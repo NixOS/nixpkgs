@@ -197,7 +197,7 @@ with lib;
       description = lib.mdDoc "Directories containing additional config files to be added to HADOOP_CONF_DIR";
     };
 
-    gatewayRole.enable = mkEnableOption "gateway role for deploying hadoop configs";
+    gatewayRole.enable = mkEnableOption (lib.mdDoc "gateway role for deploying hadoop configs");
 
     package = mkOption {
       type = types.package;

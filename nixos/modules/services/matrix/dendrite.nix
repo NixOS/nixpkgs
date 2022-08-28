@@ -7,7 +7,7 @@ let
 in
 {
   options.services.dendrite = {
-    enable = lib.mkEnableOption "matrix.org dendrite";
+    enable = lib.mkEnableOption (lib.mdDoc "matrix.org dendrite");
     httpPort = lib.mkOption {
       type = lib.types.nullOr lib.types.port;
       default = 8008;

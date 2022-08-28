@@ -12,7 +12,7 @@ let
 
 in {
   options.services.documize = {
-    enable = mkEnableOption "Documize Wiki";
+    enable = mkEnableOption (lib.mdDoc "Documize Wiki");
 
     stateDirectoryName = mkOption {
       type = types.str;

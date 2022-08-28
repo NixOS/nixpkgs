@@ -20,7 +20,7 @@ in
 {
   options = {
     services.teeworlds = {
-      enable = mkEnableOption "Teeworlds Server";
+      enable = mkEnableOption (lib.mdDoc "Teeworlds Server");
 
       openPorts = mkOption {
         type = types.bool;

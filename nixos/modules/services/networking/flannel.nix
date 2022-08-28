@@ -14,7 +14,7 @@ let
   };
 in {
   options.services.flannel = {
-    enable = mkEnableOption "flannel";
+    enable = mkEnableOption (lib.mdDoc "flannel");
 
     package = mkOption {
       description = lib.mdDoc "Package to use for flannel";

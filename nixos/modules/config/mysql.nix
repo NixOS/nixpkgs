@@ -8,54 +8,54 @@ in
 {
   options = {
     users.mysql = {
-      enable = mkEnableOption "Authentication against a MySQL/MariaDB database";
+      enable = mkEnableOption (lib.mdDoc "Authentication against a MySQL/MariaDB database");
       host = mkOption {
         type = types.str;
         example = "localhost";
-        description = "The hostname of the MySQL/MariaDB server";
+        description = lib.mdDoc "The hostname of the MySQL/MariaDB server";
       };
       database = mkOption {
         type = types.str;
         example = "auth";
-        description = "The name of the database containing the users";
+        description = lib.mdDoc "The name of the database containing the users";
       };
       user = mkOption {
         type = types.str;
         example = "nss-user";
-        description = "The username to use when connecting to the database";
+        description = lib.mdDoc "The username to use when connecting to the database";
       };
       passwordFile = mkOption {
         type = types.path;
         example = "/run/secrets/mysql-auth-db-passwd";
-        description = "The path to the file containing the password for the user";
+        description = lib.mdDoc "The path to the file containing the password for the user";
       };
       pam = mkOption {
-        description = "Settings for <literal>pam_mysql</literal>";
+        description = lib.mdDoc "Settings for `pam_mysql`";
         type = types.submodule {
           options = {
             table = mkOption {
               type = types.str;
               example = "users";
-              description = "The name of table that maps unique login names to the passwords.";
+              description = lib.mdDoc "The name of table that maps unique login names to the passwords.";
             };
             updateTable = mkOption {
               type = types.nullOr types.str;
               default = null;
               example = "users_updates";
-              description = ''
+              description = lib.mdDoc ''
                 The name of the table used for password alteration. If not defined, the value
-                of the <literal>table</literal> option will be used instead.
+                of the `table` option will be used instead.
               '';
             };
             userColumn = mkOption {
               type = types.str;
               example = "username";
-              description = "The name of the column that contains a unix login name.";
+              description = lib.mdDoc "The name of the column that contains a unix login name.";
             };
             passwordColumn = mkOption {
               type = types.str;
               example = "password";
-              description = "The name of the column that contains a (encrypted) password string.";
+              description = lib.mdDoc "The name of the column that contains a (encrypted) password string.";
             };
             statusColumn = mkOption {
               type = types.nullOr types.str;
@@ -123,27 +123,27 @@ in
               type = types.nullOr (types.enum [ "md5" "sha256" "sha512" "blowfish" ]);
               default = null;
               example = "blowfish";
-              description = "The default encryption method to use for <literal>passwordCrypt = 1</literal>.";
+              description = lib.mdDoc "The default encryption method to use for `passwordCrypt = 1`.";
             };
             where = mkOption {
               type = types.nullOr types.str;
               default = null;
               example = "host.name='web' AND user.active=1";
-              description = "Additional criteria for the query.";
+              description = lib.mdDoc "Additional criteria for the query.";
             };
             verbose = mkOption {
               type = types.bool;
               default = false;
-              description = ''
+              description = lib.mdDoc ''
                 If enabled, produces logs with detailed messages that describes what
-                <literal>pam_mysql</literal> is doing. May be useful for debugging.
+                `pam_mysql` is doing. May be useful for debugging.
               '';
             };
             disconnectEveryOperation = mkOption {
               type = types.bool;
               default = false;
-              description = ''
-                By default, <literal>pam_mysql</literal> keeps the connection to the MySQL
+              description = lib.mdDoc ''
+                By default, `pam_mysql` keeps the connection to the MySQL
                 database until the session is closed. If this option is set to true it
                 disconnects every time the PAM operation has finished. This option may
                 be useful in case the session lasts quite long.
@@ -153,17 +153,17 @@ in
               enable = mkOption {
                 type = types.bool;
                 default = false;
-                description = "Enables logging of authentication attempts in the MySQL database.";
+                description = lib.mdDoc "Enables logging of authentication attempts in the MySQL database.";
               };
               table = mkOption {
                 type = types.str;
                 example = "logs";
-                description = "The name of the table to which logs are written.";
+                description = lib.mdDoc "The name of the table to which logs are written.";
               };
               msgColumn = mkOption {
                 type = types.str;
                 example = "msg";
-                description = ''
+                description = lib.mdDoc ''
                   The name of the column in the log table to which the description
                   of the performed operation is stored.
                 '';
@@ -171,7 +171,7 @@ in
               userColumn = mkOption {
                 type = types.str;
                 example = "user";
-                description = ''
+                description = lib.mdDoc ''
                   The name of the column in the log table to which the name of the
                   user being authenticated is stored.
                 '';
@@ -179,16 +179,16 @@ in
               pidColumn = mkOption {
                 type = types.str;
                 example = "pid";
-                description = ''
+                description = lib.mdDoc ''
                   The name of the column in the log table to which the pid of the
-                  process utilising the <literal>pam_mysql's</literal> authentication
+                  process utilising the `pam_mysql's` authentication
                   service is stored.
                 '';
               };
               hostColumn = mkOption {
                 type = types.str;
                 example = "host";
-                description = ''
+                description = lib.mdDoc ''
                   The name of the column in the log table to which the name of the user
                   being authenticated is stored.
                 '';
@@ -196,16 +196,16 @@ in
               rHostColumn = mkOption {
                 type = types.str;
                 example = "rhost";
-                description = ''
+                description = lib.mdDoc ''
                   The name of the column in the log table to which the name of the remote
                   host that initiates the session is stored. The value is supposed to be
-                  set by the PAM-aware application with <literal>pam_set_item(PAM_RHOST)</literal>.
+                  set by the PAM-aware application with `pam_set_item(PAM_RHOST)`.
                 '';
               };
               timeColumn = mkOption {
                 type = types.str;
                 example = "timestamp";
-                description = ''
+                description = lib.mdDoc ''
                   The name of the column in the log table to which the timestamp of the
                   log entry is stored.
                 '';
@@ -215,11 +215,11 @@ in
         };
       };
       nss = mkOption {
-        description = ''
-          Settings for <literal>libnss-mysql</literal>.
+        description = lib.mdDoc ''
+          Settings for `libnss-mysql`.
 
-          All examples are from the <link xlink:href="https://github.com/saknopper/libnss-mysql/tree/master/sample/minimal">minimal example</link>
-          of <literal>libnss-mysql</literal>, but they are modified with NixOS paths for bash.
+          All examples are from the [minimal example](https://github.com/saknopper/libnss-mysql/tree/master/sample/minimal)
+          of `libnss-mysql`, but they are modified with NixOS paths for bash.
         '';
         type = types.submodule {
           options = {
@@ -232,8 +232,8 @@ in
                 WHERE username='%1$s' \
                 LIMIT 1
               '';
-              description = ''
-                SQL query for the <link xlink:href="https://man7.org/linux/man-pages/man3/getpwnam.3.html">getpwnam</link>
+              description = lib.mdDoc ''
+                SQL query for the [getpwnam](https://man7.org/linux/man-pages/man3/getpwnam.3.html)
                 syscall.
               '';
             };
@@ -246,8 +246,8 @@ in
                 WHERE uid='%1$u' \
                 LIMIT 1
               '';
-              description = ''
-                SQL query for the <link xlink:href="https://man7.org/linux/man-pages/man3/getpwuid.3.html">getpwuid</link>
+              description = lib.mdDoc ''
+                SQL query for the [getpwuid](https://man7.org/linux/man-pages/man3/getpwuid.3.html)
                 syscall.
               '';
             };
@@ -260,8 +260,8 @@ in
                 WHERE username='%1$s' \
                 LIMIT 1
               '';
-              description = ''
-                SQL query for the <link xlink:href="https://man7.org/linux/man-pages/man3/getspnam.3.html">getspnam</link>
+              description = lib.mdDoc ''
+                SQL query for the [getspnam](https://man7.org/linux/man-pages/man3/getspnam.3.html)
                 syscall.
               '';
             };
@@ -271,8 +271,8 @@ in
               example = literalExpression ''
                 SELECT username,'x',uid,'5000','MySQL User', CONCAT('/home/',username),'/run/sw/current-system/bin/bash' FROM users
               '';
-              description = ''
-                SQL query for the <link xlink:href="https://man7.org/linux/man-pages/man3/getpwent.3.html">getpwent</link>
+              description = lib.mdDoc ''
+                SQL query for the [getpwent](https://man7.org/linux/man-pages/man3/getpwent.3.html)
                 syscall.
               '';
             };
@@ -282,8 +282,8 @@ in
               example = literalExpression ''
                 SELECT username,password,'1','0','99999','0','0','-1','0' FROM users
               '';
-              description = ''
-                SQL query for the <link xlink:href="https://man7.org/linux/man-pages/man3/getspent.3.html">getspent</link>
+              description = lib.mdDoc ''
+                SQL query for the [getspent](https://man7.org/linux/man-pages/man3/getspent.3.html)
                 syscall.
               '';
             };
@@ -293,8 +293,8 @@ in
               example = literalExpression ''
                 SELECT name,password,gid FROM groups WHERE name='%1$s' LIMIT 1
               '';
-              description = ''
-                SQL query for the <link xlink:href="https://man7.org/linux/man-pages/man3/getgrnam.3.html">getgrnam</link>
+              description = lib.mdDoc ''
+                SQL query for the [getgrnam](https://man7.org/linux/man-pages/man3/getgrnam.3.html)
                 syscall.
               '';
             };
@@ -304,8 +304,8 @@ in
               example = literalExpression ''
                 SELECT name,password,gid FROM groups WHERE gid='%1$u' LIMIT 1
               '';
-              description = ''
-                SQL query for the <link xlink:href="https://man7.org/linux/man-pages/man3/getgrgid.3.html">getgrgid</link>
+              description = lib.mdDoc ''
+                SQL query for the [getgrgid](https://man7.org/linux/man-pages/man3/getgrgid.3.html)
                 syscall.
               '';
             };
@@ -315,8 +315,8 @@ in
               example = literalExpression ''
                 SELECT name,password,gid FROM groups
               '';
-              description = ''
-                SQL query for the <link xlink:href="https://man7.org/linux/man-pages/man3/getgrent.3.html">getgrent</link>
+              description = lib.mdDoc ''
+                SQL query for the [getgrent](https://man7.org/linux/man-pages/man3/getgrent.3.html)
                 syscall.
               '';
             };
@@ -326,8 +326,8 @@ in
               example = literalExpression ''
                 SELECT username FROM grouplist WHERE gid='%1$u'
               '';
-              description = ''
-                SQL query for the <link xlink:href="https://man7.org/linux/man-pages/man3/memsbygid.3.html">memsbygid</link>
+              description = lib.mdDoc ''
+                SQL query for the [memsbygid](https://man7.org/linux/man-pages/man3/memsbygid.3.html)
                 syscall.
               '';
             };
@@ -337,8 +337,8 @@ in
               example = literalExpression ''
                 SELECT gid FROM grouplist WHERE username='%1$s'
               '';
-              description = ''
-                SQL query for the <link xlink:href="https://man7.org/linux/man-pages/man3/gidsbymem.3.html">gidsbymem</link>
+              description = lib.mdDoc ''
+                SQL query for the [gidsbymem](https://man7.org/linux/man-pages/man3/gidsbymem.3.html)
                 syscall.
               '';
             };

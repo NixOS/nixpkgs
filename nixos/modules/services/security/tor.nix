@@ -224,11 +224,11 @@ in
 
   options = {
     services.tor = {
-      enable = mkEnableOption ''Tor daemon.
+      enable = mkEnableOption (lib.mdDoc ''Tor daemon.
         By default, the daemon is run without
-        relay, exit, bridge or client connectivity'';
+        relay, exit, bridge or client connectivity'');
 
-      openFirewall = mkEnableOption "opening of the relay port(s) in the firewall";
+      openFirewall = mkEnableOption (lib.mdDoc "opening of the relay port(s) in the firewall");
 
       package = mkOption {
         type = types.package;
@@ -237,19 +237,19 @@ in
         description = lib.mdDoc "Tor package to use.";
       };
 
-      enableGeoIP = mkEnableOption ''use of GeoIP databases.
+      enableGeoIP = mkEnableOption (lib.mdDoc ''use of GeoIP databases.
         Disabling this will disable by-country statistics for bridges and relays
-        and some client and third-party software functionality'' // { default = true; };
+        and some client and third-party software functionality'') // { default = true; };
 
-      controlSocket.enable = mkEnableOption ''control socket,
-        created in <literal>${runDir}/control</literal>'';
+      controlSocket.enable = mkEnableOption (lib.mdDoc ''control socket,
+        created in `${runDir}/control`'');
 
       client = {
-        enable = mkEnableOption ''the routing of application connections.
-          You might want to disable this if you plan running a dedicated Tor relay'';
+        enable = mkEnableOption (lib.mdDoc ''the routing of application connections.
+          You might want to disable this if you plan running a dedicated Tor relay'');
 
-        transparentProxy.enable = mkEnableOption "transparent proxy";
-        dns.enable = mkEnableOption "DNS resolver";
+        transparentProxy.enable = mkEnableOption (lib.mdDoc "transparent proxy");
+        dns.enable = mkEnableOption (lib.mdDoc "DNS resolver");
 
         socksListenAddress = mkOption {
           type = optionSOCKSPort false;

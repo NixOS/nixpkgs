@@ -43,7 +43,7 @@ in
 {
   options = {
     services.vault = {
-      enable = mkEnableOption "Vault daemon";
+      enable = mkEnableOption (lib.mdDoc "Vault daemon");
 
       package = mkOption {
         type = types.package;

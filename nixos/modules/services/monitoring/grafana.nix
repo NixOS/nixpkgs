@@ -302,7 +302,7 @@ let
   };
 in {
   options.services.grafana = {
-    enable = mkEnableOption "grafana";
+    enable = mkEnableOption (lib.mdDoc "grafana");
 
     protocol = mkOption {
       description = lib.mdDoc "Which protocol to listen.";
@@ -445,7 +445,7 @@ in {
     };
 
     provision = {
-      enable = mkEnableOption "provision";
+      enable = mkEnableOption (lib.mdDoc "provision");
       datasources = mkOption {
         description = lib.mdDoc "Grafana datasources configuration.";
         default = [];
@@ -513,7 +513,7 @@ in {
     };
 
     smtp = {
-      enable = mkEnableOption "smtp";
+      enable = mkEnableOption (lib.mdDoc "smtp");
       host = mkOption {
         description = lib.mdDoc "Host to connect to.";
         default = "localhost:25";

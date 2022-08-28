@@ -17,7 +17,7 @@ let
 in
 {
   options.networking.wireless.iwd = {
-    enable = mkEnableOption "iwd";
+    enable = mkEnableOption (lib.mdDoc "iwd");
 
     settings = mkOption {
       type = ini.type;

@@ -19,7 +19,7 @@ in
 
     services.metricbeat = {
 
-      enable = mkEnableOption "metricbeat";
+      enable = mkEnableOption (lib.mdDoc "metricbeat");
 
       package = mkOption {
         type = types.package;

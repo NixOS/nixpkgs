@@ -11,7 +11,7 @@ let
 
 in {
   options.programs.neovim = {
-    enable = mkEnableOption "Neovim";
+    enable = mkEnableOption (lib.mdDoc "Neovim");
 
     defaultEditor = mkOption {
       type = types.bool;

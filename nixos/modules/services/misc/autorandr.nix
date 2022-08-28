@@ -242,7 +242,7 @@ in {
   options = {
 
     services.autorandr = {
-      enable = mkEnableOption "handling of hotplug and sleep events by autorandr";
+      enable = mkEnableOption (lib.mdDoc "handling of hotplug and sleep events by autorandr");
 
       defaultTarget = mkOption {
         default = "default";

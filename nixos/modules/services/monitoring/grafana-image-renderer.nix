@@ -10,7 +10,7 @@ let
   configFile = format.generate "grafana-image-renderer-config.json" cfg.settings;
 in {
   options.services.grafana-image-renderer = {
-    enable = mkEnableOption "grafana-image-renderer";
+    enable = mkEnableOption (lib.mdDoc "grafana-image-renderer");
 
     chromium = mkOption {
       type = types.package;
@@ -19,9 +19,9 @@ in {
       '';
     };
 
-    verbose = mkEnableOption "verbosity for the service";
+    verbose = mkEnableOption (lib.mdDoc "verbosity for the service");
 
-    provisionGrafana = mkEnableOption "Grafana configuration for grafana-image-renderer";
+    provisionGrafana = mkEnableOption (lib.mdDoc "Grafana configuration for grafana-image-renderer");
 
     settings = mkOption {
       type = types.submodule {

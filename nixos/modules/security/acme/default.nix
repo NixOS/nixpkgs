@@ -457,7 +457,7 @@ let
         '';
       };
 
-      enableDebugLogs = mkEnableOption "debug logging for this certificate" // {
+      enableDebugLogs = mkEnableOption (lib.mdDoc "debug logging for this certificate") // {
         inherit (defaultAndText "enableDebugLogs" true) default defaultText;
       };
 

@@ -9,7 +9,7 @@ let
 in
 {
   options.services.magic-wormhole-mailbox-server = {
-    enable = mkEnableOption "Enable Magic Wormhole Mailbox Server";
+    enable = mkEnableOption (lib.mdDoc "Enable Magic Wormhole Mailbox Server");
   };
 
   config = mkIf cfg.enable {

@@ -48,7 +48,7 @@ in
 
     services.acpid = {
 
-      enable = mkEnableOption "the ACPI daemon";
+      enable = mkEnableOption (lib.mdDoc "the ACPI daemon");
 
       logEvents = mkOption {
         type = types.bool;

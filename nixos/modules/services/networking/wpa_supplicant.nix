@@ -164,7 +164,7 @@ let
 in {
   options = {
     networking.wireless = {
-      enable = mkEnableOption "wpa_supplicant";
+      enable = mkEnableOption (lib.mdDoc "wpa_supplicant");
 
       interfaces = mkOption {
         type = types.listOf types.str;

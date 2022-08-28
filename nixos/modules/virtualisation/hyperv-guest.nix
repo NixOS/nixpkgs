@@ -8,7 +8,7 @@ let
 in {
   options = {
     virtualisation.hypervGuest = {
-      enable = mkEnableOption "Hyper-V Guest Support";
+      enable = mkEnableOption (lib.mdDoc "Hyper-V Guest Support");
 
       videoMode = mkOption {
         type = types.str;

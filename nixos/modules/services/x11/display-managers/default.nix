@@ -235,15 +235,15 @@ in
               }
             ]
           '';
-        description = ''
+        description = lib.mdDoc ''
           List of sessions supported with the command used to start each
           session.  Each session script can set the
-          <varname>waitPID</varname> shell variable to make this script
+          {var}`waitPID` shell variable to make this script
           wait until the end of the user session.  Each script is used
           to define either a window manager or a desktop manager.  These
           can be differentiated by setting the attribute
-          <varname>manage</varname> either to <literal>"window"</literal>
-          or <literal>"desktop"</literal>.
+          {var}`manage` either to `"window"`
+          or `"desktop"`.
 
           The list of desktop manager and window manager should appear
           inside the display manager with the desktop manager name

@@ -42,7 +42,7 @@ in
 
     services.xrdp = {
 
-      enable = mkEnableOption "xrdp, the Remote Desktop Protocol server";
+      enable = mkEnableOption (lib.mdDoc "xrdp, the Remote Desktop Protocol server");
 
       package = mkOption {
         type = types.package;

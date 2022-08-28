@@ -26,7 +26,7 @@ in
 {
   options = {
     services.discourse = {
-      enable = lib.mkEnableOption "Discourse, an open source discussion platform";
+      enable = lib.mkEnableOption (lib.mdDoc "Discourse, an open source discussion platform");
 
       package = lib.mkOption {
         type = lib.types.package;

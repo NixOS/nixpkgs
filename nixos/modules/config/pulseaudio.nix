@@ -190,17 +190,17 @@ in {
 
       zeroconf = {
         discovery.enable =
-          mkEnableOption "discovery of pulseaudio sinks in the local network";
+          mkEnableOption (lib.mdDoc "discovery of pulseaudio sinks in the local network");
         publish.enable =
-          mkEnableOption "publishing the pulseaudio sink in the local network";
+          mkEnableOption (lib.mdDoc "publishing the pulseaudio sink in the local network");
       };
 
       # TODO: enable by default?
       tcp = {
-        enable = mkEnableOption "tcp streaming support";
+        enable = mkEnableOption (lib.mdDoc "tcp streaming support");
 
         anonymousClients = {
-          allowAll = mkEnableOption "all anonymous clients to stream to the server";
+          allowAll = mkEnableOption (lib.mdDoc "all anonymous clients to stream to the server");
           allowedIpRanges = mkOption {
             type = types.listOf types.str;
             default = [];

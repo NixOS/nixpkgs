@@ -385,7 +385,7 @@ in
 {
   options = {
     services.nginx = {
-      enable = mkEnableOption "Nginx Web Server";
+      enable = mkEnableOption (lib.mdDoc "Nginx Web Server");
 
       statusPage = mkOption {
         default = false;

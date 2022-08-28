@@ -25,7 +25,7 @@ in
 {
   options = {
     services.freeciv = {
-      enable = mkEnableOption ''freeciv'';
+      enable = mkEnableOption (lib.mdDoc ''freeciv'');
       settings = mkOption {
         description = lib.mdDoc ''
           Parameters of freeciv-server.
@@ -38,7 +38,7 @@ in
             default = "none";
             description = lib.mdDoc "Announce game in LAN using given protocol.";
           };
-          options.auth = mkEnableOption "server authentication";
+          options.auth = mkEnableOption (lib.mdDoc "server authentication");
           options.Database = mkOption {
             type = types.nullOr types.str;
             apply = pkgs.writeText "auth.conf";
@@ -54,9 +54,9 @@ in
             default = 0;
             description = lib.mdDoc "Set debug log level.";
           };
-          options.exit-on-end = mkEnableOption "exit instead of restarting when a game ends.";
-          options.Guests = mkEnableOption "guests to login if auth is enabled";
-          options.Newusers = mkEnableOption "new users to login if auth is enabled";
+          options.exit-on-end = mkEnableOption (lib.mdDoc "exit instead of restarting when a game ends.");
+          options.Guests = mkEnableOption (lib.mdDoc "guests to login if auth is enabled");
+          options.Newusers = mkEnableOption (lib.mdDoc "new users to login if auth is enabled");
           options.port = mkOption {
             type = types.port;
             default = 5556;
@@ -86,7 +86,7 @@ in
           };
         };
       };
-      openFirewall = mkEnableOption "opening the firewall for the port listening for clients";
+      openFirewall = mkEnableOption (lib.mdDoc "opening the firewall for the port listening for clients");
     };
   };
   config = mkIf cfg.enable {

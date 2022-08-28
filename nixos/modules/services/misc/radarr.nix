@@ -9,7 +9,7 @@ in
 {
   options = {
     services.radarr = {
-      enable = mkEnableOption "Radarr";
+      enable = mkEnableOption (lib.mdDoc "Radarr");
 
       package = mkOption {
         description = lib.mdDoc "Radarr package to use";

@@ -14,7 +14,7 @@ let
 in {
   options = {
     services.matrix-appservice-discord = {
-      enable = mkEnableOption "a bridge between Matrix and Discord";
+      enable = mkEnableOption (lib.mdDoc "a bridge between Matrix and Discord");
 
       settings = mkOption rec {
         # TODO: switch to types.config.json as prescribed by RFC42 once it's implemented

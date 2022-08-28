@@ -67,7 +67,7 @@ let
     {
       options = {
 
-        enable = mkEnableOption "InvoicePlane web application";
+        enable = mkEnableOption (lib.mdDoc "InvoicePlane web application");
 
         stateDir = mkOption {
           type = types.path;

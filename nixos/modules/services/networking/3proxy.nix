@@ -6,7 +6,7 @@ let
   optionalList = list: if list == [ ] then "*" else concatMapStringsSep "," toString list;
 in {
   options.services._3proxy = {
-    enable = mkEnableOption "3proxy";
+    enable = mkEnableOption (lib.mdDoc "3proxy");
     confFile = mkOption {
       type = types.path;
       example = "/var/lib/3proxy/3proxy.conf";

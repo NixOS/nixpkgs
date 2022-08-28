@@ -9,7 +9,7 @@ in
 {
   options = {
     services.leaps = {
-      enable = mkEnableOption "leaps";
+      enable = mkEnableOption (lib.mdDoc "leaps");
       port = mkOption {
         type = types.port;
         default = 8080;

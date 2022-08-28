@@ -33,7 +33,7 @@ in
 
   options.xdg.portal = {
     enable =
-      mkEnableOption ''<link xlink:href="https://github.com/flatpak/xdg-desktop-portal">xdg desktop integration</link>'' // {
+      mkEnableOption (lib.mdDoc ''[xdg desktop integration](https://github.com/flatpak/xdg-desktop-portal)'') // {
         default = false;
       };
 

@@ -66,7 +66,7 @@ in
 {
   options = {
     services.privacyidea = {
-      enable = mkEnableOption "PrivacyIDEA";
+      enable = mkEnableOption (lib.mdDoc "PrivacyIDEA");
 
       environmentFile = mkOption {
         type = types.nullOr types.path;
@@ -179,7 +179,7 @@ in
       };
 
       ldap-proxy = {
-        enable = mkEnableOption "PrivacyIDEA LDAP Proxy";
+        enable = mkEnableOption (lib.mdDoc "PrivacyIDEA LDAP Proxy");
 
         configFile = mkOption {
           type = types.nullOr types.path;

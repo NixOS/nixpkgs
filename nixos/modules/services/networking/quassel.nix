@@ -17,7 +17,7 @@ in
 
     services.quassel = {
 
-      enable = mkEnableOption "the Quassel IRC client daemon";
+      enable = mkEnableOption (lib.mdDoc "the Quassel IRC client daemon");
 
       certificateFile = mkOption {
         type = types.nullOr types.str;

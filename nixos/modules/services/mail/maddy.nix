@@ -139,7 +139,7 @@ in {
   options = {
     services.maddy = {
 
-      enable = mkEnableOption "Maddy, a free an open source mail server";
+      enable = mkEnableOption (lib.mdDoc "Maddy, a free an open source mail server");
 
       user = mkOption {
         default = "maddy";

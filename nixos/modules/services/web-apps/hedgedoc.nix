@@ -32,7 +32,7 @@ in
   ];
 
   options.services.hedgedoc = {
-    enable = mkEnableOption "the HedgeDoc Markdown Editor";
+    enable = mkEnableOption (lib.mdDoc "the HedgeDoc Markdown Editor");
 
     groups = mkOption {
       type = types.listOf types.str;
@@ -51,7 +51,7 @@ in
     };
 
     settings = let options = {
-      debug = mkEnableOption "debug mode";
+      debug = mkEnableOption (lib.mdDoc "debug mode");
       domain = mkOption {
         type = types.nullOr types.str;
         default = null;

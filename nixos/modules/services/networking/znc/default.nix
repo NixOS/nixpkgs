@@ -81,7 +81,7 @@ in
 
   options = {
     services.znc = {
-      enable = mkEnableOption "ZNC";
+      enable = mkEnableOption (lib.mdDoc "ZNC");
 
       user = mkOption {
         default = "znc";

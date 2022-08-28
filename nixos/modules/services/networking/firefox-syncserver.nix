@@ -118,11 +118,11 @@ in
       };
 
       singleNode = {
-        enable = lib.mkEnableOption "auto-configuration for a simple single-node setup";
+        enable = lib.mkEnableOption (lib.mdDoc "auto-configuration for a simple single-node setup");
 
-        enableTLS = lib.mkEnableOption "automatic TLS setup";
+        enableTLS = lib.mkEnableOption (lib.mdDoc "automatic TLS setup");
 
-        enableNginx = lib.mkEnableOption "nginx virtualhost definitions";
+        enableNginx = lib.mkEnableOption (lib.mdDoc "nginx virtualhost definitions");
 
         hostname = lib.mkOption {
           type = lib.types.str;

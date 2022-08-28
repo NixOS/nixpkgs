@@ -104,7 +104,7 @@ in {
 
   options = {
     services.mastodon = {
-      enable = lib.mkEnableOption "Mastodon, a federated social network server";
+      enable = lib.mkEnableOption (lib.mdDoc "Mastodon, a federated social network server");
 
       configureNginx = lib.mkOption {
         description = ''
