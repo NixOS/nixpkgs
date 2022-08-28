@@ -4,6 +4,7 @@
 , protobuf
 , stdenv
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "qdrant";
   version = "0.9.1";
@@ -11,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
-    rev = "refs/tags/v${version}"; # just v${version} fails to unpack as there is a branch of the same name
+    rev = "refs/tags/v${version}";
     sha256 = "sha256-rOIWiSpAqIUf2V9BMMTZqF/urz754pZV4yHav26dxqY=";
   };
 
