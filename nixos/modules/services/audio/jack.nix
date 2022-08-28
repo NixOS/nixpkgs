@@ -27,7 +27,7 @@ in {
           default = pkgs.jack2;
           defaultText = literalExpression "pkgs.jack2";
           example = literalExpression "pkgs.jack1";
-          description = ''
+          description = lib.mdDoc ''
             The JACK package to use.
           '';
         };

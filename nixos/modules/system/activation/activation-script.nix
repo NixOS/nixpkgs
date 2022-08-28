@@ -139,7 +139,7 @@ in
     };
 
     system.dryActivationScript = mkOption {
-      description = "The shell script that is to be run when dry-activating a system.";
+      description = lib.mdDoc "The shell script that is to be run when dry-activating a system.";
       readOnly = true;
       internal = true;
       default = systemActivationScript (removeAttrs config.system.activationScripts [ "script" ]) true;
@@ -199,9 +199,9 @@ in
       example = literalExpression ''"''${pkgs.busybox}/bin/env"'';
       type = types.nullOr types.path;
       visible = false;
-      description = ''
+      description = lib.mdDoc ''
         The env(1) executable that is linked system-wide to
-        <literal>/usr/bin/env</literal>.
+        `/usr/bin/env`.
       '';
     };
   };

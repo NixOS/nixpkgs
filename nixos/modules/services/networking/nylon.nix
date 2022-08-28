@@ -139,7 +139,7 @@ in
 
     services.nylon = mkOption {
       default = {};
-      description = "Collection of named nylon instances";
+      description = lib.mdDoc "Collection of named nylon instances";
       type = with types; attrsOf (submodule nylonOpts);
       internal = true;
     };

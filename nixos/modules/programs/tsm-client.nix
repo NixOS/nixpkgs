@@ -140,7 +140,7 @@ let
       type = str;
       internal = true;
       visible = false;
-      description = "Server stanza text generated from the options.";
+      description = lib.mdDoc "Server stanza text generated from the options.";
     };
     config.name = mkDefault name;
     # Client system-options file directives are explained here:

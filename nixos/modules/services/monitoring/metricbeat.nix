@@ -99,10 +99,10 @@ in
               type = types.listOf settingsFormat.type;
               default = [];
               internal = true;
-              description = ''
-                The metric collecting modules. Use <xref linkend="opt-services.metricbeat.modules"/> instead.
+              description = lib.mdDoc ''
+                The metric collecting modules. Use [](#opt-services.metricbeat.modules) instead.
 
-                See <link xlink:href="https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-modules.html"/>.
+                See <https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-modules.html>.
               '';
             };
           };

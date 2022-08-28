@@ -340,7 +340,7 @@ in
         type = types.attrs;
         internal = true;
         default = { };
-        description = "Environment variables used by Nix.";
+        description = lib.mdDoc "Environment variables used by Nix.";
       };
 
       nrBuildUsers = mkOption {

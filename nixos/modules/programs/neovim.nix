@@ -89,7 +89,7 @@ in {
       type = types.package;
       visible = false;
       readOnly = true;
-      description = "Resulting customized neovim package.";
+      description = lib.mdDoc "Resulting customized neovim package.";
     };
 
     runtime = mkOption {

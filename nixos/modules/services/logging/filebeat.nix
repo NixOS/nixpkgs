@@ -159,27 +159,27 @@ in
                 type = types.listOf json.type;
                 default = [];
                 internal = true;
-                description = ''
+                description = lib.mdDoc ''
                   Inputs specify how Filebeat locates and processes
-                  input data. Use <xref linkend="opt-services.filebeat.inputs"/> instead.
+                  input data. Use [](#opt-services.filebeat.inputs) instead.
 
-                  See <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html"/>.
+                  See <https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html>.
                 '';
               };
               modules = mkOption {
                 type = types.listOf json.type;
                 default = [];
                 internal = true;
-                description = ''
+                description = lib.mdDoc ''
                   Filebeat modules provide a quick way to get started
                   processing common log formats. They contain default
                   configurations, Elasticsearch ingest pipeline
                   definitions, and Kibana dashboards to help you
                   implement and deploy a log monitoring solution.
 
-                  Use <xref linkend="opt-services.filebeat.modules"/> instead.
+                  Use [](#opt-services.filebeat.modules) instead.
 
-                  See <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html"/>.
+                  See <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html>.
                 '';
               };
             };

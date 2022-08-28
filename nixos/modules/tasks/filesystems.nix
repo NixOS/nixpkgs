@@ -223,7 +223,7 @@ in
     system.fsPackages = mkOption {
       internal = true;
       default = [ ];
-      description = "Packages supplying file system mounters and checkers.";
+      description = lib.mdDoc "Packages supplying file system mounters and checkers.";
     };
 
     boot.supportedFilesystems = mkOption {
@@ -237,7 +237,7 @@ in
       default = {};
       type = types.attrsOf (types.submodule coreFileSystemOpts);
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         Special filesystems that are mounted very early during boot.
       '';
     };

@@ -25,7 +25,7 @@ in
       default = {};
       example = literalExpression "{ debug = true; }";
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         This option allows to enable or disable certain kernel features.
         It's not API, because it's about kernel feature sets, that
         make sense for specific use cases. Mostly along with programs,
@@ -173,7 +173,7 @@ in
       type = types.listOf types.path;
       internal = true;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Tree of kernel modules.  This includes the kernel, plus modules
         built outside of the kernel.  Combine these into a single tree of
         symlinks because modprobe only supports one directory.
@@ -193,7 +193,7 @@ in
       '';
       internal = true;
       type = types.listOf types.attrs;
-      description = ''
+      description = lib.mdDoc ''
         This option allows modules to specify the kernel config options that
         must be set (or unset) for the module to work. Please use the
         lib.kernelConfig functions to build list elements.

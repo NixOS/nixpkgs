@@ -132,7 +132,7 @@ in
 
       path = mkOption {
         internal = true;
-        description = ''
+        description = lib.mdDoc ''
           The packages you want in the boot environment.
         '';
       };

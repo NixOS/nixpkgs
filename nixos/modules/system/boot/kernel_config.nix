@@ -14,7 +14,7 @@ let
         default = null;
         internal = true;
         visible = true;
-        description = ''
+        description = lib.mdDoc ''
           Use this field for tristate kernel options expecting a "y" or "m" or "n".
         '';
       };

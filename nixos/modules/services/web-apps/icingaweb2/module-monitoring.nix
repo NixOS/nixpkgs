@@ -66,7 +66,7 @@ in {
             visible = false;
             default = name;
             type = str;
-            description = "Name of this backend";
+            description = lib.mdDoc "Name of this backend";
           };
 
           resource = mkOption {
@@ -98,7 +98,7 @@ in {
             visible = false;
             default = name;
             type = str;
-            description = "Name of this transport";
+            description = lib.mdDoc "Name of this transport";
           };
 
           type = mkOption {

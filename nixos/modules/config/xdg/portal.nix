@@ -54,11 +54,11 @@ in
       type = types.bool;
       visible = false;
       default = false;
-      description = ''
-        Sets environment variable <literal>GTK_USE_PORTAL</literal> to <literal>1</literal>.
+      description = lib.mdDoc ''
+        Sets environment variable `GTK_USE_PORTAL` to `1`.
         This will force GTK-based programs ran outside Flatpak to respect and use XDG Desktop Portals
         for features like file chooser but it is an unsupported hack that can easily break things.
-        Defaults to <literal>false</literal> to respect its opt-in nature.
+        Defaults to `false` to respect its opt-in nature.
       '';
     };
   };

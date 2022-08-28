@@ -71,7 +71,7 @@ in
       package = mkOption {
         type = types.package;
         internal = true;
-        description = ''
+        description = lib.mdDoc ''
           The package that provides the OpenGL implementation.
         '';
       };
@@ -79,9 +79,9 @@ in
       package32 = mkOption {
         type = types.package;
         internal = true;
-        description = ''
+        description = lib.mdDoc ''
           The package that provides the 32-bit OpenGL implementation on
-          64-bit systems. Used when <option>driSupport32Bit</option> is
+          64-bit systems. Used when {option}`driSupport32Bit` is
           set.
         '';
       };
@@ -111,11 +111,11 @@ in
         type = types.bool;
         internal = true;
         default = false;
-        description = ''
-          Whether the <literal>LD_LIBRARY_PATH</literal> environment variable
+        description = lib.mdDoc ''
+          Whether the `LD_LIBRARY_PATH` environment variable
           should be set to the locations of driver libraries. Drivers which
           rely on overriding libraries should set this to true. Drivers which
-          support <literal>libglvnd</literal> and other dispatch libraries
+          support `libglvnd` and other dispatch libraries
           instead of overriding libraries should not set this.
         '';
       };

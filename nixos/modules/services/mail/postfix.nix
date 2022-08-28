@@ -140,8 +140,8 @@ let
         type = types.listOf types.str;
         default = [];
         internal = true;
-        description = ''
-          The raw configuration line for the <filename>master.cf</filename>.
+        description = lib.mdDoc ''
+          The raw configuration line for the {file}`master.cf`.
         '';
       };
     };

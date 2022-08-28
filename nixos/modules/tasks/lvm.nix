@@ -10,7 +10,7 @@ in {
       default = pkgs.lvm2;
       internal = true;
       defaultText = literalExpression "pkgs.lvm2";
-      description = ''
+      description = lib.mdDoc ''
         This option allows you to override the LVM package that's used on the system
         (udev rules, tmpfiles, systemd services).
         Defaults to pkgs.lvm2, pkgs.lvm2_dmeventd if dmeventd or pkgs.lvm2_vdo if vdo is enabled.

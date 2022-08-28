@@ -236,7 +236,7 @@ in
       type = types.path;
       internal = true;
       defaultText = literalMD "generated `hercules-ci-agent.toml`";
-      description = ''
+      description = lib.mdDoc ''
         The fully assembled config file.
       '';
     };

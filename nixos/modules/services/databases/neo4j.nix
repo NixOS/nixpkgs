@@ -538,7 +538,7 @@ in {
             type = types.listOf types.path;
             internal = true;
             readOnly = true;
-            description = ''
+            description = lib.mdDoc ''
               Directories of this policy that will be created automatically
               when the certificates directory is left at its default value.
               This includes all options of type path that are left at their

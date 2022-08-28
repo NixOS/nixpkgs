@@ -53,7 +53,7 @@ in
         internal = true;
         type     = types.nullOr types.path;
         default  = null;
-        description = ''
+        description = lib.mdDoc ''
           The input method method package.
         '';
       };

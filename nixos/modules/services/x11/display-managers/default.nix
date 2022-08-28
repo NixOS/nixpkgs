@@ -153,7 +153,7 @@ in
         internal = true;
         default = "${xorg.xauth}/bin/xauth";
         defaultText = literalExpression ''"''${pkgs.xorg.xauth}/bin/xauth"'';
-        description = "Path to the <command>xauth</command> program used by display managers.";
+        description = lib.mdDoc "Path to the {command}`xauth` program used by display managers.";
       };
 
       xserverBin = mkOption {
@@ -252,7 +252,7 @@ in
       };
 
       sessionData = mkOption {
-        description = "Data exported for display managers’ convenience";
+        description = lib.mdDoc "Data exported for display managers’ convenience";
         internal = true;
         default = {};
         apply = val: {
@@ -299,7 +299,7 @@ in
       importedVariables = mkOption {
         type = types.listOf (types.strMatching "[a-zA-Z_][a-zA-Z0-9_]*");
         visible = false;
-        description = ''
+        description = lib.mdDoc ''
           Environment variables to import into the systemd user environment.
         '';
       };
