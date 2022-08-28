@@ -1,11 +1,11 @@
 { lib, appimageTools, fetchurl, nodePackages }: let
   pname = "flexoptix-app";
-  version = "5.12.1";
+  version = "5.12.2";
 
   src = fetchurl {
     name = "${pname}-${version}.AppImage";
     url = "https://flexbox.reconfigure.me/download/electron/linux/x64/FLEXOPTIX%20App.${version}.AppImage";
-    hash = "sha256-ugnJcSFgEEPJ9qxqmRGgW1fraE4E/HbbxpK/00TXPmw=";
+    hash = "sha256-XVswjIXnuWLRiXFc38lDhSvxYTQtYjs4V/AGdiNLX0g=";
   };
 
   udevRules = fetchurl {
