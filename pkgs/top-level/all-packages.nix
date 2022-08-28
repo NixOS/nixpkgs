@@ -24550,6 +24550,10 @@ with pkgs;
 
   moq = callPackage ../development/tools/moq { };
 
+  inherit (callPackages ../development/tools/move/move-cli {
+    inherit (darwin.apple_sdk.frameworks) IOKit Security CoreFoundation AppKit System;
+  }) move-cli move-cli-address20 move-cli-address32;
+
   quicktemplate = callPackage ../development/tools/quicktemplate { };
 
   linux_logo = callPackage ../tools/misc/linux-logo { };
