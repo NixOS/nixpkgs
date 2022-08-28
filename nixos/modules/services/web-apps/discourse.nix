@@ -100,9 +100,9 @@ in
       enableACME = lib.mkOption {
         type = lib.types.bool;
         default = cfg.sslCertificate == null && cfg.sslCertificateKey == null;
-        defaultText = lib.literalDocBook ''
-          <literal>true</literal>, unless <option>services.discourse.sslCertificate</option>
-          and <option>services.discourse.sslCertificateKey</option> are set.
+        defaultText = lib.literalMD ''
+          `true`, unless {option}`services.discourse.sslCertificate`
+          and {option}`services.discourse.sslCertificateKey` are set.
         '';
         description = lib.mdDoc ''
           Whether an ACME certificate should be used to secure

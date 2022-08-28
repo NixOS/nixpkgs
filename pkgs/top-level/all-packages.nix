@@ -3148,7 +3148,7 @@ with pkgs;
 
   cabal2nix = symlinkJoin {
     inherit (cabal2nix-unwrapped) name meta;
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ buildPackages.makeWrapper ];
     paths = [ cabal2nix-unwrapped ];
     postBuild = ''
       wrapProgram $out/bin/cabal2nix \
@@ -4129,6 +4129,8 @@ with pkgs;
   };
 
   jwt-hack = callPackage ../tools/security/jwt-hack { } ;
+
+  jwx = callPackage ../tools/security/jwx { } ;
 
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
@@ -7174,6 +7176,8 @@ with pkgs;
   gx-go = callPackage ../tools/package-management/gx/go { };
 
   efitools = callPackage ../tools/security/efitools { };
+
+  sbctl = callPackage ../tools/security/sbctl { };
 
   sbsigntool = callPackage ../tools/security/sbsigntool { };
 
@@ -11997,6 +12001,8 @@ with pkgs;
 
   wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
 
+  wiringpi = callPackage ../os-specific/linux/wiringpi { };
+
   wg-friendly-peer-names = callPackage ../tools/networking/wg-friendly-peer-names { };
 
   wg-netmanager = callPackage ../tools/networking/wg-netmanager {
@@ -16117,7 +16123,9 @@ with pkgs;
 
   drush = callPackage ../development/tools/misc/drush { };
 
-  dura = callPackage ../development/tools/misc/dura { };
+  dura = callPackage ../development/tools/misc/dura {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   dwfv = callPackage ../applications/science/electronics/dwfv { };
 
@@ -23324,6 +23332,7 @@ with pkgs;
   prometheus-redis-exporter = callPackage ../servers/monitoring/prometheus/redis-exporter.nix { };
   prometheus-rabbitmq-exporter = callPackage ../servers/monitoring/prometheus/rabbitmq-exporter.nix { };
   prometheus-rtl_433-exporter = callPackage ../servers/monitoring/prometheus/rtl_433-exporter.nix { };
+  prometheus-sachet = callPackage ../servers/monitoring/prometheus/sachet.nix { };
   prometheus-script-exporter = callPackage ../servers/monitoring/prometheus/script-exporter.nix { };
   prometheus-smartctl-exporter = callPackage ../servers/monitoring/prometheus/smartctl-exporter { };
   prometheus-smokeping-prober = callPackage ../servers/monitoring/prometheus/smokeping-prober.nix { };
@@ -25060,6 +25069,8 @@ with pkgs;
   ccsymbols = callPackage ../data/fonts/ccsymbols { };
 
   charis-sil = callPackage ../data/fonts/charis-sil { };
+
+  changie = callPackage ../development/tools/changie { };
 
   cherry = callPackage ../data/fonts/cherry { inherit (xorg) fonttosfnt mkfontdir; };
 
@@ -32519,6 +32530,8 @@ with pkgs;
   doom-bcc = callPackage ../games/zdoom/bcc-git.nix { };
 
   enigma = callPackage ../games/enigma { };
+
+  everspace = callPackage ../games/everspace { };
 
   ezquake = callPackage ../games/ezquake { };
 

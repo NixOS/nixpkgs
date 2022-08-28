@@ -151,7 +151,7 @@ def p_manpage(md):
     md.inline.rules.append('manpage')
 
 def p_admonition(md):
-    ADMONITION_PATTERN = re.compile(r'^::: \{([^\n]*?)\}\n(.*?)^:::\n', flags=re.MULTILINE|re.DOTALL)
+    ADMONITION_PATTERN = re.compile(r'^::: \{([^\n]*?)\}\n(.*?)^:::$\n*', flags=re.MULTILINE|re.DOTALL)
     def parse(self, m, state):
         return {
             'type': 'admonition',

@@ -71,7 +71,7 @@ in {
       baseq3 = mkOption {
         type = types.either types.package types.path;
         default = defaultBaseq3;
-        defaultText = literalDocBook "Manually downloaded Quake 3 installation directory.";
+        defaultText = literalMD "Manually downloaded Quake 3 installation directory.";
         example = "/var/lib/q3ds";
         description = lib.mdDoc ''
           Path to the baseq3 files (pak*.pk3). If this is on the nix store (type = package) all .pk3 files should be saved

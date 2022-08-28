@@ -6,8 +6,6 @@ let
   cfg = config.services.public-inbox;
   stateDir = "/var/lib/public-inbox";
 
-  manref = name: vol: "<citerefentry><refentrytitle>${name}</refentrytitle><manvolnum>${toString vol}</manvolnum></citerefentry>";
-
   gitIni = pkgs.formats.gitIni { listsAsDuplicateKeys = true; };
   iniAtom = elemAt gitIni.type/*attrsOf*/.functor.wrapped/*attrsOf*/.functor.wrapped/*either*/.functor.wrapped 0;
 
@@ -18,7 +16,7 @@ let
     args = mkOption {
       type = with types; listOf str;
       default = [];
-      description = "Command-line arguments to pass to ${manref "public-inbox-${proto}d" 1}.";
+      description = lib.mdDoc "Command-line arguments to pass to {manpage}`public-inbox-${proto}d(1)`.";
     };
     port = mkOption {
       type = with types; nullOr (either str port);
@@ -34,13 +32,13 @@ let
       type = with types; nullOr str;
       default = null;
       example = "/path/to/fullchain.pem";
-      description = "Path to TLS certificate to use for connections to ${manref "public-inbox-${proto}d" 1}.";
+      description = lib.mdDoc "Path to TLS certificate to use for connections to {manpage}`public-inbox-${proto}d(1)`.";
     };
     key = mkOption {
       type = with types; nullOr str;
       default = null;
       example = "/path/to/key.pem";
-      description = "Path to TLS key to use for connections to ${manref "public-inbox-${proto}d" 1}.";
+      description = lib.mdDoc "Path to TLS key to use for connections to {manpage}`public-inbox-${proto}d(1)`.";
     };
   };
 
@@ -198,15 +196,15 @@ in
         options.watch = mkOption {
           type = with types; listOf str;
           default = [];
-          description = "Paths for ${manref "public-inbox-watch" 1} to monitor for new mail.";
+          description = lib.mdDoc "Paths for {manpage}`public-inbox-watch(1)` to monitor for new mail.";
           example = [ "maildir:/path/to/test.example.com.git" ];
         };
         options.watchheader = mkOption {
           type = with types; nullOr str;
           default = null;
           example = "List-Id:<test@example.com>";
-          description = ''
-            If specified, ${manref "public-inbox-watch" 1} will only process
+          description = lib.mdDoc ''
+            If specified, {manpage}`public-inbox-watch(1)` will only process
             mail containing a matching header.
           '';
         };
@@ -253,7 +251,7 @@ in
       args = mkOption {
         type = with types; listOf str;
         default = [];
-        description = "Command-line arguments to pass to ${manref "public-inbox-mda" 1}.";
+        description = lib.mdDoc "Command-line arguments to pass to {manpage}`public-inbox-mda(1)`.";
       };
     };
     postfix.enable = mkEnableOption "the integration into Postfix";
@@ -302,16 +300,16 @@ in
         options.publicinboxmda.spamcheck = mkOption {
           type = with types; enum [ "spamc" "none" ];
           default = "none";
-          description = ''
-            If set to spamc, ${manref "public-inbox-watch" 1} will filter spam
+          description = lib.mdDoc ''
+            If set to spamc, {manpage}`public-inbox-watch(1)` will filter spam
             using SpamAssassin.
           '';
         };
         options.publicinboxwatch.spamcheck = mkOption {
           type = with types; enum [ "spamc" "none" ];
           default = "none";
-          description = ''
-            If set to spamc, ${manref "public-inbox-watch" 1} will filter spam
+          description = lib.mdDoc ''
+            If set to spamc, {manpage}`public-inbox-watch(1)` will filter spam
             using SpamAssassin.
           '';
         };

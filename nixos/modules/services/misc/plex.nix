@@ -134,6 +134,7 @@ in
 
         ExecStart = "${cfg.package}/bin/plexmediaserver";
         KillSignal = "SIGQUIT";
+        PIDFile = "${cfg.dataDir}/Plex Media Server/plexmediaserver.pid";
         Restart = "on-failure";
       };
 

@@ -6540,6 +6540,12 @@
     githubId = 705123;
     name = "Jan Tojnar";
   };
+  jtrees = {
+    email = "me@jtrees.io";
+    github = "jtrees";
+    githubId = 5802758;
+    name = "Joshua Trees";
+  };
   juaningan = {
     email = "juaningan@gmail.com";
     github = "uningan";
