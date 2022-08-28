@@ -9658,6 +9658,12 @@
     github = "numkem";
     githubId = 332423;
   };
+  nviets = {
+    name = "Nathan Viets";
+    github = "nviets";
+    githubId = 16027994;
+    email = "nathan.g.viets@gmail.com";
+  };
   nyanloutre = {
     email = "paul@nyanlout.re";
     github = "nyanloutre";
