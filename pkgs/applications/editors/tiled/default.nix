@@ -9,7 +9,7 @@ mkDerivation rec {
     owner = "bjorn";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QYA2krbwH807BkzVST+/+sjSR6So/aGY/YenEjYxE48=";
+    sha256 = "13qk64v159w7znca3zd8li3x5j7spwzlkmac0qxws7zhns93d021";
   };
 
   nativeBuildInputs = [ pkg-config qmake ];
