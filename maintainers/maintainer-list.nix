@@ -13885,6 +13885,12 @@
     githubId = 120451;
     name = "Urban Skudnik";
   };
+  usrfriendly = {
+      name = "Arin Lares";
+      email = "arinlares@gmail.com";
+      github = "usrfriendly";
+      githubId = 2502060;
+    };
   utdemir = {
     email = "me@utdemir.com";
     github = "utdemir";

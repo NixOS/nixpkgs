@@ -33468,7 +33468,7 @@ with pkgs;
 
   endless-sky = callPackage ../games/endless-sky { };
 
-  enyo-doom = libsForQt5.callPackage ../games/enyo-doom { };
+  enyo-launcher = libsForQt5.callPackage ../games/enyo-launcher { };
 
   eternity = callPackage ../games/eternity-engine { };
 
