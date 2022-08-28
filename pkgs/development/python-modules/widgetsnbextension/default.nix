@@ -1,25 +1,23 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, notebook
 , ipywidgets
+, jupyter-packaging
 }:
 
 buildPythonPackage rec {
   pname = "widgetsnbextension";
-  version = "3.6.1";
+  version = "4.0.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nISuZMKJPHy+Lqr8dQUiGnlcJ9aJOEVANKxIcxmnWxA=";
+    hash = "sha256-B/DoWC+SCyQxbO8WSQ8a60mPLIddSJgFQOXF2/D/Xi0=";
   };
 
-  # setup.py claims to require notebook, but the source doesn't have any imports
-  # in it.
-  postPatch = ''
-    substituteInPlace setup.py --replace "'notebook>=4.4.1'," ""
-  '';
+  nativeBuildInputs = [
+    jupyter-packaging
+  ];
 
   propagatedBuildInputs = [ ];
 
