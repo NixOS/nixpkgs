@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , fetchPypi
 , hatchling
@@ -14,7 +13,7 @@
 , pytest-timeout
 , pytest-tornasync
 , ruamel-yaml
-, strict-rfc3339
+, importlib-metadata
 }:
 
 buildPythonPackage rec {
@@ -28,19 +27,17 @@ buildPythonPackage rec {
     sha256 = "sha256-qRxRXg55caj3w8mDS3SIV/faxQL5NgS/KDmHmR/Zh+8=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov jupyterlab_server --cov-report term-missing --cov-report term:skip-covered" ""
-
-    # translation tests try to install additional packages into read only paths
-    rm -r tests/translations/
-  '';
-
   nativeBuildInputs = [
     hatchling
   ];
 
-  propagatedBuildInputs = [ requests jsonschema json5 babel jupyter_server ];
+  propagatedBuildInputs = [
+    requests
+    jsonschema
+    json5
+    babel
+    jupyter_server
+  ] ++ lib.optional (pythonOlder "3.10") importlib-metadata;
 
   checkInputs = [
     openapi-core
@@ -50,19 +47,25 @@ buildPythonPackage rec {
     ruamel-yaml
   ];
 
+  postPatch = ''
+    # translation tests try to install additional packages into read only paths
+    rm -r tests/translations/
+  '';
+
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
   pytestFlagsArray = [
-    # DeprecationWarning: The distutils package is deprecated and slated for removal in Python 3.12. Use setuptools or check PEP 632 for potential alternatives
+    # DeprecationWarning: The distutils package is deprecated and slated for removal in Python 3.12.
+    # Use setuptools or check PEP 632 for potential alternatives.
     "-W ignore::DeprecationWarning"
   ];
 
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "JupyterLab Server";
+    description = "A set of server components for JupyterLab and JupyterLab like applications";
     homepage = "https://jupyter.org";
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.costrouc ];
