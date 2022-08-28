@@ -2,24 +2,35 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools-scm
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "twitter";
-  version = "1.19.3";
+  version = "1.19.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a56ff9575fbd50a51ce91107dcb5a4c3fd00c2ba1bcb172ce538b0948d3626e6";
+    hash = "sha256-g7jSSEpsdEihGuHG9MJTNVFe6NyB272vEsvAocRo72U=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
   doCheck = false;
+
+  pythonImportsCheck = [
+    "twitter"
+  ];
 
   meta = with lib; {
     description = "Twitter API library";
-    license     = licenses.mit;
+    homepage = "https://mike.verdone.ca/twitter/";
+    license = licenses.mit;
     maintainers = with maintainers; [ thoughtpolice ];
   };
-
 }
