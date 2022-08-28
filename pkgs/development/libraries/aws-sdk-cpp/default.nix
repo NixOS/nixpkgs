@@ -32,14 +32,14 @@ in
 stdenv.mkDerivation rec {
   pname = "aws-sdk-cpp";
   version = if stdenv.system == "i686-linux" then "1.9.150"
-    else "1.9.238";
+    else "1.9.294";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-cpp";
     rev = version;
     sha256 = if version == "1.9.150" then "fgLdXWQKHaCwulrw9KV3vpQ71DjnQAL4heIRW7Rk7UY="
-      else "sha256-pEmsTfZXsvJMV79dGkjDNbUVajwyoYgzE5DCsC53pGY=";
+      else "sha256-Z1eRKW+8nVD53GkNyYlZjCcT74MqFqqRMeMc33eIQ9g=";
   };
 
   postPatch = ''

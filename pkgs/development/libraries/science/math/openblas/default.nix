@@ -23,6 +23,13 @@
 , enableAVX512 ? false
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
+
+# for passthru.tests
+, ceres-solver
+, giac
+, octave
+, opencv
+, python3
 }:
 
 with lib;
@@ -224,6 +231,11 @@ EOF
     ln -s $out/lib/libopenblas.a $out/lib/liblapack.a
     ln -s $out/lib/libopenblas.a $out/lib/liblapacke.a
   '';
+
+  passthru.tests = {
+    inherit (python3.pkgs) numpy scipy;
+    inherit ceres-solver giac octave opencv;
+  };
 
   meta = with lib; {
     description = "Basic Linear Algebra Subprograms";
