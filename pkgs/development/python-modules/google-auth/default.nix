@@ -72,7 +72,8 @@ buildPythonPackage rec {
     responses
     urllib3
   ] ++ passthru.optional-dependencies.aiohttp
-  ++ passthru.optional-dependencies.enterprise_cert
+  # `cryptography` is still required on `aarch64-darwin` for `tests/crypt/*`
+  ++ (if (stdenv.isDarwin && stdenv.isAarch64) then [ cryptography ] else passthru.optional-dependencies.enterprise_cert)
   ++ passthru.optional-dependencies.reauth;
 
   pythonImportsCheck = [
@@ -80,11 +81,12 @@ buildPythonPackage rec {
     "google.oauth2"
   ];
 
-  disabledTestPaths = [
-    # Disable tests related to pyopenssl
+  disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # Disable tests using pyOpenSSL as it does not build on M1 Macs
     "tests/transport/test__mtls_helper.py"
     "tests/transport/test_requests.py"
     "tests/transport/test_urllib3.py"
+    "tests/transport/test__custom_tls_signer.py"
   ];
 
   meta = with lib; {
