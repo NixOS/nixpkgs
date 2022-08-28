@@ -1,18 +1,11 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch
 , ncurses, boehmgc, gettext, zlib
-, sslSupport ? true, openssl ? null
-, graphicsSupport ? !stdenv.isDarwin, imlib2 ? null
-, x11Support ? graphicsSupport, libX11 ? null
-, mouseSupport ? !stdenv.isDarwin, gpm-ncurses ? null
+, sslSupport ? true, openssl
+, graphicsSupport ? !stdenv.isDarwin, imlib2
+, x11Support ? graphicsSupport, libX11
+, mouseSupport ? !stdenv.isDarwin, gpm-ncurses
 , perl, man, pkg-config, buildPackages, w3m
 }:
-
-assert sslSupport -> openssl != null;
-assert graphicsSupport -> imlib2 != null;
-assert x11Support -> graphicsSupport && libX11 != null;
-assert mouseSupport -> gpm-ncurses != null;
-
-with lib;
 
 let
   mktable = buildPackages.stdenv.mkDerivation {
@@ -26,16 +19,16 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "w3m";
-  version = "0.5.3+git20190105";
+  version = "0.5.3+git20220429";
 
   src = fetchFromGitHub {
     owner = "tats";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fbg2p8qh2gvi3g4iz4q6vc0k70pf248r4yndi5lcn2m3mzvjx0i";
+    hash = "sha256-aPPLZjjL3A5Tk0hv0NoAwJnjemC7a5RUoubhUr3lQE4=";
   };
 
-  NIX_LDFLAGS = optionalString stdenv.isSunOS "-lsocket -lnsl";
+  NIX_LDFLAGS = lib.optionalString stdenv.isSunOS "-lsocket -lnsl";
 
   # we must set these so that the generated files (e.g. w3mhelp.cgi) contain
   # the correct paths.
@@ -51,9 +44,9 @@ in stdenv.mkDerivation rec {
       url = "https://aur.archlinux.org/cgit/aur.git/plain/https.patch?h=w3m-mouse&id=5b5f0fbb59f674575e87dd368fed834641c35f03";
       sha256 = "08skvaha1hjyapsh8zw5dgfy433mw2hk7qy9yy9avn8rjqj7kjxk";
     })
-  ] ++ optional (graphicsSupport && !x11Support) [ ./no-x11.patch ];
+  ];
 
-  postPatch = optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     ln -s ${mktable}/bin/mktable mktable
     # stop make from recompiling mktable
     sed -ie 's!mktable.*:.*!mktable:!' Makefile.in
@@ -61,12 +54,12 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config gettext ];
   buildInputs = [ ncurses boehmgc zlib ]
-    ++ optional sslSupport openssl
-    ++ optional mouseSupport gpm-ncurses
-    ++ optional graphicsSupport imlib2
-    ++ optional x11Support libX11;
+    ++ lib.optional sslSupport openssl
+    ++ lib.optional mouseSupport gpm-ncurses
+    ++ lib.optional graphicsSupport imlib2
+    ++ lib.optional x11Support libX11;
 
-  postInstall = optionalString graphicsSupport ''
+  postInstall = lib.optionalString graphicsSupport ''
     ln -s $out/libexec/w3m/w3mimgdisplay $out/bin
   '';
 
@@ -74,10 +67,11 @@ in stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--with-ssl=${openssl.dev}" "--with-gc=${boehmgc.dev}" ]
-    ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
       "ac_cv_func_setpgrp_void=yes"
     ]
-    ++ optional graphicsSupport "--enable-image=${optionalString x11Support "x11,"}fb";
+    ++ lib.optional graphicsSupport "--enable-image=${lib.optionalString x11Support "x11,"}fb"
+    ++ lib.optional (graphicsSupport && !x11Support) "--without-x";
 
   preConfigure = ''
     substituteInPlace ./configure --replace "/lib /usr/lib /usr/local/lib /usr/ucblib /usr/ccslib /usr/ccs/lib /lib64 /usr/lib64" /no-such-path
@@ -88,13 +82,13 @@ in stdenv.mkDerivation rec {
 
   # for w3mimgdisplay
   # see: https://bbs.archlinux.org/viewtopic.php?id=196093
-  LIBS = optionalString x11Support "-lX11";
+  LIBS = lib.optionalString x11Support "-lX11";
 
-  meta = {
+  meta = with lib; {
     homepage = "http://w3m.sourceforge.net/";
     description = "A text-mode web browser";
-    maintainers = [ maintainers.cstrahan ];
-    platforms = lib.platforms.unix;
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ cstrahan anthonyroussel ];
+    platforms = platforms.unix;
+    license = licenses.mit;
   };
 }
