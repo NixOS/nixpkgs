@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cpio, xar, undmg, ... }:
+{ lib, stdenv, fetchurl, cpio, xar, undmg }:
 
 stdenv.mkDerivation rec {
   pname = "karabiner-elements";
@@ -41,9 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = ''
-      Karabiner-Elements is a powerful utility for keyboard customization on macOS Sierra (10.12) or later.
-    '';
+    description = "Karabiner-Elements is a powerful utility for keyboard customization on macOS Sierra (10.12) or later.";
     homepage = "https://karabiner-elements.pqrs.org/";
     platforms = platforms.darwin;
     maintainers = with maintainers; [ Enzime ];
