@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, perl, makeWrapper
 , version, sha256, patches ? [], extraBuildInputs ? []
+, forStdenvBootstrap ? false
 , ...
 }:
 stdenv.mkDerivation rec {
@@ -11,14 +12,14 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = lib.optionals (!forStdenvBootstrap) [ makeWrapper ];
   buildInputs = [ perl ] ++ extraBuildInputs;
   hardeningDisable = [ "format" ];
 
   # tests fail when building in parallel
   enableParallelBuilding = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (!forStdenvBootstrap) ''
     for bin in $out/bin/{splitdiff,rediff,editdiff,dehtmldiff}; do
       wrapProgram "$bin" \
         --prefix PATH : "$out/bin"
