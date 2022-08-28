@@ -575,7 +575,7 @@ in
       internal = true;
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Shell commands to be executed in the builder of the
         extra-utils derivation.  This can be used to provide
         additional utilities in the initial ramdisk.
@@ -586,7 +586,7 @@ in
       internal = true;
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Shell commands to be executed in the builder of the
         extra-utils derivation after patchelf has done its
         job.  This can be used to test additional utilities
@@ -598,7 +598,7 @@ in
       internal = true;
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Shell commands to be executed in the builder of the
         udev-rules derivation.  This can be used to add
         additional udev rules in the initial ramdisk.
@@ -676,7 +676,7 @@ in
         default = false;
         type = types.bool;
         description =
-          ''
+          lib.mdDoc ''
             Whether the bootloader setup runs append-initrd-secrets.
             If not, any needed secrets must be copied into the initrd
             and thus added to the store.

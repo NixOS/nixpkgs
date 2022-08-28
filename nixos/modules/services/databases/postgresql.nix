@@ -264,7 +264,7 @@ in
         default = "postgres";
         internal = true;
         readOnly = true;
-        description = ''
+        description = lib.mdDoc ''
           PostgreSQL superuser account to use for various operations. Internal since changing
           this value would lead to breakage while setting up databases.
         '';

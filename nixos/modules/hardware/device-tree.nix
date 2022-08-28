@@ -171,7 +171,7 @@ in
           default = null;
           type = types.nullOr types.path;
           internal = true;
-          description = ''
+          description = lib.mdDoc ''
             A path containing the result of applying `overlays` to `kernelPackage`.
           '';
         };

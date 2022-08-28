@@ -94,7 +94,7 @@ in rec {
 
     unit = mkOption {
       internal = true;
-      description = "The generated unit.";
+      description = lib.mdDoc "The generated unit.";
     };
 
   };
@@ -358,7 +358,7 @@ in rec {
       jobScripts = mkOption {
         type = with types; coercedTo path singleton (listOf path);
         internal = true;
-        description = "A list of all job script derivations of this unit.";
+        description = lib.mdDoc "A list of all job script derivations of this unit.";
         default = [];
       };
 

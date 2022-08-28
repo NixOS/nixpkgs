@@ -64,10 +64,10 @@ in
             bgSupport = true;
             start = "...";
           };
-        description = ''
+        description = lib.mdDoc ''
           Internal option used to add some common line to desktop manager
           scripts before forwarding the value to the
-          <varname>displayManager</varname>.
+          `displayManager`.
         '';
         apply = map (d: d // {
           manage = "desktop";

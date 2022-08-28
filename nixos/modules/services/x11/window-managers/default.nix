@@ -59,10 +59,10 @@ in
           name = "wmii";
           start = "...";
         }];
-        description = ''
+        description = lib.mdDoc ''
           Internal option used to add some common line to window manager
           scripts before forwarding the value to the
-          <varname>displayManager</varname>.
+          `displayManager`.
         '';
         apply = map (d: d // {
           manage = "window";

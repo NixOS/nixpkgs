@@ -570,7 +570,7 @@ in
         type = types.str;
         default = "";
         internal = true;
-        description = "Primary IP address used in /etc/hosts.";
+        description = lib.mdDoc "Primary IP address used in /etc/hosts.";
       };
 
     virtualisation.qemu = {

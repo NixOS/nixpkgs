@@ -294,7 +294,7 @@ in
       drivers = mkOption {
         type = types.listOf types.attrs;
         internal = true;
-        description = ''
+        description = lib.mdDoc ''
           A list of attribute sets specifying drivers to be loaded by
           the X11 server.
         '';

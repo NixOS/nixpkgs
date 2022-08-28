@@ -132,7 +132,7 @@ in
       internal = true;
       type = types.package;
       default = python;
-      description = ''
+      description = lib.mdDoc ''
         The python package to use. It should contain references to the *srht modules and also
         gunicorn.
       '';

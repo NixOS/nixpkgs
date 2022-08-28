@@ -72,7 +72,7 @@ in
       type = types.package;
       default = crioPackage;
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         The final CRI-O package (including extra packages).
       '';
     };
@@ -80,7 +80,7 @@ in
     networkDir = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = "Override the network_dir option.";
+      description = lib.mdDoc "Override the network_dir option.";
       internal = true;
     };
 

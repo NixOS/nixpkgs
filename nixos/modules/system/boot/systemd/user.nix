@@ -97,7 +97,7 @@ in {
       default = [];
       type = types.listOf types.str;
       example = [];
-      description = ''
+      description = lib.mdDoc ''
         Additional units shipped with systemd that should be enabled for per-user systemd instances.
       '';
       internal = true;

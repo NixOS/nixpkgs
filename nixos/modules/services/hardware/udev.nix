@@ -300,13 +300,13 @@ in
         type = types.listOf types.path;
         default = [];
         visible = false;
-        description = ''
-          <emphasis>This will only be used when systemd is used in stage 1.</emphasis>
+        description = lib.mdDoc ''
+          *This will only be used when systemd is used in stage 1.*
 
-          List of packages containing <command>udev</command> rules that will be copied to stage 1.
+          List of packages containing {command}`udev` rules that will be copied to stage 1.
           All files found in
-          <filename>«pkg»/etc/udev/rules.d</filename> and
-          <filename>«pkg»/lib/udev/rules.d</filename>
+          {file}`«pkg»/etc/udev/rules.d` and
+          {file}`«pkg»/lib/udev/rules.d`
           will be included.
         '';
       };
@@ -315,8 +315,8 @@ in
         type = types.listOf types.path;
         default = [];
         visible = false;
-        description = ''
-          <emphasis>This will only be used when systemd is used in stage 1.</emphasis>
+        description = lib.mdDoc ''
+          *This will only be used when systemd is used in stage 1.*
 
           Packages to search for binaries that are referenced by the udev rules in stage 1.
           This list always contains /bin of the initrd.

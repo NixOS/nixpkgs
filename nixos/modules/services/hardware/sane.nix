@@ -89,7 +89,7 @@ in
     hardware.sane.configDir = mkOption {
       type = types.str;
       internal = true;
-      description = "The value of SANE_CONFIG_DIR.";
+      description = lib.mdDoc "The value of SANE_CONFIG_DIR.";
     };
 
     hardware.sane.netConf = mkOption {

@@ -39,7 +39,7 @@ in
       default = {};
       type = with types; attrsOf anything;
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         Internal option to add configs to hbase-site.xml based on module options
       '';
     };

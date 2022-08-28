@@ -25,7 +25,7 @@ with lib;
       default = {};
       type = types.attrsOf types.anything;
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         Internal option to add configs to core-site.xml based on module options
       '';
     };
@@ -59,7 +59,7 @@ with lib;
       default = {};
       type = types.attrsOf types.anything;
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         Internal option to add configs to hdfs-site.xml based on module options
       '';
     };
@@ -134,7 +134,7 @@ with lib;
       default = {};
       type = types.attrsOf types.anything;
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         Internal option to add configs to yarn-site.xml based on module options
       '';
     };

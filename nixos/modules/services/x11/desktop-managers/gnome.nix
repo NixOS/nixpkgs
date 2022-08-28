@@ -201,7 +201,7 @@ in
             favorite-apps=[ 'firefox.desktop', 'org.gnome.Calendar.desktop' ]
           '''
         '';
-        description = "List of desktop files to put as favorite apps into gnome-shell. These need to be installed somehow globally.";
+        description = lib.mdDoc "List of desktop files to put as favorite apps into gnome-shell. These need to be installed somehow globally.";
       };
 
       extraGSettingsOverrides = mkOption {

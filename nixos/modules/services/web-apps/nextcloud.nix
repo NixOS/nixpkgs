@@ -529,7 +529,7 @@ in {
       default = occ;
       defaultText = literalMD "generated script";
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         The nextcloud-occ program preconfigured to target this Nextcloud instance.
       '';
     };

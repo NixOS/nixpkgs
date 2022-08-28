@@ -1824,7 +1824,7 @@ in
     };
 
     systemd.network.units = mkOption {
-      description = "Definition of networkd units.";
+      description = lib.mdDoc "Definition of networkd units.";
       default = {};
       internal = true;
       type = with types; attrsOf (submodule (

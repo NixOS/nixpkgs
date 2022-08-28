@@ -199,7 +199,7 @@ in
       type        = lib.types.path;
       default     = "/run/wrappers/bin";
       internal    = true;
-      description = ''
+      description = lib.mdDoc ''
         This option defines the path to the wrapper programs. It
         should not be overriden.
       '';
