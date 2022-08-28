@@ -7,13 +7,13 @@
 
 trivialBuild rec {
   pname = "apheleia";
-  version = "1.2";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "raxod502";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-yd9yhQOs0+RB8RKaXnV/kClDm8cO97RkC8yw5b8IKRo=";
+    hash = "sha256-rck7ghnvOf6Q6wKwshQ4Si47omIIzbGtdromszmB+Do=";
   };
 
   buildInputs = [
