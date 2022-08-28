@@ -8,7 +8,7 @@ in
 {
   options = {
     services.openarena = {
-      enable = mkEnableOption "OpenArena";
+      enable = mkEnableOption (lib.mdDoc "OpenArena");
 
       openPorts = mkOption {
         type = types.bool;

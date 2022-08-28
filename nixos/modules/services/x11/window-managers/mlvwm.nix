@@ -8,7 +8,7 @@ in
 {
 
   options.services.xserver.windowManager.mlvwm = {
-    enable = mkEnableOption "Macintosh-like Virtual Window Manager";
+    enable = mkEnableOption (lib.mdDoc "Macintosh-like Virtual Window Manager");
 
     configFile = mkOption {
       default = null;

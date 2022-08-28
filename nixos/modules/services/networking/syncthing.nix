@@ -74,7 +74,7 @@ in {
     services.syncthing = {
 
       enable = mkEnableOption
-        "Syncthing, a self-hosted open-source alternative to Dropbox and Bittorrent Sync";
+        (lib.mdDoc "Syncthing, a self-hosted open-source alternative to Dropbox and Bittorrent Sync");
 
       cert = mkOption {
         type = types.nullOr types.str;

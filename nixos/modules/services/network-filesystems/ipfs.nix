@@ -52,7 +52,7 @@ in
 
     services.ipfs = {
 
-      enable = mkEnableOption "Interplanetary File System (WARNING: may cause severe network degredation)";
+      enable = mkEnableOption (lib.mdDoc "Interplanetary File System (WARNING: may cause severe network degredation)");
 
       package = mkOption {
         type = types.package;

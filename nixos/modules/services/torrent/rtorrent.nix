@@ -9,7 +9,7 @@ let
 
 in {
   options.services.rtorrent = {
-    enable = mkEnableOption "rtorrent";
+    enable = mkEnableOption (lib.mdDoc "rtorrent");
 
     dataDir = mkOption {
       type = types.str;

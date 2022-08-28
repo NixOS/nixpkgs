@@ -222,8 +222,8 @@ in
       path = mkOption {
         type = types.listOf types.path;
         default = [];
-        description = ''
-          Packages added to the <envar>PATH</envar> environment variable when
+        description = lib.mdDoc ''
+          Packages added to the {env}`PATH` environment variable when
           executing programs from Udev rules.
         '';
       };

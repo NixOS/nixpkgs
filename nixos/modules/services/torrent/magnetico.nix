@@ -43,7 +43,7 @@ in {
   ###### interface
 
   options.services.magnetico = {
-    enable = mkEnableOption "Magnetico, Bittorrent DHT crawler";
+    enable = mkEnableOption (lib.mdDoc "Magnetico, Bittorrent DHT crawler");
 
     crawler.address = mkOption {
       type = types.str;

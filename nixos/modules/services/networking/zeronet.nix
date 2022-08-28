@@ -17,7 +17,7 @@ let
   };
 in with lib; {
   options.services.zeronet = {
-    enable = mkEnableOption "zeronet";
+    enable = mkEnableOption (lib.mdDoc "zeronet");
 
     package = mkOption {
       type = types.package;

@@ -8,7 +8,7 @@ in
 
 {
   options.services.weechat = {
-    enable = mkEnableOption "weechat";
+    enable = mkEnableOption (lib.mdDoc "weechat");
     root = mkOption {
       description = lib.mdDoc "Weechat state directory.";
       type = types.str;

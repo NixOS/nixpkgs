@@ -12,7 +12,7 @@ in
   options = {
 
     services.spamassassin = {
-      enable = mkEnableOption "the SpamAssassin daemon";
+      enable = mkEnableOption (lib.mdDoc "the SpamAssassin daemon");
 
       debug = mkOption {
         type = types.bool;

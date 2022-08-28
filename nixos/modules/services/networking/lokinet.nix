@@ -7,7 +7,7 @@ let
   configFile = settingsFormat.generate "lokinet.ini" (lib.filterAttrsRecursive (n: v: v != null) cfg.settings);
 in with lib; {
   options.services.lokinet = {
-    enable = mkEnableOption "Lokinet daemon";
+    enable = mkEnableOption (lib.mdDoc "Lokinet daemon");
 
     package = mkOption {
       type = types.package;

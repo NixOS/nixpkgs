@@ -29,7 +29,7 @@ in
   options = {
 
     services.zabbixAgent = {
-      enable = mkEnableOption "the Zabbix Agent";
+      enable = mkEnableOption (lib.mdDoc "the Zabbix Agent");
 
       package = mkOption {
         type = types.package;
@@ -43,8 +43,8 @@ in
         default = with pkgs; [ nettools ];
         defaultText = literalExpression "with pkgs; [ nettools ]";
         example = literalExpression "with pkgs; [ nettools mysql ]";
-        description = ''
-          Packages to be added to the Zabbix <envar>PATH</envar>.
+        description = lib.mdDoc ''
+          Packages to be added to the Zabbix {env}`PATH`.
           Typically used to add executables for scripts, but can be anything.
         '';
       };

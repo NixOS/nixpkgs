@@ -13,7 +13,7 @@ in
     ];
 
     options.hardware.ckb-next = {
-      enable = mkEnableOption "the Corsair keyboard/mouse driver";
+      enable = mkEnableOption (lib.mdDoc "the Corsair keyboard/mouse driver");
 
       gid = mkOption {
         type = types.nullOr types.int;

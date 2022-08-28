@@ -189,7 +189,7 @@ in
       default = "50%";
       example = "10G";
       type = lib.types.str;
-      description = ''
+      description = lib.mdDoc ''
         Size limit for the /run/wrappers tmpfs. Look at mount(8), tmpfs size option,
         for the accepted syntax. WARNING: don't set to less than 64MB.
       '';

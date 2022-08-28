@@ -126,7 +126,7 @@ in
       };
 
       alerts = {
-        enable = mkEnableOption "consul-alerts";
+        enable = mkEnableOption (lib.mdDoc "consul-alerts");
 
         package = mkOption {
           description = lib.mdDoc "Package to use for consul-alerts.";

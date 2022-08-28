@@ -19,17 +19,17 @@ in
 
       enable = mkOption {
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the fake "auto" display manager, which
           automatically logs in the user specified in the
-          <option>user</option> option.  This is mostly useful for
+          {option}`user` option.  This is mostly useful for
           automated tests.
         '';
       };
 
       user = mkOption {
         default = "root";
-        description = "The user account to login automatically.";
+        description = lib.mdDoc "The user account to login automatically.";
       };
 
     };

@@ -42,7 +42,7 @@ in
 {
   options = {
     services.gvpe = {
-      enable = lib.mkEnableOption "gvpe";
+      enable = lib.mkEnableOption (lib.mdDoc "gvpe");
 
       nodename = mkOption {
         default = null;

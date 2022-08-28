@@ -29,7 +29,7 @@ let
 
 in {
   options.services.collectd = with types; {
-    enable = mkEnableOption "collectd agent";
+    enable = mkEnableOption (lib.mdDoc "collectd agent");
 
     validateConfig = mkOption {
       default = true;

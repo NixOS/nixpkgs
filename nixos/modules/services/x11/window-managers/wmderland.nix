@@ -8,7 +8,7 @@ in
 
 {
   options.services.xserver.windowManager.wmderland = {
-    enable = mkEnableOption "wmderland";
+    enable = mkEnableOption (lib.mdDoc "wmderland");
 
     extraSessionCommands = mkOption {
       default = "";

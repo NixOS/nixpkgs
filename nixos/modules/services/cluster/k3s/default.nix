@@ -13,7 +13,7 @@ in
 
   # interface
   options.services.k3s = {
-    enable = mkEnableOption "k3s";
+    enable = mkEnableOption (lib.mdDoc "k3s");
 
     package = mkOption {
       type = types.package;

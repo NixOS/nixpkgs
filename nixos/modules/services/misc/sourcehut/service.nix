@@ -117,7 +117,7 @@ let
 in
 {
   options.services.sourcehut.${srv} = {
-    enable = mkEnableOption "${srv} service";
+    enable = mkEnableOption (lib.mdDoc "${srv} service");
 
     user = mkOption {
       type = types.str;

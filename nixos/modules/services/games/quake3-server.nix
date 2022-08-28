@@ -37,7 +37,7 @@ let
 in {
   options = {
     services.quake3-server = {
-      enable = mkEnableOption "Quake 3 dedicated server";
+      enable = mkEnableOption (lib.mdDoc "Quake 3 dedicated server");
 
       port = mkOption {
         type = types.port;

@@ -79,7 +79,7 @@ in {
   ];
 
   options.services.nextcloud = {
-    enable = mkEnableOption "nextcloud";
+    enable = mkEnableOption (lib.mdDoc "nextcloud");
     hostName = mkOption {
       type = types.str;
       description = lib.mdDoc "FQDN for the nextcloud instance.";
@@ -387,15 +387,15 @@ in {
 
       objectstore = {
         s3 = {
-          enable = mkEnableOption ''
+          enable = mkEnableOption (lib.mdDoc ''
             S3 object storage as primary storage.
 
             This mounts a bucket on an Amazon S3 object storage or compatible
             implementation into the virtual filesystem.
 
             Further details about this feature can be found in the
-            <link xlink:href="https://docs.nextcloud.com/server/22/admin_manual/configuration_files/primary_storage.html">upstream documentation</link>.
-          '';
+            [upstream documentation](https://docs.nextcloud.com/server/22/admin_manual/configuration_files/primary_storage.html).
+          '');
           bucket = mkOption {
             type = types.str;
             example = "nextcloud";
@@ -470,13 +470,13 @@ in {
       };
     };
 
-    enableImagemagick = mkEnableOption ''
+    enableImagemagick = mkEnableOption (lib.mdDoc ''
         the ImageMagick module for PHP.
         This is used by the theming app and for generating previews of certain images (e.g. SVG and HEIF).
         You may want to disable it for increased security. In that case, previews will still be available
         for some images (e.g. JPEG and PNG).
-        See <link xlink:href="https://github.com/nextcloud/server/issues/13099"/>.
-    '' // {
+        See <https://github.com/nextcloud/server/issues/13099>.
+    '') // {
       default = true;
     };
 

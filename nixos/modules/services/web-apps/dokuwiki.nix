@@ -60,7 +60,7 @@ let
   siteOpts = { config, lib, name, ... }:
     {
       options = {
-        enable = mkEnableOption "DokuWiki web application.";
+        enable = mkEnableOption (lib.mdDoc "DokuWiki web application.");
 
         package = mkOption {
           type = types.package;

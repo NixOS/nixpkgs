@@ -44,7 +44,7 @@ in
       type = types.submodule {
         options = {
           enable = mkEnableOption
-            "Wheter to start the web-ui. This is the preferred way of configuring things such as the steam guard token";
+            (lib.mdDoc "Wheter to start the web-ui. This is the preferred way of configuring things such as the steam guard token");
 
           package = mkOption {
             type = types.package;

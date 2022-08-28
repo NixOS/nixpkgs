@@ -13,7 +13,7 @@ let
 in
 {
   options.services.duplicity = {
-    enable = mkEnableOption "backups with duplicity";
+    enable = mkEnableOption (lib.mdDoc "backups with duplicity");
 
     root = mkOption {
       type = types.path;

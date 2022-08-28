@@ -39,7 +39,7 @@ in {
   ];
 
   options.services.vaultwarden = with types; {
-    enable = mkEnableOption "vaultwarden";
+    enable = mkEnableOption (lib.mdDoc "vaultwarden");
 
     dbBackend = mkOption {
       type = enum [ "sqlite" "mysql" "postgresql" ];

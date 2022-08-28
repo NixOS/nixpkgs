@@ -20,9 +20,9 @@ in
 {
   options.services.parsedmarc = {
 
-    enable = lib.mkEnableOption ''
+    enable = lib.mkEnableOption (lib.mdDoc ''
       parsedmarc, a DMARC report monitoring service
-    '';
+    '');
 
     provision = {
       localMail = {

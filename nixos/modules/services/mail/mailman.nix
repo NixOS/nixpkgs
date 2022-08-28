@@ -94,7 +94,7 @@ in {
       };
 
       ldap = {
-        enable = mkEnableOption "LDAP auth";
+        enable = mkEnableOption (lib.mdDoc "LDAP auth");
         serverUri = mkOption {
           type = types.str;
           example = "ldaps://ldap.host";
@@ -262,7 +262,7 @@ in {
       };
 
       serve = {
-        enable = mkEnableOption "Automatic nginx and uwsgi setup for mailman-web";
+        enable = mkEnableOption (lib.mdDoc "Automatic nginx and uwsgi setup for mailman-web");
       };
 
       extraPythonPackages = mkOption {
@@ -278,7 +278,7 @@ in {
       };
 
       hyperkitty = {
-        enable = mkEnableOption "the Hyperkitty archiver for Mailman";
+        enable = mkEnableOption (lib.mdDoc "the Hyperkitty archiver for Mailman");
 
         baseUrl = mkOption {
           type = types.str;

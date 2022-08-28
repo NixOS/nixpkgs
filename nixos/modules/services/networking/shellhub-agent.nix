@@ -12,7 +12,7 @@ in
 
     services.shellhub-agent = {
 
-      enable = mkEnableOption "ShellHub Agent daemon";
+      enable = mkEnableOption (lib.mdDoc "ShellHub Agent daemon");
 
       package = mkPackageOption pkgs "shellhub-agent" { };
 

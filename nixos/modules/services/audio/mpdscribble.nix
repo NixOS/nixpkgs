@@ -77,7 +77,7 @@ in {
 
   options.services.mpdscribble = {
 
-    enable = mkEnableOption "mpdscribble";
+    enable = mkEnableOption (lib.mdDoc "mpdscribble");
 
     proxy = mkOption {
       default = null;

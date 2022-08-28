@@ -69,7 +69,7 @@ let
       };
 
       webService = {
-        enable = mkEnableOption "awstats web service";
+        enable = mkEnableOption (lib.mdDoc "awstats web service");
 
         hostname = mkOption {
           type = types.str;
@@ -95,7 +95,7 @@ in
   ];
 
   options.services.awstats = {
-    enable = mkEnableOption "awstats";
+    enable = mkEnableOption (lib.mdDoc "awstats");
 
     dataDir = mkOption {
       type = types.path;

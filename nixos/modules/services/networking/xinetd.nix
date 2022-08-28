@@ -44,7 +44,7 @@ in
 
   options = {
 
-    services.xinetd.enable = mkEnableOption "the xinetd super-server daemon";
+    services.xinetd.enable = mkEnableOption (lib.mdDoc "the xinetd super-server daemon");
 
     services.xinetd.extraDefaults = mkOption {
       default = "";

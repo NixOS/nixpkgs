@@ -14,7 +14,7 @@ in
   ##### interface
   options = {
     services.klipper = {
-      enable = mkEnableOption "Klipper, the 3D printer firmware";
+      enable = mkEnableOption (lib.mdDoc "Klipper, the 3D printer firmware");
 
       package = mkOption {
         type = types.package;

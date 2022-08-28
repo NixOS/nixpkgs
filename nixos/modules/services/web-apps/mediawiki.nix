@@ -171,7 +171,7 @@ in
   options = {
     services.mediawiki = {
 
-      enable = mkEnableOption "MediaWiki";
+      enable = mkEnableOption (lib.mdDoc "MediaWiki");
 
       package = mkOption {
         type = types.package;

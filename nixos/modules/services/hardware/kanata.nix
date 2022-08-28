@@ -176,7 +176,7 @@ let
 in
 {
   options.services.kanata = {
-    enable = mkEnableOption "kanata";
+    enable = mkEnableOption (lib.mdDoc "kanata");
     package = mkOption {
       type = types.package;
       default = pkgs.kanata;

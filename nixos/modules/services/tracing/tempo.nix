@@ -8,7 +8,7 @@ let
   settingsFormat = pkgs.formats.yaml {};
 in {
   options.services.tempo = {
-    enable = mkEnableOption "Grafana Tempo";
+    enable = mkEnableOption (lib.mdDoc "Grafana Tempo");
 
     settings = mkOption {
       type = settingsFormat.type;

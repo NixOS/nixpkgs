@@ -11,7 +11,7 @@ let
 in
 {
   options.services.earlyoom = {
-    enable = mkEnableOption "Early out of memory killing";
+    enable = mkEnableOption (lib.mdDoc "Early out of memory killing");
 
     freeMemThreshold = mkOption {
       type = types.ints.between 1 100;

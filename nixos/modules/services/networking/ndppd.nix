@@ -103,21 +103,21 @@ let
 
 in {
   options.services.ndppd = {
-    enable = mkEnableOption "daemon that proxies NDP (Neighbor Discovery Protocol) messages between interfaces";
+    enable = mkEnableOption (lib.mdDoc "daemon that proxies NDP (Neighbor Discovery Protocol) messages between interfaces");
     interface = mkOption {
       type = types.nullOr types.str;
-      description = ''
+      description = lib.mdDoc ''
         Interface which is on link-level with router.
-        (Legacy option, use services.ndppd.proxies.&lt;interface&gt;.rules.&lt;network&gt; instead)
+        (Legacy option, use services.ndppd.proxies.\<interface\>.rules.\<network\> instead)
       '';
       default = null;
       example = "eth0";
     };
     network = mkOption {
       type = types.nullOr types.str;
-      description = ''
+      description = lib.mdDoc ''
         Network that we proxy.
-        (Legacy option, use services.ndppd.proxies.&lt;interface&gt;.rules.&lt;network&gt; instead)
+        (Legacy option, use services.ndppd.proxies.\<interface\>.rules.\<network\> instead)
       '';
       default = null;
       example = "1111::/64";

@@ -27,7 +27,7 @@ in
   ###### interface
 
   options.services.soju = {
-    enable = mkEnableOption "soju";
+    enable = mkEnableOption (lib.mdDoc "soju");
 
     listen = mkOption {
       type = types.listOf types.str;

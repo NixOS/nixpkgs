@@ -25,7 +25,7 @@ let
 
 in {
   options.services.adguardhome = with types; {
-    enable = mkEnableOption "AdGuard Home network-wide ad blocker";
+    enable = mkEnableOption (lib.mdDoc "AdGuard Home network-wide ad blocker");
 
     host = mkOption {
       default = "0.0.0.0";

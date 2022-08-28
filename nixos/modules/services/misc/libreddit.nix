@@ -13,7 +13,7 @@ in
 {
   options = {
     services.libreddit = {
-      enable = mkEnableOption "Private front-end for Reddit";
+      enable = mkEnableOption (lib.mdDoc "Private front-end for Reddit");
 
       address = mkOption {
         default = "0.0.0.0";

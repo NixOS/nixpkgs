@@ -6,7 +6,7 @@ let
   cfg = config.services.cfssl;
 in {
   options.services.cfssl = {
-    enable = mkEnableOption "the CFSSL CA api-server";
+    enable = mkEnableOption (lib.mdDoc "the CFSSL CA api-server");
 
     dataDir = mkOption {
       default = "/var/lib/cfssl";

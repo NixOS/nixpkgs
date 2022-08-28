@@ -118,7 +118,7 @@ in
 
   options.services.hylafax = {
 
-    enable = mkEnableOption "HylaFAX server";
+    enable = mkEnableOption (lib.mdDoc "HylaFAX server");
 
     autostart = mkOption {
       type = bool;
@@ -271,11 +271,11 @@ in
       '';
     };
 
-    faxcron.enable.spoolInit = mkEnableOption ''
+    faxcron.enable.spoolInit = mkEnableOption (lib.mdDoc ''
       Purge old files from the spooling area with
-      <filename>faxcron</filename>
+      {file}`faxcron`
       each time the spooling area is initialized.
-    '';
+    '');
     faxcron.enable.frequency = mkOption {
       type = nullOr nonEmptyStr;
       default = null;
@@ -311,11 +311,11 @@ in
       '';
     };
 
-    faxqclean.enable.spoolInit = mkEnableOption ''
+    faxqclean.enable.spoolInit = mkEnableOption (lib.mdDoc ''
       Purge old files from the spooling area with
-      <filename>faxqclean</filename>
+      {file}`faxqclean`
       each time the spooling area is initialized.
-    '';
+    '');
     faxqclean.enable.frequency = mkOption {
       type = nullOr nonEmptyStr;
       default = null;

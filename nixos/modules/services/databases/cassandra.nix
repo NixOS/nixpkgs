@@ -101,9 +101,9 @@ in
 {
   options.services.cassandra = {
 
-    enable = mkEnableOption ''
+    enable = mkEnableOption (lib.mdDoc ''
       Apache Cassandra – Scalable and highly available database.
-    '';
+    '');
 
     clusterName = mkOption {
       type = types.str;

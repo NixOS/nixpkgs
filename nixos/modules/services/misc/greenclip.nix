@@ -7,7 +7,7 @@ let
 in {
 
   options.services.greenclip = {
-    enable = mkEnableOption "Greenclip daemon";
+    enable = mkEnableOption (lib.mdDoc "Greenclip daemon");
 
     package = mkOption {
       type = types.package;

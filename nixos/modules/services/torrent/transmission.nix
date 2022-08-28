@@ -233,9 +233,9 @@ in
         '';
       };
 
-      openPeerPorts = mkEnableOption "opening of the peer port(s) in the firewall";
+      openPeerPorts = mkEnableOption (lib.mdDoc "opening of the peer port(s) in the firewall");
 
-      openRPCPort = mkEnableOption "opening of the RPC port in the firewall";
+      openRPCPort = mkEnableOption (lib.mdDoc "opening of the RPC port in the firewall");
 
       performanceNetParameters = mkEnableOption "performance tweaks" // {
         description = ''

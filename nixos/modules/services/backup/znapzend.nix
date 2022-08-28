@@ -294,7 +294,7 @@ in
 {
   options = {
     services.znapzend = {
-      enable = mkEnableOption "ZnapZend ZFS backup daemon";
+      enable = mkEnableOption (lib.mdDoc "ZnapZend ZFS backup daemon");
 
       logLevel = mkOption {
         default = "debug";
@@ -310,8 +310,8 @@ in
         type = str;
         default = "syslog::daemon";
         example = "/var/log/znapzend.log";
-        description = ''
-          Where to log to (syslog::&lt;facility&gt; or &lt;filepath&gt;).
+        description = lib.mdDoc ''
+          Where to log to (syslog::\<facility\> or \<filepath\>).
         '';
       };
 
@@ -358,62 +358,62 @@ in
         default = false;
       };
 
-      features.oracleMode = mkEnableOption ''
+      features.oracleMode = mkEnableOption (lib.mdDoc ''
         Destroy snapshots one by one instead of using one long argument list.
         If source and destination are out of sync for a long time, you may have
         so many snapshots to destroy that the argument gets is too long and the
         command fails.
-      '';
-      features.recvu = mkEnableOption ''
-        recvu feature which uses <literal>-u</literal> on the receiving end to keep the destination
+      '');
+      features.recvu = mkEnableOption (lib.mdDoc ''
+        recvu feature which uses `-u` on the receiving end to keep the destination
         filesystem unmounted.
-      '';
-      features.compressed = mkEnableOption ''
-        compressed feature which adds the options <literal>-Lce</literal> to
-        the <command>zfs send</command> command. When this is enabled, make
+      '');
+      features.compressed = mkEnableOption (lib.mdDoc ''
+        compressed feature which adds the options `-Lce` to
+        the {command}`zfs send` command. When this is enabled, make
         sure that both the sending and receiving pool have the same relevant
-        features enabled. Using <literal>-c</literal> will skip unneccessary
-        decompress-compress stages, <literal>-L</literal> is for large block
+        features enabled. Using `-c` will skip unneccessary
+        decompress-compress stages, `-L` is for large block
         support and -e is for embedded data support. see
-        <citerefentry><refentrytitle>znapzend</refentrytitle><manvolnum>1</manvolnum></citerefentry>
-        and <citerefentry><refentrytitle>zfs</refentrytitle><manvolnum>8</manvolnum></citerefentry>
+        {manpage}`znapzend(1)`
+        and {manpage}`zfs(8)`
         for more info.
-      '';
-      features.sendRaw = mkEnableOption ''
-        sendRaw feature which adds the options <literal>-w</literal> to the
-        <command>zfs send</command> command. For encrypted source datasets this
+      '');
+      features.sendRaw = mkEnableOption (lib.mdDoc ''
+        sendRaw feature which adds the options `-w` to the
+        {command}`zfs send` command. For encrypted source datasets this
         instructs zfs not to decrypt before sending which results in a remote
         backup that can't be read without the encryption key/passphrase, useful
         when the remote isn't fully trusted or not physically secure. This
         option must be used consistently, raw incrementals cannot be based on
         non-raw snapshots and vice versa.
-      '';
-      features.skipIntermediates = mkEnableOption ''
+      '');
+      features.skipIntermediates = mkEnableOption (lib.mdDoc ''
         Enable the skipIntermediates feature to send a single increment
         between latest common snapshot and the newly made one. It may skip
         several source snaps if the destination was offline for some time, and
         it should skip snapshots not managed by znapzend. Normally for online
         destinations, the new snapshot is sent as soon as it is created on the
         source, so there are no automatic increments to skip.
-      '';
-      features.lowmemRecurse = mkEnableOption ''
+      '');
+      features.lowmemRecurse = mkEnableOption (lib.mdDoc ''
         use lowmemRecurse on systems where you have too many datasets, so a
         recursive listing of attributes to find backup plans exhausts the
-        memory available to <command>znapzend</command>: instead, go the slower
+        memory available to {command}`znapzend`: instead, go the slower
         way to first list all impacted dataset names, and then query their
         configs one by one.
-      '';
-      features.zfsGetType = mkEnableOption ''
-        use zfsGetType if your <command>zfs get</command> supports a
-        <literal>-t</literal> argument for filtering by dataset type at all AND
+      '');
+      features.zfsGetType = mkEnableOption (lib.mdDoc ''
+        use zfsGetType if your {command}`zfs get` supports a
+        `-t` argument for filtering by dataset type at all AND
         lists properties for snapshots by default when recursing, so that there
         is too much data to process while searching for backup plans.
         If these two conditions apply to your system, the time needed for a
-        <literal>--recursive</literal> search for backup plans can literally
+        `--recursive` search for backup plans can literally
         differ by hundreds of times (depending on the amount of snapshots in
         that dataset tree... and a decent backup plan will ensure you have a lot
         of those), so you would benefit from requesting this feature.
-      '';
+      '');
     };
   };
 

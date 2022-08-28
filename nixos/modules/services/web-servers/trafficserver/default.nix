@@ -33,7 +33,7 @@ let
 in
 {
   options.services.trafficserver = {
-    enable = mkEnableOption "Apache Traffic Server";
+    enable = mkEnableOption (lib.mdDoc "Apache Traffic Server");
 
     cache = mkOption {
       type = types.lines;

@@ -6,7 +6,7 @@ let
   cfg = config.services.grocy;
 in {
   options.services.grocy = {
-    enable = mkEnableOption "grocy";
+    enable = mkEnableOption (lib.mdDoc "grocy");
 
     hostName = mkOption {
       type = types.str;

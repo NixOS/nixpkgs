@@ -277,12 +277,12 @@ in
       forceImportAll = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Forcibly import all ZFS pool(s).
 
-          If you set this option to <literal>false</literal> and NixOS subsequently fails to
+          If you set this option to `false` and NixOS subsequently fails to
           import your non-root ZFS pool(s), you should manually import each pool with
-          "zpool import -f &lt;pool-name&gt;", and then reboot. You should only need to do
+          "zpool import -f \<pool-name\>", and then reboot. You should only need to do
           this once.
         '';
       };
@@ -399,7 +399,7 @@ in
     };
 
     services.zfs.autoScrub = {
-      enable = mkEnableOption "periodic scrubbing of ZFS pools";
+      enable = mkEnableOption (lib.mdDoc "periodic scrubbing of ZFS pools");
 
       interval = mkOption {
         default = "Sun, 02:00";
@@ -440,7 +440,7 @@ in
     };
 
     services.zfs.zed = {
-      enableMail = mkEnableOption "ZED's ability to send emails" // {
+      enableMail = mkEnableOption (lib.mdDoc "ZED's ability to send emails") // {
         default = cfgZfs.package.enableMail;
         defaultText = literalExpression "config.${optZfs.package}.enableMail";
       };

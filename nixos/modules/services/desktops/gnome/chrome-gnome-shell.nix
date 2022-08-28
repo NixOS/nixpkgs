@@ -18,10 +18,10 @@ with lib;
 
   ###### interface
   options = {
-    services.gnome.chrome-gnome-shell.enable = mkEnableOption ''
+    services.gnome.chrome-gnome-shell.enable = mkEnableOption (lib.mdDoc ''
       Chrome GNOME Shell native host connector, a DBus service
       allowing to install GNOME Shell extensions from a web browser.
-    '';
+    '');
   };
 
 

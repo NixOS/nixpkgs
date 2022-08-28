@@ -475,12 +475,12 @@ in
       type = types.str;
       default = "";
       example = "/dev/sda3";
-      description = ''
+      description = lib.mdDoc ''
         Device for manual resume attempt during boot. This should be used primarily
         if you want to resume from file. If left empty, the swap partitions are used.
         Specify here the device where the file resides.
-        You should also use <varname>boot.kernelParams</varname> to specify
-        <literal>«resume_offset»</literal>.
+        You should also use {var}`boot.kernelParams` to specify
+        `«resume_offset»`.
       '';
     };
 

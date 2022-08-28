@@ -10,7 +10,7 @@ in {
   meta.maintainers = with maintainers; [ mdlayher ];
 
   options.services.corerad = {
-    enable = mkEnableOption "CoreRAD IPv6 NDP RA daemon";
+    enable = mkEnableOption (lib.mdDoc "CoreRAD IPv6 NDP RA daemon");
 
     settings = mkOption {
       type = settingsFormat.type;

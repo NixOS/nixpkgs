@@ -95,7 +95,7 @@ in
 
     services.smartd = {
 
-      enable = mkEnableOption "smartd daemon from <literal>smartmontools</literal> package";
+      enable = mkEnableOption (lib.mdDoc "smartd daemon from `smartmontools` package");
 
       autodetect = mkOption {
         default = true;

@@ -30,7 +30,7 @@ in
       user = mkOption {
         type = types.str;
         default = "nscd";
-        description = ''
+        description = lib.mdDoc ''
           User account under which nscd runs.
         '';
       };
@@ -38,7 +38,7 @@ in
       group = mkOption {
         type = types.str;
         default = "nscd";
-        description = ''
+        description = lib.mdDoc ''
           User group under which nscd runs.
         '';
       };

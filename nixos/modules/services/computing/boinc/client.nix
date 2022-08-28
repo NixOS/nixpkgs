@@ -47,13 +47,13 @@ in
       allowRemoteGuiRpc = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           If set to true, any remote host can connect to and control this BOINC
           client (subject to password authentication). If instead set to false,
-          only the hosts listed in <varname>dataDir</varname>/remote_hosts.cfg will be allowed to
+          only the hosts listed in {var}`dataDir`/remote_hosts.cfg will be allowed to
           connect.
 
-          See also: <link xlink:href="http://boinc.berkeley.edu/wiki/Controlling_BOINC_remotely#Remote_access"/>
+          See also: <http://boinc.berkeley.edu/wiki/Controlling_BOINC_remotely#Remote_access>
         '';
       };
 

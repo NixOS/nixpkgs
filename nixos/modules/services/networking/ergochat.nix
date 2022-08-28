@@ -4,7 +4,7 @@ in {
   options = {
     services.ergochat = {
 
-      enable = lib.mkEnableOption "Ergo IRC daemon";
+      enable = lib.mkEnableOption (lib.mdDoc "Ergo IRC daemon");
 
       openFilesLimit = lib.mkOption {
         type = lib.types.int;

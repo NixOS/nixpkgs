@@ -34,7 +34,7 @@ in {
 
   options.services.bookstack = {
 
-    enable = mkEnableOption "BookStack";
+    enable = mkEnableOption (lib.mdDoc "BookStack");
 
     user = mkOption {
       default = "bookstack";

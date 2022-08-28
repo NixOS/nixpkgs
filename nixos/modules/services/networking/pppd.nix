@@ -12,7 +12,7 @@ in
 
   options = {
     services.pppd = {
-      enable = mkEnableOption "pppd";
+      enable = mkEnableOption (lib.mdDoc "pppd");
 
       package = mkOption {
         default = pkgs.ppp;

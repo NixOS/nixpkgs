@@ -65,18 +65,18 @@ let
         directive in {file}`dsm.sys`.
       '';
     };
-    options.genPasswd = mkEnableOption ''
+    options.genPasswd = mkEnableOption (lib.mdDoc ''
       automatic client password generation.
       This option influences the
-      <literal>passwordaccess</literal>
-      directive in <filename>dsm.sys</filename>.
+      `passwordaccess`
+      directive in {file}`dsm.sys`.
       The password will be stored in the directory
-      given by the option <option>passwdDir</option>.
-      <emphasis>Caution</emphasis>:
+      given by the option {option}`passwdDir`.
+      *Caution*:
       If this option is enabled and the server forces
       to renew the password (e.g. on first connection),
       a random password will be generated and stored
-    '';
+    '');
     options.passwdDir = mkOption {
       type = path;
       example = "/home/alice/tsm-password";
@@ -172,11 +172,11 @@ let
   };
 
   options.programs.tsmClient = {
-    enable = mkEnableOption ''
+    enable = mkEnableOption (lib.mdDoc ''
       IBM Spectrum Protect (Tivoli Storage Manager, TSM)
       client command line applications with a
       client system-options file "dsm.sys"
-    '';
+    '');
     servers = mkOption {
       type = attrsOf (submodule [ serverOptions ]);
       default = {};

@@ -8,18 +8,18 @@ let
 in
 {
   options.services.portunus = {
-    enable = mkEnableOption "Portunus, a self-contained user/group management and authentication service for LDAP";
+    enable = mkEnableOption (lib.mdDoc "Portunus, a self-contained user/group management and authentication service for LDAP");
 
     domain = mkOption {
       type = types.str;
       example = "sso.example.com";
-      description = "Subdomain which gets reverse proxied to Portunus webserver.";
+      description = lib.mdDoc "Subdomain which gets reverse proxied to Portunus webserver.";
     };
 
     port = mkOption {
       type = types.port;
       default = 8080;
-      description = ''
+      description = lib.mdDoc ''
         Port where the Portunus webserver should listen on.
 
         This must be put behind a TLS-capable reverse proxy because Portunus only listens on localhost.
@@ -30,55 +30,55 @@ in
       type = types.package;
       default = pkgs.portunus;
       defaultText = "pkgs.portunus";
-      description = "The Portunus package to use.";
+      description = lib.mdDoc "The Portunus package to use.";
     };
 
     seedPath = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Path to a portunus seed file in json format.
-        See <link xlink:href="https://github.com/majewsky/portunus#seeding-users-and-groups-from-static-configuration"/> for available options.
+        See <https://github.com/majewsky/portunus#seeding-users-and-groups-from-static-configuration> for available options.
       '';
     };
 
     stateDir = mkOption {
       type = types.path;
       default = "/var/lib/portunus";
-      description = "Path where Portunus stores its state.";
+      description = lib.mdDoc "Path where Portunus stores its state.";
     };
 
     user = mkOption {
       type = types.str;
       default = "portunus";
-      description = "User account under which Portunus runs its webserver.";
+      description = lib.mdDoc "User account under which Portunus runs its webserver.";
     };
 
     group = mkOption {
       type = types.str;
       default = "portunus";
-      description = "Group account under which Portunus runs its webserver.";
+      description = lib.mdDoc "Group account under which Portunus runs its webserver.";
     };
 
     dex = {
-      enable = mkEnableOption ''
+      enable = mkEnableOption (lib.mdDoc ''
         Dex ldap connector.
 
         To activate dex, first a search user must be created in the Portunus web ui
-        and then the password must to be set as the <literal>DEX_SEARCH_USER_PASSWORD</literal> environment variable
-        in the <xref linkend="opt-services.dex.environmentFile"/> setting.
-      '';
+        and then the password must to be set as the `DEX_SEARCH_USER_PASSWORD` environment variable
+        in the [](#opt-services.dex.environmentFile) setting.
+      '');
 
       oidcClients = mkOption {
         type = types.listOf (types.submodule {
           options = {
             callbackURL = mkOption {
               type = types.str;
-              description = "URL where the OIDC client should redirect";
+              description = lib.mdDoc "URL where the OIDC client should redirect";
             };
             id = mkOption {
               type = types.str;
-              description = "ID of the OIDC client";
+              description = lib.mdDoc "ID of the OIDC client";
             };
           };
         });
@@ -89,18 +89,18 @@ in
             id = "service";
           }
         ];
-        description = ''
+        description = lib.mdDoc ''
           List of OIDC clients.
 
-          The OIDC secret must be set as the <literal>DEX_CLIENT_''${id}</literal> environment variable
-          in the <xref linkend="opt-services.dex.environmentFile"/> setting.
+          The OIDC secret must be set as the `DEX_CLIENT_''${id}` environment variable
+          in the [](#opt-services.dex.environmentFile) setting.
         '';
       };
 
       port = mkOption {
         type = types.port;
         default = 5556;
-        description = "Port where dex should listen on.";
+        description = lib.mdDoc "Port where dex should listen on.";
       };
     };
 
@@ -109,14 +109,14 @@ in
         type = types.package;
         default = pkgs.openldap;
         defaultText = "pkgs.openldap";
-        description = "The OpenLDAP package to use.";
+        description = lib.mdDoc "The OpenLDAP package to use.";
       };
 
       searchUserName = mkOption {
         type = types.str;
         default = "";
         example = "admin";
-        description = ''
+        description = lib.mdDoc ''
           The login name of the search user.
           This user account must be configured in Portunus either manually or via seeding.
         '';
@@ -125,7 +125,7 @@ in
       suffix = mkOption {
         type = types.str;
         example = "dc=example,dc=org";
-        description = ''
+        description = lib.mdDoc ''
           The DN of the topmost entry in your LDAP directory.
           Please refer to the Portunus documentation for more information on how this impacts the structure of the LDAP directory.
         '';
@@ -134,25 +134,25 @@ in
       tls = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Wether to enable LDAPS protocol.
-          This also adds two entries to the <literal>/etc/hosts</literal> file to point <xref linkend="opt-services.portunus.domain"/> to localhost,
+          This also adds two entries to the `/etc/hosts` file to point [](#opt-services.portunus.domain) to localhost,
           so that CLIs and programs can use ldaps protocol and verify the certificate without opening the firewall port for the protocol.
 
-          This requires a TLS certificate for <xref linkend="opt-services.portunus.domain"/> to be configured via <xref linkend="opt-security.acme.certs"/>.
+          This requires a TLS certificate for [](#opt-services.portunus.domain) to be configured via [](#opt-security.acme.certs).
         '';
       };
 
       user = mkOption {
         type = types.str;
         default = "openldap";
-        description = "User account under which Portunus runs its LDAP server.";
+        description = lib.mdDoc "User account under which Portunus runs its LDAP server.";
       };
 
       group = mkOption {
         type = types.str;
         default = "openldap";
-        description = "Group account under which Portunus runs its LDAP server.";
+        description = lib.mdDoc "Group account under which Portunus runs its LDAP server.";
       };
     };
   };

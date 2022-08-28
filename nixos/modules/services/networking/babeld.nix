@@ -40,7 +40,7 @@ in
 
     services.babeld = {
 
-      enable = mkEnableOption "the babeld network routing daemon";
+      enable = mkEnableOption (lib.mdDoc "the babeld network routing daemon");
 
       interfaceDefaults = mkOption {
         default = null;

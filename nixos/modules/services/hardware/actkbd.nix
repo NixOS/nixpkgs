@@ -57,13 +57,13 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          Whether to enable the <command>actkbd</command> key mapping daemon.
+        description = lib.mdDoc ''
+          Whether to enable the {command}`actkbd` key mapping daemon.
 
-          Turning this on will start an <command>actkbd</command>
+          Turning this on will start an {command}`actkbd`
           instance for every evdev input that has at least one key
           (which is okay even for systems with tiny memory footprint,
-          since actkbd normally uses &lt;100 bytes of memory per
+          since actkbd normally uses \<100 bytes of memory per
           instance).
 
           This allows binding keys globally without the need for e.g.

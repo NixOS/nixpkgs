@@ -9,7 +9,7 @@ let
 in {
   options = {
     services.rmfakecloud = {
-      enable = mkEnableOption "rmfakecloud remarkable self-hosted cloud";
+      enable = mkEnableOption (lib.mdDoc "rmfakecloud remarkable self-hosted cloud");
 
       package = mkOption {
         type = types.package;

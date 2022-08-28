@@ -5,7 +5,7 @@ let
 in
 {
   options.services.usbrelayd = with types; {
-    enable = mkEnableOption "USB Relay MQTT daemon";
+    enable = mkEnableOption (lib.mdDoc "USB Relay MQTT daemon");
 
     broker = mkOption {
       type = str;

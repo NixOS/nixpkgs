@@ -333,9 +333,9 @@ in {
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Enable the HTTP connector for Neo4j. Setting this option to
-          <literal>false</literal> will stop Neo4j from listening for incoming
+          `false` will stop Neo4j from listening for incoming
           connections on the HTTPS port (7474 by default).
         '';
       };

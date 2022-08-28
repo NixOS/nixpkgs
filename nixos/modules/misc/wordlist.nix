@@ -8,7 +8,7 @@ in
 {
   options = {
     environment.wordlist = {
-      enable = mkEnableOption "environment variables for lists of words";
+      enable = mkEnableOption (lib.mdDoc "environment variables for lists of words");
 
       lists = mkOption {
         type = types.attrsOf (types.nonEmptyListOf types.path);

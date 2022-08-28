@@ -8,7 +8,7 @@ in
 {
   options = {
     services.duplicati = {
-      enable = mkEnableOption "Duplicati";
+      enable = mkEnableOption (lib.mdDoc "Duplicati");
 
       port = mkOption {
         default = 8200;

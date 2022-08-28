@@ -231,10 +231,10 @@ in
               type = types.nullOr types.str;
               default = null;
               example = "x86_64-linux";
-              description = ''
+              description = lib.mdDoc ''
                 The system type the build machine can execute derivations on.
-                Either this attribute or <varname>systems</varname> must be
-                present, where <varname>system</varname> takes precedence if
+                Either this attribute or {var}`systems` must be
+                present, where {var}`system` takes precedence if
                 both are set.
               '';
             };
@@ -242,10 +242,10 @@ in
               type = types.listOf types.str;
               default = [ ];
               example = [ "x86_64-linux" "aarch64-linux" ];
-              description = ''
+              description = lib.mdDoc ''
                 The system types the build machine can execute derivations on.
-                Either this attribute or <varname>system</varname> must be
-                present, where <varname>system</varname> takes precedence if
+                Either this attribute or {var}`system` must be
+                present, where {var}`system` takes precedence if
                 both are set.
               '';
             };
@@ -297,11 +297,11 @@ in
               type = types.listOf types.str;
               default = [ ];
               example = [ "big-parallel" ];
-              description = ''
+              description = lib.mdDoc ''
                 A list of features mandatory for this builder. The builder will
                 be ignored for derivations that don't require all features in
                 this list. All mandatory features are automatically included in
-                <varname>supportedFeatures</varname>.
+                {var}`supportedFeatures`.
               '';
             };
             supportedFeatures = mkOption {

@@ -86,8 +86,8 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "none";
-        description = ''
-          <emphasis role="strong">Deprecated</emphasis>, please use <xref linkend="opt-services.xserver.displayManager.defaultSession"/> instead.
+        description = lib.mdDoc ''
+          **Deprecated**, please use [](#opt-services.xserver.displayManager.defaultSession) instead.
 
           Default desktop manager loaded if none have been chosen.
         '';

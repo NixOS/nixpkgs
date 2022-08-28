@@ -14,7 +14,7 @@ in
   meta.maintainers = [ maintainers.bachp ];
 
   options.services.minio = {
-    enable = mkEnableOption "Minio Object Storage";
+    enable = mkEnableOption (lib.mdDoc "Minio Object Storage");
 
     listenAddress = mkOption {
       default = ":9000";

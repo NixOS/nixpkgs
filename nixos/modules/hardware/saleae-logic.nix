@@ -5,7 +5,7 @@ let
 in
 {
   options.hardware.saleae-logic = {
-    enable = lib.mkEnableOption "udev rules for Saleae Logic devices";
+    enable = lib.mkEnableOption (lib.mdDoc "udev rules for Saleae Logic devices");
 
     package = lib.mkOption {
       type = lib.types.package;

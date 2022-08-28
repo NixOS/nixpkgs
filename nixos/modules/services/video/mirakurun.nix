@@ -24,7 +24,7 @@ in
   {
     options = {
       services.mirakurun = {
-        enable = mkEnableOption "the Mirakurun DVR Tuner Server";
+        enable = mkEnableOption (lib.mdDoc "the Mirakurun DVR Tuner Server");
 
         port = mkOption {
           type = with types; nullOr port;

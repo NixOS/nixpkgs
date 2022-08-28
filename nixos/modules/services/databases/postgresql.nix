@@ -40,7 +40,7 @@ in
 
     services.postgresql = {
 
-      enable = mkEnableOption "PostgreSQL Server";
+      enable = mkEnableOption (lib.mdDoc "PostgreSQL Server");
 
       package = mkOption {
         type = types.package;

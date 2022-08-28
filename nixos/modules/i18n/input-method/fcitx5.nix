@@ -20,7 +20,7 @@ in {
         '';
       };
 
-      enableRimeData = mkEnableOption "default rime-data with fcitx5-rime";
+      enableRimeData = mkEnableOption (lib.mdDoc "default rime-data with fcitx5-rime");
     };
   };
 

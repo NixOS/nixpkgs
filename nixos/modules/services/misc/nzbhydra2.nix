@@ -7,7 +7,7 @@ let cfg = config.services.nzbhydra2;
 in {
   options = {
     services.nzbhydra2 = {
-      enable = mkEnableOption "NZBHydra2";
+      enable = mkEnableOption (lib.mdDoc "NZBHydra2");
 
       dataDir = mkOption {
         type = types.str;

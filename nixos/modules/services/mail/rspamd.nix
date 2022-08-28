@@ -227,7 +227,7 @@ in
 
     services.rspamd = {
 
-      enable = mkEnableOption "rspamd, the Rapid spam filtering system";
+      enable = mkEnableOption (lib.mdDoc "rspamd, the Rapid spam filtering system");
 
       debug = mkOption {
         type = types.bool;

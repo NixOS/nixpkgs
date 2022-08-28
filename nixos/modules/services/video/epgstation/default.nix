@@ -78,7 +78,7 @@ in
   ];
 
   options.services.epgstation = {
-    enable = lib.mkEnableOption description;
+    enable = lib.mkEnableOption (lib.mdDoc description);
 
     package = lib.mkOption {
       default = pkgs.epgstation;

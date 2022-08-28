@@ -262,7 +262,7 @@ let
         '';
       };
 
-      dnssec = mkEnableOption "DNSSEC";
+      dnssec = mkEnableOption (lib.mdDoc "DNSSEC");
 
       dnssecPolicy = {
         algorithm = mkOption {
@@ -382,9 +382,9 @@ let
         type = types.listOf types.str;
         default = [];
         example = [ "192.0.2.0/24 NOKEY" "192.0.2.0/24 my_tsig_key_name" ];
-        description = ''
+        description = lib.mdDoc ''
           Allow these IPs and TSIG to transfer zones, addr TSIG|NOKEY|BLOCKED
-          address range 192.0.2.0/24, 1.2.3.4&amp;255.255.0.0, 3.0.2.20-3.0.2.40
+          address range 192.0.2.0/24, 1.2.3.4&255.255.0.0, 3.0.2.20-3.0.2.40
         '';
       };
 
@@ -478,9 +478,9 @@ in
   # options are ordered alphanumerically
   options.services.nsd = {
 
-    enable = mkEnableOption "NSD authoritative DNS server";
+    enable = mkEnableOption (lib.mdDoc "NSD authoritative DNS server");
 
-    bind8Stats = mkEnableOption "BIND8 like statistics";
+    bind8Stats = mkEnableOption (lib.mdDoc "BIND8 like statistics");
 
     dnssecInterval = mkOption {
       type = types.str;
@@ -616,7 +616,7 @@ in
       '';
     };
 
-    roundRobin = mkEnableOption "round robin rotation of records";
+    roundRobin = mkEnableOption (lib.mdDoc "round robin rotation of records");
 
     serverCount = mkOption {
       type = types.int;
@@ -735,7 +735,7 @@ in
 
     ratelimit = {
 
-      enable = mkEnableOption "ratelimit capabilities";
+      enable = mkEnableOption (lib.mdDoc "ratelimit capabilities");
 
       ipv4PrefixLength = mkOption {
         type = types.nullOr types.int;
@@ -796,7 +796,7 @@ in
 
     remoteControl = {
 
-      enable = mkEnableOption "remote control via nsd-control";
+      enable = mkEnableOption (lib.mdDoc "remote control via nsd-control");
 
       controlCertFile = mkOption {
         type = types.path;

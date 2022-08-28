@@ -8,7 +8,7 @@ let
 in {
   options = {
     services.opensnitch = {
-      enable = mkEnableOption "Opensnitch application firewall";
+      enable = mkEnableOption (lib.mdDoc "Opensnitch application firewall");
       settings = mkOption {
         type = types.submodule {
           freeformType = format.type;

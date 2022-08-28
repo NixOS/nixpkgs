@@ -667,46 +667,46 @@ in {
 
     sidecar = paramsToOptions params.sidecar // {
       enable = mkEnableOption
-        "the Thanos sidecar for Prometheus server";
+        (lib.mdDoc "the Thanos sidecar for Prometheus server");
       arguments = mkArgumentsOption "sidecar";
     };
 
     store = paramsToOptions params.store // {
       enable = mkEnableOption
-        "the Thanos store node giving access to blocks in a bucket provider.";
+        (lib.mdDoc "the Thanos store node giving access to blocks in a bucket provider.");
       arguments = mkArgumentsOption "store";
     };
 
     query = paramsToOptions params.query // {
       enable = mkEnableOption
-        ("the Thanos query node exposing PromQL enabled Query API " +
-         "with data retrieved from multiple store nodes");
+        (lib.mdDoc ("the Thanos query node exposing PromQL enabled Query API " +
+         "with data retrieved from multiple store nodes"));
       arguments = mkArgumentsOption "query";
     };
 
     rule = paramsToOptions params.rule // {
       enable = mkEnableOption
-        ("the Thanos ruler service which evaluates Prometheus rules against" +
-        " given Query nodes, exposing Store API and storing old blocks in bucket");
+        (lib.mdDoc ("the Thanos ruler service which evaluates Prometheus rules against" +
+        " given Query nodes, exposing Store API and storing old blocks in bucket"));
       arguments = mkArgumentsOption "rule";
     };
 
     compact = paramsToOptions params.compact // {
       enable = mkEnableOption
-        "the Thanos compactor which continuously compacts blocks in an object store bucket";
+        (lib.mdDoc "the Thanos compactor which continuously compacts blocks in an object store bucket");
       arguments = mkArgumentsOption "compact";
     };
 
     downsample = paramsToOptions params.downsample // {
       enable = mkEnableOption
-        "the Thanos downsampler which continuously downsamples blocks in an object store bucket";
+        (lib.mdDoc "the Thanos downsampler which continuously downsamples blocks in an object store bucket");
       arguments = mkArgumentsOption "downsample";
     };
 
     receive = paramsToOptions params.receive // {
       enable = mkEnableOption
-        ("the Thanos receiver which accept Prometheus remote write API requests " +
-         "and write to local tsdb (EXPERIMENTAL, this may change drastically without notice)");
+        (lib.mdDoc ("the Thanos receiver which accept Prometheus remote write API requests " +
+         "and write to local tsdb (EXPERIMENTAL, this may change drastically without notice)"));
       arguments = mkArgumentsOption "receive";
     };
   };

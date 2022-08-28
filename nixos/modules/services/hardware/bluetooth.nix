@@ -36,9 +36,9 @@ in
   options = {
 
     hardware.bluetooth = {
-      enable = mkEnableOption "support for Bluetooth";
+      enable = mkEnableOption (lib.mdDoc "support for Bluetooth");
 
-      hsphfpd.enable = mkEnableOption "support for hsphfpd[-prototype] implementation";
+      hsphfpd.enable = mkEnableOption (lib.mdDoc "support for hsphfpd[-prototype] implementation");
 
       powerOnBoot = mkOption {
         type = types.bool;

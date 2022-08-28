@@ -40,7 +40,7 @@ in {
   options = {
     services.unbound = {
 
-      enable = mkEnableOption "Unbound domain name server";
+      enable = mkEnableOption (lib.mdDoc "Unbound domain name server");
 
       package = mkOption {
         type = types.package;

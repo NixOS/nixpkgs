@@ -11,7 +11,7 @@ in
 {
   options = {
     services.solr = {
-      enable = mkEnableOption "Solr";
+      enable = mkEnableOption (lib.mdDoc "Solr");
 
       package = mkOption {
         type = types.package;

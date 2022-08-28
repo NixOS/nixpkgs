@@ -10,7 +10,7 @@ in {
 
   options.services.molly-brown = {
 
-    enable = mkEnableOption "Molly-Brown Gemini server";
+    enable = mkEnableOption (lib.mdDoc "Molly-Brown Gemini server");
 
     port = mkOption {
       default = 1965;

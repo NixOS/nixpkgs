@@ -53,7 +53,7 @@ let
 in
 {
   options.services.baget = {
-    enable = mkEnableOption "BaGet NuGet-compatible server";
+    enable = mkEnableOption (lib.mdDoc "BaGet NuGet-compatible server");
 
     apiKeyFile = mkOption {
       type = types.path;

@@ -29,7 +29,7 @@ in
 
     services.gvfs = {
 
-      enable = mkEnableOption "GVfs, a userspace virtual filesystem";
+      enable = mkEnableOption (lib.mdDoc "GVfs, a userspace virtual filesystem");
 
       # gvfs can be built with multiple configurations
       package = mkOption {

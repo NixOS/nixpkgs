@@ -17,7 +17,7 @@ in
       type = str;
     };
 
-    enable = mkEnableOption "Kubernetes scheduler";
+    enable = mkEnableOption (lib.mdDoc "Kubernetes scheduler");
 
     extraOpts = mkOption {
       description = lib.mdDoc "Kubernetes scheduler extra command line options.";

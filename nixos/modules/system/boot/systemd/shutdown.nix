@@ -9,7 +9,7 @@
 
 in {
   options.systemd.shutdownRamfs = {
-    enable = lib.mkEnableOption "pivoting back to an initramfs for shutdown" // { default = true; };
+    enable = lib.mkEnableOption (lib.mdDoc "pivoting back to an initramfs for shutdown") // { default = true; };
     contents = lib.mkOption {
       description = lib.mdDoc "Set of files that have to be linked into the shutdown ramfs";
       example = lib.literalExpression ''

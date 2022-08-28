@@ -41,7 +41,7 @@ in
       default = {};
       type = submodule {
         options = {
-          enable = mkEnableOption "Kea Control Agent";
+          enable = mkEnableOption (lib.mdDoc "Kea Control Agent");
 
           extraArgs = mkOption {
             type = listOf str;
@@ -80,7 +80,7 @@ in
       default = {};
       type = submodule {
         options = {
-          enable = mkEnableOption "Kea DHCP4 server";
+          enable = mkEnableOption (lib.mdDoc "Kea DHCP4 server");
 
           extraArgs = mkOption {
             type = listOf str;
@@ -140,7 +140,7 @@ in
       default = {};
       type = submodule {
         options = {
-          enable = mkEnableOption "Kea DHCP6 server";
+          enable = mkEnableOption (lib.mdDoc "Kea DHCP6 server");
 
           extraArgs = mkOption {
             type = listOf str;
@@ -201,7 +201,7 @@ in
       default = {};
       type = submodule {
         options = {
-          enable = mkEnableOption "Kea DDNS server";
+          enable = mkEnableOption (lib.mdDoc "Kea DDNS server");
 
           extraArgs = mkOption {
             type = listOf str;

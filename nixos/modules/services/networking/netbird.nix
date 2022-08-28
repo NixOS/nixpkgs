@@ -10,12 +10,12 @@ in {
   meta.maintainers = with maintainers; [ misuzu ];
 
   options.services.netbird = {
-    enable = mkEnableOption "Netbird daemon";
+    enable = mkEnableOption (lib.mdDoc "Netbird daemon");
     package = mkOption {
       type = types.package;
       default = pkgs.netbird;
       defaultText = literalExpression "pkgs.netbird";
-      description = "The package to use for netbird";
+      description = lib.mdDoc "The package to use for netbird";
     };
   };
 

@@ -9,7 +9,7 @@ in
 {
   options.services.hadoop = {
 
-    gatewayRole.enableHbaseCli = mkEnableOption "HBase CLI tools";
+    gatewayRole.enableHbaseCli = mkEnableOption (lib.mdDoc "HBase CLI tools");
 
     hbaseSiteDefault = mkOption {
       default = {
@@ -77,8 +77,8 @@ in
         default = null;
       };
       master = {
-        enable = mkEnableOption "HBase Master";
-        initHDFS = mkEnableOption "initialization of the hbase directory on HDFS";
+        enable = mkEnableOption (lib.mdDoc "HBase Master");
+        initHDFS = mkEnableOption (lib.mdDoc "initialization of the hbase directory on HDFS");
 
         openFirewall = mkOption {
           type = types.bool;
@@ -89,7 +89,7 @@ in
         };
       };
       regionServer = {
-        enable = mkEnableOption "HBase RegionServer";
+        enable = mkEnableOption (lib.mdDoc "HBase RegionServer");
 
         overrideHosts = mkOption {
           type = types.bool;

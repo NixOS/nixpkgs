@@ -6,7 +6,7 @@ let
 in
 {
   options.services.croc = {
-    enable = lib.mkEnableOption "croc relay";
+    enable = lib.mkEnableOption (lib.mdDoc "croc relay");
     ports = lib.mkOption {
       type = with types; listOf port;
       default = [9009 9010 9011 9012 9013];
@@ -17,8 +17,8 @@ in
       default = "pass123";
       description = lib.mdDoc "Password or passwordfile for the relay.";
     };
-    openFirewall = lib.mkEnableOption "opening of the peer port(s) in the firewall";
-    debug = lib.mkEnableOption "debug logs";
+    openFirewall = lib.mkEnableOption (lib.mdDoc "opening of the peer port(s) in the firewall");
+    debug = lib.mkEnableOption (lib.mdDoc "debug logs");
   };
 
   config = lib.mkIf cfg.enable {

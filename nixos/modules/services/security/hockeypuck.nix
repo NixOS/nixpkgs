@@ -7,7 +7,7 @@ in {
   meta.maintainers = with lib.maintainers; [ etu ];
 
   options.services.hockeypuck = {
-    enable = lib.mkEnableOption "Hockeypuck OpenPGP Key Server";
+    enable = lib.mkEnableOption (lib.mdDoc "Hockeypuck OpenPGP Key Server");
 
     port = lib.mkOption {
       default = 11371;

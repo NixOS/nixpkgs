@@ -10,7 +10,7 @@ let
 
     options = {
 
-      enable = mkEnableOption "blockbook-frontend application.";
+      enable = mkEnableOption (lib.mdDoc "blockbook-frontend application.");
 
       package = mkOption {
         type = types.package;

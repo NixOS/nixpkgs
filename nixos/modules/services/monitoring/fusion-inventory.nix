@@ -22,7 +22,7 @@ in {
 
     services.fusionInventory = {
 
-      enable = mkEnableOption "Fusion Inventory Agent";
+      enable = mkEnableOption (lib.mdDoc "Fusion Inventory Agent");
 
       servers = mkOption {
         type = types.listOf types.str;

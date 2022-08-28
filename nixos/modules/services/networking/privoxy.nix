@@ -53,7 +53,7 @@ in
 
   options.services.privoxy = {
 
-    enable = mkEnableOption "Privoxy, non-caching filtering proxy";
+    enable = mkEnableOption (lib.mdDoc "Privoxy, non-caching filtering proxy");
 
     enableTor = mkOption {
       type = types.bool;

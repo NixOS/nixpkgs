@@ -10,7 +10,7 @@ let
   configFile = format.generate "wiki-js.yml" cfg.settings;
 in {
   options.services.wiki-js = {
-    enable = mkEnableOption "wiki-js";
+    enable = mkEnableOption (lib.mdDoc "wiki-js");
 
     environmentFile = mkOption {
       type = types.nullOr types.path;

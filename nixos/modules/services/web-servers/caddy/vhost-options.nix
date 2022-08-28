@@ -33,14 +33,14 @@ in
     useACMEHost = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         A host of an existing Let's Encrypt certificate to use.
         This is mostly useful if you use DNS challenges but Caddy does not
         currently support your provider.
 
-        <emphasis>Note that this option does not create any certificates, nor
+        *Note that this option does not create any certificates, nor
         does it add subdomains to existing ones – you will need to create them
-        manually using <xref linkend="opt-security.acme.certs"/>.</emphasis>
+        manually using [](#opt-security.acme.certs).*
       '';
     };
 

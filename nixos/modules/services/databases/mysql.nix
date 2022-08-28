@@ -31,7 +31,7 @@ in
 
     services.mysql = {
 
-      enable = mkEnableOption "MySQL server";
+      enable = mkEnableOption (lib.mdDoc "MySQL server");
 
       package = mkOption {
         type = types.package;

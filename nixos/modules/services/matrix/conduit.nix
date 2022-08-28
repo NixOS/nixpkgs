@@ -11,7 +11,7 @@ in
   {
     meta.maintainers = with maintainers; [ pstn piegames ];
     options.services.matrix-conduit = {
-      enable = mkEnableOption "matrix-conduit";
+      enable = mkEnableOption (lib.mdDoc "matrix-conduit");
 
       extraEnvironment = mkOption {
         type = types.attrsOf types.str;

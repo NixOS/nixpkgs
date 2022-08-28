@@ -22,7 +22,7 @@ in {
 
   options.services.multipath = with types; {
 
-    enable = mkEnableOption "the device mapper multipath (DM-MP) daemon";
+    enable = mkEnableOption (lib.mdDoc "the device mapper multipath (DM-MP) daemon");
 
     package = mkOption {
       type = package;
