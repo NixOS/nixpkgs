@@ -32890,6 +32890,8 @@ with pkgs;
 
   flock = callPackage ../development/tools/flock { };
 
+  forge-mtg = callPackage ../games/forge-mtg { };
+
   freecell-solver = callPackage ../games/freecell-solver { };
 
   freeciv = callPackage ../games/freeciv {
