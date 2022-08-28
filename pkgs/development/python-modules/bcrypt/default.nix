@@ -1,37 +1,44 @@
 { lib
 , buildPythonPackage
-, setuptools
-, isPyPy
 , fetchPypi
+, libiconv
 , pythonOlder
-, cffi
 , pytestCheckHook
-, six
+, rustPlatform
+, setuptools-rust
 }:
 
 buildPythonPackage rec {
   pname = "bcrypt";
-  version = "3.2.2";
+  version = "4.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-QzxBDCF3BXcF2iqfLNAd0VdJOyp6wUyFk6FrPatra/s=";
+    sha256 = "sha256-xZwXD8kiX6rQTd4bph2FtBOUbozi5fX1/zDf1nKD8xk=";
   };
 
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    name = "${pname}-${version}";
+    inherit src;
+    sourceRoot = "${pname}-${version}/${cargoRoot}";
+    sha256 = "sha256-HvfRLyUhlXVuvxWrtSDKx3rMKJbjvuiMcDY6g+pYFS0=";
+  };
+
+  cargoRoot = "src/_bcrypt";
+
   nativeBuildInputs = [
-    setuptools
-  ];
+    setuptools-rust
+  ] ++ (with rustPlatform; [
+    cargoSetupHook
+    rust.cargo
+    rust.rustc
+  ]);
 
-  propagatedBuildInputs = [
-    six
-    cffi
-  ];
-
-  propagatedNativeBuildInputs = [
-    cffi
+  buildInputs = [
+    libiconv
   ];
 
   checkInputs = [
