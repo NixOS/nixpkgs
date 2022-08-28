@@ -25281,6 +25281,10 @@ with pkgs;
     inherit (plasma5Packages) breeze-icons;
   };
 
+  gruvbox-material-icons-gtk = callPackage ../data/icons/gruvbox-material-icons-gtk {
+    inherit (plasma5Packages) breeze-icons;
+  };
+
   gubbi-font = callPackage ../data/fonts/gubbi { };
 
   gyre-fonts = callPackage ../data/fonts/gyre {};
