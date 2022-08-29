@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zfp";
-  version = "0.5.5";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "LLNL";
     repo = "zfp";
     rev = version;
-    sha256 = "19ycflz35qsrzfcvxdyy0mgbykfghfi9y5v684jb4awjp7nf562c";
+    sha256 = "sha256-E2LI1rWo1HO5O/sxPHAmLDs3Z5xouzlgMj11rQFPNYQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -55,5 +55,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ spease atila ];
     # 64-bit only
     platforms = platforms.aarch64 ++ platforms.x86_64;
+        # error: '_Float16' was not declared in this scope; did you mean '_Float64'?
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }
