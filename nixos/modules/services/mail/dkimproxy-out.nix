@@ -45,7 +45,7 @@ in
         type = types.str;
         example = "selector1";
         description =
-          ''
+          lib.mdDoc ''
             The selector to use for DKIM key identification.
 
             For example, if 'selector1' is used here, then for each domain

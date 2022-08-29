@@ -11,7 +11,7 @@ in
       type = types.bool;
       default = false;
       description =
-        ''
+        lib.mdDoc ''
           Whether to enable nftables.  nftables is a Linux-based packet
           filtering framework intended to replace frameworks like iptables.
 
@@ -21,14 +21,13 @@ in
           Note that if you have Docker enabled you will not be able to use
           nftables without intervention. Docker uses iptables internally to
           setup NAT for containers. This module disables the ip_tables kernel
-          module, however Docker automatically loads the module. Please see [1]
+          module, however Docker automatically loads the module. Please see
+          <https://github.com/NixOS/nixpkgs/issues/24318#issuecomment-289216273>
           for more information.
 
           There are other programs that use iptables internally too, such as
-          libvirt. For information on how the two firewalls interact, see [2].
-
-          [1]: https://github.com/NixOS/nixpkgs/issues/24318#issuecomment-289216273
-          [2]: https://wiki.nftables.org/wiki-nftables/index.php/Troubleshooting#Question_4._How_do_nftables_and_iptables_interact_when_used_on_the_same_system.3F
+          libvirt. For information on how the two firewalls interact, see
+          <https://wiki.nftables.org/wiki-nftables/index.php/Troubleshooting#Question_4._How_do_nftables_and_iptables_interact_when_used_on_the_same_system.3F>.
         '';
     };
     networking.nftables.ruleset = mkOption {

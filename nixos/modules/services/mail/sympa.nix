@@ -239,10 +239,10 @@ in
       server = mkOption {
         type = enum [ "nginx" "none" ];
         default = "nginx";
-        description = ''
+        description = lib.mdDoc ''
           The webserver used for the Sympa web interface. Set it to `none` if you want to configure it yourself.
           Further nginx configuration can be done by adapting
-          <option>services.nginx.virtualHosts.«name»</option>.
+          {option}`services.nginx.virtualHosts.«name»`.
         '';
       };
 

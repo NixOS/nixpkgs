@@ -131,9 +131,9 @@ in {
     seahubExtraConf = mkOption {
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Extra config to append to `seahub_settings.py` file.
-        Refer to <link xlink:href="https://manual.seafile.com/config/seahub_settings_py/"/>
+        Refer to <https://manual.seafile.com/config/seahub_settings_py/>
         for all available options.
       '';
     };

@@ -182,11 +182,11 @@ in
         pruneOpts = mkOption {
           type = types.listOf types.str;
           default = [ ];
-          description = ''
-            A list of options (--keep-* et al.) for 'restic forget
+          description = lib.mdDoc ''
+            A list of options (--keep-\* et al.) for 'restic forget
             --prune', to automatically prune old snapshots.  The
             'forget' command is run *after* the 'backup' command, so
-            keep that in mind when constructing the --keep-* options.
+            keep that in mind when constructing the --keep-\* options.
           '';
           example = [
             "--keep-daily 7"
