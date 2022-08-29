@@ -23,6 +23,6 @@ buildGoPackage rec {
     homepage = "https://coy.im/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    broken = true; #fails to build with go >= 1.16
+    maintainers = with maintainers; [ onny ];
   };
 }
