@@ -22,6 +22,7 @@
 , pytz
 , termcolor
 , typer
+, ffmpeg
 }:
 
 buildPythonPackage rec {
@@ -37,6 +38,13 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-q6fzP1wauwnRUByGc+EQ/vNJgoCWx22Qh2uZeUF4Abk=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "--cov=pyunifiprotect --cov-append" ""
+    substituteInPlace setup.cfg \
+      --replace "pydantic!=1.9.1" "pydantic"
+  '';
 
   propagatedBuildInputs = [
     aiofiles
@@ -60,6 +68,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
+    ffmpeg # Required for command ffprobe
     pytest-aiohttp
     pytest-asyncio
     pytest-benchmark
@@ -68,24 +77,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=pyunifiprotect --cov-append" ""
-    substituteInPlace setup.cfg \
-      --replace "pydantic!=1.9.1" "pydantic"
-  '';
-
   pythonImportsCheck = [
     "pyunifiprotect"
   ];
 
   pytestFlagsArray = [
     "--benchmark-disable"
-  ];
-
-  disabledTests = [
-    # Tests require ffprobe
-    "test_get_camera_video"
   ];
 
   meta = with lib; {

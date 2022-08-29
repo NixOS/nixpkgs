@@ -12,7 +12,10 @@ rustPlatform.buildRustPackage {
   cargoVendorDir = "vendor";
   buildAndTestSubdir = "src/tools/cargo";
 
-  passthru.rustc = rustc;
+  passthru = {
+    rustc = rustc;
+    inherit (rustc) tests;
+  };
 
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;

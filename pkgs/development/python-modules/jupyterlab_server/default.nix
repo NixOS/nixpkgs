@@ -7,7 +7,7 @@
 , pythonOlder
 , requests
 , pytestCheckHook
-, pyjson5
+, json5
 , babel
 , jupyter_server
 , openapi-core
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  propagatedBuildInputs = [ requests jsonschema pyjson5 babel jupyter_server ];
+  propagatedBuildInputs = [ requests jsonschema json5 babel jupyter_server ];
 
   checkInputs = [
     openapi-core
