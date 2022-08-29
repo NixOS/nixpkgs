@@ -1,24 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, darwin, xxd }:
+{ lib, stdenv }:
+
+ /*
+ This cannot be built from source as it requires entitlements and
+ for that it needs to be code signed.
+ */
 
 stdenv.mkDerivation rec {
   pname = "yabai";
-  version = "3.3.10";
+  version = "4.0.2";
 
-  src = fetchFromGitHub {
-    owner = "koekeishiya";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-8O6//T894C32Pba3F2Z84Z6VWeCXlwml3xsXoIZGqL0=";
+  src = fetchTarball {
+    url = "https://github.com/koekeishiya/${pname}/releases/download/v${version}/${pname}-v${version}.tar.gz";
+    sha256 = "00nxzk1g0hd8jqd1r0aig6wdsbpk60551qxnvvqb9475i8qbzjf6";
   };
-
-  nativeBuildInputs = [ xxd ];
-
-  buildInputs = with darwin.apple_sdk.frameworks; [
-    Carbon
-    Cocoa
-    ScriptingBridge
-    SkyLight
-  ];
 
   installPhase = ''
     mkdir -p $out/bin
