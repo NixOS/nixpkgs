@@ -89,14 +89,13 @@ let
   */
   makeFullPerlPath = deps: makePerlPath (lib.misc.closePropagation deps);
 
-
-  ack = buildPerlPackage {
+  ack = buildPerlPackage rec {
     pname = "ack";
-    version = "3.5.0";
+    version = "3.6.0";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PETDANCE/ack-v3.5.0.tar.gz";
-      hash = "sha256-ZgU+iE6AM4egLd7g1oq/KhAjn6tlQ2TaszKHMJpyVSE=";
+      url = "mirror://cpan/authors/id/P/PE/PETDANCE/ack-v${version}.tar.gz";
+      hash = "sha256-AxRNEHBknpL2obfSC9xTXiuxrCWNqr5ILpqoJ3tI8AU=";
     };
 
     outputs = ["out" "man"];
