@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "airthings-ble";
-  version = "0.3.0";
+  version = "0.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "vincegio";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-E/+ObY/kO52J0nbyHGsBlqY5OYlnwf3ujAHEd1pEKvo=";
+    hash = "sha256-wgFM9LjSI1U8C7MNfgir9oIfMS3lJZIYK0AmvnMGxx8=";
   };
 
   nativeBuildInputs = [
