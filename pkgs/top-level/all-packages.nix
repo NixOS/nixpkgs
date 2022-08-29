@@ -16937,7 +16937,7 @@ with pkgs;
 
   scenebuilder = callPackage ../development/tools/scenebuilder { };
 
-  scenic-view = callPackage ../development/tools/scenic-view { };
+  scenic-view = callPackage ../development/tools/scenic-view { jdk = jdk11; };
 
   shncpd = callPackage ../tools/networking/shncpd { };
 
