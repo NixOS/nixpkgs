@@ -58,23 +58,23 @@
 , util-linux ? null
 
   # Darwin
-, gmp ? null
-, libiconv ? null
-, Carbon ? null
-, AppKit ? null
+, gmp
+, libiconv
+, Carbon
+, AppKit
 
   # Options
 , enableCeph ? false
-, ceph ? null
+, ceph
 , enableGlusterfs ? false
-, glusterfs ? null
+, glusterfs
 , enableIscsi ? false
-, openiscsi ? null
-, libiscsi ? null
+, openiscsi
+, libiscsi
 , enableXen ? false
-, xen ? null
+, xen
 , enableZfs ? stdenv.isLinux
-, zfs ? null
+, zfs
 }:
 
 with lib;
@@ -354,10 +354,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://libvirt.org/";
-    description = ''
-      A toolkit to interact with the virtualization capabilities of recent
-      versions of Linux (and other OSes)
-    '';
+    description = "A toolkit to interact with the virtualization capabilities of recent versions of Linux and other OSes";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz globin lovesegfault ];

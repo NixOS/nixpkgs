@@ -53,6 +53,6 @@ buildGoModule rec {
     downloadPage = "https://github.com/linkerd/linkerd2/";
     homepage = "https://linkerd.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Gonzih bryanasdev000 ];
+    maintainers = with maintainers; [ bryanasdev000 Gonzih superherointj ];
   };
 }

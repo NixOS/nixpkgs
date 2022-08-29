@@ -476,6 +476,8 @@ in {
 
   airly = callPackage ../development/python-modules/airly { };
 
+  airthings-ble = callPackage ../development/python-modules/airthings-ble { };
+
   airthings-cloud = callPackage ../development/python-modules/airthings-cloud { };
 
   airtouch4pyapi = callPackage ../development/python-modules/airtouch4pyapi { };
@@ -7790,8 +7792,6 @@ in {
 
   pyjks = callPackage ../development/python-modules/pyjks { };
 
-  pyjson5 = callPackage ../development/python-modules/pyjson5 { };
-
   pyjsparser = callPackage ../development/python-modules/pyjsparser { };
 
   pyjwkest = callPackage ../development/python-modules/pyjwkest { };
@@ -11166,6 +11166,8 @@ in {
   typing-extensions = callPackage ../development/python-modules/typing-extensions { };
 
   typing-inspect = callPackage ../development/python-modules/typing-inspect { };
+
+  typish = callPackage ../development/python-modules/typish { };
 
   typogrify = callPackage ../development/python-modules/typogrify { };
 

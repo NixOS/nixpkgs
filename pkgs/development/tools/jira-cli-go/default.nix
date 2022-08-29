@@ -33,12 +33,15 @@ buildGoModule rec {
     installShellCompletion --cmd jira \
       --bash <($out/bin/jira completion bash) \
       --zsh <($out/bin/jira completion zsh)
+
+    $out/bin/jira man --generate --output man
+    installManPage man/*
   '';
 
   meta = with lib; {
     description = "Feature-rich interactive Jira command line";
     homepage = "https://github.com/ankitpokhrel/jira-cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ bryanasdev000 ];
+    maintainers = with maintainers; [ bryanasdev000 anthonyroussel ];
   };
 }

@@ -12,10 +12,10 @@ mkDerivation rec {
   };
 
   # LaTeX is used from $PATH, as people often want to have it with extra pkgs
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [
     qtbase qtsvg python3 file/*for libmagic*/ bc
-    hunspell makeWrapper # enchant
+    hunspell # enchant
   ];
 
   configureFlags = [

@@ -190,6 +190,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/messagebird/sachet/">Sachet</link>,
+          an SMS alerting tool for the Prometheus Alertmanager.
+          Available as
+          <link linkend="opt-services.prometheus.sachet.enable">services.prometheus.sachet</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/leetronics/infnoise">infnoise</link>,
           a hardware True Random Number Generator dongle. Available as
           <link xlink:href="options.html#opt-services.infnoise.enable">services.infnoise</link>.
@@ -253,6 +261,14 @@
           a template for PostgreSQL HA with ZooKeeper, etcd or Consul.
           Available as
           <link xlink:href="options.html#opt-services.patroni.enable">services.patroni</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://writefreely.org">WriteFreely</link>,
+          a simple blogging platform with ActivityPub support. Available
+          as
+          <link xlink:href="options.html#opt-services.writefreely.enable">services.writefreely</link>.
         </para>
       </listitem>
     </itemizedlist>

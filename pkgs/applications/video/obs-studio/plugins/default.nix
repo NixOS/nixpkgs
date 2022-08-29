@@ -1,4 +1,4 @@
-{ callPackage, libsForQt5 }:
+{ callPackage, libsForQt5, pkgsi686Linux }:
 
 {
   obs-gstreamer = callPackage ./obs-gstreamer.nix {};
@@ -10,6 +10,8 @@
   looking-glass-obs = callPackage ./looking-glass-obs.nix {};
   obs-nvfbc = callPackage ./obs-nvfbc.nix {};
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix {};
-  obs-vkcapture = callPackage ./obs-vkcapture.nix {};
+  obs-vkcapture = callPackage ./obs-vkcapture.nix {
+    obs-vkcapture32 = pkgsi686Linux.obs-studio-plugins.obs-vkcapture;
+  };
   obs-backgroundremoval = callPackage ./obs-backgroundremoval.nix {};
 }

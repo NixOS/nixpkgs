@@ -106,6 +106,7 @@ let
           flags = [
             "--cmd" (lib.intersperse "|" hostProviderViml)
             "--cmd" "set packpath^=${vimUtils.packDir packDirArgs}"
+            "--cmd" "set rtp^=${vimUtils.packDir packDirArgs}"
             ];
         in
         [

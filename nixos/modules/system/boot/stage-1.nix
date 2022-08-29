@@ -611,7 +611,7 @@ in
         then "zstd"
         else "gzip"
       );
-      defaultText = literalDocBook "<literal>zstd</literal> if the kernel supports it (5.9+), <literal>gzip</literal> if not";
+      defaultText = literalMD "`zstd` if the kernel supports it (5.9+), `gzip` if not";
       type = types.either types.str (types.functionTo types.str);
       description = ''
         The compressor to use on the initrd image. May be any of:

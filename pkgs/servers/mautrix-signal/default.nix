@@ -31,6 +31,12 @@ python3.pkgs.buildPythonPackage rec {
 
   doCheck = false;
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "asyncpg>=0.20,<0.26" "asyncpg>=0.20" \
+      --replace "mautrix>=0.16.0,<0.17" "mautrix>=0.16.0"
+  '';
+
   postInstall = ''
     mkdir -p $out/bin
 

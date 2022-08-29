@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "teslajsonpy";
-  version = "2.4.2";
+  version = "2.4.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "zabuldon";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-WVyMYmuezTS3GNcIY9Uh+/0+lcgdmoLL6o5d1SFMfvE=";
+    sha256 = "sha256-S2myMuQq1a3IFGwRi2KqHDhyPyJNGNUH9Xp0mBZMNh8=";
   };
 
   nativeBuildInputs = [

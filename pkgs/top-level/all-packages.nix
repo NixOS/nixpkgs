@@ -394,6 +394,8 @@ with pkgs;
 
   commix = callPackage ../tools/security/commix { };
 
+  conserver = callPackage ../tools/misc/conserver { };
+
   containerpilot = callPackage ../applications/networking/cluster/containerpilot { };
 
   crc = callPackage ../applications/networking/cluster/crc { };
@@ -3148,7 +3150,7 @@ with pkgs;
 
   cabal2nix = symlinkJoin {
     inherit (cabal2nix-unwrapped) name meta;
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ buildPackages.makeWrapper ];
     paths = [ cabal2nix-unwrapped ];
     postBuild = ''
       wrapProgram $out/bin/cabal2nix \
@@ -4132,6 +4134,8 @@ with pkgs;
 
   jwt-hack = callPackage ../tools/security/jwt-hack { } ;
 
+  jwx = callPackage ../tools/security/jwx { } ;
+
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
   kaldi = callPackage ../tools/audio/kaldi { };
@@ -4242,8 +4246,6 @@ with pkgs;
   mandown = callPackage ../tools/misc/mandown { };
 
   mapcidr = callPackage ../tools/misc/mapcidr { };
-
-  mapproxy = callPackage ../applications/misc/mapproxy { };
 
   marl = callPackage ../development/libraries/marl {};
 
@@ -7187,6 +7189,8 @@ with pkgs;
 
   efitools = callPackage ../tools/security/efitools { };
 
+  sbctl = callPackage ../tools/security/sbctl { };
+
   sbsigntool = callPackage ../tools/security/sbsigntool {
     openssl = openssl_1_1;
   };
@@ -10036,6 +10040,8 @@ with pkgs;
 
   pre-commit = callPackage ../tools/misc/pre-commit { };
 
+  pretender = callPackage ../tools/security/pretender { };
+
   pretty-simple = callPackage ../development/tools/pretty-simple { };
 
   prettyping = callPackage ../tools/networking/prettyping { };
@@ -10213,6 +10219,8 @@ with pkgs;
 
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
+  qdrant = callPackage ../servers/search/qdrant { };
+
   qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
 
   qnial = callPackage ../development/interpreters/qnial { };
@@ -10246,6 +10254,8 @@ with pkgs;
   qodem = callPackage ../tools/networking/qodem { };
 
   qosmic = libsForQt5.callPackage ../applications/graphics/qosmic { };
+
+  qovery-cli = callPackage ../tools/admin/qovery-cli { };
 
   qownnotes = libsForQt5.callPackage ../applications/office/qownnotes { };
 
@@ -12029,6 +12039,8 @@ with pkgs;
   wire = callPackage ../development/tools/wire { };
 
   wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
+
+  wiringpi = callPackage ../os-specific/linux/wiringpi { };
 
   wg-friendly-peer-names = callPackage ../tools/networking/wg-friendly-peer-names { };
 
@@ -16155,7 +16167,9 @@ with pkgs;
 
   drush = callPackage ../development/tools/misc/drush { };
 
-  dura = callPackage ../development/tools/misc/dura { };
+  dura = callPackage ../development/tools/misc/dura {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   dwfv = callPackage ../applications/science/electronics/dwfv { };
 
@@ -16476,6 +16490,8 @@ with pkgs;
   karate = callPackage ../development/tools/karate { };
 
   kati = callPackage ../development/tools/build-managers/kati { };
+
+  kafkactl = callPackage ../development/tools/kafkactl { };
 
   kcat = callPackage ../development/tools/kcat { };
 
@@ -22495,6 +22511,8 @@ with pkgs;
 
   archiveopteryx = callPackage ../servers/mail/archiveopteryx { };
 
+  asouldocs = callPackage ../servers/asouldocs { };
+
   atlassian-bamboo = callPackage ../servers/atlassian/bamboo.nix { };
   atlassian-confluence = callPackage ../servers/atlassian/confluence.nix { };
   atlassian-crowd = callPackage ../servers/atlassian/crowd.nix { };
@@ -22610,6 +22628,10 @@ with pkgs;
   dkimproxy = callPackage ../servers/mail/dkimproxy { };
 
   dmarc-metrics-exporter = callPackage ../servers/monitoring/prometheus/dmarc-metrics-exporter { };
+
+  dmlive = callPackage ../applications/video/dmlive {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   do-agent = callPackage ../servers/monitoring/do-agent { };
 
@@ -23148,6 +23170,7 @@ with pkgs;
     mariadb_106
     mariadb_107
     mariadb_108
+    mariadb_109
   ;
   mariadb = mariadb_106;
 
@@ -23402,6 +23425,7 @@ with pkgs;
   prometheus-redis-exporter = callPackage ../servers/monitoring/prometheus/redis-exporter.nix { };
   prometheus-rabbitmq-exporter = callPackage ../servers/monitoring/prometheus/rabbitmq-exporter.nix { };
   prometheus-rtl_433-exporter = callPackage ../servers/monitoring/prometheus/rtl_433-exporter.nix { };
+  prometheus-sachet = callPackage ../servers/monitoring/prometheus/sachet.nix { };
   prometheus-script-exporter = callPackage ../servers/monitoring/prometheus/script-exporter.nix { };
   prometheus-smartctl-exporter = callPackage ../servers/monitoring/prometheus/smartctl-exporter { };
   prometheus-smokeping-prober = callPackage ../servers/monitoring/prometheus/smokeping-prober.nix { };
@@ -23739,6 +23763,8 @@ with pkgs;
   geoserver = callPackage ../servers/geospatial/geoserver { };
 
   mapcache = callPackage ../servers/geospatial/mapcache { };
+
+  mapproxy = callPackage ../servers/geospatial/mapproxy { };
 
   mapserver = callPackage ../servers/geospatial/mapserver { };
 
@@ -24133,6 +24159,8 @@ with pkgs;
   juju = callPackage ../applications/networking/juju { };
 
   jujuutils = callPackage ../os-specific/linux/jujuutils { };
+
+  karabiner-elements = callPackage ../os-specific/darwin/karabiner-elements { };
 
   kbd = callPackage ../os-specific/linux/kbd { };
 
@@ -25150,6 +25178,8 @@ with pkgs;
   ccsymbols = callPackage ../data/fonts/ccsymbols { };
 
   charis-sil = callPackage ../data/fonts/charis-sil { };
+
+  changie = callPackage ../development/tools/changie { };
 
   cherry = callPackage ../data/fonts/cherry { inherit (xorg) fonttosfnt mkfontdir; };
 
@@ -29719,7 +29749,6 @@ with pkgs;
   qemacs = callPackage ../applications/editors/qemacs { };
 
   roxctl = callPackage ../applications/networking/cluster/roxctl {
-    buildGoModule = buildGo117Module;
   };
 
   rqbit = callPackage ../applications/networking/p2p/rqbit {
@@ -30109,8 +30138,6 @@ with pkgs;
   pdfpc = callPackage ../applications/misc/pdfpc {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-libav;
   };
-
-  peach = callPackage ../servers/peach { };
 
   peaclock = callPackage ../applications/misc/peaclock {
     stdenv = gccStdenv;
@@ -31866,7 +31893,10 @@ with pkgs;
 
   worldengine-cli = python3Packages.worldengine;
 
-  wpsoffice = libsForQt5.callPackage ../applications/office/wpsoffice {};
+  wpsoffice = libsForQt5.callPackage ../applications/office/wpsoffice { };
+  wpsoffice-cn = libsForQt5.callPackage ../applications/office/wpsoffice {
+    useChineseVersion = true;
+  };
 
   wrapFirefox = callPackage ../applications/networking/browsers/firefox/wrapper.nix { };
 
@@ -32446,8 +32476,9 @@ with pkgs;
 
   lightning-pool = callPackage ../applications/blockchains/lightning-pool { };
 
-  litecoin  = libsForQt514.callPackage ../applications/blockchains/litecoin {
+  litecoin  = libsForQt5.callPackage ../applications/blockchains/litecoin {
     inherit (darwin.apple_sdk.frameworks) AppKit;
+    boost = pkgs.boost174;
   };
   litecoind = litecoin.override { withGui = false; };
 
@@ -32617,6 +32648,8 @@ with pkgs;
   doom-bcc = callPackage ../games/zdoom/bcc-git.nix { };
 
   enigma = callPackage ../games/enigma { };
+
+  everspace = callPackage ../games/everspace { };
 
   ezquake = callPackage ../games/ezquake { };
 
@@ -32972,6 +33005,8 @@ with pkgs;
   flightgear = libsForQt5.callPackage ../games/flightgear { };
 
   flock = callPackage ../development/tools/flock { };
+
+  forge-mtg = callPackage ../games/forge-mtg { };
 
   freecell-solver = callPackage ../games/freecell-solver { };
 

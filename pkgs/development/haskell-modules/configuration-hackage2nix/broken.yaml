@@ -4,6 +4,7 @@ broken-packages:
   - 3d-graphics-examples
   - 3dmodels
   - AAI
+  - aasam
   - abacate
   - abcnotation
   - abeson
@@ -2660,6 +2661,7 @@ broken-packages:
   - intrinsic-superclasses
   - introduction
   - intro-prelude
+  - invertible
   - invertible-hlist
   - invertible-syntax
   - involutive-semigroups
@@ -2868,6 +2870,7 @@ broken-packages:
   - lambda-toolbox
   - lame
   - lame-tester
+  - landlock
   - language-asn
   - language-c-comments
   - language-c-inline
@@ -2966,6 +2969,7 @@ broken-packages:
   - libpq
   - librandomorg
   - librarian
+  - libsecp256k1
   - libsystemd-daemon
   - libsystemd-journal
   - libtagc
@@ -3489,6 +3493,7 @@ broken-packages:
   - next-ref
   - nextstep-plist
   - NGrams
+  - ngx-export-log
   - niagra
   - nibblestring
   - nice-html
@@ -3820,6 +3825,7 @@ broken-packages:
   - phone-numbers
   - phone-push
   - phonetic-languages-constaints
+  - phonetic-languages-simplified-properties-array-old
   - phonetic-languages-vector
   - phraskell
   - Phsu
@@ -4312,6 +4318,7 @@ broken-packages:
   - ReviewBoard
   - rewrite-inspector
   - rfc-prelude
+  - r-glpk-phonetic-languages-ukrainian-durations
   - rhbzquery
   - riak
   - riak-protobuf-lens

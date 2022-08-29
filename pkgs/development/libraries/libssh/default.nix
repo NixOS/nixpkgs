@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchurl, pkg-config, cmake, zlib, openssl, libsodium }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, cmake
+, zlib
+, openssl
+, libsodium
+
+# for passthru.tests
+, ffmpeg
+, sshping
+, wireshark
+}:
 
 stdenv.mkDerivation rec {
   pname = "libssh";
@@ -20,6 +33,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib openssl libsodium ];
 
   nativeBuildInputs = [ cmake pkg-config ];
+
+  passthru.tests = {
+    inherit ffmpeg sshping wireshark;
+  };
 
   meta = with lib; {
     description = "SSH client library";

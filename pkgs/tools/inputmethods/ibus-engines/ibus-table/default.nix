@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-table";
-  version = "1.16.7";
+  version = "1.16.11";
 
   src = fetchFromGitHub {
     owner  = "kaio";
     repo   = "ibus-table";
     rev    = version;
-    sha256 = "sha256-rejYxuRhzNmtx11NH3BZe3ODjU5OyZ9sgk6GWnBBXAo=";
+    sha256 = "sha256-lojHn6esoE5MLyPZ/U70+6o0X2D8EH+R69dgQo+59t4=";
   };
 
   postPatch = ''
