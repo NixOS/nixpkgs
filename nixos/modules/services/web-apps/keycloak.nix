@@ -366,41 +366,21 @@ in
               type = enum [ "edge" "reencrypt" "passthrough" "none" ];
               default = "none";
               example = "edge";
-              description = ''
+              description = lib.mdDoc ''
                 The proxy address forwarding mode if the server is
                 behind a reverse proxy.
 
-                <variablelist>
-                  <varlistentry>
-                    <term>edge</term>
-                    <listitem>
-                      <para>
-                        Enables communication through HTTP between the
-                        proxy and Keycloak.
-                      </para>
-                    </listitem>
-                  </varlistentry>
-                  <varlistentry>
-                    <term>reencrypt</term>
-                    <listitem>
-                      <para>
-                        Requires communication through HTTPS between the
-                        proxy and Keycloak.
-                      </para>
-                    </listitem>
-                  </varlistentry>
-                  <varlistentry>
-                    <term>passthrough</term>
-                    <listitem>
-                      <para>
-                        Enables communication through HTTP or HTTPS between
-                        the proxy and Keycloak.
-                      </para>
-                    </listitem>
-                  </varlistentry>
-                </variablelist>
+                - `edge`:
+                  Enables communication through HTTP between the
+                  proxy and Keycloak.
+                - `reencrypt`:
+                  Requires communication through HTTPS between the
+                  proxy and Keycloak.
+                - `passthrough`:
+                  Enables communication through HTTP or HTTPS between
+                  the proxy and Keycloak.
 
-                See <link xlink:href="https://www.keycloak.org/server/reverseproxy"/> for more information.
+                See <https://www.keycloak.org/server/reverseproxy> for more information.
               '';
             };
           };
