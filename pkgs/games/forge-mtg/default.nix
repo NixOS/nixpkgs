@@ -64,8 +64,8 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    mkdir -pv $out/{bin,share/forge}
-    cp -av \
+    mkdir -p $out/bin $out/share/forge
+    cp -a \
       forge-gui-desktop/target/forge.sh \
       forge-gui-desktop/target/forge-gui-desktop-${version}-jar-with-dependencies.jar \
       forge-adventure/target/forge-adventure.sh \
