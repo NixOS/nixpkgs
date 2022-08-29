@@ -83,7 +83,7 @@ in {
     };
 
     network = mkOption {
-      description = " IPv4 network in CIDR format to use for the entire flannel network.";
+      description = lib.mdDoc " IPv4 network in CIDR format to use for the entire flannel network.";
       type = types.str;
     };
 

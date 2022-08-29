@@ -33,14 +33,14 @@ let
         default = "false";
       };
       cursorTheme = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Cursor theme to use in Phosh.
         '';
         type = types.str;
         default = "default";
       };
       outputs = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Output configurations.
         '';
         type = types.attrsOf phocOutputType;
@@ -56,7 +56,7 @@ let
   phocOutputType = types.submodule {
     options = {
       modeline = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           One or more modelines.
         '';
         type = types.either types.str (types.listOf types.str);
@@ -67,7 +67,7 @@ let
         ];
       };
       mode = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Default video mode.
         '';
         type = types.nullOr types.str;
@@ -75,7 +75,7 @@ let
         example = "768x1024";
       };
       scale = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Display scaling factor.
         '';
         type = types.nullOr (
@@ -89,7 +89,7 @@ let
         example = 2;
       };
       rotate = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Screen transformation.
         '';
         type = types.enum [

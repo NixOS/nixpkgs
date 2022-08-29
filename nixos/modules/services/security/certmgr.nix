@@ -118,34 +118,34 @@ in
           service = mkOption {
             type = nullOr str;
             default = null;
-            description = "The service on which to perform &lt;action&gt; after fetching.";
+            description = lib.mdDoc "The service on which to perform \<action\> after fetching.";
           };
 
           action = mkOption {
             type = addCheck str (x: cfg.svcManager == "command" || elem x ["restart" "reload" "nop"]);
             default = "nop";
-            description = "The action to take after fetching.";
+            description = lib.mdDoc "The action to take after fetching.";
           };
 
           # These ought all to be specified according to certmgr spec def.
           authority = mkOption {
             type = attrs;
-            description = "certmgr spec authority object.";
+            description = lib.mdDoc "certmgr spec authority object.";
           };
 
           certificate = mkOption {
             type = nullOr attrs;
-            description = "certmgr spec certificate object.";
+            description = lib.mdDoc "certmgr spec certificate object.";
           };
 
           private_key = mkOption {
             type = nullOr attrs;
-            description = "certmgr spec private_key object.";
+            description = lib.mdDoc "certmgr spec private_key object.";
           };
 
           request = mkOption {
             type = nullOr attrs;
-            description = "certmgr spec request object.";
+            description = lib.mdDoc "certmgr spec request object.";
           };
         };
     }));

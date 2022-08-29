@@ -78,11 +78,11 @@ let
       { deps = mkOption
           { type = types.listOf types.str;
             default = [ ];
-            description = "List of dependencies. The script will run after these.";
+            description = lib.mdDoc "List of dependencies. The script will run after these.";
           };
         text = mkOption
           { type = types.lines;
-            description = "The content of the script.";
+            description = lib.mdDoc "The content of the script.";
           };
       } // optionalAttrs withDry {
         supportsDryActivation = mkOption

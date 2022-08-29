@@ -247,8 +247,8 @@ in
 
     services.i2pd = {
 
-      enable = mkEnableOption "I2Pd daemon" // {
-        description = ''
+      enable = mkEnableOption (lib.mdDoc "I2Pd daemon") // {
+        description = lib.mdDoc ''
           Enables I2Pd as a running service upon activation.
           Please read http://i2pd.readthedocs.io/en/latest/ for further
           configuration help.
@@ -345,14 +345,14 @@ in
       ntcp = mkEnableTrueOption "ntcp";
       ssu = mkEnableTrueOption "ssu";
 
-      notransit = mkEnableOption "notransit" // {
-        description = ''
+      notransit = mkEnableOption (lib.mdDoc "notransit") // {
+        description = lib.mdDoc ''
           Tells the router to not accept transit tunnels during startup.
         '';
       };
 
-      floodfill = mkEnableOption "floodfill" // {
-        description = ''
+      floodfill = mkEnableOption (lib.mdDoc "floodfill") // {
+        description = lib.mdDoc ''
           If the router is declared to be unreachable and needs introduction nodes.
         '';
       };

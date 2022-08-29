@@ -9,8 +9,8 @@ in
     options = {
       services.xserver.xautolock = {
         enable = mkEnableOption (lib.mdDoc "xautolock");
-        enableNotifier = mkEnableOption "xautolock.notify" // {
-          description = ''
+        enableNotifier = mkEnableOption (lib.mdDoc "xautolock.notify") // {
+          description = lib.mdDoc ''
             Whether to enable the notifier feature of xautolock.
             This publishes a notification before the autolock.
           '';

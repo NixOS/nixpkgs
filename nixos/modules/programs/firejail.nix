@@ -39,19 +39,19 @@ in {
         options = {
           executable = mkOption {
             type = types.path;
-            description = "Executable to run sandboxed";
+            description = lib.mdDoc "Executable to run sandboxed";
             example = literalExpression ''"''${lib.getBin pkgs.firefox}/bin/firefox"'';
           };
           profile = mkOption {
             type = types.nullOr types.path;
             default = null;
-            description = "Profile to use";
+            description = lib.mdDoc "Profile to use";
             example = literalExpression ''"''${pkgs.firejail}/etc/firejail/firefox.profile"'';
           };
           extraArgs = mkOption {
             type = types.listOf types.str;
             default = [];
-            description = "Extra arguments to pass to firejail";
+            description = lib.mdDoc "Extra arguments to pass to firejail";
             example = [ "--private=~/.firejail_home" ];
           };
         };

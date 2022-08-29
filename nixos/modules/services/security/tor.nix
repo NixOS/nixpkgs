@@ -51,14 +51,14 @@ let
     type = with types; nullOr str;
     default = null;
     example = "0.0.0.0";
-    description = ''
+    description = lib.mdDoc ''
       IPv4 or IPv6 (if between brackets) address.
     '';
   };
   optionUnix = mkOption {
     type = with types; nullOr path;
     default = null;
-    description = ''
+    description = lib.mdDoc ''
       Unix domain socket path to use.
     '';
   };
