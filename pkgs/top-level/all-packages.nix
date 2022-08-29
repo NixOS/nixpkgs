@@ -2245,8 +2245,6 @@ with pkgs;
 
   inherit (nodePackages) concurrently;
 
-  inherit (nodePackages) hyperspace-cli;
-
   bklk = callPackage ../applications/misc/bklk { };
 
   bkyml = callPackage ../tools/misc/bkyml { };

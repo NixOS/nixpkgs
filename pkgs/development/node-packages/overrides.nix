@@ -38,13 +38,6 @@ final: prev: {
     ];
   };
 
-  "@hyperspace/cli" = prev."@hyperspace/cli".override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    buildInputs = [ final.node-gyp-build ];
-    postInstall = ''wrapProgram "$out/bin/hyp" --prefix PATH : ${ lib.makeBinPath [ nodejs ] }'';
-  };
-  hyperspace-cli = final."@hyperspace/cli";
-
   "@medable/mdctl-cli" = prev."@medable/mdctl-cli".override {
     nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
       glib
