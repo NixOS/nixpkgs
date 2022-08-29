@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     homepage = "https://computing.llnl.gov/projects/zfp";
     description = "Library for random-access compression of floating-point arrays";
     license = licenses.bsd3;
-    maintainers = [ maintainers.spease ];
+    maintainers = with maintainers; [ spease atila ];
     # 64-bit only
     platforms = platforms.aarch64 ++ platforms.x86_64;
   };
