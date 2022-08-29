@@ -32215,6 +32215,9 @@ with pkgs;
   alfis-nogui = alfis.override {
     withGui = false;
   };
+  inherit (callPackages ../applications/blockchains/aptos {
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
+  }) aptos aptos-node aptos-tools aptos-full;
 
   balanceofsatoshis = nodePackages.balanceofsatoshis;
 
