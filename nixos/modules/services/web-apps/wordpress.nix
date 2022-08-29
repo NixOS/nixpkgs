@@ -98,26 +98,8 @@ let
           type = types.listOf types.path;
           default = [];
           description = ''
-            List of path(s) to respective plugin(s) which are copied from the 'plugins' directory.
-            <note><para>These plugins need to be packaged before use, see example.</para></note>
-          '';
-          example = literalExpression ''
-            let
-              # Wordpress plugin 'embed-pdf-viewer' installation example
-              embedPdfViewerPlugin = pkgs.stdenv.mkDerivation {
-                name = "embed-pdf-viewer-plugin";
-                # Download the theme from the wordpress site
-                src = pkgs.fetchurl {
-                  url = "https://downloads.wordpress.org/plugin/embed-pdf-viewer.2.0.3.zip";
-                  sha256 = "1rhba5h5fjlhy8p05zf0p14c9iagfh96y91r36ni0rmk6y891lyd";
-                };
-                # We need unzip to build this package
-                nativeBuildInputs = [ pkgs.unzip ];
-                # Installing simply means copying all files to the output directory
-                installPhase = "mkdir -p $out; cp -R * $out/";
-              };
-            # And then pass this theme to the themes list like this:
-            in [ embedPdfViewerPlugin ]
+            List of path(s) to respective plugin(s) which are copied to the 'plugins' directory.
+            Using https://git.helsinki.tools/helsinki-systems/wp4nix is recommended.
           '';
         };
 
@@ -125,26 +107,8 @@ let
           type = types.listOf types.path;
           default = [];
           description = ''
-            List of path(s) to respective theme(s) which are copied from the 'theme' directory.
-            <note><para>These themes need to be packaged before use, see example.</para></note>
-          '';
-          example = literalExpression ''
-            let
-              # Let's package the responsive theme
-              responsiveTheme = pkgs.stdenv.mkDerivation {
-                name = "responsive-theme";
-                # Download the theme from the wordpress site
-                src = pkgs.fetchurl {
-                  url = "https://downloads.wordpress.org/theme/responsive.3.14.zip";
-                  sha256 = "0rjwm811f4aa4q43r77zxlpklyb85q08f9c8ns2akcarrvj5ydx3";
-                };
-                # We need unzip to build this package
-                nativeBuildInputs = [ pkgs.unzip ];
-                # Installing simply means copying all files to the output directory
-                installPhase = "mkdir -p $out; cp -R * $out/";
-              };
-            # And then pass this theme to the themes list like this:
-            in [ responsiveTheme ]
+            List of path(s) to respective theme(s) which are copied to the 'themes' directory.
+            Using https://git.helsinki.tools/helsinki-systems/wp4nix is recommended.
           '';
         };
 
