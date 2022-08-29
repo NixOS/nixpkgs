@@ -430,13 +430,14 @@ in
             };
             config = {
               from = mkDefault { type = "indirect"; id = name; };
-              to = mkIf (config.flake != null) (mkDefault
+              to = mkIf (config.flake != null) (mkDefault (
                 {
                   type = "path";
                   path = config.flake.outPath;
                 } // filterAttrs
-                (n: _: n == "lastModified" || n == "rev" || n == "revCount" || n == "narHash")
-                config.flake);
+                  (n: _: n == "lastModified" || n == "rev" || n == "revCount" || n == "narHash")
+                  config.flake
+              ));
             };
           }
         ));

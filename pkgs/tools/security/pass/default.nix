@@ -33,7 +33,8 @@ let
     in buildEnv {
       name = "pass-extensions-env";
       paths = selected;
-      buildInputs = [ makeWrapper ] ++ concatMap (x: x.buildInputs) selected;
+      nativeBuildInputs = [ makeWrapper ];
+      buildInputs = concatMap (x: x.buildInputs) selected;
 
       postBuild = ''
         files=$(find $out/bin/ -type f -exec readlink -f {} \;)

@@ -49,10 +49,8 @@ in stdenv.mkDerivation rec {
 
   patches = [ ./40103-iostat-fix.patch ];
 
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [
-    makeWrapper
-  ] ++ (with python'.pkgs; [
+  nativeBuildInputs = [ unzip makeWrapper ];
+  buildInputs = with python'.pkgs; [
     requests
     psycopg2
     psutil
@@ -63,7 +61,7 @@ in stdenv.mkDerivation rec {
     python-etcd
     consul
     docker
-  ]);
+  ];
   propagatedBuildInputs = with python'.pkgs; [ python tornado ];
 
   buildCommand = ''

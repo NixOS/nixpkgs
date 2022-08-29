@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "json5";
-  version = "0.9.6";
+  version = "0.9.9";
 
   src = fetchFromGitHub {
     owner = "dpranke";
     repo = "pyjson5";
     rev = "v${version}";
-    sha256 = "sha256-RJj5KvLKq43tRuTwxq/mB+sU35xTQwZqg/jpdYcMP6A=";
+    hash = "sha256-0ommoTv5q7YuLNF+ZPWW/Xg/8CwnPrF7rXJ+eS0joUs=";
   };
 
   checkInputs = [
@@ -21,7 +21,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "json5" ];
+  pythonImportsCheck = [
+    "json5"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/dpranke/pyjson5";

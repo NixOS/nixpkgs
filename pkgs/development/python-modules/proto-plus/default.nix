@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "proto-plus";
-  version = "1.20.6";
+  version = "1.22.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RJtFN+g/R3a9aQUcTXdtuP/j+dBkHx6HsGwRbrlMkOk=";
+    sha256 = "sha256-wuZpP99oxAWmQoImkVqGJdIdBRN5NZiuMoehIQR42Ow=";
   };
 
   propagatedBuildInputs = [ protobuf ];

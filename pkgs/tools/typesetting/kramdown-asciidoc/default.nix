@@ -13,7 +13,7 @@ let
       "kramdoc"
     ];
 
-    # buildInputs = [ makeWrapper ];
+    # nativeBuildInputs = [ makeWrapper ];
 
     # postBuild = ''
     #     wrapProgram "$out/bin/asciidoctor-epub3" \

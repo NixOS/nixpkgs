@@ -24,7 +24,7 @@ let
     Xft.lcdfilter: lcd${fontconfig.subpixel.lcdfilter}
     Xft.hinting: ${if fontconfig.hinting.enable then "1" else "0"}
     Xft.autohint: ${if fontconfig.hinting.autohint then "1" else "0"}
-    Xft.hintstyle: hintslight
+    Xft.hintstyle: ${fontconfig.hinting.style}
   '';
 
   # file provided by services.xserver.displayManager.sessionData.wrapper
@@ -285,7 +285,7 @@ in
             defaultSessionFromLegacyOptions
           else
             null;
-        defaultText = literalDocBook ''
+        defaultText = literalMD ''
           Taken from display manager settings or window manager settings, if either is set.
         '';
         example = "gnome";

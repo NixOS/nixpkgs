@@ -176,7 +176,7 @@ let
         postgresql.lib
         postgresql.man   # in case user installs this into environment
     ];
-    buildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
 
 
     # We include /bin to ensure the $out/bin directory is created, which is

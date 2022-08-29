@@ -32,10 +32,7 @@ let
       ];
     } // (attrs.meta or {});
 
-    buildInputs = [
-      dpkg
-      makeWrapper
-    ];
+    nativeBuildInputs = [ makeWrapper dpkg ];
 
     libs = attrs.libs or [
       atk

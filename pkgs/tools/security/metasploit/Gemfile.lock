@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 6241267e515db4b2902831fda1bc41773fb24529
-  ref: refs/tags/6.2.13
+  revision: 349b7d4bf192254eac191cc2603f9553a8d6da1b
+  ref: refs/tags/6.2.14
   specs:
-    metasploit-framework (6.2.13)
+    metasploit-framework (6.2.14)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -44,7 +44,7 @@ GIT
       network_interface
       nexpose
       nokogiri
-      octokit
+      octokit (~> 4.0)
       openssl-ccm
       openvas-omp
       packetfu
@@ -124,22 +124,22 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
-    addressable (2.8.0)
-      public_suffix (>= 2.0.2, < 5.0)
+    addressable (2.8.1)
+      public_suffix (>= 2.0.2, < 6.0)
     afm (0.2.2)
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.619.0)
-    aws-sdk-core (3.132.0)
+    aws-partitions (1.622.0)
+    aws-sdk-core (3.136.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-ec2 (1.328.0)
+    aws-sdk-ec2 (1.329.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-iam (1.69.0)
+    aws-sdk-iam (1.70.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-kms (1.58.0)
@@ -254,7 +254,7 @@ GEM
     mini_portile2 (2.8.0)
     minitest (5.16.3)
     mqtt (0.5.0)
-    msgpack (1.5.4)
+    msgpack (1.5.6)
     multi_json (1.15.0)
     mustermann (2.0.2)
       ruby2_keywords (~> 0.0.1)
@@ -274,7 +274,7 @@ GEM
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     nori (2.6.0)
-    octokit (5.2.0)
+    octokit (4.25.1)
       faraday (>= 1, < 3)
       sawyer (~> 0.9)
     openssl-ccm (1.2.3)
@@ -291,8 +291,8 @@ GEM
       ruby-rc4
       ttfunk
     pg (1.4.3)
-    public_suffix (4.0.7)
-    puma (5.6.4)
+    public_suffix (5.0.0)
+    puma (5.6.5)
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.4)

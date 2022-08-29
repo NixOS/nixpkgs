@@ -263,7 +263,7 @@ in {
           (drv: drv.override { pulseaudio = overriddenPackage; })
           cfg.extraModules;
         modulePaths = builtins.map
-          (drv: "${drv}/${overriddenPackage.pulseDir}/modules")
+          (drv: "${drv}/lib/pulseaudio/modules")
           # User-provided extra modules take precedence
           (overriddenModules ++ [ overriddenPackage ]);
       in lib.concatStringsSep ":" modulePaths;

@@ -5781,6 +5781,16 @@
     github = "jacg";
     githubId = 2570854;
   };
+  jakehamilton = {
+    name = "Jake Hamilton";
+    email = "jake.hamilton@hey.com";
+    matrix = "@jakehamilton:matrix.org";
+    github = "jakehamilton";
+    githubId = 7005773;
+    keys = [{
+      fingerprint = "B982 0250 1720 D540 6A18  2DA8 188E 4945 E85B 2D21";
+    }];
+  };
   jasoncarr = {
     email = "jcarr250@gmail.com";
     github = "jasoncarr0";
@@ -6539,6 +6549,12 @@
     github = "jtojnar";
     githubId = 705123;
     name = "Jan Tojnar";
+  };
+  jtrees = {
+    email = "me@jtrees.io";
+    github = "jtrees";
+    githubId = 5802758;
+    name = "Joshua Trees";
   };
   juaningan = {
     email = "juaningan@gmail.com";

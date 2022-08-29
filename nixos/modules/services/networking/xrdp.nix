@@ -100,7 +100,7 @@ in
       confDir = mkOption {
         type = types.path;
         default = confDir;
-        defaultText = literalDocBook "generated from configuration";
+        defaultText = literalMD "generated from configuration";
         description = lib.mdDoc "The location of the config files for xrdp.";
       };
     };

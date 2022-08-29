@@ -36,7 +36,7 @@ let
 
       paths = [ open-watcom ];
 
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
 
       postBuild = ''
         mkdir $out/bin

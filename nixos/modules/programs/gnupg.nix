@@ -71,7 +71,7 @@ in
       type = types.nullOr (types.enum pkgs.pinentry.flavors);
       example = "gnome3";
       default = defaultPinentryFlavor;
-      defaultText = literalDocBook ''matching the configured desktop environment'';
+      defaultText = literalMD ''matching the configured desktop environment'';
       description = lib.mdDoc ''
         Which pinentry interface to use. If not null, the path to the
         pinentry binary will be passed to gpg-agent via commandline and

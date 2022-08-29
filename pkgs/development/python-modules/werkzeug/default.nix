@@ -10,6 +10,8 @@
 , pytest-xprocess
 , pytestCheckHook
 , markupsafe
+# for passthru.tests
+, moto, sentry-sdk
 }:
 
 buildPythonPackage rec {
@@ -55,6 +57,10 @@ buildPythonPackage rec {
     # warnings._OptionError: unknown warning category: 'pytest.PytestUnraisableExceptionWarning'
     "-m 'not filterwarnings'"
   ];
+
+  passthru.tests = {
+    inherit moto sentry-sdk;
+  };
 
   meta = with lib; {
     homepage = "https://palletsprojects.com/p/werkzeug/";

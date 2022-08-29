@@ -1391,6 +1391,7 @@ dont-distribute-packages:
  - fbrnch
  - fcd
  - feature-flipper-postgres
+ - fedora-composes
  - fedora-img-dl
  - feed-gipeda
  - feed-translator
@@ -1575,6 +1576,7 @@ dont-distribute-packages:
  - gloss-devil
  - gloss-raster-accelerate
  - gloss-sodium
+ - gltf-loader
  - gmap
  - gmndl
  - gnome-desktop
@@ -2278,6 +2280,7 @@ dont-distribute-packages:
  - interpolatedstring-qq-mwotton
  - introduction-test
  - intset
+ - invertible-hxt
  - ion
  - ipatch
  - ipc
@@ -2663,6 +2666,7 @@ dont-distribute-packages:
  - mmsyn7l
  - mmsyn7s
  - mmsyn7ukr
+ - mmsyn7ukr-array
  - mmsyn7ukr-common
  - mmtl-base
  - moan
@@ -2861,6 +2865,7 @@ dont-distribute-packages:
  - openpgp-Crypto
  - openpgp-crypto-api
  - openssh-github-keys
+ - oplang
  - optima-for-hasql
  - optimal-blocks
  - optimusprime
@@ -3578,6 +3583,7 @@ dont-distribute-packages:
  - stunts
  - stutter
  - stylist
+ - stylist-traits
  - subhask
  - substring-parser
  - sugar-data
@@ -3918,6 +3924,7 @@ dont-distribute-packages:
  - warped
  - wavesurfer
  - wavy
+ - web-inv-route
  - web-mongrel2
  - web-page
  - web-routes-regular
