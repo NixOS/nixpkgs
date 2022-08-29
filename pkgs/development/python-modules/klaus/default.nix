@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, six, flask, pygments, dulwich, httpauth, humanize, pytest, requests, python-ctags3, mock }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, flask, pygments, dulwich, httpauth, humanize, pytest, requests, python-ctags3, mock }:
 
 buildPythonPackage rec {
   pname = "klaus";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    six flask pygments dulwich httpauth humanize
+    flask pygments dulwich httpauth humanize
   ];
 
   checkInputs = [
