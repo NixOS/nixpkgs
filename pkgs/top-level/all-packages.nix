@@ -34637,7 +34637,7 @@ with pkgs;
     z3_4_11
     z3_4_8
     z3_4_7;
-  z3 = z3_4_11;
+  z3 = z3_4_8;
   z3_4_4_0 = callPackage ../applications/science/logic/z3/4.4.0.nix {
     python = python2;
     stdenv = if stdenv.isDarwin then stdenv else gcc49Stdenv;
