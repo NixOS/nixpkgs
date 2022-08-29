@@ -105,7 +105,7 @@ in
           flags = mkOption {
             type = types.str;
             default = "";
-            description = "";
+            description = lib.mdDoc "";
           };
 
           unlisted = mkOption {

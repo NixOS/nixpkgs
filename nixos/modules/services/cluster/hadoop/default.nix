@@ -203,7 +203,7 @@ with lib;
       type = types.package;
       default = pkgs.hadoop;
       defaultText = literalExpression "pkgs.hadoop";
-      description = "";
+      description = lib.mdDoc "";
     };
   };
 

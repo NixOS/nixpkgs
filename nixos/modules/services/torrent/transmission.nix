@@ -71,7 +71,7 @@ in
           options.incomplete-dir-enabled = mkOption {
             type = types.bool;
             default = true;
-            description = "";
+            description = lib.mdDoc "";
           };
           options.message-level = mkOption {
             type = types.ints.between 0 3;

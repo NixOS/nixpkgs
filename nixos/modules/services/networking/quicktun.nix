@@ -20,65 +20,65 @@ with lib;
             type = types.int;
             default = 0;
             example = 1;
-            description = "";
+            description = lib.mdDoc "";
           };
 
           remoteAddress = mkOption {
             type = types.str;
             example = "tunnel.example.com";
-            description = "";
+            description = lib.mdDoc "";
           };
 
           localAddress = mkOption {
             type = types.str;
             example = "0.0.0.0";
-            description = "";
+            description = lib.mdDoc "";
           };
 
           localPort = mkOption {
             type = types.int;
             default = 2998;
-            description = "";
+            description = lib.mdDoc "";
           };
 
           remotePort = mkOption {
             type = types.int;
             default = 2998;
-            description = "";
+            description = lib.mdDoc "";
           };
 
           remoteFloat = mkOption {
             type = types.int;
             default = 0;
-            description = "";
+            description = lib.mdDoc "";
           };
 
           protocol = mkOption {
             type = types.str;
             default = "nacltai";
-            description = "";
+            description = lib.mdDoc "";
           };
 
           privateKey = mkOption {
             type = types.str;
-            description = "";
+            description = lib.mdDoc "";
           };
 
           publicKey = mkOption {
             type = types.str;
-            description = "";
+            description = lib.mdDoc "";
           };
 
           timeWindow = mkOption {
             type = types.int;
             default = 5;
-            description = "";
+            description = lib.mdDoc "";
           };
 
           upScript = mkOption {
             type = types.lines;
             default = "";
-            description = "";
+            description = lib.mdDoc "";
           };
         };
       });
