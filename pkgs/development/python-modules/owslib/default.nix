@@ -1,28 +1,64 @@
-{ lib, buildPythonPackage, fetchPypi, python-dateutil, requests, pytz, pyproj , pytest, pyyaml } :
-buildPythonPackage rec {
-  pname = "OWSLib";
-  version = "0.27.2";
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pyproj
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, pytz
+, pyyaml
+, requests
+}:
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-4QKqJETf4MhDmrHhd2zA+kfOoowJuKKCEsiTxgF8F5s=";
+buildPythonPackage rec {
+  pname = "owslib";
+  version = "0.26.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "geopython";
+    repo = "OWSLib";
+    rev = version;
+    sha256 = "sha256-IVJMBpjpMHuvHnWwC7oA0ifkuAgYvwGdGDbkX62XEgs=";
   };
 
-  # as now upstream https://github.com/geopython/OWSLib/pull/824
+  propagatedBuildInputs = [
+    python-dateutil
+    pyproj
+    pytz
+    requests
+    pyyaml
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
   postPatch = ''
+    # Can be removed with the next release: https://github.com/geopython/OWSLib/pull/824
     substituteInPlace requirements.txt \
       --replace 'pyproj ' 'pyproj #'
+    # Remove coverage
+    rm tox.ini
   '';
 
-  buildInputs = [ pytest ];
-  propagatedBuildInputs = [ python-dateutil pyproj pytz requests pyyaml ];
+  pythonImportsCheck = [
+    "owslib"
+  ];
 
-  # 'tests' dir not included in pypy distribution archive.
-  doCheck = false;
+  disabledTests = [
+    # Tests require network access
+    "TestOffline"
+    "test_ows_interfaces_wcs"
+    "test_wmts_example_informatievlaanderen"
+  ];
 
   meta = with lib; {
     description = "client for Open Geospatial Consortium web service interface standards";
-    license = licenses.bsd3;
     homepage = "https://www.osgeo.org/projects/owslib/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }
