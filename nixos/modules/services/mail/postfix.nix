@@ -70,7 +70,7 @@ let
       privileged = mkOption {
         type = types.bool;
         example = true;
-        description = "";
+        description = lib.mdDoc "";
       };
 
       chroot = mkOption {
