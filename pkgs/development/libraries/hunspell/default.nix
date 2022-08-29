@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, readline, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  ncurses,
+  readline,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   version = "1.7.0";
   pname = "hunspell";
@@ -11,18 +18,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YSJztik0QTZFNR8k8Xu1hakyE16NziDavYVkEUCbtGM=";
   };
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  outputs = ["bin" "dev" "out" "man"];
 
-  buildInputs = [ ncurses readline ];
-  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ncurses readline];
+  nativeBuildInputs = [autoreconfHook];
 
   patches = [
     ./0001-Make-hunspell-look-in-XDG_DATA_DIRS-for-dictionaries.patch
-    (fetchpatch {
-      name = "CVE-2019-16707.patch";
-      url = "https://github.com/hunspell/hunspell/commit/ac938e2ecb48ab4dd21298126c7921689d60571b.patch";
-      sha256 = "0bwfksz87iy7ikx3fb54zd5ww169qfm9kl076hsch3cs8p30s8az";
-    })
   ];
 
   postPatch = ''
@@ -31,9 +33,9 @@ stdenv.mkDerivation rec {
 
   autoreconfFlags = "-vfi";
 
-  configureFlags = [ "--with-ui" "--with-readline" ];
+  configureFlags = ["--with-ui" "--with-readline"];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   meta = with lib; {
     homepage = "http://hunspell.sourceforge.net";
@@ -59,7 +61,7 @@ stdenv.mkDerivation rec {
         * Delphi, Java (JNA, JNI), Perl, .NET, Python, Ruby ([1], [2]), UNO.
     '';
     platforms = platforms.all;
-    license = with licenses; [ gpl2 lgpl21 mpl11 ];
-    maintainers = with lib.maintainers; [ ];
+    license = with licenses; [gpl2 lgpl21 mpl11];
+    maintainers = with lib.maintainers; [];
   };
 }
