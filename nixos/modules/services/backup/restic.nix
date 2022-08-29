@@ -196,6 +196,18 @@ in
           ];
         };
 
+        checkOpts = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          description = lib.mdDoc ''
+            A list of options for 'restic check', which is run after
+            pruning.
+          '';
+          example = [
+            "--with-cache"
+          ];
+        };
+
         dynamicFilesFrom = mkOption {
           type = with types; nullOr str;
           default = null;
@@ -270,8 +282,8 @@ in
               then if (backup.paths != null) then concatStringsSep " " backup.paths else ""
               else "--files-from ${filesFromTmpFile}";
             pruneCmd = optionals (builtins.length backup.pruneOpts > 0) [
-              (resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts))
-              (resticCmd + " check")
+              (resticCmd + " forget --prune --cache-dir=%C/restic-backups-${name} " + (concatStringsSep " " backup.pruneOpts))
+              (resticCmd + " check --cache-dir=%C/restic-backups-${name} " + (concatStringsSep " " backup.checkOpts))
             ];
             # Helper functions for rclone remotes
             rcloneRemoteName = builtins.elemAt (splitString ":" backup.repository) 1;
