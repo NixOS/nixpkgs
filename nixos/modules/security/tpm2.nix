@@ -76,21 +76,11 @@ in {
 
     tctiEnvironment = {
       enable = lib.mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Set common TCTI environment variables to the specified value.
           The variables are
-          <itemizedlist>
-            <listitem>
-              <para>
-                <literal>TPM2TOOLS_TCTI</literal>
-              </para>
-            </listitem>
-            <listitem>
-              <para>
-                <literal>TPM2_PKCS11_TCTI</literal>
-              </para>
-            </listitem>
-          </itemizedlist>
+          - `TPM2TOOLS_TCTI`
+          - `TPM2_PKCS11_TCTI`
         '';
         type = lib.types.bool;
         default = false;

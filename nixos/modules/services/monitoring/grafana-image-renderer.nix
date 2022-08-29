@@ -62,18 +62,16 @@ in {
             mode = mkOption {
               default = "default";
               type = types.enum [ "default" "reusable" "clustered" ];
-              description = ''
-                Rendering mode of <literal>grafana-image-renderer</literal>:
-                <itemizedlist>
-                <listitem><para><literal>default:</literal> Creates on browser-instance
-                  per rendering request.</para></listitem>
-                <listitem><para><literal>reusable:</literal> One browser instance
-                  will be started and reused for each rendering request.</para></listitem>
-                <listitem><para><literal>clustered:</literal> allows to precisely
+              description = lib.mdDoc ''
+                Rendering mode of `grafana-image-renderer`:
+
+                - `default:` Creates on browser-instance
+                  per rendering request.
+                - `reusable:` One browser instance
+                  will be started and reused for each rendering request.
+                - `clustered:` allows to precisely
                   configure how many browser-instances are supposed to be used. The values
-                  for that mode can be declared in <literal>rendering.clustering</literal>.
-                  </para></listitem>
-                </itemizedlist>
+                  for that mode can be declared in `rendering.clustering`.
               '';
             };
             args = mkOption {

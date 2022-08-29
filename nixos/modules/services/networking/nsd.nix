@@ -213,30 +213,24 @@ let
         example = [ "192.0.2.0/24 NOKEY" "10.0.0.1-10.0.0.5 my_tsig_key_name"
                     "10.0.3.4&255.255.0.0 BLOCKED"
                   ];
-        description = ''
+        description = lib.mdDoc ''
           Listed primary servers are allowed to notify this secondary server.
 
-          Format: <literal>&lt;ip&gt; &lt;key-name | NOKEY | BLOCKED&gt;</literal>
+          Format: `<ip> <key-name | NOKEY | BLOCKED>`
 
-          <literal>&lt;ip&gt;</literal> either a plain IPv4/IPv6 address or range.
+          `<ip>` either a plain IPv4/IPv6 address or range.
           Valid patters for ranges:
-          <itemizedlist>
-            <listitem><para><literal>10.0.0.0/24</literal>: via subnet size</para></listitem>
-            <listitem><para><literal>10.0.0.0&amp;255.255.255.0</literal>: via subnet mask</para></listitem>
-            <listitem><para><literal>10.0.0.1-10.0.0.254</literal>: via range</para></listitem>
-          </itemizedlist>
+          * `10.0.0.0/24`: via subnet size
+          * `10.0.0.0&255.255.255.0`: via subnet mask
+          * `10.0.0.1-10.0.0.254`: via range
 
           A optional port number could be added with a '@':
-          <itemizedlist>
-            <listitem><para><literal>2001:1234::1@1234</literal></para></listitem>
-          </itemizedlist>
+          * `2001:1234::1@1234`
 
-          <literal>&lt;key-name | NOKEY | BLOCKED&gt;</literal>
-          <itemizedlist>
-            <listitem><para><literal>&lt;key-name&gt;</literal> will use the specified TSIG key</para></listitem>
-            <listitem><para><literal>NOKEY</literal> no TSIG signature is required</para></listitem>
-            <listitem><para><literal>BLOCKED</literal>notifies from non-listed or blocked IPs will be ignored</para></listitem>
-          </itemizedlist>
+          `<key-name | NOKEY | BLOCKED>`
+          * `<key-name>` will use the specified TSIG key
+          * `NOKEY` no TSIG signature is required
+          * `BLOCKED`notifies from non-listed or blocked IPs will be ignored
         '';
       };
 
@@ -350,19 +344,17 @@ let
         type = types.listOf types.str;
         default = [];
         example = [ "10.0.0.1@3721 my_key" "::5 NOKEY" ];
-        description = ''
+        description = lib.mdDoc ''
           This primary server will notify all given secondary servers about
           zone changes.
 
-          Format: <literal>&lt;ip&gt; &lt;key-name | NOKEY&gt;</literal>
+          Format: `<ip> <key-name | NOKEY>`
 
-          <literal>&lt;ip&gt;</literal> a plain IPv4/IPv6 address with on optional port number (ip@port)
+          `<ip>` a plain IPv4/IPv6 address with on optional port number (ip@port)
 
-          <literal>&lt;key-name | NOKEY&gt;</literal>
-          <itemizedlist>
-            <listitem><para><literal>&lt;key-name&gt;</literal> sign notifies with the specified key</para></listitem>
-            <listitem><para><literal>NOKEY</literal> don't sign notifies</para></listitem>
-          </itemizedlist>
+          `<key-name | NOKEY>`
+          - `<key-name>` sign notifies with the specified key
+          - `NOKEY` don't sign notifies
         '';
       };
 

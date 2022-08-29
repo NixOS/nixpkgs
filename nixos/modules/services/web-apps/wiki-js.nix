@@ -93,17 +93,15 @@ in {
           };
         };
       };
-      description = ''
-        Settings to configure <literal>wiki-js</literal>. This directly
-        corresponds to <link xlink:href="https://docs.requarks.io/install/config">the upstream configuration options</link>.
+      description = lib.mdDoc ''
+        Settings to configure `wiki-js`. This directly
+        corresponds to [the upstream configuration options](https://docs.requarks.io/install/config).
 
         Secrets can be injected via the environment by
-        <itemizedlist>
-          <listitem><para>specifying <xref linkend="opt-services.wiki-js.environmentFile"/>
-          to contain secrets</para></listitem>
-          <listitem><para>and setting sensitive values to <literal>$(ENVIRONMENT_VAR)</literal>
-          with this value defined in the environment-file.</para></listitem>
-        </itemizedlist>
+        - specifying [](#opt-services.wiki-js.environmentFile)
+          to contain secrets
+        - and setting sensitive values to `$(ENVIRONMENT_VAR)`
+          with this value defined in the environment-file.
       '';
     };
   };

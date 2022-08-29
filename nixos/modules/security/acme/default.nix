@@ -576,13 +576,12 @@ let
       ocspMustStaple = mkOption {
         type = types.bool;
         inherit (defaultAndText "ocspMustStaple" false) default defaultText;
-        description = ''
+        description = lib.mdDoc ''
           Turns on the OCSP Must-Staple TLS extension.
           Make sure you know what you're doing! See:
-          <itemizedlist>
-            <listitem><para><link xlink:href="https://blog.apnic.net/2019/01/15/is-the-web-ready-for-ocsp-must-staple/"/></para></listitem>
-            <listitem><para><link xlink:href="https://blog.hboeck.de/archives/886-The-Problem-with-OCSP-Stapling-and-Must-Staple-and-why-Certificate-Revocation-is-still-broken.html"/></para></listitem>
-          </itemizedlist>
+
+          - <https://blog.apnic.net/2019/01/15/is-the-web-ready-for-ocsp-must-staple/>
+          - <https://blog.hboeck.de/archives/886-The-Problem-with-OCSP-Stapling-and-Must-Staple-and-why-Certificate-Revocation-is-still-broken.html>
         '';
       };
 

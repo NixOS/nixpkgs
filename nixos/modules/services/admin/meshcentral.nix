@@ -13,15 +13,13 @@ in with lib; {
       defaultText = literalExpression "pkgs.meshcentral";
     };
     settings = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Settings for MeshCentral. Refer to upstream documentation for details:
 
-        <itemizedlist>
-          <listitem><para><link xlink:href="https://github.com/Ylianst/MeshCentral/blob/master/meshcentral-config-schema.json">JSON Schema definition</link></para></listitem>
-          <listitem><para><link xlink:href="https://github.com/Ylianst/MeshCentral/blob/master/sample-config.json">simple sample configuration</link></para></listitem>
-          <listitem><para><link xlink:href="https://github.com/Ylianst/MeshCentral/blob/master/sample-config-advanced.json">complex sample configuration</link></para></listitem>
-          <listitem><para><link xlink:href="https://www.meshcommander.com/meshcentral2">Old homepage) with documentation link</link></para></listitem>
-        </itemizedlist>
+        - [JSON Schema definition](https://github.com/Ylianst/MeshCentral/blob/master/meshcentral-config-schema.json)
+        - [simple sample configuration](https://github.com/Ylianst/MeshCentral/blob/master/sample-config.json)
+        - [complex sample configuration](https://github.com/Ylianst/MeshCentral/blob/master/sample-config-advanced.json)
+        - [Old homepage with documentation link](https://www.meshcommander.com/meshcentral2)
       '';
       type = types.submodule {
         freeformType = configFormat.type;

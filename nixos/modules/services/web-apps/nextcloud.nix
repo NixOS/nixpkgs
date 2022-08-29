@@ -533,25 +533,23 @@ in {
         The nextcloud-occ program preconfigured to target this Nextcloud instance.
       '';
     };
-    globalProfiles = mkEnableOption "global profiles" // {
-      description = ''
-        Makes user-profiles globally available under <literal>nextcloud.tld/u/user.name</literal>.
+    globalProfiles = mkEnableOption (lib.mdDoc "global profiles") // {
+      description = lib.mdDoc ''
+        Makes user-profiles globally available under `nextcloud.tld/u/user.name`.
         Even though it's enabled by default in Nextcloud, it must be explicitly enabled
         here because it has the side-effect that personal information is even accessible to
         unauthenticated users by default.
 
         By default, the following properties are set to “Show to everyone”
         if this flag is enabled:
-        <itemizedlist>
-        <listitem><para>About</para></listitem>
-        <listitem><para>Full name</para></listitem>
-        <listitem><para>Headline</para></listitem>
-        <listitem><para>Organisation</para></listitem>
-        <listitem><para>Profile picture</para></listitem>
-        <listitem><para>Role</para></listitem>
-        <listitem><para>Twitter</para></listitem>
-        <listitem><para>Website</para></listitem>
-        </itemizedlist>
+        - About
+        - Full name
+        - Headline
+        - Organisation
+        - Profile picture
+        - Role
+        - Twitter
+        - Website
 
         Only has an effect in Nextcloud 23 and later.
       '';
