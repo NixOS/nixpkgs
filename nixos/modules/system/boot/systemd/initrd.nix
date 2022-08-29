@@ -132,12 +132,15 @@ let
 
 in {
   options.boot.initrd.systemd = {
-    enable = mkEnableOption ''systemd in initrd.
+    enable = mkEnableOption "systemd in initrd" // {
+      description = ''
+        Whether to enable systemd in initrd.
 
-      Note: This is in very early development and is highly
-      experimental. Most of the features NixOS supports in initrd are
-      not yet supported by the intrd generated with this option.
-    '';
+        Note: This is in very early development and is highly
+        experimental. Most of the features NixOS supports in initrd are
+        not yet supported by the intrd generated with this option.
+      '';
+    };
 
     package = (mkPackageOption pkgs "systemd" {
       default = "systemdStage1";

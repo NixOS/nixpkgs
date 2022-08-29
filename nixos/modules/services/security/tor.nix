@@ -288,16 +288,20 @@ in
       };
 
       relay = {
-        enable = mkEnableOption ''relaying of Tor traffic for others.
+        enable = mkEnableOption "tor relaying" // {
+          description = ''
+            Whether to enable relaying of Tor traffic for others.
 
-          See <link xlink:href="https://www.torproject.org/docs/tor-doc-relay"/>
-          for details.
+            See <link xlink:href="https://www.torproject.org/docs/tor-doc-relay"/>
+            for details.
 
-          Setting this to true requires setting
-          <option>services.tor.relay.role</option>
-          and
-          <option>services.tor.settings.ORPort</option>
-          options'';
+            Setting this to true requires setting
+            <option>services.tor.relay.role</option>
+            and
+            <option>services.tor.settings.ORPort</option>
+            options.
+          '';
+        };
 
         role = mkOption {
           type = types.enum [ "exit" "relay" "bridge" "private-bridge" ];
