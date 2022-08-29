@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, nixosTests }:
+{ lib, stdenv, fetchurl, nixosTests, writeScript }:
 
 stdenv.mkDerivation rec {
   pname = "wordpress";
@@ -17,6 +17,16 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     inherit (nixosTests) wordpress;
   };
+
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts jq wp4nix
+
+    set -eu -o pipefail
+
+    version=$(curl --globoff "https://api.wordpress.org/core/version-check/1.7/" | jq -r '.offers[0].version')
+    update-source-version wordpress $version
+  '';
 
   meta = with lib; {
     homepage = "https://wordpress.org";
