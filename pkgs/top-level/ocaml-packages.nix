@@ -1147,6 +1147,10 @@ let
 
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
 
+    plotkicadsch = callPackage ../development/ocaml-modules/plotkicadsch {
+      inherit (pkgs) coreutils imagemagick;
+    };
+
     posix-base = callPackage ../development/ocaml-modules/posix/base.nix { };
 
     posix-socket = callPackage ../development/ocaml-modules/posix/socket.nix { };
