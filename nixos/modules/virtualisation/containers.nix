@@ -11,20 +11,6 @@ in
     maintainers = [ ] ++ lib.teams.podman.members;
   };
 
-
-  imports = [
-    (
-      lib.mkRemovedOptionModule
-        [ "virtualisation" "containers" "users" ]
-        "All users with `isNormalUser = true` set now get appropriate subuid/subgid mappings."
-    )
-    (
-      lib.mkRemovedOptionModule
-        [ "virtualisation" "containers" "containersConf" "extraConfig" ]
-        "Use virtualisation.containers.containersConf.settings instead."
-    )
-  ];
-
   options.virtualisation.containers = {
 
     enable =
