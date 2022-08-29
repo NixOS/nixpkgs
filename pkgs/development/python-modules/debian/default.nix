@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "python-debian";
-  version = "0.1.44";
+  version = "0.1.47";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ZVkv47ZPbGyT2U4tJZnbXgwigx07z/B8t7ltOECxMz4=";
+    sha256 = "sha256-UeICgjd3o9cWqEO4pUD7oroL7Z9QeofAwPnu/N7DNCw=";
   };
 
   propagatedBuildInputs = [ chardet ];
