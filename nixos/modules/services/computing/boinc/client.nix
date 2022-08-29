@@ -61,36 +61,23 @@ in
         type = types.listOf types.package;
         default = [];
         example = literalExpression "[ pkgs.virtualbox ]";
-        description = ''
+        description = lib.mdDoc ''
           Additional packages to make available in the environment in which
           BOINC will run. Common choices are:
-          <variablelist>
-            <varlistentry>
-              <term><varname>pkgs.virtualbox</varname></term>
-              <listitem><para>
-                The VirtualBox virtual machine framework. Required by some BOINC
-                projects, such as ATLAS@home.
-              </para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><varname>pkgs.ocl-icd</varname></term>
-              <listitem><para>
-                OpenCL infrastructure library. Required by BOINC projects that
-                use OpenCL, in addition to a device-specific OpenCL driver.
-              </para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><varname>pkgs.linuxPackages.nvidia_x11</varname></term>
-              <listitem><para>
-                Provides CUDA libraries. Required by BOINC projects that use
-                CUDA. Note that this requires an NVIDIA graphics device to be
-                present on the system.
-              </para><para>
-                Also provides OpenCL drivers for NVIDIA GPUs;
-                <varname>pkgs.ocl-icd</varname> is also needed in this case.
-              </para></listitem>
-            </varlistentry>
-          </variablelist>
+
+          - {var}`pkgs.virtualbox`:
+            The VirtualBox virtual machine framework. Required by some BOINC
+            projects, such as ATLAS@home.
+          - {var}`pkgs.ocl-icd`:
+            OpenCL infrastructure library. Required by BOINC projects that
+            use OpenCL, in addition to a device-specific OpenCL driver.
+          - {var}`pkgs.linuxPackages.nvidia_x11`:
+            Provides CUDA libraries. Required by BOINC projects that use
+            CUDA. Note that this requires an NVIDIA graphics device to be
+            present on the system.
+
+            Also provides OpenCL drivers for NVIDIA GPUs;
+            {var}`pkgs.ocl-icd` is also needed in this case.
         '';
       };
     };
