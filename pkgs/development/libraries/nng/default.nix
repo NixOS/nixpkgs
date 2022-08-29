@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ninja, mbedtlsSupport ? true, tlsSupport ? true, mbedtls }:
+{ lib, stdenv, fetchFromGitHub, cmake, ninja, mbedtlsSupport ? true, mbedtls }:
 
 stdenv.mkDerivation rec {
   pname = "nng";
@@ -16,9 +16,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional mbedtlsSupport [ mbedtls ];
 
-  cmakeFlags = [ "-G Ninja" ]
-    ++ lib.optionals mbedtlsSupport [ "-DMBEDTLS_ROOT_DIR=${mbedtls}" ]
-    ++ lib.optionals (tlsSupport || mbedtlsSupport) [ "-DNNG_ENABLE_TLS=ON" ];
+  cmakeFlags = [ "-G Ninja" "-DNNG_ENABLE_TLS=ON" ]
+    ++ lib.optionals mbedtlsSupport [ "-DMBEDTLS_ROOT_DIR=${mbedtls}" ];
 
   meta = with lib; {
     homepage = "https://nng.nanomsg.org/";
