@@ -26,8 +26,8 @@ let
 in
 {
   options.services.healthchecks = {
-    enable = mkEnableOption "healthchecks" // {
-      description = ''
+    enable = mkEnableOption (lib.mdDoc "healthchecks") // {
+      description = lib.mdDoc ''
         Enable healthchecks.
         It is expected to be run behind a HTTP reverse proxy.
       '';

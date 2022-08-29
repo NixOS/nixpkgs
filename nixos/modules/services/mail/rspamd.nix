@@ -13,24 +13,24 @@ let
       socket = mkOption {
         type = types.str;
         example = "localhost:11333";
-        description = ''
+        description = lib.mdDoc ''
           Socket for this worker to listen on in a format acceptable by rspamd.
         '';
       };
       mode = mkOption {
         type = types.str;
         default = "0644";
-        description = "Mode to set on unix socket";
+        description = lib.mdDoc "Mode to set on unix socket";
       };
       owner = mkOption {
         type = types.str;
         default = "${cfg.user}";
-        description = "Owner to set on unix socket";
+        description = lib.mdDoc "Owner to set on unix socket";
       };
       group = mkOption {
         type = types.str;
         default = "${cfg.group}";
-        description = "Group to set on unix socket";
+        description = lib.mdDoc "Group to set on unix socket";
       };
       rawEntry = mkOption {
         type = types.str;

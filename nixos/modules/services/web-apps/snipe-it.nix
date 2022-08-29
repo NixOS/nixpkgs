@@ -250,7 +250,7 @@ in {
                 options = {
                   _secret = mkOption {
                     type = nullOr (oneOf [ str path ]);
-                    description = ''
+                    description = lib.mdDoc ''
                       The path to a file containing the value the
                       option should be set to in the final
                       configuration file.

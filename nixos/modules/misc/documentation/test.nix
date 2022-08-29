@@ -30,7 +30,7 @@ let
     specialArgs.someArg.myModule = { lib, ... }: {
       options.foobar = lib.mkOption {
         type = lib.types.str;
-        description = "The foobar option was added via specialArgs";
+        description = lib.mdDoc "The foobar option was added via specialArgs";
         default = "qux";
       };
     };

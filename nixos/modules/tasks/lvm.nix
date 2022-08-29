@@ -21,7 +21,7 @@ in {
     boot.vdo.enable = mkEnableOption (lib.mdDoc "support for booting from VDOLVs");
   };
 
-  options.boot.initrd.services.lvm.enable = (mkEnableOption "enable booting from LVM2 in the initrd") // {
+  options.boot.initrd.services.lvm.enable = (mkEnableOption (lib.mdDoc "enable booting from LVM2 in the initrd")) // {
     visible = false;
   };
 
