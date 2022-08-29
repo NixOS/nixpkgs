@@ -90,7 +90,7 @@ in lib.makeExtensible (self: {
     patches = [ ./patches/flaky-tests.patch ];
   };
 
-  stable = self.nix_2_10;
+  stable = self.nix_2_11;
 
   unstable = self.stable;
 })
