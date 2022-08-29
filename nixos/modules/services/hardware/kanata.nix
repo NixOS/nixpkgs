@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -7,10 +7,20 @@ let
 
   keyboard = {
     options = {
-      device = mkOption {
-        type = types.str;
-        example = "/dev/input/by-id/usb-0000_0000-event-kbd";
-        description = "Path to the keyboard device.";
+      devices = mkOption {
+        type = types.addCheck (types.listOf types.str)
+          (devices: (length devices) > 0);
+        example = [ "/dev/input/by-id/usb-0000_0000-event-kbd" ];
+        # TODO replace note with tip, which has not been implemented yet in
+        # nixos/lib/make-options-doc/mergeJSON.py
+        description = mdDoc ''
+          Paths to keyboard devices.
+
+          ::: {.note}
+          To avoid unnecessary triggers of the service unit, unplug devices in
+          the order of the list.
+          :::
+        '';
       };
       config = mkOption {
         type = types.lines;
@@ -33,18 +43,32 @@ let
             ;; tap within 100ms for capslk, hold more than 100ms for lctl
             cap (tap-hold 100 100 caps lctl))
         '';
-        description = ''
-          Configuration other than defcfg.
-          See <link xlink:href="https://github.com/jtroo/kanata"/> for more information.
+        description = mdDoc ''
+          Configuration other than `defcfg`. See [example config
+          files](https://github.com/jtroo/kanata) for more information.
         '';
       };
       extraDefCfg = mkOption {
         type = types.lines;
         default = "";
         example = "danger-enable-cmd yes";
-        description = ''
-          Configuration of defcfg other than linux-dev.
-          See <link xlink:href="https://github.com/jtroo/kanata"/> for more information.
+        description = mdDoc ''
+          Configuration of `defcfg` other than `linux-dev`. See [example
+          config files](https://github.com/jtroo/kanata) for more information.
+        '';
+      };
+      extraArgs = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = mdDoc "Extra command line arguments passed to kanata.";
+      };
+      port = mkOption {
+        type = types.nullOr types.port;
+        default = null;
+        example = 6666;
+        description = mdDoc ''
+          Port to run the notification server on. `null` will not run the
+          server.
         '';
       };
     };
@@ -52,16 +76,18 @@ let
 
   mkName = name: "kanata-${name}";
 
+  mkDevices = devices: concatStringsSep ":" devices;
+
   mkConfig = name: keyboard: pkgs.writeText "${mkName name}-config.kdb" ''
     (defcfg
       ${keyboard.extraDefCfg}
-      linux-dev ${keyboard.device})
+      linux-dev ${mkDevices keyboard.devices})
 
     ${keyboard.config}
   '';
 
   mkService = name: keyboard: nameValuePair (mkName name) {
-    description = "kanata for ${keyboard.device}";
+    description = "kanata for ${mkDevices keyboard.devices}";
 
     # Because path units are used to activate service units, which
     # will start the old stopped services during "nixos-rebuild
@@ -72,10 +98,14 @@ let
     serviceConfig = {
       ExecStart = ''
         ${cfg.package}/bin/kanata \
-          --cfg ${mkConfig name keyboard}
+          --cfg ${mkConfig name keyboard} \
+          --symlink-path ''${RUNTIME_DIRECTORY}/${name} \
+          ${optionalString (keyboard.port != null) "--port ${toString keyboard.port}"} \
+          ${utils.escapeSystemdExecArgs keyboard.extraArgs}
       '';
 
       DynamicUser = true;
+      RuntimeDirectory = mkName name;
       SupplementaryGroups = with config.users.groups; [
         input.name
         uinput.name
@@ -83,15 +113,16 @@ let
 
       # hardening
       DeviceAllow = [
-        "/dev/uinput w"
+        "/dev/uinput rw"
         "char-input r"
       ];
-      CapabilityBoundingSet = "";
+      CapabilityBoundingSet = [ "" ];
       DevicePolicy = "closed";
-      IPAddressDeny = "any";
+      IPAddressAllow = optional (keyboard.port != null) "localhost";
+      IPAddressDeny = [ "any" ];
       LockPersonality = true;
       MemoryDenyWriteExecute = true;
-      PrivateNetwork = true;
+      PrivateNetwork = keyboard.port == null;
       PrivateUsers = true;
       ProcSubset = "pid";
       ProtectClock = true;
@@ -102,10 +133,11 @@ let
       ProtectKernelModules = true;
       ProtectKernelTunables = true;
       ProtectProc = "invisible";
-      RestrictAddressFamilies = "none";
+      RestrictAddressFamilies =
+        if (keyboard.port == null) then "none" else [ "AF_INET" ];
       RestrictNamespaces = true;
       RestrictRealtime = true;
-      SystemCallArchitectures = "native";
+      SystemCallArchitectures = [ "native" ];
       SystemCallFilter = [
         "@system-service"
         "~@privileged"
@@ -115,13 +147,32 @@ let
     };
   };
 
-  mkPath = name: keyboard: nameValuePair (mkName name) {
-    description = "kanata trigger for ${keyboard.device}";
-    wantedBy = [ "multi-user.target" ];
-    pathConfig = {
-      PathExists = keyboard.device;
+  mkPathName = i: name: "${mkName name}-${toString i}";
+
+  mkPath = name: n: i: device:
+    nameValuePair (mkPathName i name) {
+      description =
+        "${toString (i+1)}/${toString n} kanata trigger for ${name}, watching ${device}";
+      wantedBy = optional (i == 0) "multi-user.target";
+      pathConfig = {
+        PathExists = device;
+        # (ab)use systemd.path to construct a trigger chain so that the
+        # service unit is only started when all paths exist
+        # however, manual of systemd.path says Unit's suffix is not ".path"
+        Unit =
+          if (i + 1) == n
+          then "${mkName name}.service"
+          else "${mkPathName (i + 1) name}.path";
+      };
+      unitConfig.StopPropagatedFrom = optional (i > 0) "${mkName name}.service";
     };
-  };
+
+  mkPaths = name: keyboard:
+    let
+      n = length keyboard.devices;
+    in
+    imap0 (mkPath name n) keyboard.devices
+  ;
 in
 {
   options.services.kanata = {
@@ -129,28 +180,36 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.kanata;
-      defaultText = lib.literalExpression "pkgs.kanata";
-      example = lib.literalExpression "pkgs.kanata-with-cmd";
-      description = ''
-        kanata package to use.
-        If you enable danger-enable-cmd, pkgs.kanata-with-cmd should be used.
+      defaultText = literalExpression "pkgs.kanata";
+      example = literalExpression "pkgs.kanata-with-cmd";
+      description = mdDoc ''
+        The kanata package to use.
+
+        ::: {.note}
+        If `danger-enable-cmd` is enabled in any of the keyboards, the
+        `kanata-with-cmd` package should be used.
+        :::
       '';
     };
     keyboards = mkOption {
       type = types.attrsOf (types.submodule keyboard);
       default = { };
-      description = "Keyboard configurations.";
+      description = mdDoc "Keyboard configurations.";
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     hardware.uinput.enable = true;
 
     systemd = {
-      paths = mapAttrs' mkPath cfg.keyboards;
+      paths = trivial.pipe cfg.keyboards [
+        (mapAttrsToList mkPaths)
+        concatLists
+        listToAttrs
+      ];
       services = mapAttrs' mkService cfg.keyboards;
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ linj ];
+  meta.maintainers = with maintainers; [ linj ];
 }

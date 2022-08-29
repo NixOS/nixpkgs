@@ -30,7 +30,7 @@ in {
     host = mkOption {
       default = "0.0.0.0";
       type = str;
-      description = ''
+      description = lib.mdDoc ''
         Host address to bind HTTP server to.
       '';
     };
@@ -38,7 +38,7 @@ in {
     port = mkOption {
       default = 3000;
       type = port;
-      description = ''
+      description = lib.mdDoc ''
         Port to serve HTTP pages on.
       '';
     };
@@ -46,7 +46,7 @@ in {
     openFirewall = mkOption {
       default = false;
       type = bool;
-      description = ''
+      description = lib.mdDoc ''
         Open ports in the firewall for the AdGuard Home web interface. Does not
         open the port needed to access the DNS resolver.
       '';
@@ -55,7 +55,7 @@ in {
     mutableSettings = mkOption {
       default = true;
       type = bool;
-      description = ''
+      description = lib.mdDoc ''
         Allow changes made on the AdGuard Home web interface to persist between
         service restarts.
       '';
@@ -80,7 +80,7 @@ in {
     extraArgs = mkOption {
       default = [ ];
       type = listOf str;
-      description = ''
+      description = lib.mdDoc ''
         Extra command line parameters to be passed to the adguardhome binary.
       '';
     };

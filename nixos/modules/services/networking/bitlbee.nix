@@ -49,7 +49,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to run the BitlBee IRC to other chat network gateway.
           Running it allows you to access the MSN, Jabber, Yahoo! and ICQ chat
           networks via an IRC client.
@@ -69,7 +69,7 @@ in
       portNumber = mkOption {
         default = 6667;
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           Number of the port BitlBee will be listening to.
         '';
       };
@@ -77,7 +77,7 @@ in
       authBackend = mkOption {
         default = "storage";
         type = types.enum [ "storage" "pam" ];
-        description = ''
+        description = lib.mdDoc ''
           How users are authenticated
             storage -- save passwords internally
             pam -- Linux PAM authentication
@@ -87,7 +87,7 @@ in
       authMode = mkOption {
         default = "Open";
         type = types.enum [ "Open" "Closed" "Registered" ];
-        description = ''
+        description = lib.mdDoc ''
           The following authentication modes are available:
             Open -- Accept connections from anyone, use NickServ for user authentication.
             Closed -- Require authorization (using the PASS command during login) before allowing the user to connect at all.
@@ -98,7 +98,7 @@ in
       hostName = mkOption {
         default = "";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Normally, BitlBee gets a hostname using getsockname(). If you have a nicer
           alias for your BitlBee daemon, you can set it here and BitlBee will identify
           itself with that name instead.
@@ -109,7 +109,7 @@ in
         type = types.listOf types.package;
         default = [];
         example = literalExpression "[ pkgs.bitlbee-facebook ]";
-        description = ''
+        description = lib.mdDoc ''
           The list of bitlbee plugins to install.
         '';
       };
@@ -118,7 +118,7 @@ in
         type = types.listOf types.package;
         default = [];
         example = literalExpression "[ pkgs.purple-matrix ]";
-        description = ''
+        description = lib.mdDoc ''
           The list of libpurple plugins to install.
         '';
       };
@@ -126,7 +126,7 @@ in
       configDir = mkOption {
         default = "/var/lib/bitlbee";
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           Specify an alternative directory to store all the per-user configuration
           files.
         '';
@@ -135,7 +135,7 @@ in
       protocols = mkOption {
         default = "";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           This option allows to remove the support of protocol, even if compiled
           in. If nothing is given, there are no restrictions.
         '';
@@ -144,7 +144,7 @@ in
       extraSettings = mkOption {
         default = "";
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Will be inserted in the Settings section of the config file.
         '';
       };
@@ -152,7 +152,7 @@ in
       extraDefaults = mkOption {
         default = "";
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Will be inserted in the Default section of the config file.
         '';
       };

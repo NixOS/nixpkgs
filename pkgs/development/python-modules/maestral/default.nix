@@ -90,7 +90,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Open-source Dropbox client for macOS and Linux";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg sfrijters ];
     platforms = platforms.unix;
     homepage = "https://maestral.app";
   };

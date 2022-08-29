@@ -21,7 +21,7 @@ in
     enable = lib.mkEnableOption "Schleuder secure remailer";
     enablePostfix = lib.mkEnableOption "automatic postfix integration" // { default = true; };
     lists = lib.mkOption {
-      description = ''
+      description = lib.mdDoc ''
         List of list addresses that should be handled by Schleuder.
 
         Note that this is only handled by the postfix integration, and
@@ -42,16 +42,16 @@ in
       };
     */
     settings = lib.mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Settings for schleuder.yml.
 
-        Check the <link xlink:href="https://0xacab.org/schleuder/schleuder/blob/master/etc/schleuder.yml">example configuration</link> for possible values.
+        Check the [example configuration](https://0xacab.org/schleuder/schleuder/blob/master/etc/schleuder.yml) for possible values.
       '';
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
         options.keyserver = lib.mkOption {
           type = lib.types.str;
-          description = ''
+          description = lib.mdDoc ''
             Key server from which to fetch and update keys.
 
             Note that NixOS uses a different default from upstream, since the upstream default sks-keyservers.net is deprecated.
@@ -62,15 +62,15 @@ in
       default = { };
     };
     extraSettingsFile = lib.mkOption {
-      description = "YAML file to merge into the schleuder config at runtime. This can be used for secrets such as API keys.";
+      description = lib.mdDoc "YAML file to merge into the schleuder config at runtime. This can be used for secrets such as API keys.";
       type = lib.types.nullOr lib.types.path;
       default = null;
     };
     listDefaults = lib.mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Default settings for lists (list-defaults.yml).
 
-        Check the <link xlink:href="https://0xacab.org/schleuder/schleuder/-/blob/master/etc/list-defaults.yml">example configuration</link> for possible values.
+        Check the [example configuration](https://0xacab.org/schleuder/schleuder/-/blob/master/etc/list-defaults.yml) for possible values.
       '';
       type = settingsFormat.type;
       default = { };

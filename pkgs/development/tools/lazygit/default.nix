@@ -21,6 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/jesseduffield/lazygit";
     changelog = "https://github.com/jesseduffield/lazygit/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz equirosa Br1ght0ne ];
+    maintainers = with maintainers; [ equirosa Br1ght0ne ];
   };
 }

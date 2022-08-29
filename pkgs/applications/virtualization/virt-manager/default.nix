@@ -64,6 +64,10 @@ python3.pkgs.buildPythonApplication rec {
     gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ cpio e2fsprogs file findutils gzip ]}")
 
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+
+    # Fixes testCLI0051virt_install_initrd_inject on Darwin: "cpio: root:root: invalid group"
+    substituteInPlace virtinst/install/installerinject.py \
+      --replace "'--owner=root:root'" "'--owner=0:0'"
   '';
 
   checkInputs = with python3.pkgs; [
@@ -95,8 +99,7 @@ python3.pkgs.buildPythonApplication rec {
       manages Xen and LXC (linux containers).
     '';
     license = licenses.gpl2;
-    # exclude Darwin since libvirt-glib currently doesn't build there
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ qknight offline fpletz globin ];
   };
 }

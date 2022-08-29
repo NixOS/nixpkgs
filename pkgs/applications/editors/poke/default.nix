@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, autoreconfHook
 , gettext
 , help2man
 , pkg-config
@@ -40,6 +41,7 @@ in stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
+    autoreconfHook
     gettext
     pkg-config
     texinfo
@@ -108,7 +110,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres kira-bruneau ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin && stdenv.isAarch64; # Undefined symbols for architecture arm64
   };
 }
 

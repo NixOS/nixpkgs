@@ -33,19 +33,19 @@ in
 
   options.xdg.portal = {
     enable =
-      mkEnableOption "<link xlink:href='https://github.com/flatpak/xdg-desktop-portal'>xdg desktop integration</link>" // {
+      mkEnableOption ''<link xlink:href="https://github.com/flatpak/xdg-desktop-portal">xdg desktop integration</link>'' // {
         default = false;
       };
 
     extraPortals = mkOption {
       type = types.listOf types.package;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         List of additional portals to add to path. Portals allow interaction
         with system, like choosing files or taking screenshots. At minimum,
         a desktop portal implementation should be listed. GNOME and KDE already
-        adds <package>xdg-desktop-portal-gtk</package>; and
-        <package>xdg-desktop-portal-kde</package> respectively. On other desktop
+        adds `xdg-desktop-portal-gtk`; and
+        `xdg-desktop-portal-kde` respectively. On other desktop
         environments you probably want to add them yourself.
       '';
     };

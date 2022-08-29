@@ -45,7 +45,7 @@ let
         type = types.str;
         default = name;
         example = "smtp";
-        description = ''
+        description = lib.mdDoc ''
           The name of the service to run. Defaults to the attribute set key.
         '';
       };
@@ -54,16 +54,16 @@ let
         type = types.enum [ "inet" "unix" "unix-dgram" "fifo" "pass" ];
         default = "unix";
         example = "inet";
-        description = "The type of the service";
+        description = lib.mdDoc "The type of the service";
       };
 
       private = mkOption {
         type = types.bool;
         example = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether the service's sockets and storage directory is restricted to
-          be only available via the mail system. If <literal>null</literal> is
-          given it uses the postfix default <literal>true</literal>.
+          be only available via the mail system. If `null` is
+          given it uses the postfix default `true`.
         '';
       };
 
@@ -76,19 +76,19 @@ let
       chroot = mkOption {
         type = types.bool;
         example = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether the service is chrooted to have only access to the
-          <option>services.postfix.queueDir</option> and the closure of
-          store paths specified by the <option>program</option> option.
+          {option}`services.postfix.queueDir` and the closure of
+          store paths specified by the {option}`program` option.
         '';
       };
 
       wakeup = mkOption {
         type = types.int;
         example = 60;
-        description = ''
+        description = lib.mdDoc ''
           Automatically wake up the service after the specified number of
-          seconds. If <literal>0</literal> is given, never wake the service
+          seconds. If `0` is given, never wake the service
           up.
         '';
       };
@@ -96,22 +96,22 @@ let
       wakeupUnusedComponent = mkOption {
         type = types.bool;
         example = false;
-        description = ''
-          If set to <literal>false</literal> the component will only be woken
+        description = lib.mdDoc ''
+          If set to `false` the component will only be woken
           up if it is used. This is equivalent to postfix' notion of adding a
           question mark behind the wakeup time in
-          <filename>master.cf</filename>
+          {file}`master.cf`
         '';
       };
 
       maxproc = mkOption {
         type = types.int;
         example = 1;
-        description = ''
+        description = lib.mdDoc ''
           The maximum number of processes to spawn for this service. If the
-          value is <literal>0</literal> it doesn't have any limit. If
-          <literal>null</literal> is given it uses the postfix default of
-          <literal>100</literal>.
+          value is `0` it doesn't have any limit. If
+          `null` is given it uses the postfix default of
+          `100`.
         '';
       };
 
@@ -119,9 +119,9 @@ let
         type = types.str;
         default = name;
         example = "smtpd";
-        description = ''
+        description = lib.mdDoc ''
           A program name specifying a Postfix service/daemon process.
-          By default it's the attribute <option>name</option>.
+          By default it's the attribute {option}`name`.
         '';
       };
 
@@ -129,8 +129,8 @@ let
         type = types.listOf types.str;
         default = [];
         example = [ "-o" "smtp_helo_timeout=5" ];
-        description = ''
-          Arguments to pass to the <option>command</option>. There is no shell
+        description = lib.mdDoc ''
+          Arguments to pass to the {option}`command`. There is no shell
           processing involved and shell syntax is passed verbatim to the
           process.
         '';
@@ -221,13 +221,13 @@ let
         type = types.str;
         default = "/^.*/";
         example = "/^X-Mailer:/";
-        description = "A regexp pattern matching the header";
+        description = lib.mdDoc "A regexp pattern matching the header";
       };
       action = mkOption {
         type = types.str;
         default = "DUNNO";
         example = "BCC mail@example.com";
-        description = "The action to be executed when the pattern is matched";
+        description = lib.mdDoc "The action to be executed when the pattern is matched";
       };
     };
   };
@@ -267,25 +267,25 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to run the Postfix mail server.";
+        description = lib.mdDoc "Whether to run the Postfix mail server.";
       };
 
       enableSmtp = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to enable smtp in master.cf.";
+        description = lib.mdDoc "Whether to enable smtp in master.cf.";
       };
 
       enableSubmission = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable smtp submission.";
+        description = lib.mdDoc "Whether to enable smtp submission.";
       };
 
       enableSubmissions = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable smtp submission via smtps.
 
           According to RFC 8314 this should be preferred
@@ -308,7 +308,7 @@ in
           smtpd_client_restrictions = "permit_sasl_authenticated,reject";
           milter_macro_daemon_name = "ORIGINATING";
         };
-        description = "Options for the submission config in master.cf";
+        description = lib.mdDoc "Options for the submission config in master.cf";
       };
 
       submissionsOptions = mkOption {
@@ -324,7 +324,7 @@ in
           smtpd_client_restrictions = "permit_sasl_authenticated,reject";
           milter_macro_daemon_name = "ORIGINATING";
         };
-        description = ''
+        description = lib.mdDoc ''
           Options for the submission config via smtps in master.cf.
 
           smtpd_tls_security_level will be set to encrypt, if it is missing
@@ -337,155 +337,155 @@ in
       setSendmail = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to set the system sendmail to postfix's.";
+        description = lib.mdDoc "Whether to set the system sendmail to postfix's.";
       };
 
       user = mkOption {
         type = types.str;
         default = "postfix";
-        description = "What to call the Postfix user (must be used only for postfix).";
+        description = lib.mdDoc "What to call the Postfix user (must be used only for postfix).";
       };
 
       group = mkOption {
         type = types.str;
         default = "postfix";
-        description = "What to call the Postfix group (must be used only for postfix).";
+        description = lib.mdDoc "What to call the Postfix group (must be used only for postfix).";
       };
 
       setgidGroup = mkOption {
         type = types.str;
         default = "postdrop";
-        description = "
+        description = lib.mdDoc ''
           How to call postfix setgid group (for postdrop). Should
           be uniquely used group.
-        ";
+        '';
       };
 
       networks = mkOption {
         type = types.nullOr (types.listOf types.str);
         default = null;
         example = ["192.168.0.1/24"];
-        description = "
+        description = lib.mdDoc ''
           Net masks for trusted - allowed to relay mail to third parties -
           hosts. Leave empty to use mynetworks_style configuration or use
           default (localhost-only).
-        ";
+        '';
       };
 
       networksStyle = mkOption {
         type = types.str;
         default = "";
-        description = "
+        description = lib.mdDoc ''
           Name of standard way of trusted network specification to use,
           leave blank if you specify it explicitly or if you want to use
           default (localhost-only).
-        ";
+        '';
       };
 
       hostname = mkOption {
         type = types.str;
         default = "";
-        description ="
+        description = lib.mdDoc ''
           Hostname to use. Leave blank to use just the hostname of machine.
           It should be FQDN.
-        ";
+        '';
       };
 
       domain = mkOption {
         type = types.str;
         default = "";
-        description ="
+        description = lib.mdDoc ''
           Domain to use. Leave blank to use hostname minus first component.
-        ";
+        '';
       };
 
       origin = mkOption {
         type = types.str;
         default = "";
-        description ="
+        description = lib.mdDoc ''
           Origin to use in outgoing e-mail. Leave blank to use hostname.
-        ";
+        '';
       };
 
       destination = mkOption {
         type = types.nullOr (types.listOf types.str);
         default = null;
         example = ["localhost"];
-        description = "
+        description = lib.mdDoc ''
           Full (!) list of domains we deliver locally. Leave blank for
           acceptable Postfix default.
-        ";
+        '';
       };
 
       relayDomains = mkOption {
         type = types.nullOr (types.listOf types.str);
         default = null;
         example = ["localdomain"];
-        description = "
+        description = lib.mdDoc ''
           List of domains we agree to relay to. Default is empty.
-        ";
+        '';
       };
 
       relayHost = mkOption {
         type = types.str;
         default = "";
-        description = "
+        description = lib.mdDoc ''
           Mail relay for outbound mail.
-        ";
+        '';
       };
 
       relayPort = mkOption {
         type = types.int;
         default = 25;
-        description = "
+        description = lib.mdDoc ''
           SMTP port for relay mail relay.
-        ";
+        '';
       };
 
       lookupMX = mkOption {
         type = types.bool;
         default = false;
-        description = "
+        description = lib.mdDoc ''
           Whether relay specified is just domain whose MX must be used.
-        ";
+        '';
       };
 
       postmasterAlias = mkOption {
         type = types.str;
         default = "root";
-        description = "
+        description = lib.mdDoc ''
           Who should receive postmaster e-mail. Multiple values can be added by
           separating values with comma.
-        ";
+        '';
       };
 
       rootAlias = mkOption {
         type = types.str;
         default = "";
-        description = "
+        description = lib.mdDoc ''
           Who should receive root e-mail. Blank for no redirection.
           Multiple values can be added by separating values with comma.
-        ";
+        '';
       };
 
       extraAliases = mkOption {
         type = types.lines;
         default = "";
-        description = "
+        description = lib.mdDoc ''
           Additional entries to put verbatim into aliases file, cf. man-page aliases(8).
-        ";
+        '';
       };
 
       aliasMapType = mkOption {
         type = with types; enum [ "hash" "regexp" "pcre" ];
         default = "hash";
         example = "regexp";
-        description = "The format the alias map should have. Use regexp if you want to use regular expressions.";
+        description = lib.mdDoc "The format the alias map should have. Use regexp if you want to use regular expressions.";
       };
 
       config = mkOption {
         type = with types; attrsOf (oneOf [ bool str (listOf str) ]);
-        description = ''
+        description = lib.mdDoc ''
           The main.cf configuration file as key value set.
         '';
         example = {
@@ -497,16 +497,16 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "
+        description = lib.mdDoc ''
           Extra lines to be added verbatim to the main.cf configuration file.
-        ";
+        '';
       };
 
       tlsTrustedAuthorities = mkOption {
         type = types.str;
         default = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
         defaultText = literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
-        description = ''
+        description = lib.mdDoc ''
           File containing trusted certification authorities (CA) to verify certificates of mailservers contacted for mail delivery. This basically sets smtp_tls_CAfile and enables opportunistic tls. Defaults to NixOS trusted certification authorities.
         '';
       };
@@ -514,56 +514,55 @@ in
       sslCert = mkOption {
         type = types.str;
         default = "";
-        description = "SSL certificate to use.";
+        description = lib.mdDoc "SSL certificate to use.";
       };
 
       sslKey = mkOption {
         type = types.str;
         default = "";
-        description = "SSL key to use.";
+        description = lib.mdDoc "SSL key to use.";
       };
 
       recipientDelimiter = mkOption {
         type = types.str;
         default = "";
         example = "+";
-        description = "
+        description = lib.mdDoc ''
           Delimiter for address extension: so mail to user+test can be handled by ~user/.forward+test
-        ";
+        '';
       };
 
       canonical = mkOption {
         type = types.lines;
         default = "";
-        description = ''
-          Entries for the <citerefentry><refentrytitle>canonical</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> table.
+        description = lib.mdDoc ''
+          Entries for the {manpage}`canonical(5)` table.
         '';
       };
 
       virtual = mkOption {
         type = types.lines;
         default = "";
-        description = "
+        description = lib.mdDoc ''
           Entries for the virtual alias map, cf. man-page virtual(5).
-        ";
+        '';
       };
 
       virtualMapType = mkOption {
         type = types.enum ["hash" "regexp" "pcre"];
         default = "hash";
-        description = ''
-          What type of virtual alias map file to use. Use <literal>"regexp"</literal> for regular expressions.
+        description = lib.mdDoc ''
+          What type of virtual alias map file to use. Use `"regexp"` for regular expressions.
         '';
       };
 
       localRecipients = mkOption {
         type = with types; nullOr (listOf str);
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           List of accepted local users. Specify a bare username, an
-          <literal>"@domain.tld"</literal> wild-card, or a complete
-          <literal>"user@domain.tld"</literal> address. If set, these names end
+          `"@domain.tld"` wild-card, or a complete
+          `"user@domain.tld"` address. If set, these names end
           up in the local recipient map -- see the local(8) man-page -- and
           effectively replace the system user database lookup that's otherwise
           used by default.
@@ -573,21 +572,21 @@ in
       transport = mkOption {
         default = "";
         type = types.lines;
-        description = "
+        description = lib.mdDoc ''
           Entries for the transport map, cf. man-page transport(8).
-        ";
+        '';
       };
 
       dnsBlacklists = mkOption {
         default = [];
         type = with types; listOf str;
-        description = "dns blacklist servers to use with smtpd_client_restrictions";
+        description = lib.mdDoc "dns blacklist servers to use with smtpd_client_restrictions";
       };
 
       dnsBlacklistOverrides = mkOption {
         default = "";
         type = types.lines;
-        description = "contents of check_client_access for overriding dnsBlacklists";
+        description = lib.mdDoc "contents of check_client_access for overriding dnsBlacklists";
       };
 
       masterConfig = mkOption {
@@ -599,10 +598,10 @@ in
               args = [ "-o" "smtpd_tls_security_level=encrypt" ];
             };
           };
-        description = ''
+        description = lib.mdDoc ''
           An attribute set of service options, which correspond to the service
           definitions usually done within the Postfix
-          <filename>master.cf</filename> file.
+          {file}`master.cf` file.
         '';
       };
 
@@ -610,46 +609,46 @@ in
         type = types.lines;
         default = "";
         example = "submission inet n - n - - smtpd";
-        description = "Extra lines to append to the generated master.cf file.";
+        description = lib.mdDoc "Extra lines to append to the generated master.cf file.";
       };
 
       enableHeaderChecks = mkOption {
         type = types.bool;
         default = false;
         example = true;
-        description = "Whether to enable postfix header checks";
+        description = lib.mdDoc "Whether to enable postfix header checks";
       };
 
       headerChecks = mkOption {
         type = types.listOf (types.submodule headerCheckOptions);
         default = [];
         example = [ { pattern = "/^X-Spam-Flag:/"; action = "REDIRECT spam@example.com"; } ];
-        description = "Postfix header checks.";
+        description = lib.mdDoc "Postfix header checks.";
       };
 
       extraHeaderChecks = mkOption {
         type = types.lines;
         default = "";
         example = "/^X-Spam-Flag:/ REDIRECT spam@example.com";
-        description = "Extra lines to /etc/postfix/header_checks file.";
+        description = lib.mdDoc "Extra lines to /etc/postfix/header_checks file.";
       };
 
       aliasFiles = mkOption {
         type = types.attrsOf types.path;
         default = {};
-        description = "Aliases' tables to be compiled and placed into /var/lib/postfix/conf.";
+        description = lib.mdDoc "Aliases' tables to be compiled and placed into /var/lib/postfix/conf.";
       };
 
       mapFiles = mkOption {
         type = types.attrsOf types.path;
         default = {};
-        description = "Maps to be compiled and placed into /var/lib/postfix/conf.";
+        description = lib.mdDoc "Maps to be compiled and placed into /var/lib/postfix/conf.";
       };
 
       useSrs = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable sender rewriting scheme";
+        description = lib.mdDoc "Whether to enable sender rewriting scheme";
       };
 
     };

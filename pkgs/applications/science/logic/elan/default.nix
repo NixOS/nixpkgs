@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage rec {
     (runCommand "0001-dynamically-patchelf-binaries.patch" {
         CC = stdenv.cc;
         cc = "${stdenv.cc}/bin/cc";
+        ar = "${stdenv.cc}/bin/ar";
         patchelf = patchelf;
         shell = runtimeShell;
       } ''
@@ -36,6 +37,7 @@ rustPlatform.buildRustPackage rec {
        --subst-var patchelf \
        --subst-var dynamicLinker \
        --subst-var cc \
+       --subst-var ar \
        --subst-var shell
     '')
   ];

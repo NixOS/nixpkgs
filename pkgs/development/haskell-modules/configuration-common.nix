@@ -237,6 +237,11 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
+  # matterhorn-50200.17.0 won't work with brick >= 0.71
+  matterhorn = doJailbreak (super.matterhorn.overrideScope (self: super: {
+    brick = self.brick_0_70_1;
+  }));
+
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
   # 2022-06-17: Use hnix-store 0.5 until hnix 0.17
   hnix = generateOptparseApplicativeCompletion "hnix" (dontCheck (
@@ -351,24 +356,6 @@ self: super: {
   lensref = dontCheck super.lensref;
   lvmrun = disableHardening ["format"] (dontCheck super.lvmrun);
   matplotlib = dontCheck super.matplotlib;
-
-  brick_0_73 = doDistribute (super.brick_0_73.overrideScope (self: super: {
-    vty = self.vty_5_36;
-    text-zipper = self.text-zipper_0_12;
-  }));
-
-  # https://github.com/matterhorn-chat/matterhorn/issues/679 they do not want to be on stackage
-  matterhorn = doJailbreak (appendPatches [
-    # Fix build with brick 0.73
-    (fetchpatch {
-      name = "matterhorn-brick-0.72.patch";
-      url = "https://github.com/matterhorn-chat/matterhorn/commit/d52df3342b8420e219095aad477205e47fbef11b.patch";
-      sha256 = "1ifvv926g9m8niyc9nl1hy9bkx4kf12ciyv2v8vnrzz3njp4fsrz";
-    })
-  ] (super.matterhorn.overrideScope (self: super: {
-    brick = self.brick_0_73;
-  })));
-
   memcache = dontCheck super.memcache;
   metrics = dontCheck super.metrics;
   milena = dontCheck super.milena;
@@ -833,9 +820,9 @@ self: super: {
     testHaskellDepends = drv.testHaskellDepends or [] ++ [ self.hspec-meta_2_9_3 ];
     testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
   }) (super.sensei.override {
-    hspec = self.hspec_2_10_0;
+    hspec = self.hspec_2_10_0_1;
     hspec-wai = super.hspec-wai.override {
-      hspec = self.hspec_2_10_0;
+      hspec = self.hspec_2_10_0_1;
     };
   });
 
@@ -1646,14 +1633,14 @@ self: super: {
   servant-openapi3 = dontCheck super.servant-openapi3;
 
   # Give hspec 2.10.* correct dependency versions without overrideScope
-  hspec_2_10_0 = doDistribute (super.hspec_2_10_0.override {
-    hspec-discover = self.hspec-discover_2_10_0;
-    hspec-core = self.hspec-core_2_10_0;
+  hspec_2_10_0_1 = doDistribute (super.hspec_2_10_0_1.override {
+    hspec-discover = self.hspec-discover_2_10_0_1;
+    hspec-core = self.hspec-core_2_10_0_1;
   });
-  hspec-discover_2_10_0 = super.hspec-discover_2_10_0.override {
+  hspec-discover_2_10_0_1 = super.hspec-discover_2_10_0_1.override {
     hspec-meta = self.hspec-meta_2_9_3;
   };
-  hspec-core_2_10_0 = super.hspec-core_2_10_0.override {
+  hspec-core_2_10_0_1 = super.hspec-core_2_10_0_1.override {
     hspec-meta = self.hspec-meta_2_9_3;
   };
 
@@ -1785,21 +1772,6 @@ self: super: {
   # Test suite fails, upstream not reachable for simple fix (not responsive on github)
   vivid-osc = dontCheck super.vivid-osc;
   vivid-supercollider = dontCheck super.vivid-supercollider;
-
-  # cabal-install switched to build type simple in 3.2.0.0
-  # as a result, the cabal(1) man page is no longer installed
-  # automatically. Instead we need to use the `cabal man`
-  # command which generates the man page on the fly and
-  # install it to $out/share/man/man1 ourselves in this
-  # override.
-  # The commit that introduced this change:
-  # https://github.com/haskell/cabal/commit/91ac075930c87712eeada4305727a4fa651726e7
-  cabal-install = overrideCabal (old: {
-    postInstall = old.postInstall + ''
-      mkdir -p "$out/share/man/man1"
-      "$out/bin/cabal" man --raw > "$out/share/man/man1/cabal.1"
-    '';
-  }) super.cabal-install;
 
   # while waiting for a new release: https://github.com/brendanhay/amazonka/pull/572
   amazonka = appendPatches [
@@ -2145,16 +2117,16 @@ self: super: {
 
   # 2022-03-21: Newest stylish-haskell needs ghc-lib-parser-9_2
   stylish-haskell = (super.stylish-haskell.override {
-    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220709;
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_1_0;
+    ghc-lib-parser = super.ghc-lib-parser_9_2_4_20220729;
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_1_1;
   });
 
-  ghc-lib-parser-ex_9_2_1_0 = super.ghc-lib-parser-ex_9_2_1_0.override {
-    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220709;
+  ghc-lib-parser-ex_9_2_1_1 = super.ghc-lib-parser-ex_9_2_1_1.override {
+    ghc-lib-parser = super.ghc-lib-parser_9_2_4_20220729;
   };
 
   ghc-lib-parser-ex_9_2_0_4 = super.ghc-lib-parser-ex_9_2_0_4.override {
-    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220709;
+    ghc-lib-parser = super.ghc-lib-parser_9_2_4_20220729;
   };
 
   hlint_3_4_1 = doDistribute (super.hlint_3_4_1.override {
@@ -2357,6 +2329,10 @@ self: super: {
   # https://github.com/tree-sitter/haskell-tree-sitter/issues/298
   tree-sitter = doJailbreak super.tree-sitter;
 
+  # 2022-08-07: Bounds are too restrictive: https://github.com/marcin-rzeznicki/libjwt-typed/issues/2
+  # Also, the tests fail.
+  libjwt-typed = dontCheck (doJailbreak super.libjwt-typed);
+
   # Test suite fails to compile
   # https://github.com/kuribas/mfsolve/issues/8
   mfsolve = dontCheck super.mfsolve;
@@ -2407,9 +2383,12 @@ self: super: {
   # 2022-03-16: strict upper bounds https://github.com/monadfix/shower/issues/18
   shower = doJailbreak (dontCheck super.shower);
 
-  # Doesn't compile with HTF 0.15
-  # https://github.com/andrewufrank/uniform-error/issues/1
+  # Test suite isn't supposed to succeed yet, apparently…
+  # https://github.com/andrewufrank/uniform-error/blob/f40629ad119e90f8dae85e65e93d7eb149bddd53/test/Uniform/Error_test.hs#L124
+  # https://github.com/andrewufrank/uniform-error/issues/2
   uniform-error = dontCheck super.uniform-error;
+  # https://github.com/andrewufrank/uniform-fileio/issues/2
+  uniform-fileio = dontCheck super.uniform-fileio;
 
   # The shipped Setup.hs file is broken.
   csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
@@ -2423,13 +2402,12 @@ self: super: {
     }))
   ];
 
-  # 2022-02-25: Not compatible with relude 1.0
-  ema = assert super.ema.version == "0.6.0.0";
-    super.ema.overrideScope (self: super: { relude = doJailbreak self.relude_0_7_0_0; });
+  # Tests require ghc-9.2.
+  ema = dontCheck super.ema;
 
-  glirc = super.glirc.override {
+  glirc = doJailbreak (super.glirc.override {
     vty = self.vty_5_35_1;
-  };
+  });
 
   # 2022-02-25: Unmaintained and to strict upper bounds
   paths = doJailbreak super.paths;
@@ -2497,18 +2475,6 @@ self: super: {
     url = "https://github.com/erebe/wstunnel/pull/107/commits/47c1f62bdec1dbe77088d9e3ceb6d872f922ce34.patch";
     sha256 = "sha256-fW5bVbAGQxU/gd9zqgVNclwKraBtUjkKDek7L0c4+O0=";
   }) super.wstunnel;
-
-  # Adjustment of bounds on servant is unreleased
-  # https://github.com/haskell-servant/servant-cassava/commit/66617547851d38d48f5f1d1b786db1286bdafa9d
-  servant-cassava = assert super.servant-cassava.version == "0.10.1";
-    doJailbreak super.servant-cassava;
-
-  # Fix tests failure for ghc 9 (https://github.com/clinty/debian-haskell/pull/3)
-  debian = appendPatch (fetchpatch {
-    name = "debian-haskell.3.patch";
-    url = "https://github.com/clinty/debian-haskell/pull/3/commits/47441c8e4a7a00a3c8825eec98bf7a823594f9be.patch";
-    sha256 = "0wxpqazjnal9naibapg63nm7x6qz0lklcfw2m5mzjrh2q9x2cvnd";
-  }) super.debian;
 
   # Test data missing from sdist
   # https://github.com/ngless-toolkit/ngless/issues/152
@@ -2626,4 +2592,11 @@ in {
   purescript-ast = purescriptStOverride super.purescript-ast;
 
   purenix = purescriptStOverride super.purenix;
+
+  # Needs update for ghc-9:
+  # https://github.com/haskell/text-format/issues/27
+  text-format = appendPatch (fetchpatch {
+    url = "https://github.com/hackage-trustees/text-format/pull/4/commits/949383aa053497b8c251219c10506136c29b4d32.patch";
+    sha256 = "QzpZ7lDedsz1mZcq6DL4x7LBnn58rx70+ZVvPh9shRo=";
+  }) super.text-format;
 })

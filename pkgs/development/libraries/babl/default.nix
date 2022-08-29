@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, fetchpatch
 , fetchurl
 , meson
 , ninja
@@ -11,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "babl";
-  version = "0.1.92";
+  version = "0.1.96";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-9mdzUCiUS2N1rRjxYKZM65P1x9zKqdh1HeNZd3SIosE=";
+    sha256 = "sha256-M2c/5Fmpg/QRJFpJ+B/X8ZZq8eqOypsJWpQMVCuFRfY=";
   };
 
   nativeBuildInputs = [

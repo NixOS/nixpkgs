@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libtirpc";
-  version = "1.2.7-rc4";
+  version = "1.3.3";
 
   src = fetchurl {
-    url = "http://git.linux-nfs.org/?p=steved/libtirpc.git;a=snapshot;h=5ca4ca92f629d9d83e83544b9239abaaacf0a527;sf=tgz";
-    sha256 = "0w26yf9bwkpqj52sqd3n250dg9jlqnr8bjv0kc4fl5hkrv8akj8i";
+    url = "http://git.linux-nfs.org/?p=steved/libtirpc.git;a=snapshot;h=0fb94eef5062d2657d75eee686fa47238fafa312;sf=tgz";
+    sha256 = "sha256-3P3xYKeAmLbBI4TdsG1VZBO7py9ktiwhXNtGsnryGNI=";
     name = "${pname}-${version}.tar.gz";
   };
 

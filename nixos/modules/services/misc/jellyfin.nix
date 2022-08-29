@@ -13,14 +13,14 @@ in
       user = mkOption {
         type = types.str;
         default = "jellyfin";
-        description = "User account under which Jellyfin runs.";
+        description = lib.mdDoc "User account under which Jellyfin runs.";
       };
 
       package = mkOption {
         type = types.package;
         default = pkgs.jellyfin;
         defaultText = literalExpression "pkgs.jellyfin";
-        description = ''
+        description = lib.mdDoc ''
           Jellyfin package to use.
         '';
       };
@@ -28,13 +28,13 @@ in
       group = mkOption {
         type = types.str;
         default = "jellyfin";
-        description = "Group under which jellyfin runs.";
+        description = lib.mdDoc "Group under which jellyfin runs.";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Open the default ports in the firewall for the media server. The
           HTTP/HTTPS ports can be changed in the Web UI, so this option should
           only be used if they are unchanged.

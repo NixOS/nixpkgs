@@ -11,20 +11,30 @@
 , libwebpmuxSupport ? true # Build libwebpmux
 , libwebpdemuxSupport ? true # Build libwebpdemux
 , libwebpdecoderSupport ? true # Build libwebpdecoder
+
+# for passthru.tests
+, freeimage
+, gd
+, graphicsmagick
+, haskellPackages
+, imagemagick
+, imlib2
+, libjxl
+, opencv
+, python3
+, vips
 }:
 
 stdenv.mkDerivation rec {
   pname = "libwebp";
-  version = "1.2.2";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner  = "webmproject";
     repo   = pname;
     rev    = "v${version}";
-    hash   = "sha256-WF2HZPS7mbotk+d1oLM/JC5l/FWfkrk+T3Z6EW9oYEI=";
+    hash   = "sha256-XX6qOWlIl8TqOQMiGpmmDVKwQnM1taG6lrqq1ZFVk5s=";
   };
-
-  prePatch = "patchShebangs .";
 
   configureFlags = [
     (lib.enableFeature threadingSupport "threading")
@@ -50,6 +60,12 @@ stdenv.mkDerivation rec {
     ++ lib.optionals gifSupport [ giflib ];
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit freeimage gd graphicsmagick imagemagick imlib2 libjxl opencv vips;
+    inherit (python3.pkgs) pillow imread;
+    haskell-webp = haskellPackages.webp;
+  };
 
   meta = with lib; {
     description = "Tools and library for the WebP image format";

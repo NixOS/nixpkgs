@@ -40,8 +40,9 @@ stdenv.mkDerivation rec {
     docbook_xsl
     docbook_xml_dtd_43
     dbus
-    xvfb-run
     glib
+  ] ++ lib.optionals stdenv.isLinux [
+    xvfb-run
   ];
 
   buildInputs = [
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
     "-Denable_gtk_doc=true"
   ];
 
-  doCheck = true;
+  doCheck = stdenv.isLinux;
 
   checkPhase = ''
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \

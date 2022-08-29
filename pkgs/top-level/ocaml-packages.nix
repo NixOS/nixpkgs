@@ -794,11 +794,13 @@ let
     menhirSdk = callPackage ../development/ocaml-modules/menhir/sdk.nix { };
 
     merlin =
-      if lib.versionAtLeast ocaml.version "4.11"
+      if lib.versionAtLeast ocaml.version "4.12"
       then callPackage ../development/tools/ocaml/merlin/4.x.nix { }
       else callPackage ../development/tools/ocaml/merlin { };
 
     merlin-extend = callPackage ../development/ocaml-modules/merlin-extend { };
+
+    merlin-lib = callPackage ../development/tools/ocaml/merlin/lib.nix { };
 
     dot-merlin-reader = callPackage ../development/tools/ocaml/merlin/dot-merlin-reader.nix { };
 
@@ -1021,6 +1023,8 @@ let
     ocaml_sqlite3 = callPackage ../development/ocaml-modules/sqlite3 { };
 
     ocaml-syntax-shims = callPackage ../development/ocaml-modules/ocaml-syntax-shims { };
+
+    ocaml-vdom = callPackage ../development/ocaml-modules/ocaml-vdom { };
 
     syslog = callPackage ../development/ocaml-modules/syslog { };
 
@@ -1313,6 +1317,8 @@ let
     prof_spacetime = callPackage ../development/ocaml-modules/prof_spacetime { };
 
     progress = callPackage ../development/ocaml-modules/progress { };
+
+    promise_jsoo = callPackage ../development/ocaml-modules/promise_jsoo { };
 
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
 
@@ -1639,5 +1645,5 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_latest = ocamlPackages_4_14;
 
-  ocamlPackages = ocamlPackages_4_13;
+  ocamlPackages = ocamlPackages_4_14;
 }

@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "parts";
-  version = "1.5.1";
+  version = "1.5.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-H6nyn2TY1Ga65CyhxOSlgcDTTC1UJi8I/4damM6I7fM=";
+    hash = "sha256-gOPDqXF05bQcG0Kv0+akBrikRr/CfHB9/tM/TJDPHdM=";
   };
 
   # Project has no tests

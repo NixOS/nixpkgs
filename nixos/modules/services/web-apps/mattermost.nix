@@ -107,19 +107,19 @@ in
         type = types.package;
         default = pkgs.mattermost;
         defaultText = "pkgs.mattermost";
-        description = "Mattermost derivation to use.";
+        description = lib.mdDoc "Mattermost derivation to use.";
       };
 
       statePath = mkOption {
         type = types.str;
         default = "/var/lib/mattermost";
-        description = "Mattermost working directory";
+        description = lib.mdDoc "Mattermost working directory";
       };
 
       siteUrl = mkOption {
         type = types.str;
         example = "https://chat.example.com";
-        description = ''
+        description = lib.mdDoc ''
           URL this Mattermost instance is reachable under, without trailing slash.
         '';
       };
@@ -127,14 +127,14 @@ in
       siteName = mkOption {
         type = types.str;
         default = "Mattermost";
-        description = "Name of this Mattermost site.";
+        description = lib.mdDoc "Name of this Mattermost site.";
       };
 
       listenAddress = mkOption {
         type = types.str;
         default = ":8065";
         example = "[::1]:8065";
-        description = ''
+        description = lib.mdDoc ''
           Address and port this Mattermost instance listens to.
         '';
       };
@@ -142,7 +142,7 @@ in
       mutableConfig = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether the Mattermost config.json is writeable by Mattermost.
 
           Most of the settings can be edited in the system console of
@@ -159,7 +159,7 @@ in
       preferNixConfig = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           If both mutableConfig and this option are set, the Nix configuration
           will take precedence over any settings configured in the server
           console.
@@ -169,7 +169,7 @@ in
       extraConfig = mkOption {
         type = types.attrs;
         default = { };
-        description = ''
+        description = lib.mdDoc ''
           Addtional configuration options as Nix attribute set in config.json schema.
         '';
       };
@@ -178,7 +178,7 @@ in
         type = types.listOf (types.oneOf [types.path types.package]);
         default = [];
         example = "[ ./com.github.moussetc.mattermost.plugin.giphy-2.0.0.tar.gz ]";
-        description = ''
+        description = lib.mdDoc ''
           Plugins to add to the configuration. Overrides any installed if non-null.
           This is a list of paths to .tar.gz files or derivations evaluating to
           .tar.gz files.
@@ -188,7 +188,7 @@ in
       localDatabaseCreate = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Create a local PostgreSQL database for Mattermost automatically.
         '';
       };
@@ -196,7 +196,7 @@ in
       localDatabaseName = mkOption {
         type = types.str;
         default = "mattermost";
-        description = ''
+        description = lib.mdDoc ''
           Local Mattermost database name.
         '';
       };
@@ -204,7 +204,7 @@ in
       localDatabaseUser = mkOption {
         type = types.str;
         default = "mattermost";
-        description = ''
+        description = lib.mdDoc ''
           Local Mattermost database username.
         '';
       };
@@ -212,7 +212,7 @@ in
       localDatabasePassword = mkOption {
         type = types.str;
         default = "mmpgsecret";
-        description = ''
+        description = lib.mdDoc ''
           Password for local Mattermost database user.
         '';
       };
@@ -220,7 +220,7 @@ in
       user = mkOption {
         type = types.str;
         default = "mattermost";
-        description = ''
+        description = lib.mdDoc ''
           User which runs the Mattermost service.
         '';
       };
@@ -228,7 +228,7 @@ in
       group = mkOption {
         type = types.str;
         default = "mattermost";
-        description = ''
+        description = lib.mdDoc ''
           Group which runs the Mattermost service.
         '';
       };
@@ -239,13 +239,13 @@ in
           type = types.package;
           default = pkgs.matterircd;
           defaultText = "pkgs.matterircd";
-          description = "matterircd derivation to use.";
+          description = lib.mdDoc "matterircd derivation to use.";
         };
         parameters = mkOption {
           type = types.listOf types.str;
           default = [ ];
           example = [ "-mmserver chat.example.com" "-bind [::]:6667" ];
-          description = ''
+          description = lib.mdDoc ''
             Set commandline parameters to pass to matterircd. See
             https://github.com/42wim/matterircd#usage for more information.
           '';

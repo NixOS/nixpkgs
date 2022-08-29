@@ -13,13 +13,13 @@ in
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/sonarr/.config/NzbDrone";
-        description = "The directory where Sonarr stores its data files.";
+        description = lib.mdDoc "The directory where Sonarr stores its data files.";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Open ports in the firewall for the Sonarr web interface
         '';
       };
@@ -27,13 +27,13 @@ in
       user = mkOption {
         type = types.str;
         default = "sonarr";
-        description = "User account under which Sonaar runs.";
+        description = lib.mdDoc "User account under which Sonaar runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "sonarr";
-        description = "Group under which Sonaar runs.";
+        description = lib.mdDoc "Group under which Sonaar runs.";
       };
     };
   };

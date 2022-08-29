@@ -6,7 +6,7 @@
 , importlib-metadata
 , typing ? null
 , pythonOlder
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -31,9 +31,9 @@ buildPythonPackage rec {
     typing
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  checkInputs = [
+    unittestCheckHook
+  ];
 
   pythonImportsCheck = [
     "importlib_resources"

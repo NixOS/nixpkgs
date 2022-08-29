@@ -74,7 +74,8 @@ buildPythonApplication rec {
     # Can be removed with the next release
     substituteInPlace pyproject.toml \
       --replace '"hurry.filesize" = "^0.9"' "" \
-      --replace 'vt-py = ">=0.6.1,<0.8.0"' 'vt-py = ">=0.6.1"'
+      --replace 'vt-py = ">=0.6.1,<0.8.0"' 'vt-py = ">=0.6.1"' \
+      --replace 'backoff = "^1.10.0"' 'backoff = ">=1.10.0"'
   '';
 
   pythonImportsCheck = [

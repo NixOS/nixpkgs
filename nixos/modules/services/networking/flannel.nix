@@ -17,14 +17,14 @@ in {
     enable = mkEnableOption "flannel";
 
     package = mkOption {
-      description = "Package to use for flannel";
+      description = lib.mdDoc "Package to use for flannel";
       type = types.package;
       default = pkgs.flannel;
       defaultText = literalExpression "pkgs.flannel";
     };
 
     publicIp = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         IP accessible by other nodes for inter-host communication.
         Defaults to the IP of the interface being used for communication.
       '';
@@ -33,7 +33,7 @@ in {
     };
 
     iface = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Interface to use (IP or name) for inter-host communication.
         Defaults to the interface for the default route on the machine.
       '';
@@ -43,38 +43,38 @@ in {
 
     etcd = {
       endpoints = mkOption {
-        description = "Etcd endpoints";
+        description = lib.mdDoc "Etcd endpoints";
         type = types.listOf types.str;
         default = ["http://127.0.0.1:2379"];
       };
 
       prefix = mkOption {
-        description = "Etcd key prefix";
+        description = lib.mdDoc "Etcd key prefix";
         type = types.str;
         default = "/coreos.com/network";
       };
 
       caFile = mkOption {
-        description = "Etcd certificate authority file";
+        description = lib.mdDoc "Etcd certificate authority file";
         type = types.nullOr types.path;
         default = null;
       };
 
       certFile = mkOption {
-        description = "Etcd cert file";
+        description = lib.mdDoc "Etcd cert file";
         type = types.nullOr types.path;
         default = null;
       };
 
       keyFile = mkOption {
-        description = "Etcd key file";
+        description = lib.mdDoc "Etcd key file";
         type = types.nullOr types.path;
         default = null;
       };
     };
 
     kubeconfig = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Path to kubeconfig to use for storing flannel config using the
         Kubernetes API
       '';
@@ -88,7 +88,7 @@ in {
     };
 
     nodeName = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Needed when running with Kubernetes as backend as this cannot be auto-detected";
       '';
       type = types.nullOr types.str;
@@ -100,13 +100,13 @@ in {
     };
 
     storageBackend = mkOption {
-      description = "Determines where flannel stores its configuration at runtime";
+      description = lib.mdDoc "Determines where flannel stores its configuration at runtime";
       type = types.enum ["etcd" "kubernetes"];
       default = "etcd";
     };
 
     subnetLen = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         The size of the subnet allocated to each host. Defaults to 24 (i.e. /24)
         unless the Network was configured to be smaller than a /24 in which case
         it is one less than the network.
@@ -116,7 +116,7 @@ in {
     };
 
     subnetMin = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         The beginning of IP range which the subnet allocation should start with.
         Defaults to the first subnet of Network.
       '';
@@ -125,7 +125,7 @@ in {
     };
 
     subnetMax = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         The end of IP range which the subnet allocation should start with.
         Defaults to the last subnet of Network.
       '';
@@ -134,7 +134,7 @@ in {
     };
 
     backend = mkOption {
-      description = "Type of backend to use and specific configurations for that backend.";
+      description = lib.mdDoc "Type of backend to use and specific configurations for that backend.";
       type = types.attrs;
       default = {
         Type = "vxlan";

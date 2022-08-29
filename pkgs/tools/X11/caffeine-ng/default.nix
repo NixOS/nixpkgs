@@ -40,12 +40,11 @@ in buildPythonApplication rec {
     sha256 = "sha256-umIjXJ0et6Pi5Ejj96Q+ZhiKS+yj7bsgb4uQW6Ym6rU=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook glib setuptools-scm ];
+  nativeBuildInputs = [ wrapGAppsHook glib gobject-introspection setuptools-scm ];
 
   buildInputs = [
     libappindicator-gtk3
     libnotify
-    gobject-introspection
     gtk3
   ];
 
@@ -60,6 +59,8 @@ in buildPythonApplication rec {
   ];
 
   doCheck = false; # There are no tests.
+  dontWrapGApps = true;
+  strictDeps = false;
 
   postInstall = ''
     cp -r share $out/
@@ -69,10 +70,13 @@ in buildPythonApplication rec {
     ln -s $out/${python3.sitePackages}/etc $out/etc
 
     glib-compile-schemas --strict $out/share/glib-2.0/schemas
+  '';
 
+  preFixup = ''
     gappsWrapperArgs+=(
       --prefix PATH : ${lib.makeBinPath [ procps xautolock xscreensaver xfce.xfconf xset ]}
     )
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   meta = with lib; {

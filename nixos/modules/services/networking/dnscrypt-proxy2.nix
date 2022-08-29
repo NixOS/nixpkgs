@@ -9,9 +9,9 @@ in
     enable = mkEnableOption "dnscrypt-proxy2";
 
     settings = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Attrset that is converted and passed as TOML config file.
-        For available params, see: <link xlink:href="https://github.com/DNSCrypt/dnscrypt-proxy/blob/${pkgs.dnscrypt-proxy2.version}/dnscrypt-proxy/example-dnscrypt-proxy.toml"/>
+        For available params, see: <https://github.com/DNSCrypt/dnscrypt-proxy/blob/${pkgs.dnscrypt-proxy2.version}/dnscrypt-proxy/example-dnscrypt-proxy.toml>
       '';
       example = literalExpression ''
         {
@@ -28,8 +28,8 @@ in
     };
 
     upstreamDefaults = mkOption {
-      description = ''
-        Whether to base the config declared in <option>services.dnscrypt-proxy2.settings</option> on the upstream example config (<link xlink:href="https://github.com/DNSCrypt/dnscrypt-proxy/blob/master/dnscrypt-proxy/example-dnscrypt-proxy.toml"/>)
+      description = lib.mdDoc ''
+        Whether to base the config declared in {option}`services.dnscrypt-proxy2.settings` on the upstream example config (<https://github.com/DNSCrypt/dnscrypt-proxy/blob/master/dnscrypt-proxy/example-dnscrypt-proxy.toml>)
 
         Disable this if you want to declare your dnscrypt config from scratch.
       '';
@@ -38,8 +38,8 @@ in
     };
 
     configFile = mkOption {
-      description = ''
-        Path to TOML config file. See: <link xlink:href="https://github.com/DNSCrypt/dnscrypt-proxy/blob/master/dnscrypt-proxy/example-dnscrypt-proxy.toml"/>
+      description = lib.mdDoc ''
+        Path to TOML config file. See: <https://github.com/DNSCrypt/dnscrypt-proxy/blob/master/dnscrypt-proxy/example-dnscrypt-proxy.toml>
         If this option is set, it will override any configuration done in options.services.dnscrypt-proxy2.settings.
       '';
       example = "/etc/dnscrypt-proxy/dnscrypt-proxy.toml";
@@ -56,7 +56,7 @@ in
         ''}
         ${pkgs.remarshal}/bin/json2toml < config.json > $out
       '';
-      defaultText = literalDocBook "TOML file generated from <option>services.dnscrypt-proxy2.settings</option>";
+      defaultText = literalMD "TOML file generated from {option}`services.dnscrypt-proxy2.settings`";
     };
   };
 

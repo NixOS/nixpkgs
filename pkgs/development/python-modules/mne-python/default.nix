@@ -1,52 +1,62 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
 , numpy
 , scipy
 , pytestCheckHook
-, pytest-cov
 , pytest-timeout
 , h5py
 , matplotlib
 , nibabel
 , pandas
 , scikit-learn
+, decorator
+, jinja2
+, pooch
+, tqdm
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "mne-python";
-  version = "1.0.3";
-
-  disabled = isPy27;
+  version = "1.1.0";
 
   # PyPI dist insufficient to run tests
   src = fetchFromGitHub {
     owner = "mne-tools";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-6eDS/hKqEQqUxJtnfsPhxw9b4p5CC1ifnxVCRBmVVA8=";
+    sha256 = "sha256-p4brwO6uERM2vJdkJ34GdeAKk07QeVEmQrZMPcDjI2I=";
   };
 
-  propagatedBuildInputs = [ numpy scipy ];
-
-  # all tests pass, but Pytest hangs afterwards - probably some thread hasn't terminated
-  doCheck = false;
-  checkInputs = [
-    pytestCheckHook
-    pytest-cov
-    pytest-timeout
-    h5py
+  propagatedBuildInputs = [
+    decorator
+    jinja2
     matplotlib
+    numpy
+    pooch
+    scipy
+    setuptools
+    tqdm
+  ];
+
+  checkInputs = [
+    h5py
     nibabel
     pandas
+    pytestCheckHook
     scikit-learn
+    pytest-timeout
   ];
+
   preCheck = ''
     export HOME=$TMP
     export MNE_SKIP_TESTING_DATASET_TESTS=true
     export MNE_SKIP_NETWORK_TESTS=1
   '';
+
+  # all tests pass, but Pytest hangs afterwards - probably some thread hasn't terminated
+  doCheck = false;
 
   pythonImportsCheck = [ "mne" ];
 

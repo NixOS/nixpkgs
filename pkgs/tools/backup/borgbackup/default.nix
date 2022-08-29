@@ -8,17 +8,18 @@
 , openssl
 , python3
 , zstd
+, installShellFiles
 , nixosTests
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.2.1";
+  version = "1.2.2";
   format = "pyproject";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-n5zi0ZI8szoUfubQgXfYYJdFZ3IbEUL8pnkUoC5kxjM=";
+    sha256 = "sha256-1zBodEPxvrYCsdcrrjYxj2+WVIGPzcUEWFQOxXnlcmA=";
   };
 
   postPatch = ''
@@ -30,10 +31,16 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python3.pkgs; [
     cython
     setuptools-scm
-    # For building documentation:
-    sphinx
+
+    # docs
+    sphinxHook
     guzzle_sphinx_theme
+
+    # shell completions
+    installShellFiles
   ];
+
+  sphinxBuilders = [ "singlehtml" "man" ];
 
   buildInputs = [
     libb2
@@ -62,22 +69,10 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    make -C docs singlehtml
-    mkdir -p $out/share/doc/borg
-    cp -R docs/_build/singlehtml $out/share/doc/borg/html
-
-    make -C docs man
-    mkdir -p $out/share/man
-    cp -R docs/_build/man $out/share/man/man1
-
-    mkdir -p $out/share/bash-completion/completions
-    cp scripts/shell_completions/bash/borg $out/share/bash-completion/completions/
-
-    mkdir -p $out/share/fish/vendor_completions.d
-    cp scripts/shell_completions/fish/borg.fish $out/share/fish/vendor_completions.d/
-
-    mkdir -p $out/share/zsh/site-functions
-    cp scripts/shell_completions/zsh/_borg $out/share/zsh/site-functions/
+    installShellCompletion --cmd borg \
+      --bash scripts/shell_completions/bash/borg \
+      --fish scripts/shell_completions/fish/borg.fish \
+      --zsh scripts/shell_completions/zsh/_borg
   '';
 
   checkInputs = with python3.pkgs; [
@@ -119,7 +114,7 @@ python3.pkgs.buildPythonApplication rec {
     inherit (nixosTests) borgbackup;
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "doc" "man" ];
 
   meta = with lib; {
     description = "Deduplicating archiver with compression and encryption";

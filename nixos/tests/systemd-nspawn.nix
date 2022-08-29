@@ -10,8 +10,8 @@ let
       Key-Length: 1024
       Subkey-Type: ELG-E
       Subkey-Length: 1024
-      Name-Real: Joe Tester
-      Name-Email: joe@foo.bar
+      Name-Real: Bob Foobar
+      Name-Email: bob@foo.bar
       Expire-Date: 0
       # Do a commit here, so that we can later print "done"
       %commit
@@ -19,7 +19,7 @@ let
     EOF
     gpg --batch --generate-key foo
     rm $out/S.gpg-agent $out/S.gpg-agent.*
-    gpg --export joe@foo.bar -a > $out/pubkey.gpg
+    gpg --export bob@foo.bar -a > $out/pubkey.gpg
   '');
 
   nspawnImages = (pkgs.runCommand "localhost" { buildInputs = [ pkgs.coreutils pkgs.gnupg ]; } ''

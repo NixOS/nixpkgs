@@ -734,6 +734,63 @@ work in any of the formats supported by `buildPythonPackage` currently,
 with the exception of `other` (see `format` in
 [`buildPythonPackage` parameters](#buildpythonpackage-parameters) for more details).
 
+### Using unittestCheckHook {#using-unittestcheckhook}
+
+`unittestCheckHook` is a hook which will substitute the setuptools `test` command for a `checkPhase` which runs `python -m unittest discover`:
+
+```
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlags = [ "-s" "tests" "-v" ];
+```
+
+##### Using sphinxHook {#using-sphinxhook}
+
+The `sphinxHook` is a helpful tool to build documentation and manpages
+using the popular Sphinx documentation generator.
+It is setup to automatically find common documentation source paths and
+render them using the default `html` style.
+
+```
+  outputs = [
+    "out"
+    "doc"
+  ];
+
+  nativeBuildInputs = [
+    sphinxHook
+  ];
+```
+
+The hook will automatically build and install the artifact into the
+`doc` output, if it exists. It also provides an automatic diversion
+for the artifacts of the `man` builder into the `man` target.
+
+```
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
+  # Use multiple builders
+  sphinxBuilders = [
+    "singlehtml"
+    "man"
+  ];
+```
+
+Overwrite `sphinxRoot` when the hook is unable to find your
+documentation source root.
+
+```
+  # Configure sphinxRoot for uncommon paths
+  sphinxRoot = "weird/docs/path";
+```
+
+The hook is also available to packages outside the python ecosystem by
+referencing it using `python3.pkgs.sphinxHook`.
+
 ### Develop local package {#develop-local-package}
 
 As a Python developer you're likely aware of [development mode](http://setuptools.readthedocs.io/en/latest/setuptools.html#development-mode)
@@ -1260,16 +1317,18 @@ are used in `buildPythonPackage`.
 - `pytestCheckHook` to run tests with `pytest`. See [example usage](#using-pytestcheckhook).
 - `pythonCatchConflictsHook` to check whether a Python package is not already existing.
 - `pythonImportsCheckHook` to check whether importing the listed modules works.
+- `pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
+  See [example usage](#using-pythonrelaxdepshook).
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
 - `setuptoolsBuildHook` to build a wheel using `setuptools`.
 - `setuptoolsCheckHook` to run tests with `python setup.py test`.
+- `sphinxHook` to build documentation and manpages using Sphinx.
 - `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
   `venv` is created if it does not yet exist. `postVenvCreation` can be used to
   to run commands only after venv is first created.
 - `wheelUnpackHook` to move a wheel to the correct folder so it can be installed
   with the `pipInstallHook`.
-- `pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
-  See [example usage](#using-pythonrelaxdepshook).
+- `unittestCheckHook` will run tests with `python -m unittest discover`. See [example usage](#using-unittestcheckhook).
 
 ### Development mode {#development-mode}
 
@@ -1661,6 +1720,26 @@ self: super: {
       });
     };
   };
+}
+```
+
+### How to override a Python package for all Python versions using extensions? {#how-to-override-a-python-package-for-all-python-versions-using-extensions}
+
+The following overlay overrides the call to `buildPythonPackage` for the
+`foo` package for all interpreters by appending a Python extension to the
+`pythonPackagesExtensions` list of extensions.
+
+```nix
+final: prev: {
+  pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+    (
+      python-final: python-prev: {
+        foo = python-prev.foo.overridePythonAttrs (oldAttrs: {
+          ...
+        });
+      }
+    )
+  ];
 }
 ```
 

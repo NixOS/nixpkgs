@@ -152,8 +152,8 @@ let
     # TIER 3
       baloo = callPackage ./baloo.nix {};
       kbookmarks = callPackage ./kbookmarks.nix {};
-      kcmutils = callPackage ./kcmutils {};
-      kconfigwidgets = callPackage ./kconfigwidgets {};
+      kcmutils = callPackage ./kcmutils.nix {};
+      kconfigwidgets = callPackage ./kconfigwidgets.nix {};
       kdav = callPackage ./kdav.nix {};
       kdeclarative = callPackage ./kdeclarative.nix {};
       kded = callPackage ./kded.nix {};

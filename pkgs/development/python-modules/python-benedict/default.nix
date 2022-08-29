@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "python-benedict";
-  version = "0.25.2";
+  version = "0.25.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "fabiocaccamo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-WSsT+p23VctVt9A+WFKNHcgUHFijfT775eMF3RzaXDA=";
+    hash = "sha256-hvXcww2h83azvC9MnJHje3tnHpcvup709LoKoegdG4I=";
   };
 
   propagatedBuildInputs = [
@@ -42,13 +42,13 @@ buildPythonPackage rec {
     ftfy
     orjson
     requests
-    six
     toml
     xmltodict
   ];
 
   checkInputs = [
     pytestCheckHook
+    six
   ];
 
   disabledTests = [

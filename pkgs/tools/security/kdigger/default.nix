@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "kdigger";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "quarkslab";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xNOfxJJa0KbrxP1YRDEhnJEmKmpWzXchJWZ/2StR2O0=";
+    sha256 = "sha256-2H7aQoKtNABNI7R01ZOyHCFYUBIu1C7O0snO/i9807o=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -23,7 +23,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorSha256 = "sha256-3vn3MsE/4lBw89wgYgzm0RuJJ5RQTkgS6O74PpfFcUk=";
+  vendorSha256 = "sha256-Whw8zdfipbWjOXYEAQayfttH0GTTRdJAVjmvLjmsZPw=";
 
   nativeBuildInputs = [ installShellFiles ];
 

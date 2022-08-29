@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl
+, fetchpatch
 # native deps.
 , runCommand, pkg-config, meson, ninja, makeWrapper
 # build+runtime deps.
@@ -17,14 +18,27 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.5.1";
+  version = "5.5.2";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "9bad1edfd6631446da2d2331bd869887d7fe502f6eeaf62b2e43e2c113f02b6d";
+    sha256 = "3f78aa69c3f28edc42b5900b9788fba39498d8bffda7fb9c772bb470865780cb";
   };
 
   outputs = [ "out" "dev" ];
+
+  patches = [
+    (fetchpatch {
+      name = "fix-config-tests-on-darwin.patch";
+      url = "https://gitlab.nic.cz/knot/knot-resolver/-/commit/48ad9d436cf80f58c107774c313a561d852148a0.diff";
+      sha256 = "CEX1XkeYLUSe31xUhNdMRMl1VUXtKFCs5noNJaqL5x0=";
+    })
+    (fetchpatch {
+      name = "fix-config-tests-on-aarch64-darwin.patch";
+      url = "https://gitlab.nic.cz/knot/knot-resolver/-/commit/adaac913c50a5db2f226a081ddc419b0d56d1757.diff";
+      sha256 = "1LrL74luzPTyJ7VBi7fskDga4lYAh7cSUmDcd1BNO78=";
+    })
+  ];
 
   # Path fixups for the NixOS service.
   postPatch = ''
@@ -39,6 +53,13 @@ unwrapped = stdenv.mkDerivation rec {
     # ExecStart can't be overwritten in overrides.
     # We need that to use wrapped executable and correct config file.
     sed '/^ExecStart=/d' -i systemd/kresd@.service.in
+
+    # On x86_64-darwin loading by soname fails to find the libs, surprisingly.
+    # Even though they should already be loaded and they're in RPATH, too.
+    for f in daemon/lua/{kres,zonefile}.lua; do
+      substituteInPlace "$f" \
+        --replace "ffi.load(" "ffi.load('${lib.getLib knot-dns}/lib/' .. "
+    done
   ''
     # some tests have issues with network sandboxing, apparently
   + optionalString doInstallCheck ''
@@ -67,7 +88,7 @@ unwrapped = stdenv.mkDerivation rec {
     "--default-library=static" # not used by anyone
   ]
   ++ optional doInstallCheck "-Dunit_tests=enabled"
-  ++ optional (doInstallCheck && !stdenv.isDarwin) "-Dconfig_tests=enabled"
+  ++ optional doInstallCheck "-Dconfig_tests=enabled"
   ++ optional stdenv.isLinux "-Dsystemd_files=enabled" # used by NixOS service
     #"-Dextra_tests=enabled" # not suitable as in-distro tests; many deps, too.
   ;

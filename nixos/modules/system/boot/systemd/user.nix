@@ -45,14 +45,14 @@ in {
       default = "";
       type = types.lines;
       example = "DefaultCPUAccounting=yes";
-      description = ''
+      description = lib.mdDoc ''
         Extra config options for systemd user instances. See man systemd-user.conf for
         available options.
       '';
     };
 
     systemd.user.units = mkOption {
-      description = "Definition of systemd per-user units.";
+      description = lib.mdDoc "Definition of systemd per-user units.";
       default = {};
       type = systemdUtils.types.units;
     };
@@ -60,37 +60,37 @@ in {
     systemd.user.paths = mkOption {
       default = {};
       type = systemdUtils.types.paths;
-      description = "Definition of systemd per-user path units.";
+      description = lib.mdDoc "Definition of systemd per-user path units.";
     };
 
     systemd.user.services = mkOption {
       default = {};
       type = systemdUtils.types.services;
-      description = "Definition of systemd per-user service units.";
+      description = lib.mdDoc "Definition of systemd per-user service units.";
     };
 
     systemd.user.slices = mkOption {
       default = {};
       type = systemdUtils.types.slices;
-      description = "Definition of systemd per-user slice units.";
+      description = lib.mdDoc "Definition of systemd per-user slice units.";
     };
 
     systemd.user.sockets = mkOption {
       default = {};
       type = systemdUtils.types.sockets;
-      description = "Definition of systemd per-user socket units.";
+      description = lib.mdDoc "Definition of systemd per-user socket units.";
     };
 
     systemd.user.targets = mkOption {
       default = {};
       type = systemdUtils.types.targets;
-      description = "Definition of systemd per-user target units.";
+      description = lib.mdDoc "Definition of systemd per-user target units.";
     };
 
     systemd.user.timers = mkOption {
       default = {};
       type = systemdUtils.types.timers;
-      description = "Definition of systemd per-user timer units.";
+      description = lib.mdDoc "Definition of systemd per-user timer units.";
     };
 
     systemd.additionalUpstreamUserUnits = mkOption {

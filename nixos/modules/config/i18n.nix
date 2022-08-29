@@ -21,7 +21,7 @@ with lib;
           }
         '';
         example = literalExpression "pkgs.glibcLocales";
-        description = ''
+        description = lib.mdDoc ''
           Customized pkg.glibcLocales package.
 
           Changing this option can disable handling of i18n.defaultLocale
@@ -33,7 +33,7 @@ with lib;
         type = types.str;
         default = "en_US.UTF-8";
         example = "nl_NL.UTF-8";
-        description = ''
+        description = lib.mdDoc ''
           The default locale.  It determines the language for program
           messages, the format for dates and times, sort order, and so on.
           It also determines the character set, such as UTF-8.
@@ -44,10 +44,10 @@ with lib;
         type = types.attrsOf types.str;
         default = {};
         example = { LC_MESSAGES = "en_US.UTF-8"; LC_TIME = "de_DE.UTF-8"; };
-        description = ''
+        description = lib.mdDoc ''
           A set of additional system-wide locale settings other than
-          <literal>LANG</literal> which can be configured with
-          <option>i18n.defaultLocale</option>.
+          `LANG` which can be configured with
+          {option}`i18n.defaultLocale`.
         '';
       };
 
@@ -71,12 +71,11 @@ with lib;
             ))
         '';
         example = ["en_US.UTF-8/UTF-8" "nl_NL.UTF-8/UTF-8" "nl_NL/ISO-8859-1"];
-        description = ''
+        description = lib.mdDoc ''
           List of locales that the system should support.  The value
-          <literal>"all"</literal> means that all locales supported by
+          `"all"` means that all locales supported by
           Glibc will be installed.  A full list of supported locales
-          can be found at <link
-          xlink:href="https://sourceware.org/git/?p=glibc.git;a=blob;f=localedata/SUPPORTED"/>.
+          can be found at <https://sourceware.org/git/?p=glibc.git;a=blob;f=localedata/SUPPORTED>.
         '';
       };
 

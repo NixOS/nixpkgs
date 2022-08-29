@@ -91,58 +91,65 @@ default-package-overrides:
   - reflex-dom-core < 0.7.0.2
   # Downgrade hasql-dynamic-statements until hasql 1.6 is in Stackage
   - hasql-dynamic-statements < 0.3.1.2
+  # Its dependency brick >= 1.0 is not yet in stackage
+  - brick-skylighting < 1.0
 
 extra-packages:
-  - aeson < 2                           # required by pantry-0.5.2
-  - base16-bytestring < 1               # required for cabal-install etc.
   - Cabal == 2.2.*                      # required for jailbreak-cabal etc.
   - Cabal == 2.4.*                      # required for cabal-install etc.
   - Cabal == 3.2.*                      # required for cabal-install etc.
   - Cabal == 3.4.*                      # required for cabal-install etc.
+  - Cabal == 3.6.*                      # required for cabal-install-parsers etc.
+  - Diff < 0.4                          # required by liquidhaskell-0.8.10.2: https://github.com/ucsd-progsys/liquidhaskell/issues/1729
+  - ShellCheck == 0.7.2                 # 2022-02-20: haskell-ci 0.14 needs this
+  - aeson < 2                           # required by pantry-0.5.2
+  - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
+  - base16-bytestring < 1               # required for cabal-install etc.
+  - bower-json == 1.0.0.1               # 2022-05-21: Needed for spago 0.20.9
+  - clay < 0.14                         # 2022-03-20: Needed for neuron 1.0.0.0
+  - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
   - dependent-map == 0.2.4.0            # required by Hasura 1.3.1, 2020-08-20
   - dependent-sum == 0.4                # required by Hasura 1.3.1, 2020-08-20
   - dhall == 1.29.0                     # required for ats-pkg
   - dhall == 1.38.1                     # required for spago
-  - Diff < 0.4                          # required by liquidhaskell-0.8.10.2: https://github.com/ucsd-progsys/liquidhaskell/issues/1729
+  - doctest == 0.18.*                   # 2021-11-19: closest to stackage version for GHC 9.*
+  - fourmolu == 0.6.0.0                 # 2022-06-05: Last fourmolu version compatible with hls 1.7/ hls-fourmolu-plugin 1.0.3.0
+  - ghc-api-compat == 8.10.7            # 2022-02-17: preserve for GHC 8.10.7
+  - ghc-api-compat == 8.6               # 2021-09-07: preserve for GHC 8.8.4
+  - ghc-lib == 8.10.7.*                 # 2022-02-17: preserve for GHC 8.10.7
+  - ghc-lib == 9.2.*                    # 2022-02-17: preserve for GHC 9.2
+  - ghc-lib-parser == 8.10.7.*          # 2022-02-17: preserve for GHC 8.10.7
+  - ghc-lib-parser == 9.2.*             # 2022-02-17: preserve for GHC 9.2
+  - ghc-lib-parser-ex == 8.10.*         # 2022-02-17: preserve for GHC 8.10.7
+  - ghc-lib-parser-ex == 9.2.*           # 2022-07-13: preserve for GHC 9.2
+  - ghc-lib-parser-ex >= 9.2.0.3 && < 9.2.1 # 2022-07-13: needed by hlint 3.4.1
   - haddock == 2.23.*                   # required on GHC < 8.10.x
   - haddock-api == 2.23.*               # required on GHC < 8.10.x
   - haddock-library ==1.7.*             # required by stylish-cabal-0.5.0.0
   - happy == 1.19.12                    # for ghcjs
   - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
+  - hnix-store-core == 0.5.0.0          # 2022-06-17: Until hnix 0.17
+  - hnix-store-remote == 0.5.0.0        # 2022-06-17: Until hnix 0.17
+  - hspec < 2.8                         # 2022-04-07: Needed for tasty-hspec 1.1.6
+  - hspec-core < 2.8                    # 2022-04-07: Needed for tasty-hspec 1.1.6
+  - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
+  - hspec-golden == 0.1.*               # 2022-04-07: Needed for elm-format
   - immortal == 0.2.2.1                 # required by Hasura 1.3.1, 2020-08-20
   - language-javascript == 0.7.0.0      # required by purescript
   - mmorph == 1.1.3                     # Newest working version of mmorph on ghc 8.6.5. needed for hls
   - network == 2.6.3.1                  # required by pkgs/games/hedgewars/default.nix, 2020-11-15
   - optparse-applicative < 0.16         # needed for niv-0.2.19
+  - ormolu == 0.2.*                     # 2022-02-21: For ghc 8.8 and 8.10
   - pantry == 0.5.2.1                   # needed for stack-2.7.3
+  - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
+  - relude == 0.7.0.0                   # 2022-02-25: Needed for ema 0.6
   - resolv == 0.1.1.2                   # required to build cabal-install-3.0.0.0 with pre ghc-8.8.x
   - sbv == 7.13                         # required for pkgs.petrinizer
-  - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
-  - ghc-api-compat == 8.6               # 2021-09-07: preserve for GHC 8.8.4
-  - ghc-api-compat == 8.10.7            # 2022-02-17: preserve for GHC 8.10.7
-  - ghc-lib == 8.10.7.*                 # 2022-02-17: preserve for GHC 8.10.7
-  - ghc-lib-parser == 8.10.7.*          # 2022-02-17: preserve for GHC 8.10.7
-  - ghc-lib-parser-ex == 8.10.*         # 2022-02-17: preserve for GHC 8.10.7
-  - ghc-lib-parser-ex >= 9.2.0.3 && < 9.2.1 # 2022-07-13: needed by hlint 3.4.1
-  - doctest == 0.18.*                   # 2021-11-19: closest to stackage version for GHC 9.*
-  - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
-  - ormolu == 0.2.*                     # 2022-02-21: For ghc 8.8 and 8.10
-  - ShellCheck == 0.7.2                 # 2022-02-20: haskell-ci 0.14 needs this
+  - tasty-hspec == 1.1.6                # 2022-04-07: Needed for elm-format
+  - vty == 5.35.1                       # 2022-07-08: needed for glirc-2.39.0.1
   - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
   - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
-  - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
-  - relude == 0.7.0.0                   # 2022-02-25: Needed for ema 0.6
-  - clay < 0.14                         # 2022-03-20: Needed for neuron 1.0.0.0
-  - hspec-golden == 0.1.*               # 2022-04-07: Needed for elm-format
-  - tasty-hspec == 1.1.6                # 2022-04-07: Needed for elm-format
-  - hspec < 2.8                         # 2022-04-07: Needed for tasty-hspec 1.1.6
-  - hspec-core < 2.8                    # 2022-04-07: Needed for tasty-hspec 1.1.6
-  - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
-  - bower-json == 1.0.0.1               # 2022-05-21: Needed for spago 0.20.9
-  - fourmolu == 0.6.0.0                 # 2022-06-05: Last fourmolu version compatible with hls 1.7/ hls-fourmolu-plugin 1.0.3.0
-  - hnix-store-core == 0.5.0.0          # 2022-06-17: Until hnix 0.17
-  - hnix-store-remote == 0.5.0.0        # 2022-06-17: Until hnix 0.17
-  - vty == 5.35.1                       # 2022-07-08: needed for glirc-2.39.0.1
+  - brick == 0.70.*                     # 2022-08-13: needed by matterhorn-50200.17.0
 
 package-maintainers:
   abbradar:
@@ -446,22 +453,17 @@ unsupported-platforms:
   grid-proto:                                   [ platforms.darwin ]
   gtk-sni-tray:                                 [ platforms.darwin ]
   haskell-snake:                                [ platforms.darwin ]
+  hb3sum:                                       [ aarch64-linux ] # depends on blake3, which is not supported on aarch64-linux
   hcwiid:                                       [ platforms.darwin ]
   HDRUtils:                                     [ platforms.darwin ]
   hidapi:                                       [ platforms.darwin ]
   hinotify-bytestring:                          [ platforms.darwin ]
   honk:                                         [ platforms.darwin ]
-  HQu:                                          [ aarch64-linux, armv7l-linux ] # unsupported by vendored C++ library, TODO: explicitly list supported platforms
   HSoM:                                         [ platforms.darwin ]
   iwlib:                                        [ platforms.darwin ]
   Jazzkell:                                     [ platforms.darwin ] # depends on Euterpea
   jsaddle-hello:                                [ platforms.darwin ] # depends on jsaddle-webkit2gtk
   jsaddle-webkit2gtk:                           [ platforms.darwin ]
-  keid-core:                                    [ aarch64-linux ]
-  keid-geometry:                                [ aarch64-linux ]
-  keid-render-basic:                            [ aarch64-linux ]
-  keid-sound-openal:                            [ aarch64-linux ]
-  keid-ui-dearimgui:                            [ aarch64-linux ]
   Kulitta:                                      [ platforms.darwin ] # depends on Euterpea
   LambdaHack:                                   [ platforms.darwin ]
   large-hashable:                               [ aarch64-linux ] # https://github.com/factisresearch/large-hashable/issues/17
@@ -485,8 +487,6 @@ unsupported-platforms:
   oculus:                                       [ platforms.darwin ]
   pam:                                          [ platforms.darwin ]
   parport:                                      [ platforms.darwin ]
-  password:                                     [ aarch64-linux, armv7l-linux ] # uses scrypt, which requries x86
-  password-instances:                           [ aarch64-linux, armv7l-linux ] # uses scrypt, which requries x86
   persist-state:                                [ aarch64-linux, armv7l-linux ] # https://github.com/minad/persist-state/blob/6fd68c0b8b93dec78218f6d5a1f4fa06ced4e896/src/Data/PersistState.hs#L122-L128
   piyo:                                         [ platforms.darwin ]
   PortMidi-simple:                              [ platforms.darwin ]
@@ -499,8 +499,6 @@ unsupported-platforms:
   reflex-localize-dom:                          [ platforms.darwin, aarch64-linux ]
   rtlsdr:                                       [ platforms.darwin ]
   rubberband:                                   [ platforms.darwin ]
-  scat:                                         [ aarch64-linux, armv7l-linux ] # uses scrypt, which requries x86
-  scrypt:                                       [ aarch64-linux, armv7l-linux ] # https://github.com/informatikr/scrypt/issues/8
   sdl2-mixer:                                   [ platforms.darwin ]
   sdl2-ttf:                                     [ platforms.darwin ]
   sensei:                                       [ platforms.darwin ]
@@ -545,8 +543,16 @@ supported-platforms:
   hpapi:                                        [ platforms.linux ] # limited by pkgs.papi
   hsignal:                                      [ platforms.x86 ] # -msse2
   HFuse:                                        [ platforms.linux ]
+  HQu:                                          [ platforms.x86 ] # vendored C++ library needs i686/x86_64
   hw-prim-bits:                                 [ platforms.x86 ] # x86 assembler
   inline-asm:                                   [ platforms.x86 ] # x86 assembler
+  keid-core:                                    [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
+  keid-frp-banana:                              [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
+  keid-geometry:                                [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
+  keid-render-basic:                            [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
+  keid-resource-gltf:                           [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
+  keid-sound-openal:                            [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
+  keid-ui-dearimgui:                            [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
   kqueue:                                       [ platforms.netbsd, platforms.freebsd, platforms.openbsd, platforms.darwin ]
   linux-evdev:                                  [ platforms.linux ]
   linux-file-extents:                           [ platforms.linux ]
@@ -555,7 +561,12 @@ supported-platforms:
   linux-namespaces:                             [ platforms.linux ]
   lxc:                                          [ platforms.linux ]
   midi-alsa:                                    [ platforms.linux ]
+  password:                                     [ platforms.x86 ] # uses scrypt, which requries x86
+  password-instances:                           [ platforms.x86 ] # uses scrypt, which requries x86
   reactivity:                                   [ platforms.windows ]
+  reflex-libtelnet:                             [ platforms.linux ] # pkgs.libtelnet only supports linux
+  scat:                                         [ platforms.x86 ] # uses scrypt, which requries x86
+  scrypt:                                       [ platforms.x86 ] # https://github.com/informatikr/scrypt/issues/8
   seqalign:                                     [ platforms.x86 ] # x86 intrinsics
   udev:                                         [ platforms.linux ]
   Win32-console:                                [ platforms.windows ]
@@ -569,6 +580,7 @@ supported-platforms:
   Win32-services:                               [ platforms.windows ]
   Win32-services-wrapper:                       [ platforms.windows ]
   XInput:                                       [ platforms.windows ]
+  yesod-auth-simple:                            [ platforms.x86 ] # requires scrypt which only supports x86
 
 dont-distribute-packages:
   # Depends on shine, which is a ghcjs project.
@@ -642,3 +654,6 @@ dont-distribute-packages:
 
   # mesos was removed from nixpkgs
   - hs-mesos
+
+  # Output exceeds Hydra's maximum allowable size
+  - stripeapi

@@ -21,11 +21,11 @@
 , "@tailwindcss/typography"
 , "@uppy/companion"
 , "@vue/cli"
-, "@webassemblyjs/cli"
-, "@webassemblyjs/repl"
+, {"@webassemblyjs/cli": "1.11.1"}
+, {"@webassemblyjs/repl": "1.11.1"}
 , "@webassemblyjs/wasm-strip"
-, "@webassemblyjs/wasm-text-gen"
-, "@webassemblyjs/wast-refmt"
+, {"@webassemblyjs/wasm-text-gen": "1.11.1"}
+, {"@webassemblyjs/wast-refmt": "1.11.1"}
 , "alex"
 , "alloy"
 , "antennas"
@@ -44,6 +44,7 @@
 , "btc-rpc-explorer"
 , "castnow"
 , "carbon-now-cli"
+, "carto"
 , "cdk8s-cli"
 , "cdktf-cli"
 , "clean-css-cli"
@@ -171,11 +172,12 @@
 , "ijavascript"
 , "inliner"
 , "imapnotify"
+, "immich"
 , "indium"
 , "insect"
 , "intelephense"
 , "ionic"
-, {"iosevka": "https://github.com/be5invis/Iosevka/archive/v15.5.2.tar.gz"}
+, {"iosevka": "https://github.com/be5invis/Iosevka/archive/v15.6.3.tar.gz"}
 , "jake"
 , "javascript-typescript-langserver"
 , "joplin"
@@ -233,6 +235,7 @@
 , "npm-merge-driver"
 , "nrm"
 , "ocaml-language-server"
+, "orval"
 , "parcel-bundler"
 , "parcel"
 , "parsoid"

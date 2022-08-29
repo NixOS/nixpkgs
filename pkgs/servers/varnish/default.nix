@@ -2,21 +2,21 @@
 , coreutils, python3, makeWrapper }:
 
 let
-  common = { version, sha256, extraNativeBuildInputs ? [] }:
+  common = { version, hash, extraNativeBuildInputs ? [] }:
     stdenv.mkDerivation rec {
       pname = "varnish";
       inherit version;
 
       src = fetchurl {
         url = "https://varnish-cache.org/_downloads/${pname}-${version}.tgz";
-        inherit sha256;
+        inherit hash;
       };
 
       passthru.python = python3;
 
-      nativeBuildInputs = with python3.pkgs; [ pkg-config docutils sphinx ];
+      nativeBuildInputs = with python3.pkgs; [ pkg-config docutils sphinx makeWrapper];
       buildInputs = [
-        libxslt groff ncurses readline libedit makeWrapper python3
+        libxslt groff ncurses readline libedit python3
       ]
       ++ lib.optional (lib.versionOlder version "7") pcre
       ++ lib.optional (lib.versionAtLeast version "7") pcre2
@@ -42,7 +42,7 @@ let
         description = "Web application accelerator also known as a caching HTTP reverse proxy";
         homepage = "https://www.varnish-cache.org";
         license = licenses.bsd2;
-        maintainers = with maintainers; [ fpletz ];
+        maintainers = with maintainers; [ ajs124 ];
         platforms = platforms.unix;
       };
     };
@@ -50,10 +50,10 @@ in
 {
   varnish60 = common {
     version = "6.0.10";
-    sha256 = "1sr60wg5mzjb14y75cga836f19sbmmpgh13mwc4alyg3irsbz1bb";
+    hash = "sha256-a4W/dI7jeaoI43UE+G6tS6fgzEDqsXI8CUv+Wh4HJus=";
   };
   varnish71 = common {
-    version = "7.1.0";
-    sha256 = "1flyqr212jamqpwafdil170vc966r1mbb7n3ngjn8xk6hn3bhjpm";
+    version = "7.1.1";
+    hash = "sha256-LK++JZDn1Yp7rIrZm+kuRA/k04raaBbdiDbyL6UToZA=";
   };
 }

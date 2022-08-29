@@ -2,20 +2,24 @@
 
 buildGoModule rec {
   pname = "cmctl";
-  version = "1.8.2";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "cert-manager";
     repo = "cert-manager";
     rev = "v${version}";
-    sha256 = "sha256-sfC1acnCrcQ4A1tXXcjh47Af6xeJqjdGXy0gK21ZSFg=";
+    hash = "sha256-Z1aJ18X4mfJPlCPBC7QgfdX5Tk4+PK8mYoJZhGwz9ec=";
   };
 
-  vendorSha256 = "sha256-UYw9WdQ6VwzuuiOsa1yovkLZG7NmLYSW51p8UhmQMeI=";
+  vendorSha256 = "sha256-45+tZZAEHaLdTN1NQCueJVTx5x2IanwDl+Y9MELqdBE=";
 
   subPackages = [ "cmd/ctl" ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/cert-manager/cert-manager/cmd/ctl/pkg/build.name=cmctl"
+    "-X github.com/cert-manager/cert-manager/cmd/ctl/pkg/build/commands.registerCompletion=true"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,11 +32,21 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A CLI tool for managing Cert-Manager service on Kubernetes clusters";
+    description = "A CLI tool for managing cert-manager service on Kubernetes clusters";
+    longDescription = ''
+      cert-manager adds certificates and certificate issuers as resource types
+      in Kubernetes clusters, and simplifies the process of obtaining, renewing
+      and using those certificates.
+
+      It can issue certificates from a variety of supported sources, including
+      Let's Encrypt, HashiCorp Vault, and Venafi as well as private PKI, and it
+      ensures certificates remain valid and up to date, attempting to renew
+      certificates at an appropriate time before expiry.
+    '';
     downloadPage = "https://github.com/cert-manager/cert-manager";
     license = licenses.asl20;
     homepage = "https://cert-manager.io/";
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ joshvanl superherointj ];
   };
 }
 

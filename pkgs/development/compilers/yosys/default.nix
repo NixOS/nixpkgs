@@ -56,7 +56,7 @@ let
     in lib.appendToName "with-plugins" ( symlinkJoin {
       inherit (yosys) name;
       paths = paths ++ [ yosys ] ;
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
       postBuild = ''
         wrapProgram $out/bin/yosys \
           --set NIX_YOSYS_PLUGIN_DIRS $out/share/yosys/plugins \
@@ -72,13 +72,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname   = "yosys";
-  version = "0.18";
+  version = "0.20";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo  = "yosys";
     rev   = "${pname}-${version}";
-    hash  = "sha256-uvJYL7cUhf6gTvfeIVKWMB2DH5qcYzhB2WPeJf1rCTI=";
+    hash  = "sha256-0oDF6wLcWlDG2hWFjIL+oQmICQl/H6YAwDzgTiuF298=";
   };
 
   enableParallelBuilding = true;

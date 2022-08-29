@@ -1,8 +1,8 @@
-From 21b9acb1d4202a022475a24db727055f9dd2532a Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Gabriel Ebner <gebner@gebner.org>
 Date: Sun, 6 Dec 2015 14:26:36 +0100
-Subject: [PATCH 07/18] hostnamed, localed, timedated: disable methods that
- change system settings.
+Subject: [PATCH] hostnamed, localed, timedated: disable methods that change
+ system settings.
 
 ---
  src/hostname/hostnamed.c |  6 ++++++
@@ -103,6 +103,3 @@ index 9ca5d37b75..e41d8d73df 100644
          r = context_update_ntp_status(c, bus, m);
          if (r < 0)
                  return r;
--- 
-2.36.1
-

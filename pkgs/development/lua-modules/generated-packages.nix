@@ -1161,6 +1161,40 @@ buildLuarocksPackage {
   };
 }) {};
 
+lua-protobuf = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchgit, lua
+}:
+buildLuarocksPackage {
+  pname = "lua-protobuf";
+  version = "0.4.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/lua-protobuf-0.4.0-1.rockspec";
+    sha256 = "053r6z37847wm1xaxv5rwplmdqkp507qawgd382z0l7m05f06ls9";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/starwing/lua-protobuf.git",
+  "rev": "832facd266366cd86ee9bf41d35327255d0033f2",
+  "date": "2022-07-27T14:34:12+08:00",
+  "path": "/nix/store/g68x4cbi6ssd5zak14r5cbi7k88d3ml9-lua-protobuf",
+  "sha256": "0ynfq0va4w8zlr67ld6v9nmi5mnvchfygd8h5jbwk2vzlj9hg2yw",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  disabled = with lua; (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/starwing/lua-protobuf";
+    description = "protobuf data support for Lua";
+    maintainers = with lib.maintainers; [ lockejan ];
+    license.fullName = "MIT";
+  };
+}) {};
+
 lua-resty-http = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 , fetchgit, lua
 }:
@@ -1320,6 +1354,37 @@ buildLuarocksPackage {
     homepage = "https://github.com/bungle/lua-resty-session";
     description = "Session Library for OpenResty – Flexible and Secure";
     license.fullName = "BSD";
+  };
+}) {};
+
+lua-subprocess = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchgit, lua
+}:
+buildLuarocksPackage {
+  pname = "subprocess";
+  version = "scm-1";
+
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/0x0ade/lua-subprocess.git",
+  "rev": "bfa8e97da774141f301cfd1106dca53a30a4de54",
+  "date": "2021-01-09T22:31:54+01:00",
+  "path": "/nix/store/3lr7n1k85kbf718wxr51xd40i8dfs5qd-lua-subprocess",
+  "sha256": "0p91hda0b0hpgdbff5drcyygaizq086gw8vnvzn0y0fg3mc9if70",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  disabled = with lua; (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/xlq/lua-subprocess";
+    description = "A Lua module written in C that allows you to create child processes and communicate with them.";
+    maintainers = with lib.maintainers; [ scoder12 ];
+    license.fullName = "MIT";
   };
 }) {};
 
@@ -2138,6 +2203,32 @@ buildLuarocksPackage {
   };
 }) {};
 
+luaunit = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchurl, lua
+}:
+buildLuarocksPackage {
+  pname = "luaunit";
+  version = "3.4-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/luaunit-3.4-1.rockspec";
+    sha256 = "111435fa8p2819vcvg76qmknj0wqk01gy9d1nh55c36616xnj54n";
+  }).outPath;
+  src = fetchurl {
+    url    = "https://github.com/bluebird75/luaunit/releases/download/LUAUNIT_V3_4/rock-luaunit-3.4.zip";
+    sha256 = "1v8nkiwz2nr242h5cl4af6vmn5gxmn94skps1qhb55ak60j20nvr";
+  };
+
+  disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.5");
+  propagatedBuildInputs = [ lua lua ];
+
+  meta = {
+    homepage = "http://github.com/bluebird75/luaunit";
+    description = "A unit testing framework for Lua";
+    maintainers = with lib.maintainers; [ lockejan ];
+    license.fullName = "BSD";
+  };
+}) {};
+
 luautf8 = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 , fetchurl, lua
 }:
@@ -2543,6 +2634,39 @@ buildLuarocksPackage {
     homepage = "http://olivinelabs.com/busted/";
     description = "Lua String Hashing/Indexing Library";
     license.fullName = "MIT <http://opensource.org/licenses/MIT>";
+  };
+}) {};
+
+serpent = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchgit, lua
+}:
+buildLuarocksPackage {
+  pname = "serpent";
+  version = "0.30-2";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/serpent-0.30-2.rockspec";
+    sha256 = "0v83lr9ars1n0djbh7np8jjqdhhaw0pdy2nkcqzqrhv27rzv494n";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/pkulchenko/serpent",
+  "rev": "d78683597606c6e13a1fed039bc91d86eb8f600f",
+  "date": "2017-09-01T21:35:14-07:00",
+  "path": "/nix/store/z6df44n3p07n4bia7s514vgngbkbpnap-serpent",
+  "sha256": "0q80yfrgqgr01qprf0hrp284ngb7fbcq1v9rbzmdkhbm9lpgy8v8",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.5");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/pkulchenko/serpent";
+    description = "Lua serializer and pretty printer";
+    license.fullName = "MIT";
   };
 }) {};
 

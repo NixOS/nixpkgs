@@ -17,11 +17,11 @@ in
       type = types.package;
       default = pkgs.grafana-agent;
       defaultText = "pkgs.grafana-agent";
-      description = "The grafana-agent package to use.";
+      description = lib.mdDoc "The grafana-agent package to use.";
     };
 
     credentials = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Credentials to load at service startup. Keys that are UPPER_SNAKE will be loaded as env vars. Values are absolute paths to the credentials.
       '';
       type = types.attrsOf types.str;
@@ -38,8 +38,8 @@ in
     };
 
     settings = mkOption {
-      description = ''
-        Configuration for <package>grafana-agent</package>.
+      description = lib.mdDoc ''
+        Configuration for `grafana-agent`.
 
         See https://grafana.com/docs/agent/latest/configuration/
       '';

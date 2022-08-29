@@ -21,7 +21,7 @@
 }:
 
 let
-  version = "4.2.2";
+  version = "4.3.0";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -30,6 +30,7 @@ let
 
   libzbar_name =
     if stdenv.isLinux then "libzbar.so.0"
+    else if stdenv.isDarwin then "libzbar.0.dylib"
     else "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   # Not provided in official source releases, which are what upstream signs.
@@ -37,7 +38,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "sha256-bFceOu+3SLtD2eY+aSBEn13xJw7a3aVwX39QfAuqVSo=";
+    sha256 = "sha256-/bYz2KB9Fggo6cnKM3hvwL/Jy4Xsw2phx1sInuqZpFg=";
 
     postFetch = ''
       mv $out ./all
@@ -53,7 +54,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "sha256-ucLLfqmTKO5Qpg+PnmcdQwht7cWMWJoFjQWnDecEtVs=";
+    sha256 = "sha256-E941wseIQEn1+d06NWKQLQM0C+A8a0+Xxl+LzBTwEcw=";
   };
 
   postUnpack = ''
@@ -90,7 +91,6 @@ python3.pkgs.buildPythonApplication {
   ];
 
   preBuild = ''
-    sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
     substituteInPlace ./electrum/ecc_fast.py \
       --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
   '' + (if enableQt then ''
@@ -101,17 +101,11 @@ python3.pkgs.buildPythonApplication {
   '');
 
   postInstall = lib.optionalString stdenv.isLinux ''
-    # Despite setting usr_share above, these files are installed under
-    # $out/nix ...
-    mv $out/${python3.sitePackages}/nix/store"/"*/share $out
-    rm -rf $out/${python3.sitePackages}/nix
-
     substituteInPlace $out/share/applications/electrum.desktop \
       --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum %u"' \
                 "Exec=$out/bin/electrum %u" \
       --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum --testnet %u"' \
                 "Exec=$out/bin/electrum --testnet %u"
-
   '';
 
   postFixup = lib.optionalString enableQt ''

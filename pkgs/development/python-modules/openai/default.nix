@@ -4,10 +4,13 @@
 , pythonOlder
 
 # Python dependencies
+, numpy
 , openpyxl
 , pandas
 , pandas-stubs
 , requests
+, scikit-learn
+, tenacity
 , tqdm
 , wandb
 
@@ -18,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "0.20.0";
+  version = "0.23.0";
 
   disabled = pythonOlder "3.7.1";
 
@@ -27,14 +30,17 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     rev = "v${version}";
-    sha256 = "sha256-kG7gsLAOoBCt7pxViO1Zhil2FGHigPEMJfBjdIp2th8=";
+    sha256 = "sha256-VH1XR2FocRX5AYpCruAKwQUXjXqvdJsVwKdtot5Bo+Y=";
   };
 
   propagatedBuildInputs = [
+    numpy
     openpyxl
     pandas
     pandas-stubs
     requests
+    scikit-learn
+    tenacity
     tqdm
     wandb
   ];

@@ -11,35 +11,35 @@ in
     noExit = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Do not exit server on Varnish scrape errors.
       '';
     };
     withGoMetrics = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Export go runtime and http handler metrics.
       '';
     };
     verbose = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable verbose logging.
       '';
     };
     raw = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable raw stdout logging without timestamps.
       '';
     };
     varnishStatPath = mkOption {
       type = types.str;
       default = "varnishstat";
-      description = ''
+      description = lib.mdDoc ''
         Path to varnishstat.
       '';
     };
@@ -47,21 +47,21 @@ in
       type = types.nullOr types.str;
       default = config.services.varnish.stateDir;
       defaultText = lib.literalExpression "config.services.varnish.stateDir";
-      description = ''
+      description = lib.mdDoc ''
         varnishstat -n value.
       '';
     };
     healthPath = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Path under which to expose healthcheck. Disabled unless configured.
       '';
     };
     telemetryPath = mkOption {
       type = types.str;
       default = "/metrics";
-      description = ''
+      description = lib.mdDoc ''
         Path under which to expose metrics.
       '';
     };

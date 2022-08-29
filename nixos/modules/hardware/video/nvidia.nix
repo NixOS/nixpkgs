@@ -40,7 +40,7 @@ in
     hardware.nvidia.powerManagement.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Experimental power management through systemd. For more information, see
         the NVIDIA docs, on Chapter 21. Configuring Power Management Support.
       '';
@@ -49,7 +49,7 @@ in
     hardware.nvidia.powerManagement.finegrained = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Experimental power management of PRIME offload. For more information, see
         the NVIDIA docs, chapter 22. PCI-Express runtime power management.
       '';
@@ -58,11 +58,11 @@ in
     hardware.nvidia.modesetting.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable kernel modesetting when using the NVIDIA proprietary driver.
 
         Enabling this fixes screen tearing when using Optimus via PRIME (see
-        <option>hardware.nvidia.prime.sync.enable</option>. This is not enabled
+        {option}`hardware.nvidia.prime.sync.enable`. This is not enabled
         by default because it is not officially supported by NVIDIA and would not
         work with SLI.
       '';
@@ -72,7 +72,7 @@ in
       type = busIDType;
       default = "";
       example = "PCI:1:0:0";
-      description = ''
+      description = lib.mdDoc ''
         Bus ID of the NVIDIA GPU. You can find it using lspci; for example if lspci
         shows the NVIDIA GPU at "01:00.0", set this option to "PCI:1:0:0".
       '';
@@ -82,7 +82,7 @@ in
       type = busIDType;
       default = "";
       example = "PCI:0:2:0";
-      description = ''
+      description = lib.mdDoc ''
         Bus ID of the Intel GPU. You can find it using lspci; for example if lspci
         shows the Intel GPU at "00:02.0", set this option to "PCI:0:2:0".
       '';
@@ -92,7 +92,7 @@ in
       type = busIDType;
       default = "";
       example = "PCI:4:0:0";
-      description = ''
+      description = lib.mdDoc ''
         Bus ID of the AMD APU. You can find it using lspci; for example if lspci
         shows the AMD APU at "04:00.0", set this option to "PCI:4:0:0".
       '';
@@ -101,26 +101,26 @@ in
     hardware.nvidia.prime.sync.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable NVIDIA Optimus support using the NVIDIA proprietary driver via PRIME.
         If enabled, the NVIDIA GPU will be always on and used for all rendering,
         while enabling output to displays attached only to the integrated Intel GPU
         without a multiplexer.
 
         Note that this option only has any effect if the "nvidia" driver is specified
-        in <option>services.xserver.videoDrivers</option>, and it should preferably
+        in {option}`services.xserver.videoDrivers`, and it should preferably
         be the only driver there.
 
         If this is enabled, then the bus IDs of the NVIDIA and Intel GPUs have to be
-        specified (<option>hardware.nvidia.prime.nvidiaBusId</option> and
-        <option>hardware.nvidia.prime.intelBusId</option>).
+        specified ({option}`hardware.nvidia.prime.nvidiaBusId` and
+        {option}`hardware.nvidia.prime.intelBusId`).
 
         If you enable this, you may want to also enable kernel modesetting for the
-        NVIDIA driver (<option>hardware.nvidia.modesetting.enable</option>) in order
+        NVIDIA driver ({option}`hardware.nvidia.modesetting.enable`) in order
         to prevent tearing.
 
         Note that this configuration will only be successful when a display manager
-        for which the <option>services.xserver.displayManager.setupCommands</option>
+        for which the {option}`services.xserver.displayManager.setupCommands`
         option is supported is used.
       '';
     };
@@ -128,7 +128,7 @@ in
     hardware.nvidia.prime.sync.allowExternalGpu = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Configure X to allow external NVIDIA GPUs when using optimus.
       '';
     };
@@ -136,19 +136,19 @@ in
     hardware.nvidia.prime.offload.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable render offload support using the NVIDIA proprietary driver via PRIME.
 
         If this is enabled, then the bus IDs of the NVIDIA and Intel GPUs have to be
-        specified (<option>hardware.nvidia.prime.nvidiaBusId</option> and
-        <option>hardware.nvidia.prime.intelBusId</option>).
+        specified ({option}`hardware.nvidia.prime.nvidiaBusId` and
+        {option}`hardware.nvidia.prime.intelBusId`).
       '';
     };
 
     hardware.nvidia.nvidiaSettings = mkOption {
       default = true;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Whether to add nvidia-settings, NVIDIA's GUI configuration tool, to
         systemPackages.
       '';
@@ -157,7 +157,7 @@ in
     hardware.nvidia.nvidiaPersistenced = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Update for NVIDA GPU headless mode, i.e. nvidia-persistenced. It ensures all
         GPUs stay awake even during headless mode.
       '';
@@ -166,7 +166,7 @@ in
     hardware.nvidia.forceFullCompositionPipeline = lib.mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Whether to force-enable the full composition pipeline.
         This sometimes fixes screen tearing issues.
         This has been reported to reduce the performance of some OpenGL applications and may produce issues in WebGL.
@@ -178,7 +178,7 @@ in
       type = types.package;
       default = config.boot.kernelPackages.nvidiaPackages.stable;
       defaultText = literalExpression "config.boot.kernelPackages.nvidiaPackages.stable";
-      description = ''
+      description = lib.mdDoc ''
         The NVIDIA X11 derivation to use.
       '';
       example = literalExpression "config.boot.kernelPackages.nvidiaPackages.legacy_340";
@@ -187,7 +187,7 @@ in
     hardware.nvidia.open = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to use the open source kernel module
       '';
     };
@@ -259,8 +259,6 @@ in
     #   device.
     # - Configure the display manager to run specific `xrandr` commands which will
     #   configure/enable displays connected to the Intel iGPU / AMD APU.
-
-    services.xserver.useGlamor = mkDefault offloadCfg.enable;
 
     services.xserver.drivers = let
     in optional primeEnabled {

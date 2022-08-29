@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
 
   preCheck = "patchShebangs runtests";
   doCheck = true;
-  checkTarget = "test";
+  checkTarget = if stdenv.hostPlatform.isStatic then "static-test" else "test";
 
   installTargets = lib.optionals stdenv.hostPlatform.isStatic [ "static-install" ];
 
   doInstallCheck = true;
-  installCheckTarget = "testinstall";
+  installCheckTarget = if stdenv.hostPlatform.isStatic then "static-testinstall" else "testinstall";
 
   passthru = {
     updateScript = nix-update-script {

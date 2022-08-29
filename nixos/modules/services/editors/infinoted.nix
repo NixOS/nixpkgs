@@ -12,7 +12,7 @@ in {
       type = types.package;
       default = pkgs.libinfinity;
       defaultText = literalExpression "pkgs.libinfinity";
-      description = ''
+      description = lib.mdDoc ''
         Package providing infinoted
       '';
     };
@@ -20,7 +20,7 @@ in {
     keyFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Private key to use for TLS
       '';
     };
@@ -28,7 +28,7 @@ in {
     certificateFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Server certificate to use for TLS
       '';
     };
@@ -36,7 +36,7 @@ in {
     certificateChain = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Chain of CA-certificates to which our `certificateFile` is relative.
         Optional for TLS.
       '';
@@ -45,7 +45,7 @@ in {
     securityPolicy = mkOption {
       type = types.enum ["no-tls" "allow-tls" "require-tls"];
       default = "require-tls";
-      description = ''
+      description = lib.mdDoc ''
         How strictly to enforce clients connection with TLS.
       '';
     };
@@ -53,7 +53,7 @@ in {
     port = mkOption {
       type = types.port;
       default = 6523;
-      description = ''
+      description = lib.mdDoc ''
         Port to listen on
       '';
     };
@@ -61,7 +61,7 @@ in {
     rootDirectory = mkOption {
       type = types.path;
       default = "/var/lib/infinoted/documents/";
-      description = ''
+      description = lib.mdDoc ''
         Root of the directory structure to serve
       '';
     };
@@ -69,7 +69,7 @@ in {
     plugins = mkOption {
       type = types.listOf types.str;
       default = [ "note-text" "note-chat" "logging" "autosave" ];
-      description = ''
+      description = lib.mdDoc ''
         Plugins to enable
       '';
     };
@@ -77,7 +77,7 @@ in {
     passwordFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         File to read server-wide password from
       '';
     };
@@ -88,7 +88,7 @@ in {
         [autosave]
         interval=10
       '';
-      description = ''
+      description = lib.mdDoc ''
         Additional configuration to append to infinoted.conf
       '';
     };
@@ -96,7 +96,7 @@ in {
     user = mkOption {
       type = types.str;
       default = "infinoted";
-      description = ''
+      description = lib.mdDoc ''
         What to call the dedicated user under which infinoted is run
       '';
     };
@@ -104,7 +104,7 @@ in {
     group = mkOption {
       type = types.str;
       default = "infinoted";
-      description = ''
+      description = lib.mdDoc ''
         What to call the primary group of the dedicated user under which infinoted is run
       '';
     };

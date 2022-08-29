@@ -1,6 +1,7 @@
 { lib
 , copyDesktopItems
 , electron_18
+, buildGoModule
 , esbuild
 , fetchFromGitHub
 , libdeltachat
@@ -31,19 +32,18 @@ let
       hash = "sha256-4rpoDQ3o0WdWg/TmazTI+J0hL/MxwHcNMXWMq7GE7Tk=";
     };
   });
-  electronExec = if stdenv.isDarwin then
-    "${electron_18}/Applications/Electron.app/Contents/MacOS/Electron"
-  else
-    "${electron_18}/bin/electron";
-  esbuild' = esbuild.overrideAttrs (old: rec {
-    version = "0.12.29";
-    src = fetchFromGitHub {
-      owner = "evanw";
-      repo = "esbuild";
-      rev = "v${version}";
-      hash = "sha256-oU++9E3StUoyrMVRMZz8/1ntgPI62M1NoNz9sH/N5Bg=";
-    };
-  });
+  esbuild' = esbuild.override {
+    buildGoModule = args: buildGoModule (args // rec {
+      version = "0.12.29";
+      src = fetchFromGitHub {
+        owner = "evanw";
+        repo = "esbuild";
+        rev = "v${version}";
+        hash = "sha256-oU++9E3StUoyrMVRMZz8/1ntgPI62M1NoNz9sH/N5Bg=";
+      };
+      vendorSha256 = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
+    });
+  };
 in nodePackages.deltachat-desktop.override rec {
   pname = "deltachat-desktop";
   version = "1.30.1";
@@ -98,7 +98,7 @@ in nodePackages.deltachat-desktop.override rec {
         $out/lib/node_modules/deltachat-desktop/html-dist/fonts
     done
 
-    makeWrapper ${electronExec} $out/bin/deltachat \
+    makeWrapper ${electron_18}/bin/electron $out/bin/deltachat \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher${stdenv.hostPlatform.extensions.sharedLibrary} \
       --add-flags $out/lib/node_modules/deltachat-desktop
   '';

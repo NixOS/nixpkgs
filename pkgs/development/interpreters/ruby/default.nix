@@ -19,7 +19,6 @@ let
 
   generic = { version, sha256 }: let
     ver = version;
-    tag = ver.gitTag;
     atLeast30 = lib.versionAtLeast ver.majMin "3.0";
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
@@ -225,8 +224,8 @@ let
           ++ op useBaseRuby baseRuby;
 
         meta = with lib; {
-          description = "The Ruby language";
-          homepage    = "http://www.ruby-lang.org/en/";
+          description = "An object-oriented language for quick and easy programming";
+          homepage    = "https://www.ruby-lang.org/";
           license     = licenses.ruby;
           maintainers = with maintainers; [ vrthra manveru marsam ];
           platforms   = platforms.all;
@@ -248,11 +247,6 @@ let
             ruby = self;
           }) withPackages gems;
 
-          # deprecated 2016-09-21
-          majorVersion = ver.major;
-          minorVersion = ver.minor;
-          teenyVersion = ver.tiny;
-          patchLevel = ver.patchLevel;
         } // lib.optionalAttrs useBaseRuby {
           inherit baseRuby;
         };

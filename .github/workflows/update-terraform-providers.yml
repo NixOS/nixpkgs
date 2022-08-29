@@ -39,7 +39,7 @@ jobs:
 
             Check that all providers build with:
             ```
-            @ofborg build terraform-full
+            @ofborg build terraform.full
             ```
           branch: terraform-providers-update
           delete-branch: false

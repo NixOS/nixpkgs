@@ -34,13 +34,13 @@ in
         type = types.package;
         default = pkgs.zammad;
         defaultText = literalExpression "pkgs.zammad";
-        description = "Zammad package to use.";
+        description = lib.mdDoc "Zammad package to use.";
       };
 
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/zammad";
-        description = ''
+        description = lib.mdDoc ''
           Path to a folder that will contain Zammad working directory.
         '';
       };
@@ -49,25 +49,25 @@ in
         type = types.str;
         default = "127.0.0.1";
         example = "192.168.23.42";
-        description = "Host address.";
+        description = lib.mdDoc "Host address.";
       };
 
       openPorts = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to open firewall ports for Zammad";
+        description = lib.mdDoc "Whether to open firewall ports for Zammad";
       };
 
       port = mkOption {
         type = types.port;
         default = 3000;
-        description = "Web service port.";
+        description = lib.mdDoc "Web service port.";
       };
 
       websocketPort = mkOption {
         type = types.port;
         default = 6042;
-        description = "Websocket service port.";
+        description = lib.mdDoc "Websocket service port.";
       };
 
       database = {
@@ -75,7 +75,7 @@ in
           type = types.enum [ "PostgreSQL" "MySQL" ];
           default = "PostgreSQL";
           example = "MySQL";
-          description = "Database engine to use.";
+          description = lib.mdDoc "Database engine to use.";
         };
 
         host = mkOption {
@@ -90,7 +90,7 @@ in
               MySQL = "localhost";
             }.''${config.services.zammad.database.type};
           '';
-          description = ''
+          description = lib.mdDoc ''
             Database host address.
           '';
         };
@@ -98,13 +98,13 @@ in
         port = mkOption {
           type = types.nullOr types.port;
           default = null;
-          description = "Database port. Use <literal>null</literal> for default port.";
+          description = lib.mdDoc "Database port. Use `null` for default port.";
         };
 
         name = mkOption {
           type = types.str;
           default = "zammad";
-          description = ''
+          description = lib.mdDoc ''
             Database name.
           '';
         };
@@ -112,22 +112,22 @@ in
         user = mkOption {
           type = types.nullOr types.str;
           default = "zammad";
-          description = "Database user.";
+          description = lib.mdDoc "Database user.";
         };
 
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
           example = "/run/keys/zammad-dbpassword";
-          description = ''
-            A file containing the password for <option>services.zammad.database.user</option>.
+          description = lib.mdDoc ''
+            A file containing the password for {option}`services.zammad.database.user`.
           '';
         };
 
         createLocally = mkOption {
           type = types.bool;
           default = true;
-          description = "Whether to create a local database automatically.";
+          description = lib.mdDoc "Whether to create a local database automatically.";
         };
 
         settings = mkOption {
@@ -139,7 +139,7 @@ in
           '';
           description = ''
             The <filename>database.yml</filename> configuration file as key value set.
-            See <link xlink:href='TODO' />
+            See <link xlink:href="TODO"/>
             for list of configuration parameters.
           '';
         };

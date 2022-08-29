@@ -88,14 +88,14 @@ in
 
   options = {
     services.nagios = {
-      enable = mkEnableOption "<link xlink:href='http://www.nagios.org/'>Nagios</link> to monitor your system or network.";
+      enable = mkEnableOption ''<link xlink:href="http://www.nagios.org/">Nagios</link> to monitor your system or network.'';
 
       objectDefs = mkOption {
-        description = "
+        description = lib.mdDoc ''
           A list of Nagios object configuration files that must define
           the hosts, host groups, services and contacts for the
           network that you want Nagios to monitor.
-        ";
+        '';
         type = types.listOf types.path;
         example = literalExpression "[ ./objects.cfg ]";
       };
@@ -104,18 +104,18 @@ in
         type = types.listOf types.package;
         default = with pkgs; [ monitoring-plugins msmtp mailutils ];
         defaultText = literalExpression "[pkgs.monitoring-plugins pkgs.msmtp pkgs.mailutils]";
-        description = "
+        description = ''
           Packages to be added to the Nagios <envar>PATH</envar>.
           Typically used to add plugins, but can be anything.
-        ";
+        '';
       };
 
       mainConfigFile = mkOption {
         type = types.nullOr types.package;
         default = null;
-        description = "
+        description = lib.mdDoc ''
           If non-null, overrides the main configuration file of Nagios.
-        ";
+        '';
       };
 
       extraConfig = mkOption {
@@ -125,33 +125,33 @@ in
           debug_file = "/var/log/nagios/debug.log";
         };
         default = {};
-        description = "Configuration to add to /etc/nagios.cfg";
+        description = lib.mdDoc "Configuration to add to /etc/nagios.cfg";
       };
 
       validateConfig = mkOption {
         type = types.bool;
         default = pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform;
         defaultText = literalExpression "pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform";
-        description = "if true, the syntax of the nagios configuration file is checked at build time";
+        description = lib.mdDoc "if true, the syntax of the nagios configuration file is checked at build time";
       };
 
       cgiConfigFile = mkOption {
         type = types.package;
         default = nagiosCGICfgFile;
         defaultText = literalExpression "nagiosCGICfgFile";
-        description = "
+        description = lib.mdDoc ''
           Derivation for the configuration file of Nagios CGI scripts
           that can be used in web servers for running the Nagios web interface.
-        ";
+        '';
       };
 
       enableWebInterface = mkOption {
         type = types.bool;
         default = false;
-        description = "
+        description = lib.mdDoc ''
           Whether to enable the Nagios web interface.  You should also
-          enable Apache (<option>services.httpd.enable</option>).
-        ";
+          enable Apache ({option}`services.httpd.enable`).
+        '';
       };
 
       virtualHost = mkOption {
@@ -164,9 +164,9 @@ in
             sslServerKey = "/var/lib/acme/example.org/key.pem";
           }
         '';
-        description = ''
-          Apache configuration can be done by adapting <option>services.httpd.virtualHosts</option>.
-          See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
+        description = lib.mdDoc ''
+          Apache configuration can be done by adapting {option}`services.httpd.virtualHosts`.
+          See [](#opt-services.httpd.virtualHosts) for further information.
         '';
       };
     };

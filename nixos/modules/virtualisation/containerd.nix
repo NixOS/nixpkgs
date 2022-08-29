@@ -23,7 +23,7 @@ in
 
     configFile = lib.mkOption {
       default = null;
-      description = ''
+      description = lib.mdDoc ''
        Path to containerd config file.
        Setting this option will override any configuration applied by the settings option.
       '';
@@ -33,14 +33,14 @@ in
     settings = lib.mkOption {
       type = settingsFormat.type;
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         Verbatim lines to add to containerd.toml
       '';
     };
 
     args = lib.mkOption {
       default = {};
-      description = "extra args to append to the containerd cmdline";
+      description = lib.mdDoc "extra args to append to the containerd cmdline";
       type = attrsOf str;
     };
   };

@@ -26,13 +26,13 @@ with lib;
 assert elem stdenv.system [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
 
 let
-  common = { pname, versions, untarDir ? "${pname}-${version}", hash, jdk, openssl ? null, nativeLibs ? [ ], libPatches ? "", tests }:
+  common = { pname, platformAttrs, untarDir ? "${pname}-${version}", jdk, openssl ? null, nativeLibs ? [ ], libPatches ? "", tests }:
     stdenv.mkDerivation rec {
       inherit pname jdk libPatches untarDir openssl;
-      version = versions.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+      version = platformAttrs.${stdenv.system}.version or (throw "Unsupported system: ${stdenv.system}");
       src = fetchurl {
         url = "mirror://apache/hadoop/common/hadoop-${version}/hadoop-${version}" + optionalString stdenv.isAarch64 "-aarch64" + ".tar.gz";
-        hash = hash.${stdenv.system};
+        inherit (platformAttrs.${stdenv.system}) hash;
       };
       doCheck = true;
 
@@ -51,7 +51,8 @@ let
           makeWrapper "$n" "$out/bin/$(basename $n)"\
             --set-default JAVA_HOME ${jdk.home}\
             --set-default HADOOP_HOME $out/lib/${untarDir}\
-            --set-default HADOOP_CONF_DIR /etc/hadoop-conf/\
+            --run "test -d /etc/hadoop-conf && export HADOOP_CONF_DIR=\''${HADOOP_CONF_DIR-'/etc/hadoop-conf/'}"\
+            --set-default HADOOP_CONF_DIR $out/lib/${untarDir}/etc/hadoop/\
             --prefix PATH : "${makeBinPath [ bash coreutils which]}"\
             --prefix JAVA_LIBRARY_PATH : "${makeLibraryPath buildInputs}"
         done
@@ -62,7 +63,7 @@ let
 
       passthru = { inherit tests; };
 
-      meta = {
+      meta = recursiveUpdate {
         homepage = "https://hadoop.apache.org/";
         description = "Framework for distributed processing of large data sets across clusters of computers";
         license = licenses.asl20;
@@ -80,8 +81,8 @@ let
           computers, each of which may be prone to failures.
         '';
         maintainers = with maintainers; [ illustris ];
-        platforms = attrNames hash;
-      };
+        platforms = attrNames platformAttrs;
+      } (attrByPath [ stdenv.system "meta" ] {} platformAttrs);
     };
 in
 {
@@ -89,19 +90,20 @@ in
   # https://cwiki.apache.org/confluence/display/HADOOP/Hadoop+Java+Versions
   hadoop_3_3 = common rec {
     pname = "hadoop";
-    versions = rec {
-      x86_64-linux = "3.3.3";
-      x86_64-darwin = x86_64-linux;
-      aarch64-linux = "3.3.1";
-      aarch64-darwin = aarch64-linux;
+    platformAttrs = rec {
+        x86_64-linux = {
+          version = "3.3.3";
+          hash = "sha256-+nHGG7qkJxKa7wn+wCizTdVCxlrZD9zOxefvk9g7h2Q=";
+        };
+        x86_64-darwin = x86_64-linux;
+        aarch64-linux = {
+          version = "3.3.1";
+          hash = "sha256-v1Om2pk0wsgKBghRD2wgTSHJoKd3jkm1wPKAeDcKlgI=";
+          meta.knownVulnerabilities = [ "CVE-2021-37404" "CVE-2021-33036" ];
+        };
+        aarch64-darwin = aarch64-linux;
     };
-    untarDir = "${pname}-${version}";
-    hash = rec {
-      x86_64-linux = "sha256-+nHGG7qkJxKa7wn+wCizTdVCxlrZD9zOxefvk9g7h2Q=";
-      x86_64-darwin = x86_64-linux;
-      aarch64-linux = "sha256-v1Om2pk0wsgKBghRD2wgTSHJoKd3jkm1wPKAeDcKlgI=";
-      aarch64-darwin = aarch64-linux;
-    };
+    untarDir = "${pname}-${platformAttrs.${stdenv.system}.version}";
     jdk = jdk11_headless;
     inherit openssl;
     # TODO: Package and add Intel Storage Acceleration Library
@@ -122,8 +124,10 @@ in
   };
   hadoop_3_2 = common rec {
     pname = "hadoop";
-    versions.x86_64-linux = "3.2.3";
-    hash.x86_64-linux = "sha256-Q2/a1LcKutpJoGySB0qlCcYE2bvC/HoG/dp9nBikuNU=";
+    platformAttrs.x86_64-linux = {
+      version = "3.2.3";
+      hash = "sha256-Q2/a1LcKutpJoGySB0qlCcYE2bvC/HoG/dp9nBikuNU=";
+    };
     jdk = jdk8_headless;
     # not using native libs because of broken openssl_1_0_2 dependency
     # can be manually overriden
@@ -131,8 +135,10 @@ in
   };
   hadoop2 = common rec {
     pname = "hadoop";
-    versions.x86_64-linux = "2.10.2";
-    hash.x86_64-linux = "sha256-xhA4zxqIRGNhIeBnJO9dLKf/gx/Bq+uIyyZwsIafEyo=";
+    platformAttrs.x86_64-linux = {
+      version = "2.10.2";
+      hash = "sha256-xhA4zxqIRGNhIeBnJO9dLKf/gx/Bq+uIyyZwsIafEyo=";
+    };
     jdk = jdk8_headless;
     tests = nixosTests.hadoop2;
   };

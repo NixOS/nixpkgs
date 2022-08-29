@@ -8,11 +8,12 @@
 , pytorch
 , torchvision
 , tqdm
+, faiss
 }:
 
 buildPythonPackage rec {
   pname   = "pytorch-metric-learning";
-  version = "1.5.0";
+  version = "1.5.1";
 
   disabled = isPy27;
 
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "KevinMusgrave";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ge6y5n1N/+nymgD4La3ger7N4vvcoo1Bxa+etirNFNI=";
+    sha256 = "sha256-d7Ngd4SzGTJXtpgs2Jqb+y1aeMt9YUqIOft5ByDtRsc=";
   };
 
   propagatedBuildInputs = [
@@ -36,14 +37,18 @@ buildPythonPackage rec {
     export TEST_DEVICE=cpu
     export TEST_DTYPES=float32,float64  # half-precision tests fail on CPU
   '';
+
   # package only requires `unittest`, but use `pytest` to exclude tests
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    faiss
+    pytestCheckHook
+  ];
+
   disabledTests = [
-    # requires FAISS (not in Nixpkgs)
-    "test_accuracy_calculator_and_faiss"
-    "test_global_embedding_space_tester"
-    "test_with_same_parent_label_tester"
+    # TypeError: setup() missing 1 required positional argument: 'world_size'
+    "TestDistributedLossWrapper"
     # require network access:
+    "TestInference"
     "test_get_nearest_neighbors"
     "test_tuplestoweights_sampler"
     "test_untrained_indexer"
@@ -59,6 +64,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/KevinMusgrave/pytorch-metric-learning/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
-    broken = true;  # requires faiss which is unpackaged
   };
 }

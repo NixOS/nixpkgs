@@ -1,32 +1,26 @@
 { fetchFromGitHub
 , lib
-, libevdev
-, pkg-config
 , rustPlatform
 , withCmd ? false
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kanata";
-  version = "1.0.5";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "jtroo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-sL9hP+222i8y0sK3ZEx66yXBTgZp5ewoPUlZS4XnphY=";
+    sha256 = "sha256-2gGFAz0zXea+27T4ayDj6KdoI0ThwXV7U0CspHduTiQ=";
   };
 
-  cargoHash = "sha256-uhN1UdwtU0C0/lpxUYoCcMLABFTPNO5wKsIGOBnFpzw=";
+  cargoHash = "sha256-0NvZATdPABIboL5xvmBmDbqPPWvO4mM6wVB3FrOVHIQ=";
 
   buildFeatures = lib.optional withCmd "cmd";
 
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ libevdev ];
-
   meta = with lib; {
-    description = "A cross-platform advanced keyboard customization tool";
+    description = "A tool to improve keyboard comfort and usability with advanced customization";
     homepage = "https://github.com/jtroo/kanata";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ linj ];

@@ -24,7 +24,7 @@ let
   phocConfigType = types.submodule {
     options = {
       xwayland = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable XWayland support.
 
           To start XWayland immediately, use `immediate`.
@@ -132,7 +132,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable the Phone Shell.";
+        description = lib.mdDoc "Enable the Phone Shell.";
       };
 
       package = mkOption {
@@ -140,25 +140,25 @@ in
         default = pkgs.phosh;
         defaultText = literalExpression "pkgs.phosh";
         example = literalExpression "pkgs.phosh";
-        description = ''
+        description = lib.mdDoc ''
           Package that should be used for Phosh.
         '';
       };
 
       user = mkOption {
-        description = "The user to run the Phosh service.";
+        description = lib.mdDoc "The user to run the Phosh service.";
         type = types.str;
         example = "alice";
       };
 
       group = mkOption {
-        description = "The group to run the Phosh service.";
+        description = lib.mdDoc "The group to run the Phosh service.";
         type = types.str;
         example = "users";
       };
 
       phocConfig = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Configurations for the Phoc compositor.
         '';
         type = types.oneOf [ types.lines types.path phocConfigType ];

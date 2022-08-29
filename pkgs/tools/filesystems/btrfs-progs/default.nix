@@ -4,15 +4,16 @@
 , acl, attr, e2fsprogs, libuuid, lzo, udev, zlib
 , runCommand, btrfs-progs
 , gitUpdater
+, udevSupport ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "btrfs-progs";
-  version = "5.18.1";
+  version = "5.19";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "sha256-bpinXM/1LpNU2qGtKExhTEkPhEJzovpSTLrJ64QcclU=";
+    sha256 = "sha256-H7zwbksvgOehJ/1oftRiWlt0+mdP4hLINv9w4O38zPk=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +32,8 @@ stdenv.mkDerivation rec {
     install -v -m 444 -D btrfs-completion $out/share/bash-completion/completions/btrfs
   '';
 
-  configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace";
+  configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace"
+    ++ lib.optional (!udevSupport) "--disable-libudev";
 
   makeFlags = [ "udevruledir=$(out)/lib/udev/rules.d" ];
 

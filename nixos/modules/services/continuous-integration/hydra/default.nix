@@ -78,7 +78,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to run Hydra services.
         '';
       };
@@ -87,7 +87,7 @@ in
         type = types.str;
         default = localDB;
         example = "dbi:Pg:dbname=hydra;host=postgres.example.org;user=foo;";
-        description = ''
+        description = lib.mdDoc ''
           The DBI string for Hydra database connection.
 
           NOTE: Attempts to set `application_name` will be overridden by
@@ -101,12 +101,12 @@ in
         type = types.package;
         default = pkgs.hydra_unstable;
         defaultText = literalExpression "pkgs.hydra_unstable";
-        description = "The Hydra package.";
+        description = lib.mdDoc "The Hydra package.";
       };
 
       hydraURL = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The base URL for the Hydra webserver instance. Used for links in emails.
         '';
       };
@@ -115,8 +115,8 @@ in
         type = types.str;
         default = "*";
         example = "localhost";
-        description = ''
-          The hostname or address to listen on or <literal>*</literal> to listen
+        description = lib.mdDoc ''
+          The hostname or address to listen on or `*` to listen
           on all interfaces.
         '';
       };
@@ -124,7 +124,7 @@ in
       port = mkOption {
         type = types.int;
         default = 3000;
-        description = ''
+        description = lib.mdDoc ''
           TCP port the web server should listen to.
         '';
       };
@@ -132,7 +132,7 @@ in
       minimumDiskFree = mkOption {
         type = types.int;
         default = 0;
-        description = ''
+        description = lib.mdDoc ''
           Threshold of minimum disk space (GiB) to determine if the queue runner should run or not.
         '';
       };
@@ -140,14 +140,14 @@ in
       minimumDiskFreeEvaluator = mkOption {
         type = types.int;
         default = 0;
-        description = ''
+        description = lib.mdDoc ''
           Threshold of minimum disk space (GiB) to determine if the evaluator should run or not.
         '';
       };
 
       notificationSender = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Sender email address used for email notifications.
         '';
       };
@@ -156,7 +156,7 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "localhost";
-        description = ''
+        description = lib.mdDoc ''
           Hostname of the SMTP server to use to send email.
         '';
       };
@@ -164,7 +164,7 @@ in
       tracker = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Piece of HTML that is included on all pages.
         '';
       };
@@ -172,7 +172,7 @@ in
       logo = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Path to a file containing the logo of your Hydra instance.
         '';
       };
@@ -180,24 +180,24 @@ in
       debugServer = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to run the server in debug mode.";
+        description = lib.mdDoc "Whether to run the server in debug mode.";
       };
 
       extraConfig = mkOption {
         type = types.lines;
-        description = "Extra lines for the Hydra configuration.";
+        description = lib.mdDoc "Extra lines for the Hydra configuration.";
       };
 
       extraEnv = mkOption {
         type = types.attrsOf types.str;
         default = {};
-        description = "Extra environment variables for Hydra.";
+        description = lib.mdDoc "Extra environment variables for Hydra.";
       };
 
       gcRootsDir = mkOption {
         type = types.path;
         default = "/nix/var/nix/gcroots/hydra";
-        description = "Directory that holds Hydra garbage collector roots.";
+        description = lib.mdDoc "Directory that holds Hydra garbage collector roots.";
       };
 
       buildMachinesFiles = mkOption {
@@ -205,13 +205,13 @@ in
         default = optional (config.nix.buildMachines != []) "/etc/nix/machines";
         defaultText = literalExpression ''optional (config.nix.buildMachines != []) "/etc/nix/machines"'';
         example = [ "/etc/nix/machines" "/var/lib/hydra/provisioner/machines" ];
-        description = "List of files containing build machines.";
+        description = lib.mdDoc "List of files containing build machines.";
       };
 
       useSubstitutes = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to use binary caches for downloading store paths. Note that
           binary substitutions trigger (a potentially large number of) additional
           HTTP requests that slow down the queue monitor thread significantly.
@@ -320,7 +320,7 @@ in
           ${optionalString haveLocalDB ''
             if ! [ -e ${baseDir}/.db-created ]; then
               runuser -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createuser hydra
-              runuser -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createdb -O hydra hydra
+              runuser -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createdb -- -O hydra hydra
               touch ${baseDir}/.db-created
             fi
             echo "create extension if not exists pg_trgm" | runuser -u ${config.services.postgresql.superUser} -- ${config.services.postgresql.package}/bin/psql hydra

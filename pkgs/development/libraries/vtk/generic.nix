@@ -1,7 +1,7 @@
 { majorVersion, minorVersion, sourceSha256, patchesToFetch ? [] }:
 { stdenv, lib, fetchurl, cmake, libGLU, libGL, libX11, xorgproto, libXt, libpng, libtiff
 , fetchpatch
-, enableQt ? false, wrapQtAppsHook, qtbase, qtx11extras, qttools
+, enableQt ? false, qtbase, qtx11extras, qttools, qtdeclarative, qtEnv
 , enablePython ? false, pythonInterpreter ? throw "vtk: Python support requested, but no python interpreter was given."
 # Darwin support
 , Cocoa, CoreServices, DiskArbitration, IOKit, CFNetwork, Security, GLUT, OpenGL
@@ -25,7 +25,9 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ libpng libtiff ]
-    ++ optionals enableQt [ qtbase qtx11extras qttools ]
+    ++ optionals enableQt (if lib.versionOlder majorVersion "9"
+                           then [ qtbase qtx11extras qttools ]
+                           else  [ (qtEnv "qvtk-qt-env" [ qtx11extras qttools qtdeclarative ]) ])
     ++ optionals stdenv.isLinux [
       libGLU
       libGL

@@ -193,14 +193,14 @@ lib.mkOption {
         <programlisting language="bash">
 lib.mkPackageOption pkgs &quot;GHC&quot; {
   default = [ &quot;ghc&quot; ];
-  example = &quot;pkgs.haskell.package.ghc923.ghc.withPackages (hkgs: [ hkgs.primes ])&quot;;
+  example = &quot;pkgs.haskell.packages.ghc924.ghc.withPackages (hkgs: [ hkgs.primes ])&quot;;
 }
 # is like
 lib.mkOption {
   type = lib.types.package;
   default = pkgs.ghc;
   defaultText = lib.literalExpression &quot;pkgs.ghc&quot;;
-  example = lib.literalExpression &quot;pkgs.haskell.package.ghc923.ghc.withPackages (hkgs: [ hkgs.primes ])&quot;;
+  example = lib.literalExpression &quot;pkgs.haskell.packages.ghc924.ghc.withPackages (hkgs: [ hkgs.primes ])&quot;;
   description = &quot;The GHC package to use.&quot;;
 }
 </programlisting>

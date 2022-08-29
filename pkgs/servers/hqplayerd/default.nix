@@ -5,7 +5,7 @@
 , cairo
 , fetchurl
 , flac
-, gcc11
+, gcc12
 , gnome
 , gssdp
 , gupnp
@@ -22,11 +22,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "hqplayerd";
-  version = "4.32.2-92";
+  version = "4.32.4-94sse42";
 
   src = fetchurl {
-    url = "https://www.signalyst.eu/bins/${pname}/fc35/${pname}-${version}.fc35.x86_64.rpm";
-    hash = "sha256-chgzu5r35VTSc1xOVTPCWCRrjABOy+vs57SsKOSzvkM=";
+    url = "https://www.signalyst.eu/bins/${pname}/fc36/${pname}-${version}.fc36.x86_64.rpm";
+    hash = "sha256-hTckJdZzD/Sx/uV30dlGiT46QvzIGp6BQdNNRlQ/Mgw=";
   };
 
   unpackPhase = ''
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     cairo
     flac
-    gcc11.cc.lib
+    gcc12.cc.lib
     gnome.rygel
     gssdp
     gupnp

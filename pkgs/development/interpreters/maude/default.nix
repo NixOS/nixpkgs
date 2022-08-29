@@ -22,9 +22,9 @@ stdenv.mkDerivation {
     sha256 = "b112d7843f65217e3b5a9d40461698ef8dab7cbbe830af21216dfb924dc88a2f";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [ flex bison unzip makeWrapper ];
   buildInputs = [
-    flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper cln yices
+    ncurses buddy tecla gmpxx libsigsegv cln yices
   ];
 
   hardeningDisable = [ "stackprotector" ] ++

@@ -4,24 +4,26 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, tabulate
 }:
 
 buildPythonPackage rec {
   pname = "dvclive";
-  version = "0.9.0";
+  version = "0.10.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-3kbP8eL/cO/aSAIVrbfGS+vwCTsWoCbNS2orExYt4aw=";
+    hash = "sha256-4sixsWZNnI3UJRlFyB21eAdUCgF8iIZ56ECgIeFV/u8=";
   };
 
   propagatedBuildInputs = [
     dvc-render
+    tabulate # will be available as dvc-render.optional-dependencies.table
   ];
 
   # Circular dependency with dvc

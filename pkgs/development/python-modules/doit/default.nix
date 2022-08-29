@@ -10,9 +10,13 @@
 , pyinotify
 , macfsevents
 , toml
+, doit-py
+, pyflakes
+, configclass
+, mergedict
 }:
 
-buildPythonPackage rec {
+let doit = buildPythonPackage rec {
   pname = "doit";
   version = "0.36.0";
 
@@ -30,15 +34,24 @@ buildPythonPackage rec {
   ] ++ lib.optional stdenv.isLinux pyinotify
     ++ lib.optional stdenv.isDarwin macfsevents;
 
-  # hangs on darwin
-  doCheck = !stdenv.isDarwin;
-
-  checkInputs = [ mock pytestCheckHook ];
-
-  disabledTests = [
-    # depends on doit-py, which has a circular dependency on doit
-    "test___main__.py"
+  checkInputs = [
+    configclass
+    doit-py
+    mergedict
+    mock
+    pyflakes
+    pytestCheckHook
   ];
+
+  # escape infinite recursion with doit-py
+  doCheck = false;
+
+  passthru.tests = {
+    # hangs on darwin
+    check = doit.overridePythonAttrs (_: { doCheck = !stdenv.isDarwin; });
+  };
+
+  pythonImportsCheck = [ "doit" ];
 
   meta = with lib; {
     homepage = "https://pydoit.org/";
@@ -53,4 +66,5 @@ buildPythonPackage rec {
     '';
     maintainers = with maintainers; [ pSub ];
   };
-}
+
+}; in doit

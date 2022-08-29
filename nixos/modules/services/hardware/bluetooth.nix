@@ -43,7 +43,7 @@ in
       powerOnBoot = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to power up the default Bluetooth controller on boot.";
+        description = lib.mdDoc "Whether to power up the default Bluetooth controller on boot.";
       };
 
       package = mkOption {
@@ -64,7 +64,7 @@ in
       disabledPlugins = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = "Built-in plugins to disable";
+        description = lib.mdDoc "Built-in plugins to disable";
       };
 
       settings = mkOption {
@@ -75,7 +75,7 @@ in
             ControllerMode = "bredr";
           };
         };
-        description = "Set configuration for system-wide bluetooth (/etc/bluetooth/main.conf).";
+        description = lib.mdDoc "Set configuration for system-wide bluetooth (/etc/bluetooth/main.conf).";
       };
     };
   };

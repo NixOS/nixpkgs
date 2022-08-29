@@ -22,7 +22,7 @@ in
         type = types.package;
         default = pkgs.softether;
         defaultText = literalExpression "pkgs.softether";
-        description = ''
+        description = lib.mdDoc ''
           softether derivation to use.
         '';
       };
@@ -36,14 +36,14 @@ in
         up = mkOption {
           type = types.lines;
           default = "";
-          description = ''
+          description = lib.mdDoc ''
             Shell commands executed when the Virtual Network Adapter(s) is/are starting.
           '';
         };
         down = mkOption {
           type = types.lines;
           default = "";
-          description = ''
+          description = lib.mdDoc ''
             Shell commands executed when the Virtual Network Adapter(s) is/are shutting down.
           '';
         };
@@ -52,7 +52,7 @@ in
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/softether";
-        description = ''
+        description = lib.mdDoc ''
           Data directory for SoftEther VPN.
         '';
       };

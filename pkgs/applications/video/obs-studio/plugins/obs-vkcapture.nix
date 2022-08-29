@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-vkcapture";
-  version = "1.1.4";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "nowrep";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-jY78+sfAd62YnCssosLOLfxmdL6zkTEoeE58bQpswG4=";
+    hash = "sha256-yaN0am24p9gC+s64Rop+jQ3952UOtZund/KttnVxP48=";
   };
 
   nativeBuildInputs = [ cmake ninja ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "OBS Linux Vulkan/OpenGL game capture";
     homepage = "https://github.com/nowrep/obs-vkcapture";
-    maintainers = with maintainers; [ atila ];
+    maintainers = with maintainers; [ atila pedrohlc ];
     license = licenses.gpl2Only;
     platforms = platforms.linux;
   };

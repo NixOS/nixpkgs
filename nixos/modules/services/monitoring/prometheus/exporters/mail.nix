@@ -22,41 +22,41 @@ let
   serverOptions.options = {
     name = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Value for label 'configname' which will be added to all metrics.
       '';
     };
     server = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Hostname of the server that should be probed.
       '';
     };
     port = mkOption {
       type = types.int;
       example = 587;
-      description = ''
+      description = lib.mdDoc ''
         Port to use for SMTP.
       '';
     };
     from = mkOption {
       type = types.str;
       example = "exporteruser@domain.tld";
-      description = ''
+      description = lib.mdDoc ''
         Content of 'From' Header for probing mails.
       '';
     };
     to = mkOption {
       type = types.str;
       example = "exporteruser@domain.tld";
-      description = ''
+      description = lib.mdDoc ''
         Content of 'To' Header for probing mails.
       '';
     };
     detectionDir = mkOption {
       type = types.path;
       example = "/var/spool/mail/exporteruser/new";
-      description = ''
+      description = lib.mdDoc ''
         Directory in which new mails for the exporter user are placed.
         Note that this needs to exist when the exporter starts.
       '';
@@ -65,14 +65,14 @@ let
       type = types.nullOr types.str;
       default = null;
       example = "exporteruser@domain.tld";
-      description = ''
+      description = lib.mdDoc ''
         Username to use for SMTP authentication.
       '';
     };
     passphrase = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Password to use for SMTP authentication.
       '';
     };
@@ -82,20 +82,20 @@ let
     monitoringInterval = mkOption {
       type = types.str;
       example = "10s";
-      description = ''
+      description = lib.mdDoc ''
         Time interval between two probe attempts.
       '';
     };
     mailCheckTimeout = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Timeout until mails are considered "didn't make it".
       '';
     };
     disableFileDeletion = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Disables the exporter's function to delete probing mails.
       '';
     };
@@ -115,14 +115,13 @@ let
       description = ''
         List of servers that should be probed.
 
-        <emphasis>Note:</emphasis> if your mailserver has <citerefentry>
-        <refentrytitle>rspamd</refentrytitle><manvolnum>8</manvolnum></citerefentry> configured,
+        <emphasis>Note:</emphasis> if your mailserver has <citerefentry><refentrytitle>rspamd</refentrytitle><manvolnum>8</manvolnum></citerefentry> configured,
         it can happen that emails from this exporter are marked as spam.
 
         It's possible to work around the issue with a config like this:
         <programlisting>
         {
-          <link linkend="opt-services.rspamd.locals._name_.text">services.rspamd.locals."multimap.conf".text</link> = '''
+          services.rspamd.locals."multimap.conf".text = '''
             ALLOWLIST_PROMETHEUS {
               filter = "email:domain:tld";
               type = "from";
@@ -142,28 +141,28 @@ in
     environmentFile = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         File containing env-vars to be substituted into the exporter's config.
       '';
     };
     configFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Specify the mailexporter configuration file to use.
       '';
     };
     configuration = mkOption {
       type = types.nullOr (types.submodule exporterOptions);
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Specify the mailexporter configuration file to use.
       '';
     };
     telemetryPath = mkOption {
       type = types.str;
       default = "/metrics";
-      description = ''
+      description = lib.mdDoc ''
         Path under which to expose metrics.
       '';
     };

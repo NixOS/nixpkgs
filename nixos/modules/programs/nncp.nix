@@ -16,7 +16,7 @@ in {
     group = mkOption {
       type = types.str;
       default = "uucp";
-      description = ''
+      description = lib.mdDoc ''
         The group under which NNCP files shall be owned.
         Any member of this group may access the secret keys
         of this NNCP node.
@@ -27,30 +27,30 @@ in {
       type = types.package;
       default = pkgs.nncp;
       defaultText = literalExpression "pkgs.nncp";
-      description = "The NNCP package to use system-wide.";
+      description = lib.mdDoc "The NNCP package to use system-wide.";
     };
 
     secrets = mkOption {
       type = with types; listOf str;
       example = [ "/run/keys/nncp.hjson" ];
-      description = ''
+      description = lib.mdDoc ''
         A list of paths to NNCP configuration files that should not be
         in the Nix store. These files are layered on top of the values at
-        <xref linkend="opt-programs.nncp.settings"/>.
+        [](#opt-programs.nncp.settings).
       '';
     };
 
     settings = mkOption {
       type = settingsFormat.type;
-      description = ''
+      description = lib.mdDoc ''
         NNCP configuration, see
-        <link xlink:href="http://www.nncpgo.org/Configuration.html"/>.
+        <http://www.nncpgo.org/Configuration.html>.
         At runtime these settings will be overlayed by the contents of
-        <xref linkend="opt-programs.nncp.secrets"/> into the file
-        <literal>${nncpCfgFile}</literal>. Node keypairs go in
-        <literal>secrets</literal>, do not specify them in
-        <literal>settings</literal> as they will be leaked into
-        <literal>/nix/store</literal>!
+        [](#opt-programs.nncp.secrets) into the file
+        `${nncpCfgFile}`. Node keypairs go in
+        `secrets`, do not specify them in
+        `settings` as they will be leaked into
+        `/nix/store`!
       '';
       default = { };
     };

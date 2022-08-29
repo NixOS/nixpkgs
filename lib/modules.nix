@@ -266,6 +266,15 @@ rec {
               turned off.
             '';
           };
+
+          _module.specialArgs = mkOption {
+            readOnly = true;
+            internal = true;
+            description = ''
+              Externally provided module arguments that can't be modified from
+              within a configuration, but can be used in module imports.
+            '';
+          };
         };
 
         config = {
@@ -273,6 +282,7 @@ rec {
             inherit extendModules;
             moduleType = type;
           };
+          _module.specialArgs = specialArgs;
         };
       };
 

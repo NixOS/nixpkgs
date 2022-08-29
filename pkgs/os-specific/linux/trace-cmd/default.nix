@@ -1,12 +1,12 @@
 { lib, stdenv, fetchgit, pkg-config, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libtraceevent, libtracefs, zstd, sourceHighlight }:
 stdenv.mkDerivation rec {
   pname = "trace-cmd";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchgit {
     url    = "git://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
     rev    = "trace-cmd-v${version}";
-    sha256 = "sha256-zYw6DObwmroAU3ikUNo9XrwQeDlyLppe7E63WFjn44Q=";
+    sha256 = "sha256-wxrMEE7ZgMHM59Rv6Gk3f0zdpULuXLnY0UY797YF1a0=";
   };
 
   # Don't build and install html documentation

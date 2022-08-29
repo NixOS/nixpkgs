@@ -5,7 +5,7 @@
 
 buildPythonPackage rec {
   pname = "flufl.i18n";
-  version = "4.0";
+  version = "4.1";
   format = "pyproject";
 
   nativeBuildInputs = [ pdm-pep517 ];
@@ -17,6 +17,6 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MTq0djhFp/cEx0Ezt5EaMz3MzrAWjxZ0HQSkfFuasWY=";
+    sha256 = "sha256-efEJ5rJXR7L0Lyh1loXC4h2ciGfXCJGD6iKyQuEph+E=";
   };
 }

@@ -45,7 +45,7 @@ in
       package = mkOption {
         type = types.package;
         example = literalExpression "pkgs.postgresql_11";
-        description = ''
+        description = lib.mdDoc ''
           PostgreSQL package to use.
         '';
       };
@@ -53,7 +53,7 @@ in
       port = mkOption {
         type = types.int;
         default = 5432;
-        description = ''
+        description = lib.mdDoc ''
           The port on which PostgreSQL listens.
         '';
       };
@@ -61,14 +61,14 @@ in
       checkConfig = mkOption {
         type = types.bool;
         default = true;
-        description = "Check the syntax of the configuration file at compile time";
+        description = lib.mdDoc "Check the syntax of the configuration file at compile time";
       };
 
       dataDir = mkOption {
         type = types.path;
         defaultText = literalExpression ''"/var/lib/postgresql/''${config.services.postgresql.package.psqlSchema}"'';
         example = "/var/lib/postgresql/11";
-        description = ''
+        description = lib.mdDoc ''
           The data directory for PostgreSQL. If left as the default value
           this directory will automatically be created before the PostgreSQL server starts, otherwise
           the sysadmin is responsible for ensuring the directory exists with appropriate ownership
@@ -79,16 +79,15 @@ in
       authentication = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Defines how users authenticate themselves to the server. See the
-          <link xlink:href="https://www.postgresql.org/docs/current/auth-pg-hba-conf.html">
-          PostgreSQL documentation for pg_hba.conf</link>
+          [PostgreSQL documentation for pg_hba.conf](https://www.postgresql.org/docs/current/auth-pg-hba-conf.html)
           for details on the expected format of this option. By default,
           peer based authentication will be used for users connecting
           via the Unix socket, and md5 password authentication will be
           used for users connecting via TCP. Any added rules will be
           inserted above the default rules. If you'd like to replace the
-          default rules entirely, you can use <function>lib.mkForce</function> in your
+          default rules entirely, you can use `lib.mkForce` in your
           module.
         '';
       };
@@ -96,7 +95,7 @@ in
       identMap = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Defines the mapping from system users to database users.
 
           The general form is:
@@ -109,8 +108,8 @@ in
         type = with types; listOf str;
         default = [];
         example = [ "--data-checksums" "--allow-group-access" ];
-        description = ''
-          Additional arguments passed to <literal>initdb</literal> during data dir
+        description = lib.mdDoc ''
+          Additional arguments passed to `initdb` during data dir
           initialisation.
         '';
       };
@@ -118,7 +117,7 @@ in
       initialScript = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           A file containing SQL statements to execute on first startup.
         '';
       };
@@ -126,7 +125,7 @@ in
       ensureDatabases = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Ensures that the specified databases exist.
           This option will never delete existing databases, especially not when the value of this
           option is changed. This means that databases created once through this option or
@@ -143,14 +142,14 @@ in
           options = {
             name = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Name of the user to ensure.
               '';
             };
             ensurePermissions = mkOption {
               type = types.attrsOf types.str;
               default = {};
-              description = ''
+              description = lib.mdDoc ''
                 Permissions to ensure for the user, specified as an attribute set.
                 The attribute names specify the database and tables to grant the permissions for.
                 The attribute values specify the permissions to grant. You may specify one or
@@ -158,8 +157,8 @@ in
 
                 For more information on how to specify the target
                 and on which privileges exist, see the
-                <link xlink:href="https://www.postgresql.org/docs/current/sql-grant.html">GRANT syntax</link>.
-                The attributes are used as <code>GRANT ''${attrValue} ON ''${attrName}</code>.
+                [GRANT syntax](https://www.postgresql.org/docs/current/sql-grant.html).
+                The attributes are used as `GRANT ''${attrValue} ON ''${attrName}`.
               '';
               example = literalExpression ''
                 {
@@ -171,7 +170,7 @@ in
           };
         });
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Ensures that the specified users exist and have at least the ensured permissions.
           The PostgreSQL users will be identified using peer authentication. This authenticates the Unix user with the
           same name only, and that without the need for a password.
@@ -200,7 +199,7 @@ in
       enableTCPIP = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether PostgreSQL should listen on all network interfaces.
           If disabled, the database can only be accessed via its Unix
           domain socket or via TCP connections to localhost.
@@ -211,9 +210,9 @@ in
         type = types.str;
         default = "[%p] ";
         example = "%m [%p] ";
-        description = ''
+        description = lib.mdDoc ''
           A printf-style string that is output at the beginning of each log line.
-          Upstream default is <literal>'%m [%p] '</literal>, i.e. it includes the timestamp. We do
+          Upstream default is `'%m [%p] '`, i.e. it includes the timestamp. We do
           not include the timestamp, because journal has it anyway.
         '';
       };
@@ -222,9 +221,9 @@ in
         type = types.listOf types.path;
         default = [];
         example = literalExpression "with pkgs.postgresql_11.pkgs; [ postgis pg_repack ]";
-        description = ''
+        description = lib.mdDoc ''
           List of PostgreSQL plugins. PostgreSQL version for each plugin should
-          match version for <literal>services.postgresql.package</literal> value.
+          match version for `services.postgresql.package` value.
         '';
       };
 
@@ -255,8 +254,8 @@ in
       recoveryConfig = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = ''
-          Contents of the <filename>recovery.conf</filename> file.
+        description = lib.mdDoc ''
+          Contents of the {file}`recovery.conf` file.
         '';
       };
 

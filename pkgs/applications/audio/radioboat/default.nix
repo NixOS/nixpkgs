@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "radioboat";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "slashformotion";
     repo = "radioboat";
     rev = "v${version}";
-    sha256 = "sha256-ZAKTWmK3hCJxm/578cjtdgMA2ZRhCFtzfGdta0gmuFY=";
+    sha256 = "sha256-e6SZv5gb7NOpCU3blFsH7A6ETWL8QlxtpDmmk8DKn8I=";
   };
 
   vendorSha256 = "sha256-X3KiqaiOQYQBfVckh50C+4oxIVN6gXyNuQtBwGvjdFQ=";

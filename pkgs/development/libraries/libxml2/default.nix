@@ -94,8 +94,10 @@ stdenv.mkDerivation rec {
 
   doCheck =
     (stdenv.hostPlatform == stdenv.buildPlatform) &&
-    !stdenv.isDarwin &&
     stdenv.hostPlatform.libc != "musl";
+  preCheck = lib.optional stdenv.isDarwin ''
+    export DYLD_LIBRARY_PATH="$PWD/.libs:$DYLD_LIBRARY_PATH"
+  '';
 
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16

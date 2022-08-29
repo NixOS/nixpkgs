@@ -1,24 +1,12 @@
-From 1ac93cbf0eed951af6967a81f731a0f418ea0b3d Mon Sep 17 00:00:00 2001
-From: Atemu <atemu.main@gmail.com>
-Date: Tue, 17 May 2022 16:58:45 +0200
-Subject: [PATCH 2/2] opengl32 nix workaround
-
----
- bin/mangohud.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
 diff --git a/bin/mangohud.in b/bin/mangohud.in
-index 8ec21de..f65304a 100755
+index e13da99..086443c 100755
 --- a/bin/mangohud.in
 +++ b/bin/mangohud.in
 @@ -23,6 +23,6 @@ fi
  # figure out whether the 32 or 64 bit version should be used, and will search
  # for it in the correct directory
- LD_PRELOAD="${LD_PRELOAD}:${MANGOHUD_LIB_NAME}"
--LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:@ld_libdir_mangohud@"
-+LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:@ld_libdir_mangohud@:@mangohud32@/lib/mangohud"
+ LD_PRELOAD="${LD_PRELOAD}${LD_PRELOAD:+:}${MANGOHUD_LIB_NAME}"
+-LD_LIBRARY_PATH="${LD_LIBRARY_PATH}${LD_LIBRARY_PATH:+:}@ld_libdir_mangohud@"
++LD_LIBRARY_PATH="${LD_LIBRARY_PATH}${LD_LIBRARY_PATH:+:}@ld_libdir_mangohud@:@mangohud32@/lib/mangohud"
  
  exec env MANGOHUD=1 LD_LIBRARY_PATH="${LD_LIBRARY_PATH}" LD_PRELOAD="${LD_PRELOAD}" "$@"
--- 
-2.36.0
-

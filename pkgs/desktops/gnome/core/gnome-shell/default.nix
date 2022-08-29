@@ -67,13 +67,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "42.3.1";
+  version = "42.4";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "ffqzLfrDzWTUYSkYyph8+zMjjvoJJ5h1PIhF/xaTX30=";
+    sha256 = "h1/ylw6p+3oFUG4yoNUNyRf0G0yjcTS0E3f5yChzxU4=";
   };
 
   patches = [
@@ -184,6 +184,7 @@ stdenv.mkDerivation rec {
 
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
+    rm data/theme/gnome-shell.css
   '';
 
   preFixup = ''

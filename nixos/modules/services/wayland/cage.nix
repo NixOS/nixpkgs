@@ -10,7 +10,7 @@ in {
   options.services.cage.user = mkOption {
     type = types.str;
     default = "demo";
-    description = ''
+    description = lib.mdDoc ''
       User to log-in as.
     '';
   };
@@ -19,7 +19,7 @@ in {
     type = types.listOf types.str;
     default = [];
     defaultText = literalExpression "[]";
-    description = "Additional command line arguments to pass to Cage.";
+    description = lib.mdDoc "Additional command line arguments to pass to Cage.";
     example = ["-d"];
   };
 
@@ -27,7 +27,7 @@ in {
     type = types.path;
     default = "${pkgs.xterm}/bin/xterm";
     defaultText = literalExpression ''"''${pkgs.xterm}/bin/xterm"'';
-    description = ''
+    description = lib.mdDoc ''
       Program to run in cage.
     '';
   };

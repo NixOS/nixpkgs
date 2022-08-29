@@ -123,7 +123,7 @@ in rec {
             inherit self;
             includeSiteCustomize = true;
            });
-         in self.withPackages (p: [ p.mistune_2_0 ]))
+         in self.withPackages (p: [ p.mistune ]))
       ];
       options = builtins.toFile "options.json"
         (builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix));

@@ -1,8 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , attrs
-, m2r
 , pytest-benchmark
 , pytestCheckHook
 , setuptools-scm
@@ -19,8 +19,17 @@ let automat = buildPythonPackage rec {
     sha256 = "7979803c74610e11ef0c0d68a2942b152df52da55336e0c9d58daf1831cbdf33";
   };
 
+  patches = [
+    # don't depend on m2r
+    (fetchpatch {
+      name = "dont-depend-on-m2r.patch";
+      url = "https://github.com/glyph/automat/compare/v20.2.0..2562fa4ddeba5b5945d9482baa4c26a414f5e831.patch";
+      includes = [ "setup.py" ];
+      hash = "sha256-jlPLJMu1QbBpiVYHDiqPydrXjEoZgYZTVVGNxSA0NxY=";
+    })
+  ];
+
   nativeBuildInputs = [
-    m2r
     setuptools-scm
   ];
 

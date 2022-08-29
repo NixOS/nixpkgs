@@ -22,11 +22,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnutls";
-  version = "3.7.6";
+  version = "3.7.7";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
-    sha256 = "1zv2097v9f6f4c66q7yn3c6gggjk9jz38095ma7v3gs5lccmf1kp";
+    sha256 = "sha256-vpFD0NWOq2TbqbdxFKqvrFKbbA1+gd5r3xybWQJ9IQY=";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://gnutls.org/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ eelco fpletz ];
+    maintainers = with maintainers; [ vcunat ];
     platforms = platforms.all;
   };
 }

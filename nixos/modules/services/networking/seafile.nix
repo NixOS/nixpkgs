@@ -48,7 +48,7 @@ in {
             SERVICE_URL = mkOption {
               type = types.str;
               example = "https://www.example.com";
-              description = ''
+              description = lib.mdDoc ''
                 Seahub public URL.
               '';
             };
@@ -56,9 +56,9 @@ in {
         };
       };
       default = { };
-      description = ''
+      description = lib.mdDoc ''
         Configuration for ccnet, see
-        <link xlink:href="https://manual.seafile.com/config/ccnet-conf/"/>
+        <https://manual.seafile.com/config/ccnet-conf/>
         for supported values.
       '';
     };
@@ -72,7 +72,7 @@ in {
             port = mkOption {
               type = types.port;
               default = 8082;
-              description = ''
+              description = lib.mdDoc ''
                 The tcp port used by seafile fileserver.
               '';
             };
@@ -80,7 +80,7 @@ in {
               type = types.str;
               default = "127.0.0.1";
               example = "0.0.0.0";
-              description = ''
+              description = lib.mdDoc ''
                 The binding address used by seafile fileserver.
               '';
             };
@@ -88,9 +88,9 @@ in {
         };
       };
       default = { };
-      description = ''
+      description = lib.mdDoc ''
         Configuration for seafile-server, see
-        <link xlink:href="https://manual.seafile.com/config/seafile-conf/"/>
+        <https://manual.seafile.com/config/seafile-conf/>
         for supported values.
       '';
     };
@@ -99,7 +99,7 @@ in {
       type = types.int;
       default = 4;
       example = 10;
-      description = ''
+      description = lib.mdDoc ''
         The number of gunicorn worker processes for handling requests.
       '';
     };
@@ -107,7 +107,7 @@ in {
     adminEmail = mkOption {
       example = "john@example.com";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Seafile Seahub Admin Account Email.
       '';
     };
@@ -115,7 +115,7 @@ in {
     initialAdminPassword = mkOption {
       example = "someStrongPass";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Seafile Seahub Admin Account initial password.
         Should be change via Seahub web front-end.
       '';
@@ -123,7 +123,7 @@ in {
 
     seafilePackage = mkOption {
       type = types.package;
-      description = "Which package to use for the seafile server.";
+      description = lib.mdDoc "Which package to use for the seafile server.";
       default = pkgs.seafile-server;
       defaultText = literalExpression "pkgs.seafile-server";
     };
@@ -133,7 +133,7 @@ in {
       type = types.lines;
       description = ''
         Extra config to append to `seahub_settings.py` file.
-        Refer to <link xlink:href="https://manual.seafile.com/config/seahub_settings_py/" />
+        Refer to <link xlink:href="https://manual.seafile.com/config/seahub_settings_py/"/>
         for all available options.
       '';
     };

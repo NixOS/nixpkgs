@@ -15,13 +15,13 @@ in
         type = types.package;
         default = pkgs.xandikos;
         defaultText = literalExpression "pkgs.xandikos";
-        description = "The Xandikos package to use.";
+        description = lib.mdDoc "The Xandikos package to use.";
       };
 
       address = mkOption {
         type = types.str;
         default = "localhost";
-        description = ''
+        description = lib.mdDoc ''
           The IP address on which Xandikos will listen.
           By default listens on localhost.
         '';
@@ -30,13 +30,13 @@ in
       port = mkOption {
         type = types.port;
         default = 8080;
-        description = "The port of the Xandikos web application";
+        description = lib.mdDoc "The port of the Xandikos web application";
       };
 
       routePrefix = mkOption {
         type = types.str;
         default = "/";
-        description = ''
+        description = lib.mdDoc ''
           Path to Xandikos.
           Useful when Xandikos is behind a reverse proxy.
         '';
@@ -52,14 +52,14 @@ in
             "--dump-dav-xml"
           ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           Extra command line arguments to pass to xandikos.
         '';
       };
 
       nginx = mkOption {
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Configuration for nginx reverse proxy.
         '';
 
@@ -68,14 +68,14 @@ in
             enable = mkOption {
               type = types.bool;
               default = false;
-              description = ''
+              description = lib.mdDoc ''
                 Configure the nginx reverse proxy settings.
               '';
             };
 
             hostName = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 The hostname use to setup the virtualhost configuration
               '';
             };

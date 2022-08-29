@@ -38,17 +38,17 @@ let
   taintOptions = with lib.types; { name, ... }: {
     options = {
       key = mkOption {
-        description = "Key of taint.";
+        description = lib.mdDoc "Key of taint.";
         default = name;
-        defaultText = literalDocBook "Name of this submodule.";
+        defaultText = literalMD "Name of this submodule.";
         type = str;
       };
       value = mkOption {
-        description = "Value of taint.";
+        description = lib.mdDoc "Value of taint.";
         type = str;
       };
       effect = mkOption {
-        description = "Effect of taint.";
+        description = lib.mdDoc "Effect of taint.";
         example = "NoSchedule";
         type = enum ["NoSchedule" "PreferNoSchedule" "NoExecute"];
       };
@@ -68,26 +68,26 @@ in
   options.services.kubernetes.kubelet = with lib.types; {
 
     address = mkOption {
-      description = "Kubernetes kubelet info server listening address.";
+      description = lib.mdDoc "Kubernetes kubelet info server listening address.";
       default = "0.0.0.0";
       type = str;
     };
 
     clusterDns = mkOption {
-      description = "Use alternative DNS.";
+      description = lib.mdDoc "Use alternative DNS.";
       default = "10.1.0.1";
       type = str;
     };
 
     clusterDomain = mkOption {
-      description = "Use alternative domain.";
+      description = lib.mdDoc "Use alternative domain.";
       default = config.services.kubernetes.addons.dns.clusterDomain;
       defaultText = literalExpression "config.${options.services.kubernetes.addons.dns.clusterDomain}";
       type = str;
     };
 
     clientCaFile = mkOption {
-      description = "Kubernetes apiserver CA file for client authentication.";
+      description = lib.mdDoc "Kubernetes apiserver CA file for client authentication.";
       default = top.caFile;
       defaultText = literalExpression "config.${otop.caFile}";
       type = nullOr path;
@@ -95,13 +95,13 @@ in
 
     cni = {
       packages = mkOption {
-        description = "List of network plugin packages to install.";
+        description = lib.mdDoc "List of network plugin packages to install.";
         type = listOf package;
         default = [];
       };
 
       config = mkOption {
-        description = "Kubernetes CNI configuration.";
+        description = lib.mdDoc "Kubernetes CNI configuration.";
         type = listOf attrs;
         default = [];
         example = literalExpression ''
@@ -127,20 +127,20 @@ in
       };
 
       configDir = mkOption {
-        description = "Path to Kubernetes CNI configuration directory.";
+        description = lib.mdDoc "Path to Kubernetes CNI configuration directory.";
         type = nullOr path;
         default = null;
       };
     };
 
     containerRuntime = mkOption {
-      description = "Which container runtime type to use";
+      description = lib.mdDoc "Which container runtime type to use";
       type = enum ["docker" "remote"];
       default = "remote";
     };
 
     containerRuntimeEndpoint = mkOption {
-      description = "Endpoint at which to find the container runtime api interface/socket";
+      description = lib.mdDoc "Endpoint at which to find the container runtime api interface/socket";
       type = str;
       default = "unix:///run/containerd/containerd.sock";
     };
@@ -148,13 +148,13 @@ in
     enable = mkEnableOption "Kubernetes kubelet.";
 
     extraOpts = mkOption {
-      description = "Kubernetes kubelet extra command line options.";
+      description = lib.mdDoc "Kubernetes kubelet extra command line options.";
       default = "";
       type = separatedString " ";
     };
 
     featureGates = mkOption {
-      description = "List set of feature gates";
+      description = lib.mdDoc "List set of feature gates";
       default = top.featureGates;
       defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
@@ -162,20 +162,20 @@ in
 
     healthz = {
       bind = mkOption {
-        description = "Kubernetes kubelet healthz listening address.";
+        description = lib.mdDoc "Kubernetes kubelet healthz listening address.";
         default = "127.0.0.1";
         type = str;
       };
 
       port = mkOption {
-        description = "Kubernetes kubelet healthz port.";
+        description = lib.mdDoc "Kubernetes kubelet healthz port.";
         default = 10248;
         type = int;
       };
     };
 
     hostname = mkOption {
-      description = "Kubernetes kubelet hostname override.";
+      description = lib.mdDoc "Kubernetes kubelet hostname override.";
       default = config.networking.hostName;
       defaultText = literalExpression "config.networking.hostName";
       type = str;
@@ -184,69 +184,69 @@ in
     kubeconfig = top.lib.mkKubeConfigOptions "Kubelet";
 
     manifests = mkOption {
-      description = "List of manifests to bootstrap with kubelet (only pods can be created as manifest entry)";
+      description = lib.mdDoc "List of manifests to bootstrap with kubelet (only pods can be created as manifest entry)";
       type = attrsOf attrs;
       default = {};
     };
 
     networkPlugin = mkOption {
-      description = "Network plugin to use by Kubernetes.";
+      description = lib.mdDoc "Network plugin to use by Kubernetes.";
       type = nullOr (enum ["cni" "kubenet"]);
       default = "kubenet";
     };
 
     nodeIp = mkOption {
-      description = "IP address of the node. If set, kubelet will use this IP address for the node.";
+      description = lib.mdDoc "IP address of the node. If set, kubelet will use this IP address for the node.";
       default = null;
       type = nullOr str;
     };
 
     registerNode = mkOption {
-      description = "Whether to auto register kubelet with API server.";
+      description = lib.mdDoc "Whether to auto register kubelet with API server.";
       default = true;
       type = bool;
     };
 
     port = mkOption {
-      description = "Kubernetes kubelet info server listening port.";
+      description = lib.mdDoc "Kubernetes kubelet info server listening port.";
       default = 10250;
       type = int;
     };
 
     seedDockerImages = mkOption {
-      description = "List of docker images to preload on system";
+      description = lib.mdDoc "List of docker images to preload on system";
       default = [];
       type = listOf package;
     };
 
     taints = mkOption {
-      description = "Node taints (https://kubernetes.io/docs/concepts/configuration/assign-pod-node/).";
+      description = lib.mdDoc "Node taints (https://kubernetes.io/docs/concepts/configuration/assign-pod-node/).";
       default = {};
       type = attrsOf (submodule [ taintOptions ]);
     };
 
     tlsCertFile = mkOption {
-      description = "File containing x509 Certificate for HTTPS.";
+      description = lib.mdDoc "File containing x509 Certificate for HTTPS.";
       default = null;
       type = nullOr path;
     };
 
     tlsKeyFile = mkOption {
-      description = "File containing x509 private key matching tlsCertFile.";
+      description = lib.mdDoc "File containing x509 private key matching tlsCertFile.";
       default = null;
       type = nullOr path;
     };
 
     unschedulable = mkOption {
-      description = "Whether to set node taint to unschedulable=true as it is the case of node that has only master role.";
+      description = lib.mdDoc "Whether to set node taint to unschedulable=true as it is the case of node that has only master role.";
       default = false;
       type = bool;
     };
 
     verbosity = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Optional glog verbosity level for logging statements. See
-        <link xlink:href="https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md"/>
+        <https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md>
       '';
       default = null;
       type = nullOr int;

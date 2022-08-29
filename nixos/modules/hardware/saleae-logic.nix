@@ -11,7 +11,7 @@ in
       type = lib.types.package;
       default = pkgs.saleae-logic-2;
       defaultText = lib.literalExpression "pkgs.saleae-logic-2";
-      description = ''
+      description = lib.mdDoc ''
         Saleae Logic package to use.
       '';
     };

@@ -56,7 +56,7 @@ in {
         type = types.package;
         default = pkgs.pipewire;
         defaultText = literalExpression "pkgs.pipewire";
-        description = ''
+        description = lib.mdDoc ''
           The pipewire derivation to use.
         '';
       };
@@ -64,7 +64,7 @@ in {
       socketActivation = mkOption {
         default = true;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Automatically run pipewire when connections are made to the pipewire socket.
         '';
       };
@@ -73,7 +73,7 @@ in {
         client = mkOption {
           type = json.type;
           default = {};
-          description = ''
+          description = lib.mdDoc ''
             Configuration for pipewire clients. For details see
             https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/client.conf.in
           '';
@@ -82,7 +82,7 @@ in {
         client-rt = mkOption {
           type = json.type;
           default = {};
-          description = ''
+          description = lib.mdDoc ''
             Configuration for realtime pipewire clients. For details see
             https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/client-rt.conf.in
           '';
@@ -91,7 +91,7 @@ in {
         jack = mkOption {
           type = json.type;
           default = {};
-          description = ''
+          description = lib.mdDoc ''
             Configuration for the pipewire daemon's jack module. For details see
             https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/jack.conf.in
           '';
@@ -100,7 +100,7 @@ in {
         pipewire = mkOption {
           type = json.type;
           default = {};
-          description = ''
+          description = lib.mdDoc ''
             Configuration for the pipewire daemon. For details see
             https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/pipewire.conf.in
           '';
@@ -109,7 +109,7 @@ in {
         pipewire-pulse = mkOption {
           type = json.type;
           default = {};
-          description = ''
+          description = lib.mdDoc ''
             Configuration for the pipewire-pulse daemon. For details see
             https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/pipewire-pulse.conf.in
           '';
@@ -122,7 +122,7 @@ in {
           # this is for backwards compatibility
           default = cfg.alsa.enable || cfg.jack.enable || cfg.pulse.enable;
           defaultText = lib.literalExpression "config.services.pipewire.alsa.enable || config.services.pipewire.jack.enable || config.services.pipewire.pulse.enable";
-          description = "Whether to use PipeWire as the primary sound server";
+          description = lib.mdDoc "Whether to use PipeWire as the primary sound server";
         };
       };
 
@@ -142,7 +142,7 @@ in {
       systemWide = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           If true, a system-wide PipeWire service and socket is enabled
           allowing all users in the "pipewire" group to use it simultaneously.
           If false, then user units are used instead, restricting access to

@@ -2,29 +2,20 @@
 
 buildGoModule rec {
   pname = "circleci-cli";
-  version = "0.1.17142";
+  version = "0.1.20788";
 
   src = fetchFromGitHub {
     owner = "CircleCI-Public";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-69GGJfnOHry+N3hKZapKz6eFSerqIHt4wRAhm/q/SOQ=";
+    sha256 = "sha256-noREDDxy4p7LVvTehzbPPKY5Bt9r/kJii6Q//JiCD0A=";
   };
 
-  vendorSha256 = "sha256-7u2y1yBVpXf+D19tslD4s3B1KmABl4OWNzzLaBNL/2U=";
+  vendorSha256 = "sha256-jrAd1G/NCjXfaJmzOhMjMZfJoGHsQ1bi3HudBM0e8rE=";
 
   doCheck = false;
 
   ldflags = [ "-s" "-w" "-X github.com/CircleCI-Public/circleci-cli/version.Version=${version}" "-X github.com/CircleCI-Public/circleci-cli/version.Commit=${src.rev}" "-X github.com/CircleCI-Public/circleci-cli/version.packageManager=nix" ];
-
-  preBuild = ''
-    substituteInPlace data/data.go \
-      --replace 'packr.New("circleci-cli-box", "../_data")' 'packr.New("circleci-cli-box", "${placeholder "out"}/share/circleci-cli")'
-  '';
-
-  postInstall = ''
-    install -Dm644 -t $out/share/circleci-cli _data/data.yml
-  '';
 
   meta = with lib; {
     # Box blurb edited from the AUR package circleci-cli

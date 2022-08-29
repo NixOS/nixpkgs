@@ -8,14 +8,18 @@
   nv-codec-headers = nv-codec-headers-11;
 }).overrideAttrs (old: rec {
   pname = "jellyfin-ffmpeg";
-  version = "5.0.1-8";
+  version = "5.1-1";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
     rev = "v${version}";
-    sha256 = "sha256-zr1WuTkOBAVk7JkpDT52rfGGOaXEqiPFIGmJUDPhI/w=";
+    sha256 = "sha256-R3+SJ2RNaRRK6+N9eGOf/0qUgaXkT/cswkxf+7W2+Fo=";
   };
+
+  configureFlags = old.configureFlags ++ [
+    "--disable-ptx-compression" # https://github.com/jellyfin/jellyfin/issues/7944#issuecomment-1156880067
+  ];
 
   postPatch = ''
     for file in $(cat debian/patches/series); do

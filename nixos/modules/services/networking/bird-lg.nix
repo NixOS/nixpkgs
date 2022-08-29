@@ -12,19 +12,19 @@ in
         type = types.package;
         default = pkgs.bird-lg;
         defaultText = literalExpression "pkgs.bird-lg";
-        description = "The Bird Looking Glass package to use.";
+        description = lib.mdDoc "The Bird Looking Glass package to use.";
       };
 
       user = mkOption {
         type = types.str;
         default = "bird-lg";
-        description = "User to run the service.";
+        description = lib.mdDoc "User to run the service.";
       };
 
       group = mkOption {
         type = types.str;
         default = "bird-lg";
-        description = "Group to run the service.";
+        description = lib.mdDoc "Group to run the service.";
       };
 
       frontend = {
@@ -33,112 +33,112 @@ in
         listenAddress = mkOption {
           type = types.str;
           default = "127.0.0.1:5000";
-          description = "Address to listen on.";
+          description = lib.mdDoc "Address to listen on.";
         };
 
         proxyPort = mkOption {
           type = types.port;
           default = 8000;
-          description = "Port bird-lg-proxy is running on.";
+          description = lib.mdDoc "Port bird-lg-proxy is running on.";
         };
 
         domain = mkOption {
           type = types.str;
           default = "";
           example = "dn42.lantian.pub";
-          description = "Server name domain suffixes.";
+          description = lib.mdDoc "Server name domain suffixes.";
         };
 
         servers = mkOption {
           type = types.listOf types.str;
           default = [ ];
           example = [ "gigsgigscloud" "hostdare" ];
-          description = "Server name prefixes.";
+          description = lib.mdDoc "Server name prefixes.";
         };
 
         whois = mkOption {
           type = types.str;
           default = "whois.verisign-grs.com";
-          description = "Whois server for queries.";
+          description = lib.mdDoc "Whois server for queries.";
         };
 
         dnsInterface = mkOption {
           type = types.str;
           default = "asn.cymru.com";
-          description = "DNS zone to query ASN information.";
+          description = lib.mdDoc "DNS zone to query ASN information.";
         };
 
         bgpMapInfo = mkOption {
           type = types.listOf types.str;
           default = [ "asn" "as-name" "ASName" "descr" ];
-          description = "Information displayed in bgpmap.";
+          description = lib.mdDoc "Information displayed in bgpmap.";
         };
 
         titleBrand = mkOption {
           type = types.str;
           default = "Bird-lg Go";
-          description = "Prefix of page titles in browser tabs.";
+          description = lib.mdDoc "Prefix of page titles in browser tabs.";
         };
 
         netSpecificMode = mkOption {
           type = types.str;
           default = "";
           example = "dn42";
-          description = "Apply network-specific changes for some networks.";
+          description = lib.mdDoc "Apply network-specific changes for some networks.";
         };
 
         protocolFilter = mkOption {
           type = types.listOf types.str;
           default = [ ];
           example = [ "ospf" ];
-          description = "Information displayed in bgpmap.";
+          description = lib.mdDoc "Information displayed in bgpmap.";
         };
 
         nameFilter = mkOption {
           type = types.str;
           default = "";
           example = "^ospf";
-          description = "Protocol names to hide in summary tables (RE2 syntax),";
+          description = lib.mdDoc "Protocol names to hide in summary tables (RE2 syntax),";
         };
 
         timeout = mkOption {
           type = types.int;
           default = 120;
-          description = "Time before request timed out, in seconds.";
+          description = lib.mdDoc "Time before request timed out, in seconds.";
         };
 
         navbar = {
           brand = mkOption {
             type = types.str;
             default = "Bird-lg Go";
-            description = "Brand to show in the navigation bar .";
+            description = lib.mdDoc "Brand to show in the navigation bar .";
           };
 
           brandURL = mkOption {
             type = types.str;
             default = "/";
-            description = "URL of the brand to show in the navigation bar.";
+            description = lib.mdDoc "URL of the brand to show in the navigation bar.";
           };
 
           allServers = mkOption {
             type = types.str;
             default = "ALL Servers";
-            description = "Text of 'All server' button in the navigation bar.";
+            description = lib.mdDoc "Text of 'All server' button in the navigation bar.";
           };
 
           allServersURL = mkOption {
             type = types.str;
             default = "all";
-            description = "URL of 'All servers' button.";
+            description = lib.mdDoc "URL of 'All servers' button.";
           };
         };
 
         extraArgs = mkOption {
           type = types.lines;
           default = "";
-          description = "
-            Extra parameters documented <link xlink:href=\"https://github.com/xddxdd/bird-lg-go#frontend\">here</link>.
-          ";
+          description = lib.mdDoc ''
+            Extra parameters documented [here](https://github.com/xddxdd/bird-lg-go#frontend).
+          '';
         };
       };
 
@@ -148,21 +148,21 @@ in
         listenAddress = mkOption {
           type = types.str;
           default = "127.0.0.1:8000";
-          description = "Address to listen on.";
+          description = lib.mdDoc "Address to listen on.";
         };
 
         allowedIPs = mkOption {
           type = types.listOf types.str;
           default = [ ];
           example = [ "192.168.25.52" "192.168.25.53" ];
-          description = "List of IPs to allow (default all allowed).";
+          description = lib.mdDoc "List of IPs to allow (default all allowed).";
         };
 
         birdSocket = mkOption {
           type = types.str;
           default = "/run/bird.ctl";
           example = "/var/run/bird/bird.ctl";
-          description = "Bird control socket path.";
+          description = lib.mdDoc "Bird control socket path.";
         };
 
         traceroute = {
@@ -170,22 +170,22 @@ in
             type = types.str;
             default = "${pkgs.traceroute}/bin/traceroute";
             defaultText = literalExpression ''"''${pkgs.traceroute}/bin/traceroute"'';
-            description = "Traceroute's binary path.";
+            description = lib.mdDoc "Traceroute's binary path.";
           };
 
           rawOutput = mkOption {
             type = types.bool;
             default = false;
-            description = "Display traceroute output in raw format.";
+            description = lib.mdDoc "Display traceroute output in raw format.";
           };
         };
 
         extraArgs = mkOption {
           type = types.lines;
           default = "";
-          description = "
-            Extra parameters documented <link xlink:href=\"https://github.com/xddxdd/bird-lg-go#proxy\">here</link>.
-          ";
+          description = lib.mdDoc ''
+            Extra parameters documented [here](https://github.com/xddxdd/bird-lg-go#proxy).
+          '';
         };
       };
     };

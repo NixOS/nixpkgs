@@ -17,7 +17,7 @@ in
     headless = mkOption {
       type = types.bool;
       default = false;
-      description = "Whether to disable X11-related features.";
+      description = lib.mdDoc "Whether to disable X11-related features.";
     };
   };
 

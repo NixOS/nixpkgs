@@ -1,17 +1,17 @@
-{ stdenv, buildGoModule, fetchFromGitHub, lib, installShellFiles }:
+{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
 
 buildGoModule rec {
   pname = "golangci-lint";
-  version = "1.47.2";
+  version = "1.49.0";
 
   src = fetchFromGitHub {
     owner = "golangci";
     repo = "golangci-lint";
     rev = "v${version}";
-    sha256 = "sha256-ttxRVmv1Z/NOjzVN7izBJm5xQWdSAm/jTzw0klFzyck=";
+    sha256 = "sha256-L2PtDiMtT+vcMU4uW3GYZexLtDqnHRuUts7bIh/g0YA=";
   };
 
-  vendorSha256 = "sha256-zIsvXtyC3wjfoKcOJ1MG/KSGApuVlvuHDYDmbmGEgTc=";
+  vendorSha256 = "sha256-VPkOFUwp0Bm/YyBCbfQTa+R1bjau7Ai+p/TbgNxeejc=";
 
   doCheck = false;
 

@@ -9,19 +9,19 @@ let
     options = {
       principal = mkOption {
         type = types.str;
-        description = "Which principal the rule applies to";
+        description = lib.mdDoc "Which principal the rule applies to";
       };
       access = mkOption {
         type = types.either
           (types.listOf (types.enum ["add" "cpw" "delete" "get" "list" "modify"]))
           (types.enum ["all"]);
         default = "all";
-        description = "The changes the principal is allowed to make.";
+        description = lib.mdDoc "The changes the principal is allowed to make.";
       };
       target = mkOption {
         type = types.str;
         default = "*";
-        description = "The principals that 'access' applies to.";
+        description = lib.mdDoc "The principals that 'access' applies to.";
       };
     };
   };
@@ -34,7 +34,7 @@ let
           { principal = "*/admin"; access = "all"; }
           { principal = "admin"; access = "all"; }
         ];
-        description = ''
+        description = lib.mdDoc ''
           The privileges granted to a user.
         '';
       };
@@ -55,7 +55,7 @@ in
 
       realms = mkOption {
         type = types.attrsOf (types.submodule realm);
-        description = ''
+        description = lib.mdDoc ''
           The realm(s) to serve keys for.
         '';
       };

@@ -77,7 +77,7 @@ in
         }
       '';
       description =
-        ''
+        lib.mdDoc ''
           The ruleset to be used with nftables.  Should be in a format that
           can be loaded using "/bin/nft -f".  The ruleset is updated atomically.
         '';
@@ -88,9 +88,9 @@ in
         name = "nftables-rules";
         text = cfg.ruleset;
       };
-      defaultText = literalDocBook ''a file with the contents of <option>networking.nftables.ruleset</option>'';
+      defaultText = literalMD ''a file with the contents of {option}`networking.nftables.ruleset`'';
       description =
-        ''
+        lib.mdDoc ''
           The ruleset file to be used with nftables.  Should be in a format that
           can be loaded using "nft -f".  The ruleset is updated atomically.
         '';

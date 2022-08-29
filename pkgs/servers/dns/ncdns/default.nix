@@ -107,7 +107,5 @@ buildGoModule {
     homepage = "https://github.com/namecoin/ncdns";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ rnhmjoj ];
-    # module github.com/btcsuite/btcd@latest found (v0.23.1), but does not contain package github.com/btcsuite/btcd/btcec
-    broken = true;
   };
 }

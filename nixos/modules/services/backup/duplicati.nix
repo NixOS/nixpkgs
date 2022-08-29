@@ -13,7 +13,7 @@ in
       port = mkOption {
         default = 8200;
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           Port serving the web interface
         '';
       };
@@ -35,7 +35,7 @@ in
       interface = mkOption {
         default = "127.0.0.1";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Listening interface for the web UI
           Set it to "any" to listen on all available interfaces
         '';
@@ -44,7 +44,7 @@ in
       user = mkOption {
         default = "duplicati";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Duplicati runs as it's own user. It will only be able to backup world-readable files.
           Run as root with special care.
         '';

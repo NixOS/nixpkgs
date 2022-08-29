@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "karton-mwdb-reporter";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "CERT-Polska";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-2qG/8D6ZlUFJg+BB/QZ9ZMJpbsLei/7TRXd6bF40Fvg=";
+    hash = "sha256-QVxczXT74Xt0AtCSDm4nhIK4qtHQ6bqmVNb/CALZSE4=";
   };
 
   propagatedBuildInputs = [

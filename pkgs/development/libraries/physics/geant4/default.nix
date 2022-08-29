@@ -47,12 +47,12 @@ in
 lib.warnIf (enableQT != false) "geant4: enableQT is deprecated, please use enableQt"
 
 stdenv.mkDerivation rec {
-  version = "11.0.0";
+  version = "11.0.2";
   pname = "geant4";
 
   src = fetchurl{
     url = "https://cern.ch/geant4-data/releases/geant4-v${version}.tar.gz";
-    sha256 = "sha256-PMin350/8ceiGmLS6zoQvhX2uxWNOTI78yEzScnvdbk=";
+    hash = "sha256-/AONuDcxL3Tj+O/RC108qHqZnUg9TYlZxguKdJIh7GE=";
   };
 
   cmakeFlags = [
@@ -88,11 +88,11 @@ stdenv.mkDerivation rec {
   ];
   dontWrapQtApps = true; # no binaries
 
-  buildInputs = [ clhep libGLU xlibsWrapper libXmu ]
+  buildInputs = [ libGLU xlibsWrapper libXmu ]
     ++ lib.optionals enableInventor [ libXpm coin3d soxt motif ]
     ++ lib.optionals enablePython [ boost_python python3 ];
 
-  propagatedBuildInputs = [ expat xercesc zlib libGL ]
+  propagatedBuildInputs = [ clhep expat xercesc zlib libGL ]
     ++ lib.optionals enableXM [ motif ]
     ++ lib.optionals enableQt [ qtbase ];
 

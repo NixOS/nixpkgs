@@ -14,13 +14,13 @@ in
     hostname = mkOption {
       type = types.str;
       default = "localhost";
-      description = "FQDN for the onlyoffice instance.";
+      description = lib.mdDoc "FQDN for the onlyoffice instance.";
     };
 
     jwtSecretFile = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Path to a file that contains the secret to sign web requests using JSON Web Tokens.
         If left at the default value null signing is disabled.
       '';
@@ -30,37 +30,37 @@ in
       type = types.package;
       default = pkgs.onlyoffice-documentserver;
       defaultText = "pkgs.onlyoffice-documentserver";
-      description = "Which package to use for the OnlyOffice instance.";
+      description = lib.mdDoc "Which package to use for the OnlyOffice instance.";
     };
 
     port = mkOption {
       type = types.port;
       default = 8000;
-      description = "Port the OnlyOffice DocumentServer should listens on.";
+      description = lib.mdDoc "Port the OnlyOffice DocumentServer should listens on.";
     };
 
     examplePort = mkOption {
       type = types.port;
       default = null;
-      description = "Port the OnlyOffice Example server should listens on.";
+      description = lib.mdDoc "Port the OnlyOffice Example server should listens on.";
     };
 
     postgresHost = mkOption {
       type = types.str;
       default = "/run/postgresql";
-      description = "The Postgresql hostname or socket path OnlyOffice should connect to.";
+      description = lib.mdDoc "The Postgresql hostname or socket path OnlyOffice should connect to.";
     };
 
     postgresName = mkOption {
       type = types.str;
       default = "onlyoffice";
-      description = "The name of databse OnlyOffice should user.";
+      description = lib.mdDoc "The name of databse OnlyOffice should user.";
     };
 
     postgresPasswordFile = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Path to a file that contains the password OnlyOffice should use to connect to Postgresql.
         Unused when using socket authentication.
       '';
@@ -69,7 +69,7 @@ in
     postgresUser = mkOption {
       type = types.str;
       default = "onlyoffice";
-      description = ''
+      description = lib.mdDoc ''
         The username OnlyOffice should use to connect to Postgresql.
         Unused when using socket authentication.
       '';
@@ -78,7 +78,7 @@ in
     rabbitmqUrl = mkOption {
       type = types.str;
       default = "amqp://guest:guest@localhost:5672";
-      description = "The Rabbitmq in amqp URI style OnlyOffice should connect to.";
+      description = lib.mdDoc "The Rabbitmq in amqp URI style OnlyOffice should connect to.";
     };
   };
 

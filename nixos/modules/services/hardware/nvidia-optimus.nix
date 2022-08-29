@@ -11,7 +11,7 @@ let kernel = config.boot.kernelPackages; in
     hardware.nvidiaOptimus.disable = lib.mkOption {
       default = false;
       type = lib.types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Completely disable the NVIDIA graphics card and use the
         integrated graphics processor instead.
       '';

@@ -3,7 +3,9 @@
 , fetchFromGitHub
 , makeWrapper
 , makeDesktopItem
-, mkYarnPackage
+, fixup_yarn_lock
+, yarn
+, nodejs
 , fetchYarnDeps
 , electron
 , element-web
@@ -19,11 +21,10 @@
 let
   pinData = lib.importJSON ./pin.json;
   executableName = "element-desktop";
-  electron_exec = if stdenv.isDarwin then "${electron}/Applications/Electron.app/Contents/MacOS/Electron" else "${electron}/bin/electron";
   keytar = callPackage ./keytar { inherit Security AppKit; };
   seshat = callPackage ./seshat { inherit CoreServices; };
 in
-mkYarnPackage rec {
+stdenv.mkDerivation rec {
   pname = "element-desktop";
   inherit (pinData) version;
   name = "${pname}-${version}";
@@ -34,27 +35,39 @@ mkYarnPackage rec {
     sha256 = pinData.desktopSrcHash;
   };
 
-  packageJSON = ./element-desktop-package.json;
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
     sha256 = pinData.desktopYarnHash;
   };
 
-  nativeBuildInputs = [ makeWrapper ] ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
+  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs makeWrapper ]
+    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   inherit seshat;
 
+  configurePhase = ''
+    runHook preConfigure
+
+    export HOME=$(mktemp -d)
+    yarn config --offline set yarn-offline-mirror $offlineCache
+    fixup_yarn_lock yarn.lock
+    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules/
+
+    runHook postConfigure
+  '';
+
   buildPhase = ''
     runHook preBuild
-    export HOME=$(mktemp -d)
-    pushd deps/element-desktop/
-    yarn run build:ts
-    yarn run i18n
-    yarn run build:res
-    popd
+
+    yarn --offline run build:ts
+    yarn --offline run i18n
+    yarn --offline run build:res
+
     rm -rf node_modules/matrix-seshat node_modules/keytar
     ${lib.optionalString useKeytar "ln -s ${keytar} node_modules/keytar"}
     ln -s $seshat node_modules/matrix-seshat
+
     runHook postBuild
   '';
 
@@ -64,9 +77,9 @@ mkYarnPackage rec {
     # resources
     mkdir -p "$out/share/element"
     ln -s '${element-web}' "$out/share/element/webapp"
-    cp -r './deps/element-desktop' "$out/share/element/electron"
-    cp -r './deps/element-desktop/res/img' "$out/share/element"
-    rm "$out/share/element/electron/node_modules"
+    cp -r '.' "$out/share/element/electron"
+    cp -r './res/img' "$out/share/element"
+    rm -rf "$out/share/element/electron/node_modules"
     cp -r './node_modules' "$out/share/element/electron"
     cp $out/share/element/electron/lib/i18n/strings/en_EN.json $out/share/element/electron/lib/i18n/strings/en-us.json
     ln -s $out/share/element/electron/lib/i18n/strings/en{-us,}.json
@@ -83,16 +96,13 @@ mkYarnPackage rec {
 
     # executable wrapper
     # LD_PRELOAD workaround for sqlcipher not found: https://github.com/matrix-org/seshat/issues/102
-    makeWrapper '${electron_exec}' "$out/bin/${executableName}" \
+    makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
       --add-flags "$out/share/element/electron" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 
     runHook postInstall
   '';
-
-  # Do not attempt generating a tarball for element-desktop again.
-  doDist = false;
 
   # The desktop item properties should be kept in sync with data from upstream:
   # https://github.com/vector-im/element-desktop/blob/develop/package.json

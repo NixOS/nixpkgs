@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pyrisco";
-  version = "0.3.1";
+  version = "0.5.2";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "OnFreund";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1im29h4rxnp98aqzgzjj5i8jv2h5zw9c5yx8xxzl4cmr3yila9zw";
+    sha256 = "sha256-gRAQARdVZWpFHx0nE4xRktIP2p4ggp9/95VO9nNd/1w=";
   };
 
   propagatedBuildInputs = [ aiohttp ];

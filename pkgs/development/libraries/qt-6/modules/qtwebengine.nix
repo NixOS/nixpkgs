@@ -3,6 +3,7 @@
 , qtwebchannel
 , qtpositioning
 , qtwebsockets
+, buildPackages
 , bison
 , coreutils
 , flex
@@ -104,6 +105,9 @@ qtModule rec {
         --replace "/usr/bin/env -S deno" "/usr/bin/deno" || true
       patchShebangs .
     )
+
+    substituteInPlace cmake/Functions.cmake \
+      --replace "/bin/bash" "${buildPackages.bash}/bin/bash"
 
     sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
       src/3rdparty/chromium/device/udev_linux/udev?_loader.cc

@@ -14,12 +14,13 @@
 , toml
 , types-setuptools
 , types-toml
+, unittestCheckHook
 , xmldiff
 }:
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "2.7.0";
+  version = "2.7.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "CycloneDX";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Imn9wl5I7dzkUnVBzK2vhWOrf89FycVW4GvEYFeSujU=";
+    hash = "sha256-c/KhoJOa121/h0n0GUazjUFChnUo05ThD+fuZXc5/Pk=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +48,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    unittestCheckHook
     jsonschema
     lxml
     xmldiff
@@ -56,13 +58,9 @@ buildPythonPackage rec {
     "cyclonedx"
   ];
 
- checkPhase = ''
-   runHook preCheck
-   # Tests require network access
-   rm tests/test_output_json.py
-   ${python.interpreter} -m unittest discover -s tests -v
-   runHook postCheck
- '';
+  preCheck = ''
+    rm tests/test_output_json.py
+  '';
 
   meta = with lib; {
     description = "Python library for generating CycloneDX SBOMs";

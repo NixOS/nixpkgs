@@ -38,6 +38,8 @@
 , pdal
 , zstd
 , makeWrapper
+, wrapGAppsHook
+, substituteAll
 }:
 
 let
@@ -64,19 +66,21 @@ let
     urllib3
     pygments
     pyqt5
-    sip_4
+    pyqt-builder
+    sip
+    setuptools
     owslib
     six
   ];
 in mkDerivation rec {
-  version = "3.22.9";
+  version = "3.22.10";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-QHdcK34e7tC0AUstE8pbsBHzHXbmOd3gI2/zqsxb6X4=";
+    hash = "sha256-v/PshUZpf8fVW2PrGBiuAMfyfC/osOkR9GcnNOyg0l4=";
   };
 
   passthru = {
@@ -116,29 +120,31 @@ in mkDerivation rec {
     ++ lib.optional withWebKit qtwebkit
     ++ pythonBuildInputs;
 
-  nativeBuildInputs = [ makeWrapper cmake flex bison ninja ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook cmake flex bison ninja ];
 
-  # Force this pyqt_sip_dir variable to point to the sip dir in PyQt5
-  #
-  # TODO: Correct PyQt5 to provide the expected directory and fix
-  # build to use PYQT5_SIP_DIR consistently.
-  postPatch = ''
-    substituteInPlace cmake/FindPyQt5.py \
-      --replace 'sip_dir = cfg.default_sip_dir' 'sip_dir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}/PyQt5/bindings"'
-  '';
+  patches = [
+    (substituteAll {
+      src = ./set-pyqt-package-dirs.patch;
+      pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
+      qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
+    })
+  ];
 
   cmakeFlags = [
     "-DWITH_3D=True"
     "-DWITH_PDAL=TRUE"
-    "-DPYQT5_SIP_DIR=${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}/PyQt5/bindings"
-    "-DQSCI_SIP_DIR=${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}/PyQt5/bindings"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withGrass "-DGRASS_PREFIX7=${grass}/grass78";
 
+  dontWrapGApps = true; # wrapper params passed below
+
   postFixup = lib.optionalString withGrass ''
     # grass has to be availble on the command line even though we baked in
-    # the path at build time using GRASS_PREFIX
+    # the path at build time using GRASS_PREFIX.
+    # using wrapGAppsHook also prevents file dialogs from crashing the program
+    # on non-NixOS
     wrapProgram $out/bin/qgis \
+      "''${gappsWrapperArgs[@]}" \
       --prefix PATH : ${lib.makeBinPath [ grass ]}
   '';
 

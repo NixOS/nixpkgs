@@ -219,7 +219,7 @@ let
 
       # Strip binaries further than normal.
       chmod -R u+w $out
-      stripDirs "$STRIP" "lib bin" "-s"
+      stripDirs "$STRIP" "$RANLIB" "lib bin" "-s"
 
       # Run patchelf to make the programs refer to the copied libraries.
       find $out/bin $out/lib -type f | while read i; do
@@ -480,7 +480,7 @@ in
         if you want to resume from file. If left empty, the swap partitions are used.
         Specify here the device where the file resides.
         You should also use <varname>boot.kernelParams</varname> to specify
-        <literal><replaceable>resume_offset</replaceable></literal>.
+        <literal>«resume_offset»</literal>.
       '';
     };
 
@@ -488,7 +488,7 @@ in
       type = types.bool;
       default = !config.boot.isContainer;
       defaultText = literalExpression "!config.boot.isContainer";
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable the NixOS initial RAM disk (initrd). This may be
         needed to perform some initialisation tasks (like mounting
         network/encrypted file systems) before continuing the boot process.
@@ -502,11 +502,11 @@ in
           options = {
             source = mkOption {
               type = types.package;
-              description = "The object to make available inside the initrd.";
+              description = lib.mdDoc "The object to make available inside the initrd.";
             };
           };
         });
-      description = ''
+      description = lib.mdDoc ''
         Extra files to link and copy in to the initrd.
       '';
     };
@@ -514,7 +514,7 @@ in
     boot.initrd.prepend = mkOption {
       default = [ ];
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         Other initrd files to prepend to the final initrd we are building.
       '';
     };
@@ -522,15 +522,15 @@ in
     boot.initrd.checkJournalingFS = mkOption {
       default = true;
       type = types.bool;
-      description = ''
-        Whether to run <command>fsck</command> on journaling filesystems such as ext3.
+      description = lib.mdDoc ''
+        Whether to run {command}`fsck` on journaling filesystems such as ext3.
       '';
     };
 
     boot.initrd.preLVMCommands = mkOption {
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Shell commands to be executed immediately before LVM discovery.
       '';
     };
@@ -538,7 +538,7 @@ in
     boot.initrd.preDeviceCommands = mkOption {
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Shell commands to be executed before udev is started to create
         device nodes.
       '';
@@ -547,17 +547,17 @@ in
     boot.initrd.postDeviceCommands = mkOption {
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Shell commands to be executed immediately after stage 1 of the
         boot has loaded kernel modules and created device nodes in
-        <filename>/dev</filename>.
+        {file}`/dev`.
       '';
     };
 
     boot.initrd.postMountCommands = mkOption {
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Shell commands to be executed immediately after the stage 1
         filesystems have been mounted.
       '';
@@ -566,7 +566,7 @@ in
     boot.initrd.preFailCommands = mkOption {
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Shell commands to be executed before the failure prompt is shown.
       '';
     };
@@ -611,7 +611,7 @@ in
         then "zstd"
         else "gzip"
       );
-      defaultText = literalDocBook "<literal>zstd</literal> if the kernel supports it (5.9+), <literal>gzip</literal> if not";
+      defaultText = literalMD "`zstd` if the kernel supports it (5.9+), `gzip` if not";
       type = types.either types.str (types.functionTo types.str);
       description = ''
         The compressor to use on the initrd image. May be any of:
@@ -630,14 +630,14 @@ in
     boot.initrd.compressorArgs = mkOption {
       default = null;
       type = types.nullOr (types.listOf types.str);
-      description = "Arguments to pass to the compressor for the initrd image, or null to use the compressor's defaults.";
+      description = lib.mdDoc "Arguments to pass to the compressor for the initrd image, or null to use the compressor's defaults.";
     };
 
     boot.initrd.secrets = mkOption
       { default = {};
         type = types.attrsOf (types.nullOr types.path);
         description =
-          ''
+          lib.mdDoc ''
             Secrets to append to the initrd. The attribute name is the
             path the secret should have inside the initrd, the value
             is the path it should be copied from (or null for the same
@@ -655,7 +655,7 @@ in
       default = [ ];
       example = [ "btrfs" ];
       type = types.listOf types.str;
-      description = "Names of supported filesystem types in the initial ramdisk.";
+      description = lib.mdDoc "Names of supported filesystem types in the initial ramdisk.";
     };
 
     boot.initrd.verbose = mkOption {
@@ -692,12 +692,12 @@ in
         options.neededForBoot = mkOption {
           default = false;
           type = types.bool;
-          description = ''
+          description = lib.mdDoc ''
             If set, this file system will be mounted in the initial ramdisk.
             Note that the file system will always be mounted in the initial
             ramdisk if its mount point is one of the following:
             ${concatStringsSep ", " (
-              forEach utils.pathsNeededForBoot (i: "<filename>${i}</filename>")
+              forEach utils.pathsNeededForBoot (i: "{file}`${i}`")
             )}.
           '';
         };

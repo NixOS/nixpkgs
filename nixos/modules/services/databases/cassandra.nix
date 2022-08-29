@@ -422,11 +422,11 @@ in
         options = {
           username = mkOption {
             type = types.str;
-            description = "Username for JMX";
+            description = lib.mdDoc "Username for JMX";
           };
           password = mkOption {
             type = types.str;
-            description = "Password for JMX";
+            description = lib.mdDoc "Password for JMX";
           };
         };
       });
@@ -440,7 +440,7 @@ in
         else null;
       defaultText = literalMD ''generated configuration file if version is at least 3.11, otherwise `null`'';
       example = "/var/lib/cassandra/jmx.password";
-      description = ''
+      description = lib.mdDoc ''
         Specify your own jmx roles file.
 
         Make sure the permissions forbid "others" from reading the file if

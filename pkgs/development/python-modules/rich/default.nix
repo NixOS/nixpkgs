@@ -9,6 +9,12 @@
 , pygments
 , typing-extensions
 , pytestCheckHook
+
+# for passthru.tests
+, enrich
+, httpie
+, rich-rst
+, textual
 }:
 
 buildPythonPackage rec {
@@ -45,6 +51,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "rich" ];
+
+  passthru.tests = {
+    inherit enrich httpie rich-rst textual;
+  };
 
   meta = with lib; {
     description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal";

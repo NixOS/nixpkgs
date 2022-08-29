@@ -37,7 +37,7 @@ final: prev: let
       rec {
         fileVersion = "10.0";
         fullVersion = "7.4.2.24";
-        sha256 = "18ys0apiz9afid2s6lvy9qbyi8g66aimb2a7ikl1f3dm09mciprf";
+        hash = "sha256-Lt/IagK1DRfojEeJVaMy5qHoF05+U6NFi06lH68C2qM=";
         url = "${urlPrefix}/v${majorMinorPatch fullVersion}/cudnn-10.0-linux-x64-v${fullVersion}.tgz";
         supportedCudaVersions = [ "10.0" ];
       }
@@ -85,7 +85,7 @@ final: prev: let
       rec {
         fileVersion = "10.2";
         fullVersion = "8.3.2.44";
-        hash = "sha256-mKh4TpKGLyABjSDCgbMNSgzZUfk2lPZDPM9K6cUCumo=";
+        hash = "sha256-1vVu+cqM+PketzIQumw9ykm6REbBZhv6/lXB7EC2aaw=";
         url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${fileVersion}-archive.tar.xz";
         supportedCudaVersions = [ "10.2" ];
       }

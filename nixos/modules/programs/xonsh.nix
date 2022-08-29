@@ -18,7 +18,7 @@ in
 
       enable = mkOption {
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to configure xonsh as an interactive shell.
         '';
         type = types.bool;
@@ -29,14 +29,14 @@ in
         default = pkgs.xonsh;
         defaultText = literalExpression "pkgs.xonsh";
         example = literalExpression "pkgs.xonsh.override { configFile = \"/path/to/xonshrc\"; }";
-        description = ''
+        description = lib.mdDoc ''
           xonsh package to use.
         '';
       };
 
       config = mkOption {
         default = "";
-        description = "Control file to customize your shell behavior.";
+        description = lib.mdDoc "Control file to customize your shell behavior.";
         type = types.lines;
       };
 

@@ -18,13 +18,13 @@ assert blas.isILP64 == scalapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "elpa";
-  version = "2021.11.002";
+  version = "2022.05.001";
 
   passthru = { inherit (blas) isILP64; };
 
   src = fetchurl {
     url = "https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/${version}/elpa-${version}.tar.gz";
-    sha256 = "sha256-V28cru14g7gTlmQP2g9QQYOGbPbL1Lxx0Tg7oiCPH5c=";
+    sha256 = "sha256-IH5vJtZTL7cDc6/D7z04JVITr2He9lnCXa06MOT8o4s=";
   };
 
   patches = [
@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export FC="mpifort"
     export CC="mpicc"
+    export CXX="mpicxx"
+    export CPP="cpp"
 
     # These need to be set for configure to succeed
     export FCFLAGS="${lib.optionalString stdenv.hostPlatform.isx86_64 "-msse3 "

@@ -17,7 +17,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Autostart an IHaskell notebook service.";
+        description = lib.mdDoc "Autostart an IHaskell notebook service.";
       };
 
       extraPackages = mkOption {

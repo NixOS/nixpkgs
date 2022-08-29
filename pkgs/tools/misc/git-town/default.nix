@@ -1,15 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, git, testers, git-town, makeWrapper }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch, installShellFiles, git, testers, git-town, makeWrapper }:
 
 buildGoModule rec {
   pname = "git-town";
-  version = "7.7.0";
+  version = "7.8.0";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
     rev = "v${version}";
-    sha256 = "sha256-FpBEBx2gb33fGDndvZmvG1A61NoJ4Qy4V3YQSb+Ugsc=";
+    sha256 = "sha256-g9ooMIMN8DN2FcWYkDC1hICCleQYdHf30PYMCit/NMI=";
   };
+
+  patches = [
+    # Fix "go vet" when building using Go 1.18.
+    (fetchpatch {
+      name = "fix-go-vet-in-go-1.18.patch";
+      url = "https://github.com/git-town/git-town/commit/23eb0aca7b28c6a0afc21db553aa0e35d35891aa.patch";
+      sha256 = "sha256-EyfhKVrQxRJNrYqaZI04dJogaXs1J+bbOIu7p8g2Clc=";
+    })
+  ];
 
   vendorSha256 = null;
 

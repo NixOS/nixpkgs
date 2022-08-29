@@ -3,6 +3,11 @@ import json
 import sys
 from typing import Any, Dict, List
 
+# for MD conversion
+import mistune
+import re
+from xml.sax.saxutils import escape, quoteattr
+
 JSON = Dict[str, Any]
 
 class Key:
@@ -41,135 +46,135 @@ def unpivot(options: Dict[Key, Option]) -> Dict[str, JSON]:
         result[opt.name] = opt.value
     return result
 
+admonitions = {
+    '.warning': 'warning',
+    '.important': 'important',
+    '.note': 'note'
+}
+class Renderer(mistune.renderers.BaseRenderer):
+    def _get_method(self, name):
+        try:
+            return super(Renderer, self)._get_method(name)
+        except AttributeError:
+            def not_supported(*args, **kwargs):
+                raise NotImplementedError("md node not supported yet", name, args, **kwargs)
+            return not_supported
+
+    def text(self, text):
+        return escape(text)
+    def paragraph(self, text):
+        return text + "\n\n"
+    def newline(self):
+        return "<literallayout>\n</literallayout>"
+    def codespan(self, text):
+        return f"<literal>{escape(text)}</literal>"
+    def block_code(self, text, info=None):
+        info = f" language={quoteattr(info)}" if info is not None else ""
+        return f"<programlisting{info}>\n{escape(text)}</programlisting>"
+    def link(self, link, text=None, title=None):
+        tag = "link"
+        if link[0:1] == '#':
+            if text == "":
+                tag = "xref"
+            attr = "linkend"
+            link = quoteattr(link[1:])
+        else:
+            # try to faithfully reproduce links that were of the form <link href="..."/>
+            # in docbook format
+            if text == link:
+                text = ""
+            attr = "xlink:href"
+            link = quoteattr(link)
+        return f"<{tag} {attr}={link}>{text}</{tag}>"
+    def list(self, text, ordered, level, start=None):
+        if ordered:
+            raise NotImplementedError("ordered lists not supported yet")
+        return f"<itemizedlist>\n{text}\n</itemizedlist>"
+    def list_item(self, text, level):
+        return f"<listitem><para>{text}</para></listitem>\n"
+    def block_text(self, text):
+        return text
+    def emphasis(self, text):
+        return f"<emphasis>{text}</emphasis>"
+    def strong(self, text):
+        return f"<emphasis role=\"strong\">{text}</emphasis>"
+    def admonition(self, text, kind):
+        if kind not in admonitions:
+            raise NotImplementedError(f"admonition {kind} not supported yet")
+        tag = admonitions[kind]
+        # we don't keep whitespace here because usually we'll contain only
+        # a single paragraph and the original docbook string is no longer
+        # available to restore the trailer.
+        return f"<{tag}><para>{text.rstrip()}</para></{tag}>"
+    def block_quote(self, text):
+        return f"<blockquote><para>{text}</para></blockquote>"
+    def command(self, text):
+        return f"<command>{escape(text)}</command>"
+    def option(self, text):
+        return f"<option>{escape(text)}</option>"
+    def file(self, text):
+        return f"<filename>{escape(text)}</filename>"
+    def manpage(self, page, section):
+        title = f"<refentrytitle>{escape(page)}</refentrytitle>"
+        vol = f"<manvolnum>{escape(section)}</manvolnum>"
+        return f"<citerefentry>{title}{vol}</citerefentry>"
+
+    def finalize(self, data):
+        return "".join(data)
+
+def p_command(md):
+    COMMAND_PATTERN = r'\{command\}`(.*?)`'
+    def parse(self, m, state):
+        return ('command', m.group(1))
+    md.inline.register_rule('command', COMMAND_PATTERN, parse)
+    md.inline.rules.append('command')
+
+def p_file(md):
+    FILE_PATTERN = r'\{file\}`(.*?)`'
+    def parse(self, m, state):
+        return ('file', m.group(1))
+    md.inline.register_rule('file', FILE_PATTERN, parse)
+    md.inline.rules.append('file')
+
+def p_option(md):
+    OPTION_PATTERN = r'\{option\}`(.*?)`'
+    def parse(self, m, state):
+        return ('option', m.group(1))
+    md.inline.register_rule('option', OPTION_PATTERN, parse)
+    md.inline.rules.append('option')
+
+def p_manpage(md):
+    MANPAGE_PATTERN = r'\{manpage\}`(.*?)\((.+?)\)`'
+    def parse(self, m, state):
+        return ('manpage', m.group(1), m.group(2))
+    md.inline.register_rule('manpage', MANPAGE_PATTERN, parse)
+    md.inline.rules.append('manpage')
+
+def p_admonition(md):
+    ADMONITION_PATTERN = re.compile(r'^::: \{([^\n]*?)\}\n(.*?)^:::$\n*', flags=re.MULTILINE|re.DOTALL)
+    def parse(self, m, state):
+        return {
+            'type': 'admonition',
+            'children': self.parse(m.group(2), state),
+            'params': [ m.group(1) ],
+        }
+    md.block.register_rule('admonition', ADMONITION_PATTERN, parse)
+    md.block.rules.append('admonition')
+
+md = mistune.create_markdown(renderer=Renderer(), plugins=[
+    p_command, p_file, p_option, p_manpage, p_admonition
+])
+
 # converts in-place!
 def convertMD(options: Dict[str, Any]) -> str:
-    import mistune
-    import re
-    from xml.sax.saxutils import escape, quoteattr
-
-    admonitions = {
-        '.warning': 'warning',
-        '.important': 'important',
-        '.note': 'note'
-    }
-    class Renderer(mistune.renderers.BaseRenderer):
-        def _get_method(self, name):
-            try:
-                return super(Renderer, self)._get_method(name)
-            except AttributeError:
-                def not_supported(*args, **kwargs):
-                    raise NotImplementedError("md node not supported yet", name, args, **kwargs)
-                return not_supported
-
-        def text(self, text):
-            return escape(text)
-        def paragraph(self, text):
-            return text + "\n\n"
-        def newline(self):
-            return "<literallayout>\n</literallayout>"
-        def codespan(self, text):
-            return f"<literal>{escape(text)}</literal>"
-        def block_code(self, text, info=None):
-            info = f" language={quoteattr(info)}" if info is not None else ""
-            return f"<programlisting{info}>\n{escape(text)}</programlisting>"
-        def link(self, link, text=None, title=None):
-            if link[0:1] == '#':
-                attr = "linkend"
-                link = quoteattr(link[1:])
-            else:
-                # try to faithfully reproduce links that were of the form <link href="..."/>
-                # in docbook format
-                if text == link:
-                    text = ""
-                attr = "xlink:href"
-                link = quoteattr(link)
-            return f"<link {attr}={link}>{text}</link>"
-        def list(self, text, ordered, level, start=None):
-            if ordered:
-                raise NotImplementedError("ordered lists not supported yet")
-            return f"<itemizedlist>\n{text}\n</itemizedlist>"
-        def list_item(self, text, level):
-            return f"<listitem><para>{text}</para></listitem>\n"
-        def block_text(self, text):
-            return text
-        def emphasis(self, text):
-            return f"<emphasis>{text}</emphasis>"
-        def strong(self, text):
-            return f"<emphasis role=\"strong\">{text}</emphasis>"
-        def admonition(self, text, kind):
-            if kind not in admonitions:
-                raise NotImplementedError(f"admonition {kind} not supported yet")
-            tag = admonitions[kind]
-            # we don't keep whitespace here because usually we'll contain only
-            # a single paragraph and the original docbook string is no longer
-            # available to restore the trailer.
-            return f"<{tag}><para>{text.rstrip()}</para></{tag}>"
-        def block_quote(self, text):
-            return f"<blockquote><para>{text}</para></blockquote>"
-        def command(self, text):
-            return f"<command>{escape(text)}</command>"
-        def option(self, text):
-            return f"<option>{escape(text)}</option>"
-        def file(self, text):
-            return f"<filename>{escape(text)}</filename>"
-        def manpage(self, page, section):
-            title = f"<refentrytitle>{escape(page)}</refentrytitle>"
-            vol = f"<manvolnum>{escape(section)}</manvolnum>"
-            return f"<citerefentry>{title}{vol}</citerefentry>"
-
-        def finalize(self, data):
-            return "".join(data)
-
-    plugins = []
-
-    COMMAND_PATTERN = r'\{command\}`(.*?)`'
-    def command(md):
-        def parse(self, m, state):
-            return ('command', m.group(1))
-        md.inline.register_rule('command', COMMAND_PATTERN, parse)
-        md.inline.rules.append('command')
-    plugins.append(command)
-
-    FILE_PATTERN = r'\{file\}`(.*?)`'
-    def file(md):
-        def parse(self, m, state):
-            return ('file', m.group(1))
-        md.inline.register_rule('file', FILE_PATTERN, parse)
-        md.inline.rules.append('file')
-    plugins.append(file)
-
-    OPTION_PATTERN = r'\{option\}`(.*?)`'
-    def option(md):
-        def parse(self, m, state):
-            return ('option', m.group(1))
-        md.inline.register_rule('option', OPTION_PATTERN, parse)
-        md.inline.rules.append('option')
-    plugins.append(option)
-
-    MANPAGE_PATTERN = r'\{manpage\}`(.*?)\((.+?)\)`'
-    def manpage(md):
-        def parse(self, m, state):
-            return ('manpage', m.group(1), m.group(2))
-        md.inline.register_rule('manpage', MANPAGE_PATTERN, parse)
-        md.inline.rules.append('manpage')
-    plugins.append(manpage)
-
-    ADMONITION_PATTERN = re.compile(r'^::: \{([^\n]*?)\}\n(.*?)^:::\n', flags=re.MULTILINE|re.DOTALL)
-    def admonition(md):
-        def parse(self, m, state):
-            return {
-                'type': 'admonition',
-                'children': self.parse(m.group(2), state),
-                'params': [ m.group(1) ],
-            }
-        md.block.register_rule('admonition', ADMONITION_PATTERN, parse)
-        md.block.rules.append('admonition')
-    plugins.append(admonition)
-
-    def convertString(text: str) -> str:
-        rendered = mistune.markdown(text, renderer=Renderer(), plugins=plugins)
-        # keep trailing spaces so we can diff the generated XML to check for conversion bugs.
-        return rendered.rstrip() + text[len(text.rstrip()):]
+    def convertString(path: str, text: str) -> str:
+        try:
+            rendered = md(text)
+            # keep trailing spaces so we can diff the generated XML to check for conversion bugs.
+            return rendered.rstrip() + text[len(text.rstrip()):]
+        except:
+            print(f"error in {path}")
+            raise
 
     def optionIs(option: Dict[str, Any], key: str, typ: str) -> bool:
         if key not in option: return False
@@ -179,12 +184,12 @@ def convertMD(options: Dict[str, Any]) -> str:
 
     for (name, option) in options.items():
         if optionIs(option, 'description', 'mdDoc'):
-            option['description'] = convertString(option['description']['text'])
+            option['description'] = convertString(name, option['description']['text'])
         if optionIs(option, 'example', 'literalMD'):
-            docbook = convertString(option['example']['text'])
+            docbook = convertString(name, option['example']['text'])
             option['example'] = { '_type': 'literalDocBook', 'text': docbook }
         if optionIs(option, 'default', 'literalMD'):
-            docbook = convertString(option['default']['text'])
+            docbook = convertString(name, option['default']['text'])
             option['default'] = { '_type': 'literalDocBook', 'text': docbook }
 
     return options

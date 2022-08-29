@@ -5,8 +5,8 @@
   makeWrapper,
   offpunk,
   python3,
-  ripgrep,
   stdenv,
+  testers,
   timg,
   xdg-utils,
   xsel,
@@ -24,7 +24,6 @@ let
   ];
   otherDependencies = [
     less
-    ripgrep
     timg
     xdg-utils
     xsel
@@ -32,17 +31,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "offpunk";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitea {
     domain = "notabug.org";
     owner = "ploum";
     repo = "offpunk";
     rev = "v${finalAttrs.version}";
-    sha256 = "04dzkzsan1cnrslsvfgn1whpwald8xy34wqzvq81hd2mvw9a2n69";
+    sha256 = "1zg13wajsfrl3hli6sihn47db08w037jjq9vgr6m5sjh8r1jb9iy";
   };
 
-  buildInputs = [ makeWrapper ] ++ otherDependencies ++ pythonDependencies;
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = otherDependencies ++ pythonDependencies;
 
   installPhase = ''
     runHook preInstall
@@ -55,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
 
    runHook postInstall
   '';
+
+  passthru.tests.version = testers.testVersion { package = offpunk; };
 
   meta = with lib; {
     description = "An Offline-First browser for the smolnet ";

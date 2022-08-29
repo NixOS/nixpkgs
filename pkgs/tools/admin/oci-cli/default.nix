@@ -13,6 +13,7 @@ let
         src = oldAttrs.src.override {
           inherit version;
           hash = "sha256-0rUlXHxjSbwb0eWeCM0SrLvWPOZJ8liHVXg6qU37axo=";
+          sha256 = "";
         };
       });
 
@@ -21,7 +22,9 @@ let
         src = oldAttrs.src.override {
           inherit version;
           sha256 = "b85d0567b8666149a93172712e68920734333c0ce7e89b78b3e987f71e5ed4f9";
+          hash = "";
         };
+        doCheck = false;
       });
 
     };
@@ -31,24 +34,24 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "oci-cli";
-  version = "3.7.2";
+  version = "3.14.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "oracle";
-    repo = "oci-cli";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-20Tnn0s+sfLEsAG9S6f61OVGpRf53wFPtt4a2/TJbCg=";
+    hash = "sha256-yooEZuSIw2EMJVyT/Z/x4hJi8a1F674CtsMMGkMAYLg=";
   };
 
   propagatedBuildInputs = [
     arrow
     certifi
     click
-    configparser
     cryptography
     jmespath
     oci
+    prompt-toolkit
     pyopenssl
     python-dateutil
     pytz
@@ -60,9 +63,10 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "cryptography>=3.2.1,<=3.4.7" "cryptography" \
-      --replace "pyOpenSSL==19.1.0" "pyOpenSSL" \
+      --replace "cryptography>=3.2.1,<=37.0.2" "cryptography" \
+      --replace "pyOpenSSL>=17.5.0,<=22.0.0" "pyOpenSSL" \
       --replace "PyYAML>=5.4,<6" "PyYAML" \
+      --replace "prompt-toolkit==3.0.29" "prompt-toolkit" \
       --replace "terminaltables==3.1.0" "terminaltables"
   '';
 

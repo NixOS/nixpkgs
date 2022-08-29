@@ -76,6 +76,11 @@ stdenv.mkDerivation rec {
     "-DDISABLE_STRIP=true"
   ];
 
+  postFixup = lib.optionals stdenv.isDarwin ''
+    install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}
+    install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}d
+  '';
+
   meta = with lib; {
     description = "A fully functional terminal-based music player, library, and streaming audio server";
     homepage = "https://musikcube.com/";

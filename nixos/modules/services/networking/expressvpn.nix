@@ -5,7 +5,7 @@ with lib;
   options.services.expressvpn.enable = mkOption {
     type = types.bool;
     default = false;
-    description = ''
+    description = lib.mdDoc ''
       Enable the ExpressVPN daemon.
     '';
   };

@@ -9,8 +9,9 @@ cd $jami_dir/../../../../..
 
 # Update src version and hash
 version=$(curl -s 'https://dl.jami.net/release/tarballs/?C=M;O=D' | sed -n -E 's/^.*jami_([0-9.a-f]+)\.tar\.gz.*$/\1/p' | head -n 1)
+echo "Latest version: ${version}"
 
-update-source-version jami-libclient "$version" --file=$jami_dir/default.nix
+update-source-version jami-daemon "$version" --file=$jami_dir/default.nix
 
 src=$(nix-build --no-out-link -A jami-libclient.src)
 
@@ -20,7 +21,7 @@ mkdir -p $config_dir
 ffmpeg_rules="${src}/daemon/contrib/src/ffmpeg/rules.mak"
 
 # Update FFmpeg patches
-ffmpeg_patches=$(sed -n '/.sum-ffmpeg:/,/HAVE_IOS/p' ${ffmpeg_rules} | sed -n -E 's/.*ffmpeg\/(.*patch).*/\1/p')
+ffmpeg_patches=$(sed -n '/^ffmpeg:/,/^$/p' ${ffmpeg_rules} | sed -n -E 's/.*ffmpeg\/(.*patch).*/\1/p')
 echo -e "Patches for FFmpeg:\n${ffmpeg_patches}\n"
 echo "${ffmpeg_patches}" > "$config_dir/ffmpeg_patches"
 

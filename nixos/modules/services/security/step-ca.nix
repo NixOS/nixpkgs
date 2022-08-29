@@ -14,30 +14,30 @@ in
         type = lib.types.package;
         default = pkgs.step-ca;
         defaultText = lib.literalExpression "pkgs.step-ca";
-        description = "Which step-ca package to use.";
+        description = lib.mdDoc "Which step-ca package to use.";
       };
       address = lib.mkOption {
         type = lib.types.str;
         example = "127.0.0.1";
-        description = ''
+        description = lib.mdDoc ''
           The address (without port) the certificate authority should listen at.
-          This combined with <option>services.step-ca.port</option> overrides <option>services.step-ca.settings.address</option>.
+          This combined with {option}`services.step-ca.port` overrides {option}`services.step-ca.settings.address`.
         '';
       };
       port = lib.mkOption {
         type = lib.types.port;
         example = 8443;
-        description = ''
+        description = lib.mdDoc ''
           The port the certificate authority should listen on.
-          This combined with <option>services.step-ca.address</option> overrides <option>services.step-ca.settings.address</option>.
+          This combined with {option}`services.step-ca.address` overrides {option}`services.step-ca.settings.address`.
         '';
       };
       settings = lib.mkOption {
         type = with lib.types; attrsOf anything;
         description = ''
           Settings that go into <filename>ca.json</filename>. See
-          <link xlink:href="https://smallstep.com/docs/step-ca/configuration">
-          the step-ca manual</link> for more information. The easiest way to
+          <link xlink:href="https://smallstep.com/docs/step-ca/configuration">the step-ca manual</link>
+          for more information. The easiest way to
           configure this module would be to run <literal>step ca init</literal>
           to generate <filename>ca.json</filename> and then import it using
           <literal>builtins.fromJSON</literal>.

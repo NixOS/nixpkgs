@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "nordzy-icon-theme";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "alvatip";
     repo = "Nordzy-icon";
     rev = version;
-    sha256 = "sha256-2uMbiee7wCyDxs6kYd5sL/keDVIVjIWxoci5/t2HF8s=";
+    sha256 = "sha256-syiJL5i7JJXiSedUtaaoCnAv/6NgRtB3um7A5Sp+Pek=";
   };
 
   # In the post patch phase we should first make sure to patch shebangs.

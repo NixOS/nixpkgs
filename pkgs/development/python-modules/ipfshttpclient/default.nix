@@ -80,6 +80,8 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+  doCheck = false;
+
   pythonImportsCheck = [ "ipfshttpclient" ];
 
   meta = with lib; {

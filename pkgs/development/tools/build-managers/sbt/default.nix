@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sbt";
-  version = "1.6.2";
+  version = "1.7.1";
 
   src = fetchurl {
     url = "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz";
-    sha256 = "sha256-Y3Y3tsTm+gSrYs02QGHjKxJICwkAHNIzA99is2+t1EA=";
+    sha256 = "sha256-ihg6/bNRkpDd4vjIHJsrrRnd14c17zEftfub3PaNP+Q=";
   };
 
   postPatch = ''
@@ -21,7 +21,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ zlib ];
+  buildInputs = lib.optionals stdenv.isLinux [
+    stdenv.cc.cc # libstdc++.so.6
+    zlib
+  ];
 
   installPhase = ''
     runHook preInstall

@@ -3,15 +3,16 @@
 , fetchurl
 , CoreServices
 , buildPackages
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "nspr";
-  version = "4.34";
+  version = "4.34.1";
 
   src = fetchurl {
     url = "mirror://mozilla/nspr/releases/v${version}/src/nspr-${version}.tar.gz";
-    sha256 = "177rxcf3lglabs7sgwcvf72ww4v56qa71lc495wl13sxs4f03vxy";
+    hash = "sha256-xbg1TEi2Mrj0wZcGKBRsDgwMqPMscxXX1XNsAC4Dd08=";
   };
 
   patches = [
@@ -43,6 +44,10 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit (nixosTests) firefox firefox-esr-91 firefox-esr-102;
+  };
 
   meta = with lib; {
     homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/Reference/NSPR_functions";

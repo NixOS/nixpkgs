@@ -41,6 +41,7 @@ in {
   apparmor = handleTest ./apparmor.nix {};
   atd = handleTest ./atd.nix {};
   atop = handleTest ./atop.nix {};
+  auth-mysql = handleTest ./auth-mysql.nix {};
   avahi = handleTest ./avahi.nix {};
   avahi-with-resolved = handleTest ./avahi.nix { networkd = true; };
   babeld = handleTest ./babeld.nix {};
@@ -127,6 +128,7 @@ in {
   docker-tools-cross = handleTestOn ["x86_64-linux" "aarch64-linux"] ./docker-tools-cross.nix {};
   docker-tools-overlay = handleTestOn ["x86_64-linux"] ./docker-tools-overlay.nix {};
   documize = handleTest ./documize.nix {};
+  documentation = pkgs.callPackage ../modules/misc/documentation/test.nix { inherit nixosLib; };
   doh-proxy-rust = handleTest ./doh-proxy-rust.nix {};
   dokuwiki = handleTest ./dokuwiki.nix {};
   domination = handleTest ./domination.nix {};
@@ -265,10 +267,12 @@ in {
   kerberos = handleTest ./kerberos/default.nix {};
   kernel-generic = handleTest ./kernel-generic.nix {};
   kernel-latest-ath-user-regd = handleTest ./kernel-latest-ath-user-regd.nix {};
+  keter = handleTest ./keter.nix {};
   kexec = handleTest ./kexec.nix {};
   keycloak = discoverTests (import ./keycloak.nix);
   keymap = handleTest ./keymap.nix {};
   knot = handleTest ./knot.nix {};
+  komga = handleTest ./komga.nix {};
   krb5 = discoverTests (import ./krb5 {});
   ksm = handleTest ./ksm.nix {};
   kubernetes = handleTestOn ["x86_64-linux"] ./kubernetes {};
@@ -280,6 +284,7 @@ in {
   libreswan = handleTest ./libreswan.nix {};
   librewolf = handleTest ./firefox.nix { firefoxPackage = pkgs.librewolf; };
   libuiohook = handleTest ./libuiohook.nix {};
+  libvirtd = handleTest ./libvirtd.nix {};
   lidarr = handleTest ./lidarr.nix {};
   lightdm = handleTest ./lightdm.nix {};
   lighttpd = handleTest ./lighttpd.nix {};
@@ -353,6 +358,7 @@ in {
   ncdns = handleTest ./ncdns.nix {};
   ndppd = handleTest ./ndppd.nix {};
   nebula = handleTest ./nebula.nix {};
+  netbird = handleTest ./netbird.nix {};
   neo4j = handleTest ./neo4j.nix {};
   netdata = handleTest ./netdata.nix {};
   networking.networkd = handleTest ./networking.nix { networkd = true; };
@@ -416,6 +422,7 @@ in {
   pam-u2f = handleTest ./pam/pam-u2f.nix {};
   pam-ussh = handleTest ./pam/pam-ussh.nix {};
   pass-secret-service = handleTest ./pass-secret-service.nix {};
+  patroni = handleTest ./patroni.nix {};
   pantalaimon = handleTest ./matrix/pantalaimon.nix {};
   pantheon = handleTest ./pantheon.nix {};
   paperless = handleTest ./paperless.nix {};
@@ -537,6 +544,7 @@ in {
   systemd-binfmt = handleTestOn ["x86_64-linux"] ./systemd-binfmt.nix {};
   systemd-boot = handleTest ./systemd-boot.nix {};
   systemd-confinement = handleTest ./systemd-confinement.nix {};
+  systemd-coredump = handleTest ./systemd-coredump.nix {};
   systemd-cryptenroll = handleTest ./systemd-cryptenroll.nix {};
   systemd-escaping = handleTest ./systemd-escaping.nix {};
   systemd-initrd-btrfs-raid = handleTest ./systemd-initrd-btrfs-raid.nix {};
@@ -613,6 +621,7 @@ in {
   wmderland = handleTest ./wmderland.nix {};
   wpa_supplicant = handleTest ./wpa_supplicant.nix {};
   wordpress = handleTest ./wordpress.nix {};
+  writefreely = handleTest ./web-apps/writefreely.nix {};
   xandikos = handleTest ./xandikos.nix {};
   xautolock = handleTest ./xautolock.nix {};
   xfce = handleTest ./xfce.nix {};

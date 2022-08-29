@@ -34,7 +34,7 @@ in
       host = mkOption {
         type = types.str;
         default = "0.0.0.0";
-        description = ''
+        description = lib.mdDoc ''
           Host to bind OctoPrint to.
         '';
       };
@@ -42,7 +42,7 @@ in
       port = mkOption {
         type = types.port;
         default = 5000;
-        description = ''
+        description = lib.mdDoc ''
           Port to bind OctoPrint to.
         '';
       };
@@ -50,19 +50,19 @@ in
       user = mkOption {
         type = types.str;
         default = "octoprint";
-        description = "User for the daemon.";
+        description = lib.mdDoc "User for the daemon.";
       };
 
       group = mkOption {
         type = types.str;
         default = "octoprint";
-        description = "Group for the daemon.";
+        description = lib.mdDoc "Group for the daemon.";
       };
 
       stateDir = mkOption {
         type = types.path;
         default = "/var/lib/octoprint";
-        description = "State directory of the daemon.";
+        description = lib.mdDoc "State directory of the daemon.";
       };
 
       plugins = mkOption {
@@ -70,13 +70,13 @@ in
         default = plugins: [];
         defaultText = literalExpression "plugins: []";
         example = literalExpression "plugins: with plugins; [ themeify stlviewer ]";
-        description = "Additional plugins to be used. Available plugins are passed through the plugins input.";
+        description = lib.mdDoc "Additional plugins to be used. Available plugins are passed through the plugins input.";
       };
 
       extraConfig = mkOption {
         type = types.attrs;
         default = {};
-        description = "Extra options which are added to OctoPrint's YAML configuration file.";
+        description = lib.mdDoc "Extra options which are added to OctoPrint's YAML configuration file.";
       };
 
     };

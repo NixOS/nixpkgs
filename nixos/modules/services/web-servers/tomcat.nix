@@ -26,7 +26,7 @@ in
         default = pkgs.tomcat9;
         defaultText = literalExpression "pkgs.tomcat9";
         example = lib.literalExpression "pkgs.tomcat9";
-        description = ''
+        description = lib.mdDoc ''
           Which tomcat package to use.
         '';
       };
@@ -34,7 +34,7 @@ in
       purifyOnStart = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           On startup, the `baseDir` directory is populated with various files,
           subdirectories and symlinks. If this option is enabled, these items
           (except for the `logs` and `work` subdirectories) are first removed.
@@ -46,7 +46,7 @@ in
       baseDir = mkOption {
         type = lib.types.path;
         default = "/var/tomcat";
-        description = ''
+        description = lib.mdDoc ''
           Location where Tomcat stores configuration files, web applications
           and logfiles. Note that it is partially cleared on each service startup
           if `purifyOnStart` is enabled.
@@ -56,79 +56,79 @@ in
       logDirs = mkOption {
         default = [];
         type = types.listOf types.path;
-        description = "Directories to create in baseDir/logs/";
+        description = lib.mdDoc "Directories to create in baseDir/logs/";
       };
 
       extraConfigFiles = mkOption {
         default = [];
         type = types.listOf types.path;
-        description = "Extra configuration files to pull into the tomcat conf directory";
+        description = lib.mdDoc "Extra configuration files to pull into the tomcat conf directory";
       };
 
       extraEnvironment = mkOption {
         type = types.listOf types.str;
         default = [];
         example = [ "ENVIRONMENT=production" ];
-        description = "Environment Variables to pass to the tomcat service";
+        description = lib.mdDoc "Environment Variables to pass to the tomcat service";
       };
 
       extraGroups = mkOption {
         default = [];
         type = types.listOf types.str;
         example = [ "users" ];
-        description = "Defines extra groups to which the tomcat user belongs.";
+        description = lib.mdDoc "Defines extra groups to which the tomcat user belongs.";
       };
 
       user = mkOption {
         type = types.str;
         default = "tomcat";
-        description = "User account under which Apache Tomcat runs.";
+        description = lib.mdDoc "User account under which Apache Tomcat runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "tomcat";
-        description = "Group account under which Apache Tomcat runs.";
+        description = lib.mdDoc "Group account under which Apache Tomcat runs.";
       };
 
       javaOpts = mkOption {
         type = types.either (types.listOf types.str) types.str;
         default = "";
-        description = "Parameters to pass to the Java Virtual Machine which spawns Apache Tomcat";
+        description = lib.mdDoc "Parameters to pass to the Java Virtual Machine which spawns Apache Tomcat";
       };
 
       catalinaOpts = mkOption {
         type = types.either (types.listOf types.str) types.str;
         default = "";
-        description = "Parameters to pass to the Java Virtual Machine which spawns the Catalina servlet container";
+        description = lib.mdDoc "Parameters to pass to the Java Virtual Machine which spawns the Catalina servlet container";
       };
 
       sharedLibs = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "List containing JAR files or directories with JAR files which are libraries shared by the web applications";
+        description = lib.mdDoc "List containing JAR files or directories with JAR files which are libraries shared by the web applications";
       };
 
       serverXml = mkOption {
         type = types.lines;
         default = "";
-        description = "
+        description = lib.mdDoc ''
           Verbatim server.xml configuration.
           This is mutually exclusive with the virtualHosts options.
-        ";
+        '';
       };
 
       commonLibs = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "List containing JAR files or directories with JAR files which are libraries shared by the web applications and the servlet container";
+        description = lib.mdDoc "List containing JAR files or directories with JAR files which are libraries shared by the web applications and the servlet container";
       };
 
       webapps = mkOption {
         type = types.listOf types.path;
         default = [ tomcat.webapps ];
         defaultText = literalExpression "[ config.services.tomcat.package.webapps ]";
-        description = "List containing WAR files or directories with WAR files which are web applications to be deployed on Tomcat";
+        description = lib.mdDoc "List containing WAR files or directories with WAR files which are web applications to be deployed on Tomcat";
       };
 
       virtualHosts = mkOption {
@@ -136,16 +136,16 @@ in
           options = {
             name = mkOption {
               type = types.str;
-              description = "name of the virtualhost";
+              description = lib.mdDoc "name of the virtualhost";
             };
             aliases = mkOption {
               type = types.listOf types.str;
-              description = "aliases of the virtualhost";
+              description = lib.mdDoc "aliases of the virtualhost";
               default = [];
             };
             webapps = mkOption {
               type = types.listOf types.path;
-              description = ''
+              description = lib.mdDoc ''
                 List containing web application WAR files and/or directories containing
                 web applications and configuration files for the virtual host.
               '';
@@ -154,20 +154,20 @@ in
           };
         });
         default = [];
-        description = "List consisting of a virtual host name and a list of web applications to deploy on each virtual host";
+        description = lib.mdDoc "List consisting of a virtual host name and a list of web applications to deploy on each virtual host";
       };
 
       logPerVirtualHost = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable logging per virtual host.";
+        description = lib.mdDoc "Whether to enable logging per virtual host.";
       };
 
       jdk = mkOption {
         type = types.package;
         default = pkgs.jdk;
         defaultText = literalExpression "pkgs.jdk";
-        description = "Which JDK to use.";
+        description = lib.mdDoc "Which JDK to use.";
       };
 
       axis2 = {
@@ -175,13 +175,13 @@ in
         enable = mkOption {
           default = false;
           type = types.bool;
-          description = "Whether to enable an Apache Axis2 container";
+          description = lib.mdDoc "Whether to enable an Apache Axis2 container";
         };
 
         services = mkOption {
           default = [];
           type = types.listOf types.str;
-          description = "List containing AAR files or directories with AAR files which are web services to be deployed on Axis2";
+          description = lib.mdDoc "List containing AAR files or directories with AAR files which are web services to be deployed on Axis2";
         };
 
       };

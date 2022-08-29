@@ -1,9 +1,19 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytest-mock, pytestCheckHook
-, pyyaml, pythonOlder, jre_minimal, antlr4_9-python3-runtime }:
+{ lib
+, antlr4_9-python3-runtime
+, buildPythonPackage
+, fetchFromGitHub
+, jre_minimal
+, pydevd
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+}:
 
 buildPythonPackage rec {
   pname = "omegaconf";
-  version = "2.2.2";
+  version = "2.2.3";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -11,23 +21,32 @@ buildPythonPackage rec {
     owner = "omry";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-bUJ80sa2ot2JSkt29eFwSiKL6R1X1+VVeE9dFIy4Mg0=";
+    hash = "sha256-sJUYi0M/6SBSeKVSJoNY7IbVmzRZVTlek8AyL2cOPAM=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py --replace 'setup_requires=["pytest-runner"]' 'setup_requires=[]'
-  '';
+  nativeBuildInputs = [
+    jre_minimal
+  ];
 
-  checkInputs = [ pytestCheckHook pytest-mock ];
-  nativeBuildInputs = [ jre_minimal ];
-  propagatedBuildInputs = [ antlr4_9-python3-runtime pyyaml ];
+  propagatedBuildInputs = [
+    antlr4_9-python3-runtime
+    pyyaml
+  ];
 
-  disabledTestPaths = [ "tests/test_pydev_resolver_plugin.py" ];  # needs pydevd - not in Nixpkgs
+  checkInputs = [
+    pydevd
+    pytest-mock
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "omegaconf"
+  ];
 
   meta = with lib; {
-    description = "A framework for configuring complex applications";
+    description = "Framework for configuring complex applications";
     homepage = "https://github.com/omry/omegaconf";
-    license = licenses.free;  # prior bsd license (1988)
+    license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
   };
 }

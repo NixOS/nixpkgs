@@ -31,7 +31,7 @@ let
         doCheck = false;
       };
 
-      sphinx_rtd_theme = prev.sphinx_rtd_theme.override {
+      sphinx-rtd-theme = prev.sphinx-rtd-theme.override {
         inherit sphinx;
         docutils = docutils_old;
       };
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     imagemagick
     perl
     py.pkgs.sphinx
-    py.pkgs.sphinx_rtd_theme
+    py.pkgs.sphinx-rtd-theme
     which
   ];
 

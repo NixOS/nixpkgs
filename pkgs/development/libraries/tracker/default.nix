@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
     json-glib
     libstemmer
     dbus
+  ] ++ lib.optionals stdenv.isLinux [
     systemd
   ];
 
@@ -90,21 +91,29 @@ stdenv.mkDerivation rec {
     [
       "--cross-file=${crossFile}"
     ]
-  );
+  ) ++ lib.optionals (!stdenv.isLinux) [
+    "-Dsystemd_user_services=false"
+  ];
 
   doCheck = true;
 
-  preCheck = ''
-    # (tracker-store:6194): Tracker-CRITICAL **: 09:34:07.722: Cannot initialize database: Could not open sqlite3 database:'/homeless-shelter/.cache/tracker/meta.db': unable to open database file
-    export HOME=$(mktemp -d)
+  preCheck =
+    let
+      linuxDot0 = lib.optionalString stdenv.isLinux ".0";
+      darwinDot0 = lib.optionalString stdenv.isDarwin ".0";
+      extension = stdenv.hostPlatform.extensions.sharedLibrary;
+    in
+    ''
+      # (tracker-store:6194): Tracker-CRITICAL **: 09:34:07.722: Cannot initialize database: Could not open sqlite3 database:'/homeless-shelter/.cache/tracker/meta.db': unable to open database file
+      export HOME=$(mktemp -d)
 
-    # Our gobject-introspection patches make the shared library paths absolute
-    # in the GIR files. When running functional tests, the library is not yet installed,
-    # though, so we need to replace the absolute path with a local one during build.
-    # We are using a symlink that will be overridden during installation.
-    mkdir -p $out/lib
-    ln -s $PWD/src/libtracker-sparql/libtracker-sparql-3.0.so $out/lib/libtracker-sparql-3.0.so.0
-  '';
+      # Our gobject-introspection patches make the shared library paths absolute
+      # in the GIR files. When running functional tests, the library is not yet installed,
+      # though, so we need to replace the absolute path with a local one during build.
+      # We are using a symlink that will be overridden during installation.
+      mkdir -p $out/lib
+      ln -s $PWD/src/libtracker-sparql/libtracker-sparql-3.0${darwinDot0}${extension} $out/lib/libtracker-sparql-3.0${darwinDot0}${extension}${linuxDot0}
+    '';
 
   checkPhase = ''
     runHook preCheck
@@ -134,6 +143,6 @@ stdenv.mkDerivation rec {
     description = "Desktop-neutral user information store, search tool and indexer";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

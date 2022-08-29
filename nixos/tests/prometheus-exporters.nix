@@ -35,7 +35,7 @@ let
     *      };
     *      exporterTest = ''
     *        wait_for_unit("prometheus-<exporterName>-exporter.service")
-    *        wait_for_open_port("1234")
+    *        wait_for_open_port(1234)
     *        succeed("curl -sSf 'localhost:1234/metrics'")
     *      '';
     *    };
@@ -1063,7 +1063,7 @@ let
       };
       exporterTest = ''
         wait_for_unit("prometheus-smartctl-exporter.service")
-        wait_for_open_port("9633")
+        wait_for_open_port(9633)
         wait_until_succeeds(
           "curl -sSf 'localhost:9633/metrics'"
         )
@@ -1181,21 +1181,21 @@ let
         enable = true;
 
         extraFlags = [
-          "--collector.enable-restart-count"
+          "--systemd.collector.enable-restart-count"
         ];
       };
       metricProvider = { };
       exporterTest = ''
         wait_for_unit("prometheus-systemd-exporter.service")
         wait_for_open_port(9558)
-        succeed(
+        wait_until_succeeds(
             "curl -sSf localhost:9558/metrics | grep '{}'".format(
                 'systemd_unit_state{name="basic.target",state="active",type="target"} 1'
             )
         )
         succeed(
             "curl -sSf localhost:9558/metrics | grep '{}'".format(
-                'systemd_service_restart_total{state="prometheus-systemd-exporter.service"} 0'
+                'systemd_service_restart_total{name="prometheus-systemd-exporter.service"} 0'
             )
         )
       '';

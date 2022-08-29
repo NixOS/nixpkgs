@@ -42,7 +42,7 @@ in
     verbose = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable verbose logging.
       '';
     };
@@ -51,7 +51,7 @@ in
       type = types.package;
       default = pkgs.undervolt;
       defaultText = literalExpression "pkgs.undervolt";
-      description = ''
+      description = lib.mdDoc ''
         undervolt derivation to use.
       '';
     };
@@ -59,7 +59,7 @@ in
     coreOffset = mkOption {
       type = types.nullOr types.int;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The amount of voltage in mV to offset the CPU cores by.
       '';
     };
@@ -67,7 +67,7 @@ in
     gpuOffset = mkOption {
       type = types.nullOr types.int;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The amount of voltage in mV to offset the GPU by.
       '';
     };
@@ -75,7 +75,7 @@ in
     uncoreOffset = mkOption {
       type = types.nullOr types.int;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The amount of voltage in mV to offset uncore by.
       '';
     };
@@ -83,7 +83,7 @@ in
     analogioOffset = mkOption {
       type = types.nullOr types.int;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The amount of voltage in mV to offset analogio by.
       '';
     };
@@ -91,7 +91,7 @@ in
     temp = mkOption {
       type = types.nullOr types.int;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The temperature target in Celsius degrees.
       '';
     };
@@ -99,7 +99,7 @@ in
     tempAc = mkOption {
       type = types.nullOr types.int;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The temperature target on AC power in Celsius degrees.
       '';
     };
@@ -107,7 +107,7 @@ in
     tempBat = mkOption {
       type = types.nullOr types.int;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The temperature target on battery power in Celsius degrees.
       '';
     };
@@ -115,7 +115,7 @@ in
     p1.limit = mkOption {
       type = with types; nullOr int;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The P1 Power Limit in Watts.
         Both limit and window must be set.
       '';
@@ -123,7 +123,7 @@ in
     p1.window = mkOption {
       type = with types; nullOr (oneOf [ float int ]);
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The P1 Time Window in seconds.
         Both limit and window must be set.
       '';
@@ -132,7 +132,7 @@ in
     p2.limit = mkOption {
       type = with types; nullOr int;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The P2 Power Limit in Watts.
         Both limit and window must be set.
       '';
@@ -140,7 +140,7 @@ in
     p2.window = mkOption {
       type = with types; nullOr (oneOf [ float int ]);
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The P2 Time Window in seconds.
         Both limit and window must be set.
       '';
@@ -149,7 +149,7 @@ in
     useTimer = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to set a timer that applies the undervolt settings every 30s.
         This will cause spam in the journal but might be required for some
         hardware under specific conditions.

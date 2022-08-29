@@ -175,7 +175,7 @@ in
         # services.xserver.libinput.enable = true;
 
         # Define a user account. Don't forget to set a password with ‘passwd’.
-        # users.users.jane = {
+        # users.users.alice = {
         #   isNormalUser = true;
         #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
         #   packages = with pkgs; [

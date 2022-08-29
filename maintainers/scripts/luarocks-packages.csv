@@ -39,11 +39,13 @@ lua-cmsgpack,,,,,,
 lua-iconv,,,,,,
 lua-lsp,,,,,,
 lua-messagepack,,,,,,
+lua-protobuf,,,,,,lockejan
 lua-resty-http,,,,,,
 lua-resty-jwt,,,,,,
 lua-resty-openidc,,,,,,
 lua-resty-openssl,,,,,,
 lua-resty-session,,,,,,
+lua-subprocess,https://github.com/0x0ade/lua-subprocess,,,,lua5_1,scoder12
 lua-term,,,,,,
 lua-toml,,,,,,
 lua-zlib,,,,,,koral
@@ -70,6 +72,7 @@ luasql-sqlite3,,,,,,vyp
 luassert,,,,,,
 luasystem,,,,,,
 luaunbound,,,,,
+luaunit,,,,,,lockejan
 luautf8,,,,,,pstn
 luazip,,,,,,
 lua-yajl,,,,,,pstn
@@ -86,6 +89,7 @@ plenary.nvim,https://github.com/nvim-lua/plenary.nvim.git,,,,lua5_1,
 rapidjson,https://github.com/xpol/lua-rapidjson.git,,,,,
 readline,,,,,,
 say,https://github.com/Olivine-Labs/say.git,,,,,
+serpent,,,,,,lockejan
 sqlite,,,,,,
 std._debug,https://github.com/lua-stdlib/_debug.git,,,,,
 std.normalize,https://github.com/lua-stdlib/normalize.git,,,,,

@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DGTEST_SOURCE_DIR=${gtest.dev}/include"
+  ] ++ lib.optionals (!doCheck) [
+    "-DRAPIDJSON_BUILD_TESTS=OFF"
   ];
 
   checkInputs = [
@@ -52,7 +54,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isStatic;
 
   meta = with lib; {
     description = "Fast JSON parser/generator for C++ with both SAX/DOM style API";

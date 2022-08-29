@@ -21,7 +21,7 @@ in
     enable = mkEnableOption "enable zigbee2mqtt service";
 
     package = mkOption {
-      description = "Zigbee2mqtt package to use";
+      description = lib.mdDoc "Zigbee2mqtt package to use";
       default = pkgs.zigbee2mqtt;
       defaultText = literalExpression ''
         pkgs.zigbee2mqtt
@@ -30,7 +30,7 @@ in
     };
 
     dataDir = mkOption {
-      description = "Zigbee2mqtt data directory";
+      description = lib.mdDoc "Zigbee2mqtt data directory";
       default = "/var/lib/zigbee2mqtt";
       type = types.path;
     };
@@ -47,9 +47,9 @@ in
           };
         }
       '';
-      description = ''
-        Your <filename>configuration.yaml</filename> as a Nix attribute set.
-        Check the <link xlink:href="https://www.zigbee2mqtt.io/information/configuration.html">documentation</link>
+      description = lib.mdDoc ''
+        Your {file}`configuration.yaml` as a Nix attribute set.
+        Check the [documentation](https://www.zigbee2mqtt.io/information/configuration.html)
         for possible options.
       '';
     };

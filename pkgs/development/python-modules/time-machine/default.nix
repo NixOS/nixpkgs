@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "time-machine";
-  version = "2.7.1";
+  version = "2.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "adamchainz";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bRqljS09IBp/uqbx9hrr1iEwqvAyOWyl4qjKhJqqGzc=";
+    sha256 = "sha256-65jX6R3tZ5guouEug/mClvNqg0LE4v9OGzCL0eFyqsA=";
   };
 
   propagatedBuildInputs = [

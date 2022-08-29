@@ -20,19 +20,23 @@ let
       ips = [ "9.9.9.9" "149.112.112.112" ];
       url = "https://dns.quad9.net/dns-query";
     };
+    opendns = {
+      ips = [ "208.67.222.222" "208.67.220.220" ];
+      url = "https://doh.opendns.com/dns-query";
+    };
+    custom = {
+      inherit (cfg.provider) ips url;
+    };
   };
 
   defaultProvider = "quad9";
 
   providerCfg =
-    let
-      isCustom = cfg.provider.kind == "custom";
-    in
-    lib.concatStringsSep " " [
+    concatStringsSep " " [
       "-b"
-      (concatStringsSep "," (if isCustom then cfg.provider.ips else providers."${cfg.provider.kind}".ips))
+      (concatStringsSep "," providers."${cfg.provider.kind}".ips)
       "-r"
-      (if isCustom then cfg.provider.url else providers."${cfg.provider.kind}".url)
+      providers."${cfg.provider.kind}".url
     ];
 
 in
@@ -45,47 +49,49 @@ in
     enable = mkEnableOption "https-dns-proxy daemon";
 
     address = mkOption {
-      description = "The address on which to listen";
+      description = lib.mdDoc "The address on which to listen";
       type = types.str;
       default = "127.0.0.1";
     };
 
     port = mkOption {
-      description = "The port on which to listen";
+      description = lib.mdDoc "The port on which to listen";
       type = types.port;
       default = 5053;
     };
 
     provider = {
       kind = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           The upstream provider to use or custom in case you do not trust any of
           the predefined providers or just want to use your own.
 
-          The default is ${defaultProvider} and there are privacy and security trade-offs
-          when using any upstream provider. Please consider that before using any
-          of them.
+          The default is ${defaultProvider} and there are privacy and security
+          trade-offs when using any upstream provider. Please consider that
+          before using any of them.
 
-          If you pick a custom provider, you will need to provide the bootstrap
-          IP addresses as well as the resolver https URL.
+          Supported providers: ${concatStringsSep ", " (builtins.attrNames providers)}
+
+          If you pick the custom provider, you will need to provide the
+          bootstrap IP addresses as well as the resolver https URL.
         '';
-        type = types.enum ((builtins.attrNames providers) ++ [ "custom" ]);
+        type = types.enum (builtins.attrNames providers);
         default = defaultProvider;
       };
 
       ips = mkOption {
-        description = "The custom provider IPs";
+        description = lib.mdDoc "The custom provider IPs";
         type = types.listOf types.str;
       };
 
       url = mkOption {
-        description = "The custom provider URL";
+        description = lib.mdDoc "The custom provider URL";
         type = types.str;
       };
     };
 
     preferIPv4 = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         https_dns_proxy will by default use IPv6 and fail if it is not available.
         To play it safe, we choose IPv4.
       '';
@@ -94,7 +100,7 @@ in
     };
 
     extraArgs = mkOption {
-      description = "Additional arguments to pass to the process.";
+      description = lib.mdDoc "Additional arguments to pass to the process.";
       type = types.listOf types.str;
       default = [ "-v" ];
     };
@@ -105,14 +111,18 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.https-dns-proxy = {
       description = "DNS to DNS over HTTPS (DoH) proxy";
+      requires = [ "network.target" ];
       after = [ "network.target" ];
+      wants = [ "nss-lookup.target" ];
+      before = [ "nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = rec {
         Type = "exec";
         DynamicUser = true;
+        ProtectHome = "tmpfs";
         ExecStart = lib.concatStringsSep " " (
           [
-            "${pkgs.https-dns-proxy}/bin/https_dns_proxy"
+            (lib.getExe pkgs.https-dns-proxy)
             "-a ${toString cfg.address}"
             "-p ${toString cfg.port}"
             "-l -"

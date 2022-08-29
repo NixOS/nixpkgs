@@ -11,7 +11,7 @@
 
 buildGoPackage rec {
   pname = "lxd";
-  version = "5.4";
+  version = "5.5";
 
   goPackagePath = "github.com/lxc/lxd";
 
@@ -20,7 +20,7 @@ buildGoPackage rec {
       "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz"
       "https://github.com/lxc/lxd/releases/download/lxd-${version}/lxd-${version}.tar.gz"
     ];
-    sha256 = "sha256-4jS2fFB30F4i+VjjJWvZHyYkUFRZk9Cq8bTOK9uZOTo=";
+    sha256 = "sha256-Ri5mwDtesI6vOjtb5L5zBD469jIYx5rxAJib0Bja8ps=";
   };
 
   postPatch = ''
@@ -62,7 +62,7 @@ buildGoPackage rec {
     homepage = "https://linuxcontainers.org/lxd/";
     changelog = "https://github.com/lxc/lxd/releases/tag/lxd-${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz marsam ];
+    maintainers = with maintainers; [ marsam ];
     platforms = platforms.linux;
   };
 }

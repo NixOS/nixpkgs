@@ -14,14 +14,14 @@ in
         type = lib.types.bool;
         default = config.services.pipewire.enable;
         defaultText = lib.literalExpression "config.services.pipewire.enable";
-        description = "Whether to enable Wireplumber, a modular session / policy manager for PipeWire";
+        description = lib.mdDoc "Whether to enable Wireplumber, a modular session / policy manager for PipeWire";
       };
 
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.wireplumber;
         defaultText = lib.literalExpression "pkgs.wireplumber";
-        description = "The wireplumber derivation to use.";
+        description = lib.mdDoc "The wireplumber derivation to use.";
       };
     };
   };

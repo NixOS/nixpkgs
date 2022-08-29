@@ -1,13 +1,13 @@
-{ lib, fetchFromGitHub, fetchzip }:
+{ lib, fetchFromGitHub, fetchzip, stdenv }:
 
 rec {
-  version = "0.106.0";
+  version = "0.108.0";
 
   src = fetchFromGitHub {
     owner = "returntocorp";
     repo = "semgrep";
     rev = "v${version}";
-    sha256 = "sha256-/L8w8imvfjO3ICe0FBhfVrTivK58/9Y+j9Hc71tlpjA=";
+    sha256 = "sha256-Vdrv7lVPsBsxkwwfviD5zRAdsD02RfWmM+IlaThduQs=";
   };
 
   # submodule dependencies
@@ -24,15 +24,18 @@ rec {
   interfacesSrc = fetchFromGitHub {
     owner = "returntocorp";
     repo = "semgrep-interfaces";
-    rev = "8bc79b2bca62c051e46a33fb65751357a71b87b6";
-    sha256 = "sha256-k/rsTGYqHnw/4bsmeg7pQ/ckNglvuA0yhuz+OayXCdw=";
+    rev = "bad298d06a5dc50e69b6818ba73f0cc9b9a17b58";
+    sha256 = "sha256-AgNSvjVsP4b4zwkmq6BoNcOX3xdCSnQmXK+fVSkDXxQ=";
   };
 
   # fetch pre-built semgrep-core since the ocaml build is complex and relies on
   # the opam package manager at some point
-  coreRelease = fetchzip {
-    url = "https://github.com/returntocorp/semgrep/releases/download/v${version}/semgrep-v${version}-ubuntu-16.04.tgz";
-    sha256 = "sha256-ARf776uOJkCBGsJI8ul3IDWI24vFQxs2jlGEA6uXG+o=";
+  coreRelease = if stdenv.isDarwin then fetchzip {
+      url = "https://github.com/returntocorp/semgrep/releases/download/v${version}/semgrep-v${version}-osx.zip";
+      sha256 = "sha256-f3ah4yGvtUL3Ievz+3hhh5Am1YMplRxsRQzdRAoF9uU=";
+  } else fetchzip {
+      url = "https://github.com/returntocorp/semgrep/releases/download/v${version}/semgrep-v${version}-ubuntu-16.04.tgz";
+      sha256 = "sha256-qie9svlzRoAsI33W+Sxh4YTVk1iPV0NVXfzfKlEUul4=";
   };
 
   meta = with lib; {
@@ -50,6 +53,6 @@ rec {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jk ambroisie ];
     # limited by semgrep-core
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

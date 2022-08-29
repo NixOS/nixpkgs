@@ -19,7 +19,7 @@ in
       preferredHostname = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Set the device preferred hostname. This provides a hint to
           the server to use this as hostname if it is available.
         '';
@@ -28,7 +28,7 @@ in
       keepAliveInterval = mkOption {
         type = types.int;
         default = 30;
-        description = ''
+        description = lib.mdDoc ''
           Determine the interval to send the keep alive message to
           the server. This has a direct impact of the bandwidth
           used by the device.
@@ -38,7 +38,7 @@ in
       tenantId = mkOption {
         type = types.str;
         example = "ba0a880c-2ada-11eb-a35e-17266ef329d6";
-        description = ''
+        description = lib.mdDoc ''
           The tenant ID to use when connecting to the ShellHub
           Gateway.
         '';
@@ -47,7 +47,7 @@ in
       server = mkOption {
         type = types.str;
         default = "https://cloud.shellhub.io";
-        description = ''
+        description = lib.mdDoc ''
           Server address of ShellHub Gateway to connect.
         '';
       };
@@ -55,7 +55,7 @@ in
       privateKey = mkOption {
         type = types.path;
         default = "/var/lib/shellhub-agent/private.key";
-        description = ''
+        description = lib.mdDoc ''
           Location where to store the ShellHub Agent private
           key.
         '';

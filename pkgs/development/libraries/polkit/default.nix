@@ -22,7 +22,7 @@
 , gtk-doc
 , coreutils
 , useSystemd ? stdenv.isLinux
-, systemd
+, systemdMinimal
 , elogind
 # A few tests currently fail on musl (polkitunixusertest, polkitunixgrouptest, polkitidentitytest segfault).
 # Not yet investigated; it may be due to the "Make netgroup support optional"
@@ -57,14 +57,13 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.freedesktop.org/polkit/polkit/-/commit/7ba07551dfcd4ef9a87b8f0d9eb8b91fabcb41b3.patch";
       sha256 = "ebbLILncq1hAZTBMsLm+vDGw6j0iQ0crGyhzyLZQgKA=";
     })
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     # Make netgroup support optional (musl does not have it)
     # Upstream MR: https://gitlab.freedesktop.org/polkit/polkit/merge_requests/10
-    # We use the version of the patch that Alpine uses successfully.
+    # NOTE: Remove after the next release
     (fetchpatch {
       name = "make-innetgr-optional.patch";
-      url = "https://git.alpinelinux.org/aports/plain/community/polkit/make-innetgr-optional.patch?id=424ecbb6e9e3a215c978b58c05e5c112d88dddfc";
-      sha256 = "0iyiksqk29sizwaa4623bv683px1fny67639qpb1him89hza00wy";
+      url = "https://gitlab.freedesktop.org/polkit/polkit/-/commit/b57deee8178190a7ecc75290fa13cf7daabc2c66.patch";
+      sha256 = "8te6gatT9Fp+fIT05fQBym5mEwHeHfaUNUNEMfSbtLc=";
     })
   ];
 
@@ -106,7 +105,7 @@ stdenv.mkDerivation rec {
     duktape
   ] ++ lib.optionals stdenv.isLinux [
     # On Linux, fall back to elogind when systemd support is off.
-    (if useSystemd then systemd else elogind)
+    (if useSystemd then systemdMinimal else elogind)
   ];
 
   propagatedBuildInputs = [
@@ -153,7 +152,7 @@ stdenv.mkDerivation rec {
       --replace   /bin/false ${coreutils}/bin/false
   '';
 
-  postConfigure = ''
+  postConfigure = lib.optionalString (!stdenv.hostPlatform.isMusl) ''
     # Unpacked by meson
     chmod +x subprojects/mocklibc-1.0/bin/mocklibc
     patchShebangs subprojects/mocklibc-1.0/bin/mocklibc

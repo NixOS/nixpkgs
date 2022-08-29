@@ -30,7 +30,6 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 let
   buildInputs = [
     pythonEnv # for patchShebangs
-    makeWrapper
     pkg-config
     blas lapack
     singular
@@ -73,7 +72,7 @@ let
       []
     );
 
-  allInputs = lib.remove null (buildInputs ++ pythonEnv.extraLibs);
+  allInputs = lib.remove null (buildInputs ++ pythonEnv.extraLibs ++ [ makeWrapper ]);
   transitiveDeps = lib.unique (builtins.concatLists (map transitiveClosure allInputs ));
   # fix differences between spkg and sage names
   # (could patch sage instead, but this is more lightweight and also works for packages depending on sage)

@@ -48,7 +48,7 @@ in
         type = types.package;
         default = pkgs.xrdp;
         defaultText = literalExpression "pkgs.xrdp";
-        description = ''
+        description = lib.mdDoc ''
           The package to use for the xrdp daemon's binary.
         '';
       };
@@ -56,7 +56,7 @@ in
       port = mkOption {
         type = types.int;
         default = 3389;
-        description = ''
+        description = lib.mdDoc ''
           Specifies on which port the xrdp daemon listens.
         '';
       };
@@ -64,14 +64,14 @@ in
       openFirewall = mkOption {
         default = false;
         type = types.bool;
-        description = "Whether to open the firewall for the specified RDP port.";
+        description = lib.mdDoc "Whether to open the firewall for the specified RDP port.";
       };
 
       sslKey = mkOption {
         type = types.str;
         default = "/etc/xrdp/key.pem";
         example = "/path/to/your/key.pem";
-        description = ''
+        description = lib.mdDoc ''
           ssl private key path
           A self-signed certificate will be generated if file not exists.
         '';
@@ -81,7 +81,7 @@ in
         type = types.str;
         default = "/etc/xrdp/cert.pem";
         example = "/path/to/your/cert.pem";
-        description = ''
+        description = lib.mdDoc ''
           ssl certificate path
           A self-signed certificate will be generated if file not exists.
         '';
@@ -91,7 +91,7 @@ in
         type = types.str;
         default = "xterm";
         example = "xfce4-session";
-        description = ''
+        description = lib.mdDoc ''
           The script to run when user log in, usually a window manager, e.g. "icewm", "xfce4-session"
           This is per-user overridable, if file ~/startwm.sh exists it will be used instead.
         '';
@@ -100,8 +100,8 @@ in
       confDir = mkOption {
         type = types.path;
         default = confDir;
-        defaultText = literalDocBook "generated from configuration";
-        description = "The location of the config files for xrdp.";
+        defaultText = literalMD "generated from configuration";
+        description = lib.mdDoc "The location of the config files for xrdp.";
       };
     };
   };

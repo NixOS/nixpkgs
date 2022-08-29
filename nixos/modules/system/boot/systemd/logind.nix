@@ -16,27 +16,24 @@ in
       default = "";
       type = types.lines;
       example = "IdleAction=lock";
-      description = ''
+      description = lib.mdDoc ''
         Extra config options for systemd-logind. See
-        <link xlink:href="https://www.freedesktop.org/software/systemd/man/logind.conf.html">
-        logind.conf(5)</link> for available options.
+        [
+        logind.conf(5)](https://www.freedesktop.org/software/systemd/man/logind.conf.html) for available options.
       '';
     };
 
     services.logind.killUserProcesses = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Specifies whether the processes of a user should be killed
         when the user logs out.  If true, the scope unit corresponding
         to the session and all processes inside that scope will be
         terminated.  If false, the scope is "abandoned" (see
-        <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.scope.html#">
-        systemd.scope(5)</link>), and processes are not killed.
-        </para>
+        [systemd.scope(5)](https://www.freedesktop.org/software/systemd/man/systemd.scope.html#)), and processes are not killed.
 
-        <para>
-        See <link xlink:href="https://www.freedesktop.org/software/systemd/man/logind.conf.html#KillUserProcesses=">logind.conf(5)</link>
+        See [logind.conf(5)](https://www.freedesktop.org/software/systemd/man/logind.conf.html#KillUserProcesses=)
         for more details.
       '';
     };
@@ -46,7 +43,7 @@ in
       example = "ignore";
       type = logindHandlerType;
 
-      description = ''
+      description = lib.mdDoc ''
         Specifies what to be done when the laptop lid is closed.
       '';
     };
@@ -56,7 +53,7 @@ in
       example = "suspend";
       type = logindHandlerType;
 
-      description = ''
+      description = lib.mdDoc ''
         Specifies what to be done when the laptop lid is closed
         and another screen is added.
       '';
@@ -68,7 +65,7 @@ in
       example = "ignore";
       type = logindHandlerType;
 
-      description = ''
+      description = lib.mdDoc ''
         Specifies what to do when the laptop lid is closed and the system is
         on external power. By default use the same action as specified in
         services.logind.lidSwitch.

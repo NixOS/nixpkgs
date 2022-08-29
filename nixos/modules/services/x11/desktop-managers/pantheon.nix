@@ -37,14 +37,14 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable the pantheon desktop manager";
+        description = lib.mdDoc "Enable the pantheon desktop manager";
       };
 
       sessionPath = mkOption {
         default = [];
         type = types.listOf types.package;
         example = literalExpression "[ pkgs.gnome.gpaste ]";
-        description = ''
+        description = lib.mdDoc ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
 
@@ -55,25 +55,25 @@ in
       extraWingpanelIndicators = mkOption {
         default = null;
         type = with types; nullOr (listOf package);
-        description = "Indicators to add to Wingpanel.";
+        description = lib.mdDoc "Indicators to add to Wingpanel.";
       };
 
       extraSwitchboardPlugs = mkOption {
         default = null;
         type = with types; nullOr (listOf package);
-        description = "Plugs to add to Switchboard.";
+        description = lib.mdDoc "Plugs to add to Switchboard.";
       };
 
       extraGSettingsOverrides = mkOption {
         default = "";
         type = types.lines;
-        description = "Additional gsettings overrides.";
+        description = lib.mdDoc "Additional gsettings overrides.";
       };
 
       extraGSettingsOverridePackages = mkOption {
         default = [];
         type = types.listOf types.path;
-        description = "List of packages for which gsettings are overridden.";
+        description = lib.mdDoc "List of packages for which gsettings are overridden.";
       };
 
       debug = mkEnableOption "gnome-session debug messages";
@@ -84,7 +84,7 @@ in
       default = [];
       example = literalExpression "[ pkgs.pantheon.elementary-camera ]";
       type = types.listOf types.package;
-      description = "Which packages pantheon should exclude from the default environment";
+      description = lib.mdDoc "Which packages pantheon should exclude from the default environment";
     };
 
   };
@@ -134,7 +134,8 @@ in
       services.bamf.enable = true;
       services.colord.enable = mkDefault true;
       services.fwupd.enable = mkDefault true;
-      services.packagekit.enable = mkDefault true;
+      # TODO: Enable once #177946 is resolved
+      # services.packagekit.enable = mkDefault true;
       services.power-profiles-daemon.enable = mkDefault true;
       services.touchegg.enable = mkDefault true;
       services.touchegg.package = pkgs.pantheon.touchegg;

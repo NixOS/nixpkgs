@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hypnotix";
-  version = "2.8";
+  version = "2.9";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "hypnotix";
     rev = version;
-    hash = "sha256-uj5Bn3K9SCKE4p1jylfQ8XnAwNnN4VXHLMLrwhKhzsk=";
+    hash = "sha256-jjCyO6lyhqH4xeNp5uy/KqNr5Mvv+45pJGHFOXNi0rk=";
   };
 
   patches = [
@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   buildInputs = [
-    cinnamon.xapps
+    cinnamon.xapp
   ];
 
   pythonPath = with python3.pkgs; [
-    imdbpy
+    cinemagoer
     pygobject3
     requests
     setproctitle

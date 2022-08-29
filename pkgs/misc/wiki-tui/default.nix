@@ -2,20 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wiki-tui";
-  version = "0.4.8";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "Builditluc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/u0segKHrrtXfEjOmpnQ/iFbsM+VfsZKTpyc1IfuOU8=";
+    sha256 = "sha256-kcVfqj5vRfPcF6lO1Ley3ctZajNA02jUqQRlpi3MkXc=";
   };
 
   buildInputs = [ ncurses openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   nativeBuildInputs = [ pkg-config ];
 
-  cargoSha256 = "sha256-3xvaEzqAz/U8CkdGYXLBnxrgW1raeKuzRsmD+0Sd4iQ=";
+  cargoSha256 = "sha256-OW2kutjvQC9neiguixTdJx2hUFsnmQhR9DbniBr6V8w=";
 
   # Tests fail with this error: `found argument --test-threads which was not expected`
   doCheck = false;

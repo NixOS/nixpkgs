@@ -21,6 +21,9 @@
 , haskellLib
 
 , # hashes for downloading Hackage packages
+  # This is either a directory or a .tar.gz containing the cabal files and
+  # hashes of Hackage as exemplified by this repository:
+  # https://github.com/commercialhaskell/all-cabal-hashes/tree/hackage
   all-cabal-hashes
 
 , # compiler to use
@@ -136,10 +139,20 @@ let
       cabal2nix --compiler=${self.ghc.haskellCompilerName} --system=${hostPlatform.config} ${sha256Arg} "${src}" ${extraCabal2nixOptions} > "$out/default.nix"
     '';
 
+  # Given a package name and version, e.g. name = "async", version = "2.2.4",
+  # gives its cabal file and hashes (JSON file) as discovered from the
+  # all-cabal-hashes value. If that's a directory, it will copy the relevant
+  # files to $out; if it's a tarball, it will extract and move them to $out.
   all-cabal-hashes-component = name: version: buildPackages.runCommand "all-cabal-hashes-component-${name}-${version}" {} ''
-    tar --wildcards -xzvf ${all-cabal-hashes} \*/${name}/${version}/${name}.{json,cabal}
     mkdir -p $out
-    mv */${name}/${version}/${name}.{json,cabal} $out
+    if [ -d ${all-cabal-hashes} ]
+    then
+      cp ${all-cabal-hashes}/${name}/${version}/${name}.json $out
+      cp ${all-cabal-hashes}/${name}/${version}/${name}.cabal $out
+    else
+      tar --wildcards -xzvf ${all-cabal-hashes} \*/${name}/${version}/${name}.{json,cabal}
+      mv */${name}/${version}/${name}.{json,cabal} $out
+    fi
   '';
 
   hackage2nix = name: version: let component = all-cabal-hashes-component name version; in self.haskellSrc2nix {
@@ -552,7 +565,13 @@ in package-set { inherit pkgs lib callPackage; } self // {
       pkgs.runCommandLocal name
         {
           inherit src;
-          nativeBuildInputs = [ buildHaskellPackages.cabal-install ];
+          nativeBuildInputs = [
+            buildHaskellPackages.cabal-install
+
+            # TODO after https://github.com/haskell/cabal/issues/8352
+            #      remove ghc
+            self.ghc
+          ];
           dontUnpack = false;
         } ''
         unpackPhase

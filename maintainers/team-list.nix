@@ -74,6 +74,15 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+  bitnomial = {
+    # Verify additions to this team with at least one already existing member of the team.
+    members = [
+      cdepillabout
+    ];
+    scope = "Group registration for packages maintained by Bitnomial.";
+    shortName = "Bitnomial employees";
+  };
+
   blockchains = {
     members = [
       mmahut
@@ -107,6 +116,7 @@ with lib.maintainers; {
 
   cinnamon = {
     members = [
+      bobby285271
       mkg20001
     ];
     scope = "Maintain Cinnamon desktop environment and applications made by the LinuxMint team.";
@@ -256,12 +266,8 @@ with lib.maintainers; {
   golang = {
     members = [
       c00w
-      cstrahan
-      Frostman
       kalbasit
       mic92
-      orivej
-      rvolosatovs
       zowoq
     ];
     scope = "Maintain Golang compilers.";

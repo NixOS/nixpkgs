@@ -13,17 +13,26 @@
 , gtk3
 , gdk-pixbuf
 , wrapGAppsHook
+, vulkan-loader
+, libICE
+, libSM
+, libXi
+, libXcursor
+, libXext
+, libXrandr
+, fontconfig
+, glew
 }:
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.181"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.223"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "6eb85e846f25ae36a39685d6ac91025deaea306c";
-    sha256 = "0lc8hhcrad26sw2dx0lwml8lk2mxg4db4sgfxnd450xi2qd63kdc";
+    rev = "951700fdd8f54fb34ffe8a3fb328a68b5bf37abe";
+    sha256 = "0kzchsxir8wh74rxvp582mci855hbd0vma6yhcc9vpz0zmhi2cpf";
   };
 
   projectFile = "Ryujinx.sln";
@@ -33,7 +42,7 @@ buildDotnetModule rec {
 
   # TODO: Add the headless frontend. Currently errors on the following:
   # System.Exception: SDL2 initlaization failed with error "No available video device"
-  executables = [ "Ryujinx" ];
+  executables = [ "Ryujinx" "Ryujinx.Ava" ];
 
   nativeBuildInputs = [
     wrapGAppsHook
@@ -53,14 +62,28 @@ buildDotnetModule rec {
     libsoundio
     sndio
     pulseaudio
-  ];
+    vulkan-loader
+    ffmpeg
 
-  makeWrapperArgs = [
-    "--suffix PATH : ${lib.getBin ffmpeg}"
+    # Avalonia UI
+    libICE
+    libSM
+    libXi
+    libXcursor
+    libXext
+    libXrandr
+    fontconfig
+    glew
   ];
 
   patches = [
     ./appdir.patch # Ryujinx attempts to write to the nix store. This patch redirects it to "~/.config/Ryujinx" on Linux.
+  ];
+
+  makeWrapperArgs = [
+    # Without this Ryujinx fails to start on wayland. See https://github.com/Ryujinx/Ryujinx/issues/2714
+    "--set GDK_BACKEND x11"
+    "--set SDL_VIDEODRIVER x11"
   ];
 
   preInstall = ''

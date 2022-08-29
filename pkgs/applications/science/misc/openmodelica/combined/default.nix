@@ -11,7 +11,7 @@ symlinkJoin {
     omshell
   ];
 
-  buildInputs = [ gnumake makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     wrapProgram $out/bin/OMEdit \

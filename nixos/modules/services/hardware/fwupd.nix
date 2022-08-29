@@ -15,9 +15,9 @@ let
         DisabledPlugins=${lib.concatStringsSep ";" cfg.disabledPlugins}
       '';
     };
-    "fwupd/uefi.conf" = {
-      source = pkgs.writeText "uefi.conf" ''
-        [uefi]
+    "fwupd/uefi_capsule.conf" = {
+      source = pkgs.writeText "uefi_capsule.conf" ''
+        [uefi_capsule]
         OverrideESPMountPoint=${config.boot.loader.efi.efiSysMountPoint}
       '';
     };
@@ -53,7 +53,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable fwupd, a DBus service that allows
           applications to update firmware.
         '';
@@ -63,7 +63,7 @@ in {
         type = types.listOf types.str;
         default = [];
         example = [ "2082b5e0-7a64-478a-b1b2-e3404fab6dad" ];
-        description = ''
+        description = lib.mdDoc ''
           Allow disabling specific devices by their GUID
         '';
       };
@@ -72,7 +72,7 @@ in {
         type = types.listOf types.str;
         default = [];
         example = [ "udev" ];
-        description = ''
+        description = lib.mdDoc ''
           Allow disabling specific plugins
         '';
       };
@@ -81,7 +81,7 @@ in {
         type = types.listOf types.path;
         default = [];
         example = literalExpression "[ /etc/nixos/fwupd/myfirmware.pem ]";
-        description = ''
+        description = lib.mdDoc ''
           Installing a public key allows firmware signed with a matching private key to be recognized as trusted, which may require less authentication to install than for untrusted files. By default trusted firmware can be upgraded (but not downgraded) without the user or administrator password. Only very few keys are installed by default.
         '';
       };
@@ -89,9 +89,9 @@ in {
       enableTestRemote = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable test remote. This is used by
-          <link xlink:href="https://github.com/fwupd/fwupd/blob/master/data/installed-tests/README.md">installed tests</link>.
+          [installed tests](https://github.com/fwupd/fwupd/blob/master/data/installed-tests/README.md).
         '';
       };
 
@@ -99,7 +99,7 @@ in {
         type = types.package;
         default = pkgs.fwupd;
         defaultText = literalExpression "pkgs.fwupd";
-        description = ''
+        description = lib.mdDoc ''
           Which fwupd package to use.
         '';
       };

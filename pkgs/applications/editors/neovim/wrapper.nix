@@ -45,7 +45,7 @@ let
     finalMakeWrapperArgs =
       [ "${neovim}/bin/nvim" "${placeholder "out"}/bin/nvim" ]
       ++ [ "--set" "NVIM_SYSTEM_RPLUGIN_MANIFEST" "${placeholder "out"}/rplugin.vim" ]
-      ++ optionals wrapRc [ "--add-flags" "--clean" "--add-flags" "-u ${writeText "init.vim" neovimRcContent}" ]
+      ++ optionals wrapRc [ "--add-flags" "-u ${writeText "init.vim" neovimRcContent}" ]
       ;
   in
   assert withPython2 -> throw "Python2 support has been removed from the neovim wrapper, please remove withPython2 and python2Env.";
@@ -123,7 +123,7 @@ let
       unwrapped = neovim;
       initRc = neovimRcContent;
 
-      tests = callPackage ./tests.nix {
+      tests = callPackage ./tests {
       };
     };
 

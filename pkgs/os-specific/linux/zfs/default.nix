@@ -203,7 +203,7 @@ let
         changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
         license = lib.licenses.cddl;
         platforms = lib.platforms.linux;
-        maintainers = with lib.maintainers; [ hmenke jcumming jonringer wizeman fpletz globin ];
+        maintainers = with lib.maintainers; [ hmenke jcumming jonringer wizeman globin ];
         mainProgram = "zfs";
         # If your Linux kernel version is not yet supported by zfs, try zfsUnstable.
         # On NixOS set the option boot.zfs.enableUnstable.

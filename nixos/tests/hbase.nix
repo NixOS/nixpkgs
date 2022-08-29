@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, lib, package ? pkgs.hbase, ... }:
 {
-  name = "hbase";
+  name = "hbase-standalone";
 
   meta = with lib.maintainers; {
     maintainers = [ illustris ];
@@ -8,7 +8,7 @@ import ./make-test-python.nix ({ pkgs, lib, package ? pkgs.hbase, ... }:
 
   nodes = {
     hbase = { pkgs, ... }: {
-      services.hbase = {
+      services.hbase-standalone = {
         enable = true;
         inherit package;
         # Needed for standalone mode in hbase 2+

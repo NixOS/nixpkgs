@@ -346,7 +346,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker load --input='${examples.layeredImageWithFakeRootCommands}'"
         )
         docker.succeed(
-            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/jane | grep -E ^1000$'"
+            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/alice | grep -E ^1000$'"
         )
 
     with subtest("Ensure docker load on merged images loads all of the constituent images"):
@@ -389,7 +389,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker load --input='${examples.mergedBashFakeRoot}'"
         )
         docker.succeed(
-            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/jane | grep -E ^1000$'"
+            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/alice | grep -E ^1000$'"
         )
 
     with subtest("The image contains store paths referenced by the fakeRootCommands output"):

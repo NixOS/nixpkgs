@@ -15,9 +15,9 @@ dotnetBuildHook() {
     fi
 
     if [ "${selfContainedBuild-}" ]; then
-        dotnetBuildFlags+=("--self-contained")
+        dotnetBuildFlags+=("-p:SelfContained=true")
     else
-        dotnetBuildFlags+=("--no-self-contained")
+        dotnetBuildFlags+=("-p:SelfContained=false")
     fi
 
     if [ "${version-}" ]; then

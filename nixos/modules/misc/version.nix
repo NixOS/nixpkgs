@@ -38,11 +38,18 @@ let
 in
 {
   imports = [
+    ./label.nix
     (mkRenamedOptionModule [ "system" "nixosVersion" ] [ "system" "nixos" "version" ])
     (mkRenamedOptionModule [ "system" "nixosVersionSuffix" ] [ "system" "nixos" "versionSuffix" ])
     (mkRenamedOptionModule [ "system" "nixosRevision" ] [ "system" "nixos" "revision" ])
     (mkRenamedOptionModule [ "system" "nixosLabel" ] [ "system" "nixos" "label" ])
   ];
+
+  options.boot.initrd.osRelease = mkOption {
+    internal = true;
+    readOnly = true;
+    default = initrdRelease;
+  };
 
   options.system = {
 
@@ -140,11 +147,6 @@ in
       };
 
       "os-release".text = attrsToText osReleaseContents;
-    };
-
-    boot.initrd.systemd.contents = {
-      "/etc/os-release".source = initrdRelease;
-      "/etc/initrd-release".source = initrdRelease;
     };
 
     # We have to use `warnings` because when warning in the default of the option

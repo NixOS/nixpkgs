@@ -17,22 +17,20 @@
 , psutil
 , pyarrow
 , pytest-xdist
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "3.2.0";
+  version = "3.3.2";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-l/tDBuMky4aQnOMqmUToHSH7yyingMXN8BtuTUfUwyI=";
+    hash = "sha256-v5ZAeRHG/LvlmL4bnETgCiYAv/nqutKpf0My78EWVJc=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'pyarrow >= 3.0.0, < 8.0dev' 'pyarrow >= 3.0.0, < 9.0dev'
-  '';
 
   propagatedBuildInputs = [
     google-cloud-core
@@ -84,6 +82,7 @@ buildPythonPackage rec {
     "test__initiate_resumable_upload"
     "test__initiate_resumable_upload_mtls"
     "test__initiate_resumable_upload_with_retry"
+    "test_table_clones"
   ];
 
   disabledTestPaths = [

@@ -20,12 +20,11 @@ buildPythonPackage rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2022.07.18";
+  version = "2022.8.19";
 
   src = fetchPypi {
-    inherit pname;
-    version = builtins.replaceStrings [ ".0" ] [ "." ] version;
-    sha256 = "sha256-DnuB/GrI0bfT//p5+QRMpBY3hEIlgsmjWTMF2ipp7AI=";
+    inherit pname version;
+    sha256 = "sha256-zCkKyKH+xiaEF2X+0S96Hr3+AXka5cXzeU7fzjXYGEM=";
   };
 
   propagatedBuildInputs = [ brotli certifi mutagen pycryptodomex websockets ];
@@ -57,7 +56,6 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/yt-dlp/yt-dlp/";
     description = "Command-line tool to download videos from YouTube.com and other sites (youtube-dl fork)";
-    changelog = "https://github.com/yt-dlp/yt-dlp/raw/${version}/Changelog.md";
     longDescription = ''
       yt-dlp is a youtube-dl fork based on the now inactive youtube-dlc.
 

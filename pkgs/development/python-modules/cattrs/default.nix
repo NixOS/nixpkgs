@@ -2,6 +2,8 @@
 , attrs
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
+, exceptiongroup
 , hypothesis
 , immutables
 , motor
@@ -31,12 +33,22 @@ buildPythonPackage rec {
     hash = "sha256-C8uIsewpgJfB1yYckWTwF5K32+2AAOrxFKB9I18RENg=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/python-attrs/cattrs/commit/290d162a589acf10ea63b825b7b283e23ca7698a.diff";
+      excludes = [ "poetry.lock" ];
+      hash = "sha256-n6c3qVg9umGKAxeTALq3QTJgO9DIj3SY0ZHhtsDeW94=";
+    })
+  ];
+
   nativeBuildInputs = [
     poetry-core
   ];
 
   propagatedBuildInputs = [
     attrs
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
   ] ++ lib.optionals (pythonOlder "3.7") [
     typing-extensions
   ];

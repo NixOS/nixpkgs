@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "regenmaschine";
-  version = "2022.07.3";
+  version = "2022.08.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-z7FrVnGQjpTjdIX/gatP/ZjzOLaj2D8XsQ+UTYBOHgE=";
+    sha256 = "sha256-JPJ+8h3r1C2fHxVPsQgk0ZuG7VqKfBb4qthAG+GCvcE=";
   };
 
   nativeBuildInputs = [

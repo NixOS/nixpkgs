@@ -24,7 +24,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "xxe-pe";
-  version = "10.1.0";
+  version = "10.2.0";
 
   src =
     assert !acceptLicense -> throw ''
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     '';
       fetchurl {
         url = "https://www.xmlmind.com/xmleditor/_download/xxe-perso-${builtins.replaceStrings [ "." ] [ "_" ] version}.zip";
-        sha256 = "sha256-AeyaJSEJQQJ/XxvaIky4fnEr+7fVAEqhSxtYhN8L2JA=";
+        sha256 = "sha256-JZ9nQwMrQL/1HKGwvXoWlnTx55ZK/UYjMJAddCtm0rw=";
       };
 
   nativeBuildInputs = [

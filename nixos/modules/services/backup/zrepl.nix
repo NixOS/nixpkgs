@@ -17,14 +17,13 @@ in
         type = types.package;
         default = pkgs.zrepl;
         defaultText = literalExpression "pkgs.zrepl";
-        description = "Which package to use for zrepl";
+        description = lib.mdDoc "Which package to use for zrepl";
       };
 
       settings = mkOption {
         default = { };
-        description = ''
-          Configuration for zrepl. See <link
-          xlink:href="https://zrepl.github.io/configuration.html"/>
+        description = lib.mdDoc ''
+          Configuration for zrepl. See <https://zrepl.github.io/configuration.html>
           for more information.
         '';
         type = types.submodule {

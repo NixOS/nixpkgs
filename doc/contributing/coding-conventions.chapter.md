@@ -453,7 +453,7 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
   }
   ```
 
-  Find the value to put as `sha256` by running `nix run -f '<nixpkgs>' nix-prefetch-github -c nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS nix` or `nix-prefetch-url --unpack https://github.com/NixOS/nix/archive/1f795f9f44607cc5bec70d1300150bfefcef2aae.tar.gz`.
+Find the value to put as `sha256` by running `nix-shell -p nix-prefetch-github --run "nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS nix"`. 
 
 ## Obtaining source hash {#sec-source-hashes}
 

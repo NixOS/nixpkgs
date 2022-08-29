@@ -22,20 +22,21 @@
 , Cocoa
 , Foundation
 , libiconv
+, UserNotifications
 , nixosTests
 , runCommand
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "20220624-141144-bd1b7c5d";
+  version = "20220807-113146-c2fee766";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-7VuNOJ4xqTxumLft7wRj4zdN8Y2ZSYtXr/KuqaLNOgw=";
+    sha256 = "sha256-2krngcANqcwq8wNQZSz01srJ6yEOkk03QnO2sL7SuJA=";
   };
 
   postPatch = ''
@@ -45,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     rm -r wezterm-ssh/tests
   '';
 
-  cargoSha256 = "sha256-YvQ0APyPiYwISE/pDD2s+UgYFj4CKPdolb14FrNpocU=";
+  cargoSha256 = "sha256-ZkDGCR86VSCuvVlo4Pf9Ifax2BZuBicZpB/K/7bIMls=";
 
   nativeBuildInputs = [
     pkg-config
@@ -71,6 +72,7 @@ rustPlatform.buildRustPackage rec {
     CoreGraphics
     Foundation
     libiconv
+    UserNotifications
   ];
 
   postInstall = ''
@@ -119,7 +121,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
     platforms = platforms.unix;
-    # Fails on missing UserNotifications framework while linking
-    broken = stdenv.isDarwin;
   };
 }

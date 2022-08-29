@@ -26,7 +26,7 @@
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.5.3";
+  version = "3.5.4";
 
   outputs = [ "out" "dev" ];
 
@@ -34,7 +34,7 @@ mkDerivation rec {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "sha256-J6ukQ29DpCgmX9MF+evWXAy3usl0xB/xv4inBPS8nQI=";
+    sha256 = "sha256-ennKNUuoyhpVfG1XPzJKrop0i77BAB3C2MNqZPOXNkc=";
   };
 
   patches = [
@@ -79,7 +79,8 @@ mkDerivation rec {
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
     # See also: https://bugreports.qt.io/browse/QTBUG-85967
     "--set QML_DISABLE_DISK_CACHE 1"
-    "--prefix PATH : ${lib.makeBinPath [ xdg-utils ]}"
+    # make xdg-open overrideable at runtime
+    "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"
   ];
 
   cmakeFlags = [

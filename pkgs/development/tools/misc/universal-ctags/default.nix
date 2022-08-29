@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "universal-ctags";
-  version = "5.9.20220710.0";
+  version = "5.9.20220814.0";
 
   src = fetchFromGitHub {
     owner = "universal-ctags";
     repo = "ctags";
     rev = "p${version}";
-    sha256 = "sha256-/7g1AGLbl49s8hbwy3IGwshKAGKRJrdbECau2acMtjE=";
+    sha256 = "sha256-U1PjmBb99v7N+Dd7n2r1Xx09yflf0OxRlb4f1Sg0UvI=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];

@@ -70,5 +70,8 @@ in buildPythonPackage rec {
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ hyphon81 ];
+
+    # See https://github.com/NixOS/nixpkgs/pull/179912#issuecomment-1206265922.
+    broken = true;
   };
 }

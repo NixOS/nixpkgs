@@ -44,6 +44,12 @@ in {
             encryption = {
               allow = true;
               default = true;
+
+              verification_levels = {
+                receive = "cross-signed-tofu";
+                send = "cross-signed-tofu";
+                share = "cross-signed-tofu";
+              };
             };
             username_template = "facebook_{userid}";
           };
@@ -75,15 +81,12 @@ in {
             };
           }
         '';
-        description = ''
-          <filename>config.yaml</filename> configuration as a Nix attribute set.
+        description = lib.mdDoc ''
+          {file}`config.yaml` configuration as a Nix attribute set.
           Configuration options should match those described in
-          <link xlink:href="https://github.com/mautrix/facebook/blob/master/mautrix_facebook/example-config.yaml">
-          example-config.yaml</link>.
-          </para>
+          [example-config.yaml](https://github.com/mautrix/facebook/blob/master/mautrix_facebook/example-config.yaml).
 
-          <para>
-          Secret tokens should be specified using <option>environmentFile</option>
+          Secret tokens should be specified using {option}`environmentFile`
           instead of this world-readable attribute set.
         '';
       };
@@ -91,34 +94,36 @@ in {
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           File containing environment variables to be passed to the mautrix-telegram service.
 
-          Any config variable can be overridden by setting <literal>MAUTRIX_FACEBOOK_SOME_KEY</literal> to override the <literal>some.key</literal> variable.
+          Any config variable can be overridden by setting `MAUTRIX_FACEBOOK_SOME_KEY` to override the `some.key` variable.
         '';
       };
 
       configurePostgresql = mkOption {
         type = types.bool;
         default = true;
-        description = ''
-          Enable PostgreSQL and create a user and database for mautrix-facebook. The default <literal>settings</literal> reference this database, if you disable this option you must provide a database URL.
+        description = lib.mdDoc ''
+          Enable PostgreSQL and create a user and database for mautrix-facebook. The default `settings` reference this database, if you disable this option you must provide a database URL.
         '';
       };
 
       registrationData = mkOption {
         type = types.attrs;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Output data for appservice registration. Simply make any desired changes and serialize to JSON. Note that this data contains secrets so think twice before putting it into the nix store.
 
-          Currently <literal>as_token</literal> and <literal>hs_token</literal> need to be added as they are not known to this module.
+          Currently `as_token` and `hs_token` need to be added as they are not known to this module.
         '';
       };
     };
   };
 
   config = mkIf cfg.enable {
+    users.groups.mautrix-facebook = {};
+
     users.users.mautrix-facebook = {
       group = "mautrix-facebook";
       isSystemUser = true;

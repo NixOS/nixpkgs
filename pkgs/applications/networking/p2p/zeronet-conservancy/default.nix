@@ -6,19 +6,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "zeronet-conservancy";
-  version = "0.7.6";
+  version = "0.7.7";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "zeronet-conservancy";
     repo = "zeronet-conservancy";
     rev = "v${version}";
-    sha256 = "sha256-tWNU7UJVWB+aRLam6WKV/HaRRTIQvlEgxe4xJYKpXJY=";
+    sha256 = "sha256-6qBdq6DoIKZUUGflz7kWu3S3pMJB4vkGUytpU5EatP0=";
   };
 
   propagatedBuildInputs = with python3Packages; [
     gevent msgpack base58 merkletools rsa pysocks pyasn1 websocket-client
-    gevent-websocket rencode bitcoinlib maxminddb pyopenssl rich
+    gevent-websocket rencode bitcoinlib maxminddb pyopenssl rich defusedxml
+    pyaes
   ];
 
   buildPhase = ''

@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "folly";
-  version = "2022.07.25.00";
+  version = "2022.08.22.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "sha256-Bb6Txg0GNhkRP1qqeracmYENrO6x79HXMuWU2gtGGxU=";
+    sha256 = "sha256-Cj8JK3uoObt1G8kd2y4KxS88WwLPthdBvPcLi1C24aQ=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,13 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}" "-fpermissive" ];
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+
+  # folly-config.cmake, will `find_package` these, thus there should be
+  # a way to ensure abi compatibility.
+  passthru = {
+    inherit boost;
+    fmt = fmt_8;
+  };
 
   meta = with lib; {
     description = "An open-source C++ library developed and used at Facebook";

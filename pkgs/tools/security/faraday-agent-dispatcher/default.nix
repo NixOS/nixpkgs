@@ -49,6 +49,7 @@ python3.pkgs.buildPythonApplication rec {
 
   disabledTests = [
     "test_execute_agent"
+    "SSL"
   ];
 
   disabledTestPaths = [

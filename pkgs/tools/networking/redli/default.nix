@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "redli";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "IBM-Cloud";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bR02R9M3041oNUEQId1zgAxMNPyXXQNAYEyE/XIDdPE=";
+    sha256 = "sha256-nLauKt3OnFZFnFjw0s2kTFdvdYjFkeA6eQwZEhT4n/s=";
   };
 
   vendorSha256 = null;

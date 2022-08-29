@@ -73,7 +73,7 @@ let
     libxkbcommon libXScrnSaver libXcomposite libXcursor libXdamage
     libXext libXfixes libXi libXrandr libXrender libxshmfence
     libXtst libuuid mesa nspr nss pango pipewire udev wayland
-    xdg-utils xorg.libxcb zlib snappy
+    xorg.libxcb zlib snappy
   ]
     ++ optional pulseSupport libpulseaudio
     ++ optional libvaSupport libva;
@@ -90,11 +90,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.41.100";
+  version = "1.42.88";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "sha256-r5mMI7iLJ+q4dvt/IDcFlHz56sygYXsG8bb29UVxmTI=";
+    sha256 = "sha256-Or3eTLwap6KFhO7ieLyAXS0NKga5eUbd3KyFq/YNg+c=";
   };
 
   dontConfigure = true;
@@ -170,6 +170,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : ${rpath}
       --prefix PATH : ${binpath}
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
       ${optionalString (enableFeatures != []) ''
       --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}"
       ''}

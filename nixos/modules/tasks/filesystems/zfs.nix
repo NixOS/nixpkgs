@@ -202,21 +202,21 @@ in
         type = types.package;
         default = if config.boot.zfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs;
         defaultText = literalExpression "if config.boot.zfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs";
-        description = "Configured ZFS userland tools package.";
+        description = lib.mdDoc "Configured ZFS userland tools package.";
       };
 
       enabled = mkOption {
         readOnly = true;
         type = types.bool;
         default = inInitrd || inSystem;
-        defaultText = literalDocBook "<literal>true</literal> if ZFS filesystem support is enabled";
-        description = "True if ZFS filesystem support is enabled";
+        defaultText = literalMD "`true` if ZFS filesystem support is enabled";
+        description = lib.mdDoc "True if ZFS filesystem support is enabled";
       };
 
       enableUnstable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Use the unstable zfs package. This might be an option, if the latest
           kernel is not yet supported by a published release of ZFS. Enabling
           this option will install a development version of ZFS on Linux. The
@@ -230,12 +230,12 @@ in
         type = types.listOf types.str;
         default = [];
         example = [ "tank" "data" ];
-        description = ''
+        description = lib.mdDoc ''
           Name or GUID of extra ZFS pools that you wish to import during boot.
 
           Usually this is not necessary. Instead, you should set the mountpoint property
-          of ZFS filesystems to <literal>legacy</literal> and add the ZFS filesystems to
-          NixOS's <option>fileSystems</option> option, which makes NixOS automatically
+          of ZFS filesystems to `legacy` and add the ZFS filesystems to
+          NixOS's {option}`fileSystems` option, which makes NixOS automatically
           import the associated pool.
 
           However, in some cases (e.g. if you have many filesystems) it may be preferable
@@ -248,7 +248,7 @@ in
       devNodes = mkOption {
         type = types.path;
         default = "/dev/disk/by-id";
-        description = ''
+        description = lib.mdDoc ''
           Name of directory from which to import ZFS devices.
 
           This should be a path under /dev containing stable names for all devices needed, as
@@ -259,16 +259,16 @@ in
       forceImportRoot = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Forcibly import the ZFS root pool(s) during early boot.
 
           This is enabled by default for backwards compatibility purposes, but it is highly
           recommended to disable this option, as it bypasses some of the safeguards ZFS uses
           to protect your ZFS pools.
 
-          If you set this option to <literal>false</literal> and NixOS subsequently fails to
+          If you set this option to `false` and NixOS subsequently fails to
           boot because it cannot import the root pool, you should boot with the
-          <literal>zfs_force=1</literal> option as a kernel parameter (e.g. by manually
+          `zfs_force=1` option as a kernel parameter (e.g. by manually
           editing the kernel params in grub during boot). You should only need to do this
           once.
         '';
@@ -291,7 +291,7 @@ in
         type = types.either types.bool (types.listOf types.str);
         default = true;
         example = [ "tank" "data" ];
-        description = ''
+        description = lib.mdDoc ''
           If true on import encryption keys or passwords for all encrypted datasets
           are requested. To only decrypt selected datasets supply a list of dataset
           names instead. For root pools the encryption key can be supplied via both
@@ -304,15 +304,15 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Enable the (OpenSolaris-compatible) ZFS auto-snapshotting service.
-          Note that you must set the <literal>com.sun:auto-snapshot</literal>
-          property to <literal>true</literal> on all datasets which you wish
+          Note that you must set the `com.sun:auto-snapshot`
+          property to `true` on all datasets which you wish
           to auto-snapshot.
 
           You can override a child dataset to use, or not use auto-snapshotting
           by setting its flag with the given interval:
-          <literal>zfs set com.sun:auto-snapshot:weekly=false DATASET</literal>
+          `zfs set com.sun:auto-snapshot:weekly=false DATASET`
         '';
       };
 
@@ -320,14 +320,14 @@ in
         default = "-k -p";
         example = "-k -p --utc";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Flags to pass to the zfs-auto-snapshot command.
 
-          Run <literal>zfs-auto-snapshot</literal> (without any arguments) to
+          Run `zfs-auto-snapshot` (without any arguments) to
           see available flags.
 
           If it's not too inconvenient for snapshots to have timestamps in UTC,
-          it is suggested that you append <literal>--utc</literal> to the list
+          it is suggested that you append `--utc` to the list
           of default options (see example).
 
           Otherwise, snapshot names can cause name conflicts or apparent time
@@ -338,7 +338,7 @@ in
       frequent = mkOption {
         default = 4;
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           Number of frequent (15-minute) auto-snapshots that you wish to keep.
         '';
       };
@@ -346,7 +346,7 @@ in
       hourly = mkOption {
         default = 24;
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           Number of hourly auto-snapshots that you wish to keep.
         '';
       };
@@ -354,7 +354,7 @@ in
       daily = mkOption {
         default = 7;
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           Number of daily auto-snapshots that you wish to keep.
         '';
       };
@@ -362,7 +362,7 @@ in
       weekly = mkOption {
         default = 4;
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           Number of weekly auto-snapshots that you wish to keep.
         '';
       };
@@ -370,7 +370,7 @@ in
       monthly = mkOption {
         default = 12;
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           Number of monthly auto-snapshots that you wish to keep.
         '';
       };
@@ -378,7 +378,7 @@ in
 
     services.zfs.trim = {
       enable = mkOption {
-        description = "Whether to enable periodic TRIM on all ZFS pools.";
+        description = lib.mdDoc "Whether to enable periodic TRIM on all ZFS pools.";
         default = true;
         example = false;
         type = types.bool;
@@ -388,13 +388,12 @@ in
         default = "weekly";
         type = types.str;
         example = "daily";
-        description = ''
+        description = lib.mdDoc ''
           How often we run trim. For most desktop and server systems
           a sufficient trimming frequency is once a week.
 
           The format is described in
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
+          {manpage}`systemd.time(7)`.
         '';
       };
     };
@@ -406,10 +405,9 @@ in
         default = "Sun, 02:00";
         type = types.str;
         example = "daily";
-        description = ''
+        description = lib.mdDoc ''
           Systemd calendar expression when to scrub ZFS pools. See
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
+          {manpage}`systemd.time(7)`.
         '';
       };
 
@@ -417,7 +415,7 @@ in
         default = [];
         type = types.listOf types.str;
         example = [ "tank" ];
-        description = ''
+        description = lib.mdDoc ''
           List of ZFS pools to periodically scrub. If empty, all pools
           will be scrubbed.
         '';
@@ -428,7 +426,7 @@ in
       type = types.either (types.enum [ "disabled" "all" ]) (types.listOf types.str);
       default = "disabled";
       example = [ "tank" "dozer" ];
-      description = ''
+      description = lib.mdDoc ''
         After importing, expand each device in the specified pools.
 
         Set the value to the plain string "all" to expand all pools on boot:
@@ -464,11 +462,11 @@ in
             ZED_SCRUB_AFTER_RESILVER = false;
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           ZFS Event Daemon /etc/zfs/zed.d/zed.rc content
 
           See
-          <citerefentry><refentrytitle>zed</refentrytitle><manvolnum>8</manvolnum></citerefentry>
+          {manpage}`zed(8)`
           for details on ZED and the scripts in /etc/zfs/zed.d to find the possible variables
         '';
       };
@@ -714,6 +712,8 @@ in
             RemainAfterExit = true;
           };
 
+          path = lib.optionals (cfgExpandOnBoot == "all") [ cfgZfs.package ];
+
           script = ''
             for pool in ${poolListProvider}; do
               systemctl start --no-block "zpool-expand@$pool"
@@ -765,10 +765,10 @@ in
         description = "ZFS pools scrubbing";
         after = [ "zfs-import.target" ];
         serviceConfig = {
-          Type = "oneshot";
+          Type = "simple";
         };
         script = ''
-          ${cfgZfs.package}/bin/zpool scrub ${
+          ${cfgZfs.package}/bin/zpool scrub -w ${
             if cfgScrub.pools != [] then
               (concatStringsSep " " cfgScrub.pools)
             else

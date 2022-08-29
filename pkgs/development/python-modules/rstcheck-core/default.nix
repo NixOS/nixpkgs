@@ -47,7 +47,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'types-docutils = ">=0.18, <0.19"' 'types-docutils = ">=0.18"'
+      --replace 'types-docutils = ">=0.18, <0.19"' 'types-docutils = ">=0.18"' \
+      --replace 'docutils = ">=0.7, <0.19"' 'docutils = ">=0.7"'
   '';
 
   pythonImportsCheck = [

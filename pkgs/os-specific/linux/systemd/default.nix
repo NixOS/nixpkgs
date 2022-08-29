@@ -89,7 +89,7 @@
 , withMachined ? true
 , withNetworkd ? true
 , withNss ? !stdenv.hostPlatform.isMusl
-, withOomd ? false
+, withOomd ? true
 , withPCRE2 ? true
 , withPolkit ? true
 , withPortabled ? false
@@ -127,7 +127,7 @@ assert withCryptsetup -> (cryptsetup != null);
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "251.3";
+  version = "251.4";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -144,12 +144,13 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "sha256-vcj+k/duRID2R+wGQIyq+dVRrFYNQTsjHya6k0hmZxk=";
+    sha256 = "sha256-lfG6flT1k8LZBAdDK+cF9RjmJMkHMJquMjQK3MINFd8=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
   # `git am path/to/00*.patch` them into a systemd worktree, rebase to the more recent
-  # systemd version, and export the patches again via `git -c format.signoff=false format-patch v${version}`.
+  # systemd version, and export the patches again via
+  # `git -c format.signoff=false format-patch v${version} --no-numbered --zero-commit --no-signature`.
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all patches
   patches = [
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
@@ -166,10 +167,9 @@ stdenv.mkDerivation {
     ./0012-add-rootprefix-to-lookup-dir-paths.patch
     ./0013-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
     ./0014-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
-    ./0015-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
-    ./0016-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0017-pkg-config-derive-prefix-from-prefix.patch
-    ./0018-inherit-systemd-environment-when-calling-generators.patch
+    ./0015-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0016-pkg-config-derive-prefix-from-prefix.patch
+    ./0017-inherit-systemd-environment-when-calling-generators.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {

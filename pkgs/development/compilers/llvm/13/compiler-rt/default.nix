@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
     "-DCOMPILER_RT_BUILD_MEMPROF=OFF"
     "-DCOMPILER_RT_BUILD_ORC=OFF" # may be possible to build with musl if necessary
-  ] ++ lib.optionals ((useLLVM || bareMetal) && !haveLibc) [
+  ] ++ lib.optionals ((useLLVM && !haveLibc) || bareMetal) [
     "-DCMAKE_C_COMPILER_WORKS=ON"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"

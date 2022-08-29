@@ -37,13 +37,13 @@ in
 
       logLevel = mkOption {
         type = types.enum ["DEBUG" "INFO" "WARNING" "ERROR" "CRITICAL" "TRACE" "NONE"];
-        description = "Log level used by the GlusterFS daemon";
+        description = lib.mdDoc "Log level used by the GlusterFS daemon";
         default = "INFO";
       };
 
       useRpcbind = mkOption {
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Enable use of rpcbind. This is required for Gluster's NFS functionality.
 
           You may want to turn it off to reduce the attack surface for DDoS reflection attacks.
@@ -56,13 +56,13 @@ in
 
       enableGlustereventsd = mkOption {
         type = types.bool;
-        description = "Whether to enable the GlusterFS Events Daemon";
+        description = lib.mdDoc "Whether to enable the GlusterFS Events Daemon";
         default = true;
       };
 
       killMode = mkOption {
         type = types.enum ["control-group" "process" "mixed" "none"];
-        description = ''
+        description = lib.mdDoc ''
           The systemd KillMode to use for glusterd.
 
           glusterd spawns other daemons like gsyncd.
@@ -79,7 +79,7 @@ in
 
       stopKillTimeout = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The systemd TimeoutStopSec to use.
 
           After this time after having been asked to shut down, glusterd
@@ -94,17 +94,17 @@ in
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        description = "Extra flags passed to the GlusterFS daemon";
+        description = lib.mdDoc "Extra flags passed to the GlusterFS daemon";
         default = [];
       };
 
       tlsSettings = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Make the server communicate via TLS.
           This means it will only connect to other gluster
           servers having certificates signed by the same CA.
 
-          Enabling this will create a file <filename>/var/lib/glusterd/secure-access</filename>.
+          Enabling this will create a file {file}`/var/lib/glusterd/secure-access`.
           Disabling will delete this file again.
 
           See also: https://gluster.readthedocs.io/en/latest/Administrator%20Guide/SSL/
@@ -114,17 +114,17 @@ in
           options = {
             tlsKeyPath = mkOption {
               type = types.str;
-              description = "Path to the private key used for TLS.";
+              description = lib.mdDoc "Path to the private key used for TLS.";
             };
 
             tlsPem = mkOption {
               type = types.path;
-              description = "Path to the certificate used for TLS.";
+              description = lib.mdDoc "Path to the certificate used for TLS.";
             };
 
             caCert = mkOption {
               type = types.path;
-              description = "Path certificate authority used to sign the cluster certificates.";
+              description = lib.mdDoc "Path certificate authority used to sign the cluster certificates.";
             };
           };
         });

@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pydrive2";
-  version = "1.10.1";
+  version = "1.14.0";
 
   src = fetchPypi {
     pname = "PyDrive2";
     inherit version;
-    sha256 = "sha256-rCnW2h7/Pl8U09oK8Q/wvz0SRIQn7k6Z0vgzZmNFVIM=";
+    sha256 = "sha256-212jvmcWMPVxynEAsoHYtdcv0His1CUkem0pLis9KEA=";
   };
 
   propagatedBuildInputs = [

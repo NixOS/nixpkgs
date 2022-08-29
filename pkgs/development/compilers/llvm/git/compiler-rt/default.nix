@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
     "-DCOMPILER_RT_BUILD_MEMPROF=OFF"
     "-DCOMPILER_RT_BUILD_ORC=OFF" # may be possible to build with musl if necessary
-  ] ++ lib.optionals ((useLLVM || bareMetal) && !haveLibc) [
+  ] ++ lib.optionals ((useLLVM && !haveLibc) || bareMetal) [
     "-DCMAKE_C_COMPILER_WORKS=ON"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
@@ -66,7 +66,6 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" ];
 
   patches = [
-    ./codesign.patch # Revert compiler-rt commit that makes codesign mandatory
     ./X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
     ./gnu-install-dirs.patch
     # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the

@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "oranchelo-icon-theme";
-  version = "0.8.0.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "OrancheloTeam";
     repo = pname;
-    rev = "096c8c8d550ac9a85f5f34f3f30243e6f198df2d";
-    sha256 = "sha256-TKi42SA33pGKdrPtGTpvxFbOP+5N93Y4BvO4CRTveLM=";
+    rev = "v${version}";
+    sha256 = "sha256-IDsZj/X9rFSdDpa3bL6IPEPCRe5GustPteDxSbfz+SA=";
   };
 
   nativeBuildInputs = [
@@ -22,9 +22,18 @@ stdenvNoCC.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
-  installPhase = ''
-    mkdir -p $out/share/icons
-    cp -r $Oranchelo* $out/share/icons/
+  makeFlags = [
+    "DESTDIR=$(out)"
+    "PREFIX="
+  ];
+
+  postInstall = ''
+    # space in icon name causes gtk-update-icon-cache to fail
+    mv "$out/share/icons/Oranchelo/apps/scalable/ grsync.svg" "$out/share/icons/Oranchelo/apps/scalable/grsync.svg"
+
+    for theme in $out/share/icons/*; do
+      gtk-update-icon-cache "$theme"
+    done
   '';
 
   meta = with lib; {

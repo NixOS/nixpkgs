@@ -1,4 +1,4 @@
-{ stdenv, bazel_4, buildBazelPackage, isPy3k, lib, fetchFromGitHub, symlinkJoin
+{ stdenv, bazel_5, buildBazelPackage, isPy3k, lib, fetchFromGitHub, symlinkJoin
 , addOpenGLRunpath, fetchpatch, patchelfUnstable
 # Python deps
 , buildPythonPackage, pythonOlder, python
@@ -76,7 +76,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.9.1";
+  version = "2.10.0-rc0";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -184,13 +184,13 @@ let
     stdenv = llvmPackages_11.stdenv;
   })) {
     name = "${pname}-${version}";
-    bazel = bazel_4;
+    bazel = bazel_5;
 
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      hash = "sha256-kILNvwHi29F8BClYsZw+7RT2t6x57AsAHURVTfs5uOE=";
+      hash = "sha256-zN8I0wxKrxWcI0RuOqDz6srdW0Q+kgaZhJdXM46N1e8=";
     };
 
     # On update, it can be useful to steal the changes from gentoo
@@ -369,12 +369,13 @@ let
     fetchAttrs = {
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "sha256-mcK60pLz70tOAu1+THUXweiO2SCSFUdFdT91HaUokzA="
+        "sha256-KtVReqHL3zxE8TPrqIerSOt59Mgke/ftoFZKMzgX/u8="
       else
         if stdenv.isDarwin then
-          "sha256-j2k9Q+k41nq5nP1VjjkkNjXRov1uAda4RCMDMAthjrk="
+          # FIXME: this checksum is currently wrong, since the tensorflow dependency fetch is broken on darwin
+          "sha256-j2k9Q+k41nq5nP1VjjkkNjXRov1uAda4RCMDMAthjr0="
         else
-          "sha256-teW6o9Fb4hUxmaHpQU2F+5ihE/DA+MIY8QaMEKMnFiE=";
+          "sha256-zH3xNFEU2JR0Ww8bpD4mCiorGtao0WVPP4vklVMgS4A=";
     };
 
     buildAttrs = {

@@ -286,8 +286,10 @@ rec {
         set -o errexit
         set -o nounset
         set -o pipefail
+      '' + lib.optionalString (runtimeInputs != [ ]) ''
 
         export PATH="${lib.makeBinPath runtimeInputs}:$PATH"
+      '' + ''
 
         ${text}
       '';

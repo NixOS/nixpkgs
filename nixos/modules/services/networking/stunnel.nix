@@ -42,46 +42,45 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the stunnel TLS tunneling service.";
+        description = lib.mdDoc "Whether to enable the stunnel TLS tunneling service.";
       };
 
       user = mkOption {
         type = with types; nullOr str;
         default = "nobody";
-        description = "The user under which stunnel runs.";
+        description = lib.mdDoc "The user under which stunnel runs.";
       };
 
       group = mkOption {
         type = with types; nullOr str;
         default = "nogroup";
-        description = "The group under which stunnel runs.";
+        description = lib.mdDoc "The group under which stunnel runs.";
       };
 
       logLevel = mkOption {
         type = types.enum [ "emerg" "alert" "crit" "err" "warning" "notice" "info" "debug" ];
         default = "info";
-        description = "Verbosity of stunnel output.";
+        description = lib.mdDoc "Verbosity of stunnel output.";
       };
 
       fipsMode = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable FIPS 140-2 mode required for compliance.";
+        description = lib.mdDoc "Enable FIPS 140-2 mode required for compliance.";
       };
 
       enableInsecureSSLv3 = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable support for the insecure SSLv3 protocol.";
+        description = lib.mdDoc "Enable support for the insecure SSLv3 protocol.";
       };
 
 
       servers = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Define the server configuations.
 
-          See "SERVICE-LEVEL OPTIONS" in <citerefentry><refentrytitle>stunnel</refentrytitle>
-          <manvolnum>8</manvolnum></citerefentry>.
+          See "SERVICE-LEVEL OPTIONS" in {manpage}`stunnel(8)`.
         '';
         type = with types; attrsOf (attrsOf (nullOr (oneOf [bool int str])));
         example = {
@@ -95,13 +94,12 @@ in
       };
 
       clients = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Define the client configurations.
 
           By default, verifyChain and OCSPaia are enabled and a CAFile is provided from pkgs.cacert.
 
-          See "SERVICE-LEVEL OPTIONS" in <citerefentry><refentrytitle>stunnel</refentrytitle>
-          <manvolnum>8</manvolnum></citerefentry>.
+          See "SERVICE-LEVEL OPTIONS" in {manpage}`stunnel(8)`.
         '';
         type = with types; attrsOf (attrsOf (nullOr (oneOf [bool int str])));
 

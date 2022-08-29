@@ -3,16 +3,17 @@
 buildDunePackage rec {
 
   pname = "crunch";
-  version = "3.3.0";
 
-  useDune2 = true;
+  version = "3.3.1";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-crunch/releases/download/v${version}/crunch-${version}.tbz";
-    sha256 = "0b6mqr5nlijhn0r0cryz72yk32x5vqnnp1c6zvpppqg7f7hf312q";
+    sha256 = "sha256-LFug1BELy7dzHLpOr7bESnSHw/iMGtR0AScbaf+o7Wo=";
   };
 
-  propagatedBuildInputs = [ cmdliner_1_1 ptime ];
+  buildInputs = [ cmdliner_1_1 ];
+
+  propagatedBuildInputs = [ ptime ];
 
   outputs = [ "lib" "bin" "out" ];
 

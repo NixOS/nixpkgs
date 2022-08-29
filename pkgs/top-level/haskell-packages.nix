@@ -15,15 +15,15 @@ let
     "integer-simple"
     "native-bignum"
     "ghc902"
-    "ghc923"
-    "ghc941"
+    "ghc924"
+    "ghc942"
     "ghcHEAD"
   ];
 
   nativeBignumIncludes = [
     "ghc902"
-    "ghc923"
-    "ghc941"
+    "ghc924"
+    "ghc942"
     "ghcHEAD"
   ];
 
@@ -138,7 +138,7 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
-    ghc923 = callPackage ../development/compilers/ghc/9.2.3.nix {
+    ghc924 = callPackage ../development/compilers/ghc/9.2.4.nix {
       bootPkgs =
         # aarch64 ghc8107Binary exceeds max output size on hydra
         if stdenv.hostPlatform.isAarch then
@@ -155,12 +155,21 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
-    ghc941 = callPackage ../development/compilers/ghc/9.4.1.nix {
+    ghc942 = callPackage ../development/compilers/ghc/9.4.2.nix {
       bootPkgs =
-        # TODO(@sternenseemann): Package 9.0.2 bindist or wait for upstream fix
-        # Need to use 902 due to
+        # Building with 9.2 is broken due to
         # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
-          packages.ghc902;
+        # Use 8.10 as a workaround where possible to keep bootstrap path short.
+
+        # On ARM text won't build with GHC 8.10.*
+        if stdenv.hostPlatform.isAarch then
+          # TODO(@sternenseemann): package bindist
+          packages.ghc902
+        # No suitable bindists for powerpc64le
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc902
+        else
+          packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
@@ -277,14 +286,14 @@ in {
       ghc = bh.compiler.ghc902;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
     };
-    ghc923 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc923;
-      ghc = bh.compiler.ghc923;
+    ghc924 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc924;
+      ghc = bh.compiler.ghc924;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
     };
-    ghc941 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc941;
-      ghc = bh.compiler.ghc941;
+    ghc942 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc942;
+      ghc = bh.compiler.ghc942;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.4.x.nix { };
     };
     ghcHEAD = callPackage ../development/haskell-modules {

@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     description = "Proprietary issue tracking product, also providing project management functions";
     homepage = "https://www.atlassian.com/software/jira";
     license = licenses.unfree;
-    maintainers = with maintainers; [ fpletz globin ciil megheaiulian techknowlogick ma27 ];
+    maintainers = with maintainers; [ globin ciil megheaiulian techknowlogick ma27 ];
   };
 }

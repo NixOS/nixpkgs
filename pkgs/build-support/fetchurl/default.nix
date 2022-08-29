@@ -117,6 +117,9 @@ let
     else throw "fetchurl requires either `url` or `urls` to be set";
 
   hash_ =
+    # Many other combinations don't make sense, but this is the most common one:
+    if hash != "" && sha256 != "" then throw "multiple hashes passed to fetchurl" else
+
     if hash != "" then { outputHashAlgo = null; outputHash = hash; }
     else if md5 != "" then throw "fetchurl does not support md5 anymore, please use sha256 or sha512"
     else if (outputHash != "" && outputHashAlgo != "") then { inherit outputHashAlgo outputHash; }

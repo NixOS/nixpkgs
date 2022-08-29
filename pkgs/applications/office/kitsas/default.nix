@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kitsas";
-  version = "3.1.1";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "artoh";
     repo = "kitupiikki";
     rev = "v${version}";
-    sha256 = "sha256-nmlGLrVsTQawYHNgaax9EiutL4xgFdOD34Q4/rnB/D0=";
+    sha256 = "sha256-1gp6CMoDTAp6ORnuk5wos67zygmE9s2pXwvwcR+Hwgg=";
   };
 
   # QList::swapItemsAt was introduced in Qt 5.13

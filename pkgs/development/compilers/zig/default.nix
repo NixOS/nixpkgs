@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-x2c4c9RSrNWGqEngio4ArW7dJjW0gg+8nqBwPcR721k=";
   };
 
+  # Fix index out of bounds reading RPATH (cherry-picked from 0.10-dev)
+  patches = [ ./rpath.patch ];
+
   nativeBuildInputs = [
     cmake
     llvmPackages.llvm.dev

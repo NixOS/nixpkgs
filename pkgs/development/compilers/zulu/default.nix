@@ -117,7 +117,7 @@ in stdenv.mkDerivation {
       Certified builds of OpenJDK that can be deployed across multiple
       operating systems, containers, hypervisors and Cloud platforms.
     '';
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "java";
   };

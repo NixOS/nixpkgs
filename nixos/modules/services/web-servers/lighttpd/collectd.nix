@@ -30,10 +30,10 @@ in
     collectionCgi = mkOption {
       type = types.path;
       default = defaultCollectionCgi;
-      defaultText = literalDocBook ''
-        <literal>config.${options.services.collectd.package}</literal> configured for lighttpd
+      defaultText = literalMD ''
+        `config.${options.services.collectd.package}` configured for lighttpd
       '';
-      description = ''
+      description = lib.mdDoc ''
         Path to collection.cgi script from (collectd sources)/contrib/collection.cgi
         This option allows to use a customized version
       '';

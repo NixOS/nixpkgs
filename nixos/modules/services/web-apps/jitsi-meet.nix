@@ -51,7 +51,7 @@ in
     hostName = mkOption {
       type = str;
       example = "meet.example.org";
-      description = ''
+      description = lib.mdDoc ''
         FQDN of the Jitsi Meet instance.
       '';
     };
@@ -65,10 +65,10 @@ in
           defaultLang = "fi";
         }
       '';
-      description = ''
-        Client-side web application settings that override the defaults in <filename>config.js</filename>.
+      description = lib.mdDoc ''
+        Client-side web application settings that override the defaults in {file}`config.js`.
 
-        See <link xlink:href="https://github.com/jitsi/jitsi-meet/blob/master/config.js" /> for default
+        See <https://github.com/jitsi/jitsi-meet/blob/master/config.js> for default
         configuration with comments.
       '';
     };
@@ -76,8 +76,8 @@ in
     extraConfig = mkOption {
       type = lines;
       default = "";
-      description = ''
-        Text to append to <filename>config.js</filename> web application config file.
+      description = lib.mdDoc ''
+        Text to append to {file}`config.js` web application config file.
 
         Can be used to insert JavaScript logic to determine user's region in cascading bridges setup.
       '';
@@ -92,10 +92,10 @@ in
           SHOW_WATERMARK_FOR_GUESTS = false;
         }
       '';
-      description = ''
-        Client-side web-app interface settings that override the defaults in <filename>interface_config.js</filename>.
+      description = lib.mdDoc ''
+        Client-side web-app interface settings that override the defaults in {file}`interface_config.js`.
 
-        See <link xlink:href="https://github.com/jitsi/jitsi-meet/blob/master/interface_config.js" /> for
+        See <https://github.com/jitsi/jitsi-meet/blob/master/interface_config.js> for
         default configuration with comments.
       '';
     };
@@ -104,10 +104,10 @@ in
       enable = mkOption {
         type = bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable Jitsi Videobridge instance and configure it to connect to Prosody.
 
-          Additional configuration is possible with <option>services.jitsi-videobridge</option>.
+          Additional configuration is possible with {option}`services.jitsi-videobridge`.
         '';
       };
 
@@ -115,10 +115,10 @@ in
         type = nullOr str;
         default = null;
         example = "/run/keys/videobridge";
-        description = ''
+        description = lib.mdDoc ''
           File containing password to the Prosody account for videobridge.
 
-          If <literal>null</literal>, a file with password will be generated automatically. Setting
+          If `null`, a file with password will be generated automatically. Setting
           this option is useful if you plan to connect additional videobridges to the XMPP server.
         '';
       };
@@ -127,35 +127,35 @@ in
     jicofo.enable = mkOption {
       type = bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable JiCoFo instance and configure it to connect to Prosody.
 
-        Additional configuration is possible with <option>services.jicofo</option>.
+        Additional configuration is possible with {option}`services.jicofo`.
       '';
     };
 
     jibri.enable = mkOption {
       type = bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable a Jibri instance and configure it to connect to Prosody.
 
-        Additional configuration is possible with <option>services.jibri</option>, and
-        <option>services.jibri.finalizeScript</option> is especially useful.
+        Additional configuration is possible with {option}`services.jibri`, and
+        {option}`services.jibri.finalizeScript` is especially useful.
       '';
     };
 
     nginx.enable = mkOption {
       type = bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable nginx virtual host that will serve the javascript application and act as
         a proxy for the XMPP server. Further nginx configuration can be done by adapting
-        <option>services.nginx.virtualHosts.&lt;hostName&gt;</option>.
+        {option}`services.nginx.virtualHosts.<hostName>`.
         When this is enabled, ACME will be used to retrieve a TLS certificate by default. To disable
-        this, set the <option>services.nginx.virtualHosts.&lt;hostName&gt;.enableACME</option> to
-        <literal>false</literal> and if appropriate do the same for
-        <option>services.nginx.virtualHosts.&lt;hostName&gt;.forceSSL</option>.
+        this, set the {option}`services.nginx.virtualHosts.<hostName>.enableACME` to
+        `false` and if appropriate do the same for
+        {option}`services.nginx.virtualHosts.<hostName>.forceSSL`.
       '';
     };
 
@@ -164,7 +164,7 @@ in
     prosody.enable = mkOption {
       type = bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to configure Prosody to relay XMPP messages between Jitsi Meet components. Turn this
         off if you want to configure it manually.
       '';
@@ -267,6 +267,7 @@ in
         EnvironmentFile = [ "/var/lib/jitsi-meet/secrets-env" ];
         SupplementaryGroups = [ "jitsi-meet" ];
       };
+      reloadIfChanged = true;
     };
 
     users.groups.jitsi-meet = {};

@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
     cp git-open $out/bin
     installManPage git-open.1
     wrapProgram $out/bin/git-open \
-      --prefix PATH : "${lib.makeBinPath [ git xdg-utils gnugrep ]}"
+      --prefix PATH : "${lib.makeBinPath [ git gnugrep ]}" \
+      --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
   '';
 
   meta = with lib; {

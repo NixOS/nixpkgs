@@ -48,9 +48,16 @@ self: super: {
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
   xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
 
-  # cabal-install needs more recent versions of Cabal and base16-bytestring.
+  # cabal-install needs most recent versions of Cabal and Cabal-syntax
   cabal-install = super.cabal-install.overrideScope (self: super: {
-    Cabal = self.Cabal_3_6_3_0;
+    Cabal = self.Cabal_3_8_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+    process = self.process_1_6_15_0;
+  });
+  cabal-install-solver = super.cabal-install-solver.overrideScope (self: super: {
+    Cabal = self.Cabal_3_8_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+    process = self.process_1_6_15_0;
   });
 
   # Pick right versions for GHC-specific packages
@@ -92,13 +99,15 @@ self: super: {
   mime-string = disableOptimization super.mime-string;
 
   # Older compilers need the latest ghc-lib to build this package.
-  hls-hlint-plugin = addBuildDepend self.ghc-lib (overrideCabal (drv: {
-      # Workaround for https://github.com/haskell/haskell-language-server/issues/2728
-      postPatch = ''
-        sed -i 's/(GHC.RealSrcSpan x,/(GHC.RealSrcSpan x Nothing,/' src/Ide/Plugin/Hlint.hs
-      '';
-    })
-     super.hls-hlint-plugin);
+  # Fix build with ghc-lib >= 9.0 and ghc <= 8.10.7
+  # https://github.com/haskell/haskell-language-server/issues/2728
+  hls-hlint-plugin = addBuildDepend self.ghc-lib (appendPatch (pkgs.fetchpatch {
+    name = "hls-hlint-plugin-workaround.patch";
+    url = "https://github.com/haskell/haskell-language-server/pull/2854.patch";
+    hash = "sha256-bLGu0OQtXsmMF3rZM+R6k7bsZm4Vgf2r0ert5Wunong=";
+    stripLen = 2;
+    includes = ["src/Ide/Plugin/Hlint.hs"];
+  }) super.hls-hlint-plugin);
 
   haskell-language-server = appendConfigureFlags [
       "-f-stylishhaskell"

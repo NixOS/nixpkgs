@@ -22,30 +22,30 @@ let
   wrapperType = lib.types.submodule ({ name, config, ... }: {
     options.source = lib.mkOption
       { type = lib.types.path;
-        description = "The absolute path to the program to be wrapped.";
+        description = lib.mdDoc "The absolute path to the program to be wrapped.";
       };
     options.program = lib.mkOption
       { type = with lib.types; nullOr str;
         default = name;
-        description = ''
+        description = lib.mdDoc ''
           The name of the wrapper program. Defaults to the attribute name.
         '';
       };
     options.owner = lib.mkOption
       { type = lib.types.str;
-        description = "The owner of the wrapper program.";
+        description = lib.mdDoc "The owner of the wrapper program.";
       };
     options.group = lib.mkOption
       { type = lib.types.str;
-        description = "The group of the wrapper program.";
+        description = lib.mdDoc "The group of the wrapper program.";
       };
     options.permissions = lib.mkOption
       { type = fileModeType;
         default  = "u+rx,g+x,o+x";
         example = "a+rx";
-        description = ''
+        description = lib.mdDoc ''
           The permissions of the wrapper program. The format is that of a
-          symbolic or numeric file mode understood by <command>chmod</command>.
+          symbolic or numeric file mode understood by {command}`chmod`.
         '';
       };
     options.capabilities = lib.mkOption
@@ -54,10 +54,7 @@ let
         description = ''
           A comma-separated list of capabilities to be given to the wrapper
           program. For capabilities supported by the system check the
-          <citerefentry>
-            <refentrytitle>capabilities</refentrytitle>
-            <manvolnum>7</manvolnum>
-          </citerefentry>
+          <citerefentry><refentrytitle>capabilities</refentrytitle><manvolnum>7</manvolnum></citerefentry>
           manual page.
 
           <note><para>
@@ -73,12 +70,12 @@ let
     options.setuid = lib.mkOption
       { type = lib.types.bool;
         default = false;
-        description = "Whether to add the setuid bit the wrapper program.";
+        description = lib.mdDoc "Whether to add the setuid bit the wrapper program.";
       };
     options.setgid = lib.mkOption
       { type = lib.types.bool;
         default = false;
-        description = "Whether to add the setgid bit the wrapper program.";
+        description = lib.mdDoc "Whether to add the setgid bit the wrapper program.";
       };
   });
 
@@ -179,12 +176,22 @@ in
               };
           }
         '';
-      description = ''
+      description = lib.mdDoc ''
         This option effectively allows adding setuid/setgid bits, capabilities,
         changing file ownership and permissions of a program without directly
         modifying it. This works by creating a wrapper program under the
-        <option>security.wrapperDir</option> directory, which is then added to
-        the shell <literal>PATH</literal>.
+        {option}`security.wrapperDir` directory, which is then added to
+        the shell `PATH`.
+      '';
+    };
+
+    security.wrapperDirSize = lib.mkOption {
+      default = "50%";
+      example = "10G";
+      type = lib.types.str;
+      description = ''
+        Size limit for the /run/wrappers tmpfs. Look at mount(8), tmpfs size option,
+        for the accepted syntax. WARNING: don't set to less than 64MB.
       '';
     };
 
@@ -230,7 +237,7 @@ in
 
     boot.specialFileSystems.${parentWrapperDir} = {
       fsType = "tmpfs";
-      options = [ "nodev" "mode=755" ];
+      options = [ "nodev" "mode=755" "size=${config.security.wrapperDirSize}" ];
     };
 
     # Make sure our wrapperDir exports to the PATH env variable when

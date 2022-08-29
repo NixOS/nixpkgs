@@ -122,7 +122,7 @@ in
     user = mkOption {
       type = types.str;
       default = srvsrht;
-      description = ''
+      description = lib.mdDoc ''
         User for ${srv}.sr.ht.
       '';
     };
@@ -130,7 +130,7 @@ in
     group = mkOption {
       type = types.str;
       default = srvsrht;
-      description = ''
+      description = lib.mdDoc ''
         Group for ${srv}.sr.ht.
         Membership grants access to the Git/Mercurial repositories by default,
         but not to the config.ini file (where secrets are).
@@ -140,7 +140,7 @@ in
     port = mkOption {
       type = types.port;
       default = port;
-      description = ''
+      description = lib.mdDoc ''
         Port on which the "${srv}" backend should listen.
       '';
     };
@@ -150,7 +150,7 @@ in
         type = types.str;
         default = "unix:///run/redis-sourcehut-${srvsrht}/redis.sock?db=0";
         example = "redis://shared.wireguard:6379/0";
-        description = ''
+        description = lib.mdDoc ''
           The redis host URL. This is used for caching and temporary storage, and must
           be shared between nodes (e.g. git1.sr.ht and git2.sr.ht), but need not be
           shared between services. It may be shared between services, however, with no
@@ -163,9 +163,9 @@ in
       database = mkOption {
         type = types.str;
         default = "${srv}.sr.ht";
-        description = ''
+        description = lib.mdDoc ''
           PostgreSQL database name for the ${srv}.sr.ht service,
-          used if <xref linkend="opt-services.sourcehut.postgresql.enable"/> is <literal>true</literal>.
+          used if [](#opt-services.sourcehut.postgresql.enable) is `true`.
         '';
       };
     };
@@ -174,7 +174,7 @@ in
       extraArgs = mkOption {
         type = with types; listOf str;
         default = ["--timeout 120" "--workers 1" "--log-level=info"];
-        description = "Extra arguments passed to Gunicorn.";
+        description = lib.mdDoc "Extra arguments passed to Gunicorn.";
       };
     };
   } // optionalAttrs webhooks {
@@ -182,12 +182,12 @@ in
       extraArgs = mkOption {
         type = with types; listOf str;
         default = ["--loglevel DEBUG" "--pool eventlet" "--without-heartbeat"];
-        description = "Extra arguments passed to the Celery responsible for webhooks.";
+        description = lib.mdDoc "Extra arguments passed to the Celery responsible for webhooks.";
       };
       celeryConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Content of the <literal>celeryconfig.py</literal> used by the Celery responsible for webhooks.";
+        description = lib.mdDoc "Content of the `celeryconfig.py` used by the Celery responsible for webhooks.";
       };
     };
   };

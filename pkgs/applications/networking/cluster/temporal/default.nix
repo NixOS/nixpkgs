@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "temporal";
-  version = "1.17.1";
+  version = "1.17.4";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
     rev = "v${version}";
-    sha256 = "sha256-YaFB2OBC5dJjfomkge6w3sGyrESRxAFTDm+jPMLgskc=";
+    sha256 = "sha256-FT1GOhB3PN5CBktMm5Z2xe6MF3U/BUQj7XViinTjWG4=";
   };
 
   vendorSha256 = "sha256-MT/BmGTdyEzmXjuwlA6WhLIWlrQz3Wc4Tl5dMI1587Q=";

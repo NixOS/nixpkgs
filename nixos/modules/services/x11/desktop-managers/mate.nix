@@ -16,7 +16,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable the MATE desktop environment";
+        description = lib.mdDoc "Enable the MATE desktop environment";
       };
 
       debug = mkEnableOption "mate-session debug messages";
@@ -26,7 +26,7 @@ in
       default = [];
       example = literalExpression "[ pkgs.mate.mate-terminal pkgs.mate.pluma ]";
       type = types.listOf types.package;
-      description = "Which MATE packages to exclude from the default environment";
+      description = lib.mdDoc "Which MATE packages to exclude from the default environment";
     };
 
   };

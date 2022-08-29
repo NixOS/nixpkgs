@@ -7,7 +7,7 @@ in {
 
     userid = mkOption {
       type = nullOr str;
-      description = "User ID to return. Set to null to return a random string each time.";
+      description = lib.mdDoc "User ID to return. Set to null to return a random string each time.";
       default = null;
       example = "alice";
     };

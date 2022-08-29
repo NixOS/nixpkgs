@@ -19,11 +19,11 @@ in
       type = types.package;
       default = pkgs.k3s;
       defaultText = literalExpression "pkgs.k3s";
-      description = "Package that should be used for k3s";
+      description = lib.mdDoc "Package that should be used for k3s";
     };
 
     role = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Whether k3s should run as a server or agent.
         Note that the server, by default, also runs as an agent.
       '';
@@ -33,14 +33,14 @@ in
 
     serverAddr = mkOption {
       type = types.str;
-      description = "The k3s server to connect to. This option only makes sense for an agent.";
+      description = lib.mdDoc "The k3s server to connect to. This option only makes sense for an agent.";
       example = "https://10.0.0.10:6443";
       default = "";
     };
 
     token = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         The k3s token to use when connecting to the server. This option only makes sense for an agent.
         WARNING: This option will expose store your token unencrypted world-readable in the nix store.
         If this is undesired use the tokenFile option instead.
@@ -50,12 +50,12 @@ in
 
     tokenFile = mkOption {
       type = types.nullOr types.path;
-      description = "File path containing k3s token to use when connecting to the server. This option only makes sense for an agent.";
+      description = lib.mdDoc "File path containing k3s token to use when connecting to the server. This option only makes sense for an agent.";
       default = null;
     };
 
     extraFlags = mkOption {
-      description = "Extra flags to pass to the k3s command.";
+      description = lib.mdDoc "Extra flags to pass to the k3s command.";
       type = types.str;
       default = "";
       example = "--no-deploy traefik --cluster-cidr 10.24.0.0/16";
@@ -64,13 +64,13 @@ in
     disableAgent = mkOption {
       type = types.bool;
       default = false;
-      description = "Only run the server. This option only makes sense for a server.";
+      description = lib.mdDoc "Only run the server. This option only makes sense for a server.";
     };
 
     configPath = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = "File path containing the k3s YAML config. This is useful when the config is generated (for example on boot).";
+      description = lib.mdDoc "File path containing the k3s YAML config. This is useful when the config is generated (for example on boot).";
     };
   };
 

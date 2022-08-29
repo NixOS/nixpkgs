@@ -54,14 +54,14 @@ let
           self: super: {
             octoprint-pisupport = self.buildPythonPackage rec {
               pname = "OctoPrint-PiSupport";
-              version = "2022.3.28";
+              version = "2022.6.13";
               format = "setuptools";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint-PiSupport";
                 rev = version;
-                sha256 = "yzE/jz604nX/CHcW3aa7goH1ey8qZ7rLw31SMfNKJZM=";
+                sha256 = "sha256-3z5Btl287W3j+L+MQG8FOWt21smML0vpmu9BP48B9A0=";
               };
 
               # requires octoprint itself during tests
@@ -74,13 +74,13 @@ let
           self: super: {
             octoprint = self.buildPythonPackage rec {
               pname = "OctoPrint";
-              version = "1.8.1";
+              version = "1.8.2";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint";
                 rev = version;
-                sha256 = "sha256-9phB9B8y3ay1Bsvf/m/E9xdl7vmQur4qbWOw9v6KFak=";
+                sha256 = "sha256-uJuGeDS4TnGH1r+6oHtcJDZVGM7hDmkJpB35B1JtqQ0=";
               };
 
               propagatedBuildInputs = with super; [

@@ -49,13 +49,13 @@ in
         type = types.package;
         default = pkgs.vault;
         defaultText = literalExpression "pkgs.vault";
-        description = "This option specifies the vault package to use.";
+        description = lib.mdDoc "This option specifies the vault package to use.";
       };
 
       dev = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           In this mode, Vault runs in-memory and starts unsealed. This option is not meant production but for development and testing i.e. for nixos tests.
         '';
       };
@@ -63,29 +63,29 @@ in
       devRootTokenID = mkOption {
         type = types.str;
         default = false;
-        description = ''
-          Initial root token. This only applies when <option>services.vault.dev</option> is true
+        description = lib.mdDoc ''
+          Initial root token. This only applies when {option}`services.vault.dev` is true
         '';
       };
 
       address = mkOption {
         type = types.str;
         default = "127.0.0.1:8200";
-        description = "The name of the ip interface to listen to";
+        description = lib.mdDoc "The name of the ip interface to listen to";
       };
 
       tlsCertFile = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "/path/to/your/cert.pem";
-        description = "TLS certificate file. TLS will be disabled unless this option is set";
+        description = lib.mdDoc "TLS certificate file. TLS will be disabled unless this option is set";
       };
 
       tlsKeyFile = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "/path/to/your/key.pem";
-        description = "TLS private key file. TLS will be disabled unless this option is set";
+        description = lib.mdDoc "TLS private key file. TLS will be disabled unless this option is set";
       };
 
       listenerExtraConfig = mkOption {
@@ -93,49 +93,49 @@ in
         default = ''
           tls_min_version = "tls12"
         '';
-        description = "Extra text appended to the listener section.";
+        description = lib.mdDoc "Extra text appended to the listener section.";
       };
 
       storageBackend = mkOption {
         type = types.enum [ "inmem" "file" "consul" "zookeeper" "s3" "azure" "dynamodb" "etcd" "mssql" "mysql" "postgresql" "swift" "gcs" "raft" ];
         default = "inmem";
-        description = "The name of the type of storage backend";
+        description = lib.mdDoc "The name of the type of storage backend";
       };
 
       storagePath = mkOption {
         type = types.nullOr types.path;
-        default = if cfg.storageBackend == "file" then "/var/lib/vault" else null;
+        default = if cfg.storageBackend == "file" || cfg.storageBackend == "raft" then "/var/lib/vault" else null;
         defaultText = literalExpression ''
-          if config.${opt.storageBackend} == "file"
+          if config.${opt.storageBackend} == "file" || cfg.storageBackend == "raft"
           then "/var/lib/vault"
           else null
         '';
-        description = "Data directory for file backend";
+        description = lib.mdDoc "Data directory for file backend";
       };
 
       storageConfig = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           HCL configuration to insert in the storageBackend section.
 
           Confidential values should not be specified here because this option's
           value is written to the Nix store, which is publicly readable.
           Provide credentials and such in a separate file using
-          <xref linkend="opt-services.vault.extraSettingsPaths"/>.
+          [](#opt-services.vault.extraSettingsPaths).
         '';
       };
 
       telemetryConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Telemetry configuration";
+        description = lib.mdDoc "Telemetry configuration";
       };
 
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Extra text appended to <filename>vault.hcl</filename>.";
+        description = lib.mdDoc "Extra text appended to {file}`vault.hcl`.";
       };
 
       extraSettingsPaths = mkOption {
@@ -172,11 +172,16 @@ in
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.storageBackend == "inmem" -> (cfg.storagePath == null && cfg.storageConfig == null);
+      {
+        assertion = cfg.storageBackend == "inmem" -> (cfg.storagePath == null && cfg.storageConfig == null);
         message = ''The "inmem" storage expects no services.vault.storagePath nor services.vault.storageConfig'';
       }
-      { assertion = (cfg.storageBackend == "file" -> (cfg.storagePath != null && cfg.storageConfig == null)) && (cfg.storagePath != null -> cfg.storageBackend == "file");
-        message = ''You must set services.vault.storagePath only when using the "file" backend'';
+      {
+        assertion = (
+          (cfg.storageBackend == "file" -> (cfg.storagePath != null && cfg.storageConfig == null)) &&
+          (cfg.storagePath != null -> (cfg.storageBackend == "file" || cfg.storageBackend == "raft"))
+        );
+        message = ''You must set services.vault.storagePath only when using the "file" or "raft" backend'';
       }
     ];
 

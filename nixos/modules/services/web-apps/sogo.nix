@@ -21,31 +21,31 @@ in {
     enable = mkEnableOption "SOGo groupware";
 
     vhostName = mkOption {
-      description = "Name of the nginx vhost";
+      description = lib.mdDoc "Name of the nginx vhost";
       type = str;
       default = "sogo";
     };
 
     timezone = mkOption {
-      description = "Timezone of your SOGo instance";
+      description = lib.mdDoc "Timezone of your SOGo instance";
       type = str;
       example = "America/Montreal";
     };
 
     language = mkOption {
-      description = "Language of SOGo";
+      description = lib.mdDoc "Language of SOGo";
       type = str;
       default = "English";
     };
 
     ealarmsCredFile = mkOption {
-      description = "Optional path to a credentials file for email alarms";
+      description = lib.mdDoc "Optional path to a credentials file for email alarms";
       type = nullOr str;
       default = null;
     };
 
     configReplaces = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Replacement-filepath mapping for sogo.conf.
         Every key is replaced with the contents of the file specified as value.
 
@@ -60,7 +60,7 @@ in {
     };
 
     extraConfig = mkOption {
-      description = "Extra sogo.conf configuration lines";
+      description = lib.mdDoc "Extra sogo.conf configuration lines";
       type = lines;
       default = "";
     };

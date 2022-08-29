@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "headscale";
-  version = "0.16.0";
+  version = "0.16.4";
 
   src = fetchFromGitHub {
     owner = "juanfont";
     repo = "headscale";
     rev = "v${version}";
-    sha256 = "sha256-IP54zRbSUKxHr41OADKRfQIHEYBjrGs0fMyCxL0Yn6o=";
+    sha256 = "sha256-j5fbWxRMkYlsgL1QDEDlitKB3FOmDTy17FcuztALISw=";
   };
 
-  vendorSha256 = "sha256-b9C6F+7N0ecW0HiTx+rztZnxb+n6U6YTSOJvp3GqnWQ=";
+  vendorSha256 = "sha256-RzmnAh81BN4tbzAGzJbb6CMuws8kuPJDw7aPkRRnSS8=";
 
   ldflags = [ "-s" "-w" "-X github.com/juanfont/headscale/cmd/headscale/cli.Version=v${version}" ];
 

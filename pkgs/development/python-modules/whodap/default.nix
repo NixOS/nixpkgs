@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "whodap";
-  version = "0.1.5";
+  version = "0.1.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "pogzyb";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Jm3+WMGuYc910TNDVzHjYcbNcts668D3xYORXxozWqA=";
+    hash = "sha256-gLA6tT6ZUMjb2ZF5t6DdI5nqiX2Uxatj3ThmQ+VZu9A=";
   };
 
   propagatedBuildInputs = [

@@ -37,17 +37,22 @@
 # Avoid .lib depending on lib.getLib openssl
 # The build gets a little hacky, so in some cases we disable this approach.
 , withSlimLib ? stdenv.isLinux && !stdenv.hostPlatform.isMusl && !withDNSTAP
+# enable support for python plugins in unbound: note this is distinct from pyunbound
+# see https://unbound.docs.nlnetlabs.nl/en/latest/developer/python-modules.html
 , withPythonModule ? false
 , libnghttp2
+
+# for passthru.tests
+, gnutls
 }:
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.16.0";
+  version = "1.16.2";
 
   src = fetchurl {
     url = "https://nlnetlabs.nl/downloads/unbound/unbound-${version}.tar.gz";
-    hash = "sha256-ZwFTTJOOsBliZgEZHtxtAS/FNMCdJBjVuSgn2wy+SKU=";
+    hash = "sha256-LjLyg4IMJMUcod2K/s/bdHxzhaE3q+hlyZ20sldANYE=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
@@ -142,13 +147,16 @@ stdenv.mkDerivation rec {
     (pkg: lib.optionalString (pkg ? dev) " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' --replace '-R${pkg.dev}/lib' '-R${pkg.out}/lib'")
     (builtins.filter (p: p != null) buildInputs);
 
-  passthru.tests = nixosTests.unbound;
+  passthru.tests = {
+    inherit gnutls;
+    nixos-test = nixosTests.unbound;
+  };
 
   meta = with lib; {
     description = "Validating, recursive, and caching DNS resolver";
     license = licenses.bsd3;
     homepage = "https://www.unbound.net";
-    maintainers = with maintainers; [ fpletz globin ];
+    maintainers = with maintainers; [ ajs124 ];
     platforms = platforms.unix;
   };
 }

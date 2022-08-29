@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   in ''
     # xorg.xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
     wrapQtApp $out/bin/polymc \
-      --set GAME_LIBRARY_PATH /run/opengl-driver/lib:${libpath} \
+      --set LD_LIBRARY_PATH /run/opengl-driver/lib:${libpath} \
       --prefix POLYMC_JAVA_PATHS : ${lib.makeSearchPath "bin/java" jdks} \
       --prefix PATH : ${lib.makeBinPath [ xorg.xrandr ]}
   '';

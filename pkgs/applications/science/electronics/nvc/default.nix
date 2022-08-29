@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nvc";
-  version = "1.6.2";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "nickg";
     repo = pname;
     rev = "r${version}";
-    sha256 = "sha256-BtUMpT1MKRFGRlIbCEGo4OBZ/r9es1VRmJdgmk1oZFQ=";
+    sha256 = "sha256-U9VxpHzrAQPMqnSs0YcEnc9dlQUutTuZCJP5F1v7eaA=";
   };
 
   nativeBuildInputs = [
@@ -38,9 +38,9 @@ stdenv.mkDerivation rec {
     (if stdenv.isLinux then elfutils else libelf)
   ];
 
-  # TODO: remove me on 1.7.0
-  postPatch = ''
-    sed -i "/vests22/d;/vhpi4/d" test/regress/testlist.txt
+  # TODO: recheck me on next release
+  postPatch = lib.optionalString stdenv.isLinux ''
+    sed -i "/vhpi4/d" test/regress/testlist.txt
   '';
 
   preConfigure = ''

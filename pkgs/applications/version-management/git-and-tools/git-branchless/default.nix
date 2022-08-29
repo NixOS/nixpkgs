@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-branchless";
-  version = "0.3.12";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "arxanas";
     repo = "git-branchless";
     rev = "v${version}";
-    sha256 = "sha256-1bUHltONLfJumkxPnzGJFMMyS02LVqjpDL+KgiewyoQ=";
+    sha256 = "sha256-WFrN5TRFr9xHBUawTfvri0qlTiWCfAeC5SL+T6mwlU0=";
   };
 
-  cargoSha256 = "sha256-3+ULHqtKAhf4AdoLPK/3IqnfOcskoh6ctlQnY1oTHJ8=";
+  cargoSha256 = "sha256-AGW1jUKPc5iiuDlgIDHG1sOn1flAB3UdxJJNKPH5+f8=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -46,15 +46,6 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     "--skip=test_checkout_pty"
     "--skip=test_next_ambiguous_interactive"
-  ];
-
-  # Fixed in next release
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/arxanas/git-branchless/commit/8bed1e83495a448f479103d2d4b75745aa512667.patch";
-      sha256 = "sha256-bFfXBYxfgx1TxlJ+/2Gh9WsgL2vCJKwwbq4JD8/2c1w=";
-      name = "fix-tests-for-latest-git";
-    })
   ];
 
   meta = with lib; {

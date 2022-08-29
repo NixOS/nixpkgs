@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "karton-config-extractor";
-  version = "2.0.2";
+  version = "2.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "CERT-Polska";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-r0WMtfau5zeVDSjxy2h96INQl8bm4EP0IAcgnGPhTtk=";
+    sha256 = "sha256-ep69Rrm8Ek0lkgctz6vDAZ1MZ8kWKZSyIvMMAmzTngA=";
   };
 
   propagatedBuildInputs = [

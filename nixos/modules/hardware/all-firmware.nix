@@ -21,7 +21,7 @@ in {
     hardware.enableAllFirmware = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Turn on this option if you want to enable all the firmware.
       '';
     };
@@ -30,7 +30,7 @@ in {
       default = config.hardware.enableAllFirmware;
       defaultText = lib.literalExpression "config.hardware.enableAllFirmware";
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Turn on this option if you want to enable all the firmware with a license allowing redistribution.
       '';
     };
@@ -38,7 +38,7 @@ in {
     hardware.wirelessRegulatoryDatabase = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Load the wireless regulatory database at boot.
       '';
     };

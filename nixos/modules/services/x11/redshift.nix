@@ -29,7 +29,7 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable Redshift to change your screen's colour temperature depending on
         the time of day.
       '';
@@ -39,17 +39,17 @@ in {
       day = mkOption {
         type = types.int;
         default = 5500;
-        description = ''
+        description = lib.mdDoc ''
           Colour temperature to use during the day, between
-          <literal>1000</literal> and <literal>25000</literal> K.
+          `1000` and `25000` K.
         '';
       };
       night = mkOption {
         type = types.int;
         default = 3700;
-        description = ''
+        description = lib.mdDoc ''
           Colour temperature to use at night, between
-          <literal>1000</literal> and <literal>25000</literal> K.
+          `1000` and `25000` K.
         '';
       };
     };
@@ -58,17 +58,17 @@ in {
       day = mkOption {
         type = types.str;
         default = "1";
-        description = ''
+        description = lib.mdDoc ''
           Screen brightness to apply during the day,
-          between <literal>0.1</literal> and <literal>1.0</literal>.
+          between `0.1` and `1.0`.
         '';
       };
       night = mkOption {
         type = types.str;
         default = "1";
-        description = ''
+        description = lib.mdDoc ''
           Screen brightness to apply during the night,
-          between <literal>0.1</literal> and <literal>1.0</literal>.
+          between `0.1` and `1.0`.
         '';
       };
     };
@@ -77,7 +77,7 @@ in {
       type = types.package;
       default = pkgs.redshift;
       defaultText = literalExpression "pkgs.redshift";
-      description = ''
+      description = lib.mdDoc ''
         redshift derivation to use.
       '';
     };
@@ -86,7 +86,7 @@ in {
       type = types.str;
       default = "/bin/redshift";
       example = "/bin/redshift-gtk";
-      description = ''
+      description = lib.mdDoc ''
         Redshift executable to use within the package.
       '';
     };
@@ -95,9 +95,9 @@ in {
       type = types.listOf types.str;
       default = [];
       example = [ "-v" "-m randr" ];
-      description = ''
+      description = lib.mdDoc ''
         Additional command-line arguments to pass to
-        <command>redshift</command>.
+        {command}`redshift`.
       '';
     };
   };

@@ -40,14 +40,14 @@ in {
           example = literalExpression ''
             [ "-dalsa" "--device" "hw:1" ];
           '';
-          description = ''
+          description = lib.mdDoc ''
             Specifies startup command line arguments to pass to JACK server.
           '';
         };
 
         session = mkOption {
           type = types.lines;
-          description = ''
+          description = lib.mdDoc ''
             Commands to run after JACK is started.
           '';
         };
@@ -58,7 +58,7 @@ in {
         enable = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Route audio to/from generic ALSA-using applications using ALSA JACK PCM plugin.
           '';
         };
@@ -66,7 +66,7 @@ in {
         support32Bit = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Whether to support sound for 32-bit ALSA applications on 64-bit system.
           '';
         };
@@ -76,7 +76,7 @@ in {
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Create ALSA loopback device, instead of using PCM plugin. Has broader
             application support (things like Steam will work), but may need fine-tuning
             for concrete hardware.
@@ -86,14 +86,14 @@ in {
         index = mkOption {
           type = types.int;
           default = 10;
-          description = ''
+          description = lib.mdDoc ''
             Index of an ALSA loopback device.
           '';
         };
 
         config = mkOption {
           type = types.lines;
-          description = ''
+          description = lib.mdDoc ''
             ALSA config for loopback device.
           '';
         };
@@ -105,7 +105,7 @@ in {
             period_size 2048
             periods 2
           '';
-          description = ''
+          description = lib.mdDoc ''
             For music production software that still doesn't support JACK natively you
             would like to put buffer/period adjustments here
             to decrease dmix device latency.
@@ -114,7 +114,7 @@ in {
 
         session = mkOption {
           type = types.lines;
-          description = ''
+          description = lib.mdDoc ''
             Additional commands to run to setup loopback device.
           '';
         };

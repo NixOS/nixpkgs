@@ -12,18 +12,16 @@ in
   options = {
     services.geoipupdate = {
       enable = lib.mkEnableOption ''
-        periodic downloading of GeoIP databases using
-        <productname>geoipupdate</productname>.
+        periodic downloading of GeoIP databases using geoipupdate.
       '';
 
       interval = lib.mkOption {
         type = lib.types.str;
         default = "weekly";
-        description = ''
+        description = lib.mdDoc ''
           Update the GeoIP databases at this time / interval.
           The format is described in
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
+          {manpage}`systemd.time(7)`.
         '';
       };
 
@@ -37,21 +35,20 @@ in
             ProxyUserPassword = { _secret = "/run/keys/proxy_pass"; };
           }
         '';
-        description = ''
-          <productname>geoipupdate</productname> configuration
-          options. See
-          <link xlink:href="https://github.com/maxmind/geoipupdate/blob/main/doc/GeoIP.conf.md" />
+        description = lib.mdDoc ''
+          geoipupdate configuration options. See
+          <https://github.com/maxmind/geoipupdate/blob/main/doc/GeoIP.conf.md>
           for a full list of available options.
 
           Settings containing secret data should be set to an
           attribute set containing the attribute
-          <literal>_secret</literal> - a string pointing to a file
+          `_secret` - a string pointing to a file
           containing the value the option should be set to. See the
           example to get a better picture of this: in the resulting
-          <filename>GeoIP.conf</filename> file, the
-          <literal>ProxyUserPassword</literal> key will be set to the
+          {file}`GeoIP.conf` file, the
+          `ProxyUserPassword` key will be set to the
           contents of the
-          <filename>/run/keys/proxy_pass</filename> file.
+          {file}`/run/keys/proxy_pass` file.
         '';
         type = lib.types.submodule {
           freeformType =
@@ -65,7 +62,7 @@ in
 
             AccountID = lib.mkOption {
               type = lib.types.int;
-              description = ''
+              description = lib.mdDoc ''
                 Your MaxMind account ID.
               '';
             };
@@ -77,23 +74,21 @@ in
                 "GeoLite2-City"
                 "GeoLite2-Country"
               ];
-              description = ''
+              description = lib.mdDoc ''
                 List of database edition IDs. This includes new string
-                IDs like <literal>GeoIP2-City</literal> and old
-                numeric IDs like <literal>106</literal>.
+                IDs like `GeoIP2-City` and old
+                numeric IDs like `106`.
               '';
             };
 
             LicenseKey = lib.mkOption {
               type = with lib.types; either path (attrsOf path);
-              description = ''
-                A file containing the
-                <productname>MaxMind</productname> license key.
+              description = lib.mdDoc ''
+                A file containing the MaxMind license key.
 
                 Always handled as a secret whether the value is
-                wrapped in a <literal>{ _secret = ...; }</literal>
-                attrset or not (refer to <xref
-                linkend="opt-services.geoipupdate.settings" /> for
+                wrapped in a `{ _secret = ...; }`
+                attrset or not (refer to [](#opt-services.geoipupdate.settings) for
                 details).
               '';
               apply = x: if isAttrs x then x else { _secret = x; };
@@ -103,10 +98,10 @@ in
               type = lib.types.path;
               default = "/var/lib/GeoIP";
               example = "/run/GeoIP";
-              description = ''
+              description = lib.mdDoc ''
                 The directory to store the database files in. The
                 directory will be automatically created, the owner
-                changed to <literal>geoip</literal> and permissions
+                changed to `geoip` and permissions
                 set to world readable. This applies if the directory
                 already exists as well, so don't use a directory with
                 sensitive contents.

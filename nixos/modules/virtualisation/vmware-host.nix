@@ -41,18 +41,18 @@ in
         type = types.package;
         default = pkgs.vmware-workstation;
         defaultText = literalExpression "pkgs.vmware-workstation";
-        description = "VMware host virtualisation package to use";
+        description = lib.mdDoc "VMware host virtualisation package to use";
       };
       extraPackages = mkOption {
         type = with types; listOf package;
         default = with pkgs; [ ];
-        description = "Extra packages to be used with VMware host.";
+        description = lib.mdDoc "Extra packages to be used with VMware host.";
         example = "with pkgs; [ ntfs3g ]";
       };
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Add extra config to /etc/vmware/config";
+        description = lib.mdDoc "Add extra config to /etc/vmware/config";
         example = ''
           # Allow unsupported device's OpenGL and Vulkan acceleration for guest vGPU
           mks.gl.allowUnsupportedDrivers = "TRUE"

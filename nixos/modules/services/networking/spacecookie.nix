@@ -32,7 +32,7 @@ in {
         default = pkgs.spacecookie;
         defaultText = literalExpression "pkgs.spacecookie";
         example = literalExpression "pkgs.haskellPackages.spacecookie";
-        description = ''
+        description = lib.mdDoc ''
           The spacecookie derivation to use. This can be used to
           override the used package or to use another version.
         '';
@@ -41,7 +41,7 @@ in {
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to open the necessary port in the firewall for spacecookie.
         '';
       };
@@ -49,7 +49,7 @@ in {
       port = mkOption {
         type = types.port;
         default = 70;
-        description = ''
+        description = lib.mdDoc ''
           Port the gopher service should be exposed on.
         '';
       };
@@ -57,10 +57,10 @@ in {
       address = mkOption {
         type = types.str;
         default = "[::]";
-        description = ''
+        description = lib.mdDoc ''
           Address to listen on. Must be in the
-          <literal>ListenStream=</literal> syntax of
-          <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.socket.html">systemd.socket(5)</link>.
+          `ListenStream=` syntax of
+          [systemd.socket(5)](https://www.freedesktop.org/software/systemd/man/systemd.socket.html).
         '';
       };
 
@@ -71,7 +71,7 @@ in {
           options.hostname = mkOption {
             type = types.str;
             default = "localhost";
-            description = ''
+            description = lib.mdDoc ''
               The hostname the service is reachable via. Clients
               will use this hostname for further requests after
               loading the initial gopher menu.
@@ -81,11 +81,11 @@ in {
           options.root = mkOption {
             type = types.path;
             default = "/srv/gopher";
-            description = ''
+            description = lib.mdDoc ''
               The directory spacecookie should serve via gopher.
               Files in there need to be world-readable since
               the spacecookie service file sets
-              <literal>DynamicUser=true</literal>.
+              `DynamicUser=true`.
             '';
           };
 
@@ -96,7 +96,7 @@ in {
             hide-ips = mkOption {
               type = types.bool;
               default = true;
-              description = ''
+              description = lib.mdDoc ''
                 If enabled, spacecookie will hide personal
                 information of users like IP addresses from
                 log output.
@@ -110,7 +110,7 @@ in {
               # journald will add timestamps, so no need
               # to double up.
               default = true;
-              description = ''
+              description = lib.mdDoc ''
                 If enabled, spacecookie will not print timestamps
                 at the beginning of every log line.
               '';
@@ -123,18 +123,18 @@ in {
                 "error"
               ];
               default = "info";
-              description = ''
+              description = lib.mdDoc ''
                 Log level for the spacecookie service.
               '';
             };
           };
         };
 
-        description = ''
+        description = lib.mdDoc ''
           Settings for spacecookie. The settings set here are
           directly translated to the spacecookie JSON config
           file. See
-          <link xlink:href="https://sternenseemann.github.io/spacecookie/spacecookie.json.5.html">spacecookie.json(5)</link>
+          [spacecookie.json(5)](https://sternenseemann.github.io/spacecookie/spacecookie.json.5.html)
           for explanations of all options.
         '';
       };

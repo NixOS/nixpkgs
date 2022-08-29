@@ -8,14 +8,23 @@ let
 
   makeColor = i: concatMapStringsSep "," (x: "0x" + substring (2*i) 2 x);
 
-  isUnicode = hasSuffix "UTF-8" (toUpper config.i18n.defaultLocale);
+  isUnicode = '' \
+    LOCALE_ARCHIVE=${config.i18n.glibcLocales}/lib/locale/locale-archive \
+    LANG=${config.i18n.defaultLocale} \
+    LC_IDENTIFICATION=${config.i18n.defaultLocale} \
+    locale -k identification-codeset | grep -i UTF-8 \
+  '';
 
   optimizedKeymap = pkgs.runCommand "keymap" {
-    nativeBuildInputs = [ pkgs.buildPackages.kbd ];
+    nativeBuildInputs = with pkgs.buildPackages; [ kbd locale ];
     LOADKEYS_KEYMAP_PATH = "${consoleEnv pkgs.kbd}/share/keymaps/**";
     preferLocalBuild = true;
   } ''
-    loadkeys -b ${optionalString isUnicode "-u"} "${cfg.keyMap}" > $out
+    if ${isUnicode} ; then
+      loadkeys -b -u "${cfg.keyMap}" > $out
+    else
+      loadkeys -b "${cfg.keyMap}" > $out
+    fi
   '';
 
   # Sadly, systemd-vconsole-setup doesn't support binary keymaps.
@@ -58,7 +67,7 @@ in
       type = with types; either str path;
       default = "us";
       example = "fr";
-      description = ''
+      description = lib.mdDoc ''
         The keyboard mapping table for the virtual consoles.
       '';
     };
@@ -72,7 +81,7 @@ in
         "002b36" "cb4b16" "586e75" "657b83"
         "839496" "6c71c4" "93a1a1" "fdf6e3"
       ];
-      description = ''
+      description = lib.mdDoc ''
         The 16 colors palette used by the virtual consoles.
         Leave empty to use the default colors.
         Colors must be in hexadecimal format and listed in
@@ -84,7 +93,7 @@ in
     packages = mkOption {
       type = types.listOf types.package;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         List of additional packages that provide console fonts, keymaps and
         other resources for virtual consoles use.
       '';
@@ -93,7 +102,7 @@ in
     useXkbConfig = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         If set, configure the virtual console keymap from the xserver
         keyboard settings.
       '';
@@ -102,7 +111,7 @@ in
     earlySetup = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Enable setting virtual console options as early as possible (in initrd).
       '';
     };
@@ -130,7 +139,7 @@ in
     })
 
     (mkIf setVconsole (mkMerge [
-      { environment.systemPackages = [ pkgs.kbd ];
+      { environment.systemPackages = with pkgs; [ kbd locale ];
 
         # Let systemd-vconsole-setup.service do the work of setting up the
         # virtual consoles.
@@ -139,8 +148,13 @@ in
         environment.etc.kbd.source = "${consoleEnv pkgs.kbd}/share";
 
         boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) (mkBefore ''
-          kbd_mode ${if isUnicode then "-u" else "-a"} -C /dev/console
-          printf "\033%%${if isUnicode then "G" else "@"}" >> /dev/console
+          if ${isUnicode} ; then
+            kbd_mode -u -C /dev/console
+            printf "\033%%G" >> /dev/console
+          else
+            kbd_mode -a -C /dev/console
+            printf "\033%%@" >> /dev/console
+          fi
           loadkmap < ${optimizedKeymap}
 
           ${optionalString cfg.earlySetup ''

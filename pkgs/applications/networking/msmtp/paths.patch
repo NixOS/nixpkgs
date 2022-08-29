@@ -1,61 +1,40 @@
-diff --git a/scripts/msmtpq/msmtp-queue b/scripts/msmtpq/msmtp-queue
-index 1dc220d..d834241 100755
---- a/scripts/msmtpq/msmtp-queue
-+++ b/scripts/msmtpq/msmtp-queue
-@@ -27,4 +27,4 @@
- ## change the below line to be
- ##   exec /path/to/msmtpq --q-mgmt
- 
--exec msmtpq --q-mgmt "$1"
-+exec @msmtpq@ --q-mgmt "$1"
 diff --git a/scripts/msmtpq/msmtpq b/scripts/msmtpq/msmtpq
-index bdb4fb8..1363a67 100755
+index d8b4039..1f2a7b5 100755
 --- a/scripts/msmtpq/msmtpq
 +++ b/scripts/msmtpq/msmtpq
-@@ -59,7 +59,7 @@ err() { dsp '' "$@" '' ; exit 1 ; }
- ##   enter the location of the msmtp executable  (no quotes !!)
- ##   e.g. ( MSMTP=/path/to/msmtp )
- ##   and uncomment the test for its existence
--MSMTP=msmtp
-+MSMTP=@msmtp@
- #[ -x "$MSMTP" ] || \
- #  log -e 1 "msmtpq : can't find the msmtp executable [ $MSMTP ]"   # if not found - complain ; quit
+@@ -60,8 +60,8 @@ err() { dsp '' "$@" '' ; exit 1 ; }
+ ##   e.g. ( export MSMTP=/path/to/msmtp )
+ if [ "$MSMTP" = "" ] ; then  # If MSMTP is unset or empty...
+   MSMTP=msmtp
+-elif [ ! -x "$MSMTP" ] ; then
+-  log -e 1 "msmtpq : can't find the msmtp executable [ $MSMTP ]"   # if not found - complain ; quit
++# elif [ ! -x "$MSMTP" ] ; then
++#   log -e 1 "msmtpq : can't find the msmtp executable [ $MSMTP ]"   # if not found - complain ; quit
+ fi
  ##
-@@ -70,9 +70,9 @@ MSMTP=msmtp
+ ## set the queue var to the location of the msmtp queue directory
+@@ -71,7 +71,7 @@ fi
  ##            ( chmod 0700 msmtp.queue )
  ##
- ## the queue dir - modify this to reflect where you'd like it to be  (no quotes !!)
--Q=~/.msmtp.queue
--[ -d "$Q" ] || mkdir -m 0700 "$Q" || \
--  err '' "msmtpq : can't find or create msmtp queue directory [ $Q ]" ''     # if not present - complain ; quit
+ ## the queue dir - export this variable to reflect where you'd like it to be  (no quotes !!)
+-Q=${Q:-~/.msmtp.queue}
 +Q=${MSMTP_QUEUE:-~/.msmtp.queue}
-+[ -d "$Q" ] || mkdir -m 0700 -p "$Q" || \
-+   err '' "msmtpq : can't find or create msmtp queue directory [ $Q ]" ''     # if not present - complain ; quit
+ [ -d "$Q" ] || mkdir -m 0700 -p "$Q" || \
+   err '' "msmtpq : can't find or create msmtp queue directory [ $Q ]" ''     # if not present - complain ; quit
  ##
- ## set the queue log file var to the location of the msmtp queue log file
- ##   where it is or where you'd like it to be
-@@ -84,7 +83,10 @@ Q=~/.msmtp.queue
- ##     (doing so would be inadvisable under most conditions, however)
+@@ -85,8 +85,10 @@ Q=${Q:-~/.msmtp.queue}
  ##
- ## the queue log file - modify (or comment out) to taste  (but no quotes !!)
--LOG=~/log/msmtp.queue.log
+ ## the queue log file - export this variable to change where logs are stored  (but no quotes !!)
+ ##                      Set it to "" (empty string) to disable logging.
+-[ -v LOG ] || LOG=~/log/msmtp.queue.log
 +LOG=${MSMTP_LOG:-~/log/msmtp.queue.log}
-+test -d "$(dirname $LOG)" || mkdir -p "$(dirname $LOG)"
+ [ -d "$(dirname "$LOG")" ] || mkdir -p "$(dirname "$LOG")"
 +
 +JOURNAL=@journal@
  ## ======================================================================================
  
  ## msmtpq can use the following environment variables :
-@@ -108,7 +110,7 @@ LOG=~/log/msmtp.queue.log
- ##
- #EMAIL_CONN_NOTEST=y                 # deprecated ; use below var
- #EMAIL_CONN_TEST={x| |p|P|n|s}       # see settings above for EMAIL_CONN_TEST
--EMAIL_CONN_TEST=n
-+EMAIL_CONN_TEST=@test@
- #EMAIL_QUEUE_QUIET=t
- ## ======================================================================================
- 
-@@ -138,6 +140,7 @@ on_exit() {                          # unlock the queue on exit if the lock was
+@@ -139,6 +141,7 @@ on_exit() {                          # unlock the queue on exit if the lock was
  ## display msg to user, as well
  ##
  log() {
@@ -63,15 +42,14 @@ index bdb4fb8..1363a67 100755
    local ARG RC PFX
    PFX="$('date' +'%Y %d %b %H:%M:%S')"
                                       # time stamp prefix - "2008 13 Mar 03:59:45 "
-   if [ "$1" = '-e' ] ; then          # there's an error exit code
-@@ -154,10 +157,19 @@ log() {
+@@ -156,10 +159,19 @@ log() {
      done
    fi
  
-+  if [ "$JOURNAL" == "y" ] ; then
-+    for ARG ; do
-+      [ -n "$ARG" ] && \
-+        echo "$PFX : $ARG" | @systemdcat@ -t $NAME -p info
++  if [ "$JOURNAL" = "Y" ]; then
++    for ARG; do
++      [ -n "$ARG" ] &&
++        echo "$ARG" | systemd-cat -t "$NAME" -p info
 +    done
 +  fi
 +
@@ -79,20 +57,8 @@ index bdb4fb8..1363a67 100755
      [ -n "$LKD" ] && lock_queue -u   # unlock here (if locked)
      [ -n "$LOG" ] && \
        echo "    exit code = $RC" >> "$LOG" # logging ok ; send exit code to log
-+    [ "$JOURNAL" == "y" ] && \
-+      echo "exit code= $RC" | @systemdcat@ -t $NAME -p emerg
-     exit $RC                         # exit w/return code
++    [ "$JOURNAL" = "Y" ] && \
++      echo "exit code= $RC" | systemd-cat -t "$NAME" -p emerg
+     exit "$RC"                       # exit w/return code
    fi
  }
-@@ -207,10 +219,7 @@ connect_test() {
-     ping -qnc1 -w4 8.8.8.8 >/dev/null 2>&1 || return 1
- 
-   elif [ "$EMAIL_CONN_TEST" = 'n' ] ; then                     # use netcat (nc) test
--    # must, of course, have netcat (nc) installed
--    which nc >/dev/null 2>&1 || \
--      log -e 1 "msmtpq : can't find netcat executable [ nc ]"  # if not found - complain ; quit
--    'nc' -vz www.debian.org 80 >/dev/null 2>&1 || return 1
-+    @nc@ -vz www.debian.org 80 >/dev/null 2>&1 || return 1
- 
-   elif [ "$EMAIL_CONN_TEST" = 's' ] ; then                     # use sh sockets test
-     # note that this does not work on debian systems

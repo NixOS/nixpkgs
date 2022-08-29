@@ -157,10 +157,10 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to use NetworkManager to obtain an IP address and other
           configuration for all network interfaces that are not manually
-          configured. If enabled, a group <literal>networkmanager</literal>
+          configured. If enabled, a group `networkmanager`
           will be created. Add all users that should have permission
           to change network settings to this group.
         '';
@@ -173,17 +173,14 @@ in {
           str
         ]));
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Configuration for the [connection] section of NetworkManager.conf.
           Refer to
-          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
+          [
             https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#id-1.2.3.11
-          </link>
+          ](https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html)
           or
-          <citerefentry>
-            <refentrytitle>NetworkManager.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          {manpage}`NetworkManager.conf(5)`
           for more information.
         '';
       };
@@ -191,17 +188,14 @@ in {
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Configuration appended to the generated NetworkManager.conf.
           Refer to
-          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
+          [
             https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
-          </link>
+          ](https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html)
           or
-          <citerefentry>
-            <refentrytitle>NetworkManager.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          {manpage}`NetworkManager.conf(5)`
           for more information.
         '';
       };
@@ -209,18 +203,15 @@ in {
       unmanaged = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           List of interfaces that will not be managed by NetworkManager.
           Interface name can be specified here, but if you need more fidelity,
           refer to
-          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#device-spec">
+          [
             https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#device-spec
-          </link>
+          ](https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#device-spec)
           or the "Device List Format" Appendix of
-          <citerefentry>
-            <refentrytitle>NetworkManager.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>.
+          {manpage}`NetworkManager.conf(5)`.
         '';
       };
 
@@ -243,7 +234,7 @@ in {
           in
           types.listOf networkManagerPluginPackage;
         default = [ ];
-        description = ''
+        description = lib.mdDoc ''
           List of NetworkManager plug-ins to enable.
           Some plug-ins are enabled by the NetworkManager module by default.
         '';
@@ -252,7 +243,7 @@ in {
       dhcp = mkOption {
         type = types.enum [ "dhcpcd" "internal" ];
         default = "internal";
-        description = ''
+        description = lib.mdDoc ''
           Which program (or internal library) should be used for DHCP.
         '';
       };
@@ -260,7 +251,7 @@ in {
       firewallBackend = mkOption {
         type = types.enum [ "iptables" "nftables" "none" ];
         default = "iptables";
-        description = ''
+        description = lib.mdDoc ''
           Which firewall backend should be used for configuring masquerading with shared mode.
           If set to none, NetworkManager doesn't manage the configuration at all.
         '';
@@ -269,7 +260,7 @@ in {
       logLevel = mkOption {
         type = types.enum [ "OFF" "ERR" "WARN" "INFO" "DEBUG" "TRACE" ];
         default = "WARN";
-        description = ''
+        description = lib.mdDoc ''
           Set the default logging verbosity level.
         '';
       };
@@ -277,7 +268,7 @@ in {
       appendNameservers = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           A list of name servers that should be appended
           to the ones configured in NetworkManager or received by DHCP.
         '';
@@ -286,7 +277,7 @@ in {
       insertNameservers = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           A list of name servers that should be inserted before
           the ones configured in NetworkManager or received by DHCP.
         '';
@@ -300,16 +291,16 @@ in {
         backend = mkOption {
           type = types.enum [ "wpa_supplicant" "iwd" ];
           default = "wpa_supplicant";
-          description = ''
+          description = lib.mdDoc ''
             Specify the Wi-Fi backend used for the device.
-            Currently supported are <option>wpa_supplicant</option> or <option>iwd</option> (experimental).
+            Currently supported are {option}`wpa_supplicant` or {option}`iwd` (experimental).
           '';
         };
 
         powersave = mkOption {
           type = types.nullOr types.bool;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             Whether to enable Wi-Fi power saving.
           '';
         };
@@ -317,7 +308,7 @@ in {
         scanRandMacAddress = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Whether to enable MAC address randomization of a Wi-Fi device
             during scanning.
           '';
@@ -327,19 +318,15 @@ in {
       dns = mkOption {
         type = types.enum [ "default" "dnsmasq" "unbound" "systemd-resolved" "none" ];
         default = "default";
-        description = ''
-          Set the DNS (<literal>resolv.conf</literal>) processing mode.
-          </para>
-          <para>
+        description = lib.mdDoc ''
+          Set the DNS (`resolv.conf`) processing mode.
+
           A description of these modes can be found in the main section of
-          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
+          [
             https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
-          </link>
+          ](https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html)
           or in
-          <citerefentry>
-            <refentrytitle>NetworkManager.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>.
+          {manpage}`NetworkManager.conf(5)`.
         '';
       };
 
@@ -348,7 +335,7 @@ in {
           options = {
             source = mkOption {
               type = types.path;
-              description = ''
+              description = lib.mdDoc ''
                 Path to the hook script.
               '';
             };
@@ -380,7 +367,7 @@ in {
             ''';
             type = "basic";
         } ]'';
-        description = ''
+        description = lib.mdDoc ''
           A list of scripts which will be executed in response to  network  events.
         '';
       };
@@ -388,12 +375,12 @@ in {
       enableStrongSwan = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable the StrongSwan plugin.
-          </para><para>
+
           If you enable this option the
-          <literal>networkmanager_strongswan</literal> plugin will be added to
-          the <option>networking.networkmanager.plugins</option> option
+          `networkmanager_strongswan` plugin will be added to
+          the {option}`networking.networkmanager.plugins` option
           so you don't need to to that yourself.
         '';
       };
@@ -401,10 +388,10 @@ in {
       enableFccUnlock = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable FCC unlock procedures. Since release 1.18.4, the ModemManager daemon no longer
           automatically performs the FCC unlock procedure by default. See
-          <link xlink:href="https://modemmanager.org/docs/modemmanager/fcc-unlock/">the docs</link>
+          [the docs](https://modemmanager.org/docs/modemmanager/fcc-unlock/)
           for more details.
         '';
       };

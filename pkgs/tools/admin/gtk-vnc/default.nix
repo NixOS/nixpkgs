@@ -9,6 +9,7 @@
 , glib
 , pkg-config
 , cyrus_sasl
+, pulseaudioSupport ? stdenv.isLinux
 , libpulseaudio
 , libgcrypt
 , gtk3
@@ -51,8 +52,13 @@ stdenv.mkDerivation rec {
     glib
     libgcrypt
     cyrus_sasl
-    libpulseaudio
     gtk3
+  ] ++ lib.optionals pulseaudioSupport [
+    libpulseaudio
+  ];
+
+  mesonFlags = lib.optionals (!pulseaudioSupport) [
+    "-Dpulseaudio=disabled"
   ];
 
   passthru = {
@@ -67,6 +73,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/gtk-vnc";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ raskin offline ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

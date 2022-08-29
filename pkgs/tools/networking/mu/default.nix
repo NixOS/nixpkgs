@@ -14,20 +14,20 @@
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.8.7";
+  version = "1.8.9";
 
   src = fetchFromGitHub {
     owner = "djcb";
     repo = "mu";
     rev = "v${version}";
-    sha256 = "/RGq/q0N623RR4HuAmyfFx1/OYZBrmK1ddhiT4bgy3k=";
+    hash = "sha256-AqbTYcPwV9iNar34pESbz9Vp/88hhB+/VxcLIhLZ16o=";
   };
 
   postPatch = ''
     # Fix mu4e-builddir (set it to $out)
     substituteInPlace mu4e/mu4e-config.el.in \
       --replace "@abs_top_builddir@" "$out"
-    substituteInPlace lib/utils/mu-utils.cc \
+    substituteInPlace lib/utils/mu-test-utils.cc \
       --replace "/bin/rm" "${coreutils}/bin/rm"
   '';
 

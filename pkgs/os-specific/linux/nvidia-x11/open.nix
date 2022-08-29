@@ -1,8 +1,10 @@
-nvidia_x11: hash:
 { stdenv
 , lib
 , fetchFromGitHub
 , kernel
+, nvidia_x11
+, hash
+, broken ? false
 }:
 
 stdenv.mkDerivation {
@@ -33,5 +35,6 @@ stdenv.mkDerivation {
     license = with licenses; [ gpl2Plus mit ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ nickcao ];
+    inherit broken;
   };
 }

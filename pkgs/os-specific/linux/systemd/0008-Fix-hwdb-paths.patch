@@ -1,7 +1,7 @@
-From 3894fcd76e5791e094c685c0095006b6867893c1 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Nikolay Amiantov <ab@fmap.me>
 Date: Thu, 7 Jul 2016 02:47:13 +0300
-Subject: [PATCH 08/18] Fix hwdb paths
+Subject: [PATCH] Fix hwdb paths
 
 Patch by vcunat.
 ---
@@ -23,6 +23,3 @@ index 62d27f7b89..87318e041b 100644
 -        UDEVLIBEXECDIR "/hwdb.bin\0"
 +        "/etc/udev/hwdb.bin\0"
 +
--- 
-2.36.1
-

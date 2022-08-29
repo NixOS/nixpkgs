@@ -72,14 +72,14 @@ let
       device = mkOption {
         example = "/dev/sda";
         type = types.str;
-        description = "Location of the device.";
+        description = lib.mdDoc "Location of the device.";
       };
 
       options = mkOption {
         default = "";
         example = "-d sat";
         type = types.separatedString " ";
-        description = "Options that determine how smartd monitors the device.";
+        description = lib.mdDoc "Options that determine how smartd monitors the device.";
       };
 
     };
@@ -100,12 +100,12 @@ in
       autodetect = mkOption {
         default = true;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whenever smartd should monitor all devices connected to the
           machine at the time it's being started (the default).
 
           Set to false to monitor the devices listed in
-          <option>services.smartd.devices</option> only.
+          {option}`services.smartd.devices` only.
         '';
       };
 
@@ -113,11 +113,11 @@ in
         default = [];
         type = types.listOf types.str;
         example = ["-A /var/log/smartd/" "--interval=3600"];
-        description = ''
-          Extra command-line options passed to the <literal>smartd</literal>
+        description = lib.mdDoc ''
+          Extra command-line options passed to the `smartd`
           daemon on startup.
 
-          (See <literal>man 8 smartd</literal>.)
+          (See `man 8 smartd`.)
         '';
       };
 
@@ -128,7 +128,7 @@ in
             default = config.services.mail.sendmailSetuidWrapper != null;
             defaultText = literalExpression "config.services.mail.sendmailSetuidWrapper != null";
             type = types.bool;
-            description = "Whenever to send e-mail notifications.";
+            description = lib.mdDoc "Whenever to send e-mail notifications.";
           };
 
           sender = mkOption {
@@ -144,17 +144,17 @@ in
           recipient = mkOption {
             default = "root";
             type = types.str;
-            description = "Recipient of the notification messages.";
+            description = lib.mdDoc "Recipient of the notification messages.";
           };
 
           mailer = mkOption {
             default = "/run/wrappers/bin/sendmail";
             type = types.path;
-            description = ''
+            description = lib.mdDoc ''
               Sendmail-compatible binary to be used to send the messages.
 
               You should probably enable
-              <option>services.postfix</option> or some other MTA for
+              {option}`services.postfix` or some other MTA for
               this to work.
             '';
           };
@@ -164,7 +164,7 @@ in
           enable = mkOption {
             default = true;
             type = types.bool;
-            description = "Whenever to send wall notifications to all users.";
+            description = lib.mdDoc "Whenever to send wall notifications to all users.";
           };
         };
 
@@ -173,21 +173,21 @@ in
             default = config.services.xserver.enable;
             defaultText = literalExpression "config.services.xserver.enable";
             type = types.bool;
-            description = "Whenever to send X11 xmessage notifications.";
+            description = lib.mdDoc "Whenever to send X11 xmessage notifications.";
           };
 
           display = mkOption {
             default = ":${toString config.services.xserver.display}";
             defaultText = literalExpression ''":''${toString config.services.xserver.display}"'';
             type = types.str;
-            description = "DISPLAY to send X11 notifications to.";
+            description = lib.mdDoc "DISPLAY to send X11 notifications to.";
           };
         };
 
         test = mkOption {
           default = false;
           type = types.bool;
-          description = "Whenever to send a test notification on startup.";
+          description = lib.mdDoc "Whenever to send a test notification on startup.";
         };
 
       };
@@ -197,12 +197,12 @@ in
           default = "-a";
           type = types.separatedString " ";
           example = "-a -o on -s (S/../.././02|L/../../7/04)";
-          description = ''
+          description = lib.mdDoc ''
             Common default options for explicitly monitored (listed in
-            <option>services.smartd.devices</option>) devices.
+            {option}`services.smartd.devices`) devices.
 
             The default value turns on monitoring of all the things (see
-            <literal>man 5 smartd.conf</literal>).
+            `man 5 smartd.conf`).
 
             The example also turns on SMART Automatic Offline Testing on
             startup, and schedules short self-tests daily, and long
@@ -214,8 +214,8 @@ in
           default = cfg.defaults.monitored;
           defaultText = literalExpression "config.${opt.defaults.monitored}";
           type = types.separatedString " ";
-          description = ''
-            Like <option>services.smartd.defaults.monitored</option>, but for the
+          description = lib.mdDoc ''
+            Like {option}`services.smartd.defaults.monitored`, but for the
             autodetected devices.
           '';
         };
@@ -225,7 +225,7 @@ in
         default = [];
         example = [ { device = "/dev/sda"; } { device = "/dev/sdb"; options = "-d sat"; } ];
         type = with types; listOf (submodule smartdDeviceOpts);
-        description = "List of devices to monitor.";
+        description = lib.mdDoc "List of devices to monitor.";
       };
 
     };

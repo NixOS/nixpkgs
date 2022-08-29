@@ -13,7 +13,7 @@ in
       port = mkOption {
         type = types.port;
         default = 5000;
-        description = ''
+        description = lib.mdDoc ''
           Port number where nix-serve will listen on.
         '';
       };
@@ -21,7 +21,7 @@ in
       bindAddress = mkOption {
         type = types.str;
         default = "0.0.0.0";
-        description = ''
+        description = lib.mdDoc ''
           IP address where nix-serve will bind its listening socket.
         '';
       };
@@ -29,7 +29,7 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Open ports in the firewall for nix-serve.";
+        description = lib.mdDoc "Open ports in the firewall for nix-serve.";
       };
 
       secretKeyFile = mkOption {
@@ -39,9 +39,9 @@ in
           The path to the file used for signing derivation data.
           Generate with:
 
-          ```
+          <programlisting>
           nix-store --generate-binary-cache-key key-name secret-key-file public-key-file
-          ```
+          </programlisting>
 
           For more details see <citerefentry><refentrytitle>nix-store</refentrytitle><manvolnum>1</manvolnum></citerefentry>.
         '';
@@ -50,7 +50,7 @@ in
       extraParams = mkOption {
         type = types.separatedString " ";
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Extra command line parameters for nix-serve.
         '';
       };

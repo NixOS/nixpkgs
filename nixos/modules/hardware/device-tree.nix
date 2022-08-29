@@ -9,14 +9,23 @@ let
     options = {
       name = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Name of this overlay
+        '';
+      };
+
+      filter = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "*rpi*.dtb";
+        description = lib.mdDoc ''
+          Only apply to .dtb files matching glob expression.
         '';
       };
 
       dtsFile = mkOption {
         type = types.nullOr types.path;
-        description = ''
+        description = lib.mdDoc ''
           Path to .dts overlay file, overlay is applied to
           each .dtb file matching "compatible" of the overlay.
         '';
@@ -27,7 +36,7 @@ let
       dtsText = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Literal DTS contents, overlay is applied to
           each .dtb file matching "compatible" of the overlay.
         '';
@@ -49,28 +58,11 @@ let
       dtboFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Path to .dtbo compiled overlay file.
         '';
       };
     };
-  };
-
-  # this requires kernel package
-  dtbsWithSymbols = pkgs.stdenv.mkDerivation {
-    name = "dtbs-with-symbols";
-    inherit (cfg.kernelPackage) src nativeBuildInputs depsBuildBuild;
-    patches = map (patch: patch.patch) cfg.kernelPackage.kernelPatches;
-    buildPhase = ''
-      patchShebangs scripts/*
-      substituteInPlace scripts/Makefile.lib \
-        --replace 'DTC_FLAGS += $(DTC_FLAGS_$(basetarget))' 'DTC_FLAGS += $(DTC_FLAGS_$(basetarget)) -@'
-      make ${pkgs.stdenv.hostPlatform.linux-kernel.baseConfig} ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
-      make dtbs ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
-    '';
-    installPhase = ''
-      make dtbs_install INSTALL_DTBS_PATH=$out/dtbs  ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
-    '';
   };
 
   filterDTBs = src: if isNull cfg.filter
@@ -82,6 +74,8 @@ let
         find . -type f -name '${cfg.filter}' -print0 \
           | xargs -0 cp -v --no-preserve=mode --target-directory $out --parents
       '';
+
+  filteredDTBs = filterDTBs cfg.kernelPackage;
 
   # Compile single Device Tree overlay source
   # file (.dts) into its compiled variant (.dtbo)
@@ -115,7 +109,7 @@ in
         enable = mkOption {
           default = pkgs.stdenv.hostPlatform.linux-kernel.DTB or false;
           type = types.bool;
-          description = ''
+          description = lib.mdDoc ''
             Build device tree files. These are used to describe the
             non-discoverable hardware of a system.
           '';
@@ -126,7 +120,7 @@ in
           defaultText = literalExpression "config.boot.kernelPackages.kernel";
           example = literalExpression "pkgs.linux_latest";
           type = types.path;
-          description = ''
+          description = lib.mdDoc ''
             Kernel package containing the base device-tree (.dtb) to boot. Uses
             device trees bundled with the Linux kernel by default.
           '';
@@ -136,7 +130,7 @@ in
           default = null;
           example = "some-dtb.dtb";
           type = types.nullOr types.str;
-          description = ''
+          description = lib.mdDoc ''
             The name of an explicit dtb to be loaded, relative to the dtb base.
             Useful in extlinux scenarios if the bootloader doesn't pick the
             right .dtb file from FDTDIR.
@@ -147,7 +141,7 @@ in
           type = types.nullOr types.str;
           default = null;
           example = "*rpi*.dtb";
-          description = ''
+          description = lib.mdDoc ''
             Only include .dtb files matching glob expression.
           '';
         };
@@ -165,9 +159,10 @@ in
           '';
           type = types.listOf (types.coercedTo types.path (path: {
             name = baseNameOf path;
+            filter = null;
             dtboFile = path;
           }) overlayType);
-          description = ''
+          description = lib.mdDoc ''
             List of overlays to apply to base device-tree (.dtb) files.
           '';
         };
@@ -197,7 +192,7 @@ in
     };
 
     hardware.deviceTree.package = if (cfg.overlays != [])
-      then pkgs.deviceTree.applyOverlays (filterDTBs dtbsWithSymbols) (withDTBOs cfg.overlays)
-      else (filterDTBs cfg.kernelPackage);
+      then pkgs.deviceTree.applyOverlays filteredDTBs (withDTBOs cfg.overlays)
+      else filteredDTBs;
   };
 }

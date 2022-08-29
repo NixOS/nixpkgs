@@ -19,20 +19,20 @@
 
 stdenv.mkDerivation rec {
   pname = "amberol";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = pname;
     rev = version;
-    hash = "sha256-27jXpx79JNF5FjVKERNrQFS7VHZHWh57jjBWvX5IRio=";
+    hash = "sha256-/kZYzUzycHKre6/dvZgeqXu6mrkblftV51Z7866fZVY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-M5T+imP7up3RRiXOJRrqimcjs8r81V5jfQMjR02skko=";
+    hash = "sha256-1+RWL9MD6aX+zI2rtQUQCqemCephLKGEAf5xNCb+jo4=";
   };
 
   postPatch = ''

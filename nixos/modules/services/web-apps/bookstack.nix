@@ -38,21 +38,21 @@ in {
 
     user = mkOption {
       default = "bookstack";
-      description = "User bookstack runs as.";
+      description = lib.mdDoc "User bookstack runs as.";
       type = types.str;
     };
 
     group = mkOption {
       default = "bookstack";
-      description = "Group bookstack runs as.";
+      description = lib.mdDoc "Group bookstack runs as.";
       type = types.str;
     };
 
     appKeyFile = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         A file containing the Laravel APP_KEY - a 32 character long,
         base64 encoded key used for encryption where needed. Can be
-        generated with <code>head -c 32 /dev/urandom | base64</code>.
+        generated with `head -c 32 /dev/urandom | base64`.
       '';
       example = "/run/keys/bookstack-appkey";
       type = types.path;
@@ -66,15 +66,15 @@ in {
                   config.networking.hostName;
       defaultText = lib.literalExpression "config.networking.fqdn";
       example = "bookstack.example.com";
-      description = ''
+      description = lib.mdDoc ''
         The hostname to serve BookStack on.
       '';
     };
 
     appURL = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         The root URL that you want to host BookStack on. All URLs in BookStack will be generated using this value.
-        If you change this in the future you may need to run a command to update stored URLs in the database. Command example: <code>php artisan bookstack:update-url https://old.example.com https://new.example.com</code>
+        If you change this in the future you may need to run a command to update stored URLs in the database. Command example: `php artisan bookstack:update-url https://old.example.com https://new.example.com`
       '';
       default = "http${lib.optionalString tlsEnabled "s"}://${cfg.hostname}";
       defaultText = ''http''${lib.optionalString tlsEnabled "s"}://''${cfg.hostname}'';
@@ -83,7 +83,7 @@ in {
     };
 
     dataDir = mkOption {
-      description = "BookStack data directory";
+      description = lib.mdDoc "BookStack data directory";
       default = "/var/lib/bookstack";
       type = types.path;
     };
@@ -92,37 +92,37 @@ in {
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = "Database host address.";
+        description = lib.mdDoc "Database host address.";
       };
       port = mkOption {
         type = types.port;
         default = 3306;
-        description = "Database host port.";
+        description = lib.mdDoc "Database host port.";
       };
       name = mkOption {
         type = types.str;
         default = "bookstack";
-        description = "Database name.";
+        description = lib.mdDoc "Database name.";
       };
       user = mkOption {
         type = types.str;
         default = user;
         defaultText = literalExpression "user";
-        description = "Database username.";
+        description = lib.mdDoc "Database username.";
       };
       passwordFile = mkOption {
         type = with types; nullOr path;
         default = null;
         example = "/run/keys/bookstack-dbpassword";
-        description = ''
+        description = lib.mdDoc ''
           A file containing the password corresponding to
-          <option>database.user</option>.
+          {option}`database.user`.
         '';
       };
       createLocally = mkOption {
         type = types.bool;
         default = false;
-        description = "Create the database and database user locally.";
+        description = lib.mdDoc "Create the database and database user locally.";
       };
     };
 
@@ -130,47 +130,47 @@ in {
       driver = mkOption {
         type = types.enum [ "smtp" "sendmail" ];
         default = "smtp";
-        description = "Mail driver to use.";
+        description = lib.mdDoc "Mail driver to use.";
       };
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = "Mail host address.";
+        description = lib.mdDoc "Mail host address.";
       };
       port = mkOption {
         type = types.port;
         default = 1025;
-        description = "Mail host port.";
+        description = lib.mdDoc "Mail host port.";
       };
       fromName = mkOption {
         type = types.str;
         default = "BookStack";
-        description = "Mail \"from\" name.";
+        description = lib.mdDoc "Mail \"from\" name.";
       };
       from = mkOption {
         type = types.str;
         default = "mail@bookstackapp.com";
-        description = "Mail \"from\" email.";
+        description = lib.mdDoc "Mail \"from\" email.";
       };
       user = mkOption {
         type = with types; nullOr str;
         default = null;
         example = "bookstack";
-        description = "Mail username.";
+        description = lib.mdDoc "Mail username.";
       };
       passwordFile = mkOption {
         type = with types; nullOr path;
         default = null;
         example = "/run/keys/bookstack-mailpassword";
-        description = ''
+        description = lib.mdDoc ''
           A file containing the password corresponding to
-          <option>mail.user</option>.
+          {option}`mail.user`.
         '';
       };
       encryption = mkOption {
         type = with types; nullOr (enum [ "tls" ]);
         default = null;
-        description = "SMTP encryption mechanism to use.";
+        description = lib.mdDoc "SMTP encryption mechanism to use.";
       };
     };
 
@@ -178,7 +178,7 @@ in {
       type = types.str;
       default = "18M";
       example = "1G";
-      description = "The maximum size for uploads (e.g. images).";
+      description = lib.mdDoc "The maximum size for uploads (e.g. images).";
     };
 
     poolConfig = mkOption {
@@ -191,8 +191,8 @@ in {
         "pm.max_spare_servers" = 4;
         "pm.max_requests" = 500;
       };
-      description = ''
-        Options for the bookstack PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+      description = lib.mdDoc ''
+        Options for the bookstack PHP pool. See the documentation on `php-fpm.conf`
         for details on configuration directives.
       '';
     };
@@ -213,7 +213,7 @@ in {
           enableACME = true;
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         With this option, you can customize the nginx virtualHost settings.
       '';
     };
@@ -256,20 +256,20 @@ in {
           OIDC_ISSUER_DISCOVER = true;
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         BookStack configuration options to set in the
-        <filename>.env</filename> file.
+        {file}`.env` file.
 
-        Refer to <link xlink:href="https://www.bookstackapp.com/docs/"/>
+        Refer to <https://www.bookstackapp.com/docs/>
         for details on supported values.
 
         Settings containing secret data should be set to an attribute
-        set containing the attribute <literal>_secret</literal> - a
+        set containing the attribute `_secret` - a
         string pointing to a file containing the value the option
         should be set to. See the example to get a better picture of
-        this: in the resulting <filename>.env</filename> file, the
-        <literal>OIDC_CLIENT_SECRET</literal> key will be set to the
-        contents of the <filename>/run/keys/oidc_secret</filename>
+        this: in the resulting {file}`.env` file, the
+        `OIDC_CLIENT_SECRET` key will be set to the
+        contents of the {file}`/run/keys/oidc_secret`
         file.
       '';
     };
