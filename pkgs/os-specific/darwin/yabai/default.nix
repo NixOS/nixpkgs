@@ -22,9 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = ''
-      A tiling window manager for macOS based on binary space partitioning
-    '';
+    description = "A tiling window manager for macOS based on binary space partitioning";
     homepage = "https://github.com/koekeishiya/yabai";
     platforms = platforms.darwin;
     maintainers = with maintainers; [ cmacrae shardy ];
