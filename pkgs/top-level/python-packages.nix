@@ -11163,6 +11163,8 @@ in {
 
   typing-inspect = callPackage ../development/python-modules/typing-inspect { };
 
+  typish = callPackage ../development/python-modules/typish { };
+
   typogrify = callPackage ../development/python-modules/typogrify { };
 
   tzdata = callPackage ../development/python-modules/tzdata { };
