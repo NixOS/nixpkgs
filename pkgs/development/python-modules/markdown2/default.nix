@@ -15,7 +15,13 @@ buildPythonPackage rec {
   checkInputs = [ pygments ];
 
   checkPhase = ''
-    ${python.interpreter} ./test/test.py
+    runHook preCheck
+
+    pushd test
+    ${python.interpreter} ./test.py -- -knownfailure
+    popd  # test
+
+    runHook postCheck
   '';
 
   meta = with lib; {
