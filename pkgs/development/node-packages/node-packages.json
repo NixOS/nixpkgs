@@ -288,6 +288,7 @@
 , "sql-formatter"
 , "ssb-server"
 , "stackdriver-statsd-backend"
+, "standard-version"
 , "stf"
 , "stylelint"
 , "surge"
