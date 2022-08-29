@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cpu-x";
-  version = "4.3.1";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "X0rg";
     repo = "CPU-X";
     rev = "v${version}";
-    sha256 = "sha256-9oRNyspFmvIG63aJ8qyaVmi1GW1eW+Rg0+z8la3LuKA=";
+    sha256 = "sha256-PNfEiin4Hble/H8cOvSK+A7wmoeOlyITRUTwGTd3B6s=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook nasm makeWrapper ];
