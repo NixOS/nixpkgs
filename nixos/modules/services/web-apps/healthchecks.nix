@@ -98,15 +98,20 @@ in
       description = ''
         Environment variables which are read by healthchecks <literal>(local)_settings.py</literal>.
 
-        Settings which are explictly covered in options bewlow, are type-checked and/or transformed
+        Settings which are explictly covered in options below, are type-checked and/or transformed
         before added to the environment, everything else is passed as a string.
 
         See <link xlink:href="">https://healthchecks.io/docs/self_hosted_configuration/</link>
         for a full documentation of settings.
 
-        We add two variables to this list inside the packages <literal>local_settings.py.</literal>
+        We add three variables to this list inside the packages <literal>local_settings.py.</literal>
+        - EMAIL_HOST_PASSWORD_FILE to read EMAIL_HOST_PASSWORD from a file at runtime and keep it out of /nix/store.
         - STATIC_ROOT to set a state directory for dynamically generated static files.
         - SECRET_KEY_FILE to read SECRET_KEY from a file at runtime and keep it out of /nix/store.
+
+        Additionally, a superuser can be created if SUPERUSER_EMAIL and SUPERUSER_PASSWORD_FILE
+        are defined. SUPERUSER_PASSWORD_FILE should be a file containing the desired superuser password.
+        On application start up this user is created if it does not exist.
       '';
       type = types.submodule {
         freeformType = types.attrsOf types.str;
@@ -191,6 +196,7 @@ in
             ${pkg}/opt/healthchecks/manage.py collectstatic --no-input
             ${pkg}/opt/healthchecks/manage.py remove_stale_contenttypes --no-input
             ${pkg}/opt/healthchecks/manage.py compress
+            ${pkg}/opt/healthchecks/manage.py shell < ${pkg}/opt/healthchecks/hc/create_superuser.py
           '';
 
           serviceConfig = commonConfig // {
