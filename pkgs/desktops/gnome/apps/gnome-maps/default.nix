@@ -1,36 +1,52 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , gettext
 , python3
 , pkg-config
 , gnome
-, gtk3
+, glib
+, gtk4
 , gobject-introspection
 , gdk-pixbuf
-, librest
+, librest_1_0
 , libgweather
 , geoclue2
-, wrapGAppsHook
-, libchamplain
+, wrapGAppsHook4
+, desktop-file-utils
+, libshumate
 , libsecret
-, libsoup
+, libsoup_3
 , gsettings-desktop-schemas
 , gjs
-, libhandy
-, geocode-glib
+, libadwaita
+, geocode-glib_2
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-maps";
-  version = "43.alpha";
+  version = "43.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-wFE9g8trmJ5HFZz4nHLnsIgejanl6kfI1+c2LY6uE5A=";
+    sha256 = "sha256-19Nu9/GjmJ/8f2nRZ7Ya1V6FINxkjRWKP0Ya1JV97Xw=";
   };
+
+  patches = [
+    # Fix build without GTK 3.
+    # https://gitlab.gnome.org/GNOME/gnome-maps/-/merge_requests/248
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-maps/-/merge_requests/248.patch";
+      sha256 = "TxPzDYiqvFkXeIbtIXabb8XOajlMdShaWzQGsPjweGw=";
+      postFetch = ''
+        # Make the patch apply.
+        substituteInPlace "$out" --replace "version: '43.0'," "version: '43.beta',"
+      '';
+    })
+  ];
 
   doCheck = true;
 
@@ -39,30 +55,31 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
-    wrapGAppsHook
+    wrapGAppsHook4
+    gobject-introspection
+    # For post install script
+    desktop-file-utils
+    glib
+    gtk4
   ];
 
   buildInputs = [
     gdk-pixbuf
+    glib
     geoclue2
-    geocode-glib
+    geocode-glib_2
     gjs
-    gobject-introspection
     gsettings-desktop-schemas
-    gtk3
-    libchamplain
+    gtk4
+    libshumate
     libgweather
-    libhandy
-    librest
+    libadwaita
+    librest_1_0
     libsecret
-    libsoup
+    libsoup_3
   ];
 
   postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-
     # The .service file isn't wrapped with the correct environment
     # so misses GIR files when started. By re-pointing from the gjs
     # entry point to the wrapped binary we get back to a wrapped
