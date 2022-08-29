@@ -108,9 +108,9 @@ in
             type = types.str;
             default = "127.0.0.1";
             example = "0.0.0.0";
-            description = ''
+            description = lib.mdDoc ''
               Where to listen for RPC connections.
-              Use \"0.0.0.0\" to listen on all interfaces.
+              Use `0.0.0.0` to listen on all interfaces.
             '';
           };
           options.rpc-port = mkOption {

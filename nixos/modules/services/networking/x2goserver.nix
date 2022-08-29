@@ -22,7 +22,7 @@ in {
   ];
 
   options.services.x2goserver = {
-    enable = mkEnableOption "x2goserver" // {
+    enable = mkEnableOption (lib.mdDoc "x2goserver") // {
       description = ''
         Enables the x2goserver module.
         NOTE: This will create a good amount of symlinks in `/usr/local/bin`

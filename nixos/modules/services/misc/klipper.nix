@@ -76,10 +76,10 @@ in
         type = with types; attrsOf
           (submodule {
             options = {
-              enable = mkEnableOption ''
+              enable = mkEnableOption (lib.mdDoc ''
                 building of firmware and addition of klipper-flash tools for manual flashing.
                 This will add `klipper-flash-$mcu` scripts to your environment which can be called to flash the firmware.
-              '';
+              '');
               configFile = mkOption {
                 type = path;
                 description = lib.mdDoc "Path to firmware config which is generated using `klipper-genconf`";

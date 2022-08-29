@@ -463,14 +463,13 @@ in
             type = types.enum [ "host" "guest" ];
             default = "host";
             description =
-              ''
+              lib.mdDoc ''
                 Controls the direction in which the ports are mapped:
 
-                - <literal>"host"</literal> means traffic from the host ports
-                is forwarded to the given guest port.
-
-                - <literal>"guest"</literal> means traffic from the guest ports
-                is forwarded to the given host port.
+                - `"host"` means traffic from the host ports
+                  is forwarded to the given guest port.
+                - `"guest"` means traffic from the guest ports
+                  is forwarded to the given host port.
               '';
           };
           options.proto = mkOption {

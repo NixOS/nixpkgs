@@ -72,7 +72,7 @@ in
     enableNotifications = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Send notifications about killed processes via the system d-bus.
 
         WARNING: enabling this option (while convenient) should *not* be done on a
@@ -80,10 +80,10 @@ in
         local user to DoS your session by spamming notifications.
 
         To actually see the notifications in your GUI session, you need to have
-        <literal>systembus-notify</literal> running as your user, which this
-        option handles by enabling <option>services.systembus-notify</option>.
+        `systembus-notify` running as your user, which this
+        option handles by enabling {option}`services.systembus-notify`.
 
-        See <link xlink:href="https://github.com/rfjakob/earlyoom#notifications">README</link> for details.
+        See [README](https://github.com/rfjakob/earlyoom#notifications) for details.
       '';
     };
 
