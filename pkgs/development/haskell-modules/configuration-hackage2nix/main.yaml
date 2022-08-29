@@ -99,6 +99,7 @@ extra-packages:
   - Cabal == 2.4.*                      # required for cabal-install etc.
   - Cabal == 3.2.*                      # required for cabal-install etc.
   - Cabal == 3.4.*                      # required for cabal-install etc.
+  - Cabal == 3.6.*                      # required for cabal-install-parsers etc.
   - Diff < 0.4                          # required by liquidhaskell-0.8.10.2: https://github.com/ucsd-progsys/liquidhaskell/issues/1729
   - ShellCheck == 0.7.2                 # 2022-02-20: haskell-ci 0.14 needs this
   - aeson < 2                           # required by pantry-0.5.2
