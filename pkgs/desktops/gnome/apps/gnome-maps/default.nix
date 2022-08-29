@@ -7,29 +7,29 @@
 , python3
 , pkg-config
 , gnome
-, gtk3
+, gtk4
 , gobject-introspection
 , gdk-pixbuf
-, librest
+, librest_1_0
 , libgweather
 , geoclue2
-, wrapGAppsHook
-, libchamplain
+, wrapGAppsHook4
+, libshumate
 , libsecret
-, libsoup
+, libsoup_3
 , gsettings-desktop-schemas
 , gjs
-, libhandy
-, geocode-glib
+, libadwaita
+, geocode-glib_2
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-maps";
-  version = "43.alpha";
+  version = "43.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-wFE9g8trmJ5HFZz4nHLnsIgejanl6kfI1+c2LY6uE5A=";
+    sha256 = "sha256-19Nu9/GjmJ/8f2nRZ7Ya1V6FINxkjRWKP0Ya1JV97Xw=";
   };
 
   doCheck = true;
@@ -40,23 +40,23 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
+    gobject-introspection
   ];
 
   buildInputs = [
     gdk-pixbuf
     geoclue2
-    geocode-glib
+    geocode-glib_2
     gjs
-    gobject-introspection
     gsettings-desktop-schemas
-    gtk3
-    libchamplain
+    gtk4
+    libshumate
     libgweather
-    libhandy
-    librest
+    libadwaita
+    librest_1_0
     libsecret
-    libsoup
+    libsoup_3
   ];
 
   postPatch = ''
