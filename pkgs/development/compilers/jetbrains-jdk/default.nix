@@ -1,14 +1,14 @@
-{ lib, openjdk11, fetchFromGitHub, jetbrains }:
+{ lib, openjdk17, fetchFromGitHub, jetbrains }:
 
-openjdk11.overrideAttrs (oldAttrs: rec {
+openjdk17.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk";
-  version = "11_0_13-b1751.25";
+  version = "17.0.4-b469.44";
 
   src = fetchFromGitHub {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
     rev = "jb${version}";
-    sha256 = "sha256-TPNYZUkAoiZfp7Ci3fslKnRNGY1lnyIhXYUt6J31lwI=";
+    sha256 = "sha256-g4VlG99Qtn4VKj7wOoimlqp2HoDk1Vm8mMWhHOS2SMY='#";
   };
   patches = [];
   meta = with lib; {
@@ -20,12 +20,11 @@ openjdk11.overrideAttrs (oldAttrs: rec {
      include: Subpixel Anti-Aliasing, enhanced font rendering on Linux, HiDPI
      support, ligatures, some fixes for native crashes not presented in
      official build, and other small enhancements.
-
      JetBrains Runtime is not a certified build of OpenJDK. Please, use at
      your own risk.
     '';
     homepage = "https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime";
-    inherit (openjdk11.meta) license platforms mainProgram;
+    inherit (openjdk17.meta) license platforms mainProgram;
     maintainers = with maintainers; [ edwtjo ];
   };
   passthru = oldAttrs.passthru // {
