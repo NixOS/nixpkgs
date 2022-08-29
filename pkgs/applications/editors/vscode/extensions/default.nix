@@ -538,6 +538,21 @@ let
         };
       };
 
+      catppuccin.catppuccin-vsc = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "catppuccin-vsc";
+          publisher = "catppuccin";
+          version = "2.1.0";
+          sha256 = "sha256-1pX9NQxW2Rm9p912Pn7QmLmXPI7EmiXTnCLWsIQNFhY=";
+        };
+        meta = with lib; {
+          description = "Soothing pastel theme for VSCode";
+          license = licenses.mit;
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Catppuccin.catppuccin-vsc";
+          maintainers = with maintainers; [ nullx76 ];
+        };
+      };
+
       chenglou92.rescript-vscode = callPackage ./rescript { };
 
       christian-kohler.path-intellisense = buildVscodeMarketplaceExtension {
