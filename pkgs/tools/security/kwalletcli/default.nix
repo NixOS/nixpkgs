@@ -38,12 +38,11 @@ mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/pinentry-kwallet \
-      --prefix PATH : $out/bin:${lib.makeBinPath [ pinentry-qt ]} \
-      --set-default PINENTRY pinentry-qt
-    wrapProgram $out/bin/kwalletcli_getpin \
-      --prefix PATH : $out/bin:${lib.makeBinPath [ pinentry-qt ]} \
-      --set-default PINENTRY pinentry-qt
+    for program in pinentry-kwallet kwalletcli_getpin; do
+      wrapProgram $out/bin/$program \
+        --prefix PATH : $out/bin:${lib.makeBinPath [ pinentry-qt ]} \
+        --set-default PINENTRY pinentry-qt
+    done
   '';
 
   meta = with lib; {
