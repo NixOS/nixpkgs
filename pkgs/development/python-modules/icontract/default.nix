@@ -15,6 +15,7 @@
 , astor
 , numpy
 , asyncstdlib
+, deal
 }:
 
 buildPythonPackage rec {
@@ -55,12 +56,10 @@ buildPythonPackage rec {
     astor
     numpy
     asyncstdlib
+    deal
   ];
 
   disabledTestPaths = [
-    # needs an old version of deal to comply with the tests
-    # see https://github.com/Parquery/icontract/issues/244
-    "tests_with_others/test_deal.py"
     # mypy decorator checks don't pass. For some reaseon mypy
     # doesn't check the python file provided in the test.
     "tests/test_mypy_decorators.py"
