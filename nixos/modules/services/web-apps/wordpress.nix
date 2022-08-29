@@ -31,8 +31,8 @@ let
       # Since hard linking directories is not allowed, copying is the next best thing.
 
       # copy additional plugin(s) and theme(s)
-      ${concatMapStringsSep "\n" (theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${theme.name}") cfg.themes}
-      ${concatMapStringsSep "\n" (plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${plugin.name}") cfg.plugins}
+      ${concatMapStringsSep "\n" (theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${theme.passthru.wpName or theme.pname}") cfg.themes}
+      ${concatMapStringsSep "\n" (plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${plugin.passthru.wpName or plugin.pname}") cfg.plugins}
     '';
   };
 

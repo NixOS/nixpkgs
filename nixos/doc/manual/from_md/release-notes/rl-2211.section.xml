@@ -424,6 +424,34 @@
       </listitem>
       <listitem>
         <para>
+          The WordPress module now stores themes and plugins in a
+          directory name without appending the current version. This
+          avoids loosing settings when upgrading themes and plugins as
+          some of them use the directory name to store the settings in
+          the database. This needs manual intervention in case of using
+          such a broken plugin or theme which is rare.
+        </para>
+        <programlisting language="bash">
+nix-shell -p wp-cli
+cat /etc/httpd/httpd.conf  | grep &quot;\-wordpress-&quot;
+cd /nix/store/xxx-wordpress-xxx/share/wordpress
+sudo -u wordpress wp maintenance-mode activate
+sudo -u wordpress wp maintenance-mode status
+sudo -u wordpress wp db export
+sudo -u wordpress wp db search name-version
+sudo -u wordpress wp search-replace --dry-run --verbose --precise name-version name
+# repeat without --dry-run if satisfied with results
+sudo -u wordpress wp maintenance-mode deactivate
+</programlisting>
+        <para>
+          (https://developer.wordpress.org/cli/commands/). Afterwards
+          verify that the website is working fine and no settings got
+          lost. If case of loss you can recover using the exported sql
+          dump.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>k3s</literal> no longer supports docker as runtime
           due to upstream dropping support.
         </para>
