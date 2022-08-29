@@ -22,6 +22,9 @@ mkDerivation rec {
 
     substituteInPlace pinentry-kwallet \
       --replace '/usr/bin/env mksh' ${mksh}/bin/mksh
+
+    substituteInPlace kwalletcli_getpin \
+      --replace '/usr/bin/env mksh' ${mksh}/bin/mksh
   '';
 
   makeFlags = [ "KDE_VER=5" ];
@@ -36,6 +39,9 @@ mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/pinentry-kwallet \
+      --prefix PATH : $out/bin:${lib.makeBinPath [ pinentry-qt ]} \
+      --set-default PINENTRY pinentry-qt
+    wrapProgram $out/bin/kwalletcli_getpin \
       --prefix PATH : $out/bin:${lib.makeBinPath [ pinentry-qt ]} \
       --set-default PINENTRY pinentry-qt
   '';
