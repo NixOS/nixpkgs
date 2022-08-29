@@ -14,16 +14,16 @@ let
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 in rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "4.2.1";
+  version = "4.2.2";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-za3TauhNoxGDphpY615EnTt46HpMgS+sYpBln/twefw=";
+    sha256 = "sha256-vGKDngFYh24wwR5nAYEz1GXm+K4sqEBvOp9jsioE0wU=";
   };
 
-  cargoSha256 = "sha256-wppaa3IGOqkFu/1CAp8g+PlPtMWm/7qNpPu0k4/mL3A=";
+  cargoSha256 = "sha256-s2gQuLkPxKQceGl3II9D6vWisYgL+YCI/YhX+mSyPoo=";
 
   outputs = [ "out" ] ++ lib.optional (!isCross) "man";
 
@@ -48,7 +48,7 @@ in rustPlatform.buildRustPackage rec {
   # generate the man page
   + lib.optionalString (!isCross) ''
     # TexLab builds man page separately in CI:
-    # https://github.com/latex-lsp/texlab/blob/v4.2.1/.github/workflows/publish.yml#L131-L135
+    # https://github.com/latex-lsp/texlab/blob/v4.2.2/.github/workflows/publish.yml#L131-L135
     help2man --no-info "$out/bin/texlab" > texlab.1
     installManPage texlab.1
   '';
