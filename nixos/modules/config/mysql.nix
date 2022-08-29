@@ -61,30 +61,20 @@ in
               type = types.nullOr types.str;
               default = null;
               example = "status";
-              description = ''
+              description = lib.mdDoc ''
                 The name of the column or an SQL expression that indicates the status of
                 the user. The status is expressed by the combination of two bitfields
                 shown below:
 
-                <itemizedlist>
-                  <listitem>
-                    <para>
-                      <literal>bit 0 (0x01)</literal>:
-                      if flagged, <literal>pam_mysql</literal> deems the account to be expired and
-                      returns <literal>PAM_ACCT_EXPIRED</literal>. That is, the account is supposed
-                      to no longer be available. Note this doesn't mean that <literal>pam_mysql</literal>
-                      rejects further authentication operations.
-                    </para>
-                  </listitem>
-                  <listitem>
-                    <para>
-                      <literal>bit 1 (0x02)</literal>:
-                      if flagged, <literal>pam_mysql</literal> deems the authentication token
-                      (password) to be expired and returns <literal>PAM_NEW_AUTHTOK_REQD</literal>.
-                      This ends up requiring that the user enter a new password.
-                    </para>
-                  </listitem>
-                </itemizedlist>
+                - `bit 0 (0x01)`:
+                   if flagged, `pam_mysql` deems the account to be expired and
+                   returns `PAM_ACCT_EXPIRED`. That is, the account is supposed
+                   to no longer be available. Note this doesn't mean that `pam_mysql`
+                   rejects further authentication operations.
+                -  `bit 1 (0x02)`:
+                   if flagged, `pam_mysql` deems the authentication token
+                   (password) to be expired and returns `PAM_NEW_AUTHTOK_REQD`.
+                   This ends up requiring that the user enter a new password.
               '';
             };
             passwordCrypt = mkOption {
@@ -101,74 +91,32 @@ in
                 "8" "sha512"
                 "9" "sha256"
               ];
-              description = ''
+              description = lib.mdDoc ''
                 The method to encrypt the user's password:
 
-                <itemizedlist>
-                <listitem>
-                  <para>
-                    <literal>0</literal> (or <literal>"plain"</literal>):
-                    No encryption. Passwords are stored in plaintext. HIGHLY DISCOURAGED.
-                  </para>
-                </listitem>
-                <listitem>
-                  <para>
-                    <literal>1</literal> (or <literal>"Y"</literal>):
-                    Use crypt(3) function.
-                  </para>
-                </listitem>
-                <listitem>
-                  <para>
-                    <literal>2</literal> (or <literal>"mysql"</literal>):
-                    Use the MySQL PASSWORD() function. It is possible that the encryption function used
-                    by <literal>pam_mysql</literal> is different from that of the MySQL server, as
-                    <literal>pam_mysql</literal> uses the function defined in MySQL's C-client API
-                    instead of using PASSWORD() SQL function in the query.
-                  </para>
-                </listitem>
-                <listitem>
-                  <para>
-                    <literal>3</literal> (or <literal>"md5"</literal>):
-                    Use plain hex MD5.
-                  </para>
-                </listitem>
-                <listitem>
-                  <para>
-                    <literal>4</literal> (or <literal>"sha1"</literal>):
-                    Use plain hex SHA1.
-                  </para>
-                </listitem>
-                <listitem>
-                  <para>
-                    <literal>5</literal> (or <literal>"drupal7"</literal>):
-                    Use Drupal7 salted passwords.
-                  </para>
-                </listitem>
-                <listitem>
-                  <para>
-                    <literal>6</literal> (or <literal>"joomla15"</literal>):
-                    Use Joomla15 salted passwords.
-                  </para>
-                </listitem>
-                <listitem>
-                  <para>
-                    <literal>7</literal> (or <literal>"ssha"</literal>):
-                    Use ssha hashed passwords.
-                  </para>
-                </listitem>
-                <listitem>
-                  <para>
-                    <literal>8</literal> (or <literal>"sha512"</literal>):
-                    Use sha512 hashed passwords.
-                  </para>
-                </listitem>
-                <listitem>
-                  <para>
-                    <literal>9</literal> (or <literal>"sha256"</literal>):
-                    Use sha256 hashed passwords.
-                  </para>
-                </listitem>
-                </itemizedlist>
+                - `0` (or `"plain"`):
+                  No encryption. Passwords are stored in plaintext. HIGHLY DISCOURAGED.
+                - `1` (or `"Y"`):
+                  Use crypt(3) function.
+                - `2` (or `"mysql"`):
+                  Use the MySQL PASSWORD() function. It is possible that the encryption function used
+                  by `pam_mysql` is different from that of the MySQL server, as
+                  `pam_mysql` uses the function defined in MySQL's C-client API
+                  instead of using PASSWORD() SQL function in the query.
+                - `3` (or `"md5"`):
+                  Use plain hex MD5.
+                - `4` (or `"sha1"`):
+                  Use plain hex SHA1.
+                - `5` (or `"drupal7"`):
+                  Use Drupal7 salted passwords.
+                - `6` (or `"joomla15"`):
+                  Use Joomla15 salted passwords.
+                - `7` (or `"ssha"`):
+                  Use ssha hashed passwords.
+                - `8` (or `"sha512"`):
+                  Use sha512 hashed passwords.
+                - `9` (or `"sha256"`):
+                  Use sha256 hashed passwords.
               '';
             };
             cryptDefault = mkOption {

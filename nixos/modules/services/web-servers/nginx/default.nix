@@ -499,21 +499,16 @@ in
       config = mkOption {
         type = types.str;
         default = "";
-        description = ''
-          Verbatim <filename>nginx.conf</filename> configuration.
+        description = lib.mdDoc ''
+          Verbatim {file}`nginx.conf` configuration.
           This is mutually exclusive to any other config option for
-          <filename>nginx.conf</filename> except for
-          <itemizedlist>
-          <listitem><para><xref linkend="opt-services.nginx.appendConfig"/>
-          </para></listitem>
-          <listitem><para><xref linkend="opt-services.nginx.httpConfig"/>
-          </para></listitem>
-          <listitem><para><xref linkend="opt-services.nginx.logError"/>
-          </para></listitem>
-          </itemizedlist>
+          {file}`nginx.conf` except for
+          - [](#opt-services.nginx.appendConfig)
+          - [](#opt-services.nginx.httpConfig)
+          - [](#opt-services.nginx.logError)
 
           If additional verbatim config in addition to other options is needed,
-          <xref linkend="opt-services.nginx.appendConfig"/> should be used instead.
+          [](#opt-services.nginx.appendConfig) should be used instead.
         '';
       };
 

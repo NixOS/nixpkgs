@@ -85,37 +85,24 @@ in {
     dbtype = mkOption {
       type = types.enum [ "mysql" "percona" "mariadb" "postgresql" "sqlserver" ];
       default = "postgresql";
-      description = ''
-        Specify the database provider:
-        <simplelist type='inline'>
-          <member><literal>mysql</literal></member>
-          <member><literal>percona</literal></member>
-          <member><literal>mariadb</literal></member>
-          <member><literal>postgresql</literal></member>
-          <member><literal>sqlserver</literal></member>
-        </simplelist>
+      description = lib.mdDoc ''
+        Specify the database provider: `mysql`, `percona`, `mariadb`, `postgresql`, `sqlserver`
       '';
     };
 
     db = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Database specific connection string for example:
-        <itemizedlist>
-        <listitem><para>MySQL/Percona/MariaDB:
-          <literal>user:password@tcp(host:3306)/documize</literal>
-        </para></listitem>
-        <listitem><para>MySQLv8+:
-          <literal>user:password@tcp(host:3306)/documize?allowNativePasswords=true</literal>
-        </para></listitem>
-        <listitem><para>PostgreSQL:
-          <literal>host=localhost port=5432 dbname=documize user=admin password=secret sslmode=disable</literal>
-        </para></listitem>
-        <listitem><para>MSSQL:
-          <literal>sqlserver://username:password@localhost:1433?database=Documize</literal> or
-          <literal>sqlserver://sa@localhost/SQLExpress?database=Documize</literal>
-        </para></listitem>
-        </itemizedlist>
+        - MySQL/Percona/MariaDB:
+          `user:password@tcp(host:3306)/documize`
+        - MySQLv8+:
+          `user:password@tcp(host:3306)/documize?allowNativePasswords=true`
+        - PostgreSQL:
+          `host=localhost port=5432 dbname=documize user=admin password=secret sslmode=disable`
+        - MSSQL:
+          `sqlserver://username:password@localhost:1433?database=Documize` or
+          `sqlserver://sa@localhost/SQLExpress?database=Documize`
       '';
     };
 
