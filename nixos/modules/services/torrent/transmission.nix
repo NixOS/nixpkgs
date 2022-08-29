@@ -24,14 +24,18 @@ in
   ];
   options = {
     services.transmission = {
-      enable = mkEnableOption ''the headless Transmission BitTorrent daemon.
+      enable = mkEnableOption "transmission" // {
+        description = ''
+          Whether to enable the headless Transmission BitTorrent daemon.
 
-        Transmission daemon can be controlled via the RPC interface using
-        transmission-remote, the WebUI (http://127.0.0.1:9091/ by default),
-        or other clients like stig or tremc.
+          Transmission daemon can be controlled via the RPC interface using
+          transmission-remote, the WebUI (http://127.0.0.1:9091/ by default),
+          or other clients like stig or tremc.
 
-        Torrents are downloaded to <xref linkend="opt-services.transmission.home"/>/${downloadsDir} by default and are
-        accessible to users in the "transmission" group'';
+          Torrents are downloaded to <xref linkend="opt-services.transmission.home"/>/${downloadsDir} by default and are
+          accessible to users in the "transmission" group.
+        '';
+      };
 
       settings = mkOption {
         description = lib.mdDoc ''
@@ -233,14 +237,18 @@ in
 
       openRPCPort = mkEnableOption "opening of the RPC port in the firewall";
 
-      performanceNetParameters = mkEnableOption ''tweaking of kernel parameters
-        to open many more connections at the same time.
+      performanceNetParameters = mkEnableOption "performance tweaks" // {
+        description = ''
+          Whether to enable tweaking of kernel parameters
+          to open many more connections at the same time.
 
-        Note that you may also want to increase
-        <literal>peer-limit-global"</literal>.
-        And be aware that these settings are quite aggressive
-        and might not suite your regular desktop use.
-        For instance, SSH sessions may time out more easily'';
+          Note that you may also want to increase
+          <literal>peer-limit-global"</literal>.
+          And be aware that these settings are quite aggressive
+          and might not suite your regular desktop use.
+          For instance, SSH sessions may time out more easily.
+        '';
+      };
     };
   };
 
