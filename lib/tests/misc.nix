@@ -1398,4 +1398,24 @@ runTests {
     expr = (with types; either int (listOf (either bool str))).description;
     expected = "signed integer or list of (boolean or string)";
   };
+
+  testFind = {
+    expr = filesystem.find ".+\\.foo" ./testData/files;
+    expected = [ ./testData/files/itchy.foo ./testData/files/subfolder/scratchy.foo ];
+  };
+
+  testFindSuffix = {
+    expr = filesystem.findSuffix ".foo" ./testData/files;
+    expected = [ ./testData/files/itchy.foo ./testData/files/subfolder/scratchy.foo ];
+  };
+
+  testFindEmpty = {
+    expr = filesystem.find "A1xfAhg" ./testData/files;
+    expected = [];
+  };
+
+  testFindSuffixEmpty = {
+    expr = filesystem.findSuffix "A1xfAhg" ./testData/files;
+    expected = [];
+  };
 }
