@@ -4,6 +4,7 @@
 , libtiff
 , librsvg
 , libiconv
+, bash
 }:
 
 stdenv.mkDerivation rec {
@@ -17,12 +18,19 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" ];
 
+  strictDeps = true;
+  nativeBuildInputs = [
+    librsvg
+  ];
+
   buildInputs = [
     libjpeg
     libtiff
-    librsvg
     libiconv
+    bash
   ];
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "The big set of CLI tools to make/modify/optimize/show/export DJVU files";
