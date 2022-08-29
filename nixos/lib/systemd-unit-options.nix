@@ -192,8 +192,7 @@ in rec {
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[Unit]</literal> section of the unit.  See
-          <citerefentry><refentrytitle>systemd.unit</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          <citerefentry><refentrytitle>systemd.unit</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
         '';
       };
 
@@ -296,8 +295,7 @@ in rec {
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[Service]</literal> section of the unit.  See
-          <citerefentry><refentrytitle>systemd.service</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          <citerefentry><refentrytitle>systemd.service</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
         '';
       };
 
@@ -449,8 +447,7 @@ in rec {
         description = ''
           Automatically start this unit at the given date/time, which
           must be in the format described in
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.  This is equivalent
+          <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>7</manvolnum></citerefentry>.  This is equivalent
           to adding a corresponding timer unit with
           <option>OnCalendar</option> set to the value given here.
         '';
@@ -497,8 +494,7 @@ in rec {
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[Socket]</literal> section of the unit.  See
-          <citerefentry><refentrytitle>systemd.socket</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          <citerefentry><refentrytitle>systemd.socket</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
         '';
       };
     };
@@ -530,10 +526,8 @@ in rec {
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[Timer]</literal> section of the unit.  See
-          <citerefentry><refentrytitle>systemd.timer</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> and
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry> for details.
+          <citerefentry><refentrytitle>systemd.timer</refentrytitle><manvolnum>5</manvolnum></citerefentry> and
+          <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>7</manvolnum></citerefentry> for details.
         '';
       };
 
@@ -565,8 +559,7 @@ in rec {
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[Path]</literal> section of the unit.  See
-          <citerefentry><refentrytitle>systemd.path</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          <citerefentry><refentrytitle>systemd.path</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
         '';
       };
 
@@ -627,8 +620,7 @@ in rec {
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[Mount]</literal> section of the unit.  See
-          <citerefentry><refentrytitle>systemd.mount</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          <citerefentry><refentrytitle>systemd.mount</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
         '';
       };
 
@@ -668,8 +660,7 @@ in rec {
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[Automount]</literal> section of the unit.  See
-          <citerefentry><refentrytitle>systemd.automount</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          <citerefentry><refentrytitle>systemd.automount</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
         '';
       };
 
@@ -700,8 +691,7 @@ in rec {
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[Slice]</literal> section of the unit.  See
-          <citerefentry><refentrytitle>systemd.slice</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          <citerefentry><refentrytitle>systemd.slice</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
         '';
       };
 
