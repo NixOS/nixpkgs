@@ -18,7 +18,6 @@
 , systemd
 , gobject-introspection
 , wrapGAppsHook
-, gi-docgen
 , vala
 , gi-docgen
 , gnome
