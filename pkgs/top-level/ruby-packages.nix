@@ -198,6 +198,28 @@
     };
     version = "3.0.5";
   };
+  cf-uaa-lib = {
+    dependencies = ["addressable" "httpclient" "multi_json"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "be5cec88d24296be2d61921de31fd3b5b537e3687487a1be03d3fe3fbd1fcc28";
+      type = "gem";
+    };
+    version = "4.0.1";
+  };
+  cf-uaac = {
+    dependencies = [ "cf-uaa-lib" "em-http-request" "eventmachine" "highline" "json_pure" "launchy" "rack"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "318802f998a0628223ff6e71dba17d387dd6f1da37eb9359fe9be04d68aa6bf4";
+      type = "gem";
+    };
+    version = "4.6.0";
+  };
   charlock_holmes = {
     groups = ["default"];
     platforms = [];
@@ -612,6 +634,16 @@
     };
     version = "2.3.0";
   };
+  cookiejar = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "4aa89d181e37f834d3c69efb4f774b58eb93fc87841cdc38a070d0a4e7aa1360";
+      type = "gem";
+    };
+    version = "0.3.3";
+  };
   crass = {
     groups = ["default"];
     platforms = [];
@@ -766,6 +798,28 @@
       type = "gem";
     };
     version = "0.1.0";
+  };
+  em-http-request = {
+    dependencies = ["addressable" "cookiejar" "em-socksify" "eventmachine" "http_parser.rb"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "16fbc72b2a6e20c804c564ac5d12e98668c6fcef8c3b1dd2387dff505f2efdab";
+      type = "gem";
+    };
+    version = "1.1.7";
+  };
+  em-socksify = {
+    dependencies = ["eventmachine"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "d39656c6d1e11de4390b49484a0ff5fd8add0f12283580026ad959a5b81f6466";
+      type = "gem";
+    };
+    version = "0.3.2";
   };
   em-websocket = {
     dependencies = ["eventmachine" "http_parser.rb"];
@@ -1789,6 +1843,17 @@
       type = "gem";
     };
     version = "1.6.6";
+  };
+  launchy = {
+    dependencies = ["addressable"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "954243c4255920982ce682f89a42e76372dba94770bf09c23a523e204bdebef5";
+      type = "gem";
+    };
+    version = "2.5.0";
   };
   libv8 = {
     groups = ["default"];
