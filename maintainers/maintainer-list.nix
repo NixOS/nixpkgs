@@ -2719,6 +2719,12 @@
     githubId = 34543609;
     name = "creator54";
   };
+  crinklywrappr = {
+    email = "crinklywrappr@pm.me";
+    name = "Daniel Fitzpatrick";
+    github = "crinklywrappr";
+    githubId = 56522;
+  };
   cript0nauta = {
     email = "shareman1204@gmail.com";
     github = "cript0nauta";
@@ -15086,11 +15092,5 @@
     name = "Milena Yisui";
     github = "yisuidenghua";
     githubId = 102890144;
-  };
-  crinklywrappr = {
-    email = "crinklywrappr@pm.me";
-    name = "Daniel Fitzpatrick";
-    github = "crinklywrappr";
-    githubId = 56522;
   };
 }

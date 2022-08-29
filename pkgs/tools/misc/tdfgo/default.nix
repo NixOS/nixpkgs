@@ -2,13 +2,15 @@
 
 buildGo118Module rec {
   pname = "tdfgo";
-  version = "v0.0.0-9f0b3315eed32409639a05aca55d7a0252681193";
+  version = "unstable-2022-08-25";
+
   src = fetchFromGitHub {
     owner = "digitallyserviced";
     repo = "tdfgo";
     rev = "9f0b3315eed32409639a05aca55d7a0252681193";
     sha256 = "sha256-Lr4+bXdVxYbCXKVzE+fjeLD559HuABK6lOLJ0sBBGNY=";
   };
+
   vendorSha256 = "sha256-T6PSs5NfXSXvzlq67rIDbzURyA+25df3nMMfufo0fow=";
 
   meta = with lib; {
@@ -17,6 +19,6 @@ buildGo118Module rec {
     homepage = "https://github.com/digitallyserviced/tdfgo";
     license = licenses.cc0;
     platforms = platforms.linux;
-    maintainers = with maintainers; [crinklywrappr];
+    maintainers = with maintainers; [ crinklywrappr ];
   };
 }
