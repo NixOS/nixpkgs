@@ -11309,6 +11309,12 @@
     githubId = 107703;
     name = "Samuel Rivas";
   };
+  samw = {
+    email = "sam@wlcx.cc";
+    github = "wlcx";
+    githubId = 3065381;
+    name = "Sam Willcocks";
+  };
   samyak = {
     name = "Samyak Sarnayak";
     email = "samyak201@gmail.com";

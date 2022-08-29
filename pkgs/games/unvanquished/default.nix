@@ -6,15 +6,15 @@
 }:
 
 let
-  version = "0.52.1";
-  binary-deps-version = "5";
+  version = "0.53.1";
+  binary-deps-version = "6";
 
   src = fetchFromGitHub {
     owner = "Unvanquished";
     repo = "Unvanquished";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1fiqn9f6nsh4cfjy7gfsv950hphwi9ca0ddgsjvn77g7yc0arp6c";
+    sha256 = "sha256-AWXuPXOhhPfdDrcyZF5o7uBnieSCGhwCzOYN8MjgTl8=";
   };
 
   unvanquished-binary-deps = stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ let
     version = binary-deps-version;
     src = fetchzip {
       url = "https://dl.unvanquished.net/deps/linux64-${version}.tar.bz2";
-      sha256 = "08bpyavbh5lmyprvqqi59gnm8s1fjmlk9f1785wlv7f52d9f9z1p";
+      sha256 = "sha256-ERfg89oTf9JTtv/qRnTRIzFP+zMpHT8W4WAIxqogy9E=";
     };
     dontPatchELF = true;
     preFixup = ''
@@ -81,7 +81,7 @@ let
     pname = "unvanquished-assets";
     inherit version src;
 
-    outputHash = "sha256:084jdisb48xyk9agjifn0nlnsdnjgg32si8zd1khsywd0kffplzx";
+    outputHash = "sha256-+mO4HQwFfy7SeGrN4R52KOr/uNQXkHMvYir3k0l5rDo=";
     outputHashMode = "recursive";
     nativeBuildInputs = [ aria2 cacert ];
     buildCommand = "bash $src/download-paks --cache=$(pwd) --version=${version} $out";
@@ -99,6 +99,7 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake unvanquished-binary-deps copyDesktopItems ];
+
   buildInputs = [
     gmp
     libGL
