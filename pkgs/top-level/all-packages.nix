@@ -10434,6 +10434,10 @@ with pkgs;
   riemann_c_client = callPackage ../tools/misc/riemann-c-client { };
   riemann-tools = callPackage ../tools/misc/riemann-tools { };
 
+  riff = callPackage ../development/tools/riff {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+  };
+
   ripmime = callPackage ../tools/networking/ripmime {};
 
   rkflashtool = callPackage ../tools/misc/rkflashtool { };
