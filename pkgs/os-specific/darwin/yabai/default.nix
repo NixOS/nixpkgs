@@ -1,4 +1,4 @@
-{ lib, stdenv }:
+{ lib, stdenv, fetchzip }:
 
  /*
  This cannot be built from source as it requires entitlements and
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "yabai";
   version = "4.0.2";
 
-  src = fetchTarball {
+  src = fetchzip {
     url = "https://github.com/koekeishiya/${pname}/releases/download/v${version}/${pname}-v${version}.tar.gz";
     sha256 = "00nxzk1g0hd8jqd1r0aig6wdsbpk60551qxnvvqb9475i8qbzjf6";
   };
