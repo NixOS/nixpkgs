@@ -11,6 +11,7 @@
 , pynacl
 , pytest-relaxed
 , pytestCheckHook
+, six
 }:
 
 buildPythonPackage rec {
@@ -35,6 +36,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cryptography
     pyasn1
+    six
   ] ++ passthru.optional-dependencies.ed25519; # remove on 3.0 update
 
   checkInputs = [
