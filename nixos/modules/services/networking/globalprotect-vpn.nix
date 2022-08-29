@@ -19,9 +19,7 @@ in
     settings = mkOption {
       description = ''
         GlobalProtect-openconnect configuration. For more information, visit
-        <link
-        xlink:href="https://github.com/yuezk/GlobalProtect-openconnect/wiki/Configuration"
-        />.
+        <link xlink:href="https://github.com/yuezk/GlobalProtect-openconnect/wiki/Configuration"/>.
       '';
       default = { };
       example = {

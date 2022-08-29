@@ -199,8 +199,7 @@ in
                 description = ''
                   The name of the column in the log table to which the name of the remote
                   host that initiates the session is stored. The value is supposed to be
-                  set by the PAM-aware application with <literal>pam_set_item(PAM_RHOST)
-                  </literal>.
+                  set by the PAM-aware application with <literal>pam_set_item(PAM_RHOST)</literal>.
                 '';
               };
               timeColumn = mkOption {
@@ -234,8 +233,7 @@ in
                 LIMIT 1
               '';
               description = ''
-                SQL query for the <link
-                xlink:href="https://man7.org/linux/man-pages/man3/getpwnam.3.html">getpwnam</link>
+                SQL query for the <link xlink:href="https://man7.org/linux/man-pages/man3/getpwnam.3.html">getpwnam</link>
                 syscall.
               '';
             };
@@ -249,8 +247,7 @@ in
                 LIMIT 1
               '';
               description = ''
-                SQL query for the <link
-                xlink:href="https://man7.org/linux/man-pages/man3/getpwuid.3.html">getpwuid</link>
+                SQL query for the <link xlink:href="https://man7.org/linux/man-pages/man3/getpwuid.3.html">getpwuid</link>
                 syscall.
               '';
             };
@@ -264,8 +261,7 @@ in
                 LIMIT 1
               '';
               description = ''
-                SQL query for the <link
-                xlink:href="https://man7.org/linux/man-pages/man3/getspnam.3.html">getspnam</link>
+                SQL query for the <link xlink:href="https://man7.org/linux/man-pages/man3/getspnam.3.html">getspnam</link>
                 syscall.
               '';
             };
@@ -276,8 +272,7 @@ in
                 SELECT username,'x',uid,'5000','MySQL User', CONCAT('/home/',username),'/run/sw/current-system/bin/bash' FROM users
               '';
               description = ''
-                SQL query for the <link
-                xlink:href="https://man7.org/linux/man-pages/man3/getpwent.3.html">getpwent</link>
+                SQL query for the <link xlink:href="https://man7.org/linux/man-pages/man3/getpwent.3.html">getpwent</link>
                 syscall.
               '';
             };
@@ -288,8 +283,7 @@ in
                 SELECT username,password,'1','0','99999','0','0','-1','0' FROM users
               '';
               description = ''
-                SQL query for the <link
-                xlink:href="https://man7.org/linux/man-pages/man3/getspent.3.html">getspent</link>
+                SQL query for the <link xlink:href="https://man7.org/linux/man-pages/man3/getspent.3.html">getspent</link>
                 syscall.
               '';
             };
@@ -300,8 +294,7 @@ in
                 SELECT name,password,gid FROM groups WHERE name='%1$s' LIMIT 1
               '';
               description = ''
-                SQL query for the <link
-                xlink:href="https://man7.org/linux/man-pages/man3/getgrnam.3.html">getgrnam</link>
+                SQL query for the <link xlink:href="https://man7.org/linux/man-pages/man3/getgrnam.3.html">getgrnam</link>
                 syscall.
               '';
             };
@@ -312,8 +305,7 @@ in
                 SELECT name,password,gid FROM groups WHERE gid='%1$u' LIMIT 1
               '';
               description = ''
-                SQL query for the <link
-                xlink:href="https://man7.org/linux/man-pages/man3/getgrgid.3.html">getgrgid</link>
+                SQL query for the <link xlink:href="https://man7.org/linux/man-pages/man3/getgrgid.3.html">getgrgid</link>
                 syscall.
               '';
             };
@@ -324,8 +316,7 @@ in
                 SELECT name,password,gid FROM groups
               '';
               description = ''
-                SQL query for the <link
-                xlink:href="https://man7.org/linux/man-pages/man3/getgrent.3.html">getgrent</link>
+                SQL query for the <link xlink:href="https://man7.org/linux/man-pages/man3/getgrent.3.html">getgrent</link>
                 syscall.
               '';
             };
@@ -336,8 +327,7 @@ in
                 SELECT username FROM grouplist WHERE gid='%1$u'
               '';
               description = ''
-                SQL query for the <link
-                xlink:href="https://man7.org/linux/man-pages/man3/memsbygid.3.html">memsbygid</link>
+                SQL query for the <link xlink:href="https://man7.org/linux/man-pages/man3/memsbygid.3.html">memsbygid</link>
                 syscall.
               '';
             };
@@ -348,8 +338,7 @@ in
                 SELECT gid FROM grouplist WHERE username='%1$s'
               '';
               description = ''
-                SQL query for the <link
-                xlink:href="https://man7.org/linux/man-pages/man3/gidsbymem.3.html">gidsbymem</link>
+                SQL query for the <link xlink:href="https://man7.org/linux/man-pages/man3/gidsbymem.3.html">gidsbymem</link>
                 syscall.
               '';
             };
