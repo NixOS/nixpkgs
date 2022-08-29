@@ -142,4 +142,41 @@ with builtins; with lib; recursiveUpdate lib (rec {
         if cl?case then compare cl.case var
         else all (equal true) (zipListsWith compare cl.cases var); in
     switch-if (map (cl: { cond = combine cl var; inherit (cl) out; }) clauses) default;
+
+  /* Override arguments to mkCoqDerivation for a Coq library.
+
+     This function allows you to easily override arguments to mkCoqDerivation,
+     even when they are not exposed by the Coq library directly.
+
+     Type: overrideCoqDerivation :: AttrSet -> CoqLibraryDerivation -> CoqLibraryDerivation
+
+     Example:
+
+     ```nix
+     coqPackages.lib.overrideCoqDerivation
+       {
+         defaultVersion = "9999";
+         release."9999".sha256 = "1lq8x86vd3vqqh2yq6hvyagpnhfq5wmk5pg2z0xq7b7dbbbhyfkw";
+       }
+       coqPackages.QuickChick;
+     ```
+
+     This example overrides the `defaultVersion` and `release` arguments that
+     are passed to `mkCoqDerivation` in the QuickChick derivation.
+
+     Note that there is a difference between using `.override` on a Coq
+     library vs this `overrideCoqDerivation` function. `.override` allows you
+     to modify arguments to the derivation itself, for instance by passing
+     different versions of dependencies:
+
+     ```nix
+     coqPackages.QuickCick.override { ssreflect = my-cool-ssreflect; }
+     ```
+
+     whereas `overrideCoqDerivation` allows you to override arguments to the
+     call to `mkCoqDerivation` in the Coq library.
+  */
+  overrideCoqDerivation = f: drv: (drv.override (args: {
+    mkCoqDerivation = drv_: (args.mkCoqDerivation drv_).override f;
+  }));
 })

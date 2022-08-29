@@ -11,7 +11,7 @@ let
 
       metaFetch = import ../build-support/coq/meta-fetch/default.nix
         {inherit lib stdenv fetchzip; };
-      mkCoqDerivation = callPackage ../build-support/coq {};
+      mkCoqDerivation = lib.makeOverridable (callPackage ../build-support/coq {});
 
       contribs = recurseIntoAttrs
         (callPackage ../development/coq-modules/contribs {});
