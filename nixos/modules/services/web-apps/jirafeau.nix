@@ -45,12 +45,12 @@ in
         $cfg['style'] = 'courgette';
         $cfg['organisation'] = 'ACME';
       '';
-      description = let
+      description =  let
         documentationLink =
           "https://gitlab.com/mojo42/Jirafeau/-/blob/${cfg.package.version}/lib/config.original.php";
       in
-        ''
-          Jirefeau configuration. Refer to <link xlink:href="${documentationLink}"/> for supported
+        lib.mdDoc ''
+          Jirefeau configuration. Refer to <${documentationLink}> for supported
           values.
         '';
     };
@@ -73,10 +73,10 @@ in
       description = let
         nginxCoreDocumentation = "http://nginx.org/en/docs/http/ngx_http_core_module.html";
       in
-        ''
+        lib.mdDoc ''
           Timeout for reading client request bodies and headers. Refer to
-          <link xlink:href="${nginxCoreDocumentation}#client_body_timeout"/> and
-          <link xlink:href="${nginxCoreDocumentation}#client_header_timeout"/> for accepted values.
+          <${nginxCoreDocumentation}#client_body_timeout> and
+          <${nginxCoreDocumentation}#client_header_timeout> for accepted values.
         '';
     };
 

@@ -97,18 +97,18 @@ in
       useLegacyConfig = mkOption {
         default = true;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to propagate the legacy options under
-          <option>services.znc.confOptions.*</option> to the znc config. If this
+          {option}`services.znc.confOptions.*` to the znc config. If this
           is turned on, the znc config will contain a user with the default name
           "znc", global modules "webadmin" and "adminlog" will be enabled by
           default, and more, all controlled through the
-          <option>services.znc.confOptions.*</option> options.
-          You can use <command>nix-instantiate --eval --strict '&lt;nixpkgs/nixos&gt;' -A config.services.znc.config</command>
+          {option}`services.znc.confOptions.*` options.
+          You can use {command}`nix-instantiate --eval --strict '<nixpkgs/nixos>' -A config.services.znc.config`
           to view the current value of the config.
 
           In any case, if you need more flexibility,
-          <option>services.znc.config</option> can be used to override/add to
+          {option}`services.znc.config` can be used to override/add to
           all of the legacy options.
         '';
       };
@@ -177,11 +177,11 @@ in
             &lt;/Pass&gt;
           '';
           type = types.str;
-          description = ''
-            Generate with <command>nix-shell -p znc --command "znc --makepass"</command>.
+          description = lib.mdDoc ''
+            Generate with {command}`nix-shell -p znc --command "znc --makepass"`.
             This is the password used to log in to the ZNC web admin interface.
             You can also set this through
-            <option>services.znc.config.User.&lt;username&gt;.Pass.Method</option>
+            {option}`services.znc.config.User.<username>.Pass.Method`
             and co.
           '';
         };

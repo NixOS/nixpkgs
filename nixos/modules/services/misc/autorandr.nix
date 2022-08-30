@@ -149,15 +149,15 @@ let
             };
           };
         });
-        description = ''
+        description = lib.mdDoc ''
           Output scale configuration.
 
           Either configure by pixels or a scaling factor. When using pixel method the
-          <citerefentry><refentrytitle>xrandr</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+          {manpage}`xrandr(1)`
           option
-          <parameter class="command">--scale-from</parameter>
+          `--scale-from`
           will be used; when using factor method the option
-          <parameter class="command">--scale</parameter>
+          `--scale`
           will be used.
 
           This option is a shortcut version of the transform option and they are mutually

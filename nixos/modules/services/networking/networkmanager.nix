@@ -327,9 +327,9 @@ in {
             type = mkOption {
               type = types.enum (attrNames dispatcherTypesSubdirMap);
               default = "basic";
-              description = ''
+              description = lib.mdDoc ''
                 Dispatcher hook type. Look up the hooks described at
-                <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.html">https://developer.gnome.org/NetworkManager/stable/NetworkManager.html</link>
+                [https://developer.gnome.org/NetworkManager/stable/NetworkManager.html](https://developer.gnome.org/NetworkManager/stable/NetworkManager.html)
                 and choose the type depending on the output folder.
                 You should then filter the event type (e.g., "up"/"down") from within your script.
               '';

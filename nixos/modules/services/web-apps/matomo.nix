@@ -53,11 +53,11 @@ in {
         type = types.nullOr types.str;
         default = null;
         example = "lighttpd";
-        description = ''
-          Name of the web server user that forwards requests to <option>services.phpfpm.pools.&lt;name&gt;.socket</option> the fastcgi socket for Matomo if the nginx
+        description = lib.mdDoc ''
+          Name of the web server user that forwards requests to {option}`services.phpfpm.pools.<name>.socket` the fastcgi socket for Matomo if the nginx
           option is not used. Either this option or the nginx option is mandatory.
           If you want to use another webserver than nginx, you need to set this to that server's user
-          and pass fastcgi requests to <literal>index.php</literal>, <literal>matomo.php</literal> and <literal>piwik.php</literal> (legacy name) to this socket.
+          and pass fastcgi requests to `index.php`, `matomo.php` and `piwik.php` (legacy name) to this socket.
         '';
       };
 

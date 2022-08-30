@@ -288,17 +288,17 @@ in
       };
 
       relay = {
-        enable = mkEnableOption "tor relaying" // {
-          description = ''
+        enable = mkEnableOption (lib.mdDoc "tor relaying") // {
+          description = lib.mdDoc ''
             Whether to enable relaying of Tor traffic for others.
 
-            See <link xlink:href="https://www.torproject.org/docs/tor-doc-relay"/>
+            See <https://www.torproject.org/docs/tor-doc-relay>
             for details.
 
             Setting this to true requires setting
-            <option>services.tor.relay.role</option>
+            {option}`services.tor.relay.role`
             and
-            <option>services.tor.settings.ORPort</option>
+            {option}`services.tor.settings.ORPort`
             options.
           '';
         };

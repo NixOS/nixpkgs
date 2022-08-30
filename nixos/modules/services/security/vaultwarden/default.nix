@@ -97,26 +97,26 @@ in {
           SMTP_FROM_NAME = "example.com Bitwarden server";
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         The configuration of vaultwarden is done through environment variables,
-        therefore it is recommended to use upper snake case (e.g. <envar>DISABLE_2FA_REMEMBER</envar>).
+        therefore it is recommended to use upper snake case (e.g. {env}`DISABLE_2FA_REMEMBER`).
 
-        However, camel case (e.g. <literal>disable2FARemember</literal>) is also supported:
+        However, camel case (e.g. `disable2FARemember`) is also supported:
         The NixOS module will convert it automatically to
-        upper case snake case (e.g. <envar>DISABLE_2FA_REMEMBER</envar>).
+        upper case snake case (e.g. {env}`DISABLE_2FA_REMEMBER`).
         In this conversion digits (0-9) are handled just like upper case characters,
-        so <literal>foo2</literal> would be converted to <envar>FOO_2</envar>.
-        Names already in this format remain unchanged, so <literal>FOO2</literal> remains <literal>FOO2</literal> if passed as such,
-        even though <literal>foo2</literal> would have been converted to <envar>FOO_2</envar>.
+        so `foo2` would be converted to {env}`FOO_2`.
+        Names already in this format remain unchanged, so `FOO2` remains `FOO2` if passed as such,
+        even though `foo2` would have been converted to {env}`FOO_2`.
         This allows working around any potential future conflicting naming conventions.
 
         Based on the attributes passed to this config option an environment file will be generated
         that is passed to vaultwarden's systemd service.
 
         The available configuration options can be found in
-        <link xlink:href="https://github.com/dani-garcia/vaultwarden/blob/${vaultwarden.version}/.env.template">the environment template file</link>.
+        [the environment template file](https://github.com/dani-garcia/vaultwarden/blob/${vaultwarden.version}/.env.template).
 
-        See <xref linkend="opt-services.vaultwarden.environmentFile"/> for how
+        See ()[#opt-services.vaultwarden.environmentFile) for how
         to set up access to the Admin UI to invite initial users.
       '';
     };

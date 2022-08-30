@@ -137,11 +137,16 @@ let
         usersFile = mkOption {
           type = with types; nullOr str;
           default = if config.aclUse then "/var/lib/dokuwiki/${name}/users.auth.php" else null;
-          description = ''
+          description = lib.mdDoc ''
             Location of the dokuwiki users file. List of users. Format:
-            login:passwordhash:Real Name:email:groups,comma,separated
-            Create passwordHash easily by using:$ mkpasswd -5 password `pwgen 8 1`
-            Example: <link xlink:href="https://github.com/splitbrain/dokuwiki/blob/master/conf/users.auth.php.dist"/>
+
+                login:passwordhash:Real Name:email:groups,comma,separated
+
+            Create passwordHash easily by using:
+
+                mkpasswd -5 password `pwgen 8 1`
+
+            Example: <https://github.com/splitbrain/dokuwiki/blob/master/conf/users.auth.php.dist>
             '';
           example = "/var/lib/dokuwiki/${name}/users.auth.php";
         };

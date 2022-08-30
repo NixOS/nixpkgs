@@ -137,9 +137,9 @@ in
             {
             }
           '';
-          description = ''
-            The <filename>database.yml</filename> configuration file as key value set.
-            See <link xlink:href="TODO"/>
+          description = lib.mdDoc ''
+            The {file}`database.yml` configuration file as key value set.
+            See \<TODO\>
             for list of configuration parameters.
           '';
         };
