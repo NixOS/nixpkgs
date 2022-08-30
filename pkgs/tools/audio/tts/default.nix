@@ -32,20 +32,21 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.7.1";
+  version = "0.8.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "sha256-ch+711soRfZj1egyaF0+6NrUJtf7JqfZuxQ4eDf1zas=";
+    sha256 = "sha256-A48L1JGXckSEaZra00ZOBVxcYJMvhpQqzE8nABaP0TY=";
   };
 
   postPatch = let
     relaxedConstraints = [
       "cython"
       "gruut"
+      "inflect"
       "librosa"
       "mecab-python3"
       "numba"
@@ -138,8 +139,6 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   disabledTestPaths = [
-    # Requires network acccess to download models
-    "tests/aux_tests/test_remove_silence_vad_script.py"
     # phonemes mismatch between espeak-ng and gruuts phonemizer
     "tests/text_tests/test_phonemizer.py"
     # no training, it takes too long
