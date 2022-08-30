@@ -21151,8 +21151,6 @@ with pkgs;
 
   lambda-mod-zsh-theme = callPackage ../shells/zsh/lambda-mod-zsh-theme { };
 
-  libgme = callPackage ../development/libraries/audio/libgme { };
-
   librdf_raptor = callPackage ../development/libraries/librdf/raptor.nix { };
 
   librdf_raptor2 = callPackage ../development/libraries/librdf/raptor2.nix { };

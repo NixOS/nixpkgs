@@ -78,7 +78,7 @@
 , libGLU
 , libGL
 , libintl
-, libgme
+, game-music-emu
 , openssl
 , x265
 , libxml2
@@ -164,7 +164,7 @@ stdenv.mkDerivation rec {
     gnutls
     libGL
     libGLU
-    libgme
+    game-music-emu
     openssl
     libxml2
     libintl
