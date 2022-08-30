@@ -238,6 +238,8 @@ in lib.makeScope pkgs.newScope (self: with self; {
         }
       );
 
+      lamdera = callPackage ./packages/lamdera.nix {};
+
       inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse elm-git-install;
     })
   )
