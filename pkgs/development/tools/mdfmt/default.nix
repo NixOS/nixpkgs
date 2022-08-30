@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
+{ lib
+, buildGoModule
+, fetchFromGitHub
 }:
+
 buildGoModule rec {
   pname = "mdfmt";
   version = "unstable-20181128";
