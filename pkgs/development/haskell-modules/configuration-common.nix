@@ -2196,6 +2196,10 @@ self: super: {
     '';
   }) super.recursion-schemes;
 
+  # 2022-08-30 Too strict bounds on finite-typelits
+  # https://github.com/jumper149/blucontrol/issues/1
+  blucontrol = doJailbreak super.blucontrol;
+
   # Fix from https://github.com/brendanhay/gogol/pull/144 which has seen no release
   # Can't use fetchpatch as it required tweaking the line endings as the .cabal
   # file revision on hackage was gifted CRLF line endings
