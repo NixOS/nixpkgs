@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
-, asciidoc
 , cmake
 , expat
 , fontconfig
@@ -50,7 +49,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    asciidoc
     cmake
     perl
     pkg-config
