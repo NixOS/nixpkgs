@@ -4428,6 +4428,12 @@
     githubId = 74379;
     name = "Florian Pester";
   };
+  fmoda3 = {
+    email = "fmoda3@mac.com";
+    github = "fmoda3";
+    githubId = 1746471;
+    name = "Frank Moda III";
+  };
   fmthoma = {
     email = "f.m.thoma@googlemail.com";
     github = "fmthoma";
@@ -5780,6 +5786,16 @@
     email = "jacg@my-post-office.net";
     github = "jacg";
     githubId = 2570854;
+  };
+  jakehamilton = {
+    name = "Jake Hamilton";
+    email = "jake.hamilton@hey.com";
+    matrix = "@jakehamilton:matrix.org";
+    github = "jakehamilton";
+    githubId = 7005773;
+    keys = [{
+      fingerprint = "B982 0250 1720 D540 6A18  2DA8 188E 4945 E85B 2D21";
+    }];
   };
   jasoncarr = {
     email = "jcarr250@gmail.com";
@@ -15098,5 +15114,14 @@
     name = "Milena Yisui";
     github = "yisuidenghua";
     githubId = 102890144;
+  };
+  macalinao = {
+    email = "me@ianm.com";
+    name = "Ian Macalinao";
+    github = "macalinao";
+    githubId = 401263;
+    keys = [{
+      fingerprint = "1147 43F1 E707 6F3E 6F4B  2C96 B9A8 B592 F126 F8E8";
+    }];
   };
 }

@@ -80,7 +80,7 @@ Right: `"A library for decoding PNG images"`
 
 ### `longDescription` {#var-meta-longDescription}
 
-An arbitrarily long description of the package.
+An arbitrarily long description of the package in [CommonMark](https://commonmark.org) Markdown.
 
 ### `branch` {#var-meta-branch}
 

@@ -2245,8 +2245,6 @@ with pkgs;
 
   inherit (nodePackages) concurrently;
 
-  inherit (nodePackages) hyperspace-cli;
-
   bklk = callPackage ../applications/misc/bklk { };
 
   bkyml = callPackage ../tools/misc/bkyml { };
@@ -4242,8 +4240,6 @@ with pkgs;
   mandown = callPackage ../tools/misc/mandown { };
 
   mapcidr = callPackage ../tools/misc/mapcidr { };
-
-  mapproxy = callPackage ../applications/misc/mapproxy { };
 
   marl = callPackage ../development/libraries/marl {};
 
@@ -10008,6 +10004,8 @@ with pkgs;
 
   pre-commit = callPackage ../tools/misc/pre-commit { };
 
+  pretender = callPackage ../tools/security/pretender { };
+
   pretty-simple = callPackage ../development/tools/pretty-simple { };
 
   prettyping = callPackage ../tools/networking/prettyping { };
@@ -14418,6 +14416,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
   cargo-expand = callPackage ../development/tools/rust/cargo-expand { };
+  cargo-hakari = callPackage ../development/tools/rust/cargo-hakari { };
   cargo-feature = callPackage ../development/tools/rust/cargo-feature { };
   cargo-flash = callPackage ../development/tools/rust/cargo-flash {
     inherit (darwin.apple_sdk.frameworks) AppKit;
@@ -16451,6 +16450,8 @@ with pkgs;
 
   kati = callPackage ../development/tools/build-managers/kati { };
 
+  kafkactl = callPackage ../development/tools/kafkactl { };
+
   kcat = callPackage ../development/tools/kcat { };
 
   kcc = libsForQt5.callPackage ../applications/graphics/kcc { };
@@ -16934,7 +16935,7 @@ with pkgs;
 
   scenebuilder = callPackage ../development/tools/scenebuilder { };
 
-  scenic-view = callPackage ../development/tools/scenic-view { };
+  scenic-view = callPackage ../development/tools/scenic-view { jdk = jdk11; };
 
   shncpd = callPackage ../tools/networking/shncpd { };
 
@@ -23671,6 +23672,8 @@ with pkgs;
   geoserver = callPackage ../servers/geospatial/geoserver { };
 
   mapcache = callPackage ../servers/geospatial/mapcache { };
+
+  mapproxy = callPackage ../servers/geospatial/mapproxy { };
 
   mapserver = callPackage ../servers/geospatial/mapserver { };
 
@@ -32365,8 +32368,9 @@ with pkgs;
 
   lightning-pool = callPackage ../applications/blockchains/lightning-pool { };
 
-  litecoin  = libsForQt514.callPackage ../applications/blockchains/litecoin {
+  litecoin  = libsForQt5.callPackage ../applications/blockchains/litecoin {
     inherit (darwin.apple_sdk.frameworks) AppKit;
+    boost = pkgs.boost174;
   };
   litecoind = litecoin.override { withGui = false; };
 
