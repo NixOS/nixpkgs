@@ -93,7 +93,8 @@ self: super: {
   time-compat = doJailbreak super.time-compat;
   http-media = unmarkBroken (doJailbreak super.http-media);
   servant-server = unmarkBroken (doJailbreak super.servant-server);
-  foundation = dontCheck super.foundation;
+  basement = doDistribute self.basement_0_0_14;
+  foundation = doDistribute (dontCheck self.foundation_0_0_28);
   vault = dontHaddock super.vault;
 
   # https://github.com/snapframework/snap-core/issues/288

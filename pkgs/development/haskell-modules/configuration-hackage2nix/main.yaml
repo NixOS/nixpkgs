@@ -150,6 +150,8 @@ extra-packages:
   - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
   - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
   - brick == 0.70.*                     # 2022-08-13: needed by matterhorn-50200.17.0
+  - basement < 0.0.15                   # 2022-08-30: last version to support GHC < 8.10
+  - foundation < 0.0.29                 # 2022-08-30: last version to support GHC < 8.10
 
 package-maintainers:
   abbradar:
