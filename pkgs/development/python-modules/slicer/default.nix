@@ -4,7 +4,7 @@
 , isPy27
 , pytestCheckHook
 , pandas
-, pytorch
+, torch
 , scipy
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "f5d5f7b45f98d155b9c0ba6554fa9770c6b26d5793a3e77a1030fb56910ebeec";
   };
 
-  checkInputs = [ pytestCheckHook pandas pytorch scipy ];
+  checkInputs = [ pytestCheckHook pandas torch scipy ];
 
   disabledTests = [
     # IndexError: too many indices for array

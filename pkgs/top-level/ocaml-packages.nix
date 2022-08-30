@@ -1232,7 +1232,7 @@ let
     tls-mirage = callPackage ../development/ocaml-modules/tls/mirage.nix { };
 
     torch = callPackage ../development/ocaml-modules/torch {
-      inherit (pkgs.python3Packages) pytorch;
+      inherit (pkgs.python3Packages) torch;
     };
 
     ocaml-protoc = callPackage ../development/ocaml-modules/ocaml-protoc { };

@@ -3,7 +3,7 @@
 , buildPythonPackage
 , numpy
 , scipy
-, pytorch
+, torch
 , autograd
 , nose2
 , matplotlib
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "sha256-dqyduExNgXIbEFlgkckaPfhLFSVLqPgwAOyBUdowwiQ=";
   };
 
-  propagatedBuildInputs = [ numpy scipy pytorch ];
+  propagatedBuildInputs = [ numpy scipy torch ];
   checkInputs = [ nose2 autograd matplotlib tensorflow ];
 
   checkPhase = ''
