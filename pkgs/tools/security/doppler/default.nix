@@ -21,7 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://doppler.com";
-    description = "The official CLI for interacting with your Doppler Enclave secrets and configuation";
+    description = "The official CLI for interacting with your Doppler Enclave secrets and configuration";
     license = licenses.asl20;
     maintainers = with maintainers; [ lucperkins ];
   };
