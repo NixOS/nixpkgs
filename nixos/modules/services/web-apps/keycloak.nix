@@ -314,23 +314,21 @@ in
               type = str;
               default = "";
               example = "/auth";
-              description = ''
-                The path relative to <literal>/</literal> for serving
+              description = lib.mdDoc ''
+                The path relative to `/` for serving
                 resources.
 
-                <note>
-                  <para>
-                    In versions of Keycloak using Wildfly (&lt;17),
-                    this defaulted to <literal>/auth</literal>. If
-                    upgrading from the Wildfly version of Keycloak,
-                    i.e. a NixOS version before 22.05, you'll likely
-                    want to set this to <literal>/auth</literal> to
-                    keep compatibility with your clients.
+                ::: {.note}
+                In versions of Keycloak using Wildfly (&lt;17),
+                this defaulted to `/auth`. If
+                upgrading from the Wildfly version of Keycloak,
+                i.e. a NixOS version before 22.05, you'll likely
+                want to set this to `/auth` to
+                keep compatibility with your clients.
 
-                    See <link xlink:href="https://www.keycloak.org/migration/migrating-to-quarkus"/>
-                    for more information on migrating from Wildfly to Quarkus.
-                  </para>
-                </note>
+                See <https://www.keycloak.org/migration/migrating-to-quarkus>
+                for more information on migrating from Wildfly to Quarkus.
+                :::
               '';
             };
 

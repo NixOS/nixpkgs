@@ -417,23 +417,23 @@ in
       splashImage = mkOption {
         type = types.nullOr types.path;
         example = literalExpression "./my-background.png";
-        description = ''
+        description = lib.mdDoc ''
           Background image used for GRUB.
-          Set to <literal>null</literal> to run GRUB in text mode.
+          Set to `null` to run GRUB in text mode.
 
-          <note><para>
+          ::: {.note}
           For grub 1:
           It must be a 640x480,
           14-colour image in XPM format, optionally compressed with
-          <command>gzip</command> or <command>bzip2</command>.
-          </para></note>
+          {command}`gzip` or {command}`bzip2`.
+          :::
 
-          <note><para>
+          ::: {.note}
           For grub 2:
           File must be one of .png, .tga, .jpg, or .jpeg. JPEG images must
           not be progressive.
           The image will be scaled if necessary to fit the screen.
-          </para></note>
+          :::
         '';
       };
 
@@ -441,36 +441,36 @@ in
         type = types.nullOr types.str;
         example = "#7EBAE4";
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Background color to be used for GRUB to fill the areas the image isn't filling.
 
-          <note><para>
+          ::: {.note}
           This options has no effect for GRUB 1.
-          </para></note>
+          :::
         '';
       };
 
       entryOptions = mkOption {
         default = "--class nixos --unrestricted";
         type = types.nullOr types.str;
-        description = ''
+        description = lib.mdDoc ''
           Options applied to the primary NixOS menu entry.
 
-          <note><para>
+          ::: {.note}
           This options has no effect for GRUB 1.
-          </para></note>
+          :::
         '';
       };
 
       subEntryOptions = mkOption {
         default = "--class nixos";
         type = types.nullOr types.str;
-        description = ''
+        description = lib.mdDoc ''
           Options applied to the secondary NixOS submenu entry.
 
-          <note><para>
+          ::: {.note}
           This options has no effect for GRUB 1.
-          </para></note>
+          :::
         '';
       };
 
@@ -478,24 +478,24 @@ in
         type = types.nullOr types.path;
         example = literalExpression "pkgs.nixos-grub2-theme";
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Grub theme to be used.
 
-          <note><para>
+          ::: {.note}
           This options has no effect for GRUB 1.
-          </para></note>
+          :::
         '';
       };
 
       splashMode = mkOption {
         type = types.enum [ "normal" "stretch" ];
         default = "stretch";
-        description = ''
+        description = lib.mdDoc ''
           Whether to stretch the image or show the image in the top-left corner unstretched.
 
-          <note><para>
+          ::: {.note}
           This options has no effect for GRUB 1.
-          </para></note>
+          :::
         '';
       };
 

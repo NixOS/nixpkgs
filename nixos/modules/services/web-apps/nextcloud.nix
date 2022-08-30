@@ -371,16 +371,16 @@ in {
         default = null;
         type = types.nullOr types.str;
         example = "DE";
-        description = ''
-          <warning>
-           <para>This option exists since Nextcloud 21! If older versions are used,
-            this will throw an eval-error!</para>
-          </warning>
+        description = lib.mdDoc ''
+          ::: {.warning}
+          This option exists since Nextcloud 21! If older versions are used,
+          this will throw an eval-error!
+          :::
 
-          <link xlink:href="https://www.iso.org/iso-3166-country-codes.html">ISO 3611-1</link>
+          [ISO 3611-1](https://www.iso.org/iso-3166-country-codes.html)
           country codes for automatic phone-number detection without a country code.
 
-          With e.g. <literal>DE</literal> set, the <literal>+49</literal> can be omitted for
+          With e.g. `DE` set, the `+49` can be omitted for
           phone-numbers.
         '';
       };
@@ -519,8 +519,8 @@ in {
         type = with types; either str (listOf str);
         default = "05:00:00";
         example = "Sun 14:00:00";
-        description = ''
-          When to run the update. See `systemd.services.&lt;name&gt;.startAt`.
+        description = lib.mdDoc ''
+          When to run the update. See `systemd.services.<name>.startAt`.
         '';
       };
     };

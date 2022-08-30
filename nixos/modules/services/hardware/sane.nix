@@ -48,12 +48,12 @@ in
     hardware.sane.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable support for SANE scanners.
 
-        <note><para>
-          Users in the "scanner" group will gain access to the scanner, or the "lp" group if it's also a printer.
-        </para></note>
+        ::: {.note}
+        Users in the "scanner" group will gain access to the scanner, or the "lp" group if it's also a printer.
+        :::
       '';
     };
 
@@ -66,12 +66,12 @@ in
     hardware.sane.extraBackends = mkOption {
       type = types.listOf types.path;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Packages providing extra SANE backends to enable.
 
-        <note><para>
-          The example contains the package for HP scanners.
-        </para></note>
+        ::: {.note}
+        The example contains the package for HP scanners.
+        :::
       '';
       example = literalExpression "[ pkgs.hplipWithPlugin ]";
     };

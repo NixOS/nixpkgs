@@ -510,17 +510,19 @@ in
         ]
         '';
       description =
-        ''
+        lib.mdDoc ''
           When using the SLiRP user networking (default), this option allows to
           forward ports to/from the host/guest.
 
-          <warning><para>
-            If the NixOS firewall on the virtual machine is enabled, you also
-            have to open the guest ports to enable the traffic between host and
-            guest.
-          </para></warning>
+          ::: {.warning}
+          If the NixOS firewall on the virtual machine is enabled, you also
+          have to open the guest ports to enable the traffic between host and
+          guest.
+          :::
 
-          <note><para>Currently QEMU supports only IPv4 forwarding.</para></note>
+          ::: {.note}
+          Currently QEMU supports only IPv4 forwarding.
+          :::
         '';
     };
 

@@ -160,9 +160,12 @@ let
         plugins = mkOption {
           type = types.listOf types.path;
           default = [];
-          description = ''
+          description = lib.mdDoc ''
                 List of path(s) to respective plugin(s) which are copied from the 'plugin' directory.
-                <note><para>These plugins need to be packaged before use, see example.</para></note>
+
+                ::: {.note}
+                These plugins need to be packaged before use, see example.
+                :::
           '';
           example = literalExpression ''
                 let
@@ -188,9 +191,12 @@ let
         templates = mkOption {
           type = types.listOf types.path;
           default = [];
-          description = ''
+          description = lib.mdDoc ''
                 List of path(s) to respective template(s) which are copied from the 'tpl' directory.
-                <note><para>These templates need to be packaged before use, see example.</para></note>
+
+                ::: {.note}
+                These templates need to be packaged before use, see example.
+                :::
           '';
           example = literalExpression ''
                 let

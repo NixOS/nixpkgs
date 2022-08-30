@@ -668,17 +668,17 @@ in
     };
 
     builds = {
-      enableWorker = mkEnableOption ''
+      enableWorker = mkEnableOption (lib.mdDoc ''
         worker for builds.sr.ht
 
-        <warning><para>
+        ::: {.warning}
         For smaller deployments, job runners can be installed alongside the master server
         but even if you only build your own software, integration with other services
         may cause you to run untrusted builds
         (e.g. automatic testing of patches via listssrht).
-        See <link xlink:href="https://man.sr.ht/builds.sr.ht/configuration.md#security-model"/>.
-        </para></warning>
-      '';
+        See <https://man.sr.ht/builds.sr.ht/configuration.md#security-model>.
+        :::
+      '');
 
       images = mkOption {
         type = with types; attrsOf (attrsOf (attrsOf package));

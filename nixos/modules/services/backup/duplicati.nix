@@ -21,14 +21,14 @@ in
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/duplicati";
-        description = ''
+        description = lib.mdDoc ''
           The directory where Duplicati stores its data files.
 
-          <note><para>
-            If left as the default value this directory will automatically be created
-            before the Duplicati server starts, otherwise you are responsible for ensuring
-            the directory exists with appropriate ownership and permissions.
-          </para></note>
+          ::: {.note}
+          If left as the default value this directory will automatically be created
+          before the Duplicati server starts, otherwise you are responsible for ensuring
+          the directory exists with appropriate ownership and permissions.
+          :::
         '';
       };
 
