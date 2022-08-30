@@ -10828,6 +10828,8 @@ with pkgs;
     lua = lua5_3;
   };
 
+  silice = callPackage ../development/compilers/silice { };
+
   silver-searcher = callPackage ../tools/text/silver-searcher { };
 
   simpleproxy = callPackage ../tools/networking/simpleproxy { };
