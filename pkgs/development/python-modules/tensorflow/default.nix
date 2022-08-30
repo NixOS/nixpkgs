@@ -369,13 +369,13 @@ let
     fetchAttrs = {
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "sha256-KtVReqHL3zxE8TPrqIerSOt59Mgke/ftoFZKMzgX/u8="
+        "sha256-+kJKPJ5SW38ORsRgeY8786s5lDOnOayC3k0p5pO9b1g="
       else
         if stdenv.isDarwin then
           # FIXME: this checksum is currently wrong, since the tensorflow dependency fetch is broken on darwin
           "sha256-j2k9Q+k41nq5nP1VjjkkNjXRov1uAda4RCMDMAthjr0="
         else
-          "sha256-zH3xNFEU2JR0Ww8bpD4mCiorGtao0WVPP4vklVMgS4A=";
+          "sha256-igNmTDZ6tx+P/sVswNDTkqfO3ZKUVkVW2+gOzCE8YFQ=";
     };
 
     buildAttrs = {

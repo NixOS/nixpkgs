@@ -226,9 +226,12 @@ let
     fetchAttrs = {
       sha256 =
         if cudaSupport then
-          "sha256-Ald+vplRx/DDG/7TfHAqD4Gktb1BGnf7FSCCJzSI0eo="
+          "sha256-NDcfTvUQFsX7OUWUQ4/DY9Kelx5L+P+3RmEpLsK0Fls="
         else
-          "sha256-eK5IjTAncDarkWYKnXrEo7kw7J7iOH7in2L2GabnFYo=";
+          if stdenv.isDarwin then
+            "sha256:1vw39h9lnc5a0dfg2sdknz1rvfdyrm6z3lnay9jm2p1zi51nsz5y"
+          else
+            "sha256-txQvvRrPcl72VM9dAzwWRJhfJTJlXxUKfGsYuER3/Uc=";
     };
 
     buildAttrs = {
