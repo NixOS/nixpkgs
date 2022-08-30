@@ -129,12 +129,14 @@ in
     environment.interactiveShellInit = ''
       # Bind gpg-agent to this TTY if gpg commands are used.
       export GPG_TTY=$(tty)
+    '';
 
-    '' + (optionalString cfg.agent.enableSSHSupport ''
-      # SSH agent protocol doesn't support changing TTYs, so bind the agent
-      # to every new TTY.
-      ${cfg.package}/bin/gpg-connect-agent --quiet updatestartuptty /bye > /dev/null
-    '');
+    programs.ssh.extraConfig = optionalString cfg.agent.enableSSHSupport ''
+      # The SSH agent protocol doesn't have support for changing TTYs; however we
+      # can simulate this with the `exec` feature of openssh (see ssh_config(5))
+      # that hooks a command to the shell currently running the ssh program.
+      Match host * exec "${cfg.package}/bin/gpg-connect-agent --quiet updatestartuptty /bye > /dev/null"
+    '';
 
     environment.extraInit = mkIf cfg.agent.enableSSHSupport ''
       if [ -z "$SSH_AUTH_SOCK" ]; then
