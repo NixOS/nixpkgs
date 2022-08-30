@@ -5,7 +5,7 @@
 }:
 buildGoModule rec {
   pname = "mdfmt";
-  version = "29e3d55";
+  version = "unstable-20181128";
 
   src = fetchFromGitHub {
     owner = "moorereason";
