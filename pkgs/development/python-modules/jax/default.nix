@@ -2,10 +2,11 @@
 , absl-py
 , blas
 , buildPythonPackage
+, etils
 , fetchFromGitHub
-, fetchpatch
 , jaxlib
 , lapack
+, matplotlib
 , numpy
 , opt-einsum
 , pytestCheckHook
@@ -20,7 +21,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.3.6";
+  version = "0.3.16";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,19 +30,8 @@ buildPythonPackage rec {
     owner = "google";
     repo = pname;
     rev = "jax-v${version}";
-    hash = "sha256-eGdAEZFHadNTHgciP4KMYHdwksz9g6un0Ar+A/KV5TE=";
+    hash = "sha256-4idh7boqBXSO9vEHxEcrzXjBIrKmmXiCf6cXh7En1/I=";
   };
-
-  patches = [
-    # See https://github.com/google/jax/issues/7944
-    ./cache-fix.patch
-
-    # See https://github.com/google/jax/issues/10292
-    (fetchpatch {
-      url = "https://github.com/google/jax/commit/cadc8046d56e0c1433cf48a2f106947d5f4ecbfd.patch";
-      hash = "sha256-jrpIqt4LzWAswt/Cpwtfa5d1Yn31HcXkVH3ETmaigA0=";
-    })
-  ];
 
   # jaxlib is _not_ included in propagatedBuildInputs because there are
   # different versions of jaxlib depending on the desired target hardware. The
@@ -49,14 +39,16 @@ buildPythonPackage rec {
   # CPU wheel is packaged.
   propagatedBuildInputs = [
     absl-py
+    etils
     numpy
     opt-einsum
     scipy
     typing-extensions
-  ];
+  ] ++ etils.optional-dependencies.epath;
 
   checkInputs = [
     jaxlib
+    matplotlib
     pytestCheckHook
     pytest-xdist
   ];
