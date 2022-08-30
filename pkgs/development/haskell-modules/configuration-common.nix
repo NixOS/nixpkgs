@@ -2186,7 +2186,15 @@ self: super: {
 
   # Fixes https://github.com/NixOS/nixpkgs/issues/140613
   # https://github.com/recursion-schemes/recursion-schemes/issues/128
-  recursion-schemes = appendPatch ./patches/recursion-schemes-128.patch super.recursion-schemes;
+  recursion-schemes = overrideCabal (drv: {
+    patches = drv.patches or [] ++ [
+      ./patches/recursion-schemes-128.patch
+    ];
+    # make sure line endings don't break the patch
+    prePatch = drv.prePatch or "" + ''
+      "${pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
+    '';
+  }) super.recursion-schemes;
 
   # Fix from https://github.com/brendanhay/gogol/pull/144 which has seen no release
   # Can't use fetchpatch as it required tweaking the line endings as the .cabal
