@@ -18,17 +18,17 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           This option enables lxd, a daemon that manages
           containers. Users in the "lxd" group can interact with
           the daemon (e.g. to start or stop containers) using the
-          <command>lxc</command> command line tool, among others.
+          {command}`lxc` command line tool, among others.
 
           Most of the time, you'll also want to start lxcfs, so
           that containers can "see" the limits:
-          <programlisting>
+          ```
           virtualisation.lxc.lxcfs.enable = true;
-          </programlisting>
+          ```
         '';
       };
 

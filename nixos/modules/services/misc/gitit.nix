@@ -348,14 +348,14 @@ let
       mimeTypesFile = mkOption {
         type = types.path;
         default = "/etc/mime/types.info";
-        description = ''
+        description = lib.mdDoc ''
           Specifies the path of a file containing mime type mappings.  Each
           line of the file should contain two fields, separated by whitespace.
           The first field is the mime type, the second is a file extension.
           For example:
-<programlisting>
-video/x-ms-wmx  wmx
-</programlisting>
+          ```
+          video/x-ms-wmx  wmx
+          ```
           If the file is not found, some simple defaults will be used.
         '';
       };

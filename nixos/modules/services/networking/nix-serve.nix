@@ -35,15 +35,15 @@ in
       secretKeyFile = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The path to the file used for signing derivation data.
           Generate with:
 
-          <programlisting>
+          ```
           nix-store --generate-binary-cache-key key-name secret-key-file public-key-file
-          </programlisting>
+          ```
 
-          For more details see <citerefentry><refentrytitle>nix-store</refentrytitle><manvolnum>1</manvolnum></citerefentry>.
+          For more details see {manpage}`nix-store(1)`.
         '';
       };
 

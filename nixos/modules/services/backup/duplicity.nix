@@ -54,15 +54,15 @@ in
     secretFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Path of a file containing secrets (gpg passphrase, access key...) in
         the format of EnvironmentFile as described by
-        <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry>. For example:
-        <programlisting>
+        {manpage}`systemd.exec(5)`. For example:
+        ```
         PASSPHRASE=«...»
         AWS_ACCESS_KEY_ID=«...»
         AWS_SECRET_ACCESS_KEY=«...»
-        </programlisting>
+        ```
       '';
     };
 

@@ -125,31 +125,31 @@ in {
       type = with types; nullOr path;
       default = null;
       example = "/var/lib/vaultwarden.env";
-      description = ''
-        Additional environment file as defined in <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+      description = lib.mdDoc ''
+        Additional environment file as defined in {manpage}`systemd.exec(5)`.
 
-        Secrets like <envar>ADMIN_TOKEN</envar> and <envar>SMTP_PASSWORD</envar>
+        Secrets like {env}`ADMIN_TOKEN` and {env}`SMTP_PASSWORD`
         may be passed to the service without adding them to the world-readable Nix store.
 
         Note that this file needs to be available on the host on which
-        <literal>vaultwarden</literal> is running.
+        `vaultwarden` is running.
 
         As a concrete example, to make the Admin UI available
         (from which new users can be invited initially),
-        the secret <envar>ADMIN_TOKEN</envar> needs to be defined as described
-        <link xlink:href="https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page">here</link>.
-        Setting <literal>environmentFile</literal> to <literal>/var/lib/vaultwarden.env</literal>
+        the secret {env}`ADMIN_TOKEN` needs to be defined as described
+        [here](https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page).
+        Setting `environmentFile` to `/var/lib/vaultwarden.env`
         and ensuring permissions with e.g.
-        <literal>chown vaultwarden:vaultwarden /var/lib/vaultwarden.env</literal>
-        (the <literal>vaultwarden</literal> user will only exist after activating with
-        <literal>enable = true;</literal> before this), we can set the contents of the file to have
+        `chown vaultwarden:vaultwarden /var/lib/vaultwarden.env`
+        (the `vaultwarden` user will only exist after activating with
+        `enable = true;` before this), we can set the contents of the file to have
         contents such as:
 
-<programlisting>
-# Admin secret token, see
-# https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page
-ADMIN_TOKEN=...copy-paste a unique generated secret token here...
-</programlisting>
+        ```
+        # Admin secret token, see
+        # https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page
+        ADMIN_TOKEN=...copy-paste a unique generated secret token here...
+        ```
       '';
     };
 

@@ -50,26 +50,26 @@ in
       type = lib.types.nullOr lib.types.path;
       example = "/var/lib/dendrite/registration_secret";
       default = null;
-      description = ''
-        Environment file as defined in <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+      description = lib.mdDoc ''
+        Environment file as defined in {manpage}`systemd.exec(5)`.
         Secrets may be passed to the service without adding them to the world-readable
         Nix store, by specifying placeholder variables as the option value in Nix and
         setting these variables accordingly in the environment file. Currently only used
         for the registration secret to allow secure registration when
         client_api.registration_disabled is true.
 
-        <programlisting>
+        ```
           # snippet of dendrite-related config
           services.dendrite.settings.client_api.registration_shared_secret = "$REGISTRATION_SHARED_SECRET";
-        </programlisting>
+        ```
 
-        <programlisting>
+        ```
           # content of the environment file
           REGISTRATION_SHARED_SECRET=verysecretpassword
-        </programlisting>
+        ```
 
         Note that this file needs to be available on the host on which
-        <literal>dendrite</literal> is running.
+        `dendrite` is running.
       '';
     };
     loadCredential = lib.mkOption {

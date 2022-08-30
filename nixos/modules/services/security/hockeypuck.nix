@@ -37,10 +37,10 @@ in {
           };
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Configuration file for hockeypuck, here you can override
-        certain settings (<literal>loglevel</literal> and
-        <literal>openpgp.db.dsn</literal>) by just setting those values.
+        certain settings (`loglevel` and
+        `openpgp.db.dsn`) by just setting those values.
 
         For other settings you need to use lib.mkForce to override them.
 
@@ -49,7 +49,7 @@ in {
         the database yourself.
 
         Example:
-        <programlisting>
+        ```
           services.postgresql = {
             enable = true;
             ensureDatabases = [ "hockeypuck" ];
@@ -58,7 +58,7 @@ in {
               ensurePermissions."DATABASE hockeypuck" = "ALL PRIVILEGES";
             }];
           };
-        </programlisting>
+        ```
       '';
     };
   };

@@ -990,27 +990,27 @@ in
       type = with types; nullOr path;
       default = null;
       example = "/var/lib/hedgedoc/hedgedoc.env";
-      description = ''
-        Environment file as defined in <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+      description = lib.mdDoc ''
+        Environment file as defined in {manpage}`systemd.exec(5)`.
 
         Secrets may be passed to the service without adding them to the world-readable
         Nix store, by specifying placeholder variables as the option value in Nix and
         setting these variables accordingly in the environment file.
 
-        <programlisting>
+        ```
           # snippet of HedgeDoc-related config
           services.hedgedoc.configuration.dbURL = "postgres://hedgedoc:\''${DB_PASSWORD}@db-host:5432/hedgedocdb";
           services.hedgedoc.configuration.minio.secretKey = "$MINIO_SECRET_KEY";
-        </programlisting>
+        ```
 
-        <programlisting>
+        ```
           # content of the environment file
           DB_PASSWORD=verysecretdbpassword
           MINIO_SECRET_KEY=verysecretminiokey
-        </programlisting>
+        ```
 
         Note that this file needs to be available on the host on which
-        <literal>HedgeDoc</literal> is running.
+        `HedgeDoc` is running.
       '';
     };
 

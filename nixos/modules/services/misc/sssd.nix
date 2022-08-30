@@ -54,25 +54,23 @@ in {
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = ''
-          Environment file as defined in <citerefentry>
-          <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
-          </citerefentry>.
+        description = lib.mdDoc ''
+          Environment file as defined in {manpage}`systemd.exec(5)`.
 
           Secrets may be passed to the service without adding them to the world-readable
           Nix store, by specifying placeholder variables as the option value in Nix and
           setting these variables accordingly in the environment file.
 
-          <programlisting>
+          ```
             # snippet of sssd-related config
             [domain/LDAP]
             ldap_default_authtok = $SSSD_LDAP_DEFAULT_AUTHTOK
-          </programlisting>
+          ```
 
-          <programlisting>
+          ```
             # contents of the environment file
             SSSD_LDAP_DEFAULT_AUTHTOK=verysecretpassword
-          </programlisting>
+          ```
         '';
       };
     };

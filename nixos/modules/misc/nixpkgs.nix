@@ -311,26 +311,26 @@ in
       defaultText = lib.literalMD ''
         Traditionally `builtins.currentSystem`, but unset when invoking NixOS through `lib.nixosSystem`.
       '';
-      description = ''
+      description = lib.mdDoc ''
         This option does not need to be specified for NixOS configurations
-        with a recently generated <literal>hardware-configuration.nix</literal>.
+        with a recently generated `hardware-configuration.nix`.
 
         Specifies the Nix platform type on which NixOS should be built.
-        It is better to specify <literal>nixpkgs.localSystem</literal> instead.
-        <programlisting>
+        It is better to specify `nixpkgs.localSystem` instead.
+        ```
         {
           nixpkgs.system = ..;
         }
-        </programlisting>
+        ```
         is the same as
-        <programlisting>
+        ```
         {
           nixpkgs.localSystem.system = ..;
         }
-        </programlisting>
-        See <literal>nixpkgs.localSystem</literal> for more information.
+        ```
+        See `nixpkgs.localSystem` for more information.
 
-        Ignored when <literal>nixpkgs.pkgs</literal>, <literal>nixpkgs.localSystem</literal> or <literal>nixpkgs.hostPlatform</literal> is set.
+        Ignored when `nixpkgs.pkgs`, `nixpkgs.localSystem` or `nixpkgs.hostPlatform` is set.
       '';
     };
   };

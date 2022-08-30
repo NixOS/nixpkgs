@@ -18,26 +18,26 @@ in {
       type = types.nullOr types.path;
       default = null;
       example = "/var/lib/3proxy/3proxy.passwd";
-      description = ''
+      description = lib.mdDoc ''
         Load users and passwords from this file.
 
         Example users file with plain-text passwords:
 
-        <programlisting>
+        ```
           test1:CL:password1
           test2:CL:password2
-        </programlisting>
+        ```
 
         Example users file with md5-crypted passwords:
 
-        <programlisting>
+        ```
           test1:CR:$1$tFkisVd2$1GA8JXkRmTXdLDytM/i3a1
           test2:CR:$1$rkpibm5J$Aq1.9VtYAn0JrqZ8M.1ME.
-        </programlisting>
+        ```
 
         You can generate md5-crypted passwords via https://unix4lyfe.org/crypt/
         Note that htpasswd tool generates incompatible md5-crypted passwords.
-        Consult <link xlink:href="https://github.com/z3APA3A/3proxy/wiki/How-To-(incomplete)#USERS">documentation</link> for more information.
+        Consult [documentation](https://github.com/z3APA3A/3proxy/wiki/How-To-%28incomplete%29#USERS) for more information.
       '';
     };
     services = mkOption {
