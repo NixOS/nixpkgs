@@ -42,13 +42,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "strawberry";
-  version = "1.0.7";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    hash = "sha256-TAt/P9nykUtOoHmprFiUJnip8mAnJlvkufD0v9ZWrp4=";
+    hash = "sha256-NhouAHr5fKdH62rtCIHlr8ennixIf9YQrf4zRIGjfxs=";
   };
 
   # the big strawberry shown in the context menu is *very* much in your face, so use the grey version instead
