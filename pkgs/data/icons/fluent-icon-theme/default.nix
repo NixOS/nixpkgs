@@ -4,43 +4,43 @@
 , gtk3
 , hicolor-icon-theme
 , jdupes
-, boldPanelIcons ? false
+, roundedIcons ? false
 , blackPanelIcons ? false
-, themeVariants ? []
+, colorVariants ? []
+,
 }:
-
 let
-  pname = "Whitesur-icon-theme";
+  pname = "Fluent-icon-theme";
 in
-lib.checkListOfEnum "${pname}: theme variants" [
-  "default"
-  "purple"
-  "pink"
-  "red"
-  "orange"
-  "yellow"
+lib.checkListOfEnum "${pname}: available color variants" [
+  "standard"
   "green"
   "grey"
-  "nord"
+  "orange"
+  "pink"
+  "purple"
+  "red"
+  "yellow"
+  "teal"
   "all"
-] themeVariants
+] colorVariants
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-08-30";
+  version = "2022-02-28";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "pcvRD4CUwUT46/kmMbnerj5mqPCcHIRreVIh9wz6Kfg=";
+    sha256 = "UMj3qF9lhd9kM7J/3RtG3AiWlBontrowfsFOb3yr0tQ=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];
 
   buildInputs = [ hicolor-icon-theme ];
 
-  # These fixup steps are slow and unnecessary
+  # Unnecessary & slow fixup's
   dontPatchELF = true;
   dontRewriteSymlinks = true;
   dontDropIconThemeCache = true;
@@ -53,9 +53,9 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     ./install.sh --dest $out/share/icons \
-      --name WhiteSur \
-      --theme ${builtins.toString themeVariants} \
-      ${lib.optionalString boldPanelIcons "--bold"} \
+      --name Fluent \
+      ${builtins.toString colorVariants} \
+      ${lib.optionalString roundedIcons "--round"} \
       ${lib.optionalString blackPanelIcons "--black"}
 
     jdupes --link-soft --recurse $out/share
@@ -64,11 +64,10 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "MacOS Big Sur style icon theme for Linux desktops";
-    homepage = "https://github.com/vinceliuice/WhiteSur-icon-theme";
+    description = "Fluent icon theme for linux desktops";
+    homepage = "https://github.com/vinceliuice/Fluent-icon-theme";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ icy-thought ];
   };
-
 }

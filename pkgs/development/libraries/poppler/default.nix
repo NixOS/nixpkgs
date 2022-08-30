@@ -23,7 +23,7 @@
 , texlive
 , zlib
 , withData ? true, poppler_data
-, qt5Support ? false, qtbase ? null
+, qt5Support ? false, qt6Support ? false, qtbase ? null
 , introspectionSupport ? false, gobject-introspection ? null
 , utils ? false, nss ? null
 , minimal ? false
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     lcms
     curl
     nss
-  ] ++ lib.optionals qt5Support [
+  ] ++ lib.optionals (qt5Support || qt6Support) [
     qtbase
   ] ++ lib.optionals introspectionSupport [
     gobject-introspection
@@ -85,6 +85,7 @@ stdenv.mkDerivation rec {
     (mkFlag (!minimal) "LIBCURL")
     (mkFlag utils "UTILS")
     (mkFlag qt5Support "QT5")
+    (mkFlag qt6Support "QT6")
   ];
 
   dontWrapQtApps = true;
