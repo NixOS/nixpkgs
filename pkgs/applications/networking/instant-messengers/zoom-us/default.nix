@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/Zoom.desktop \
         --replace "Exec=/usr/bin/zoom" "Exec=$out/bin/zoom"
 
-    for i in zopen zoom ZoomLauncher; do
+    for i in aomhost zopen zoom ZoomLauncher; do
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/zoom/$i
     done
 
