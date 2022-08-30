@@ -14593,9 +14593,10 @@ with pkgs;
 
   smlpkg = callPackage ../tools/package-management/smlpkg { };
 
-  solc = callPackage ../development/compilers/solc {
+  inherit (callPackages ../development/compilers/solc {
     boost = boost172;
-  };
+  }) solc_0_8_11 solc_0_8_13;
+  solc = solc_0_8_13;
 
   souffle = callPackage ../development/compilers/souffle { };
 
