@@ -67,7 +67,91 @@ let
     node ~/dist/server/tools/peertube.js $@
   '';
 
-in {
+  pluginModules = pkgs.runCommand "peertube-plugins" { } ''
+    mkdir $out
+    ${lib.concatMapStrings (plugin: ''
+    ln -s ${plugin}/lib/node_modules/${plugin.packageName} $out/
+    '') cfg.plugins}
+  '';
+
+  mkPluginService = configured: {
+    description = "Management of declaratively specified PeerTube plugins${lib.optionalString (!configured) " (initial)"}";
+    wantedBy = [ "multi-user.target" ];
+
+    environment = env;
+
+    path = with pkgs; [ nodejs-16_x yarn ];
+
+    script =
+      let
+        nixosPluginsJson = pkgs.writeText
+          "nixos-plugins.json"
+          (builtins.toJSON (map (plugin: plugin.packageName) cfg.plugins));
+      in
+      ''
+        set -euo pipefail
+
+        ${lib.optionalString (!configured) ''
+        # Ensure peertube is configured after first start (HACK)
+        while [ ! -d "${cfg.settings.storage.plugins}" ]; do
+          sleep 1
+        done
+        ''}
+
+        if [ -e "${cfg.settings.storage.plugins}/package.json" ]; then
+          packages_hash_pre="$(sha256sum ${cfg.settings.storage.plugins}/package.json)"
+        else
+          packages_hash_pre=""
+        fi
+
+        ${lib.concatMapStrings (plugin: ''
+        node ~/dist/scripts/plugin/install.js -p ${plugin}/lib/node_modules/${plugin.packageName}
+        '') cfg.plugins}
+
+        if [ -e "${cfg.settings.storage.plugins}/nixos-plugins.json" ]; then
+          for plugin in "$(${pkgs.jq}/bin/jq --slurp --raw-output '.[0] - .[1] | .[]' ${cfg.settings.storage.plugins}/nixos-plugins.json ${nixosPluginsJson})"; do
+            # ignore trailing newline
+            [ -z "$plugin" ] && continue
+            echo "Removing plugin $plugin (even on success, a (wrong) error message is returned)"
+            node ~/dist/scripts/plugin/uninstall.js -n "$plugin"
+          done
+        fi
+        ln -sf ${nixosPluginsJson} ${cfg.settings.storage.plugins}/nixos-plugins.json
+
+        packages_hash_post="$(sha256sum ${cfg.settings.storage.plugins}/package.json)"
+        [ "$packages_hash_pre" = "$packages_hash_post" ] || touch ${cfg.settings.storage.plugins}/.restart
+      '';
+
+    serviceConfig = {
+      ExecCondition = if configured
+        then "${pkgs.coreutils}/bin/test -d ${cfg.settings.storage.plugins}"
+        else "${pkgs.coreutils}/bin/test ! -d ${cfg.settings.storage.plugins}";
+      ExecStartPost = "+${pkgs.writeShellScript "peertube-plugins-post" ''
+        set -euo pipefail
+
+        if [ -e "${cfg.settings.storage.plugins}/.restart" ]; then
+          systemctl restart --no-block peertube
+          rm ${cfg.settings.storage.plugins}/.restart
+        fi
+      ''}";
+      Type = "oneshot";
+      WorkingDirectory = cfg.package;
+      ReadWritePaths = [ "/var/lib/peertube" ] ++ cfg.dataDirs;
+      # User and group
+      User = cfg.user;
+      Group = cfg.group;
+      # Sandboxing
+      RestrictAddressFamilies = [ ];
+      # System Call Filtering
+      SystemCallFilter = [ ("~" + lib.concatStringsSep " " systemCallsList) "pipe" "pipe2" ];
+    } // cfgService;
+  } // (if configured then {
+    before = [ "peertube.service" ];
+  } else {
+    after = [ "peertube.service" ];
+  });
+in
+{
   options.services.peertube = {
     enable = lib.mkEnableOption (lib.mdDoc "Enable Peertube’s service");
 
@@ -255,6 +339,23 @@ in {
       defaultText = lib.literalExpression "pkgs.peertube";
       description = lib.mdDoc "Peertube package to use.";
     };
+
+    plugins = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      example = lib.literalExpression ''
+        with peertube.plugins; [
+          peertube-plugin-hello-world
+        ]
+      '';
+      description = lib.mdDoc ''
+        List of Peertube plugins to declaratively install.
+        Only plugins packaged in nixpkgs are supported.
+        The plugins are installed after PeerTube is started,
+        but it needs to be restarted afterwards,
+        which can take some time.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -381,6 +482,9 @@ in {
         SystemCallFilter = "~" + lib.concatStringsSep " " (systemCallsList ++ [ "@resources" ]);
       } // cfgService;
     };
+
+    systemd.services.peertube-plugins = mkPluginService true;
+    systemd.services.peertube-plugins-initial = mkPluginService false;
 
     systemd.services.peertube = {
       description = "PeerTube daemon";
