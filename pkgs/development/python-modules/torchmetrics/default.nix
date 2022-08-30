@@ -7,7 +7,7 @@
 , packaging
 , psutil
 , py-deprecate
-, pytorch
+, torch
 , pytestCheckHook
 , torchmetrics
 , pytorch-lightning
@@ -34,7 +34,7 @@ buildPythonPackage {
 
   # Let the user bring their own instance
   buildInputs = [
-    pytorch
+    torch
   ];
 
   checkInputs = [

@@ -84,11 +84,11 @@ python.pkgs.buildPythonApplication rec {
     pandas
     pypinyin
     pysbd
-    pytorch-bin
     pyworld
     scipy
     soundfile
     tensorflow
+    torch-bin
     torchaudio-bin
     tqdm
     umap-learn

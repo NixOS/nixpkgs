@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytorch
+, torch
 , ninja
 , scipy
 , which
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  propagatedBuildInputs = [ pytorch pybind11 ];
+  propagatedBuildInputs = [ torch pybind11 ];
 
   checkInputs = [
     which

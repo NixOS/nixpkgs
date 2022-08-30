@@ -24,8 +24,8 @@ let
 in buildPythonPackage {
   inherit version;
 
-  pname = "pytorch";
-  # Don't forget to update pytorch to the same version.
+  pname = "torch";
+  # Don't forget to update torch to the same version.
 
   format = "wheel";
 
