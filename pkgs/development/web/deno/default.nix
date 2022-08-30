@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , rustPlatform
 , installShellFiles
-, fetchpatch
 , tinycc
 , libiconv
 , libobjc
@@ -30,24 +29,15 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.23.4";
+  version = "1.25.1";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nLQqfLRuh9mhZfjeiPaGpQbi5bXEg7HiGwrwDmaIRWM=";
+    sha256 = "sha256-nKMQDfCU1HsOfdzVwmgCIWa/rUmvufHlsS9jcDwcZzw=";
   };
-  cargoSha256 = "sha256-l5Ce/ypYXZKEi859OFskwC/Unpo842ZPxIHvp6lCjQc=";
-
-  patches = [
-    # remove after https://github.com/denoland/deno/pull/15193 is in a release
-    (fetchpatch {
-      name = "byo-tcc.patch";
-      url = "https://github.com/denoland/deno/pull/15193/commits/c43698b2b58af1ef69b1558d55c8ebea0268dfea.patch";
-      sha256 = "sha256-YE5mGHyEm20FjFhr8yveBRlrOVL3+qQYxz2xp/IfmJs=";
-    })
-  ];
+  cargoSha256 = "sha256-jFoVQK74gnhC6Ume/PHe8NG7rNeTkwPMBBWn/hT7nCs=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
@@ -68,7 +58,7 @@ rustPlatform.buildRustPackage rec {
   # The deno_ffi package currently needs libtcc.a on linux and macos and will try to compile it at build time
   # To avoid this we point it to our copy (dir)
   # In the future tinycc will be replaced with asm
-  DENO_FFI_LIBTCC = "${libtcc}/lib";
+  TCC_PATH = "${libtcc}/lib";
 
   # Tests have some inconsistencies between runs with output integration tests
   # Skipping until resolved
@@ -111,5 +101,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ jk ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    broken = stdenv.isDarwin; # currently fail to build tinycc on darwin in nixpkgs
   };
 }
