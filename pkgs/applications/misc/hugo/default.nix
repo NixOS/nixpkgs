@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "hugo";
@@ -22,6 +22,8 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  ldflags = [ "-s" "-w" "-X github.com/gohugoio/hugo/common/hugo.vendorInfo=nixpkgs" ];
 
   postInstall = ''
     $out/bin/hugo gen man
