@@ -180,13 +180,13 @@ in
         readable only by the <literal>uucp</literal> user.
         See hosts.hfaxd(5) for details.
         This configuration permits access for all users:
-        <literal>
+        <programlisting>
           environment.etc."hosts.hfaxd" = {
             mode = "0600";
             user = "uucp";
             text = ".*";
           };
-        </literal>
+        </programlisting>
         Note that host-based access can be controlled with
         <option>config.systemd.sockets.hylafax-hfaxd.listenStreams</option>;
         by default, only 127.0.0.1 is permitted to connect.

@@ -29,9 +29,9 @@ let
           The log file to be scanned.
 
           For mail, set this to
-          <literal>
+          <programlisting>
           journalctl $OLD_CURSOR -u postfix.service | ''${pkgs.perl}/bin/perl ''${pkgs.awstats.out}/share/awstats/tools/maillogconvert.pl standard |
-          </literal>
+          </programlisting>
         '';
       };
 
@@ -42,9 +42,9 @@ let
           The log format being used.
 
           For mail, set this to
-          <literal>
+          <programlisting>
           %time2 %email %email_r %host %host_r %method %url %code %bytesd
-          </literal>
+          </programlisting>
         '';
       };
 

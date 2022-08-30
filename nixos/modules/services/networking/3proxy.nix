@@ -23,17 +23,17 @@ in {
 
         Example users file with plain-text passwords:
 
-        <literal>
+        <programlisting>
           test1:CL:password1
           test2:CL:password2
-        </literal>
+        </programlisting>
 
         Example users file with md5-crypted passwords:
 
-        <literal>
+        <programlisting>
           test1:CR:$1$tFkisVd2$1GA8JXkRmTXdLDytM/i3a1
           test2:CR:$1$rkpibm5J$Aq1.9VtYAn0JrqZ8M.1ME.
-        </literal>
+        </programlisting>
 
         You can generate md5-crypted passwords via https://unix4lyfe.org/crypt/
         Note that htpasswd tool generates incompatible md5-crypted passwords.
@@ -130,7 +130,7 @@ in {
 
               Double authentication is possible, e.g.
 
-              <literal>
+              <programlisting>
                 {
                   auth = [ "iponly" "strong" ];
                   acl = [
@@ -144,7 +144,7 @@ in {
                     }
                   ];
                 }
-              </literal>
+              </programlisting>
               In this example strong username authentication is not required to access 192.168.0.0/16.
             '';
           };
