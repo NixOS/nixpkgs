@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "moorereason";
     repo = "mdfmt";
-    rev = "v${version}";
+    rev = "29e3d55cbe5af4cfc31b172aed1d69b9a5a22c5b";
     sha256 = "122k9rjm4g0cksgg1pywm3q64qhgvyq2275mrszjcp4ry15kpd74";
   };
 
