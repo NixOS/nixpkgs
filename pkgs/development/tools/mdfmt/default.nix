@@ -20,6 +20,6 @@ buildGoModule rec {
     description = "Like gofmt, but for Markdown with front matter";
     homepage = "https://github.com/moorereason/mdfmt";
     license = licenses.mit;
-    maintainers = with maintainers; [Ob11stan];
+    maintainers = with maintainers; [ Ob11stan ];
   };
 }
