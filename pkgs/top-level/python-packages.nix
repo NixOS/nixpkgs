@@ -5451,6 +5451,8 @@ in {
 
   markdown-macros = callPackage ../development/python-modules/markdown-macros { };
 
+  markdownify  = callPackage ../development/python-modules/markdownify { };
+
   markdownsuperscript = callPackage ../development/python-modules/markdownsuperscript { };
 
   markerlib = callPackage ../development/python-modules/markerlib { };
@@ -6471,6 +6473,8 @@ in {
   palace = callPackage ../development/python-modules/palace { };
 
   palettable = callPackage ../development/python-modules/palettable { };
+
+  pallets-sphinx-themes = callPackage ../development/python-modules/pallets-sphinx-themes { };
 
   pamela = callPackage ../development/python-modules/pamela { };
 
@@ -9662,6 +9666,8 @@ in {
   rq = callPackage ../development/python-modules/rq { };
 
   rsa = callPackage ../development/python-modules/rsa { };
+
+  rsskey = callPackage ../development/python-modules/rsskey { };
 
   rst2ansi = callPackage ../development/python-modules/rst2ansi { };
 
