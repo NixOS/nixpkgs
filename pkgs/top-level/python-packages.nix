@@ -10929,7 +10929,6 @@ in {
 
   torch-bin = callPackage ../development/python-modules/torch/bin.nix { };
 
-
   torchWithCuda = self.torch.override {
     cudaSupport = true;
   };
