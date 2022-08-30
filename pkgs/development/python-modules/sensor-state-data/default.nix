@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "sensor-state-data";
-  version = "2.5.0";
+  version = "2.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-xAsyM33so+oKCX3yQPpmEWT0QdxfLLQt3eYCkfphsF8=";
+    hash = "sha256-qu8dP0HAu6szL/GwfX6ar3P0No5HDBbULNWdjLaiLwc=";
   };
 
   nativeBuildInputs = [
