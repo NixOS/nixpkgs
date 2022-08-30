@@ -172,9 +172,9 @@ in
         To switch to a specialised configuration
         (e.g. <literal>fewJobsManyCores</literal>) at runtime, run:
 
-        <screen>
-        <prompt># </prompt>sudo /run/current-system/specialisation/fewJobsManyCores/bin/switch-to-configuration test
-        </screen>
+        <programlisting>
+        sudo /run/current-system/specialisation/fewJobsManyCores/bin/switch-to-configuration test
+        </programlisting>
       '';
       type = types.attrsOf (types.submodule (
         local@{ ... }: let

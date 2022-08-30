@@ -32,13 +32,14 @@ in
         Useful for not loosing track of configurations built from different
         nixos branches/revisions, e.g.:
 
-        <screen>
+        <programlisting>
         #!/bin/sh
         today=`date +%Y%m%d`
         branch=`(cd nixpkgs ; git branch 2>/dev/null | sed -n '/^\* / { s|^\* ||; p; }')`
         revision=`(cd nixpkgs ; git rev-parse HEAD)`
         export NIXOS_LABEL_VERSION="$today.$branch-''${revision:0:7}"
-        nixos-rebuild switch</screen>
+        nixos-rebuild switch
+        </programlisting>
       '';
     };
 
@@ -53,12 +54,12 @@ in
         Useful for not loosing track of configurations built with
         different options, e.g.:
 
-        <screen>
+        <programlisting>
         {
           system.nixos.tags = [ "with-xen" ];
           virtualisation.xen.enable = true;
         }
-        </screen>
+        </programlisting>
       '';
     };
 
