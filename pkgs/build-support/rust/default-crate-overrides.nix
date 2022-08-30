@@ -35,6 +35,7 @@
 , libevdev
 , alsa-lib
 , graphene
+, protobuf
 , ...
 }:
 
@@ -200,6 +201,11 @@ in
   pango-sys = attr: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ pango ];
+  };
+
+  prost-build = attrs: {
+    nativeBuildInputs = [ protobuf ];
+    PROTOC = "${lib.getBin protobuf}/bin/protoc";
   };
 
   pq-sys = attr: {
