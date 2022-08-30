@@ -137,7 +137,7 @@ rec {
       let default' = if !isList default then [ default ] else default;
       in mkOption {
         type = lib.types.package;
-        description = "The ${name} package to use.";
+        description = lib.mdDoc "The ${name} package to use.";
         default = attrByPath default'
           (throw "${concatStringsSep "." default'} cannot be found in pkgs") pkgs;
         defaultText = literalExpression ("pkgs." + concatStringsSep "." default');
