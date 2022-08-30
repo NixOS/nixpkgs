@@ -48,7 +48,7 @@ let
   meta = with lib; {
     description = "Compiler for Ethereum smart contract language Solidity";
     homepage = "https://github.com/ethereum/solidity";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dbrock akru lionello sifmelcara ];
   };
 
