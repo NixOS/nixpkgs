@@ -1420,6 +1420,8 @@ in {
 
   bme680 = callPackage ../development/python-modules/bme680 { };
 
+  boddle = callPackage ../development/python-modules/boddle { };
+
   bokeh = callPackage ../development/python-modules/bokeh { };
 
   boltons = callPackage ../development/python-modules/boltons { };
