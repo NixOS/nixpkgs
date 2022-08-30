@@ -26,9 +26,9 @@ in {
 
           Most of the time, you'll also want to start lxcfs, so
           that containers can "see" the limits:
-          <code>
-            virtualisation.lxc.lxcfs.enable = true;
-          </code>
+          <programlisting>
+          virtualisation.lxc.lxcfs.enable = true;
+          </programlisting>
         '';
       };
 

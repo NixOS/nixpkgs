@@ -49,7 +49,7 @@ in {
         the database yourself.
 
         Example:
-        <literal>
+        <programlisting>
           services.postgresql = {
             enable = true;
             ensureDatabases = [ "hockeypuck" ];
@@ -58,7 +58,7 @@ in {
               ensurePermissions."DATABASE hockeypuck" = "ALL PRIVILEGES";
             }];
           };
-        </literal>
+        </programlisting>
       '';
     };
   };

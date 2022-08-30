@@ -72,9 +72,9 @@ in with lib; {
             values, you can run the <command>lsusb</command> command. Example
             output:
 
-            <literal>
+            <programlisting>
             Bus 005 Device 002: ID 0403:c630 Future Technology Devices International, Ltd lcd2usb interface
-            </literal>
+            </programlisting>
 
             In this case the vendor id is 0403 and the product id is c630.
           '';

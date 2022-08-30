@@ -19,9 +19,9 @@ in {
           This enables LXCFS, a FUSE filesystem for LXC.
           To use lxcfs in include the following configuration in your
           container configuration:
-          <code>
-            virtualisation.lxc.defaultConfig = "lxc.include = ''${pkgs.lxcfs}/share/lxc/config/common.conf.d/00-lxcfs.conf";
-          </code>
+          <programlisting>
+          virtualisation.lxc.defaultConfig = "lxc.include = ''${pkgs.lxcfs}/share/lxc/config/common.conf.d/00-lxcfs.conf";
+          </programlisting>
         '';
       };
   };
