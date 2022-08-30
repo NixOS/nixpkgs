@@ -230,15 +230,15 @@ in
       settings = mkOption {
         type = with types; attrsOf (oneOf [ bool float int str ]);
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           PostgreSQL configuration. Refer to
-          <link xlink:href="https://www.postgresql.org/docs/11/config-setting.html#CONFIG-SETTING-CONFIGURATION-FILE"/>
-          for an overview of <literal>postgresql.conf</literal>.
+          <https://www.postgresql.org/docs/11/config-setting.html#CONFIG-SETTING-CONFIGURATION-FILE>
+          for an overview of `postgresql.conf`.
 
-          <note><para>
-            String values will automatically be enclosed in single quotes. Single quotes will be
-            escaped with two single quotes as described by the upstream documentation linked above.
-          </para></note>
+          ::: {.note}
+          String values will automatically be enclosed in single quotes. Single quotes will be
+          escaped with two single quotes as described by the upstream documentation linked above.
+          :::
         '';
         example = literalExpression ''
           {

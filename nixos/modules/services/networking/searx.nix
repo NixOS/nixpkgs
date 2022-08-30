@@ -81,35 +81,33 @@ in
               };
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           Searx settings. These will be merged with (taking precedence over)
           the default configuration. It's also possible to refer to
           environment variables
-          (defined in <xref linkend="opt-services.searx.environmentFile"/>)
-          using the syntax <literal>@VARIABLE_NAME@</literal>.
-          <note>
-            <para>
-              For available settings, see the Searx
-              <link xlink:href="https://searx.github.io/searx/admin/settings.html">docs</link>.
-            </para>
-          </note>
+          (defined in [](#opt-services.searx.environmentFile))
+          using the syntax `@VARIABLE_NAME@`.
+
+          ::: {.note}
+          For available settings, see the Searx
+          [docs](https://searx.github.io/searx/admin/settings.html).
+          :::
         '';
       };
 
       settingsFile = mkOption {
         type = types.path;
         default = "${runDir}/settings.yml";
-        description = ''
+        description = lib.mdDoc ''
           The path of the Searx server settings.yml file. If no file is
           specified, a default file is used (default config file has debug mode
           enabled). Note: setting this options overrides
-          <xref linkend="opt-services.searx.settings"/>.
-          <warning>
-            <para>
-              This file, along with any secret key it contains, will be copied
-              into the world-readable Nix store.
-            </para>
-          </warning>
+          [](#opt-services.searx.settings).
+
+          ::: {.warning}
+          This file, along with any secret key it contains, will be copied
+          into the world-readable Nix store.
+          :::
         '';
       };
 
@@ -123,15 +121,14 @@ in
       runInUwsgi = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to run searx in uWSGI as a "vassal", instead of using its
           built-in HTTP server. This is the recommended mode for public or
           large instances, but is unecessary for LAN or local-only use.
-          <warning>
-            <para>
-              The built-in HTTP server logs all queries by default.
-            </para>
-          </warning>
+
+          ::: {.warning}
+          The built-in HTTP server logs all queries by default.
+          :::
         '';
       };
 

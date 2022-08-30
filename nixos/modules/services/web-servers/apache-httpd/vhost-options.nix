@@ -45,16 +45,14 @@ in
         { ip = "192.154.1.1"; port = 80; }
         { ip = "*"; port = 8080; }
       ];
-      description = ''
+      description = lib.mdDoc ''
         Listen addresses and ports for this virtual host.
-        <note>
-        <para>
-          This option overrides <literal>addSSL</literal>, <literal>forceSSL</literal> and <literal>onlySSL</literal>.
-        </para>
-        <para>
-          If you only want to set the addresses manually and not the ports, take a look at <literal>listenAddresses</literal>.
-        </para>
-        </note>
+
+        ::: {.note}
+        This option overrides `addSSL`, `forceSSL` and `onlySSL`.
+
+        If you only want to set the addresses manually and not the ports, take a look at `listenAddresses`.
+        :::
       '';
     };
 
@@ -202,14 +200,14 @@ in
           file = "/home/eelco/some-file.png";
         }
       ];
-      description = ''
+      description = lib.mdDoc ''
         This option provides a simple way to serve individual, static files.
 
-        <note><para>
-          This option has been deprecated and will be removed in a future
-          version of NixOS. You can achieve the same result by making use of
-          the <literal>locations.&lt;name&gt;.alias</literal> option.
-        </para></note>
+        ::: {.note}
+        This option has been deprecated and will be removed in a future
+        version of NixOS. You can achieve the same result by making use of
+        the `locations.<name>.alias` option.
+        :::
       '';
     };
 

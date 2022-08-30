@@ -38,16 +38,14 @@ in
         openFirewall = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Open ports in the firewall for Mirakurun.
 
-            <warning>
-              <para>
-                Exposing Mirakurun to the open internet is generally advised
-                against. Only use it inside a trusted local network, or
-                consider putting it behind a VPN if you want remote access.
-              </para>
-            </warning>
+            ::: {.warning}
+            Exposing Mirakurun to the open internet is generally advised
+            against. Only use it inside a trusted local network, or
+            consider putting it behind a VPN if you want remote access.
+            :::
           '';
         };
 

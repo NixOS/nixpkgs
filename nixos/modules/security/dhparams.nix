@@ -56,45 +56,53 @@ in {
         in attrsOf (coercedTo int coerce (submodule paramsSubmodule));
         default = {};
         example = lib.literalExpression "{ nginx.bits = 3072; }";
-        description = ''
+        description = lib.mdDoc ''
           Diffie-Hellman parameters to generate.
 
           The value is the size (in bits) of the DH params to generate. The
           generated DH params path can be found in
-          <literal>config.security.dhparams.params.«name».path</literal>.
+          `config.security.dhparams.params.«name».path`.
 
-          <note><para>The name of the DH params is taken as being the name of
+          ::: {.note}
+          The name of the DH params is taken as being the name of
           the service it serves and the params will be generated before the
-          said service is started.</para></note>
+          said service is started.
+          :::
 
-          <warning><para>If you are removing all dhparams from this list, you
-          have to leave <option>security.dhparams.enable</option> for at
+          ::: {.warning}
+          If you are removing all dhparams from this list, you
+          have to leave {option}`security.dhparams.enable` for at
           least one activation in order to have them be cleaned up. This also
           means if you rollback to a version without any dhparams the
           existing ones won't be cleaned up. Of course this only applies if
-          <option>security.dhparams.stateful</option> is
-          <literal>true</literal>.</para></warning>
+          {option}`security.dhparams.stateful` is
+          `true`.
+          :::
 
-          <note><title>For module implementers:</title><para>It's recommended
+          ::: {.note}
+          **For module implementers:** It's recommended
           to not set a specific bit size here, so that users can easily
           override this by setting
-          <option>security.dhparams.defaultBitSize</option>.</para></note>
+          {option}`security.dhparams.defaultBitSize`.
+          :::
         '';
       };
 
       stateful = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether generation of Diffie-Hellman parameters should be stateful or
           not. If this is enabled, PEM-encoded files for Diffie-Hellman
           parameters are placed in the directory specified by
-          <option>security.dhparams.path</option>. Otherwise the files are
+          {option}`security.dhparams.path`. Otherwise the files are
           created within the Nix store.
 
-          <note><para>If this is <literal>false</literal> the resulting store
+          ::: {.note}
+          If this is `false` the resulting store
           path will be non-deterministic and will be rebuilt every time the
-          <literal>openssl</literal> package changes.</para></note>
+          `openssl` package changes.
+          :::
         '';
       };
 

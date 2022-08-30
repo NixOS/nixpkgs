@@ -51,13 +51,13 @@ in
         default = pkgs.bluez;
         defaultText = literalExpression "pkgs.bluez";
         example = literalExpression "pkgs.bluezFull";
-        description = ''
+        description = lib.mdDoc ''
           Which BlueZ package to use.
 
-          <note><para>
-            Use the <literal>pkgs.bluezFull</literal> package to enable all
-            bluez plugins.
-          </para></note>
+          ::: {.note}
+          Use the `pkgs.bluezFull` package to enable all
+          bluez plugins.
+          :::
         '';
       };
 

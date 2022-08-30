@@ -484,14 +484,14 @@ in
       user = mkOption {
         type = types.str;
         default = "wwwrun";
-        description = ''
+        description = lib.mdDoc ''
           User account under which httpd children processes run.
 
           If you require the main httpd process to run as
-          <literal>root</literal> add the following configuration:
-          <programlisting>
+          `root` add the following configuration:
+          ```
           systemd.services.httpd.serviceConfig.User = lib.mkForce "root";
-          </programlisting>
+          ```
         '';
       };
 

@@ -529,28 +529,28 @@ in
       user = mkOption {
         type = types.str;
         default = "prosody";
-        description = ''
+        description = lib.mdDoc ''
           User account under which prosody runs.
 
-          <note><para>
+          ::: {.note}
           If left as the default value this user will automatically be created
           on system activation, otherwise you are responsible for
           ensuring the user exists before the prosody service starts.
-          </para></note>
+          :::
         '';
       };
 
       group = mkOption {
         type = types.str;
         default = "prosody";
-        description = ''
+        description = lib.mdDoc ''
           Group account under which prosody runs.
 
-          <note><para>
+          ::: {.note}
           If left as the default value this group will automatically be created
           on system activation, otherwise you are responsible for
           ensuring the group exists before the prosody service starts.
-          </para></note>
+          :::
         '';
       };
 
