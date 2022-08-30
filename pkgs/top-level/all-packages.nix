@@ -3703,6 +3703,8 @@ with pkgs;
 
   dconf = callPackage ../development/libraries/dconf { };
 
+  dconf-utils = callPackage ../development/libraries/dconf/utils.nix { };
+
   ddate = callPackage ../tools/misc/ddate { };
 
   ddosify = callPackage ../development/tools/ddosify { };

@@ -42,6 +42,7 @@ let
 
     # serialization
     cli = callLibs ./cli.nix;
+    dconf = callLibs ./dconf.nix;
     generators = callLibs ./generators.nix;
 
     # misc

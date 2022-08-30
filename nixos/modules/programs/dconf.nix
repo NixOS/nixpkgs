@@ -1,56 +1,55 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.dconf;
-  cfgDir = pkgs.symlinkJoin {
-    name = "dconf-system-config";
-    paths = map (x: "${x}/etc/dconf") cfg.packages;
-    postBuild = ''
-      mkdir -p $out/profile
-      mkdir -p $out/db
-    '' + (
-      concatStringsSep "\n" (
-        mapAttrsToList (
-          name: path: ''
-            ln -s ${path} $out/profile/${name}
-          ''
-        ) cfg.profiles
-      )
-    ) + ''
-      ${pkgs.dconf}/bin/dconf update $out/db
-    '';
-  };
+
+  asFileDb = val:
+    let db =
+      if lib.isAttrs val && !lib.isDerivation val then
+        pkgs.dconf-utils.mkDconfDb "${pkgs.writeTextDir "dconf/db" (lib.generators.toDconfINI val)}/dconf"
+      else val;
+    in "file-db:${db}";
 in
 {
-  ###### interface
+  imports = [
+    (lib.mkRemovedOptionModule [ "programs" "dconf" "packages" ] "This option is not supported anymore, you should use `programs.dconf.profiles.<profile>.databases` instead.")
+  ];
 
   options = {
     programs.dconf = {
-      enable = mkEnableOption (lib.mdDoc "dconf");
+      enable = lib.mkEnableOption (lib.mdDoc "dconf");
 
-      profiles = mkOption {
-        type = types.attrsOf types.path;
-        default = {};
-        description = lib.mdDoc "Set of dconf profile files, installed at {file}`/etc/dconf/profiles/«name»`.";
-        internal = true;
+      profiles = lib.mkOption {
+        type = with lib.types; attrsOf (submodule {
+          options = {
+            enableUserDb = lib.mkOption {
+              type = bool;
+              default = true;
+              description = lib.mdDoc "Add `user-db:user` at the beginning of the profile.";
+            };
+
+            databases = lib.mkOption {
+              type = with lib.types; listOf (oneOf [ attrs str path package ]);
+              default = [];
+              description = lib.mdDoc "List of data sources for the profile. An element can be an attrset, or the path of an already compiled database.";
+            };
+          };
+        });
+        description = lib.mdDoc "Attrset of dconf profiles.";
       };
 
-      packages = mkOption {
-        type = types.listOf types.package;
-        default = [];
-        description = lib.mdDoc "A list of packages which provide dconf profiles and databases in {file}`/etc/dconf`.";
+      defaultProfile = lib.mkOption {
+        type = with lib.types; nullOr str;
+        default = null;
+        description = lib.mdDoc "The default dconf profile.";
       };
     };
   };
 
-  ###### implementation
-
-  config = mkIf (cfg.profiles != {} || cfg.enable) {
-    environment.etc.dconf = mkIf (cfg.profiles != {} || cfg.packages != []) {
-      source = cfgDir;
-    };
+  config = lib.mkIf cfg.enable {
+    environment.etc = lib.attrsets.mapAttrs' (name: value: lib.nameValuePair "dconf/profile/${name}" {
+      text = lib.concatMapStrings (x: "${x}\n") ((lib.optional value.enableUserDb "user-db:user") ++ (map asFileDb value.databases));
+    }) cfg.profiles;
 
     services.dbus.packages = [ pkgs.dconf ];
 
@@ -59,8 +58,9 @@ in
     # For dconf executable
     environment.systemPackages = [ pkgs.dconf ];
 
-    # Needed for unwrapped applications
-    environment.sessionVariables.GIO_EXTRA_MODULES = mkIf cfg.enable [ "${pkgs.dconf.lib}/lib/gio/modules" ];
+    environment.sessionVariables = {
+      # Needed for unwrapped applications
+      GIO_EXTRA_MODULES = [ "${pkgs.dconf.lib}/lib/gio/modules" ];
+    } // (if cfg.defaultProfile != null then { DCONF_PROFILE = cfg.defaultProfile; } else {});
   };
-
 }

@@ -66,7 +66,7 @@ in
     # Without dconf enabled it is impossible to use IBus
     programs.dconf.enable = true;
 
-    programs.dconf.packages = [ ibusPackage ];
+    programs.dconf.profiles.ibus.databases = [ (pkgs.dconf-utils.mkDconfDb "${ibusPackage}/etc/dconf/db/ibus.d") ];
 
     services.dbus.packages = [
       ibusPackage

@@ -175,6 +175,18 @@ rec {
            + "\n")
     + (toINI { inherit mkSectionName mkKeyValue listsAsDuplicateKeys; } sections);
 
+  # converts { a.b.c = 5; } to { "a.b".c = 5; } for toINI
+  flattenAttrs = with builtins; extraIsLeafPredicate: sep: let
+    recurse = path: value:
+      if isAttrs value && !lib.isDerivation value && !extraIsLeafPredicate value then
+        lib.mapAttrsToList (name: value: recurse ([ name ] ++ path) value) value
+      else if length path > 1 then {
+        ${concatStringsSep sep (lib.reverseList (tail path))}.${head path} = value;
+      } else {
+        ${head path} = value;
+      };
+  in attrs: lib.foldl lib.recursiveUpdate { } (lib.flatten (recurse [ ] attrs));
+
   /* Generate a git-config file from an attrset.
    *
    * It has two major differences from the regular INI format:
@@ -213,21 +225,27 @@ rec {
         let mkKeyValue = mkKeyValueDefault { } " = " k;
         in concatStringsSep "\n" (map (kv: "\t" + mkKeyValue kv) (lib.toList v));
 
-      # converts { a.b.c = 5; } to { "a.b".c = 5; } for toINI
-      gitFlattenAttrs = let
-        recurse = path: value:
-          if isAttrs value && !lib.isDerivation value then
-            lib.mapAttrsToList (name: value: recurse ([ name ] ++ path) value) value
-          else if length path > 1 then {
-            ${concatStringsSep "." (lib.reverseList (tail path))}.${head path} = value;
-          } else {
-            ${head path} = value;
-          };
-      in attrs: lib.foldl lib.recursiveUpdate { } (lib.flatten (recurse [ ] attrs));
-
       toINI_ = toINI { inherit mkKeyValue mkSectionName; };
     in
-      toINI_ (gitFlattenAttrs attrs);
+      toINI_ (flattenAttrs (_: false) "." attrs);
+
+  /* mkValueStringDefault wrapper that handles dconf INI quirks. */
+  mkValueStringDconf = v:
+    if builtins.isList v then
+      "[${lib.concatMapStringsSep ", " mkValueStringDconf v}]"
+    else if lib.types.isType lib.dconf.types.tuple v then
+      "(${lib.concatMapStringsSep ", " mkValueStringDconf v._elements})"
+    else if builtins.isString v then
+      "'${v}'"
+    else mkValueStringDefault {} v;
+
+  /* mkKeyValueDefault wrapper that handles dconf INI quirks. */
+  mkKeyValueDconf = mkKeyValueDefault { mkValueString = mkValueStringDconf; } "=";
+
+  /* Generates INI in dconf keyfile style.
+    * The main differences of the format is that it requires strings to be quoted and has a tuple type (`lib.dconf.mkTuple`).
+    */
+  toDconfINI = attrs: toINI { mkKeyValue = mkKeyValueDconf; } (flattenAttrs (x: lib.types.isType lib.dconf.types.tuple x) "/" attrs);
 
   /* Generates JSON from an arbitrary (non-function) value.
     * For more information see the documentation of the builtin.

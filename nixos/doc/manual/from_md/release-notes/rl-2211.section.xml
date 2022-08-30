@@ -127,6 +127,18 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>programs.dconf</literal> module now supports
+          configuration using the Nix language. This allows you to
+          configure settings of apps and DEs (if they use
+          <literal>dconf</literal>) declaratively without having to use
+          <literal>extraGSettingsOverrides</literal> which has some
+          problems noted in
+          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/54150">this
+          issue</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           PHP now defaults to PHP 8.1, updated from 8.0.
         </para>
       </listitem>
@@ -649,6 +661,14 @@
           because of stability and compatibility issues. Users who still
           wish to remain using GTK can do so by using
           <literal>emacs-gtk</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option <literal>programs.dconf.packages</literal> has been
+          removed, use
+          <literal>programs.dconf.profiles.user.databases</literal>
+          instead.
         </para>
       </listitem>
       <listitem>

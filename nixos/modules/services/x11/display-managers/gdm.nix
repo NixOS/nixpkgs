@@ -229,39 +229,13 @@ in
 
     systemd.user.services.dbus.wantedBy = [ "default.target" ];
 
-    programs.dconf.profiles.gdm =
-    let
-      customDconf = pkgs.writeTextFile {
-        name = "gdm-dconf";
-        destination = "/dconf/gdm-custom";
-        text = ''
-          ${optionalString (!cfg.gdm.autoSuspend) ''
-            [org/gnome/settings-daemon/plugins/power]
-            sleep-inactive-ac-type='nothing'
-            sleep-inactive-battery-type='nothing'
-            sleep-inactive-ac-timeout=0
-            sleep-inactive-battery-timeout=0
-          ''}
-        '';
+    programs.dconf.profiles.gdm.databases = [ "${gdm}/share/gdm/greeter-dconf-defaults" ] ++ lib.lists.optional cfg.gdm.autoSuspend {
+      org.gnome.settings-daemon.plugins.power = {
+        sleep-inactive-ac-type = "nothing";
+        sleep-inactive-battery-type = "nothing";
+        sleep-inactive-ac-timeout = 0;
+        sleep-inactive-battery-timeout = 0;
       };
-
-      customDconfDb = pkgs.stdenv.mkDerivation {
-        name = "gdm-dconf-db";
-        buildCommand = ''
-          ${pkgs.dconf}/bin/dconf compile $out ${customDconf}/dconf
-        '';
-      };
-    in pkgs.stdenv.mkDerivation {
-      name = "dconf-gdm-profile";
-      buildCommand = ''
-        # Check that the GDM profile starts with what we expect.
-        if [ $(head -n 1 ${gdm}/share/dconf/profile/gdm) != "user-db:user" ]; then
-          echo "GDM dconf profile changed, please update gdm.nix"
-          exit 1
-        fi
-        # Insert our custom DB behind it.
-        sed '2ifile-db:${customDconfDb}' ${gdm}/share/dconf/profile/gdm > $out
-      '';
     };
 
     # Use AutomaticLogin if delay is zero, because it's immediate.
