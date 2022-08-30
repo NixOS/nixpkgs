@@ -12,7 +12,7 @@ in
 
     nixos.label = mkOption {
       type = types.strMatching "[a-zA-Z0-9:_\\.-]*";
-      description = ''
+      description = lib.mdDoc ''
         NixOS version name to be used in the names of generated
         outputs and boot labels.
 
@@ -20,26 +20,26 @@ in
         this is the option for you.
 
         It can only contain letters, numbers and the following symbols:
-        <literal>:</literal>, <literal>_</literal>, <literal>.</literal> and <literal>-</literal>.
+        `:`, `_`, `.` and `-`.
 
-        The default is <option>system.nixos.tags</option> separated by
-        "-" + "-" + <envar>NIXOS_LABEL_VERSION</envar> environment
+        The default is {option}`system.nixos.tags` separated by
+        "-" + "-" + {env}`NIXOS_LABEL_VERSION` environment
         variable (defaults to the value of
-        <option>system.nixos.version</option>).
+        {option}`system.nixos.version`).
 
-        Can be overriden by setting <envar>NIXOS_LABEL</envar>.
+        Can be overriden by setting {env}`NIXOS_LABEL`.
 
         Useful for not loosing track of configurations built from different
         nixos branches/revisions, e.g.:
 
-        <programlisting>
+        ```
         #!/bin/sh
         today=`date +%Y%m%d`
         branch=`(cd nixpkgs ; git branch 2>/dev/null | sed -n '/^\* / { s|^\* ||; p; }')`
         revision=`(cd nixpkgs ; git rev-parse HEAD)`
         export NIXOS_LABEL_VERSION="$today.$branch-''${revision:0:7}"
         nixos-rebuild switch
-        </programlisting>
+        ```
       '';
     };
 
@@ -47,19 +47,19 @@ in
       type = types.listOf types.str;
       default = [];
       example = [ "with-xen" ];
-      description = ''
+      description = lib.mdDoc ''
         Strings to prefix to the default
-        <option>system.nixos.label</option>.
+        {option}`system.nixos.label`.
 
         Useful for not loosing track of configurations built with
         different options, e.g.:
 
-        <programlisting>
+        ```
         {
           system.nixos.tags = [ "with-xen" ];
           virtualisation.xen.enable = true;
         }
-        </programlisting>
+        ```
       '';
     };
 

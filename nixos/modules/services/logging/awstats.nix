@@ -25,26 +25,26 @@ let
       logFile = mkOption {
         type = types.str;
         example = "/var/log/nginx/access.log";
-        description = ''
+        description = lib.mdDoc ''
           The log file to be scanned.
 
           For mail, set this to
-          <programlisting>
+          ```
           journalctl $OLD_CURSOR -u postfix.service | ''${pkgs.perl}/bin/perl ''${pkgs.awstats.out}/share/awstats/tools/maillogconvert.pl standard |
-          </programlisting>
+          ```
         '';
       };
 
       logFormat = mkOption {
         type = types.str;
         default = "1";
-        description = ''
+        description = lib.mdDoc ''
           The log format being used.
 
           For mail, set this to
-          <programlisting>
+          ```
           %time2 %email %email_r %host %host_r %method %url %code %bytesd
-          </programlisting>
+          ```
         '';
       };
 

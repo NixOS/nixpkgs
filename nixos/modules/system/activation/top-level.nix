@@ -164,17 +164,17 @@ in
     specialisation = mkOption {
       default = {};
       example = lib.literalExpression "{ fewJobsManyCores.configuration = { nix.settings = { core = 0; max-jobs = 1; }; }; }";
-      description = ''
+      description = lib.mdDoc ''
         Additional configurations to build. If
-        <literal>inheritParentConfig</literal> is true, the system
+        `inheritParentConfig` is true, the system
         will be based on the overall system configuration.
 
         To switch to a specialised configuration
-        (e.g. <literal>fewJobsManyCores</literal>) at runtime, run:
+        (e.g. `fewJobsManyCores`) at runtime, run:
 
-        <programlisting>
+        ```
         sudo /run/current-system/specialisation/fewJobsManyCores/bin/switch-to-configuration test
-        </programlisting>
+        ```
       '';
       type = types.attrsOf (types.submodule (
         local@{ ... }: let

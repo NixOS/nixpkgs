@@ -261,25 +261,25 @@ in
         type = types.nullOr types.path;
         default = null;
         example = "/var/lib/murmur/murmurd.env";
-        description = ''
-          Environment file as defined in <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+        description = lib.mdDoc ''
+          Environment file as defined in {manpage}`systemd.exec(5)`.
 
           Secrets may be passed to the service without adding them to the world-readable
           Nix store, by specifying placeholder variables as the option value in Nix and
           setting these variables accordingly in the environment file.
 
-          <programlisting>
+          ```
             # snippet of murmur-related config
             services.murmur.password = "$MURMURD_PASSWORD";
-          </programlisting>
+          ```
 
-          <programlisting>
+          ```
             # content of the environment file
             MURMURD_PASSWORD=verysecretpassword
-          </programlisting>
+          ```
 
           Note that this file needs to be available on the host on which
-          <literal>murmur</literal> is running.
+          `murmur` is running.
         '';
       };
     };
