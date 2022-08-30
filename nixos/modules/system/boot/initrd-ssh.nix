@@ -51,12 +51,13 @@ in
         Specify SSH host keys to import into the initrd.
 
         To generate keys, use
-        <citerefentry><refentrytitle>ssh-keygen</refentrytitle><manvolnum>1</manvolnum></citerefentry>:
+        <citerefentry><refentrytitle>ssh-keygen</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+        as root:
 
-        <screen>
-        <prompt># </prompt>ssh-keygen -t rsa -N "" -f /etc/secrets/initrd/ssh_host_rsa_key
-        <prompt># </prompt>ssh-keygen -t ed25519 -N "" -f /etc/secrets/initrd/ssh_host_ed25519_key
-        </screen>
+        <programlisting>
+        ssh-keygen -t rsa -N "" -f /etc/secrets/initrd/ssh_host_rsa_key
+        ssh-keygen -t ed25519 -N "" -f /etc/secrets/initrd/ssh_host_ed25519_key
+        </programlisting>
 
         <warning>
           <para>

@@ -68,9 +68,9 @@ in
           Needs to be a 64 byte long string of hexadecimal
           characters. You can generate one by running
 
-          <screen>
-          <prompt>$ </prompt>openssl rand -hex 64 >/path/to/secret_key_base_file
-          </screen>
+          <programlisting>
+          openssl rand -hex 64 >/path/to/secret_key_base_file
+          </programlisting>
 
           This should be a string, not a nix path, since nix paths are
           copied into the world-readable nix store.
