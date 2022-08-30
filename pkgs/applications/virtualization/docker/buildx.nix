@@ -20,11 +20,17 @@ buildGoModule rec {
   ];
 
   installPhase = ''
+    runHook preInstall
     install -D $GOPATH/bin/buildx $out/libexec/docker/cli-plugins/docker-buildx
+
+    mkdir -p $out/bin
+    ln -s $out/libexec/docker/cli-plugins/docker-buildx $out/bin/docker-buildx
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "Docker CLI plugin for extended build capabilities with BuildKit";
+    homepage = "https://github.com/docker/buildx";
     license = licenses.asl20;
     maintainers = [ maintainers.ivan-babrou ];
   };
