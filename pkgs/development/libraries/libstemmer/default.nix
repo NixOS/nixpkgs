@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl }:
+{ lib, stdenv, fetchFromGitHub, perl, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "libstemmer";
@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     patchShebangs .
+  '' + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    substituteInPlace GNUmakefile \
+      --replace './snowball' '${lib.getBin buildPackages.libstemmer}/bin/snowball'
   '';
 
   makeTarget = "libstemmer.a";
@@ -23,6 +26,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
     install -Dt $out/lib libstemmer.a
     install -Dt $out/include include/libstemmer.h
+    install -Dt $out/bin {snowball,stemwords}
     runHook postInstall
   '';
 
