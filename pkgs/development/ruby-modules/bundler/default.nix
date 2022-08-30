@@ -1,4 +1,4 @@
-{ buildRubyGem, ruby, writeScript }:
+{ lib, buildRubyGem, ruby, writeScript }:
 
 buildRubyGem rec {
   inherit ruby;
@@ -21,4 +21,11 @@ buildRubyGem rec {
   postFixup = ''
     sed -i -e "s/activate_bin_path/bin_path/g" $out/bin/bundle
   '';
+
+  meta = with lib; {
+    description = "Manage your Ruby application's gem dependencies";
+    homepage = "https://bundler.io";
+    license = licenses.mit;
+    maintainers = with maintainers; [anthonyroussel];
+  };
 }
