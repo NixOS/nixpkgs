@@ -25,7 +25,7 @@
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
-, pytorch
+, torch
 , pyyaml
 , requests
 , scikit-learn
@@ -94,7 +94,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-xdist
     pytestCheckHook
-    pytorch
+    torch
     scikit-learn
     tqdm
   ];

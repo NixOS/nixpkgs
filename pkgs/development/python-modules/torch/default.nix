@@ -120,8 +120,8 @@ let
     "LD_LIBRARY_PATH=${cudaStub}\${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH ";
 
 in buildPythonPackage rec {
-  pname = "pytorch";
-  # Don't forget to update pytorch-bin to the same version.
+  pname = "torch";
+  # Don't forget to update torch-bin to the same version.
   version = "1.11.0";
   format = "setuptools";
 

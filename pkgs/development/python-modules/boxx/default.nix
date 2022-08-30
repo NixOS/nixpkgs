@@ -12,7 +12,7 @@
 , fn
 , pyopengl
 , seaborn
-, pytorch
+, torch
 , pythonOlder
 , torchvision
 }:
@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     xvfb-run
-    pytorch
+    torch
     torchvision
   ];
 

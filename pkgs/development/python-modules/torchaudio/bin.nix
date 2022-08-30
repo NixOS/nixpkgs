@@ -7,7 +7,7 @@
 , isPy39
 , isPy310
 , python
-, pytorch-bin
+, torch-bin
 , pythonOlder
 , pythonAtLeast
 }:
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   disabled = !(isPy37 || isPy38 || isPy39 || isPy310);
 
   propagatedBuildInputs = [
-    pytorch-bin
+    torch-bin
   ];
 
   # The wheel-binary is not stripped to avoid the error of `ImportError: libtorch_cuda_cpp.so: ELF load command address/offset not properly aligned.`.
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     # Note: after patchelf'ing, libcudart can still not be found. However, this should
     #       not be an issue, because PyTorch is loaded before torchvision and brings
     #       in the necessary symbols.
-    patchelf --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:${pytorch-bin}/${python.sitePackages}/torch/lib:" \
+    patchelf --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:${torch-bin}/${python.sitePackages}/torch/lib:" \
       "$out/${python.sitePackages}/torchaudio/_torchaudio.so"
   '';
 
