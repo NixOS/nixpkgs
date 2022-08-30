@@ -6746,6 +6746,8 @@ in {
 
   pickleshare = callPackage ../development/python-modules/pickleshare { };
 
+  picobox = callPackage ../development/python-modules/picobox { };
+
   picos = callPackage ../development/python-modules/picos { };
 
   pid = callPackage ../development/python-modules/pid { };
@@ -10357,6 +10359,8 @@ in {
   sphinx-material = callPackage ../development/python-modules/sphinx-material { };
 
   sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree { };
+
+  sphinx-mdinclude = callPackage ../development/python-modules/sphinx-mdinclude { };
 
   sphinx_pypi_upload = callPackage ../development/python-modules/sphinx_pypi_upload { };
 

@@ -13,6 +13,10 @@
 , hamlib
 , wxGTK31-gtk3
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
+, AppKit
+, AVFoundation
+, Cocoa
+, CoreMedia
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +30,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-LPCY5gPinxJkfPfumKggI/JQorcW+Qw/ZAP6XQmPkeA=";
   };
 
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/CMakeLists.txt \
+      --replace "if(APPLE)" "if(0)" \
+      --replace "\''${FREEDV_LINK_LIBS})" "\''${FREEDV_LINK_LIBS} \''${FREEDV_LINK_LIBS_OSX})" \
+      --replace "\''${RES_FILES})" "\''${RES_FILES} \''${FREEDV_SOURCES_OSX})"
+  '';
+
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [
     codec2
     libsamplerate
@@ -35,7 +47,13 @@ stdenv.mkDerivation rec {
     speexdsp
     hamlib
     wxGTK31-gtk3
-  ] ++ (if pulseSupport then [ libpulseaudio ] else [ portaudio ]);
+  ] ++ (if pulseSupport then [ libpulseaudio ] else [ portaudio ])
+  ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    AVFoundation
+    Cocoa
+    CoreMedia
+  ];
 
   cmakeFlags = [
     "-DUSE_INTERNAL_CODEC2:BOOL=FALSE"
@@ -46,8 +64,7 @@ stdenv.mkDerivation rec {
     homepage = "https://freedv.org/";
     description = "Digital voice for HF radio";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ mvs ];
+    maintainers = with maintainers; [ mvs wegank ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;  # see https://github.com/NixOS/nixpkgs/issues/165422
   };
 }
