@@ -24,15 +24,15 @@ in
   ];
   options = {
     services.transmission = {
-      enable = mkEnableOption "transmission" // {
-        description = ''
+      enable = mkEnableOption (lib.mdDoc "transmission") // {
+        description = lib.mdDoc ''
           Whether to enable the headless Transmission BitTorrent daemon.
 
           Transmission daemon can be controlled via the RPC interface using
           transmission-remote, the WebUI (http://127.0.0.1:9091/ by default),
           or other clients like stig or tremc.
 
-          Torrents are downloaded to <xref linkend="opt-services.transmission.home"/>/${downloadsDir} by default and are
+          Torrents are downloaded to [](#opt-services.transmission.home)/${downloadsDir} by default and are
           accessible to users in the "transmission" group.
         '';
       };
@@ -237,13 +237,13 @@ in
 
       openRPCPort = mkEnableOption (lib.mdDoc "opening of the RPC port in the firewall");
 
-      performanceNetParameters = mkEnableOption "performance tweaks" // {
-        description = ''
+      performanceNetParameters = mkEnableOption (lib.mdDoc "performance tweaks") // {
+        description = lib.mdDoc ''
           Whether to enable tweaking of kernel parameters
           to open many more connections at the same time.
 
           Note that you may also want to increase
-          <literal>peer-limit-global"</literal>.
+          `peer-limit-global`.
           And be aware that these settings are quite aggressive
           and might not suite your regular desktop use.
           For instance, SSH sessions may time out more easily.

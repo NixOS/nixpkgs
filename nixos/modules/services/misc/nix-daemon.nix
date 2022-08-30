@@ -628,17 +628,17 @@ in
             sandbox-paths = { "/bin/sh" = "''${pkgs.busybox-sandbox-shell.out}/bin/busybox"; };
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           Configuration for Nix, see
-          <link xlink:href="https://nixos.org/manual/nix/stable/#sec-conf-file"/> or
-          <citerefentry><refentrytitle>nix.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry> for avalaible options.
+          <https://nixos.org/manual/nix/stable/#sec-conf-file> or
+          {manpage}`nix.conf(5)` for avalaible options.
           The value declared here will be translated directly to the key-value pairs Nix expects.
 
-          You can use <command>nix-instantiate --eval --strict '&lt;nixpkgs/nixos&gt;' -A config.nix.settings</command>
+          You can use {command}`nix-instantiate --eval --strict '<nixpkgs/nixos>' -A config.nix.settings`
           to view the current value. By default it is empty.
 
-          Nix configurations defined under <option>nix.*</option> will be translated and applied to this
-          option. In addition, configuration specified in <option>nix.extraOptions</option> which will be appended
+          Nix configurations defined under {option}`nix.*` will be translated and applied to this
+          option. In addition, configuration specified in {option}`nix.extraOptions` which will be appended
           verbatim to the resulting config file.
         '';
       };

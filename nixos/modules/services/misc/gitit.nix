@@ -211,7 +211,7 @@ let
       templatesDir = mkOption {
         type = types.path;
         default = gititShared + "/data/templates";
-        description = ''
+        description = lib.mdDoc ''
           Specifies the path of the directory containing page templates.  If it
           does not exist, gitit will create it with default templates.  Users
           may wish to edit the templates to customize the appearance of their
@@ -490,10 +490,10 @@ let
       absoluteUrls = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Make wikilinks absolute with respect to the base-url.  So, for
           example, in a wiki served at the base URL '/wiki', on a page
-          Sub/Page, the wikilink '[Cactus]()' will produce a link to
+          Sub/Page, the wikilink `[Cactus]()` will produce a link to
           '/wiki/Cactus' if absoluteUrls is true, and a relative link to
           'Cactus' (referring to '/wiki/Sub/Cactus') if absolute-urls is 'no'.
         '';

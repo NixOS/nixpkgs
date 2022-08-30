@@ -88,11 +88,11 @@ let
         supportsDryActivation = mkOption
           { type = types.bool;
             default = false;
-            description = ''
+            description = lib.mdDoc ''
               Whether this activation script supports being dry-activated.
               These activation scripts will also be executed on dry-activate
               activations with the environment variable
-              <literal>NIXOS_ACTION</literal> being set to <literal>dry-activate</literal>.
+              `NIXOS_ACTION` being set to `dry-activate`.
               it's important that these activation scripts  don't
               modify anything about the system when the variable is set.
             '';

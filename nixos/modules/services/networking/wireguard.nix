@@ -194,19 +194,20 @@ let
         default = null;
         example = "demo.wireguard.io:12913";
         type = with types; nullOr str;
-        description = ''Endpoint IP or hostname of the peer, followed by a colon,
-        and then a port number of the peer.
+        description = lib.mdDoc ''
+          Endpoint IP or hostname of the peer, followed by a colon,
+          and then a port number of the peer.
 
-        Warning for endpoints with changing IPs:
-        The WireGuard kernel side cannot perform DNS resolution.
-        Thus DNS resolution is done once by the <literal>wg</literal> userspace
-        utility, when setting up WireGuard. Consequently, if the IP address
-        behind the name changes, WireGuard will not notice.
-        This is especially common for dynamic-DNS setups, but also applies to
-        any other DNS-based setup.
-        If you do not use IP endpoints, you likely want to set
-        <option>networking.wireguard.dynamicEndpointRefreshSeconds</option>
-        to refresh the IPs periodically.
+          Warning for endpoints with changing IPs:
+          The WireGuard kernel side cannot perform DNS resolution.
+          Thus DNS resolution is done once by the `wg` userspace
+          utility, when setting up WireGuard. Consequently, if the IP address
+          behind the name changes, WireGuard will not notice.
+          This is especially common for dynamic-DNS setups, but also applies to
+          any other DNS-based setup.
+          If you do not use IP endpoints, you likely want to set
+          {option}`networking.wireguard.dynamicEndpointRefreshSeconds`
+          to refresh the IPs periodically.
         '';
       };
 

@@ -132,8 +132,8 @@ let
 
 in {
   options.boot.initrd.systemd = {
-    enable = mkEnableOption "systemd in initrd" // {
-      description = ''
+    enable = mkEnableOption (lib.mdDoc "systemd in initrd") // {
+      description = lib.mdDoc ''
         Whether to enable systemd in initrd.
 
         Note: This is in very early development and is highly

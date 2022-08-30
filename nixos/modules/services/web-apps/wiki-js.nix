@@ -85,10 +85,10 @@ in {
             '';
           };
 
-          offline = mkEnableOption "offline mode" // {
-            description = ''
+          offline = mkEnableOption (lib.mdDoc "offline mode") // {
+            description = lib.mdDoc ''
               Disable latest file updates and enable
-              <link xlink:href="https://docs.requarks.io/install/sideload">sideloading</link>.
+              [sideloading](https://docs.requarks.io/install/sideload).
             '';
           };
         };

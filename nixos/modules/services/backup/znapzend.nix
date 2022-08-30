@@ -12,19 +12,19 @@ let
       backups. It consists of a series of retention periodes to interval
       associations:
 
-      <literal>
+      ```
         retA=>intA,retB=>intB,...
-      </literal>
+      ```
 
       Both intervals and retention periods are expressed in standard units
       of time or multiples of them. You can use both the full name or a
       shortcut according to the following listing:
 
-      <literal>
+      ```
         second|sec|s, minute|min, hour|h, day|d, week|w, month|mon|m, year|y
-      </literal>
+      ```
 
-      See <citerefentry><refentrytitle>znapzendzetup</refentrytitle><manvolnum>1</manvolnum></citerefentry> for more info.
+      See {manpage}`znapzendzetup(1)` for more info.
   '';
   planExample = "1h=>10min,1d=>1h,1w=>1d,1m=>1w,1y=>1m";
 
@@ -57,7 +57,7 @@ let
 
       plan = mkOption {
         type = str;
-        description = planDescription;
+        description = lib.mdDoc planDescription;
         example = planExample;
       };
 
@@ -209,7 +209,7 @@ let
 
       plan = mkOption {
         type = str;
-        description = planDescription;
+        description = lib.mdDoc planDescription;
         example = planExample;
       };
 

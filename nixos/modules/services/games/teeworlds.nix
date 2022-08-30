@@ -80,8 +80,8 @@ in
       extraOptions = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
-          Extra configuration lines for the <filename>teeworlds.cfg</filename>. See <link xlink:href="https://www.teeworlds.com/?page=docs&amp;wiki=server_settings">Teeworlds Documentation</link>.
+        description = lib.mdDoc ''
+          Extra configuration lines for the {file}`teeworlds.cfg`. See [Teeworlds Documentation](https://www.teeworlds.com/?page=docs&wiki=server_settings).
         '';
         example = [ "sv_map dm1" "sv_gametype dm" ];
       };
