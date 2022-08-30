@@ -11542,6 +11542,12 @@
       fingerprint = "AE8C 0836 FDF6 3FFC 9580  C588 B156 8953 B193 9F1C";
     }];
   };
+  samlukeyes123 = {
+    email = "samlukeyes123@gmail.com";
+    github = "SamLukeYes";
+    githubId = 12882091;
+    name = "Sam L. Yes";
+  };
   samrose = {
     email = "samuel.rose@gmail.com";
     github = "samrose";
