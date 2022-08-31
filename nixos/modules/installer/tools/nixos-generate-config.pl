@@ -632,6 +632,18 @@ EOF
     }
 }
 
+my $flakeConfig = <<EOF;
+{
+  outputs = { self, nixpkgs }: {
+    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+      modules = [
+        ./configuration.nix
+      ];
+    };
+  };
+}
+EOF
+
 if ($showHardwareConfig) {
     print STDOUT $hwConfig;
 } else {
@@ -647,10 +659,13 @@ if ($showHardwareConfig) {
     mkpath($outDir, 0, 0755);
     write_file($fn, $hwConfig);
 
-    # Generate a basic configuration.nix, unless one already exists.
+    # Generate a basic configuration.nix and flake.nix, unless one already exists.
     $fn = "$outDir/configuration.nix";
-    if ($force || ! -e $fn) {
+    my $flakeFn = "$outDir/flake.nix";
+    if ($force || ! -e $fn || ! -e $flakeFn) {
         print STDERR "writing $fn...\n";
+        print STDERR "writing $flakeFn...\n";
+        write_file($flakeFn, $flakeConfig);
 
         my $bootLoaderConfig = "";
         if (-e "/sys/firmware/efi/efivars") {
@@ -693,6 +708,7 @@ EOF
         print STDERR "For more hardware-specific settings, see https://github.com/NixOS/nixos-hardware.\n"
     } else {
         print STDERR "warning: not overwriting existing $fn\n";
+        print STDERR "warning: not overwriting existing $flakeFn\n";
     }
 }
 
