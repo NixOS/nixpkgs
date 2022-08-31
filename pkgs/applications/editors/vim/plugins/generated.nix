@@ -5649,6 +5649,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-pack/nvim-spectre/";
   };
 
+  nvim-surround = buildVimPluginFrom2Nix {
+    pname = "nvim-surround";
+    version = "2022-08-29";
+    src = fetchFromGitHub {
+      owner = "kylechui";
+      repo = "nvim-surround";
+      rev = "01e17311bddffd65cc191bbefb845dba46780859";
+      sha256 = "0hhfmxmcqi0bmrv19jr9qs8751gwg6bpxljjyyasbgd37hp3vgqb";
+    };
+    meta.homepage = "https://github.com/kylechui/nvim-surround/";
+  };
+
   nvim-terminal-lua = buildVimPluginFrom2Nix {
     pname = "nvim-terminal.lua";
     version = "2019-10-17";
