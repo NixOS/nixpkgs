@@ -6,7 +6,7 @@
 
 , coqpit
 , fsspec
-, pytorch-bin
+, torch-bin
 , tensorboardx
 , protobuf
 
@@ -33,7 +33,7 @@ buildPythonPackage {
   propagatedBuildInputs = [
     coqpit
     fsspec
-    pytorch-bin
+    torch-bin
     soundfile
     tensorboardx
     protobuf
