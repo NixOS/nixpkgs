@@ -230,6 +230,8 @@ with pkgs;
     python3 = python39;
   };
 
+  mov-cli = callPackage ../applications/video/mov-cli { };
+
   ani-cli = callPackage ../applications/video/ani-cli { };
 
   anime-downloader = callPackage ../applications/video/anime-downloader { };
