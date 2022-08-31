@@ -14,6 +14,11 @@
 , json-glib
 , libmspack
 , webkitgtk_4_1
+, runCommand
+, coccinelle
+, git
+, substituteAll
+, glib
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +29,17 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "trqNVI3KpCqYMOnqGNX6lNs1ZBPxZQv9btNnYKGG4o8=";
   };
+
+  patches = [
+    # evolution-ews contains .so files loaded by evolution-data-server refering
+    # schemas from evolution. evolution-data-server is not wrapped with
+    # evolution's schemas because it would be a circular dependency with
+    # evolution.
+    (substituteAll {
+      src = ./hardcode-gsettings.patch;
+      evo = glib.makeSchemaPath evolution evolution.name;
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -50,10 +66,37 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "evolution-ews";
-      versionPolicy = "odd-unstable";
-    };
+    hardcodeGsettingsPatch =
+      runCommand
+        "hardcode-gsettings.patch"
+        {
+          inherit src;
+          nativeBuildInputs = [
+            git
+            coccinelle
+          ];
+        }
+        ''
+          unpackPhase
+          cd "''${sourceRoot:-.}"
+          git init
+          git add -A
+          spatch --sp-file "${./hardcode-gsettings.cocci}" --dir . --in-place
+          git diff > "$out"
+        '';
+
+    updateScript =
+      let
+        gnomeUpdate = gnome.updateScript {
+          packageName = "evolution-ews";
+          versionPolicy = "odd-unstable";
+        };
+
+        newUpdateScript = lib.escapeShellArgs gnomeUpdate.command + " && cp --no-preserve=mode \"$(nix-build -A evolution-ews.hardcodeGsettingsPatch)\" \"$0\"";
+      in
+      gnomeUpdate // {
+        command = [ "sh" "-c" newUpdateScript ./hardcode-gsettings.patch ];
+      };
   };
 
   meta = with lib; {
