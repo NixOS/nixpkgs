@@ -1,8 +1,6 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, git
-, tree
 }:
 buildGoModule rec {
   pname = "FerretDB";
