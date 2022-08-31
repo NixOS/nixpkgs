@@ -2,7 +2,7 @@
 
 let
   pname = "anytype";
-  version = "0.25.4";
+  version = "0.28.0";
   name = "Anytype-${version}";
   nameExecutable = pname;
   src = fetchurl {
