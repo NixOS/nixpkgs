@@ -1,11 +1,11 @@
 diff --git a/meson.build b/meson.build
-index a1ec1f67b6..8ce50973f7 100644
+index 6a19df48a1..3fd77077c1 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -864,8 +864,8 @@
+@@ -924,8 +924,8 @@ endif
  isocodes = dependency('iso-codes', required: false)
  if isocodes.found()
-   isocodes_prefix = isocodes.get_pkgconfig_variable('prefix')
+   isocodes_prefix = isocodes.get_variable(pkgconfig: 'prefix')
 -  isocodes_location = isocodes_prefix / get_option('datadir') / 'xml' / 'iso-codes'
 -  isocodes_localedir= isocodes_prefix / get_option('datadir') / 'locale'
 +  isocodes_location = isocodes_prefix / 'share' / 'xml' / 'iso-codes'
