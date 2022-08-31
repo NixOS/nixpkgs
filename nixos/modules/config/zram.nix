@@ -73,10 +73,10 @@ in
         default = 50;
         type = types.int;
         description = lib.mdDoc ''
-          Maximum amount of memory that can be used by the zram swap devices
+          Maximum total amount of memory that can be stored in the zram swap devices
           (as a percentage of your total memory). Defaults to 1/2 of your total
-          RAM. Run `zramctl` to check how good memory is
-          compressed.
+          RAM. Run `zramctl` to check how good memory is compressed.
+          This doesn't define how much memory will be used by the zram swap devices.
         '';
       };
 
@@ -84,8 +84,9 @@ in
         default = null;
         type = with types; nullOr int;
         description = lib.mdDoc ''
-          Maximum total amount of memory (in bytes) that can be used by the zram
+          Maximum total amount of memory (in bytes) that can be stored in the zram
           swap devices.
+          This doesn't define how much memory will be used by the zram swap devices.
         '';
       };
 
