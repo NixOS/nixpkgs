@@ -1423,6 +1423,12 @@
     githubId = 35324;
     name = "Badi' Abdul-Wahid";
   };
+  baitinq = {
+    email = "manuelpalenzuelamerino@gmail.com";
+    name = "Baitinq";
+    github = "Baitinq";
+    githubId = 30861839;
+  };
   balodja = {
     email = "balodja@gmail.com";
     github = "balodja";
