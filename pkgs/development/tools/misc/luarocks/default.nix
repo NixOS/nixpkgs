@@ -1,4 +1,5 @@
-{lib, stdenv, fetchFromGitHub
+{lib, stdenv, fetchFromGitHub, buildPackages
+, fetchpatch
 , curl, makeWrapper, which, unzip
 , lua
 # for 'luarocks pack'
@@ -20,7 +21,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-i0NmF268aK5lr4zjYyhk4TPUO7Zyz0Cl0fSW43Pmd1Q=";
   };
 
-  patches = [ ./darwin-3.7.0.patch ];
+  patches = [
+    ./darwin-3.7.0.patch
+    # follow standard environmental variables
+    # https://github.com/luarocks/luarocks/pull/1433
+    (fetchpatch {
+      url = "https://github.com/luarocks/luarocks/commit/d719541577a89909185aa8de7a33cf73b7a63ac3.diff";
+      sha256 = "sha256-rMnhZFqLEul0wnsxvw9nl6JXVanC5QgOZ+I/HJ0vRCM=";
+    })
+  ];
 
   postPatch = lib.optionalString stdenv.targetPlatform.isDarwin ''
     substituteInPlace src/luarocks/core/cfg.lua --subst-var-by 'darwinMinVersion' '${stdenv.targetPlatform.darwinMinVersion}'
@@ -43,12 +52,15 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [ makeWrapper installShellFiles lua unzip ];
 
-  buildInputs = [ lua curl which ];
+  buildInputs = [ curl which ];
 
   postInstall = ''
     sed -e "1s@.*@#! ${lua}/bin/lua$LUA_SUFFIX@" -i "$out"/bin/*
+    substituteInPlace $out/etc/luarocks/* \
+     --replace '${lua.luaOnBuild}' '${lua}'
+
     for i in "$out"/bin/*; do
         test -L "$i" || {
             wrapProgram "$i" \
@@ -58,7 +70,7 @@ stdenv.mkDerivation rec {
               --suffix LUA_CPATH ";" "$(echo "$out"/share/lua/*/)?/init.lua"
         }
     done
-
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd luarocks --bash <($out/bin/luarocks completion bash)
     installShellCompletion --cmd luarocks --zsh <($out/bin/luarocks completion zsh)
   '';
@@ -75,6 +87,10 @@ stdenv.mkDerivation rec {
     export PATH="src/bin:''${PATH:-}"
     export LUA_PATH="src/?.lua;''${LUA_PATH:-}"
   '';
+
+  disallowedReferences = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    lua.luaOnBuild
+  ];
 
   passthru = {
     updateScript = nix-update-script {

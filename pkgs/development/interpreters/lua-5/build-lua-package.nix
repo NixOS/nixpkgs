@@ -2,9 +2,10 @@
 { lib
 , lua
 , wrapLua
+, luarocks
 # Whether the derivation provides a lua module or not.
-, toLuaModule
 , luarocksCheckHook
+, luaLib
 }:
 
 {
@@ -12,9 +13,7 @@ pname
 , version
 
 # by default prefix `name` e.g. "lua5.2-${name}"
-, namePrefix ? if lua.pkgs.isLuaJIT
-               then lua.name + "-"
-               else "lua" + lua.luaversion + "-"
+, namePrefix ? "${lua.pname}${lua.sourceVersion.major}.${lua.sourceVersion.minor}-"
 
 # Dependencies for building the package
 , buildInputs ? []
@@ -82,7 +81,7 @@ let
   # configured trees)
   luarocks_config = "luarocks-config.lua";
   luarocks_content = let
-    generatedConfig = lua.pkgs.lib.generateLuarocksConfig {
+    generatedConfig = luaLib.generateLuarocksConfig {
       externalDeps = externalDeps ++ externalDepsGenerated;
       inherit extraVariables;
       inherit rocksSubdir;
@@ -107,19 +106,19 @@ let
     );
   externalDeps' = lib.filter (dep: !lib.isDerivation dep) externalDeps;
 
-  luarocksDrv = toLuaModule ( lua.stdenv.mkDerivation (
+  luarocksDrv = luaLib.toLuaModule ( lua.stdenv.mkDerivation (
 builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariables"] // {
 
   name = namePrefix + pname + "-" + version;
 
   nativeBuildInputs = [
     wrapLua
-    lua.pkgs.luarocks
-  ]
-    ++ buildInputs
-    ++ lib.optionals doCheck ([ luarocksCheckHook ] ++ checkInputs)
-    ++ (map (d: d.dep) externalDeps')
-    ;
+    luarocks
+  ] ++ lib.optionals doCheck ([ luarocksCheckHook ] ++ checkInputs);
+
+  buildInputs = buildInputs
+    ++ (map (d: d.dep) externalDeps');
+
 
   # propagate lua to active setup-hook in nix-shell
   propagatedBuildInputs = propagatedBuildInputs ++ [ lua ];
@@ -156,7 +155,7 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
 
     nix_debug "Using LUAROCKS_CONFIG=$LUAROCKS_CONFIG"
 
-    LUAROCKS=${lua.pkgs.luarocks}/bin/luarocks
+    LUAROCKS=luarocks
     if (( ''${NIX_DEBUG:-0} >= 1 )); then
         LUAROCKS="$LUAROCKS --verbose"
     fi

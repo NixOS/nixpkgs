@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , buildPackages
-, name ? "luajit-${version}"
 , isStable
 , hash
 , rev
@@ -11,6 +10,13 @@
 , callPackage
 , self
 , packageOverrides ? (final: prev: {})
+, pkgsBuildBuild
+, pkgsBuildHost
+, pkgsBuildTarget
+, pkgsHostHost
+, pkgsTargetTarget
+, sourceVersion
+, passthruFun
 , enableFFI ? true
 , enableJIT ? true
 , enableJITDebugModule ? enableJIT
@@ -22,12 +28,14 @@
 , enableAPICheck ? false
 , enableVMAssertions ? false
 , useSystemMalloc ? false
-}:
+, luaAttr ? "luajit_${sourceVersion.major}_${sourceVersion.minor}"
+} @ inputs:
 assert enableJITDebugModule -> enableJIT;
 assert enableGDBJITSupport -> enableJIT;
 assert enableValgrindSupport -> valgrind != null;
 let
-  luaPackages = callPackage ../../lua-modules { lua = self; overrides = packageOverrides; };
+
+  luaPackages = self.pkgs;
 
   XCFLAGS = with lib;
     optional (!enableFFI) "-DLUAJIT_DISABLE_FFI"
@@ -42,7 +50,8 @@ let
   ;
 in
 stdenv.mkDerivation rec {
-  inherit name version;
+  pname = "luajit";
+  inherit version;
   src = fetchFromGitHub {
     owner = "LuaJIT";
     repo = "LuaJIT";
@@ -93,19 +102,24 @@ stdenv.mkDerivation rec {
     ln -s "$out"/bin/luajit-* "$out"/bin/luajit
   '';
 
-  LuaPathSearchPaths    = luaPackages.lib.luaPathList;
-  LuaCPathSearchPaths   = luaPackages.lib.luaCPathList;
+  LuaPathSearchPaths    = luaPackages.luaLib.luaPathList;
+  LuaCPathSearchPaths   = luaPackages.luaLib.luaCPathList;
 
-  setupHook = luaPackages.lua-setup-hook luaPackages.lib.luaPathList luaPackages.lib.luaCPathList;
+  setupHook = luaPackages.lua-setup-hook luaPackages.luaLib.luaPathList luaPackages.luaLib.luaCPathList;
 
-  passthru = rec {
-    buildEnv = callPackage ../lua-5/wrapper.nix {
-      lua = self;
-      inherit (luaPackages) requiredLuaModules;
-    };
-    withPackages = import ../lua-5/with-packages.nix { inherit buildEnv luaPackages; };
-    pkgs = luaPackages;
-    interpreter = "${self}/bin/lua";
+  # copied from python
+  passthru = let
+    # When we override the interpreter we also need to override the spliced versions of the interpreter
+    inputs' = lib.filterAttrs (n: v: ! lib.isDerivation v && n != "passthruFun") inputs;
+    override = attr: let lua = attr.override (inputs' // { self = lua; }); in lua;
+  in passthruFun rec {
+    inherit self luaversion packageOverrides luaAttr sourceVersion;
+    executable = "lua";
+    luaOnBuildForBuild = override pkgsBuildBuild.${luaAttr};
+    luaOnBuildForHost = override pkgsBuildHost.${luaAttr};
+    luaOnBuildForTarget = override pkgsBuildTarget.${luaAttr};
+    luaOnHostForHost = override pkgsHostHost.${luaAttr};
+    luaOnTargetForTarget = if lib.hasAttr luaAttr pkgsTargetTarget then (override pkgsTargetTarget.${luaAttr}) else {};
   };
 
   meta = with lib; {

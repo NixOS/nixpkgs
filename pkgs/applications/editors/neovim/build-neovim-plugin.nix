@@ -20,7 +20,7 @@ in
   }@attrs:
     let
       originalLuaDrv = lua51Packages.${luaAttr};
-      luaDrv = lua51Packages.lib.overrideLuarocks originalLuaDrv (drv: {
+      luaDrv = lua51Packages.luaLib.overrideLuarocks originalLuaDrv (drv: {
         extraConfig = ''
           -- to create a flat hierarchy
           lua_modules_path = "lua"
