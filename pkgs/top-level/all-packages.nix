@@ -16775,7 +16775,9 @@ with pkgs;
     libbpf = libbpf_1;
   };
 
-  bpftrace = callPackage ../os-specific/linux/bpftrace { };
+  bpftrace = callPackage ../os-specific/linux/bpftrace {
+    libbpf = libbpf_1
+  };
 
   bpm-tools = callPackage ../tools/audio/bpm-tools { };
 
