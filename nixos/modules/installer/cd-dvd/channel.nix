@@ -31,6 +31,7 @@ let
 in
 
 {
+  nix.registry.nixpkgs.flake.outPath = pkgs.path;
   # Provide the NixOS/Nixpkgs sources in /etc/nixos.  This is required
   # for nixos-install.
   boot.postBootCommands = mkAfter
@@ -45,10 +46,6 @@ in
         ln -s /nix/var/nix/profiles/per-user/root/channels /root/.nix-defexpr/channels
         mkdir -m 0755 -p /var/lib/nixos
         touch /var/lib/nixos/did-channel-init
-        echo "pinning the nixpkgs registry entry to NixOS/Nixpkgs sources..."
-        ${config.nix.package.out}/bin/nix \
-          --extra-experimental-features 'nix-command flakes' \
-          registry pin nixpkgs ${toString pkgs.path}
       fi
     '';
 }
