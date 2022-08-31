@@ -2,8 +2,10 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, extra-cmake-modules
 , ninja
 , wayland
+, wayland-scanner
 , obs-studio
 , libX11
 , vulkan-headers
@@ -29,7 +31,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_PLUGIN=OFF"
   ];
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [ cmake extra-cmake-modules ninja wayland-scanner ];
   buildInputs = [
     libGL
     libX11
