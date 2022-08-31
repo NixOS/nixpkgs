@@ -15,18 +15,6 @@
 , librusty_v8 ? callPackage ./librusty_v8.nix { }
 }:
 
-let
-  libtcc = tinycc.overrideAttrs (oa: {
-    makeFlags = [ "libtcc.a" ];
-    # tests want tcc binary
-    doCheck = false;
-    outputs = [ "out" ];
-    installPhase = ''
-      mkdir -p $out/lib/
-      mv libtcc.a $out/lib/
-    '';
-  });
-in
 rustPlatform.buildRustPackage rec {
   pname = "deno";
   version = "1.25.1";
@@ -58,6 +46,19 @@ rustPlatform.buildRustPackage rec {
   # The deno_ffi package currently needs libtcc.a on linux and macos and will try to compile it at build time
   # To avoid this we point it to our copy (dir)
   # In the future tinycc will be replaced with asm
+  libtcc = tinycc.overrideAttrs (oa: {
+    makeFlags = [ "libtcc.a" ];
+    # tests want tcc binary
+    doCheck = false;
+    outputs = [ "out" ];
+    installPhase = ''
+      mkdir -p $out/lib/
+      mv libtcc.a $out/lib/
+    '';
+    # building the whole of tcc on darwin is broken in nixpkgs
+    # but just building libtcc.a works fine so mark this as unbroken
+    meta.broken = false;
+  });
   TCC_PATH = "${libtcc}/lib";
 
   # Tests have some inconsistencies between runs with output integration tests
@@ -101,6 +102,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ jk ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-    broken = stdenv.isDarwin; # currently fail to build tinycc on darwin in nixpkgs
   };
 }
