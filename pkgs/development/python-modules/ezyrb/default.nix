@@ -8,7 +8,7 @@
 , scipy
 , matplotlib
 , scikit-learn
-, pytorch
+, torch
 , pytestCheckHook
 }:
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     scipy
     matplotlib
     scikit-learn
-    pytorch
+    torch
   ];
 
   checkInputs = [

@@ -1,4 +1,4 @@
-# Warning: use the same CUDA version as pytorch-bin.
+# Warning: use the same CUDA version as torch-bin.
 #
 # Precompiled wheels can be found at:
 # https://download.pytorch.org/whl/torch_stable.html

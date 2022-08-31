@@ -6,7 +6,7 @@
 , ignite
 , numpy
 , pybind11
-, pytorch
+, torch
 , which
 }:
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ ninja which ];
   buildInputs = [ pybind11 ];
-  propagatedBuildInputs = [ numpy pytorch ignite ];
+  propagatedBuildInputs = [ numpy torch ignite ];
 
   BUILD_MONAI = 1;
 

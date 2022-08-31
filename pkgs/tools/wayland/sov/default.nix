@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sov";
-  version = "0.72";
+  version = "0.73";
 
   src = fetchFromGitHub {
     owner = "milgra";
     repo = pname;
     rev = version;
-    sha256 = "sha256-av+st0tux+ho8bfJwx6Nk1pma1Pjvv/dpW5BWnUDNvQ=";
+    sha256 = "sha256-cjbTSvW1fCPl2wZ848XrUPU0bDQ4oXy+D8GqyBMaTwQ=";
   };
 
   postPatch = ''

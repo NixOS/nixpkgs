@@ -196,6 +196,7 @@ ADMIN_TOKEN=...copy-paste a unique generated secret token here...
         ProtectSystem = "strict";
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         StateDirectory = "bitwarden_rs";
+        StateDirectoryMode = "0700";
       };
       wantedBy = [ "multi-user.target" ];
     };

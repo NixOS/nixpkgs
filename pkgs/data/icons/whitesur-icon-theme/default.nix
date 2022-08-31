@@ -12,17 +12,28 @@
 let
   pname = "Whitesur-icon-theme";
 in
-lib.checkListOfEnum "${pname}: theme variants" [ "default" "purple" "pink" "red" "orange" "yellow" "green" "grey" "nord" "all" ] themeVariants
+lib.checkListOfEnum "${pname}: theme variants" [
+  "default"
+  "purple"
+  "pink"
+  "red"
+  "orange"
+  "yellow"
+  "green"
+  "grey"
+  "nord"
+  "all"
+] themeVariants
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-05-11";
+  version = "2022-08-30";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7Bbkjbh6nZdYot0tJMWFuW1Jnl9U4KOLN/n+z92UWh4=";
+    sha256 = "pcvRD4CUwUT46/kmMbnerj5mqPCcHIRreVIh9wz6Kfg=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];
@@ -32,7 +43,6 @@ stdenvNoCC.mkDerivation rec {
   # These fixup steps are slow and unnecessary
   dontPatchELF = true;
   dontRewriteSymlinks = true;
-
   dontDropIconThemeCache = true;
 
   postPatch = ''
