@@ -2,7 +2,6 @@
 , lib
 , fetchFromGitLab
 , rustPlatform
-, gnome
 , pkg-config
 , meson
 , wrapGAppsHook4
@@ -78,10 +77,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  passthru.updateScript = gnome.updateScript {
-    packageName = pname;
-  };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/YaLTeR/video-trimmer";
