@@ -792,6 +792,16 @@ rec {
     ln -s ${bashInteractive}/bin/bash $out/bin/sh
   '';
 
+  # This provides the ca bundle in common locations
+  caCertificates = runCommand "ca-certificates" { } ''
+    # Old NixOS compatibility.
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/etc/ssl/certs/ca-bundle.crt
+    # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/etc/ssl/certs/ca-certificates.crt
+    # CentOS/Fedora compatibility.
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/etc/pki/tls/certs/ca-bundle.crt
+  '';
+
   # Build an image and populate its nix database with the provided
   # contents. The main purpose is to be able to use nix commands in
   # the container.
