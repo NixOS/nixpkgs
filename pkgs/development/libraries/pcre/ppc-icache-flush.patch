@@ -1,0 +1,102 @@
+GCC's version of __builtin___clear_cache() is a no-op on PowerPC.
+Change to use an improved version of the existing ppc_cache_flush().
+
+--- a/sljit/sljitConfigInternal.h	2022-02-12 21:42:26.812059103 -0800
++++ b/sljit/sljitConfigInternal.h	2022-02-12 21:42:57.508834803 -0800
+@@ -284,7 +284,8 @@
+ /****************************/
+ 
+ #if (!defined SLJIT_CACHE_FLUSH && defined __has_builtin)
+-#if __has_builtin(__builtin___clear_cache)
++#if __has_builtin(__builtin___clear_cache) && \
++	!(defined SLJIT_CONFIG_PPC && SLJIT_CONFIG_PPC)
+ 
+ #define SLJIT_CACHE_FLUSH(from, to) \
+ 	__builtin___clear_cache((char*)from, (char*)to)
+--- a/sljit/sljitNativePPC_common.c	2022-02-12 21:42:26.816059204 -0800
++++ b/sljit/sljitNativePPC_common.c	2022-02-12 21:42:57.512834904 -0800
+@@ -46,6 +46,39 @@
+ #define SLJIT_PASS_ENTRY_ADDR_TO_CALL 1
+ #endif
+ 
++#ifdef __linux__
++#include <sys/auxv.h>
++
++/* Return the instruction cache line size, in bytes. */
++static SLJIT_INLINE sljit_u32 get_icache_line_size()
++{
++	static sljit_u32 icache_line_size = 0;
++	if (SLJIT_UNLIKELY(!icache_line_size)) {
++		icache_line_size = (sljit_u32) getauxval(AT_ICACHEBSIZE);
++		SLJIT_ASSERT(icache_line_size != 0);
++	}
++	return icache_line_size;
++}
++
++/* Cache and return the first hardware capabilities word. */
++static SLJIT_INLINE unsigned long get_hwcap()
++{
++	static unsigned long hwcap = 0;
++	if (SLJIT_UNLIKELY(!hwcap)) {
++		hwcap = getauxval(AT_HWCAP);
++		SLJIT_ASSERT(hwcap != 0);
++	}
++	return hwcap;
++}
++
++/* Return non-zero if this CPU has the icache snoop feature. */
++static SLJIT_INLINE unsigned long has_feature_icache_snoop()
++{
++	return (get_hwcap() & PPC_FEATURE_ICACHE_SNOOP);
++}
++
++#endif  /* __linux__ */
++
+ #if (defined SLJIT_CACHE_FLUSH_OWN_IMPL && SLJIT_CACHE_FLUSH_OWN_IMPL)
+ 
+ static void ppc_cache_flush(sljit_ins *from, sljit_ins *to)
+@@ -68,14 +101,40 @@
+ #	error "Cache flush is not implemented for PowerPC/POWER common mode."
+ #	else
+ 	/* Cache flush for PowerPC architecture. */
+-	while (from < to) {
++	/* For POWER5 and up with icache snooping, only one icbi in the range
++ 	 * is required. The sync flushes the store queue, and the icbi/isync
++	 * kills the local prefetch.
++	 */
++	if (has_feature_icache_snoop()) {
+ 		__asm__ volatile (
+-			"dcbf 0, %0\n"
+ 			"sync\n"
+ 			"icbi 0, %0\n"
+-			: : "r"(from)
++			"isync\n"
++			: : "r"(from) : "memory"
++		);
++		return;
++	}
++
++	sljit_u32 cache_line_bytes = get_icache_line_size();
++	sljit_u32 cache_line_words = cache_line_bytes / sizeof(sljit_ins);
++	uintptr_t cache_line_mask = ~(uintptr_t)(cache_line_bytes - 1);
++
++	/* Round down to start of cache line to simplify the end condition. */
++	sljit_ins* start = (sljit_ins*)((uintptr_t)(from) & cache_line_mask);
++
++	for (from = start; from < to; from += cache_line_words) {
++		__asm__ volatile (
++			"dcbf 0, %0"
++			: : "r"(from) : "memory"
++		);
++	}
++	__asm__ volatile ( "sync" );
++
++	for (from = start; from < to; from += cache_line_words) {
++		__asm__ volatile (
++			"icbi 0, %0"
++			: : "r"(from) : "memory"
+ 		);
+-		from++;
+ 	}
+ 	__asm__ volatile ( "isync" );
+ #	endif

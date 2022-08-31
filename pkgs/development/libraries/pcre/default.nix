@@ -27,8 +27,13 @@ stdenv.mkDerivation rec {
   ]
     ++ optional (variant != null) "--enable-${variant}";
 
-  # https://bugs.exim.org/show_bug.cgi?id=2173
-  patches = [ ./stacksize-detection.patch ];
+  patches = [
+    # https://bugs.exim.org/show_bug.cgi?id=2173
+    ./stacksize-detection.patch
+
+    # https://github.com/void-linux/void-packages/commit/8e1eceec431ab3d3d6e469ad0680ce74e46f8be3
+    ./ppc-icache-flush.patch
+  ];
 
   preCheck = ''
     patchShebangs RunGrepTest
