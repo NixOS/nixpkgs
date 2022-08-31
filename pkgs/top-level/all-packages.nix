@@ -16752,6 +16752,7 @@ with pkgs;
 
   bcc = callPackage ../os-specific/linux/bcc {
     python = pkgs.python3;
+    libbpf = libbpf_1;
   };
 
   bpftrace = callPackage ../os-specific/linux/bpftrace { };
