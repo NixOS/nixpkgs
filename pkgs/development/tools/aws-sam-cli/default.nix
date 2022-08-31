@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     # Werkzeug >= 2.1.0 breaks the `sam local start-lambda` command because
     # aws-sam-cli uses a "WERKZEUG_RUN_MAIN" hack to suppress flask output.
     # (https://github.com/cs01/gdbgui/issues/425)
-    ./use_forward_comatible_log_silencing.patch
+    ./use_forward_compatible_log_silencing.patch
   ];
 
   # fix over-restrictive version bounds
