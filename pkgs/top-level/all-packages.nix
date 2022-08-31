@@ -7001,6 +7001,8 @@ with pkgs;
 
   gnome-frog = callPackage ../applications/misc/gnome-frog { };
 
+  gnome-info-collect = callPackage ../desktops/gnome/misc/gnome-info-collect { };
+
   gnome-keysign = callPackage ../tools/security/gnome-keysign { };
 
   gnome-secrets = callPackage ../applications/misc/gnome-secrets { };
