@@ -114,7 +114,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.8.3";
+    version = "1.8.4";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -123,7 +123,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "sha256-ciIpd86KhmJRH/o8CIFWb2xFjsjWHSUNlGYRfWEiOOw=";
+      sha256 = "sha256-rfoHQ0zcKexBxA/vRg6Nlwlj/gx+hJ3sfzkyrbFh+IY=";
     };
 
     patches = [
@@ -322,6 +322,7 @@ let
 
     passthru = {
       filesInstalledToEtc = [
+        "fwupd/bios-settings.d/README.md"
         "fwupd/daemon.conf"
         "fwupd/remotes.d/lvfs-testing.conf"
         "fwupd/remotes.d/lvfs.conf"
