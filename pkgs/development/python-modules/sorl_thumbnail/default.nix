@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "sorl-thumbnail";
-  version = "12.8.0";
+  version = "12.9.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7io8nwuInlmRk4PTeB8TF9ycSSf7RLIvsUN/b+cFS5Y=";
+    sha256 = "sha256-DLwvUhUufyJm48LLSuXYOv0ulv1eHELlZnNiuqo9LbM=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
