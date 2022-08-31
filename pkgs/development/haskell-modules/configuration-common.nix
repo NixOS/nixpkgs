@@ -1223,6 +1223,8 @@ self: super: {
 
   # The test suite depends on an impure cabal-install installation in
   # $HOME, which we don't have in our build sandbox.
+  # 2022-08-31: Jailbreak is done to allow aeson 2.0.*:
+  # https://github.com/haskell-CI/haskell-ci/commit/6ad0d5d701cbe101013335d597acaf5feadd3ab9#r82681900
   cabal-install-parsers = doJailbreak (dontCheck (super.cabal-install-parsers.override {
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
   }));
@@ -2031,17 +2033,6 @@ self: super: {
     ShellCheck = self.ShellCheck_0_7_2;
     cabal-install-parsers = self.cabal-install-parsers_0_4_5;
   });
-
-  # Build haskell-ci from git repository
-  haskell-ci-unstable = overrideSrc rec {
-    version = "0.14.1-${builtins.substring 0 7 src.rev}";
-    src = pkgs.fetchFromGitHub {
-      owner = "haskell-CI";
-      repo = "haskell-ci";
-      rev = "8311a999b8e8be3aa31f65f314def256aa2d5535";
-      sha256 = "169jaqm4xs2almmvqsk567wayxs0g6kn0l5877c03hzr3d9ykrav";
-    };
-  } self.haskell-ci;
 
   large-hashable = lib.pipe (super.large-hashable.override {
     # https://github.com/factisresearch/large-hashable/commit/5ec9d2c7233fc4445303564047c992b693e1155c
