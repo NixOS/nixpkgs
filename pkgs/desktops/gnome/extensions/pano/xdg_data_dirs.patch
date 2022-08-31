@@ -1,0 +1,13 @@
+Index: gnome-shell-pano/package.json
+===================================================================
+--- gnome-shell-pano.orig/package.json
++++ gnome-shell-pano/package.json
+@@ -7,7 +7,7 @@
+   "scripts": {
+     "build": "yarn run lock:types && yarn run build:types && yarn run build:ts && yarn run gen:locale && yarn run build:extension",
+     "clean": "yarn run clean:ts && yarn run build:types",
+-    "lock:types": "rm -rf docs-lock.json && cross-env XDG_DATA_DIRS=$XDG_DATA_DIRS:/usr/share/gir-1.0:/usr/share/gnome-shell:/usr/lib/mutter-10:/usr/lib64/mutter-10 yarn run gi-ts config --lock",
++    "lock:types": "rm -rf docs-lock.json && env XDG_DATA_DIRS=$XDG_DATA_DIRS:@xdg_data_dirs@ yarn run gi-ts config --lock",
+     "build:types": "yarn run clean:types && gi-ts generate",
+     "gen:locale": "yarn run ts-node scripts/generateLocale.ts",
+     "clean:types": "rm -rf ./@types",

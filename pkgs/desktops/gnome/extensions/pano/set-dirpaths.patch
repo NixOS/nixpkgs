@@ -1,0 +1,10 @@
+Index: nixos/extension.js
+===================================================================
+--- nixos.orig/extension.js
++++ nixos/extension.js
+@@ -1,3 +1,5 @@
++imports.gi.GIRepository.Repository.prepend_search_path('@gda_path@');
++imports.gi.GIRepository.Repository.prepend_search_path('@gsound_path@');
+ 
+ try {
+ 

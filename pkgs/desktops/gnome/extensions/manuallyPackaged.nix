@@ -10,6 +10,7 @@
   "icon-hider@kalnitsky.org" = callPackage ./icon-hider { };
   "impatience@gfxmonk.net" = callPackage ./impatience { };
   "no-title-bar@jonaspoehler.de" = callPackage ./no-title-bar { };
+  "pano@elhan.io" = callPackage ./pano { };
   "paperwm@hedning:matrix.org" = callPackage ./paperwm { };
   "pidgin@muffinmad" = callPackage ./pidgin-im-integration { };
   "pop-shell@system76.com" = callPackage ./pop-shell { };
