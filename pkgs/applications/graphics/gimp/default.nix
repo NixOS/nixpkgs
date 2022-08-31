@@ -77,7 +77,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "2.99.10-unstable-2022-06-28";
+  version = "2.99.12-unstable-2022-08-31";
 
   outputs = [
     "out"
@@ -92,8 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gimp";
-    rev = "256b2d9615af2ba6dfcfdc32cc34a437aee214b3";
-    hash = "sha256-ITL5nb8fka5Xj+6/JthGRTVVvTDd7LED49IuhZZNk4U=";
+    rev = "a791151ed05b6e2f7b0ecb71db8be9629d61f5df";
+    hash = "sha256-0IIQwJW/HwkvKmjrs2xOhbpyLvvqJ0PR3q75PF+b/Ac=";
   };
 
   patches = [
@@ -122,10 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
     # the correct directory at the moment. There is a MR against isocodes to fix that:
     # https://salsa.debian.org/iso-codes-team/iso-codes/merge_requests/11
     ./fix-isocodes-paths.patch
-
-    # Skip broken dependency in Windows code.
-    # https://gitlab.gnome.org/GNOME/gimp/-/issues/7907
-    ./skip-win.patch
 
     # Make the babl-0.1 patch apply
     (fetchpatch {
@@ -248,6 +244,8 @@ stdenv.mkDerivation (finalAttrs: {
       "-Djpeg-xl=disabled"
       # Broken references
       "-Dgi-docgen=disabled"
+      # Removed pkg-config variable
+      "-Dheif=disabled"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-Dalsa=disabled"
@@ -295,6 +293,8 @@ stdenv.mkDerivation (finalAttrs: {
       lib.makeBinPath [
         # for dot for gegl:introspect (Debug » Show Image Graph, hidden by default on stable release)
         graphviz
+        # for gimp-script-fu-interpreter-3.0 invoked by shebang of some plug-ins
+        "$out"
       ]
     }")
   '';
