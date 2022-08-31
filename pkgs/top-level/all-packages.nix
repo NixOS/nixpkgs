@@ -15075,10 +15075,6 @@ with pkgs;
   python2 = python27;
   python3 = python310;
 
-  # pythonPackages further below, but assigned here because they need to be in sync
-  python2Packages = dontRecurseIntoAttrs python27Packages;
-  python3Packages = dontRecurseIntoAttrs python310Packages;
-
   pypy = pypy2;
   pypy2 = pypy27;
   pypy3 = pypy38;
@@ -15132,7 +15128,9 @@ with pkgs;
   # List of extensions with overrides to apply to all Python package sets.
   pythonPackagesExtensions = [ ];
   # Python package sets.
+  python2Packages = dontRecurseIntoAttrs python2.pkgs;
   python27Packages = python27.pkgs;
+  python3Packages = dontRecurseIntoAttrs python3.pkgs;
   python37Packages = python37.pkgs;
   python38Packages = python38.pkgs;
   python39Packages = recurseIntoAttrs python39.pkgs;
