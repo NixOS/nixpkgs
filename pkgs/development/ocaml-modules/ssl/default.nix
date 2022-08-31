@@ -23,7 +23,7 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ openssl ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.06";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ alcotest ];
   preCheck = ''
     mkdir -p _build/default/tests/

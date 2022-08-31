@@ -1,4 +1,4 @@
-{ lib, fetchFromGitLab, buildDunePackage, zarith, alcotest }:
+{ lib, fetchFromGitLab, buildDunePackage, ocaml, zarith, alcotest }:
 
 buildDunePackage rec {
   pname = "ff";
@@ -21,7 +21,7 @@ buildDunePackage rec {
     alcotest
   ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     homepage = "https://gitlab.com/dannywillems/ocaml-ff";
