@@ -25,6 +25,7 @@ let
     catAttrs
     collect
     splitString
+    hasPrefix
     ;
 
   inherit (builtins)
@@ -312,8 +313,9 @@ in
 
             http-relative-path = mkOption {
               type = str;
-              default = "";
+              default = "/";
               example = "/auth";
+              apply = x: if !(hasPrefix "/") x then "/" + x else x;
               description = ''
                 The path relative to <literal>/</literal> for serving
                 resources.
@@ -658,7 +660,7 @@ in
             '' + ''
               export KEYCLOAK_ADMIN=admin
               export KEYCLOAK_ADMIN_PASSWORD=${cfg.initialAdminPassword}
-              kc.sh start
+              kc.sh start --optimized
             '';
           };
 
