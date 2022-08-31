@@ -51,5 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ikalnytskyi/sphinxcontrib-openapi";
     description = "OpenAPI (fka Swagger) spec renderer for Sphinx";
     license = licenses.bsd0;
+    maintainers = [ maintainers.flokli ];
   };
 }
