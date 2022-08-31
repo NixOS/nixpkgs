@@ -75,7 +75,7 @@ let
   ]);
 in stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "2.99.10-unstable-2022-06-28";
+  version = "2.99.12-unstable-2022-08-31";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -92,8 +92,8 @@ in stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gimp";
-    rev = "256b2d9615af2ba6dfcfdc32cc34a437aee214b3";
-    sha256 = "ITL5nb8fka5Xj+6/JthGRTVVvTDd7LED49IuhZZNk4U=";
+    rev = "a791151ed05b6e2f7b0ecb71db8be9629d61f5df";
+    sha256 = "0IIQwJW/HwkvKmjrs2xOhbpyLvvqJ0PR3q75PF+b/Ac=";
   };
 
   patches = [
@@ -124,10 +124,6 @@ in stdenv.mkDerivation (finalAttrs: {
     # the correct directory at the moment. There is a MR against isocodes to fix that:
     # https://salsa.debian.org/iso-codes-team/iso-codes/merge_requests/11
     ./fix-isocodes-paths.patch
-
-    # Skip broken dependency in Windows code.
-    # https://gitlab.gnome.org/GNOME/gimp/-/issues/7907
-    ./skip-win.patch
   ];
 
   nativeBuildInputs = [
@@ -271,7 +267,7 @@ in stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [
       # for dot for gegl:introspect (Debug » Show Image Graph, hidden by default on stable release)
       graphviz
-    ]}")
+    ]}:$out/bin")
   '';
 
   postFixup = ''
