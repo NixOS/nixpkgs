@@ -15,6 +15,7 @@
 , aws-checksums
 , CoreAudio
 , AudioToolbox
+, nix
 , # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
   apis ? ["*"]
 , # Whether to enable AWS' custom memory management.
@@ -31,13 +32,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "aws-sdk-cpp";
-  version = "1.9.294";
+  version = "1.9.371";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "sha256-Z1eRKW+8nVD53GkNyYlZjCcT74MqFqqRMeMc33eIQ9g=";
+    sha256 = "sha256-3ebAPHNIM4VlDzP1KV4Y7uGTAJAi45/VVTj0Q/PPd8U=";
   };
 
   patches = [
@@ -118,6 +119,11 @@ stdenv.mkDerivation rec {
 
   # Builds in 2+h with 2 cores, and ~10m with a big-parallel builder.
   requiredSystemFeatures = [ "big-parallel" ];
+
+  passthru.tests = {
+    inherit nix;
+    inherit (nix) tests;
+  };
 
   meta = with lib; {
     description = "A C++ interface for Amazon Web Services";
