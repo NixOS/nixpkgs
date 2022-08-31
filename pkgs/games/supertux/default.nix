@@ -10,6 +10,9 @@
 , libvorbis
 , libGLU
 , libGL
+, libSM
+, libICE
+, libXext
 , openal
 , boost
 , glew
@@ -37,6 +40,9 @@ stdenv.mkDerivation rec {
     libvorbis
     libGLU
     libGL
+    libSM
+    libICE
+    libXext
     openal
     boost
     glew
