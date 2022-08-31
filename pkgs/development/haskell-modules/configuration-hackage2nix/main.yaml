@@ -152,6 +152,7 @@ extra-packages:
   - brick == 0.70.*                     # 2022-08-13: needed by matterhorn-50200.17.0
   - basement < 0.0.15                   # 2022-08-30: last version to support GHC < 8.10
   - foundation < 0.0.29                 # 2022-08-30: last version to support GHC < 8.10
+  - cabal-install-parsers < 0.5         # 2022-08-31: required by haskell-ci 0.14.3
 
 package-maintainers:
   abbradar:

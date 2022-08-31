@@ -1223,9 +1223,16 @@ self: super: {
 
   # The test suite depends on an impure cabal-install installation in
   # $HOME, which we don't have in our build sandbox.
-  cabal-install-parsers = dontCheck (super.cabal-install-parsers.override {
-    Cabal = self.Cabal_3_6_3_0;
-  });
+  cabal-install-parsers = doJailbreak (dontCheck (super.cabal-install-parsers.override {
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+  }));
+  cabal-install-parsers_0_4_5 = doDistribute (
+    dontCheck (
+      super.cabal-install-parsers_0_4_5.override {
+        Cabal = self.Cabal_3_6_3_0;
+      }
+    )
+  );
 
   # 2022-03-12: Pick patches from master for compat with Stackage Nightly
   gitit = appendPatches [
@@ -2022,6 +2029,7 @@ self: super: {
   haskell-ci = super.haskell-ci.overrideScope (self: super: {
     Cabal = self.Cabal_3_6_3_0;
     ShellCheck = self.ShellCheck_0_7_2;
+    cabal-install-parsers = self.cabal-install-parsers_0_4_5;
   });
 
   # Build haskell-ci from git repository
