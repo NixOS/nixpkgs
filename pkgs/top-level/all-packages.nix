@@ -16751,12 +16751,14 @@ with pkgs;
   bpftools = callPackage ../os-specific/linux/bpftools { };
 
   bcc = callPackage ../os-specific/linux/bcc {
-    python = pkgs.python3;
+    python = python3;
     libbpf = libbpf_1;
+    llvmPackages = llvmPackages_14;
   };
 
   bpftrace = callPackage ../os-specific/linux/bpftrace {
-    libbpf = libbpf_1
+    libbpf = libbpf_1;
+    llvmPackages = llvmPackages_14;
   };
 
   bpm-tools = callPackage ../tools/audio/bpm-tools { };
