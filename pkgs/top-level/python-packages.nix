@@ -1947,6 +1947,8 @@ in {
 
   cogapp = callPackage ../development/python-modules/cogapp { };
 
+  coinmetrics-api-client = callPackage ../development/python-modules/coinmetrics-api-client { };
+
   ColanderAlchemy = callPackage ../development/python-modules/colanderalchemy { };
 
   colander = callPackage ../development/python-modules/colander { };
