@@ -137,6 +137,20 @@ let
         See [documentation](https://www.wireguard.com/netns/).
         '';
       };
+
+      fwMark = mkOption {
+        default = null;
+        type = with types; nullOr str;
+        example = "0x6e6978";
+        description = lib.mdDoc ''
+          Mark all wireguard packets originating from
+          this interface with the given firewall mark. The firewall mark can be
+          used in firewalls or policy routing to filter the wireguard packets.
+          This can be useful for setup where all traffic goes through the
+          wireguard tunnel, because the wireguard packets need to be routed
+          differently.
+        '';
+      };
     };
 
   };
@@ -406,6 +420,7 @@ let
           ${concatStringsSep " " (
             [ ''${wg} set "${name}" private-key "${privKey}"'' ]
             ++ optional (values.listenPort != null) ''listen-port "${toString values.listenPort}"''
+            ++ optional (values.fwMark != null) ''fwmark "${values.fwMark}"''
           )}
 
           ${ipPostMove} link set up dev "${name}"
