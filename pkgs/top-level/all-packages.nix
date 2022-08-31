@@ -16622,7 +16622,6 @@ with pkgs;
   msitools = callPackage ../development/tools/misc/msitools { };
 
   haskell-ci = haskell.lib.compose.justStaticExecutables haskellPackages.haskell-ci;
-  haskell-ci-unstable = lowPrio (haskell.lib.compose.justStaticExecutables haskellPackages.haskell-ci-unstable);
 
   neoload = callPackage ../development/tools/neoload {
     licenseAccepted = (config.neoload.accept_license or false);
