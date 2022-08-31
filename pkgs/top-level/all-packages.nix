@@ -9182,6 +9182,8 @@ with pkgs;
 
   pandoc-drawio-filter = python3Packages.callPackage ../tools/misc/pandoc-drawio-filter { };
 
+  pandoc-katex = callPackage ../tools/misc/pandoc-katex { };
+
   pandoc-plantuml-filter = python3Packages.callPackage ../tools/misc/pandoc-plantuml-filter { };
 
   # pandoc-*nos is a filter suite, where pandoc-xnos has all functionality and the others are used for only specific functionality
