@@ -122,31 +122,26 @@ let
 in buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "1.11.0";
+  version = "1.12.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7.0";
 
   outputs = [
-    "out"   # output standard python package
-    "dev"   # output libtorch headers
-    "lib"   # output libtorch libraries
+    "out" # output standard python package
+    "dev" # output libtorch headers
+    "lib" # output libtorch libraries
   ];
 
   src = fetchFromGitHub {
-    owner  = "pytorch";
-    repo   = "pytorch";
-    rev    = "v${version}";
+    owner = "pytorch";
+    repo = "pytorch";
+    rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-CEu63tdRBAF8CTchO3Qu8gUNObQylX6U08yDTI4/c/0=";
+    hash = "sha256-8378BVOBFCRYRG1+yIYFSPKmb1rFOLgR+8pNZKt9NfI=";
   };
 
-  patches = [
-    # Fix for a breakpad incompatibility with glibc>2.33
-    # https://github.com/pytorch/pytorch/issues/70297
-    # https://github.com/google/breakpad/commit/605c51ed96ad44b34c457bbca320e74e194c317e
-    ./breakpad-sigstksz.patch
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # pthreadpool added support for Grand Central Dispatch in April
     # 2020. However, this relies on functionality (DISPATCH_APPLY_AUTO)
     # that is available starting with macOS 10.13. However, our current
@@ -208,7 +203,7 @@ in buildPythonPackage rec {
   PYTORCH_BUILD_VERSION = version;
   PYTORCH_BUILD_NUMBER = 0;
 
-  USE_SYSTEM_NCCL=setBool useSystemNccl;                  # don't build pytorch's third_party NCCL
+  USE_SYSTEM_NCCL = setBool useSystemNccl;                  # don't build pytorch's third_party NCCL
 
   # Suppress a weird warning in mkl-dnn, part of ideep in pytorch
   # (upstream seems to have fixed this in the wrong place?)
@@ -243,15 +238,17 @@ in buildPythonPackage rec {
     pillow six future tensorboard protobuf
   ] ++ lib.optionals MPISupport [ mpi ];
 
-  checkInputs = [ hypothesis ninja psutil ];
-
   # Tests take a long time and may be flaky, so just sanity-check imports
   doCheck = false;
+
   pythonImportsCheck = [
     "torch"
   ];
 
+  checkInputs = [ hypothesis ninja psutil ];
+
   checkPhase = with lib.versions; with lib.strings; concatStringsSep " " [
+    "runHook preCheck"
     cudaStubEnv
     "${python.interpreter} test/run_test.py"
     "--exclude"
@@ -264,13 +261,15 @@ in buildPythonPackage rec {
       # tensorboard has acceptable failures for pytorch 1.3.x due to dependencies on tensorboard-plugins
       (optionalString (majorMinor version == "1.3" ) "tensorboard")
     ])
+    "runHook postCheck"
   ];
+
   postInstall = ''
     find "$out/${python.sitePackages}/torch/include" "$out/${python.sitePackages}/torch/lib" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
 
     mkdir $dev
     cp -r $out/${python.sitePackages}/torch/include $dev/include
-    cp -r $out/${python.sitePackages}/torch/share   $dev/share
+    cp -r $out/${python.sitePackages}/torch/share $dev/share
 
     # Fix up library paths for split outputs
     substituteInPlace \
@@ -282,7 +281,7 @@ in buildPythonPackage rec {
       --replace \''${_IMPORT_PREFIX}/lib "$lib/lib"
 
     mkdir $lib
-    mv $out/${python.sitePackages}/torch/lib     $lib/lib
+    mv $out/${python.sitePackages}/torch/lib $lib/lib
     ln -s $lib/lib $out/${python.sitePackages}/torch/lib
   '';
 
@@ -312,11 +311,12 @@ in buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "Open source, prototype-to-production deep learning platform";
-    homepage    = "https://pytorch.org/";
-    license     = licenses.bsd3;
+    changelog = "https://github.com/pytorch/pytorch/releases/tag/v${version}";
+    # keep PyTorch in the description so the package can be found under that name on search.nixos.org
+    description = "PyTorch: Tensors and Dynamic neural networks in Python with strong GPU acceleration";
+    homepage = "https://pytorch.org/";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
-    platforms   = with platforms; linux ++ lib.optionals (!cudaSupport) darwin;
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    platforms = with platforms; linux ++ lib.optionals (!cudaSupport) darwin;
   };
 }
