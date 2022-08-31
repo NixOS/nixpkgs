@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , python
 , bootstrapped-pip
 , lib
@@ -27,6 +28,14 @@ let
     patches = [
       ./tag-date.patch
       ./setuptools-distutils-C++.patch
+      # Fix cross compilation of extension modules
+      # https://github.com/pypa/distutils/pull/173
+      (fetchpatch {
+        url = "https://github.com/pypa/distutils/commit/22b9bcf2e2d2a66f7dc96661312972e2f6bd9e01.patch";
+        hash = "sha256-IVb1LLgLIHO6HPn2911uksrLB1jG0MyQetdxkq5wcG4=";
+        stripLen = 2;
+        extraPrefix = "setuptools/_distutils/";
+      })
     ];
 
     buildPhase = ''
