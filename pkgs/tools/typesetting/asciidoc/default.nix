@@ -282,7 +282,7 @@ in python3.pkgs.buildPythonApplication rec {
       fromSource
     ] ++ lib.optional _enableDitaaFilter binaryBytecode;
     homepage = "https://asciidoc-py.github.io/";
-    changelog = "https://github.com/asciidoc-py/asciidoc-py/blob/${src.rev}/CHANGELOG.adoc";
+    changelog = "https://github.com/asciidoc-py/asciidoc-py/blob/${version}/CHANGELOG.adoc";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor dotlambda ];
