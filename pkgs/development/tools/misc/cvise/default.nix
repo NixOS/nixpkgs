@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , bash
 , cmake
+, colordiff
 , flex
 , libclang
 , llvm
@@ -15,13 +16,13 @@
 
 buildPythonApplication rec {
   pname = "cvise";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "marxin";
     repo = "cvise";
-    rev = "v${version}";
-    sha256 = "0cfzikkhp91hjgxjk3izzczb8d9p8v9zsfyk6iklk92n5qf1aakq";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Nt6Zs3FxO8Ti+ikVPVaMCejzBIuUxrzG4VLhChCSJQw=";
   };
 
   patches = [
@@ -34,8 +35,9 @@ buildPythonApplication rec {
     substituteInPlace cvise.py \
       --replace "#!/bin/bash" "#!${bash}/bin/bash"
 
-    substituteInPlace setup.cfg \
-      --replace "--flake8" ""
+    substituteInPlace cvise/utils/testing.py \
+      --replace "'colordiff --version'" "'${colordiff}/bin/colordiff --version'" \
+      --replace "'colordiff'" "'${colordiff}/bin/colordiff'"
   '';
 
   nativeBuildInputs = [
@@ -61,10 +63,6 @@ buildPythonApplication rec {
     pytestCheckHook
     unifdef
   ];
-
-  preCheck = ''
-    patchShebangs cvise.py
-  '';
 
   disabledTests = [
     # Needs gcc, fails when run noninteractively (without tty).
