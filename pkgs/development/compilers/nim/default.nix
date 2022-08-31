@@ -143,6 +143,7 @@ in {
       runHook preInstall
       install -Dt $out/bin bin/*
       ln -sf $out/nim/bin/nim $out/bin/nim
+      ln -sf $out/nim/lib $out/lib
       ./install.sh $out
       runHook postInstall
     '';
