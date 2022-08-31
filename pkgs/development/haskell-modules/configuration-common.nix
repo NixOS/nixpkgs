@@ -820,9 +820,9 @@ self: super: {
     testHaskellDepends = drv.testHaskellDepends or [] ++ [ self.hspec-meta_2_9_3 ];
     testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
   }) (super.sensei.override {
-    hspec = self.hspec_2_10_0_1;
+    hspec = self.hspec_2_10_1;
     hspec-wai = super.hspec-wai.override {
-      hspec = self.hspec_2_10_0_1;
+      hspec = self.hspec_2_10_1;
     };
   });
 
@@ -1642,14 +1642,14 @@ self: super: {
   servant-openapi3 = dontCheck super.servant-openapi3;
 
   # Give hspec 2.10.* correct dependency versions without overrideScope
-  hspec_2_10_0_1 = doDistribute (super.hspec_2_10_0_1.override {
-    hspec-discover = self.hspec-discover_2_10_0_1;
-    hspec-core = self.hspec-core_2_10_0_1;
+  hspec_2_10_1 = doDistribute (super.hspec_2_10_1.override {
+    hspec-discover = self.hspec-discover_2_10_1;
+    hspec-core = self.hspec-core_2_10_1;
   });
-  hspec-discover_2_10_0_1 = super.hspec-discover_2_10_0_1.override {
+  hspec-discover_2_10_1 = super.hspec-discover_2_10_1.override {
     hspec-meta = self.hspec-meta_2_9_3;
   };
-  hspec-core_2_10_0_1 = super.hspec-core_2_10_0_1.override {
+  hspec-core_2_10_1 = super.hspec-core_2_10_1.override {
     hspec-meta = self.hspec-meta_2_9_3;
   };
 
