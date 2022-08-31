@@ -1,4 +1,4 @@
-# Warning: Need to update at the same time as pytorch-bin
+# Warning: Need to update at the same time as torch-bin
 #
 # Precompiled wheels can be found at:
 # https://download.pytorch.org/whl/torch_stable.html
