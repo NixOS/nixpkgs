@@ -1,4 +1,5 @@
-{ python3Packages, fetchFromGitHub, lib, yubikey-personalization, libu2f-host, libusb1, procps }:
+{ python3Packages, fetchFromGitHub, lib, yubikey-personalization, libu2f-host, libusb1, procps
+, stdenv, pyOpenSSLSupport ? !(stdenv.isDarwin && stdenv.isAarch64) }:
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
@@ -12,25 +13,30 @@ python3Packages.buildPythonPackage rec {
     sha256 = "sha256-MwM/b1QP6pkyBjz/r6oC4sW1mKC0CKMay45a0wCktk0=";
   };
 
+  patches = lib.optionals (!pyOpenSSLSupport) [
+    ./remove-pyopenssl-tests.patch
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'fido2 = ">=0.9, <1.0"' 'fido2 = ">*"'
     substituteInPlace "ykman/pcsc/__init__.py" \
-      --replace 'pkill' '${procps}/bin/pkill'
+      --replace 'pkill' '${if stdenv.isLinux then "${procps}" else "/usr"}/bin/pkill'
   '';
 
   nativeBuildInputs = with python3Packages; [ poetry-core ];
 
   propagatedBuildInputs =
-    with python3Packages; [
+    with python3Packages; ([
       click
       cryptography
       pyscard
       pyusb
-      pyopenssl
       six
       fido2
-    ] ++ [
+    ] ++ lib.optionals pyOpenSSLSupport [
+      pyopenssl
+    ]) ++ [
       libu2f-host
       libusb1
       yubikey-personalization
