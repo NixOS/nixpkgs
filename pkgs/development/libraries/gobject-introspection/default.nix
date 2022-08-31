@@ -27,6 +27,12 @@
 # it may be worth thinking about using multiple derivation outputs
 # In that case its about 6MB which could be separated
 
+let
+  pythonModules = pp: [
+    pp.Mako
+    pp.markdown
+  ];
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gobject-introspection";
   version = "1.72.0";
@@ -67,12 +73,13 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_45
-    python3
+    # Build definition checks for the Python modules needed at runtime by importing them.
+    (buildPackages.python3.withPackages pythonModules)
     finalAttrs.setupHook # move .gir files
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ gobject-introspection-unwrapped ];
 
   buildInputs = [
-    python3
+    (python3.withPackages pythonModules)
   ];
 
   checkInputs = lib.optionals stdenv.isDarwin [
@@ -86,7 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "--datadir=${placeholder "dev"}/share"
-    "-Ddoctool=disabled"
     "-Dcairo=disabled"
     "-Dgtk_doc=${lib.boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
