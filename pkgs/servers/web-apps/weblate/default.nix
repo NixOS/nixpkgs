@@ -4,10 +4,6 @@
 , gettext
 , isocodes
 , xorg
-, wrapGAppsNoGuiHook
-, gobject-introspection
-, pango
-, harfbuzz
 , makeWrapper
 , gitSVN
 , git-review
@@ -76,18 +72,8 @@
     }
   );
 
-  buildInputs = [
-    pango
-    harfbuzz
-  ];
-
-  nativeBuildInputs = [
-    wrapGAppsNoGuiHook
-    gobject-introspection
-  ];
-
   postFixup = let
-  path = lib.makeBinPath [
+    path = lib.makeBinPath [
       gitSVN
 
       #optional
