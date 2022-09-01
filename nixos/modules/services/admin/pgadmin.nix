@@ -28,7 +28,7 @@ let
 in
 {
   options.services.pgadmin = {
-    enable = mkEnableOption "PostgreSQL Admin 4";
+    enable = mkEnableOption (lib.mdDoc "PostgreSQL Admin 4");
 
     port = mkOption {
       description = lib.mdDoc "Port for pgadmin4 to run on";
@@ -49,7 +49,7 @@ in
       type = types.path;
     };
 
-    openFirewall = mkEnableOption "firewall passthrough for pgadmin4";
+    openFirewall = mkEnableOption (lib.mdDoc "firewall passthrough for pgadmin4");
 
     settings = mkOption {
       description = lib.mdDoc ''

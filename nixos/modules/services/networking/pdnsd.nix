@@ -24,7 +24,7 @@ in
 
 { options =
     { services.pdnsd =
-        { enable = mkEnableOption "pdnsd";
+        { enable = mkEnableOption (lib.mdDoc "pdnsd");
 
           cacheDir = mkOption {
             type = types.str;

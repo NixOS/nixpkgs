@@ -13,7 +13,7 @@ in {
   options = {
 
     services.metabase = {
-      enable = mkEnableOption "Metabase service";
+      enable = mkEnableOption (lib.mdDoc "Metabase service");
 
       listen = {
         ip = mkOption {

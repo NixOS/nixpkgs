@@ -19,13 +19,13 @@ let
 in
 {
   options.services.dex = {
-    enable = mkEnableOption "the OpenID Connect and OAuth2 identity provider";
+    enable = mkEnableOption (lib.mdDoc "the OpenID Connect and OAuth2 identity provider");
 
     environmentFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
-        Environment file (see <literal>systemd.exec(5)</literal>
+      description = lib.mdDoc ''
+        Environment file (see `systemd.exec(5)`
         "EnvironmentFile=" section for the syntax) to define variables for dex.
         This option can be used to safely include secret keys into the dex configuration.
       '';

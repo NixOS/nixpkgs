@@ -18,7 +18,7 @@ in
 
     services.journalbeat = {
 
-      enable = mkEnableOption "journalbeat";
+      enable = mkEnableOption (lib.mdDoc "journalbeat");
 
       package = mkOption {
         type = types.package;

@@ -10,18 +10,18 @@ in {
       default = pkgs.lvm2;
       internal = true;
       defaultText = literalExpression "pkgs.lvm2";
-      description = ''
+      description = lib.mdDoc ''
         This option allows you to override the LVM package that's used on the system
         (udev rules, tmpfiles, systemd services).
         Defaults to pkgs.lvm2, pkgs.lvm2_dmeventd if dmeventd or pkgs.lvm2_vdo if vdo is enabled.
       '';
     };
-    dmeventd.enable = mkEnableOption "the LVM dmevent daemon";
-    boot.thin.enable = mkEnableOption "support for booting from ThinLVs";
-    boot.vdo.enable = mkEnableOption "support for booting from VDOLVs";
+    dmeventd.enable = mkEnableOption (lib.mdDoc "the LVM dmevent daemon");
+    boot.thin.enable = mkEnableOption (lib.mdDoc "support for booting from ThinLVs");
+    boot.vdo.enable = mkEnableOption (lib.mdDoc "support for booting from VDOLVs");
   };
 
-  options.boot.initrd.services.lvm.enable = (mkEnableOption "enable booting from LVM2 in the initrd") // {
+  options.boot.initrd.services.lvm.enable = (mkEnableOption (lib.mdDoc "enable booting from LVM2 in the initrd")) // {
     visible = false;
   };
 

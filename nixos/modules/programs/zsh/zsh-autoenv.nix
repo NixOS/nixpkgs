@@ -7,7 +7,7 @@ let
 in {
   options = {
     programs.zsh.zsh-autoenv = {
-      enable = mkEnableOption "zsh-autoenv";
+      enable = mkEnableOption (lib.mdDoc "zsh-autoenv");
       package = mkOption {
         default = pkgs.zsh-autoenv;
         defaultText = literalExpression "pkgs.zsh-autoenv";

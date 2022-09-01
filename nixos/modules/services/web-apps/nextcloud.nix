@@ -79,7 +79,7 @@ in {
   ];
 
   options.services.nextcloud = {
-    enable = mkEnableOption "nextcloud";
+    enable = mkEnableOption (lib.mdDoc "nextcloud");
     hostName = mkOption {
       type = types.str;
       description = lib.mdDoc "FQDN for the nextcloud instance.";
@@ -371,31 +371,31 @@ in {
         default = null;
         type = types.nullOr types.str;
         example = "DE";
-        description = ''
-          <warning>
-           <para>This option exists since Nextcloud 21! If older versions are used,
-            this will throw an eval-error!</para>
-          </warning>
+        description = lib.mdDoc ''
+          ::: {.warning}
+          This option exists since Nextcloud 21! If older versions are used,
+          this will throw an eval-error!
+          :::
 
-          <link xlink:href="https://www.iso.org/iso-3166-country-codes.html">ISO 3611-1</link>
+          [ISO 3611-1](https://www.iso.org/iso-3166-country-codes.html)
           country codes for automatic phone-number detection without a country code.
 
-          With e.g. <literal>DE</literal> set, the <literal>+49</literal> can be omitted for
+          With e.g. `DE` set, the `+49` can be omitted for
           phone-numbers.
         '';
       };
 
       objectstore = {
         s3 = {
-          enable = mkEnableOption ''
+          enable = mkEnableOption (lib.mdDoc ''
             S3 object storage as primary storage.
 
             This mounts a bucket on an Amazon S3 object storage or compatible
             implementation into the virtual filesystem.
 
             Further details about this feature can be found in the
-            <link xlink:href="https://docs.nextcloud.com/server/22/admin_manual/configuration_files/primary_storage.html">upstream documentation</link>.
-          '';
+            [upstream documentation](https://docs.nextcloud.com/server/22/admin_manual/configuration_files/primary_storage.html).
+          '');
           bucket = mkOption {
             type = types.str;
             example = "nextcloud";
@@ -470,13 +470,13 @@ in {
       };
     };
 
-    enableImagemagick = mkEnableOption ''
+    enableImagemagick = mkEnableOption (lib.mdDoc ''
         the ImageMagick module for PHP.
         This is used by the theming app and for generating previews of certain images (e.g. SVG and HEIF).
         You may want to disable it for increased security. In that case, previews will still be available
         for some images (e.g. JPEG and PNG).
-        See <link xlink:href="https://github.com/nextcloud/server/issues/13099"/>.
-    '' // {
+        See <https://github.com/nextcloud/server/issues/13099>.
+    '') // {
       default = true;
     };
 
@@ -519,8 +519,8 @@ in {
         type = with types; either str (listOf str);
         default = "05:00:00";
         example = "Sun 14:00:00";
-        description = ''
-          When to run the update. See `systemd.services.&lt;name&gt;.startAt`.
+        description = lib.mdDoc ''
+          When to run the update. See `systemd.services.<name>.startAt`.
         '';
       };
     };
@@ -529,29 +529,27 @@ in {
       default = occ;
       defaultText = literalMD "generated script";
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         The nextcloud-occ program preconfigured to target this Nextcloud instance.
       '';
     };
-    globalProfiles = mkEnableOption "global profiles" // {
-      description = ''
-        Makes user-profiles globally available under <literal>nextcloud.tld/u/user.name</literal>.
+    globalProfiles = mkEnableOption (lib.mdDoc "global profiles") // {
+      description = lib.mdDoc ''
+        Makes user-profiles globally available under `nextcloud.tld/u/user.name`.
         Even though it's enabled by default in Nextcloud, it must be explicitly enabled
         here because it has the side-effect that personal information is even accessible to
         unauthenticated users by default.
 
         By default, the following properties are set to “Show to everyone”
         if this flag is enabled:
-        <itemizedlist>
-        <listitem><para>About</para></listitem>
-        <listitem><para>Full name</para></listitem>
-        <listitem><para>Headline</para></listitem>
-        <listitem><para>Organisation</para></listitem>
-        <listitem><para>Profile picture</para></listitem>
-        <listitem><para>Role</para></listitem>
-        <listitem><para>Twitter</para></listitem>
-        <listitem><para>Website</para></listitem>
-        </itemizedlist>
+        - About
+        - Full name
+        - Headline
+        - Organisation
+        - Profile picture
+        - Role
+        - Twitter
+        - Website
 
         Only has an effect in Nextcloud 23 and later.
       '';

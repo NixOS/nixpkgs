@@ -8,7 +8,7 @@ in
 {
   options = {
     services.distccd = {
-      enable = mkEnableOption "distccd";
+      enable = mkEnableOption (lib.mdDoc "distccd");
 
       allowedClients = mkOption {
         type = types.listOf types.str;
@@ -84,7 +84,7 @@ in
       };
 
       stats = {
-        enable = mkEnableOption "statistics reporting via HTTP server";
+        enable = mkEnableOption (lib.mdDoc "statistics reporting via HTTP server");
         port = mkOption {
           type = types.port;
           default = 3633;

@@ -141,7 +141,7 @@ in
         type = types.attrs;
         internal = true;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Environment variables used for the network proxy.
         '';
       };

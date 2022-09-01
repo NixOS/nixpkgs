@@ -39,7 +39,7 @@ in
       enableWattsUpPro = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable the Watts Up Pro device.
 
           The Watts Up Pro contains a generic FTDI USB device without a specific
@@ -49,10 +49,8 @@ in
 
           The generic FTDI device is known to also be used on:
 
-          <itemizedlist>
-            <listitem><para>Sparkfun FT232 breakout board</para></listitem>
-            <listitem><para>Parallax Propeller</para></listitem>
-          </itemizedlist>
+          - Sparkfun FT232 breakout board
+          - Parallax Propeller
         '';
       };
 

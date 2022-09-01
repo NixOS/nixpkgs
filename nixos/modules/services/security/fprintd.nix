@@ -18,7 +18,7 @@ in
 
     services.fprintd = {
 
-      enable = mkEnableOption "fprintd daemon and PAM module for fingerprint readers handling";
+      enable = mkEnableOption (lib.mdDoc "fprintd daemon and PAM module for fingerprint readers handling");
 
       package = mkOption {
         type = types.package;
@@ -31,7 +31,7 @@ in
 
       tod = {
 
-        enable = mkEnableOption "Touch OEM Drivers library support";
+        enable = mkEnableOption (lib.mdDoc "Touch OEM Drivers library support");
 
         driver = mkOption {
           type = types.package;

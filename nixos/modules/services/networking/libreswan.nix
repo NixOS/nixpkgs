@@ -47,7 +47,7 @@ in
 
     services.libreswan = {
 
-      enable = mkEnableOption "Libreswan IPsec service";
+      enable = mkEnableOption (lib.mdDoc "Libreswan IPsec service");
 
       configSetup = mkOption {
         type = types.lines;
@@ -93,12 +93,12 @@ in
             ''';
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           A set of policies to apply to the IPsec connections.
 
-          <note><para>
-            The policy name must match the one of connection it needs to apply to.
-          </para></note>
+          ::: {.note}
+          The policy name must match the one of connection it needs to apply to.
+          :::
         '';
       };
 

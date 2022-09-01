@@ -12,7 +12,7 @@ in
   {
     options = {
       services.zerobin = {
-        enable = mkEnableOption "0bin";
+        enable = mkEnableOption (lib.mdDoc "0bin");
 
         dataDir = mkOption {
           type = types.str;

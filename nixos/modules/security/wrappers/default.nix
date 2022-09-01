@@ -51,20 +51,20 @@ let
     options.capabilities = lib.mkOption
       { type = lib.types.commas;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           A comma-separated list of capabilities to be given to the wrapper
           program. For capabilities supported by the system check the
-          <citerefentry><refentrytitle>capabilities</refentrytitle><manvolnum>7</manvolnum></citerefentry>
+          {manpage}`capabilities(7)`
           manual page.
 
-          <note><para>
-            <literal>cap_setpcap</literal>, which is required for the wrapper
-            program to be able to raise caps into the Ambient set is NOT raised
-            to the Ambient set so that the real program cannot modify its own
-            capabilities!! This may be too restrictive for cases in which the
-            real program needs cap_setpcap but it at least leans on the side
-            security paranoid vs. too relaxed.
-          </para></note>
+          ::: {.note}
+          `cap_setpcap`, which is required for the wrapper
+          program to be able to raise caps into the Ambient set is NOT raised
+          to the Ambient set so that the real program cannot modify its own
+          capabilities!! This may be too restrictive for cases in which the
+          real program needs cap_setpcap but it at least leans on the side
+          security paranoid vs. too relaxed.
+          :::
         '';
       };
     options.setuid = lib.mkOption
@@ -189,7 +189,7 @@ in
       default = "50%";
       example = "10G";
       type = lib.types.str;
-      description = ''
+      description = lib.mdDoc ''
         Size limit for the /run/wrappers tmpfs. Look at mount(8), tmpfs size option,
         for the accepted syntax. WARNING: don't set to less than 64MB.
       '';
@@ -199,7 +199,7 @@ in
       type        = lib.types.path;
       default     = "/run/wrappers/bin";
       internal    = true;
-      description = ''
+      description = lib.mdDoc ''
         This option defines the path to the wrapper programs. It
         should not be overriden.
       '';

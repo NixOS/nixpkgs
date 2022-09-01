@@ -43,7 +43,7 @@ in
 {
   options = {
     services.vault = {
-      enable = mkEnableOption "Vault daemon";
+      enable = mkEnableOption (lib.mdDoc "Vault daemon");
 
       package = mkOption {
         type = types.package;
@@ -141,17 +141,17 @@ in
       extraSettingsPaths = mkOption {
         type = types.listOf types.path;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Configuration files to load besides the immutable one defined by the NixOS module.
           This can be used to avoid putting credentials in the Nix store, which can be read by any user.
 
           Each path can point to a JSON- or HCL-formatted file, or a directory
-          to be scanned for files with <literal>.hcl</literal> or
-          <literal>.json</literal> extensions.
+          to be scanned for files with `.hcl` or
+          `.json` extensions.
 
           To upload the confidential file with NixOps, use for example:
 
-          <programlisting><![CDATA[
+          ```
           # https://releases.nixos.org/nixops/latest/manual/manual.html#opt-deployment.keys
           deployment.keys."vault.hcl" = let db = import ./db-credentials.nix; in {
             text = ${"''"}
@@ -164,7 +164,7 @@ in
           services.vault.extraSettingsPaths = ["/run/keys/vault.hcl"];
           services.vault.storageBackend = "postgresql";
           users.users.vault.extraGroups = ["keys"];
-          ]]></programlisting>
+          ```
         '';
       };
     };

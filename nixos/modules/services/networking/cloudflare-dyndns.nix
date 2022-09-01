@@ -8,7 +8,7 @@ in
 {
   options = {
     services.cloudflare-dyndns = {
-      enable = mkEnableOption "Cloudflare Dynamic DNS Client";
+      enable = mkEnableOption (lib.mdDoc "Cloudflare Dynamic DNS Client");
 
       apiTokenFile = mkOption {
         type = types.nullOr types.str;

@@ -167,22 +167,20 @@ in {
             "CAP_NET_RAW"          # open raw sockets
           ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           Grant capabilities to the uWSGI instance. See the
-          <literal>capabilities(7)</literal> for available values.
-          <note>
-            <para>
-              uWSGI runs as an unprivileged user (even as Emperor) with the minimal
-              capabilities required. This option can be used to add fine-grained
-              permissions without running the service as root.
-            </para>
-            <para>
-              When in Emperor mode, any capability to be inherited by a vassal must
-              be specified again in the vassal configuration using <literal>cap</literal>.
-              See the uWSGI <link xlink:href="https://uwsgi-docs.readthedocs.io/en/latest/Capabilities.html">docs</link>
-              for more information.
-            </para>
-          </note>
+          `capabilities(7)` for available values.
+
+          ::: {.note}
+          uWSGI runs as an unprivileged user (even as Emperor) with the minimal
+          capabilities required. This option can be used to add fine-grained
+          permissions without running the service as root.
+
+          When in Emperor mode, any capability to be inherited by a vassal must
+          be specified again in the vassal configuration using `cap`.
+          See the uWSGI [docs](https://uwsgi-docs.readthedocs.io/en/latest/Capabilities.html)
+          for more information.
+          :::
         '';
       };
     };

@@ -34,22 +34,22 @@ in
 {
   options = {
     services.firefox-syncserver = {
-      enable = lib.mkEnableOption ''
+      enable = lib.mkEnableOption (lib.mdDoc ''
         the Firefox Sync storage service.
 
         Out of the box this will not be very useful unless you also configure at least
         one service and one nodes by inserting them into the mysql database manually, e.g.
         by running
 
-        <programlisting>
+        ```
           INSERT INTO `services` (`id`, `service`, `pattern`) VALUES ('1', 'sync-1.5', '{node}/1.5/{uid}');
           INSERT INTO `nodes` (`id`, `service`, `node`, `available`, `current_load`,
               `capacity`, `downed`, `backoff`)
             VALUES ('1', '1', 'https://mydomain.tld', '1', '0', '10', '0', '0');
-        </programlisting>
+        ```
 
-        <option>${opt.singleNode.enable}</option> does this automatically when enabled
-      '';
+        {option}`${opt.singleNode.enable}` does this automatically when enabled
+      '');
 
       package = lib.mkOption {
         type = lib.types.package;
@@ -118,11 +118,11 @@ in
       };
 
       singleNode = {
-        enable = lib.mkEnableOption "auto-configuration for a simple single-node setup";
+        enable = lib.mkEnableOption (lib.mdDoc "auto-configuration for a simple single-node setup");
 
-        enableTLS = lib.mkEnableOption "automatic TLS setup";
+        enableTLS = lib.mkEnableOption (lib.mdDoc "automatic TLS setup");
 
-        enableNginx = lib.mkEnableOption "nginx virtualhost definitions";
+        enableNginx = lib.mkEnableOption (lib.mdDoc "nginx virtualhost definitions");
 
         hostname = lib.mkOption {
           type = lib.types.str;

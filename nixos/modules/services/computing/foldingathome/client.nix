@@ -18,7 +18,7 @@ in
     '')
   ];
   options.services.foldingathome = {
-    enable = mkEnableOption "Enable the Folding@home client";
+    enable = mkEnableOption (lib.mdDoc "Enable the Folding@home client");
 
     package = mkOption {
       type = types.package;

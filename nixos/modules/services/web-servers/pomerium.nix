@@ -7,7 +7,7 @@ let
 in
 {
   options.services.pomerium = {
-    enable = mkEnableOption "the Pomerium authenticating reverse proxy";
+    enable = mkEnableOption (lib.mdDoc "the Pomerium authenticating reverse proxy");
 
     configFile = mkOption {
       type = with types; nullOr path;

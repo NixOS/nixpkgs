@@ -15,7 +15,7 @@ let
 
 in {
   options.services.darkhttpd = with types; {
-    enable = mkEnableOption "DarkHTTPd web server";
+    enable = mkEnableOption (lib.mdDoc "DarkHTTPd web server");
 
     port = mkOption {
       default = 80;

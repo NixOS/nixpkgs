@@ -16,7 +16,7 @@ in
   {
     options = {
       programs.thefuck = {
-        enable = mkEnableOption "thefuck";
+        enable = mkEnableOption (lib.mdDoc "thefuck");
 
         alias = mkOption {
           default = "fuck";

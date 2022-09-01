@@ -7,7 +7,7 @@ let
   configFile = settingsFormat.generate "lokinet.ini" (lib.filterAttrsRecursive (n: v: v != null) cfg.settings);
 in with lib; {
   options.services.lokinet = {
-    enable = mkEnableOption "Lokinet daemon";
+    enable = mkEnableOption (lib.mdDoc "Lokinet daemon");
 
     package = mkOption {
       type = types.package;
@@ -65,9 +65,9 @@ in with lib; {
                   exit-node = [ "example.loki" ];              # maps all exit traffic to example.loki
                   exit-node = [ "example.loki:100.0.0.0/24" ]; # maps 100.0.0.0/24 to example.loki
                 '';
-                description = ''
+                description = lib.mdDoc ''
                   Specify a `.loki` address and an optional ip range to use as an exit broker.
-                  See <link xlink:href="http://probably.loki/wiki/index.php?title=Exit_Nodes"/> for
+                  See <http://probably.loki/wiki/index.php?title=Exit_Nodes> for
                   a list of exit nodes.
                 '';
               };

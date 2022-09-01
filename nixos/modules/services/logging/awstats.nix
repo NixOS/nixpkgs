@@ -25,26 +25,26 @@ let
       logFile = mkOption {
         type = types.str;
         example = "/var/log/nginx/access.log";
-        description = ''
+        description = lib.mdDoc ''
           The log file to be scanned.
 
           For mail, set this to
-          <literal>
+          ```
           journalctl $OLD_CURSOR -u postfix.service | ''${pkgs.perl}/bin/perl ''${pkgs.awstats.out}/share/awstats/tools/maillogconvert.pl standard |
-          </literal>
+          ```
         '';
       };
 
       logFormat = mkOption {
         type = types.str;
         default = "1";
-        description = ''
+        description = lib.mdDoc ''
           The log format being used.
 
           For mail, set this to
-          <literal>
+          ```
           %time2 %email %email_r %host %host_r %method %url %code %bytesd
-          </literal>
+          ```
         '';
       };
 
@@ -69,7 +69,7 @@ let
       };
 
       webService = {
-        enable = mkEnableOption "awstats web service";
+        enable = mkEnableOption (lib.mdDoc "awstats web service");
 
         hostname = mkOption {
           type = types.str;
@@ -95,7 +95,7 @@ in
   ];
 
   options.services.awstats = {
-    enable = mkEnableOption "awstats";
+    enable = mkEnableOption (lib.mdDoc "awstats");
 
     dataDir = mkOption {
       type = types.path;

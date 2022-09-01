@@ -10,7 +10,7 @@ in {
 
   options = {
     services.orangefs.client = {
-      enable = mkEnableOption "OrangeFS client daemon";
+      enable = mkEnableOption (lib.mdDoc "OrangeFS client daemon");
 
       extraOptions = mkOption {
         type = with types; listOf str;

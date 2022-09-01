@@ -8,7 +8,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.jwm.enable = mkEnableOption "jwm";
+    services.xserver.windowManager.jwm.enable = mkEnableOption (lib.mdDoc "jwm");
   };
 
   ###### implementation

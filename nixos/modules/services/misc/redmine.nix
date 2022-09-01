@@ -49,7 +49,7 @@ in
   # interface
   options = {
     services.redmine = {
-      enable = mkEnableOption "Redmine";
+      enable = mkEnableOption (lib.mdDoc "Redmine");
 
       package = mkOption {
         type = types.package;

@@ -32,7 +32,7 @@ in
   # interface
 
   options.services.limesurvey = {
-    enable = mkEnableOption "Limesurvey web application.";
+    enable = mkEnableOption (lib.mdDoc "Limesurvey web application.");
 
     database = {
       type = mkOption {

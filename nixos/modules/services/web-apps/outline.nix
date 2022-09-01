@@ -12,7 +12,7 @@ in
   #   https://github.com/outline/outline/blob/v0.65.2/shared/types.ts
   # The order is kept the same here to make updating easier.
   options.services.outline = {
-    enable = lib.mkEnableOption "outline";
+    enable = lib.mkEnableOption (lib.mdDoc "outline");
 
     package = lib.mkOption {
       default = pkgs.outline;
@@ -29,13 +29,13 @@ in
           ${"''"};
         })
       '';
-      description = "Outline package to use.";
+      description = lib.mdDoc "Outline package to use.";
     };
 
     user = lib.mkOption {
       type = lib.types.str;
       default = defaultUser;
-      description = ''
+      description = lib.mdDoc ''
         User under which the service should run. If this is the default value,
         the user will be created, with the specified group as the primary
         group.
@@ -45,7 +45,7 @@ in
     group = lib.mkOption {
       type = lib.types.str;
       default = defaultUser;
-      description = ''
+      description = lib.mdDoc ''
         Group under which the service should run. If this is the default value,
         the group will be created.
       '';
@@ -55,8 +55,8 @@ in
       type = lib.types.str;
       default = "";
       example = "--env=production-ssl-disabled";
-      description = ''
-        Optional arguments to pass to <literal>sequelize</literal> calls.
+      description = lib.mdDoc ''
+        Optional arguments to pass to `sequelize` calls.
       '';
     };
 
@@ -67,7 +67,7 @@ in
     secretKeyFile = lib.mkOption {
       type = lib.types.str;
       default = "/var/lib/outline/secret_key";
-      description = ''
+      description = lib.mdDoc ''
         File path that contains the application secret key. It must be 32
         bytes long and hex-encoded. If the file does not exist, a new key will
         be generated and saved here.
@@ -77,7 +77,7 @@ in
     utilsSecretFile = lib.mkOption {
       type = lib.types.str;
       default = "/var/lib/outline/utils_secret";
-      description = ''
+      description = lib.mdDoc ''
         File path that contains the utility secret key. If the file does not
         exist, a new key will be generated and saved here.
       '';
@@ -86,49 +86,49 @@ in
     databaseUrl = lib.mkOption {
       type = lib.types.str;
       default = "local";
-      description = ''
+      description = lib.mdDoc ''
         URI to use for the main PostgreSQL database. If this needs to include
         credentials that shouldn't be world-readable in the Nix store, set an
         environment file on the systemd service and override the
-        <literal>DATABASE_URL</literal> entry. Pass the string
-        <literal>local</literal> to setup a database on the local server.
+        `DATABASE_URL` entry. Pass the string
+        `local` to setup a database on the local server.
       '';
     };
 
     redisUrl = lib.mkOption {
       type = lib.types.str;
       default = "local";
-      description = ''
+      description = lib.mdDoc ''
         Connection to a redis server. If this needs to include credentials
         that shouldn't be world-readable in the Nix store, set an environment
         file on the systemd service and override the
-        <literal>REDIS_URL</literal> entry. Pass the string
-        <literal>local</literal> to setup a local Redis database.
+        `REDIS_URL` entry. Pass the string
+        `local` to setup a local Redis database.
       '';
     };
 
     publicUrl = lib.mkOption {
       type = lib.types.str;
       default = "http://localhost:3000";
-      description = "The fully qualified, publicly accessible URL";
+      description = lib.mdDoc "The fully qualified, publicly accessible URL";
     };
 
     port = lib.mkOption {
       type = lib.types.port;
       default = 3000;
-      description = "Listening port.";
+      description = lib.mdDoc "Listening port.";
     };
 
     storage = lib.mkOption {
-      description = ''
+      description = lib.mdDoc ''
         To support uploading of images for avatars and document attachments an
         s3-compatible storage must be provided. AWS S3 is recommended for
         redundency however if you want to keep all file storage local an
-        alternative such as <link xlink:href="https://github.com/minio/minio">minio</link>
+        alternative such as [minio](https://github.com/minio/minio)
         can be used.
 
         A more detailed guide on setting up S3 is available
-        <link xlink:href="https://wiki.generaloutline.com/share/125de1cc-9ff6-424b-8415-0d58c809a40f">here</link>.
+        [here](https://wiki.generaloutline.com/share/125de1cc-9ff6-424b-8415-0d58c809a40f).
       '';
       example = lib.literalExpression ''
         {
@@ -143,42 +143,42 @@ in
         options = {
           accessKey = lib.mkOption {
             type = lib.types.str;
-            description = "S3 access key.";
+            description = lib.mdDoc "S3 access key.";
           };
           secretKeyFile = lib.mkOption {
             type = lib.types.path;
-            description = "File path that contains the S3 secret key.";
+            description = lib.mdDoc "File path that contains the S3 secret key.";
           };
           region = lib.mkOption {
             type = lib.types.str;
             default = "xx-xxxx-x";
-            description = "AWS S3 region name.";
+            description = lib.mdDoc "AWS S3 region name.";
           };
           uploadBucketUrl = lib.mkOption {
             type = lib.types.str;
-            description = ''
+            description = lib.mdDoc ''
               URL endpoint of an S3-compatible API where uploads should be
               stored.
             '';
           };
           uploadBucketName = lib.mkOption {
             type = lib.types.str;
-            description = "Name of the bucket where uploads should be stored.";
+            description = lib.mdDoc "Name of the bucket where uploads should be stored.";
           };
           uploadMaxSize = lib.mkOption {
             type = lib.types.int;
             default = 26214400;
-            description = "Maxmium file size for uploads.";
+            description = lib.mdDoc "Maxmium file size for uploads.";
           };
           forcePathStyle = lib.mkOption {
             type = lib.types.bool;
             default = true;
-            description = "Force S3 path style.";
+            description = lib.mdDoc "Force S3 path style.";
           };
           acl = lib.mkOption {
             type = lib.types.str;
             default = "private";
-            description = "ACL setting.";
+            description = lib.mdDoc "ACL setting.";
           };
         };
       };
@@ -189,56 +189,56 @@ in
     #
 
     slackAuthentication = lib.mkOption {
-      description = ''
+      description = lib.mdDoc ''
         To configure Slack auth, you'll need to create an Application at
         https://api.slack.com/apps
 
-        When configuring the Client ID, add a redirect URL under "OAuth &amp; Permissions"
-        to <literal>https://[publicUrl]/auth/slack.callback</literal>.
+        When configuring the Client ID, add a redirect URL under "OAuth & Permissions"
+        to `https://[publicUrl]/auth/slack.callback`.
       '';
       default = null;
       type = lib.types.nullOr (lib.types.submodule {
         options = {
           clientId = lib.mkOption {
             type = lib.types.str;
-            description = "Authentication key.";
+            description = lib.mdDoc "Authentication key.";
           };
           secretFile = lib.mkOption {
             type = lib.types.str;
-            description = "File path containing the authentication secret.";
+            description = lib.mdDoc "File path containing the authentication secret.";
           };
         };
       });
     };
 
     googleAuthentication = lib.mkOption {
-      description = ''
+      description = lib.mdDoc ''
         To configure Google auth, you'll need to create an OAuth Client ID at
         https://console.cloud.google.com/apis/credentials
 
         When configuring the Client ID, add an Authorized redirect URI to
-        <literal>https://[publicUrl]/auth/google.callback</literal>.
+        `https://[publicUrl]/auth/google.callback`.
       '';
       default = null;
       type = lib.types.nullOr (lib.types.submodule {
         options = {
           clientId = lib.mkOption {
             type = lib.types.str;
-            description = "Authentication client identifier.";
+            description = lib.mdDoc "Authentication client identifier.";
           };
           clientSecretFile = lib.mkOption {
             type = lib.types.str;
-            description = "File path containing the authentication secret.";
+            description = lib.mdDoc "File path containing the authentication secret.";
           };
         };
       });
     };
 
     azureAuthentication = lib.mkOption {
-      description = ''
+      description = lib.mdDoc ''
         To configure Microsoft/Azure auth, you'll need to create an OAuth
         Client. See
-        <link xlink:href="https://wiki.generaloutline.com/share/dfa77e56-d4d2-4b51-8ff8-84ea6608faa4">the guide</link>
+        [the guide](https://wiki.generaloutline.com/share/dfa77e56-d4d2-4b51-8ff8-84ea6608faa4)
         for details on setting up your Azure App.
       '';
       default = null;
@@ -246,53 +246,53 @@ in
         options = {
           clientId = lib.mkOption {
             type = lib.types.str;
-            description = "Authentication client identifier.";
+            description = lib.mdDoc "Authentication client identifier.";
           };
           clientSecretFile = lib.mkOption {
             type = lib.types.str;
-            description = "File path containing the authentication secret.";
+            description = lib.mdDoc "File path containing the authentication secret.";
           };
           resourceAppId = lib.mkOption {
             type = lib.types.str;
-            description = "Authentication application resource ID.";
+            description = lib.mdDoc "Authentication application resource ID.";
           };
         };
       });
     };
 
     oidcAuthentication = lib.mkOption {
-      description = ''
+      description = lib.mdDoc ''
         To configure generic OIDC auth, you'll need some kind of identity
         provider. See the documentation for whichever IdP you use to fill out
         all the fields. The redirect URL is
-        <literal>https://[publicUrl]/auth/oidc.callback</literal>.
+        `https://[publicUrl]/auth/oidc.callback`.
       '';
       default = null;
       type = lib.types.nullOr (lib.types.submodule {
         options = {
           clientId = lib.mkOption {
             type = lib.types.str;
-            description = "Authentication client identifier.";
+            description = lib.mdDoc "Authentication client identifier.";
           };
           clientSecretFile = lib.mkOption {
             type = lib.types.str;
-            description = "File path containing the authentication secret.";
+            description = lib.mdDoc "File path containing the authentication secret.";
           };
           authUrl = lib.mkOption {
             type = lib.types.str;
-            description = "OIDC authentication URL endpoint.";
+            description = lib.mdDoc "OIDC authentication URL endpoint.";
           };
           tokenUrl = lib.mkOption {
             type = lib.types.str;
-            description = "OIDC token URL endpoint.";
+            description = lib.mdDoc "OIDC token URL endpoint.";
           };
           userinfoUrl = lib.mkOption {
             type = lib.types.str;
-            description = "OIDC userinfo URL endpoint.";
+            description = lib.mdDoc "OIDC userinfo URL endpoint.";
           };
           usernameClaim = lib.mkOption {
             type = lib.types.str;
-            description = ''
+            description = lib.mdDoc ''
               Specify which claims to derive user information from. Supports any
               valid JSON path with the JWT payload
             '';
@@ -300,12 +300,12 @@ in
           };
           displayName = lib.mkOption {
             type = lib.types.str;
-            description = "Display name for OIDC authentication.";
+            description = lib.mdDoc "Display name for OIDC authentication.";
             default = "OpenID";
           };
           scopes = lib.mkOption {
             type = lib.types.listOf lib.types.str;
-            description = "OpenID authentication scopes.";
+            description = lib.mdDoc "OpenID authentication scopes.";
             default = [ "openid" "profile" "email" ];
           };
         };
@@ -319,28 +319,28 @@ in
     sslKeyFile = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         File path that contains the Base64-encoded private key for HTTPS
         termination. This is only required if you do not use an external reverse
         proxy. See
-        <link xlink:href="https://wiki.generaloutline.com/share/dfa77e56-d4d2-4b51-8ff8-84ea6608faa4">the documentation</link>.
+        [the documentation](https://wiki.generaloutline.com/share/dfa77e56-d4d2-4b51-8ff8-84ea6608faa4).
       '';
     };
     sslCertFile = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         File path that contains the Base64-encoded certificate for HTTPS
         termination. This is only required if you do not use an external reverse
         proxy. See
-        <link xlink:href="https://wiki.generaloutline.com/share/dfa77e56-d4d2-4b51-8ff8-84ea6608faa4">the documentation</link>.
+        [the documentation](https://wiki.generaloutline.com/share/dfa77e56-d4d2-4b51-8ff8-84ea6608faa4).
       '';
     };
 
     cdnUrl = lib.mkOption {
       type = lib.types.str;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         If using a Cloudfront/Cloudflare distribution or similar it can be set
         using this option. This will cause paths to JavaScript files,
         stylesheets and images to be updated to the hostname defined here. In
@@ -351,9 +351,9 @@ in
     forceHttps = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Auto-redirect to HTTPS in production. The default is
-        <literal>true</literal> but you may set this to <literal>false</literal>
+        `true` but you may set this to `false`
         if you can be sure that SSL is terminated at an external loadbalancer.
       '';
     };
@@ -361,7 +361,7 @@ in
     enableUpdateCheck = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Have the installation check for updates by sending anonymized statistics
         to the maintainers.
       '';
@@ -370,7 +370,7 @@ in
     concurrency = lib.mkOption {
       type = lib.types.int;
       default = 1;
-      description = ''
+      description = lib.mdDoc ''
         How many processes should be spawned. For a rough estimate, divide your
         server's available memory by 512.
       '';
@@ -379,7 +379,7 @@ in
     maximumImportSize = lib.mkOption {
       type = lib.types.int;
       default = 5120000;
-      description = ''
+      description = lib.mdDoc ''
         The maximum size of document imports. Overriding this could be required
         if you have especially large Word documents with embedded imagery.
       '';
@@ -388,11 +388,11 @@ in
     debugOutput = lib.mkOption {
       type = lib.types.nullOr (lib.types.enum [ "http" ]);
       default = null;
-      description = "Set this to <literal>http</literal> log HTTP requests.";
+      description = lib.mdDoc "Set this to `http` log HTTP requests.";
     };
 
     slackIntegration = lib.mkOption {
-      description = ''
+      description = lib.mdDoc ''
         For a complete Slack integration with search and posting to channels
         this configuration is also needed. See here for details:
         https://wiki.generaloutline.com/share/be25efd1-b3ef-4450-b8e5-c4a4fc11e02a
@@ -402,16 +402,16 @@ in
         options = {
           verificationTokenFile = lib.mkOption {
             type = lib.types.str;
-            description = "File path containing the verification token.";
+            description = lib.mdDoc "File path containing the verification token.";
           };
           appId = lib.mkOption {
             type = lib.types.str;
-            description = "Application ID.";
+            description = lib.mdDoc "Application ID.";
           };
           messageActions = lib.mkOption {
             type = lib.types.bool;
             default = true;
-            description = "Whether to enable message actions.";
+            description = lib.mdDoc "Whether to enable message actions.";
           };
         };
       });
@@ -420,7 +420,7 @@ in
     googleAnalyticsId = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Optionally enable Google Analytics to track page views in the knowledge
         base.
       '';
@@ -429,8 +429,8 @@ in
     sentryDsn = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
-      description = ''
-        Optionally enable <link xlink:href="https://sentry.io/">Sentry</link> to
+      description = lib.mdDoc ''
+        Optionally enable [Sentry](https://sentry.io/) to
         track errors and performance.
       '';
     };
@@ -438,14 +438,14 @@ in
     logo = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Custom logo displayed on the authentication screen. This will be scaled
         to a height of 60px.
       '';
     };
 
     smtp = lib.mkOption {
-      description = ''
+      description = lib.mdDoc ''
         To support sending outgoing transactional emails such as
         "document updated" or "you've been invited" you'll need to provide
         authentication for an SMTP server.
@@ -455,39 +455,39 @@ in
         options = {
           host = lib.mkOption {
             type = lib.types.str;
-            description = "Host name or IP adress of the SMTP server.";
+            description = lib.mdDoc "Host name or IP adress of the SMTP server.";
           };
           port = lib.mkOption {
             type = lib.types.port;
-            description = "TCP port of the SMTP server.";
+            description = lib.mdDoc "TCP port of the SMTP server.";
           };
           username = lib.mkOption {
             type = lib.types.str;
-            description = "Username to authenticate with.";
+            description = lib.mdDoc "Username to authenticate with.";
           };
           passwordFile = lib.mkOption {
             type = lib.types.str;
-            description = ''
+            description = lib.mdDoc ''
               File path containing the password to authenticate with.
             '';
           };
           fromEmail = lib.mkOption {
             type = lib.types.str;
-            description = "Sender email in outgoing mail.";
+            description = lib.mdDoc "Sender email in outgoing mail.";
           };
           replyEmail = lib.mkOption {
             type = lib.types.str;
-            description = "Reply address in outgoing mail.";
+            description = lib.mdDoc "Reply address in outgoing mail.";
           };
           tlsCiphers = lib.mkOption {
             type = lib.types.str;
             default = "";
-            description = "Override SMTP cipher configuration.";
+            description = lib.mdDoc "Override SMTP cipher configuration.";
           };
           secure = lib.mkOption {
             type = lib.types.bool;
             default = true;
-            description = "Use a secure SMTP connection.";
+            description = lib.mdDoc "Use a secure SMTP connection.";
           };
         };
       });
@@ -516,24 +516,24 @@ in
          "zh_TW"
       ];
       default = "en_US";
-      description = ''
+      description = lib.mdDoc ''
         The default interface language. See
-        <link xlink:href="https://translate.getoutline.com/">translate.getoutline.com</link>
+        [translate.getoutline.com](https://translate.getoutline.com/)
         for a list of available language codes and their rough percentage
         translated.
       '';
     };
 
-    rateLimiter.enable = lib.mkEnableOption "rate limiter for the application web server";
+    rateLimiter.enable = lib.mkEnableOption (lib.mdDoc "rate limiter for the application web server");
     rateLimiter.requests = lib.mkOption {
       type = lib.types.int;
       default = 5000;
-      description = "Maximum number of requests in a throttling window.";
+      description = lib.mdDoc "Maximum number of requests in a throttling window.";
     };
     rateLimiter.durationWindow = lib.mkOption {
       type = lib.types.int;
       default = 60;
-      description = "Length of a throttling window.";
+      description = lib.mdDoc "Length of a throttling window.";
     };
   };
 

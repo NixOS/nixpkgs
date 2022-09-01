@@ -37,7 +37,7 @@ in
 
     services.mysqlBackup = {
 
-      enable = mkEnableOption "MySQL backups";
+      enable = mkEnableOption (lib.mdDoc "MySQL backups");
 
       calendar = mkOption {
         type = types.str;

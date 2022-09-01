@@ -9,7 +9,7 @@ in
 {
   options = {
     services.jackett = {
-      enable = mkEnableOption "Jackett";
+      enable = mkEnableOption (lib.mdDoc "Jackett");
 
       dataDir = mkOption {
         type = types.str;

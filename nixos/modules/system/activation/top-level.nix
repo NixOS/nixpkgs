@@ -164,17 +164,17 @@ in
     specialisation = mkOption {
       default = {};
       example = lib.literalExpression "{ fewJobsManyCores.configuration = { nix.settings = { core = 0; max-jobs = 1; }; }; }";
-      description = ''
+      description = lib.mdDoc ''
         Additional configurations to build. If
-        <literal>inheritParentConfig</literal> is true, the system
+        `inheritParentConfig` is true, the system
         will be based on the overall system configuration.
 
         To switch to a specialised configuration
-        (e.g. <literal>fewJobsManyCores</literal>) at runtime, run:
+        (e.g. `fewJobsManyCores`) at runtime, run:
 
-        <screen>
-        <prompt># </prompt>sudo /run/current-system/specialisation/fewJobsManyCores/bin/switch-to-configuration test
-        </screen>
+        ```
+        sudo /run/current-system/specialisation/fewJobsManyCores/bin/switch-to-configuration test
+        ```
       '';
       type = types.attrsOf (types.submodule (
         local@{ ... }: let
@@ -207,7 +207,7 @@ in
     system.boot.loader.id = mkOption {
       internal = true;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Id string of the used bootloader.
       '';
     };
@@ -217,7 +217,7 @@ in
       default = pkgs.stdenv.hostPlatform.linux-kernel.target;
       defaultText = literalExpression "pkgs.stdenv.hostPlatform.linux-kernel.target";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Name of the kernel file to be passed to the bootloader.
       '';
     };
@@ -226,7 +226,7 @@ in
       internal = true;
       default = "initrd";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Name of the initrd file to be passed to the bootloader.
       '';
     };
@@ -238,10 +238,10 @@ in
         #             go to `true` instead of `echo`, hiding the useless path
         #             from the log.
         default = "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
-        description = ''
+        description = lib.mdDoc ''
           A program that writes a bootloader installation script to the path passed in the first command line argument.
 
-          See <literal>nixos/modules/system/activation/switch-to-configuration.pl</literal>.
+          See `nixos/modules/system/activation/switch-to-configuration.pl`.
         '';
         type = types.unique {
           message = ''
@@ -280,7 +280,7 @@ in
       type = types.lines;
       internal = true;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         This code will be added to the builder creating the system store path.
       '';
     };

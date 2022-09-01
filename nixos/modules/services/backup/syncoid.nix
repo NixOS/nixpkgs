@@ -85,7 +85,7 @@ in
   # Interface
 
   options.services.syncoid = {
-    enable = mkEnableOption "Syncoid ZFS synchronization service";
+    enable = mkEnableOption (lib.mdDoc "Syncoid ZFS synchronization service");
 
     interval = mkOption {
       type = types.str;
@@ -200,7 +200,7 @@ in
             '';
           };
 
-          recursive = mkEnableOption ''the transfer of child datasets'';
+          recursive = mkEnableOption (lib.mdDoc ''the transfer of child datasets'');
 
           sshKey = mkOption {
             type = types.nullOr types.path;
