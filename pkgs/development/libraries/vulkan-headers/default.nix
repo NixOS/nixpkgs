@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake }:
 stdenv.mkDerivation rec {
   pname = "vulkan-headers";
-  version = "1.3.224.0";
+  version = "1.3.224.1";
 
   nativeBuildInputs = [ cmake ];
 
