@@ -18442,7 +18442,7 @@ with pkgs;
   gtkimageview = callPackage ../development/libraries/gtkimageview { };
 
   glib = callPackage ../development/libraries/glib (let
-    glib-untested = glib.override { doCheck = false; };
+    glib-untested = glib.overrideAttrs (_: { doCheck = false; });
   in {
     # break dependency cycles
     # these things are only used for tests, they don't get into the closure
