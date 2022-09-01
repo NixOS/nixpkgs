@@ -53,7 +53,6 @@
 , zsh
 
   # command-t dependencies
-, rake
 , ruby
 
   # cpsm dependencies
@@ -240,9 +239,11 @@ self: super: {
   };
 
   command-t = super.command-t.overrideAttrs (old: {
-    buildInputs = [ ruby rake ];
+    buildInputs = [ ruby ];
     buildPhase = ''
-      rake make
+      substituteInPlace lua/wincent/commandt/lib/Makefile \
+        --replace '/bin/bash' 'bash'
+      make build
       rm ruby/command-t/ext/command-t/*.o
     '';
   });
@@ -979,7 +980,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-prqS4cx5T+EiilXf3v7ResNBtgst0Kpgvayknf0QDXA=";
+          cargoSha256 = "sha256-QAfHhpXABuOPaHCfQQZYhBERGXMaJPFipWHt/MeSc3c=";
         };
       in
       ''
