@@ -44,6 +44,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-oPmqo5GLrXgQOfwwemNWUqFNGzkc1Vm2bt7Evtujxdc=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-38784.patch";
+      url = "https://gitlab.freedesktop.org/poppler/poppler/-/commit/27354e9d9696ee2bc063910a6c9a6b27c5184a52.patch";
+      sha256 = "sha256-M12zaHxcgQB/37tHffllqzd+Juq9BH5gpKVGaRY00vI=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     ninja
