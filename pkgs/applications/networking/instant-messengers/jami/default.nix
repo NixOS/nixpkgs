@@ -12,7 +12,7 @@
 }:
 
 let
-  version = "20220726.1515.da8d1da";
+  version = "20220825.0828.c10f01f";
 
   src = fetchzip {
     url = "https://dl.jami.net/release/tarballs/jami_${version}.tar.gz";
