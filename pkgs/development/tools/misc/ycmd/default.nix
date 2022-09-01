@@ -1,33 +1,34 @@
-{ stdenv, lib, fetchFromGitHub, cmake, llvmPackages, boost, python
+{ stdenv, lib, fetchFromGitHub, cmake, llvmPackages, abseil-cpp, boost, python
 , withGocode ? true, gocode
 , withGodef ? true, godef
 , withGotools? true, gotools
+, withRust ? true, rust-analyzer
 , withTypescript ? true, nodePackages
 , fixDarwinDylibNames, Cocoa
 }:
 
 stdenv.mkDerivation {
   pname = "ycmd";
-  version = "unstable-2020-02-22";
+  version = "unstable-2022-06-11";
   disabled = !python.isPy3k;
 
   # required for third_party directory creation
   src = fetchFromGitHub {
     owner = "Valloric";
     repo = "ycmd";
-    rev = "9a6b86e3a156066335b678c328f226229746bae5";
-    sha256 = "sha256-xzLELjp4DsG6mkzaFqpuquSa0uoaZWrYLrKr/mzrqrA=";
+    rev = "d1707c14883ced0e32fcca9c0f5dbd6849b5f751";
+    sha256 = "sha256-pcl75O1ZSxLJzmIkROWje8bQgDoaOuOe0Es3TtOrJHg=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ]
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs = [ boost llvmPackages.libclang ]
+  buildInputs = [ abseil-cpp boost llvmPackages.libclang ]
     ++ lib.optional stdenv.isDarwin Cocoa;
 
   buildPhase = ''
-    export EXTRA_CMAKE_ARGS=-DPATH_TO_LLVM_ROOT=${llvmPackages.clang-unwrapped}
-    ${python.interpreter} build.py --system-libclang --clang-completer --system-boost
+    export EXTRA_CMAKE_ARGS="-DPATH_TO_LLVM_ROOT=${llvmPackages.clang-unwrapped} -DUSE_SYSTEM_ABSEIL=1"
+    ${python.interpreter} build.py --system-libclang --clang-completer
   '';
 
   dontConfigure = true;
@@ -50,7 +51,7 @@ stdenv.mkDerivation {
     " ycmd/__main__.py
 
     mkdir -p $out/lib/ycmd
-    cp -r ycmd/ CORE_VERSION libclang.so.* libclang.dylib* ycm_core.so $out/lib/ycmd/
+    cp -r ycmd/ CORE_VERSION libclang.so.* libclang.dylib* ycm_core.*.so $out/lib/ycmd/
 
     mkdir -p $out/bin
     ln -s $out/lib/ycmd/ycmd/__main__.py $out/bin/ycmd
@@ -73,6 +74,9 @@ stdenv.mkDerivation {
     TARGET=$out/lib/ycmd/third_party/go/src/golang.org/x/tools/cmd/gopls
     mkdir -p $TARGET
     ln -sf ${gotools}/bin/gopls $TARGET
+  '' + lib.optionalString withRust ''
+    TARGET=$out/lib/ycmd/third_party/rust-analyzer
+    ln -sf ${rust-analyzer} $TARGET
   '' + lib.optionalString withTypescript ''
     TARGET=$out/lib/ycmd/third_party/tsserver
     ln -sf ${nodePackages.typescript} $TARGET
