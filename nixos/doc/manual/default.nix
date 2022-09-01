@@ -6,6 +6,7 @@
 , extraSources ? []
 , baseOptionsJSON ? null
 , warningsAreErrors ? true
+, allowDocBook ? true
 , prefix ? ../../..
 }:
 
@@ -28,7 +29,7 @@ let
   stripAnyPrefixes = lib.flip (lib.foldr lib.removePrefix) prefixesToStrip;
 
   optionsDoc = buildPackages.nixosOptionsDoc {
-    inherit options revision baseOptionsJSON warningsAreErrors;
+    inherit options revision baseOptionsJSON warningsAreErrors allowDocBook;
     transformOptions = opt: opt // {
       # Clean up declaration sites to not refer to the NixOS source tree.
       declarations = map stripAnyPrefixes opt.declarations;
