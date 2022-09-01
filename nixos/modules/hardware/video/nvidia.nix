@@ -37,6 +37,22 @@ in
     ];
 
   options = {
+    hardware.nvidia.cuda.enable = lib.mkOption {
+      type = types.bool;
+      default = enabled;
+      defaultText = literalExpression ''elem "nvidia" config.services.xserver.videoDrivers'';
+      description = lib.mdDoc "Whether to enable cuda.";
+    };
+
+    hardware.nvidia.cuda.package = lib.mkOption {
+      type = types.package;
+      default = pkgs.cudaPackages.cudatoolkit;
+      defaultText = literalExpression "pkgs.cudaPackages.cudatoolkit";
+      description = lib.mdDoc ''
+        Which cuda package to use for system libraries.
+      '';
+    };
+
     hardware.nvidia.powerManagement.enable = mkOption {
       type = types.bool;
       default = false;
@@ -320,7 +336,10 @@ in
     hardware.opengl.extraPackages = [
       nvidia_x11.out
       pkgs.nvidia-vaapi-driver
+    ] ++ lib.optionals cfg.cuda.enable [
+      cfg.cuda.package
     ];
+
     hardware.opengl.extraPackages32 = [
       nvidia_x11.lib32
       pkgs.pkgsi686Linux.nvidia-vaapi-driver
