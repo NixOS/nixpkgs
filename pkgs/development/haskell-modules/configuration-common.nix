@@ -2555,6 +2555,10 @@ self: super: {
     testTarget = "regex-tdfa-unittest";
   } super.regex-tdfa;
 
+  # 2022-09-01:
+  # Restrictive upper bound on base.
+  # Remove once version 1.* is released
+  monad-bayes = doJailbreak super.monad-bayes;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super // (let
   # We need to build purescript with these dependencies and thus also its reverse
   # dependencies to avoid version mismatches in their dependency closure.
