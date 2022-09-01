@@ -5,7 +5,6 @@
 , buildPackages
 
 # this is just for tests (not in the closure of any regular package)
-, doCheck ? config.doCheckByDefault or false
 , coreutils, dbus, libxml2, tzdata
 , desktop-file-utils, shared-mime-info
 , darwin, fetchpatch
@@ -213,7 +212,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
-  preCheck = optionalString doCheck ''
+  preCheck = optionalString finalAttrs.doCheck or config.doCheckByDefault or false ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/glib-${finalAttrs.version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export TZDIR="${tzdata}/share/zoneinfo"
     export XDG_CACHE_HOME="$TMP"
@@ -225,8 +224,6 @@ stdenv.mkDerivation (finalAttrs: {
     echo "PATH=$PATH"
   '';
 
-  inherit doCheck;
-
   separateDebugInfo = stdenv.isLinux;
 
   passthru = rec {
@@ -236,6 +233,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeSchemaPath = dir: name: "${makeSchemaDataDirPath dir name}/glib-2.0/schemas";
     getSchemaPath = pkg: makeSchemaPath pkg pkg.name;
     getSchemaDataDirPath = pkg: makeSchemaDataDirPath pkg pkg.name;
+
+    tests.withChecks = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
 
     inherit flattenInclude;
     updateScript = gnome.updateScript {
