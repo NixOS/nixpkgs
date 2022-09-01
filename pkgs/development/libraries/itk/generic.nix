@@ -1,9 +1,11 @@
+{ version, rev, sourceSha256 }:
+
 { lib, stdenv, fetchFromGitHub, cmake, makeWrapper
 , pkg-config, libX11, libuuid, xz, vtk, Cocoa }:
 
 stdenv.mkDerivation rec {
   pname = "itk";
-  version = "5.2.1";
+  inherit version;
 
   itkGenericLabelInterpolatorSrc = fetchFromGitHub {
     owner = "InsightSoftwareConsortium";
@@ -22,8 +24,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "InsightSoftwareConsortium";
     repo = "ITK";
-    rev = "v${version}";
-    sha256 = "sha256-KaVe9FMGm4ZVMpwAT12fA67T0qZS3ZueiI8z85+xSwE=";
+    inherit rev;
+    sha256 = sourceSha256;
   };
 
   postPatch = ''

@@ -18878,9 +18878,15 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  itk = callPackage ../development/libraries/itk {
+  itk_5 = callPackage ../development/libraries/itk/5.x.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
+
+  itk-unstable = callPackage ../development/libraries/itk/unstable.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
+
+  itk = itk_5;
 
   jama = callPackage ../development/libraries/jama { };
 
