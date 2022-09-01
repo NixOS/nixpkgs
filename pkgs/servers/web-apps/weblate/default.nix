@@ -1,4 +1,14 @@
-{ lib, fetchFromGitHub, poetry2nix, gettext, isocodes, xorg }:
+{ lib
+, fetchFromGitHub
+, poetry2nix
+, gettext
+, isocodes
+, xorg
+, wrapGAppsNoGuiHook
+, gobject-introspection
+, pango
+, harfbuzz
+}:
 
 (poetry2nix.mkPoetryApplication {
 
@@ -62,6 +72,16 @@
       });
     }
   );
+
+  buildInputs = [
+    pango
+    harfbuzz
+  ];
+
+  nativeBuildInputs = [
+    wrapGAppsNoGuiHook
+    gobject-introspection
+  ];
 
   meta = with lib; {
     description = "Web based translation tool with tight version control integration";
