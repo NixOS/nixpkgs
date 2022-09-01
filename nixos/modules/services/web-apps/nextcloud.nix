@@ -841,6 +841,8 @@ in {
         in {
           wantedBy = [ "multi-user.target" ];
           before = [ "phpfpm-nextcloud.service" ];
+          after = optional (cfg.config.dbtype == "pgsql") "postgresql.service";
+          requires = optional (cfg.config.dbtype == "pgsql") "postgresql.service";
           path = [ occ ];
           script = ''
             ${optionalString (c.dbpassFile != null) ''
