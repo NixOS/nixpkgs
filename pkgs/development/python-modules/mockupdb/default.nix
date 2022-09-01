@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , pymongo
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -12,6 +15,8 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ pymongo ];
+
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "mockupdb" ];
 
