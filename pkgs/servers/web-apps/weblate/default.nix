@@ -51,16 +51,13 @@
       pyparsing = super.pyparsing.overridePythonAttrs (old: {
         nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.flit-core ];
       });
-      pillow = super.pillow.overridePythonAttrs (old: {
-        buildInputs = (old.buildInputs or [ ]) ++ [ xorg.libxcb ];
-      });
-      ua-parser = super.ua-parser.overridePythonAttrs (old: {
-        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.pyyaml ];
-        postPatch = ''
-          substituteInPlace setup.py \
-            --replace "pyyaml ~= 5.4.0" "pyyaml~=6.0"
-        '';
-      });
+      # ua-parser = super.ua-parser.overridePythonAttrs (old: {
+      #   nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.pyyaml ];
+      #   postPatch = ''
+      #     substituteInPlace setup.py \
+      #       --replace "pyyaml ~= 5.4.0" "pyyaml~=6.0"
+      #   '';
+      # });
       jarowinkler = super.jarowinkler.overridePythonAttrs (old: {
         nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.scikit-build ];
       });
