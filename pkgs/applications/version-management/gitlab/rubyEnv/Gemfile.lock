@@ -887,7 +887,7 @@ GEM
       plist (~> 3.1)
       train-core
       wmi-lite (~> 1.0)
-    oj (3.13.20)
+    oj (3.13.21)
     omniauth (1.9.1)
       hashie (>= 3.4.6)
       rack (>= 1.6.2, < 3)
@@ -1651,7 +1651,7 @@ DEPENDENCIES
   oauth2 (~> 2.0)
   octokit (~> 4.15)
   ohai (~> 16.10)
-  oj (~> 3.13.20)
+  oj (~> 3.13.21)
   omniauth (~> 1.8)
   omniauth-alicloud (~> 1.0.1)
   omniauth-atlassian-oauth2 (~> 0.2.0)

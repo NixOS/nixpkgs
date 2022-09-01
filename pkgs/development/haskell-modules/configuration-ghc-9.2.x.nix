@@ -213,7 +213,9 @@ self: super: {
   implicit-hie-cradle = doJailbreak super.implicit-hie-cradle;
   # 1.3 introduced support for GHC 9.2.x, so when this assert fails, the jailbreak can be removed
   hashtables = assert super.hashtables.version == "1.2.4.2"; doJailbreak super.hashtables;
-  hiedb = doJailbreak super.hiedb;
+
+  # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
+  hiedb = doJailbreak (dontCheck super.hiedb);
 
   # 2022-02-05: The following plugins don‘t work yet on ghc9.2.
   # Compare: https://haskell-language-server.readthedocs.io/en/latest/supported-versions.html

@@ -1,10 +1,11 @@
-{ rustPlatform, lib, fetchFromGitHub
+{ rust_1_61, lib, fetchFromGitHub
 , zlib, openssl
 , pkg-config, protobuf, llvmPackages
 }:
-rustPlatform.buildRustPackage rec {
+
+rust_1_61.packages.stable.rustPlatform.buildRustPackage rec {
   pname = "nearcore";
-  version = "1.27.0";
+  version = "1.28.1";
 
   # https://github.com/near/nearcore/tags
   src = fetchFromGitHub {
@@ -12,10 +13,12 @@ rustPlatform.buildRustPackage rec {
     repo = "nearcore";
     # there is also a branch for this version number, so we need to be explicit
     rev = "refs/tags/${version}";
-    sha256 = "sha256-B9HqUa0mBSvsCPzxPt4NqpV99rV4lmQ9Q/z9lxob9oM=";
+
+    sha256 = "sha256-lAbVcmr8StAZAII++21xiBd4tRcdprefvcGzPLIjl74=";
   };
 
-  cargoSha256 = "sha256-6GIt3J6y/O8XaHQJKRSPRgK2XbghMLif4e2Btdww9Ng=";
+  cargoSha256 = "sha256-1aoL5fbKZ4XZ1ELVDWNDFHDL2FyNuoX/DVb0h8RWBxI=";
+  cargoPatches = [ ./0001-make-near-test-contracts-optional.patch ];
 
   postPatch = ''
     substituteInPlace neard/build.rs \
