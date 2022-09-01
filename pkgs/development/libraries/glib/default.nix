@@ -97,7 +97,9 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/qyliss/glib/-/commit/339a06d66685107280ca6bdca5da5d96b8222fb5.patch";
       sha256 = "sha256-/NdFkuiJvyass3jTDEJPeciA2Lwe53IUd3kAnKAvTaw=";
     })
-  ] ++ optional doCheck ./skip-timer-test.patch;
+
+    ./skip-timer-test.patch
+  ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
