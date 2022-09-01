@@ -20,11 +20,12 @@
 , uvicorn
 , uvloop
 , websockets
+, aioquic
 }:
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "22.3.2";
+  version = "22.6.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -33,22 +34,12 @@ buildPythonPackage rec {
     owner = "sanic-org";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-4zdPp3X22dfZ5YlW3G5/OqeUxrt+NiFO9dk2XjEKXEg=";
+    hash = "sha256-krEQd0ak9Uua+r+pYmLStlizgE4HmZBO8Q0I2/gWAwU=";
   };
-
-  patches = [
-    ./22.3.2-CVE-2022-35920.patch
-  ];
-
-  postPatch = ''
-    # Loosen dependency requirements.
-    substituteInPlace setup.py \
-      --replace "pytest==6.2.5" "pytest" \
-      --replace "gunicorn==20.0.4" "gunicorn"
-  '';
 
   propagatedBuildInputs = [
     aiofiles
+    aioquic
     httptools
     multidict
     sanic-routing
@@ -88,6 +79,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Require networking
+    "test_full_message"
     # Fails to parse cmdline arguments
     "test_dev"
     "test_auto_reload"
@@ -130,9 +123,7 @@ buildPythonPackage rec {
   # for the same local port
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "sanic"
-  ];
+  pythonImportsCheck = [ "sanic" ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;
