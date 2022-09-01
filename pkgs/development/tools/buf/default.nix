@@ -26,6 +26,10 @@ buildGoModule rec {
     ./skip_test_requiring_network.patch
     # Skip TestWorkspaceGit which requires .git and commits.
     ./skip_test_requiring_dotgit.patch
+    # Skips the invalid_upstream test as it is flakey. Based on upstream commit
+    # 27930caf2eb35c2592a77f59ed5afe4d9e2fb7ea.
+    # This patch may be removed on the next buf update.
+    ./skip_test_invalid_upstream_flakey.patch
   ];
 
   nativeBuildInputs = [ installShellFiles ];
