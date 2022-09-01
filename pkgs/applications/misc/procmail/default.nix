@@ -1,22 +1,20 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, msmtp }:
 
 stdenv.mkDerivation rec {
   pname = "procmail";
-  version = "3.22";
+  version = "3.24";
 
-  src = fetchurl {
-    url = "ftp://ftp.fu-berlin.de/pub/unix/mail/procmail/procmail-${version}.tar.gz";
-    sha256 = "05z1c803n5cppkcq99vkyd5myff904lf9sdgynfqngfk9nrpaz08";
+  src = fetchFromGitHub {
+    owner = "BuGlessRB";
+    repo = "procmail";
+    rev = "v${version}";
+    sha256 = "sha256-z0g+IeSldUSwv/W4pAQhtWiughujxsEPgDcsW9Fx3jY=";
   };
 
-  patches = [
-    ./CVE-2014-3618.patch
-    (fetchurl {
-      url = "https://sources.debian.org/data/main/p/procmail/3.22-26/debian/patches/30";
-      sha256 = "11zmz1bj0v9pay3ldmyyg7473b80h89gycrhndsgg9q50yhcqaaq";
-      name = "CVE-2017-16844";
-    })
-  ];
+  patches = [ ./autoconf-bin-lookup-path.patch ];
+
+  # procmail forwarding action relies on a package providing sendmail
+  buildInputs = [ msmtp ];
 
   # getline is defined differently in glibc now. So rename it.
   # Without the .PHONY target "make install" won't install anything on Darwin.
@@ -33,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Mail processing and filtering utility";
-    homepage = "http://www.procmail.org/";
+    homepage = "https://github.com/BuGlessRB/procmail";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ gebner ];

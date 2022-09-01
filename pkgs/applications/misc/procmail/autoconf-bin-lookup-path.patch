@@ -1,0 +1,13 @@
+--- a/src/autoconf	1970-01-01 01:00:01.000000000 +0100
++++ b/src/autoconf	2022-09-02 22:32:07.501456346 +0200
+@@ -1430,8 +1430,8 @@
+ echo '#endif' >>$ACONF
+
+ cat >lookfor <<HERE
+-for a in /usr/sbin /usr/lib /lib /usr/etc /etc /usr/bin /bin /usr/local/bin \
+- /usr/lbin /usr/local/lib /usr/local /usr/.lib /local/bin /sbin
++IFS=:
++for a in \$PATH
+ do
+  if test -f "\$a/\$1"
+  then
