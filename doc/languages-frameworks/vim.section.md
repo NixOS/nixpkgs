@@ -196,20 +196,8 @@ vim_configurable.customize {
 }
 ```
 
-For Neovim the syntax is:
+Note: this is not possible anymore for neovim.
 
-```nix
-neovim.override {
-  configure = {
-    customRC = ''
-      # your custom configuration goes here! 
-    '';
-    plug.plugins = with pkgs.vimPlugins; [
-      vim-go
-    ];
-  };
-}
-```
 
 ## Adding new plugins to nixpkgs {#adding-new-plugins-to-nixpkgs}
 
