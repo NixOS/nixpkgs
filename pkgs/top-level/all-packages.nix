@@ -17466,7 +17466,6 @@ with pkgs;
   boolstuff = callPackage ../development/libraries/boolstuff { };
 
   inherit (callPackage ../development/libraries/boost { inherit (buildPackages) boost-build; })
-    boost155
     boost159
     boost160
     boost165
@@ -32986,7 +32985,7 @@ with pkgs;
   gl117 = callPackage ../games/gl-117 { };
 
   globulation2 = callPackage ../games/globulation {
-    boost = boost155;
+    boost = boost168; # breaks with >= boost169
   };
 
   gltron = callPackage ../games/gltron { };
@@ -33462,7 +33461,7 @@ with pkgs;
   space-orbit = callPackage ../games/space-orbit { };
 
   spring = callPackage ../games/spring
-    { stdenv = gcc10StdenvCompat; asciidoc = asciidoc-full; boost = boost155; };
+    { stdenv = gcc10StdenvCompat; asciidoc = asciidoc-full; };
 
   springLobby = callPackage ../games/spring/springlobby.nix { };
 
