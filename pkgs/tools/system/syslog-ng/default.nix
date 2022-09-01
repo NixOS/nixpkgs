@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "syslog-ng";
-  version = "3.37.1";
+  version = "3.38.1";
 
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1noyDLiWzV1i8k2eG+wTiEf6RhiuE6OUbK4rdcUo7hQ=";
+    sha256 = "sha256-VJH2htC4KbabLg/A1mpi9RmRqvruAFR1v6OPqzmUQfc=";
   };
 
   nativeBuildInputs = [ pkg-config which ];
