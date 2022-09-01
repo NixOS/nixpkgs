@@ -2931,7 +2931,7 @@
   danth = {
     name = "Daniel Thwaites";
     email = "danthwaites30@btinternet.com";
-    matrix = "@danth:pwak.org";
+    matrix = "@danth:danth.me";
     github = "danth";
     githubId = 28959268;
     keys = [{
