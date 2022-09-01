@@ -1,19 +1,18 @@
 { lib, stdenv, fetchFromGitHub, cmake, makeWrapper, openal, fluidsynth
-, soundfont-fluid, libGL, SDL2, bzip2, zlib, libjpeg, libsndfile, mpg123
+, soundfont-fluid, libGL, SDL2, bzip2, zlib, libjpeg, libsndfile, libvpx, mpg123
 , game-music-emu, pkg-config, copyDesktopItems, makeDesktopItem }:
 
 let
-  zmusic-src = fetchFromGitHub {
-    owner = "coelckers";
-    repo = "zmusic";
-    rev = "bff02053bea30bd789e45f60b90db3ffc69c8cc8";
-    sha256 = "0vpr79gpdbhslg5qxyd1qxlv5akgli26skm1vb94yd8v69ymdcy2";
-  };
-  zmusic = stdenv.mkDerivation {
+  zmusic = stdenv.mkDerivation rec {
     pname = "zmusic";
     version = "1.1.3";
 
-    src = zmusic-src;
+    src = fetchFromGitHub {
+      owner = "ZDoom";
+      repo = "ZMusic";
+      rev = version;
+      hash = "sha256-wrNWfTIbNU/S2qFObUSkb6qyaceh+Y7Loxqudl86+W4=";
+    };
 
     nativeBuildInputs = [ cmake pkg-config ];
 
@@ -23,18 +22,17 @@ let
         -e "s@FluidR3_GM.sf2@FluidR3_GM2-2.sf2@g" \
         source/mididevices/music_fluidsynth_mididevice.cpp
     '';
-
   };
 
   gzdoom = stdenv.mkDerivation rec {
     pname = "gzdoom";
-    version = "4.7.1";
+    version = "4.8.2";
 
     src = fetchFromGitHub {
-      owner = "coelckers";
+      owner = "ZDoom";
       repo = "gzdoom";
       rev = "g${version}";
-      sha256 = "sha256-3wO83RgxzeJnoxykKQxb1S1GA6QZlhZMw6GrV3YEm/0=";
+      hash = "sha256-aT7DUZih3EDqncaXYIPIyGsz4fI267N29PmN3qyVjyo=";
       fetchSubmodules = true;
     };
 
@@ -48,6 +46,7 @@ let
       zlib
       libjpeg
       libsndfile
+      libvpx
       mpg123
       game-music-emu
       zmusic
@@ -84,13 +83,11 @@ let
     '';
 
     meta = with lib; {
-      homepage = "https://github.com/coelckers/gzdoom";
-      description =
-        "A Doom source port based on ZDoom. It features an OpenGL renderer and lots of new features";
-      license = licenses.gpl3;
+      homepage = "https://github.com/ZDoom/gzdoom";
+      description = "A Doom source port based on ZDoom. It features an OpenGL renderer and lots of new features";
+      license = licenses.gpl3Plus;
       platforms = [ "x86_64-linux" ];
-      maintainers = with maintainers; [ lassulus ];
+      maintainers = with maintainers; [ azahi lassulus ];
     };
   };
-
 in gzdoom
