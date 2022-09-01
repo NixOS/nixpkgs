@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchCrate
-, openssl
 , stdenv
 , Security
 , withLsp ? true
@@ -9,18 +8,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "taplo";
-  version = "0.6.9";
+  version = "0.7.0";
 
   src = fetchCrate {
     inherit version;
     pname = "taplo-cli";
-    sha256 = "sha256-gf58V/KIsbM+mCT3SvjZ772cuikS2L81eRb7uy8OPys=";
+    sha256 = "sha256-lJdDr6pXOxndv3mBAbqkDnVXOFklSMcnzTed0U1Nm9U=";
   };
 
-  cargoSha256 = "sha256-f+jefc3qw4rljmikvrmvZfCCadBKicBs7SMh/mJ4WSs=";
-
-  OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
-  OPENSSL_INCLUDE_DIR = "${openssl.dev}/include";
+  cargoSha256 = "sha256-1wN43HOyrSFTs9nKxUi3kcnGvtONW8SgKwIEK1ckCgk=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
