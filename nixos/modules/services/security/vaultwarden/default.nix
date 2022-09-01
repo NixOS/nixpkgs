@@ -196,6 +196,7 @@ in {
         ProtectSystem = "strict";
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         StateDirectory = "bitwarden_rs";
+        StateDirectoryMode = "0700";
       };
       wantedBy = [ "multi-user.target" ];
     };

@@ -11,10 +11,6 @@ let
   cfgFile = format.generate "00-default.conf" cfg.settings;
 in
 {
-  imports = [
-    (mkRenamedOptionModule [ "virtualisation" "cri-o" "registries" ] [ "virtualisation" "containers" "registries" "search" ])
-  ];
-
   meta = {
     maintainers = teams.podman.members;
   };

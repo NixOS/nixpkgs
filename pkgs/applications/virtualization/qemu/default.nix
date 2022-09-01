@@ -126,6 +126,27 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/418ade7849ce7641c0f7333718caf5091a02fd4c.patch";
       sha256 = "sha256-zQHDXedIXZBnabv4+3TA4z5mY1+KZiPmqUbhaSkGLgA=";
     })
+    # needed for CVE-2022-0216's test to pass
+    (fetchpatch {
+      name = "fuzz-tests-x86-only.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/b911c30c566dee48a27bc1bfa1ee6df3a729cbbb.patch";
+      sha256 = "sha256-RXKRmZo25yZ1VuBtBA+BsY8as9kIcACqE6aEYmIm9KQ=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-0216.part-1.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/6c8fa961da5e60f574bb52fd3ad44b1e9e8ad4b8.patch";
+      sha256 = "sha256-0z0zVPBVXFSU8qEV0Ea2+rDxyikMyitlDM0jZOLLC6s=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-0216.part-2.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/4367a20cc442c56b05611b4224de9a61908f9eac.patch";
+      sha256 = "sha256-hpNu4Zjw1dIbT6Vt57cayHE1Elaltp0a/bsKlDY0Qr8=";
+    })
+    (fetchpatch {
+      name = "CVE-2020-14394.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/effaf5a240e03020f4ae953e10b764622c3e87cc.patch";
+      sha256 = "sha256-NobsIxRC+xlyj8d/oD4mqgXAGX37pfww/PQQuKhrTzc=";
+    })
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 

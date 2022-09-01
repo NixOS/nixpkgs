@@ -258,6 +258,14 @@
           <link xlink:href="options.html#opt-services.patroni.enable">services.patroni</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://writefreely.org">WriteFreely</link>,
+          a simple blogging platform with ActivityPub support. Available
+          as
+          <link xlink:href="options.html#opt-services.writefreely.enable">services.writefreely</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-incompatibilities">
@@ -426,6 +434,12 @@
         <para>
           <literal>k3s</literal> no longer supports docker as runtime
           due to upstream dropping support.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>k3s</literal> supports <literal>clusterInit</literal>
+          option, and it is enabled by default, for servers.
         </para>
       </listitem>
     </itemizedlist>

@@ -10,7 +10,7 @@
 , pillow
 , pyro-api
 , pythonOlder
-, pytorch
+, torch
 , scikit-learn
 , seaborn
 , torchvision
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pyro-api
-    pytorch
+    torch
     networkx
     opt-einsum
     tqdm

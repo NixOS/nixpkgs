@@ -9,7 +9,6 @@
 , "@commitlint/config-conventional"
 , "@forge/cli"
 , "@google/clasp"
-, "@hyperspace/cli"
 , "@medable/mdctl-cli"
 , "@nerdwallet/shepherd"
 , "@nestjs/cli"

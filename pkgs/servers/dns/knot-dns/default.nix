@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
 , systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2, libmnl
+, ngtcp2-gnutls
 , autoreconfHook, nixosTests, knot-resolver
 , fetchpatch
 }:
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     nettle libedit
     libiconv lmdb libintl
     nghttp2 # DoH support in kdig
+    ngtcp2-gnutls  # DoQ support in kdig (and elsewhere but not much use there yet)
     libmaxminddb # optional for geoip module (it's tiny)
     # without sphinx &al. for developer documentation
     # TODO: add dnstap support?

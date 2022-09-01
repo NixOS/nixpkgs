@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-event-stream";
-  version = "0.2.7";
+  version = "0.2.12";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8Du9Ib3MhPcgetBIi0k1NboaXxZh7iPNhDe7197JnHc=";
+    sha256 = "sha256-I4DqsPmHsZsReoqAH0WMU5/XlM4LiaxpJrVVYdXnMZY=";
   };
 
   nativeBuildInputs = [ cmake ];

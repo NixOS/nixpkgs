@@ -399,7 +399,9 @@ rec {
       # modules recursively. It returns the final list of unique-by-key modules
       filterModules = modulesPath: { disabled, modules }:
         let
-          moduleKey = m: if isString m then toString modulesPath + "/" + m else toString m;
+          moduleKey = m: if isString m && (builtins.substring 0 1 m != "/")
+            then toString modulesPath + "/" + m
+            else toString m;
           disabledKeys = map moduleKey disabled;
           keyFilter = filter (attrs: ! elem attrs.key disabledKeys);
         in map (attrs: attrs.module) (builtins.genericClosure {

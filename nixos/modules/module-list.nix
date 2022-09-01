@@ -204,6 +204,7 @@
   ./programs/plotinus.nix
   ./programs/proxychains.nix
   ./programs/qt5ct.nix
+  ./programs/rust-motd.nix
   ./programs/screen.nix
   ./programs/sedutil.nix
   ./programs/seahorse.nix
@@ -1119,6 +1120,7 @@
   ./services/web-apps/wiki-js.nix
   ./services/web-apps/whitebophir.nix
   ./services/web-apps/wordpress.nix
+  ./services/web-apps/writefreely.nix
   ./services/web-apps/youtrack.nix
   ./services/web-apps/zabbix.nix
   ./services/web-servers/agate.nix

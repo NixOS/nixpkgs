@@ -102,7 +102,9 @@ let
   # Shell script to start the VM.
   startVM =
     ''
-      #! ${pkgs.runtimeShell}
+      #! ${cfg.host.pkgs.runtimeShell}
+
+      export PATH=${makeBinPath [ cfg.host.pkgs.coreutils ]}''${PATH:+:}$PATH
 
       set -e
 
@@ -575,11 +577,24 @@ in
         description = lib.mdDoc "Primary IP address used in /etc/hosts.";
       };
 
+    virtualisation.host.pkgs = mkOption {
+      type = options.nixpkgs.pkgs.type;
+      default = pkgs;
+      defaultText = "pkgs";
+      example = literalExpression ''
+        import pkgs.path { system = "x86_64-darwin"; }
+      '';
+      description = ''
+        pkgs set to use for the host-specific packages of the vm runner.
+        Changing this to e.g. a Darwin package set allows running NixOS VMs on Darwin.
+      '';
+    };
+
     virtualisation.qemu = {
       package =
         mkOption {
           type = types.package;
-          default = pkgs.qemu_kvm;
+          default = cfg.host.pkgs.qemu_kvm;
           example = "pkgs.qemu_test";
           description = lib.mdDoc "QEMU package to use.";
         };
@@ -1076,14 +1091,14 @@ in
 
     services.qemuGuest.enable = cfg.qemu.guestAgent.enable;
 
-    system.build.vm = pkgs.runCommand "nixos-vm" {
+    system.build.vm = cfg.host.pkgs.runCommand "nixos-vm" {
       preferLocalBuild = true;
       meta.mainProgram = "run-${config.system.name}-vm";
     }
       ''
         mkdir -p $out/bin
         ln -s ${config.system.build.toplevel} $out/system
-        ln -s ${pkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${config.system.name}-vm
+        ln -s ${cfg.host.pkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${config.system.name}-vm
       '';
 
     # When building a regular system configuration, override whatever

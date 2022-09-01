@@ -46,7 +46,6 @@ in
   imports = [
     ./dnsname.nix
     ./network-socket.nix
-    (lib.mkRenamedOptionModule [ "virtualisation" "podman" "libpod" ] [ "virtualisation" "containers" "containersConf" ])
   ];
 
   meta = {

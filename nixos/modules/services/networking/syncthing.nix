@@ -268,10 +268,10 @@ in {
                   {
                     versioning = {
                       type = "staggered";
+                      fsPath = "/syncthing/backup";
                       params = {
                         cleanInterval = "3600";
                         maxAge = "31536000";
-                        versionsPath = "/syncthing/backup";
                       };
                     };
                   }
@@ -293,6 +293,14 @@ in {
                     type = enum [ "external" "simple" "staggered" "trashcan" ];
                     description = mdDoc ''
                       The type of versioning.
+                      See <https://docs.syncthing.net/users/versioning.html>.
+                    '';
+                  };
+                  fsPath = mkOption {
+                    default = "";
+                    type = either str path;
+                    description = mdDoc ''
+                      Path to the versioning folder.
                       See <https://docs.syncthing.net/users/versioning.html>.
                     '';
                   };
