@@ -15,7 +15,7 @@ let
     # TODO disable this, shouldn't be enabled in production
     DEBUG = True
     DATA_DIR = "/var/lib/weblate"
-    STATIC_ROOT = "${pkgs.weblate}/lib/${pkgs.python3.libPrefix}/site-packages/weblate/static/"
+    STATIC_ROOT = "${pkgs.weblate}/${pkgs.python3.sitePackages}/weblate/static/"
     MEDIA_ROOT = "/var/lib/weblate/media"
 
     DATABASES = {
