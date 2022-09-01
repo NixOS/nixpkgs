@@ -9224,6 +9224,8 @@ with pkgs;
 
   nitrogen = callPackage ../tools/X11/nitrogen {};
 
+  smart-wallpaper = callPackage ../tools/X11/smart-wallpaper { };
+
   nms = callPackage ../tools/misc/nms { };
 
   nomachine-client = callPackage ../tools/admin/nomachine-client { };
