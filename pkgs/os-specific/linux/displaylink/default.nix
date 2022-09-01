@@ -67,12 +67,12 @@ stdenv.mkDerivation rec {
   dontStrip = true;
   dontPatchELF = true;
 
-
   meta = with lib; {
     description = "DisplayLink DL-5xxx, DL-41xx and DL-3x00 Driver for Linux";
+    homepage = "https://www.displaylink.com/";
+    license = licenses.unfree;
     maintainers = with maintainers; [ abbradar peterhoeg eyjhb ];
     platforms = [ "x86_64-linux" "i686-linux" ];
-    license = licenses.unfree;
-    homepage = "https://www.displaylink.com/";
+    hydraPlatforms = [];
   };
 }
