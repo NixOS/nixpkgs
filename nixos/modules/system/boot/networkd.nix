@@ -1257,11 +1257,10 @@ let
         default = {};
         example = { Route = "fd00::/64"; };
         type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6RoutePrefix;
-        description = ''
+        description = lib.mdDoc ''
           Each attribute in this set specifies an option in the
-          <literal>[IPv6RoutePrefix]</literal> section of the unit.  See
-          <citerefentry><refentrytitle>systemd.network</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          `[IPv6RoutePrefix]` section of the unit.  See
+          {manpage}`systemd.network(5)` for details.
         '';
       };
     };
@@ -1413,10 +1412,9 @@ let
       default = [];
       example = [ { ipv6RoutePrefixConfig = { Route = "fd00::/64"; LifetimeSec = 3600; }; } ];
       type = with types; listOf (submodule ipv6RoutePrefixOptions);
-      description = ''
+      description = lib.mdDoc ''
         A list of ipv6RoutePrefix sections to be added to the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        {manpage}`systemd.network(5)` for details.
       '';
     };
 
