@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "proj";
-  version = "9.0.0";
+  version = "9.1.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
     rev = version;
-    sha256 = "sha256-zMP+WzC65BFz8g8mF5t7toqxmxCJePysd6WJuqpe8yg=";
+    sha256 = "sha256-Upsp72RorV+5PFPHOK3zCJgVTRZ6fSVVFRope8Bp8/M=";
   };
 
   outputs = [ "out" "dev" ];
