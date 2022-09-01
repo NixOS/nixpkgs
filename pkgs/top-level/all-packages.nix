@@ -2177,6 +2177,8 @@ with pkgs;
 
   crystfel-headless = callPackage ../applications/science/physics/crystfel { withGui = false; };
 
+  cyberchef = callPackage ../tools/misc/cyberchef { };
+
   cw = callPackage ../tools/admin/cw { };
 
   ec2-api-tools = callPackage ../tools/virtualization/ec2-api-tools { };
