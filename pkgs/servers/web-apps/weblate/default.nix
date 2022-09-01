@@ -1,25 +1,25 @@
 { lib, fetchFromGitHub, poetry2nix, gettext, isocodes, xorg }:
 
 (poetry2nix.mkPoetryApplication {
+
   src = fetchFromGitHub {
     owner = "WeblateOrg";
     repo = "weblate";
     rev = "weblate-4.14";
     sha256 = "sha256-PsFYL/yKu90QQ0/XdbVFHY1uTU/6H+YfitqFb6Ic4E8=";
   };
+
   pyproject = ./pyproject.toml;
   poetrylock = ./poetry.lock;
-  # The default timeout for the celery check is much too short upstream, so
-  # we increase it. I guess this is due to the fact that we test the setup
-  # very early into the initialization of the server, so the load might be
-  # higher compared to production setups?
-  patches = [ ./longer-celery-wait-time.patch ];
-  meta = with lib; {
-    description = "Web based translation tool with tight version control integration";
-    homepage = https://weblate.org/;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ erictapen ];
-  };
+
+  patches = [
+    # The default timeout for the celery check is much too short upstream, so
+    # we increase it. Otherwise the integration test fails. I guess this is due
+    # to the fact that we test the setup very early into the initialization of
+    # the server, so the load might be higher compared to production setups?
+    ./longer-celery-wait-time.patch
+  ];
+
   overrides = poetry2nix.overrides.withDefaults (
     self: super: {
       aeidon = super.aeidon.overridePythonAttrs (old: {
@@ -62,5 +62,13 @@
       });
     }
   );
+
+  meta = with lib; {
+    description = "Web based translation tool with tight version control integration";
+    homepage = https://weblate.org/;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ erictapen ];
+  };
+
 }).dependencyEnv
 
