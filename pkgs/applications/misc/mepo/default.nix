@@ -22,13 +22,13 @@ let
   menuInputs = if withX11 then [ dmenu xdotool ] else [ bemenu ];
 in stdenv.mkDerivation rec {
   pname = "mepo";
-  version = "0.4.2";
+  version = "0.5";
 
   src = fetchFromSourcehut {
     owner = "~mil";
     repo = pname;
     rev = version;
-    hash = "sha256-k6YXaqB3EwbDPlTvijZf10q+IYwt4/MiqGXL495KIcY=";
+    hash = "sha256-V8NdlDnj6nyC7pAPu76tMbw//5LqgPcd0jOKSsvx9ZU=";
   };
 
   nativeBuildInputs = [ pkg-config zig makeWrapper ];
