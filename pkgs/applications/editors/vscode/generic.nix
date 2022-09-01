@@ -11,7 +11,7 @@
 , nodePackages, bash
 
 # Attributes inherit from specific versions
-, version, src, meta, sourceRoot
+, version, src, meta, sourceRoot, postInstall
 , executableName, longName, shortName, pname, updateScript
 # sourceExecutableName is the name of the binary in the source archive, over
 # which we have no control
@@ -135,7 +135,7 @@ let
       chmod +x resources/app/node_modules/@vscode/ripgrep/bin/rg
     '';
 
-    inherit meta;
+    inherit postInstall meta;
   };
 
   # Vscode and variants allow for users to download and use extensions
