@@ -385,9 +385,6 @@ in
       packages = [ weblate-env pkgs.weblate ] ++ weblatePath;
     };
 
-    # TODO remove
-    environment.systemPackages = config.users.users.weblate.packages;
-
     users.groups.weblate.members = [ config.services.nginx.user ];
   };
 
