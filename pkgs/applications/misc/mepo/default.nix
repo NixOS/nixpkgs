@@ -16,6 +16,14 @@
 , xdotool
 , bemenu
 , withX11 ? false
+
+# transmits user's location without asking first
+, geoclueSupport ? false , geoclue2
+
+# transmits user's location without asking first
+, reportLocationToMozilla ? false
+
+, gpsdSupport ? true , gpsd
 }:
 
 let
@@ -35,7 +43,22 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     curl SDL2 SDL2_gfx SDL2_image SDL2_ttf inconsolata-nerdfont jq ncurses
-  ] ++ menuInputs;
+  ] ++ menuInputs
+  ++ lib.optionals geoclueSupport [
+    geoclue2
+  ] ++ lib.optionals gpsdSupport [
+    gpsd
+  ];
+
+  patches = lib.optionals (!geoclueSupport) [
+    ./dont-report-user-location-to-geoclue-without-asking.patch
+  ] ++ lib.optionals (!reportLocationToMozilla) [
+    ./dont-report-user-location-to-mozilla-without-asking.patch
+  ];
+
+  postPatch = lib.optionalString gpsdSupport ''
+    substituteInPlace scripts/mepo_ui_menu_user_pin_updater.sh --replace gpspipe ${gpsd}/bin/gpspipe
+  '';
 
   preBuild = ''
     export HOME=$TMPDIR
