@@ -5,10 +5,10 @@
 , cmake
 , alsa-lib
 , ffmpeg
+, game-music-emu
 , libass
 , libcddb
 , libcdio
-, libgme
 , libpulseaudio
 , libsidplayfp
 , libva
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     ffmpeg
+    game-music-emu
     libXv
     libass
     libcddb
     libcdio
-    libgme
     libpulseaudio
     libsidplayfp
     libva
