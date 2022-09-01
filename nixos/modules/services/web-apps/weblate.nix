@@ -24,8 +24,6 @@ let
         "HOST": "/run/postgresql",
         "NAME": "weblate",
         "USER": "weblate",
-        "PASSWORD": "",
-        "PORT": ""
       }
     }
 
