@@ -36,7 +36,7 @@ let
 
       # current and desired state
       NEEDED_SERVICES=$(echo ${concatStringsSep " " (attrNames hashedServices)} | tr " " "\n")
-      REGISTERED_SERVICES=$(gitlab-runner list 2>&1 | grep 'Executor' | awk '{ print $1 }')
+      REGISTERED_SERVICES=$(gitlab-runner list 2>&1 | grep 'Executor' | perl -pe 's/\x1b\[[0-9;]*[mG]//g' | awk '{ print $1 }')
 
       # difference between current and desired state
       NEW_SERVICES=$(grep -vxF -f <(echo "$REGISTERED_SERVICES") <(echo "$NEEDED_SERVICES") || true)
@@ -93,7 +93,7 @@ let
       '') hashedServices)}
 
       # unregister old services
-      for NAME in $(echo "$OLD_SERVICES")
+      for NAME in "$OLD_SERVICES"
       do
         [ ! -z "$NAME" ] && gitlab-runner unregister \
           --name "$NAME" && sleep 1
