@@ -48,7 +48,7 @@ in
 
     services.acpid = {
 
-      enable = mkEnableOption "the ACPI daemon";
+      enable = mkEnableOption (lib.mdDoc "the ACPI daemon");
 
       logEvents = mkOption {
         type = types.bool;
@@ -72,12 +72,12 @@ in
           };
         });
 
-        description = ''
+        description = lib.mdDoc ''
           Event handlers.
 
-          <note><para>
-            Handler can be a single command.
-          </para></note>
+          ::: {.note}
+          Handler can be a single command.
+          :::
         '';
         default = {};
         example = {

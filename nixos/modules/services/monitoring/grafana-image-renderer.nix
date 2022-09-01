@@ -10,7 +10,7 @@ let
   configFile = format.generate "grafana-image-renderer-config.json" cfg.settings;
 in {
   options.services.grafana-image-renderer = {
-    enable = mkEnableOption "grafana-image-renderer";
+    enable = mkEnableOption (lib.mdDoc "grafana-image-renderer");
 
     chromium = mkOption {
       type = types.package;
@@ -19,9 +19,9 @@ in {
       '';
     };
 
-    verbose = mkEnableOption "verbosity for the service";
+    verbose = mkEnableOption (lib.mdDoc "verbosity for the service");
 
-    provisionGrafana = mkEnableOption "Grafana configuration for grafana-image-renderer";
+    provisionGrafana = mkEnableOption (lib.mdDoc "Grafana configuration for grafana-image-renderer");
 
     settings = mkOption {
       type = types.submodule {
@@ -62,18 +62,16 @@ in {
             mode = mkOption {
               default = "default";
               type = types.enum [ "default" "reusable" "clustered" ];
-              description = ''
-                Rendering mode of <literal>grafana-image-renderer</literal>:
-                <itemizedlist>
-                <listitem><para><literal>default:</literal> Creates on browser-instance
-                  per rendering request.</para></listitem>
-                <listitem><para><literal>reusable:</literal> One browser instance
-                  will be started and reused for each rendering request.</para></listitem>
-                <listitem><para><literal>clustered:</literal> allows to precisely
+              description = lib.mdDoc ''
+                Rendering mode of `grafana-image-renderer`:
+
+                - `default:` Creates on browser-instance
+                  per rendering request.
+                - `reusable:` One browser instance
+                  will be started and reused for each rendering request.
+                - `clustered:` allows to precisely
                   configure how many browser-instances are supposed to be used. The values
-                  for that mode can be declared in <literal>rendering.clustering</literal>.
-                  </para></listitem>
-                </itemizedlist>
+                  for that mode can be declared in `rendering.clustering`.
               '';
             };
             args = mkOption {

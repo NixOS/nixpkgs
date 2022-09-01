@@ -33,7 +33,7 @@ in
 
     services.graylog = {
 
-      enable = mkEnableOption "Graylog";
+      enable = mkEnableOption (lib.mdDoc "Graylog");
 
       package = mkOption {
         type = types.package;

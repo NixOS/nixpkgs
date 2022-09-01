@@ -26,7 +26,7 @@ in
 {
   options = {
     services.discourse = {
-      enable = lib.mkEnableOption "Discourse, an open source discussion platform";
+      enable = lib.mkEnableOption (lib.mdDoc "Discourse, an open source discussion platform");
 
       package = lib.mkOption {
         type = lib.types.package;
@@ -57,20 +57,20 @@ in
         type = with lib.types; nullOr path;
         default = null;
         example = "/run/keys/secret_key_base";
-        description = ''
+        description = lib.mdDoc ''
           The path to a file containing the
-          <literal>secret_key_base</literal> secret.
+          `secret_key_base` secret.
 
-          Discourse uses <literal>secret_key_base</literal> to encrypt
+          Discourse uses `secret_key_base` to encrypt
           the cookie store, which contains session data, and to digest
           user auth tokens.
 
           Needs to be a 64 byte long string of hexadecimal
           characters. You can generate one by running
 
-          <screen>
-          <prompt>$ </prompt>openssl rand -hex 64 >/path/to/secret_key_base_file
-          </screen>
+          ```
+          openssl rand -hex 64 >/path/to/secret_key_base_file
+          ```
 
           This should be a string, not a nix path, since nix paths are
           copied into the world-readable nix store.

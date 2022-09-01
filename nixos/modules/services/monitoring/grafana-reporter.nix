@@ -7,7 +7,7 @@ let
 
 in {
   options.services.grafana_reporter = {
-    enable = mkEnableOption "grafana_reporter";
+    enable = mkEnableOption (lib.mdDoc "grafana_reporter");
 
     grafana = {
       protocol = mkOption {

@@ -41,18 +41,18 @@ in {
 
   options = {
     services.xserver.windowManager.xmonad = {
-      enable = mkEnableOption "xmonad";
+      enable = mkEnableOption (lib.mdDoc "xmonad");
 
       haskellPackages = mkOption {
         default = pkgs.haskellPackages;
         defaultText = literalExpression "pkgs.haskellPackages";
         example = literalExpression "pkgs.haskell.packages.ghc8107";
         type = types.attrs;
-        description = ''
+        description = lib.mdDoc ''
           haskellPackages used to build Xmonad and other packages.
           This can be used to change the GHC version used to build
           Xmonad and the packages listed in
-          <varname>extraPackages</varname>.
+          {var}`extraPackages`.
         '';
       };
 
@@ -66,10 +66,10 @@ in {
             haskellPackages.monad-logger
           ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           Extra packages available to ghc when rebuilding Xmonad. The
           value must be a function which receives the attrset defined
-          in <varname>haskellPackages</varname> as the sole argument.
+          in {var}`haskellPackages` as the sole argument.
         '';
       };
 

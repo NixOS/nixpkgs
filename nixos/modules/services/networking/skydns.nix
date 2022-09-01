@@ -7,7 +7,7 @@ let
 
 in {
   options.services.skydns = {
-    enable = mkEnableOption "skydns service";
+    enable = mkEnableOption (lib.mdDoc "skydns service");
 
     etcd = {
       machines = mkOption {

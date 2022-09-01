@@ -28,7 +28,7 @@ let
 
 in {
   options.services.tox-node = {
-    enable = mkEnableOption "Tox Node service";
+    enable = mkEnableOption (lib.mdDoc "Tox Node service");
 
     logType = mkOption {
       type = types.enum [ "Stderr" "Stdout" "Syslog" "None" ];

@@ -164,19 +164,19 @@ let
 in {
   options = {
     networking.wireless = {
-      enable = mkEnableOption "wpa_supplicant";
+      enable = mkEnableOption (lib.mdDoc "wpa_supplicant");
 
       interfaces = mkOption {
         type = types.listOf types.str;
         default = [];
         example = [ "wlan0" "wlan1" ];
-        description = ''
-          The interfaces <command>wpa_supplicant</command> will use. If empty, it will
+        description = lib.mdDoc ''
+          The interfaces {command}`wpa_supplicant` will use. If empty, it will
           automatically use all wireless interfaces.
 
-          <note><para>
-            A separate wpa_supplicant instance will be started for each interface.
-          </para></note>
+          ::: {.note}
+          A separate wpa_supplicant instance will be started for each interface.
+          :::
         '';
       };
 
@@ -186,7 +186,7 @@ in {
         description = lib.mdDoc "Force a specific wpa_supplicant driver.";
       };
 
-      allowAuxiliaryImperativeNetworks = mkEnableOption "support for imperative & declarative networks" // {
+      allowAuxiliaryImperativeNetworks = mkEnableOption (lib.mdDoc "support for imperative & declarative networks") // {
         description = ''
           Whether to allow configuring networks "imperatively" (e.g. via
           <literal>wpa_supplicant_gui</literal>) and declaratively via
@@ -222,24 +222,24 @@ in {
         type = types.nullOr types.path;
         default = null;
         example = "/run/secrets/wireless.env";
-        description = ''
-          File consisting of lines of the form <literal>varname=value</literal>
+        description = lib.mdDoc ''
+          File consisting of lines of the form `varname=value`
           to define variables for the wireless configuration.
 
-          See section "EnvironmentFile=" in <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry> for a syntax reference.
+          See section "EnvironmentFile=" in {manpage}`systemd.exec(5)` for a syntax reference.
 
           Secrets (PSKs, passwords, etc.) can be provided without adding them to
           the world-readable Nix store by defining them in the environment file and
-          referring to them in option <option>networking.wireless.networks</option>
-          with the syntax <literal>@varname@</literal>. Example:
+          referring to them in option {option}`networking.wireless.networks`
+          with the syntax `@varname@`. Example:
 
-          <programlisting>
+          ```
           # content of /run/secrets/wireless.env
           PSK_HOME=mypassword
           PASS_WORK=myworkpassword
-          </programlisting>
+          ```
 
-          <programlisting>
+          ```
           # wireless-related configuration
           networking.wireless.environmentFile = "/run/secrets/wireless.env";
           networking.wireless.networks = {
@@ -250,7 +250,7 @@ in {
               password="@PASS_WORK@"
             ''';
           };
-          </programlisting>
+          ```
         '';
       };
 
@@ -260,36 +260,36 @@ in {
             psk = mkOption {
               type = types.nullOr types.str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 The network's pre-shared key in plaintext defaulting
                 to being a network without any authentication.
 
-                <warning><para>
-                  Be aware that this will be written to the nix store
-                  in plaintext! Use an environment variable instead.
-                </para></warning>
+                ::: {.warning}
+                Be aware that this will be written to the nix store
+                in plaintext! Use an environment variable instead.
+                :::
 
-                <note><para>
-                  Mutually exclusive with <varname>pskRaw</varname>.
-                </para></note>
+                ::: {.note}
+                Mutually exclusive with {var}`pskRaw`.
+                :::
               '';
             };
 
             pskRaw = mkOption {
               type = types.nullOr types.str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 The network's pre-shared key in hex defaulting
                 to being a network without any authentication.
 
-                <warning><para>
-                  Be aware that this will be written to the nix store
-                  in plaintext! Use an environment variable instead.
-                </para></warning>
+                ::: {.warning}
+                Be aware that this will be written to the nix store
+                in plaintext! Use an environment variable instead.
+                :::
 
-                <note><para>
-                  Mutually exclusive with <varname>psk</varname>.
-                </para></note>
+                ::: {.note}
+                Mutually exclusive with {var}`psk`.
+                :::
               '';
             };
 
@@ -343,21 +343,21 @@ in {
                 identity="user@example.com"
                 password="@EXAMPLE_PASSWORD@"
               '';
-              description = ''
+              description = lib.mdDoc ''
                 Use this option to configure advanced authentication methods like EAP.
                 See
-                <citerefentry><refentrytitle>wpa_supplicant.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+                {manpage}`wpa_supplicant.conf(5)`
                 for example configurations.
 
-                <warning><para>
-                  Be aware that this will be written to the nix store
-                  in plaintext! Use an environment variable for secrets.
-                </para></warning>
+                ::: {.warning}
+                Be aware that this will be written to the nix store
+                in plaintext! Use an environment variable for secrets.
+                :::
 
-                <note><para>
-                  Mutually exclusive with <varname>psk</varname> and
-                  <varname>pskRaw</varname>.
-                </para></note>
+                ::: {.note}
+                Mutually exclusive with {var}`psk` and
+                {var}`pskRaw`.
+                :::
               '';
             };
 

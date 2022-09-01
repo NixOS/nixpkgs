@@ -28,7 +28,7 @@ let
     '';
 in
 {
-  options.programs.mininet.enable = mkEnableOption "Mininet";
+  options.programs.mininet.enable = mkEnableOption (lib.mdDoc "Mininet");
 
   config = mkIf cfg.enable {
 

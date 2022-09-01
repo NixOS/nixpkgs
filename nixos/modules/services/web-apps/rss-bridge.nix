@@ -11,7 +11,7 @@ in
 {
   options = {
     services.rss-bridge = {
-      enable = mkEnableOption "rss-bridge";
+      enable = mkEnableOption (lib.mdDoc "rss-bridge");
 
       user = mkOption {
         type = types.str;

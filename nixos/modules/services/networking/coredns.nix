@@ -7,7 +7,7 @@ let
   configFile = pkgs.writeText "Corefile" cfg.config;
 in {
   options.services.coredns = {
-    enable = mkEnableOption "Coredns dns server";
+    enable = mkEnableOption (lib.mdDoc "Coredns dns server");
 
     config = mkOption {
       default = "";

@@ -12,7 +12,7 @@ in
 
   options = {
     services.tautulli = {
-      enable = mkEnableOption "Tautulli Plex Monitor";
+      enable = mkEnableOption (lib.mdDoc "Tautulli Plex Monitor");
 
       dataDir = mkOption {
         type = types.str;

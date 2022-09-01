@@ -25,7 +25,7 @@ in
 
   {
     options.services.davmail = {
-      enable = mkEnableOption "davmail, an MS Exchange gateway";
+      enable = mkEnableOption (lib.mdDoc "davmail, an MS Exchange gateway");
 
       url = mkOption {
         type = types.str;

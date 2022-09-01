@@ -19,7 +19,7 @@ in
   ###### interface
 
   options.services.openntpd = {
-    enable = mkEnableOption "OpenNTP time synchronization server";
+    enable = mkEnableOption (lib.mdDoc "OpenNTP time synchronization server");
 
     servers = mkOption {
       default = config.services.ntp.servers;

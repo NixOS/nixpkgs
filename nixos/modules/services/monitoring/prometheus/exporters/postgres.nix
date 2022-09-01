@@ -36,8 +36,8 @@ in
       type = types.nullOr types.path;
       default = null;
       example = "/root/prometheus-postgres-exporter.env";
-      description = ''
-        Environment file as defined in <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+      description = lib.mdDoc ''
+        Environment file as defined in {manpage}`systemd.exec(5)`.
 
         Secrets may be passed to the service without adding them to the
         world-readable Nix store, by specifying placeholder variables as
@@ -46,7 +46,7 @@ in
 
         Environment variables from this file will be interpolated into the
         config file using envsubst with this syntax:
-        <literal>$ENVIRONMENT ''${VARIABLE}</literal>
+        `$ENVIRONMENT ''${VARIABLE}`
 
         The main use is to set the DATA_SOURCE_NAME that contains the
         postgres password
@@ -54,10 +54,10 @@ in
         note that contents from this file will override dataSourceName
         if you have set it from nix.
 
-        <programlisting>
+        ```
           # Content of the environment file
           DATA_SOURCE_NAME=postgresql://username:password@localhost:5432/postgres?sslmode=disable
-        </programlisting>
+        ```
 
         Note that this file needs to be available on the host on which
         this exporter is running.

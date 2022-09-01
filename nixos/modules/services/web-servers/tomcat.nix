@@ -19,7 +19,7 @@ in
   options = {
 
     services.tomcat = {
-      enable = mkEnableOption "Apache Tomcat";
+      enable = mkEnableOption (lib.mdDoc "Apache Tomcat");
 
       package = mkOption {
         type = types.package;

@@ -7,7 +7,7 @@ with lib;
 
   ###### interface
   options = {
-    programs.partition-manager.enable = mkEnableOption "KDE Partition Manager";
+    programs.partition-manager.enable = mkEnableOption (lib.mdDoc "KDE Partition Manager");
   };
 
   ###### implementation

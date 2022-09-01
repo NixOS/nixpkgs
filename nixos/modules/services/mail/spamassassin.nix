@@ -12,7 +12,7 @@ in
   options = {
 
     services.spamassassin = {
-      enable = mkEnableOption "the SpamAssassin daemon";
+      enable = mkEnableOption (lib.mdDoc "the SpamAssassin daemon");
 
       debug = mkOption {
         type = types.bool;
@@ -22,23 +22,26 @@ in
 
       config = mkOption {
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           The SpamAssassin local.cf config
 
           If you are using this configuration:
-            add_header all Status _YESNO_, score=_SCORE_ required=_REQD_ tests=_TESTS_ autolearn=_AUTOLEARN_ version=_VERSION_
+
+              add_header all Status _YESNO_, score=_SCORE_ required=_REQD_ tests=_TESTS_ autolearn=_AUTOLEARN_ version=_VERSION_
 
           Then you can Use this sieve filter:
-            require ["fileinto", "reject", "envelope"];
 
-            if header :contains "X-Spam-Flag" "YES" {
-              fileinto "spam";
-            }
+              require ["fileinto", "reject", "envelope"];
+
+              if header :contains "X-Spam-Flag" "YES" {
+                fileinto "spam";
+              }
 
           Or this procmail filter:
-            :0:
-            * ^X-Spam-Flag: YES
-            /var/vpopmail/domains/lastlog.de/js/.maildir/.spam/new
+
+              :0:
+              * ^X-Spam-Flag: YES
+              /var/vpopmail/domains/lastlog.de/js/.maildir/.spam/new
 
           To filter your messages based on the additional mail headers added by spamassassin.
         '';

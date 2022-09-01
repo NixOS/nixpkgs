@@ -11,9 +11,9 @@ in
 
   options = {
     services.geoipupdate = {
-      enable = lib.mkEnableOption ''
+      enable = lib.mkEnableOption (lib.mdDoc ''
         periodic downloading of GeoIP databases using geoipupdate.
-      '';
+      '');
 
       interval = lib.mkOption {
         type = lib.types.str;

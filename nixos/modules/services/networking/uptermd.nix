@@ -8,7 +8,7 @@ in
 {
   options = {
     services.uptermd = {
-      enable = mkEnableOption "uptermd";
+      enable = mkEnableOption (lib.mdDoc "uptermd");
 
       openFirewall = mkOption {
         type = types.bool;

@@ -25,7 +25,7 @@ let
 
 in {
   options.services.adguardhome = with types; {
-    enable = mkEnableOption "AdGuard Home network-wide ad blocker";
+    enable = mkEnableOption (lib.mdDoc "AdGuard Home network-wide ad blocker");
 
     host = mkOption {
       default = "0.0.0.0";
@@ -64,16 +64,16 @@ in {
     settings = mkOption {
       type = (pkgs.formats.yaml { }).type;
       default = { };
-      description = ''
+      description = lib.mdDoc ''
         AdGuard Home configuration. Refer to
-        <link xlink:href="https://github.com/AdguardTeam/AdGuardHome/wiki/Configuration#configuration-file"/>
+        <https://github.com/AdguardTeam/AdGuardHome/wiki/Configuration#configuration-file>
         for details on supported values.
 
-        <note><para>
-          On start and if <option>mutableSettings</option> is <literal>true</literal>,
-          these options are merged into the configuration file on start, taking
-          precedence over configuration changes made on the web interface.
-        </para></note>
+        ::: {.note}
+        On start and if {option}`mutableSettings` is `true`,
+        these options are merged into the configuration file on start, taking
+        precedence over configuration changes made on the web interface.
+        :::
       '';
     };
 

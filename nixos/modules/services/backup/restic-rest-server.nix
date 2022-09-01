@@ -9,7 +9,7 @@ in
   meta.maintainers = [ maintainers.bachp ];
 
   options.services.restic.server = {
-    enable = mkEnableOption "Restic REST Server";
+    enable = mkEnableOption (lib.mdDoc "Restic REST Server");
 
     listenAddress = mkOption {
       default = ":8000";

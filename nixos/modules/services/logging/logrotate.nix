@@ -205,7 +205,7 @@ in
 
   options = {
     services.logrotate = {
-      enable = mkEnableOption "the logrotate systemd service" // {
+      enable = mkEnableOption (lib.mdDoc "the logrotate systemd service") // {
         default = foldr (n: a: a || n.enable) false (attrValues cfg.settings);
         defaultText = literalExpression "cfg.settings != {}";
       };
@@ -222,7 +222,7 @@ in
           freeformType = with types; attrsOf (nullOr (oneOf [ int bool str ]));
 
           options = {
-            enable = mkEnableOption "setting individual kill switch" // {
+            enable = mkEnableOption (lib.mdDoc "setting individual kill switch") // {
               default = true;
             };
 
@@ -316,11 +316,11 @@ in
       paths = mkOption {
         type = with types; attrsOf (submodule pathOpts);
         default = { };
-        description = ''
+        description = lib.mdDoc ''
           Attribute set of paths to rotate. The order each block appears in the generated configuration file
-          can be controlled by the <link linkend="opt-services.logrotate.paths._name_.priority">priority</link> option
+          can be controlled by the [priority](#opt-services.logrotate.paths._name_.priority) option
           using the same semantics as `lib.mkOrder`. Smaller values have a greater priority.
-          This setting has been deprecated in favor of <link linkend="opt-services.logrotate.settings">logrotate settings</link>.
+          This setting has been deprecated in favor of [logrotate settings](#opt-services.logrotate.settings).
         '';
         example = literalExpression ''
           {

@@ -19,7 +19,7 @@ in
     # One could also do regular btrfs balances, but that shouldn't be necessary
     # during normal usage and as long as the filesystems aren't filled near capacity
     services.btrfs.autoScrub = {
-      enable = mkEnableOption "regular btrfs scrub";
+      enable = mkEnableOption (lib.mdDoc "regular btrfs scrub");
 
       fileSystems = mkOption {
         type = types.listOf types.path;

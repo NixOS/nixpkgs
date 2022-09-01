@@ -316,23 +316,21 @@ in
               default = "/";
               example = "/auth";
               apply = x: if !(hasPrefix "/") x then "/" + x else x;
-              description = ''
-                The path relative to <literal>/</literal> for serving
+              description = lib.mdDoc ''
+                The path relative to `/` for serving
                 resources.
 
-                <note>
-                  <para>
-                    In versions of Keycloak using Wildfly (&lt;17),
-                    this defaulted to <literal>/auth</literal>. If
-                    upgrading from the Wildfly version of Keycloak,
-                    i.e. a NixOS version before 22.05, you'll likely
-                    want to set this to <literal>/auth</literal> to
-                    keep compatibility with your clients.
+                ::: {.note}
+                In versions of Keycloak using Wildfly (&lt;17),
+                this defaulted to `/auth`. If
+                upgrading from the Wildfly version of Keycloak,
+                i.e. a NixOS version before 22.05, you'll likely
+                want to set this to `/auth` to
+                keep compatibility with your clients.
 
-                    See <link xlink:href="https://www.keycloak.org/migration/migrating-to-quarkus"/>
-                    for more information on migrating from Wildfly to Quarkus.
-                  </para>
-                </note>
+                See <https://www.keycloak.org/migration/migrating-to-quarkus>
+                for more information on migrating from Wildfly to Quarkus.
+                :::
               '';
             };
 
@@ -368,41 +366,21 @@ in
               type = enum [ "edge" "reencrypt" "passthrough" "none" ];
               default = "none";
               example = "edge";
-              description = ''
+              description = lib.mdDoc ''
                 The proxy address forwarding mode if the server is
                 behind a reverse proxy.
 
-                <variablelist>
-                  <varlistentry>
-                    <term>edge</term>
-                    <listitem>
-                      <para>
-                        Enables communication through HTTP between the
-                        proxy and Keycloak.
-                      </para>
-                    </listitem>
-                  </varlistentry>
-                  <varlistentry>
-                    <term>reencrypt</term>
-                    <listitem>
-                      <para>
-                        Requires communication through HTTPS between the
-                        proxy and Keycloak.
-                      </para>
-                    </listitem>
-                  </varlistentry>
-                  <varlistentry>
-                    <term>passthrough</term>
-                    <listitem>
-                      <para>
-                        Enables communication through HTTP or HTTPS between
-                        the proxy and Keycloak.
-                      </para>
-                    </listitem>
-                  </varlistentry>
-                </variablelist>
+                - `edge`:
+                  Enables communication through HTTP between the
+                  proxy and Keycloak.
+                - `reencrypt`:
+                  Requires communication through HTTPS between the
+                  proxy and Keycloak.
+                - `passthrough`:
+                  Enables communication through HTTP or HTTPS between
+                  the proxy and Keycloak.
 
-                See <link xlink:href="https://www.keycloak.org/server/reverseproxy"/> for more information.
+                See <https://www.keycloak.org/server/reverseproxy> for more information.
               '';
             };
           };
