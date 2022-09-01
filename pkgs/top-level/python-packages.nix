@@ -5832,6 +5832,8 @@ self: super: with self; {
 
   mat2 = callPackage ../development/python-modules/mat2 { };
 
+  material-color-utilities = callPackage ../development/python-modules/material-color-utilities { };
+
   matchpy = callPackage ../development/python-modules/matchpy { };
 
   mathlibtools = callPackage ../development/python-modules/mathlibtools { };
