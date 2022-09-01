@@ -47,6 +47,8 @@ let
   confFile = pkgs.writeText "named.conf"
     ''
       include "/etc/bind/rndc.key";
+      ${concatMapStrings (file: "include \"${file}\"" ) cfg.keyFiles};
+
       controls {
         inet 127.0.0.1 allow {localhost;} keys {"rndc-key";};
       };
@@ -140,6 +142,19 @@ in
         description = lib.mdDoc ''
           Only use ipv4, even if the host supports ipv6.
         '';
+      };
+
+      keyFiles = mkOption {
+	      default = [ ];
+	      type = types.listOf types.path;
+	      description = lib.mdDoc ''
+          A list of files containing additional configuration
+          to be included using the include directive. This option
+          allows to include configuration like TSIG keys without
+          exposing them to the nix store readable to any process.
+          Note that using this option will also disable configuration
+          checks at build time.
+	      '';
       };
 
       forwarders = mkOption {
