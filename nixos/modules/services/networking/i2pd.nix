@@ -396,12 +396,12 @@ in
       };
 
       precomputation.elgamal = mkEnableTrueOption "Precomputed ElGamal tables" // {
-        description = ''
+        description = lib.mdDoc ''
           Whenever to use precomputated tables for ElGamal.
-          <command>i2pd</command> defaults to <literal>false</literal>
+          {command}`i2pd` defaults to `false`
           to save 64M of memory (and looses some performance).
 
-          We default to <literal>true</literal> as that is what most
+          We default to `true` as that is what most
           users want anyway.
         '';
       };
