@@ -35,6 +35,7 @@ in
     executableName = "codium";
     longName = "VSCodium";
     shortName = "vscodium";
+    extensionHomePath = ".vscode-oss/extensions";
 
     src = fetchurl {
       url = "https://github.com/VSCodium/vscodium/releases/download/${version}/VSCodium-${plat}-${version}.${archive_fmt}";

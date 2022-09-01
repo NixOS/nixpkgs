@@ -12,7 +12,7 @@
 
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot
-, executableName, longName, shortName, pname, updateScript
+, executableName, longName, shortName, pname, updateScript, extensionHomePath
 # sourceExecutableName is the name of the binary in the source archive, over
 # which we have no control
 , sourceExecutableName ? executableName
@@ -25,7 +25,12 @@ let
     inherit pname version src sourceRoot;
 
     passthru = {
-      inherit executableName longName tests updateScript;
+      inherit executableName longName shortName tests updateScript extensionHomePath;
+      userHomePath =
+        if stdenv.isDarwin then
+          "Library/Application Support/${shortName}/User"
+        else
+          ".config/${shortName}/User";
       fhs = fhs {};
       fhsWithPackages = f: fhs { additionalPkgs = f; };
     };

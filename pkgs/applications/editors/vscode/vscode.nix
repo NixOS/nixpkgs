@@ -31,6 +31,7 @@ in
     executableName = "code" + lib.optionalString isInsiders "-insiders";
     longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
     shortName = "Code" + lib.optionalString isInsiders " - Insiders";
+    extensionHomePath = ".vscode${lib.optionalString isInsiders "-insiders"}/extensions";
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
