@@ -18,7 +18,7 @@ in
 {
   options = {
     services.xserver.windowManager.exwm = {
-      enable = mkEnableOption "exwm";
+      enable = mkEnableOption (lib.mdDoc "exwm");
       loadScript = mkOption {
         default = "(require 'exwm)";
         type = types.lines;
@@ -48,10 +48,10 @@ in
             epkgs.proofgeneral
           ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           Extra packages available to Emacs. The value must be a
           function which receives the attrset defined in
-          <varname>emacs.pkgs</varname> as the sole argument.
+          {var}`emacs.pkgs` as the sole argument.
         '';
       };
     };

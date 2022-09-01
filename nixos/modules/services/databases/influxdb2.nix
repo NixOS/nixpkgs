@@ -10,7 +10,7 @@ in
 {
   options = {
     services.influxdb2 = {
-      enable = mkEnableOption "the influxdb2 server";
+      enable = mkEnableOption (lib.mdDoc "the influxdb2 server");
 
       package = mkOption {
         default = pkgs.influxdb2-server;

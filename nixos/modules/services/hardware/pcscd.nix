@@ -16,7 +16,7 @@ in
   ###### interface
 
   options.services.pcscd = {
-    enable = mkEnableOption "PCSC-Lite daemon";
+    enable = mkEnableOption (lib.mdDoc "PCSC-Lite daemon");
 
     plugins = mkOption {
       type = types.listOf types.package;

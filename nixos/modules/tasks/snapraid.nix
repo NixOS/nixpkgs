@@ -6,7 +6,7 @@ let cfg = config.snapraid;
 in
 {
   options.snapraid = with types; {
-    enable = mkEnableOption "SnapRAID";
+    enable = mkEnableOption (lib.mdDoc "SnapRAID");
     dataDisks = mkOption {
       default = { };
       example = {

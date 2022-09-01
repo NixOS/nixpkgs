@@ -7,15 +7,15 @@ let
 in
 {
   options.programs.corectrl = {
-    enable = mkEnableOption ''
+    enable = mkEnableOption (lib.mdDoc ''
       A tool to overclock amd graphics cards and processors.
       Add your user to the corectrl group to run corectrl without needing to enter your password
-    '';
+    '');
 
     gpuOverclock = {
-      enable = mkEnableOption ''
+      enable = mkEnableOption (lib.mdDoc ''
         true
-      '';
+      '');
       ppfeaturemask = mkOption {
         type = types.str;
         default = "0xfffd7fff";

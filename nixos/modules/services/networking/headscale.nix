@@ -12,7 +12,7 @@ in
 {
   options = {
     services.headscale = {
-      enable = mkEnableOption "headscale, Open Source coordination server for Tailscale";
+      enable = mkEnableOption (lib.mdDoc "headscale, Open Source coordination server for Tailscale");
 
       package = mkOption {
         type = types.package;
@@ -26,26 +26,28 @@ in
       user = mkOption {
         default = "headscale";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           User account under which headscale runs.
-          <note><para>
+
+          ::: {.note}
           If left as the default value this user will automatically be created
           on system activation, otherwise you are responsible for
           ensuring the user exists before the headscale service starts.
-          </para></note>
+          :::
         '';
       };
 
       group = mkOption {
         default = "headscale";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Group under which headscale runs.
-          <note><para>
+
+          ::: {.note}
           If left as the default value this group will automatically be created
           on system activation, otherwise you are responsible for
           ensuring the user exists before the headscale service starts.
-          </para></note>
+          :::
         '';
       };
 

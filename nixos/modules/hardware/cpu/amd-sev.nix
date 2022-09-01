@@ -6,7 +6,7 @@ let
 in
   with lib; {
     options.hardware.cpu.amd.sev = {
-      enable = mkEnableOption "access to the AMD SEV device";
+      enable = mkEnableOption (lib.mdDoc "access to the AMD SEV device");
       user = mkOption {
         description = lib.mdDoc "Owner to assign to the SEV device.";
         type = types.str;

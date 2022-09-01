@@ -16,7 +16,7 @@ in
 
     services.safeeyes = {
 
-      enable = mkEnableOption "the safeeyes OSGi service";
+      enable = mkEnableOption (lib.mdDoc "the safeeyes OSGi service");
 
     };
 

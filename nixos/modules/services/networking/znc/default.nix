@@ -81,7 +81,7 @@ in
 
   options = {
     services.znc = {
-      enable = mkEnableOption "ZNC";
+      enable = mkEnableOption (lib.mdDoc "ZNC");
 
       user = mkOption {
         default = "znc";
@@ -149,27 +149,27 @@ in
             };
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           Configuration for ZNC, see
-          <link xlink:href="https://wiki.znc.in/Configuration"/> for details. The
+          <https://wiki.znc.in/Configuration> for details. The
           Nix value declared here will be translated directly to the xml-like
           format ZNC expects. This is much more flexible than the legacy options
-          under <option>services.znc.confOptions.*</option>, but also can't do
+          under {option}`services.znc.confOptions.*`, but also can't do
           any type checking.
 
-          You can use <command>nix-instantiate --eval --strict '&lt;nixpkgs/nixos&gt;' -A config.services.znc.config</command>
+          You can use {command}`nix-instantiate --eval --strict '<nixpkgs/nixos>' -A config.services.znc.config`
           to view the current value. By default it contains a listener for port
           5000 with SSL enabled.
 
-          Nix attributes called <literal>extraConfig</literal> will be inserted
+          Nix attributes called `extraConfig` will be inserted
           verbatim into the resulting config file.
 
-          If <option>services.znc.useLegacyConfig</option> is turned on, the
-          option values in <option>services.znc.confOptions.*</option> will be
+          If {option}`services.znc.useLegacyConfig` is turned on, the
+          option values in {option}`services.znc.confOptions.*` will be
           gracefully be applied to this option.
 
           If you intend to update the configuration through this option, be sure
-          to enable <option>services.znc.mutable</option>, otherwise none of the
+          to enable {option}`services.znc.mutable`, otherwise none of the
           changes here will be applied after the initial deploy.
         '';
       };

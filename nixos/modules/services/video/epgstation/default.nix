@@ -78,7 +78,7 @@ in
   ];
 
   options.services.epgstation = {
-    enable = lib.mkEnableOption description;
+    enable = lib.mkEnableOption (lib.mdDoc description);
 
     package = lib.mkOption {
       default = pkgs.epgstation;
@@ -101,16 +101,14 @@ in
     openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Open ports in the firewall for the EPGStation web interface.
 
-        <warning>
-          <para>
-            Exposing EPGStation to the open internet is generally advised
-            against. Only use it inside a trusted local network, or consider
-            putting it behind a VPN if you want remote access.
-          </para>
-        </warning>
+        ::: {.warning}
+        Exposing EPGStation to the open internet is generally advised
+        against. Only use it inside a trusted local network, or consider
+        putting it behind a VPN if you want remote access.
+        :::
       '';
     };
 

@@ -12,7 +12,7 @@ in
 
   options.services.lemmy = {
 
-    enable = mkEnableOption "lemmy a federated alternative to reddit in rust";
+    enable = mkEnableOption (lib.mdDoc "lemmy a federated alternative to reddit in rust");
 
     jwtSecretPath = mkOption {
       type = types.path;
@@ -27,7 +27,7 @@ in
       };
     };
 
-    caddy.enable = mkEnableOption "exposing lemmy with the caddy reverse proxy";
+    caddy.enable = mkEnableOption (lib.mdDoc "exposing lemmy with the caddy reverse proxy");
 
     settings = mkOption {
       default = { };
@@ -49,7 +49,7 @@ in
         };
 
         options.federation = {
-          enabled = mkEnableOption "activitypub federation";
+          enabled = mkEnableOption (lib.mdDoc "activitypub federation");
         };
 
         options.captcha = {
@@ -65,7 +65,7 @@ in
           };
         };
 
-        options.database.createLocally = mkEnableOption "creation of database on the instance";
+        options.database.createLocally = mkEnableOption (lib.mdDoc "creation of database on the instance");
 
       };
     };

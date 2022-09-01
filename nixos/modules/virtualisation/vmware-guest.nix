@@ -13,7 +13,7 @@ in
   ];
 
   options.virtualisation.vmware.guest = {
-    enable = mkEnableOption "VMWare Guest Support";
+    enable = mkEnableOption (lib.mdDoc "VMWare Guest Support");
     headless = mkOption {
       type = types.bool;
       default = false;

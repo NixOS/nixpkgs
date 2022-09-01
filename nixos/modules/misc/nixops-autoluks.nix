@@ -5,7 +5,7 @@ let
 
   inherit (config.nixops) enableDeprecatedAutoLuks;
 in {
-  options.nixops.enableDeprecatedAutoLuks = lib.mkEnableOption "Enable the deprecated NixOps AutoLuks module";
+  options.nixops.enableDeprecatedAutoLuks = lib.mkEnableOption (lib.mdDoc "Enable the deprecated NixOps AutoLuks module");
 
   config = {
     assertions = [

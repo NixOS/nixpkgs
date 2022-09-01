@@ -43,7 +43,7 @@ in
 
   options = {
     services.sslh = {
-      enable = mkEnableOption "sslh";
+      enable = mkEnableOption (lib.mdDoc "sslh");
 
       verbose = mkOption {
         type = types.bool;

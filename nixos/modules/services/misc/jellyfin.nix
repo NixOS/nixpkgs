@@ -8,7 +8,7 @@ in
 {
   options = {
     services.jellyfin = {
-      enable = mkEnableOption "Jellyfin Media Server";
+      enable = mkEnableOption (lib.mdDoc "Jellyfin Media Server");
 
       user = mkOption {
         type = types.str;

@@ -5,22 +5,22 @@ with lib;
 let
   templateSubmodule = { ... }: {
     options = {
-      enable = mkEnableOption "this template";
+      enable = mkEnableOption (lib.mdDoc "this template");
 
       target = mkOption {
-        description = "Path in the container";
+        description = lib.mdDoc "Path in the container";
         type = types.path;
       };
       template = mkOption {
-        description = ".tpl file for rendering the target";
+        description = lib.mdDoc ".tpl file for rendering the target";
         type = types.path;
       };
       when = mkOption {
-        description = "Events which trigger a rewrite (create, copy)";
+        description = lib.mdDoc "Events which trigger a rewrite (create, copy)";
         type = types.listOf (types.str);
       };
       properties = mkOption {
-        description = "Additional properties";
+        description = lib.mdDoc "Additional properties";
         type = types.attrs;
         default = {};
       };
@@ -58,7 +58,7 @@ in
   options = {
     virtualisation.lxc = {
       templates = mkOption {
-        description = "Templates for LXD";
+        description = lib.mdDoc "Templates for LXD";
         type = types.attrsOf (types.submodule (templateSubmodule));
         default = {};
         example = literalExpression ''

@@ -12,7 +12,7 @@ in
   meta.maintainers = with lib.maintainers; [ hexa ];
 
   options.services.botamusique = {
-    enable = mkEnableOption "botamusique, a bot to play audio streams on mumble";
+    enable = mkEnableOption (lib.mdDoc "botamusique, a bot to play audio streams on mumble");
 
     package = mkOption {
       type = types.package;

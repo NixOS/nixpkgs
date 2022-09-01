@@ -404,7 +404,7 @@ in
 
     services.httpd = {
 
-      enable = mkEnableOption "the Apache HTTP Server";
+      enable = mkEnableOption (lib.mdDoc "the Apache HTTP Server");
 
       package = mkOption {
         type = types.package;
@@ -445,11 +445,11 @@ in
             { name = "jk"; path = "''${pkgs.tomcat_connectors}/modules/mod_jk.so"; }
           ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           Additional Apache modules to be used. These can be
           specified as a string in the case of modules distributed
           with Apache, or as an attribute set specifying the
-          <varname>name</varname> and <varname>path</varname> of the
+          {var}`name` and {var}`path` of the
           module.
         '';
       };
@@ -484,14 +484,14 @@ in
       user = mkOption {
         type = types.str;
         default = "wwwrun";
-        description = ''
+        description = lib.mdDoc ''
           User account under which httpd children processes run.
 
           If you require the main httpd process to run as
-          <literal>root</literal> add the following configuration:
-          <programlisting>
+          `root` add the following configuration:
+          ```
           systemd.services.httpd.serviceConfig.User = lib.mkForce "root";
-          </programlisting>
+          ```
         '';
       };
 

@@ -35,7 +35,7 @@ in
       type = str;
     };
 
-    enable = mkEnableOption "Kubernetes controller manager";
+    enable = mkEnableOption (lib.mdDoc "Kubernetes controller manager");
 
     extraOpts = mkOption {
       description = lib.mdDoc "Kubernetes controller manager extra command line options.";

@@ -44,7 +44,7 @@ in
 {
   options = {
     services.factorio = {
-      enable = mkEnableOption name;
+      enable = mkEnableOption (lib.mdDoc name);
       port = mkOption {
         type = types.int;
         default = 34197;

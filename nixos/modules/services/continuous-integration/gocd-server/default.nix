@@ -8,7 +8,7 @@ let
 in {
   options = {
     services.gocd-server = {
-      enable = mkEnableOption "gocd-server";
+      enable = mkEnableOption (lib.mdDoc "gocd-server");
 
       user = mkOption {
         default = "gocd-server";
