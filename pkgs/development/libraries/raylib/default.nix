@@ -4,7 +4,8 @@
   alsaSupport ? stdenv.hostPlatform.isLinux, alsa-lib,
   pulseSupport ? stdenv.hostPlatform.isLinux, libpulseaudio,
   sharedLib ? true,
-  includeEverything ? true
+  includeEverything ? true,
+  waylandSupport ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -19,17 +20,24 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [
-    mesa libGLU glfw libX11 libXi libXcursor libXrandr libXinerama
-  ] ++ lib.optional alsaSupport alsa-lib
-    ++ lib.optional pulseSupport libpulseaudio;
+  buildInputs =
+    if waylandSupport
+    then [ ]
+    else [ libX11 libXi libXcursor libXrandr libXinerama ]
+      ++ [
+      (glfw.override { inherit waylandSupport; })
+      mesa libGLU
+    ]
+      ++ lib.optional alsaSupport alsa-lib
+      ++ lib.optional pulseSupport libpulseaudio;
 
   # https://github.com/raysan5/raylib/wiki/CMake-Build-Options
   cmakeFlags = [
     "-DUSE_EXTERNAL_GLFW=ON"
     "-DBUILD_EXAMPLES=OFF"
   ] ++ lib.optional includeEverything "-DINCLUDE_EVERYTHING=ON"
-    ++ lib.optional sharedLib "-DBUILD_SHARED_LIBS=ON";
+    ++ lib.optional sharedLib "-DBUILD_SHARED_LIBS=ON"
+    ++ lib.optional waylandSupport "-DUSE_WAYLAND=ON";
 
   # fix libasound.so/libpulse.so not being found
   preFixup = ''
