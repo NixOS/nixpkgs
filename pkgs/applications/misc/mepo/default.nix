@@ -44,11 +44,8 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     curl SDL2 SDL2_gfx SDL2_image SDL2_ttf inconsolata-nerdfont jq ncurses
   ] ++ menuInputs
-  ++ lib.optionals geoclueSupport [
-    geoclue2
-  ] ++ lib.optionals gpsdSupport [
-    gpsd
-  ];
+    ++ lib.optional geoclueSupport geoclue2
+    ++ lib.optional gpsdSupport gpsd;
 
   patches = lib.optionals (!geoclueSupport) [
     ./dont-report-user-location-to-geoclue-without-asking.patch
