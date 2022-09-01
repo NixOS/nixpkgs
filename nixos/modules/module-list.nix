@@ -609,6 +609,7 @@
   ./services/misc/nix-optimise.nix
   ./services/misc/nix-ssh-serve.nix
   ./services/misc/novacomd.nix
+  ./services/misc/ntfy-sh.nix
   ./services/misc/nzbget.nix
   ./services/misc/nzbhydra2.nix
   ./services/misc/octoprint.nix
