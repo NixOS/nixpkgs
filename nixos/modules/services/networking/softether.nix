@@ -7,6 +7,37 @@ let
 
   package = cfg.package.override { dataDir = cfg.dataDir; };
 
+  mkValue = type: value: { inherit type value; };
+
+  encodeValue = {type, value}: lib.generators.mkValueStringDefault {} value;
+
+  recurseEncode = v: builtins.concatLists (lib.attrsets.mapAttrsToList encode v);
+
+  encode = name: value: {
+    bool = encode name (mkValue "bool" value);
+    int = encode name (mkValue "uint" value);
+    string = encode name (mkValue "string" value);
+    set =
+      if value ? type && value ? value then [ "${value.type} ${name} ${encodeValue value}" ]
+      else [ "declare ${name}" "{" ] ++ (map (c: "\t" + c) (recurseEncode value)) ++ [ "}" ];
+  }.${builtins.typeOf value};
+
+
+  softetherConf = {
+    type = with lib.types; let
+      valueType = nullOr (oneOf [
+          bool
+          ints.unsigned
+          str
+          (lazyAttrsOf valueType)
+      ]) // {
+        description = ''
+          Recursive attribute set of null or boolean or unsigned int or string or typed definition set ({type="type", value=value})
+        '';
+      };
+    in attrsOf valueType;
+    generate = pkgs: name: value: pkgs.writeText name (lib.concatStringsSep "\n" (recurseEncode value));
+  };
 in
 {
 
@@ -27,7 +58,76 @@ in
         '';
       };
 
-      vpnserver.enable = mkEnableOption "SoftEther VPN Server";
+      vpnserver = {
+        enable = mkEnableOption "SoftEther VPN Server";
+        settings = mkOption {
+          type = softetherConf.type;
+          example = literalExample ''
+            { root = {
+              ListenerList.Listener0 = {
+                Enabled = true;
+                Port = 5555;
+              }
+              VirtualHUB.DEFAULT = {
+                Online = true;
+                SecurityAccountDatabase.UserList.USer = {
+                  AuthNtLmSecureHash = {type="byte"; value="iEb36u6PsRetBr3YMLdYbA==";};
+                  AuthPassword = {type="byte"; value="nSBsqvVeSws6oSxE8RRdDAoWgAU=";};
+                  AuthType = 1;
+                };
+              };
+            }}
+          '';
+          description = ''
+            Configuration for SoftEther vpnserver, see
+            <link xlink:href="https://www.softether.org/4-docs/1-manual/3._SoftEther_VPN_Server_Manual/3.3_VPN_Server_Administration#3.3.7_Configuration_File"/>
+            for details. The Nix vale declared here will be translated directly
+            to the key-value format SoftEther expects.
+            </para>
+            <para>
+            You can use
+            <command>nix-instantiate --eval --strict '&lt;nixpkgs/nixos&gt;' -A config.services.softether.vpnserver.settings</command>
+            to view the current value. By default it contains listeners on
+            ports  443, 992, 1194, &amp; 5555.
+            </para>
+            <para>
+            if you intend to update the configuration through this option, be
+            sure to disable <option>services.softether.vpnserver.mutable</option>,
+            otherwise, none of the changes here will be applied after the
+            initial deploy.
+          '';
+        };
+        mutable = mkOption {
+          default = true;
+          type = types.bool;
+          description = ''
+            Indicates whether to allow the contents of the
+            <literal>dataDir</literal> directory to be changed by the user at
+            run-time.
+            </para>
+            <para>
+            If enabled, modifications to the vpnserver configuration after its
+            initial creation are not overwritten by a NixOS rebuild. If
+            disabled, the vpnserver configuration is rebuilt on every NixOS
+            rebuild.
+            </para>
+            <para>
+            If the user wants to manage the softether service using the
+            <literal>vpncmd</literal> command, this option should be enabled.
+          '';
+        };
+        configFile = mkOption {
+          type = types.path;
+          description = ''
+            Configuration file for SoftEther vpnserver. It is recommended to
+            use the <option>config</option> option insead.
+            </para>
+            <para>
+            Setting this option will override any auto-generated config file
+            through the <option>config</option> option.
+          '';
+        };
+      };
 
       vpnbridge.enable = mkEnableOption "SoftEther VPN Bridge";
 
@@ -89,6 +189,30 @@ in
     }
 
     (mkIf (cfg.vpnserver.enable) {
+      services.softether.vpnserver = {
+        configFile = mkDefault (softetherConf.generate pkgs "vpn_server.config" cfg.vpnserver.settings);
+        settings.root = {
+          ServerConfiguration = mkDefault {};
+          ListenerList = mkDefault {
+            Listener0 = {
+              Enabled = true;
+              Port = 443;
+            };
+            Listener1 = {
+              Enabled = true;
+              Port = 992;
+            };
+            Listener2 = {
+              Enabled = true;
+              Port = 1194;
+            };
+            Listener3 = {
+              Enabled = true;
+              Port = 5555;
+            };
+          };
+        };
+      };
       systemd.services.vpnserver = {
         description = "SoftEther VPN Server";
         after = [ "softether-init.service" ];
@@ -100,6 +224,8 @@ in
           ExecStop = "${package}/bin/vpnserver stop";
         };
         preStart = ''
+            cp ${optionalString (cfg.vpnserver.mutable) "--no-clobber"} ${cfg.vpnserver.configFile} ${cfg.dataDir}/vpnserver/vpn_server.config
+
             rm -rf ${cfg.dataDir}/vpnserver/vpnserver
             ln -s ${package}${cfg.dataDir}/vpnserver/vpnserver ${cfg.dataDir}/vpnserver/vpnserver
         '';
