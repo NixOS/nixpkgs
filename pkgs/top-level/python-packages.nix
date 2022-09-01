@@ -7888,6 +7888,8 @@ in {
 
   pylru = callPackage ../development/python-modules/pylru { };
 
+  pylsqpack = callPackage ../development/python-modules/pylsqpack { };
+
   pyls-black = callPackage ../development/python-modules/pyls-black { };
 
   pyls-flake8 = callPackage ../development/python-modules/pyls-flake8 { };
