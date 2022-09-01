@@ -1411,7 +1411,7 @@ let
 
     ipv6RoutePrefixes = mkOption {
       default = [];
-      example = [ { Route = "fd00::/64"; LifetimeSec = 3600; } ];
+      example = [ { ipv6RoutePrefixConfig = { Route = "fd00::/64"; LifetimeSec = 3600; }; } ];
       type = with types; listOf (submodule ipv6RoutePrefixOptions);
       description = ''
         A list of ipv6RoutePrefix sections to be added to the unit.  See
