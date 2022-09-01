@@ -1947,6 +1947,8 @@ in {
 
   cogapp = callPackage ../development/python-modules/cogapp { };
 
+  coinmetrics-api-client = callPackage ../development/python-modules/coinmetrics-api-client { };
+
   ColanderAlchemy = callPackage ../development/python-modules/colanderalchemy { };
 
   colander = callPackage ../development/python-modules/colander { };
@@ -3785,6 +3787,8 @@ in {
   google-cloud-bigquery-storage = callPackage ../development/python-modules/google-cloud-bigquery-storage { };
 
   google-cloud-bigtable = callPackage ../development/python-modules/google-cloud-bigtable { };
+
+  google-cloud-compute = callPackage ../development/python-modules/google-cloud-compute { };
 
   google-cloud-container = callPackage ../development/python-modules/google-cloud-container { };
 
@@ -10924,7 +10928,6 @@ in {
   };
 
   torch-bin = callPackage ../development/python-modules/torch/bin.nix { };
-
 
   torchWithCuda = self.torch.override {
     cudaSupport = true;
