@@ -829,6 +829,7 @@ in {
   systemd-initrd-networkd-openvpn = handleTest ./initrd-network-openvpn { systemdStage1 = true; };
   systemd-initrd-vlan = handleTest ./systemd-initrd-vlan.nix {};
   systemd-journal = handleTest ./systemd-journal.nix {};
+  systemd-journal-gateway = handleTest ./systemd-journal-gateway.nix {};
   systemd-machinectl = handleTest ./systemd-machinectl.nix {};
   systemd-networkd = handleTest ./systemd-networkd.nix {};
   systemd-networkd-dhcpserver = handleTest ./systemd-networkd-dhcpserver.nix {};
