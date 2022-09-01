@@ -8,16 +8,20 @@
 , alembic
 , psycopg2
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "GeoAlchemy2";
+  pname = "geoalchemy2";
   version = "0.12.4";
   format = "setuptools";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-PHs6bS/I6BpJYEPHgB9yuM35Ix33fN5n/KxqKuQzwEk=";
+    pname = "GeoAlchemy2";
+    inherit version;
+    hash = "sha256-PHs6bS/I6BpJYEPHgB9yuM35Ix33fN5n/KxqKuQzwEk=";
   };
 
   nativeBuildInputs = [
@@ -59,9 +63,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Toolkit for working with spatial databases";
-    homepage =  "http://geoalchemy.org/";
+    homepage =  "https://geoalchemy-2.readthedocs.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
-
 }
