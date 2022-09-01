@@ -43,12 +43,12 @@ let
   '';
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
   version = "2.72.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glib/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
     sha256 = "Sjmi9iS4US1QDVhAFz7af6hfUcEJBS6ugGrOzoXTRfA=";
   };
 
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   buildInputs = [
-    libelf setupHook pcre
+    libelf finalAttrs.setupHook pcre
   ] ++ optionals (!stdenv.hostPlatform.isWindows) [
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
   ] ++ optionals stdenv.isLinux [
@@ -190,7 +190,7 @@ stdenv.mkDerivation rec {
     sed -i "$dev/bin/glib-gettextize" -e "s|^gettext_dir=.*|gettext_dir=$dev/share/glib-2.0/gettext|"
 
     # This file is *included* in gtk3 and would introduce runtime reference via __FILE__.
-    sed '1i#line 1 "${pname}-${version}/include/glib-2.0/gobject/gobjectnotifyqueue.c"' \
+    sed '1i#line 1 "glib-${finalAttrs.version}/include/glib-2.0/gobject/gobjectnotifyqueue.c"' \
       -i "$dev"/include/glib-2.0/gobject/gobjectnotifyqueue.c
     for i in $bin/bin/*; do
       moveToOutput "share/bash-completion/completions/''${i##*/}" "$bin"
@@ -214,7 +214,7 @@ stdenv.mkDerivation rec {
   checkInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
   preCheck = optionalString doCheck ''
-    export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${pname}-${version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="$NIX_BUILD_TOP/glib-${finalAttrs.version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export TZDIR="${tzdata}/share/zoneinfo"
     export XDG_CACHE_HOME="$TMP"
     export XDG_RUNTIME_HOME="$TMP"
@@ -258,4 +258,4 @@ stdenv.mkDerivation rec {
       set of utility functions for strings and common data structures.
     '';
   };
-}
+})
