@@ -13,8 +13,7 @@
 }:
 
 let
-  opencvFlag = name: enabled: "-DWITH_${name}=${if enabled then "ON" else "OFF"}";
-
+  mkFlag = name: enabled: "-DWITH_${name}=${lib.boolToCMakeString enabled}";
 in
 
 stdenv.mkDerivation rec {
@@ -59,11 +58,11 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   cmakeFlags = [
-    (opencvFlag "TIFF" enableTIFF)
-    (opencvFlag "JPEG" enableJPEG)
-    (opencvFlag "PNG" enablePNG)
-    (opencvFlag "OPENEXR" enableEXR)
-    (opencvFlag "GSTREAMER" enableGStreamer)
+    (mkFlag "TIFF" enableTIFF)
+    (mkFlag "JPEG" enableJPEG)
+    (mkFlag "PNG" enablePNG)
+    (mkFlag "OPENEXR" enableEXR)
+    (mkFlag "GSTREAMER" enableGStreamer)
   ] ++ lib.optional (!enableUnfree) "-DBUILD_opencv_nonfree=OFF";
 
   hardeningDisable = [ "bindnow" "relro" ];

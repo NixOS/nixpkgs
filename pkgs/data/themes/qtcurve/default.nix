@@ -55,7 +55,7 @@ mkDerivation rec {
   '';
 
   configureFlags = [
-    "-DENABLE_GTK2=${if gtk2Support then "ON" else "OFF"}"
+    "-DENABLE_GTK2=${lib.boolToCMakeString gtk2Support}"
     "-DENABLE_QT4=OFF"
   ];
 

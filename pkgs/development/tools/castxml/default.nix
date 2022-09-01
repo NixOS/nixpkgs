@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCLANG_RESOURCE_DIR=${libclang.dev}/"
-    "-DSPHINX_HTML=${if withHTML then "ON" else "OFF"}"
-    "-DSPHINX_MAN=${if withManual then "ON" else "OFF"}"
+    "-DSPHINX_HTML=${lib.boolToCMakeString withHTML}"
+    "-DSPHINX_MAN=${lib.boolToCMakeString withManual}"
   ];
 
   # 97% tests passed, 97 tests failed out of 2881

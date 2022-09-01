@@ -41,9 +41,6 @@
 , withShared ? true
 }:
 
-let
-  onOff = value: if value then "ON" else "OFF";
-in
 stdenv.mkDerivation rec {
   pname = "fltk";
   inherit version;
@@ -113,40 +110,40 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     # Common
-    "-DOPTION_BUILD_SHARED_LIBS=${onOff withShared}"
+    "-DOPTION_BUILD_SHARED_LIBS=${lib.boolToCMakeString withShared}"
     "-DOPTION_USE_SYSTEM_ZLIB=ON"
     "-DOPTION_USE_SYSTEM_LIBJPEG=ON"
     "-DOPTION_USE_SYSTEM_LIBPNG=ON"
 
     # X11
-    "-DOPTION_USE_XINERAMA=${onOff stdenv.hostPlatform.isLinux}"
-    "-DOPTION_USE_XFIXES=${onOff stdenv.hostPlatform.isLinux}"
-    "-DOPTION_USE_XCURSOR=${onOff stdenv.hostPlatform.isLinux}"
-    "-DOPTION_USE_XFT=${onOff stdenv.hostPlatform.isLinux}"
-    "-DOPTION_USE_XRENDER=${onOff stdenv.hostPlatform.isLinux}"
-    "-DOPTION_USE_XDBE=${onOff stdenv.hostPlatform.isLinux}"
+    "-DOPTION_USE_XINERAMA=${lib.boolToCMakeString stdenv.hostPlatform.isLinux}"
+    "-DOPTION_USE_XFIXES=${lib.boolToCMakeString stdenv.hostPlatform.isLinux}"
+    "-DOPTION_USE_XCURSOR=${lib.boolToCMakeString stdenv.hostPlatform.isLinux}"
+    "-DOPTION_USE_XFT=${lib.boolToCMakeString stdenv.hostPlatform.isLinux}"
+    "-DOPTION_USE_XRENDER=${lib.boolToCMakeString stdenv.hostPlatform.isLinux}"
+    "-DOPTION_USE_XDBE=${lib.boolToCMakeString stdenv.hostPlatform.isLinux}"
 
     # GL
-    "-DOPTION_USE_GL=${onOff withGL}"
+    "-DOPTION_USE_GL=${lib.boolToCMakeString withGL}"
     "-DOpenGL_GL_PREFERENCE=GLVND"
 
     # Cairo
-    "-DOPTION_CAIRO=${onOff withCairo}"
-    "-DOPTION_CAIROEXT=${onOff withCairo}"
+    "-DOPTION_CAIRO=${lib.boolToCMakeString withCairo}"
+    "-DOPTION_CAIROEXT=${lib.boolToCMakeString withCairo}"
 
     # Pango
-    "-DOPTION_USE_PANGO=${onOff withPango}"
+    "-DOPTION_USE_PANGO=${lib.boolToCMakeString withPango}"
 
     # Examples & Tests
-    "-DFLTK_BUILD_EXAMPLES=${onOff withExamples}"
-    "-DFLTK_BUILD_TEST=${onOff withExamples}"
+    "-DFLTK_BUILD_EXAMPLES=${lib.boolToCMakeString withExamples}"
+    "-DFLTK_BUILD_TEST=${lib.boolToCMakeString withExamples}"
 
     # Docs
-    "-DOPTION_BUILD_HTML_DOCUMENTATION=${onOff withDocs}"
+    "-DOPTION_BUILD_HTML_DOCUMENTATION=${lib.boolToCMakeString withDocs}"
     "-DOPTION_BUILD_PDF_DOCUMENTATION=OFF"
-    "-DOPTION_INSTALL_HTML_DOCUMENTATION=${onOff withDocs}"
+    "-DOPTION_INSTALL_HTML_DOCUMENTATION=${lib.boolToCMakeString withDocs}"
     "-DOPTION_INSTALL_PDF_DOCUMENTATION=OFF"
-    "-DOPTION_INCLUDE_DRIVER_DOCUMENTATION=${onOff withDocs}"
+    "-DOPTION_INCLUDE_DRIVER_DOCUMENTATION=${lib.boolToCMakeString withDocs}"
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"

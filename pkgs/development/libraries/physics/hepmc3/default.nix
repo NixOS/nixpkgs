@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withPython python;
 
   cmakeFlags = [
-    "-DHEPMC3_ENABLE_PYTHON=${if withPython then "ON" else "OFF"}"
+    "-DHEPMC3_ENABLE_PYTHON=${lib.boolToCMakeString withPython}"
   ] ++ lib.optionals withPython [
     "-DHEPMC3_PYTHON_VERSIONS=${if python.isPy3k then "3.X" else "2.X"}"
     "-DHEPMC3_Python_SITEARCH${pythonVersion}=${placeholder "out"}/${python.sitePackages}"

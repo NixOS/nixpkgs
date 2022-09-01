@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
       "-DWITH_OPENVDB=ON"
       "-DWITH_TBB=ON"
       "-DWITH_IMAGE_OPENJPEG=ON"
-      "-DWITH_OPENCOLLADA=${if colladaSupport then "ON" else "OFF"}"
+      "-DWITH_OPENCOLLADA=${lib.boolToCMakeString colladaSupport}"
     ]
     ++ optionals stdenv.isDarwin [
       "-DWITH_CYCLES_OSL=OFF" # requires LLVM

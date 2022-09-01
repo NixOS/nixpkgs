@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DENABLE_PYTHON=${if enablePython then "ON" else "OFF"}"
+    "-DENABLE_PYTHON=${lib.boolToCMakeString enablePython}"
     "-DENABLE_PNG=ON"
-    "-DENABLE_ECCODES_THREADS=${if enablePosixThreads then "ON" else "OFF"}"
-    "-DENABLE_ECCODES_OMP_THREADS=${if enableOpenMPThreads then "ON" else "OFF"}"
+    "-DENABLE_ECCODES_THREADS=${lib.boolToCMakeString enablePosixThreads}"
+    "-DENABLE_ECCODES_OMP_THREADS=${lib.boolToCMakeString enableOpenMPThreads}"
   ];
 
   doCheck = true;

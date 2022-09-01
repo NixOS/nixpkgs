@@ -28,7 +28,6 @@ let
     rev = "renderdoc-modified-7";
     sha256 = "15r2m5kcs0id64pa2fsw58qll3jyh71jzc04wy20pgsh2326zis6";
   };
-  cmakeBool = b: if b then "ON" else "OFF";
 in
 mkDerivation rec {
   pname = "renderdoc";
@@ -61,7 +60,7 @@ mkDerivation rec {
     "-DBUILD_VERSION_DIST_VER=${version}"
     "-DBUILD_VERSION_DIST_CONTACT=https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/graphics/renderdoc"
     "-DBUILD_VERSION_STABLE=ON"
-    "-DENABLE_WAYLAND=${cmakeBool waylandSupport}"
+    "-DENABLE_WAYLAND=${lib.boolToCMakeString waylandSupport}"
   ];
 
   # TODO: define these in the above array via placeholders, once those are widely supported

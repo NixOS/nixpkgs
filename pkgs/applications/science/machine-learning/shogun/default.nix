@@ -124,9 +124,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals pythonSupport (with python3Packages; [ python numpy ])
     ++ lib.optional opencvSupport opencv;
 
-  cmakeFlags = let
-    enableIf = cond: if cond then "ON" else "OFF";
-  in [
+  cmakeFlags = [
     "-DBUILD_META_EXAMPLES=ON"
     "-DCMAKE_DISABLE_FIND_PACKAGE_ARPACK=ON"
     "-DCMAKE_DISABLE_FIND_PACKAGE_ARPREC=ON"
@@ -135,12 +133,12 @@ stdenv.mkDerivation rec {
     "-DCMAKE_DISABLE_FIND_PACKAGE_TFLogger=ON"
     "-DCMAKE_DISABLE_FIND_PACKAGE_ViennaCL=ON"
     "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;TrainedModelSerialization'"  # Sporadic segfault
-    "-DENABLE_TESTING=${enableIf doCheck}"
+    "-DENABLE_TESTING=${lib.boolToCMakeString doCheck}"
     "-DDISABLE_META_INTEGRATION_TESTS=ON"
     "-DTRAVIS_DISABLE_META_CPP=ON"
-    "-DINTERFACE_PYTHON=${enableIf pythonSupport}"
-    "-DOpenCV=${enableIf opencvSupport}"
-    "-DUSE_SVMLIGHT=${enableIf withSvmLight}"
+    "-DINTERFACE_PYTHON=${lib.boolToCMakeString pythonSupport}"
+    "-DOpenCV=${lib.boolToCMakeString opencvSupport}"
+    "-DUSE_SVMLIGHT=${lib.boolToCMakeString withSvmLight}"
   ];
 
   CXXFLAGS = "-faligned-new";

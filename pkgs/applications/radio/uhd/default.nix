@@ -31,7 +31,6 @@
 }:
 
 let
-  onOffBool = b: if b then "ON" else "OFF";
   inherit (lib) optionals;
 in
 
@@ -59,23 +58,23 @@ stdenv.mkDerivation rec {
     "-DENABLE_LIBUHD=ON"
     "-DENABLE_USB=ON"
     "-DENABLE_TESTS=ON" # This installs tests as well so we delete them via postPhases
-    "-DENABLE_EXAMPLES=${onOffBool enableExamples}"
-    "-DENABLE_UTILS=${onOffBool enableUtils}"
-    "-DENABLE_C_API=${onOffBool enableCApi}"
-    "-DENABLE_PYTHON_API=${onOffBool enablePythonApi}"
-    "-DENABLE_DPDK=${onOffBool enableDpdk}"
+    "-DENABLE_EXAMPLES=${lib.boolToCMakeString enableExamples}"
+    "-DENABLE_UTILS=${lib.boolToCMakeString enableUtils}"
+    "-DENABLE_C_API=${lib.boolToCMakeString enableCApi}"
+    "-DENABLE_PYTHON_API=${lib.boolToCMakeString enablePythonApi}"
+    "-DENABLE_DPDK=${lib.boolToCMakeString enableDpdk}"
     # Devices
-    "-DENABLE_OCTOCLOCK=${onOffBool enableOctoClock}"
-    "-DENABLE_MPMD=${onOffBool enableMpmd}"
-    "-DENABLE_B100=${onOffBool enableB100}"
-    "-DENABLE_B200=${onOffBool enableB200}"
-    "-DENABLE_USRP1=${onOffBool enableUsrp1}"
-    "-DENABLE_USRP2=${onOffBool enableUsrp2}"
-    "-DENABLE_X300=${onOffBool enableX300}"
-    "-DENABLE_N300=${onOffBool enableN300}"
-    "-DENABLE_N320=${onOffBool enableN320}"
-    "-DENABLE_E300=${onOffBool enableE300}"
-    "-DENABLE_E320=${onOffBool enableE320}"
+    "-DENABLE_OCTOCLOCK=${lib.boolToCMakeString enableOctoClock}"
+    "-DENABLE_MPMD=${lib.boolToCMakeString enableMpmd}"
+    "-DENABLE_B100=${lib.boolToCMakeString enableB100}"
+    "-DENABLE_B200=${lib.boolToCMakeString enableB200}"
+    "-DENABLE_USRP1=${lib.boolToCMakeString enableUsrp1}"
+    "-DENABLE_USRP2=${lib.boolToCMakeString enableUsrp2}"
+    "-DENABLE_X300=${lib.boolToCMakeString enableX300}"
+    "-DENABLE_N300=${lib.boolToCMakeString enableN300}"
+    "-DENABLE_N320=${lib.boolToCMakeString enableN320}"
+    "-DENABLE_E300=${lib.boolToCMakeString enableE300}"
+    "-DENABLE_E320=${lib.boolToCMakeString enableE320}"
   ]
     # TODO: Check if this still needed
     # ABI differences GCC 7.1

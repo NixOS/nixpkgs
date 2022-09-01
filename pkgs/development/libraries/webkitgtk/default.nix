@@ -186,14 +186,12 @@ stdenv.mkDerivation rec {
     libsoup
   ];
 
-  cmakeFlags = let
-    cmakeBool = x: if x then "ON" else "OFF";
-  in [
+  cmakeFlags = [
     "-DENABLE_INTROSPECTION=ON"
     "-DPORT=GTK"
     "-DUSE_LIBHYPHEN=OFF"
-    "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
-    "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
+    "-DUSE_SOUP2=${lib.boolToCMakeString (lib.versions.major libsoup.version == "2")}"
+    "-DUSE_LIBSECRET=${lib.boolToCMakeString withLibsecret}"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DENABLE_GAMEPAD=OFF"
     "-DENABLE_GTKDOC=OFF"

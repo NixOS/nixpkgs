@@ -65,8 +65,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DGIT_VERSION=OFF"
-    "-DUSE_POPPLER=${if usePoppler then "ON" else "OFF"}"
-    "-DUSE_MUPDF=${if useMupdf then "ON" else "OFF"}"
+    "-DUSE_POPPLER=${lib.boolToCMakeString usePoppler}"
+    "-DUSE_MUPDF=${lib.boolToCMakeString useMupdf}"
     "-DUSE_MUJS=OFF"
     "-DUSE_GUMBO=ON"
     "-DUSE_TRANSLATIONS=ON"

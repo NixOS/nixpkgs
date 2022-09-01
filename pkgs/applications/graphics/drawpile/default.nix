@@ -63,9 +63,6 @@ let
     qtx11extras
   ];
 
-  boolToFlag = bool:
-    if bool then "ON" else "OFF";
-
 in mkDerivation rec {
   pname = "drawpile";
   version = "2.1.20";
@@ -89,11 +86,11 @@ in mkDerivation rec {
   cmakeFlags = [
     "-Wno-dev"
     "-DINITSYS=systemd"
-    "-DCLIENT=${boolToFlag buildClient}"
-    "-DSERVER=${boolToFlag buildServer}"
-    "-DSERVERGUI=${boolToFlag buildServerGui}"
-    "-DTOOLS=${boolToFlag buildExtraTools}"
-    "-DKIS_TABLET=${boolToFlag enableKisTablet}"
+    "-DCLIENT=${lib.boolToCMakeString buildClient}"
+    "-DSERVER=${lib.boolToCMakeString buildServer}"
+    "-DSERVERGUI=${lib.boolToCMakeString buildServerGui}"
+    "-DTOOLS=${lib.boolToCMakeString buildExtraTools}"
+    "-DKIS_TABLET=${lib.boolToCMakeString enableKisTablet}"
   ];
 
   meta = {

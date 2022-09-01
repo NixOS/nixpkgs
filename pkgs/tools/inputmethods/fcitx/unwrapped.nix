@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_OPENCC=OFF"
     "-DENABLE_PRESAGE=OFF"
     "-DENABLE_XDGAUTOSTART=OFF"
-    "-DENABLE_PINYIN=${if withPinyin then "ON" else "OFF"}"
+    "-DENABLE_PINYIN=${lib.boolToCMakeString withPinyin}"
     "-DENABLE_TABLE=ON"
     "-DENABLE_SPELL=ON"
     "-DENABLE_QT_GUI=ON"

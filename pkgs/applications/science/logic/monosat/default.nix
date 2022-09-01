@@ -6,8 +6,6 @@
 with lib;
 
 let
-  boolToCmake = x: if x then "ON" else "OFF";
-
   rev    = "1.8.0";
   sha256 = "0q3a8x3iih25xkp2bm842sm2hxlb8hxlls4qmvj7vzwrh4lvsl7b";
 
@@ -45,8 +43,8 @@ let
 
     cmakeFlags = [
       "-DBUILD_STATIC=OFF"
-      "-DJAVA=${boolToCmake includeJava}"
-      "-DGPL=${boolToCmake includeGplCode}"
+      "-DJAVA=${lib.boolToCMakeString includeJava}"
+      "-DGPL=${lib.boolToCMakeString includeGplCode}"
 
       # file RPATH_CHANGE could not write new RPATH
       "-DCMAKE_SKIP_BUILD_RPATH=ON"

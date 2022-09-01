@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 
   cmakeFlags = lib.attrsets.mapAttrsToList
-    (name: value: "-DZSTD_${name}:BOOL=${if value then "ON" else "OFF"}") {
+    (name: value: "-DZSTD_${name}:BOOL=${lib.boolToCMakeString value}") {
       BUILD_SHARED = !static;
       BUILD_STATIC = static;
       BUILD_CONTRIB = buildContrib;

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableFortran "-DBUILD_ZFORP=ON"
     ++ lib.optional enableOpenMP "-DZFP_WITH_OPENMP=ON"
     ++ lib.optional enablePython "-DBUILD_ZFPY=ON"
-    ++ ([ "-DBUILD_UTILITIES=${if enableUtilities then "ON" else "OFF"}" ]);
+    ++ ([ "-DBUILD_UTILITIES=${lib.boolToCMakeString enableUtilities}" ]);
 
   preCheck = lib.optional targetPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH="$out/lib:$DYLD_LIBRARY_PATH"

@@ -75,13 +75,13 @@ in
       ++ lib.optionals vulkanWayland [ wayland libffi ];
 
     cmakeFlags = [
-      "-DHEADLESS=${if enableQt then "OFF" else "ON"}"
+      "-DHEADLESS=${lib.boolToCMakeString enableQt}"
       "-DOpenGL_GL_PREFERENCE=GLVND"
       "-DUSE_SYSTEM_FFMPEG=ON"
       "-DUSE_SYSTEM_LIBZIP=ON"
       "-DUSE_SYSTEM_SNAPPY=ON"
-      "-DUSE_WAYLAND_WSI=${if vulkanWayland then "ON" else "OFF"}"
-      "-DUSING_QT_UI=${if enableQt then "ON" else "OFF"}"
+      "-DUSE_WAYLAND_WSI=${lib.boolToCMakeString vulkanWayland}"
+      "-DUSING_QT_UI=${lib.boolToCMakeString enableQt}"
     ];
 
     desktopItems = [(makeDesktopItem {

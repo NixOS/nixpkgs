@@ -12,9 +12,6 @@
 , tinygltf
 }:
 
-let
-  cmakeBool = b: if b then "ON" else "OFF";
-in
 stdenv.mkDerivation rec {
   version = "1.5.3";
   pname = "draco";
@@ -33,10 +30,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 ];
 
   cmakeFlags = [
-    "-DDRACO_ANIMATION_ENCODING=${cmakeBool withAnimation}"
+    "-DDRACO_ANIMATION_ENCODING=${lib.boolToCMakeString withAnimation}"
     "-DDRACO_GOOGLETEST_PATH=${gtest}"
-    "-DBUILD_SHARED_LIBS=${cmakeBool true}"
-    "-DDRACO_TRANSCODER_SUPPORTED=${cmakeBool withTranscoder}"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DDRACO_TRANSCODER_SUPPORTED=${lib.boolToCMakeString withTranscoder}"
   ] ++ lib.optionals withTranscoder [
     "-DDRACO_EIGEN_PATH=${eigen}/include/eigen3"
     "-DDRACO_FILESYSTEM_PATH=${ghc_filesystem}"

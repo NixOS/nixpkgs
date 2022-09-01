@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenAL IOKit Cocoa libsamplerate ];
 
   cmakeFlags = [
-    "-DBUILD_RECORDER=${if (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isLinux) then "ON" else "OFF"}"
+    "-DBUILD_RECORDER=${lib.boolToCMakeString (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isLinux)}"
     "-DUSE_SYSTEM_ANGELSCRIPT=ON"
     "-DCHECK_ASSETS=OFF"
     "-DUSE_SYSTEM_WIIUSE=ON"

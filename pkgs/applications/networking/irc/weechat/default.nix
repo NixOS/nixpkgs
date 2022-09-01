@@ -47,7 +47,7 @@ let
         "-DENABLE_PHP=OFF"
       ]
         ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"]
-        ++ map (p: "-D${p.cmakeFlag}=" + (if p.enabled then "ON" else "OFF")) plugins
+        ++ map (p: "-D${p.cmakeFlag}=" + (lib.boolToCMakeString p.enabled)) plugins
         ;
 
       nativeBuildInputs = [ cmake pkg-config makeWrapper asciidoctor ];

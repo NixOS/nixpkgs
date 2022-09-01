@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = let
-    mkFeatureFlag = label: value: "-DICINGA2_WITH_${label}=${if value then "ON" else "OFF"}";
+    mkFeatureFlag = label: value: "-DICINGA2_WITH_${label}=${lib.boolToCMakeString value}";
   in [
     # Paths
     "-DCMAKE_INSTALL_SYSCONFDIR=etc"

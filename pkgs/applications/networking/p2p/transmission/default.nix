@@ -47,18 +47,14 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "apparmor" ];
 
-  cmakeFlags =
-    let
-      mkFlag = opt: if opt then "ON" else "OFF";
-    in
-    [
-      "-DENABLE_MAC=OFF" # requires xcodebuild
-      "-DENABLE_GTK=${mkFlag enableGTK3}"
-      "-DENABLE_QT=${mkFlag enableQt}"
-      "-DENABLE_DAEMON=${mkFlag enableDaemon}"
-      "-DENABLE_CLI=${mkFlag enableCli}"
-      "-DINSTALL_LIB=${mkFlag installLib}"
-    ];
+  cmakeFlags = [
+    "-DENABLE_MAC=OFF" # requires xcodebuild
+    "-DENABLE_GTK=${lib.boolToCMakeString enableGTK3}"
+    "-DENABLE_QT=${lib.boolToCMakeString enableQt}"
+    "-DENABLE_DAEMON=${lib.boolToCMakeString enableDaemon}"
+    "-DENABLE_CLI=${lib.boolToCMakeString enableCli}"
+    "-DINSTALL_LIB=${lib.boolToCMakeString installLib}"
+  ];
 
   nativeBuildInputs = [
     pkg-config

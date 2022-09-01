@@ -11,7 +11,6 @@ let components = {
      md = true;
      metal = true;
    };
-   onOffBool = b: if b then "ON" else "OFF";
    withMPI = (mpi != null);
 in
 stdenv.mkDerivation rec {
@@ -35,18 +34,14 @@ stdenv.mkDerivation rec {
 
   dontAddPrefix = true;
   cmakeFlags = [
-       "-DENABLE_MPI=${onOffBool withMPI}"
-       "-DBUILD_CGCMM=${onOffBool components.cgcmm}"
-       "-DBUILD_DEPRECIATED=${onOffBool components.depreciated}"
-       "-DBUILD_HPMC=${onOffBool components.hpmc}"
-       "-DBUILD_MD=${onOffBool components.md}"
-       "-DBUILD_METAL=${onOffBool components.metal}"
+    "-DENABLE_MPI=${lib.boolToCMakeString withMPI}"
+    "-DBUILD_CGCMM=${lib.boolToCMakeString components.cgcmm}"
+    "-DBUILD_DEPRECIATED=${lib.boolToCMakeString components.depreciated}"
+    "-DBUILD_HPMC=${lib.boolToCMakeString components.hpmc}"
+    "-DBUILD_MD=${lib.boolToCMakeString components.md}"
+    "-DBUILD_METAL=${lib.boolToCMakeString components.metal}"
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/${python.sitePackages}"
   ];
-
-  preConfigure = ''
-    # Since we can't expand $out in `cmakeFlags`
-    cmakeFlags="$cmakeFlags -DCMAKE_INSTALL_PREFIX=$out/${python.sitePackages}"
-  '';
 
   # tests fail but have tested that package runs properly
   doCheck = false;

@@ -205,9 +205,7 @@ let
     ln -s "${extra.src}" "${extra.dst}/${extra.md5}-${extra.name}"
   '';
 
-  opencvFlag = name: enabled: "-DWITH_${name}=${printEnabled enabled}";
-
-  printEnabled = enabled: if enabled then "ON" else "OFF";
+  mkFlag = name: enabled: "-DWITH_${name}=${lib.boolToCMakeString enabled}";
 in
 
 stdenv.mkDerivation {
@@ -297,24 +295,24 @@ stdenv.mkDerivation {
     "-DBUILD_PROTOBUF=OFF"
     "-DProtobuf_PROTOC_EXECUTABLE=${lib.getExe buildPackages.protobuf}"
     "-DPROTOBUF_UPDATE_FILES=ON"
-    "-DOPENCV_ENABLE_NONFREE=${printEnabled enableUnfree}"
+    "-DOPENCV_ENABLE_NONFREE=${lib.boolToCMakeString enableUnfree}"
     "-DBUILD_TESTS=OFF"
     "-DBUILD_PERF_TESTS=OFF"
-    "-DBUILD_DOCS=${printEnabled enableDocs}"
+    "-DBUILD_DOCS=${lib.boolToCMakeString enableDocs}"
     # "OpenCV disables pkg-config to avoid using of host libraries. Consider using PKG_CONFIG_LIBDIR to specify target SYSROOT"
     # but we have proper separation of build and host libs :), fixes cross
     "-DOPENCV_ENABLE_PKG_CONFIG=ON"
-    (opencvFlag "IPP" enableIpp)
-    (opencvFlag "TIFF" enableTIFF)
-    (opencvFlag "WEBP" enableWebP)
-    (opencvFlag "JPEG" enableJPEG)
-    (opencvFlag "PNG" enablePNG)
-    (opencvFlag "OPENEXR" enableEXR)
-    (opencvFlag "OPENJPEG" enableJPEG2000)
+    (mkFlag "IPP" enableIpp)
+    (mkFlag "TIFF" enableTIFF)
+    (mkFlag "WEBP" enableWebP)
+    (mkFlag "JPEG" enableJPEG)
+    (mkFlag "PNG" enablePNG)
+    (mkFlag "OPENEXR" enableEXR)
+    (mkFlag "OPENJPEG" enableJPEG2000)
     "-DWITH_JASPER=OFF" # OpenCV falls back to a vendored copy of Jasper when OpenJPEG is disabled
-    (opencvFlag "CUDA" enableCuda)
-    (opencvFlag "CUBLAS" enableCuda)
-    (opencvFlag "TBB" enableTbb)
+    (mkFlag "CUDA" enableCuda)
+    (mkFlag "CUBLAS" enableCuda)
+    (mkFlag "TBB" enableTbb)
   ] ++ lib.optionals enableCuda [
     "-DCUDA_FAST_MATH=ON"
     "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"

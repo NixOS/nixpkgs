@@ -52,7 +52,7 @@ assert withLibVlc -> withHttpStream;
 
 let
   fstat = x: fn:
-    "-DENABLE_${fn}=${if x then "ON" else "OFF"}";
+    "-DENABLE_${fn}=${lib.boolToCMakeString x}";
 
   withUdisks = (withTaglib && withDevices);
 

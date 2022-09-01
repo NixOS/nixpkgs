@@ -49,10 +49,10 @@ stdenv.mkDerivation rec {
   ++ lib.optional client libX11;
 
   cmakeFlags = [
-    "-DBUILD_MONOLITHIC=${if monolithic then "ON" else "OFF"}"
-    "-DBUILD_DAEMON=${if enableDaemon then "ON" else "OFF"}"
-    "-DBUILD_REMOTEGUI=${if client then "ON" else "OFF"}"
-    "-DBUILD_WEBSERVER=${if httpServer then "ON" else "OFF"}"
+    "-DBUILD_MONOLITHIC=${lib.boolToCMakeString monolithic}"
+    "-DBUILD_DAEMON=${lib.boolToCMakeString enableDaemon}"
+    "-DBUILD_REMOTEGUI=${lib.boolToCMakeString client}"
+    "-DBUILD_WEBSERVER=${lib.boolToCMakeString httpServer}"
   ];
 
   # aMule will try to `dlopen' libupnp and libixml, so help it

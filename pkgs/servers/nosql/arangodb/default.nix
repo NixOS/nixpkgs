@@ -40,8 +40,8 @@ let
       # do not set GCC's -march=xxx based on builder's /proc/cpuinfo
       "-DUSE_OPTIMIZE_FOR_ARCHITECTURE=OFF"
       # also avoid using builder's /proc/cpuinfo
-      "-DHAVE_SSE42=${if stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
-      "-DASM_OPTIMIZATIONS=${if stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
+      "-DHAVE_SSE42=${lib.boolToCMakeString stdenv.hostPlatform.sse4_2Support}"
+      "-DASM_OPTIMIZATIONS=${lib.boolToCMakeString stdenv.hostPlatform.sse4_2Support}"
     ];
 
     meta = with lib; {

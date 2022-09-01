@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DXRT_FEATURE_SERVICE=${if serviceSupport then "ON" else "OFF"}"
+    "-DXRT_FEATURE_SERVICE=${lib.boolToCMakeString serviceSupport}"
     "-DXRT_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH=ON"
   ];
 

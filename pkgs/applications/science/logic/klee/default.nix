@@ -81,18 +81,16 @@ clang.stdenv.mkDerivation rec {
     (lit.override { python3 = kleePython; })
   ];
 
-  cmakeFlags = let
-    onOff = val: if val then "ON" else "OFF";
-  in [
+  cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else if !debug && includeDebugInfo then "RelWithDebInfo" else "MinSizeRel"}"
     "-DKLEE_RUNTIME_BUILD_TYPE=${if debugRuntime then "Debug" else "Release"}"
-    "-DKLEE_ENABLE_TIMESTAMP=${onOff false}"
-    "-DENABLE_KLEE_UCLIBC=${onOff true}"
+    "-DKLEE_ENABLE_TIMESTAMP=OFF"
+    "-DENABLE_KLEE_UCLIBC=ON"
     "-DKLEE_UCLIBC_PATH=${kleeuClibc}"
-    "-DENABLE_KLEE_ASSERTS=${onOff asserts}"
-    "-DENABLE_POSIX_RUNTIME=${onOff true}"
-    "-DENABLE_UNIT_TESTS=${onOff true}"
-    "-DENABLE_SYSTEM_TESTS=${onOff true}"
+    "-DENABLE_KLEE_ASSERTS=${lib.boolToCMakeString asserts}"
+    "-DENABLE_POSIX_RUNTIME=ON"
+    "-DENABLE_UNIT_TESTS=ON"
+    "-DENABLE_SYSTEM_TESTS=ON"
     "-DGTEST_SRC_DIR=${gtest.src}"
     "-DGTEST_INCLUDE_DIR=${gtest.src}/googletest/include"
     "-Wno-dev"

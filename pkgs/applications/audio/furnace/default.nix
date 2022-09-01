@@ -52,14 +52,14 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DBUILD_GUI=${if withGUI then "ON" else "OFF"}"
+    "-DBUILD_GUI=${lib.boolToCMakeString withGUI}"
     "-DSYSTEM_FFTW=ON"
     "-DSYSTEM_FMT=ON"
     "-DSYSTEM_LIBSNDFILE=ON"
     "-DSYSTEM_RTMIDI=ON"
     "-DSYSTEM_SDL2=ON"
     "-DSYSTEM_ZLIB=ON"
-    "-DWITH_JACK=${if withJACK then "ON" else "OFF"}"
+    "-DWITH_JACK=${lib.boolToCMakeString withJACK}"
     "-DWARNINGS_ARE_ERRORS=ON"
   ];
 

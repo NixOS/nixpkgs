@@ -18,8 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optional stdenv.hostPlatform.isx86 libx86;
 
-  cmakeFlags = [ "-DCLASSICBUILD=${if stdenv.hostPlatform.isx86 then "ON" else "OFF"}" ];
-
+  cmakeFlags = [ "-DCLASSICBUILD=${lib.boolToCMakeString stdenv.hostPlatform.isx86}" ];
 
   meta = with lib; {
     description = "Tool for reading and parsing EDID data from monitors";

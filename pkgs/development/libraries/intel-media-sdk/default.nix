@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SAMPLES=OFF"
-    "-DBUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+    "-DBUILD_TESTS=${lib.boolToCMakeString doCheck}"
     "-DUSE_SYSTEM_GTEST=ON"
   ];
 

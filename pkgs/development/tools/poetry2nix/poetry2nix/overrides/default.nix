@@ -654,7 +654,7 @@ lib.composeManyExtensions [
               ;
               preBuild = if mpiSupport then "export CC=${mpi}/bin/mpicc" else "";
               HDF5_DIR = "${pkgs.hdf5}";
-              HDF5_MPI = if mpiSupport then "ON" else "OFF";
+              HDF5_MPI = lib.boolToCMakeString mpiSupport;
               # avoid strict pinning of numpy
               postPatch = ''
                 substituteInPlace setup.py \

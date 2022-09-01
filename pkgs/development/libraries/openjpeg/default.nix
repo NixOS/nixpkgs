@@ -18,7 +18,7 @@ assert (openjpegJarSupport || jpipLibSupport) -> jdk != null;
 
 let
   inherit (lib) optional optionals;
-  mkFlag = optSet: flag: "-D${flag}=${if optSet then "ON" else "OFF"}";
+  mkFlag = optSet: flag: "-D${flag}=${lib.boolToCMakeString optSet}";
 in
 
 stdenv.mkDerivation rec {
