@@ -1,10 +1,10 @@
 diff --git a/bin/internal/shared.sh b/bin/internal/shared.sh
-index 05cba4393b..2a775bf24f 100644
+index ab746724e9..1087983c87 100644
 --- a/bin/internal/shared.sh
 +++ b/bin/internal/shared.sh
-@@ -217,8 +217,6 @@ function shared::execute() {
-   # FLUTTER_TOOL_ARGS="--enable-asserts $FLUTTER_TOOL_ARGS"
-   # FLUTTER_TOOL_ARGS="$FLUTTER_TOOL_ARGS --observe=65432"
+@@ -215,8 +215,6 @@ function shared::execute() {
+     exit 1
+   fi
  
 -  upgrade_flutter 7< "$PROG_NAME"
 -
@@ -12,7 +12,7 @@ index 05cba4393b..2a775bf24f 100644
    case "$BIN_NAME" in
      flutter*)
 diff --git a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
-index 396756808e..d324a6df59 100644
+index 738fef987d..03a152e64f 100644
 --- a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
 +++ b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
 @@ -241,7 +241,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
