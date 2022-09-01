@@ -8,6 +8,12 @@
 , gobject-introspection
 , pango
 , harfbuzz
+, makeWrapper
+, gitSVN
+, git-review
+, tesseract
+, licensee
+, mercurial
 }:
 
 (poetry2nix.mkPoetryApplication {
@@ -79,6 +85,21 @@
     wrapGAppsNoGuiHook
     gobject-introspection
   ];
+
+  postFixup = let
+  path = lib.makeBinPath [
+      gitSVN
+
+      #optional
+      git-review
+      tesseract
+      licensee
+      mercurial
+    ];
+  in ''
+    wrapProgram $out/bin/weblate \
+      --prefix PATH : "${path}"
+  '';
 
   meta = with lib; {
     description = "Web based translation tool with tight version control integration";
