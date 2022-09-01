@@ -1720,6 +1720,8 @@ with pkgs;
 
   portfolio-filemanager = callPackage ../applications/file-managers/portfolio-filemanager { };
 
+  potreeconverter = callPackage ../applications/graphics/potreeconverter { };
+
   ranger = callPackage ../applications/file-managers/ranger { };
 
   sfm = callPackage ../applications/file-managers/sfm { };
