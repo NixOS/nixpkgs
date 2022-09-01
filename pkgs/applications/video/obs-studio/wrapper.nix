@@ -6,7 +6,7 @@ symlinkJoin {
   name = "wrapped-${obs-studio.name}";
 
   nativeBuildInputs = [ makeWrapper ];
-  paths = [ obs-studio ];
+  paths = [ obs-studio ] ++ plugins;
 
   postBuild = with lib;
     let
@@ -19,13 +19,20 @@ symlinkJoin {
         paths = plugins;
       };
 
-      wrapCommand = [
+      wrapCommandLine = [
           "wrapProgram"
           "$out/bin/obs"
           ''--set OBS_PLUGINS_PATH "${pluginsJoined}/lib/obs-plugins"''
           ''--set OBS_PLUGINS_DATA_PATH "${pluginsJoined}/share/obs/obs-plugins"''
         ] ++ pluginArguments;
-    in concatStringsSep " " wrapCommand;
+    in ''
+    ${concatStringsSep " " wrapCommandLine}
+
+    # Remove unused obs-plugins dir to not cause confusion
+    rm -r $out/share/obs/obs-plugins
+    # Leave some breadcrumbs
+    echo 'Plugins are at ${pluginsJoined}/share/obs/obs-plugins' > $out/share/obs/obs-plugins-README
+  '';
 
   inherit (obs-studio) meta;
   passthru = obs-studio.passthru // {
