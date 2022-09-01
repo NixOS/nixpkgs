@@ -21934,6 +21934,8 @@ with pkgs;
 
   wlr-protocols = callPackage ../development/libraries/wlroots/protocols.nix { };
 
+  wren = callPackage ../development/compilers/wren { };
+
   wt = wt4;
   inherit (callPackages ../development/libraries/wt {
     boost = boost175;
