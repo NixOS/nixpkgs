@@ -2,6 +2,7 @@
 , nv-codec-headers-11
 , fetchFromGitHub
 , lib
+, fetchpatch
 }:
 
 (ffmpeg_5-full.override {
@@ -19,6 +20,15 @@
 
   configureFlags = old.configureFlags ++ [
     "--disable-ptx-compression" # https://github.com/jellyfin/jellyfin/issues/7944#issuecomment-1156880067
+  ];
+
+  patches = old.patches ++ [
+    # fixed in upstream ffmpeg 5.1.1 https://trac.ffmpeg.org/ticket/9841
+    (fetchpatch {
+      name = "rename-imf-fate-target.patch";
+      url = "https://github.com/FFmpeg/FFmpeg/commit/80d1b8938eb227f0e9efde91050836b1e9a051a9.patch";
+      sha256 = "sha256-weUbLKSQ9iRYSQ3hgXcVpo8jfKajpXK21qD1GrZYHYQ=";
+    })
   ];
 
   postPatch = ''
