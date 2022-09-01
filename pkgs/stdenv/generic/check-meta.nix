@@ -87,6 +87,7 @@ let
   hasAllowedInsecure = attrs:
     !(isMarkedInsecure attrs) ||
     allowInsecurePredicate attrs ||
+    config.allowInsecurePackages ||
     builtins.getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
 
 

@@ -76,6 +76,14 @@ let
       '';
     };
 
+    allowInsecurePackages = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to allow packages with known security issues and vurnabilties.
+      '';
+    };
+
     allowUnfree = mkOption {
       type = types.bool;
       default = false;

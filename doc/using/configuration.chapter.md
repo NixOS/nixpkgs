@@ -137,18 +137,27 @@ A complete list of licenses can be found in the file `lib/licenses.nix` of the n
 
 There are several ways to tweak how Nix handles a package which has been marked as insecure.
 
+-   By default insecure packages are allowed, to disable them you may add `allowInsecurePackages = false;` to your user's configuration file, like this:
+
+    ```nix
+    {
+      allowInsecurePackages = true;
+    }
+    ```
+
 -   To temporarily allow all insecure packages, you can use an environment variable for a single invocation of the nix tools:
 
     ```ShellSession
     $ export NIXPKGS_ALLOW_INSECURE=1
     ```
 
--   It is possible to permanently allow individual insecure packages, while still blocking other insecure packages by default using the `permittedInsecurePackages` configuration option in the user configuration file.
+-   It is possible to permanently allow individual insecure packages, while still blocking other insecure packages by default using the `permittedInsecurePackages` and setting ``allowInsecurePackages = false;`` configuration option in the user configuration file.
 
     The following example configuration permits the installation of the hypothetically insecure package `hello`, version `1.2.3`:
 
     ```nix
     {
+      allowInsecurePackages = false;
       permittedInsecurePackages = [
         "hello-1.2.3"
       ];
@@ -163,6 +172,7 @@ There are several ways to tweak how Nix handles a package which has been marked 
 
     ```nix
     {
+      allowInsecurePackages = false;
       allowInsecurePredicate = pkg: builtins.stringLength (lib.getName pkg) <= 5;
     }
     ```

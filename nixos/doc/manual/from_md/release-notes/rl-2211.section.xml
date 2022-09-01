@@ -13,6 +13,16 @@
     <itemizedlist>
       <listitem>
         <para>
+          Insecure packages are now allowed by default to be able to
+          complete <literal>meta.knownVurnabilities</literal>. If you
+          want to disallow insecure packages again you can set
+          <literal>nixpkgs.config.allowInsecurePackages = false;</literal>
+          or add <literal>allowInsecurePackages = false;</literal> to
+          <literal>~/.config/nixpkgs/config.nix</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           During cross-compilation, tests are now executed if the test
           suite can be executed by the build platform. This is the case
           when doing “native” cross-compilation where the build and host
