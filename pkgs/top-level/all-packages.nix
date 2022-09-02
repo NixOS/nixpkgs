@@ -24550,6 +24550,7 @@ with pkgs;
 
   moq = callPackage ../development/tools/moq { };
 
+  wrapWithMoveProverDeps = callPackage ../development/tools/move/wrapWithMoveProverDeps.nix { };
   inherit (callPackages ../development/tools/move/move-cli {
     inherit (darwin.apple_sdk.frameworks) IOKit Security CoreFoundation AppKit System;
   }) move-cli move-cli-address20 move-cli-address32;
