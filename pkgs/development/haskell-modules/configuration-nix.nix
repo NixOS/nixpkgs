@@ -1026,6 +1026,8 @@ self: super: builtins.intersectAttrs super {
     broken = false;
   }) super.cabal-install;
 
+  keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
+
 # haskell-language-server plugins all use the same test harness so we give them what we want in this loop.
 } // pkgs.lib.mapAttrs
   (_: overrideCabal (drv: {
