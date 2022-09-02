@@ -12,13 +12,14 @@
 , AppKit
 , System
   # Prover dependencies
-, z3
+, z3_4_11
 , icu
 , boogie
 , dotnet-sdk
 }:
 
 let
+  z3 = z3_4_11;
   common = { buildFeatures ? [ ] }:
     let
       # Default to not running tests.
@@ -29,8 +30,7 @@ let
       # `dotnet-sdk` only works on 64-bit systems, so we can't run
       # the Move prover on `i686`.
       # Exclude Move prover tests until z3 4.11 is on Nixpkgs
-      # installProver = !stdenv.isi686;
-      installProver = false;
+      installProver = !stdenv.isi686;
     in
     rustPlatform.buildRustPackage rec {
       inherit buildFeatures doCheck;
@@ -45,7 +45,6 @@ let
       };
 
       cargoSha256 = "sha256-BTbChMtwSD5GIHLXUaEMlk3PMMh7jgR9yWk2W4J4El8=";
-      verifyCargoDeps = true;
 
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [ openssl zlib git ] ++ (lib.optionals stdenv.isDarwin ([
