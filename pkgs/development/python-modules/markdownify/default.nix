@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "markdownify";
-  version = "0.11.4";
+  version = "0.11.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-crOkiv/M8v7rJd/Tvsq67PU76vTgi+aNzthEcniDKBM=";
+    sha256 = "sha256-uPmakJ92tBqt+3SPLD6+I39B37JhdEZFr2cSwe0r11g=";
   };
 
   propagatedBuildInputs = [ beautifulsoup4 six ];
