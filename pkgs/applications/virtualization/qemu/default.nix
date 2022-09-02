@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "7.0.0";
+  version = "7.1.0";
 
   src = fetchurl {
-    url= "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "sha256-9rN1x5UfcoQCeYsLqrsthkeMpT1Eztvvq74cRr9G+Dk=";
+    url = "https://download.qemu.org/qemu-${version}.tar.xz";
+    sha256 = "1rmvrgqjhrvcmchnz170dxvrrf14n6nm39y8ivrprmfydd9lwqx0";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -108,44 +108,6 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/3e4546d5bd38a1e98d4bd2de48631abf0398a3a2.diff";
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
-    })
-    # make nixos tests that boot from USB more stable
-    # https://lists.nongnu.org/archive/html/qemu-devel/2022-05/msg01484.html
-    (fetchpatch {
-      url = "https://gitlab.com/raboof/qemu/-/commit/3fb5e8fe4434130b1167a995b2a01c077cca2cd5.patch";
-      sha256 = "sha256-evzrN3i4ntc/AFG0C0rezQpQbWcnx74nXO+5DLErX8o=";
-    })
-    # fix 9p on macOS host, landed in master
-    (fetchpatch {
-      name = "fix-9p-on-macos.patch";
-      url = "https://gitlab.com/qemu/qemu/-/commit/f5643914a9e8f79c606a76e6a9d7ea82a3fc3e65.patch";
-      sha256 = "sha256-8i13wU135h+YxoXFtkXweBN3hMslpWoNoeQ7Ydmn3V4=";
-    })
-    (fetchpatch {
-      name = "CVE-2022-35414.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/418ade7849ce7641c0f7333718caf5091a02fd4c.patch";
-      sha256 = "sha256-zQHDXedIXZBnabv4+3TA4z5mY1+KZiPmqUbhaSkGLgA=";
-    })
-    # needed for CVE-2022-0216's test to pass
-    (fetchpatch {
-      name = "fuzz-tests-x86-only.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/b911c30c566dee48a27bc1bfa1ee6df3a729cbbb.patch";
-      sha256 = "sha256-RXKRmZo25yZ1VuBtBA+BsY8as9kIcACqE6aEYmIm9KQ=";
-    })
-    (fetchpatch {
-      name = "CVE-2022-0216.part-1.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/6c8fa961da5e60f574bb52fd3ad44b1e9e8ad4b8.patch";
-      sha256 = "sha256-0z0zVPBVXFSU8qEV0Ea2+rDxyikMyitlDM0jZOLLC6s=";
-    })
-    (fetchpatch {
-      name = "CVE-2022-0216.part-2.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/4367a20cc442c56b05611b4224de9a61908f9eac.patch";
-      sha256 = "sha256-hpNu4Zjw1dIbT6Vt57cayHE1Elaltp0a/bsKlDY0Qr8=";
-    })
-    (fetchpatch {
-      name = "CVE-2020-14394.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/effaf5a240e03020f4ae953e10b764622c3e87cc.patch";
-      sha256 = "sha256-NobsIxRC+xlyj8d/oD4mqgXAGX37pfww/PQQuKhrTzc=";
     })
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
