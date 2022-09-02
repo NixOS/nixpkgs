@@ -25,9 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python3 ];
 
-  buildPhase = ''
-    make --directory projects/make
-  '';
+  makeFlags = [ "-C projects/make" ];
 
   doCheck = true;
 
@@ -40,8 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    mv bin/wren_cli $out/bin/wren
+    install -Dm755 bin/wren_cli $out/bin/wren
   '';
 
   meta = with lib; {

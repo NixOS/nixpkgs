@@ -19,9 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "0w8n5lyn3wa1nmdyci0zi249w1qbq725cr1d9xsg067irq17v8k5";
   };
 
-  buildPhase = ''
-    make --directory projects/make
-  '';
+  makeFlags = [ "-C projects/make" ];
 
   doCheck = true;
   checkPhase = ''
@@ -33,8 +31,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
     cp -r lib $out
 
-    mkdir -p $out/bin
-    cp ${cli}/bin/wren $out/bin/wren
+    install -Dm755 ${cli}/bin/wren -t $out/bin
   '';
 
   buildInputs = [ python3 ];
