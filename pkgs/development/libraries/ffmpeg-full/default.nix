@@ -261,10 +261,6 @@ stdenv.mkDerivation rec {
       --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
     substituteInPlace doc/filters.texi \
       --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
-  '' +
-  # ffmpeg 5.1 https://trac.ffmpeg.org/ticket/9841
-  ''
-    substituteInPlace tests/Makefile --replace 'include $(SRC_PATH)/tests/fate/imf.mak' ""
   '';
 
   configurePlatforms = [];
