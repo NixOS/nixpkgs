@@ -30,6 +30,8 @@ with lib;
       beam = super.beam_nox;
       cairo = super.cairo.override { x11Support = false; };
       dbus = super.dbus.override { x11Support = false; };
+      ffmpeg_4 = super.ffmpeg_4.override { sdlSupport = false; vdpauSupport = false; };
+      ffmpeg_5 = super.ffmpeg_5.override { sdlSupport = false; vdpauSupport = false; };
       gobject-introspection = super.gobject-introspection.override { x11Support = false; };
       libva = super.libva-minimal;
       networkmanager-fortisslvpn = super.networkmanager-fortisslvpn.override { withGnome = false; };
