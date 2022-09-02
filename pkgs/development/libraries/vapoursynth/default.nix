@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001-Call-weak-function-to-allow-adding-preloaded-plugins.patch
+  ] ++ lib.optionals stdenv.isDarwin [
+    # For darwin/clang it's not enough to mark the function import as weak. It
+    # has to be explicitly declared that way to the linker.
+    ./darwin-weak-function-flag.patch
   ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook makeWrapper ];
@@ -50,7 +54,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A video processing framework with the future in mind";
     homepage    = "http://www.vapoursynth.com/";
     license     = licenses.lgpl21;

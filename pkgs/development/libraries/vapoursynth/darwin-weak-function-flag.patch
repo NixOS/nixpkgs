@@ -1,0 +1,13 @@
+diff --git a/Makefile.am b/Makefile.am
+index c4d51382..b51f5971 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -88,7 +88,7 @@ pkginclude_HEADERS = include/VapourSynth.h \
+ 
+ pkgconfig_DATA += pc/vapoursynth.pc
+ 
+-libvapoursynth_la_LDFLAGS = -no-undefined -avoid-version $(UNDEFINEDLDFLAGS)
++libvapoursynth_la_LDFLAGS = -no-undefined -avoid-version -Wl,-U,_VSLoadPluginsNix $(UNDEFINEDLDFLAGS)
+ libvapoursynth_la_CPPFLAGS = $(PTHREAD_CFLAGS) $(ZIMG_CFLAGS) -DVS_PATH_PLUGINDIR='"$(PLUGINDIR)"'
+ libvapoursynth_la_LIBADD = $(PTHREAD_LIBS) $(ZIMG_LIBS) $(DLOPENLIB)
+ 
