@@ -318,6 +318,7 @@ in
       "d ${stateDir hostName}/cache 0750 ${user} ${webserver.group} - -"
       "d ${stateDir hostName}/index 0750 ${user} ${webserver.group} - -"
       "d ${stateDir hostName}/locks 0750 ${user} ${webserver.group} - -"
+      "d ${stateDir hostName}/log 0750 ${user} ${webserver.group} - -"
       "d ${stateDir hostName}/media 0750 ${user} ${webserver.group} - -"
       "d ${stateDir hostName}/media_attic 0750 ${user} ${webserver.group} - -"
       "d ${stateDir hostName}/media_meta 0750 ${user} ${webserver.group} - -"
