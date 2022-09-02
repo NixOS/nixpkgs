@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-# TODO: This may file may need additional review, eg which configuartions to
+# TODO: This may file may need additional review, eg which configurations to
 # expose to the user.
 #
 # I only used it to access some simple databases.
@@ -22,20 +22,14 @@
 with lib;
 
 let
-
   cfg = config.services.firebird;
-
   firebird = cfg.package;
-
   dataDir = "${cfg.baseDir}/data";
   systemDir = "${cfg.baseDir}/system";
-
 in
 
 {
-
   ###### interface
-
   options = {
 
     services.firebird = {
@@ -55,6 +49,7 @@ in
 
       port = mkOption {
         default = 3050;
+        defaultText = "3050";
         type = types.port;
         description = lib.mdDoc ''
           Port Firebird uses.
@@ -101,29 +96,21 @@ in
 
         # TODO: moving security2.fdb into the data directory works, maybe there
         # is a better way
-        preStart =
-          ''
-            if ! test -e "${systemDir}/security2.fdb"; then
-                cp ${firebird}/security2.fdb "${systemDir}"
-            fi
+        preStart = ''
+          if ! test -e "${systemDir}/security${lib.versions.major firebird.version}.fdb"; then
+              cp ${firebird}/security${lib.versions.major firebird.version}.fdb "${systemDir}"
+          fi
 
-            if ! test -e "${systemDir}/security3.fdb"; then
-                cp ${firebird}/security3.fdb "${systemDir}"
-            fi
-
-            if ! test -e "${systemDir}/security4.fdb"; then
-                cp ${firebird}/security4.fdb "${systemDir}"
-            fi
-
-            chmod -R 700         "${dataDir}" "${systemDir}" /var/log/firebird
-          '';
+          chmod -R 700 "${dataDir}" "${systemDir}" /var/log/firebird
+        '';
 
         serviceConfig.User = cfg.user;
         serviceConfig.LogsDirectory = "firebird";
         serviceConfig.LogsDirectoryMode = "0700";
-        serviceConfig.ExecStart = "${firebird}/bin/fbserver -d";
 
-        # TODO think about shutdown
+        serviceConfig.ExecStart = "${firebird}/bin/firebird -d";
+
+        # TODO implement: shutdown, restart, stop
       };
 
     environment.etc."firebird/firebird.msg".source = "${firebird}/firebird.msg";
@@ -147,7 +134,7 @@ in
       # ConnectionTimeout = 180
 
       #RemoteServiceName = gds_db
-      RemoteServicePort = ${cfg.port}
+      RemoteServicePort = ${builtins.toString cfg.port}
 
       # randomly choose port for server Event Notification
       #RemoteAuxPort = 0

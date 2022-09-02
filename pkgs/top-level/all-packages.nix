@@ -22660,7 +22660,11 @@ with pkgs;
 
   felix_remoteshell = callPackage ../servers/felix/remoteshell.nix { };
 
-  inherit (callPackages ../servers/firebird { }) firebird_4 firebird_3 firebird_2_5 firebird;
+  firebird_2_5 = callPackage ../servers/firebird/2_5.nix { };
+  firebird_3 = callPackage ../servers/firebird/3.nix { };
+  firebird_4 = callPackage ../servers/firebird/4.nix { };
+  firebird = firebird_4;
+  firebird-client-lib = firebird.client;
 
   freeradius = callPackage ../servers/freeradius { };
 
