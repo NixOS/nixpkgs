@@ -1,12 +1,12 @@
 { lib, stdenvNoCC, fetchFromGitHub, python3 }:
 
 stdenvNoCC.mkDerivation rec {
-  name = "ovmfvartool";
+  pname = "ovmfvartool";
   version = "unstable-2021-06-16";
 
   src = fetchFromGitHub {
     owner = "hlandau";
-    repo = name;
+    repo = pname;
     rev = "c4c0c24dce1d201f95dfd69fd7fd9d51ea301377";
     hash = "sha256-3OvYAB41apPn1c2YTKBIEITmHSUMQ0oEijY5DhZWWGo=";
   };

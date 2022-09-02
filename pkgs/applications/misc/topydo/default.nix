@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitHub, glibcLocales, unittestCheckHook }:
+{ lib, python3Packages, fetchFromGitHub, glibcLocales }:
 
 with python3Packages;
 
