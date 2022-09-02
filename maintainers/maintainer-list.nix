@@ -11290,6 +11290,16 @@
     githubId = 710906;
     name = "Roel van Dijk";
   };
+  romatthe = {
+    email = "me@romatthe.dev";
+    matrix = "@romatthe:matrix.org";
+    github = "romatthe";
+    githubId = 8373222;
+    name = "Robin Mattheussen";
+    keys = [{
+      fingerprint = "F091 CD76 1D44 A8B5 5AF4  26F2 8DC3 890E 89ED E9DF";
+    }];
+  };
   romildo = {
     email = "malaquias@gmail.com";
     github = "romildo";
