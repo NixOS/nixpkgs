@@ -1,29 +1,32 @@
 { lib
 , fetchFromGitHub
 , buildGoModule
-, gitUpdater
+, testers
+, boulder
 }:
 
 buildGoModule rec {
   pname = "boulder";
-  version = "2022-07-11";
+  version = "2022-08-29";
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
     repo = "boulder";
     rev = "release-${version}";
-    sha256 = "sha256-fDKB7q2e+qdHt+t/BQWX7LkpyiZQtZSHp/x5uv0/c7c=";
     leaveDotGit = true;
     postFetch = ''
       cd $out
-      git rev-parse HEAD > $out/COMMIT
+      git rev-parse --short=8 HEAD 2>/dev/null >$out/COMMIT
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
+    hash = "sha256-DiO7sOcTd8aOld4Pqd0D7yTPrRh/Mhg25I63Vb/gHhM=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [ "cmd/boulder" ];
+
+  patches = [ ./no-build-id-test.patch ];
 
   ldflags = [
     "-s"
@@ -32,8 +35,42 @@ buildGoModule rec {
   ];
 
   preBuild = ''
-    ldflags+=" -X \"github.com/letsencrypt/boulder/core.BuildID=$(cat COMMIT)\""
+    ldflags+=" -X \"github.com/letsencrypt/boulder/core.BuildID=${src.rev} +$(cat COMMIT)\""
     ldflags+=" -X \"github.com/letsencrypt/boulder/core.BuildTime=$(date -u -d @0)\""
+  '';
+
+  preCheck = ''
+    # Test all targets.
+    unset subPackages
+
+    # Disable tests that require additional services.
+    rm -rf \
+      cmd/admin-revoker/main_test.go \
+      cmd/bad-key-revoker/main_test.go \
+      cmd/cert-checker/main_test.go \
+      cmd/contact-auditor/main_test.go \
+      cmd/expiration-mailer/main_test.go \
+      cmd/expiration-mailer/send_test.go \
+      cmd/id-exporter/main_test.go \
+      cmd/rocsp-tool/client_test.go \
+      db/map_test.go \
+      db/multi_test.go \
+      db/rollback_test.go \
+      log/log_test.go \
+      ocsp/updater/updater_test.go \
+      ra/ra_test.go \
+      rocsp/rocsp_test.go \
+      sa/database_test.go \
+      sa/model_test.go \
+      sa/precertificates_test.go \
+      sa/rate_limits_test.go \
+      sa/sa_test.go \
+      test/load-generator/acme/directory_test.go \
+      va/caa_test.go \
+      va/dns_test.go \
+      va/http_test.go \
+      va/tlsalpn_test.go \
+      va/va_test.go
   '';
 
   postInstall = ''
@@ -42,12 +79,10 @@ buildGoModule rec {
     done
   '';
 
-  # There are no tests for cmd/boulder.
-  doCheck = false;
-
-  passthru.updateScript = gitUpdater {
-    inherit pname version;
-    rev-prefix = "release-";
+  passthru.tests.version = testers.testVersion {
+    package = boulder;
+    command = "boulder --version";
+    inherit version;
   };
 
   meta = with lib; {
