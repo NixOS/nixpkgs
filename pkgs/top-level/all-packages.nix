@@ -36407,6 +36407,12 @@ with pkgs;
     branch = "canary";
   };
 
+  discord-openasar = discord.override { withOpenASAR = true; };
+
+  discord-ptb-openasar = discord-ptb.override { withOpenASAR = true; };
+
+  discord-canary-openasar = discord-canary.override { withOpenASAR = true; };
+
   golden-cheetah = libsForQt5.callPackage ../applications/misc/golden-cheetah {};
 
   linkchecker = callPackage ../tools/networking/linkchecker { };
