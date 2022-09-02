@@ -12,7 +12,7 @@
 , mercurial
 }:
 
-poetry2nix.mkPoetryApplication {
+(poetry2nix.mkPoetryApplication {
 
   src = fetchFromGitHub {
     owner = "WeblateOrg";
@@ -34,9 +34,6 @@ poetry2nix.mkPoetryApplication {
 
   overrides = poetry2nix.overrides.withDefaults (
     self: super: {
-      weblate = super.weblate.overridePythonAttrs (old: {
-        propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.aeidon ];
-      });
       aeidon = super.aeidon.overridePythonAttrs (old: {
         src = fetchFromGitHub {
           owner = "otsaloma";
@@ -75,7 +72,7 @@ poetry2nix.mkPoetryApplication {
     }
   );
 
-  makeWrapperArgs = let
+  postFixup = let
     path = lib.makeBinPath [
       gitSVN
 
@@ -85,9 +82,10 @@ poetry2nix.mkPoetryApplication {
       licensee
       mercurial
     ];
-  in [
-    "--prefix" "PATH" ":" path
-  ];
+  in ''
+    wrapProgram $out/bin/weblate \
+      --prefix PATH : "${path}"
+  '';
 
   meta = with lib; {
     description = "Web based translation tool with tight version control integration";
@@ -96,5 +94,5 @@ poetry2nix.mkPoetryApplication {
     maintainers = with maintainers; [ erictapen ];
   };
 
-}
+}).dependencyEnv
 

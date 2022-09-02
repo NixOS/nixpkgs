@@ -88,7 +88,6 @@ let
     gid = "weblate";
     wsgi-file = "${pkgs.weblate}/lib/${pkgs.python3.libPrefix}/site-packages/weblate/wsgi.py";
     pyhome = pkgs.weblate;
-    pythonpath = "${pkgs.weblate}/${pkgs.python3.sitePackages}";
 
     # Some more recommendations by upstream:
     # https://docs.weblate.org/en/latest/admin/install.html#sample-configuration-for-nginx-and-uwsgi
@@ -103,7 +102,7 @@ let
     disable-write-exception = true;
   };
   environment = {
-    PYTHONPATH = "${settings_py}:${pkgs.python3.pkgs.makePythonPath pkgs.weblate.propagatedBuildInputs}";
+    PYTHONPATH = "${settings_py}";
     DJANGO_SETTINGS_MODULE = "settings";
     GI_TYPELIB_PATH = "${pkgs.pango.out}/lib/girepository-1.0:${pkgs.harfbuzz}/lib/girepository-1.0";
   };
@@ -259,7 +258,7 @@ in
           pidFile = "/run/celery/%%n.pid";
           nodes = "celery notify memory backup translate";
           cmd = verb: ''
-            ${pkgs.weblate.dependencyEnv}/bin/celery multi ${verb} \
+            ${pkgs.weblate}/bin/celery multi ${verb} \
               ${nodes} \
               -A "weblate.utils" \
               --pidfile=${pidFile} \
@@ -290,7 +289,7 @@ in
           ExecStart = cmd "start";
           ExecReload = cmd "restart";
           ExecStop = ''
-            ${pkgs.weblate.dependencyEnv}/bin/celery multi stopwait \
+            ${pkgs.weblate}/bin/celery multi stopwait \
               ${nodes} \
               --pidfile=${pidFile}
           '';
