@@ -25,7 +25,6 @@ let
   z3 = z3_4_11;
   # `dotnet-sdk` only works on 64-bit systems, so we can't run
   # the Move prover on `i686`.
-  # Exclude Move prover tests until z3 4.11 is on Nixpkgs
   installProver = !stdenv.isi686;
 
   common = { buildFeatures ? [ ] }:
