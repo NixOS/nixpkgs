@@ -31,6 +31,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = with python3Packages; [
     distutils_extra
+    gobject-introspection
     intltool
     wrapGAppsHook
     gdk-pixbuf
@@ -40,7 +41,6 @@ python3Packages.buildPythonApplication rec {
     gdk-pixbuf
     glib
     gnome.adwaita-icon-theme
-    gobject-introspection
     gtk3
     keybinder3
     libappindicator
