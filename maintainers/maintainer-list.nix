@@ -4255,6 +4255,12 @@
     githubId = 7670450;
     name = "Federico Beffa";
   };
+  fbergroth = {
+    email = "fbergroth@gmail.com";
+    github = "fbergroth";
+    githubId = 1211003;
+    name = "Fredrik Bergroth";
+  };
   fbrs = {
     email = "yuuki@protonmail.com";
     github = "cideM";
