@@ -4241,6 +4241,9 @@ with pkgs;
 
   mapcidr = callPackage ../tools/misc/mapcidr { };
 
+  maple-mono = (callPackage ../data/fonts/maple-font { }).Mono-v5;
+  maple-mono-NF = (callPackage ../data/fonts/maple-font { }).Mono-NF-v5;
+
   marl = callPackage ../development/libraries/marl {};
 
   marlin-calc = callPackage ../tools/misc/marlin-calc {};
