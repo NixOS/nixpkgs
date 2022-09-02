@@ -14679,6 +14679,16 @@
     githubId = 32876;
     name = "Diego Zamboni";
   };
+  zzschmidc = {
+    name = "Christian Schmid";
+    email = "christian@schmid.nu";
+    github = "zzschmidc";
+    githubId = 6686119;
+    keys = [{
+      longkeyid = "rsa4096/0x705DA16CA644E62A";
+      fingerprint = "1C21 D23F 3679 BB40 29B1  20A9 705D A16C A644 E62A";
+    }];
+  };
   turbomack = {
     email = "marek.faj@gmail.com";
     github = "turboMaCk";
