@@ -8621,6 +8621,12 @@
       fingerprint = "FEF0 AE2D 5449 3482 5F06  40AA 186A 1EDA C5C6 3F83";
     }];
   };
+  mightyiam = {
+    email = "mightyiampresence@gmail.com";
+    github = "mightyiam";
+    githubId = 635591;
+    name = "Shahar Dawn Or";
+  };
   mihnea-s = {
     email = "mihn.stn@gmail.com";
     github = "mihnea-s";
