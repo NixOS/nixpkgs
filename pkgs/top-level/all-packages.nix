@@ -12740,6 +12740,8 @@ with pkgs;
 
   mksh = callPackage ../shells/mksh { };
 
+  murex = callPackage ../shells/murex { };
+
   oh = callPackage ../shells/oh { };
 
   oil = callPackage ../shells/oil { };
