@@ -11,17 +11,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ bison ];
 
+  # Jambase expects ar to have flags.
   preConfigure = ''
-    unset AR
+    export AR="$AR rc"
   '';
 
-  buildPhase = ''
-    runHook preBuild
-
-    make jam0
-
-    runHook postBuild
-  '';
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     runHook preInstall
@@ -39,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.perforce.com/resources/documentation/jam";
     license = licenses.free;
     description = "Just Another Make";
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [ impl orivej ];
     platforms = platforms.unix;
   };
 }
