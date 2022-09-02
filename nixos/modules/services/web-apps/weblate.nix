@@ -111,6 +111,15 @@ let
     ((pkgs.lib.concatStrings (pkgs.lib.mapAttrsToList (n: v: "export ${n}=${v}\n") environment)) + ''
       eval -- "\$@"
     '');
+  weblatePath = with pkgs; [
+        gitSVN
+
+        #optional
+        git-review
+        tesseract
+        licensee
+        mercurial
+      ];
 in
 {
 
@@ -229,6 +238,7 @@ in
         "weblate-postgresql-setup.service"
       ];
       inherit environment;
+      path = weblatePath;
       serviceConfig = {
         Type = "oneshot";
         # WorkingDirectory = pkgs.weblate;
@@ -250,6 +260,7 @@ in
       environment = environment // {
         CELERY_WORKER_RUNNING = "1";
       };
+      path = weblatePath;
       # Recommendations from:
       # https://github.com/WeblateOrg/weblate/blob/main/weblate/examples/celery-weblate.service
       serviceConfig =
@@ -313,6 +324,7 @@ in
         "weblate.socket"
       ];
       inherit environment;
+      path = weblatePath;
       serviceConfig = {
         Type = "notify";
         NotifyAccess = "all";
@@ -368,7 +380,7 @@ in
     users.users.weblate = {
       isSystemUser = true;
       group = "weblate";
-      packages = [ weblate-env pkgs.weblate ];
+      packages = [ weblate-env pkgs.weblate ] ++ weblatePath;
     };
 
     users.groups.weblate.members = [ config.services.nginx.user ];
