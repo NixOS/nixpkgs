@@ -12,6 +12,7 @@
 , writeScript
 , runCommand
 , snort3
+, nixosTests
 
 , doCheck ? false # tests fail
 
@@ -121,6 +122,7 @@ clangStdenv.mkDerivation {
       update-source-version "${pname}" "$version"
     '';
     tests = {
+      module = nixosTests.snort3;
       # tests fail
       #unitTests = runCommand "${pname}-unit-tests" { } ''
       #  ${snort3}/bin/snort --catch-test all

@@ -926,6 +926,7 @@
   ./services/networking/snowflake-proxy.nix
   ./services/networking/smartdns.nix
   ./services/networking/smokeping.nix
+  ./services/networking/snort3.nix
   ./services/networking/softether.nix
   ./services/networking/solanum.nix
   ./services/networking/soju.nix

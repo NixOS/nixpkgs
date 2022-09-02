@@ -517,6 +517,7 @@ in {
   smokeping = handleTest ./smokeping.nix {};
   snapcast = handleTest ./snapcast.nix {};
   snapper = handleTest ./snapper.nix {};
+  snort3 = handleTest ./snort3.nix {};
   soapui = handleTest ./soapui.nix {};
   sogo = handleTest ./sogo.nix {};
   solanum = handleTest ./solanum.nix {};
