@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libwebp";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner  = "webmproject";
     repo   = pname;
     rev    = "v${version}";
-    hash   = "sha256-t27d+eJR4iTHSLlI3J7RqHgsWACThjsI9O6R2Zb9F1g=";
+    hash   = "sha256-XX6qOWlIl8TqOQMiGpmmDVKwQnM1taG6lrqq1ZFVk5s=";
   };
 
   prePatch = "patchShebangs .";
