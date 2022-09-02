@@ -426,7 +426,9 @@ class Machine:
             self.monitor.send(message)
             return self.wait_for_monitor_prompt()
 
-    def wait_for_unit(self, unit: str, user: Optional[str] = None) -> None:
+    def wait_for_unit(
+        self, unit: str, user: Optional[str] = None, timeout: int = 900
+    ) -> None:
         """Wait for a systemd unit to get into "active" state.
         Throws exceptions on "failed" and "inactive" states as well as
         after timing out.
@@ -456,7 +458,7 @@ class Machine:
                 unit, f" with user {user}" if user is not None else ""
             )
         ):
-            retry(check_active)
+            retry(check_active, timeout)
 
     def get_unit_info(self, unit: str, user: Optional[str] = None) -> Dict[str, str]:
         status, lines = self.systemctl('--no-pager show "{}"'.format(unit), user)
