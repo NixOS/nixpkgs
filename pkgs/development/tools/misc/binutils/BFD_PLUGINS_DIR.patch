@@ -1,0 +1,24 @@
+--- a/bfd/plugin.c
++++ b/bfd/plugin.c
+@@ -490,9 +490,18 @@ build_plugin_list (bfd *abfd)
+   /* The intent was to search ${libdir}/bfd-plugins for plugins, but
+      unfortunately the original implementation wasn't precisely that
+      when configuring binutils using --libdir.  Search in the proper
+-     path first, then the old one for backwards compatibility.  */
+-  static const char *path[]
+-    = { LIBDIR "/bfd-plugins", BINDIR "/../lib/bfd-plugins" };
++     path first, then the old one for backwards compatibility.
++
++     On top of that user is allowed to extend default search path with
++     BFD_PLUGINS_DIR environment variable. It's useful for cases when
++     modifying system directories is not feasible.
++   */
++  const char *path[] =
++    {
++      getenv ("BFD_PLUGINS_DIR"),
++      LIBDIR "/bfd-plugins",
++      BINDIR "/../lib/bfd-plugins",
++    };
+   struct stat last_st;
+   unsigned int i;
+ 

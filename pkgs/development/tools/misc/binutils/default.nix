@@ -87,6 +87,9 @@ stdenv.mkDerivation {
     #    https://sourceware.org/PR29450
     # Remove once 2.40 releases.
     ./gas-dwarf-zero-PR29451.patch
+
+    # Add an extra path to look up gcc LTO plugin. Used by binutils wrapper.
+    ./BFD_PLUGINS_DIR.patch
   ]
   ++ lib.optional targetPlatform.isiOS ./support-ios.patch
   # This patch was suggested by Nick Clifton to fix
