@@ -18,6 +18,9 @@
 , withX11 ? false
 
 # transmits user's location without asking first
+, geoclueSupport ? false , geoclue2
+
+# transmits user's location without asking first
 , reportLocationToMozilla ? false
 
 , gpsdSupport ? true , gpsd
@@ -41,16 +44,24 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     curl SDL2 SDL2_gfx SDL2_image SDL2_ttf inconsolata-nerdfont jq ncurses
   ] ++ menuInputs
+    ++ lib.optional geoclueSupport geoclue2
     ++ lib.optional gpsdSupport gpsd;
 
   patches = lib.optionals (!reportLocationToMozilla) [
     ./dont-report-user-location-to-mozilla-without-asking.patch
+  ] ++ lib.optionals (!geoclueSupport) [
+    ./dont-report-user-location-to-geoclue-without-asking.patch
   ];
 
   postPatch = lib.optionalString gpsdSupport ''
     substituteInPlace \
       scripts/mepo_ui_menu_user_pin_updater.sh \
       --replace gpspipe ${gpsd}/bin/gpspipe
+  '' + lib.optionalString geoclueSupport ''
+    substituteInPlace \
+      scripts/mepo_ui_menu_user_pin_updater.sh \
+      --replace /usr/libexec/geoclue-2.0/demos/ \
+                ${geoclue2}/libexec/geoclue-2.0/demos/
   '';
 
   preBuild = ''

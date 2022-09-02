@@ -1,0 +1,26 @@
+diff --git a/scripts/mepo_ui_menu_user_pin_updater.sh b/scripts/mepo_ui_menu_user_pin_updater.sh
+index a307334..4d059f0 100755
+--- a/scripts/mepo_ui_menu_user_pin_updater.sh
++++ b/scripts/mepo_ui_menu_user_pin_updater.sh
+@@ -14,20 +14,7 @@ coordsviamls() {
+ }
+ 
+ coordsviageoclue() {
+-  supportsgeoclue || return 1
+-
+-  /usr/libexec/geoclue-2.0/demos/agent > /dev/null &
+-  AGENTPID=$!
+-  LATLON="$(
+-          ( /usr/libexec/geoclue-2.0/demos/where-am-i -t 10 & ) |
+-          grep -E "Latitude|Longitude:" -m2 |
+-          cut -d: -f2 |
+-          tr -d "° " |
+-          tr "\n" " "
+-  )"
+-  kill -9 $AGENTPID
+-  pkill -9 -f where-am-i
+-  echo "$LATLON"
++  echo ""
+ }
+ 
+ supportsgeoclue() {
