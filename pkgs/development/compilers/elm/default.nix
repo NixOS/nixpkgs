@@ -10,7 +10,7 @@ let
   hsPkgs = self: pkgs.haskell.packages.ghc8107.override {
     overrides = self: super: with pkgs.haskell.lib.compose; with lib;
     let elmPkgs = rec {
-      elm = overrideCabal (drv: {
+      elm = (overrideCabal (drv: {
         # sadly with parallelism most of the time breaks compilation
         enableParallelBuilding = false;
         preConfigure = fetchElmDeps {
@@ -18,7 +18,6 @@ let
           elmVersion = drv.version;
           registryDat = ./registry.dat;
         };
-        buildTools = drv.buildTools or [] ++ [ makeWrapper ];
         jailbreak = true;
         postInstall = ''
           wrapProgram $out/bin/elm \
@@ -29,7 +28,13 @@ let
         homepage = "https://elm-lang.org/";
         license = licenses.bsd3;
         maintainers = with maintainers; [ domenkozar turbomack ];
-      }) (self.callPackage ./packages/elm.nix { });
+      }) (self.callPackage ./packages/elm.nix { })).overrideAttrs(drv:
+        {
+          # nativeBuildInputs are required to avoid issues with cross compilation described in https://github.com/NixOS/nixpkgs/issues/188296
+          # We can't do this in overrideCabal thus this workaround.
+          nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ makeWrapper ];
+        }
+      );
 
       /*
       The elm-format expression is updated via a script in the https://github.com/avh4/elm-format repo:
