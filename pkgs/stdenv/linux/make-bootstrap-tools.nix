@@ -172,10 +172,6 @@ in with pkgs; rec {
           cp ${bootBinutils.out}/bin/$i $out/bin
         done
         cp -r '${lib.getLib binutils.bintools}'/lib/* "$out/lib/"
-        chmod -R u+w $out/lib
-        # remove link to gcc's lto plugin in binutils. Does not exist
-        # for cross-gcc.
-        rm -f "$out/lib/bfd-plugins/liblto_plugin.so"
 
         chmod -R u+w $out
 

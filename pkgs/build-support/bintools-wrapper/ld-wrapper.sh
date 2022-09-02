@@ -249,6 +249,7 @@ if (( "${NIX_DEBUG:-0}" >= 1 )); then
 fi
 
 PATH="$path_backup"
+@gnu_binutils_inject_plugin@
 # Old bash workaround, see above.
 @prog@ \
     ${extraBefore+"${extraBefore[@]}"} \

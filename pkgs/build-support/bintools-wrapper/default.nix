@@ -8,6 +8,7 @@
 { name ? ""
 , lib
 , stdenvNoCC
+, stdenv ? stdenvNoCC
 , bintools ? null, libc ? null, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
 , netbsd ? null, netbsdCross ? null
 , sharedLibraryLoader ?
@@ -42,7 +43,6 @@ assert !(nativeLibc && noLibc);
 assert (noLibc || nativeLibc) == (libc == null);
 
 let
-  stdenv = stdenvNoCC;
   inherit (stdenv) hostPlatform targetPlatform;
 
   # Prefix for binaries. Customarily ends with a dash separator.
@@ -94,6 +94,15 @@ let
     then import ../expand-response-params { inherit (buildPackages) stdenv; }
     else "";
 
+  # We can install the link only if our compiler's host and target
+  # match GNU binutils' host and target.
+  gcc_lto_plugin_is_compatible =
+       (bintools.isGNU or false)
+    && stdenv.cc != null
+    && stdenv.cc.stdenv.hostPlatform == stdenv.hostPlatform
+    && stdenv.cc.stdenv.targetPlatform == stdenv.targetPlatform;
+  gcc_lto_plugin_path = "${stdenv.cc.cc}/libexec/gcc/${stdenv.targetPlatform.config}/${stdenv.cc.cc.version or "UNKNOWN"}/liblto_plugin.so";
+
 in
 
 stdenv.mkDerivation {
@@ -137,6 +146,8 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
+      runHook preInstall
+
       mkdir -p $out/bin $out/nix-support
 
       wrap() {
@@ -167,7 +178,7 @@ stdenv.mkDerivation {
 
     # Create symlinks for rest of the binaries.
     + ''
-      for binary in objdump objcopy size strings as ar nm gprof dwp c++filt addr2line ranlib readelf elfedit; do
+      for binary in objdump objcopy size strings as nm gprof dwp c++filt addr2line ranlib readelf elfedit; do
         if [ -e $ldPath/${targetPrefix}''${binary} ]; then
           ln -s $ldPath/${targetPrefix}''${binary} $out/bin/${targetPrefix}''${binary}
         fi
@@ -187,6 +198,8 @@ stdenv.mkDerivation {
         [[ -e "$underlying" ]] || continue
         wrap ${targetPrefix}$variant ${./ld-wrapper.sh} $underlying
       done
+
+      runHook postInstall
     '';
 
   strictDeps = true;
@@ -199,6 +212,25 @@ stdenv.mkDerivation {
     ./setup-hook.sh
   ];
 
+  # Install linker plugin to make 'ar', 'ld' and friends auto-load
+  # linker plugin to handle LTO bytecode without explicit --plugin
+  # parameter.
+  #
+  # We can install the link only if our compiler's host and target
+  # match GNU binutils' host and target.
+  gnu_binutils_inject_plugin = lib.optionalString gcc_lto_plugin_is_compatible ''
+    if [ -d ${placeholder "out"}/lib/bfd-plugins ]; then
+      export BFD_PLUGINS_DIR="${placeholder "out"}/lib/bfd-plugins"
+    fi
+  '';
+
+  postInstall = lib.optionalString gcc_lto_plugin_is_compatible ''
+      if [ -e ${gcc_lto_plugin_path} ]; then
+        mkdir -p $out/lib/bfd-plugins
+        ln -s ${gcc_lto_plugin_path} $out/lib/bfd-plugins/
+      fi
+  '';
+
   postFixup =
     ##
     ## General libc support
@@ -209,6 +241,7 @@ stdenv.mkDerivation {
 
       echo "${libc_lib}" > $out/nix-support/orig-libc
       echo "${libc_dev}" > $out/nix-support/orig-libc-dev
+
     ''
 
     ##
@@ -306,6 +339,9 @@ stdenv.mkDerivation {
     + optionalString (bintools.isGNU or false) ''
       wrap ${targetPrefix}strip ${./gnu-binutils-strip-wrapper.sh} \
         "${bintools_bin}/bin/${targetPrefix}strip"
+      # TODO: also wrap: size, rescoff, nm, dlltool, coffdump, addr2line, ranlib, maybe others?
+      wrap ${targetPrefix}ar ${./gnu-binutils-ar-wrapper.sh} \
+        "${bintools_bin}/bin/${targetPrefix}ar"
     ''
 
     ###
