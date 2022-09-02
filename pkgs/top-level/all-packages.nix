@@ -20150,8 +20150,8 @@ with pkgs;
     withUtils = false;
   });
 
-  libva = callPackage ../development/libraries/libva { };
-  libva-minimal = libva.override { minimal = true; };
+  libva-minimal = callPackage ../development/libraries/libva { minimal = true; };
+  libva = libva-minimal.override { minimal = false; };
   libva-utils = callPackage ../development/libraries/libva/utils.nix { };
 
   libva1 = callPackage ../development/libraries/libva/1.nix { };
