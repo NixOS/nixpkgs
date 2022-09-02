@@ -144,6 +144,7 @@ stdenv.mkDerivation rec {
     rsync --archive "${DESTDIR}/etc" "$out"
     rm --recursive "${DESTDIR}/etc"
     for o in $outputs; do
+        if [[ "$o" = "debug" ]]; then continue; fi
         rsync --archive "${DESTDIR}/''${!o}" "$(dirname "''${!o}")"
         rm --recursive "${DESTDIR}/''${!o}"
     done
@@ -161,6 +162,8 @@ stdenv.mkDerivation rec {
   # so we need to convince it to install all files to a temporary
   # location using DESTDIR and then move it to proper one in postInstall.
   DESTDIR = "${placeholder "out"}/dest";
+
+  separateDebugInfo = true;
 
   passthru = {
     updateScript = gnome.updateScript {
