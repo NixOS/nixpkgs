@@ -10950,6 +10950,8 @@ with pkgs;
 
   snort = callPackage ../applications/networking/ids/snort { };
 
+  snort3 = callPackage ../applications/networking/ids/snort3 { };
+
   so = callPackage ../development/tools/so {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
