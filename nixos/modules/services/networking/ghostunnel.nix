@@ -213,7 +213,7 @@ in
 {
 
   options = {
-    services.ghostunnel.enable = mkEnableOption "ghostunnel";
+    services.ghostunnel.enable = mkEnableOption (lib.mdDoc "ghostunnel");
 
     services.ghostunnel.package = mkOption {
       description = lib.mdDoc "The ghostunnel package to use.";

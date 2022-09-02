@@ -28,7 +28,7 @@ in
 
   options = {
     services.zammad = {
-      enable = mkEnableOption "Zammad, a web-based, open source user support/ticketing solution.";
+      enable = mkEnableOption (lib.mdDoc "Zammad, a web-based, open source user support/ticketing solution.");
 
       package = mkOption {
         type = types.package;
@@ -137,9 +137,9 @@ in
             {
             }
           '';
-          description = ''
-            The <filename>database.yml</filename> configuration file as key value set.
-            See <link xlink:href="TODO"/>
+          description = lib.mdDoc ''
+            The {file}`database.yml` configuration file as key value set.
+            See \<TODO\>
             for list of configuration parameters.
           '';
         };
@@ -149,20 +149,20 @@ in
         type = types.nullOr types.path;
         default = null;
         example = "/run/keys/secret_key_base";
-        description = ''
+        description = lib.mdDoc ''
           The path to a file containing the
-          <literal>secret_key_base</literal> secret.
+          `secret_key_base` secret.
 
-          Zammad uses <literal>secret_key_base</literal> to encrypt
+          Zammad uses `secret_key_base` to encrypt
           the cookie store, which contains session data, and to digest
           user auth tokens.
 
           Needs to be a 64 byte long string of hexadecimal
           characters. You can generate one by running
 
-          <screen>
-          <prompt>$ </prompt>openssl rand -hex 64 >/path/to/secret_key_base_file
-          </screen>
+          ```
+          openssl rand -hex 64 >/path/to/secret_key_base_file
+          ```
 
           This should be a string, not a nix path, since nix paths are
           copied into the world-readable nix store.

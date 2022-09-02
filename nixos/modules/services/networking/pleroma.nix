@@ -4,7 +4,7 @@ let
 in {
   options = {
     services.pleroma = with lib; {
-      enable = mkEnableOption "pleroma";
+      enable = mkEnableOption (lib.mdDoc "pleroma");
 
       package = mkOption {
         type = types.package;

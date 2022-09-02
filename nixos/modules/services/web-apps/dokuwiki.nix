@@ -60,7 +60,7 @@ let
   siteOpts = { config, lib, name, ... }:
     {
       options = {
-        enable = mkEnableOption "DokuWiki web application.";
+        enable = mkEnableOption (lib.mdDoc "DokuWiki web application.");
 
         package = mkOption {
           type = types.package;
@@ -137,11 +137,16 @@ let
         usersFile = mkOption {
           type = with types; nullOr str;
           default = if config.aclUse then "/var/lib/dokuwiki/${name}/users.auth.php" else null;
-          description = ''
+          description = lib.mdDoc ''
             Location of the dokuwiki users file. List of users. Format:
-            login:passwordhash:Real Name:email:groups,comma,separated
-            Create passwordHash easily by using:$ mkpasswd -5 password `pwgen 8 1`
-            Example: <link xlink:href="https://github.com/splitbrain/dokuwiki/blob/master/conf/users.auth.php.dist"/>
+
+                login:passwordhash:Real Name:email:groups,comma,separated
+
+            Create passwordHash easily by using:
+
+                mkpasswd -5 password `pwgen 8 1`
+
+            Example: <https://github.com/splitbrain/dokuwiki/blob/master/conf/users.auth.php.dist>
             '';
           example = "/var/lib/dokuwiki/${name}/users.auth.php";
         };
@@ -160,9 +165,12 @@ let
         plugins = mkOption {
           type = types.listOf types.path;
           default = [];
-          description = ''
+          description = lib.mdDoc ''
                 List of path(s) to respective plugin(s) which are copied from the 'plugin' directory.
-                <note><para>These plugins need to be packaged before use, see example.</para></note>
+
+                ::: {.note}
+                These plugins need to be packaged before use, see example.
+                :::
           '';
           example = literalExpression ''
                 let
@@ -188,9 +196,12 @@ let
         templates = mkOption {
           type = types.listOf types.path;
           default = [];
-          description = ''
+          description = lib.mdDoc ''
                 List of path(s) to respective template(s) which are copied from the 'tpl' directory.
-                <note><para>These templates need to be packaged before use, see example.</para></note>
+
+                ::: {.note}
+                These templates need to be packaged before use, see example.
+                :::
           '';
           example = literalExpression ''
                 let

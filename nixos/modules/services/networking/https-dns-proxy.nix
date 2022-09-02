@@ -46,7 +46,7 @@ in
   ###### interface
 
   options.services.https-dns-proxy = {
-    enable = mkEnableOption "https-dns-proxy daemon";
+    enable = mkEnableOption (lib.mdDoc "https-dns-proxy daemon");
 
     address = mkOption {
       description = lib.mdDoc "The address on which to listen";

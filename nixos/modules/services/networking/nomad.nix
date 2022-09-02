@@ -8,7 +8,7 @@ in
   ##### interface
   options = {
     services.nomad = {
-      enable = mkEnableOption "Nomad, a distributed, highly available, datacenter-aware scheduler";
+      enable = mkEnableOption (lib.mdDoc "Nomad, a distributed, highly available, datacenter-aware scheduler");
 
       package = mkOption {
         type = types.package;
@@ -22,8 +22,8 @@ in
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = [ ];
-        description = ''
-          Extra packages to add to <envar>PATH</envar> for the Nomad agent process.
+        description = lib.mdDoc ''
+          Extra packages to add to {env}`PATH` for the Nomad agent process.
         '';
         example = literalExpression ''
           with pkgs; [ cni-plugins ]

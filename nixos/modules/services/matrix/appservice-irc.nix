@@ -28,7 +28,7 @@ let
   registrationFile = "/var/lib/matrix-appservice-irc/registration.yml";
 in {
   options.services.matrix-appservice-irc = with types; {
-    enable = mkEnableOption "the Matrix/IRC bridge";
+    enable = mkEnableOption (lib.mdDoc "the Matrix/IRC bridge");
 
     port = mkOption {
       type = port;

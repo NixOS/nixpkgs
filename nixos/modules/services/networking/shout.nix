@@ -23,7 +23,7 @@ let
 
 in {
   options.services.shout = {
-    enable = mkEnableOption "Shout web IRC client";
+    enable = mkEnableOption (lib.mdDoc "Shout web IRC client");
 
     private = mkOption {
       type = types.bool;

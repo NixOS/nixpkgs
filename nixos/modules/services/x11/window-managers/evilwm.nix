@@ -8,7 +8,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.evilwm.enable = mkEnableOption "evilwm";
+    services.xserver.windowManager.evilwm.enable = mkEnableOption (lib.mdDoc "evilwm");
   };
 
   ###### implementation

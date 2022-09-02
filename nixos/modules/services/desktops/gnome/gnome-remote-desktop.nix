@@ -19,7 +19,7 @@ with lib;
   ###### interface
   options = {
     services.gnome.gnome-remote-desktop = {
-      enable = mkEnableOption "Remote Desktop support using Pipewire";
+      enable = mkEnableOption (lib.mdDoc "Remote Desktop support using Pipewire");
     };
   };
 

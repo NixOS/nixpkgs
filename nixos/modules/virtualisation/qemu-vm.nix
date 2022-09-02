@@ -465,14 +465,13 @@ in
             type = types.enum [ "host" "guest" ];
             default = "host";
             description =
-              ''
+              lib.mdDoc ''
                 Controls the direction in which the ports are mapped:
 
-                - <literal>"host"</literal> means traffic from the host ports
-                is forwarded to the given guest port.
-
-                - <literal>"guest"</literal> means traffic from the guest ports
-                is forwarded to the given host port.
+                - `"host"` means traffic from the host ports
+                  is forwarded to the given guest port.
+                - `"guest"` means traffic from the guest ports
+                  is forwarded to the given host port.
               '';
           };
           options.proto = mkOption {
@@ -513,17 +512,19 @@ in
         ]
         '';
       description =
-        ''
+        lib.mdDoc ''
           When using the SLiRP user networking (default), this option allows to
           forward ports to/from the host/guest.
 
-          <warning><para>
-            If the NixOS firewall on the virtual machine is enabled, you also
-            have to open the guest ports to enable the traffic between host and
-            guest.
-          </para></warning>
+          ::: {.warning}
+          If the NixOS firewall on the virtual machine is enabled, you also
+          have to open the guest ports to enable the traffic between host and
+          guest.
+          :::
 
-          <note><para>Currently QEMU supports only IPv4 forwarding.</para></note>
+          ::: {.note}
+          Currently QEMU supports only IPv4 forwarding.
+          :::
         '';
     };
 
@@ -573,7 +574,7 @@ in
         type = types.str;
         default = "";
         internal = true;
-        description = "Primary IP address used in /etc/hosts.";
+        description = lib.mdDoc "Primary IP address used in /etc/hosts.";
       };
 
     virtualisation.host.pkgs = mkOption {

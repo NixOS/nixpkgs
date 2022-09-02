@@ -10,7 +10,7 @@ in
   };
   options = {
     services.nar-serve = {
-      enable = mkEnableOption "Serve NAR file contents via HTTP";
+      enable = mkEnableOption (lib.mdDoc "Serve NAR file contents via HTTP");
 
       port = mkOption {
         type = types.port;

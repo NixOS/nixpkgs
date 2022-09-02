@@ -34,7 +34,7 @@ in
 {
   options = {
     services.crowd = {
-      enable = mkEnableOption "Atlassian Crowd service";
+      enable = mkEnableOption (lib.mdDoc "Atlassian Crowd service");
 
       user = mkOption {
         type = types.str;
@@ -86,7 +86,7 @@ in
       };
 
       proxy = {
-        enable = mkEnableOption "reverse proxy support";
+        enable = mkEnableOption (lib.mdDoc "reverse proxy support");
 
         name = mkOption {
           type = types.str;

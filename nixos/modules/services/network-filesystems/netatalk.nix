@@ -10,7 +10,7 @@ in {
   options = {
     services.netatalk = {
 
-      enable = mkEnableOption "the Netatalk AFP fileserver";
+      enable = mkEnableOption (lib.mdDoc "the Netatalk AFP fileserver");
 
       port = mkOption {
         type = types.port;

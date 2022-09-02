@@ -50,7 +50,7 @@ in
 
     services.monero = {
 
-      enable = mkEnableOption "Monero node daemon";
+      enable = mkEnableOption (lib.mdDoc "Monero node daemon");
 
       dataDir = mkOption {
         type = types.str;

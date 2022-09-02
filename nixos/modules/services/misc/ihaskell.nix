@@ -30,10 +30,10 @@ in
             haskellPackages.lens
           ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           Extra packages available to ghc when running ihaskell. The
           value must be a function which receives the attrset defined
-          in <varname>haskellPackages</varname> as the sole argument.
+          in {var}`haskellPackages` as the sole argument.
         '';
       };
     };

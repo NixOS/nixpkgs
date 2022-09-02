@@ -8,7 +8,7 @@ in
 {
   options = {
     services.calibre-web = {
-      enable = mkEnableOption "Calibre-Web";
+      enable = mkEnableOption (lib.mdDoc "Calibre-Web");
 
       listen = {
         ip = mkOption {

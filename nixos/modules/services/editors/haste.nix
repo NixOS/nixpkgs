@@ -10,8 +10,8 @@ let
 in
 {
   options.services.haste-server = {
-    enable = mkEnableOption "haste-server";
-    openFirewall = mkEnableOption "firewall passthrough for haste-server";
+    enable = mkEnableOption (lib.mdDoc "haste-server");
+    openFirewall = mkEnableOption (lib.mdDoc "firewall passthrough for haste-server");
 
     settings = mkOption {
       description = lib.mdDoc ''

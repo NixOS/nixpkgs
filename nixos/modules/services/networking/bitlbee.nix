@@ -59,9 +59,9 @@ in
       interface = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = ''
-          The interface the BitlBee deamon will be listening to.  If `127.0.0.1',
-          only clients on the local host can connect to it; if `0.0.0.0', clients
+        description = lib.mdDoc ''
+          The interface the BitlBee deamon will be listening to.  If `127.0.0.1`,
+          only clients on the local host can connect to it; if `0.0.0.0`, clients
           can access it from any network interface.
         '';
       };

@@ -41,7 +41,7 @@ in
   ###### interface
   options.services.kubernetes.pki = with lib.types; {
 
-    enable = mkEnableOption "easyCert issuer service";
+    enable = mkEnableOption (lib.mdDoc "easyCert issuer service");
 
     certs = mkOption {
       description = lib.mdDoc "List of certificate specs to feed to cert generator.";
@@ -114,9 +114,9 @@ in
     };
 
     etcClusterAdminKubeconfig = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Symlink a kubeconfig with cluster-admin privileges to environment path
-        (/etc/&lt;path&gt;).
+        (/etc/\<path\>).
       '';
       default = null;
       type = nullOr str;

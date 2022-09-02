@@ -17465,7 +17465,6 @@ with pkgs;
   boolstuff = callPackage ../development/libraries/boolstuff { };
 
   inherit (callPackage ../development/libraries/boost { inherit (buildPackages) boost-build; })
-    boost155
     boost159
     boost160
     boost165
@@ -20570,6 +20569,7 @@ with pkgs;
   nghttp3 = callPackage ../development/libraries/nghttp3 { };
 
   ngtcp2 = callPackage ../development/libraries/ngtcp2 { };
+  ngtcp2-gnutls = callPackage ../development/libraries/ngtcp2/gnutls.nix { };
 
   nix-plugins = callPackage ../development/libraries/nix-plugins { };
 
@@ -32985,7 +32985,7 @@ with pkgs;
   gl117 = callPackage ../games/gl-117 { };
 
   globulation2 = callPackage ../games/globulation {
-    boost = boost155;
+    boost = boost168; # breaks with >= boost169
   };
 
   gltron = callPackage ../games/gltron { };
@@ -33461,7 +33461,7 @@ with pkgs;
   space-orbit = callPackage ../games/space-orbit { };
 
   spring = callPackage ../games/spring
-    { stdenv = gcc10StdenvCompat; asciidoc = asciidoc-full; boost = boost155; };
+    { stdenv = gcc10StdenvCompat; asciidoc = asciidoc-full; };
 
   springLobby = callPackage ../games/spring/springlobby.nix { };
 
@@ -33532,6 +33532,7 @@ with pkgs;
 
   the-powder-toy = callPackage ../games/the-powder-toy {
     lua = lua5_1;
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
   tbe = libsForQt5.callPackage ../games/the-butterfly-effect { };

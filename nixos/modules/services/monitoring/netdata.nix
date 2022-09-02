@@ -49,7 +49,7 @@ let
 in {
   options = {
     services.netdata = {
-      enable = mkEnableOption "netdata";
+      enable = mkEnableOption (lib.mdDoc "netdata");
 
       package = mkOption {
         type = types.package;

@@ -40,7 +40,7 @@ in
         type = types.listOf types.package;
         default = [ ];
         internal = true;
-        description = ''
+        description = lib.mdDoc ''
           List of packages containing tracker3 subcommands.
         '';
       };

@@ -66,25 +66,25 @@ in
 {
   options = {
     services.privacyidea = {
-      enable = mkEnableOption "PrivacyIDEA";
+      enable = mkEnableOption (lib.mdDoc "PrivacyIDEA");
 
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/root/privacyidea.env";
-        description = ''
+        description = lib.mdDoc ''
           File to load as environment file. Environment variables
           from this file will be interpolated into the config file
-          using <literal>envsubst</literal> which is helpful for specifying
+          using `envsubst` which is helpful for specifying
           secrets:
-          <programlisting>
-          { <xref linkend="opt-services.privacyidea.secretKey"/> = "$SECRET"; }
-          </programlisting>
+          ```
+          { services.privacyidea.secretKey = "$SECRET"; }
+          ```
 
           The environment-file can now specify the actual secret key:
-          <programlisting>
+          ```
           SECRET=veryverytopsecret
-          </programlisting>
+          ```
         '';
       };
 
@@ -179,7 +179,7 @@ in
       };
 
       ldap-proxy = {
-        enable = mkEnableOption "PrivacyIDEA LDAP Proxy";
+        enable = mkEnableOption (lib.mdDoc "PrivacyIDEA LDAP Proxy");
 
         configFile = mkOption {
           type = types.nullOr types.path;

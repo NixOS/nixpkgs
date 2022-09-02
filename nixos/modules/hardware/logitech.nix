@@ -19,7 +19,7 @@ in
   options.hardware.logitech = {
 
     lcd = {
-      enable = mkEnableOption "Logitech LCD Devices";
+      enable = mkEnableOption (lib.mdDoc "Logitech LCD Devices");
 
       startWhenNeeded = mkOption {
         type = types.bool;
@@ -41,7 +41,7 @@ in
     };
 
     wireless = {
-      enable = mkEnableOption "Logitech Wireless Devices";
+      enable = mkEnableOption (lib.mdDoc "Logitech Wireless Devices");
 
       enableGraphical = mkOption {
         type = types.bool;

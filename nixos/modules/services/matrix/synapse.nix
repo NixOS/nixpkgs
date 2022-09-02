@@ -138,7 +138,7 @@ in {
 
   options = {
     services.matrix-synapse = {
-      enable = mkEnableOption "matrix.org synapse";
+      enable = mkEnableOption (lib.mdDoc "matrix.org synapse");
 
       configFile = mkOption {
         type = types.path;

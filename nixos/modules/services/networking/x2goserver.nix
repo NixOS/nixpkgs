@@ -22,16 +22,16 @@ in {
   ];
 
   options.services.x2goserver = {
-    enable = mkEnableOption "x2goserver" // {
-      description = ''
+    enable = mkEnableOption (lib.mdDoc "x2goserver") // {
+      description = lib.mdDoc ''
         Enables the x2goserver module.
         NOTE: This will create a good amount of symlinks in `/usr/local/bin`
       '';
     };
 
     superenicer = {
-      enable = mkEnableOption "superenicer" // {
-        description = ''
+      enable = mkEnableOption (lib.mdDoc "superenicer") // {
+        description = lib.mdDoc ''
           Enables the SupeReNicer code in x2gocleansessions, this will renice
           suspended sessions to nice level 19 and renice them to level 0 if the
           session becomes marked as running again

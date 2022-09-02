@@ -58,8 +58,10 @@ Additional syntax extensions are available, though not all extensions can be use
   A few markups for other kinds of literals are also available:
 
   - `` {command}`rm -rfi` `` turns into {command}`rm -rfi`
-  - `` {option}`networking.useDHCP` `` turns into {option}`networking.useDHCP`
+  - `` {env}`XDG_DATA_DIRS` `` turns into {env}`XDG_DATA_DIRS`
   - `` {file}`/etc/passwd` `` turns into {file}`/etc/passwd`
+  - `` {option}`networking.useDHCP` `` turns into {option}`networking.useDHCP`
+  - `` {var}`/etc/passwd` `` turns into {var}`/etc/passwd`
 
   These literal kinds are used mostly in NixOS option documentation.
 

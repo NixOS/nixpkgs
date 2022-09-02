@@ -256,7 +256,7 @@ in {
             interpreterSandboxPath = mkOption {
               internal = true;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 Path of the interpreter to expose in the build sandbox.
               '';
               type = types.nullOr types.path;

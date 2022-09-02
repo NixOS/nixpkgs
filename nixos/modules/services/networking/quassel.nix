@@ -17,7 +17,7 @@ in
 
     services.quassel = {
 
-      enable = mkEnableOption "the Quassel IRC client daemon";
+      enable = mkEnableOption (lib.mdDoc "the Quassel IRC client daemon");
 
       certificateFile = mkOption {
         type = types.nullOr types.str;
@@ -47,9 +47,9 @@ in
       interfaces = mkOption {
         type = types.listOf types.str;
         default = [ "127.0.0.1" ];
-        description = ''
-          The interfaces the Quassel daemon will be listening to.  If `[ 127.0.0.1 ]',
-          only clients on the local host can connect to it; if `[ 0.0.0.0 ]', clients
+        description = lib.mdDoc ''
+          The interfaces the Quassel daemon will be listening to.  If `[ 127.0.0.1 ]`,
+          only clients on the local host can connect to it; if `[ 0.0.0.0 ]`, clients
           can access it from any network interface.
         '';
       };
