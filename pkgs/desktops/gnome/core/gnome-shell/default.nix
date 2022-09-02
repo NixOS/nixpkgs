@@ -202,6 +202,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  separateDebugInfo = true;
+
   passthru = {
     mozillaPlugin = "/lib/mozilla/plugins";
     updateScript = gnome.updateScript {
