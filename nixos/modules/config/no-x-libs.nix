@@ -31,6 +31,7 @@ with lib;
       cairo = super.cairo.override { x11Support = false; };
       dbus = super.dbus.override { x11Support = false; };
       gobject-introspection = super.gobject-introspection.override { x11Support = false; };
+      libva = super.libva-minimal;
       networkmanager-fortisslvpn = super.networkmanager-fortisslvpn.override { withGnome = false; };
       networkmanager-iodine = super.networkmanager-iodine.override { withGnome = false; };
       networkmanager-l2tp = super.networkmanager-l2tp.override { withGnome = false; };
