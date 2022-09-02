@@ -17,6 +17,9 @@
 , bemenu
 , withX11 ? false
 
+# transmits user's location without asking first
+, reportLocationToMozilla ? false
+
 , gpsdSupport ? true , gpsd
 }:
 
@@ -39,6 +42,10 @@ in stdenv.mkDerivation rec {
     curl SDL2 SDL2_gfx SDL2_image SDL2_ttf inconsolata-nerdfont jq ncurses
   ] ++ menuInputs
     ++ lib.optional gpsdSupport gpsd;
+
+  patches = lib.optionals (!reportLocationToMozilla) [
+    ./dont-report-user-location-to-mozilla-without-asking.patch
+  ];
 
   postPatch = lib.optionalString gpsdSupport ''
     substituteInPlace \

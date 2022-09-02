@@ -1,0 +1,20 @@
+diff --git a/scripts/mepo_ui_menu_user_pin_updater.sh b/scripts/mepo_ui_menu_user_pin_updater.sh
+index a307334..5fe9d53 100755
+--- a/scripts/mepo_ui_menu_user_pin_updater.sh
++++ b/scripts/mepo_ui_menu_user_pin_updater.sh
+@@ -3,14 +3,7 @@ DISPLAYNAME=" Location Pin: Center on user location"
+ HOTKEY=x
+ 
+ coordsviamls() {
+-  MLSKEY=9a418f3c-364a-418a-85e8-1bde733f0c88
+-  MLSRESULT="$(
+-    # TODO: MLS supports POST buffer with network names -- scrape from nmcli
+-    curl "https://location.services.mozilla.com/v1/geolocate?key=$MLSKEY"
+-  )"
+-  LAT="$(echo "$MLSRESULT" | jq '.location.lat')"
+-  LON="$(echo "$MLSRESULT" | jq '.location.lng')"
+-  echo "$LAT $LON"
++  echo ""
+ }
+ 
+ coordsviageoclue() {
