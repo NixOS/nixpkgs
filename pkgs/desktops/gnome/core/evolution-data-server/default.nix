@@ -17,7 +17,6 @@
 , sqlite
 , tzdata
 , libcanberra-gtk3
-, gcr_4
 , p11-kit
 , db
 , nspr
@@ -87,7 +86,6 @@ stdenv.mkDerivation rec {
     libsoup_3
     gtk3
     gnome-online-accounts
-    gcr_4
     p11-kit
     libgweather
     libaccounts-glib
