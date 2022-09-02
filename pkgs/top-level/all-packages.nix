@@ -27003,6 +27003,8 @@ with pkgs;
 
   dwmblocks = callPackage ../applications/misc/dwmblocks { };
 
+  dwmbar = callPackage ../applications/misc/dwmbar { };
+
   dwm-status = callPackage ../applications/window-managers/dwm/dwm-status.nix { };
 
   exploitdb = callPackage ../tools/security/exploitdb { };
