@@ -16,6 +16,8 @@
 , xdotool
 , bemenu
 , withX11 ? false
+
+, gpsdSupport ? true , gpsd
 }:
 
 let
@@ -35,7 +37,14 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     curl SDL2 SDL2_gfx SDL2_image SDL2_ttf inconsolata-nerdfont jq ncurses
-  ] ++ menuInputs;
+  ] ++ menuInputs
+    ++ lib.optional gpsdSupport gpsd;
+
+  postPatch = lib.optionalString gpsdSupport ''
+    substituteInPlace \
+      scripts/mepo_ui_menu_user_pin_updater.sh \
+      --replace gpspipe ${gpsd}/bin/gpspipe
+  '';
 
   preBuild = ''
     export HOME=$TMPDIR
