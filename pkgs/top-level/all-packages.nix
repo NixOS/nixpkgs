@@ -230,6 +230,8 @@ with pkgs;
     python3 = python39;
   };
 
+  mov-cli = callPackage ../applications/video/mov-cli { };
+
   ani-cli = callPackage ../applications/video/ani-cli { };
 
   anime-downloader = callPackage ../applications/video/anime-downloader { };
@@ -5947,7 +5949,9 @@ with pkgs;
 
   wallutils = callPackage ../tools/graphics/wallutils { };
 
-  worker-build = callPackage ../development/tools/worker-build { };
+  worker-build = callPackage ../development/tools/worker-build {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   wrangler = callPackage ../development/tools/wrangler {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security;
@@ -12774,6 +12778,8 @@ with pkgs;
 
   mksh = callPackage ../shells/mksh { };
 
+  murex = callPackage ../shells/murex { };
+
   oh = callPackage ../shells/oh { };
 
   oil = callPackage ../shells/oil { };
@@ -14537,6 +14543,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Foundation;
   };
   cargo-wipe = callPackage ../development/tools/rust/cargo-wipe { };
+  cargo-workspaces = callPackage ../development/tools/rust/cargo-workspaces {
+    inherit (darwin.apple_sdk.frameworks) IOKit Security CoreFoundation AppKit System;
+  };
   cargo-xbuild = callPackage ../development/tools/rust/cargo-xbuild { };
   cargo-generate = callPackage ../development/tools/rust/cargo-generate {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -27093,6 +27102,8 @@ with pkgs;
 
   dwmblocks = callPackage ../applications/misc/dwmblocks { };
 
+  dwmbar = callPackage ../applications/misc/dwmbar { };
+
   dwm-status = callPackage ../applications/window-managers/dwm/dwm-status.nix { };
 
   exploitdb = callPackage ../tools/security/exploitdb { };
@@ -31512,7 +31523,7 @@ with pkgs;
 
   utox = callPackage ../applications/networking/instant-messengers/utox { };
 
-  valentina = libsForQt512.callPackage ../applications/misc/valentina { };
+  valentina = libsForQt5.callPackage ../applications/misc/valentina { };
 
   vbindiff = callPackage ../applications/editors/vbindiff { };
 
