@@ -10,7 +10,7 @@
 , glib
 , cairo
 , sqlite
-, libsoup
+, libsoup_3
 , gtk4
 , xvfb-run
 , gnome
@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libshumate";
-  version = "1.0.0.alpha.1";
+  version = "1.0.0.beta";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libshumate";
     rev = version;
-    sha256 = "4kCXFUJRglh1aIBk03MNUV8jfx0mJzIFCUDM4g9tzlg=";
+    sha256 = "Rnsxu4Vu4yzx3U5fdIUYaeh16cp7svoA0MSUX3etsyc=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     glib
     cairo
     sqlite
-    libsoup
+    libsoup_3
     gtk4
   ];
 
