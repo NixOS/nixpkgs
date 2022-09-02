@@ -18010,7 +18010,7 @@ with pkgs;
 
   pylint-exit = callPackage ../development/tools/pylint-exit { };
 
-  qtcreator = libsForQt5.callPackage ../development/tools/qtcreator {
+  qtcreator = qt6Packages.callPackage ../development/tools/qtcreator {
     inherit (linuxPackages) perf;
   };
 

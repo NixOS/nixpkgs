@@ -1,49 +1,64 @@
-{ mkDerivation, lib, fetchurl, fetchgit, fetchpatch
-, qtbase, qtquickcontrols, qtscript, qtdeclarative, qmake, llvmPackages_8, elfutils, perf
+/*
+  FIXME
+
+  -- The following packages have not been found:
+
+  * Qt6QmlCompilerPlusPrivate
+  * litehtml
+  * Qt6WebEngineWidgets
+  * LibRustcDemangle, Demangling for Rust symbols, written in Rust., <https://github.com/alexcrichton/rustc-demangle>
+    Demangling of Rust symbols
+
+  -- The following features have been disabled:
+
+  * Build documentation
+  * Build online documentation
+  * Build tests
+  * Build with sanitize, SANITIZE_FLAGS=''
+  * Build with Crashpad
+  * Library Nanotrace
+  * Build Qbs
+  * Native WebKit help viewer, with CONDITION FWWebKit AND FWAppKit AND Qt5_VERSION VERSION_LESS 6.0.0
+  * QtWebEngine help viewer, with CONDITION BUILD_HELPVIEWERBACKEND_QTWEBENGINE AND TARGET Qt5::WebEngineWidgets
+  * multilanguage-support in qml2puppet, with CONDITION TARGET QtCreator::multilanguage-support
+  * Include developer documentation
+*/
+
+{ stdenv, lib, fetchurl, fetchgit, fetchpatch
+, cmake, qtbase, qt5compat, qtdeclarative, qtquick3d, qtquicktimeline
+, qtserialport, qtsvg, qttools, wrapQtAppsHook
+#, qtwebengine
+, llvmPackages, elfutils, perf, pkg-config
 , withDocumentation ? false, withClangPlugins ? true
 }:
 
 with lib;
 
-let
-  # Fetch clang from qt vendor, this contains submodules like this:
-  # clang<-clang-tools-extra<-clazy.
-  clang_qt_vendor = llvmPackages_8.clang-unwrapped.overrideAttrs (oldAttrs: {
-    # file RPATH_CHANGE could not write new RPATH
-    cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=ON" ];
-    src = fetchgit {
-      url = "https://code.qt.io/clang/clang.git";
-      rev = "c12b012bb7465299490cf93c2ae90499a5c417d5";
-      sha256 = "0mgmnazgr19hnd03xcrv7d932j6dpz88nhhx008b0lv4bah9mqm0";
-    };
-    unpackPhase = "";
-  });
-in
-
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qtcreator";
-  version = "5.0.3";
+  version = "8.0.1";
   baseVersion = builtins.concatStringsSep "." (lib.take 2 (builtins.splitVersion version));
-
   src = fetchurl {
-    url = "http://download.qt-project.org/official_releases/${pname}/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    sha256 = "1sz21ijzvhf5avblikffykbqa8zdq3sbg32g2dmyxv5w211v3lvz";
+    url = "https://download.qt.io/official_releases/${pname}/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.xz";
+    sha256 = "sha256-4s4gCnnHTc1jZ9y7g8g5wcILLMB31qZYY56s3opKuGU=";
   };
 
-  buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative elfutils.dev ] ++
-    optionals withClangPlugins [ llvmPackages_8.libclang
-                                 clang_qt_vendor
-                                 llvmPackages_8.llvm ];
+  buildInputs = [
+      qtbase qt5compat qtdeclarative qtquick3d qtquicktimeline qtserialport
+      qtsvg qttools elfutils.dev
+      #qtwebengine
+    ] ++
+    optionals withClangPlugins [
+      llvmPackages.libclang
+      llvmPackages.clang-unwrapped
+      llvmPackages.llvm
+    ];
 
-  nativeBuildInputs = [ qmake ];
-
-  # 0001-Fix-clang-libcpp-regexp.patch is for fixing regexp that is used to
-  # find clang libc++ library include paths. By default it's not covering paths
-  # like libc++-version, which is default name for libc++ folder in nixos.
-  # ./0002-Dont-remove-clang-header-paths.patch is for forcing qtcreator to not
-  # remove system clang include paths.
-  patches = [ ./0001-Fix-clang-libcpp-regexp.patch
-              ./0002-Dont-remove-clang-header-paths.patch ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+  ];
 
   doCheck = true;
 
@@ -52,29 +67,6 @@ mkDerivation rec {
   installFlags = [ "INSTALL_ROOT=$(out)" ] ++ optional withDocumentation "install_docs";
 
   qtWrapperArgs = [ "--set-default PERFPROFILER_PARSER_FILEPATH ${lib.getBin perf}/bin" ];
-
-  preConfigure = ''
-    substituteInPlace src/plugins/plugins.pro \
-      --replace '$$[QT_INSTALL_QML]/QtQuick/Controls' '${qtquickcontrols}/${qtbase.qtQmlPrefix}/QtQuick/Controls'
-    substituteInPlace src/libs/libs.pro \
-      --replace '$$[QT_INSTALL_QML]/QtQuick/Controls' '${qtquickcontrols}/${qtbase.qtQmlPrefix}/QtQuick/Controls'
-    '' + optionalString withClangPlugins ''
-    # Fix paths for llvm/clang includes directories.
-    substituteInPlace src/shared/clang/clang_defines.pri \
-      --replace '$$clean_path($${LLVM_LIBDIR}/clang/$${LLVM_VERSION}/include)' '${clang_qt_vendor}/lib/clang/8.0.0/include' \
-      --replace '$$clean_path($${LLVM_BINDIR})' '${clang_qt_vendor}/bin'
-
-    # Fix paths to libclang library.
-    substituteInPlace src/shared/clang/clang_installation.pri \
-      --replace 'LIBCLANG_LIBS = -L$${LLVM_LIBDIR}' 'LIBCLANG_LIBS = -L${llvmPackages_8.libclang.lib}/lib' \
-      --replace 'LIBCLANG_LIBS += $${CLANG_LIB}' 'LIBCLANG_LIBS += -lclang' \
-      --replace 'LIBTOOLING_LIBS = -L$${LLVM_LIBDIR}' 'LIBTOOLING_LIBS = -L${clang_qt_vendor}/lib' \
-      --replace 'LLVM_CXXFLAGS ~= s,-gsplit-dwarf,' '${lib.concatStringsSep "\n" ["LLVM_CXXFLAGS ~= s,-gsplit-dwarf," "    LLVM_CXXFLAGS += -fno-rtti"]}'
-  '';
-
-  preBuild = optionalString withDocumentation ''
-    ln -s ${getLib qtbase}/$qtDocPrefix $NIX_QT5_TMP/share
-  '';
 
   postInstall = ''
     mkdir -p $out/share/applications
@@ -90,7 +82,7 @@ mkDerivation rec {
       tailored to the needs of Qt developers. It includes features such as an
       advanced code editor, a visual debugger and a GUI designer.
     '';
-    homepage = "https://wiki.qt.io/Category:Tools::QtCreator";
+    homepage = "https://wiki.qt.io/Qt_Creator";
     license = "LGPL";
     maintainers = [ maintainers.akaWolf ];
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
