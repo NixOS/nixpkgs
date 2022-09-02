@@ -1,8 +1,8 @@
-{ mkDerivation, lib, fetchFromGitHub, qtwebkit, qtsvg, qtxmlpatterns
-, fontconfig, freetype, libpng, zlib, libjpeg
+{ stdenv, lib, fetchFromGitHub, qtwebkit, qtsvg, qtxmlpatterns
+, fontconfig, freetype, libpng, zlib, libjpeg, wrapQtAppsHook
 , openssl, libX11, libXext, libXrender }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   version = "0.12.6";
   pname = "wkhtmltopdf";
 
@@ -12,6 +12,10 @@ mkDerivation rec {
     rev    = version;
     sha256 = "0m2zy986kzcpg0g3bvvm815ap9n5ann5f6bdy7pfj6jv482bm5mg";
   };
+
+  nativeBuildInputs = [
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     fontconfig freetype libpng zlib libjpeg openssl
@@ -23,6 +27,12 @@ mkDerivation rec {
     for f in src/image/image.pro src/pdf/pdf.pro ; do
       substituteInPlace $f --replace '$(INSTALL_ROOT)' ""
     done
+  '';
+
+  # rewrite library path
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change libwkhtmltox.0.dylib $out/lib/libwkhtmltox.0.dylib $out/bin/wkhtmltopdf
+    install_name_tool -change libwkhtmltox.0.dylib $out/lib/libwkhtmltox.0.dylib $out/bin/wkhtmltoimage
   '';
 
   configurePhase = "qmake wkhtmltopdf.pro INSTALLBASE=$out";
@@ -42,6 +52,6 @@ mkDerivation rec {
     '';
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jb55 ];
-    platforms = with platforms; linux;
+    platforms = platforms.unix;
   };
 }

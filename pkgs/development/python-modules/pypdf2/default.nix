@@ -1,29 +1,33 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , glibcLocales
-, python
+, typing-extensions
+, unittestCheckHook
 , isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "PyPDF2";
-  version = "1.26.0";
+  version = "2.10.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11a3aqljg4sawjijkvzhs3irpw0y67zivqpbjpm065ha5wpr13z2";
+    sha256 = "sha256-8JDF/HmQz1ptY2TOI2KDSXTjITbVIpG6uyNy5dZH0Yg=";
   };
 
   LC_ALL = "en_US.UTF-8";
   buildInputs = [ glibcLocales ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s Tests
-  '';
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
+    typing-extensions
+  ];
 
   # Tests broken on Python 3.x
-  doCheck = !(isPy3k);
+  #doCheck = !(isPy3k);
+
+  checkInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     description = "A Pure-Python library built as a PDF toolkit";

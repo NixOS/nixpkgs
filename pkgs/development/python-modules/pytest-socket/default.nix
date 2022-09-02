@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-socket";
-  version = "0.5.0";
+  version = "0.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "miketheman";
     repo = pname;
     rev = version;
-    hash = "sha256-HdGkpIHFsoAG2+8UyL9jSb3Dm8bWkYzREdY3i15ls/Q=";
+    hash = "sha256-QKHnuq2pqWMVUhF9nnhJggEK6SSyp6zBEfQX9tGND2E=";
   };
 
   nativeBuildInputs = [

@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libwacom";
-  version = "1.99.1";
+  version = "2.4.0";
 
   outputs = [ "out" "dev" ];
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "linuxwacom";
     repo = "libwacom";
     rev = "libwacom-${version}";
-    sha256 = "sha256-WGW/4m+BTe6dEigUcuUIZjoTeamInW6zrtrlaqKM6Js=";
+    sha256 = "sha256-9uhnO+MqB7tAnSXjBcJWCzHGiz9izun4nVjFb17G8Gg=";
   };
 
   nativeBuildInputs = [

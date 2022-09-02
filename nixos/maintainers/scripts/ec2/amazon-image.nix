@@ -23,7 +23,7 @@ in {
   options.amazonImage = {
     name = mkOption {
       type = types.str;
-      description = "The name of the generated derivation";
+      description = lib.mdDoc "The name of the generated derivation";
       default = "nixos-amazon-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
     };
 
@@ -35,7 +35,7 @@ in {
         ]
       '';
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         This option lists files to be copied to fixed locations in the
         generated image. Glob patterns work.
       '';
@@ -45,13 +45,13 @@ in {
       type = with types; either (enum [ "auto" ]) int;
       default = if config.ec2.hvm then 2048 else 8192;
       example = 8192;
-      description = "The size in MB of the image";
+      description = lib.mdDoc "The size in MB of the image";
     };
 
     format = mkOption {
       type = types.enum [ "raw" "qcow2" "vpc" ];
       default = "vpc";
-      description = "The image format to output";
+      description = lib.mdDoc "The image format to output";
     };
   };
 
@@ -73,7 +73,7 @@ in {
         }
       '';
 
-    zfsBuilder = import ../../../lib/make-zfs-image.nix {
+    zfsBuilder = import ../../../lib/make-multi-disk-zfs-image.nix {
       inherit lib config configFile;
       inherit (cfg) contents format name;
       pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://github.com/sm00th/bitlbee-discord";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lassulus jb55 ];
+    maintainers = with maintainers; [ lassulus ];
     platforms = lib.platforms.linux;
   };
 }

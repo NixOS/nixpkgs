@@ -103,7 +103,7 @@ in
     networking.dhcpcd.enable = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable dhcpcd for device configuration. This is mainly to
         explicitly disable dhcpcd (for example when using networkd).
       '';
@@ -112,7 +112,7 @@ in
     networking.dhcpcd.persistent = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
           Whenever to leave interfaces configured on dhcpcd daemon
           shutdown. Set to true if you have your root or store mounted
           over the network or this machine accepts SSH connections
@@ -124,7 +124,7 @@ in
     networking.dhcpcd.denyInterfaces = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
          Disable the DHCP client for any interface whose name matches
          any of the shell glob patterns in this list. The purpose of
          this option is to blacklist virtual interfaces such as those
@@ -135,7 +135,7 @@ in
     networking.dhcpcd.allowInterfaces = mkOption {
       type = types.nullOr (types.listOf types.str);
       default = null;
-      description = ''
+      description = lib.mdDoc ''
          Enable the DHCP client for any interface whose name matches
          any of the shell glob patterns in this list. Any interface not
          explicitly matched by this pattern will be denied. This pattern only
@@ -146,7 +146,7 @@ in
     networking.dhcpcd.extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
          Literal string to append to the config file generated for dhcpcd.
       '';
     };
@@ -155,7 +155,7 @@ in
       type = types.lines;
       default = "";
       example = "if [[ $reason =~ BOUND ]]; then echo $interface: Routers are $new_routers - were $old_routers; fi";
-      description = ''
+      description = lib.mdDoc ''
          Shell code that will be run after all other hooks. See
          `man dhcpcd-run-hooks` for details on what is possible.
       '';
@@ -164,7 +164,7 @@ in
     networking.dhcpcd.wait = mkOption {
       type = types.enum [ "background" "any" "ipv4" "ipv6" "both" "if-carrier-up" ];
       default = "any";
-      description = ''
+      description = lib.mdDoc ''
         This option specifies when the dhcpcd service will fork to background.
         If set to "background", dhcpcd will fork to background immediately.
         If set to "ipv4" or "ipv6", dhcpcd will wait for the corresponding IP
@@ -182,6 +182,20 @@ in
   ###### implementation
 
   config = mkIf enableDHCP {
+
+    assertions = [ {
+      # dhcpcd doesn't start properly with malloc ∉ [ libc scudo ]
+      # see https://github.com/NixOS/nixpkgs/issues/151696
+      assertion =
+        dhcpcd.enablePrivSep
+          -> elem config.environment.memoryAllocator.provider [ "libc" "scudo" ];
+      message = ''
+        dhcpcd with privilege separation is incompatible with chosen system malloc.
+          Currently only the `libc` and `scudo` allocators are known to work.
+          To disable dhcpcd's privilege separation, overlay Nixpkgs and override dhcpcd
+          to set `enablePrivSep = false`.
+      '';
+    } ];
 
     systemd.services.dhcpcd = let
       cfgN = config.networking;
@@ -201,7 +215,7 @@ in
         # dhcpcd.  So do a "systemctl restart" instead.
         stopIfChanged = false;
 
-        path = [ dhcpcd pkgs.nettools pkgs.openresolv ];
+        path = [ dhcpcd pkgs.nettools config.networking.resolvconf.package ];
 
         unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 

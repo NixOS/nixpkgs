@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "2048-in-terminal";
-  version = "2021-09-12";
+  version = "unstable-2021-09-12";
 
   src = fetchFromGitHub {
     sha256 = "1jgacyimn59kxqhrk8jp13qayc2mncxhx393spqcxbz0sj6lxq9p";
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     description = "Animated console version of the 2048 game";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

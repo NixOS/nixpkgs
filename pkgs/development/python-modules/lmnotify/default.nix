@@ -3,28 +3,39 @@
 , fetchPypi
 , oauthlib
 , requests
-, requests_oauthlib
+, requests-oauthlib
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "lmnotify";
   version = "0.0.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cCP7BU2f7QJe9gAI298cvkp3OGijvBv8G1RN7qfZ5PE=";
+    hash = "sha256-cCP7BU2f7QJe9gAI298cvkp3OGijvBv8G1RN7qfZ5PE=";
   };
 
-  propagatedBuildInputs = [ oauthlib requests requests_oauthlib ];
+  propagatedBuildInputs = [
+    oauthlib
+    requests
+    requests-oauthlib
+  ];
 
-  doCheck = false; # no tests exist
+  # Module has no tests
+  doCheck = false;
 
-  pythonImportsCheck = [ "lmnotify" ];
+  pythonImportsCheck = [
+    "lmnotify"
+  ];
 
   meta = with lib; {
     description = "Python package for sending notifications to LaMetric Time";
     homepage = "https://github.com/keans/lmnotify";
-    maintainers = with maintainers; [ rhoriguchi ];
     license = licenses.mit;
+    maintainers = with maintainers; [ rhoriguchi ];
   };
 }

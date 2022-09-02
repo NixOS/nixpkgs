@@ -33,6 +33,8 @@ stdenv.mkDerivation {
     sourceRoot="$sourceRoot/tools/build"
   '';
 
+  patches = useBoost.boostBuildPatches or [];
+
   # Upstream defaults to gcc on darwin, but we use clang.
   postPatch = ''
     substituteInPlace src/build-system.jam \

@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.74.0";
+  version = "2.103.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14215f5077151a7f32ca048ff7fad63c977d7cdeadc93d93c8957efbe3c89ba6";
+    hash = "sha256-0iXIUWvoL6+kT+KaJq7yzdEzYA0orKBbQkGAVUYcSKk=";
   };
 
   propagatedBuildInputs = [
@@ -40,6 +40,11 @@ buildPythonPackage rec {
     smdebug-rulesconfig
     pandas
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "attrs==20.3.0" "attrs>=20.3.0"
+  '';
 
   postFixup = ''
     [ "$($out/bin/sagemaker-upgrade-v2 --help 2>&1 | grep -cim1 'pandas failed to import')" -eq "0" ]

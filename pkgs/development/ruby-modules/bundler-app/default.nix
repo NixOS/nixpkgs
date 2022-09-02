@@ -27,6 +27,7 @@
 , allowSubstitutes ? false
 , installManpages ? true
 , meta ? {}
+, nativeBuildInputs ? []
 , buildInputs ? []
 , postBuild ? ""
 , gemConfig ? null
@@ -39,9 +40,12 @@ let
   cmdArgs = removeAttrs args [ "pname" "postBuild" "gemConfig" "passthru" "gemset" "gemdir" ] // {
     inherit preferLocalBuild allowSubstitutes; # pass the defaults
 
-    buildInputs = buildInputs ++ lib.optional (scripts != []) makeWrapper;
+    nativeBuildInputs = nativeBuildInputs ++ lib.optionals (scripts != []) [ makeWrapper ];
 
-    meta = { platforms = ruby.meta.platforms; } // meta;
+    meta = {
+      mainProgram = pname;
+      inherit (ruby.meta) platforms;
+    } // meta;
     passthru = basicEnv.passthru // {
       inherit basicEnv;
       inherit (basicEnv) env;
@@ -57,7 +61,7 @@ in
                                 "--set BUNDLE_FROZEN 1 "+
                                 "--set GEM_HOME ${basicEnv}/${ruby.gemPath} "+
                                 "--set GEM_PATH ${basicEnv}/${ruby.gemPath} "+
-                                "--run \"cd $srcdir\";\n") scripts)}
+                                "--chdir \"$srcdir\";\n") scripts)}
 
     ${lib.optionalString installManpages ''
     for section in {1..9}; do

@@ -48,13 +48,13 @@
 , pname ? "gnuradio"
 , versionAttr ? {
   major = "3.10";
-  minor = "0";
+  minor = "3";
   patch = "0";
 }
 }:
 
 let
-  sourceSha256 = "sha256-1K8nlNiirks3MJ+9cH9bkILVFtu5OxhKkNhetGqojn4=";
+  sourceSha256 = "sha256-pH0nvZBUto9jXSN6fXD5vP1lIBwCMuFAvF2qT5dYsHU=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -135,6 +135,12 @@ let
         libsndfile
       ];
       cmakeEnableFlag = "GRC";
+    };
+    jsonyaml_blocks = {
+      pythonRuntime = [
+        python.pkgs.jsonschema
+      ];
+      cmakeEnableFlag = "JSONYAML_BLOCKS";
     };
     gr-blocks = {
       cmakeEnableFlag = "GR_BLOCKS";
@@ -221,6 +227,7 @@ let
         setuptools
         click
         click-plugins
+        pygccxml
       ];
       cmakeEnableFlag = "GR_MODTOOL";
     };
@@ -293,9 +300,15 @@ stdenv.mkDerivation rec {
   ];
   passthru = shared.passthru // {
     # Deps that are potentially overriden and are used inside GR plugins - the same version must
-    inherit boost volk;
+    inherit
+      boost
+      volk
+      spdlog
+    ;
   } // lib.optionalAttrs (hasFeature "gr-uhd") {
     inherit uhd;
+  } // lib.optionalAttrs (hasFeature "gr-pdu") {
+    inherit libiio libad9361;
   } // lib.optionalAttrs (hasFeature "gr-qtgui") {
     inherit (libsForQt5) qwt;
   };

@@ -1,55 +1,44 @@
-{ lib
-, stdenv
-, fetchurl
+{ comma
 , fetchFromGitHub
-, linkFarm
-, nix-index
 , fzy
+, lib
+, makeWrapper
+, nix
+, nix-index
+, rustPlatform
+, testers
 }:
 
-let
-
-  # nix-index takes a little while to run and the contents don't change
-  # meaningfully very often.
-  indexCache = fetchurl {
-    url = "https://github.com/Mic92/nix-index-database/releases/download/2021-12-12/index-x86_64-linux";
-    sha256 = "sha256-+SoG5Qz2KWA/nIWXE6SLpdi8MDqTs8LY90fGZxGKOiA=";
-  };
-
-  # nix-locate needs the --db argument to be a directory containing a file
-  # named "files".
-  nixIndexDB = linkFarm "nix-index-cache" [
-    { name = "files"; path = indexCache; }
-  ];
-
-in stdenv.mkDerivation rec {
+rustPlatform.buildRustPackage rec {
   pname = "comma";
-  version = "1.1.0";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "nix-community";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-WBIQmwlkb/GMoOq+Dnyrk8YmgiM/wJnc5HYZP8Uw72E=";
+    repo = "comma";
+    rev = "v${version}";
+    sha256 = "sha256-emhvBaicLAnu/Kn4oxHngGa5BSxOEwbkhTLO5XvauMw=";
   };
 
-  postPatch = ''
-    substituteInPlace , \
-      --replace '$PREBUILT_NIX_INDEX_DB' "${nixIndexDB}" \
-      --replace nix-locate "${nix-index}/bin/nix-locate" \
-      --replace fzy "${fzy}/bin/fzy"
+  cargoSha256 = "sha256-mQxNo4VjW2Q0MYfU+RCb4Ayl9ClpxrSV8X4EKZ7PewA=";
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    wrapProgram $out/bin/comma \
+      --prefix PATH : ${lib.makeBinPath [ nix fzy nix-index ]}
+    ln -s $out/bin/comma $out/bin/,
   '';
 
-  installPhase = ''
-    install -Dm755 , -t $out/bin
-    ln -s $out/bin/, $out/bin/comma
-  '';
+  passthru.tests = {
+    version = testers.testVersion { package = comma; };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/nix-community/comma";
-    description = "Run software without installing it";
+    description = "Runs programs without installing them";
     license = licenses.mit;
-    maintainers = with maintainers; [ Enzime ];
+    maintainers = with maintainers; [ Enzime artturin ];
     platforms = platforms.all;
   };
 }

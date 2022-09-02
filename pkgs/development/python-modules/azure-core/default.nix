@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , aiodns
 , aiohttp
 , flask
@@ -11,23 +15,23 @@
 , requests
 , six
 , trio
-, typing-extensions
-}:
+, typing-extensions }:
 
 buildPythonPackage rec {
-  version = "1.21.1";
+  version = "1.24.2";
   pname = "azure-core";
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "88d2db5cf9a135a7287dc45fdde6b96f9ca62c9567512a3bb3e20e322ce7deb2";
+    sha256 = "sha256-Dzog0kVlm/gfs2cAcKVBDI1KQymNWpgeYtzjkwAKkIQ=";
   };
 
   propagatedBuildInputs = [
     requests
     six
+    typing-extensions
   ];
 
   checkInputs = [
@@ -41,7 +45,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     trio
-    typing-extensions
   ];
 
   # test server needs to be available
@@ -51,7 +54,20 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/" ];
   # disable tests which touch network
-  disabledTests = [ "aiohttp" "multipart_send" "response" "request" "timeout" ];
+  disabledTests = [
+    "aiohttp"
+    "multipart_send"
+    "response"
+    "request"
+    "timeout"
+    "test_sync_transport_short_read_download_stream"
+    "test_aio_transport_short_read_download_stream"
+  # disable 8 tests failing on some darwin machines with errors:
+  # azure.core.polling.base_polling.BadStatus: Invalid return status 403 for 'GET' operation
+  # azure.core.exceptions.HttpResponseError: Operation returned an invalid status 'Forbidden'
+  ] ++ lib.optional stdenv.isDarwin [
+    "location_polling_fail"
+  ];
   disabledTestPaths = [
     # requires testing modules which aren't published, and likely to create cyclic dependencies
     "tests/test_connection_string_parsing.py"
@@ -60,6 +76,8 @@ buildPythonPackage rec {
     "tests/test_streaming.py"
     # testserver tests require being in a very specific working directory to make it work
     "tests/testserver_tests/"
+    # requires missing pytest plugin
+    "tests/async_tests/test_rest_asyncio_transport.py"
   ];
 
   meta = with lib; {

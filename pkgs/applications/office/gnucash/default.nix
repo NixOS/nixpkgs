@@ -1,9 +1,10 @@
-{ fetchurl
-, lib
+{ lib
 , stdenv
+, fetchurl
 , aqbanking
 , boost
 , cmake
+, gettext
 , glib
 , glibcLocales
 , gtest
@@ -16,7 +17,6 @@
 , libxml2
 , libxslt
 , makeWrapper
-, perl
 , perlPackages
 , pkg-config
 , swig
@@ -26,15 +26,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "4.9";
+  version = "4.11";
 
+  # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
-    url = "https://github.com/Gnucash/gnucash/releases/download/${version}/gnucash-${version}.tar.bz2";
-    sha256 = "0bdpzb0wc9bjph5iff7133ppnkcqzfd10yi2qagij4mpq4q1qmcs";
+    url = "https://github.com/Gnucash/gnucash/releases/download/${version}/${pname}-${version}.tar.bz2";
+    hash = "sha256-+BTt4w174N7Ar7KujQNii5rjTISLaDEuTFre2UwQKxk=";
   };
 
   nativeBuildInputs = [
     cmake
+    gettext
     makeWrapper
     wrapGAppsHook
   ];
@@ -53,11 +55,15 @@ stdenv.mkDerivation rec {
     libofx
     libxml2
     libxslt
-    perl
     pkg-config
     swig
     webkitgtk
-  ] ++ (with perlPackages; [ FinanceQuote DateManip ]);
+  ]
+  ++ (with perlPackages; [
+    DateManip
+    FinanceQuote
+    perl
+  ]);
 
   patches = [
     # this patch disables test-gnc-timezone and test-gnc-datetime which fail due to nix datetime challenges
@@ -68,16 +74,14 @@ stdenv.mkDerivation rec {
     ./0003-remove-valgrind.patch
   ];
 
-  preConfigure = ''
-    export GUILE_AUTO_COMPILE=0 # this needs to be an env variable and not a cmake flag to suppress guile warning
-  '';
+  # this needs to be an environment variable and not a cmake flag to suppress
+  # guile warning
+  GUILE_AUTO_COMPILE="0";
 
+  # `make check` target does not define its prerequisites but expects them to
+  # have already been built.  The list of targets below was built through trial
+  # and error based on failing tests.
   doCheck = true;
-
-  /*
-    GNUcash's `make check` target does not define its prerequisites but expects them to have already been built.
-    The list of targets below was built through trial and error based on failing tests.
-  */
   preCheck = ''
     make \
       test-account-object \
@@ -150,18 +154,19 @@ stdenv.mkDerivation rec {
       test-xml-pricedb \
       test-xml-transaction \
       test-xml2-is-file
-
-      export LD_LIBRARY_PATH="$PWD/lib:$PWD/lib/gnucash:$PWD/lib/gnucash/test:$PWD/lib/gnucash/test/future"
   '';
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --set GNC_DBD_DIR ${libdbiDrivers}/lib/dbd                                      # specify where db drivers are
-      --set GSETTINGS_SCHEMA_DIR ${glib.makeSchemaPath "$out" "${pname}-${version}"}  # specify where nix puts the gnome settings schemas
+      # db drivers location
+      --set GNC_DBD_DIR ${libdbiDrivers}/lib/dbd
+      # gnome settings schemas location on Nix
+      --set GSETTINGS_SCHEMA_DIR ${glib.makeSchemaPath "$out" "${pname}-${version}"}
     )
   '';
 
-  # wrapGAppsHook would wrap all binaries including the cli utils which need Perl wrapping
+  # wrapGAppsHook would wrap all binaries including the cli utils which need
+  # Perl wrapping
   dontWrapGApps = true;
 
   # gnucash is wrapped using the args constructed for wrapGAppsHook.
@@ -176,15 +181,31 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Personal and small business double entry accounting application.";
-    longDescription = ''
-      Designed to be easy to use, yet powerful and flexible, GnuCash allows you to track bank accounts, stocks, income and expenses.
-      As quick and intuitive to use as a checkbook register, it is based on professional accounting principles to ensure balanced books and accurate reports.
-    '';
-
     homepage = "https://www.gnucash.org/";
+    description = "Free software for double entry accounting";
+    longDescription = ''
+      GnuCash is personal and small-business financial-accounting software,
+      freely licensed under the GNU GPL and available for GNU/Linux, BSD,
+      Solaris, Mac OS X and Microsoft Windows.
+
+      Designed to be easy to use, yet powerful and flexible, GnuCash allows you
+      to track bank accounts, stocks, income and expenses. As quick and
+      intuitive to use as a checkbook register, it is based on professional
+      accounting principles to ensure balanced books and accurate reports.
+
+      Some interesting features:
+
+      - Double-Entry Accounting
+      - Stock/Bond/Mutual Fund Accounts
+      - Small-Business Accounting
+      - Reports, Graphs
+      - QIF/OFX/HBCI Import, Transaction Matching
+      - Scheduled Transactions
+      - Financial Calculations
+    '';
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.domenkozar ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ domenkozar AndersonTorres rski ];
+    platforms = platforms.unix;
   };
 }
+# TODO: investigate Darwin support

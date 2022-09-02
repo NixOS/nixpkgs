@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, fetchurl
+{ lib, buildDunePackage, ocaml, fetchurl
 , bigarray-compat, alcotest, astring, fpath, bos, findlib, pkg-config
 }:
 
@@ -14,10 +14,13 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.07";
   useDune2 = true;
 
+  strictDeps = !doCheck;
+
   propagatedBuildInputs = [ bigarray-compat ];
 
-  checkInputs = [ alcotest astring fpath bos findlib pkg-config ];
-  doCheck = true;
+  nativeBuildInputs = [ findlib pkg-config ];
+  checkInputs = [ alcotest astring fpath bos ];
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = with lib; {
     homepage = "https://github.com/dinosaure/overlap";

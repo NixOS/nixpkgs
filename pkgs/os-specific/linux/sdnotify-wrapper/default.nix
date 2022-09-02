@@ -1,4 +1,4 @@
-{ lib, runCommandCC, skawarePackages }:
+{ stdenv, lib, runCommandCC, skawarePackages }:
 
 with skawarePackages;
 
@@ -14,7 +14,7 @@ in runCommandCC "sdnotify-wrapper" {
    meta = {
      homepage = "https://skarnet.org/software/misc/sdnotify-wrapper.c";
      description = "Use systemd sd_notify without having to link against libsystemd";
-     platforms = lib.platforms.all;
+     platforms = lib.platforms.linux;
      license = lib.licenses.isc;
      maintainers = with lib.maintainers; [ Profpatsch ];
    };

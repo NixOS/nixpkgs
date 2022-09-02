@@ -1,14 +1,17 @@
 { lib, stdenv, fetchurl, bzip2, freetype, graphviz, ghostscript
 , libjpeg, libpng, libtiff, libxml2, zlib, libtool, xz, libX11
-, libwebp, quantumdepth ? 8, fixDarwinDylibNames, nukeReferences }:
+, libwebp, quantumdepth ? 8, fixDarwinDylibNames, nukeReferences
+, runCommand
+, graphicsmagick  # for passthru.tests
+}:
 
 stdenv.mkDerivation rec {
   pname = "graphicsmagick";
-  version = "1.3.37";
+  version = "1.3.38";
 
   src = fetchurl {
     url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${version}.tar.xz";
-    sha256 = "sha256-kNwi8ae9JA5MkGWpQJYr8T2kPJm8w2yxEcw8Gg10d9Q=";
+    sha256 = "sha256-1gzZ21k1HSucsZvrRDFwrKoo8HPRPSWPZ7NidjXjJnU=";
   };
 
   patches = [
@@ -33,12 +36,22 @@ stdenv.mkDerivation rec {
   # Remove CFLAGS from the binaries to avoid closure bloat.
   # In the past we have had -dev packages in the closure of the binaries soley due to the string references.
   postConfigure = ''
-    nuke-refs ./magick/magick_config.h
+    nuke-refs -e $out ./magick/magick_config.h
   '';
 
   postInstall = ''
     sed -i 's/-ltiff.*'\'/\'/ $out/bin/*
   '';
+
+  passthru = {
+    tests = {
+      issue-157920 = runCommand "issue-157920-regression-test" {
+        buildInputs = [ graphicsmagick ];
+      } ''
+        gm convert ${graphviz}/share/graphviz/doc/pdf/neatoguide.pdf jpg:$out
+      '';
+    };
+  };
 
   meta = {
     homepage = "http://www.graphicsmagick.org";

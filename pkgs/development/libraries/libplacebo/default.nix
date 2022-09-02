@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "4.192.0";
+  version = "4.208.0";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "19i7p9z8mmki5yq26059dp9055cccgxs0vfdlx0w1qak7pmv1vpm";
+    sha256 = "161dp5781s74ca3gglaxlmchx7glyshf0wg43w98pl22n1jcm5qk";
   };
 
   nativeBuildInputs = [
@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
     "-Dvulkan-registry=${vulkan-headers}/share/vulkan/registry/vk.xml"
     "-Ddemos=false" # Don't build and install the demo programs
     "-Dd3d11=disabled" # Disable the Direct3D 11 based renderer
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-Dunwind=disabled" # libplacebo doesn’t build with `darwin.libunwind`
   ];
 
   meta = with lib; {

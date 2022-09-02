@@ -12,26 +12,26 @@ in
 
   options.services.lemmy = {
 
-    enable = mkEnableOption "lemmy a federated alternative to reddit in rust";
+    enable = mkEnableOption (lib.mdDoc "lemmy a federated alternative to reddit in rust");
 
     jwtSecretPath = mkOption {
       type = types.path;
-      description = "Path to read the jwt secret from.";
+      description = lib.mdDoc "Path to read the jwt secret from.";
     };
 
     ui = {
       port = mkOption {
         type = types.port;
         default = 1234;
-        description = "Port where lemmy-ui should listen for incoming requests.";
+        description = lib.mdDoc "Port where lemmy-ui should listen for incoming requests.";
       };
     };
 
-    caddy.enable = mkEnableOption "exposing lemmy with the caddy reverse proxy";
+    caddy.enable = mkEnableOption (lib.mdDoc "exposing lemmy with the caddy reverse proxy");
 
     settings = mkOption {
       default = { };
-      description = "Lemmy configuration";
+      description = lib.mdDoc "Lemmy configuration";
 
       type = types.submodule {
         freeformType = settingsFormat.type;
@@ -39,33 +39,33 @@ in
         options.hostname = mkOption {
           type = types.str;
           default = null;
-          description = "The domain name of your instance (eg 'lemmy.ml').";
+          description = lib.mdDoc "The domain name of your instance (eg 'lemmy.ml').";
         };
 
         options.port = mkOption {
           type = types.port;
           default = 8536;
-          description = "Port where lemmy should listen for incoming requests.";
+          description = lib.mdDoc "Port where lemmy should listen for incoming requests.";
         };
 
         options.federation = {
-          enabled = mkEnableOption "activitypub federation";
+          enabled = mkEnableOption (lib.mdDoc "activitypub federation");
         };
 
         options.captcha = {
           enabled = mkOption {
             type = types.bool;
             default = true;
-            description = "Enable Captcha.";
+            description = lib.mdDoc "Enable Captcha.";
           };
           difficulty = mkOption {
             type = types.enum [ "easy" "medium" "hard" ];
             default = "medium";
-            description = "The difficultly of the captcha to solve.";
+            description = lib.mdDoc "The difficultly of the captcha to solve.";
           };
         };
 
-        options.database.createLocally = mkEnableOption "creation of database on the instance";
+        options.database.createLocally = mkEnableOption (lib.mdDoc "creation of database on the instance");
 
       };
     };
@@ -164,7 +164,7 @@ in
 
         wantedBy = [ "multi-user.target" ];
 
-        after = [ "pict-rs.service " ] ++ lib.optionals cfg.settings.database.createLocally [ "lemmy-postgresql.service" ];
+        after = [ "pict-rs.service" ] ++ lib.optionals cfg.settings.database.createLocally [ "lemmy-postgresql.service" ];
 
         requires = lib.optionals cfg.settings.database.createLocally [ "lemmy-postgresql.service" ];
 

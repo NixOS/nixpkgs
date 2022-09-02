@@ -1,8 +1,10 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
-, nose
+, argon2-cffi
 , bcrypt
-, argon2_cffi
+, cryptography
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -14,12 +16,21 @@ buildPythonPackage rec {
     sha256 = "defd50f72b65c5402ab2c573830a6978e5f202ad0d984793c8dde2c4152ebe04";
   };
 
-  checkInputs = [ nose ];
-  propagatedBuildInputs = [ bcrypt argon2_cffi ];
-  propagatedNativeBuildInputs = [ argon2_cffi ];
+  passthru.optional-dependencies = {
+    argon2 = [ argon2-cffi ];
+    bcrypt = [ bcrypt ];
+    totp = [ cryptography ];
+  };
 
-  meta = {
+  checkInputs = [
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.argon2
+    ++ passthru.optional-dependencies.bcrypt
+    ++ passthru.optional-dependencies.totp;
+
+  meta = with lib; {
     description = "A password hashing library for Python";
-    homepage    = "https://code.google.com/p/passlib/";
+    homepage = "https://foss.heptapod.net/python-libs/passlib";
+    license = licenses.bsdOriginal;
   };
 }

@@ -1,7 +1,7 @@
-From 93b2d29de784c68d1b4d70d7f214b19432aec6a8 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Tue, 8 Jan 2013 15:46:30 +0100
-Subject: [PATCH 01/19] Start device units for uninitialised encrypted devices
+Subject: [PATCH] Start device units for uninitialised encrypted devices
 
 This is necessary because the NixOS service that initialises the
 filesystem depends on the appearance of the device unit.  Also, this
@@ -27,6 +27,3 @@ index 25b8a590a6..d18999ea87 100644
  # add symlink to GPT root disk
  SUBSYSTEM=="block", ENV{ID_PART_GPT_AUTO_ROOT}=="1", ENV{ID_FS_TYPE}!="crypto_LUKS", SYMLINK+="gpt-auto-root"
  SUBSYSTEM=="block", ENV{ID_PART_GPT_AUTO_ROOT}=="1", ENV{ID_FS_TYPE}=="crypto_LUKS", SYMLINK+="gpt-auto-root-luks"
--- 
-2.33.1
-

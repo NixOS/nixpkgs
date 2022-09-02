@@ -1,43 +1,55 @@
-{ lib, buildGoPackage, fetchFromGitHub, ronn, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, ronn, installShellFiles, git, testers, git-lfs }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "git-lfs";
-  version = "3.0.2";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "git-lfs";
     repo = "git-lfs";
-    sha256 = "0k2pzbhd95xixh5aqdwf5pafilg85wl46d04xbb4lx6k3gkfv0f3";
+    rev = "v${version}";
+    sha256 = "sha256-3gVUPfZs5GViEA3D7Zm5NdxhuEz9DhwPLoQqHFdGCrI=";
   };
 
-  goPackagePath = "github.com/git-lfs/git-lfs";
+  vendorSha256 = null;
 
   nativeBuildInputs = [ ronn installShellFiles ];
 
-  ldflags = [ "-s" "-w" "-X ${goPackagePath}/config.Vendor=${version}" "-X ${goPackagePath}/config.GitCommit=${src.rev}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/git-lfs/git-lfs/v${lib.versions.major version}/config.Vendor=${version}"
+  ];
 
   subPackages = [ "." ];
 
   preBuild = ''
-    pushd go/src/github.com/git-lfs/git-lfs
-      go generate ./commands
-    popd
+    GOARCH= go generate ./commands
   '';
 
   postBuild = ''
-    make -C go/src/${goPackagePath} man
+    make man
+  '';
+
+  checkInputs = [ git ];
+
+  preCheck = ''
+    unset subPackages
   '';
 
   postInstall = ''
-    installManPage go/src/${goPackagePath}/man/*.{1,5}
+    installManPage man/man*/*
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = git-lfs;
+  };
 
   meta = with lib; {
     description = "Git extension for versioning large files";
-    homepage    = "https://git-lfs.github.com/";
-    changelog   = "https://github.com/git-lfs/git-lfs/raw/v${version}/CHANGELOG.md";
-    license     = [ licenses.mit ];
-    maintainers = [ maintainers.twey maintainers.marsam ];
+    homepage = "https://git-lfs.github.com/";
+    changelog = "https://github.com/git-lfs/git-lfs/raw/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ twey marsam ];
   };
 }

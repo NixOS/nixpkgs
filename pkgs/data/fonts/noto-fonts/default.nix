@@ -4,12 +4,13 @@
 , fetchFromGitHub
 , fetchurl
 , cairo
-, python3
+, nixosTests
 , pkg-config
 , pngquant
 , which
 , imagemagick
 , zopfli
+, buildPackages
 }:
 
 let
@@ -70,11 +71,14 @@ let
         owner = "googlefonts";
         repo = "noto-cjk";
         inherit rev sha256;
+        sparseCheckout = "${typeface}/Variable/OTC";
       };
 
       installPhase = ''
-        install -m444 -Dt $out/share/fonts/opentype/noto-cjk ${typeface}/OTC/*.ttc
+        install -m444 -Dt $out/share/fonts/opentype/noto-cjk ${typeface}/Variable/OTC/*.otf.ttc
       '';
+
+      passthru.tests.noto-fonts = nixosTests.noto-fonts;
 
       meta = with lib; {
         description = "Beautiful and free fonts for CJK languages";
@@ -113,21 +117,21 @@ in
     typeface = "Sans";
     version = "2.004";
     rev = "9f7f3c38eab63e1d1fddd8d50937fe4f1eacdb1d";
-    sha256 = "sha256-BX4tcDcz+RGka8mtced1k3BopUJQ14t1BtAVqTjyPik=";
+    sha256 = "sha256-PWpcTBnBRK87ZuRI/PsGp2UMQgCCyfkLHwvB1mOl5K0=";
   };
 
   noto-fonts-cjk-serif = mkNotoCJK {
     typeface = "Serif";
     version = "2.000";
     rev = "9f7f3c38eab63e1d1fddd8d50937fe4f1eacdb1d";
-    sha256 = "sha256-BX4tcDcz+RGka8mtced1k3BopUJQ14t1BtAVqTjyPik=";
+    sha256 = "sha256-1w66Ge7DZjbONGhxSz69uFhfsjMsDiDkrGl6NsoB7dY=";
   };
 
   noto-fonts-emoji = let
     version = "2.034";
     emojiPythonEnv =
-      python3.withPackages (p: with p; [ fonttools nototools ]);
-  in stdenv.mkDerivation {
+      buildPackages.python3.withPackages (p: with p; [ fonttools nototools ]);
+  in stdenvNoCC.mkDerivation {
     pname = "noto-fonts-emoji";
     inherit version;
 
@@ -138,13 +142,17 @@ in
       sha256 = "1d6zzk0ii43iqfnjbldwp8sasyx99lbjp1nfgqjla7ixld6yp98l";
     };
 
-    nativeBuildInputs = [
+    depsBuildBuild = [
+      buildPackages.stdenv.cc
+      pkg-config
       cairo
+    ];
+
+    nativeBuildInputs = [
       imagemagick
       zopfli
       pngquant
       which
-      pkg-config
       emojiPythonEnv
     ];
 
@@ -154,14 +162,6 @@ in
       # remove check for virtualenv, since we handle
       # python requirements using python.withPackages
       sed -i '/ifndef VIRTUAL_ENV/,+2d' Makefile
-
-      # Remove check for missing zopfli, it doesn't
-      # work and we guarantee its presence already.
-      sed -i '/ifdef MISSING_ZOPFLI/,+2d' Makefile
-      sed -i '/ifeq (,$(shell which $(ZOPFLIPNG)))/,+4d' Makefile
-
-      sed -i '/ZOPFLIPNG = zopflipng/d' Makefile
-      echo "ZOPFLIPNG = ${zopfli}/bin/zopflipng" >> Makefile
 
       # Make the build verbose so it won't get culled by Hydra thinking that
       # it somehow got stuck doing nothing.

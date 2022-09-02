@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule
+{ stdenv, lib, fetchFromGitHub, buildGoModule
 , pkg-config, ffmpeg, gnutls
 }:
 
@@ -7,7 +7,7 @@ buildGoModule rec {
   version = "0.5.20";
 
   proxyVendor = true;
-  vendorSha256 = "sha256-pyPxONcWniJoA0qYusHktF3/taYda2StaMiMhyRYEm4=";
+  vendorSha256 = "sha256-aRZoAEnRai8i5H08ReW8lEFlbmarYxU0lBRhR/Llw+M=";
 
   src = fetchFromGitHub {
     owner = "livepeer";
@@ -24,6 +24,7 @@ buildGoModule rec {
   buildInputs = [ ffmpeg gnutls ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Official Go implementation of the Livepeer protocol";
     homepage = "https://livepeer.org";
     license = licenses.mit;

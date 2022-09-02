@@ -12,44 +12,44 @@ in {
   options = {
     services.monetdb = {
 
-      enable = mkEnableOption "the MonetDB database server";
+      enable = mkEnableOption (lib.mdDoc "the MonetDB database server");
 
       package = mkOption {
         type = types.package;
         default = pkgs.monetdb;
         defaultText = literalExpression "pkgs.monetdb";
-        description = "MonetDB package to use.";
+        description = lib.mdDoc "MonetDB package to use.";
       };
 
       user = mkOption {
         type = types.str;
         default = "monetdb";
-        description = "User account under which MonetDB runs.";
+        description = lib.mdDoc "User account under which MonetDB runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "monetdb";
-        description = "Group under which MonetDB runs.";
+        description = lib.mdDoc "Group under which MonetDB runs.";
       };
 
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/monetdb";
-        description = "Data directory for the dbfarm.";
+        description = lib.mdDoc "Data directory for the dbfarm.";
       };
 
       port = mkOption {
         type = types.ints.u16;
         default = 50000;
-        description = "Port to listen on.";
+        description = lib.mdDoc "Port to listen on.";
       };
 
       listenAddress = mkOption {
         type = types.str;
         default = "127.0.0.1";
         example = "0.0.0.0";
-        description = "Address to listen on.";
+        description = lib.mdDoc "Address to listen on.";
       };
     };
   };

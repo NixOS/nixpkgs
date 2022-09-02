@@ -177,17 +177,17 @@ OK
             the boot partition.
           </para>
           <programlisting>
-# parted /dev/sda -- mkpart primary 512MiB -8GiB
+# parted /dev/sda -- mkpart primary 512MB -8GB
 </programlisting>
         </listitem>
         <listitem>
           <para>
             Next, add a <emphasis>swap</emphasis> partition. The size
-            required will vary according to needs, here a 8GiB one is
+            required will vary according to needs, here a 8GB one is
             created.
           </para>
           <programlisting>
-# parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
+# parted /dev/sda -- mkpart primary linux-swap -8GB 100%
 </programlisting>
           <note>
             <para>
@@ -204,7 +204,7 @@ OK
             reserved 512MiB at the start of the disk.
           </para>
           <programlisting>
-# parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
+# parted /dev/sda -- mkpart ESP fat32 1MB 512MB
 # parted /dev/sda -- set 3 esp on
 </programlisting>
         </listitem>
@@ -242,7 +242,7 @@ OK
             live.
           </para>
           <programlisting>
-# parted /dev/sda -- mkpart primary 1MiB -8GiB
+# parted /dev/sda -- mkpart primary 1MB -8GB
 </programlisting>
         </listitem>
         <listitem>
@@ -252,7 +252,7 @@ OK
             created.
           </para>
           <programlisting>
-# parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
+# parted /dev/sda -- mkpart primary linux-swap -8GB 100%
 </programlisting>
           <note>
             <para>
@@ -411,6 +411,13 @@ OK
                 specify on which disk the GRUB boot loader is to be
                 installed. Without it, NixOS cannot boot.
               </para>
+              <para>
+                If there are other operating systems running on the
+                machine before installing NixOS, the
+                <xref linkend="opt-boot.loader.grub.useOSProber" />
+                option can be set to <literal>true</literal> to
+                automatically add them to the grub menu.
+              </para>
             </listitem>
           </varlistentry>
           <varlistentry>
@@ -419,7 +426,9 @@ OK
             </term>
             <listitem>
               <para>
-                You <emphasis>must</emphasis> set the option
+                You must select a boot-loader, either system-boot or
+                GRUB. The recommended option is systemd-boot: set the
+                option
                 <xref linkend="opt-boot.loader.systemd-boot.enable" />
                 to <literal>true</literal>.
                 <literal>nixos-generate-config</literal> should do this
@@ -433,16 +442,26 @@ OK
                 <link linkend="opt-boot.loader.systemd-boot.enable"><literal>boot.loader.systemd-boot</literal></link>
                 as well.
               </para>
+              <para>
+                If you want to use GRUB, set
+                <xref linkend="opt-boot.loader.grub.device" /> to
+                <literal>nodev</literal> and
+                <xref linkend="opt-boot.loader.grub.efiSupport" /> to
+                <literal>true</literal>.
+              </para>
+              <para>
+                With system-boot, you should not need any special
+                configuration to detect other installed systems. With
+                GRUB, set
+                <xref linkend="opt-boot.loader.grub.useOSProber" /> to
+                <literal>true</literal>, but this will only detect
+                windows partitions, not other linux distributions. If
+                you dual boot another linux distribution, use
+                system-boot instead.
+              </para>
             </listitem>
           </varlistentry>
         </variablelist>
-        <para>
-          If there are other operating systems running on the machine
-          before installing NixOS, the
-          <xref linkend="opt-boot.loader.grub.useOSProber" /> option can
-          be set to <literal>true</literal> to automatically add them to
-          the grub menu.
-        </para>
         <para>
           If you need to configure networking for your machine the
           configuration options are described in
@@ -638,6 +657,7 @@ $ passwd eelco
     <title>Additional installation notes</title>
     <xi:include href="installing-usb.section.xml" />
     <xi:include href="installing-pxe.section.xml" />
+    <xi:include href="installing-kexec.section.xml" />
     <xi:include href="installing-virtualbox-guest.section.xml" />
     <xi:include href="installing-from-other-distro.section.xml" />
     <xi:include href="installing-behind-a-proxy.section.xml" />

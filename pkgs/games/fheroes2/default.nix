@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, gettext, libpng, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, zlib
+, gettext, glibcLocalesUtf8, libpng, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, zlib
 
 # updater only
 , nix-update-script
@@ -7,27 +7,37 @@
 
 stdenv.mkDerivation rec {
   pname = "fheroes2";
-  version = "0.9.11";
+  version = "0.9.18";
 
   src = fetchFromGitHub {
     owner = "ihhub";
     repo = "fheroes2";
     rev = version;
-    sha256 = "sha256-p2FG4oWLTGflOoxsp8A+FpoVHfKiEw3DEnK8n3UiBtU=";
+    sha256 = "sha256-I79PoNE6GFvYD4jnsxKo7MsoPgVow8b8fTIiClOGnAI=";
   };
 
-  buildInputs = [ gettext libpng SDL2 SDL2_image SDL2_mixer SDL2_ttf zlib ];
+  buildInputs = [ gettext glibcLocalesUtf8 libpng SDL2 SDL2_image SDL2_mixer SDL2_ttf zlib ];
 
   makeFlags = [
     "FHEROES2_STRICT_COMPILATION=1"
+    "FHEROES2_DATA=\"${placeholder "out"}/share/fheroes2\""
   ];
 
   enableParallelBuilding = true;
+
+  postBuild = ''
+    # Pick guaranteed to be present UTF-8 locale.
+    # Otherwise `iconv` calls fail to produce valid translations.
+    LANG=en_US.UTF_8 make -C files/lang
+  '';
 
   installPhase = ''
     runHook preInstall
 
     install -Dm755 $PWD/src/dist/fheroes2 $out/bin/fheroes2
+
+    install -Dm644 -t $out/share/fheroes2/files/lang $PWD/files/lang/*.mo
+    install -Dm644 -t $out/share/fheroes2/files/data $PWD/files/data/resurrection.h2d
 
     runHook postInstall
   '';

@@ -1,0 +1,27 @@
+From 7326421eeaadbc2aeb3828628c2e65bb7be323a9 Mon Sep 17 00:00:00 2001
+From: buxit <buti@bux.at>
+Date: Wed, 2 Nov 2016 16:25:14 +0100
+Subject: [PATCH] fix 60 seconds delay
+
+use `libusb_handle_events_timeout_completed()` instead of `libusb_handle_events()`
+should fix #144
+---
+ src/usb_gsource.cpp | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/usb_gsource.cpp b/src/usb_gsource.cpp
+index 00bf1315..afb38f65 100644
+--- a/src/usb_gsource.cpp
++++ b/src/usb_gsource.cpp
+@@ -174,7 +174,10 @@ USBGSource::on_source_dispatch(GSource* source, GSourceFunc callback, gpointer u
+ gboolean
+ USBGSource::on_source()
+ {
+-  libusb_handle_events(NULL);
++  struct timeval to;
++  to.tv_sec = 0;
++  to.tv_usec = 0;
++  libusb_handle_events_timeout_completed(NULL, &to, NULL);
+   return TRUE;
+ }
+ 

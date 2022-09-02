@@ -1,21 +1,81 @@
-{ lib, fetchPypi, buildPythonPackage, six }:
+{ lib
+, buildPythonPackage
+, deprecated
+, fetchFromGitHub
+, hiro
+, packaging
+, pymemcache
+, pymongo
+, pytest-asyncio
+, pytest-lazy-fixture
+, pytestCheckHook
+, pythonOlder
+, redis
+, setuptools
+, typing-extensions
+}:
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "1.6";
+  version = "2.7.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6c0a57b42647f1141f5a7a0a8479b49e4367c24937a01bd9d4063a595c2dd48a";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "alisaifee";
+    repo = pname;
+    rev = version;
+    # Upstream uses versioneer, which relies on git attributes substitution.
+    # This leads to non-reproducible archives on github. Remove the substituted
+    # file here, and recreate it later based on our version info.
+    postFetch = ''
+      rm "$out/limits/_version.py"
+    '';
+    hash = "sha256-TBZElCogPtoR2qX1YjBgpYh99LhrvLHFtr2ogemo9/c=";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [
+    deprecated
+    packaging
+    setuptools
+    typing-extensions
+  ];
 
-  doCheck = false; # ifilter
+  checkInputs = [
+    hiro
+    pymemcache
+    pymongo
+    pytest-asyncio
+    pytest-lazy-fixture
+    pytestCheckHook
+    redis
+  ];
+
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace "--cov=limits" "" \
+      --replace "-K" ""
+
+    # Recreate _version.py, deleted at fetch time due to non-reproducibility.
+    echo 'def get_versions(): return {"version": "${version}"}' > limits/_version.py
+  '';
+
+  pythonImportsCheck = [
+    "limits"
+  ];
+
+  pytestFlagsArray = [
+    # All other tests require a running Docker instance
+    "tests/test_limits.py"
+    "tests/test_ratelimit_parser.py"
+    "tests/test_limit_granularities.py"
+  ];
 
   meta = with lib; {
     description = "Rate limiting utilities";
-    license = licenses.mit;
     homepage = "https://limits.readthedocs.org/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

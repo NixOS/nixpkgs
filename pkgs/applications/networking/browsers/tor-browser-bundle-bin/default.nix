@@ -87,7 +87,7 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "11.0.4";
+  version = "11.5.2";
 
   lang = "en-US";
 
@@ -96,16 +96,18 @@ let
       urls = [
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
+        "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
-      sha256 = "0pz1v5ig031wgnq3191ja08a4brdrbzziqnkpcrlra1wcdnzv985";
+      sha256 = "sha256-kM3OOFTpEU7nIyqqdGcqLZ86QLb6isM5cfWG7jo891o=";
     };
 
     i686-linux = fetchurl {
       urls = [
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
+        "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      sha256 = "0ykdgbm8f5lcv7p54f3ffxsaw2cdzbhk6sv7d2hm7d81fcnhmjq4";
+      sha256 = "sha256-62dGoIqaCrSzsDjvt8c5hEAwOSTFst9PCpvMzveBukY=";
     };
   };
 in
@@ -125,7 +127,7 @@ stdenv.mkDerivation rec {
     desktopName = "Tor Browser";
     genericName = "Web Browser";
     comment = meta.description;
-    categories = "Network;WebBrowser;Security;";
+    categories = [ "Network" "WebBrowser" "Security" ];
   };
 
   buildCommand = ''
@@ -355,7 +357,7 @@ stdenv.mkDerivation rec {
       TMPDIR="\''${TMPDIR:-/tmp}" \
       HOME="\$HOME" \
       XAUTHORITY="\''${XAUTHORITY:-\$HOME/.Xauthority}" \
-      DISPLAY="\$DISPLAY" \
+      DISPLAY="\''${DISPLAY:-}" \
       DBUS_SESSION_BUS_ADDRESS="\''${DBUS_SESSION_BUS_ADDRESS:-unix:path=\$XDG_RUNTIME_DIR/bus}" \\
       \
       XDG_DATA_HOME="\$HOME/.local/share" \
@@ -363,6 +365,11 @@ stdenv.mkDerivation rec {
       \
       PULSE_SERVER="\''${PULSE_SERVER:-}" \
       PULSE_COOKIE="\''${PULSE_COOKIE:-}" \
+      \
+      MOZ_ENABLE_WAYLAND="\''${MOZ_ENABLE_WAYLAND:-}" \
+      WAYLAND_DISPLAY="\''${WAYLAND_DISPLAY:-}" \
+      XDG_RUNTIME_DIR="\''${XDG_RUNTIME_DIR:-}" \
+      XCURSOR_PATH="\''${XCURSOR_PATH:-}" \
       \
       APULSE_PLAYBACK_DEVICE="\''${APULSE_PLAYBACK_DEVICE:-plug:dmix}" \
       \
@@ -402,7 +409,7 @@ stdenv.mkDerivation rec {
     LD_LIBRARY_PATH=$libPath $TBB_IN_STORE/TorBrowser/Tor/tor --version >/dev/null
 
     echo "Checking tor-browser wrapper ..."
-    DISPLAY="" XAUTHORITY="" DBUS_SESSION_BUS_ADDRESS="" TBB_HOME=$(mktemp -d) \
+      TBB_HOME=$(mktemp -d) \
       $out/bin/tor-browser --version >/dev/null
   '';
 
@@ -427,5 +434,6 @@ stdenv.mkDerivation rec {
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.
     license = licenses.free;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

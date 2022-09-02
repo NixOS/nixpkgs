@@ -7,6 +7,7 @@
 # This will cause c_rehash to refer to perl via the environment, but otherwise
 # will produce a perfectly functional openssl binary and library.
 , withPerl ? stdenv.hostPlatform == stdenv.buildPlatform
+, removeReferencesTo
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -43,9 +44,23 @@ let
       substituteInPlace crypto/async/arch/async_posix.h \
         --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
                   '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
+    ''
+    # Move ENGINESDIR into OPENSSLDIR for static builds, in order to move
+    # it to the separate etc output.
+    + lib.optionalString static ''
+      substituteInPlace Configurations/unix-Makefile.tmpl \
+        --replace 'ENGINESDIR=$(libdir)/engines-{- $sover_dirname -}' \
+                  'ENGINESDIR=$(OPENSSLDIR)/engines-{- $sover_dirname -}'
     '';
 
-    outputs = [ "bin" "dev" "out" "man" ] ++ lib.optional withDocs "doc";
+    outputs = [ "bin" "dev" "out" "man" ]
+      ++ lib.optional withDocs "doc"
+      # Separate output for the runtime dependencies of the static build.
+      # Specifically, move OPENSSLDIR into this output, as its path will be
+      # compiled into 'libcrypto.a'. This makes it a runtime dependency of
+      # any package that statically links openssl, so we want to keep that
+      # output minimal.
+      ++ lib.optional static "etc";
     setOutputFlags = false;
     separateDebugInfo =
       !stdenv.hostPlatform.isDarwin &&
@@ -69,6 +84,12 @@ let
         x86_64-linux = "./Configure linux-x86_64";
         x86_64-solaris = "./Configure solaris64-x86_64-gcc";
         riscv64-linux = "./Configure linux64-riscv64";
+        mips64el-linux =
+          if stdenv.hostPlatform.isMips64n64
+          then "./Configure linux64-mips64"
+          else if stdenv.hostPlatform.isMips64n32
+          then "./Configure linux-mips64"
+          else throw "unsupported ABI for ${stdenv.hostPlatform.system}";
       }.${stdenv.hostPlatform.system} or (
         if stdenv.hostPlatform == stdenv.buildPlatform
           then "./config"
@@ -95,7 +116,14 @@ let
     configureFlags = [
       "shared" # "shared" builds both shared and static libraries
       "--libdir=lib"
-      "--openssldir=etc/ssl"
+      (if !static then
+         "--openssldir=etc/ssl"
+       else
+         # Move OPENSSLDIR to the 'etc' output for static builds. Prepend '/.'
+         # to the path to make it appear absolute before variable expansion,
+         # else the 'prefix' would be prepended to it.
+         "--openssldir=/.$(etc)/etc/ssl"
+      )
     ] ++ lib.optionals withCryptodev [
       "-DHAVE_CRYPTODEV"
       "-DUSE_CRYPTODEV_DIGESTS"
@@ -106,7 +134,11 @@ let
       # OpenSSL needs a specific `no-shared` configure flag.
       # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
       # for a comprehensive list of configuration options.
-      ++ lib.optional (lib.versionAtLeast version "1.1.0" && static) "no-shared";
+      ++ lib.optional (lib.versionAtLeast version "1.1.0" && static) "no-shared"
+      # This introduces a reference to the CTLOG_FILE which is undesired when
+      # trying to build binaries statically.
+      ++ lib.optional static "no-ct"
+      ;
 
     makeFlags = [
       "MANDIR=$(man)/share/man"
@@ -120,13 +152,19 @@ let
     enableParallelBuilding = true;
 
     postInstall =
-    lib.optionalString (!static) ''
+    (if static then ''
+      # OPENSSLDIR has a reference to self
+      ${removeReferencesTo}/bin/remove-references-to -t $out $out/lib/*.a
+    '' else ''
       # If we're building dynamic libraries, then don't install static
       # libraries.
       if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib $out/lib/*.dll)" ]; then
           rm "$out/lib/"*.a
       fi
-    '' + lib.optionalString (!stdenv.hostPlatform.isWindows)
+
+      # 'etc' is a separate output on static builds only.
+      etc=$out
+    '') + lib.optionalString (!stdenv.hostPlatform.isWindows)
       # Fix bin/c_rehash's perl interpreter line
       #
       # - openssl 1_0_2: embeds a reference to buildPackages.perl
@@ -147,14 +185,15 @@ let
       mv $out/include $dev/
 
       # remove dependency on Perl at runtime
-      rm -r $out/etc/ssl/misc
+      rm -r $etc/etc/ssl/misc
 
-      rmdir $out/etc/ssl/{certs,private}
+      rmdir $etc/etc/ssl/{certs,private}
     '';
 
     postFixup = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
-      # Check to make sure the main output doesn't depend on perl
-      if grep -r '${buildPackages.perl}' $out; then
+      # Check to make sure the main output and the static runtime dependencies
+      # don't depend on perl
+      if grep -r '${buildPackages.perl}' $out $etc; then
         echo "Found an erroneous dependency on perl ^^^" >&2
         exit 1
       fi
@@ -170,24 +209,10 @@ let
 
 in {
 
-  openssl_1_0_2 = common {
-    version = "1.0.2u";
-    sha256 = "ecd0c6ffb493dd06707d38b14bb4d8c2288bb7033735606569d8f90f89669d16";
-    patches = [
-      ./1.0.2/nix-ssl-cert-file.patch
-
-      (if stdenv.hostPlatform.isDarwin
-       then ./1.0.2/use-etc-ssl-certs-darwin.patch
-       else ./1.0.2/use-etc-ssl-certs.patch)
-    ] ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
-      ./1.0.2/darwin64-arm64.patch
-    ];
-    extraMeta.knownVulnerabilities = [ "Support for OpenSSL 1.0.2 ended with 2019." ];
-  };
 
   openssl_1_1 = common rec {
-    version = "1.1.1m";
-    sha256 = "sha256-+JGZvosjykX8fLnx2NPuZzEjGChq0DD1MWrKZGLbbJY=";
+    version = "1.1.1q";
+    sha256 = "sha256-15Oc5hQCnN/wtsIPDi5XAxWKSJpyslB7i9Ub+Mj9EMo=";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 
@@ -200,9 +225,9 @@ in {
     withDocs = true;
   };
 
-  openssl_3_0 = common {
-    version = "3.0.1";
-    sha256 = "sha256-wxGthTNTvOeW7a0BqGLFCopYf2Ln4hAO9GWrU+ybBtE=";
+  openssl_3 = common {
+    version = "3.0.5";
+    sha256 = "sha256-qn2Nm+9xrWUlxVuhHl9Dl4ic5Jwsk0nc6m0+TwsCSno=";
     patches = [
       ./3.0/nix-ssl-cert-file.patch
 

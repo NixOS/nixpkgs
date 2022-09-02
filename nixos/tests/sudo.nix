@@ -28,6 +28,10 @@ in
           enable = true;
           wheelNeedsPassword = false;
 
+          extraConfig = ''
+            Defaults lecture="never"
+          '';
+
           extraRules = [
             # SUDOERS SYNTAX CHECK (Test whether the module produces a valid output;
             # errors being detected by the visudo checks.

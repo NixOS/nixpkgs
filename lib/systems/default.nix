@@ -8,7 +8,13 @@ rec {
   platforms = import ./platforms.nix { inherit lib; };
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
-  supported = import ./supported.nix { inherit lib; };
+
+  /* List of all Nix system doubles the nixpkgs flake will expose the package set
+     for. All systems listed here must be supported by nixpkgs as `localSystem`.
+
+     **Warning**: This attribute is considered experimental and is subject to change.
+  */
+  flakeExposed = import ./flake-systems.nix { };
 
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
   # necessary.
@@ -25,8 +31,12 @@ rec {
       # Either of these can be losslessly-extracted from `parsed` iff parsing succeeds.
       system = parse.doubleFromSystem final.parsed;
       config = parse.tripleFromSystem final.parsed;
-      # Determine whether we are compatible with the provided CPU
-      isCompatible = platform: parse.isCompatible final.parsed.cpu platform.parsed.cpu;
+      # Determine whether we can execute binaries built for the provided platform.
+      canExecute = platform:
+        final.isAndroid == platform.isAndroid &&
+        parse.isCompatible final.parsed.cpu platform.parsed.cpu
+        && final.parsed.kernel == platform.parsed.kernel;
+      isCompatible = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
       # Derived meta-data
       libc =
         /**/ if final.isDarwin              then "libSystem"
@@ -55,11 +65,17 @@ rec {
         # is why we use the more obscure "bfd" and not "binutils" for this
         # choice.
         else                                     "bfd";
-      extensions = {
+      extensions = rec {
         sharedLibrary =
           /**/ if final.isDarwin  then ".dylib"
           else if final.isWindows then ".dll"
           else                         ".so";
+        staticLibrary =
+          /**/ if final.isWindows then ".lib"
+          else                         ".a";
+        library =
+          /**/ if final.isStatic then staticLibrary
+          else                        sharedLibrary;
         executable =
           /**/ if final.isWindows then ".exe"
           else                         "";
@@ -105,7 +121,10 @@ rec {
         else if final.isAarch64 then "arm64"
         else if final.isx86_32 then "i386"
         else if final.isx86_64 then "x86_64"
-        else if final.isMips then "mips"
+        # linux kernel does not distinguish microblaze/microblazeel
+        else if final.isMicroBlaze then "microblaze"
+        else if final.isMips32 then "mips"
+        else if final.isMips64 then "mips"    # linux kernel does not distinguish mips32/mips64
         else if final.isPower then "powerpc"
         else if final.isRiscV then "riscv"
         else if final.isS390 then "s390"
@@ -158,7 +177,7 @@ rec {
         wine = (pkgs.winePackagesFor wine-name).minimal;
       in
         if final.parsed.kernel.name == pkgs.stdenv.hostPlatform.parsed.kernel.name &&
-           pkgs.stdenv.hostPlatform.isCompatible final
+           pkgs.stdenv.hostPlatform.canExecute final
         then "${pkgs.runtimeShell} -c '\"$@\"' --"
         else if final.isWindows
         then "${wine}/bin/${wine-name}"

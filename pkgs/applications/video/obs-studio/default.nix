@@ -6,7 +6,7 @@
 , addOpenGLRunpath
 , cmake
 , fdk_aac
-, ffmpeg
+, ffmpeg_4
 , jansson
 , libjack2
 , libxkbcommon
@@ -34,8 +34,10 @@
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
 , libpulseaudio
 , libcef
+, pciutils
 , pipewireSupport ? stdenv.isLinux
 , pipewire
+, libdrm
 }:
 
 let
@@ -44,22 +46,19 @@ let
 in
 mkDerivation rec {
   pname = "obs-studio";
-  version = "27.0.1";
+  version = "27.2.4";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = version;
-    sha256 = "04fzsr9yizmxy0r7z2706crvnsnybpnv5kgfn77znknxxjacfhkn";
+    sha256 = "sha256-OiSejQovSmhItrnrQlcVp9PCDRgAhuxTinSpXbH8bo0=";
     fetchSubmodules = true;
   };
 
   patches = [
     # Lets obs-browser build against CEF 90.1.0+
     ./Enable-file-access-and-universal-access-for-file-URL.patch
-
-    # Lets obs-browser build against CEF 91.1.0+
-    ./Change-product_version-to-user_agent_product.patch
   ];
 
   nativeBuildInputs = [
@@ -73,7 +72,7 @@ mkDerivation rec {
   buildInputs = [
     curl
     fdk_aac
-    ffmpeg
+    ffmpeg_4
     jansson
     libcef
     libjack2
@@ -89,11 +88,12 @@ mkDerivation rec {
     x264
     libvlc
     mbedtls
+    pciutils
   ]
   ++ optionals scriptingSupport [ luajit python3 ]
   ++ optional alsaSupport alsa-lib
   ++ optional pulseaudioSupport libpulseaudio
-  ++ optional pipewireSupport pipewire;
+  ++ optionals pipewireSupport [ pipewire libdrm ];
 
   # Copied from the obs-linuxbrowser
   postUnpack = ''
@@ -140,8 +140,9 @@ mkDerivation rec {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ jb55 MP2E V ];
+    maintainers = with maintainers; [ jb55 MP2E V miangraham ];
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    mainProgram = "obs";
   };
 }

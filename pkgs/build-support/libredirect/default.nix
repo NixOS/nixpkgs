@@ -27,7 +27,7 @@ else stdenv.mkDerivation rec {
 
   outputs = ["out" "hook"];
 
-  libName = "libredirect" + stdenv.targetPlatform.extensions.sharedLibrary;
+  libName = "libredirect" + stdenv.hostPlatform.extensions.sharedLibrary;
 
   buildPhase = ''
     runHook preBuild
@@ -57,7 +57,9 @@ else stdenv.mkDerivation rec {
     ''}
 
     if [ -n "$doInstallCheck" ]; then
-      $CC -Wall -std=c99 -O3 test.c -o test
+      $CC -Wall -std=c99 \
+        ${lib.optionalString (!stdenv.isDarwin) "-D_GNU_SOURCE"} \
+        -O3 test.c -o test
     fi
 
     runHook postBuild
@@ -97,7 +99,7 @@ else stdenv.mkDerivation rec {
   installCheckPhase = ''
     (
       source "$hook/nix-support/setup-hook"
-      NIX_REDIRECTS="/foo/bar/test=${coreutils}/bin/true" ./test
+      NIX_REDIRECTS="/foo/bar/test=${coreutils}/bin/true:/bar/baz=$(mktemp -d)" ./test
     )
   '';
 

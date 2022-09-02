@@ -8,6 +8,8 @@
 , libsodium
 , protobufc
 , hiredis
+, python ? null
+, swig
 , dns-root-data
 , pkg-config
 , makeWrapper
@@ -32,28 +34,36 @@
 , withDNSTAP ? false
 , withTFO ? false
 , withRedis ? false
-# Avoid .lib depending on openssl.out
+# Avoid .lib depending on lib.getLib openssl
 # The build gets a little hacky, so in some cases we disable this approach.
 , withSlimLib ? stdenv.isLinux && !stdenv.hostPlatform.isMusl && !withDNSTAP
+# enable support for python plugins in unbound: note this is distinct from pyunbound
+# see https://unbound.docs.nlnetlabs.nl/en/latest/developer/python-modules.html
+, withPythonModule ? false
 , libnghttp2
+
+# for passthru.tests
+, gnutls
 }:
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.14.0";
+  version = "1.16.2";
 
   src = fetchurl {
     url = "https://nlnetlabs.nl/downloads/unbound/unbound-${version}.tar.gz";
-    sha256 = "sha256-bvkcvwLVKZ6rOTKMCFc5Pee0iFov5yM93+PBJP9aicg=";
+    hash = "sha256-LjLyg4IMJMUcod2K/s/bdHxzhaE3q+hlyZ20sldANYE=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optionals withPythonModule [ swig ];
 
   buildInputs = [ openssl nettle expat libevent ]
     ++ lib.optionals withSystemd [ pkg-config systemd ]
-    ++ lib.optionals withDoH [ libnghttp2 ];
+    ++ lib.optionals withDoH [ libnghttp2 ]
+    ++ lib.optionals withPythonModule [ python ];
 
   configureFlags = [
     "--with-ssl=${openssl.dev}"
@@ -69,6 +79,8 @@ stdenv.mkDerivation rec {
     "--disable-flto"
   ] ++ lib.optionals withSystemd [
     "--enable-systemd"
+  ] ++ lib.optionals withPythonModule [
+    "--with-pythonmodule"
   ] ++ lib.optionals withDoH [
     "--with-libnghttp2=${libnghttp2.dev}"
   ] ++ lib.optionals withECS [
@@ -100,17 +112,26 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  postPatch = lib.optionalString withPythonModule ''
+    substituteInPlace Makefile.in \
+      --replace "\$(DESTDIR)\$(PYTHON_SITE_PKG)" "$out/${python.sitePackages}"
+  '';
+
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
 
   postInstall = ''
     make unbound-event-install
     wrapProgram $out/bin/unbound-control-setup \
       --prefix PATH : ${lib.makeBinPath [ openssl ]}
+  '' + lib.optionalString withPythonModule ''
+    wrapProgram $out/bin/unbound \
+      --prefix PYTHONPATH : "$out/${python.sitePackages}" \
+      --argv0 $out/bin/unbound
   '';
 
   preFixup = lib.optionalString withSlimLib
     # Build libunbound again, but only against nettle instead of openssl.
-    # This avoids gnutls.out -> unbound.lib -> openssl.out.
+    # This avoids gnutls.out -> unbound.lib -> lib.getLib openssl.
     ''
       configureFlags="$configureFlags --with-nettle=${nettle.dev} --with-libunbound-only"
       configurePhase
@@ -126,13 +147,16 @@ stdenv.mkDerivation rec {
     (pkg: lib.optionalString (pkg ? dev) " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' --replace '-R${pkg.dev}/lib' '-R${pkg.out}/lib'")
     (builtins.filter (p: p != null) buildInputs);
 
-  passthru.tests = nixosTests.unbound;
+  passthru.tests = {
+    inherit gnutls;
+    nixos-test = nixosTests.unbound;
+  };
 
   meta = with lib; {
     description = "Validating, recursive, and caching DNS resolver";
     license = licenses.bsd3;
     homepage = "https://www.unbound.net";
-    maintainers = with maintainers; [ ehmry fpletz globin ];
+    maintainers = with maintainers; [ ajs124 ];
     platforms = platforms.unix;
   };
 }

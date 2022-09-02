@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, openssl, pkg-config, libnl
 , nixosTests, wpa_supplicant_gui
-, withDbus ? true, dbus
+, dbusSupport ? true, dbus
 , withReadline ? true, readline
 , withPcsclite ? true, pcsclite
 , readOnlyModeSSIDs ? false
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Fix a bug when using two config files
+    ./Use-unique-IDs-for-networks-and-credentials.patch
   ] ++ lib.optionals readOnlyModeSSIDs [
     # Allow read-only networks
     ./0001-Implement-read-only-mode-for-ssids.patch
@@ -26,46 +28,48 @@ stdenv.mkDerivation rec {
   # TODO: Patch epoll so that the dbus actually responds
   # TODO: Figure out how to get privsep working, currently getting SIGBUS
   extraConfig = ''
+    #CONFIG_ELOOP_EPOLL=y
+    #CONFIG_PRIVSEP=y
+    #CONFIG_TLSV12=y see #8332
     CONFIG_AP=y
-    CONFIG_LIBNL32=y
+    CONFIG_BGSCAN_LEARN=y
+    CONFIG_BGSCAN_SIMPLE=y
+    CONFIG_DEBUG_SYSLOG=y
+    CONFIG_EAP_EKE=y
     CONFIG_EAP_FAST=y
-    CONFIG_EAP_PWD=y
-    CONFIG_EAP_PAX=y
-    CONFIG_EAP_SAKE=y
     CONFIG_EAP_GPSK=y
     CONFIG_EAP_GPSK_SHA256=y
+    CONFIG_EAP_IKEV2=y
+    CONFIG_EAP_PAX=y
+    CONFIG_EAP_PWD=y
+    CONFIG_EAP_SAKE=y
+    CONFIG_ELOOP=eloop
+    CONFIG_EXT_PASSWORD_FILE=y
+    CONFIG_HS20=y
+    CONFIG_HT_OVERRIDES=y
+    CONFIG_IEEE80211AC=y
+    CONFIG_IEEE80211N=y
+    CONFIG_IEEE80211R=y
+    CONFIG_IEEE80211W=y
+    CONFIG_INTERNETWORKING=y
+    CONFIG_L2_PACKET=linux
+    CONFIG_LIBNL32=y
     CONFIG_OWE=y
+    CONFIG_P2P=y
+    CONFIG_TDLS=y
+    CONFIG_TLS=openssl
+    CONFIG_TLSV11=y
+    CONFIG_VHT_OVERRIDES=y
+    CONFIG_WNM=y
     CONFIG_WPS=y
     CONFIG_WPS_ER=y
     CONFIG_WPS_NFS=y
-    CONFIG_EAP_IKEV2=y
-    CONFIG_EAP_EKE=y
-    CONFIG_HT_OVERRIDES=y
-    CONFIG_VHT_OVERRIDES=y
-    CONFIG_ELOOP=eloop
-    #CONFIG_ELOOP_EPOLL=y
-    CONFIG_L2_PACKET=linux
-    CONFIG_IEEE80211W=y
-    CONFIG_TLS=openssl
-    CONFIG_TLSV11=y
-    #CONFIG_TLSV12=y see #8332
-    CONFIG_IEEE80211R=y
-    CONFIG_DEBUG_SYSLOG=y
-    #CONFIG_PRIVSEP=y
-    CONFIG_IEEE80211N=y
-    CONFIG_IEEE80211AC=y
-    CONFIG_INTERNETWORKING=y
-    CONFIG_HS20=y
-    CONFIG_P2P=y
-    CONFIG_TDLS=y
-    CONFIG_BGSCAN_SIMPLE=y
-    CONFIG_BGSCAN_LEARN=y
   '' + optionalString withPcsclite ''
     CONFIG_EAP_SIM=y
     CONFIG_EAP_AKA=y
     CONFIG_EAP_AKA_PRIME=y
     CONFIG_PCSC=y
-  '' + optionalString withDbus ''
+  '' + optionalString dbusSupport ''
     CONFIG_CTRL_IFACE_DBUS=y
     CONFIG_CTRL_IFACE_DBUS_NEW=y
     CONFIG_CTRL_IFACE_DBUS_INTRO=y
@@ -90,7 +94,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ openssl libnl ]
-    ++ optional withDbus dbus
+    ++ optional dbusSupport dbus
     ++ optional withReadline readline
     ++ optional withPcsclite pcsclite;
 

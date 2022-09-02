@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "09mhbr8x66ykhf5581a5zjpplpjxibqzgkkpx689kybwg0wk1cw3";
   };
 
-  buildInputs = [ automake autoconf libtool ];
+  nativeBuildInputs = [ automake autoconf ];
+  buildInputs = [ libtool ];
 
   # .so endings are missing (quick and dirty fix)
   postInstall = ''

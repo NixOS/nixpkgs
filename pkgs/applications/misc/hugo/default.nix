@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "hugo";
-  version = "0.92.0";
+  version = "0.102.2";
 
   src = fetchFromGitHub {
     owner = "gohugoio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-rzAt6jGj1MJ5AvkEKjAH91mKnUcLOPgHgiDkzkdibks=";
+    sha256 = "sha256-mAkdx42JaYSSpNLssBNkX45V3VniVKVbPt2SQ/QaXmY=";
   };
 
-  vendorSha256 = "sha256-ftA7ktZ6dEownEwJC4tK5/V3fl8toACiFiq9xTa7NE4=";
+  vendorSha256 = "sha256-oWOu8vmxe0a/nIgkjpx7XrB49rjcuqnnpuOMtI9bLfY=";
 
   doCheck = false;
 
@@ -23,13 +23,15 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  ldflags = [ "-s" "-w" "-X github.com/gohugoio/hugo/common/hugo.vendorInfo=nixpkgs" ];
+
   postInstall = ''
     $out/bin/hugo gen man
     installManPage man/*
     installShellCompletion --cmd hugo \
-      --bash <($out/bin/hugo gen autocomplete --type=bash) \
-      --fish <($out/bin/hugo gen autocomplete --type=fish) \
-      --zsh <($out/bin/hugo gen autocomplete --type=zsh)
+      --bash <($out/bin/hugo completion bash) \
+      --fish <($out/bin/hugo completion fish) \
+      --zsh <($out/bin/hugo completion zsh)
   '';
 
   meta = with lib; {

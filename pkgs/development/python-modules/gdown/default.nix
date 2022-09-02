@@ -11,12 +11,12 @@
 
 buildPythonApplication rec {
   pname = "gdown";
-  version = "4.2.0";
+  version = "4.5.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bd871c125242a9d3691aa74f360b6b5268a58c13991bb2405fdb3ec3028307dc";
+    sha256 = "sha256-ghcGEGPYr8qtnY4tVBD7wJicKz8JRqa9m/65RhYWzGo=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +26,8 @@ buildPythonApplication rec {
     tqdm
     setuptools
     six
-  ];
+  ]
+  ++ requests.optional-dependencies.socks;
 
   checkPhase = ''
     $out/bin/gdown --help > /dev/null

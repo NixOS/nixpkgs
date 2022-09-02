@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "readme-renderer";
-  version = "32.0";
+  version = "37.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "readme_renderer";
     inherit version;
-    sha256 = "sha256-tRK+r6Z5gmDH1a8+Gx8Jfli/zZpXXafE3dXgN0kKW4U=";
+    sha256 = "sha256-B7fqI04D5Y93zCIuIG5qu49MBDW+zOUQR5TuWR+TAcU=";
   };
 
   propagatedBuildInputs = [
@@ -39,6 +39,17 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "cmarkgfm>=0.5.0,<0.7.0" "cmarkgfm>=0.5.0,<1"
   '';
+
+  disabledTests = [
+    # https://github.com/pypa/readme_renderer/issues/221
+    "test_GFM_"
+    # Relies on old distutils behaviour removed by setuptools (TypeError: dist must be a Distribution instance)
+    "test_valid_rst"
+    "test_invalid_rst"
+    "test_malicious_rst"
+    "test_invalid_missing"
+    "test_invalid_empty"
+  ];
 
   pythonImportsCheck = [
     "readme_renderer"

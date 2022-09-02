@@ -37,9 +37,16 @@ stdenv.mkDerivation rec {
     verilog
   ];
 
+  # the "translate" target both (a) builds the software and (b) runs
+  # the tests (without validating the results)
+  buildTargets = [ "translate" ];
+
+  # the "diff" target examines the test results
+  checkTarget = "diff";
+
   installPhase = ''
     runHook preInstall
-    install -D -m755 src/vhd2vl $out/bin/vdh2vl
+    install -D -m755 src/vhd2vl $out/bin/vhd2vl
     runHook postInstall
   '';
 

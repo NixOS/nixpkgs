@@ -35,7 +35,7 @@ let
     *      };
     *      exporterTest = ''
     *        wait_for_unit("prometheus-<exporterName>-exporter.service")
-    *        wait_for_open_port("1234")
+    *        wait_for_open_port(1234)
     *        succeed("curl -sSf 'localhost:1234/metrics'")
     *      '';
     *    };
@@ -52,7 +52,7 @@ let
     *    testScript = ''
     *      <exporterName>.start()
     *      <exporterName>.wait_for_unit("prometheus-<exporterName>-exporter.service")
-    *      <exporterName>.wait_for_open_port("1234")
+    *      <exporterName>.wait_for_open_port(1234)
     *      <exporterName>.succeed("curl -sSf 'localhost:1234/metrics'")
     *      <exporterName>.shutdown()
     *    '';
@@ -557,10 +557,12 @@ let
         systemd.services.prometheus-mail-exporter = {
           after = [ "postfix.service" ];
           requires = [ "postfix.service" ];
-          preStart = ''
-            mkdir -p -m 0700 mail-exporter/new
-          '';
           serviceConfig = {
+            ExecStartPre = [
+              "${pkgs.writeShellScript "create-maildir" ''
+                mkdir -p -m 0700 mail-exporter/new
+              ''}"
+            ];
             ProtectHome = true;
             ReadOnlyPaths = "/";
             ReadWritePaths = "/var/spool/mail";
@@ -672,7 +674,7 @@ let
             basicAuth.nextcloud-exporter = "snakeoilpw";
             locations."/" = {
               root = "${pkgs.prometheus-nextcloud-exporter.src}/serverinfo/testdata";
-              tryFiles = "/negative-space.xml =404";
+              tryFiles = "/negative-space.json =404";
             };
           };
         };
@@ -933,6 +935,27 @@ let
       '';
     };
 
+    pve = let
+      pveExporterEnvFile = pkgs.writeTextFile {
+        name = "pve.env";
+        text = ''
+          PVE_USER="test_user@pam"
+          PVE_PASSWORD="hunter3"
+          PVE_VERIFY_SSL="false"
+        '';
+      };
+    in {
+      exporterConfig = {
+        enable = true;
+        environmentFile = pveExporterEnvFile;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-pve-exporter.service")
+        wait_for_open_port(9221)
+        wait_until_succeeds("curl localhost:9221")
+      '';
+    };
+
     py-air-control = {
       nodeName = "py_air_control";
       exporterConfig = {
@@ -1040,7 +1063,7 @@ let
       };
       exporterTest = ''
         wait_for_unit("prometheus-smartctl-exporter.service")
-        wait_for_open_port("9633")
+        wait_for_open_port(9633)
         wait_until_succeeds(
           "curl -sSf 'localhost:9633/metrics'"
         )
@@ -1156,14 +1179,23 @@ let
     systemd = {
       exporterConfig = {
         enable = true;
+
+        extraFlags = [
+          "--systemd.collector.enable-restart-count"
+        ];
       };
       metricProvider = { };
       exporterTest = ''
         wait_for_unit("prometheus-systemd-exporter.service")
         wait_for_open_port(9558)
-        succeed(
+        wait_until_succeeds(
             "curl -sSf localhost:9558/metrics | grep '{}'".format(
                 'systemd_unit_state{name="basic.target",state="active",type="target"} 1'
+            )
+        )
+        succeed(
+            "curl -sSf localhost:9558/metrics | grep '{}'".format(
+                'systemd_service_restart_total{name="prometheus-systemd-exporter.service"} 0'
             )
         )
       '';
@@ -1305,7 +1337,7 @@ mapAttrs
       '';
 
       meta = with maintainers; {
-        maintainers = [ willibutz elseym ];
+        maintainers = [ willibutz ];
       };
     }
   )))

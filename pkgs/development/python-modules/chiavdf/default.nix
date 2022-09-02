@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "chiavdf";
-  version = "1.0.5";
+  version = "1.0.7";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2pC6sFRwgAwIEanZXe99848XMxK/lyLGxiA+UA+q3H0=";
+    hash = "sha256-956517eGqRSLg+Y4ybmASiZoypgpYn/D9lbPA4Rcfts=";
   };
 
   patches = [
@@ -45,6 +45,7 @@ buildPythonPackage rec {
   dontConfigure = true;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Chia verifiable delay function utilities";
     homepage = "https://www.chia.net/";
     license = licenses.asl20;

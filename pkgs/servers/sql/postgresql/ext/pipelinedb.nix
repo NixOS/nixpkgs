@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = postgresql.meta.platforms;
     maintainers = [ maintainers.marsam ];
-    broken = versionOlder postgresql.version "10";
+    broken = versions.major postgresql.version != "11";
   };
 }

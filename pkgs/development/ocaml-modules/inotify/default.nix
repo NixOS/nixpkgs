@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.3";
-  name = "ocaml${ocaml.version}-inotify-${version}";
+  pname = "ocaml${ocaml.version}-inotify";
 
   src = fetchFromGitHub {
     owner = "whitequark";
@@ -19,8 +19,12 @@ stdenv.mkDerivation rec {
     sha256 = "04lfxrrsmk2mc704kaln8jqx93jc4bkxhijmfy2d4cmk1cim7r6k";
   }) ];
 
-  buildInputs = [ ocaml findlib ocamlbuild ocaml_lwt ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ ocaml_lwt ];
   checkInputs = [ ounit fileutils ];
+
+  # Otherwise checkInputs can't be found
+  strictDeps = false;
 
   configureFlags = [ "--enable-lwt"
     (lib.optionalString doCheck "--enable-tests") ];

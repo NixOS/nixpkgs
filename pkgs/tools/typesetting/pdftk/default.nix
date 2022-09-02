@@ -32,7 +32,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "0qx1axqr0h5zbn2z9bnb1d0rbs0vajw4p8szw34nicngnn213g7k";
+    outputHash = "sha256-IlHuvFfkqM3O+3PPVBqUJzQXJELKGKHrmI1tdxsBpSk=";
   };
 
   # Point to our local deps repo
@@ -88,6 +88,10 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Command-line tool for working with PDFs";
     homepage = "https://gitlab.com/pdftk-java/pdftk";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin averelld ];
     platforms = platforms.unix;

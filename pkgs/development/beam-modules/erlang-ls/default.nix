@@ -1,7 +1,7 @@
 { fetchFromGitHub, fetchgit, fetchHex, rebar3Relx, buildRebar3, rebar3-proper
 , stdenv, writeScript, lib }:
 let
-  version = "0.21.2";
+  version = "0.41.2";
   owner = "erlang-ls";
   repo = "erlang_ls";
   deps = import ./rebar-deps.nix {
@@ -11,6 +11,11 @@ let
       proper = super.proper.overrideAttrs (_: {
         configurePhase = "true";
       });
+      redbug = super.redbug.overrideAttrs (_: {
+        patchPhase = ''
+          substituteInPlace rebar.config --replace ", warnings_as_errors" ""
+          '';
+      });
     });
   };
 in
@@ -19,7 +24,7 @@ rebar3Relx {
   inherit version;
   src = fetchFromGitHub {
     inherit owner repo;
-    sha256 = "sha256-CiA71mvmq3HrJvgrEDMwp3CQ4Dl05BpTO5HusAL5FAQ=";
+    sha256 = "sha256-LUgiQtK0OsdTmg1jEdxJ0x+39U3PXoFYsGlOv4l7/Ig=";
     rev = version;
   };
   releaseType = "escript";
@@ -51,7 +56,7 @@ rebar3Relx {
     #! nix-shell -i bash -p common-updater-scripts coreutils git gnused gnutar gzip "rebar3WithPlugins { globalPlugins = [ beamPackages.rebar3-nix ]; }"
 
     set -ox errexit
-    latest=$(list-git-tags https://github.com/${owner}/${repo}.git | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
+    latest=$(list-git-tags | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
     if [[ "$latest" != "${version}" ]]; then
       nixpkgs="$(git rev-parse --show-toplevel)"
       nix_path="$nixpkgs/pkgs/development/beam-modules/erlang-ls"

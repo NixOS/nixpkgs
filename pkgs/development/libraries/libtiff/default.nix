@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 
 , autoreconfHook
 , pkg-config
@@ -8,17 +9,25 @@
 , libjpeg
 , xz
 , zlib
-}:
 
-#FIXME: fix aarch64-darwin build and get rid of ./aarch64-darwin.nix
+# for passthru.tests
+, libgeotiff
+, python3Packages
+, imagemagick
+, graphicsmagick
+, gdal
+, openimageio
+, freeimage
+, imlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "libtiff";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchurl {
     url = "https://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
-    sha256 = "1j3snghqjbhwmnm5vz3dr1zm68dj15mgbx1wqld7vkl7n2nfaihf";
+    sha256 = "1vdbk3sc497c58kxmp02irl6nqkfm9rjs3br7g59m59qfnrj6wli";
   };
 
   patches = [
@@ -27,6 +36,11 @@ stdenv.mkDerivation rec {
     # libc++abi 11 has an `#include <version>`, this picks up files name
     # `version` in the project's include paths
     ./rename-version.patch
+    (fetchpatch {
+      name = "CVE-2022-34526.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/275735d0354e39c0ac1dc3c0db2120d6f31d1990.patch";
+      sha256 = "sha256-faKsdJjvQwNdkAKjYm4vubvZvnULt9zz4l53zBFr67s=";
+    })
   ];
 
   postPatch = ''
@@ -52,6 +66,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
+
+  passthru.tests = {
+    inherit libgeotiff imagemagick graphicsmagick gdal openimageio freeimage imlib;
+    inherit (python3Packages) pillow imread;
+  };
 
   meta = with lib; {
     description = "Library and utilities for working with the TIFF image file format";

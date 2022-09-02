@@ -2,18 +2,22 @@
 
 buildGoModule rec {
   pname = "buildkite-cli";
-  version = "1.2.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-AIa+hEYtPJ4CFvAFSpNJFxY+B3+DJH1Q0hL/3BD/yN0=";
+    sha256 = "sha256-4MUgyUKyycsreAMVtyKJFpQOHvI6JJSn7TUZtbQANyc=";
   };
 
-  vendorSha256 = "sha256-4AH9PZWSrBXi9w4Mr7dpXqDkQZGzuELG876YCaFTj2Q=";
+  vendorSha256 = "sha256-3x7yJenJ2BHdqVPaBaqfFVeOSJZ/VRNF/TTfSsw+2os=";
 
   doCheck = false;
+
+  postPatch = ''
+    patchShebangs .buildkite/steps/{lint,run-local}.sh
+  '';
 
   subPackages = [ "cmd/bk" ];
 
@@ -24,5 +28,6 @@ buildGoModule rec {
     homepage = "https://github.com/buildkite/cli";
     license = licenses.mit;
     maintainers = with maintainers; [ groodt ];
+    mainProgram = "bk";
   };
 }

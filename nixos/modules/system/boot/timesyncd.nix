@@ -11,7 +11,7 @@ with lib;
         default = !config.boot.isContainer;
         defaultText = literalExpression "!config.boot.isContainer";
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Enables the systemd NTP client daemon.
         '';
       };
@@ -19,7 +19,7 @@ with lib;
         default = config.networking.timeServers;
         defaultText = literalExpression "config.networking.timeServers";
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           The set of NTP servers from which to synchronise.
         '';
       };
@@ -29,10 +29,10 @@ with lib;
         example = ''
           PollIntervalMaxSec=180
         '';
-        description = ''
+        description = lib.mdDoc ''
           Extra config options for systemd-timesyncd. See
-          <link xlink:href="https://www.freedesktop.org/software/systemd/man/timesyncd.conf.html">
-          timesyncd.conf(5)</link> for available options.
+          [
+          timesyncd.conf(5)](https://www.freedesktop.org/software/systemd/man/timesyncd.conf.html) for available options.
         '';
       };
     };
@@ -60,15 +60,27 @@ with lib;
     };
     users.groups.systemd-timesync.gid = config.ids.gids.systemd-timesync;
 
-    system.activationScripts.systemd-timesyncd-migration = mkIf (versionOlder config.system.stateVersion "19.09") ''
+    system.activationScripts.systemd-timesyncd-migration =
       # workaround an issue of systemd-timesyncd not starting due to upstream systemd reverting their dynamic users changes
       #  - https://github.com/NixOS/nixpkgs/pull/61321#issuecomment-492423742
       #  - https://github.com/systemd/systemd/issues/12131
-      if [ -L /var/lib/systemd/timesync ]; then
-        rm /var/lib/systemd/timesync
-        mv /var/lib/private/systemd/timesync /var/lib/systemd/timesync
+      mkIf (versionOlder config.system.stateVersion "19.09") ''
+        if [ -L /var/lib/systemd/timesync ]; then
+          rm /var/lib/systemd/timesync
+          mv /var/lib/private/systemd/timesync /var/lib/systemd/timesync
+        fi
+      '';
+    system.activationScripts.systemd-timesyncd-init-clock =
+      # Ensure that we have some stored time to prevent systemd-timesyncd to
+      # resort back to the fallback time.
+      # If the file doesn't exist we assume that our current system clock is
+      # good enough to provide an initial value.
+      ''
+      if ! [ -f /var/lib/systemd/timesync/clock ]; then
+        test -d /var/lib/systemd/timesync || mkdir -p /var/lib/systemd/timesync
+        touch /var/lib/systemd/timesync/clock
       fi
-    '';
+      '';
   };
 
 }

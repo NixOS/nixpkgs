@@ -7,26 +7,31 @@
 , pango
 , gdk-pixbuf
 , atk
-, gtk3
-, testVersion
+, gtk4
+, wrapGAppsHook
+, gobject-introspection
+, xvfb-run
+, testers
 , czkawka
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "czkawka";
-  version = "4.0.0";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "qarmin";
     repo = "czkawka";
     rev = version;
-    sha256 = "sha256-UIgyKWMVSKAgUNqfxFYSfP+l9x52XAzrXr1nnfKub9I=";
+    sha256 = "sha256-+Z4R6eRYNU0/wmrrTCLabY1zgxGbdSkgrfJd8rI5fZo=";
   };
 
-  cargoSha256 = "sha256-jPrkNKFmdVk3LEa20jtXSx+7S98fSrX7Rt/lexC0Gwo=";
+  cargoSha256 = "sha256-hkqGOl6ew3GBMPem8bPRy0PYphHhXJVv6iQiH6lK0kE=";
 
   nativeBuildInputs = [
     pkg-config
+    wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -35,10 +40,20 @@ rustPlatform.buildRustPackage rec {
     pango
     gdk-pixbuf
     atk
-    gtk3
+    gtk4
   ];
 
-  passthru.tests.version = testVersion {
+  checkInputs = [
+    xvfb-run
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+    xvfb-run cargo test
+    runHook postCheck
+  '';
+
+  passthru.tests.version = testers.testVersion {
     package = czkawka;
     command = "czkawka_cli --version";
   };

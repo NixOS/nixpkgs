@@ -1,56 +1,32 @@
-{ stdenv
-, alsa-lib
+{ stdenv, lib
 , addOpenGLRunpath
+, alsa-lib
 , autoPatchelfHook
 , cairo
 , fetchurl
 , flac
-, gcc11
+, gcc12
 , gnome
 , gssdp
-, lame
-, lib
-, libgmpris
-, llvmPackages_10
-, mpg123
-, rpmextract
-, wavpack
-
 , gupnp
 , gupnp-av
+, lame
+, libgmpris
+, libusb-compat-0_1
+, llvmPackages_10
 , meson
+, mpg123
 , ninja
+, rpmextract
+, wavpack
 }:
-let
-  # hqplayerd relies on some package versions available for the fc34 release,
-  # which has out-of-date pkgs compared to nixpkgs. The following drvs
-  # can/should be removed when the fc35 hqplayer rpm is made available.
-  gupnp_1_2 = gupnp.overrideAttrs (old: rec {
-    pname = "gupnp";
-    version = "1.2.7";
-    src = fetchurl {
-      url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-      sha256 = "sha256-hEEnbxr9AXbm9ZUCajpQfu0YCav6BAJrrT8hYis1I+w=";
-    };
-  });
-
-  gupnp-av_0_12 = gupnp-av.overrideAttrs (old: rec {
-    pname = "gupnp-av";
-    version = "0.12.11";
-    src = fetchurl {
-      url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-      sha256 = "sha256-aJ3PFJKriZHa6ikTZaMlSKd9GiKU2FszYitVzKnOb9w=";
-    };
-    nativeBuildInputs = lib.subtractLists [ meson ninja ] old.nativeBuildInputs;
-  });
-in
 stdenv.mkDerivation rec {
   pname = "hqplayerd";
-  version = "4.29.1-80";
+  version = "4.32.4-94sse42";
 
   src = fetchurl {
-    url = "https://www.signalyst.eu/bins/${pname}/fc34/${pname}-${version}sse42.fc34.x86_64.rpm";
-    sha256 = "sha256-TL5zq7fu7tLoWadmVDMXrE8oiVhHbggpmwWrIGRuAnI=";
+    url = "https://www.signalyst.eu/bins/${pname}/fc36/${pname}-${version}.fc36.x86_64.rpm";
+    hash = "sha256-hTckJdZzD/Sx/uV30dlGiT46QvzIGp6BQdNNRlQ/Mgw=";
   };
 
   unpackPhase = ''
@@ -63,13 +39,14 @@ stdenv.mkDerivation rec {
     alsa-lib
     cairo
     flac
-    gcc11.cc.lib
+    gcc12.cc.lib
     gnome.rygel
     gssdp
-    gupnp_1_2
-    gupnp-av_0_12
+    gupnp
+    gupnp-av
     lame
     libgmpris
+    libusb-compat-0_1
     llvmPackages_10.openmp
     mpg123
     wavpack
@@ -81,34 +58,37 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    # main executable
-    mkdir -p $out/bin
-    cp ./usr/bin/hqplayerd $out/bin
+    # executables
+    mkdir -p $out
+    cp -rv ./usr/bin $out/bin
 
-    # main configuration
-    mkdir -p $out/etc/hqplayer
-    cp ./etc/hqplayer/hqplayerd.xml $out/etc/hqplayer/
+    # libs
+    mkdir -p $out
+    cp -rv ./opt/hqplayerd/lib $out
+
+    # configuration
+    mkdir -p $out/etc
+    cp -rv ./etc/hqplayer $out/etc/
 
     # udev rules
-    mkdir -p $out/etc/udev/rules.d
-    cp ./etc/udev/rules.d/50-taudio2.rules $out/etc/udev/rules.d/
+    mkdir -p $out/etc/udev
+    cp -rv ./etc/udev/rules.d $out/etc/udev/
 
     # kernel module cfgs
-    mkdir -p $out/etc/modules-load.d
-    cp ./etc/modules-load.d/taudio2.conf $out/etc/modules-load.d/
+    mkdir -p $out/etc
+    cp -rv ./etc/modules-load.d $out/etc/
 
     # systemd service file
-    mkdir -p $out/lib/systemd/system
-    cp ./usr/lib/systemd/system/hqplayerd.service $out/lib/systemd/system/
+    mkdir -p $out/lib/systemd
+    cp -rv ./usr/lib/systemd/system $out/lib/systemd/
 
     # documentation
-    mkdir -p $out/share/doc/hqplayerd
-    cp ./usr/share/doc/hqplayerd/* $out/share/doc/hqplayerd/
+    mkdir -p $out/share/doc
+    cp -rv ./usr/share/doc/hqplayerd $out/share/doc/
 
     # misc service support files
-    mkdir -p $out/var/lib/hqplayer
-    cp -r ./var/lib/hqplayer/web $out/var/lib/hqplayer
-
+    mkdir -p $out/var/lib
+    cp -rv ./var/lib/hqplayer $out/var/lib/
     runHook postInstall
   '';
 
@@ -129,7 +109,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.signalyst.com/custom.html";
     description = "High-end upsampling multichannel software embedded HD-audio player";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ lovesegfault ];
   };
 }

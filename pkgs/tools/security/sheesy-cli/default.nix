@@ -37,5 +37,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/share-secrets-safely/cli/releases/tag/${version}";
     license = with licenses; [ lgpl21Only ];
     maintainers = with maintainers; [ devhell ];
+    mainProgram = "sy";
   };
 }

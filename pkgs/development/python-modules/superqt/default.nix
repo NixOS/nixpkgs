@@ -3,23 +3,39 @@
 , fetchFromGitHub
 , setuptools-scm
 , pyqt5
+, qtpy
 , typing-extensions
-, pytest
 , pytestCheckHook
-}: buildPythonPackage rec {
+, pygments
+}:
+
+buildPythonPackage rec {
   pname = "superqt";
-  version = "0.2.5-1";
+  version = "0.3.5";
+  format = "pyproject";
+
   src = fetchFromGitHub {
     owner = "napari";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-rkTiCJ8mIogS9SDmLPiaAyhhuBx3kk6rXjCc19zbwiM=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-nKNFV/mzdugQ+UJ/qB0SkCSm5vEpvI/tgHYKJr6NEyg=";
   };
-  format = "pyproject";
+
   nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ pyqt5 typing-extensions ];
-  checkInputs = [ pytestCheckHook pytest ];
+
+  propagatedBuildInputs = [
+    pyqt5
+    qtpy
+    typing-extensions
+    pygments
+  ];
+
+  checkInputs = [ pytestCheckHook ];
+
   doCheck = false; # Segfaults...
+
+  pythonImportsCheck = [ "superqt" ];
+
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   meta = with lib; {

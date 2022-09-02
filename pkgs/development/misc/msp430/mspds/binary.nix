@@ -17,7 +17,8 @@ in stdenv.mkDerivation rec {
     if stdenv.hostPlatform.isWindows then "MSP430${archPostfix}.dll"
     else "libmsp430${archPostfix}${stdenv.hostPlatform.extensions.sharedLibrary}";
 
-  nativeBuildInputs = [ unzip autoPatchelfHook ];
+  nativeBuildInputs = [ unzip ]
+    ++ lib.optional stdenv.isLinux autoPatchelfHook;
   buildInputs = [ stdenv.cc.cc ];
 
   installPhase = ''
@@ -28,6 +29,7 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "Unfree binary release of the TI MSP430 FET debug driver";
     homepage = "https://www.ti.com/tool/MSPDS";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ aerialx ];

@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
+    broken = stdenv.isDarwin || stdenv.isAarch64;
     description = "Build vector tilesets from large collections of GeoJSON features";
     homepage = "https://github.com/mapbox/tippecanoe";
     license = licenses.bsd2;
     maintainers = with maintainers; [ sikmir ];
     platforms = with platforms; linux ++ darwin;
-    broken = stdenv.hostPlatform.isAarch64;
   };
 }

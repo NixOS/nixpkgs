@@ -7,7 +7,6 @@
 , thrift
 # Not gnuradioPackages'
 , codec2
-, log4cpp
 , gmp
 , gsm
 , libopus
@@ -48,7 +47,7 @@ gnuradio3_8.pkgs.mkDerivation rec {
   buildInputs = [
     gnuradio3_8.unwrapped.boost
     codec2
-    log4cpp
+    gnuradio3_8.unwrapped.log4cpp
     gmp
     libpulseaudio
     libconfig

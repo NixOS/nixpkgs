@@ -8,12 +8,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "cxxopts";
+  pname = "cxxopts";
   version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "jarro2783";
-    repo = name;
+    repo = "cxxopts";
     rev = "v${version}";
     sha256 = "08x7j168l1xwj0r3rv89cgghmfhsx98lpq35r3vkh504m1pd55a6";
   };

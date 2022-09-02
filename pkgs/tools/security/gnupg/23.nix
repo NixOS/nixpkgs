@@ -1,46 +1,41 @@
 { fetchurl, fetchpatch, lib, stdenv, pkg-config, libgcrypt, libassuan, libksba
 , libgpg-error, libiconv, npth, gettext, texinfo, buildPackages
-
-# Each of the dependencies below are optional.
-# Gnupg can be built without them at the cost of reduced functionality.
 , guiSupport ? stdenv.isDarwin, enableMinimal ? false
-, adns ? null, bzip2 ? null , gnutls ? null , libusb1 ? null , openldap ? null
-, tpm2-tss ? null
-, pcsclite ? null , pinentry ? null , readline ? null , sqlite ? null , zlib ? null
+, adns, bzip2, gnutls, libusb1, openldap
+, tpm2-tss, pcsclite, pinentry, readline, sqlite, zlib
 }:
 
-with lib;
-
-assert guiSupport -> pinentry != null && enableMinimal == false;
+assert guiSupport -> enableMinimal == false;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
-  version = "2.3.3";
+  version = "2.3.7";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    sha256 = "0dz9x0r5021bhk1kjh29m1q13xbslwb8yn9qzcp7b9m1lrnvi2ap";
+    sha256 = "sha256-7hY6X7nsmf/BsY5l+u+NCGgAxXE9FaZyq1fTeZ2oNmk=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config texinfo ];
   buildInputs = [
     libgcrypt libassuan libksba libiconv npth gettext
+  ] ++ lib.optionals (!enableMinimal) ([
     readline libusb1 gnutls adns openldap zlib bzip2 sqlite
-  ] ++ optional (!stdenv.isDarwin) tpm2-tss ;
+  ] ++ lib.optional (!stdenv.isDarwin) tpm2-tss);
 
   patches = [
     ./fix-libusb-include-path.patch
     ./tests-add-test-cases-for-import-without-uid.patch
     ./allow-import-of-previously-known-keys-even-without-UI.patch
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
+
+    # Patch for DoS vuln from https://seclists.org/oss-sec/2022/q3/27
+    ./v3-0001-Disallow-compressed-signatures-and-certificates.patch
   ];
   postPatch = ''
-    sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' configure doc/dirmngr.texi doc/gnupg.info-1
-    # Fix broken SOURCE_DATE_EPOCH usage - remove on the next upstream update
-    sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.am
-    sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.in
-  '' + lib.optionalString (stdenv.isLinux && pcsclite != null) ''
+    sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1
+  '' + lib.optionalString (stdenv.isLinux && (!enableMinimal)) ''
     sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   '';
 
@@ -51,8 +46,8 @@ stdenv.mkDerivation rec {
     "--with-libassuan-prefix=${libassuan.dev}"
     "--with-ksba-prefix=${libksba.dev}"
     "--with-npth-prefix=${npth}"
-  ] ++ optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}"
-  ++ optional ( (!stdenv.isDarwin) && (tpm2-tss != null) ) "--with-tss=intel";
+  ] ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}"
+  ++ lib.optional ((!stdenv.isDarwin) && (!enableMinimal)) "--with-tss=intel";
   postInstall = if enableMinimal
   then ''
     rm -r $out/{libexec,sbin,share}
@@ -96,5 +91,6 @@ stdenv.mkDerivation rec {
     '';
     maintainers = with maintainers; [ fpletz vrthra ];
     platforms = platforms.all;
+    mainProgram = "gpg";
   };
 }

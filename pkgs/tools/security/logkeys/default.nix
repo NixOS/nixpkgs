@@ -11,7 +11,8 @@ stdenv.mkDerivation {
     sha256 = "1k6kj0913imwh53lh6hrhqmrpygqg2h462raafjsn7gbd3vkgx8n";
   };
 
-  buildInputs = [ autoconf automake which procps kbd ];
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ which procps kbd ];
 
   postPatch = ''
     substituteInPlace src/Makefile.am --replace 'root' '$(id -u)'

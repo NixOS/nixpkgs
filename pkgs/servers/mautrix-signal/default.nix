@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-signal";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
     rev = "v${version}";
-    sha256 = "sha256-gJngGgShW63g5zSyZraod0YTt/pFtVLySDXNXXC5Xxs=";
+    sha256 = "sha256-khtvfZbqBRQyHteil+H/b3EktjRet6DRcKMHmCClNq0=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonPackage rec {
     prometheus-client
     pycryptodome
     python-olm
-    python_magic
+    python-magic
     qrcode
     ruamel-yaml
     unpaddedbase64
@@ -30,6 +30,12 @@ python3.pkgs.buildPythonPackage rec {
   ];
 
   doCheck = false;
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "asyncpg>=0.20,<0.26" "asyncpg>=0.20" \
+      --replace "mautrix>=0.16.0,<0.17" "mautrix>=0.16.0"
+  '';
 
   postInstall = ''
     mkdir -p $out/bin

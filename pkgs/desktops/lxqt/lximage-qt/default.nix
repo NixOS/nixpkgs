@@ -7,22 +7,24 @@
 , qttools
 , qtx11extras
 , qtsvg
+, qtimageformats
 , xorg
 , lxqt-build-tools
 , libfm-qt
 , libexif
+, menu-cache
 , lxqtUpdateScript
 }:
 
 mkDerivation rec {
   pname = "lximage-qt";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1bf0smkawyibrabw7zcynwr2afpsv7pnnyxn4nqgh6mxnp7al157";
+    sha256 = "QvQ0LBGP9XD7vwuUD+A1x8oGDvqTeCkYyd2XyjU0fUo=";
   };
 
   nativeBuildInputs = [
@@ -36,10 +38,12 @@ mkDerivation rec {
     qttools
     qtx11extras
     qtsvg
+    qtimageformats # add-on module to support more image file formats
     libfm-qt
     xorg.libpthreadstubs
     xorg.libXdmcp
     libexif
+    menu-cache
   ];
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
@@ -49,6 +53,6 @@ mkDerivation rec {
     description = "The image viewer and screenshot tool for lxqt";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

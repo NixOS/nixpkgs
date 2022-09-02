@@ -1,5 +1,5 @@
 {
-  autoreconfHook, cups, gzip, libjpeg, rpmextract,
+  autoreconfHook, cups, libjpeg, rpmextract,
   fetchurl, lib, stdenv
 }:
 
@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
   };
   sourceRoot = srcdirs.filter;
 
-  nativeBuildInputs = [ autoreconfHook gzip rpmextract ];
+  nativeBuildInputs = [ autoreconfHook rpmextract ];
   buildInputs = [ cups libjpeg ];
 
   unpackPhase = ''

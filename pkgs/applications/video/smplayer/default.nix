@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "smplayer";
-  version = "21.10.0";
+  version = "22.7.0";
 
   src = fetchFromGitHub {
     owner = "smplayer-dev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-p6036c8KX3GCINmkjHZlDLgHhLKri+t2WNWzP4KsSI8=";
+    hash = "sha256-vU+M5aCCGSA+IwJXTLMYvno/Qei+5Hwck3Q/Ah7N09s=";
   };
 
   nativeBuildInputs = [
@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [ qtscript ];
+  buildInputs = [
+    qtscript
+  ];
 
   dontUseQmakeConfigure = true;
 

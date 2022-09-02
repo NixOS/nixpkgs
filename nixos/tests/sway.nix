@@ -1,12 +1,16 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
-
-{
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "sway";
   meta = {
     maintainers = with lib.maintainers; [ primeos synthetica ];
   };
 
-  machine = { config, ... }: {
+  # testScriptWithTypes:49: error: Cannot call function of unknown type
+  #           (machine.succeed if succeed else machine.execute)(
+  #           ^
+  # Found 1 error in 1 file (checked 1 source file)
+  skipTypeCheck = true;
+
+  nodes.machine = { config, ... }: {
     # Automatically login on tty1 as a normal user:
     imports = [ ./common/user-account.nix ];
     services.getty.autologinUser = "alice";
@@ -70,6 +74,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
   enableOCR = true;
 
   testScript = { nodes, ... }: ''
+    import shlex
+
+    def swaymsg(command: str, succeed=True):
+        with machine.nested(f"sending swaymsg {command!r}" + " (allowed to fail)" * (not succeed)):
+          (machine.succeed if succeed else machine.execute)(
+            f"su - alice -c {shlex.quote('swaymsg -- ' + command)}"
+          )
+
     start_all()
     machine.wait_for_unit("multi-user.target")
 
@@ -81,9 +93,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     machine.wait_for_file("/tmp/sway-ipc.sock")
 
     # Test XWayland (foot does not support X):
-    machine.succeed(
-        "su - alice -c 'swaymsg exec WINIT_UNIX_BACKEND=x11 WAYLAND_DISPLAY=invalid alacritty'"
-    )
+    swaymsg("exec WINIT_UNIX_BACKEND=x11 WAYLAND_DISPLAY=invalid alacritty")
     machine.wait_for_text("alice@machine")
     machine.send_chars("test-x11\n")
     machine.wait_for_file("/tmp/test-x11-exit-ok")
@@ -107,9 +117,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
     # Test gpg-agent starting pinentry-gnome3 via D-Bus (tests if
     # $WAYLAND_DISPLAY is correctly imported into the D-Bus user env):
-    machine.succeed(
-        "su - alice -c 'swaymsg -- exec gpg --no-tty --yes --quick-generate-key test'"
-    )
+    swaymsg("exec gpg --no-tty --yes --quick-generate-key test")
     machine.wait_until_succeeds("pgrep --exact gpg")
     machine.wait_for_text("Passphrase")
     machine.screenshot("gpg_pinentry")
@@ -121,8 +129,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     machine.wait_for_text("You pressed the exit shortcut.")
     machine.screenshot("sway_exit")
 
+    swaymsg("exec swaylock")
+    machine.wait_until_succeeds("pgrep -x swaylock")
+    machine.sleep(3)
+    machine.send_chars("${nodes.machine.config.users.users.alice.password}")
+    machine.send_key("ret")
+    machine.wait_until_fails("pgrep -x swaylock")
+
     # Exit Sway and verify process exit status 0:
-    machine.succeed("su - alice -c 'swaymsg exit || true'")
+    swaymsg("exit", succeed=False)
     machine.wait_until_fails("pgrep -x sway")
     machine.wait_for_file("/tmp/sway-exit-ok")
   '';

@@ -17,7 +17,7 @@
 , dill
 , flask
 , flask_login
-, flask_wtf
+, flask-wtf
 , flask-appbuilder
 , flask-caching
 , GitPython
@@ -65,13 +65,13 @@
 , mkYarnPackage
 }:
 let
-  version = "2.1.4";
+  version = "2.3.3";
 
   airflow-src = fetchFromGitHub rec {
     owner = "apache";
     repo = "airflow";
-    rev = version;
-    sha256 = "12nxjaz4afkq30s42x3rbsci8jiw2k5zjngsc8i190fasbacbnbs";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-N+6ljfSo6+UvSAnvDav6G0S49JZ1VJwxmaiKPV3/DjA=";
   };
 
   # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
@@ -126,7 +126,7 @@ buildPythonPackage rec {
     flask-appbuilder
     flask-caching
     flask_login
-    flask_wtf
+    flask-wtf
     GitPython
     graphviz
     gunicorn
@@ -243,5 +243,7 @@ buildPythonPackage rec {
     homepage = "https://airflow.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ bhipple costrouc ingenieroariel ];
+    # requires extremely outdated versions of multiple dependencies
+    broken = true;
   };
 }

@@ -112,68 +112,68 @@ let
 in {
   options.services.dd-agent = {
     enable = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable the dd-agent v5 monitoring service.
-        For datadog-agent v6, see <option>services.datadog-agent.enable</option>.
+        For datadog-agent v6, see {option}`services.datadog-agent.enable`.
       '';
       default = false;
       type = types.bool;
     };
 
     api_key = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         The Datadog API key to associate the agent with your account.
 
         Warning: this key is stored in cleartext within the world-readable
         Nix store! Consider using the new v6
-        <option>services.datadog-agent</option> module instead.
+        {option}`services.datadog-agent` module instead.
       '';
       example = "ae0aa6a8f08efa988ba0a17578f009ab";
       type = types.str;
     };
 
     tags = mkOption {
-      description = "The tags to mark this Datadog agent";
+      description = lib.mdDoc "The tags to mark this Datadog agent";
       example = [ "test" "service" ];
       default = null;
       type = types.nullOr (types.listOf types.str);
     };
 
     hostname = mkOption {
-      description = "The hostname to show in the Datadog dashboard (optional)";
+      description = lib.mdDoc "The hostname to show in the Datadog dashboard (optional)";
       default = null;
       example = "mymachine.mydomain";
       type = types.nullOr types.str;
     };
 
     postgresqlConfig = mkOption {
-      description = "Datadog PostgreSQL integration configuration";
+      description = lib.mdDoc "Datadog PostgreSQL integration configuration";
       default = null;
       type = types.nullOr types.lines;
     };
 
     nginxConfig = mkOption {
-      description = "Datadog nginx integration configuration";
+      description = lib.mdDoc "Datadog nginx integration configuration";
       default = null;
       type = types.nullOr types.lines;
     };
 
     mongoConfig = mkOption {
-      description = "MongoDB integration configuration";
+      description = lib.mdDoc "MongoDB integration configuration";
       default = null;
       type = types.nullOr types.lines;
     };
 
     jmxConfig = mkOption {
-      description = "JMX integration configuration";
+      description = lib.mdDoc "JMX integration configuration";
       default = null;
       type = types.nullOr types.lines;
     };
 
     processConfig = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Process integration configuration
-        See <link xlink:href="https://docs.datadoghq.com/integrations/process/"/>
+        See <https://docs.datadoghq.com/integrations/process/>
       '';
       default = null;
       type = types.nullOr types.lines;

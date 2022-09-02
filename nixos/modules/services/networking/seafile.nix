@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 with lib;
 let
-  python = pkgs.python3Packages.python;
   cfg = config.services.seafile;
   settingsFormat = pkgs.formats.ini { };
 
@@ -20,6 +19,8 @@ let
     MEDIA_ROOT = '${seahubDir}/media/'
     THUMBNAIL_ROOT = '${seahubDir}/thumbnail/'
 
+    SERVICE_URL = '${cfg.ccnetSettings.General.SERVICE_URL}'
+
     with open('${seafRoot}/.seahubSecret') as f:
         SECRET_KEY = f.readline().rstrip()
 
@@ -36,7 +37,7 @@ in {
   ###### Interface
 
   options.services.seafile = {
-    enable = mkEnableOption "Seafile server";
+    enable = mkEnableOption (lib.mdDoc "Seafile server");
 
     ccnetSettings = mkOption {
       type = types.submodule {
@@ -47,7 +48,7 @@ in {
             SERVICE_URL = mkOption {
               type = types.str;
               example = "https://www.example.com";
-              description = ''
+              description = lib.mdDoc ''
                 Seahub public URL.
               '';
             };
@@ -55,9 +56,9 @@ in {
         };
       };
       default = { };
-      description = ''
+      description = lib.mdDoc ''
         Configuration for ccnet, see
-        <link xlink:href="https://manual.seafile.com/config/ccnet-conf/"/>
+        <https://manual.seafile.com/config/ccnet-conf/>
         for supported values.
       '';
     };
@@ -71,7 +72,7 @@ in {
             port = mkOption {
               type = types.port;
               default = 8082;
-              description = ''
+              description = lib.mdDoc ''
                 The tcp port used by seafile fileserver.
               '';
             };
@@ -79,7 +80,7 @@ in {
               type = types.str;
               default = "127.0.0.1";
               example = "0.0.0.0";
-              description = ''
+              description = lib.mdDoc ''
                 The binding address used by seafile fileserver.
               '';
             };
@@ -87,9 +88,9 @@ in {
         };
       };
       default = { };
-      description = ''
+      description = lib.mdDoc ''
         Configuration for seafile-server, see
-        <link xlink:href="https://manual.seafile.com/config/seafile-conf/"/>
+        <https://manual.seafile.com/config/seafile-conf/>
         for supported values.
       '';
     };
@@ -98,7 +99,7 @@ in {
       type = types.int;
       default = 4;
       example = 10;
-      description = ''
+      description = lib.mdDoc ''
         The number of gunicorn worker processes for handling requests.
       '';
     };
@@ -106,7 +107,7 @@ in {
     adminEmail = mkOption {
       example = "john@example.com";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Seafile Seahub Admin Account Email.
       '';
     };
@@ -114,7 +115,7 @@ in {
     initialAdminPassword = mkOption {
       example = "someStrongPass";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Seafile Seahub Admin Account initial password.
         Should be change via Seahub web front-end.
       '';
@@ -122,7 +123,7 @@ in {
 
     seafilePackage = mkOption {
       type = types.package;
-      description = "Which package to use for the seafile server.";
+      description = lib.mdDoc "Which package to use for the seafile server.";
       default = pkgs.seafile-server;
       defaultText = literalExpression "pkgs.seafile-server";
     };
@@ -130,9 +131,9 @@ in {
     seahubExtraConf = mkOption {
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Extra config to append to `seahub_settings.py` file.
-        Refer to <link xlink:href="https://manual.seafile.com/config/seahub_settings_py/" />
+        Refer to <https://manual.seafile.com/config/seahub_settings_py/>
         for all available options.
       '';
     };
@@ -178,6 +179,7 @@ in {
         after = [ "network.target" ];
         wantedBy = [ "seafile.target" ];
         restartTriggers = [ ccnetConf seafileConf ];
+        path = [ pkgs.sqlite ];
         serviceConfig = securityOptions // {
           User = "seafile";
           Group = "seafile";
@@ -201,11 +203,11 @@ in {
           if [ ! -f "${seafRoot}/server-setup" ]; then
               mkdir -p ${dataDir}/library-template
               mkdir -p ${ccnetDir}/{GroupMgr,misc,OrgMgr,PeerMgr}
-              ${pkgs.sqlite}/bin/sqlite3 ${ccnetDir}/GroupMgr/groupmgr.db ".read ${cfg.seafilePackage}/share/seafile/sql/sqlite/groupmgr.sql"
-              ${pkgs.sqlite}/bin/sqlite3 ${ccnetDir}/misc/config.db ".read ${cfg.seafilePackage}/share/seafile/sql/sqlite/config.sql"
-              ${pkgs.sqlite}/bin/sqlite3 ${ccnetDir}/OrgMgr/orgmgr.db ".read ${cfg.seafilePackage}/share/seafile/sql/sqlite/org.sql"
-              ${pkgs.sqlite}/bin/sqlite3 ${ccnetDir}/PeerMgr/usermgr.db ".read ${cfg.seafilePackage}/share/seafile/sql/sqlite/user.sql"
-              ${pkgs.sqlite}/bin/sqlite3 ${dataDir}/seafile.db ".read ${cfg.seafilePackage}/share/seafile/sql/sqlite/seafile.sql"
+              sqlite3 ${ccnetDir}/GroupMgr/groupmgr.db ".read ${cfg.seafilePackage}/share/seafile/sql/sqlite/groupmgr.sql"
+              sqlite3 ${ccnetDir}/misc/config.db ".read ${cfg.seafilePackage}/share/seafile/sql/sqlite/config.sql"
+              sqlite3 ${ccnetDir}/OrgMgr/orgmgr.db ".read ${cfg.seafilePackage}/share/seafile/sql/sqlite/org.sql"
+              sqlite3 ${ccnetDir}/PeerMgr/usermgr.db ".read ${cfg.seafilePackage}/share/seafile/sql/sqlite/user.sql"
+              sqlite3 ${dataDir}/seafile.db ".read ${cfg.seafilePackage}/share/seafile/sql/sqlite/seafile.sql"
               echo "${cfg.seafilePackage.version}-sqlite" > "${seafRoot}"/server-setup
           fi
           # checking for upgrades and handling them
@@ -214,16 +216,21 @@ in {
           installedMinor=$(cat "${seafRoot}/server-setup" | cut -d"-" -f1 | cut -d"." -f2)
           pkgMajor=$(echo "${cfg.seafilePackage.version}" | cut -d"." -f1)
           pkgMinor=$(echo "${cfg.seafilePackage.version}" | cut -d"." -f2)
-          if [ $installedMajor != $pkgMajor ] || [ $installedMinor != $pkgMinor ]; then
+
+          if [[ $installedMajor == $pkgMajor && $installedMinor == $pkgMinor ]]; then
+             :
+          elif [[ $installedMajor == 8 && $installedMinor == 0 && $pkgMajor == 9 && $pkgMinor == 0 ]]; then
+              # Upgrade from 8.0 to 9.0
+              sqlite3 ${dataDir}/seafile.db ".read ${pkgs.seahub}/scripts/upgrade/sql/9.0.0/sqlite3/seafile.sql"
+              echo "${cfg.seafilePackage.version}-sqlite" > "${seafRoot}"/server-setup
+          else
               echo "Unsupported upgrade" >&2
               exit 1
           fi
         '';
       };
 
-      seahub = let
-        penv = (pkgs.python3.withPackages (ps: with ps; [ gunicorn seahub ]));
-      in {
+      seahub = {
         description = "Seafile Server Web Frontend";
         wantedBy = [ "seafile.target" ];
         partOf = [ "seafile.target" ];
@@ -231,8 +238,7 @@ in {
         requires = [ "seaf-server.service" ];
         restartTriggers = [ seahubSettings ];
         environment = {
-          PYTHONPATH =
-            "${pkgs.python3Packages.seahub}/thirdpart:${pkgs.python3Packages.seahub}:${penv}/${python.sitePackages}";
+          PYTHONPATH = "${pkgs.seahub.pythonPath}:${pkgs.seahub}/thirdpart:${pkgs.seahub}";
           DJANGO_SETTINGS_MODULE = "seahub.settings";
           CCNET_CONF_DIR = ccnetDir;
           SEAFILE_CONF_DIR = dataDir;
@@ -249,7 +255,7 @@ in {
           LogsDirectory = "seafile";
           ConfigurationDirectory = "seafile";
           ExecStart = ''
-            ${penv}/bin/gunicorn seahub.wsgi:application \
+            ${pkgs.seahub.python.pkgs.gunicorn}/bin/gunicorn seahub.wsgi:application \
             --name seahub \
             --workers ${toString cfg.workers} \
             --log-level=info \
@@ -262,27 +268,27 @@ in {
         preStart = ''
           mkdir -p ${seahubDir}/media
           # Link all media except avatars
-          for m in `find ${pkgs.python3Packages.seahub}/media/ -maxdepth 1 -not -name "avatars"`; do
+          for m in `find ${pkgs.seahub}/media/ -maxdepth 1 -not -name "avatars"`; do
             ln -sf $m ${seahubDir}/media/
           done
           if [ ! -e "${seafRoot}/.seahubSecret" ]; then
-              ${penv}/bin/python ${pkgs.python3Packages.seahub}/tools/secret_key_generator.py > ${seafRoot}/.seahubSecret
+              ${pkgs.seahub.python}/bin/python ${pkgs.seahub}/tools/secret_key_generator.py > ${seafRoot}/.seahubSecret
               chmod 400 ${seafRoot}/.seahubSecret
           fi
           if [ ! -f "${seafRoot}/seahub-setup" ]; then
               # avatars directory should be writable
-              install -D -t ${seahubDir}/media/avatars/ ${pkgs.python3Packages.seahub}/media/avatars/default.png
-              install -D -t ${seahubDir}/media/avatars/groups ${pkgs.python3Packages.seahub}/media/avatars/groups/default.png
+              install -D -t ${seahubDir}/media/avatars/ ${pkgs.seahub}/media/avatars/default.png
+              install -D -t ${seahubDir}/media/avatars/groups ${pkgs.seahub}/media/avatars/groups/default.png
               # init database
-              ${pkgs.python3Packages.seahub}/manage.py migrate
+              ${pkgs.seahub}/manage.py migrate
               # create admin account
-              ${pkgs.expect}/bin/expect -c 'spawn ${pkgs.python3Packages.seahub}/manage.py createsuperuser --email=${cfg.adminEmail}; expect "Password: "; send "${cfg.initialAdminPassword}\r"; expect "Password (again): "; send "${cfg.initialAdminPassword}\r"; expect "Superuser created successfully."'
-              echo "${pkgs.python3Packages.seahub.version}-sqlite" > "${seafRoot}/seahub-setup"
+              ${pkgs.expect}/bin/expect -c 'spawn ${pkgs.seahub}/manage.py createsuperuser --email=${cfg.adminEmail}; expect "Password: "; send "${cfg.initialAdminPassword}\r"; expect "Password (again): "; send "${cfg.initialAdminPassword}\r"; expect "Superuser created successfully."'
+              echo "${pkgs.seahub.version}-sqlite" > "${seafRoot}/seahub-setup"
           fi
-          if [ $(cat "${seafRoot}/seahub-setup" | cut -d"-" -f1) != "${pkgs.python3Packages.seahub.version}" ]; then
+          if [ $(cat "${seafRoot}/seahub-setup" | cut -d"-" -f1) != "${pkgs.seahub.version}" ]; then
               # update database
-              ${pkgs.python3Packages.seahub}/manage.py migrate
-              echo "${pkgs.python3Packages.seahub.version}-sqlite" > "${seafRoot}/seahub-setup"
+              ${pkgs.seahub}/manage.py migrate
+              echo "${pkgs.seahub.version}-sqlite" > "${seafRoot}/seahub-setup"
           fi
         '';
       };

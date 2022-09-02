@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "vdom";
+  pname = "vdom";
   version = "0.6.0";
 
   ipkgName = "idris-vdom";

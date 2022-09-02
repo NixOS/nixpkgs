@@ -2,7 +2,6 @@
 , mkDerivationWith
 , python3Packages
 , fetchFromGitHub
-, fetchpatch
 , wrapQtAppsHook
 , ffmpeg
 , qtbase
@@ -10,24 +9,15 @@
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "corrscope";
-  version = "0.7.1";
+  version = "0.8.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "corrscope";
     repo = "corrscope";
     rev = version;
-    sha256 = "0c9kmrw6pcda68li04b5j2kmsgdw1q463qlc32wn96zn9hl82v6m";
+    sha256 = "1wdla4ryif1ss37aqi61lcvzddvf568wyh5s3xv1lrryh4al9vpd";
   };
-
-  patches = [
-    # Remove when bumping past 0.7.1
-    (fetchpatch {
-      name = "0001-Use-poetry-core.patch";
-      url = "https://github.com/corrscope/corrscope/commit/d40d1846dd54b8bccd7b8055d6aece48aacbb943.patch";
-      sha256 = "0xxsbmxdbh3agfm6ww3rpa7ab0ysppan490w0gaqwmwzrxmmdljv";
-    })
-  ];
 
   nativeBuildInputs = [
     wrapQtAppsHook
@@ -48,8 +38,10 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     matplotlib
     numpy
     packaging
+    qtpy
     pyqt5
     ruamel-yaml
+    colorspacious
   ];
 
   dontWrapQtApps = true;

@@ -26,7 +26,7 @@
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
 , bundler, libsass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
-, CoreServices, DarwinTools, cctools, libtool, discount
+, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb
 }@args:
 
 let
@@ -152,6 +152,10 @@ in
       substituteInPlace lib/ethon/curls/settings.rb \
         --replace "libcurl" "${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary}"
     '';
+  };
+
+  exiv2 = attrs: {
+    buildFlags = [ "--with-exiv2-lib=${exiv2}/lib" "--with-exiv2-include=${exiv2.dev}/include" ];
   };
 
   fog-dnsimple = attrs:
@@ -290,6 +294,14 @@ in
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook glib ];
   };
 
+  gollum = attrs: {
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace bin/gollum \
+        --replace "/usr/bin/env -S ruby" "${ruby}/bin/ruby"
+    '';
+  };
+
   grpc = attrs: {
     nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.isDarwin libtool;
     buildInputs = [ openssl ];
@@ -309,8 +321,12 @@ in
       substituteInPlace Makefile \
         --replace '-Wno-invalid-source-encoding' ""
     '' + lib.optionalString stdenv.isDarwin ''
+      # For < v1.48.0
       substituteInPlace src/ruby/ext/grpc/extconf.rb \
         --replace "ENV['AR'] = 'libtool -o' if RUBY_PLATFORM =~ /darwin/" ""
+      # For >= v1.48.0
+      substituteInPlace src/ruby/ext/grpc/extconf.rb \
+        --replace 'apple_toolchain = ' 'apple_toolchain = false && '
     '';
   };
 
@@ -412,6 +428,10 @@ in
       installPath=$(cat $out/nix-support/gem-meta/install-path)
       sed -e 's@ENV\["MAGIC_LIB"\] ||@ENV\["MAGIC_LIB"\] || "${file}/lib/libmagic.so" ||@' -i $installPath/lib/magic/api.rb
     '';
+  };
+
+  maxmind_geoip2 = attrs: {
+    buildFlags = [ "--with-maxminddb-lib=${libmaxminddb}/lib" "--with-maxminddb-include=${libmaxminddb}/include" ];
   };
 
   metasploit-framework = attrs: {
@@ -550,14 +570,6 @@ in
       "--with-libvirt-include=${libvirt}/include"
       "--with-libvirt-lib=${libvirt}/lib"
     ];
-    dontBuild = false;
-    postPatch = ''
-      # https://gitlab.com/libvirt/libvirt-ruby/-/commit/43543991832c9623c00395092bcfb9e178243ba4
-      substituteInPlace ext/libvirt/common.c \
-        --replace 'st.h' 'ruby/st.h'
-      substituteInPlace ext/libvirt/domain.c \
-        --replace 'st.h' 'ruby/st.h'
-    '';
   };
 
   ruby-lxc = attrs: {

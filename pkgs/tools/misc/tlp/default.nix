@@ -40,7 +40,7 @@
   ];
 
   buildInputs = [ perl ];
-  nativeBuildInputs = [ makeWrapper gnused ];
+  nativeBuildInputs = [ makeWrapper ];
 
   # XXX: While [1] states that DESTDIR should not be used, and that the correct
   # variable to set is, in fact, PREFIX, tlp thinks otherwise. The Makefile for

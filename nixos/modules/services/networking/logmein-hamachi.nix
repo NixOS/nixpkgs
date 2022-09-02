@@ -18,7 +18,7 @@ in
       type = types.bool;
       default = false;
       description =
-        ''
+        lib.mdDoc ''
           Whether to enable LogMeIn Hamachi, a proprietary
           (closed source) commercial VPN software.
         '';

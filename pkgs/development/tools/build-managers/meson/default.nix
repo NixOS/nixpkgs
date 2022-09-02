@@ -5,24 +5,19 @@
 , pkg-config
 , python3
 , substituteAll
+, withDarwinFrameworksGtkDocPatch ? false
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "0.60.3";
+  version = "0.63.1";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    hash = "sha256-h8pfqTWKAYZFKTkr1k4CcVjrlK/KfHdmsYZu8n7MuY4=";
+    sha256 = "Bv4TKXIT1v8BIcXVqrJaVu+Tj/7FdBTtYIb9onLLZek=";
   };
 
   patches = [
-    # Upstream insists on not allowing bindir and other dir options
-    # outside of prefix for some reason:
-    # https://github.com/mesonbuild/meson/issues/2561
-    # We remove the check so multiple outputs can work sanely.
-    ./allow-dirs-outside-of-prefix.patch
-
     # Meson is currently inspecting fewer variables than autoconf does, which
     # makes it harder for us to use setup hooks, etc.  Taken from
     # https://github.com/mesonbuild/meson/pull/6827
@@ -58,9 +53,24 @@ python3.pkgs.buildPythonApplication rec {
     # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
     ./boost-Do-not-add-system-paths-on-nix.patch
 
-    # Meson tries to update ld.so.cache which breaks when the target architecture
-    # differs from the build host's.
-    ./do-not-update-ldconfig-cache.patch
+    # Prevent Meson from passing -O0 in buildtype=plain.
+    # Nixpkgs enables fortifications which do not work without optimizations.
+    # https://github.com/mesonbuild/meson/pull/10593
+    (fetchpatch {
+      url = "https://github.com/mesonbuild/meson/commit/f9bfeb2add70973113ab4a98454a5c5d7e3a26ae.patch";
+      revert = true;
+      sha256 = "VKXUwdS+zMp1y+5GrV2inESUpUUp+OL3aI4wOXHxOeo=";
+    })
+
+    # Fix passing multiple --define-variable arguments to pkg-config.
+    # https://github.com/mesonbuild/meson/pull/10670
+    (fetchpatch {
+      url = "https://github.com/mesonbuild/meson/commit/d5252c5d4cf1c1931fef0c1c98dd66c000891d21.patch";
+      sha256 = "GiUNVul1N5Fl8mfqM7vA/r1FdKqImiDYLXMVDt77gvw=";
+      excludes = [
+        "docs/yaml/objects/dep.yaml"
+      ];
+    })
   ];
 
   setupHook = ./setup-hook.sh;

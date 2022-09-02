@@ -1,17 +1,19 @@
 { lib, stdenv, fetchurl, pkg-config, libsamplerate, libsndfile, fftw
-, vamp-plugin-sdk, ladspaH }:
+, vamp-plugin-sdk, ladspaH, meson, ninja, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "rubberband";
-  version = "1.9.0";
+  version = "2.0.2";
 
   src = fetchurl {
     url = "https://breakfastquay.com/files/releases/${pname}-${version}.tar.bz2";
-    sha256 = "4f5b9509364ea876b4052fc390c079a3ad4ab63a2683aad09662fb905c2dc026";
+    sha256 = "sha256-uerAJ+eXeJrplhHJ6urxw6RMyAT5yKBEGg0dJvPWvfk=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libsamplerate libsndfile fftw vamp-plugin-sdk ladspaH ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
+  buildInputs = [ libsamplerate libsndfile fftw vamp-plugin-sdk ladspaH ] ++ lib.optionals stdenv.isDarwin
+    (with darwin.apple_sdk.frameworks; [Accelerate CoreGraphics CoreVideo]);
+  makeFlags = [ "AR:=$(AR)" ];
 
   meta = with lib; {
     description = "High quality software library for audio time-stretching and pitch-shifting";
@@ -19,6 +21,6 @@ stdenv.mkDerivation rec {
     # commercial license available as well, see homepage. You'll get some more optimized routines
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu maintainers.marcweber ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

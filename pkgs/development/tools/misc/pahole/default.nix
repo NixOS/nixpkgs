@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, pkg-config, libbpf, cmake, elfutils, zlib }:
+{ lib, stdenv, fetchgit, pkg-config, libbpf, cmake, elfutils, zlib, argp-standalone, musl-obstack }:
 
 stdenv.mkDerivation rec {
   pname = "pahole";
@@ -10,13 +10,17 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ elfutils zlib libbpf ];
+  buildInputs = [ elfutils zlib libbpf ]
+    ++ lib.optional stdenv.hostPlatform.isMusl [
+    argp-standalone
+    musl-obstack
+  ];
 
   # Put libraries in "lib" subdirectory, not top level of $out
   cmakeFlags = [ "-D__LIB=lib" "-DLIBBPF_EMBEDDED=OFF" ];
 
   meta = with lib; {
-    homepage = "https://git.kernel.org/cgit/devel/pahole/pahole.git/";
+    homepage = "https://git.kernel.org/pub/scm/devel/pahole/pahole.git/";
     description = "Pahole and other DWARF utils";
     license = licenses.gpl2Only;
 

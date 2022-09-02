@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   buildInputs = [
-    SDL.dev
+    (lib.getDev SDL)
     SDL_image
     SDL_mixer
     SDL_ttf

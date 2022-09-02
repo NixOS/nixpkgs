@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , pkg-config
 , meson
 , ninja
@@ -36,23 +35,14 @@
 
 stdenv.mkDerivation rec {
   pname = "folks";
-  version = "0.15.3";
+  version = "0.15.5";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Idc3+vCT9L4GVHPucMogiFuaLDaFlB26JMIjn9PFRKU=";
+    sha256 = "D/+KiWMwzYKu5FmDJPflQciE0DN1NiEnI7S+s4x1kIY=";
   };
-
-  patches = [
-    # Fix build with evolution-data-server ≥ 3.41
-    # https://gitlab.gnome.org/GNOME/folks/-/merge_requests/52
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/folks/-/commit/62d588b0c609de17df5b4d1ebfbc67c456267efc.patch";
-      sha256 = "TDL/5kvVwHnvDMuKDdPLQmpmE1FTZhY+7HG8NxKqt5w=";
-    })
-  ];
 
   nativeBuildInputs = [
     gettext

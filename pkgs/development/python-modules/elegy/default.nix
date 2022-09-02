@@ -8,7 +8,7 @@
 , lib
 , poetry
 , pytestCheckHook
-, pytorch
+, torch
 , pyyaml
 , sh
 , tables
@@ -22,15 +22,23 @@
 
 buildPythonPackage rec {
   pname = "elegy";
-  version = "0.8.4";
+  version = "0.8.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "poets-ai";
     repo = pname;
     rev = version;
-    sha256 = "11w8lgl31b52w2qri8j8cgzd30sn8i3769g8nkkshvgkjgca9r4g";
+    hash = "sha256-FZmLriYhsX+zyQKCtCjbOy6MH+AvjzHRNUyaDSXGlLI=";
   };
+
+  # The cloudpickle constraint is too strict. wandb is marked as an optional
+  # dependency but `buildPythonPackage` doesn't seem to respect that setting.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'cloudpickle = "^1.5.0"' 'cloudpickle = "*"' \
+      --replace 'wandb = { version = "^0.12.10", optional = true }' ""
+  '';
 
   nativeBuildInputs = [
     poetry
@@ -58,7 +66,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    pytorch
+    torch
     sh
     tensorflow
   ];

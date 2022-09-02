@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, dpkg
 , alsa-lib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3, mesa
+, gdk-pixbuf, glib, pango, nspr, nss, gtk3, mesa
 , xorg, autoPatchelfHook, systemd, libnotify, libappindicator
 , makeWrapper
 }:
@@ -16,7 +16,6 @@ let deps = [
     freetype
     gdk-pixbuf
     glib
-    gnome2.GConf
     pango
     gtk3
     libappindicator
@@ -44,11 +43,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mullvad-vpn";
-  version = "2021.6";
+  version = "2022.4";
 
   src = fetchurl {
     url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_amd64.deb";
-    sha256 = "0vpahryw4hm1k9p4vang84ji88znz67s7wxnwqndf02a627n7fcm";
+    sha256 = "sha256-OwTtWzlZjHNFSN5/UjFJbcrPCv9+ucWYEL2idYjeozU=";
   };
 
   nativeBuildInputs = [
@@ -90,6 +89,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mullvad/mullvadvpn-app";
     description = "Client for Mullvad VPN";
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ Br1ght0ne ymarkus flexagoon ];

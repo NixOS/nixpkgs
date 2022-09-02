@@ -2,11 +2,11 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "okapi";
-  version = "1.2.0";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://github.com/trinsic-id/okapi/releases/download/v${version}/okapi-vendor-${version}.tar.gz";
-    sha256 = "sha256-1aADcwEEWMhoJjwc8wkEcmBYXz+5josOfI/KLaton2k=";
+    sha256 = "sha256-wszpCzh1VhqBlox7ywWi6WKUmxQUTsf5N5IiJumlEbM=";
   };
 
   cargoVendorDir = "vendor";

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , pkg-config
 , meson
@@ -15,8 +16,8 @@
 , openssh
 , systemd
 , gobject-introspection
-, makeWrapper
-, libxslt
+, wrapGAppsHook
+, gi-docgen
 , vala
 , gnome
 , python3
@@ -25,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gcr";
-  version = "3.41.0";
+  version = "3.41.1";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "CQn8SeqK1IMtJ1ZP8v0dxmZpbioHxzlBxIgp5gVy2gE=";
+    sha256 = "u3Eoo8L+u/7pwDuQ131JjQzrI3sHiYAtYBhcccS+ok8=";
   };
 
   nativeBuildInputs = [
@@ -41,8 +42,8 @@ stdenv.mkDerivation rec {
     ninja
     gettext
     gobject-introspection
-    libxslt
-    makeWrapper
+    gi-docgen
+    wrapGAppsHook
     vala
     shared-mime-info
   ];
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
     pango
     libsecret
     openssh
+  ] ++ lib.optionals stdenv.isLinux [
     systemd
   ];
 
@@ -68,10 +70,11 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=false"
     # We are still using ssh-agent from gnome-keyring.
     # https://github.com/NixOS/nixpkgs/issues/140824
     "-Dssh_agent=false"
+  ] ++ lib.optionals (!stdenv.isLinux) [
+    "-Dsystemd=disabled"
   ];
 
   doCheck = false; # fails 21 out of 603 tests, needs dbus daemon
@@ -79,20 +82,22 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
 
   postPatch = ''
-    patchShebangs build/ gcr/fixtures/
+    patchShebangs gcr/fixtures/
 
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
+    substituteInPlace meson_post_install.py --replace ".so" "${stdenv.hostPlatform.extensions.sharedLibrary}"
   '';
 
-  preFixup = ''
-    wrapProgram "$out/bin/gcr-viewer" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
+      freeze = true;
     };
   };
 

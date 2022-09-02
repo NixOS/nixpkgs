@@ -1,43 +1,38 @@
-{ lib, buildGo117Module, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
-buildGo117Module rec {
+buildGoModule rec {
   pname = "talosctl";
-  version = "0.14.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
-    owner = "talos-systems";
+    owner = "siderolabs";
     repo = "talos";
     rev = "v${version}";
-    sha256 = "sha256-JeZ+Q6LTDJtoxfu4mJNc3wv3Y6OPcIUvgnozj9mWwLw=";
+    sha256 = "sha256-+cipDqPsBrUw4Q3uDkV76buPWTgtJXnvFsEaqqifTH8=";
   };
 
-  vendorSha256 = "sha256-ujbEWvcNJJOUegVgAGEPwYF02TiqD1lZELvqc/Gmb4A=";
+  vendorSha256 = "sha256-58XLmJaE3g2KG9e4rOyO1ouBBlCGX96e8AWfr0XVHC4=";
 
-  # look for GO_LDFLAGS getting set in the Makefile
-  ldflags =
-    let
-      versionPkg = "github.com/talos-systems/talos/pkg/version"; # VERSION_PKG
-      imagesPkgs = "github.com/talos-systems/talos/pkg/images"; # IMAGES_PKGS
-      mgmtHelpersPkg = "github.com/talos-systems/talos/cmd/talosctl/pkg/mgmt/helpers"; #MGMT_HELPERS_PKG
-    in
-    [
-      "-X ${versionPkg}.Name=Talos"
-      "-X ${versionPkg}.SHA=${src.rev}" # should be the hash, but as we build from tags, this needs to do
-      "-X ${versionPkg}.Tag=${src.rev}"
-      "-X ${versionPkg}.PkgsVersion=v0.9.0-2-g447ce75" # PKGS
-      "-X ${versionPkg}.ExtrasVersion=v0.7.0-1-gd6b73a7" # EXTRAS
-      "-X ${imagesPkgs}.Username=talos-systems" # USERNAME
-      "-X ${imagesPkgs}.Registry=ghcr.io" # REGISTRY
-      "-X ${mgmtHelpersPkg}.ArtifactsPath=_out" # ARTIFACTS
-    ];
+  ldflags = [ "-s" "-w" ];
+
+  GOWORK = "off";
 
   subPackages = [ "cmd/talosctl" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd talosctl \
+      --bash <($out/bin/talosctl completion bash) \
+      --fish <($out/bin/talosctl completion fish) \
+      --zsh <($out/bin/talosctl completion zsh)
+  '';
 
   doCheck = false;
 
   meta = with lib; {
     description = "A CLI for out-of-band management of Kubernetes nodes created by Talos";
-    homepage = "https://github.com/talos-systems/talos";
+    homepage = "https://www.talos.dev/";
     license = licenses.mpl20;
     maintainers = with maintainers; [ flokli ];
   };

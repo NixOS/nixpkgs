@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl, cmake, bison, pkg-config
+{ lib, stdenv, fetchurl, cmake, bison, pkg-config, nukeReferences
 , boost, libedit, libevent, lz4, ncurses, openssl, protobuf, readline, zlib, perl
 , cctools, CoreServices, developer_cmds
-, libtirpc, rpcsvc-proto
+, libtirpc, rpcsvc-proto, nixosTests
 }:
 
 # Note: zlib is not required; MySQL can use an internal zlib.
@@ -9,11 +9,11 @@
 let
 self = stdenv.mkDerivation rec {
   pname = "mysql";
-  version = "5.7.27";
+  version = "5.7.37";
 
   src = fetchurl {
     url = "mirror://mysql/MySQL-5.7/${pname}-${version}.tar.gz";
-    sha256 = "1fhv16zr46pxm1j8vb8x8mh3nwzglg01arz8gnazbmjqldr5idpq";
+    sha256 = "sha256-qZqaqGNdJWbat2Sy3la+0XMDZdNg4guyf1Y5LOVOGL0=";
   };
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
@@ -21,7 +21,7 @@ self = stdenv.mkDerivation rec {
     export PATH=$PATH:$TMPDIR
   '';
 
-  nativeBuildInputs = [ bison cmake pkg-config ]
+  nativeBuildInputs = [ bison cmake pkg-config nukeReferences ]
     ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
 
   buildInputs = [ boost libedit libevent lz4 ncurses openssl protobuf readline zlib ]
@@ -31,7 +31,6 @@ self = stdenv.mkDerivation rec {
   outputs = [ "out" "static" ];
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # To run libmysql/libmysql_api_test during build.
     "-DWITH_SSL=yes"
     "-DWITH_EMBEDDED_SERVER=yes"
     "-DWITH_UNIT_TESTS=no"
@@ -66,6 +65,7 @@ self = stdenv.mkDerivation rec {
     sed -i -e "s|/usr/bin/libtool|libtool|" cmake/merge_archives.cmake.in
   '';
   postInstall = ''
+    nuke-refs "$out/share/mysql/docs/INFO_BIN"
     moveToOutput "lib/*.a" $static
     ln -s libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libmysqlclient_r${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
@@ -75,6 +75,7 @@ self = stdenv.mkDerivation rec {
     connector-c = self;
     server = self;
     mysqlVersion = "5.7";
+    tests = nixosTests.mysql.mysql57;
   };
 
   meta = with lib; {

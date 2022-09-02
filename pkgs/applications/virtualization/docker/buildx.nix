@@ -2,16 +2,22 @@
 
 buildGoModule rec {
   pname = "docker-buildx";
-  version = "0.7.1";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "buildx";
     rev = "v${version}";
-    sha256 = "sha256-5EV0Rw1+ufxQ1wmQ0EJXQ7HVtXVbB4do/tet0QFRi08=";
+    sha256 = "sha256-nJR+wpWa7y8Mq6WWj1ZH/FRCtar40XP2fwyl1hMgELI=";
   };
 
   vendorSha256 = null;
+
+  ldflags = [
+    "-w" "-s"
+    "-X github.com/docker/buildx/version.Package=github.com/docker/buildx"
+    "-X github.com/docker/buildx/version.Version=v${version}"
+  ];
 
   installPhase = ''
     install -D $GOPATH/bin/buildx $out/libexec/docker/cli-plugins/docker-buildx

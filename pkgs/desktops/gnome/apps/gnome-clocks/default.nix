@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
 , ninja
@@ -7,35 +8,34 @@
 , wrapGAppsHook
 , itstool
 , desktop-file-utils
-, vala
+, vala_0_56
 , gobject-introspection
 , libxml2
-, gtk3
+, gtk4
 , glib
 , gsound
 , sound-theme-freedesktop
 , gsettings-desktop-schemas
-, adwaita-icon-theme
 , gnome-desktop
 , geocode-glib
 , gnome
 , gdk-pixbuf
 , geoclue2
 , libgweather
-, libhandy
+, libadwaita
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-clocks";
-  version = "41.0";
+  version = "42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-clocks/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "34yLBKuS+mGPXe5RGFce+fyeilt5XqAKNcbcZ3ywLaw=";
+    sha256 = "DnEY20oDLjzqMhLZjLuCjWt88i/gXgxfyLORxqPdb+A=";
   };
 
   nativeBuildInputs = [
-    vala
+    vala_0_56
     meson
     ninja
     pkg-config
@@ -48,17 +48,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     glib
     gsettings-desktop-schemas
     gdk-pixbuf
-    adwaita-icon-theme
     gnome-desktop
     geocode-glib
     geoclue2
     libgweather
     gsound
-    libhandy
+    libadwaita
   ];
 
   preFixup = ''
@@ -81,7 +80,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/Clocks";
     description = "Clock application designed for GNOME 3";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

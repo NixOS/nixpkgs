@@ -78,11 +78,11 @@ let
     pname = "nim-bootstrap";
     version = "g${lib.substring 0 7 revision}";
 
-    src = fetchgit {
-      # A Git checkout is much smaller than a GitHub tarball.
-      url = "https://github.com/nim-lang/csources_v1.git";
+    src = fetchFromGitHub {
+      owner = "nim-lang";
+      repo = "csources_v1";
       rev = revision;
-      sha256 = "1c2k681knrha1zmf4abhb32i2wwd3nwflzylnqryxk753swla043";
+      sha256 = "sha256-gwBFuR7lzO4zttR/6rgdjXMRxVhwKeLqDwpmOwMyU7A=";
     };
 
     enableParallelBuilding = true;
@@ -98,12 +98,12 @@ in {
 
   nim-unwrapped = stdenv.mkDerivation rec {
     pname = "nim-unwrapped";
-    version = "1.6.2";
+    version = "1.6.6";
     strictDeps = true;
 
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${version}.tar.xz";
-      hash = "sha256-msRxT6bDFdaR2n9diUHBsZDU1Dc5fZdC4yfC1RiT43M=";
+      hash = "sha256-Z7ERzm84YVA7n8wcrln8NNASJWbT7P7zoGSiF0EhpFI=";
     };
 
     buildInputs = [ boehmgc openssl pcre readline sqlite ];
@@ -143,6 +143,7 @@ in {
       runHook preInstall
       install -Dt $out/bin bin/*
       ln -sf $out/nim/bin/nim $out/bin/nim
+      ln -sf $out/nim/lib $out/lib
       ./install.sh $out
       runHook postInstall
     '';
@@ -183,6 +184,14 @@ in {
       install -Dt $out/bin src/nimble
       runHook postBuild
     '';
+
+    meta = with lib; {
+      description = "Package manager for the Nim programming language";
+      homepage = "https://github.com/nim-lang/nimble";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ ehmry ];
+      mainProgram = "nimble";
+    };
   };
 
   nim = let

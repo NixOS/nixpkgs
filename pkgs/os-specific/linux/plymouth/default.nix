@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.freedesktop.org/wiki/Software/Plymouth/";
     description = "Boot splash and boot logger";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.goibhniu teams.gnome.members ];
+    maintainers = [ maintainers.goibhniu ] ++ teams.gnome.members;
     platforms = platforms.linux;
   };
 }

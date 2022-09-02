@@ -20,12 +20,12 @@ let
   inherit (python3Packages) docutils python fb-re2 pygit2 pygments;
 
   self = python3Packages.buildPythonApplication rec {
-    pname = "mercurial";
-    version = "6.0.1";
+    pname = "mercurial${lib.optionalString fullBuild "-full"}";
+    version = "6.2.1";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "sha256-Bf0LSAOJyWVH9abHaekO4A8dE/esDUZeQKOBxs86VuI=";
+      sha256 = "sha256-isXXog0cKtVNTCY9E0FkZG3DSo46a+1pz76rr404gto=";
     };
 
     format = "other";
@@ -34,9 +34,9 @@ let
 
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
-      name = "${pname}-${version}";
-      sha256 = "sha256-leyLb6RqntiuEhmJSUkZRUuO8ah0BZI5OhKkGbWRjxs=";
-      sourceRoot = "${pname}-${version}/rust";
+      name = "mercurial-${version}";
+      sha256 = "sha256-shmeTQSCpQLrRUbL5bu9nAiPideZUe31YNCrClLM1eI=";
+      sourceRoot = "mercurial-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
 
@@ -91,7 +91,7 @@ let
       homepage = "https://www.mercurial-scm.org";
       downloadPage = "https://www.mercurial-scm.org/release/";
       license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ eelco lukegb pacien ];
+      maintainers = with maintainers; [ eelco lukegb pacien techknowlogick ];
       platforms = platforms.unix;
     };
   };
@@ -151,6 +151,8 @@ let
     EOF
 
     export HGTEST_REAL_HG="${mercurial}/bin/hg"
+    # include tests for native components
+    export HGMODULEPOLICY="rust+c"
     # extended timeout necessary for tests to pass on the busy CI workers
     export HGTESTFLAGS="--blacklist blacklists/nix --timeout 1800 -j$NIX_BUILD_CORES ${flags}"
     make check
@@ -180,7 +182,11 @@ in
         buildInputs = self.buildInputs ++ self.propagatedBuildInputs;
         nativeBuildInputs = self.nativeBuildInputs;
 
-        phases = [ "installPhase" "installCheckPhase" ];
+        dontUnpack = true;
+        dontPatch = true;
+        dontConfigure = true;
+        dontBuild = true;
+        doCheck = false;
 
         installPhase = ''
           runHook preInstall

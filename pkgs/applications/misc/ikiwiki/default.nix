@@ -18,9 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "0skrc8r4wh4mjfgw1c94awr5sacfb9nfsbm4frikanc9xsy16ksr";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ which highlight ]
     ++ (with perlPackages; [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
-      TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
+      TimeDate gettext DBFile CGISession CGIFormBuilder LocaleGettext
       RpcXML XMLSimple ImageMagick YAML YAMLLibYAML HTMLTree AuthenPassphrase
       NetOpenIDConsumer LWPxParanoidAgent CryptSSLeay ])
     ++ lib.optionals docutilsSupport [

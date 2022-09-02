@@ -5,6 +5,7 @@
 , defusedxml
 , dnspython
 , fetchFromGitHub
+, fetchpatch
 , flake8
 , isodate
 , lxml
@@ -17,7 +18,7 @@
 , pyyaml
 , requests
 , requests_ntlm
-, requests_oauthlib
+, requests-oauthlib
 , requests-kerberos
 , requests-mock
 , tzdata
@@ -26,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "exchangelib";
-  version = "4.7.1";
+  version = "4.7.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -34,9 +35,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ecederstrand";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1kwb5ixlmxg0xxm4wms5r4kym220vbncr9afi9qc25g8npkbs860";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Oarmdc2PuE4kQ/qUqQhuzdTpIrrMFCK72CrVmoSH1DI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "tests-timezones.patch";
+      url = "https://github.com/ecederstrand/exchangelib/commit/d5d386f54adec8ab02f871332b89e1176c214ba2.diff";
+      hash = "sha256-E3Ys6IDJ/yMsvi+1GKbwckkhbNrc9JLM/+GrPtUz+mY=";
+    })
+  ];
 
   propagatedBuildInputs = [
     cached-property
@@ -48,7 +57,7 @@ buildPythonPackage rec {
     pygments
     requests
     requests_ntlm
-    requests_oauthlib
+    requests-oauthlib
     requests-kerberos
     tzdata
     tzlocal

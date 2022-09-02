@@ -6,65 +6,23 @@
 , version, src
 }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      aiofiles = super.aiofiles.overridePythonAttrs (oldAttrs: rec {
-        version = "0.8.0";
-        src = fetchFromGitHub {
-          owner = "Tinche";
-          repo = "aiofiles";
-          rev = "v${version}";
-          sha256 = "0mr9pzji4vqyf2yzh8yxz5q7fm8mgmkimx1xh49wh625m72pxcap";
-        };
-      });
-
-      asgiref = super.asgiref.overridePythonAttrs (oldAttrs: rec {
-        version = "3.4.1";
-        src = fetchFromGitHub {
-          owner = "django";
-          repo = "asgiref";
-          rev = version;
-          sha256 = "0440321alpqb1cdsmfzmiiy8rpq0ic0wvraalzk39cgrl7mghw39";
-        };
-      });
-
-      click = super.click.overridePythonAttrs (oldAttrs: rec {
-        version = "8.0.3";
-        src = fetchFromGitHub {
-          owner = "pallets";
-          repo = "click";
-          rev = version;
-          sha256 = "0pxvxgfhqjgsjbgfnilqjki1l24r0rdfd98cl77i71yqdd2f497g";
-        };
-      });
-
-      starlette = super.starlette.overridePythonAttrs (oldAttrs: rec {
-        version = "0.17.0";
-        src = fetchFromGitHub {
-          owner = "encode";
-          repo = "starlette";
-          rev = version;
-          sha256 = "1g76qpvqzivmwll5ir4bf45jx5kilnkadvy6b7qjisvr402i3qmw";
-        };
-        disabledTestPaths = [];
-      });
-
-      uvicorn = super.uvicorn.overridePythonAttrs (oldAttrs: rec {
-        version = "0.16.0";
-        src = fetchFromGitHub {
-          owner = "encode";
-          repo = "uvicorn";
-          rev = version;
-          sha256 = "14jih6j4q2qp5c9rgl798i5p51b4y6zkkj434q2l1naw0csphk4s";
-        };
-      });
-    };
-  };
-in
-with python.pkgs; buildPythonApplication rec {
+with python3.pkgs; buildPythonApplication rec {
   pname = "platformio";
   inherit version src;
+
+  patches = [
+    ./fix-searchpath.patch
+    ./use-local-spdx-license-list.patch
+    ./missing-udev-rules-nixos.patch
+  ];
+
+  postPatch = ''
+    substitute platformio/package/manifest/schema.py platformio/package/manifest/schema.py \
+      --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data.json}'
+
+    substituteInPlace setup.py \
+      --replace 'uvicorn==%s" % ("0.17.*"' 'uvicorn==%s" % ("0.18.*"'
+  '';
 
   propagatedBuildInputs = [
     aiofiles
@@ -80,6 +38,7 @@ with python.pkgs; buildPythonApplication rec {
     pyserial
     requests
     semantic-version
+    spdx-license-list-data.json
     starlette
     tabulate
     uvicorn
@@ -87,15 +46,45 @@ with python.pkgs; buildPythonApplication rec {
     zeroconf
   ];
 
-  HOME = "/tmp";
+  preCheck = ''
+    export HOME=$(mktemp -d)
+    export PATH=$PATH:$out/bin
+  '';
 
   checkInputs = [
     jsondiff
     pytestCheckHook
-    tox
   ];
 
-  pytestFlagsArray = (map (e: "--deselect tests/${e}") [
+  disabledTestPaths = [
+    "tests/commands/pkg/test_install.py"
+    "tests/commands/pkg/test_list.py"
+    "tests/commands/pkg/test_outdated.py"
+    "tests/commands/pkg/test_search.py"
+    "tests/commands/pkg/test_show.py"
+    "tests/commands/pkg/test_uninstall.py"
+    "tests/commands/pkg/test_update.py"
+    "tests/commands/test_boards.py"
+    "tests/commands/test_check.py"
+    "tests/commands/test_platform.py"
+    "tests/commands/test_run.py"
+    "tests/commands/test_test.py"
+    "tests/misc/test_maintenance.py"
+    # requires internet connection
+    "tests/misc/ino2cpp/test_ino2cpp.py"
+  ];
+
+  disabledTests = [
+    # requires internet connection
+    "test_api_cache"
+    "test_ping_internet_ips"
+  ];
+
+  pytestFlagsArray = [
+    "tests"
+  ] ++ (map (e: "--deselect tests/${e}") [
+    "commands/pkg/test_exec.py::test_pkg_specified"
+    "commands/pkg/test_exec.py::test_unrecognized_options"
     "commands/test_ci.py::test_ci_boards"
     "commands/test_ci.py::test_ci_build_dir"
     "commands/test_ci.py::test_ci_keep_build_dir"
@@ -105,6 +94,7 @@ with python.pkgs; buildPythonApplication rec {
     "commands/test_init.py::test_init_duplicated_boards"
     "commands/test_init.py::test_init_enable_auto_uploading"
     "commands/test_init.py::test_init_ide_atom"
+    "commands/test_init.py::test_init_ide_clion"
     "commands/test_init.py::test_init_ide_eclipse"
     "commands/test_init.py::test_init_ide_vscode"
     "commands/test_init.py::test_init_incorrect_board"
@@ -133,9 +123,6 @@ with python.pkgs; buildPythonApplication rec {
     "commands/test_lib_complex.py::test_lib_show"
     "commands/test_lib_complex.py::test_lib_stats"
     "commands/test_lib_complex.py::test_search"
-    "commands/test_test.py::test_local_env"
-    "commands/test_test.py::test_multiple_env_build"
-    "commands/test_test.py::test_setup_teardown_are_compilable"
     "package/test_manager.py::test_download"
     "package/test_manager.py::test_install_force"
     "package/test_manager.py::test_install_from_registry"
@@ -152,36 +139,13 @@ with python.pkgs; buildPythonApplication rec {
     "test_misc.py::test_ping_internet_ips"
     "test_misc.py::test_platformio_cli"
     "test_pkgmanifest.py::test_packages"
-  ]) ++ (map (e: "--ignore=tests/${e}") [
-    "commands/test_boards.py"
-    "commands/test_check.py"
-    "commands/test_platform.py"
-    "commands/test_update.py"
-    "test_maintenance.py"
-    "test_ino2cpp.py"
-  ]) ++ [
-    "tests"
-  ];
-
-  patches = [
-    ./fix-searchpath.patch
-    ./use-local-spdx-license-list.patch
-    ./missing-udev-rules-nixos.patch
-  ];
-
-  postPatch = ''
-    substitute platformio/package/manifest/schema.py platformio/package/manifest/schema.py \
-      --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data}'
-
-    substituteInPlace setup.py \
-      --replace "zeroconf==0.37.*" "zeroconf"
-  '';
+  ]);
 
   meta = with lib; {
-    broken = stdenv.isAarch64;
     description = "An open source ecosystem for IoT development";
-    homepage = "http://platformio.org";
+    homepage = "https://platformio.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ mog makefu ];
+    broken = stdenv.isAarch64;
   };
 }

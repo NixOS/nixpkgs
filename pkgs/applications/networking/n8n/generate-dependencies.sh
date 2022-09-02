@@ -10,9 +10,10 @@
 #          -> cpu-features
 #             -> node-gyp@3.8.0 -> python2
 #             -> cmake
+cd "$(dirname $(readlink -f $0))"
 
 node2nix \
-  --14 \
+  --nodejs-16 \
   --strip-optional-dependencies \
   --node-env node-env.nix \
   --input package.json \

@@ -72,7 +72,7 @@ in
   options.services.ceph = {
     # Ceph has a monolithic configuration file but different sections for
     # each daemon, a separate client section and a global section
-    enable = mkEnableOption "Ceph global configuration";
+    enable = mkEnableOption (lib.mdDoc "Ceph global configuration");
 
     global = {
       fsid = mkOption {
@@ -80,7 +80,7 @@ in
         example = ''
           433a2193-4f8a-47a0-95d2-209d7ca2cca5
         '';
-        description = ''
+        description = lib.mdDoc ''
           Filesystem ID, a generated uuid, its must be generated and set before
           attempting to start a cluster
         '';
@@ -89,7 +89,7 @@ in
       clusterName = mkOption {
         type = types.str;
         default = "ceph";
-        description = ''
+        description = lib.mdDoc ''
           Name of cluster
         '';
       };
@@ -98,7 +98,7 @@ in
         type = types.path;
         default = "${pkgs.ceph.lib}/lib/ceph/mgr";
         defaultText = literalExpression ''"''${pkgs.ceph.lib}/lib/ceph/mgr"'';
-        description = ''
+        description = lib.mdDoc ''
           Path at which to find ceph-mgr modules.
         '';
       };
@@ -109,7 +109,7 @@ in
         example = ''
           node0, node1, node2
         '';
-        description = ''
+        description = lib.mdDoc ''
           List of hosts that will be used as monitors at startup.
         '';
       };
@@ -120,7 +120,7 @@ in
         example = ''
           10.10.0.1, 10.10.0.2, 10.10.0.3
         '';
-        description = ''
+        description = lib.mdDoc ''
           List of hostname shortnames/IP addresses of the initial monitors.
         '';
       };
@@ -128,7 +128,7 @@ in
       maxOpenFiles = mkOption {
         type = types.int;
         default = 131072;
-        description = ''
+        description = lib.mdDoc ''
           Max open files for each OSD daemon.
         '';
       };
@@ -136,7 +136,7 @@ in
       authClusterRequired = mkOption {
         type = types.enum [ "cephx" "none" ];
         default = "cephx";
-        description = ''
+        description = lib.mdDoc ''
           Enables requiring daemons to authenticate with eachother in the cluster.
         '';
       };
@@ -144,7 +144,7 @@ in
       authServiceRequired = mkOption {
         type = types.enum [ "cephx" "none" ];
         default = "cephx";
-        description = ''
+        description = lib.mdDoc ''
           Enables requiring clients to authenticate with the cluster to access services in the cluster (e.g. radosgw, mds or osd).
         '';
       };
@@ -152,7 +152,7 @@ in
       authClientRequired = mkOption {
         type = types.enum [ "cephx" "none" ];
         default = "cephx";
-        description = ''
+        description = lib.mdDoc ''
           Enables requiring the cluster to authenticate itself to the client.
         '';
       };
@@ -163,7 +163,7 @@ in
         example = ''
           10.20.0.0/24, 192.168.1.0/24
         '';
-        description = ''
+        description = lib.mdDoc ''
           A comma-separated list of subnets that will be used as public networks in the cluster.
         '';
       };
@@ -174,16 +174,16 @@ in
         example = ''
           10.10.0.0/24, 192.168.0.0/24
         '';
-        description = ''
+        description = lib.mdDoc ''
           A comma-separated list of subnets that will be used as cluster networks in the cluster.
         '';
       };
 
       rgwMimeTypesFile = mkOption {
         type = with types; nullOr path;
-        default = "${pkgs.mime-types}/etc/mime.types";
-        defaultText = literalExpression ''"''${pkgs.mime-types}/etc/mime.types"'';
-        description = ''
+        default = "${pkgs.mailcap}/etc/mime.types";
+        defaultText = literalExpression ''"''${pkgs.mailcap}/etc/mime.types"'';
+        description = lib.mdDoc ''
           Path to mime types used by radosgw.
         '';
       };
@@ -195,18 +195,18 @@ in
       example = {
         "ms bind ipv6" = "true";
       };
-      description = ''
+      description = lib.mdDoc ''
         Extra configuration to add to the global section. Use for setting values that are common for all daemons in the cluster.
       '';
     };
 
     mgr = {
-      enable = mkEnableOption "Ceph MGR daemon";
+      enable = mkEnableOption (lib.mdDoc "Ceph MGR daemon");
       daemons = mkOption {
         type = with types; listOf str;
         default = [];
         example = [ "name1" "name2" ];
-        description = ''
+        description = lib.mdDoc ''
           A list of names for manager daemons that should have a service created. The names correspond
           to the id part in ceph i.e. [ "name1" ] would result in mgr.name1
         '';
@@ -214,19 +214,19 @@ in
       extraConfig = mkOption {
         type = with types; attrsOf str;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration to add to the global section for manager daemons.
         '';
       };
     };
 
     mon = {
-      enable = mkEnableOption "Ceph MON daemon";
+      enable = mkEnableOption (lib.mdDoc "Ceph MON daemon");
       daemons = mkOption {
         type = with types; listOf str;
         default = [];
         example = [ "name1" "name2" ];
-        description = ''
+        description = lib.mdDoc ''
           A list of monitor daemons that should have a service created. The names correspond
           to the id part in ceph i.e. [ "name1" ] would result in mon.name1
         '';
@@ -234,19 +234,19 @@ in
       extraConfig = mkOption {
         type = with types; attrsOf str;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration to add to the monitor section.
         '';
       };
     };
 
     osd = {
-      enable = mkEnableOption "Ceph OSD daemon";
+      enable = mkEnableOption (lib.mdDoc "Ceph OSD daemon");
       daemons = mkOption {
         type = with types; listOf str;
         default = [];
         example = [ "name1" "name2" ];
-        description = ''
+        description = lib.mdDoc ''
           A list of OSD daemons that should have a service created. The names correspond
           to the id part in ceph i.e. [ "name1" ] would result in osd.name1
         '';
@@ -262,19 +262,19 @@ in
           "osd pool default pgp num" = "200";
           "osd crush chooseleaf type" = "1";
         };
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration to add to the OSD section.
         '';
       };
     };
 
     mds = {
-      enable = mkEnableOption "Ceph MDS daemon";
+      enable = mkEnableOption (lib.mdDoc "Ceph MDS daemon");
       daemons = mkOption {
         type = with types; listOf str;
         default = [];
         example = [ "name1" "name2" ];
-        description = ''
+        description = lib.mdDoc ''
           A list of metadata service daemons that should have a service created. The names correspond
           to the id part in ceph i.e. [ "name1" ] would result in mds.name1
         '';
@@ -282,19 +282,19 @@ in
       extraConfig = mkOption {
         type = with types; attrsOf str;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration to add to the MDS section.
         '';
       };
     };
 
     rgw = {
-      enable = mkEnableOption "Ceph RadosGW daemon";
+      enable = mkEnableOption (lib.mdDoc "Ceph RadosGW daemon");
       daemons = mkOption {
         type = with types; listOf str;
         default = [];
         example = [ "name1" "name2" ];
-        description = ''
+        description = lib.mdDoc ''
           A list of rados gateway daemons that should have a service created. The names correspond
           to the id part in ceph i.e. [ "name1" ] would result in client.name1, radosgw daemons
           aren't daemons to cluster in the sense that OSD, MGR or MON daemons are. They are simply
@@ -304,7 +304,7 @@ in
     };
 
     client = {
-      enable = mkEnableOption "Ceph client configuration";
+      enable = mkEnableOption (lib.mdDoc "Ceph client configuration");
       extraConfig = mkOption {
         type = with types; attrsOf (attrsOf str);
         default = {};
@@ -315,7 +315,7 @@ in
             "client.radosgw.node0" = { "some config option" = "true"; };
           };
         '';
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration to add to the client section. Configuration for rados gateways
           would be added here, with their own sections, see example.
         '';

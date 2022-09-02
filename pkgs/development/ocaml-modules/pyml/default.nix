@@ -2,18 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "pyml";
-  version = "20210226";
+  version = "20220615";
 
   src = fetchFromGitHub {
     owner  = "thierry-martinez";
     repo   = pname;
     rev    = version;
-    sha256 = "15xk6bgdzsf04d6wdjpr3s1ci2g7d7qnbq3102avkz179d5n62h7";
+    sha256 = "sha256-my/xn9vrYTcHyjXGBNamgqpBz2/6bTyQHuE9ViVGLjw=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     ocaml
     findlib
+  ];
+  buildInputs = [
     utop
     ncurses
   ];
@@ -22,6 +24,8 @@ stdenv.mkDerivation rec {
     python3
     stdcompat
   ];
+
+  strictDeps = true;
 
   buildPhase = ''
     make all pymltop pymlutop PREFIX=$out

@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , qtbase
 , qtmultimedia
 , qscintilla
@@ -26,6 +27,9 @@
 , qtmacextras
 , qmake
 , spacenavSupport ? stdenv.isLinux, libspnav
+, wayland
+, wayland-protocols
+, qtwayland
 }:
 
 mkDerivation rec {
@@ -39,13 +43,26 @@ mkDerivation rec {
     sha256 = "sha256-2tOLqpFt5klFPxHNONnHVzBKEFWn4+ufx/MU+eYbliA=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-0496.patch";
+      url = "https://github.com/openscad/openscad/commit/00a4692989c4e2f191525f73f24ad8727bacdf41.patch";
+      sha256 = "sha256-q3SLj2b5aM/IQ8vIDj4iVcwCajgyJ5juNV/KN35uxfI=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-0497.patch";
+      url = "https://github.com/openscad/openscad/commit/84addf3c1efbd51d8ff424b7da276400bbfa1a4b.patch";
+      sha256 = "sha256-KNEVu10E2d4G2x+FJcuHo2tjD8ygMRuhUcW9NbN98bM=";
+    })
+  ];
+
   nativeBuildInputs = [ bison flex pkg-config gettext qmake ];
 
   buildInputs = [
     eigen boost glew opencsg cgal mpfr gmp glib
     harfbuzz lib3mf libzip double-conversion freetype fontconfig
     qtbase qtmultimedia qscintilla
-  ] ++ lib.optionals stdenv.isLinux [ libGLU libGL ]
+  ] ++ lib.optionals stdenv.isLinux [ libGLU libGL wayland wayland-protocols qtwayland ]
     ++ lib.optional stdenv.isDarwin qtmacextras
     ++ lib.optional spacenavSupport libspnav
   ;
@@ -57,8 +74,11 @@ mkDerivation rec {
       "SPNAV_LIBPATH=${libspnav}/lib"
     ];
 
-  # src/lexer.l:36:10: fatal error: parser.hxx: No such file or directory
-  enableParallelBuilding = false; # true by default due to qmake
+  enableParallelBuilding = true;
+
+  preBuild = ''
+    make objects/parser.cxx
+  '';
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir $out/Applications

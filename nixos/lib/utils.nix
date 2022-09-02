@@ -45,6 +45,26 @@ rec {
    replaceChars ["/" "-" " "] ["-" "\\x2d" "\\x20"]
    (removePrefix "/" s);
 
+  # Quotes an argument for use in Exec* service lines.
+  # systemd accepts "-quoted strings with escape sequences, toJSON produces
+  # a subset of these.
+  # Additionally we escape % to disallow expansion of % specifiers. Any lone ;
+  # in the input will be turned it ";" and thus lose its special meaning.
+  # Every $ is escaped to $$, this makes it unnecessary to disable environment
+  # substitution for the directive.
+  escapeSystemdExecArg = arg:
+    let
+      s = if builtins.isPath arg then "${arg}"
+        else if builtins.isString arg then arg
+        else if builtins.isInt arg || builtins.isFloat arg then toString arg
+        else throw "escapeSystemdExecArg only allows strings, paths and numbers";
+    in
+      replaceChars [ "%" "$" ] [ "%%" "$$" ] (builtins.toJSON s);
+
+  # Quotes a list of arguments into a single string for use in a Exec*
+  # line.
+  escapeSystemdExecArgs = concatMapStringsSep " " escapeSystemdExecArg;
+
   # Returns a system path for a given shell package
   toShellPath = shell:
     if types.shellPackage.check shell then
@@ -149,10 +169,17 @@ rec {
       if [[ -h '${output}' ]]; then
         rm '${output}'
       fi
+
+      inherit_errexit_enabled=0
+      shopt -pq inherit_errexit && inherit_errexit_enabled=1
+      shopt -s inherit_errexit
     ''
     + concatStringsSep
         "\n"
-        (imap1 (index: name: "export secret${toString index}=$(<'${secrets.${name}}')")
+        (imap1 (index: name: ''
+                  secret${toString index}=$(<'${secrets.${name}}')
+                  export secret${toString index}
+                '')
                (attrNames secrets))
     + "\n"
     + "${pkgs.jq}/bin/jq >'${output}' '"
@@ -164,10 +191,28 @@ rec {
       ' <<'EOF'
       ${builtins.toJSON set}
       EOF
+      (( ! $inherit_errexit_enabled )) && shopt -u inherit_errexit
     '';
+
+  /* Remove packages of packagesToRemove from packages, based on their names.
+     Relies on package names and has quadratic complexity so use with caution!
+
+     Type:
+       removePackagesByName :: [package] -> [package] -> [package]
+
+     Example:
+       removePackagesByName [ nautilus file-roller ] [ file-roller totem ]
+       => [ nautilus ]
+  */
+  removePackagesByName = packages: packagesToRemove:
+    let
+      namesToRemove = map lib.getName packagesToRemove;
+    in
+      lib.filter (x: !(builtins.elem (lib.getName x) namesToRemove)) packages;
 
   systemdUtils = {
     lib = import ./systemd-lib.nix { inherit lib config pkgs; };
     unitOptions = import ./systemd-unit-options.nix { inherit lib systemdUtils; };
+    types = import ./systemd-types.nix { inherit lib systemdUtils pkgs; };
   };
 }

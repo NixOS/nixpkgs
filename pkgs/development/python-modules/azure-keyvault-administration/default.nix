@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "azure-keyvault-administration";
-  version = "4.0.0";
+  version = "4.1.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "b05a0372f35921cedb7a231426077745eee9a65881088de6d4d8b73d9709a6cb";
+    sha256 = "sha256-m5dkKUZoPkpUzSW1K39+wpIfWHc2oRyxMetOf/Ybzuc=";
   };
 
   propagatedBuildInputs = [

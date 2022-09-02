@@ -19,6 +19,14 @@ pkgs.runCommand "nixpkgs-release-checks" { src = nixpkgs; buildInputs = [nix]; }
         exit 1
     fi
 
+    # Make sure that no paths collide on case-preserving or case-insensitive filesysytems.
+    conflictingPaths=$(find $src | awk '{ print $1 " " tolower($1) }' | sort -k2 | uniq -D -f 1 | cut -d ' ' -f 1)
+    if [[ -n $conflictingPaths ]]; then
+        echo "Files in nixpkgs must not vary only by case"
+        echo "The offending paths: $conflictingPaths"
+        exit 1
+    fi
+
     src2=$TMPDIR/foo
     cp -rd $src $src2
 
@@ -30,12 +38,22 @@ pkgs.runCommand "nixpkgs-release-checks" { src = nixpkgs; buildInputs = [nix]; }
         # Relies on impure eval
         export NIX_ABORT_ON_WARN=true
 
-        nix-env -f $src \
-            --show-trace --argstr system "$platform" \
-            --arg config '{ allowAliases = false; }' \
-            --option experimental-features 'no-url-literals' \
-            -qa --drv-path --system-filter \* --system \
-            "''${opts[@]}" 2> eval-warnings.log > packages1
+        set +e
+        (
+          set -x
+          nix-env -f $src \
+              --show-trace --argstr system "$platform" \
+              --arg config '{ allowAliases = false; }' \
+              --option experimental-features 'no-url-literals' \
+              -qa --drv-path --system-filter \* --system \
+              "''${opts[@]}" 2> eval-warnings.log > packages1
+        )
+        rc=$?
+        set -e
+        if [ "$rc" != "0" ]; then
+          cat eval-warnings.log
+          exit $rc
+        fi
 
         s1=$(sha1sum packages1 | cut -c1-40)
         echo $s1

@@ -3,13 +3,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "raspberrypi-eeprom";
-  version = "2021.04.29-138a1";
+  version = "2022.04.26-138a1";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
     rev = "v${version}";
-    sha256 = "sha256-nzAMPa4gqCAcROFa7z34IoMA3aoMHX9fYCsPFde9dac=";
+    hash = "sha256-/Y+EaAxJQofDRE67HY8AVqAdOPdFI01/EhYCAT5qlSM=";
   };
 
   buildInputs = [ python3 ];
@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin $out/share/rpi-eeprom
 
-    cp rpi-eeprom-config rpi-eeprom-update $out/bin
+    cp rpi-eeprom-config rpi-eeprom-update rpi-eeprom-digest $out/bin
     cp -r firmware/{beta,critical,old,stable} $out/share/rpi-eeprom
     cp -P firmware/default firmware/latest $out/share/rpi-eeprom
   '';

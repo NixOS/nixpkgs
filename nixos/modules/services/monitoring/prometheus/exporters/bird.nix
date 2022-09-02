@@ -11,21 +11,21 @@ in
     birdVersion = mkOption {
       type = types.enum [ 1 2 ];
       default = 2;
-      description = ''
+      description = lib.mdDoc ''
         Specifies whether BIRD1 or BIRD2 is in use.
       '';
     };
     birdSocket = mkOption {
       type = types.path;
-      default = "/var/run/bird.ctl";
-      description = ''
+      default = "/run/bird/bird.ctl";
+      description = lib.mdDoc ''
         Path to BIRD2 (or BIRD1 v4) socket.
       '';
     };
     newMetricFormat = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Enable the new more-generic metric format.
       '';
     };

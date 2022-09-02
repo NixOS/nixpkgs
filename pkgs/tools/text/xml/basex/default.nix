@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "basex";
-  version = "9.6.3";
+  version = "10.1";
 
   src = fetchurl {
     url = "http://files.basex.org/releases/${version}/BaseX${builtins.replaceStrings ["."] [""] version}.zip";
-    hash = "sha256-OlIAyGUQKrl+Zu79p6cahHpx59zLozGkUDAEvykGN6Y=";
+    hash = "sha256-d11kqwsLsHopFi7w+wTDWx9h+UVM7Z5kY7vKXsBrvuo=";
   };
 
   nativeBuildInputs = [ unzip copyDesktopItems ];
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     comment = "Visually query and analyse your XML data";
     desktopName = "BaseX XML Database";
     genericName = "XML database tool";
-    categories = "Development;Utility;Database";
-    mimeType = "text/xml";
+    categories = [ "Development" "Utility" "Database" ];
+    mimeTypes = [ "text/xml" ];
   });
 
   dontBuild = true;
@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
       modes, BaseX offers a client/server architecture.
     '';
     homepage = "https://basex.org/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];

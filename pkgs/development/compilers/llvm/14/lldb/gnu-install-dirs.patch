@@ -1,0 +1,36 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 79d451965ed4..78188978d6de 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -12,6 +12,8 @@ set(CMAKE_MODULE_PATH
+ # If we are not building as part of LLVM, build LLDB as a standalone project,
+ # using LLVM as an external library.
+ if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
++  include(GNUInstallDirs)
++
+   project(lldb)
+   include(LLDBStandalone)
+ 
+diff --git a/cmake/modules/AddLLDB.cmake b/cmake/modules/AddLLDB.cmake
+index 3291a7c808e1..b27d27ce6a87 100644
+--- a/cmake/modules/AddLLDB.cmake
++++ b/cmake/modules/AddLLDB.cmake
+@@ -109,7 +109,7 @@ function(add_lldb_library name)
+   endif()
+ 
+   if(PARAM_SHARED)
+-    set(install_dest lib${LLVM_LIBDIR_SUFFIX})
++    set(install_dest ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX})
+     if(PARAM_INSTALL_PREFIX)
+       set(install_dest ${PARAM_INSTALL_PREFIX})
+     endif()
+diff --git a/tools/intel-features/CMakeLists.txt b/tools/intel-features/CMakeLists.txt
+index 7d48491ec89a..c04543585588 100644
+--- a/tools/intel-features/CMakeLists.txt
++++ b/tools/intel-features/CMakeLists.txt
+@@ -30,4 +30,4 @@ add_lldb_library(lldbIntelFeatures SHARED
+   )
+ 
+ install(TARGETS lldbIntelFeatures
+-  LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX})
++  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX})

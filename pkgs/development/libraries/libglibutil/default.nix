@@ -1,15 +1,14 @@
-{ stdenv, lib, fetchFromGitLab, pkg-config, glib }:
+{ stdenv, lib, fetchFromGitHub, pkg-config, glib }:
 
 stdenv.mkDerivation rec {
   pname = "libglibutil";
-  version = "1.0.55";
+  version = "1.0.66";
 
-  src = fetchFromGitLab {
-    domain = "git.sailfishos.org";
-    owner = "mer-core";
+  src = fetchFromGitHub {
+    owner = "sailfishos";
     repo = pname;
     rev = version;
-    sha256 = "0zrxccpyfz4jf14zr6fj9b88p340s66lw5cnqkapfa72kl1rnp4q";
+    sha256 = "sha256-CYZDlmnHOCT0HC7sG0dN7zWkhcSRzX6XXPrEFmFEye8=";
   };
 
   outputs = [ "out" "dev" ];

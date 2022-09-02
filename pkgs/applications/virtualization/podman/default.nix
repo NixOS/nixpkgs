@@ -17,20 +17,20 @@
 
 buildGoModule rec {
   pname = "podman";
-  version = "3.4.4";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    sha256 = "sha256-5Y0+xfoMCe3a6kX+OhmxURZXZLAnrS1t8TFyHqjGCeA=";
+    sha256 = "sha256-crlOF8FoLlDulJJ8t8M1kk6JhSZdJU1VtR+G0O6VngM=";
   };
 
   vendorSha256 = null;
 
   doCheck = false;
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "man" ] ++ lib.optionals stdenv.isLinux [ "rootlessport" ];
 
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles ];
 
@@ -47,26 +47,32 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    ${if stdenv.isDarwin
-      then "make podman-remote"
-      else "make podman"}
+    ${if stdenv.isDarwin then ''
+      make podman-remote # podman-mac-helper uses FHS paths
+    '' else ''
+      make bin/podman bin/rootlessport
+    ''}
     make docs
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-  '' + lib.optionalString stdenv.isDarwin ''
-    mv bin/{darwin/podman,podman}
-  '' + ''
-    install -Dm555 bin/podman $out/bin/podman
-    installShellCompletion --bash completions/bash/*
-    installShellCompletion --fish completions/fish/*
-    installShellCompletion --zsh completions/zsh/*
-    MANDIR=$man/share/man make install.man-nobuild
-    install -Dm644 cni/87-podman-bridge.conflist -t $out/etc/cni/net.d
-    install -Dm644 contrib/tmpfile/podman.conf -t $out/lib/tmpfiles.d
-    install -Dm644 contrib/systemd/system/podman.{socket,service} -t $out/lib/systemd/system
+    mkdir -p {$out/{bin,etc,lib,share},$man} # ensure paths exist for the wrapper
+    ${if stdenv.isDarwin then ''
+      mv bin/{darwin/podman,podman}
+    '' else ''
+      install -Dm644 cni/87-podman-bridge.conflist -t $out/etc/cni/net.d
+      install -Dm644 contrib/tmpfile/podman.conf -t $out/lib/tmpfiles.d
+      for s in contrib/systemd/**/*.in; do
+        substituteInPlace "$s" --replace "@@PODMAN@@" "podman" # don't use unwrapped binary
+      done
+      PREFIX=$out make install.systemd
+      install -Dm555 bin/rootlessport -t $rootlessport/bin
+    ''}
+    install -Dm555 bin/podman -t $out/bin
+    PREFIX=$out make install.completions
+    MANDIR=$man/share/man make install.man
     runHook postInstall
   '';
 
@@ -82,14 +88,14 @@ buildGoModule rec {
       podman-tls-ghostunnel
       podman-dnsname
       ;
+    oci-containers-podman = nixosTests.oci-containers.podman;
   };
 
   meta = with lib; {
     homepage = "https://podman.io/";
     description = "A program for managing pods, containers and container images";
-    changelog = "https://github.com/containers/podman/blob/v${version}/changelog.txt";
+    changelog = "https://github.com/containers/podman/blob/v${version}/RELEASE_NOTES.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ] ++ teams.podman.members;
-    platforms = platforms.unix;
   };
 }

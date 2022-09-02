@@ -1,9 +1,7 @@
-{ lib, stdenv, fetchgit, fetchFromGitHub
+{ lib, stdenv, fetchFromGitLab, fetchFromGitHub
 , file, libxslt, docbook_xml_dtd_412, docbook_xsl, xmlto
 , w3m, gnugrep, gnused, coreutils, xset, perlPackages
-, mimiSupport ? false, gawk ? null }:
-
-assert mimiSupport -> gawk != null;
+, mimiSupport ? false, gawk }:
 
 let
   # A much better xdg-open
@@ -24,14 +22,16 @@ stdenv.mkDerivation rec {
   pname = "xdg-utils";
   version = "unstable-2020-10-21";
 
-  src = fetchgit {
-    url = "https://gitlab.freedesktop.org/xdg/${pname}.git";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "xdg";
+    repo = "xdg-utils";
     rev = "d11b33ec7f24cfb1546f6b459611d440013bdc72";
     sha256 = "sha256-8PtXfI8hRneEpnUvIV3M+6ACjlkx0w/NEiJFdGbbHnQ=";
   };
 
   # just needed when built from git
-  buildInputs = [ libxslt docbook_xml_dtd_412 docbook_xsl xmlto w3m ];
+  nativeBuildInputs = [ libxslt docbook_xml_dtd_412 docbook_xsl xmlto w3m ];
 
   postInstall = lib.optionalString mimiSupport ''
     cp ${mimisrc}/xdg-open $out/bin/xdg-open

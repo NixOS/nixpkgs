@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy3k, isPyPy, python
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy3k, isPyPy, unittestCheckHook
 , pythonAtLeast }:
 
 let
@@ -20,10 +20,9 @@ in buildPythonPackage rec {
   # Also, don't bother on PyPy: AssertionError: TypeError not raised
   doCheck = pythonOlder "3.6" && !isPyPy;
 
-  checkPhase = ''
-    cd ${testDir}
-    ${python.interpreter} -m unittest discover
-  '';
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" testDir ];
 
   meta = with lib; {
     description = "Backport of typing module to Python versions older than 3.5";

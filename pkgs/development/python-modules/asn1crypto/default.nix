@@ -1,19 +1,25 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "asn1crypto";
-  version = "1.4.0";
+  version = "1.5.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f4f6e119474e58e04a2b1af817eb585b4fd72bdd89b998624712b5c99be7641c";
+  # Pulling from Github to run tests
+  src = fetchFromGitHub {
+    owner = "wbond";
+    repo = "asn1crypto";
+    rev = version;
+    sha256 = "sha256-M8vASxhaJPgkiTrAckxz7gk/QHkrFlNz7fFbnLEBT+M=";
   };
 
-  # No tests included
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   meta = {
     description = "Fast ASN.1 parser and serializer with definitions for private keys, public keys, certificates, CRL, OCSP, CMS, PKCS#3, PKCS#7, PKCS#8, PKCS#12, PKCS#5, X.509 and TSP";

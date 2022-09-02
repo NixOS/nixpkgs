@@ -1,6 +1,6 @@
 { buildPythonPackage, lib, fetchPypi
 , pytestCheckHook, filelock, mock, pep8
-, cython
+, cython, setuptools-scm
 , six, pyshp, shapely, geos, numpy
 , gdal, pillow, matplotlib, pyepsg, pykdtree, scipy, owslib, fiona
 , proj, flufl_lock
@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "cartopy";
-  version = "0.20.1";
+  version = "0.20.3";
 
   src = fetchPypi {
     inherit version;
     pname = "Cartopy";
-    sha256 = "91f87b130e2574547a20cd634498df97d797abd12dcfd0235bc0cdbcec8b05e3";
+    sha256 = "sha256-DWD6Li+9d8TR9rH507WIlmFH8HwbF50tNFcKweG0kAY=";
   };
 
   postPatch = ''
@@ -22,6 +22,13 @@ buildPythonPackage rec {
       --replace "test_osgb(" "dont_test_osgb(" \
       --replace "test_epsg(" "dont_test_epsg("
   '';
+
+  nativeBuildInputs = [
+    cython
+    geos # for geos-config
+    proj
+    setuptools-scm
+  ];
 
   buildInputs = [
     geos proj
@@ -46,12 +53,6 @@ buildPythonPackage rec {
     "test_nightshade_image"
     "background_img"
     "test_gridliner_labels_bbox_style"
-  ];
-
-  nativeBuildInputs = [
-    cython
-    geos # for geos-config
-    proj
   ];
 
   meta = with lib; {

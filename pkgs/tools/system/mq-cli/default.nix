@@ -19,6 +19,5 @@ rustPlatform.buildRustPackage rec {
     license          = licenses.mit;
     maintainers      = with maintainers; [ tazjin ];
     platforms        = platforms.linux;
-    repositories.git = "git://github.com/aprilabank/mq-cli.git";
   };
 }

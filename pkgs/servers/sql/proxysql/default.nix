@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , autoconf
 , automake
 , bison
@@ -12,19 +11,18 @@
 , curl
 , flex
 , gnutls
-, jemalloc
 , libconfig
 , libdaemon
 , libev
 , libgcrypt
 , libinjection
 , libmicrohttpd_0_9_70
+, libuuid
 , lz4
 , nlohmann_json
-, openssl
+, openssl_3
 , pcre
 , perl
-, prometheus-cpp
 , python2
 , re2
 , zlib
@@ -32,22 +30,18 @@
 
 stdenv.mkDerivation rec {
   pname = "proxysql";
-  version = "2.3.2";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "sysown";
     repo = pname;
     rev = version;
-    sha256 = "13l4bf7zhfjy701qx9hfr40vlsm4d0pbfmwr5d6lf514xznvsnzl";
+    hash = "sha256-gh0x8wi1v/+iUlE4JymOyD/NI7rL+2/JJQYGAcsL7/g=";
   };
 
   patches = [
     ./makefiles.patch
     ./dont-phone-home.patch
-    (fetchpatch {
-      url = "https://github.com/sysown/proxysql/pull/3402.patch";
-      sha256 = "079jjhvx32qxjczmsplkhzjn9gl7c2a3famssczmjv2ffs65vibi";
-    })
   ];
 
   nativeBuildInputs = [
@@ -61,13 +55,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bison
-    curl
+    (curl.override { openssl = openssl_3; })
     flex
     gnutls
     libgcrypt
-    openssl
+    libuuid
     zlib
   ];
+
+  enableParallelBuilding = true;
 
   GIT_VERSION = version;
 
@@ -100,16 +96,14 @@ stdenv.mkDerivation rec {
     ${lib.concatMapStringsSep "\n"
       (x: ''replace_dep "${x.f}" "${x.p.src}" "${x.p.pname or (builtins.parseDrvName x.p.name).name}" "${x.p.name}"'') [
         { f = "curl"; p = curl; }
-        { f = "jemalloc"; p = jemalloc; }
         { f = "libconfig"; p = libconfig; }
         { f = "libdaemon"; p = libdaemon; }
         { f = "libev"; p = libev; }
         { f = "libinjection"; p = libinjection; }
         { f = "libmicrohttpd"; p = libmicrohttpd_0_9_70; }
-        { f = "libssl"; p = openssl; }
+        { f = "libssl"; p = openssl_3; }
         { f = "lz4"; p = lz4; }
         { f = "pcre"; p = pcre; }
-        { f = "prometheus-cpp"; p = prometheus-cpp; }
         { f = "re2"; p = re2; }
     ]}
 
@@ -123,8 +117,9 @@ stdenv.mkDerivation rec {
     ln -s ${nlohmann_json.src}/single_include/nlohmann/json.hpp .
     popd
 
-    pushd prometheus-cpp/prometheus-cpp/3rdparty
-    replace_dep . "${civetweb.src}" civetweb
+    pushd prometheus-cpp
+    tar xf v0.9.0.tar.gz
+    replace_dep prometheus-cpp/3rdparty "${civetweb.src}" civetweb
     popd
 
     sed -i s_/usr/bin/env_${coreutils}/bin/env_g libssl/openssl/config

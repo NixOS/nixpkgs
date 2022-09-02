@@ -46,7 +46,7 @@ buildPythonApplication rec {
     pyramid
     strictyaml
     waitress
-  ];
+  ] ++ passlib.optional-dependencies.argon2;
 
   checkInputs = [
     beautifulsoup4

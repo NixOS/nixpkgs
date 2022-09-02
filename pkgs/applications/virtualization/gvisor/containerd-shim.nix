@@ -1,8 +1,8 @@
 { lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
-  name = "gvisor-containerd-shim-${version}";
-  version = "2019-10-09";
+  pname = "gvisor-containerd-shim";
+  version = "unstable-2019-10-09";
 
   src = fetchFromGitHub {
     owner  = "google";

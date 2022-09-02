@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "solo2-cli";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "solokeys";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3GIK0boxGD4Xa5OskP1535zCQyhMQ/oXbgThRivJzww=";
+    sha256 = "sha256-CRufj4SAkM0Qdffq45dp41TUqnnWep4zCB0XrEjdoG8=";
   };
 
-  cargoSha256 = "sha256-MYxVegXUVeZ4AzDz+Si5TtTjUDEPTO0Nh008rgLtsLw=";
+  cargoSha256 = "sha256-Q6/Vi5TB0H3OQ4np/DYIpTOsTPTSDjHonFI24LJ5gWE=";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isDarwin [ PCSC IOKit CoreFoundation AppKit ];
 
   postInstall = ''
+    install -D 70-solo2.rules $out/lib/udev/rules.d/70-solo2.rules
     installShellCompletion target/*/release/solo2.{bash,fish,zsh}
   '';
 
@@ -44,5 +45,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/solokeys/solo2-cli";
     license = with licenses; [ asl20 mit ]; # either at your option
     maintainers = with maintainers; [ lukegb ];
+    mainProgram = "solo2";
   };
 }

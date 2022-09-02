@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "authcaptureproxy";
-  version = "1.1.1";
+  version = "1.1.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "alandtse";
     repo = "auth_capture_proxy";
-    rev = "v${version}";
-    sha256 = "08zpaclg5f9g1pix0jaq42i2ph12xc8djjrmhxz0yygw5rsilgl4";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-4IPBulzRoAAplyM/1MPE40IW4IXBIGYLydzpY64Gl0c=";
   };
 
   postPatch = ''

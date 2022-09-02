@@ -1,44 +1,54 @@
-{ lib, stdenv, fetchFromGitHub, libtool, autoreconfHook, pkg-config
-, sysfsutils
-, argp-standalone
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libtool
+, pkg-config
+, psmisc
+, argp-standalone ? null
+, openssl
+, jitterentropy ? null, withJitterEntropy ? true
   # WARNING: DO NOT USE BEACON GENERATED VALUES AS SECRET CRYPTOGRAPHIC KEYS
   # https://www.nist.gov/programs-projects/nist-randomness-beacon
-, curl ? null, libxml2 ? null, openssl ? null, withNistBeacon ? false
-  # Systems that support RDRAND but not AES-NI require libgcrypt to use RDRAND as an entropy source
-, libgcrypt ? null, withGcrypt ? true
-, jitterentropy ? null, withJitterEntropy ? true
+, curl ? null, jansson ? null, libxml2 ? null, withNistBeacon ? false
 , libp11 ? null, opensc ? null, withPkcs11 ? true
+, librtlsdr ? null, withRtlsdr ? true
 }:
+
+assert (stdenv.hostPlatform.isMusl) -> argp-standalone != null;
+assert (withJitterEntropy) -> jitterentropy != null;
+assert (withNistBeacon) -> curl != null && jansson != null && libxml2 != null;
+assert (withPkcs11) -> libp11 != null && opensc != null;
+assert (withRtlsdr) -> librtlsdr != null;
 
 with lib;
 
 stdenv.mkDerivation rec {
   pname = "rng-tools";
-  version = "6.11";
+  version = "6.15";
 
   src = fetchFromGitHub {
     owner = "nhorman";
-    repo = "rng-tools";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-qheJaeVX2zuv0mvKEd6wcbSHFjiJE0t5hVCJiRSKm3M=";
+    hash = "sha256-km+MEng3VWZF07sdvGLbAG/vf8/A1DxhA/Xa2Y+LAEQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook libtool pkg-config ];
 
   configureFlags = [
-    (withFeature   withGcrypt        "libgcrypt")
-    (enableFeature withJitterEntropy "jitterentropy")
-    (withFeature   withNistBeacon    "nistbeacon")
-    (withFeature   withPkcs11        "pkcs11")
+    (enableFeature (withJitterEntropy) "jitterentropy")
+    (withFeature   (withNistBeacon)    "nistbeacon")
+    (withFeature   (withPkcs11)        "pkcs11")
+    (withFeature   (withRtlsdr)        "rtlsdr")
   ];
 
-  # argp-standalone is only used when libc lacks argp parsing (musl)
-  buildInputs = [ sysfsutils ]
-    ++ optionals stdenv.hostPlatform.isx86_64 [ argp-standalone ]
-    ++ optionals withGcrypt        [ libgcrypt ]
-    ++ optionals withJitterEntropy [ jitterentropy ]
-    ++ optionals withNistBeacon    [ curl libxml2 openssl ]
-    ++ optionals withPkcs11        [ libp11 openssl ];
+  buildInputs = [ openssl ]
+    ++ optionals (stdenv.hostPlatform.isMusl) [ argp-standalone ]
+    ++ optionals (withJitterEntropy) [ jitterentropy ]
+    ++ optionals (withNistBeacon)    [ curl jansson libxml2 ]
+    ++ optionals (withPkcs11)        [ libp11 openssl ]
+    ++ optionals (withRtlsdr)        [ librtlsdr ];
 
   enableParallelBuilding = true;
 
@@ -50,10 +60,20 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   preCheck = "patchShebangs tests/*.sh";
+  checkInputs = [ psmisc ]; # rngtestjitter.sh needs killall
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    set -o pipefail
+    $out/bin/rngtest --version | grep $version
+    runHook postInstallCheck
+  '';
 
   meta = {
     description = "A random number generator daemon";
     homepage = "https://github.com/nhorman/rng-tools";
+    changelog = "https://github.com/nhorman/rng-tools/releases/tag/v${version}";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ johnazoidberg c0bw3b ];

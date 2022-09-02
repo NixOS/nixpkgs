@@ -16,35 +16,35 @@ in {
 
   options = {
     services.nats = {
-      enable = mkEnableOption "NATS messaging system";
+      enable = mkEnableOption (lib.mdDoc "NATS messaging system");
 
       user = mkOption {
         type = types.str;
         default = "nats";
-        description = "User account under which NATS runs.";
+        description = lib.mdDoc "User account under which NATS runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "nats";
-        description = "Group under which NATS runs.";
+        description = lib.mdDoc "Group under which NATS runs.";
       };
 
       serverName = mkOption {
         default = "nats";
         example = "n1-c3";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Name of the NATS server, must be unique if clustered.
         '';
       };
 
-      jetstream = mkEnableOption "JetStream";
+      jetstream = mkEnableOption (lib.mdDoc "JetStream");
 
       port = mkOption {
         default = 4222;
         type = types.port;
-        description = ''
+        description = lib.mdDoc ''
           Port on which to listen.
         '';
       };
@@ -52,7 +52,7 @@ in {
       dataDir = mkOption {
         default = "/var/lib/nats";
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           The NATS data directory. Only used if JetStream is enabled, for
           storing stream metadata and messages.
 
@@ -74,10 +74,10 @@ in {
             };
           };
         '';
-        description = ''
+        description = lib.mdDoc ''
           Declarative NATS configuration. See the
-          <link xlink:href="https://docs.nats.io/nats-server/configuration">
-          NATS documentation</link> for a list of options.
+          [
+          NATS documentation](https://docs.nats.io/nats-server/configuration) for a list of options.
         '';
       };
     };

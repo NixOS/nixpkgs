@@ -13,7 +13,6 @@
 , gtk3
 , gtksourceview4
 , gtk-vnc
-, freerdp
 , libvirt
 , spice-gtk
 , python3
@@ -55,12 +54,18 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-boxes";
-  version = "41.3";
+  version = "42.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "m4QGgNHnOG/d/WoVrU3Q8s2ljv6BjPVHg3tGrovw4Yk=";
+    sha256 = "Vu/3+vgwD6oc4U+An468Knu02RWvx7EnNxKXkWBbYNM=";
   };
+
+  patches = [
+    # Fix path to libgovf-0.1.so in the gir file. We patch gobject-introspection to hardcode absolute paths but
+    # our Meson patch will only pass the info when install_dir is absolute as well.
+    ./fix-gir-lib-path.patch
+  ];
 
   doCheck = true;
 
@@ -86,7 +91,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     acl
     cyrus_sasl
-    freerdp
     gdbm
     glib
     glib-networking

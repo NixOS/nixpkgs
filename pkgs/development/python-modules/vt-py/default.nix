@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "vt-py";
-  version = "0.13.1";
+  version = "0.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "VirusTotal";
     repo = pname;
     rev = version;
-    sha256 = "sha256-85ohhynXHWjuwKB18DciB48tNGZcHzafobMDaGoTkoc=";
+    sha256 = "sha256-T0QvYVh5VRxpRdFWsnYpYdAypRc3yYwsXdsOiykRj0s=";
   };
 
   propagatedBuildInputs = [

@@ -2,7 +2,6 @@
 , stdenv
 , substituteAll
 , fetchurl
-, fetchpatch
 , pkg-config
 , gettext
 , docbook-xsl-nons
@@ -31,7 +30,7 @@
 , gnome
 , gsettings-desktop-schemas
 , sassc
-, trackerSupport ? stdenv.isLinux
+, trackerSupport ? stdenv.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
 , tracker
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux
@@ -40,12 +39,13 @@
 , wayland-protocols
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
-, withGtkDoc ? stdenv.isLinux
+, withGtkDoc ? stdenv.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
 , cups
 , AppKit
 , Cocoa
 , QuartzCore
 , broadwaySupport ? true
+, wayland-scanner
 }:
 
 let
@@ -60,7 +60,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk+3";
-  version = "3.24.31";
+  version = "3.24.34";
 
   outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
   outputBin = "dev";
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "sha256-Qjw+f9tMRZ7oieNf1Ncf0mI1YlQcEEGxHAflrR/xC/k=";
+    sha256 = "sha256-28afkN3IIbjRRB8AN03B2kMjour6kHjmHtvl7u+oUuw=";
   };
 
   patches = [
@@ -84,14 +84,11 @@ stdenv.mkDerivation rec {
     # e.g. https://gitlab.gnome.org/GNOME/gtk/blob/3.24.4/gtk/gtk-launch.c#L31-33
     # https://gitlab.gnome.org/GNOME/gtk/merge_requests/536
     ./patches/3.0-darwin-x11.patch
-
-    # 3.24.31 does not declare QuartzCore dependency properly and fails to link
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/0ac61443694b477c41fc246cb387ef86aba441de.patch";
-      sha256 = "sha256-KaMeIdV/gfM4xzN9lIkY99E7bzAfTM6VETk5DEunB2w=";
-    })
   ];
 
+  depsBuildBuild = [
+    pkg-config
+  ];
   nativeBuildInputs = [
     gettext
     gobject-introspection
@@ -101,15 +98,19 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     sassc
+    gdk-pixbuf
   ] ++ setupHooks ++ lib.optionals withGtkDoc [
     docbook_xml_dtd_43
     docbook-xsl-nons
     gtk-doc
     # For xmllint
     libxml2
+  ] ++ lib.optionals waylandSupport [
+    wayland-scanner
   ];
 
   buildInputs = [
+    gobject-introspection
     libxkbcommon
     (libepoxy.override { inherit x11Support; })
     isocodes
@@ -200,6 +201,8 @@ stdenv.mkDerivation rec {
     for f in $dev/bin/gtk-encode-symbolic-svg; do
       wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     done
+  '' + lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
+    GTK_PATH="''${out:?}/lib/gtk-3.0/3.0.0/immodules/" ''${dev:?}/bin/gtk-query-immodules-3.0 > "''${out:?}/lib/gtk-3.0/3.0.0/immodules.cache"
   '';
 
   # Wrap demos
@@ -210,6 +213,9 @@ stdenv.mkDerivation rec {
       wrapProgram $dev/bin/$program \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}"
     done
+  '' + lib.optionalString stdenv.isDarwin ''
+    # a comment created a cycle between outputs
+    sed '/^# ModulesPath =/d' -i "$out"/lib/gtk-*/*/immodules.cache
   '';
 
   passthru = {

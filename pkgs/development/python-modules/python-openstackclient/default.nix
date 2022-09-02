@@ -2,23 +2,32 @@
 , buildPythonPackage
 , fetchPypi
 , ddt
+, installShellFiles
+, openstackdocstheme
 , osc-lib
 , pbr
 , python-cinderclient
 , python-keystoneclient
 , python-novaclient
 , requests-mock
+, sphinx
 , stestr
 }:
 
 buildPythonPackage rec {
   pname = "python-openstackclient";
-  version = "5.7.0";
+  version = "6.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c65e3d51018f193cce2daf3d0fd69daa36003bdb2b85df6b07b973e4c39e2f92";
+    sha256 = "sha256-kcOsEtpLQjwWs5F2FvhKI+KWHnUPzlkNQJ7MUO4EMc4=";
   };
+
+  nativeBuildInputs = [
+    installShellFiles
+    openstackdocstheme
+    sphinx
+  ];
 
   propagatedBuildInputs = [
     osc-lib
@@ -27,6 +36,11 @@ buildPythonPackage rec {
     python-keystoneclient
     python-novaclient
   ];
+
+  postInstall = ''
+    sphinx-build -a -E -d doc/build/doctrees -b man doc/source doc/build/man
+    installManPage doc/build/man/openstack.1
+  '';
 
   checkInputs = [
     ddt

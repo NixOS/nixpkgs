@@ -156,6 +156,21 @@ in
     };
   };
 
+  geoip2 = {
+    src = fetchFromGitHub {
+      name = "geoip2";
+      owner = "leev";
+      repo = "ngx_http_geoip2_module";
+      rev = "3.3";
+      sha256 = "EEn/qxPsBFgVBqOgPYTrRhaLPwSBlSPWYYSr3SL8wZA=";
+    };
+    inputs = [ pkgs.libmaxminddb ];
+
+    meta = {
+      maintainers = with lib.maintainers; [ pinpox ];
+    };
+  };
+
   http_proxy_connect_module_v18 = http_proxy_connect_module_generic "proxy_connect_rewrite_1018" // {
     supports = with lib.versions; version: major version == "1" && minor version == "18";
   };
@@ -237,10 +252,11 @@ in
       name = "modsecurity-nginx";
       owner = "SpiderLabs";
       repo = "ModSecurity-nginx";
-      rev = "v1.0.1";
-      sha256 = "0cbb3g3g4v6q5zc6an212ia5kjjad62bidnkm8b70i4qv1615pzf";
+      rev = "v1.0.3";
+      sha256 = "sha256-xp0/eqi5PJlzb9NaUbNnzEqNcxDPyjyNwZOwmlv1+ag=";
     };
     inputs = [ pkgs.curl pkgs.geoip pkgs.libmodsecurity pkgs.libxml2 pkgs.lmdb pkgs.yajl ];
+    disableIPC = true;
   };
 
   moreheaders = {
@@ -248,8 +264,8 @@ in
       name = "moreheaders";
       owner = "openresty";
       repo = "headers-more-nginx-module";
-      rev = "v0.33";
-      sha256 = "1cgdjylrdd69vlkwwmn018hrglzjwd83nqva1hrapgcfw12f7j53";
+      rev = "v0.34";
+      sha256 = "sha256-LsrN/rF/p17x/80Jw9CgbmK69to6LycCM1OwTBojz8M=";
     };
   };
 

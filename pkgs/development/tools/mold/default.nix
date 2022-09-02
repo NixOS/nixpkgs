@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "1.0.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-G+mVZS3ZRuBd00xfBqrTvmHOykFk63nJlucxv01nr3k=";
+    sha256 = "sha256-d1rSmDPiVHpYbDPWQKkDhcJJklKlM1+vGdzvjICTT14=";
   };
 
   buildInputs = [ zlib openssl ];
@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rui314/mold";
     license = lib.licenses.agpl3Plus;
     maintainers = with maintainers; [ nitsky ];
-    broken = stdenv.isAarch64;
+    platforms = platforms.unix;
+    # error: aligned deallocation function of type 'void (void *, std::align_val_t) noexcept' is only available on macOS 10.14 or newer
+    broken = stdenv.isAarch64 || stdenv.isDarwin;
   };
 }

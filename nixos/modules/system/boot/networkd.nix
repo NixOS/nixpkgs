@@ -10,6 +10,36 @@ let
 
   check = {
 
+    global = {
+      sectionNetwork = checkUnitConfig "Network" [
+        (assertOnlyFields [
+          "SpeedMeter"
+          "SpeedMeterIntervalSec"
+          "ManageForeignRoutingPolicyRules"
+          "ManageForeignRoutes"
+          "RouteTable"
+        ])
+        (assertValueOneOf "SpeedMeter" boolValues)
+        (assertInt "SpeedMeterIntervalSec")
+        (assertValueOneOf "ManageForeignRoutingPolicyRules" boolValues)
+        (assertValueOneOf "ManageForeignRoutes" boolValues)
+      ];
+
+      sectionDHCPv4 = checkUnitConfig "DHCPv4" [
+        (assertOnlyFields [
+          "DUIDType"
+          "DUIDRawData"
+        ])
+      ];
+
+      sectionDHCPv6 = checkUnitConfig "DHCPv6" [
+        (assertOnlyFields [
+          "DUIDType"
+          "DUIDRawData"
+        ])
+      ];
+    };
+
     link = {
 
       sectionLink = checkUnitConfig "Link" [
@@ -281,6 +311,8 @@ let
           "PrivateKeyFile"
           "ListenPort"
           "FirewallMark"
+          "RouteTable"
+          "RouteMetric"
         ])
         (assertInt "FirewallMark")
         (assertRange "FirewallMark" 1 4294967295)
@@ -296,6 +328,8 @@ let
           "AllowedIPs"
           "Endpoint"
           "PersistentKeepalive"
+          "RouteTable"
+          "RouteMetric"
         ])
         (assertInt "PersistentKeepalive")
         (assertRange "PersistentKeepalive" 0 65535)
@@ -417,15 +451,21 @@ let
           "Multicast"
           "AllMulticast"
           "Unmanaged"
+          "Group"
           "RequiredForOnline"
+          "RequiredFamilyForOnline"
           "ActivationPolicy"
+          "Promiscuous"
         ])
         (assertMacAddress "MACAddress")
         (assertByteFormat "MTUBytes")
         (assertValueOneOf "ARP" boolValues)
         (assertValueOneOf "Multicast" boolValues)
         (assertValueOneOf "AllMulticast" boolValues)
+        (assertValueOneOf "Promiscuous" boolValues)
         (assertValueOneOf "Unmanaged" boolValues)
+        (assertInt "Group")
+        (assertRange "Group" 0 2147483647)
         (assertValueOneOf "RequiredForOnline" (boolValues ++ [
           "missing"
           "off"
@@ -437,6 +477,12 @@ let
           "enslaved"
           "routable"
         ]))
+        (assertValueOneOf "RequiredFamilyForOnline" [
+          "ipv4"
+          "ipv6"
+          "both"
+          "any"
+        ])
         (assertValueOneOf "ActivationPolicy" ([
           "up"
           "always-up"
@@ -745,6 +791,7 @@ let
           "RouteDenyList"
           "RouteAllowList"
           "DHCPv6Client"
+          "RouteMetric"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
@@ -756,10 +803,12 @@ let
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
         (assertOnlyFields [
+          "ServerAddress"
           "PoolOffset"
           "PoolSize"
           "DefaultLeaseTimeSec"
           "MaxLeaseTimeSec"
+          "UplinkInterface"
           "EmitDNS"
           "DNS"
           "EmitNTP"
@@ -773,10 +822,15 @@ let
           "EmitLPR"
           "LPR"
           "EmitRouter"
+          "Router"
           "EmitTimezone"
           "Timezone"
           "SendOption"
           "SendVendorOption"
+          "BindToInterface"
+          "RelayTarget"
+          "RelayAgentCircuitId"
+          "RelayAgentRemoteId"
         ])
         (assertInt "PoolOffset")
         (assertMinimum "PoolOffset" 0)
@@ -790,6 +844,7 @@ let
         (assertValueOneOf "EmitLPR" boolValues)
         (assertValueOneOf "EmitRouter" boolValues)
         (assertValueOneOf "EmitTimezone" boolValues)
+        (assertValueOneOf "BindToInterface" boolValues)
       ];
 
       sectionIPv6SendRA = checkUnitConfig "IPv6SendRA" [
@@ -798,6 +853,7 @@ let
           "OtherInformation"
           "RouterLifetimeSec"
           "RouterPreference"
+          "UplinkInterface"
           "EmitDNS"
           "DNS"
           "EmitDomains"
@@ -823,6 +879,15 @@ let
         (assertValueOneOf "OnLink" boolValues)
       ];
 
+      sectionIPv6RoutePrefix = checkUnitConfig "IPv6RoutePrefix" [
+        (assertOnlyFields [
+          "Route"
+          "LifetimeSec"
+        ])
+        (assertHasField "Route")
+        (assertInt "LifetimeSec")
+      ];
+
       sectionDHCPServerStaticLease = checkUnitConfig "DHCPServerStaticLease" [
         (assertOnlyFields [
           "MACAddress"
@@ -841,8 +906,8 @@ let
     enable = mkOption {
       default = true;
       type = types.bool;
-      description = ''
-        Whether to manage network configuration using <command>systemd-network</command>.
+      description = lib.mdDoc ''
+        Whether to manage network configuration using {command}`systemd-network`.
       '';
     };
 
@@ -850,12 +915,12 @@ let
       default = {};
       example = { Name = "eth0"; };
       type = types.attrsOf unitOption;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[Match]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.link</refentrytitle><manvolnum>5</manvolnum></citerefentry>
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle><manvolnum>5</manvolnum></citerefentry>
-        <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+        `[Match]` section of the unit.  See
+        {manpage}`systemd.link(5)`
+        {manpage}`systemd.netdev(5)`
+        {manpage}`systemd.network(5)`
         for details.
       '';
     };
@@ -863,7 +928,42 @@ let
     extraConfig = mkOption {
       default = "";
       type = types.lines;
-      description = "Extra configuration append to unit";
+      description = lib.mdDoc "Extra configuration append to unit";
+    };
+  };
+
+  networkdOptions = {
+    networkConfig = mkOption {
+      default = {};
+      example = { SpeedMeter = true; ManageForeignRoutingPolicyRules = false; };
+      type = types.addCheck (types.attrsOf unitOption) check.global.sectionNetwork;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[Network]` section of the networkd config.
+        See {manpage}`networkd.conf(5)` for details.
+      '';
+    };
+
+    dhcpV4Config = mkOption {
+      default = {};
+      example = { DUIDType = "vendor"; };
+      type = types.addCheck (types.attrsOf unitOption) check.global.sectionDHCPv4;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[DHCPv4]` section of the networkd config.
+        See {manpage}`networkd.conf(5)` for details.
+      '';
+    };
+
+    dhcpV6Config = mkOption {
+      default = {};
+      example = { DUIDType = "vendor"; };
+      type = types.addCheck (types.attrsOf unitOption) check.global.sectionDHCPv6;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[DHCPv6]` section of the networkd config.
+        See {manpage}`networkd.conf(5)` for details.
+      '';
     };
   };
 
@@ -872,8 +972,8 @@ let
     enable = mkOption {
       default = true;
       type = types.bool;
-      description = ''
-        Whether to enable this .link unit. It's handled by udev no matter if <command>systemd-networkd</command> is enabled or not
+      description = lib.mdDoc ''
+        Whether to enable this .link unit. It's handled by udev no matter if {command}`systemd-networkd` is enabled or not
       '';
     };
 
@@ -881,11 +981,10 @@ let
       default = {};
       example = { MACAddress = "00:ff:ee:aa:cc:dd"; };
       type = types.addCheck (types.attrsOf unitOption) check.link.sectionLink;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[Link]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.link</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[Link]` section of the unit.  See
+        {manpage}`systemd.link(5)` for details.
       '';
     };
 
@@ -896,11 +995,10 @@ let
       wireguardPeerConfig = mkOption {
         default = {};
         type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionWireGuardPeer;
-        description = ''
+        description = lib.mdDoc ''
           Each attribute in this set specifies an option in the
-          <literal>[WireGuardPeer]</literal> section of the unit.  See
-          <citerefentry><refentrytitle>systemd.network</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          `[WireGuardPeer]` section of the unit.  See
+          {manpage}`systemd.network(5)` for details.
         '';
       };
     };
@@ -911,11 +1009,10 @@ let
     netdevConfig = mkOption {
       example = { Name = "mybridge"; Kind = "bridge"; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionNetdev;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[Netdev]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[Netdev]` section of the unit.  See
+        {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
@@ -923,11 +1020,10 @@ let
       default = {};
       example = { Id = 4; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionVLAN;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[VLAN]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[VLAN]` section of the unit.  See
+        {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
@@ -935,22 +1031,20 @@ let
       default = {};
       example = { Mode = "private"; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionMACVLAN;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[MACVLAN]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[MACVLAN]` section of the unit.  See
+        {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
     vxlanConfig = mkOption {
       default = {};
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionVXLAN;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[VXLAN]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[VXLAN]` section of the unit.  See
+        {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
@@ -958,11 +1052,10 @@ let
       default = {};
       example = { Remote = "192.168.1.1"; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionTunnel;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[Tunnel]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[Tunnel]` section of the unit.  See
+        {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
@@ -970,11 +1063,10 @@ let
       default = { };
       example = { Port = 9001; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionFooOverUDP;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[FooOverUDP]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[FooOverUDP]` section of the unit.  See
+        {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
@@ -982,11 +1074,10 @@ let
       default = {};
       example = { Name = "veth2"; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionPeer;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[Peer]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[Peer]` section of the unit.  See
+        {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
@@ -994,11 +1085,10 @@ let
       default = {};
       example = { User = "openvpn"; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionTun;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[Tun]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[Tun]` section of the unit.  See
+        {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
@@ -1006,11 +1096,10 @@ let
       default = {};
       example = { User = "openvpn"; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionTap;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[Tap]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[Tap]` section of the unit.  See
+        {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
@@ -1022,13 +1111,12 @@ let
         FirewallMark = 42;
       };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionWireGuard;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[WireGuard]</literal> section of the unit. See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-        Use <literal>PrivateKeyFile</literal> instead of
-        <literal>PrivateKey</literal>: the nix store is
+        `[WireGuard]` section of the unit. See
+        {manpage}`systemd.netdev(5)` for details.
+        Use `PrivateKeyFile` instead of
+        `PrivateKey`: the nix store is
         world-readable.
       '';
     };
@@ -1043,13 +1131,12 @@ let
         PersistentKeepalive = 15;
       };}];
       type = with types; listOf (submodule wireguardPeerOptions);
-      description = ''
+      description = lib.mdDoc ''
         Each item in this array specifies an option in the
-        <literal>[WireGuardPeer]</literal> section of the unit. See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-        Use <literal>PresharedKeyFile</literal> instead of
-        <literal>PresharedKey</literal>: the nix store is
+        `[WireGuardPeer]` section of the unit. See
+        {manpage}`systemd.netdev(5)` for details.
+        Use `PresharedKeyFile` instead of
+        `PresharedKey`: the nix store is
         world-readable.
       '';
     };
@@ -1058,11 +1145,10 @@ let
       default = {};
       example = { Mode = "802.3ad"; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionBond;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[Bond]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[Bond]` section of the unit.  See
+        {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
@@ -1070,11 +1156,10 @@ let
       default = {};
       example = { InterfaceId = 1; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionXfrm;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[Xfrm]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[Xfrm]` section of the unit.  See
+        {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
@@ -1082,14 +1167,12 @@ let
       default = {};
       example = { Table = 2342; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionVRF;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[VRF]</literal> section of the unit. See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[VRF]` section of the unit. See
+        {manpage}`systemd.netdev(5)` for details.
         A detailed explanation about how VRFs work can be found in the
-        <link xlink:href="https://www.kernel.org/doc/Documentation/networking/vrf.txt">kernel
-        docs</link>.
+        [kernel docs](https://www.kernel.org/doc/Documentation/networking/vrf.txt).
       '';
     };
 
@@ -1100,11 +1183,10 @@ let
         RoutingAlgorithm = "batman-v";
       };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionBatmanAdvanced;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[BatmanAdvanced]</literal> section of the unit. See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[BatmanAdvanced]` section of the unit. See
+        {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
@@ -1115,11 +1197,10 @@ let
       addressConfig = mkOption {
         example = { Address = "192.168.0.100/24"; };
         type = types.addCheck (types.attrsOf unitOption) check.network.sectionAddress;
-        description = ''
+        description = lib.mdDoc ''
           Each attribute in this set specifies an option in the
-          <literal>[Address]</literal> section of the unit.  See
-          <citerefentry><refentrytitle>systemd.network</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          `[Address]` section of the unit.  See
+          {manpage}`systemd.network(5)` for details.
         '';
       };
     };
@@ -1131,11 +1212,10 @@ let
         default = { };
         example = { Table = 10; IncomingInterface = "eth1"; Family = "both"; };
         type = types.addCheck (types.attrsOf unitOption) check.network.sectionRoutingPolicyRule;
-        description = ''
+        description = lib.mdDoc ''
           Each attribute in this set specifies an option in the
-          <literal>[RoutingPolicyRule]</literal> section of the unit.  See
-          <citerefentry><refentrytitle>systemd.network</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          `[RoutingPolicyRule]` section of the unit.  See
+          {manpage}`systemd.network(5)` for details.
         '';
       };
     };
@@ -1147,11 +1227,10 @@ let
         default = {};
         example = { Gateway = "192.168.0.1"; };
         type = types.addCheck (types.attrsOf unitOption) check.network.sectionRoute;
-        description = ''
+        description = lib.mdDoc ''
           Each attribute in this set specifies an option in the
-          <literal>[Route]</literal> section of the unit.  See
-          <citerefentry><refentrytitle>systemd.network</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          `[Route]` section of the unit.  See
+          {manpage}`systemd.network(5)` for details.
         '';
       };
     };
@@ -1163,9 +1242,24 @@ let
         default = {};
         example = { Prefix = "fd00::/64"; };
         type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6Prefix;
+        description = lib.mdDoc ''
+          Each attribute in this set specifies an option in the
+          `[IPv6Prefix]` section of the unit.  See
+          {manpage}`systemd.network(5)` for details.
+        '';
+      };
+    };
+  };
+
+  ipv6RoutePrefixOptions = {
+    options = {
+      ipv6RoutePrefixConfig = mkOption {
+        default = {};
+        example = { Route = "fd00::/64"; };
+        type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6RoutePrefix;
         description = ''
           Each attribute in this set specifies an option in the
-          <literal>[IPv6Prefix]</literal> section of the unit.  See
+          <literal>[IPv6RoutePrefix]</literal> section of the unit.  See
           <citerefentry><refentrytitle>systemd.network</refentrytitle>
           <manvolnum>5</manvolnum></citerefentry> for details.
         '';
@@ -1179,14 +1273,13 @@ let
         default = {};
         example = { MACAddress = "65:43:4a:5b:d8:5f"; Address = "192.168.1.42"; };
         type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPServerStaticLease;
-        description = ''
+        description = lib.mdDoc ''
           Each attribute in this set specifies an option in the
-          <literal>[DHCPServerStaticLease]</literal> section of the unit.  See
-          <citerefentry><refentrytitle>systemd.network</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          `[DHCPServerStaticLease]` section of the unit.  See
+          {manpage}`systemd.network(5)` for details.
 
           Make sure to configure the corresponding client interface to use
-          <literal>ClientIdentifier=mac</literal>.
+          `ClientIdentifier=mac`.
         '';
       };
     };
@@ -1198,11 +1291,10 @@ let
       default = {};
       example = { Unmanaged = true; };
       type = types.addCheck (types.attrsOf unitOption) check.network.sectionLink;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[Link]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[Link]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
       '';
     };
 
@@ -1210,11 +1302,10 @@ let
       default = {};
       example = { Description = "My Network"; };
       type = types.addCheck (types.attrsOf unitOption) check.network.sectionNetwork;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[Network]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[Network]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
       '';
     };
 
@@ -1229,11 +1320,10 @@ let
       default = {};
       example = { UseDNS = true; UseRoutes = true; };
       type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPv4;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[DHCPv4]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[DHCPv4]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
       '';
     };
 
@@ -1241,11 +1331,10 @@ let
       default = {};
       example = { UseDNS = true; };
       type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPv6;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[DHCPv6]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[DHCPv6]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
       '';
     };
 
@@ -1253,11 +1342,10 @@ let
       default = {};
       example = { SubnetId = "auto"; Announce = true; };
       type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPv6PrefixDelegation;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[DHCPv6PrefixDelegation]</literal> section of the unit. See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[DHCPv6PrefixDelegation]` section of the unit. See
+        {manpage}`systemd.network(5)` for details.
       '';
     };
 
@@ -1265,11 +1353,10 @@ let
       default = {};
       example = { UseDNS = true; DHCPv6Client = "always"; };
       type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6AcceptRA;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[IPv6AcceptRA]</literal> section of the unit. See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[IPv6AcceptRA]` section of the unit. See
+        {manpage}`systemd.network(5)` for details.
       '';
     };
 
@@ -1277,11 +1364,10 @@ let
       default = {};
       example = { PoolOffset = 50; EmitDNS = false; };
       type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPServer;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[DHCPServer]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[DHCPServer]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
       '';
     };
 
@@ -1296,31 +1382,39 @@ let
       default = {};
       example = { EmitDNS = true; Managed = true; OtherInformation = true; };
       type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6SendRA;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[IPv6SendRA]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        `[IPv6SendRA]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
       '';
     };
 
     dhcpServerStaticLeases = mkOption {
       default = [];
-      example = [ { MACAddress = "65:43:4a:5b:d8:5f"; Address = "192.168.1.42"; } ];
+      example = [ { dhcpServerStaticLeaseConfig = { MACAddress = "65:43:4a:5b:d8:5f"; Address = "192.168.1.42"; }; } ];
       type = with types; listOf (submodule dhcpServerStaticLeaseOptions);
-      description = ''
+      description = lib.mdDoc ''
         A list of DHCPServerStaticLease sections to be added to the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        {manpage}`systemd.network(5)` for details.
       '';
     };
 
     ipv6Prefixes = mkOption {
       default = [];
-      example = [ { AddressAutoconfiguration = true; OnLink = true; } ];
+      example = [ { ipv6PrefixConfig = { AddressAutoconfiguration = true; OnLink = true; }; } ];
       type = with types; listOf (submodule ipv6PrefixOptions);
-      description = ''
+      description = lib.mdDoc ''
         A list of ipv6Prefix sections to be added to the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
+    ipv6RoutePrefixes = mkOption {
+      default = [];
+      example = [ { Route = "fd00::/64"; LifetimeSec = 3600; } ];
+      type = with types; listOf (submodule ipv6RoutePrefixOptions);
+      description = ''
+        A list of ipv6RoutePrefix sections to be added to the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
@@ -1329,7 +1423,7 @@ let
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The name of the network interface to match against.
       '';
     };
@@ -1337,7 +1431,7 @@ let
     DHCP = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable DHCP on the interfaces matched.
       '';
     };
@@ -1345,7 +1439,7 @@ let
     domains = mkOption {
       type = types.nullOr (types.listOf types.str);
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         A list of domains to pass to the network config.
       '';
     };
@@ -1353,150 +1447,135 @@ let
     address = mkOption {
       default = [ ];
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         A list of addresses to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
     gateway = mkOption {
       default = [ ];
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         A list of gateways to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
     dns = mkOption {
       default = [ ];
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         A list of dns servers to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
     ntp = mkOption {
       default = [ ];
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         A list of ntp servers to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
     bridge = mkOption {
       default = [ ];
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         A list of bridge interfaces to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
     bond = mkOption {
       default = [ ];
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         A list of bond interfaces to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
     vrf = mkOption {
       default = [ ];
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         A list of vrf interfaces to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
     vlan = mkOption {
       default = [ ];
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         A list of vlan interfaces to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
     macvlan = mkOption {
       default = [ ];
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         A list of macvlan interfaces to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
     vxlan = mkOption {
       default = [ ];
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         A list of vxlan interfaces to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
     tunnel = mkOption {
       default = [ ];
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         A list of tunnel interfaces to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
     xfrm = mkOption {
       default = [ ];
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         A list of xfrm interfaces to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
 
     addresses = mkOption {
       default = [ ];
       type = with types; listOf (submodule addressOptions);
-      description = ''
+      description = lib.mdDoc ''
         A list of address sections to be added to the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        {manpage}`systemd.network(5)` for details.
       '';
     };
 
     routingPolicyRules = mkOption {
       default = [ ];
       type = with types; listOf (submodule routingPolicyRulesOptions);
-      description = ''
+      description = lib.mdDoc ''
         A list of routing policy rules sections to be added to the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        {manpage}`systemd.network(5)` for details.
       '';
     };
 
     routes = mkOption {
       default = [ ];
       type = with types; listOf (submodule routeOptions);
-      description = ''
+      description = lib.mdDoc ''
         A list of route sections to be added to the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        {manpage}`systemd.network(5)` for details.
       '';
     };
 
@@ -1511,6 +1590,38 @@ let
         DHCP = config.DHCP;
       } // optionalAttrs (config.domains != null) {
         Domains = concatStringsSep " " config.domains;
+      };
+    };
+  };
+
+  networkdConfig = { config, ... }: {
+    options = {
+      routeTables = mkOption {
+        default = {};
+        example = { foo = 27; };
+        type = with types; attrsOf int;
+        description = lib.mdDoc ''
+          Defines route table names as an attrset of name to number.
+          See {manpage}`networkd.conf(5)` for details.
+        '';
+      };
+
+      addRouteTablesToIPRoute2 = mkOption {
+        default = true;
+        example = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          If true and routeTables are set, then the specified route tables
+          will also be installed into /etc/iproute2/rt_tables.
+        '';
+      };
+    };
+
+    config = {
+      networkConfig = optionalAttrs (config.routeTables != { }) {
+        RouteTable = mapAttrsToList
+          (name: number: "${name}:${toString number}")
+          config.routeTables;
       };
     };
   };
@@ -1595,6 +1706,20 @@ let
         ''
         + def.extraConfig;
     };
+
+  renderConfig = def:
+    { text = ''
+        [Network]
+        ${attrsToSection def.networkConfig}
+      ''
+      + optionalString (def.dhcpV4Config != { }) ''
+        [DHCPv4]
+        ${attrsToSection def.dhcpV4Config}
+      ''
+      + optionalString (def.dhcpV6Config != { }) ''
+        [DHCPv6]
+        ${attrsToSection def.dhcpV6Config}
+      ''; };
 
   networkToUnit = name: def:
     { inherit (def) enable;
@@ -1686,6 +1811,10 @@ let
           [IPv6Prefix]
           ${attrsToSection x.ipv6PrefixConfig}
         '')
+        + flip concatMapStrings def.ipv6RoutePrefixes (x: ''
+          [IPv6RoutePrefix]
+          ${attrsToSection x.ipv6RoutePrefixConfig}
+        '')
         + flip concatMapStrings def.dhcpServerStaticLeases (x: ''
           [DHCPServerStaticLease]
           ${attrsToSection x.dhcpServerStaticLeaseConfig}
@@ -1705,7 +1834,7 @@ in
     systemd.network.enable = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable networkd or not.
       '';
     };
@@ -1713,23 +1842,29 @@ in
     systemd.network.links = mkOption {
       default = {};
       type = with types; attrsOf (submodule [ { options = linkOptions; } ]);
-      description = "Definition of systemd network links.";
+      description = lib.mdDoc "Definition of systemd network links.";
     };
 
     systemd.network.netdevs = mkOption {
       default = {};
       type = with types; attrsOf (submodule [ { options = netdevOptions; } ]);
-      description = "Definition of systemd network devices.";
+      description = lib.mdDoc "Definition of systemd network devices.";
     };
 
     systemd.network.networks = mkOption {
       default = {};
       type = with types; attrsOf (submodule [ { options = networkOptions; } networkConfig ]);
-      description = "Definition of systemd networks.";
+      description = lib.mdDoc "Definition of systemd networks.";
+    };
+
+    systemd.network.config = mkOption {
+      default = {};
+      type = with types; submodule [ { options = networkdOptions; } networkdConfig ];
+      description = lib.mdDoc "Definition of global systemd network config.";
     };
 
     systemd.network.units = mkOption {
-      description = "Definition of networkd units.";
+      description = lib.mdDoc "Definition of networkd units.";
       default = {};
       internal = true;
       type = with types; attrsOf (submodule (
@@ -1741,6 +1876,46 @@ in
         }));
     };
 
+    systemd.network.wait-online = {
+      anyInterface = mkOption {
+        description = lib.mdDoc ''
+          Whether to consider the network online when any interface is online, as opposed to all of them.
+          This is useful on portable machines with a wired and a wireless interface, for example.
+        '';
+        type = types.bool;
+        default = false;
+      };
+
+      ignoredInterfaces = mkOption {
+        description = lib.mdDoc ''
+          Network interfaces to be ignored when deciding if the system is online.
+        '';
+        type = with types; listOf str;
+        default = [];
+        example = [ "wg0" ];
+      };
+
+      timeout = mkOption {
+        description = lib.mdDoc ''
+          Time to wait for the network to come online, in seconds. Set to 0 to disable.
+        '';
+        type = types.ints.unsigned;
+        default = 120;
+        example = 0;
+      };
+
+      extraArgs = mkOption {
+        description = lib.mdDoc ''
+          Extra command-line arguments to pass to systemd-networkd-wait-online.
+          These also affect per-interface `systemd-network-wait-online@` services.
+
+          See [{manpage}`systemd-networkd-wait-online.service(8)`](https://www.freedesktop.org/software/systemd/man/systemd-networkd-wait-online.service.html) for all available options.
+        '';
+        type = with types; listOf str;
+        default = [];
+      };
+    };
+
   };
 
   config = mkMerge [
@@ -1749,6 +1924,11 @@ in
     {
       systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links;
       environment.etc = unitFiles;
+
+      systemd.network.wait-online.extraArgs =
+        [ "--timeout=${toString cfg.wait-online.timeout}" ]
+        ++ optional cfg.wait-online.anyInterface "--any"
+        ++ map (i: "--ignore=${i}") cfg.wait-online.ignoredInterfaces;
     }
 
     (mkIf config.systemd.network.enable {
@@ -1772,11 +1952,17 @@ in
       systemd.services.systemd-networkd = {
         wantedBy = [ "multi-user.target" ];
         aliases = [ "dbus-org.freedesktop.network1.service" ];
-        restartTriggers = map (x: x.source) (attrValues unitFiles);
+        restartTriggers = map (x: x.source) (attrValues unitFiles) ++ [
+          config.environment.etc."systemd/networkd.conf".source
+        ];
       };
 
       systemd.services.systemd-networkd-wait-online = {
         wantedBy = [ "network-online.target" ];
+        serviceConfig.ExecStart = [
+          ""
+          "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online ${utils.escapeSystemdExecArgs cfg.wait-online.extraArgs}"
+        ];
       };
 
       systemd.services."systemd-network-wait-online@" = {
@@ -1787,8 +1973,19 @@ in
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          ExecStart = "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %I";
+          ExecStart = "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %I ${utils.escapeSystemdExecArgs cfg.wait-online.extraArgs}";
         };
+      };
+
+      environment.etc."systemd/networkd.conf" = renderConfig cfg.config;
+
+      networking.iproute2 = mkIf (cfg.config.addRouteTablesToIPRoute2 && cfg.config.routeTables != { }) {
+        enable = mkDefault true;
+        rttablesExtraConfig = ''
+
+          # Extra tables defined in NixOS systemd.networkd.config.routeTables.
+          ${concatStringsSep "\n" (mapAttrsToList (name: number: "${toString number} ${name}") cfg.config.routeTables)}
+        '';
       };
 
       services.resolved.enable = mkDefault true;

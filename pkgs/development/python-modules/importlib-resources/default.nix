@@ -6,18 +6,19 @@
 , importlib-metadata
 , typing ? null
 , pythonOlder
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "importlib-resources";
-  version = "5.4.0";
+  version = "5.8.0";
+  format = "pyproject";
   disabled = isPy27;
 
   src = fetchPypi {
     pname = "importlib_resources";
     inherit version;
-    sha256 = "sha256-11bi+F3U3iuom+CyHboqO77C6HGkKjoWcZJYoR+HUGs=";
+    sha256 = "sha256-VoyfFssgT53syNbSSlcu7qJ9rLtM7p5rA6gCVzZ2l1E=";
   };
 
   nativeBuildInputs = [
@@ -30,9 +31,9 @@ buildPythonPackage rec {
     typing
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  checkInputs = [
+    unittestCheckHook
+  ];
 
   pythonImportsCheck = [
     "importlib_resources"

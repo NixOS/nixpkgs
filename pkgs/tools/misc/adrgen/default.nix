@@ -1,7 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, testVersion
+, testers
 , adrgen
 }:
 
@@ -18,7 +18,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-aDtUD+KKKSE0TpSi4+6HXSBMqF/TROZZhT0ox3a8Idk=";
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = adrgen;
     command = "adrgen version";
     version = "v${version}";

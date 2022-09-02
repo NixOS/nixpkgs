@@ -87,5 +87,6 @@ in stdenv.mkDerivation {
     license     = licenses.bsd3;
     platforms   = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ thoughtpolice ];
+    mainProgram = "sml";
   };
 }

@@ -1,9 +1,0 @@
-diff -Naur --label a/package.json --label b/package.json a/package.json b/package.json
---- a/package.json
-+++ b/package.json
-@@ -1,4 +1,5 @@
- {
-+  "version": "3.4.4",
-   "name": "@mastodon/mastodon",
-   "license": "AGPL-3.0-or-later",
-   "engines": {

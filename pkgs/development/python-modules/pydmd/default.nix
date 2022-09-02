@@ -8,11 +8,12 @@
 , pytestCheckHook
 , pythonOlder
 , scipy
+, ezyrb
 }:
 
 buildPythonPackage rec {
   pname = "pydmd";
-  version = "0.4";
+  version = "0.4.0.post2207";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mathLab";
     repo = "PyDMD";
-    rev = "v${version}";
-    sha256 = "1qwa3dyrrm20x0pzr7rklcw7433fd822n4m8bbbdd7z83xh6xm8g";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-IiHNn8BXOl+eQdxwTrF8PQhDlsMOTj87ugpQ09kDTO4=";
   };
 
   propagatedBuildInputs = [
@@ -29,15 +30,17 @@ buildPythonPackage rec {
     matplotlib
     numpy
     scipy
+    ezyrb
   ];
 
   checkInputs = [
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    # Those tests take over 1.5 h on hydra. Also, an error and two failures
-    "tests/test_spdmd.py"
+  pytestFlagsArray = [
+    # test suite takes over 100 vCPU hours, just run small subset of it.
+    # TODO: Add a passthru.tests with all tests
+    "tests/test_dmdbase.py"
   ];
 
   pythonImportsCheck = [

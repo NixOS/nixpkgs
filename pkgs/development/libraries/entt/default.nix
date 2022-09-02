@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, cmake }:
 stdenv.mkDerivation rec {
   pname = "entt";
-  version = "3.9.0";
+  version = "3.10.3";
 
   src = fetchFromGitHub {
     owner = "skypjack";
     repo = "entt";
     rev = "v${version}";
-    sha256 = "sha256-7UeL8D+A0pH3TKNO5B8A1nhD7uDWeirHnHaI/YKVwyo=";
+    sha256 = "sha256-pewAwvNRCBS6rm3AmHthiayGfP71lqkAO+x6rT957Xg=";
   };
 
   nativeBuildInputs = [ cmake ];

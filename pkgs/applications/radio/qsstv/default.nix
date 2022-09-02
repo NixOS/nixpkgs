@@ -2,12 +2,12 @@
   libpulseaudio, alsa-lib, hamlib, libv4l, fftwFloat }:
 
 mkDerivation rec {
-  version = "9.4.4";
+  version = "9.5.8";
   pname = "qsstv";
 
   src = fetchurl {
     url = "http://users.telenet.be/on4qz/qsstv/downloads/qsstv_${version}.tar.gz";
-    sha256 = "0f9hx6sy418cb23fadll298pqbc5l2lxsdivi4vgqbkvx7sw58zi";
+    sha256 = "0s3sivc0xan6amibdiwfnknrl3248wzgy98w6gyxikl0qsjpygy0";
   };
 
   nativeBuildInputs = [
@@ -20,7 +20,8 @@ mkDerivation rec {
 
   postInstall = ''
     # Install desktop icon
-    install -D qsstv/icons/qsstv.png $out/share/pixmaps/qsstv.png
+    install -D icons/qsstv.png $out/share/pixmaps/qsstv.png
+    install -D qsstv.desktop $out/share/applications/qsstv.desktop
   '';
 
   meta = with lib; {
@@ -31,4 +32,3 @@ mkDerivation rec {
     maintainers = with lib.maintainers; [ hax404 ];
   };
 }
-

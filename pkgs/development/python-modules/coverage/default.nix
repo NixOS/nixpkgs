@@ -2,15 +2,18 @@
 , buildPythonPackage
 , fetchPypi
 , mock
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "coverage";
-  version = "5.5";
+  version = "6.4.2";
+  # uses f strings
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ebe78fe9a0e874362175b02371bdfbee64d8edc42a044253ddf4ee7d3c15212c";
+    sha256 = "sha256-bDzP6Jw28+W5g3ue5QdHIxAWTzUsn+MyEgt2TJ1grb4=";
   };
 
   # No tests in archive

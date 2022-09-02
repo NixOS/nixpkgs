@@ -11,17 +11,17 @@
 
 buildDotnetModule rec {
   pname = "archisteamfarm";
-  version = "5.2.1.5";
+  # nixpkgs-update: no auto update
+  version = "5.2.8.3";
 
   src = fetchFromGitHub {
     owner = "justarchinet";
     repo = pname;
     rev = version;
-    sha256 = "sha256-fjRf+9m1VGRq2ylqp5CP+FCPepUPyHjknSmJaei2yyE=";
+    sha256 = "sha256-WoEbcZbTUH34xkJ+KtAbJXFqWSpFXlXtsQgXOVknxTg=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
 
   nugetDeps = if stdenvNoCC.isAarch64 then ./deps-aarch64-linux.nix else ./deps-x86_64-linux.nix;
 
@@ -41,7 +41,7 @@ buildDotnetModule rec {
   '';
 
   passthru = {
-    updateScript = ./updater.sh;
+    updateScript = ./update.sh;
     ui = callPackage ./web-ui { };
   };
 

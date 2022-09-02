@@ -22,7 +22,6 @@ in
 
 runTests {
 
-
 # TRIVIAL
 
   testId = {
@@ -251,6 +250,68 @@ runTests {
     expected = "&quot;test&quot; &apos;test&apos; &lt; &amp; &gt;";
   };
 
+  testToShellVars = {
+    expr = ''
+      ${toShellVars {
+        STRing01 = "just a 'string'";
+        _array_ = [ "with" "more strings" ];
+        assoc."with some" = ''
+          strings
+          possibly newlines
+        '';
+        drv = {
+          outPath = "/drv";
+          foo = "ignored attribute";
+        };
+        path = /path;
+        stringable = {
+          __toString = _: "hello toString";
+          bar = "ignored attribute";
+        };
+      }}
+    '';
+    expected = ''
+      STRing01='just a '\'''string'\''''
+      declare -a _array_=('with' 'more strings')
+      declare -A assoc=(['with some']='strings
+      possibly newlines
+      ')
+      drv='/drv'
+      path='/path'
+      stringable='hello toString'
+    '';
+  };
+
+  testHasInfixFalse = {
+    expr = hasInfix "c" "abde";
+    expected = false;
+  };
+
+  testHasInfixTrue = {
+    expr = hasInfix "c" "abcde";
+    expected = true;
+  };
+
+  testHasInfixDerivation = {
+    expr = hasInfix "hello" (import ../.. { system = "x86_64-linux"; }).hello;
+    expected = true;
+  };
+
+  testHasInfixPath = {
+    expr = hasInfix "tests" ./.;
+    expected = true;
+  };
+
+  testHasInfixPathStoreDir = {
+    expr = hasInfix builtins.storeDir ./.;
+    expected = true;
+  };
+
+  testHasInfixToString = {
+    expr = hasInfix "a" { __toString = _: "a"; };
+    expected = true;
+  };
+
 # LISTS
 
   testFilter = {
@@ -471,6 +532,66 @@ runTests {
     '';
   };
 
+  testToINIWithGlobalSectionEmpty = {
+    expr = generators.toINIWithGlobalSection {} {
+      globalSection = {
+      };
+      sections = {
+      };
+    };
+    expected = ''
+    '';
+  };
+
+  testToINIWithGlobalSectionGlobalEmptyIsTheSameAsToINI =
+    let
+      sections = {
+        "section 1" = {
+          attribute1 = 5;
+          x = "Me-se JarJar Binx";
+        };
+        "foo" = {
+          "he\\h=he" = "this is okay";
+        };
+      };
+    in {
+      expr =
+        generators.toINIWithGlobalSection {} {
+            globalSection = {};
+            sections = sections;
+        };
+      expected = generators.toINI {} sections;
+  };
+
+  testToINIWithGlobalSectionFull = {
+    expr = generators.toINIWithGlobalSection {} {
+      globalSection = {
+        foo = "bar";
+        test = false;
+      };
+      sections = {
+        "section 1" = {
+          attribute1 = 5;
+          x = "Me-se JarJar Binx";
+        };
+        "foo" = {
+          "he\\h=he" = "this is okay";
+        };
+      };
+    };
+    expected = ''
+      foo=bar
+      test=false
+
+      [foo]
+      he\h\=he=this is okay
+
+      [section 1]
+      attribute1=5
+      x=Me-se JarJar Binx
+    '';
+  };
+
   /* right now only invocation check */
   testToJSONSimple =
     let val = {
@@ -551,6 +672,21 @@ runTests {
       expr = (builtins.tryEval
         (generators.toPretty { } (generators.withRecursion { depthLimit = 2; } a))).success;
       expected = false;
+    };
+
+  testWithRecursionDealsWithFunctors =
+    let
+      functor = {
+        __functor = self: { a, b, }: null;
+      };
+      a = {
+        value = "1234";
+        b = functor;
+        c.d = functor;
+      };
+    in {
+      expr = generators.toPretty { } (generators.withRecursion { depthLimit = 1; throwOnDepthLimit = false; } a);
+      expected = "{\n  b = <function, args: {a, b}>;\n  c = {\n    d = \"<unevaluated>\";\n  };\n  value = \"<unevaluated>\";\n}";
     };
 
   testToPrettyMultiline = {
@@ -649,6 +785,11 @@ runTests {
     expected = "foo";
   };
 
+  testSanitizeDerivationNameUnicode = testSanitizeDerivationName {
+    name = "fö";
+    expected = "f-";
+  };
+
   testSanitizeDerivationNameAscii = testSanitizeDerivationName {
     name = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
     expected = "-+--.-0123456789-=-?-ABCDEFGHIJKLMNOPQRSTUVWXYZ-_-abcdefghijklmnopqrstuvwxyz-";
@@ -691,7 +832,7 @@ runTests {
 
         locs = filter (o: ! o.internal) (optionAttrSetToDocList options);
       in map (o: o.loc) locs;
-    expected = [ [ "foo" ] [ "foo" "<name>" "bar" ] [ "foo" "bar" ] ];
+    expected = [ [ "_module" "args" ] [ "foo" ] [ "foo" "<name>" "bar" ] [ "foo" "bar" ] ];
   };
 
   testCartesianProductOfEmptySet = {
@@ -760,5 +901,309 @@ runTests {
       { a = 3; b = 30; c = 200; }
       { a = 3; b = 30; c = 300; }
     ];
+  };
+
+  # The example from the showAttrPath documentation
+  testShowAttrPathExample = {
+    expr = showAttrPath [ "foo" "10" "bar" ];
+    expected = "foo.\"10\".bar";
+  };
+
+  testShowAttrPathEmpty = {
+    expr = showAttrPath [];
+    expected = "<root attribute path>";
+  };
+
+  testShowAttrPathVarious = {
+    expr = showAttrPath [
+      "."
+      "foo"
+      "2"
+      "a2-b"
+      "_bc'de"
+    ];
+    expected = ''".".foo."2".a2-b._bc'de'';
+  };
+
+  testGroupBy = {
+    expr = groupBy (n: toString (mod n 5)) (range 0 16);
+    expected = {
+      "0" = [ 0 5 10 15 ];
+      "1" = [ 1 6 11 16 ];
+      "2" = [ 2 7 12 ];
+      "3" = [ 3 8 13 ];
+      "4" = [ 4 9 14 ];
+    };
+  };
+
+  testGroupBy' = {
+    expr = groupBy' builtins.add 0 (x: boolToString (x > 2)) [ 5 1 2 3 4 ];
+    expected = { false = 3; true = 12; };
+  };
+
+  # The example from the updateManyAttrsByPath documentation
+  testUpdateManyAttrsByPathExample = {
+    expr = updateManyAttrsByPath [
+      {
+        path = [ "a" "b" ];
+        update = old: { d = old.c; };
+      }
+      {
+        path = [ "a" "b" "c" ];
+        update = old: old + 1;
+      }
+      {
+        path = [ "x" "y" ];
+        update = old: "xy";
+      }
+    ] { a.b.c = 0; };
+    expected = { a = { b = { d = 1; }; }; x = { y = "xy"; }; };
+  };
+
+  # If there are no updates, the value is passed through
+  testUpdateManyAttrsByPathNone = {
+    expr = updateManyAttrsByPath [] "something";
+    expected = "something";
+  };
+
+  # A single update to the root path is just like applying the function directly
+  testUpdateManyAttrsByPathSingleIncrement = {
+    expr = updateManyAttrsByPath [
+      {
+        path = [ ];
+        update = old: old + 1;
+      }
+    ] 0;
+    expected = 1;
+  };
+
+  # Multiple updates can be applied are done in order
+  testUpdateManyAttrsByPathMultipleIncrements = {
+    expr = updateManyAttrsByPath [
+      {
+        path = [ ];
+        update = old: old + "a";
+      }
+      {
+        path = [ ];
+        update = old: old + "b";
+      }
+      {
+        path = [ ];
+        update = old: old + "c";
+      }
+    ] "";
+    expected = "abc";
+  };
+
+  # If an update doesn't use the value, all previous updates are not evaluated
+  testUpdateManyAttrsByPathLazy = {
+    expr = updateManyAttrsByPath [
+      {
+        path = [ ];
+        update = old: old + throw "nope";
+      }
+      {
+        path = [ ];
+        update = old: "untainted";
+      }
+    ] (throw "start");
+    expected = "untainted";
+  };
+
+  # Deeply nested attributes can be updated without affecting others
+  testUpdateManyAttrsByPathDeep = {
+    expr = updateManyAttrsByPath [
+      {
+        path = [ "a" "b" "c" ];
+        update = old: old + 1;
+      }
+    ] {
+      a.b.c = 0;
+
+      a.b.z = 0;
+      a.y.z = 0;
+      x.y.z = 0;
+    };
+    expected = {
+      a.b.c = 1;
+
+      a.b.z = 0;
+      a.y.z = 0;
+      x.y.z = 0;
+    };
+  };
+
+  # Nested attributes are updated first
+  testUpdateManyAttrsByPathNestedBeforehand = {
+    expr = updateManyAttrsByPath [
+      {
+        path = [ "a" ];
+        update = old: old // { x = old.b; };
+      }
+      {
+        path = [ "a" "b" ];
+        update = old: old + 1;
+      }
+    ] {
+      a.b = 0;
+    };
+    expected = {
+      a.b = 1;
+      a.x = 1;
+    };
+  };
+
+  ## Levenshtein distance functions and co.
+  testCommonPrefixLengthEmpty = {
+    expr = strings.commonPrefixLength "" "hello";
+    expected = 0;
+  };
+
+  testCommonPrefixLengthSame = {
+    expr = strings.commonPrefixLength "hello" "hello";
+    expected = 5;
+  };
+
+  testCommonPrefixLengthDiffering = {
+    expr = strings.commonPrefixLength "hello" "hey";
+    expected = 2;
+  };
+
+  testCommonSuffixLengthEmpty = {
+    expr = strings.commonSuffixLength "" "hello";
+    expected = 0;
+  };
+
+  testCommonSuffixLengthSame = {
+    expr = strings.commonSuffixLength "hello" "hello";
+    expected = 5;
+  };
+
+  testCommonSuffixLengthDiffering = {
+    expr = strings.commonSuffixLength "test" "rest";
+    expected = 3;
+  };
+
+  testLevenshteinEmpty = {
+    expr = strings.levenshtein "" "";
+    expected = 0;
+  };
+
+  testLevenshteinOnlyAdd = {
+    expr = strings.levenshtein "" "hello there";
+    expected = 11;
+  };
+
+  testLevenshteinOnlyRemove = {
+    expr = strings.levenshtein "hello there" "";
+    expected = 11;
+  };
+
+  testLevenshteinOnlyTransform = {
+    expr = strings.levenshtein "abcdef" "ghijkl";
+    expected = 6;
+  };
+
+  testLevenshteinMixed = {
+    expr = strings.levenshtein "kitchen" "sitting";
+    expected = 5;
+  };
+
+  testLevenshteinAtMostZeroFalse = {
+    expr = strings.levenshteinAtMost 0 "foo" "boo";
+    expected = false;
+  };
+
+  testLevenshteinAtMostZeroTrue = {
+    expr = strings.levenshteinAtMost 0 "foo" "foo";
+    expected = true;
+  };
+
+  testLevenshteinAtMostOneFalse = {
+    expr = strings.levenshteinAtMost 1 "car" "ct";
+    expected = false;
+  };
+
+  testLevenshteinAtMostOneTrue = {
+    expr = strings.levenshteinAtMost 1 "car" "cr";
+    expected = true;
+  };
+
+  # We test levenshteinAtMost 2 particularly well because it uses a complicated
+  # implementation
+  testLevenshteinAtMostTwoIsEmpty = {
+    expr = strings.levenshteinAtMost 2 "" "";
+    expected = true;
+  };
+
+  testLevenshteinAtMostTwoIsZero = {
+    expr = strings.levenshteinAtMost 2 "abcdef" "abcdef";
+    expected = true;
+  };
+
+  testLevenshteinAtMostTwoIsOne = {
+    expr = strings.levenshteinAtMost 2 "abcdef" "abddef";
+    expected = true;
+  };
+
+  testLevenshteinAtMostTwoDiff0False = {
+    expr = strings.levenshteinAtMost 2 "abcdef" "aczyef";
+    expected = false;
+  };
+
+  testLevenshteinAtMostTwoDiff0Outer = {
+    expr = strings.levenshteinAtMost 2 "abcdef" "zbcdez";
+    expected = true;
+  };
+
+  testLevenshteinAtMostTwoDiff0DelLeft = {
+    expr = strings.levenshteinAtMost 2 "abcdef" "bcdefz";
+    expected = true;
+  };
+
+  testLevenshteinAtMostTwoDiff0DelRight = {
+    expr = strings.levenshteinAtMost 2 "abcdef" "zabcde";
+    expected = true;
+  };
+
+  testLevenshteinAtMostTwoDiff1False = {
+    expr = strings.levenshteinAtMost 2 "abcdef" "bddez";
+    expected = false;
+  };
+
+  testLevenshteinAtMostTwoDiff1DelLeft = {
+    expr = strings.levenshteinAtMost 2 "abcdef" "bcdez";
+    expected = true;
+  };
+
+  testLevenshteinAtMostTwoDiff1DelRight = {
+    expr = strings.levenshteinAtMost 2 "abcdef" "zbcde";
+    expected = true;
+  };
+
+  testLevenshteinAtMostTwoDiff2False = {
+    expr = strings.levenshteinAtMost 2 "hello" "hxo";
+    expected = false;
+  };
+
+  testLevenshteinAtMostTwoDiff2True = {
+    expr = strings.levenshteinAtMost 2 "hello" "heo";
+    expected = true;
+  };
+
+  testLevenshteinAtMostTwoDiff3 = {
+    expr = strings.levenshteinAtMost 2 "hello" "ho";
+    expected = false;
+  };
+
+  testLevenshteinAtMostThreeFalse = {
+    expr = strings.levenshteinAtMost 3 "hello" "Holla!";
+    expected = false;
+  };
+
+  testLevenshteinAtMostThreeTrue = {
+    expr = strings.levenshteinAtMost 3 "hello" "Holla";
+    expected = true;
   };
 }

@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
-, substituteAll
 , meson
 , ninja
 , pkg-config
@@ -15,26 +14,24 @@
 , switchboard
 , fwupd
 , appstream
-, nixos-artwork
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-about";
-  version = "6.0.1";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0c075ac7iqz4hqbp2ph0cwyhiq0jn6c1g1jjfhygjbssv3vvd268";
+    sha256 = "sha256-/8K3xSbzlagOT0zHdXNwEERJP88C+H2I6qJHXwdlTS4=";
   };
 
   patches = [
-    # Use NixOS's default wallpaper
-    (substituteAll {
-      src = ./fix-background-path.patch;
-      default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
-    })
+    # Introduces a wallpaper meson flag.
+    # The wallpapaper path does not exist on NixOS, let's just remove the wallpaper.
+    # https://github.com/elementary/switchboard-plug-about/pull/236
+    ./add-wallpaper-option.patch
   ];
 
   nativeBuildInputs = [
@@ -53,6 +50,11 @@ stdenv.mkDerivation rec {
     libgtop
     libhandy
     switchboard
+  ];
+
+  mesonFlags = [
+    # This option is introduced in add-wallpaper-option.patch
+    "-Dwallpaper=false"
   ];
 
   passthru = {

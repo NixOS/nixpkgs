@@ -10,7 +10,6 @@ rec {
   *
   * Examples:
   * runCommand "name" {envVariable = true;} ''echo hello > $out''
-  * runCommandNoCC "name" {envVariable = true;} ''echo hello > $out'' # equivalent to prior
   * runCommandCC "name" {} ''gcc -o myfile myfile.c; cp myfile $out'';
   *
   * The `*Local` variants force a derivation to be built locally,
@@ -68,10 +67,11 @@ rec {
     # extra arguments to pass to stdenv.mkDerivation
     , name
     # name of the resulting derivation
+    # TODO(@Artturin): enable strictDeps always
     }: buildCommand:
     stdenv.mkDerivation ({
-      name = lib.strings.sanitizeDerivationName name;
-      inherit buildCommand;
+      enableParallelBuilding = true;
+      inherit buildCommand name;
       passAsFile = [ "buildCommand" ]
         ++ (derivationArgs.passAsFile or []);
     }
@@ -121,7 +121,7 @@ rec {
         allowSubstitutes = false;
       }
       ''
-        target=$out${destination}
+        target=$out${lib.escapeShellArg destination}
         mkdir -p "$(dirname "$target")"
 
         if [ -e "$textPath" ]; then
@@ -286,8 +286,10 @@ rec {
         set -o errexit
         set -o nounset
         set -o pipefail
+      '' + lib.optionalString (runtimeInputs != [ ]) ''
 
         export PATH="${lib.makeBinPath runtimeInputs}:$PATH"
+      '' + ''
 
         ${text}
       '';
@@ -316,10 +318,10 @@ rec {
       allowSubstitutes = false;
     }
     ''
-    n=$out/bin/$name
-    mkdir -p "$(dirname "$n")"
-    mv "$codePath" code.c
-    $CC -x c code.c -o "$n"
+      n=$out/bin/$name
+      mkdir -p "$(dirname "$n")"
+      mv "$codePath" code.c
+      $CC -x c code.c -o "$n"
     '';
 
 
@@ -478,7 +480,7 @@ rec {
       cd $out
       ${lib.concatMapStrings (x: ''
           mkdir -p "$(dirname ${lib.escapeShellArg x.name})"
-          ln -s ${lib.escapeShellArg x.path} ${lib.escapeShellArg x.name}
+          ln -s ${lib.escapeShellArg "${x.path}"} ${lib.escapeShellArg x.name}
       '') entries}
     '';
 
@@ -516,15 +518,20 @@ rec {
    * # setup hook that depends on the hello package and runs ./myscript.sh
    * myhellohook = makeSetupHook { deps = [ hello ]; } ./myscript.sh;
    *
-   * # wrotes a setup hook where @bash@ myscript.sh is substituted for the
+   * # writes a Linux-exclusive setup hook where @bash@ myscript.sh is substituted for the
    * # bash interpreter.
    * myhellohookSub = makeSetupHook {
    *                 deps = [ hello ];
    *                 substitutions = { bash = "${pkgs.bash}/bin/bash"; };
+   *                 meta.platforms = lib.platforms.linux;
    *               } ./myscript.sh;
    */
-  makeSetupHook = { name ? "hook", deps ? [], substitutions ? {} }: script:
-    runCommand name substitutions
+  makeSetupHook = { name ? "hook", deps ? [], substitutions ? {}, meta ? {} }: script:
+    runCommand name
+      (substitutions // {
+        inherit meta;
+        strictDeps = true;
+      })
       (''
         mkdir -p $out/nix-support
         cp ${script} $out/nix-support/setup-hook
@@ -781,37 +788,4 @@ rec {
     outputHash = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
     preferLocalBuild = true;
   } "mkdir $out";
-
-  /* Checks the command output contains the specified version
-   *
-   * Although simplistic, this test assures that the main program
-   * can run. While there's no substitute for a real test case,
-   * it does catch dynamic linking errors and such. It also provides
-   * some protection against accidentally building the wrong version,
-   * for example when using an 'old' hash in a fixed-output derivation.
-   *
-   * Examples:
-   *
-   * passthru.tests.version = testVersion { package = hello; };
-   *
-   * passthru.tests.version = testVersion {
-   *   package = seaweedfs;
-   *   command = "weed version";
-   * };
-   *
-   * passthru.tests.version = testVersion {
-   *   package = key;
-   *   command = "KeY --help";
-   *   # Wrong '2.5' version in the code. Drop on next version.
-   *   version = "2.5";
-   * };
-   */
-  testVersion =
-    { package,
-      command ? "${package.meta.mainProgram or package.pname or package.name} --version",
-      version ? package.version,
-    }: runCommand "${package.name}-test-version" { nativeBuildInputs = [ package ]; meta.timeout = 60; } ''
-      ${command} |& grep -Fw ${version}
-      touch $out
-    '';
 }

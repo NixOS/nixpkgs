@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, python3Packages, docutils, help2man, installShellFiles
-, abootimg, acl, apksigner, apktool, binutils-unwrapped, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, db, diffutils, dtc
+, abootimg, acl, apksigner, apktool, binutils-unwrapped-all-targets, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, db, diffutils, dtc
 , e2fsprogs, enjarify, file, findutils, fontforge-fonttools, ffmpeg, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg, gnutar
 , gzip, hdf5, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, ocaml, oggvideotools, openssh, openssl, pdftk, pgpdump, poppler_utils, procyon, qemu, R
 , radare2, sng, sqlite, squashfsTools, tcpdump, ubootTools, odt2txt, unzip, wabt, xmlbeans, xxd, xz, zip, zstd
@@ -11,11 +11,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "201";
+  version = "221";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-urvSZSpy5ksHhWqJM8ek0dyyKPeme/sJ16L6JfHg7Lg=";
+    sha256 = "sha256-E4p8uBICWIbplszgP8zdghO7qEI46WCk3eeP71jas9o=";
   };
 
   outputs = [ "out" "man" ];
@@ -44,20 +44,20 @@ python3Packages.buildPythonApplication rec {
   #
   # Still missing these tools: docx2txt lipo otool r2pipe
   pythonPath = [
-      binutils-unwrapped bzip2 colordiff coreutils cpio db diffutils
+      binutils-unwrapped-all-targets bzip2 colordiff coreutils cpio db diffutils
       e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
-      libarchive libcaca lz4 openssl pgpdump sng sqlite squashfsTools unzip xxd
+      libarchive lz4 openssl pgpdump sng sqlite squashfsTools unzip xxd
       xz zip zstd
     ]
     ++ (with python3Packages; [
       argcomplete debian defusedxml jsondiff jsbeautifier libarchive-c
-      python_magic progressbar33 pypdf2 rpm tlsh
+      python-magic progressbar33 pypdf2 rpm tlsh
     ])
     ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr acl cdrkit dtc ]
     ++ lib.optionals enableBloat ([
       abootimg apksigner apktool cbfstool colord enjarify ffmpeg fpc ghc ghostscriptX giflib gnupg gnumeric
-      hdf5 imagemagick llvm jdk mono ocaml odt2txt oggvideotools openssh pdftk poppler_utils procyon qemu R tcpdump ubootTools wabt radare2 xmlbeans
-    ] ++ (with python3Packages; [ androguard binwalk guestfs h5py pdfminer ]));
+      hdf5 imagemagick libcaca llvm jdk mono ocaml odt2txt oggvideotools openssh pdftk poppler_utils procyon qemu R tcpdump ubootTools wabt radare2 xmlbeans
+    ] ++ (with python3Packages; [ androguard binwalk guestfs h5py pdfminer-six ]));
 
   checkInputs = with python3Packages; [ pytestCheckHook ] ++ pythonPath;
 
@@ -66,17 +66,22 @@ python3Packages.buildPythonApplication rec {
     installManPage doc/diffoscope.1
   '';
 
-  # Disable flaky test and a failing one
   disabledTests = [
+    # Disable flaky test and a failing one
     "test_android_manifest"
     "test_sbin_added_to_path"
     "test_diff_meta"
     "test_diff_meta2"
     "test_obj_no_differences"
 
-    # Failing because of file-v5.40 has a slightly different output.
-    # Upstream issue: https://salsa.debian.org/reproducible-builds/diffoscope/-/issues/271
-    "test_text_proper_indentation"
+    # fails because it fails to determine llvm version
+    "test_item3_deflate_llvm_bitcode"
+
+    # OSError: [Errno 84] Invalid or incomplete multibyte or wide character: b'/build/pytest-of-nixbld/pytest-0/\xf0(\x8c('
+    "test_non_unicode_filename"
+
+    # disable formatting tests because they can break on black updates
+    "test_code_is_black_clean"
   ] ++ lib.optionals stdenv.isDarwin [
     # Disable flaky tests on Darwin
     "test_non_unicode_filename"
@@ -120,7 +125,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://diffoscope.org/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dezgeg ma27 danielfullmer ];
+    maintainers = with maintainers; [ dezgeg danielfullmer ];
     platforms = platforms.unix;
   };
 }

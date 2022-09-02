@@ -37,7 +37,7 @@ buildPythonPackage rec {
     description = "2d physics library";
     homepage = "https://www.pymunk.org";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.unix;
   };
 }

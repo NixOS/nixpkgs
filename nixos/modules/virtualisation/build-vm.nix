@@ -25,8 +25,8 @@ in
   options = {
 
     virtualisation.vmVariant = mkOption {
-      description = ''
-        Machine configuration to be added for the vm script produced by <literal>nixos-rebuild build-vm</literal>.
+      description = lib.mdDoc ''
+        Machine configuration to be added for the vm script produced by `nixos-rebuild build-vm`.
       '';
       inherit (vmVariant) type;
       default = {};
@@ -34,8 +34,8 @@ in
     };
 
     virtualisation.vmVariantWithBootLoader = mkOption {
-      description = ''
-        Machine configuration to be added for the vm script produced by <literal>nixos-rebuild build-vm-with-bootloader</literal>.
+      description = lib.mdDoc ''
+        Machine configuration to be added for the vm script produced by `nixos-rebuild build-vm-with-bootloader`.
       '';
       inherit (vmVariantWithBootLoader) type;
       default = {};

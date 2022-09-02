@@ -8,12 +8,16 @@
 
 buildPythonPackage rec {
   pname = "zcs";
-  version = "0.1.17";
+  version = "0.1.21";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ZoQgAaJy3kKHLljyKA0Oo/D1kefE8X9FlsGDSNt1nPw=";
+    sha256 = "sha256-Zs2aK+RR84uKjh+ZF/3gulS78zbb+XahTVSTJAArKHA=";
   };
+
+  patches = [
+    ./fix-test-yaml.patch
+  ];
 
   propagatedBuildInputs = [ yacs ];
 

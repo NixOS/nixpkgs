@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitHub
 , makeDesktopItem
 , python3
@@ -24,8 +25,16 @@ let
     genericName = "Molecular Modeler";
     comment = description;
     icon = pname;
-    mimeType = "chemical/x-pdb;chemical/x-mdl-molfile;chemical/x-mol2;chemical/seq-aa-fasta;chemical/seq-na-fasta;chemical/x-xyz;chemical/x-mdl-sdf;";
-    categories = "Graphics;Education;Science;Chemistry;";
+    mimeTypes = [
+      "chemical/x-pdb"
+      "chemical/x-mdl-molfile"
+      "chemical/x-mol2"
+      "chemical/seq-aa-fasta"
+      "chemical/seq-na-fasta"
+      "chemical/x-xyz"
+      "chemical/x-mdl-sdf"
+    ];
+    categories = [ "Graphics" "Education" "Science" "Chemistry" ];
   };
 in
 python3Packages.buildPythonApplication rec {
@@ -59,6 +68,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     inherit description;
     homepage = "https://www.pymol.org/";
     license = licenses.mit;

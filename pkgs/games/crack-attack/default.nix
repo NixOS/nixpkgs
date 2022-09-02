@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.nongnu.org/crack-attack/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.piotr ];
+    maintainers = [ ];
   };
 }

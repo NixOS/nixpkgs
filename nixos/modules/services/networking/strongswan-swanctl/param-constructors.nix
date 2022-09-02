@@ -57,11 +57,12 @@ rec {
 
   documentDefault = description : strongswanDefault :
     if strongswanDefault == null
-    then description
-    else description + ''
-      </para><para>
-      StrongSwan default: <literal><![CDATA[${builtins.toJSON strongswanDefault}]]></literal>
-    '';
+    then mdDoc description
+    else mdDoc (description + ''
+
+
+      StrongSwan default: ````${builtins.toJSON strongswanDefault}````
+    '');
 
   single = f: name: value: { ${name} = f value; };
 
@@ -120,7 +121,7 @@ rec {
     option = mkOption {
       type = types.attrsOf option;
       default = {};
-      inherit description;
+      description = mdDoc description;
     };
     render = single (attrs:
       (paramsToRenderedStrings attrs
@@ -138,7 +139,7 @@ rec {
     option = mkOption {
       type = types.attrsOf option;
       default = {};
-      inherit description;
+      description = mdDoc description;
     };
     render = prefix: attrs:
       let prefixedAttrs = mapAttrs' (name: nameValuePair "${prefix}-${name}") attrs;

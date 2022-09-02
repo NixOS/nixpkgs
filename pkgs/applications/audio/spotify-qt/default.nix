@@ -9,13 +9,13 @@
 
 mkDerivation rec {
    pname = "spotify-qt";
-   version = "3.8";
+   version = "3.9";
 
    src = fetchFromGitHub {
       owner = "kraxarn";
       repo = pname;
       rev = "v${version}";
-      sha256 = "sha256-Rgtw+nrM8YUBHPIIe9zVhLij/ep07piPf/2MSmTVQKk=";
+      sha256 = "sha256-8rLpasgXiaL2KpGnYMQdNN2ayjcSkmz5hDkNBnKNWHk=";
    };
 
    buildInputs = [ libxcb qtbase qtsvg ];
@@ -30,7 +30,7 @@ mkDerivation rec {
     description = "Lightweight unofficial Spotify client using Qt";
     homepage = "https://github.com/kraxarn/spotify-qt";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ kiyengar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
    };
 }

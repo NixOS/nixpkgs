@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.codenix.com/~tolua/";
     license = licenses.mit;
     maintainers = with maintainers; [ vrthra ];
+    mainProgram = "tolua++";
     platforms = with platforms; unix;
   };
 }

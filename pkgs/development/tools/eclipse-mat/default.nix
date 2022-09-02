@@ -20,7 +20,7 @@
 
 with lib;
 let
-  pVersion = "1.12.0.20210602";
+  pVersion = "1.13.0.20220615";
   pVersionTriple = splitVersion pVersion;
   majorVersion = elemAt pVersionTriple 0;
   minorVersion = elemAt pVersionTriple 1;
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://ftp.halifax.rwth-aachen.de/eclipse//mat/${baseVersion}/rcp/MemoryAnalyzer-${version}-linux.gtk.x86_64.zip";
-    sha256 = "sha256-qX4RPuZdeiEduJAEpzOi/QnbJ+kaD0PZ3WHrmGsvqHc=";
+    sha256 = "sha256-LwtP76kb9xgdcsWCSCXeRbhFVyFS3xkl15F075Cq4Os=";
   };
 
   desktopItem = makeDesktopItem {
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     comment = "Eclipse Memory Analyzer";
     desktopName = "Eclipse MAT";
     genericName = "Java Memory Analyzer";
-    categories = "Development;";
+    categories = [ "Development" ];
   };
 
   unpackPhase = ''
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     mv mat $out
 
     # Patch binaries.
-    interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
+    interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
     libCairo=$out/eclipse/libcairo-swt.so
     patchelf --set-interpreter $interpreter $out/mat/MemoryAnalyzer
     [ -f $libCairo ] && patchelf --set-rpath ${
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     mv $out/share/pixmaps/eclipse64.png $out/share/pixmaps/eclipse.png
   '';
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip makeWrapper ];
   buildInputs = [
     fontconfig
     freetype
@@ -90,7 +90,6 @@ stdenv.mkDerivation rec {
     libX11
     libXrender
     libXtst
-    makeWrapper
     zlib
     shared-mime-info
     webkitgtk
@@ -110,6 +109,7 @@ stdenv.mkDerivation rec {
       run a report to automatically extract leak suspects.
     '';
     homepage = "https://www.eclipse.org/mat";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.epl20;
     maintainers = [ maintainers.ktor ];
     platforms = [ "x86_64-linux" ];

@@ -2,16 +2,30 @@
 
 buildGoModule rec {
   pname = "alps";
-  version = "2021-09-29";
+  version = "2022-06-03";
 
   src = fetchFromSourcehut {
     owner = "~migadu";
     repo = "alps";
-    rev = "d4c35f3c3157bece8e50fd95f2ee1081be30d7ae";
-    sha256 = "sha256-xKfRLdfeD7lWdmC0iiq4dOIv2SmzbKH7HcAISCJgdug=";
+    rev = "9cb23b09975e95f6a5952e3718eaf471c3e3510f";
+    hash = "sha256-BUV1/BRIXHEf2FU1rdmNgueo8KSUlMKbIpAg2lFs3hA=";
   };
 
-  vendorSha256 = "sha256-8fmbv5uPRfzUqsYU95YzsnuFkq4cwj+LN2X3W/yBHyA=";
+  vendorSha256 = "sha256-cpY+lYM/nAX3nUaFknrRAavxDk8UDzJkoqFjJ1/KWeg=";
+
+  ldflags = [
+    "-X main.themesPath=${placeholder "out"}/share/alps/themes"
+    "-X git.sr.ht/~migadu/alps.PluginDir=${placeholder "out"}/share/alps/plugins"
+  ];
+
+  postPatch = ''
+    substituteInPlace plugin.go --replace "const PluginDir" "var PluginDir"
+  '';
+
+  postInstall = ''
+    mkdir -p "$out/share/alps"
+    cp -r themes plugins "$out/share/alps/"
+  '';
 
   proxyVendor = true;
 
@@ -19,6 +33,6 @@ buildGoModule rec {
     description = "A simple and extensible webmail.";
     homepage = "https://git.sr.ht/~migadu/alps";
     license = licenses.mit;
-    maintainers = with maintainers; [ gordias ];
+    maintainers = with maintainers; [ gordias booklearner ];
   };
 }

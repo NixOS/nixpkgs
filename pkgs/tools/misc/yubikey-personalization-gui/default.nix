@@ -1,4 +1,4 @@
-{ lib, fetchurl, mkDerivation, pkg-config, qtbase, qmake, imagemagick
+{ stdenv, lib, fetchurl, mkDerivation, pkg-config, qtbase, qmake, imagemagick
 , libyubikey, yubikey-personalization }:
 
 mkDerivation rec {
@@ -19,9 +19,9 @@ mkDerivation rec {
 
     # Desktop files
     install -D -m0644 resources/lin/yubikey-personalization-gui.desktop "$out/share/applications/yubikey-personalization-gui.desktop"
-    install -D -m0644 resources/lin/yubikey-personalization-gui.desktop "$out/share/pixmaps/yubikey-personalization-gui.xpm"
 
     # Icons
+    install -D -m0644 resources/lin/yubikey-personalization-gui.xpm "$out/share/pixmaps/yubikey-personalization-gui.xpm"
     install -D -m0644 resources/lin/yubikey-personalization-gui.png "$out/share/icons/hicolor/128x128/apps/yubikey-personalization-gui.png"
     for SIZE in 16 24 32 48 64 96; do
       # set modify/create for reproducible builds
@@ -34,6 +34,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://developers.yubico.com/yubikey-personalization-gui";
     description = "A QT based cross-platform utility designed to facilitate reconfiguration of the Yubikey";
     license = licenses.bsd2;

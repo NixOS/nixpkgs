@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "1.1.0";
+  version = "1.1.1";
 
   disabled = !isPy3k;
 
@@ -26,8 +26,15 @@ buildPythonPackage rec {
     owner = "scrapinghub";
     repo = "dateparser";
     rev = "v${version}";
-    sha256 = "sha256-RpQWDsj7vGtfu6wf4yETdswfXDfoTkburTl6aOA03Ww=";
+    sha256 = "sha256-bDup3q93Zq+pvwsy/lQy2byOMjG6C/+7813hWQMbZRU=";
   };
+
+  postPatch = ''
+    # https://github.com/scrapinghub/dateparser/issues/1053
+    substituteInPlace tests/test_search.py --replace \
+      "('June 2020', datetime.datetime(2020, 6, datetime.datetime.utcnow().day, 0, 0))," \
+      "('June 2020', datetime.datetime(2020, 6, min(30, datetime.datetime.utcnow().day), 0, 0)),"
+  '';
 
   propagatedBuildInputs = [
     # install_requires

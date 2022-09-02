@@ -1,14 +1,15 @@
 { lib
-, python3
+, buildPythonPackage
+, fetchPypi
 }:
 
-with python3.pkgs; buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "esphome-dashboard";
-  version = "20220116.0";
+  version = "20220508.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-eItt7AP96juIaP57yGzW/Fb8NAGsns/4nGWQIMv7Xn8=";
+    sha256 = "sha256-nBVVNe6Qwo72ws6G8WAO99f2ftbxoixOB0eiLuILyeg=";
   };
 
   # no tests

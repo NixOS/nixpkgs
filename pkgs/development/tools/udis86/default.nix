@@ -1,17 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, python2 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "udis86";
-  version = "1.7.2";
+  version = "unstable-2014-12-25";
 
   src = fetchFromGitHub {
     owner = "vmt";
     repo = "udis86";
-    rev = "v${version}";
-    sha256 = "0c60zwimim6jrm4saw36s38w5sg5v8n9mr58pkqmjrlf7q9g6am1";
+    rev = "56ff6c87c11de0ffa725b14339004820556e343d";
+    hash = "sha256-bmm1rgzZeStQJXEmcT8vnplsnmgN3LJlYs7COmqsDU8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook python2 ];
+  patches = [
+    (fetchpatch {
+      name = "support-python3-for-building";
+      url = "https://github.com/vmt/udis86/commit/3c05ce60372cb2eba39d6eb87ac05af8a664e1b1.patch";
+      hash = "sha256-uF4Cwt7UMkyd0RX6cCMQt9xvkkUNQvTDH/Z/6nHtVT8=";
+    })
+  ];
+
+  nativeBuildInputs = [ autoreconfHook python3 ];
 
   configureFlags = [
     "--enable-shared"
@@ -23,6 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "http://udis86.sourceforge.net";
     license = licenses.bsd2;
     maintainers = with maintainers; [ timor ];
+    mainProgram = "udcli";
     description = ''
       Easy-to-use, minimalistic x86 disassembler library (libudis86)
     '';

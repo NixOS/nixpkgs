@@ -22,12 +22,12 @@ let
       pkg-config
       docbook2x
       docbook-xsl-nons
+      wrapGAppsHook
     ];
     buildInputs = [
       gtk3
       gobject-introspection
       vala gtk-doc
-      wrapGAppsHook
     ];
   });
 

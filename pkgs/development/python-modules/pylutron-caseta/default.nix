@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "pylutron-caseta";
-  version = "0.13.0";
-  format = "setuptools";
+  version = "0.14.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "gurumitts";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pVBFlGguVN6b3YY2lFF8KG83tBuotLmWLq/dKjRKAUQ=";
+    hash = "sha256-D1P4roUZ+byU031RtdwIOR/ncxY9wl9UqCKVb/XPGVk=";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +32,10 @@ buildPythonPackage rec {
     pytest-sugar
     pytest-timeout
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
   ];
 
   pythonImportsCheck = [

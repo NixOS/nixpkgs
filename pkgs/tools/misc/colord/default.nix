@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , nixosTests
 , bash-completion
@@ -17,7 +18,7 @@
 , ninja
 , vala
 , libgudev
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , shared-mime-info
 , sane-backends
 , docbook_xsl
@@ -25,17 +26,18 @@
 , docbook_xml_dtd_412
 , gtk-doc
 , libxslt
+, enableDaemon ? !stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {
   pname = "colord";
-  version = "1.4.5";
+  version = "1.4.6";
 
   outputs = [ "out" "dev" "devdoc" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/colord/releases/${pname}-${version}.tar.xz";
-    sha256 = "05sydi6qqqx1rrqwnga1vbg9srkf89wdcfw5w4p4m7r37m2flx5p";
+    sha256 = "dAdjGie/5dG2cueuQndwAcEF2GC3tzkig8jGMA3ojm8=";
   };
 
   patches = [
@@ -55,6 +57,7 @@ stdenv.mkDerivation rec {
     "-Dlibcolordcompat=true"
     "-Dsane=true"
     "-Dvapi=true"
+    "-Ddaemon=${lib.boolToString enableDaemon}"
     "-Ddaemon_user=colord"
   ];
 
@@ -71,7 +74,7 @@ stdenv.mkDerivation rec {
     pkg-config
     shared-mime-info
     vala
-    wrapGAppsHook
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
@@ -82,10 +85,11 @@ stdenv.mkDerivation rec {
     gusb
     lcms2
     libgudev
-    polkit
     sane-backends
     sqlite
     systemd
+  ] ++ lib.optionals enableDaemon [
+    polkit
   ];
 
   postInstall = ''
@@ -95,7 +99,7 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
   PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
   PKG_CONFIG_SYSTEMD_TMPFILESDIR = "${placeholder "out"}/lib/tmpfiles.d";
-  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR= "${placeholder "out"}/share/bash-completion/completions";
+  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR = "${placeholder "out"}/share/bash-completion/completions";
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
   passthru = {

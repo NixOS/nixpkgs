@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonApplication
 , dataclasses
 , fetchPypi
@@ -24,11 +25,14 @@ buildPythonApplication rec {
     dataclasses
   ];
 
-  buildInputs = [
-    libX11
-    libXinerama
-    libXrandr
-  ];
+  postPatch = ''
+    substituteInPlace screeninfo/enumerators/xinerama.py \
+      --replace 'load_library("X11")' 'ctypes.cdll.LoadLibrary("${libX11}/lib/libX11.so")' \
+      --replace 'load_library("Xinerama")' 'ctypes.cdll.LoadLibrary("${libXinerama}/lib/libXinerama.so")'
+    substituteInPlace screeninfo/enumerators/xrandr.py \
+      --replace 'load_library("X11")' 'ctypes.cdll.LoadLibrary("${libX11}/lib/libX11.so")' \
+      --replace 'load_library("Xrandr")' 'ctypes.cdll.LoadLibrary("${libXrandr}/lib/libXrandr.so")'
+  '';
 
   checkInputs = [
     pytestCheckHook
@@ -42,6 +46,7 @@ buildPythonApplication rec {
   pythonImportsCheck = [ "screeninfo" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Fetch location and size of physical screens";
     homepage = "https://github.com/rr-/screeninfo";
     license = licenses.mit;

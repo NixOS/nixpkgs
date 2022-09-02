@@ -8,23 +8,26 @@
 , openssl
 , udev
 , zlib
+, pcsclite
 }:
 
 stdenv.mkDerivation rec {
   pname = "libfido2";
-  version = "1.9.0";
+  version = "1.11.0";
 
   # releases on https://developers.yubico.com/libfido2/Releases/ are signed
   src = fetchurl {
     url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ujnjrzc20t/IrT0ctuO+fszAlYhhCjsHyGXQ7T5YwtI=";
+    sha256 = "sha256-CDDFhT47RAmalxZuDOxUpltUt/qqwHBxhy93uOTXswI=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ libcbor openssl zlib ]
+  buildInputs = [ libcbor zlib ]
     ++ lib.optionals stdenv.isDarwin [ hidapi ]
-    ++ lib.optionals stdenv.isLinux [ udev ];
+    ++ lib.optionals stdenv.isLinux [ udev pcsclite ];
+
+  propagatedBuildInputs = [ openssl ];
 
   cmakeFlags = [
     "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
@@ -33,6 +36,7 @@ stdenv.mkDerivation rec {
     "-DUSE_HIDAPI=1"
   ] ++ lib.optionals stdenv.isLinux [
     "-DNFC_LINUX=1"
+    "-DUSE_PCSC=1"
   ];
 
   meta = with lib; {

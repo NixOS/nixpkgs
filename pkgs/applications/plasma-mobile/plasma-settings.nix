@@ -11,6 +11,8 @@
 , kdbusaddons
 , ki18n
 , kitemmodels
+, modemmanager-qt
+, networkmanager-qt
 , plasma-framework
 }:
 
@@ -29,6 +31,8 @@ mkDerivation rec {
     kdbusaddons
     ki18n
     kitemmodels
+    modemmanager-qt
+    networkmanager-qt
     plasma-framework
   ];
 

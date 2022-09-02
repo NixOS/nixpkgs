@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     icon = "gnujump";
     desktopName = "GNUjump";
     comment     = "Jump up the tower to survive";
-    categories  = "Game;ArcadeGame;";
+    categories  = [ "Game" "ArcadeGame" ];
   }) ];
 
   postInstall = ''

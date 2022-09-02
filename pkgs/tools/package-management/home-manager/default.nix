@@ -1,18 +1,18 @@
 #Adapted from
 #https://github.com/rycee/home-manager/blob/2c07829be2bcae55e04997b19719ff902a44016d/home-manager/default.nix
 
-{ bash, coreutils, findutils, gnused, less, gettext, nixos-option, lib, stdenv, makeWrapper, fetchFromGitHub }:
+{ bash, coreutils, findutils, gnused, less, ncurses, gettext, nixos-option, lib, stdenv, makeWrapper, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
 
   pname = "home-manager";
-  version = "2021-12-25";
+  version = "2022-04-17";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "home-manager";
-    rev = "48f2b381dd397ec88040d3354ac9c036739ba139";
-    sha256 = "1i9v94brh9vhyhzcqyfj64nzhaibdj0sw74pxgk4bcsp0hqawgcd";
+    rev = "620ed197f3624dafa5f42e61d5c043f39b8df366";
+    sha256 = "sha256-BoBvGT71yOfrNDTZQs7+FX0zb4yjMBETgIjtTsdJw+o=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/home-manager \
       --subst-var-by bash "${bash}" \
       --subst-var-by DEP_PATH "${
-        lib.makeBinPath [ coreutils findutils gettext gnused less nixos-option ]
+        lib.makeBinPath [ coreutils findutils gettext gnused less ncurses nixos-option ]
       }" \
       --subst-var-by HOME_MANAGER_LIB '${src}/lib/bash/home-manager.sh' \
       --subst-var-by HOME_MANAGER_PATH '${src}' \

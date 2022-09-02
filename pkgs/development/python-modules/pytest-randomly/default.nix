@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "pytest-randomly";
-  version = "3.10.3";
+  version = "3.12.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "pytest-dev";
     rev = version;
-    sha256 = "sha256-NoYpMpFWz52Z0+KIUumUFp3xMPA1jGw8COojU+bsgHc=";
+    hash = "sha256-n/Xp/HghqcQUreez+QbR3Mi5hE1U4zoOJCdFqD+pVBk=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pytest plugin to randomly order tests and control random.seed";
     homepage = "https://github.com/pytest-dev/pytest-randomly";
-    license = licenses.bsd3;
+    license = licenses.mit;
     maintainers = with maintainers; [ sternenseemann ];
   };
 }

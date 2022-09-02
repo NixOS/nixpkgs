@@ -3,14 +3,17 @@
 , buildPythonPackage
 , setuptools-scm
 , astropy
+, numpy
+, scipy
+, six
 , pytestCheckHook
 , pytest-doctestplus
-, scipy
 }:
 
 buildPythonPackage rec {
   pname = "radio_beam";
   version = "0.3.3";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit version;
@@ -22,9 +25,17 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [ astropy ];
+  propagatedBuildInputs = [
+    astropy
+    numpy
+    scipy
+    six
+  ];
 
-  checkInputs = [ pytestCheckHook pytest-doctestplus scipy ];
+  checkInputs = [
+    pytestCheckHook
+    pytest-doctestplus
+  ];
 
   # Tests must be run in the build directory
   preCheck = ''

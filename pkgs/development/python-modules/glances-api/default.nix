@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "glances-api";
-  version = "0.3.3";
+  version = "0.4.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "home-assistant-ecosystem";
     repo = "python-glances-api";
     rev = version;
-    sha256 = "sha256-F3jmYBZNzI4hRmH1J+S5RwxjouZNcUJOnD3QpX1J39s=";
+    sha256 = "sha256-IBEy19iouYAHIZwc/bnMgmHLrbfZjLni0Ne4o0I6FNg=";
   };
 
   nativeBuildInputs = [
@@ -36,11 +36,6 @@ buildPythonPackage rec {
     pytest-httpx
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'httpx = ">=0.20,<1"' 'httpx = ">=0.19,<1"'
-  '';
 
   pythonImportsCheck = [
     "glances_api"

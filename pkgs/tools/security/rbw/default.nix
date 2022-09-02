@@ -26,15 +26,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
-  version = "1.4.1";
+  version = "1.4.3";
 
   src = fetchCrate {
     inherit version;
     crateName = pname;
-    sha256 = "sha256-RNdxAp3Q/xNrK1XcKZPMfuqxWzDtdhwT+nqG25SjJhI=";
+    sha256 = "sha256-teeGKQNf+nuUcF9BcdiTV/ycENTbcGvPZZ34FdOO31k=";
   };
 
-  cargoSha256 = "sha256-I0KwHCmfYxgSF5IMHiPooaf2bypd6eYCOPSB+qnEBJY=";
+  cargoSha256 = "sha256-Soquc3OuGlDsGSwNCvYOWQeraYpkzX1oJwmM03Rc3Jg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage rec {
 
   preConfigure = ''
     export OPENSSL_INCLUDE_DIR="${openssl.dev}/include"
-    export OPENSSL_LIB_DIR="${openssl.out}/lib"
+    export OPENSSL_LIB_DIR="${lib.getLib openssl}/lib"
   '';
 
   postInstall = ''

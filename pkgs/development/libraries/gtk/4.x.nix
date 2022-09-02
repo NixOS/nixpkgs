@@ -62,7 +62,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk4";
-  version = "4.6.0";
+  version = "4.6.6";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "eC1ZUfv9WF/J7HbAnQfijmAUxy2wAftWf/8hf7luTYw=";
+    sha256 = "e7/k0TVp98KX7UmDSscmPjGLe/EC0ycctGbVlx9ZrnA=";
   };
 
   nativeBuildInputs = [
@@ -202,13 +202,9 @@ stdenv.mkDerivation rec {
     for f in $dev/bin/gtk4-encode-symbolic-svg; do
       wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     done
-
-  '' + lib.optionalString x11Support ''
-    # So that DevHelp can find this.
-    # TODO: Remove this with DevHelp 41.
-    mkdir -p "$devdoc/share/devhelp/books"
-    mv "$out/share/doc/"* "$devdoc/share/devhelp/books"
-    rmdir -p --ignore-fail-on-non-empty "$out/share/doc"
+  '' + lib.optionalString broadwaySupport ''
+    # Broadway daemon
+    moveToOutput bin/gtk4-broadwayd "$out"
   '';
 
   # Wrap demos
@@ -219,6 +215,9 @@ stdenv.mkDerivation rec {
       wrapProgram $dev/bin/$program \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}"
     done
+  '' + lib.optionalString x11Support ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {

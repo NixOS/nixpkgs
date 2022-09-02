@@ -1,33 +1,30 @@
 { lib
 , buildPythonPackage
-, cookies
-, fetchPypi
-, mock
+, fetchFromGitHub
 , pytest-localserver
 , pytestCheckHook
 , pythonOlder
 , requests
-, six
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "responses";
-  version = "0.16.0";
+  version = "0.21.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-ouOsoqgnfmElfNOxwVSx3Q14Kxrj04t/o3y+P+tTF5E=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "getsentry";
+    repo = pname;
+    rev = version;
+    hash = "sha256-qYohrXrQkUBPo7yC+ZOwidDaCg/2nteXKAOCUvR4k2Q=";
   };
 
   propagatedBuildInputs = [
     requests
     urllib3
-    six
-  ] ++ lib.optionals (pythonOlder "3.4") [
-    cookies
-  ] ++ lib.optionals (pythonOlder "3.3") [
-    mock
   ];
 
   checkInputs = [
@@ -35,7 +32,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "responses" ];
+  pythonImportsCheck = [
+    "responses"
+  ];
 
   meta = with lib; {
     description = "Python module for mocking out the requests Python library";

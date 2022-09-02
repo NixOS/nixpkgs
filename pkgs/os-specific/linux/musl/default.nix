@@ -40,11 +40,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "musl";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchurl {
     url    = "https://musl.libc.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "1p8r6bac64y98ln0wzmnixysckq3crca69ys7p16sy9d04i975lv";
+    sha256 = "sha256-fVsLYGJSHkYn4JnkydyCSNMqMChelZt+7Kp4DPjP1KQ=";
   };
 
   enableParallelBuilding = true;
@@ -102,15 +102,11 @@ stdenv.mkDerivation rec {
     # Apparently glibc provides scsi itself?
     (cd $dev/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
 
-    # Strip debug out of the static library
-    $STRIP -S $out/lib/libc.a
     mkdir -p $out/bin
 
 
-    ${if (stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32) then
-      "install -D libssp_nonshared.a $out/lib/libssp_nonshared.a
-      $STRIP -S $out/lib/libssp_nonshared.a"
-      else ""
+    ${lib.optionalString (stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32)
+      "install -D libssp_nonshared.a $out/lib/libssp_nonshared.a"
     }
 
     # Create 'ldd' symlink, builtin

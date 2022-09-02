@@ -1,7 +1,7 @@
 { lib, stdenv, patchelf, makeWrapper
 
 # Linked dynamic libraries.
-, glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr
+, glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, nss, nspr
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
 , alsa-lib, libXdamage, libXtst, libXrandr, libxshmfence, expat, cups
 , dbus, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
@@ -32,7 +32,7 @@
 , channel ? "stable"
 
 # Necessary for USB audio devices.
-, pulseSupport ? true, libpulseaudio ? null
+, pulseSupport ? true, libpulseaudio
 
 # Only needed for getting information about upstream binaries
 , chromium
@@ -57,13 +57,13 @@ let
   version = chromium.upstream-info.version;
 
   deps = [
-    glib fontconfig freetype pango cairo libX11 libXi atk gconf nss nspr
+    glib fontconfig freetype pango cairo libX11 libXi atk nss nspr
     libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite libxcb
     alsa-lib libXdamage libXtst libXrandr libxshmfence expat cups
     dbus gdk-pixbuf gcc-unwrapped.lib
     systemd
     libexif pciutils
-    liberation_ttf curl util-linux xdg-utils wget
+    liberation_ttf curl util-linux wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at-spi2-atk at-spi2-core
     libkrb5 libdrm libglvnd mesa coreutils
@@ -118,6 +118,9 @@ in stdenv.mkDerivation {
     cp -a opt/* $out/share
     cp -a usr/share/* $out/share
 
+
+    substituteInPlace $out/share/google/$appname/google-$appname \
+      --replace 'CHROME_WRAPPER' 'WRAPPER'
     substituteInPlace $out/share/applications/google-$appname.desktop \
       --replace /usr/bin/google-chrome-$dist $exe
     substituteInPlace $out/share/gnome-control-center/default-apps/google-$appname.xml \
@@ -142,9 +145,11 @@ in stdenv.mkDerivation {
     makeWrapper "$out/share/google/$appname/google-$appname" "$exe" \
       --prefix LD_LIBRARY_PATH : "$rpath" \
       --prefix PATH            : "$binpath" \
-      --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-      --add-flags ${escapeShellArg commandLineArgs} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+      --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
+      --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addOpenGLRunpath.driverLink}/share" \
+      --set CHROME_WRAPPER  "google-chrome-$dist" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}" \
+      --add-flags ${escapeShellArg commandLineArgs}
 
     for elf in $out/share/google/$appname/{chrome,chrome-sandbox,${crashpadHandlerBinary},nacl_helper}; do
       patchelf --set-rpath $rpath $elf
@@ -158,6 +163,7 @@ in stdenv.mkDerivation {
     description = "A freeware web browser developed by Google";
     homepage = "https://www.google.com/chrome/browser/";
     license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ primeos ];
     # Note from primeos: By updating Chromium I also update Google Chrome and
     # will try to merge PRs and respond to issues but I'm not actually using

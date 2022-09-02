@@ -66,6 +66,7 @@ let
           timstott
           zimbatm
           zowoq
+          techknowlogick
         ];
       };
     } // attrs');
@@ -84,9 +85,28 @@ let
           passthru = {
             withPlugins = newplugins:
               withPlugins (x: newplugins x ++ actualPlugins);
-            full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p));
+            full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p.actualProviders));
 
-            # Ouch
+            # Expose wrappers around the override* functions of the terraform
+            # derivation.
+            #
+            # Note that this does not behave as anyone would expect if plugins
+            # are specified. The overrides are not on the user-visible wrapper
+            # derivation but instead on the function application that eventually
+            # generates the wrapper. This means:
+            #
+            # 1. When using overrideAttrs, only `passthru` attributes will
+            #    become visible on the wrapper derivation. Other overrides that
+            #    modify the derivation *may* still have an effect, but it can be
+            #    difficult to follow.
+            #
+            # 2. Other overrides may work if they modify the terraform
+            #    derivation, or they may have no effect, depending on what
+            #    exactly is being changed.
+            #
+            # 3. Specifying overrides on the wrapper is unsupported.
+            #
+            # See nixpkgs#158620 for details.
             overrideDerivation = f:
               (pluggable (terraform.overrideDerivation f)).withPlugins plugins;
             overrideAttrs = f:
@@ -104,6 +124,12 @@ let
           lib.appendToName "with-plugins" (stdenv.mkDerivation {
             inherit (terraform) name meta;
             nativeBuildInputs = [ makeWrapper ];
+
+            # Expose the passthru set with the override functions
+            # defined above, as well as any passthru values already
+            # set on `terraform` at this point (relevant in case a
+            # user overrides attributes).
+            passthru = terraform.passthru // passthru;
 
             buildCommand = ''
               # Create wrappers for terraform plugins because Terraform only
@@ -128,8 +154,6 @@ let
                 --set NIX_TERRAFORM_PLUGIN_DIR $out/libexec/terraform-providers \
                 --prefix PATH : "${lib.makeBinPath wrapperInputs}"
             '';
-
-            inherit passthru;
           });
     in
     withPlugins (_: [ ]);
@@ -144,35 +168,15 @@ rec {
   # Constructor for other terraform versions
   mkTerraform = attrs: pluggable (generic attrs);
 
-  terraform_0_13 = mkTerraform {
-    version = "0.13.7";
-    sha256 = "1cahnmp66dk21g7ga6454yfhaqrxff7hpwpdgc87cswyq823fgjn";
-    patches = [ ./provider-path.patch ];
-    passthru = { inherit plugins; };
-  };
-
-  terraform_0_14 = mkTerraform {
-    version = "0.14.11";
-    sha256 = "1yi1jj3n61g1kn8klw6l78shd23q79llb7qqwigqrx3ki2mp279j";
-    vendorSha256 = "sha256-tWrSr6JCS9s+I0T1o3jgZ395u8IBmh73XGrnJidWI7U=";
-    patches = [ ./provider-path.patch ];
-    passthru = { inherit plugins; };
-  };
-
-  terraform_0_15 = mkTerraform {
-    version = "0.15.5";
-    sha256 = "18f4a6l24s3cym7gk40agxikd90i56q84wziskw1spy9rgv2yx6d";
-    vendorSha256 = "sha256-oFvoEsDunJR4IULdGwS6nHBKWEgUehgT+nNM41W/GYo=";
-    patches = [ ./provider-path-0_15.patch ];
-    passthru = { inherit plugins; };
-  };
-
   terraform_1 = mkTerraform {
-    version = "1.1.4";
-    sha256 = "sha256-PzBdo4zqWB9ma+uYFGmZtJNCXlRnAHxQmzWxZFPzHH0=";
-    vendorSha256 = "sha256-Rk2hHtJfaS553MJIea6n51irMas3qcBrWAD+adzTi1Y=";
+    version = "1.2.8";
+    sha256 = "sha256-FJHZtYQHzRPWlSlXYu8mdd0YddIrBy8eBzhsvAHwfZw=";
+    vendorSha256 = "sha256-VKJ+aWZYD6N8HDJwUEtgWxoBMGOa27K9ze2RUJvuipc=";
     patches = [ ./provider-path-0_15.patch ];
-    passthru = { inherit plugins; };
+    passthru = {
+      inherit plugins;
+      tests = { inherit terraform_plugins_test; };
+    };
   };
 
   # Tests that the plugins are being used. Terraform looks at the specific

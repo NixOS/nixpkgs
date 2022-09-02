@@ -62,11 +62,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     autoreconfHook = pkgs.autoreconfHook269;
   };
 
-#### BINDINGS
-
-  libglademm = callPackage ./bindings/libglademm { };
-
-} // lib.optionalAttrs (config.allowAliases or true) {
+} // lib.optionalAttrs config.allowAliases {
   inherit (pkgs)
     # GTK Libs
     glib glibmm atk atkmm cairo pango pangomm gdk_pixbuf gtkmm2 libcanberra-gtk2
@@ -89,4 +85,5 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome_icon_theme = self.gnome-icon-theme;
   gnomeicontheme = self.gnome-icon-theme;
   gnome_common = gnome-common;
+  libglademm = throw "libglademm has been removed"; # 2022-01-15
 })

@@ -1,24 +1,25 @@
-{ lib, stdenv, fetchurl, nixosTests
+{ lib, stdenv, fetchurl, nixosTests, buildPackages
 # Native buildInputs components
 , bison, boost, cmake, fixDarwinDylibNames, flex, makeWrapper, pkg-config
 # Common components
 , curl, libiconv, ncurses, openssl, pcre, pcre2
 , libkrb5, libaio, liburing, systemd
 , CoreServices, cctools, perl
-, jemalloc, less
+, jemalloc, less, libedit
 # Server components
 , bzip2, lz4, lzo, snappy, xz, zlib, zstd
 , cracklib, judy, libevent, libxml2
 , linux-pam, numactl, pmdk
+, fmt_8
 , withStorageMroonga ? true, kytea, libsodium, msgpack, zeromq
 , withStorageRocks ? true
 }:
 
-let # in mariadb # spans the whole file
+let
 
 libExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
-mytopEnv = perl.withPackages (p: with p; [ DBDmysql DBI TermReadKey ]);
+mytopEnv = buildPackages.perl.withPackages (p: with p; [ DBDmysql DBI TermReadKey ]);
 
 mariadbPackage = packageSettings: (server packageSettings) // {
   client = client packageSettings; # MariaDB Client
@@ -30,7 +31,7 @@ commonOptions = packageSettings: rec { # attributes common to both builds
 
   src = fetchurl {
     url = "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    inherit (packageSettings) sha256;
+    inherit (packageSettings) hash;
   };
 
   nativeBuildInputs = [ cmake pkg-config ]
@@ -42,7 +43,7 @@ commonOptions = packageSettings: rec { # attributes common to both builds
   ] ++ (packageSettings.extraBuildInputs or [])
     ++ lib.optionals stdenv.hostPlatform.isLinux ([ libkrb5 systemd ]
     ++ (if (lib.versionOlder version "10.6") then [ libaio ] else [ liburing ]))
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl libedit ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) [ jemalloc ]
     ++ (if (lib.versionOlder version "10.5") then [ pcre ] else [ pcre2 ]);
 
@@ -59,7 +60,7 @@ commonOptions = packageSettings: rec { # attributes common to both builds
 
   cmakeFlags = [
     "-DBUILD_CONFIG=mysql_release"
-    "-DMANUFACTURER=NixOS.org"
+    "-DMANUFACTURER=nixos.org"
     "-DDEFAULT_CHARSET=utf8mb4"
     "-DDEFAULT_COLLATION=utf8mb4_unicode_ci"
     "-DSECURITY_HARDENED=ON"
@@ -93,6 +94,10 @@ commonOptions = packageSettings: rec { # attributes common to both builds
     # to pass in java explicitly.
     "-DCONNECT_WITH_JDBC=OFF"
     "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # revisit this if nixpkgs supports any architecture whose stack grows upwards
+    "-DSTACK_DIRECTION=-1"
+    "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   postInstall = ''
@@ -141,7 +146,7 @@ in stdenv.mkDerivation (common // {
   ];
 
   cmakeFlags = common.cmakeFlags ++ [
-    "-DPLUGIN_AUTH_PAM=OFF"
+    "-DPLUGIN_AUTH_PAM=NO"
     "-DWITHOUT_SERVER=ON"
     "-DWITH_WSREP=OFF"
     "-DINSTALL_MYSQLSHAREDIR=share/mysql-client"
@@ -173,7 +178,8 @@ in stdenv.mkDerivation (common // {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ linux-pam ]
     ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) pmdk.dev
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) mytopEnv
-    ++ lib.optionals withStorageMroonga [ kytea libsodium msgpack zeromq ];
+    ++ lib.optionals withStorageMroonga [ kytea libsodium msgpack zeromq ]
+    ++ lib.optionals (lib.versionAtLeast common.version "10.7") [ fmt_8 ];
 
   patches = common.patches;
 
@@ -205,7 +211,8 @@ in stdenv.mkDerivation (common // {
   ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) [
     "-DWITH_JEMALLOC=yes"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DPLUGIN_AUTH_PAM=OFF"
+    "-DPLUGIN_AUTH_PAM=NO"
+    "-DPLUGIN_AUTH_PAM_V1=NO"
     "-DWITHOUT_OQGRAPH=1"
     "-DWITHOUT_PLUGIN_S3=1"
   ];
@@ -227,21 +234,37 @@ in stdenv.mkDerivation (common // {
   '';
 
   CXXFLAGS = lib.optionalString stdenv.hostPlatform.isi686 "-fpermissive";
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 });
 in {
   mariadb_104 = mariadbPackage {
     # Supported until 2024-06-18
-    version = "10.4.22";
-    sha256 = "000ca1hdnj2jg051cjgdd2ralgwgh2p8nwb1x6b85202xdpc7ga4";
+    version = "10.4.26";
+    hash = "sha256-cVrH4jr8O4pVnGzJmM2xlz2Q9iGyvddgPixuU4YLLd8=";
   };
   mariadb_105 = mariadbPackage {
     # Supported until 2025-06-24
-    version = "10.5.13";
-    sha256 = "0n0w1pyypv6wsknaqyykj3lc9zv6smji4q5jcf90w4rid330iw0n";
+    version = "10.5.17";
+    hash = "sha256-hJyEC3b0hWUDtD7zqEH8lx6LUYjI3zaQkTv1aZaRt2E=";
   };
   mariadb_106 = mariadbPackage {
     # Supported until 2026-07
-    version = "10.6.5";
-    sha256 = "13qaqb2h6kysfdi3h1l9zbb2qlpjgxb1n8mxnj5jm96r50209gp0";
+    version = "10.6.9";
+    hash = "sha256-N5Wfi1+8ZNlOGA3NiuW9+v1AYgOgf0j3vs1rinYzdEw=";
+  };
+  mariadb_107 = mariadbPackage {
+    # Supported until 2023-02. TODO: remove ahead of 22.11 release.
+    version = "10.7.5";
+    hash = "sha256-f/OkzNoe7S8aZBO4DE7WjMqRFzD1Aaaf1/STo0oJVLo=";
+  };
+  mariadb_108 = mariadbPackage {
+    # Supported until 2023-05
+    version = "10.8.4";
+    hash = "sha256-ZexgyjZYjs0RzYw/wM414dYDAp4SN4z4i6qGX9CJEWY=";
+  };
+  mariadb_109 = mariadbPackage {
+    # Supported until 2023-08(?)
+    version = "10.9.2";
+    hash = "sha256-X0X/deBDlmVVqV+9uPCS5gzipsR7pZ0UTbRuE46SL0g=";
   };
 }

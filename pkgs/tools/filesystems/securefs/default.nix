@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     ./add-macfuse-support.patch
   ];
 
+  postPatch = ''
+    sed -i -e '/TEST_SOURCES/d' CMakeLists.txt
+  '';
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ fuse ];
 

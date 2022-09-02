@@ -12,15 +12,15 @@
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "1.20";
+  version = "1.29";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    sha256 = "sha256-GcqmMqrZSgvSrsY8FJbPynNWTzSi5A6kmyq+xJ+2i3Y=";
+    sha256 = "sha256-W2MOK6aIa1whkj13OeuibNjL/2LWt7TO8h4JeoUrZnQ=";
   };
 
-  outputs = [ "out" "man" ]
+  outputs = [ "out" "man" "doc" ]
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
 
   nativeBuildInputs = [
@@ -59,15 +59,16 @@ stdenv.mkDerivation rec {
   postUnpack = ''
     mkdir -p iwd/ell
     ln -s ${ell.src}/ell/useful.h iwd/ell/useful.h
+    ln -s ${ell.src}/ell/asn1-private.h iwd/ell/asn1-private.h
     patchShebangs .
   '';
 
   doCheck = true;
 
   postInstall = ''
-    mkdir -p $out/share
-    cp -a doc $out/share/
-    cp -a README AUTHORS TODO $out/share/doc/
+    mkdir -p $doc/share/doc
+    cp -a doc $doc/share/doc/iwd
+    cp -a README AUTHORS TODO $doc/share/doc/iwd
   '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     mkdir -p $test/bin
     cp -a test/* $test/bin/

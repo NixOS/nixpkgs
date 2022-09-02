@@ -2,7 +2,6 @@
 , rustPlatform
 , lib
 , stdenv
-, fetchpatch
 , pkg-config
 , zstd
 , CoreFoundation
@@ -13,19 +12,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "onefetch";
-  version = "2.11.0";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "o2sh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-16oiZAyj6haBk6mgUT25pPDUrCMd7pGo2kAQ0gTe2kM=";
+    sha256 = "sha256-nSvqAXzA/4CSnOMCZri2ks58bW+9v+SoyIIzb+K5S88=";
   };
 
-  # enable pkg-config feature of zstd
-  cargoPatches = [ ./zstd-pkg-config.patch ];
+  cargoPatches = [
+    # enable pkg-config feature of zstd
+    ./zstd-pkg-config.patch
+  ];
 
-  cargoSha256 = "sha256-6wnfn33mfye5o/vY1JQX1Lc4+jzHiKKgGsSLxeJWyFc=";
+  cargoSha256 = "sha256-uSef6x5QkXKwajglbwyoIsUFGbz0zntVM1ko0FZqnck=";
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -3,7 +3,6 @@
   lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pythonOlder
   # runtime deps
 , click
@@ -17,30 +16,22 @@
 , pyyaml-env-tag
 , watchdog
   # testing deps
-, Babel
+, babel
 , mock
-, pytestCheckHook
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs";
-  version = "1.2.3";
+  version = "1.3.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-LBw2ftGyeNvARQ8xiYUho8BiQh+aIEqROP51gKvNxEo=";
+    sha256 = "sha256-S4xkr3jS5GvkMu8JnEGfqhmkxy3FtZZb7Rbuniltudg=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/mkdocs/mkdocs/commit/c93fc91e4dc0ef33e2ea418aaa32b0584a8d354a.patch";
-      sha256 = "sha256-7uLIuQOt6KU/+iS9cwhXkWPAHzZkQdMyNBxSMut5WK4=";
-      excludes = [ "tox.ini" ];
-    })
-  ];
 
   propagatedBuildInputs = [
     click
@@ -56,20 +47,12 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    Babel
+    unittestCheckHook
+    babel
     mock
   ];
 
-
-  checkPhase = ''
-    set -euo pipefail
-
-    runHook preCheck
-
-    python -m unittest discover -v -p '*tests.py' mkdocs --top-level-directory .
-
-    runHook postCheck
-  '';
+  unittestFlagsArray = [ "-v" "-p" "'*tests.py'" "mkdocs" ];
 
   pythonImportsCheck = [ "mkdocs" ];
 

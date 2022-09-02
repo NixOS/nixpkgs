@@ -25,13 +25,13 @@ from pathlib import Path
 log = logging.getLogger()
 log.addHandler(logging.StreamHandler())
 
-ROOT = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))).parent.parent
-from pluginupdate import Editor, update_plugins, PluginDesc, CleanEnvironment, LOG_LEVELS, Cache
+ROOT = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))).parent.parent # type: ignore
+from pluginupdate import Editor, update_plugins, FetchConfig, CleanEnvironment
 
 PKG_LIST="maintainers/scripts/luarocks-packages.csv"
 TMP_FILE="$(mktemp)"
 GENERATED_NIXFILE="pkgs/development/lua-modules/generated-packages.nix"
-LUAROCKS_CONFIG="$NIXPKGS_PATH/maintainers/scripts/luarocks-config.lua"
+LUAROCKS_CONFIG="maintainers/scripts/luarocks-config.lua"
 
 HEADER = """/* {GENERATED_NIXFILE} is an auto-generated file -- DO NOT EDIT!
 Regenerate it with:
@@ -118,7 +118,7 @@ class LuaEditor(Editor):
     def attr_path(self):
         return "luaPackages"
 
-    def get_update(self, input_file: str, outfile: str, proc: int):
+    def get_update(self, input_file: str, outfile: str, config: FetchConfig):
         _prefetch = generate_pkg_nix
 
         def update() -> dict:
@@ -126,14 +126,14 @@ class LuaEditor(Editor):
             sorted_plugin_specs = sorted(plugin_specs, key=lambda v: v.name.lower())
 
             try:
-                pool = Pool(processes=proc)
+                pool = Pool(processes=config.proc)
                 results = pool.map(_prefetch, sorted_plugin_specs)
             finally:
                 pass
 
             self.generate_nix(results, outfile)
 
-            redirects = []
+            redirects = {}
             return redirects
 
         return update
@@ -158,14 +158,14 @@ def generate_pkg_nix(plug: LuaPlugin):
     Our cache key associates "p.name-p.version" to its rockspec
     '''
     log.debug("Generating nix expression for %s", plug.name)
-    cmd = [ "luarocks", "nix"]
+    custom_env = os.environ.copy()
+    custom_env['LUAROCKS_CONFIG'] = LUAROCKS_CONFIG
 
+    cmd = [ "luarocks", "nix"]
 
     if plug.maintainers:
         cmd.append(f"--maintainers={plug.maintainers}")
 
-    # updates plugin directly from its repository
-    print("server: [%s]" % plug.server)
     # if plug.server == "src":
     if plug.src != "":
         if plug.src is None:
@@ -181,10 +181,8 @@ def generate_pkg_nix(plug: LuaPlugin):
 
             cmd.append(plug.version)
 
-    #
     if plug.server != "src" and plug.server:
         cmd.append(f"--only-server={plug.server}")
-
 
     if plug.luaversion:
         with CleanEnvironment():
@@ -196,7 +194,8 @@ def generate_pkg_nix(plug: LuaPlugin):
             cmd.append(f"--lua-dir={lua_drv_path}/bin")
 
     log.debug("running %s", ' '.join(cmd))
-    output = subprocess.check_output(cmd, text=True)
+
+    output = subprocess.check_output(cmd, env=custom_env, text=True)
     output = "callPackage(" + output.strip() + ") {};\n\n"
     return (plug, output)
 
@@ -209,7 +208,6 @@ def main():
 
     parser = editor.create_parser()
     args = parser.parse_args()
-    log.setLevel(LOG_LEVELS[args.debug])
 
     update_plugins(editor, args)
 

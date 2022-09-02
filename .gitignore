@@ -5,13 +5,13 @@
 .idea/
 .vscode/
 outputs/
-result
 result-*
-source/
 /doc/NEWS.html
 /doc/NEWS.txt
 /doc/manual.html
 /doc/manual.pdf
+/result
+/source/
 .version-suffix
 
 .DS_Store

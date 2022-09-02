@@ -25,7 +25,7 @@ perlPackages.buildPerlModule {
       desktopName = "Frozen Bubble";
       genericName = "Frozen Bubble";
       comment = "Arcade/reflex colour matching game";
-      categories = "Game;";
+      categories = [ "Game" ];
     })
   ];
 

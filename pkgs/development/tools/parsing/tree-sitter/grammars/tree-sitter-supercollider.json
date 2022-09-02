@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/madskjeldgaard/tree-sitter-supercollider",
-  "rev": "a7201b61779be59ac0fc0d118746c886dbc3edbd",
-  "date": "2022-01-14T01:11:12+01:00",
-  "path": "/nix/store/rgy05854am625shbs13gjx0yggbb6awh-tree-sitter-supercollider",
-  "sha256": "118mbv8d5n2lb4w5cbjy657g9z9z910gvjjj41a2rkx971vgb6w3",
+  "rev": "90c6d9f777d2b8c4ce497c48b5f270a44bcf3ea0",
+  "date": "2022-04-14T11:41:40+02:00",
+  "path": "/nix/store/hzdm20x9fpc8bqd6bphq1akbdmdcpq7s-tree-sitter-supercollider",
+  "sha256": "1g0q32crsnzxnwh5bjfjm0dkxpnvdj76idjc8s4ba7hinwa8jpv0",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

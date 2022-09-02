@@ -1,9 +1,10 @@
-{ buildPythonApplication
+{ stdenv
+, lib
+, buildPythonApplication
 , click
 , fetchPypi
 , git
 , httpretty
-, lib
 , qrcode
 , pygments
 , pyopenssl
@@ -11,17 +12,38 @@
 , requests
 , rollbar
 , stripe
+, pythonOlder
 , sure
 }:
 
 buildPythonApplication rec {
   pname = "gigalixir";
-  version = "1.2.4";
+  version = "1.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "894b7e5bef30abc2c003e6df47f7758de5649b6f593e33926fcd398cc88d9ce2";
+    hash = "sha256-kNtybgv8j7t1tl6R5ZuC4vj5fnEcEenuNt0twA1kAh0=";
   };
+
+  propagatedBuildInputs = [
+    click
+    pygments
+    pyopenssl
+    qrcode
+    requests
+    rollbar
+    stripe
+  ];
+
+  checkInputs = [
+    git
+    httpretty
+    pytestCheckHook
+    sure
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -29,26 +51,17 @@ buildPythonApplication rec {
       --replace "cryptography==" "cryptography>="
   '';
 
-  propagatedBuildInputs = [
-    click
-    requests
-    stripe
-    rollbar
-    pygments
-    qrcode
-    pyopenssl
+  disabledTests = [
+    # Test requires network access
+    "test_rollback_without_version"
   ];
 
-  checkInputs = [
-    httpretty
-    sure
-    pytestCheckHook
-    git
+  pythonImportsCheck = [
+    "gigalixir"
   ];
-
-  pythonImportsCheck = [ "gigalixir" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Gigalixir Command-Line Interface";
     homepage = "https://github.com/gigalixir/gigalixir-cli";
     license = licenses.mit;

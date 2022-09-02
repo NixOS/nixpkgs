@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps
+, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps, makeWrapper
 }:
 
 let
@@ -46,6 +46,8 @@ let
     # N.B. omniauth_oauth2_generic and apollo_upload_server both provide a
     # `console` executable.
     ignoreCollisions = true;
+
+    extraConfigPaths = lib.forEach data.vendored_gems (gem: "${src}/vendor/gems/${gem}");
   };
 
   yarnOfflineCache = fetchYarnDeps {
@@ -59,9 +61,17 @@ let
 
     nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert ];
 
-    # Since version 12.6.0, the rake tasks need the location of git,
-    # so we have to apply the location patches here too.
-    patches = [ ./remove-hardcoded-locations.patch ];
+    patches = [
+      # Since version 12.6.0, the rake tasks need the location of git,
+      # so we have to apply the location patches here too.
+      ./remove-hardcoded-locations.patch
+
+      # Gitlab edited the default database config since [1] and the
+      # installer complains about valid keywords only being "main" and "ci".
+      #
+      # [1]: https://gitlab.com/gitlab-org/gitlab/-/commit/99c0fac52b10cd9df62bbe785db799352a2d9028
+      ./Remove-geo-from-database.yml.patch
+    ];
     # One of the patches uses this variable - if it's unset, execution
     # of rake tasks fails.
     GITLAB_LOG_PATH = "log";
@@ -74,7 +84,7 @@ let
       rm lib/tasks/yarn.rake
 
       # The rake tasks won't run without a basic configuration in place
-      mv config/database.yml.env config/database.yml
+      mv config/database.yml.postgresql config/database.yml
       mv config/gitlab.yml.example config/gitlab.yml
 
       # Yarn and bundler wants a real home directory to write cache, config, etc to
@@ -119,6 +129,7 @@ stdenv.mkDerivation {
 
   inherit src;
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git nettools
   ];
@@ -126,6 +137,9 @@ stdenv.mkDerivation {
   patches = [
     # Change hardcoded paths to the NixOS equivalent
     ./remove-hardcoded-locations.patch
+
+    # Bump pg to 1.4.3 (see https://github.com/NixOS/nixpkgs/pull/187946)
+    ./update-pg.patch
   ];
 
   postPatch = ''
@@ -174,6 +188,9 @@ stdenv.mkDerivation {
     # rake tasks to mitigate CVE-2017-0882
     # see https://about.gitlab.com/2017/03/20/gitlab-8-dot-17-dot-4-security-release/
     cp ${./reset_token.rake} $out/share/gitlab/lib/tasks/reset_token.rake
+
+    # manually patch the shebang line in generate-loose-foreign-key
+    wrapProgram $out/share/gitlab/scripts/decomposition/generate-loose-foreign-key --set ENABLE_SPRING 0 --add-flags 'runner -e test'
   '';
 
   passthru = {
@@ -192,7 +209,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin krav talyz yayayayaka yuka ];
+    maintainers = with maintainers; [ globin krav talyz yayayayaka yuka ];
   } // (if gitlabEnterprise then
     {
       license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE

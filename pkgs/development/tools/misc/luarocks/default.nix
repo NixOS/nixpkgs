@@ -3,6 +3,7 @@
 , lua
 # for 'luarocks pack'
 , zip
+, nix-update-script
 # some packages need to be compiled with cmake
 , cmake
 , installShellFiles
@@ -10,20 +11,24 @@
 
 stdenv.mkDerivation rec {
   pname = "luarocks";
-  version = "3.2.1";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "luarocks";
     repo = "luarocks";
     rev = "v${version}";
-    sha256 = "0viiafmb8binksda79ah828q1dfnb6jsqlk7vyndl2xvx9yfn4y2";
+    sha256 = "sha256-i0NmF268aK5lr4zjYyhk4TPUO7Zyz0Cl0fSW43Pmd1Q=";
   };
 
-  patches = [ ./darwin-3.1.3.patch ];
+  patches = [ ./darwin-3.7.0.patch ];
 
   postPatch = lib.optionalString stdenv.targetPlatform.isDarwin ''
     substituteInPlace src/luarocks/core/cfg.lua --subst-var-by 'darwinMinVersion' '${stdenv.targetPlatform.darwinMinVersion}'
   '';
+
+  # Manually written ./configure does not support --build= or --host=:
+  #   Error: Unknown flag: --build=x86_64-unknown-linux-gnu
+  configurePlatforms = [ ];
 
   preConfigure = ''
     lua -e "" || {
@@ -70,6 +75,12 @@ stdenv.mkDerivation rec {
     export PATH="src/bin:''${PATH:-}"
     export LUA_PATH="src/?.lua;''${LUA_PATH:-}"
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with lib; {
     description = "A package manager for Lua";

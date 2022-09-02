@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-D0rakLZ+swrDwBMcr+EJPgaYsQTWob50QteW1PoIdNk=";
   };
 
-  vendorSha256 = "sha256-gMHPWf/kFb55GyyMciLWRzvrQXUGDQ72RNkIhkMVe54=";
+  vendorSha256 = "sha256-PGsj7pLtd+xpy9Dhv6qJX5sHin4YAOdXaYj4QCSFte4=";
 
   meta = with lib; {
     description = "A time zone helper";

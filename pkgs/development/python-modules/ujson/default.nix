@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "ujson";
-  version = "4.3.0";
-  disabled = isPyPy || pythonOlder "3.5";
+  version = "5.4.0";
+  disabled = isPyPy || pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "baee56eca35cb5fbe02c28bd9c0936be41a96fa5c0812d9d4b7edeb5c3d568a0";
+    sha256 = "sha256-a5U+CUQeMHUEEwdV5b1rFYUBeNWR9mKSu6RgjE9/mwA=";
   };
 
   nativeBuildInputs = [
@@ -28,9 +28,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ujson" ];
 
   meta = with lib; {
-    description = "Ultra fast JSON encoder and decoder for Python";
-    homepage = "https://pypi.python.org/pypi/ujson";
+    description = "Ultra fast JSON encoder and decoder";
+    homepage = "https://github.com/ultrajson/ultrajson";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

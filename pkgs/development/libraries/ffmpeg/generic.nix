@@ -1,6 +1,6 @@
 { lib, stdenv, buildPackages, fetchurl, pkg-config, addOpenGLRunpath, perl, texinfo, yasm
 , alsa-lib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
-, libssh, libtheora, libva, libdrm, libvorbis, libvpx, xz, libpulseaudio, soxr
+, libssh, libtheora, libva, libdrm, libvorbis, libvpx, xz, soxr
 , x264, x265, xvidcore, zimg, zlib, libopus, speex, nv-codec-headers, dav1d
 , srt ? null
 , openglSupport ? false, libGLU ? null, libGL ? null
@@ -19,7 +19,10 @@
 , Cocoa, darwinFrameworks ? [ Cocoa ]
 # Inherit generics
 , branch, sha256, version, patches ? [], knownVulnerabilities ? []
-, doCheck ? true, ...
+, doCheck ? true
+, pulseaudioSupport ? stdenv.isLinux
+, libpulseaudio
+, ...
 }:
 
 /* Maintainer notes:
@@ -149,7 +152,7 @@ stdenv.mkDerivation rec {
       (ifMinVer "2.2" (enableFeature openglSupport "opengl"))
       (ifMinVer "4.2" (enableFeature libmfxSupport "libmfx"))
       (ifMinVer "4.2" (enableFeature libaomSupport "libaom"))
-      (disDarwinOrArmFix (ifMinVer "0.9" "--enable-libpulse") "0.9" "--disable-libpulse")
+      (disDarwinOrArmFix (ifMinVer "0.9" (lib.optionalString pulseaudioSupport "--enable-libpulse")) "0.9" "--disable-libpulse")
       (ifMinVer "2.5" (if sdlSupport && reqMin "3.2" then "--enable-sdl2" else if sdlSupport then "--enable-sdl" else null)) # autodetected before 2.5, SDL1 support removed in 3.2 for SDL2
       (ifMinVer "1.2" "--enable-libsoxr")
       "--enable-libx264"
@@ -182,7 +185,7 @@ stdenv.mkDerivation rec {
     ++ optional libmfxSupport intel-media-sdk
     ++ optional libaomSupport libaom
     ++ optional vpxSupport libvpx
-    ++ optionals (!isDarwin && !isAarch32) [ libpulseaudio ] # Need to be fixed on Darwin and ARM
+    ++ optionals (!isDarwin && !isAarch32 && pulseaudioSupport) [ libpulseaudio ] # Need to be fixed on Darwin and ARM
     ++ optional ((isLinux || isFreeBSD) && !isAarch32) libva
     ++ optional ((isLinux || isFreeBSD) && !isAarch32) libdrm
     ++ optional isLinux alsa-lib
@@ -235,8 +238,8 @@ stdenv.mkDerivation rec {
       a corporation.
     '';
     license = licenses.gpl3;
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ codyopel ];
     inherit branch knownVulnerabilities;
   };
 }

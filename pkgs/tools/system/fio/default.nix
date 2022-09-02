@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fio";
-  version = "3.29";
+  version = "3.31";
 
   src = fetchFromGitHub {
     owner  = "axboe";
     repo   = "fio";
     rev    = "fio-${version}";
-    sha256 = "sha256-SSQFZK8oVarenp/I37QX/N4F4Es2r2bVyWw6U2OcCHw=";
+    sha256 = "sha256-wqm9yjrJKP3JgsLmPnu14Pi2zm0iTdGcTOGOqXmZslM=";
   };
 
   buildInputs = [ python3 zlib ]

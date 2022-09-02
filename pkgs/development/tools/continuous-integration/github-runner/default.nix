@@ -13,7 +13,6 @@
 , linkFarmFromDrvs
 , lttng-ust
 , makeWrapper
-, nodejs-12_x
 , nodejs-16_x
 , openssl
 , stdenv
@@ -22,14 +21,15 @@
 , nuget-to-nix
 }:
 let
+  fetchNuGet = { pname, version, sha256 }: fetchurl {
+    name = "${pname}.${version}.nupkg";
+    url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
+    inherit sha256;
+  };
+
   nugetSource = linkFarmFromDrvs "nuget-packages" (
-    import ./deps.nix {
-      fetchNuGet = { pname, version, sha256 }: fetchurl {
-        name = "${pname}.${version}.nupkg";
-        url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
-        inherit sha256;
-      };
-    }
+    import ./deps.nix { inherit fetchNuGet; } ++
+    dotnetSdk.passthru.packages { inherit fetchNuGet; }
   );
 
   dotnetSdk = dotnetCorePackages.sdk_6_0;
@@ -43,13 +43,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.286.0";
+  version = "2.296.1";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-a3Kh65NTpVlKUer59rna7NWIQSxh1edU9MwguakzydI=";
+    hash = "sha256-vE1x/wRzjcRR56jUgW8PVM2SzsG87IKXOZghloZBgYM=";
   };
 
   nativeBuildInputs = [
@@ -77,20 +77,17 @@ stdenv.mkDerivation rec {
     ./patches/use-get-directory-for-diag.patch
     # Don't try to install systemd service
     ./patches/dont-install-systemd-service.patch
-    # Prevent the runner from starting a self-update for new versions
-    # (upstream issue: https://github.com/actions/runner/issues/485)
-    ./patches/prevent-self-update.patch
   ];
 
   postPatch = ''
     # Relax the version requirement
     substituteInPlace src/global.json \
-      --replace '6.0.100' '${dotnetSdk.version}'
+      --replace '6.0.300' '${dotnetSdk.version}'
 
     # Disable specific tests
     substituteInPlace src/dir.proj \
       --replace 'dotnet test Test/Test.csproj' \
-                "dotnet test Test/Test.csproj --filter '${lib.concatStringsSep "&amp;" disabledTests}'"
+                "dotnet test Test/Test.csproj --filter '${lib.concatStringsSep "&amp;" (map (x: "FullyQualifiedName!=${x}") disabledTests)}'"
 
     # We don't use a Git checkout
     substituteInPlace src/dir.proj \
@@ -105,10 +102,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
 
-    # Set up Nuget dependencies
     export HOME=$(mktemp -d)
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_NOLOGO=1
 
     # Never use nuget.org
     nuget sources Disable -Name "nuget.org"
@@ -137,18 +131,21 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  disabledTests = [
-    # Self-updating is patched out, hence this test will fail
-    "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync_ValidateHash"
-    "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync"
-    "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.RunnerL0.TestRunOnceHandleUpdateMessage"
-  ] ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
-    # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
-    "FullyQualifiedName!=GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
-  ] ++ map
-    # Online tests
-    (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}")
-    [
+  # Fully qualified name of disabled tests
+  disabledTests =
+    [ "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync" ]
+    ++ map (x: "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync_${x}") [
+      "Cancel_CloneHashTask_WhenNotNeeded"
+      "CloneHash_RuntimeAndExternals"
+      "DownloadRetry"
+      "FallbackToFullPackage"
+      "NoUpdateOnOldVersion"
+      "NotUseExternalsRuntimeTrimmedPackageOnHashMismatch"
+      "UseExternalsRuntimeTrimmedPackage"
+      "UseExternalsTrimmedPackage"
+      "ValidateHash"
+    ]
+    ++ map (x: "GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}") [
       "CompositeActionWithActionfile_CompositeContainerNested"
       "CompositeActionWithActionfile_CompositePrestepNested"
       "CompositeActionWithActionfile_MaxLimit"
@@ -178,21 +175,30 @@ stdenv.mkDerivation rec {
       "RepositoryActionWithInvalidWrapperActionfile_Node_Legacy"
       "RepositoryActionWithWrapperActionfile_PreSteps"
       "RepositoryActionWithWrapperActionfile_PreSteps_Legacy"
-    ] ++ map
-    (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.DotnetsdkDownloadScriptL0.${x}")
-    [
+    ]
+    ++ map (x: "GitHub.Runner.Common.Tests.DotnetsdkDownloadScriptL0.${x}") [
       "EnsureDotnetsdkBashDownloadScriptUpToDate"
       "EnsureDotnetsdkPowershellDownloadScriptUpToDate"
+    ]
+    ++ [ "GitHub.Runner.Common.Tests.Listener.RunnerL0.TestRunOnceHandleUpdateMessage" ]
+    # Tests for trimmed runner packages which aim at reducing the update size. Not relevant for Nix.
+    ++ map (x: "GitHub.Runner.Common.Tests.PackagesTrimL0.${x}") [
+      "RunnerLayoutParts_CheckExternalsHash"
+      "RunnerLayoutParts_CheckDotnetRuntimeHash"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+      # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
+      "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
     ];
-
   checkInputs = [ git ];
 
   checkPhase = ''
     runHook preCheck
 
     mkdir -p _layout/externals
-    ln -s ${nodejs-12_x} _layout/externals/node12
     ln -s ${nodejs-16_x} _layout/externals/node16
+
+    printf 'Disabled tests:\n%s\n' '${lib.concatMapStringsSep "\n" (x: " - ${x}") disabledTests}'
 
     # BUILDCONFIG needs to be "Debug"
     dotnet msbuild \
@@ -219,15 +225,21 @@ stdenv.mkDerivation rec {
 
     # Install the helper scripts to bin/ to resemble the upstream package
     mkdir -p $out/bin
-    install -m755 src/Misc/layoutbin/runsvc.sh        $out/bin/
-    install -m755 src/Misc/layoutbin/RunnerService.js $out/lib/
-    install -m755 src/Misc/layoutroot/run.sh          $out/lib/
-    install -m755 src/Misc/layoutroot/config.sh       $out/lib/
-    install -m755 src/Misc/layoutroot/env.sh          $out/lib/
+    install -m755 src/Misc/layoutbin/runsvc.sh                 $out/bin/
+    install -m755 src/Misc/layoutbin/RunnerService.js          $out/lib/
+    install -m755 src/Misc/layoutroot/run.sh                   $out/lib/
+    install -m755 src/Misc/layoutroot/run-helper.sh.template   $out/lib/run-helper.sh
+    install -m755 src/Misc/layoutroot/config.sh                $out/lib/
+    install -m755 src/Misc/layoutroot/env.sh                   $out/lib/
 
     # Rewrite reference in helper scripts from bin/ to lib/
-    substituteInPlace $out/lib/run.sh    --replace '"$DIR"/bin' "$out/lib"
-    substituteInPlace $out/lib/config.sh --replace './bin' "$out/lib"
+    substituteInPlace $out/lib/run.sh    --replace '"$DIR"/bin' '"$DIR"/lib'
+    substituteInPlace $out/lib/config.sh --replace './bin' $out'/lib' \
+      --replace 'source ./env.sh' $out/bin/env.sh
+
+    # Remove uneeded copy for run-helper template
+    substituteInPlace $out/lib/run.sh --replace 'cp -f "$DIR"/run-helper.sh.template "$DIR"/run-helper.sh' ' '
+    substituteInPlace $out/lib/run-helper.sh --replace '"$DIR"/bin/' '"$DIR"/'
 
     # Make paths absolute
     substituteInPlace $out/bin/runsvc.sh \
@@ -238,7 +250,6 @@ stdenv.mkDerivation rec {
     # externals/node{12,16}. As opposed to the official releases, we don't
     # link the Alpine Node flavors.
     mkdir -p $out/externals
-    ln -s ${nodejs-12_x} $out/externals/node12
     ln -s ${nodejs-16_x} $out/externals/node16
 
     # Install Nodejs scripts called from workflows
@@ -264,7 +275,7 @@ stdenv.mkDerivation rec {
     wrap() {
       makeWrapper $out/lib/$1 $out/bin/$1 \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath (buildInputs ++ [ openssl ])} \
-        ''${@:2}
+        "''${@:2}"
     }
 
     fix_rpath Runner.Listener
@@ -274,10 +285,13 @@ stdenv.mkDerivation rec {
     wrap Runner.Listener
     wrap Runner.PluginHost
     wrap Runner.Worker
-    wrap run.sh
-    wrap env.sh
+    wrap run.sh --run 'export RUNNER_ROOT=''${RUNNER_ROOT:-$HOME/.github-runner}'
+    wrap env.sh --run 'cd $RUNNER_ROOT'
 
-    wrap config.sh --prefix PATH : ${lib.makeBinPath [ glibc.bin ]}
+    wrap config.sh --run 'export RUNNER_ROOT=''${RUNNER_ROOT:-$HOME/.github-runner}' \
+      --run 'mkdir -p $RUNNER_ROOT' \
+      --prefix PATH : ${lib.makeBinPath [ glibc.bin ]} \
+      --chdir $out
   '';
 
   # Script to create deps.nix file for dotnet dependencies. Run it with
@@ -290,6 +304,9 @@ stdenv.mkDerivation rec {
     name = "create-deps-file";
     runtimeInputs = [ dotnetSdk nuget-to-nix ];
     text = ''
+      # Disable telemetry data
+      export DOTNET_CLI_TELEMETRY_OPTOUT=1
+
       rundir=$(pwd)
 
       printf "\n* Setup workdir\n"

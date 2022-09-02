@@ -1,10 +1,21 @@
-{ lib, python3Packages }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "snakemake";
-  version = "6.10.0";
+  version = "7.12.1";
+  format = "setuptools";
 
-  propagatedBuildInputs = with python3Packages; [
+  src = fetchFromGitHub {
+    owner = "snakemake";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QfSk6K/Vpj3+k+5w0thiP9O4CTvL8JDRwj4lDSt2NnU=";
+  };
+
+  propagatedBuildInputs = with python3.pkgs; [
     appdirs
     configargparse
     connection-pool
@@ -22,19 +33,41 @@ python3Packages.buildPythonApplication rec {
     pyyaml
     ratelimiter
     requests
+    retry
     smart-open
     stopit
     tabulate
     toposort
     wrapt
+    yte
   ];
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "199a86c8d1fcfdb88c4271a1507b0ab371a15bc407f2dad9b0ab8c43438adff8";
-  };
+  # See
+  # https://github.com/snakemake/snakemake/blob/main/.github/workflows/main.yml#L99
+  # for the current basic test suite. Tibanna and Tes require extra
+  # setup.
 
-  doCheck = false; # Tests depend on Google Cloud credentials at ${HOME}/gcloud-service-key.json
+  checkInputs = with python3.pkgs; [
+    pandas
+    pytestCheckHook
+    requests-mock
+  ];
+
+  disabledTestPaths = [
+    "tests/test_tes.py"
+    "tests/test_tibanna.py"
+    "tests/test_linting.py"
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "test_github_issue1396"
+    "test_github_issue1460"
+  ];
+
+  pythonImportsCheck = [
+    "snakemake"
+  ];
 
   meta = with lib; {
     homepage = "https://snakemake.github.io";

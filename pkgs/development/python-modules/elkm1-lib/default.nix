@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "elkm1-lib";
-  version = "1.0.0";
+  version = "2.1.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "gwww";
     repo = "elkm1";
     rev = version;
-    sha256 = "04xidix6l5d9rqfwp6cmj6wvais04nlvz5ynp0zwgyjp9sh2nhp6";
+    hash = "sha256-uc+hU4RyF6IXUbdpZHozbF6vO2NE2hrfgxAnmmB27lw=";
   };
 
   nativeBuildInputs = [
@@ -36,16 +36,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  patches = [
-    # Switch to poetry-core, https://github.com/gwww/elkm1/pull/45
-    (fetchpatch {
-      name = "switch-to-poetry-core.patch";
-      url = "https://github.com/gwww/elkm1/commit/807a17268498298908bf82af4933b158b37c8f32.patch";
-      sha256 = "1539g8wsxppqj6dm6w81ps05frb8vrfaxahxn2cqs76zdhvly3p9";
-    })
+  pythonImportsCheck = [
+    "elkm1_lib"
   ];
-
-  pythonImportsCheck = [ "elkm1_lib" ];
 
   meta = with lib; {
     description = "Python module for interacting with ElkM1 alarm/automation panel";

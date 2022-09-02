@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, openssl, zlib, cmake, python2, perl, snappy, lzo, which }:
+{ stdenv, lib, fetchFromGitHub, openssl, zlib, cmake, python2, perl, snappy, lzo, which, catch2, catch }:
 
 let
   common = { version, sha256 }: stdenv.mkDerivation {
@@ -26,6 +26,14 @@ let
       # with nixpkgs, it has no sense to check for a version update
       substituteInPlace js/client/client.js --replace "require('@arangodb').checkAvailableVersions();" ""
       substituteInPlace js/server/server.js --replace "require('@arangodb').checkAvailableVersions();" ""
+
+      ${if (lib.versionOlder version "3.4") then ''
+        cp ${catch}/include/catch/catch.hpp 3rdParty/catch/catch.hpp
+      '' else if (lib.versionOlder version "3.5") then ''
+        cp ${catch2}/include/catch2/catch.hpp 3rdParty/catch/catch.hpp
+      '' else ''
+        (cd 3rdParty/boost/1.69.0 && patch -p1 < ${../../../development/libraries/boost/pthread-stack-min-fix.patch})
+      ''}
     '';
 
     cmakeFlags = [

@@ -21,6 +21,8 @@
 mkDerivation rec {
   pname = "elisa";
 
+  outputs = [ "out" "dev" ];
+
   buildInputs = [ libvlc ];
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

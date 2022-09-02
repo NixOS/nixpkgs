@@ -29,8 +29,8 @@ let
   boolToUpper = b: lib.toUpper (lib.boolToString b);
 in
 stdenv.mkDerivation rec {
-  version = "0.8.0";
-  pname = "davix";
+  version = "0.8.2";
+  pname = "davix" + lib.optionalString enableThirdPartyCopy "-copy";
   nativeBuildInputs = [ cmake pkg-config python3 ];
   buildInputs = [
     openssl
@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
   # "please ignore the GitHub-generated tarballs, as they are incomplete"
   # https://github.com/cern-fts/davix/releases/tag/R_0_8_0
   src = fetchurl {
-    url = "https://github.com/cern-fts/${pname}/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/${pname}-${version}.tar.gz";
-    sha256 = "LxCNoECKg/tbnwxoFQ02C6cz5LOg/imNRbDTLSircSQ=";
+    url = "https://github.com/cern-fts/davix/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/davix-${version}.tar.gz";
+    sha256 = "sha256-iBeiTCPxMJud4jO5qIJFX0V8Qu3CpknccP4lJM922Uw=";
   };
 
   preConfigure = ''
@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Toolkit for Http-based file management";
 
     longDescription = "Davix is a toolkit designed for file
@@ -71,8 +72,8 @@ stdenv.mkDerivation rec {
     Davix provides an API and a set of command line tools";
 
     license = licenses.lgpl2Plus;
-    homepage = "http://dmc.web.cern.ch/projects/davix/home";
-    changelog = "https://github.com/cern-fts/davix/blob/devel/RELEASE-NOTES.md";
+    homepage = "https://github.com/cern-fts/davix";
+    changelog = "https://github.com/cern-fts/davix/blob/R_${lib.replaceStrings ["."] ["_"] version}/RELEASE-NOTES.md";
     maintainers = with maintainers; [ adev ];
     platforms = platforms.all;
   };

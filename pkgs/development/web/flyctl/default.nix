@@ -1,32 +1,61 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ lib, buildGoModule, fetchFromGitHub, testers, flyctl, installShellFiles }:
 
 buildGoModule rec {
   pname = "flyctl";
-  version = "0.0.260";
+  version = "0.0.383";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
-    sha256 = "sha256-xjvZp6LAKVYgZpiSHlfZzZ/OBp/UutjvndM46okC0b4=";
+    sha256 = "sha256-SI+Xm4TUn4HmfbTG0YQuwQhCSVcean8PsOx5SowI/eU=";
   };
+
+  vendorSha256 = "sha256-swbQOLW3NMVDbD1hJh7iFKAFWlQhWSY2KHQGj5NSdqw=";
+
+  subPackages = [ "." ];
+
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/superfly/flyctl/internal/buildinfo.commit=${src.rev}"
+    "-X github.com/superfly/flyctl/internal/buildinfo.buildDate=1970-01-01T00:00:00Z"
+    "-X github.com/superfly/flyctl/internal/buildinfo.environment=production"
+    "-X github.com/superfly/flyctl/internal/buildinfo.version=${version}"
+  ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   preBuild = ''
     go generate ./...
   '';
 
-  subPackages = [ "." ];
+  preCheck = ''
+    HOME=$(mktemp -d)
+  '';
 
-  vendorSha256 = "sha256-lwayHq4uByCkiwzRd3lPaSAW4XvKNMVNcN4Cfct74e8=";
+  postCheck = ''
+    go test ./... -ldflags="-X 'github.com/superfly/flyctl/internal/buildinfo.buildDate=1970-01-01T00:00:00Z'"
+  '';
 
-  doCheck = false;
+  postInstall = ''
+    installShellCompletion --cmd flyctl \
+      --bash <($out/bin/flyctl completion bash) \
+      --fish <($out/bin/flyctl completion fish) \
+      --zsh <($out/bin/flyctl completion zsh)
+    ln -s $out/bin/flyctl $out/bin/fly
+  '';
 
-  ldflags = [ "-s" "-w" "-X github.com/superfly/flyctl/flyctl.Version=${version}" "-X github.com/superfly/flyctl/flyctl.Commit=${src.rev}" "-X github.com/superfly/flyctl/flyctl.BuildDate=1970-01-01T00:00:00+0000" "-X github.com/superfly/flyctl/flyctl.Environment=production" ];
+  passthru.tests.version = testers.testVersion {
+    package = flyctl;
+    command = "HOME=$(mktemp -d) flyctl version";
+    version = "v${flyctl.version}";
+  };
 
   meta = with lib; {
     description = "Command line tools for fly.io services";
+    downloadPage = "https://github.com/superfly/flyctl";
     homepage = "https://fly.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjanse jsierles ];
+    maintainers = with maintainers; [ aaronjanse jsierles techknowlogick viraptor ];
   };
 }

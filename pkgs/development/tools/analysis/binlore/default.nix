@@ -30,8 +30,8 @@ let
   src = fetchFromGitHub {
     owner = "abathur";
     repo = "binlore";
-    rev = "v0.1.3";
-    hash = "sha256-+rgv8gAQ3ptOpL/EhbKr/jq+k/4Lpn06/2qON+Ps2wE=";
+    rev = "v0.2.0";
+    hash = "sha256-bBJky7Km+mieHTqoMz3mda3KaKxr9ipYpfQqn/4w8J0=";
   };
   /*
   binlore has one one more yallbacks responsible for
@@ -57,11 +57,11 @@ let
     #   since this form will make it easier to pilot other
     #   uses of binlore.
     callback = lore: drv: overrides: ''
-      if [[ -d "${drv}/bin" ]]; then
+      if [[ -d "${drv}/bin" ]] || [[ -d "${drv}/lib" ]] || [[ -d "${drv}/libexec" ]]; then
         echo generating binlore for $drv by running:
-        echo "${yara}/bin/yara ${lore.rules} ${drv}/bin | ${yallback}/bin/yallback ${lore.yallback}"
+        echo "${yara}/bin/yara --scan-list --recursive ${lore.rules} <(printf '%s\n' ${drv}/{bin,lib,libexec}) | ${yallback}/bin/yallback ${lore.yallback}"
       else
-        echo "failed to generate binlore for $drv (${drv}/bin doesn't exist)"
+        echo "failed to generate binlore for $drv (none of ${drv}/{bin,lib,libexec} exist)"
       fi
     '' +
     /*
@@ -83,18 +83,19 @@ let
         fi
         ((i--)) || true # don't break build
       done # || true # don't break build
-      if [[ -d "${drv}/bin" ]]; then
-        ${yara}/bin/yara ${lore.rules} ${drv}/bin | ${yallback}/bin/yallback ${lore.yallback} "$filter"
+      if [[ -d "${drv}/bin" ]] || [[ -d "${drv}/lib" ]] || [[ -d "${drv}/libexec" ]]; then
+        ${yara}/bin/yara --scan-list --recursive ${lore.rules} <(printf '%s\n' ${drv}/{bin,lib,libexec}) | ${yallback}/bin/yallback ${lore.yallback} "$filter"
       fi
     '';
   };
   overrides = (src + /overrides);
 
 in rec {
-  collect = { lore ? loreDef, drvs }: (runCommand "more-binlore" { } ''
+  collect = { lore ? loreDef, drvs, strip ? [ ] }: (runCommand "more-binlore" { } ''
     mkdir $out
     for lorefile in ${toString lore.types}; do
-      cat ${lib.concatMapStrings (x: x + "/$lorefile ") (map (make lore) (map lib.getBin drvs))} > $out/$lorefile
+      cat ${lib.concatMapStrings (x: x + "/$lorefile ") (map (make lore) (map lib.getBin (builtins.filter lib.isDerivation drvs)))} > $out/$lorefile
+      substituteInPlace $out/$lorefile ${lib.concatMapStrings (x: "--replace '${x}/' '' ") strip}
     done
   '');
   # TODO: echo for debug, can be removed at some point

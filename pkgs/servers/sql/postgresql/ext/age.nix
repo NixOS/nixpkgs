@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "age";
-  version = "0.6.0";
+  version = "1.0.0-rc1";
 
   src = fetchFromGitHub {
     owner = "apache";
-    repo = "incubator-age";
+    repo = "age";
     rev = "v${version}";
-    sha256 = "1cl6p9qz2yhgm603ljlyjdn0msk3hzga1frjqsmqmpp3nw4dbkka";
+    sha256 = "sha256-b5cBpS5xWaohRZf5H0DwzNq0BodqWDjkAP44osPVYps=";
   };
 
   buildInputs = [ postgresql ];
@@ -54,12 +54,13 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    # Only supports PostgreSQL 11 https://github.com/apache/age/issues/225
+    broken = versions.major postgresql.version != "11";
     description = "A graph database extension for PostgreSQL";
     homepage = "https://age.apache.org/";
-    changelog = "https://github.com/apache/incubator-age/releases/tag/v${version}";
+    changelog = "https://github.com/apache/age/raw/v${version}/RELEASE";
     maintainers = with maintainers; [ ];
     platforms = postgresql.meta.platforms;
     license = licenses.asl20;
-    broken = versionOlder postgresql.version "11.0";
   };
 }

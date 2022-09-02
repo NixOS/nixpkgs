@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , krakenex
 , pandas
@@ -7,13 +8,17 @@
 
 buildPythonPackage rec {
   pname = "pykrakenapi";
-  version = "0.2.4";
+  version = "0.3.1";
+
+  disabled = pythonOlder "3.3";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dominiktraxl";
     repo = "pykrakenapi";
     rev = "v${version}";
-    hash = "sha256-i2r6t+JcL6INI8Y26gvVvNjv6XxMj4G+pF9Xf/hsx1A=";
+    hash = "sha256-gG0kbB3yaFU4DcBKupnBS7UFuU1hIMThdUHCuqufKzc=";
   };
 
   propagatedBuildInputs = [

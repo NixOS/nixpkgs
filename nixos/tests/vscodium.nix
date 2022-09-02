@@ -32,6 +32,14 @@ let
         maintainers = [ synthetica turion ];
       };
       enableOCR = true;
+
+      # testScriptWithTypes:55: error: Item "function" of
+      # "Union[Callable[[Callable[..., Any]], ContextManager[Any]], ContextManager[Any]]"
+      # has no attribute "__enter__"
+      #     with codium_running:
+      #          ^
+      skipTypeCheck = true;
+
       testScript = ''
         @polling_condition
         def codium_running():

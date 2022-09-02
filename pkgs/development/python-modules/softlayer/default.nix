@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , click
 , fetchFromGitHub
@@ -13,19 +14,27 @@
 , testtools
 , tkinter
 , urllib3
+, prettytable
+, rich
+, zeep
 }:
 
 buildPythonPackage rec {
   pname = "softlayer";
-  version = "5.9.8";
+  version = "6.1.0";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "softlayer-python";
     rev = "v${version}";
-    sha256 = "087kyl2yacvh12i4x3357659mgq4xycv8a4y9rl3rj57kp5jc6ah";
+    sha256 = "sha256-T49KVAsgcAZySkaJi47IrFcMHGZvEkGDjPWsdMarzwM=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+        --replace 'rich == 12.3.0' 'rich >= 12.3.0'
+  '';
 
   propagatedBuildInputs = [
     click
@@ -34,6 +43,8 @@ buildPythonPackage rec {
     pygments
     requests
     urllib3
+    prettytable
+    rich
   ];
 
   checkInputs = [
@@ -42,6 +53,18 @@ buildPythonPackage rec {
     sphinx
     testtools
     tkinter
+    zeep
+  ];
+
+  # Otherwise soap_tests.py will fail to create directory
+  # Permission denied: '/homeless-shelter'
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  disabledTestPaths = [
+    # Test fails with ConnectionError trying to connect to api.softlayer.com
+    "tests/transports/soap_tests.py"
   ];
 
   pythonImportsCheck = [ "SoftLayer" ];
@@ -50,6 +73,6 @@ buildPythonPackage rec {
     description = "Python libraries that assist in calling the SoftLayer API";
     homepage = "https://github.com/softlayer/softlayer-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ onny ];
   };
 }

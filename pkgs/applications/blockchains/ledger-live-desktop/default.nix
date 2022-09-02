@@ -2,16 +2,15 @@
 
 let
   pname = "ledger-live-desktop";
-  version = "2.36.3";
-  name = "${pname}-${version}";
+  version = "2.46.0";
 
   src = fetchurl {
-    url = "https://github.com/LedgerHQ/${pname}/releases/download/v${version}/${pname}-${version}-linux-x86_64.AppImage";
-    hash = "sha256:1sxsr70nm86fyx2m3wf694x1p6kvmkwxw6fqnslpbyjpyi9x73cd";
+    url = "https://download.live.ledger.com/${pname}-${version}-linux-x86_64.AppImage";
+    hash = "sha256-QbCiOzASqicd0Tns1sV9ZVoc/GmuoohB9wB/g0Z6uFA=";
   };
 
   appimageContents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 
   # Hotplug events from udevd are fired into the kernel, which then re-broadcasts them over a
@@ -25,12 +24,12 @@ let
   });
 in
 appimageTools.wrapType2 rec {
-  inherit name src;
+  inherit pname version src;
 
   extraPkgs = pkgs: [ systemdPatched ];
 
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
+    mv $out/bin/${pname}-${version} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/ledger-live-desktop.desktop $out/share/applications/ledger-live-desktop.desktop
     install -m 444 -D ${appimageContents}/ledger-live-desktop.png $out/share/icons/hicolor/1024x1024/apps/ledger-live-desktop.png
     ${imagemagick}/bin/convert ${appimageContents}/ledger-live-desktop.png -resize 512x512 ledger-live-desktop_512.png
@@ -43,7 +42,7 @@ appimageTools.wrapType2 rec {
     description = "Wallet app for Ledger Nano S and Ledger Blue";
     homepage = "https://www.ledger.com/live";
     license = licenses.mit;
-    maintainers = with maintainers; [ andresilva thedavidmeister nyanloutre RaghavSood th0rgal ];
+    maintainers = with maintainers; [ andresilva thedavidmeister nyanloutre RaghavSood th0rgal WeebSorceress ];
     platforms = [ "x86_64-linux" ];
   };
 }

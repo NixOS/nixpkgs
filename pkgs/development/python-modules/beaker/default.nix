@@ -5,7 +5,7 @@
 , glibcLocales
 , nose
 , pylibmc
-, memcached
+, python-memcached
 , redis
 , pymongo
 , mock
@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     glibcLocales
-    memcached
+    python-memcached
     mock
     nose
     pylibmc
@@ -52,11 +52,7 @@ buildPythonPackage rec {
   ];
 
   # Can not run memcached tests because it immediately tries to connect
-  postPatch = lib.optionalString isPy3k ''
-    substituteInPlace setup.py \
-      --replace "python-memcached" "python3-memcached"
-    '' + ''
-
+  postPatch = ''
     rm tests/test_memcached.py
   '';
 
@@ -74,6 +70,11 @@ buildPythonPackage rec {
 
   meta = {
     description = "A Session and Caching library with WSGI Middleware";
+    homepage = "https://github.com/bbangert/beaker";
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ domenkozar ];
+    knownVulnerabilities = [
+      "CVE-2013-7489"
+    ];
   };
 }

@@ -33,7 +33,7 @@ in
     maintainers = [ rnhmjoj ];
   };
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     services.nginx.enable = true;
     services.nginx.virtualHosts."example.com" = {
       addSSL = true;
@@ -81,23 +81,23 @@ in
     ''
       with subtest("Privoxy is running"):
           machine.wait_for_unit("privoxy")
-          machine.wait_for_open_port("8118")
+          machine.wait_for_open_port(8118)
           machine.succeed("curl -f http://config.privoxy.org")
 
       with subtest("Privoxy can filter http requests"):
-          machine.wait_for_open_port("80")
+          machine.wait_for_open_port(80)
           assert "great day" in machine.succeed(
               "curl -sfL http://example.com/how-are-you? | tee /dev/stderr"
           )
 
       with subtest("Privoxy can filter https requests"):
-          machine.wait_for_open_port("443")
+          machine.wait_for_open_port(443)
           assert "great day" in machine.succeed(
               "curl -sfL https://example.com/how-are-you? | tee /dev/stderr"
           )
 
       with subtest("Blocks are working"):
-          machine.wait_for_open_port("443")
+          machine.wait_for_open_port(443)
           machine.fail("curl -f https://example.com/ads 1>&2")
           machine.succeed("curl -f https://example.com/PRIVOXY-FORCE/ads 1>&2")
 

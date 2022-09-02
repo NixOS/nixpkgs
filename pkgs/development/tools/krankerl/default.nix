@@ -6,7 +6,6 @@
 , dbus
 , sqlite
 , file
-, gzip
 , makeWrapper
 }:
 
@@ -25,7 +24,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    gzip
     makeWrapper
   ];
 

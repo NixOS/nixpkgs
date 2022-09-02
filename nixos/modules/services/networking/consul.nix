@@ -28,7 +28,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enables the consul daemon.
         '';
       };
@@ -37,7 +37,7 @@ in
         type = types.package;
         default = pkgs.consul;
         defaultText = literalExpression "pkgs.consul";
-        description = ''
+        description = lib.mdDoc ''
           The package used for the Consul agent and CLI.
         '';
       };
@@ -46,7 +46,7 @@ in
       webUi = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enables the web interface on the consul http port.
         '';
       };
@@ -54,7 +54,7 @@ in
       leaveOnStop = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           If enabled, causes a leave action to be sent when closing consul.
           This allows a clean termination of the node, but permanently removes
           it from the cluster. You probably don't want this option unless you
@@ -68,7 +68,7 @@ in
         advertise = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             The name of the interface to pull the advertise_addr from.
           '';
         };
@@ -76,17 +76,25 @@ in
         bind = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             The name of the interface to pull the bind_addr from.
           '';
         };
+      };
 
+      forceAddrFamily = mkOption {
+        type = types.enum [ "any" "ipv4" "ipv6" ];
+        default = "any";
+        description = lib.mdDoc ''
+          Whether to bind ipv4/ipv6 or both kind of addresses.
+        '';
       };
 
       forceIpv4 = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
+        type = types.nullOr types.bool;
+        default = null;
+        description = lib.mdDoc ''
+          Deprecated: Use consul.forceAddrFamily instead.
           Whether we should force the interfaces to only pull ipv4 addresses.
         '';
       };
@@ -94,7 +102,7 @@ in
       dropPrivileges = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether the consul agent should be run as a non-root consul user.
         '';
       };
@@ -102,7 +110,7 @@ in
       extraConfig = mkOption {
         default = { };
         type = types.attrsOf types.anything;
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration options which are serialized to json and added
           to the config.json file.
         '';
@@ -111,42 +119,42 @@ in
       extraConfigFiles = mkOption {
         default = [ ];
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           Additional configuration files to pass to consul
           NOTE: These will not trigger the service to be restarted when altered.
         '';
       };
 
       alerts = {
-        enable = mkEnableOption "consul-alerts";
+        enable = mkEnableOption (lib.mdDoc "consul-alerts");
 
         package = mkOption {
-          description = "Package to use for consul-alerts.";
+          description = lib.mdDoc "Package to use for consul-alerts.";
           default = pkgs.consul-alerts;
           defaultText = literalExpression "pkgs.consul-alerts";
           type = types.package;
         };
 
         listenAddr = mkOption {
-          description = "Api listening address.";
+          description = lib.mdDoc "Api listening address.";
           default = "localhost:9000";
           type = types.str;
         };
 
         consulAddr = mkOption {
-          description = "Consul api listening adddress";
+          description = lib.mdDoc "Consul api listening adddress";
           default = "localhost:8500";
           type = types.str;
         };
 
         watchChecks = mkOption {
-          description = "Whether to enable check watcher.";
+          description = lib.mdDoc "Whether to enable check watcher.";
           default = true;
           type = types.bool;
         };
 
         watchEvents = mkOption {
-          description = "Whether to enable event watcher.";
+          description = lib.mdDoc "Whether to enable event watcher.";
           default = true;
           type = types.bool;
         };
@@ -175,6 +183,13 @@ in
         systemPackages = [ cfg.package ];
       };
 
+      warnings = lib.flatten [
+        (lib.optional (cfg.forceIpv4 != null) ''
+          The option consul.forceIpv4 is deprecated, please use
+          consul.forceAddrFamily instead.
+        '')
+      ];
+
       systemd.services.consul = {
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ] ++ systemdDevices;
@@ -196,15 +211,21 @@ in
         });
 
         path = with pkgs; [ iproute2 gnugrep gawk consul ];
-        preStart = ''
+        preStart = let
+          family = if cfg.forceAddrFamily == "ipv6" then
+            "-6"
+          else if cfg.forceAddrFamily == "ipv4" then
+            "-4"
+          else
+            "";
+        in ''
           mkdir -m 0700 -p ${dataDir}
           chown -R consul ${dataDir}
 
           # Determine interface addresses
           getAddrOnce () {
-            ip addr show dev "$1" \
-              | grep 'inet${optionalString (cfg.forceIpv4) " "}.*scope global' \
-              | awk -F '[ /\t]*' '{print $3}' | head -n 1
+            ip ${family} addr show dev "$1" scope global \
+              | awk -F '[ /\t]*' '/inet/ {print $3}' | head -n 1
           }
           getAddr () {
             ADDR="$(getAddrOnce $1)"
@@ -233,6 +254,11 @@ in
         '';
       };
     }
+
+    # deprecated
+    (mkIf (cfg.forceIpv4 != null && cfg.forceIpv4) {
+      services.consul.forceAddrFamily = "ipv4";
+    })
 
     (mkIf (cfg.alerts.enable) {
       systemd.services.consul-alerts = {

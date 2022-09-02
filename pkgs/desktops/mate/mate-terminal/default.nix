@@ -1,4 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, libxml2, mate-desktop, dconf, vte, pcre2, wrapGAppsHook, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, itstool
+, libxml2
+, mate-desktop
+, dconf
+, vte
+, pcre2
+, wrapGAppsHook
+, mateUpdateScript
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-terminal";
@@ -27,6 +41,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.updateScript = mateUpdateScript { inherit pname version; };
+
+  passthru.tests.test = nixosTests.terminal-emulators.mate-terminal;
 
   meta = with lib; {
     description = "MATE desktop terminal emulator";

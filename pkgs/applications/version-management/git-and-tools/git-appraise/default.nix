@@ -1,23 +1,24 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  pname = "git-appraise-unstable";
-  version = "2018-02-26";
-  rev = "2414523905939525559e4b2498c5597f86193b61";
-
-  goPackagePath = "github.com/google/git-appraise";
+buildGoModule rec {
+  pname = "git-appraise";
+  version = "unstable-2022-04-13";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "google";
     repo = "git-appraise";
-    sha256 = "04xkp1jpas1dfms6i9j09bgkydih0q10nhwn75w9ds8hi2qaa3sa";
+    rev = "99aeb0e71544d3e1952e208c339b1aec70968cf3";
+    sha256 = "sha256-TteTI8yGP2sckoJ5xuBB5S8xzm1upXmZPlcDLvXZrpc=";
   };
 
-  meta = {
+  vendorSha256 = "sha256-Lzq4qpDAUjKFA2T685eW9NCfzEhDsn5UR1A1cIaZadE=";
+
+  ldflags = [ "-s" "-w" ];
+
+  meta = with lib; {
     description = "Distributed code review system for Git repos";
     homepage = "https://github.com/google/git-appraise";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.vdemeester ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ vdemeester ];
   };
 }

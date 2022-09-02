@@ -22,6 +22,14 @@ let
       export CONFIG_FILE=${configPath}
 
       mkdir -p $(dirname ${configPath})
+      touch ${configPath}
+
+      # update global options
+      remarshal --if toml --of json ${configPath} \
+        | jq -cM 'with_entries(select([.key] | inside(["runners"])))' \
+        | jq -scM '.[0] + .[1]' - <(echo ${escapeShellArg (toJSON cfg.settings)}) \
+        | remarshal --if json --of toml \
+        | sponge ${configPath}
 
       # remove no longer existing services
       gitlab-runner verify --delete
@@ -36,12 +44,12 @@ let
 
       # register new services
       ${concatStringsSep "\n" (mapAttrsToList (name: service: ''
-        if echo "$NEW_SERVICES" | grep -xq ${name}; then
+        if echo "$NEW_SERVICES" | grep -xq "${name}"; then
           bash -c ${escapeShellArg (concatStringsSep " \\\n " ([
             "set -a && source ${service.registrationConfigFile} &&"
             "gitlab-runner register"
             "--non-interactive"
-            "--name ${name}"
+            (if service.description != null then "--description \"${service.description}\"" else "--name '${name}'")
             "--executor ${service.executor}"
             "--limit ${toString service.limit}"
             "--request-concurrency ${toString service.requestConcurrency}"
@@ -91,22 +99,6 @@ let
           --name "$NAME" && sleep 1
       done
 
-      # update global options
-      remarshal --if toml --of json ${configPath} \
-        | jq -cM ${escapeShellArg (concatStringsSep " | " [
-            ".check_interval = ${toJSON cfg.checkInterval}"
-            ".concurrent = ${toJSON cfg.concurrent}"
-            ".sentry_dsn = ${toJSON cfg.sentryDSN}"
-            ".listen_address = ${toJSON cfg.prometheusListenAddress}"
-            ".session_server.listen_address = ${toJSON cfg.sessionServer.listenAddress}"
-            ".session_server.advertise_address = ${toJSON cfg.sessionServer.advertiseAddress}"
-            ".session_server.session_timeout = ${toJSON cfg.sessionServer.sessionTimeout}"
-            "del(.[] | nulls)"
-            "del(.session_server[] | nulls)"
-          ])} \
-        | remarshal --if json --of toml \
-        | sponge ${configPath}
-
       # make config file readable by service
       chown -R --reference=$HOME $(dirname ${configPath})
     '');
@@ -117,107 +109,37 @@ let
 in
 {
   options.services.gitlab-runner = {
-    enable = mkEnableOption "Gitlab Runner";
+    enable = mkEnableOption (lib.mdDoc "Gitlab Runner");
     configFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Configuration file for gitlab-runner.
 
-        <option>configFile</option> takes precedence over <option>services</option>.
-        <option>checkInterval</option> and <option>concurrent</option> will be ignored too.
+        {option}`configFile` takes precedence over {option}`services`.
+        {option}`checkInterval` and {option}`concurrent` will be ignored too.
 
-        This option is deprecated, please use <option>services</option> instead.
-        You can use <option>registrationConfigFile</option> and
-        <option>registrationFlags</option>
+        This option is deprecated, please use {option}`services` instead.
+        You can use {option}`registrationConfigFile` and
+        {option}`registrationFlags`
         for settings not covered by this module.
       '';
     };
-    checkInterval = mkOption {
-      type = types.int;
-      default = 0;
-      example = literalExpression "with lib; (length (attrNames config.services.gitlab-runner.services)) * 3";
-      description = ''
-        Defines the interval length, in seconds, between new jobs check.
-        The default value is 3;
-        if set to 0 or lower, the default value will be used.
-        See <link xlink:href="https://docs.gitlab.com/runner/configuration/advanced-configuration.html#how-check_interval-works">runner documentation</link> for more information.
-      '';
-    };
-    concurrent = mkOption {
-      type = types.int;
-      default = 1;
-      example = literalExpression "config.nix.settings.max-jobs";
-      description = ''
-        Limits how many jobs globally can be run concurrently.
-        The most upper limit of jobs using all defined runners.
-        0 does not mean unlimited.
-      '';
-    };
-    sentryDSN = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      example = "https://public:private@host:port/1";
-      description = ''
-        Data Source Name for tracking of all system level errors to Sentry.
-      '';
-    };
-    prometheusListenAddress = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      example = "localhost:8080";
-      description = ''
-        Address (&lt;host&gt;:&lt;port&gt;) on which the Prometheus metrics HTTP server
-        should be listening.
-      '';
-    };
-    sessionServer = mkOption {
+    settings = mkOption {
       type = types.submodule {
-        options = {
-          listenAddress = mkOption {
-            type = types.nullOr types.str;
-            default = null;
-            example = "0.0.0.0:8093";
-            description = ''
-              An internal URL to be used for the session server.
-            '';
-          };
-          advertiseAddress = mkOption {
-            type = types.nullOr types.str;
-            default = null;
-            example = "runner-host-name.tld:8093";
-            description = ''
-              The URL that the Runner will expose to GitLab to be used
-              to access the session server.
-              Fallbacks to <option>listenAddress</option> if not defined.
-            '';
-          };
-          sessionTimeout = mkOption {
-            type = types.int;
-            default = 1800;
-            description = ''
-              How long in seconds the session can stay active after
-              the job completes (which will block the job from finishing).
-            '';
-          };
-        };
+        freeformType = (pkgs.formats.json { }).type;
       };
       default = { };
-      example = literalExpression ''
-        {
-          listenAddress = "0.0.0.0:8093";
-        }
-      '';
-      description = ''
-        The session server allows the user to interact with jobs
-        that the Runner is responsible for. A good example of this is the
-        <link xlink:href="https://docs.gitlab.com/ee/ci/interactive_web_terminal/index.html">interactive web terminal</link>.
+      description = lib.mdDoc ''
+        Global gitlab-runner configuration. See
+        <https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-global-section>
+        for supported values.
       '';
     };
     gracefulTermination = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Finish all remaining jobs before stopping.
         If not set gitlab-runner will stop immediatly without waiting
         for jobs to finish, which will lead to failed builds.
@@ -227,7 +149,7 @@ in
       type = types.str;
       default = "infinity";
       example = "5min 20s";
-      description = ''
+      description = lib.mdDoc ''
         Time to wait until a graceful shutdown is turned into a forceful one.
       '';
     };
@@ -236,17 +158,17 @@ in
       default = pkgs.gitlab-runner;
       defaultText = literalExpression "pkgs.gitlab-runner";
       example = literalExpression "pkgs.gitlab-runner_1_11";
-      description = "Gitlab Runner package to use.";
+      description = lib.mdDoc "Gitlab Runner package to use.";
     };
     extraPackages = mkOption {
       type = types.listOf types.package;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         Extra packages to add to PATH for the gitlab-runner process.
       '';
     };
     services = mkOption {
-      description = "GitLab Runner services.";
+      description = lib.mdDoc "GitLab Runner services.";
       default = { };
       example = literalExpression ''
         {
@@ -328,17 +250,17 @@ in
         options = {
           registrationConfigFile = mkOption {
             type = types.path;
-            description = ''
+            description = lib.mdDoc ''
               Absolute path to a file with environment variables
               used for gitlab-runner registration.
               A list of all supported environment variables can be found in
-              <literal>gitlab-runner register --help</literal>.
+              `gitlab-runner register --help`.
 
               Ones that you probably want to set is
 
-              <literal>CI_SERVER_URL=&lt;CI server URL&gt;</literal>
+              `CI_SERVER_URL=<CI server URL>`
 
-              <literal>REGISTRATION_TOKEN=&lt;registration secret&gt;</literal>
+              `REGISTRATION_TOKEN=<registration secret>`
 
               WARNING: make sure to use quoted absolute path,
               or it is going to be copied to Nix Store.
@@ -348,10 +270,10 @@ in
             type = types.listOf types.str;
             default = [ ];
             example = [ "--docker-helper-image my/gitlab-runner-helper" ];
-            description = ''
+            description = lib.mdDoc ''
               Extra command-line flags passed to
-              <literal>gitlab-runner register</literal>.
-              Execute <literal>gitlab-runner register --help</literal>
+              `gitlab-runner register`.
+              Execute `gitlab-runner register --help`
               for a list of supported flags.
             '';
           };
@@ -359,25 +281,32 @@ in
             type = types.attrsOf types.str;
             default = { };
             example = { NAME = "value"; };
-            description = ''
+            description = lib.mdDoc ''
               Custom environment variables injected to build environment.
-              For secrets you can use <option>registrationConfigFile</option>
-              with <literal>RUNNER_ENV</literal> variable set.
+              For secrets you can use {option}`registrationConfigFile`
+              with `RUNNER_ENV` variable set.
+            '';
+          };
+          description = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = lib.mdDoc ''
+              Name/description of the runner.
             '';
           };
           executor = mkOption {
             type = types.str;
             default = "docker";
-            description = ''
+            description = lib.mdDoc ''
               Select executor, eg. shell, docker, etc.
-              See <link xlink:href="https://docs.gitlab.com/runner/executors/README.html">runner documentation</link> for more information.
+              See [runner documentation](https://docs.gitlab.com/runner/executors/README.html) for more information.
             '';
           };
           buildsDir = mkOption {
             type = types.nullOr types.path;
             default = null;
             example = "/var/lib/gitlab-runner/builds";
-            description = ''
+            description = lib.mdDoc ''
               Absolute path to a directory where builds will be stored
               in context of selected executor (Locally, Docker, SSH).
             '';
@@ -386,14 +315,14 @@ in
             type = types.nullOr types.str;
             default = null;
             example = "http://gitlab.example.local";
-            description = ''
+            description = lib.mdDoc ''
               Overwrite the URL for the GitLab instance. Used if the Runner can’t connect to GitLab on the URL GitLab exposes itself.
             '';
           };
           dockerImage = mkOption {
             type = types.nullOr types.str;
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               Docker image to be used.
             '';
           };
@@ -401,7 +330,7 @@ in
             type = types.listOf types.str;
             default = [ ];
             example = [ "/var/run/docker.sock:/var/run/docker.sock" ];
-            description = ''
+            description = lib.mdDoc ''
               Bind-mount a volume and create it
               if it doesn't exist prior to mounting.
             '';
@@ -409,14 +338,14 @@ in
           dockerDisableCache = mkOption {
             type = types.bool;
             default = false;
-            description = ''
+            description = lib.mdDoc ''
               Disable all container caching.
             '';
           };
           dockerPrivileged = mkOption {
             type = types.bool;
             default = false;
-            description = ''
+            description = lib.mdDoc ''
               Give extended privileges to container.
             '';
           };
@@ -424,7 +353,7 @@ in
             type = types.listOf types.str;
             default = [ ];
             example = [ "other-host:127.0.0.1" ];
-            description = ''
+            description = lib.mdDoc ''
               Add a custom host-to-IP mapping.
             '';
           };
@@ -432,7 +361,7 @@ in
             type = types.listOf types.str;
             default = [ ];
             example = [ "ruby:*" "python:*" "php:*" "my.registry.tld:5000/*:*" ];
-            description = ''
+            description = lib.mdDoc ''
               Whitelist allowed images.
             '';
           };
@@ -440,21 +369,21 @@ in
             type = types.listOf types.str;
             default = [ ];
             example = [ "postgres:9" "redis:*" "mysql:*" ];
-            description = ''
+            description = lib.mdDoc ''
               Whitelist allowed services.
             '';
           };
           preCloneScript = mkOption {
             type = types.nullOr types.path;
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               Runner-specific command script executed before code is pulled.
             '';
           };
           preBuildScript = mkOption {
             type = types.nullOr types.path;
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               Runner-specific command script executed after code is pulled,
               just before build executes.
             '';
@@ -462,7 +391,7 @@ in
           postBuildScript = mkOption {
             type = types.nullOr types.path;
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               Runner-specific command script executed after code is pulled
               and just after build executes.
             '';
@@ -470,22 +399,22 @@ in
           tagList = mkOption {
             type = types.listOf types.str;
             default = [ ];
-            description = ''
+            description = lib.mdDoc ''
               Tag list.
             '';
           };
           runUntagged = mkOption {
             type = types.bool;
             default = false;
-            description = ''
+            description = lib.mdDoc ''
               Register to run untagged builds; defaults to
-              <literal>true</literal> when <option>tagList</option> is empty.
+              `true` when {option}`tagList` is empty.
             '';
           };
           limit = mkOption {
             type = types.int;
             default = 0;
-            description = ''
+            description = lib.mdDoc ''
               Limit how many jobs can be handled concurrently by this service.
               0 (default) simply means don't limit.
             '';
@@ -493,14 +422,14 @@ in
           requestConcurrency = mkOption {
             type = types.int;
             default = 0;
-            description = ''
+            description = lib.mdDoc ''
               Limit number of concurrent requests for new jobs from GitLab.
             '';
           };
           maximumTimeout = mkOption {
             type = types.int;
             default = 0;
-            description = ''
+            description = lib.mdDoc ''
               What is the maximum timeout (in seconds) that will be set for
               job when using this Runner. 0 (default) simply means don't limit.
             '';
@@ -508,7 +437,7 @@ in
           protected = mkOption {
             type = types.bool;
             default = false;
-            description = ''
+            description = lib.mdDoc ''
               When set to true Runner will only run on pipelines
               triggered on protected branches.
             '';
@@ -516,9 +445,9 @@ in
           debugTraceDisabled = mkOption {
             type = types.bool;
             default = false;
-            description = ''
+            description = lib.mdDoc ''
               When set to true Runner will disable the possibility of
-              using the <literal>CI_DEBUG_TRACE</literal> feature.
+              using the `CI_DEBUG_TRACE` feature.
             '';
           };
         };
@@ -528,8 +457,8 @@ in
   config = mkIf cfg.enable {
     warnings = (mapAttrsToList
       (n: v: "services.gitlab-runner.services.${n}.`registrationConfigFile` points to a file in Nix Store. You should use quoted absolute path to prevent this.")
-      (filterAttrs (n: v: isStorePath v.registrationConfigFile) cfg.services))
-    ++ optional (cfg.configFile != null) "services.gitlab-runner.`configFile` is deprecated, please use services.gitlab-runner.`services`.";
+      (filterAttrs (n: v: isStorePath v.registrationConfigFile) cfg.services));
+
     environment.systemPackages = [ cfg.package ];
     systemd.services.gitlab-runner = {
       description = "Gitlab Runner";
@@ -577,5 +506,14 @@ in
     (mkRenamedOptionModule [ "services" "gitlab-runner" "packages" ] [ "services" "gitlab-runner" "extraPackages" ] )
     (mkRemovedOptionModule [ "services" "gitlab-runner" "configOptions" ] "Use services.gitlab-runner.services option instead" )
     (mkRemovedOptionModule [ "services" "gitlab-runner" "workDir" ] "You should move contents of workDir (if any) to /var/lib/gitlab-runner" )
+
+    (mkRenamedOptionModule [ "services" "gitlab-runner" "checkInterval" ] [ "services" "gitlab-runner" "settings" "check_interval" ] )
+    (mkRenamedOptionModule [ "services" "gitlab-runner" "concurrent" ] [ "services" "gitlab-runner" "settings" "concurrent" ] )
+    (mkRenamedOptionModule [ "services" "gitlab-runner" "sentryDSN" ] [ "services" "gitlab-runner" "settings" "sentry_dsn" ] )
+    (mkRenamedOptionModule [ "services" "gitlab-runner" "prometheusListenAddress" ] [ "services" "gitlab-runner" "settings" "listen_address" ] )
+
+    (mkRenamedOptionModule [ "services" "gitlab-runner" "sessionServer" "listenAddress" ] [ "services" "gitlab-runner" "settings" "session_server" "listen_address" ] )
+    (mkRenamedOptionModule [ "services" "gitlab-runner" "sessionServer" "advertiseAddress" ] [ "services" "gitlab-runner" "settings" "session_server" "advertise_address" ] )
+    (mkRenamedOptionModule [ "services" "gitlab-runner" "sessionServer" "sessionTimeout" ] [ "services" "gitlab-runner" "settings" "session_server" "session_timeout" ] )
   ];
 }

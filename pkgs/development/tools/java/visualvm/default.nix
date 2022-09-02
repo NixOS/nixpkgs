@@ -1,12 +1,12 @@
 { stdenv, fetchzip, lib, makeWrapper, makeDesktopItem, jdk, gawk }:
 
 stdenv.mkDerivation rec {
-  version = "2.1.1";
+  version = "2.1.4";
   pname = "visualvm";
 
   src = fetchzip {
     url = "https://github.com/visualvm/visualvm.src/releases/download/${version}/visualvm_${builtins.replaceStrings ["."] [""]  version}.zip";
-    sha256 = "sha256-LXMPdzIOFPzFUx3uufx+2UeJ6mg/9kJXGews4KU3rrU=";
+    sha256 = "sha256-o7gcKJy3gDUV3WPo5vO+5Zyyz1UVC2wGRTxZL69RxNE=";
   };
 
   desktopItem = makeDesktopItem {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
       comment = "Java Troubleshooting Tool";
       desktopName = "VisualVM";
       genericName = "Java Troubleshooting Tool";
-      categories = "Development;";
+      categories = [ "Development" ];
   };
 
   nativeBuildInputs = [ makeWrapper ];

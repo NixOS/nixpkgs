@@ -12,7 +12,7 @@ let
           type = types.bool;
           inherit default;
           example = !default;
-          description = "Whether to make use of the ${description}";
+          description = lib.mdDoc "Whether to make use of the ${description}";
         };
       in {
         base = mkWrapperFeature true ''
@@ -35,18 +35,18 @@ let
   };
 in {
   options.programs.sway = {
-    enable = mkEnableOption ''
+    enable = mkEnableOption (lib.mdDoc ''
       Sway, the i3-compatible tiling Wayland compositor. You can manually launch
       Sway by executing "exec sway" on a TTY. Copy /etc/sway/config to
       ~/.config/sway/config to modify the default configuration. See
-      <link xlink:href="https://github.com/swaywm/sway/wiki" /> and
-      "man 5 sway" for more information'';
+      <https://github.com/swaywm/sway/wiki> and
+      "man 5 sway" for more information'');
 
     wrapperFeatures = mkOption {
       type = wrapperOptions;
       default = { };
       example = { gtk = true; };
-      description = ''
+      description = lib.mdDoc ''
         Attribute set of features to enable in the wrapper.
       '';
     };
@@ -64,10 +64,10 @@ in {
         # use this if they aren't displayed properly:
         export _JAVA_AWT_WM_NONREPARENTING=1
       '';
-      description = ''
+      description = lib.mdDoc ''
         Shell commands executed just before Sway is started. See
-        <link xlink:href="https://github.com/swaywm/sway/wiki/Running-programs-natively-under-wayland" />
-        and <link xlink:href="https://github.com/swaywm/wlroots/blob/master/docs/env_vars.md" />
+        <https://github.com/swaywm/sway/wiki/Running-programs-natively-under-wayland>
+        and <https://github.com/swaywm/wlroots/blob/master/docs/env_vars.md>
         for some useful environment variables.
       '';
     };
@@ -81,7 +81,7 @@ in {
         "--unsupported-gpu"
         "--my-next-gpu-wont-be-nvidia"
       ];
-      description = ''
+      description = lib.mdDoc ''
         Command line arguments passed to launch Sway. Please DO NOT report
         issues if you use an unsupported GPU (proprietary drivers).
       '';
@@ -101,10 +101,10 @@ in {
           termite rofi light
         ]
       '';
-      description = ''
+      description = lib.mdDoc ''
         Extra packages to be installed system wide. See
-        <link xlink:href="https://github.com/swaywm/sway/wiki/Useful-add-ons-for-sway" /> and
-        <link xlink:href="https://github.com/swaywm/sway/wiki/i3-Migration-Guide#common-x11-apps-used-on-i3-with-wayland-alternatives" />
+        <https://github.com/swaywm/sway/wiki/Useful-add-ons-for-sway> and
+        <https://github.com/swaywm/sway/wiki/i3-Migration-Guide#common-x11-apps-used-on-i3-with-wayland-alternatives>
         for a list of useful software.
       '';
     };
@@ -134,6 +134,7 @@ in {
         '';
       };
     };
+    security.polkit.enable = true;
     security.pam.services.swaylock = {};
     hardware.opengl.enable = mkDefault true;
     fonts.enableDefaultFonts = mkDefault true;

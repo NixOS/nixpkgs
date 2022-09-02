@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "blueberry";
-  version = "1.4.6";
+  version = "1.4.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4SKEkoIEflOX5WXJ7X3onrieecT2NoH/eV3H3Cx/SYQ=";
+    sha256 = "sha256-MyIjcTyKn1aC2th6fCOw4cIqrRKatk2s4QD5R9cm83A=";
   };
 
   nativeBuildInputs = [
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bluez-tools
-    cinnamon.xapps
-    gnome.gnome-bluetooth
+    cinnamon.xapp
+    gnome.gnome-bluetooth_1_0
     python3Packages.python
     util-linux
   ];

@@ -1,34 +1,43 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , requests
-, urllib3
-, mock
 , setuptools
+, six
 , stone
-, pythonOlder
+, mock
+, pytest-mock
+, pytestCheckHook
+, sphinxHook
 }:
 
 buildPythonPackage rec {
   pname = "dropbox";
-  version = "11.26.0";
+  version = "11.33.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
+  outputs = ["out" "doc"];
 
   src = fetchFromGitHub {
     owner = "dropbox";
     repo = "dropbox-sdk-python";
-    rev = "v${version}";
-    sha256 = "0ncx41jg2wbsklqkrh0zjwjs3kfkscz8d6gcbsxqa1qpa3pa5519";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-re1TYujoLWjvDE0/ikTMQmXufdS1Q5IMViiFY2/QRMw=";
   };
 
   propagatedBuildInputs = [
     requests
-    urllib3
-    mock
     setuptools
+    six
     stone
+  ];
+
+  checkInputs = [
+    mock
+    pytest-mock
+    pytestCheckHook
   ];
 
   postPatch = ''
@@ -36,17 +45,39 @@ buildPythonPackage rec {
       --replace "'pytest-runner == 5.2.0'," ""
   '';
 
-  # Set DROPBOX_TOKEN environment variable to a valid token.
-  doCheck = false;
+  doCheck = true;
 
   pythonImportsCheck = [
     "dropbox"
+  ];
+  nativeBuildInputs = [ sphinxHook ];
+
+  # Set SCOPED_USER_DROPBOX_TOKEN environment variable to a valid value.
+  disabledTests = [
+    "test_default_oauth2_urls"
+    "test_bad_auth"
+    "test_multi_auth"
+    "test_refresh"
+    "test_app_auth"
+    "test_downscope"
+    "test_rpc"
+    "test_upload_download"
+    "test_bad_upload_types"
+    "test_clone_when_user_linked"
+    "test_with_path_root_constructor"
+    "test_path_root"
+    "test_path_root_err"
+    "test_versioned_route"
+    "test_team"
+    "test_as_user"
+    "test_as_admin"
+    "test_clone_when_team_linked"
   ];
 
   meta = with lib; {
     description = "Python library for Dropbox's HTTP-based Core and Datastore APIs";
     homepage = "https://github.com/dropbox/dropbox-sdk-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ sfrijters ];
   };
 }

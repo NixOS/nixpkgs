@@ -9,24 +9,16 @@
 
 stdenv.mkDerivation rec {
   pname = "openexr";
-  version = "3.1.3";
-
-  outputs = [ "bin" "dev" "out" "doc" ];
+  version = "3.1.5";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openexr";
     rev = "v${version}";
-    sha256 = "sha256-Bi6yTcZBWTsWWMm3A7FVYblvSXKLSkHmhGvpNYGiOzE=";
+    sha256 = "sha256-mmzrMCYyAAa1z8fLZVbaTL1TZzdRaRTLgK+wzPuH4tg=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "CVE-2021-45942.patch";
-      url = "https://github.com/AcademySoftwareFoundation/openexr/commit/11cad77da87c4fa2aab7d58dd5339e254db7937e.patch";
-      sha256 = "1qa8662ga5i0lyfi9mkj9s9bygdg7h1i6ahki28c664kxrlsakch";
-    })
-  ];
+  outputs = [ "bin" "dev" "out" "doc" ];
 
   # tests are determined to use /var/tmp on unix
   postPatch = ''
@@ -35,6 +27,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  cmakeFlags = lib.optional stdenv.hostPlatform.isStatic "-DCMAKE_SKIP_RPATH=ON";
+
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ imath zlib ];
 
@@ -42,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A high dynamic-range (HDR) image file format";
-    homepage = "https://www.openexr.com/";
+    homepage = "https://www.openexr.com";
     license = licenses.bsd3;
     maintainers = with maintainers; [ paperdigits ];
     platforms = platforms.all;

@@ -10,14 +10,16 @@
 
 buildPythonPackage rec {
   pname = "pyowm";
-  version = "3.2.0";
+  version = "3.3.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "csparpa";
     repo = pname;
     rev = version;
-    sha256 = "0sq8rxcgdiayl5gy4qhkvvsdq1d93sbzn0nfg8f1vr8qxh8qkfq4";
+    sha256 = "sha256-cSOhm3aDksLBChZzgw1gjUjLQkElR2/xGFMOb9K9RME=";
   };
 
   propagatedBuildInputs = [
@@ -26,12 +28,18 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   # Run only tests which don't require network access
-  pytestFlagsArray = [ "tests/unit" ];
+  pytestFlagsArray = [
+    "tests/unit"
+  ];
 
-  pythonImportsCheck = [ "pyowm" ];
+  pythonImportsCheck = [
+    "pyowm"
+  ];
 
   meta = with lib; {
     description = "Python wrapper around the OpenWeatherMap web API";

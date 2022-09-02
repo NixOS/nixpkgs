@@ -28,17 +28,17 @@ in
           "192.168.0.2" = [ "fileserver.local" "nameserver.local" ];
         };
       '';
-      description = ''
+      description = lib.mdDoc ''
         Locally defined maps of hostnames to IP addresses.
       '';
     };
 
     networking.hostFiles = lib.mkOption {
       type = types.listOf types.path;
-      defaultText = literalDocBook "Hosts from <option>networking.hosts</option> and <option>networking.extraHosts</option>";
+      defaultText = literalMD "Hosts from {option}`networking.hosts` and {option}`networking.extraHosts`";
       example = literalExpression ''[ "''${pkgs.my-blocklist-package}/share/my-blocklist/hosts" ]'';
-      description = ''
-        Files that should be concatenated together to form <filename>/etc/hosts</filename>.
+      description = lib.mdDoc ''
+        Files that should be concatenated together to form {file}`/etc/hosts`.
       '';
     };
 
@@ -46,9 +46,9 @@ in
       type = types.lines;
       default = "";
       example = "192.168.0.1 lanlocalhost";
-      description = ''
-        Additional verbatim entries to be appended to <filename>/etc/hosts</filename>.
-        For adding hosts from derivation results, use <option>networking.hostFiles</option> instead.
+      description = lib.mdDoc ''
+        Additional verbatim entries to be appended to {file}`/etc/hosts`.
+        For adding hosts from derivation results, use {option}`networking.hostFiles` instead.
       '';
     };
 
@@ -60,7 +60,7 @@ in
         "3.nixos.pool.ntp.org"
       ];
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         The set of NTP servers from which to synchronise.
       '';
     };
@@ -70,7 +70,7 @@ in
       default = lib.mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           This option specifies the default value for httpProxy, httpsProxy, ftpProxy and rsyncProxy.
         '';
         example = "http://127.0.0.1:3128";
@@ -80,7 +80,7 @@ in
         type = types.nullOr types.str;
         default = cfg.proxy.default;
         defaultText = literalExpression "config.${opt.proxy.default}";
-        description = ''
+        description = lib.mdDoc ''
           This option specifies the http_proxy environment variable.
         '';
         example = "http://127.0.0.1:3128";
@@ -90,7 +90,7 @@ in
         type = types.nullOr types.str;
         default = cfg.proxy.default;
         defaultText = literalExpression "config.${opt.proxy.default}";
-        description = ''
+        description = lib.mdDoc ''
           This option specifies the https_proxy environment variable.
         '';
         example = "http://127.0.0.1:3128";
@@ -100,7 +100,7 @@ in
         type = types.nullOr types.str;
         default = cfg.proxy.default;
         defaultText = literalExpression "config.${opt.proxy.default}";
-        description = ''
+        description = lib.mdDoc ''
           This option specifies the ftp_proxy environment variable.
         '';
         example = "http://127.0.0.1:3128";
@@ -110,7 +110,7 @@ in
         type = types.nullOr types.str;
         default = cfg.proxy.default;
         defaultText = literalExpression "config.${opt.proxy.default}";
-        description = ''
+        description = lib.mdDoc ''
           This option specifies the rsync_proxy environment variable.
         '';
         example = "http://127.0.0.1:3128";
@@ -120,7 +120,7 @@ in
         type = types.nullOr types.str;
         default = cfg.proxy.default;
         defaultText = literalExpression "config.${opt.proxy.default}";
-        description = ''
+        description = lib.mdDoc ''
           This option specifies the all_proxy environment variable.
         '';
         example = "http://127.0.0.1:3128";
@@ -129,7 +129,7 @@ in
       noProxy = lib.mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           This option specifies the no_proxy environment variable.
           If a default proxy is used and noProxy is null,
           then noProxy will be set to 127.0.0.1,localhost.
@@ -141,7 +141,7 @@ in
         type = types.attrs;
         internal = true;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Environment variables used for the network proxy.
         '';
       };

@@ -8,7 +8,9 @@
 , elfutils
 , python3
 , libiberty
-, libopcodes
+# TODO: switch back to latest versions when upstream ports
+# to binutils-2.39: https://github.com/SimonKagstrom/kcov/issues/381
+, libopcodes_2_38
 , runCommand
 , gcc
 , rustc
@@ -30,7 +32,7 @@ let
       preConfigure = "patchShebangs src/bin-to-c-source.py";
       nativeBuildInputs = [ cmake pkg-config python3 ];
 
-      buildInputs = [ curl zlib elfutils libiberty libopcodes ];
+      buildInputs = [ curl zlib elfutils libiberty libopcodes_2_38 ];
 
       strictDeps = true;
 

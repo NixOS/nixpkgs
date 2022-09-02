@@ -7,12 +7,13 @@
 , pythonOlder
 , pyyaml
 , starkbank-ecdsa
+, six
 , werkzeug
 }:
 
 buildPythonPackage rec {
   pname = "sendgrid";
-  version = "6.9.5";
+  version = "6.9.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,12 +22,13 @@ buildPythonPackage rec {
     owner = pname;
     repo = "sendgrid-python";
     rev = version;
-    sha256 = "1r8xh0c6wivrajj6gl1hv25vsb9i79n19nd4x53207i5vz9d55g5";
+    sha256 = "sha256-Lx84jmgJz/J5MJtJyqDTVIbN6H63gD2rkJrdNeojd08=";
   };
 
   propagatedBuildInputs = [
     python-http-client
     starkbank-ecdsa
+    six
   ];
 
   checkInputs = [

@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "fsm";
+  pname = "fsm";
   version = "2017-04-16";
 
   src = fetchFromGitHub {

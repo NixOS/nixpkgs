@@ -20,7 +20,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the RabbitMQ server, an Advanced Message
           Queuing Protocol (AMQP) broker.
         '';
@@ -30,7 +30,7 @@ in
         default = pkgs.rabbitmq-server;
         type = types.package;
         defaultText = literalExpression "pkgs.rabbitmq-server";
-        description = ''
+        description = lib.mdDoc ''
           Which rabbitmq package to use.
         '';
       };
@@ -38,12 +38,12 @@ in
       listenAddress = mkOption {
         default = "127.0.0.1";
         example = "";
-        description = ''
+        description = lib.mdDoc ''
           IP address on which RabbitMQ will listen for AMQP
           connections.  Set to the empty string to listen on all
           interfaces.  Note that RabbitMQ creates a user named
-          <literal>guest</literal> with password
-          <literal>guest</literal> by default, so you should delete
+          `guest` with password
+          `guest` by default, so you should delete
           this user if you intend to allow external access.
 
           Together with 'port' setting it's mostly an alias for
@@ -55,7 +55,7 @@ in
 
       port = mkOption {
         default = 5672;
-        description = ''
+        description = lib.mdDoc ''
           Port on which RabbitMQ will listen for AMQP connections.
         '';
         type = types.port;
@@ -64,7 +64,7 @@ in
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/rabbitmq";
-        description = ''
+        description = lib.mdDoc ''
           Data directory for rabbitmq.
         '';
       };
@@ -72,7 +72,7 @@ in
       cookie = mkOption {
         default = "";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Erlang cookie is a string of arbitrary length which must
           be the same for several nodes to be allowed to communicate.
           Leave empty to generate automatically.
@@ -88,15 +88,15 @@ in
             "auth_backends.1.authz" = "rabbit_auth_backend_internal";
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           Configuration options in RabbitMQ's new config file format,
           which is a simple key-value format that can not express nested
-          data structures. This is known as the <literal>rabbitmq.conf</literal> file,
+          data structures. This is known as the `rabbitmq.conf` file,
           although outside NixOS that filename may have Erlang syntax, particularly
           prior to RabbitMQ 3.7.0.
 
           If you do need to express nested data structures, you can use
-          <literal>config</literal> option. Configuration from <literal>config</literal>
+          `config` option. Configuration from `config`
           will be merged into these options by RabbitMQ at runtime to
           form the final configuration.
 
@@ -108,14 +108,14 @@ in
       config = mkOption {
         default = "";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Verbatim advanced configuration file contents using the Erlang syntax.
-          This is also known as the <literal>advanced.config</literal> file or the old config format.
+          This is also known as the `advanced.config` file or the old config format.
 
-          <literal>configItems</literal> is preferred whenever possible. However, nested
-          data structures can only be expressed properly using the <literal>config</literal> option.
+          `configItems` is preferred whenever possible. However, nested
+          data structures can only be expressed properly using the `config` option.
 
-          The contents of this option will be merged into the <literal>configItems</literal>
+          The contents of this option will be merged into the `configItems`
           by RabbitMQ at runtime to form the final configuration.
 
           See the second table on https://www.rabbitmq.com/configure.html#config-items
@@ -126,21 +126,21 @@ in
       plugins = mkOption {
         default = [ ];
         type = types.listOf types.str;
-        description = "The names of plugins to enable";
+        description = lib.mdDoc "The names of plugins to enable";
       };
 
       pluginDirs = mkOption {
         default = [ ];
         type = types.listOf types.path;
-        description = "The list of directories containing external plugins";
+        description = lib.mdDoc "The list of directories containing external plugins";
       };
 
       managementPlugin = {
-        enable = mkEnableOption "the management plugin";
+        enable = mkEnableOption (lib.mdDoc "the management plugin");
         port = mkOption {
           default = 15672;
           type = types.port;
-          description = ''
+          description = lib.mdDoc ''
             On which port to run the management plugin
           '';
         };

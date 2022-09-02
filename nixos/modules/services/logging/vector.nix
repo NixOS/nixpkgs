@@ -6,12 +6,12 @@ let cfg = config.services.vector;
 in
 {
   options.services.vector = {
-    enable = mkEnableOption "Vector";
+    enable = mkEnableOption (lib.mdDoc "Vector");
 
     journaldAccess = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable Vector to access journald.
       '';
     };
@@ -19,7 +19,7 @@ in
     settings = mkOption {
       type = (pkgs.formats.json { }).type;
       default = { };
-      description = ''
+      description = lib.mdDoc ''
         Specify the configuration for Vector in Nix.
       '';
     };

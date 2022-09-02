@@ -1,12 +1,13 @@
 { lib, stdenv, fetchFromGitHub, which, ocaml, findlib }:
 
-if !lib.versionAtLeast ocaml.version "4.10"
+if lib.versionOlder ocaml.version "4.10"
 then throw "camlpdf is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
   version = "2.5";
-  name = "ocaml${ocaml.version}-camlpdf-${version}";
+  pname = "ocaml${ocaml.version}-camlpdf";
+
   src = fetchFromGitHub {
     owner = "johnwhitington";
     repo = "camlpdf";
@@ -14,7 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:1qmsa0xgi960y7r20mvf8hxiiml7l1908s4dm7nq262f19w51gsl";
   };
 
-  buildInputs = [ which ocaml findlib ];
+  nativeBuildInputs = [ which ocaml findlib ];
+
+  strictDeps = true;
 
   preInstall = ''
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs

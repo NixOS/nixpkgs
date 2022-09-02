@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , makeWrapper
-, chafa
 , coreutils
 , curl
 , dmenu
@@ -16,25 +15,32 @@
 
 stdenv.mkDerivation rec {
   pname = "ytfzf";
-  version = "2.1";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ytfzf";
     rev = "v${version}";
-    hash = "sha256-NJLXXam7FmBWj9sM+S71e5o5e6OtVpw0m32kUo3Fbec=";
+    hash = "sha256-nci2VXto9LptfNHBmLGxfMXQnzbVP1+GlvllOqWFGKU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   dontBuild = true;
 
-  installFlags = [ "PREFIX=${placeholder "out"}" "doc" ];
+  installFlags = [
+    "PREFIX="
+    "DESTDIR=${placeholder "out"}"
+    "doc"
+    "addons"
+  ];
 
   postInstall = ''
-    wrapProgram "$out/bin/ytfzf" --prefix PATH : ${lib.makeBinPath [
-      chafa coreutils curl dmenu fzf gnused jq mpv ueberzug yt-dlp
-    ]}
+    wrapProgram "$out/bin/ytfzf" \
+      --prefix PATH : ${lib.makeBinPath [
+        coreutils curl dmenu fzf gnused jq mpv ueberzug yt-dlp
+      ]} \
+      --set YTFZF_SYSTEM_ADDON_DIR "$out/share/ytfzf/addons"
   '';
 
   meta = with lib; {

@@ -123,7 +123,7 @@ let
       unwrapped = neovim;
       initRc = neovimRcContent;
 
-      tests = callPackage ./tests.nix {
+      tests = callPackage ./tests {
       };
     };
 

@@ -1,20 +1,20 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, autoreconfHook
-, bash, fuse, libmspack, openssl, pam, xercesc, icu, libdnet, procps, libtirpc, rpcsvc-proto
+, bash, fuse3, libmspack, openssl, pam, xercesc, icu, libdnet, procps, libtirpc, rpcsvc-proto
 , libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst
 , pkg-config, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute2, dbus, systemd, which
-, libdrm, udev
+, libdrm, udev, util-linux
 , withX ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "open-vm-tools";
-  version = "11.3.5";
+  version = "12.1.0";
 
   src = fetchFromGitHub {
     owner  = "vmware";
     repo   = "open-vm-tools";
     rev    = "stable-${version}";
-    sha256 = "03fahljrijq4ij8a4v8d7806mpf22ppkgr61n5s974g3xfdvpl13";
+    hash = "sha256-PgrLu0Bm9Vom5WNl43312QFWKojdXDAGn3Nvj4hzPrQ=";
   };
 
   sourceRoot = "${src.name}/open-vm-tools";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
-  buildInputs = [ fuse glib icu libdnet libdrm libmspack libtirpc openssl pam procps rpcsvc-proto udev xercesc ]
+  buildInputs = [ fuse3 glib icu libdnet libdrm libmspack libtirpc openssl pam procps rpcsvc-proto udev xercesc ]
       ++ lib.optionals withX [ gdk-pixbuf-xlib gtk3 gtkmm3 libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
 
   postPatch = ''
@@ -37,12 +37,20 @@ stdenv.mkDerivation rec {
 
      # Make reboot work, shutdown is not in /sbin on NixOS
      sed -i 's,/sbin/shutdown,shutdown,' lib/system/systemLinux.c
+
+     # Fix paths to fuse3 (we do not use fuse2 so that is not modified)
+     sed -i 's,/bin/fusermount3,${fuse3}/bin/fusermount3,' vmhgfs-fuse/config.c
+
+     substituteInPlace services/plugins/vix/foundryToolsDaemon.c \
+      --replace "/usr/bin/vmhgfs-fuse" "${placeholder "out"}/bin/vmhgfs-fuse" \
+      --replace "/bin/mount" "${util-linux}/bin/mount"
   '';
 
   configureFlags = [
     "--without-kernel-modules"
     "--without-xmlsecurity"
     "--with-udev-rules-dir=${placeholder "out"}/lib/udev/rules.d"
+    "--with-fuse=fuse3"
   ] ++ lib.optional (!withX) "--without-x";
 
   enableParallelBuilding = true;

@@ -9,7 +9,9 @@
 # expressions are ever made modular at the top level) can just use
 # types.submodule instead of using eval-config.nix
 evalConfigArgs@
-{ # !!! system can be set modularly, would be nice to remove
+{ # !!! system can be set modularly, would be nice to remove,
+  #     however, removing or changing this default is too much
+  #     of a breaking change. To set it modularly, pass `null`.
   system ? builtins.currentSystem
 , # !!! is this argument needed any more? The pkgs argument can
   # be set modularly anyway.
@@ -21,6 +23,7 @@ evalConfigArgs@
 , # !!! See comment about args in lib/modules.nix
   specialArgs ? {}
 , modules
+, modulesLocation ? (builtins.unsafeGetAttrPos "modules" evalConfigArgs).file or null
 , # !!! See comment about check in lib/modules.nix
   check ? true
 , prefix ? []
@@ -47,12 +50,7 @@ let
       # this.  Since the latter defaults to the former, the former should
       # default to the argument. That way this new default could propagate all
       # they way through, but has the last priority behind everything else.
-      nixpkgs.system = lib.mkDefault system;
-
-      # Stash the value of the `system` argument. When using `nesting.children`
-      # we want to have the same default value behavior (immediately above)
-      # without any interference from the user's configuration.
-      nixpkgs.initialSystem = system;
+      nixpkgs.system = lib.mkIf (system != null) (lib.mkDefault system);
 
       _module.args.pkgs = lib.mkIf (pkgs_ != null) (lib.mkForce pkgs_);
     };
@@ -74,7 +72,18 @@ let
         _module.check = lib.mkDefault check;
       };
     };
-  allUserModules = modules ++ legacyModules;
+
+  allUserModules =
+    let
+      # Add the invoking file (or specified modulesLocation) as error message location
+      # for modules that don't have their own locations; presumably inline modules.
+      locatedModules =
+        if modulesLocation == null then
+          modules
+        else
+          map (lib.setDefaultModuleLocation modulesLocation) modules;
+    in
+      locatedModules ++ legacyModules;
 
   noUserModules = evalModulesMinimal ({
     inherit prefix specialArgs;

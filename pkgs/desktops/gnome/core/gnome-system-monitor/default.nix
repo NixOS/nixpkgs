@@ -12,7 +12,6 @@
 , wrapGAppsHook
 , meson
 , ninja
-, python3
 , gsettings-desktop-schemas
 , itstool
 , gnome
@@ -24,12 +23,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-system-monitor";
-  version = "41.0";
+  version = "42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-system-monitor/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "x/xExhlJt5SwKJlo67vMDBX4z8PZ5Fv6qB7UXBITnl8=";
+    sha256 = "EyOdIgMiAaIr0pgzxXW2hIFnANLeFooVMCI1d8XAddw=";
   };
+
+  patches = [
+    # Fix pkexec detection on NixOS.
+    ./fix-paths.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -38,7 +42,6 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     meson
     ninja
-    python3
   ];
 
   buildInputs = [
@@ -57,12 +60,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-    sed -i '/gtk-update-icon-cache/s/^/#/' meson_post_install.py
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {

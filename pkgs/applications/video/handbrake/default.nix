@@ -11,7 +11,7 @@
 , lib
 , fetchFromGitHub
   # For tests
-, testVersion
+, testers
 , runCommand
 , fetchurl
   # Main build tools
@@ -57,10 +57,10 @@
 , libdvdcss
 , libbluray
   # Darwin-specific
-, AudioToolbox ? null
-, Foundation ? null
-, libobjc ? null
-, VideoToolbox ? null
+, AudioToolbox
+, Foundation
+, libobjc
+, VideoToolbox
   # GTK
   # NOTE: 2019-07-19: The gtk3 package has a transitive dependency on dbus,
   # which in turn depends on systemd. systemd is not supported on Darwin, so
@@ -206,7 +206,7 @@ let self = stdenv.mkDerivation rec {
   ++ optional (!useGtk) "--disable-gtk"
   ++ optional useFdk "--enable-fdk-aac"
   ++ optional stdenv.isDarwin "--disable-xcode"
-  ++ optional (stdenv.isx86_32 || stdenv.isx86_64) "--harden";
+  ++ optional stdenv.hostPlatform.isx86 "--harden";
 
   # NOTE: 2018-12-27: Check NixOS HandBrake test if changing
   NIX_LDFLAGS = [ "-lx265" ];
@@ -230,7 +230,7 @@ let self = stdenv.mkDerivation rec {
         HandBrakeCLI -i ${testMkv} -o test.mkv -e x264 -q 20 -B 160
         test -e test.mkv
       '';
-    version = testVersion { package = self; command = "HandBrakeCLI --version"; };
+    version = testers.testVersion { package = self; command = "HandBrakeCLI --version"; };
   };
 
   meta = with lib; {

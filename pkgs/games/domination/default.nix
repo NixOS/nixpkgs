@@ -6,20 +6,19 @@
 , ant
 , makeWrapper
 , makeDesktopItem
+, copyDesktopItems
 , nixosTests
 }:
 
 let
   desktopItem = makeDesktopItem {
-    type = "Application";
-    name = "Domination";
+    name = "domination";
     desktopName = "Domination";
     exec = "domination";
     icon = "domination";
   };
   editorDesktopItem = makeDesktopItem {
-    type = "Application";
-    name = "Domination Map Editor";
+    name = "domination-map-editor";
     desktopName = "Domination Map Editor";
     exec = "domination-map-editor";
     icon = "domination";
@@ -27,7 +26,7 @@ let
 
 in stdenv.mkDerivation {
   pname = "domination";
-  version = "1.2.4";
+  version = "1.2.5";
 
   # The .zip releases do not contain the build.xml file
   src = fetchsvn {
@@ -35,22 +34,31 @@ in stdenv.mkDerivation {
     # There are no tags in the repository.
     # Look for commits like "new version x.y.z info on website"
     # or "website update for x.y.z".
-    rev = "2109";
-    sha256 = "sha256-awTaEkv0zUXgrKVKuFzi5sgHgrfiNmAFMODO5U0DL6I=";
+    rev = "2212";
+    sha256 = "sha256-XuPMxGDap8x7I+U7+1C+DlkQkoV/u2FCwYyTZFWmYHM=";
   };
 
   nativeBuildInputs = [
     jdk8
     ant
     makeWrapper
+    copyDesktopItems
   ];
 
   buildPhase = ''
+    runHook preBuild
     cd swingUI
     ant
+    runHook postBuild
   '';
 
+  desktopItems = [
+    desktopItem
+    editorDesktopItem
+  ];
+
   installPhase = ''
+    runHook preInstall
     # Remove unnecessary files and launchers (they'd need to be wrapped anyway)
     rm -r \
       build/game/src.zip \
@@ -65,19 +73,14 @@ in stdenv.mkDerivation {
     # Reimplement the two launchers mentioned in Unix_shortcutSpec.xml with makeWrapper
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/domination \
-      --run "cd $out/share/domination" \
+      --chdir "$out/share/domination" \
       --add-flags "-jar $out/share/domination/Domination.jar"
     makeWrapper ${jre}/bin/java $out/bin/domination-map-editor \
-      --run "cd $out/share/domination" \
+      --chdir "$out/share/domination" \
       --add-flags "-cp $out/share/domination/Domination.jar net.yura.domination.ui.swinggui.SwingGUIFrame"
 
-    install -Dm644 \
-      ${desktopItem}/share/applications/Domination.desktop \
-      $out/share/applications/Domination.desktop
-    install -Dm644 \
-      "${editorDesktopItem}/share/applications/Domination Map Editor.desktop" \
-      "$out/share/applications/Domination Map Editor.desktop"
     install -Dm644 build/game/resources/icon.png $out/share/pixmaps/domination.png
+    runHook postInstall
   '';
 
   passthru.tests = {
@@ -94,6 +97,10 @@ in stdenv.mkDerivation {
       It includes a map editor, a simple map format, multiplayer network play,
       single player, hotseat, 5 user interfaces and many more features.
     '';
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # source bundles dependencies as jars
+    ];
     license = licenses.gpl3;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;

@@ -19,18 +19,20 @@
 , flex
 , librsvg
 , check
+, glib
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "rofi-unwrapped";
-  version = "1.7.2";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "davatorium";
     repo = "rofi";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "vre8kFou01P7S6KBBtfzvfFP554mhV+d6rjvY+GfWXk=";
+    sha256 = "sha256-3XFusKeckagEPfbLtt1xAVTEfn1Qebdi/Iq1AYbHCR4=";
   };
 
   preConfigure = ''
@@ -39,14 +41,13 @@ stdenv.mkDerivation rec {
     sed -i 's/~root/~nobody/g' test/helper-expand.c
   '';
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  depsBuildBuild = [ buildPackages.stdenv.cc pkg-config glib ];
+  nativeBuildInputs = [ meson ninja pkg-config flex bison ];
   buildInputs = [
     libxkbcommon
     pango
     cairo
     git
-    bison
-    flex
     librsvg
     check
     libstartup_notification

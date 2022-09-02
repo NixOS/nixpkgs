@@ -1,14 +1,14 @@
-{ lib, buildGo117Module, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
-buildGo117Module rec {
+buildGoModule rec {
   pname = "vcluster";
-  version = "0.5.3";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+rLDRVfB6wZ1wYoLE2wwRxzS6GmI6KYtOKdXZd+LnnU=";
+    sha256 = "sha256-aFTugqWr/9e3wQLL4yre2T8CUKq8P0HZLsES8lFZKHY=";
   };
 
   vendorSha256 = null;
@@ -40,6 +40,6 @@ buildGo117Module rec {
     downloadPage = "https://github.com/loft-sh/vcluster";
     homepage = "https://www.vcluster.com/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ peterromfeldhk ];
+    maintainers = with maintainers; [ peterromfeldhk berryp ];
   };
 }

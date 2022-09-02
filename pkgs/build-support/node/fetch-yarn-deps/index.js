@@ -33,11 +33,11 @@ const urlToName = url => {
 	}
 }
 
-const downloadFileHttps = (fileName, url, expectedHash) => {
+const downloadFileHttps = (fileName, url, expectedHash, hashType = 'sha1') => {
 	return new Promise((resolve, reject) => {
 		https.get(url, (res) => {
 			const file = fs.createWriteStream(fileName)
-			const hash = crypto.createHash('sha1')
+			const hash = crypto.createHash(hashType)
 			res.pipe(file)
 			res.pipe(hash).setEncoding('hex')
 			res.on('end', () => {
@@ -100,6 +100,10 @@ const downloadPkg = (pkg, verbose) => {
 	} else if (isGitUrl(url)) {
 		return downloadGit(fileName, url.replace(/^git\+/, ''), hash)
 	} else if (url.startsWith('https://')) {
+		if (typeof pkg.integrity === 'string' || pkg.integrity instanceof String) {
+			const [ type, checksum ] = pkg.integrity.split('-')
+			return downloadFileHttps(fileName, url, Buffer.from(checksum, 'base64').toString('hex'), type)
+		}
 		return downloadFileHttps(fileName, url, hash)
 	} else if (url.startsWith('file:')) {
 		console.warn(`ignoring unsupported file:path url "${url}"`)

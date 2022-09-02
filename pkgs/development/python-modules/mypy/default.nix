@@ -14,22 +14,22 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "0.931";
+  version = "0.961";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy";
     rev = "v${version}";
-    sha256 = "1v83flrdxh8grcp40qw04q4hzjflih9xwib64078vsxv2w36f817";
+    hash = "sha256-K6p73+/SeWniMSD/mP09qwqFOBr/Pqohl+PaTDVpvZI=";
   };
 
   patches = [
     # FIXME: Remove patch after upstream has decided the proper solution.
     #        https://github.com/python/mypy/pull/11143
     (fetchpatch {
-      url = "https://github.com/python/mypy/commit/f1755259d54330cd087cae763cd5bbbff26e3e8a.patch";
-      sha256 = "sha256-5gPahX2X6+/qUaqDQIGJGvh9lQ2EDtks2cpQutgbOHk=";
+      url = "https://github.com/python/mypy/commit/2004ae023b9d3628d9f09886cbbc20868aee8554.patch";
+      hash = "sha256-y+tXvgyiECO5+66YLvaje8Bz5iPvfWNIBJcsnZ2nOdI=";
     })
   ];
 

@@ -96,9 +96,9 @@ We use jbidwatcher as an example for a discontinued project here.
 
 1. Have Nixpkgs checked out locally and up to date.
 1. Create a new branch for your change, e.g. `git checkout -b jbidwatcher`
-1. Remove the actual package including its directory, e.g. `rm -rf pkgs/applications/misc/jbidwatcher`
+1. Remove the actual package including its directory, e.g. `git rm -rf pkgs/applications/misc/jbidwatcher`
 1. Remove the package from the list of all packages (`pkgs/top-level/all-packages.nix`).
-1. Add an alias for the package name in `pkgs/top-level/aliases.nix` (There is also `pkgs/misc/vim-plugins/aliases.nix`. Package sets typically do not have aliases, so we can't add them there.)
+1. Add an alias for the package name in `pkgs/top-level/aliases.nix` (There is also `pkgs/applications/editors/vim/plugins/aliases.nix`. Package sets typically do not have aliases, so we can't add them there.)
 
     For example in this case:
 
@@ -167,24 +167,30 @@ Packages with automated tests are much more likely to be merged in a timely fash
 
 ### Tested compilation of all pkgs that depend on this change using `nixpkgs-review` {#submitting-changes-tested-compilation}
 
-If you are updating a package’s version, you can use nixpkgs-review to make sure all packages that depend on the updated package still compile correctly. The `nixpkgs-review` utility can look for and build all dependencies either based on uncommited changes with the `wip` option or specifying a github pull request number.
+If you are updating a package’s version, you can use `nixpkgs-review` to make sure all packages that depend on the updated package still compile correctly. The `nixpkgs-review` utility can look for and build all dependencies either based on uncommitted changes with the `wip` option or specifying a GitHub pull request number.
 
-review changes from pull request number 12345:
+Review changes from pull request number 12345:
 
 ```ShellSession
-nix run nixpkgs.nixpkgs-review -c nixpkgs-review pr 12345
+nix-shell -p nixpkgs-review --run "nixpkgs-review pr 12345"
 ```
 
-review uncommitted changes:
+Alternatively, with flakes (and analogously for the other commands below):
 
 ```ShellSession
-nix run nixpkgs.nixpkgs-review -c nixpkgs-review wip
+nix run nixpkgs#nixpkgs-review -- pr 12345
 ```
 
-review changes from last commit:
+Review uncommitted changes:
 
 ```ShellSession
-nix run nixpkgs.nixpkgs-review -c nixpkgs-review rev HEAD
+nix-shell -p nixpkgs-review --run "nixpkgs-review wip"
+```
+
+Review changes from last commit:
+
+```ShellSession
+nix-shell -p nixpkgs-review --run "nixpkgs-review rev HEAD"
 ```
 
 ### Tested execution of all binary files (usually in `./result/bin/`) {#submitting-changes-tested-execution}
@@ -227,7 +233,7 @@ digraph {
 }
 ```
 
-[This GitHub Action](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/periodic-merge-6h.yml) brings changes from `master` to `staging-next` and from `staging-next` to `staging` every 6 hours.
+[This GitHub Action](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/periodic-merge-6h.yml) brings changes from `master` to `staging-next` and from `staging-next` to `staging` every 6 hours; these are the blue arrows in the diagram above.  The purple arrows in the diagram above are done manually and much less frequently.  You can get an idea of how often these merges occur by looking at the git history.
 
 
 ### Master branch {#submitting-changes-master-branch}
@@ -236,7 +242,7 @@ The `master` branch is the main development branch. It should only see non-break
 
 ### Staging branch {#submitting-changes-staging-branch}
 
-The `staging` branch is a development branch where mass-rebuilds go. It should only see non-breaking mass-rebuild commits. That means it is not to be used for testing, and changes must have been well tested already. If the branch is already in a broken state, please refrain from adding extra new breakages.
+The `staging` branch is a development branch where mass-rebuilds go. Mass rebuilds are commits that cause rebuilds for many packages, like more than 500 (or perhaps, if it's 'light' packages, 1000). It should only see non-breaking mass-rebuild commits. That means it is not to be used for testing, and changes must have been well tested already. If the branch is already in a broken state, please refrain from adding extra new breakages.
 
 ### Staging-next branch {#submitting-changes-staging-next-branch}
 

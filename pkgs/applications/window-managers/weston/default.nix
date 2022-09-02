@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, wayland-scanner
+{ lib, stdenv, fetchurl, fetchpatch, meson, ninja, pkg-config, wayland-scanner, python3
 , wayland, libGL, mesa, libxkbcommon, cairo, libxcb
 , libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput, libevdev
 , colord, lcms2, pipewire ? null
@@ -7,17 +7,24 @@
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
 }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "weston";
-  version = "9.0.0";
+  version = "10.0.1";
 
   src = fetchurl {
-    url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "1zlql0xgiqc3pvgbpnnvj4xvpd91pwva8qf83xfb23if377ddxaw";
+    url = "https://gitlab.freedesktop.org/wayland/weston/-/releases/${version}/downloads/weston-${version}.tar.xz";
+    sha256 = "05a10gfbadyxkwgsncc5vc343f493csgh10vk0878nl6d98557la";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
+  patches = [
+    # Fix race condition in build system
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/wayland/weston/-/commit/0d3e438d080433ed5d203c876e7de6c7f8a14f98.patch";
+      sha256 = "sha256-d9NG1vUIuL4jpXqCo0myz/97JuFYesH+8kJnegQXeMU=";
+    })
+  ];
+
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner python3 ];
   buildInputs = [
     wayland libGL mesa libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
     mtdev libjpeg pam dbus libinput libevdev pango libunwind freerdp vaapi libva
@@ -26,25 +33,25 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags= [
-    "-Dbackend-drm-screencast-vaapi=${boolToString (vaapi != null)}"
-    "-Dbackend-rdp=${boolToString (freerdp != null)}"
-    "-Dxwayland=${boolToString (xwayland != null)}" # Default is true!
+    "-Dbackend-drm-screencast-vaapi=${lib.boolToString (vaapi != null)}"
+    "-Dbackend-rdp=${lib.boolToString (freerdp != null)}"
+    "-Dxwayland=${lib.boolToString (xwayland != null)}" # Default is true!
     "-Dremoting=false" # TODO
-    "-Dpipewire=${boolToString (pipewire != null)}"
-    "-Dimage-webp=${boolToString (libwebp != null)}"
+    "-Dpipewire=${lib.boolToString (pipewire != null)}"
+    "-Dimage-webp=${lib.boolToString (libwebp != null)}"
     "-Ddemo-clients=false"
     "-Dsimple-clients="
     "-Dtest-junit-xml=false"
     # TODO:
     #"--enable-clients"
     #"--disable-setuid-install" # prevent install target to chown root weston-launch, which fails
-  ] ++ optionals (xwayland != null) [
+  ] ++ lib.optionals (xwayland != null) [
     "-Dxwayland-path=${xwayland.out}/bin/Xwayland"
   ];
 
   passthru.providedSessions = [ "weston" ];
 
-  meta = {
+  meta = with lib; {
     description = "A lightweight and functional Wayland compositor";
     longDescription = ''
       Weston is the reference implementation of a Wayland compositor, as well

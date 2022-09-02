@@ -70,7 +70,7 @@ in
 
 impure-cmds // appleSourcePackages // chooseLibs // {
 
-  inherit apple_sdk;
+  inherit apple_sdk apple_sdk_10_12 apple_sdk_11_0;
 
   stdenvNoCF = stdenv.override {
     extraBuildInputs = [];
@@ -120,8 +120,10 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     executable = true;
 
     text = ''
-      CODESIGN_ALLOCATE=${targetPrefix}codesign_allocate \
-        ${self.sigtool}/bin/codesign -f -s - "$linkerOutput"
+      if [ "$linkerOutput" != "/dev/null" ]; then
+        CODESIGN_ALLOCATE=${targetPrefix}codesign_allocate \
+          ${self.sigtool}/bin/codesign -f -s - "$linkerOutput"
+      fi
     '';
   };
 
@@ -148,13 +150,17 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   lsusb = callPackage ../os-specific/darwin/lsusb { };
 
+  moltenvk = pkgs.darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/moltenvk {
+    inherit (apple_sdk_11_0.frameworks) AppKit Foundation Metal QuartzCore;
+    inherit (apple_sdk_11_0) MacOSX-SDK Libsystem;
+    inherit (pkgs.darwin) cctools sigtool;
+  };
+
   opencflite = callPackage ../os-specific/darwin/opencflite { };
 
   stubs = pkgs.callPackages ../os-specific/darwin/stubs { };
 
   trash = callPackage ../os-specific/darwin/trash { };
-
-  usr-include = callPackage ../os-specific/darwin/usr-include { };
 
   xattr = pkgs.python3Packages.callPackage ../os-specific/darwin/xattr { };
 

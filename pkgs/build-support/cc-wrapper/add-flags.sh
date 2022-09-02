@@ -33,6 +33,20 @@ NIX_CFLAGS_COMPILE_@suffixSalt@="-B@out@/bin/ $NIX_CFLAGS_COMPILE_@suffixSalt@"
 # Export and assign separately in order that a failing $(..) will fail
 # the script.
 
+# Currently bootstrap-tools does not split glibc, and gcc files into
+# separate directories. As a workaround we want resulting cflags to be
+# ordered as: crt1-cflags libc-cflags cc-cflags. Otherwise we mix crt/libc.so
+# from different libc as seen in
+#   https://github.com/NixOS/nixpkgs/issues/158042
+#
+# Note that below has reverse ordering as we prepend flags one-by-one.
+# Once bootstrap-tools is split into different directories we can stop
+# relying on flag ordering below.
+
+if [ -e @out@/nix-support/cc-cflags ]; then
+    NIX_CFLAGS_COMPILE_@suffixSalt@="$(< @out@/nix-support/cc-cflags) $NIX_CFLAGS_COMPILE_@suffixSalt@"
+fi
+
 if [[ "$cInclude" = 1 ]] && [ -e @out@/nix-support/libc-cflags ]; then
     NIX_CFLAGS_COMPILE_@suffixSalt@="$(< @out@/nix-support/libc-cflags) $NIX_CFLAGS_COMPILE_@suffixSalt@"
 fi
@@ -47,10 +61,6 @@ fi
 
 if [ -e @out@/nix-support/libcxx-ldflags ]; then
     NIX_CXXSTDLIB_LINK_@suffixSalt@+=" $(< @out@/nix-support/libcxx-ldflags)"
-fi
-
-if [ -e @out@/nix-support/cc-cflags ]; then
-    NIX_CFLAGS_COMPILE_@suffixSalt@="$(< @out@/nix-support/cc-cflags) $NIX_CFLAGS_COMPILE_@suffixSalt@"
 fi
 
 if [ -e @out@/nix-support/gnat-cflags ]; then

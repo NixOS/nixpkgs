@@ -55,6 +55,18 @@ trim_trailing_whitespace = unset
 [*.lock]
 indent_size = unset
 
+# trailing whitespace is an actual syntax element of classic Markdown/
+# CommonMark to enforce a line break
+[*.md]
+trim_trailing_whitespace = unset
+
+# binaries
+[*.nib]
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+charset = unset
+
 [eggs.nix]
 trim_trailing_whitespace = unset
 
@@ -65,10 +77,6 @@ trim_trailing_whitespace = unset
 end_of_line = unset
 indent_style = unset
 insert_final_newline = unset
-trim_trailing_whitespace = unset
-
-[pkgs/build-support/upstream-updater/**]
-indent_style = unset
 trim_trailing_whitespace = unset
 
 [pkgs/development/compilers/elm/registry.dat]
@@ -83,11 +91,4 @@ trim_trailing_whitespace = unset
 trim_trailing_whitespace = unset
 
 [pkgs/tools/misc/timidity/timidity.cfg]
-trim_trailing_whitespace = unset
-
-[pkgs/tools/security/enpass/data.json]
-insert_final_newline = unset
-trim_trailing_whitespace = unset
-
-[pkgs/top-level/emscripten-packages.nix]
 trim_trailing_whitespace = unset

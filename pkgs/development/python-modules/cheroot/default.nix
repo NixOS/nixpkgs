@@ -1,42 +1,41 @@
 { lib
 , stdenv
-, fetchPypi
 , buildPythonPackage
-, isPy3k
+, fetchPypi
 , jaraco_functools
 , jaraco_text
 , more-itertools
 , portend
-, pyopenssl
-, pytestCheckHook
-, pytest-cov
+, pypytools
 , pytest-mock
+, pytestCheckHook
+, pythonOlder
 , requests
 , requests-toolbelt
 , requests-unixsocket
 , setuptools-scm
 , setuptools-scm-git-archive
 , six
-, trustme
 }:
 
 buildPythonPackage rec {
   pname = "cheroot";
-  version = "8.5.2";
+  version = "8.6.0";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f137d03fd5155b1364bea557a7c98168665c239f6c8cedd8f80e81cdfac01567";
+    hash = "sha256-NmrfbnyslVVIbC0b5il5kwIu/2+MRlXBRDJozKPwjiU=";
   };
 
-  nativeBuildInputs = [ setuptools-scm setuptools-scm-git-archive ];
+  nativeBuildInputs = [
+    setuptools-scm
+    setuptools-scm-git-archive
+  ];
 
   propagatedBuildInputs = [
-    # install_requires
     jaraco_functools
-
     more-itertools
     six
   ];
@@ -44,14 +43,12 @@ buildPythonPackage rec {
   checkInputs = [
     jaraco_text
     portend
-    pyopenssl
-    pytestCheckHook
-    pytest-cov
+    pypytools
     pytest-mock
+    pytestCheckHook
     requests
     requests-toolbelt
     requests-unixsocket
-    trustme
   ];
 
   # Disable doctest plugin because times out
@@ -71,12 +68,19 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "http_over_https_error"
     "bind_addr_unix"
+    "test_ssl_env"
   ];
 
   disabledTestPaths = [
     # avoid attempting to use 3 packages not available on nixpkgs
     # (jaraco.apt, jaraco.context, yg.lockfile)
     "cheroot/test/test_wsgi.py"
+    # requires pyopenssl
+    "cheroot/test/test_ssl.py"
+  ];
+
+  pythonImportsCheck = [
+    "cheroot"
   ];
 
   # Some of the tests use localhost networking.
@@ -86,5 +90,6 @@ buildPythonPackage rec {
     description = "High-performance, pure-Python HTTP";
     homepage = "https://github.com/cherrypy/cheroot";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

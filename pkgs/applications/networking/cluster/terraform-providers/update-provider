@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=../../../../.. -i bash -p coreutils curl jq moreutils nix nix-prefetch
+#! nix-shell -I nixpkgs=../../../../.. -i bash -p coreutils curl git jq moreutils nix nix-prefetch
 # shellcheck shell=bash
 # vim: ft=sh
 #
@@ -11,7 +11,7 @@ shopt -s inherit_errexit
 
 show_usage() {
   cat <<DOC
-Usage: ./update-provider [--force] [--vendor] [<owner>/]<provider>
+Usage: ./update-provider [--force] [--no-build] [<owner>/]<provider>
 
 Update a single provider in the providers.json inventory file.
 
@@ -27,14 +27,14 @@ to add the provider to the list:
 Options:
 
   * --force: Force the update even if the version matches.
-  * --vendor: Switch from go package to go modules with vendor.
+  * --no-build: Don't build provider
   * --vendor-sha256 <sha256>: Override the SHA256 or "null".
 DOC
 }
 
 force=
 provider=
-vendor=
+build=1
 vendorSha256=
 
 while [[ $# -gt 0 ]]; do
@@ -47,9 +47,8 @@ while [[ $# -gt 0 ]]; do
     force=1
     shift
     ;;
-  --vendor)
-    force=1
-    vendor=1
+  --no-build)
+    build=0
     shift
     ;;
   --vendor-sha256)
@@ -76,45 +75,46 @@ if [[ -z ${provider} ]]; then
   exit 1
 fi
 
-provider_name=$(basename "${provider}")
-
 # Usage: read_attr <key>
 read_attr() {
-  jq -r ".\"${provider_name}\".\"$1\"" providers.json
+  jq -r ".\"${provider}\".\"$1\"" providers.json
 }
 
 # Usage: update_attr <key> <value>
 update_attr() {
   if [[ $2 == "null" ]]; then
-    jq -S ".\"${provider_name}\".\"$1\" = null" providers.json | sponge providers.json
+    jq -S ".\"${provider}\".\"$1\" = null" providers.json | sponge providers.json
   else
-    jq -S ".\"${provider_name}\".\"$1\" = \"$2\"" providers.json | sponge providers.json
+    jq -S ".\"${provider}\".\"$1\" = \"$2\"" providers.json | sponge providers.json
   fi
 }
 
-prefetch_github() {
-  # of a given owner, repo and rev, fetch the tarball and return the output of
-  # `nix-prefetch-url`
-  local owner=$1
-  local repo=$2
-  local rev=$3
-  nix-prefetch-url --unpack "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz"
+repo_root=$(git rev-parse --show-toplevel)
+
+generate_hash() {
+  nix-prefetch -I nixpkgs="${repo_root}" \
+    "{ sha256 }: (import ${repo_root} {}).terraform-providers.${provider}.$1.overrideAttrs (_: { $2 = sha256; })"
 }
 
-old_source_address="$(read_attr provider-source-address)"
-old_vendor_sha256=$(read_attr vendorSha256)
-old_version=$(read_attr version)
+echo_provider() {
+  echo "== terraform-providers.${provider}: $* =="
+}
 
 if [[ ${provider} =~ ^[^/]+/[^/]+$ ]]; then
+  echo_provider "init"
   source_address=registry.terraform.io/${provider}
+  provider=$(basename "${provider}")
+  update_attr "provider-source-address" "${source_address}"
+  update_attr version "0"
+  # create empty stings so nix-prefetch works
+  update_attr sha256 ""
+  update_attr vendorSha256 ""
 else
-  source_address=${old_source_address}
+  source_address="$(read_attr provider-source-address)"
 fi
-if [[ ${source_address} == "null" ]]; then
-  echo "Could not find the source address for provider: ${provider}"
-  exit 1
-fi
-update_attr "provider-source-address" "${source_address}"
+
+old_vendor_sha256=$(read_attr vendorSha256)
+old_version=$(read_attr version)
 
 # The provider source address (used inside Terraform `required_providers` block) is
 # used to compute the registry API endpoint
@@ -126,9 +126,14 @@ registry_response=$(curl -s https://"${source_address/\///v1/providers/}")
 
 version="$(jq -r '.version' <<<"${registry_response}")"
 if [[ ${old_version} == "${version}" && ${force} != 1 && -z ${vendorSha256} && ${old_vendor_sha256} != "${vendorSha256}" ]]; then
-  echo "${provider_name} is already at version ${version}"
+  echo_provider "already at version ${version}"
   exit
 fi
+if [[ ${version} =~ [[:alpha:]] && ${force} != 1 ]]; then
+  echo_provider "not updating to unstable version ${version}"
+  exit
+fi
+echo_provider "updating from ${old_version} to ${version}"
 update_attr version "${version}"
 
 provider_source_url="$(jq -r '.source' <<<"${registry_response}")"
@@ -139,28 +144,23 @@ repo="$(echo "${provider_source_url}" | cut -d '/' -f 5)"
 update_attr repo "${repo}"
 rev="$(jq -r '.tag' <<<"${registry_response}")"
 update_attr rev "${rev}"
-sha256=$(prefetch_github "${org}" "${repo}" "${rev}")
+echo_provider "calculating sha256"
+sha256=$(generate_hash src outputHash)
 update_attr sha256 "${sha256}"
-
-repo_root=$(git rev-parse --show-toplevel)
 
 if [[ -z ${vendorSha256} ]]; then
   if [[ ${old_vendor_sha256} == null ]]; then
     vendorSha256=null
-  elif [[ -n ${old_vendor_sha256} || ${vendor} == 1 ]]; then
-    echo "=== Calculating vendorSha256 ==="
-    vendorSha256=$(nix-prefetch -I nixpkgs=../../../../.. "{ sha256 }: (import ../../../../.. {}).terraform-providers.${provider_name}.go-modules.overrideAttrs (_: { vendorSha256 = sha256; })")
-    # Deal with nix unstable
-    if [[ ${vendorSha256} == sha256-* ]]; then
-      vendorSha256=$(nix --extra-experimental-features nix-command hash to-base32 "${vendorSha256}")
-    fi
+  else
+    echo_provider "calculating vendorSha256"
+    vendorSha256=$(generate_hash go-modules vendorSha256)
   fi
 fi
 
-if [[ -n ${vendorSha256} ]]; then
-  update_attr vendorSha256 "${vendorSha256}"
-fi
+update_attr vendorSha256 "${vendorSha256}"
 
 # Check that the provider builds
-echo "=== Building terraform-providers.${provider_name} ==="
-nix-build --no-out-link "${repo_root}" -A "terraform-providers.${provider_name}"
+if [[ ${build} == 1 ]]; then
+  echo_provider "building"
+  nix-build --no-out-link "${repo_root}" -A "terraform-providers.${provider}"
+fi

@@ -24,7 +24,7 @@ in {
       example = literalExpression ''
         [ "/dev/sda", "/dev/nvme0n1" ];
       '';
-      description = ''
+      description = lib.mdDoc ''
         Paths to the disks that will be monitored. Will autodiscover
         all disks if none given.
       '';
@@ -33,7 +33,7 @@ in {
       type = types.str;
       default = "60s";
       example = "2m";
-      description = ''
+      description = lib.mdDoc ''
         Interval that limits how often a disk can be queried.
       '';
     };
@@ -42,11 +42,11 @@ in {
   serviceOpts = {
     serviceConfig = {
       AmbientCapabilities = [
-        "CAP_RAW_SYSIO"
+        "CAP_SYS_RAWIO"
         "CAP_SYS_ADMIN"
       ];
       CapabilityBoundingSet = [
-        "CAP_RAW_SYSIO"
+        "CAP_SYS_RAWIO"
         "CAP_SYS_ADMIN"
       ];
       DevicePolicy = "closed";

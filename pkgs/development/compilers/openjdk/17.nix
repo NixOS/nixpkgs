@@ -11,8 +11,8 @@
 let
   version = {
     feature = "17";
-    interim = ".0.1";
-    build = "12";
+    interim = ".0.4";
+    build = "8";
   };
 
   openjdk = stdenv.mkDerivation {
@@ -23,7 +23,7 @@ let
       owner = "openjdk";
       repo = "jdk${version.feature}u";
       rev = "jdk-${version.feature}${version.interim}+${version.build}";
-      sha256 = "1l1jgbz8q7zq66npfg88r0l5xga427vrz35iys09j44b6qllrldd";
+      sha256 = "drbljLz82ZyK29lIDLPqCkwqpBdgU/7zCTZ0ceeb1SI=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];
@@ -41,6 +41,7 @@ let
       ./currency-date-range-jdk10.patch
       ./increase-javadoc-heap-jdk13.patch
       ./ignore-LegalNoticeFilePlugin.patch
+      ./fix-library-path-jdk17.patch
 
       # -Wformat etc. are stricter in newer gccs, per
       # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79677
@@ -157,7 +158,7 @@ let
 
     disallowedReferences = [ openjdk17-bootstrap ];
 
-    meta = import ./meta.nix lib;
+    meta = import ./meta.nix lib version.feature;
 
     passthru = {
       architecture = "";

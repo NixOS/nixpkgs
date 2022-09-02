@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "taskwarrior";
-  version = "2.6.1";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
     rev = "v${version}";
-    sha256 = "sha256-jMZzo2cegoapEHTvfD6ThU1IsXru3iOcpyDbZxkSXzQ=";
+    sha256 = "sha256-0YveqiylXJi4cdDCfnPtwCVOJbQrZYsxnXES+9B4Yfw=";
     fetchSubmodules = true;
   };
 
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://taskwarrior.org";
     license = licenses.mit;
     maintainers = with maintainers; [ marcweber oxalica ];
+    mainProgram = "task";
     platforms = platforms.unix;
   };
 }

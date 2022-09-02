@@ -7,24 +7,25 @@
 , pythonOlder
 , matplotlib
 , mock
-, pytorch
+, packaging
+, torch
 , scikit-learn
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "ignite";
-  version = "0.4.7";
+  version = "0.4.9";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "11gvw0yqb3y5ddifs5f38bgslvfmw1bmd9rga1ynlrmmgmhxym6h";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-KBEoMV9lwlEra4DiGDLgPb85+HrnK4Qiy3XYDa9hO3s=";
   };
 
   checkInputs = [ pytestCheckHook matplotlib mock pytest-xdist torchvision ];
-  propagatedBuildInputs = [ pytorch scikit-learn tqdm ];
+  propagatedBuildInputs = [ packaging torch scikit-learn tqdm ];
 
   # runs succesfully in 3.9, however, async isn't correctly closed so it will fail after test suite.
   doCheck = pythonOlder "3.9";

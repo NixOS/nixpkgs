@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ocenaudio";
-  version = "3.11.2";
+  version = "3.11.14";
 
   src = fetchurl {
     url = "https://www.ocenaudio.com/downloads/index.php/ocenaudio_debian9_64.deb?version=${version}";
-    sha256 = "sha256-kvmBOw8fQZSC1jC8FRVq4v+i7mM6ol2IrDTqfJtuZYc=";
+    sha256 = "sha256-5HQ64jCM8kyWLqxFqsFN3lJgM/JlWf1/RYKSpAFYTYE=";
   };
 
   nativeBuildInputs = [
@@ -41,12 +41,13 @@ stdenv.mkDerivation rec {
     rm -rf $out/opt
 
     # Create symlink bzip2 library
-    ln -s ${bzip2.out}/lib/libbz2.so.1 $out/libbz2.so.1.0
+    ln -s ${bzip2.out}/lib/libbz2.so.1 $out/lib/libbz2.so.1.0
   '';
 
   meta = with lib; {
     description = "Cross-platform, easy to use, fast and functional audio editor";
     homepage = "https://www.ocenaudio.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ onny ];

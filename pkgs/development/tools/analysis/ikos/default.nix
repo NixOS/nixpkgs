@@ -10,12 +10,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ikos";
+  pname = "ikos";
   version = "3.0";
 
   src = fetchFromGitHub {
     owner = "NASA-SW-VnV";
-    repo = name;
+    repo = "ikos";
     rev = "v${version}";
     sha256 = "0k3kp1af0qx3l1x6a4sl4fm8qlwchjvwkvs2ck0fhfnc62q2im5f";
   };

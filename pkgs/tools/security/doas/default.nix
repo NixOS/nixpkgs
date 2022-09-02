@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
     sed -i '/\(chown\|chmod\)/d' GNUmakefile
   '';
 
-  buildInputs = [ bison pam ];
+  nativeBuildInputs = [ bison ];
+  buildInputs = [ pam ];
 
   meta = with lib; {
     description = "Executes the given command as another user";

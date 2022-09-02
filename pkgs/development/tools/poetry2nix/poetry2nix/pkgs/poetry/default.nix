@@ -14,9 +14,6 @@ poetry2nix.mkPoetryApplication {
 
   inherit projectDir pyproject poetrylock;
 
-  # Don't include poetry in inputs
-  __isBootstrap = true;
-
   src = fetchFromGitHub (lib.importJSON ./src.json);
 
   # "Vendor" dependencies (for build-system support)

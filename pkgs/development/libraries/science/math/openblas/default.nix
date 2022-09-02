@@ -23,6 +23,13 @@
 , enableAVX512 ? false
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
+
+# for passthru.tests
+, ceres-solver
+, giac
+, octave
+, opencv
+, python3
 }:
 
 with lib;
@@ -129,7 +136,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.19";
+  version = "0.3.20";
 
   outputs = [ "out" "dev" ];
 
@@ -137,7 +144,7 @@ stdenv.mkDerivation rec {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "sha256-EqA6oFM2theuvvuDOWeOx0Bv6AEFffmpWHJBzp23br0=";
+    sha256 = "sha256-FLPVcepf7tv/es+4kur9Op7o3iVAAayuYN4hY/P4mmQ=";
   };
 
   inherit blas64;
@@ -224,6 +231,11 @@ EOF
     ln -s $out/lib/libopenblas.a $out/lib/liblapack.a
     ln -s $out/lib/libopenblas.a $out/lib/liblapacke.a
   '';
+
+  passthru.tests = {
+    inherit (python3.pkgs) numpy scipy;
+    inherit ceres-solver giac octave opencv;
+  };
 
   meta = with lib; {
     description = "Basic Linear Algebra Subprograms";

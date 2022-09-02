@@ -1,6 +1,6 @@
 { lib
 , buildDunePackage
-, fetchurl
+, fetchFromGitHub
 , ppx_deriving
 , bppsuite
 , alcotest
@@ -11,18 +11,18 @@
 , lacaml
 , menhir
 , menhirLib
-, printbox
+, printbox-text
 }:
 
 buildDunePackage rec {
   pname = "phylogenetics";
-  version = "0.0.0";
+  version = "unstable-2022-05-06";
 
-  useDune2 = true;
-
-  src = fetchurl {
-    url = "https://github.com/biocaml/phylogenetics/releases/download/v${version}/${pname}-${version}.tbz";
-    sha256 = "sha256:0knfh2s0jfnsc0vsq5yw5xla7m7i98xd0qv512dyh3jhkh7m00l9";
+  src = fetchFromGitHub {
+    owner = "biocaml";
+    repo = pname;
+    rev = "cd7c624d0f98e31b02933ca4511b9809b26d35b5";
+    sha256 = "sha256:0w0xyah3hj05hxg1rsa40hhma3dm1cyq0zvnjrihhf22laxap7ga";
   };
 
   minimalOCamlVersion = "4.08";
@@ -37,15 +37,16 @@ buildDunePackage rec {
     lacaml
     menhirLib
     ppx_deriving
-    printbox
+    printbox-text
   ];
 
   doCheck = true;
 
   meta = with lib; {
-    homepage = "https://github.com/biocaml/phylogenetics";
     description = "Algorithms and datastructures for phylogenetics";
-    maintainers = [ maintainers.bcdarwin ];
+    homepage = "https://github.com/biocaml/phylogenetics";
     license = licenses.cecill-b;
+    maintainers = [ maintainers.bcdarwin ];
+    mainProgram = "phylosim";
   };
 }

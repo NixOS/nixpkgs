@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "metabase";
-  version = "0.41.5";
+  version = "0.44.1";
 
   src = fetchurl {
     url = "https://downloads.metabase.com/v${version}/metabase.jar";
-    sha256 = "sha256-DH1xy1cTVDNNXyOIaayGHzOi4g0ZukNFFbZjufY+XLk=";
+    hash = "sha256-TIQrmzdLD/pwMbd1dyLh3d2bauu7Wv6C2CtuuXMNN5E=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -14,13 +14,16 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
     makeWrapper ${jdk11}/bin/java $out/bin/metabase --add-flags "-jar $src"
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "The easy, open source way for everyone in your company to ask questions and learn from data";
     homepage    = "https://metabase.com";
-    license     = licenses.agpl3;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license     = licenses.agpl3Only;
     platforms   = platforms.all;
     maintainers = with maintainers; [ schneefux thoughtpolice mmahut ];
   };

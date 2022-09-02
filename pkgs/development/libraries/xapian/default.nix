@@ -2,14 +2,14 @@
 , libuuid, zlib }:
 
 let
-  generic = version: sha256: stdenv.mkDerivation {
+  generic = version: hash: stdenv.mkDerivation {
     pname = "xapian";
     inherit version;
     passthru = { inherit version; };
 
     src = fetchurl {
       url = "https://oligarchy.co.uk/xapian/${version}/xapian-core-${version}.tar.xz";
-      inherit sha256;
+      inherit hash;
     };
 
     outputs = [ "out" "man" "doc" ];
@@ -38,5 +38,8 @@ let
     };
   };
 in {
-  xapian_1_4 = generic "1.4.18" "sha256-GW3btK0QRQEA8JkaWZ5O2UTLrZLkpv6BO+bc4WAkS3c=";
+  # Don't forget to change the hashes in xapian-omega and
+  # python3Packages.xapian. They inherit the version from this package, and
+  # should always be built with the equivalent xapian version.
+  xapian_1_4 = generic "1.4.20" "sha256-zivl7/cgdcgQbANA5wsQk9vOviq0LcHBvgjdOtQZRC0=";
 }

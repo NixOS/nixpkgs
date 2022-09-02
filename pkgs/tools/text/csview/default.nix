@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "csview";
-  version = "0.3.12";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1j3u9r5TjdewAyzuCwCkXl/A2yI9L/AS5QGRpz30N7U=";
+    sha256 = "sha256-yx/gGJ8QGmMaiVw+yWWhswbGpf9YZk2kWoxFXXSETyA=";
   };
 
-  cargoSha256 = "sha256-Z+LnWXvVfZa8Mtr9LrieqCBGxaQE1vj1joSttYM5Xhs=";
+  cargoSha256 = "sha256-4YJfD8TuQN9aQlbhzpv69YE20tMMIUxq6UdDpJSP7lI=";
 
   meta = with lib; {
     description = "A high performance csv viewer with cjk/emoji support";

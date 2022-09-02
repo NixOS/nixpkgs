@@ -1,8 +1,6 @@
 { lib
-, pkgs
 , python3
 , fetchFromGitHub
-, fetchpatch
 , platformio
 , esptool
 , git
@@ -11,26 +9,21 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      esphome-dashboard = pkgs.callPackage ./dashboard.nix {};
+      esphome-dashboard = self.callPackage ./dashboard.nix {};
     };
   };
 in
 with python.pkgs; buildPythonApplication rec {
   pname = "esphome";
-  version = "2022.1.2";
+  version = "2022.8.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "sha256-hq+gYhDkEzIqgP4CcHRuA5A9694L3LeW9bditejfjm8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-lukK++CRpl7ucX9RuYa4qhHBbBY4oc/ijqGopeIaXPY=";
   };
-
-  patches = [
-    # fix missing write permissions on src files before modifing them
-    ./fix-src-permissions.patch
-  ];
 
   postPatch = ''
     # remove all version pinning (E.g tornado==5.1.1 -> tornado)
@@ -107,6 +100,6 @@ with python.pkgs; buildPythonApplication rec {
       mit # The C++/runtime codebase of the ESPHome project (file extensions .c, .cpp, .h, .hpp, .tcc, .ino)
       gpl3Only # The python codebase and all other parts of this codebase
     ];
-    maintainers = with maintainers; [ globin elseym hexa ];
+    maintainers = with maintainers; [ globin hexa ];
   };
 }

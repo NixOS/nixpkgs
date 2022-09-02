@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "inih";
-  version = "r53";
+  version = "56";
 
   src = fetchFromGitHub {
     owner = "benhoyt";
     repo = pname;
-    rev = version;
-    sha256 = "0dqf5j2sw4hq68rqvxbrsf44ygfzx9ypiyzipk4cvp9aimbvsbc6";
+    rev = "r${version}";
+    sha256 = "sha256-7k3i3pElihastUDrdf9DyRZMe2UNFckfLUFGb4rbWLo=";
   };
 
   nativeBuildInputs = [ meson ninja ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Simple .INI file parser in C, good for embedded systems";
     homepage = "https://github.com/benhoyt/inih";
-    changelog = "https://github.com/benhoyt/inih/releases/tag/${version}";
+    changelog = "https://github.com/benhoyt/inih/releases/tag/r${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ TredwellGit ];
     platforms = platforms.all;

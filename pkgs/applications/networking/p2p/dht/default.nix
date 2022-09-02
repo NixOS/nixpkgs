@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "BitTorrent DHT library";
     homepage = "https://github.com/transmission/dht";
     license = licenses.mit;
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.unix;
   };
 }

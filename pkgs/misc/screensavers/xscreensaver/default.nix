@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, makeWrapper
 , pkg-config, intltool
-, perl, gettext, libX11, libXext, libXi, libXt
+, perl, perlPackages, gettext, libX11, libXext, libXi, libXt
 , libXft, libXinerama, libXrandr, libXxf86vm, libGL, libGLU, gle
 , gtk2, gdk-pixbuf, gdk-pixbuf-xlib, libxml2, pam
 , systemd, coreutils
@@ -9,12 +9,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "6.02";
+  version = "6.04";
   pname = "xscreensaver";
 
   src = fetchurl {
     url = "https://www.jwz.org/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Xm1ssJAzrVYs/m1Gv5MS5EUfeUa+2KRnGqk0TfkZMYQ=";
+    sha256 = "sha256-eHAUsp8MV5Pswtk+EQmgSf9IqwwpuFHas09oPO72sVI=";
   };
 
   nativeBuildInputs = [
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     perl gettext libX11 libXext libXi libXt
     libXft libXinerama libXrandr libXxf86vm libGL libGLU gle
     gtk2 gdk-pixbuf gdk-pixbuf-xlib libxml2 pam
+    perlPackages.LWPProtocolHttps perlPackages.MozillaCA
   ] ++ lib.optional withSystemd systemd;
 
   preConfigure = ''
@@ -38,13 +39,14 @@ stdenv.mkDerivation rec {
   ];
 
   # "marbling" has NEON code that mixes signed and unsigned vector types
-  NIX_CFLAGS_COMPILE = lib.optional (with stdenv.hostPlatform; isAarch64 || isAarch32) "-flax-vector-conversions";
+  NIX_CFLAGS_COMPILE = lib.optional stdenv.hostPlatform.isAarch "-flax-vector-conversions";
 
   postInstall = ''
     for bin in $out/bin/*; do
       wrapProgram "$bin" \
         --prefix PATH : "$out/libexec/xscreensaver" \
-        --prefix PATH : "${lib.makeBinPath [ coreutils ]}"
+        --prefix PATH : "${lib.makeBinPath [ coreutils perl ]}" \
+        --prefix PERL5LIB ':' $PERL5LIB
     done
   '' + lib.optionalString forceInstallAllHacks ''
     make -j$NIX_BUILD_CORES -C hacks/glx dnalogo

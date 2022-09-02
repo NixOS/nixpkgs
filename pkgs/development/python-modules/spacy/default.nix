@@ -1,43 +1,44 @@
 { lib
+, blis
 , buildPythonPackage
 , callPackage
-, fetchPypi
-, pythonOlder
-, pytest
-, blis
 , catalogue
 , cymem
+, fetchPypi
 , jinja2
 , jsonschema
+, langcodes
 , murmurhash
 , numpy
-, preshed
-, requests
-, setuptools
-, srsly
-, spacy-legacy
-, thinc
-, typer
-, wasabi
 , packaging
 , pathy
+, preshed
 , pydantic
+, pytest
 , python
-, tqdm
-, typing-extensions
+, pythonOlder
+, requests
+, setuptools
+, spacy-legacy
 , spacy-loggers
-, langcodes
+, srsly
+, thinc
+, tqdm
+, typer
+, typing-extensions
+, wasabi
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.2.1";
+  version = "3.4.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9uusURYndAqMorEXuR71UVyPCy+xF6aevgHQEN1PxTw=";
+    hash = "sha256-PM0an1Z1nl8Pnv31cRmgZwKtWcBF3eCzgwtUclk+Ce8=";
   };
 
   propagatedBuildInputs = [
@@ -46,6 +47,7 @@ buildPythonPackage rec {
     cymem
     jinja2
     jsonschema
+    langcodes
     murmurhash
     numpy
     packaging
@@ -54,15 +56,21 @@ buildPythonPackage rec {
     pydantic
     requests
     setuptools
-    srsly
     spacy-legacy
+    spacy-loggers
+    srsly
     thinc
     tqdm
     typer
     wasabi
-    spacy-loggers
-    langcodes
-  ] ++ lib.optional (pythonOlder "3.8") typing-extensions;
+  ] ++ lib.optional (pythonOlder "3.8") [
+    typing-extensions
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pydantic>=1.7.4,!=1.8,!=1.8.1,<1.9.0" "pydantic~=1.2"
+  '';
 
   checkInputs = [
     pytest
@@ -73,12 +81,14 @@ buildPythonPackage rec {
     ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
   '';
 
-  pythonImportsCheck = [ "spacy" ];
+  pythonImportsCheck = [
+    "spacy"
+  ];
 
   passthru.tests.annotation = callPackage ./annotation-test { };
 
   meta = with lib; {
-    description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
+    description = "Industrial-strength Natural Language Processing (NLP)";
     homepage = "https://github.com/explosion/spaCy";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

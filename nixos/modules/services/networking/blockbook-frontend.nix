@@ -10,34 +10,34 @@ let
 
     options = {
 
-      enable = mkEnableOption "blockbook-frontend application.";
+      enable = mkEnableOption (lib.mdDoc "blockbook-frontend application.");
 
       package = mkOption {
         type = types.package;
         default = pkgs.blockbook;
         defaultText = literalExpression "pkgs.blockbook";
-        description = "Which blockbook package to use.";
+        description = lib.mdDoc "Which blockbook package to use.";
       };
 
       user = mkOption {
         type = types.str;
         default = "blockbook-frontend-${name}";
-        description = "The user as which to run blockbook-frontend-${name}.";
+        description = lib.mdDoc "The user as which to run blockbook-frontend-${name}.";
       };
 
       group = mkOption {
         type = types.str;
         default = "${config.user}";
-        description = "The group as which to run blockbook-frontend-${name}.";
+        description = lib.mdDoc "The group as which to run blockbook-frontend-${name}.";
       };
 
       certFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/etc/secrets/blockbook-frontend-${name}/certFile";
-        description = ''
+        description = lib.mdDoc ''
           To enable SSL, specify path to the name of certificate files without extension.
-          Expecting <filename>certFile.crt</filename> and <filename>certFile.key</filename>.
+          Expecting {file}`certFile.crt` and {file}`certFile.key`.
         '';
       };
 
@@ -45,14 +45,14 @@ let
         type = with types; nullOr path;
         default = null;
         example = "${config.dataDir}/config.json";
-        description = "Location of the blockbook configuration file.";
+        description = lib.mdDoc "Location of the blockbook configuration file.";
       };
 
       coinName = mkOption {
         type = types.str;
         default = "Bitcoin";
-        description = ''
-          See <link xlink:href="https://github.com/trezor/blockbook/blob/master/bchain/coins/blockchain.go#L61"/>
+        description = lib.mdDoc ''
+          See <https://github.com/trezor/blockbook/blob/master/bchain/coins/blockchain.go#L61>
           for current of coins supported in master (Note: may differ from release).
         '';
       };
@@ -62,8 +62,8 @@ let
         default = "${config.package}/share/css/";
         defaultText = literalExpression ''"''${package}/share/css/"'';
         example = literalExpression ''"''${dataDir}/static/css/"'';
-        description = ''
-          Location of the dir with <filename>main.css</filename> CSS file.
+        description = lib.mdDoc ''
+          Location of the dir with {file}`main.css` CSS file.
           By default, the one shipped with the package is used.
         '';
       };
@@ -71,68 +71,68 @@ let
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/blockbook-frontend-${name}";
-        description = "Location of blockbook-frontend-${name} data directory.";
+        description = lib.mdDoc "Location of blockbook-frontend-${name} data directory.";
       };
 
       debug = mkOption {
         type = types.bool;
         default = false;
-        description = "Debug mode, return more verbose errors, reload templates on each request.";
+        description = lib.mdDoc "Debug mode, return more verbose errors, reload templates on each request.";
       };
 
       internal = mkOption {
         type = types.nullOr types.str;
         default = ":9030";
-        description = "Internal http server binding <literal>[address]:port</literal>.";
+        description = lib.mdDoc "Internal http server binding `[address]:port`.";
       };
 
       messageQueueBinding = mkOption {
         type = types.str;
         default = "tcp://127.0.0.1:38330";
-        description = "Message Queue Binding <literal>address:port</literal>.";
+        description = lib.mdDoc "Message Queue Binding `address:port`.";
       };
 
       public = mkOption {
         type = types.nullOr types.str;
         default = ":9130";
-        description = "Public http server binding <literal>[address]:port</literal>.";
+        description = lib.mdDoc "Public http server binding `[address]:port`.";
       };
 
       rpc = {
         url = mkOption {
           type = types.str;
           default = "http://127.0.0.1";
-          description = "URL for JSON-RPC connections.";
+          description = lib.mdDoc "URL for JSON-RPC connections.";
         };
 
         port = mkOption {
           type = types.port;
           default = 8030;
-          description = "Port for JSON-RPC connections.";
+          description = lib.mdDoc "Port for JSON-RPC connections.";
         };
 
         user = mkOption {
           type = types.str;
           default = "rpc";
-          description = "Username for JSON-RPC connections.";
+          description = lib.mdDoc "Username for JSON-RPC connections.";
         };
 
         password = mkOption {
           type = types.str;
           default = "rpc";
-          description = ''
+          description = lib.mdDoc ''
             RPC password for JSON-RPC connections.
             Warning: this is stored in cleartext in the Nix store!!!
-            Use <literal>configFile</literal> or <literal>passwordFile</literal> if needed.
+            Use `configFile` or `passwordFile` if needed.
           '';
         };
 
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             File containing password of the RPC user.
-            Note: This options is ignored when <literal>configFile</literal> is used.
+            Note: This options is ignored when `configFile` is used.
           '';
         };
       };
@@ -140,7 +140,7 @@ let
       sync = mkOption {
         type = types.bool;
         default = true;
-        description = "Synchronizes until tip, if together with zeromq, keeps index synchronized.";
+        description = lib.mdDoc "Synchronizes until tip, if together with zeromq, keeps index synchronized.";
       };
 
       templateDir = mkOption {
@@ -148,7 +148,7 @@ let
         default = "${config.package}/share/templates/";
         defaultText = literalExpression ''"''${package}/share/templates/"'';
         example = literalExpression ''"''${dataDir}/templates/static/"'';
-        description = "Location of the HTML templates. By default, ones shipped with the package are used.";
+        description = lib.mdDoc "Location of the HTML templates. By default, ones shipped with the package are used.";
       };
 
       extraConfig = mkOption {
@@ -171,10 +171,10 @@ let
           "mempool_sub_workers" = 2;
           "block_addresses_to_keep" = 300;
         }'';
-        description = ''
-          Additional configurations to be appended to <filename>coin.conf</filename>.
+        description = lib.mdDoc ''
+          Additional configurations to be appended to {file}`coin.conf`.
           Overrides any already defined configuration options.
-          See <link xlink:href="https://github.com/trezor/blockbook/tree/master/configs/coins"/>
+          See <https://github.com/trezor/blockbook/tree/master/configs/coins>
           for current configuration options supported in master (Note: may differ from release).
         '';
       };
@@ -183,7 +183,7 @@ let
         type = types.listOf types.str;
         default = [];
         example = [ "-workers=1" "-dbcache=0" "-logtosderr" ];
-        description = ''
+        description = lib.mdDoc ''
           Extra command line options to pass to Blockbook.
           Run blockbook --help to list all available options.
         '';
@@ -198,7 +198,7 @@ in
     services.blockbook-frontend = mkOption {
       type = types.attrsOf (types.submodule blockbookOpts);
       default = {};
-      description = "Specification of one or more blockbook-frontend instances.";
+      description = lib.mdDoc "Specification of one or more blockbook-frontend instances.";
     };
   };
 

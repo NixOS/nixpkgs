@@ -10,19 +10,18 @@
 , pcre2
 
 # update script
-, genericUpdater
-, common-updater-scripts
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "libyang";
-  version = "2.0.112";
+  version = "2.0.231";
 
   src = fetchFromGitHub {
     owner = "CESNET";
     repo = "libyang";
     rev = "v${version}";
-    sha256 = "sha256-f8x0tC3XcQ9fnUE987GYw8qEo/B+J759vpCImqG3QWs=";
+    sha256 = "sha256-IntucM8ABJsJNH7XnZ59McwmfSIimclrWzSz4NKdMrE=";
   };
 
   nativeBuildInputs = [
@@ -40,9 +39,8 @@ stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_TYPE:String=Release"
   ];
 
-  passthru.updateScript = genericUpdater {
+  passthru.updateScript = gitUpdater {
     inherit pname version;
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
     rev-prefix = "v";
   };
 

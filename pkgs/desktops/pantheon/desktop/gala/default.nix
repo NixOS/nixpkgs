@@ -19,7 +19,6 @@
 , gnome-desktop
 , mutter
 , clutter
-, elementary-icon-theme
 , gnome-settings-daemon
 , wrapGAppsHook
 , gexiv2
@@ -27,28 +26,32 @@
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "6.3.0";
+  version = "6.3.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-f/WDm9/+lXgplg9tGpct4f+1cOhKgdypwiDRBhewRGw=";
+    sha256 = "sha256-7RZt6gA3wyp1cxIWBYFK+fYFSZDbjHcwYa2snOmDw1Y=";
   };
 
   patches = [
+    # We look for plugins in `/run/current-system/sw/lib/` because
+    # there are multiple plugin providers (e.g. gala and wingpanel).
     ./plugins-dir.patch
-    # Session crashes when switching windows with Alt+Tab
-    # https://github.com/elementary/gala/issues/1312
+
+    # WindowManager: save/restore easing on workspace switch
+    # https://github.com/elementary/gala/pull/1430
     (fetchpatch {
-      url = "https://github.com/elementary/gala/commit/cc83db8fe398feae9f3e4caa8352b65f0c8c96d4.patch";
-      sha256 = "sha256-CPO3EHIzqHAV6ZLHngivCdsD8je8CK/NHznfxSEkhzc=";
+      url = "https://github.com/elementary/gala/commit/1f94db16c627f73af5dc69714611815e4691b5e8.patch";
+      sha256 = "sha256-PLNbAXyOG0TMn1y2QIBnL6BOQVqBA+DBgPOVJo4nDr8=";
     })
-    # WindowSwitcher: Clear indicator background
-    # https://github.com/elementary/gala/pull/1318
+
+    # WindowSwitcher: fix initial alt-tab switcher indicator visibility
+    # https://github.com/elementary/gala/pull/1417
     (fetchpatch {
-      url = "https://github.com/elementary/gala/commit/cce53acffecba795b6cc48916d4621a47996d2c9.patch";
-      sha256 = "sha256-5aTZE6poo4sQMTLfk9Nhw4G4BW8i9dvpWktizRIS58Q=";
+      url = "https://github.com/elementary/gala/commit/e0095415cdbfc369e6482e84b8aaffc6a04cafe7.patch";
+      sha256 = "sha256-n/BJPIrUaCQtBgDotOLq/bCAAccdbL6OwciXY115HsM=";
     })
   ];
 
@@ -67,7 +70,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bamf
     clutter
-    elementary-icon-theme
     gnome-settings-daemon
     gexiv2
     gnome-desktop

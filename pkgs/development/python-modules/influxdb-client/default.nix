@@ -1,4 +1,5 @@
 { lib
+, aiohttp
 , buildPythonPackage
 , fetchFromGitHub
 , rx
@@ -14,14 +15,16 @@
 
 buildPythonPackage rec {
   pname = "influxdb-client";
-  version = "1.25.0";
-  disabled = pythonOlder "3.6";
+  version = "1.31.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb-client-python";
-    rev = "v${version}";
-    sha256 = "0anziqlczzc9qmz1mrk8yapn0pc18wz2pknyghyj5qpym3w2azas";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gTJgY4vFgmFDn2WYUKEbvbu7hjxcw2QGI+blensS5BI=";
   };
 
   propagatedBuildInputs = [
@@ -31,19 +34,29 @@ buildPythonPackage rec {
     python-dateutil
     setuptools
     urllib3
-    ciso8601
     pytz
   ];
+
+  passthru.optional-dependencies = {
+    async = [
+      aiohttp
+    ];
+    ciso = [
+      ciso8601
+    ];
+  };
 
   # requires influxdb server
   doCheck = false;
 
-  pythonImportsCheck = [ "influxdb_client" ];
+  pythonImportsCheck = [
+    "influxdb_client"
+  ];
 
   meta = with lib; {
     description = "InfluxDB 2.0 Python client library";
     homepage = "https://github.com/influxdata/influxdb-client-python";
     license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }

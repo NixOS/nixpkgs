@@ -5,12 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "linux-pam";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchurl {
     url    = "https://github.com/linux-pam/linux-pam/releases/download/v${version}/Linux-PAM-${version}.tar.xz";
-    sha256 = "sha256-IB1AcwsRNbGzzeoJ8sKKxjTXMYHM0Bcs7d7jZJxXkvw=";
+    sha256 = "sha256-5OxxMakdpEUSV0Jo9JPG2MoQXIcJFpG46bVspoXU+U0=";
   };
+
+  patches = [ ./suid-wrapper-path.patch ];
 
   outputs = [ "out" "doc" "man" /* "modules" */ ];
 
@@ -18,7 +20,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ flex ]
     ++ lib.optional stdenv.buildPlatform.isDarwin gettext;
 
-  buildInputs = [ cracklib db4 audit ]
+  buildInputs = [ cracklib db4 ]
+    ++ lib.optional stdenv.buildPlatform.isLinux audit
     ++ lib.optional withLibxcrypt libxcrypt;
 
   enableParallelBuilding = true;

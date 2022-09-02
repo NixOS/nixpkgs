@@ -13,6 +13,7 @@
 , python3
 , xz
 , zlib
+, catch2
 # recommended dependencies
 , withHwloc ? true
 , hwloc
@@ -49,11 +50,11 @@
 
 stdenv.mkDerivation rec {
   pname = "trafficserver";
-  version = "9.1.1";
+  version = "9.1.2";
 
   src = fetchzip {
     url = "mirror://apache/trafficserver/trafficserver-${version}.tar.bz2";
-    sha256 = "sha256-oicRqKFE6hOpcNG9o3BmrMujtEzi4hrPhBWaljOW+VI=";
+    sha256 = "sha256-eRpyTdwwO5EzrVpt9fF6VEYGZjHb905nQJd065wY5RU=";
   };
 
   patches = [
@@ -64,12 +65,7 @@ stdenv.mkDerivation rec {
       sha256 = "0z1ikgpp00rzrrcqh97931586yn9wbksgai9xlkcjd5cg8gq0150";
     })
 
-    # Fix build against ncurses-6.3:
-    #  https://github.com/apache/trafficserver/pull/8437
-    (fetchpatch {
-      url = "https://github.com/apache/trafficserver/commit/66c86c6b082903a92b9db33c60e3ed947e77d540.patch";
-      sha256 = "1hgpp80xnnjr4k5i6gcllrb7dw4q4xcdrkwxpc1xk2np5cbyxd16";
-    })
+    ./fix-catch2-version-incompatibility.patch
   ];
 
   # NOTE: The upstream README indicates that flex is needed for some features,
@@ -113,6 +109,10 @@ stdenv.mkDerivation rec {
       tools/check-unused-dependencies
 
     substituteInPlace configure --replace '/usr/bin/file' '${file}/bin/file'
+
+    # TODO: remove after the following change has been released
+    # https://github.com/apache/trafficserver/pull/8683
+    cp ${catch2}/include/catch2/catch.hpp tests/include/catch.hpp
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace configure \
       --replace '/usr/include/linux' '${linuxHeaders}/include/linux'

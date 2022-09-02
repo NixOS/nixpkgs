@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "einarhauks";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JBtlGd9aHY8ikhpJ5v7ZcNu3BfLdBmOBZCMa6C0s6gE=";
+    hash = "sha256-JBtlGd9aHY8ikhpJ5v7ZcNu3BfLdBmOBZCMa6C0s6gE=";
   };
 
   nativeBuildInputs = [
@@ -40,13 +40,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'backoff = "^1.11.1"' 'backoff = "*"'
+  '';
 
   pythonImportsCheck = [
     "tesla_wall_connector"
   ];
 
   meta = with lib; {
-    description = "Python library for communicating with a Tesla Wall Connector";
+    description = "Library for communicating with a Tesla Wall Connector";
     homepage = "https://github.com/einarhauks/tesla-wall-connector";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

@@ -5,18 +5,23 @@
 , setuptools-scm
 , shapely
 , sqlalchemy
+, alembic
 , psycopg2
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "GeoAlchemy2";
-  version = "0.10.2";
+  pname = "geoalchemy2";
+  version = "0.12.4";
   format = "setuptools";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "3db833746e11bc802b754751ec94eaab81009a9ad8fe647d461fe76d1a47a3fd";
+    pname = "GeoAlchemy2";
+    inherit version;
+    hash = "sha256-PHs6bS/I6BpJYEPHgB9yuM35Ix33fN5n/KxqKuQzwEk=";
   };
 
   nativeBuildInputs = [
@@ -30,8 +35,15 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    alembic
     psycopg2
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    # tests require live postgis database
+    "--deselect=tests/test_pickle.py::TestPickle::test_pickle_unpickle"
+    "--deselect=tests/gallery/test_specific_compilation.py::test_specific_compilation"
   ];
 
   disabledTestPaths = [
@@ -41,13 +53,18 @@ buildPythonPackage rec {
     "tests/gallery/test_summarystatsagg.py"
     "tests/gallery/test_type_decorator.py"
     "tests/test_functional.py"
+    "tests/test_functional_postgresql.py"
+    "tests/test_alembic_migrations.py"
+  ];
+
+  pythonImportsCheck = [
+    "geoalchemy2"
   ];
 
   meta = with lib; {
     description = "Toolkit for working with spatial databases";
-    homepage =  "http://geoalchemy.org/";
+    homepage =  "https://geoalchemy-2.readthedocs.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
-
 }

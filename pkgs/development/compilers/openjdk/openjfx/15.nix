@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, writeText, openjdk11_headless, gradle_5
 , pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib
-, ffmpeg, python3, ruby }:
+, ffmpeg_4, python3, ruby }:
 
 let
   major = "15";
@@ -21,7 +21,7 @@ let
       sha256 = "019glq8rhn6amy3n5jc17vi2wpf1pxpmmywvyz1ga8n09w7xscq1";
     };
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg ];
+    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4 ];
     nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;
@@ -31,8 +31,15 @@ let
       JDK_HOME = ${openjdk11_headless.home}
     '' + args.gradleProperties or "");
 
-    #avoids errors about deprecation of GTypeDebugFlags, GTimeVal, etc.
-    NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+    NIX_CFLAGS_COMPILE = [
+      #avoids errors about deprecation of GTypeDebugFlags, GTimeVal, etc.
+      "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
+
+      # gstreamer workaround for -fno-common toolchains:
+      #   ld: gsttypefindelement.o:(.bss._gst_disable_registry_cache+0x0): multiple definition of
+      #     `_gst_disable_registry_cache'; gst.o:(.bss._gst_disable_registry_cache+0x0): first defined here
+      "-fcommon"
+    ];
 
     buildPhase = ''
       runHook preBuild
@@ -89,7 +96,10 @@ in makePackage {
   '';
 
   # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+  # -fcommon: gstreamer workaround for -fno-common toolchains:
+  #   ld: gsttypefindelement.o:(.bss._gst_disable_registry_cache+0x0): multiple definition of
+  #     `_gst_disable_registry_cache'; gst.o:(.bss._gst_disable_registry_cache+0x0): first defined here
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS -fcommon";
 
   stripDebugList = [ "." ];
 

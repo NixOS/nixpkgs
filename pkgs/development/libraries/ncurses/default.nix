@@ -11,18 +11,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  # Note the revision needs to be adjusted.
-  version = "6.3";
-  name = "ncurses-${version}" + lib.optionalString (abiVersion == "5") "-abi5-compat";
+  ver = "6.3";
+  # We pick fresh intermediate release to get a fix for CVE-2022-29458
+  # which was fixed in 20220416 patchset.
+  patchver = "20220507";
+  version = "${ver}-p${patchver}";
+  pname = "ncurses" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
-  # We cannot use fetchFromGitHub (which calls fetchzip)
-  # because we need to be able to use fetchurlBoot.
-  src = let
-    # Note the version needs to be adjusted.
-    rev = "v${version}";
-  in fetchurl {
-    url = "https://github.com/mirror/ncurses/archive/${rev}.tar.gz";
-    sha256 = "1mawdjhzl2na2j0dylwc37f5w95rhgyvlwnfhww5rz2r7fgkvayv";
+  src = fetchurl {
+    url = "https://invisible-island.net/archives/ncurses/current/ncurses-${ver}-${patchver}.tgz";
+    sha256 = "02y4n4my5qqhw3fdhdjv1zc9xpyglzlzmzjwq2zcwbwv738255ja";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -35,6 +33,7 @@ stdenv.mkDerivation rec {
     "--enable-symlinks"
     "--with-manpage-format=normal"
     "--disable-stripping"
+    "--with-versioned-syms"
   ] ++ lib.optional unicodeSupport "--enable-widec"
     ++ lib.optional (!withCxx) "--without-cxx"
     ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
@@ -42,7 +41,17 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--enable-sp-funcs"
       "--enable-term-driver"
-    ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isUnix && stdenv.hostPlatform.isStatic) [
+      # For static binaries, the point is to have a standalone binary with
+      # minimum dependencies. So here we make sure that binaries using this
+      # package won't depend on a terminfo database located in the Nix store.
+      "--with-terminfo-dirs=${lib.concatStringsSep ":" [
+        "/etc/terminfo" # Debian, Fedora, Gentoo
+        "/lib/terminfo" # Debian
+        "/usr/share/terminfo" # upstream default, probably all FHS-based distros
+        "/run/current-system/sw/share/terminfo" # NixOS
+      ]}"
+  ];
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
   CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";

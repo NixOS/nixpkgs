@@ -1,32 +1,34 @@
-{ lib, stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsa-lib
+{ lib, stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curlWithGnuTls, alsa-lib
 , libXfixes, atk, gtk3, libXrender, pango, gnome, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
 , makeDesktopItem, openssl, wrapGAppsHook, at-spi2-atk, at-spi2-core, libuuid
-, e2fsprogs, krb5, libdrm, mesa, unzip, copyDesktopItems
+, e2fsprogs, krb5, libdrm, mesa, unzip, copyDesktopItems, libxshmfence, libxkbcommon
 }:
 
 with lib;
 
 let
-  curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
   pname = "gitkraken";
-  version = "8.2.1";
+  version = "8.8.0";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-      sha256 = "sha256-FjG7htwMRLZmwH6OjjyHkGUTaVNzuMTn6BjXUnCgwAA=";
+      sha256 = "sha256-F/uqV6CL/zFERS6nKVD8kEqCZQ2O9AGGzU5uCJ94qwk=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      sha256 = "sha256-cBZ53lekhPl5yjxclg2PeMCL0NKwshkKhP/lFbEinCs=";
+      sha256 = "sha256-TWkwN39SxPRvUUjAPSBxv4octWasjRiA91FNCWRya44=";
     };
 
-    aarch64-darwin = srcs.x86_64-darwin;
+    aarch64-darwin = fetchzip {
+      url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
+      sha256 = "sha256-drAj0t8BRUETQ6mZPdHXgkuFAKeYsGLE8oLtf/imHk4=";
+    };
   };
 
   src = srcs.${stdenv.hostPlatform.system} or throwSystem;
@@ -34,6 +36,7 @@ let
   meta = {
     homepage = "https://www.gitkraken.com/";
     description = "The downright luxurious and most popular Git client for Windows, Mac & Linux";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = builtins.attrNames srcs;
     maintainers = with maintainers; [ xnwdd evanjs arkivm ];
@@ -85,6 +88,8 @@ let
       krb5
       libdrm
       mesa
+      libxshmfence
+      libxkbcommon
     ];
 
     desktopItems = [ (makeDesktopItem {
@@ -93,7 +98,7 @@ let
       icon = pname;
       desktopName = "GitKraken";
       genericName = "Git Client";
-      categories = "Development;";
+      categories = [ "Development" ];
       comment = "Graphical Git client from Axosoft";
     }) ];
 

@@ -7,6 +7,7 @@
 , libxkbcommon
 , libinput
 , pixman
+, pythonOlder
 , udev
 , wlroots
 , wayland
@@ -18,17 +19,15 @@
 
 buildPythonPackage rec {
   pname = "pywlroots";
-  version = "0.15.3";
+  version = "0.15.20";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sCHeiD6KugHZLtxcVcLggdHC1gqCxStuHy1065TbGiY=";
+    sha256 = "sha256-hHZzMK7ge2Hs7tzHo4LV3rumEoEoL2OODRQRM60Vlz0=";
   };
-
-  # The XWayland detection uses some hard-coded FHS paths. Since we
-  # know wlroots was built with xwayland support, replace its
-  # detection with `return True`.
-  patches = [ ./xwayland.patch ];
 
   nativeBuildInputs = [ pkg-config ];
   propagatedNativeBuildInputs = [ cffi ];

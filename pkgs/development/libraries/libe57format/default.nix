@@ -1,6 +1,7 @@
 {
   lib, stdenv,
   cmake,
+  fetchpatch,
   fetchFromGitHub,
   boost,
   xercesc,
@@ -17,6 +18,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "15l23spjvak5h3n7aj3ggy0c3cwcg8mvnc9jlbd9yc2ra43bx7bp";
   };
+
+  patches = [
+    # gcc11 header fix
+    (fetchpatch {
+      url = "https://github.com/asmaloney/libE57Format/commit/13f6a16394ce3eb50ea4cd21f31f77f53294e8d0.patch";
+      sha256 = "sha256-4vVhKrCxnWO106DSAk+xxo4uk6zC89m9VQAPaDJ8Ed4=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

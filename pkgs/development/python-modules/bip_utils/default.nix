@@ -8,15 +8,15 @@
 
 buildPythonPackage rec {
   pname = "bip_utils";
-  version = "1.11.1";
+  version = "2.5.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ebellocchia";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0r8h979rklq7cvl0b449mfrx62dv367s31zgwfqn81kj72i3ndg4";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-lH8hd+JA1FhGH60MYIIuwHjr/4wFbYeuw/hd60kr1xc=";
   };
 
   propagatedBuildInputs = [ ecdsa pysha3 ];

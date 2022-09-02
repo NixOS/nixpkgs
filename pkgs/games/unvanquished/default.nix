@@ -1,31 +1,61 @@
-{ lib, stdenv, fetchzip, fetchFromGitHub, buildFHSUserEnv, makeDesktopItem
-, copyDesktopItems, gcc, cmake, gmp , libGL, zlib, ncurses, geoip, lua5
-, nettle, curl, SDL2, freetype, glew , openal, libopus, opusfile, libogg
-, libvorbis, libjpeg, libwebp, libpng
-, cacert, aria2 # to download assets
+{ lib
+, stdenv
+, fetchzip
+, fetchFromGitHub
+, fetchpatch
+, SDL2
+, buildFHSUserEnv
+, cmake
+, copyDesktopItems
+, curl
+, freetype
+, gcc
+, geoip
+, glew
+, gmp
+, libGL
+, libjpeg
+, libogg
+, libopus
+, libpng
+, libvorbis
+, libwebp
+, lua5
+, makeDesktopItem
+, ncurses
+, nettle
+, openal
+, opusfile
+, zlib
+# to download assets
+, aria2
+, cacert
 }:
 
 let
-  version = "0.52.1";
-  binary-deps-version = "5";
+  version = "0.53.1";
+  binary-deps-version = "6";
 
   src = fetchFromGitHub {
     owner = "Unvanquished";
     repo = "Unvanquished";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1fiqn9f6nsh4cfjy7gfsv950hphwi9ca0ddgsjvn77g7yc0arp6c";
+    sha256 = "sha256-AWXuPXOhhPfdDrcyZF5o7uBnieSCGhwCzOYN8MjgTl8=";
   };
 
   unvanquished-binary-deps = stdenv.mkDerivation rec {
     # DISCLAIMER: this is selected binary crap from the NaCl SDK
     name = "unvanquished-binary-deps";
     version = binary-deps-version;
+
     src = fetchzip {
       url = "https://dl.unvanquished.net/deps/linux64-${version}.tar.bz2";
-      sha256 = "08bpyavbh5lmyprvqqi59gnm8s1fjmlk9f1785wlv7f52d9f9z1p";
+      sha256 = "sha256-ERfg89oTf9JTtv/qRnTRIzFP+zMpHT8W4WAIxqogy9E=";
     };
+
     dontPatchELF = true;
+
     preFixup = ''
       # We are not using the autoPatchelfHook, because it would make
       # nacl_bootstrap_helper unable to load nacl_loader:
@@ -38,7 +68,12 @@ let
         fi
       done
     '';
-    preCheck = "pnacl/bin/clang -v"; # check it links correctly
+
+    preCheck = ''
+      # check it links correctly
+      pnacl/bin/clang -v
+    '';
+
     installPhase = ''
       runHook preInstall
 
@@ -51,15 +86,18 @@ let
 
   libstdcpp-preload-for-unvanquished-nacl = stdenv.mkDerivation {
     name = "libstdcpp-preload-for-unvanquished-nacl";
+
+    propagatedBuildInputs = [ gcc.cc.lib ];
+
     buildCommand = ''
       mkdir $out/etc -p
       echo ${gcc.cc.lib}/lib/libstdc++.so.6 > $out/etc/ld-nix.so.preload
     '';
-    propagatedBuildInputs = [ gcc.cc.lib ];
   };
 
   fhsEnv = buildFHSUserEnv {
     name = "unvanquished-fhs-wrapper";
+
     targetPkgs = pkgs: [ libstdcpp-preload-for-unvanquished-nacl ];
   };
 
@@ -81,10 +119,14 @@ let
     pname = "unvanquished-assets";
     inherit version src;
 
-    outputHash = "sha256:084jdisb48xyk9agjifn0nlnsdnjgg32si8zd1khsywd0kffplzx";
+    outputHash = "sha256-+mO4HQwFfy7SeGrN4R52KOr/uNQXkHMvYir3k0l5rDo=";
     outputHashMode = "recursive";
+
     nativeBuildInputs = [ aria2 cacert ];
-    buildCommand = "bash $src/download-paks --cache=$(pwd) --version=${version} $out";
+
+    buildCommand = ''
+      bash $src/download-paks --cache=$(pwd) --version=${version} $out
+    '';
   };
 
 # this really is the daemon game engine, the game itself is in the assets
@@ -98,7 +140,12 @@ in stdenv.mkDerivation rec {
     chmod +w -R daemon/external_deps/linux64-${binary-deps-version}/
   '';
 
-  nativeBuildInputs = [ cmake unvanquished-binary-deps copyDesktopItems ];
+  nativeBuildInputs = [
+    cmake
+    unvanquished-binary-deps
+    copyDesktopItems
+  ];
+
   buildInputs = [
     gmp
     libGL
@@ -135,25 +182,17 @@ in stdenv.mkDerivation rec {
       desktopName = "Unvanquished";
       comment = "FPS/RTS Game - Aliens vs. Humans";
       icon = "unvanquished";
-      terminal = false;
       exec = "unvanquished";
-      categories = "Game;ActionGame;StrategyGame;";
-      # May or may not work
+      categories = [ "Game" "ActionGame" "StrategyGame" ];
       prefersNonDefaultGPU = true;
-      fileValidation = false; # it doesn't like PrefersNonDefaultGPU
-      # yes, PrefersNonDefaultGPU is standard:
-      # https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html
     })
     (makeDesktopItem {
       name = "net.unvanquished.UnvanquishedProtocolHandler.desktop";
       desktopName = "Unvanquished (protocol handler)";
       noDisplay = true;
-      terminal = false;
       exec = "unvanquished -connect %u";
-      mimeType = "x-scheme-handler/unv";
-      # May or may not work
+      mimeTypes = [ "x-scheme-handler/unv" ];
       prefersNonDefaultGPU = true;
-      fileValidation = false; # it doesn't like PrefersNonDefaultGPU
     })
   ];
 
@@ -176,17 +215,22 @@ in stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
   meta = {
-    platforms = [ "x86_64-linux" ];
     homepage = "https://unvanquished.net/";
     downloadPage = "https://unvanquished.net/download/";
     description = "A fast paced, first person strategy game";
-    maintainers = with lib.maintainers; [ afontain ];
     # don't replace the following lib.licenses.zlib with just "zlib",
     # or you would end up with the package instead
     license = with lib.licenses; [
       mit gpl3Plus lib.licenses.zlib bsd3 # engine
       cc-by-sa-25 cc-by-sa-30 cc-by-30 cc-by-sa-40 cc0 # assets
     ];
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode  # unvanquished-binary-deps
+    ];
+    maintainers = with lib.maintainers; [ afontain ];
+    platforms = [ "x86_64-linux" ];
   };
 }

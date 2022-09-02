@@ -75,5 +75,7 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ cpu ];
     platforms = platforms.linux;
+    # See https://github.com/NixOS/nixpkgs/pull/160120
+    broken = withTTS;
   };
 }

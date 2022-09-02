@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dlib";
-  version = "19.22";
+  version = "19.24";
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
     rev ="v${version}";
-    sha256 = "sha256-cEbw01w4KgSG3JTvTE/qruo7i4/L++m02HW+0VNmSSQ=";
+    sha256 = "sha256-YhIjP9TIIyQF6lBj85gyVRIAAwgIodzh0ViQL8v2ACA=";
   };
 
   postPatch = ''
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.dlib.net";
     license = licenses.boost;
     maintainers = with maintainers; [ christopherpoole ma27 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -2,18 +2,19 @@
 , buildPythonPackage
 , fetchFromGitHub
 , googleapis-common-protos
+, protobuf
 , lib
 }:
 
 buildPythonPackage rec {
   pname = "tensorflow-metadata";
-  version = "1.5.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "metadata";
-    rev = "v${version}";
-    sha256 = "17p74k6rwswpmj7m16cw9hdam6b4m7v5bahirmc2l1kwfvrn4w33";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-6BtKHyVrprtEb2Bi7g2YuctUykWSRXmKwADfHzGkYjc=";
   };
 
   patches = [
@@ -31,7 +32,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     absl-py
     googleapis-common-protos
+    protobuf
   ];
+
+  # has no tests
+  doCheck = false;
 
   pythonImportsCheck = [
     "tensorflow_metadata"

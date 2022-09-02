@@ -10,13 +10,13 @@ let
   };
 in {
   options.hardware.ubertooth = {
-    enable = mkEnableOption "Enable the Ubertooth software and its udev rules.";
+    enable = mkEnableOption (lib.mdDoc "Enable the Ubertooth software and its udev rules.");
 
     group = mkOption {
       type = types.str;
       default = "ubertooth";
       example = "wheel";
-      description = "Group for Ubertooth's udev rules.";
+      description = lib.mdDoc "Group for Ubertooth's udev rules.";
     };
   };
 

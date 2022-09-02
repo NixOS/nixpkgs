@@ -51,10 +51,10 @@ in stdenv.mkDerivation rec {
       with close compatibility, under multiple platforms.
     '';
 
-    homepage = "http://www.freedink.org/";
+    homepage = "https://www.gnu.org/software/freedink/"; # Formerly http://www.freedink.org
     license = lib.licenses.gpl3Plus;
 
-    maintainers = [ lib.maintainers.bjg ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     hydraPlatforms = lib.platforms.linux; # sdl-config times out on darwin
   };

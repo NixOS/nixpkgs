@@ -1,34 +1,50 @@
 { buildPythonPackage
 , fetchFromGitHub
 , jaxlib
+, jax
 , keras
 , lib
 , matplotlib
 , msgpack
 , numpy
 , optax
+, pytest-xdist
 , pytestCheckHook
 , tensorflow
+, fetchpatch
+, rich
 }:
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.3.6";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0zvq0vl88hiwmss49bnm7gdmndr1dfza2bcs1fj88a9r7w9dmlsr";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-egTYYFZxhE/Kk7jXRi1HmjCjyFia2LoRigH042isDu0=";
   };
+
+  patches = [
+    # Bump rich dependency, should be fixed in releases after 0.6.0
+    # https://github.com/google/flax/pull/2407
+    (fetchpatch {
+      url = "https://github.com/google/flax/commit/72189153f9779022b97858ae747c23fbaf571e3d.patch";
+      sha256 = "sha256-hKOn/M7qpBM6R1RIJpnXpRoZgIHqkwQZApN4L0fBzIE=";
+      name = "bump_rich_dependency.patch";
+    })
+  ];
 
   buildInputs = [ jaxlib ];
 
   propagatedBuildInputs = [
+    jax
     matplotlib
     msgpack
     numpy
     optax
+    rich
   ];
 
   pythonImportsCheck = [
@@ -37,8 +53,14 @@ buildPythonPackage rec {
 
   checkInputs = [
     keras
+    pytest-xdist
     pytestCheckHook
     tensorflow
+  ];
+
+  pytestFlagsArray = [
+    "-W ignore::FutureWarning"
+    "-W ignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [

@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , installShellFiles
+, ansible
 , cryptography
 , jinja2
 , junit-xml
@@ -21,19 +22,13 @@
 , xmltodict
 }:
 
-let
-  ansible-collections = callPackage ./collections.nix {
-    version = "5.0.1";
-    sha256 = "sha256:0xn3lpinmflkxwak7zb36wjs9w2y1k5s295apn3v77xnpc2cfz5l";
-  };
-in
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.12.1";
+  version = "2.13.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-pFCHByYr4Ru03ZigBvGxSBeHmgVea2xGrZ/KiJT7MHM=";
+    sha256 = "sha256-t3nQ5VqXcXwO5ehrSGqmfAfCgJ70d74qyErQkajdLds=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -49,14 +44,14 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    # depend on ansible-collections instead of the other way around
-    ansible-collections
+    # depend on ansible instead of the other way around
+    ansible
     # from requirements.txt
     cryptography
     jinja2
     packaging
     pyyaml
-    resolvelib
+    resolvelib # This library is a PITA, since ansible requires a very old version of it
     # optional dependencies
     junit-xml
     lxml
@@ -77,14 +72,11 @@ buildPythonPackage rec {
   # internal import errors, missing dependencies
   doCheck = false;
 
-  passthru = {
-    collections = ansible-collections;
-  };
-
   meta = with lib; {
+    changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
     description = "Radically simple IT automation";
     homepage = "https://www.ansible.com";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

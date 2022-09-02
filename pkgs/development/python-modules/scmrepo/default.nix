@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "scmrepo";
-  version = "0.0.7";
+  version = "0.0.25";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
-    rev = version;
-    hash = "sha256-tZsogqcfAqpSo9yOz4z0mgY9SVU1epPmcBuyLJsHLfY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-269vJNclTBWEqM9AJbF96R1I6Ru3q8YBd5A8Rmw7Jjo=";
   };
 
   propagatedBuildInputs = [
@@ -36,6 +36,11 @@ buildPythonPackage rec {
     pygit2
     pygtrie
   ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "asyncssh>=2.7.1,<2.9" "asyncssh>=2.7.1"
+  '';
 
   # Requires a running Docker instance
   doCheck = false;

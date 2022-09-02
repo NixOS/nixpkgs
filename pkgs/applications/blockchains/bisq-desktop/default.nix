@@ -10,7 +10,6 @@
 , writeScript
 , bash
 , tor
-, gnutar
 , zip
 , xz
 }:
@@ -35,14 +34,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bisq-desktop";
-  version = "1.8.0";
+  version = "1.9.4";
 
   src = fetchurl {
     url = "https://github.com/bisq-network/bisq/releases/download/v${version}/Bisq-64bit-${version}.deb";
-    sha256 = "1q6x6w8mp5ax852hlvi2p61xgckb2lpr2ml21a9mfs9421b6m8h2";
+    sha256 = "sha256-8CgbJ5gfzIEh5ppwvQxYz1IES7Dd4MZCac0uVLh/YaY=";
   };
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems imagemagick dpkg gnutar zip xz ];
+  nativeBuildInputs = [ makeWrapper copyDesktopItems imagemagick dpkg zip xz ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -51,7 +50,7 @@ stdenv.mkDerivation rec {
       icon = "bisq";
       desktopName = "Bisq ${version}";
       genericName = "Decentralized bitcoin exchange";
-      categories = "Network;P2P;";
+      categories = [ "Network" "P2P" ];
     })
   ];
 
@@ -95,6 +94,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A decentralized bitcoin exchange network";
     homepage = "https://bisq.network";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     maintainers = with maintainers; [ juaningan emmanuelrosa ];
     platforms = [ "x86_64-linux" ];

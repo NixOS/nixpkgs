@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "mani";
-  version = "0.11.1";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "alajmo";
     repo = "mani";
     rev = "v${version}";
-    sha256 = "sha256-9SvjgXQADDNyv8O9KKE3gKXu67Nz5LepayUXSbWwEoY=";
+    sha256 = "sha256-eH6V7J0KHGyR//kVr0dOdBYuoR3FDbW/pSh0RhHd4A8=";
   };
 
-  vendorSha256 = "sha256-cuAZN08A2nND9d4c9w+kTqiMB9yaJ49Q0aT/V0J9FRw=";
+  vendorSha256 = "sha256-g336is8Jjbbzmtsu3suhO9SNq3IJyy1MQ3s8P39MhvU=";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 

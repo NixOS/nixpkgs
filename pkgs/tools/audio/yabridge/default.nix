@@ -8,17 +8,24 @@
 , ninja
 , pkg-config
 , wine
-, boost
 , libxcb
 , nix-update-script
 }:
 
 let
+  # Derived from subprojects/asio.wrap
+  asio = fetchFromGitHub {
+    owner = "chriskohlhoff";
+    repo = "asio";
+    rev = "asio-1-22-1";
+    sha256 = "sha256-UDLhx2yI6Txg0wP5H4oNIhgKIB2eMxUGCyT2x/7GgVg=";
+  };
+
   # Derived from subprojects/bitsery.wrap
   bitsery = fetchFromGitHub {
     owner = "fraillt";
     repo = "bitsery";
-    rev = "c0fc083c9de805e5825d7553507569febf6a6f93";
+    rev = "v5.2.2";
     sha256 = "sha256-VwzVtxt+E/SVcxqIJw8BKPO2q7bu/hkhY+nB7FHrZpY=";
   };
 
@@ -26,45 +33,53 @@ let
   function2 = fetchFromGitHub {
     owner = "Naios";
     repo = "function2";
-    rev = "02ca99831de59c7c3a4b834789260253cace0ced";
+    rev = "4.2.0";
     sha256 = "sha256-wrt+fCcM6YD4ZRZYvqqB+fNakCNmltdPZKlNkPLtgMs=";
+  };
+
+  # Derived from subprojects/ghc_filesystem.wrap
+  ghc_filesystem = fetchFromGitHub {
+    owner = "gulrak";
+    repo = "filesystem";
+    rev = "v1.5.12";
+    sha256 = "sha256-j4RE5Ach7C7Kef4+H9AHSXa2L8OVyJljDwBduKcC4eE=";
   };
 
   # Derived from subprojects/tomlplusplus.wrap
   tomlplusplus = fetchFromGitHub {
     owner = "marzer";
     repo = "tomlplusplus";
-    rev = "47216c8a73d77e7431ec536fb3e251aed06cc420";
-    sha256 = "sha256-cwAzWu5j3ch/56a6JmEoKCsxVNTk6tiZswNdNT6qzX0=";
+    rev = "v3.0.1";
+    sha256 = "sha256-l8ckbCqjz3GUfwStcl3H2C+un5dZfT2uLtayvdu93D4=";
   };
 
   # Derived from vst3.wrap
   vst3 = fetchFromGitHub {
     owner = "robbert-vdh";
     repo = "vst3sdk";
-    rev = "v3.7.3_build_20-patched";
+    rev = "v3.7.5_build_44-patched";
     fetchSubmodules = true;
-    sha256 = "sha256-m2y7No7BNbIjLNgdAqIAEr6UuAZZ/wwM2+iPWKK17gQ=";
+    sha256 = "sha256-6cuEUa+BXa6MnAYIBq873n0NRLadcPfMX+kpf4ysE6M=";
   };
 in multiStdenv.mkDerivation rec {
   pname = "yabridge";
-  version = "3.7.0";
+  version = "4.0.2";
 
   # NOTE: Also update yabridgectl's cargoHash when this is updated
   src = fetchFromGitHub {
     owner = "robbert-vdh";
     repo = pname;
     rev = version;
-    sha256 = "sha256-dz7kScNrVUsjokJntzUCJzDIboqi3vQI+RpXl0UFmUQ=";
+    sha256 = "sha256-rce6gxnB+RpG84Xakw0h4vZ8lyEQ41swWQGuwpomV2I=";
   };
 
   # Unpack subproject sources
   postUnpack = ''(
     cd "$sourceRoot/subprojects"
+    cp -R --no-preserve=mode,ownership ${asio} asio
     cp -R --no-preserve=mode,ownership ${bitsery} bitsery
-    cp packagefiles/bitsery/* bitsery
     cp -R --no-preserve=mode,ownership ${function2} function2
-    cp packagefiles/function2/* function2
+    cp -R --no-preserve=mode,ownership ${ghc_filesystem} ghc_filesystem
     cp -R --no-preserve=mode,ownership ${tomlplusplus} tomlplusplus
     cp -R --no-preserve=mode,ownership ${vst3} vst3
   )'';
@@ -73,14 +88,23 @@ in multiStdenv.mkDerivation rec {
     # Hard code bitbridge & runtime dependencies
     (substituteAll {
       src = ./hardcode-dependencies.patch;
-      boost32 = pkgsi686Linux.boost;
       libxcb32 = pkgsi686Linux.xorg.libxcb;
       inherit libnotify wine;
     })
+
+    # Patch the chainloader to search for libyabridge through NIX_PROFILES
+    ./libyabridge-from-nix-profiles.patch
   ];
 
   postPatch = ''
     patchShebangs .
+    (
+      cd subprojects
+      cp packagefiles/asio/* asio
+      cp packagefiles/bitsery/* bitsery
+      cp packagefiles/function2/* function2
+      cp packagefiles/ghc_filesystem/* ghc_filesystem
+    )
   '';
 
   nativeBuildInputs = [
@@ -91,18 +115,12 @@ in multiStdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
     libxcb
   ];
 
-  # Meson is no longer able to pick up Boost automatically.
-  # https://github.com/NixOS/nixpkgs/issues/86131
-  BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
-  BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
-
   mesonFlags = [
     "--cross-file" "cross-wine.conf"
-    "-Dwith-bitbridge=true"
+    "-Dbitbridge=true"
 
     # Requires CMake and is unnecessary
     "-Dtomlplusplus:generate_cmake_config=false"
@@ -111,10 +129,8 @@ in multiStdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir -p "$out/bin" "$out/lib"
-    cp yabridge-group*.exe{,.so} "$out/bin"
-    cp yabridge-host*.exe{,.so} "$out/bin"
-    cp libyabridge-vst2.so "$out/lib"
-    cp libyabridge-vst3.so "$out/lib"
+    cp yabridge-host{,-32}.exe{,.so} "$out/bin"
+    cp libyabridge{,-chainloader}-{vst2,vst3}.so "$out/lib"
     runHook postInstall
   '';
 
@@ -131,8 +147,8 @@ in multiStdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Yet Another VST bridge, run Windows VST2 plugins under Linux";
-    homepage = "https://github.com/robbert-vdh/yabridge";
+    description = "A modern and transparent way to use Windows VST2 and VST3 plugins on Linux";
+    homepage = src.meta.homepage;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = [ "x86_64-linux" ];

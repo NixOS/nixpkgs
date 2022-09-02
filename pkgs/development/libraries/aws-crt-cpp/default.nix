@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-crt-cpp";
-  version = "0.17.8";
+  version = "0.17.32";
 
   outputs = [ "out" "dev" ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "awslabs";
     repo = "aws-crt-cpp";
     rev = "v${version}";
-    sha256 = "sha256-eHABIg3v5ycpQzacW/8C74PT6yDOXGmJqDa9P1hN7Mo=";
+    sha256 = "sha256-Za2+7stcdrKou8DlfIIYGu5RYqS2FG5zCITm9pFSWX0=";
   };
 
   patches = [
@@ -57,7 +57,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DBUILD_SHARED_LIBS=ON"
   ];
 

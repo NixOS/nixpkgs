@@ -6,17 +6,17 @@ let
   cfg = config.services.mbpfan;
   verbose = if cfg.verbose then "v" else "";
   settingsFormat = pkgs.formats.ini {};
-  settingsFile = settingsFormat.generate "config.conf" cfg.settings;
+  settingsFile = settingsFormat.generate "mbpfan.ini" cfg.settings;
 
 in {
   options.services.mbpfan = {
-    enable = mkEnableOption "mbpfan, fan controller daemon for Apple Macs and MacBooks";
+    enable = mkEnableOption (lib.mdDoc "mbpfan, fan controller daemon for Apple Macs and MacBooks");
 
     package = mkOption {
       type = types.package;
       default = pkgs.mbpfan;
       defaultText = literalExpression "pkgs.mbpfan";
-      description = ''
+      description = lib.mdDoc ''
         The package used for the mbpfan daemon.
       '';
     };
@@ -24,46 +24,46 @@ in {
     verbose = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         If true, sets the log level to verbose.
       '';
     };
 
     settings = mkOption {
       default = {};
-      description = "The INI configuration for Mbpfan.";
+      description = lib.mdDoc "INI configuration for Mbpfan.";
       type = types.submodule {
         freeformType = settingsFormat.type;
 
         options.general.min_fan1_speed = mkOption {
-          type = types.int;
+          type = types.nullOr types.int;
           default = 2000;
-          description = "The minimum fan speed.";
-        };
-        options.general.max_fan1_speed = mkOption {
-          type = types.int;
-          default = 6199;
-          description = "The maximum fan speed.";
+          description = lib.mdDoc ''
+            You can check minimum and maximum fan limits with
+            `cat /sys/devices/platform/applesmc.768/fan*_min` and
+            `cat /sys/devices/platform/applesmc.768/fan*_max` respectively.
+            Setting to null implies using default value from applesmc.
+          '';
         };
         options.general.low_temp = mkOption {
           type = types.int;
           default = 55;
-          description = "The low temperature.";
+          description = lib.mdDoc "If temperature is below this, fans will run at minimum speed.";
         };
         options.general.high_temp = mkOption {
           type = types.int;
           default = 58;
-          description = "The high temperature.";
+          description = lib.mdDoc "If temperature is above this, fan speed will gradually increase.";
         };
         options.general.max_temp = mkOption {
           type = types.int;
           default = 86;
-          description = "The maximum temperature.";
+          description = lib.mdDoc "If temperature is above this, fans will run at maximum speed.";
         };
         options.general.polling_interval = mkOption {
           type = types.int;
           default = 1;
-          description = "The polling interval.";
+          description = lib.mdDoc "The polling interval.";
         };
       };
     };

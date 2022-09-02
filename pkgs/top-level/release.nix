@@ -57,7 +57,6 @@ let
               jobs.openssl.x86_64-darwin
               jobs.pandoc.x86_64-darwin
               jobs.postgresql.x86_64-darwin
-              jobs.python2.x86_64-darwin
               jobs.python3.x86_64-darwin
               jobs.ruby.x86_64-darwin
               jobs.rustc.x86_64-darwin
@@ -102,7 +101,6 @@ let
               jobs.go.x86_64-linux
               jobs.linux.x86_64-linux
               jobs.pandoc.x86_64-linux
-              jobs.python2.x86_64-linux
               jobs.python3.x86_64-linux
               # Needed by contributors to test PRs (by inclusion of the PR template)
               jobs.nixpkgs-review.x86_64-linux
@@ -110,7 +108,7 @@ let
               jobs.nix-info.x86_64-linux
               jobs.nix-info-tested.x86_64-linux
               # Ensure that X11/GTK are in order.
-              jobs.thunderbird-unwrapped.x86_64-linux
+              jobs.firefox-unwrapped.x86_64-linux
               jobs.cachix.x86_64-linux
 
               /*
@@ -136,8 +134,8 @@ let
             ++ lib.optionals supportDarwin.x86_64 [
               jobs.stdenv.x86_64-darwin
               jobs.cargo.x86_64-darwin
+              jobs.cachix.x86_64-darwin
               jobs.go.x86_64-darwin
-              jobs.python2.x86_64-darwin
               jobs.python3.x86_64-darwin
               jobs.nixpkgs-review.x86_64-darwin
               jobs.nix-info.x86_64-darwin

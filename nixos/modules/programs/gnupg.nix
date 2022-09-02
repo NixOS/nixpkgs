@@ -17,7 +17,7 @@ let
     else if xserverCfg.enable || config.programs.sway.enable then
       "gnome3"
     else
-      null;
+      "curses";
 
 in
 
@@ -28,7 +28,7 @@ in
       type = types.package;
       default = pkgs.gnupg;
       defaultText = literalExpression "pkgs.gnupg";
-      description = ''
+      description = lib.mdDoc ''
         The gpg package that should be used.
       '';
     };
@@ -36,7 +36,7 @@ in
     agent.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enables GnuPG agent with socket-activation for every user session.
       '';
     };
@@ -44,7 +44,7 @@ in
     agent.enableSSHSupport = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable SSH agent support in GnuPG agent. Also sets SSH_AUTH_SOCK
         environment variable correctly. This will disable socket-activation
         and thus always start a GnuPG agent per user session.
@@ -54,7 +54,7 @@ in
     agent.enableExtraSocket = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable extra socket for GnuPG agent.
       '';
     };
@@ -62,7 +62,7 @@ in
     agent.enableBrowserSocket = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable browser socket for GnuPG agent.
       '';
     };
@@ -71,8 +71,8 @@ in
       type = types.nullOr (types.enum pkgs.pinentry.flavors);
       example = "gnome3";
       default = defaultPinentryFlavor;
-      defaultText = literalDocBook ''matching the configured desktop environment'';
-      description = ''
+      defaultText = literalMD ''matching the configured desktop environment'';
+      description = lib.mdDoc ''
         Which pinentry interface to use. If not null, the path to the
         pinentry binary will be passed to gpg-agent via commandline and
         thus overrides the pinentry option in gpg-agent.conf in the user's
@@ -86,7 +86,7 @@ in
     dirmngr.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enables GnuPG network certificate management daemon with socket-activation for every user session.
       '';
     };
@@ -129,12 +129,14 @@ in
     environment.interactiveShellInit = ''
       # Bind gpg-agent to this TTY if gpg commands are used.
       export GPG_TTY=$(tty)
+    '';
 
-    '' + (optionalString cfg.agent.enableSSHSupport ''
-      # SSH agent protocol doesn't support changing TTYs, so bind the agent
-      # to every new TTY.
-      ${cfg.package}/bin/gpg-connect-agent --quiet updatestartuptty /bye > /dev/null
-    '');
+    programs.ssh.extraConfig = optionalString cfg.agent.enableSSHSupport ''
+      # The SSH agent protocol doesn't have support for changing TTYs; however we
+      # can simulate this with the `exec` feature of openssh (see ssh_config(5))
+      # that hooks a command to the shell currently running the ssh program.
+      Match host * exec "${cfg.package}/bin/gpg-connect-agent --quiet updatestartuptty /bye > /dev/null"
+    '';
 
     environment.extraInit = mkIf cfg.agent.enableSSHSupport ''
       if [ -z "$SSH_AUTH_SOCK" ]; then

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "free42";
-  version = "3.0.9";
+  version = "3.0.14";
 
   src = fetchFromGitHub {
     owner = "thomasokken";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZSwqgHsfe9apyYZ1fkvDMnQxdNb9E8U1l9jvC9t693w=";
+    hash = "sha256-Jx+MLItr+rIGfzJdQku1pRXaIldfrpG3vfOhjebSIZA=";
   };
 
   nativeBuildInputs = [
@@ -74,8 +74,7 @@ stdenv.mkDerivation rec {
       exec = "free42bin";
       type = "Application";
       comment = meta.description;
-      categories = "Utility;Calculator;";
-      terminal = "false";
+      categories = [ "Utility" "Calculator" ];
     })
     (makeDesktopItem {
       name = "com.thomasokken.free42dec";
@@ -84,8 +83,7 @@ stdenv.mkDerivation rec {
       exec = "free42dec";
       type = "Application";
       comment = meta.description;
-      categories = "Utility;Calculator;";
-      terminal = "false";
+      categories = [ "Utility" "Calculator" ];
     })
   ];
 

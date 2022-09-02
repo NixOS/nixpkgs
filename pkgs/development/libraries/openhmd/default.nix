@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
     "-DOPENHMD_EXAMPLE_SIMPLE=${examplesOnOff}"
     "-DOPENHMD_EXAMPLE_SDL=${examplesOnOff}"
     "-DOpenGL_GL_PREFERENCE=GLVND"
+
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
   postInstall = lib.optionalString withExamples ''

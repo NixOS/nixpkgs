@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gpsprune";
-  version = "21";
+  version = "22";
 
   src = fetchurl {
     url = "https://activityworkshop.net/software/gpsprune/gpsprune_${version}.jar";
-    sha256 = "sha256-FS6nf8K+qfEWDCQwmoxH1laJIONMtwmb/H89SVJtV1E=";
+    sha256 = "sha256-T4lzw3UupnSF+anrdZDhg68OxSJsD7M3djK7WpKXq6Q=";
   };
 
   dontUnpack = true;
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       desktopName = "GpsPrune";
       genericName = "GPS Data Editor";
       comment = meta.description;
-      categories = "Education;Geoscience;";
+      categories = [ "Education" "Geoscience" ];
     })
   ];
 
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Application for viewing, editing and converting GPS coordinate data";
     homepage = "https://activityworkshop.net/software/gpsprune/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ rycee ];
     platforms = platforms.all;

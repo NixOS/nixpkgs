@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
-, ffmpeg
+, ffmpeg_4
 , zlib
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_4
     zlib
   ];
 

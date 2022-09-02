@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-http";
-  version = "0.6.10";
+  version = "0.6.19";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-http";
     rev = "v${version}";
-    sha256 = "sha256-R+teEKSQjSFYt3+XXvooAy4GJwN4yzEhJtiuknBZIgU=";
+    sha256 = "sha256-ErwsRYz0D5ktlDaXIDvTXkxO7MM0N4RAA5IBqPbNfAc=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DBUILD_SHARED_LIBS=ON"
   ];
 

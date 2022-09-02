@@ -1,7 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, curl, openssl, s2n-tls, zlib
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, curl
+, openssl
+, s2n-tls
+, zlib
 , aws-crt-cpp
-, aws-c-cal, aws-c-common, aws-c-event-stream, aws-c-io, aws-checksums
-, CoreAudio, AudioToolbox
+, aws-c-cal
+, aws-c-common
+, aws-c-event-stream
+, aws-c-io
+, aws-checksums
+, CoreAudio
+, AudioToolbox
 , # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
   apis ? ["*"]
 , # Whether to enable AWS' custom memory management.
@@ -18,16 +31,35 @@ in
 
 stdenv.mkDerivation rec {
   pname = "aws-sdk-cpp";
-  version = "1.9.150";
+  version = "1.9.294";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "sha256-fgLdXWQKHaCwulrw9KV3vpQ71DjnQAL4heIRW7Rk7UY=";
+    sha256 = "sha256-Z1eRKW+8nVD53GkNyYlZjCcT74MqFqqRMeMc33eIQ9g=";
   };
 
+  patches = [
+    ./cmake-dirs.patch
+  ];
+
   postPatch = ''
+    # Missing includes for GCC11
+    sed '5i#include <thread>' -i \
+      aws-cpp-sdk-cloudfront-integration-tests/CloudfrontOperationTest.cpp \
+      aws-cpp-sdk-cognitoidentity-integration-tests/IdentityPoolOperationTest.cpp \
+      aws-cpp-sdk-dynamodb-integration-tests/TableOperationTest.cpp \
+      aws-cpp-sdk-elasticfilesystem-integration-tests/ElasticFileSystemTest.cpp \
+      aws-cpp-sdk-lambda-integration-tests/FunctionTest.cpp \
+      aws-cpp-sdk-mediastore-data-integration-tests/MediaStoreDataTest.cpp \
+      aws-cpp-sdk-queues/source/sqs/SQSQueue.cpp \
+      aws-cpp-sdk-redshift-integration-tests/RedshiftClientTest.cpp \
+      aws-cpp-sdk-s3-crt-integration-tests/BucketAndObjectOperationTest.cpp \
+      aws-cpp-sdk-s3-integration-tests/BucketAndObjectOperationTest.cpp \
+      aws-cpp-sdk-s3control-integration-tests/S3ControlTest.cpp \
+      aws-cpp-sdk-sqs-integration-tests/QueueOperationTest.cpp \
+      aws-cpp-sdk-transfer-tests/TransferTests.cpp
     # Flaky on Hydra
     rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
     # Includes aws-c-auth private headers, so only works with submodule build
@@ -35,6 +67,9 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     # TestRandomURLMultiThreaded fails
     rm aws-cpp-sdk-core-tests/http/HttpClientTest.cpp
+  '' + lib.optionalString stdenv.isi686 ''
+    # EPSILON is exceeded
+    rm aws-cpp-sdk-core-tests/aws/client/AdaptiveRetryStrategyTest.cpp
   '';
 
   # FIXME: might be nice to put different APIs in different outputs
@@ -55,7 +90,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
   ] ++ lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-DENABLE_TESTING=OFF"
@@ -64,9 +98,6 @@ stdenv.mkDerivation rec {
     "-DTARGET_ARCH=${host_os}"
   ] ++ lib.optional (apis != ["*"])
     "-DBUILD_ONLY=${lib.concatStringsSep ";" apis}";
-
-  # fix build with gcc9, can be removed after bumping to current version
-  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
 
   # aws-cpp-sdk-core-tests/aws/client/AWSClientTest.cpp
   # seem to have a datarace
@@ -80,16 +111,6 @@ stdenv.mkDerivation rec {
 
   __darwinAllowLocalNetworking = true;
 
-  patches = [
-    ./cmake-dirs.patch
-
-    # fix cmake config
-    (fetchpatch {
-      url = "https://github.com/aws/aws-sdk-cpp/commit/b102aaf5693c4165c84b616ab9ffb9edfb705239.diff";
-      sha256 = "sha256-38QBo3MEFpyHPb8jZEURRPkoeu4DqWhVeErJayiHKF0=";
-    })
-  ];
-
   # Builds in 2+h with 2 cores, and ~10m with a big-parallel builder.
   requiredSystemFeatures = [ "big-parallel" ];
 
@@ -99,5 +120,7 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ eelco orivej ];
+    # building ec2 runs out of memory: cc1plus: out of memory allocating 33554372 bytes after a total of 74424320 bytes
+    broken = stdenv.buildPlatform.is32bit && ((builtins.elem "ec2" apis) || (builtins.elem "*" apis));
   };
 }

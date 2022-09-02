@@ -10,13 +10,13 @@
 
 mkDerivation rec {
   pname = "goldendict";
-  version = "2021-03-09";
+  version = "2022-05-10";
 
   src = fetchFromGitHub {
     owner = "goldendict";
     repo = pname;
-    rev = "b2e673961d28ca5eb920a909091252d3321f09d6";
-    sha256 = "sha256-+AAamnICq0/B54ggFpgF/Uupm1a4YiEYgHXrhIK4M0E=";
+    rev = "f810c6bd724e61977b4e94ca2d8abfa5bd766379";
+    sha256 = "sha256-gNM+iahoGQy8TlNFLQx5ksITzQznv7MWMX/88QCTnL0";
   };
 
   patches = [
@@ -27,7 +27,8 @@ mkDerivation rec {
 
   postPatch = ''
     substituteInPlace goldendict.pro \
-      --replace "hunspell-1.6.1" "hunspell-${lib.versions.majorMinor hunspell.version}"
+      --replace "hunspell-1.6.1" "hunspell-${lib.versions.majorMinor hunspell.version}" \
+      --replace "opencc.2" "opencc"
   '';
 
   nativeBuildInputs = [ pkg-config qmake ];

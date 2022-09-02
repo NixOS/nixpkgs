@@ -19,22 +19,19 @@
 
 buildDotnetModule rec {
   pname = "OpenTabletDriver";
-  version = "0.6.0.2";
+  version = "0.6.0.4";
 
   src = fetchFromGitHub {
     owner = "OpenTabletDriver";
     repo = "OpenTabletDriver";
     rev = "v${version}";
-    sha256 = "sha256-qPlya5f12Cc1yAK8dliWelA7drAoeeIkFXOD+aDeToo=";
+    sha256 = "sha256-VvxW8Ck+XC4nXSUyDhcbGoeSr5uSAZ66jtZNoADuVR8=";
   };
 
   debPkg = fetchurl {
     url = "https://github.com/OpenTabletDriver/OpenTabletDriver/releases/download/v${version}/OpenTabletDriver.deb";
     sha256 = "sha256-LJqH3+JckPF7S/1uBE2X81jxWg0MF9ff92Ei8WPEA2w=";
   };
-
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   dotnetInstallFlags = [ "--framework=net6.0" ];
 
@@ -58,6 +55,8 @@ buildDotnetModule rec {
     libnotify
     udev
   ];
+
+  buildInputs = runtimeDeps;
 
   doCheck = true;
   testProjectFile = "OpenTabletDriver.Tests/OpenTabletDriver.Tests.csproj";
@@ -100,8 +99,7 @@ buildDotnetModule rec {
       exec = "otd-gui";
       icon = "otd";
       comment = meta.description;
-      type = "Application";
-      categories = "Utility;";
+      categories = [ "Utility" ];
     })
   ];
 

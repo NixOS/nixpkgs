@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "pycoolmasternet-async";
-  version = "0.1.2";
+  version = "0.1.3";
 
   disabled = pythonOlder "3.7";
 
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "OnFreund";
     repo = "pycoolmasternet-async";
     rev = "v${version}";
-    sha256 = "0qzdk18iqrvin8p8zrydf69d6pii3j47j11h7ymmsx08gh7c176g";
+    hash = "sha256-1Xd8OdN8d3g23kQZqihZrNLKoqLCbu5BvAMNitg8aDA=";
   };
 
   # no tests implemented

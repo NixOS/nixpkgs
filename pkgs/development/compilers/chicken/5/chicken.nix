@@ -31,11 +31,13 @@ stdenv.mkDerivation rec {
     "C_COMPILER=$(CC)"
   ]);
 
-  buildInputs = [
+  nativeBuildInputs = [
     makeWrapper
-  ] ++ (lib.optionals (bootstrap-chicken != null) [
+  ];
+
+  buildInputs = lib.optionals (bootstrap-chicken != null) [
     bootstrap-chicken
-  ]);
+  ];
 
   postInstall = ''
     for f in $out/bin/*
@@ -45,10 +47,15 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
   postCheck = ''
     ./csi -R chicken.pathname -R chicken.platform \
        -p "(assert (equal? \"${toString binaryVersion}\" (pathname-file (car (repository-path)))))"
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/chicken -version
   '';
 
   meta = {

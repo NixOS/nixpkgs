@@ -6,33 +6,22 @@
 }:
 
 let
-  pname = "sublimetext4";
+  pnameBase = "sublimetext4";
   packageAttribute = "sublime4${lib.optionalString dev "-dev"}";
   binaries = [ "sublime_text" "plugin_host-3.3" "plugin_host-3.8" "crash_reporter" ];
   primaryBinary = "sublime_text";
   primaryBinaryAliases = [ "subl" "sublime" "sublime4" ];
-  downloadUrl = "https://download.sublimetext.com/sublime_text_build_${buildVersion}_${arch}.tar.xz";
+  downloadUrl = arch: "https://download.sublimetext.com/sublime_text_build_${buildVersion}_${arch}.tar.xz";
   versionUrl = "https://download.sublimetext.com/latest/${if dev then "dev" else "stable"}";
   versionFile = builtins.toString ./packages.nix;
-  archSha256 = {
-    "aarch64-linux" = aarch64sha256;
-    "x86_64-linux" = x64sha256;
-  }.${stdenv.hostPlatform.system};
-  arch = {
-    "aarch64-linux" = "arm64";
-    "x86_64-linux" = "x64";
-  }.${stdenv.hostPlatform.system};
 
   libPath = lib.makeLibraryPath [ xorg.libX11 xorg.libXtst glib libglvnd openssl gtk3 cairo pango curl ];
 in let
-  binaryPackage = stdenv.mkDerivation {
-    pname = "${pname}-bin";
+  binaryPackage = stdenv.mkDerivation rec {
+    pname = "${pnameBase}-bin";
     version = buildVersion;
 
-    src = fetchurl {
-      url = downloadUrl;
-      sha256 = archSha256;
-    };
+    src = passthru.sources.${stdenv.hostPlatform.system};
 
     dontStrip = true;
     dontPatchELF = true;
@@ -95,9 +84,22 @@ in let
         --set LOCALE_ARCHIVE "${glibcLocales.out}/lib/locale/locale-archive" \
         "''${gappsWrapperArgs[@]}"
     '';
+
+    passthru = {
+      sources = {
+        "aarch64-linux" = fetchurl {
+          url = downloadUrl "arm64";
+          sha256 = aarch64sha256;
+        };
+        "x86_64-linux" = fetchurl {
+          url = downloadUrl "x64";
+          sha256 = x64sha256;
+        };
+      };
+    };
   };
 in stdenv.mkDerivation (rec {
-  inherit pname;
+  pname = pnameBase;
   version = buildVersion;
 
   dontUnpack = true;
@@ -119,29 +121,36 @@ in stdenv.mkDerivation (rec {
     done
   '';
 
-  passthru.updateScript = writeShellScript "${pname}-update-script" ''
-    set -o errexit
-    PATH=${lib.makeBinPath [ common-updater-scripts curl ]}
+  passthru = {
+    updateScript =
+      let
+        script = writeShellScript "${packageAttribute}-update-script" ''
+          set -o errexit
+          PATH=${lib.makeBinPath [ common-updater-scripts curl ]}
 
-    latestVersion=$(curl -s ${versionUrl})
+          versionFile=$1
+          latestVersion=$(curl -s "${versionUrl}")
 
-    if [[ "${buildVersion}" = "$latestVersion" ]]; then
-        echo "The new version same as the old version."
-        exit 0
-    fi
+          if [[ "${buildVersion}" = "$latestVersion" ]]; then
+              echo "The new version same as the old version."
+              exit 0
+          fi
 
-    for platform in ${lib.concatStringsSep " " meta.platforms}; do
-        # The script will not perform an update when the version attribute is up to date from previous platform run
-        # We need to clear it before each run
-        update-source-version ${packageAttribute}.${primaryBinary} 0 0000000000000000000000000000000000000000000000000000000000000000 --file=${versionFile} --version-key=buildVersion --system=$platform
-        update-source-version ${packageAttribute}.${primaryBinary} $latestVersion --file=${versionFile} --version-key=buildVersion --system=$platform
-    done
-  '';
+          for platform in ${lib.escapeShellArgs meta.platforms}; do
+              # The script will not perform an update when the version attribute is up to date from previous platform run
+              # We need to clear it before each run
+              update-source-version "${packageAttribute}.${primaryBinary}" 0 "${lib.fakeSha256}" --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
+              update-source-version "${packageAttribute}.${primaryBinary}" "$latestVersion" --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
+          done
+        '';
+      in [ script versionFile ];
+  };
 
   meta = with lib; {
     description = "Sophisticated text editor for code, markup and prose";
     homepage = "https://www.sublimetext.com/";
     maintainers = with maintainers; [ jtojnar wmertens demin-dmitriy zimbatm ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "aarch64-linux" "x86_64-linux" ];
   };

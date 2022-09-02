@@ -18,40 +18,40 @@ in
 
     services.pgpkeyserver-lite = {
 
-      enable = mkEnableOption "pgpkeyserver-lite on a nginx vHost proxying to a gpg keyserver";
+      enable = mkEnableOption (lib.mdDoc "pgpkeyserver-lite on a nginx vHost proxying to a gpg keyserver");
 
       package = mkOption {
         default = pkgs.pgpkeyserver-lite;
         defaultText = literalExpression "pkgs.pgpkeyserver-lite";
         type = types.package;
-        description = "
+        description = lib.mdDoc ''
           Which webgui derivation to use.
-        ";
+        '';
       };
 
       hostname = mkOption {
         type = types.str;
-        description = "
+        description = lib.mdDoc ''
           Which hostname to set the vHost to that is proxying to sks.
-        ";
+        '';
       };
 
       hkpAddress = mkOption {
         default = builtins.head sksCfg.hkpAddress;
         defaultText = literalExpression "head config.${sksOpt.hkpAddress}";
         type = types.str;
-        description = "
+        description = lib.mdDoc ''
           Wich ip address the sks-keyserver is listening on.
-        ";
+        '';
       };
 
       hkpPort = mkOption {
         default = sksCfg.hkpPort;
         defaultText = literalExpression "config.${sksOpt.hkpPort}";
         type = types.int;
-        description = "
+        description = lib.mdDoc ''
           Which port the sks-keyserver is listening on.
-        ";
+        '';
       };
     };
   };

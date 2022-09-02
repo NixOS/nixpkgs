@@ -6,11 +6,11 @@
 
 buildDunePackage rec {
   pname = "index";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/index/releases/download/${version}/index-${version}.tbz";
-    sha256 = "1q1lv960dk1br8nz8gkibdywl2wv64ywib7b9jn33f6mpb81qc9f";
+    sha256 = "sha256:150mcsh8vj2hapfnxbjmacanjy4avrv8yk1lyaxmqj3fpmn1y32y";
   };
 
   minimalOCamlVersion = "4.08";

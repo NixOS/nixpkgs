@@ -1,0 +1,26 @@
+From 7e90a58be65bc9d81e53dfba39a44fdd2c7a79a4 Mon Sep 17 00:00:00 2001
+From: Maxim Zhukov <mussitantesmortem@gmail.com>
+Date: Sat, 23 Jul 2022 08:44:07 +0300
+Subject: [PATCH] cargo: remove vendored openssl
+
+Signed-off-by: Maxim Zhukov <mussitantesmortem@gmail.com>
+---
+ Cargo.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index 341c722..81665fb 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -23,7 +23,7 @@ url = "2.1.0"
+ hyper-native-tls = { version = "0.3.0", optional = true }
+ mime_guess = "2.0"
+ open = "1"
+-openssl = { version = "0.10", features = ["vendored"] }
++openssl = { version = "0.10" }
+ # Iron crates
+ iron = "0.6.1"
+ iron-cors = "0.8.0"
+-- 
+2.36.0
+

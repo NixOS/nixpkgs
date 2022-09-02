@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perlPackages
-, python2, ruby, jre, nettools, bc
+, python3, ruby, jre, nettools, bc
 }:
 
 stdenv.mkDerivation rec {
@@ -13,8 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-p273O5JLFX1dA2caV3lVVL9YNTcGMSrC7DWieUfUmqI=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     makeWrapper
+  ];
+
+  buildInputs = [
     which
     coreutils
     rrdtool
@@ -38,7 +41,7 @@ stdenv.mkDerivation rec {
     perlPackages.ListMoreUtils
     perlPackages.LWP
     perlPackages.DBDPg
-    python2
+    python3
     ruby
     jre
     # tests
@@ -89,6 +92,10 @@ stdenv.mkDerivation rec {
     sed -i '/ENV{PATH}/d' node/lib/Munin/Node/Service.pm
   '';
 
+  # Disable parallel build, errors:
+  #  Can't locate Munin/Common/Defaults.pm in @INC ...
+  enableParallelBuilding = false;
+
   # DESTDIR shouldn't be needed (and shouldn't have worked), but munin
   # developers have forgotten to use PREFIX everywhere, so we use DESTDIR to
   # ensure that everything is installed in $out.
@@ -97,7 +104,7 @@ stdenv.mkDerivation rec {
     "DESTDIR=$(out)"
     "PERLLIB=$(out)/${perlPackages.perl.libPrefix}"
     "PERL=${perlPackages.perl.outPath}/bin/perl"
-    "PYTHON=${python2.outPath}/bin/python"
+    "PYTHON=${python3.interpreter}"
     "RUBY=${ruby.outPath}/bin/ruby"
     "JAVARUN=${jre.outPath}/bin/java"
     "PLUGINUSER=munin"

@@ -61,12 +61,12 @@ in
 
 buildPythonPackage rec {
   pname = "jupyterhub";
-  version = "1.3.0";
+  version = "1.5.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13pf6qhimpaxj20871ff5rvwwan59320cdhhrn9cfh6314971zq5";
+    sha256 = "sha256-3GGPZXwjukYoDjYlflCTGAZnS6Dp5kmK+wke/GIm1p0=";
   };
 
   # Most of this only applies when building from source (e.g. js/css assets are
@@ -149,14 +149,17 @@ buildPythonPackage rec {
     "test_upgrade"
     # Testcase fails to find requests import
     "test_external_service"
+    # attempts to do ssl connection
+    "test_connection_notebook_wrong_certs"
   ];
 
   meta = with lib; {
+    # darwin: E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Serves multiple Jupyter notebook instances";
     homepage = "https://jupyter.org/";
+    changelog = "https://github.com/jupyterhub/jupyterhub/blob/${version}/docs/source/changelog.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ixxie cstrahan ];
-    # E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
-    broken = stdenv.isDarwin;
   };
 }

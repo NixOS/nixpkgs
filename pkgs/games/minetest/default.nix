@@ -1,13 +1,50 @@
-{ lib, stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
-, libjpeg, libXxf86vm, libGLU, libGL, openal, libvorbis, sqlite, luajit
-, freetype, gettext, doxygen, ncurses, graphviz, xorg, gmp, libspatialindex
-, leveldb, postgresql, hiredis, libiconv, OpenGL, OpenAL ? openal, Carbon, Cocoa
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, irrlichtmt
+, coreutils
+, libpng
+, bzip2
+, curl
+, libogg
+, jsoncpp
+, libjpeg
+, libGLU
+, openal
+, libvorbis
+, sqlite
+, luajit
+, freetype
+, gettext
+, doxygen
+, ncurses
+, graphviz
+, xorg
+, gmp
+, libspatialindex
+, leveldb
+, postgresql
+, hiredis
+, libiconv
+, zlib
+, libXrandr
+, libX11
+, ninja
+, prometheus-cpp
+, OpenGL
+, OpenAL ? openal
+, Carbon
+, Cocoa
+, withTouchSupport ? false
 }:
 
 with lib;
 
 let
   boolToCMake = b: if b then "ON" else "OFF";
+
+  irrlichtmtInput = irrlichtmt.override { inherit withTouchSupport; };
 
   generic = { version, rev ? version, sha256, dataRev ? version, dataSha256, buildClient ? true, buildServer ? false }: let
     sources = {
@@ -30,34 +67,50 @@ let
     src = sources.src;
 
     cmakeFlags = [
+      "-G Ninja"
       "-DBUILD_CLIENT=${boolToCMake buildClient}"
       "-DBUILD_SERVER=${boolToCMake buildServer}"
-      "-DENABLE_FREETYPE=1"
       "-DENABLE_GETTEXT=1"
+      "-DENABLE_SPATIAL=1"
       "-DENABLE_SYSTEM_JSONCPP=1"
-      "-DIRRLICHT_INCLUDE_DIR=${irrlicht}/include/irrlicht"
-    ] ++ optionals buildClient [
-      "-DOpenGL_GL_PREFERENCE=GLVND"
+
+      # Remove when https://github.com/NixOS/nixpkgs/issues/144170 is fixed
+      "-DCMAKE_INSTALL_BINDIR=bin"
+      "-DCMAKE_INSTALL_DATADIR=share"
+      "-DCMAKE_INSTALL_DOCDIR=share/doc"
+      "-DCMAKE_INSTALL_DOCDIR=share/doc"
+      "-DCMAKE_INSTALL_MANDIR=share/man"
+      "-DCMAKE_INSTALL_LOCALEDIR=share/locale"
+
+    ] ++ optionals buildServer [
+      "-DENABLE_PROMETHEUS=1"
+    ] ++ optionals withTouchSupport [
+      "-DENABLE_TOUCH=TRUE"
     ];
 
     NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
-    nativeBuildInputs = [ cmake doxygen graphviz ];
+    nativeBuildInputs = [ cmake doxygen graphviz ninja ];
 
     buildInputs = [
-      irrlicht luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
+      irrlichtmtInput luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
       gmp libspatialindex
     ] ++ optionals stdenv.isDarwin [
       libiconv OpenGL OpenAL Carbon Cocoa
     ] ++ optionals buildClient [
-      libpng libjpeg libGLU libGL openal libogg libvorbis xorg.libX11 libXxf86vm
+      libpng libjpeg libGLU openal libogg libvorbis xorg.libX11
     ] ++ optionals buildServer [
-      leveldb postgresql hiredis
+      leveldb postgresql hiredis prometheus-cpp
     ];
+
+    postPatch = ''
+      substituteInPlace src/filesys.cpp --replace "/bin/rm" "${coreutils}/bin/rm"
+    '';
 
     postInstall = ''
       mkdir -pv $out/share/minetest/games/minetest_game/
       cp -rv ${sources.data}/* $out/share/minetest/games/minetest_game/
+      patchShebangs $out
     '';
 
     meta = with lib; {
@@ -66,25 +119,22 @@ let
       license = licenses.lgpl21Plus;
       platforms = platforms.linux ++ platforms.darwin;
       maintainers = with maintainers; [ pyrolagus fpletz ];
+      # never built on Hydra
+      # https://hydra.nixos.org/job/nixpkgs/trunk/minetestclient_4.x86_64-darwin
+      # https://hydra.nixos.org/job/nixpkgs/trunk/minetestserver_4.x86_64-darwin
+      broken = (lib.versionOlder version "5.0.0") && stdenv.isDarwin;
     };
   };
 
-  v4 = {
-    version = "0.4.17.1";
-    sha256 = "19sfblgh9mchkgw32n7gdvm7a8a9jxsl9cdlgmxn9bk9m939a2sg";
-    dataSha256 = "1g8iw2pya32ifljbdx6z6rpcinmzm81i9minhi2bi1d500ailn7s";
-  };
-
   v5 = {
-    version = "5.4.1";
-    sha256 = "062ilb7s377q3hwfhl8q06vvcw2raydz5ljzlzwy2dmyzmdcndb8";
-    dataSha256 = "0i45lbnikvgj9kxdp0yphpjjwjcgp4ibn49xkj78j5ic1s9n8jd4";
+    version = "5.6.0";
+    sha256 = "sha256-wcbYcVHs4L0etOwUBjKvzsmZtnpOxpFgLV8nx3UfJQI=";
+    dataSha256 = "sha256-TVaDHYstFEuT0nBExwLE1PtM1CZh71t9CRxC9rEYTd4=";
   };
 
+  mkClient = version: generic (version // { buildClient = true; buildServer = false; });
+  mkServer = version: generic (version // { buildClient = false; buildServer = true; });
 in {
-  minetestclient_4 = generic (v4 // { buildClient = true; buildServer = false; });
-  minetestserver_4 = generic (v4 // { buildClient = false; buildServer = true; });
-
-  minetestclient_5 = generic (v5 // { buildClient = true; buildServer = false; });
-  minetestserver_5 = generic (v5 // { buildClient = false; buildServer = true; });
+  minetestclient_5 = mkClient v5;
+  minetestserver_5 = mkServer v5;
 }

@@ -4,32 +4,43 @@
 , fetchFromGitHub
 , aiocoap
 , dtlssocket
+, pydantic
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pytradfri";
-  version = "8.0.1";
+  version = "11.0.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "pytradfri";
-    rev = version;
-    hash = "sha256-Wxz2P55lc7yJ1OXNXYWb25a+xtMs1sANNc7hE7nawHI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+OOmoh2HLKiHAqOIH2aB4CZcW/ND/0bszgkcdRMYBlc=";
   };
 
   propagatedBuildInputs = [
-    aiocoap
-    dtlssocket
+    pydantic
   ];
+
+  passthru.optional-dependencies = {
+    async = [
+      aiocoap
+      dtlssocket
+    ];
+  };
 
   checkInputs = [
     pytestCheckHook
-  ];
+  ]
+  ++ passthru.optional-dependencies.async;
 
-  pythonImportsCheck = [ "pytradfri" ];
+  pythonImportsCheck = [
+    "pytradfri"
+  ];
 
   meta = with lib; {
     description = "Python package to communicate with the IKEA Trådfri ZigBee Gateway";

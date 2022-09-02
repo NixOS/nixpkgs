@@ -1,58 +1,49 @@
-{ branch ? "stable", pkgs, lib, stdenv }:
+{ branch ? "stable", callPackage, fetchurl, lib, stdenv }:
 let
-  inherit (pkgs) callPackage fetchurl;
   versions = if stdenv.isLinux then {
-    stable = "0.0.16";
-    ptb = "0.0.27";
-    canary = "0.0.132";
+    stable = "0.0.19";
+    ptb = "0.0.29";
+    canary = "0.0.137";
   } else {
     stable = "0.0.264";
-    ptb = "0.0.58";
-    canary = "0.0.280";
+    ptb = "0.0.59";
+    canary = "0.0.283";
   };
   version = versions.${branch};
-  srcs = {
+  srcs = rec {
     x86_64-linux = {
       stable = fetchurl {
-        url =
-          "https://dl.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
-        sha256 = "UTVKjs/i7C/m8141bXBsakQRFd/c//EmqqhKhkr1OOk=";
+        url = "https://dl.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
+        sha256 = "GfSyddbGF8WA6JmHo4tUM27cyHV5kRAyrEiZe1jbA5A=";
       };
       ptb = fetchurl {
-        url =
-          "https://dl-ptb.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
-        sha256 = "0yphs65wpyr0ap6y24b0nbhq7sm02dg5c1yiym1fxjbynm1mdvqb";
+        url = "https://dl-ptb.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
+        sha256 = "d78NnQZ3MkLje8mHrI6noH2iD2oEvSJ3cDnsmzQsUYc=";
       };
       canary = fetchurl {
-        url =
-          "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-        sha256 = "1jjbd9qllgcdpnfxg5alxpwl050vzg13rh17n638wha0vv4mjhyv";
+        url = "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
+        sha256 = "sha256-dreKO2yBDP547VYuJziBhC2sLdpbM2fcK5bxeds0zUQ=";
       };
     };
-    x86_64-darwin = {
-      stable = fetchurl {
-        url = "https://dl.discordapp.net/apps/osx/${version}/Discord.dmg";
-        sha256 = "1jvlxmbfqhslsr16prsgbki77kq7i3ipbkbn67pnwlnis40y9s7p";
-      };
-      ptb = fetchurl {
-        url =
-          "https://dl-ptb.discordapp.net/apps/osx/${version}/DiscordPTB.dmg";
-        sha256 = "sha256-GwYUoPBbx9lSaRP1JwzI0UE9gEU+rV4a9BNPVSxHki0=";
-      };
-      canary = fetchurl {
-        url =
-          "https://dl-canary.discordapp.net/apps/osx/${version}/DiscordCanary.dmg";
-        sha256 = "0ccchsywry68vv81pqzzxmh1r19lnvxr429iwvgfr9y82lyjvz06";
-      };
-    };
-    # Only PTB bundles a MachO Universal binary with ARM support.
     aarch64-darwin = {
       ptb = fetchurl {
-        url =
-          "https://dl-ptb.discordapp.net/apps/osx/${version}/DiscordPTB.dmg";
-        sha256 = "sha256-GwYUoPBbx9lSaRP1JwzI0UE9gEU+rV4a9BNPVSxHki0=";
+        url = "https://dl-ptb.discordapp.net/apps/osx/${version}/DiscordPTB.dmg";
+        sha256 = "sha256-LS7KExVXkOv8O/GrisPMbBxg/pwoDXIOo1dK9wk1yB8=";
+      };
+      canary = fetchurl {
+        url = "https://dl-canary.discordapp.net/apps/osx/${version}/DiscordCanary.dmg";
+        sha256 = "0mqpk1szp46mih95x42ld32rrspc6jx1j7qdaxf01whzb3d4pi9l";
       };
     };
+    # Stable does not (yet) provide aarch64-darwin support. PTB and Canary, however, do.
+    x86_64-darwin =
+      aarch64-darwin
+      // {
+        stable = fetchurl {
+          url = "https://dl.discordapp.net/apps/osx/${version}/Discord.dmg";
+          sha256 = "1jvlxmbfqhslsr16prsgbki77kq7i3ipbkbn67pnwlnis40y9s7p";
+        };
+      };
   };
   src = srcs.${stdenv.hostPlatform.system}.${branch};
 
@@ -60,30 +51,44 @@ let
     description = "All-in-one cross-platform voice and text chat for gamers";
     homepage = "https://discordapp.com/";
     downloadPage = "https://discordapp.com/download";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ ldesgoui MP2E devins2518 ];
+    maintainers = with maintainers; [ MP2E devins2518 ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ]
-      ++ lib.optionals (branch == "ptb") [ "aarch64-darwin" ];
+      ++ lib.optionals (branch != "stable") [ "aarch64-darwin" ];
   };
-  package = if stdenv.isLinux then ./linux.nix else ./darwin.nix;
-  packages = {
-    stable = callPackage package rec {
-      inherit src version meta;
-      pname = "discord";
-      binaryName = "Discord";
-      desktopName = "Discord";
-    };
-    ptb = callPackage package rec {
-      inherit src version meta;
-      pname = "discord-ptb";
-      binaryName = "DiscordPTB";
-      desktopName = "Discord PTB";
-    };
-    canary = callPackage package rec {
-      inherit src version meta;
-      pname = "discord-canary";
-      binaryName = "DiscordCanary";
-      desktopName = "Discord Canary";
-    };
-  };
-in packages.${branch}
+  package =
+    if stdenv.isLinux
+    then ./linux.nix
+    else ./darwin.nix;
+
+  openasar = callPackage ./openasar.nix { };
+
+  packages = (
+    builtins.mapAttrs
+      (_: value:
+        callPackage package (value
+          // {
+          inherit src version openasar;
+          meta = meta // { mainProgram = value.binaryName; };
+        }))
+      {
+        stable = rec {
+          pname = "discord";
+          binaryName = "Discord";
+          desktopName = "Discord";
+        };
+        ptb = rec {
+          pname = "discord-ptb";
+          binaryName = "DiscordPTB";
+          desktopName = "Discord PTB";
+        };
+        canary = rec {
+          pname = "discord-canary";
+          binaryName = "DiscordCanary";
+          desktopName = "Discord Canary";
+        };
+      }
+  );
+in
+packages.${branch}

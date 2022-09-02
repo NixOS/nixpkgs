@@ -1,12 +1,22 @@
-{ stdenv, lib, fetchzip, buildDunePackage, camlp5
+{ lib
+, buildDunePackage, camlp5
+, ocaml
+, menhir, menhirLib
+, atdgen
+, stdlib-shims
 , re, perl, ncurses
 , ppxlib, ppx_deriving
 , ppxlib_0_15, ppx_deriving_0_15
-, version ? "1.13.7"
+, coqPackages
+, version ? if lib.versionAtLeast ocaml.version "4.08" then "1.16.5"
+    else if lib.versionAtLeast ocaml.version "4.07" then "1.15.2" else "1.14.1"
 }:
 with lib;
-let fetched = import ../../../build-support/coq/meta-fetch/default.nix
-  {inherit lib stdenv fetchzip; } ({
+let fetched = coqPackages.metaFetch ({
+    release."1.16.5".sha256 = "sha256-tKX5/cVPoBeHiUe+qn7c5FIRYCwY0AAukN7vSd/Nz9A=";
+    release."1.15.2".sha256 = "sha256-XgopNP83POFbMNyl2D+gY1rmqGg03o++Ngv3zJfCn2s=";
+    release."1.15.0".sha256 = "sha256:1ngdc41sgyzyz3i3lkzjhnj66gza5h912virkh077dyv17ysb6ar";
+    release."1.14.1".sha256 = "sha256-BZPVL8ymjrE9kVGyf6bpc+GA2spS5JBpkUtZi04nPis=";
     release."1.13.7".sha256 = "10fnwz30bsvj7ii1vg4l1li5pd7n0qqmwj18snkdr5j9gk0apc1r";
     release."1.13.5".sha256 = "02a6r23mximrdvs6kgv6rp0r2dgk7zynbs99nn7lphw2c4189kka";
     release."1.13.1".sha256 = "12a9nbdvg9gybpw63lx3nw5wnxfznpraprb0wj3l68v1w43xq044";
@@ -21,12 +31,21 @@ buildDunePackage rec {
   pname = "elpi";
   inherit (fetched) version src;
 
-  minimumOCamlVersion = "4.04";
+  patches = lib.optional (versionAtLeast version "1.16" || version == "dev")
+    ./atd_2_10.patch;
 
-  buildInputs = [ perl ncurses ];
+  minimalOCamlVersion = "4.04";
 
-  propagatedBuildInputs = [ camlp5 re ]
-  ++ (if lib.versionAtLeast version "1.13"
+  buildInputs = [ perl ncurses ]
+  ++ optional (versionAtLeast version "1.15" || version == "dev") menhir
+  ++ optional (versionAtLeast version "1.16" || version == "dev") atdgen;
+
+  propagatedBuildInputs = [ re stdlib-shims ]
+  ++ (if versionAtLeast version "1.15" || version == "dev"
+     then [ menhirLib ]
+     else [ camlp5 ]
+  )
+  ++ (if lib.versionAtLeast version "1.13" || version == "dev"
      then [ ppxlib ppx_deriving ]
      else [ ppxlib_0_15 ppx_deriving_0_15 ]
   );
@@ -41,6 +60,4 @@ buildDunePackage rec {
   postPatch = ''
     substituteInPlace elpi_REPL.ml --replace "tput cols" "${ncurses}/bin/tput cols"
   '';
-
-  useDune2 = true;
 }

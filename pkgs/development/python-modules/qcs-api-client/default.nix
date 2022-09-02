@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "qcs-api-client";
-  version = "0.20.10";
+  version = "0.21.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "qcs-api-client-python";
-    rev = "v${version}";
-    hash = "sha256-pBC8pFrk6iNYPS3/LKaVo+ds2okN56bxzvffEfs6SrU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-F3Fc03JWS73LcDCufWl/gLkjGvzlwLdBFVsSxtn3LvE=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "switch-to-poetry-core.patch";
       url = "https://github.com/rigetti/qcs-api-client-python/commit/32f0b3c7070a65f4edf5b2552648d88435469e44.patch";
-      sha256 = "sha256-mOc+Q/5cmwPziojtxeEMWWHSDvqvzZlNRbPtOSeTinQ=";
+      hash = "sha256-mOc+Q/5cmwPziojtxeEMWWHSDvqvzZlNRbPtOSeTinQ=";
     })
   ];
 
@@ -74,7 +74,11 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Test is outdated
+    "tests/test_client/test_additional_properties.py"
+    "tests/test_client/test_auth.py"
     "tests/test_client/test_client.py"
+    "tests/test_client/test_datetime.py"
+    "tests/test_imports.py"
   ];
 
   pythonImportsCheck = [
@@ -83,7 +87,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for accessing the Rigetti QCS API";
-    homepage = "https://pypi.org/project/qcs-api-client/";
+    homepage = "https://qcs-api-client-python.readthedocs.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

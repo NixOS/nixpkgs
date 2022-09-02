@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "http://aften.sourceforge.net/";
     license = licenses.lgpl21Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
   };
 }

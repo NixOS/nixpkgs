@@ -12,7 +12,9 @@ buildDunePackage {
     zarith
   ];
 
-  buildInputs = [
+  nativeBuildInputs = [
     cppo
   ];
+
+  strictDeps = true;
 }

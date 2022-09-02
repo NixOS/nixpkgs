@@ -5,7 +5,6 @@
 , cairo
 , cmake
 , fetchurl
-, fetchpatch
 , gettext
 , ghostscript
 , glib
@@ -44,19 +43,26 @@
 let
   python3Env = python3.withPackages
     (ps: with ps; [
+      appdirs
+      beautifulsoup4
+      cachecontrol
       numpy
       lxml
+      packaging
       pillow
       scour
-    ]);
+      pyserial
+      requests
+      pygobject3
+    ] ++ inkex.propagatedBuildInputs);
 in
 stdenv.mkDerivation rec {
   pname = "inkscape";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchurl {
-    url = "https://media.inkscape.org/dl/resources/file/${pname}-${version}.tar.xz";
-    sha256 = "sha256-rsoLnTO1sc+pqnBDO97mqMPQIP+vwubwyaYO7Xp5eK8=";
+    url = "https://media.inkscape.org/dl/resources/file/inkscape-${version}.tar.xz";
+    sha256 = "Rs59oOunykutwdtw6cu2fgrfm7NCaH3G4ItcohuNTBs=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
@@ -71,37 +77,6 @@ stdenv.mkDerivation rec {
       # Python is used at run-time to execute scripts,
       # e.g., those from the "Effects" menu.
       python3 = "${python3Env}/bin/python";
-    })
-
-    # Fix parsing paths by Python extensions.
-    # https://gitlab.com/inkscape/extensions/-/merge_requests/342
-    (fetchpatch {
-      url = "https://gitlab.com/inkscape/extensions/-/commit/a82c382c610d37837c8f3f5b13224bab8fd3667e.patch";
-      sha256 = "YWrgjCnQ9q6BUsxSLQojIXnDzPxM/SgrIfj1gxQ/JKM=";
-      stripLen = 1;
-      extraPrefix = "share/extensions/";
-    })
-
-    # Fix build with Poppler 21.11.0.
-    # https://gitlab.com/inkscape/inkscape/-/merge_requests/3622
-    (fetchpatch {
-      url = "https://gitlab.com/inkscape/inkscape/-/commit/5724c21b9cb7b6176a7b36ca24068b148c817e82.patch";
-      sha256 = "/1p/Vkes1HuZN0v09Ey4kiT+4zrEaoSXyPAmc4O3sDg=";
-    })
-
-    # Remove mandatory break from end of paragraphs, added in Pango 1.49
-    # https://gitlab.com/inkscape/inkscape/-/merge_requests/3630
-    # TODO: Remove in Inkscape 1.1.2
-    (fetchpatch {
-      url = "https://gitlab.com/inkscape/inkscape/-/commit/b3dabef2245d4e4e977ee9d6776be9a134493515.patch";
-      sha256 = "YhqUlRBKL1vJ/iCM/DvdwbmPIsAHQpcgf4TPpjlnBng=";
-    })
-    # Fix build against gcc-12
-    # https://gitlab.com/inkscape/inkscape/-/merge_requests/3683
-    (fetchpatch {
-      name = "gcc-12.patch";
-      url = "https://gitlab.com/inkscape/inkscape/-/commit/3825abc637ac2d3bc6ff997503b0631ac14e16b5.patch";
-      sha256 = "sha256-VzKrWCkcVA1Co/xBTyh28Zhm2zFE/2jfZ3LveK0raO4=";
     })
   ];
 

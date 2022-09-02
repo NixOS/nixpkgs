@@ -44,7 +44,7 @@ let
     installPhase = ''
       mkdir -p $out/bin
       install -m755 zod $out/bin/
-      wrapProgram $out/bin/zod --run "cd ${zod_assets}/usr/lib/commander-zod"
+      wrapProgram $out/bin/zod --chdir "${zod_assets}/usr/lib/commander-zod"
     '';
   };
   zod_map_editor = stdenv.mkDerivation {
@@ -56,7 +56,7 @@ let
     installPhase = ''
       mkdir -p $out/bin
       install -m755 zod_map_editor $out/bin
-      wrapProgram $out/bin/zod_map_editor --run "cd ${zod_assets}/usr/lib/commander-zod"
+      wrapProgram $out/bin/zod_map_editor --chdir "${zod_assets}/usr/lib/commander-zod"
     '';
   };
   zod_launcher = stdenv.mkDerivation {

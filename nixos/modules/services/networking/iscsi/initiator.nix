@@ -4,24 +4,24 @@ let
 in
 {
   options.services.openiscsi = with types; {
-    enable = mkEnableOption "the openiscsi iscsi daemon";
-    enableAutoLoginOut = mkEnableOption ''
+    enable = mkEnableOption (lib.mdDoc "the openiscsi iscsi daemon");
+    enableAutoLoginOut = mkEnableOption (lib.mdDoc ''
       automatic login and logout of all automatic targets.
       You probably do not want this.
-    '';
+    '');
     discoverPortal = mkOption {
       type = nullOr str;
       default = null;
-      description = "Portal to discover targets on";
+      description = lib.mdDoc "Portal to discover targets on";
     };
     name = mkOption {
       type = str;
-      description = "Name of this iscsi initiator";
+      description = lib.mdDoc "Name of this iscsi initiator";
       example = "iqn.2020-08.org.linux-iscsi.initiatorhost:example";
     };
     package = mkOption {
       type = package;
-      description = "openiscsi package to use";
+      description = lib.mdDoc "openiscsi package to use";
       default = pkgs.openiscsi;
       defaultText = literalExpression "pkgs.openiscsi";
     };
@@ -29,11 +29,11 @@ in
     extraConfig = mkOption {
       type = str;
       default = "";
-      description = "Lines to append to default iscsid.conf";
+      description = lib.mdDoc "Lines to append to default iscsid.conf";
     };
 
     extraConfigFile = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Append an additional file's contents to /etc/iscsid.conf. Use a non-store path
         and store passwords in this file.
       '';

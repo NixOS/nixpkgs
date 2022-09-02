@@ -171,26 +171,26 @@ in
   options = {
     services.mediawiki = {
 
-      enable = mkEnableOption "MediaWiki";
+      enable = mkEnableOption (lib.mdDoc "MediaWiki");
 
       package = mkOption {
         type = types.package;
         default = pkgs.mediawiki;
         defaultText = literalExpression "pkgs.mediawiki";
-        description = "Which MediaWiki package to use.";
+        description = lib.mdDoc "Which MediaWiki package to use.";
       };
 
       name = mkOption {
         type = types.str;
         default = "MediaWiki";
         example = "Foobar Wiki";
-        description = "Name of the wiki.";
+        description = lib.mdDoc "Name of the wiki.";
       };
 
       uploadsDir = mkOption {
         type = types.nullOr types.path;
         default = "${stateDir}/uploads";
-        description = ''
+        description = lib.mdDoc ''
           This directory is used for uploads of pictures. The directory passed here is automatically
           created and permissions adjusted as required.
         '';
@@ -198,15 +198,15 @@ in
 
       passwordFile = mkOption {
         type = types.path;
-        description = "A file containing the initial password for the admin user.";
+        description = lib.mdDoc "A file containing the initial password for the admin user.";
         example = "/run/keys/mediawiki-password";
       };
 
       skins = mkOption {
         default = {};
         type = types.attrsOf types.path;
-        description = ''
-          Attribute set of paths whose content is copied to the <filename>skins</filename>
+        description = lib.mdDoc ''
+          Attribute set of paths whose content is copied to the {file}`skins`
           subdirectory of the MediaWiki installation in addition to the default skins.
         '';
       };
@@ -214,11 +214,11 @@ in
       extensions = mkOption {
         default = {};
         type = types.attrsOf (types.nullOr types.path);
-        description = ''
-          Attribute set of paths whose content is copied to the <filename>extensions</filename>
+        description = lib.mdDoc ''
+          Attribute set of paths whose content is copied to the {file}`extensions`
           subdirectory of the MediaWiki installation and enabled in configuration.
 
-          Use <literal>null</literal> instead of path to enable extensions that are part of MediaWiki.
+          Use `null` instead of path to enable extensions that are part of MediaWiki.
         '';
         example = literalExpression ''
           {
@@ -235,52 +235,52 @@ in
         type = mkOption {
           type = types.enum [ "mysql" "postgres" "sqlite" "mssql" "oracle" ];
           default = "mysql";
-          description = "Database engine to use. MySQL/MariaDB is the database of choice by MediaWiki developers.";
+          description = lib.mdDoc "Database engine to use. MySQL/MariaDB is the database of choice by MediaWiki developers.";
         };
 
         host = mkOption {
           type = types.str;
           default = "localhost";
-          description = "Database host address.";
+          description = lib.mdDoc "Database host address.";
         };
 
         port = mkOption {
           type = types.port;
           default = 3306;
-          description = "Database host port.";
+          description = lib.mdDoc "Database host port.";
         };
 
         name = mkOption {
           type = types.str;
           default = "mediawiki";
-          description = "Database name.";
+          description = lib.mdDoc "Database name.";
         };
 
         user = mkOption {
           type = types.str;
           default = "mediawiki";
-          description = "Database user.";
+          description = lib.mdDoc "Database user.";
         };
 
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
           example = "/run/keys/mediawiki-dbpassword";
-          description = ''
+          description = lib.mdDoc ''
             A file containing the password corresponding to
-            <option>database.user</option>.
+            {option}`database.user`.
           '';
         };
 
         tablePrefix = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             If you only have access to a single database and wish to install more than
             one version of MediaWiki, or have other applications that also use the
             database, you can give the table names a unique prefix to stop any naming
             conflicts or confusion.
-            See <link xlink:href='https://www.mediawiki.org/wiki/Manual:$wgDBprefix'/>.
+            See <https://www.mediawiki.org/wiki/Manual:$wgDBprefix>.
           '';
         };
 
@@ -288,14 +288,14 @@ in
           type = types.nullOr types.path;
           default = if cfg.database.createLocally then "/run/mysqld/mysqld.sock" else null;
           defaultText = literalExpression "/run/mysqld/mysqld.sock";
-          description = "Path to the unix socket file to use for authentication.";
+          description = lib.mdDoc "Path to the unix socket file to use for authentication.";
         };
 
         createLocally = mkOption {
           type = types.bool;
           default = cfg.database.type == "mysql";
           defaultText = literalExpression "true";
-          description = ''
+          description = lib.mdDoc ''
             Create the database and database user locally.
             This currently only applies if database type "mysql" is selected.
           '';
@@ -312,9 +312,9 @@ in
             enableACME = true;
           }
         '';
-        description = ''
-          Apache configuration can be done by adapting <option>services.httpd.virtualHosts</option>.
-          See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
+        description = lib.mdDoc ''
+          Apache configuration can be done by adapting {option}`services.httpd.virtualHosts`.
+          See [](#opt-services.httpd.virtualHosts) for further information.
         '';
       };
 
@@ -328,18 +328,18 @@ in
           "pm.max_spare_servers" = 4;
           "pm.max_requests" = 500;
         };
-        description = ''
-          Options for the MediaWiki PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+        description = lib.mdDoc ''
+          Options for the MediaWiki PHP pool. See the documentation on `php-fpm.conf`
           for details on configuration directives.
         '';
       };
 
       extraConfig = mkOption {
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Any additional text to be appended to MediaWiki's
           LocalSettings.php configuration file. For configuration
-          settings, see <link xlink:href="https://www.mediawiki.org/wiki/Manual:Configuration_settings"/>.
+          settings, see <https://www.mediawiki.org/wiki/Manual:Configuration_settings>.
         '';
         default = "";
         example = ''

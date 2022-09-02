@@ -1,5 +1,4 @@
-{ mkDerivation
-, lib
+{ lib
 , fetchFromGitHub
 , callPackage
 , pkg-config
@@ -10,9 +9,11 @@
 , wrapQtAppsHook
 , extra-cmake-modules
 , qtbase
+, qtwayland
+, qtsvg
 , qtimageformats
+, qt5compat
 , gtk3
-, kwayland
 , libdbusmenu
 , lz4
 , xxHash
@@ -22,6 +23,7 @@
 , libopus
 , alsa-lib
 , libpulseaudio
+, pipewire
 , range-v3
 , tl-expected
 , hunspell
@@ -34,6 +36,7 @@
 , util-linuxMinimal
 , pcre
 , libpthreadstubs
+, libXdamage
 , libXdmcp
 , libselinux
 , libsepol
@@ -70,7 +73,7 @@ let
 in
 env.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "3.4.8";
+  version = "4.1.1";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
@@ -79,7 +82,7 @@ env.mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "11h2w82i10zn55iz9xda8ihsnv6s8rxm3wkmmmkpa4zfzinryqb4";
+    sha256 = "0b8nwimks6hfnb3bqik8d4s9z689hhj4p9ykqgc36pmpr54nyma8";
   };
 
   postPatch = ''
@@ -112,9 +115,11 @@ env.mkDerivation rec {
 
   buildInputs = [
     qtbase
+    qtwayland
+    qtsvg
     qtimageformats
+    qt5compat
     gtk3
-    kwayland
     libdbusmenu
     lz4
     xxHash
@@ -124,6 +129,7 @@ env.mkDerivation rec {
     libopus
     alsa-lib
     libpulseaudio
+    pipewire
     range-v3
     tl-expected
     hunspell
@@ -136,6 +142,7 @@ env.mkDerivation rec {
     util-linuxMinimal # Required for libmount thus not nativeBuildInputs.
     pcre
     libpthreadstubs
+    libXdamage
     libXdmcp
     libselinux
     libsepol
@@ -158,8 +165,6 @@ env.mkDerivation rec {
     "-DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c"
     # See: https://github.com/NixOS/nixpkgs/pull/130827#issuecomment-885212649
     "-DDESKTOP_APP_USE_PACKAGED_FONTS=OFF"
-    # TODO: Remove once QT6 is available in nixpkgs
-    "-DDESKTOP_APP_QT6=OFF"
   ];
 
   postFixup = ''
@@ -168,7 +173,7 @@ env.mkDerivation rec {
     wrapProgram $out/bin/telegram-desktop \
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
-      --prefix PATH : ${lib.makeBinPath [ xdg-utils]} \
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils]} \
       --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR"
     sed -i $out/bin/telegram-desktop \
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","
@@ -189,6 +194,6 @@ env.mkDerivation rec {
     platforms = platforms.linux;
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ oxalica vanilla ];
+    maintainers = with maintainers; [ oxalica ];
   };
 }

@@ -4,6 +4,7 @@
 , fetchpatch
 , intltool
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , gtk-doc
@@ -74,6 +75,8 @@ stdenv.mkDerivation rec {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_412
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -81,6 +84,7 @@ stdenv.mkDerivation rec {
     json-glib
     libsoup
     avahi
+    gobject-introspection
   ] ++ lib.optionals withDemoAgent [
     libnotify gdk-pixbuf
   ] ++ lib.optionals (!stdenv.isDarwin) [
@@ -113,6 +117,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin && withDemoAgent;
     description = "Geolocation framework and some data providers";
     homepage = "https://gitlab.freedesktop.org/geoclue/geoclue/wikis/home";
     maintainers = with maintainers; [ raskin ];

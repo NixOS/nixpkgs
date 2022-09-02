@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.enlightenment.org";
     license = with licenses; [ isc ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.enlightenment.members;
   };
 }

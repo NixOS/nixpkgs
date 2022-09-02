@@ -5,7 +5,6 @@
 , meson
 , ninja
 , gettext
-, gobject-introspection
 , python3
 , gstreamer
 , orc
@@ -19,6 +18,7 @@
 , libvisual
 , tremor # provides 'virbisidec'
 , libGL
+, gobject-introspection
 , enableX11 ? stdenv.isLinux
 , libXv
 , libXext
@@ -41,19 +41,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-base";
-  version = "1.18.5";
+  version = "1.20.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-lgt69FhXANsP3VuENVThHiVk/tngYfWR+uiKe+ZEb6M=";
+    sha256 = "sha256-fjCz3YGnA4D/dVT5mEcdaZb/drvm/FRHCW+FHiRHPJ8=";
   };
 
-  patches = [
-    ./fix_pkgconfig_includedir.patch
+  strictDeps = true;
+  depsBuildBuild = [
+    pkg-config
   ];
-
   nativeBuildInputs = [
     meson
     ninja
@@ -62,13 +62,14 @@ stdenv.mkDerivation rec {
     gettext
     orc
     glib
-    gobject-introspection
-
+    gstreamer
     # docs
     # TODO add hotdoc here
+    gobject-introspection
   ] ++ lib.optional enableWayland wayland;
 
   buildInputs = [
+    gobject-introspection
     orc
     libtheora
     libintl
@@ -106,7 +107,6 @@ stdenv.mkDerivation rec {
     # See https://github.com/GStreamer/gst-plugins-base/blob/d64a4b7a69c3462851ff4dcfa97cc6f94cd64aef/meson_options.txt#L15 for a list of choices
     "-Dgl_winsys=${lib.concatStringsSep "," (lib.optional enableX11 "x11" ++ lib.optional enableWayland "wayland" ++ lib.optional enableCocoa "cocoa")}"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
     "-Dtests=disabled"
   ]
   ++ lib.optional (!enableX11) "-Dx11=disabled"
@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs \
-      common/scangobj-merge.py \
+      scripts/meson-pkg-config-file-fixup.py \
       scripts/extract-release-date-from-doap-file.py
   '';
 

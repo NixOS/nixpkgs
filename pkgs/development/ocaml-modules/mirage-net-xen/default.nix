@@ -17,8 +17,6 @@ buildDunePackage {
   inherit (netchannel)
     src
     version
-    useDune2
-    minimumOCamlVersion
     meta
     ;
 

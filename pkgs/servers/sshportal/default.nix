@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "sshportal";
-  version = "1.18.5";
+  version = "1.19.3";
 
   src = fetchFromGitHub {
     owner = "moul";
     repo = "sshportal";
     rev = "v${version}";
-    sha256 = "1d9zws7b6ng23vyk8di5jmnbsxz7kaj4z8wz43wkwr6b65c2h0bf";
+    sha256 = "sha256-8+UHG4xTH9h1IvMoOY7YHPClk4t2vWSBOUnYU6+mynQ=";
   };
 
   ldflags = [ "-X main.GitTag=${version}" "-X main.GitSha=${version}" "-s" "-w" ];
 
-  vendorSha256 = "0fnn455adw4bhz68dpqaii08wv7lifdd5kx95rpqxsi2sqrzr4br";
+  vendorSha256 = "sha256-swDoQeO44fkpS2JNUAXaj3ZVjjzhoEr34YZ1/ArnLBk=";
 
   meta = with lib; {
     description = "Simple, fun and transparent SSH (and telnet) bastion server";

@@ -53,14 +53,14 @@
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
-  version = "1.12.4";
+  version = "1.12.7";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "792e6265f7f6d71b2a087028472a048287bed2587e43d2eec2c31d360c16211c"; # Taken from https://github.com/flatpak/flatpak/releases/
+    sha256 = "sha256-bbUqUxzieCgqx+v7mfZqC7PsyvROhkhEwslcHuW6kxY="; # Taken from https://github.com/flatpak/flatpak/releases/
   };
 
   patches = [
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     # Hardcode paths used by Flatpak itself.
     (substituteAll {
       src = ./fix-paths.patch;
-      p11kit = "${p11-kit.dev}/bin/p11-kit";
+      p11kit = "${p11-kit.bin}/bin/p11-kit";
     })
 
     # Adapt paths exposed to sandbox for NixOS.

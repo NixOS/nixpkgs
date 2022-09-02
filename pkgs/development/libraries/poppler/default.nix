@@ -18,11 +18,12 @@
 , ninja
 , openjpeg
 , pkg-config
-, scribusUnstable
+, python3
+, scribus
 , texlive
 , zlib
 , withData ? true, poppler_data
-, qt5Support ? false, qtbase ? null
+, qt5Support ? false, qt6Support ? false, qtbase ? null
 , introspectionSupport ? false, gobject-introspection ? null
 , utils ? false, nss ? null
 , minimal ? false
@@ -34,19 +35,28 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "poppler-${suffix}";
-  version = "22.01.0"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
+  version = "22.08.0"; # beware: updates often break cups-filters build, check texlive and scribus too!
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
-    sha256 = "sha256-fTSTBWtbhkE+XGk8LK4CxcBs2OYY0UwsMeLIS2eyMT4=";
+    sha256 = "sha256-tJMyhyFALyXLdSP5zcL318WfRa2Zm951xjyQYE2w8gs=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-38784.patch";
+      url = "https://gitlab.freedesktop.org/poppler/poppler/-/commit/27354e9d9696ee2bc063910a6c9a6b27c5184a52.patch";
+      sha256 = "sha256-M12zaHxcgQB/37tHffllqzd+Juq9BH5gpKVGaRY00vI=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
+    python3
   ];
 
   buildInputs = [
@@ -70,7 +80,7 @@ stdenv.mkDerivation rec {
     lcms
     curl
     nss
-  ] ++ lib.optionals qt5Support [
+  ] ++ lib.optionals (qt5Support || qt6Support) [
     qtbase
   ] ++ lib.optionals introspectionSupport [
     gobject-introspection
@@ -83,6 +93,7 @@ stdenv.mkDerivation rec {
     (mkFlag (!minimal) "LIBCURL")
     (mkFlag utils "UTILS")
     (mkFlag qt5Support "QT5")
+    (mkFlag qt6Support "QT6")
   ];
 
   dontWrapQtApps = true;
@@ -95,7 +106,7 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = {
       # These depend on internal poppler code that frequently changes.
-      inherit inkscape cups-filters texlive scribusUnstable;
+      inherit inkscape cups-filters texlive scribus;
     };
   };
 

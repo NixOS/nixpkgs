@@ -1,7 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, hicolor-icon-theme, jdupes }:
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gtk3
+, hicolor-icon-theme
+, jdupes
+, colorVariants ? [] # default: all
+}:
 
-stdenv.mkDerivation rec {
+let
   pname = "vimix-icon-theme";
+
+in
+lib.checkListOfEnum "${pname}: color variants" [ "standard" "Amethyst" "Beryl" "Doder" "Ruby" "Black" "White" ] colorVariants
+
+stdenvNoCC.mkDerivation rec {
+  inherit pname;
   version = "2021-11-09";
 
   src = fetchFromGitHub {
@@ -23,10 +36,16 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
     patchShebangs install.sh
-    ./install.sh -a -d $out/share/icons
+
+    ./install.sh \
+      ${if colorVariants != [] then builtins.toString colorVariants else "-a"} \
+      -d $out/share/icons
+
     # replace duplicate files with symlinks
-    jdupes -l -r $out/share/icons
+    jdupes -L -r $out/share/icons
+
     runHook postInstall
   '';
 

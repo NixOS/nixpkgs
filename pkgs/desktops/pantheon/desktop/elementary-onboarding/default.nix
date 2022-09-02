@@ -1,70 +1,50 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
-, substituteAll
-, pkg-config
 , meson
 , ninja
-, vala
+, pkg-config
 , python3
-, gtk3
-, glib
-, granite
-, libgee
-, elementary-icon-theme
-, elementary-gtk-theme
-, elementary-settings-daemon
-, gettext
-, libhandy
-, wrapGAppsHook
+, vala
+, wrapGAppsHook4
 , appcenter
+, elementary-settings-daemon
+, glib
+, granite7
+, gtk4
+, libadwaita
+, libgee
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-onboarding";
-  version = "6.1.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "onboarding";
     rev = version;
-    sha256 = "sha256-9voy9eje3VlV4IMM664EyjKWTfSVogX5JoRCqhsUXTE=";
+    sha256 = "sha256-bxOy9VivpgL4xXJhDF7K/gpq9zcCFIJFfRpG7QC8svE=";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      appcenter = appcenter;
-    })
-    # Provides the directory where the locales are actually installed
-    # https://github.com/elementary/onboarding/pull/147
-    (fetchpatch {
-      url = "https://github.com/elementary/onboarding/commit/af19c3dbefd1c0e0ec18eddacc1f21cb991f5513.patch";
-      sha256 = "sha256-fSFfjSd33W7rXXEUHY8b3rv9B9c31XfCjxjRxBBrqjs=";
-    })
-  ];
-
   nativeBuildInputs = [
-    gettext
     meson
     ninja
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    elementary-gtk-theme
-    elementary-icon-theme
+    appcenter # settings schema
     elementary-settings-daemon # settings schema
     glib
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
-    libhandy
   ];
 
   postPatch = ''

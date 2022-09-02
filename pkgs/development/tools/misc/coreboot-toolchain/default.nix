@@ -1,4 +1,4 @@
-{ lib, callPackage }:
+{ stdenv, lib, callPackage }:
 let
   common = arch: callPackage (
     { bison
@@ -9,37 +9,41 @@ let
     , getopt
     , git
     , gnat11
+    , gcc
     , lib
     , perl
     , stdenvNoCC
     , zlib
+    , withAda ? true
     }:
 
     stdenvNoCC.mkDerivation rec {
       pname = "coreboot-toolchain-${arch}";
-      version = "4.15";
+      version = "4.16";
 
       src = fetchgit {
         url = "https://review.coreboot.org/coreboot";
         rev = version;
-        sha256 = "1qsb2ca22h5f0iwc254qsfm7qcn8967ir8aybdxa1pakgmnfsyp9";
+        sha256 = "sha256-PCum+IvJ136eZQLovUi9u4xTLLs17MkMP5Oc0/2mMY4=";
         fetchSubmodules = false;
         leaveDotGit = true;
         postFetch = ''
-          patchShebangs $out/util/crossgcc/buildgcc
-          PATH=${lib.makeBinPath [ getopt ]}:$PATH $out/util/crossgcc/buildgcc -W > $out/.crossgcc_version
+          PATH=${lib.makeBinPath [ getopt ]}:$PATH ${stdenv.shell} $out/util/crossgcc/buildgcc -W > $out/.crossgcc_version
           rm -rf $out/.git
         '';
+        allowedRequisites = [ ];
       };
 
       nativeBuildInputs = [ bison curl git perl ];
-      buildInputs = [ flex gnat11 zlib ];
+      buildInputs = [ flex zlib (if withAda then gnat11 else gcc) ];
 
       enableParallelBuilding = true;
       dontConfigure = true;
       dontInstall = true;
 
       postPatch = ''
+        patchShebangs util/crossgcc/buildgcc
+
         mkdir -p util/crossgcc/tarballs
 
         ${lib.concatMapStringsSep "\n" (

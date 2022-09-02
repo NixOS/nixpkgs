@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       desktopName = "Maelstrom";
       genericName = "Maelstrom";
       comment = "An arcade-style game resembling Asteroids";
-      categories = "Game;";
+      categories = [ "Game" ];
     })
   ];
 

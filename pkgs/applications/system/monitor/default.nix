@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, nix-update-script
+, gitUpdater
 , meson
 , ninja
 , vala
@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monitor";
-  version = "0.12.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
-    sha256 = "1fv98yz9393ddp0k96bwbgccy6x9dmmg8g1pjd3xs6m4c1bnvfc7";
+    sha256 = "sha256-dw1FR9nU8MY6LBL3sF942azeSgKmCntXCk4+nhMb4Wo=";
     fetchSubmodules = true;
   };
 
@@ -75,8 +75,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
+    updateScript = gitUpdater {
+      inherit pname version;
+      ignoredVersions = "ci.*";
     };
   };
 
@@ -90,7 +91,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/stsdc/monitor";
     maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     mainProgram = "com.github.stsdc.monitor";
   };
 }

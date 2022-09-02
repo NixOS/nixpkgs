@@ -34,7 +34,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://pypi.python.org/pypi/et_xmlfile";
     license = licenses.mit;
-    maintainers = with maintainers; [ sjourdois ];
+    maintainers = with maintainers; [ ];
   };
 
 }

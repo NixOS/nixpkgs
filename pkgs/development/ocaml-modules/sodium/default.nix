@@ -16,8 +16,10 @@ stdenv.mkDerivation rec {
     ./lib-gen-link-bigarray.patch
   ];
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ ctypes libsodium ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 
@@ -26,7 +28,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/dsheets/ocaml-sodium";
     description = "Binding to libsodium 1.0.9+";
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.rixed ];
   };
 }

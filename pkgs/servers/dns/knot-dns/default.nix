@@ -1,15 +1,17 @@
 { lib, stdenv, fetchurl, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
 , systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2, libmnl
+, ngtcp2-gnutls
 , autoreconfHook, nixosTests, knot-resolver
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.1.5";
+  version = "3.2.0";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "2da6e50b0662297d55f80e349568224e07fe88cad20bee1d2e22f54bb32da064";
+    sha256 = "426d120994daf93af348aa6c48428e583dd286656415de4daf7a59106fd98631";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -21,6 +23,11 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
+    (fetchpatch {
+      name = "test-32bit-xdp.patch";
+      url = "https://gitlab.nic.cz/knot/knot-dns/-/commit/325dfeefdfd8a3dd318cfe0ab52cd7efbf839ccd.diff";
+      sha256 = "E5J2Jf4/m5H59Xn6TyATu2gKs3CgShYlMF2Qj1SW1zw=";
+    })
     # Don't try to create directories like /var/lib/knot at build time.
     # They are later created from NixOS itself.
     ./dont-create-run-time-dirs.patch
@@ -33,6 +40,7 @@ stdenv.mkDerivation rec {
     nettle libedit
     libiconv lmdb libintl
     nghttp2 # DoH support in kdig
+    ngtcp2-gnutls  # DoQ support in kdig (and elsewhere but not much use there yet)
     libmaxminddb # optional for geoip module (it's tiny)
     # without sphinx &al. for developer documentation
     # TODO: add dnstap support?

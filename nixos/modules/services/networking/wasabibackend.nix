@@ -29,37 +29,37 @@ in {
   options = {
 
     services.wasabibackend = {
-      enable = mkEnableOption "Wasabi backend service";
+      enable = mkEnableOption (lib.mdDoc "Wasabi backend service");
 
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/wasabibackend";
-        description = "The data directory for the Wasabi backend node.";
+        description = lib.mdDoc "The data directory for the Wasabi backend node.";
       };
 
       customConfigFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = "Defines the path to a custom configuration file that is copied to the user's directory. Overrides any config options.";
+        description = lib.mdDoc "Defines the path to a custom configuration file that is copied to the user's directory. Overrides any config options.";
       };
 
       network = mkOption {
         type = types.enum [ "mainnet" "testnet" "regtest" ];
         default = "mainnet";
-        description = "The network to use for the Wasabi backend service.";
+        description = lib.mdDoc "The network to use for the Wasabi backend service.";
       };
 
       endpoint = {
         ip = mkOption {
           type = types.str;
           default = "127.0.0.1";
-          description = "IP address for P2P connection to bitcoind.";
+          description = lib.mdDoc "IP address for P2P connection to bitcoind.";
         };
 
         port = mkOption {
           type = types.port;
           default = 8333;
-          description = "Port for P2P connection to bitcoind.";
+          description = lib.mdDoc "Port for P2P connection to bitcoind.";
         };
       };
 
@@ -67,45 +67,45 @@ in {
         ip = mkOption {
           type = types.str;
           default = "127.0.0.1";
-          description = "IP address for RPC connection to bitcoind.";
+          description = lib.mdDoc "IP address for RPC connection to bitcoind.";
         };
 
         port = mkOption {
           type = types.port;
           default = 8332;
-          description = "Port for RPC connection to bitcoind.";
+          description = lib.mdDoc "Port for RPC connection to bitcoind.";
         };
 
         user = mkOption {
           type = types.str;
           default = "bitcoin";
-          description = "RPC user for the bitcoin endpoint.";
+          description = lib.mdDoc "RPC user for the bitcoin endpoint.";
         };
 
         password = mkOption {
           type = types.str;
           default = "password";
-          description = "RPC password for the bitcoin endpoint. Warning: this is stored in cleartext in the Nix store! Use <literal>configFile</literal> or <literal>passwordFile</literal> if needed.";
+          description = lib.mdDoc "RPC password for the bitcoin endpoint. Warning: this is stored in cleartext in the Nix store! Use `configFile` or `passwordFile` if needed.";
         };
 
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
-          description = "File that contains the password of the RPC user.";
+          description = lib.mdDoc "File that contains the password of the RPC user.";
         };
       };
 
       user = mkOption {
         type = types.str;
         default = "wasabibackend";
-        description = "The user as which to run the wasabibackend node.";
+        description = lib.mdDoc "The user as which to run the wasabibackend node.";
       };
 
       group = mkOption {
         type = types.str;
         default = cfg.user;
         defaultText = literalExpression "config.${opt.user}";
-        description = "The group as which to run the wasabibackend node.";
+        description = lib.mdDoc "The group as which to run the wasabibackend node.";
       };
     };
   };

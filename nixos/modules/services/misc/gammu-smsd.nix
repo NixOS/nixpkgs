@@ -53,44 +53,44 @@ in {
   options = {
     services.gammu-smsd = {
 
-      enable = mkEnableOption "gammu-smsd daemon";
+      enable = mkEnableOption (lib.mdDoc "gammu-smsd daemon");
 
       user = mkOption {
         type = types.str;
         default = "smsd";
-        description = "User that has access to the device";
+        description = lib.mdDoc "User that has access to the device";
       };
 
       device = {
         path = mkOption {
           type = types.path;
-          description = "Device node or address of the phone";
+          description = lib.mdDoc "Device node or address of the phone";
           example = "/dev/ttyUSB2";
         };
 
         group = mkOption {
           type = types.str;
           default = "root";
-          description = "Owner group of the device";
+          description = lib.mdDoc "Owner group of the device";
           example = "dialout";
         };
 
         connection = mkOption {
           type = types.str;
           default = "at";
-          description = "Protocol which will be used to talk to the phone";
+          description = lib.mdDoc "Protocol which will be used to talk to the phone";
         };
 
         synchronizeTime = mkOption {
           type = types.bool;
           default = true;
-          description = "Whether to set time from computer to the phone during starting connection";
+          description = lib.mdDoc "Whether to set time from computer to the phone during starting connection";
         };
 
         pin = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = "PIN code for the simcard";
+          description = lib.mdDoc "PIN code for the simcard";
         };
       };
 
@@ -99,13 +99,13 @@ in {
         file = mkOption {
           type = types.str;
           default = "syslog";
-          description = "Path to file where information about communication will be stored";
+          description = lib.mdDoc "Path to file where information about communication will be stored";
         };
 
         format = mkOption {
           type = types.enum [ "nothing" "text" "textall" "textalldate" "errors" "errorsdate" "binary" ];
           default = "errors";
-          description = "Determines what will be logged to the LogFile";
+          description = lib.mdDoc "Determines what will be logged to the LogFile";
         };
       };
 
@@ -114,14 +114,14 @@ in {
         gammu = mkOption {
           type = types.lines;
           default = "";
-          description = "Extra config lines to be added into [gammu] section";
+          description = lib.mdDoc "Extra config lines to be added into [gammu] section";
         };
 
 
         smsd = mkOption {
           type = types.lines;
           default = "";
-          description = "Extra config lines to be added into [smsd] section";
+          description = lib.mdDoc "Extra config lines to be added into [smsd] section";
         };
       };
 
@@ -130,69 +130,69 @@ in {
         service = mkOption {
           type = types.enum [ "null" "files" "sql" ];
           default = "null";
-          description = "Service to use to store sms data.";
+          description = lib.mdDoc "Service to use to store sms data.";
         };
 
         files = {
           inboxPath = mkOption {
             type = types.path;
             default = "/var/spool/sms/inbox/";
-            description = "Where the received SMSes are stored";
+            description = lib.mdDoc "Where the received SMSes are stored";
           };
 
           outboxPath = mkOption {
             type = types.path;
             default = "/var/spool/sms/outbox/";
-            description = "Where SMSes to be sent should be placed";
+            description = lib.mdDoc "Where SMSes to be sent should be placed";
           };
 
           sentSMSPath = mkOption {
             type = types.path;
             default = "/var/spool/sms/sent/";
-            description = "Where the transmitted SMSes are placed";
+            description = lib.mdDoc "Where the transmitted SMSes are placed";
           };
 
           errorSMSPath = mkOption {
             type = types.path;
             default = "/var/spool/sms/error/";
-            description = "Where SMSes with error in transmission is placed";
+            description = lib.mdDoc "Where SMSes with error in transmission is placed";
           };
         };
 
         sql = {
           driver = mkOption {
             type = types.enum [ "native_mysql" "native_pgsql" "odbc" "dbi" ];
-            description = "DB driver to use";
+            description = lib.mdDoc "DB driver to use";
           };
 
           sqlDialect = mkOption {
             type = types.nullOr types.str;
             default = null;
-            description = "SQL dialect to use (odbc driver only)";
+            description = lib.mdDoc "SQL dialect to use (odbc driver only)";
           };
 
           database = mkOption {
             type = types.nullOr types.str;
             default = null;
-            description = "Database name to store sms data";
+            description = lib.mdDoc "Database name to store sms data";
           };
 
           host = mkOption {
             type = types.str;
             default = "localhost";
-            description = "Database server address";
+            description = lib.mdDoc "Database server address";
           };
 
           user = mkOption {
             type = types.nullOr types.str;
             default = null;
-            description = "User name used for connection to the database";
+            description = lib.mdDoc "User name used for connection to the database";
           };
 
           password = mkOption {
             type = types.nullOr types.str;
             default = null;
-            description = "User password used for connetion to the database";
+            description = lib.mdDoc "User password used for connetion to the database";
           };
         };
       };

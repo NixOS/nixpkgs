@@ -32,14 +32,15 @@
 
 stdenv.mkDerivation rec {
   pname = "calls";
-  version = "41.1";
+  version = "42.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
     rev = version;
-    sha256 = "1vbw9x5s3ww11f3lnqivc74rjlmi9fk1hzaq1idrdcck3gvif0h8";
+    fetchSubmodules = true;
+    hash = "sha256-ASKK9PB5FAD10CR5O+L2WgMjCzmIalithHL8jV0USiM=";
   };
 
   outputs = [ "out" "devdoc" ];
@@ -105,7 +106,7 @@ stdenv.mkDerivation rec {
     longDescription = "GNOME Calls is a phone dialer and call handler. Setting NixOS option `programs.calls.enable = true` is recommended.";
     homepage = "https://source.puri.sm/Librem5/calls";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ craigem lheckemann ];
+    maintainers = with maintainers; [ craigem lheckemann tomfitzhenry ];
     platforms = platforms.linux;
   };
 }

@@ -26,6 +26,7 @@
 , at-spi2-core
 , cups
 , libxshmfence
+, obs-studio
 }:
 
 let
@@ -59,27 +60,27 @@ let
     "aarch64-linux" = {
       platformStr = "linuxarm64";
       projectArch = "arm64";
-      sha256 = "1j93qawh9h6k2ic70i10npppv5f9dch961lc1wxwsi68daq8r081";
     };
     "i686-linux" = {
       platformStr = "linux32";
       projectArch = "x86";
-      sha256 = "0ki4zr8ih06kirgbpxbinv4baw3qvacx208q6qy1cvpfh6ll4fwb";
     };
     "x86_64-linux" = {
       platformStr = "linux64";
       projectArch = "x86_64";
-      sha256 = "1ja711x9fdlf21qw1k9xn3lvjc5zsfgnjga1w1r8sysam73jk7xj";
     };
   };
+  platforms."aarch64-linux".sha256 = "0gmnmr0zn2ffn7xbhmfh6rhmwmxy5zzlj0s3lyp99knjn47lg2fg";
+  platforms."i686-linux".sha256 = "1lp2z9db89qk2wh900c2dzlhflwmcbmp4m7xnlj04pq4q2kgfm9p";
+  platforms."x86_64-linux".sha256 = "1ljrp0iky7rrj04sbqicrg1jr938xnid6jlirbf7gwlmzliz3wfs";
 
   platformInfo = builtins.getAttr stdenv.targetPlatform.system platforms;
 in
 stdenv.mkDerivation rec {
   pname = "cef-binary";
-  version = "90.6.7";
-  gitRevision = "19ba721";
-  chromiumVersion = "90.0.4430.212";
+  version = "100.0.24";
+  gitRevision = "0783cf8";
+  chromiumVersion = "100.0.4896.127";
 
   src = fetchurl {
     url = "https://cef-builds.spotifycdn.com/cef_binary_${version}+g${gitRevision}+chromium-${chromiumVersion}_${platformInfo.platformStr}_minimal.tar.bz2";
@@ -87,7 +88,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  cmakeFlags = "-DPROJECT_ARCH=${platformInfo.projectArch}";
+  cmakeFlags = [ "-DPROJECT_ARCH=${platformInfo.projectArch}" ];
   makeFlags = [ "libcef_dll_wrapper" ];
   dontStrip = true;
   dontPatchELF = true;
@@ -102,10 +103,19 @@ stdenv.mkDerivation rec {
     cp -r ../include $out/
   '';
 
+  passthru.tests = {
+    inherit obs-studio; # frequently breaks on CEF updates
+  };
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Simple framework for embedding Chromium-based browsers in other applications";
     homepage = "https://cef-builds.spotifycdn.com/index.html";
     maintainers = with maintainers; [ puffnfresh ];
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode
+    ];
     license = licenses.bsd3;
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
   };

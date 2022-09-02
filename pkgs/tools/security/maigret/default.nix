@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maigret";
-  version = "0.4.1";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "soxoj";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0igfxg238awdn1ly8s3r655yi3gpxink7g2hr6xb0c1nrm7z0kad";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-0Ni4rXVu3ZQyHBvD3IpV0i849CnumLj+n6/g4sMhHEs=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -63,11 +63,16 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     # Remove all version pinning
     sed -i -e "s/==[0-9.]*//" requirements.txt
+
     # We are not build for Python < 3.7
-    sed -i -e '/future-annotations/d' requirements.txt
-    # We can't work with dummy packages
-    sed -i -e 's/bs4/beautifulsoup4/g' requirements.txt
+    substituteInPlace requirements.txt \
+      --replace "future-annotations" ""
   '';
+
+  pytestFlagsArray = [
+    # DeprecationWarning: There is no current event loop
+    "-W ignore::DeprecationWarning"
+  ];
 
   disabledTests = [
     # Tests require network access

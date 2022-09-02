@@ -21,19 +21,19 @@
 
 stdenv.mkDerivation rec {
   pname = "spot";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "xou816";
     repo = "spot";
     rev = version;
-    hash = "sha256-uZzylK9imEazwC/ogsDO8ZBvByE5/SNSV+mIlp7Z9Ww=";
+    hash = "sha256-0iuLZq9FSxaOchxx6LzGwpY8qnOq2APl/qkBYzEV2uw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-v5xdlsI6OlEpCYOTFePTyI8BkIrAwT6FR2JwiRTGgOA=";
+    hash = "sha256-g46BkrTv6tdrGe/p245O4cBoPjbvyRP7U6hH1Hp4ja0=";
   };
 
   nativeBuildInputs = [
@@ -80,5 +80,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/xou816/spot";
     license = licenses.mit;
     maintainers = with maintainers; [ jtojnar tomfitzhenry ];
+    platforms = platforms.linux;
   };
 }

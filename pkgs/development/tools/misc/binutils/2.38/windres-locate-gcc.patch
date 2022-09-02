@@ -1,0 +1,19 @@
+diff --git a/binutils/resrc.c b/binutils/resrc.c
+index a875c3a4..0411d047 100644
+--- a/binutils/resrc.c
++++ b/binutils/resrc.c
+@@ -521,7 +521,13 @@ read_rc_file (const char *filename, const char *preprocessor,
+ 
+       cpp_pipe = 0;
+ 
+-      if (dash)
++      /* Nixpkgs specific : look first at the prefixed path
++        ( there should be no gcc in the binutils folder ) */
++      if (slash && dash) {
++        cpp_pipe = look_for_default(cmd, slash + 1, dash - slash, preprocargs, filename);
++      }
++
++      if (dash && ! cpp_pipe)
+ 	{
+ 	  /* First, try looking for a prefixed gcc in the windres
+ 	     directory, with the same prefix as windres */

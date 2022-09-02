@@ -1,24 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, nix-update-script }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+
+# for passthru.tests
+, bazel
+, chromium
+, grpc
+, haskellPackages
+, mercurial
+, ninja
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "re2";
-  version = "2021-11-01";
+  version = "2022-06-01";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "re2";
     rev = version;
-    sha256 = "sha256-q8u7xNp6n17F6twPoVkix8iCKPWUN+qg6rhSR4Dv+bI=";
+    sha256 = "sha256-UontAjOXpnPcOgoFHjf+1WSbCR7h58/U7nn4meT200Y=";
   };
-
-  patches = [
-    # Pull upstreal fix for parallel testing.
-    (fetchpatch {
-      name = "parallel-tests.patch";
-      url = "https://github.com/google/re2/commit/9262284a7edc1b83e7172f4ec2d7967d695e7420.patch";
-      sha256 = "1knhfx9cs4841r09jw4ha6mdx9qwpvlcxvd04i8vr84kd0lilqms";
-    })
-  ];
 
   preConfigure = ''
     substituteInPlace Makefile --replace "/usr/local" "$out"
@@ -32,16 +36,26 @@ stdenv.mkDerivation rec {
 
   preCheck = "patchShebangs runtests";
   doCheck = true;
-  checkTarget = "test";
+  checkTarget = if stdenv.hostPlatform.isStatic then "static-test" else "test";
 
   installTargets = lib.optionals stdenv.hostPlatform.isStatic [ "static-install" ];
 
   doInstallCheck = true;
-  installCheckTarget = "testinstall";
+  installCheckTarget = if stdenv.hostPlatform.isStatic then "static-testinstall" else "testinstall";
 
   passthru = {
     updateScript = nix-update-script {
       attrPath = pname;
+    };
+    tests = {
+      inherit
+        chromium
+        grpc
+        mercurial;
+      inherit (python3.pkgs)
+        fb-re2
+        google-re2;
+      haskellPackages-re2 = haskellPackages.re2;
     };
   };
 

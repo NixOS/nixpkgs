@@ -8,22 +8,29 @@
 
 buildPythonPackage rec {
   pname = "pyftdi";
-  version = "0.53.3";
-  disabled = pythonOlder "3.5";
+  version = "0.54.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "eblot";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-t4rFsuhcpYdgmQeog+DRFxHk0wpMc+aukQi981vH/44=";
+    hash = "sha256-vL8jSgTtDvaHuCvaCYmFixILQFasTl82yINL5yRtOwU=";
   };
 
-  propagatedBuildInputs = [ pyusb pyserial ];
+  propagatedBuildInputs = [
+    pyserial
+    pyusb
+  ];
 
-  # tests requires access to the serial port
+  # Tests require access to the serial port
   doCheck = false;
 
-  pythonImportsCheck = [ "pyftdi" ];
+  pythonImportsCheck = [
+    "pyftdi"
+  ];
 
   meta = with lib; {
     description = "User-space driver for modern FTDI devices";

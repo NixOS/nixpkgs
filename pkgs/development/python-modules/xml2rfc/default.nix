@@ -1,6 +1,6 @@
 { lib
-, fetchPypi
 , buildPythonPackage
+, fetchFromGitHub
 , pythonOlder
 , intervaltree
 , pyflakes
@@ -18,18 +18,36 @@
 , jinja2
 , configargparse
 , appdirs
+, decorator
+, pycairo
+, pytestCheckHook
+, python-fontconfig
 }:
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "3.12.0";
+  version = "3.14.1";
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "25deadb9ee95f0dc71376a60e9c1e34636b5016c1952ad5597a6246495e34464";
+  src = fetchFromGitHub {
+    owner = "ietf-tools";
+    repo = "xml2rfc";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-v8wvmAV5t2dEWFWtbM68Npe+QzwXksRUl0H+tP0RgFc=";
   };
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "SHELL := /bin/bash" "SHELL := bash" \
+      --replace "test flaketest" "test" \
+      --replace "python setup.py --quiet install" ""
+    substituteInPlace setup.py \
+      --replace "'tox'," ""
+    substituteInPlace requirements.txt \
+      --replace "jinja2>=2.11,<3.0" "jinja2" \
+      --replace "markupsafe==2.0.1" "markupsafe"
+  '';
 
   propagatedBuildInputs = [
     intervaltree
@@ -50,23 +68,25 @@ buildPythonPackage rec {
     appdirs
   ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "jinja2>=2.11,<3.0" "jinja2>=2.11"
-  '';
+  checkInputs = [
+    decorator
+    pycairo
+    pytestCheckHook
+    python-fontconfig
+  ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  # lxml tries to fetch from the internet
+   # requires Noto Serif and Roboto Mono font
   doCheck = false;
+
+  checkPhase = ''
+    make tests-no-network
+  '';
 
   pythonImportsCheck = [ "xml2rfc" ];
 
   meta = with lib; {
     description = "Tool generating IETF RFCs and drafts from XML sources";
-    homepage = "https://tools.ietf.org/tools/xml2rfc/trac/";
+    homepage = "https://github.com/ietf-tools/xml2rfc";
     # Well, parts might be considered unfree, if being strict; see:
     # http://metadata.ftp-master.debian.org/changelogs/non-free/x/xml2rfc/xml2rfc_2.9.6-1_copyright
     license = licenses.bsd3;

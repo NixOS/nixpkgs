@@ -4,32 +4,46 @@
 , deprecated
 , oauthlib
 , requests
-, requests_oauthlib
+, requests-oauthlib
 , six
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "atlassian-python-api";
-  version = "3.18.1";
+  version = "3.26.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "atlassian-api";
     repo = pname;
-    rev = version;
-    sha256 = "09xvkbdfhkrdkn8axb6bhi7p12lm2z1z84rx1wksfw9mffqk90v9";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-S1+QKSxoBSIebsqhx4OgQAOhNw3P674m/V203ylXB+c=";
   };
+
+  propagatedBuildInputs = [
+    deprecated
+    oauthlib
+    requests
+    requests-oauthlib
+    six
+  ];
 
   checkInputs = [
     pytestCheckHook
   ];
 
-  propagatedBuildInputs = [ deprecated oauthlib requests requests_oauthlib six ];
+  pythonImportsCheck = [
+    "atlassian"
+  ];
 
   meta = with lib; {
     description = "Python Atlassian REST API Wrapper";
     homepage = "https://github.com/atlassian-api/atlassian-python-api";
     license = licenses.asl20;
-    maintainers = [ maintainers.arnoldfarkas ];
+    maintainers = with maintainers; [ arnoldfarkas ];
   };
 }

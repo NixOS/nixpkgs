@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.73.0";
+  version = "0.79.0";
   format = "flit";
 
   disabled = pythonOlder "3.6";
@@ -27,9 +27,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = pname;
-    rev = version;
-    sha256 = "0v3w9b8107b3g2rgy5y58f0p64inhwl1j9cybp627myypwpqx4b7";
+    rev = "refs/tags/${version}";
+    hash = "sha256-HaA9a/tqKtB24YtObk/XAsUy2mmWNonRyPXHflGRiPQ=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "starlette==" "starlette>="
+  '';
 
   propagatedBuildInputs = [
     starlette
@@ -48,12 +53,7 @@ buildPythonPackage rec {
     pytest-asyncio
     sqlalchemy
     trio
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "starlette ==" "starlette >="
-  '';
+  ] ++ passlib.optional-dependencies.bcrypt;
 
   pytestFlagsArray = [
     # ignoring deprecation warnings to avoid test failure from
@@ -70,10 +70,13 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_get_custom_response"
-
     # Failed: DID NOT RAISE <class 'starlette.websockets.WebSocketDisconnect'>
     "test_websocket_invalid_data"
     "test_websocket_no_credentials"
+    # TypeError: __init__() missing 1...starlette-releated
+    "test_head"
+    "test_options"
+    "test_trace"
   ];
 
   pythonImportsCheck = [

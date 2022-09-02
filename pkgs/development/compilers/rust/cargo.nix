@@ -5,14 +5,17 @@
 }:
 
 rustPlatform.buildRustPackage {
-  name = "cargo-${rustc.version}";
+  pname = "cargo";
   inherit (rustc) version src;
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
   cargoVendorDir = "vendor";
   buildAndTestSubdir = "src/tools/cargo";
 
-  passthru.rustc = rustc;
+  passthru = {
+    rustc = rustc;
+    inherit (rustc) tests;
+  };
 
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
@@ -72,5 +75,7 @@ rustPlatform.buildRustPackage {
     maintainers = with maintainers; [ retrry ];
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.unix;
+    # weird segfault in a build script
+    broken = stdenv.targetPlatform.isMusl && !stdenv.targetPlatform.isStatic;
   };
 }

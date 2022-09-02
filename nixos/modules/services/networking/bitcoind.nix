@@ -11,19 +11,19 @@ let
       name = mkOption {
         type = types.str;
         example = "alice";
-        description = ''
+        description = lib.mdDoc ''
           Username for JSON-RPC connections.
         '';
       };
       passwordHMAC = mkOption {
         type = types.uniq (types.strMatching "[0-9a-f]+\\$[0-9a-f]{64}");
         example = "f7efda5c189b999524f151318c0c86$d5b51b3beffbc02b724e5d095828e0bc8b2456e9ac8757ae3211a5d9b16a22ae";
-        description = ''
+        description = lib.mdDoc ''
           Password HMAC-SHA-256 for JSON-RPC connections. Must be a string of the
-          format &lt;SALT-HEX&gt;$&lt;HMAC-HEX&gt;.
+          format \<SALT-HEX\>$\<HMAC-HEX\>.
 
           Tool (Python script) for HMAC generation is available here:
-          <link xlink:href="https://github.com/bitcoin/bitcoin/blob/master/share/rpcauth/rpcauth.py"/>
+          <https://github.com/bitcoin/bitcoin/blob/master/share/rpcauth/rpcauth.py>
         '';
       };
     };
@@ -35,20 +35,20 @@ let
   bitcoindOpts = { config, lib, name, ...}: {
     options = {
 
-      enable = mkEnableOption "Bitcoin daemon";
+      enable = mkEnableOption (lib.mdDoc "Bitcoin daemon");
 
       package = mkOption {
         type = types.package;
         default = pkgs.bitcoind;
         defaultText = literalExpression "pkgs.bitcoind";
-        description = "The package providing bitcoin binaries.";
+        description = lib.mdDoc "The package providing bitcoin binaries.";
       };
 
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/var/lib/${name}/bitcoin.conf";
-        description = "The configuration file path to supply bitcoind.";
+        description = lib.mdDoc "The configuration file path to supply bitcoind.";
       };
 
       extraConfig = mkOption {
@@ -59,32 +59,32 @@ let
           rpcthreads=16
           logips=1
         '';
-        description = "Additional configurations to be appended to <filename>bitcoin.conf</filename>.";
+        description = lib.mdDoc "Additional configurations to be appended to {file}`bitcoin.conf`.";
       };
 
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/bitcoind-${name}";
-        description = "The data directory for bitcoind.";
+        description = lib.mdDoc "The data directory for bitcoind.";
       };
 
       user = mkOption {
         type = types.str;
         default = "bitcoind-${name}";
-        description = "The user as which to run bitcoind.";
+        description = lib.mdDoc "The user as which to run bitcoind.";
       };
 
       group = mkOption {
         type = types.str;
         default = config.user;
-        description = "The group as which to run bitcoind.";
+        description = lib.mdDoc "The group as which to run bitcoind.";
       };
 
       rpc = {
         port = mkOption {
           type = types.nullOr types.port;
           default = null;
-          description = "Override the default port on which to listen for JSON-RPC connections.";
+          description = lib.mdDoc "Override the default port on which to listen for JSON-RPC connections.";
         };
         users = mkOption {
           default = {};
@@ -95,33 +95,33 @@ let
             }
           '';
           type = types.attrsOf (types.submodule rpcUserOpts);
-          description = "RPC user information for JSON-RPC connnections.";
+          description = lib.mdDoc "RPC user information for JSON-RPC connnections.";
         };
       };
 
       pidFile = mkOption {
         type = types.path;
         default = "${config.dataDir}/bitcoind.pid";
-        description = "Location of bitcoind pid file.";
+        description = lib.mdDoc "Location of bitcoind pid file.";
       };
 
       testnet = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to use the testnet instead of mainnet.";
+        description = lib.mdDoc "Whether to use the testnet instead of mainnet.";
       };
 
       port = mkOption {
         type = types.nullOr types.port;
         default = null;
-        description = "Override the default port on which to listen for connections.";
+        description = lib.mdDoc "Override the default port on which to listen for connections.";
       };
 
       dbCache = mkOption {
         type = types.nullOr (types.ints.between 4 16384);
         default = null;
         example = 4000;
-        description = "Override the default database cache size in MiB.";
+        description = lib.mdDoc "Override the default database cache size in MiB.";
       };
 
       prune = mkOption {
@@ -132,7 +132,7 @@ let
         );
         default = null;
         example = 10000;
-        description = ''
+        description = lib.mdDoc ''
           Reduce storage requirements by enabling pruning (deleting) of old
           blocks. This allows the pruneblockchain RPC to be called to delete
           specific blocks, and enables automatic pruning of old blocks if a
@@ -147,7 +147,7 @@ let
       extraCmdlineOptions = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Extra command line options to pass to bitcoind.
           Run bitcoind --help to list all available options.
         '';
@@ -161,7 +161,7 @@ in
     services.bitcoind = mkOption {
       type = types.attrsOf (types.submodule bitcoindOpts);
       default = {};
-      description = "Specification of one or more bitcoind instances.";
+      description = lib.mdDoc "Specification of one or more bitcoind instances.";
     };
   };
 

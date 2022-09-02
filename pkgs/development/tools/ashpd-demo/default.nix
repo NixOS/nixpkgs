@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     rustPlatform.cargoSetupHook
     rustPlatform.rust.rustc
     wrapGAppsHook4
+    rustPlatform.bindgenHook
     desktop-file-utils
     glib # for glib-compile-schemas
   ];
@@ -62,11 +63,6 @@ stdenv.mkDerivation rec {
     wayland
     libshumate
   ];
-
-  # libspa-sys requires this for bindgen
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-  # <spa-0.2/spa/utils/defs.h> included by libspa-sys requires <stdbool.h>
-  BINDGEN_EXTRA_CLANG_ARGS = "-I${llvmPackages.libclang.lib}/lib/clang/${lib.getVersion llvmPackages.clang}/include -I${glibc.dev}/include";
 
   passthru = {
     updateScript = nix-update-script {

@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "slides";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "maaslalani";
     repo = "slides";
     rev = "v${version}";
-    sha256 = "02zdgn0pnjqharvmn9rww45yrja8dzww64s3fryxx4pm8g5km9nf";
+    sha256 = "sha256-Ca0/M4B6yAdV4hbJ95gH9MVZg3EFIY5bSMkkYy2+P+Q=";
   };
 
   checkInputs = [
@@ -21,7 +21,7 @@ buildGoModule rec {
     go
   ];
 
-  vendorSha256 = "06vb5xnss6ibgbsny6cadphfkzw8z3np5qgn3hp2wpf3hxgcnnvs";
+  vendorSha256 = "sha256-pn7c/6RF/GpECQtaxsTau91T7pLg+ZAUBbnR7h8DfnY=";
 
   ldflags = [
     "-s"
@@ -32,7 +32,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "Terminal based presentation tool";
     homepage = "https://github.com/maaslalani/slides";
+    changelog = "https://github.com/maaslalani/slides/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ maaslalani ];
+    maintainers = with maintainers; [ maaslalani penguwin ];
   };
 }

@@ -6,24 +6,24 @@
 , withGui ? true, libevent
 , qtbase, qttools
 , zeromq
+, fmt
 }:
 
 with lib;
 
 mkDerivation rec {
-
-  name = "litecoin" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "0.18.1";
+  pname = "litecoin" + optionalString (!withGui) "d";
+  version = "0.21.2.1";
 
   src = fetchFromGitHub {
     owner = "litecoin-project";
     repo = "litecoin";
     rev = "v${version}";
-    sha256 = "11753zhyx1kmrlljc6kbjwrcb06dfcrsqvmw3iaki9a132qk6l5c";
+    sha256 = "sha256-WJFdac5hGrHy9o3HzjS91zH+4EtJY7kUJAQK+aZaEyo=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ openssl db48 boost zlib zeromq
+  buildInputs = [ openssl db48 boost zlib zeromq fmt
                   miniupnpc glib protobuf util-linux libevent ]
                   ++ optionals stdenv.isDarwin [ AppKit ]
                   ++ optionals withGui [ qtbase qttools qrencode ];
@@ -35,7 +35,13 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = true;
+  checkPhase = ''
+    ./src/test/test_litecoin
+  '';
+
   meta = {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "A lite version of Bitcoin using scrypt as a proof-of-work algorithm";
     longDescription= ''
       Litecoin is a peer-to-peer Internet currency that enables instant payments
@@ -49,7 +55,6 @@ mkDerivation rec {
     homepage = "https://litecoin.org/";
     platforms = platforms.unix;
     license = licenses.mit;
-    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ offline ];
   };
 }

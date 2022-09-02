@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , gtk3
 , gettext
 , json_c
@@ -30,6 +31,15 @@ in buildPythonApplication rec {
     sha256 = "rVKcxzWZRLcuxK8xRyRgvitXAh4uOEyqHswLeTdA2Mk=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Fix build due to setuptools issue.
+    # https://github.com/mypaint/mypaint/pull/1183
+    (fetchpatch {
+      url = "https://github.com/mypaint/mypaint/commit/423950bec96d6057eac70442de577364d784a847.patch";
+      sha256 = "OxJJOi20bFMRibL59zx6svtMrkgeMYyEvbdSXbZHqpc=";
+    })
+  ];
 
   nativeBuildInputs = [
     gettext

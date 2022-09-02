@@ -9,37 +9,37 @@ in {
   options = {
     services = {
       mtr-exporter = {
-        enable = mkEnableOption "a Prometheus exporter for MTR";
+        enable = mkEnableOption (lib.mdDoc "a Prometheus exporter for MTR");
 
         target = mkOption {
           type = types.str;
           example = "example.org";
-          description = "Target to check using MTR.";
+          description = lib.mdDoc "Target to check using MTR.";
         };
 
         interval = mkOption {
           type = types.int;
           default = 60;
-          description = "Interval between MTR checks in seconds.";
+          description = lib.mdDoc "Interval between MTR checks in seconds.";
         };
 
         port = mkOption {
           type = types.port;
           default = 8080;
-          description = "Listen port for MTR exporter.";
+          description = lib.mdDoc "Listen port for MTR exporter.";
         };
 
         address = mkOption {
           type = types.str;
           default = "127.0.0.1";
-          description = "Listen address for MTR exporter.";
+          description = lib.mdDoc "Listen address for MTR exporter.";
         };
 
         mtrFlags = mkOption {
           type = with types; listOf str;
           default = [];
           example = ["-G1"];
-          description = "Additional flags to pass to MTR.";
+          description = lib.mdDoc "Additional flags to pass to MTR.";
         };
       };
     };

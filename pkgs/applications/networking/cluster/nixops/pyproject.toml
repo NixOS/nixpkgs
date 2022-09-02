@@ -5,7 +5,7 @@ description = "NixOps 2.0"
 authors = ["Adam Hoese <adam.hose@tweag.io>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 nixops = {git = "https://github.com/NixOS/nixops.git"}
 nixops-aws = {git = "https://github.com/NixOS/nixops-aws.git"}
 nixops-digitalocean = {git = "https://github.com/nix-community/nixops-digitalocean.git"}
@@ -15,9 +15,6 @@ nixops-hercules-ci = {git = "https://github.com/hercules-ci/nixops-hercules-ci.g
 nixops-hetzner = {git = "https://github.com/NixOS/nixops-hetzner"}
 nixopsvbox = {git = "https://github.com/nix-community/nixops-vbox.git"}
 nixops-virtd = {git = "https://github.com/nix-community/nixops-libvirtd.git"}
-
-[tool.poetry.dev-dependencies]
-sphinx = "^3.1.2"
 
 [build-system]
 requires = ["poetry>=0.12"]

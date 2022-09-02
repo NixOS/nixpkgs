@@ -1,6 +1,8 @@
 { lib
 , stdenv
 , fetchFromRepoOrCz
+, copyPkgconfigItems
+, makePkgconfigItem
 , perl
 , texinfo
 , which
@@ -8,18 +10,39 @@
 
 stdenv.mkDerivation rec {
   pname = "tcc";
-  version = "0.9.27+date=2022-01-11";
+  version = "unstable-2022-07-15";
 
   src = fetchFromRepoOrCz {
     repo = "tinycc";
-    rev = "4e0e9b8f210d69893b306d6b24d2dd615a22f246";
-    hash = "sha256-0BJ5wXsgDLBIvcbq+rL9UQC4NjLHCI9r6sUWF98APPg=";
+    rev = "af1abf1f45d45b34f0b02437f559f4dfdba7d23c";
+    hash = "sha256-jY0P2GErmo//YBaz6u4/jj/voOE3C2JaIDRmo0orXN8=";
   };
 
   nativeBuildInputs = [
+    copyPkgconfigItems
     perl
     texinfo
     which
+  ];
+
+  pkgconfigItems = [
+    (makePkgconfigItem rec {
+      name = "libtcc";
+      inherit version;
+      cflags = [ "-I${variables.includedir}" ];
+      libs = [
+        "-L${variables.libdir}"
+        "-Wl,--rpath ${variables.libdir}"
+        "-ltcc"
+        "-ldl"
+      ];
+      variables = rec {
+        prefix = "${placeholder "out"}";
+        includedir = "${prefix}/include";
+        libdir = "${prefix}/lib";
+      };
+      description = "Tiny C compiler backend";
+    })
   ];
 
   postPatch = ''
@@ -41,17 +64,6 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     echo ${version} > VERSION
     configureFlagsArray+=("--elfinterp=$(< $NIX_CC/nix-support/dynamic-linker)")
-  '';
-
-  postFixup = ''
-    cat >libtcc.pc <<EOF
-    Name: libtcc
-    Description: Tiny C compiler backend
-    Version: ${version}
-    Libs: -L$out/lib -Wl,--rpath $out/lib -ltcc -ldl
-    Cflags: -I$out/include
-    EOF
-    install -Dt $out/lib/pkgconfig libtcc.pc -m 444
   '';
 
   outputs = [ "out" "info" "man" ];
@@ -86,7 +98,9 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ joachifm AndersonTorres ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }
 # TODO: more multiple outputs
 # TODO: self-compilation
+# TODO: provide expression for stable release

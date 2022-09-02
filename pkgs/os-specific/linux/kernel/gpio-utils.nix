@@ -2,8 +2,6 @@
 
 with lib;
 
-assert versionAtLeast linux.version "4.6";
-
 stdenv.mkDerivation {
   pname = "gpio-utils";
   version = linux.version;

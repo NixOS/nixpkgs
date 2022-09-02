@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pivy";
-  version = "0.6.5";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "coin3d";
     repo = "pivy";
-    rev = version;
-    sha256 = "0vids7sxk8w5vr73xdnf8xdci71a7syl6cd35aiisppbqyyfmykx";
+    rev = "refs/tags/${version}";
+    hash = "sha256-mU3QRDJd56gGDWqwcxAN3yUCkAkABP/I9gIBMH2MOXA=";
   };
 
   dontUseCmakeConfigure = true;
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace \$'{SoQt_INCLUDE_DIRS}' \
+    substituteInPlace distutils_cmake/CMakeLists.txt --replace \$'{SoQt_INCLUDE_DIRS}' \
       \$'{Coin_INCLUDE_DIR}'\;\$'{SoQt_INCLUDE_DIRS}'
   '';
 

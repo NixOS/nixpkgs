@@ -7,26 +7,26 @@
 , kjobwidgets
 , kxmlgui
 , lib
-, testVersion
+, testers
 , k4dirstat
 }:
 
 mkDerivation rec {
   pname = "k4dirstat";
-  version = "3.3.0";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "jeromerobert";
     repo = pname;
     rev = version;
-    hash = "sha256-KLvWSDv4x0tMhAPqp8yNQed2i7R0MPbvadHddSJ1Nx4=";
+    hash = "sha256-nedtCa3h62pAmJYGIYp9jkNYiqe9WevVjwNAqVaaFuc=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kiconthemes kio kjobwidgets kxmlgui ];
 
   passthru.tests.version =
-    testVersion {
+    testers.testVersion {
       package = k4dirstat;
       command = "k4dirstat -platform offscreen --version &>/dev/stdout";
     };

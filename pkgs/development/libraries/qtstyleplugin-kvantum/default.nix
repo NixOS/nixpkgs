@@ -1,16 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qtsvg, qtx11extras, kwindowsystem
+{ lib, stdenv, fetchFromGitHub, fetchpatch, qmake, qtbase, qtsvg, qtx11extras, kwindowsystem
 , libX11, libXext, qttools, wrapQtAppsHook
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "qtstyleplugin-kvantum";
-  version = "1.0.0";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "Kvantum";
     rev = "V${version}";
-    sha256 = "0yvxj7r9z890nfq5cadw7ys144c2mnvaplvx4v4ndv7238b741l8";
+    sha256 = "chdtcx73mfr/b1P3yVevx0m7HkMFzEYG7YLuhSyG7rk=";
   };
 
   nativeBuildInputs = [
@@ -23,11 +24,26 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/Kvantum";
 
+  patches = [
+    (fetchpatch {
+      # add xdg dirs support
+      url = "https://github.com/tsujan/Kvantum/commit/01989083f9ee75a013c2654e760efd0a1dea4a68.patch";
+      hash = "sha256-HPx+p4Iek/Me78olty1fA0dUNceK7bwOlTYIcQu8ycc=";
+      stripLen = 1;
+    })
+  ];
+
   postPatch = ''
     # Fix plugin dir
     substituteInPlace style/style.pro \
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
   '';
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    attrPath = "libsForQt5.${pname}";
+    rev-prefix = "V";
+  };
 
   meta = with lib; {
     description = "SVG-based Qt5 theme engine plus a config tool and extra themes";
@@ -35,6 +51,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     broken = lib.versionOlder qtbase.version "5.14";
-    maintainers = [ maintainers.bugworm ];
+    maintainers = [ maintainers.romildo ];
   };
 }

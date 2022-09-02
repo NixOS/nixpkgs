@@ -1,0 +1,13 @@
+cabal-version:      2.4
+name:               local
+version:            0.1.0.0
+
+synopsis: Nixpkgs test case
+license:  MIT
+extra-source-files: CHANGELOG.md
+
+executable local
+    main-is:          Main.hs
+    build-depends:    base
+    hs-source-dirs:   app
+    default-language: Haskell2010

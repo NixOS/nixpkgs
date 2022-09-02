@@ -7,6 +7,7 @@
 , lndir
 , dbus-python
 , sip
+, pyqt5_sip
 , pyqt-builder
 , libsForQt5
 , withConnectivity ? false
@@ -16,31 +17,33 @@
 , withLocation ? false
 }:
 
-let
-  pyqt5_sip = buildPythonPackage rec {
-    pname = "PyQt5_sip";
-    version = "12.9.0";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0cmfxb7igahxy74qkq199l6zdxrr75bnxris42fww3ibgjflir6k";
-    };
-
-    # There is no test code and the check phase fails with:
-    # > error: could not create 'PyQt5/sip.cpython-38-x86_64-linux-gnu.so': No such file or directory
-    doCheck = false;
-  };
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "PyQt5";
-  version = "5.15.4";
+  version = "5.15.7";
   format = "pyproject";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1gp5jz71nmg58zsm1h4vzhcphf36rbz37qgsfnzal76i1mz5js9a";
+    sha256 = "sha256-dVEhpSs6CMsHJ1wQ67lldtNuMg5XJZHbFs/bxVgQFZQ=";
   };
+
+  patches = [
+    # Fix some wrong assumptions by ./project.py
+    # TODO: figure out how to send this upstream
+    ./pyqt5-fix-dbus-mainloop-support.patch
+    # confirm license when installing via pyqt5_sip
+    ./pyqt5-confirm-license.patch
+  ];
+
+  # be more verbose
+  postPatch = ''
+    cat >> pyproject.toml <<EOF
+    [tool.sip.project]
+    verbose = true
+    EOF
+  '';
 
   outputs = [ "out" "dev" ];
 
@@ -81,14 +84,8 @@ in buildPythonPackage rec {
     pyqt5_sip
   ];
 
-  patches = [
-    # Fix some wrong assumptions by ./project.py
-    # TODO: figure out how to send this upstream
-    ./pyqt5-fix-dbus-mainloop-support.patch
-  ];
-
   passthru = {
-    inherit sip;
+    inherit sip pyqt5_sip;
     multimediaEnabled = withMultimedia;
     webKitEnabled = withWebKit;
     WebSocketsEnabled = withWebSockets;

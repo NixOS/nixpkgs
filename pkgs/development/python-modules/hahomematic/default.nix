@@ -14,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "0.27.2";
-  format = "setuptools";
+  version = "2022.8.15";
+  format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "danielperna84";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-XBGA3wRZdl8rJ1hLLPPLK7E87Ggoly+kePbLY4x9/ZE=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-//qtDLU5wXE0ZrkxYI+rOgIu9cLwCbeuMtM57cE1CxA=";
   };
 
   propagatedBuildInputs = [
@@ -37,6 +37,9 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytestCheckHook
   ];
+
+  # Starting with 0.30 the tests are broken, check with the next major release
+  doCheck = false;
 
   pythonImportsCheck = [
     "hahomematic"

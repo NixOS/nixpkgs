@@ -1,12 +1,12 @@
 {lib, stdenv, fetchurl, cyrus_sasl, libevent, nixosTests }:
 
 stdenv.mkDerivation rec {
-  version = "1.6.12";
+  version = "1.6.16";
   pname = "memcached";
 
   src = fetchurl {
     url = "https://memcached.org/files/${pname}-${version}.tar.gz";
-    sha256 = "sha256-8pGjX4Lvl1btHZUoee9fS+hw+TK9/LKrYTVmCav4I0Y=";
+    sha256 = "sha256-MFGpO/HdDDry0OWJ/272UR+HY4WjWxjp/4dB5KGrNNo=";
   };
 
   configureFlags = [
@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A distributed memory object caching system";
-    repositories.git = "https://github.com/memcached/memcached.git";
     homepage = "http://memcached.org/";
     license = licenses.bsd3;
     maintainers = [ maintainers.coconnor ];

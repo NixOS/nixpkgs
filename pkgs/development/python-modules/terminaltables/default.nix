@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "terminaltables";
-  version = "3.1.7";
+  version = "3.1.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5dab2f33927c0a020b8011c81b92830ff9fd4ba701657da5d7bfdc41048360a6";
+    sha256 = "ba6eca5cb5ba02bba4c9f4f985af80c54ec3dccf94cfcd190154386255e47543";
   };
 
   meta = with lib; {

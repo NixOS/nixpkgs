@@ -4,8 +4,13 @@ on:
   check_suite:
     types: [ completed ]
 
+permissions:
+  contents: read
+
 jobs:
   action:
+    permissions:
+      statuses: write
     runs-on: ubuntu-latest
     steps:
     - name: clear pending status

@@ -6,11 +6,12 @@
 , jaraco_collections
 , more-itertools
 , objgraph
-, pathpy
+, path
 , portend
 , pytest-forked
 , pytest-services
 , pytestCheckHook
+, python-memcached
 , pythonAtLeast
 , pythonOlder
 , requests-toolbelt
@@ -22,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "cherrypy";
-  version = "18.6.1";
+  version = "18.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -30,40 +31,38 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "CherryPy";
     inherit version;
-    hash = "sha256-8z6HKG57PjCeBOciXY5JOC2dd3PmCSJB1/YTiTxWNJU=";
+    hash = "sha256-cpRS95jKdWOQBG7zGAQ8roZKRoFN6vPmvTTclZrxmN4=";
   };
+
+  postPatch = ''
+    # Disable doctest plugin because times out
+    substituteInPlace pytest.ini \
+      --replace "--doctest-modules" "-vvv" \
+      --replace "-p pytest_cov" "" \
+      --replace "--no-cov-on-fail" ""
+    sed -i "/--cov/d" pytest.ini
+  '';
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
-    # required
     cheroot
     portend
     more-itertools
     zc_lockfile
     jaraco_collections
-    # optional
-    routes
-    simplejson
   ];
 
   checkInputs = [
     objgraph
-    pathpy
+    path
     pytest-forked
     pytest-services
     pytestCheckHook
     requests-toolbelt
   ];
-
-  preCheck = ''
-    # Disable doctest plugin because times out
-    substituteInPlace pytest.ini \
-      --replace "--doctest-modules" "-vvv"
-    sed -i "/--cov/d" pytest.ini
-  '';
 
   pytestFlagsArray = [
     "-W"
@@ -76,6 +75,9 @@ buildPythonPackage rec {
     # daemonize and autoreload tests have issue with sockets within sandbox
     "daemonize"
     "Autoreload"
+
+    "test_antistampede"
+    "test_file_stream"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_block"
   ];
@@ -89,6 +91,14 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "cherrypy"
   ];
+
+  passthru.optional-dependencies = {
+    json = [ simplejson ];
+    memcached_session = [ python-memcached ];
+    routes_dispatcher = [ routes ];
+    # not packaged yet
+    xcgi = [ /* flup */ ];
+  };
 
   meta = with lib; {
     description = "Object-oriented HTTP framework";

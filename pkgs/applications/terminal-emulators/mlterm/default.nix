@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, autoconf, makeDesktopItem
+{ stdenv, lib, fetchFromGitHub, pkg-config, autoconf, makeDesktopItem, nixosTests
 , libX11, gdk-pixbuf, cairo, libXft, gtk3, vte
 , harfbuzz #substituting glyphs with opentype fonts
 , fribidi, m17n_lib #bidi and encoding
@@ -106,11 +106,11 @@ stdenv.mkDerivation rec {
     comment = "Terminal emulator";
     desktopName = "mlterm";
     genericName = "Terminal emulator";
-    categories = lib.concatStringsSep ";" [
-      "Application" "System" "TerminalEmulator"
-    ];
-    startupNotify = "false";
+    categories = [ "Application" "System" "TerminalEmulator" ];
+    startupNotify = false;
   };
+
+  passthru.tests.test = nixosTests.terminal-emulators.mlterm;
 
   meta = with lib; {
     description = "Multi Lingual TERMinal emulator";

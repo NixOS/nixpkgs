@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://taglib.org/";
-    repositories.git = "git://github.com/taglib/taglib.git";
     description = "A library for reading and editing audio file metadata";
     longDescription = ''
       TagLib is a library for reading and editing the meta-data of several

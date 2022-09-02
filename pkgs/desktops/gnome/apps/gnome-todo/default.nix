@@ -27,21 +27,21 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-todo";
-  version = "unstable-2022-01-01";
+  version = "unstable-2022-06-12";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnome-todo";
-    rev = "4a6be8c38510d909a9f94ec34c4da1f31ac9f1ab";
-    sha256 = "5UGo9vMb8scPWK91gftYOjqkJs9tGMiH1lqyEqedF2A=";
+    rev = "ad4e15f0b58860caf8c6d497795b83b594a9c3e5";
+    sha256 = "HRufLoZou9ssQ/qoDG8anhOAtl8IYvFpyjq/XJlsotQ=";
   };
 
   patches = [
     # fix build race bug https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=257667
     (fetchpatch {
       url = "https://cgit.freebsd.org/ports/plain/deskutils/gnome-todo/files/patch-src_meson.build?id=a4faaf6cf7835014b5f69a337b544ea4ee7f9655";
-      sha256 = "sha256:0ihixyq72yhx6njij7bldsqb80x3y217yh6livknlf5r1wr3hakn";
+      sha256 = "sha256-dio4Mg+5OGrnjtRAf4LwowO0sG50HRmlNR16cbDvEUY=";
       extraPrefix = "";
       name = "gnome-todo_meson-build.patch";
     })

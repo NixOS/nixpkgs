@@ -40,6 +40,12 @@ stdenv.mkDerivation rec {
     cd build/
   '';
 
+  # -fcommon is a workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: CMakeFiles/pharo.dir/build/pharo-vm-2016.02.18/src/vm/gcc3x-cointerp.c.o:(.bss+0x88): multiple definition of
+  #     `sendTrace'; CMakeFiles/pharo.dir/build/pharo-vm-2016.02.18/src/vm/cogit.c.o:(.bss+0x84): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   installPhase = ''
     mkdir -p "$prefix/lib/$name"
 

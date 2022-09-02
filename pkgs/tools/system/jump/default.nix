@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "jump";
-  version = "0.40.0";
+  version = "0.41.0";
 
   src = fetchFromGitHub {
     owner = "gsamokovarov";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8Lfta4qDXYVSHG3UI8iUA6vIjBe5OIX7n0LC4OW1qMU=";
+    sha256 = "sha256-nI4n1WxgdGGP822APBOLZ5lNkjwL1KfP5bKUxfvXdnE=";
   };
 
   vendorSha256 = null;
@@ -36,6 +36,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/gsamokovarov/jump";
     license = licenses.mit;
-    maintainers = with maintainers; [ sondr3 ];
+    maintainers = with maintainers; [ ];
   };
 }

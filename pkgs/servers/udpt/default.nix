@@ -23,5 +23,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ makefu ];
+    mainProgram = "udpt-rs";
   };
 }

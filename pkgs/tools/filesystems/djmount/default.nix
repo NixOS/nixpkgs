@@ -8,8 +8,22 @@ stdenv.mkDerivation rec {
     sha256 = "0kqf0cy3h4cfiy5a2sigmisx0lvvsi1n0fbyb9ll5gacmy1b8nxa";
   };
 
+  postPatch = ''
+    # Taken from https://github.com/pupnp/pupnp/pull/334/files
+    substituteInPlace libupnp/threadutil/inc/ithread.h \
+      --replace \
+        "#define ithread_mutexattr_setkind_np pthread_mutexattr_setkind_np" \
+        '#define ithread_mutexattr_setkind_np pthread_mutexattr_settype'
+  '';
+
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fuse];
+  buildInputs = [ fuse ];
+
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: libupnp/upnp/.libs/libupnp.a(libupnp_la-gena_ctrlpt.o):libupnp/upnp/src/inc/upnpapi.h:163:
+  #     multiple definition of `pVirtualDirList'; libupnp/upnp/.libs/libupnp.a(libupnp_la-upnpapi.o):libupnp/upnp/src/inc/upnpapi.h:163: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   meta = {
     homepage = "http://djmount.sourceforge.net/";

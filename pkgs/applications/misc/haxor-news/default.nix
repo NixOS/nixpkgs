@@ -16,7 +16,13 @@ let
         };
       });
       # Use click 7
-      click = self.callPackage ../../../development/python2-modules/click/default.nix { };
+      click = super.click.overridePythonAttrs (old: rec {
+        version = "7.1.2";
+        src = old.src.override {
+          inherit version;
+          sha256 = "d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a";
+        };
+      });
     };
   };
 in
@@ -46,11 +52,9 @@ buildPythonApplication rec {
   # will fail without pre-seeded config files
   doCheck = false;
 
-  checkInputs = [ mock ];
+  checkInputs = [ unittestCheckHook mock ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests -v
-  '';
+  unittestFlagsArray = [ "-s" "tests" "-v" ];
 
   meta = with lib; {
     homepage = "https://github.com/donnemartin/haxor-news";

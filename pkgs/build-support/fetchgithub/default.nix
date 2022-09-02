@@ -5,10 +5,23 @@
 , deepClone ? false, private ? false, forceFetchGit ? false
 , sparseCheckout ? ""
 , githubBase ? "github.com", varPrefix ? null
+, meta ? { }
 , ... # For hash agility
 }@args:
+
 let
+
+  position = (if args.meta.description or null != null
+    then builtins.unsafeGetAttrPos "description" args.meta
+    else builtins.unsafeGetAttrPos "rev" args
+  );
   baseUrl = "https://${githubBase}/${owner}/${repo}";
+  newMeta = meta // {
+    homepage = meta.homepage or baseUrl;
+
+    # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
+    position = "${position.file}:${toString position.line}";
+  };
   passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "forceFetchGit" "private" "githubBase" "varPrefix" ];
   varBase = "NIX${if varPrefix == null then "" else "_${varPrefix}"}_GITHUB_PRIVATE_";
   useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || forceFetchGit || (sparseCheckout != "");
@@ -29,12 +42,21 @@ let
     '';
     netrcImpureEnvVars = [ "${varBase}USERNAME" "${varBase}PASSWORD" ];
   };
+
+  gitRepoUrl = "${baseUrl}.git";
+
   fetcherArgs = (if useFetchGit
     then {
-      inherit rev deepClone fetchSubmodules sparseCheckout; url = "${baseUrl}.git";
+      inherit rev deepClone fetchSubmodules sparseCheckout; url = gitRepoUrl;
     } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
-    else { url = "${baseUrl}/archive/${rev}.tar.gz"; }
+    else {
+      url = "${baseUrl}/archive/${rev}.tar.gz";
+
+      passthru = {
+        inherit gitRepoUrl;
+      };
+    }
   ) // privateAttrs // passthruAttrs // { inherit name; };
 in
 
-fetcher fetcherArgs // { meta.homepage = baseUrl; inherit rev; }
+fetcher fetcherArgs // { meta = newMeta; inherit rev; }

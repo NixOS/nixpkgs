@@ -36,14 +36,9 @@ stdenv.mkDerivation rec {
   # NOTE: disabling tests due to gtest issue
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DLEVELDB_BUILD_TESTS=OFF"
+    "-DLEVELDB_BUILD_BENCHMARKS=OFF"
   ];
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
-    # remove shared objects from "all" target
-    sed -i '/^all:/ s/$(SHARED_LIBS) $(SHARED_PROGRAMS)//' Makefile
-  '';
 
   postInstall = ''
     substituteInPlace "$out"/lib/cmake/leveldb/leveldbTargets.cmake \

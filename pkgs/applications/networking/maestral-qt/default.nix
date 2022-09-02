@@ -2,21 +2,44 @@
 , fetchFromGitHub
 , python3
 , wrapQtAppsHook
+, nixosTests
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  inherit (pypkgs) makePythonPath;
+
+  pypkgs = (python3.override {
+    packageOverrides = self: super: {
+      # Use last available version of maestral that still supports PyQt5
+      # Remove this override when PyQt6 is available
+      maestral = super.maestral.overridePythonAttrs (old: rec {
+        version = "1.5.3";
+        src = fetchFromGitHub {
+          owner = "SamSchott";
+          repo = "maestral";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-Uo3vcYez2qSq162SSKjoCkwygwR5awzDceIq8/h3dao=";
+        };
+      });
+    };
+  }).pkgs;
+
+in
+pypkgs.buildPythonApplication rec {
   pname = "maestral-qt";
-  version = "1.5.2";
-  disabled = python3.pkgs.pythonOlder "3.6";
+  version = "1.5.3";
+  disabled = pypkgs.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-qt";
-    rev = "v${version}";
-    sha256 = "sha256-/wleUwTPkm5l8GgtBM2J0jsdc1A54WRYJPmHqSsdz4c=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-zaG9Zwz9S/SVb7xDa7eXkjLNt1BhA1cQ3I18rVt+8uQ=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  format = "pyproject";
+
+  propagatedBuildInputs = with pypkgs; [
     click
     markdown2
     maestral
@@ -33,8 +56,8 @@ python3.pkgs.buildPythonApplication rec {
     "\${qtWrapperArgs[@]}"
 
     # Add the installed directories to the python path so the daemon can find them
-    "--prefix" "PYTHONPATH" ":" "${lib.concatStringsSep ":" (map (p: p + "/lib/${python3.libPrefix}/site-packages") (python3.pkgs.requiredPythonModules python3.pkgs.maestral.propagatedBuildInputs))}"
-    "--prefix" "PYTHONPATH" ":" "${python3.pkgs.maestral}/lib/${python3.libPrefix}/site-packages"
+    "--prefix PYTHONPATH : ${makePythonPath (pypkgs.requiredPythonModules pypkgs.maestral.propagatedBuildInputs)}"
+    "--prefix PYTHONPATH : ${makePythonPath [ pypkgs.maestral ]}"
   ];
 
   # no tests
@@ -42,10 +65,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "maestral_qt" ];
 
+  passthru.tests.maestral = nixosTests.maestral;
+
   meta = with lib; {
     description = "GUI front-end for maestral (an open-source Dropbox client) for Linux";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg sfrijters ];
     platforms = platforms.linux;
     homepage = "https://maestral.app";
   };

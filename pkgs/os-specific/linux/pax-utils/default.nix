@@ -1,19 +1,41 @@
-{ stdenv, lib, fetchurl, bash }:
+{ stdenv
+, lib
+, fetchurl
+, buildPackages
+, docbook_xml_dtd_44
+, docbook_xsl
+, libcap
+, pkg-config
+, meson
+, ninja
+, xmlto
+, python3
+
+, gitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "pax-utils";
-  version = "1.3.3";
+  version = "1.3.5";
 
   src = fetchurl {
     url = "mirror://gentoo/distfiles/${pname}-${version}.tar.xz";
-    sha256 = "sha256-7sp/vZi8Zr6tSncADCAl2fF+qCAbhCRYgkBs4AubaxQ=";
+    sha256 = "sha256-8KWwPfIwiqLdeq9TuewLK0hFW4YSnkd6FkPeYpBKuHQ=";
   };
 
   strictDeps = true;
 
-  buildInputs = [ bash ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ docbook_xml_dtd_44 docbook_xsl meson ninja pkg-config xmlto ];
+  buildInputs = [ libcap ];
+  # Needed for lddtree
+  propagatedBuildInputs = [ (python3.withPackages (p: with p; [ pyelftools ])) ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    url = "https://anongit.gentoo.org/git/proj/pax-utils.git";
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "ELF utils that can check files for security relevant properties";

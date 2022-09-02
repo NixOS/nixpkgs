@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, bash, makeWrapper, bat
+{ lib, stdenv, fetchFromGitHub, makeWrapper, bat
 # batdiff, batgrep, and batwatch
 , coreutils
 , getconf
@@ -15,6 +15,8 @@
 # batdiff
 , gitMinimal
 , withDelta ? delta != null, delta ? null
+# batman
+, util-linux
 }:
 
 let
@@ -33,7 +35,7 @@ let
     };
 
     # bat needs to be in the PATH during building so EXECUTABLE_BAT picks it up
-    nativeBuildInputs = [ bash bat ];
+    nativeBuildInputs = [ bat ];
 
     dontConfigure = true;
 
@@ -93,7 +95,7 @@ let
 
       src = core;
 
-      nativeBuildInputs = [ bash makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
       # Make the dependencies available to the tests.
       buildInputs = dependencies;
 
@@ -136,7 +138,7 @@ in
 {
   batdiff = script "batdiff" ([ less coreutils gitMinimal ] ++ optionalDep withDelta delta);
   batgrep = script "batgrep" [ less coreutils ripgrep ];
-  batman = script "batman" [];
+  batman = script "batman" [ util-linux ];
   batwatch = script "batwatch" ([ less coreutils ] ++ optionalDep withEntr entr);
   prettybat = script "prettybat" ([]
     ++ optionalDep withShFmt shfmt

@@ -2,17 +2,21 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyxbe";
-  version = "unstable-2021-01-10";
+  version = "1.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mborgerson";
     repo = pname;
-    rev = "a7ae1bb21b02a57783831eb080c1edbafaad1d5d";
-    sha256 = "1cp9a5f41z8j7bzip6nhka8qnxs12v75cdf80sk2nzgf1k15wi2p";
+    rev = "v${version}";
+    hash = "sha256-oOY0g1F5sxGUxXAT19Ygq5q7pnxEhIAKmyYELR1PHEA=";
   };
 
   checkInputs = [
@@ -25,7 +29,9 @@ buildPythonPackage rec {
       --replace "'xbefiles'" "'tests/xbefiles'"
   '';
 
-  pythonImportsCheck = [ "xbe" ];
+  pythonImportsCheck = [
+    "xbe"
+  ];
 
   meta = with lib; {
     description = "Library to work with XBE files";

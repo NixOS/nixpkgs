@@ -8,13 +8,14 @@
 
 buildPythonPackage rec {
   pname = "aiolifx";
-  version = "0.7.0";
+  version = "0.8.2";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.4";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9FwTYcaXwGMMnhp+MXe1Iu8Og5aHL6qo9SVKWHFtc7o=";
+    hash = "sha256-k47cXi2CDtFIV3gzfdYU4i17ry0ABXcWK5CcWhwTdT0=";
   };
 
   propagatedBuildInputs = [
@@ -25,10 +26,12 @@ buildPythonPackage rec {
   # tests are not implemented
   doCheck = false;
 
-  pythonImportsCheck = [ "aiolifx" ];
+  pythonImportsCheck = [
+    "aiolifx"
+  ];
 
   meta = with lib; {
-    description = "API for local communication with LIFX devices over a LAN";
+    description = "Module for local communication with LIFX devices over a LAN";
     homepage = "https://github.com/frawau/aiolifx";
     license = licenses.mit;
     maintainers = with maintainers; [ netixx ];

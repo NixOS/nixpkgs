@@ -5,11 +5,15 @@ with lib;
 let
   cfg = config.systemd;
   lndir = "${pkgs.buildPackages.xorg.lndir}/bin/lndir";
+  systemd = cfg.package;
 in rec {
 
   shellEscape = s: (replaceChars [ "\\" ] [ "\\\\" ] s);
 
   mkPathSafeName = lib.replaceChars ["@" ":" "\\" "[" "]"] ["-" "-" "-" "" ""];
+
+  # a type for options that take a unit name
+  unitNameType = types.strMatching "[a-zA-Z0-9@%:_.\\-]+[.](service|socket|device|mount|automount|swap|target|path|timer|scope|slice)";
 
   makeUnit = name: unit:
     if unit.enable then
@@ -19,8 +23,9 @@ in rec {
           inherit (unit) text;
         }
         ''
-          mkdir -p $out
-          echo -n "$text" > $out/${shellEscape name}
+          name=${shellEscape name}
+          mkdir -p "$out/$(dirname "$name")"
+          echo -n "$text" > "$out/$name"
         ''
     else
       pkgs.runCommand "unit-${mkPathSafeName name}-disabled"
@@ -28,8 +33,9 @@ in rec {
           allowSubstitutes = false;
         }
         ''
-          mkdir -p $out
-          ln -s /dev/null $out/${shellEscape name}
+          name=${shellEscape name}
+          mkdir -p "$out/$(dirname "$name")"
+          ln -s /dev/null "$out/$name"
         '';
 
   boolValues = [true false "yes" "no"];
@@ -116,10 +122,15 @@ in rec {
         (if isList value then value else [value]))
         as));
 
-  generateUnits = generateUnits' true;
-
-  generateUnits' = allowCollisions: type: units: upstreamUnits: upstreamWants:
-    pkgs.runCommand "${type}-units"
+  generateUnits = { allowCollisions ? true, type, units, upstreamUnits, upstreamWants, packages ? cfg.packages, package ? cfg.package }:
+    let
+      typeDir = ({
+        system = "system";
+        initrd = "system";
+        user = "user";
+        nspawn = "nspawn";
+      }).${type};
+    in pkgs.runCommand "${type}-units"
       { preferLocalBuild = true;
         allowSubstitutes = false;
       } ''
@@ -127,7 +138,7 @@ in rec {
 
       # Copy the upstream systemd units we're interested in.
       for i in ${toString upstreamUnits}; do
-        fn=${cfg.package}/example/systemd/${type}/$i
+        fn=${package}/example/systemd/${typeDir}/$i
         if ! [ -e $fn ]; then echo "missing $fn"; false; fi
         if [ -L $fn ]; then
           target="$(readlink "$fn")"
@@ -144,7 +155,7 @@ in rec {
       # Copy .wants links, but only those that point to units that
       # we're interested in.
       for i in ${toString upstreamWants}; do
-        fn=${cfg.package}/example/systemd/${type}/$i
+        fn=${package}/example/systemd/${typeDir}/$i
         if ! [ -e $fn ]; then echo "missing $fn"; false; fi
         x=$out/$(basename $fn)
         mkdir $x
@@ -156,14 +167,14 @@ in rec {
       done
 
       # Symlink all units provided listed in systemd.packages.
-      packages="${toString cfg.packages}"
+      packages="${toString packages}"
 
       # Filter duplicate directories
       declare -A unique_packages
       for k in $packages ; do unique_packages[$k]=1 ; done
 
       for i in ''${!unique_packages[@]}; do
-        for fn in $i/etc/systemd/${type}/* $i/lib/systemd/${type}/*; do
+        for fn in $i/etc/systemd/${typeDir}/* $i/lib/systemd/${typeDir}/*; do
           if ! [[ "$fn" =~ .wants$ ]]; then
             if [[ -d "$fn" ]]; then
               targetDir="$out/$(basename "$fn")"
@@ -232,4 +243,186 @@ in rec {
       ''}
     ''; # */
 
+  makeJobScript = name: text:
+    let
+      scriptName = replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape name);
+      out = (pkgs.writeShellScriptBin scriptName ''
+        set -e
+        ${text}
+      '').overrideAttrs (_: {
+        # The derivation name is different from the script file name
+        # to keep the script file name short to avoid cluttering logs.
+        name = "unit-script-${scriptName}";
+      });
+    in "${out}/bin/${scriptName}";
+
+  unitConfig = { config, options, ... }: {
+    config = {
+      unitConfig =
+        optionalAttrs (config.requires != [])
+          { Requires = toString config.requires; }
+        // optionalAttrs (config.wants != [])
+          { Wants = toString config.wants; }
+        // optionalAttrs (config.after != [])
+          { After = toString config.after; }
+        // optionalAttrs (config.before != [])
+          { Before = toString config.before; }
+        // optionalAttrs (config.bindsTo != [])
+          { BindsTo = toString config.bindsTo; }
+        // optionalAttrs (config.partOf != [])
+          { PartOf = toString config.partOf; }
+        // optionalAttrs (config.conflicts != [])
+          { Conflicts = toString config.conflicts; }
+        // optionalAttrs (config.requisite != [])
+          { Requisite = toString config.requisite; }
+        // optionalAttrs (config ? restartTriggers && config.restartTriggers != [])
+          { X-Restart-Triggers = toString config.restartTriggers; }
+        // optionalAttrs (config ? reloadTriggers && config.reloadTriggers != [])
+          { X-Reload-Triggers = toString config.reloadTriggers; }
+        // optionalAttrs (config.description != "") {
+          Description = config.description; }
+        // optionalAttrs (config.documentation != []) {
+          Documentation = toString config.documentation; }
+        // optionalAttrs (config.onFailure != []) {
+          OnFailure = toString config.onFailure; }
+        // optionalAttrs (config.onSuccess != []) {
+          OnSuccess = toString config.onSuccess; }
+        // optionalAttrs (options.startLimitIntervalSec.isDefined) {
+          StartLimitIntervalSec = toString config.startLimitIntervalSec;
+        } // optionalAttrs (options.startLimitBurst.isDefined) {
+          StartLimitBurst = toString config.startLimitBurst;
+        };
+    };
+  };
+
+  serviceConfig = { config, ... }: {
+    config.environment.PATH = mkIf (config.path != []) "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
+  };
+
+  stage2ServiceConfig = {
+    imports = [ serviceConfig ];
+    # Default path for systemd services. Should be quite minimal.
+    config.path = mkAfter [
+      pkgs.coreutils
+      pkgs.findutils
+      pkgs.gnugrep
+      pkgs.gnused
+      systemd
+    ];
+  };
+
+  stage1ServiceConfig = serviceConfig;
+
+  mountConfig = { config, ... }: {
+    config = {
+      mountConfig =
+        { What = config.what;
+          Where = config.where;
+        } // optionalAttrs (config.type != "") {
+          Type = config.type;
+        } // optionalAttrs (config.options != "") {
+          Options = config.options;
+        };
+    };
+  };
+
+  automountConfig = { config, ... }: {
+    config = {
+      automountConfig =
+        { Where = config.where;
+        };
+    };
+  };
+
+  commonUnitText = def: ''
+      [Unit]
+      ${attrsToSection def.unitConfig}
+    '';
+
+  targetToUnit = name: def:
+    { inherit (def) aliases wantedBy requiredBy enable;
+      text =
+        ''
+          [Unit]
+          ${attrsToSection def.unitConfig}
+        '';
+    };
+
+  serviceToUnit = name: def:
+    { inherit (def) aliases wantedBy requiredBy enable;
+      text = commonUnitText def +
+        ''
+          [Service]
+          ${let env = cfg.globalEnvironment // def.environment;
+            in concatMapStrings (n:
+              let s = optionalString (env.${n} != null)
+                "Environment=${builtins.toJSON "${n}=${env.${n}}"}\n";
+              # systemd max line length is now 1MiB
+              # https://github.com/systemd/systemd/commit/e6dde451a51dc5aaa7f4d98d39b8fe735f73d2af
+              in if stringLength s >= 1048576 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env)}
+          ${if def ? reloadIfChanged && def.reloadIfChanged then ''
+            X-ReloadIfChanged=true
+          '' else if (def ? restartIfChanged && !def.restartIfChanged) then ''
+            X-RestartIfChanged=false
+          '' else ""}
+          ${optionalString (def ? stopIfChanged && !def.stopIfChanged) "X-StopIfChanged=false"}
+          ${attrsToSection def.serviceConfig}
+        '';
+    };
+
+  socketToUnit = name: def:
+    { inherit (def) aliases wantedBy requiredBy enable;
+      text = commonUnitText def +
+        ''
+          [Socket]
+          ${attrsToSection def.socketConfig}
+          ${concatStringsSep "\n" (map (s: "ListenStream=${s}") def.listenStreams)}
+          ${concatStringsSep "\n" (map (s: "ListenDatagram=${s}") def.listenDatagrams)}
+        '';
+    };
+
+  timerToUnit = name: def:
+    { inherit (def) aliases wantedBy requiredBy enable;
+      text = commonUnitText def +
+        ''
+          [Timer]
+          ${attrsToSection def.timerConfig}
+        '';
+    };
+
+  pathToUnit = name: def:
+    { inherit (def) aliases wantedBy requiredBy enable;
+      text = commonUnitText def +
+        ''
+          [Path]
+          ${attrsToSection def.pathConfig}
+        '';
+    };
+
+  mountToUnit = name: def:
+    { inherit (def) aliases wantedBy requiredBy enable;
+      text = commonUnitText def +
+        ''
+          [Mount]
+          ${attrsToSection def.mountConfig}
+        '';
+    };
+
+  automountToUnit = name: def:
+    { inherit (def) aliases wantedBy requiredBy enable;
+      text = commonUnitText def +
+        ''
+          [Automount]
+          ${attrsToSection def.automountConfig}
+        '';
+    };
+
+  sliceToUnit = name: def:
+    { inherit (def) aliases wantedBy requiredBy enable;
+      text = commonUnitText def +
+        ''
+          [Slice]
+          ${attrsToSection def.sliceConfig}
+        '';
+    };
 }

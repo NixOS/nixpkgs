@@ -1,4 +1,4 @@
-{ stdenv, lib, python2, cmake, libllvm, ocaml, findlib, ctypes }:
+{ stdenv, lib, python3, cmake, libllvm, ocaml, findlib, ctypes }:
 
 let version = lib.getVersion libllvm; in
 
@@ -8,9 +8,11 @@ stdenv.mkDerivation {
 
   inherit (libllvm) src;
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ python2 ocaml findlib ctypes ];
+  nativeBuildInputs = [ cmake python3 ocaml findlib ];
+  buildInputs = [ ctypes ];
   propagatedBuildInputs = [ libllvm ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=YES" # fixes bytecode builds
@@ -36,7 +38,7 @@ stdenv.mkDerivation {
 
   meta = {
     inherit (libllvm.meta) license homepage;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     description = "OCaml bindings distributed with LLVM";
     maintainers = with lib.maintainers; [ vbgl ];
   };

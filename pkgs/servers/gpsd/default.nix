@@ -81,6 +81,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
     sed -e "s|systemd_dir = .*|systemd_dir = '$out/lib/systemd/system'|" -i SConscript
     export TAR=noop
+    substituteInPlace SConscript --replace "env['CCVERSION']" "env['CC']"
 
     sconsFlags+=" udevdir=$out/lib/udev"
     sconsFlags+=" python_libdir=$out/lib/${python3Packages.python.libPrefix}/site-packages"
@@ -109,7 +110,6 @@ stdenv.mkDerivation rec {
 
   # remove binaries for x-less install because xgps sconsflag is partially broken
   postFixup = ''
-    ${if guiSupport then "" else "rm $out/bin/xgps*"}
     wrapPythonProgramsIn $out/bin "$out $pythonPath"
   '';
 

@@ -3,7 +3,11 @@
 with lib;
 
 let
+  json = pkgs.formats.json { };
   cfg = config.services.prometheus;
+  checkConfigEnabled =
+    (lib.isBool cfg.checkConfig && cfg.checkConfig)
+      || cfg.checkConfig == "syntax-only";
 
   workingDir = "/var/lib/" + cfg.stateDir;
 
@@ -26,7 +30,7 @@ let
 
   # a wrapper that verifies that the configuration is valid
   promtoolCheck = what: name: file:
-    if cfg.checkConfig then
+    if checkConfigEnabled then
       pkgs.runCommandLocal
         "${name}-${replaceStrings [" "] [""] what}-checked"
         { buildInputs = [ cfg.package ]; } ''
@@ -34,13 +38,7 @@ let
         promtool ${what} $out
       '' else file;
 
-  # Pretty-print JSON to a file
-  writePrettyJSON = name: x:
-    pkgs.runCommandLocal name { } ''
-      echo '${builtins.toJSON x}' | ${pkgs.jq}/bin/jq . > $out
-    '';
-
-  generatedPrometheusYml = writePrettyJSON "prometheus.yml" promConfig;
+  generatedPrometheusYml = json.generate "prometheus.yml" promConfig;
 
   # This becomes the main config file for Prometheus
   promConfig = {
@@ -63,7 +61,7 @@ let
           pkgs.writeText "prometheus.yml" cfg.configText
         else generatedPrometheusYml;
     in
-    promtoolCheck "check config" "prometheus.yml" yml;
+    promtoolCheck "check config ${lib.optionalString (cfg.checkConfig == "syntax-only") "--syntax-only"}" "prometheus.yml" yml;
 
   cmdlineArgs = cfg.extraFlags ++ [
     "--storage.tsdb.path=${workingDir}/data/"
@@ -74,7 +72,6 @@ let
     }"
     "--web.listen-address=${cfg.listenAddress}:${builtins.toString cfg.port}"
     "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
-    "--alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
   ] ++ optional (cfg.webExternalUrl != null) "--web.external-url=${cfg.webExternalUrl}"
     ++ optional (cfg.retentionTime != null) "--storage.tsdb.retention.time=${cfg.retentionTime}";
 
@@ -102,14 +99,14 @@ let
 
   mkDefOpt = type: defaultStr: description: mkOpt type (description + ''
 
-    Defaults to <literal>${defaultStr}</literal> in prometheus
-    when set to <literal>null</literal>.
+    Defaults to ````${defaultStr}```` in prometheus
+    when set to `null`.
   '');
 
   mkOpt = type: description: mkOption {
     type = types.nullOr type;
     default = null;
-    inherit description;
+    description = lib.mdDoc description;
   };
 
   mkSdConfigModule = extraOptions: types.submodule {
@@ -187,7 +184,7 @@ let
     options = {
       username = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           HTTP username
         '';
       };
@@ -254,13 +251,13 @@ let
       authorization = mkOption {
         type = types.nullOr types.attrs;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Sets the `Authorization` header on every scrape request with the configured credentials.
         '';
       };
       job_name = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The job name assigned to scraped metrics by default.
         '';
       };
@@ -291,7 +288,7 @@ let
 
         If honor_labels is set to "false", label conflicts are
         resolved by renaming conflicting labels in the scraped data
-        to "exported_&lt;original-label&gt;" (for example
+        to "exported_\<original-label\>" (for example
         "exported_instance", "exported_job") and then attaching
         server-side labels. This is useful for use cases such as
         federation, where all labels specified in the target should
@@ -302,10 +299,10 @@ let
         honor_timestamps controls whether Prometheus respects the timestamps present
         in scraped data.
 
-        If honor_timestamps is set to <literal>true</literal>, the timestamps of the metrics exposed
+        If honor_timestamps is set to `true`, the timestamps of the metrics exposed
         by the target will be used.
 
-        If honor_timestamps is set to <literal>false</literal>, the timestamps of the metrics exposed
+        If honor_timestamps is set to `false`, the timestamps of the metrics exposed
         by the target will be ignored.
       '';
 
@@ -326,13 +323,13 @@ let
       bearer_token = mkOpt types.str ''
         Sets the `Authorization` header on every scrape request with
         the configured bearer token. It is mutually exclusive with
-        <option>bearer_token_file</option>.
+        {option}`bearer_token_file`.
       '';
 
       bearer_token_file = mkOpt types.str ''
         Sets the `Authorization` header on every scrape request with
         the bearer token read from the configured file. It is mutually
-        exclusive with <option>bearer_token</option>.
+        exclusive with {option}`bearer_token`.
       '';
 
       tls_config = mkOpt promTypes.tls_config ''
@@ -382,9 +379,8 @@ let
       gce_sd_configs = mkOpt (types.listOf promTypes.gce_sd_config) ''
         List of Google Compute Engine service discovery configurations.
 
-        See <link
-        xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#gce_sd_config">the
-        relevant Prometheus configuration docs</link> for more detail.
+        See [the relevant Prometheus configuration docs](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#gce_sd_config)
+        for more detail.
       '';
 
       hetzner_sd_configs = mkOpt (types.listOf promTypes.hetzner_sd_config) ''
@@ -516,7 +512,7 @@ let
 
       subscription_id = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The subscription ID.
         '';
       };
@@ -595,7 +591,7 @@ let
 
     allow_stale = mkOpt types.bool ''
       Allow stale Consul results
-      (see <link xlink:href="https://www.consul.io/api/index.html#consistency-modes"/>).
+      (see <https://www.consul.io/api/index.html#consistency-modes>).
 
       Will reduce load on Consul.
     '';
@@ -621,7 +617,7 @@ let
   mkDockerSdConfigModule = extraOptions: mkSdConfigModule ({
     host = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Address of the Docker daemon.
       '';
     };
@@ -636,16 +632,16 @@ let
         options = {
           name = mkOption {
             type = types.str;
-            description = ''
+            description = lib.mdDoc ''
               Name of the filter. The available filters are listed in the upstream documentation:
-              Services: <link xlink:href="https://docs.docker.com/engine/api/v1.40/#operation/ServiceList"/>
-              Tasks: <link xlink:href="https://docs.docker.com/engine/api/v1.40/#operation/TaskList"/>
-              Nodes: <link xlink:href="https://docs.docker.com/engine/api/v1.40/#operation/NodeList"/>
+              Services: <https://docs.docker.com/engine/api/v1.40/#operation/ServiceList>
+              Tasks: <https://docs.docker.com/engine/api/v1.40/#operation/TaskList>
+              Nodes: <https://docs.docker.com/engine/api/v1.40/#operation/NodeList>
             '';
           };
           values = mkOption {
             type = types.str;
-            description = ''
+            description = lib.mdDoc ''
               Value for the filter.
             '';
           };
@@ -668,7 +664,7 @@ let
   promTypes.dockerswarm_sd_config = mkDockerSdConfigModule {
     role = mkOption {
       type = types.enum [ "services" "tasks" "nodes" ];
-      description = ''
+      description = lib.mdDoc ''
         Role of the targets to retrieve. Must be `services`, `tasks`, or `nodes`.
       '';
     };
@@ -678,7 +674,7 @@ let
     options = {
       names = mkOption {
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           A list of DNS SRV record names to be queried.
         '';
       };
@@ -701,7 +697,7 @@ let
     options = {
       region = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The AWS Region. If blank, the region from the instance metadata is used.
         '';
       };
@@ -711,12 +707,12 @@ let
 
       access_key = mkOpt types.str ''
         The AWS API key id. If blank, the environment variable
-        <literal>AWS_ACCESS_KEY_ID</literal> is used.
+        `AWS_ACCESS_KEY_ID` is used.
       '';
 
       secret_key = mkOpt types.str ''
         The AWS API key secret. If blank, the environment variable
-         <literal>AWS_SECRET_ACCESS_KEY</literal> is used.
+         `AWS_SECRET_ACCESS_KEY` is used.
       '';
 
       profile = mkOpt types.str ''
@@ -742,8 +738,8 @@ let
           options = {
             name = mkOption {
               type = types.str;
-              description = ''
-                See <link xlink:href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html">this list</link>
+              description = lib.mdDoc ''
+                See [this list](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html)
                 for the available filters.
               '';
             };
@@ -751,7 +747,7 @@ let
             values = mkOption {
               type = types.listOf types.str;
               default = [ ];
-              description = ''
+              description = lib.mdDoc ''
                 Value of the filter.
               '';
             };
@@ -765,7 +761,7 @@ let
   promTypes.eureka_sd_config = mkSdConfigModule {
     server = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         The URL to connect to the Eureka server.
       '';
     };
@@ -775,7 +771,7 @@ let
     options = {
       files = mkOption {
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           Patterns for files from which target groups are extracted. Refer
           to the Prometheus documentation for permitted filename patterns
           and formats.
@@ -794,14 +790,14 @@ let
       # required configuration values for `gce_sd_config`.
       project = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The GCP Project.
         '';
       };
 
       zone = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The zone of the scrape targets. If you need multiple zones use multiple
           gce_sd_configs.
         '';
@@ -810,9 +806,7 @@ let
       filter = mkOpt types.str ''
         Filter can be used optionally to filter the instance list by other
         criteria Syntax of this filter string is described here in the filter
-        query parameter section: <link
-        xlink:href="https://cloud.google.com/compute/docs/reference/latest/instances/list"
-        />.
+        query parameter section: <https://cloud.google.com/compute/docs/reference/latest/instances/list>.
       '';
 
       refresh_interval = mkDefOpt types.str "60s" ''
@@ -828,7 +822,7 @@ let
         The tag separator used to separate concatenated GCE instance network tags.
 
         See the GCP documentation on network tags for more information:
-        <link xlink:href="https://cloud.google.com/vpc/docs/add-remove-network-tags" />
+        <https://cloud.google.com/vpc/docs/add-remove-network-tags>
       '';
     };
   };
@@ -836,9 +830,9 @@ let
   promTypes.hetzner_sd_config = mkSdConfigModule {
     role = mkOption {
       type = types.enum [ "robot" "hcloud" ];
-      description = ''
+      description = lib.mdDoc ''
         The Hetzner role of entities that should be discovered.
-        One of <literal>robot</literal> or <literal>hcloud</literal>.
+        One of `robot` or `hcloud`.
       '';
     };
 
@@ -855,7 +849,7 @@ let
     options = {
       url = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           URL from which the targets are fetched.
         '';
       };
@@ -892,7 +886,7 @@ let
 
     role = mkOption {
       type = types.enum [ "endpoints" "service" "pod" "node" "ingress" ];
-      description = ''
+      description = lib.mdDoc ''
         The Kubernetes role of entities that should be discovered.
         One of endpoints, service, pod, node, or ingress.
       '';
@@ -923,7 +917,7 @@ let
             options = {
               role = mkOption {
                 type = types.str;
-                description = ''
+                description = lib.mdDoc ''
                   Selector role
                 '';
               };
@@ -957,7 +951,7 @@ let
   promTypes.kuma_sd_config = mkSdConfigModule {
     server = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Address of the Kuma Control Plane's MADS xDS server.
       '';
     };
@@ -982,11 +976,11 @@ let
       '';
 
       access_key = mkOpt types.str ''
-        The AWS API keys. If blank, the environment variable <literal>AWS_ACCESS_KEY_ID</literal> is used.
+        The AWS API keys. If blank, the environment variable `AWS_ACCESS_KEY_ID` is used.
       '';
 
       secret_key = mkOpt types.str ''
-        The AWS API keys. If blank, the environment variable <literal>AWS_SECRET_ACCESS_KEY</literal> is used.
+        The AWS API keys. If blank, the environment variable `AWS_SECRET_ACCESS_KEY` is used.
       '';
 
       profile = mkOpt types.str ''
@@ -1025,7 +1019,7 @@ let
   promTypes.marathon_sd_config = mkSdConfigModule {
     servers = mkOption {
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         List of URLs to be used to contact Marathon servers. You need to provide at least one server URL.
       '';
     };
@@ -1036,14 +1030,14 @@ let
 
     auth_token = mkOpt types.str ''
       Optional authentication information for token-based authentication:
-      <link xlink:href="https://docs.mesosphere.com/1.11/security/ent/iam-api/#passing-an-authentication-token" />
-      It is mutually exclusive with <literal>auth_token_file</literal> and other authentication mechanisms.
+      <https://docs.mesosphere.com/1.11/security/ent/iam-api/#passing-an-authentication-token>
+      It is mutually exclusive with `auth_token_file` and other authentication mechanisms.
     '';
 
     auth_token_file = mkOpt types.str ''
       Optional authentication information for token-based authentication:
-      <link xlink:href="https://docs.mesosphere.com/1.11/security/ent/iam-api/#passing-an-authentication-token" />
-      It is mutually exclusive with <literal>auth_token</literal> and other authentication mechanisms.
+      <https://docs.mesosphere.com/1.11/security/ent/iam-api/#passing-an-authentication-token>
+      It is mutually exclusive with `auth_token` and other authentication mechanisms.
     '';
   };
 
@@ -1051,14 +1045,14 @@ let
     options = {
       servers = mkOption {
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           The Zookeeper servers.
         '';
       };
 
       paths = mkOption {
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           Paths can point to a single service, or the root of a tree of services.
         '';
       };
@@ -1100,14 +1094,14 @@ let
       {
         role = mkOption {
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             The OpenStack role of entities that should be discovered.
           '';
         };
 
         region = mkOption {
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             The OpenStack Region.
           '';
         };
@@ -1168,14 +1162,14 @@ let
   promTypes.puppetdb_sd_config = mkSdConfigModule {
     url = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         The URL of the PuppetDB root query endpoint.
       '';
     };
 
     query = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Puppet Query Language (PQL) query. Only resources are supported.
         https://puppet.com/docs/puppetdb/latest/api/query/v4/pql.html
       '';
@@ -1204,7 +1198,7 @@ let
     options = {
       access_key = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Access key to use. https://console.scaleway.com/project/credentials
         '';
       };
@@ -1221,14 +1215,14 @@ let
 
       project_id = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Project ID of the targets.
         '';
       };
 
       role = mkOption {
         type = types.enum [ "instance" "baremetal" ];
-        description = ''
+        description = lib.mdDoc ''
           Role of the targets to retrieve. Must be `instance` or `baremetal`.
         '';
       };
@@ -1278,7 +1272,7 @@ let
     options = {
       account = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The account to use for discovering new targets.
         '';
       };
@@ -1291,21 +1285,21 @@ let
 
       dns_suffix = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The DNS suffix which should be applied to target.
         '';
       };
 
       endpoint = mkOption {
         type = types.str;
-        description = ''
-          The Triton discovery endpoint (e.g. <literal>cmon.us-east-3b.triton.zone</literal>). This is
+        description = lib.mdDoc ''
+          The Triton discovery endpoint (e.g. `cmon.us-east-3b.triton.zone`). This is
           often the same value as dns_suffix.
         '';
       };
 
       groups = mkOpt (types.listOf types.str) ''
-        A list of groups for which targets are retrieved, only supported when targeting the <literal>container</literal> role.
+        A list of groups for which targets are retrieved, only supported when targeting the `container` role.
         If omitted all containers owned by the requesting account are scraped.
       '';
 
@@ -1330,21 +1324,21 @@ let
   promTypes.uyuni_sd_config = mkSdConfigModule {
     server = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         The URL to connect to the Uyuni server.
       '';
     };
 
     username = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Credentials are used to authenticate the requests to Uyuni API.
       '';
     };
 
     password = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Credentials are used to authenticate the requests to Uyuni API.
       '';
     };
@@ -1366,14 +1360,14 @@ let
     options = {
       targets = mkOption {
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           The targets specified by the target group.
         '';
       };
       labels = mkOption {
         type = types.attrsOf types.str;
         default = { };
-        description = ''
+        description = lib.mdDoc ''
           Labels assigned to all metrics scraped from the targets.
         '';
       };
@@ -1429,7 +1423,7 @@ let
     options = {
       url = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           ServerName extension to indicate the name of the server.
           http://tools.ietf.org/html/rfc4366#section-3.1
         '';
@@ -1515,7 +1509,7 @@ let
     options = {
       url = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           ServerName extension to indicate the name of the server.
           http://tools.ietf.org/html/rfc4366#section-3.1
         '';
@@ -1563,6 +1557,8 @@ in
     (mkRenamedOptionModule [ "services" "prometheus2" ] [ "services" "prometheus" ])
     (mkRemovedOptionModule [ "services" "prometheus" "environmentFile" ]
       "It has been removed since it was causing issues (https://github.com/NixOS/nixpkgs/issues/126083) and Prometheus now has native support for secret files, i.e. `basic_auth.password_file` and `authorization.credentials_file`.")
+    (mkRemovedOptionModule [ "services" "prometheus" "alertmanagerTimeout" ]
+      "Deprecated upstream and no longer had any effect")
   ];
 
   options.services.prometheus = {
@@ -1570,7 +1566,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable the Prometheus monitoring daemon.
       '';
     };
@@ -1579,7 +1575,7 @@ in
       type = types.package;
       default = pkgs.prometheus;
       defaultText = literalExpression "pkgs.prometheus";
-      description = ''
+      description = lib.mdDoc ''
         The prometheus package that should be used.
       '';
     };
@@ -1587,7 +1583,7 @@ in
     port = mkOption {
       type = types.port;
       default = 9090;
-      description = ''
+      description = lib.mdDoc ''
         Port to listen on.
       '';
     };
@@ -1595,7 +1591,7 @@ in
     listenAddress = mkOption {
       type = types.str;
       default = "0.0.0.0";
-      description = ''
+      description = lib.mdDoc ''
         Address to listen on for the web interface, API, and telemetry.
       '';
     };
@@ -1603,8 +1599,8 @@ in
     stateDir = mkOption {
       type = types.str;
       default = "prometheus2";
-      description = ''
-        Directory below <literal>/var/lib</literal> to store Prometheus metrics data.
+      description = lib.mdDoc ''
+        Directory below `/var/lib` to store Prometheus metrics data.
         This directory will be created automatically using systemd's StateDirectory mechanism.
       '';
     };
@@ -1612,7 +1608,7 @@ in
     extraFlags = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         Extra commandline options when launching Prometheus.
       '';
     };
@@ -1620,11 +1616,11 @@ in
     enableReload = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Reload prometheus when configuration file changes (instead of restart).
 
         The following property holds: switching to a configuration
-        (<literal>switch-to-configuration</literal>) that changes the prometheus
+        (`switch-to-configuration`) that changes the prometheus
         configuration only finishes successully when prometheus has finished
         loading the new configuration.
       '';
@@ -1633,7 +1629,7 @@ in
     configText = mkOption {
       type = types.nullOr types.lines;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         If non-null, this option defines the text that is written to
         prometheus.yml. If null, the contents of prometheus.yml is generated
         from the structured config options.
@@ -1643,7 +1639,7 @@ in
     globalConfig = mkOption {
       type = promTypes.globalConfig;
       default = { };
-      description = ''
+      description = lib.mdDoc ''
         Parameters that are valid in all  configuration contexts. They
         also serve as defaults for other configuration sections
       '';
@@ -1652,25 +1648,25 @@ in
     remoteRead = mkOption {
       type = types.listOf promTypes.remote_read;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         Parameters of the endpoints to query from.
-        See <link xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_read">the official documentation</link> for more information.
+        See [the official documentation](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_read) for more information.
       '';
     };
 
     remoteWrite = mkOption {
       type = types.listOf promTypes.remote_write;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         Parameters of the endpoints to send samples to.
-        See <link xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write">the official documentation</link> for more information.
+        See [the official documentation](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write) for more information.
       '';
     };
 
     rules = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         Alerting and/or Recording rules to evaluate at runtime.
       '';
     };
@@ -1678,7 +1674,7 @@ in
     ruleFiles = mkOption {
       type = types.listOf types.path;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         Any additional rules files to include in this configuration.
       '';
     };
@@ -1686,7 +1682,7 @@ in
     scrapeConfigs = mkOption {
       type = types.listOf promTypes.scrape_config;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         A list of scrape configurations.
       '';
     };
@@ -1705,25 +1701,17 @@ in
         } ]
       '';
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         A list of alertmanagers to send alerts to.
-        See <link xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alertmanager_config">the official documentation</link> for more information.
+        See [the official documentation](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alertmanager_config) for more information.
       '';
     };
 
     alertmanagerNotificationQueueCapacity = mkOption {
       type = types.int;
       default = 10000;
-      description = ''
+      description = lib.mdDoc ''
         The capacity of the queue for pending alert manager notifications.
-      '';
-    };
-
-    alertmanagerTimeout = mkOption {
-      type = types.int;
-      default = 10;
-      description = ''
-        Alert manager HTTP API timeout (in seconds).
       '';
     };
 
@@ -1731,23 +1719,26 @@ in
       type = types.nullOr types.str;
       default = null;
       example = "https://example.com/";
-      description = ''
+      description = lib.mdDoc ''
         The URL under which Prometheus is externally reachable (for example,
         if Prometheus is served via a reverse proxy).
       '';
     };
 
     checkConfig = mkOption {
-      type = types.bool;
+      type = with types; either bool (enum [ "syntax-only" ]);
       default = true;
-      description = ''
-        Check configuration with <literal>promtool
-        check</literal>. The call to <literal>promtool</literal> is
-        subject to sandboxing by Nix. When credentials are stored in
-        external files (<literal>password_file</literal>,
-        <literal>bearer_token_file</literal>, etc), they will not be
-        visible to <literal>promtool</literal> and it will report
-        errors, despite a correct configuration.
+      example = "syntax-only";
+      description = lib.mdDoc ''
+        Check configuration with `promtool check`. The call to `promtool` is
+        subject to sandboxing by Nix.
+
+        If you use credentials stored in external files
+        (`password_file`, `bearer_token_file`, etc),
+        they will not be visible to `promtool`
+        and it will report errors, despite a correct configuration.
+        To resolve this, you may set this option to `"syntax-only"`
+        in order to only syntax check the Prometheus configuration.
       '';
     };
 
@@ -1755,7 +1746,7 @@ in
       type = types.nullOr types.str;
       default = null;
       example = "15d";
-      description = ''
+      description = lib.mdDoc ''
         How long to retain samples in storage.
       '';
     };

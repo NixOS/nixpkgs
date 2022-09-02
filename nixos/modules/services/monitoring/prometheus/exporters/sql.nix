@@ -7,7 +7,7 @@ let
       jobs = mkOption {
         type = attrsOf (submodule jobOptions);
         default = { };
-        description = "An attrset of metrics scraping jobs to run.";
+        description = lib.mdDoc "An attrset of metrics scraping jobs to run.";
       };
     };
   };
@@ -15,23 +15,23 @@ let
     options = with types; {
       interval = mkOption {
         type = str;
-        description = ''
+        description = lib.mdDoc ''
           How often to run this job, specified in
-          <link xlink:href="https://golang.org/pkg/time/#ParseDuration">Go duration</link> format.
+          [Go duration](https://golang.org/pkg/time/#ParseDuration) format.
         '';
       };
       connections = mkOption {
         type = listOf str;
-        description = "A list of connection strings of the SQL servers to scrape metrics from";
+        description = lib.mdDoc "A list of connection strings of the SQL servers to scrape metrics from";
       };
       startupSql = mkOption {
         type = listOf str;
         default = [];
-        description = "A list of SQL statements to execute once after making a connection.";
+        description = lib.mdDoc "A list of SQL statements to execute once after making a connection.";
       };
       queries = mkOption {
         type = attrsOf (submodule queryOptions);
-        description = "SQL queries to run.";
+        description = lib.mdDoc "SQL queries to run.";
       };
     };
   };
@@ -40,20 +40,20 @@ let
       help = mkOption {
         type = nullOr str;
         default = null;
-        description = "A human-readable description of this metric.";
+        description = lib.mdDoc "A human-readable description of this metric.";
       };
       labels = mkOption {
         type = listOf str;
         default = [ ];
-        description = "A set of columns that will be used as Prometheus labels.";
+        description = lib.mdDoc "A set of columns that will be used as Prometheus labels.";
       };
       query = mkOption {
         type = str;
-        description = "The SQL query to run.";
+        description = lib.mdDoc "The SQL query to run.";
       };
       values = mkOption {
         type = listOf str;
-        description = "A set of columns that will be used as values of this metric.";
+        description = lib.mdDoc "A set of columns that will be used as values of this metric.";
       };
     };
   };
@@ -77,14 +77,14 @@ in
     configFile = mkOption {
       type = with types; nullOr path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Path to configuration file.
       '';
     };
     configuration = mkOption {
       type = with types; nullOr (submodule cfgOptions);
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Exporter configuration as nix attribute set. Mutually exclusive with 'configFile' option.
       '';
     };

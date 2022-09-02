@@ -4,30 +4,30 @@
 , fetchPypi
 , importlib-metadata
 , pyyaml
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "markdown";
-  version = "3.3.6";
+  version = "3.3.7";
 
   disabled = pythonOlder "3.6";
+
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "Markdown";
     inherit version;
-    sha256 = "sha256-dt+K4yKU7Dnc+JNAOCiC36Epdfh/RcPtHs2x6M78cAY=";
+    sha256 = "cbb516f16218e643d8e0a95b309f77eb118cb138d39a4f27851e6a63581db874";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
     importlib-metadata
   ];
 
-  checkInputs = [ pyyaml ];
+  checkInputs = [ unittestCheckHook pyyaml ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  pythonImportsCheck = [ "markdown" ];
 
   meta = with lib; {
     description = "A Python implementation of John Gruber's Markdown with Extension support";

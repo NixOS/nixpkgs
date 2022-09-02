@@ -1,23 +1,43 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "serf";
-  version = "0.8.1";
-  rev = "v${version}";
-
-  goPackagePath = "github.com/hashicorp/serf";
+  version = "0.10.0";
+  rev = "a2bba5676d6e37953715ea10e583843793a0c507";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "serf";
-    inherit rev;
-    sha256 = "1arakjvhyasrk52vhxas2ghlrby3i3wj59r7sjrkbpln2cdbqnlx";
+    rev = "v${version}";
+    sha256 = "sha256-5P2Pq2yzTGyw0hLwHdJB4YB+du0D8Q3MagRH3WXZ100=";
   };
 
+  vendorSha256 = "sha256-2v2KcULgrwMRVGA91p7LJQPyQqwHLHhJa1WSivXHQG4=";
+
+  subPackages = [ "cmd/serf" ];
+
+  # These values are expected by version/version.go
+  # https://github.com/hashicorp/serf/blob/7faa1b06262f70780c3c35ac25a4c96d754f06f3/version/version.go#L8-L22
+  ldflags = lib.mapAttrsToList
+    (n: v: "-X github.com/hashicorp/serf/version.${n}=${v}") {
+      GitCommit = rev;
+      Version = version;
+      VersionPrerelease = "";
+    };
+
+  # There are no tests for cmd/serf.
+  doCheck = false;
+
   meta = with lib; {
-    description = "Tool for service orchestration and management";
-    homepage = "https://www.serf.io/";
-    platforms = platforms.linux ++ platforms.darwin;
+    description = "Service orchestration and management tool";
+    longDescription = ''
+      Serf is a decentralized solution for service discovery and orchestration
+      that is lightweight, highly available, and fault tolerant.
+    '';
+    homepage = "https://www.serf.io";
     license = licenses.mpl20;
     maintainers = with maintainers; [ pradeepchhetri ];
   };

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "repmgr";
-  version = "5.3.0";
+  version = "5.3.2";
 
   src = fetchFromGitHub {
     owner = "2ndQuadrant";
     repo = "repmgr";
     rev = "v${version}";
-    sha256 = "sha256-hDBdtp6wPjvtc0MO8aG0Tdx5JiQJf8KS0f778R5xCZc=";
+    sha256 = "sha256-M8FMin9y6nAiPYeT5pUUy0KyZ1dkuH708GshZ6GoXXw=";
   };
 
   nativeBuildInputs = [ flex ];

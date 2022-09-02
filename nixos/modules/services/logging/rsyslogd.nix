@@ -39,7 +39,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable syslogd.  Note that systemd also logs
           syslog messages, so you normally don't need to run syslogd.
         '';
@@ -48,10 +48,10 @@ in
       defaultConfig = mkOption {
         type = types.lines;
         default = defaultConf;
-        description = ''
-          The default <filename>syslog.conf</filename> file configures a
+        description = lib.mdDoc ''
+          The default {file}`syslog.conf` file configures a
           fairly standard setup of log files, which can be extended by
-          means of <varname>extraConfig</varname>.
+          means of {var}`extraConfig`.
         '';
       };
 
@@ -59,9 +59,9 @@ in
         type = types.lines;
         default = "";
         example = "news.* -/var/log/news";
-        description = ''
-          Additional text appended to <filename>syslog.conf</filename>,
-          i.e. the contents of <varname>defaultConfig</varname>.
+        description = lib.mdDoc ''
+          Additional text appended to {file}`syslog.conf`,
+          i.e. the contents of {var}`defaultConfig`.
         '';
       };
 
@@ -69,8 +69,8 @@ in
         type = types.listOf types.str;
         default = [ ];
         example = [ "-m 0" ];
-        description = ''
-          Additional parameters passed to <command>rsyslogd</command>.
+        description = lib.mdDoc ''
+          Additional parameters passed to {command}`rsyslogd`.
         '';
       };
 

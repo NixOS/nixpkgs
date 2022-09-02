@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cloak";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "evansmurithi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "139z2ga0q7a0vwfnn5hpzsz5yrrrr7rgyd32yvfj5sxiywkmczs7";
+    hash = "sha256-Pd2aorsXdHB1bs609+S5s+WV5M1ql48yIKaoN8SEvsg=";
   };
 
-  cargoSha256 = "0af38wgwmsamnx63dwfm2nrkd8wmky3ai7zwy0knmifgkn4b7yyj";
+  cargoHash = "sha256-m11A5fcJzWoDZglrr2Es1V5ZJNepEkGeIRVhexJ7jws=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 

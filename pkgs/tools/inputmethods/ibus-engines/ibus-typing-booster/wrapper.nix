@@ -20,7 +20,7 @@ symlinkJoin {
   postBuild = ''
     for i in bin/emoji-picker libexec/ibus-{setup,engine}-typing-booster; do
       wrapProgram "$out/$i" \
-        --prefix NIX_HUNSPELL_DIRS : ${hunspellDirs}
+        --prefix NIX_HUNSPELL_DIRS : ${lib.escapeShellArg hunspellDirs}
     done
 
     sed -i -e "s,${typing-booster},$out," $out/share/ibus/component/typing-booster.xml

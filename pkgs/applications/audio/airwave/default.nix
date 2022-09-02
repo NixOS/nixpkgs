@@ -3,7 +3,6 @@
 }:
 
 let
-
   version = "1.3.3";
 
   airwave-src = fetchFromGitHub {
@@ -38,7 +37,8 @@ let
 in
 
 multiStdenv.mkDerivation {
-  name = "airwave-${version}";
+  pname = "airwave";
+  inherit version;
 
   src = airwave-src;
 

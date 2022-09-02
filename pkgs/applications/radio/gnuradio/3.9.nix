@@ -46,13 +46,13 @@
 , pname ? "gnuradio"
 , versionAttr ? {
   major = "3.9";
-  minor = "5";
+  minor = "7";
   patch = "0";
 }
 }:
 
 let
-  sourceSha256 = "sha256-TWCXLoS+ImKNd2zkxMks4FXsQMvGKgcW5/MW8S1Y1TY=";
+  sourceSha256 = "sha256-6HEvQsV2JCkgNvBYsy1jfSTUIwEnrKJTzXNIVcPeWFQ=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -133,6 +133,12 @@ let
         libsndfile
       ];
       cmakeEnableFlag = "GRC";
+    };
+    jsonyaml_blocks = {
+      pythonRuntime = [
+        python.pkgs.jsonschema
+      ];
+      cmakeEnableFlag = "JSONYAML_BLOCKS";
     };
     gr-blocks = {
       cmakeEnableFlag = "GR_BLOCKS";
@@ -275,7 +281,11 @@ stdenv.mkDerivation rec {
   ];
   passthru = shared.passthru // {
     # Deps that are potentially overriden and are used inside GR plugins - the same version must
-    inherit boost volk;
+    inherit
+      boost
+      volk
+      log4cpp
+    ;
   } // lib.optionalAttrs (hasFeature "gr-uhd") {
     inherit uhd;
   } // lib.optionalAttrs (hasFeature "gr-qtgui") {

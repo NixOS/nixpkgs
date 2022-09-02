@@ -1,19 +1,17 @@
-{ lib, buildGo117Module, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGo117Module rec {
+buildGoModule rec {
   pname = "nebula";
-  version = "1.5.2";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "slackhq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "kxBu+r99sC3XWDX+xTmhdUJx0HMVWA0Xgy7wgfrjZ5E=";
+    sha256 = "sha256-JUFMcqu24YK1FjaNPkQLOtkyEhvqZPXZyFV+HBAKn5w=";
   };
 
-  vendorSha256 = "5Yv2t5vdUNCcCo2KAm1xCkRVrt6gIasKHLqH7VVPDuU=";
-
-  doCheck = false;
+  vendorSha256 = "sha256-GvMiOEC3Y/pGG++Z+XCgLVADKymUR9shDxjx3xIz8u0=";
 
   subPackages = [ "cmd/nebula" "cmd/nebula-cert" ];
 

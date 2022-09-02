@@ -12,8 +12,8 @@
  <xi:include href="../from_md/development/sources.chapter.xml" />
  <xi:include href="../from_md/development/writing-modules.chapter.xml" />
  <xi:include href="../from_md/development/building-parts.chapter.xml" />
+ <xi:include href="../from_md/development/what-happens-during-a-system-switch.chapter.xml" />
  <xi:include href="../from_md/development/writing-documentation.chapter.xml" />
- <xi:include href="../from_md/development/building-nixos.chapter.xml" />
  <xi:include href="../from_md/development/nixos-tests.chapter.xml" />
  <xi:include href="../from_md/development/testing-installer.chapter.xml" />
 </part>

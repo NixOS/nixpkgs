@@ -5,16 +5,20 @@
 , azure-common
 , azure-core
 , msrestazure
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "azure-eventgrid";
-  version = "4.7.1";
+  version = "4.9.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "b96afc0317c764c2c428512485305ec5748698081cb6bc70dcaa903b0ac04754";
+    hash = "sha256-ueuOxhNATK6o/Vue+x5vtP0ac3CQellkuyQmSrq7tqQ=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +30,10 @@ buildPythonPackage rec {
 
   # has no tests
   doCheck = false;
-  pythonImportsCheck = [ "azure.eventgrid" ];
+
+  pythonImportsCheck = [
+    "azure.eventgrid"
+  ];
 
   meta = with lib; {
     description = "A fully-managed intelligent event routing service that allows for uniform event consumption using a publish-subscribe model";

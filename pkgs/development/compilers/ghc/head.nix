@@ -19,7 +19,7 @@
 , elfutils # for DWARF support
 
 , useLLVM ? !(stdenv.targetPlatform.isx86
-              || stdenv.targetPlatform.isPowerPC
+              || stdenv.targetPlatform.isPower
               || stdenv.targetPlatform.isSparc
               || (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin))
 , # LLVM is conceptually a run-time-only depedendency, but for
@@ -42,7 +42,7 @@
   # platform). Static libs are always built.
   enableShared ? !stdenv.targetPlatform.isWindows && !stdenv.targetPlatform.useiOSPrebuilt
 
-, version ? "9.3.20211111"
+, version ? "9.3.20220406"
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
   ghcFlavour ? lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
@@ -186,8 +186,8 @@ stdenv.mkDerivation (rec {
 
   src = fetchgit {
     url = "https://gitlab.haskell.org/ghc/ghc.git/";
-    rev = "cc635da167fdec2dead0603b0026cb841f0aa645";
-    sha256 = "1lj76l546zriwkcn2r7i5a4j35bx9fh5iggwfz2xvhh8aq8j2i46";
+    rev = "c44432db254d2fc960d7864e080cb50e65dfa7c6";
+    sha256 = "0xagijcfcw3a19s6dmh6z7085lvkrakys3lcby4ncq1v0syh507h";
   };
 
   enableParallelBuilding = true;
@@ -205,7 +205,7 @@ stdenv.mkDerivation (rec {
     # GHC is a bit confused on its cross terminology, as these would normally be
     # the *host* tools.
     export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
-    export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
+    export CXX="${targetCC}/bin/${targetCC.targetPrefix}c++"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
     # and more generally have a faster linker.
     export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}"
@@ -346,6 +346,10 @@ stdenv.mkDerivation (rec {
 
     inherit llvmPackages;
     inherit enableShared;
+
+    # This is used by the haskell builder to query
+    # the presence of the haddock program.
+    hasHaddock = enableHaddockProgram;
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";

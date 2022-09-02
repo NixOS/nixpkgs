@@ -16,12 +16,9 @@ let
     name = pname;
     exec = pname;
     icon = pname;
-    terminal = "false";
     comment = description;
-    type = "Application";
-    categories = "Game;ArcadeGame;ActionGame";
+    categories = [ "Game" "ArcadeGame" "ActionGame" ];
     genericName = pname;
-    fileValidation = false;
   };
 
 in

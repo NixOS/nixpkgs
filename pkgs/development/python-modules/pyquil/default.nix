@@ -1,10 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , importlib-metadata
 , ipython
-, lark-parser
+, lark
 , networkx
 , numpy
 , poetry-core
@@ -23,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "3.0.1";
+  version = "3.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -32,23 +31,15 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OU7/LjcpCxvqlcfdlm5ll4f0DYXf0yxNprM8Muu2wyg=";
+    sha256 = "sha256-lifenGICnllPe/W9xmyp1Jkh7dRfph6u2+2uNvlARMw=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "pyquil-pr-1404-unpin-qcs-api-client-version-pyproject.patch";
-      url = "https://github.com/rigetti/pyquil/commit/2e35a4fdf65262fdf39c5091aeddfa3f3564925a.patch";
-      sha256 = "sha256-KGDNU2wpzsuifQSbbkoMwaFXspHW6zyIJ5GRZbw+lUY=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core
   ];
 
   propagatedBuildInputs = [
-    lark-parser
+    lark
     networkx
     numpy
     qcs-api-client
@@ -71,7 +62,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'lark = "^0.11.1"' 'lark-parser = ">=0.11.1"'
+      --replace 'lark = "^0.11.1"' 'lark = "*"' \
+      --replace 'qcs-api-client = ">=0.8.1,<0.21.0"' 'qcs-api-client = "*"'
   '';
 
   disabledTestPaths = [
@@ -92,9 +84,14 @@ buildPythonPackage rec {
   disabledTests = [
     "test_compile_with_quilt_calibrations"
     "test_sets_timeout_on_requests"
+    # sensitive to lark parser output
+    "test_memory_commands"
+    "test_classical"
   ];
 
-  pythonImportsCheck = [ "pyquil" ];
+  pythonImportsCheck = [
+    "pyquil"
+  ];
 
   meta = with lib; {
     description = "Python library for creating Quantum Instruction Language (Quil) programs";

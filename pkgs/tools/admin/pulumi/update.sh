@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p gh
+#!nix-shell update-pulumi-shell.nix -i bash
 # shellcheck shell=bash
 # Bash 3 compatible for Darwin
 
@@ -8,38 +8,55 @@ if [ -z "${GITHUB_TOKEN}" ]; then
   exit 1
 fi
 
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
 # Version of Pulumi from
 # https://www.pulumi.com/docs/get-started/install/versions/
-VERSION="3.22.1"
+VERSION="3.38.0"
 
 # An array of plugin names. The respective repository inside Pulumi's
 # Github organization is called pulumi-$name by convention.
 
 declare -a pulumi_repos
 pulumi_repos=(
+  "aiven"
+  "akamai"
+  "alicloud"
+  "artifactory"
   "auth0"
   "aws"
   "azure"
+  "azuread"
+  "azuredevops"
   "cloudflare"
   "consul"
   "datadog"
   "digitalocean"
   "docker"
   "equinix-metal"
+  "fastly"
   "gcp"
   "github"
   "gitlab"
+  "google-native"
   "hcloud"
   "kubernetes"
   "linode"
   "mailgun"
   "mysql"
   "openstack"
-  "packet"
   "postgresql"
   "random"
+  "snowflake"
+  "spotinst"
+  "sumologic"
+  "tailscale"
+  "tls"
   "vault"
+  "venafi"
   "vsphere"
+  "wavefront"
+  "yandex"
 )
 
 # Contains latest release ${VERSION} from
@@ -92,8 +109,6 @@ function genSrcs() {
   local tmpdir
   tmpdir="$(mktemp -d)"
 
-  local i=0
-
   for plugVers in "${plugins[@]}"; do
     local plug=${plugVers%=*}
     local version=${plugVers#*=}
@@ -101,7 +116,6 @@ function genSrcs() {
     # https://github.com/pulumi/pulumi/blob/06d4dde8898b2a0de2c3c7ff8e45f97495b89d82/pkg/workspace/plugins.go#L197
     local url="https://api.pulumi.com/releases/plugins/pulumi-resource-${plug}-v${version}-${1}-${2}.tar.gz"
     genSrc "${url}" "${plug}" "${tmpdir}" &
-    ((++i))
   done
 
   wait
@@ -142,4 +156,4 @@ EOF
   echo "  };"
   echo "}"
 
-} > data.nix
+} > "${SCRIPT_DIR}/data.nix"

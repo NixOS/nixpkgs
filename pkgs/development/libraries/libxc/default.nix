@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libxc";
-  version = "5.2.0";
+  version = "5.2.3";
 
   src = fetchFromGitLab {
     owner = "libxc";
     repo = "libxc";
     rev = version;
-    sha256 = "1zfhfiwk8cnfbmkagaia4xhsc133icl1pryzync28kzsjxzlwfzc";
+    sha256 = "sha256-PuLpwhyyht+kkPUTrJTH+VTY5WuOhi2mIUDrFqubF+w=";
   };
 
   nativeBuildInputs = [ perl cmake gfortran ];
@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DENABLE_FORTRAN=ON"
     "-DBUILD_SHARED_LIBS=ON"
-    # needed for tests to link
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     # Force compilation of higher derivatives
     "-DDISABLE_VXC=0"
     "-DDISABLE_FXC=0"

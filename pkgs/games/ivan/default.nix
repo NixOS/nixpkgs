@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     icon = "ivan.png";
     desktopName = "IVAN";
     genericName = pname;
-    categories = "Game;AdventureGame;RolePlaying;";
+    categories = [ "Game" "AdventureGame" "RolePlaying" ];
     comment = meta.description;
   };
 

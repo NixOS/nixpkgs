@@ -3,7 +3,7 @@
 , callPackage
 , pythonOlder
 , fetchFromGitHub
-, Babel
+, babel
 , gruut-ipa
 , dateparser
 , jsonlines
@@ -18,12 +18,15 @@
 
 let
   langPkgs = [
+    "ar"
     "cs"
     "de"
-    "es"
     "en"
+    "es"
+    "fa"
     "fr"
     "it"
+    "lb"
     "nl"
     "pt"
     "ru"
@@ -33,25 +36,25 @@ let
 in
 buildPythonPackage rec {
   pname = "gruut";
-  version = "2.2.0";
+  version = "2.3.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-9vj3x2IjTso8ksN1cqe5frwg0Y3GhOB6bPWvaBSBOf8=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-DD7gnvH9T2R6E19+exWE7Si+XEpfh0Iy5FYbycjgzgM=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "Babel~=2.8.0" "Babel" \
       --replace "dateparser~=1.0.0" "dateparser" \
-      --replace "gruut_lang_en~=2.0.0" "gruut_lang_en"
+      --replace "gruut_lang_en~=2.0.0" "gruut_lang_en" \
+      --replace "jsonlines~=1.2.0" "jsonlines"
   '';
 
   propagatedBuildInputs = [
-    Babel
+    babel
     gruut-ipa
     jsonlines
     num2words

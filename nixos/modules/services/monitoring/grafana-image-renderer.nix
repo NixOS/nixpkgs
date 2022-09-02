@@ -10,18 +10,18 @@ let
   configFile = format.generate "grafana-image-renderer-config.json" cfg.settings;
 in {
   options.services.grafana-image-renderer = {
-    enable = mkEnableOption "grafana-image-renderer";
+    enable = mkEnableOption (lib.mdDoc "grafana-image-renderer");
 
     chromium = mkOption {
       type = types.package;
-      description = ''
+      description = lib.mdDoc ''
         The chromium to use for image rendering.
       '';
     };
 
-    verbose = mkEnableOption "verbosity for the service";
+    verbose = mkEnableOption (lib.mdDoc "verbosity for the service");
 
-    provisionGrafana = mkEnableOption "Grafana configuration for grafana-image-renderer";
+    provisionGrafana = mkEnableOption (lib.mdDoc "Grafana configuration for grafana-image-renderer");
 
     settings = mkOption {
       type = types.submodule {
@@ -32,15 +32,15 @@ in {
             port = mkOption {
               type = types.port;
               default = 8081;
-              description = ''
+              description = lib.mdDoc ''
                 The TCP port to use for the rendering server.
               '';
             };
             logging.level = mkOption {
               type = types.enum [ "error" "warning" "info" "debug" ];
               default = "info";
-              description = ''
-                The log-level of the <filename>grafana-image-renderer.service</filename>-unit.
+              description = lib.mdDoc ''
+                The log-level of the {file}`grafana-image-renderer.service`-unit.
               '';
             };
           };
@@ -48,39 +48,37 @@ in {
             width = mkOption {
               default = 1000;
               type = types.ints.positive;
-              description = ''
+              description = lib.mdDoc ''
                 Width of the PNG used to display the alerting graph.
               '';
             };
             height = mkOption {
               default = 500;
               type = types.ints.positive;
-              description = ''
+              description = lib.mdDoc ''
                 Height of the PNG used to display the alerting graph.
               '';
             };
             mode = mkOption {
               default = "default";
               type = types.enum [ "default" "reusable" "clustered" ];
-              description = ''
-                Rendering mode of <package>grafana-image-renderer</package>:
-                <itemizedlist>
-                <listitem><para><literal>default:</literal> Creates on browser-instance
-                  per rendering request.</para></listitem>
-                <listitem><para><literal>reusable:</literal> One browser instance
-                  will be started and reused for each rendering request.</para></listitem>
-                <listitem><para><literal>clustered:</literal> allows to precisely
+              description = lib.mdDoc ''
+                Rendering mode of `grafana-image-renderer`:
+
+                - `default:` Creates on browser-instance
+                  per rendering request.
+                - `reusable:` One browser instance
+                  will be started and reused for each rendering request.
+                - `clustered:` allows to precisely
                   configure how many browser-instances are supposed to be used. The values
-                  for that mode can be declared in <literal>rendering.clustering</literal>.
-                  </para></listitem>
-                </itemizedlist>
+                  for that mode can be declared in `rendering.clustering`.
               '';
             };
             args = mkOption {
               type = types.listOf types.str;
               default = [ "--no-sandbox" ];
-              description = ''
-                List of CLI flags passed to <package>chromium</package>.
+              description = lib.mdDoc ''
+                List of CLI flags passed to `chromium`.
               '';
             };
           };
@@ -89,10 +87,10 @@ in {
 
       default = {};
 
-      description = ''
-        Configuration attributes for <package>grafana-image-renderer</package>.
+      description = lib.mdDoc ''
+        Configuration attributes for `grafana-image-renderer`.
 
-        See <link xlink:href="https://github.com/grafana/grafana-image-renderer/blob/ce1f81438e5f69c7fd7c73ce08bab624c4c92e25/default.json" />
+        See <https://github.com/grafana/grafana-image-renderer/blob/ce1f81438e5f69c7fd7c73ce08bab624c4c92e25/default.json>
         for supported values.
       '';
     };

@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.unifiedremote.com/";
     description = "The one-and-only remote for your computer";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ sfrijters ];
     platforms = [ "x86_64-linux" ];

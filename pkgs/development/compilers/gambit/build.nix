@@ -86,8 +86,8 @@ gccStdenv.mkDerivation rec {
 
     # OS-specific paths are hardcoded in ./configure
     substituteInPlace config.status \
-      --replace "/usr/local/opt/openssl@1.1" "${openssl.out}" \
-      --replace "/usr/local/opt/openssl" "${openssl.out}"
+      --replace "/usr/local/opt/openssl@1.1" "${lib.getLib openssl}" \
+      --replace "/usr/local/opt/openssl" "${lib.getLib openssl}"
 
     ./config.status
   '';

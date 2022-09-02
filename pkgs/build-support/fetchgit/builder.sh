@@ -12,6 +12,7 @@ $SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" \
   ${deepClone:+--deepClone} \
   ${fetchSubmodules:+--fetch-submodules} \
   ${sparseCheckout:+--sparse-checkout "$sparseCheckout"} \
+  ${nonConeMode:+--non-cone-mode} \
   ${branchName:+--branch-name "$branchName"}
 
 runHook postFetch

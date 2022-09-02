@@ -1,38 +1,56 @@
 { lib
-
+, beautifulsoup4
+, bleach
 , buildPythonPackage
-, fetchPypi
-, isPyPy
-, pyflakes
-, pep8
+, chardet
 , django
 , django_contrib_comments
+, fetchPypi
 , filebrowser_safe
-, grappelli_safe
-, bleach
-, tzlocal
-, beautifulsoup4
-, requests
-, requests_oauthlib
 , future
+, grappelli_safe
+, isPyPy
+, pep8
 , pillow
-, chardet
+, pyflakes
+, pythonOlder
+, requests
+, requests-oauthlib
+, tzlocal
 }:
 
 buildPythonPackage rec {
-  version = "4.3.1";
-  pname = "Mezzanine";
+  pname = "mezzanine";
+  version = "6.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6" || isPyPy;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "42c7909953cc5aea91921b47d804b61e14893bf48a2a476ce49a96559a0fa1d3";
+    pname = "Mezzanine";
+    inherit version;
+    hash = "sha256-R/PB4PFQpVp6jnCasyPszgC294SKjLzq2oMkR2qV86s=";
   };
 
-  disabled = isPyPy || lib.versionOlder django.version "1.11"
-    || lib.versionAtLeast django.version "2.0";
+  buildInputs = [
+    pyflakes
+    pep8
+  ];
 
-  buildInputs = [ pyflakes pep8 ];
-  propagatedBuildInputs = [ django django_contrib_comments filebrowser_safe grappelli_safe bleach tzlocal beautifulsoup4 requests requests_oauthlib future pillow chardet ];
+  propagatedBuildInputs = [
+    beautifulsoup4
+    bleach
+    chardet
+    django
+    django_contrib_comments
+    filebrowser_safe
+    future
+    grappelli_safe
+    pillow
+    requests
+    requests-oauthlib
+    tzlocal
+  ];
 
   # Tests Fail Due to Syntax Warning, Fixed for v3.1.11+
   doCheck = false;
@@ -41,12 +59,10 @@ buildPythonPackage rec {
     sed -i 's/==/>=/' setup.py
   '';
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   meta = with lib; {
-    description = ''
-      A content management platform built using the Django framework
-    '';
+    description = "Content management platform built using the Django framework";
     longDescription = ''
       Mezzanine is a powerful, consistent, and flexible content
       management platform. Built using the Django framework, Mezzanine
@@ -64,11 +80,9 @@ buildPythonPackage rec {
     '';
     homepage = "http://mezzanine.jupo.org/";
     downloadPage = "https://github.com/stephenmcd/mezzanine/releases";
-    license = licenses.free;
+    license = licenses.bsd2;
     maintainers = with maintainers; [ prikhi ];
     platforms = platforms.unix;
-    # mezzanine requires django-1.11. Consider overriding python package set to use django_1_11"
-    broken = versionOlder django.version "1.11" || versionAtLeast django.version "2.0";
   };
-
 }
+

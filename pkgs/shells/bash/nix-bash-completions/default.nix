@@ -11,9 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "1n5zs6xcnv4bv1hdaypmz7fv4j7dsr4a0ifah99iyj4p5j85i1bc";
   };
 
+  strictDeps = true;
   # To enable lazy loading via. bash-completion we need a symlink to the script
   # from every command name.
   installPhase = ''
+    runHook preInstall
+
     commands=$(
       function complete() { shift 2; echo "$@"; }
       shopt -s extglob
@@ -24,6 +27,8 @@ stdenv.mkDerivation rec {
     for c in $commands; do
       ln -s _nix $c
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

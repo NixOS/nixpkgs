@@ -1,39 +1,43 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "syft";
-  version = "0.36.0";
+  version = "0.55.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JNW4sozNtLey7uAj1xECR/ui+/1L02moZKuGzWXIh5k=";
+    sha256 = "sha256-tzrWgmEMe7y6PQgtYiN12LGR24FuaEvzOBAfgbIOepo=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
-      commit="$(git rev-parse HEAD)"
-      source_date_epoch=$(git log --date=format:'%Y-%m-%dT%H:%M:%SZ' -1 --pretty=%ad)
-      substituteInPlace "$out/internal/version/build.go" \
-        --replace 'gitCommit = valueNotProvided' "gitCommit = \"$commit\"" \
-        --replace 'buildDate = valueNotProvided' "buildDate = \"$source_date_epoch\""
+      git rev-parse HEAD > $out/COMMIT
+      # 0000-00-00T00:00:00Z
+      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorSha256 = "sha256-urDDb+53KSvUOjVRY/geENIQM1vvBUDddlNpQw3LcLg=";
+  vendorSha256 = "sha256-HaTUjNKAZNiVcM4tZJb0r9ezsvWTlOicPct/ZtpTz5Y=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  subPackages = [ "." ];
+  subPackages = [ "cmd/syft" ];
 
   ldflags = [
     "-s"
     "-w"
     "-X github.com/anchore/syft/internal/version.version=${version}"
+    "-X github.com/anchore/syft/internal/version.gitDescription=v${version}"
     "-X github.com/anchore/syft/internal/version.gitTreeState=clean"
   ];
+
+  preBuild = ''
+    ldflags+=" -X github.com/anchore/syft/internal/version.gitCommit=$(cat COMMIT)"
+    ldflags+=" -X github.com/anchore/syft/internal/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
+  '';
 
   # tests require a running docker instance
   doCheck = false;
@@ -46,6 +50,17 @@ buildGoModule rec {
       --bash <($out/bin/syft completion bash) \
       --fish <($out/bin/syft completion fish) \
       --zsh <($out/bin/syft completion zsh)
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    export SYFT_CHECK_FOR_APP_UPDATE=false
+    $out/bin/syft --help
+    $out/bin/syft version | grep "${version}"
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

@@ -17,7 +17,7 @@ in
     programs.plotinus = {
       enable = mkOption {
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the Plotinus GTK 3 plugin. Plotinus provides a
           popup (triggered by Ctrl-Shift-P) to search the menus of a
           compatible application.

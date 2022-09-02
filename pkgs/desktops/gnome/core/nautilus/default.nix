@@ -1,6 +1,6 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -19,7 +19,6 @@
 , libnotify
 , libexif
 , libseccomp
-, exempi
 , librsvg
 , tracker
 , tracker-miners
@@ -35,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nautilus";
-  version = "41.2";
+  version = "42.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "hyKFscQKbuQYzile0RX1Qn2nCQfYItlbz1FnXVSYgis=";
+    sha256 = "mSEtLrdZlvGBcorQSi4thvJXewZOaKNMi4GnA330zLI=";
   };
 
   patches = [
@@ -52,17 +51,6 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit tracker;
-    })
-
-    # Fix build with latest libportal
-    # https://gitlab.gnome.org/GNOME/nautilus/-/merge_requests/749
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/nautilus/-/commit/55cfd66ccca391fc144f5863ff6bfc1f3b137e2d.patch";
-      sha256 = "xSb9l7xxEYpAwmdmeWT/t7Z9Ck3DPtsODzbReQW/Q70=";
-      excludes = [
-        "build-aux/flatpak/org.gnome.Nautilus.json"
-        "build-aux/flatpak/org.gnome.Nautilus.yml"
-      ];
     })
   ];
 
@@ -79,7 +67,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    exempi
     gexiv2
     glib-networking
     gnome-desktop

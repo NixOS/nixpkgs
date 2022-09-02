@@ -15,34 +15,36 @@
 , CoreServices
 , tzdata
 , cmake
-  # kafka is optional but one of the most used features
-, enableKafka ? true
+, perl
+  # nix has a problem with the `?` in the feature list
+  # enabling kafka will produce a vector with no features at all
+, enableKafka ? false
   # TODO investigate adding "api" "api-client" "vrl-cli" and various "vendor-*"
   # "disk-buffer" is using leveldb TODO: investigate how useful
   # it would be, perhaps only for massive scale?
-, features ? ([ "sinks" "sources" "transforms" ]
+, features ? ([ "sinks" "sources" "transforms" "vrl-cli" ]
     # the second feature flag is passed to the rdkafka dependency
     # building on linux fails without this feature flag (both x86_64 and AArch64)
-    ++ lib.optionals enableKafka [ "rdkafka-plain" "rdkafka/dynamic_linking" ]
+    ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
     ++ lib.optional stdenv.targetPlatform.isUnix "unix")
 }:
 
 let
   pname = "vector";
-  version = "0.19.1";
+  version = "0.24.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
-    owner = "timberio";
+    owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ty+tsT3nkdYN7/avG1imIwWKAmtPA3NPjhrtoADciQs=";
+    sha256 = "sha256-kZ6Ek3CagAznyU7yDv96jFk1xCjfF2gvrNYyVTeFuO0=";
   };
 
-  cargoSha256 = "sha256-dYIAbjBBnEsCGt5ceV+jG0hsu8dcAH4V+wnfm6Chw8Q=";
-  nativeBuildInputs = [ pkg-config cmake ];
+  cargoSha256 = "sha256-4aHMPrawTF9QpoX7cmiPv9ddu0LF008uqBTu0oyan98=";
+  nativeBuildInputs = [ pkg-config cmake perl ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
 
@@ -54,13 +56,15 @@ rustPlatform.buildRustPackage {
 
   TZDIR = "${tzdata}/share/zoneinfo";
 
+  # needed to dynamically link rdkafka
+  CARGO_FEATURE_DYNAMIC_LINKING=1;
+
   buildNoDefaultFeatures = true;
   buildFeatures = features;
 
   # TODO investigate compilation failure for tests
-  # dev dependency includes httpmock which depends on iashc which depends on curl-sys with http2 feature enabled
-  # compilation fails because of a missing http2 include
-  doCheck = !stdenv.isDarwin;
+  # there are about 100 tests failing (out of 1100) for version 0.22.0
+  doCheck = false;
 
   checkFlags = [
     # tries to make a network access
@@ -104,5 +108,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/timberio/vector";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ thoughtpolice happysalada ];
+    platforms = with platforms; linux;
   };
 }

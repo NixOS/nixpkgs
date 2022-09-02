@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, cmake, llvmPackages, boost, python
+{ stdenv, lib, fetchFromGitHub, cmake, llvmPackages, boost, python
 , withGocode ? true, gocode
 , withGodef ? true, godef
 , withGotools? true, gotools
@@ -12,10 +12,12 @@ stdenv.mkDerivation {
   disabled = !python.isPy3k;
 
   # required for third_party directory creation
-  src = fetchgit {
-    url = "https://github.com/Valloric/ycmd.git";
+  src = fetchFromGitHub {
+    owner = "Valloric";
+    repo = "ycmd";
     rev = "9a6b86e3a156066335b678c328f226229746bae5";
-    sha256 = "1c5axdngxaxj5vc6lr8sxb99mr5adsm1dnjckaxc23kq78pc8cn7";
+    sha256 = "sha256-xzLELjp4DsG6mkzaFqpuquSa0uoaZWrYLrKr/mzrqrA=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ]

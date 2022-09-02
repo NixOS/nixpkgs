@@ -21,58 +21,58 @@ let
 in
 {
   options.services.alerta = {
-    enable = mkEnableOption "alerta";
+    enable = mkEnableOption (lib.mdDoc "alerta");
 
     port = mkOption {
       type = types.int;
       default = 5000;
-      description = "Port of Alerta";
+      description = lib.mdDoc "Port of Alerta";
     };
 
     bind = mkOption {
       type = types.str;
       default = "0.0.0.0";
-      description = "Address to bind to. The default is to bind to all addresses";
+      description = lib.mdDoc "Address to bind to. The default is to bind to all addresses";
     };
 
     logDir = mkOption {
       type = types.path;
-      description = "Location where the logfiles are stored";
+      description = lib.mdDoc "Location where the logfiles are stored";
       default = "/var/log/alerta";
     };
 
     databaseUrl = mkOption {
       type = types.str;
-      description = "URL of the MongoDB or PostgreSQL database to connect to";
+      description = lib.mdDoc "URL of the MongoDB or PostgreSQL database to connect to";
       default = "mongodb://localhost";
     };
 
     databaseName = mkOption {
       type = types.str;
-      description = "Name of the database instance to connect to";
+      description = lib.mdDoc "Name of the database instance to connect to";
       default = "monitoring";
     };
 
     corsOrigins = mkOption {
       type = types.listOf types.str;
-      description = "List of URLs that can access the API for Cross-Origin Resource Sharing (CORS)";
+      description = lib.mdDoc "List of URLs that can access the API for Cross-Origin Resource Sharing (CORS)";
       default = [ "http://localhost" "http://localhost:5000" ];
     };
 
     authenticationRequired = mkOption {
       type = types.bool;
-      description = "Whether users must authenticate when using the web UI or command-line tool";
+      description = lib.mdDoc "Whether users must authenticate when using the web UI or command-line tool";
       default = false;
     };
 
     signupEnabled = mkOption {
       type = types.bool;
-      description = "Whether to prevent sign-up of new users via the web UI";
+      description = lib.mdDoc "Whether to prevent sign-up of new users via the web UI";
       default = true;
     };
 
     extraConfig = mkOption {
-      description = "These lines go into alertad.conf verbatim.";
+      description = lib.mdDoc "These lines go into alertad.conf verbatim.";
       default = "";
       type = types.lines;
     };

@@ -81,6 +81,7 @@ in import ../make-test-python.nix {
   };
 
   testScript = { nodes, ... }: ''
+    # Check with sqlite storage
     server.wait_for_unit("prosody.service")
     server.succeed('prosodyctl status | grep "Prosody is running"')
 

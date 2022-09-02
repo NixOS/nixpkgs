@@ -1,16 +1,16 @@
 { stdenv, lib
 , pkg-config, autoreconfHook
 , fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libgcrypt, libarchive, nspr, nss, popt, db, xz, python, lua, llvmPackages
-, sqlite, zstd
+, sqlite, zstd, fetchpatch, libcap
 }:
 
 stdenv.mkDerivation rec {
   pname = "rpm";
-  version = "4.17.0";
+  version = "4.17.1";
 
   src = fetchurl {
-    url = "http://ftp.rpm.org/releases/rpm-${lib.versions.majorMinor version}.x/rpm-${version}.tar.bz2";
-    sha256 = "2e0d220b24749b17810ed181ac1ed005a56bbb6bc8ac429c21f314068dc65e6a";
+    url = "https://ftp.osuosl.org/pub/rpm/releases/rpm-${lib.versions.majorMinor version}.x/rpm-${version}.tar.bz2";
+    hash = "sha256-DBG3k0ZucliFH/gr1lyP/Ywtu8cKzIaaXTQVBUmSbl0=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ cpio zlib zstd bzip2 file libarchive libgcrypt nspr nss db xz python lua sqlite ]
-                ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+                ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
+                ++ lib.optional stdenv.isLinux libcap;
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
   propagatedBuildInputs = [ popt nss db bzip2 libarchive libbfd ]
@@ -35,6 +36,13 @@ stdenv.mkDerivation rec {
     "--enable-zstd"
     "--localstatedir=/var"
     "--sharedstatedir=/com"
+  ] ++ lib.optional stdenv.isLinux "--with-cap";
+
+  patches = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ # Fix build for macOS aarch64
+    (fetchpatch {
+      url = "https://github.com/rpm-software-management/rpm/commit/ad87ced3990c7e14b6b593fa411505e99412e248.patch";
+      hash = "sha256-WYlxPGcPB5lGQmkyJ/IpGoqVfAKtMxKzlr5flTqn638=";
+    })
   ];
 
   postPatch = ''

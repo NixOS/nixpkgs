@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "fastavro";
-  version = "1.4.9";
+  version = "1.6.0";
 
   disabled = pythonOlder "3.6";
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "0af6d67s6mi9ylqla8nga6cj4y0y4gp3l2q68br2mrdyivkml0g0";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-n9/M/blE+fvknUvlIlTWLqOhxo2Su3lj548enUf1DUg=";
   };
 
   preBuild = ''

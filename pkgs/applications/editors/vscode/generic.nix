@@ -1,6 +1,6 @@
 { stdenv, lib, makeDesktopItem
-, unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook
-, gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
+, unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook, makeWrapper
+, atomEnv, at-spi2-atk, autoPatchelfHook
 , systemd, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap
 , writeShellScriptBin
 
@@ -37,19 +37,16 @@ let
       genericName = "Text Editor";
       exec = "${executableName} %F";
       icon = "code";
-      startupNotify = "true";
-      categories = "Utility;TextEditor;Development;IDE;";
-      mimeType = "text/plain;inode/directory;";
-      extraEntries = ''
-        StartupWMClass=${shortName}
-        Actions=new-empty-window;
-        Keywords=vscode;
-
-        [Desktop Action new-empty-window]
-        Name=New Empty Window
-        Exec=${executableName} --new-window %F
-        Icon=code
-      '';
+      startupNotify = true;
+      startupWMClass = shortName;
+      categories = [ "Utility" "TextEditor" "Development" "IDE" ];
+      mimeTypes = [ "text/plain" "inode/directory" ];
+      keywords = [ "vscode" ];
+      actions.new-empty-window = {
+        name = "New Empty Window";
+        exec = "${executableName} --new-window %F";
+        icon = "code";
+      };
     };
 
     urlHandlerDesktopItem = makeDesktopItem {
@@ -59,24 +56,28 @@ let
       genericName = "Text Editor";
       exec = executableName + " --open-url %U";
       icon = "code";
-      startupNotify = "true";
-      categories = "Utility;TextEditor;Development;IDE;";
-      mimeType = "x-scheme-handler/vscode;";
-      extraEntries = ''
-        NoDisplay=true
-        Keywords=vscode;
-      '';
+      startupNotify = true;
+      categories = [ "Utility" "TextEditor" "Development" "IDE" ];
+      mimeTypes = [ "x-scheme-handler/vscode" ];
+      keywords = [ "vscode" ];
+      noDisplay = true;
     };
 
     buildInputs = [ libsecret libXScrnSaver libxshmfence ]
-      ++ lib.optionals (!stdenv.isDarwin) ([ gtk2 at-spi2-atk ] ++ atomEnv.packages);
+      ++ lib.optionals (!stdenv.isDarwin) ([ at-spi2-atk ] ++ atomEnv.packages);
 
-    runtimeDependencies = lib.optional (stdenv.isLinux) [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
+    runtimeDependencies = lib.optional stdenv.isLinux [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
 
-    nativeBuildInputs = [unzip] ++ lib.optionals (!stdenv.isDarwin) [ autoPatchelfHook wrapGAppsHook ];
+    nativeBuildInputs = [ unzip ]
+      ++ lib.optionals stdenv.isLinux [
+        autoPatchelfHook
+        nodePackages.asar
+        (wrapGAppsHook.override { inherit makeWrapper; })
+      ];
 
     dontBuild = true;
     dontConfigure = true;
+    noDumpEnvVars = true;
 
     installPhase = ''
       runHook preInstall
@@ -118,14 +119,20 @@ let
       # this is a fix for "save as root" functionality
       packed="resources/app/node_modules.asar"
       unpacked="resources/app/node_modules"
-      ${nodePackages.asar}/bin/asar extract "$packed" "$unpacked"
+      asar extract "$packed" "$unpacked"
       substituteInPlace $unpacked/@vscode/sudo-prompt/index.js \
         --replace "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
         --replace "/bin/bash" "${bash}/bin/bash"
       rm -rf "$packed"
 
+      # without this symlink loading JsChardet, the library that is used for auto encoding detection when files.autoGuessEncoding is true,
+      # fails to load with: electron/js2c/renderer_init: Error: Cannot find module 'jschardet'
+      # and the window immediately closes which renders VSCode unusable
+      # see https://github.com/NixOS/nixpkgs/issues/152939 for full log
+      ln -rs "$unpacked" "$packed"
+
       # this fixes bundled ripgrep
-      chmod +x resources/app/node_modules/vscode-ripgrep/bin/rg
+      chmod +x resources/app/node_modules/@vscode/ripgrep/bin/rg
     '';
 
     inherit meta;
@@ -161,12 +168,9 @@ let
       krb5
     ]) ++ additionalPkgs pkgs;
 
-    # restore desktop item icons
+    # symlink shared assets, including icons and desktop entries
     extraInstallCommands = ''
-      mkdir -p "$out/share/applications"
-      for item in ${unwrapped}/share/applications/*.desktop; do
-        ln -s "$item" "$out/share/applications/"
-      done
+      ln -s "${unwrapped}/share" "$out/"
     '';
 
     runScript = "${unwrapped}/bin/${executableName}";

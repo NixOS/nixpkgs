@@ -22,7 +22,7 @@
 , postInstall
   # : list Maintainer
 , maintainers ? [ ]
-  # : passtrhu arguments (e.g. tests)
+  # : passthru arguments (e.g. tests)
 , passthru ? { }
 
 }:

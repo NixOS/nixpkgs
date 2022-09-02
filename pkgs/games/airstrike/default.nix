@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     cp -r data airstrikerc $out/share
 
     wrapProgram $out/bin/airstrike \
-      --run "cd $out/share"
+      --chdir "$out/share"
   '';
 
   meta = with lib; {

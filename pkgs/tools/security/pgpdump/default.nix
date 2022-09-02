@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pgpdump";
-  version = "0.34";
+  version = "0.35";
 
   src = fetchFromGitHub {
     owner = "kazu-yamamoto";
     repo = "pgpdump";
     rev = "v${version}";
-    sha256 = "1vvxhbz8nqzw9gf7cdmas2shzziznsqj84w6w74h8zzgb4m3byzz";
+    sha256 = "sha256-GjPy/feF437WtDqbEn1lGwWayWtvKhqsyJFMuH3IFl4=";
   };
 
   buildInputs = lib.optionals supportCompressedPackets [ zlib bzip2 ];

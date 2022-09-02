@@ -1,10 +1,10 @@
 diff --git a/meson.build b/meson.build
-index 4330512e..e53b70ab 100644
+index b91dd037..01d70a61 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -403,7 +403,7 @@ endif
- if build_standalone and get_option('plugin_uefi_capsule')
-   efiboot = dependency('efiboot')
+@@ -413,7 +413,7 @@ if build_standalone and efiboot.found() and efivar.found()
+     conf.set('HAVE_EFI_TIME_T', '1')
+   endif
  
 -  efi_app_location = join_paths(libexecdir, 'fwupd', 'efi')
 +  efi_app_location = join_paths(dependency('fwupd-efi').get_pkgconfig_variable('prefix'), 'libexec', 'fwupd', 'efi')

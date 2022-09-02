@@ -1,21 +1,36 @@
 { lib
 , buildPythonPackage
-, fetchgit
+, fetchFromGitHub
 , cmake
 }:
 
+let
+  tests = fetchFromGitHub {
+    owner = "editorconfig";
+    repo = "editorconfig-core-test";
+    rev = "e407c1592df0f8e91664835324dea85146f20189";
+    sha256 = "sha256-9WSEkMJOewPqJjB6f7J6Ir0L+U712hkaN+GszjnGw7c=";
+  };
+in
 buildPythonPackage rec {
   pname = "editorconfig";
   version = "0.12.3";
 
-  # fetchgit used to ensure test submodule is available
-  src = fetchgit {
-    url = "https://github.com/editorconfig/editorconfig-core-py";
-    rev = "1a8fb62b9941fded9e4fb83a3d0599427f5484cb"; # Not tagged
-    sha256 = "0vx8rl7kii72965jsi01mdsz9rfi1q9bwy13x47iaqm6rmcwc1rb";
+  src = fetchFromGitHub {
+    owner = "editorconfig";
+    repo = "editorconfig-core-py";
+    rev = "v${version}";
+    sha256 = "sha256-ZwoTMgk18+BpPNtXKQUMXGcl2Lp+1RQVyPHgk6gHWh8=";
+    # workaround until https://github.com/editorconfig/editorconfig-core-py/pull/40 is merged
+    # fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
+  postUnpack = ''
+    cp -r ${tests}/* source/tests
+    chmod +w -R source/tests
+  '';
+
+  checkInputs = [
     cmake
   ];
 
@@ -31,8 +46,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "EditorConfig File Locator and Interpreter for Python";
-    homepage = "https://editorconfig.org";
+    homepage = "https://github.com/editorconfig/editorconfig-core-py";
     license = licenses.psfl;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

@@ -5,33 +5,31 @@
 , darwin
 
 , asciidoctor
+, botan2
 , curl
-, glibcLocales
 , libXi
 , libXtst
 , libargon2
-, libgcrypt
-, libgpg-error
-, libsodium
-, libyubikey
+, libusb1
+, minizip
+, pcsclite
 , pkg-config
 , qrencode
 , qtbase
 , qtmacextras
 , qtsvg
 , qtx11extras
-, quazip
 , readline
+, wrapGAppsHook
 , wrapQtAppsHook
-, yubikey-personalization
 , zlib
 
 , withKeePassBrowser ? true
 , withKeePassKeeShare ? true
-, withKeePassKeeShareSecure ? true
 , withKeePassSSHAgent ? true
 , withKeePassNetworking ? true
 , withKeePassTouchID ? true
+, withKeePassYubiKey ? true
 , withKeePassFDOSecrets ? true
 
 , nixosTests
@@ -41,13 +39,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "keepassxc";
-  version = "2.6.6";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = version;
-    sha256 = "15rm3avdmc2x2n92zq6w1zbcranak4j6dds2sxmgdqi1ffc0a3ci";
+    sha256 = "sha256-BOtehDzlWhhfXj8TOFvFN4f86Hl2EC3rO4qUIl9fqq4=";
   };
 
   NIX_CFLAGS_COMPILE = optionalString stdenv.cc.isClang [
@@ -65,15 +63,12 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DKEEPASSXC_BUILD_TYPE=Release"
     "-DWITH_GUI_TESTS=ON"
-    "-DWITH_XC_AUTOTYPE=ON"
     "-DWITH_XC_UPDATECHECK=OFF"
-    "-DWITH_XC_YUBIKEY=ON"
   ]
   ++ (optional withKeePassBrowser "-DWITH_XC_BROWSER=ON")
   ++ (optional withKeePassKeeShare "-DWITH_XC_KEESHARE=ON")
-  ++ (optional withKeePassKeeShareSecure "-DWITH_XC_KEESHARE_SECURE=ON")
   ++ (optional withKeePassNetworking "-DWITH_XC_NETWORKING=ON")
-  ++ (optional (withKeePassTouchID && stdenv.isDarwin) "-DWITH_XC_TOUCHID=ON")
+  ++ (optional (withKeePassYubiKey && stdenv.isLinux) "-DWITH_XC_YUBIKEY=ON")
   ++ (optional (withKeePassFDOSecrets && stdenv.isLinux) "-DWITH_XC_FDOSECRETS=ON")
   ++ (optional withKeePassSSHAgent "-DWITH_XC_SSHAGENT=ON");
 
@@ -90,30 +85,31 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  nativeBuildInputs = [ asciidoctor cmake wrapQtAppsHook qttools pkg-config ];
+  nativeBuildInputs = [ asciidoctor cmake wrapGAppsHook wrapQtAppsHook qttools pkg-config ];
+
+  dontWrapGApps = true;
+  postFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   buildInputs = [
     curl
-    glibcLocales
+    botan2
     libXi
     libXtst
     libargon2
-    libgcrypt
-    libgpg-error
-    libsodium
-    libyubikey
+    minizip
+    pcsclite
     qrencode
     qtbase
     qtsvg
     qtx11extras
     readline
-    yubikey-personalization
     zlib
   ]
-  ++ optional withKeePassKeeShareSecure quazip
+  ++ optional stdenv.isLinux libusb1
   ++ optional stdenv.isDarwin qtmacextras
-  ++ optional (stdenv.isDarwin && withKeePassTouchID)
-    darwin.apple_sdk.frameworks.LocalAuthentication;
+  ++ optional (stdenv.isDarwin && withKeePassTouchID) darwin.apple_sdk.frameworks.LocalAuthentication;
 
   passthru.tests = nixosTests.keepassxc;
 
@@ -130,5 +126,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jonafato turion ];
     platforms = platforms.linux ++ platforms.darwin;
+    broken = stdenv.isDarwin;  # see to https://github.com/NixOS/nixpkgs/issues/172165
   };
 }

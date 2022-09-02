@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
   opencl-headers,
   cmake,
@@ -30,6 +31,21 @@ stdenv.mkDerivation rec {
       sha256 = "1kyff3vx2r4hjpqah9qk99z6dwz7nsnbnhhl6a76mdhjmgp1q646";
       fetchSubmodules = true;
     };
+
+  patches = [
+    # global context library is separated from libethash
+    ./add-global-context.patch
+
+    # CUDA 11 no longer support SM30
+    (fetchpatch {
+      url = "https://github.com/ethereum-mining/ethminer/commit/dae359dff28f376d4ce7ddfbd651dcd34d6dad8f.patch";
+      hash = "sha256-CJGKc0rXOcKDX1u5VBzc8gyBi1Me9CNATfQzKViqtAA=";
+    })
+  ];
+
+  postPatch = ''
+    sed -i 's/_lib_static//' libpoolprotocols/CMakeLists.txt
+  '';
 
   # NOTE: dbus is broken
   cmakeFlags = [
@@ -63,15 +79,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals cudaSupport [
     cudatoolkit
   ];
-
-  patches = [
-    # global context library is separated from libethash
-    ./add-global-context.patch
-  ];
-
-  preConfigure = ''
-    sed -i 's/_lib_static//' libpoolprotocols/CMakeLists.txt
-  '';
 
   postInstall = ''
     wrapProgram $out/bin/ethminer --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib

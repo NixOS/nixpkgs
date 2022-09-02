@@ -2,11 +2,11 @@
 , buildPythonPackage
 , fetchFromGitHub
 , gibberish-detector
-, isPy27
 , mock
 , pkgs
 , pyahocorasick
 , pytestCheckHook
+, pythonOlder
 , pyyaml
 , requests
 , responses
@@ -15,14 +15,16 @@
 
 buildPythonPackage rec {
   pname = "detect-secrets";
-  version = "1.1.0";
-  disabled = isPy27;
+  version = "1.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dG2YaWXAMINxBGKNMlVfGTR9QHdnepiZmN+G88X4Wak=";
+    hash = "sha256-Dl/2HgCacDko/ug9nGA9X+LyOkuDot11H28lxrgkwdE=";
     leaveDotGit = true;
   };
 
@@ -58,7 +60,9 @@ buildPythonPackage rec {
     "test_start_halfway"
   ];
 
-  pythonImportsCheck = [ "detect_secrets" ];
+  pythonImportsCheck = [
+    "detect_secrets"
+  ];
 
   meta = with lib; {
     description = "An enterprise friendly way of detecting and preventing secrets in code";

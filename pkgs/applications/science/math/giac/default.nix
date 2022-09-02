@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, fetchpatch, texlive, bison, flex, lapack, blas
-, gmp, mpfr, pari, ntl, gsl, mpfi, ecm, glpk, nauty
-, readline, gettext, libpng, libao, gfortran, perl
+, autoreconfHook, gmp, mpfr, pari, ntl, gsl, mpfi, ecm, glpk, nauty
+, buildPackages, readline, gettext, libpng, libao, gfortran, perl
 , enableGUI ? false, libGL, libGLU, xorg, fltk
 , enableMicroPy ? false, python3
 }:
@@ -9,11 +9,11 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "giac${lib.optionalString enableGUI "-with-xcas"}";
-  version = "1.6.0-47"; # TODO try to remove preCheck phase on upgrade
+  version = "1.9.0-5"; # TODO try to remove preCheck phase on upgrade
 
   src = fetchurl {
     url = "https://www-fourier.ujf-grenoble.fr/~parisse/debian/dists/stable/main/source/giac_${version}.tar.gz";
-    sha256 = "sha256-c5A9/I6L/o3Y3dxEPoTKpw/fJqYMr6euLldaQ1HWT5c=";
+    sha256 = "sha256-EP8wRi8QZPrr1lfKN6da87s1FCy8AuDYbzcvsJCWyLE=";
   };
 
   patches = [
@@ -32,18 +32,24 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # 1.9.0-5's tarball contains a binary (src/mkjs) which is executed
+  # at build time. we will delete and rebuild it.
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   postPatch = ''
     for i in doc/*/Makefile* micropython*/xcas/Makefile*; do
       substituteInPlace "$i" --replace "/bin/cp" "cp";
     done;
-  '' +
-  # workaround for 1.6.0-47, should not be necessary in future versions
-  lib.optionalString (!enableMicroPy) ''
-    sed -i -e 's/micropython-[0-9.]* //' Makefile*
+    rm src/mkjs
+    substituteInPlace src/Makefile.am --replace "g++ mkjs.cc" \
+      "${buildPackages.stdenv.cc.targetPrefix}c++ mkjs.cc"
+
+    # to open help
+    substituteInPlace src/global.cc --replace 'browser="mozilla"' 'browser="xdg-open"'
   '';
 
   nativeBuildInputs = [
-    texlive.combined.scheme-small bison flex
+    autoreconfHook texlive.combined.scheme-small bison flex
   ];
 
   # perl is only needed for patchShebangs fixup.
@@ -57,13 +63,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableGUI [
     libGL libGLU fltk xorg.libX11
   ] ++ lib.optional enableMicroPy python3;
-
-  /* fixes:
-  configure:16211: checking for main in -lntl
-  configure:16230: g++ -o conftest -g -O2   conftest.cpp -lntl  -llapack -lblas -lgfortran -ldl -lpng16 -lm -lmpfi -lmpfr -lgmp  >&5
-  /nix/store/y9c1v4x7y39j2rfbg17agjwqdzxpsn18-ntl-11.3.2/lib/libntl.so: undefined reference to `pthread_key_create'
-  */
-  NIX_CFLAGS_LINK="-lpthread";
 
   # xcas Phys and Turtle menus are broken with split outputs
   # and interactive use is likely to need docs

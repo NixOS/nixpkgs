@@ -1,0 +1,122 @@
+<chapter xmlns="http://docbook.org/ns/docbook"  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="sec-switching-systems">
+  <title>What happens during a system switch?</title>
+  <para>
+    Running <literal>nixos-rebuild switch</literal> is one of the more
+    common tasks under NixOS. This chapter explains some of the
+    internals of this command to make it simpler for new module
+    developers to configure their units correctly and to make it easier
+    to understand what is happening and why for curious administrators.
+  </para>
+  <para>
+    <literal>nixos-rebuild</literal>, like many deployment solutions,
+    calls <literal>switch-to-configuration</literal> which resides in a
+    NixOS system at <literal>$out/bin/switch-to-configuration</literal>.
+    The script is called with the action that is to be performed like
+    <literal>switch</literal>, <literal>test</literal>,
+    <literal>boot</literal>. There is also the
+    <literal>dry-activate</literal> action which does not really perform
+    the actions but rather prints what it would do if you called it with
+    <literal>test</literal>. This feature can be used to check what
+    service states would be changed if the configuration was switched
+    to.
+  </para>
+  <para>
+    If the action is <literal>switch</literal> or
+    <literal>boot</literal>, the bootloader is updated first so the
+    configuration will be the next one to boot. Unless
+    <literal>NIXOS_NO_SYNC</literal> is set to <literal>1</literal>,
+    <literal>/nix/store</literal> is synced to disk.
+  </para>
+  <para>
+    If the action is <literal>switch</literal> or
+    <literal>test</literal>, the currently running system is inspected
+    and the actions to switch to the new system are calculated. This
+    process takes two data sources into account:
+    <literal>/etc/fstab</literal> and the current systemd status. Mounts
+    and swaps are read from <literal>/etc/fstab</literal> and the
+    corresponding actions are generated. If a new mount is added, for
+    example, the proper <literal>.mount</literal> unit is marked to be
+    started. The current systemd state is inspected, the difference
+    between the current system and the desired configuration is
+    calculated and actions are generated to get to this state. There are
+    a lot of nuances that can be controlled by the units which are
+    explained here.
+  </para>
+  <para>
+    After calculating what should be done, the actions are carried out.
+    The order of actions is always the same:
+  </para>
+  <itemizedlist spacing="compact">
+    <listitem>
+      <para>
+        Stop units (<literal>systemctl stop</literal>)
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Run activation script (<literal>$out/activate</literal>)
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        See if the activation script requested more units to restart
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Restart systemd if needed
+        (<literal>systemd daemon-reexec</literal>)
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Forget about the failed state of units
+        (<literal>systemctl reset-failed</literal>)
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Reload systemd (<literal>systemctl daemon-reload</literal>)
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Reload systemd user instances
+        (<literal>systemctl --user daemon-reload</literal>)
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Set up tmpfiles (<literal>systemd-tmpfiles --create</literal>)
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Reload units (<literal>systemctl reload</literal>)
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Restart units (<literal>systemctl restart</literal>)
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Start units (<literal>systemctl start</literal>)
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Inspect what changed during these actions and print units that
+        failed and that were newly started
+      </para>
+    </listitem>
+  </itemizedlist>
+  <para>
+    Most of these actions are either self-explaining but some of them
+    have to do with our units or the activation script. For this reason,
+    these topics are explained in the next sections.
+  </para>
+  <xi:include href="unit-handling.section.xml" />
+  <xi:include href="activation-script.section.xml" />
+</chapter>

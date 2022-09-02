@@ -2,6 +2,7 @@
 , buildPythonPackage
 , aiohttp
 , bitarray
+, chacha20poly1305-reuseable
 , cryptography
 , deepdiff
 , fetchFromGitHub
@@ -14,13 +15,14 @@
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
+, requests
 , srptools
 , zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.9.8";
+  version = "0.10.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -29,17 +31,28 @@ buildPythonPackage rec {
     owner = "postlund";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ns1ys3mwi1s1b8zxcr7xgr1rfnlxwdn2fp680yi09x4d9nmnvqp";
+    sha256 = "sha256-ng5KfW93p2/N2a6lnGbRJC6aWOQgTl0imBLdUIUlDic=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest-runner" ""
+    # Remove all version pinning
+
+    substituteInPlace base_versions.txt \
+      --replace "protobuf==3.19.1,<4" "protobuf>=3.19.0,<4"
+  '';
 
   propagatedBuildInputs = [
     aiohttp
     bitarray
+    chacha20poly1305-reuseable
     cryptography
     mediafile
     miniaudio
     netifaces
     protobuf
+    requests
     srptools
     zeroconf
   ];
@@ -52,12 +65,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-    # Remove all version pinning
-    sed -i -e "s/==[0-9.]*//" requirements/requirements.txt
-  '';
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
 
   disabledTestPaths = [
     # Test doesn't work in the sandbox
@@ -74,6 +84,6 @@ buildPythonPackage rec {
     description = "Python client library for the Apple TV";
     homepage = "https://github.com/postlund/pyatv";
     license = licenses.mit;
-    maintainers = with maintainers; [ elseym ];
+    maintainers = with maintainers; [ ];
   };
 }

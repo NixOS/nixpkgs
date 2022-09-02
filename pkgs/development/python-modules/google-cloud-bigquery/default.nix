@@ -2,7 +2,9 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, db-dtypes
 , freezegun
+, google-cloud-bigquery-storage
 , google-cloud-core
 , google-cloud-datacatalog
 , google-cloud-storage
@@ -14,26 +16,32 @@
 , proto-plus
 , psutil
 , pyarrow
+, pytest-xdist
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "2.32.0";
+  version = "3.3.2";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-84Y6xCk/CkWF5ERh2CuR+SOXIe8z/JV11AG02n3BJ70=";
+    hash = "sha256-v5ZAeRHG/LvlmL4bnETgCiYAv/nqutKpf0My78EWVJc=";
   };
 
   propagatedBuildInputs = [
-    google-resumable-media
     google-cloud-core
+    google-cloud-bigquery-storage
+    google-resumable-media
     proto-plus
     pyarrow
   ];
 
   checkInputs = [
+    db-dtypes
     freezegun
     google-cloud-testutils
     ipython
@@ -43,6 +51,7 @@ buildPythonPackage rec {
     google-cloud-datacatalog
     google-cloud-storage
     pytestCheckHook
+    pytest-xdist
   ];
 
   # prevent google directory from shadowing google imports
@@ -54,8 +63,8 @@ buildPythonPackage rec {
     # requires credentials
     "test_bigquery_magic"
     "TestBigQuery"
+    "test_context_with_no_query_cache_from_context"
     "test_arrow_extension_types_same_for_storage_and_REST_APIs_894"
-    "test_query_retry_539"
     "test_list_rows_empty_table"
     "test_list_rows_page_size"
     "test_list_rows_scalars"
@@ -70,6 +79,17 @@ buildPythonPackage rec {
     "test_parameterized_types_round_trip"
     "test_structs"
     "test_table_snapshots"
+    "test__initiate_resumable_upload"
+    "test__initiate_resumable_upload_mtls"
+    "test__initiate_resumable_upload_with_retry"
+    "test_table_clones"
+  ];
+
+  disabledTestPaths = [
+    # requires credentials
+    "tests/system/test_query.py"
+    "tests/system/test_job_retry.py"
+    "tests/system/test_pandas.py"
   ];
 
   pythonImportsCheck = [

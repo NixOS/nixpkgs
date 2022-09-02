@@ -14,15 +14,15 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "0.31.2";
+  version = "0.32.2";
   pname = "neon";
 
   src = fetchurl {
     url = "https://notroj.github.io/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0y46dbhiblcvg8k41bdydr3fivghwk73z040ki5825d24ynf67ng";
+    sha256 = "sha256-mGVmRoxilfxdD7FBpZgeMcn4LuOOk4N0q+2Ece8vsoY=";
   };
 
-  patches = optionals stdenv.isDarwin [ ./0.29.6-darwin-fix-configure.patch ];
+  patches = optionals stdenv.isDarwin [ ./darwin-fix-configure.patch ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [libxml2 openssl]
@@ -34,6 +34,10 @@ stdenv.mkDerivation rec {
     (lib.withFeature compressionSupport "zlib")
     (lib.withFeature sslSupport "ssl")
   ];
+
+  preConfigure = ''
+    export PKG_CONFIG="$(command -v "$PKG_CONFIG")"
+  '';
 
   passthru = {inherit compressionSupport sslSupport;};
 

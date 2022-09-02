@@ -5,6 +5,7 @@
 , ninja
 , pkg-config
 , python3
+, gstreamer
 , gst-plugins-base
 , gettext
 , libav
@@ -15,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-libav";
-  version = "1.18.5";
+  version = "1.20.3";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-gi4AipEOndE67b3Y3GP+3vQEDA7i6Se6sxEuneaTpUg=";
+    sha256 = "sha256-P+3RBWD836obZGLL95o4xOe1fX85A1k5P8DO9tvyff4=";
   };
 
   outputs = [ "out" "dev" ];
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gstreamer
     gst-plugins-base
     libav
   ];

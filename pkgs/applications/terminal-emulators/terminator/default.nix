@@ -9,6 +9,7 @@
 , libnotify
 , wrapGAppsHook
 , vte
+, nixosTests
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -49,9 +50,6 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     patchShebangs tests po
-    # dbus-python is correctly passed in propagatedBuildInputs, but for some reason setup.py complains.
-    # The wrapped terminator has the correct path added, so ignore this.
-    substituteInPlace setup.py --replace "'dbus-python'," ""
   '';
 
   doCheck = false;
@@ -61,6 +59,8 @@ python3.pkgs.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.terminator;
 
   meta = with lib; {
     description = "Terminal emulator with support for tiling and tabs";
