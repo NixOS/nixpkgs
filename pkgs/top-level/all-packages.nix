@@ -5390,6 +5390,8 @@ with pkgs;
 
   cron = callPackage ../tools/system/cron { };
 
+  ctlptl = callPackage ../development/tools/ctlptl { };
+
   snooze = callPackage ../tools/system/snooze { };
 
   cudaPackages_10_0 = callPackage ./cuda-packages.nix { cudaVersion = "10.0"; };
@@ -23340,6 +23342,8 @@ with pkgs;
     tpmSupport = true;
   };
 
+  ovmfvartool = callPackage ../applications/virtualization/ovmfvartool { };
+
   ops = callPackage ../applications/virtualization/ops { };
 
   seabios = callPackage ../applications/virtualization/seabios { };
@@ -24585,7 +24589,9 @@ with pkgs;
 
   gotools = callPackage ../development/tools/gotools { };
 
-  gotop = callPackage ../tools/system/gotop { };
+  gotop = callPackage ../tools/system/gotop {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   go-migrate = callPackage ../development/tools/go-migrate { };
 
