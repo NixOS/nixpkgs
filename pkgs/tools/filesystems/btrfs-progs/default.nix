@@ -5,6 +5,7 @@
 , runCommand, btrfs-progs
 , gitUpdater
 , udevSupport ? true
+, enablePython ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+  ] ++ lib.optionals enablePython [
     python3 python3.pkgs.setuptools
+  ] ++ [
     sphinx
   ];
 
@@ -32,12 +35,17 @@ stdenv.mkDerivation rec {
     install -v -m 444 -D btrfs-completion $out/share/bash-completion/completions/btrfs
   '';
 
-  configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace"
-    ++ lib.optional (!udevSupport) "--disable-libudev";
+  configureFlags = lib.optionals stdenv.hostPlatform.isMusl [
+    "--disable-backtrace"
+  ] ++ lib.optionals (!enablePython) [
+    "--disable-python"
+  ] ++ lib.optionals (!udevSupport) [
+    "--disable-libudev"
+  ];
 
   makeFlags = [ "udevruledir=$(out)/lib/udev/rules.d" ];
 
-  installFlags = [ "install_python" ];
+  installFlags = lib.optionals enablePython [ "install_python" ];
 
   enableParallelBuilding = true;
 

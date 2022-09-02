@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       --replace '.picocom_history' '.cache/picocom_history'
 
     substituteInPlace picocom.c \
-      --replace '"rz -vv"' '"${lrzsz}/bin/rz -vv"' \
+      --replace '"rz -vv -E"' '"${lrzsz}/bin/rz -vv -E"' \
       --replace '"sz -vv"' '"${lrzsz}/bin/sz -vv"'
   '';
 
