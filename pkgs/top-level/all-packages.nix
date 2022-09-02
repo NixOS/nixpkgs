@@ -358,6 +358,8 @@ with pkgs;
 
   chrysalis = callPackage ../applications/misc/chrysalis { };
 
+  classicube = callPackage ../games/classicube { };
+
   clj-kondo = callPackage ../development/tools/clj-kondo { };
 
   cloak = callPackage ../applications/misc/cloak {
