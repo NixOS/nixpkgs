@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
  '';
 
   meta = with lib; {
-    description = "File Manager and User Shell for the GNU Project";
+    description = "File Manager and User Shell for the GNU Project - midnight-commander";
     downloadPage = "https://www.midnight-commander.org/downloads/";
     homepage = "https://www.midnight-commander.org";
     license = licenses.gpl2Plus;
