@@ -247,8 +247,8 @@ OK
         </listitem>
         <listitem>
           <para>
-            Set the <emphasis>root</emphasis> partition’s boot flag to
-            on. This allows the disk to be booted from.
+            Set the root partition’s boot flag to on. This allows the
+            disk to be booted from.
           </para>
           <programlisting>
 # parted /dev/sda -- set 1 boot on

@@ -183,7 +183,7 @@ update /etc/fstab.
     # parted /dev/sda -- mkpart primary 1MB -8GB
     ```
 
-3.  Set the *root* partition's boot flag to on. This allows the disk to be booted from.
+3.  Set the root partition's boot flag to on. This allows the disk to be booted from.
 
     ```ShellSession
     # parted /dev/sda -- set 1 boot on
