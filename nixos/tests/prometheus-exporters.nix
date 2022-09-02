@@ -307,6 +307,19 @@ let
       '';
     };
 
+    ipmi = {
+      exporterConfig = {
+        enable = true;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-ipmi-exporter.service")
+        wait_for_open_port(9290)
+        succeed(
+          "curl -sSf http://localhost:9290/metrics | grep 'ipmi_scrape_duration_seconds'"
+        )
+      '';
+    };
+
     jitsi = {
       exporterConfig = {
         enable = true;
