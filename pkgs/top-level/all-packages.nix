@@ -304,6 +304,8 @@ with pkgs;
 
   buf = callPackage ../development/tools/buf { };
 
+  buf-language-server = callPackage ../development/tools/buf-language-server { };
+
   cbfmt = callPackage ../development/tools/cbfmt { };
 
   cfn-nag = callPackage ../development/tools/cfn-nag { };
