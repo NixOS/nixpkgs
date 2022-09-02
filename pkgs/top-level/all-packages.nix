@@ -19176,6 +19176,8 @@ with pkgs;
 
   libdaemon = callPackage ../development/libraries/libdaemon { };
 
+  libdaq3 = callPackage ../applications/networking/ids/libdaq3 { };
+
   libdatrie = callPackage ../development/libraries/libdatrie { };
 
   libdazzle = callPackage ../development/libraries/libdazzle { };
