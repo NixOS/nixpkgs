@@ -52,9 +52,6 @@ let
       srcs.io_bazel_rules_sass
       srcs.platforms
       srcs.remote_java_tools_for_testing
-      #srcs.remote_java_tools_linux
-      #srcs."java_tools_linux-v11.8.zip"
-      #srcs."java_tools-v11.8.zip"
       srcs."coverage_output_generator-v2.6.zip"
       srcs.build_bazel_rules_nodejs
       srcs."android_tools_pkg-0.26.0.tar.gz"
@@ -402,13 +399,6 @@ stdenv.mkDerivation rec {
     '';
 
     genericPatches = ''
-      # Substitute j2objc and objc wrapper's python shebang to plain python path.
-      # These scripts explicitly depend on Python 2.7, hence we use python27.
-      # See also `postFixup` where python27 is added to $out/nix-support
-      #substituteInPlace tools/j2objc/j2objc_header_map.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
-      #substituteInPlace tools/j2objc/j2objc_wrapper.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
-      #substituteInPlace tools/objc/j2objc_dead_code_pruner.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
-
       # md5sum is part of coreutils
       sed -i 's|/sbin/md5|md5sum|g' \
         src/BUILD third_party/ijar/test/testenv.sh tools/objc/libtool.sh
