@@ -18,6 +18,7 @@ in
 
 (gobject-introspection-unwrapped.override args).overrideAttrs (previousAttrs: {
   pname = "gobject-introspection-wrapped";
+  depsTargetTargetPropagated = [ gobject-introspection-unwrapped ];
   postFixup = (previousAttrs.postFixup or "") + ''
     mv $dev/bin/g-ir-compiler $dev/bin/.g-ir-compiler-wrapped
     mv $dev/bin/g-ir-scanner $dev/bin/.g-ir-scanner-wrapped

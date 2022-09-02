@@ -64,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     meson
     ninja
@@ -76,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Build definition checks for the Python modules needed at runtime by importing them.
     (buildPackages.python3.withPackages pythonModules)
     finalAttrs.setupHook # move .gir files
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ gobject-introspection-unwrapped ];
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ gobject-introspection-unwrapped ];
 
   buildInputs = [
     (python3.withPackages pythonModules)
@@ -95,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--datadir=${placeholder "dev"}/share"
     "-Dcairo=disabled"
     "-Dgtk_doc=${lib.boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     "-Dgi_cross_ldd_wrapper=${substituteAll {
       name = "g-ir-scanner-lddwrapper";
       isExecutable = true;
@@ -134,6 +136,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   postCheck = ''
     rm $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
+  '';
+
+  # add self to buildInputs to avoid needing to add gobject-introspection to buildInputs in addition to nativeBuildInputs
+  # builds use target-pkg-config to look for gobject-introspection instead of just looking for binaries in $PATH
+  # wrapper uses depsTargetTargetPropagated so ignore it
+  preFixup = lib.optionalString (!lib.hasSuffix "-wrapped" finalAttrs.pname) ''
+    mkdir -p $dev/nix-support
+    echo "$out" > $dev/nix-support/propagated-target-target-deps
   '';
 
   setupHook = ./setup-hook.sh;
