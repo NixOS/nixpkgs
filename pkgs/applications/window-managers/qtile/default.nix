@@ -11,6 +11,7 @@
 , wayland
 , wlroots
 , xcbutilcursor
+, pulseaudio
 }:
 
 let
@@ -36,6 +37,10 @@ let
         --replace libpango-1.0.so.0 ${pango.out}/lib/libpango-1.0.so.0
       substituteInPlace libqtile/backend/x11/xcursors.py \
         --replace libxcb-cursor.so.0 ${xcbutilcursor.out}/lib/libxcb-cursor.so.0
+    '';
+    
+    preBuild = ''
+      ./scripts/ffibuild
     '';
 
     SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -67,6 +72,7 @@ let
       wayland
       wlroots
       libxkbcommon
+      pulseaudio
     ];
 
     # for `qtile check`, needs `stubtest` and `mypy` commands
