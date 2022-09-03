@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkg-config, ApplicationServices, CoreServices }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, autoconf, automake, libtool, pkg-config, ApplicationServices, CoreServices, pkgsStatic }:
 
 stdenv.mkDerivation rec {
   version = "1.44.2";
@@ -54,6 +54,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ automake autoconf libtool pkg-config ];
   buildInputs = lib.optionals stdenv.isDarwin [ ApplicationServices CoreServices ];
+  patches = [
+    # Fix tests for statically linked variant
+    # upstream PR is https://github.com/libuv/libuv/pull/3735
+    (fetchpatch {
+          url = "https://patch-diff.githubusercontent.com/raw/libuv/libuv/pull/3735.patch";
+          sha256 = "sha256-6XsjrseD8a+ny887EKOX0NmHocLMXGf2YL13vkNHUZ0=";
+        })
+  ];
+  passthru.tests.static = pkgsStatic.libuv;
 
   preConfigure = ''
     LIBTOOLIZE=libtoolize ./autogen.sh
