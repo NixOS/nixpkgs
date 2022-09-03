@@ -9,6 +9,8 @@
 # Build options
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime
 , multithreadBuild ? true # Multithreading via pthreads/win32 threads
+, headlessBuild ? false # https://aur.archlinux.org/packages/ffmpeg-headless
+# TODO: , libva-headless, x264-noffmpeg
 , sdlSupport ? !stdenv.isAarch32, SDL ? null, SDL2 ? null
 , vdpauSupport ? !stdenv.isAarch32, libvdpau ? null
 # Developer options
@@ -68,9 +70,19 @@ let
   vaapiSupport = reqMin "0.6" && ((isLinux || isFreeBSD) && !isAarch32);
 
   vpxSupport = reqMin "0.6" && !isAarch32;
+
+  /* FIXME
+  libva' = if headlessBuild then libva-headless else libva;
+  x264' = if headlessBuild then x264-noffmpeg else x264;
+  */
+  libva' = libva;
+  x264' = x264;
+  openglSupport' = if headlessBuild then false else openglSupport;
+  sdlSupport' = if headlessBuild then false else sdlSupport;
+  pulseaudioSupport' = if headlessBuild then false else pulseaudioSupport;
 in
 
-assert openglSupport -> libGL != null && libGLU != null;
+assert openglSupport' -> libGL != null && libGLU != null;
 assert libmfxSupport -> intel-media-sdk != null;
 assert libaomSupport -> libaom != null;
 
@@ -149,11 +161,11 @@ stdenv.mkDerivation rec {
       "--enable-libvorbis"
       (ifMinVer "0.6" (enableFeature vpxSupport "libvpx"))
       (ifMinVer "2.4" "--enable-lzma")
-      (ifMinVer "2.2" (enableFeature openglSupport "opengl"))
+      (ifMinVer "2.2" (enableFeature openglSupport' "opengl"))
       (ifMinVer "4.2" (enableFeature libmfxSupport "libmfx"))
       (ifMinVer "4.2" (enableFeature libaomSupport "libaom"))
-      (disDarwinOrArmFix (ifMinVer "0.9" (lib.optionalString pulseaudioSupport "--enable-libpulse")) "0.9" "--disable-libpulse")
-      (ifMinVer "2.5" (if sdlSupport && reqMin "3.2" then "--enable-sdl2" else if sdlSupport then "--enable-sdl" else null)) # autodetected before 2.5, SDL1 support removed in 3.2 for SDL2
+      (disDarwinOrArmFix (ifMinVer "0.9" (lib.optionalString pulseaudioSupport' "--enable-libpulse")) "0.9" "--disable-libpulse")
+      (ifMinVer "2.5" (if sdlSupport' && reqMin "3.2" then "--enable-sdl2" else if sdlSupport' then "--enable-sdl" else null)) # autodetected before 2.5, SDL1 support removed in 3.2 for SDL2
       (ifMinVer "1.2" "--enable-libsoxr")
       "--enable-libx264"
       "--enable-libxvid"
@@ -170,6 +182,13 @@ stdenv.mkDerivation rec {
       "--disable-stripping"
     # Disable mmx support for 0.6.90
       (verFix null "0.6.90" "--disable-mmx")
+  ] ++ optionals headlessBuild [
+      "--disable-libjack"
+      "--disable-libpulse"
+      "--disable-libxcb"
+      "--disable-xlib"
+      "--disable-sdl2"
+      "--disable-htmlpages"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
@@ -180,18 +199,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libssh libtheora
-    libvorbis xz soxr x264 x265 xvidcore zimg zlib libopus speex srt nv-codec-headers
-  ] ++ optionals openglSupport [ libGL libGLU ]
+    libvorbis xz soxr x264' x265 xvidcore zimg zlib libopus speex srt nv-codec-headers
+  ] ++ optionals openglSupport' [ libGL libGLU ]
     ++ optional libmfxSupport intel-media-sdk
     ++ optional libaomSupport libaom
     ++ optional vpxSupport libvpx
-    ++ optionals (!isDarwin && !isAarch32 && pulseaudioSupport) [ libpulseaudio ] # Need to be fixed on Darwin and ARM
-    ++ optional ((isLinux || isFreeBSD) && !isAarch32) libva
+    ++ optionals (!isDarwin && !isAarch32 && pulseaudioSupport') [ libpulseaudio ] # Need to be fixed on Darwin and ARM
+    ++ optional ((isLinux || isFreeBSD) && !isAarch32) libva'
     ++ optional ((isLinux || isFreeBSD) && !isAarch32) libdrm
     ++ optional isLinux alsa-lib
     ++ optionals isDarwin darwinFrameworks
     ++ optional vdpauSupport libvdpau
-    ++ optional sdlSupport (if reqMin "3.2" then SDL2 else SDL)
+    ++ optional sdlSupport' (if reqMin "3.2" then SDL2 else SDL)
     ++ optional (reqMin "4.2") dav1d;
 
   enableParallelBuilding = true;

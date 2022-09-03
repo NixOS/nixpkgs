@@ -17712,6 +17712,10 @@ with pkgs;
   # version number which the upstream support.
   ffmpeg = ffmpeg_4;
 
+  ffmpeg-headless = ffmpeg.override {
+    headlessBuild = true;
+  };
+
   ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
     svt-av1 = if stdenv.isAarch64 then null else svt-av1;
     rav1e = null; # We already have SVT-AV1 for faster encoding
