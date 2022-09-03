@@ -7,7 +7,7 @@ let emojiJSON = fetchurl {
 in
 stdenv.mkDerivation rec {
   pname = "wofi-emoji";
-  version = "unstable-2022-08-19";
+  version = "unstable-2022-09-03";
 
   src = fetchFromGitHub {
     owner = "dln";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace build.sh \
-      --replace 'curl ${emojiJSON.url}' 'cat emoji-en-US.json'
+      --replace 'curl ${emojiJSON.url}' 'cat ${emojiJSON}'
   '';
 
   buildPhase = ''
