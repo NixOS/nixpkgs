@@ -34029,6 +34029,14 @@ with pkgs;
 
   minetest-mods = callPackage ../games/minetest/mods { };
 
+  minetestWithMods = import ../games/minetest/minetest-with-mods.nix 
+                                {
+                                    inherit symlinkJoin;
+                                    inherit makeWrapper;
+                                    inherit minetest-mods;
+                                    inherit (pkgs) minetest;
+                                  };
+
   mnemosyne = callPackage ../games/mnemosyne {
     python = python3;
   };
