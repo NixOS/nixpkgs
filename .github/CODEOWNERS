@@ -288,3 +288,8 @@
 # Dotnet
 /pkgs/build-support/dotnet          @IvarWithoutBones
 /pkgs/development/compilers/dotnet  @IvarWithoutBones
+
+# Node.js
+/pkgs/build-support/node/build-npm-package      @winterqt
+/pkgs/build-support/node/fetch-npm-deps         @winterqt
+/doc/languages-frameworks/javascript.section.md @winterqt
