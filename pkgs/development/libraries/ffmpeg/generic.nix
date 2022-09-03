@@ -11,7 +11,7 @@
 # Build options
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime
 , multithreadBuild ? true # Multithreading via pthreads/win32 threads
-, sdlSupport ? !stdenv.isAarch32, SDL, SDL2
+, sdlSupport ? !stdenv.isAarch32, SDL2
 , vdpauSupport ? !stdenv.isAarch32, libvdpau
 # Developer options
 , debugDeveloper ? false
@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
       (ifMinVer "4.2" (enableFeature libmfxSupport "libmfx"))
       (ifMinVer "4.2" (enableFeature libaomSupport "libaom"))
       (disDarwinOrArmFix (ifMinVer "0.9" (lib.optionalString pulseaudioSupport "--enable-libpulse")) "0.9" "--disable-libpulse")
-      (ifMinVer "2.5" (if sdlSupport && reqMin "3.2" then "--enable-sdl2" else if sdlSupport then "--enable-sdl" else null)) # autodetected before 2.5, SDL1 support removed in 3.2 for SDL2
+      (ifMinVer "2.5" (if sdlSupport && reqMin "3.2" then "--enable-sdl2" else null))
       (ifMinVer "1.2" "--enable-libsoxr")
       "--enable-libx264"
       "--enable-libxvid"
@@ -175,7 +175,7 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.isLinux alsa-lib
     ++ optionals stdenv.isDarwin [ Cocoa CoreMedia VideoToolbox ]
     ++ optional vdpauSupport libvdpau
-    ++ optional sdlSupport (if reqMin "3.2" then SDL2 else SDL)
+    ++ optional sdlSupport SDL2
     ++ optional srtSupport srt
     ++ optional (reqMin "4.2") dav1d;
 
