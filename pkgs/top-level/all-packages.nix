@@ -34027,6 +34027,8 @@ with pkgs;
   minetestclient = minetestclient_5;
   minetestserver = minetestserver_5;
 
+  minetest-mods = callPackage ../games/minetest/mods { };
+
   mnemosyne = callPackage ../games/mnemosyne {
     python = python3;
   };
