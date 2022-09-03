@@ -69,8 +69,6 @@ stdenv.mkDerivation rec {
   qtWrapperArgs = [ "--set-default PERFPROFILER_PARSER_FILEPATH ${lib.getBin perf}/bin" ];
 
   postInstall = ''
-    mkdir -p $out/share/applications
-    cp share/applications/org.qt-project.qtcreator.desktop $out/share/applications
     substituteInPlace $out/share/applications/org.qt-project.qtcreator.desktop \
       --replace "Exec=qtcreator" "Exec=$out/bin/qtcreator"
   '';
