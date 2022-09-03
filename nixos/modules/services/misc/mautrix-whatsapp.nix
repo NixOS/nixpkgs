@@ -129,7 +129,7 @@ in
     users.users.mautrix-whatsapp = {
       isSystemUser = true;
       group = "mautrix-whatsapp";
-      home = ${dataDir};
+      home = dataDir;
     };
     services.matrix-synapse.settings.app_service_config_files = [ "${registrationFile}" ];
 
