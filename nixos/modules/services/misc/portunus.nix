@@ -284,5 +284,5 @@ in
     ];
   };
 
-  meta.maintainers = [ majewsky ] ++ teams.c3d2.members;
+  meta.maintainers = [ maintainers.majewsky ] ++ teams.c3d2.members;
 }
