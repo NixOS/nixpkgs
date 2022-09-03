@@ -1,4 +1,4 @@
-{ lib, coq, mkCoqPackages, runCommandNoCC }:
+{ lib, coq, mkCoqPackages, runCommand }:
 
 let
 
@@ -24,7 +24,7 @@ let
       coqPackages.QuickChick;
 in
 
-runCommandNoCC
+runCommand
   "coq-overrideCoqDerivation-test-0.1"
   { meta.maintainers = with lib.maintainers; [cdepillabout]; }
   ''
