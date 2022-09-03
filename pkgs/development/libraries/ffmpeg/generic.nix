@@ -1,8 +1,10 @@
 { lib, stdenv, buildPackages, fetchurl, pkg-config, addOpenGLRunpath, perl, texinfo, yasm
 , alsa-lib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
-, libssh, libtheora, libva, libdrm, libvorbis, libvpx, xz, soxr
+, libssh, libtheora, libva, libdrm, libvorbis, xz, soxr
 , x264, x265, xvidcore, zimg, zlib, libopus, speex, nv-codec-headers, dav1d
-, srt
+, vpxSupport ? !stdenv.isAarch32, libvpx
+, srtSupport ? true, srt
+, vaapiSupport ? ((stdenv.isLinux || stdenv.isFreeBSD) && !stdenv.isAarch32)
 , openglSupport ? false, libGLU, libGL
 , libmfxSupport ? false, intel-media-sdk
 , libaomSupport ? false, libaom
@@ -34,12 +36,6 @@
  *   pulseaudio
  *
  * Known issues:
- * 0.6     - fails to compile (unresolved) (so far, only disabling a number of
- *           features works, but that is not a feasible solution)
- * 0.6.90  - mmx: compile errors (fix: disable for 0.6.90-rc0)
- * 1.1     - libsoxr: compile error (fix: disable for 1.1)
- *           Support was initially added in 1.1 before soxr api change, fix
- *           would probably be to add soxr-1.0
  * ALL     - Cross-compiling will disable features not present on host OS
  *           (e.g. dxva2 support [DirectX] will not be enabled unless natively
  *           compiled on Cygwin)
@@ -47,7 +43,6 @@
  */
 
 let
-  inherit (stdenv) isDarwin isFreeBSD isLinux isAarch32;
   inherit (lib) optional optionals optionalString enableFeature filter;
 
   cmpVer = builtins.compareVersions;
@@ -63,14 +58,9 @@ let
 
   # Disable dependency that needs fixes before it will work on Darwin or Arm
   disDarwinOrArmFix = origArg: minVer: fixArg: if ((isDarwin || isAarch32) && reqMin minVer) then fixArg else origArg;
-
-  vaapiSupport = reqMin "0.6" && ((isLinux || isFreeBSD) && !isAarch32);
-
-  vpxSupport = reqMin "0.6" && !isAarch32;
 in
 
 stdenv.mkDerivation rec {
-
   pname = "ffmpeg";
   inherit version;
 
@@ -96,7 +86,7 @@ stdenv.mkDerivation rec {
     # Build flags
       "--enable-shared"
       (ifMinVer "0.6" "--enable-pic")
-      (ifMinVer "4.0" (enableFeature (srt != null) "libsrt"))
+      (ifMinVer "4.0" (enableFeature srtSupport "libsrt"))
       (enableFeature runtimeCpuDetectBuild "runtime-cpudetect")
       "--enable-hardcoded-tables"
     ] ++
@@ -115,7 +105,7 @@ stdenv.mkDerivation rec {
       "--enable-ffmpeg"
       "--disable-ffplay"
       (ifMinVer "0.6" "--enable-ffprobe")
-      (if reqMin "4" then null else "--disable-ffserver")
+      (ifVerOlder "4" "--disable-ffserver")
     # Libraries
       (ifMinVer "0.6" "--enable-avcodec")
       (ifMinVer "0.6" "--enable-avdevice")
@@ -175,18 +165,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libssh libtheora
-    libvorbis xz soxr x264 x265 xvidcore zimg zlib libopus speex srt nv-codec-headers
+    libvorbis xz soxr x264 x265 xvidcore zimg zlib libopus speex nv-codec-headers
   ] ++ optionals openglSupport [ libGL libGLU ]
     ++ optional libmfxSupport intel-media-sdk
     ++ optional libaomSupport libaom
     ++ optional vpxSupport libvpx
-    ++ optionals (!isDarwin && !isAarch32 && pulseaudioSupport) [ libpulseaudio ] # Need to be fixed on Darwin and ARM
-    ++ optional ((isLinux || isFreeBSD) && !isAarch32) libva
-    ++ optional ((isLinux || isFreeBSD) && !isAarch32) libdrm
-    ++ optional isLinux alsa-lib
-    ++ optionals isDarwin [ Cocoa CoreMedia VideoToolbox ]
+    ++ optionals (!stdenv.isDarwin && !stdenv.isAarch32 && pulseaudioSupport) [ libpulseaudio ] # Need to be fixed on Darwin and ARM
+    ++ optionals vaapiSupport [ libva libdrm ]
+    ++ optional stdenv.isLinux alsa-lib
+    ++ optionals stdenv.isDarwin [ Cocoa CoreMedia VideoToolbox ]
     ++ optional vdpauSupport libvdpau
     ++ optional sdlSupport (if reqMin "3.2" then SDL2 else SDL)
+    ++ optional srtSupport srt
     ++ optional (reqMin "4.2") dav1d;
 
   enableParallelBuilding = true;
