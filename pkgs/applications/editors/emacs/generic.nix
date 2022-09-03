@@ -18,7 +18,7 @@
 , withX ? !stdenv.isDarwin
 , withNS ? stdenv.isDarwin
 , withGTK2 ? false, gtk2-x11 ? null
-, withGTK3 ? true, gtk3-x11 ? null, gsettings-desktop-schemas ? null
+, withGTK3 ? false, gtk3-x11 ? null, gsettings-desktop-schemas ? null
 , withXwidgets ? false, webkitgtk ? null, wrapGAppsHook ? null, glib-networking ? null
 , withMotif ? false, motif ? null
 , withSQLite3 ? false
