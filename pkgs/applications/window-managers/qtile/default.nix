@@ -38,7 +38,7 @@ let
       substituteInPlace libqtile/backend/x11/xcursors.py \
         --replace libxcb-cursor.so.0 ${xcbutilcursor.out}/lib/libxcb-cursor.so.0
     '';
-    
+
     preBuild = ''
       ./scripts/ffibuild
     '';
