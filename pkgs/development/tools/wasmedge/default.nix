@@ -5,7 +5,7 @@
 , cmake
 , gtest
 , spdlog
-, CoreServices
+, Security
 }:
 
 llvmPackages.stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ llvmPackages.stdenv.mkDerivation rec {
       spdlog
       llvmPackages.llvm
     ]
-    ++ lib.optionals llvmPackages.stdenv.isDarwin [ CoreServices ];
+    ++ lib.optionals llvmPackages.stdenv.isDarwin [ Security ];
 
   nativeBuildInputs = [ cmake llvmPackages.lld ];
 
