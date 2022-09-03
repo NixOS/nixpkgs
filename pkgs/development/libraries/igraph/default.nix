@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "igraph";
-  version = "0.9.9";
+  version = "0.9.10";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = pname;
     rev = version;
-    hash = "sha256-Zb9F4kFUNA/MtoYYEKGJ5JyKxtG0DHSdGaUpDLKmAAc=";
+    hash = "sha256-prDadHsNhDRkNp1i0niKIYxE0g85Zs0ngvUy6uK8evk=";
   };
 
   postPatch = ''
