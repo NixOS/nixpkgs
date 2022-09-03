@@ -10243,6 +10243,18 @@ final: prev:
     meta.homepage = "https://github.com/tpope/vim-liquid/";
   };
 
+  vim-llvm = buildVimPluginFrom2Nix {
+    pname = "vim-llvm";
+    version = "2022-05-03";
+    src = fetchFromGitHub {
+      owner = "rhysd";
+      repo = "vim-llvm";
+      rev = "ac3fbdd79b0f5bd68049d38a4901e43a93d4cfd0";
+      sha256 = "1nzmyd2fh2rfxqi87pgdx40xxq7b16izgi57fib8fpywcw26s2ga";
+    };
+    meta.homepage = "https://github.com/rhysd/vim-llvm/";
+  };
+
   vim-localvimrc = buildVimPluginFrom2Nix {
     pname = "vim-localvimrc";
     version = "2022-05-11";
