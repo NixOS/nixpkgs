@@ -10,14 +10,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "Surelog";
-  version = "2022.05.15";
+  pname = "surelog";
+  version = "v1.36";
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = pname;
-    rev = "15d3698ca5c7d45dd95b58c15e76131420cb001c";
-    hash = "sha256-dfje9yZ8ZR7x1EUxDUpKNcOWKYTPwPG6T4HzudV59R4=";
+    rev = version;
+    hash = "sha256-gMxpnSsJTXmg2VU7mQcw1J40OuqW6oo9/sGplLgV0ho=";
     fetchSubmodules = true;
   };
 
