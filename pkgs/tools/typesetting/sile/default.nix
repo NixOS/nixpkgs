@@ -91,7 +91,21 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  doCheck = true;
+  # The upstream make check target runs a self check. This works fine on most
+  # platforms, but on Darwin the install-name embedded inside the dynamic
+  # library is not usable because it references the final install target
+  # location of another resource rather than the local build directory. Running
+  # the check after build will not viable because the build dir gets blown away
+  # but the TMPDIR hack below. Patching the binary is not viable because of
+  # Makefile shenanigans that cause a loop. See discussion in:
+  # https://github.com/NixOS/nixpkgs/pull/189582#issuecomment-1237143968
+  #
+  # preCheck = ''
+  #   # libtexpdf.0.dylib has its final path as install name, patch it to the pre-installation path for tests
+  #   install_name_tool -change $out/lib/libtexpdf.0.dylib $PWD/libtexpdf/.libs/libtexpdf.0.dylib justenoughlibtexpdf.so
+  # '';
+  #
+  doCheck = !stdenv.isDarwin;
 
   enableParallelBuilding = true;
 
@@ -106,7 +120,6 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" "man" "dev" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful
