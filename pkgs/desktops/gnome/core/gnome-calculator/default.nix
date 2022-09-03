@@ -16,7 +16,7 @@
 , gnome
 , mpfr
 , gmp
-, libsoup
+, libsoup_3
 , libmpc
 , libadwaita
 , gsettings-desktop-schemas
@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-calculator";
-  version = "43.alpha";
+  version = "43.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-calculator/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "SUAYyg8lJQ55pbI1rUx+Pq88RzgV5qGi1tSqJW1F6LE=";
+    sha256 = "byc20DrpQXONb869vdSm8/7Sgo1A9gGVnCmHNoYAUoY=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     gmp
     libgee
     gsettings-desktop-schemas
-    libsoup
+    libsoup_3
     libmpc
     libadwaita
   ];
