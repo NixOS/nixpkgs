@@ -45,19 +45,11 @@
 let
   inherit (lib) optional optionals optionalString enableFeature filter;
 
-  cmpVer = builtins.compareVersions;
-  reqMin = requiredVersion: (cmpVer requiredVersion branch != 1);
-  reqMatch = requiredVersion: (cmpVer requiredVersion branch == 0);
+  reqMin = requiredVersion: (builtins.compareVersions requiredVersion branch != 1);
 
   ifMinVer = minVer: flag: if reqMin minVer then flag else null;
 
   ifVerOlder = maxVer: flag: if (lib.versionOlder branch maxVer) then flag else null;
-
-  # Version specific fix
-  verFix = withoutFix: fixVer: withFix: if reqMatch fixVer then withFix else withoutFix;
-
-  # Disable dependency that needs fixes before it will work on Darwin or Arm
-  disDarwinOrArmFix = origArg: minVer: fixArg: if ((isDarwin || isAarch32) && reqMin minVer) then fixArg else origArg;
 in
 
 stdenv.mkDerivation rec {
@@ -85,7 +77,7 @@ stdenv.mkDerivation rec {
       "--enable-version3"
     # Build flags
       "--enable-shared"
-      (ifMinVer "0.6" "--enable-pic")
+      "--enable-pic"
       (ifMinVer "4.0" (enableFeature srtSupport "libsrt"))
       (enableFeature runtimeCpuDetectBuild "runtime-cpudetect")
       "--enable-hardcoded-tables"
@@ -98,46 +90,46 @@ stdenv.mkDerivation rec {
        else
          ["--disable-pthreads" "--disable-w32threads"])
     ++ [
-      (ifMinVer "0.9" "--disable-os2threads") # We don't support OS/2
+      "--disable-os2threads" # We don't support OS/2
       "--enable-network"
       (ifMinVer "2.4" "--enable-pixelutils")
     # Executables
       "--enable-ffmpeg"
       "--disable-ffplay"
-      (ifMinVer "0.6" "--enable-ffprobe")
+      "--enable-ffprobe"
       (ifVerOlder "4" "--disable-ffserver")
     # Libraries
-      (ifMinVer "0.6" "--enable-avcodec")
-      (ifMinVer "0.6" "--enable-avdevice")
+      "--enable-avcodec"
+      "--enable-avdevice"
       "--enable-avfilter"
-      (ifMinVer "0.6" "--enable-avformat")
+      "--enable-avformat"
       (ifMinVer "1.0" (ifVerOlder "5.0" "--enable-avresample"))
       (ifMinVer "1.1" "--enable-avutil")
       "--enable-postproc"
-      (ifMinVer "0.9" "--enable-swresample")
+      "--enable-swresample"
       "--enable-swscale"
     # Docs
-      (ifMinVer "0.6" "--disable-doc")
+      "--disable-doc"
     # External Libraries
       "--enable-libass"
       "--enable-bzlib"
       "--enable-gnutls"
       (ifMinVer "1.0" "--enable-fontconfig")
-      (ifMinVer "0.7" "--enable-libfreetype")
+      "--enable-libfreetype"
       "--enable-libmp3lame"
       (ifMinVer "1.2" "--enable-iconv")
       "--enable-libtheora"
       (ifMinVer "2.1" "--enable-libssh")
-      (ifMinVer "0.6" (enableFeature vaapiSupport "vaapi"))
+      (enableFeature vaapiSupport "vaapi")
       (ifMinVer "3.4" (enableFeature vaapiSupport "libdrm"))
       (enableFeature vdpauSupport "vdpau")
       "--enable-libvorbis"
-      (ifMinVer "0.6" (enableFeature vpxSupport "libvpx"))
+      (enableFeature vpxSupport "libvpx")
       (ifMinVer "2.4" "--enable-lzma")
       (ifMinVer "2.2" (enableFeature openglSupport "opengl"))
       (ifMinVer "4.2" (enableFeature libmfxSupport "libmfx"))
       (ifMinVer "4.2" (enableFeature libaomSupport "libaom"))
-      (disDarwinOrArmFix (ifMinVer "0.9" (lib.optionalString pulseaudioSupport "--enable-libpulse")) "0.9" "--disable-libpulse")
+      (lib.optionalString pulseaudioSupport "--enable-libpulse")
       (ifMinVer "2.5" (if sdlSupport && reqMin "3.2" then "--enable-sdl2" else null))
       (ifMinVer "1.2" "--enable-libsoxr")
       "--enable-libx264"
@@ -153,8 +145,6 @@ stdenv.mkDerivation rec {
       (enableFeature optimizationsDeveloper "optimizations")
       (enableFeature extraWarningsDeveloper "extra-warnings")
       "--disable-stripping"
-    # Disable mmx support for 0.6.90
-      (verFix null "0.6.90" "--disable-mmx")
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
