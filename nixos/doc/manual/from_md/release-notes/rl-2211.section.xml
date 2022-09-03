@@ -386,6 +386,14 @@
       </listitem>
       <listitem>
         <para>
+          Emacs now uses the Lucid toolkit by default instead of GTK
+          because of stability and compatibility issues. Users who still
+          wish to remain using GTK can do so by using
+          <literal>emacs-gtk</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           riak package removed along with
           <literal>services.riak</literal> module, due to lack of
           maintainer to update the package.
