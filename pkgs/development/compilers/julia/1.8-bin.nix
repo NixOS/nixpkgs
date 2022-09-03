@@ -2,29 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "julia-bin";
-  version = "1.7.3";
+  version = "1.8.0";
 
   src = {
     x86_64-linux = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/linux/x64/${lib.versions.majorMinor version}/julia-${version}-linux-x86_64.tar.gz";
-      sha256 = "0ff7ypr76xf99h3dmy1xdnkq2xn432qnzihxs72xrd4j5nhlybwv";
+      sha256 = "sha256-6A1zLMt/eeAA15jLi2Vtw2QatZUW1uTlLhZ2UBeJKgA=";
     };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  # Julia’s source files are in different locations for source and binary
-  # releases. Thus we temporarily create a symlink to allow us to share patches
-  # with source releases.
-  prePatch = ''
-    ln -s share/julia/test
-  '';
-  patches = [
-    # Source release Nix patch(es) relevant for binary releases as well.
-    ./patches/1.7-bin/0005-nix-Enable-parallel-unit-tests-for-sandbox.patch
-  ];
   postPatch = ''
-    # Revert symlink hack.
-    rm test
-
     # Julia fails to pick up our Certification Authority root certificates, but
     # it provides its own so we can simply disable the test. Patching in the
     # dynamic path to ours require us to rebuild the Julia system image.
@@ -46,6 +33,7 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   preInstallCheck = ''
+    export JULIA_TEST_USE_MULTIPLE_WORKERS=true
     # Some tests require read/write access to $HOME.
     export HOME="$TMPDIR"
   '';
