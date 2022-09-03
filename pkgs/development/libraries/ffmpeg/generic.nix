@@ -64,8 +64,7 @@ stdenv.mkDerivation rec {
   postPatch = "patchShebangs .";
   inherit patches;
 
-  outputs = [ "bin" "dev" "out" "man" ]
-    ++ optional (reqMin "1.0") "doc" ; # just dev-doc
+  outputs = [ "bin" "dev" "out" "man" "doc" ];
   setOutputFlags = false; # doesn't accept all and stores configureFlags in libs!
 
   configurePlatforms = [];
@@ -103,8 +102,8 @@ stdenv.mkDerivation rec {
       "--enable-avdevice"
       "--enable-avfilter"
       "--enable-avformat"
-      (ifMinVer "1.0" (ifVerOlder "5.0" "--enable-avresample"))
-      (ifMinVer "1.1" "--enable-avutil")
+      (ifVerOlder "5.0" "--enable-avresample")
+      "--enable-avutil"
       "--enable-postproc"
       "--enable-swresample"
       "--enable-swscale"
@@ -114,10 +113,10 @@ stdenv.mkDerivation rec {
       "--enable-libass"
       "--enable-bzlib"
       "--enable-gnutls"
-      (ifMinVer "1.0" "--enable-fontconfig")
+      "--enable-fontconfig"
       "--enable-libfreetype"
       "--enable-libmp3lame"
-      (ifMinVer "1.2" "--enable-iconv")
+      "--enable-iconv"
       "--enable-libtheora"
       (ifMinVer "2.1" "--enable-libssh")
       (enableFeature vaapiSupport "vaapi")
@@ -131,7 +130,7 @@ stdenv.mkDerivation rec {
       (ifMinVer "4.2" (enableFeature libaomSupport "libaom"))
       (lib.optionalString pulseaudioSupport "--enable-libpulse")
       (ifMinVer "2.5" (if sdlSupport && reqMin "3.2" then "--enable-sdl2" else null))
-      (ifMinVer "1.2" "--enable-libsoxr")
+      "--enable-libsoxr"
       "--enable-libx264"
       "--enable-libxvid"
       "--enable-libzimg"
