@@ -15,8 +15,7 @@
 , debugDeveloper ? false
 , optimizationsDeveloper ? true
 , extraWarningsDeveloper ? false
-# Darwin frameworks
-, Cocoa, darwinFrameworks ? [ Cocoa ]
+, Cocoa, CoreMedia, VideoToolbox
 # Inherit generics
 , branch, sha256, version, patches ? [], knownVulnerabilities ? []
 , doCheck ? true
@@ -185,7 +184,7 @@ stdenv.mkDerivation rec {
     ++ optional ((isLinux || isFreeBSD) && !isAarch32) libva
     ++ optional ((isLinux || isFreeBSD) && !isAarch32) libdrm
     ++ optional isLinux alsa-lib
-    ++ optionals isDarwin darwinFrameworks
+    ++ optionals isDarwin [ Cocoa CoreMedia VideoToolbox ]
     ++ optional vdpauSupport libvdpau
     ++ optional sdlSupport (if reqMin "3.2" then SDL2 else SDL)
     ++ optional (reqMin "4.2") dav1d;
