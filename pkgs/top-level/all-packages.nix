@@ -33573,6 +33573,8 @@ with pkgs;
 
   tbe = libsForQt5.callPackage ../games/the-butterfly-effect { };
 
+  tbls = callPackage ../tools/misc/tbls { };
+
   tecnoballz = callPackage ../games/tecnoballz { };
 
   teetertorture = callPackage ../games/teetertorture { };
