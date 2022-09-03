@@ -5625,6 +5625,16 @@
     githubId = 510202;
     name = "Ismaël Bouya";
   };
+  impl = {
+    email = "noah@noahfontes.com";
+    matrix = "@impl:matrix.org";
+    github = "impl";
+    githubId = 41129;
+    name = "Noah Fontes";
+    keys = [{
+      fingerprint = "F5B2 BE1B 9AAD 98FE 2916  5597 3665 FFF7 9D38 7BAA";
+    }];
+  };
   imsofi = {
     email = "sofi+git@mailbox.org";
     github = "imsofi";
