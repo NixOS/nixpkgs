@@ -147,7 +147,7 @@ stdenv.mkDerivation rec {
       (ifMinVer "2.8" "--enable-libopus")
       "--enable-libspeex"
       (ifMinVer "2.8" "--enable-libx265")
-      (ifMinVer "4.2" (enableFeature (dav1d != null) "libdav1d"))
+      (ifMinVer "4.2" (enableFeature (reqMin "4.2") "libdav1d"))
     # Developer flags
       (enableFeature debugDeveloper "debug")
       (enableFeature optimizationsDeveloper "optimizations")
