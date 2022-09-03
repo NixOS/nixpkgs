@@ -3,23 +3,23 @@
 , useSteamRun ? true }:
 
 let
-  rev = "6a1a59f687ac7b98698e2ebb97d82a94865e50f6";
+  rev = "6246fde6b54f8c7e340057fe2d940287c437153f";
 in
   buildDotnetModule rec {
     pname = "XIVLauncher";
-    version = "1.0.0.9";
+    version = "1.0.1.0";
 
     src = fetchFromGitHub {
       owner = "goatcorp";
       repo = "FFXIVQuickLauncher";
       inherit rev;
-      sha256 = "sha256-jRyYeTg73W58OH2fWmuVkjxEdyPNqDGRbEZwxBMfdCo=";
+      sha256 = "sha256-sM909/ysrlwsiVSBrMo4cOZUWxjRA3ZSwlloGythOAY=";
     };
 
     nativeBuildInputs = [ copyDesktopItems ];
 
     projectFile = "src/XIVLauncher.Core/XIVLauncher.Core.csproj";
-    nugetDeps = ./deps.nix; # File generated with `nuget-to-nix path/to/src > deps.nix`
+    nugetDeps = ./deps.nix; # File generated with `nix-build -A xivlauncher.passthru.fetch-deps`
 
     dotnetFlags = [
       "--runtime linux-x64"
