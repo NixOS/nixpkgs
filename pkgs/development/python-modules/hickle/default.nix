@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname   = "hickle";
-  version = "4.0.4";
+  version = "5.0.2";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d35030a76fe1c7fa6480088cde932689960ed354a2539ffaf5f3c90c578c06f";
+    sha256 = "sha256-2+7OF/a89jK/zLhbk/Q2A+zsKnfRbq3YMKGycEWsLEQ=";
   };
 
   postPatch = ''
