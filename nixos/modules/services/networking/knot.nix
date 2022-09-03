@@ -37,12 +37,12 @@ let
 in {
   options = {
     services.knot = {
-      enable = mkEnableOption "Knot authoritative-only DNS server";
+      enable = mkEnableOption (lib.mdDoc "Knot authoritative-only DNS server");
 
       extraArgs = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           List of additional command line paramters for knotd
         '';
       };
@@ -50,7 +50,7 @@ in {
       keyFiles = mkOption {
         type = types.listOf types.path;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           A list of files containing additional configuration
           to be included using the include directive. This option
           allows to include configuration like TSIG keys without
@@ -63,7 +63,7 @@ in {
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Extra lines to be added verbatim to knot.conf
         '';
       };
@@ -72,7 +72,7 @@ in {
         type = types.package;
         default = pkgs.knot-dns;
         defaultText = literalExpression "pkgs.knot-dns";
-        description = ''
+        description = lib.mdDoc ''
           Which Knot DNS package to use
         '';
       };

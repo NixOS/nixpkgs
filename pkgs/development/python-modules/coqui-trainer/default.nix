@@ -6,7 +6,9 @@
 
 , coqpit
 , fsspec
-, pytorch-bin
+, torch-bin
+, tensorboardx
+, protobuf
 
 , pytestCheckHook
 , soundfile
@@ -15,33 +17,26 @@
 
 let
   pname = "coqui-trainer";
-  version = "0.0.11";
+  version = "0.0.14";
 in
 buildPythonPackage {
   inherit pname version;
   format = "pyproject";
 
-  disabled = pythonAtLeast "3.10"; # https://github.com/coqui-ai/Trainer/issues/22
-
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "Trainer";
-    rev = "v${version}";
-    hash = "sha256-ujuQ9l6NOpDb2TdQbRcOM+j91RfbE8wCL9C0PID8g8Q=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WvJDGV7gmf/QQN3SswTq/ABy9ppPFi5xYnMeL/M7GxY=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/coqui-ai/Trainer/commit/07b447abf3290c8f2e5e723687b8a480b7382265.patch";
-      sha256 = "0v1hl784d9rghkblcfwgzp0gg9d6r5r0yv2kapzdz2qymiajy7y2";
-    })
-  ];
 
   propagatedBuildInputs = [
     coqpit
     fsspec
-    pytorch-bin
+    torch-bin
     soundfile
+    tensorboardx
+    protobuf
   ];
 
   # only one test and that requires training data from the internet

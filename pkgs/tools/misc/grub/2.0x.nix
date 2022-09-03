@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
     # Pull upstream patch to fix linkage against binutils-2.36.
     (fetchpatch {
-      name = "binutils-2.36";
+      name = "binutils-2.36.patch";
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=b98275138bf4fc250a1c362dfd2c8b1cf2421701";
       sha256 = "001m058bsl2pcb0ii84jfm5ias8zgzabrfy6k2cc9w6w1y51ii82";
     })
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "all" ];
 
-  separateDebugInfo = true;
+  separateDebugInfo = !xenSupport;
 
   # Work around a bug in the generated flex lexer (upstream flex bug?)
   NIX_CFLAGS_COMPILE = "-Wno-error";

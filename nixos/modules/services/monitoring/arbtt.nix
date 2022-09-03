@@ -10,7 +10,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable the arbtt statistics capture service.
         '';
       };
@@ -19,7 +19,7 @@ in {
         type = types.package;
         default = pkgs.haskellPackages.arbtt;
         defaultText = literalExpression "pkgs.haskellPackages.arbtt";
-        description = ''
+        description = lib.mdDoc ''
           The package to use for the arbtt binaries.
         '';
       };
@@ -28,7 +28,7 @@ in {
         type = types.str;
         default = "%h/.arbtt/capture.log";
         example = "/home/username/.arbtt-capture.log";
-        description = ''
+        description = lib.mdDoc ''
           The log file for captured samples.
         '';
       };
@@ -37,7 +37,7 @@ in {
         type = types.int;
         default = 60;
         example = 120;
-        description = ''
+        description = lib.mdDoc ''
           The sampling interval in seconds.
         '';
       };

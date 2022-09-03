@@ -1,5 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage
-, requests, datadog, configparser, python
+{ lib
+, fetchPypi
+, buildPythonPackage
+, chardet
+, configparser
+, datadog
+, requests
+, python
 }:
 
 buildPythonPackage rec {
@@ -11,8 +17,12 @@ buildPythonPackage rec {
     sha256 = "iWlNX43ZtvU73wz4+8DgDulQNOnssJGxTBkvAaLj530=";
   };
 
-  propagatedBuildInputs = [ requests datadog ]
-    ++ lib.optional python.isPy2 configparser;
+  propagatedBuildInputs = [
+    chardet
+    datadog
+    requests
+  ]
+  ++ lib.optional python.isPy2 configparser;
 
   pythonImportsCheck = [ "gradient_statsd" ];
 

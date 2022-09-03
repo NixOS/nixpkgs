@@ -18,7 +18,8 @@
     extraGSettingsOverrides = ''
       [org.gnome.shell]
       welcome-dialog-last-shown-version='9999999999'
-
+      [org.gnome.desktop.session]
+      idle-delay=0
       [org.gnome.settings-daemon.plugins.power]
       sleep-inactive-ac-type='nothing'
       sleep-inactive-battery-type='nothing'

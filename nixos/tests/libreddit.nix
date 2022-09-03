@@ -14,7 +14,7 @@ with lib;
 
   testScript = ''
     machine.wait_for_unit("libreddit.service")
-    machine.wait_for_open_port("80")
+    machine.wait_for_open_port(80)
     # Query a page that does not require Internet access
     machine.succeed("curl --fail http://localhost:80/settings")
   '';

@@ -57,6 +57,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Display and control Android devices over USB or TCP/IP";
     homepage = "https://github.com/Genymobile/scrcpy";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # server
+    ];
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ deltaevo lukeadams msfjarvis ];

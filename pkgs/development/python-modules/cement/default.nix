@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "cement";
-  version = "3.0.6";
+  version = "3.0.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fccec41eab3f15a03445b1ce24c8a7e106d4d5520f6507a7145698ce68923d31";
+    sha256 = "sha256-rRGmlGZeKtKEV8VgSU9PjDaiX8WOUA1gip2R4E4dMJM=";
   };
 
   # Disable test tests since they depend on a memcached server running on

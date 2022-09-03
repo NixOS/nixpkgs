@@ -26,7 +26,7 @@ in
         }
       '';
       description =
-        ''
+        lib.mdDoc ''
         Configure freetds database entries. Each attribute denotes
         a section within freetds.conf, and the value (a string) is the config
         content for that section. When at least one entry is configured

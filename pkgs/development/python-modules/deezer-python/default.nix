@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "deezer-python";
-  version = "5.3.2";
+  version = "5.5.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "browniebroke";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-lOVHSYL57hwzvdC+pJFDkDGFuu29jdZ36BYscw82uDE=";
+    hash = "sha256-VwN/EkJ2LtbCqSelPVl33dD1MFSlypUXmyw4FnH0ee4=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,9 @@ buildPythonPackage rec {
       --replace " --cov=deezer" ""
   '';
 
-  pythonImportsCheck = [ "deezer" ];
+  pythonImportsCheck = [
+    "deezer"
+  ];
 
   meta = with lib; {
     description = "Python wrapper around the Deezer API";

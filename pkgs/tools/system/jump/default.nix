@@ -36,6 +36,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/gsamokovarov/jump";
     license = licenses.mit;
-    maintainers = with maintainers; [ sondr3 ];
+    maintainers = with maintainers; [ ];
   };
 }

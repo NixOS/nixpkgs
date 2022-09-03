@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-9zP+rWhaK4fC2Qhd0oq9WVvCkvryooYo09k7016Rbxw=";
   };
 
-  cargoSha256 = "sha256-otn0XvZ0wufD+4mCGSM0hevKM+wWSvFVCKtTu/5m1uA=";
+  cargoPatches = [ ./darwin-cargo-lock.patch ];
+  cargoSha256 = "sha256-rkcEF/INNVn9K4p0/1M++l6lnjtZp1Srx57gkaqcKek=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Cocoa Foundation ];
 
@@ -32,7 +33,6 @@ rustPlatform.buildRustPackage rec {
     description = "Upgrade all the things";
     homepage = "https://github.com/r-darwish/topgrade";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ SuperSandro2000 ];
-    broken = stdenv.isDarwin;
+    maintainers = with maintainers; [ SuperSandro2000 xyenon ];
   };
 }

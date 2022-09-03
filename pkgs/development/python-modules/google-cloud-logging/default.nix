@@ -9,22 +9,24 @@
 , google-cloud-core
 , google-cloud-testutils
 , mock
+, pandas
 , proto-plus
 , pytestCheckHook
 , pytest-asyncio
 , pythonOlder
+, rich
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "3.1.1";
+  version = "3.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YjR2pdEWEWh84nixN/lDO4HssDlNN8CfhX1TOmBnsQs=";
+    hash = "sha256-cZEhSRzDSe4/hGAPPCkWtbuV1oYLlNkNNPj2PZedEiA=";
   };
 
   propagatedBuildInputs = [
@@ -40,8 +42,10 @@ buildPythonPackage rec {
     flask
     google-cloud-testutils
     mock
+    pandas
     pytestCheckHook
     pytest-asyncio
+    rich
   ];
 
   disabledTests = [

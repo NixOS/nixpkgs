@@ -3,33 +3,39 @@
 , attrs
 , buildPythonPackage
 , bson
+, boto3
+, botocore
 , cattrs
+, exceptiongroup
 , fetchFromGitHub
 , itsdangerous
 , poetry-core
+, pymongo
 , pytestCheckHook
 , pythonOlder
 , pyyaml
+, redis
 , requests
 , requests-mock
 , rich
 , timeout-decorator
 , ujson
+, urllib3
 , url-normalize
 }:
 
 buildPythonPackage rec {
   pname = "requests-cache";
-  version = "0.9.4";
+  version = "0.9.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "reclosedev";
+    owner = "requests-cache";
     repo = "requests-cache";
     rev = "v${version}";
-    hash = "sha256-9OlWMom/0OMlbPd3evjIaX75Gjlu+F8vKBJwX4Z58qQ=";
+    hash = "sha256-oFI5Rv/MAiPHiZts0PrNS+YMDFD/RxnMJ6deTxZNkSM=";
   };
 
   nativeBuildInputs = [
@@ -39,21 +45,46 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     appdirs
     attrs
-    bson
     cattrs
-    itsdangerous
-    pyyaml
+    exceptiongroup
     requests
-    ujson
+    urllib3
     url-normalize
   ];
+
+  passthru.optional-dependencies = {
+    dynamodb = [
+      boto3
+      botocore
+    ];
+    mongodbo = [
+      pymongo
+    ];
+    redis = [
+      redis
+    ];
+    bson = [
+      bson
+    ];
+    json = [
+      ujson
+    ];
+    security = [
+      itsdangerous
+    ];
+    yaml = [
+      pyyaml
+    ];
+  };
 
   checkInputs = [
     pytestCheckHook
     requests-mock
     rich
     timeout-decorator
-  ];
+  ]
+  ++ passthru.optional-dependencies.json
+  ++ passthru.optional-dependencies.security;
 
   preCheck = ''
     export HOME=$(mktemp -d);

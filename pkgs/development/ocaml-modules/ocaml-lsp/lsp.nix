@@ -13,6 +13,7 @@
 , dyn
 , re
 , stdune
+, chrome-trace
 , dune_3
 , csexp
 , pp
@@ -40,7 +41,22 @@ buildDunePackage rec {
   '';
 
   buildInputs =
-    if lib.versionAtLeast version "1.10.0" then
+    if lib.versionAtLeast version "1.12.0" then
+      [
+        pp
+        re
+        ppx_yojson_conv_lib
+        octavius
+        dune-build-info
+        dune-rpc
+        omd
+        cmdliner
+        ocamlformat-rpc-lib
+        dyn
+        stdune
+        chrome-trace
+      ]
+    else if lib.versionAtLeast version "1.10.0" then
       [
         pp
         re

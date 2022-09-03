@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Stand-alone WebIDL Parser in Python";
     homepage = "https://github.com/plinss/widlparser";
     license = licenses.mit;
-    maintainers = [ maintainers.kvark ];
+    maintainers = [];
   };
 }

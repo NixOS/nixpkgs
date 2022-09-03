@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/linux-ima/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ tstrobel ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

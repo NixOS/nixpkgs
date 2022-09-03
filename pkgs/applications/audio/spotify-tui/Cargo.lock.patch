@@ -1,0 +1,11 @@
+--- a/Cargo.lock	2022-04-27 17:25:49.017415644 +0300
++++ b/Cargo.lock	2022-04-27 17:25:51.307433984 +0300
+@@ -1722,8 +1722,6 @@
+ [[package]]
+ name = "rspotify"
+ version = "0.10.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "eefd7bb58b714606b30a490f751d7926942e2874eef5e82934d60d7a4a68dca4"
+ dependencies = [
+  "base64 0.10.1",
+  "chrono",

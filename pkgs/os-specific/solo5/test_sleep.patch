@@ -1,0 +1,22 @@
+diff --git a/tests/test_time/test_time.c b/tests/test_time/test_time.c
+index 931500b..cde64ad 100644
+--- a/tests/test_time/test_time.c
++++ b/tests/test_time/test_time.c
+@@ -110,7 +110,8 @@ int solo5_app_main(const struct solo5_start_info *si __attribute__((unused)))
+         /*
+          * Verify that we did not sleep less than requested (see above).
+          */
+-        if (delta < NSEC_PER_SEC) {
++        const solo5_time_t slack = 100000000ULL;
++        if (delta < NSEC_PER_SEC - slack) {
+             printf("[%d] ERROR: slept too little (expected at least %llu ns)\n",
+                     iters, (unsigned long long)NSEC_PER_SEC);
+             failed = true;
+@@ -120,7 +121,6 @@ int solo5_app_main(const struct solo5_start_info *si __attribute__((unused)))
+          * Verify that we did not sleep more than requested, within reason
+          * (scheduling delays, general inaccuracy of the current timing code).
+          */
+-        const solo5_time_t slack = 100000000ULL;
+         if (delta > (NSEC_PER_SEC + slack)) {
+             printf("[%d] ERROR: slept too much (expected at most %llu ns)\n",
+                     iters, (unsigned long long)slack);

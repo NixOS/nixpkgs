@@ -179,6 +179,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "VMWare tools for working with OVF, OVA, and VMX images";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ numinit wolfangaukang ];
     platforms = builtins.attrNames ovftoolSystems;

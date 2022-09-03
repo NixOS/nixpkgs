@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     moveToOutput bin/pcre-config "$dev"
   '' + optionalString (variant != null) ''
-    ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib}
+    ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib,*a}
   '';
 
   meta = {

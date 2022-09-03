@@ -8,6 +8,7 @@
 , libprom
 , libpromhttp
 , libmicrohttpd
+, sqlite
 , nixosTests
 }:
 
@@ -29,11 +30,19 @@ stdenv.mkDerivation rec {
     libprom
     libpromhttp
     libmicrohttpd
+    sqlite.dev
   ];
 
   patches = [
     ./pure-configure.patch
   ];
+
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: ...-libprom-0.1.1/include/prom_collector_registry.h:37: multiple definition of
+  #     `PROM_COLLECTOR_REGISTRY_DEFAULT'; ...-libprom-0.1.1/include/prom_collector_registry.h:37: first defined here
+  # Should be fixed in libprom-1.2.0 and later: https://github.com/digitalocean/prometheus-client-c/pull/25
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   passthru.tests.coturn = nixosTests.coturn;
 

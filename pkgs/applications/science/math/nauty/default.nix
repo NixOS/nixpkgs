@@ -4,11 +4,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nauty";
-  version = "2.7r3";
+  version = "2.7r4";
 
   src = fetchurl {
     url = "https://pallini.di.uniroma1.it/nauty${builtins.replaceStrings ["."] [""] version}.tar.gz";
-    sha256 = "sha256-TwZltxalP3oU6irjAFnyPQZM4/5MEsATQE724e4LiMI=";
+    sha256 = "sha256-uBDIWm/imfO0yfJKr5KcrH+VRsLzXCDh3Qrbx0CISKY=";
   };
 
   outputs = [ "out" "dev" ];

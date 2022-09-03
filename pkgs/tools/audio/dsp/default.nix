@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dsp";
-  version = "1.8";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "bmc0";
     repo = "dsp";
     rev = "v${version}";
-    sha256 = "sha256-LTgjpzAGi3oL8l5NcJj1ortKFd3vWDfXHr8YyedAxEE=";
+    sha256 = "sha256-S1pzVQ/ceNsx0vGmzdDWw2TjPVLiRgzR4edFblWsekY=";
   };
 
   nativeBuildInputs = [ pkg-config ];

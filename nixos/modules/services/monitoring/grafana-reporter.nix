@@ -7,40 +7,40 @@ let
 
 in {
   options.services.grafana_reporter = {
-    enable = mkEnableOption "grafana_reporter";
+    enable = mkEnableOption (lib.mdDoc "grafana_reporter");
 
     grafana = {
       protocol = mkOption {
-        description = "Grafana protocol.";
+        description = lib.mdDoc "Grafana protocol.";
         default = "http";
         type = types.enum ["http" "https"];
       };
       addr = mkOption {
-        description = "Grafana address.";
+        description = lib.mdDoc "Grafana address.";
         default = "127.0.0.1";
         type = types.str;
       };
       port = mkOption {
-        description = "Grafana port.";
+        description = lib.mdDoc "Grafana port.";
         default = 3000;
         type = types.int;
       };
 
     };
     addr = mkOption {
-      description = "Listening address.";
+      description = lib.mdDoc "Listening address.";
       default = "127.0.0.1";
       type = types.str;
     };
 
     port = mkOption {
-      description = "Listening port.";
+      description = lib.mdDoc "Listening port.";
       default = 8686;
       type = types.int;
     };
 
     templateDir = mkOption {
-      description = "Optional template directory to use custom tex templates";
+      description = lib.mdDoc "Optional template directory to use custom tex templates";
       default = pkgs.grafana_reporter;
       defaultText = literalExpression "pkgs.grafana_reporter";
       type = types.either types.str types.path;

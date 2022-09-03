@@ -10,24 +10,17 @@
 , enableWebDAV ? false, sqlite, libuuid
 , enableExtendedAttrs ? false, attr
 , perl
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "lighttpd";
-  version = "1.4.64";
+  version = "1.4.66";
 
   src = fetchurl {
     url = "https://download.lighttpd.net/lighttpd/releases-${lib.versions.majorMinor version}.x/${pname}-${version}.tar.xz";
-    sha256 = "sha256-4Uidn6dJb78uBxwzi1k7IwDTjCPx5ZZ+UsnvSC4bDiY=";
+    sha256 = "sha256-R6xuYCcaoBluZUctAtAZVW3HxtCd87Zd8sGraGY0jjs=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "macos-10.12-avoid-ccrandomgeneratebytes.patch";
-      url = "https://redmine.lighttpd.net/projects/lighttpd/repository/14/revisions/6791f71b20a127b5b0091020dd065f4f9c7cafb6/diff?format=diff";
-      sha256 = "1x5ybkvxwinl7s1nv3rrc57m4mj38q0gbyjp1ijr4w5lhabw4vzs";
-    })
-  ];
 
   postPatch = ''
     patchShebangs tests
@@ -79,6 +72,10 @@ stdenv.mkDerivation rec {
     rm "$out/share/lighttpd/doc/config/conf.d/Makefile"*
     rm "$out/share/lighttpd/doc/config/vhosts.d/Makefile"*
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) lighttpd;
+  };
 
   meta = with lib; {
     description = "Lightweight high-performance web server";

@@ -16,6 +16,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-O48T1WsUIVnNQb8gmzSkFFHTOiFOKVSAEYhF9zUqZz0=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "==" ">="
+  '';
+
   propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
     colorama
@@ -34,13 +39,6 @@ python3.pkgs.buildPythonApplication rec {
   ] ++ [
     ncurses
   ];
-
-  preConfigure = ''
-    substituteInPlace setup.py \
-      --replace 'beautifulsoup4==4.9.3' 'beautifulsoup4>=4.9.3' \
-      --replace 'unidecode==1.2.0' 'unidecode>=1.2.0' \
-      --replace 'flask==2.0.1' 'flask>=2.0.1'
-  '';
 
   preBuild = ''
     export HOME=$(mktemp -d)
@@ -64,6 +62,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/SwagLyrics/SwagLyrics-For-Spotify";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
-    platforms = platforms.unix;
   };
 }

@@ -100,13 +100,12 @@ buildGoModule {
     cp -r _tpl "$out/share/tpl"
   '';
 
+  passthru.tests.ncdns = nixosTests.ncdns;
+
   meta = with lib; {
     description = "Namecoin to DNS bridge daemon";
     homepage = "https://github.com/namecoin/ncdns";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ rnhmjoj ];
   };
-
-  passthru.tests.ncdns = nixosTests.ncdns;
-
 }

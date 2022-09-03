@@ -5,20 +5,19 @@
 , pcre
 , readline
 , zlib
+, writeScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "slang";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchurl {
     url = "https://www.jedsoft.org/releases/slang/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-/J47D8T2fDwfbUPJDBalxC0Re44oRXxbRoMbi1064xo=";
+    sha256 = "sha256-+RRQVK4TGXPGEgjqgkhtXdEOPFza0jt8SgYXdDyPWhg=";
   };
 
   outputs = [ "out" "dev" "man" "doc" ];
-
-  patches = [ ./terminfo-dirs.patch ];
 
   # Fix some wrong hardcoded paths
   preConfigure = ''
@@ -51,13 +50,26 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=(AR_CR="${stdenv.cc.targetPrefix}ar cr")
   '';
 
-  # slang 2.3.2 does not support parallel building
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   postInstall = ''
     find "$out"/lib/ -name '*.so' -exec chmod +x "{}" \;
     sed '/^Libs:/s/$/ -lncurses/' -i "$dev"/lib/pkgconfig/slang.pc
   '';
+
+  passthru = {
+    updateScript = writeScript "update-slang" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of 'Version 2.3.3</td>'
+      new_version="$(curl -s https://www.jedsoft.org/slang/ |
+          pcregrep -o1 'Version ([0-9.]+)</td>')"
+      update-source-version ${pname} "$new_version"
+    '';
+  };
 
   meta = with lib; {
     description = "A small, embeddable multi-platform programming library";

@@ -49,6 +49,6 @@ buildPythonPackage rec {
       syntax. Then the template is passed data to render the final document.
       an optional sandboxed environment.
     '';
-    maintainers = with maintainers; [ pierron sjourdois ];
+    maintainers = with maintainers; [ pierron ];
   };
 }

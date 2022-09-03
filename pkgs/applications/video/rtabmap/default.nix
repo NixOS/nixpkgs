@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Disable warnings that are irrelevant to us as packagers
-  cmakeFlags = "-Wno-dev";
+  cmakeFlags = [ "-Wno-dev" ];
 
   # We run one of the executables we build while the build is
   # still running (and patchelf hasn't been invoked) which means

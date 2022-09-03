@@ -25,7 +25,7 @@ let
     meta = with lib; {
       description = "Sharing solution for files, calendars, contacts and more";
       homepage = "https://nextcloud.com";
-      maintainers = with maintainers; [ schneefux bachp globin fpletz ma27 ];
+      maintainers = with maintainers; [ schneefux bachp globin ma27 ];
       license = licenses.agpl3Plus;
       platforms = with platforms; unix;
       knownVulnerabilities = extraVulnerabilities
@@ -46,15 +46,15 @@ in {
   '';
 
   nextcloud23 = generic {
-    version = "23.0.5";
-    sha256 = "3cf51a795f8439e5d34f0a521d939cefafbae38450cce64c6673016984195f29";
+    version = "23.0.8";
+    sha256 = "ac3d042253399be25a2aa01c799dec75a1459b6ae453874414f6528cc2ee5061";
   };
 
   nextcloud24 = generic {
-    version = "24.0.1";
-    sha256 = "d32a8f6c4722a45cb67de7018163cfafcfa22a871fbac0f623c3875fa4304e5a";
+    version = "24.0.4";
+    sha256 = "d107426f8e1c193db882a04c844f9bc7e7eeb7c21e46c46197e5154d6d6ac28e";
   };
 
-  # tip: get she sha with:
+  # tip: get the sha with:
   # curl 'https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256'
 }

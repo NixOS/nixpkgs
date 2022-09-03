@@ -1,5 +1,12 @@
-{ stdenv, fetchurl }:
-{ version, artifactId, groupId, sha512, type ? "jar", suffix ? "" }:
+{ lib, stdenv, fetchurl }:
+{ version
+, artifactId
+, groupId
+, sha512
+, type ? "jar"
+, suffix ? ""
+, sourceProvenance ? (if type == "jar" then [ lib.sourceTypes.binaryBytecode ] else [])
+}:
 
 let
   m2Path = "${builtins.replaceStrings ["."] ["/"] groupId}/${artifactId}/${version}";
@@ -18,4 +25,6 @@ in stdenv.mkDerivation {
     mkdir -p $out/m2/$m2Path
     cp $src $out/m2/$m2Path/$m2File
   '';
+
+  meta.sourceProvenance = sourceProvenance;
 }

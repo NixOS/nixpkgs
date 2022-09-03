@@ -50,7 +50,7 @@ in
   getLuaCPath = drv: getPath drv luaLib.luaCPathList;
 
   inherit (callPackage ../development/interpreters/lua-5/hooks { inherit (args) lib;})
-    lua-setup-hook;
+    luarocksMoveDataFolder luarocksCheckHook lua-setup-hook;
 
   inherit lua callPackage;
   inherit buildLuaPackage buildLuarocksPackage buildLuaApplication;
@@ -60,7 +60,7 @@ in
   # wraps programs in $out/bin with valid LUA_PATH/LUA_CPATH
   wrapLua = callPackage ../development/interpreters/lua-5/wrap-lua.nix {
     inherit lua lib;
-    inherit (pkgs) makeSetupHook makeWrapper;
+    inherit (pkgs.buildPackages) makeSetupHook makeWrapper;
   };
 
   luarocks = callPackage ../development/tools/misc/luarocks/default.nix {
@@ -102,6 +102,11 @@ in
       maintainers = with maintainers; [ richardipsum ];
       platforms = platforms.unix;
     };
+  };
+
+  nfd = callPackage ../development/lua-modules/nfd {
+    inherit (lib) maintainers;
+    inherit (pkgs.gnome) zenity;
   };
 
   vicious = luaLib.toLuaModule( stdenv.mkDerivation rec {

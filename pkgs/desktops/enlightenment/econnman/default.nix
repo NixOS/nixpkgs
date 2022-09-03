@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://enlightenment.org/";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with lib.maintainers; [ matejc tstrobel ftrvxmtrx ] ++ teams.enlightenment.members;
+    maintainers = with lib.maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
   };
 }

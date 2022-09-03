@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-bamboo";
-  version = "0.7.7";
+  version = "0.7.8";
 
   src = fetchFromGitHub {
     owner = "BambooEngine";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1qdkimq4n9bxqjlnd00dggvx09cf4wqwk0kpgj01jd0i6ahggns1";
+    sha256 = "sha256-H7me34KfhDD7BNEEKkhYXo9DLeclO7N19e961BOh1Ho=";
   };
 
   nativeBuildInputs = [

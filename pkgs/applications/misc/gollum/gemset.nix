@@ -101,15 +101,15 @@
     version = "4.0.1";
   };
   gollum = {
-    dependencies = ["gemojione" "gollum-lib" "kramdown" "kramdown-parser-gfm" "mustache-sinatra" "octicons" "rss" "sass" "sinatra" "sinatra-contrib" "sprockets" "sprockets-helpers" "therubyrhino" "uglifier" "useragent" "webrick"];
+    dependencies = ["gemojione" "gollum-lib" "i18n" "kramdown" "kramdown-parser-gfm" "mustache-sinatra" "octicons" "rdoc" "rss" "sass" "sinatra" "sinatra-contrib" "sprockets" "sprockets-helpers" "therubyrhino" "uglifier" "useragent" "webrick"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1zdpl8rj6r2psigcjavwi57ljriyakh0ydfai9c3q85jzc005bax";
+      sha256 = "1xz7d3xfc536njk0fg4inmzzy350c5bjp237vghrcky8azc6xl7k";
       type = "gem";
     };
-    version = "5.2.3";
+    version = "5.3.0";
   };
   gollum-lib = {
     dependencies = ["gemojione" "github-markup" "gollum-rugged_adapter" "loofah" "nokogiri" "octicons" "rouge" "twitter-text"];
@@ -117,10 +117,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1samwcxjr1z0sy8a87xvp0z4qx0fc2irzx568s6q1yxcba9nqqv2";
+      sha256 = "1acxi4zjdmxlj7hzv9fjqilqngcwjvzhk3khnykdfvnb0l6l4xbs";
       type = "gem";
     };
-    version = "5.1.3";
+    version = "5.2";
   };
   gollum-rugged_adapter = {
     dependencies = ["mime-types" "rugged"];
@@ -142,6 +142,17 @@
       type = "gem";
     };
     version = "4.3.4";
+  };
+  i18n = {
+    dependencies = ["concurrent-ruby"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0b2qyvnk4yynlg17ymkq4g5xgr275637fhl1mjh0valw3cb1fhhg";
+      type = "gem";
+    };
+    version = "1.10.0";
   };
   json = {
     groups = ["default"];
@@ -281,6 +292,17 @@
     };
     version = "0.9.12";
   };
+  psych = {
+    dependencies = ["stringio"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0c2lz03mkn43rf2a2xiy8vqgir1dvds0a0fpx7m7my6a21ygryw2";
+      type = "gem";
+    };
+    version = "4.0.4";
+  };
   racc = {
     groups = ["default"];
     platforms = [];
@@ -296,10 +318,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0i5vs0dph9i5jn8dfc6aqd6njcafmb20rwqngrf759c9cvmyff16";
+      sha256 = "1b1qsg0yfargdhmpapp2d3mlxj82wyygs9nj74w0r03diyi8swlc";
       type = "gem";
     };
-    version = "2.2.3";
+    version = "2.2.3.1";
   };
   rack-protection = {
     dependencies = ["rack"];
@@ -333,6 +355,17 @@
     };
     version = "0.10.1";
   };
+  rdoc = {
+    dependencies = ["psych"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1bxzcvxvrmb1ngxz0bgz1va4q9c4w8m6gc8lmdhi6gnvaaf98gsy";
+      type = "gem";
+    };
+    version = "6.4.0";
+  };
   RedCloth = {
     groups = ["default"];
     platforms = [];
@@ -358,10 +391,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "080fswzii68wnbsg7pgq55ba7p289sqjlxwp4vch0h32qy1f8v8d";
+      sha256 = "17dhzc9hfzd8x18hfsvn9rsp4jg18wdfsdy3a5p99y5dhfh1321r";
       type = "gem";
     };
-    version = "3.28.0";
+    version = "3.29.0";
   };
   rss = {
     dependencies = ["rexml"];
@@ -470,6 +503,16 @@
     };
     version = "1.4.0";
   };
+  stringio = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1jns0x5lbafyqyx7pgzfs6i4ykc7p6zg7gxa6hd82w40n6z9rdvi";
+      type = "gem";
+    };
+    version = "3.0.2";
+  };
   therubyrhino = {
     dependencies = ["therubyrhino_jar"];
     groups = ["default"];
@@ -539,10 +582,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0bf120xbq23zjyf8zi8h1576d71g58srr8rndig0whn10w72vrxz";
+      sha256 = "1yj2nz2l101vr1x9w2k83a0fag1xgnmjwp8w8rw4ik2rwcz65fch";
       type = "gem";
     };
-    version = "0.0.8.1";
+    version = "0.0.8.2";
   };
   useragent = {
     groups = ["default"];

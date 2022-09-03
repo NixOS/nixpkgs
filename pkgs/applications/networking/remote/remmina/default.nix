@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitLab, cmake, ninja, pkg-config, wrapGAppsHook
-, glib, gtk3, gettext, libxkbfile, libX11
+, glib, gtk3, gettext, libxkbfile, libX11, python3
 , freerdp, libssh, libgcrypt, gnutls, vte
 , pcre2, libdbusmenu-gtk3, libappindicator-gtk3
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
@@ -15,13 +15,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "remmina";
-  version = "1.4.25";
+  version = "1.4.27";
 
   src = fetchFromGitLab {
     owner  = "Remmina";
     repo   = "Remmina";
     rev    = "v${version}";
-    sha256 = "sha256-1val/KCClEtw1prVWuXJe8DmmQ7e7oqwAfAnT9G9iHI=";
+    sha256 = "sha256-WIppHK4ucvKqgXB8VPy9ldbw22ZuDaEn1gNaLpyb4jA=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config wrapGAppsHook ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     libvncserver libpthreadstubs libXdmcp libxkbcommon
     libsoup spice-protocol spice-gtk libepoxy at-spi2-core
     openssl gnome.adwaita-icon-theme json-glib libsodium webkitgtk
-    harfbuzz
+    harfbuzz python3
   ] ++ optionals withLibsecret [ libsecret ]
     ++ optionals withVte [ vte ];
 

@@ -12,6 +12,7 @@ let
           inherit version;
           sha256 = "0qiax309my534drk81lihq9ghngr96qnm40kbmgc9ay4fncqq6kh";
         };
+        doCheck = false;
       });
     };
   };

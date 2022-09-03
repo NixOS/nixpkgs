@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "2.6.1";
+  version = "2.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/limits/_version.py"
     '';
-    hash = "sha256-ja+YbRHCcZ5tFnoofdR44jbkkdDroVUdKeDOt6yE0LI=";
+    hash = "sha256-TBZElCogPtoR2qX1YjBgpYh99LhrvLHFtr2ogemo9/c=";
   };
 
   propagatedBuildInputs = [
@@ -56,9 +56,6 @@ buildPythonPackage rec {
     substituteInPlace pytest.ini \
       --replace "--cov=limits" "" \
       --replace "-K" ""
-    # redis-py-cluster doesn't support redis > 4
-    substituteInPlace tests/conftest.py \
-      --replace "import rediscluster" ""
 
     # Recreate _version.py, deleted at fetch time due to non-reproducibility.
     echo 'def get_versions(): return {"version": "${version}"}' > limits/_version.py

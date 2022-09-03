@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "cirq-core";
-  version = "0.14.1";
+  version = "0.15.0";
 
   disabled = pythonOlder "3.6";
 
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "quantumlib";
     repo = "cirq";
     rev = "v${version}";
-    sha256 = "sha256-cIDwV3IBXrTJ4jC1/HYmduY3tLe/f6wj8CWZ4cnThG8=";
+    sha256 = "sha256-E36zXpv+9WBNYvv/shItS7Q34gYqUyADlqWd+m4Jpps=";
   };
 
   sourceRoot = "source/${pname}";

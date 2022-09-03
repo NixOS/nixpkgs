@@ -1,5 +1,8 @@
 { pkgs ? (import ../.. {}), nixpkgs ? { }}:
 let
+  inherit (pkgs) lib;
+  inherit (lib) hasPrefix removePrefix;
+
   locationsXml = import ./lib-function-locations.nix { inherit pkgs nixpkgs; };
   functionDocs = import ./lib-function-docs.nix { inherit locationsXml pkgs; };
   version = pkgs.lib.version;
@@ -29,6 +32,18 @@ let
   optionsDoc = pkgs.nixosOptionsDoc {
     inherit (pkgs.lib.evalModules { modules = [ ../../pkgs/top-level/config.nix ]; }) options;
     documentType = "none";
+    transformOptions = opt:
+      opt // {
+        declarations =
+          map
+            (decl:
+              if hasPrefix (toString ../..) (toString decl)
+              then
+                let subpath = removePrefix "/" (removePrefix (toString ../..) (toString decl));
+                in { url = "https://github.com/NixOS/nixpkgs/blob/master/${subpath}"; name = subpath; }
+              else decl)
+            opt.declarations;
+        };
   };
 
 in pkgs.runCommand "doc-support" {}

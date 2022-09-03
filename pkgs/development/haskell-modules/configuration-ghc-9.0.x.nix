@@ -39,7 +39,8 @@ self: super: {
   rts = null;
   stm = null;
   template-haskell = null;
-  terminfo = null;
+  # GHC only builds terminfo if it is a native compiler
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_5;
   text = null;
   time = null;
   transformers = null;
@@ -48,9 +49,16 @@ self: super: {
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
   xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
 
-  # cabal-install needs more recent versions of Cabal and base16-bytestring.
-  cabal-install = (doJailbreak super.cabal-install).overrideScope (self: super: {
-    Cabal = self.Cabal_3_6_3_0;
+  # cabal-install needs the latest/matching versions of Cabal-syntax and Cabal
+  cabal-install = super.cabal-install.overrideScope (self: super: {
+    Cabal = self.Cabal_3_8_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+    process = self.process_1_6_15_0;
+  });
+  cabal-install-solver = super.cabal-install-solver.overrideScope (self: super: {
+    Cabal = self.Cabal_3_8_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+    process = self.process_1_6_15_0;
   });
 
   # Jailbreaks & Version Updates
@@ -130,4 +138,7 @@ self: super: {
   inline-c-cpp =
     (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
     super.inline-c-cpp;
+
+  # 2022-05-31: weeder 2.3.0 requires GHC 9.2
+  weeder = doDistribute self.weeder_2_3_1;
 }

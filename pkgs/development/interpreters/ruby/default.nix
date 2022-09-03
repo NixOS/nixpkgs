@@ -19,7 +19,6 @@ let
 
   generic = { version, sha256 }: let
     ver = version;
-    tag = ver.gitTag;
     atLeast30 = lib.versionAtLeast ver.majMin "3.0";
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
@@ -79,13 +78,13 @@ let
           ++ (op opensslSupport openssl)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
-          ++ (op jemallocSupport jemalloc)
           # Looks like ruby fails to build on darwin without readline even if curses
           # support is not enabled, so add readline to the build inputs if curses
           # support is disabled (if it's enabled, we already have it) and we're
           # running on darwin
           ++ op (!cursesSupport && stdenv.isDarwin) readline
           ++ ops stdenv.isDarwin [ libiconv libobjc libunwind Foundation ];
+        propagatedBuildInputs = op jemallocSupport jemalloc;
 
         enableParallelBuilding = true;
 
@@ -137,6 +136,10 @@ let
           (lib.enableFeature docSupport "install-doc")
           (lib.withFeature jemallocSupport "jemalloc")
           (lib.withFeatureAs docSupport "ridir" "${placeholder "devdoc"}/share/ri")
+          # ruby enables -O3 for gcc, however our compiler hardening wrapper
+          # overrides that by enabling `-O2` which is the minimum optimization
+          # needed for `_FORTIFY_SOURCE`.
+        ] ++ lib.optional stdenv.cc.isGNU "CFLAGS=-O3" ++ [
         ] ++ ops stdenv.isDarwin [
           # on darwin, we have /usr/include/tk.h -- so the configure script detects
           # that tk is installed
@@ -221,8 +224,8 @@ let
           ++ op useBaseRuby baseRuby;
 
         meta = with lib; {
-          description = "The Ruby language";
-          homepage    = "http://www.ruby-lang.org/en/";
+          description = "An object-oriented language for quick and easy programming";
+          homepage    = "https://www.ruby-lang.org/";
           license     = licenses.ruby;
           maintainers = with maintainers; [ vrthra manveru marsam ];
           platforms   = platforms.all;
@@ -244,11 +247,6 @@ let
             ruby = self;
           }) withPackages gems;
 
-          # deprecated 2016-09-21
-          majorVersion = ver.major;
-          minorVersion = ver.minor;
-          teenyVersion = ver.tiny;
-          patchLevel = ver.patchLevel;
         } // lib.optionalAttrs useBaseRuby {
           inherit baseRuby;
         };
@@ -256,6 +254,9 @@ let
     ) args; in self;
 
 in {
+  mkRubyVersion = rubyVersion;
+  mkRuby = generic;
+
   ruby_2_7 = generic {
     version = rubyVersion "2" "7" "6" "";
     sha256 = "042xrdk7hsv4072bayz3f8ffqh61i8zlhvck10nfshllq063n877";

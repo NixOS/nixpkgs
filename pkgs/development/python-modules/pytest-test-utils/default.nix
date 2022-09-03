@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-test-utils";
-  version = "0.0.6";
+  version = "0.0.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
-    rev = version;
-    hash = "sha256-0lShdMNP2suN+JO0uKWwjsGQxFCRnCZEQp2h9hQNrrA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-5gB+hnJR2+NQd/n7RGrX1bzfKt8Np7IbWw61SZgNVJY=";
   };
 
   buildInputs = [

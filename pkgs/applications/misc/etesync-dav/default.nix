@@ -46,12 +46,15 @@ in python.pkgs.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python.pkgs; [
+    appdirs
     etebase
     etesync
     flask
     flask-wtf
+    msgpack
     (python.pkgs.toPythonModule (radicale3.override { python3 = python; }))
-  ];
+    requests
+  ] ++ requests.optional-dependencies.socks;
 
   doCheck = false;
 

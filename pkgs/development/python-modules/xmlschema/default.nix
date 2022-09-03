@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "xmlschema";
-  version = "1.11.1";
+  version = "1.11.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "sissaschool";
     repo = "xmlschema";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ccbVYvQBM4U8wgNXlgi5qYxUZHpajWs/eVXbCFdG5bU=";
+    hash = "sha256-z6VgLRDp5PHaYstdV30gt6xGVd4uifz4LkYQ2z3ayk4=";
   };
 
   propagatedBuildInputs = [

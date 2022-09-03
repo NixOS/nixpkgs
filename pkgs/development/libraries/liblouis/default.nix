@@ -1,7 +1,6 @@
 { fetchFromGitHub
 , lib
 , stdenv
-, fetchpatch
 , autoreconfHook
 , pkg-config
 , gettext
@@ -14,24 +13,16 @@
 
 stdenv.mkDerivation rec {
   pname = "liblouis";
-  version = "3.21.0";
+  version = "3.22.0";
+
+  outputs = [ "out" "dev" "man" "info" "doc" ];
 
   src = fetchFromGitHub {
     owner = "liblouis";
     repo = "liblouis";
     rev = "v${version}";
-    sha256 = "sha256-Hfn0dfXihtUfO3R+qJaetrPwupcIwblvi1DQdHCF1s8=";
+    sha256 = "sha256-EI/uaHXe0NlqdEw764q0SjerThYEVLRogUlmrsZwXnY=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "parenthesize-memcpy-calls-clang.patch";
-      url = "https://github.com/liblouis/liblouis/commit/528f38938e9f539a251d9de92ad1c1b90401c4d0.patch";
-      sha256 = "0hlhqsvd5wflg70bd7bmssnchk8znzbr93in0zpspzbyap6xz112";
-    })
-  ];
-
-  outputs = [ "out" "dev" "man" "info" "doc" ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -71,7 +62,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open-source braille translator and back-translator";
     homepage = "http://liblouis.org/";
-    license = licenses.lgpl21;
+    license = with licenses; [
+      lgpl21Plus # library
+      gpl3Plus # tools
+    ];
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;
   };

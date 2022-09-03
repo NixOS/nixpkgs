@@ -87,6 +87,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Brother BrGenML1 LPR driver";
     homepage = "http://www.brother.com";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = lib.platforms.linux;
     license = lib.licenses.unfreeRedistributable;
     maintainers = with lib.maintainers; [ jraygauthier ];

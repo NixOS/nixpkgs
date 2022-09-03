@@ -13,15 +13,11 @@
 
 
 # for tests
-, tox
 , go
 , pulumictl
-, bash
 , pylint
 , pytest
 , pytest-timeout
-, coverage
-, black
 , wheel
 , pytest-asyncio
 
@@ -55,30 +51,25 @@ buildPythonPackage rec {
     pulumi-bin
     pulumictl
     mypy
-    bash
     go
-    tox
     pytest
     pytest-timeout
-    coverage
     pytest-asyncio
     wheel
-    black
   ];
 
-  pythonImportsCheck = ["pulumi"];
-
+  sourceRoot="source/sdk/python/lib";
+  # we apply the modifications done in the pulumi/sdk/python/Makefile
+  # but without the venv code
   postPatch = ''
-    cp README.md sdk/python/lib
-    patchShebangs .
-    cd sdk/python/lib
-
-    substituteInPlace setup.py \
-      --replace "{VERSION}" "${version}"
+    cp ../../README.md .
+    sed -i "s/\''${VERSION}/${version}/g" setup.py
   '';
 
   # disabled because tests try to fetch go packages from the net
   doCheck = false;
+
+  pythonImportsCheck = ["pulumi"];
 
   meta = with lib; {
     description = "Modern Infrastructure as Code. Any cloud, any language";

@@ -24,20 +24,21 @@
 , libsciter
 , llvmPackages
 , wrapGAppsHook
+, writeText
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustdesk";
-  version = "1.1.8";
+  version = "1.1.9";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
-    rev = "0325500ebf331b66220cec6e9078afb83b0e98a7";
-    sha256 = "sha256-xglyyoiAjJx3y8+A2OYHZffjqjDkcTjIluPA/J42VVg=";
+    rev = version;
+    sha256 = "sha256-IlrfqwNyaSHE9Ct0mn7MUxEg7p1Ku34eOMYelEAYFW8=";
   };
 
-  cargoSha256 = "sha256-4MQKa54f3X7IHGd29H6RY7v2toeHvTHInIpgXjdotjw=";
+  cargoSha256 = "sha256-1OMWEk+DerltF7kwdo4d04rbgIFLHBRq3vZaL7jtrdE=";
 
   LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";
 
@@ -51,10 +52,29 @@ rustPlatform.buildRustPackage rec {
   # properly.
   postUnpack = let
     vcpkg_target = "x64-linux";
+
+    updates_vcpkg_file = writeText "update_vcpkg_rustdesk"
+    ''
+    Package : libyuv
+    Architecture : ${vcpkg_target}
+    Version : 1.0
+    Status : is installed
+
+    Package : libvpx
+    Architecture : ${vcpkg_target}
+    Version : 1.0
+    Status : is installed
+    '';
   in ''
     export VCPKG_ROOT="$TMP/vcpkg";
 
+    mkdir -p $VCPKG_ROOT/.vcpkg-root
     mkdir -p $VCPKG_ROOT/installed/${vcpkg_target}/lib
+    mkdir -p $VCPKG_ROOT/installed/vcpkg/updates
+    ln -s ${updates_vcpkg_file} $VCPKG_ROOT/installed/vcpkg/status
+    mkdir -p $VCPKG_ROOT/installed/vcpkg/info
+    touch $VCPKG_ROOT/installed/vcpkg/info/libyuv_1.0_${vcpkg_target}.list
+    touch $VCPKG_ROOT/installed/vcpkg/info/libvpx_1.0_${vcpkg_target}.list
 
     ln -s ${libvpx.out}/lib/* $VCPKG_ROOT/installed/${vcpkg_target}/lib/
     ln -s ${libyuv.out}/lib/* $VCPKG_ROOT/installed/${vcpkg_target}/lib/

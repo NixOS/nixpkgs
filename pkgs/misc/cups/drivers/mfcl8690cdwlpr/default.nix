@@ -38,8 +38,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Brother MFC-L8690CDW LPR printer driver";
     homepage = "http://www.brother.com/";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.fuzzy-id ];
+    maintainers = [ ];
     platforms = [ "i686-linux" ];
   };
 }

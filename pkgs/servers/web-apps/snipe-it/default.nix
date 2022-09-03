@@ -1,14 +1,10 @@
-{ pkgs, stdenv, lib, fetchFromGitHub, dataDir ? "/var/lib/snipe-it" }:
+{ pkgs, stdenv, lib, fetchFromGitHub, dataDir ? "/var/lib/snipe-it", mariadb }:
 
 let
   package = (import ./composition.nix {
     inherit pkgs;
     inherit (stdenv.hostPlatform) system;
     noDev = true; # Disable development dependencies
-    # Requires PHP >= 7.4 and PHP < 8.0 as of v5.4.3
-    # https://snipe-it.readme.io/docs/requirements
-    php = pkgs.php74;
-    phpPackages = pkgs.php74Packages;
   }).overrideAttrs (attrs : {
     installPhase = attrs.installPhase + ''
       rm -R $out/storage $out/public/uploads $out/bootstrap/cache
@@ -17,18 +13,19 @@ let
       ln -s ${dataDir}/public/uploads $out/public/uploads
       ln -s ${dataDir}/bootstrap/cache $out/bootstrap/cache
       chmod +x $out/artisan
+      substituteInPlace config/database.php --replace "env('DB_DUMP_PATH', '/usr/local/bin')" "env('DB_DUMP_PATH', '${mariadb}/bin')"
     '';
   });
 
 in package.override rec {
   pname = "snipe-it";
-  version = "5.4.3";
+  version = "6.0.10";
 
   src = fetchFromGitHub {
     owner = "snipe";
     repo = pname;
     rev = "v${version}";
-    sha256 = "053cm5vb0806sj61g0zf0xqqzlchgkdj8zwkry07mhjdbp1k8k7n";
+    sha256 = "sha256-RLUcN2gk3uU2aOqs2poShSRfwQJ6CipxBRqJeO2RNzw=";
   };
 
   meta = with lib; {

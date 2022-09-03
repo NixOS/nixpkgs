@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "nuclei";
-  version = "2.7.1";
+  version = "2.7.7";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ra8BxM+zpe5UKlJ28wc8yE5ta4ro4o2OHfmu9fBqFTA=";
+    sha256 = "sha256-61oq7h/e9aFCEwvrKRx1zyITw/X2obRsnyycO94tW0A=";
   };
 
-  vendorSha256 = "sha256-4E9nHBaojkOwnSPxRn2JGFcQTF4WowTOtzE5zRjkqhk=";
+  vendorSha256 = "sha256-HZZutN6hG/wNBz1hy0S3kWd/LmaeAvn1NlB917xmCDo=";
 
   modRoot = "./v2";
   subPackages = [

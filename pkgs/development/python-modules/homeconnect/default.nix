@@ -4,23 +4,25 @@
 , requests
 , requests-oauthlib
 , pythonOlder
+, six
 }:
 
 buildPythonPackage rec {
   pname = "homeconnect";
-  version = "0.7.0";
+  version = "0.7.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/h0dEVmP0R9tVt56mvu72Ksrvnuox1FA7BgrZMOhV6Q=";
+    hash = "sha256-wCx8Jh3NBTnYI+essH9toacjUaT4fS61SaAAZDCYZ4g=";
   };
 
   propagatedBuildInputs = [
     requests
     requests-oauthlib
+    six
   ];
 
   # Project has no tests

@@ -22,6 +22,11 @@ qtUnseenHostPath() {
 qtHostPathHook() {
     qtUnseenHostPath "$1" || return 0
 
+    if ! [ -v qtPluginPrefix ]
+    then
+        echo "wrapQtAppsHook qtHostPathHook: qtPluginPrefix is unset. hint: add qt6.qtbase to buildInputs"
+    fi
+
     local pluginDir="$1/${qtPluginPrefix:?}"
     if [ -d "$pluginDir" ]
     then
@@ -34,7 +39,7 @@ qtHostPathHook() {
         qtWrapperArgs+=(--prefix QML2_IMPORT_PATH : "$qmlDir")
     fi
 }
-addEnvHooks "$hostOffset" qtHostPathHook
+addEnvHooks "$targetOffset" qtHostPathHook
 
 makeQtWrapper() {
     local original="$1"
@@ -85,8 +90,6 @@ wrapQtAppsHook() {
 
         find "$targetDir" ! -type d -executable -print0 | while IFS= read -r -d '' file
         do
-            isELF "$file" || isMachO "$file" || continue
-
             if [ -f "$file" ]
             then
                 echo "wrapping $file"

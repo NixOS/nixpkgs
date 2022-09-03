@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "atenpdu";
-  version = "0.3.2";
+  version = "0.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hlbrjx6WKVJYaxrMT4fiRXlxKRcQU4AIQUVgA8mbWa8=";
+    sha256 = "sha256-vvq8InmJUgvm/PpvZutpsBR3Fj1gR+xrkgfEGlw04Ek=";
   };
 
   propagatedBuildInputs = [ pysnmp ];

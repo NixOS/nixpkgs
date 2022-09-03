@@ -45,13 +45,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.44.2";
+  version = "3.44.4";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Ltcq/k1rsXD4co+uoJB/7hAhLf3nqfq4L7zIPQ8i8Cg=";
+    sha256 = "wMZliDjVi6RgQqS55Qo7sRKWkeTNuEteugvzMLLMsus=";
   };
 
   patches = [
@@ -119,7 +119,6 @@ stdenv.mkDerivation rec {
     "-DENABLE_UOA=OFF"
     "-DENABLE_VALA_BINDINGS=ON"
     "-DENABLE_INTROSPECTION=ON"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
     "-DWITH_PHONENUMBER=ON"
     "-DWITH_GWEATHER4=ON"

@@ -112,6 +112,7 @@ let result = stdenv.mkDerivation rec {
 
   meta = with lib; {
     license = licenses.gpl2Classpath;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode binaryBytecode ];
     description = "AdoptOpenJDK, prebuilt OpenJDK binary";
     platforms = lib.mapAttrsToList (arch: _: arch + "-linux") sourcePerArch; # some inherit jre.meta.platforms
     maintainers = with lib.maintainers; [ taku0 ];

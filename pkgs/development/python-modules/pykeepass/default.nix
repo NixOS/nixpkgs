@@ -6,13 +6,15 @@
 
 buildPythonPackage rec {
   pname   = "pykeepass";
-  version = "4.0.2";
+  version = "4.0.3";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "libkeepass";
     repo = "pykeepass";
     rev = "v${version}";
-    hash = "sha256-q6cBowEki5iJh04Hp1jwbWdteEu3HXtD3tG/TsYDRNI=";
+    hash = "sha256-HyveBBsd1OFWoY3PgqqaKRLBhsxgFv8PRAxEF6r+bf4=";
   };
 
   postPatch = ''

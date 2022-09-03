@@ -136,7 +136,7 @@ in
       type = types.bool;
       default = false;
       description =
-        ''
+        lib.mdDoc ''
           Whether to enable Network Address Translation (NAT).
         '';
     };
@@ -145,7 +145,7 @@ in
       type = types.bool;
       default = false;
       description =
-        ''
+        lib.mdDoc ''
           Whether to enable IPv6 NAT.
         '';
     };
@@ -155,7 +155,7 @@ in
       default = [];
       example = [ "eth0" ];
       description =
-        ''
+        lib.mdDoc ''
           The interfaces for which to perform NAT. Packets coming from
           these interface and destined for the external interface will
           be rewritten.
@@ -167,7 +167,7 @@ in
       default = [];
       example = [ "192.168.1.0/24" ];
       description =
-        ''
+        lib.mdDoc ''
           The IP address ranges for which to perform NAT.  Packets
           coming from these addresses (on any interface) and destined
           for the external interface will be rewritten.
@@ -179,7 +179,7 @@ in
       default = [];
       example = [ "fc00::/64" ];
       description =
-        ''
+        lib.mdDoc ''
           The IPv6 address ranges for which to perform NAT.  Packets
           coming from these addresses (on any interface) and destined
           for the external interface will be rewritten.
@@ -191,7 +191,7 @@ in
       default = null;
       example = "eth1";
       description =
-        ''
+        lib.mdDoc ''
           The name of the external network interface.
         '';
     };
@@ -201,7 +201,7 @@ in
       default = null;
       example = "203.0.113.123";
       description =
-        ''
+        lib.mdDoc ''
           The public IP address to which packets from the local
           network are to be rewritten.  If this is left empty, the
           IP address associated with the external interface will be
@@ -214,7 +214,7 @@ in
       default = null;
       example = "2001:dc0:2001:11::175";
       description =
-        ''
+        lib.mdDoc ''
           The public IPv6 address to which packets from the local
           network are to be rewritten.  If this is left empty, the
           IP address associated with the external interface will be
@@ -228,27 +228,27 @@ in
           sourcePort = mkOption {
             type = types.either types.int (types.strMatching "[[:digit:]]+:[[:digit:]]+");
             example = 8080;
-            description = "Source port of the external interface; to specify a port range, use a string with a colon (e.g. \"60000:61000\")";
+            description = lib.mdDoc "Source port of the external interface; to specify a port range, use a string with a colon (e.g. \"60000:61000\")";
           };
 
           destination = mkOption {
             type = types.str;
             example = "10.0.0.1:80";
-            description = "Forward connection to destination ip:port (or [ipv6]:port); to specify a port range, use ip:start-end";
+            description = lib.mdDoc "Forward connection to destination ip:port (or [ipv6]:port); to specify a port range, use ip:start-end";
           };
 
           proto = mkOption {
             type = types.str;
             default = "tcp";
             example = "udp";
-            description = "Protocol of forwarded connection";
+            description = lib.mdDoc "Protocol of forwarded connection";
           };
 
           loopbackIPs = mkOption {
             type = types.listOf types.str;
             default = [];
             example = literalExpression ''[ "55.1.2.3" ]'';
-            description = "Public IPs for NAT reflection; for connections to `loopbackip:sourcePort' from the host itself and from other hosts behind NAT";
+            description = lib.mdDoc "Public IPs for NAT reflection; for connections to `loopbackip:sourcePort' from the host itself and from other hosts behind NAT";
           };
         };
       });
@@ -258,7 +258,7 @@ in
         { sourcePort = 8080; destination = "[fc00::2]:80"; proto = "tcp"; }
       ];
       description =
-        ''
+        lib.mdDoc ''
           List of forwarded ports from the external interface to
           internal destinations by using DNAT. Destination can be
           IPv6 if IPv6 NAT is enabled.
@@ -270,7 +270,7 @@ in
       default = null;
       example = "10.0.0.1";
       description =
-        ''
+        lib.mdDoc ''
           The local IP address to which all traffic that does not match any
           forwarding rule is forwarded.
         '';
@@ -281,7 +281,7 @@ in
       default = "";
       example = "iptables -A INPUT -p icmp -j ACCEPT";
       description =
-        ''
+        lib.mdDoc ''
           Additional shell commands executed as part of the nat
           initialisation script.
         '';
@@ -292,7 +292,7 @@ in
       default = "";
       example = "iptables -D INPUT -p icmp -j ACCEPT || true";
       description =
-        ''
+        lib.mdDoc ''
           Additional shell commands executed as part of the nat
           teardown script.
         '';

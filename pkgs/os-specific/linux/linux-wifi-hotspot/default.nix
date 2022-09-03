@@ -14,7 +14,15 @@
 , iproute2
 , flock
 , iptables
-, gawk }:
+, gawk
+, coreutils
+, gnugrep
+, gnused
+, kmod
+, networkmanager
+, procps
+}:
+
 
 stdenv.mkDerivation rec {
   pname = "linux-wifi-hotspot";
@@ -56,7 +64,21 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/create_ap \
       --prefix PATH : ${lib.makeBinPath [
-          hostapd getopt iw which dnsmasq iproute2 flock iptables gawk
+          coreutils
+          dnsmasq
+          flock
+          gawk
+          getopt
+          gnugrep
+          gnused
+          hostapd
+          iproute2
+          iptables
+          iw
+          kmod
+          networkmanager
+          procps
+          which
         ]}
 
     wrapProgram $out/bin/wihotspot-gui \

@@ -118,7 +118,6 @@ stdenv.mkDerivation rec {
   checkInputs = [
     bc
     perl
-    perlPackages.DigestMD5
     (python3.withPackages (ps: with ps; [ numpy scipy ]))
   ] ++ lib.optionals withMPI [ mpi openssh ];
 

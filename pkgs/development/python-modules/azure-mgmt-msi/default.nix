@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-msi";
-  version = "6.0.1";
+  version = "6.1.0";
 
   disabled = pythonOlder "3.6";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-PPkQmUoBkJ8Su7h9G2/t8dVy/PT3uCYZjlf70fnY2vU=";
+    sha256 = "sha256-lS8da3Al1z1pMLDBf6ZtWc1UFUVgkN1qpKTxt4VXdlQ=";
   };
 
   propagatedBuildInputs = [

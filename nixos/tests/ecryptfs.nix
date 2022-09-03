@@ -11,16 +11,16 @@ import ./make-test-python.nix ({ ... }:
 
   testScript = ''
     def login_as_alice():
-        machine.wait_until_tty_matches(1, "login: ")
+        machine.wait_until_tty_matches("1", "login: ")
         machine.send_chars("alice\n")
-        machine.wait_until_tty_matches(1, "Password: ")
+        machine.wait_until_tty_matches("1", "Password: ")
         machine.send_chars("foobar\n")
-        machine.wait_until_tty_matches(1, "alice\@machine")
+        machine.wait_until_tty_matches("1", "alice\@machine")
 
 
     def logout():
         machine.send_chars("logout\n")
-        machine.wait_until_tty_matches(1, "login: ")
+        machine.wait_until_tty_matches("1", "login: ")
 
 
     machine.wait_for_unit("default.target")
@@ -36,7 +36,7 @@ import ./make-test-python.nix ({ ... }:
     with subtest("Log alice in (ecryptfs passwhrase is wrapped during first login)"):
         login_as_alice()
         machine.send_chars("logout\n")
-        machine.wait_until_tty_matches(1, "login: ")
+        machine.wait_until_tty_matches("1", "login: ")
 
     # Why do I need to do this??
     machine.succeed("su alice -c ecryptfs-umount-private || true")

@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "alejandra";
-  version = "1.4.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "kamadorueda";
     repo = "alejandra";
     rev = version;
-    sha256 = "sha256-0AolxQtKj3Oek0WSbODDpPVO5Ih8PXHOA3qXEKPB4dQ=";
+    sha256 = "sha256-xFumnivtVwu5fFBOrTxrv6fv3geHKF04RGP23EsDVaI=";
   };
 
-  cargoSha256 = "sha256-USI98hozlTaTj07tMbCQEWDgRkHsd4PFW1HUpKsNZJA=";
+  cargoSha256 = "sha256-tF8E9mnvkTXoViVss9cNjpU4UkEsARp4RtlxKWq55hc=";
 
   passthru.tests = {
     version = testers.testVersion { package = alejandra; };
@@ -27,6 +27,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kamadorueda/alejandra";
     changelog = "https://github.com/kamadorueda/alejandra/blob/${version}/CHANGELOG.md";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ _0x4A6F kamadorueda ];
+    maintainers = with maintainers; [ _0x4A6F kamadorueda sciencentistguy ];
   };
 }

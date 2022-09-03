@@ -10,4 +10,10 @@ import ./generic.nix {
       sha256 = "sha256:08mpy7lsiwv8m5qrqc4xzyiv2hri5713gz2qs1nfz02hz1bd79mc"; }
   ];
   sha256 = "03d7ida94s1gpr3gadf4jyhmh5rrszd5s4m4z59daaib25rvfyv7";
+
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: libcamlrun.a(startup.o):(.bss+0x800): multiple definition of
+  #     `caml_code_fragments_table'; libcamlrun.a(backtrace.o):(.bss+0x20): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 }

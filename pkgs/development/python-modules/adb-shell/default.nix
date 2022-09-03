@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "adb-shell";
-  version = "0.4.2";
+  version = "0.4.3";
   format = "setuptools";
 
   disabled = !isPy3k;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "JeffLIrion";
     repo = "adb_shell";
     rev = "v${version}";
-    hash = "sha256-8tclSjmLlTAIeq6t7YPGtJwvSwtlzQ7sRAQatcQRzeY=";
+    hash = "sha256-+RU3nyJpHq0r/9erEbjUILpwIPWq14HdOX7LkSxySs4=";
   };
 
   propagatedBuildInputs = [
@@ -49,13 +49,6 @@ buildPythonPackage rec {
   ]
   ++ passthru.optional-dependencies.async
   ++ passthru.optional-dependencies.usb;
-
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [
-    # Tests are failing with Python 3.10
-    # https://github.com/JeffLIrion/adb_shell/issues/198
-    "TestAdbDeviceAsync"
-    "TestTcpTransportAsync"
-  ];
 
   pythonImportsCheck = [
     "adb_shell"

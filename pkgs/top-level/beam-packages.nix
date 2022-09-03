@@ -92,15 +92,6 @@ with beam; {
       odbcSupport = true;
     };
 
-    # Basho fork, using custom builder.
-    erlang_basho_R16B02 =
-      lib.callErlang ../development/interpreters/erlang/R16B02-basho.nix {
-        autoconf = buildPackages.autoconf269;
-        inherit wxSupport;
-      };
-    erlang_basho_R16B02_odbc =
-      erlang_basho_R16B02.override { odbcSupport = true; };
-
     # Other Beam languages. These are built with `beam.interpreters.erlang`. To
     # access for example elixir built with different version of Erlang, use
     # `beam.packages.erlangR24.elixir`.

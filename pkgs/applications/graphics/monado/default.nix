@@ -35,6 +35,8 @@
 , vulkan-loader
 , wayland
 , wayland-protocols
+, wayland-scanner
+, libdrm
 , zlib
 # Set as 'false' to build monado without service support, i.e. allow VR
 # applications linking against libopenxr_monado.so to use OpenXR standalone
@@ -65,6 +67,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DXRT_FEATURE_SERVICE=${if serviceSupport then "ON" else "OFF"}"
+    "-DXRT_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH=ON"
   ];
 
   buildInputs = [
@@ -95,7 +98,9 @@ stdenv.mkDerivation rec {
     vulkan-headers
     vulkan-loader
     wayland
+    wayland-scanner
     wayland-protocols
+    libdrm
     zlib
   ];
 

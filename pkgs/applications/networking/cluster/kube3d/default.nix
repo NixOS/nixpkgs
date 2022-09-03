@@ -15,13 +15,13 @@ let
 in
 buildGoModule rec {
   pname = "kube3d";
-  version = "5.4.1";
+  version = "5.4.4";
 
   src = fetchFromGitHub {
     owner = "k3d-io";
     repo = "k3d";
     rev = "v${version}";
-    sha256 = "sha256-DVQrD4JMei9yRFzuiVb6AcydEupNSlpgYLfGWWRiaao=";
+    sha256 = "sha256-3J25Aj/otKDCWJ+YqAsoJogU2vckZMy7fsS8XR2EMgE=";
   };
   vendorSha256 = null;
 

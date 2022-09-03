@@ -162,8 +162,6 @@
 
   # Packages made the classical callPackage way
 
-  apheleia = callPackage ./apheleia { };
-
   ebuild-mode = callPackage ./ebuild-mode { };
 
   evil-markdown = callPackage ./evil-markdown { };

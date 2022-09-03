@@ -2,7 +2,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, black
 , jinja2
 , poetry-core
 , round
@@ -38,13 +37,14 @@ buildPythonPackage rec {
   patches = [
     # The build-system section is missing
     ./build_poetry.patch
+    ./remove-black-requirement.patch
   ];
 
   checkInputs = [ pytestCheckHook ];
 
   # Despite living in 'tool.poetry.dependencies',
   # these are only used at build time to process the image resource files
-  nativeBuildInputs = [ black inkscape imagemagick jinja2 poetry-core round ];
+  nativeBuildInputs = [ inkscape imagemagick jinja2 poetry-core round ];
 
   propagatedBuildInputs = [ graphviz ];
 

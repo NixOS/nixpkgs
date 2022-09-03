@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "jorio";
     repo = pname;
     rev = version;
-    sha256 = "sha256:1yd4clks7kr2hn69c4q1ykc92sw6axbspambm03viapr834bjz3q";
+    sha256 = "sha256-eHy5yED5qrgHqKuqq1dXhmuR2PQBE5aMhSLPoydlpPk=";
     fetchSubmodules = true;
   };
 

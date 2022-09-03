@@ -26,10 +26,10 @@ in
     services.pantheon = {
 
       contractor = {
-         enable = mkEnableOption "contractor, a desktop-wide extension service used by Pantheon";
+         enable = mkEnableOption (lib.mdDoc "contractor, a desktop-wide extension service used by Pantheon");
       };
 
-      apps.enable = mkEnableOption "Pantheon default applications";
+      apps.enable = mkEnableOption (lib.mdDoc "Pantheon default applications");
 
     };
 
@@ -37,50 +37,46 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable the pantheon desktop manager";
+        description = lib.mdDoc "Enable the pantheon desktop manager";
       };
 
       sessionPath = mkOption {
         default = [];
         type = types.listOf types.package;
         example = literalExpression "[ pkgs.gnome.gpaste ]";
-        description = ''
+        description = lib.mdDoc ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
 
           Note that this should be a last resort; patching the package is preferred (see GPaste).
         '';
-        apply = list: list ++
-        [
-          pkgs.pantheon.pantheon-agent-geoclue2
-        ];
       };
 
       extraWingpanelIndicators = mkOption {
         default = null;
         type = with types; nullOr (listOf package);
-        description = "Indicators to add to Wingpanel.";
+        description = lib.mdDoc "Indicators to add to Wingpanel.";
       };
 
       extraSwitchboardPlugs = mkOption {
         default = null;
         type = with types; nullOr (listOf package);
-        description = "Plugs to add to Switchboard.";
+        description = lib.mdDoc "Plugs to add to Switchboard.";
       };
 
       extraGSettingsOverrides = mkOption {
         default = "";
         type = types.lines;
-        description = "Additional gsettings overrides.";
+        description = lib.mdDoc "Additional gsettings overrides.";
       };
 
       extraGSettingsOverridePackages = mkOption {
         default = [];
         type = types.listOf types.path;
-        description = "List of packages for which gsettings are overridden.";
+        description = lib.mdDoc "List of packages for which gsettings are overridden.";
       };
 
-      debug = mkEnableOption "gnome-session debug messages";
+      debug = mkEnableOption (lib.mdDoc "gnome-session debug messages");
 
     };
 
@@ -88,7 +84,7 @@ in
       default = [];
       example = literalExpression "[ pkgs.pantheon.elementary-camera ]";
       type = types.listOf types.package;
-      description = "Which packages pantheon should exclude from the default environment";
+      description = lib.mdDoc "Which packages pantheon should exclude from the default environment";
     };
 
   };
@@ -96,6 +92,9 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
+      services.xserver.desktopManager.pantheon.sessionPath = utils.removePackagesByName [
+        pkgs.pantheon.pantheon-agent-geoclue2
+      ] config.environment.pantheon.excludePackages;
 
       services.xserver.displayManager.sessionPackages = [ pkgs.pantheon.elementary-session-settings ];
 
@@ -135,7 +134,8 @@ in
       services.bamf.enable = true;
       services.colord.enable = mkDefault true;
       services.fwupd.enable = mkDefault true;
-      services.packagekit.enable = mkDefault true;
+      # TODO: Enable once #177946 is resolved
+      # services.packagekit.enable = mkDefault true;
       services.power-profiles-daemon.enable = mkDefault true;
       services.touchegg.enable = mkDefault true;
       services.touchegg.package = pkgs.pantheon.touchegg;
@@ -177,19 +177,28 @@ in
       networking.networkmanager.enable = mkDefault true;
 
       # Global environment
-      environment.systemPackages = with pkgs; [
+      environment.systemPackages = (with pkgs.pantheon; [
+        elementary-session-settings
+        elementary-settings-daemon
+        gala
+        gnome-settings-daemon
+        (switchboard-with-plugs.override {
+          plugs = cfg.extraSwitchboardPlugs;
+        })
+        (wingpanel-with-indicators.override {
+          indicators = cfg.extraWingpanelIndicators;
+        })
+      ]) ++ utils.removePackagesByName ((with pkgs; [
         desktop-file-utils
-        glib
+        glib # for gsettings program
         gnome-menus
         gnome.adwaita-icon-theme
-        gtk3.out
-        hicolor-icon-theme
+        gtk3.out # for gtk-launch program
         onboard
         qgnomeplatform
-        shared-mime-info
         sound-theme-freedesktop
-        xdg-user-dirs
-      ] ++ (with pkgs.pantheon; [
+        xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
+      ]) ++ (with pkgs.pantheon; [
         # Artwork
         elementary-gtk-theme
         elementary-icon-theme
@@ -199,30 +208,20 @@ in
         # Desktop
         elementary-default-settings
         elementary-dock
-        elementary-session-settings
         elementary-shortcut-overlay
-        gala
-        (switchboard-with-plugs.override {
-          plugs = cfg.extraSwitchboardPlugs;
-        })
-        (wingpanel-with-indicators.override {
-          indicators = cfg.extraWingpanelIndicators;
-        })
 
         # Services
         elementary-capnet-assist
         elementary-notifications
-        elementary-settings-daemon
-        gnome-settings-daemon
         pantheon-agent-geoclue2
         pantheon-agent-polkit
-      ]);
-
-      programs.evince.enable = mkDefault true;
-      programs.file-roller.enable = mkDefault true;
+      ])) config.environment.pantheon.excludePackages;
 
       # Settings from elementary-default-settings
       environment.etc."gtk-3.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-3.0/settings.ini";
+
+      xdg.mime.enable = true;
+      xdg.icons.enable = true;
 
       xdg.portal.enable = true;
       xdg.portal.extraPortals = with pkgs.pantheon; [
@@ -271,6 +270,9 @@ in
     })
 
     (mkIf serviceCfg.apps.enable {
+      programs.evince.enable = mkDefault true;
+      programs.file-roller.enable = mkDefault true;
+
       environment.systemPackages = utils.removePackagesByName ([
         pkgs.gnome.gnome-font-viewer
       ] ++ (with pkgs.pantheon; [

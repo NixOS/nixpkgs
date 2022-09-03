@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
     # See http://www.baudline.com/faq.html#licensing_terms.
     # (Do NOT (re)distribute on hydra.)
     license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ maintainers.bjornfor ];
   };

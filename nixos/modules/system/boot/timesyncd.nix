@@ -11,7 +11,7 @@ with lib;
         default = !config.boot.isContainer;
         defaultText = literalExpression "!config.boot.isContainer";
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Enables the systemd NTP client daemon.
         '';
       };
@@ -19,7 +19,7 @@ with lib;
         default = config.networking.timeServers;
         defaultText = literalExpression "config.networking.timeServers";
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           The set of NTP servers from which to synchronise.
         '';
       };
@@ -29,10 +29,10 @@ with lib;
         example = ''
           PollIntervalMaxSec=180
         '';
-        description = ''
+        description = lib.mdDoc ''
           Extra config options for systemd-timesyncd. See
-          <link xlink:href="https://www.freedesktop.org/software/systemd/man/timesyncd.conf.html">
-          timesyncd.conf(5)</link> for available options.
+          [
+          timesyncd.conf(5)](https://www.freedesktop.org/software/systemd/man/timesyncd.conf.html) for available options.
         '';
       };
     };

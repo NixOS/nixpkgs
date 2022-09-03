@@ -1,5 +1,5 @@
-{ mkDerivation, fetchurl, lib, makeWrapper
-, extra-cmake-modules, kdoctools, wrapGAppsHook, wrapQtAppsHook
+{ mkDerivation, fetchurl, lib
+, extra-cmake-modules, kdoctools, wrapGAppsHook
 , kconfig, kcrash, kinit, kpmcore, polkit-qt
 , cryptsetup, lvm2, mdadm, smartmontools, systemdMinimal, util-linux
 , btrfs-progs, dosfstools, e2fsprogs, exfat, f2fs-tools, fatresize, hfsprogs
@@ -41,20 +41,23 @@ let
 in mkDerivation rec {
   pname = "partitionmanager";
   # NOTE: When changing this version, also change the version of `kpmcore`.
-  version = "22.04.0";
+  version = "22.04.3";
 
   src = fetchurl {
     url = "mirror://kde/stable/release-service/${version}/src/${pname}-${version}.tar.xz";
-    hash = "sha256-eChn3OkdLHC9pedDBBwszTeTj2l7ky2W79INqvjrkBo=";
+    hash = "sha256-wt5iQC8Ok6Ey4JJEipz8rk5UxS8kCKRmQZnQAm0WhOg=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook wrapQtAppsHook makeWrapper ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
 
   propagatedBuildInputs = [ kconfig kcrash kinit kpmcore polkit-qt ];
 
-  postFixup = ''
-    wrapProgram $out/bin/partitionmanager \
+  dontWrapGApps = true;
+  preFixup = ''
+    qtWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
       --prefix PATH : "${runtimeDeps}"
+    )
   '';
 
   meta = with lib; {

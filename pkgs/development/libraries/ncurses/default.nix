@@ -41,7 +41,17 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--enable-sp-funcs"
       "--enable-term-driver"
-    ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isUnix && stdenv.hostPlatform.isStatic) [
+      # For static binaries, the point is to have a standalone binary with
+      # minimum dependencies. So here we make sure that binaries using this
+      # package won't depend on a terminfo database located in the Nix store.
+      "--with-terminfo-dirs=${lib.concatStringsSep ":" [
+        "/etc/terminfo" # Debian, Fedora, Gentoo
+        "/lib/terminfo" # Debian
+        "/usr/share/terminfo" # upstream default, probably all FHS-based distros
+        "/run/current-system/sw/share/terminfo" # NixOS
+      ]}"
+  ];
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
   CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";

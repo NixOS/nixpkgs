@@ -25,6 +25,12 @@ stdenvNoCC.mkDerivation rec {
       sha256 = "sha256-F6Q4dUtfmR28VxLbITiLFJ44FjG4T1Cvuz3a0nLisMs=";
       name = "update_old_nixos_logo.patch";
     })
+    # https://github.com/dylanaraps/neofetch/pull/2157
+    (fetchpatch {
+      url = "https://github.com/dylanaraps/neofetch/commit/de253afcf41bab441dc58d34cae654040cab7451.patch";
+      sha256 = "sha256-3i7WnCWNfsRjbenTULmKHft5o/o176imzforNmuoJwo=";
+      name = "improve_detect_nixos_version.patch";
+    })
   ];
 
   outputs = [ "out" "man" ];

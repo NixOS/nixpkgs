@@ -8,6 +8,7 @@
 , pythonOlder
 , requests
 , requests-oauthlib
+, six
 , vcrpy
 }:
 
@@ -31,6 +32,7 @@ buildPythonPackage rec {
     oauthlib
     requests
     requests-oauthlib
+    six
   ];
 
   checkInputs = [

@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://activemq.apache.org/";
     description = "Messaging and Integration Patterns server written in Java";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
   };

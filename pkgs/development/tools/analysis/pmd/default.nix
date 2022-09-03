@@ -2,20 +2,32 @@
 
 stdenv.mkDerivation rec {
   pname = "pmd";
-  version = "6.43.0";
+  version = "6.48.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pmd/pmd-bin-${version}.zip";
-    sha256 = "sha256-+eJCN890vm4WBcMZ2VCGOS8WUyIckL+DfQVNaUSovGE=";
+    url = "https://github.com/pmd/pmd/releases/download/pmd_releases/${version}/pmd-bin-${version}.zip";
+    hash = "sha256-DXoiV5AunDGagfq8BWHFcgGBv9OdGij5DDuxOKJYnE4=";
   };
 
   nativeBuildInputs = [ unzip makeWrapper ];
 
+  dontConfigure = true;
+  dontBuild = true;
+
   installPhase = ''
     runHook preInstall
-    mkdir -p $out
-    cp -R {bin,lib} $out
-    wrapProgram $out/bin/run.sh --prefix PATH : ${openjdk.jre}/bin
+
+    install -Dm755 bin/run.sh $out/libexec/pmd
+    install -Dm644 lib/*.jar -t $out/lib/pmd
+
+    wrapProgram $out/libexec/pmd \
+        --prefix PATH : ${openjdk.jre}/bin \
+        --set LIB_DIR $out/lib/pmd
+
+    for app in pmd cpd cpdgui designer bgastviewer designerold ast-dump; do
+        makeWrapper $out/libexec/pmd $out/bin/$app --argv0 $app --add-flags $app
+    done
+
     runHook postInstall
   '';
 

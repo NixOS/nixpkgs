@@ -48,6 +48,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/SoongNoonien/mpdevil";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bloomvdomino ];
+    maintainers = with maintainers; [ ];
   };
 }

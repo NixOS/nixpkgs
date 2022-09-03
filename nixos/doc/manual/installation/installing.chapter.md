@@ -133,14 +133,14 @@ update /etc/fstab.
     which will be used by the boot partition.
 
     ```ShellSession
-    # parted /dev/sda -- mkpart primary 512MiB -8GiB
+    # parted /dev/sda -- mkpart primary 512MB -8GB
     ```
 
 3.  Next, add a *swap* partition. The size required will vary according
-    to needs, here a 8GiB one is created.
+    to needs, here a 8GB one is created.
 
     ```ShellSession
-    # parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
+    # parted /dev/sda -- mkpart primary linux-swap -8GB 100%
     ```
 
     ::: {.note}
@@ -153,7 +153,7 @@ update /etc/fstab.
     reserved 512MiB at the start of the disk.
 
     ```ShellSession
-    # parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
+    # parted /dev/sda -- mkpart ESP fat32 1MB 512MB
     # parted /dev/sda -- set 3 esp on
     ```
 
@@ -180,14 +180,14 @@ update /etc/fstab.
     end part, where the swap will live.
 
     ```ShellSession
-    # parted /dev/sda -- mkpart primary 1MiB -8GiB
+    # parted /dev/sda -- mkpart primary 1MB -8GB
     ```
 
 3.  Finally, add a *swap* partition. The size required will vary
     according to needs, here a 8GiB one is created.
 
     ```ShellSession
-    # parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
+    # parted /dev/sda -- mkpart primary linux-swap -8GB 100%
     ```
 
     ::: {.note}
@@ -303,7 +303,8 @@ Use the following commands:
 
     UEFI systems
 
-    :   You *must* set the option [](#opt-boot.loader.systemd-boot.enable)
+    :   You must select a boot-loader, either system-boot or GRUB. The recommended
+        option is systemd-boot: set the option [](#opt-boot.loader.systemd-boot.enable)
         to `true`. `nixos-generate-config` should do this automatically
         for new configurations when booted in UEFI mode.
 
@@ -311,6 +312,15 @@ Use the following commands:
         [`boot.loader.efi`](#opt-boot.loader.efi.canTouchEfiVariables) and
         [`boot.loader.systemd-boot`](#opt-boot.loader.systemd-boot.enable)
         as well.
+
+    :   If you want to use GRUB, set [](#opt-boot.loader.grub.device) to `nodev` and
+        [](#opt-boot.loader.grub.efiSupport) to `true`.
+
+    :   With system-boot, you should not need any special configuration to detect
+        other installed systems. With GRUB, set [](#opt-boot.loader.grub.useOSProber)
+        to `true`, but this will only detect windows partitions, not other linux
+        distributions. If you dual boot another linux distribution, use system-boot
+        instead.
 
     If you need to configure networking for your machine the
     configuration options are described in [](#sec-networking). In
@@ -476,6 +486,7 @@ With a partitioned disk.
 ```{=docbook}
 <xi:include href="installing-usb.section.xml" />
 <xi:include href="installing-pxe.section.xml" />
+<xi:include href="installing-kexec.section.xml" />
 <xi:include href="installing-virtualbox-guest.section.xml" />
 <xi:include href="installing-from-other-distro.section.xml" />
 <xi:include href="installing-behind-a-proxy.section.xml" />

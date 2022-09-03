@@ -5,7 +5,7 @@ description = "NixOps 2.0"
 authors = ["Adam Hoese <adam.hose@tweag.io>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 nixops = {git = "https://github.com/NixOS/nixops.git"}
 nixops-aws = {git = "https://github.com/NixOS/nixops-aws.git"}
 nixops-digitalocean = {git = "https://github.com/nix-community/nixops-digitalocean.git"}
@@ -14,13 +14,7 @@ nixops-gcp = {git = "https://github.com/nix-community/nixops-gce.git"}
 nixops-hercules-ci = {git = "https://github.com/hercules-ci/nixops-hercules-ci.git"}
 nixops-hetzner = {git = "https://github.com/NixOS/nixops-hetzner"}
 nixopsvbox = {git = "https://github.com/nix-community/nixops-vbox.git"}
-# FIXME: Once #30 lands this can be replaced
-# https://github.com/nix-community/nixops-libvirtd/pull/30
-# nixops-virtd = {git = "https://github.com/nix-community/nixops-libvirtd.git"}
-nixops-virtd = { git = "https://github.com/lovesegfault/nixops-libvirtd.git", branch = "update-libvirt" }
-
-[tool.poetry.dev-dependencies]
-sphinx = "^3.1.2"
+nixops-virtd = {git = "https://github.com/nix-community/nixops-libvirtd.git"}
 
 [build-system]
 requires = ["poetry>=0.12"]

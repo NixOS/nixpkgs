@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "20200115";
+  version = "20200125";
   pname = "m4rie";
 
   src = fetchFromBitbucket {
     owner = "malb";
     repo = "m4rie";
     rev = "release-${version}";
-    sha256 = "0s8if80x5d6mikbcfsbbxg347136spahp9f3x8i1hflbwl8xj9k8";
+    sha256 = "sha256-bjAcxfXsC6+jPYC472CN78jm4UljJQlkWyvsqckCDh0=";
   };
 
   doCheck = true;

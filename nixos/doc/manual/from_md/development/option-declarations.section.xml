@@ -94,7 +94,17 @@ options = {
       <listitem>
         <para>
           A textual description of the option, in DocBook format, that
-          will be included in the NixOS manual.
+          will be included in the NixOS manual. During the migration
+          process from DocBook to CommonMark the description may also be
+          written in CommonMark, but has to be wrapped in
+          <literal>lib.mdDoc</literal> to differentiate it from DocBook.
+          See the nixpkgs manual for
+          <link xlink:href="https://nixos.org/nixpkgs/manual/#sec-contributing-markup">the
+          list of CommonMark extensions</link> supported by NixOS
+          documentation.
+        </para>
+        <para>
+          New documentation should preferably be written as CommonMark.
         </para>
       </listitem>
     </varlistentry>
@@ -183,14 +193,14 @@ lib.mkOption {
         <programlisting language="bash">
 lib.mkPackageOption pkgs &quot;GHC&quot; {
   default = [ &quot;ghc&quot; ];
-  example = &quot;pkgs.haskell.package.ghc922.ghc.withPackages (hkgs: [ hkgs.primes ])&quot;;
+  example = &quot;pkgs.haskell.packages.ghc924.ghc.withPackages (hkgs: [ hkgs.primes ])&quot;;
 }
 # is like
 lib.mkOption {
   type = lib.types.package;
   default = pkgs.ghc;
   defaultText = lib.literalExpression &quot;pkgs.ghc&quot;;
-  example = lib.literalExpression &quot;pkgs.haskell.package.ghc922.ghc.withPackages (hkgs: [ hkgs.primes ])&quot;;
+  example = lib.literalExpression &quot;pkgs.haskell.packages.ghc924.ghc.withPackages (hkgs: [ hkgs.primes ])&quot;;
   description = &quot;The GHC package to use.&quot;;
 }
 </programlisting>

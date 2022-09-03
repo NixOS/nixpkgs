@@ -1,20 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "dill";
-  version = "0.3.4";
-  doCheck = !isPy27;
+  version = "0.3.5.1";
 
   src = fetchFromGitHub {
     owner = "uqfoundation";
     repo = pname;
-    rev = "${pname}-${version}";
-    sha256 = "0x702gh50wb3n820p2p9w49cn4a354y207pllwc7snfxprv6hypm";
+    rev = "refs/tags/dill-${version}";
+    sha256 = "sha256-gWE7aQodblgHjUqGAzOJGgxJ4qx9wHo/DU4KRE6JMWo=";
   };
 
   checkInputs = [
@@ -27,13 +25,16 @@ buildPythonPackage rec {
     "tests/test_diff.py"
     "tests/test_module.py"
     "tests/test_objects.py"
+    "tests/test_session.py"
   ];
 
   disabledTests = [
     "test_class_objects"
-    "test_method_decorator"
     "test_importable"
+    "test_method_decorator"
     "test_the_rest"
+    # test exception catching needs updating, can probably be removed with next update
+    "test_recursive_function"
   ];
 
   pythonImportsCheck = [ "dill" ];

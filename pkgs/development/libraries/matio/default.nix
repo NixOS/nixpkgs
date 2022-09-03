@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     description = "A C library for reading and writing Matlab MAT files";
     homepage = "http://matio.sourceforge.net/";
     license = licenses.bsd2;
-    maintainers = [ maintainers.vbgl ];
+    maintainers = [ ];
     mainProgram = "matdump";
     platforms = platforms.all;
   };

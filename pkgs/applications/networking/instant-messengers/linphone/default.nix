@@ -33,7 +33,7 @@
 
 mkDerivation rec {
   pname = "linphone-desktop";
-  version = "4.4.1";
+  version = "4.4.8";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -41,7 +41,7 @@ mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-BBOTyKMZikkxMJSmzAuChVHpVeCvbAimn1K3REGbqEg=";
+    sha256 = "sha256-o/IyUvIthCrka6oTa0xMKg0sDj4zdon3kBr2gJ2Id8w=";
   };
 
   patches = [
@@ -83,6 +83,9 @@ mkDerivation rec {
   cmakeFlags = [
     "-DMINIZIP_INCLUDE_DIRS=${minizip2}/include"
     "-DMINIZIP_LIBRARIES=minizip"
+
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
   # The default install phase fails because the paths are somehow messed up in

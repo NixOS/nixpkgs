@@ -10,11 +10,11 @@
 
 let
   pname = "pgadmin";
-  version = "6.9";
+  version = "6.12";
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    sha256 = "sha256-C/0UDbPUuKCF9BBrDdlETGl7ALpFOmGaaxHVHxrIPVo=";
+    sha256 = "sha256-cO7GdZDfJ0pq1jpMyrVy0UM49WhrKOIJOmMJauSkbyo=";
   };
 
   yarnDeps = mkYarnModules {
@@ -32,7 +32,7 @@ let
     flask_login
     flask_mail
     flask_migrate
-    flask_sqlalchemy
+    flask-sqlalchemy
     flask-wtf
     flask-compress
     passlib
@@ -66,24 +66,14 @@ let
     pyotp
     botocore
     boto3
+    azure-mgmt-subscription
+    azure-mgmt-rdbms
+    azure-mgmt-resource
+    azure-identity
   ];
 
-  # override necessary on pgadmin4 6.9
+  # override necessary on pgadmin4 6.12
   pythonPackages = python3.pkgs.overrideScope (final: prev: rec {
-    flask = prev.flask.overridePythonAttrs (oldAttrs: rec {
-      version = "2.0.3";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "sha256-4RIMIoyi9VO0cN9KX6knq2YlhGdSYGmYGz6wqRkCaH0=";
-      };
-      disabledTests = (oldAttrs.disabledTests or [ ]) ++ [
-        "test_aborting"
-      ];
-    });
-    flask-paranoid = prev.flask-paranoid.overridePythonAttrs (oldAttrs: rec {
-      # tests fail due to downgrades here
-      doCheck = false;
-    });
     werkzeug = prev.werkzeug.overridePythonAttrs (oldAttrs: rec {
       version = "2.0.3";
       src = oldAttrs.src.override {
@@ -120,15 +110,7 @@ pythonPackages.buildPythonApplication rec {
     patchShebangs .
 
     # relax dependencies
-    substituteInPlace requirements.txt \
-      --replace "eventlet==0.33.0" "eventlet>=0.33.0" \
-      --replace "psycopg2==2.9.*" "psycopg2>=2.9" \
-      --replace "cryptography==3.*" "cryptography>=3.0" \
-      --replace "requests==2.25.*" "requests>=2.25.0" \
-      --replace "boto3==1.20.*" "boto3>=1.20" \
-      --replace "botocore==1.23.*" "botocore>=1.23" \
-      --replace "pytz==2021.*" "pytz" \
-      --replace "Werkzeug==2.0.3" "werkzeug>=2.*"
+    sed 's|==|>=|g' -i requirements.txt
     # don't use Server Mode (can be overridden later)
     substituteInPlace pkg/pip/setup_pip.py \
       --replace "req = req.replace('psycopg2', 'psycopg2-binary')" "req = req" \

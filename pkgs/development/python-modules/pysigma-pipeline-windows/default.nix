@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma-pipeline-windows";
-  version = "0.1.0";
+  version = "1.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-pipeline-windows";
-    rev = "v${version}";
-    hash = "sha256-BO6hiPLwEJX0sICqMZfcO4tqljdS+93Z1kG8IWsV9og=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/DUhgvcGhk28HRDCi96K1NH6MHNB1WogfuMVCgNbot4=";
   };
 
   nativeBuildInputs = [

@@ -4,6 +4,7 @@
 , vimCommandCheckHook
 , vimGenDocHook
 , neovimRequireCheckHook
+, toVimPlugin
 }:
 
 rec {
@@ -23,11 +24,6 @@ rec {
     let drv = stdenv.mkDerivation (attrs // {
       name = namePrefix + name;
 
-      # dont move the doc folder since vim expects it
-      forceShare= [ "man" "info" ];
-
-      nativeBuildInputs = attrs.nativeBuildInputs or []
-      ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ vimCommandCheckHook vimGenDocHook ];
       inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
 
       installPhase = ''
@@ -40,9 +36,9 @@ rec {
         runHook postInstall
       '';
     });
-    in  drv.overrideAttrs(oa: {
+    in toVimPlugin(drv.overrideAttrs(oa: {
       rtp = "${drv}";
-    });
+    }));
 
   buildVimPluginFrom2Nix = attrs: buildVimPlugin ({
     # vim plugins may override this

@@ -2,14 +2,14 @@
 
 buildPythonApplication rec {
   pname = "rofi-rbw";
-  version = "0.5.0";
+  version = "1.0.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofi-rbw";
-    rev = version;
-    hash = "sha256-1RDwb8lKls6+X/XtARbi4F7sK4nT03Iy3Wb9N1LEa5o=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-YDL0pMl3BX59kzjuykn0lQHu2RMvPhsBrlSiqdcZAXs=";
   };
 
   propagatedBuildInputs = [ configargparse ];

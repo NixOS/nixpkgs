@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "osinfo-db";
-  version = "20220214";
+  version = "20220727";
 
   src = fetchurl {
     url = "https://releases.pagure.org/libosinfo/${pname}-${version}.tar.xz";
-    sha256 = "sha256-E+bJAOuCAPFmD4oe13Xs7NWgH9skv7bu4c5l3XvP06k=";
+    sha256 = "sha256-IpHlI07Ymagww28rQFb/XnYjX0uge1k0IfSGUpBjTV4=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/libosinfo/osinfo-db/";
     changelog = "https://gitlab.com/libosinfo/osinfo-db/-/commits/v${version}";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }

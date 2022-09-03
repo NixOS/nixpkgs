@@ -9,14 +9,3 @@
  )
  
  govf_dep = declare_dependency(
---- a/subprojects/gtk-frdp/src/meson.build
-+++ b/subprojects/gtk-frdp/src/meson.build
-@@ -50,7 +50,7 @@ gtk_frdp_lib = shared_library('gtk-frdp-' + api_version,
-   gtk_frdp_sources,
-   dependencies: gtk_frdp_deps,
-   install: true,
--  install_dir: libdir
-+  install_dir: get_option ('prefix') / libdir
- )
- 
- gtk_frdp_dep = declare_dependency(

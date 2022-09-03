@@ -206,6 +206,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     license = licenses.unfree;
     description = "Citrix Workspace";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ pmenke michaeladler ];
     inherit homepage;

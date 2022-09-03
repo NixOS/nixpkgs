@@ -1,13 +1,13 @@
 { lib, stdenv, mkDerivation, fetchFromGitLab, qmake, qtbase, qttools, qtserialport, libGLU }:
 mkDerivation rec {
   pname = "OSCAR";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "pholy";
     repo = "OSCAR-code";
     rev = "v${version}";
-    sha256 = "sha256-/70NoyiQ33RFdSTBAyi5c/JPZ2AV1/iRvkAZ6VjpUXw=";
+    sha256 = "sha256-bgETkpyL0yhCD1FfTVN0s9RNOPkDp88W/1Gdxvu+Ons=";
   };
 
   buildInputs = [ qtbase qttools qtserialport libGLU ];

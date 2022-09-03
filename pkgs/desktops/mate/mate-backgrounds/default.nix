@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, meson, ninja, gettext, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, meson
+, ninja
+, gettext
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-backgrounds";

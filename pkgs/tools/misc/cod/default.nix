@@ -24,13 +24,15 @@ buildGoModule rec {
     done
     popd
     export COD_TEST_BINARY="''${NIX_BUILD_TOP}/go/bin/cod"
+
+    substituteInPlace test/learn_test.go --replace TestLearnArgparseSubCommand SkipLearnArgparseSubCommand
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Tool for generating Bash/Fish/Zsh autocompletions based on `--help` output";
     homepage = "https://github.com/dim-an/cod/";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    broken = true;
   };
 }

@@ -30,49 +30,49 @@ in
 
   options = {
     services.ttyd = {
-      enable = mkEnableOption "ttyd daemon";
+      enable = mkEnableOption (lib.mdDoc "ttyd daemon");
 
       port = mkOption {
         type = types.port;
         default = 7681;
-        description = "Port to listen on (use 0 for random port)";
+        description = lib.mdDoc "Port to listen on (use 0 for random port)";
       };
 
       socket = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/var/run/ttyd.sock";
-        description = "UNIX domain socket path to bind.";
+        description = lib.mdDoc "UNIX domain socket path to bind.";
       };
 
       interface = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "eth0";
-        description = "Network interface to bind.";
+        description = lib.mdDoc "Network interface to bind.";
       };
 
       username = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "Username for basic authentication.";
+        description = lib.mdDoc "Username for basic authentication.";
       };
 
       passwordFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         apply = value: if value == null then null else toString value;
-        description = ''
+        description = lib.mdDoc ''
           File containing the password to use for basic authentication.
           For insecurely putting the password in the globally readable store use
-          <literal>pkgs.writeText "ttydpw" "MyPassword"</literal>.
+          `pkgs.writeText "ttydpw" "MyPassword"`.
         '';
       };
 
       signal = mkOption {
         type = types.ints.u8;
         default = 1;
-        description = "Signal to send to the command on session close.";
+        description = lib.mdDoc "Signal to send to the command on session close.";
       };
 
       clientOptions = mkOption {
@@ -83,75 +83,75 @@ in
           fontFamily = "Fira Code";
 
         }'';
-        description = ''
+        description = lib.mdDoc ''
           Attribute set of client options for xtermjs.
-          <link xlink:href="https://xtermjs.org/docs/api/terminal/interfaces/iterminaloptions/"/>
+          <https://xtermjs.org/docs/api/terminal/interfaces/iterminaloptions/>
         '';
       };
 
       terminalType = mkOption {
         type = types.str;
         default = "xterm-256color";
-        description = "Terminal type to report.";
+        description = lib.mdDoc "Terminal type to report.";
       };
 
       checkOrigin = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to allow a websocket connection from a different origin.";
+        description = lib.mdDoc "Whether to allow a websocket connection from a different origin.";
       };
 
       maxClients = mkOption {
         type = types.int;
         default = 0;
-        description = "Maximum clients to support (0, no limit)";
+        description = lib.mdDoc "Maximum clients to support (0, no limit)";
       };
 
       indexFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = "Custom index.html path";
+        description = lib.mdDoc "Custom index.html path";
       };
 
       enableIPv6 = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether or not to enable IPv6 support.";
+        description = lib.mdDoc "Whether or not to enable IPv6 support.";
       };
 
       enableSSL = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether or not to enable SSL (https) support.";
+        description = lib.mdDoc "Whether or not to enable SSL (https) support.";
       };
 
       certFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = "SSL certificate file path.";
+        description = lib.mdDoc "SSL certificate file path.";
       };
 
       keyFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         apply = value: if value == null then null else toString value;
-        description = ''
+        description = lib.mdDoc ''
           SSL key file path.
           For insecurely putting the keyFile in the globally readable store use
-          <literal>pkgs.writeText "ttydKeyFile" "SSLKEY"</literal>.
+          `pkgs.writeText "ttydKeyFile" "SSLKEY"`.
         '';
       };
 
       caFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = "SSL CA file path for client certificate verification.";
+        description = lib.mdDoc "SSL CA file path for client certificate verification.";
       };
 
       logLevel = mkOption {
         type = types.int;
         default = 7;
-        description = "Set log level.";
+        description = lib.mdDoc "Set log level.";
       };
     };
   };

@@ -24,13 +24,13 @@
 , libvpx
 }:
 stdenv.mkDerivation rec {
-  version = "1.1.0";
+  version = "2.6.0";
   pname = "baresip";
   src = fetchFromGitHub {
     owner = "baresip";
     repo = "baresip";
     rev = "v${version}";
-    sha256 = "sha256-9mc1Beo7/iNhDXSDC/jiTL+lJRt8ah/1xF1heoHTE+g=";
+    sha256 = "sha256-YcXLRhW7PyvK0R1+7DOjmtxg+Ajq9u7fvZFQO7DJapQ=";
   };
   postPatch = ''
     patchShebangs modules/ctrl_dbus/gen.sh

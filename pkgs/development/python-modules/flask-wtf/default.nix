@@ -4,7 +4,7 @@
 , flask
 , itsdangerous
 , wtforms
-, email_validator
+, email-validator
 , pytestCheckHook
 }:
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    email = [ email_validator ];
+    email = [ email-validator ];
   };
 
   checkInputs = [

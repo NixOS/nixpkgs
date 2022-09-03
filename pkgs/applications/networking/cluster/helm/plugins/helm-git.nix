@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The Helm downloader plugin that provides GIT protocol support";
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/aslafy-z/helm-git";
     license = licenses.mit;
     maintainers = with maintainers; [ flokli ];
   };

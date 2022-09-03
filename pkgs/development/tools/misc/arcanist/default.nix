@@ -25,16 +25,19 @@ let makeArcWrapper = toolset: ''
 in
 stdenv.mkDerivation {
   pname = "arcanist";
-  version = "20220425";
+  version = "20220517";
 
   src = fetchFromGitHub {
     owner = "phacility";
     repo = "arcanist";
-    rev = "da206314cf59f71334b187283e18823bddc16ddd";
-    sha256 = "sha256-6VVUjFMwPQvk22Ni1YUSgks4ZM0j1JP+71VnYKD8onM=";
+    rev = "85c953ebe4a6fef332158fd757d97c5a58682d3a";
+    sha256 = "0x847fw74mzrbhzpgc4iqgvs6dsf4svwfa707dsbxi78fn2lxbl7";
   };
 
-  patches = [ ./dont-require-python3-in-path.patch ];
+  patches = [
+    ./dont-require-python3-in-path.patch
+    ./shellcomplete-strlen-null.patch
+  ];
 
   buildInputs = [ php python3 ];
 

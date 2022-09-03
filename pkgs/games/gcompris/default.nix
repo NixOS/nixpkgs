@@ -18,11 +18,11 @@
 
 mkDerivation rec {
   pname = "gcompris";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchurl {
     url = "https://download.kde.org/stable/gcompris/qt/src/gcompris-qt-${version}.tar.xz";
-    sha256 = "sha256-UgWLp5IVqbeFFCO/PRFJ/X1sPm7nSkagVcgEp5SdzGI=";
+    sha256 = "sha256-/QZub48rarVHcD0PgOPc6NTlOKrsEzVK/qjHb5CjWS0=";
   };
 
   cmakeFlags = [

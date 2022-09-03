@@ -7,8 +7,6 @@ in {
   meta.maintainers = lib.teams.home-assistant.members;
 
   nodes.hass = { pkgs, ... }: {
-    environment.systemPackages = with pkgs; [ mosquitto ];
-
     services.postgresql = {
       enable = true;
       ensureDatabases = [ "hass" ];
@@ -98,10 +96,26 @@ in {
       };
       lovelaceConfigWritable = true;
     };
+
+    # Cause a configuration change inside `configuration.yml` and verify that the process is being reloaded.
+    specialisation.differentName = {
+      inheritParentConfig = true;
+      configuration.services.home-assistant.config.homeassistant.name = lib.mkForce "Test Home";
+    };
+
+    # Cause a configuration change that requires a service restart as we added a new runtime dependency
+    specialisation.newFeature = {
+      inheritParentConfig = true;
+      configuration.services.home-assistant.config.esphome = {};
+    };
   };
 
-  testScript = ''
+  testScript = { nodes, ... }: let
+    system = nodes.hass.config.system.build.toplevel;
+  in
+  ''
     import re
+    import json
 
     start_all()
 
@@ -111,9 +125,22 @@ in {
     pattern = re.compile(r"path=(?P<path>[\/a-z0-9-.]+)\/bin\/hass")
     response = hass.execute("systemctl show -p ExecStart home-assistant.service")[1]
     match = pattern.search(response)
+    assert match
     package = match.group('path')
 
+
+    def get_journal_cursor(host) -> str:
+        exit, out = host.execute("journalctl -u home-assistant.service -n1 -o json-pretty --output-fields=__CURSOR")
+        assert exit == 0
+        return json.loads(out)["__CURSOR"]
+
+
+    def wait_for_homeassistant(host, cursor):
+        host.wait_until_succeeds(f"journalctl --after-cursor='{cursor}' -u home-assistant.service | grep -q 'Home Assistant initialized in'")
+
+
     hass.wait_for_unit("home-assistant.service")
+    cursor = get_journal_cursor(hass)
 
     with subtest("Check that YAML configuration file is in place"):
         hass.succeed("test -L ${configDir}/configuration.yaml")
@@ -130,7 +157,7 @@ in {
         hass.succeed(f"grep -q 'wake_on_lan' {package}/extra_components")
 
     with subtest("Check that Home Assistant's web interface and API can be reached"):
-        hass.wait_until_succeeds("journalctl -u home-assistant.service | grep -q 'Home Assistant initialized in'")
+        wait_for_homeassistant(hass, cursor)
         hass.wait_for_open_port(8123)
         hass.succeed("curl --fail http://localhost:8123/lovelace")
 
@@ -141,12 +168,25 @@ in {
     with subtest("Check extra components are considered in systemd unit hardening"):
         hass.succeed("systemctl show -p DeviceAllow home-assistant.service | grep -q char-ttyUSB")
 
-    with subtest("Print log to ease debugging"):
-        output_log = hass.succeed("cat ${configDir}/home-assistant.log")
-        print("\n### home-assistant.log ###\n")
-        print(output_log + "\n")
+    with subtest("Check service reloads when configuration changes"):
+      # store the old pid of the process
+      pid = hass.succeed("systemctl show --property=MainPID home-assistant.service")
+      cursor = get_journal_cursor(hass)
+      hass.succeed("${system}/specialisation/differentName/bin/switch-to-configuration test")
+      new_pid = hass.succeed("systemctl show --property=MainPID home-assistant.service")
+      assert pid == new_pid, "The PID of the process should not change between process reloads"
+      wait_for_homeassistant(hass, cursor)
+
+    with subtest("check service restarts when package changes"):
+      pid = new_pid
+      cursor = get_journal_cursor(hass)
+      hass.succeed("${system}/specialisation/newFeature/bin/switch-to-configuration test")
+      new_pid = hass.succeed("systemctl show --property=MainPID home-assistant.service")
+      assert pid != new_pid, "The PID of the process shoudl change when the HA binary changes"
+      wait_for_homeassistant(hass, cursor)
 
     with subtest("Check that no errors were logged"):
+        output_log = hass.succeed("cat ${configDir}/home-assistant.log")
         assert "ERROR" not in output_log
 
     with subtest("Check systemd unit hardening"):

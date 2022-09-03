@@ -11,7 +11,7 @@ dotnetCheckHook() {
     fi
 
     for project in ${testProjectFile[@]}; do
-        env \
+        env "LD_LIBRARY_PATH=@libraryPath@" \
             dotnet test "$project" \
               -maxcpucount:$maxCpuFlag \
               -p:ContinuousIntegrationBuild=true \

@@ -6,13 +6,13 @@ let
   disableLTO = stdenv.cc.isClang && stdenv.isDarwin;  # workaround issue #19098
 in stdenv.mkDerivation rec {
   pname = "tracy";
-  version = "0.8.1";
+  version = "0.8.2.1";
 
   src = fetchFromGitHub {
     owner = "wolfpld";
     repo = "tracy";
     rev = "v${version}";
-    sha256 = "sha256-4z3tos/sQUCL5UAcvqHzIzwoxo1fCGldNpmKsCXKJDs=";
+    sha256 = "sha256-SVzNy0JP/JrUYgelypBn8SPO+Ksm1rq2yGnxk1hCLkQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];

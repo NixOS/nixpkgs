@@ -43,9 +43,9 @@
 } @ args:
 
 let
-  version = "2.34";
-  patchSuffix = "-210";
-  sha256 = "sha256-RNJqH+ILiFOkj0cOrQHkJ56GmsFJsZXdpORKGV2YGrI=";
+  version = "2.35";
+  patchSuffix = "-163";
+  sha256 = "sha256-USNzL2tnzNMZMF79OZlx1YWSEivMKmUYob0lEN0M9S4=";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -62,14 +62,14 @@ stdenv.mkDerivation ({
   patches =
     [
       /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
-          $ git fetch --all -p && git checkout origin/release/2.34/master && git describe
-          glibc-2.34-210-ge123f08ad5
-          $ git show --minimal --reverse glibc-2.34.. | gzip -9n --rsyncable - > 2.34-master.patch.gz
+          $ git fetch --all -p && git checkout origin/release/2.35/master && git describe
+          glibc-2.35-210-ge123f08ad5
+          $ git show --minimal --reverse glibc-2.35.. | gzip -9n --rsyncable - > 2.35-master.patch.gz
 
          To compare the archive contents zdiff can be used.
-          $ zdiff -u 2.34-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.34-master.patch.gz
+          $ zdiff -u 2.35-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.35-master.patch.gz
        */
-      ./2.34-master.patch.gz
+      ./2.35-master.patch.gz
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
@@ -115,33 +115,12 @@ stdenv.mkDerivation ({
         sha256 = "091bk3kyrx1gc380gryrxjzgcmh1ajcj8s2rjhp2d2yzd5mpd5ps";
       })
 
-      /* Provide utf-8 locales by default, so we can use it in stdenv without depending on our large locale-archive. */
-      (fetchurl {
-        url = "https://salsa.debian.org/glibc-team/glibc/raw/49767c9f7de4828220b691b29de0baf60d8a54ec/debian/patches/localedata/locale-C.diff";
-        sha256 = "0irj60hs2i91ilwg5w7sqrxb695c93xg0ik7yhhq9irprd7fidn4";
-      })
-
       ./fix-x64-abi.patch
 
       /* https://github.com/NixOS/nixpkgs/pull/137601 */
       ./nix-nss-open-files.patch
 
       ./0001-Revert-Remove-all-usage-of-BASH-or-BASH-in-installed.patch
-
-      /* Fix segfault in getpwuid when stat fails
-         https://sourceware.org/bugzilla/show_bug.cgi?id=28752 */
-      (fetchurl {
-        url = "https://patchwork.sourceware.org/project/glibc/patch/20220314175316.3239120-2-sam@gentoo.org/raw/";
-        sha256 = "sq0BoPqXHQ69Vq4zJobCspe4XRfnAiuac/wqzVQJESc=";
-      })
-
-      /* Patch pending upstream inclusion to fix string.h syntax for older gcc.
-         Needed to unbreak gnat bootstrap against old gcc in nixpkgs:
-           https://patchwork.sourceware.org/project/glibc/patch/20220520150609.346566-1-slyfox@gentoo.org/ */
-      (fetchurl {
-        url = "https://patchwork.sourceware.org/project/glibc/patch/20220520150609.346566-1-slyfox@gentoo.org/raw/";
-        sha256 = "x3/eO1EHJXBIrH2WXHRRD1swtWv+btFVjvMt5tj/wDA=";
-      })
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
@@ -178,7 +157,7 @@ stdenv.mkDerivation ({
     [ "-C"
       "--enable-add-ons"
       "--sysconfdir=/etc"
-      "--enable-stackguard-randomization"
+      "--enable-stack-protector=strong"
       "--enable-bind-now"
       (lib.withFeatureAs withLinuxHeaders "headers" "${linuxHeaders}/include")
       (lib.enableFeature profilingLibraries "profile")
@@ -188,6 +167,9 @@ stdenv.mkDerivation ({
       # and on aarch64 with binutils 2.30 or later.
       # https://sourceware.org/glibc/wiki/PortStatus
       "--enable-static-pie"
+    ] ++ lib.optionals stdenv.hostPlatform.isx86 [
+      # Enable Intel Control-flow Enforcement Technology (CET) support
+      "--enable-cet"
     ] ++ lib.optionals withLinuxHeaders [
       "--enable-kernel=3.2.0" # can't get below with glibc >= 2.26
     ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [

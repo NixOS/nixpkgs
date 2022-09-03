@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "python-keystoneclient";
-  version = "4.5.0";
+  version = "5.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bX8FxpLn2yaSd4KEx3mubOqLIVmRS0QXpfoL/qHinNw=";
+    hash = "sha256-D1DaM78gtVrPxZ1PlGD6Lvwb4V/QXsPyNnTQPror6j8=";
   };
 
   propagatedBuildInputs = [

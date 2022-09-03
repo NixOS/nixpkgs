@@ -6,7 +6,7 @@ let
 
   cfg = config.services.mailman;
 
-  inherit (pkgs.mailmanPackages.buildEnvs { withHyperkitty = cfg.hyperkitty.enable; })
+  inherit (pkgs.mailmanPackages.buildEnvs { withHyperkitty = cfg.hyperkitty.enable; withLDAP = cfg.ldap.enable; })
     mailmanEnv webEnv;
 
   withPostgresql = config.services.postgresql.enable;
@@ -44,7 +44,13 @@ let
     transport_file_type: hash
   '';
 
-  mailmanCfg = lib.generators.toINI {} cfg.settings;
+  mailmanCfg = lib.generators.toINI {}
+    (recursiveUpdate cfg.settings
+      ((optionalAttrs (cfg.restApiPassFile != null) {
+        webservice.admin_pass = "#NIXOS_MAILMAN_REST_API_PASS_SECRET#";
+      })));
+
+  mailmanCfgFile = pkgs.writeText "mailman-raw.cfg" mailmanCfg;
 
   mailmanHyperkittyCfg = pkgs.writeText "mailman-hyperkitty.cfg" ''
     [general]
@@ -84,14 +90,122 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable Mailman on this host. Requires an active MTA on the host (e.g. Postfix).";
+        description = lib.mdDoc "Enable Mailman on this host. Requires an active MTA on the host (e.g. Postfix).";
+      };
+
+      ldap = {
+        enable = mkEnableOption (lib.mdDoc "LDAP auth");
+        serverUri = mkOption {
+          type = types.str;
+          example = "ldaps://ldap.host";
+          description = lib.mdDoc ''
+            LDAP host to connect against.
+          '';
+        };
+        bindDn = mkOption {
+          type = types.str;
+          example = "cn=root,dc=nixos,dc=org";
+          description = lib.mdDoc ''
+            Service account to bind against.
+          '';
+        };
+        bindPasswordFile = mkOption {
+          type = types.str;
+          example = "/run/secrets/ldap-bind";
+          description = lib.mdDoc ''
+            Path to the file containing the bind password of the servie account
+            defined by [](#opt-services.mailman.ldap.bindDn).
+          '';
+        };
+        superUserGroup = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "cn=admin,ou=groups,dc=nixos,dc=org";
+          description = lib.mdDoc ''
+            Group where a user must be a member of to gain superuser rights.
+          '';
+        };
+        userSearch = {
+          query = mkOption {
+            type = types.str;
+            example = "(&(objectClass=inetOrgPerson)(|(uid=%(user)s)(mail=%(user)s)))";
+            description = lib.mdDoc ''
+              Query to find a user in the LDAP database.
+            '';
+          };
+          ou = mkOption {
+            type = types.str;
+            example = "ou=users,dc=nixos,dc=org";
+            description = lib.mdDoc ''
+              Organizational unit to look up a user.
+            '';
+          };
+        };
+        groupSearch = {
+          type = mkOption {
+            type = types.enum [
+              "posixGroup" "groupOfNames" "memberDNGroup" "nestedMemberDNGroup" "nestedGroupOfNames"
+              "groupOfUniqueNames" "nestedGroupOfUniqueNames" "activeDirectoryGroup" "nestedActiveDirectoryGroup"
+              "organizationalRoleGroup" "nestedOrganizationalRoleGroup"
+            ];
+            default = "posixGroup";
+            apply = v: "${toUpper (substring 0 1 v)}${substring 1 (stringLength v) v}Type";
+            description = lib.mdDoc ''
+              Type of group to perform a group search against.
+            '';
+          };
+          query = mkOption {
+            type = types.str;
+            example = "(objectClass=groupOfNames)";
+            description = lib.mdDoc ''
+              Query to find a group associated to a user in the LDAP database.
+            '';
+          };
+          ou = mkOption {
+            type = types.str;
+            example = "ou=groups,dc=nixos,dc=org";
+            description = lib.mdDoc ''
+              Organizational unit to look up a group.
+            '';
+          };
+        };
+        attrMap = {
+          username = mkOption {
+            default = "uid";
+            type = types.str;
+            description = lib.mdDoc ''
+              LDAP-attribute that corresponds to the `username`-attribute in mailman.
+            '';
+          };
+          firstName = mkOption {
+            default = "givenName";
+            type = types.str;
+            description = lib.mdDoc ''
+              LDAP-attribute that corresponds to the `firstName`-attribute in mailman.
+            '';
+          };
+          lastName = mkOption {
+            default = "sn";
+            type = types.str;
+            description = lib.mdDoc ''
+              LDAP-attribute that corresponds to the `lastName`-attribute in mailman.
+            '';
+          };
+          email = mkOption {
+            default = "mail";
+            type = types.str;
+            description = lib.mdDoc ''
+              LDAP-attribute that corresponds to the `email`-attribute in mailman.
+            '';
+          };
+        };
       };
 
       enablePostfix = mkOption {
         type = types.bool;
         default = true;
         example = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable Postfix integration. Requires an active Postfix installation.
 
           If you want to use another MTA, set this option to false and configure
@@ -104,7 +218,7 @@ in {
       siteOwner = mkOption {
         type = types.str;
         example = "postmaster@example.org";
-        description = ''
+        description = lib.mdDoc ''
           Certain messages that must be delivered to a human, but which can't
           be delivered to a list owner (e.g. a bounce from a list owner), will
           be sent to this address. It should point to a human.
@@ -114,7 +228,7 @@ in {
       webHosts = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           The list of hostnames and/or IP addresses from which the Mailman Web
           UI will accept requests. By default, "localhost" and "127.0.0.1" are
           enabled. All additional names under which your web server accepts
@@ -126,7 +240,7 @@ in {
       webUser = mkOption {
         type = types.str;
         default = "mailman-web";
-        description = ''
+        description = lib.mdDoc ''
           User to run mailman-web as
         '';
       };
@@ -134,34 +248,42 @@ in {
       webSettings = mkOption {
         type = types.attrs;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Overrides for the default mailman-web Django settings.
         '';
       };
 
+      restApiPassFile = mkOption {
+        default = null;
+        type = types.nullOr types.str;
+        description = lib.mdDoc ''
+          Path to the file containing the value for `MAILMAN_REST_API_PASS`.
+        '';
+      };
+
       serve = {
-        enable = mkEnableOption "Automatic nginx and uwsgi setup for mailman-web";
+        enable = mkEnableOption (lib.mdDoc "Automatic nginx and uwsgi setup for mailman-web");
       };
 
       extraPythonPackages = mkOption {
-        description = "Packages to add to the python environment used by mailman and mailman-web";
+        description = lib.mdDoc "Packages to add to the python environment used by mailman and mailman-web";
         type = types.listOf types.package;
         default = [];
       };
 
       settings = mkOption {
-        description = "Settings for mailman.cfg";
+        description = lib.mdDoc "Settings for mailman.cfg";
         type = types.attrsOf (types.attrsOf types.str);
         default = {};
       };
 
       hyperkitty = {
-        enable = mkEnableOption "the Hyperkitty archiver for Mailman";
+        enable = mkEnableOption (lib.mdDoc "the Hyperkitty archiver for Mailman");
 
         baseUrl = mkOption {
           type = types.str;
           default = "http://localhost:18507/archives/";
-          description = ''
+          description = lib.mdDoc ''
             Where can Mailman connect to Hyperkitty's internal API, preferably on
             localhost?
           '';
@@ -255,8 +377,6 @@ in {
     };
     users.groups.mailman = {};
 
-    environment.etc."mailman.cfg".text = mailmanCfg;
-
     environment.etc."mailman3/settings.py".text = ''
       import os
 
@@ -274,6 +394,39 @@ in {
 
       with open('/var/lib/mailman-web/settings_local.json') as f:
           globals().update(json.load(f))
+
+      ${optionalString (cfg.restApiPassFile != null) ''
+        with open('${cfg.restApiPassFile}') as f:
+            MAILMAN_REST_API_PASS = f.read().rstrip('\n')
+      ''}
+
+      ${optionalString (cfg.ldap.enable) ''
+        import ldap
+        from django_auth_ldap.config import LDAPSearch, ${cfg.ldap.groupSearch.type}
+        AUTH_LDAP_SERVER_URI = "${cfg.ldap.serverUri}"
+        AUTH_LDAP_BIND_DN = "${cfg.ldap.bindDn}"
+        with open("${cfg.ldap.bindPasswordFile}") as f:
+            AUTH_LDAP_BIND_PASSWORD = f.read().rstrip('\n')
+        AUTH_LDAP_USER_SEARCH = LDAPSearch("${cfg.ldap.userSearch.ou}",
+            ldap.SCOPE_SUBTREE, "${cfg.ldap.userSearch.query}")
+        AUTH_LDAP_GROUP_TYPE = ${cfg.ldap.groupSearch.type}()
+        AUTH_LDAP_GROUP_SEARCH = LDAPSearch("${cfg.ldap.groupSearch.ou}",
+            ldap.SCOPE_SUBTREE, "${cfg.ldap.groupSearch.query}")
+        AUTH_LDAP_USER_ATTR_MAP = {
+          ${concatStrings (flip mapAttrsToList cfg.ldap.attrMap (key: value: ''
+            "${key}": "${value}",
+          ''))}
+        }
+        ${optionalString (cfg.ldap.superUserGroup != null) ''
+          AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+            "is_superuser": "${cfg.ldap.superUserGroup}"
+          }
+        ''}
+        AUTHENTICATION_BACKENDS = (
+            "django_auth_ldap.backend.LDAPBackend",
+            "django.contrib.auth.backends.ModelBackend"
+        )
+      ''}
     '';
 
     services.nginx = mkIf (cfg.serve.enable && cfg.webHosts != []) {
@@ -320,7 +473,7 @@ in {
         after = [ "network.target" ]
           ++ lib.optional cfg.enablePostfix "postfix-setup.service"
           ++ lib.optional withPostgresql "postgresql.service";
-        restartTriggers = [ config.environment.etc."mailman.cfg".source ];
+        restartTriggers = [ mailmanCfgFile ];
         requires = optional withPostgresql "postgresql.service";
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
@@ -344,6 +497,14 @@ in {
         requires = optional withPostgresql "postgresql.service";
         serviceConfig.Type = "oneshot";
         script = ''
+          install -m0750 -o mailman -g mailman ${mailmanCfgFile} /etc/mailman.cfg
+          ${optionalString (cfg.restApiPassFile != null) ''
+            ${pkgs.replace-secret}/bin/replace-secret \
+              '#NIXOS_MAILMAN_REST_API_PASS_SECRET#' \
+              ${cfg.restApiPassFile} \
+              /etc/mailman.cfg
+          ''}
+
           mailmanDir=/var/lib/mailman
           mailmanWebDir=/var/lib/mailman-web
 
@@ -424,7 +585,7 @@ in {
       mailman-daily = {
         description = "Trigger daily Mailman events";
         startAt = "daily";
-        restartTriggers = [ config.environment.etc."mailman.cfg".source ];
+        restartTriggers = [ mailmanCfgFile ];
         serviceConfig = {
           ExecStart = "${mailmanEnv}/bin/mailman digests --send";
           User = "mailman";

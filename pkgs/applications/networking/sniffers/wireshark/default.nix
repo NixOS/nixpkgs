@@ -11,7 +11,7 @@ assert withQt  -> qt5  != null;
 with lib;
 
 let
-  version = "3.6.3";
+  version = "3.6.5";
   variant = if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "sha256-tgNkpMAGihCBGrP9B1ymwesOddRGACcbiKIO2Tou9jE=";
+    sha256 = "sha256-otdB1g/zUWE31LnzjNwH7uVKVuw2BG9MOv7mv7T26qE=";
   };
 
   cmakeFlags = [
@@ -57,10 +57,6 @@ in stdenv.mkDerivation {
 
   postPatch = ''
     sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
-  '';
-
-  preBuild = ''
-    export LD_LIBRARY_PATH="$PWD/run"
   '';
 
   postInstall = ''

@@ -6,15 +6,20 @@
 
 let chia = python3Packages.buildPythonApplication rec {
   pname = "chia";
-  version = "1.3.1";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "chia-blockchain";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-nH6rCzIQu5oWsdEHa+UkvbWeUGjrtpEKVEcLmSoor5k=";
+    hash = "sha256-FzKdb6Z/ykKYjpjCr7QR5fxXPNnQbW3bBY97t7DxS90=";
   };
+
+  patches = [
+    # chia tries to put lock files in the python modules directory
+    ./dont_lock_in_store.patch
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -39,16 +44,18 @@ let chia = python3Packages.buildPythonApplication rec {
     chiapos
     chiavdf
     chiabip158
+    chia-rs
     click
     clvm
     clvm-rs
     clvm-tools
+    clvm-tools-rs
     colorama
     colorlog
     concurrent-log-handler
     cryptography
     dnslib
-    dnspythonchia
+    dnspython
     fasteners
     filelock
     keyrings-cryptfile

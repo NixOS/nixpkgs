@@ -15,6 +15,6 @@ python310Packages.buildPythonPackage rec {
     homepage = "https://florian-berger.de/en/software/pixel2svg/";
     description = "Converts pixel art to SVG - pixel by pixel";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ papojari ];
+    maintainers = with maintainers; [ annaaurora ];
   };
 }

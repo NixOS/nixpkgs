@@ -1,0 +1,40 @@
+diff --git a/a/src/gallium/frontends/dri/dri_util.c b/b/src/gallium/frontends/dri/dri_util.c
+index 8d60526..782360d 100644
+--- a/src/gallium/frontends/dri/dri_util.c
++++ b/src/gallium/frontends/dri/dri_util.c
+@@ -808,35 +808,6 @@ const __DRIcoreExtension driCoreExtension = {
+     .unbindContext              = driUnbindContext
+ };
+ 
+-/** DRI2 interface */
+-const __DRIdri2Extension driDRI2Extension = {
+-    .base = { __DRI_DRI2, 4 },
+-
+-    .createNewScreen            = dri2CreateNewScreen,
+-    .createNewDrawable          = driCreateNewDrawable,
+-    .createNewContext           = driCreateNewContext,
+-    .getAPIMask                 = driGetAPIMask,
+-    .createNewContextForAPI     = driCreateNewContextForAPI,
+-    .allocateBuffer             = dri2AllocateBuffer,
+-    .releaseBuffer              = dri2ReleaseBuffer,
+-    .createContextAttribs       = driCreateContextAttribs,
+-    .createNewScreen2           = driCreateNewScreen2,
+-};
+-
+-const __DRIdri2Extension swkmsDRI2Extension = {
+-    .base = { __DRI_DRI2, 4 },
+-
+-    .createNewScreen            = swkmsCreateNewScreen,
+-    .createNewDrawable          = driCreateNewDrawable,
+-    .createNewContext           = driCreateNewContext,
+-    .getAPIMask                 = driGetAPIMask,
+-    .createNewContextForAPI     = driCreateNewContextForAPI,
+-    .allocateBuffer             = dri2AllocateBuffer,
+-    .releaseBuffer              = dri2ReleaseBuffer,
+-    .createContextAttribs       = driCreateContextAttribs,
+-    .createNewScreen2           = driCreateNewScreen2,
+-};
+-
+ const __DRIswrastExtension driSWRastExtension = {
+     .base = { __DRI_SWRAST, 4 },
+ 

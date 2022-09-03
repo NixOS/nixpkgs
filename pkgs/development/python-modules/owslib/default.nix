@@ -1,12 +1,18 @@
 { lib, buildPythonPackage, fetchPypi, python-dateutil, requests, pytz, pyproj , pytest, pyyaml } :
 buildPythonPackage rec {
   pname = "OWSLib";
-  version = "0.25.0";
+  version = "0.26.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "20d79bce0be10277caa36f3134826bd0065325df0301a55b2c8b1c338d8d8f0a";
+    sha256 = "sha256-jEywYzjrZAXCrs7QttCFaCqmHw8uUo8ceI1o3FDflBs=";
   };
+
+  # as now upstream https://github.com/geopython/OWSLib/pull/824
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace 'pyproj ' 'pyproj #'
+  '';
 
   buildInputs = [ pytest ];
   propagatedBuildInputs = [ python-dateutil pyproj pytz requests pyyaml ];

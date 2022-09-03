@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gdcm";
-  version = "3.0.12";
+  version = "3.0.15";
 
   src = fetchFromGitHub {
     owner = "malaterre";
     repo = "GDCM";
     rev = "v${version}";
-    sha256 = "sha256-ChHsbnX+128ZOugL6Nc8EqfaDMaNMNDmKTN55pyyem8=";
+    sha256 = "sha256-kyazfsm0lGgz26PWJUyFRmFxQFxmotDPXrwx3N/EVl0=";
   };
 
   cmakeFlags = [

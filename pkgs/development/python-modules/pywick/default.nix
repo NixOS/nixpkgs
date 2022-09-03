@@ -8,7 +8,7 @@
 , pandas
 , pillow
 , six
-, pytorch
+, torch
 , torchvision
 , tqdm
 , lib
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    h5py hickle numpy pandas pillow six pytorch torchvision tqdm
+    h5py hickle numpy pandas pillow six torch torchvision tqdm
   ];
 
   checkInputs = [ pytest ];

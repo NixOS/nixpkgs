@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "lib2geom";
-  version = "1.1";
+  version = "1.2";
 
   outputs = [ "out" "dev" ];
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "inkscape";
     repo = "lib2geom";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-u9pbpwVzAXzrM2/tQnd1B6Jo9Fzg6UZBr9AtUsNMfQ0=";
+    sha256 = "sha256-SNo5YT7o29zdxkHLuy9MT88qBg/U1Wwa3BWShF5ACTc=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,6 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
     "-D2GEOM_BUILD_SHARED=ON"
   ];
 

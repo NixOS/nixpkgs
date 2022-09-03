@@ -1,7 +1,13 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub
-, Cocoa ? null }:
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, fetchurl
+, Cocoa
+, installShellFiles
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "noti";
   version = "3.5.0";
 
@@ -12,17 +18,29 @@ buildGoPackage rec {
     sha256 = "12r9wawwl6x0rfv1kahwkamfa0pjq24z60az9pn9nsi2z1rrlwkd";
   };
 
+  patches = [
+    # update golang.org/x/sys to fix building on aarch64-darwin
+    # using fetchurl because fetchpatch breaks the patch
+    (fetchurl {
+      url = "https://github.com/variadico/noti/commit/a90bccfdb2e6a0adc2e92f9a4e7be64133832ba9.patch";
+      sha256 = "sha256-vSAwuAR9absMSFqGOlzmRZoOGC/jpkmh8CMCVjeleUo=";
+    })
+  ];
+
+  vendorSha256 = null;
+
+  nativeBuildInputs = [ installShellFiles ];
+
   buildInputs = lib.optional stdenv.isDarwin Cocoa;
 
-  goPackagePath = "github.com/variadico/noti";
-
   ldflags = [
-    "-X ${goPackagePath}/internal/command.Version=${version}"
+    "-s"
+    "-w"
+    "-X github.com/variadico/noti/internal/command.Version=${version}"
   ];
 
   postInstall = ''
-    install -Dm444 -t $out/share/man/man1 $src/docs/man/*.1
-    install -Dm444 -t $out/share/man/man5 $src/docs/man/*.5
+    installManPage docs/man/*
   '';
 
   meta = with lib; {

@@ -116,13 +116,7 @@ class VimEditor(pluginupdate.Editor):
 def main():
 
     global luaPlugins
-
-    # whitelist
-    luaPlugins = run_nix_expr(GET_PLUGINS_LUA) + [
-        "diffview-nvim",
-        "marks-nvim",
-        "nvim-biscuits"
-    ]
+    luaPlugins = run_nix_expr(GET_PLUGINS_LUA)
 
     editor = VimEditor("vim", ROOT, GET_PLUGINS)
     parser = editor.create_parser()

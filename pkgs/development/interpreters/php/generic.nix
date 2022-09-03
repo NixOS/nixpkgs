@@ -29,7 +29,7 @@ let
     , xcbuild
 
     , version
-    , sha256
+    , hash
     , extraPatches ? [ ]
     , packageOverrides ? (final: prev: { })
     , phpAttrsOverrides ? (attrs: { })
@@ -290,7 +290,7 @@ let
 
           src = fetchurl {
             url = "https://www.php.net/distributions/php-${version}.tar.bz2";
-            inherit sha256;
+            inherit hash;
           };
 
           patches = [ ./fix-paths-php7.patch ] ++ extraPatches;

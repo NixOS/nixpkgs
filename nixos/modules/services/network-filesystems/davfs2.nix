@@ -15,7 +15,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable davfs2.
       '';
     };
@@ -23,7 +23,7 @@ in
     davUser = mkOption {
       type = types.str;
       default = "davfs2";
-      description = ''
+      description = lib.mdDoc ''
         When invoked by root the mount.davfs daemon will run as this user.
         Value must be given as name, not as numerical id.
       '';
@@ -32,7 +32,7 @@ in
     davGroup = mkOption {
       type = types.str;
       default = "davfs2";
-      description = ''
+      description = lib.mdDoc ''
         The group of the running mount.davfs daemon. Ordinary users must be
         member of this group in order to mount a davfs2 file system. Value must
         be given as name, not as numerical id.
@@ -47,7 +47,7 @@ in
         proxy foo.bar:8080
         use_locks 0
       '';
-      description = ''
+      description = lib.mdDoc ''
         Extra lines appended to the configuration of davfs2.
       ''  ;
     };

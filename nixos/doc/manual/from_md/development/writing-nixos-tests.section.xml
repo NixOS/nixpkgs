@@ -590,11 +590,24 @@ import ./make-test-python.nix {
       # fmt: on
     '';
 </programlisting>
+    <para>
+      Similarly, the type checking of test scripts can be disabled in
+      the following way:
+    </para>
+    <programlisting language="bash">
+import ./make-test-python.nix {
+  skipTypeCheck = true;
+  nodes.machine =
+    { config, pkgs, ... }:
+    { configuration…
+    };
+}
+</programlisting>
   </section>
   <section xml:id="ssec-failing-tests-early">
     <title>Failing tests early</title>
     <para>
-      To fail tests early when certain invariables are no longer met
+      To fail tests early when certain invariants are no longer met
       (instead of waiting for the build to time out), the decorator
       <literal>polling_condition</literal> is provided. For example, if
       we are testing a program <literal>foo</literal> that should not
@@ -622,12 +635,10 @@ with foo_running:
     <para>
       : specifies how often the condition should be polled:
     </para>
-    <programlisting>
-```py
+    <programlisting language="python">
 @polling_condition(seconds_interval=10)
 def foo_running():
     machine.succeed(&quot;pgrep -x foo&quot;)
-```
 </programlisting>
     <para>
       <literal>description</literal>
@@ -637,19 +648,45 @@ def foo_running():
       provided, the description is pulled from the docstring of the
       function. These two are therefore equivalent:
     </para>
-    <programlisting>
-```py
+    <programlisting language="python">
 @polling_condition
 def foo_running():
     &quot;check that foo is running&quot;
     machine.succeed(&quot;pgrep -x foo&quot;)
-```
-
-```py
+</programlisting>
+    <programlisting language="python">
 @polling_condition(description=&quot;check that foo is running&quot;)
 def foo_running():
     machine.succeed(&quot;pgrep -x foo&quot;)
-```
 </programlisting>
+  </section>
+  <section xml:id="ssec-python-packages-in-test-script">
+    <title>Adding Python packages to the test script</title>
+    <para>
+      When additional Python libraries are required in the test script,
+      they can be added using the parameter
+      <literal>extraPythonPackages</literal>. For example, you could add
+      <literal>numpy</literal> like this:
+    </para>
+    <programlisting language="bash">
+import ./make-test-python.nix
+{
+  extraPythonPackages = p: [ p.numpy ];
+
+  nodes = { };
+
+  # Type checking on extra packages doesn't work yet
+  skipTypeCheck = true;
+
+  testScript = ''
+    import numpy as np
+    assert str(np.zeros(4) == &quot;array([0., 0., 0., 0.])&quot;)
+  '';
+}
+</programlisting>
+    <para>
+      In that case, <literal>numpy</literal> is chosen from the generic
+      <literal>python3Packages</literal>.
+    </para>
   </section>
 </section>

@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, glib, gobject-introspection, python3, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, glib
+, gobject-introspection
+, python3
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-menus";
@@ -9,9 +18,16 @@ stdenv.mkDerivation rec {
     sha256 = "1r7zf64aclaplz77hkl9kq0xnz6jk1l49z64i8v56c41pm59c283";
   };
 
-  nativeBuildInputs = [ pkg-config gettext gobject-introspection ];
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+    gobject-introspection
+  ];
 
-  buildInputs = [ glib python3 ];
+  buildInputs = [
+    glib
+    python3
+  ];
 
   makeFlags = [
     "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/"

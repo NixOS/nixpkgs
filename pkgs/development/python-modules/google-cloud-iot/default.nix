@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-iot";
-  version = "2.5.0";
+  version = "2.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bZ2Zn4r+hQ2MfkgXmJPYWbKy3tYlTkYh6ohmWQA/75U=";
+    sha256 = "sha256-BCNpEZdpBRkRa6p8OwDoE6F70ljbSg6doG83hCnQbwM=";
   };
 
   propagatedBuildInputs = [ grpc-google-iam-v1 google-api-core libcst proto-plus ];

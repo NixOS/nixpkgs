@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "moku";
-  version = "2.3";
+  version = "2.4";
 
   /*
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   */
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EzVcECjJyrr2NLQkG0Yp/jYBMnsEP1/FnS5O3UplszI=";
+    hash = "sha256-yFA2NkiRt6wjXJk6i7oxrjD597acAligWId3MDYwTd0=";
   };
   /*
 

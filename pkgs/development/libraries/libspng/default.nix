@@ -49,8 +49,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simple, modern libpng alternative";
-    homepage = "https://github.com/randy408/libspng";
+    homepage = "https://libspng.org/";
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ humancalico ];
+    platforms = platforms.all;
   };
 }

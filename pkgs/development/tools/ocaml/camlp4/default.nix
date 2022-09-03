@@ -1,6 +1,6 @@
 { lib, stdenv, fetchzip, which, ocaml, ocamlbuild }:
 
-if lib.versionAtLeast ocaml.version "4.14"
+if lib.versionAtLeast ocaml.version "4.15"
 then throw "camlp4 is not available for OCaml ${ocaml.version}"
 else
 
@@ -41,6 +41,9 @@ let param = {
   "4.13" = {
      version = "4.13+1";
      sha256 = "0fzxa1zdhk74mlxpin7p90flks6sp4gkc0mfclmj9zak15rii55n"; };
+  "4.14" = {
+     version = "4.14+1";
+     sha256 = "sha256-cPN3GioZT/Zt6uzbjGUPEGVJcPQdsAnCkU/AQoPfvuo="; };
   }.${ocaml.meta.branch};
 in
 

@@ -62,10 +62,7 @@ in mkYarnPackage rec {
   '';
 
   # don't generate the dist tarball
-  # (`doDist = false` does not work in mkYarnPackage)
-  distPhase = ''
-    true
-  '';
+  doDist = false;
 
   passthru = {
     nodeAppDir = "libexec/${pname}/deps/${pname}";

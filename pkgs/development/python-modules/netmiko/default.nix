@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "netmiko";
-  version = "4.1.0";
+  version = "4.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-VwUZdHr82WsEprB7rk5d62AwaCxzngftDgjeBZW4OWQ=";
+    sha256 = "sha256-9e3iooZw09/TRwBhRoZl+A+bSQbtIOaw+02eHJvmevw=";
   };
 
   buildInputs = [ setuptools ];

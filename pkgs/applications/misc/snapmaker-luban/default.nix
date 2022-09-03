@@ -81,6 +81,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Snapmaker Luban is an easy-to-use 3-in-1 software tailor-made for Snapmaker machines";
     homepage = "https://github.com/Snapmaker/Luban";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3;
     maintainers = [ maintainers.simonkampe ];
     platforms = [ "x86_64-linux" ];

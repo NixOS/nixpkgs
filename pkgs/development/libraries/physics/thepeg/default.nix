@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "thepeg";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/thepeg/ThePEG-${version}.tar.bz2";
-    sha256 = "0gif4vb9lw2px2qdywqm7x0frbv0h5gq9lq36c50f2hv77a5bgwp";
+    hash = "sha256-8hRzGXp2H8MpF7CKjSTSv6+T/1fzRB/WBdqZrJ3l1Qs=";
   };
 
   buildInputs = [ boost fastjet gsl hepmc2 lhapdf rivet zlib ];

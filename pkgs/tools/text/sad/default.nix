@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sad";
-  version = "0.4.21";
+  version = "0.4.22";
 
   src = fetchFromGitHub {
     owner = "ms-jpq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-kM5jeoFmDOwgnzdSwfPJfZhpBS8RPMNt143S5iYYrF4=";
+    sha256 = "sha256-v1fXEC+bV561cewH17x+1anhfXstGBOHG5rHvhYIvLo=";
   };
 
-  cargoSha256 = "sha256-JwYUM4o4I3dC1HgG4bkUS1PH4MsxcvwdefjefnEZQFs=";
+  cargoSha256 = "sha256-krQTa9R3hmMVKLoBgnbCw+aSQu9HUXfA3XflB8AZv6w=";
 
   meta = with lib; {
     description = "CLI tool to search and replace";

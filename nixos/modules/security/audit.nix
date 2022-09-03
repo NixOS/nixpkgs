@@ -56,7 +56,7 @@ in {
       enable = mkOption {
         type        = types.enum [ false true "lock" ];
         default     = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the Linux audit system. The special `lock' value can be used to
           enable auditing and prevent disabling it until a restart. Be careful about locking
           this, as it will prevent you from changing your audit configuration until you
@@ -67,13 +67,13 @@ in {
       failureMode = mkOption {
         type        = types.enum [ "silent" "printk" "panic" ];
         default     = "printk";
-        description = "How to handle critical errors in the auditing system";
+        description = lib.mdDoc "How to handle critical errors in the auditing system";
       };
 
       backlogLimit = mkOption {
         type        = types.int;
         default     = 64; # Apparently the kernel default
-        description = ''
+        description = lib.mdDoc ''
           The maximum number of outstanding audit buffers allowed; exceeding this is
           considered a failure and handled in a manner specified by failureMode.
         '';
@@ -82,7 +82,7 @@ in {
       rateLimit = mkOption {
         type        = types.int;
         default     = 0;
-        description = ''
+        description = lib.mdDoc ''
           The maximum messages per second permitted before triggering a failure as
           specified by failureMode. Setting it to zero disables the limit.
         '';
@@ -92,7 +92,7 @@ in {
         type        = types.listOf types.str; # (types.either types.str (types.submodule rule));
         default     = [];
         example     = [ "-a exit,always -F arch=b64 -S execve" ];
-        description = ''
+        description = lib.mdDoc ''
           The ordered audit rules, with each string appearing as one line of the audit.rules file.
         '';
       };

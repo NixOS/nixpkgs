@@ -35,18 +35,18 @@ in
 {
   options.services.kea = with types; {
     ctrl-agent = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Kea Control Agent configuration
       '';
       default = {};
       type = submodule {
         options = {
-          enable = mkEnableOption "Kea Control Agent";
+          enable = mkEnableOption (lib.mdDoc "Kea Control Agent");
 
           extraArgs = mkOption {
             type = listOf str;
             default = [];
-            description = ''
+            description = lib.mdDoc ''
               List of additonal arguments to pass to the daemon.
             '';
           };
@@ -54,19 +54,19 @@ in
           configFile = mkOption {
             type = nullOr path;
             default = null;
-            description = ''
-              Kea Control Agent configuration as a path, see <link xlink:href="https://kea.readthedocs.io/en/kea-${package.version}/arm/agent.html"/>.
+            description = lib.mdDoc ''
+              Kea Control Agent configuration as a path, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/agent.html>.
 
-              Takes preference over <link linkend="opt-services.kea.ctrl-agent.settings">settings</link>.
-              Most users should prefer using <link linkend="opt-services.kea.ctrl-agent.settings">settings</link> instead.
+              Takes preference over [settings](#opt-services.kea.ctrl-agent.settings).
+              Most users should prefer using [settings](#opt-services.kea.ctrl-agent.settings) instead.
             '';
           };
 
           settings = mkOption {
             type = format.type;
             default = null;
-            description = ''
-              Kea Control Agent configuration as an attribute set, see <link xlink:href="https://kea.readthedocs.io/en/kea-${package.version}/arm/agent.html"/>.
+            description = lib.mdDoc ''
+              Kea Control Agent configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/agent.html>.
             '';
           };
         };
@@ -74,18 +74,18 @@ in
     };
 
     dhcp4 = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         DHCP4 Server configuration
       '';
       default = {};
       type = submodule {
         options = {
-          enable = mkEnableOption "Kea DHCP4 server";
+          enable = mkEnableOption (lib.mdDoc "Kea DHCP4 server");
 
           extraArgs = mkOption {
             type = listOf str;
             default = [];
-            description = ''
+            description = lib.mdDoc ''
               List of additonal arguments to pass to the daemon.
             '';
           };
@@ -93,11 +93,11 @@ in
           configFile = mkOption {
             type = nullOr path;
             default = null;
-            description = ''
-              Kea DHCP4 configuration as a path, see <link xlink:href="https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp4-srv.html"/>.
+            description = lib.mdDoc ''
+              Kea DHCP4 configuration as a path, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp4-srv.html>.
 
-              Takes preference over <link linkend="opt-services.kea.dhcp4.settings">settings</link>.
-              Most users should prefer using <link linkend="opt-services.kea.dhcp4.settings">settings</link> instead.
+              Takes preference over [settings](#opt-services.kea.dhcp4.settings).
+              Most users should prefer using [settings](#opt-services.kea.dhcp4.settings) instead.
             '';
           };
 
@@ -125,8 +125,8 @@ in
                 } ];
               } ];
             };
-            description = ''
-              Kea DHCP4 configuration as an attribute set, see <link xlink:href="https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp4-srv.html"/>.
+            description = lib.mdDoc ''
+              Kea DHCP4 configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp4-srv.html>.
             '';
           };
         };
@@ -134,18 +134,18 @@ in
     };
 
     dhcp6 = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         DHCP6 Server configuration
       '';
       default = {};
       type = submodule {
         options = {
-          enable = mkEnableOption "Kea DHCP6 server";
+          enable = mkEnableOption (lib.mdDoc "Kea DHCP6 server");
 
           extraArgs = mkOption {
             type = listOf str;
             default = [];
-            description = ''
+            description = lib.mdDoc ''
               List of additonal arguments to pass to the daemon.
             '';
           };
@@ -153,11 +153,11 @@ in
           configFile = mkOption {
             type = nullOr path;
             default = null;
-            description = ''
-              Kea DHCP6 configuration as a path, see <link xlink:href="https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp6-srv.html"/>.
+            description = lib.mdDoc ''
+              Kea DHCP6 configuration as a path, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp6-srv.html>.
 
-              Takes preference over <link linkend="opt-services.kea.dhcp6.settings">settings</link>.
-              Most users should prefer using <link linkend="opt-services.kea.dhcp6.settings">settings</link> instead.
+              Takes preference over [settings](#opt-services.kea.dhcp6.settings).
+              Most users should prefer using [settings](#opt-services.kea.dhcp6.settings) instead.
             '';
           };
 
@@ -186,8 +186,8 @@ in
                 } ];
               } ];
             };
-            description = ''
-              Kea DHCP6 configuration as an attribute set, see <link xlink:href="https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp6-srv.html"/>.
+            description = lib.mdDoc ''
+              Kea DHCP6 configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp6-srv.html>.
             '';
           };
         };
@@ -195,18 +195,18 @@ in
     };
 
     dhcp-ddns = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Kea DHCP-DDNS configuration
       '';
       default = {};
       type = submodule {
         options = {
-          enable = mkEnableOption "Kea DDNS server";
+          enable = mkEnableOption (lib.mdDoc "Kea DDNS server");
 
           extraArgs = mkOption {
             type = listOf str;
             default = [];
-            description = ''
+            description = lib.mdDoc ''
               List of additonal arguments to pass to the daemon.
             '';
           };
@@ -214,11 +214,11 @@ in
           configFile = mkOption {
             type = nullOr path;
             default = null;
-            description = ''
-              Kea DHCP-DDNS configuration as a path, see <link xlink:href="https://kea.readthedocs.io/en/kea-${package.version}/arm/ddns.html"/>.
+            description = lib.mdDoc ''
+              Kea DHCP-DDNS configuration as a path, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/ddns.html>.
 
-              Takes preference over <link linkend="opt-services.kea.dhcp-ddns.settings">settings</link>.
-              Most users should prefer using <link linkend="opt-services.kea.dhcp-ddns.settings">settings</link> instead.
+              Takes preference over [settings](#opt-services.kea.dhcp-ddns.settings).
+              Most users should prefer using [settings](#opt-services.kea.dhcp-ddns.settings) instead.
             '';
           };
 
@@ -239,8 +239,8 @@ in
                 ddns-domains = [ ];
               };
             };
-            description = ''
-              Kea DHCP-DDNS configuration as an attribute set, see <link xlink:href="https://kea.readthedocs.io/en/kea-${package.version}/arm/ddns.html"/>.
+            description = lib.mdDoc ''
+              Kea DHCP-DDNS configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/ddns.html>.
             '';
           };
         };
@@ -298,7 +298,7 @@ in
       ];
 
       serviceConfig = {
-        ExecStart = "${package}/bin/kea-ctrl-agent -c /etc/kea/ctrl-agent.conf ${lib.escapeShellArgs cfg.dhcp4.extraArgs}";
+        ExecStart = "${package}/bin/kea-ctrl-agent -c /etc/kea/ctrl-agent.conf ${lib.escapeShellArgs cfg.ctrl-agent.extraArgs}";
         KillMode = "process";
         Restart = "on-failure";
       } // commonServiceConfig;

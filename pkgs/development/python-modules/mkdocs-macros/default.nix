@@ -6,7 +6,7 @@
 , mkdocs-macros
 , mkdocs-material
 , jinja2
-, dateutil
+, python-dateutil
 , termcolor
 , pyyaml
 , runCommand
@@ -24,8 +24,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     jinja2
-    dateutil
     termcolor
+    python-dateutil
     pyyaml
     mkdocs
   ];

@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "svd2rust";
-  version = "0.24.0";
+  version = "0.25.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-P0s2mrfYA7DUThvje0LH3Pq0Os6UZJrrnjnzAm8UlDQ=";
+    sha256 = "sha256-mPkcefB9oTLYhtokhUVwoWfsvLtZWWb+LwElmJeZsiA=";
   };
 
-  cargoSha256 = "sha256-TDgd8RG97ROeAQJ1uDF2m+yIa8US7zFz+5qrQtFbazE=";
+  cargoSha256 = "sha256-sjjmsrgKfrvXynVsZuYkmGKmh0cTAlSNT4h2fVHATrU=";
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 

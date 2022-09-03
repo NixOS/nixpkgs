@@ -11,7 +11,28 @@ let
     , extraAttrs ? [ ]
     }:
     let
-      buildSystem = if attr == "cython" then self.python.pythonForBuild.pkgs.cython else self.${attr};
+      buildSystem =
+        if builtins.isAttrs attr then
+          let
+            fromIsValid =
+              if builtins.hasAttr "from" attr then
+                lib.versionAtLeast drv.version attr.from
+              else
+                true;
+            untilIsValid =
+              if builtins.hasAttr "until" attr then
+                lib.versionOlder drv.version attr.until
+              else
+                true;
+            intendedBuildSystem =
+              if attr.buildSystem == "cython" then
+                self.python.pythonForBuild.cython
+              else
+                self.${attr.buildSystem};
+          in
+          if fromIsValid && untilIsValid then intendedBuildSystem else null
+        else
+          if attr == "cython" then self.python.pythonForBuild.pkgs.cython else self.${attr};
     in
     (
       # Flit only works on Python3
@@ -24,7 +45,10 @@ let
             { }
           else
             {
-              nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.${attr} ] ++ map (a: self.${a}) extraAttrs;
+              nativeBuildInputs =
+                (old.nativeBuildInputs or [ ])
+                ++ lib.optionals (!(builtins.isNull buildSystem)) [ buildSystem ]
+                ++ map (a: self.${a}) extraAttrs;
             }
         )
     );
@@ -163,6 +187,13 @@ lib.composeManyExtensions [
               attr = "flit-core";
             } else super.argon2-cffi;
 
+      awscrt = super.awscrt.overridePythonAttrs (
+        old: {
+          nativeBuildInputs = [ pkgs.cmake ] ++ old.nativeBuildInputs;
+          dontUseCmakeConfigure = true;
+        }
+      );
+
       bcrypt = super.bcrypt.overridePythonAttrs (
         old: {
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.libffi ];
@@ -294,7 +325,10 @@ lib.composeManyExtensions [
             "36.0.1" = "sha256-kozYXkqt1Wpqyo9GYCwN08J+zV92ZWFJY/f+rulxmeQ=";
             "36.0.2" = "1a0ni1a3dbv2dvh6gx2i54z8v5j9m6asqg97kkv7gqb1ivihsbp8";
             "37.0.2" = "sha256-qvrxvneoBXjP96AnUPyrtfmCnZo+IriHR5HbtWQ5Gk8=";
-          }.${version} or null;
+            "37.0.4" = "sha256-f8r6QclTwkgK20CNe9i65ZOqvSUeDc4Emv6BFBhh1hI";
+          }.${version} or (
+            lib.warn "Unknown cryptography version: '${version}'. Please update getCargoHash." lib.fakeHash
+          );
           sha256 = getCargoHash super.cryptography.version;
           scrypto =
             if lib.versionAtLeast super.cryptography.version "35" && sha256 == null then
@@ -494,6 +528,12 @@ lib.composeManyExtensions [
         preConfigure = ''
           ${old.preConfigure or ""}
           sed -i '/eth-hash/d' setup.py
+        '';
+      });
+
+      evdev = super.evdev.overridePythonAttrs (old: {
+        preConfigure = ''
+          substituteInPlace setup.py --replace /usr/include/linux ${pkgs.linuxHeaders}/include/linux
         '';
       });
 
@@ -846,6 +886,16 @@ lib.composeManyExtensions [
         propagatedBuildInputs = [ pkgs.libvirt ];
       });
 
+      lightgbm = super.lightgbm.overridePythonAttrs (
+        old: {
+          nativeBuildInputs = [ pkgs.cmake ] ++ old.nativeBuildInputs;
+          dontUseCmakeConfigure = true;
+          postConfigure = ''
+            export HOME=$(mktemp -d)
+          '';
+        }
+      );
+
       llvmlite = super.llvmlite.overridePythonAttrs (
         old:
         let
@@ -1098,10 +1148,15 @@ lib.composeManyExtensions [
               url = "https://github.com/python/mypy/commit/f1755259d54330cd087cae763cd5bbbff26e3e8a.patch";
               sha256 = "sha256-5gPahX2X6+/qUaqDQIGJGvh9lQ2EDtks2cpQutgbOHk=";
             })
-          ] ++ lib.optionals (lib.strings.versionAtLeast old.version "0.940") [
+          ] ++ lib.optionals ((lib.strings.versionAtLeast old.version "0.940") && lib.strings.versionOlder old.version "0.960") [
             (pkgs.fetchpatch {
               url = "https://github.com/python/mypy/commit/e7869f05751561958b946b562093397027f6d5fa.patch";
               sha256 = "sha256-waIZ+m3tfvYE4HJ8kL6rN/C4fMjvLEe9UoPbt9mHWIM=";
+            })
+          ] ++ lib.optionals (lib.strings.versionAtLeast old.version "0.960") [
+            (pkgs.fetchpatch {
+              url = "https://github.com/python/mypy/commit/2004ae023b9d3628d9f09886cbbc20868aee8554.patch";
+              sha256 = "sha256-y+tXvgyiECO5+66YLvaje8Bz5iPvfWNIBJcsnZ2nOdI=";
             })
           ];
         }
@@ -1205,6 +1260,7 @@ lib.composeManyExtensions [
           getCargoHash = version: {
             "3.6.7" = "sha256-sz2k9podPB6QSptkyOu7+BoVTrKhefizRtYU+MICPt4=";
             "3.6.8" = "sha256-vpfceVtYkU09xszNIihY1xbqGWieqDquxwsAmDH8jd4=";
+            "3.7.2" = "sha256-2U37IhftNYjH7sV7Nh51YpR/WjmPmmzX/aGuHsFgwf4=";
           }.${version} or null;
         in
         super.orjson.overridePythonAttrs (old: {
@@ -1454,6 +1510,14 @@ lib.composeManyExtensions [
         }
       );
 
+      pyfftw = super.pyfftw.overridePythonAttrs (old: {
+        buildInputs = (old.buildInputs or [ ]) ++ [
+          pkgs.fftw
+          pkgs.fftwFloat
+          pkgs.fftwLongDouble
+        ];
+      });
+
       pyfuse3 = super.pyfuse3.overridePythonAttrs (old: {
         nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkg-config ];
         buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.fuse3 ];
@@ -1534,6 +1598,14 @@ lib.composeManyExtensions [
           '';
         }
       );
+
+      pynput = super.pynput.overridePythonAttrs (old: {
+        nativeBuildInputs = (old.nativeBuildInputs or [ ])
+          ++ [ self.sphinx ];
+
+        propagatedBuildInputs = (old.propagatedBuildInputs or [ ])
+          ++ [ self.setuptools-lint ];
+      });
 
       pymssql = super.pymssql.overridePythonAttrs (old: {
         buildInputs = (old.buildInputs or [ ])
@@ -1878,7 +1950,8 @@ lib.composeManyExtensions [
         # Local setuptools versions like "x.y.post0" confuse an internal check
         postPatch = ''
           substituteInPlace setup.py \
-            --replace 'setuptools_version.' '"${self.setuptools.version}".'
+            --replace 'setuptools_version.' '"${self.setuptools.version}".' \
+            --replace 'pytest-runner==' 'pytest-runner>='
         '';
       });
 
@@ -1887,7 +1960,7 @@ lib.composeManyExtensions [
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.geos ];
           inherit (pkgs.python3.pkgs.shapely) GEOS_LIBRARY_PATH;
 
-          GEOS_LIBC = lib.optionalString (!stdenv.isDarwin) "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
+          GEOS_LIBC = lib.optionalString (!stdenv.isDarwin) "${lib.getLib stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
 
           # Fix library paths
           postPatch = old.postPatch or "" + ''
@@ -2346,9 +2419,19 @@ lib.composeManyExtensions [
       });
 
       wtforms = super.wtforms.overridePythonAttrs (old: {
-        buildInputs = (old.buildInputs or [ ]) ++ [ self.babel ];
+        buildInputs = (old.buildInputs or [ ]) ++ [ self.Babel ];
       });
 
+      nbconvert = super.nbconvert.overridePythonAttrs (_: {
+        postPatch = lib.optionalString (lib.versionAtLeast self.nbconvert.version "6.5.0") ''
+          substituteInPlace \
+            ./nbconvert/exporters/templateexporter.py \
+            --replace \
+            'root_dirs.extend(jupyter_path())' \
+            'root_dirs.extend(jupyter_path() + [os.path.join("@out@", "share", "jupyter")])' \
+            --subst-var out
+        '';
+      });
     }
   )
 

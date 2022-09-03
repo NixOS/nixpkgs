@@ -9,6 +9,8 @@ let
   # Fetch clang from qt vendor, this contains submodules like this:
   # clang<-clang-tools-extra<-clazy.
   clang_qt_vendor = llvmPackages_8.clang-unwrapped.overrideAttrs (oldAttrs: {
+    # file RPATH_CHANGE could not write new RPATH
+    cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=ON" ];
     src = fetchgit {
       url = "https://code.qt.io/clang/clang.git";
       rev = "c12b012bb7465299490cf93c2ae90499a5c417d5";

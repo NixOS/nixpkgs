@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "-ocamlfind ${ocamlPackages.findlib}/bin/ocamlfind" ];
 
-  buildInputs = [ which perl jdk openssl coreutils zlib ncurses
-    makeWrapper gcc binutils gnumake nodejs
+  nativeBuildInputs = [ gcc binutils nodejs which makeWrapper ];
+  buildInputs = [ perl jdk openssl coreutils zlib ncurses
   ] ++ (with ocamlPackages; [
     ocaml findlib ssl camlzip ulex ocamlgraph camlp4
   ]);
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://opalang.org/";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.kkallio ];
+    maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
 }

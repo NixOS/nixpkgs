@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qttools, qttranslations, qtlocation, wrapQtAppsHook, substituteAll }:
+{ lib, stdenv, fetchFromGitHub, qmake, qttools, qttranslations, qtlocation, qtpbfimageplugin, wrapQtAppsHook, substituteAll }:
 
 stdenv.mkDerivation rec {
   pname = "gpxsee";
-  version = "10.5";
+  version = "11.3";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    sha256 = "sha256-TvOdyzWvGSdl8aSA+pAOpPVpQzK9POmqtClqdXAMsws=";
+    sha256 = "sha256-n8busir6IYyWyGOv9AzYjm8erR0fjMAduIzITH+EvVI=";
   };
 
   patches = (substituteAll {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     inherit qttranslations;
   });
 
-  buildInputs = [ qtlocation ];
+  buildInputs = [ qtlocation qtpbfimageplugin ];
 
   nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
 

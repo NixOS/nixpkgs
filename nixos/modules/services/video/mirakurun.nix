@@ -24,13 +24,13 @@ in
   {
     options = {
       services.mirakurun = {
-        enable = mkEnableOption "the Mirakurun DVR Tuner Server";
+        enable = mkEnableOption (lib.mdDoc "the Mirakurun DVR Tuner Server");
 
         port = mkOption {
           type = with types; nullOr port;
           default = 40772;
-          description = ''
-            Port to listen on. If <literal>null</literal>, it won't listen on
+          description = lib.mdDoc ''
+            Port to listen on. If `null`, it won't listen on
             any port.
           '';
         };
@@ -38,24 +38,22 @@ in
         openFirewall = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Open ports in the firewall for Mirakurun.
 
-            <warning>
-              <para>
-                Exposing Mirakurun to the open internet is generally advised
-                against. Only use it inside a trusted local network, or
-                consider putting it behind a VPN if you want remote access.
-              </para>
-            </warning>
+            ::: {.warning}
+            Exposing Mirakurun to the open internet is generally advised
+            against. Only use it inside a trusted local network, or
+            consider putting it behind a VPN if you want remote access.
+            :::
           '';
         };
 
         unixSocket = mkOption {
           type = with types; nullOr path;
           default = "/var/run/mirakurun/mirakurun.sock";
-          description = ''
-            Path to unix socket to listen on. If <literal>null</literal>, it
+          description = lib.mdDoc ''
+            Path to unix socket to listen on. If `null`, it
             won't listen on any unix sockets.
           '';
         };
@@ -63,7 +61,7 @@ in
         allowSmartCardAccess = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Install polkit rules to allow Mirakurun to access smart card readers
             which is commonly used along with tuner devices.
           '';
@@ -78,11 +76,11 @@ in
               overflowTimeLimit = 30000;
             };
           '';
-          description = ''
+          description = lib.mdDoc ''
             Options for server.yml.
 
             Documentation:
-            <link xlink:href="https://github.com/Chinachu/Mirakurun/blob/master/doc/Configuration.md"/>
+            <https://github.com/Chinachu/Mirakurun/blob/master/doc/Configuration.md>
           '';
         };
 
@@ -98,12 +96,12 @@ in
               }
             ];
           '';
-          description = ''
+          description = lib.mdDoc ''
             Options which are added to tuners.yml. If none is specified, it will
             automatically be generated at runtime.
 
             Documentation:
-            <link xlink:href="https://github.com/Chinachu/Mirakurun/blob/master/doc/Configuration.md"/>
+            <https://github.com/Chinachu/Mirakurun/blob/master/doc/Configuration.md>
           '';
         };
 
@@ -119,12 +117,12 @@ in
               }
             ];
           '';
-          description = ''
+          description = lib.mdDoc ''
             Options which are added to channels.yml. If none is specified, it
             will automatically be generated at runtime.
 
             Documentation:
-            <link xlink:href="https://github.com/Chinachu/Mirakurun/blob/master/doc/Configuration.md"/>
+            <https://github.com/Chinachu/Mirakurun/blob/master/doc/Configuration.md>
           '';
         };
       };
@@ -189,6 +187,7 @@ in
           CHANNELS_CONFIG_PATH = "/etc/mirakurun/channels.yml";
           SERVICES_DB_PATH = "/var/lib/mirakurun/services.json";
           PROGRAMS_DB_PATH = "/var/lib/mirakurun/programs.json";
+          LOGO_DATA_DIR_PATH = "/var/lib/mirakurun/logos";
           NODE_ENV = "production";
         };
 

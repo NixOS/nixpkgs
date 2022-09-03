@@ -21,6 +21,7 @@ let
     homepage    = "https://tamarin-prover.github.io";
     description = "Security protocol verification in the symbolic model";
     maintainers = [ lib.maintainers.thoughtpolice ];
+    hydraPlatforms = lib.platforms.linux; # maude is broken on darwin
   };
 
   # tamarin use symlinks to the LICENSE and Setup.hs files, so for these sublibraries

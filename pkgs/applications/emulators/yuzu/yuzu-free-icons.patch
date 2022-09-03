@@ -1,1183 +1,0 @@
-From 23e02aec6ff6b0823c2e66f5cff737e0cd430a22 Mon Sep 17 00:00:00 2001
-From: Kyle K <190571+Docteh@users.noreply.github.com>
-Date: Mon, 28 Mar 2022 14:44:12 -0700
-Subject: [PATCH 1/2] Moving Icons away from CC BY-ND 3.0 for FOSS packaging
- purposes
-
-I've seen some comments stating that sharing pre-compiled packages
-of yuzu is problematic for linux distributions due to some contents
-having license of CC BY-ND 3.0
-
-Sources for the icons have been updated in the dist/license.md document
-
-Also a note has been added to call attention to the two copies of a QT theme
-called QDarkStyleSheet
----
- dist/license.md                               |  63 ++++++++++--------
- dist/qt_themes/colorful/icons/48x48/plus.png  | Bin 496 -> 232 bytes
- .../colorful/icons/48x48/sd_card.png          | Bin 680 -> 760 bytes
- dist/qt_themes/colorful/icons/48x48/star.png  | Bin 1248 -> 1330 bytes
- .../qt_themes/default/icons/16x16/checked.png | Bin 657 -> 414 bytes
- dist/qt_themes/default/icons/16x16/failed.png | Bin 524 -> 361 bytes
- dist/qt_themes/default/icons/16x16/lock.png   | Bin 279 -> 318 bytes
- .../default/icons/256x256/plus_folder.png     | Bin 3135 -> 3521 bytes
- .../default/icons/48x48/bad_folder.png        | Bin 1088 -> 1007 bytes
- dist/qt_themes/default/icons/48x48/chip.png   | Bin 15070 -> 511 bytes
- dist/qt_themes/default/icons/48x48/folder.png | Bin 410 -> 535 bytes
- dist/qt_themes/default/icons/48x48/plus.png   | Bin 316 -> 274 bytes
- .../qt_themes/default/icons/48x48/sd_card.png | Bin 614 -> 638 bytes
- dist/qt_themes/default/icons/48x48/star.png   | Bin 686 -> 1029 bytes
- .../qt_themes/qdarkstyle/icons/16x16/lock.png | Bin 304 -> 343 bytes
- .../qdarkstyle/icons/256x256/plus_folder.png  | Bin 3438 -> 3931 bytes
- .../qdarkstyle/icons/48x48/bad_folder.png     | Bin 1098 -> 1061 bytes
- .../qt_themes/qdarkstyle/icons/48x48/chip.png | Bin 15120 -> 551 bytes
- .../qdarkstyle/icons/48x48/folder.png         | Bin 542 -> 594 bytes
- .../qt_themes/qdarkstyle/icons/48x48/plus.png | Bin 339 -> 297 bytes
- .../qdarkstyle/icons/48x48/sd_card.png        | Bin 676 -> 679 bytes
- .../qt_themes/qdarkstyle/icons/48x48/star.png | Bin 725 -> 1055 bytes
- .../icons/16x16/lock.png                      | Bin 304 -> 343 bytes
- .../icons/256x256/plus_folder.png             | Bin 3438 -> 3931 bytes
- .../icons/48x48/bad_folder.png                | Bin 1098 -> 1061 bytes
- .../icons/48x48/chip.png                      | Bin 15120 -> 551 bytes
- .../icons/48x48/folder.png                    | Bin 542 -> 594 bytes
- .../icons/48x48/plus.png                      | Bin 339 -> 297 bytes
- .../icons/48x48/sd_card.png                   | Bin 676 -> 679 bytes
- .../icons/48x48/star.png                      | Bin 725 -> 1055 bytes
- 30 files changed, 37 insertions(+), 26 deletions(-)
-
-diff --git a/dist/license.md b/dist/license.md
-index 7bdebfec1fccdf97a4cf24a1eddd94638d510d8b..745256c32947aeb5d77bae10bc3cce666542967e 100644
---- a/dist/license.md
-+++ b/dist/license.md
-@@ -2,34 +2,45 @@ The icons in this folder and its subfolders have the following licenses:
- 
- Icon Name | License | Origin/Author
- --- | --- | ---
--qt_themes/default/icons/16x16/checked.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/default/icons/16x16/failed.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/default/icons/16x16/lock.png | CC BY-ND 3.0 | https://icons8.com
-+qt_themes/default/icons/16x16/checked.png |Apache 2.0 | https://github.com/google/material-design-icons/ (modified)
-+qt_themes/default/icons/16x16/failed.png | Apache 2.0 | https://github.com/google/material-design-icons/ (modified)
-+qt_themes/default/icons/16x16/lock.png | Apache 2.0 | https://github.com/google/material-design-icons/
- qt_themes/default/icons/16x16/view-refresh.png | Apache 2.0 | https://material.io
--qt_themes/default/icons/256x256/plus_folder.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/default/icons/48x48/bad_folder.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/default/icons/48x48/chip.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/default/icons/48x48/folder.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/default/icons/48x48/plus.png | CC0 1.0 | Designed by BreadFish64 from the Citra team
--qt_themes/default/icons/48x48/sd_card.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/default/icons/48x48/star.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/qdarkstyle/icons/16x16/lock.png | CC BY-ND 3.0 | https://icons8.com
-+qt_themes/default/icons/256x256/plus_folder.png | MIT | https://github.com/tailwindlabs/heroicons
-+qt_themes/default/icons/48x48/bad_folder.png | MIT | https://github.com/tailwindlabs/heroicons
-+qt_themes/default/icons/48x48/chip.png | MIT | https://github.com/tailwindlabs/heroicons
-+qt_themes/default/icons/48x48/folder.png | MIT | https://github.com/tailwindlabs/heroicons
-+qt_themes/default/icons/48x48/plus.png | MIT | https://github.com/tailwindlabs/heroicons
-+qt_themes/default/icons/48x48/sd_card.png | CC0 1.0 | SVG Repo https://www.svgrepo.com/svg/70351/sd-card
-+qt_themes/default/icons/48x48/star.png | MIT | https://github.com/tailwindlabs/heroicons
-+qt_themes/qdarkstyle/icons/16x16/lock.png | Apache 2.0 | https://github.com/google/material-design-icons/
- qt_themes/qdarkstyle/icons/16x16/view-refresh.png | Apache 2.0 | https://material.io
--qt_themes/qdarkstyle/icons/256x256/plus_folder.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/qdarkstyle/icons/48x48/bad_folder.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/qdarkstyle/icons/48x48/chip.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/qdarkstyle/icons/48x48/folder.png | CC BY-ND 3.0 | https://icons8.com
-+qt_themes/qdarkstyle/icons/256x256/plus_folder.png | MIT | https://github.com/tailwindlabs/heroicons
-+qt_themes/qdarkstyle/icons/48x48/bad_folder.png | MIT | https://github.com/tailwindlabs/heroicons
-+qt_themes/qdarkstyle/icons/48x48/chip.png | MIT | https://github.com/tailwindlabs/heroicons
-+qt_themes/qdarkstyle/icons/48x48/folder.png | MIT | https://github.com/tailwindlabs/heroicons
- qt_themes/qdarkstyle/icons/48x48/plus.png | CC0 1.0 | Designed by BreadFish64 from the Citra team
--qt_themes/qdarkstyle/icons/48x48/sd_card.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/qdarkstyle/icons/48x48/star.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/colorful/icons/16x16/lock.png | CC BY-ND 3.0 | https://icons8.com
-+qt_themes/qdarkstyle/icons/48x48/sd_card.png | CC0 1.0 | SVG Repo https://www.svgrepo.com/svg/70351/sd-card
-+qt_themes/qdarkstyle/icons/48x48/star.png | MIT | https://github.com/tailwindlabs/heroicons
-+qt_themes/qdarkstyle/ | MIT/CC BY 4.0 | Upstream https://github.com/ColinDuquesnoy/QDarkStyleSheet
-+
-+qt_themes/qdarkstyle_midnight_blue/icons | See above | See the above qt_themes/qdarkstyle/icons entries
-+qt_themes/qdarkstyle_midnight_blue/ | MIT/CC BY 4.0 | Upstream https://github.com/ColinDuquesnoy/QDarkStyleSheet
-+
-+qt_themes/colorful/icons/16x16/lock.png | MIT | https://github.com/icons8/flat-color-icons
- qt_themes/colorful/icons/16x16/view-refresh.png | Apache 2.0 | https://material.io
--qt_themes/colorful/icons/256x256/plus_folder.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/colorful/icons/48x48/bad_folder.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/colorful/icons/48x48/chip.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/colorful/icons/48x48/folder.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/colorful/icons/48x48/plus.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/colorful/icons/48x48/sd_card.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/colorful/icons/48x48/star.png | CC BY-ND 3.0 | https://icons8.com
-+qt_themes/colorful/icons/256x256/plus_folder.png | MIT | https://github.com/icons8/flat-color-icons (modified)
-+qt_themes/colorful/icons/48x48/bad_folder.png | MIT | https://github.com/icons8/flat-color-icons (modified)
-+qt_themes/colorful/icons/48x48/chip.png | MIT | https://github.com/icons8/flat-color-icons (modified)
-+qt_themes/colorful/icons/48x48/folder.png | MIT | https://github.com/icons8/flat-color-icons
-+qt_themes/colorful/icons/48x48/plus.png | Apache 2.0 | https://remixicon.com/ (modified)
-+qt_themes/colorful/icons/48x48/sd_card.png | CC0 1.0 | https://www.svgrepo.com/svg/276818/sd-card
-+qt_themes/colorful/icons/48x48/star.png | CC0 1.0 | https://www.svgrepo.com/svg/13674/star
-+
-+qt_themes/colorful_dark/icons/16x16/lock.png | MIT | https://github.com/icons8/flat-color-icons (modified)
-+qt_themes/colorful_dark/icons/16x16/view-refresh.png | Apache 2.0 | https://material.io
-+
-+qt_themes/colorful_midnight_blue/icons/16x16/lock.png | MIT | https://github.com/icons8/flat-color-icons (modified)
-+qt_themes/colorful_midnight_blue/icons/16x16/view-refresh.png | Apache 2.0 | https://material.io
- 
--<!-- TODO: Add the license of the yuzu icon -->
-\ No newline at end of file
-+<!-- TODO: Add the license of the yuzu icon -->
-diff --git a/dist/qt_themes/colorful/icons/48x48/plus.png b/dist/qt_themes/colorful/icons/48x48/plus.png
-index bc2c47c91a761228dc4ebdc8df8713119d5fec3a..ff3cf889e467cfa18e1af577ceff6b3931c5290c 100644
---- a/dist/qt_themes/colorful/icons/48x48/plus.png
-+++ b/dist/qt_themes/colorful/icons/48x48/plus.png
-@@ -1,3 +1,3 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d  …IDAThCí˜±JÄ@†ƒ XZXk#(áv#ÜXYè;XXÚ\fãZ+}AÄVP,m¬n÷TDKk«³S‹8ör¦8gÅùàg!™ÿŸ@²“H„ÑÜ¤S‰M—â™£CmÍš²æE;S”RNâû|‚N‡MyÇµ…·Oó_´K%a£zĞò˜/”3WT6ÚÁ/ >•;*		ÀàFp#¸‘ Ü@uÓyÜ·Öl×n/¼<ùê«„×tp]‰Š|ŒlıİM×•ƒw¿‘ßÎgM×'{Õ4]6æ_}Xeaƒ,V“XXö6`ŞÔC²XÍâõVìkÀ/8 ‹ÃÁâS&Yx]{†ìgö2ŸÄ·É¾…,6x¬'èãê3QÎÉúÁB¸7\¶@ÖF+€	ÀàFp#¸Á n©$lp ZõÀ]%•àøÎ¿›‡~ù“€*Â§ÀµÍ6q8Â|¿Ö0"Â"Š> ŸP}¡ó¼_    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  ‡  ‡åñe   tEXtSoftware www.inkscape.org›î<   eIDAThí×¡€0†ÑÂ@(c«b!°Usü!¼çj®ùRsm È™ª/};ïçcİKîš+†¾I@š€4iÒ¤ï'Ïİ¦Úèîôùæ?& M@š€4i €?» òt6ıºç    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/colorful/icons/48x48/sd_card.png b/dist/qt_themes/colorful/icons/48x48/sd_card.png
-index 29be71a0d4307c9653e22a31e77e43e87a907beb..5a81693cb0d95c36b65793a91628867742e27374 100644
---- a/dist/qt_themes/colorful/icons/48x48/sd_card.png
-+++ b/dist/qt_themes/colorful/icons/48x48/sd_card.png
-@@ -1,6 +1,5 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  £  £dÜ_‰   tEXtSoftware www.inkscape.org›î<  %IDAThíšAkÔ@†ß™Ù¤Iwci)•R/¢%õ(”¢`QèÙ£‡B©¢`½yğàÊ¶ÛEñôôPı	İ-*ş ¥¥zÚB©°ºØ6[³™ñ «­8›d›8[™ç–o¾„÷	/$œpH»'ºÅÊm0ú $ ˆØá«ùñ¥V­m	ŒÌ•o;û¤Ëéhÿ„ €†W«ùŞîâûGWgdm4îuGŠ+ÓÔîN7<  ÓİÓC3ÆwvùŒ¬-çšn±2E,û©y(üY§Û  Ïğé›•hYÎéÀ÷® X<–€[ªÜgV®`æúú×çG?àBï `íK“Ë­SF©à’åŠôÉÂw¡Ãóåf9GÂfÒMƒ–Ã¥•{†}jÖÌõş
--yğ+J£ÓO©€;W7ºìÂŸáŸ­Ã üß¤‹€T€\ÊØÎ@ó¸Şdˆ1î¸›ˆ5ÈDz)Aä9ğàÍy˜ì§Ä÷à÷~üöÜ‘”t=1Ïù×zsb¦U#ö»P§¡T£T£T£T£T£T£T£T£T£T£T£T£Tóÿ
--Š-ÁåßÔyÀ¹`bS¶. ^7¼½ítbE'¨ïnsA_ÉÖ¥ïòÂ¯¿ğ÷kU%ÿ6àï×ªÜ?x¾¿¶%kİ,à–^Şw!Ğ—lÂª¼,¬®·ÜìqâùŒÌ ÑÅ
--(    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  b  b_'ĞS   tEXtSoftware www.inkscape.org›î<  uIDAThí˜ËnÔ0†?Û¹M’)#•G ºDB¬yX±àX‚`Á 	Vğ*,Ë"ñP1¹eÛ,Zª2´¹Ìà&•òí<äü¿sdAK¼ùöÜ
-+ñ¬ís»ğşáuqÑœló¢.Ä×ÑØ@ÅCC}T‰zë%O^97ÁÛV<ÀÍô«Óq*3°)~›rMe6Ùf…\Óêí#ƒ®iU›|™ßÀZwã&\Øc Üûı¯×½»ó€Ÿ^·‹²#U½P«l³B®ieàÅácW:¶æÊqïTí¸>~>üP5_i Îı%aª&{Ÿ»·îUÍWØüô‘Şg Ş¨Û½7PÇ` k]3èšÁ@×ê0ÆbLeG¼;]«T¡KÍl¶ Ô )iã>Ú¦?~şWRŠQ„A«8Î20›/1Ö0'ìí%!ÈfÎvfÊS$ñˆ0ÑÚÍ¬×E«8Î2`RI<¥HS‰Öš³÷2RD£€(
-+˜N3V«œ ğÇqf ŒB‹%?§RJ‚À'ŠB„œw¹¤”ÄS’²lW/ÎŒF!~à±ÎÖë‚Õ*'Ïsö®Mœƒ…š»ÂqRÆ²l.5q1™ŒIÒk¡X—ç>£µAkƒ§ÚIr’!$eYP”B¤””Å±puF`©5«e±–<ÏK…­b92 iš0Ÿ/É²ùÉo‚8NQ8>jçå!R$IØª€Áaø¾Çd2ÆXÆ"”<İŞJJö÷'ÿ%3B€rw?6ôB]S¹…¦—¥ck®|~.úó=è`ä<    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/colorful/icons/48x48/star.png b/dist/qt_themes/colorful/icons/48x48/star.png
-index 43b5d52ed7cca57aec41d75670cf29cfa98e849d..5798992ed990bb95cb354bb5108cec972693e220 100644
---- a/dist/qt_themes/colorful/icons/48x48/star.png
-+++ b/dist/qt_themes/colorful/icons/48x48/star.png
-@@ -1,8 +1,7 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   bKGD ÿ ÿ ÿ ½§“  •IDAThí™mˆTeÇçÎê.DXéª‹/!¡f;;#`ï”_|ÁMÄ Ñ¥aŸ
--*üÙ	*,‚ ‰ +‚ÆÍ]AsİÖRXKÍíEÒ´İÙ¹Ï¿ëº3³3wæ÷Ú‡öÀ0œ;ÏsÎÿÿœÿsç20a6a±™º7%Õ½!g‹+°zÛ§áì4<æÚÂ÷/Ä‘Ç‹#( ²gAMHMäıgâJKtrK#ÙK} f ß˜:i®ÍÛ=u®x*ûk]x¦s9·&Tñ[ÁqüÈ·¹ç¥è+9u¯tOø‘Ï]_»2ê|ÑWÀè@ãÀøÊwDŸ.BSÏÚÅ8ëÙpJˆ Ì-µ%‹*g´pÖ1¾l§-Q¦Œ¬ú~ÃíxùŸASÆÀC1 eiHÌµÅ{ú£È]ùç@S*êÌo$7ÙÁIÔ·q
--WO#¦‡ò¾ûƒÆ9¶|Ïàõæ®‹€zÛ§‘Ë6c´ 3ğ¸§W¥²„
--I»1uâ¬Ÿ„;ÃĞäó–ş$ô}iØ0ßfaŞlœšÁµ€f€fƒÍDnÖ5Ci—©¶xL‰¯18úU³˜ßïáÁüó8;‹ï³ô—}	¨gã« Ë®` $*ùÕc¨ZŒÂB;ÉÌöQÌÅË¯ã˜|¤DàŠw™*U£:bxÒ™BÈã%ÔÓ¾
--Ü‡H7•²/ë_ŸdÂÄğÍ´Å’ûw Ğë—á´1íÆK¦l¬Éµ[ªó£R¬»zÖ/Â¹ÏA-ÿ¥d@MZe©ÎÎr8Û¨N¬™INû@w——CYE#@çMö¨¥2G+a¬zèØº[°áO‘î»’Ôkæ?lÉ¿á«é ÓÉG˜úèÉ €Cfö˜%3VÃVÓ]ÈìËò£­ÁÜ[ãË=Ş—T"›Â1®ìœÿ3³++ju\%ttÕÀº% ;Iïyÿx›mE&_+úîBGx´5BÉ ô®—ìÜlvm@MÖP}H35%ì2µu*¤lXğõÒQH¦Ğ7Sª(á÷@Ïê&rA‰ò’	èLÁwªaË»›mùw¡ŞÂ¿‘å“Ò(øÊ¨&¿øÙ$¸7,œğœŸ
--Rı•²2Gh…Ş2RãP›_¥3¹:öA›X©:»L±_&†@(	éğCÍÈµÔ(™~C›Íô4ÒïUô?úl¾·ŞkŸZ–ô¦ùCwZ[ç;–üæm›š¸CâePvd«DÆ¶¶Ø8S[ğ{Í©ı[mÙÁ¿GçÙâÌ•DúÀKæü% ½A1.S¨=`(]á`ê5Ï:¬5óEàüeO««m¥|Û	ZT†â©€„!µ–¬Øsn›õİ¶ÄZ¿_D¤­ë+kğ—lCºTR‰´BüPó@y`|ÿ§«K•“Øéù¯J¥Ó¡¶Î~Í°§<–Ğ|Kë«>;Œ„½LÎ2c»—ÌœªuYª«Ø¤o—îz4‡Ä¤ËQÄ°	û?Ø¿Š•IëMu»    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  (  (5ÈÍÆ   tEXtSoftware www.inkscape.org›î<  ¯IDAThí™OlTUÆç¾™©¤ÓR‚H,halbŒáÿØbX)WÆ7ÄD*hŒ‰	!îHÜ¸2®º1”R@pié¨´´ ¨”a ù33ï7‚P˜¾÷è{­¿åÌ¹çûÎ|÷9÷=ø•1v2Û4v2Û%G,Êä5Ÿƒ(ğATUâÂ‰wSVí ×:Ís3]ƒQğ˜(’X«_à8»3*H(ä²Vœ3ü»E]Ç±M³Ó‡ÂæŠÄ+Î<y¾×•Ï¢à
-+İ›½mKÔÈ O7×ˆYVİ²8L¾ĞPcvğìîæXµÛÃæÕ|_ûbà,¨RÇiL¦»~‹3TTe'•ÅÄ­-w„ÉšcÇ7.2±Ø PBìÒš–ƒÂàÍ'Û·x€¸¨óiX¼¡80Ößö²qe¨ò¹¤,­i=pq²Ü¡8`\³ÿâ Ÿ„Á=işìÍ.ˆç0#È:…ûÖ˜†¹¯í¿<ş@Üè]_mL"e!%hjÍˆĞø<äª	Ò‹Ø!EF[[®Í)øÍñT:ÜVU¸iZc›Œ˜åVl½¨Ô#Ô£¼ú¬5 œÎ+z^àWQ3Pºçœ÷Ö¾ÛOïkûHÕ¬±)°p
-+N—A‡UÍ°ˆ=&×s›–9¢GÓ­, FUí¸ÕÿN£ëš£ü÷ı‡¸¦¬¯MwŸ6 ³Ó‡Œ˜5À¥iæW,º¶6İ}ÆÈ|_ûb„ŸQê§G›'~«k“™s?xâ¬¦õÀEu5 #S¯ÍÄ•5‹‡
-+-qôx{]<ÆQ`ù”HóÆYëèº9é§¶xÅ~çÔæù¥bùBs´Ú&†À`‰Øºy­ûş¨ğ}eÜîßøRÙı¬ŒDÎ”¬»n^æĞ•J1s/¦JLVÇÃç	å„±ÎÛ‰ÓhrewId…§Î9§\µav¦ëºW ï¹ft`õ¬øƒ] «'%Í¿Ø¢¶ÍYÕsËOp ÁìÎ©ÍóK¥òÕçÓåñx¬nÖŠ}×üÆºĞ¸åâ+Á%C¹T^$>PÖšÈ[ªlÛÁ®”"‘>ëP«8 ØÈ0"Ñ9 LˆÃwºÑ»¾ZL"dÍsC55-?ŞôÀØ
-+¦æ>ŒòÀ·ş0Ñw GTÖÿ9ğ]@ğı/"²E }AVªøïDŞRÚfŸ;è‚¨ìª>7ó;ÙÒé¨’)œÜôª~,õÌ 8€·—Dek²p7•|½{ïCñ "h²¥»3ÙòÆ2ÙLü~@Xá[•Ÿ nhÆZÌ7·ïÏÜ³èÍÎ{~òéÀû‰Âı»"ú•Bİ³büÎD¾¶P"&ÍŠûTî(ö[liWM€G ÒÔYö^íßøÃnücE;€äã1åR±ğ,À×w¨Š*º7wj[{:‚<Çºôá¿’­İ»M•»DÑİÀ#ãë û+ÀJP¾GlcmKÏÖ #¯ª›İ¨míépI{€A:‘'ò¹öm…\¶!´„(ä²ù\û¶©â›VüZÍIŠ(…˜    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/default/icons/16x16/checked.png b/dist/qt_themes/default/icons/16x16/checked.png
-index 3e017b715802d120d3c93343e374ef3566c954d3..b9e64e9e083479d3ee98f767e7db0afa918733a4 100644
---- a/dist/qt_themes/default/icons/16x16/checked.png
-+++ b/dist/qt_themes/default/icons/16x16/checked.png
-@@ -1,3 +1,4 @@
- ‰PNG
- 
--   IHDR         óÿa   bKGD ÿ ÿ ÿ ½§“  FIDAT8}“ËKÔQÅ?ß;¿ÆÌL¾Kß%´ªu…è6Ú	¡2£ Â¦e£âPş®šU­”RŒ¯±‘¥„\ä£Ì	g~3ß:âcğì.÷œsÏ÷Şs…|PÛ´Äöüãªpe3ËwJ;{*§µ3v¡Ç“4 ”nÓ*]„±¯3¹^9¼`Ğª$‰Õ*r™ìôrëÄ€Æ•áÒ‡İ¢Œ›\qu®4¿Ú>1¨±½ıYÀÉ¤x´zoüw¾Énz^V`¹£ª˜Ÿs½.rh <ä P}™¸)q×uKM'PSœ´újA*ºDÜ…èKëáB{xWTB(AÔ6¦%¶çÊ]&;WªDtJEbe½a '­Ó@EÃÒ~›9~ªŸ¹C‘æù@oÇÇ>/ NæàQ²OgØÀQRİ’¬Ü4çOlˆo(Œÿ³¬÷Íó^”.AFş‰/ù5ú¸Ö¸2\¸;öá	Ğ¢0…Ê‡¸ß;qZT?(©Bä›I´úÒ‡İ9ÂŠüİ±Éš¢ÏÎ7ĞrÓì|nó,	@ÓBàJ*“jùÚñúW¾¨9øçËÓdâ‚ŒÅÛÇÃàÀëL›–;êŸ,¿T¬Ù¨ˆl8E¾\¬ò[ FTBNZ§s½¨Ÿ”Znz‘#Îã¥¶ÈÎ€[k}ÅI«%T€níH°Î]\­·S9Íƒ¨mJ¢µ Y—l$Z}‹ù¾ó;ÁôŞØ8Ùm    IEND®B`‚
-\ No newline at end of file
-+   IHDR         óÿa   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d  3IDAT8O¥“¡NAE§‚C@R@í4˜òH8$ àPÒ?¨B ‹%(!!áœé¾íÒl79·sßtŞ¼í¤m6¡›)àá±¸xO'ú– ã2ÃlÃ¼±š>àHôš#¨J€yáÖr`¶¡O’''9A¹ó~2‡LRøOæÆót
-+¿1{„>¬‚Ôa÷%Æ˜>ó´4ï‚Å½7_ñ§5/€	âªŞanól¢&s¨5}ÂhRmæ,Ø$Ê—.r±&{¡ÕŒF&€M¢ª$\‘Gi3ëD\2ìù\ÊzœÃ!4™Õ›ìGÁæi:)Ç&¹VO®A*{Û©'™¥håü=T·@ÀŞ.à¢&uó-œ¿õÏÏ9¥/¼ÂVõ´â§    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/default/icons/16x16/failed.png b/dist/qt_themes/default/icons/16x16/failed.png
-index 7c4047dd0842e321cb89bd20038772bafc6300cd..1fea7d8f1591573cfac8f772d030a6fdb43fe2a8 100644
---- a/dist/qt_themes/default/icons/16x16/failed.png
-+++ b/dist/qt_themes/default/icons/16x16/failed.png
-@@ -1,8 +1,4 @@
- ‰PNG
- 
--   IHDR         óÿa   bKGD ÿ ÿ ÿ ½§“  ÁIDAT8’1OQ…¿û†ÆB:pFh(`ÿd¦pân6ÔÛ6 k/Ğ’@46ğøÈN[lHfåà&&4PìÌª4šÈÎµØÙuft§{'çÜwÏyOÈ!ZŸŒo¬ª ‹ÄL \¨jCbsà|
--¾§õ’>tÊŞkQİîç'¸xk×[ïÿ•İ}U^Œ0f Ê¾í·V@§äÖîjPa%*¹ë -ÏOêosZûÈhxp]]ĞMàŞ =™1ñU%“Y6œz°%Å¾‘.–z°İ<Ä¸š¸j]Ì-X+^Á9ÚXRÄ’¢s´ÃŠW }“éBÌ‚„%·Ìåb~ŸÚşé@§üxV°š(NN÷Å èí¥™Q5.sdKØşéYXñ
--aÅ+<úøù+F%¤C\õ8Gî3÷´IO›ÃNİŒmH¸äM`é90ğ?A6ÿóŒ; [Q¸RÆf *¹ë
--ïnë"s»Êšíş~åçî
--+w´ï9õà%$_Àö[«¯€ëÑ>®Dem`îS9„KŞ„š¸*b@§Ù… XÆüHëÿ û"ª0
--2-ø    IEND®B`‚
-\ No newline at end of file
-+   IHDR         óÿa   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d   şIDAT8O­“+Â@„·H0¡CÒô¤ÁôÜ€àà XL¹†4\€T¢‹AH3ÛİRšİlx|ÉäïşefË><aà†m”	È†´ëçù½¾x€±‹²„¦P‹½hÍt•PÀ<DÙBÙ°s‚„9jæä2kñKür,É<SjÂßÒ#<ÌŞA½@ÍÿLÆªîU­Ã5éñbÈdvAOÌ ½Ußè5°1R²Â +%2ˆbÂ¶„ÌÇ^ŞğÊÖg¤ôşç ñ%Q/\è£,ïCµhğlGĞ2­	{|Ç™å= ?^g!
-+J¿û<W(    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/default/icons/16x16/lock.png b/dist/qt_themes/default/icons/16x16/lock.png
-index 496b58078983bc3c4f7dc2808fd02b8deb8b7b67..69d399050804cfa45e00850d4330a5b7cfaa3a43 100644
---- a/dist/qt_themes/default/icons/16x16/lock.png
-+++ b/dist/qt_themes/default/icons/16x16/lock.png
-@@ -1,7 +1,6 @@
- ‰PNG
- 
--   IHDR         óÿa   ŞIDAT8OÓmQÃP…á§
--   €Z-
--Àà €$€„VÌ™¹;SBBöO2swß=ûµ0nWXã´¹=c…Ï
--[ŒÄ_ã¡½ïpĞş·8+ÈàÈ÷¯-ø7xB\àeßqOiäWì`‰;ÜbÓ)3jÎq„í˜‚¨ˆsÉ/N¤Ÿà1}è$c2L±Uq½O‰l>¿Tó&3º
--ú Ùª;ıaS o8ö5P›—µ¥ I³Q‘»øw		ÈeB™ÿ,ÀĞTv}‹Tó×(3å7{J+j=—ª    IEND®B`‚
-\ No newline at end of file
-+   IHDR         óÿa   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d   ÓIDAT8O•’1
-+1E£ˆx[Ak±¶ÒSÀsXÙyÁŞSØÙÛªØÛÚ¨ş—Œ…$«û3f!ŒË0‘Wù6ÉÔ~¢/ïò(ç&™wµ¬%Í]
-+©qW¡iß˜¡ä7
-+©qW!5 -_!V Æ]–•|ÊïÃå¤‡^OÃ¾ğ¹÷§<S9–Š`ú2Ä"ôĞëI½ALÏÌRÀâœÍì•ŒdË$')ØÊINRÀæ-Lr’ºGü‹“Œ¦$½x‘r&‹ë*Xé¼8çÜ`Ş9e¢‹Ô    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/default/icons/256x256/plus_folder.png b/dist/qt_themes/default/icons/256x256/plus_folder.png
-index ae4afccc768e0a2163b23d5c457a821ef536dd73..3a49669a3ae3f0ea46ebd5ddd0e51f2b31b37d47 100644
---- a/dist/qt_themes/default/icons/256x256/plus_folder.png
-+++ b/dist/qt_themes/default/icons/256x256/plus_folder.png
-@@ -1,12 +1,18 @@
- ‰PNG
- 
--   IHDR         \r¨f   sBIT|dˆ   	pHYs    ùĞP9   tEXtSoftware www.inkscape.org›î<  ¼IDATxœíİkŒUÇñï>] -K/@-bb¡…EE"¥HDÅ6QLäD¢D}cŒo|á%hÄ€JRX¥áED´JJB[.¥@¹Ho»Ë­ë‹Ó…ív÷¹lÏ<gfÎ÷“œ¤Ù>{æ¿ÏìùíÌ<gÎ€$I’$I’$I’$I’$I’$I’$I’$I’$I’¤„zº´=ùÀt`60˜Ö¥må-`°Ö›“V$u¨¨ 88X| è-h[e²Xüøğ ğfÒŠ¤.9ø!°¶1l®§{G[RW-n¶“~À•¹­Î#œI•÷1à¤XUkë³ğˆ@5øğ6éS•Ûß€E¾÷RRÇÏ~ğÔ¥u´¤D¾~ĞÔ±]LiWHİu^ä+º­ Ì“Jå»¤¹´»“¤¤R¸„ôƒ"·¶Ø£#i)aºkê‘c»²ı#æpÂ<÷Ô!çvnË½$ —0‡=õ È½m´ØWRt^ô+O»gª‹¶‘şßön;½é“"ºŠô¿ğ¶Û:üT@=ûì0àj ‘¨o°X™ºÕÏèÁ~NG-«Kqß¨ #˜ú€€½Ö¢æ>ÜºÕËÈÀRüewfêT?#ğå¤U¨Ë€½R¡zi&şœ˜ºµÔ|"uª—ğQ`ŸÔ…¨-KR zià_•*q_)ªaUƒk*ª°0ujÛ„kRà ÔE¨m=¸¿Qƒ°Ì·ªcfêTü jÜ_Š¦‡pÇ™ªãIÂ3U/ƒ;Úk„[òŸ <NîÂó6a Hå÷p7p+pá2Q Rµ¼ÜHx˜Ì#»Û™ UÓ0á©Ü?îŸl'€T}+€€ç:ıF@ª‡—€ó?uòM.ÿ%ÕÃàfàtpÛ¸G Rıüøğr« R==LXFî…f/2 ¤úzø$ğâD/ğ€T_‡7Ó'z ÕÛqÀuı§ Õß©À…ãı‡× ¤<ÖŒş¢G R¦¿ûE@ÊÇIÀ)£¿à)€”—Ç§ÛÁ# )7‹u` Hù¹hä)N¶f&vy»R™MæÒ?ÊÛùÀS èö0pñöşãIÕÔK#— «(vL~d£Enäà<Õ:Õ Î^¥˜±¹rdCEşÇ	s‘%MŞÂ
--Á±Çç[Àl
--èxXÌ+àÍrt°øãtYQ‡æ§B@Òî{8£€~?ñSeE…J
--« Ç«7¹ÃaÂRD’âûqÇêJ"w¸™$”Ô‘©ÀVâ×§c_X¼¹OIÁcnçİMûÄ€¦JÚmÏGì+z ø×_*V´ƒ½ÎĞ“2f H3 ¤Œ RÆ )c€”1@Ê˜ eÌ 2æú|õ´'°8™°¢Ì\`¿ˆı¿lî'Ü¦º.bÿê¢˜wöw¹víl
--aÉçõÄ¿Í»YÛNØ÷Gÿ#f¯Ÿ¸ûÎ ¨‰>àº;ğÇ¶­À²¢ĞÌE ¯ÔC/p3cû–ÀŞÀr\¦2€zø6áÁe0¸˜™¸µÁ ¨¾™Àe©‹cáA0*9 ú¾ì›ºˆq|ğè9•˜P}'¦.`ï¦.BÍ Õ·(uM”¹6a ÔÁœÔ4ñÔ¨9 ú¦§. ‰¾Ô¨9@Ê˜ eÌ 2f H3 ¤Œ RÆ )c€”1@Ê˜ eÌ 2f H3 ¤Œ RÆ )c€”1@Ê˜ eÌ 2f H3 ¤Œ RÆ )c€”1@Ê˜ eÌ 2f HëM]@ÅíÌ ¦%¨aj‚m¶k	0%Áv7îhO%Ø~¥Glı]®=•ã€åÀVâ¾¶øm5ğ=`Æ¸{²zú‰ûşDí¬î°pé©m·—€Å»îÒÊ‰ ^hßÀ­ÀÙ©Ñ¤ìÜ	œ’º21 Úw9pBê"´[ö®¦.¤,€ö\ºE1øiê"ÊÂ hÏ…@Oê"Íç©‹( µáFõÑƒ×  ‡û¥.BÑ}<ue` ´v@êTˆ÷¦. €Öf§.@…Ø7ue` ´æ{TOîW|¤¬ RÆ )c€”1@Ê˜ eÌ 2f H3 ¤Œ RÆ )c€”1@Ê˜ eÌ 2f H3 ¤Œ RÆ€Ö†R B¦. €Ö6¦.@…x1ue` ´¶x;uŠîÉÔ”ĞÚ«Àƒ©‹Pt·¥. €ö\Ÿº Eµ¸'ue` ´ç·Às©‹P4?Æ‹»€Ğ®!`^9®ƒ?¿L]DY íûp:°5u!š´;€³í©) 3ı„§ÊŞ‘ºuäUàRÂcŞ7%®¥TzSPA'Ç KÅÀ<`V¢zfw_Fƒ¤9×~“0ãQBX/6'¨£†#¶ş.×.x…¸û0fûN?w®ú‰¸<2f H3 ¤Œ RÆ )c€”1@Ê˜ eÌ 2f H3 ¤Œ RÆ )c€”1@Ê˜ eÌ 2f H3 ¤Œ RÆ )c€”1@Ê˜ eÌ 2f H3 ¤Œ RÆ€ê+ó³îßN]€š3 ªï•Ô4ñrêÔœP}/¤. ‰çS æ€ê»'uH]„š3 ªï–ÔLàn`[ê"ÔœP}+R1Æ0ğƒÔE¨5 .¶¦.b”ë€•©‹Pk@=<œ¼‘ºàŸÀ×S¡ö õqpğl¢íWK€ÁD5¨C@½Ü, ¾E¸60Ü…m¾ü88Ÿpõ_Ñ›º E7\¾£Íf°7ƒÿQœñWY@½½¸£Iãò@Ê˜ eÌ 2f H3 ¤Œ RÆ )câÎ3P¤bÅcÃ` b‡s"ö%iWs#öµ­AÜÛHß±/I»Š9Æ¶4€Í;<82b’Şup@Äş65€µ;8-r’‚Øck-ÀÏ	cµ`^äB¥Ü½Ÿ°ÎBÌ±ú³°:r¡Ó€+ğ)–p%05r¿«7UŞI 'rÁRnzˆ”>Òl`CA¸‘b£r0XN1cs§¥ã®-h#ÃÀFàB`ÿHoŠTws€o/QÜ¸¼
--Ş=D?	¸«àj;aº§)÷óìªl˜ğş><FXh x½ íÍ$œ—A8¤Ü§ må`?àà#m	pïH 4€§€ƒ
--Ş¨¤ôÖó!L†ğ×ùêtõHê¢kG‹;]¥ŸA8|œ•¢"I]ñ?ÂJÑ[`çóŒÍÀoRT$©k®`Çà‡]?§ŸNXçı.$©;ÖîÕyçÉMc¯4 w³"I]óÆ<¶m¼ú	x$ÕÇÀíc¿8ÑTİ½¦	Kª¶UÀ±ŒóÜÆ‰&lNgÔÅI•´	8“	ÚÚl¶Ñ*à”‰¾QRé Ÿş;Ñ¦´èài`°¬×J*7€³;›½¨İÛu?ÜŒ“„¤*xX
--<Ğê…íŞpp/p"á~Iåµ–ps_ËÁİqôğ!à“(JRñ~OX8tU»ßĞé-‡[O8Ì”ŞFà«Àt¸Ìÿd/ì=D¸£¨8½“ìGÒäÖ
--<•6ùÇŠ±fß<àRà<Â"IÅÚJ¸}ÿ'„åü&-æ¢}À—€³€ã="ö-åîMà¯Àïën‹ÑiQ«ööŸ‡V™OX2\Rs„«ùkKwßÜG¤A?Z·—í
--ÌÆ Æ3HX°ÃÙ·’$I’$I’$I’$I’Ú÷ñ?t¸EZ    IEND®B`‚
-\ No newline at end of file
-+   IHDR         \r¨f   sRGB ®Îé   gAMA  ±üa   	pHYs  ¼<  ¼<Á¿Š-  VIDATx^íİiŒ%UÆñAP00#8,È3Q@‹M”ˆQ†($c0¢FQPåq	ŒKŒFÙ"|7YdQA! ²*QD@ö;ø<UÕMO÷¹=}ëÖ©ª{Îÿ—<TUs—º·Ş>µ3                                      4hjÚ……ÊÎÊRe‰²XÙDYWYOY_éò÷G/(*w*R~¡\¡¼¤ Z[9@9U¹YyQñ“ÄÍ-ÊA
-+Ğ‰İ•ï+(¡/(i'(*@tk*Ë”•Ğ—‘t“»”7(@Şg?D¹]	}I÷ù·²µ4jGå*%ô¥#ı
-+E ñÁ½“”ç”Ğ—ô3Œl+åJèFúŠ jû ²R	}±Èø„"€¡}ZñE'¡/¿P0'>Ê¿\	}‰Èx‡"€ÕòU|¡/I#tœúÒ´BÀ‡)¡/I3LÚUyV	}QHº¡d`u·Ûn Ü lY,!7÷(ïPş^,!9¯¨¦!.g(lüùz½r™BK C‡*¡¦!É/ì$jĞ.Àå6eÓb	`w IƒvNTØø1»	
-+µ )¾Ÿ­b	X-„„Z G+lü„–@B¦· üáº²û`6´0½ğ…sAK S[ îÈÓ§{8ø‡aĞcSÀşÊoÊÙÎ<¤x@lñŒ€>¬ø¯p¸|Gñ5ó÷ùÊcÊƒŠ´ß§ôÆÙÊô@Úˆï38]ñøƒ®KÀLnz»ÅZ§d<âµ®SV(P:·ÁÇº¸ãrÅÃ‚¡Š@Zq/[×+G)›+­y³ú…bÆù¸FCH3Ï++ïWf»g§G*¡_"V¾¢ 9´ã±4}Ì'ÚÌ_)¡7‘Ÿ(hE ıÜªì«4ÎcÆ…Ş°éÜ­xèoÄAÈ#ç(#XGi«‹oßbŒ¸(yÄ§}æ`d;(¡7h:÷*ÜcĞŠ@>9M©}õ®.úî¿6œ«øÈ&âóUy¾:Ïè m‡+W(KCrpçm¸´š¢|¸ã^Ìí±:‡â0¿œÎ§2Ğ.Š@>+W+o,–æ¨Íp5E»\öPşY,!e›)¾xhÎ- ŸhÃSÕíóÆ¿ŸBK }.*s:&àÀ8y`w ¾¿Æ÷­öì€ òÁî@>|`ğåì`€üxãwK€">÷ğu`9FÈÇòñ#ÅÇ‚( ùbw ë+'•³3Q òÆî@–)îòo
-+ ØÈÃÉÊŒş( °‰S„¾iÚVùP9û2
-+ &¸ì©¸o¤ée•ë~( ˜Ê»»(]w8¶W(gK L÷°òÅÜÒrX5-P 0ˆûoğe>6pŠòÅ·¸÷(Œ/÷)¸Êè_Ë•PO#MÈ•÷»7RŞªøê¼K”¶ºáåóÊ$
-+ Ğ¾mÆõ¢Ú^bæZ¥À. Ğé¾şß­<à´Èmà
-+ Ğ­‹”·)m~õA{{† tÏ¿¯Æl³%°ÿC úÁEÀãfx½> I zÄ»õ§Å¨Ü  _|VÎgbómÂ) @¿Ü¡x 6,¡  ıóËjÛÆ  |ÙuP €şñ­Ùm  dÊ£4{(©İªx‘›ûce5m> ë)ŸT|#ÊÊíŠ›šçı3ÿ??ÆEwÚE»(úÜ”6ÈŸSQBŸK(~¬ŸC« ;¡Ï¥é,§6÷¹â!‹›?æÈõsüÜ}ÊcüQ Òµ…r¥òöb©?×»‹Š%$‡¦Š/+mbÃu!9_ñk"1€4­P––³ğkù5‘
-+@zÜlÿH9Û(¿æ(»è!
-+@zfôıŞ¿æ—ÊY¤‚–…Jp¸†¸ûªMÊY¤€o 1?S¿vÌƒ–Q ÒâÎckã=Ğ
-+@Z¶¬¦1ù´ AHK×ğÏ¯¦H  -m||gÂ‡	dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒĞ<£½·òmååAåyå¥â÷Íïzï¦ãuæuçuèué÷1ìyö–+¡ éäà å%ôï'£ÇëÖë8¡ÓYN *(ç(ÛúˆÂëÖëØëÚë#¢ ŒÎ#ò^«xl~´ÃëÚë¼Ñ“Fÿ
-+]ª,*–Ğ&¯s¯{Z#  ŒæL…¿;^÷şP >Œ¢Ùß=¹l Ÿ:®œE|Uá»\+­½”íÊYôÀeÏrÃ  Ôs@5Eğ™Ô@¨g·jŠşØµšb€z¶®¦èmª)†@¨ç5ÕıÁgR gª)úãéjŠ!P êùo5E<PM1
-+@=7USôŸI€z~[MÑWSPÏÏô‡?‹óÊYƒPœUÎ¢üYp\¦
-+@}Ç*•³èĞã
-+÷eÔD¨Ïq+gÑ¡Ã•{ËY‹0šsşútÇëş F@İ	ÊŠ{±E;¼®½Î½î1
-+@3&º­¾¹XBL^Çİ®cD€æ\­ì¤,S®P^PĞ¯K¯S¯[¯c¯k4À=Ûx\€ã‹¥¸rÔÁUî¬,V|£Ê|%¶ƒ•-ÊÙhîV~ZÎFõ„²R¹Cù‹ò°’÷Û›{Rb`„\¦„Ö}“ñ{ ¾Ğºo:äŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ dŒ–§«iLOUS$€–GªiLVS$€–¿UÓ˜9!€´\YMcºªš"€´\£ÜWÎFá×ö{ €´xıål~m¿AHÏiÊÊÙFù¯Ìâ‚P Òó„ò	åÅb©~­+KH M(_.gá×òk"1€t¨£ŒÒğsı~-$ˆ6o¸ïUêğsü\6ş„Q Òç¦ûRåXe.§ı?ÖÏ¡ÙŸ¸5”ã•åÅR\~/tkMewee;e#ÅRnQ|!‘Ïósª¯{/UÓ˜ŠíşhÅo;¯V ¬ŞºJhj:Gy ­S;›TS ³kk[yÒàÉr>ºª)€ÙíXMc{Ü`e9İ;«)€Ùµµ­ÛşöJhÿ éøèò+ ƒy¹_	mCMÇ‚ç­£<_ı v>ª Ì—\‡¶¦ãm~m¥ğ%ô ¦s2_0ÓÅ`…¶¦s§2y!Ï·aså»å,€i~ lVÎF·Ê6¤ª±â‹ ¼ìkJh[‰•#”I;+¡ÅÌ·_™äl-å%´ÄÌ›”IŞİ£lè1ó{e[È‘ÏÀ]­„¶˜yP™qĞ™JèÁ±óœr–²§2ã—ãïø^ÊÙJ[gß¦çÇJaê:ïR.*g;ãVÈµŠPúe÷nŒ;Ÿùr+»(¯Uºä.õÌÔàÊt·â#õ ÒäÓŒ[*ÅŸS›ÜîıÅÍ é:C™¼İ{ú=ú›*w)¾:@ZQ)÷K2ı ›¯×w… *“¿…zéq…¸]ñùI iğÙ¶m”K•Ği7ï|¯œˆS•U6~ÔOŸoJ¸Uiëºd ñx×ŞÜÍèû#Ô0ŸƒÿB9`Ì}V	vü3¨`ş?WŞW,Gç)–³3ÍV låze«b	À8ñ…};)¾Â6hĞ.À„G•ƒ”g‹% ãÂGı—)7~›Ëí¸¾tĞ<LÔêZ ºç~>¦œ_,Íb®÷ãß ¸@Ï¾@ÿ}Q™SÏ[ÃtÈq•âc»K úèdeÎ=nÛ#Ï…ÊÓÊ¾Å€>ùºâ¡şælØ`îÁäae…c@÷¼Ïï~=O(–†P§ ˜;íø«â"Àƒ@w&ÎÔ^,iÔ¿à[(ç* Ú÷gÅ¿ïß©¥n`‚//t~¯RÜÕÑ¨¯`õ|ÿ›Ê!ÊCşA]MîÃ»¿³Ê~Å€Ü“ö§”›‹¥qA9Xñ„S{!%„ŒoğnîÅw_bì+¯SBÿBÈÜr£r¨e÷ºjâQ‡üğuÉ¯ó ÌÊGö­¸{¾ß).Q´ÙœğBğEDû(;(cÑœ"ó~“âı’jÚÊx]n€+oQ–*>€¸DY¨¬«¸G¢×(«»[îrßgÌ&»y@¹Cqß›·)>7ÒÑ|                                      Ğ½yóş‘°Ãºp¡    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/default/icons/48x48/bad_folder.png b/dist/qt_themes/default/icons/48x48/bad_folder.png
-index 2527c1318575236c92c8111413bcdf1caeacbd27..364ec646f6f1c6b5b632fb68efd2602aa2c87f25 100644
---- a/dist/qt_themes/default/icons/48x48/bad_folder.png
-+++ b/dist/qt_themes/default/icons/48x48/bad_folder.png
-@@ -1,8 +1,7 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  £  £dÜ_‰   tEXtSoftware www.inkscape.org›î<  ½IDAThíš]hUÇgv5õ‹FkØ*µ_Zµ1`v#¡A›0>(Eª‘‚µø -iµÖjé‹(TŸm]
--V)éC¥5"*­>´îf+”VÛMÒìÎéÃììN¦»ÉÌlœQØ?vÎ=÷şÿù¸÷rïBM4qùqà~ h[ ·\ ÆË¿‘cÔ§Í {öğ)W±ÿÄİvX6q€õÈÖ³=!sàP@²µì"¼Jç¸Ó’a’ÀäêÑ¨œäß•¦€SÀ×À§À¬XÌ»–}¬ëÎë"İ¡°qX[OÀY¬ò¿„ë€e®¶×`î£™Âååaq´ùNÀ\G"£æßPå;e¸‚‡NÇ?Î;®[İşwh
--ˆMQ£) j4DxÔ td$–É¯†RaùÁc¿úÉü	(ÈätîsÃ4¿3Lù%›N½é'?rù¡äÓ(ƒ¶/ğj>İó€×üHœîîP5v»šÅÄØ§##1/5"›mí¨º/7}ÖKÈœÙĞsèóõâ¢òFv¨ïæ…êD& f{ ë5Q]§J—*]"²¹Üe©0»£FjÁéD" ;”ÚôÙ~±hşÈŒ'2cãfI~«tTÙ’K÷v»Ò_Ç±¥º€sıı7Šò¶Çîªèè?ïU;„Œ™ÖéÀ­„®É©§\­;?!dùGzW/H}ëGûnrøÿ Û D
--bšº`Ë—e-ÅâNWÛgÀ‘ĞäÓÉÇŞ ù[òéÔWóÖPsÙ¡µíªâq+ˆÇsƒ©€`®¬³×3Ñw°Î3lL„³Õ¶íÀŠºq‘Êx?ÿF­¬Ë¦“O&¾8v Ò”¨~ İ Õ«¸g•3~ZëõQ‘—0õ’EHîDô•yJ–Ëíww>|	,âgÁn`é"ğ® 3>dò ¥ËÅ™±ı‰ÌØ~U9´@ÉÛõš©QÛ‰cí‡>QöoÁ:6ı
--ëÉøÅ(ÖI' ÙtjX ?@ù!ºurÃƒŸt~yt"uBùpm9|ğL€²“Àsg``‰RØÛ(×:ˆ«QzXo-m>Â^\Ãû8&©Ü`r;"»¼$
--œ×ê÷®÷’§"Ã6á±¶­—cAæ‡À·`MZïZqhñ˜ÛŠõÏ€69ÜëF–­èôZÄ¿…5gmÕß \¨5€ß­l2X*™»Dä¶FkÕ‚ÀiQ^¾¥,}“»Ë-Ô    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sRGB ®Îé   gAMA  ±üa   	pHYs  "q  "qÔ:L  „IDAThCí™KhAÇw¶I›Rj±Š´=UZ(h«‚`mÓ”¨Ué#¢ëQô¢X*ŞìE(hQñuÕ›½iõTÅçÁ‹ "j«ˆˆ$Q+(j¦;ş¿Í$İl·‡ìLj*ùÁ/û}›İd¾ìÌì#Z9æ6L,­xá„å0ºá)<GÍl–X‡!Wä=Xg…=0"ã¬±C§¨0ãEÜ‚N_¬ÒŒ±Ú»Î/¸Ò€Nj$5Öúy2NÀğ
-+\§±Úwêƒ2¨."¡/Á”¶Ú7ì‚²dªò*4OºĞm$uÃvxßÌÔ²î¤€ªØ
-+¯QbÀõx(M<WšYúĞ‰´Î7³)^Á%PöCDë²	šh^C{;«ºO6ò‡)d¦€J#íîp‡ÿ0Åbµ,_ÄÒJ±òFZëçy¼'œqübìÅ´N¼­åLx¼½èÕ"¼z<Ï{L$ÊQZ@xs°C«G¤I0Õ¶6V‰T)j@,ÖWü©1^Ë}b:äyy'°T²"!ÿj,èú‰*¿ùøeÙí/¿‰¯â]ÑÆ†x¬%`BfšÁÎ LÜáÑ 3ƒégÍm¢¤€h¨i;gš_¤3Ãµúh{ q”” ]Àû`ĞÇ~R¤	¬¿rÊ/Î5£Ÿö©4ÒøŠb=c•"MPik®‹n
-+Ğ ®‰¯`ÛÂâ])Aª€È–ÆEø§9¾ˆëÆsÃàÏ(¯š‚s­÷s[°L¤RÈ	½}¢DdéP<©O±®‡üK1p÷‹t˜mèRâ¢Hàè3Dâ÷G€ë§ñê‰'© ñÃzÊv£ˆ·bµìËN‰Ø5]ˆ·Š`˜v‡C½á¦}ØÎ>À§àZ›ˆ\ã¾ ¦ı‘ŒTzŠpÙŒg …~¡k\€/?„…ÌsÏQ³ƒ"vd\ßki)+¯ÒçtĞ÷¼+LçÌÔÎŒ=VQµÉŞÎNêB#ĞNXfËÅÒ
-+İ+kàh­ì7¤g/ôHä_CmØi¼YÛHmNŞo@ë›sÁ0	]tA§³Qjk-La7´w¥l”Úh>Vt¢A§³Az:·&qš¿éÑõ:HV@·ò©‚şøïÂ;şËÈ‘#Çÿ¦ı[&<!ä\(    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/default/icons/48x48/chip.png b/dist/qt_themes/default/icons/48x48/chip.png
-index 3efdf301eb52a587f18b7d2f94d6ea64773a0231..1b573d51af66864f03a7e20179d3ea4d5f36a012 100644
---- a/dist/qt_themes/default/icons/48x48/chip.png
-+++ b/dist/qt_themes/default/icons/48x48/chip.png
-@@ -1,163 +1,6 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   	pHYs  Ä  Ä•+  8$iTXtXML:com.adobe.xmp     <?xpacket begin="ï»¿" id="W5M0MpCehiHzreSzNTczkc9d"?>
--<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 5.6-c138 79.159824, 2016/09/14-01:09:01        ">
--   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
--      <rdf:Description rdf:about=""
--            xmlns:xmp="http://ns.adobe.com/xap/1.0/"
--            xmlns:dc="http://purl.org/dc/elements/1.1/"
--            xmlns:photoshop="http://ns.adobe.com/photoshop/1.0/"
--            xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
--            xmlns:stEvt="http://ns.adobe.com/xap/1.0/sType/ResourceEvent#"
--            xmlns:tiff="http://ns.adobe.com/tiff/1.0/"
--            xmlns:exif="http://ns.adobe.com/exif/1.0/">
--         <xmp:CreatorTool>Adobe Photoshop CC 2017 (Windows)</xmp:CreatorTool>
--         <xmp:CreateDate>2018-07-25T20:26:27+08:00</xmp:CreateDate>
--         <xmp:ModifyDate>2018-07-25T20:30:37+08:00</xmp:ModifyDate>
--         <xmp:MetadataDate>2018-07-25T20:30:37+08:00</xmp:MetadataDate>
--         <dc:format>image/png</dc:format>
--         <photoshop:ColorMode>3</photoshop:ColorMode>
--         <xmpMM:InstanceID>xmp.iid:a03a1ab2-4145-5444-bda5-17fcd23a669a</xmpMM:InstanceID>
--         <xmpMM:DocumentID>xmp.did:a03a1ab2-4145-5444-bda5-17fcd23a669a</xmpMM:DocumentID>
--         <xmpMM:OriginalDocumentID>xmp.did:a03a1ab2-4145-5444-bda5-17fcd23a669a</xmpMM:OriginalDocumentID>
--         <xmpMM:History>
--            <rdf:Seq>
--               <rdf:li rdf:parseType="Resource">
--                  <stEvt:action>created</stEvt:action>
--                  <stEvt:instanceID>xmp.iid:a03a1ab2-4145-5444-bda5-17fcd23a669a</stEvt:instanceID>
--                  <stEvt:when>2018-07-25T20:26:27+08:00</stEvt:when>
--                  <stEvt:softwareAgent>Adobe Photoshop CC 2017 (Windows)</stEvt:softwareAgent>
--               </rdf:li>
--            </rdf:Seq>
--         </xmpMM:History>
--         <tiff:Orientation>1</tiff:Orientation>
--         <tiff:XResolution>960000/10000</tiff:XResolution>
--         <tiff:YResolution>960000/10000</tiff:YResolution>
--         <tiff:ResolutionUnit>2</tiff:ResolutionUnit>
--         <exif:ColorSpace>65535</exif:ColorSpace>
--         <exif:PixelXDimension>48</exif:PixelXDimension>
--         <exif:PixelYDimension>48</exif:PixelYDimension>
--      </rdf:Description>
--   </rdf:RDF>
--</x:xmpmeta>
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                            
--<?xpacket end="w"?>ÊÒô6    cHRM  z%  €ƒ  ùÿ  €é  u0  ê`  :˜  o’_ÅF  4IDATxÚì™ÍKTQÆ6ù™_4¹iº(DQQ!lAm\D-ò/Ğšéßá¦M	ÑÎ¨Ø×jÑE£uµ6…sİ¼‡—{çÏ=9¼0Ì3çœçÇÌ9wÎ9p2½ş»@Ÿòî¿€?òÚTP€å5o*°\Æ‘Ú$@$¥ƒlŞ†òïh5¼IÃ‹€® úÕ@ËÊ/^YyËªm¿áİWŞl 8¯ ]2Ñj½Vş'ÃÛQ^ÉğªÒWMwÀ#jM9n)ï¹â™ònK›x§¼f "ŞĞí  L ÅP*NEi[ˆñZ€)  xŸßÔw`î¤¯ÊÄªU›ò¿¨‰æºş½¶ù>ÆtP•	{Q>ó#c€H‰6ùêu2á`Ü&ßßóĞXm|\³É7¼VŒ*ÉÚg Û|©Šˆ¢ˆFËàL \ÌËCê›QÛÀ‹œ ¤æ«7‘†<ÚäË3ÀM›|/¯ê+ÚÊÑOÈ&_X…@# #ÀRÌ£z8' ©ùNıg.€ë6ùNıw:€1›|6ïÓ64 ,óÑ©¶l­9›ÄiùÂ2ê ¸Ì5\ÉÉ,5ß^B9öó	Ğl“¯^'Ó¦lòıL0€Ï í6ùz€ÇÀ£Êû5í{ ±mò¥ê©÷e~ÕÅo¯òº®®Oª/¥xM´u®pOî‰@¸'÷Äçëøx (K¤‘²Y    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  ‡  ‡åñe   tEXtSoftware www.inkscape.org›î<  |IDAThí™MRÃ0F_º€@C¯Ôcğ·)‡†°lé
-+Ñ^€f_M†©¨ck"Ç$ã7£EgdYjù«™L¦+s`[Û<‚t6À¾¶MÿVŠ®êD41µş­Lº,şh
-+(€;`Tü¶dï1—¬€p¦È+ˆ+à= 9+û¬÷4aÒsò½aóŒrŸ ùÆn-
-+X‹ ÏÀ¥E`Áğ(öZYŞ‰ S‹ J±×·oAH™ÎmëıFy4ZÅ5·}ş¡ª…´şGZ%ä òù·Ù)-¤ò·h¡Y¢µN|-!é:ëCãl!‹)¤R¦ñF9…E. 5¹€ÔŒ² ­’h®ĞxÑ´P_'q4-´M´Ö‰VYËéŞµ5YI*ñ9ÆDƒ¼Ìòş©áƒã^|"ÎÍD	¼ˆ½–Ğ? VvcQÀ9ğ• ùWÆŒÃ]eŸÉ—VÉ7~Ò%oë,lWÇ¾FñÍç74©±ÖB!ÚFëÁ¿fÍd†ÌS(´JHÓšÉ    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/default/icons/48x48/folder.png b/dist/qt_themes/default/icons/48x48/folder.png
-index 2e67d8b38fe9219a9bee674472f6a1356cae3698..507337fae59964244795a3b0bc528e07de52df3e 100644
---- a/dist/qt_themes/default/icons/48x48/folder.png
-+++ b/dist/qt_themes/default/icons/48x48/folder.png
-@@ -1,4 +1,6 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   	pHYs  Ä  Ä•+  LIDAThŞíÚ¿JÃP†ñŸ%8Iq,^€®âäÔ+ptğJ\¼€Ş„7 “â¢“n‚
---¢‹Uë`‚i@°š6	|/|CNşğ<çœ„p"‘e®°`KhıâüÎñT™mÜ`4a½ ‡…*á÷ş ^¬Óª$6K€ÏªW…ÀA‰/hÏZà±D6fı•|Í+<Lõ·éŒÙÇk¶cÔÀºÀò´F`V¹ÆÚO¼Õ8Áb¡m·8…†èÖ¸×»)cÆ{Y8nÀÔ9Îwxñ}ç¹yÆ¤¥á	RZMìô¾ï¥º;|a™ í”1ãí'8ÂVz@g8”û€P“ÌûZÜíäÚ`ÕøŠoSj˜²ƒ¼7ş=eË:Nj>Ã”q=ƒûáFéÔğ‰ô{5ù­¡´|¸> Ê…    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sRGB ®Îé   gAMA  ±üa   	pHYs  "r  "rÒm!  ¬IDAThCí™=/A‡…(¼4Ô*ñ–H”â½Q
-+â%>ƒÏà¨u
-+:¡$|-¡R¨Pz—ãùí­³;FávïfWæIìÌİìİÿw7w›)x<|S£4à4b'6b%œá>½1…Wø‘’'ØŒ5aßÑVHkb_ĞV@V=Ä!ÚŞ8M«¢Í©ó€¨ô_Q‘*6úzI|ÅkÜÆaüÁš'­cÒñe·0öÁÎ¢9p“R­rƒK@}¨‰%EÓpOƒ^º,â’J1‡»êDĞ7°Wj&¦	×p(èı]HG°5è}s=j(€ùé±,¡?š4ëì¶MŸ,r‡›¥fŒÜ·á1JKXñ\ã¸ÆpàÀ5>€k| ×ø ®Q ­µ˜ØV­]c«©¨ ÷¥vŒ¾ğ˜%Âcİ+Úñ£wû¨µ-‰¸F5,£ö¢5ªæ68Àè“ypËôã3ÚfQÕÚ‹1VĞœJYT5ËŠ6&ñm'fA­Îc™ß6ù&P»°ÒM¾´ĞşÀãj/Ããñü
-+…O{pƒ.Ó­ó    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/default/icons/48x48/plus.png b/dist/qt_themes/default/icons/48x48/plus.png
-index dbc74687b177ea85ffa48be3864db8a49bed76cb..ba7b62aaf7e681348c0780f96f929425bb75f4c0 100644
---- a/dist/qt_themes/default/icons/48x48/plus.png
-+++ b/dist/qt_themes/default/icons/48x48/plus.png
-@@ -1,3 +1,3 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  Ä  Ä•+   tEXtSoftware www.inkscape.org›î<   ¹IDAThí™1„0ÄÓSğ	š{ZZò® \$q–œv$7)ìÂR¢ B& @ÌòY7Ì ¶CÍÔDYqX=M±n2o¬İ°5`#6`#6`#6¿&ìw÷„ó•ØZ%îöK9“éQò®`ˆ/Zªxû—;ğiÂ)[%®]Å%Ö›˜ØH€ØH€ØH€—@2=ÆK`1½–î¿Y…è…/ËÇ©?â™ì²    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  ‡  ‡åñe   tEXtSoftware www.inkscape.org›î<   IDAThíÙÁ	€0DÑÑúì¿­#T!V×!ò,xŠ~È!A	 şj’´ì3™¿%d–Tö™³^2d-¬íÃÓß5f,ú%Üp#À 7Üpkçùœ«è:áûÄù<ïê}¢û-Ôòt½5Í-ÄÌ 7Üp#À 7Ü2–Ês7ºÿÅ ÷VOsp¿×5²    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/default/icons/48x48/sd_card.png b/dist/qt_themes/default/icons/48x48/sd_card.png
-index edacaeeb5629c5cf4a86d24eb35a4d37c45bfa77..8a8682133a1da5bcffa2612334db7badf4c5a6a4 100644
---- a/dist/qt_themes/default/icons/48x48/sd_card.png
-+++ b/dist/qt_themes/default/icons/48x48/sd_card.png
-@@ -1,6 +1,5 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  Ä  Ä•+   tEXtSoftware www.inkscape.org›î<  ãIDAThíÚ1kAÆñ_Ì±±PKAHª€ •˜ÆF‚_À*½Ø	VZªßÀFl¬DPÔ*…ú1…¢‘(ê)B’³È77{{·Ù›Sæ/ì>÷.ó<·³3Å.ã±„çøNCµ‰·¸#cú,ÑÂul7h|P}Â©¿5¿÷'l<¬÷8›š©i~®0¿hÏğ¡8Å2¾àqĞ³€y¬b-Ğ—ñíñ
--¯ı\1>\ÆšûÌ?UşGÎF=¼Œ®½Zè#½­?¬½+‘¾Œù06·g„ùî´9=¢oRŠ…aZ¸«Ú¤¦4å‡¸†óÍyÙªœ±óÀL=U®èİ®UœêŞ|Õ¦U¡/Ç_ñ"8ÿØœİ£­·t=Š~»Uèß°QÔg½í#¨Ÿ…ş=Ò·±iİ1Û‘¾x‰—éÊ;P‡ı´Y ï+*d¦¢wNoãÉ¨}`êÉRSç8ŠKÁùBC^v•pš¦*­BÿüÊR“¤&HMš 59@jr€Ôä ©ÉR“¤&HÍ 3Qõ)ùª
--°Ş°‘q)½\©
--ğ¤a#ãRÛ×q½·+ÓRïøÔ`¦(Ä:Nş‰ù.ó¸c'ı¤¿PÙÄÜÄá*ƒ¿¾3íiS    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs   È   Èı×;   tEXtSoftware www.inkscape.org›î<  ûIDAThí˜=/AÇ¬ó–¸„‚D´¢‰F¼4:
-+ÑKT*!Qqß·JDN¡ñ$áP¨t$3’±vìÎŞíÎJæ—LvîÙ™Íÿ¿;Ïs“òÈËÀğ|&Ğ€ù2uR'$Úß>€ş Õ1Å×ÀxÌù¦T#A7jb<¬Ø&”ØP’ıV`MöÀ­2nhö€3%¾´Eùìo€nÙoŒ¡õ9àˆßŸx@Ó©Ä}ó_d|Ñ¿’ñ‚/~¢<k=HÉò€m`Ò`NâD5à»Àt‚ZbÅÀ÷›ÏœxOâÄ›Ÿ’¿Ùofe¿	h–ı¼2_ƒ¨& ¾¸'¯õ¾x.DßŸxÀ?“U]ÿ½T¶Ö‡5ã$ŞfLÛ@g Qƒ3ÎÀè÷2….‰óšxÚ\"–ò;pm2qàDzFlJÀ“fL%ÛX˜PÓ½P›áøry 3px=¤·ãLŒÒ­÷j
-+¥Ò<Fqi‹(Êú;O]4 ö%]Àpzr*‡®ŒşËÈ4Y7º|³n`QKÀRĞ€8§iÓ!¯-A7³şBqlãØÆ°3`gÀ6Î€mœÛ8¶ql£3ğ–ªŠhjÒ("–²Â'pj:i¸ÇşéÜ=0§ù¹	ÌŒ€    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/default/icons/48x48/star.png b/dist/qt_themes/default/icons/48x48/star.png
-index 740f7f3e75da9160a8db6a1941b159509a7ab8ee..c2b78f0c3e543913b18d4f95956109c7d2646ba8 100644
---- a/dist/qt_themes/default/icons/48x48/star.png
-+++ b/dist/qt_themes/default/icons/48x48/star.png
-@@ -1,8 +1,4 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   bKGD ÿ ÿ ÿ ½§“  cIDAThíÙ;ŒLQÀñk³‹‰„ÙeI6lC"Äz¨<¢¢R
--¢Pj5"QÑI<¢×4:•
--ñ¨$’]Ö#	»–âÜ³™¹÷š³wVæŸ|ÅdæûÎÿ»÷ÌœsîĞ¦M›˜%1/éÁ·$zb²0VaœF%‰SÇ‰BFñ;‰è.Õ('Çı•OãX©F9yjfÏ± L©¬0S>ı%zeæÚÜ/Ñ+›0©v“Ø\š]®«-ŸÆµÒì°
--?4n`½Í´™ÙÙ~ë»´àÂÖ-,V®~Ÿ°¸wÌëÁzlÃáêïÎ‘¿k°}Âø%LÁ\Ì¶°$Åû“âk…9ÛÕÉ{±¶cx'lCŞ
--wuï“×ïğ¦^²Oƒ²âbµğô/ñáV¶2#>pß•¥§ÇOa‹‰]øÜÒÕkÇÑ¬ò)1Üò_°7¯|Êj<+Q~[ŠÊ§,Ç£ä_aİ¿Ê§táöÊ?ÆÊfÉ§tàêÈßÁ’fËWs.¢ü-,Š)Ÿr9‚üÎÌE·Ó•‚yõÉEÑvÌ«Ç5g¥",ëÍB
--œŠÜ!ÅÏõèÄÖ¼IEˆy«s×÷!æïulù¾2ïq'ñ1cÎ¤[ˆjd˜À,«Ê«à¼°¯o”(fÎÌw…§µL>S¯ÆùHîàaA_á`:ûğ²F­{MôÂátT=ØgœUl]èLr¿ÎR3ÊÿƒUƒŒã’©ó¼(½¸)<Ië4¡îVà‰p°Ù¡şváä7,ò/Q›6ÿ ¬¨.Id h    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  ‡  ‡åñe   tEXtSoftware www.inkscape.org›î<  ‚IDAThí™KHUAÆ7E3R3[D–YmŠ‹Ê¤UE`T(‘¹ÓhÕ¢AsaDÑB¢Ç¢¢H"ZÔª–¡½ˆ|’eàm1sñœÿyŞ{æh„83ÿù¾osæüg.Ìav‘ˆ‘{°HO€W1jEpeÜZ.ófÑWhÃi>UÎ¢¯PH ıxO Ÿx—mdTc7<®‹µ­Ú¤ é5¹OÔïDÛ^ÃšFñûÓ®DÛ‡Ys€õØN ùÀBà§è[gJÔä’Ëç0†zÄşxƒı)²ô}ogÜ] Ö`78	Yú¿EÌjÂ¦–\İÀ¥>ŒJ'üÆd„lö@°,$ÏAQ¿ísØa©7ßBò ÏPC ¶Ÿñşš•?@‰o‰îË”÷°5Èü`4‚H¸âÃ5"÷Pê73¢ö~/ –BÓVBù¬õ^m*?€çÀ=-â…Q Øl‡à®Ê}<Úpûl§€‹@n!ÓÈÕÚSÂÓy¿Aå¸¿h¯ŠÍJThMécX4ø€”ƒÇ¦xüÚĞ„3O™oKR¼s!I¢öó"ï¡£ ¸á¡ÙlN—0¸îA8 l1`:…*œ©xªÜ$â;‚Ê*İ>XÍQˆ5šqïÆ´¶”/]D¦°§ébÎ]&©µÊ}Æe„\ ÍEPæúé çi#æm[?Fà’9Wè]&…LÒéQÿšG
-+_¸‘Éö‹z”%4ãGMÓt¯‹€ØP/û|b‹ºûÄõ	Îz#N=Ğ%ÄZ]b²P)¯õÛ1œÒ}­‚³Ë¸kù8;òšp)*ıöÊå_ ËÅ˜"fÈ‹c{„Ğ'ìµuÀwó©2Œ}»L RkL]è"íº=èğ0;¨‹[_ÓOº]ôuš6Ÿƒº&±ŠÔ kƒQç×Rı·[Læ¨íCdğMğƒÜîœ[juuûòJè6y¹•Ô-8ÿSÆîOaú·.k&êöD{JJã6VrÖšœ@1ğËC8U®î#”¯cı¸&wàOç<ÄFP·lé¢Quã<İ®	à$jL¢Rß;@YÎ2à.Ó)ú0p‚˜GËV …9Q“ñº«Ãæğ¿â/×ñé6v•O    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle/icons/16x16/lock.png b/dist/qt_themes/qdarkstyle/icons/16x16/lock.png
-index c750a39e855800fe4cde217a1bf28f841030e501..7e63927b2c047718f80ec29512472f1a2d9d357e 100644
---- a/dist/qt_themes/qdarkstyle/icons/16x16/lock.png
-+++ b/dist/qt_themes/qdarkstyle/icons/16x16/lock.png
-@@ -1,3 +1,5 @@
- ‰PNG
- 
--   IHDR         óÿa   bKGD ÿ ÿ ÿ ½§“   	pHYs     šœ   tIMEâ	-êœIj   ½IDAT8Ë’Ñ‚0DW†RHRv@h”@¶@Út Vğü	c8İŸ$·—Íæ¤ 5pç‹PÈ 	.Áşµ)8ßPõÖ×º-*Õ Ó9Kh”~"Ü0¹”¤<!ğt•ÔG¸Î×¤q±x‘tçùå’ßğœgàôŠÌĞô–t\Øİø¾}À/ìıäÕ1Òò'©Hå“Ã:Ãõ—@½ğ"ÈÖ8#Ğ| ]bíû=Ú    IEND®B`‚
-\ No newline at end of file
-+   IHDR         óÿa   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d   ìIDAT8O•’1
-+Â0†ñ®BÅÙ©Bğ Ã©[ ¸{
-+7÷®UÜ]»¨Küÿæ·XLª~ğ‘÷^^mˆ	áœKá¾`œj»4&°‚\IÆ¬%j‹ƒ¦\Í#•X©–«ÔĞÓúÎÖÚ«OQ\@îµÀ‡[°Æ½0ø¼Şá7Ø“é˜±Z9à†åu!ÎÎñ[CŸŠz¶s¥QØÃF¥Á;h@ß˜*€ƒ|8'ª8H×Ì`_2Ò5`·’qè Ür×²RùƒÎKü\T	¥Ô±ÖCš`YÂøsõğIïñ[gcŒy\íÚÛ›±¦\    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle/icons/256x256/plus_folder.png b/dist/qt_themes/qdarkstyle/icons/256x256/plus_folder.png
-index 303f9a321890fc4c2054e2cff498adf23f654b70..002101114d150e304765a3466be9bf267ae96382 100644
---- a/dist/qt_themes/qdarkstyle/icons/256x256/plus_folder.png
-+++ b/dist/qt_themes/qdarkstyle/icons/256x256/plus_folder.png
-@@ -1,17 +1,47 @@
- ‰PNG
- 
--   IHDR         \r¨f   sBIT|dˆ   	pHYs    ùĞP9   tEXtSoftware www.inkscape.org›î<  ëIDATxœíİ¬İõ]ÇñçûP ¥å÷*lƒ±	k™CEµH˜À¨¢3cÈ~˜e’!XL5nKÆĞ÷ƒÌM%ò#0Ût ØlÈÄ°ŒZL[`F	?ÛÒ}ûÇ9].åş8÷öû=Ÿs¾Ÿç#¹¡¹÷ôóyqo?¯ûı~Ï÷H’$I’$I’$I’$I’$I’$I’$I’$I’$I*(F1Ifî 
--,–ŒbîıØ
--lv FÄ–²‘¤ùi¥ 2óxàT`p"ğãÀ¢6æ3ßÖÿ	üpwD¼T6’4³Æ
-- 3.|¼©©q'Üà_€k»""ç‘^a¯ 3WWg41^‡= |øBD¼X:Œ{±`3óg€O?ß\œ*<
--üğn¨´y@füğ;@¯ñDõ¸ø`D¬+DõšWdæ)ÀuÀÑíÄ©ÎÀG"âªÒAT§¡ 3ø,“ÿöİ8ºøpD¼\:ˆê2Tdæ•À_ûz-È­ÀoFÄöÒAT9tf~„şâWûşxgDì,Du˜µ 2ó÷OŒ(‹ún~Íˆ4
--3@fÜ ì3º8ø›ˆøPéê¾i 3ßÜ,mMñŞˆø\éê¶W@f.Ö?;ú8šbpRDü_é ê®éNä¹ÿ8X|&3}çE­yÅ?®Ì<XGÿ²]‡"âK¥C¨›öÜø(.şqóg™¹oéê¦@f¾¸¸`MïÀûJ‡P7Mİ¸ßòWWd¦?5. 2sğ8°´lÍâW"âöÒ!Ô-»· ÎÁÅ?îŞ]:€ºgw¼«h
--cMfî_:„º¥78ñç´ÒA4§ex÷%5¬ü4p`é ÊêÒÔ-=ü­2IüY©Q=àøÒ!4´JP·ô€•¥Chh¯¼e+5¢‡7øœ$?/5¨T:„æåàÒÔ=|`ÒøóRc"3}:ÍdÙ <W:„·cğñ,ğ<ıGÉ­¾›ÚšÔÆß÷€o _niò®Ñ€4Y¥ÿt®«#â;{;˜ M¦nş<"Ö.t@š|_¦ÿ ÙGçû}º¯4ùÎş'3×Ì÷/Z R7,nÌÌOÍç²qw¤î¹83"œë…nHİs2ğõÌ<r®º u×à"bóL/p@ê®ã€2sÆg}X R·½¸v¦/Z R÷ıFf^2İ< Õağ±qê'İê°øÛ=?iHõ8=3Ïú	w¤º¬£¿+°Üjsık @ªÑ¥»ÿPb`°™şQII}K€#Í/å]À±ñĞ¢Lpı“nˆh^ibÓy°¸x[KSõ€?%ÛõTf^”™îjHó™½Ì¼83Ÿnim~ÚİX¼3"6´4¾Ôy™¹¸XÑğĞ/ËÛ*€GS"âû-Œ-U%3î^ÛğĞ¿ÚÖ¦ùy.~©ñpACÿdpkDÜÕÂ¸Rµ"âàö†‡]ÙF\ÓÂ˜’š_[+š>°X/48¦$ 3OKò{MoltñKí<lãœ/ŞMÀã'é•~ĞàX€¿ı¥v5ö`P`‘gèI³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fHÕ=5B™¹°
--xı;ÉŞà/ OĞ¿ñËZà¶ˆx°Áñ5"@‡dæ>À%ÀÀë[îøÁÏïO7ˆï¶<¯ä.@Gdæ2à&à“´¿ø÷ôïdû­Ì\3â¹µ,€Èşí¤odÊ_
--Y
--\Ÿ™gÎ¡!Y İp9pzéû ŸÏÌƒKÑÜ,€	7XhW–Î±‡åÀe¥ChnÀä;8¬tˆi¼?3£tÍÎ˜|§•0ƒ×+K‡Ğì,€ÉwBé ³çlÂè‚å¥ÌâÇJĞì,€Éw@é ³XV:€fgH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY RÅ, ©b‹J˜d™¹?ppp$°¤@ŒÅæÖêÌÜ§À¼O>îˆ‡
--Ì?1,€ÈÌ·—g KÇgg>ŠÉÌ€Ï×DÄ–’YÆ‘» ó™ûgæµÀZà\\ü“`%ğÀÆÌ\U:Ì¸± †”™û_ŞS:‹ä5À×2óìÒAÆ‰0¼«€SK‡Ğ^Ùøbf®,d\X CÈÌ“–Î¡F|¼tˆqaç J‡PcÎÊÌ¥CŒ`™ÙÎ*C
--ÀcX Ã88¼t5îçJÀÜ,@­xmé ãÀ˜Û¡¥¨‡•0,€¹ù=ê&®øMªfH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ æ¶³t µbGé ãÀ˜Û¥¨›KÀÜ^.BÛP:À8° æOw—Î¡ÆİV:À8° †óÅÒÔ¨Ç€;J‡Àp><Z:„ó×áÁ],€¡ş±¬Á#Ç]p3ğéÒ!Æ…0¤ˆøoà|`[é,Z°¯ï‰ˆ]¥ƒŒ`"â&úO•ıjé,š—§+€³"â¹ÒaÆÉ¢Ò&MD¬Ş‘™'ç «€£€C
--E:„şóîÇÑÊœHõıó7î§_Ö×GÄ–9Æ°@qpOé™ùãû¤Û?Œˆ—¡™¹ UÌ*fH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY “oœŸuÿré š0ù*`O– ÙY “ïñÒfñƒÒ4;`òİQ:Àvß,B³³ &ß-¥Ìàñ|éš0á"â^àË¥sì!?*Bs³ ºáJ`[éS\ß.Bs³ : "ş¸x±tà[À‡J‡Ğp,€ˆˆ€SG
--EHàïÕ±£PÍ“Ğ!±Xüp/ıEÙ¶gNŠˆDÄÎÌ©†,*@Í,À«€«2óàà ¦z‘şâ¿?"<ãoBY ›Í¥sh|¹ UÌ*fH³ ¤ŠY RÅ, ©b€T±Í-f¡HíjreØŞà€ËKÒ«ÑàXÏ÷hö2Ò748–¤Wkrmí[ğu™ùÖÇ“4™'G68äs=`Sƒœ×ğx’úš^[›zÀú†½,3jxL©j™ùàÒ†‡]ßF,®ÎLß0XK× ‹z=™yB¶ã™–ª’™‘™Ÿli®Ü=Ác-Mp]f¶q3
--©ó2óàÌ¼¾¥µù@/"øZKÿï6dæ%™ùš–æ:%3—gæ‡À¹-Ms;@&<øzKí¶‹ş}êf¼Ÿg7É’ş÷÷`ı»mˆZ™,ó`úû¥oV¶1W%ŞüíŸU»:"îÜ] =à!àè–'•TŞƒÀ±Ñ?R»èßÒYR÷}f°ëÏÒÖ=R*•¤Ö=[aÊ~FDlş®T*I#qõîÅS¶  2ó à~ú"$uË&à­SŸÜôŠ#±¸lÔ©$ÄïîùØ¶W½Õ7×,’¤QøRDÜ¾ç'§=U73—ÿœĞv*I­»8eºç6N{²AD<œlîë’&ÆsÀ»gzhëŒgEÄ}ÀÙ€O{•&ÓvàŒˆøîL/˜õtÃˆøàbà¥†ƒIj×‹ÀoGÄİ³½h¨Ëu3ó—ñ$!i<	œßœë…C]pw§Ñ¿^@ÒøÚœ>Ìâ‡y\q÷oşyÁ$µëÇï†2¯K§|€şf†¤ò Ş\óºÍÿ‚oÙ•™‡¼Ø¡ãHZ°ô¯ßùãˆxf!ìõ=û²à+€÷K÷v<IsÚFÿòıEÄc{3Pc7íÌÌeÀ¯¿ìÛÔØ’x	øwàÀõƒ“õöZ+wí”Á/«€· Ç>–´1ŸÔ1ÛéÍßHÿ¶ıww5µè§ém»3s1p(4À33¶+I’$I’$I’$I’$IÓú™›ÙÌßN>3    IEND®B`‚
-\ No newline at end of file
-+   IHDR         \r¨f   sRGB ®Îé   gAMA  ±üa   	pHYs  ¼<  ¼<Á¿Š-  ğIDATx^íİyeÆq†¥„PC0¹J@îÂ¥¢"%*‰àKQ(ÎTòHÉ!D(-)KTY r(p¥DğH¹QQ@¹X€ãóôûn²ÉÙé™î™}ßï§êÉÛİ»;»éé÷7o÷ôt¯                                      :¨ÛÚ5›ÍÕì¨LV&)•M”u”u•õ•®ı}£Ô»ÊËÊcÊï•ë”EF£© ¶¦ÿ~5ŸQöSöU¦*tğê=¤œ¥"° Ì+TŞÕñwWs¤r¨²—¡+~£¡Bğb˜** êôcÔ|E9MÙÎËĞş¦ "ğD˜Eî:Z Ôñıx3•YŠ÷éÑ{ş¥ì£"ğx˜EÎ:V ÔùıJ©²G± ½Œ"€Âš±-Í÷”ó5ù€Bç>ªÜ®çm«0‹\µ5Ğ´¥šùÊ.ÅŒ6Œ2Wz Îïƒ|Qèü£#Ì•* Ú`¾£Æ¯üã‹Í(k© h#i(s4y±ÒöñôŠ@¦Z: Äß¯şHÇ23âWquşÙjèüic$™ ´A­æ²0‡0ÈÄj€:¿òß¥¬U,@.(¶ ¨óûÃ;R¶( 7Äy@ßÅá
-+…ÎŸ/	$n¸ƒ€G(Ÿ“ÈE aƒîèÉö	>+› v’4Ôà…Îş	$hÀ@Oğ5(c‹ÀÊ	$d°À)
-+Ca$•F zRıäº²ûÀp	$`ÕÀ±
-+#ÁH ËG z"}!Ï*üC+	Œbı€¯ÙïKGwÓŠohá[¼åÒáŠ_…{‹Àn@24oÏÿU^QWQÑ|VmWõ/ Wª9,ÌÕêmåjåÇÊb­6¢ˆCïÛ•^)hİ«Ê£Š_ôü\Ş¡í¿Öû6@“øÕ·îw,R¾¡ÿ´ßvD‹(ÉyOñeöü‚x•úÅÓ^X¥¾°ƒ_Õ·Nç*³ôŸôıìPE Yîÿ:õ‡ë{À÷ê«Ólı‡N£ó·OëĞßöQ¼tø üÊ5ÊúÃ/ë¨¾°wlëğsm´gÇit E yWæ)ªì_,é¾]€'Õ|ÌÓóÛŒSµÁ¾fÑIìdÃwz>Qı¨íckj£Y[m]Ÿù÷>?¿"Œ²1]Yª¾û¥0[w¶mÕüçUaU¡dc=å—*—(¥ÏŞuÇ÷§ÿê°@ç;q¢dåe‘ŠÀFa¶5. uİİÇoi &¬øÂ½w«ø^-q&+÷`lQŠ@V&*÷¨øƒ«³ ü;¶¨Q,{*/ e›)·´2pğ» •Ó†øFœDÍ´îİù}R	#ô¹üv¤Ç\ – ébw +“”ëUVûî€ 2Áî@V|`ğ¼094
-+@fâî€Gô«QÀ!qzP€qL +—«ø¸À ( ™bw ë+ç‡É( cw 34
-+ğ%ÿ  dİl\ "0àz ôíx$àk#MS”CÃä
-+ bØKñµ!¦Ó5
-+Xé¼
-+ –‹»;+İ¾<<ª±rp˜( X‰ŠÀ‹Êg59Cy¨Xˆ”Û ƒRğe§üÉ2¸HY¬øÒñ\ÈutÛ_»+îş¥™9Jåâ¯²£Í¿¡l¨ì¤øì¼[•w•n91şiŒ €ªi4ÕT^Pş \¬øÊ¾“_"¯/¾¦` tŠÀcŠïïx ò\±°>;hPÜŒ t‘ŠÀÍjvSê|ûÕ'Mó è2w~ŸYçH ¸ è±©ÔuL`'ÿC zDÜ˜æ*ç«Q €3G©äNÀ«X¿ÙlnL zˆFªYæ*7‰ ô_Ç¶jQ €ŞãÓ®ë0 ô4»€5›Í±ÊDe×O_F÷-‹mÕÆQ 2¡¾®òMåVÍ¾¦<¢x¨éxú5-~ÏºšG—4ê»‹öX
-+@âÔ™ıjÿ]M>¥\ªì§v;8/ó×ü=Oùgü³şÒEH˜:°¯‡rR|øc„ü½ş™;âc Q€D©ãn®æ.ebA9şÙÅz¬	a©¡ $Hv¼ŸVÚ‰ëBrc|L$†¦¹Š/8Ñ)~,?&CHŒ^©=lŸæ:jf|l$„Ó••®ıŞ!~ÌÓÂ$RAHˆ^¡7V3è=à:ä@ıMâ4@H‹¯/WåsêÇ®²À f€´ìÛ*Õñ;P
-+@Z¶ˆm•ü¶ AHKçğ‹-@HKÏ'ÛLBx2ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ :¬Ùl6”iÊ…Ê½ÊóÊ;Jåôë§…¿¢Rş¿ÕÁëÌëÎëĞëÒ¿·ŠÛgĞAÚ@§«YªÜ®¯ì¦l¨ŒQĞ¯3¯;¯C¯K¯Ó¥q£C(  òCÊMšœ¯L)¢
-+^·ó½®½ÎÃ"´ƒĞ&mˆ¾#ï}ŠïÍzx]ß×=Ú@hC|Z¨L( N^ç	´‡Ğ_(tşîñº÷s€’( %é•Ç£öwßñ¹@	€´Áùí¨Ùa=à,='lË%°ÒÊÙ[™&Ñ&){…I´‚PÎÁ±Eïà9)PÎ®±EïØ%¶h œ­b‹Ş±ulÑ
-+@9ëÅ½ƒç¤
-+@9oÅ½ãÍØ¢€rş[ôçb‹P ÊY[ô“( åü.¶è·Ä-  ”sÂq€ŞáçâÚ0‰VP Jh4>0/Ì¡Ì‹Ï	ZD(ïå•0‰.zUás%Q JŠ¯8G‡9tÑ1z.‰Óh Úğ¨áÕ§{fë9àz m  ´IàÙjNPŞ) ^×'Äu6P :@â…j|Iî‹¨’×ñ´¸ÎÑ&
-+@‡hƒ¼GÍöÊe‘ò®‚Îğºô:õºİ>®kt€ob1Gí™a¶:zÒ²º©ƒÖ«/V¹£2QñUÆ)Uûª²y˜¬ÌSÊÕa²R¯)Ë”G•´ù¼è…¹Ğöã½Tí,
-+@Bô\úæUßè=•ûÄiT¤®À. 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+@ZŞŒm•Şˆ-@HËK±­ÒË±E( iYÛ*qä„P ÒrWl«twl‘ 
-+@ZîU“•ğcûw €„4ßGn˜«ÄÜø;
-+@z.Q“åWÿ*‹º€½B¿¦æëÊ{Å‚Îğc}Mıj˜E*( 	RG½IÍ¬0×³âc"1€D©Ã£æt¥‘€öôøXH a±ã¤”9&àŸ9ˆÎŸ6
-+@ââĞ}²r†2’·ı=şŞÉñg‘°F³Ù<Síœ0[mL8‰.Ñs=FÍîÊÊTeCÅ^PşªøD¢{õTñV_—é¹jÆÉ*Íq8Eç†ùJ}@$VC}r5¯‡¹Jì]€ºŞÚÙ$¶ †WW_yİ JcÛÆÀğ¶‹mÕ^uX¦+·_l¯®¾²ÌàÉ0]¹Cµo³Vœ0ˆØG¾æ*÷¤ÀãJG}½_33LÂQÊÆa²RîóOoÍ©ê<¡f‚§+æ“K¦4Âùê úQ?¯æ!e³bAµW?ÜÚ# ó{Àuøˆri˜°ŠŸ(ut~+ú|_XÛ:ÌT¥óÉG "õ‰ï©™æj±¢Ïë—ï¨ÔíŠÏL²¥>0V¹È¢fŸˆBñGŒQ^*×ëNeJü3€¬hÛßF¹Ç¡fÏ+Åè¿ø'û}£§kæsÒ—è™§ìÕ÷G©ò6®ì­\©Ù?+şlFİnPŸ/>&¾ü:úƒ>¥ææ0×5¾®ı}ÊcŠOQæİ¤`\ÌDegåƒJ7í§°Ğı€_}ŸR|¤@šüVüqÔ¿âz qHàa	€t]Ñ×ùm¥Ïèk°©Ÿ¼v± @JŞR&¨ <fW¹"¾à«Á\æ $æ§ı;¿¸JF>%øel± @
-+ŞV¶VøG˜¼í¦oğ.Àea@".^µóÛ€€iPç‡ TË»öşŞ€kzâ¾ÑïÁŸæ ŒrÇÖùmĞ€ià¯ıJùB± Àht­:ÿ!qz€!€©l æÊ–Å £‰OìÛ^ÀgØjĞ]€>úÁ—Õø#Šÿ+ -|ÔÆpß†- ¦ğ¹ùßRê¸Q€ö¹¯únÎ‹ÃìĞV[ Lt¹ß.
-+@ï;U}vD'ô{`UÍfó"5Ç…9 =èuşãôjhĞG|¼šSÃ€ó}å¤092- úh$pŒš*- •ğ>ÿIz¾ Ì\©`*_Tó3e½b€nğ;uG©ó_f[Sº ˜ŠÀæj(» Ôé~eº:é»{µ5„×/ö‰Ó”ó¿ï zîk¾¥ÿít~kkĞŸF¾ŞÙ\å€b€*Ü©|[ÿÁ0ÛÄÓô¨šO+‡){€YªÌP¦uªó[ÇF ıi4àÂò9e¶òI/PÊå|åJuüßÄ·’ĞŸŠÁjT\½>ìe †å#û7(>›ï6uüÊNÃ¯¼ ôQ!xŸØ_ÙWÙV©í÷=ÌÜ¯ô·)·ºU§¯åx]ë€*©ñîÁdÅ')¾/ú:Š¯Häó8Ñ)ğ%÷}A¾›İ<§ø˜™¯½éãe÷«Ã¿                                       Œbk¬ñ*IfÚe”’    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle/icons/48x48/bad_folder.png b/dist/qt_themes/qdarkstyle/icons/48x48/bad_folder.png
-index 4a9709623476fcf4070c4e3da2bb17375222082e..245f96c7ba65c9a792abc01a1b76c39accd3ee5e 100644
---- a/dist/qt_themes/qdarkstyle/icons/48x48/bad_folder.png
-+++ b/dist/qt_themes/qdarkstyle/icons/48x48/bad_folder.png
-@@ -1,8 +1,7 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  £  £dÜ_‰   tEXtSoftware www.inkscape.org›î<  ÇIDAThí™[he†Ÿwvµi¢¶6ZCTTŠŞÔCcÀd#!	A›0^(E<!RĞâ/¤%-¢‚µZAz#*êµÖx0JH/#”ˆxîEën¶‚4ÚæĞİÏ‹İÙ¬c’=f‡Â>°°ßÿÿß»ïËìü3Ì@:¡üÂÌÂÀ@3°±@o
--˜¦%Í­½0³GÍ,n¥³df‡Í¬1Hó£e÷ó™5a¾·
--æ=àXœ³ÿ• ³ŠzMÀíUÔ+ˆÌÌÅ·UÈ¯dv§j³ ü||,)	™ ¶?¶Şœ †$¼X@æHïX-Àà\â2`«oìe|»HÒÌúƒpWfvOÖ£ÇŒ?ÀDĞ&af_çù]p|óâª4Îæ}oğ¸è¨šz€ ©šz€ 	m À†‡C±¥ÄvHÏ_ûÙñŸJéühv1ş©ãºß9®~ŒE#¯•Òx€Ä`çc^-x)í¸«Øş@œjo6sF}ÃrqØğp¨@„’FÀšW˜º#¾{¢ÀœŞÙqØÓ«ÍËôjl°ûªB:9Î! ó71ë1£ÍŒ6IOf—lÉ}+´ÎçˆFvİ^J¹'ZÇ¦¦[Ç¦¦İ´~Î-4íG»Ú}í¯ I¯¨y€¿úú6Éx½ÈåfïØÈ²OI? o-/¨1K‹û€kŠnm³ßFñîş€HÜ×µx¦ŒÖƒ'ïïŞì’ş^„0ëÚÊ»}Ùº!•ÚŸ? é`¢fÑÎ®rû»ÑÈ­¾á=5¹™‹îh4“ÿŠ›#vDæ„{Ó*Ï:C.öĞëHš©Íİ¨mÜÜ°ê¼”Ûï×~P«X´óáÖÏ”1³4ËçÂ˜¤hEf}$îíØæ†œï†ÕÖ˜ô®ºÙkHÒ…Æ[ZÆÇÏCÆø™¼Év3ÛRãéó.k˜H_H½ß:6u´ulê¨™¼Ş.YñŠ00<”­¯¦ÍìK ]†ßIq¯ˆE#C‚¾2tÖF¶gvçİ´|19F€K³Ó7—!;+é©\ÑßßdÌ®ØìÊ„ÍI¿	ô
--ÀÌvïáİ\•ÇÛ’r©ø@ç^¤Å4
--ÎÚòù./¦Ï¤!@Ò‡@0Næ|9ü’!­u"ş×l®Ì~Š2 ³ƒ¹mTÒ$0™}MÚR¬Hæ´Àâ™GõW”¡S
--sÿ»Hš~¯TÙq4N»$]W©ÖJNÉxş_1î{^G    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sRGB ®Îé   gAMA  ±üa   	pHYs  "r  "rÒm!  ºIDAThCí™[HaÇgÖõ†˜´E¨O†‚PYA‘éº²•^V
-+Q³ ºøR$Foù%Eİ^“^ëQëÉ¢ëC=™Qi±»¥A‘Ùnë|ıÏÌY÷¢Â:óm®°?ø{Îùö›ùÎ™ùæ›‹Jš4i–6*Û„™0» 7TeAfx]VUuÊÿH~'4Éâ”Ç»O.è ¢Q%“ü"0ÀF(@£%‰äßÑ‡I.É);]	ÅOI¨¢zA`›<ˆ’•EúõC[x˜hÜÅÓË?›ÛË."Œ]‡f¬rn#lM¥s¦z¨7Èƒ–ıãĞM¡ß¨ R<‚­i’XÑí'GE%­°·(ˆ¢	ÜfßØ6ÌIh“Ş°pèFZ-×£oã Š‡ŠJ-4oõÌb)›kú¤8Òã0WŒ(†äğyw•Ã×èêò69OÏÍVùÆ6š|éLÔW.³gÚŸ	Uàˆ©WÉ§6şY:ÒÚ3{0kË8¢,‘yšéH-À»Ç]‚¸›Ã°`Ÿò×W—r(¹g êÃßèèuªf[ŸîYZFÆYXéH+Àçqn…i7"e´hàéëÂ»^Ág4‰6Su•áËCJ¸m«Š¦^„~Ã‹¾“‡}USm—ô¾‘R€ßS³O&NçG(•şFWø,IÁrİî<#ã0LôQ9âBÑúh-c¹€œ¼P7n•%†)÷5ÔVø›]t—Múææ‡èÙH
-+–
-+ğí­^…=ÌµÆç	›6¬iâ%ùFS!”¯îB-aím½˜-„üiÛôö-aº ¯Ç¹îQgÕ†%®q8¢“öÁiÌŸa»€¿v#ˆÉ>é.|Ü…"Şss<ØV=Ï¾i,L!QÏÎ,°ì¬öz\‡¼M5‡Ñ/ş ”öLc¾ UùÉŞ\Øq¥öÃŞĞıy@¡?Ø5é08½\[ùî9¥õû¦±ôNü½®®àOn TÑŒ/	cSEÎTöÇĞPÂg`¾<é‡z¹Œ£;¤”“‘Z-4…&Œ.1T°M%6°fœ*[ıÕë‰ğê€è“È¢B9@ )(ÊÙ¡Ï]8ƒ0ôj)1€ë´9\ =t=‡ıˆ'H ÚŒFôeÎ0L'¢8Å¡PòFÎD4
-+¥*ôun;§«3kıFút½¢ÅÙòÉ"}îC÷pä—Â,I“&Mb(Ê?µR{"!    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle/icons/48x48/chip.png b/dist/qt_themes/qdarkstyle/icons/48x48/chip.png
-index 973fabd052e389c28ef36c482cf44d764795a3b4..db0cadac1338a971b7b890c33f5920580c1013a5 100644
---- a/dist/qt_themes/qdarkstyle/icons/48x48/chip.png
-+++ b/dist/qt_themes/qdarkstyle/icons/48x48/chip.png
-@@ -1,165 +1,5 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   	pHYs  Ä  Ä•+  8$iTXtXML:com.adobe.xmp     <?xpacket begin="ï»¿" id="W5M0MpCehiHzreSzNTczkc9d"?>
--<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 5.6-c138 79.159824, 2016/09/14-01:09:01        ">
--   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
--      <rdf:Description rdf:about=""
--            xmlns:xmp="http://ns.adobe.com/xap/1.0/"
--            xmlns:dc="http://purl.org/dc/elements/1.1/"
--            xmlns:photoshop="http://ns.adobe.com/photoshop/1.0/"
--            xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
--            xmlns:stEvt="http://ns.adobe.com/xap/1.0/sType/ResourceEvent#"
--            xmlns:tiff="http://ns.adobe.com/tiff/1.0/"
--            xmlns:exif="http://ns.adobe.com/exif/1.0/">
--         <xmp:CreatorTool>Adobe Photoshop CC 2017 (Windows)</xmp:CreatorTool>
--         <xmp:CreateDate>2018-07-25T21:37:27+08:00</xmp:CreateDate>
--         <xmp:ModifyDate>2018-07-25T21:38:09+08:00</xmp:ModifyDate>
--         <xmp:MetadataDate>2018-07-25T21:38:09+08:00</xmp:MetadataDate>
--         <dc:format>image/png</dc:format>
--         <photoshop:ColorMode>3</photoshop:ColorMode>
--         <xmpMM:InstanceID>xmp.iid:d24b6914-04d7-6e40-94e6-a3f5f4d24f35</xmpMM:InstanceID>
--         <xmpMM:DocumentID>xmp.did:d24b6914-04d7-6e40-94e6-a3f5f4d24f35</xmpMM:DocumentID>
--         <xmpMM:OriginalDocumentID>xmp.did:d24b6914-04d7-6e40-94e6-a3f5f4d24f35</xmpMM:OriginalDocumentID>
--         <xmpMM:History>
--            <rdf:Seq>
--               <rdf:li rdf:parseType="Resource">
--                  <stEvt:action>created</stEvt:action>
--                  <stEvt:instanceID>xmp.iid:d24b6914-04d7-6e40-94e6-a3f5f4d24f35</stEvt:instanceID>
--                  <stEvt:when>2018-07-25T21:37:27+08:00</stEvt:when>
--                  <stEvt:softwareAgent>Adobe Photoshop CC 2017 (Windows)</stEvt:softwareAgent>
--               </rdf:li>
--            </rdf:Seq>
--         </xmpMM:History>
--         <tiff:Orientation>1</tiff:Orientation>
--         <tiff:XResolution>960000/10000</tiff:XResolution>
--         <tiff:YResolution>960000/10000</tiff:YResolution>
--         <tiff:ResolutionUnit>2</tiff:ResolutionUnit>
--         <exif:ColorSpace>65535</exif:ColorSpace>
--         <exif:PixelXDimension>48</exif:PixelXDimension>
--         <exif:PixelYDimension>48</exif:PixelYDimension>
--      </rdf:Description>
--   </rdf:RDF>
--</x:xmpmeta>
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                            
--<?xpacket end="w"?>Ú(    cHRM  z%  €ƒ  ùÿ  €é  u0  ê`  :˜  o’_ÅF  fIDATxÚì™¿kAÅ7Š§‰zI0¦	b!±Hs˜€ ˜J‚¦I© Zè_à4ÿÄÎNT4juD´°ˆ¤V‹ÃF¹Ï³pÆáöfãev—0¾ÕÛ™yogç»3ßI’M ¸ü>£7|~ ó7
--4€pÓæ$õù‹ç’v'! ©hÉÀ¼´¸wËâZÀ>‹;%ÀB(cÎ@+È†Å5nEÿbÌâÎ9ı.EÛÕ@Àè#ò­Å½qÚ.[’jV»ÓI( OÌ M`Âá®Z:®8Ü$Ğ4m9\X3Ü:0Ì€¤
--PFRøqIã)æG€º¤J‡v{Y` ‰èüf§Uà{ñ¸´Y$Õ¬èw¦ÿrğ[Òp&}À³`ìNóÌWå`BÒ¯>O'õ" 3^}ÀÏ²ÙÎ68äÕL÷$İ·b˜´>³B˜±½ú²üÀÒ$[]lÕ8f ¸¬JúĞà5p­¼ú<éx‘ÌŞª»¾2 yõ×÷Î½*Ñ'äÕ³P4Ğcîº¿jI'J²ºëëq3:öêëq;:Ì²~šr`xœá@z*Yô%’ÚG6»vY†EìÓÓh¡LQéŒ¤³í æ$í)Ã‰Ì«ø”ÒÁP-øL\õêót2W°Y¯>`#…\öl`À«.JZlp²ÖÀgå#fl¯¾,Yè²)÷åõö„(ğKšÎ!†®TïêÆIêûß¶ÁËìñ8ŞGñ8Şo»{â? ¨‡ÌîH‘    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  ‡  ‡åñe   tEXtSoftware www.inkscape.org›î<  ¤IDAThí™AR1E;,ô*à‘8†(=§°\ªK)VºáÀ„ısÁP™a2!"T^‹Îïî©üÉˆd2™ €°(>íøè svÌµã]˜P€=Ac5}ã]tBÿZ7 à	˜ëí¨‰k¤!~L€gà*´1;Iøt§È7ĞÓ*¾sââ·| ÁÿQF	Šßò¨ÑÀÔ}nƒ…«yn€W+×DCxe‰Ş)Ô{(W×Êõëãœc »nkç»¼}€WÁ¾uØñ´õN^ñ¶W©àï â…|ã5¦P?ÑX©o`$"ËPá,eSÛÁ«ë÷Øz—·
-+¹ÔäRsyàé…jÆ7 Wë…*›Dá7nñ®ÇO½…1æ¾ü…ÆZ$+":^èXïTëm|ãóYjÚ4°._áD¢¤mf9êÛ40³®ÇD8™ º"2vä>JøÅµ¶Gd¨ÑÀ5ğ“ øw4‹&úlÎ*OY|W¥øR_TOë4XÚxÜùü†&5Ú^¨·ñçşš5“9sş 
-+/º„°M+ö    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle/icons/48x48/folder.png b/dist/qt_themes/qdarkstyle/icons/48x48/folder.png
-index 0f1e987d6aa24b1d2f26d40181ec05b62c5862da..11a76b5c1256ade016d4e22cf048656cb0788ad3 100644
---- a/dist/qt_themes/qdarkstyle/icons/48x48/folder.png
-+++ b/dist/qt_themes/qdarkstyle/icons/48x48/folder.png
-@@ -1,3 +1,5 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   	pHYs  Ä  Ä•+  ĞIDAThŞíš1kA…Ï‘‡¥X[‹ 6!¥Õëì,mS[Z‹? Â?«¤!¤yØh!6‚$i’Çùlva2¼„„·fwes·ØåÌìwï,3+UU­¥È/€x%¥U7 Šˆ.>ˆEDüt€l¿²ıÃ6]®ŸÚŞî9€w¹±²¿f¼?È l?Ïg}l1û;ô§S`v›ş“¤àB>”ıâ»À“[­B¶éù™_%ış´Kú;Àû”Ò™$ùôOGŸ)¥ïÑ²›×vEÄ…^ÒãoÀÓ¦d¾Õ±¤e¯¬®o¼îg¹ú("^«¨"çÀÜöè˜±-`ŞzìôEù¢ì~Û{Ùz^"t2>Éü6M—¼“ùú,ü¦	<zåÔ\V…&a^’*B¡ŠPE¨"TªU„*B¡ŠPE¨"Tªı'¥	 ”Êe[‹‡¶g#ı™íÃlkñ¨v%½l_ÉIÀIg#ó˜·;„v£=:ÔhZZÏRD,$m^•$—Å7<;ë;6°•RZDflSÒ[`c¬o#"–’>Iz¥âWƒ.QZÎÒU¥¬<’º*îI–ôkğßúÖ_é>…$Öy#    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sRGB ®Îé   gAMA  ±üa   	pHYs  "r  "rÒm!  çIDAThCí™;KÃP†AŠƒ—Eg'Á(â}ÜªTÁAœœüşgqÕQ]DPtrp²µx¡õùNNÛ¤íĞÆÄ“Àyàá;'ms¾7MSš¦,K²qt­P*•Ú)‹8ıØA¸Å=Çq
-+îô ù|Æ°¸Â´Ş}´°ĞşÈª!}ÃOY-"¢ÁÎÏÕ2ÑMvÚ‡µ§NWQ>Ğ-ÁkÒ(Í†Å¾à!Nêeª°qkÙÕ‚×‡¢L°r`Û°Çú¸×5\:ó”%¼VÂC.ûÛxDõ ÄZJº&ÂB×dà$C=–‰‡8Ñã?Áş;);8®6´|‘Na·šUy Ç!Y ƒµH¨Ø@?r¡yTùltúÄt²ïÎ|$#€æMW/]I
-+ĞÀ46€il ÓØ ¦±Lc˜Æ0`	Pt‡>êîZÇ€F=%À»;ö1¬kœÕÕKN~ñ÷â·ú_å³(·DŒ"=à:Ğ‹ôÜ£Şg¹	•$NÇY.¡Ü ñ#Ş$Ÿ8A€{ubpGÙÂ™ÇéqSšw§x'æñ	ãŠÜ›Õí*ê.M<An]Ï¡<q ƒşÉ_øŠ—xÁ‘OÂYb±Xš#•ú‹ƒ¿¢şÃè    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle/icons/48x48/plus.png b/dist/qt_themes/qdarkstyle/icons/48x48/plus.png
-index 16cc8b4f44d52009d4a3f4c9d46f5bb0e20babcf..6af929bf66b9d82cd43aa2db19fb0db05c89b8af 100644
---- a/dist/qt_themes/qdarkstyle/icons/48x48/plus.png
-+++ b/dist/qt_themes/qdarkstyle/icons/48x48/plus.png
-@@ -1,4 +1,4 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  Ä  Ä•+   tEXtSoftware www.inkscape.org›î<   ĞIDAThíÙA‚0…á©ázZ½„†K¸ÃïBF 4J}`Ş—°é¢3/M“Nˆ0³ÍĞİøµ@£î«™Êê¾ŠıL€¾F­TcS€Ùb)m^ï´õ†¿æ j æ j æ j 6	0#fÄE–Š}ºßØK¦d(â9=íUûŞïä}tq^?<‰{Jéòºğw "n?ï¢Üzolp‰+X¼Ä‰Õ@ÍÔ@ÍÔ@ÍÔj
--×¾V+ÀµpmŸ8úoV³y ãÈ)" Q¢O    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  ‡  ‡åñe   tEXtSoftware www.inkscape.org›î<   ¦IDAThíÙQ
-+ƒ0EÑ™n£]’éÂÛxı¨Ğ¢Ta|(÷€ I®ø‘` \’¤AR›¯Á½Í$ú«æÉª%ég¢Ì’¹nƒ‰ 7Üp#À 7Ü¾öó»tÆÛkõ<±¸Å÷ğ÷Í¯¤FËÌGïÁu?¡ˆxFÄtÔBVLñ^K'27Üp#À 7Üp«h÷ç ³ÿb€¿¼ f	»òd¹    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle/icons/48x48/sd_card.png b/dist/qt_themes/qdarkstyle/icons/48x48/sd_card.png
-index 0291c6542d05a40a350bb5bdbd99a15c01467161..42b9f27738d95d742b4e8380c6450e639630e049 100644
---- a/dist/qt_themes/qdarkstyle/icons/48x48/sd_card.png
-+++ b/dist/qt_themes/qdarkstyle/icons/48x48/sd_card.png
-@@ -1,7 +1,5 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  Ä  Ä•+   tEXtSoftware www.inkscape.org›î<  !IDAThíš¿kA†ŸÏœBbc¡–‚˜T+ñMgaku}°¬´Tÿ±I%A­RhÒ
--‚x…AM¡Áşˆ¾·á&³»¹quw™vßÛÛ}Ş¹]¸=¨€¤®¤ç’6T›’ŞJº'éXÏ"ñ–¤[’~Õ(^Äš¤³+ß–´Ğ°¸Ëª¤IßËå;ÀĞuâgÀûly˜>‹Î63À4°ô|ø<r²À,°¼vò‹@'[7³Û!ÎÛä%=-8#¼m$é¥÷ÙY~ÅË’ú^ÖË¶íyyß9æcßoßù6Ã3.¼r­ñƒÒ’ZÀ¶O›Øä¦üN#p¸TŸË¿¡°€¤óÀ|Ã.•(ëŒ†k	8ã¼6àL«$Ÿu–×ÍìÅÖŠ¤õ*ı…÷IF×ŞE3ë:ïİzÀà‡³Ÿ)à'°îìê ° ß|
--ğÙÉÚÙ17Ş#¶˜d4S–Íì´ëZ6!*È&€ÃùÁìåb%Ûv¼±ìxØ¤±	ù—tÍYŸ©K¦
--!W¡İDî*´ç§P*›T 6©@lRØ¤±Ib“
--Ä&ˆM*›T 6©@lşÛjÔ"œœWY5‹T%÷p¥¬À“šEª’ó*ûmô$°ÂğéÊna8efîSâ0³WÀUàkb!¬—}ù±Hš–t_Ò;5ÿ•MIo$İ‘t´Ìñ7'÷şªu    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs   È   Èı×;   tEXtSoftware www.inkscape.org›î<  $IDAThí˜?hÖ@Æç×Ïşuh¡¸ºXÄIÁED—nvpŠ«à$Ä‚“VquV7ÿt’"íà â*¸ˆV>èŞMÁ¥CN8Âİ—\brò[òò¾oç¹Ë]B ’†’îHú!é@Í0’´ZGgHü¤¤7‰Îs éŒOÇ¡Šâ¯€Ëu&!\ô&bG²â_Wœô`×ÆóÀ=o ß¾ÇÀğØqòwE`Ûı—›À’gbµúÄ%mz–ø¬ÓsÜÉŸËİ¿oó·rù/6¿‘Ëo9cİ÷i*ıI Oå²÷´A)Vüs`¥Y9ñpf¾sâ¡`Kš ›ù«6õøfãàºHš³ñ¬3„›‡ì4˜Îåö:•ËŒ?ô,·Y—ú©*z¢7ñCàZåh	¯I§ÉÎàÎZKcj"´‰gù¶ùLö(ÿ¾úb?%HzdãÉÂÊ²fŒÙ×k`¡†˜*ü,jx8I{_œÍ éCËç½Ëù"}eNš½0QÆ@õ×yx÷€¤i`
-+8\hUQ$¡Xö÷À\ §üoÛqtİ@áãÛuë’ö$íJºíkˆş+‘€cözÔWìú
-+ÒHMo 5½ÔôRÓHMo 5½ÔôRÓHMÈÀ¯VU”Ã«)d`›ìïtWğÖWğ0Æ|n £æ4•f¬c>ùŠ K‹~· Bµ    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle/icons/48x48/star.png b/dist/qt_themes/qdarkstyle/icons/48x48/star.png
-index 90d423a1d4c1e05ccec0a01fa34abca9fe99676d..546779e2a810e73169f65a79850aa07dffd70267 100644
---- a/dist/qt_themes/qdarkstyle/icons/48x48/star.png
-+++ b/dist/qt_themes/qdarkstyle/icons/48x48/star.png
-@@ -1,4 +1,8 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   bKGD ÿ ÿ ÿ ½§“  ŠIDAThí™=hA†ß1†‹r(Î…øÓ(ˆÂùS¥ò+­¬"be›&VÚˆbo§¨•VV*jZ!1ç"sQ“Çâöp¸ÜííLf²"÷ÀÇŞ÷}ï;3»3+uéÒ%@(ç­Ã ø\ı±ê¬Š•XÒˆ¤br]X'<@¨ğ—*Ğ—·®Ì XÊù¼uexÛÂÀ{Àä­­#ÀÉâœÈ[_G€ç)å­/`?°˜b`8²fè×èuIiëÜHº¸f€-À\Êè7¨¥PuCÎÀIYŞõıkĞG}³ÊÊ4°&DíÕ‚û%m“´CRIÒ°¤­)6Kº¼”T•4)é‹1æ««–%0$i»¤Á&‘ƒ’’{±5IS’*’>Ë2—ü2Æ|jŒ9,ƒ¼¸ikn~ˆ?HZ8¢1˜L½œ~ä=Ì-øŒd²frlSÎ9Í°˜ÈY8À7`ØI¼eb x—£ø
--pĞK¼ebğ*ñãÀÎe‰·L€G+(ş5°)ˆxËDpoÄ?ÖßdäFDñ¯ã«‰ÛÄßÇ£gö=N=ãÒ˜7Æàäkà¨g\G|‚œ§(Jš•ÔãS0…_’Öcæ\‚|f ¬ğâ%©WÒ!× ^S+w×@`â -fª’.Jº$i:cÌ.B!l€³6¤ŸÀ`WF©Ÿë;q:¦N=ó`wJüŞä?iŒÆ4ğ¢MÑqà”CãÀÇ6¹Æo¨wG63À5Ày_ z“ØÙ9ÃGH¦¿Á<pk/#o	x ,Xù‡Bhn.´xC½±Ù!ÿaêß1ßD]ºügüöÃšÊéÄ¯    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  ‡  ‡åñe   tEXtSoftware www.inkscape.org›î<  œIDAThí™[ˆMQÇ¿edq›Äƒ”0n/„†0&OHÉP¼!O\J))å”’B$—D$yà	åArkÆ-If8“q©ùy8k7Û·×Şûœ³×vJó¯ı°ÖúÖÿÿÿÖY{íµÖéCuaò"f‰ÈbADîcå¥å@p‚(ıªí/Àv‡ù Ûªí/€Úhr›¶™4*Ã]ö	£Ñ§¦ï9¹Z•¯‰ÈuU·Ê³¦? /Õh· kUİëjût˜©ŒvuÀà»j›áK×çÒÓç¦1¦`Œé‘[)±ÕğTò†PÛFÕö¬š^# ¦)ƒ¿€¡öáÀO3Õ‡¶¯)¤§ÄmcLGP0ÆtŠÈ”>¡¿«,"M"2®Dõª|ÉsQD–„Ê­À§ùÛEä1¦;5X¼£rüF9xGÙ¶JñX˜f~ğ-ƒÀÉşS¹¿£“Ø›Qà.P—À?¸—QcO˜S¿“Uù¹ˆÜÍ¸_Dä¾ˆ\5ÆdŒù4‹Èr™'"#Kàn‘†½ ªl{€#@m	B^ÔZíåé@R§Ü/Úc`Ê?4?Åjjü&¥u^g5º€ÍÿÀüf¢[ğÀüÚRIæ /$ 	}e=
-+œ‹Ñlæ—KXœ!lx4?‡èV<À…Ll
-+âßÀæ·à~ï
-+À¦¬üHğĞ!Ò,Igˆå]Ft•Áj5¤3”'Vvê½~9œ·r˜<—m¢GÄ7¸ô«´U&„J¶ÓTùCŞ§p§¢’Ö¨rÅSÈÑ7ß£&èÄ\øô¬[”à«„Øz`©}êâ^)Î–|ÜÅÎ+±C˜`;
-+Àn ÆHqÏËü@¢‡F3–â™ €ñªÏ\S å‘ÀJ%ô–ĞE-°øœ`>@'¡å’â…p»ŠY‘Gg”ÈQ[?8cö£}\8Œ4pTµñm~ Ğ¡Dš€éÀ“ƒ7€Ñö¹óÄr4©ú ìoBRz¹ûl%º¤BñkO/cëôå–c+Ñ_ÊÛı© ‹yÜõÈs`vÏlã‚ælö™@=ğ#F8ÀiJøQ<gœNáêJ9ğ—•Äş±¯@k|­¶¯û¼š·‚ØEq„âÖ÷20!çà
-+½[ôN`'yşô&Ã<r³É8ïjûĞ‡>üÇø€üÀ¸Š6Õ    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle_midnight_blue/icons/16x16/lock.png b/dist/qt_themes/qdarkstyle_midnight_blue/icons/16x16/lock.png
-index c750a39e855800fe4cde217a1bf28f841030e501..7e63927b2c047718f80ec29512472f1a2d9d357e 100644
---- a/dist/qt_themes/qdarkstyle_midnight_blue/icons/16x16/lock.png
-+++ b/dist/qt_themes/qdarkstyle_midnight_blue/icons/16x16/lock.png
-@@ -1,3 +1,5 @@
- ‰PNG
- 
--   IHDR         óÿa   bKGD ÿ ÿ ÿ ½§“   	pHYs     šœ   tIMEâ	-êœIj   ½IDAT8Ë’Ñ‚0DW†RHRv@h”@¶@Út Vğü	c8İŸ$·—Íæ¤ 5pç‹PÈ 	.Áşµ)8ßPõÖ×º-*Õ Ó9Kh”~"Ü0¹”¤<!ğt•ÔG¸Î×¤q±x‘tçùå’ßğœgàôŠÌĞô–t\Øİø¾}À/ìıäÕ1Òò'©Hå“Ã:Ãõ—@½ğ"ÈÖ8#Ğ| ]bíû=Ú    IEND®B`‚
-\ No newline at end of file
-+   IHDR         óÿa   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d   ìIDAT8O•’1
-+Â0†ñ®BÅÙ©Bğ Ã©[ ¸{
-+7÷®UÜ]»¨Küÿæ·XLª~ğ‘÷^^mˆ	áœKá¾`œj»4&°‚\IÆ¬%j‹ƒ¦\Í#•X©–«ÔĞÓúÎÖÚ«OQ\@îµÀ‡[°Æ½0ø¼Şá7Ø“é˜±Z9à†åu!ÎÎñ[CŸŠz¶s¥QØÃF¥Á;h@ß˜*€ƒ|8'ª8H×Ì`_2Ò5`·’qè Ür×²RùƒÎKü\T	¥Ô±ÖCš`YÂøsõğIïñ[gcŒy\íÚÛ›±¦\    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle_midnight_blue/icons/256x256/plus_folder.png b/dist/qt_themes/qdarkstyle_midnight_blue/icons/256x256/plus_folder.png
-index 303f9a321890fc4c2054e2cff498adf23f654b70..002101114d150e304765a3466be9bf267ae96382 100644
---- a/dist/qt_themes/qdarkstyle_midnight_blue/icons/256x256/plus_folder.png
-+++ b/dist/qt_themes/qdarkstyle_midnight_blue/icons/256x256/plus_folder.png
-@@ -1,17 +1,47 @@
- ‰PNG
- 
--   IHDR         \r¨f   sBIT|dˆ   	pHYs    ùĞP9   tEXtSoftware www.inkscape.org›î<  ëIDATxœíİ¬İõ]ÇñçûP ¥å÷*lƒ±	k™CEµH˜À¨¢3cÈ~˜e’!XL5nKÆĞ÷ƒÌM%ò#0Ût ØlÈÄ°ŒZL[`F	?ÛÒ}ûÇ9].åş8÷öû=Ÿs¾Ÿç#¹¡¹÷ôóyqo?¯ûı~Ï÷H’$I’$I’$I’$I’$I’$I’$I’$I’$I*(F1Ifî 
--,–ŒbîıØ
--lv FÄ–²‘¤ùi¥ 2óxàT`p"ğãÀ¢6æ3ßÖÿ	üpwD¼T6’4³Æ
-- 3.|¼©©q'Üà_€k»""ç‘^a¯ 3WWg41^‡= |øBD¼X:Œ{±`3óg€O?ß\œ*<
--üğn¨´y@füğ;@¯ñDõ¸ø`D¬+DõšWdæ)ÀuÀÑíÄ©ÎÀG"âªÒAT§¡ 3ø,“ÿöİ8ºøpD¼\:ˆê2Tdæ•À_ûz-È­ÀoFÄöÒAT9tf~„şâWûşxgDì,Du˜µ 2ó÷OŒ(‹ún~Íˆ4
--3@fÜ ì3º8ø›ˆøPéê¾i 3ßÜ,mMñŞˆø\éê¶W@f.Ö?;ú8šbpRDü_é ê®éNä¹ÿ8X|&3}çE­yÅ?®Ì<XGÿ²]‡"âK¥C¨›öÜø(.şqóg™¹oéê¦@f¾¸¸`MïÀûJ‡P7Mİ¸ßòWWd¦?5. 2sğ8°´lÍâW"âöÒ!Ô-»· ÎÁÅ?îŞ]:€ºgw¼«h
--cMfî_:„º¥78ñç´ÒA4§ex÷%5¬ü4p`é ÊêÒÔ-=ü­2IüY©Q=àøÒ!4´JP·ô€•¥Chh¯¼e+5¢‡7øœ$?/5¨T:„æåàÒÔ=|`ÒøóRc"3}:ÍdÙ <W:„·cğñ,ğ<ıGÉ­¾›ÚšÔÆß÷€o _niò®Ñ€4Y¥ÿt®«#â;{;˜ M¦nş<"Ö.t@š|_¦ÿ ÙGçû}º¯4ùÎş'3×Ì÷/Z R7,nÌÌOÍç²qw¤î¹83"œë…nHİs2ğõÌ<r®º u×à"bóL/p@ê®ã€2sÆg}X R·½¸v¦/Z R÷ıFf^2İ< Õağ±qê'İê°øÛ=?iHõ8=3Ïú	w¤º¬£¿+°Üjsık @ªÑ¥»ÿPb`°™şQII}K€#Í/å]À±ñĞ¢Lpı“nˆh^ibÓy°¸x[KSõ€?%ÛõTf^”™îjHó™½Ì¼83Ÿnim~ÚİX¼3"6´4¾Ôy™¹¸XÑğĞ/ËÛ*€GS"âû-Œ-U%3î^ÛğĞ¿ÚÖ¦ùy.~©ñpACÿdpkDÜÕÂ¸Rµ"âàö†‡]ÙF\ÓÂ˜’š_[+š>°X/48¦$ 3OKò{MoltñKí<lãœ/ŞMÀã'é•~ĞàX€¿ı¥v5ö`P`‘gèI³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fHÕ=5B™¹°
--xı;ÉŞà/ OĞ¿ñËZà¶ˆx°Áñ5"@‡dæ>À%ÀÀë[îøÁÏïO7ˆï¶<¯ä.@Gdæ2à&à“´¿ø÷ôïdû­Ì\3â¹µ,€Èşí¤odÊ_
--Y
--\Ÿ™gÎ¡!Y İp9pzéû ŸÏÌƒKÑÜ,€	7XhW–Î±‡åÀe¥ChnÀä;8¬tˆi¼?3£tÍÎ˜|§•0ƒ×+K‡Ğì,€ÉwBé ³çlÂè‚å¥ÌâÇJĞì,€Éw@é ³XV:€fgH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY RÅ, ©b‹J˜d™¹?ppp$°¤@ŒÅæÖêÌÜ§À¼O>îˆ‡
--Ì?1,€ÈÌ·—g KÇgg>ŠÉÌ€Ï×DÄ–’YÆ‘» ó™ûgæµÀZà\\ü“`%ğÀÆÌ\U:Ì¸± †”™û_ŞS:‹ä5À×2óìÒAÆ‰0¼«€SK‡Ğ^Ùøbf®,d\X CÈÌ“–Î¡F|¼tˆqaç J‡PcÎÊÌ¥CŒ`™ÙÎ*C
--ÀcX Ã88¼t5îçJÀÜ,@­xmé ãÀ˜Û¡¥¨‡•0,€¹ù=ê&®øMªfH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ æ¶³t µbGé ãÀ˜Û¥¨›KÀÜ^.BÛP:À8° æOw—Î¡ÆİV:À8° †óÅÒÔ¨Ç€;J‡Àp><Z:„ó×áÁ],€¡ş±¬Á#Ç]p3ğéÒ!Æ…0¤ˆøoà|`[é,Z°¯ï‰ˆ]¥ƒŒ`"â&úO•ıjé,š—§+€³"â¹ÒaÆÉ¢Ò&MD¬Ş‘™'ç «€£€C
--E:„şóîÇÑÊœHõıó7î§_Ö×GÄ–9Æ°@qpOé™ùãû¤Û?Œˆ—¡™¹ UÌ*fH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY “oœŸuÿré š0ù*`O– ÙY “ïñÒfñƒÒ4;`òİQ:Àvß,B³³ &ß-¥Ìàñ|éš0á"â^àË¥sì!?*Bs³ ºáJ`[éS\ß.Bs³ : "ş¸x±tà[À‡J‡Ğp,€ˆˆ€SG
--EHàïÕ±£PÍ“Ğ!±Xüp/ıEÙ¶gNŠˆDÄÎÌ©†,*@Í,À«€«2óàà ¦z‘şâ¿?"<ãoBY ›Í¥sh|¹ UÌ*fH³ ¤ŠY RÅ, ©b€T±Í-f¡HíjreØŞà€ËKÒ«ÑàXÏ÷hö2Ò748–¤Wkrmí[ğu™ùÖÇ“4™'G68äs=`Sƒœ×ğx’úš^[›zÀú†½,3jxL©j™ùàÒ†‡]ßF,®ÎLß0XK× ‹z=™yB¶ã™–ª’™‘™Ÿli®Ü=Ác-Mp]f¶q3
--©ó2óàÌ¼¾¥µù@/"øZKÿï6dæ%™ùš–æ:%3—gæ‡À¹-Ms;@&<øzKí¶‹ş}êf¼Ÿg7É’ş÷÷`ı»mˆZ™,ó`úû¥oV¶1W%ŞüíŸU»:"îÜ] =à!àè–'•TŞƒÀ±Ñ?R»èßÒYR÷}f°ëÏÒÖ=R*•¤Ö=[aÊ~FDlş®T*I#qõîÅS¶  2ó à~ú"$uË&à­SŸÜôŠ#±¸lÔ©$ÄïîùØ¶W½Õ7×,’¤QøRDÜ¾ç'§=U73—ÿœĞv*I­»8eºç6N{²AD<œlîë’&ÆsÀ»gzhëŒgEÄ}ÀÙ€O{•&ÓvàŒˆøîL/˜õtÃˆøàbà¥†ƒIj×‹ÀoGÄİ³½h¨Ëu3ó—ñ$!i<	œßœë…C]pw§Ñ¿^@ÒøÚœ>Ìâ‡y\q÷oşyÁ$µëÇï†2¯K§|€şf†¤ò Ş\óºÍÿ‚oÙ•™‡¼Ø¡ãHZ°ô¯ßùãˆxf!ìõ=û²à+€÷K÷v<IsÚFÿòıEÄc{3Pc7íÌÌeÀ¯¿ìÛÔØ’x	øwàÀõƒ“õöZ+wí”Á/«€· Ç>–´1ŸÔ1ÛéÍßHÿ¶ıww5µè§ém»3s1p(4À33¶+I’$I’$I’$I’$IÓú™›ÙÌßN>3    IEND®B`‚
-\ No newline at end of file
-+   IHDR         \r¨f   sRGB ®Îé   gAMA  ±üa   	pHYs  ¼<  ¼<Á¿Š-  ğIDATx^íİyeÆq†¥„PC0¹J@îÂ¥¢"%*‰àKQ(ÎTòHÉ!D(-)KTY r(p¥DğH¹QQ@¹X€ãóôûn²ÉÙé™î™}ßï§êÉÛİ»;»éé÷7o÷ôt¯                                      :¨ÛÚ5›ÍÕì¨LV&)•M”u”u•õ•®ı}£Ô»ÊËÊcÊï•ë”EF£© ¶¦ÿ~5ŸQöSöU¦*tğê=¤œ¥"° Ì+TŞÕñwWs¤r¨²—¡+~£¡Bğb˜** êôcÔ|E9MÙÎËĞş¦ "ğD˜Eî:Z Ôñıx3•YŠ÷éÑ{ş¥ì£"ğx˜EÎ:V ÔùıJ©²G± ½Œ"€Âš±-Í÷”ó5ù€Bç>ªÜ®çm«0‹\µ5Ğ´¥šùÊ.ÅŒ6Œ2Wz Îïƒ|Qèü£#Ì•* Ú`¾£Æ¯üã‹Í(k© h#i(s4y±ÒöñôŠ@¦Z: Äß¯şHÇ23âWquşÙjèüic$™ ´A­æ²0‡0ÈÄj€:¿òß¥¬U,@.(¶ ¨óûÃ;R¶( 7Äy@ßÅá
-+…ÎŸ/	$n¸ƒ€G(Ÿ“ÈE aƒîèÉö	>+› v’4Ôà…Îş	$hÀ@Oğ5(c‹ÀÊ	$d°À)
-+Ca$•F zRıäº²ûÀp	$`ÕÀ±
-+#ÁH ËG z"}!Ï*üC+	Œbı€¯ÙïKGwÓŠohá[¼åÒáŠ_…{‹Àn@24oÏÿU^QWQÑ|VmWõ/ Wª9,ÌÕêmåjåÇÊb­6¢ˆCïÛ•^)hİ«Ê£Š_ôü\Ş¡í¿Öû6@“øÕ·îw,R¾¡ÿ´ßvD‹(ÉyOñeöü‚x•úÅÓ^X¥¾°ƒ_Õ·Nç*³ôŸôıìPE Yîÿ:õ‡ë{À÷ê«Ólı‡N£ó·OëĞßöQ¼tø üÊ5ÊúÃ/ë¨¾°wlëğsm´gÇit E yWæ)ªì_,é¾]€'Õ|ÌÓóÛŒSµÁ¾fÑIìdÃwz>Qı¨íckj£Y[m]Ÿù÷>?¿"Œ²1]Yª¾û¥0[w¶mÕüçUaU¡dc=å—*—(¥ÏŞuÇ÷§ÿê°@ç;q¢dåe‘ŠÀFa¶5. uİİÇoi &¬øÂ½w«ø^-q&+÷`lQŠ@V&*÷¨øƒ«³ ü;¶¨Q,{*/ e›)·´2pğ» •Ó†øFœDÍ´îİù}R	#ô¹üv¤Ç\ – ébw +“”ëUVûî€ 2Áî@V|`ğ¼094
-+@fâî€Gô«QÀ!qzP€qL +—«ø¸À ( ™bw ë+ç‡É( cw 34
-+ğ%ÿ  dİl\ "0àz ôíx$àk#MS”CÃä
-+ bØKñµ!¦Ó5
-+Xé¼
-+ –‹»;+İ¾<<ª±rp˜( X‰ŠÀ‹Êg59Cy¨Xˆ”Û ƒRğe§üÉ2¸HY¬øÒñ\ÈutÛ_»+îş¥™9Jåâ¯²£Í¿¡l¨ì¤øì¼[•w•n91şiŒ €ªi4ÕT^Pş \¬øÊ¾“_"¯/¾¦` tŠÀcŠïïx ò\±°>;hPÜŒ t‘ŠÀÍjvSê|ûÕ'Mó è2w~ŸYçH ¸ è±©ÔuL`'ÿC zDÜ˜æ*ç«Q €3G©äNÀ«X¿ÙlnL zˆFªYæ*7‰ ô_Ç¶jQ €ŞãÓ®ë0 ô4»€5›Í±ÊDe×O_F÷-‹mÕÆQ 2¡¾®òMåVÍ¾¦<¢x¨éxú5-~ÏºšG—4ê»‹öX
-+@âÔ™ıjÿ]M>¥\ªì§v;8/ó×ü=Oùgü³şÒEH˜:°¯‡rR|øc„ü½ş™;âc Q€D©ãn®æ.ebA9şÙÅz¬	a©¡ $Hv¼ŸVÚ‰ëBrc|L$†¦¹Š/8Ñ)~,?&CHŒ^©=lŸæ:jf|l$„Ó••®ıŞ!~ÌÓÂ$RAHˆ^¡7V3è=à:ä@ıMâ4@H‹¯/WåsêÇ®²À f€´ìÛ*Õñ;P
-+@Z¶ˆm•ü¶ AHKçğ‹-@HKÏ'ÛLBx2ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ :¬Ùl6”iÊ…Ê½ÊóÊ;Jåôë§…¿¢Rş¿ÕÁëÌëÎëĞëÒ¿·ŠÛgĞAÚ@§«YªÜ®¯ì¦l¨ŒQĞ¯3¯;¯C¯K¯Ó¥q£C(  òCÊMšœ¯L)¢
-+^·ó½®½ÎÃ"´ƒĞ&mˆ¾#ï}ŠïÍzx]ß×=Ú@hC|Z¨L( N^ç	´‡Ğ_(tşîñº÷s€’( %é•Ç£öwßñ¹@	€´Áùí¨Ùa=à,='lË%°ÒÊÙ[™&Ñ&){…I´‚PÎÁ±Eïà9)PÎ®±EïØ%¶h œ­b‹Ş±ulÑ
-+@9ëÅ½ƒç¤
-+@9oÅ½ãÍØ¢€rş[ôçb‹P ÊY[ô“( åü.¶è·Ä-  ”sÂq€ŞáçâÚ0‰VP Jh4>0/Ì¡Ì‹Ï	ZD(ïå•0‰.zUás%Q JŠ¯8G‡9tÑ1z.‰Óh Úğ¨áÕ§{fë9àz m  ´IàÙjNPŞ) ^×'Äu6P :@â…j|Iî‹¨’×ñ´¸ÎÑ&
-+@‡hƒ¼GÍöÊe‘ò®‚Îğºô:õºİ>®kt€ob1Gí™a¶:zÒ²º©ƒÖ«/V¹£2QñUÆ)Uûª²y˜¬ÌSÊÕa²R¯)Ë”G•´ù¼è…¹Ğöã½Tí,
-+@Bô\úæUßè=•ûÄiT¤®À. 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+@ZŞŒm•Şˆ-@HËK±­ÒË±E( iYÛ*qä„P ÒrWl«twl‘ 
-+@ZîU“•ğcûw €„4ßGn˜«ÄÜø;
-+@z.Q“åWÿ*‹º€½B¿¦æëÊ{Å‚Îğc}Mıj˜E*( 	RG½IÍ¬0×³âc"1€D©Ã£æt¥‘€öôøXH a±ã¤”9&àŸ9ˆÎŸ6
-+@ââĞ}²r†2’·ı=şŞÉñg‘°F³Ù<Síœ0[mL8‰.Ñs=FÍîÊÊTeCÅ^PşªøD¢{õTñV_—é¹jÆÉ*Íq8Eç†ùJ}@$VC}r5¯‡¹Jì]€ºŞÚÙ$¶ †WW_yİ JcÛÆÀğ¶‹mÕ^uX¦+·_l¯®¾²ÌàÉ0]¹Cµo³Vœ0ˆØG¾æ*÷¤ÀãJG}½_33LÂQÊÆa²RîóOoÍ©ê<¡f‚§+æ“K¦4Âùê úQ?¯æ!e³bAµW?ÜÚ# ó{Àuøˆri˜°ŠŸ(ut~+ú|_XÛ:ÌT¥óÉG "õ‰ï©™æj±¢Ïë—ï¨ÔíŠÏL²¥>0V¹È¢fŸˆBñGŒQ^*×ëNeJü3€¬hÛßF¹Ç¡fÏ+Åè¿ø'û}£§kæsÒ—è™§ìÕ÷G©ò6®ì­\©Ù?+şlFİnPŸ/>&¾ü:úƒ>¥ææ0×5¾®ı}ÊcŠOQæİ¤`\ÌDegåƒJ7í§°Ğı€_}ŸR|¤@šüVüqÔ¿âz qHàa	€t]Ñ×ùm¥Ïèk°©Ÿ¼v± @JŞR&¨ <fW¹"¾à«Á\æ $æ§ı;¿¸JF>%øel± @
-+ŞV¶VøG˜¼í¦oğ.Àea@".^µóÛ€€iPç‡ TË»öşŞ€kzâ¾ÑïÁŸæ ŒrÇÖùmĞ€ià¯ıJùB± Àht­:ÿ!qz€!€©l æÊ–Å £‰OìÛ^ÀgØjĞ]€>úÁ—Õø#Šÿ+ -|ÔÆpß†- ¦ğ¹ùßRê¸Q€ö¹¯únÎ‹ÃìĞV[ Lt¹ß.
-+@ï;U}vD'ô{`UÍfó"5Ç…9 =èuşãôjhĞG|¼šSÃ€ó}å¤092- úh$pŒš*- •ğ>ÿIz¾ Ì\©`*_Tó3e½b€nğ;uG©ó_f[Sº ˜ŠÀæj(» Ôé~eº:é»{µ5„×/ö‰Ó”ó¿ï zîk¾¥ÿít~kkĞŸF¾ŞÙ\å€b€*Ü©|[ÿÁ0ÛÄÓô¨šO+‡){€YªÌP¦uªó[ÇF ıi4àÂò9e¶òI/PÊå|åJuüßÄ·’ĞŸŠÁjT\½>ìe †å#û7(>›ï6uüÊNÃ¯¼ ôQ!xŸØ_ÙWÙV©í÷=ÌÜ¯ô·)·ºU§¯åx]ë€*©ñîÁdÅ')¾/ú:Š¯Häó8Ñ)ğ%÷}A¾›İ<§ø˜™¯½éãe÷«Ã¿                                       Œbk¬ñ*IfÚe”’    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/bad_folder.png b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/bad_folder.png
-index 4a9709623476fcf4070c4e3da2bb17375222082e..245f96c7ba65c9a792abc01a1b76c39accd3ee5e 100644
---- a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/bad_folder.png
-+++ b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/bad_folder.png
-@@ -1,8 +1,7 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  £  £dÜ_‰   tEXtSoftware www.inkscape.org›î<  ÇIDAThí™[he†Ÿwvµi¢¶6ZCTTŠŞÔCcÀd#!	A›0^(E<!RĞâ/¤%-¢‚µZAz#*êµÖx0JH/#”ˆxîEën¶‚4ÚæĞİÏ‹İÙ¬c’=f‡Â>°°ßÿÿß»ïËìü3Ì@:¡üÂÌÂÀ@3°±@o
--˜¦%Í­½0³GÍ,n¥³df‡Í¬1Hó£e÷ó™5a¾·
--æ=àXœ³ÿ• ³ŠzMÀíUÔ+ˆÌÌÅ·UÈ¯dv§j³ ü||,)	™ ¶?¶Şœ †$¼X@æHïX-Àà\â2`«oìe|»HÒÌúƒpWfvOÖ£ÇŒ?ÀDĞ&af_çù]p|óâª4Îæ}oğ¸è¨šz€ ©šz€ 	m À†‡C±¥ÄvHÏ_ûÙñŸJéühv1ş©ãºß9®~ŒE#¯•Òx€Ä`çc^-x)í¸«Øş@œjo6sF}ÃrqØğp¨@„’FÀšW˜º#¾{¢ÀœŞÙqØÓ«ÍËôjl°ûªB:9Î! ó71ë1£ÍŒ6IOf—lÉ}+´ÎçˆFvİ^J¹'ZÇ¦¦[Ç¦¦İ´~Î-4íG»Ú}í¯ I¯¨y€¿úú6Éx½ÈåfïØÈ²OI? o-/¨1K‹û€kŠnm³ßFñîş€HÜ×µx¦ŒÖƒ'ïïŞì’ş^„0ëÚÊ»}Ùº!•ÚŸ? é`¢fÑÎ®rû»ÑÈ­¾á=5¹™‹îh4“ÿŠ›#vDæ„{Ó*Ï:C.öĞëHš©Íİ¨mÜÜ°ê¼”Ûï×~P«X´óáÖÏ”1³4ËçÂ˜¤hEf}$îíØæ†œï†ÕÖ˜ô®ºÙkHÒ…Æ[ZÆÇÏCÆø™¼Év3ÛRãéó.k˜H_H½ß:6u´ulê¨™¼Ş.YñŠ00<”­¯¦ÍìK ]†ßIq¯ˆE#C‚¾2tÖF¶gvçİ´|19F€K³Ó7—!;+é©\ÑßßdÌ®ØìÊ„ÍI¿	ô
--ÀÌvïáİ\•ÇÛ’r©ø@ç^¤Å4
--ÎÚòù./¦Ï¤!@Ò‡@0Næ|9ü’!­u"ş×l®Ì~Š2 ³ƒ¹mTÒ$0™}MÚR¬Hæ´Àâ™GõW”¡S
--sÿ»Hš~¯TÙq4N»$]W©ÖJNÉxş_1î{^G    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sRGB ®Îé   gAMA  ±üa   	pHYs  "r  "rÒm!  ºIDAThCí™[HaÇgÖõ†˜´E¨O†‚PYA‘éº²•^V
-+Q³ ºøR$Foù%Eİ^“^ëQëÉ¢ëC=™Qi±»¥A‘Ùnë|ıÏÌY÷¢Â:óm®°?ø{Îùö›ùÎ™ùæ›‹Jš4i–6*Û„™0» 7TeAfx]VUuÊÿH~'4Éâ”Ç»O.è ¢Q%“ü"0ÀF(@£%‰äßÑ‡I.É);]	ÅOI¨¢zA`›<ˆ’•EúõC[x˜hÜÅÓË?›ÛË."Œ]‡f¬rn#lM¥s¦z¨7Èƒ–ıãĞM¡ß¨ R<‚­i’XÑí'GE%­°·(ˆ¢	ÜfßØ6ÌIh“Ş°pèFZ-×£oã Š‡ŠJ-4oõÌb)›kú¤8Òã0WŒ(†äğyw•Ã×èêò69OÏÍVùÆ6š|éLÔW.³gÚŸ	Uàˆ©WÉ§6şY:ÒÚ3{0kË8¢,‘yšéH-À»Ç]‚¸›Ã°`Ÿò×W—r(¹g êÃßèèuªf[ŸîYZFÆYXéH+Àçqn…i7"e´hàéëÂ»^Ág4‰6Su•áËCJ¸m«Š¦^„~Ã‹¾“‡}USm—ô¾‘R€ßS³O&NçG(•şFWø,IÁrİî<#ã0LôQ9âBÑúh-c¹€œ¼P7n•%†)÷5ÔVø›]t—Múææ‡èÙH
-+–
-+ğí­^…=ÌµÆç	›6¬iâ%ùFS!”¯îB-aím½˜-„üiÛôö-aº ¯Ç¹îQgÕ†%®q8¢“öÁiÌŸa»€¿v#ˆÉ>é.|Ü…"Şss<ØV=Ï¾i,L!QÏÎ,°ì¬öz\‡¼M5‡Ñ/ş ”öLc¾ UùÉŞ\Øq¥öÃŞĞıy@¡?Ø5é08½\[ùî9¥õû¦±ôNü½®®àOn TÑŒ/	cSEÎTöÇĞPÂg`¾<é‡z¹Œ£;¤”“‘Z-4…&Œ.1T°M%6°fœ*[ıÕë‰ğê€è“È¢B9@ )(ÊÙ¡Ï]8ƒ0ôj)1€ë´9\ =t=‡ıˆ'H ÚŒFôeÎ0L'¢8Å¡PòFÎD4
-+¥*ôun;§«3kıFút½¢ÅÙòÉ"}îC÷pä—Â,I“&Mb(Ê?µR{"!    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/chip.png b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/chip.png
-index 973fabd052e389c28ef36c482cf44d764795a3b4..db0cadac1338a971b7b890c33f5920580c1013a5 100644
---- a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/chip.png
-+++ b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/chip.png
-@@ -1,165 +1,5 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   	pHYs  Ä  Ä•+  8$iTXtXML:com.adobe.xmp     <?xpacket begin="ï»¿" id="W5M0MpCehiHzreSzNTczkc9d"?>
--<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 5.6-c138 79.159824, 2016/09/14-01:09:01        ">
--   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
--      <rdf:Description rdf:about=""
--            xmlns:xmp="http://ns.adobe.com/xap/1.0/"
--            xmlns:dc="http://purl.org/dc/elements/1.1/"
--            xmlns:photoshop="http://ns.adobe.com/photoshop/1.0/"
--            xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
--            xmlns:stEvt="http://ns.adobe.com/xap/1.0/sType/ResourceEvent#"
--            xmlns:tiff="http://ns.adobe.com/tiff/1.0/"
--            xmlns:exif="http://ns.adobe.com/exif/1.0/">
--         <xmp:CreatorTool>Adobe Photoshop CC 2017 (Windows)</xmp:CreatorTool>
--         <xmp:CreateDate>2018-07-25T21:37:27+08:00</xmp:CreateDate>
--         <xmp:ModifyDate>2018-07-25T21:38:09+08:00</xmp:ModifyDate>
--         <xmp:MetadataDate>2018-07-25T21:38:09+08:00</xmp:MetadataDate>
--         <dc:format>image/png</dc:format>
--         <photoshop:ColorMode>3</photoshop:ColorMode>
--         <xmpMM:InstanceID>xmp.iid:d24b6914-04d7-6e40-94e6-a3f5f4d24f35</xmpMM:InstanceID>
--         <xmpMM:DocumentID>xmp.did:d24b6914-04d7-6e40-94e6-a3f5f4d24f35</xmpMM:DocumentID>
--         <xmpMM:OriginalDocumentID>xmp.did:d24b6914-04d7-6e40-94e6-a3f5f4d24f35</xmpMM:OriginalDocumentID>
--         <xmpMM:History>
--            <rdf:Seq>
--               <rdf:li rdf:parseType="Resource">
--                  <stEvt:action>created</stEvt:action>
--                  <stEvt:instanceID>xmp.iid:d24b6914-04d7-6e40-94e6-a3f5f4d24f35</stEvt:instanceID>
--                  <stEvt:when>2018-07-25T21:37:27+08:00</stEvt:when>
--                  <stEvt:softwareAgent>Adobe Photoshop CC 2017 (Windows)</stEvt:softwareAgent>
--               </rdf:li>
--            </rdf:Seq>
--         </xmpMM:History>
--         <tiff:Orientation>1</tiff:Orientation>
--         <tiff:XResolution>960000/10000</tiff:XResolution>
--         <tiff:YResolution>960000/10000</tiff:YResolution>
--         <tiff:ResolutionUnit>2</tiff:ResolutionUnit>
--         <exif:ColorSpace>65535</exif:ColorSpace>
--         <exif:PixelXDimension>48</exif:PixelXDimension>
--         <exif:PixelYDimension>48</exif:PixelYDimension>
--      </rdf:Description>
--   </rdf:RDF>
--</x:xmpmeta>
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                            
--<?xpacket end="w"?>Ú(    cHRM  z%  €ƒ  ùÿ  €é  u0  ê`  :˜  o’_ÅF  fIDATxÚì™¿kAÅ7Š§‰zI0¦	b!±Hs˜€ ˜J‚¦I© Zè_à4ÿÄÎNT4juD´°ˆ¤V‹ÃF¹Ï³pÆáöfãev—0¾ÕÛ™yogç»3ßI’M ¸ü>£7|~ ó7
--4€pÓæ$õù‹ç’v'! ©hÉÀ¼´¸wËâZÀ>‹;%ÀB(cÎ@+È†Å5nEÿbÌâÎ9ı.EÛÕ@Àè#ò­Å½qÚ.[’jV»ÓI( OÌ M`Âá®Z:®8Ü$Ğ4m9\X3Ü:0Ì€¤
--PFRøqIã)æG€º¤J‡v{Y` ‰èüf§Uà{ñ¸´Y$Õ¬èw¦ÿrğ[Òp&}À³`ìNóÌWå`BÒ¯>O'õ" 3^}ÀÏ²ÙÎ68äÕL÷$İ·b˜´>³B˜±½ú²üÀÒ$[]lÕ8f ¸¬JúĞà5p­¼ú<éx‘ÌŞª»¾2 yõ×÷Î½*Ñ'äÕ³P4Ğcîº¿jI'J²ºëëq3:öêëq;:Ì²~šr`xœá@z*Yô%’ÚG6»vY†EìÓÓh¡LQéŒ¤³í æ$í)Ã‰Ì«ø”ÒÁP-øL\õêót2W°Y¯>`#…\öl`À«.JZlp²ÖÀgå#fl¯¾,Yè²)÷åõö„(ğKšÎ!†®TïêÆIêûß¶ÁËìñ8ŞGñ8Şo»{â? ¨‡ÌîH‘    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  ‡  ‡åñe   tEXtSoftware www.inkscape.org›î<  ¤IDAThí™AR1E;,ô*à‘8†(=§°\ªK)VºáÀ„ısÁP™a2!"T^‹Îïî©üÉˆd2™ €°(>íøè svÌµã]˜P€=Ac5}ã]tBÿZ7 à	˜ëí¨‰k¤!~L€gà*´1;Iøt§È7ĞÓ*¾sââ·| ÁÿQF	Šßò¨ÑÀÔ}nƒ…«yn€W+×DCxe‰Ş)Ô{(W×Êõëãœc »nkç»¼}€WÁ¾uØñ´õN^ñ¶W©àï â…|ã5¦P?ÑX©o`$"ËPá,eSÛÁ«ë÷Øz—·
-+¹ÔäRsyàé…jÆ7 Wë…*›Dá7nñ®ÇO½…1æ¾ü…ÆZ$+":^èXïTëm|ãóYjÚ4°._áD¢¤mf9êÛ40³®ÇD8™ º"2vä>JøÅµ¶Gd¨ÑÀ5ğ“ øw4‹&úlÎ*OY|W¥øR_TOë4XÚxÜùü†&5Ú^¨·ñçşš5“9sş 
-+/º„°M+ö    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/folder.png b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/folder.png
-index 0f1e987d6aa24b1d2f26d40181ec05b62c5862da..11a76b5c1256ade016d4e22cf048656cb0788ad3 100644
---- a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/folder.png
-+++ b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/folder.png
-@@ -1,3 +1,5 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   	pHYs  Ä  Ä•+  ĞIDAThŞíš1kA…Ï‘‡¥X[‹ 6!¥Õëì,mS[Z‹? Â?«¤!¤yØh!6‚$i’Çùlva2¼„„·fwes·ØåÌìwï,3+UU­¥È/€x%¥U7 Šˆ.>ˆEDüt€l¿²ıÃ6]®ŸÚŞî9€w¹±²¿f¼?È l?Ïg}l1û;ô§S`v›ş“¤àB>”ıâ»À“[­B¶éù™_%ış´Kú;Àû”Ò™$ùôOGŸ)¥ïÑ²›×vEÄ…^ÒãoÀÓ¦d¾Õ±¤e¯¬®o¼îg¹ú("^«¨"çÀÜöè˜±-`ŞzìôEù¢ì~Û{Ùz^"t2>Éü6M—¼“ùú,ü¦	<zåÔ\V…&a^’*B¡ŠPE¨"TªU„*B¡ŠPE¨"Tªı'¥	 ”Êe[‹‡¶g#ı™íÃlkñ¨v%½l_ÉIÀIg#ó˜·;„v£=:ÔhZZÏRD,$m^•$—Å7<;ë;6°•RZDflSÒ[`c¬o#"–’>Iz¥âWƒ.QZÎÒU¥¬<’º*îI–ôkğßúÖ_é>…$Öy#    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sRGB ®Îé   gAMA  ±üa   	pHYs  "r  "rÒm!  çIDAThCí™;KÃP†AŠƒ—Eg'Á(â}ÜªTÁAœœüşgqÕQ]DPtrp²µx¡õùNNÛ¤íĞÆÄ“Àyàá;'ms¾7MSš¦,K²qt­P*•Ú)‹8ıØA¸Å=Çq
-+îô ù|Æ°¸Â´Ş}´°ĞşÈª!}ÃOY-"¢ÁÎÏÕ2ÑMvÚ‡µ§NWQ>Ğ-ÁkÒ(Í†Å¾à!Nêeª°qkÙÕ‚×‡¢L°r`Û°Çú¸×5\:ó”%¼VÂC.ûÛxDõ ÄZJº&ÂB×dà$C=–‰‡8Ñã?Áş;);8®6´|‘Na·šUy Ç!Y ƒµH¨Ø@?r¡yTùltúÄt²ïÎ|$#€æMW/]I
-+ĞÀ46€il ÓØ ¦±Lc˜Æ0`	Pt‡>êîZÇ€F=%À»;ö1¬kœÕÕKN~ñ÷â·ú_å³(·DŒ"=à:Ğ‹ôÜ£Şg¹	•$NÇY.¡Ü ñ#Ş$Ÿ8A€{ubpGÙÂ™ÇéqSšw§x'æñ	ãŠÜ›Õí*ê.M<An]Ï¡<q ƒşÉ_øŠ—xÁ‘OÂYb±Xš#•ú‹ƒ¿¢şÃè    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/plus.png b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/plus.png
-index 16cc8b4f44d52009d4a3f4c9d46f5bb0e20babcf..6af929bf66b9d82cd43aa2db19fb0db05c89b8af 100644
---- a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/plus.png
-+++ b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/plus.png
-@@ -1,4 +1,4 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  Ä  Ä•+   tEXtSoftware www.inkscape.org›î<   ĞIDAThíÙA‚0…á©ázZ½„†K¸ÃïBF 4J}`Ş—°é¢3/M“Nˆ0³ÍĞİøµ@£î«™Êê¾ŠıL€¾F­TcS€Ùb)m^ï´õ†¿æ j æ j æ j 6	0#fÄE–Š}ºßØK¦d(â9=íUûŞïä}tq^?<‰{Jéòºğw "n?ï¢Üzolp‰+X¼Ä‰Õ@ÍÔ@ÍÔ@ÍÔj
--×¾V+ÀµpmŸ8úoV³y ãÈ)" Q¢O    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  ‡  ‡åñe   tEXtSoftware www.inkscape.org›î<   ¦IDAThíÙQ
-+ƒ0EÑ™n£]’éÂÛxı¨Ğ¢Ta|(÷€ I®ø‘` \’¤AR›¯Á½Í$ú«æÉª%ég¢Ì’¹nƒ‰ 7Üp#À 7Ü¾öó»tÆÛkõ<±¸Å÷ğ÷Í¯¤FËÌGïÁu?¡ˆxFÄtÔBVLñ^K'27Üp#À 7Üp«h÷ç ³ÿb€¿¼ f	»òd¹    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/sd_card.png b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/sd_card.png
-index 0291c6542d05a40a350bb5bdbd99a15c01467161..42b9f27738d95d742b4e8380c6450e639630e049 100644
---- a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/sd_card.png
-+++ b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/sd_card.png
-@@ -1,7 +1,5 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  Ä  Ä•+   tEXtSoftware www.inkscape.org›î<  !IDAThíš¿kA†ŸÏœBbc¡–‚˜T+ñMgaku}°¬´Tÿ±I%A­RhÒ
--‚x…AM¡Áşˆ¾·á&³»¹quw™vßÛÛ}Ş¹]¸=¨€¤®¤ç’6T›’ŞJº'éXÏ"ñ–¤[’~Õ(^Äš¤³+ß–´Ğ°¸Ëª¤IßËå;ÀĞuâgÀûly˜>‹Î63À4°ô|ø<r²À,°¼vò‹@'[7³Û!ÎÛä%=-8#¼m$é¥÷ÙY~ÅË’ú^ÖË¶íyyß9æcßoßù6Ã3.¼r­ñƒÒ’ZÀ¶O›Øä¦üN#p¸TŸË¿¡°€¤óÀ|Ã.•(ëŒ†k	8ã¼6àL«$Ÿu–×ÍìÅÖŠ¤õ*ı…÷IF×ŞE3ë:ïİzÀà‡³Ÿ)à'°îìê ° ß|
--ğÙÉÚÙ17Ş#¶˜d4S–Íì´ëZ6!*È&€ÃùÁìåb%Ûv¼±ìxØ¤±	ù—tÍYŸ©K¦
--!W¡İDî*´ç§P*›T 6©@lRØ¤±Ib“
--Ä&ˆM*›T 6©@lşÛjÔ"œœWY5‹T%÷p¥¬À“šEª’ó*ûmô$°ÂğéÊna8efîSâ0³WÀUàkb!¬—}ù±Hš–t_Ò;5ÿ•MIo$İ‘t´Ìñ7'÷şªu    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs   È   Èı×;   tEXtSoftware www.inkscape.org›î<  $IDAThí˜?hÖ@Æç×Ïşuh¡¸ºXÄIÁED—nvpŠ«à$Ä‚“VquV7ÿt’"íà â*¸ˆV>èŞMÁ¥CN8Âİ—\brò[òò¾oç¹Ë]B ’†’îHú!é@Í0’´ZGgHü¤¤7‰Îs éŒOÇ¡Šâ¯€Ëu&!\ô&bG²â_Wœô`×ÆóÀ=o ß¾ÇÀğØqòwE`Ûı—›À’gbµúÄ%mz–ø¬ÓsÜÉŸËİ¿oó·rù/6¿‘Ëo9cİ÷i*ıI Oå²÷´A)Vüs`¥Y9ñpf¾sâ¡`Kš ›ù«6õøfãàºHš³ñ¬3„›‡ì4˜Îåö:•ËŒ?ô,·Y—ú©*z¢7ñCàZåh	¯I§ÉÎàÎZKcj"´‰gù¶ùLö(ÿ¾úb?%HzdãÉÂÊ²fŒÙ×k`¡†˜*ü,jx8I{_œÍ éCËç½Ëù"}eNš½0QÆ@õ×yx÷€¤i`
-+8\hUQ$¡Xö÷À\ §üoÛqtİ@áãÛuë’ö$íJºíkˆş+‘€cözÔWìú
-+ÒHMo 5½ÔôRÓHMo 5½ÔôRÓHMÈÀ¯VU”Ã«)d`›ìïtWğÖWğ0Æ|n £æ4•f¬c>ùŠ K‹~· Bµ    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/star.png b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/star.png
-index 90d423a1d4c1e05ccec0a01fa34abca9fe99676d..546779e2a810e73169f65a79850aa07dffd70267 100644
---- a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/star.png
-+++ b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/star.png
-@@ -1,4 +1,8 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   bKGD ÿ ÿ ÿ ½§“  ŠIDAThí™=hA†ß1†‹r(Î…øÓ(ˆÂùS¥ò+­¬"be›&VÚˆbo§¨•VV*jZ!1ç"sQ“Çâöp¸ÜííLf²"÷ÀÇŞ÷}ï;3»3+uéÒ%@(ç­Ã ø\ı±ê¬Š•XÒˆ¤br]X'<@¨ğ—*Ğ—·®Ì XÊù¼uexÛÂÀ{Àä­­#ÀÉâœÈ[_G€ç)å­/`?°˜b`8²fè×èuIiëÜHº¸f€-À\Êè7¨¥PuCÎÀIYŞõıkĞG}³ÊÊ4°&DíÕ‚û%m“´CRIÒ°¤­)6Kº¼”T•4)é‹1æ««–%0$i»¤Á&‘ƒ’’{±5IS’*’>Ë2—ü2Æ|jŒ9,ƒ¼¸ikn~ˆ?HZ8¢1˜L½œ~ä=Ì-øŒd²frlSÎ9Í°˜ÈY8À7`ØI¼eb x—£ø
--pĞK¼ebğ*ñãÀÎe‰·L€G+(ş5°)ˆxËDpoÄ?ÖßdäFDñ¯ã«‰ÛÄßÇ£gö=N=ãÒ˜7Æàäkà¨g\G|‚œ§(Jš•ÔãS0…_’Öcæ\‚|f ¬ğâ%©WÒ!× ^S+w×@`â -fª’.Jº$i:cÌ.B!l€³6¤ŸÀ`WF©Ÿë;q:¦N=ó`wJüŞä?iŒÆ4ğ¢MÑqà”CãÀÇ6¹Æo¨wG63À5Ày_ z“ØÙ9ÃGH¦¿Á<pk/#o	x ,Xù‡Bhn.´xC½±Ù!ÿaêß1ßD]ºügüöÃšÊéÄ¯    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  ‡  ‡åñe   tEXtSoftware www.inkscape.org›î<  œIDAThí™[ˆMQÇ¿edq›Äƒ”0n/„†0&OHÉP¼!O\J))å”’B$—D$yà	åArkÆ-If8“q©ùy8k7Û·×Şûœ³×vJó¯ı°ÖúÖÿÿÿÖY{íµÖéCuaò"f‰ÈbADîcå¥å@p‚(ıªí/Àv‡ù Ûªí/€Úhr›¶™4*Ã]ö	£Ñ§¦ï9¹Z•¯‰ÈuU·Ê³¦? /Õh· kUİëjût˜©ŒvuÀà»j›áK×çÒÓç¦1¦`Œé‘[)±ÕğTò†PÛFÕö¬š^# ¦)ƒ¿€¡öáÀO3Õ‡¶¯)¤§ÄmcLGP0ÆtŠÈ”>¡¿«,"M"2®Dõª|ÉsQD–„Ê­À§ùÛEä1¦;5X¼£rüF9xGÙ¶JñX˜f~ğ-ƒÀÉşS¹¿£“Ø›Qà.P—À?¸—QcO˜S¿“Uù¹ˆÜÍ¸_Dä¾ˆ\5ÆdŒù4‹Èr™'"#Kàn‘†½ ªl{€#@m	B^ÔZíåé@R§Ü/Úc`Ê?4?Åjjü&¥u^g5º€ÍÿÀüf¢[ğÀüÚRIæ /$ 	}e=
-+œ‹Ñlæ—KXœ!lx4?‡èV<À…Ll
-+âßÀæ·à~ï
-+À¦¬üHğĞ!Ò,Igˆå]Ft•Áj5¤3”'Vvê½~9œ·r˜<—m¢GÄ7¸ô«´U&„J¶ÓTùCŞ§p§¢’Ö¨rÅSÈÑ7ß£&èÄ\øô¬[”à«„Øz`©}êâ^)Î–|ÜÅÎ+±C˜`;
-+Àn ÆHqÏËü@¢‡F3–â™ €ñªÏ\S å‘ÀJ%ô–ĞE-°øœ`>@'¡å’â…p»ŠY‘Gg”ÈQ[?8cö£}\8Œ4pTµñm~ Ğ¡Dš€éÀ“ƒ7€Ñö¹óÄr4©ú ìoBRz¹ûl%º¤BñkO/cëôå–c+Ñ_ÊÛı© ‹yÜõÈs`vÏlã‚ælö™@=ğ#F8ÀiJøQ<gœNáêJ9ğ—•Äş±¯@k|­¶¯û¼š·‚ØEq„âÖ÷20!çà
-+½[ôN`'yşô&Ã<r³É8ïjûĞ‡>üÇø€üÀ¸Š6Õ    IEND®B`‚
-\ No newline at end of file
--- 
-2.36.0
-

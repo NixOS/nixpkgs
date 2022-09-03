@@ -1,14 +1,20 @@
 { stdenv, lib, fetchurl, autoPatchelfHook, dpkg, awscli, unzip }:
 let
-  ver = "1.2.312.0";
-  source =
-    if stdenv.isDarwin then {
-      url = "https://s3.amazonaws.com/session-manager-downloads/plugin/${ver}/mac/sessionmanager-bundle.zip";
-      sha256 = "50aac34a4dedddf20c20be24989ee5d33b46a72187791715fb9b395b54db8ef9";
-    } else {
-      url = "https://s3.amazonaws.com/session-manager-downloads/plugin/${ver}/ubuntu_64bit/session-manager-plugin.deb";
-      sha256 = "2e51ce5bf8f23a1e590fff866bbdadcf82aa03c5054c671d9115482a1b263cc7";
-    };
+  ver = "1.2.331.0";
+  source = {
+    url = rec {
+      "x86_64-linux" = "https://s3.amazonaws.com/session-manager-downloads/plugin/${ver}/ubuntu_64bit/session-manager-plugin.deb";
+      "aarch64-linux" = "https://s3.amazonaws.com/session-manager-downloads/plugin/${ver}/ubuntu_arm64/session-manager-plugin.deb";
+      "x86_64-darwin" = "https://s3.amazonaws.com/session-manager-downloads/plugin/${ver}/mac/sessionmanager-bundle.zip";
+      "aarch64-darwin" = x86_64-darwin;
+    }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    sha256 = rec {
+      "x86_64-linux" = "sha256-xWnY89dslkGhRTh9llRFkuUqYIjHQNt+TLnkPQr3u1Q=";
+      "aarch64-linux" = "sha256-QE6+EjLoydTPuLitG6fALXAtvIkfyoFuWij8Z2HT6+Q=";
+      "x86_64-darwin" = "0gr6frdn9jvxnkymkcpvgkqw4z2sac9jdf5qj4hzakq1zkfviazf";
+      "aarch64-darwin" = x86_64-darwin;
+    }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  };
   archivePath = if stdenv.isDarwin then "sessionmanager-bundle" else "usr/local/sessionmanagerplugin";
 in
 stdenv.mkDerivation rec {
@@ -35,10 +41,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage =
-      "https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html";
+    homepage = "https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html";
     description = "Amazon SSM Session Manager Plugin";
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ mbaillie ];
   };

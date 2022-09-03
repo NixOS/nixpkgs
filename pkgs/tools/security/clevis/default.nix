@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, asciidoc
-, makeWrapper, jansson, jose, cryptsetup, curl, libpwquality, luksmeta
-, coreutils, tpm2-tools
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, asciidoc
+, makeWrapper
+, jansson
+, jose
+, cryptsetup
+, curl
+, libpwquality
+, luksmeta
+, coreutils
+, tpm2-tools
+, gnugrep
+, gnused
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +39,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # We wrap the main clevis binary entrypoint but not the sub-binaries.
     wrapProgram $out/bin/clevis \
-      --prefix PATH ':' "${tpm2-tools}/bin:${jose}/bin:${placeholder "out"}/bin"
+      --prefix PATH ':' "${lib.makeBinPath [tpm2-tools jose cryptsetup libpwquality luksmeta gnugrep gnused coreutils]}:${placeholder "out"}/bin"
   '';
 
   nativeBuildInputs = [ meson ninja pkg-config asciidoc makeWrapper ];
@@ -35,7 +50,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Automated Encryption Framework";
     homepage = "https://github.com/latchset/clevis";
-    maintainers = with lib.maintainers; [ fpletz ];
+    maintainers = with lib.maintainers; [ ];
     license = lib.licenses.gpl3Plus;
   };
 }

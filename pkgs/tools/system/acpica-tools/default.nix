@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # We can handle stripping ourselves.
-  INSTALLFLAGS = "-m 555";
+  # Unless we are on Darwin. Upstream makefiles degrade coreutils install to cp if _APPLE is detected.
+  INSTALLFLAGS = lib.optionals (!stdenv.isDarwin) "-m 555";
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -41,6 +42,6 @@ stdenv.mkDerivation rec {
     description = "ACPICA Tools";
     license = with licenses; [ iasl gpl2Only bsd3 ];
     maintainers = with maintainers; [ tadfisher ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

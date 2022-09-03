@@ -27,7 +27,7 @@ stdenv.mkDerivation  rec {
     homepage = "http://xpra.org/";
     description = "fakeXinerama for Xpra";
     platforms = platforms.linux;
-    maintainers = [ maintainers.tstrobel ];
+    maintainers = [ ];
     license = licenses.gpl2;
   };
 }

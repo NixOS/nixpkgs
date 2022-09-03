@@ -87,6 +87,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ asciidoctor cmake wrapGAppsHook wrapQtAppsHook qttools pkg-config ];
 
+  dontWrapGApps = true;
+  postFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   buildInputs = [
     curl
     botan2

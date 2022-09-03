@@ -1,4 +1,8 @@
-{ lib, stdenv, buildPythonPackage, fetchpatch, fetchPypi, pythonOlder
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , aiodns
 , aiohttp
 , flask
@@ -11,29 +15,18 @@
 , requests
 , six
 , trio
-, typing-extensions
-}:
+, typing-extensions }:
 
 buildPythonPackage rec {
-  version = "1.24.0";
+  version = "1.24.2";
   pname = "azure-core";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-NFsbBB+q19AgWyDVaX8dDfNEMC56qoUBkFWA/4e9C+U=";
+    sha256 = "sha256-Dzog0kVlm/gfs2cAcKVBDI1KQymNWpgeYtzjkwAKkIQ=";
   };
-
-  patches = [
-    # FIXME: fixes tests with new versions of flask/werkzeug
-    # upstream PR: https://github.com/Azure/azure-sdk-for-python/pull/24450
-    (fetchpatch {
-      url = "https://github.com/Azure/azure-sdk-for-python/commit/fb20b0b985f614bb7bcd84f3f5f6f3105de25fd9.patch";
-      stripLen = 3;
-      sha256 = "sha256-Gt5T/UkQT1yml8bqYbeUpimfOPlmzpN1KKKUnbU9xJw=";
-    })
-  ];
 
   propagatedBuildInputs = [
     requests
@@ -83,6 +76,8 @@ buildPythonPackage rec {
     "tests/test_streaming.py"
     # testserver tests require being in a very specific working directory to make it work
     "tests/testserver_tests/"
+    # requires missing pytest plugin
+    "tests/async_tests/test_rest_asyncio_transport.py"
   ];
 
   meta = with lib; {

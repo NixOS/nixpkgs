@@ -32,7 +32,9 @@ stdenv.mkDerivation rec {
   # only a Debian package release that is tagged in the upstream repo
   version = "0.0.0+git20220520";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    # remove if cross-compiling gobject-introspection works
+    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
@@ -61,7 +63,13 @@ stdenv.mkDerivation rec {
     libgudev
   ];
 
-  mesonFlags = [ "-Dgtk_doc=true" "-Dman=true" ];
+  mesonFlags = [
+    "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Dman=true"
+    # TODO(mindavi): introspection broken due to https://github.com/NixOS/nixpkgs/issues/72868
+    #                can be removed if cross-compiling gobject-introspection works.
+    "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
+  ];
 
   checkInputs = [
     dbus

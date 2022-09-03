@@ -9,7 +9,7 @@
 , configText ? ""
 }:
 let
-  version = "2203";
+  version = "2206";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -18,7 +18,9 @@ let
 
   # For USB support, ensure that /var/run/vmware/<YOUR-UID>
   # exists and is owned by you. Then run vmware-usbarbitrator as root.
-  bins = [ "vmware-view" "vmware-usbarbitrator" ];
+  bins = [ "vmware-view" "vmware-view-legacy" "vmware-usbarbitrator" ];
+
+  mainProgram = "vmware-view-legacy";
 
   # This forces the default GTK theme (Adwaita) because Horizon is prone to
   # UI usability issues when using non-default themes, such as Adwaita-dark.
@@ -30,11 +32,11 @@ let
   '';
 
   vmwareHorizonClientFiles = stdenv.mkDerivation {
-    name = "vmwareHorizonClientFiles";
+    pname = "vmware-horizon-files";
     inherit version;
     src = fetchurl {
-      url = "https://download3.vmware.com/software/CART23FQ1_LIN_2203_TARBALL/VMware-Horizon-Client-Linux-2203-8.5.0-19586897.tar.gz";
-      sha256 = "27429dddaeedfa8b701d7aa7868f60ad58efa42687d7f27e84375fda9f5cd137";
+      url = "https://download3.vmware.com/software/CART23FQ2_LIN_2206_TARBALL/VMware-Horizon-Client-Linux-2206-8.6.0-20094634.tar.gz";
+      sha256 = "9819eae5708bf0d71156b81283e3a70100e2e22de9db827a8956ca8e83b2414a";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
@@ -49,7 +51,7 @@ let
       rm "$out/lib/vmware/gcc/libstdc++.so.6"
 
       # This library causes the program to core-dump occasionally. Use ours instead.
-      rm $out/lib/vmware/view/crtbora/libcairo.*
+      rm -r $out/lib/vmware/view/crtbora
 
       ${lib.concatMapStrings wrapBinCommands bins}
     '';
@@ -104,7 +106,7 @@ let
     name = "vmware-view";
     desktopName = "VMware Horizon Client";
     icon = "${vmwareHorizonClientFiles}/share/icons/vmware-view.png";
-    exec = "${vmwareFHSUserEnv "vmware-view"}/bin/vmware-view %u";
+    exec = "${vmwareFHSUserEnv mainProgram}/bin/${mainProgram} %u";
     mimeTypes = [ "x-scheme-handler/vmware-view" ];
   };
 
@@ -131,7 +133,7 @@ stdenv.mkDerivation {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    mainProgram = "vmware-view";
+    inherit mainProgram;
     description = "Allows you to connect to your VMware Horizon virtual desktop";
     homepage = "https://www.vmware.com/go/viewclients";
     license = licenses.unfree;

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pywizlight";
-  version = "0.5.13";
+  version = "0.5.14";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "sbidy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UePrG49Q2tJq3f2QaW4BjbWHHif6cTFGdiO/DZfpMFA=";
+    sha256 = "sha256-IkuAYEg5nuUT6zxmuJe6afp4MVWf0+HAnEoAdOrdTvQ=";
   };
 
   propagatedBuildInputs = [
@@ -30,6 +30,10 @@ buildPythonPackage rec {
   checkInputs = [
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
   ];
 
   disabledTests = [

@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "colmena";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "colmena";
     rev = "v${version}";
-    sha256 = "sha256-aGpMiY9pS2616AfAVWA87tULKatDYF2kCKxwYstK8V0=";
+    sha256 = "sha256-kXc5YD3u+4lLWnih6s5ZjOYT+p0TvC2I7GT9eBAK2Jk=";
   };
 
-  cargoSha256 = "sha256-ckCArDFjVwVWWK0Ffj0AYe411b9xU33CBc1zeCh2kns=";
+  cargoSha256 = "sha256-B8gO2m+i3BOsMyB/KHlA4MO+a5UT+ZAN1XJ92X1suec=";
 
   nativeBuildInputs = [ installShellFiles ];
 

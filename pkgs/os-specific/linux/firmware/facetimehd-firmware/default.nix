@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cpio, xz, pkgs }:
+{ lib, stdenvNoCC, fetchurl, cpio, xz, pkgs }:
 
 let
 
@@ -33,7 +33,7 @@ let
 
 in
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
 
   pname = "facetimehd-firmware";
   inherit version;

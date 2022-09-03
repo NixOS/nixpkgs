@@ -10,16 +10,16 @@ let
     inherit tiling_wm;
   };
   stableVersion = {
-    version = "2021.2.1.14"; # "Android Studio Chipmunk (2021.2.1)"
-    sha256Hash = "1cy7ngm160w819ikrd459kg6lnk1k16jjnjm3d0aksmlws5b12z9";
+    version = "2021.2.1.15"; # "Android Studio Chipmunk (2021.2.1)"
+    sha256Hash = "ABjg38DdKSFwBRb3osRDN3xVd4jaf7CkUkPstDAHRb4=";
   };
   betaVersion = {
-    version = "2021.2.1.11"; # "Android Studio Chipmunk (2021.2.1) Beta 4"
-    sha256Hash = "0in8x6v957y9hsnz5ak845pdpvgvnvlm0s6r9y8f27zkm947vbjd";
+    version = "2021.3.1.14"; # "Android Studio Dolphin (2021.3.1) Beta 5"
+    sha256Hash = "k1Qt54u45rwHsQNz9TVqnFB65kBKtfFZ3OknpfutKPI=";
   };
   latestVersion = { # canary & dev
-    version = "2021.3.1.9"; # "Android Studio Dolphin (2021.3.1) Canary 9"
-    sha256Hash = "0nx26xwy67mnbkz37m3nw354siv152sa6zx94pxrvbnxxgppigfb";
+    version = "2022.1.1.8"; # "Android Studio Electric Eel (2022.1.1) Canary 8"
+    sha256Hash = "0bZXx4YpMztLAnwuBaSaNT3GJNfYnqCDanwR+Q7qyUc=";
   };
 in {
   # Attributes are named by their corresponding release channels

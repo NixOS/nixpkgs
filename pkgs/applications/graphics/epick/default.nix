@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "epick";
-  version = "0.6.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "vv9k";
     repo = pname;
     rev = version;
-    sha256 = "sha256-x1C8kY9VpMg7aXgC/jRsLCeUV8uRLobgjSAQdK2/sHk=";
+    sha256 = "sha256-sZ0ZPst6PE6KQ+pmjqLdcD7bWU/gLRsGH84PtWTLdSQ=";
   };
 
-  cargoSha256 = "sha256-KgQOlvKRt47lg7NteqBa2DLKkDf93JTzp9EIHn3clxY=";
+  cargoSha256 = "sha256-kMVjX4AWn8XFRzI7P9NRW8B7AHcIC8TG8LQk7tzkz5o=";
 
   nativeBuildInputs = lib.optional stdenv.isLinux python3;
 

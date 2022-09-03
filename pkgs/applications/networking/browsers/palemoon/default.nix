@@ -45,7 +45,7 @@ assert with lib.strings; (
 
 stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "31.0.0";
+  version = "31.2.0.1";
 
   src = fetchFromGitea {
     domain = "repo.palemoon.org";
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     repo = "Pale-Moon";
     rev = "${version}_Release";
     fetchSubmodules = true;
-    sha256 = "sha256-fIQAQCtjA/9Otft3e9Z4xWgE09sqsdArYQtZqmEgfTc=";
+    sha256 = "sha256-ytJC3QW9grbI6DusYITACc40+xUJ94+ATVGaOzWAwHU=";
   };
 
   nativeBuildInputs = [
@@ -113,6 +113,13 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
 
+    # Too many cores can lead to build flakiness
+    # https://forum.palemoon.org/viewtopic.php?f=5&t=28480
+    export jobs=$(($NIX_BUILD_CORES<=20 ? $NIX_BUILD_CORES : 20))
+    if [ -z "$enableParallelBuilding" ]; then
+      jobs=1
+    fi
+
     export MOZCONFIG=$PWD/mozconfig
     export MOZ_NOSPAM=1
 
@@ -120,7 +127,7 @@ stdenv.mkDerivation rec {
     export gtkversion=${if withGTK3 then "3" else "2"}
     export xlibs=${lib.makeLibraryPath [ xorg.libX11 ]}
     export prefix=$out
-    export mozmakeflags="-j${if enableParallelBuilding then "$NIX_BUILD_CORES" else "1"}"
+    export mozmakeflags="-j$jobs"
     export autoconf=${autoconf213}/bin/autoconf
 
     substituteAll ${./mozconfig} $MOZCONFIG

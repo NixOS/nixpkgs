@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "ToneLib Jam – the learning and practice software for guitar players";
     homepage = "https://tonelib.net/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ dan4ik605743 ];
     platforms = [ "x86_64-linux" ];

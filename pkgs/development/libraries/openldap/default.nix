@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 
 # dependencies
 , cyrus_sasl
@@ -14,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "openldap";
-  version = "2.6.2";
+  version = "2.6.3";
 
   src = fetchurl {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${pname}-${version}.tgz";
-    hash = "sha256-gdCTRSMutiSG7PWsrNLFbAxFtKbIwGZhLn9CGiOhz4c";
+    hash = "sha256-0qKh1x3z13OWscFq11AuZ030RuBgcrDlpOlBw9BsDUY=";
   };
 
   # TODO: separate "out" and "bin"
@@ -59,18 +60,18 @@ stdenv.mkDerivation rec {
     "ac_cv_func_memcmp_working=yes"
   ] ++ lib.optional stdenv.isFreeBSD "--with-pic";
 
+  NIX_CFLAGS_COMPILE = [ "-DLDAPI_SOCK=\"/run/openldap/ldapi\"" ];
+
   makeFlags= [
     "CC=${stdenv.cc.targetPrefix}cc"
     "STRIP="  # Disable install stripping as it breaks cross-compiling. We strip binaries anyway in fixupPhase.
+    "STRIP_OPTS="
     "prefix=${placeholder "out"}"
-    "sysconfdir=${placeholder "out"}/etc"
+    "sysconfdir=/etc"
     "systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     # contrib modules require these
     "moduledir=${placeholder "out"}/lib/modules"
     "mandir=${placeholder "out"}/share/man"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    # Can be unconditional, doing it like this to prevent a mass rebuild.
-    "STRIP_OPTS="
   ];
 
   extraContribModules = [
@@ -81,7 +82,7 @@ stdenv.mkDerivation rec {
   ];
 
   postBuild = ''
-    for module in ${lib.concatStringsSep " " extraContribModules}; do
+    for module in $extraContribModules; do
       make $makeFlags CC=$CC -C contrib/slapd-modules/$module
     done
   '';
@@ -100,12 +101,13 @@ stdenv.mkDerivation rec {
 
   installFlags = [
     "prefix=${placeholder "out"}"
+    "sysconfdir=${placeholder "out"}/etc"
     "moduledir=${placeholder "out"}/lib/modules"
     "INSTALL=install"
   ];
 
   postInstall = ''
-    for module in ${lib.concatStringsSep " " extraContribModules}; do
+    for module in $extraContribModules; do
       make $installFlags install -C contrib/slapd-modules/$module
     done
     chmod +x "$out"/lib/*.{so,dylib}
@@ -116,6 +118,6 @@ stdenv.mkDerivation rec {
     description = "An open source implementation of the Lightweight Directory Access Protocol";
     license = licenses.openldap;
     maintainers = with maintainers; [ ajs124 das_j hexa ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

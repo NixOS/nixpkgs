@@ -55,6 +55,12 @@ in mkLicense lset) ({
     fullName = "GNU Affero General Public License v3.0 or later";
   };
 
+  aladdin = {
+    spdxId = "Aladdin";
+    fullName = "Aladdin Free Public License";
+    free = false;
+  };
+
   amazonsl = {
     fullName = "Amazon Software License";
     url = "https://aws.amazon.com/asl/";
@@ -140,6 +146,11 @@ in mkLicense lset) ({
   bsdOriginal = {
     spdxId = "BSD-4-Clause";
     fullName = ''BSD 4-clause "Original" or "Old" License'';
+  };
+
+  bsdOriginalShortened = {
+    spdxId = "BSD-4-Clause-Shortened";
+    fullName = "BSD 4 Clause Shortened";
   };
 
   bsdOriginalUC = {
@@ -514,6 +525,13 @@ in mkLicense lset) ({
     free = false;
   };
 
+  databricks-dbx = {
+    fullName = "DataBricks eXtensions aka dbx License";
+    url = "https://github.com/databrickslabs/dbx/blob/743b579a4ac44531f764c6e522dbe5a81a7dc0e4/LICENSE";
+    free = false;
+    redistributable = false;
+  };
+
   issl = {
     fullName = "Intel Simplified Software License";
     url = "https://software.intel.com/en-us/license/intel-simplified-software-license";
@@ -680,6 +698,11 @@ in mkLicense lset) ({
     fullName = "SIL Open Font License 1.1";
   };
 
+  oml = {
+    spdxId = "OML";
+    fullName = "Open Market License";
+  };
+
   openldap = {
     spdxId = "OLDAP-2.8";
     fullName = "Open LDAP Public License v2.8";
@@ -809,6 +832,11 @@ in mkLicense lset) ({
   tcltk = {
     spdxId = "TCL";
     fullName = "TCL/TK License";
+  };
+
+  ucd = {
+    fullName = "Unicode Character Database License";
+    url = "https://fedoraproject.org/wiki/Licensing:UCD";
   };
 
   ufl = {

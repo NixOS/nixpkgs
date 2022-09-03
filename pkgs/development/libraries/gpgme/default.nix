@@ -27,11 +27,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gpgme";
-  version = "1.17.1";
+  version = "1.18.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
-    hash = "sha256-cR6r9d1mG5sEvp7cms4qe8Ax9r2dN6do0C0O/e8Qj18=";
+    hash = "sha256-Nh1OrkfOkl26DqVpr0DntSxkXEri5l5WIb8bbN2LDp4=";
   };
 
   patches = [
@@ -47,6 +47,9 @@ stdenv.mkDerivation rec {
     ./python-310-detection-without-distutils.patch
     # Find correct version string for Python >= 3.10, https://dev.gnupg.org/D546
     ./python-find-version-string-above-310.patch
+    # Fix a test after disallowing compressed signatures in gpg (PR #180336)
+    ./test_t-verify_double-plaintext.patch
+
     # Disable python tests on Darwin as they use gpg (see configureFlags below)
   ] ++ lib.optional stdenv.isDarwin ./disable-python-tests.patch
   # Fix _AC_UNDECLARED_WARNING for autoconf>=2.70
@@ -104,7 +107,7 @@ stdenv.mkDerivation rec {
     # debugging is disabled
     lib.optional (qtbase != null) "-DQT_NO_DEBUG"
     # https://www.gnupg.org/documentation/manuals/gpgme/Largefile-Support-_0028LFS_0029.html
-    ++ lib.optional (system == "i686-linux") "-D_FILE_OFFSET_BITS=64"
+    ++ lib.optional stdenv.hostPlatform.is32bit "-D_FILE_OFFSET_BITS=64"
   );
 
   doCheck = true;

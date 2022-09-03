@@ -195,6 +195,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   qt5ct = callPackage ../tools/misc/qt5ct { };
 
+  qtdbusextended = callPackage ../development/libraries/qtdbusextended { };
+
   qtfeedback = callPackage ../development/libraries/qtfeedback { };
 
   qtforkawesome = callPackage ../development/libraries/qtforkawesome { };
@@ -234,6 +236,10 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   signond = callPackage ../development/libraries/signond {};
 
   soundkonverter = callPackage ../applications/audio/soundkonverter {};
+
+  xp-pen-deco-01-v2-driver = callPackage ../os-specific/linux/xp-pen-drivers/deco-01-v2 { };
+
+  xp-pen-g430-driver = callPackage ../os-specific/linux/xp-pen-drivers/g430 { };
 
   yuview = callPackage ../applications/video/yuview { };
 })))

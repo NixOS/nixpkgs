@@ -7,12 +7,12 @@
 
 mkDerivation rec {
   pname = "calamares";
-  version = "3.2.57";
+  version = "3.2.61";
 
   # release including submodule
   src = fetchurl {
     url = "https://github.com/calamares/calamares/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "ef7f564ec2cd8baaf94a44982ce1db88c1192696617f21538d0b8472a63b4c2b";
+    sha256 = "sha256-dZG5tgc4vbp7neK42lRiqyEAbbBqAG8N0hrFuDJxHdI=";
   };
 
   patches = lib.optionals nixos-extensions [
@@ -57,7 +57,7 @@ mkDerivation rec {
 
   postPatch = ''
     # Run calamares without root. Other patches make it functional as a normal user
-    sed -e "s,pkexec calamares,calamares," \
+    sed -e "s,pkexec calamares,calamares -D6," \
         -i calamares.desktop
 
     sed -e "s,X-AppStream-Ignore=true,&\nStartupWMClass=calamares," \

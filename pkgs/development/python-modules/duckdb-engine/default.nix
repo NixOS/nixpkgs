@@ -8,10 +8,12 @@
 , ipython-sql
 , poetry-core
 , sqlalchemy
+, typing-extensions
 }:
+
 buildPythonPackage rec {
   pname = "duckdb-engine";
-  version = "0.1.8";
+  version = "0.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,20 +21,32 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "duckdb_engine";
     owner = "Mause";
-    rev = version;
-    hash = "sha256-dnm1nveCjrXFjDRykHp39AeVx7sk7Q/XwGn6hxdydT4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6bR2pt7gUHZu4I7VmJgVsFT9u3/e4c9RAKHHlbX/Tyk=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  propagatedBuildInputs = [ duckdb sqlalchemy ];
+  propagatedBuildInputs = [
+    duckdb
+    sqlalchemy
+  ];
 
-  checkInputs = [ pytestCheckHook hypothesis ipython-sql ];
+  checkInputs = [
+    pytestCheckHook
+    hypothesis
+    ipython-sql
+    typing-extensions
+  ];
 
-  pythonImportsCheck = [ "duckdb_engine" ];
+  pythonImportsCheck = [
+    "duckdb_engine"
+  ];
 
   meta = with lib; {
-    description = "Very very very basic sqlalchemy driver for duckdb";
+    description = "SQLAlchemy driver for duckdb";
     homepage = "https://github.com/Mause/duckdb_engine";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];

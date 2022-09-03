@@ -2,6 +2,7 @@
 , db
 , fetchurl
 , groff
+, gzip
 , lib
 , libiconv
 , libpipeline
@@ -68,8 +69,7 @@ stdenv.mkDerivation rec {
     # make sure that we don't wrap symlinks (since that changes argv[0] to the -wrapped name)
     find "$out/bin" -type f | while read file; do
       wrapProgram "$file" \
-        --prefix PATH : "${lib.getBin groff}/bin" \
-        --prefix PATH : "${lib.getBin zstd}/bin"
+        --prefix PATH : "${lib.makeBinPath [ groff gzip zstd ]}"
     done
   '';
 

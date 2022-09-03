@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "kubernetes";
-  version = "23.6.0";
+  version = "24.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kubernetes-client";
     repo = "python";
-    rev = "v${version}";
-    sha256 = "sha256-d6S7cMTiwIgqOcN9j3yeEXUNSro9I2b8HLJw1oGKjWI=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-rRr73UGhLzpznpNKHCj8LReMk2wOpIoxrSzitl9J+Pg=";
   };
 
   propagatedBuildInputs = [

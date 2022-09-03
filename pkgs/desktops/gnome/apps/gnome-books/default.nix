@@ -88,6 +88,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    broken = true; # won't build with current meson; upstream is dead/archived
     homepage = "https://wiki.gnome.org/Apps/Books";
     description = "An e-book manager application for GNOME";
     maintainers = teams.gnome.members;

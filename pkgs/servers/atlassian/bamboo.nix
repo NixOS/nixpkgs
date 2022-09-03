@@ -31,6 +31,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "Bamboo Data Center is a continuous delivery server.";
     homepage = "https://www.atlassian.com/software/bamboo";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = with licenses; [ unfree ];
     maintainers = with maintainers; [ techknowlogick ];
   };

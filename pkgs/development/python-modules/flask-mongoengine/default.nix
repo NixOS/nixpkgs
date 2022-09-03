@@ -8,7 +8,7 @@
 , nose
 , rednose
 , coverage
-, email_validator
+, email-validator
 }:
 
 buildPythonPackage rec {
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    email_validator
+    email-validator
     flask
     flask-wtf
     mongoengine

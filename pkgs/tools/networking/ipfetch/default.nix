@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     description = "Neofetch but for ip adresses";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ papojari ];
+    maintainers = with maintainers; [ annaaurora ];
   };
 }

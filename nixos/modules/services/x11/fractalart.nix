@@ -8,21 +8,21 @@ in {
       type = types.bool;
       default = false;
       example = true;
-      description = "Enable FractalArt for generating colorful wallpapers on login";
+      description = lib.mdDoc "Enable FractalArt for generating colorful wallpapers on login";
     };
 
     width = mkOption {
       type = types.nullOr types.int;
       default = null;
       example = 1920;
-      description = "Screen width";
+      description = lib.mdDoc "Screen width";
     };
 
     height = mkOption {
       type = types.nullOr types.int;
       default = null;
       example = 1080;
-      description = "Screen height";
+      description = lib.mdDoc "Screen height";
     };
   };
 

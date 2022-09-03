@@ -1,6 +1,7 @@
 { lib
 , copyDesktopItems
 , electron_18
+, buildGoModule
 , esbuild
 , fetchFromGitHub
 , libdeltachat
@@ -18,41 +19,40 @@
 
 let
   libdeltachat' = libdeltachat.overrideAttrs (old: rec {
-    version = "1.84.0";
+    version = "1.86.0";
     src = fetchFromGitHub {
       owner = "deltachat";
       repo = "deltachat-core-rust";
       rev = version;
-      hash = "sha256-ZG3siulXVHTbdSd9tmenljFODZ3LWX+BXn6OJfrbEYA=";
+      hash = "sha256-VLS93Ffeit2rVmXxYkXcnf8eDA3DC2/wKYZTh56QCk0=";
     };
     cargoDeps = rustPlatform.fetchCargoTarball {
       inherit src;
       name = "${old.pname}-${version}";
-      hash = "sha256-vQ+A4dEWh5+BgWOdxd7GTPuHk6M6bHgGnZcWNwR/Urs=";
+      hash = "sha256-4rpoDQ3o0WdWg/TmazTI+J0hL/MxwHcNMXWMq7GE7Tk=";
     };
   });
-  electronExec = if stdenv.isDarwin then
-    "${electron_18}/Applications/Electron.app/Contents/MacOS/Electron"
-  else
-    "${electron_18}/bin/electron";
-  esbuild' = esbuild.overrideAttrs (old: rec {
-    version = "0.12.29";
-    src = fetchFromGitHub {
-      owner = "evanw";
-      repo = "esbuild";
-      rev = "v${version}";
-      hash = "sha256-oU++9E3StUoyrMVRMZz8/1ntgPI62M1NoNz9sH/N5Bg=";
-    };
-  });
+  esbuild' = esbuild.override {
+    buildGoModule = args: buildGoModule (args // rec {
+      version = "0.12.29";
+      src = fetchFromGitHub {
+        owner = "evanw";
+        repo = "esbuild";
+        rev = "v${version}";
+        hash = "sha256-oU++9E3StUoyrMVRMZz8/1ntgPI62M1NoNz9sH/N5Bg=";
+      };
+      vendorSha256 = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
+    });
+  };
 in nodePackages.deltachat-desktop.override rec {
   pname = "deltachat-desktop";
-  version = "1.30.0";
+  version = "1.30.1";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-vp6vqoQvkAe7QPy4210r/5c1GNaGWgYvG0LyLqtCAxw=";
+    hash = "sha256-gZjZbXiqhFVfThZOsvL/nKkf6MX+E3KB5ldEAIuzBYA=";
   };
 
   nativeBuildInputs = [
@@ -81,7 +81,7 @@ in nodePackages.deltachat-desktop.override rec {
   postInstall = ''
     rm -r node_modules/deltachat-node/node/prebuilds
 
-    npm run build
+    npm run build4production
 
     npm prune --production
 
@@ -98,7 +98,7 @@ in nodePackages.deltachat-desktop.override rec {
         $out/lib/node_modules/deltachat-desktop/html-dist/fonts
     done
 
-    makeWrapper ${electronExec} $out/bin/deltachat \
+    makeWrapper ${electron_18}/bin/electron $out/bin/deltachat \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher${stdenv.hostPlatform.extensions.sharedLibrary} \
       --add-flags $out/lib/node_modules/deltachat-desktop
   '';
@@ -122,6 +122,7 @@ in nodePackages.deltachat-desktop.override rec {
     homepage = "https://github.com/deltachat/deltachat-desktop";
     changelog = "https://github.com/deltachat/deltachat-desktop/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Plus;
+    mainProgram = "deltachat";
     maintainers = with maintainers; [ dotlambda ];
   };
 }

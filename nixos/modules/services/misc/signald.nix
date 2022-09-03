@@ -8,24 +8,24 @@ let
 in
 {
   options.services.signald = {
-    enable = mkEnableOption "the signald service";
+    enable = mkEnableOption (lib.mdDoc "the signald service");
 
     user = mkOption {
       type = types.str;
       default = defaultUser;
-      description = "User under which signald runs.";
+      description = lib.mdDoc "User under which signald runs.";
     };
 
     group = mkOption {
       type = types.str;
       default = defaultUser;
-      description = "Group under which signald runs.";
+      description = lib.mdDoc "Group under which signald runs.";
     };
 
     socketPath = mkOption {
       type = types.str;
       default = "/run/signald/signald.sock";
-      description = "Path to the signald socket";
+      description = lib.mdDoc "Path to the signald socket";
     };
   };
 

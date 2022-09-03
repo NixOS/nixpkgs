@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "ZooKeeper co-process for instance monitoring, backup/recovery, cleanup and visualization";
     homepage = "https://github.com/soabase/exhibitor";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     mainProgram = "startExhibitor.sh";
     platforms = platforms.unix;

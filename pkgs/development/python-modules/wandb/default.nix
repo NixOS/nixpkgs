@@ -25,6 +25,7 @@
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
+, torch
 , pyyaml
 , requests
 , scikit-learn
@@ -38,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.12.17";
+  version = "0.12.21";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -46,8 +47,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = "client";
-    rev = "v${version}";
-    hash = "sha256-hY01cql/j3ieL1zJoPOM/QZiF0X/ivekFRfX+TvZhyM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jKb2pNmCW4MYz6ncsMNg7o5giCI2bpKER/kb8lfJekI=";
   };
 
   patches = [
@@ -93,46 +94,57 @@ buildPythonPackage rec {
     pytest-mock
     pytest-xdist
     pytestCheckHook
+    torch
     scikit-learn
     tqdm
   ];
 
   disabledTestPaths = [
     # Tests that try to get chatty over sockets or spin up servers, not possible in the nix build environment.
-    "tests/test_cli.py"
-    "tests/test_data_types.py"
-    "tests/test_file_stream.py"
-    "tests/test_file_upload.py"
-    "tests/test_footer.py"
-    "tests/test_internal_api.py"
-    "tests/test_label_full.py"
-    "tests/test_login.py"
-    "tests/test_meta.py"
-    "tests/test_metric_full.py"
-    "tests/test_metric_internal.py"
-    "tests/test_mode_disabled.py"
-    "tests/test_mp_full.py"
-    "tests/test_public_api.py"
-    "tests/test_redir.py"
-    "tests/test_runtime.py"
-    "tests/test_sender.py"
-    "tests/test_start_method.py"
-    "tests/test_tb_watcher.py"
-    "tests/test_telemetry_full.py"
-    "tests/wandb_agent_test.py"
-    "tests/wandb_artifacts_test.py"
-    "tests/wandb_integration_test.py"
-    "tests/wandb_run_test.py"
-    "tests/wandb_settings_test.py"
-    "tests/wandb_sweep_test.py"
-    "tests/wandb_verify_test.py"
-    "tests/test_model_workflows.py"
+    "tests/unit_tests/integrations/test_keras.py"
+    "tests/unit_tests/integrations/test_torch.py"
+    "tests/unit_tests/test_cli.py"
+    "tests/unit_tests/test_data_types.py"
+    "tests/unit_tests/test_file_stream.py"
+    "tests/unit_tests/test_file_upload.py"
+    "tests/unit_tests/test_footer.py"
+    "tests/unit_tests/test_internal_api.py"
+    "tests/unit_tests/test_label_full.py"
+    "tests/unit_tests/test_login.py"
+    "tests/unit_tests/test_meta.py"
+    "tests/unit_tests/test_metric_full.py"
+    "tests/unit_tests/test_metric_internal.py"
+    "tests/unit_tests/test_mode_disabled.py"
+    "tests/unit_tests/test_model_workflows.py"
+    "tests/unit_tests/test_mp_full.py"
+    "tests/unit_tests/test_public_api.py"
+    "tests/unit_tests/test_redir.py"
+    "tests/unit_tests/test_runtime.py"
+    "tests/unit_tests/test_sender.py"
+    "tests/unit_tests/test_start_method.py"
+    "tests/unit_tests/test_tb_watcher.py"
+    "tests/unit_tests/test_telemetry_full.py"
+    "tests/unit_tests/test_util.py"
+    "tests/unit_tests/wandb_agent_test.py"
+    "tests/unit_tests/wandb_artifacts_test.py"
+    "tests/unit_tests/wandb_integration_test.py"
+    "tests/unit_tests/wandb_run_test.py"
+    "tests/unit_tests/wandb_settings_test.py"
+    "tests/unit_tests/wandb_sweep_test.py"
+    "tests/unit_tests/wandb_tensorflow_test.py"
+    "tests/unit_tests/wandb_verify_test.py"
+    "tests/unit_tests/test_tpu.py"
+    "tests/unit_tests/test_plots.py"
+    "tests/unit_tests/test_report_api.py"
+
+    # Requires metaflow, which is not yet packaged.
+    "tests/unit_tests/integrations/test_metaflow.py"
 
     # Fails and borks the pytest runner as well.
-    "tests/wandb_test.py"
+    "tests/unit_tests/wandb_test.py"
 
     # Tries to access /homeless-shelter
-    "tests/test_tables.py"
+    "tests/unit_tests/test_tables.py"
   ];
 
   # Disable test that fails on darwin due to issue with python3Packages.psutil:
@@ -147,7 +159,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A CLI and library for interacting with the Weights and Biases API";
-    homepage = "https://github.com/wandb/client";
+    homepage = "https://github.com/wandb/wandb";
+    changelog = "https://github.com/wandb/wandb/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ samuela ];
   };

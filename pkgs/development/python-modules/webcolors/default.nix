@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -17,9 +17,9 @@ buildPythonPackage rec {
     hash = "sha256-FtBD06CP1qGxt+Pp5iZA0JeQ3OgNK91HkqF1s1/nlKk=";
   };
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests
-  '';
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "tests" ];
 
   pythonImportsCheck = [
     "webcolors"

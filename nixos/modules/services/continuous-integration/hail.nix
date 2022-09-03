@@ -13,7 +13,7 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enables the Hail Auto Update Service. Hail can automatically deploy artifacts
         built by a Hydra Continous Integration server. A common use case is to provide
         continous deployment for single services or a full NixOS configuration.'';
@@ -21,22 +21,22 @@ in {
     profile = mkOption {
       type = types.str;
       default = "hail-profile";
-      description = "The name of the Nix profile used by Hail.";
+      description = lib.mdDoc "The name of the Nix profile used by Hail.";
     };
     hydraJobUri = mkOption {
       type = types.str;
-      description = "The URI of the Hydra Job.";
+      description = lib.mdDoc "The URI of the Hydra Job.";
     };
     netrc = mkOption {
       type = types.nullOr types.path;
-      description = "The netrc file to use when fetching data from Hydra.";
+      description = lib.mdDoc "The netrc file to use when fetching data from Hydra.";
       default = null;
     };
     package = mkOption {
       type = types.package;
       default = pkgs.haskellPackages.hail;
       defaultText = literalExpression "pkgs.haskellPackages.hail";
-      description = "Hail package to use.";
+      description = lib.mdDoc "Hail package to use.";
     };
   };
 

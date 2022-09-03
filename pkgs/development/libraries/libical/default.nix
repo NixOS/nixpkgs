@@ -13,7 +13,6 @@
 , python3
 , tzdata
 , fixDarwinDylibNames
-, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
 , gobject-introspection
 , vala
 }:
@@ -37,6 +36,8 @@ stdenv.mkDerivation rec {
     ninja
     perl
     pkg-config
+    gobject-introspection
+    vala
     # Docs building fails:
     # https://github.com/NixOS/nixpkgs/pull/67204
     # previously with https://github.com/NixOS/nixpkgs/pull/61657#issuecomment-495579489
@@ -44,15 +45,12 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # provides ical-glib-src-generator that runs during build
     libical
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-    vala
   ] ++ lib.optionals stdenv.isDarwin [
     fixDarwinDylibNames
   ];
   installCheckInputs = [
     # running libical-glib tests
-    (python3.withPackages (pkgs: with pkgs; [
+    (python3.pythonForBuild.withPackages (pkgs: with pkgs; [
       pygobject3
     ]))
   ];
@@ -61,14 +59,13 @@ stdenv.mkDerivation rec {
     glib
     libxml2
     icu
-  ] ++ lib.optionals withIntrospection [
     gobject-introspection
   ];
 
   cmakeFlags = [
     "-DENABLE_GTK_DOC=False"
-    "-DGOBJECT_INTROSPECTION=${if withIntrospection then "True" else "False"}"
-    "-DICAL_GLIB_VAPI=${if withIntrospection then "True" else "False"}"
+    "-DGOBJECT_INTROSPECTION=True"
+    "-DICAL_GLIB_VAPI=True"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DIMPORT_ICAL_GLIB_SRC_GENERATOR=${lib.getDev buildPackages.libical}/lib/cmake/LibIcal/IcalGlibSrcGenerator.cmake"
   ];
@@ -81,7 +78,8 @@ stdenv.mkDerivation rec {
 
   # Using install check so we do not have to manually set
   # LD_LIBRARY_PATH and GI_TYPELIB_PATH variables
-  doInstallCheck = true;
+  # Musl does not support TZDIR.
+  doInstallCheck = !stdenv.hostPlatform.isMusl;
   enableParallelChecking = false;
   preInstallCheck = if stdenv.isDarwin then ''
     for testexe in $(find ./src/test -maxdepth 1 -type f -executable); do

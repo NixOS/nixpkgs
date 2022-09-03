@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "nengo-gui";
-  version = "0.4.8";
+  version = "0.4.9";
 
   src = fetchFromGitHub {
     owner = "nengo";
     repo = "nengo-gui";
-    rev = "v${version}";
-    sha256 = "1awb0h2l6yifb77zah7a4qzxqvkk4ac5fynangalidr10sk9rzk3";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-aBi4roe9pqPmpbW5zrbDoIvyH5mTKgIzL2O5j1+VBMY=";
   };
 
   propagatedBuildInputs = with python3Packages; [ nengo ];

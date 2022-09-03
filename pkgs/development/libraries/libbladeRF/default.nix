@@ -52,7 +52,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://nuand.com/libbladeRF-doc";
     description = "Supporting library of the BladeRF SDR opensource hardware";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ funfunctor ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

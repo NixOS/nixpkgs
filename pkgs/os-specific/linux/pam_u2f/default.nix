@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pam_u2f";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src     = fetchurl {
     url = "https://developers.yubico.com/pam-u2f/Releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-IwPm+Zsf3o7jw6sopN4tpt3SJclTaT6EXWstg4giH7M=";
+    sha256 = "sha256-cOdBvKGXtktPvo3R9tV84ritWMp4Y1LFJfPy1EEliUw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://developers.yubico.com/pam-u2f/";
     description = "A PAM module for allowing authentication with a U2F device";
+    changelog = "https://github.com/Yubico/pam-u2f/raw/pam_u2f-${version}/NEWS";
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ philandstuff ];

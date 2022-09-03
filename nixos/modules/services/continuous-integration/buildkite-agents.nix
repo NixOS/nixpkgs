@@ -34,32 +34,32 @@ let
       enable = mkOption {
         default = true;
         type = types.bool;
-        description = "Whether to enable this buildkite agent";
+        description = lib.mdDoc "Whether to enable this buildkite agent";
       };
 
       package = mkOption {
         default = pkgs.buildkite-agent;
         defaultText = literalExpression "pkgs.buildkite-agent";
-        description = "Which buildkite-agent derivation to use";
+        description = lib.mdDoc "Which buildkite-agent derivation to use";
         type = types.package;
       };
 
       dataDir = mkOption {
         default = "/var/lib/buildkite-agent-${name}";
-        description = "The workdir for the agent";
+        description = lib.mdDoc "The workdir for the agent";
         type = types.str;
       };
 
       runtimePackages = mkOption {
         default = [ pkgs.bash pkgs.gnutar pkgs.gzip pkgs.git pkgs.nix ];
         defaultText = literalExpression "[ pkgs.bash pkgs.gnutar pkgs.gzip pkgs.git pkgs.nix ]";
-        description = "Add programs to the buildkite-agent environment";
+        description = lib.mdDoc "Add programs to the buildkite-agent environment";
         type = types.listOf types.package;
       };
 
       tokenPath = mkOption {
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           The token from your Buildkite "Agents" page.
 
           A run-time path to the token file, which is supposed to be provisioned
@@ -70,7 +70,7 @@ let
       name = mkOption {
         type = types.str;
         default = "%hostname-${name}-%n";
-        description = ''
+        description = lib.mdDoc ''
           The name of the agent as seen in the buildkite dashboard.
         '';
       };
@@ -79,7 +79,7 @@ let
         type = types.attrsOf (types.either types.str (types.listOf types.str));
         default = {};
         example = { queue = "default"; docker = "true"; ruby2 ="true"; };
-        description = ''
+        description = lib.mdDoc ''
           Tags for the agent.
         '';
       };
@@ -88,7 +88,7 @@ let
         type = types.lines;
         default = "";
         example = "debug=true";
-        description = ''
+        description = lib.mdDoc ''
           Extra lines to be added verbatim to the configuration file.
         '';
       };
@@ -100,7 +100,7 @@ let
         ## don't end up in the Nix store.
         apply = final: if final == null then null else toString final;
 
-        description = ''
+        description = lib.mdDoc ''
           OpenSSH private key
 
           A run-time path to the key file, which is supposed to be provisioned
@@ -168,10 +168,10 @@ let
       hooksPath = mkOption {
         type = types.path;
         default = hooksDir config;
-        defaultText = literalDocBook "generated from <option>services.buildkite-agents.&lt;name&gt;.hooks</option>";
-        description = ''
+        defaultText = literalMD "generated from {option}`services.buildkite-agents.<name>.hooks`";
+        description = lib.mdDoc ''
           Path to the directory storing the hooks.
-          Consider using <option>services.buildkite-agents.&lt;name&gt;.hooks.&lt;name&gt;</option>
+          Consider using {option}`services.buildkite-agents.<name>.hooks.<name>`
           instead.
         '';
       };
@@ -180,7 +180,7 @@ let
         type = types.str;
         default = "${pkgs.bash}/bin/bash -e -c";
         defaultText = literalExpression ''"''${pkgs.bash}/bin/bash -e -c"'';
-        description = ''
+        description = lib.mdDoc ''
           Command that buildkite-agent 3 will execute when it spawns a shell.
         '';
       };
@@ -193,7 +193,7 @@ in
   options.services.buildkite-agents = mkOption {
     type = types.attrsOf (types.submodule buildkiteOptions);
     default = {};
-    description = ''
+    description = lib.mdDoc ''
       Attribute set of buildkite agents.
       The attribute key is combined with the hostname and a unique integer to
       create the final agent name. This can be overridden by setting the `name`

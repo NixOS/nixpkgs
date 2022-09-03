@@ -12,7 +12,7 @@
 buildDunePackage {
   pname = "shared-memory-ring-lwt";
 
-  inherit (shared-memory-ring) version src useDune2;
+  inherit (shared-memory-ring) version src;
 
   buildInputs = [
     ppx_cstruct

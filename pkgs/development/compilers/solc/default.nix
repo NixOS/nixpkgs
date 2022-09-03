@@ -90,12 +90,6 @@ let
     doCheck = false;
 
     checkPhase = ''
-      while IFS= read -r -d ''' dir
-      do
-        LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$(pwd)/$dir
-        export LD_LIBRARY_PATH
-      done <   <(find . -type d -print0)
-
       pushd ..
       # IPC tests need aleth avaliable, so we disable it
       sed -i "s/IPC_ENABLED=true/IPC_ENABLED=false\nIPC_FLAGS=\"--no-ipc\"/" ./scripts/tests.sh

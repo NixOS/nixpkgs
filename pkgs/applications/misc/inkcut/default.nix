@@ -1,4 +1,5 @@
 { lib
+, fetchpatch
 , python3Packages
 , fetchFromGitHub
 , wrapQtAppsHook
@@ -9,14 +10,36 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "inkcut";
-  version = "2.1.3";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0px0xdv6kyzkkpmvryrdfavv1qy2xrqdxkpmhvx1gj649xcabv32";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-S5IrNWVoUp1w+P7DrKlOUOyY3Q16CHSct9ndZOB3UpU=";
   };
+
+  patches = [
+    # fix opening the extension on inkscape 1.2
+    # https://github.com/inkcut/inkcut/pull/340
+    (fetchpatch {
+      url = "https://github.com/inkcut/inkcut/commit/d5d5d0ab3c588c576b668f4c7b07a10609ba2fd0.patch";
+      hash = "sha256-szfiOujuV7OOwYK/OU51m9FK6dzkbWds+h0cr5dGIg4=";
+    })
+    # fix loading a document from stdin (as used from the extension)
+    # https://github.com/inkcut/inkcut/issues/341
+    (fetchpatch {
+      url = "https://github.com/inkcut/inkcut/commit/748ab4157f87afec37dadd715094e87d02c9c739.patch";
+      hash = "sha256-ZGiwZru2bUYu749YSz5vxmGwLTAoYIAsafcX6PmdbYo=";
+      revert = true;
+    })
+    # fix distutils deprecation error
+    # https://github.com/inkcut/inkcut/pull/343
+    (fetchpatch {
+      url = "https://github.com/inkcut/inkcut/commit/9fb95204981bcc51401a1bc10caa02d1fae0d6cb.patch";
+      hash = "sha256-nriys7IWPGykZjVz+DIDsE9Tm40DewkHQlIUaxFwtzM=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace inkcut/device/transports/printer/plugin.py \
@@ -53,7 +76,7 @@ buildPythonApplication rec {
   ];
 
   dontWrapQtApps = true;
-  makeWrapperArgs = [ "\${qtWrapperArgs[@]}" ];
+  makeWrapperArgs = [ "--unset" "PYTHONPATH" "\${qtWrapperArgs[@]}" ];
 
   postInstall = ''
     mkdir -p $out/share/inkscape/extensions

@@ -2,7 +2,6 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
-, freezegun
 , oauthlib
 , pytest-asyncio
 , pytest-mock
@@ -12,20 +11,21 @@
 , requests-oauthlib
 , requests-mock
 , setuptools-scm
+, time-machine
 }:
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "6.2.4";
-  format = "setuptools";
+  version = "7.0.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jabesq";
     repo = "pyatmo";
-    rev = "v${version}";
-    sha256 = "sha256-VXkQByaNA02fwBO2yuf7w1ZF/oJwd/h21de1EQlCu2U=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-WrpRLAfViudC0n7AG5es2CM8XbZ0yJqXCY9yod9czb0=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -42,11 +42,11 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    freezegun
     pytest-asyncio
     pytest-mock
     pytestCheckHook
     requests-mock
+    time-machine
   ];
 
   postPatch = ''

@@ -112,14 +112,26 @@ stdenv.mkDerivation rec {
     # adapted from https://trac.sagemath.org/ticket/23712#comment:22
     ./patches/tachyon-renamed-focallength.patch
 
-    # docutils 0.18.1 now triggers Sphinx warnings. tolerate them for
-    # now, because patching Sphinx is not feasible. remove when Sphinx
-    # 5.0 hits nixpkgs.
-    # https://github.com/sphinx-doc/sphinx/pull/10372
-    ./patches/docutils-0.18.1-deprecation.patch
+    (fetchSageDiff {
+      name = "eclib-20220621-update.patch";
+      base = "9.7.beta4";
+      rev = "9b65d73399b33043777ba628a4d318638aec6e0e";
+      sha256 = "sha256-pcb9Q9a0ROCZTyfT7TRMtgEqCom8SgrtAaZ8ATgeqVI=";
+    })
+
+    # https://trac.sagemath.org/ticket/34149
+    (fetchSageDiff {
+      name = "sphinx-5-update.patch";
+      base = "9.7.beta6";
+      rev = "6f9ceb7883376a1cacda51d84ec7870121860482";
+      sha256 = "sha256-prTCwBfl/wNXIkdjKLiMSe/B64wCXOjOTr4AVNiFruw=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
+
+  # do not create .orig backup files if patch applies with fuzz
+  patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
 
   postPatch = ''
     # Make sure sage can at least be imported without setting any environment

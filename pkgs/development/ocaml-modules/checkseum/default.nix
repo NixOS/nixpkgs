@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, dune-configurator, pkg-config
+{ lib, fetchurl, buildDunePackage, ocaml, dune-configurator, pkg-config
 , bigarray-compat, optint
 , fmt, rresult, bos, fpath, astring, alcotest
 , withFreestanding ? false
@@ -36,7 +36,7 @@ buildDunePackage rec {
     rresult
   ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     description = "ADLER-32 and CRC32C Cyclic Redundancy Check";

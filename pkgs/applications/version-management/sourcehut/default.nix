@@ -2,6 +2,7 @@
 , openssl
 , callPackage
 , recurseIntoAttrs
+, nixosTests
 }:
 
 # To expose the *srht modules, they have to be a python module so we use `buildPythonModule`
@@ -44,4 +45,7 @@ with python.pkgs; recurseIntoAttrs {
   pagessrht = pagessrht;
   pastesrht = toPythonApplication pastesrht;
   todosrht = toPythonApplication todosrht;
+  passthru.tests = {
+    nixos-sourcehut = nixosTests.sourcehut;
+  };
 }

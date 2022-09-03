@@ -1,53 +1,46 @@
-{ lib, stdenv, fetchFromGitHub, sqlite, pkg-config, autoreconfHook, pmccabe
-, xapian, glib, gmime3, texinfo, emacs, guile
-, gtk3, webkitgtk, libsoup, icu
-, makeWrapper
-, withMug ? false
-, batchSize ? null }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, coreutils
+, emacs
+, glib
+, gmime3
+, texinfo
+, xapian
+}:
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.6.10";
+  version = "1.8.9";
 
   src = fetchFromGitHub {
-    owner  = "djcb";
-    repo   = "mu";
-    rev    = version;
-    sha256 = "1uJB8QdR0JgWlogb1cdUicz+LLtYQpAvYJjwcRjXt+E=";
+    owner = "djcb";
+    repo = "mu";
+    rev = "v${version}";
+    hash = "sha256-AqbTYcPwV9iNar34pESbz9Vp/88hhB+/VxcLIhLZ16o=";
   };
 
-  postPatch = lib.optionalString (batchSize != null) ''
-    sed -i lib/mu-store.cc --regexp-extended \
-      -e 's@(constexpr auto BatchSize).*@\1 = ${toString batchSize};@'
+  postPatch = ''
+    # Fix mu4e-builddir (set it to $out)
+    substituteInPlace mu4e/mu4e-config.el.in \
+      --replace "@abs_top_builddir@" "$out"
+    substituteInPlace lib/utils/mu-test-utils.cc \
+      --replace "/bin/rm" "${coreutils}/bin/rm"
   '';
 
-  buildInputs = [
-    sqlite xapian glib gmime3 texinfo emacs libsoup icu
-  ]
-    # Workaround for https://github.com/djcb/mu/issues/1641
-    ++ lib.optional (!stdenv.isDarwin) guile
-    ++ lib.optionals withMug [ gtk3 webkitgtk ];
+  buildInputs = [ emacs glib gmime3 texinfo xapian ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook pmccabe makeWrapper ];
+  mesonFlags = [
+    "-Dguile=disabled"
+    "-Dreadline=disabled"
+  ];
+
+  nativeBuildInputs = [ pkg-config meson ninja ];
 
   enableParallelBuilding = true;
-
-  preBuild = ''
-    # Fix mu4e-builddir (set it to $out)
-    substituteInPlace mu4e/mu4e-meta.el.in \
-      --replace "@abs_top_builddir@" "$out"
-  '';
-
-  # Make sure included scripts can find their dependencies & optionally install mug
-  postInstall = ''
-    wrapProgram "$out/bin/mu" \
-      --prefix LD_LIBRARY_PATH : "$out/lib" \
-      --prefix GUILE_LOAD_PATH : "$out/share/guile/site/2.2"
-  '' + lib.optionalString withMug ''
-    for f in mug ; do
-      install -m755 toys/$f/$f $out/bin/$f
-    done
-  '';
 
   doCheck = true;
 
@@ -55,8 +48,8 @@ stdenv.mkDerivation rec {
     description = "A collection of utilties for indexing and searching Maildirs";
     license = licenses.gpl3Plus;
     homepage = "https://www.djcbsoftware.nl/code/mu/";
-    changelog = "https://github.com/djcb/mu/releases/tag/${version}";
+    changelog = "https://github.com/djcb/mu/releases/tag/v${version}";
     maintainers = with maintainers; [ antono chvp peterhoeg ];
-    platforms = platforms.mesaPlatforms;
+    platforms = platforms.unix;
   };
 }

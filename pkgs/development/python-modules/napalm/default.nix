@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchFromGitHub, fetchpatch, setuptools, cffi
 , paramiko, requests, future, textfsm, jinja2, netaddr, pyyaml, pyeapi, netmiko
 , junos-eznc, ciscoconfparse, scp, lxml, ncclient, pytestCheckHook, ddt, mock
-, pythonOlder }:
+, pythonOlder, invoke }:
 
 buildPythonPackage rec {
   pname = "napalm";
@@ -35,14 +35,13 @@ buildPythonPackage rec {
       --replace "netmiko>=3.3.0,<4.0.0" "netmiko"
   '';
 
-  buildInputs = [ setuptools ];
-
   propagatedBuildInputs = [
     cffi
     paramiko
     requests
     future
     textfsm
+    invoke
     jinja2
     netaddr
     pyyaml
@@ -51,6 +50,7 @@ buildPythonPackage rec {
     junos-eznc
     ciscoconfparse
     scp
+    setuptools
     lxml
     ncclient
   ];
@@ -62,6 +62,6 @@ buildPythonPackage rec {
       "Network Automation and Programmability Abstraction Layer with Multivendor support";
     homepage = "https://github.com/napalm-automation/napalm";
     license = licenses.asl20;
-    maintainers = [ maintainers.astro ];
+    maintainers = with maintainers; [ ] ++ teams.c3d2.members;
   };
 }

@@ -7,13 +7,13 @@ let
 in {
 
   options.services.clipcat= {
-    enable = mkEnableOption "Clipcat clipboard daemon";
+    enable = mkEnableOption (lib.mdDoc "Clipcat clipboard daemon");
 
     package = mkOption {
       type = types.package;
       default = pkgs.clipcat;
       defaultText = literalExpression "pkgs.clipcat";
-      description = "clipcat derivation to use.";
+      description = lib.mdDoc "clipcat derivation to use.";
     };
   };
 

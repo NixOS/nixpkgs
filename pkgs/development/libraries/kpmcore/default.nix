@@ -6,11 +6,11 @@
 stdenv.mkDerivation rec {
   pname = "kpmcore";
   # NOTE: When changing this version, also change the version of `partition-manager`.
-  version = "22.04.0";
+  version = "22.04.3";
 
   src = fetchurl {
     url = "mirror://kde/stable/release-service/${version}/src/${pname}-${version}.tar.xz";
-    hash = "sha256-sO8WUJL6072H1ghMZd7j0xNMwEn4bJF5PXMhfEb2jbs=";
+    hash = "sha256-LmKglUgXhLOBLSpzfXvK/UXFqY3L+p/EoHbZTSKlGhM=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules ];

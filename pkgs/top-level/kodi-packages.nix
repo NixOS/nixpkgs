@@ -58,6 +58,8 @@ let self = rec {
 
   iagl = callPackage ../applications/video/kodi/addons/iagl { };
 
+  invidious = callPackage ../applications/video/kodi/addons/invidious { };
+
   libretro = callPackage ../applications/video/kodi/addons/libretro { };
 
   libretro-genplus = callPackage ../applications/video/kodi/addons/libretro-genplus { inherit genesis-plus-gx; };

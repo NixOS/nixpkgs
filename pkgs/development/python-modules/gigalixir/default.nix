@@ -18,14 +18,14 @@
 
 buildPythonApplication rec {
   pname = "gigalixir";
-  version = "1.2.5";
+  version = "1.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-P70xsI/zwsoSgK1XCPzJSI5NQ58M431kmgo5gHXbaNw=";
+    hash = "sha256-kNtybgv8j7t1tl6R5ZuC4vj5fnEcEenuNt0twA1kAh0=";
   };
 
   propagatedBuildInputs = [

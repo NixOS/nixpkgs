@@ -21,7 +21,6 @@ in stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   buildInputs = [ windows.mingw_w64_headers ];
-  dontStrip = true;
   hardeningDisable = [ "stackprotector" "fortify" ];
 
   meta = {

@@ -39,6 +39,7 @@ let
     "tree-sitter-verilog"
     "tree-sitter-jsdoc"
     "tree-sitter-ql"
+    "tree-sitter-ql-dbscheme"
     "tree-sitter-embedded-template"
     "tree-sitter-tsq"
     "tree-sitter-toml"
@@ -122,6 +123,10 @@ let
       orga = "MDeiml";
       repo = "tree-sitter-markdown";
     };
+    "tree-sitter-rego" = {
+      orga = "FallenAngel97";
+      repo = "tree-sitter-rego";
+    };
     "tree-sitter-rst" = {
       orga = "stsewd";
       repo = "tree-sitter-rst";
@@ -129,6 +134,10 @@ let
     "tree-sitter-svelte" = {
       orga = "Himujjal";
       repo = "tree-sitter-svelte";
+    };
+    "tree-sitter-sql" = {
+      orga = "m-novikov";
+      repo = "tree-sitter-sql";
     };
     "tree-sitter-vim" = {
       orga = "vigoux";
@@ -177,6 +186,10 @@ let
     "tree-sitter-gomod" = {
       orga = "camdencheek";
       repo = "tree-sitter-go-mod";
+    };
+    "tree-sitter-gowork" = {
+      orga = "omertuc";
+      repo = "tree-sitter-go-work";
     };
     "tree-sitter-graphql" = {
       orga = "bkegley";
@@ -321,6 +334,10 @@ let
     "tree-sitter-scheme" = {
       orga = "6cdh";
       repo = "tree-sitter-scheme";
+    };
+    "tree-sitter-tiger" = {
+      orga = "ambroisie";
+      repo = "tree-sitter-tiger";
     };
   };
 

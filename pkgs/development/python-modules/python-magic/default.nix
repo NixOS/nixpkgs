@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, python
 , buildPythonPackage
 , fetchFromGitHub
 , substituteAll
@@ -10,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "python-magic";
-  version = "0.4.26";
+  version = "0.4.27";
 
   src = fetchFromGitHub {
     owner = "ahupp";
     repo = "python-magic";
     rev = version;
-    sha256 = "sha256-RcKldMwSRroNZNEl0jwuJG9C+3OIPBzk+CjqkxKK/eY=";
+    sha256 = "sha256-fZ+5xJ3P0EYK+6rQ8VzXv2zckKfEH5VUdISIR6ybIfQ=";
   };
 
   patches = [

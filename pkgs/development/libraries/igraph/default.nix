@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "igraph";
-  version = "0.9.8";
+  version = "0.9.9";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = pname;
     rev = version;
-    hash = "sha256-t0GC6FVFcbVbmZ74XNSPCRRUsSr1Z8rRw6Rf++qk4I0=";
+    hash = "sha256-Zb9F4kFUNA/MtoYYEKGJ5JyKxtG0DHSdGaUpDLKmAAc=";
   };
 
   postPatch = ''
@@ -86,13 +86,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  # needed to find libigraph, and liblas on darwin
-  preCheck = if stdenv.isDarwin then ''
-    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [ blas ]}:$PWD/src"
-  '' else ''
-    export LD_LIBRARY_PATH="$PWD/src"
-  '';
 
   postInstall = ''
     mkdir -p "$out/share"

@@ -24,7 +24,7 @@ let
   phocConfigType = types.submodule {
     options = {
       xwayland = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable XWayland support.
 
           To start XWayland immediately, use `immediate`.
@@ -33,14 +33,14 @@ let
         default = "false";
       };
       cursorTheme = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Cursor theme to use in Phosh.
         '';
         type = types.str;
         default = "default";
       };
       outputs = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Output configurations.
         '';
         type = types.attrsOf phocOutputType;
@@ -56,7 +56,7 @@ let
   phocOutputType = types.submodule {
     options = {
       modeline = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           One or more modelines.
         '';
         type = types.either types.str (types.listOf types.str);
@@ -67,7 +67,7 @@ let
         ];
       };
       mode = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Default video mode.
         '';
         type = types.nullOr types.str;
@@ -75,7 +75,7 @@ let
         example = "768x1024";
       };
       scale = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Display scaling factor.
         '';
         type = types.nullOr (
@@ -89,7 +89,7 @@ let
         example = 2;
       };
       rotate = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Screen transformation.
         '';
         type = types.enum [
@@ -132,7 +132,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable the Phone Shell.";
+        description = lib.mdDoc "Enable the Phone Shell.";
       };
 
       package = mkOption {
@@ -140,25 +140,25 @@ in
         default = pkgs.phosh;
         defaultText = literalExpression "pkgs.phosh";
         example = literalExpression "pkgs.phosh";
-        description = ''
+        description = lib.mdDoc ''
           Package that should be used for Phosh.
         '';
       };
 
       user = mkOption {
-        description = "The user to run the Phosh service.";
+        description = lib.mdDoc "The user to run the Phosh service.";
         type = types.str;
         example = "alice";
       };
 
       group = mkOption {
-        description = "The group to run the Phosh service.";
+        description = lib.mdDoc "The group to run the Phosh service.";
         type = types.str;
         example = "users";
       };
 
       phocConfig = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Configurations for the Phoc compositor.
         '';
         type = types.oneOf [ types.lines types.path phocConfigType ];

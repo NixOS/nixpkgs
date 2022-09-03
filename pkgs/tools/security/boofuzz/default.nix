@@ -37,9 +37,10 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   disabledTests = [
-    # Tests require socket access
-    "test_raw_l2"
-    "test_raw_l3"
+    "TestNetworkMonitor"
+    "TestNoResponseFailure"
+    "TestProcessMonitor"
+    "TestSocketConnection"
   ];
 
   pythonImportsCheck = [
@@ -51,7 +52,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/jtpereyda/boofuzz";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ fab ];
-    # FAILED unit_tests/test_monitors.py::TestProcessMonitor::test_set_options_persistent
-    broken = (stdenv.isDarwin && stdenv.isx86_64);
   };
 }

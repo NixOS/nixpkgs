@@ -34,7 +34,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "22.0.4";
+  version = "22.1.6";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -48,7 +48,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "1m0y8wgy48hmcidsr7sbk5hcw3v0qr8359fd2x34fvl2z9c1z5y7";
+    sha256 = "22ced061eb9adab8ea35368246c1995c09723f3f71653cd5050c5cec376e671a";
   };
 
   # TODO:
@@ -59,11 +59,11 @@ self = stdenv.mkDerivation {
     ./musl.patch
     (fetchpatch {
       url = "https://raw.githubusercontent.com/void-linux/void-packages/b9f58f303ae23754c95d5d1fe87a98b5a2d8f271/srcpkgs/mesa/patches/musl-endian.patch";
-      sha256 = "sha256-eRc91qCaFlVzrxFrNUPpAHd1gsqKsLCCN0IW8pBQcqk=";
+      hash = "sha256-eRc91qCaFlVzrxFrNUPpAHd1gsqKsLCCN0IW8pBQcqk=";
     })
     (fetchpatch {
       url = "https://raw.githubusercontent.com/void-linux/void-packages/b9f58f303ae23754c95d5d1fe87a98b5a2d8f271/srcpkgs/mesa/patches/musl-stacksize.patch";
-      sha256 = "sha256-bEp0AWddsw1Pc3rxdKN8fsrX4x2TQEzMUa5afhLXGsg=";
+      hash = "sha256-bEp0AWddsw1Pc3rxdKN8fsrX4x2TQEzMUa5afhLXGsg=";
     })
 
     ./opencl.patch
@@ -72,24 +72,20 @@ self = stdenv.mkDerivation {
     # Fix aarch64-darwin build, remove when upstreaam supports it out of the box.
     # See: https://gitlab.freedesktop.org/mesa/mesa/-/issues/1020
     ./aarch64-darwin.patch
+  ] ++ optionals stdenv.isDarwin [
+    # 22.1 on darwin won't build: https://gitlab.freedesktop.org/mesa/mesa/-/issues/6519
+    # (already in-tree for 22.2)
+    ./drop-dri2.patch
   ];
 
   postPatch = ''
     patchShebangs .
-
-    substituteInPlace meson.build --replace \
-      "find_program('pkg-config')" \
-      "find_program('${buildPackages.pkg-config.targetPrefix}pkg-config')"
 
     # The drirc.d directory cannot be installed to $drivers as that would cause a cyclic dependency:
     substituteInPlace src/util/xmlconfig.c --replace \
       'DATADIR "/drirc.d"' '"${placeholder "out"}/share/drirc.d"'
     substituteInPlace src/util/meson.build --replace \
       "get_option('datadir')" "'${placeholder "out"}/share'"
-  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    substituteInPlace meson.build --replace \
-      "find_program('nm')" \
-      "find_program('${stdenv.cc.targetPrefix}nm')"
   '';
 
   outputs = [ "out" "dev" "drivers" ]

@@ -16,9 +16,6 @@ rec {
   */
   flakeExposed = import ./flake-systems.nix { };
 
-  # TODO(@sternenseemann): remove before 21.11
-  supported = throw "2022-05-23: Use lib.systems.flakeExposed instead of lib.systems.supported.hydra, as lib.systems.supported has been removed";
-
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
   # necessary.
   #
@@ -36,6 +33,7 @@ rec {
       config = parse.tripleFromSystem final.parsed;
       # Determine whether we can execute binaries built for the provided platform.
       canExecute = platform:
+        final.isAndroid == platform.isAndroid &&
         parse.isCompatible final.parsed.cpu platform.parsed.cpu
         && final.parsed.kernel == platform.parsed.kernel;
       isCompatible = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
@@ -67,11 +65,17 @@ rec {
         # is why we use the more obscure "bfd" and not "binutils" for this
         # choice.
         else                                     "bfd";
-      extensions = {
+      extensions = rec {
         sharedLibrary =
           /**/ if final.isDarwin  then ".dylib"
           else if final.isWindows then ".dll"
           else                         ".so";
+        staticLibrary =
+          /**/ if final.isWindows then ".lib"
+          else                         ".a";
+        library =
+          /**/ if final.isStatic then staticLibrary
+          else                        sharedLibrary;
         executable =
           /**/ if final.isWindows then ".exe"
           else                         "";
@@ -117,6 +121,8 @@ rec {
         else if final.isAarch64 then "arm64"
         else if final.isx86_32 then "i386"
         else if final.isx86_64 then "x86_64"
+        # linux kernel does not distinguish microblaze/microblazeel
+        else if final.isMicroBlaze then "microblaze"
         else if final.isMips32 then "mips"
         else if final.isMips64 then "mips"    # linux kernel does not distinguish mips32/mips64
         else if final.isPower then "powerpc"

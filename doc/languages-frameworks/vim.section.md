@@ -5,11 +5,9 @@ and additional libraries.
 
 Loading can be deferred; see examples.
 
-At the moment we support three different methods for managing plugins:
+At the moment we support two different methods for managing plugins:
 
-- Vim packages (*recommend*)
-- VAM (=vim-addon-manager)
-- Pathogen
+- Vim packages (*recommended*)
 - vim-plug
 
 ## Custom configuration {#custom-configuration}
@@ -45,7 +43,7 @@ neovim.override {
 ```
 
 If you want to use `neovim-qt` as a graphical editor, you can configure it by overriding Neovim in an overlay
-or passing it an overridden Neovimn:
+or passing it an overridden Neovim:
 
 ```nix
 neovim-qt.override {
@@ -61,7 +59,7 @@ neovim-qt.override {
 
 ## Managing plugins with Vim packages {#managing-plugins-with-vim-packages}
 
-To store you plugins in Vim packages (the native Vim plugin manager, see `:help packages`) the following example can be used:
+To store your plugins in Vim packages (the native Vim plugin manager, see `:help packages`) the following example can be used:
 
 ```nix
 vim_configurable.customize {
@@ -110,7 +108,7 @@ The resulting package can be added to `packageOverrides` in `~/.nixpkgs/config.n
     };
     myNeovim = neovim.override {
       configure = {
-      # add here code from the example section
+      # add code from the example section here
       };
     };
   };
@@ -158,10 +156,10 @@ in
 ```
 
 ### Specificities for some plugins
-#### Tree sitter
+#### Treesitter
 
 By default `nvim-treesitter` encourages you to download, compile and install
-the required tree-sitter grammars at run time with `:TSInstall`. This works
+the required Treesitter grammars at run time with `:TSInstall`. This works
 poorly on NixOS.  Instead, to install the `nvim-treesitter` plugins with a set
 of precompiled grammars, you can use `nvim-treesitter.withPlugins` function:
 
@@ -204,110 +202,13 @@ For Neovim the syntax is:
 neovim.override {
   configure = {
     customRC = ''
-      # here your custom configuration goes!
+      # your custom configuration goes here! 
     '';
     plug.plugins = with pkgs.vimPlugins; [
       vim-go
     ];
   };
 }
-```
-
-## Managing plugins with VAM {#managing-plugins-with-vam}
-
-### Handling dependencies of Vim plugins {#handling-dependencies-of-vim-plugins}
-
-VAM introduced .json files supporting dependencies without versioning
-assuming that "using latest version" is ok most of the time.
-
-### Example {#example}
-
-First create a vim-scripts file having one plugin name per line. Example:
-
-```vim
-"tlib"
-{'name': 'vim-addon-sql'}
-{'filetype_regex': '\%(vim)$', 'names': ['reload', 'vim-dev-plugin']}
-```
-
-Such vim-scripts file can be read by VAM as well like this:
-
-```vim
-call vam#Scripts(expand('~/.vim-scripts'), {})
-```
-
-Create a default.nix file:
-
-```nix
-{ nixpkgs ? import <nixpkgs> {}, compiler ? "ghc7102" }:
-nixpkgs.vim_configurable.customize { name = "vim"; vimrcConfig.vam.pluginDictionaries = [ "vim-addon-vim2nix" ]; }
-```
-
-Create a generate.vim file:
-
-```vim
-ActivateAddons vim-addon-vim2nix
-let vim_scripts = "vim-scripts"
-call nix#ExportPluginsForNix({
-\  'path_to_nixpkgs': eval('{"'.substitute(substitute(substitute($NIX_PATH, ':', ',', 'g'), '=',':', 'g'), '\([:,]\)', '"\1"',"g").'"}')["nixpkgs"],
-\  'cache_file': '/tmp/vim2nix-cache',
-\  'try_catch': 0,
-\  'plugin_dictionaries': ["vim-addon-manager"]+map(readfile(vim_scripts), 'eval(v:val)')
-\ })
-```
-
-Then run
-
-```bash
-nix-shell -p vimUtils.vim_with_vim2nix --command "vim -c 'source generate.vim'"
-```
-
-You should get a Vim buffer with the nix derivations (output1) and vam.pluginDictionaries (output2).
-You can add your Vim to your system's configuration file like this and start it by "vim-my":
-
-```nix
-my-vim =
-  let plugins = let inherit (vimUtils) buildVimPluginFrom2Nix; in {
-    copy paste output1 here
-  }; in vim_configurable.customize {
-    name = "vim-my";
-
-    vimrcConfig.vam.knownPlugins = plugins; # optional
-    vimrcConfig.vam.pluginDictionaries = [
-       copy paste output2 here
-    ];
-
-    # Pathogen would be
-    # vimrcConfig.pathogen.knownPlugins = plugins; # plugins
-    # vimrcConfig.pathogen.pluginNames = ["tlib"];
-  };
-```
-
-Sample output1:
-
-```nix
-"reload" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-  name = "reload";
-  src = fetchgit {
-    url = "https://github.com/xolox/vim-reload";
-    rev = "0a601a668727f5b675cb1ddc19f6861f3f7ab9e1";
-    sha256 = "0vb832l9yxj919f5hfg6qj6bn9ni57gnjd3bj7zpq7d4iv2s4wdh";
-  };
-  dependencies = ["nim-misc"];
-
-};
-[...]
-```
-
-Sample output2:
-
-```nix
-[
-  ''vim-addon-manager''
-  ''tlib''
-  { "name" = ''vim-addon-sql''; }
-  { "filetype_regex" = ''\%(vim)$$''; "names" = [ ''reload'' ''vim-dev-plugin'' ]; }
-]
 ```
 
 ## Adding new plugins to nixpkgs {#adding-new-plugins-to-nixpkgs}
@@ -326,7 +227,7 @@ Sometimes plugins require an override that must be changed when the plugin is up
 
 To add a new plugin, run `./update.py --add "[owner]/[name]"`. **NOTE**: This script automatically commits to your git repository. Be sure to check out a fresh branch before running.
 
-Finally, there are some plugins that are also packaged in nodePackages because they have Javascript-related build steps, such as running webpack. Those plugins are not listed in `vim-plugin-names` or managed by `update.py` at all, and are included separately in `overrides.nix`. Currently, all these plugins are related to the `coc.nvim` ecosystem of Language Server Protocol integration with vim/neovim.
+Finally, there are some plugins that are also packaged in nodePackages because they have Javascript-related build steps, such as running webpack. Those plugins are not listed in `vim-plugin-names` or managed by `update.py` at all, and are included separately in `overrides.nix`. Currently, all these plugins are related to the `coc.nvim` ecosystem of the Language Server Protocol integration with vim/neovim.
 
 ## Updating plugins in nixpkgs {#updating-plugins-in-nixpkgs}
 

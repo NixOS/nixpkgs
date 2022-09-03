@@ -8,7 +8,7 @@
 , python3
 , dbus
 , polkit
-, systemd
+, systemdMinimal
 , IOKit
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://pcsclite.apdu.fr/files/pcsc-lite-${version}.tar.bz2";
-    sha256 = "sha256:024x0hadn0kc0m9yz3l2pqzc5mdqyza9lmckg0bn4xak6frzkqwy";
+    hash = "sha256-nuP5szNTdWIXeJNVmtT3uNXCPr6Cju9TBWwC2xQEnQg=";
   };
 
   patches = [ ./no-dropdir-literals.patch ];
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config perl ];
 
   buildInputs = [ python3 ]
-    ++ lib.optionals stdenv.isLinux [ dbus polkit systemd ]
+    ++ lib.optionals stdenv.isLinux [ dbus polkit systemdMinimal ]
     ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
   meta = with lib; {

@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.spice-space.org/usbredir.html";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ offline ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

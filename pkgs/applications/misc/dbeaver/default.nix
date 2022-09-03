@@ -23,16 +23,16 @@
   inherit maven; # use overridden maven version (see dbeaver's entry in all-packages.nix)
 }) rec {
   pname = "dbeaver";
-  version = "22.0.5"; # When updating also update mvnSha256
+  version = "22.1.5"; # When updating also update mvnSha256
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "sha256-P+t1wtMTVKbfEXCFuz8zPNy3z4YysJRyOvTxiDFlp2c=";
+    sha256 = "sha256-KMrevQ37c84UD46XygKa0Q06qacJianoYqfe4j4MfEI=";
   };
 
-  mvnSha256 = "veclFlzLhTU+nT360qxRNut+yEi2dfTBxdQASyRMqhI=";
+  mvnSha256 = "KVE+AYYEWN9bjAWop4mpiPq8yU3GdSGqOTmLG4pdflQ=";
   mvnParameters = "-P desktop,all-platforms";
 
   nativeBuildInputs = [
@@ -127,6 +127,10 @@
       PostgreSQL, MariaDB, SQLite, Oracle, DB2, SQL Server, Sybase, MS Access,
       Teradata, Firebird, Derby, etc.
     '';
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # dependencies from maven
+    ];
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
     maintainers = with maintainers; [ jojosch mkg20001 ];

@@ -9,6 +9,7 @@
 , fetchpatch
 , fetchPypi
 , isPy3k
+, libcxxabi
 , openssl
 , Security
 , six
@@ -56,6 +57,10 @@ buildPythonPackage rec {
     six
   ] ++ lib.optionals (!isPy3k) [
     enum34
+  ];
+
+  LDFLAGS = lib.optionals stdenv.isDarwin [
+    "-L${lib.getLib libcxxabi}/lib"
   ];
 
   dontUseCmakeConfigure = true;

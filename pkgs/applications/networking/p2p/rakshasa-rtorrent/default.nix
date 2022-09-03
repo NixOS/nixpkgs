@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-HTwAs8dfZVXfLRNiT6QpjKGnuahHfoMfYWqdKkedUL0=";
   };
 
+  passthru = {
+    inherit libtorrent;
+  };
+
   nativeBuildInputs = [
     autoconf-archive
     autoreconfHook

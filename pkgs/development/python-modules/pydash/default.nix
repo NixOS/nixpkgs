@@ -6,7 +6,7 @@
 , mock
 , pytestCheckHook
 , pythonOlder
-, sphinx_rtd_theme
+, sphinx-rtd-theme
 }:
 
 buildPythonPackage rec {
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   checkInputs = [
     invoke
     mock
-    sphinx_rtd_theme
+    sphinx-rtd-theme
     pytestCheckHook
   ];
 

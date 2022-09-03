@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qrcodegen";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "nayuki";
     repo = "QR-Code-generator";
     rev = "v${version}";
-    sha256 = "sha256-WH6O3YE/+NNznzl52TXZYL+6O25GmKSnaFqDDhRl4As=";
+    sha256 = "sha256-aci5SFBRNRrSub4XVJ2luHNZ2pAUegjgQ6pD9kpkaTY=";
   };
 
   preBuild = ''

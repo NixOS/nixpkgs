@@ -1,6 +1,6 @@
 { stdenv, lib, pkgs, fetchurl, buildEnv
 , coreutils, findutils, gnugrep, gnused, getopt, git, tree, gnupg, openssl
-, which, procps , qrencode , makeWrapper, pass, symlinkJoin
+, which, openssh, procps, qrencode, makeWrapper, pass, symlinkJoin
 
 , xclip ? null, xdotool ? null, dmenu ? null
 , x11Support ? !stdenv.isDarwin , dmenuSupport ? (x11Support || waylandSupport)
@@ -33,7 +33,8 @@ let
     in buildEnv {
       name = "pass-extensions-env";
       paths = selected;
-      buildInputs = [ makeWrapper ] ++ concatMap (x: x.buildInputs) selected;
+      nativeBuildInputs = [ makeWrapper ];
+      buildInputs = concatMap (x: x.buildInputs) selected;
 
       postBuild = ''
         files=$(find $out/bin/ -type f -exec readlink -f {} \;)
@@ -91,8 +92,9 @@ stdenv.mkDerivation rec {
     gnused
     tree
     which
-    qrencode
+    openssh
     procps
+    qrencode
   ] ++ optional stdenv.isDarwin openssl
     ++ optional x11Support xclip
     ++ optional waylandSupport wl-clipboard

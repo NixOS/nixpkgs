@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "help2man";
-  version = "1.49.1";
+  version = "1.49.2";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-/ZmmZOxL6ahqDdiXGZifFPNnqcB5110OHXHhinu1GwM=";
+    sha256 = "sha256-ni4OITp+CjYkTu1iBNkCtlBGAqV4tuzRUmixRU3q3TY=";
   };
 
   strictDeps = true;

@@ -4,11 +4,16 @@
 
 let
   inherit (phpPackages) composer;
+
+  filterSrc = src:
+    builtins.filterSource (path: type: type != "directory" || (baseNameOf path != ".git" && baseNameOf path != ".git" && baseNameOf path != ".svn")) src;
+
   buildZipPackage = { name, src }:
     stdenv.mkDerivation {
       inherit name src;
-      buildInputs = [ unzip ];
+      nativeBuildInputs = [ unzip ];
       buildCommand = ''
+        shopt -s dotglob
         unzip $src
         baseDir=$(find . -type d -mindepth 1 -maxdepth 1)
         cd $baseDir
@@ -28,6 +33,7 @@ let
     , removeComposerArtifacts ? false
     , postInstall ? ""
     , noDev ? false
+    , composerExtraArgs ? ""
     , unpackPhase ? "true"
     , buildPhase ? "true"
     , ...}@args:
@@ -132,10 +138,9 @@ let
             ''}
           '') (builtins.attrNames dependencies);
 
-      extraArgs = removeAttrs args [ "name" "packages" "devPackages" "buildInputs" ];
+      extraArgs = removeAttrs args [ "packages" "devPackages" "buildInputs" ];
     in
     stdenv.mkDerivation ({
-      name = "composer-${name}";
       buildInputs = [ php composer ] ++ buildInputs;
 
       inherit unpackPhase buildPhase;
@@ -174,7 +179,7 @@ let
 
         # Reconstruct the installed.json file from the lock file
         mkdir -p vendor/composer
-        ${reconstructInstalled} composer.lock > vendor/composer/installed.json
+        ${php}/bin/php ${reconstructInstalled} composer.lock > vendor/composer/installed.json
 
         # Copy or symlink the provided dependencies
         cd vendor
@@ -185,14 +190,14 @@ let
         # Reconstruct autoload scripts
         # We use the optimize feature because Nix packages cannot change after they have been built
         # Using the dynamic loader for a Nix package is useless since there is nothing to dynamically reload.
-        composer dump-autoload --optimize ${lib.optionalString noDev "--no-dev"}
+        composer dump-autoload --optimize ${lib.optionalString noDev "--no-dev"} ${composerExtraArgs}
 
         # Run the install step as a validation to confirm that everything works out as expected
-        composer install --optimize-autoloader ${lib.optionalString noDev "--no-dev"}
+        composer install --optimize-autoloader ${lib.optionalString noDev "--no-dev"} ${composerExtraArgs}
 
         ${lib.optionalString executable ''
           # Reconstruct the bin/ folder if we deploy an executable project
-          ${constructBin} composer.json
+          ${php}/bin/php ${constructBin} composer.json
           ln -s $(pwd)/vendor/bin $out/bin
         ''}
 
@@ -232,6 +237,7 @@ let
   } // extraArgs);
 in
 {
+  inherit filterSrc;
   composer = lib.makeOverridable composer;
   buildZipPackage = lib.makeOverridable buildZipPackage;
   buildPackage = lib.makeOverridable buildPackage;

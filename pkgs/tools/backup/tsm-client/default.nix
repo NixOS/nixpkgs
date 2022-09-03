@@ -45,7 +45,7 @@
 # point to this derivations `/dsmi_dir` directory symlink.
 # Other environment variables might be necessary,
 # depending on local configuration or usage; see:
-# https://www.ibm.com/docs/en/spectrum-protect/8.1.13?topic=solaris-set-api-environment-variables
+# https://www.ibm.com/docs/en/spectrum-protect/8.1.15?topic=solaris-set-api-environment-variables
 
 
 # The newest version of TSM client should be discoverable by
@@ -58,11 +58,11 @@
 #   check the date of the "Linux x86_64 client"
 # * "IBM Spectrum Protect BA client ... interim fix downloads"
 # Look for the "Linux x86_64 client" rows
-# in the table # at the bottom of each page.
+# in the table at the bottom of each page.
 # Follow the "HTTPS" link of the row with the latest date stamp.
 # In the directory listing to show up, pick the big `.tar` file.
 #
-# (as of 2021-12-18)
+# (as of 2022-08-13)
 
 
 let
@@ -72,6 +72,7 @@ let
     downloadPage = "https://www.ibm.com/support/pages/ibm-spectrum-protect-downloads-latest-fix-packs-and-interim-fixes";
     platforms = [ "x86_64-linux" ];
     mainProgram = "dsmc";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.yarny ];
     description = "IBM Spectrum Protect (Tivoli Storage Manager) CLI and API";
@@ -106,10 +107,10 @@ let
 
   unwrapped = stdenv.mkDerivation rec {
     name = "tsm-client-${version}-unwrapped";
-    version = "8.1.14.0";
+    version = "8.1.15.1";
     src = fetchurl {
       url = mkSrcUrl version;
-      sha256 = "1iczc4w8rwzqnw01r89kwxcdr7pnwh3nqr3a0q8ncrxrhsy3qwn0";
+      hash = "sha512-DURIMlWlmu+l2UT3bAMaFPlwO+UlrfgaYCsm/JonvvC0K0WallhNKFd7sp0amPkU+4QHE2fkFrTGE3/lY+fghQ==";
     };
     inherit meta passthru;
 
@@ -158,6 +159,16 @@ let
         fi
         ln --symbolic --force --no-target-directory "$out/$(cut -b 7- <<< "$target")" "$link"
       done
+    '';
+
+    # since 7b9fd5d1c9802131ca0a01ff08a3ff64379d2df4
+    # autopatchelf misses to add $out/lib to rpath;
+    # we have to call autopatchelf manually as it would
+    # run too late and overwrite our rpath otherwise
+    dontAutoPatchelf = true;
+    postFixup = ''
+      autoPatchelf $out
+      patchelf --add-rpath $out/lib $out/lib/*
     '';
   };
 

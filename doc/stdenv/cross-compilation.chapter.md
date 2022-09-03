@@ -153,6 +153,24 @@ Add the following to your `mkDerivation` invocation.
 doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 ```
 
+#### Package using Meson needs to run binaries for the host platform during build. {#cross-meson-runs-host-code}
+
+Add `mesonEmulatorHook` to `nativeBuildInputs` conditionally on if the target binaries can be executed.
+
+e.g.
+
+```
+nativeBuildInputs = [
+  meson
+] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  mesonEmulatorHook
+];
+```
+
+Example of an error which this fixes.
+
+`[Errno 8] Exec format error: './gdk3-scan'`
+
 ## Cross-building packages {#sec-cross-usage}
 
 Nixpkgs can be instantiated with `localSystem` alone, in which case there is no cross-compiling and everything is built by and for that system, or also with `crossSystem`, in which case packages run on the latter, but all building happens on the former. Both parameters take the same schema as the 3 (build, host, and target) platforms defined in the previous section. As mentioned above, `lib.systems.examples` has some platforms which are used as arguments for these parameters in practice. You can use them programmatically, or on the command line:

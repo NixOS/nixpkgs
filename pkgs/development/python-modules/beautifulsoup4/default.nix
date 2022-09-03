@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, chardet
 , html5lib
 , lxml
 , pytestCheckHook
@@ -22,7 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-rZqlW2XvKAjrQF9Gz3Tff8twRNXLwmSH+W6y7y5DZpM=";
   };
 
+  nativeBuildInputs = [
+    sphinxHook
+  ];
+
   propagatedBuildInputs = [
+    chardet
     html5lib
     lxml
     soupsieve
@@ -31,7 +37,6 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
-  nativeBuildInputs = [ sphinxHook ];
 
   pythonImportsCheck = [
     "bs4"

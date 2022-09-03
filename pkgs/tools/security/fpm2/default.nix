@@ -1,22 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, gnupg, gtk2
-, libxml2, intltool
+{ lib, stdenv, fetchurl, pkg-config, gnupg, gtk3
+, libxml2, intltool, nettle
 }:
-
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "fpm2";
-  version = "0.79";
+  version = "0.90";
 
   src = fetchurl {
-    url = "https://als.regnet.cz/fpm2/download/fpm2-${version}.tar.bz2";
-    sha256 = "d55e9ce6be38a44fc1053d82db2d117cf3991a51898bd86d7913bae769f04da7";
+    url = "https://als.regnet.cz/fpm2/download/fpm2-${version}.tar.xz";
+    sha256 = "1lfzja3vzd6l6hfvw8gvg4qkl5iy6gra5pa8gjlps9l63k2bjfhz";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gnupg gtk2 libxml2 intltool ];
+  buildInputs = [ gnupg gtk3 libxml2 intltool nettle ];
 
-  meta = {
+  meta = with lib; {
     description = "GTK2 port from Figaro's Password Manager originally developed by John Conneely, with some new enhancements";
     homepage    = "https://als.regnet.cz/fpm2/";
     license     = licenses.gpl2;

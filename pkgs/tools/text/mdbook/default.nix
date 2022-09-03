@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices }:
+{ lib, stdenv, fetchFromGitHub, nix, rustPlatform, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook";
-  version = "0.4.17";
+  version = "0.4.21";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "mdBook";
     rev = "v${version}";
-    sha256 = "sha256-08ccRiOBXYqueKfyi/Ry39O2xOXUKishgqhn6RdbvUE=";
+    sha256 = "sha256-ggcyOsA4cyo5l87cZmOMI0w1gCzmWy9NRJiWxjBdB1E=";
   };
 
-  cargoSha256 = "sha256-vXUjKpCGlHlBvXLtmGkFtHRxxZakiEzuNzReFGEl6dw=";
+  cargoSha256 = "sha256-KVoMC8ypikABVkIj5dCSHzYZ9CV8UMuAFxSEYLaQTSk=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
@@ -20,6 +20,12 @@ rustPlatform.buildRustPackage rec {
   # Can be removed when https://github.com/rust-lang/mdBook/pull/1777
   # is released.
   logLevel = "info";
+
+  passthru = {
+    tests = {
+      inherit nix;
+    };
+  };
 
   meta = with lib; {
     description = "Create books from MarkDown";

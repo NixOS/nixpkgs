@@ -1,20 +1,23 @@
-{ stdenv, lib, fetchgit, bash, coreutils, dtc, file, gawk, gnugrep, gnused }:
+{ stdenv, lib, fetchgit, bash, coreutils, dtc, file, gawk, gnugrep, gnused, pandoc, which }:
 
 stdenv.mkDerivation rec {
   pname = "restool";
-  version = "20.12";
+  version = "2.4";
 
   src = fetchgit {
     url = "https://source.codeaurora.org/external/qoriq/qoriq-components/restool";
-    rev = "LSDK-${version}";
-    sha256 = "137xvvms3n4wwb5v2sv70vsib52s3s314306qa0mqpgxf9fb19zl";
+    rev = "abd2f5b7181db9d03db9e6ccda0194923b73e9a2";
+    sha256 = "sha256-ryTDyqSy39e8Omf7l8lK4mLWr8jccDhMVPldkVGSQVo=";
   };
 
-  nativeBuildInputs = [ file ];
-  buildInputs = [ bash coreutils dtc gawk gnugrep gnused ];
+  nativeBuildInputs = [ file pandoc ];
+  buildInputs = [ bash coreutils dtc gawk gnugrep gnused which ];
 
+  enableParallelBuilding = true;
   makeFlags = [
-    "prefix=$(out)"
+    "prefix="
+    "bindir_completion=/share/bash-completion/completions"
+    "DESTDIR=$(out)"
     "VERSION=${version}"
   ];
 

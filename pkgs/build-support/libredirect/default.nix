@@ -27,7 +27,7 @@ else stdenv.mkDerivation rec {
 
   outputs = ["out" "hook"];
 
-  libName = "libredirect" + stdenv.targetPlatform.extensions.sharedLibrary;
+  libName = "libredirect" + stdenv.hostPlatform.extensions.sharedLibrary;
 
   buildPhase = ''
     runHook preBuild

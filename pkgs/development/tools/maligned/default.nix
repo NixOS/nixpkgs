@@ -1,30 +1,31 @@
-{ buildGoPackage
-, lib
+{ lib
+, buildGoModule
 , fetchFromGitHub
+, go
 }:
 
-buildGoPackage rec {
-  pname = "maligned-unstable";
-  version = "2018-07-07";
-  rev = "6e39bd26a8c8b58c5a22129593044655a9e25959";
-
-  goPackagePath = "github.com/mdempsky/maligned";
+buildGoModule rec {
+  pname = "maligned";
+  version = "unstable-2022-02-04";
+  rev = "d7cd9a96ae47d02b08234503b54709ad4ae82105";
 
   src = fetchFromGitHub {
-    inherit rev;
-
     owner = "mdempsky";
     repo = "maligned";
-    sha256 = "08inr5xjqv9flrlyhqd8ck1q26y5xb6iilz0xkb6bqa4dl5ialhi";
+    inherit rev;
+    sha256 = "sha256-exljmDNtVhjJkvh0EomcbBXSsmQx4I59MHDfMWSQyKk=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-q/0lxZWk3a7brMsbLvZUSZ8XUHfWfx79qxjir1Vygx4=";
+
+  allowGoReference = true;
+
+  checkInputs = [ go ];
 
   meta = with lib; {
     description = "Tool to detect Go structs that would take less memory if their fields were sorted";
     homepage = "https://github.com/mdempsky/maligned";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }

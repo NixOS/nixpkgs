@@ -28,14 +28,14 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "3.5";
+      version = "3.6";
       pname = "weechat";
 
       hardeningEnable = [ "pie" ];
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
-        sha256 = "sha256-8ZSa2dQPTiChGW00T5OASHmd0C2PatUtTu9Gr4CF4Oc=";
+        sha256 = "sha256-GkYN/Y4LQQr7GdSDu0ucXXM9wWPAqKD1txJXkOhJMDc=";
       };
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
@@ -85,7 +85,7 @@ let
           on https://nixos.org/nixpkgs/manual/#sec-weechat .
         '';
         license = lib.licenses.gpl3;
-        maintainers = with lib.maintainers; [ lovek323 lheckemann ];
+        maintainers = with lib.maintainers; [ lovek323 ];
         platforms = lib.platforms.unix;
       };
     }

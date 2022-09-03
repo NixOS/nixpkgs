@@ -6,7 +6,6 @@
 , jaraco_text
 , more-itertools
 , portend
-, pyopenssl
 , pypytools
 , pytest-mock
 , pytestCheckHook
@@ -17,7 +16,6 @@
 , setuptools-scm
 , setuptools-scm-git-archive
 , six
-, trustme
 }:
 
 buildPythonPackage rec {
@@ -45,14 +43,12 @@ buildPythonPackage rec {
   checkInputs = [
     jaraco_text
     portend
-    pyopenssl
     pypytools
     pytest-mock
     pytestCheckHook
     requests
     requests-toolbelt
     requests-unixsocket
-    trustme
   ];
 
   # Disable doctest plugin because times out
@@ -79,6 +75,8 @@ buildPythonPackage rec {
     # avoid attempting to use 3 packages not available on nixpkgs
     # (jaraco.apt, jaraco.context, yg.lockfile)
     "cheroot/test/test_wsgi.py"
+    # requires pyopenssl
+    "cheroot/test/test_ssl.py"
   ];
 
   pythonImportsCheck = [

@@ -169,7 +169,7 @@ configuration, GPU devices have world-read/write permissions
 (`/dev/dri/renderD*`) or are tagged as `uaccess` (`/dev/dri/card*`). The
 access control lists of devices with the `uaccess` tag will be updated
 automatically when a user logs in through `systemd-logind`. For example,
-if the user *jane* is logged in, the access control list should look as
+if the user *alice* is logged in, the access control list should look as
 follows:
 
 ```ShellSession
@@ -178,7 +178,7 @@ $ getfacl /dev/dri/card0
 # owner: root
 # group: video
 user::rw-
-user:jane:rw-
+user:alice:rw-
 group::rw-
 mask::rw-
 other::---

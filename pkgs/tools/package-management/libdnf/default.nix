@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libdnf";
-  version = "0.66.0";
+  version = "0.68.0";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = pname;
     rev = version;
-    sha256 = "sha256-fQyNm51roz6wn9QAE8/ZIrutyWP45xiKVHzn8n0LcwE=";
+    sha256 = "sha256-vXk+ob2lBCXF0+VUSxUpZL60Vn1dJTdyQAgsJkCnml8=";
   };
 
   nativeBuildInputs = [

@@ -1,13 +1,11 @@
 { lib
-, buildGoPackage
+, buildGoModule
 , fetchFromGitHub
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "ircdog";
   version = "0.3.0";
-
-  goPackagePath = "github.com/ergochat/ircdog";
 
   src = fetchFromGitHub {
     owner = "goshuirc";
@@ -16,6 +14,7 @@ buildGoPackage rec {
     sha256 = "sha256-x3ihWLgVYu17vG1xQTgIr4TSkeZ467TZBV1fPTPnZgw=";
     fetchSubmodules = true;
   };
+  vendorSha256 = null;
 
   meta = with lib; {
     description = "ircdog is a simple wrapper over the raw IRC protocol that can respond to pings, and interprets formatting codes";

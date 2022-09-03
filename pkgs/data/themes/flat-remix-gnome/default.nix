@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "flat-remix-gnome";
-  version = "20220524";
+  version = "20220622";
 
   src = fetchFromGitHub {
     owner = "daniruiz";
     repo = pname;
     rev = version;
-    hash = "sha256-m7Er6F0VWcdV3+oUPfhJJq80oaht15hBFtg7JQgZJI8=";
+    hash = "sha256-fm1YOKI6TLkCnkkPZkp8I0xWkNrZt4sVktYZyD5foKU=";
   };
 
   nativeBuildInputs = [ glib fake-dconf ];

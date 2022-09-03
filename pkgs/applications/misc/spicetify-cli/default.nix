@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "spicetify-cli";
-  version = "2.9.4";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
-    owner = "khanhas";
+    owner = "spicetify";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dHkbjmb9qlMO+pYUmdnoztkrMqPW6GfceAUxgnRmlDA=";
+    sha256 = "sha256-NX3qbnnbV2mLxBQCjfl7xNicyir6usi2uYGw6Yij/ho=";
   };
 
   vendorSha256 = "sha256-zYIbtcDM9iYSRHagvI9D284Y7w0ZxG4Ba1p4jqmQyng=";
@@ -25,7 +25,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Command-line tool to customize Spotify client";
-    homepage = "https://github.com/khanhas/spicetify-cli/";
+    homepage = "https://github.com/spicetify/spicetify-cli/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jonringer ];
   };

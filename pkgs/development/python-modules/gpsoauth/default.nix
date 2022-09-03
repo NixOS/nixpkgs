@@ -7,14 +7,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.0.1";
+  version = "1.0.2";
   pname = "gpsoauth";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wxLyvrNwT3QQHGLCxaIFdRG7OJpECMpynE+lgAGtFk0=";
+    sha256 = "sha256-68rnLrMlp/BsvqlbnV5kvsJTcDEtsV6OLkbE1U5ynno=";
   };
 
   propagatedBuildInputs = [ pycryptodomex requests ];

@@ -135,7 +135,9 @@ let
   # and libraries path.
   # We prefetch it, patch it, and override it in a global bazelrc.
   system = if stdenv.hostPlatform.isDarwin then "darwin" else "linux";
-  arch = stdenv.hostPlatform.parsed.cpu.name;
+
+  # on aarch64 Darwin, `uname -m` returns "arm64"
+  arch = with stdenv.hostPlatform; if isDarwin && isAarch64 then "arm64" else parsed.cpu.name;
 
   remote_java_tools = stdenv.mkDerivation {
     name = "remote_java_tools_${system}";
@@ -197,6 +199,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # source bundles dependencies as jars
+    ];
     license = licenses.asl20;
     maintainers = lib.teams.bazel.members;
     inherit platforms;
@@ -253,7 +259,7 @@ stdenv.mkDerivation rec {
       runLocal = name: attrs: script:
       let
         attrs' = removeAttrs attrs [ "buildInputs" ];
-        buildInputs = [ python3 which ] ++ (attrs.buildInputs or []);
+        buildInputs = attrs.buildInputs or [];
       in
       runCommandCC name ({
         inherit buildInputs;
@@ -319,13 +325,13 @@ stdenv.mkDerivation rec {
 
     in (if !stdenv.hostPlatform.isDarwin then {
       # `extracted` doesn’t work on darwin
-      shebang = callPackage ../shebang-test.nix { inherit runLocal extracted bazelTest distDir; };
+      shebang = callPackage ../shebang-test.nix { inherit runLocal extracted bazelTest distDir; bazel = bazel_self; };
     } else {}) // {
-      bashTools = callPackage ../bash-tools-test.nix { inherit runLocal bazelTest distDir; };
-      cpp = callPackage ../cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; };
-      java = callPackage ../java-test.nix { inherit runLocal bazelTest bazel-examples distDir; };
-      protobuf = callPackage ../protobuf-test.nix { inherit runLocal bazelTest distDir; };
-      pythonBinPath = callPackage ../python-bin-path-test.nix { inherit runLocal bazelTest distDir; };
+      bashTools = callPackage ../bash-tools-test.nix { inherit runLocal bazelTest distDir; bazel = bazel_self; };
+      cpp = callPackage ../cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazel_self; };
+      java = callPackage ../java-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazel_self; };
+      protobuf = callPackage ../protobuf-test.nix { inherit runLocal bazelTest distDir; bazel = bazel_self; };
+      pythonBinPath = callPackage ../python-bin-path-test.nix { inherit runLocal bazelTest distDir; bazel = bazel_self; };
 
       bashToolsWithNixHacks = callPackage ../bash-tools-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
 
@@ -587,6 +593,7 @@ stdenv.mkDerivation rec {
     # The binary _must_ exist with this naming if your project contains a .bazelversion
     # file.
     cp ./bazel_src/scripts/packages/bazel.sh $out/bin/bazel
+    wrapProgram $out/bin/bazel $wrapperfile --suffix PATH : ${defaultShellPath}
     mv ./bazel_src/output/bazel $out/bin/bazel-${version}-${system}-${arch}
 
     mkdir $out/share

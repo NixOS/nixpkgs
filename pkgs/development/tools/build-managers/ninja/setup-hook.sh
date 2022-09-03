@@ -14,7 +14,7 @@ ninjaBuildPhase() {
     )
 
     echoCmd 'build flags' "${flagsArray[@]}"
-    ninja "${flagsArray[@]}" | cat
+    TERM=dumb ninja "${flagsArray[@]}"
 
     runHook postBuild
 }
@@ -33,7 +33,7 @@ ninjaInstallPhase() {
     )
 
     echoCmd 'install flags' "${flagsArray[@]}"
-    ninja "${flagsArray[@]}" | cat
+    TERM=dumb ninja "${flagsArray[@]}"
 
     runHook postInstall
 }
@@ -67,7 +67,7 @@ ninjaCheckPhase() {
         )
 
         echoCmd 'check flags' "${flagsArray[@]}"
-        ninja "${flagsArray[@]}" | cat
+        TERM=dumb ninja "${flagsArray[@]}"
     fi
 
     runHook postCheck

@@ -1,11 +1,12 @@
 { lib, mkCoqDerivation, coq, version ? null }:
 
-with lib; mkCoqDerivation {
+with lib; (mkCoqDerivation {
   pname = "equations";
   owner = "mattam82";
   repo = "Coq-Equations";
   inherit version;
   defaultVersion = switch coq.coq-version [
+    { case = "8.16"; out = "1.3+8.16"; }
     { case = "8.15"; out = "1.3+8.15"; }
     { case = "8.14"; out = "1.3+8.14"; }
     { case = "8.13"; out = "1.3+8.13"; }
@@ -51,13 +52,16 @@ with lib; mkCoqDerivation {
     release."1.3+8.14".sha256         = "19bj9nncd1r9g4273h5qx35gs3i4bw5z9bhjni24b413hyj55hkv";
     release."1.3+8.15".rev            = "v1.3-8.15";
     release."1.3+8.15".sha256         = "1vfcfpsp9zyj0sw0cwibk76nj6n0r6gwh8m1aa3lbvc0b1kbm32k";
+    release."1.3+8.16".rev            = "v1.3-8.16";
+    release."1.3+8.16".sha256         = "sha256-zyMGeRObtSGWh7n3WCqesBZL5EgLvKwmnTy09rYpxyE=";
 
   mlPlugin = true;
-  preBuild = "coq_makefile -f _CoqProject -o Makefile";
 
   meta = {
     homepage = "https://mattam82.github.io/Coq-Equations/";
     description = "A plugin for Coq to add dependent pattern-matching";
     maintainers = with maintainers; [ jwiegley ];
   };
-}
+}).overrideAttrs (o: {
+  preBuild = "coq_makefile -f _CoqProject -o Makefile${optionalString (versionAtLeast o.version "1.2.1") ".coq"}";
+})

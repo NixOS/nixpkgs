@@ -148,6 +148,7 @@ stdenv.mkDerivation rec {
     install -D d8 $out/bin/d8
     install -D -m644 obj/libv8_monolith.a $out/lib/libv8.a
     install -D -m644 icudtl.dat $out/share/v8/icudtl.dat
+    ln -s libv8.a $out/lib/libv8_monolith.a
     cp -r ../../include $out
 
     mkdir -p $out/lib/pkgconfig

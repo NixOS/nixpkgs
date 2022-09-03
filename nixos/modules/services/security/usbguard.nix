@@ -39,15 +39,15 @@ in
 
   options = {
     services.usbguard = {
-      enable = mkEnableOption "USBGuard daemon";
+      enable = mkEnableOption (lib.mdDoc "USBGuard daemon");
 
       package = mkOption {
         type = types.package;
         default = pkgs.usbguard;
         defaultText = literalExpression "pkgs.usbguard";
-        description = ''
+        description = lib.mdDoc ''
           The usbguard package to use. If you do not need the Qt GUI, use
-          <literal>pkgs.usbguard-nox</literal> to save disk space.
+          `pkgs.usbguard-nox` to save disk space.
         '';
       };
 
@@ -57,28 +57,26 @@ in
         example = ''
           allow with-interface equals { 08:*:* }
         '';
-        description = ''
+        description = lib.mdDoc ''
           The USBGuard daemon will load this as the policy rule set.
           As these rules are NixOS managed they are immutable and can't
           be changed by the IPC interface.
 
           If you do not set this option, the USBGuard daemon will load
-          it's policy rule set from <literal>${defaultRuleFile}</literal>.
+          it's policy rule set from `${defaultRuleFile}`.
           This file can be changed manually or via the IPC interface.
 
-          Running <literal>usbguard generate-policy</literal> as root will
+          Running `usbguard generate-policy` as root will
           generate a config for your currently plugged in devices.
 
-          For more details see <citerefentry>
-          <refentrytitle>usbguard-rules.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          For more details see {manpage}`usbguard-rules.conf(5)`.
         '';
       };
 
       implictPolicyTarget = mkOption {
         type = policy;
         default = "block";
-        description = ''
+        description = lib.mdDoc ''
           How to treat USB devices that don't match any rule in the policy.
           Target should be one of allow, block or reject (logically remove the
           device node from the system).
@@ -88,7 +86,7 @@ in
       presentDevicePolicy = mkOption {
         type = policy;
         default = "apply-policy";
-        description = ''
+        description = lib.mdDoc ''
           How to treat USB devices that are already connected when the daemon
           starts. Policy should be one of allow, block, reject, keep (keep
           whatever state the device is currently in) or apply-policy (evaluate
@@ -99,7 +97,7 @@ in
       presentControllerPolicy = mkOption {
         type = policy;
         default = "keep";
-        description = ''
+        description = lib.mdDoc ''
           How to treat USB controller devices that are already connected when
           the daemon starts. One of allow, block, reject, keep or apply-policy.
         '';
@@ -108,7 +106,7 @@ in
       insertedDevicePolicy = mkOption {
         type = policy;
         default = "apply-policy";
-        description = ''
+        description = lib.mdDoc ''
           How to treat USB devices that are already connected after the daemon
           starts. One of block, reject, apply-policy.
         '';
@@ -117,7 +115,7 @@ in
       restoreControllerDeviceState = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           The  USBGuard  daemon  modifies  some attributes of controller
           devices like the default authorization state of new child device
           instances. Using this setting, you can controll whether the daemon
@@ -130,7 +128,7 @@ in
         type = types.listOf types.str;
         default = [ "root" ];
         example = [ "root" "yourusername" ];
-        description = ''
+        description = lib.mdDoc ''
           A list of usernames that the daemon will accept IPC connections from.
         '';
       };
@@ -139,7 +137,7 @@ in
         type = types.listOf types.str;
         default = [ ];
         example = [ "wheel" ];
-        description = ''
+        description = lib.mdDoc ''
           A list of groupnames that the daemon will accept IPC connections
           from.
         '';
@@ -148,7 +146,7 @@ in
       deviceRulesWithPort = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Generate device specific rules including the "via-port" attribute.
         '';
       };

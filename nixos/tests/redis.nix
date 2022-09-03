@@ -30,7 +30,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     machine.wait_for_unit("redis-test")
 
     # The unnamed Redis server still opens a port for backward-compatibility
-    machine.wait_for_open_port("6379")
+    machine.wait_for_open_port(6379)
 
     machine.wait_for_file("${redis.servers."".unixSocket}")
     machine.wait_for_file("${redis.servers."test".unixSocket}")

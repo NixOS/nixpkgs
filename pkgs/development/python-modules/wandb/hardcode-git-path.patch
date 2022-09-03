@@ -1,7 +1,7 @@
-diff --git a/functional_tests/kfp/wandb_probe.py b/functional_tests/kfp/wandb_probe.py
+diff --git a/tests/functional_tests/t0_main/kfp/wandb_probe.py b/tests/functional_tests/t0_main/kfp/wandb_probe.py
 index 82fadfe1..25c1454c 100644
---- a/functional_tests/kfp/wandb_probe.py
-+++ b/functional_tests/kfp/wandb_probe.py
+--- a/tests/functional_tests/t0_main/kfp/wandb_probe.py
++++ b/tests/functional_tests/t0_main/kfp/wandb_probe.py
 @@ -5,7 +5,7 @@ import subprocess
  def wandb_probe_package():
      if not os.environ.get("WB_PROBE_PACKAGE"):

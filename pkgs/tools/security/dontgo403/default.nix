@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "dontgo403";
-  version = "0.3";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "devploit";
     repo = pname;
     rev = version;
-    hash = "sha256-QHkmnhOLdyci3PAhf/JIiYlCta8DJ3cZb1S6Sim0qGQ=";
+    hash = "sha256-aVPmS4qIa9v7jnK1YG9EUV81frhu3/0x3zY7akPkpeg=";
   };
 
   vendorSha256 = "sha256-jF+CSmLHMdlFpttYf3pK84wdfFAHSVPAK8S5zunUzB0=";

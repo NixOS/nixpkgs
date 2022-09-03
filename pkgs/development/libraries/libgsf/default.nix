@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgsf";
-  version = "1.14.49";
+  version = "1.14.50";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "6evjZojwEMnm5AyJA/NzKUjeuKygMleNB9B1G9gs+Fc=";
+    sha256 = "bmwg0HeDOQadWDwNY3WdKX6BfqENDYl+u+ll8W4ujlI=";
   };
 
   nativeBuildInputs = [

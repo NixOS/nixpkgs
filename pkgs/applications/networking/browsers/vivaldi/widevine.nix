@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Widevine support for Vivaldi";
     homepage = "https://www.widevine.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ betaboon ];
     platforms   = [ "x86_64-linux" ];

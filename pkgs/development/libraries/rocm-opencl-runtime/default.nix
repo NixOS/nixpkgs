@@ -6,11 +6,9 @@
 , cmake
 , rocm-cmake
 , clang
-, clang-unwrapped
 , glew
 , libglvnd
 , libX11
-, lld
 , llvm
 , mesa
 , numactl
@@ -24,24 +22,22 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-opencl-runtime";
-  version = "5.1.1";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-OpenCL-Runtime";
     rev = "rocm-${version}";
-    hash = "sha256-O7q3uTjspO/rZ2+8+g7pRfBXsCRaEr4DZxEqABHbOeY=";
+    hash = "sha256-Mk7Wssz34Uxtb9PRIEGrTn/tXtqxLMrq0damA/p/DsY=";
   };
 
   nativeBuildInputs = [ cmake rocm-cmake ];
 
   buildInputs = [
     clang
-    clang-unwrapped
     glew
     libglvnd
     libX11
-    lld
     llvm
     mesa
     numactl

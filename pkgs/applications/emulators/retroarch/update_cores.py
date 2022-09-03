@@ -59,6 +59,7 @@ CORES = {
     "mupen64plus": {"repo": "mupen64plus-libretro-nx"},
     "neocd": {"repo": "neocd_libretro"},
     "nestopia": {"repo": "nestopia"},
+    "nxengine": {"repo": "nxengine-libretro"},
     "np2kai": {"repo": "NP2kai", "owner": "AZO234", "fetch_submodules": True},
     "o2em": {"repo": "libretro-o2em"},
     "opera": {"repo": "opera-libretro"},

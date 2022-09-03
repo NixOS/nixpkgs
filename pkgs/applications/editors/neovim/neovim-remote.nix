@@ -33,6 +33,8 @@ with python3.pkgs; buildPythonApplication rec {
     "test_escape_double_quotes_in_filenames"
   ];
 
+  doCheck = !stdenv.isDarwin;
+
   meta = with lib; {
     description = "A tool that helps controlling nvim processes from a terminal";
     homepage = "https://github.com/mhinz/neovim-remote/";

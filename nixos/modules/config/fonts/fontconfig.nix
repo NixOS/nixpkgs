@@ -65,7 +65,7 @@ let
           ${fcBool cfg.hinting.autohint}
         </edit>
         <edit mode="append" name="hintstyle">
-          <const>hintslight</const>
+          <const>${cfg.hinting.style}</const>
         </edit>
         <edit mode="append" name="antialias">
           ${fcBool cfg.antialias}
@@ -226,7 +226,6 @@ in
     (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "useEmbeddedBitmaps" ] [ "fonts" "fontconfig" "useEmbeddedBitmaps" ])
     (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "forceAutohint" ] [ "fonts" "fontconfig" "forceAutohint" ])
     (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "renderMonoTTFAsBitmap" ] [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ])
-    (mkRemovedOptionModule [ "fonts" "fontconfig" "hinting" "style" ] "")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "forceAutohint" ] "")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ] "")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "dpi" ] "Use display server-specific options")
@@ -247,7 +246,7 @@ in
         enable = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             If enabled, a Fontconfig configuration file will be built
             pointing to a set of default fonts.  If you don't care about
             running X11 applications or any other program that uses
@@ -260,7 +259,7 @@ in
           internal = true;
           type     = with types; listOf path;
           default  = [ ];
-          description = ''
+          description = lib.mdDoc ''
             Fontconfig configuration packages.
           '';
         };
@@ -268,7 +267,7 @@ in
         antialias = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Enable font antialiasing. At high resolution (> 200 DPI),
             antialiasing has no visible effect; users of such displays may want
             to disable this option.
@@ -278,9 +277,9 @@ in
         localConf = mkOption {
           type = types.lines;
           default = "";
-          description = ''
+          description = lib.mdDoc ''
             System-wide customization file contents, has higher priority than
-            <literal>defaultFonts</literal> settings.
+            `defaultFonts` settings.
           '';
         };
 
@@ -288,7 +287,7 @@ in
           monospace = mkOption {
             type = types.listOf types.str;
             default = ["DejaVu Sans Mono"];
-            description = ''
+            description = lib.mdDoc ''
               System-wide default monospace font(s). Multiple fonts may be
               listed in case multiple languages must be supported.
             '';
@@ -297,7 +296,7 @@ in
           sansSerif = mkOption {
             type = types.listOf types.str;
             default = ["DejaVu Sans"];
-            description = ''
+            description = lib.mdDoc ''
               System-wide default sans serif font(s). Multiple fonts may be
               listed in case multiple languages must be supported.
             '';
@@ -306,7 +305,7 @@ in
           serif = mkOption {
             type = types.listOf types.str;
             default = ["DejaVu Serif"];
-            description = ''
+            description = lib.mdDoc ''
               System-wide default serif font(s). Multiple fonts may be listed
               in case multiple languages must be supported.
             '';
@@ -315,7 +314,7 @@ in
           emoji = mkOption {
             type = types.listOf types.str;
             default = ["Noto Color Emoji"];
-            description = ''
+            description = lib.mdDoc ''
               System-wide default emoji font(s). Multiple fonts may be listed
               in case a font does not support all emoji.
 
@@ -332,7 +331,7 @@ in
           enable = mkOption {
             type = types.bool;
             default = true;
-            description = ''
+            description = lib.mdDoc ''
               Enable font hinting. Hinting aligns glyphs to pixel boundaries to
               improve rendering sharpness at low resolution. At high resolution
               (> 200 dpi) hinting will do nothing (at best); users of such
@@ -343,10 +342,24 @@ in
           autohint = mkOption {
             type = types.bool;
             default = false;
-            description = ''
+            description = lib.mdDoc ''
               Enable the autohinter in place of the default interpreter.
               The results are usually lower quality than correctly-hinted
               fonts, but better than unhinted fonts.
+            '';
+          };
+
+          style = mkOption {
+            type = types.enum [ "hintnone" "hintslight" "hintmedium" "hintfull" ];
+            default = "hintslight";
+            description = lib.mdDoc ''
+              Hintstyle is the amount of font reshaping done to line up
+              to the grid.
+
+              hintslight will make the font more fuzzy to line up to the grid
+              but will be better in retaining font shape, while hintfull will
+              be a crisp font that aligns well to the pixel grid but will lose
+              a greater amount of font shape.
             '';
           };
         };
@@ -354,10 +367,10 @@ in
         includeUserConf = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Include the user configuration from
-            <filename>~/.config/fontconfig/fonts.conf</filename> or
-            <filename>~/.config/fontconfig/conf.d</filename>.
+            {file}`~/.config/fontconfig/fonts.conf` or
+            {file}`~/.config/fontconfig/conf.d`.
           '';
         };
 
@@ -366,26 +379,26 @@ in
           rgba = mkOption {
             default = "rgb";
             type = types.enum ["rgb" "bgr" "vrgb" "vbgr" "none"];
-            description = ''
+            description = lib.mdDoc ''
               Subpixel order. The overwhelming majority of displays are
-              <literal>rgb</literal> in their normal orientation. Select
-              <literal>vrgb</literal> for mounting such a display 90 degrees
-              clockwise from its normal orientation or <literal>vbgr</literal>
+              `rgb` in their normal orientation. Select
+              `vrgb` for mounting such a display 90 degrees
+              clockwise from its normal orientation or `vbgr`
               for mounting 90 degrees counter-clockwise. Select
-              <literal>bgr</literal> in the unlikely event of mounting 180
+              `bgr` in the unlikely event of mounting 180
               degrees from the normal orientation. Reverse these directions in
               the improbable event that the display's native subpixel order is
-              <literal>bgr</literal>.
+              `bgr`.
             '';
           };
 
           lcdfilter = mkOption {
             default = "default";
             type = types.enum ["none" "default" "light" "legacy"];
-            description = ''
+            description = lib.mdDoc ''
               FreeType LCD filter. At high resolution (> 200 DPI), LCD filtering
               has no visible effect; users of such displays may want to select
-              <literal>none</literal>.
+              `none`.
             '';
           };
 
@@ -394,7 +407,7 @@ in
         cache32Bit = mkOption {
           default = false;
           type = types.bool;
-          description = ''
+          description = lib.mdDoc ''
             Generate system fonts cache for 32-bit applications.
           '';
         };
@@ -402,8 +415,8 @@ in
         allowBitmaps = mkOption {
           type = types.bool;
           default = true;
-          description = ''
-            Allow bitmap fonts. Set to <literal>false</literal> to ban all
+          description = lib.mdDoc ''
+            Allow bitmap fonts. Set to `false` to ban all
             bitmap fonts.
           '';
         };
@@ -411,8 +424,8 @@ in
         allowType1 = mkOption {
           type = types.bool;
           default = false;
-          description = ''
-            Allow Type-1 fonts. Default is <literal>false</literal> because of
+          description = lib.mdDoc ''
+            Allow Type-1 fonts. Default is `false` because of
             poor rendering.
           '';
         };
@@ -420,7 +433,7 @@ in
         useEmbeddedBitmaps = mkOption {
           type = types.bool;
           default = false;
-          description = "Use embedded bitmaps in fonts like Calibri.";
+          description = lib.mdDoc "Use embedded bitmaps in fonts like Calibri.";
         };
 
       };

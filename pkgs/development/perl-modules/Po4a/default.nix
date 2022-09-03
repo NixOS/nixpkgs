@@ -30,8 +30,8 @@ buildPerlPackage rec {
     done
   '';
   meta = {
-    homepage = "https://po4a.org/";
     description = "Tools for helping translation of documentation";
-    license = lib.licenses.gpl2;
+    homepage = "https://po4a.org";
+    license = with lib.licenses; [ gpl2Only ];
   };
 }

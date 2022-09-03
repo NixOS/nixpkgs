@@ -17,9 +17,9 @@ import ./make-test-python.nix ({ lib, ... }: {
   testScript = ''
     machine.wait_for_unit("multi-user.target")
     machine.wait_for_unit("getty@tty1.service")
-    machine.wait_until_tty_matches(1, "login: ")
+    machine.wait_until_tty_matches("1", "login: ")
     machine.send_chars("alice\n")
-    machine.wait_until_tty_matches(1, "Password: ")
+    machine.wait_until_tty_matches("1", "Password: ")
     machine.send_chars("pass1\n")
     machine.succeed('[ "$(stat -c %a /home/alice)" == "700" ]')
     machine.succeed('[ "$(stat -c %a /home/bob)" == "750" ]')

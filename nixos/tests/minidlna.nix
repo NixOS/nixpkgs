@@ -32,7 +32,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     start_all()
     server.succeed("mkdir -p /tmp/stuff && chown minidlna: /tmp/stuff")
     server.wait_for_unit("minidlna")
-    server.wait_for_open_port("8200")
+    server.wait_for_open_port(8200)
     # requests must be made *by IP* to avoid triggering minidlna's
     # DNS-rebinding protection
     server.succeed("curl --fail http://$(getent ahostsv4 localhost | head -n1 | cut -f 1 -d ' '):8200/")

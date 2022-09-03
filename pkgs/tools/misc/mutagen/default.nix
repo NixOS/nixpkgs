@@ -1,6 +1,6 @@
-{ stdenv, lib, buildGo118Module, fetchFromGitHub, fetchzip }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub, fetchzip }:
 
-buildGo118Module rec {
+buildGoModule rec {
   pname = "mutagen";
   version = "0.14.0";
 
@@ -39,6 +39,7 @@ buildGo118Module rec {
     homepage = "https://mutagen.io/";
     changelog = "https://github.com/mutagen-io/mutagen/releases/tag/v${version}";
     maintainers = [ maintainers.marsam ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
   };
 }

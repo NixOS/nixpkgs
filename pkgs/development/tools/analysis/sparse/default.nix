@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Semantic parser for C";
-    homepage    = "https://git.kernel.org/cgit/devel/sparse/sparse.git/";
+    homepage    = "https://git.kernel.org/pub/scm/devel/sparse/sparse.git/";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice jkarlson ];

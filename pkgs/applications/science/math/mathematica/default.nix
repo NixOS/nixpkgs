@@ -47,6 +47,7 @@ callPackage real-drv {
     description = "Wolfram Mathematica computational software system";
     homepage = "http://www.wolfram.com/mathematica/";
     license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ herberteuler ];
     platforms = [ "x86_64-linux" ];
   };

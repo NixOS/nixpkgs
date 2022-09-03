@@ -67,6 +67,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.brother.com/";
     description = "Brother HL1110 printer driver";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
     downloadPage = "http://support.brother.com/g/b/downloadlist.aspx?c=eu_ot&lang=en&prod=hl1110_us_eu_as&os=128#SelectLanguageType-561_0_1";

@@ -11,13 +11,13 @@ let
 
 in {
   options.programs.starship = {
-    enable = mkEnableOption "the Starship shell prompt";
+    enable = mkEnableOption (lib.mdDoc "the Starship shell prompt");
 
     settings = mkOption {
       inherit (settingsFormat) type;
       default = { };
-      description = ''
-        Configuration included in <literal>starship.toml</literal>.
+      description = lib.mdDoc ''
+        Configuration included in `starship.toml`.
 
         See https://starship.rs/config/#prompt for documentation.
       '';

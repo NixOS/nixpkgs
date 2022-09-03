@@ -47,10 +47,15 @@ in stdenv.mkDerivation rec {
         sha256 = "0jfaqckhg388jh9b4msrpkv6wrd6xzlw18m0bngbby8k8ywalp9i";
       };
 
-  buildInputs = [ polyml z3 veriT vampire eprover-ho ]
-    ++ lib.optionals (!stdenv.isDarwin) [ nettools java ];
+  buildInputs = [ polyml z3 veriT vampire eprover-ho nettools ]
+    ++ lib.optionals (!stdenv.isDarwin) [ java ];
 
-  sourceRoot = dirname;
+  sourceRoot = "${dirname}${lib.optionalString stdenv.isDarwin ".app"}";
+
+  postUnpack = if stdenv.isDarwin then ''
+    mv $sourceRoot ${dirname}
+    sourceRoot=${dirname}
+  '' else null;
 
   postPatch = ''
     patchShebangs .
@@ -112,6 +117,9 @@ in stdenv.mkDerivation rec {
       --replace '"$ML_HOME/" ^ (if ML_System.platform_is_windows then "sha1.dll" else "libsha1.so")' '"${sha1}/lib/libsha1.so"'
 
     rm -r heaps
+  '' + lib.optionalString (stdenv.hostPlatform.system == "x86_64-darwin") ''
+    substituteInPlace lib/scripts/isabelle-platform \
+      --replace 'ISABELLE_APPLE_PLATFORM64=arm64-darwin' ""
   '' + (if ! stdenv.isLinux then "" else ''
     arch=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux" else "x86-linux"}
     for f in contrib/*/$arch/{bash_process,epclextract,nunchaku,SPASS,zipperposition}; do
@@ -178,9 +186,13 @@ in stdenv.mkDerivation rec {
       formulas in a logical calculus.
     '';
     homepage = "https://isabelle.in.tum.de/";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode  # source bundles binary dependencies
+    ];
     license = licenses.bsd3;
     maintainers = [ maintainers.jwiegley maintainers.jvanbruegge ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 } // {
   withComponents = f:

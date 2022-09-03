@@ -19,7 +19,7 @@ let
 
 in buildEnv {
   name = "aspell-env";
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   paths = [ aspell ] ++ dicts;
   postBuild = ''
     # Construct wrappers in /bin

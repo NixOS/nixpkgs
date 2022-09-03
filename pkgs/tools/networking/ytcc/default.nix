@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ytcc";
-  version = "2.5.5";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "woefe";
     repo = "ytcc";
     rev = "v${version}";
-    sha256 = "sha256-DjyVcjU2dVku5ademm6DygMnzWHB7iMqPfU56BBjAwU=";
+    sha256 = "sha256-NTG7CtmlJzrhgr/JRSQ1jjSpJEm+PlF67PlEbPNihFE=";
   };
 
   nativeBuildInputs = [ gettext installShellFiles ];
@@ -37,6 +37,10 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     installManPage doc/ytcc.1
+    installShellCompletion --cmd ytcc \
+      --bash scripts/completions/bash/ytcc.completion.sh \
+      --fish scripts/completions/fish/ytcc.fish \
+      --zsh scripts/completions/zsh/_ytcc
   '';
 
   meta = {

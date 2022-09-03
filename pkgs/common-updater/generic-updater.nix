@@ -92,7 +92,7 @@ let
     if [ -n "$latest_tag" ]; then
       # print commands to commit the changes
       if [ "$version" != "$latest_tag" ]; then
-        pfile=$(EDITOR=echo ${nix}/bin/nix edit -f. "$attr_path")
+        pfile=$(EDITOR=echo ${nix}/bin/nix edit --extra-experimental-features nix-command -f. "$attr_path")
         echo "   git add $pfile " >> ${fileForGitCommands}
         echo "   git commit -m '$attr_path: $version -> $latest_tag'" >> ${fileForGitCommands}
       fi

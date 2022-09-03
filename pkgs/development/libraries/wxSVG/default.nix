@@ -7,6 +7,8 @@
 , pango
 , pkg-config
 , wxGTK
+# darwin deps
+, Cocoa
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +30,7 @@ stdenv.mkDerivation rec {
     libexif
     pango
     wxGTK
-  ];
+  ] ++ lib.optional stdenv.isDarwin Cocoa;
 
   meta = with lib; {
     homepage = "http://wxsvg.sourceforge.net/";
@@ -37,9 +39,8 @@ stdenv.mkDerivation rec {
       wxSVG is C++ library to create, manipulate and render Scalable Vector
       Graphics (SVG) files with the wxWidgets toolkit.
     '';
-    license = with licenses; gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = wxGTK.meta.platforms;
-    broken = stdenv.isDarwin;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.AndersonTorres ];
+    inherit (wxGTK.meta) platforms;
   };
 }
