@@ -168,6 +168,7 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly"
     "-DLLVM_ENABLE_DUMP=ON"
+    "-DLLVM_LIT_ARGS=-svj\${NIX_BUILD_CORES}"
   ] ++ optionals enableManpages [
     "-DLLVM_BUILD_DOCS=ON"
     "-DLLVM_ENABLE_SPHINX=ON"
