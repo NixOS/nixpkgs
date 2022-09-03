@@ -28,7 +28,7 @@
 , cmake, qtbase, qt5compat, qtdeclarative, qtquick3d, qtquicktimeline
 , qtserialport, qtsvg, qttools, wrapQtAppsHook
 #, qtwebengine
-, llvmPackages, elfutils, perf, pkg-config
+, llvmPackages, elfutils, rustc-demangle, perf, pkg-config
 , withDocumentation ? false, withClangPlugins ? true
 }:
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
       qtbase qt5compat qtdeclarative qtquick3d qtquicktimeline qtserialport
-      qtsvg qttools elfutils.dev
+      qtsvg qttools elfutils.dev rustc-demangle
       #qtwebengine
     ] ++
     optionals withClangPlugins [
