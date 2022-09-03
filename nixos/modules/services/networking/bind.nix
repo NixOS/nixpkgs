@@ -145,16 +145,16 @@ in
       };
 
       keyFiles = mkOption {
-	      default = [ ];
-	      type = types.listOf types.path;
-	      description = lib.mdDoc ''
+        default = [ ];
+        type = types.listOf types.path;
+        description = lib.mdDoc ''
           A list of files containing additional configuration
           to be included using the include directive. This option
           allows to include configuration like TSIG keys without
           exposing them to the nix store readable to any process.
           Note that using this option will also disable configuration
           checks at build time.
-	      '';
+        '';
       };
 
       forwarders = mkOption {
@@ -168,7 +168,7 @@ in
 
       forward = mkOption {
         default = "first";
-        type = types.enum ["first" "only"];
+        type = types.enum [ "first" "only" ];
         description = lib.mdDoc ''
           Whether to forward 'first' (try forwarding but lookup directly if forwarding fails) or 'only'.
         '';
@@ -257,7 +257,7 @@ in
         description = "BIND daemon user";
         isSystemUser = true;
       };
-    users.groups.${bindUser} = {};
+    users.groups.${bindUser} = { };
 
     systemd.services.bind = {
       description = "BIND Domain Name Server";
