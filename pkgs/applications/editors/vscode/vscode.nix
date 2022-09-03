@@ -1,4 +1,7 @@
-{ stdenv, lib, callPackage, fetchurl, isInsiders ? false }:
+{ stdenv, lib, callPackage, fetchurl
+, isInsiders ? false
+, commandLineArgs ? ""
+}:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -31,6 +34,7 @@ in
     executableName = "code" + lib.optionalString isInsiders "-insiders";
     longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
     shortName = "Code" + lib.optionalString isInsiders " - Insiders";
+    inherit commandLineArgs;
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
