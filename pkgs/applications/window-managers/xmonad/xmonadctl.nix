@@ -3,13 +3,13 @@
 let xmonadctlEnv = ghcWithPackages (self: [ self.xmonad-contrib self.X11 ]);
 in stdenv.mkDerivation rec {
   pname = "xmonadctl";
-  version = "0.17.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "xmonad";
     repo = "xmonad-contrib";
     rev = "v${version}";
-    sha256 = "142ycg7dammq98drimv6xbih8dla9qindxds9fgkspmrrils3sar";
+    sha256 = "sha256-KsotlGCqhJ/zJ8YZn0KIyx8/SuoLaTa2gK4Uxgq21fM=";
   };
 
   installPhase = ''
