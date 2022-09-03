@@ -39,7 +39,7 @@ in
           domain = config.services.matrix-synapse.settings.server_name;
         };
         appservice = rec {
-          address = http://localhost:29318;
+          address = "http://localhost:29318";
           hostname = "0.0.0.0";
           port = 29318;
           database = {
