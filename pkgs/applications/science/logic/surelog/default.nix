@@ -46,8 +46,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mv $out/lib/surelog/* $out/lib/
-    rm -rf $out/lib/surelog
-    rm -rf $out/lib/pkg
+    mv $out/lib/pkg $out/lib/surelog/
   '';
 
   meta = {
