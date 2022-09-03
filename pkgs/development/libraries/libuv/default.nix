@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkg-config, ApplicationServices, CoreServices }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, autoconf, automake, libtool, pkg-config, ApplicationServices, CoreServices, pkgsStatic }:
 
 stdenv.mkDerivation rec {
   version = "1.44.2";
@@ -10,6 +10,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-K6v+00basjI32ON27ZjC5spQi/zWCcslDwQwyosq2iY=";
   };
+
+  patches = [
+    # Fix tests for statically linked variant upstream PR is
+    # https://github.com/libuv/libuv/pull/3735
+    (fetchpatch {
+      url = "https://github.com/libuv/libuv/commit/9d898acc564351dde74e9ed9865144e5c41f5beb.patch";
+      sha256 = "sha256-6XsjrseD8a+ny887EKOX0NmHocLMXGf2YL13vkNHUZ0=";
+    })
+  ];
 
   postPatch = let
     toDisable = [
@@ -69,6 +78,8 @@ stdenv.mkDerivation rec {
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
+
+  passthru.tests.static = pkgsStatic.libuv;
 
   meta = with lib; {
     description = "A multi-platform support library with a focus on asynchronous I/O";
