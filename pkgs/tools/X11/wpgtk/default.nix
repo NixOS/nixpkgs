@@ -49,6 +49,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/deviantfero/wpgtk";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.melkor333 ];
+    maintainers = [ maintainers.melkor333 maintainers.cafkafk ];
   };
 }
