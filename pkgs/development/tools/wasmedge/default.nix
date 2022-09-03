@@ -5,6 +5,7 @@
 , cmake
 , gtest
 , spdlog
+, CoreServices
 }:
 
 llvmPackages.stdenv.mkDerivation rec {
@@ -18,11 +19,13 @@ llvmPackages.stdenv.mkDerivation rec {
     sha256 = "sha256-SJi8CV0sa+g+Ngvdw8+SxV3kHqoiKBhYUwDLZM4+jX0=";
   };
 
-  buildInputs = [
-    boost
-    spdlog
-    llvmPackages.llvm
-  ];
+  buildInputs =
+    [
+      boost
+      spdlog
+      llvmPackages.llvm
+    ]
+    ++ lib.optionals llvmPackages.stdenv.isDarwin [ CoreServices ];
 
   nativeBuildInputs = [ cmake llvmPackages.lld ];
 
