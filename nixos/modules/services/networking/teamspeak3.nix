@@ -152,6 +152,7 @@ in
         WorkingDirectory = cfg.dataDir;
         User = user;
         Group = group;
+        Restart = "on-failure";
       };
     };
   };
