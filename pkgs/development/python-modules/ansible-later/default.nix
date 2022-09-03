@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "ansible-later";
-  version = "2.0.16";
+  version = "2.0.19";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -31,20 +31,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thegeeklab";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AlLy8rqqNrJtoI01OHq8W1Oi8iN8RiBdtq2sZ7zlTyM=";
+    rev = "v${version}";
+    hash = "sha256-kyoNuykPWdH8uHxjl0nWVwyFYLeWjbtOTkEZ1fG7x5E=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace " --cov=ansiblelater --cov-report=xml:coverage.xml --cov-report=term --cov-append --no-cov-on-fail" "" \
-      --replace 'PyYAML = "6.0"' 'PyYAML = "*"' \
-      --replace 'unidiff = "0.7.3"' 'unidiff = "*"' \
       --replace 'jsonschema = "' 'jsonschema = "^' \
-      --replace 'python-json-logger = "' 'python-json-logger = "^' \
-      --replace 'toolz = "0.11.2' 'toolz = "*' \
-      --replace 'yamllint = "' 'yamllint = "^'
+      --replace "--cov=ansiblelater --cov-report=xml:coverage.xml --cov-report=term --cov-append --no-cov-on-fail" "" \
   '';
 
   nativeBuildInputs = [
@@ -82,9 +77,19 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Best practice scanner for Ansible roles and playbooks";
+    description = "Another best practice scanner for Ansible roles and playbooks";
+    longDescription = ''
+      ansible-later is a best practice scanner and linting tool. In most cases,
+      if you write Ansible roles in a team, it helps to have a coding or best
+      practice guideline in place. This will make Ansible roles more readable
+      for all maintainers and can reduce the troubleshooting time. While
+      ansible-later aims to be a fast and easy to use linting tool for your
+      Ansible resources, it might not be that feature completed as required in
+      some situations. If you need a more in-depth analysis you can take a look
+      at ansible-lint.
+    '';
     homepage = "https://github.com/thegeeklab/ansible-later";
     license = licenses.mit;
-    maintainers = with maintainers; [ tboerger ];
+    maintainers = with maintainers; [ azahi tboerger ];
   };
 }
