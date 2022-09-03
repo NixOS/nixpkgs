@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, runtimeShell
+{ stdenv, lib, fetchurl, fetchpatch, runtimeShell, buildPackages
 , gettext, pkg-config, python3
 , avahi, libgphoto2, libieee1284, libjpeg, libpng, libtiff, libusb1, libv4l, net-snmp
 , curl, systemd, libxml2, poppler, gawk
@@ -29,7 +29,25 @@ stdenv.mkDerivation {
     sha256 = "055iicihxa6b28iv5fnz13n67frdr5nrydq2c846f9x7q0vw4a1s";
   };
 
+  patches = [
+    # sane-desc will be used in postInstall so compile it for build
+    # https://github.com/void-linux/void-packages/blob/master/srcpkgs/sane/patches/sane-desc-cross.patch
+    (fetchpatch {
+      name = "compile-sane-desc-for-build.patch";
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/4b97cd2fb4ec38712544438c2491b6d7d5ab334a/srcpkgs/sane/patches/sane-desc-cross.patch";
+      sha256 = "sha256-y6BOXnOJBSTqvRp6LwAucqaqv+OLLyhCS/tXfLpnAPI=";
+    })
+  ];
+
+  postPatch = ''
+    # related to the compile-sane-desc-for-build
+    substituteInPlace tools/Makefile.in \
+      --replace 'cc -I' '$(CC_FOR_BUILD) -I'
+  '';
+
   outputs = [ "out" "doc" "man" ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [
     gettext
@@ -61,6 +79,10 @@ stdenv.mkDerivation {
     lib.optional (avahi != null)   "--with-avahi"
     ++ lib.optional (libusb1 != null) "--with-usb"
   ;
+
+  # autoconf check for HAVE_MMAP is never set on cross compilation.
+  # The pieusb backend fails compilation if HAVE_MMAP is not set.
+  buildFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "CFLAGS=-DHAVE_MMAP=${if stdenv.hostPlatform.isLinux then "1" else "0"}" ];
 
   postInstall = let
 

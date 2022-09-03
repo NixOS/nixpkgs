@@ -278,6 +278,7 @@ in {
   kubernetes = handleTestOn ["x86_64-linux"] ./kubernetes {};
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   leaps = handleTest ./leaps.nix {};
+  lemmy = handleTest ./lemmy.nix {};
   libinput = handleTest ./libinput.nix {};
   libreddit = handleTest ./libreddit.nix {};
   libresprite = handleTest ./libresprite.nix {};
