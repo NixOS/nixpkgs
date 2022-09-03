@@ -3,7 +3,7 @@
 , fetchPypi
 , brotli
 , certifi
-, ffmpeg
+, ffmpeg-headless
 , rtmpdump
 , atomicparsley
 , pycryptodomex
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     let
       packagesToBinPath = []
         ++ lib.optional atomicparsleySupport atomicparsley
-        ++ lib.optional ffmpegSupport ffmpeg
+        ++ lib.optional ffmpegSupport ffmpeg-headless
         ++ lib.optional rtmpSupport rtmpdump;
     in lib.optionalString (packagesToBinPath != [])
     [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
