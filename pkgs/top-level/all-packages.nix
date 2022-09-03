@@ -24047,6 +24047,8 @@ with pkgs;
 
   htop-vim = callPackage ../tools/system/htop/htop-vim.nix { };
 
+  below = callPackage ../tools/system/below { };
+
   btop = callPackage ../tools/system/btop {
     stdenv = gcc11Stdenv;
   };
