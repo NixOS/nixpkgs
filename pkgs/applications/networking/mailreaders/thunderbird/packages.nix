@@ -1,7 +1,7 @@
 { stdenv, lib, buildMozillaMach, callPackage, fetchurl, fetchpatch, nixosTests }:
 
 rec {
-  thunderbird = thunderbird-91;
+  thunderbird = thunderbird-102;
   thunderbird-91 = (buildMozillaMach rec {
     pname = "thunderbird";
     version = "91.13.0";
