@@ -1,20 +1,20 @@
 { lib, python3Packages, fetchFromGitHub, libxslt,
-  gobject-introspection, gtk3, wrapGAppsHook, gnome }:
+  gobject-introspection, gtk, wrapGAppsHook, gnome }:
 
 python3Packages.buildPythonApplication rec {
   pname = "wpgtk";
-  version = "6.5.0";
+  version = "6.5.5";
 
   src = fetchFromGitHub {
     owner = "deviantfero";
     repo = "wpgtk";
     rev = version;
-    sha256 = "0gv607jrdfbmadjyy3pbrj5ksh1dmaw5hz7l8my2z7sh0ifds0n2";
+    sha256 = "sha256-g3flxQNiNta+uL4t21Lhpij8b5yB78SJLGaFpTcm9fE=";
   };
 
   buildInputs = [
     wrapGAppsHook
-    gtk3
+    gtk
     gobject-introspection
     gnome.adwaita-icon-theme
     libxslt
