@@ -2211,6 +2211,11 @@ with pkgs;
     client = true;
   };
 
+  amule-web = amule.override {
+    monolithic = false;
+    httpServer = true;
+  };
+
   antennas = nodePackages.antennas;
 
   apg = callPackage ../tools/security/apg { };
