@@ -447,6 +447,13 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>paperless</literal> module now defaults
+          <literal>PAPERLESS_TIME_ZONE</literal> to your configured
+          system timezone.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           (Neo)Vim can not be configured with
           <literal>configure.pathogen</literal> anymore to reduce
           maintainance burden. Use <literal>configure.packages</literal>
