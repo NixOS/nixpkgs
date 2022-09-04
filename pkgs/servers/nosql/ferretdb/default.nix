@@ -2,13 +2,14 @@
 , buildGoModule
 , fetchFromGitHub
 }:
+
 buildGoModule rec {
-  pname = "FerretDB";
+  pname = "ferretdb";
   version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "FerretDB";
-    repo = pname;
+    repo = "FerretDB";
     rev = "v${version}";
     sha256 = "sha256-WSdscZ1/Dix83RE95Iv61rdaSBWx1GMi6qOIPNus+ZI=";
   };
