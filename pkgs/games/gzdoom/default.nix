@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, openal, fluidsynth
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, makeWrapper, openal, fluidsynth
 , soundfont-fluid, libGL, SDL2, bzip2, zlib, libjpeg, libsndfile, libvpx, mpg123
 , game-music-emu, pkg-config, copyDesktopItems, makeDesktopItem }:
 
@@ -50,6 +50,13 @@ let
       mpg123
       game-music-emu
       zmusic
+    ];
+
+    patches = [
+      (fetchpatch {  # TODO: Delete me when upgrading to 4.9
+        url = "https://github.com/ZDoom/gzdoom/commit/aae85a1b9169953d8dcc5f138a477d5c7d75addb.patch";
+        sha256 = "upuLDgVMaGaFSVaDV9Hj13DR5LUma51xv+Mfsz9m9a0=";
+      })
     ];
 
     NIX_CFLAGS_LINK = "-lopenal -lfluidsynth";
