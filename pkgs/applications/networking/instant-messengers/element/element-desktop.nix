@@ -39,6 +39,8 @@ mkYarnPackage rec {
     sha256 = pinData.desktopYarnHash;
   };
 
+  packageResolutions = (builtins.fromJSON (builtins.readFile ./element-desktop-package.json)).resolutions;
+
   nativeBuildInputs = [ makeWrapper ] ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   inherit seshat;
