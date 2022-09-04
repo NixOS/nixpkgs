@@ -116,5 +116,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/baresip/baresip";
     maintainers = with lib.maintainers; [ elohmeier raskin ];
     license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }
