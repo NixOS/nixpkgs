@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Swaylock, with fancy effects
     '';
+    mainProgram = "swaylock";
     inherit (src.meta) homepage;
     license = licenses.mit;
     platforms = platforms.linux;
