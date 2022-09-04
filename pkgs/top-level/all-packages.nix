@@ -20748,6 +20748,8 @@ with pkgs;
   };
   opencascade-occt = callPackage ../development/libraries/opencascade-occt { };
 
+  opencascade-occt_7-4 = callPackage ../development/libraries/opencascade-occt_7-4 { };
+
   opencl-headers = callPackage ../development/libraries/opencl-headers { };
 
   opencl-clhpp = callPackage ../development/libraries/opencl-clhpp { };
