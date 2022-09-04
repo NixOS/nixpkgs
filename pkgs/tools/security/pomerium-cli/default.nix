@@ -1,7 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
-, pomerium
 }:
 
 let
@@ -9,7 +8,7 @@ let
 in
 buildGoModule rec {
   pname = "pomerium-cli";
-  inherit (pomerium) version;
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "pomerium";
