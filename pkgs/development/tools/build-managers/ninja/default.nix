@@ -34,19 +34,29 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     python configure.py --bootstrap
   '' + lib.optionalString buildDocs ''
     # "./ninja -vn manual" output copied here to support cross compilation.
     asciidoc -b docbook -d book -o build/manual.xml doc/manual.asciidoc
     xsltproc --nonet doc/docbook.xsl build/manual.xml > doc/manual.html
+  '' + ''
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 -t $out/bin ninja
     install -Dm444 misc/bash-completion $out/share/bash-completion/completions/ninja
     install -Dm444 misc/zsh-completion $out/share/zsh/site-functions/_ninja
   '' + lib.optionalString buildDocs ''
     install -Dm444 -t $out/share/doc/ninja doc/manual.asciidoc doc/manual.html
+  '' + ''
+
+    runHook postInstall
   '';
 
   setupHook = ./setup-hook.sh;
