@@ -16,13 +16,6 @@
 , xdotool
 , bemenu
 , withX11 ? false
-
-# transmits user's location without asking first
-, geoclueSupport ? false, geoclue2
-
-# transmits user's location without asking first
-, reportLocationToMozilla ? false
-
 , gpsdSupport ? true, gpsd
 }:
 
@@ -39,9 +32,11 @@ in stdenv.mkDerivation rec {
     hash = "sha256-V8NdlDnj6nyC7pAPu76tMbw//5LqgPcd0jOKSsvx9ZU=";
   };
 
-  patches = lib.optionals (!reportLocationToMozilla) [
+  patches = [
+    # mepo 0.5 transmits user's location to third parties without asking first;
+    # these patches preserve the 0.4 behavior while we work with them to come up
+    # with an opt-in mechanism.
     ./dont-report-user-location-to-mozilla-without-asking.patch
-  ] ++ lib.optionals (!geoclueSupport) [
     ./dont-report-user-location-to-geoclue-without-asking.patch
   ];
 
@@ -49,11 +44,6 @@ in stdenv.mkDerivation rec {
     substituteInPlace \
       scripts/mepo_ui_menu_user_pin_updater.sh \
       --replace gpspipe ${gpsd}/bin/gpspipe
-  '' + lib.optionalString geoclueSupport ''
-    substituteInPlace \
-      scripts/mepo_ui_menu_user_pin_updater.sh \
-      --replace /usr/libexec/geoclue-2.0/demos/ \
-                ${geoclue2}/libexec/geoclue-2.0/demos/
   '';
 
   nativeBuildInputs = [ pkg-config zig makeWrapper ];
@@ -61,7 +51,6 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     curl SDL2 SDL2_gfx SDL2_image SDL2_ttf inconsolata-nerdfont jq ncurses
   ] ++ menuInputs
-    ++ lib.optional geoclueSupport geoclue2
     ++ lib.optional gpsdSupport gpsd;
 
   preBuild = ''
