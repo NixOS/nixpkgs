@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace build.sh \
-      --replace 'curl ${emojiJSON.url}' 'cat emoji-en-US.json'
+      --replace 'curl ${emojiJSON.url}' 'cat ${emojiJSON}'
   '';
 
   buildPhase = ''
