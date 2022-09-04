@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-maps";
-  version = "43.beta";
+  version = "43.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-19Nu9/GjmJ/8f2nRZ7Ya1V6FINxkjRWKP0Ya1JV97Xw=";
+    sha256 = "sha256-NBqS8OTo+lOaOggrdYXYA/4Od7byiF7ztq9zZxKSQ5k=";
   };
 
   doCheck = true;
