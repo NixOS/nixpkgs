@@ -1,5 +1,13 @@
-{ lib, mkXfceDerivation, glib, gtk3, libnotify, libxfce4ui, libxfce4util
-, xfce4-panel, xfconf }:
+{ lib
+, mkXfceDerivation
+, glib
+, gtk3
+, libnotify
+, libxfce4ui
+, libxfce4util
+, xfce4-panel
+, xfconf
+}:
 
 mkXfceDerivation {
   category = "apps";
@@ -8,7 +16,15 @@ mkXfceDerivation {
 
   sha256 = "sha256-JcHxqKLl4F4FQv7lE64gWUorCvl5g5mSD+jEmj1ORfY=";
 
-  buildInputs = [ gtk3 glib libnotify libxfce4ui libxfce4util xfce4-panel xfconf ];
+  buildInputs = [
+    gtk3
+    glib
+    libnotify
+    libxfce4ui
+    libxfce4util
+    xfce4-panel
+    xfconf
+  ];
 
   configureFlags = [
     "--enable-dbus-start-daemon"
