@@ -12,7 +12,6 @@ rustPlatform.buildRustPackage rec {
     repo = pname;
     rev = "v${version}";
     sha256 = "sha256-fwzWdOinW/ECVI/65pPB1shxPdl2nZThAqlg8wlWg/g=";
-    name = "${pname}-git-v${version}";
   };
 
   cargoSha256 = "sha256-c+wzMzTkG0FpfQ1rZ8e9dn0ez12vmoecrtNeFk90sdQ=";
