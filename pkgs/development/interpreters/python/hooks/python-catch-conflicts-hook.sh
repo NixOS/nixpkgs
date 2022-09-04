@@ -6,5 +6,5 @@ pythonCatchConflictsPhase() {
 }
 
 if [ -z "${dontUsePythonCatchConflicts-}" ]; then
-    preDistPhases+=" pythonCatchConflictsPhase"
+    addPhase "preDistPhases pythonCatchConflictsPhase"
 fi
