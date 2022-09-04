@@ -8,6 +8,8 @@
 , gettext
 , gobject-introspection
 , cairo
+, colord
+, lcms2
 , pango
 , json-glib
 , libstartup_notification
@@ -47,13 +49,13 @@
 
 let self = stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "43.beta";
+  version = "43.rc";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "/nE+P+k+gHkzw8Xy3stscYtq3C1wjV8951+o7mnbjGg=";
+    sha256 = "ILLYyWWthlqr7xIJr8cHnrxQsotBuMPISW8fSaTGRQA=";
   };
 
   patches = [
@@ -117,6 +119,8 @@ let self = stdenv.mkDerivation rec {
     libxkbcommon
     libxkbfile
     libXdamage
+    colord
+    lcms2
     pango
     pipewire
     sysprof # for D-Bus interfaces
