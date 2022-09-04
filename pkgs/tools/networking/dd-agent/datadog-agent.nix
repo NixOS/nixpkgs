@@ -93,7 +93,8 @@ in buildGoModule rec {
   # into standard paths.
   postInstall = ''
     mkdir -p $out/${python.sitePackages} $out/share/datadog-agent
-    cp -R $src/cmd/agent/dist/conf.d $out/share/datadog-agent
+    cp -R --no-preserve=mode $src/cmd/agent/dist/conf.d $out/share/datadog-agent
+    rm -rf $out/share/datadog-agent/conf.d/{apm.yaml.default,process_agent.yaml.default,winproc.d}
     cp -R $src/cmd/agent/dist/{checks,utils,config.py} $out/${python.sitePackages}
 
     cp -R $src/pkg/status/templates $out/share/datadog-agent
