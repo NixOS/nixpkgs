@@ -50,6 +50,9 @@
 , # Whether to output have EFIVARS available in $out/efi-vars.fd and use it during disk creation
   touchEFIVars ? false
 
+, # Whether to enforce SMM in QEMU for EFI variables manipulation - this can break authenticated variables manipulation such as bootloader installation.
+  systemManagementModeEnforcement ? false
+
 , # OVMF firmware derivation, defaults to `pkgs.OVMF.fd`
   OVMF ? pkgs.OVMF.fd
 
@@ -99,21 +102,20 @@
   additionalPaths ? []
 }:
 
-assert partitionTableType == "legacy" || partitionTableType == "legacy+gpt" || partitionTableType == "efi" || partitionTableType == "hybrid" || partitionTableType == "none";
-# We use -E offset=X below, which is only supported by e2fsprogs
-assert partitionTableType != "none" -> fsType == "ext4";
+let
+  _1 = lib.assertOneOf "partitionTableType" partitionTableType [ "legacy" "legacy+gpt" "efi" "hybrid" "none" ];
+  # We use -E offset=X below, which is only supported by e2fsprogs
+  _2 = lib.assertMsg (partitionTableType != "none" -> fsType == "ext4") "to produce a partition table, we need to use -E offset flag which is support only for fsType = ext4";
+  # TODO: legacy+gpt is it a good idea?
+  _3 = lib.assertMsg (touchEFIVars -> partitionTableType == "hybrid" || partitionTableType == "efi" || partitionTableType == "legacy+gpt") "EFI variables can be used only with a partition table of type: hybrid, efi or legacy+gpt.";
+  # If only Nix store image, then: contents must be empty, configFile must be unset, and we should no install bootloader.
+  _4 = lib.assertMsg (onlyNixStore -> contents == [] && configFile == null && !installBootLoader) "In a only Nix store image, the contents must be empty, no configuration must be provided and no bootloader should be installed.";
+in
 # Either both or none of {user,group} need to be set
 assert lib.all
          (attrs: ((attrs.user  or null) == null)
               == ((attrs.group or null) == null))
         contents;
-
-# If only Nix store image, then: contents must be empty, configFile must be unset, and we should no install bootloader.
-assert onlyNixStore -> contents == [] && configFile == null && !installBootLoader;
-
-# EFI variables manipulation can be done only on a partiion table supporting UEFI.
-# TODO: legacy+gpt is it a good idea?
-assert touchEFIVars -> partitionTableType == "hybrid" || partitionTableType == "efi" || partitionTableType == "legacy+gpt";
 
 with lib;
 
@@ -432,7 +434,14 @@ let format' = format; in let
       postVM = moveOrConvertImage + postVM;
       QEMU_OPTS =
         concatStringsSep " " (lib.optional useEFIBoot "-drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
-        ++ lib.optional touchEFIVars "-drive if=pflash,format=raw,unit=1,file=$efiVars"
+        ++ lib.optionals touchEFIVars [
+          "-drive if=pflash,format=raw,unit=1,file=$efiVars"
+        ]
+        ++ lib.optionals systemManagementModeEnforcement [
+          "-machine type=q35,accel=kvm,smm=on"
+          # Ensure we require EFI firmware to go through SMM to touch secureboot variables (once setup is done)
+          "-global driver=cfi.pflash01,property=secure,value=on"
+        ]
       );
       memSize = 1024;
     } ''
