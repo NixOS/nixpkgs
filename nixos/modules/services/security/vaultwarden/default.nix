@@ -223,7 +223,7 @@ ADMIN_TOKEN=...copy-paste a unique generated secret token here...
     };
 
     systemd.timers.backup-vaultwarden = mkIf (cfg.backupDir != null) {
-      aliases = [ "backup-bitwarden_rs.service" ];
+      aliases = [ "backup-bitwarden_rs.timer" ];
       description = "Backup vaultwarden on time";
       timerConfig = {
         OnCalendar = mkDefault "23:00";
