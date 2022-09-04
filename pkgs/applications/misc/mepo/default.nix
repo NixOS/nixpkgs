@@ -39,14 +39,6 @@ in stdenv.mkDerivation rec {
     hash = "sha256-V8NdlDnj6nyC7pAPu76tMbw//5LqgPcd0jOKSsvx9ZU=";
   };
 
-  nativeBuildInputs = [ pkg-config zig makeWrapper ];
-
-  buildInputs = [
-    curl SDL2 SDL2_gfx SDL2_image SDL2_ttf inconsolata-nerdfont jq ncurses
-  ] ++ menuInputs
-    ++ lib.optional geoclueSupport geoclue2
-    ++ lib.optional gpsdSupport gpsd;
-
   patches = lib.optionals (!reportLocationToMozilla) [
     ./dont-report-user-location-to-mozilla-without-asking.patch
   ] ++ lib.optionals (!geoclueSupport) [
@@ -63,6 +55,14 @@ in stdenv.mkDerivation rec {
       --replace /usr/libexec/geoclue-2.0/demos/ \
                 ${geoclue2}/libexec/geoclue-2.0/demos/
   '';
+
+  nativeBuildInputs = [ pkg-config zig makeWrapper ];
+
+  buildInputs = [
+    curl SDL2 SDL2_gfx SDL2_image SDL2_ttf inconsolata-nerdfont jq ncurses
+  ] ++ menuInputs
+    ++ lib.optional geoclueSupport geoclue2
+    ++ lib.optional gpsdSupport gpsd;
 
   preBuild = ''
     export HOME=$TMPDIR
