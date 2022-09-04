@@ -19,13 +19,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meld";
-  version = "3.21.3";
+  version = "3.22.0";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "xanGKMaCh6bPV22NggQegICl3VwSy01wmsKZSqCxsZc=";
+    sha256 = "P8EHyY7251NY/9Kw0UyF3bSP4UoR6TmpQyL6qo6QxA0=";
   };
 
   nativeBuildInputs = [
@@ -74,7 +74,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Visual diff and merge tool";
-    homepage = "http://meldmerge.org/";
+    homepage = "https://meld.app/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ jtojnar mimame ];
