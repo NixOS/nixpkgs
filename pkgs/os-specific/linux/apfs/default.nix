@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation {
   pname = "apfs";
-  version = "unstable-2022-07-24-${kernel.version}";
+  version = "unstable-2022-08-15-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "linux-apfs";
     repo = "linux-apfs-rw";
-    rev = "925d86b7be3ccf21b17734cfececf40e43c4598e";
-    sha256 = "sha256-N5lGJu4c03cVDk3WTcegzZHBDmguPEX8dCedJS2TMSI=";
+    rev = "e4bf2d51d3fe8485ad2b28a89c157ada32ee3d77";
+    sha256 = "sha256-zvl1H9AIExgt6t2A2w7zDwXmRsmLY8y3P6EfbBuFdh8=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/linux-apfs/linux-apfs-rw";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "4.9" || kernel.kernelAtLeast "5.19";
+    broken = kernel.kernelOlder "4.9";
     maintainers = with maintainers; [ Luflosi ];
   };
 }

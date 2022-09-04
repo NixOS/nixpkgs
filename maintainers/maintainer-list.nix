@@ -8975,7 +8975,7 @@
     name = "Millian Poquet";
   };
   mpscholten = {
-    email = "marc@mpscholten.de";
+    email = "marc@digitallyinduced.com";
     github = "mpscholten";
     githubId = 2072185;
     name = "Marc Scholten";
@@ -15144,6 +15144,16 @@
     githubId = 3806110;
     keys = [{
       fingerprint = "4384 B8E1 299F C028 1641  7B8F EC30 EFBE FA7E 84A4";
+    }];
+  };
+  cafkafk = {
+    email = "cafkafk@cafkafk.com";
+    matrix = "@cafkafk:matrix.cafkafk.com";
+    name = "Christina Sørensen";
+    github = "cafkafk";
+    githubId = 89321978;
+    keys = [{
+      fingerprint = "7B9E E848 D074 AE03 7A0C  651A 8ED4 DEF7 375A 30C8";
     }];
   };
 }

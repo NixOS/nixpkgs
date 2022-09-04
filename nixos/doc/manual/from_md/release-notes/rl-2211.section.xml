@@ -208,6 +208,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://languagetool.org/">languagetool</link>,
+          a multilingual grammar, style, and spell checker. Available as
+          <link xlink:href="options.html#opt-services.languagetool.enable">services.languagetool</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.getoutline.com/">Outline</link>,
           a wiki and knowledge base similar to Notion. Available as
           <link linkend="opt-services.outline.enable">services.outline</link>.
@@ -382,6 +389,14 @@
         <para>
           <literal>pkgs.cosign</literal> does not provide the
           <literal>cosigned</literal> binary anymore.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Emacs now uses the Lucid toolkit by default instead of GTK
+          because of stability and compatibility issues. Users who still
+          wish to remain using GTK can do so by using
+          <literal>emacs-gtk</literal>.
         </para>
       </listitem>
       <listitem>
