@@ -14,4 +14,5 @@
     obs-vkcapture32 = pkgsi686Linux.obs-studio-plugins.obs-vkcapture;
   };
   obs-backgroundremoval = callPackage ./obs-backgroundremoval.nix {};
+  obs-hyperion = callPackage ./obs-hyperion/default.nix {};
 }
