@@ -12,6 +12,10 @@
 , unpaper
 , liberation_ttf
 , fetchFromGitHub
+
+# Allow propagating additional dependencies through an override with
+# the packages being considered in the PYTHONPATH exposed via passthru.
+, extraPropagatedBuildInputs ? ps: []
 }:
 
 let
@@ -157,7 +161,7 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
     whitenoise
     whoosh
     zope_interface
-  ];
+  ] ++ (extraPropagatedBuildInputs python.pkgs);
 
   # paperless-ngx includes the bundled django-q version. This will
   # conflict with the tests and is not needed since we overrode the
