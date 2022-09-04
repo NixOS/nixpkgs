@@ -17,9 +17,11 @@ let
     GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
   } // (
     lib.mapAttrs (_: toString) cfg.extraConfig
-  ) // (optionalAttrs enableRedis {
+  ) // optionalAttrs (config.time.timeZone != null) {
+    PAPERLESS_TIME_ZONE = lib.mkDefault config.time.timeZone;
+  } // optionalAttrs enableRedis {
     PAPERLESS_REDIS = "unix://${redisServer.unixSocket}";
-  });
+  };
 
   manage = let
     setupEnv = lib.concatStringsSep "\n" (mapAttrsToList (name: val: "export ${name}=\"${val}\"") env);
@@ -174,11 +176,10 @@ in
         See [the documentation](https://paperless-ngx.readthedocs.io/en/latest/configuration.html)
         for available options.
       '';
-      example = literalExpression ''
-        {
-          PAPERLESS_OCR_LANGUAGE = "deu+eng";
-        }
-      '';
+      example = {
+        PAPERLESS_OCR_LANGUAGE = "deu+eng";
+        PAPERLESS_DBHOST = "/run/postgresql";
+      };
     };
 
     user = mkOption {
@@ -285,12 +286,13 @@ in
         '';
         Restart = "on-failure";
 
-        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
-        # gunicorn needs setuid
-        SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ [ "@setuid" ];
+        # gunicorn needs setuid, liblapack needs mbind
+        SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ [ "@setuid mbind" ];
         # Needs to serve web page
         PrivateNetwork = false;
+      } // lib.optionalAttrs (cfg.port < 1024) {
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
       };
       environment = env // {
         PATH = mkForce cfg.package.path;
