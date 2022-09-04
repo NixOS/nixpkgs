@@ -176,11 +176,10 @@ in
         See [the documentation](https://paperless-ngx.readthedocs.io/en/latest/configuration.html)
         for available options.
       '';
-      example = literalExpression ''
-        {
-          PAPERLESS_OCR_LANGUAGE = "deu+eng";
-        }
-      '';
+      example = {
+        PAPERLESS_OCR_LANGUAGE = "deu+eng";
+        PAPERLESS_DBHOST = "/run/postgresql";
+      };
     };
 
     user = mkOption {
