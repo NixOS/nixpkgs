@@ -3,6 +3,7 @@
 , secureBoot ? false
 , httpSupport ? false
 , tpmSupport ? false
+, systemManagementModeSupport ? false
 }:
 
 assert csmSupport -> seabios != null;
@@ -40,6 +41,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
 
   buildFlags =
     lib.optionals secureBoot [ "-D SECURE_BOOT_ENABLE=TRUE" ]
+    ++ lib.optionals systemManagementModeSupport [ "-D SMM_REQUIRE" ]
     ++ lib.optionals csmSupport [ "-D CSM_ENABLE" "-D FD_SIZE_2MB" ]
     ++ lib.optionals httpSupport [ "-D NETWORK_HTTP_ENABLE=TRUE" "-D NETWORK_HTTP_BOOT_ENABLE=TRUE" ]
     ++ lib.optionals tpmSupport [ "-D TPM_ENABLE" "-D TPM2_ENABLE" "-D TPM2_CONFIG_ENABLE"];

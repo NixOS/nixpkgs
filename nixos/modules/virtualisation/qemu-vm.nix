@@ -212,6 +212,10 @@ let
 
   regInfo = pkgs.closureInfo { rootPaths = config.virtualisation.additionalPaths; };
 
+  OVMF_fd = (pkgs.OVMF.override {
+    systemManagementModeSupport = cfg.useSecureBoot;
+    secureBoot = cfg.useSecureBoot;
+  }).fd;
 
   # Generate a hard disk image containing a /boot partition and GRUB
   # in the MBR.  Used when the `useBootLoader' option is set.
@@ -228,6 +232,7 @@ let
     diskSize = "auto";
     additionalSpace = "0M";
     copyChannel = false;
+    OVMF = OVMF_fd;
   };
 
   # This image is supposed to have no side-effects on the boot disk.
@@ -244,10 +249,6 @@ let
     additionalSpace = "0M";
     copyChannel = false;
   };
-
-  OVMF_fd = (pkgs.OVMF.override {
-    secureBoot = cfg.useSecureBoot;
-  }).fd;
 
 in
 
@@ -705,6 +706,17 @@ in
             Platform-specific flash binary for EFI variables, implementation-dependent to the EFI firmware.
             Defaults to OVMF.
           '';
+        };
+
+      systemManagementModeEnforcement = mkOption {
+        type = types.bool;
+        default = cfg.useSecureBoot;
+        defaultText = lib.literalExpression "cfg.useSecureBoot";
+        description =
+          lib.mdDoc ''
+            Enable system management mode enforcement for QEMU which prevent the OS from arbitrary accessing the UEFI variables memory.
+            It enforces to use the SMM API to perform any changes, useful in SecureBoot contexts.
+          '';
       };
     };
 
@@ -910,6 +922,10 @@ in
       (mkIf cfg.useEFIBoot [
         "-drive if=pflash,format=raw,unit=0,readonly=on,file=${cfg.efi.firmware}"
         "-drive if=pflash,format=raw,unit=1,file=$NIX_EFI_VARS"
+      ])
+      (mkIf cfg.efi.systemManagementModeEnforcement [
+        # Enforce SMM usage for authenticated variables in UEFI
+        "-global driver=cfi.pflash01,property=secure,value=on"
       ])
       (mkIf (cfg.bios != null) [
         "-bios ${cfg.bios}/bios.bin"

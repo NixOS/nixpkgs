@@ -50,6 +50,9 @@
 , # Whether to output have EFIVARS available in $out/efi-vars.fd and use it during disk creation
   touchEFIVars ? false
 
+, # Whether to enforce SMM in QEMU for EFI variables manipulation - this can break authenticated variables manipulation such as bootloader installation.
+  systemManagementModeEnforcement ? false
+
 , # OVMF firmware derivation, defaults to `pkgs.OVMF.fd`
   OVMF ? pkgs.OVMF.fd
 
@@ -401,7 +404,13 @@ let format' = format; in let
       postVM = moveOrConvertImage + postVM;
       QEMU_OPTS =
         concatStringsSep " " (lib.optional useEFIBoot "-drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
-        ++ lib.optional touchEFIVars "-drive if=pflash,format=raw,unit=1,file=$efiVars"
+        ++ lib.optionals touchEFIVars [
+          "-drive if=pflash,format=raw,unit=1,file=$efiVars"
+        ]
+        ++ lib.optionals systemManagementModeEnforcement [
+          # Ensure we require EFI firmware to go through SMM to touch secureboot variables (once setup is done)
+          "-global driver=cfi.pflash01,property=secure,value=on"
+        ]
       );
       memSize = 1024;
     } ''
