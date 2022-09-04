@@ -8,6 +8,12 @@
 , pythonOlder
 , cffi
 , pytestCheckHook
+  # for passthru.tests
+, asyncssh
+, django_4
+, fastapi
+, paramiko
+, twisted
 }:
 
 buildPythonPackage rec {
@@ -54,6 +60,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "bcrypt"
   ];
+
+  passthru.tests = {
+    inherit asyncssh django_4 fastapi paramiko twisted;
+  };
 
   meta = with lib; {
     description = "Modern password hashing for your software and your servers";
