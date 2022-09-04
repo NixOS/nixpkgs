@@ -580,6 +580,18 @@ final: prev:
     meta.homepage = "https://github.com/ckarnell/antonys-macro-repeater/";
   };
 
+  aquarium-vim = buildVimPluginFrom2Nix {
+    pname = "aquarium-vim";
+    version = "2022-06-22";
+    src = fetchFromGitHub {
+      owner = "FrenzyExists";
+      repo = "aquarium-vim";
+      rev = "1f9417b11146580b47f2ecae26b9f3a75bf5e526";
+      sha256 = "1jihpz43gyp52g7i63wlg5k03sgjcrqr241iks0q2q3c73n2jjgf";
+    };
+    meta.homepage = "https://github.com/FrenzyExists/aquarium-vim/";
+  };
+
   arcanist-vim = buildVimPluginFrom2Nix {
     pname = "arcanist.vim";
     version = "2016-05-27";
