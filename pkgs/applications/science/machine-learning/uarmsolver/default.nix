@@ -1,10 +1,10 @@
 { lib
-, gccStdenv
+, stdenv
 , fetchFromGitHub
 , cmake
 }:
 
-gccStdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "uarmsolver";
   version = "0.2.4";
 
@@ -25,7 +25,7 @@ gccStdenv.mkDerivation rec {
     description = "universal Association Rule Mining Solver";
     homepage    = "https://github.com/firefly-cpp/uARMSolver";
     license     = licenses.mit;
-    platforms   = platforms.all;
+    platforms   = platforms.linux;
     maintainers = with maintainers; [ firefly-cpp ];
   };
 }
