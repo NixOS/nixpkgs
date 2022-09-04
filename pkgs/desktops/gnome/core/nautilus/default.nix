@@ -4,7 +4,7 @@
 , meson
 , ninja
 , pkg-config
-, gtk-doc
+, gi-docgen
 , docbook-xsl-nons
 , gettext
 , libxml2
@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nautilus";
-  version = "43.beta.1";
+  version = "43.rc";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "vcNohRVfwJVzkkCy6VEAMvXZWCP5NL0bkpcIIQdWg1E=";
+    sha256 = "9w/Rm7J0XBr7lieVsxVOEKivbgWaEJnf9eoHoKNgdfc=";
   };
 
   patches = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    gtk-doc
+    gi-docgen
     docbook-xsl-nons
     wrapGAppsHook4
   ];
@@ -108,6 +108,11 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
