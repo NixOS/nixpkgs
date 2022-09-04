@@ -10154,6 +10154,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
+  pcscliteWithPolkit = pcsclite.override {
+    pname = "pcsclite-with-polkit";
+    polkitSupport = true;
+  };
+
   pcsctools = callPackage ../tools/security/pcsctools { };
 
   pcsc-cyberjack = callPackage ../tools/security/pcsc-cyberjack { };
