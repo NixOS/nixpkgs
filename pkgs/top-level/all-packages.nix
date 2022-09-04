@@ -34029,7 +34029,7 @@ with pkgs;
 
   minetest-mods = callPackage ../games/minetest/mods { };
 
-  minetestWithMods = import ../games/minetest/minetest-with-mods.nix 
+  minetestWithMods = import ../games/minetest/minetest-with-mods.nix
                                 pkgs
                                 {
                                     inherit symlinkJoin;
