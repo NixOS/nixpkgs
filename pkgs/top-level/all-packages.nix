@@ -3645,6 +3645,8 @@ with pkgs;
 
   dokuwiki = callPackage ../servers/web-apps/dokuwiki { };
 
+  dolibarr = callPackage ../servers/web-apps/dolibarr { };
+
   doppler = callPackage ../tools/security/doppler {};
 
   dosage = callPackage ../applications/graphics/dosage { };
@@ -15441,6 +15443,8 @@ with pkgs;
 
   avr8burnomat = callPackage ../development/misc/avr8-burn-omat { };
 
+  cppreference-doc = callPackage ../development/misc/cppreference-doc { };
+
   sourceFromHead = callPackage ../build-support/source-from-head-fun.nix {};
 
   jruby = callPackage ../development/interpreters/jruby { };
@@ -20216,8 +20220,8 @@ with pkgs;
     withUtils = false;
   });
 
-  libva = callPackage ../development/libraries/libva { };
-  libva-minimal = libva.override { minimal = true; };
+  libva-minimal = callPackage ../development/libraries/libva { minimal = true; };
+  libva = libva-minimal.override { minimal = false; };
   libva-utils = callPackage ../development/libraries/libva/utils.nix { };
 
   libva1 = callPackage ../development/libraries/libva/1.nix { };
@@ -28444,6 +28448,8 @@ with pkgs;
 
   swaynag-battery = callPackage ../applications/misc/swaynag-battery {};
 
+  swayest-workstyle = callPackage ../applications/window-managers/sway/swayest-workstyle { };
+
   tiramisu = callPackage ../applications/misc/tiramisu { };
 
   rlaunch = callPackage ../applications/misc/rlaunch {
@@ -34879,6 +34885,8 @@ with pkgs;
   caneda = libsForQt5.callPackage ../applications/science/electronics/caneda { };
 
   csxcad = callPackage ../applications/science/electronics/csxcad { };
+
+  dataexplorer = callPackage ../applications/science/electronics/dataexplorer { };
 
   diylc = callPackage ../applications/science/electronics/diylc { };
 
