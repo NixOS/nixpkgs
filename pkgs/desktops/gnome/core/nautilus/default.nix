@@ -36,13 +36,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nautilus";
-  version = "43.beta.1";
+  version = "43.rc";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "vcNohRVfwJVzkkCy6VEAMvXZWCP5NL0bkpcIIQdWg1E=";
+    sha256 = "9w/Rm7J0XBr7lieVsxVOEKivbgWaEJnf9eoHoKNgdfc=";
   };
 
   patches = [
