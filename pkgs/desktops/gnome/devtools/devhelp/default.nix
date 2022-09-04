@@ -8,9 +8,7 @@
 , gtk3
 , wrapGAppsHook
 , glib
-, appstream-glib
 , gobject-introspection
-, python3
 , gi-docgen
 , webkitgtk_4_1
 , gettext
@@ -21,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "devhelp";
-  version = "43.beta";
+  version = "43.rc";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/devhelp/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "cVgG50RPktYW2xuI8Qq3zy9sFNrQDXhBqtz9x3ZJmTE=";
+    sha256 = "6RirnKpTBwZnxquzkgT6CJxOpVsnjL9lQWGptoykmQ0=";
   };
 
   nativeBuildInputs = [
@@ -37,10 +35,11 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     wrapGAppsHook
-    appstream-glib
     gobject-introspection
-    python3
     gi-docgen
+    # post install script
+    glib
+    gtk3
   ];
 
   buildInputs = [
@@ -56,12 +55,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  postPatch = ''
-    # patchShebangs requires executable file
-    chmod +x build-aux/meson/meson_post_install.py
-    patchShebangs build-aux/meson/meson_post_install.py
-  '';
 
   preFixup = ''
     gappsWrapperArgs+=(
