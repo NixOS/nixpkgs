@@ -54,6 +54,13 @@ stdenv.mkDerivation {
       # workaround '-p0' patchflags below.
       stripLen = 1;
     })
+
+    # fix https://github.com/root-project/root/issues/10990
+    (fetchpatch {
+      url = "https://github.com/root-project/root/pull/11243/commits/e177a477b0be05ef139094be1e96a99ece06350a.diff";
+      hash = "sha256-2DQmJGHmATHawl3dk9dExncVe1sXzJQyy4PPwShoLTY=";
+      stripLen = 5;
+    })
   ];
   patchFlags = [ "-p0" ];
 
