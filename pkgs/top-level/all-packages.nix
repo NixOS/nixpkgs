@@ -4208,6 +4208,8 @@ with pkgs;
 
   libzbc = callPackage ../os-specific/linux/libzbc { };
 
+  libzbd = callPackage ../os-specific/linux/libzbd { };
+
   lifeograph = callPackage ../applications/editors/lifeograph { };
 
   limitcpu = callPackage ../tools/misc/limitcpu { };
