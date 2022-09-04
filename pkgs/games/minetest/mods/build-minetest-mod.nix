@@ -3,7 +3,7 @@
 rec {
   buildMinetestMod =
     attrs@{
-      name ? "${attrs.pname}", 
+      name ? "${attrs.pname}",
       namePrefix ? "",
       src,
       unpackPhase ? "",
