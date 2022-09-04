@@ -11296,6 +11296,8 @@ with pkgs;
 
   swaks = callPackage ../tools/networking/swaks { };
 
+  swiftbar = callPackage ../os-specific/darwin/swiftbar { };
+
   swiften = callPackage ../development/libraries/swiften { };
 
   squeekboard = callPackage ../applications/accessibility/squeekboard { };
