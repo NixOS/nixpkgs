@@ -4206,6 +4206,8 @@ with pkgs;
 
   libxnd = callPackage ../development/libraries/libxnd { };
 
+  libzbc = callPackage ../os-specific/linux/libzbc { };
+
   lifeograph = callPackage ../applications/editors/lifeograph { };
 
   limitcpu = callPackage ../tools/misc/limitcpu { };
