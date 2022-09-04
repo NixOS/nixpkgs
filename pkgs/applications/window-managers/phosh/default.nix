@@ -27,11 +27,12 @@
 , networkmanager
 , polkit
 , libsecret
+, evolution-data-server
 }:
 
 stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
-    sha256 = "sha256-oC0qW64VA8EDzFUfac3I4N11SJPs2R0B5TjcvNhruzQ=";
+    sha256 = "sha256-NJLuOUBQmgphGMFZN3MsIOP99YI+CxyR+JuybX3Vnpc=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +59,7 @@ stdenv.mkDerivation rec {
     libxkbcommon
     libgudev
     callaudiod
+    evolution-data-server
     pulseaudio
     glib
     gcr
@@ -82,7 +84,12 @@ stdenv.mkDerivation rec {
   # Temporarily disabled - Test is broken (SIGABRT)
   doCheck = false;
 
-  mesonFlags = [ "-Dsystemd=true" "-Dcompositor=${phoc}/bin/phoc" ];
+  mesonFlags = [
+    "-Dsystemd=true"
+    "-Dcompositor=${phoc}/bin/phoc"
+    # https://github.com/NixOS/nixpkgs/issues/36468
+    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
+  ];
 
   postPatch = ''
     chmod +x build-aux/post_install.py
