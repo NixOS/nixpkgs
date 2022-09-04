@@ -1359,25 +1359,25 @@ void PluginManagerPrivate::loadPlugins()
     const QVector<PluginSpec *> queue = loadQueue();
     Utils::setMimeStartupPhase(MimeStartupPhase::PluginsLoading);
     for (PluginSpec *spec : queue) {
-        qDebug() << "PluginManagerPrivate::loadPlugins loadPlugin Loaded" << spec << spec->name() << spec->version();
+        qDebug() << "PluginManagerPrivate::loadPlugins spec" << spec << spec->name() << spec->version() << "loadPlugin Loaded";
         loadPlugin(spec, PluginSpec::Loaded);
     }
 
     Utils::setMimeStartupPhase(MimeStartupPhase::PluginsInitializing);
     for (PluginSpec *spec : queue) {
-        qDebug() << "PluginManagerPrivate::loadPlugins loadPlugin Initialized" << spec << spec->name() << spec->version();
+        qDebug() << "PluginManagerPrivate::loadPlugins spec" << spec << spec->name() << spec->version() << "loadPlugin Initialized";
         loadPlugin(spec, PluginSpec::Initialized);
     }
 
     Utils::setMimeStartupPhase(MimeStartupPhase::PluginsDelayedInitializing);
     Utils::reverseForeach(queue, [this](PluginSpec *spec) {
-        qDebug() << "PluginManagerPrivate::loadPlugins loadPlugin Running" << spec << spec->name() << spec->version();
+        qDebug() << "PluginManagerPrivate::loadPlugins spec" << spec << spec->name() << spec->version() << "loadPlugin Running";
         loadPlugin(spec, PluginSpec::Running);
         if (spec->state() == PluginSpec::Running) {
             delayedInitializeQueue.push(spec);
         } else {
             // Plugin initialization failed, so cleanup after it
-            qDebug() << "PluginManagerPrivate::loadPlugins spec->d->kill()" << spec << spec->name() << spec->version();
+            qDebug() << "PluginManagerPrivate::loadPlugins spec" << spec << spec->name() << spec->version() << "spec->d->kill()";
             spec->d->kill();
         }
     });
