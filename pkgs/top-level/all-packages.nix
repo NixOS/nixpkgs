@@ -34706,6 +34706,8 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
+  seqtk = callPackage ../applications/science/biology/seqtk { };
+
   snpeff = callPackage ../applications/science/biology/snpeff { };
 
   somafm-cli = callPackage ../tools/misc/somafm-cli { };
