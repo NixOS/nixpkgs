@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "versioneer";
-  version = "0.24";
+  version = "0.25";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-G426nlHi8OBMfoVFIW7s3qLWPhvVVpRI7mbFSffneC8=";
+    hash = "sha256-mo1axyDGbgmawguk+8LPAKXyuxYU3on0TIKTWsUQuuE=";
   };
 
   # Couldn't get tests to work because, for instance, they used virtualenv and
