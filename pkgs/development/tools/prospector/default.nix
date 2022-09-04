@@ -58,7 +58,8 @@ buildPythonApplication rec {
     substituteInPlace pyproject.toml \
       --replace 'requirements-detector = "^0.7"' 'requirements-detector = "*"' \
       --replace 'pep8-naming = ">=0.3.3,<=0.10.0"' 'pep8-naming = "*"' \
-      --replace 'mccabe = "^0.6.0"' 'mccabe = "*"'
+      --replace 'mccabe = "^0.6.0"' 'mccabe = "*"' \
+      --replace 'pycodestyle = ">=2.6.0,<2.9.0"' 'pycodestyle = "*"'
   '';
 
   pythonImportsCheck = [
