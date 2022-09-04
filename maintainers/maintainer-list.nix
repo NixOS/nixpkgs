@@ -315,6 +315,12 @@
     githubId = 1174858;
     name = "Maxwell Huang-Hobbs";
   };
+  adjacentresearch = {
+     email = "nate@adjacentresearch.xyz";
+     github = "0xperp";
+     githubId = 96147421;
+     name = "0xperp";
+  };
   adnelson = {
     email = "ithinkican@gmail.com";
     github = "adnelson";
