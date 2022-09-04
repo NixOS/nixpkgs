@@ -34032,8 +34032,6 @@ with pkgs;
   minetestWithMods = import ../games/minetest/minetest-with-mods.nix
                                 pkgs
                                 {
-                                    inherit symlinkJoin;
-                                    inherit makeWrapper;
                                     inherit minetest-mods;
                                     inherit minetest;
                                   };
