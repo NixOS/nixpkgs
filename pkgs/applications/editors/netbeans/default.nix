@@ -64,6 +64,10 @@ stdenv.mkDerivation {
     description = "An integrated development environment for Java, C, C++ and PHP";
     homepage = "https://netbeans.apache.org/";
     license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     maintainers = with lib.maintainers; [ sander rszibele asbachb ];
     platforms = lib.platforms.unix;
   };
