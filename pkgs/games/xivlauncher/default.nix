@@ -64,7 +64,7 @@ in
       description = "Custom launcher for FFXIV";
       homepage = "https://github.com/goatcorp/FFXIVQuickLauncher";
       license = licenses.gpl3;
-      maintainers = with maintainers; [ ashkitten ];
+      maintainers = with maintainers; [ ashkitten sersorrel ];
       platforms = [ "x86_64-linux" ];
     };
   }
