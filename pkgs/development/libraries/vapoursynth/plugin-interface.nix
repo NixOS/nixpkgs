@@ -1,5 +1,5 @@
 { lib, python3, buildEnv, writeText, runCommandCC, stdenv, runCommand
-, vapoursynth, makeWrapper, withPlugins }:
+, vapoursynth, makeWrapper, patchelf, withPlugins }:
 
 plugins: let
   pythonEnvironment = python3.buildEnv.override {
@@ -39,12 +39,12 @@ plugins: let
   ext = stdenv.targetPlatform.extensions.sharedLibrary;
 in
 runCommand "${vapoursynth.name}-with-plugins" {
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ] ++ (lib.optionals (!stdenv.isDarwin) [ patchelf ]);
   passthru = {
     inherit python3;
     withPlugins = plugins': withPlugins (plugins ++ plugins');
   };
-} ''
+} (''
   mkdir -p \
     $out/bin \
     $out/lib/pkgconfig \
@@ -69,6 +69,7 @@ runCommand "${vapoursynth.name}-with-plugins" {
       ln -s $pythonPlugin $out/''${pythonPlugin#"${pythonEnvironment}/"}
   done
 
+'' + (lib.optionalString (!stdenv.isDarwin) ''
   for binaryFile in \
       lib/libvapoursynth${ext} \
       lib/libvapoursynth-script${ext}.0.0.0
@@ -95,6 +96,7 @@ runCommand "${vapoursynth.name}-with-plugins" {
           --output $out/$binaryFile \
           ${vapoursynth}/$binaryFile
   done
+'') + ''
 
   ln -s \
       ${pluginLoader}/lib/libvapoursynth-nix-plugins${ext} \
@@ -110,4 +112,4 @@ runCommand "${vapoursynth.name}-with-plugins" {
 
   makeWrapper $out/bin/.vspipe-wrapped $out/bin/vspipe \
       --prefix PYTHONPATH : $out/${python3.sitePackages}
-''
+'')

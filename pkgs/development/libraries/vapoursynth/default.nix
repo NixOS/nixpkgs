@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
     withPlugins = import ./plugin-interface.nix {
       inherit lib python3 buildEnv writeText runCommandCC stdenv runCommand
-        vapoursynth makeWrapper withPlugins;
+        vapoursynth makeWrapper patchelf withPlugins;
     };
   };
 
