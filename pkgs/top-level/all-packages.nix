@@ -4204,6 +4204,8 @@ with pkgs;
 
   libnss-mysql = callPackage ../os-specific/linux/libnss-mysql { };
 
+  libnvme = callPackage ../os-specific/linux/libnvme { };
+
   libxnd = callPackage ../development/libraries/libxnd { };
 
   libzbc = callPackage ../os-specific/linux/libzbc { };
