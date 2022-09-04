@@ -148,6 +148,17 @@ let
 
     # doesn't like the extra setlocale warnings emitted by our bash wrappers
     test-locale.t
+
+    # Python 3.10 error message change https://bz.mercurial-scm.org/show_bug.cgi?id=6643
+    test-http-bad-server.t
+
+    # Python 3.10-3.12 deprecation warning: distutils
+    # https://bz.mercurial-scm.org/show_bug.cgi?id=6729
+    test-hghave.t
+
+    # Python 3.10-3.12 deprecation warning: asyncore
+    # https://bz.mercurial-scm.org/show_bug.cgi?id=6727
+    test-patchbomb-tls.t
     EOF
 
     export HGTEST_REAL_HG="${mercurial}/bin/hg"
