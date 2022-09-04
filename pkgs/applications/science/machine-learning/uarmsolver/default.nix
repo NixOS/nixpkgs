@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "uarmsolver";
+  pname = "uarmsolver";
   version = "0.2.4";
 
   src = fetchFromGitHub {
