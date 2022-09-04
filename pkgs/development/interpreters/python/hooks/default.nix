@@ -15,6 +15,9 @@ let
   pythonSitePackages = python.sitePackages;
   pythonCheckInterpreter = python.interpreter;
   setuppy = ../run_setup.py;
+
+  makePhase = callPackage make-phase { };
+
 in rec {
 
   condaInstallHook = callPackage ({ gnutar, lbzip2 }:
