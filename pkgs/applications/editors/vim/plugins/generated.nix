@@ -4588,8 +4588,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "jose-elias-alvarez";
       repo = "null-ls.nvim";
-      rev = "8ab5b579828693bb4dc206db34de51238dbd9d84";
-      sha256 = "15ccyswyparl4vgv691ki2kiz93r5if7fj1fflpj64dkv1jj0bi3";
+      rev = "08da35a3d1a1a0a626c63c0f6dd5c2e58a61373e";
+      sha256 = "0hsx9ddc6dyb78hnqffvvarjsi85psdc9kckrgk1644rfvn1m40c";
     };
     meta.homepage = "https://github.com/jose-elias-alvarez/null-ls.nvim/";
   };
@@ -7244,12 +7244,12 @@ final: prev:
 
   vifm-vim = buildVimPluginFrom2Nix {
     pname = "vifm.vim";
-    version = "2022-08-29";
+    version = "2022-09-04";
     src = fetchFromGitHub {
       owner = "vifm";
       repo = "vifm.vim";
-      rev = "9f1e597cefaba008474a03b57595eb895b5f0095";
-      sha256 = "0vb2l7sh9zjhny7vrg453b6msm50v2cs1l76qqpf5kdfzqcnglcm";
+      rev = "2c553b3e75393c1c7fed833106c7cbe4d744a24d";
+      sha256 = "1b8z6y2g946d2v9w1f7wxssf0yi25fz6m2s55ag1kx52jfld02ld";
     };
     meta.homepage = "https://github.com/vifm/vifm.vim/";
   };
