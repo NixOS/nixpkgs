@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgnomekbd";
-  version = "3.28.0";
+  version = "3.28.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "swV6RD5MJvkf41Lc0RVKVs3VHxz9fLas4wDDzBKGWck=";
+    sha256 = "ItxZVm1zwAZTUPWpc0DmLsx7CMTfGRg4BLuL4kyP6HA=";
   };
 
   nativeBuildInputs = [
