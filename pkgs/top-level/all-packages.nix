@@ -15401,6 +15401,8 @@ with pkgs;
 
   avr8burnomat = callPackage ../development/misc/avr8-burn-omat { };
 
+  cppreference-doc = callPackage ../development/misc/cppreference-doc { };
+
   sourceFromHead = callPackage ../build-support/source-from-head-fun.nix {};
 
   jruby = callPackage ../development/interpreters/jruby { };
