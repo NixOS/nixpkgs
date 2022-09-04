@@ -389,6 +389,17 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>coq</literal> package and versioned variants
+          starting at <literal>coq_8_14</literal> no longer include
+          CoqIDE, which is now available through
+          <literal>coqPackages.coqide</literal>. It is still possible to
+          get CoqIDE as part of the <literal>coq</literal> package by
+          overriding the <literal>buildIde</literal> argument of the
+          derivation.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           PHP 7.4 is no longer supported due to upstream not supporting
           this version for the entire lifecycle of the 22.11 release.
         </para>
