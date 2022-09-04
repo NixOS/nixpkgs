@@ -2720,6 +2720,8 @@ in {
 
   doit-py = callPackage ../development/python-modules/doit-py { };
 
+  domeneshop = callPackage ../development/python-modules/domeneshop { };
+
   dominate = callPackage ../development/python-modules/dominate { };
 
   doorbirdpy = callPackage ../development/python-modules/doorbirdpy { };
