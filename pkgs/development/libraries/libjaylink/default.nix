@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libjaylink";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.zapb.de";
     owner = "libjaylink";
     repo = "libjaylink";
     rev = version;
-    sha256 = "sha256-90obLaSE3oxrocyJWZ4+j4U4GuPIZEiiIQqenu4vsJg=";
+    sha256 = "sha256-odJDE1A0WZ9vBXPxaUdthjTgmbmbdHjbyY1PkaM4+vI=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
