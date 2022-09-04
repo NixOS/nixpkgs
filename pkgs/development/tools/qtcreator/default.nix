@@ -64,9 +64,7 @@ stdenv.mkDerivation rec {
 
   buildFlags = optional withDocumentation "docs";
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Debug"
-  ];
+  cmakeBuildType = "Debug";
 
   installFlags = [ "INSTALL_ROOT=$(out)" ] ++ optional withDocumentation "install_docs";
 
