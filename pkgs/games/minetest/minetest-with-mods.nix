@@ -6,9 +6,7 @@ flip (
 
   pkgs.makeOverridable
     (
-      { symlinkJoin
-      , makeWrapper
-      , minetest-mods
+      { minetest-mods
       , minetest
       }:
 
@@ -18,9 +16,9 @@ flip (
           ":"
           (map (mod: "${mod}/share/minetest/mods") mods);
       in
-      symlinkJoin {
+      pkgs.symlinkJoin {
         name = "minetest-with-mods";
-        buildInputs = [ makeWrapper ];
+        buildInputs = [ pkgs.makeWrapper ];
         paths = [
           minetest
         ] ++ mods;
