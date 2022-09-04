@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
     "--without-debugger"
   ] ++ lib.optionals pythonSupport [
     "--with-python=${python}"
+  ] ++ lib.optionals (!pythonSupport) [
+    "--without-python"
   ] ++ lib.optionals (!cryptoSupport) [
     "--without-crypto"
   ];
