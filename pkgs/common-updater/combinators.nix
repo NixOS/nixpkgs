@@ -19,7 +19,8 @@
       command : (FilePath | [ (FilePath | String) ])
       // Features that the script supports
       // - commit: (experimental) returns commit message in stdout
-      supportedFeatures : ?[ "commit" ]
+      // - silent: (experimental) returns no stdout
+      supportedFeatures : ?[ ("commit" | "silent") ]
       // Override attribute path detected by update.nix
       attrPath : ?String
     }
@@ -118,11 +119,40 @@ rec {
     in
     let
       scripts = scriptsNormalized;
-      validateFeatures = ({ supportedFeatures, ... }: supportedFeatures == [ ]);
+      hasCommitSupport = lib.findSingle ({ supportedFeatures, ... }: supportedFeatures == [ "commit" ]) null null scripts != null;
+      validateFeatures =
+        if hasCommitSupport then
+          ({ supportedFeatures, ... }: supportedFeatures == [ "commit" ] || supportedFeatures == [ "silent" ])
+        else
+          ({ supportedFeatures, ... }: supportedFeatures == [ ]);
     in
 
-    assert lib.assertMsg (lib.all validateFeatures scripts) "Combining update scripts with features enabled is currently unsupported.";
+    assert lib.assertMsg (lib.all validateFeatures scripts) "Combining update scripts with features enabled (other than a single script with “commit” and all other with “silent”) is currently unsupported.";
     assert lib.assertMsg (builtins.length (lib.unique (builtins.map ({ attrPath ? null, ... }: attrPath) scripts)) == 1) "Combining update scripts with different attr paths is currently unsupported.";
 
-    commandsToShellInvocation (builtins.map ({ command, ... }: command) scripts);
+    {
+      command = commandsToShellInvocation (builtins.map ({ command, ... }: command) scripts);
+      supportedFeatures = lib.optionals hasCommitSupport [
+        "commit"
+      ];
+    };
+
+  /*
+    copyAttrOutputToFile : String → FilePath → UpdateScript
+    EXPERIMENTAL! Simple update script that copies the output of Nix derivation built by `attr` to `path`.
+  */
+  copyAttrOutputToFile =
+    attr:
+    path:
+
+    {
+      command = [
+        "sh"
+        "-c"
+        "cp --no-preserve=all \"$(nix-build -A ${attr})\" \"$0\" > /dev/null"
+        path
+      ];
+      supportedFeatures = [ "silent" ];
+    };
+
 }
