@@ -11638,6 +11638,18 @@ final: prev:
     meta.homepage = "https://github.com/mg979/vim-xtabline/";
   };
 
+  vim-yami = buildVimPluginFrom2Nix {
+    pname = "vim-yami";
+    version = "2020-01-05";
+    src = fetchFromGitHub {
+      owner = "danishprakash";
+      repo = "vim-yami";
+      rev = "716fe223a430a1379ef1e4bec84348a2f07430fd";
+      sha256 = "0zfisxps5ssawlf5bimdv3vdjmb4ls5i42kxsvkaifps0qml6mdp";
+    };
+    meta.homepage = "https://github.com/danishprakash/vim-yami/";
+  };
+
   vim-yaml = buildVimPluginFrom2Nix {
     pname = "vim-yaml";
     version = "2021-01-14";
