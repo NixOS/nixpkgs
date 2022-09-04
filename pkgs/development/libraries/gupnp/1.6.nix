@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -17,28 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gupnp";
-  version = "1.5.3";
+  version = "1.5.4";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-dF4/qzOzqhbbNCYxmK/c/9XjWCKjKA277O9210HEhoc=";
+    sha256 = "sha256-mIMpFXw1ElKuB7qtiq6/EKfLVaZCwi1hOqhbp0wFG3g=";
   };
-
-  patches = [
-    # Do not use deprecated symbols after libsoup update.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gupnp/-/commit/1296d10eda308792d2924f141d72b8b6818878bd.patch";
-      sha256 = "mboJQ9I7oV+HXt0atUSLt6FDTCCT22lbuI7OUb0tDLM=";
-    })
-
-    # Fix test after libsoup update.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gupnp/-/commit/fba0ca75445189f6554bd66fb3aa4f022b8f69e9.patch";
-      sha256 = "6dkpnDqHVvesrzEIYLbHdoB0dfePr0ll8jQxijuu24E=";
-    })
-  ];
 
   depsBuildBuild = [
     pkg-config
