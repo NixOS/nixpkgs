@@ -3,6 +3,10 @@
 , jsoncpp, gtest, which, gtk2, unzip, abseil-cpp, breakpad }:
 let
   inherit (python3Packages) python gyp six;
+  utdic = fetchurl {
+    url = "https://osdn.net/downloads/users/39/39056/mozcdic-ut-20220904.tar.bz2";
+    sha256 = "sha256-pmLBCcw2Zsirzl1PjYkviRIZoyfUz5rpESeABDxuhtU=";
+  };
   japanese_usage_dictionary = fetchFromGitHub {
     owner = "hiroyuki-komatsu";
     repo = "japanese-usage-dictionary";
@@ -47,6 +51,9 @@ in clangStdenv.mkDerivation rec {
   postUnpack = ''
     unzip ${x-ken-all} -d $sourceRoot/src/
     unzip ${jigyosyo} -d $sourceRoot/src/
+    mkdir $TMPDIR/unpack
+    tar xf ${utdic} -C $TMPDIR/unpack
+    cat $TMPDIR/unpack/mozcdic-ut-20220904/mozcdic-ut-20220904.txt >> $sourceRoot/src/data/dictionary_oss/dictionary00.txt
 
     rmdir $sourceRoot/src/third_party/breakpad/
     ln -s ${breakpad} $sourceRoot/src/third_party/breakpad
