@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
     sha256 = hash;
   };
 
-  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
-
   ADDFLAGS = with darwin.apple_sdk.frameworks;
     lib.optional stdenv.isDarwin
       "-F${IOKit}/Library/Frameworks/";
