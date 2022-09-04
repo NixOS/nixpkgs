@@ -8,6 +8,7 @@
 , pip
 , pytest-xdist
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , setuptools
 , setuptools-scm
@@ -25,8 +26,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-Oeiu5GVEbgInjYDb69QyXR3YYzJI9DITxzol9Y59ilU=";
   };
-
-  patches = [ ./fix-setup-py-bad-syntax-detection.patch ];
 
   nativeBuildInputs = [
     setuptools-scm
@@ -56,7 +55,20 @@ buildPythonPackage rec {
     "network"
     "test_direct_reference_with_extras"
     "test_local_duplicate_subdependency_combined"
-  ];
+  ] ++ (lib.optional (pythonAtLeast "3.8" && pythonOlder "3.10")
+    # Ignore test_cli_compile.py's `test_bad_setup_file` test case on Python
+    # versions that don't yet include a fix for this issue with `ensurepip`:
+    # https://github.com/python/cpython/issues/90355
+    #
+    # pip-compile uses `build.util.project_wheel_metadata()` to get dependencies
+    # from project setup files, and `build.env.IsolatedEnvBuilder`, a class used
+    # by `project_wheel_metadata()`, has code that gets the version of `pip` that's
+    # installed in its isolated env. The bug in `ensurepip` causes the isolated
+    # env to have no `pip` package installed if it's found in an outer environment,
+    # This happnes to be the case with Nix build environments, which results in a
+    # `StopIteration` exception in `IsolatedEnvBuilder`, causing this test case to fail.
+    "test_bad_setup_file"
+  );
 
   pythonImportsCheck = [
     "piptools"
