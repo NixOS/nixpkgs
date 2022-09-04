@@ -304,6 +304,8 @@ with pkgs;
 
   breakpad = callPackage ../development/misc/breakpad { };
 
+  brev-cli = callPackage ../development/misc/brev-cli { };
+
   buf = callPackage ../development/tools/buf { };
 
   buf-language-server = callPackage ../development/tools/buf-language-server { };
