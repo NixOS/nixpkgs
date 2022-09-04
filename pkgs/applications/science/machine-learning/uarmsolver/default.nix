@@ -1,10 +1,10 @@
 { lib
-, stdenv
+, gccStdenv
 , fetchFromGitHub
 , cmake
 }:
 
-stdenv.mkDerivation rec {
+gccStdenv.mkDerivation rec {
   pname = "uarmsolver";
   version = "0.2.4";
 
