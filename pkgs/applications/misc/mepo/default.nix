@@ -18,12 +18,12 @@
 , withX11 ? false
 
 # transmits user's location without asking first
-, geoclueSupport ? false , geoclue2
+, geoclueSupport ? false, geoclue2
 
 # transmits user's location without asking first
 , reportLocationToMozilla ? false
 
-, gpsdSupport ? true , gpsd
+, gpsdSupport ? true, gpsd
 }:
 
 let
