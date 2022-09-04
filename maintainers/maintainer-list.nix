@@ -4340,6 +4340,12 @@
     githubId = 415760;
     name = "Jonas Höglund";
   };
+  firefly-cpp = {
+    email = "iztok@iztok-jr-fister.eu";
+    github = "firefly-cpp";
+    githubId = 1633361;
+    name = "Iztok Fister Jr.";
+  };
   fishi0x01 = {
     email = "fishi0x01@gmail.com";
     github = "fishi0x01";
@@ -6489,6 +6495,12 @@
     github = "jpotier";
     githubId = 752510;
     name = "Martin Potier";
+  };
+  jqqqqqqqqqq = {
+    email = "jqqqqqqqqqq@gmail.com";
+    github = "jqqqqqqqqqq";
+    githubId = 12872927;
+    name = "Curtis Jiang";
   };
   jqueiroz = {
     email = "nixos@johnjq.com";
@@ -9685,6 +9697,12 @@
     matrix = "@numkem:matrix.org";
     github = "numkem";
     githubId = 332423;
+  };
+  nviets = {
+    email = "nathan.g.viets@gmail.com";
+    github = "nviets";
+    githubId = 16027994;
+    name = "Nathan Viets";
   };
   nyanloutre = {
     email = "paul@nyanlout.re";
