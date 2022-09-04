@@ -22,5 +22,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ sebastianblunt ];
     license = licenses.asl20;
   };
-
 }
