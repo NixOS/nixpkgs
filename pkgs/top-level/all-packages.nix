@@ -34236,6 +34236,8 @@ with pkgs;
 
   sc2-headless = callPackage ../applications/science/machine-learning/sc2-headless { };
 
+  uarmsolver = callPackage ../applications/science/machine-learning/uarmsolver { };
+
   ### SCIENCE/MATH
 
   _4ti2  = callPackage ../applications/science/math/4ti2 { };
