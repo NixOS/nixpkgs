@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-maps";
-  version = "43.beta";
+  version = "43.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-19Nu9/GjmJ/8f2nRZ7Ya1V6FINxkjRWKP0Ya1JV97Xw=";
+    sha256 = "sha256-NBqS8OTo+lOaOggrdYXYA/4Od7byiF7ztq9zZxKSQ5k=";
   };
 
   patches = [
@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
     # https://gitlab.gnome.org/GNOME/gnome-maps/-/merge_requests/248
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gnome-maps/-/merge_requests/248.patch";
-      sha256 = "TxPzDYiqvFkXeIbtIXabb8XOajlMdShaWzQGsPjweGw=";
+      sha256 = "koVpvz021b+rvauIc3kvEBdTttRSuYiPvDH/dVbs5pc=";
       postFetch = ''
         # Make the patch apply.
-        substituteInPlace "$out" --replace "version: '43.0'," "version: '43.beta',"
+        substituteInPlace "$out" --replace "version: '43.0'," "version: '43.rc',"
       '';
     })
   ];
