@@ -50,6 +50,9 @@
 , # Whether to output have EFIVARS available in $out/efi-vars.fd and use it during disk creation
   touchEFIVars ? false
 
+, # Whether to enforce SMM in QEMU for EFI variables manipulation - this can break authenticated variables manipulation such as bootloader installation.
+  systemManagementModeEnforcement ? false
+
 , # OVMF firmware derivation, defaults to `pkgs.OVMF.fd`
   OVMF ? pkgs.OVMF.fd
 
@@ -82,12 +85,21 @@
 , # Disk image format, one of qcow2, qcow2-compressed, vdi, vpc, raw.
   format ? "raw"
 
-  # Whether to fix partitions GUIDs/UUIDs to arbitrary values.
+  # Whether to fix:
+  #   - GPT Disk Unique Identifier (diskGUID)
+  #   - GPT Partition Unique Identifier: depends on the layout, root partition UUID can be controlled through `rootGPUID` option
+  #   - GPT Partition Type Identifier: fixed according to the layout, e.g. ESP partition, etc. through `parted` invocation.
+  #   - Filesystem Unique Identifier when fsType = ext4 for *root partition*.
+  # BIOS/MBR support is "best effort" at the moment.
+  # Boot partitions may not be deterministic.
   # Also, to fix last time checked of the ext4 partition if fsType = ext4.
 , deterministic ? true
 
-  # GUID used for root partition
-, rootGUID ? "F222513B-DED1-49FA-B591-20CE86A2FE7F"
+  # GPT Partition Unique Identifier for root partition.
+, rootGPUID ? "F222513B-DED1-49FA-B591-20CE86A2FE7F"
+  # When fsType = ext4, this is the root Filesystem Unique Identifier.
+  # TODO: support other filesystems someday.
+, rootFSUID ? (if fsType == "ext4" then rootGPUID else null)
 
 , # Whether a nix channel based on the current source tree should be
   # made available inside the image. Useful for interactive use of nix
@@ -99,21 +111,18 @@
   additionalPaths ? []
 }:
 
-assert partitionTableType == "legacy" || partitionTableType == "legacy+gpt" || partitionTableType == "efi" || partitionTableType == "hybrid" || partitionTableType == "none";
-# We use -E offset=X below, which is only supported by e2fsprogs
-assert partitionTableType != "none" -> fsType == "ext4";
+assert (lib.assertOneOf "partitionTableType" partitionTableType [ "legacy" "legacy+gpt" "efi" "hybrid" "none" ]);
+assert (lib.assertMsg (fsType == "ext4" && deterministic -> rootFSUID != null) "In deterministic mode with a ext4 partition, rootFSUID must be non-null, by default, it is equal to rootGPUID.");
+  # We use -E offset=X below, which is only supported by e2fsprogs
+assert (lib.assertMsg (partitionTableType != "none" -> fsType == "ext4") "to produce a partition table, we need to use -E offset flag which is support only for fsType = ext4");
+assert (lib.assertMsg (touchEFIVars -> partitionTableType == "hybrid" || partitionTableType == "efi" || partitionTableType == "legacy+gpt") "EFI variables can be used only with a partition table of type: hybrid, efi or legacy+gpt.");
+  # If only Nix store image, then: contents must be empty, configFile must be unset, and we should no install bootloader.
+assert (lib.assertMsg (onlyNixStore -> contents == [] && configFile == null && !installBootLoader) "In a only Nix store image, the contents must be empty, no configuration must be provided and no bootloader should be installed.");
 # Either both or none of {user,group} need to be set
-assert lib.all
+assert (lib.assertMsg (lib.all
          (attrs: ((attrs.user  or null) == null)
               == ((attrs.group or null) == null))
-        contents;
-
-# If only Nix store image, then: contents must be empty, configFile must be unset, and we should no install bootloader.
-assert onlyNixStore -> contents == [] && configFile == null && !installBootLoader;
-
-# EFI variables manipulation can be done only on a partiion table supporting UEFI.
-# TODO: legacy+gpt is it a good idea?
-assert touchEFIVars -> partitionTableType == "hybrid" || partitionTableType == "efi" || partitionTableType == "legacy+gpt";
+        contents) "Contents of the disk image should set none of {user, group} or both at the same time.");
 
 with lib;
 
@@ -157,7 +166,7 @@ let format' = format; in let
           --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
           --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC \
           --partition-guid=2:970C694F-AFD0-4B99-B750-CDB7A329AB6F \
-          --partition-guid=3:${rootGUID} \
+          --partition-guid=3:${rootGPUID} \
           $diskImage
       ''}
     '';
@@ -171,7 +180,7 @@ let format' = format; in let
           sgdisk \
           --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
           --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC \
-          --partition-guid=2:${rootGUID} \
+          --partition-guid=2:${rootGPUID} \
           $diskImage
       ''}
     '';
@@ -188,7 +197,7 @@ let format' = format; in let
           --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
           --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC \
           --partition-guid=2:970C694F-AFD0-4B99-B750-CDB7A329AB6F \
-          --partition-guid=3:${rootGUID} \
+          --partition-guid=3:${rootGPUID} \
           $diskImage
       ''}
     '';
@@ -432,7 +441,14 @@ let format' = format; in let
       postVM = moveOrConvertImage + postVM;
       QEMU_OPTS =
         concatStringsSep " " (lib.optional useEFIBoot "-drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
-        ++ lib.optional touchEFIVars "-drive if=pflash,format=raw,unit=1,file=$efiVars"
+        ++ lib.optionals touchEFIVars [
+          "-drive if=pflash,format=raw,unit=1,file=$efiVars"
+        ]
+        ++ lib.optionals systemManagementModeEnforcement [
+          "-machine type=q35,accel=kvm,smm=on"
+          # Ensure we require EFI firmware to go through SMM to touch secureboot variables (once setup is done)
+          "-global driver=cfi.pflash01,property=secure,value=on"
+        ]
       );
       memSize = 1024;
     } ''
@@ -440,9 +456,12 @@ let format' = format; in let
 
       rootDisk=${if partitionTableType != "none" then "/dev/vda${rootPartition}" else "/dev/vda"}
 
-      # Some tools assume these exist
-      ln -s vda /dev/xvda
-      ln -s vda /dev/sda
+      # It is necessary to set root filesystem unique identifier in advance, otherwise
+      # bootloader might get the wrong one and failed to boot.
+      # At the end, we reset again because we want deterministic timestamps.
+      ${optionalString (fsType == "ext4" && deterministic) ''
+        tune2fs -T now ${optionalString deterministic "-U ${rootFSUID}"} -c 0 -i 0 $rootDisk
+      ''}
       # make systemd-boot find ESP without udev
       mkdir /dev/block
       ln -s /dev/vda1 /dev/block/254:1
@@ -509,7 +528,7 @@ let format' = format; in let
       # This two-step approach is necessary otherwise `tune2fs` will want a fresher filesystem to perform
       # some changes.
       ${optionalString (fsType == "ext4") ''
-        tune2fs -T now ${optionalString deterministic "-U ${rootGUID}"} -c 0 -i 0 $rootDisk
+        tune2fs -T now ${optionalString deterministic "-U ${rootFSUID}"} -c 0 -i 0 $rootDisk
         ${optionalString deterministic "tune2fs -f -T 19700101 $rootDisk"}
       ''}
     ''

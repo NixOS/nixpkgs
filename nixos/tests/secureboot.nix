@@ -8,16 +8,19 @@ with pkgs.lib;
 
 let
   common = {
-    virtualisation.useBootLoader = true;
-    virtualisation.useEFIBoot = true;
-    virtualisation.useSecureBoot = true;
+    virtualisation = {
+      useBootLoader = true;
+      useEFIBoot = true;
+      useSecureBoot = true;
+      efi.systemManagementModeEnforcement = false; # Investigate why it breaks everything.
+    };
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
     environment.systemPackages = [ pkgs.efibootmgr pkgs.sbsigntool pkgs.sbctl ];
   };
 in
 {
-  basic = makeTest {
+  prevent-reboot = makeTest {
     name = "secureboot-installation-prevent-reboot";
     meta.maintainers = with pkgs.lib.maintainers; [ raitobezarius ];
 

@@ -1095,6 +1095,14 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
+          QEMU test architecture supports running System Management
+          Enforcement (SMM), useful to lock down UEFI authenticated
+          variables. At the moment, it seems to prevent any change to
+          UEFI platform, breaking disk production and tests, if enabled.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>nixos/lib/make-disk-image.nix</literal> can now
           mutate EFI variables, run user-provided EFI firmware or
           variable templates. As a result, NixOS tests have better
