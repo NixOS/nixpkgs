@@ -22,14 +22,6 @@ in
     };
   };
 
-  creaturesMod = buildMod {
-    pname = "creatures";
-    src = fetchGit {
-      url = "https://github.com/MirceaKitsune/minetest_mods_creatures.git";
-      rev = "adca784b964f28f7393669b3da71c99750099e7b";
-    };
-  };
-
   zombiesMod = buildMod {
     pname = "zombies";
     src = fetchGit {
