@@ -41,12 +41,6 @@ let
     runtime = ".NET Runtime ${version}";
     sdk = ".NET SDK ${version}";
   };
-
-  packageDeps = mkNugetDeps {
-    name = "${pname}-${version}-deps";
-    nugetDeps = packages;
-  };
-
 in
 stdenv.mkDerivation (finalAttrs: rec {
   inherit pname version;
@@ -85,11 +79,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     runHook postInstall
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/dotnet --info
-  '';
-
   # Tell autoPatchelf about runtime dependencies.
   # (postFixup phase is run before autoPatchelfHook.)
   postFixup = lib.optionalString stdenv.isLinux ''
@@ -109,19 +98,25 @@ stdenv.mkDerivation (finalAttrs: rec {
       $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
   '';
 
-  setupHook = writeText "dotnet-setup-hook" ''
-    if [ ! -w "$HOME" ]; then
-      export HOME=$(mktemp -d) # Dotnet expects a writable home directory for its configuration files
-    fi
+  meta = with lib; {
+    description = builtins.getAttr type descriptions;
+    homepage = "https://dotnet.github.io/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kuznero mdarocha ];
+    mainProgram = "dotnet";
+    platforms = attrNames srcs;
+  };
+} // import ./sdk/common.nix {
+  inherit stdenv writeText testers runCommand;
+  inherit (finalAttrs) finalPackage;
 
-    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 # Dont try to expand NuGetFallbackFolder to disk
-    export DOTNET_NOLOGO=1 # Disables the welcome message
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-  '';
-
-  passthru = rec {
+  passthru = {
     inherit icu;
-    packages = packageDeps;
+
+    packages = mkNugetDeps {
+      name = "${pname}-${version}-deps";
+      nugetDeps = packages;
+    };
 
     updateScript =
       if type != "sdk" then
@@ -140,31 +135,5 @@ stdenv.mkDerivation (finalAttrs: rec {
         pushd pkgs/development/compilers/dotnet
         exec ${./update.sh} "${majorVersion}"
       '';
-
-    tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-      };
-
-      smoke-test = runCommand "dotnet-sdk-smoke-test" {
-        nativeBuildInputs = [ finalAttrs.finalPackage ];
-      } ''
-        HOME=$(pwd)/fake-home
-        dotnet new console
-        dotnet build
-        output="$(dotnet run)"
-        # yes, older SDKs omit the comma
-        [[ "$output" =~ Hello,?\ World! ]] && touch "$out"
-      '';
-    };
-  };
-
-  meta = with lib; {
-    description = builtins.getAttr type descriptions;
-    homepage = "https://dotnet.github.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kuznero mdarocha ];
-    mainProgram = "dotnet";
-    platforms = attrNames srcs;
   };
 })

@@ -1,0 +1,57 @@
+From 162a057ff24dfd1e63ae15fc0e25464ebcb0c439 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Wed, 31 Aug 2022 22:46:55 -0300
+Subject: [PATCH] make tarball deterministic
+
+---
+ .../Arcade/src/Tarball_WriteSourceRepoProperties.cs           | 4 ++--
+ src/SourceBuild/Arcade/tools/SourceBuildArcadeTarball.targets | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/SourceBuild/Arcade/src/Tarball_WriteSourceRepoProperties.cs b/src/SourceBuild/Arcade/src/Tarball_WriteSourceRepoProperties.cs
+index b6b2793f3..b4f6f61a7 100644
+--- a/src/SourceBuild/Arcade/src/Tarball_WriteSourceRepoProperties.cs
++++ b/src/SourceBuild/Arcade/src/Tarball_WriteSourceRepoProperties.cs
+@@ -105,7 +105,7 @@ private static DerivedVersion GetVersionInfo(string version, string commitCount)
+                 if (releaseParts.Length == 2)
+                 {
+                     // NuGet does this - arbitrary build IDs
+-                    return new DerivedVersion { OfficialBuildId = DateTime.Now.ToString("yyyyMMdd.1"), PreReleaseVersionLabel = releaseParts[0] };
++                    return new DerivedVersion { OfficialBuildId = "20220101.1", PreReleaseVersionLabel = releaseParts[0] };
+                 }
+                 else if (releaseParts.Length == 3)
+                 {
+@@ -139,7 +139,7 @@ private static DerivedVersion GetVersionInfo(string version, string commitCount)
+             {
+                 // finalized version number (x.y.z) - probably not our code
+                 // VSTest, Application Insights, Newtonsoft.Json do this
+-                return new DerivedVersion { OfficialBuildId = DateTime.Now.ToString("yyyyMMdd.1"), PreReleaseVersionLabel = string.Empty };
++                return new DerivedVersion { OfficialBuildId = "20220101.1", PreReleaseVersionLabel = string.Empty };
+             }
+ 
+             throw new FormatException($"Can't derive a build ID from version {version} (commit count {commitCount}, release {string.Join(";", nugetVersion.Release.Split('-', '.'))})");
+diff --git a/src/SourceBuild/Arcade/tools/SourceBuildArcadeTarball.targets b/src/SourceBuild/Arcade/tools/SourceBuildArcadeTarball.targets
+index a516a86cf..23db99e26 100644
+--- a/src/SourceBuild/Arcade/tools/SourceBuildArcadeTarball.targets
++++ b/src/SourceBuild/Arcade/tools/SourceBuildArcadeTarball.targets
+@@ -177,7 +177,7 @@
+       WorkingDirectory="$(TarballRepoSourceDir)" />
+ 
+     <Exec
+-      Command="git submodule foreach 'rm -rf %24%28git rev-parse --git-dir%29/objects ||:'"
++      Command="git submodule foreach 'cd %24%28git rev-parse --git-dir%29 %26%26 rm -rf objects/* logs index hooks packed-refs FETCH_HEAD ORIG_HEAD refs/* shallow'"
+       WorkingDirectory="$(TarballRepoSourceDir)"
+       Condition="$(PreserveTarballGitFolders) != 'true'" />
+ 
+@@ -191,7 +191,7 @@
+ 
+     <!-- Remove the git objects folder to free up tarball space -->
+     <Exec
+-      Command="rm -rf objects"
++      Command="rm -rf objects/* logs index hooks packed-refs FETCH_HEAD ORIG_HEAD refs/tags refs/remotes shallow"
+       WorkingDirectory="$(TarballRepoSourceDir).git"
+       Condition="$(PreserveTarballGitFolders) != 'true'" />
+ 
+-- 
+2.37.1
+

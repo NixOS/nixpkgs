@@ -40,6 +40,8 @@ rec {
   sdk_2_2 = throw "Dotnet SDK 2.2 is EOL, please use 3.1 (LTS), 5.0 (Current) or 6.0 (LTS)";
   sdk_3_0 = throw "Dotnet SDK 3.0 is EOL, please use 3.1 (LTS), 5.0 (Current) or 6.0 (LTS)";
 
+  sdk = callPackage ./sdk { inherit (buildAttrs) buildNetSdk; };
+
   newtonsoft-json_11 = callPackage ./newtonsoft-json {
     version = "11.0.2";
     sha256 = "sha256-MHD2DXIdDJA3RicOU94/KA38VuN2csVV2Umcb4xGQzI=";
