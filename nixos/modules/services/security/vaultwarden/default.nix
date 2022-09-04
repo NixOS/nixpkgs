@@ -210,6 +210,8 @@ ADMIN_TOKEN=...copy-paste a unique generated secret token here...
         BACKUP_FOLDER = cfg.backupDir;
       };
       path = with pkgs; [ sqlite ];
+      # if both services are started at the same time, vaultwarden fails with "database is locked"
+      before = [ "vaultwarden.service" ];
       serviceConfig = {
         SyslogIdentifier = "backup-vaultwarden";
         Type = "oneshot";
