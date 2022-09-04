@@ -30,11 +30,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-remote-desktop";
-  version = "43.beta";
+  version = "43.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-th1u0ih9pV/Om1meTCsNBvuVEsvmkSYxu6cbfViVq+c=";
+    hash = "sha256-dLT4QCC3pgMu3Clh3691sqHVHYE/eW1zSbOtMg+78I0=";
   };
 
   nativeBuildInputs = [
@@ -81,11 +81,9 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs \
       tests/vnc-test-runner.sh \
-      tests/run-vnc-tests.py \
-      meson_post_install.py
+      tests/run-vnc-tests.py
 
     substituteInPlace tests/vnc-test-runner.sh \
       --replace "dbus-run-session" "dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf"
