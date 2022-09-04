@@ -6825,6 +6825,8 @@ in {
 
   ppdeep = callPackage ../development/python-modules/ppdeep { };
 
+  prodict = callPackage ../development/python-modules/prodict { };
+
   proxy_tools = callPackage ../development/python-modules/proxy_tools { };
 
   py-nextbusnext = callPackage ../development/python-modules/py-nextbusnext { };
