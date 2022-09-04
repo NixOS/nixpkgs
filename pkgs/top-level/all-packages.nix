@@ -32555,6 +32555,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit Security AppKit;
   };
 
+  solana-validator = callPackage ../applications/blockchains/solana-validator {
+    inherit (darwin.apple_sdk.frameworks) IOKit Security AppKit;
+  };
+
   snarkos = callPackage ../applications/blockchains/snarkos {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
