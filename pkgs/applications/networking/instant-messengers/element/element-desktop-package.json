@@ -2,7 +2,7 @@
   "name": "element-desktop",
   "productName": "Element",
   "main": "lib/electron-main.js",
-  "version": "1.11.0",
+  "version": "1.11.4",
   "description": "A feature-rich client for Matrix.org",
   "author": "Element",
   "repository": {
@@ -42,7 +42,7 @@
   "dependencies": {
     "auto-launch": "^5.0.5",
     "counterpart": "^0.18.6",
-    "electron-store": "^6.0.1",
+    "electron-store": "^8.0.2",
     "electron-window-state": "^5.0.3",
     "minimist": "^1.2.6",
     "png-to-ico": "^2.1.1",
@@ -62,7 +62,7 @@
     "asar": "^2.0.1",
     "chokidar": "^3.5.2",
     "detect-libc": "^1.0.3",
-    "electron": "^19",
+    "electron": "^20",
     "electron-builder": "22.11.4",
     "electron-builder-squirrel-windows": "22.11.4",
     "electron-devtools-installer": "^3.1.1",
@@ -87,6 +87,9 @@
   "hakDependencies": {
     "matrix-seshat": "^2.3.3",
     "keytar": "^7.9.0"
+  },
+  "resolutions": {
+    "@types/node": "16.11.38"
   },
   "build": {
     "appId": "im.riot.app",
@@ -119,10 +122,14 @@
       "darkModeSupport": true
     },
     "win": {
-      "target": {
-        "target": "squirrel"
-      },
+      "target": [
+        "squirrel",
+        "msi"
+      ],
       "sign": "scripts/electron_winSign"
+    },
+    "msi": {
+      "perMachine": true
     },
     "directories": {
       "output": "dist"

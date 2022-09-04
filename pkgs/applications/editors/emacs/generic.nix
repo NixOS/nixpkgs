@@ -30,7 +30,7 @@
 , withAthena ? false
 , withToolkitScrollBars ? true
 , withPgtk ? false
-, withXinput2 ? false
+, withXinput2 ? withX && lib.versionAtLeast version "29"
 , withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
 , toolkit ? (
   if withGTK2 then "gtk2"
@@ -204,15 +204,10 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
       -f batch-native-compile $out/share/emacs/site-lisp/site-start.el
   '';
 
-  postFixup = lib.concatStringsSep "\n" [
-
-    (lib.optionalString (stdenv.isLinux && withX && toolkit == "lucid") ''
-      patchelf --set-rpath \
-        "$(patchelf --print-rpath "$out/bin/emacs"):${lib.makeLibraryPath [ libXcursor ]}" \
-        "$out/bin/emacs"
+  postFixup = lib.optionalString (stdenv.isLinux && withX && toolkit == "lucid") ''
+      patchelf --add-rpath ${lib.makeLibraryPath [ libXcursor ]} $out/bin/emacs
       patchelf --add-needed "libXcursor.so.1" "$out/bin/emacs"
-    '')
-  ];
+  '';
 
   passthru = {
     inherit nativeComp;
