@@ -45,7 +45,9 @@ let
   ];
 
   instanceOptions = {
-    options = sharedOptions // {
+    options =
+    (getAttrs [ "enable" ] sharedOptions)
+    // {
       execConfig = mkOption {
         default = {};
         example = { Parameters = "/bin/sh"; };
