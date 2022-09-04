@@ -2,6 +2,7 @@
 , attrs
 , buildPythonPackage
 , fetchPypi
+, hatch-fancy-pypi-readme
 , hatch-vcs
 , hatchling
 , importlib-metadata
@@ -24,15 +25,12 @@ buildPythonPackage rec {
     sha256 = "sha256-FlBZ8Hbv9pcbrlt0L8App7TvP5vPBMFOR3anYF3hSyM=";
   };
 
-  patches = [
-    ./remove-fancy-pypi-readme.patch
-  ];
-
   postPatch = ''
     patchShebangs json/bin/jsonschema_suite
   '';
 
   nativeBuildInputs = [
+    hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
   ];
