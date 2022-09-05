@@ -69,7 +69,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
         server.wait_until_succeeds("curl -sf https://${serverDomain} | grep Kanidm")
         server.wait_until_succeeds("ldapsearch -H ldap://[::1]:636 -b '${ldapBaseDN}' -x '(name=test)'")
         client.wait_until_succeeds("kanidm login -D anonymous && kanidm self whoami | grep anonymous@${serverDomain}")
-        (rv, result) = server.execute("kanidmd recover_account -d quiet -c ${serverConfigFile} -n admin 2>&1 | rg -o '[A-Za-z0-9]{48}'")
+        rv, result = server.execute("kanidmd recover_account -c ${serverConfigFile} idm_admin 2>&1 | rg -o '[A-Za-z0-9]{48}'")
         assert rv == 0
       '';
   })
