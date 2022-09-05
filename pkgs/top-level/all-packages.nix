@@ -638,11 +638,15 @@ with pkgs;
 
   umoci = callPackage ../applications/virtualization/umoci {};
 
+  dippi = callPackage ../tools/graphics/dippi {};
+
   dispad = callPackage ../tools/X11/dispad { };
 
   dupeguru = callPackage ../applications/misc/dupeguru { };
 
   dump1090 = callPackage ../applications/radio/dump1090 { };
+
+  dwarf2json = callPackage ../tools/misc/dwarf2json { };
 
   ebook2cw = callPackage ../applications/radio/ebook2cw { };
 
@@ -702,6 +706,8 @@ with pkgs;
   prefer-remote-fetch = import ../build-support/prefer-remote-fetch;
 
   global-platform-pro = callPackage ../development/tools/global-platform-pro { };
+
+  gomi = callPackage ../tools/misc/gomi { };
 
   graph-easy = callPackage ../tools/graphics/graph-easy { };
 
@@ -1159,6 +1165,10 @@ with pkgs;
   libdislocator = callPackage ../tools/security/afl/libdislocator.nix { };
 
   afpfs-ng = callPackage ../tools/filesystems/afpfs-ng { };
+
+  afsctool = callPackage ../tools/filesystems/afsctool {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   agate = callPackage ../servers/gemini/agate {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -2600,6 +2610,8 @@ with pkgs;
 
   harvid = callPackage ../tools/video/harvid { };
 
+  headset = callPackage ../applications/audio/headset { };
+
   hilbish = callPackage ../shells/hilbish { };
 
   hime = callPackage ../tools/inputmethods/hime {};
@@ -3053,6 +3065,8 @@ with pkgs;
   borg-sans-mono = callPackage ../data/fonts/borg-sans-mono { };
 
   boringtun = callPackage ../tools/networking/boringtun { };
+
+  book-summary = callPackage ../tools/text/book-summary { };
 
   bookstack = callPackage ../servers/web-apps/bookstack { };
 
@@ -7128,6 +7142,8 @@ with pkgs;
   };
 
   grin = callPackage ../tools/text/grin { };
+
+  gyb = callPackage ../tools/backup/gyb { };
 
   igrep = callPackage ../tools/text/igrep {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -12668,6 +12684,8 @@ with pkgs;
   zpaqd = callPackage ../tools/archivers/zpaq/zpaqd.nix { };
 
   zplug = callPackage ../shells/zsh/zplug { };
+
+  zi = callPackage ../shells/zsh/zi {};
 
   zinit = callPackage ../shells/zsh/zinit {} ;
 
@@ -32642,6 +32660,8 @@ with pkgs;
   snarkos = callPackage ../applications/blockchains/snarkos {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  terra-station = callPackage ../applications/blockchains/terra-station { };
 
   tessera = callPackage ../applications/blockchains/tessera { };
 
