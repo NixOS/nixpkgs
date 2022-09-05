@@ -10247,7 +10247,6 @@
     githubId = 1212814;
     name = "Peter Willemsen";
     keys = [{
-      longkeyid = "rsa4096/0x5C9DD4BFB96A28F0";
       fingerprint = "A37F D403 88E2 D026 B9F6  9617 5C9D D4BF B96A 28F0";
     }];
   };
