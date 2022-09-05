@@ -29697,6 +29697,8 @@ with pkgs;
 
   pdfmixtool = libsForQt5.callPackage ../applications/office/pdfmixtool { };
 
+  pdfrankenstein = callPackage ../applications/office/pdfrankenstein { };
+
   pig = callPackage ../applications/networking/cluster/pig { };
 
   pijul = callPackage ../applications/version-management/pijul { };
