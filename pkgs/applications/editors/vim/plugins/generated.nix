@@ -940,6 +940,18 @@ final: prev:
     meta.homepage = "https://github.com/bkad/camelcasemotion/";
   };
 
+  candle-grey = buildVimPluginFrom2Nix {
+    pname = "candle-grey";
+    version = "2022-06-28";
+    src = fetchFromGitHub {
+      owner = "aditya-azad";
+      repo = "candle-grey";
+      rev = "c21bd19db706dad3481b3b95236bfe1d75dd470f";
+      sha256 = "148d5cks1g8w89vjgds2awq6wh8r4hj4dbl09vmr0j230xx9ka0h";
+    };
+    meta.homepage = "https://github.com/aditya-azad/candle-grey/";
+  };
+
   caw-vim = buildVimPluginFrom2Nix {
     pname = "caw.vim";
     version = "2021-09-20";
