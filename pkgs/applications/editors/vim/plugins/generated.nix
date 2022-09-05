@@ -5140,7 +5140,7 @@ final: prev:
     src = fetchFromGitHub {
       owner = "kyazdani42";
       repo = "nvim-tree.lua";
-      rev = "e282420111929e2af2efca6f3fe31f95985d4a5b";
+      rev = "b83e06f7feeeaac08d59430903c729132f03c4cd";
       sha256 = "1x0zjn1p3m416952n4bbqb0wx420p3bbp7fc00anhska2ydw7qvq";
     };
     meta.homepage = "https://github.com/kyazdani42/nvim-tree.lua/";
