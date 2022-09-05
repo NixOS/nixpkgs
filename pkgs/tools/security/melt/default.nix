@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "melt";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "melt";
     rev = "v${version}";
-    sha256 = "sha256-I1LNCrJo3Ihh03aTUG0QhS6ySuMqNJJGyZ8XZzClDlU=";
+    sha256 = "sha256-C5bvlgyHU4lfmaAjNddnVyB2B41Wq7yO/RmARAeaORw=";
   };
 
-  vendorSha256 = "sha256-eRFWDyXN2c5VSxYOE12sczYP3rGtzLjY9M2DQgHNFyA=";
+  vendorSha256 = "sha256-9LTR7CrTBGAh7TPMQenY4vZQ7KMYv02fDsY51pkJZSo=";
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 

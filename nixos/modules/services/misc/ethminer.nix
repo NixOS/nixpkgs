@@ -18,61 +18,61 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable ethminer ether mining.";
+        description = lib.mdDoc "Enable ethminer ether mining.";
       };
 
       recheckInterval = mkOption {
         type = types.ints.unsigned;
         default = 2000;
-        description = "Interval in milliseconds between farm rechecks.";
+        description = lib.mdDoc "Interval in milliseconds between farm rechecks.";
       };
 
       toolkit = mkOption {
         type = types.enum [ "cuda" "opencl" ];
         default = "cuda";
-        description = "Cuda or opencl toolkit.";
+        description = lib.mdDoc "Cuda or opencl toolkit.";
       };
 
       apiPort = mkOption {
         type = types.int;
         default = -3333;
-        description = "Ethminer api port. minus sign puts api in read-only mode.";
+        description = lib.mdDoc "Ethminer api port. minus sign puts api in read-only mode.";
       };
 
       wallet = mkOption {
         type = types.str;
         example = "0x0123456789abcdef0123456789abcdef01234567";
-        description = "Ethereum wallet address.";
+        description = lib.mdDoc "Ethereum wallet address.";
       };
 
       pool = mkOption {
         type = types.str;
         example = "eth-us-east1.nanopool.org";
-        description = "Mining pool address.";
+        description = lib.mdDoc "Mining pool address.";
       };
 
       stratumPort = mkOption {
         type = types.port;
         default = 9999;
-        description = "Stratum protocol tcp port.";
+        description = lib.mdDoc "Stratum protocol tcp port.";
       };
 
       rig = mkOption {
         type = types.str;
         default = "mining-rig-name";
-        description = "Mining rig name.";
+        description = lib.mdDoc "Mining rig name.";
       };
 
       registerMail = mkOption {
         type = types.str;
         example = "email%40example.org";
-        description = "Url encoded email address to register with pool.";
+        description = lib.mdDoc "Url encoded email address to register with pool.";
       };
 
       maxPower = mkOption {
         type = types.ints.unsigned;
         default = 113;
-        description = "Miner max watt usage.";
+        description = lib.mdDoc "Miner max watt usage.";
       };
 
     };

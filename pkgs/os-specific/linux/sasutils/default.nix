@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitHub, sg3_utils }:
+{ lib, python3Packages, fetchFromGitHub, installShellFiles, sg3_utils }:
 
 python3Packages.buildPythonApplication rec {
   pname = "sasutils";
@@ -11,7 +11,13 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0kh5pcc2shdmrvqqi2y1zamzsfvk56pqgwqgqhjfz4r6yfpm04wl";
   };
 
+  nativeBuildInputs = [ installShellFiles ];
+
   propagatedBuildInputs = [ sg3_utils ];
+
+  postInstall = ''
+    installManPage doc/man/man1/*.1
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/stanford-rc/sasutils";

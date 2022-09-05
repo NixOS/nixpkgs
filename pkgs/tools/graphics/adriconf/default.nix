@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.freedesktop.org/mesa/adriconf/";
     description = "A GUI tool used to configure open source graphics drivers";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ musfay ];
+    maintainers = with maintainers; [ muscaln ];
     platforms = platforms.linux;
   };
 }

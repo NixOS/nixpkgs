@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, bc, librsvg, xcursorgen }:
+{ lib, stdenvNoCC, fetchFromGitLab, bc, librsvg, xcursorgen }:
 
 let
   dimensions = {
@@ -16,7 +16,7 @@ let
     # meta.longDescription.)
     map variantName product;
 in
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "comixcursors";
   version = "0.9.2";
 
@@ -90,31 +90,11 @@ stdenv.mkDerivation rec {
       opacity, edge thickness, and right- or left-handedness, for this cursor
       theme.  This package's derivation has an output for each of these
       variants, named following the upstream convention, and the attribute for
-      an output must be used to install a variant.  E.g.:
-      <programlisting language="nix">
-      environment.systemPackages = [
-        comixcursors.Blue
-        comixcursors.Opaque_Orange
-        comixcursors.Slim_Red
-        comixcursors.Opaque_Slim_White
-        comixcursors.LH_Green
-        comixcursors.LH_Opaque_Black
-        comixcursors.LH_Slim_Orange
-        comixcursors.LH_Opaque_Slim_Blue
-      ];
-      </programlisting>
-
-      Attempting to use just <literal>comixcursors</literal>, i.e. without an
-      output attribute, will not install any variants.  To install all the
-      variants, use <literal>comixcursors.all</literal> (which is a list), e.g.:
-      <programlisting language="nix">
-      environment.systemPackages = comixcursors.all ++ [...];
-      </programlisting>
-
-      The complete list of output attributes is:
-      <programlisting>
-      ${concatStringsSep "\n" variants}
-      </programlisting>
+      an output must be used to install a variant,
+      e.g. `comixcursors.LH_Opaque_Slim_Blue`.  Attempting to use only
+      `comixcursors`, i.e. without an output attribute, will not install any
+      variants.  To install all the variants, use `comixcursors.all` (which is a
+      list).
     '';
     homepage = "https://gitlab.com/limitland/comixcursors";
     changelog = "https://gitlab.com/limitland/comixcursors/-/blob/HEAD/NEWS";

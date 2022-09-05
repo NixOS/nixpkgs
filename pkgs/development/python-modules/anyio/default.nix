@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , fetchpatch
 , pythonOlder
+, setuptools
 , setuptools-scm
 , idna
 , sniffio
@@ -44,6 +45,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 

@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Perforce Command-Line Client";
     homepage = "https://www.perforce.com";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ corngood ];

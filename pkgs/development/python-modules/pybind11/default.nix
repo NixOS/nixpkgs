@@ -13,14 +13,18 @@
 
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.9.1";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-wBvEWQlZhHoSCMbGgYtB3alWBLA8mA8Mz6JPLhXa3Pc=";
+    hash = "sha256-/X8DZPFsNrKGbhjZ1GFOj17/NU6p4R+saCW3pLKVNeA=";
   };
+
+  postPatch = ''
+    sed -i "/^timeout/d" pyproject.toml
+  '';
 
   nativeBuildInputs = [ cmake ];
 
@@ -66,6 +70,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/pybind/pybind11";
+    changelog = "https://github.com/pybind/pybind11/blob/${src.rev}/docs/changelog.rst";
     description = "Seamless operability between C++11 and Python";
     longDescription = ''
       Pybind11 is a lightweight header-only library that exposes

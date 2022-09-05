@@ -1,4 +1,5 @@
 { lib
+, aiohttp
 , buildPythonPackage
 , fetchFromGitHub
 , rx
@@ -14,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "influxdb-client";
-  version = "1.27.0";
+  version = "1.31.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb-client-python";
-    rev = "v${version}";
-    hash = "sha256-M0Ob3HjIhlYSIWXGM54NXiEMSCmZzNLLNsCRyxAcjMc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gTJgY4vFgmFDn2WYUKEbvbu7hjxcw2QGI+blensS5BI=";
   };
 
   propagatedBuildInputs = [
@@ -33,9 +34,17 @@ buildPythonPackage rec {
     python-dateutil
     setuptools
     urllib3
-    ciso8601
     pytz
   ];
+
+  passthru.optional-dependencies = {
+    async = [
+      aiohttp
+    ];
+    ciso = [
+      ciso8601
+    ];
+  };
 
   # requires influxdb server
   doCheck = false;

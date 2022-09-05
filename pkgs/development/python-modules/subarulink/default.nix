@@ -36,6 +36,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
+
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "--cov=subarulink" ""

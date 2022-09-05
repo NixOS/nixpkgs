@@ -99,6 +99,6 @@ in buildPythonPackage rec {
     homepage = "https://github.com/Theano/Theano";
     description = "A Python library for large-scale array computation";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ maintainers.bcdarwin ];
+    maintainers = [ ];
   };
 }

@@ -1,5 +1,5 @@
-source 'https://rubygems.org' do
-  # We need to specify a version including prerelease to pick up prereleases.
-  # This should pick up all future releases / prereleases.
-  gem 'cocoapods', '>=1.7.0.beta.1'
-end
+source 'https://rubygems.org'
+
+# We need to specify a version including prerelease to pick up prereleases.
+# This should pick up all future releases / prereleases.
+gem 'cocoapods', '>=1.7.0.beta.1'

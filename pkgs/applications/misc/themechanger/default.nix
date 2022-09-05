@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "themechanger";
-  version = "0.10.2";
+  version = "0.11.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "ALEX11BR";
     repo = "ThemeChanger";
     rev = "v${version}";
-    sha256 = "00z1npm3lpvf0wc9z2v58pc4nxxh8x9m158kxf1k0qlz536jrzqr";
+    sha256 = "sha256-zSbh+mqCKquOyQASwVUW6hghmUc37nTuoa8pWCHM/a8=";
   };
 
   nativeBuildInputs = [

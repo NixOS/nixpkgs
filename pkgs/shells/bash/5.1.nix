@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
     "--disable-nls"
   ];
 
+  strictDeps = true;
   # Note: Bison is needed because the patches above modify parse.y.
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bison ]
@@ -98,7 +99,7 @@ stdenv.mkDerivation rec {
     if interactive
     then ''
       substituteInPlace "$out/bin/bashbug" \
-        --replace '${stdenv.shell}' "$out/bin/bash"
+        --replace '#!/bin/sh' "#!$out/bin/bash"
     ''
     # most space is taken by locale data
     else ''

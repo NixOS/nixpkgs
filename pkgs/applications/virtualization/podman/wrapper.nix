@@ -12,7 +12,6 @@
 , slirp4netns # User-mode networking for unprivileged namespaces
 , fuse-overlayfs # CoW for images, much faster than default vfs
 , util-linux # nsenter
-, cni-plugins # not added to path
 , iptables
 , iproute2
 , catatonit
@@ -76,5 +75,5 @@ in runCommand podman.name {
   ln -s ${podman-unwrapped}/share $out/share
   makeWrapper ${podman-unwrapped}/bin/podman $out/bin/podman \
     --set CONTAINERS_HELPER_BINARY_DIR ${helpersBin}/bin \
-    --prefix PATH : ${binPath}
+    --prefix PATH : ${lib.escapeShellArg binPath}
 ''

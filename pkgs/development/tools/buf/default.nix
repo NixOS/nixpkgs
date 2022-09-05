@@ -10,22 +10,26 @@
 
 buildGoModule rec {
   pname = "buf";
-  version = "1.4.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cKb9pZYEsO1thgtl/8XFJHpNrO6P3OR8Lox/Gf9ccYk=";
+    sha256 = "sha256-ALqyl5GLOxwsojR0/hfjO4yD3AEkyQK+faa3smMW94c=";
   };
 
-  vendorSha256 = "sha256-zXLvKEdiIFnmwWQBgbJHCEBe2i7FobgeUOnA3LvHl8w=";
+  vendorSha256 = "sha256-K+CAC2OrmjzpRF0DLSYp21BgvkxtJCF2FdpzYx/CqGI=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
     ./skip_test_requiring_network.patch
     # Skip TestWorkspaceGit which requires .git and commits.
     ./skip_test_requiring_dotgit.patch
+    # Skips the invalid_upstream test as it is flakey. Based on upstream commit
+    # 27930caf2eb35c2592a77f59ed5afe4d9e2fb7ea.
+    # This patch may be removed on the next buf update.
+    ./skip_test_invalid_upstream_flakey.patch
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -48,13 +52,9 @@ buildGoModule rec {
     runHook preInstall
 
     # Binaries
-    mkdir -p "$out/bin"
     # Only install required binaries, don't install testing binaries
-    for FILE in \
-      "buf" \
-      "protoc-gen-buf-breaking" \
-      "protoc-gen-buf-lint"; do
-      cp "$GOPATH/bin/$FILE" "$out/bin/"
+    for FILE in buf protoc-gen-buf-breaking protoc-gen-buf-lint; do
+      install -D -m 555 -t $out/bin $GOPATH/bin/$FILE
     done
 
     # Completions

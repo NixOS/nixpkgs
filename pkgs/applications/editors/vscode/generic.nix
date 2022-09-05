@@ -1,5 +1,5 @@
 { stdenv, lib, makeDesktopItem
-, unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook
+, unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook, makeWrapper
 , atomEnv, at-spi2-atk, autoPatchelfHook
 , systemd, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap
 , writeShellScriptBin
@@ -11,7 +11,7 @@
 , nodePackages, bash
 
 # Attributes inherit from specific versions
-, version, src, meta, sourceRoot
+, version, src, meta, sourceRoot, commandLineArgs
 , executableName, longName, shortName, pname, updateScript
 # sourceExecutableName is the name of the binary in the source archive, over
 # which we have no control
@@ -68,7 +68,12 @@ let
 
     runtimeDependencies = lib.optional stdenv.isLinux [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
 
-    nativeBuildInputs = [ unzip ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook nodePackages.asar wrapGAppsHook ];
+    nativeBuildInputs = [ unzip ]
+      ++ lib.optionals stdenv.isLinux [
+        autoPatchelfHook
+        nodePackages.asar
+        (wrapGAppsHook.override { inherit makeWrapper; })
+      ];
 
     dontBuild = true;
     dontConfigure = true;
@@ -105,6 +110,7 @@ let
         # Add gio to PATH so that moving files to the trash works when not using a desktop environment
         --prefix PATH : ${glib.bin}/bin
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+        --add-flags ${lib.escapeShellArg commandLineArgs}
       )
     '';
 

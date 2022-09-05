@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, bzip2, zlib, autoconf, automake, cmake, gnumake, help2man, texinfo, libtool, cppzmq
+{ lib, stdenv, fetchFromGitHub, bzip2, zlib, autoconf, automake, cmake, help2man, texinfo, libtool, cppzmq
 , libarchive, avro-cpp_llvm, boost, jansson, zeromq, openssl, pam, libiodbc, libkrb5, gcc, libcxx, which, catch2
 , nanodbc_llvm, fmt, nlohmann_json, spdlog }:
 
@@ -8,7 +8,7 @@ let
 in
 let
   common = import ./common.nix {
-    inherit lib stdenv bzip2 zlib autoconf automake cmake gnumake
+    inherit lib stdenv bzip2 zlib autoconf automake cmake
       help2man texinfo libtool cppzmq libarchive jansson
       zeromq openssl pam libiodbc libkrb5 gcc libcxx
       boost avro-cpp which catch2 nanodbc fmt nlohmann_json
@@ -99,4 +99,3 @@ rec {
     };
   });
 }
-

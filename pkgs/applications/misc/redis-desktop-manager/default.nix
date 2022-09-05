@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchFromGitiles, pkg-config, libssh2
+{ stdenv, mkDerivation, lib, fetchFromGitHub, fetchFromGitiles, pkg-config, libssh2
 , qtbase, qtdeclarative, qtgraphicaleffects, qtimageformats, qtquickcontrols2
 , qtsvg, qttools, qtquick1, qtcharts
 , qmake
@@ -75,6 +75,7 @@ EOF
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Cross-platform open source Redis DB management tool";
     homepage = "https://redisdesktop.com/";
     license = licenses.gpl3Only;

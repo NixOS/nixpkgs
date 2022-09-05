@@ -80,3 +80,49 @@ tests.fetchgit = invalidateFetcherByDrvHash fetchgit {
   sha256 = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
 };
 ```
+
+## `nixosTest` {#tester-nixosTest}
+
+Run a NixOS VM network test using this evaluation of Nixpkgs.
+
+NOTE: This function is primarily for external use. NixOS itself uses `make-test-python.nix` directly. Packages defined in Nixpkgs [reuse NixOS tests via `nixosTests`, plural](#ssec-nixos-tests-linking).
+
+It is mostly equivalent to the function `import ./make-test-python.nix` from the
+[NixOS manual](https://nixos.org/nixos/manual/index.html#sec-nixos-tests),
+except that the current application of Nixpkgs (`pkgs`) will be used, instead of
+letting NixOS invoke Nixpkgs anew.
+
+If a test machine needs to set NixOS options under `nixpkgs`, it must set only the
+`nixpkgs.pkgs` option.
+
+### Parameter
+
+A [NixOS VM test network](https://nixos.org/nixos/manual/index.html#sec-nixos-tests), or path to it. Example:
+
+```nix
+{
+  name = "my-test";
+  nodes = {
+    machine1 = { lib, pkgs, nodes, ... }: {
+      environment.systemPackages = [ pkgs.hello ];
+      services.foo.enable = true;
+    };
+    # machine2 = ...;
+  };
+  testScript = ''
+    start_all()
+    machine1.wait_for_unit("foo.service")
+    machine1.succeed("hello | foo-send")
+  '';
+}
+```
+
+### Result
+
+A derivation that runs the VM test.
+
+Notable attributes:
+
+ * `nodes`: the evaluated NixOS configurations. Useful for debugging and exploring the configuration.
+
+ * `driverInteractive`: a script that launches an interactive Python session in the context of the `testScript`.

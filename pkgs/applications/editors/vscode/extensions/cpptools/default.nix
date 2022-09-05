@@ -1,7 +1,8 @@
 { lib, vscode-utils
-, fetchurl, mono, writeScript, runtimeShell
+, fetchurl, writeScript, runtimeShell
 , jq, clang-tools
 , gdbUseFixed ? true, gdb # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
+, autoPatchelfHook, makeWrapper, stdenv, lttng-ust, libkrb5, zlib
 }:
 
 /*
@@ -29,47 +30,27 @@
 
 let
   gdbDefaultsTo = if gdbUseFixed then "${gdb}/bin/gdb" else "gdb";
-
-
-  openDebugAD7Script = writeScript "OpenDebugAD7" ''
-    #!${runtimeShell}
-    BIN_DIR="$(cd "$(dirname "$0")" && pwd -P)"
-    ${if gdbUseFixed
-        then ''
-          export PATH=''${PATH}''${PATH:+:}${gdb}/bin
-        ''
-        else ""}
-    ${mono}/bin/mono $BIN_DIR/bin/OpenDebugAD7.exe $*
-  '';
 in
-
 vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "1.9.1";
+    version = "1.11.0";
+    sha256 = "c0725d3914aeb2515627691727455cc27e7a75031fa02ca957be02cc210bd64d";
+    arch = "linux-x64";
   };
 
-  vsix = fetchurl {
-    name = "${mktplcRef.publisher}-${mktplcRef.name}.gz";
-    url = "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/${mktplcRef.publisher}/vsextensions/${mktplcRef.name}/${mktplcRef.version}/vspackage?targetPlatform=linux-x64";
-    sha256 = "sha256-BtTl9DR8hnwNpO5k99M4dtqcTQ2hTzVbjR8VZh+tdDI=";
-  };
-
-  unpackPhase = ''
-    runHook preUnpack
-
-    gzip -d $src --stdout &> temporary.zip
-    unzip temporary.zip
-    rm temporary.zip
-
-    cd extension/
-
-    runHook postUnpack
-  '';
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+  ];
 
   buildInputs = [
     jq
+    lttng-ust
+    libkrb5
+    zlib
+    stdenv.cc.cc.lib
   ];
 
   postPatch = ''
@@ -85,27 +66,25 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     # Prevent download/install of extensions
     touch "./install.lock"
 
-    # Mono runtimes from nix package (used by generated `OpenDebugAD7`).
-    mv ./debugAdapters/bin/OpenDebugAD7 ./debugAdapters/bin/OpenDebugAD7_orig
-    cp -p "${openDebugAD7Script}" "./debugAdapters/bin/OpenDebugAD7"
-
     # Clang-format from nix package.
-    mv  ./LLVM/ ./LLVM_orig
+    mv ./LLVM/ ./LLVM_orig
     mkdir "./LLVM/"
     find "${clang-tools}" -mindepth 1 -maxdepth 1 | xargs ln -s -t "./LLVM"
 
-    # Patching  cpptools and cpptools-srv
-    elfInterpreter="$(cat $NIX_CC/nix-support/dynamic-linker)"
-    patchelf --set-interpreter "$elfInterpreter" ./bin/cpptools
-    patchelf --set-interpreter "$elfInterpreter" ./bin/cpptools-srv
-    chmod a+x ./bin/cpptools{-srv,}
+    # Patching binaries
+    chmod +x bin/cpptools bin/cpptools-srv bin/cpptools-wordexp debugAdapters/bin/OpenDebugAD7
+    patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so.1 ./debugAdapters/bin/libcoreclrtraceptprovider.so
   '';
 
-    meta = with lib; {
-      license = licenses.unfree;
-      maintainers = [ maintainers.jraygauthier ];
-      # A 32 bit linux would also be possible with some effort (specific download of binaries +
-      # patching of the elf files with 32 bit interpreter).
-      platforms = [ "x86_64-linux" ];
-    };
+  postFixup = lib.optionalString gdbUseFixed ''
+    wrapProgram $out/share/vscode/extensions/ms-vscode.cpptools/debugAdapters/bin/OpenDebugAD7 --prefix PATH : ${lib.makeBinPath [ gdb ]}
+  '';
+
+  meta = with lib; {
+    description = "The C/C++ extension adds language support for C/C++ to Visual Studio Code, including features such as IntelliSense and debugging.";
+    homepage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ jraygauthier stargate01 ];
+    platforms = [ "x86_64-linux" ];
+  };
 }

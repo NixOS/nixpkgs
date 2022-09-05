@@ -1,21 +1,21 @@
 { lib, fetchFromGitHub, python3Packages, gettext, git, qt5 }:
 
 let
-  inherit (python3Packages) buildPythonApplication pyqt5 sip_4 pyinotify;
+  inherit (python3Packages) buildPythonApplication pyqt5 sip_4 pyinotify qtpy;
 
 in buildPythonApplication rec {
   pname = "git-cola";
-  version = "3.12.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
     rev = "v${version}";
-    sha256 = "1f8jpfa916nszj431cmp41bxj2m76k2n8qnscqgxrc0k3pnnp3wc";
+    hash = "sha256-xCGXPGZa4K9f37kZRerfUY+Y7atRdqld5rxj0VYdziU=";
   };
 
   buildInputs = [ git gettext ];
-  propagatedBuildInputs = [ pyqt5 sip_4 pyinotify ];
+  propagatedBuildInputs = [ pyqt5 sip_4 pyinotify qtpy ];
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
   doCheck = false;

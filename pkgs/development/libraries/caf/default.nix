@@ -21,10 +21,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "test";
-  preCheck = ''
-    export LD_LIBRARY_PATH=$PWD/libcaf_core:$PWD/libcaf_io
-    export DYLD_LIBRARY_PATH=$PWD/libcaf_core:$PWD/libcaf_io
-  '';
 
   meta = with lib; {
     description = "An open source implementation of the actor model in C++";

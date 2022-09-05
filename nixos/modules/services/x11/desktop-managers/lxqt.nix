@@ -9,19 +9,23 @@ let
 in
 
 {
+  meta = {
+    maintainers = teams.lxqt.members;
+  };
+
   options = {
 
     services.xserver.desktopManager.lxqt.enable = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable the LXQt desktop manager";
+      description = lib.mdDoc "Enable the LXQt desktop manager";
     };
 
     environment.lxqt.excludePackages = mkOption {
       default = [];
       example = literalExpression "[ pkgs.lxqt.qterminal ]";
       type = types.listOf types.package;
-      description = "Which LXQt packages to exclude from the default environment";
+      description = lib.mdDoc "Which LXQt packages to exclude from the default environment";
     };
 
   };
@@ -63,8 +67,9 @@ in
 
     services.upower.enable = config.powerManagement.enable;
 
-    xdg.portal.enable = true;
-    xdg.portal.extraPortals = [ pkgs.lxqt.xdg-desktop-portal-lxqt ];
+    services.xserver.libinput.enable = mkDefault true;
+
+    xdg.portal.lxqt.enable = true;
   };
 
 }

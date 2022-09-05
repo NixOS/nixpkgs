@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libpcap, withTcl ? true, tcl }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, libpcap, withTcl ? true, tcl }:
 
 stdenv.mkDerivation rec {
   pname = "hping";
@@ -10,6 +10,15 @@ stdenv.mkDerivation rec {
     rev = "3547c7691742c6eaa31f8402e0ccbb81387c1b99"; # there are no tags/releases
     sha256 = "0y0n1ybij3yg9lfgzcwfmjz1sjg913zcqrv391xx83dm0j80sdpb";
   };
+  patches = [
+    # Pull patch pending upstream inclusion for -fno-common toolchain
+    # support: https://github.com/antirez/hping/pull/64
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/antirez/hping/pull/64/commits/d057b9309aec3a5a53aaee1ac3451a8a5b71b4e8.patch";
+      sha256 = "0bqr7kdlziijja588ipj8g5hv2109wq01c6x2qadbhjfnsps1b6l";
+    })
+  ];
 
   buildInputs = [ libpcap ] ++ lib.optional withTcl tcl;
 

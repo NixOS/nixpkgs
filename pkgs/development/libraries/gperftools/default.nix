@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gperftools";
-  version = "2.9.1";
+  version = "2.10";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-loUlC6mtR3oyS5opSmicCnfUqcefSk8+kKDcHNmC/oo=";
+    sha256 = "sha256-lUX9T31cYZEi+0DgF52EDSL9yiSHa8ToMxhpQFKHOGk=";
   };
 
   patches = [
@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  # tcmalloc uses libunwind in a way that works correctly only on non-ARM linux
-  buildInputs = lib.optional (stdenv.isLinux && !(stdenv.isAarch64 || stdenv.isAarch32)) libunwind;
+  # tcmalloc uses libunwind in a way that works correctly only on non-ARM dynamically linked linux
+  buildInputs = lib.optional (stdenv.isLinux && !(stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isStatic )) libunwind;
 
   # Disable general dynamic TLS on AArch to support dlopen()'ing the library:
   # https://bugzilla.redhat.com/show_bug.cgi?id=1483558
-  configureFlags = lib.optional (stdenv.isAarch32 || stdenv.isAarch64)
+  configureFlags = lib.optional stdenv.hostPlatform.isAarch
     "--disable-general-dynamic-tls";
 
   prePatch = lib.optionalString stdenv.isDarwin ''

@@ -23,6 +23,8 @@
 , libxcb
 , libxkbcommon
 , libxshmfence
+, libGL
+, libappindicator-gtk3
 , mesa
 , nspr
 , nss
@@ -42,12 +44,19 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.7.0-49.BETA";
+  version = "8.9.0-1.BETA";
 
-  src = fetchurl {
-    url = "https://downloads.1password.com/linux/tar/beta/x86_64/1password-${version}.x64.tar.gz";
-    sha256 = "sha256-cYT9Pi2WEjZQ5P7Dr84l65AHyD8tZrYC+m4hFxSsNd4=";
-  };
+  src =
+    if stdenv.hostPlatform.isAarch64 then
+      fetchurl {
+        url = "https://downloads.1password.com/linux/tar/beta/aarch64/1password-${version}.arm64.tar.gz";
+        sha256 = "0wxf1l6wh5m80f6s4f32j9i7f233lg162fw40770xxgwv8bl1f6a";
+      }
+    else
+      fetchurl {
+        url = "https://downloads.1password.com/linux/tar/beta/x86_64/1password-${version}.x64.tar.gz";
+        sha256 = "0vqrcwn5y350g91w3kh8n43gw21kck1cwim92dw9i0xxxch91hrg";
+      };
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -78,6 +87,8 @@ in stdenv.mkDerivation rec {
       libxcb
       libxkbcommon
       libxshmfence
+      libGL
+      libappindicator-gtk3
       mesa
       nspr
       nss
@@ -115,8 +126,9 @@ in stdenv.mkDerivation rec {
       # Electron is trying to open udev via dlopen()
       # and for some reason that doesn't seem to be impacted from the rpath.
       # Adding udev to LD_LIBRARY_PATH fixes that.
+      # Make xdg-open overrideable at runtime.
       makeWrapper $out/share/1password/1password $out/bin/1password \
-        --prefix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+        --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
 
       runHook postInstall
@@ -125,8 +137,9 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Multi-platform password manager";
     homepage = "https://1password.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ timstott savannidgerinel maxeaubrey sebtm ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

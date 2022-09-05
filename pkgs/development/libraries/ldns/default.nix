@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ldns";
-  version = "1.8.1";
+  version = "1.8.3";
 
   src = fetchurl {
     url = "https://www.nlnetlabs.nl/downloads/ldns/${pname}-${version}.tar.gz";
-    sha256 = "sha256-lYIpq85NOqoZp1wNEnZmVksXIWkCGG6VLKSu9Hxtf6M=";
+    sha256 = "sha256-w/ct0QNrKQfjpW5qz537LlUSVrPBu9l4eULe7rcOeGA=";
   };
 
   postPatch = ''
@@ -42,9 +42,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library with the aim of simplifying DNS programming in C";
-    license = licenses.bsd3;
     homepage = "http://www.nlnetlabs.nl/projects/ldns/";
-    platforms = platforms.unix;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ dtzWill ];
+    mainProgram = "drill";
+    platforms = platforms.unix;
   };
 }

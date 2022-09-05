@@ -1,201 +1,31 @@
 diff --git a/shapely/geos.py b/shapely/geos.py
-index 13ab835..1abdb5e 100644
+index 88c5f53..1ccd6e4 100644
 --- a/shapely/geos.py
 +++ b/shapely/geos.py
-@@ -55,174 +55,21 @@ def load_dll(libname, fallbacks=None, mode=DEFAULT_MODE):
-             "Could not find lib {} or load any of its variants {}.".format(
-                 libname, fallbacks or []))
+@@ -96,6 +96,7 @@ if sys.platform.startswith('linux'):
+         alt_paths = [
+             'libgeos_c.so.1',
+             'libgeos_c.so',
++            '@libgeos_c@',
+         ]
+         _lgeos = load_dll('geos_c', fallbacks=alt_paths)
  
--_lgeos = None
- def exists_conda_env():
-     """Does this module exist in a conda environment?"""
-     return os.path.exists(os.path.join(sys.prefix, 'conda-meta'))
+@@ -160,6 +161,7 @@ elif sys.platform == 'darwin':
+             "/usr/local/lib/libgeos_c.dylib",
+             # homebrew Apple Silicon
+             "/opt/homebrew/lib/libgeos_c.dylib",
++            "@libgeos_c@",
+         ]
+         _lgeos = load_dll('geos_c', fallbacks=alt_paths)
  
--
--if sys.platform.startswith('linux'):
--    # Test to see if we have a wheel repaired by auditwheel which contains its
--    # own libgeos_c. Note: auditwheel 3.1 changed the location of libs.
--    geos_whl_so = glob.glob(
--        os.path.abspath(os.path.join(os.path.dirname(__file__), ".libs/libgeos*.so*"))
--    ) or glob.glob(
--        os.path.abspath(
--            os.path.join(
--                os.path.dirname(__file__), "..", "Shapely.libs", "libgeos*.so*"
--            )
--        )
--    )
--
--    if len(geos_whl_so) > 0:
--        # We have observed problems with CDLL of libgeos_c not automatically
--        # loading the sibling c++ library since the change made by auditwheel
--        # 3.1, so we explicitly load them both.
--        geos_whl_so = sorted(geos_whl_so)
--        CDLL(geos_whl_so[0])
--        _lgeos = CDLL(geos_whl_so[-1])
--        LOG.debug("Found GEOS DLL: %r, using it.", _lgeos)
--
--    elif hasattr(sys, 'frozen'):
--        geos_pyinstaller_so = glob.glob(os.path.join(sys.prefix, 'libgeos_c-*.so.*'))
--        if len(geos_pyinstaller_so) >= 1:
--            _lgeos = CDLL(geos_pyinstaller_so[0])
--            LOG.debug("Found GEOS DLL: %r, using it.", _lgeos)
--    elif exists_conda_env():
--        # conda package.
--        _lgeos = CDLL(os.path.join(sys.prefix, 'lib', 'libgeos_c.so'))
--    else:
--        alt_paths = [
--            'libgeos_c.so.1',
--            'libgeos_c.so',
--        ]
--        _lgeos = load_dll('geos_c', fallbacks=alt_paths)
--
-+_lgeos = CDLL('@libgeos_c@')
-+if sys.platform == 'darwin':
-     # ctypes.CDLL(None) internally calls dlopen(NULL), and as the dlopen
-     # manpage says, "If filename is NULL, then the returned handle is for the
-     # main program". This way we can let the linker do the work to figure out
-     # which libc Python is actually using.
-     free = CDLL(None).free
--    free.argtypes = [c_void_p]
--    free.restype = None
--
--elif sys.platform == 'darwin':
--    # Test to see if we have a delocated wheel with a GEOS dylib.
--    dylib_path = os.path.abspath(
--        os.path.join(os.path.dirname(__file__), ".dylibs/*.dylib")
--    )
--    LOG.debug("Formed path for globbing: dylib_path=%r", dylib_path)
--
--    geos_whl_dylib = glob.glob(dylib_path)
--    LOG.debug("Globbed: geos_whl_dylib=%r", geos_whl_dylib)
--
--    if len(geos_whl_dylib) > 0:
--        handle = CDLL(None)
--        if hasattr(handle, "initGEOS_r"):
--            LOG.debug("GEOS already loaded")
--            _lgeos = handle
--        else:
--            geos_whl_dylib = sorted(geos_whl_dylib)
--            CDLL(geos_whl_dylib[0])
--            _lgeos = CDLL(geos_whl_dylib[-1])
--            LOG.debug("Found GEOS DLL: %r, using it.", _lgeos)
--
--    elif exists_conda_env():
--        # conda package.
--        _lgeos = CDLL(os.path.join(sys.prefix, 'lib', 'libgeos_c.dylib'))
--    else:
--        if hasattr(sys, 'frozen'):
--            try:
--                # .app file from py2app
--                alt_paths = [os.path.join(
--                    os.environ['RESOURCEPATH'], '..', 'Frameworks',
--                    'libgeos_c.dylib')]
--            except KeyError:
--                alt_paths = [
--                    # binary from pyinstaller
--                    os.path.join(sys.executable, 'libgeos_c.dylib'),
--                    # .app from cx_Freeze
--                    os.path.join(os.path.dirname(sys.executable), 'libgeos_c.1.dylib')]
--                if hasattr(sys, '_MEIPASS'):
--                    alt_paths.append(
--                        os.path.join(sys._MEIPASS, 'libgeos_c.1.dylib'))
--        else:
--            alt_paths = [
--                # The Framework build from Kyng Chaos
--                "/Library/Frameworks/GEOS.framework/Versions/Current/GEOS",
--                # macports
--                '/opt/local/lib/libgeos_c.dylib',
--                # homebrew Intel
--                '/usr/local/lib/libgeos_c.dylib',
--                # homebrew Apple Silicon
--                '/opt/homebrew/lib/libgeos_c.dylib',
--            ]
--        _lgeos = load_dll('geos_c', fallbacks=alt_paths)
--
--    free = CDLL(None).free
--    free.argtypes = [c_void_p]
--    free.restype = None
--
--elif sys.platform == 'win32':
--    _conda_dll_path = os.path.join(sys.prefix, 'Library', 'bin', 'geos_c.dll')
--    if exists_conda_env() and os.path.exists(_conda_dll_path):
--        _lgeos = CDLL(_conda_dll_path)
--    else:
--        geos_whl_dll = glob.glob(
--            os.path.abspath(
--                os.path.join(
--                    os.path.dirname(__file__), "..", "Shapely.libs", "geos*.dll"
--                )
--            )
--        )
--
--        if len(geos_whl_dll) > 0:
--            geos_whl_dll = sorted(geos_whl_dll)
--            # CDLL(geos_whl_so[0])
--            _lgeos = CDLL(geos_whl_dll[-1])
--            LOG.debug("Found GEOS DLL: %r, using it.", _lgeos)
--        else:
--            try:
--                egg_dlls = os.path.abspath(
--                    os.path.join(os.path.dirname(__file__), "DLLs")
--                )
--                if hasattr(sys, "_MEIPASS"):
--                    wininst_dlls = sys._MEIPASS
--                elif hasattr(sys, "frozen"):
--                    wininst_dlls = os.path.normpath(
--                        os.path.abspath(sys.executable + "../../DLLS")
--                    )
--                else:
--                    wininst_dlls = os.path.abspath(os.__file__ + "../../../DLLs")
--                original_path = os.environ["PATH"]
--                os.environ["PATH"] = "%s;%s;%s" % (
--                    egg_dlls,
--                    wininst_dlls,
--                    original_path,
--                )
--                _lgeos = load_dll("geos_c.dll")
--
--            except (ImportError, WindowsError, OSError):
--                raise
--
--        def free(m):
--            try:
--                cdll.msvcrt.free(m)
--            except WindowsError:
--                # XXX: See http://trac.gispython.org/projects/PCL/ticket/149
--                pass
--
--elif sys.platform == 'sunos5':
--    _lgeos = load_dll('geos_c', fallbacks=['libgeos_c.so.1', 'libgeos_c.so'])
--    free.restype = None
--    free.argtypes = [c_void_p]
--    free.restype = None
--
--else:  # other *nix systems
--    _lgeos = load_dll('geos_c', fallbacks=['libgeos_c.so.1', 'libgeos_c.so'])
--    free = CDLL(None).free
--    free.argtypes = [c_void_p]
--    free.restype = None
-+else:
-+    free = CDLL('@libc@').free
-+free.argtypes = [c_void_p]
-+free.restype = None
- 
- 
- def _geos_version():
 diff --git a/tests/test_dlls.py b/tests/test_dlls.py
-index c71da8e..fae9da6 100644
+index c71da8e..c36262c 100644
 --- a/tests/test_dlls.py
 +++ b/tests/test_dlls.py
-@@ -12,10 +12,4 @@ class LoadingTestCase(unittest.TestCase):
-     @unittest.skipIf(sys.platform == "win32", "FIXME: adapt test for win32")
-     def test_fallbacks(self):
-         load_dll('geos_c', fallbacks=[
--            os.path.join(sys.prefix, "lib", "libgeos_c.dylib"), # anaconda (Mac OS X)
--            '/opt/local/lib/libgeos_c.dylib',     # MacPorts
--            '/usr/local/lib/libgeos_c.dylib',     # homebrew (Mac OS X)
--            '/opt/homebrew/lib/libgeos_c.dylib',  # homebrew (macOS)
--            os.path.join(sys.prefix, "lib", "libgeos_c.so"), # anaconda (Linux)
--            'libgeos_c.so.1',
+@@ -18,4 +18,5 @@ class LoadingTestCase(unittest.TestCase):
+             '/opt/homebrew/lib/libgeos_c.dylib',  # homebrew (macOS)
+             os.path.join(sys.prefix, "lib", "libgeos_c.so"), # anaconda (Linux)
+             'libgeos_c.so.1',
 -            'libgeos_c.so'])
++            'libgeos_c.so',
 +            '@libgeos_c@'])

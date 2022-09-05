@@ -27,6 +27,14 @@ function Code(elem)
       content = '<refentrytitle>' .. title .. '</refentrytitle>' .. (volnum ~= nil and ('<manvolnum>' .. volnum .. '</manvolnum>') or '')
     elseif elem.attributes['role'] == 'file' then
       tag = 'filename'
+    elseif elem.attributes['role'] == 'command' then
+      tag = 'command'
+    elseif elem.attributes['role'] == 'option' then
+      tag = 'option'
+    elseif elem.attributes['role'] == 'var' then
+      tag = 'varname'
+    elseif elem.attributes['role'] == 'env' then
+      tag = 'envar'
     end
 
     if tag ~= nil then

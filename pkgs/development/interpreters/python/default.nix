@@ -19,9 +19,14 @@ with pkgs;
     , pythonOnBuildForTarget
     , pythonOnHostForHost
     , pythonOnTargetForTarget
+    , pythonAttr ? null
     , self # is pythonOnHostForTarget
     }: let
       pythonPackages = callPackage
+        # Function that when called
+        # - imports python-packages.nix
+        # - adds spliced package sets to the package set
+        # - applies overrides from `packageOverrides` and `pythonPackagesOverlays`.
         ({ pkgs, stdenv, python, overrides }: let
           pythonPackagesFun = import ../../../top-level/python-packages.nix {
             inherit stdenv pkgs lib;
@@ -74,7 +79,7 @@ with pkgs;
           extra = _: {};
           optionalExtensions = cond: as: if cond then as else [];
           python2Extension = import ../../../top-level/python2-packages.nix;
-          extensions = lib.composeManyExtensions ((optionalExtensions (!self.isPy3k) [python2Extension]) ++ [ overrides ]);
+          extensions = lib.composeManyExtensions ((optionalExtensions (!self.isPy3k) [python2Extension]) ++ pkgs.pythonPackagesExtensions ++ [ overrides ]);
           aliases = self: super: lib.optionalAttrs config.allowAliases (import ../../../top-level/python-aliases.nix lib self super);
         in lib.makeScopeWithSplicing
           pkgs.splicePackages
@@ -117,6 +122,8 @@ with pkgs;
         tests = callPackage ./tests.nix {
           python = self;
         };
+
+        inherit pythonAttr;
   };
 
   sources = {
@@ -124,19 +131,19 @@ with pkgs;
       sourceVersion = {
         major = "3";
         minor = "9";
-        patch = "12";
+        patch = "13";
         suffix = "";
       };
-      sha256 = "sha256-LNlLIGcOQVnG2atX+R2/JVuX2MGhRR0cNfTsGWit+XE=";
+      sha256 = "sha256-ElsMWY8eFdKqZUBug/eS330XHN84wWgDsUmZQxajCA8=";
     };
     python310 = {
       sourceVersion = {
         major = "3";
         minor = "10";
-        patch = "4";
+        patch = "6";
         suffix = "";
       };
-      sha256 = "sha256-gL+SX1cdpDazUhCIbPefbrX6XWxXExa3NWg0NFH3ehk=";
+      sha256 = "sha256-95X/h9EdSwx8M7yIUbDChkjYpFg6ohAKmMIrQya20/M=";
     };
   };
 
@@ -199,9 +206,9 @@ in {
       major = "3";
       minor = "11";
       patch = "0";
-      suffix = "a7";
+      suffix = "rc1";
     };
-    sha256 = "sha256-t8Vt10wvRy1Ja1qNNWvWrZ75sD8mKIwyN9P/aYqwPXQ=";
+    sha256 = "sha256-U6U3fDeoosbaB1sU651jN0V59/PHGPog8KH7sOlKkis=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -230,11 +237,10 @@ in {
     enableOptimizations = false;
     enableLTO = false;
     mimetypesSupport = false;
-  } // sources.python39)).overrideAttrs(old: {
+  } // sources.python310)).overrideAttrs(old: {
+    # TODO(@Artturin): Add this to the main cpython expr
+    strictDeps = true;
     pname = "python3-minimal";
-    meta = old.meta // {
-      maintainers = [];
-    };
   });
 
   pypy27 = callPackage ./pypy {

@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "07yxnlalvcglgwa9pjs1clwrmwx7a4575jai7q05jz3g4i6dprp3";
   };
 
-  buildInputs = [ nose mock ];
+  checkInputs = [ nose mock ];
 
   patchPhase = ''
     # Failing test: ERROR: statsd.tests.test_ipv6_resolution_udp

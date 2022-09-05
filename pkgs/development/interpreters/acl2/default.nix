@@ -10,20 +10,20 @@ let
   # ACL2 system itself; see
   # https://www.cs.utexas.edu/users/moore/acl2/current/HTML/installation/requirements.html#Obtaining-SBCL
   sbcl' = args.sbcl.override { disableImmobileSpace = true; };
-  sbcl = runCommandLocal args.sbcl.name { buildInputs = [ makeWrapper ]; } ''
+  sbcl = runCommandLocal args.sbcl.name { nativeBuildInputs = [ makeWrapper ]; } ''
     makeWrapper ${sbcl'}/bin/sbcl $out/bin/sbcl \
       --add-flags "--dynamic-space-size 2000"
   '';
 
 in stdenv.mkDerivation rec {
   pname = "acl2";
-  version = "8.4";
+  version = "8.5";
 
   src = fetchFromGitHub {
     owner = "acl2-devel";
     repo = "acl2-devel";
     rev = version;
-    sha256 = "16rr9zqmd3y1sd6zxff2f9gdd84l99pr7mdp1sjwmh427h661c68";
+    sha256 = "12cv5ms1j3vfrq066km020nwxb6x2dzh12g8nz6xxyxysn44wzzi";
   };
 
   # You can swap this out with any other IPASIR implementation at
@@ -40,12 +40,14 @@ in stdenv.mkDerivation rec {
     libcrypto = "${lib.getLib openssl}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}";
   })];
 
+  nativeBuildInputs = lib.optional certifyBooks makeWrapper;
+
   buildInputs = [
     # ACL2 itself only needs a Common Lisp compiler/interpreter:
     sbcl
   ] ++ lib.optionals certifyBooks [
     # To build community books, we need Perl and a couple of utilities:
-    which perl hostname makeWrapper
+    which perl hostname
     # Some of the books require one or more of these external tools:
     glucose minisat abc-verifier libipasir
     z3 (python2.withPackages (ps: [ ps.z3 ]))

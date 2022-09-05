@@ -12,7 +12,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable the kodi multimedia center.";
+        description = lib.mdDoc "Enable the kodi multimedia center.";
       };
 
       package = mkOption {
@@ -20,7 +20,7 @@ in
         default = pkgs.kodi;
         defaultText = literalExpression "pkgs.kodi";
         example = literalExpression "pkgs.kodi.withPackages (p: with p; [ jellyfin pvr-iptvsimple vfs-sftp ])";
-        description = ''
+        description = lib.mdDoc ''
           Package that should be used for Kodi.
         '';
       };

@@ -389,7 +389,7 @@ let
     Rglpk = [ pkgs.glpk ];
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
-    Rhdf5lib = [ pkgs.zlib.dev ];
+    Rhdf5lib = with pkgs; [ zlib.dev hdf5.dev ];
     Rhpc = with pkgs; [ zlib bzip2.dev icu xz.dev mpi pcre.dev ];
     Rhtslib = with pkgs; [ zlib.dev automake autoconf bzip2.dev xz.dev curl.dev ];
     rjags = [ pkgs.jags ];
@@ -938,6 +938,22 @@ let
   ];
 
   otherOverrides = old: new: {
+    gifski = old.gifski.overrideDerivation (attrs: {
+      cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
+        src = attrs.src;
+        sourceRoot = "gifski/src/myrustlib";
+        hash = "sha256-vBrTQ+5JZA8554Aasbqw7mbaOfJNQjrOpG00IXAcamI=";
+      };
+
+      cargoRoot = "src/myrustlib";
+
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [
+        pkgs.rustPlatform.cargoSetupHook
+        pkgs.cargo
+        pkgs.rustc
+      ];
+    });
+
     stringi = old.stringi.overrideDerivation (attrs: {
       postInstall = let
         icuName = "icudt52l";
@@ -997,10 +1013,6 @@ let
       patchPhase = "patchShebangs configure";
     });
 
-    Rhdf5lib = old.Rhdf5lib.overrideDerivation (attrs: {
-      patches = [ ./patches/Rhdf5lib.patch ];
-    });
-
     rJava = old.rJava.overrideDerivation (attrs: {
       preConfigure = ''
         export JAVA_CPPFLAGS=-I${pkgs.jdk}/include/
@@ -1027,6 +1039,11 @@ let
             sed -i 's#system("which \(\w\+\)"[^)]*)#"${pkgs.darwin.cctools}/bin/\1"#g' $file
         done
       '';
+    });
+
+    s2 = old.s2.overrideDerivation (attrs: {
+      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
+      PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
     });
 
     Rmpi = old.Rmpi.overrideDerivation (attrs: {
@@ -1298,6 +1315,10 @@ let
 
     geomorph = old.geomorph.overrideDerivation (attrs: {
       RGL_USE_NULL = "true";
+    });
+
+    Rhdf5lib = old.Rhdf5lib.overrideDerivation (attrs: {
+      propagatedBuildInputs = attrs.propagatedBuildInputs ++ [ pkgs.hdf5.dev ];
     });
 
     RNifti = old.RNifti.overrideDerivation (attrs: {

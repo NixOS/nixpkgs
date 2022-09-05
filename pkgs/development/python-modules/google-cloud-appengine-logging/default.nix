@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-appengine-logging";
-  version = "1.1.1";
+  version = "1.1.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NhRQ7X17/Y79DvJT4haArrb23zzwV+XoJT9YUfjLvKc=";
+    hash = "sha256-im0A14OQghyYqgtkD767qG+niKQX4jpb0pm2yNBwBCQ=";
   };
 
   propagatedBuildInputs = [

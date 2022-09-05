@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "betterlockscreen";
-  version = "4.0.3";
+  version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "pavanjadhaw";
     repo = "betterlockscreen";
     rev = "v${version}";
-    sha256 = "sha256-d4uI/S7Kr8yvzc4/L0BX8+TBXb4AVNMJp4gb8uXgBwA=";
+    sha256 = "sha256-ZZnwByxfESE8ZOOh1vnbphUHDolo9MIQh3erjtBLmWQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

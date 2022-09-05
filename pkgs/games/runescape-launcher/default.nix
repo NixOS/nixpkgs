@@ -77,6 +77,7 @@ let
     meta = with lib; {
       description = "Launcher for RuneScape 3, the current main RuneScape";
       homepage = "https://www.runescape.com/";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       license = licenses.unfree;
       maintainers = with maintainers; [ grburst ];
       platforms = [ "x86_64-linux" ];
@@ -102,6 +103,13 @@ in
     ];
     multiPkgs = pkgs: [ libGL ];
     runScript = "runescape-launcher";
+    extraInstallCommands = ''
+      mkdir -p "$out/share/applications"
+      cp ${runescape}/share/applications/runescape-launcher.desktop "$out/share/applications"
+      cp -r ${runescape}/share/icons "$out/share/icons"
+      substituteInPlace "$out/share/applications/runescape-launcher.desktop" \
+        --replace "/usr/bin/runescape-launcher" "RuneScape"
+    '';
 
     meta = with lib; {
       description = "RuneScape Game Client (NXT) - Launcher for RuneScape 3";

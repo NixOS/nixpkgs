@@ -1,17 +1,31 @@
-{ lib, buildPythonApplication, fetchPypi, installShellFiles }:
+{ lib
+, python3
+, substituteAll
+, ffmpeg
+, installShellFiles
+}:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "you-get";
-  version = "0.4.1555";
+  version = "0.4.1620";
 
   # Tests aren't packaged, but they all hit the real network so
   # probably aren't suitable for a build environment anyway.
   doCheck = false;
 
-  src = fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "99282aca720c7ee1d9ef4b63bbbd226e906ea170b789a459fafd5b0627b0b15f";
+    sha256 = "sha256-wCDaT9Nz1ZiSsqFwX1PXHq6QF6fjLRI9wwvvWxcmYOY=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./ffmpeg-path.patch;
+      ffmpeg = "${lib.getBin ffmpeg}/bin/ffmpeg";
+      ffprobe = "${lib.getBin ffmpeg}/bin/ffmpeg";
+      version = lib.getVersion ffmpeg;
+    })
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 

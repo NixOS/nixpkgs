@@ -1,27 +1,30 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , msrest
-, msrestazure
 , azure-common
-, azure-mgmt-nspkg
+, azure-mgmt-core
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-msi";
-  version = "6.0.0";
+  version = "6.1.0";
+
+  disabled = pythonOlder "3.6";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-RpmYeF6LRKqu0KrjNAFAaOGxyfPuK+TImOumP+FPX2w=";
+    sha256 = "sha256-lS8da3Al1z1pMLDBf6ZtWc1UFUVgkN1qpKTxt4VXdlQ=";
   };
 
   propagatedBuildInputs = [
     msrest
-    msrestazure
     azure-common
-    azure-mgmt-nspkg
+    azure-mgmt-core
   ];
 
   pythonNamespaces = [ "azure.mgmt" ];
@@ -29,9 +32,11 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
+  pythonImportsCheck = [ "azure.mgmt.msi" ];
+
   meta = with lib; {
     description = "This is the Microsoft Azure MSI Management Client Library";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/resources/azure-mgmt-msi";
     license = licenses.mit;
     maintainers = with maintainers; [ maxwilson ];
   };

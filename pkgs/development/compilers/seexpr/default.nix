@@ -22,7 +22,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-r6mgyb/FGz4KYZOgLDgmIqjO+PSmneD3KUWjymZXtEk=";
   };
 
-  cmakeFlags = [ "-DENABLE_SSE4=OFF" ];
+  cmakeFlags = [
+    "-DENABLE_SSE4=OFF"
+    # file RPATH_CHANGE could not write new RPATH
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libGLU libpng zlib qt4 python3Packages.pyqt4 python3Packages.boost bison flex ];

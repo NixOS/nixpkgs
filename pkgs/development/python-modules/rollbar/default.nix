@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "rollbar";
-  version = "0.16.2";
+  version = "0.16.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aa3b570062dd8dfb0e11537ba858f9e1633a604680e062a525434b8245540f87";
+    sha256 = "sha256-AjE9/GBxDsc2qwM9D4yWnYV6i5kc1n4MGpFiDooE7eI=";
   };
 
   propagatedBuildInputs = [

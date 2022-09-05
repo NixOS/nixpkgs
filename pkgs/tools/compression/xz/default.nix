@@ -16,10 +16,12 @@ stdenv.mkDerivation rec {
     sha256 = "1ps2i8i212n0f4xpq6clp7h13q7m1y8slqvxha9i8d0bj0qgj5si";
   };
 
+  strictDeps = true;
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   configureFlags = lib.optional enableStatic "--disable-shared";
 
+  enableParallelBuilding = true;
   doCheck = true;
 
   preCheck = ''

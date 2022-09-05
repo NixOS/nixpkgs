@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://taskwarrior.org";
     license = licenses.mit;
     maintainers = with maintainers; [ marcweber oxalica ];
+    mainProgram = "task";
     platforms = platforms.unix;
   };
 }

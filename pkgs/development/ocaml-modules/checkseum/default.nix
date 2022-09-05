@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, dune-configurator, pkg-config
+{ lib, fetchurl, buildDunePackage, ocaml, dune-configurator, pkg-config
 , bigarray-compat, optint
 , fmt, rresult, bos, fpath, astring, alcotest
 , withFreestanding ? false
@@ -36,12 +36,13 @@ buildDunePackage rec {
     rresult
   ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
-    homepage = "https://github.com/mirage/checkseum";
     description = "ADLER-32 and CRC32C Cyclic Redundancy Check";
+    homepage = "https://github.com/mirage/checkseum";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
+    mainProgram = "checkseum.checkseum";
   };
 }

@@ -44,13 +44,6 @@ in mkDerivation rec {
     export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
   '';
 
-  # During build, binaries are called that rely on freshly built
-  # libraries.  These reside in build/lib, and are not found by
-  # default.
-  preBuild = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib:$PWD/VTK/ThirdParty/vtkm/vtk-m/lib
-  '';
-
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
     "-DPARAVIEW_ENABLE_FFMPEG=ON"

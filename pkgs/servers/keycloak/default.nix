@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "keycloak";
-  version = "17.0.1";
+  version = "19.0.1";
 
   src = fetchzip {
     url = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
-    sha256 = "sha256-z1LfTUoK+v4oQxdyIQruFhl5O333zirSrkPoTFgVfmI=";
+    sha256 = "sha256-3hqnFH0zWvgOgpQHV4eMqTGzUWEoRwxvOcOUL2s8YQk=";
   };
 
   nativeBuildInputs = [ makeWrapper jre ];
@@ -28,17 +28,14 @@ stdenv.mkDerivation rec {
     install -m 0600 ${confFile} conf/keycloak.conf
   '' + ''
     install_plugin() {
-    if [ -d "$1" ]; then
-      find "$1" -type f \( -iname \*.ear -o -iname \*.jar \) -exec install -m 0500 "{}" "providers/" \;
-    else
-      install -m 0500 "$1" "providers/"
-    fi
+      if [ -d "$1" ]; then
+        find "$1" -type f \( -iname \*.ear -o -iname \*.jar \) -exec install -m 0500 "{}" "providers/" \;
+      else
+        install -m 0500 "$1" "providers/"
+      fi
     }
     ${lib.concatMapStringsSep "\n" (pl: "install_plugin ${lib.escapeShellArg pl}") plugins}
   '' + ''
-    export KC_HOME_DIR=$out
-    export KC_CONF_DIR=$out/conf
-
     patchShebangs bin/kc.sh
     bin/kc.sh build
 
@@ -57,8 +54,8 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    substituteInPlace $out/bin/kc.sh --replace '-Dkc.home.dir=$DIRNAME/../' '-Dkc.home.dir=$KC_HOME_DIR'
-    substituteInPlace $out/bin/kc.sh --replace '-Djboss.server.config.dir=$DIRNAME/../conf' '-Djboss.server.config.dir=$KC_CONF_DIR'
+    substituteInPlace $out/bin/kc.sh --replace ${lib.escapeShellArg "-Dkc.home.dir='$DIRNAME'/../"} '-Dkc.home.dir=$KC_HOME_DIR'
+    substituteInPlace $out/bin/kc.sh --replace ${lib.escapeShellArg "-Djboss.server.config.dir='$DIRNAME'/../conf"} '-Djboss.server.config.dir=$KC_CONF_DIR'
 
     for script in $(find $out/bin -type f -executable); do
       wrapProgram "$script" --set JAVA_HOME ${jre} --prefix PATH : ${jre}/bin
@@ -74,6 +71,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.keycloak.org/";
     description = "Identity and access management for modern applications and services";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     platforms = jre.meta.platforms;
     maintainers = with maintainers; [ ngerstle talyz ];

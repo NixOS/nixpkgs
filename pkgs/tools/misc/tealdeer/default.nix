@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
@@ -25,9 +26,10 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
   postInstall = ''
-    installShellCompletion --bash --name tealdeer.bash bash_tealdeer
-    installShellCompletion --fish --name tealdeer.fish fish_tealdeer
-    installShellCompletion --zsh --name _tealdeer zsh_tealdeer
+    installShellCompletion --cmd tldr \
+      --bash bash_tealdeer \
+      --fish fish_tealdeer \
+      --zsh zsh_tealdeer
   '';
 
   # disable tests for now since one needs network

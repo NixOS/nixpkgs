@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, gupnp, mate, imagemagick, wrapGAppsHook, mateUpdateScript
-, glib, substituteAll }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, gtk3
+, gupnp
+, mate
+, imagemagick
+, wrapGAppsHook
+, mateUpdateScript
+, glib
+, substituteAll
+}:
 
 stdenv.mkDerivation rec {
   pname = "caja-extensions";

@@ -70,17 +70,17 @@ let
       projectArch = "x86_64";
     };
   };
-  platforms."aarch64-linux".sha256 = "0m12adzcs6xsmgnqsdc5g0xs6xmjbj560x4d9rnv9fpf1p7jv2fa";
-  platforms."i686-linux".sha256 = "00cy5kxx8hpifkwhn9qbfch7ng3crx0zb6ypllzip6qms956mama";
-  platforms."x86_64-linux".sha256 = "1f1hxx4xl0wljyrgj0m3zq47yz2cyqd52qigrkpcvavr1d2sx6m3";
+  platforms."aarch64-linux".sha256 = "0gmnmr0zn2ffn7xbhmfh6rhmwmxy5zzlj0s3lyp99knjn47lg2fg";
+  platforms."i686-linux".sha256 = "1lp2z9db89qk2wh900c2dzlhflwmcbmp4m7xnlj04pq4q2kgfm9p";
+  platforms."x86_64-linux".sha256 = "1ljrp0iky7rrj04sbqicrg1jr938xnid6jlirbf7gwlmzliz3wfs";
 
   platformInfo = builtins.getAttr stdenv.targetPlatform.system platforms;
 in
 stdenv.mkDerivation rec {
   pname = "cef-binary";
-  version = "98.1.21";
-  gitRevision = "9782362";
-  chromiumVersion = "98.0.4758.102";
+  version = "100.0.24";
+  gitRevision = "0783cf8";
+  chromiumVersion = "100.0.4896.127";
 
   src = fetchurl {
     url = "https://cef-builds.spotifycdn.com/cef_binary_${version}+g${gitRevision}+chromium-${chromiumVersion}_${platformInfo.platformStr}_minimal.tar.bz2";
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  cmakeFlags = "-DPROJECT_ARCH=${platformInfo.projectArch}";
+  cmakeFlags = [ "-DPROJECT_ARCH=${platformInfo.projectArch}" ];
   makeFlags = [ "libcef_dll_wrapper" ];
   dontStrip = true;
   dontPatchELF = true;
@@ -112,6 +112,10 @@ stdenv.mkDerivation rec {
     description = "Simple framework for embedding Chromium-based browsers in other applications";
     homepage = "https://cef-builds.spotifycdn.com/index.html";
     maintainers = with maintainers; [ puffnfresh ];
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode
+    ];
     license = licenses.bsd3;
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
   };

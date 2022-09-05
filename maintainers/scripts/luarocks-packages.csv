@@ -6,6 +6,7 @@ basexx,https://github.com/teto/basexx.git,,,,,
 binaryheap,https://github.com/Tieske/binaryheap.lua,,,,,vcunat
 busted,,,,,,
 cassowary,,,,,,marsam alerque
+cldr,,,,,,alerque
 compat53,,,,0.7-1,,vcunat
 cosmo,,,,,,marsam
 coxpcall,,,,1.17.0-1,,
@@ -14,6 +15,7 @@ cyrussasl,https://github.com/JorjBauer/lua-cyrussasl.git,,,,,
 digestif,https://github.com/astoff/digestif.git,,,0.2-1,lua5_3,
 dkjson,,,,,,
 fifo,,,,,,
+fluent,,,,,,alerque
 gitsigns.nvim,https://github.com/lewis6991/gitsigns.nvim.git,,,,lua5_1,
 http,,,,0.3-0,,vcunat
 inspect,,,,,,
@@ -22,6 +24,9 @@ ldoc,https://github.com/stevedonovan/LDoc.git,,,,,
 lgi,,,,,,
 linenoise,https://github.com/hoelzro/lua-linenoise.git,,,,,
 ljsyscall,,,,,lua5_1,lblasc
+lmathx,,,,,lua5_3,alexshpilkin
+lmpfrlib,,,,,lua5_3,alexshpilkin
+loadkit,,,,,,alerque
 lpeg,,,,,,vyp
 lpeg_patterns,,,,,,
 lpeglabel,,,,,,
@@ -34,11 +39,13 @@ lua-cmsgpack,,,,,,
 lua-iconv,,,,,,
 lua-lsp,,,,,,
 lua-messagepack,,,,,,
+lua-protobuf,,,,,,lockejan
 lua-resty-http,,,,,,
 lua-resty-jwt,,,,,,
 lua-resty-openidc,,,,,,
 lua-resty-openssl,,,,,,
 lua-resty-session,,,,,,
+lua-subprocess,https://github.com/0x0ade/lua-subprocess,,,,lua5_1,scoder12
 lua-term,,,,,,
 lua-toml,,,,,,
 lua-zlib,,,,,,koral
@@ -52,7 +59,7 @@ luadbi-postgresql,,,,,,
 luadbi-sqlite3,,,,,,
 luaepnf,,,,,,
 luaevent,,,,,,
-luaexpat,,,,1.3.0-1,,arobyn flosse
+luaexpat,,,,1.4.1-1,,arobyn flosse
 luaffi,,,http://luarocks.org/dev,,,
 luafilesystem,,,,1.7.0-2,,flosse
 lualogging,,,,,,
@@ -64,6 +71,8 @@ luasocket,,,,,,
 luasql-sqlite3,,,,,,vyp
 luassert,,,,,,
 luasystem,,,,,,
+luaunbound,,,,,
+luaunit,,,,,,lockejan
 luautf8,,,,,,pstn
 luazip,,,,,,
 lua-yajl,,,,,,pstn
@@ -80,7 +89,10 @@ plenary.nvim,https://github.com/nvim-lua/plenary.nvim.git,,,,lua5_1,
 rapidjson,https://github.com/xpol/lua-rapidjson.git,,,,,
 readline,,,,,,
 say,https://github.com/Olivine-Labs/say.git,,,,,
+serpent,,,,,,lockejan
+sqlite,,,,,,
 std._debug,https://github.com/lua-stdlib/_debug.git,,,,,
 std.normalize,https://github.com/lua-stdlib/normalize.git,,,,,
 stdlib,,,,41.2.2,,vyp
+tl,,,,,,mephistophiles
 vstruct,https://github.com/ToxicFrog/vstruct.git,,,,,

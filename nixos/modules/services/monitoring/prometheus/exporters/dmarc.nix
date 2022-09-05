@@ -24,28 +24,28 @@ in {
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = ''
+        description = lib.mdDoc ''
           Hostname of IMAP server to connect to.
         '';
       };
       port = mkOption {
         type = types.port;
         default = 993;
-        description = ''
+        description = lib.mdDoc ''
           Port of the IMAP server to connect to.
         '';
       };
       username = mkOption {
         type = types.str;
         example = "postmaster@example.org";
-        description = ''
+        description = lib.mdDoc ''
           Login username for the IMAP connection.
         '';
       };
       passwordFile = mkOption {
         type = types.str;
         example = "/run/secrets/dovecot_pw";
-        description = ''
+        description = lib.mdDoc ''
           File containing the login password for the IMAP connection.
         '';
       };
@@ -54,21 +54,21 @@ in {
       inbox = mkOption {
         type = types.str;
         default = "INBOX";
-        description = ''
+        description = lib.mdDoc ''
           IMAP mailbox that is checked for incoming DMARC aggregate reports
         '';
       };
       done = mkOption {
         type = types.str;
         default = "Archive";
-        description = ''
+        description = lib.mdDoc ''
           IMAP mailbox that successfully processed reports are moved to.
         '';
       };
       error = mkOption {
         type = types.str;
         default = "Invalid";
-        description = ''
+        description = lib.mdDoc ''
           IMAP mailbox that emails are moved to that could not be processed.
         '';
       };
@@ -76,7 +76,7 @@ in {
     pollIntervalSeconds = mkOption {
       type = types.ints.unsigned;
       default = 60;
-      description = ''
+      description = lib.mdDoc ''
         How often to poll the IMAP server in seconds.
       '';
     };
@@ -84,7 +84,7 @@ in {
       type = types.ints.unsigned;
       default = 604800;
       defaultText = "7 days (in seconds)";
-      description = ''
+      description = lib.mdDoc ''
         How long individual report IDs will be remembered to avoid
         counting double delivered reports twice.
       '';
@@ -92,8 +92,8 @@ in {
     debug = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Whether to declare enable <literal>--debug</literal>.
+      description = lib.mdDoc ''
+        Whether to declare enable `--debug`.
       '';
     };
   };
@@ -108,7 +108,7 @@ in {
           -i ${pkgs.writeText "dmarc-exporter.json.template" json} \
           -o ''${STATE_DIRECTORY}/dmarc-exporter.json
 
-        exec ${pkgs.prometheus-dmarc-exporter}/bin/prometheus-dmarc-exporter \
+        exec ${pkgs.dmarc-metrics-exporter}/bin/dmarc-metrics-exporter \
           --configuration /var/lib/prometheus-dmarc-exporter/dmarc-exporter.json \
           ${optionalString cfg.debug "--debug"}
       ''}";

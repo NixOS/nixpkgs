@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
-, isPy27
 , glibcLocales
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "urwid";
   version = "2.1.2";
   format = "setuptools";
-
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -33,6 +30,6 @@ buildPythonPackage rec {
     description = "A full-featured console (xterm et al.) user interface library";
     homepage = "https://urwid.org/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

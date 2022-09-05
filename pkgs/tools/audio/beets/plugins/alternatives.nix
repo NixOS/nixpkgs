@@ -1,6 +1,6 @@
-{ lib, fetchFromGitHub, beets, pythonPackages }:
+{ lib, fetchFromGitHub, beets, python3Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "beets-alternatives";
   version = "unstable-2021-02-01";
 
@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
 
   nativeBuildInputs = [ beets ];
 
-  checkInputs = with pythonPackages; [
+  checkInputs = with python3Packages; [
     pytestCheckHook
     mock
   ];

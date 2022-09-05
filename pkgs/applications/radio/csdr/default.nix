@@ -1,38 +1,34 @@
 { stdenv, lib, fetchFromGitHub
-, autoreconfHook, pkg-config, fftwFloat, libsamplerate
+, cmake, pkg-config, fftwFloat, libsamplerate
 }:
 
 stdenv.mkDerivation rec {
   pname = "csdr";
-  version = "0.17.1";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "jketterl";
     repo = pname;
     rev = version;
-    sha256 = "1vip5a3xgskcwba3xi66zfr986xrsch9na7my818cm8vw345y57b";
+    sha256 = "sha256-4XO3QYF0yaMNFjBHulrlZvO0/A1fFscD98QxnC6Itmk=";
   };
 
-  patchPhase = ''
-    substituteInPlace configure.ac \
-      --replace -Wformat=0 ""
-  '';
-
   nativeBuildInputs = [
-    autoreconfHook
+    cmake
     pkg-config
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     fftwFloat
     libsamplerate
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/jketterl/csdr";
     description = "A simple DSP library and command-line tool for Software Defined Radio";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ astro ];
+    maintainers = teams.c3d2.members;
   };
 }

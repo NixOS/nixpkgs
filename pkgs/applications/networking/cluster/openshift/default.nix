@@ -10,14 +10,14 @@
 
 buildGoModule rec {
   pname = "openshift";
-  version = "4.10.0";
-  gitCommit = "346b183";
+  version = "4.11.0";
+  gitCommit = "20dd77d5";
 
   src = fetchFromGitHub {
     owner = "openshift";
     repo = "oc";
-    rev = "release-4.10";
-    sha256 = "Pdq3OwT5P7vvB70X+GVglT9CdJbhkm35nvEGurO1HPc=";
+    rev = "20dd77d5c889f86b05e2bdd182853ae702852c63";
+    sha256 = "wqLo/CKGzeMDJUoI9PUEjJER5hSPu+FmUCJLPZ9PJuw=";
   };
 
   vendorSha256 = null;
@@ -60,9 +60,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Build, deploy, and manage your applications with Docker and Kubernetes";
-    license = licenses.asl20;
     homepage = "http://www.openshift.org";
+    license = licenses.asl20;
     maintainers = with maintainers; [ offline bachp moretea stehessel ];
+    mainProgram = "oc";
     platforms = platforms.unix;
   };
 }

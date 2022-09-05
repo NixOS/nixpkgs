@@ -10,11 +10,17 @@ stdenv.mkDerivation rec {
     sha256 = "1whlyifvvc7w04ahq07nnk1h18wc8j7c6wnvlb6mszravxh3qxcb";
   };
 
-  # Fix installation of Python bindings
-  patches = [ (fetchpatch {
-    url = "https://sourceforge.net/p/lirc/tickets/339/attachment/0001-Fix-Python-bindings.patch";
-    sha256 = "088a39x8c1qd81qwvbiqd6crb2lk777wmrs8rdh1ga06lglyvbly";
-  }) ];
+  patches = [
+    # Fix installation of Python bindings
+    (fetchpatch {
+      url = "https://sourceforge.net/p/lirc/tickets/339/attachment/0001-Fix-Python-bindings.patch";
+      sha256 = "088a39x8c1qd81qwvbiqd6crb2lk777wmrs8rdh1ga06lglyvbly";
+    })
+
+    # Add a workaround for linux-headers-5.18 until upstream adapts:
+    #   https://sourceforge.net/p/lirc/git/merge-requests/45/
+    ./linux-headers-5.18.patch
+  ];
 
   postPatch = ''
     patchShebangs .

@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "temescal";
-  version = "0.3";
+  version = "0.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-V1wsncIm4f6NPa6lwlO9pkDIFBG1K3VhmOQCwyrPGm4=";
+    hash = "sha256-MfTftheNj8zI3iXIIJU+jy9xikvX9eO58LA0NCMJBnY=";
   };
 
   propagatedBuildInputs = [

@@ -10,6 +10,11 @@
 , wayland
 , wayland-protocols
 , gtk-layer-shell
+# gtk-layer-shell fails to cross-compile due to a hard dependency
+# on gobject-introspection.
+# Disable it when cross-compiling since it's an optional dependency.
+# This disables transparency support.
+, withGtkLayerShell ? (stdenv.buildPlatform == stdenv.hostPlatform)
 }:
 
 stdenv.mkDerivation rec {
@@ -23,12 +28,15 @@ stdenv.mkDerivation rec {
     sha256 = "cTscfx+erHVFHwwYpN7pADQWt5sq75sQSyXSP/H8kOs=";
   };
 
+  strictDeps = true;
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ pkg-config meson ninja scdoc ];
   buildInputs = [
     gtk3
     libxkbcommon
     wayland
     wayland-protocols
+  ] ++ lib.optionals withGtkLayerShell [
     gtk-layer-shell
   ];
 

@@ -28,7 +28,7 @@ in import ./make-test-python.nix ({pkgs, ...}: {
             attrs = {
               objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
               olcDatabase = "{1}mdb";
-              olcDbDirectory = "/var/db/openldap";
+              olcDbDirectory = "/var/lib/openldap/db";
               olcSuffix = dbSuffix;
               olcRootDN = "cn=${ldapRootUser},${dbSuffix}";
               olcRootPW = ldapRootPassword;
@@ -67,6 +67,8 @@ in import ./make-test-python.nix ({pkgs, ...}: {
 
     services.sssd = {
       enable = true;
+      # just for testing purposes, don't put this into the Nix store in production!
+      environmentFile = "${pkgs.writeText "ldap-root" "LDAP_BIND_PW=${ldapRootPassword}"}";
       config = ''
         [sssd]
         config_file_version = 2
@@ -80,7 +82,7 @@ in import ./make-test-python.nix ({pkgs, ...}: {
         ldap_search_base = ${dbSuffix}
         ldap_default_bind_dn = cn=${ldapRootUser},${dbSuffix}
         ldap_default_authtok_type = password
-        ldap_default_authtok = ${ldapRootPassword}
+        ldap_default_authtok = $LDAP_BIND_PW
       '';
     };
   };

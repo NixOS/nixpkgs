@@ -3,9 +3,8 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , fetchFromGitHub
-, gtk-doc
+, gi-docgen
 , pkg-config
 , gobject-introspection
 , gettext
@@ -18,7 +17,6 @@
 , libarchive
 , curl
 , libjcat
-, libxslt
 , elfutils
 , libsmbios
 , efivar
@@ -26,14 +24,12 @@
 , meson
 , libuuid
 , colord
-, docbook_xml_dtd_43
-, docbook-xsl-nons
 , ninja
 , gcab
 , gnutls
 , protobufc
 , python3
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , json-glib
 , bash-completion
 , shared-mime-info
@@ -54,6 +50,8 @@
 , modemmanager
 , libqmi
 , libmbim
+, libcbor
+, xz
 }:
 
 let
@@ -116,7 +114,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.7.7";
+    version = "1.8.3";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -125,7 +123,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "sha256-QUmU06zfZ0qQ9wotoW2k4XalrRH+Y25qs/DhpJ4GKWk=";
+      sha256 = "sha256-ciIpd86KhmJRH/o8CIFWb2xFjsjWHSUNlGYRfWEiOOw=";
     };
 
     patches = [
@@ -140,13 +138,6 @@ let
       # they are not really part of the library.
       ./install-fwupdplugin-to-out.patch
 
-      # Fix detection of installed tests
-      # https://github.com/fwupd/fwupd/issues/3880
-      (fetchpatch {
-        url = "https://github.com/fwupd/fwupd/commit/5bc546221331feae9cedc1892219a25d8837955f.patch";
-        sha256 = "XcLhcDrB2/MFCXjKAyhftQgvJG4BBkp07geM9eK3q1g=";
-      })
-
       # Installed tests are installed to different output
       # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle.
       ./installed-tests-path.patch
@@ -158,7 +149,7 @@ let
     nativeBuildInputs = [
       meson
       ninja
-      gtk-doc
+      gi-docgen
       pkg-config
       gobject-introspection
       gettext
@@ -166,12 +157,9 @@ let
       valgrind
       gcab
       gnutls
-      docbook_xml_dtd_43
-      docbook-xsl-nons
-      libxslt
       protobufc # for protoc
       python
-      wrapGAppsHook
+      wrapGAppsNoGuiHook
       vala
     ];
 
@@ -197,16 +185,20 @@ let
       protobufc
       modemmanager
       libmbim
+      libcbor
       libqmi
+      xz # for liblzma.
     ] ++ lib.optionals haveDell [
       libsmbios
+    ] ++ lib.optionals haveFlashrom [
+      flashrom
     ];
 
     mesonFlags = [
-      "-Ddocs=gtkdoc"
+      "-Ddocs=enabled"
       "-Dplugin_dummy=true"
       # We are building the official releases.
-      "-Dsupported_build=true"
+      "-Dsupported_build=enabled"
       # Would dlopen libsoup to preserve compatibility with clients linking against older fwupd.
       # https://github.com/fwupd/fwupd/commit/173d389fa59d8db152a5b9da7cc1171586639c97
       "-Dsoup_session_compat=false"
@@ -217,7 +209,9 @@ let
       "--sysconfdir=/etc"
       "-Dsysconfdir_install=${placeholder "out"}/etc"
       "-Defi_os_dir=nixos"
-      "-Dplugin_modem_manager=true"
+      "-Dplugin_modem_manager=enabled"
+      # Requires Meson 0.63
+      "-Dgresource_quirks=disabled"
 
       # We do not want to place the daemon into lib (cyclic reference)
       "--libexecdir=${placeholder "out"}/libexec"
@@ -225,14 +219,14 @@ let
       # against libfwupdplugin which is in $out/lib.
       "-Dc_link_args=-Wl,-rpath,${placeholder "out"}/lib"
     ] ++ lib.optionals (!haveDell) [
-      "-Dplugin_dell=false"
-      "-Dplugin_synaptics_mst=false"
+      "-Dplugin_dell=disabled"
+      "-Dplugin_synaptics_mst=disabled"
     ] ++ lib.optionals (!haveRedfish) [
-      "-Dplugin_redfish=false"
-    ] ++ lib.optionals haveFlashrom [
-      "-Dplugin_flashrom=true"
+      "-Dplugin_redfish=disabled"
+    ] ++ lib.optionals (!haveFlashrom) [
+      "-Dplugin_flashrom=disabled"
     ] ++ lib.optionals (!haveMSR) [
-      "-Dplugin_msr=false"
+      "-Dplugin_msr=disabled"
     ];
 
     # TODO: wrapGAppsHook wraps efi capsule even though it is not ELF
@@ -263,8 +257,18 @@ let
         meson_post_install.sh \
         po/test-deps
 
+      # This checks a version of a dependency of gi-docgen but gi-docgen is self-contained in Nixpkgs.
+      echo "Clearing docs/test-deps.py"
+      test -f docs/test-deps.py
+      echo > docs/test-deps.py
+
       substituteInPlace data/installed-tests/fwupdmgr-p2p.sh \
         --replace "gdbus" ${glib.bin}/bin/gdbus
+    '';
+
+    preBuild = ''
+      # jcat-tool at buildtime requires a home directory
+      export HOME="$(mktemp -d)"
     '';
 
     preCheck = ''
@@ -291,7 +295,7 @@ let
         efibootmgr
         bubblewrap
         tpm2-tools
-      ] ++ lib.optional haveFlashrom flashrom;
+      ];
     in ''
       gappsWrapperArgs+=(
         --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
@@ -300,8 +304,8 @@ let
       )
     '';
 
-    # Since we had to disable wrapGAppsHook, we need to wrap the executables manually.
     postFixup = ''
+      # Since we had to disable wrapGAppsHook, we need to wrap the executables manually.
       find -L "$out/bin" "$out/libexec" -type f -executable -print0 \
         | while IFS= read -r -d ''' file; do
         if [[ "$file" != *.efi ]]; then
@@ -309,6 +313,9 @@ let
           wrapGApp "$file"
         fi
       done
+
+      # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+      moveToOutput "share/doc" "$devdoc"
     '';
 
     separateDebugInfo = true;

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A simple, small, efficient, C++ XML parser";
-    homepage = "http://www.grinninglizard.com/tinyxml2/index.html";
+    homepage = "https://www.grinninglizard.com/tinyxml2/index.html";
     platforms = lib.platforms.unix;
     license = lib.licenses.zlib;
   };

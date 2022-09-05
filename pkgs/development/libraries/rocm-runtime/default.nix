@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , writeScript
 , addOpenGLRunpath
-, clang-unwrapped
 , cmake
 , xxd
 , elfutils
@@ -14,20 +13,20 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-runtime";
-  version = "5.0.1";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCR-Runtime";
     rev = "rocm-${version}";
-    hash = "sha256-KOzVZNHtpwEOn7lZ36c4BGrImrq8dkUWRiHqGm+UTDk=";
+    hash = "sha256-TY0YPgNzxBLXAj7fncLQ01cSJyydveOLHrimCmLS32o=";
   };
 
   sourceRoot = "source/src";
 
   nativeBuildInputs = [ cmake xxd ];
 
-  buildInputs = [ clang-unwrapped elfutils llvm numactl ];
+  buildInputs = [ elfutils llvm numactl ];
 
   cmakeFlags = [
    "-DBITCODE_DIR=${rocm-device-libs}/amdgcn/bitcode"

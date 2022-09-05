@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, qt4, qmake4Hook, trousers }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, qtbase, qmake, wrapQtAppsHook, trousers }:
 
 stdenv.mkDerivation rec {
   version = "0.8.1";
@@ -8,12 +8,24 @@ stdenv.mkDerivation rec {
     owner = "Rohde-Schwarz";
     repo = "TPMManager";
     rev = "v${version}";
-    sha256 = "sha256-JKYG+I/tZ+0NDmHcIgKV6eGrjbPvPQKPo0sE/zBlLY4=";
+    sha256 = "sha256-UZYn4ssbvLpdB0DssT7MXqQZCu1KkLf/Bsb45Rvgm+E=";
   };
 
-  nativeBuildInputs = [ qmake4Hook ];
+  patches = [
+    # build with Qt5
+    (fetchpatch {
+      url = "https://github.com/Rohde-Schwarz/TPMManager/commit/f62c0f2de2097af9b504c80d6193818e6e4ca84f.patch";
+      sha256 = "sha256-gMhDNN2UkX2lJf/oJEzOkCvF6+EGdIj9xwtXb1rCeys=";
+    })
+    (fetchpatch {
+      url = "https://github.com/Rohde-Schwarz/TPMManager/commit/c287a841ac6b057ed35799949211866b9f533561.patch";
+      sha256 = "sha256-2ZyUml8Q9bKQLVZWr18AzLt8VYLICXH9VDeq6B5Xfto=";
+    })
+  ];
 
-  buildInputs = [ qt4 trousers ];
+  nativeBuildInputs = [ qmake wrapQtAppsHook ];
+
+  buildInputs = [ qtbase trousers ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -35,7 +47,7 @@ stdenv.mkDerivation rec {
     homepage = "https://projects.sirrix.com/trac/tpmmanager";
     description = "Tool for managing the TPM";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ tstrobel ];
+    maintainers = with lib.maintainers; [ ];
     platforms = with lib.platforms; linux;
   };
 }

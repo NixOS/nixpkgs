@@ -2,32 +2,40 @@
 , bcrypt
 , buildPythonPackage
 , cryptography
+, fetchpatch
 , fetchPypi
+, gssapi
 , invoke
 , mock
 , pyasn1
 , pynacl
 , pytest-relaxed
 , pytestCheckHook
-, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "paramiko";
-  version = "2.10.3";
+  version = "2.11.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3bGXeFOu+CgEs11yoOWXskT6MmxATDUL0AxbAdv+5xo=";
+    sha256 = "sha256-AD5r7nwDTCH7sFG/g9wKnuQQYgTdPFMFTHFFLMTsOTg=";
   };
 
+  patches = [
+    # Fix usage of dsa keys
+    # https://github.com/paramiko/paramiko/pull/1606/
+    (fetchpatch {
+      url = "https://github.com/paramiko/paramiko/commit/18e38b99f515056071fb27b9c1a4f472005c324a.patch";
+      sha256 = "sha256-bPDghPeLo3NiOg+JwD5CJRRLv2VEqmSx1rOF2Tf8ZDA=";
+    })
+  ];
+
   propagatedBuildInputs = [
-    bcrypt
     cryptography
     pyasn1
-    pynacl
-  ];
+  ] ++ passthru.optional-dependencies.ed25519; # remove on 3.0 update
 
   checkInputs = [
     invoke
@@ -51,16 +59,13 @@ buildPythonPackage rec {
     "paramiko"
   ];
 
-  patches = [
-    # Fix usage of dsa keys
-    # https://github.com/paramiko/paramiko/pull/1606/
-    (fetchpatch {
-      url = "https://github.com/paramiko/paramiko/commit/18e38b99f515056071fb27b9c1a4f472005c324a.patch";
-      sha256 = "sha256-bPDghPeLo3NiOg+JwD5CJRRLv2VEqmSx1rOF2Tf8ZDA=";
-    })
-  ];
-
   __darwinAllowLocalNetworking = true;
+
+  passthru.optional-dependencies = {
+    gssapi = [ pyasn1 gssapi ];
+    ed25519 = [ pynacl bcrypt ];
+    invoke = [ invoke ];
+  };
 
   meta = with lib; {
     homepage = "https://github.com/paramiko/paramiko/";
@@ -72,6 +77,6 @@ buildPythonPackage rec {
       between python scripts. All major ciphers and hash methods are
       supported. SFTP client and server mode are both supported too.
     '';
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

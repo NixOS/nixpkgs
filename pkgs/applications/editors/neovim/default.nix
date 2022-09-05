@@ -3,6 +3,7 @@
 , unibilium, gperf
 , libvterm-neovim
 , tree-sitter
+, CoreServices
 , glibcLocales ? null, procps ? null
 
 # now defaults to false because some tests can be flaky (clipboard etc), see
@@ -25,13 +26,13 @@ let
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
-    version = "0.7.0";
+    version = "0.7.2";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "sha256-eYYaHpfSaYYrLkcD81Y4rsAMYDP1IJ7fLJJepkACkA8=";
+      sha256 = "sha256-eKKQNM02Vhy+3yL2QV+0FSEpcniEa5Aq6hkAUIgLo1k=";
     };
 
     patches = [
@@ -60,7 +61,7 @@ in
       neovimLuaEnv
       tree-sitter
       unibilium
-    ] ++ optional stdenv.isDarwin libiconv
+    ] ++ optionals stdenv.isDarwin [ libiconv CoreServices ]
       ++ optionals doCheck [ glibcLocales procps ]
     ;
 
@@ -132,7 +133,7 @@ in
       # those contributions were copied from Vim (identified in the commit logs
       # by the vim-patch token). See LICENSE for details."
       license = with licenses; [ asl20 vim ];
-      maintainers = with maintainers; [ manveru rvolosatovs ma27 ];
+      maintainers = with maintainers; [ manveru rvolosatovs ];
       platforms   = platforms.unix;
     };
   }

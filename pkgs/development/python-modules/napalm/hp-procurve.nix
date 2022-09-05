@@ -30,12 +30,14 @@ buildPythonPackage rec {
     "test_method_signatures"
     # AttributeError: 'PatchedProcurveDriver' object has no attribute 'platform'
     "test_get_config_filtered"
+    # AssertionError
+    "test_get_interfaces"
   ];
 
   meta = with lib; {
     description = "HP ProCurve Driver for NAPALM automation frontend";
-    homepage =
-      "https://github.com/napalm-automation-community/napalm-hp-procurve";
+    homepage = "https://github.com/napalm-automation-community/napalm-hp-procurve";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
 }

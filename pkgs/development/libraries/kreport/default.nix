@@ -1,7 +1,7 @@
 {
   mkDerivation, lib, fetchurl,
   extra-cmake-modules,
-  qtdeclarative, qtwebkit, kconfig, kcoreaddons, kwidgetsaddons, kguiaddons, kproperty, marble, python2
+  qtdeclarative, qtwebkit, kconfig, kcoreaddons, kwidgetsaddons, kguiaddons, kproperty, marble, python3
 }:
 
 mkDerivation rec {
@@ -15,7 +15,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ extra-cmake-modules ];
 
-  buildInputs = [ qtdeclarative qtwebkit kconfig kcoreaddons kwidgetsaddons kguiaddons kproperty marble python2 ];
+  buildInputs = [ qtdeclarative qtwebkit kconfig kcoreaddons kwidgetsaddons kguiaddons kproperty marble python3 ];
 
   meta = with lib; {
     description = "A framework for creation and generation of reports in multiple formats";

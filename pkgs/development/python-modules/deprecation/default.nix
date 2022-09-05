@@ -5,6 +5,7 @@
 , pythonAtLeast
 , pythonOlder
 , unittest2
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -29,13 +30,9 @@ buildPythonPackage rec {
 
   # avoiding mass rebuilds for python3.9, but no longer
   # needed with patch
-  checkInputs = lib.optional (pythonOlder "3.10") [
+  checkInputs = [ unittestCheckHook ] ++ lib.optional (pythonOlder "3.10") [
     unittest2
   ];
-
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
 
   meta = with lib; {
     description = "A library to handle automated deprecations";

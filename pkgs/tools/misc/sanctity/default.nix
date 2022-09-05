@@ -2,22 +2,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sanctity";
-  version = "1.2.1";
+  version = "1.3.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
-    owner = "papojari";
+    owner = "annaaurora";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-rK4em0maJQS50zPfnuFSxRoXUuFCaw9ZOfmgf70Sdac=";
+    sha256 = "sha256-y6xj4A5SHcW747aFE9TfuurNnuUxjTUeKJmzxeiWqVc=";
   };
 
-  cargoSha256 = "sha256-IQp/sSVgKY1j6N+UcifEi74dg/PkZJoeqLekeLc/vMU=";
+  cargoSha256 = "sha256-co58YBeFjP9DKzxDegQI7txuJ1smqJxdlRLae+Ppwh0=";
 
   meta = with lib; {
     description = "Test the 16 terminal colors in all combinations";
-    homepage = "https://codeberg.org/papojari/sanctity";
+    homepage = "https://codeberg.org/annaaurora/sanctity";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ papojari ];
+    maintainers = with maintainers; [ annaaurora ];
   };
 }

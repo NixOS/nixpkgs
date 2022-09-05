@@ -15,19 +15,20 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "nautilus-open-any-terminal";
-  version = "0.2.16";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "Stunkymonkey";
     repo = pname;
     rev = version;
-    sha256 = "sha256-g5B+tp131vmjShBCGrKR5ZQCjtJY823/kPacZ0S9E80=";
+    sha256 = "sha256-PF6DVpiAPL9NG4jK6wDqdqYw+26Nks/bGEbbaV/5aIs=";
   };
 
   patches = [ ./hardcode-gsettings.patch ];
 
   nativeBuildInputs = [
     glib
+    gobject-introspection
     pkg-config
     wrapGAppsHook
   ];
@@ -37,7 +38,6 @@ python3.pkgs.buildPythonPackage rec {
     dconf
     gnome.nautilus
     gnome.nautilus-python
-    gobject-introspection
     gsettings-desktop-schemas
     gtk3
     python3.pkgs.pygobject3

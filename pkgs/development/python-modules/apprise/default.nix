@@ -1,5 +1,5 @@
 { lib
-, Babel
+, babel
 , buildPythonPackage
 , click
 , cryptography
@@ -20,18 +20,18 @@
 
 buildPythonPackage rec {
   pname = "apprise";
-  version = "0.9.8.2";
+  version = "1.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EDKa77sU09HOBp4NVsHNwp6S4UbHyqX8T8rFGOnV8kA=";
+    hash = "sha256-llOQAzH4vR9O+pzaLCueJ7aar7Kt8UsrzmV5f3UzOss=";
   };
 
   nativeBuildInputs = [
-    Babel
+    babel
     installShellFiles
   ];
 

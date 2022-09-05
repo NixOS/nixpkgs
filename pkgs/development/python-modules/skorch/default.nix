@@ -7,7 +7,7 @@
 , flaky
 , numpy
 , pandas
-, pytorch
+, torch
 , scikit-learn
 , scipy
 , tabulate
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "b35cb4e50045742f0ffcfad33044af691d5d36b50212573753a804483a947ca9";
   };
 
-  propagatedBuildInputs = [ numpy pytorch scikit-learn scipy tabulate tqdm ];
+  propagatedBuildInputs = [ numpy torch scikit-learn scipy tabulate tqdm ];
   checkInputs = [ pytest pytest-cov flaky pandas pytestCheckHook ];
 
   disabledTests = [

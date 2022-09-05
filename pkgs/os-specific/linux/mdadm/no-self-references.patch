@@ -1,8 +1,8 @@
 diff --git a/Makefile b/Makefile
-index d82e30f..d231cf9 100644
+index 2a51d813..a31ac48a 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -51,6 +51,9 @@ endif
+@@ -63,6 +63,9 @@ endif
  ifdef DEBIAN
  CPPFLAGS += -DDEBIAN
  endif
@@ -12,7 +12,7 @@ index d82e30f..d231cf9 100644
  ifdef DEFAULT_OLD_METADATA
   CPPFLAGS += -DDEFAULT_OLD_METADATA
   DEFAULT_METADATA=0.90
-@@ -105,6 +108,7 @@ endif
+@@ -129,6 +132,7 @@ endif
  INSTALL = /usr/bin/install
  DESTDIR =
  BINDIR  = /sbin
@@ -20,14 +20,8 @@ index d82e30f..d231cf9 100644
  MANDIR  = /usr/share/man
  MAN4DIR = $(MANDIR)/man4
  MAN5DIR = $(MANDIR)/man5
-@@ -259,20 +263,20 @@ sha1.o : sha1.c sha1.h md5.h
- 	$(CC) $(CFLAGS) -DHAVE_STDINT_H -o sha1.o -c sha1.c
- 
- install : mdadm mdmon install-man install-udev
--	$(INSTALL) -D $(STRIP) -m 755 mdadm $(DESTDIR)$(BINDIR)/mdadm
--	$(INSTALL) -D $(STRIP) -m 755 mdmon $(DESTDIR)$(BINDIR)/mdmon
-+	$(INSTALL) -D $(STRIP) -m 755 mdadm $(DESTDIR)$(INSTALL_BINDIR)/mdadm
-+	$(INSTALL) -D $(STRIP) -m 755 mdmon $(DESTDIR)$(INSTALL_BINDIR)/mdmon
+@@ -253,16 +257,16 @@ sha1.o : sha1.c sha1.h md5.h
+ install : install-bin install-man install-udev
  
  install-static : mdadm.static install-man
 -	$(INSTALL) -D $(STRIP) -m 755 mdadm.static $(DESTDIR)$(BINDIR)/mdadm
@@ -47,8 +41,8 @@ index d82e30f..d231cf9 100644
  
  install-man: mdadm.8 md.4 mdadm.conf.5 mdmon.8
  	$(INSTALL) -D -m 644 mdadm.8 $(DESTDIR)$(MAN8DIR)/mdadm.8
-@@ -305,7 +309,7 @@ install-systemd: systemd/mdmon@.service
- 	if [ -f /etc/SuSE-release -o -n "$(SUSE)" ] ;then $(INSTALL) -D -m 755 systemd/SUSE-mdadm_env.sh $(DESTDIR)$(SYSTEMD_DIR)/../scripts/mdadm_env.sh ;fi
+@@ -305,7 +309,7 @@ install-bin: mdadm mdmon
+ 	$(INSTALL) -D $(STRIP) -m 755 mdmon $(DESTDIR)$(BINDIR)/mdmon
  
  uninstall:
 -	rm -f $(DESTDIR)$(MAN8DIR)/mdadm.8 $(DESTDIR)$(MAN8DIR)/mdmon.8 $(DESTDIR)$(MAN4DIR)/md.4 $(DESTDIR)$(MAN5DIR)/mdadm.conf.5 $(DESTDIR)$(BINDIR)/mdadm
@@ -57,10 +51,10 @@ index d82e30f..d231cf9 100644
  test: mdadm mdmon test_stripe swap_super raid6check
  	@echo "Please run './test' as root"
 diff --git a/policy.c b/policy.c
-index 064d349..6b2f2b1 100644
+index eee9ef63..9f916e9d 100644
 --- a/policy.c
 +++ b/policy.c
-@@ -796,12 +796,39 @@ char *find_rule(struct rule *rule, char *rule_type)
+@@ -817,12 +817,39 @@ char *find_rule(struct rule *rule, char *rule_type)
  #define UDEV_RULE_FORMAT \
  "ACTION==\"add\", SUBSYSTEM==\"block\", " \
  "ENV{DEVTYPE}==\"%s\", ENV{ID_PATH}==\"%s\", " \
@@ -102,7 +96,7 @@ index 064d349..6b2f2b1 100644
  
  /* Write rule in the rule file. Use format from UDEV_RULE_FORMAT */
  int write_rule(struct rule *rule, int fd, int force_part)
-@@ -815,9 +842,9 @@ int write_rule(struct rule *rule, int fd, int force_part)
+@@ -836,9 +863,9 @@ int write_rule(struct rule *rule, int fd, int force_part)
  	if (force_part)
  		typ = type_part;
  	if (typ)
@@ -115,10 +109,10 @@ index 064d349..6b2f2b1 100644
  }
  
 diff --git a/util.c b/util.c
-index cc98d3b..1ada2f4 100644
+index 3d05d074..e004a798 100644
 --- a/util.c
 +++ b/util.c
-@@ -1700,7 +1700,9 @@ int start_mdmon(char *devnm)
+@@ -1913,7 +1913,9 @@ int start_mdmon(char *devnm)
  	char pathbuf[1024];
  	char *paths[4] = {
  		pathbuf,

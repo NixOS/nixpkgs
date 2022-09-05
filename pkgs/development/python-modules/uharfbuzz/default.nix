@@ -1,10 +1,12 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
 , cython
 , setuptools-scm
 , pytestCheckHook
+, ApplicationServices
 }:
 
 buildPythonPackage rec {
@@ -29,6 +31,8 @@ buildPythonPackage rec {
     cython
     setuptools-scm
   ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
   checkInputs = [
     pytestCheckHook

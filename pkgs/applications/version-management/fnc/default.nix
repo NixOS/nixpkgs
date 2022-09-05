@@ -1,12 +1,12 @@
-{ lib, fetchurl, stdenv, zlib, ncurses, libiconv }:
+{ lib, fetchurl, fetchpatch, stdenv, zlib, ncurses, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "fnc";
-  version = "0.10";
+  version = "0.12";
 
   src = fetchurl {
     url = "https://fnc.bsdbox.org/tarball/${version}/fnc-${version}.tar.gz";
-    sha256 = "1phqxh0afky7q2qmhgjlsq1awbv4254yd8wpzxlww4p7a57cp0lk";
+    sha256 = "05cg8id4d1ia8y60y3x23167bl1rn2fdpkf1jfj3aklhlihvkbxd";
   };
 
   buildInputs = [ libiconv ncurses zlib ];
@@ -15,14 +15,6 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     mkdir -p $out/bin
-  '';
-
-  doInstallCheck = true;
-
-  installCheckPhase = ''
-    runHook preInstallCheck
-    test "$($out/bin/fnc --version)" = '${pname} ${version}'
-    runHook postInstallCheck
   '';
 
   meta = with lib; {

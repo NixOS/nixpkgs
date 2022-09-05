@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, callPackage, sqlcipher, nodejs-14_x, python3, yarn, fixup_yarn_lock, CoreServices, fetchYarnDeps, removeReferencesTo }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, callPackage, sqlcipher, nodejs, python3, yarn, fixup_yarn_lock, CoreServices, fetchYarnDeps, removeReferencesTo }:
 
 let
   pinData = lib.importJSON ./pin.json;
@@ -16,10 +16,10 @@ in rustPlatform.buildRustPackage rec {
 
   sourceRoot = "source/seshat-node/native";
 
-  nativeBuildInputs = [ nodejs-14_x python3 yarn ];
+  nativeBuildInputs = [ nodejs python3 yarn ];
   buildInputs = [ sqlcipher ] ++ lib.optional stdenv.isDarwin CoreServices;
 
-  npm_config_nodedir = nodejs-14_x;
+  npm_config_nodedir = nodejs;
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = src + "/seshat-node/yarn.lock";

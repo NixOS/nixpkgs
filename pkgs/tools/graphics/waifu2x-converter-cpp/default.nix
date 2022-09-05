@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/waifu2x-converter-cpp --prefix LD_LIBRARY_PATH : "${ocl-icd}/lib"
   '';
 
+  cmakeFlags = [
+    # file RPATH_CHANGE could not write new RPATH
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ];
+
   meta = {
     description = "Improved fork of Waifu2X C++ using OpenCL and OpenCV";
     homepage = "https://github.com/DeadSix27/waifu2x-converter-cpp";

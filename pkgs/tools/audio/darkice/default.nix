@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "http://darkice.org/";
     description = "Live audio streamer";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ ikervagyok fpletz ];
+    maintainers = with lib.maintainers; [ ikervagyok ];
   };
 }

@@ -58,7 +58,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
     name = "${name}-deps.tar.gz";
     inherit bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
 
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ fFetchAttrs.impureEnvVars or [];
 
     nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [] ++ [ bazel ];
 

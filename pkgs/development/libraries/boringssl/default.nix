@@ -26,6 +26,8 @@ buildGoModule {
   # (if we use postConfigure then cmake will loop runHook postConfigure)
   preBuild = ''
     cmakeConfigurePhase
+  '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    export GOARCH=$(go env GOHOSTARCH)
   '';
 
   buildPhase = ''

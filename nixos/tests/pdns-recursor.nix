@@ -9,7 +9,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   testScript = ''
     server.wait_for_unit("pdns-recursor")
-    server.wait_for_open_port("53")
+    server.wait_for_open_port(53)
     assert "192.0.2.1" in server.succeed("host example.com localhost")
   '';
 })

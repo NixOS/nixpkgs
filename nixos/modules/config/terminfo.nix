@@ -9,7 +9,7 @@ with lib;
   options.environment.enableAllTerminfo = with lib; mkOption {
     default = false;
     type = types.bool;
-    description = ''
+    description = lib.mdDoc ''
       Whether to install all terminfo outputs
     '';
   };

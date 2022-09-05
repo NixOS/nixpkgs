@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, runCommand, bootstrap_cmds, coreutils, glibc, m4, runtimeShell }:
+{ lib, stdenv, fetchurl, fetchpatch, runCommand, bootstrap_cmds, coreutils, glibc, m4, runtimeShell }:
 
 let
   options = rec {
@@ -59,6 +59,21 @@ stdenv.mkDerivation rec {
     sha256 = cfg.sha256;
   };
 
+  patches = [
+    # Pull upstream fiux for -fno-common toolchains:
+    #  https://github.com/Clozure/ccl/pull/316
+    (fetchpatch {
+      name = "fno-common-p1.patch";
+      url = "https://github.com/Clozure/ccl/commit/185dc1a00e7492f8be98e5f93b561758423595f1.patch";
+      sha256 = "0wqfds7346qdwdsxz3bl2p601ib94rdp9nknj7igj01q8lqfpajw";
+    })
+    (fetchpatch {
+      name = "fno-common-p2.patch";
+      url = "https://github.com/Clozure/ccl/commit/997de91062d1f152d0c3b322a1e3694243e4a403.patch";
+      sha256 = "10w6zw8wgalkdyya4m48lgca4p9wgcp1h44hy9wqr94dzlllq0f6";
+    })
+  ];
+
   buildInputs = if stdenv.isDarwin then [ bootstrap_cmds m4 ] else [ glibc m4 ];
 
   CCL_RUNTIME = cfg.runtime;
@@ -104,8 +119,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Clozure Common Lisp";
     homepage    = "https://ccl.clozure.com/";
-    maintainers = with maintainers; [ raskin muflax tohl ];
+    maintainers = with maintainers; [ raskin tohl ];
     platforms   = attrNames options;
+    # assembler failures during build, x86_64-darwin broken since 2020-10-14
+    broken      = (stdenv.isDarwin && stdenv.isx86_64);
     license     = licenses.asl20;
   };
 }

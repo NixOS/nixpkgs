@@ -128,9 +128,12 @@ version="$(jq -r '.version' <<<"${registry_response}")"
 if [[ ${old_version} == "${version}" && ${force} != 1 && -z ${vendorSha256} && ${old_vendor_sha256} != "${vendorSha256}" ]]; then
   echo_provider "already at version ${version}"
   exit
-else
-  echo_provider "updating from ${old_version} to ${version}"
 fi
+if [[ ${version} =~ [[:alpha:]] && ${force} != 1 ]]; then
+  echo_provider "not updating to unstable version ${version}"
+  exit
+fi
+echo_provider "updating from ${old_version} to ${version}"
 update_attr version "${version}"
 
 provider_source_url="$(jq -r '.source' <<<"${registry_response}")"

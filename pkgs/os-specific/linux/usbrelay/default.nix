@@ -1,14 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, hidapi }:
+{ stdenv, lib, fetchFromGitHub, hidapi, installShellFiles }:
 stdenv.mkDerivation rec {
   pname = "usbrelay";
-  version = "0.9";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "darrylb123";
     repo = "usbrelay";
     rev = version;
-    sha256 = "sha256-bxME4r5W5bZKxMZ/Svi1EenqHKVWIjU6iiKaM8U6lmA=";
+    sha256 = "sha256-5zgpN4a+r0tmw0ISTJM+d9mo+L/qwUvpWPSsykuG0cg=";
   };
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   buildInputs = [
     hidapi
@@ -18,6 +22,10 @@ stdenv.mkDerivation rec {
     "DIR_VERSION=${version}"
     "PREFIX=${placeholder "out"}"
   ];
+
+  postInstall = ''
+    installManPage usbrelay.1
+  '';
 
   meta = with lib; {
     description = "Tool to control USB HID relays";

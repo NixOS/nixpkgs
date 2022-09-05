@@ -3,9 +3,10 @@
 , fetchFromGitHub
 , which
 , linuxHeaders
-, clang_9
-, llvmPackages_9
+, clang
+, llvmPackages_11
 , python3
+, curl
 , debugRuntime ? true
 , runtimeAsserts ? false
 , extraKleeuClibcConfig ? {}
@@ -23,18 +24,20 @@ let
     "DEVEL_PREFIX" = "/";
   });
 in
-clang_9.stdenv.mkDerivation rec {
+clang.stdenv.mkDerivation rec {
   pname = "klee-uclibc";
-  version = "1.2";
+  version = "1.3";
   src = fetchFromGitHub {
     owner = "klee";
     repo = "klee-uclibc";
     rev = "klee_uclibc_v${version}";
-    sha256 = "qdrGMw+2XwpDsfxdv6swnoaoACcF5a/RWgUxUYbtPrI=";
+    sha256 = "sha256-xQ8GWa0Gmd3lbwKodJhrsZeuR4j7NT4zIUh+kNhVY/w=";
   };
+
   nativeBuildInputs = [
-    clang_9
-    llvmPackages_9.llvm
+    clang
+    curl
+    llvmPackages_11.llvm
     python3
     which
   ];
@@ -44,7 +47,7 @@ clang_9.stdenv.mkDerivation rec {
 
   # HACK: needed for cross-compile.
   # See https://www.mail-archive.com/klee-dev@imperial.ac.uk/msg03141.html
-  KLEE_CFLAGS = "-idirafter ${clang_9}/resource-root/include";
+  KLEE_CFLAGS = "-idirafter ${clang}/resource-root/include";
 
   prePatch = ''
     patchShebangs ./configure

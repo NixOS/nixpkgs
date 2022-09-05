@@ -36,15 +36,15 @@
 , xtrans
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalPackages: {
   pname = "xarcan";
-  version = "0.6.0+date=2021-08-26";
+  version = "unstable-2022-06-14";
 
   src = fetchFromGitHub {
     owner = "letoram";
-    repo = pname;
-    rev = "e40f0176e495ffdad6e7405c58378df6532eb70d";
-    hash = "sha256-T+1oL7P5MTDkeSfW6OXc1OgfZ8E6e/4YRonf1eXcfIA=";
+    repo = "xarcan";
+    rev = "02111f4925453c0c545e9193c6a5e22c0d4e98c3";
+    hash = "sha256-rp2sNRbv0OZdfyqZfsv/v3TGQY5uyXWqbvlmUDd7iBk=";
   };
 
   nativeBuildInputs = [
@@ -116,4 +116,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
-}
+})

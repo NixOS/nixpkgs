@@ -43,7 +43,7 @@ in rec {
       name = "nixos-${nixos.channel.version}";
       meta = {
         description = "Release-critical builds for the NixOS channel";
-        maintainers = with pkgs.lib.maintainers; [ eelco fpletz ];
+        maintainers = with pkgs.lib.maintainers; [ eelco ];
       };
       constituents = pkgs.lib.concatLists [
         [ "nixos.channel" ]
@@ -132,12 +132,14 @@ in rec {
         # fails with kernel >= 5.15 https://github.com/NixOS/nixpkgs/pull/152505#issuecomment-1005049314
         #(onFullSupported "nixos.tests.nfs3.simple")
         (onFullSupported "nixos.tests.nfs4.simple")
+        (onSystems ["x86_64-linux"] "nixos.tests.oci-containers.podman")
         (onFullSupported "nixos.tests.openssh")
         (onFullSupported "nixos.tests.pantheon")
         (onFullSupported "nixos.tests.php.fpm")
         (onFullSupported "nixos.tests.php.httpd")
         (onFullSupported "nixos.tests.php.pcre")
         (onFullSupported "nixos.tests.plasma5")
+        (onSystems ["x86_64-linux"] "nixos.tests.podman")
         (onFullSupported "nixos.tests.predictable-interface-names.predictableNetworkd")
         (onFullSupported "nixos.tests.predictable-interface-names.predictable")
         (onFullSupported "nixos.tests.predictable-interface-names.unpredictableNetworkd")

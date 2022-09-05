@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq common-updater-scripts dotnetCorePackages.sdk_5_0 nuget-to-nix gnused nix coreutils findutils
+#!nix-shell -i bash -p curl jq common-updater-scripts dotnetCorePackages.sdk_6_0 nuget-to-nix gnused nix coreutils findutils
 
 set -euo pipefail
 
@@ -29,7 +29,11 @@ chmod -R +w "$src"
 pushd "$src"
 
 mkdir ./nuget_tmp.packages
+
+dotnet restore Jellyfin.Server --packages ./nuget_tmp.packages --runtime linux-x86
 dotnet restore Jellyfin.Server --packages ./nuget_tmp.packages --runtime linux-x64
+dotnet restore Jellyfin.Server --packages ./nuget_tmp.packages --runtime linux-arm
+dotnet restore Jellyfin.Server --packages ./nuget_tmp.packages --runtime linux-arm64
 
 nuget-to-nix ./nuget_tmp.packages > "$nugetDepsFile"
 

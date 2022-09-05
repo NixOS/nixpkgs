@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ stdenv, lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "gost";
@@ -42,6 +42,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A simple tunnel written in golang";
     homepage = "https://github.com/ginuerzh/gost";
     license = licenses.mit;

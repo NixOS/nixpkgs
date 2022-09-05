@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A visualization framework for the analysis and visualization of relational data";
 
     longDescription =

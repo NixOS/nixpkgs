@@ -2,7 +2,6 @@
 , stdenv
 , pkg-config
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , wrapGAppsHook
 , avahi
@@ -14,22 +13,14 @@
 
 stdenv.mkDerivation rec {
   pname = "uxplay";
-  version = "1.50";
+  version = "1.55";
 
   src = fetchFromGitHub {
     owner = "FDH2";
     repo = "UxPlay";
     rev = "v${version}";
-    sha256 = "sha256-43BCpYh0XtsnI064/ddcz2/Imj399g+bxLlT0BpqLMI=";
+    sha256 = "sha256-X5+vqGhgEQqjbzSs58t1/znlhlDJHLUwgNokYV7xNhc=";
   };
-
-  patches = [
-    # https://github.com/FDH2/UxPlay/issues/91
-    (fetchpatch {
-      url = "https://github.com/FDH2/UxPlay/commit/f373fb2edcfb1f4c279e5796cf21e4a865800a71.patch";
-      sha256 = "sha256-ENT/sMyPjDdZ4gdxiatYJ/UxuCl+ekk0iQOn8ELDAKQ=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -51,6 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/FDH2/UxPlay";
     description = "AirPlay Unix mirroring server";
     license = licenses.gpl3Plus;

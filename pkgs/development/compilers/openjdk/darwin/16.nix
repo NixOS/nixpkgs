@@ -86,7 +86,7 @@ let
       home = jdk;
     };
 
-    meta = import ./meta.nix lib;
+    meta = import ./meta.nix lib version;
   };
 in
 jdk

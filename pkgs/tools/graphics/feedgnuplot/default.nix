@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, makeWrapper, gawk
+{ lib, fetchFromGitHub, makeWrapper
 , makeFontsConf, freefont_ttf, gnuplot, perl, perlPackages
 , stdenv, shortenPerlShebang
 }:
@@ -22,7 +22,7 @@ perlPackages.buildPerlPackage rec {
 
   outputs = [ "out" ];
 
-  nativeBuildInputs = [ makeWrapper gawk ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
 
   buildInputs = [ gnuplot perl ]
     ++ (with perlPackages; [ ListMoreUtils IPCRun StringShellQuote ]);

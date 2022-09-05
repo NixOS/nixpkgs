@@ -2,7 +2,7 @@
   lib, stdenv, buildPackages, fetchurl, fetchpatch,
   runCommand,
   autoreconfHook,
-  autoconf, automake, libtool,
+  autoconf, automake, libtool, bash,
   # Enabling python support while cross compiling would be possible, but
   # the configure script tries executing python to gather info instead of
   # relying on python3-config exclusively
@@ -21,9 +21,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" ];
 
+  strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = lib.optionals enablePython [ python3 swig ];
+  nativeBuildInputs = [ autoreconfHook ]
+    ++ lib.optionals enablePython [ python3 swig ];
+  buildInputs = [ bash ];
 
   configureFlags = [
     # z/OS plugin is not useful on Linux,

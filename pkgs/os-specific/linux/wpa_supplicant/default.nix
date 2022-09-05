@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     CONFIG_EAP_PWD=y
     CONFIG_EAP_SAKE=y
     CONFIG_ELOOP=eloop
+    CONFIG_EXT_PASSWORD_FILE=y
     CONFIG_HS20=y
     CONFIG_HT_OVERRIDES=y
     CONFIG_IEEE80211AC=y

@@ -578,7 +578,7 @@ in {
               webserver.wait_for_unit(f"acme-finished-{test_domain}.target")
               wait_for_server()
               check_connection(client, test_domain)
-              rc, _ = client.execute(
+              rc, _s = client.execute(
                   f"openssl s_client -CAfile /tmp/ca.crt -connect {test_alias}:443"
                   " </dev/null 2>/dev/null | openssl x509 -noout -text"
                   f" | grep DNS: | grep {test_alias}"

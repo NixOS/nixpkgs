@@ -1,0 +1,24 @@
+diff --git a/autogen.sh b/autogen.sh
+index acbcacb..1f60b83 100755
+--- a/autogen.sh
++++ b/autogen.sh
+@@ -21,11 +21,6 @@
+   exit 1
+ fi
+ 
+-if ! [ -x "$(command -v black)" ]; then
+-  echo 'black is not installed'
+-  exit 1
+-fi
+-
+ # preprocess the resources
+ for pvd in "${providers[@]}"; do
+   # convert the svg to png for azure provider
+@@ -55,7 +50,3 @@
+ # Generate doc for custom module
+ echo "generating the docs for custom"
+ python -m scripts.generate "custom"
+-
+-# run black
+-echo "linting the all the diagram modules"
+-black "$app_root_dir"/**/*.py

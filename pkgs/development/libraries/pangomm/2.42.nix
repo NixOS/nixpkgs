@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "C++ interface to the Pango text rendering library";
     homepage    = "https://www.pango.org/";
     license     = with licenses; [ lgpl2 lgpl21 ];

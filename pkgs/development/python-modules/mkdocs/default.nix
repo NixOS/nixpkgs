@@ -16,9 +16,9 @@
 , pyyaml-env-tag
 , watchdog
   # testing deps
-, Babel
+, babel
 , mock
-, pytestCheckHook
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -47,20 +47,12 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    Babel
+    unittestCheckHook
+    babel
     mock
   ];
 
-
-  checkPhase = ''
-    set -euo pipefail
-
-    runHook preCheck
-
-    python -m unittest discover -v -p '*tests.py' mkdocs --top-level-directory .
-
-    runHook postCheck
-  '';
+  unittestFlagsArray = [ "-v" "-p" "'*tests.py'" "mkdocs" ];
 
   pythonImportsCheck = [ "mkdocs" ];
 

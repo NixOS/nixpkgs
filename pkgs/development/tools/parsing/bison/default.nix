@@ -18,12 +18,18 @@ stdenv.mkDerivation rec {
   # Otherwise tests fail due to incorrect unicode symbol oconversion.
   configurePlatforms = [ "build" "host" ];
 
+  # there's a /bin/sh shebang in bin/yacc which when no strictDeps is patched with the build stdenv shell
+  # however when cross-compiling it would still be patched with the build stdenv shell which would be wrong
+  # cannot add bash to buildInputs due to infinite recursion
+  strictDeps = stdenv.hostPlatform != stdenv.buildPlatform;
+
   nativeBuildInputs = [ m4 perl ] ++ lib.optional stdenv.isSunOS help2man;
   propagatedBuildInputs = [ m4 ];
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  # Normal check and install check largely execute the same test suite
+  doCheck = false;
   doInstallCheck = true;
 
   meta = {

@@ -16,18 +16,19 @@
 , xz
 , zlib
 , zstd
+, jemalloc
 , follyMobile ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "folly";
-  version = "2022.02.28.00";
+  version = "2022.08.29.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "sha256-9h2NsfQMQ7ps9Rt0HhTD+YKwk/soGchCC9GyEJGcm4g=";
+    sha256 = "sha256-OALOfjr9qEqr8dbL9G8USKImU+hDP8iDfJijzT6KPLM=";
   };
 
   nativeBuildInputs = [
@@ -50,17 +51,27 @@ stdenv.mkDerivation rec {
     libunwind
     fmt_8
     zstd
-  ];
+  ] ++ lib.optional stdenv.isLinux jemalloc;
 
-  NIX_CFLAGS_COMPILE = [ "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}" ];
+  # jemalloc headers are required in include/folly/portability/Malloc.h
+  propagatedBuildInputs = lib.optional stdenv.isLinux jemalloc;
+
+  NIX_CFLAGS_COMPILE = [ "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}" "-fpermissive" ];
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+
+  # folly-config.cmake, will `find_package` these, thus there should be
+  # a way to ensure abi compatibility.
+  passthru = {
+    inherit boost;
+    fmt = fmt_8;
+  };
 
   meta = with lib; {
     description = "An open-source C++ library developed and used at Facebook";
     homepage = "https://github.com/facebook/folly";
     license = licenses.asl20;
     # 32bit is not supported: https://github.com/facebook/folly/issues/103
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
     maintainers = with maintainers; [ abbradar pierreis ];
   };
 }

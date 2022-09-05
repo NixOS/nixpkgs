@@ -1,10 +1,10 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    google-protobuf (3.15.6)
-    pg_query (2.0.2)
-      google-protobuf (~> 3.15.5)
-    sqlint (0.2.0)
+    google-protobuf (3.21.2)
+    pg_query (2.1.3)
+      google-protobuf (>= 3.19.2)
+    sqlint (0.2.1)
       pg_query (~> 2)
 
 PLATFORMS
@@ -14,4 +14,4 @@ DEPENDENCIES
   sqlint
 
 BUNDLED WITH
-   2.1.4
+   2.3.9

@@ -10,14 +10,16 @@
 
 buildPythonPackage rec {
   pname = "py-canary";
-  version = "0.5.1";
+  version = "0.5.3";
+  format = "pyproject";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "snjoetw";
     repo = pname;
-    rev = version;
-    sha256 = "0j743cc0wv7im3anx1vvdm79zyvw67swhc3zwwc1r8626dgnmxjr";
+    rev = "refs/tags/${version}";
+    hash = "sha256-873XAf0jOX5pjrNRELEcTWCauk80FUYxTu7G7jc3MHE=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +32,14 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [ "canary" ];
+  pythonImportsCheck = [
+    "canary"
+  ];
+
+  disabledTests = [
+    # Test requires network access
+    "test_location_with_motion_entry"
+  ];
 
   meta = with lib; {
     description = "Python package for Canary Security Camera";

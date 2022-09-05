@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchurl, guileSupport ? false, pkg-config, guile }:
+{ lib
+, stdenv
+, fetchurl
+, guileSupport ? false, guile
+# avoid guile depend on bootstrap to prevent dependency cycles
+, inBootstrap ? false
+, pkg-config
+, gnumake
+}:
+
+let
+  guileEnabled = guileSupport && !inBootstrap;
+in
 
 stdenv.mkDerivation rec {
   pname = "gnumake";
@@ -19,10 +31,10 @@ stdenv.mkDerivation rec {
     ./0002-remove-impure-dirs.patch
   ];
 
-  nativeBuildInputs = lib.optionals guileSupport [ pkg-config ];
-  buildInputs = lib.optionals guileSupport [ guile ];
+  nativeBuildInputs = lib.optionals guileEnabled [ pkg-config ];
+  buildInputs = lib.optionals guileEnabled [ guile ];
 
-  configureFlags = lib.optional guileSupport "--with-guile"
+  configureFlags = lib.optional guileEnabled "--with-guile"
 
     # Make uses this test to decide whether it should keep track of
     # subseconds. Apple made this possible with APFS and macOS 10.13.
@@ -36,11 +48,13 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" "info" ];
   separateDebugInfo = true;
 
-  meta = with lib; {
-    homepage = "https://www.gnu.org/software/make/";
-    description = "A tool to control the generation of non-source files from sources";
-    license = licenses.gpl3Plus;
+  passthru.tests = {
+    # make sure that the override doesn't break bootstrapping
+    gnumakeWithGuile = gnumake.override { guileSupport = true; };
+  };
 
+  meta = with lib; {
+    description = "A tool to control the generation of non-source files from sources";
     longDescription = ''
       Make is a tool which controls the generation of executables and
       other non-source files of a program from the program's source files.
@@ -51,8 +65,11 @@ stdenv.mkDerivation rec {
       should write a makefile for it, so that it is possible to use Make
       to build and install the program.
     '';
+    homepage = "https://www.gnu.org/software/make/";
 
-    platforms = platforms.all;
+    license = licenses.gpl3Plus;
     maintainers = [ maintainers.vrthra ];
+    mainProgram = "make";
+    platforms = platforms.all;
   };
 }

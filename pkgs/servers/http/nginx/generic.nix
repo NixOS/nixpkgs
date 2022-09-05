@@ -1,7 +1,8 @@
-{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
+outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
+, nginx-doc
 
 , nixosTests
-, substituteAll, gd, geoip, perl
+, substituteAll, removeReferencesTo, gd, geoip, perl
 , withDebug ? false
 , withKTLS ? false
 , withStream ? true
@@ -21,8 +22,9 @@
 , extraPatches ? []
 , fixPatch ? p: p
 , preConfigure ? ""
-, postInstall ? null
+, postInstall ? ""
 , meta ? null
+, nginx-doc ? outer.nginx-doc
 , passthru ? { tests = {}; }
 }:
 
@@ -43,6 +45,8 @@ stdenv.mkDerivation {
   inherit pname;
   inherit version;
   inherit nginxVersion;
+
+  outputs = ["out" "doc"];
 
   src = if src != null then src else fetchurl {
     url = "https://nginx.org/download/nginx-${version}.tar.gz";
@@ -114,8 +118,12 @@ stdenv.mkDerivation {
 
   configurePlatforms = [];
 
-  preConfigure = preConfigure
-    + concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules;
+  # Disable _multioutConfig hook which adds --bindir=$out/bin into configureFlags,
+  # which breaks build, since nginx does not actually use autoconf.
+  preConfigure = ''
+    setOutputFlags=
+  '' + preConfigure
+     + concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules;
 
   patches = map fixPatch ([
     (substituteAll {
@@ -145,14 +153,24 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  postInstall = if postInstall != null then postInstall else ''
-    mv $out/sbin $out/bin
+  preInstall = ''
+    mkdir -p $doc
+    cp -r ${nginx-doc}/* $doc
   '';
+
+  nativeBuildInputs = [ removeReferencesTo ];
+
+  disallowedReferences = map (m: m.src) modules;
+
+  postInstall =
+    let
+      noSourceRefs = lib.concatMapStrings (m: "remove-references-to -t ${m.src} $out/sbin/nginx\n") modules;
+    in noSourceRefs + postInstall;
 
   passthru = {
     modules = modules;
     tests = {
-      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-pubhtml nginx-sandbox nginx-sso;
+      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-http3 nginx-pubhtml nginx-sandbox nginx-sso;
       variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
       acme-integration = nixosTests.acme;
     } // passthru.tests;

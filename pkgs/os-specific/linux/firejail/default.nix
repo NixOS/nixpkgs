@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "firejail";
-  version = "0.9.68";
+  version = "0.9.70";
 
   src = fetchFromGitHub {
     owner = "netblue30";
     repo = "firejail";
     rev = version;
-    sha256 = "18yy1mykx7h78yj7sz729i3dlsrgi25m17m5x9gbrvsx7f87rw7j";
+    sha256 = "sha256-x1txt0uER66bZN6BD6c/31Zu6fPPwC9kl/3bxEE6Ce8=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     # Adds the /nix directory when using an overlay.
     # Required to run any programs under this mode.
     ./mount-nix-dir-on-overlay.patch
+
     # By default fbuilder hardcodes the firejail binary to the install path.
     # On NixOS the firejail binary is a setuid wrapper available in $PATH.
     ./fbuilder-call-firejail-on-path.patch

@@ -26,7 +26,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ citeproc-py requests setuptools six ];
 
   checkInputs = [ contextlib2 pytest pytestCheckHook vcrpy ];
-  disabledTests = [ "test_io" ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  pythonImportsCheck = [ "duecredit" ];
 
   meta = with lib; {
     homepage = "https://github.com/duecredit/duecredit";

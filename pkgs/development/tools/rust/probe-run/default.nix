@@ -3,14 +3,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "probe-run";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-SXA77LXM1SuBJ8BH+ahwJl/3gWsCbdLXBiHZdJySWq0=";
+    sha256 = "sha256-7o0aRiCxWoDoMysXIPyiBqH/8TtFo87im6Y0OFL0cTA=";
   };
 
-  cargoSha256 = "sha256-e9POSuA/I7IUKUOxMTfCWxNn0AicojpGQpxamzmHa7g=";
+  cargoSha256 = "sha256-vREz3FTZXMrc18LXIycJXX6SgW6IKGIgL/+79dMfNjk=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 ]

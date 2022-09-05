@@ -588,6 +588,13 @@ in
     preBuild = "cd libretro";
   };
 
+  nxengine = mkLibRetroCore {
+    core = "nxengine";
+    description = "NXEngine libretro port";
+    license = lib.licenses.gpl3Only;
+    makefile = "Makefile";
+  };
+
   np2kai = mkLibRetroCore rec {
     core = "np2kai";
     src = getCoreSrc core;
@@ -672,7 +679,7 @@ in
     license = "MAME";
 
     extraBuildInputs = [ libpng SDL ];
-    SDL_CONFIG = "${SDL.dev}/bin/sdl-config";
+    SDL_CONFIG = "${lib.getDev SDL}/bin/sdl-config";
     dontAddPrefix = true;
     configurePlatforms = [ ];
     makeFlags = lib.optional stdenv.hostPlatform.isAarch64 [ "platform=aarch64" ];

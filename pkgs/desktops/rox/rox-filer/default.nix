@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
 , wrapGAppsHook
 , libxml2
@@ -27,13 +28,20 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./rox-filer-2.11-in-source-build.patch
+    # Pull upstream fix for -fno-common toolchains like upstream gcc-10:
+    #   https://github.com/rox-desktop/rox-filer/pull/15
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/rox-desktop/rox-filer/commit/86b0bb9144186d51ea9b898905111bd8b143b552.patch";
+      sha256 = "1csyx229i09p00lbdlkdqdhn3x2lb5zby1h9rkjgzlr2qz74gc69";
+    })
   ];
 
   # go to the source directory after unpacking the sources
   setSourceRoot = "export sourceRoot=rox-filer-${version}/ROX-Filer/";
 
-  # patch source with defined patches
-  patchFlags = [ "-p0" ];
+  # account for 'setSourceRoot' offset
+  patchFlags = [ "-p2" ];
 
   # patch the main.c to disable the lookup of the APP_DIR environment variable,
   # which is used to lookup the location for certain images when rox-filer

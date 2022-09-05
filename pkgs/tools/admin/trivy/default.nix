@@ -5,16 +5,17 @@
 
 buildGoModule rec {
   pname = "trivy";
-  version = "0.27.1";
+  version = "0.31.3";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-eyvxBpGuOXicuqINYhl4/fUgN/j+Awe5vgMaMxtAMr0=";
+    sha256 = "sha256-e+H5FH9UU2zK4GmxN04T87GdZYRZDVtA0FNw6t4kjgQ=";
   };
-
-  vendorSha256 = "sha256-91tq4ipi3JobVgffASn8KRd3JQkgbOx/7PsjKq5vJdE=";
+  # hash missmatch on across linux and darwin
+  proxyVendor = true;
+  vendorSha256 = "sha256-QjJHmVqZTw5w1jR+EctS4VzeJMBpkCL3VGjeKeQmyPA=";
 
   excludedPackages = "misc";
 
@@ -24,7 +25,7 @@ buildGoModule rec {
     "-X main.version=v${version}"
   ];
 
-  # Tests requires network access
+  # Tests require network access
   doCheck = false;
 
   doInstallCheck = true;

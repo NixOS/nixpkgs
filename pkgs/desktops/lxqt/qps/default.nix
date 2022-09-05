@@ -44,6 +44,6 @@ mkDerivation rec {
     description = "Qt based process manager";
     license = licenses.gpl2Plus;
     platforms = with platforms; linux; # does not build on darwin
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

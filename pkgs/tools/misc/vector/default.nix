@@ -16,33 +16,34 @@
 , tzdata
 , cmake
 , perl
-  # kafka is optional but one of the most used features
-, enableKafka ? true
+  # nix has a problem with the `?` in the feature list
+  # enabling kafka will produce a vector with no features at all
+, enableKafka ? false
   # TODO investigate adding "api" "api-client" "vrl-cli" and various "vendor-*"
   # "disk-buffer" is using leveldb TODO: investigate how useful
   # it would be, perhaps only for massive scale?
 , features ? ([ "sinks" "sources" "transforms" "vrl-cli" ]
     # the second feature flag is passed to the rdkafka dependency
     # building on linux fails without this feature flag (both x86_64 and AArch64)
-    ++ lib.optionals enableKafka [ "rdkafka/gssapi-vendored" ]
+    ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
     ++ lib.optional stdenv.targetPlatform.isUnix "unix")
 }:
 
 let
   pname = "vector";
-  version = "0.21.1";
+  version = "0.24.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
-    owner = "timberio";
+    owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-eskm+H0D+SB3PB76T6Z+iL5jjyy51lOXy88QXsn/Azs=";
+    sha256 = "sha256-kZ6Ek3CagAznyU7yDv96jFk1xCjfF2gvrNYyVTeFuO0=";
   };
 
-  cargoSha256 = "sha256-fN6o8Fcqdhs5c3RID+ok1Xo5g6nF9m3f8EWIJ47dn/k=";
+  cargoSha256 = "sha256-4aHMPrawTF9QpoX7cmiPv9ddu0LF008uqBTu0oyan98=";
   nativeBuildInputs = [ pkg-config cmake perl ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
@@ -62,7 +63,7 @@ rustPlatform.buildRustPackage {
   buildFeatures = features;
 
   # TODO investigate compilation failure for tests
-  # there are about 100 tests failing (out of 1100) for version 0.21.1
+  # there are about 100 tests failing (out of 1100) for version 0.22.0
   doCheck = false;
 
   checkFlags = [

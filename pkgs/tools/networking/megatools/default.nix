@@ -1,24 +1,45 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, glib, fuse, curl, glib-networking
-, asciidoc, libxml2, docbook_xsl, docbook_xml_dtd_45, libxslt, wrapGAppsNoGuiHook }:
+{ lib
+, stdenv
+, fetchgit
+, asciidoc
+, docbook_xml_dtd_45
+, docbook2x
+, libxml2
+, meson
+, ninja
+, pkg-config
+, curl
+, glib
+, fuse
+}:
 
 stdenv.mkDerivation rec {
   pname = "megatools";
-  version = "1.10.3";
+  version = "1.11.0";
 
   src = fetchgit {
     url = "https://megous.com/git/megatools";
-    rev = "5581d06e447b84d0101d36dc96ab72920eec1017";
-    sha256 = "1fh456kjsmdvpmvklkpi06h720yvhahd4rxa6cm5x818pl44p1r4";
+    rev = version;
+    sha256 = "sha256-Q9hMJBQBenufubbmeAw8Q8w+Oo+UcZLWathKNDwTv3s=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook pkg-config wrapGAppsNoGuiHook asciidoc libxml2
-    docbook_xsl docbook_xml_dtd_45 libxslt
+    asciidoc
+    docbook_xml_dtd_45
+    docbook2x
+    libxml2
+    meson
+    ninja
+    pkg-config
   ];
-  buildInputs = [ glib glib-networking curl ]
-  ++ lib.optionals stdenv.isLinux [ fuse ];
+
+  buildInputs = [
+    curl
+    glib
+  ] ++ lib.optionals stdenv.isLinux [ fuse ];
 
   enableParallelBuilding = true;
+  strictDeps = true;
 
   meta = with lib; {
     description = "Command line client for Mega.co.nz";

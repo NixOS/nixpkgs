@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = kernel.kernelOlder "4.19";
     description =
       "Experimental implementation of a kvmclock-derived clocksource for Linux guests under OpenBSD's hypervisor";
     homepage = "https://github.com/voutilad/vmm_clock";

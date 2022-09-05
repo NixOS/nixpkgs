@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://lxde.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ hinton romildo ];
+    maintainers = with maintainers; [ romildo ];
   };
 }

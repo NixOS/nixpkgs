@@ -137,8 +137,8 @@ let
   self = if doWrap then
     stdenv.mkDerivation {
       inherit pname version passthru;
+      nativeBuildInputs = [ makeWrapper ];
       buildInputs = [
-        makeWrapper
         xorg.lndir
       ];
       buildCommand = ''

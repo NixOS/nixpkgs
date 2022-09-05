@@ -12,6 +12,9 @@
 , python3
 , linuxHeaders
 , nixosTests
+
+# v8 (upstream default), wavm, wamr, wasmtime, disabled
+, wasmRuntime ? "wamr"
 }:
 
 let
@@ -20,8 +23,8 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.21.1";
-    rev = "af50070ee60866874b0a9383daf9364e884ded22";
+    version = "1.21.4";
+    rev = "782ba5e5ab9476770378ec9f1901803e0d38ac41";
   };
 in
 buildBazelPackage rec {
@@ -31,10 +34,10 @@ buildBazelPackage rec {
   src = fetchFromGitHub {
     owner = "envoyproxy";
     repo = "envoy";
-    inherit (srcVer) rev ;
-    hash = "sha256:11mm72zmb479ss585jzqzhklyyqmdadnvr91ghzvjxc0j2a1hrr4";
+    inherit (srcVer) rev;
+    hash = "sha256-SthKDMQs5yNU0iouAPVsDeCPKcsBXmO9ebDwu58UQRs=";
 
-    extraPostFetch = ''
+    postFetch = ''
       chmod -R +w $out
       rm $out/.bazelversion
       echo ${srcVer.rev} > $out/SOURCE_VERSION
@@ -58,6 +61,13 @@ buildBazelPackage rec {
       url = "https://github.com/envoyproxy/envoy/commit/68448aae7a78a3123097b6ea96016b270457e7b8.patch";
       sha256 = "123kv3x37p8fgfp29jhw5xg5js5q5ipibs8hsm7gzfd5bcllnpfh";
     })
+
+    # fix issues with brotli and GCC 11.2.0+ (-Werror=vla-parameter)
+    ./bump-brotli.patch
+
+    # fix linux-aarch64 WAMR builds
+    # (upstream WAMR only detects aarch64 on Darwin, not Linux)
+    ./fix-aarch64-wamr.patch
   ];
 
   nativeBuildInputs = [
@@ -75,8 +85,8 @@ buildBazelPackage rec {
 
   fetchAttrs = {
     sha256 = {
-      x86_64-linux = "0f7mls2zrpjjvbz6pgkzrvr55bv05xn2l76j9i1r0cf367qqfkz8";
-      aarch64-linux = "1l3ls47z20xrw6x9qps5jm7vq50xb1acv9gczfdrj9hw6jybgwgg";
+      x86_64-linux = "sha256-/SA+WFHcMjk6iLwuEmuBIzy3pMhw7TThIEx292dv6IE=";
+      aarch64-linux = "sha256-0XdeirdIP7+nKy8zZbr2uHN2RZ4ZFOJt9i/+Ow1s/W4=";
     }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
@@ -128,6 +138,11 @@ buildBazelPackage rec {
     "--cxxopt=-Wno-maybe-uninitialized"
     "--cxxopt=-Wno-uninitialized"
     "--cxxopt=-Wno-error=type-limits"
+
+    "--define=wasm=${wasmRuntime}"
+  ];
+  bazelFetchFlags = [
+    "--define=wasm=${wasmRuntime}"
   ];
 
   passthru.tests = {

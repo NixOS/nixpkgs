@@ -50,6 +50,6 @@ mkDerivation rec {
     description = "Core library of PCManFM-Qt (Qt binding for libfm)";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

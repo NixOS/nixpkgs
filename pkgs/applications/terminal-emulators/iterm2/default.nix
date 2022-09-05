@@ -18,6 +18,8 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "sha256-ZE/uYBKB2popdIdZWA8AvyJiwMzt32u6u/H/AyNcoVo=";
   };
 
+  dontFixup = true;
+
   installPhase = ''
     runHook preInstall
     APP_DIR="$out/Applications/iTerm2.app"

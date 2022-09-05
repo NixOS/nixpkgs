@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.isx86_64;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Minimal Markdown Documentation";
     homepage = "https://github.com/ryantm/mmdoc";
     license = licenses.cc0;

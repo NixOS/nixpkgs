@@ -1375,12 +1375,12 @@ let
 
     sweet_xml = buildMix rec {
       name = "sweet_xml";
-      version = "0.6.6";
+      version = "0.7.2";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "0wrm3wx1c4wg8xj8lx1pg9xdpxhsbbry71l3kwgsizwjz1cc87if";
+        sha256 = "sha256-aJTmihIPRUU02ZBF6jMl93QOpxJgvDFfguKXMdVwpug=";
       };
 
       beamDeps = [];

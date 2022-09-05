@@ -1,19 +1,23 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 , chardet
 , cssselect
 , lxml
+, timeout-decorator
 }:
 
 buildPythonPackage rec {
   pname = "readability-lxml";
   version = "0.8.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-5R/qVrWQmq+IbTB9SOeeCWKTJVr6Vnt9CLypTSWxpOE=";
+  src = fetchFromGitHub {
+    owner = "buriy";
+    repo = "python-readability";
+    rev = "v${version}";
+    hash = "sha256-MKdQRety24qOG9xgIdaCJ72XEImP42SlMG6tC7bwzo4=";
   };
 
   propagatedBuildInputs = [ chardet cssselect lxml ];
@@ -22,9 +26,13 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace 'sys.platform == "darwin"' "False"
   '';
 
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+    timeout-decorator
+  ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Fast python port of arc90's readability tool";
     homepage = "https://github.com/buriy/python-readability";
     license = licenses.apsl20;

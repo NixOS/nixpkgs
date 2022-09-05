@@ -11,15 +11,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "open-watcom-v2";
-  version = "unstable-2022-04-23";
-  name = "${pname}-unwrapped-${version}";
+  pname = "${passthru.prettyName}-unwrapped";
+  version = "unstable-2022-08-02";
 
   src = fetchFromGitHub {
     owner = "open-watcom";
     repo = "open-watcom-v2";
-    rev = "3351d37f44eef84fcd428b8b5537cb29a7db22a8";
-    sha256 = "mSF9xFKJ5AQ+Ds84qMD8xJJ7B9AMujgksxMNzSDzLA4=";
+    rev = "4bdb73995b871982dd106838296903701ded29c2";
+    sha256 = "sha256-Ay/f+gnj8EklN8T/uP0a+Zji6HEHAoPLdkrSTQaC9Rs=";
   };
 
   postPatch = ''
@@ -82,8 +81,11 @@ stdenv.mkDerivation rec {
   # Stripping breaks many tools
   dontStrip = true;
 
-  passthru.updateScript = unstableGitUpdater {
-    url = "https://github.com/open-watcom/open-watcom-v2.git";
+  passthru = {
+    prettyName = "open-watcom-v2";
+    updateScript = unstableGitUpdater {
+      url = "https://github.com/open-watcom/open-watcom-v2.git";
+    };
   };
 
   meta = with lib; {

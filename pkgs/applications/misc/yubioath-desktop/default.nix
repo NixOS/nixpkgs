@@ -1,27 +1,38 @@
-{ lib, stdenv, fetchurl, mkDerivation
-, qmake, qtbase, qtquickcontrols2, qtgraphicaleffects
-, python3, pyotherside
-, pcsclite, yubikey-personalization
-, yubikey-manager, makeWrapper }:
+{ lib
+, stdenv
+, fetchurl
+, mkDerivation
+, qmake
+, qtbase
+, qtquickcontrols2
+, qtgraphicaleffects
+, qtmultimedia
+, python3
+, pyotherside
+, pcsclite
+, yubikey-personalization
+, yubikey-manager
+, makeWrapper
+}:
 
 mkDerivation rec {
   pname = "yubioath-desktop";
-  version = "5.0.5";
+  version = "5.1.0";
 
   src = fetchurl {
     url = "https://developers.yubico.com/yubioath-desktop/Releases/yubioath-desktop-${version}.tar.gz";
-    sha256 = "05xs6xh9pi50h0668arirj0gnz11adpixgsdkds072077gasdm0g";
+    hash = "sha256-Lm9F4eaG9T5brAV7XDAkoj0WClmXEYIhuUzh2rk0oc0=";
   };
 
   doCheck = false;
 
-  buildInputs = [ qtbase qtquickcontrols2 qtgraphicaleffects python3 ];
+  buildInputs = [ qtbase qtquickcontrols2 qtgraphicaleffects qtmultimedia python3 ];
 
   nativeBuildInputs = [ qmake makeWrapper python3.pkgs.wrapPython ];
 
   postPatch = ''
-    substituteInPlace deployment.pri \
-      --replace '/usr/bin' "$out/bin"
+    substituteInPlace QZXing/QZXing-components.pri \
+      --replace 'target.path = $$PREFIX/lib' 'target.path = $$PREFIX/bin'
   '';
 
   pythonPath = [ yubikey-manager ];

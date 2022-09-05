@@ -3,20 +3,29 @@
 , rustPlatform
 , lua52Support ? true
 , luauSupport ? false
+, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "stylua";
-  version = "0.13.1";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "johnnymorganz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0Pl8SogCSZcboLHVAI45JqCLojAqIWBFuoZAK4gTzrs=";
+    sha256 = "sha256-l4q6Qlgdxgm4K5+NkWMZI3Hhtx6m/0DG9PE4gvo/ylo=";
   };
 
-  cargoSha256 = "sha256-VFgA5kOwUJG0GgKU4AUYCB/psAPM2GdTz5oRFgkrNi8=";
+  cargoSha256 = "sha256-zlk9KdiSKWknyuJTTqpzCeSJUXJGDK2A0g1ss8AHoYs=";
+
+  cargoPatches = [
+    # fixes broken 0.14.3 lockfile
+    (fetchpatch {
+      url = "https://github.com/JohnnyMorganz/StyLua/commit/834f632f67af6425e7773eaade8d23a880946843.patch";
+      sha256 = "sha256-oM2gaILwiNMqTGFRQBw6/fxbjljNWxeIb0lcXcAJR3w=";
+    })
+  ];
 
   buildFeatures = lib.optional lua52Support "lua52"
     ++ lib.optional luauSupport "luau";

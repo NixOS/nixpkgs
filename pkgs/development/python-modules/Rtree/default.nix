@@ -1,32 +1,36 @@
-{ lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  libspatialindex,
-  numpy,
-  pytestCheckHook
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, libspatialindex
+, numpy
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "Rtree";
-  version = "0.9.7";
+  pname = "rtree";
+  version = "1.0.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "be8772ca34699a9ad3fb4cfe2cfb6629854e453c10b3328039301bbfc128ca3e";
+    pname = "Rtree";
+    inherit version;
+    sha256 = "sha256-0Eg0ghITRrCTuaQlGNQPkhrfRFkVt66jB+smdoyDloI=";
   };
 
-  buildInputs = [ libspatialindex ];
-
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace rtree/finder.py --replace \
-      "find_library('spatialindex_c')" "'${libspatialindex}/lib/libspatialindex_c${stdenv.hostPlatform.extensions.sharedLibrary}'"
+      'find_library("spatialindex_c")' '"${libspatialindex}/lib/libspatialindex_c${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
+
+  buildInputs = [ libspatialindex ];
 
   checkInputs = [
     numpy
     pytestCheckHook
   ];
+
   pythonImportsCheck = [ "rtree" ];
 
   meta = with lib; {

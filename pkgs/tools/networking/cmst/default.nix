@@ -1,14 +1,14 @@
-{ mkDerivation, lib, fetchFromGitHub, qmake, qtbase, qttools }:
+{ mkDerivation, lib, fetchFromGitHub, qmake, qtbase, qttools, gitUpdater }:
 
 mkDerivation rec {
   pname = "cmst";
-  version = "2022.03.13";
+  version = "2022.05.01";
 
   src = fetchFromGitHub {
     repo = "cmst";
     owner = "andrew-bibb";
     rev = "${pname}-${version}";
-    sha256 = "sha256-PIS77yYM7tR+0vpTDh9Li/dnaWHUQW+w1NLRb5g+sz8=";
+    sha256 = "sha256-d3uvJf1tI9vXyq1eIbHkKrinBuPkYoBUcusHsJmSqMA=";
   };
 
   nativeBuildInputs = [ qmake qttools ];
@@ -20,6 +20,11 @@ mkDerivation rec {
       substituteInPlace $f --replace /etc $out/etc --replace /usr $out
     done
   '';
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    rev-prefix = "${pname}-";
+  };
 
   meta = with lib; {
     description = "QT GUI for Connman with system tray icon";

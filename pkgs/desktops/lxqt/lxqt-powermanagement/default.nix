@@ -52,6 +52,6 @@ mkDerivation rec {
     description = "Power management module for LXQt";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

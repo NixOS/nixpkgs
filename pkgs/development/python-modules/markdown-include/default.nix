@@ -1,17 +1,20 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , markdown
 }:
 
 buildPythonPackage rec {
   pname = "markdown-include";
-  version = "0.6.0";
+  version = "0.7.0";
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "18p4qfhazvskcg6xsdv1np8m1gc1llyabp311xzhqy7p6q76hpbg";
+  # only wheel on pypi
+  src = fetchFromGitHub {
+    owner = "cmacmackin";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-2pC0K/Z5l7q6sx4FSM4Pi1/5bt1wLZsqOmcbnE47rVs=";
   };
 
   propagatedBuildInputs = [

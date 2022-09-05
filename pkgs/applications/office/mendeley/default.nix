@@ -139,6 +139,7 @@ mkDerivation {
   meta = with lib; {
     homepage = "https://www.mendeley.com";
     description = "A reference manager and academic social network";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers  = with maintainers; [ dtzWill ];

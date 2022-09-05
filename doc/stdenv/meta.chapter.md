@@ -80,7 +80,7 @@ Right: `"A library for decoding PNG images"`
 
 ### `longDescription` {#var-meta-longDescription}
 
-An arbitrarily long description of the package.
+An arbitrarily long description of the package in [CommonMark](https://commonmark.org) Markdown.
 
 ### `branch` {#var-meta-branch}
 
@@ -175,6 +175,40 @@ The NixOS tests are available as `nixosTests` in parameters of derivations. For 
 
 NixOS tests run in a VM, so they are slower than regular package tests. For more information see [NixOS module tests](https://nixos.org/manual/nixos/stable/#sec-nixos-tests).
 
+Alternatively, you can specify other derivations as tests. You can make use of
+the optional parameter to inject the correct package without
+relying on non-local definitions, even in the presence of `overrideAttrs`.
+Here that's `finalAttrs.finalPackage`, but you could choose a different name if
+`finalAttrs` already exists in your scope.
+
+`(mypkg.overrideAttrs f).passthru.tests` will be as expected, as long as the
+definition of `tests` does not rely on the original `mypkg` or overrides it in
+all places.
+
+```nix
+# my-package/default.nix
+{ stdenv, callPackage }:
+stdenv.mkDerivation (finalAttrs: {
+  # ...
+  passthru.tests.example = callPackage ./example.nix { my-package = finalAttrs.finalPackage; };
+})
+```
+
+```nix
+# my-package/example.nix
+{ runCommand, lib, my-package, ... }:
+runCommand "my-package-test" {
+  nativeBuildInputs = [ my-package ];
+  src = lib.sources.sourcesByRegex ./. [ ".*.in" ".*.expected" ];
+} ''
+  my-package --help
+  my-package <example.in >example.actual
+  diff -U3 --color=auto example.expected example.actual
+  mkdir $out
+''
+```
+
+
 ### `timeout` {#var-meta-timeout}
 
 A timeout (in seconds) for building the derivation. If the derivation takes longer than this time to build, it can fail due to breaking the timeout. However, all computers do not have the same computing power, hence some builders may decide to apply a multiplicative factor to this value. When filling this value in, try to keep it approximately consistent with other values already present in `nixpkgs`.
@@ -215,3 +249,31 @@ Unfree package that cannot be redistributed. You can build it yourself, but you 
 ### `lib.licenses.unfreeRedistributableFirmware`, `"unfree-redistributable-firmware"` {#lib.licenses.unfreeredistributablefirmware-unfree-redistributable-firmware}
 
 This package supplies unfree, redistributable firmware. This is a separate value from `unfree-redistributable` because not everybody cares whether firmware is free.
+
+## Source provenance {#sec-meta-sourceProvenance}
+
+The value of a package's `meta.sourceProvenance` attribute specifies the provenance of the package's derivation outputs.
+
+If a package contains elements that are not built from the original source by a nixpkgs derivation, the `meta.sourceProvenance` attribute should be a list containing one or more value from `lib.sourceTypes` defined in [`nixpkgs/lib/source-types.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/source-types.nix).
+
+Adding this information helps users who have needs related to build transparency and supply-chain security to gain some visibility into their installed software or set policy to allow or disallow installation based on source provenance.
+
+The presence of a particular `sourceType` in a package's `meta.sourceProvenance` list indicates that the package contains some components falling into that category, though the *absence* of that `sourceType` does not *guarantee* the absence of that category of `sourceType` in the package's contents. A package with no `meta.sourceProvenance` set implies it has no *known* `sourceType`s other than `fromSource`.
+
+The meaning of the `meta.sourceProvenance` attribute does not depend on the value of the `meta.license` attribute.
+
+### `lib.sourceTypes.fromSource` {#lib.sourceTypes.fromSource}
+
+Package elements which are produced by a nixpkgs derivation which builds them from source code.
+
+### `lib.sourceTypes.binaryNativeCode` {#lib.sourceTypes.binaryNativeCode}
+
+Native code to be executed on the target system's CPU, built by a third party. This includes packages which wrap a downloaded AppImage or Debian package.
+
+### `lib.sourceTypes.binaryFirmware` {#lib.sourceTypes.binaryFirmware}
+
+Code to be executed on a peripheral device or embedded controller, built by a third party.
+
+### `lib.sourceTypes.binaryBytecode` {#lib.sourceTypes.binaryBytecode}
+
+Code to run on a VM interpreter or JIT compiled into bytecode by a third party. This includes packages which download Java `.jar` files from another source.

@@ -20,6 +20,12 @@
 , lib
 , options
 , transformOptions ? lib.id  # function for additional tranformations of the options
+, documentType ? "appendix" # TODO deprecate "appendix" in favor of "none"
+                            #      and/or rename function to moduleOptionDoc for clean slate
+
+  # If you include more than one option list into a document, you need to
+  # provide different ids.
+, variablelistId ? "configuration-variable-list"
 , revision ? "" # Specify revision for the options
 # a set of options the docs we are generating will be merged into, as if by recursiveUpdate.
 # used to split the options doc build into a static part (nixos/modules) and a dynamic part
@@ -45,8 +51,11 @@ let
     else if lib.isFunction x then "<function>"
     else x;
 
-  optionsList = lib.flip map optionsListVisible
-   (opt: transformOptions opt
+  rawOpts = lib.optionAttrSetToDocList options;
+  transformedOpts = map transformOptions rawOpts;
+  filteredOpts = lib.filter (opt: opt.visible && !opt.internal) transformedOpts;
+  optionsList = lib.flip map filteredOpts
+   (opt: opt
     // lib.optionalAttrs (opt ? example) { example = substSpecial opt.example; }
     // lib.optionalAttrs (opt ? default) { default = substSpecial opt.default; }
     // lib.optionalAttrs (opt ? type) { type = substSpecial opt.type; }
@@ -88,9 +97,6 @@ let
         '';
     in "<itemizedlist>${lib.concatStringsSep "\n" (map (p: describe (unpack p)) packages)}</itemizedlist>";
 
-  # Remove invisible and internal options.
-  optionsListVisible = lib.filter (opt: opt.visible && !opt.internal) (lib.optionAttrSetToDocList options);
-
   optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList);
 
 in rec {
@@ -110,7 +116,15 @@ in rec {
 
   optionsJSON = pkgs.runCommand "options.json"
     { meta.description = "List of NixOS options in JSON format";
-      buildInputs = [ pkgs.brotli ];
+      buildInputs = [
+        pkgs.brotli
+        (let
+          self = (pkgs.python3Minimal.override {
+            inherit self;
+            includeSiteCustomize = true;
+           });
+         in self.withPackages (p: [ p.mistune ]))
+      ];
       options = builtins.toFile "options.json"
         (builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix));
     }
@@ -121,9 +135,13 @@ in rec {
 
       ${
         if baseOptionsJSON == null
-          then "cp $options $dst/options.json"
+          then ''
+            # `cp $options $dst/options.json`, but with temporary
+            # markdown processing
+            python ${./mergeJSON.py} $options <(echo '{}') > $dst/options.json
+          ''
           else ''
-            ${pkgs.python3Minimal}/bin/python ${./mergeJSON.py} \
+            python ${./mergeJSON.py} \
               ${lib.optionalString warningsAreErrors "--warnings-are-errors"} \
               ${baseOptionsJSON} $options \
               > $dst/options.json
@@ -161,7 +179,9 @@ in rec {
 
     ${pkgs.python3Minimal}/bin/python ${./sortXML.py} $optionsXML sorted.xml
     ${pkgs.libxslt.bin}/bin/xsltproc \
+      --stringparam documentType '${documentType}' \
       --stringparam revision '${revision}' \
+      --stringparam variablelistId '${variablelistId}' \
       -o intermediate.xml ${./options-to-docbook.xsl} sorted.xml
     ${pkgs.libxslt.bin}/bin/xsltproc \
       -o "$out" ${./postprocess-option-descriptions.xsl} intermediate.xml

@@ -6,13 +6,13 @@
 
 with python3.pkgs; buildPythonApplication rec {
   pname = "neovim-remote";
-  version = "2.4.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "mhinz";
     repo = "neovim-remote";
     rev = "v${version}";
-    sha256 = "0jlw0qksak4bdzddpsj74pm2f2bgpj3cwrlspdjjy0j9qzg0mpl9";
+    sha256 = "0lbz4w8hgxsw4k1pxafrl3rhydrvi5jc6vnsmkvnhh6l6rxlmvmq";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +32,8 @@ with python3.pkgs; buildPythonApplication rec {
     "test_escape_single_quotes_in_filenames"
     "test_escape_double_quotes_in_filenames"
   ];
+
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "A tool that helps controlling nvim processes from a terminal";

@@ -9,7 +9,7 @@ in
 {
   options = {
     services.teleport = with lib.types; {
-      enable = mkEnableOption "the Teleport service";
+      enable = mkEnableOption (lib.mdDoc "the Teleport service");
 
       settings = mkOption {
         type = settingsYaml.type;
@@ -33,15 +33,15 @@ in
             auth_service.enabled = false;
           }
         '';
-        description = ''
-          Contents of the <literal>teleport.yaml</literal> config file.
-          The <literal>--config</literal> arguments will only be passed if this set is not empty.
+        description = lib.mdDoc ''
+          Contents of the `teleport.yaml` config file.
+          The `--config` arguments will only be passed if this set is not empty.
 
-          See <link xlink:href="https://goteleport.com/docs/setup/reference/config/"/>.
+          See <https://goteleport.com/docs/setup/reference/config/>.
         '';
       };
 
-      insecure.enable = mkEnableOption ''
+      insecure.enable = mkEnableOption (lib.mdDoc ''
         starting teleport in insecure mode.
 
         This is dangerous!
@@ -49,25 +49,25 @@ in
         Proceed with caution!
 
         Teleport starts with disabled certificate validation on Proxy Service, validation still occurs on Auth Service
-      '';
+      '');
 
       diag = {
-        enable = mkEnableOption ''
+        enable = mkEnableOption (lib.mdDoc ''
           endpoints for monitoring purposes.
 
-          See <link xlink:href="https://goteleport.com/docs/setup/admin/troubleshooting/#troubleshooting/"/>
-        '';
+          See <https://goteleport.com/docs/setup/admin/troubleshooting/#troubleshooting/>
+        '');
 
         addr = mkOption {
           type = str;
           default = "127.0.0.1";
-          description = "Metrics and diagnostics address.";
+          description = lib.mdDoc "Metrics and diagnostics address.";
         };
 
         port = mkOption {
           type = int;
           default = 3000;
-          description = "Metrics and diagnostics port.";
+          description = lib.mdDoc "Metrics and diagnostics port.";
         };
       };
     };

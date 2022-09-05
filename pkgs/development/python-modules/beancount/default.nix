@@ -12,7 +12,7 @@
 , oauth2client
 , ply
 , pytest
-, python_magic
+, python-magic
 , requests
 }:
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     lxml
     oauth2client
     ply
-    python_magic
+    python-magic
     requests
     # pytest really is a runtime dependency
     # https://github.com/beancount/beancount/blob/v2/setup.py#L81-L82

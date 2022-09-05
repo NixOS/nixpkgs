@@ -1,15 +1,18 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , pythonOlder
+, pandoc
 , pytestCheckHook
+, pytest-console-scripts
+, pytest-timeout
 , pytest-tornasync
-, argon2_cffi
+, argon2-cffi
 , jinja2
 , tornado
 , pyzmq
+, ipykernel
 , ipython_genutils
 , traitlets
 , jupyter_core
@@ -27,23 +30,16 @@
 
 buildPythonPackage rec {
   pname = "jupyter_server";
-  version = "1.11.2";
-  disabled = pythonOlder "3.6";
+  version = "1.18.1";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c1f32e0c1807ab2de37bf70af97a36b4436db0bc8af3124632b1f4441038bf95";
+    sha256 = "sha256-K3L8WVvMrikiYKrYFXoOrY2ixwPsauG7ezbbrQ4mfqc=";
   };
 
-  patches = [ (fetchpatch
-    { name = "Normalize-file-name-and-path.patch";
-      url = "https://github.com/jupyter-server/jupyter_server/pull/608/commits/345e26cdfd78651954b68708fa44119c2ac0dbd5.patch";
-      sha256 = "1kqz3dyh2w0h1g1fbvqa13q17hb6y32694rlaasyg213mq6g4k32";
-    })
-  ];
-
   propagatedBuildInputs = [
-    argon2_cffi
+    argon2-cffi
     jinja2
     tornado
     pyzmq
@@ -62,7 +58,11 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    ipykernel
+    pandoc
     pytestCheckHook
+    pytest-console-scripts
+    pytest-timeout
     pytest-tornasync
     requests
   ];
@@ -72,17 +72,18 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  pytestFlagsArray = [ "jupyter_server" ];
-
-  # disabled failing tests
   disabledTests = [
-    "test_server_extension_list"
-    "test_list_formats"
-    "test_base_url"
-    "test_culling"
+    "test_cull_idle"
   ] ++ lib.optionals stdenv.isDarwin [
     # attempts to use trashcan, build env doesn't allow this
     "test_delete"
+    # test is presumable broken in sandbox
+    "test_authorized_requests"
+  ];
+
+  disabledTestPaths = [
+    "tests/services/kernels/test_api.py"
+    "tests/services/sessions/test_api.py"
   ];
 
   __darwinAllowLocalNetworking = true;

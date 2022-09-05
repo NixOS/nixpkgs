@@ -1,117 +1,87 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchurl
+{ buildDotnetModule
 , dotnetCorePackages
-, makeWrapper
-, unzip
-, writeText
+, fetchFromGitHub
+, icu
+, lib
+, patchelf
+, stdenv
 }:
-
 let
-
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-
-  deps = map (package: stdenv.mkDerivation (with package; {
-    inherit pname version src;
-
-    buildInputs = [ unzip ];
-    unpackPhase = ''
-      unzip $src
-      chmod -R u+r .
-      function traverseRename () {
-        for e in *
-        do
-          t="$(echo "$e" | sed -e "s/%20/\ /g" -e "s/%2B/+/g")"
-          [ "$t" != "$e" ] && mv -vn "$e" "$t"
-          if [ -d "$t" ]
-          then
-            cd "$t"
-            traverseRename
-            cd ..
-          fi
-        done
-      }
-
-      traverseRename
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      package=$out/lib/dotnet/${pname}/${version}
-      mkdir -p $package
-      cp -r . $package
-      echo "{}" > $package/.nupkg.metadata
-
-      runHook postInstall
-    '';
-
-    dontFixup = true;
-  }))
-    (import ./deps.nix { inherit fetchurl; });
-
-  nuget-config = writeText "NuGet.Config" ''
-    <?xml version="1.0" encoding="utf-8"?>
-    <configuration>
-      <packageSources>
-        <clear />
-      </packageSources>
-      <fallbackPackageFolders>
-        ${lib.concatStringsSep "\n" (map (package: "<add key=\"${package}\" value=\"${package}/lib/dotnet\"/>") deps)}
-      </fallbackPackageFolders>
-    </configuration>
-  '';
-
-in stdenv.mkDerivation rec {
+  inherit (dotnetCorePackages) sdk_6_0;
+in
+buildDotnetModule rec {
   pname = "omnisharp-roslyn";
-  version = "1.38.2";
+  version = "1.39.1";
 
   src = fetchFromGitHub {
     owner = "OmniSharp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "7XJIdotfffu8xo+S6xlc1zcK3oY9QIg1CJhCNJh5co0=";
+    sha256 = "Fd9fS5iSEynZfRwZexDlVndE/zSZdUdugR0VgXXAdmI=";
   };
 
-  nativeBuildInputs = [ makeWrapper dotnet-sdk ];
+  projectFile = "src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj";
+  nugetDeps = ./deps.nix;
+
+  nativeBuildInputs = [
+    patchelf
+  ];
+
+  dotnetInstallFlags = [ "--framework net6.0" ];
+  dotnetBuildFlags = [ "--framework net6.0" ];
+  dotnetFlags = [
+    # These flags are set by the cake build.
+    "-property:PackageVersion=${version}"
+    "-property:AssemblyVersion=${version}.0"
+    "-property:FileVersion=${version}.0"
+    "-property:InformationalVersion=${version}"
+    "-property:RuntimeFrameworkVersion=6.0.0-preview.7.21317.1"
+    "-property:RollForward=LatestMajor"
+  ];
 
   postPatch = ''
     # Relax the version requirement
     substituteInPlace global.json \
-      --replace '6.0.100' '${dotnet-sdk.version}'
+      --replace '7.0.100-preview.4.22252.9' '${sdk_6_0.version}'
+    # Patch the project files so we can compile them properly
+    for project in src/OmniSharp.Http.Driver/OmniSharp.Http.Driver.csproj src/OmniSharp.LanguageServerProtocol/OmniSharp.LanguageServerProtocol.csproj src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj; do
+      substituteInPlace $project \
+        --replace '<RuntimeIdentifiers>win7-x64;win7-x86;win10-arm64</RuntimeIdentifiers>' '<RuntimeIdentifiers>linux-x64;linux-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>'
+    done
   '';
 
-  buildPhase = ''
-    runHook preBuild
+  dontDotnetFixup = true; # we'll fix it ourselves
+  postFixup = lib.optionalString stdenv.isLinux ''
+    # Emulate what .NET 7 does to its binaries while a fix doesn't land in buildDotnetModule
+    patchelf --set-interpreter $(patchelf --print-interpreter ${sdk_6_0}/dotnet) \
+      --set-rpath $(patchelf --print-rpath ${sdk_6_0}/dotnet) \
+      $out/lib/omnisharp-roslyn/OmniSharp
 
-    HOME=$(pwd)/fake-home dotnet msbuild -r \
-      -p:Configuration=Release \
-      -p:RestoreConfigFile=${nuget-config} \
-      src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -r bin/Release/OmniSharp.Stdio.Driver/net6.0 $out/src
+  '' + ''
+    # Now create a wrapper without DOTNET_ROOT
+    # we explicitly don't set DOTNET_ROOT as it should get the one from PATH
+    # as you can use any .NET SDK higher than 6 to run OmniSharp and you most
+    # likely will NOT want the .NET 6 runtime running it (as it'll use that to
+    # detect the SDKs for its own use, so it's better to let it find it in PATH).
+    makeWrapper $out/lib/omnisharp-roslyn/OmniSharp $out/bin/OmniSharp \
+      --prefix LD_LIBRARY_PATH : ${sdk_6_0.icu}/lib \
+      --set-default DOTNET_ROOT ${sdk_6_0}
 
     # Delete files to mimick hacks in https://github.com/OmniSharp/omnisharp-roslyn/blob/bdc14ca/build.cake#L594
-    rm $out/src/NuGet.*.dll
-    rm $out/src/System.Configuration.ConfigurationManager.dll
-
-    makeWrapper $out/src/OmniSharp $out/bin/omnisharp \
-      --prefix DOTNET_ROOT : ${dotnet-sdk} \
-      --suffix PATH : ${dotnet-sdk}/bin
+    rm $out/lib/omnisharp-roslyn/NuGet.*.dll
+    rm $out/lib/omnisharp-roslyn/System.Configuration.ConfigurationManager.dll
   '';
 
   meta = with lib; {
     description = "OmniSharp based on roslyn workspaces";
     homepage = "https://github.com/OmniSharp/omnisharp-roslyn";
     platforms = platforms.unix;
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode # dependencies
+    ];
     license = licenses.mit;
-    maintainers = with maintainers; [ tesq0 ericdallo corngood ];
-    mainProgram = "omnisharp";
+    maintainers = with maintainers; [ tesq0 ericdallo corngood mdarocha ];
+    mainProgram = "OmniSharp";
   };
-
 }

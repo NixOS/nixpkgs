@@ -32,7 +32,7 @@ let
       env = python3.withPackages (pp: with pp; [
         sphinx
         recommonmark
-        sphinx_rtd_theme
+        sphinx-rtd-theme
       ]);
     in
     # Expose only the sphinx-build binary to avoid contaminating
@@ -45,7 +45,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.20.0";
+  version = "1.21.0";
 
   outputs = [ "bin" "out" "dev" ];
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     owner = "libinput";
     repo = "libinput";
     rev = version;
-    sha256 = "Ey6ItBIrf1POACp2+6R0B4KxJq5V1HoO+y4j6hZSGAE=";
+    sha256 = "R94BdrjI4szNbVtQ+ydRNUg9clR8mkRL7+GE9b2FcDs=";
   };
 
   patches = [

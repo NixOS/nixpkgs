@@ -1,8 +1,6 @@
 { lib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
 
-let
-  py = python3Packages;
-in py.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "friture";
   version = "0.49";
 
@@ -13,10 +11,10 @@ in py.buildPythonApplication rec {
     sha256 = "sha256-xKgyBV/Qc+9PgXyxcT0xG1GXLC6KnjavJ/0SUE+9VSY=";
   };
 
-  nativeBuildInputs = (with py; [ numpy cython scipy ]) ++
+  nativeBuildInputs = (with python3Packages; [ numpy cython scipy ]) ++
     [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with py; [
+  propagatedBuildInputs = with python3Packages; [
     sounddevice
     pyopengl
     pyopengl-accelerate

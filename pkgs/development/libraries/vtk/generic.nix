@@ -1,7 +1,7 @@
 { majorVersion, minorVersion, sourceSha256, patchesToFetch ? [] }:
 { stdenv, lib, fetchurl, cmake, libGLU, libGL, libX11, xorgproto, libXt, libpng, libtiff
 , fetchpatch
-, enableQt ? false, wrapQtAppsHook, qtbase, qtx11extras, qttools
+, enableQt ? false, qtbase, qtx11extras, qttools, qtdeclarative, qtEnv
 , enablePython ? false, pythonInterpreter ? throw "vtk: Python support requested, but no python interpreter was given."
 # Darwin support
 , Cocoa, CoreServices, DiskArbitration, IOKit, CFNetwork, Security, GLUT, OpenGL
@@ -25,7 +25,9 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ libpng libtiff ]
-    ++ optionals enableQt [ qtbase qtx11extras qttools ]
+    ++ optionals enableQt (if lib.versionOlder majorVersion "9"
+                           then [ qtbase qtx11extras qttools ]
+                           else  [ (qtEnv "qvtk-qt-env" [ qtx11extras qttools qtdeclarative ]) ])
     ++ optionals stdenv.isLinux [
       libGLU
       libGL
@@ -53,10 +55,6 @@ in stdenv.mkDerivation rec {
 
   patches = map fetchpatch patchesToFetch;
 
-  preBuild = ''
-    export LD_LIBRARY_PATH="$(pwd)/lib";
-  '';
-
   dontWrapQtApps = true;
 
   # Shared libraries don't work, because of rpath troubles with the current
@@ -73,6 +71,7 @@ in stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DVTK_VERSIONED_INSTALL=OFF"
   ] ++ optionals enableQt [
     "-D${if lib.versionOlder version "9.0" then "VTK_Group_Qt:BOOL=ON" else "VTK_GROUP_ENABLE_Qt:STRING=YES"}"
   ] ++ optionals (enableQt && lib.versionOlder version "8.0") [
@@ -88,16 +87,6 @@ in stdenv.mkDerivation rec {
     sed -i 's|COMMAND vtkHashSource|COMMAND "DYLD_LIBRARY_PATH=''${VTK_BINARY_DIR}/lib" ''${VTK_BINARY_DIR}/bin/vtkHashSource-${majorVersion}|' ./Parallel/Core/CMakeLists.txt
     sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/' ./ThirdParty/libxml2/vtklibxml2/xmlschemas.c
     sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/g' ./ThirdParty/libxml2/vtklibxml2/xpath.c
-  '';
-
-  preFixup = ''
-    for lib in $out/lib/libvtk*.so; do
-      ln -s $lib $out/lib/"$(basename "$lib" | sed -e 's/-[[:digit:]]*.[[:digit:]]*//g')"
-    done
-
-    mv $out/include/vtk-${majorVersion}/* $out/include
-    rmdir $out/include/vtk-${majorVersion}
-    ln -s $out/include $out/include/vtk-${majorVersion}
   '';
 
   meta = with lib; {

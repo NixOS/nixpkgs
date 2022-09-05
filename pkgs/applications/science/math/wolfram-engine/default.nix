@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     # Fix the installation script
     patchShebangs MathInstaller
     substituteInPlace MathInstaller \
-      --replace "`hostname`" "" \
+      --replace '`hostname`' "" \
       --replace "chgrp" "# chgrp" \
       --replace "chown" ": # chown"
 
@@ -112,8 +112,12 @@ stdenv.mkDerivation rec {
 
     # Fix library paths
     cd $out/libexec/${dirName}/Executables
-    for path in MathKernel WolframKernel math mcc wolfram; do
+    for path in MathKernel math mcc wolfram; do
       makeWrapper $out/libexec/${dirName}/Executables/$path $out/bin/$path --set LD_LIBRARY_PATH "${zlib}/lib:${stdenv.cc.cc.lib}/lib:${libssh2}/lib:\''${LD_LIBRARY_PATH}"
+    done
+
+    for path in WolframKernel wolframscript; do
+      makeWrapper $out/libexec/${dirName}/SystemFiles/Kernel/Binaries/Linux-x86-64/$path $out/bin/$path --set LD_LIBRARY_PATH "${zlib}/lib:${stdenv.cc.cc.lib}/lib:${libssh2}/lib:\''${LD_LIBRARY_PATH}"
     done
 
     # ... and xkeyboard config path for Qt
@@ -136,6 +140,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Wolfram Engine computational software system";
     homepage = "https://www.wolfram.com/engine/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ fbeffa ];
     platforms = [ "x86_64-linux" ];

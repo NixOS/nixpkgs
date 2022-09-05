@@ -51,6 +51,6 @@ mkDerivation rec {
     description = "LXQt Qt platform integration plugin";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

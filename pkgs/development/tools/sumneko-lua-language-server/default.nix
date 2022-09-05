@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, ninja, makeWrapper, darwin }:
+{ lib, stdenv, fetchFromGitHub, ninja, makeWrapper, CoreFoundation, Foundation }:
 let
   target = if stdenv.isDarwin then "macOS" else "Linux";
 in
 stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
-  version = "3.2.1";
+  version = "3.5.3";
 
   src = fetchFromGitHub {
     owner = "sumneko";
     repo = "lua-language-server";
     rev = version;
-    sha256 = "sha256-rxferVxTWmclviDshHhBmbCezOI+FvcfUW3gAkBQNHQ=";
+    sha256 = "sha256-K/B+THEgM6pzW+VOc8pgtH+3zpWEgocEdTsuO0APoT0=";
     fetchSubmodules = true;
   };
 
@@ -20,16 +20,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Foundation
+    CoreFoundation
+    Foundation
   ];
-
-  # Disable cwd support on darwin, because it requires macOS>=10.15
-  preConfigure = lib.optionalString stdenv.isDarwin ''
-    for file in 3rd/bee.lua/bee/subprocess/subprocess_posix.cpp 3rd/luamake/3rd/bee.lua/bee/subprocess/subprocess_posix.cpp; do
-      substituteInPlace $file --replace '#define SUPPORT_CWD 1' ""
-    done
-  '';
 
   preBuild = ''
     cd 3rd/luamake

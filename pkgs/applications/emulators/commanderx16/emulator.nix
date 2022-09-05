@@ -4,15 +4,15 @@
 , SDL2
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "x16-emulator";
-  version = "40";
+  version = "41";
 
   src = fetchFromGitHub {
     owner = "commanderx16";
-    repo = pname;
-    rev = "r${version}";
-    hash = "sha256-7ZzVd2NJCFNAFrS2cj6bxcq/AzO5VakoFX9o1Ac9egg=";
+    repo = "x16-emulator";
+    rev = "r${finalAttrs.version}";
+    hash = "sha256-pnWqtSXQzUfQ8ADIXL9r2YjuBwHDQ2NAffAEFCN5Qzw=";
   };
 
   dontConfigure = true;
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install -Dm 755 -t $out/bin/ x16emu
-    install -Dm 444 -t $out/share/doc/${pname} README.md
+    install -Dm 444 -t $out/share/doc/x16-emulator/ README.md
 
     runHook postInstall
   '';
@@ -33,12 +33,14 @@ stdenv.mkDerivation rec {
     description = "The official emulator of CommanderX16 8-bit computer";
     license = licenses.bsd2;
     maintainers = with maintainers; [ AndersonTorres ];
+    mainProgram = "x16emu";
     inherit (SDL2.meta) platforms;
+    broken = with stdenv; isDarwin && isAarch64;
   };
 
   passthru = {
-    # upstream project recommends emulator and rom synchronized;
+    # upstream project recommends emulator and rom to be synchronized;
     # passing through the version is useful to ensure this
-    inherit version;
+    inherit (finalAttrs) version;
   };
-}
+})

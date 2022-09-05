@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "scipy";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MdTy1rckvJqY5Se1hJuKflib8epjDDOqVj7akSyf8L0=";
+    sha256 = "sha256-nj+xsOiW8UqFqpoo1fdV2q7rVMiXt0bfelXMsCs0DzM=";
   };
 
   nativeBuildInputs = [ cython gfortran pythran ];
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     rm scipy/linalg/tests/test_lapack.py
   '';
 
-  doCheck = true;
+  doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
 
   preConfigure = ''
     sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py

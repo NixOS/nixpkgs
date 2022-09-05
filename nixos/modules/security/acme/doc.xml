@@ -81,8 +81,8 @@ services.nginx = {
     };
 
     # We can also add a different vhost and reuse the same certificate
-    # but we have to append extraDomainNames manually.
-    <link linkend="opt-security.acme.certs._name_.extraDomainNames">security.acme.certs."foo.example.com".extraDomainNames</link> = [ "baz.example.com" ];
+    # but we have to append extraDomainNames manually beforehand:
+    # <link linkend="opt-security.acme.certs._name_.extraDomainNames">security.acme.certs."foo.example.com".extraDomainNames</link> = [ "baz.example.com" ];
     "baz.example.com" = {
       <link linkend="opt-services.nginx.virtualHosts._name_.forceSSL">forceSSL</link> = true;
       <link linkend="opt-services.nginx.virtualHosts._name_.useACMEHost">useACMEHost</link> = "foo.example.com";

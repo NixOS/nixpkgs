@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Fast and friendly network scanner";
     homepage = "https://angryip.org";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ kylesferrazza ];

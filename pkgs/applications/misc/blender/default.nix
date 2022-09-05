@@ -6,6 +6,7 @@
 , zlib, zstd, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
+, hipSupport ? false, hip # comes with a significantly larger closure size
 , colladaSupport ? true, opencollada
 , spaceNavSupport ? stdenv.isLinux, libspnav
 , makeWrapper
@@ -27,11 +28,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "1d0476bzcz86lwdnyjn7hyzkmhfiqh47ls5h09jlbm7v7k9x69hw";
+    hash = "sha256-k78LL1urcQWxnF1lSoSi3CH3Ylhzo2Bk2Yvq5zbTYEo=";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
@@ -76,9 +77,7 @@ stdenv.mkDerivation rec {
       : > build_files/cmake/platform/platform_apple_xcode.cmake
       substituteInPlace source/creator/CMakeLists.txt \
         --replace '${"$"}{LIBDIR}/python' \
-                  '${python}' \
-        --replace '${"$"}{LIBDIR}/openmp' \
-                  '${llvmPackages.openmp}'
+                  '${python}'
       substituteInPlace build_files/cmake/platform/platform_apple.cmake \
         --replace '${"$"}{LIBDIR}/python' \
                   '${python}' \
@@ -88,7 +87,11 @@ stdenv.mkDerivation rec {
                   '${python310Packages.numpy}/${python.sitePackages}/numpy'
     '' else ''
       substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
-    '');
+    '') +
+    (if hipSupport then ''
+      substituteInPlace extern/hipew/src/hipew.c --replace '"/opt/rocm/hip/lib/libamdhip64.so"' '"${hip}/lib/libamdhip64.so"'
+      substituteInPlace extern/hipew/src/hipew.c --replace '"opt/rocm/hip/bin"' '"${hip}/bin"'
+    '' else "");
 
   cmakeFlags =
     [

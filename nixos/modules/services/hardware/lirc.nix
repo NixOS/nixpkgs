@@ -11,7 +11,7 @@ in {
   options = {
     services.lirc = {
 
-      enable = mkEnableOption "LIRC daemon";
+      enable = mkEnableOption (lib.mdDoc "LIRC daemon");
 
       options = mkOption {
         type = types.lines;
@@ -19,18 +19,18 @@ in {
           [lircd]
           nodaemon = False
         '';
-        description = "LIRC default options descriped in man:lircd(8) (<filename>lirc_options.conf</filename>)";
+        description = lib.mdDoc "LIRC default options descriped in man:lircd(8) ({file}`lirc_options.conf`)";
       };
 
       configs = mkOption {
         type = types.listOf types.lines;
-        description = "Configurations for lircd to load, see man:lircd.conf(5) for details (<filename>lircd.conf</filename>)";
+        description = lib.mdDoc "Configurations for lircd to load, see man:lircd.conf(5) for details ({file}`lircd.conf`)";
       };
 
       extraArguments = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "Extra arguments to lircd.";
+        description = lib.mdDoc "Extra arguments to lircd.";
       };
     };
   };

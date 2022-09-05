@@ -102,6 +102,13 @@ stdenv.mkDerivation rec {
     "-DENABLE_COMPATIBILITY_LIST_DOWNLOAD=OFF" # We provide this deterministically
   ];
 
+  qtWrapperArgs = [
+    # Fixes vulkan detection
+    "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
+    # Without yuzu doesnt start on wayland. See https://github.com/yuzu-emu/yuzu/issues/6088
+    "--set QT_QPA_PLATFORM xcb"
+  ];
+
   preConfigure = ''
     # This prevents a check for submodule directories.
     rm -f .gitmodules
@@ -116,13 +123,6 @@ stdenv.mkDerivation rec {
   # This must be done after cmake finishes as it overwrites the file
   postConfigure = ''
     ln -sf ${compat-list} ./dist/compatibility_list/compatibility_list.json
-  '';
-
-  # Fix vulkan detection
-  postFixup = ''
-    for bin in $out/bin/yuzu $out/bin/yuzu-cmd; do
-      wrapProgram $bin --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
-    done
   '';
 
   passthru.updateScript = runCommandLocal "yuzu-${branch}-updateScript" {
@@ -146,9 +146,10 @@ stdenv.mkDerivation rec {
     license = with licenses; [
       gpl3Plus
       # Icons
-      cc-by-nd-30 cc0
+      asl20 mit cc0
     ];
     maintainers = with maintainers; [
+      ashley
       ivar
       joshuafern
       sbruder

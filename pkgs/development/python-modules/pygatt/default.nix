@@ -25,7 +25,7 @@ buildPythonPackage rec {
     pyserial
   ];
 
-  passthru.extras-require.GATTTOOL = [
+  passthru.optional-dependencies.GATTTOOL = [
     pexpect
   ];
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     nose
     pytestCheckHook
   ]
-  ++ passthru.extras-require.GATTTOOL;
+  ++ passthru.optional-dependencies.GATTTOOL;
 
   postPatch = ''
     # Not support for Python < 3.4

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, wl-clipboard }:
+{ lib, stdenv, fetchFromGitHub, wl-clipboard, bash }:
 
 stdenv.mkDerivation rec {
   pname = "wl-clipboard-x11";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-i+oF1Mu72O5WPTWzqsvo4l2CERWWp4Jq/U0DffPZ8vg=";
   };
 
+  strictDeps = true;
+  buildInputs = [ bash ];
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   postPatch = ''

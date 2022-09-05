@@ -1,27 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pycryptodome-test-vectors
-}:
+{ pycryptodome }:
 
-buildPythonPackage rec {
+(pycryptodome.overrideAttrs (oldAttrs: rec {
   pname = "pycryptodomex";
-  version = "3.14.1";
-  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-LOdu0Agf1qyMdO3HW50U7KIGQXOveYQ8JPpiVzJjwfI=";
-  };
+  postPatch = ''
+    touch .separate_namespace
+  '';
 
   pythonImportsCheck = [
     "Cryptodome"
   ];
-
-  meta = with lib; {
-    description = "A self-contained cryptographic library for Python";
-    homepage = "https://www.pycryptodome.org";
-    license = with licenses; [ bsd2 /* and */ asl20 ];
-    maintainers = with maintainers; [ fab ];
-  };
-}
+}))

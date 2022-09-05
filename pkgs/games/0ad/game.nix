@@ -1,4 +1,4 @@
-{ stdenv, lib, perl, fetchurl, python3, fmt, libidn
+{ stdenv, lib, fetchpatch, perl, fetchurl, python3, fmt, libidn
 , pkg-config, spidermonkey_78, boost, icu, libxml2, libpng, libsodium
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
 , openal, libGLU, libGL, xorgproto, libX11, libXcursor, nspr, SDL2
@@ -50,7 +50,14 @@ stdenv.mkDerivation rec {
     "-I${fmt.dev}/include"
   ];
 
-  patches = [ ./rootdir_env.patch ];
+  patches = [
+    ./rootdir_env.patch
+    (fetchpatch {
+      # fix build with gcc11 and glibc 2.35
+      url = "https://github.com/0ad/0ad/commit/7df614338cbd41f5e254ce75f649490b2637e1d0.patch";
+      hash = "sha256-QZvcNm8Zni3aJnMPueft0OITf8zeMDXWBjOLYoirJs0=";
+    })
+  ];
 
   configurePhase = ''
     # Delete shipped libraries which we don't need.

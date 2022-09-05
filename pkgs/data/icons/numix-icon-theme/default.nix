@@ -1,24 +1,42 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, gnome-icon-theme, hicolor-icon-theme }:
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gtk3
+, adwaita-icon-theme
+, breeze-icons
+, gnome-icon-theme
+, hicolor-icon-theme
+, gitUpdater
+}:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "numix-icon-theme";
-  version = "21.10.31";
+  version = "22.08.16";
 
   src = fetchFromGitHub {
     owner = "numixproject";
     repo = pname;
     rev = version;
-    sha256 = "sha256-wyVvXifdbKR2aiBMrki8y/H0khH4eFD1RHVSC+jAT28=";
+    sha256 = "sha256-EveIr5XYyQYhz0AqZQBql3j0LnD8taNdzB/6IV7Mz2k=";
   };
 
-  nativeBuildInputs = [ gtk3 ];
+  nativeBuildInputs = [
+    gtk3
+  ];
 
-  propagatedBuildInputs = [ gnome-icon-theme hicolor-icon-theme ];
+  propagatedBuildInputs = [
+    adwaita-icon-theme
+    breeze-icons
+    gnome-icon-theme
+    hicolor-icon-theme
+  ];
 
   dontDropIconThemeCache = true;
 
   installPhase = ''
     runHook preInstall
+
+    substituteInPlace Numix/index.theme --replace Breeze breeze
 
     mkdir -p $out/share/icons
     cp -a Numix{,-Light} $out/share/icons/
@@ -29,6 +47,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { inherit pname version; };
 
   meta = with lib; {
     description = "Numix icon theme";

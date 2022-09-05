@@ -4,18 +4,17 @@ let
       # dependencies
       { stdenv, lib, fetchurl, makeWrapper
       , glibc, zlib, readline, openssl, icu, lz4, systemd, libossp_uuid
-      , pkg-config, libxml2, tzdata
+      , pkg-config, libxml2, tzdata, libkrb5
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
-      , enableSystemd ? (lib.versionAtLeast version "9.6" && !stdenv.isDarwin)
-      , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic, libkrb5
+      , enableSystemd ? (lib.versionAtLeast version "9.6" && !stdenv.isDarwin && !stdenv.hostPlatform.isStatic)
+      , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
 
-
-      # for postgreql.pkgs
+      # for postgresql.pkgs
       , this, self, newScope, buildEnv
 
       # source specification
-      , version, sha256, psqlSchema,
+      , version, hash, psqlSchema,
 
       # for tests
       nixosTests, thisAttr
@@ -31,7 +30,7 @@ let
 
     src = fetchurl {
       url = "mirror://postgresql/source/v${version}/${pname}-${version}.tar.bz2";
-      inherit sha256;
+      inherit hash;
     };
 
     hardeningEnable = lib.optionals (!stdenv.cc.isClang) [ "pie" ];
@@ -177,7 +176,7 @@ let
         postgresql.lib
         postgresql.man   # in case user installs this into environment
     ];
-    buildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
 
 
     # We include /bin to ensure the $out/bin directory is created, which is
@@ -202,9 +201,9 @@ let
 in self: {
 
   postgresql_10 = self.callPackage generic {
-    version = "10.20";
+    version = "10.22";
     psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    sha256 = "sha256-h94W1ZvP5C+mBcMSxZvl4pToo+astlXdetR8u5MKZZ8=";
+    hash = "sha256-lVl3VVxp3xpk9EuB1KGYfrdKu9GHBXn1rZ2UYTPdjk0=";
     this = self.postgresql_10;
     thisAttr = "postgresql_10";
     inherit self;
@@ -212,36 +211,36 @@ in self: {
   };
 
   postgresql_11 = self.callPackage generic {
-    version = "11.15";
+    version = "11.17";
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
-    sha256 = "sha256-yPWOjr1PRWf0+boQMus+meAlHYfL4+VktIVZDjeoeeM=";
+    hash = "sha256-bphJY64HZeYVd5lRA6fmWU2w8L0BUorBI+DeSmpMtMQ=";
     this = self.postgresql_11;
     thisAttr = "postgresql_11";
     inherit self;
   };
 
   postgresql_12 = self.callPackage generic {
-    version = "12.10";
+    version = "12.12";
     psqlSchema = "12";
-    sha256 = "sha256-g90ZLmA0lRGSuahtwZzzcXqLghIOLxGgo2cjyCDSslc=";
+    hash = "sha256-NLPxxpQI4iBowMcbGCdpHxyJFTsK1XbBpE+JIKhYA5w=";
     this = self.postgresql_12;
     thisAttr = "postgresql_12";
     inherit self;
   };
 
   postgresql_13 = self.callPackage generic {
-    version = "13.6";
+    version = "13.8";
     psqlSchema = "13";
-    sha256 = "sha256-uvx/o9nU2o/nG4TGO6i9/oCSk1wwwKqFwkssCFCPZ/w=";
+    hash = "sha256-c4dv3TpRcIc0BFjcpM4VuNKk286zNMBEFCRVGubEze0=";
     this = self.postgresql_13;
     thisAttr = "postgresql_13";
     inherit self;
   };
 
   postgresql_14 = self.callPackage generic {
-    version = "14.2";
+    version = "14.5";
     psqlSchema = "14";
-    sha256 = "sha256-LPeLLkaJEvgQHWldtTQM8xPC6faKYS+3FCdSToyal3o=";
+    hash = "sha256-1PcstfuFfJqfdeyM8JGhdxJygC8hePCy5lt7b/ZPSjA=";
     this = self.postgresql_14;
     thisAttr = "postgresql_14";
     inherit self;

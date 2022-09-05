@@ -5,35 +5,35 @@ with lib;
 {
   options = {
     services.pptpd = {
-      enable = mkEnableOption "pptpd, the Point-to-Point Tunneling Protocol daemon";
+      enable = mkEnableOption (lib.mdDoc "pptpd, the Point-to-Point Tunneling Protocol daemon");
 
       serverIp = mkOption {
         type        = types.str;
-        description = "The server-side IP address.";
+        description = lib.mdDoc "The server-side IP address.";
         default     = "10.124.124.1";
       };
 
       clientIpRange = mkOption {
         type        = types.str;
-        description = "The range from which client IPs are drawn.";
+        description = lib.mdDoc "The range from which client IPs are drawn.";
         default     = "10.124.124.2-11";
       };
 
       maxClients = mkOption {
         type        = types.int;
-        description = "The maximum number of simultaneous connections.";
+        description = lib.mdDoc "The maximum number of simultaneous connections.";
         default     = 10;
       };
 
       extraPptpdOptions = mkOption {
         type        = types.lines;
-        description = "Adds extra lines to the pptpd configuration file.";
+        description = lib.mdDoc "Adds extra lines to the pptpd configuration file.";
         default     = "";
       };
 
       extraPppdOptions = mkOption {
         type        = types.lines;
-        description = "Adds extra lines to the pppd options file.";
+        description = lib.mdDoc "Adds extra lines to the pppd options file.";
         default     = "";
         example     = ''
           ms-dns 8.8.8.8
@@ -108,7 +108,7 @@ with lib;
         #username	pptpd	password	*
         EOF
 
-        chown root.root "$secrets"
+        chown root:root "$secrets"
         chmod 600 "$secrets"
       '';
 

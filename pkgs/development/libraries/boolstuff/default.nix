@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config }:
 stdenv.mkDerivation rec {
   pname = "boolstuff";
-  version = "0.1.16";
+  version = "0.1.17";
 
   src = fetchurl {
-    url = "https://perso.b2b2c.ca/~sarrazip/dev/${pname}-${version}.tar.gz";
-    sha256 = "10qynbyw723gz2vrvn4xk2var172kvhlz3l3l80qbdsfb3d12wn0";
+    url = "http://perso.b2b2c.ca/~sarrazip/dev/${pname}-${version}.tar.gz";
+    hash = "sha256-WPFUoTUofigPxTRo6vUbVTEVWMeEPDWszCA05toOX0I=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     homepage = "http://perso.b2b2c.ca/~sarrazip/dev/boolstuff.html";
     license = "GPL";
     maintainers = [ lib.maintainers.marcweber ];
+    mainProgram = "booldnf";
     platforms = lib.platforms.all;
   };
 }

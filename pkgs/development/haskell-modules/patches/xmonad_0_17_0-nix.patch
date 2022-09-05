@@ -27,7 +27,7 @@ index 46a0939..92af53d 100644
 -                CompileGhc ->
 -                    run "ghc" ghcArgs
 +                CompileGhc -> do
-+                    ghc <- fromMaybe "ghc" <$> (lookupEnv "NIX_GHC")
++                    ghc <- fromMaybe "ghc" <$> (lookupEnv "XMONAD_GHC")
 +                    run ghc ghcArgs
                  CompileStackGhc stackYaml ->
                      run "stack" ["build", "--silent", "--stack-yaml", stackYaml] .&&.

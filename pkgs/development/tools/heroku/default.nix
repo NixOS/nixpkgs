@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "heroku";
-  version = "7.59.2";
+  version = "7.60.2";
 
   src = fetchurl {
     url = "https://cli-assets.heroku.com/heroku-v${version}/heroku-v${version}.tar.xz";
-    sha256 = "dbb69d4b5df99ff47ed0f6f1f58d968b3b144b13deee1b33c82fef7ef4006903";
+    sha256 = "sha256-HKVfUT59TBrY9Sk/CxhD3ujT+Q3iEcBI50Bbu1MWOxY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

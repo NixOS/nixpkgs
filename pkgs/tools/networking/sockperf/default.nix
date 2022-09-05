@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Network Benchmarking Utility";
     homepage = "https://github.com/Mellanox/sockperf";
     license = licenses.bsd3;

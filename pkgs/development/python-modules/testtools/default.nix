@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonRelaxDepsHook
 , pbr
 , python-mimeparse
 , extras
@@ -20,15 +21,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pbr python-mimeparse extras ];
   buildInputs = [ traceback2 ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   # testscenarios has a circular dependency on testtools
   doCheck = false;
   checkInputs = [ testscenarios ];
 
-  # testtools 2.0.0 and up has a circular run-time dependency on futures
-  postPatch = ''
-    substituteInPlace requirements.txt --replace "fixtures>=1.3.0" ""
-  '';
+  pythonRemoveDeps = [ "fixtures" ];
 
   meta = {
     description = "A set of extensions to the Python standard library's unit testing framework";

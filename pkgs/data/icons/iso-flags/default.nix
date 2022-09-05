@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib, stdenvNoCC
 , fetchFromGitHub
 , perl
 , inkscape
@@ -6,7 +6,7 @@
 , targets ? [ "all" ]
 }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "iso-flags";
   version = "unstable-18012020";
 

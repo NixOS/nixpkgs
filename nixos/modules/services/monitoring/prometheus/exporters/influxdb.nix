@@ -12,13 +12,13 @@ in
       type = types.str;
       default = "5m";
       example = "10m";
-      description = "How long a sample is valid for";
+      description = lib.mdDoc "How long a sample is valid for";
     };
     udpBindAddress = mkOption {
       type = types.str;
       default = ":9122";
       example = "192.0.2.1:9122";
-      description = "Address on which to listen for udp packets";
+      description = lib.mdDoc "Address on which to listen for udp packets";
     };
   };
   serviceOpts = {

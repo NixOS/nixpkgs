@@ -1,47 +1,43 @@
-{ lib, buildGoPackage, fetchFromGitHub, installShellFiles, makeWrapper, gnupg, bzip2, xz, graphviz }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, makeWrapper, gnupg, bzip2, xz, graphviz, testers, aptly }:
 
-let
+buildGoModule rec {
+  pname = "aptly";
+  version = "1.5.0";
 
-  version = "1.4.0";
-  rev = "v${version}";
-
-  aptlySrc = fetchFromGitHub {
-    inherit rev;
+  src = fetchFromGitHub {
     owner = "aptly-dev";
     repo = "aptly";
-    sha256 = "06cq761r3bxybb9xn58jii0ggp79mcp3810z1r2z3xcvplwhwnhy";
+    rev = "v${version}";
+    sha256 = "sha256-LqGOLXXaGfQfoj2r+aY9SdOKUDI9+22EsHKBhHMidyk=";
   };
 
-  aptlyCompletionSrc = fetchFromGitHub {
-    rev = "1.0.1";
-    owner = "aptly-dev";
-    repo = "aptly-bash-completion";
-    sha256 = "0dkc4z687yk912lpv8rirv0nby7iny1zgdvnhdm5b47qmjr1sm5q";
-  };
-
-in
-
-buildGoPackage {
-  pname = "aptly";
-  inherit version;
-
-  src = aptlySrc;
-
-  goPackagePath = "github.com/aptly-dev/aptly";
+  vendorSha256 = "sha256-6l3OFKFTtFWT68Ylav6woczBlMhD75C9ZoQ6OeLz0Cs=";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
+  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
+
   postInstall = ''
-    installShellCompletion --bash ${aptlyCompletionSrc}/aptly
+    installShellCompletion --bash --name aptly completion.d/aptly
+    installShellCompletion --zsh --name _aptly completion.d/_aptly
     wrapProgram "$out/bin/aptly" \
       --prefix PATH ":" "${lib.makeBinPath [ gnupg bzip2 xz graphviz ]}"
   '';
+
+  doCheck = false;
+
+  passthru.tests.version = testers.testVersion {
+    package = aptly;
+    command = "aptly version";
+  };
 
   meta = with lib; {
     homepage = "https://www.aptly.info";
     description = "Debian repository management tool";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ maintainers.montag451 ];
+    maintainers = with maintainers; [ montag451 ] ++ teams.bitnomial.members;
+    changelog =
+      "https://github.com/aptly-dev/aptly/releases/tag/v${version}";
   };
 }

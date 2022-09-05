@@ -158,7 +158,9 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
     # Waiting for pleroma to be up.
     timeout 5m bash -c 'while [[ "$(curl -s -o /dev/null -w '%{http_code}' https://pleroma.nixos.test/api/v1/instance)" != "200" ]]; do sleep 2; done'
-    pleroma_ctl user new jamy jamy@nixos.test --password 'jamy-password' --moderator --admin -y
+    # Toremove the RELEASE_COOKIE bit when https://github.com/NixOS/nixpkgs/issues/166229 gets fixed.
+    RELEASE_COOKIE="/var/lib/pleroma/.cookie" \
+      pleroma_ctl user new jamy jamy@nixos.test --password 'jamy-password' --moderator --admin -y
   '';
 
   tls-cert = pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''

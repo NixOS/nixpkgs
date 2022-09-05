@@ -27,7 +27,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to use ConnMan for managing your network connections.
         '';
       };
@@ -35,7 +35,7 @@ in {
       enableVPN = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable ConnMan VPN service.
         '';
       };
@@ -43,7 +43,7 @@ in {
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Configuration lines appended to the generated connman configuration file.
         '';
       };
@@ -51,7 +51,7 @@ in {
       networkInterfaceBlacklist = mkOption {
         type = with types; listOf str;
         default = [ "vmnet" "vboxnet" "virbr" "ifb" "ve" ];
-        description = ''
+        description = lib.mdDoc ''
           Default blacklisted interfaces, this includes NixOS containers interfaces (ve).
         '';
       };
@@ -60,9 +60,9 @@ in {
         backend = mkOption {
           type = types.enum [ "wpa_supplicant" "iwd" ];
           default = "wpa_supplicant";
-          description = ''
+          description = lib.mdDoc ''
             Specify the Wi-Fi backend used.
-            Currently supported are <option>wpa_supplicant</option> or <option>iwd</option>.
+            Currently supported are {option}`wpa_supplicant` or {option}`iwd`.
           '';
         };
       };
@@ -71,14 +71,14 @@ in {
         type = with types; listOf str;
         default = [ ];
         example = [ "--nodnsproxy" ];
-        description = ''
+        description = lib.mdDoc ''
           Extra flags to pass to connmand
         '';
       };
 
       package = mkOption {
         type = types.package;
-        description = "The connman package / build flavor";
+        description = lib.mdDoc "The connman package / build flavor";
         default = connman;
         defaultText = literalExpression "pkgs.connman";
         example = literalExpression "pkgs.connmanFull";

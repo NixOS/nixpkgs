@@ -38,6 +38,7 @@ buildRubyGem rec {
     homepage    = "https://anystyle.io/";
     license     = licenses.bsd2;
     maintainers = with maintainers; [ shamilton ];
+    mainProgram = "anystyle";
     platforms   = platforms.unix;
   };
 }

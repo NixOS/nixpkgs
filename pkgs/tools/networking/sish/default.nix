@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "sish";
-  version = "2.1.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "antoniomika";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0rUQRul6es+m8JFGXChrygwU5fBi6RiYhoD1dQHpG3s=";
+    sha256 = "sha256-Gk6hUv6SKZ71iJdeh9fvA45Oj3J1TjPWpvKQT5qj8NU=";
   };
 
-  vendorSha256 = "sha256-GoiwpYELleD5tltQgRPGQU725h/uHe8tXqH4tIY//uE=";
+  vendorSha256 = "sha256-FCLhAJxEPskigvlzvm5A+hVQOSWqqZnAxCPe7cawryA=";
 
   meta = with lib; {
     description = "HTTP(S)/WS(S)/TCP Tunnels to localhost";

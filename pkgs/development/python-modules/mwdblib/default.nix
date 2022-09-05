@@ -6,7 +6,7 @@
 , fetchFromGitHub
 , humanize
 , keyring
-, python
+, unittestCheckHook
 , python-dateutil
 , pythonOlder
 , requests
@@ -36,11 +36,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest discover
-    runHook postCheck
-  '';
+  checkInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [
     "mwdblib"

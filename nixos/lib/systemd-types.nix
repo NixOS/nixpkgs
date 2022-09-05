@@ -1,4 +1,4 @@
-{ lib, systemdUtils }:
+{ lib, systemdUtils, pkgs }:
 
 with systemdUtils.lib;
 with systemdUtils.unitOptions;
@@ -34,4 +34,36 @@ rec {
 
   automounts = with types; listOf (submodule [ stage2AutomountOptions unitConfig automountConfig ]);
   initrdAutomounts = with types; attrsOf (submodule [ stage1AutomountOptions unitConfig automountConfig ]);
+
+  initrdContents = types.attrsOf (types.submodule ({ config, options, name, ... }: {
+    options = {
+      enable = mkEnableOption (lib.mdDoc "copying of this file and symlinking it") // { default = true; };
+
+      target = mkOption {
+        type = types.path;
+        description = lib.mdDoc ''
+          Path of the symlink.
+        '';
+        default = name;
+      };
+
+      text = mkOption {
+        default = null;
+        type = types.nullOr types.lines;
+        description = lib.mdDoc "Text of the file.";
+      };
+
+      source = mkOption {
+        type = types.path;
+        description = lib.mdDoc "Path of the source file.";
+      };
+    };
+
+    config = {
+      source = mkIf (config.text != null) (
+        let name' = "initrd-" + baseNameOf name;
+        in mkDerivedConfig options.text (pkgs.writeText name')
+      );
+    };
+  }));
 }

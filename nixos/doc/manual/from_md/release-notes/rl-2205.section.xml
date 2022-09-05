@@ -1,9 +1,5 @@
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-22.05">
-  <title>Release 22.05 (“Quokka”, 2022.05/??)</title>
-  <para>
-    In addition to numerous new and upgraded packages, this release has
-    the following highlights:
-  </para>
+  <title>Release 22.05 (“Quokka”, 2022.05/30)</title>
   <itemizedlist spacing="compact">
     <listitem>
       <para>
@@ -14,50 +10,36 @@
   </itemizedlist>
   <section xml:id="sec-release-22.05-highlights">
     <title>Highlights</title>
+    <para>
+      In addition to numerous new and upgraded packages, this release
+      has the following highlights:
+    </para>
     <itemizedlist>
       <listitem>
-        <para>
-          The <literal>firefox</literal> browser on
-          <literal>x86_64-linux</literal> is now making use of
-          profile-guided optimization resulting in a much more
-          responsive browsing experience.
-        </para>
+<literallayout>Nix has been updated from 2.3 to 2.8. This mainly brings experimental support for Flakes, but also marks the <literal>nix</literal> command as experimental which now has to be enabled via the configuration explicitly. For more information and instructions for upgrades, see the relase notes for <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.4.html">nix-2.4</link>,
+<link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.5.html">nix-2.5</link>, <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.6.html">nix-2.6</link>, <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.7.html">nix-2.7</link> and <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.8.html">nix-2.8</link></literallayout>
       </listitem>
       <listitem>
         <para>
-          <literal>security.acme.defaults</literal> has been added to
-          simplify configuring settings for many certificates at once.
-          This also opens up the the option to use DNS-01 validation
-          when using <literal>enableACME</literal> on web server virtual
-          hosts (e.g.
-          <literal>services.nginx.virtualHosts.*.enableACME</literal>).
+          The <literal>firefox</literal> browser on
+          <literal>x86_64-linux</literal> now makes use of
+          profile-guided optimisation, resulting in a much more
+          responsive browsing experience.
         </para>
       </listitem>
       <listitem>
         <para>
           GNOME has been upgraded to 42. Please take a look at their
           <link xlink:href="https://release.gnome.org/42/">Release
-          Notes</link> for details. Notably, it replaces gedit with
-          GNOME Text Editor, GNOME Terminal with GNOME Console (formerly
-          King’s Cross), and GNOME Screenshot with a tool built into the
-          Shell.
+          Notes</link> for details. In particular, it replaces gedit
+          with GNOME Text Editor, GNOME Terminal with GNOME Console
+          (formerly King’s Cross) and GNOME Screenshot by a tool
+          integrated into the Shell.
         </para>
       </listitem>
       <listitem>
         <para>
-          PHP 8.1 is now available
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          Mattermost has been updated to extended support release 6.3,
-          as the previously packaged extended support release 5.37 is
-          <link xlink:href="https://docs.mattermost.com/upgrade/extended-support-release.html">reaching
-          its end of life</link>. Migrations may take a while, see the
-          <link xlink:href="https://docs.mattermost.com/install/self-managed-changelog.html#release-v6-3-extended-support-release">changelog</link>
-          and
-          <link xlink:href="https://docs.mattermost.com/upgrade/important-upgrade-notes.html">important
-          upgrade notes</link>.
+          PHP 8.1 is now available.
         </para>
       </listitem>
       <listitem>
@@ -75,21 +57,22 @@
       </listitem>
       <listitem>
         <para>
-          The new
-          <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook"><literal>postgresqlTestHook</literal></link>
-          runs a PostgreSQL server for the duration of package checks.
+          Pulseaudio has been updated to version 15.0 and now optionally
+          <link xlink:href="https://www.freedesktop.org/wiki/Software/PulseAudio/Notes/15.0/#supportforldacandaptxbluetoothcodecsplussbcxqsbcwithhigher-qualityparameters">supports
+          additional Bluetooth audio codecs</link> such as aptX or LDAC,
+          with codec switching available in
+          <literal>pavucontrol</literal>. This feature is disabled by
+          default, but can be enabled with the option
+          <literal>hardware.pulseaudio.package = pkgs.pulseaudioFull;</literal>.
+          Existing third-party modules that offered similar functions,
+          such as <literal>pulseaudio-modules-bt</literal> or
+          <literal>pulseaudio-hsphfpd</literal>, are obsolete and have
+          been removed.
         </para>
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://kops.sigs.k8s.io"><literal>kops</literal></link>
-          defaults to 1.22.4, which will enable
-          <link xlink:href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html">Instance
-          Metadata Service Version 2</link> and require tokens on new
-          clusters with Kubernetes 1.22. This will increase security by
-          default, but may break some types of workloads. See the
-          <link xlink:href="https://kops.sigs.k8s.io/releases/1.22-notes/">release
-          notes</link> for details.
+          PostgreSQL now defaults to major version 14.
         </para>
       </listitem>
       <listitem>
@@ -108,11 +91,39 @@
           default.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The GNOME and Plasma installation CDs now use
+          <literal>pkgs.calamares</literal> and
+          <literal>pkgs.calamares-nixos-extensions</literal> to allow
+          users to easily install and set up NixOS with a GUI.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>security.acme.defaults</literal> has been added to
+          simplify the configuration of settings for many certificates
+          at once. This also opens up the option to use DNS-01
+          validation when using <literal>enableACME</literal> web server
+          virtual hosts (e.g.
+          <literal>services.nginx.virtualHosts.*.enableACME</literal>).
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-new-services">
     <title>New Services</title>
     <itemizedlist>
+      <listitem>
+        <para>
+          <link xlink:href="https://1password.com/">1password</link>,
+          command-lines and graphic interface for 1Password. Available
+          as
+          <link linkend="opt-programs._1password.enable">programs._1password</link>
+          and
+          <link linkend="opt-programs._1password.enable">programs._1password-gui</link>.
+        </para>
+      </listitem>
       <listitem>
         <para>
           <link xlink:href="https://github.com/intel/linux-sgx#install-the-intelr-sgx-psw">aesmd</link>,
@@ -123,25 +134,101 @@
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://docs.docker.com/engine/security/rootless/">rootless
-          Docker</link>, a <literal>systemd --user</literal> Docker
-          service which runs without root permissions. Available as
-          <link xlink:href="options.html#opt-virtualisation.docker.rootless.enable">virtualisation.docker.rootless.enable</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://conduit.rs/">matrix-conduit</link>,
-          a simple, fast and reliable chat server powered by matrix.
+          <link xlink:href="https://github.com/mbrubeck/agate">agate</link>,
+          a very simple server for the Gemini hypertext protocol.
           Available as
-          <link xlink:href="option.html#opt-services.matrix-conduit.enable">services.matrix-conduit</link>.
+          <link linkend="opt-services.agate.enable">services.agate</link>.
         </para>
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://github.com/vvilhonen/nethoscope">nethoscope</link>,
-          listen to your network traffic. Available as
-          <link linkend="opt-programs.nethoscope.enable">programs.nethoscope</link>.
+          <link xlink:href="https://github.com/linux-apfs/linux-apfs-rw">apfs</link>,
+          a kernel module for mounting the Apple File System (APFS).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://gitlab.com/DarkElvenAngel/argononed">argonone</link>,
+          a replacement daemon for the Raspberry Pi Argon One power
+          button and cooler. Available at
+          <link xlink:href="options.html#opt-services.hardware.argonone.enable">services.hardware.argonone</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm">ArchiSteamFarm</link>,
+          a C# application with primary purpose of idling Steam cards
+          from multiple accounts simultaneously. Available as
+          <link linkend="opt-services.archisteamfarm.enable">services.archisteamfarm</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://loic-sharma.github.io/BaGet/">BaGet</link>,
+          a lightweight NuGet and symbol server. Available at
+          <link linkend="opt-services.baget.enable">services.baget</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/xddxdd/bird-lg-go">bird-lg</link>,
+          a BGP looking glass for Bird Routing. Available as
+          <link linkend="opt-services.bird-lg.package">services.bird-lg</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://0xerr0r.github.io/blocky/">blocky</link>,
+          fast and lightweight DNS proxy as ad-blocker for local network
+          with many features. Available as
+          <link linkend="opt-services.blocky.enable">services.blocky</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/kissgyorgy/cloudflare-dyndns">cloudflare-dyndns</link>,
+          CloudFlare Dynamic DNS client. Available as
+          <link linkend="opt-services.cloudflare-dyndns.enable">services.cloudflare-dyndns</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://corosync.github.io/corosync/">Corosync</link>
+          and
+          <link xlink:href="https://clusterlabs.org/pacemaker/">Pacemaker</link>,
+          A open-source high availability resource manager. Available as
+          <link linkend="opt-services.corosync.enable">services.corosync</link>
+          and
+          <link linkend="opt-services.pacemaker.enable">services.pacemaker</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/lakinduakash/linux-wifi-hotspot">create_ap</link>,
+          a module for creating wifi hotspots using the program
+          linux-wifi-hotspot. Available as
+          <link linkend="opt-services.create_ap.enable">services.create_ap</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.envoyproxy.io/">Envoy</link>, a
+          high-performance reverse proxy. Available as
+          <link linkend="opt-services.envoy.enable">services.envoy</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://ergo.chat">ergochat</link>, a modern
+          IRC with IRCv3 features. Available as
+          <link linkend="opt-services.ergochat.enable">services.ergochat</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/audreyt/ethercalc">ethercalc</link>,
+          an online collaborative spreadsheet. Available as
+          <link linkend="opt-services.ethercalc.enable">services.ethercalc</link>.
         </para>
       </listitem>
       <listitem>
@@ -154,51 +241,49 @@
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://github.com/linux-apfs/linux-apfs-rw">apfs</link>,
-          a kernel module for mounting the Apple File System (APFS).
+          <link xlink:href="https://frrouting.org/">FRRouting</link>, a
+          popular suite of Internet routing protocol daemons (BGP, BFD,
+          OSPF, IS-IS, VRRP and others). Available as
+          <link linkend="opt-services.frr.babel.enable">services.frr</link>.
         </para>
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://frrouting.org/">FRRouting</link>, a
-          popular suite of Internet routing protocol daemons (BGP, BFD,
-          OSPF, IS-IS, VRRP and others). Available as
-          <link linkend="opt-services.frr.babel.enable">services.frr</link>
+          <link xlink:href="https://grafana.com/oss/mimir/">Grafana
+          Mimir</link>, an open source, horizontally scalable, highly
+          available, multi-tenant, long-term storage for Prometheus.
+          Available as
+          <link linkend="opt-services.mimir.enable">services.mimir</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://hastebin.com/about.md">Haste</link>,
+          a pastebin written in node.js. Available as
+          <link linkend="opt-services.haste-server.enable">services.haste</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/juanfont/headscale">headscale</link>,
+          an Open Source implementation of the
+          <link xlink:href="https://tailscale.io">Tailscale</link>
+          Control Server. Available as
+          <link linkend="opt-services.headscale.enable">services.headscale</link>.
         </para>
       </listitem>
       <listitem>
         <para>
           <link xlink:href="https://github.com/hifi/heisenbridge">heisenbridge</link>,
           a bouncer-style Matrix IRC bridge. Available as
-          <link xlink:href="options.html#opt-services.heisenbridge.enable">services.heisenbridge</link>.
+          <link linkend="opt-services.heisenbridge.enable">services.heisenbridge</link>.
         </para>
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://snowflake.torproject.org/">snowflake-proxy</link>,
-          a system to defeat internet censorship. Available as
-          <link xlink:href="options.html#opt-services.snowflake-proxy.enable">services.snowflake-proxy</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://ergo.chat">ergochat</link>, a modern
-          IRC with IRCv3 features. Available as
-          <link xlink:href="options.html#opt-services.ergochat.enable">services.ergochat</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/ngoduykhanh/PowerDNS-Admin">PowerDNS-Admin</link>,
-          a web interface for the PowerDNS server. Available at
-          <link xlink:href="options.html#opt-services.powerdns-admin.enable">services.powerdns-admin</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/postgres/pgadmin4">pgadmin4</link>,
-          an admin interface for the PostgreSQL database. Available at
-          <link xlink:href="options.html#opt-services.pgadmin.enable">services.pgadmin</link>.
+          <link xlink:href="https://github.com/aarond10/https_dns_proxy">https-dns-proxy</link>,
+          DNS to DNS over HTTPS (DoH) proxy. Available as
+          <link linkend="opt-services.https-dns-proxy.enable">services.https-dns-proxy</link>.
         </para>
       </listitem>
       <listitem>
@@ -206,7 +291,7 @@
           <link xlink:href="https://github.com/sezanzeb/input-remapper">input-remapper</link>,
           an easy to use tool to change the mapping of your input device
           buttons. Available at
-          <link xlink:href="options.html#opt-services.input-remapper.enable">services.input-remapper</link>.
+          <link linkend="opt-services.input-remapper.enable">services.input-remapper</link>.
         </para>
       </listitem>
       <listitem>
@@ -214,23 +299,52 @@
           <link xlink:href="https://invoiceplane.com">InvoicePlane</link>,
           web application for managing and creating invoices. Available
           at
-          <link xlink:href="options.html#opt-services.invoiceplane.enable">services.invoiceplane</link>.
+          <link linkend="opt-services.invoiceplane.sites._name_.enable">services.invoiceplane</link>.
         </para>
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://maddy.email">maddy</link>, a
-          composable all-in-one mail server. Available as
-          <link xlink:href="options.html#opt-services.maddy.enable">services.maddy</link>.
+          <link xlink:href="https://userbase.kde.org/K3b">k3b</link>,
+          the KDE disk burning application. Available as
+          <link linkend="opt-programs.k3b.enable">programs.k3b</link>.
         </para>
       </listitem>
       <listitem>
         <para>
           <link xlink:href="https://www.scorchworks.com/K40whisperer/k40whisperer.html">K40-Whisperer</link>,
           a program to control cheap Chinese laser cutters. Available as
-          <link xlink:href="options.html#opt-programs.k4-whisperer.enable">programs.k40-whisperer.enable</link>.
+          <link linkend="opt-programs.k40-whisperer.enable">programs.k40-whisperer.enable</link>.
           Users must add themselves to the <literal>k40</literal> group
           to be able to access the device.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://kanidm.github.io/kanidm/stable/">kanidm</link>,
+          an identity management server written in Rust. Available as
+          <link linkend="opt-services.kanidm.enableServer">services.kanidm</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://maddy.email/">Maddy</link>, a free
+          an open source mail server. Availabe as
+          <link linkend="opt-services.maddy.enable">services.maddy</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://conduit.rs/">matrix-conduit</link>,
+          a simple, fast and reliable chat server powered by matrix.
+          Available as
+          <link xlink:href="option.html#opt-services.matrix-conduit.enable">services.matrix-conduit</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://moosefs.com">Moosefs</link>, fault
+          tolerant petabyte distributed file system. Available as
+          <link linkend="opt-services.moosefs.master.enable">moosefs</link>.
         </para>
       </listitem>
       <listitem>
@@ -239,14 +353,71 @@
           the client for the
           <link xlink:href="https://vpn.mozilla.org/">Mozilla VPN</link>
           service. Available as
-          <link xlink:href="options.html#opt-services.mozillavpn">services.mozillavpn</link>.
+          <link linkend="opt-services.mozillavpn.enable">services.mozillavpn</link>.
         </para>
       </listitem>
       <listitem>
         <para>
           <link xlink:href="https://github.com/mgumz/mtr-exporter">mtr-exporter</link>,
           a Prometheus exporter for mtr metrics. Available as
-          <link xlink:href="options.html#opt-services.mtr-exporter.enable">services.mtr-exporter</link>.
+          <link linkend="opt-services.mtr-exporter.enable">services.mtr-exporter</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://nbd.sourceforge.io/">nbd</link>, a
+          Network Block Device server. Available as
+          <link linkend="opt-services.nbd.server.enable">services.nbd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/netbox-community/netbox">netbox</link>,
+          infrastructure resource modeling (IRM) tool. Available as
+          <link linkend="opt-services.netbox.enable">services.netbox</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/vvilhonen/nethoscope">nethoscope</link>,
+          listen to your network traffic. Available as
+          <link linkend="opt-programs.nethoscope.enable">programs.nethoscope</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://nifi.apache.org">nifi</link>, an
+          easy to use, powerful, and reliable system to process and
+          distribute data. Available as
+          <link linkend="opt-services.nifi.enable">services.nifi</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/Mic92/nix-ld">nix-ld</link>,
+          Run unpatched dynamic binaries on NixOS. Available as
+          <link linkend="opt-programs.nix-ld.enable">programs.nix-ld</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="http://www.nncpgo.org">NNCP</link>, NNCP
+          (Node to Node copy) utilities and configuration, Available as
+          <link linkend="opt-programs.nncp.enable">programs.nncp</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/postgres/pgadmin4">pgadmin4</link>,
+          an admin interface for the PostgreSQL database. Available at
+          <link linkend="opt-services.pgadmin.enable">services.pgadmin</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/ngoduykhanh/PowerDNS-Admin">PowerDNS-Admin</link>,
+          a web interface for the PowerDNS server. Available at
+          <link linkend="opt-services.powerdns-admin.enable">services.powerdns-admin</link>.
         </para>
       </listitem>
       <listitem>
@@ -254,61 +425,7 @@
           <link xlink:href="https://github.com/prometheus-pve/prometheus-pve-exporter">prometheus-pve-exporter</link>,
           a tool that exposes information from the Proxmox VE API for
           use by Prometheus. Available as
-          <link xlink:href="options.html#opt-services.prometheus.exporters.pve">services.prometheus.exporters.pve</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/netbox-community/netbox">netbox</link>,
-          infrastructure resource modeling (IRM) tool. Available as
-          <link xlink:href="options.html#opt-services.netbox.enable">services.netbox</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://tetrd.app">tetrd</link>, share your
-          internet connection from your device to your PC and vice versa
-          through a USB cable. Available at
-          <link linkend="opt-services.tetrd.enable">services.tetrd</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/mbrubeck/agate">agate</link>,
-          a very simple server for the Gemini hypertext protocol.
-          Available as
-          <link xlink:href="options.html#opt-services.agate.enable">services.agate</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm">ArchiSteamFarm</link>,
-          a C# application with primary purpose of idling Steam cards
-          from multiple accounts simultaneously. Available as
-          <link xlink:href="options.html#opt-services.archisteamfarm.enable">services.archisteamfarm</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://goteleport.com">teleport</link>,
-          allows engineers and security professionals to unify access
-          for SSH servers, Kubernetes clusters, web applications, and
-          databases across all environments. Available at
-          <link linkend="opt-services.teleport.enable">services.teleport</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://loic-sharma.github.io/BaGet/">BaGet</link>,
-          a lightweight NuGet and symbol server. Available at
-          <link linkend="opt-services.baget.enable">services.baget</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://moosefs.com">moosefs</link>, fault
-          tolerant petabyte distributed file system. Available as
-          <link linkend="opt-services.moosefs.client.enable">moosefs</link>.
+          <link linkend="opt-services.prometheus.exporters.pve.enable">services.prometheus.exporters.pve</link>.
         </para>
       </listitem>
       <listitem>
@@ -316,6 +433,84 @@
           <link xlink:href="https://github.com/ThomasLeister/prosody-filer">prosody-filer</link>,
           a server for handling XMPP HTTP Upload requests. Available at
           <link linkend="opt-services.prosody-filer.enable">services.prosody-filer</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://public-inbox.org">Public
+          Inbox</link>, an <quote>archives first</quote> approach to
+          mailing lists. Available as
+          <link linkend="opt-services.public-inbox.enable">services.public-inbox</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/fleaz/r53-ddns">r53-ddns</link>,
+          a small tool to run your own DDNS service via AWS Route53.
+          Available as
+          <link linkend="opt-services.r53-ddns.enable">services.r53-ddns</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://ddvk.github.io/rmfakecloud/">rmfakecloud</link>,
+          a clone of the cloud sync the remarkable tablet. Available as
+          <link linkend="opt-services.rmfakecloud.enable">services.rmfakecloud</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://docs.docker.com/engine/security/rootless/">rootless
+          Docker</link>, a <literal>systemd --user</literal> Docker
+          service which runs without root permissions. Available as
+          <link linkend="opt-virtualisation.docker.rootless.enable">virtualisation.docker.rootless.enable</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.rstudio.com/products/rstudio/#rstudio-server">rstudio-server</link>,
+          a browser-based version of the RStudio IDE for the R
+          programming language. Available as
+          <link linkend="opt-services.rstudio-server.enable">services.rstudio-server</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/aler9/rtsp-simple-server">rtsp-simple-server</link>,
+          ready-to-use RTSP / RTMP / HLS server and proxy that allows to
+          read, publish and proxy video and audio streams. Available as
+          <link linkend="opt-services.rtsp-simple-server.enable">services.rtsp-simple-server</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://snipeitapp.com">Snipe-IT</link>, a
+          free open source IT asset/license management system. Available
+          as
+          <link linkend="opt-services.snipe-it.enable">services.snipe-it</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://snowflake.torproject.org/">snowflake-proxy</link>,
+          a system to defeat internet censorship. Available as
+          <link linkend="opt-services.snowflake-proxy.enable">services.snowflake-proxy</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://sslmate.com/">sslmate-agent</link>,
+          a daemon for managing SSL/TLS certificates on a server.
+          Available as
+          <link xlink:href="services.sslmate-agent.enable">services.sslmate-agent</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://starship.rs">starship</link>, a
+          minimal, blazing-fast, and infinitely customizable prompt for
+          any shell. Available at
+          <link linkend="opt-programs.starship.enable">programs.startship</link>.
         </para>
       </listitem>
       <listitem>
@@ -331,77 +526,56 @@
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://github.com/audreyt/ethercalc">ethercalc</link>,
-          an online collaborative spreadsheet. Available as
-          <link xlink:href="options.html#opt-services.ethercalc.enable">services.ethercalc</link>.
+          <link xlink:href="https://goteleport.com">teleport</link>,
+          allows engineers and security professionals to unify access
+          for SSH servers, Kubernetes clusters, web applications, and
+          databases across all environments. Available at
+          <link linkend="opt-services.teleport.enable">services.teleport</link>.
         </para>
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://nbd.sourceforge.io/">nbd</link>, a
-          Network Block Device server. Available as
-          <link xlink:href="options.html#opt-services.nbd.server.enable">services.nbd</link>.
+          <link xlink:href="https://tetrd.app">tetrd</link>, share your
+          internet connection from your device to your PC and vice versa
+          through a USB cable. Available at
+          <link linkend="opt-services.tetrd.enable">services.tetrd</link>.
         </para>
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://github.com/Mic92/nix-ld">nix-ld</link>,
-          Run unpatched dynamic binaries on NixOS. Available as
-          <link xlink:href="options.html#opt-programs.nix-ld.enable">programs.nix-ld</link>.
+          <link xlink:href="https://upterm.dev">uptermd</link>, an
+          open-source solution for sharing terminal sessions instantly
+          over the public internet via secure tunnels. Available at
+          <link linkend="opt-services.uptermd.enable">services.uptermd</link>.
         </para>
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://timetagger.app">timetagger</link>,
-          an open source time-tracker with an intuitive user experience
-          and powerful reporting.
-          <link xlink:href="options.html#opt-services.timetagger.enable">services.timetagger</link>.
+          <link xlink:href="https://github.com/darrylb123/usbrelay">usbrelayd</link>,
+          an USB Relay MQTT daemon. Available as
+          <link linkend="opt-services.usbrelayd.enable">services.usbrelayd</link>.
         </para>
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://www.rstudio.com/products/rstudio/#rstudio-server">rstudio-server</link>,
-          a browser-based version of the RStudio IDE for the R
-          programming language. Available as
-          <link xlink:href="options.html#opt-services.rstudio-server.enable">services.rstudio-server</link>.
+          <link xlink:href="https://github.com/miquels/webdav-server-rs">webdav-server-rs</link>,
+          Webdav server in rust. Available as
+          <link linkend="opt-services.webdav-server-rs.enable">services.webdav-server-rs</link>.
         </para>
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://github.com/juanfont/headscale">headscale</link>,
-          an Open Source implementation of the
-          <link xlink:href="https://tailscale.io">Tailscale</link>
-          Control Server. Available as
-          <link xlink:href="options.html#opt-services.headscale.enable">services.headscale</link>
+          <link xlink:href="https://github.com/gin66/wg_netmanager">wg-netmanager</link>,
+          the Wireguard network manager. Available as
+          <link linkend="opt-services.wg-netmanager.enable">services.wg-netmanager</link>.
         </para>
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://github.com/lakinduakash/linux-wifi-hotspot">create_ap</link>,
-          a module for creating wifi hotspots using the program
-          linux-wifi-hotspot. Available as
-          <link xlink:href="options.html#opt-services.create_ap.enable">services.create_ap</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://0xerr0r.github.io/blocky/">blocky</link>,
-          fast and lightweight DNS proxy as ad-blocker for local network
-          with many features.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://clusterlabs.org/pacemaker/">pacemaker</link>
-          cluster resource manager
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://nifi.apache.org">nifi</link>, an
-          easy to use, powerful, and reliable system to process and
-          distribute data. Available as
-          <link xlink:href="options.html#opt-services.nifi.enable">services.nifi</link>.
+          <link xlink:href="https://zammad.org/">Zammad</link>, a
+          web-based, open source user support/ticketing solution.
+          Available as
+          <link linkend="opt-services.zammad.enable">services.zammad</link>.
         </para>
       </listitem>
     </itemizedlist>
@@ -441,6 +615,15 @@
           <literal>(ghc.withPackages (p: [])).override { withLLVM = true; }</literal>,
           one needs to use
           <literal>(ghc.withPackages.override { useLLVM = true; }) (p: [])</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The update of the haskell package set brings with it a new
+          version of the <literal>xmonad</literal> module, which will
+          break your configuration if you use <literal>launch</literal>
+          as entrypoint. The example code the corresponding nixos module
+          was adjusted, you may want to have a look at it.
         </para>
       </listitem>
       <listitem>
@@ -491,6 +674,28 @@
           <literal>libcontainer</literal> based software such as Podman
           and Skopeo which assumes they have ownership over
           <literal>/etc/containers</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>lib.systems.supported</literal> has been removed, as
+          it was overengineered for determining the systems to support
+          in the nixpkgs flake. The list of systems exposed by the
+          nixpkgs flake can now be accessed as
+          <literal>lib.systems.flakeExposed</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          For new installations
+          <literal>virtualisation.oci-containers.backend</literal> is
+          now set to <literal>podman</literal> by default. If you still
+          want to use Docker on systems where
+          <literal>system.stateVersion</literal> is set to to
+          <literal>&quot;22.05&quot;</literal> set
+          <literal>virtualisation.oci-containers.backend = &quot;docker&quot;;</literal>.Old
+          systems with older <literal>stateVersion</literal>s stay with
+          <quote>docker</quote>.
         </para>
       </listitem>
       <listitem>
@@ -584,6 +789,25 @@
           In the ncdns module, the default value of
           <literal>services.ncdns.address</literal> has been changed to
           the IPv6 loopback address (<literal>::1</literal>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>openldap</literal> (and therefore the slapd LDAP
+          server) were updated to version 2.6.2. The project introduced
+          backwards-incompatible changes, namely the removal of the bdb,
+          hdb, ndb, and shell backends in slapd. Therefore before
+          updating, dump your database <literal>slapcat -n 1</literal>
+          in LDIF format, and reimport it after updating your
+          <literal>services.openldap.settings</literal>, which
+          represents your <literal>cn=config</literal>.
+        </para>
+        <para>
+          Additionally with 2.5 the argon2 module was included in the
+          standard distrubtion and renamed from
+          <literal>pw-argon2</literal> to <literal>argon2</literal>.
+          Remember to update your <literal>olcModuleLoad</literal> entry
+          in <literal>cn=config</literal>.
         </para>
       </listitem>
       <listitem>
@@ -790,7 +1014,7 @@
     };
 
     extraConfigFiles = [
-      /run/keys/matrix-synapse/secrets.yaml
+      &quot;/run/keys/matrix-synapse/secrets.yaml&quot;
     ];
   };
 }
@@ -798,7 +1022,9 @@
         <para>
           The secrets in your original config should be migrated into a
           YAML file that is included via
-          <literal>extraConfigFiles</literal>.
+          <literal>extraConfigFiles</literal>. The filename must be
+          quoted to prevent nix from copying it to the (world readable)
+          store.
         </para>
         <para>
           Additionally a few option defaults have been synced up with
@@ -812,6 +1038,11 @@
           <literal>22.05</literal>. Files will need to be manually moved
           to the new location if the <literal>stateVersion</literal> is
           updated.
+        </para>
+        <para>
+          As of Synapse 1.58.0, the old groups/communities feature has
+          been disabled by default. It will be completely removed with
+          Synapse 1.61.0.
         </para>
       </listitem>
       <listitem>
@@ -1092,6 +1323,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>teleport</literal> has been upgraded to major version
+          9. Please see upstream
+          <link xlink:href="https://goteleport.com/docs/setup/operations/upgrading/">upgrade
+          instructions</link> and
+          <link xlink:href="https://goteleport.com/docs/changelog/#900">release
+          notes</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           For <literal>pkgs.python3.pkgs.ipython</literal>, its direct
           dependency
           <literal>pkgs.python3.pkgs.matplotlib-inline</literal> (which
@@ -1288,7 +1529,7 @@
           <literal>systemd-shutdown</literal> is now properly linked on
           shutdown to unmount all filesystems and device mapper devices
           cleanly. This can be disabled using
-          <literal>boot.systemd.shutdown.enable</literal>.
+          <literal>systemd.shutdownRamfs.enable</literal>.
         </para>
       </listitem>
       <listitem>
@@ -1356,9 +1597,29 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.zookeeper</literal> has a new option
+          <literal>jre</literal> for specifying the JRE to start
+          zookeeper with. It defaults to the JRE that
+          <literal>pkgs.zookeeper</literal> was wrapped with, instead of
+          <literal>pkgs.jre</literal>. This changes the JRE to
+          <literal>pkgs.jdk11_headless</literal> by default.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.pgadmin</literal> now refers to
           <literal>pkgs.pgadmin4</literal>. <literal>pgadmin3</literal>
           has been removed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.minetestclient_4</literal> and
+          <literal>pkgs.minetestserver_4</literal> have been removed, as
+          the last 4.x release was in 2018.
+          <literal>pkgs.minetestclient</literal> (equivalent to
+          <literal>pkgs.minetest</literal> ) and
+          <literal>pkgs.minetestserver</literal> can be used instead.
         </para>
       </listitem>
       <listitem>
@@ -1513,6 +1774,19 @@
         <para>
           The <literal>vpnc</literal> package has been changed to use
           GnuTLS instead of OpenSSL by default for licensing reasons.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The default version of <literal>nextcloud</literal> is
+          <emphasis role="strong">nextcloud24</emphasis>. Please note
+          that it’s <emphasis role="strong">not</emphasis> possible to
+          upgrade <literal>nextcloud</literal> across multiple major
+          versions! This means it’s e.g. not possible to upgrade from
+          <literal>nextcloud22</literal> to
+          <literal>nextcloud24</literal> in a single deploy and most
+          <literal>21.11</literal> users will have to upgrade to
+          <literal>nextcloud23</literal> first.
         </para>
       </listitem>
       <listitem>
@@ -1723,6 +1997,43 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://kops.sigs.k8s.io"><literal>kops</literal></link>
+          defaults to 1.23.2, which will enable
+          <link xlink:href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html">Instance
+          Metadata Service Version 2</link> and require tokens on new
+          clusters with Kubernetes &gt;= 1.22. This will increase
+          security by default, but may break some types of workloads.
+          The default behaviour for
+          <literal>spec.kubeDNS.nodeLocalDNS.forwardToKubeDNS</literal>
+          has changed from <literal>true</literal> to
+          <literal>false</literal>. Cilium now has
+          <literal>disable-cnp-status-updates: true</literal> by
+          default. Set this to false if you rely on the
+          CiliumNetworkPolicy status fields. Support for Kubernetes
+          1.17, the Lyft CNI, Weave CNI on Kubernetes &gt;= 1.23, CentOS
+          7 and 8, Debian 9, RHEL 7, and Ubuntu 16.05 (Xenial) has been
+          removed. See the
+          <link xlink:href="https://kops.sigs.k8s.io/releases/1.22-notes/">1.22
+          release notes</link> and
+          <link xlink:href="https://kops.sigs.k8s.io/releases/1.23-notes/">1.23
+          release notes</link> for more details, including other
+          significant changes.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Mattermost has been upgraded to extended support version 6.3
+          as the previously packaged extended support version 5.37 is
+          <link xlink:href="https://docs.mattermost.com/upgrade/extended-support-release.html">reaching
+          end of life</link>. Migration may take some time, see the
+          <link xlink:href="https://docs.mattermost.com/install/self-managed-changelog.html#release-v6-3-extended-support-release">changelog</link>
+          and
+          <link xlink:href="https://docs.mattermost.com/upgrade/important-upgrade-notes.html">important
+          upgrade notes</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The
           <literal>writers.writePyPy2</literal>/<literal>writers.writePyPy3</literal>
           and corresponding
@@ -1764,6 +2075,66 @@
           true) parameter. By default auto-upgrade will now run
           immediately if it would have been triggered at least once
           during the time when the timer was inactive.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Mastodon now uses <literal>services.redis.servers</literal> to
+          start a new redis server, instead of using a global redis
+          server. This improves compatibility with other services that
+          use redis.
+        </para>
+        <para>
+          Note that this will recreate the redis database, although
+          according to the
+          <link xlink:href="https://docs.joinmastodon.org/admin/backups/">Mastodon
+          docs</link>, this is almost harmless:
+        </para>
+        <blockquote>
+          <para>
+            Losing the Redis database is almost harmless: The only
+            irrecoverable data will be the contents of the Sidekiq
+            queues and scheduled retries of previously failed jobs. The
+            home and list feeds are stored in Redis, but can be
+            regenerated with tootctl.
+          </para>
+        </blockquote>
+        <para>
+          If you do want to save the redis database, you can use the
+          following commands:
+        </para>
+        <programlisting language="bash">
+redis-cli save
+cp /var/lib/redis/dump.rdb &quot;/var/lib/redis-mastodon/dump.rdb&quot;
+</programlisting>
+      </listitem>
+      <listitem>
+        <para>
+          Peertube now uses services.redis.servers to start a new redis
+          server, instead of using a global redis server. This improves
+          compatibility with other services that use redis.
+        </para>
+        <para>
+          Redis database is used for storage only cache and job queue.
+          More information can be found here -
+          <link xlink:href="https://docs.joinpeertube.org/contribute-architecture">Peertube
+          architecture</link>.
+        </para>
+        <para>
+          If you do want to save the redis database, you can use the
+          following commands before upgrade OS:
+        </para>
+        <programlisting language="bash">
+redis-cli save
+sudo mkdir /var/lib/redis-peertube
+sudo cp /var/lib/redis/dump.rdb /var/lib/redis-peertube/dump.rdb
+</programlisting>
+      </listitem>
+      <listitem>
+        <para>
+          Added the <literal>keter</literal> NixOS module. Keter reverse
+          proxies requests to your loaded application based on virtual
+          hostnames.
         </para>
       </listitem>
       <listitem>
@@ -1935,13 +2306,6 @@
           <literal>services.xserver.desktopManager.runXdgAutostartIfNone</literal>
           or using the <literal>dex</literal> package to make
           <literal>fcitx5</literal> work.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          A new module was added for the Envoy reverse proxy, providing
-          the options <literal>services.envoy.enable</literal> and
-          <literal>services.envoy.settings</literal>.
         </para>
       </listitem>
       <listitem>
@@ -2141,15 +2505,6 @@
       </listitem>
       <listitem>
         <para>
-          A new module was added for the
-          <link xlink:href="https://starship.rs/">Starship</link> shell
-          prompt, providing the options
-          <literal>programs.starship.enable</literal> and
-          <literal>programs.starship.settings</literal>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           The <link xlink:href="https://dino.im">Dino</link> XMPP client
           was updated to 0.3, adding support for audio and video calls.
         </para>
@@ -2192,6 +2547,14 @@
         <para>
           The <literal>vscode-extensions.ionide.ionide-fsharp</literal>
           package has been updated to 6.0.0 and now requires .NET 6.0.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>phpPackages.box</literal> package has been
+          updated from 2.7.5 to 3.16.0. See the
+          <link xlink:href="https://github.com/box-project/box/blob/master/UPGRADE.md#from-27-to-30">upgrade
+          guide</link> for more details.
         </para>
       </listitem>
       <listitem>
@@ -2294,6 +2657,14 @@
       </listitem>
       <listitem>
         <para>
+          <literal>mercury</literal> was updated to 22.01.1, which has
+          some breaking changes
+          (<link xlink:href="https://dl.mercurylang.org/release/release-notes-22.01.html">Mercury
+          22.01 news</link>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           xfsprogs was update to version 5.15, which enables inobtcount
           and bigtime by default on filesystem creation. Support for
           these features was added in kernel 5.10 and deemed stable in
@@ -2340,10 +2711,28 @@
       </listitem>
       <listitem>
         <para>
+          The default <literal>scribus</literal> version is now 1.5,
+          while version 1.4 is still available as
+          <literal>scribus_1_4</literal>
+          (<link xlink:href="https://github.com/NixOS/nixpkgs/pull/172700">#172700</link>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The Nextcloud module now supports to create a Mysql database
           automatically with
           <literal>services.nextcloud.database.createLocally</literal>
           enabled.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The Nextcloud module now allows setting the value of the
+          <literal>max-age</literal> directive of the
+          <literal>Strict-Transport-Security</literal> HTTP header,
+          which is now controlled by the
+          <literal>services.nextcloud.https</literal> option, rather
+          than <literal>services.nginx.recommendedHttpHeaders</literal>.
         </para>
       </listitem>
       <listitem>
@@ -2373,17 +2762,66 @@
       </listitem>
       <listitem>
         <para>
-          The <literal>programs.nncp</literal> options were added for
-          generating host-global NNCP configuration.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           The option <literal>services.snapserver.openFirewall</literal>
           will no longer default to <literal>true</literal> starting
           with NixOS 22.11. Enable it explicitly if you need to control
           Snapserver remotely or connect streamig clients from other
           hosts.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option
+          <link xlink:href="options.html#opt-networking.useDHCP">networking.useDHCP</link>
+          isn’t deprecated anymore. When using
+          <link xlink:href="options.html#opt-networking.useNetworkd"><literal>systemd-networkd</literal></link>,
+          a generic <literal>.network</literal>-unit is added which
+          enables DHCP for each interface matching
+          <literal>en*</literal>, <literal>eth*</literal> or
+          <literal>wl*</literal> with priority 99 (which means that it
+          doesn’t have any effect if such an interface is matched by a
+          <literal>.network-</literal>unit with a lower priority). In
+          case of scripted networking, no behavior was changed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The new
+          <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook"><literal>postgresqlTestHook</literal></link>
+          runs a PostgreSQL server for the duration of package checks.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>zfs</literal> was updated from 2.1.4 to 2.1.5,
+          enabling it to be used with Linux kernel 5.18.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>stdenv.mkDerivation</literal> now supports a
+          self-referencing <literal>finalAttrs:</literal> parameter
+          containing the final <literal>mkDerivation</literal> arguments
+          including overrides. <literal>drv.overrideAttrs</literal> now
+          supports two parameters
+          <literal>finalAttrs: previousAttrs:</literal>. This allows
+          packaging configuration to be overridden in a consistent
+          manner by providing an alternative to
+          <literal>rec {}</literal> syntax.
+        </para>
+        <para>
+          Additionally, <literal>passthru</literal> can now reference
+          <literal>finalAttrs.finalPackage</literal> containing the
+          final package, including attributes such as the output paths
+          and <literal>overrideAttrs</literal>.
+        </para>
+        <para>
+          New language integrations can be simplified by overriding a
+          <quote>prototype</quote> package containing the
+          language-specific logic. This removes the need for a extra
+          layer of overriding for the <quote>generic builder</quote>
+          arguments, thus removing a usability problem and source of
+          error.
         </para>
       </listitem>
     </itemizedlist>

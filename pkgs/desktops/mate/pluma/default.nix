@@ -1,5 +1,21 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, perl, itstool, isocodes, enchant, libxml2, python3
-, adwaita-icon-theme, gtksourceview4, libpeas, mate-desktop, wrapGAppsHook, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, perl
+, itstool
+, isocodes
+, enchant
+, libxml2
+, python3
+, adwaita-icon-theme
+, gtksourceview4
+, libpeas
+, mate-desktop
+, wrapGAppsHook
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "pluma";

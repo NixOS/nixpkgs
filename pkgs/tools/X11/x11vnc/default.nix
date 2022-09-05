@@ -19,6 +19,14 @@ stdenv.mkDerivation rec {
       url = "https://github.com/LibVNC/x11vnc/commit/69eeb9f7baa14ca03b16c9de821f9876def7a36a.patch";
       sha256 = "0hdhp32g2i5m0ihmaxkxhsn3d5f2qasadvwpgxify4xnzabmyb2d";
     })
+
+    # Pull upstream fix for -fno-common toolchains:
+    #   https://github.com/LibVNC/x11vnc/pull/121
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/LibVNC/x11vnc/commit/a48b0b1cd887d7f3ae67f525d7d334bd2feffe60.patch";
+      sha256 = "046gjsmg0vm0m4y9ny17y2jayc4ba7vib2whw71l5x1hjp6pksjs";
+    })
   ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -41,10 +49,6 @@ stdenv.mkDerivation rec {
 
     # Xdummy script is currently broken, so we avoid building it. This removes everything Xdummy-related from the affected Makefile
     sed -i -e '/^\tXdummy.c\ \\$/,$d' -e 's/\tx11vnc_loop\ \\/\tx11vnc_loop/' misc/Makefile.am
-  '';
-
-  preConfigure = ''
-    configureFlags="--mandir=$out/share/man"
   '';
 
   meta = with lib; {

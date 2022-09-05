@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     tpm2-tss tpm2-tools opensc openssl sqlite libyaml
-    (python3.withPackages (ps: [ ps.pyyaml ps.cryptography ps.pyasn1-modules ps.tpm2-pytss ]))
+    (python3.withPackages (ps: with ps; [ packaging pyyaml cryptography pyasn1-modules tpm2-pytss ]))
   ];
 
   outputs = [ "out" "bin" "dev" ];

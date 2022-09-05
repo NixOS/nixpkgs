@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , calf
 , fftwFloat
-, fmt
+, fmt_8
 , glib
 , gtk4
 , itstool
@@ -23,7 +23,6 @@
 , nlohmann_json
 , pipewire
 , pkg-config
-, python3
 , rnnoise
 , rubberband
 , speexdsp
@@ -35,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "6.2.4";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
-    sha256 = "sha256-g/qN1Tafh71HdPLHW43Zva9MK6G+qxSnb1aRisuwdBw=";
+    sha256 = "sha256-OLxuE1jiALuKlC9U9esVlhaMBEaoZyNae8OO8upE4ZM=";
   };
 
   nativeBuildInputs = [
@@ -50,13 +49,12 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     wrapGAppsHook4
   ];
 
   buildInputs = [
     fftwFloat
-    fmt
+    fmt_8
     glib
     gtk4
     libadwaita
@@ -75,11 +73,6 @@ stdenv.mkDerivation rec {
     tbb
     zita-convolver
   ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
 
   preFixup =
     let

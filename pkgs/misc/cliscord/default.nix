@@ -1,4 +1,4 @@
-{ lib, rustPlatform, openssl, pkg-config, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, openssl, pkg-config, fetchFromGitHub, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cliscord";
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-hzZozgOkw8kFppuHiX9TQxHhxKRv8utWWbhEOIzKDLo=";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   nativeBuildInputs = [ pkg-config ];
 

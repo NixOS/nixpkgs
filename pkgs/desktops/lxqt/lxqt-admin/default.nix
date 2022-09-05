@@ -54,6 +54,6 @@ mkDerivation rec {
     description = "LXQt system administration tool";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "faraday-agent-dispatcher";
-  version = "2.1.3";
+  version = "2.2.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_agent_dispatcher";
-    rev = version;
-    hash = "sha256-lqCW1/wRXfN7C9c6TPvninueOgrhzNdjRJ9fuueMyH0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-dTXTR2H37FDfnpY4Ts6NoYAnJX52yqRZeD2Yf8S/kS8=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -49,6 +49,7 @@ python3.pkgs.buildPythonApplication rec {
 
   disabledTests = [
     "test_execute_agent"
+    "SSL"
   ];
 
   disabledTestPaths = [

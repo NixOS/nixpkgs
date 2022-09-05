@@ -1,17 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "coredns";
-  version = "1.9.1";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "coredns";
     repo = "coredns";
     rev = "v${version}";
-    sha256 = "sha256-1lJrbazEgsRHI10qIgA9KgglsxpnMIdxEWpu6RiJ0pQ=";
+    sha256 = "sha256-9lRZjY85SD1HXAWVCp8fpzV0d1Y+LbodT3Sp21CNp+k=";
   };
 
-  vendorSha256 = "sha256-ueEuduZ76FUs2wE8oiHGON9+s91jaHhS6gOKr7MNh8g=";
+  vendorSha256 = "sha256-gNa+dm7n71IiSCztTO5VZ5FnGTGYfNXo/HMichNzek0=";
 
   postPatch = ''
     substituteInPlace test/file_cname_proxy_test.go \
@@ -20,6 +24,9 @@ buildGoModule rec {
 
     substituteInPlace test/readme_test.go \
       --replace "TestReadme" "SkipReadme"
+  '' + lib.optionalString stdenv.isDarwin ''
+    # loopback interface is lo0 on macos
+    sed -E -i 's/\blo\b/lo0/' plugin/bind/setup_test.go
   '';
 
   meta = with lib; {

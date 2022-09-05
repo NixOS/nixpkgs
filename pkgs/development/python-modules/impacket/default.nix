@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "impacket";
-  version = "0.9.24";
+  version = "0.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GNVX04f0kU+vpzmBO5FyvD+L2cA26Tv1iajg67cwS7o=";
+    hash = "sha256-uOsCCiy7RxRmac/jHGS7Ln1kmdBJxJPWQYuXFvXHRYM=";
   };
 
   propagatedBuildInputs = [

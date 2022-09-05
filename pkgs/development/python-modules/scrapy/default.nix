@@ -30,13 +30,15 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.6.1";
+  version = "2.6.2";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit version;
     pname = "Scrapy";
-    sha256 = "56fd55a59d0f329ce752892358abee5a6b50b4fc55a40420ea317dc617553827";
+    sha256 = "55e21181165f25337105fff1efc8393296375cea7de699a7e703bbd265595f26";
   };
 
   nativeBuildInputs = [
@@ -92,6 +94,7 @@ buildPythonPackage rec {
     "test_nested_xpath"
     "test_flavor_detection"
     # Requires network access
+    "AnonymousFTPTestCase"
     "FTPFeedStorageTest"
     "FeedExportTest"
     "test_custom_asyncio_loop_enabled_true"
@@ -99,6 +102,7 @@ buildPythonPackage rec {
     "test_custom_loop_asyncio_deferred_signal"
     "FileFeedStoragePreFeedOptionsTest"  # https://github.com/scrapy/scrapy/issues/5157
     "test_timeout_download_from_spider_nodata_rcvd"
+    "test_timeout_download_from_spider_server_hangs"
     # Fails with AssertionError
     "test_peek_fifo"
     "test_peek_one_element"
@@ -107,6 +111,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "test_xmliter_encoding"
     "test_download"
+    "test_reactor_default_twisted_reactor_select"
   ];
 
   postInstall = ''
@@ -131,7 +136,7 @@ buildPythonPackage rec {
     homepage = "https://scrapy.org/";
     changelog = "https://github.com/scrapy/scrapy/raw/${version}/docs/news.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ drewkett marsam ];
+    maintainers = with maintainers; [ marsam ];
     platforms = platforms.unix;
   };
 }

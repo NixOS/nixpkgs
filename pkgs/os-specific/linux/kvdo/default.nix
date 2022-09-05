@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "dm-vdo";
     repo = "kvdo";
     rev = version;
-    sha256 = "1xl7dwcqx00w1gbpb6vlkn8nchyfj1fsc8c06vgda0sgxp7qs5gn";
+    hash = "sha256-4FYTFUIvGjea3bh2GbQYG7hSswVDdNS3S+jWQ9+inpg=";
   };
 
   dontConfigure = true;
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dm-vdo/kvdo";
     description = "A pair of kernel modules which provide pools of deduplicated and/or compressed block storage";
     platforms = platforms.linux;
+    broken = kernel.kernelOlder "5.15" || kernel.kernelAtLeast "5.17";
   };
 }

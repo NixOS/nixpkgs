@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libxml2";
-  version = "2.9.13";
+  version = "2.9.14";
 
   outputs = [ "bin" "dev" "out" "man" "doc" ]
     ++ lib.optional pythonSupport "py"
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "J2EwYC0S/khOzANEfuXnWdBGVVj7yda9FE43RTBuvw4=";
+    sha256 = "1vnzk33wfms348lgz9pvkq9li7jm44pvm73lbr3w1khwgljlmmv0";
   };
 
   patches = [
@@ -94,8 +94,10 @@ stdenv.mkDerivation rec {
 
   doCheck =
     (stdenv.hostPlatform == stdenv.buildPlatform) &&
-    !stdenv.isDarwin &&
     stdenv.hostPlatform.libc != "musl";
+  preCheck = lib.optional stdenv.isDarwin ''
+    export DYLD_LIBRARY_PATH="$PWD/.libs:$DYLD_LIBRARY_PATH"
+  '';
 
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
@@ -124,7 +126,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "http://xmlsoft.org/";
+    homepage = "https://gitlab.gnome.org/GNOME/libxml2";
     description = "XML parsing library for C";
     license = licenses.mit;
     platforms = platforms.all;

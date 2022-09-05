@@ -7,8 +7,10 @@
 , cmake
 , pkg-config
 , makeWrapper
+, fftw
 , fmt_8
 , libsndfile
+, rtmidi
 , SDL2
 , zlib
 , withJACK ? stdenv.hostPlatform.isUnix
@@ -19,20 +21,15 @@
 
 stdenv.mkDerivation rec {
   pname = "furnace";
-  version = "0.5.8";
+  version = "0.6pre1";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "103ymd3wa1sfsr6qg15vpcs53j350i7zidv3azlf7cynk6k28xim";
+    sha256 = "sha256-7MrzSC8PYQ4X8fyX1hB8mOoSCtLpY+o1x42v9HLdoao=";
   };
-
-  postPatch = ''
-    # rtmidi is not used yet
-    sed -i -e '/add_subdirectory(extern\/rtmidi/d' -e '/DEPENDENCIES_LIBRARIES rtmidi/d' CMakeLists.txt
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -42,8 +39,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    fftw
     fmt_8
     libsndfile
+    rtmidi
     SDL2
     zlib
   ] ++ lib.optionals withJACK [
@@ -54,10 +53,12 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_GUI=${if withGUI then "ON" else "OFF"}"
+    "-DSYSTEM_FFTW=ON"
     "-DSYSTEM_FMT=ON"
     "-DSYSTEM_LIBSNDFILE=ON"
-    "-DSYSTEM_ZLIB=ON"
+    "-DSYSTEM_RTMIDI=ON"
     "-DSYSTEM_SDL2=ON"
+    "-DSYSTEM_ZLIB=ON"
     "-DWITH_JACK=${if withJACK then "ON" else "OFF"}"
     "-DWARNINGS_ARE_ERRORS=ON"
   ];
@@ -85,8 +86,6 @@ stdenv.mkDerivation rec {
     };
     tests.version = testers.testVersion {
       package = furnace;
-      # The command always exits with code 1
-      command = "(furnace --version || [ $? -eq 1 ])";
     };
   };
 

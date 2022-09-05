@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "vault";
-  version = "1.10.1";
+  version = "1.11.3";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "sha256-In+rc5H8HNx5hGySYvCqx6hQ7tmTioHiNdJIMyMRNvU=";
+    sha256 = "sha256-L86wV47xGf3W6LEhFuH6cP30dtvETRbEGsmQNCHviCI=";
   };
 
-  vendorSha256 = "sha256-z0PsLrT4jtSof4Bd62juGLv58EV22TnPx6fosMvW97c=";
+  vendorSha256 = "sha256-fKHo/m2QKEclNMeDxlM8kmOxAWbKu1lsXC4cKDaImdg=";
 
   subPackages = [ "." ];
 
@@ -38,7 +38,7 @@ buildGoModule rec {
       --prefix PATH ${lib.makeBinPath [ gawk glibc ]}
   '';
 
-  passthru.tests = { inherit (nixosTests) vault vault-postgresql; };
+  passthru.tests = { inherit (nixosTests) vault vault-postgresql vault-dev; };
 
   meta = with lib; {
     homepage = "https://www.vaultproject.io/";

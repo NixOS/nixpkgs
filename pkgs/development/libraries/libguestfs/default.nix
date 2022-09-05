@@ -1,37 +1,94 @@
-{ lib, stdenv, fetchurl, pkg-config, autoreconfHook, makeWrapper
-, ncurses, cpio, gperf, cdrkit, flex, bison, qemu, pcre2, augeas, libxml2
-, acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex, db
-, gmp, readline, file, numactl, libapparmor, jansson
-, getopt, perlPackages, ocamlPackages
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, autoreconfHook
+, makeWrapper
+, ncurses
+, cpio
+, gperf
+, cdrkit
+, flex
+, bison
+, qemu
+, pcre2
+, augeas
+, libxml2
+, acl
+, libcap
+, libcap_ng
+, libconfig
+, systemd
+, fuse
+, yajl
+, libvirt
+, hivex
+, db
+, gmp
+, readline
+, file
+, numactl
+, libapparmor
+, jansson
+, getopt
+, perlPackages
+, ocamlPackages
 , libtirpc
 , appliance ? null
-, javaSupport ? false, jdk ? null }:
+, javaSupport ? false
+, jdk
+}:
 
 assert appliance == null || lib.isDerivation appliance;
-assert javaSupport -> jdk != null;
 
 stdenv.mkDerivation rec {
   pname = "libguestfs";
-  version = "1.48.0";
+  version = "1.48.4";
 
   src = fetchurl {
     url = "https://libguestfs.org/download/${lib.versions.majorMinor version}-stable/${pname}-${version}.tar.gz";
-    sha256 = "sha256-FoH93t/PSEym3uxUIwMwoy3vvTDCqx+BeI4lLLXQSCk=";
+    sha256 = "sha256-ncIrbFpF8ZwsupEaN7Oo2G9idEUhsQ61PD05B+UIAxI=";
   };
 
   strictDeps = true;
   nativeBuildInputs = [
-    autoreconfHook bison cdrkit cpio flex getopt gperf makeWrapper pkg-config qemu
-  ] ++ (with perlPackages; [ perl libintl-perl GetoptLong SysVirt ])
-    ++ (with ocamlPackages; [ ocaml findlib ]);
+    autoreconfHook
+    bison
+    cdrkit
+    cpio
+    flex
+    getopt
+    gperf
+    makeWrapper
+    pkg-config
+    qemu
+  ] ++ (with perlPackages; [ perl libintl-perl GetoptLong ModuleBuild ])
+  ++ (with ocamlPackages; [ ocaml findlib ]);
   buildInputs = [
-    ncurses jansson
-    pcre2 augeas libxml2 acl libcap libcap_ng libconfig
-    systemd fuse yajl libvirt gmp readline file hivex db
-    numactl libapparmor perlPackages.ModuleBuild
+    ncurses
+    jansson
+    pcre2
+    augeas
+    libxml2
+    acl
+    libcap
+    libcap_ng
+    libconfig
+    systemd
+    fuse
+    yajl
+    libvirt
+    gmp
+    readline
+    file
+    hivex
+    db
+    numactl
+    libapparmor
+    perlPackages.ModuleBuild
     libtirpc
   ] ++ (with ocamlPackages; [ ocamlbuild ocaml_libvirt gettext-stub ounit ])
-    ++ lib.optional javaSupport jdk;
+  ++ lib.optional javaSupport jdk;
 
   prePatch = ''
     # build-time scripts
@@ -54,10 +111,14 @@ stdenv.mkDerivation rec {
   patches = [
     ./libguestfs-syms.patch
   ];
+
+  createFindlibDestdir = true;
+
   installFlags = [ "REALLY_INSTALL=yes" ];
   enableParallelBuilding = true;
 
   postInstall = ''
+    mv "$out/lib/ocaml/guestfs" "$OCAMLFIND_DESTDIR/guestfs"
     for bin in $out/bin/*; do
       wrapProgram "$bin" \
         --prefix PATH     : "$out/bin:${hivex}/bin:${qemu}/bin" \
@@ -95,7 +156,7 @@ stdenv.mkDerivation rec {
     description = "Tools for accessing and modifying virtual machine disk images";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     homepage = "https://libguestfs.org/";
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [ offline ];
     platforms = platforms.linux;
     # this is to avoid "output size exceeded"
     hydraPlatforms = if appliance != null then appliance.meta.hydraPlatforms else platforms.linux;

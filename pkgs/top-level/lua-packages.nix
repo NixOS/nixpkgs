@@ -50,7 +50,7 @@ in
   getLuaCPath = drv: getPath drv luaLib.luaCPathList;
 
   inherit (callPackage ../development/interpreters/lua-5/hooks { inherit (args) lib;})
-    lua-setup-hook;
+    luarocksMoveDataFolder luarocksCheckHook lua-setup-hook;
 
   inherit lua callPackage;
   inherit buildLuaPackage buildLuarocksPackage buildLuaApplication;
@@ -60,7 +60,7 @@ in
   # wraps programs in $out/bin with valid LUA_PATH/LUA_CPATH
   wrapLua = callPackage ../development/interpreters/lua-5/wrap-lua.nix {
     inherit lua lib;
-    inherit (pkgs) makeSetupHook makeWrapper;
+    inherit (pkgs.buildPackages) makeSetupHook makeWrapper;
   };
 
   luarocks = callPackage ../development/tools/misc/luarocks/default.nix {
@@ -95,6 +95,7 @@ in
     '';
 
     meta = with lib; {
+      broken = stdenv.isDarwin;
       description = "Lightweight UNIX I/O and POSIX binding for Lua";
       homepage = "https://www.gitano.org.uk/luxio/";
       license = licenses.mit;
@@ -103,15 +104,20 @@ in
     };
   };
 
+  nfd = callPackage ../development/lua-modules/nfd {
+    inherit (lib) maintainers;
+    inherit (pkgs.gnome) zenity;
+  };
+
   vicious = luaLib.toLuaModule( stdenv.mkDerivation rec {
     pname = "vicious";
-    version = "2.5.0";
+    version = "2.5.1";
 
     src = fetchFromGitHub {
-      owner = "Mic92";
+      owner = "vicious-widgets";
       repo = "vicious";
       rev = "v${version}";
-      sha256 = "0lb90334mz0my8ydsmnsnkki0xr58kinsg0hf9d6k4b0vjfi0r0a";
+      sha256 = "sha256-geu/g/dFAVxtY1BuJYpZoVtFS/oL66NFnqiLAnJELtI=";
     };
 
     buildInputs = [ lua ];
@@ -124,9 +130,9 @@ in
 
     meta = with lib; {
       description = "A modular widget library for the awesome window manager";
-      homepage    = "https://github.com/Mic92/vicious";
-      license     = licenses.gpl2;
-      maintainers = with maintainers; [ makefu mic92 ];
+      homepage    = "https://vicious.rtfd.io";
+      license     = licenses.gpl2Plus;
+      maintainers = with maintainers; [ makefu mic92 McSinyx ];
       platforms   = platforms.linux;
     };
   });

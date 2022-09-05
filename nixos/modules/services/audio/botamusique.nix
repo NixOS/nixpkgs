@@ -12,13 +12,13 @@ in
   meta.maintainers = with lib.maintainers; [ hexa ];
 
   options.services.botamusique = {
-    enable = mkEnableOption "botamusique, a bot to play audio streams on mumble";
+    enable = mkEnableOption (lib.mdDoc "botamusique, a bot to play audio streams on mumble");
 
     package = mkOption {
       type = types.package;
       default = pkgs.botamusique;
       defaultText = literalExpression "pkgs.botamusique";
-      description = "The botamusique package to use.";
+      description = lib.mdDoc "The botamusique package to use.";
     };
 
     settings = mkOption {
@@ -29,32 +29,32 @@ in
             type = types.str;
             default = "localhost";
             example = "mumble.example.com";
-            description = "Hostname of the mumble server to connect to.";
+            description = lib.mdDoc "Hostname of the mumble server to connect to.";
           };
 
           server.port = mkOption {
             type = types.port;
             default = 64738;
-            description = "Port of the mumble server to connect to.";
+            description = lib.mdDoc "Port of the mumble server to connect to.";
           };
 
           bot.username = mkOption {
             type = types.str;
             default = "botamusique";
-            description = "Name the bot should appear with.";
+            description = lib.mdDoc "Name the bot should appear with.";
           };
 
           bot.comment = mkOption {
             type = types.str;
             default = "Hi, I'm here to play radio, local music or youtube/soundcloud music. Have fun!";
-            description = "Comment displayed for the bot.";
+            description = lib.mdDoc "Comment displayed for the bot.";
           };
         };
       };
       default = {};
-      description = ''
-        Your <filename>configuration.ini</filename> as a Nix attribute set. Look up
-        possible options in the <link xlink:href="https://github.com/azlux/botamusique/blob/master/configuration.example.ini">configuration.example.ini</link>.
+      description = lib.mdDoc ''
+        Your {file}`configuration.ini` as a Nix attribute set. Look up
+        possible options in the [configuration.example.ini](https://github.com/azlux/botamusique/blob/master/configuration.example.ini).
       '';
     };
   };

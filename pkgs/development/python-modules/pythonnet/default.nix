@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchPypi
 , fetchNuGet
 , buildPythonPackage
@@ -90,6 +91,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = ".Net and Mono integration for Python";
     homepage = "https://pythonnet.github.io";
     license = licenses.mit;

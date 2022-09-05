@@ -1,0 +1,34 @@
+diff --git a/jellyfin.ruleset b/jellyfin.ruleset
+index 1c834de82..e8f091f71 100644
+--- a/jellyfin.ruleset
++++ b/jellyfin.ruleset
+@@ -54,6 +54,29 @@
+     <Rule Id="SA1602" Action="None" />
+     <!-- disable warning SA1633: The file header is missing or not located at the top of the file -->
+     <Rule Id="SA1633" Action="None" />
++
++    <!-- disable warning SA1028: Code should not contain trailing whitespace -->
++    <Rule Id="SA1028" Action="None" />
++    <!-- disable warning SA1507: Code should not contain multiple blank lines in a row -->
++    <Rule Id="SA1507" Action="None" />
++    <!-- disable warning SA1642: Constructor summary documentation should begin with standard text -->
++    <Rule Id="SA1642" Action="None" />
++    <!-- disable warning SA1505: An opening brace should not be followed by a blank line -->
++    <Rule Id="SA1505" Action="None" />
++    <!-- disable warning SA1508: A closing brace should not be preceded by a blank line -->
++    <Rule Id="SA1508" Action="None" />
++    <!-- disable warning SA1513: Closing brace should be followed by blank line -->
++    <Rule Id="SA1513" Action="None" />
++    <!-- disable warning SA1111: Closing parenthesis should be on line of last parameter -->
++    <Rule Id="SA1111" Action="None" />
++    <!-- disable warning SA1649: File name should match first type name -->
++    <Rule Id="SA1649" Action="None" />
++    <!-- disable warning SA1137: Elements should have the same indentation -->
++    <Rule Id="SA1137" Action="None" />
++    <!-- disable warning SA1005: Single line comment should begin with a space -->
++    <Rule Id="SA1005" Action="None" />
++    <!-- disable warning SA1208: Using directive for 'System.Text' should appear before directive for '...' -->
++    <Rule Id="SA1208" Action="None" />
+   </Rules>
+ 
+   <Rules AnalyzerId="Microsoft.CodeAnalysis.NetAnalyzers" RuleNamespace="Microsoft.Design">

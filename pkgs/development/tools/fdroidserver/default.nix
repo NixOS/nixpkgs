@@ -27,7 +27,7 @@ python.pkgs.buildPythonApplication rec {
     install -m 0755 gradlew-fdroid $out/bin
   '';
 
-  buildInputs = [ python.pkgs.Babel ];
+  buildInputs = [ python.pkgs.babel ];
 
   propagatedBuildInputs = with python.pkgs; [
     androguard

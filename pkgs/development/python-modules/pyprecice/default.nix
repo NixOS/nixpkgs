@@ -1,20 +1,40 @@
-{ lib, buildPythonPackage, fetchFromGitHub, precice, numpy, mpi4py, cython }:
+{ lib
+, buildPythonPackage
+, cython
+, fetchFromGitHub
+, mpi4py
+, numpy
+, precice
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "pyprecice";
-  version = "2.3.0.1";
+  version = "2.4.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "precice";
     repo = "python-bindings";
-    rev = "v${version}";
-    sha256 = "1yz96pif63ms797bzxbfrjba4mgz7cz5dqrqghn5sg0g1b9qxnn5";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Endy5oiC1OWdtZlVPUkIdkzoDTc1b5TaQ6VEUWq5iSg=";
   };
 
-  nativeBuildInputs = [ cython ];
-  propagatedBuildInputs = [ numpy mpi4py precice ];
+  nativeBuildInputs = [
+    cython
+  ];
 
-  doCheck = false; # Disable Test because everything depends on open mpi which requires network.
+  propagatedBuildInputs = [
+    numpy
+    mpi4py
+    precice
+  ];
+
+  # Disable Test because everything depends on open mpi which requires network
+  doCheck = false;
+
   # Do not use pythonImportsCheck because this will also initialize mpi which requires a network interface
 
   meta = with lib; {

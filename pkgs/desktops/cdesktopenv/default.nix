@@ -3,7 +3,7 @@
 , xorgproto, libX11, bison, ksh, perl, gnum4
 , libXinerama, libXt, libXext, libtirpc, motif, libXft, xbitmaps
 , libjpeg, libXmu, libXdmcp, libXScrnSaver, symlinkJoin, bdftopcf
-, ncompress, mkfontdir, tcl, libXaw, gcc, glibcLocales, gawk
+, ncompress, mkfontdir, tcl, libXaw, gcc, glibcLocales
 , autoPatchelfHook, libredirect, makeWrapper, xset, xrdb, fakeroot
 , rpcsvc-proto }:
 
@@ -43,11 +43,16 @@ in stdenv.mkDerivation rec {
     libjpeg libXmu libXdmcp libXScrnSaver tcl libXaw ksh
   ];
   nativeBuildInputs = [
-    bison ncompress gawk autoPatchelfHook makeWrapper fakeroot
+    bison ncompress autoPatchelfHook makeWrapper fakeroot
     rpcsvc-proto
   ];
   # build fails otherwise
   enableParallelBuilding = false;
+
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: raima/startup.o:/build/cde-2.3.2/lib/DtSearch/raima/dbtype.h:408: multiple definition of
+  #     `__SK__'; raima/alloc.o:/build/cde-2.3.2/lib/DtSearch/raima/dbtype.h:408: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   makeFlags = [
     "World"

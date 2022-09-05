@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "genimage";
-  version = "9";
+  version = "15";
 
   src = fetchurl {
     url = "https://public.pengutronix.de/software/genimage/genimage-${version}.tar.xz";
-    sha256 = "0y4h8x8lqxam8m90rdfq8cg5137kvilxr3d1qzddpx7nxpvmmwv9";
+    sha256 = "0gh05pkmqn9ck79mwvl2812ssh0fb0xbq72iwh7b641ki2zj9jlv";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -17,10 +17,11 @@ stdenv.mkDerivation rec {
     # documentation.
     docdir="$out/share/doc/genimage"
     mkdir -p "$docdir"
-    cp -v README "$docdir"
+    cp -v README.rst "$docdir"
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://git.pengutronix.de/cgit/genimage";
     description = "Generate filesystem images from directory trees";
     license = licenses.gpl2Plus;

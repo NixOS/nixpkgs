@@ -12,18 +12,18 @@ in
 
   options = {
     services.beanstalkd = {
-      enable = mkEnableOption "the Beanstalk work queue";
+      enable = mkEnableOption (lib.mdDoc "the Beanstalk work queue");
 
       listen = {
         port = mkOption {
           type = types.int;
-          description = "TCP port that will be used to accept client connections.";
+          description = lib.mdDoc "TCP port that will be used to accept client connections.";
           default = 11300;
         };
 
         address = mkOption {
           type = types.str;
-          description = "IP address to listen on.";
+          description = lib.mdDoc "IP address to listen on.";
           default = "127.0.0.1";
           example = "0.0.0.0";
         };
@@ -32,7 +32,7 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to open ports in the firewall for the server.";
+        description = lib.mdDoc "Whether to open ports in the firewall for the server.";
       };
     };
   };

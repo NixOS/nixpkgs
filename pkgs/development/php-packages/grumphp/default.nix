@@ -22,7 +22,6 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = versionOlder php.version "8.0";
     description = "A PHP code-quality tool";
     homepage = "https://github.com/phpro/grumphp";
     license = licenses.mit;

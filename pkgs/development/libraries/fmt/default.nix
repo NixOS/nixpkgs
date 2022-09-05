@@ -23,7 +23,6 @@ let
 
       cmakeFlags = [
         "-DBUILD_SHARED_LIBS=${if enableShared then "ON" else "OFF"}"
-        "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
       ];
 
       doCheck = true;
@@ -34,7 +33,7 @@ let
           fmt (formerly cppformat) is an open-source formatting library. It can be
           used as a fast and safe alternative to printf and IOStreams.
         '';
-        homepage = "http://fmtlib.net/";
+        homepage = "https://fmt.dev/";
         downloadPage = "https://github.com/fmtlib/fmt/";
         maintainers = [ maintainers.jdehaas ];
         license = licenses.mit;
@@ -49,7 +48,12 @@ in
   };
 
   fmt_8 = generic {
-    version = "8.0.1";
-    sha256 = "1mnvxqsan034d2jiqnw2yvkljl7lwvhakmj5bscwp1fpkn655bbw";
+    version = "8.1.1";
+    sha256 = "sha256-leb2800CwdZMJRWF5b1Y9ocK0jXpOX/nwo95icDf308=";
+  };
+
+  fmt_9 = generic {
+    version = "9.0.0";
+    sha256 = "sha256-nwlAzMkY1JdhLtes48VaNH9LS7GzqtPCwk2dZA/bGmQ=";
   };
 }

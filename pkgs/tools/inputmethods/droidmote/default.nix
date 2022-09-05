@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Control your computer from your couch";
     homepage = "https://www.videomap.it/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ atila ];
     platforms = lib.attrNames srcs;

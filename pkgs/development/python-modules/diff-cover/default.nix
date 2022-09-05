@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "diff-cover";
-  version = "6.5.0";
+  version = "6.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "diff_cover";
     inherit version;
-    sha256 = "sha256-N2O0/C75EGO6crUCFGUiJLLQqfMVRNVQRZb1xKhHzXs=";
+    hash = "sha256-jDuxOBLpZnvIP4x2BkAlEenC/nnWeG8SlSLnlpPuCWs=";
   };
 
   propagatedBuildInputs = [
@@ -50,10 +50,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests check for flake8
     "file_does_not_exist"
-    # AssertionError: assert '.c { color:...
-    "test_style_defs"
-    # uses pytest.approx in a boolean context, which is unsupported since pytest7
-    "test_percent_covered"
+    # Comparing console output doesn't work reliable
+    "console"
   ];
 
   pythonImportsCheck = [

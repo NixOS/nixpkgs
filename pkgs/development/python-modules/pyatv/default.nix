@@ -2,6 +2,7 @@
 , buildPythonPackage
 , aiohttp
 , bitarray
+, chacha20poly1305-reuseable
 , cryptography
 , deepdiff
 , fetchFromGitHub
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.10.0";
+  version = "0.10.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     owner = "postlund";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aYNBFtsnSg3PORq72U0PXPFCTVj2+8D2TS3nMau55t4=";
+    sha256 = "sha256-ng5KfW93p2/N2a6lnGbRJC6aWOQgTl0imBLdUIUlDic=";
   };
 
   postPatch = ''
@@ -45,6 +46,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     bitarray
+    chacha20poly1305-reuseable
     cryptography
     mediafile
     miniaudio
@@ -63,6 +65,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
+
   disabledTestPaths = [
     # Test doesn't work in the sandbox
     "tests/protocols/companion/test_companion_auth.py"
@@ -78,6 +84,6 @@ buildPythonPackage rec {
     description = "Python client library for the Apple TV";
     homepage = "https://github.com/postlund/pyatv";
     license = licenses.mit;
-    maintainers = with maintainers; [ elseym ];
+    maintainers = with maintainers; [ ];
   };
 }

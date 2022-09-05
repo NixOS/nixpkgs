@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "bugsnag";
-  version = "4.2.0";
+  version = "4.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NnTn4m9we40Ww2abP7mbz1CtdypZyN2GYBvj8zxhOpI=";
+    hash = "sha256-PT6XaKz3QFAEhCmS7jXKK7xxscNlpbhGpCKQIRuSt6U=";
   };
 
   propagatedBuildInputs = [

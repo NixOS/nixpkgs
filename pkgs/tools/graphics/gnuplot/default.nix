@@ -21,11 +21,11 @@ let
 in
 (if withQt then mkDerivation else stdenv.mkDerivation) rec {
   pname = "gnuplot";
-  version = "5.4.2";
+  version = "5.4.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-5Xx14TGBM5UdMqg7zcSv8X/tKHIsTnHyMFz8KuHK57o=";
+    sha256 = "sha256-NyMAt4Z/WzU4sl/F0Kx3NK9uP+DSArbbkm5DaZE/CQI=";
   };
 
   nativeBuildInputs = [ makeWrapper pkg-config texinfo ] ++ lib.optional withQt qttools;

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, python3Packages, libunistring
-, harfbuzz, fontconfig, pkg-config, ncurses, imagemagick, xsel
+, harfbuzz, fontconfig, pkg-config, ncurses, imagemagick
 , libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor
 , libxkbcommon, libXi, libXext, wayland-protocols, wayland
 , lcms2
@@ -21,21 +21,20 @@
 , bashInteractive
 , zsh
 , fish
-, fetchpatch
 , nixosTests
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.24.4";
+  version = "0.25.2";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "sha256-c6XM/xeGZ68srf8xQJA1iYCUR3kXNceTMxsZAnbFmug=";
+    sha256 = "sha256-o/vVz1lPfsgkzbYjYhIrScCAROmVdiPsNwjW/m5n7Us=";
   };
 
   buildInputs = [
@@ -58,7 +57,7 @@ buildPythonApplication rec {
   ] ++ lib.optionals stdenv.isLinux [
     fontconfig libunistring libcanberra libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
-    wayland-protocols wayland dbus
+    wayland-protocols wayland dbus libGL
   ];
 
   nativeBuildInputs = [
@@ -75,26 +74,18 @@ buildPythonApplication rec {
     libicns  # For the png2icns tool.
   ];
 
-  propagatedBuildInputs = lib.optional stdenv.isLinux libGL;
-
   outputs = [ "out" "terminfo" "shell_integration" ];
 
   patches = [
-    (fetchpatch {
-      name = "fix-zsh-completion-test-1.patch";
-      url = "https://github.com/kovidgoyal/kitty/commit/297592242c290a81ca4ba08802841f4c33a4de25.patch";
-      sha256 = "sha256-/V6y/4AaJsZvx1KS5UFZ+0zyAoZuLgbgFORZ1dX/1qE=";
-    })
-    (fetchpatch {
-      name = "fix-zsh-completion-test-2.patch";
-      url = "https://github.com/kovidgoyal/kitty/commit/d8ed42ae8e014d9abf9550a65ae203468f8bfa43.patch";
-      sha256 = "sha256-Azgzqf5atW999FVn9rSGKMyZLsI692dYXhJPx07GBO0=";
-    })
-    (fetchpatch {
-      name = "fix-build-with-non-framework-python-on-darwin.patch";
-      url = "https://github.com/kovidgoyal/kitty/commit/57cffc71b78244e6a9d49f4c9af24d1a88dbf537.patch";
-      sha256 = "sha256-1IGONSVCVo5SmLKw90eqxaI5Mwc764O1ur+aMsc7h94=";
-    })
+    # Needed on darwin
+
+    # Gets `test_ssh_shell_integration` to pass for `zsh` when `compinit` complains about
+    # permissions.
+    ./zsh-compinit.patch
+
+    # Skip `test_ssh_bootstrap_with_different_launchers` when launcher is `zsh` since it causes:
+    # OSError: master_fd is in error condition
+    ./disable-test_ssh_bootstrap_with_different_launchers.patch
   ];
 
   # Causes build failure due to warning
@@ -119,6 +110,7 @@ buildPythonApplication rec {
       --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
       --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
       --canberra-library='${libcanberra}/lib/libcanberra.so' \
+      --fontconfig-library='${fontconfig.lib}/lib/libfontconfig.so' \
       ${commonOptions}
     ''}
     runHook postBuild
@@ -133,6 +125,21 @@ buildPythonApplication rec {
     fish
   ];
 
+  # skip failing tests due to darwin sandbox
+  preCheck = if stdenv.isDarwin then ''
+    substituteInPlace kitty_tests/file_transmission.py \
+      --replace test_file_get dont_test_file_get \
+      --replace test_path_mapping_receive dont_test_path_mapping_receive
+    substituteInPlace kitty_tests/shell_integration.py \
+      --replace test_fish_integration dont_test_fish_integration
+    substituteInPlace kitty_tests/open_actions.py \
+      --replace test_parsing_of_open_actions dont_test_parsing_of_open_actions
+    substituteInPlace kitty_tests/ssh.py \
+      --replace test_ssh_connection_data dont_test_ssh_connection_data
+    substituteInPlace kitty_tests/fonts.py \
+      --replace 'class Rendering(BaseTest)' 'class Rendering'
+  '' else "";
+
   checkPhase =
     let buildBinPath =
       if stdenv.isDarwin
@@ -140,8 +147,13 @@ buildPythonApplication rec {
         else "linux-package/bin";
     in
     ''
+      runHook preCheck
+
       # Fontconfig error: Cannot load default config file: No such file: (null)
       export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
+
+      # Required for `test_ssh_shell_integration` to pass.
+      export TERM=kitty
 
       env PATH="${buildBinPath}:$PATH" ${python.interpreter} test.py
     '';
@@ -159,7 +171,7 @@ buildPythonApplication rec {
     '' else ''
     cp -r linux-package/{bin,share,lib} $out
     ''}
-    wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${lib.makeBinPath [ imagemagick xsel ncurses.dev ]}"
+    wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${lib.makeBinPath [ imagemagick ncurses.dev ]}"
 
     installShellCompletion --cmd kitty \
       --bash <("$out/bin/kitty" +complete setup bash) \
@@ -181,6 +193,18 @@ buildPythonApplication rec {
 
     runHook postInstall
   '';
+
+  # Patch shebangs that Nix can't automatically patch
+  preFixup =
+    let
+      pathComponent = if stdenv.isDarwin then "Applications/kitty.app/Contents/Resources" else "lib";
+    in
+    ''
+      substituteInPlace $out/${pathComponent}/kitty/shell-integration/ssh/askpass.py \
+        --replace '/usr/bin/env -S ' $out/bin/
+      substituteInPlace $shell_integration/ssh/askpass.py \
+        --replace '/usr/bin/env -S ' $out/bin/
+    '';
 
   passthru.tests.test = nixosTests.terminal-emulators.kitty;
 

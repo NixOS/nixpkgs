@@ -139,6 +139,7 @@ buildFHSUserEnv {
   meta = {
     description = "The Unigine Superposition GPU benchmarking tool";
     homepage = "https://benchmark.unigine.com/superposition";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.BarinovMaxim ];
     platforms = [ "x86_64-linux" ];

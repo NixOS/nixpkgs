@@ -1,50 +1,20 @@
-{ bcg729
-, bctoolbox
-, bcunit
+{ bctoolbox
 , belcard
 , belle-sip
 , belr
-, bzrtp
-, cairo
 , cmake
-, cyrus_sasl
 , doxygen
 , fetchFromGitLab
-, ffmpeg
-, gdk-pixbuf
-, glib
-, graphviz
-, gtk2
-, intltool
 , jsoncpp
-, libexosip
-, libmatroska
-, libnotify
-, libosip
-, libsoup
-, libupnp
-, libX11
 , libxml2
 , lime
-, makeWrapper
-, mbedtls
 , mediastreamer
-, openldap
-, ortp
-, pango
-, pkg-config
 , python3
-, readline
 , bc-soci
-, boost
-, speex
 , sqlite
 , lib
 , stdenv
-, udev
 , xercesc
-, xsd
-, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -62,69 +32,31 @@ stdenv.mkDerivation rec {
 
   patches = [ ./use-normal-jsoncpp.patch ];
 
-  # Do not build static libraries
-  cmakeFlags = [ "-DENABLE_STATIC=NO" ];
+  cmakeFlags = [
+    "-DENABLE_STATIC=NO" # Do not build static libraries
+    "-DENABLE_UNIT_TESTS=NO" # Do not build test executables
+  ];
 
-  # TODO: Not sure if all these inputs are actually needed. Most of them were
-  # defined when liblinphone and linphone-desktop weren't separated yet, so some
-  # of them might not be needed for liblinphone alone.
   buildInputs = [
-    (python3.withPackages (ps: [ ps.pystache ps.six ]))
-
     # Made by BC
-    bcg729
-    bctoolbox
     belcard
     belle-sip
-    belr
-    bzrtp
     lime
     mediastreamer
-    ortp
 
     # Vendored by BC
     bc-soci
 
-    # Vendored by BC but we use upstream, might cause problems
-    libmatroska
-
-    cairo
-    cyrus_sasl
-    ffmpeg
-    gdk-pixbuf
-    glib
-    gtk2
-    libX11
-    libexosip
-    libnotify
-    libosip
-    libsoup
-    libupnp
-    libxml2
-    mbedtls
-    openldap
-    pango
-    readline
-    boost
-    speex
-    sqlite
-    udev
-    xercesc
-    xsd
-    zlib
     jsoncpp
+    libxml2
+    (python3.withPackages (ps: [ ps.pystache ps.six ]))
+    sqlite
+    xercesc
   ];
 
   nativeBuildInputs = [
-    # Made by BC
-    bcunit
-
     cmake
     doxygen
-    graphviz
-    intltool
-    makeWrapper
-    pkg-config
   ];
 
   strictDeps = true;

@@ -15,6 +15,7 @@
 , enableNumpy ? false
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
 , patches ? []
+, boostBuildPatches ? []
 , useMpi ? false
 , mpi
 , extraB2Args ? []
@@ -117,10 +118,7 @@ stdenv.mkDerivation {
   patchFlags = [];
 
   patches = patches
-  ++ optional stdenv.isDarwin (
-    if version == "1.55.0"
-    then ./darwin-1.55-no-system-python.patch
-    else ./darwin-no-system-python.patch)
+  ++ optional stdenv.isDarwin ./darwin-no-system-python.patch
   # Fix boost-context segmentation faults on ppc64 due to ABI violation
   ++ optional (versionAtLeast version "1.61" &&
                versionOlder version "1.71") (fetchpatch {
@@ -168,6 +166,10 @@ stdenv.mkDerivation {
       stdenv.hostPlatform.isMips64n32 ||
       # the patch above does not apply cleanly to pre-1.65 boost
       (stdenv.hostPlatform.isMips64n64 && (versionOlder version "1.65"));
+  };
+
+  passthru = {
+    inherit boostBuildPatches;
   };
 
   preConfigure = optionalString useMpi ''

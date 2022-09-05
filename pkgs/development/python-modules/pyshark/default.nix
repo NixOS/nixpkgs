@@ -1,27 +1,40 @@
-{ lib, buildPythonPackage, fetchFromGitHub, py, lxml, pytestCheckHook, wireshark-cli }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, appdirs
+, lxml
+, packaging
+, py
+, pytestCheckHook
+, pythonOlder
+, wireshark-cli
+}:
 
 buildPythonPackage rec {
   pname = "pyshark";
-  version = "0.4.3";
+  version = "0.5.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "KimiNewt";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-cveiFkkSplfQPgUEVWyV40KKHCtKJZsfvdV8JmEUmE4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-byll2GWY2841AAf8Xh+KfaCOtMGVKabTsLCe3gCdZ1o=";
   };
 
+  sourceRoot = "${src.name}/src";
+
   propagatedBuildInputs = [
+    appdirs
     py
     lxml
+    packaging
   ];
 
-  preConfigure = ''
-    cd src
-  '';
-
   preCheck = ''
-    cd ..
+    export HOME=$(mktemp -d)
   '';
 
   checkInputs = [
@@ -29,12 +42,18 @@ buildPythonPackage rec {
     wireshark-cli
   ];
 
-  pythonImportsCheck = [ "pyshark" ];
+  pythonImportsCheck = [
+    "pyshark"
+  ];
+
+  pytestFlagsArray = [
+    "../tests/"
+  ];
 
   meta = with lib; {
-    description = "Python wrapper for tshark, allowing python packet parsing using wireshark dissectors";
+    description = "Python wrapper for tshark, allowing Python packet parsing using Wireshark dissectors";
     homepage = "https://github.com/KimiNewt/pyshark/";
     license = licenses.mit;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
   };
 }

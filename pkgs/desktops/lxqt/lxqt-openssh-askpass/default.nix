@@ -46,6 +46,6 @@ mkDerivation rec {
     description = "GUI to query passwords on behalf of SSH agents";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

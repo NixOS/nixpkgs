@@ -17,7 +17,7 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ reason ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     printbox-text
   ];
 

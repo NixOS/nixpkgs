@@ -18,4 +18,4 @@ $ ver=4.7
 $ git log --reverse --patch v$ver..remotes/tc-cgroup/cgroup-v2-cpu-v$ver > ../nixpkgs/pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/$ver.patch
 ```
 
-[1]: https://git.kernel.org/cgit/linux/kernel/git/tj/cgroup.git/tree/Documentation/cgroup-v2-cpu.txt?h=cgroup-v2-cpu
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/tree/Documentation/cgroup-v2-cpu.txt?h=cgroup-v2-cpu

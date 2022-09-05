@@ -123,7 +123,8 @@ rec {
    */
   doDistribute = overrideCabal (drv: {
     # lib.platforms.all is the default value for platforms (since GHC can cross-compile)
-    hydraPlatforms = drv.platforms or lib.platforms.all;
+    hydraPlatforms = lib.subtractLists (drv.badPlatforms or [])
+      (drv.platforms or lib.platforms.all);
   });
   /* dontDistribute disables the distribution of binaries for the package
      via hydra.
@@ -299,6 +300,9 @@ rec {
      directly. The effect is that the package is built as if it were published
      on hackage. This can be used as a test for the source distribution,
      assuming the build fails when packaging mistakes are in the cabal file.
+
+     A faster implementation using `cabal-install` is available as
+     `buildFromCabalSdist` in your Haskell package set.
    */
   buildFromSdist = pkg: overrideCabal (drv: {
     src = "${sdistTarball pkg}/${pkg.pname}-${pkg.version}.tar.gz";

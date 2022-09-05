@@ -1,4 +1,4 @@
-{ appimageTools, lib, fetchurl, gtk3, gsettings-desktop-schemas, version, sha256 }:
+{ appimageTools, lib, fetchurl, version, sha256 }:
 
 let
   pname = "losslesscut";
@@ -21,7 +21,6 @@ in appimageTools.wrapType2 {
 
   profile = ''
     export LC_ALL=C.UTF-8
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
   '';
 
   extraPkgs = ps: appimageTools.defaultFhsEnvArgs.multiPkgs ps;

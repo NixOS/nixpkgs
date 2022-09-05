@@ -29,14 +29,12 @@
 , libnotify ? null
 , enableUI ? true
 , withWayland ? false
-, libxkbcommon ? null
-, wayland ? null
+, libxkbcommon
+, wayland
 , buildPackages
 , runtimeShell
 , nixosTests
 }:
-
-assert withWayland -> wayland != null && libxkbcommon != null;
 
 with lib;
 
@@ -90,6 +88,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs --build data/dconf/make-dconf-override-db.sh
     cp ${buildPackages.gtk-doc}/share/gtk-doc/data/gtk-doc.make .
+    substituteInPlace bus/services/org.freedesktop.IBus.session.GNOME.service.in --replace "ExecStart=sh" "ExecStart=${runtimeShell}"
+    substituteInPlace bus/services/org.freedesktop.IBus.session.generic.service.in --replace "ExecStart=sh" "ExecStart=${runtimeShell}"
   '';
 
   preAutoreconf = "touch ChangeLog";

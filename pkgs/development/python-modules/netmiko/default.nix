@@ -3,16 +3,15 @@
 
 buildPythonPackage rec {
   pname = "netmiko";
-  version = "4.0.0";
+  version = "4.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fVhBkiO1JpqMIFl32xlwSjeCd7aObocXPAr069fKdmc=";
+    sha256 = "sha256-9e3iooZw09/TRwBhRoZl+A+bSQbtIOaw+02eHJvmevw=";
   };
 
   buildInputs = [ setuptools ];
-  propagatedBuildInputs =
-    [ paramiko scp tenacity textfsm ntc-templates pyserial ];
+  propagatedBuildInputs = [ paramiko scp tenacity pyyaml textfsm ntc-templates pyserial ];
 
   # tests require closed-source pyats and genie packages
   doCheck = false;

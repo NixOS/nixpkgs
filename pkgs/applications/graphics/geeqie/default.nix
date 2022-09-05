@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoconf, automake, gettext, intltool
 , gtk3, lcms2, exiv2, libchamplain, clutter-gtk, ffmpegthumbnailer, fbida
-, wrapGAppsHook, fetchpatch, bash, doxygen
+, wrapGAppsHook, fetchpatch, doxygen
 , nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "geeqie";
-  version = "1.7.3";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "BestImageViewer";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs =
     [ pkg-config autoconf automake gettext intltool
-      wrapGAppsHook bash doxygen
+      wrapGAppsHook doxygen
     ];
 
   buildInputs = [

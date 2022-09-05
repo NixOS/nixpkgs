@@ -66,6 +66,6 @@ mkDerivation rec {
     description = "Various packaging tools and scripts for LXQt applications";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

@@ -52,6 +52,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Medical imaging software with 2D, 3D and 4D capabilities";
     homepage = "https://www.aliza-dicom-viewer.com";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ mounium ];
     platforms = platforms.linux;

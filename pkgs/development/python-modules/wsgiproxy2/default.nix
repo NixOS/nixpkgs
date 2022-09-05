@@ -1,30 +1,39 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, six
+, fetchFromGitHub
 , webob
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "WSGIProxy2";
-  version = "0.4.2";
+  pname = "wsgiproxy2";
+  version = "0.5.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "13kf9bdxrc95y9vriaz0viry3ah11nz4rlrykcfvb8nlqpx3dcm4";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "gawel";
+    repo = "WSGIProxy2";
+    rev = version;
+    hash = "sha256-ouofw3cBQzBwSh3Pdtdl7KI2pg/T/z3qoh8zoeiKiSs=";
   };
 
-  propagatedBuildInputs = [ six webob ];
+  propagatedBuildInputs = [
+    webob
+  ];
 
-  # circular dep on webtest
+  # Circular dependency on webtest
   doCheck = false;
 
+  pythonImportsCheck = [
+    "wsgiproxy"
+  ];
+
   meta = with lib; {
-    homepage = "http://pythonpaste.org/wsgiproxy/";
     description = "HTTP proxying tools for WSGI apps";
+    homepage = "https://wsgiproxy2.readthedocs.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }

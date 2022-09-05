@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/ram02z/tree-sitter-fish",
-  "rev": "d482d70ea8e191c05b2c1b613ed6fdff30a14da0",
-  "date": "2022-03-14T15:15:13+00:00",
-  "path": "/nix/store/5ajcf2hl1hph7iky6lwp5vh7a49k587s-tree-sitter-fish",
-  "sha256": "0idnm9lrvj1jhrvrgcddppkc09hr7inciz6k02d0nnxv8pqaw3w6",
+  "rev": "84436cf24c2b3176bfbb220922a0fdbd0141e406",
+  "date": "2022-08-21T20:31:28+01:00",
+  "path": "/nix/store/mf86jwsgjr0jdsdp88haqlqhfnpwvsh9-tree-sitter-fish",
+  "sha256": "12s3db2mg9qa8l1i4a5h59kd7kl5j83wyl5kzq7j2k56xmvq56x0",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

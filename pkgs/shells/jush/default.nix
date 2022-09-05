@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1azvghrh31gawd798a254ml4id642qvbva64zzg30pjszh1087n8";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ editline ];

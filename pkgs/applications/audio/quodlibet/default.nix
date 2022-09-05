@@ -9,11 +9,11 @@
 let optionals = lib.optionals; in
 python3.pkgs.buildPythonApplication rec {
   pname = "quodlibet${tag}";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchurl {
     url = "https://github.com/quodlibet/quodlibet/releases/download/release-${version}/quodlibet-${version}.tar.gz";
-    sha256 = "sha256-oDMY0nZ+SVlVF2PQqH+tl3OHr3EmCP5XJxQXaiS782c=";
+    sha256 = "sha256-MBYVgp9lLLr+2zVTkjcWKli8HucaVn0kn3eJ2SaCRbw=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook gettext ];

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "medfile";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchurl {
     url = "http://files.salome-platform.org/Salome/other/med-${version}.tar.gz";
-    sha256 = "1khzclkrd1yn9mz3g14ndgpsbj8j50v8dsjarcj6kkn9zgbbazc4";
+    sha256 = "sha256-3CtdVOvwZm4/8ul0BB0qsNqQYGEyNTcCOrFl1XM4ndA=";
   };
 
   patches = [

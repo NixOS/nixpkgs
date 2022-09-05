@@ -3,9 +3,9 @@
 , callPackage
 , fetchFromGitHub
 , flit-core
-, python
+, unittestCheckHook
 
-# important downstream dependencies
+  # important downstream dependencies
 , flit
 , black
 , mypy
@@ -26,13 +26,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ flit-core ];
 
-  pythonImportsCheck = [ "tomli" ];
+  checkInputs = [ unittestCheckHook ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest discover
-    runHook postCheck
-  '';
+  pythonImportsCheck = [ "tomli" ];
 
   passthru.tests = {
     # test downstream dependencies

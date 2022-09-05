@@ -16,6 +16,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/thorkill/eresi/commit/a79406344cc21d594d27fa5ec5922abe9f7475e7.patch";
       sha256 = "1mjjc6hj7r06iarvai7prcdvjk9g0k5vwrmkwcm7b8ivd5xzxp2z";
     })
+
+    # Pull patch pending upstream inclusion for -fno-common toolchains:
+    #   https://github.com/thorkill/eresi/pull/166
+    (fetchpatch {
+      url = "https://github.com/thorkill/eresi/commit/bc5b9a75c326f277e5f89e01a3b8f7f0519a99f6.patch";
+      sha256 = "0lqwrnkkhhd3vi1r8ngvziyqkk09h98h93rrs3ndqi048a898ys1";
+    })
   ];
 
   postPatch = ''

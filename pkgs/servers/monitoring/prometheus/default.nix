@@ -10,27 +10,31 @@
 , enableAzure ? true
 , enableConsul ? true
 , enableDigitalOcean ? true
+, enableDNS ? true
 , enableEureka ? true
 , enableGCE ? true
 , enableHetzner ? true
+, enableIONOS ? true
 , enableKubernetes ? true
 , enableLinode ? true
 , enableMarathon ? true
 , enableMoby ? true
+, enableNomad ? true
 , enableOpenstack ? true
 , enablePuppetDB ? true
 , enableScaleway ? true
 , enableTriton ? true
 , enableUyuni ? true
+, enableVultr ? true
 , enableXDS ? true
 , enableZookeeper ? true
 }:
 
 let
-  version = "2.35.0";
+  version = "2.38.0";
   webUiStatic = fetchurl {
     url = "https://github.com/prometheus/prometheus/releases/download/v${version}/prometheus-web-ui-${version}.tar.gz";
-    sha256 = "sha256-66zWOjFTYwmspiKeklt3NAAT1uJJrZqeyQvWWsCN9fQ=";
+    sha256 = "sha256-0CcWHJYso9iI1isCa2ZKYtNpfqcUt5sj23xkufxv6rw=";
   };
 in
 buildGoModule rec {
@@ -41,10 +45,10 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "sha256-h0uBs3xMKpRH3A1VG5xrhjXVAT7GL5L3UZWb3HJ2Fz4=";
+    sha256 = "sha256-5s2Q3xjublHAQSB6MaxZTMOPS0T6/Bn5Ki8NCkBYM2E=";
   };
 
-  vendorSha256 = "sha256-0I6hmjhdfB41rWOQ9FM9CMq5w5437ka/jLuFXcBQBlM=";
+  vendorSha256 = "sha256-wfHdfW4D4ESbglUUjAl5a93aJqLuQkqKHMChHGnCmCg=";
 
   excludedPackages = [ "documentation/prometheus-mixin" ];
 
@@ -55,6 +59,7 @@ buildGoModule rec {
 
     # Enable only select service discovery to shrink binaries.
     (
+      true  # prevent bash syntax error when all plugins are disabled
     ${lib.optionalString (enableAWS)
       "echo - github.com/prometheus/prometheus/discovery/aws"}
     ${lib.optionalString (enableAzure)
@@ -63,12 +68,16 @@ buildGoModule rec {
       "echo - github.com/prometheus/prometheus/discovery/consul"}
     ${lib.optionalString (enableDigitalOcean)
       "echo - github.com/prometheus/prometheus/discovery/digitalocean"}
+    ${lib.optionalString (enableDNS)
+      "echo - github.com/prometheus/prometheus/discovery/dns"}
     ${lib.optionalString (enableEureka)
       "echo - github.com/prometheus/prometheus/discovery/eureka"}
     ${lib.optionalString (enableGCE)
       "echo - github.com/prometheus/prometheus/discovery/gce"}
     ${lib.optionalString (enableHetzner)
       "echo - github.com/prometheus/prometheus/discovery/hetzner"}
+    ${lib.optionalString (enableIONOS)
+      "echo - github.com/prometheus/prometheus/discovery/ionos"}
     ${lib.optionalString (enableKubernetes)
       "echo - github.com/prometheus/prometheus/discovery/kubernetes"}
     ${lib.optionalString (enableLinode)
@@ -77,6 +86,8 @@ buildGoModule rec {
       "echo - github.com/prometheus/prometheus/discovery/marathon"}
     ${lib.optionalString (enableMoby)
       "echo - github.com/prometheus/prometheus/discovery/moby"}
+    ${lib.optionalString (enableNomad)
+      "echo - github.com/prometheus/prometheus/discovery/nomad"}
     ${lib.optionalString (enableOpenstack)
       "echo - github.com/prometheus/prometheus/discovery/openstack"}
     ${lib.optionalString (enablePuppetDB)
@@ -87,6 +98,8 @@ buildGoModule rec {
       "echo - github.com/prometheus/prometheus/discovery/triton"}
     ${lib.optionalString (enableUyuni)
       "echo - github.com/prometheus/prometheus/discovery/uyuni"}
+    ${lib.optionalString (enableVultr)
+      "echo - github.com/prometheus/prometheus/discovery/vultr"}
     ${lib.optionalString (enableXDS)
       "echo - github.com/prometheus/prometheus/discovery/xds"}
     ${lib.optionalString (enableZookeeper)
@@ -95,7 +108,7 @@ buildGoModule rec {
   '';
 
   preBuild = ''
-    if [[ -d vendor ]]; then make -o assets assets-compress plugins; fi
+    if [[ -d vendor ]]; then GOARCH= make -o assets assets-compress plugins; fi
   '';
 
   tags = [ "builtinassets" ];

@@ -102,13 +102,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "cmus";
-  version = "2.9.1";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner  = "cmus";
     repo   = "cmus";
     rev    = "v${version}";
-    sha256 = "sha256-HEiEnEWf/MzhPO19VKTLYzhylpEvyzy1Jxs6EW2NU34=";
+    sha256 = "sha256-Ha0bIh3SYMhA28YXQ//Loaz9J1lTJAzjTx8eK3AqUjM=";
   };
 
   patches = [ ./option-debugging.patch ];

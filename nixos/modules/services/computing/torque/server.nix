@@ -11,7 +11,7 @@ in
 
     services.torque.server = {
 
-      enable = mkEnableOption "torque server";
+      enable = mkEnableOption (lib.mdDoc "torque server");
 
     };
 

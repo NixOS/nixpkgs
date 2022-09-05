@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Folding@home viewer";
     homepage = "https://foldingathome.org/";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.zimbatm ];
     platforms = [ "x86_64-linux" ];

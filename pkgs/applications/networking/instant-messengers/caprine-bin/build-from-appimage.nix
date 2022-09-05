@@ -1,8 +1,6 @@
 { lib
 , fetchurl
 , appimageTools
-, gtk3
-, gsettings-desktop-schemas
 , xorg
 , pname
 , version
@@ -11,26 +9,28 @@
 }:
 
 let
-  name = "${pname}-${version}";
   src = fetchurl {
     url = "https://github.com/sindresorhus/caprine/releases/download/v${version}/Caprine-${version}.AppImage";
     name = "Caprine-${version}.AppImage";
     inherit sha256;
   };
-  extracted = appimageTools.extractType2 { inherit name src; };
+  extracted = appimageTools.extractType2 { inherit pname version src; };
 in
 (appimageTools.wrapType2 {
-  inherit name src;
+  inherit pname version src;
+
+  passthru = {
+    inherit pname version src;
+  };
 
   profile = ''
     export LC_ALL=C.UTF-8
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
   '';
 
   extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs;
 
   extraInstallCommands = ''
-    mv $out/bin/{${name},caprine}
+    mv $out/bin/{${pname}-${version},caprine}
 
     mkdir -p $out/share
     "${xorg.lndir}/bin/lndir" -silent "${extracted}/usr/share" "$out/share"
@@ -45,6 +45,4 @@ in
     platforms = [ "x86_64-linux" ];
     mainProgram = "caprine";
   };
-}) // {
-  inherit pname version;
-}
+})

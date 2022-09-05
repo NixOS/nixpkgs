@@ -20,24 +20,15 @@
 , withYubikey ? false, libyubikey
 }:
 
-assert withSqlite -> sqlite != null;
-assert withLdap -> openldap != null;
-assert withPcap -> libpcap != null;
-assert withCap -> libcap != null;
-assert withMemcached -> libmemcached != null;
-assert withRedis -> hiredis != null;
-assert withMysql -> libmysqlclient != null;
-assert withYubikey -> libyubikey != null;
-assert withCollectd -> collectd != null;
-assert withRest -> curl != null && withJson;
+assert withRest -> withJson;
 
 stdenv.mkDerivation rec {
   pname = "freeradius";
-  version = "3.0.25";
+  version = "3.2.0";
 
   src = fetchurl {
     url = "ftp://ftp.freeradius.org/pub/freeradius/freeradius-server-${version}.tar.gz";
-    hash = "sha256-SIOmi7PO5GAlNZqXwWkc5lXour/W3DwCHQDhCaL/TBA=";
+    hash = "sha256-QtGgoC7CrxRyjcdoySHUeAC8gwP0FyIetvMvBCNbBDE=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -86,7 +77,7 @@ stdenv.mkDerivation rec {
     homepage = "https://freeradius.org/";
     description = "A modular, high performance free RADIUS suite";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ sheenobu willibutz fpletz lheckemann elseym ];
+    maintainers = with maintainers; [ sheenobu willibutz lheckemann ];
     platforms = with platforms; linux;
   };
 }

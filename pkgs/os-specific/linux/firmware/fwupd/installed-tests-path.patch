@@ -1,5 +1,5 @@
 diff --git a/data/installed-tests/meson.build b/data/installed-tests/meson.build
-index b8ec916f0..38209b363 100644
+index b8ec916f..38209b36 100644
 --- a/data/installed-tests/meson.build
 +++ b/data/installed-tests/meson.build
 @@ -83,5 +83,5 @@ configure_file(
@@ -10,10 +10,10 @@ index b8ec916f0..38209b363 100644
 +  install_dir: join_paths(get_option('installed_test_prefix'), 'etc', 'fwupd', 'remotes.d'),
  )
 diff --git a/meson.build b/meson.build
-index 32fe6e408..b35d741e0 100644
+index b91dd037..d7e20b18 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -183,8 +183,8 @@ else
+@@ -188,8 +188,8 @@ else
    datadir = join_paths(prefix, get_option('datadir'))
    sysconfdir = join_paths(prefix, get_option('sysconfdir'))
    localstatedir = join_paths(prefix, get_option('localstatedir'))
@@ -21,10 +21,10 @@ index 32fe6e408..b35d741e0 100644
 -  installed_test_datadir = join_paths(datadir, 'installed-tests', meson.project_name())
 +  installed_test_bindir = join_paths(get_option('installed_test_prefix'), 'libexec', 'installed-tests', meson.project_name())
 +  installed_test_datadir = join_paths(get_option('installed_test_prefix'), 'share', 'installed-tests', meson.project_name())
+   daemon_dir = join_paths(libexecdir, 'fwupd')
  endif
  mandir = join_paths(prefix, get_option('mandir'))
- localedir = join_paths(prefix, get_option('localedir'))
-@@ -484,6 +484,7 @@ gnome = import('gnome')
+@@ -492,6 +492,7 @@ gnome = import('gnome')
  i18n = import('i18n')
  
  conf.set_quoted('FWUPD_PREFIX', prefix)
@@ -33,19 +33,19 @@ index 32fe6e408..b35d741e0 100644
  conf.set_quoted('FWUPD_LIBDIR', libdir)
  conf.set_quoted('FWUPD_LIBEXECDIR', libexecdir)
 diff --git a/meson_options.txt b/meson_options.txt
-index 0a0e2853..5f68d78b 100644
+index d00038db..be1c45b4 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -25,6 +26,7 @@ option('plugin_coreboot', type : 'boolean', value : true, description : 'enable
- option('systemd', type : 'boolean', value : true, description : 'enable systemd support')
+@@ -56,6 +56,7 @@ option('systemd', type : 'feature', description : 'systemd support', deprecated:
+ option('systemd_unit_user', type : 'string', description : 'User account to use for fwupd-refresh.service (empty for DynamicUser)')
  option('systemd_root_prefix', type: 'string', value: '', description: 'Directory to base systemd’s installation directories on')
- option('elogind', type : 'boolean', value : false, description : 'enable elogind support')
+ option('elogind', type : 'feature', description : 'elogind support', deprecated: {'true': 'enabled', 'false': 'disabled'})
 +option('installed_test_prefix', type: 'string', description: 'Prefix for installed tests')
  option('tests', type : 'boolean', value : true, description : 'enable tests')
- option('tpm', type : 'boolean', value : true, description : 'enable TPM support')
- option('udevdir', type: 'string', value: '', description: 'Directory for udev rules')
+ option('soup_session_compat', type : 'boolean', value : true, description : 'enable SoupSession runtime compatibility support')
+ option('curl', type : 'feature', description : 'libcurl support', deprecated: {'true': 'enabled', 'false': 'disabled'})
 diff --git a/plugins/redfish/fu-self-test.c b/plugins/redfish/fu-self-test.c
-index c507fabc8..0cddc3248 100644
+index 4d19e560..91cfaa61 100644
 --- a/plugins/redfish/fu-self-test.c
 +++ b/plugins/redfish/fu-self-test.c
 @@ -27,7 +27,7 @@ fu_test_is_installed_test(void)

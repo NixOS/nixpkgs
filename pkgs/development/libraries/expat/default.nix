@@ -16,15 +16,19 @@
 
 stdenv.mkDerivation rec {
   pname = "expat";
-  version = "2.4.7";
+  version = "2.4.8";
 
   src = fetchurl {
     url = "https://github.com/libexpat/libexpat/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/${pname}-${version}.tar.xz";
-    sha256 = "0zbss0dssn17mjmvk17qfi5cmvm0lcyzs62cwvqr219hhl864xcq";
+    sha256 = "sha256-95uPkEt0nj4NIK/q3s+CScVbLjLU67CJrjeN9HncryU=";
   };
+
+  strictDeps = true;
 
   outputs = [ "out" "dev" ]; # TODO: fix referrers
   outputBin = "dev";
+
+  enableParallelBuilding = true;
 
   configureFlags = lib.optional stdenv.isFreeBSD "--with-pic";
 

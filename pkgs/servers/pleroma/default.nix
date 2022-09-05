@@ -1,50 +1,21 @@
 { lib, beamPackages
 , fetchFromGitHub, fetchFromGitLab
-, file, cmake, bash
+, file, cmake
 , nixosTests, writeText
-, cookieFile ? null
 , ...
 }:
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-RcqqNNNCR4cxETUCyjChkpq+cQ1QzNOHHzdqBLtOc6g=";
+    sha256 = "sha256-x8j/2Eot/EEHsedgZntB5MPxlYMNDlFyZtmiMdhcS7U=";
   };
-
-  preFixup = if (cookieFile != null) then ''
-    # There's no way to use a subprocess to cat the content of the
-    # file cookie using wrapProgram: it gets escaped (by design) with
-    # a pair of backticks :(
-    # We have to come up with our own custom wrapper to do this.
-    function wrapWithCookie () {
-        local hidden
-        hidden="$(dirname "$1")/.$(basename "$1")"-wrapped
-        while [ -e "$hidden" ]; do
-            hidden="''${hidden}_"
-        done
-        mv "$1" "''${hidden}"
-
-        cat > "$1" << EOF
-    #!${bash}/bin/bash
-    export RELEASE_COOKIE="\$(cat "${cookieFile}")"
-    exec -a "\$0" "''${hidden}" "\$@"
-    EOF
-        chmod +x "$1"
-    }
-
-    for f in "$out"/bin/*; do
-        if [[ -x "$f" ]]; then
-            wrapWithCookie "$f"
-        fi
-    done
-  '' else "";
 
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
@@ -233,7 +204,7 @@ beamPackages.mixRelease rec {
     description = "ActivityPub microblogging server";
     homepage = "https://git.pleroma.social/pleroma/pleroma";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ petabyteboy ninjatrappeur yuka kloenk ];
+    maintainers = with maintainers; [ ninjatrappeur yuka kloenk ];
     platforms = platforms.unix;
   };
 }

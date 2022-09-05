@@ -1,16 +1,12 @@
-{ stdenv, lib, callPackage, fetchurl, fetchpatch, nixosTests }:
-
-let
-  common = opts: callPackage (import ./common.nix opts) {};
-in
+{ stdenv, lib, callPackage, fetchurl, fetchpatch, nixosTests, buildMozillaMach }:
 
 rec {
-  firefox = common rec {
+  firefox = buildMozillaMach rec {
     pname = "firefox";
-    version = "99.0.1";
+    version = "104.0.1";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "0006b773ef1057a6e0b959d4f39849ad4a79272b38d565da98062b9aaf0effd2b729349c1f9fa10fccf7d2462d2c536b02c167ae6ad4556d6e519c6d22c25a7f";
+      sha512 = "ad80fccfde34a201fc4b596c2a0a1d959abc132946dde0865b6da624a07fd9c57381bc268c394a17f295e0e183d122b2cf5c5126e8a0bc99684affaa6212e246";
     };
 
     meta = {
@@ -30,12 +26,40 @@ rec {
     };
   };
 
-  firefox-esr-91 = common rec {
-    pname = "firefox-esr";
-    version = "91.8.0esr";
+  firefox-esr-102 = buildMozillaMach rec {
+    pname = "firefox-esr-102";
+    version = "102.2.0esr";
+    applicationName = "Mozilla Firefox ESR";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "edea2c7d4d3d0322091b20b623019ef041090d9f89f33c8e3140f66a54624261f278257393db70d2038154de8ee02da0bee6ecf85c281f3558338da71fc173c3";
+      sha512 = "06d753867ccfe1b2c79148cc60bc816b47a2abfa98219808868e9028bef1763d982ef7012698d06b8959cce79163d7926baf5f9d5ca9daa18c51fbf0efc59993";
+    };
+
+    meta = {
+      description = "A web browser built from Firefox Extended Support Release source tree";
+      homepage = "http://www.mozilla.com/en-US/firefox/";
+      maintainers = with lib.maintainers; [ hexa ];
+      platforms = lib.platforms.unix;
+      badPlatforms = lib.platforms.darwin;
+      broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
+                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
+      license = lib.licenses.mpl20;
+    };
+    tests = [ nixosTests.firefox-esr-102 ];
+    updateScript = callPackage ./update.nix {
+      attrPath = "firefox-esr-102-unwrapped";
+      versionPrefix = "102";
+      versionSuffix = "esr";
+    };
+  };
+
+  firefox-esr-91 = buildMozillaMach rec {
+    pname = "firefox-esr-91";
+    version = "91.13.0esr";
+    applicationName = "Mozilla Firefox ESR";
+    src = fetchurl {
+      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
+      sha512 = "38b4cc52de21e76d6061e6ba175e1cbfd888a16070aa951f5a44283f2db9d7e94f2504621f0da78feac6e71491a6d0e7038f63dd0ae112dcad700eb02e9aa516";
     };
 
     meta = {
@@ -51,33 +75,8 @@ rec {
     tests = [ nixosTests.firefox-esr-91 ];
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-91-unwrapped";
+      versionPrefix = "91";
       versionSuffix = "esr";
     };
-  };
-
-  librewolf =
-  let
-    librewolf-src = callPackage ./librewolf { };
-  in
-  (common rec {
-    pname = "librewolf";
-    binaryName = "librewolf";
-    version = librewolf-src.packageVersion;
-    src = librewolf-src.firefox;
-    inherit (librewolf-src) extraConfigureFlags extraPostPatch extraPassthru;
-
-    meta = {
-      description = "A fork of Firefox, focused on privacy, security and freedom";
-      homepage = "https://librewolf.net/";
-      maintainers = with lib.maintainers; [ squalus ];
-      inherit (firefox.meta) platforms badPlatforms broken maxSilent license;
-    };
-    updateScript = callPackage ./librewolf/update.nix {
-      attrPath = "librewolf-unwrapped";
-    };
-  }).override {
-    crashreporterSupport = false;
-    enableOfficialBranding = false;
-    pgoSupport = false; # Profiling gets stuck and doesn't terminate.
   };
 }

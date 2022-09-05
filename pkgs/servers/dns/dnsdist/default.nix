@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dnsdist";
-  version = "1.7.0";
+  version = "1.7.2";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/dnsdist-${version}.tar.bz2";
-    sha256 = "sha256-eMxyywzPf7Xz8vrgnHntplpSVjdNoJu1Qbc16mho/GQ=";
+    hash = "sha256-UkvSuwWqLgWYKpca6FEPKBIwOrRIajhhtiIS0GsRJ80=";
   };
 
   patches = [

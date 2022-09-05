@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "DESTDIR=$(out)" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "http://www.drpetter.se/project_sfxr.html";
     description = "A videogame sound effect generator";
     license = licenses.mit;

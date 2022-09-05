@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monero-cli";
-  version = "0.17.3.0";
+  version = "0.18.1.0";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    sha256 = "1spsf7m3x4psp9s7mivr6x4886jnbq4i8ll2dl8bv5bsdhcd3pjm";
+    sha256 = "sha256-xniGiGqZpL1b6alnCxa2MNzuDQxPgMdNjqifOC8h0qM=";
     fetchSubmodules = true;
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # remove vendored libraries
-    rm -r external/{miniupnp,randomx,rapidjson,unbound}
+    rm -r external/{miniupnp,randomx,rapidjson}
     # export patched source for monero-gui
     cp -r . $source
   '';

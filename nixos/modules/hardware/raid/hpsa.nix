@@ -40,7 +40,7 @@ let
       homepage = "https://downloads.linux.hpe.com/SDR/downloads/MCP/Ubuntu/pool/non-free/";
       license = licenses.unfreeRedistributable;
       platforms = [ "x86_64-linux" ];
-      maintainers = with maintainers; [ volth ];
+      maintainers = with maintainers; [ ];
     };
   };
 in {
@@ -48,7 +48,7 @@ in {
 
   options = {
     hardware.raid.HPSmartArray = {
-      enable = mkEnableOption "HP Smart Array kernel modules and CLI utility";
+      enable = mkEnableOption (lib.mdDoc "HP Smart Array kernel modules and CLI utility");
     };
   };
 

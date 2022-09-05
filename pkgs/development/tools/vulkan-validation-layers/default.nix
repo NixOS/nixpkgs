@@ -3,7 +3,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , glslang
 , libffi
 , libX11
@@ -22,7 +22,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.3.211.0";
+  version = "1.3.216.0";
 
   # If we were to use "dev" here instead of headers, the setupHook would be
   # placed in that output instead of "out".
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       owner = "KhronosGroup";
       repo = "Vulkan-ValidationLayers";
       rev = "sdk-${version}";
-      sha256 = "sha256-NGpFfekZtB0rvnGxYVDo808xzgBuo8ZC4bjXjQnTpxU=";
+      hash = "sha256-ri6ImAuskbvYL/ZM8kaVDZRP2v1qfSaafVacwwRF424=";
     });
 
   # Include absolute paths to layer libraries in their associated
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     "-DSPIRV_HEADERS_INSTALL_DIR=${spirv-headers}"
     "-DROBIN_HOOD_HASHING_INSTALL_DIR=${robin-hood-hashing}"
     "-DBUILD_LAYER_SUPPORT_FILES=ON"
-    "-DPKG_CONFIG_EXECUTABLE=${pkgconfig}/bin/pkg-config"
+    "-DPKG_CONFIG_EXECUTABLE=${pkg-config}/bin/pkg-config"
     # Hide dev warnings that are useless for packaging
     "-Wno-dev"
   ];

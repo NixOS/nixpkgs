@@ -46,6 +46,6 @@ mkDerivation rec {
     description = "Archive tool for the LXQt desktop environment";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ jchw ];
+    maintainers = with maintainers; [ jchw ] ++ teams.lxqt.members;
   };
 }

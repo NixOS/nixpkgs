@@ -76,8 +76,9 @@ let
         '';
         homepage = "https://github.com/com-lihaoyi/Ammonite";
         license = licenses.mit;
-        platforms = platforms.all;
         maintainers = [ maintainers.nequissimus ];
+        mainProgram = "amm";
+        platforms = platforms.all;
       };
     };
 in {

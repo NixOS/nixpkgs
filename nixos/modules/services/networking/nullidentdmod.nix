@@ -3,11 +3,11 @@
 
 in {
   options.services.nullidentdmod = with types; {
-    enable = mkEnableOption "the nullidentdmod identd daemon";
+    enable = mkEnableOption (lib.mdDoc "the nullidentdmod identd daemon");
 
     userid = mkOption {
       type = nullOr str;
-      description = "User ID to return. Set to null to return a random string each time.";
+      description = lib.mdDoc "User ID to return. Set to null to return a random string each time.";
       default = null;
       example = "alice";
     };

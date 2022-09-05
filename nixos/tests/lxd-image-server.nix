@@ -1,54 +1,21 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, lib, ... } :
 
 let
-  # Since we don't have access to the internet during the tests, we have to
-  # pre-fetch lxd containers beforehand.
-  #
-  # I've chosen to import Alpine Linux, because its image is turbo-tiny and,
-  # generally, sufficient for our tests.
-  alpine-meta = pkgs.fetchurl {
-    url = "https://tarballs.nixos.org/alpine/3.12/lxd.tar.xz";
-    hash = "sha256-1tcKaO9lOkvqfmG/7FMbfAEToAuFy2YMewS8ysBKuLA=";
+  lxd-image = import ../release.nix {
+    configuration = {
+      # Building documentation makes the test unnecessarily take a longer time:
+      documentation.enable = lib.mkForce false;
+    };
   };
 
-  alpine-rootfs = pkgs.fetchurl {
-    url = "https://tarballs.nixos.org/alpine/3.12/rootfs.tar.xz";
-    hash = "sha256-Tba9sSoaiMtQLY45u7p5DMqXTSDgs/763L/SQp0bkCA=";
-  };
-
-  lxd-config = pkgs.writeText "config.yaml" ''
-    storage_pools:
-      - name: default
-        driver: dir
-        config:
-          source: /var/lxd-pool
-
-    networks:
-      - name: lxdbr0
-        type: bridge
-        config:
-          ipv4.address: auto
-          ipv6.address: none
-
-    profiles:
-      - name: default
-        devices:
-          eth0:
-            name: eth0
-            network: lxdbr0
-            type: nic
-          root:
-            path: /
-            pool: default
-            type: disk
-  '';
-
+  lxd-image-metadata = lxd-image.lxdMeta.${pkgs.system};
+  lxd-image-rootfs = lxd-image.lxdImage.${pkgs.system};
 
 in {
   name = "lxd-image-server";
 
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ mkg20001 ];
+    maintainers = [ mkg20001 patryk27 ];
   };
 
   nodes.machine = { lib, ... }: {
@@ -100,20 +67,20 @@ in {
     # lxd expects the pool's directory to already exist
     machine.succeed("mkdir /var/lxd-pool")
 
-
     machine.succeed(
-        "cat ${lxd-config} | lxd init --preseed"
+        "cat ${./common/lxd/config.yaml} | lxd init --preseed"
     )
 
     machine.succeed(
-        "lxc image import ${alpine-meta} ${alpine-rootfs} --alias alpine"
+        "lxc image import ${lxd-image-metadata}/*/*.tar.xz ${lxd-image-rootfs}/*/*.tar.xz --alias nixos"
     )
 
-    loc = "/var/www/simplestreams/images/iats/alpine/amd64/default/v1"
+    loc = "/var/www/simplestreams/images/iats/nixos/amd64/default/v1"
 
     with subtest("push image to server"):
-        machine.succeed("lxc launch alpine test")
-        machine.succeed("lxc stop test")
+        machine.succeed("lxc launch nixos test")
+        machine.sleep(5)
+        machine.succeed("lxc stop -f test")
         machine.succeed("lxc publish --public test --alias=testimg")
         machine.succeed("lxc image export testimg")
         machine.succeed("ls >&2")

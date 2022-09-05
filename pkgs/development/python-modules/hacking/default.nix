@@ -39,6 +39,9 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    # tries to trigger flake8 and fails
+    rm hacking/tests/test_doctest.py
+
     stestr run
   '';
 

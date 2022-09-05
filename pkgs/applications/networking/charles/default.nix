@@ -57,6 +57,7 @@ let
         description = "Web Debugging Proxy";
         homepage = "https://www.charlesproxy.com/";
         maintainers = with maintainers; [ kalbasit ];
+        sourceProvenance = with sourceTypes; [ binaryBytecode ];
         license = licenses.unfree;
         platforms = platforms.unix;
       };

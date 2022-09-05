@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "async-upnp-client";
-  version = "0.28.0";
+  version = "0.31.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "StevenLooman";
     repo = "async_upnp_client";
     rev = version;
-    sha256 = "sha256-ZyYIZLIlLQV3Yj4a+M5vZVaTe9lEsrWhBe/g9wzM1TY=";
+    sha256 = "sha256-/8gSx1oe2ljBGIPddzBLXuH3LiuHpUXi4/vO7stm5FY=";
   };
 
   propagatedBuildInputs = [
@@ -59,6 +59,11 @@ buildPythonPackage rec {
     "test_unsubscribe"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_deferred_callback_url"
+  ];
+
+  disabledTestPaths = [
+    # Tries to bind to multicast socket and fails to find proper interface
+    "tests/test_ssdp_listener.py"
   ];
 
   pythonImportsCheck = [

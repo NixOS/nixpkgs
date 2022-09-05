@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "eterm";
-  version = "0.9.6-unstable=2020-03-03";
+  version = "0.9.6+date=2020-03-03";
 
   src = fetchFromGitHub {
     owner = "mej";
@@ -43,7 +43,10 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
     knownVulnerabilities = [
-      "Usage of ANSI escape sequences causes unexpected newline-termination, leading to unexpected command execution (https://www.openwall.com/lists/oss-security/2021/05/17/1)"
+      ''Usage of ANSI escape sequences causes unexpected newline-termination,
+        leading to unexpected command execution. More info at:
+        - https://www.cve.org/CVERecord?id=CVE-2021-33477
+        - https://www.openwall.com/lists/oss-security/2021/05/17/1''
     ];
   };
 }

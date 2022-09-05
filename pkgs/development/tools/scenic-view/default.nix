@@ -96,6 +96,7 @@ in stdenv.mkDerivation rec {
   desktopItems = [ desktopItem ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "JavaFx application to visualize and modify the scenegraph of running JavaFx applications.";
     longDescription = ''
       A JavaFX application designed to make it simple to understand the current state of your application scenegraph
@@ -103,6 +104,10 @@ in stdenv.mkDerivation rec {
       This lets you find bugs and get things pixel perfect without having to do the compile-check-compile dance.
     '';
     homepage = "https://github.com/JonathanGiles/scenic-view/";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ wirew0rm ];
     platforms = platforms.all;

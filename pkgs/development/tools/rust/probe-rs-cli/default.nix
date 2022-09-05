@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "probe-rs-cli";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-XYrB/aKuFCe0FNe6N9vqDdr408tAiN6YvT5BL6lCxmU=";
+    sha256 = "sha256-3aKRUABJ1LkRGzwDSwQZeNXKGeRmTlbHKSGewfKn+2Q=";
   };
 
-  cargoSha256 = "sha256-aXSJMSGNl2fzob1j/qiPHHZLisYQeU1gUO5cYbzSHYA=";
+  cargoSha256 = "sha256-bOfdpRVm9zqpFF/YmD06u4OKdyqXwfCSTNlTIZZygeg=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
@@ -19,6 +19,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://probe.rs/";
     changelog = "https://github.com/probe-rs/probe-rs/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ xgroleau ];
+    maintainers = with maintainers; [ xgroleau newam ];
   };
 }

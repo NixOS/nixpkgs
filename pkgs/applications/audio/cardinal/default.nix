@@ -1,9 +1,7 @@
 {
   stdenv
 , fetchFromGitHub
-, fetchpatch
 , fetchurl
-, fetchzip
 , freetype
 , jansson
 , lib
@@ -23,22 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cardinal";
-  version = "22.02";
+  version = "22.07";
 
   src = fetchurl {
     url =
-      "https://github.com/DISTRHO/Cardinal/releases/download/${version}/cardinal-${version}.tar.xz";
-    sha256 = "sha256-IVlAROFGFffTEU00NCmv74w1DRb7dNMp20FeBVoDrdM=";
+      "https://github.com/DISTRHO/Cardinal/releases/download/${version}/cardinal+deps-${version}.tar.xz";
+    sha256 = "sha256-4PpqGfycIwJ7g7gnogPYUO1BnlW7dkwYzw/9QV3R3+g=";
   };
-
-  patches = [
-    # see https://github.com/DISTRHO/Cardinal/issues/151#issuecomment-1041886260
-    (fetchpatch {
-      url =
-        "https://github.com/DISTRHO/Cardinal/commit/13e9ef37c5dd35d77a54b1cb006767be7a72ac69.patch";
-      sha256 = "sha256-NYUYLbLeBX1WEzjPi0s/T1N+EXQKyi0ifbPxgBYDjRs=";
-    })
-  ];
 
   prePatch = ''
     patchShebangs ./dpf/utils/generate-ttl.sh
@@ -64,6 +53,7 @@ stdenv.mkDerivation rec {
     speexdsp
   ];
 
+  hardeningDisable = [ "format" ];
   makeFlags = [ "SYSDEPS=true" "PREFIX=$(out)" ];
 
   meta = {

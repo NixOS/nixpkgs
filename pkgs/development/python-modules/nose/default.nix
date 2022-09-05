@@ -41,8 +41,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A unittest-based testing framework for python that makes writing and running tests easier";
-    homepage = "http://readthedocs.org/docs/nose/";
+    homepage = "https://nose.readthedocs.io/";
     license = licenses.lgpl3;
+    maintainers = with maintainers; [ ];
   };
-
 }

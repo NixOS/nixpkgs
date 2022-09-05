@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitHub
 , installShellFiles
 , python3Packages

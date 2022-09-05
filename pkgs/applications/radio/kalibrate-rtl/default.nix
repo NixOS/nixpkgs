@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "kalibrate-rtl";
-  version = "unstable-2013-12-14";
+  version = "unstable-2022-02-02";
 
   src = fetchFromGitHub {
     owner = "steve-m";
     repo = "kalibrate-rtl";
-    rev = "aae11c8a8dc79692a94ccfee39ba01e8c8c05d38";
-    sha256 = "1spbfflkqnw9s8317ppsf7b1nnkicqsmaqsnz1zf8i49ix70i6kn";
+    rev = "340003eb0846b069c3edef19ed3363b8ac7b5215";
+    sha256 = "n9mfu8H2OS8dKPNhtJxBfMDp8aHEIcxg/R+kcRNOBpk=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -26,7 +26,8 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/steve-m/kalibrate-rtl";
     license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [ bjornfor viraptor ];
+    mainProgram = "kal";
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

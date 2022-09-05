@@ -11,6 +11,12 @@ stdenv.mkDerivation {
     sha256 = "125jx1rsqkiifcffyjb05b2s36rllckdgjaf1bay15k9gzhwwldz";
   };
 
+  # Add workaround for -fno-common toolchains like upstream gcc-10 to
+  # avoid build failures like:
+  #   ld: afpcmd-cmdline_main.o:/build/source/cmdline/cmdline_afp.h:4: multiple definition of
+  #    `full_url'; afpcmd-cmdline_afp.o:/build/source/cmdline/cmdline_afp.c:27: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   buildInputs = [ fuse readline libgcrypt gmp ];
 
   meta = with lib; {

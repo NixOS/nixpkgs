@@ -13,7 +13,7 @@
 , libxml2
 , libxslt
 , docbook_xml_dtd_45
-, docbook_xsl
+, docbook-xsl-nons
 , glib
 , systemd
 , polkit
@@ -21,39 +21,33 @@
 
 stdenv.mkDerivation rec {
   pname = "bolt";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "bolt";
     repo = "bolt";
     rev = version;
-    sha256 = "1phgp8fs0dlj74kbkqlvfniwc32daz47b3pvsxlfxqzyrp77xrfm";
+    sha256 = "eXjj7oD5HOW/AG2uxDa0tSleKmbouFd2fwlL2HHFiMA=";
   };
 
   patches = [
     # meson install tries to create /var/lib/boltd
     ./0001-skip-mkdir.patch
 
-    # https://github.com/NixOS/nixpkgs/issues/104429
+    # Test does not work on ZFS with atime disabled.
     # Upstream issue: https://gitlab.freedesktop.org/bolt/bolt/-/issues/167
     (fetchpatch {
-      name = "disable-atime-tests.diff";
-      url = "https://gitlab.freedesktop.org/roberth/bolt/-/commit/1f672a7de2ebc4dd51590bb90f3b873a8ac0f4e6.diff";
-      sha256 = "134f5s6kjqs6612pwq5pm1miy58crn1kxbyyqhzjnzmf9m57fnc8";
-    })
-
-    # Fix tests with newer umockdev
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/bolt/bolt/-/commit/130e09d1c7ff02c09e4ad1c9c36e9940b68e58d8.patch";
-      sha256 = "HycuM7z4VvtBuZZLU68tBxGT1YjaqJRS4sKyoTGHZEk=";
+      url = "https://gitlab.freedesktop.org/bolt/bolt/-/commit/c2f1d5c40ad71b20507e02faa11037b395fac2f8.diff";
+      revert = true;
+      sha256 = "6w7ll65W/CydrWAVi/qgzhrQeDv1PWWShulLxoglF+I=";
     })
   ];
 
   nativeBuildInputs = [
     asciidoc
     docbook_xml_dtd_45
-    docbook_xsl
+    docbook-xsl-nons
     libxml2
     libxslt
     meson

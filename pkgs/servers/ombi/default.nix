@@ -10,14 +10,14 @@ let
     "Unsupported system: ${stdenv.hostPlatform.system}");
 
   hash = {
-    x64-linux_hash = "sha256-O/dfLZst7RFnqDZj8UX6ejL2EBjGnCBY3e8JB3peRgY=";
-    arm64-linux_hash = "sha256-DkCOK1A7L1gMqY/XPIJFFz7qvUvxA6aJa24Hrh3dT/U=";
-    x64-osx_hash = "sha256-4N0/FTVhxUooauhh+7u527aViSBILiCb+a4cI17QTAg=";
+    x64-linux_hash = "sha256-7l9NT0brk6c7H3oqe9IjTY+5Ji2c5a4vB4vomqmv7x8=";
+    arm64-linux_hash = "sha256-UKVCpFS4m2DMkgG62V7uSQyLG/Zt6z3GSogd30A/4nY=";
+    x64-osx_hash = "sha256-xUu4nsAzBDCKUJWmim3UXVgFzwa6fg9mj/eD3OW1ILY=";
   }."${arch}-${os}_hash";
 
 in stdenv.mkDerivation rec {
   pname = "ombi";
-  version = "4.10.2";
+  version = "4.22.5";
 
   sourceRoot = ".";
 
@@ -49,6 +49,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Self-hosted web application that automatically gives your shared Plex or Emby users the ability to request content by themselves";
     homepage = "https://ombi.io/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ woky ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];

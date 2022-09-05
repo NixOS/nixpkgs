@@ -33,6 +33,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/scrapinghub/python-crfsuite";
     license = licenses.mit;
     maintainers = teams.tts.members;
-    broken = pythonAtLeast "3.10"; # https://github.com/scrapinghub/python-crfsuite/issues/130
   };
 }

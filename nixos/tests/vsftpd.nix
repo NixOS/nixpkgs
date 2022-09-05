@@ -29,7 +29,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   testScript = ''
     client.start()
     server.wait_for_unit("vsftpd")
-    server.wait_for_open_port("21")
+    server.wait_for_open_port(21)
 
     client.succeed("curl -u ftp-test-user:ftp-test-password ftp://server")
     client.succeed('echo "this is a test" > /tmp/test.file.up')

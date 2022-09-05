@@ -1,26 +1,40 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, gitUpdater
 , gdk-pixbuf
 , gnome-themes-extra
 , gtk-engine-murrine
+, jdupes
 , librsvg
 , sassc
 , which
+, themeVariants ? [] # default: blue
+, colorVariants ? [] # default: all
+, tweaks ? []
 }:
 
-stdenv.mkDerivation rec {
+let
   pname = "qogir-theme";
-  version = "2021-12-25";
+
+in
+lib.checkListOfEnum "${pname}: theme variants" [ "default" "manjaro" "ubuntu" "all" ] themeVariants
+lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] colorVariants
+lib.checkListOfEnum "${pname}: tweaks" [ "image" "square" "round" ] tweaks
+
+stdenv.mkDerivation rec {
+  inherit pname;
+  version = "2022-07-17";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "1h10yqz3i59bxhkk2r2p8as8g9ibx38bbpdxi7jgg2pxr581mn4f";
+    sha256 = "NGgTToaSJBwmHnZjWbJ3dSJg9Mmfchj3W0xgK0CMb9M=";
   };
 
   nativeBuildInputs = [
+    jdupes
     sassc
     which
   ];
@@ -35,14 +49,32 @@ stdenv.mkDerivation rec {
     gtk-engine-murrine # murrine engine for Gtk2
   ];
 
+  postPatch = ''
+    patchShebangs install.sh clean-old-theme.sh
+  '';
+
   installPhase = ''
-    patchShebangs .
+    runHook preInstall
+
     mkdir -p $out/share/themes
-    name= ./install.sh -t all -d $out/share/themes
+
+    name= HOME="$TMPDIR" ./install.sh \
+      ${lib.optionalString (themeVariants != []) "--theme " + builtins.toString themeVariants} \
+      ${lib.optionalString (colorVariants != []) "--color " + builtins.toString colorVariants} \
+      ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks} \
+      --dest $out/share/themes
+
     mkdir -p $out/share/doc/${pname}
     cp -a src/firefox $out/share/doc/${pname}
+
     rm $out/share/themes/*/{AUTHORS,COPYING}
+
+    jdupes --link-soft --recurse $out/share
+
+    runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { inherit pname version; };
 
   meta = with lib; {
     description = "Flat Design theme for GTK based desktop environments";

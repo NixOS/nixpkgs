@@ -63,6 +63,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     description = "Some additional CUPS drivers including Canon drivers";
     platforms = [ "x86_64-linux" ];
   };

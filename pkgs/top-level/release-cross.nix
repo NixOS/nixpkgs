@@ -1,4 +1,11 @@
 /* This file defines some basic smoke tests for cross compilation.
+   Individual jobs can be tested by running:
+
+   $ nix-build pkgs/top-level/release-cross.nix -A <jobname>.<package> --arg supportedSystems '[builtins.currentSystem]'
+
+   e.g.
+
+   $ nix-build pkgs/top-level/release-cross.nix -A crossMingw32.nixUnstable --arg supportedSystems '[builtins.currentSystem]'
 */
 
 { # The platforms *from* which we cross compile.
@@ -153,7 +160,6 @@ in
 
   /* Linux on armv7l-hf */
   armv7l-hf = mapTestOnCross lib.systems.examples.armv7l-hf-multiplatform linuxCommon;
-  scaleway-c1 = mapTestOnCross lib.systems.examples.scaleway-c1 linuxCommon;
 
   pogoplug4 = mapTestOnCross lib.systems.examples.pogoplug4 linuxCommon;
 
@@ -195,8 +201,9 @@ in
   powerpcle-embedded = mapTestOnCross lib.systems.examples.ppcle-embedded embedded;
   i686-embedded = mapTestOnCross lib.systems.examples.i686-embedded embedded;
   x86_64-embedded = mapTestOnCross lib.systems.examples.x86_64-embedded embedded;
-  riscv64-embedded = mapTestOnCross lib.systems.examples.riscv64 embedded;
-  riscv32-embedded = mapTestOnCross lib.systems.examples.riscv32 embedded;
+  riscv64-embedded = mapTestOnCross lib.systems.examples.riscv64-embedded embedded;
+  riscv32-embedded = mapTestOnCross lib.systems.examples.riscv32-embedded embedded;
+  rx-embedded = mapTestOnCross lib.systems.examples.rx-embedded embedded;
 
   x86_64-netbsd = mapTestOnCross lib.systems.examples.x86_64-netbsd common;
 

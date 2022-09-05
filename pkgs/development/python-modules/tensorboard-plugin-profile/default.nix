@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "tensorboard_plugin_profile";
-  version = "2.5.0";
+  version = "2.8.0";
   format = "wheel";
 
   src = fetchPypi {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     format = "wheel";
     dist = "py3";
     python = "py3";
-    sha256 = "16jch9py98h7wrffdiz6j0i3kdykxdp5m0kfxr1fxy2phqanpjqk";
+    hash = "sha256-2LzXSdPrzS5G63ONvchdEL4aJD75eU9dF1pMqLcfbto=";
   };
 
   propagatedBuildInputs = [

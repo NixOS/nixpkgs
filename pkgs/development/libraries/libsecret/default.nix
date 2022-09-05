@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
     sha256 = "P7PONA/NfbVNh8iT5pv8Kx9uTUsnkGX/5m2snw/RK00=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -48,6 +52,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libgcrypt
+    gobject-introspection
   ];
 
   propagatedBuildInputs = [
@@ -110,6 +115,7 @@ stdenv.mkDerivation rec {
     description = "A library for storing and retrieving passwords and other secrets";
     homepage = "https://wiki.gnome.org/Projects/Libsecret";
     license = lib.licenses.lgpl21Plus;
+    mainProgram = "secret-tool";
     inherit (glib.meta) platforms maintainers;
   };
 }

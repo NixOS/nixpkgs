@@ -10,7 +10,6 @@ rec {
   *
   * Examples:
   * runCommand "name" {envVariable = true;} ''echo hello > $out''
-  * runCommandNoCC "name" {envVariable = true;} ''echo hello > $out'' # equivalent to prior
   * runCommandCC "name" {} ''gcc -o myfile myfile.c; cp myfile $out'';
   *
   * The `*Local` variants force a derivation to be built locally,
@@ -68,8 +67,10 @@ rec {
     # extra arguments to pass to stdenv.mkDerivation
     , name
     # name of the resulting derivation
+    # TODO(@Artturin): enable strictDeps always
     }: buildCommand:
     stdenv.mkDerivation ({
+      enableParallelBuilding = true;
       inherit buildCommand name;
       passAsFile = [ "buildCommand" ]
         ++ (derivationArgs.passAsFile or []);
@@ -285,8 +286,10 @@ rec {
         set -o errexit
         set -o nounset
         set -o pipefail
+      '' + lib.optionalString (runtimeInputs != [ ]) ''
 
         export PATH="${lib.makeBinPath runtimeInputs}:$PATH"
+      '' + ''
 
         ${text}
       '';
@@ -315,10 +318,10 @@ rec {
       allowSubstitutes = false;
     }
     ''
-    n=$out/bin/$name
-    mkdir -p "$(dirname "$n")"
-    mv "$codePath" code.c
-    $CC -x c code.c -o "$n"
+      n=$out/bin/$name
+      mkdir -p "$(dirname "$n")"
+      mv "$codePath" code.c
+      $CC -x c code.c -o "$n"
     '';
 
 
@@ -477,7 +480,7 @@ rec {
       cd $out
       ${lib.concatMapStrings (x: ''
           mkdir -p "$(dirname ${lib.escapeShellArg x.name})"
-          ln -s ${lib.escapeShellArg x.path} ${lib.escapeShellArg x.name}
+          ln -s ${lib.escapeShellArg "${x.path}"} ${lib.escapeShellArg x.name}
       '') entries}
     '';
 
@@ -527,6 +530,7 @@ rec {
     runCommand name
       (substitutions // {
         inherit meta;
+        strictDeps = true;
       })
       (''
         mkdir -p $out/nix-support

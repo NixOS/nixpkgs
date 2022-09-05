@@ -1,24 +1,34 @@
 { stdenv
 , lib
 , fetchurl
+, pipewire
 , makeWrapper
 , xar
 , cpio
   # Dynamic libraries
 , alsa-lib
 , atk
+, at-spi2-atk
+, at-spi2-core
 , cairo
+, cups
 , dbus
+, expat
+, libdrm
 , libGL
 , fontconfig
 , freetype
 , gtk3
 , gdk-pixbuf
 , glib
+, mesa
+, nspr
+, nss
 , pango
 , wayland
 , xorg
 , libxkbcommon
+, udev
 , zlib
   # Runtime
 , coreutils
@@ -33,27 +43,27 @@ let
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
-  # Zoom versions are released at different times for each platform and linux
-  # is stuck on 5.9.6 until https://github.com/NixOS/nixpkgs/pull/166085 is
-  # resolved
-  version = {
-    aarch64-darwin = "5.10.4.6592";
-    x86_64-darwin = "5.10.4.6592";
-    x86_64-linux = "5.9.6.2225";
-   }.${system} or throwSystem;
+  # Zoom versions are released at different times for each platform
+  # and often with different versions.  We write them on three lines
+  # like this (rather than using {}) so that the updater script can
+  # find where to edit them.
+  versions.aarch64-darwin = "5.11.9.10046";
+  versions.x86_64-darwin = "5.11.9.10046";
+  versions.x86_64-linux = "5.11.10.4400";
 
   srcs = {
     aarch64-darwin = fetchurl {
-       url = "https://zoom.us/client/${version}/Zoom.pkg?archType=arm64";
-       sha256 = "0jg5f9hvb67hhfnifpx5fzz65fcijldy1znlia6pqflxwci3m5rq";
+      url = "https://zoom.us/client/${versions.aarch64-darwin}/zoomusInstallerFull.pkg?archType=arm64";
+      name = "zoomusInstallerFull.pkg";
+      hash = "sha256-Z+K811azMRnhptZ1UvM+o5IgE0F4p9BrntJC9IgPU7U=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://zoom.us/client/${version}/Zoom.pkg";
-      sha256 = "1p83691bid8kz5mw09x6l9zvjglfszi5vbhfmbbpiqhiqcxlfz83";
+      url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
+      hash = "sha256-7U7qT3xlm5LqcJByMWxhZnqs6XBzylEGhqTNUgiaXJY=";
     };
     x86_64-linux = fetchurl {
-      url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
-      sha256 = "0rynpw2fjn9j75f34rk0rgqn9wzyzgzmwh1a3xcx7hqingv45k53";
+      url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
+      hash = "sha256-Pi1MtuCHzkQACamsNOIS6pbM03L1CmyosbpdrYVNCkQ=";
     };
   };
 
@@ -61,34 +71,47 @@ let
     # $ LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$PWD ldd zoom | grep 'not found'
     alsa-lib
     atk
+    at-spi2-atk
+    at-spi2-core
     cairo
+    cups
     dbus
+    expat
+    libdrm
     libGL
+    pipewire
     fontconfig
     freetype
     gtk3
     gdk-pixbuf
     glib
+    mesa
+    nspr
+    nss
     pango
     stdenv.cc.cc
     wayland
     xorg.libX11
     xorg.libxcb
     xorg.libXcomposite
+    xorg.libXdamage
     xorg.libXext
     libxkbcommon
+    xorg.libXrandr
     xorg.libXrender
-    zlib
+    xorg.libxshmfence
     xorg.xcbutilimage
     xorg.xcbutilkeysyms
     xorg.libXfixes
     xorg.libXtst
+    udev
+    zlib
   ] ++ lib.optional (pulseaudioSupport) libpulseaudio);
 
 in
 stdenv.mkDerivation rec {
   pname = "zoom";
-  inherit version;
+  version = versions.${system} or throwSystem;
 
   src = srcs.${system} or throwSystem;
 
@@ -110,8 +133,8 @@ stdenv.mkDerivation rec {
     runHook preInstall
     ${rec {
       aarch64-darwin = ''
-        mkdir -p $out/Applications/zoom.us.app
-        cp -R . $out/Applications/zoom.us.app
+        mkdir -p $out/Applications
+        cp -R zoom.us.app $out/Applications/
       '';
       # darwin steps same on both architectures
       x86_64-darwin = aarch64-darwin;
@@ -129,12 +152,14 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/Zoom.desktop \
         --replace "Exec=/usr/bin/zoom" "Exec=$out/bin/zoom"
 
-    for i in zopen zoom ZoomLauncher; do
+    for i in aomhost zopen zoom ZoomLauncher; do
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/zoom/$i
     done
 
     # ZoomLauncher sets LD_LIBRARY_PATH before execing zoom
-    wrapProgram $out/opt/zoom/zoom \
+    # IPC breaks if the executable name does not end in 'zoom'
+    mv $out/opt/zoom/zoom $out/opt/zoom/.zoom
+    makeWrapper $out/opt/zoom/.zoom $out/opt/zoom/zoom \
       --prefix LD_LIBRARY_PATH ":" ${libs}
 
     rm $out/bin/zoom
@@ -162,6 +187,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://zoom.us/";
     description = "zoom.us video conferencing application";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = builtins.attrNames srcs;
     maintainers = with maintainers; [ danbst tadfisher doronbehar ];

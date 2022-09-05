@@ -63,6 +63,7 @@ stdenv.mkDerivation {
     homepage = "https://cocotec.io/fdr/";
     description = "The CSP refinement checker";
     license = licenses.unfreeRedistributable;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ nickhu ];
   };

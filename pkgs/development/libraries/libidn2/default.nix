@@ -16,9 +16,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dpQM1Od46Ak1eanRlbJf/16Tbp3GJCBoUotDenZ2T5E=";
   };
 
+  strictDeps = true;
+  # Beware: non-bootstrap libidn2 is overridden by ./hack.nix
   outputs = [ "bin" "dev" "out" "info" "devdoc" ];
 
   patches = optional stdenv.isDarwin ./fix-error-darwin.patch;
+
+  enableParallelBuilding = true;
 
   # The above patch causes the documentation to be regenerated, so the
   # documentation tools are required.

@@ -6,6 +6,7 @@
 , pkg-config
 , fetchFromGitHub
 , fetchYarnDeps
+, nixosTests
 }:
 
 let
@@ -67,6 +68,7 @@ mkYarnPackage {
   distPhase = "true";
 
   passthru.updateScript = ./update.sh;
+  passthru.tests.lemmy-ui = nixosTests.lemmy;
 
   meta = with lib; {
     description = "Building a federated alternative to reddit in rust";

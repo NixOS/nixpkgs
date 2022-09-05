@@ -50,25 +50,25 @@ rec {
       };
     in valueType;
 
-    generate = name: value: pkgs.runCommand name {
-      nativeBuildInputs = [ pkgs.jq ];
+    generate = name: value: pkgs.callPackage ({ runCommand, jq }: runCommand name {
+      nativeBuildInputs = [ jq ];
       value = builtins.toJSON value;
       passAsFile = [ "value" ];
     } ''
       jq . "$valuePath"> $out
-    '';
+    '') {};
 
   };
 
   yaml = {}: {
 
-    generate = name: value: pkgs.runCommand name {
-        nativeBuildInputs = [ pkgs.remarshal ];
-        value = builtins.toJSON value;
-        passAsFile = [ "value" ];
-      } ''
-        json2yaml "$valuePath" "$out"
-      '';
+    generate = name: value: pkgs.callPackage ({ runCommand, remarshal }: runCommand name {
+      nativeBuildInputs = [ remarshal ];
+      value = builtins.toJSON value;
+      passAsFile = [ "value" ];
+    } ''
+      json2yaml "$valuePath" "$out"
+    '') {};
 
     type = with lib.types; let
       valueType = nullOr (oneOf [
@@ -135,6 +135,66 @@ rec {
 
   };
 
+  keyValue = {
+    # Represents lists as duplicate keys
+    listsAsDuplicateKeys ? false,
+    # Alternative to listsAsDuplicateKeys, converts list to non-list
+    # listToValue :: [Atom] -> Atom
+    listToValue ? null,
+    ...
+    }@args:
+    assert !listsAsDuplicateKeys || listToValue == null;
+    {
+
+    type = with lib.types; let
+
+      singleAtom = nullOr (oneOf [
+        bool
+        int
+        float
+        str
+      ]) // {
+        description = "atom (null, bool, int, float or string)";
+      };
+
+      atom =
+        if listsAsDuplicateKeys then
+          coercedTo singleAtom lib.singleton (listOf singleAtom) // {
+            description = singleAtom.description + " or a list of them for duplicate keys";
+          }
+        else if listToValue != null then
+          coercedTo singleAtom lib.singleton (nonEmptyListOf singleAtom) // {
+            description = singleAtom.description + " or a non-empty list of them";
+          }
+        else
+          singleAtom;
+
+    in attrsOf atom;
+
+    generate = name: value:
+      let
+        transformedValue =
+          if listToValue != null
+          then
+            lib.mapAttrs (key: val:
+              if lib.isList val then listToValue val else val
+            ) value
+          else value;
+      in pkgs.writeText name (lib.generators.toKeyValue (removeAttrs args ["listToValue"]) transformedValue);
+
+  };
+
+  gitIni = { listsAsDuplicateKeys ? false, ... }@args: {
+
+    type = with lib.types; let
+
+      iniAtom = (ini args).type/*attrsOf*/.functor.wrapped/*attrsOf*/.functor.wrapped;
+
+    in attrsOf (attrsOf (either iniAtom (attrsOf iniAtom)));
+
+    generate = name: value: pkgs.writeText name (lib.generators.toGitINI value);
+  };
+
   toml = {}: json {} // {
     type = with lib.types; let
       valueType = oneOf [
@@ -150,13 +210,13 @@ rec {
       };
     in valueType;
 
-    generate = name: value: pkgs.runCommand name {
-      nativeBuildInputs = [ pkgs.remarshal ];
+    generate = name: value: pkgs.callPackage ({ runCommand, remarshal }: runCommand name {
+      nativeBuildInputs = [ remarshal ];
       value = builtins.toJSON value;
       passAsFile = [ "value" ];
     } ''
       json2toml "$valuePath" "$out"
-    '';
+    '') {};
 
   };
 
@@ -346,7 +406,7 @@ rec {
           } // lib.mapAttrs (_name: type: elixirOr type) lib.types;
         };
 
-      generate = name: value: pkgs.runCommandNoCC name
+      generate = name: value: pkgs.runCommand name
         {
           value = toConf value;
           passAsFile = [ "value" ];

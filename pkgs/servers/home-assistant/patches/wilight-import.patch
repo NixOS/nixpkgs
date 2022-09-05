@@ -1,0 +1,52 @@
+diff --git a/homeassistant/components/wilight/__init__.py b/homeassistant/components/wilight/__init__.py
+index 2cdcf20c1e..37b034c9ae 100644
+--- a/homeassistant/components/wilight/__init__.py
++++ b/homeassistant/components/wilight/__init__.py
+@@ -2,7 +2,7 @@
+ 
+ from typing import Any
+ 
+-from pywilight.wilight_device import Device as PyWiLightDevice
++from pywilight.wilight_device import PyWiLightDevice
+ 
+ from homeassistant.config_entries import ConfigEntry
+ from homeassistant.const import Platform
+diff --git a/homeassistant/components/wilight/fan.py b/homeassistant/components/wilight/fan.py
+index c598e6db39..3d0c6d0ff3 100644
+--- a/homeassistant/components/wilight/fan.py
++++ b/homeassistant/components/wilight/fan.py
+@@ -13,7 +13,7 @@ from pywilight.const import (
+     WL_SPEED_LOW,
+     WL_SPEED_MEDIUM,
+ )
+-from pywilight.wilight_device import Device as PyWiLightDevice
++from pywilight.wilight_device import PyWiLightDevice
+ 
+ from homeassistant.components.fan import DIRECTION_FORWARD, FanEntity, FanEntityFeature
+ from homeassistant.config_entries import ConfigEntry
+diff --git a/homeassistant/components/wilight/light.py b/homeassistant/components/wilight/light.py
+index ea9e19dcb3..2509dc5073 100644
+--- a/homeassistant/components/wilight/light.py
++++ b/homeassistant/components/wilight/light.py
+@@ -4,7 +4,7 @@ from __future__ import annotations
+ from typing import Any
+ 
+ from pywilight.const import ITEM_LIGHT, LIGHT_COLOR, LIGHT_DIMMER, LIGHT_ON_OFF
+-from pywilight.wilight_device import Device as PyWiLightDevice
++from pywilight.wilight_device import PyWiLightDevice
+ 
+ from homeassistant.components.light import (
+     ATTR_BRIGHTNESS,
+diff --git a/homeassistant/components/wilight/parent_device.py b/homeassistant/components/wilight/parent_device.py
+index 17a33fef63..8091e78cc7 100644
+--- a/homeassistant/components/wilight/parent_device.py
++++ b/homeassistant/components/wilight/parent_device.py
+@@ -5,7 +5,7 @@ import asyncio
+ import logging
+ 
+ import pywilight
+-from pywilight.wilight_device import Device as PyWiLightDevice
++from pywilight.wilight_device import PyWiLightDevice
+ import requests
+ 
+ from homeassistant.config_entries import ConfigEntry

@@ -6,15 +6,15 @@
 , nordzy-themes ? [ "all" ] # Override this to only install selected themes
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "nordzy-icon-theme";
-  version = "unstable-2022-01-23";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "alvatip";
     repo = "Nordzy-icon";
-    rev = "10b9ee80ef5c4cac1d1770d89a6d55046521ea36";
-    sha256 = "1b8abhs5gzr2qy407jq818pr67vjky8zn3pa3c8n552ayybblibk";
+    rev = version;
+    sha256 = "sha256-syiJL5i7JJXiSedUtaaoCnAv/6NgRtB3um7A5Sp+Pek=";
   };
 
   # In the post patch phase we should first make sure to patch shebangs.

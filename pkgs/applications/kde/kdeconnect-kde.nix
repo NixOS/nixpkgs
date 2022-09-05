@@ -28,6 +28,7 @@
 , sshfs
 , wayland
 , wayland-scanner
+, plasma-wayland-protocols
 }:
 
 mkDerivation {
@@ -56,6 +57,7 @@ mkDerivation {
     qtx11extras
     wayland
     wayland-scanner
+    plasma-wayland-protocols
     # otherwise buttons are blank on non-kde
     breeze-icons
   ];

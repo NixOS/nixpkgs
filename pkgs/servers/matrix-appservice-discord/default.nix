@@ -4,7 +4,7 @@ assert lib.versionAtLeast nodejs.version "12.0.0";
 
 let
   nodeSources = runCommand "node-sources" {} ''
-    tar --no-same-owner --no-same-permissions -xf "${nodejs.src}"
+    tar --no-same-owner --no-same-permissions -xf ${nodejs.src}
     mv node-* $out
   '';
 
@@ -62,10 +62,7 @@ in mkYarnPackage rec {
   '';
 
   # don't generate the dist tarball
-  # (`doDist = false` does not work in mkYarnPackage)
-  distPhase = ''
-    true
-  '';
+  doDist = false;
 
   passthru = {
     nodeAppDir = "libexec/${pname}/deps/${pname}";

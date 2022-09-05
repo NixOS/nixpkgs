@@ -10,15 +10,23 @@
 }:
 
 let params =
-  if lib.versionAtLeast ocaml.version "4.13"
+  if lib.versionAtLeast ocaml.version "4.14"
   then {
-    version = "1.10.3";
-    sha256 = "sha256-o6wQc7Byi5T0vbARF3LAq69/9wMkOZRQ6rcVa/rBUfE=";
+    name = "lsp";
+    version = "1.12.4";
+    sha256 = "sha256-kZuYAny8VjWdq+ipEdPSTRcGzqjNBOgXOi0dOwb52EY=";
+  } else if lib.versionAtLeast ocaml.version "4.13"
+  then {
+    name = "jsonrpc";
+    version = "1.10.5";
+    sha256 = "sha256-TeJS6t1ruWhWPvWNatrnSUWI6T17XKiosHLYizBDDcw=";
   } else if lib.versionAtLeast ocaml.version "4.12"
   then {
+    name = "jsonrpc";
     version = "1.9.0";
     sha256 = "sha256:1ac44n6g3rf84gvhcca545avgf9vpkwkkkm0s8ipshfhp4g4jikh";
   } else {
+    name = "jsonrpc";
     version = "1.4.1";
     sha256 = "1ssyazc0yrdng98cypwa9m3nzfisdzpp7hqnx684rqj8f0g3gs6f";
   }
@@ -28,11 +36,11 @@ buildDunePackage rec {
   pname = "jsonrpc";
   inherit (params) version;
   src = fetchurl {
-    url = "https://github.com/ocaml/ocaml-lsp/releases/download/${version}/jsonrpc-${version}.tbz";
+    url = "https://github.com/ocaml/ocaml-lsp/releases/download/${version}/${params.name}-${version}.tbz";
     inherit (params) sha256;
   };
 
-  useDune2 = true;
+  duneVersion = if lib.versionAtLeast version "1.10.0" then "3" else "2";
   minimalOCamlVersion = "4.06";
 
   buildInputs =

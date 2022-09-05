@@ -1,25 +1,16 @@
-{ lib, stdenv, nixosTests, fetchFromGitHub, fetchpatch, rustPlatform, libiconv, Security }:
+{ lib, stdenv, nixosTests, fetchFromGitHub, rustPlatform, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
-  version = "3.2.3";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "mbrubeck";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nkWk/0TIAHcYQjxbg0HnT+4S4Cinl22WfqHb9U6u5eI=";
+    sha256 = "sha256-NyHs/9kRBGqmh44MSRzYb7CSvEB0RlmL9l5QpGEwDhY=";
   };
-  cargoSha256 = "sha256-aF86QpizJ+lMNmN9DQKA9o1QZWZObyQ3v3+HmT/s02g=";
-
-  patches = [
-    # https://github.com/mbrubeck/agate/pull/143
-    (fetchpatch {
-      name = "fix-port-collision.patch";
-      url = "https://github.com/mbrubeck/agate/commit/2f5d7878ec9d0dd51762c4c7680fc9f825d8ecd5.patch";
-      sha256 = "sha256-NEFmfb0y97O2W96YggD+MgcN7tlFEi9T4FNzLCND77s=";
-    })
-  ];
+  cargoSha256 = "sha256-V0MLXOLLmKnk4Iyhbu+EomsxOX6RLYHIsi/IwWiqmcg=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 

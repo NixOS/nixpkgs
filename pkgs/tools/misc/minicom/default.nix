@@ -1,15 +1,16 @@
-{ lib, stdenv, fetchgit, autoreconfHook, makeWrapper, pkg-config
+{ lib, stdenv, fetchFromGitLab, autoreconfHook, makeWrapper, pkg-config
 , lrzsz, ncurses, libiconv }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "minicom";
-  version = "2.7.1";
+  version = "2.8";
 
-  # The repository isn't tagged properly, so we need to use commit refs
-  src = fetchgit {
-    url    = "https://salsa.debian.org/minicom-team/minicom.git";
-    rev    = "6ea8033b6864aa35d14fb8b87e104e4f783635ce";
-    sha256 = "0j95727xni4r122dalp09963gvc1nqa18l1d4wzz8746kw5s2rrb";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "minicom-team";
+    repo = pname;
+    rev = version;
+    sha256 = "165zhi88swvkhl3v17223r0f27hb3y0qzrgl51jkk0my2m4xscgg";
   };
 
   buildInputs = [ ncurses ] ++ lib.optional stdenv.isDarwin libiconv;

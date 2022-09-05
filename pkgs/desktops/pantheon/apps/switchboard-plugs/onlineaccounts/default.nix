@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-onlineaccounts";
-  version = "6.4.0";
+  version = "6.5.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Fppl/IvdlW8lZ6YKEHaHNticv3FFFKEKTPPVnz4u9b4=";
+    sha256 = "sha256-Q/vvXKyeedn5o7HnL9F5ixSjJS3OWrvvHbzvx2fW2qY=";
   };
 
   nativeBuildInputs = [

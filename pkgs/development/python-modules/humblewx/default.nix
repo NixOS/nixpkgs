@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , wxPython_4_0
-, python3
+, python
 }:
 
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
     for i in examples/*; do
-      ${python3.interpreter} $i
+      ${python.interpreter} $i
     done
     runHook postCheck
   '';

@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/stxxl/stxxl";
     license = licenses.boost;
     maintainers = with maintainers; [ ];
+    mainProgram = "stxxl_tool";
     platforms = platforms.all;
   };
 }

@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1xnbnbi0zk2xsyn8dqsmyxqlfnl36pb1wwibnlp0dxixw6sfymyl";
   };
 
+  strictDeps = true;
+
   prePatch = ''
     substituteInPlace deer \
       --replace " perl " " ${perl}/bin/perl "

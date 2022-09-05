@@ -73,7 +73,7 @@ system.activationScripts.my-activation-script = {
     <title>NixOS snippets</title>
     <para>
       There are some snippets NixOS enables by default because disabling
-      them would most likely break you system. This section lists a few
+      them would most likely break your system. This section lists a few
       of them and what they do:
     </para>
     <itemizedlist spacing="compact">

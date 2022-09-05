@@ -32,6 +32,10 @@
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
     ],
+    "somafm-internet-radio": [
+      "SomaFm-Radio@alireza6677.gmail.com",
+      "SomaFm-Radio@cajhne.gmail.com"
+    ],
     "transparent-window": [
       "transparent-window@pbxqdown.github.com",
       "transparentwindows.mdirshad07"
@@ -78,6 +82,10 @@
     "noannoyance": [
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
+    ],
+    "somafm-internet-radio": [
+      "SomaFm-Radio@alireza6677.gmail.com",
+      "SomaFm-Radio@cajhne.gmail.com"
     ],
     "fuzzy-clock": [
       "fuzzy-clock@keepawayfromfire.co.uk",
@@ -129,6 +137,10 @@
       "fuzzy-clock@keepawayfromfire.co.uk",
       "FuzzyClock@johngoetz"
     ],
+    "panel-date-format": [
+      "panel-date-format@keiii.github.com",
+      "panel-date-format@atareao.es"
+    ],
     "disable-unredirect-fullscreen-windows": [
       "unredirect@vaina.lt",
       "unredirect@aunetx"
@@ -140,6 +152,10 @@
     "wireguard-indicator": [
       "wireguard-indicator@gregos.me",
       "wireguard-indicator@atareao.es"
+    ],
+    "volume-scroller": [
+      "volume_scroller@trflynn89.pm.me",
+      "volume_scroller@noskoski"
     ]
   },
   "42": {
@@ -155,9 +171,17 @@
       "lockkeys@vaina.lt",
       "lockkeys@fawtytoo"
     ],
+    "panel-date-format": [
+      "panel-date-format@keiii.github.com",
+      "panel-date-format@atareao.es"
+    ],
     "wireguard-indicator": [
       "wireguard-indicator@gregos.me",
       "wireguard-indicator@atareao.es"
+    ],
+    "volume-scroller": [
+      "volume_scroller@trflynn89.pm.me",
+      "volume_scroller@noskoski"
     ]
   }
 }

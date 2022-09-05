@@ -21,6 +21,8 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  patches = [ ./fix-gcc11-compilation.patch ];
+
   configureFlags = [
     "--with-tests=no"
     "--with-boost=${boost.dev}"

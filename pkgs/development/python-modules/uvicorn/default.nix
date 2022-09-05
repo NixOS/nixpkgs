@@ -2,31 +2,28 @@
 , buildPythonPackage
 , callPackage
 , fetchFromGitHub
-, asgiref
 , click
-, colorama
 , h11
 , httptools
 , python-dotenv
 , pyyaml
 , typing-extensions
 , uvloop
-, watchgod
+, watchfiles
 , websockets
-, wsproto
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.17.5";
+  version = "0.18.2";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "sha256-66wPVnBLy2HK4p0m/b/DRxy12sk8AsVFZoFVcWRkL4s=";
+    hash = "sha256-nxtDqYh2OmDtoV10CEBGYQrQBf+Xtuf5k9yR6UfCgYc=";
   };
 
   outputs = [
@@ -35,19 +32,19 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    asgiref
     click
-    colorama
     h11
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
+
+  passthru.optional-dependencies.standard = [
     httptools
     python-dotenv
     pyyaml
     uvloop
-    watchgod
+    watchfiles
     websockets
-    wsproto
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
   ];
 
   postInstall = ''
@@ -68,6 +65,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://www.uvicorn.org/";
+    changelog = "https://github.com/encode/uvicorn/blob/${src.rev}/CHANGELOG.md";
     description = "The lightning-fast ASGI server";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];

@@ -3,16 +3,16 @@
 }:
 
 let
-  version = "4.44.0";
+  version = "4.45.0";
 
   src = fetchFromGitHub {
     owner = "v2fly";
     repo = "v2ray-core";
     rev = "v${version}";
-    sha256 = "1yk02n2lllbcwqkz4f3l3d2df1w3m768zxvdawgmafjgmbqf0gjf";
+    sha256 = "sha256-vVCWCppGeAc7dwY0fX+G0CU3Vy6OBPpDBUOBK3ykg60=";
   };
 
-  vendorSha256 = "sha256-kTwISKPIFpb/OPh9rIzLH8a6mqpyDBJo2stSu5bc02Q=";
+  vendorSha256 = "sha256-TbWMbIT578I8xbNsKgBeSP4MewuEKpfh62ZbJIeHgDs=";
 
   assetsDrv = symlinkJoin {
     name = "v2ray-assets";

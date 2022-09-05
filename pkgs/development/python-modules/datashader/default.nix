@@ -15,6 +15,7 @@
 , pyct
 , scipy
 , pytestCheckHook
+, pythonOlder
 , nbsmoke
 , fastparquet
 , nbconvert
@@ -24,12 +25,14 @@
 
 buildPythonPackage rec {
   pname = "datashader";
-  version = "0.13.0";
+  version = "0.14.2";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6JscHm1QjDmXOLLa83qhAvY/xwvlPM6duQ1lSxnCVV8=";
+    hash = "sha256-q8aOpuJD6aX9m9jPm9PY5vZGBJL6Jpf+pPHbcQVOJLg=";
   };
 
   propagatedBuildInputs = [
@@ -46,7 +49,7 @@ buildPythonPackage rec {
     param
     pyct
     scipy
-  ] ++ dask.extras-require.complete;
+  ] ++ dask.optional-dependencies.complete;
 
   checkInputs = [
     pytestCheckHook

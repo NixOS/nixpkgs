@@ -1,9 +1,7 @@
 { buildPythonPackage
 , fetchFromGitHub
 , lib
-
-# since this is a dependency of pytest, we need to avoid
-# circular dependencies
+, flit-core
 , jinja2
 , pytestCheckHook
 , railroad-diagrams
@@ -12,16 +10,21 @@
 let
   pyparsing = buildPythonPackage rec {
     pname = "pyparsing";
-    version = "3.0.7";
+    version = "3.0.9";
+    format = "pyproject";
 
     src = fetchFromGitHub {
       owner = "pyparsing";
       repo = pname;
       rev = "pyparsing_${version}";
-      sha256 = "sha256-RyvTTbFshAZgyZPgzqcq31E504RlnMZuf16jJYGqDDI=";
+      sha256 = "sha256-aCRyJQyLf8qQ6NO41q+HC856TjIHzIt0vyVBLV+3teE=";
     };
 
-    # circular dependencies if enabled by default
+    nativeBuildInputs = [
+      flit-core
+    ];
+
+    # circular dependencies with pytest if enabled by default
     doCheck = false;
     checkInputs = [
       jinja2
@@ -43,4 +46,4 @@ let
     };
   };
 in
-  pyparsing
+pyparsing

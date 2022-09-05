@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   pname = "crossfire-arch";
-  version = "r${toString rev}";
+  version = rev;
 
   src = fetchsvn {
     url = "http://svn.code.sf.net/p/crossfire/code/arch/trunk/";
-    sha256 = sha256;
-    rev = rev;
+    inherit sha256;
+    rev = "r${rev}";
   };
 
   installPhase = ''

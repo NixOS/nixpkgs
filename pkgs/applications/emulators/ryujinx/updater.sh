@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=./. -i bash -p coreutils gnused curl common-updater-scripts nuget-to-nix nix-prefetch-git jq dotnet-sdk_6
+#! nix-shell -I nixpkgs=./. -i bash -p coreutils gnused curl common-updater-scripts nix-prefetch-git jq
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
@@ -60,27 +60,19 @@ OLD_VERSION="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./default.nix)"
 
 echo "comparing versions $OLD_VERSION -> $NEW_VERSION"
 if [[ "$OLD_VERSION" == "$NEW_VERSION" ]]; then
-    echo "Already up to date! Doing nothing"
-    exit 0
+    echo "Already up to date!"
+    if [[ "${1-default}" != "--deps-only" ]]; then
+      exit 0
+    fi
 fi
 
-SHA="$(nix-prefetch-git https://github.com/ryujinx/ryujinx --rev "$COMMIT" --quiet | jq -r '.sha256')"
-
 cd ../../../..
-update-source-version ryujinx "$NEW_VERSION" "$SHA" --rev="$COMMIT"
+
+if [[ "${1-default}" != "--deps-only" ]]; then
+    SHA="$(nix-prefetch-git https://github.com/ryujinx/ryujinx --rev "$COMMIT" --quiet | jq -r '.sha256')"
+    update-source-version ryujinx "$NEW_VERSION" "$SHA" --rev="$COMMIT"
+fi
 
 echo "building Nuget lockfile"
 
-STORE_SRC="$(nix-build . -A ryujinx.src --no-out-link)"
-SRC="$(mktemp -d /tmp/ryujinx-src.XXX)"
-cp -rT "$STORE_SRC" "$SRC"
-chmod -R +w "$SRC"
-pushd "$SRC"
-
-mkdir nuget_tmp.packages
-DOTNET_CLI_TELEMETRY_OPTOUT=1 dotnet restore Ryujinx.sln --packages nuget_tmp.packages
-
-nuget-to-nix ./nuget_tmp.packages >"$DEPS_FILE"
-
-popd
-rm -r "$SRC"
+$(nix-build -A ryujinx.fetch-deps --no-out-link) "$DEPS_FILE"

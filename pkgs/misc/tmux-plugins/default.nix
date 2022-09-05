@@ -92,12 +92,12 @@ in rec {
 
   continuum = mkTmuxPlugin {
     pluginName = "continuum";
-    version = "unstable-2020-10-16";
+    version = "unstable-2022-01-25";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-continuum";
-      rev = "26eb5ffce0b559d682b9f98c8d4b6c370ecb639b";
-      sha256 = "1glwa89bv2r92qz579a49prk3jf612cpd5hw46j4wfb35xhnj3ab";
+      rev = "fc2f31d79537a5b349f55b74c8ca69abaac1ddbb";
+      sha256 = "06i1jp83iybw76raaxciqz9a7ypgpkvbyjn6jjap8jpqfmj2wmjb";
     };
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-continuum";
@@ -249,12 +249,12 @@ in rec {
   gruvbox = mkTmuxPlugin {
     pluginName = "gruvbox";
     rtpFilePath = "gruvbox-tpm.tmux";
-    version = "unstable-2019-05-05";
+    version = "unstable-2022-04-19";
     src = fetchFromGitHub {
       owner = "egel";
       repo = "tmux-gruvbox";
-      rev = "6149fd8b5d6924925b4d5aa6935039780e94f3d6";
-      sha256 = "1ykr4yardavd0x7yfrnshd4b0gi8p31pji7i79ib0nss134zncpb";
+      rev = "3f9e38d7243179730b419b5bfafb4e22b0a969ad";
+      sha256 = "1l0kq77rk3cbv0rvh7bmfn90vvqqmywn9jk6gbl9mg3qbynq5wcf";
     };
   };
 
@@ -397,23 +397,23 @@ in rec {
 
   prefix-highlight = mkTmuxPlugin {
     pluginName = "prefix-highlight";
-    version = "unstable-2020-03-26";
+    version = "unstable-2021-03-30";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-prefix-highlight";
-      rev = "1db6e735aad54503b076391d791c56e1af213917";
-      sha256 = "0ws9blzg00zhz548m51cm6zbrkqlz7jazkr5029vka1f6qk36x0g";
+      rev = "15acc6172300bc2eb13c81718dc53da6ae69de4f";
+      sha256 = "08rkflfnynxgv2s26b33l199h6xcqdfmlqbyqa1wkw7h85br3dgl";
     };
   };
 
   resurrect = mkTmuxPlugin {
     pluginName = "resurrect";
-    version = "unstable-2020-09-18";
+    version = "unstable-2022-05-01";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-resurrect";
-      rev = "e4825055c92e54b0c6ec572afc9b6c4723aba6c8";
-      sha256 = "0a96drkx1kpadkbxabcnvb542p75xdh2dbizvlq2lac5ldpb4hmx";
+      rev = "ca6468e2deef11efadfe3a62832ae67742505432";
+      sha256 = "0d7jg5dy4jq64679rf2zqmqbvgiqvpcj5jxfljk7d7y86dnqhj3n";
     };
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-resurrect";

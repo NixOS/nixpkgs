@@ -12,15 +12,36 @@
   <xsl:output method='xml' encoding="UTF-8" />
 
   <xsl:param name="revision" />
+  <xsl:param name="documentType" />
   <xsl:param name="program" />
+  <xsl:param name="variablelistId" />
 
 
   <xsl:template match="/expr/list">
-    <appendix xml:id="appendix-configuration-options">
-      <title>Configuration Options</title>
-      <variablelist xml:id="configuration-variable-list">
+    <xsl:choose>
+      <xsl:when test="$documentType = 'appendix'">
+        <appendix xml:id="appendix-configuration-options">
+          <title>Configuration Options</title>
+          <xsl:call-template name="variable-list"/>
+        </appendix>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="variable-list"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="variable-list">
+      <variablelist>
+      <xsl:attribute name="id" namespace="http://www.w3.org/XML/1998/namespace"><xsl:value-of select="$variablelistId"/></xsl:attribute>
         <xsl:for-each select="attrs">
-          <xsl:variable name="id" select="concat('opt-', str:replace(str:replace(str:replace(str:replace(attr[@name = 'name']/string/@value, '*', '_'), '&lt;', '_'), '>', '_'), ':', '_'))" />
+          <xsl:variable name="id" select="
+            concat('opt-',
+              translate(
+                attr[@name = 'name']/string/@value,
+                '*&lt; >[]:',
+                '_______'
+            ))" />
           <varlistentry>
             <term xlink:href="#{$id}">
               <xsl:attribute name="xml:id"><xsl:value-of select="$id"/></xsl:attribute>
@@ -96,7 +117,6 @@
         </xsl:for-each>
 
       </variablelist>
-    </appendix>
   </xsl:template>
 
 
@@ -195,6 +215,23 @@
 
   <xsl:template match="attr[@name = 'declarations' or @name = 'definitions']">
     <simplelist>
+      <!--
+        Example:
+          opt.declarations = [ { name = "foo/bar.nix"; url = "https://github.com/....."; } ];
+      -->
+      <xsl:for-each select="list/attrs[attr[@name = 'name']]">
+        <member><filename>
+          <xsl:if test="attr[@name = 'url']">
+            <xsl:attribute name="xlink:href"><xsl:value-of select="attr[@name = 'url']/string/@value"/></xsl:attribute>
+          </xsl:if>
+          <xsl:value-of select="attr[@name = 'name']/string/@value"/>
+        </filename></member>
+      </xsl:for-each>
+
+      <!--
+        When the declarations/definitions are raw strings,
+        fall back to hardcoded location logic, specific to Nixpkgs.
+      -->
       <xsl:for-each select="list/string">
         <member><filename>
           <!-- Hyperlink the filename either to the NixOS Subversion

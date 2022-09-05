@@ -87,7 +87,7 @@ let
     '';
 
     # https://github.com/TES3MP/openmw-tes3mp/issues/552
-    patches = [ ./tes3mp.patch ];
+    patches = oldAttrs.patches ++ [ ./tes3mp.patch ];
 
     NIX_CFLAGS_COMPILE = "-fpermissive";
 
@@ -108,6 +108,7 @@ let
       license = licenses.gpl3Only;
       maintainers = with maintainers; [ peterhoeg ];
       platforms = [ "x86_64-linux" "i686-linux" ];
+      broken = true;
     };
   });
 

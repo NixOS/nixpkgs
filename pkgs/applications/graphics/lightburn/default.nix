@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "lightburn";
-  version = "1.1.03";
+  version = "1.2.01";
 
   nativeBuildInputs = [
     p7zip
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/LightBurnSoftware/deployment/releases/download/${version}/LightBurn-Linux64-v${version}.7z";
-    sha256 = "sha256-X7hAkzVqIABpyFokiYaMGZqSda69cKhKghFDWDEVOow=";
+    sha256 = "sha256-V4hswyj6Ly6inaIlHlxpvER8ar09wZ55Ad+xH4GbHfs=";
   };
 
   buildInputs = [
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Layout, editing, and control software for your laser cutter";
     homepage = "https://lightburnsoftware.com/";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ q3k ];
     platforms = [ "x86_64-linux" ];

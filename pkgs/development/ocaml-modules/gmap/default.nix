@@ -15,7 +15,7 @@ buildDunePackage rec {
 
   checkInputs = [ alcotest ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.05";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     description = "Heterogenous maps over a GADT";

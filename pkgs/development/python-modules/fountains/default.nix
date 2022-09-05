@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "fountains";
-  version = "1.3.0";
-  format = "setuptools";
+  version = "2.0.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-c6nw22UtAREYZp0XCEZE6p7GpRvSLukq5y0c9KvVf9w=";
+    hash = "sha256-9ASOgqkE1vwCKGAZXEJaHoABMXomIWTGv3jAsNssdsU=";
   };
 
   propagatedBuildInputs = [

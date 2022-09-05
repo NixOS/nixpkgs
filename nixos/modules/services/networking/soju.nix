@@ -27,16 +27,15 @@ in
   ###### interface
 
   options.services.soju = {
-    enable = mkEnableOption "soju";
+    enable = mkEnableOption (lib.mdDoc "soju");
 
     listen = mkOption {
       type = types.listOf types.str;
       default = [ ":6697" ];
-      description = ''
+      description = lib.mdDoc ''
         Where soju should listen for incoming connections. See the
-        <literal>listen</literal> directive in
-        <citerefentry><refentrytitle>soju</refentrytitle>
-        <manvolnum>1</manvolnum></citerefentry>.
+        `listen` directive in
+        {manpage}`soju(1)`.
       '';
     };
 
@@ -44,42 +43,43 @@ in
       type = types.str;
       default = config.networking.hostName;
       defaultText = literalExpression "config.networking.hostName";
-      description = "Server hostname.";
+      description = lib.mdDoc "Server hostname.";
     };
 
     tlsCertificate = mkOption {
       type = types.nullOr types.path;
+      default = null;
       example = "/var/host.cert";
-      description = "Path to server TLS certificate.";
+      description = lib.mdDoc "Path to server TLS certificate.";
     };
 
     tlsCertificateKey = mkOption {
       type = types.nullOr types.path;
+      default = null;
       example = "/var/host.key";
-      description = "Path to server TLS certificate key.";
+      description = lib.mdDoc "Path to server TLS certificate key.";
     };
 
     enableMessageLogging = mkOption {
       type = types.bool;
       default = true;
-      description = "Whether to enable message logging.";
+      description = lib.mdDoc "Whether to enable message logging.";
     };
 
     httpOrigins = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         List of allowed HTTP origins for WebSocket listeners. The parameters are
         interpreted as shell patterns, see
-        <citerefentry><refentrytitle>glob</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>.
+        {manpage}`glob(7)`.
       '';
     };
 
     acceptProxyIP = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Allow the specified IPs to act as a proxy. Proxys have the ability to
         overwrite the remote and local connection addresses (via the X-Forwarded-\*
         HTTP header fields). The special name "localhost" accepts the loopback
@@ -90,13 +90,23 @@ in
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = "Lines added verbatim to the configuration file.";
+      description = lib.mdDoc "Lines added verbatim to the configuration file.";
     };
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = (cfg.tlsCertificate != null) == (cfg.tlsCertificateKey != null);
+        message = ''
+          services.soju.tlsCertificate and services.soju.tlsCertificateKey
+          must both be specified to enable TLS.
+        '';
+      }
+    ];
+
     systemd.services.soju = {
       description = "soju IRC bouncer";
       wantedBy = [ "multi-user.target" ];

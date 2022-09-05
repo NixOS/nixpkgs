@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
       font-patcher
       /src/glyphs
     '';
-    sha256 = "sha256-ePBlEVjzAJ7g6iAGIqPfgZ8bwtNILmyEVm0zD+xNN6k=";
+    sha256 = "sha256-06dn6M2wCFO/uBHDR7VZHNHIybT4h/VGD9nHc4G0EKA=";
   };
 
   propagatedBuildInputs = with python3Packages; [ fontforge ];

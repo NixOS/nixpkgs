@@ -8,14 +8,14 @@ let
 in {
   options = {
     services.powerdns = {
-      enable = mkEnableOption "PowerDNS domain name server";
+      enable = mkEnableOption (lib.mdDoc "PowerDNS domain name server");
 
       extraConfig = mkOption {
         type = types.lines;
         default = "launch=bind";
-        description = ''
+        description = lib.mdDoc ''
           PowerDNS configuration. Refer to
-          <link xlink:href="https://doc.powerdns.com/authoritative/settings.html"/>
+          <https://doc.powerdns.com/authoritative/settings.html>
           for details on supported values.
         '';
       };

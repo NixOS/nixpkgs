@@ -4,16 +4,16 @@
 
 buildGoModule rec {
   pname = "mycorrhiza";
-  version = "1.8.2";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "bouncepaw";
     repo = "mycorrhiza";
     rev = "v${version}";
-    sha256 = "sha256-+8cW7xNr4gzNHQ/hBpASoe9g7W/QFQhtO/dZ9umgJec=";
+    sha256 = "sha256-uPnIp4Fc2vXwZnr19jQf39rReutzUqXO9EsXhjt1TuA=";
   };
 
-  vendorSha256 = "sha256-foAjMPvNJnjpxRAXEgNeYuvDAoBdMwiQc9BiNxifzUc=";
+  vendorSha256 = "sha256-be9Et2hAW3xntt9AHN9xfc9dBW/MCvpdl0XdTJKRIy4=";
 
   subPackages = [ "." ];
 

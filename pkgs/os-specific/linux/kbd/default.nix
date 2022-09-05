@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ check pam ];
+  NIX_LDFLAGS = lib.optional stdenv.hostPlatform.isStatic "-laudit";
   nativeBuildInputs = [ autoreconfHook pkg-config flex ];
 
   passthru.tests = {

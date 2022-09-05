@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "igraph";
-  version = "0.9.10";
+  version = "0.9.11";
 
   disabled = pythonOlder "3.6";
 
@@ -18,8 +18,12 @@ buildPythonPackage rec {
     owner = "igraph";
     repo = "python-igraph";
     rev = version;
-    hash = "sha256-c20N8BtbQGxAK7ykQvyfqWYu7wVOlYfeGpNOwWPlGxs=";
+    hash = "sha256-tvkV5ve9X+LXx3LOdHIPljQKZc1v6yts0juo4SwDmfY=";
   };
+
+  postPatch = ''
+    rm -r vendor
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -27,7 +31,6 @@ buildPythonPackage rec {
 
   buildInputs = [
     igraph
-    igraph.dev
   ];
 
   propagatedBuildInputs = [

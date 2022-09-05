@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pynws";
-  version = "1.3.2";
+  version = "1.4.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "MatthewFlamm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0d2x3vlm444aar4wbdg48xzpgwng5m7i2d7h1z0pb6c514747sd1";
+    sha256 = "sha256-hAUD92wlQZ0BZ++e/KdIOgTzavmUkrH3esDhI3mbl5Y=";
   };
 
   propagatedBuildInputs = [

@@ -86,6 +86,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.brother.com/";
     description = "Brother MFC-L2750DW printer driver";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = builtins.map (arch: "${arch}-linux") arches;
     maintainers = [ maintainers.lovesegfault ];

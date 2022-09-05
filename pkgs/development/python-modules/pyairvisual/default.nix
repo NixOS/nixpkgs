@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyairvisual";
-  version = "2021.10.0";
+  version = "2022.07.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Wj+ReRTYsP/XMrr74XPHrkHYT0sXfqcW/shbG3zNuH0=";
+    sha256 = "sha256-UzcKK0LJ/Xp5iVWsrDQ3nfhWgKAAxKmXrK1zPSoG/gY=";
   };
 
   nativeBuildInputs = [

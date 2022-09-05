@@ -38,6 +38,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "-p tremor-cli" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Early stage event processing system for unstructured data with rich support for structural pattern matching, filtering and transformation";
     homepage = "https://www.tremor.rs/";
     license = licenses.asl20;
