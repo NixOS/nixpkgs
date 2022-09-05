@@ -15845,6 +15845,8 @@ with pkgs;
     wxGTK = wxGTK30;
   };
 
+  bob  = callPackage ../development/tools/build-managers/bob { };
+
   buck = callPackage ../development/tools/build-managers/buck { };
 
   build2 = callPackage ../development/tools/build-managers/build2 {
