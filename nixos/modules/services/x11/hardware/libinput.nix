@@ -159,11 +159,9 @@ let cfg = config.services.xserver.libinput;
       tappingButtonMap = mkOption {
         type = types.nullOr (types.enum [ "lrm" "lmr" ]);
         default = null;
-        description =
-          ''
-            Set   the   button   mapping   for   1/2/3-finger   taps  to  left/right/middle  or
-            left/middle/right, respectively.
-          '';
+        description = ''
+          Set the button mapping for 1/2/3-finger taps to left/right/middle or left/middle/right, respectively.
+        '';
       };
 
       tappingDragLock = mkOption {
