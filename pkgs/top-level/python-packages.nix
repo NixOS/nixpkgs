@@ -1404,6 +1404,8 @@ in {
 
   blspy = callPackage ../development/python-modules/blspy { };
 
+  bluemaestro-ble = callPackage ../development/python-modules/bluemaestro-ble { };
+
   bluepy = callPackage ../development/python-modules/bluepy { };
 
   bluepy-devices = callPackage ../development/python-modules/bluepy-devices { };
