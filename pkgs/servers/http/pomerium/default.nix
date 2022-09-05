@@ -3,18 +3,52 @@
 , callPackage
 , lib
 , envoy
+, mkYarnPackage
+, fetchYarnDeps
 , nixosTests
-, pomerium-ui
 , pomerium-cli
 }:
 
 let
   inherit (lib) concatStringsSep concatMap id mapAttrsToList;
-  common = callPackage ./common.nix { };
 in
 buildGoModule rec {
-  inherit (common) version src vendorSha256 meta;
   pname = "pomerium";
+  version = "0.19.0";
+  src = fetchFromGitHub {
+    owner = "pomerium";
+    repo = "pomerium";
+    rev = "v${version}";
+    sha256 = "sha256:0s5ji1iywymzxlv89y3ivl5vngkifhbpidpwxdrh969l3c5r4klf";
+  };
+
+  vendorSha256 = "sha256:1p78nb7bryvs7p5iq6ihylflyjia60x4hd9c62ffwz37dwqlbi33";
+
+  ui = mkYarnPackage {
+    inherit version;
+    src = "${src}/ui";
+
+    # update pomerium-ui-package.json when updating package, sourced from ui/package.json
+    packageJSON = ./pomerium-ui-package.json;
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${src}/ui/yarn.lock";
+      sha256 = "sha256:1n6swanrds9hbd4yyfjzpnfhsb8fzj1pwvvcg3w7b1cgnihclrmv";
+    };
+
+    buildPhase = ''
+      runHook preBuild
+      yarn --offline build
+      runHook postbuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      cp -R deps/pomerium/dist $out
+      runHook postInstall
+    '';
+
+    doDist = false;
+  };
 
   subPackages = [
     "cmd/pomerium"
@@ -70,7 +104,7 @@ buildGoModule rec {
     echo '${envoy.version}' > pkg/envoy/files/envoy.version
 
     # put the built UI files where they will be picked up as part of binary build
-    cp -r ${pomerium-ui} ui
+    cp -r ${ui}/* ui/dist
   '';
 
   installPhase = ''
@@ -80,5 +114,13 @@ buildGoModule rec {
   passthru.tests = {
     inherit (nixosTests) pomerium;
     inherit pomerium-cli;
+  };
+
+  meta = with lib; {
+    homepage = "https://pomerium.io";
+    description = "Authenticating reverse proxy";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ lukegb ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }
