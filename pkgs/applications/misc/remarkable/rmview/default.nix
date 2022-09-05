@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = with python3Packages; [ pyqt5 wrapQtAppsHook ];
-  propagatedBuildInputs = with python3Packages; [ pyqt5 paramiko twisted pyjwt pyopenssl service-identity ];
+  propagatedBuildInputs = with python3Packages; [ pyqt5 paramiko twisted pyjwt pyopenssl service-identity sshtunnel ];
 
   preBuild = ''
     pyrcc5 -o src/rmview/resources.py resources.qrc
