@@ -7691,6 +7691,8 @@ with pkgs;
   ipfs-migrator-unwrapped = callPackage ../applications/networking/ipfs-migrator/unwrapped.nix { };
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
 
+  ipfs-upload-client = callPackage ../applications/networking/ipfs-upload-client { };
+
   ipget = callPackage ../applications/networking/ipget { };
 
   i-pi = with python3Packages; toPythonApplication i-pi;
@@ -10577,6 +10579,8 @@ with pkgs;
   rpmextract = callPackage ../tools/archivers/rpmextract { };
 
   rrdtool = callPackage ../tools/misc/rrdtool { };
+
+  rscw = callPackage ../applications/radio/rscw { };
 
   rset = callPackage ../tools/admin/rset { };
 
@@ -36276,6 +36280,8 @@ with pkgs;
   unixcw = libsForQt5.callPackage ../applications/radio/unixcw { };
 
   vault = callPackage ../tools/security/vault { };
+
+  vault-medusa = callPackage ../tools/security/vault-medusa { };
 
   vault-bin = callPackage ../tools/security/vault/vault-bin.nix { };
 
