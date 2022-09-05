@@ -7868,6 +7868,8 @@ in {
 
   pylibconfig2 = callPackage ../development/python-modules/pylibconfig2 { };
 
+  pylibdmtx = callPackage ../development/python-modules/pylibdmtx { };
+
   pylibftdi = callPackage ../development/python-modules/pylibftdi {
     inherit (pkgs) libusb1;
   };
