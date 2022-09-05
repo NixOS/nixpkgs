@@ -30578,6 +30578,8 @@ with pkgs;
 
   rednotebook = python3Packages.callPackage ../applications/editors/rednotebook { };
 
+  remctl = callPackage ../tools/networking/remctl { };
+
   remnote = callPackage ../applications/misc/remnote { };
 
   remotebox = callPackage ../applications/virtualization/remotebox { };

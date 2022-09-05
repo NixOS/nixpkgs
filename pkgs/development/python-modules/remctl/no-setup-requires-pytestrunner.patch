@@ -1,0 +1,11 @@
+--- a/setup.py  2022-05-10 12:59:25.122838422 -0400
++++ b/setup.py  2022-05-10 12:59:44.336239263 -0400
+@@ -112,7 +112,7 @@
+     "long_description": "\n".join(doclines[2:]),
+     "license": "MIT",
+     "install_requires": ['typing;python_version<"3.5"'],
+-    "setup_requires": ["pytest-runner"],
++    "setup_requires": [],
+     "tests_require": ["pytest"],
+     "classifiers": [
+         "Development Status :: 4 - Beta",
