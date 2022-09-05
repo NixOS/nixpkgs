@@ -15,6 +15,33 @@
 , wheel
 }:
 
+let
+  # In some test cases, the `build` package needs to be able to `pip install`
+  # the `wheel` package [1]. Since we cannot provide network access, we create a
+  # derivation that holds a .whl of the `wheel` package and specify it as a
+  # `--find-links` directory. This is done by the `fix-setup-py-bad-syntax-detection`
+  # patch that uses the `NIX_PIP_FIND_LINKS` env var exported by the `preCheck`
+  # script.
+  #
+  # [1] How and why that is the case:
+  # * `build.util.project_wheel_metadata()`, a function called by pip-compile,
+  #   creates an isolated build environment using `venv`. However, virtualenvs
+  #   created by `venv` doesn't have `wheel` installed.
+  # * After creating a build environment, `project_wheel_metadata()` runs
+  #   `pip install -r` to install the packages required by the build backend.
+  # * `build` falls back to its default build backend when a project doesn't
+  #   define one, which is the case with some of the test cases.
+  # * The default build backend's `requires` list includes the `wheel` package`.
+  # * Because `wheel` is missing from the build environment, `pip` tries
+  #   to install it.
+  wheelhouse = wheel.overrideAttrs (old: {
+    name = "pip-tools-build-wheelhouse";
+    installPhase = ''
+      mkdir -p $out
+      cp dist/*.whl $out
+    '';
+  });
+in
 buildPythonPackage rec {
   pname = "pip-tools";
   version = "6.8.0";
@@ -26,6 +53,8 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-Oeiu5GVEbgInjYDb69QyXR3YYzJI9DITxzol9Y59ilU=";
   };
+
+  patches = [ ./fix-setup-py-bad-syntax-detection.patch ];
 
   nativeBuildInputs = [
     setuptools-scm
@@ -45,9 +74,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  preCheck = (lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
     # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
     export no_proxy='*';
+  '') + ''
+    # Used by ./fix-setup-py-bad-syntax-detection.patch
+    export NIX_PIP_FIND_LINKS=${wheelhouse}
   '';
 
   disabledTests = [

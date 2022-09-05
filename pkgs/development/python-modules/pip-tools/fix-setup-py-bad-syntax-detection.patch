@@ -1,0 +1,12 @@
+diff --git a/tests/test_cli_compile.py b/tests/test_cli_compile.py
+index 72acd52..0fe6963 100644
+--- a/tests/test_cli_compile.py
++++ b/tests/test_cli_compile.py
+@@ -1054,6 +1054,7 @@ def test_filter_pip_markers(pip_conf, runner):
+     assert "unknown_package" not in out.stderr
+ 
+ 
++@mock.patch.dict(os.environ, {"PIP_FIND_LINKS": os.environ["NIX_PIP_FIND_LINKS"]})
+ def test_bad_setup_file(runner):
+     with open("setup.py", "w") as package:
+         package.write("BAD SYNTAX")
