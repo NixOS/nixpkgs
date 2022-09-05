@@ -207,11 +207,7 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
   '';
 
   passthru = {
-    inherit python;
-    # PYTHONPATH of all dependencies used by the package
-    pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
-    inherit path;
-
+    inherit python path;
     tests = { inherit (nixosTests) paperless; };
   };
 
