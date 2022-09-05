@@ -1756,6 +1756,18 @@ final: prev:
     meta.homepage = "https://github.com/ctrlpvim/ctrlp.vim/";
   };
 
+  cyclist-vim = buildVimPluginFrom2Nix {
+    pname = "cyclist.vim";
+    version = "2020-10-18";
+    src = fetchFromGitHub {
+      owner = "tjdevries";
+      repo = "cyclist.vim";
+      rev = "d611ea3a21365f90d512dd024874e070e864309e";
+      sha256 = "0f9ypavxp2z5vgi5pgqlq0a8977a4xmvqp6g2iwdmrw3bgddi5qa";
+    };
+    meta.homepage = "https://github.com/tjdevries/cyclist.vim/";
+  };
+
   dart-vim-plugin = buildVimPluginFrom2Nix {
     pname = "dart-vim-plugin";
     version = "2022-05-23";
