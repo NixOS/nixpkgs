@@ -842,6 +842,7 @@ mapAliases ({
   pbis-open = throw "pbis-open has been removed, because it is no longer maintained upstream"; # added 2021-12-15
   pdf-redact-tools = throw "pdf-redact-tools has been removed from nixpkgs because the upstream has abandoned the project"; # Added 2022-01-01
   pdfmod = throw "pdfmod has been removed"; # Added 2022-01-15
+  pdfstudio = throw "'pdfstudio' has been replaced with 'pdfstudio<year>', where '<year>' is the year from the PDF Studio version number, because each license is specific to a given year"; # Added 2022-09-04
   peach = asouldocs; # Added 2022-08-28
   pentablet-driver = xp-pen-g430-driver; # Added 2022-06-23
   perlXMLParser = throw "'perlXMLParser' has been renamed to/replaced by 'perlPackages.XMLParser'"; # Converted to throw 2022-02-22

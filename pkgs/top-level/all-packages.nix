@@ -26593,14 +26593,19 @@ with pkgs;
 
   foxitreader = libsForQt512.callPackage ../applications/misc/foxitreader { };
 
-  pdfstudio = import ../applications/misc/pdfstudio {
-    program = "pdfstudio";
-    inherit callPackage fetchurl libgccjit;
+  pdfstudio2021 = import ../applications/misc/pdfstudio {
+    inherit callPackage fetchurl libgccjit jdk11 jdk17;
+    year = "2021";
+  };
+
+  pdfstudio2022 = import ../applications/misc/pdfstudio {
+    inherit callPackage fetchurl libgccjit jdk11 jdk17;
+    year = "2022";
   };
 
   pdfstudioviewer = import ../applications/misc/pdfstudio {
+    inherit callPackage fetchurl libgccjit jdk11 jdk17;
     program = "pdfstudioviewer";
-    inherit callPackage fetchurl libgccjit;
   };
 
   aeolus = callPackage ../applications/audio/aeolus { };
