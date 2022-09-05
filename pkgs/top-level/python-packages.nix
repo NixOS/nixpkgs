@@ -6452,6 +6452,8 @@ in {
 
   ovh = callPackage ../development/python-modules/ovh { };
 
+  ovmfvartool = callPackage ../development/python-modules/ovmfvartool { };
+
   ovoenergy = callPackage ../development/python-modules/ovoenergy { };
 
   owslib = callPackage ../development/python-modules/owslib { };
