@@ -8060,6 +8060,8 @@ with pkgs;
 
   kpcli = callPackage ../tools/security/kpcli { };
 
+  kphotoalbum = libsForQt5.callPackage ../applications/graphics/kphotoalbum { };
+
   kratos = callPackage ../applications/misc/kratos { };
 
   krename = libsForQt5.callPackage ../applications/misc/krename { };
