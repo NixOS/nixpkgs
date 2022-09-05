@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   preFixup = ''
-    wrapQtApp "$out/bin/rmview"
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   meta = with lib; {
