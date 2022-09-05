@@ -5627,6 +5627,18 @@ final: prev:
     meta.homepage = "https://github.com/sotte/presenting.vim/";
   };
 
+  preto = buildVimPluginFrom2Nix {
+    pname = "preto";
+    version = "2016-02-16";
+    src = fetchFromGitHub {
+      owner = "ewilazarus";
+      repo = "preto";
+      rev = "b9200d9a0ff09c4bc8b1cf054f61f12f49438454";
+      sha256 = "1g4cgj4vn81p08air7rfx6fx2wbncy92hicgmb5mdx2fbh2qpc9p";
+    };
+    meta.homepage = "https://github.com/ewilazarus/preto/";
+  };
+
   prev_indent = buildVimPluginFrom2Nix {
     pname = "prev_indent";
     version = "2014-03-08";
