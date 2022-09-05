@@ -11,7 +11,7 @@ buildGoModule rec {
     hash = "sha256-JG1fysCqqd/MwpNhKJwLr4cTGq4/88f9OMMapb+r3bc=";
   };
 
-  vendorSha256 = "sha256-R+zXGR5isoo76oc4lsFf9uCM0Kyi8dQiKEg4BUxtv+k=";
+  vendorHash = "sha256-R+zXGR5isoo76oc4lsFf9uCM0Kyi8dQiKEg4BUxtv+k=";
 
   excludedPackages = ["example/server-db" "test/e2e" "tui-example"];
 
