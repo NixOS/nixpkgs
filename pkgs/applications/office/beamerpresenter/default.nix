@@ -22,6 +22,7 @@
 # choose renderer: mupdf or poppler or both (not recommended)
 , usePoppler ? false
 , useMupdf ? true
+, useExternalRenderer ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -67,6 +68,9 @@ stdenv.mkDerivation rec {
     "-DGIT_VERSION=OFF"
     "-DUSE_POPPLER=${if usePoppler then "ON" else "OFF"}"
     "-DUSE_MUPDF=${if useMupdf then "ON" else "OFF"}"
+    "-DUSE_QTPDF=OFF"
+    "-DUSE_MUPDF_THIRD=ON"
+    "-DUSE_EXTERNAL_RENDERER=${if useExternalRenderer then "ON" else "OFF"}"
     "-DUSE_MUJS=OFF"
     "-DUSE_GUMBO=ON"
     "-DUSE_TRANSLATIONS=ON"
