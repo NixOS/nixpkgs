@@ -245,6 +245,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://www.dolibarr.org/">Dolibarr</link>,
+          an enterprise resource planning and customer relationship
+          manager. Enable using
+          <link linkend="opt-services.dolibarr.enable">services.dolibarr</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.expressvpn.com">expressvpn</link>,
           the CLI client for ExpressVPN. Available as
           <link linkend="opt-services.expressvpn.enable">services.expressvpn</link>.
@@ -435,6 +443,13 @@
           The <literal>meta.mainProgram</literal> attribute of packages
           in <literal>wineWowPackages</literal> now defaults to
           <literal>&quot;wine64&quot;</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>paperless</literal> module now defaults
+          <literal>PAPERLESS_TIME_ZONE</literal> to your configured
+          system timezone.
         </para>
       </listitem>
       <listitem>

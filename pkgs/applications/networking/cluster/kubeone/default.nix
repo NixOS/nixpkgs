@@ -2,6 +2,8 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, kubeone
+, testers
 }:
 
 buildGoModule rec {
@@ -17,6 +19,12 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-w/uLR7wi28Ub7Nouxxg39NlD1OzyIE2oEP4D88Xbwu0=";
 
+  ldflags = [
+    "-s -w"
+    "-X k8c.io/kubeone/pkg/cmd.version=${version}"
+    "-X k8c.io/kubeone/pkg/cmd.date=unknown"
+  ];
+
   nativeBuildInputs = [
     installShellFiles
   ];
@@ -26,6 +34,11 @@ buildGoModule rec {
       --bash <($out/bin/kubeone completion bash) \
       --zsh <($out/bin/kubeone completion zsh)
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = kubeone;
+    command = "kubeone version";
+  };
 
   meta = {
     description = "Automate cluster operations on all your cloud, on-prem, edge, and IoT environments.";

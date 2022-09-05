@@ -304,6 +304,8 @@ with pkgs;
 
   breakpad = callPackage ../development/misc/breakpad { };
 
+  brev-cli = callPackage ../development/misc/brev-cli { };
+
   buf = callPackage ../development/tools/buf { };
 
   buf-language-server = callPackage ../development/tools/buf-language-server { };
@@ -2183,6 +2185,8 @@ with pkgs;
 
   crystfel-headless = callPackage ../applications/science/physics/crystfel { withGui = false; };
 
+  cyberchef = callPackage ../tools/misc/cyberchef { };
+
   cw = callPackage ../tools/admin/cw { };
 
   ec2-api-tools = callPackage ../tools/virtualization/ec2-api-tools { };
@@ -2207,6 +2211,11 @@ with pkgs;
   amule-gui = amule.override {
     monolithic = false;
     client = true;
+  };
+
+  amule-web = amule.override {
+    monolithic = false;
+    httpServer = true;
   };
 
   antennas = nodePackages.antennas;
@@ -3638,6 +3647,8 @@ with pkgs;
   doitlive = callPackage ../tools/misc/doitlive { };
 
   dokuwiki = callPackage ../servers/web-apps/dokuwiki { };
+
+  dolibarr = callPackage ../servers/web-apps/dolibarr { };
 
   doppler = callPackage ../tools/security/doppler {};
 
@@ -8710,6 +8721,8 @@ with pkgs;
 
   mandoc = callPackage ../tools/misc/mandoc { };
 
+  mangareader = libsForQt5.callPackage ../applications/graphics/mangareader { };
+
   mangohud = callPackage ../tools/graphics/mangohud {
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
     mangohud32 = pkgsi686Linux.mangohud;
@@ -9865,6 +9878,8 @@ with pkgs;
   pinentry-rofi = callPackage ../tools/security/pinentry-rofi { };
 
   pingtcp = callPackage ../tools/networking/pingtcp { };
+
+  pingu = callPackage ../tools/networking/pingu { };
 
   pinnwand = callPackage ../servers/pinnwand { };
 
@@ -11282,6 +11297,8 @@ with pkgs;
   };
 
   swaks = callPackage ../tools/networking/swaks { };
+
+  swiftbar = callPackage ../os-specific/darwin/swiftbar { };
 
   swiften = callPackage ../development/libraries/swiften { };
 
@@ -15399,6 +15416,8 @@ with pkgs;
 
   avr8burnomat = callPackage ../development/misc/avr8-burn-omat { };
 
+  cppreference-doc = callPackage ../development/misc/cppreference-doc { };
+
   sourceFromHead = callPackage ../build-support/source-from-head-fun.nix {};
 
   jruby = callPackage ../development/interpreters/jruby { };
@@ -16470,7 +16489,10 @@ with pkgs;
   ftjam = callPackage ../development/tools/build-managers/jam/ftjam.nix { };
 
   javacc = callPackage ../development/tools/parsing/javacc {
+    # Upstream doesn't support anything newer than Java 8.
+    # https://github.com/javacc/javacc/blob/c708628423b71ce8bc3b70143fa5b6a2b7362b3a/README.md#building-javacc-from-source
     jdk = jdk8;
+    jre = jre8;
   };
 
   jbake = callPackage ../development/tools/jbake { };
@@ -20154,8 +20176,8 @@ with pkgs;
     withUtils = false;
   });
 
-  libva = callPackage ../development/libraries/libva { };
-  libva-minimal = libva.override { minimal = true; };
+  libva-minimal = callPackage ../development/libraries/libva { minimal = true; };
+  libva = libva-minimal.override { minimal = false; };
   libva-utils = callPackage ../development/libraries/libva/utils.nix { };
 
   libva1 = callPackage ../development/libraries/libva/1.nix { };
@@ -22660,6 +22682,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  ferretdb = callPackage ../servers/nosql/ferretdb { };
+
   felix = callPackage ../servers/felix { };
 
   felix_remoteshell = callPackage ../servers/felix/remoteshell.nix { };
@@ -23400,6 +23424,7 @@ with pkgs;
   prometheus-unbound-exporter = callPackage ../servers/monitoring/prometheus/unbound-exporter.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  prometheus-v2ray-exporter = callPackage ../servers/monitoring/prometheus/v2ray-exporter.nix { };
   prometheus-varnish-exporter = callPackage ../servers/monitoring/prometheus/varnish-exporter.nix { };
   prometheus-wireguard-exporter = callPackage ../servers/monitoring/prometheus/wireguard-exporter.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -24777,6 +24802,8 @@ with pkgs;
 
   statifier = callPackage ../os-specific/linux/statifier { };
 
+  swiftdefaultapps = callPackage ../os-specific/darwin/swiftdefaultapps { };
+
   sysdig = callPackage ../os-specific/linux/sysdig {
     kernel = null;
   }; # sysdig is a client, for a driver look at linuxPackagesFor
@@ -25698,6 +25725,8 @@ with pkgs;
   oranchelo-icon-theme = callPackage ../data/icons/oranchelo-icon-theme { };
 
   orbitron = callPackage ../data/fonts/orbitron { };
+
+  orbuculum = callPackage ../development/embedded/orbuculum { };
 
   orchis-theme = callPackage ../data/themes/orchis-theme { };
 
@@ -28339,6 +28368,8 @@ with pkgs;
 
   swaynag-battery = callPackage ../applications/misc/swaynag-battery {};
 
+  swayest-workstyle = callPackage ../applications/window-managers/sway/swayest-workstyle { };
+
   tiramisu = callPackage ../applications/misc/tiramisu { };
 
   rlaunch = callPackage ../applications/misc/rlaunch {
@@ -28350,6 +28381,8 @@ with pkgs;
   waybar = callPackage ../applications/misc/waybar {};
 
   wayshot = callPackage ../tools/misc/wayshot { };
+
+  waylevel = callPackage ../tools/misc/waylevel { };
 
   wbg = callPackage ../applications/misc/wbg { };
 
@@ -34078,6 +34111,8 @@ with pkgs;
 
   inormalize = callPackage ../applications/science/biology/inormalize { };
 
+  iqtree = callPackage ../applications/science/biology/iqtree { };
+
   itsx = callPackage ../applications/science/biology/itsx { };
 
   iv = callPackage ../applications/science/biology/iv {
@@ -34217,6 +34252,8 @@ with pkgs;
   nengo-gui = callPackage ../applications/science/machine-learning/nengo-gui { };
 
   sc2-headless = callPackage ../applications/science/machine-learning/sc2-headless { };
+
+  uarmsolver = callPackage ../applications/science/machine-learning/uarmsolver { };
 
   ### SCIENCE/MATH
 
@@ -34765,6 +34802,8 @@ with pkgs;
   caneda = libsForQt5.callPackage ../applications/science/electronics/caneda { };
 
   csxcad = callPackage ../applications/science/electronics/csxcad { };
+
+  dataexplorer = callPackage ../applications/science/electronics/dataexplorer { };
 
   diylc = callPackage ../applications/science/electronics/diylc { };
 
@@ -36111,6 +36150,8 @@ with pkgs;
   twiggy = callPackage ../development/tools/twiggy { };
 
   uacme = callPackage ../tools/admin/uacme { };
+
+  ufiformat = callPackage ../tools/system/ufiformat { };
 
   ums = callPackage ../servers/ums { };
 

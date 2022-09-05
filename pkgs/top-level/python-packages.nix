@@ -2115,6 +2115,8 @@ in {
 
   cryptacular = callPackage ../development/python-modules/cryptacular { };
 
+  cryptg = callPackage ../development/python-modules/cryptg { };
+
   cryptography = callPackage ../development/python-modules/cryptography {
     inherit (pkgs.darwin) libiconv;
     inherit (pkgs.darwin.apple_sdk.frameworks) Security;
@@ -2717,6 +2719,8 @@ in {
   doit = callPackage ../development/python-modules/doit { };
 
   doit-py = callPackage ../development/python-modules/doit-py { };
+
+  domeneshop = callPackage ../development/python-modules/domeneshop { };
 
   dominate = callPackage ../development/python-modules/dominate { };
 
@@ -6631,6 +6635,8 @@ in {
   pdfx = callPackage ../development/python-modules/pdfx { };
 
   pdm-pep517 = callPackage ../development/python-modules/pdm-pep517 { };
+
+  pdoc = callPackage ../development/python-modules/pdoc { };
 
   pdoc3 = callPackage ../development/python-modules/pdoc3 { };
 
