@@ -1359,13 +1359,13 @@ void PluginManagerPrivate::loadPlugins()
     const QVector<PluginSpec *> queue = loadQueue();
     Utils::setMimeStartupPhase(MimeStartupPhase::PluginsLoading);
     for (PluginSpec *spec : queue) {
-        qDebug() << "PluginManagerPrivate::loadPlugins spec" << spec << spec->name() << spec->version() << "data" << spec->d << "loadPlugin Loaded";
+        qDebug() << "PluginManagerPrivate::loadPlugins spec" << spec << spec->name() << spec->version() << "data" << spec->d << "state" << spec->state() << "loadPlugin Loaded";
         loadPlugin(spec, PluginSpec::Loaded);
     }
 
     Utils::setMimeStartupPhase(MimeStartupPhase::PluginsInitializing);
     for (PluginSpec *spec : queue) {
-        qDebug() << "PluginManagerPrivate::loadPlugins spec" << spec << spec->name() << spec->version() << "data" << spec->d << "loadPlugin Initialized";
+        qDebug() << "PluginManagerPrivate::loadPlugins spec" << spec << spec->name() << spec->version() << "data" << spec->d << "state" << spec->state() << "loadPlugin Initialized";
         loadPlugin(spec, PluginSpec::Initialized);
     }
 
@@ -1383,14 +1383,13 @@ void PluginManagerPrivate::loadPlugins()
 
     Utils::setMimeStartupPhase(MimeStartupPhase::PluginsDelayedInitializing);
     Utils::reverseForeach(queue, [this](PluginSpec *spec) {
-        qDebug() << "PluginManagerPrivate::loadPlugins spec" << spec << spec->name() << spec->version() << "data" << spec->d << "loadPlugin Running";
+        qDebug() << "PluginManagerPrivate::loadPlugins spec" << spec << spec->name() << spec->version() << "data" << spec->d << "state" << spec->state() << "loadPlugin Running";
         loadPlugin(spec, PluginSpec::Running);
-        qDebug() << "PluginManagerPrivate::loadPlugins spec" << spec << spec->name() << spec->version() << "data" << spec->d << "state" << spec->state();
         if (spec->state() == PluginSpec::Running) {
             delayedInitializeQueue.push(spec);
         } else {
             // Plugin initialization failed, so cleanup after it
-            qDebug() << "PluginManagerPrivate::loadPlugins spec" << spec << spec->name() << spec->version() << "data" << spec->d << "spec->d->kill()";
+            qDebug() << "PluginManagerPrivate::loadPlugins spec" << spec << spec->name() << spec->version() << "data" << spec->d << "state" << spec->state() << "spec->d->kill()";
             spec->d->kill();
         }
     });
