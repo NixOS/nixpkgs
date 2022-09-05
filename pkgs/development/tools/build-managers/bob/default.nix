@@ -7,7 +7,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "benchkram";
     repo = pname;
-    rev = "v${version}";
+    rev = "${version}";
     sha256 = "sha256-JG1fysCqqd/MwpNhKJwLr4cTGq4/88f9OMMapb+r3bc=";
   };
 
