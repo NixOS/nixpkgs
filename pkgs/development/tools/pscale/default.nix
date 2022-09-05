@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, lib
+, pscale
+, testers
+}:
 
 buildGoModule rec {
   pname = "pscale";
@@ -20,10 +26,23 @@ buildGoModule rec {
     "-X main.date=unknown"
   ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd pscale \
+      --bash <($out/bin/pscale completion bash) \
+      --fish <($out/bin/pscale completion fish) \
+      --zsh <($out/bin/pscale completion zsh)
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = pscale;
+  };
+
   meta = with lib; {
-    homepage = "https://www.planetscale.com/";
-    changelog = "https://github.com/planetscale/cli/releases/tag/v${version}";
     description = "The CLI for PlanetScale Database";
+    changelog = "https://github.com/planetscale/cli/releases/tag/v${version}";
+    homepage = "https://www.planetscale.com/";
     license = licenses.asl20;
     maintainers = with maintainers; [ pimeys ];
   };
