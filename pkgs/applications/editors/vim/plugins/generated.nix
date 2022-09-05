@@ -1638,12 +1638,12 @@ final: prev:
 
   coq_nvim = buildVimPluginFrom2Nix {
     pname = "coq_nvim";
-    version = "2022-09-04";
+    version = "2022-09-05";
     src = fetchFromGitHub {
       owner = "ms-jpq";
       repo = "coq_nvim";
-      rev = "e0551498af3b66d31420687f1fadf44e318d1865";
-      sha256 = "1klgk3mcd5wygkpphwaxmxjna8fxqwl78q2ga4kws8cgyplhqwgj";
+      rev = "20e09f0012c741baeec8da5abf1a5ad43e6d602a";
+      sha256 = "067nr4ymbzwj8lsjgsz7cf64f8caddqngkgm10dp8ixlmraqhhpy";
     };
     meta.homepage = "https://github.com/ms-jpq/coq_nvim/";
   };
@@ -4488,12 +4488,12 @@ final: prev:
 
   nightfox-nvim = buildVimPluginFrom2Nix {
     pname = "nightfox.nvim";
-    version = "2022-08-09";
+    version = "2022-09-05";
     src = fetchFromGitHub {
       owner = "EdenEast";
       repo = "nightfox.nvim";
-      rev = "e2f961859cbfb2ba38147dc59fdd2314992c8b62";
-      sha256 = "10m27rm3bcrq38h08p0sxvwxgl0mdjs231rn0bk0mn5myvqq44ja";
+      rev = "e07db0f668ab9678a2fc1a4c73c58115e202f52a";
+      sha256 = "00jn291s2vkqmprbq7qwknrllyrwh9xiyyn28y73fcjp4m26nkvp";
     };
     meta.homepage = "https://github.com/EdenEast/nightfox.nvim/";
   };
@@ -5124,12 +5124,12 @@ final: prev:
 
   nvim-tree-lua = buildVimPluginFrom2Nix {
     pname = "nvim-tree.lua";
-    version = "2022-09-04";
+    version = "2022-09-05";
     src = fetchFromGitHub {
       owner = "kyazdani42";
       repo = "nvim-tree.lua";
-      rev = "951e10a64e0b03069f0f50ddc79d6a8ed8d23dec";
-      sha256 = "192bsw0q8z7zwynwjq1163hrd4cfzy3fnq98nk22z80f5z4f3kf4";
+      rev = "e282420111929e2af2efca6f3fe31f95985d4a5b";
+      sha256 = "1x0zjn1p3m416952n4bbqb0wx420p3bbp7fc00anhska2ydw7qvq";
     };
     meta.homepage = "https://github.com/kyazdani42/nvim-tree.lua/";
   };
@@ -5436,12 +5436,12 @@ final: prev:
 
   packer-nvim = buildVimPluginFrom2Nix {
     pname = "packer.nvim";
-    version = "2022-09-04";
+    version = "2022-09-05";
     src = fetchFromGitHub {
       owner = "wbthomason";
       repo = "packer.nvim";
-      rev = "14571611c06e757f4f5fe46b82657417645c74dc";
-      sha256 = "1dnjcmairw69v2g2gxdnbn7nn4vl570d1bq85a82y0j31p6w4z3a";
+      rev = "6db20b4804b432beb04abe2a3e850e03e0ec1f27";
+      sha256 = "19jv0im638mppsh76f4v1ivlqln4vvhydq355xbbbnzd3vi6gmf9";
     };
     meta.homepage = "https://github.com/wbthomason/packer.nvim/";
   };
@@ -5625,6 +5625,18 @@ final: prev:
       sha256 = "1hpid82gdczis0g0pxvx445n2wg7j4zx66fm43zxq08kcv3k5ara";
     };
     meta.homepage = "https://github.com/sotte/presenting.vim/";
+  };
+
+  preto = buildVimPluginFrom2Nix {
+    pname = "preto";
+    version = "2016-02-16";
+    src = fetchFromGitHub {
+      owner = "ewilazarus";
+      repo = "preto";
+      rev = "b9200d9a0ff09c4bc8b1cf054f61f12f49438454";
+      sha256 = "1g4cgj4vn81p08air7rfx6fx2wbncy92hicgmb5mdx2fbh2qpc9p";
+    };
+    meta.homepage = "https://github.com/ewilazarus/preto/";
   };
 
   prev_indent = buildVimPluginFrom2Nix {
@@ -10271,12 +10283,12 @@ final: prev:
 
   vim-plug = buildVimPluginFrom2Nix {
     pname = "vim-plug";
-    version = "2022-08-17";
+    version = "2022-09-05";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "vim-plug";
-      rev = "d94d234548a8fd6fa686812848f377f1419dafa1";
-      sha256 = "1jyx46iddxhsb0nhbg5snj6x0snlmp1nv4m86n3afsz1y4371g9g";
+      rev = "f308ef394ee7c71338e661f9da8dea186d5d2c09";
+      sha256 = "1l5a3im0r5wxb5ca0angcjwv9p4byy5xnaf9rsa5242caig19hgj";
     };
     meta.homepage = "https://github.com/junegunn/vim-plug/";
   };
@@ -12158,12 +12170,12 @@ final: prev:
 
   chad = buildVimPluginFrom2Nix {
     pname = "chad";
-    version = "2022-09-04";
+    version = "2022-09-05";
     src = fetchFromGitHub {
       owner = "ms-jpq";
       repo = "chadtree";
-      rev = "c4d82b2e2b815ce1fae2962b46e245f6cbfe66ca";
-      sha256 = "03vapzgpkqqgm85vjvcm6y0br02r1g7fl687nm7qkgzdlfhfnz4r";
+      rev = "356ee2f165a1cf9f17c37e000d325ba775def643";
+      sha256 = "02zb16926a2ng6nsj7rsr6vi7gjbd7d2q8kkgdc0c43iw4qd55hi";
     };
     meta.homepage = "https://github.com/ms-jpq/chadtree/";
   };
