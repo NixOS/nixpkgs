@@ -17,7 +17,7 @@
 , boogie
 , dotnet-sdk
 , callPackage
-, wrapWithMoveProverDeps
+, move-wrapWithMoveProverDeps
 }:
 
 let
@@ -29,13 +29,8 @@ let
 
   common = { buildFeatures ? [ ] }:
     let
-      # Default to not running tests.
-      # Tests do not pass with the `address20` or `address32` features enabled, since
-      # expected outputs were generated with no features. (16 byte addresses)
-      # We should run tests on `move-cli` with no features enabled.
-      doCheck = (builtins.length buildFeatures) == 0;
       package = rustPlatform.buildRustPackage rec {
-        inherit buildFeatures doCheck;
+        inherit buildFeatures;
 
         pname = "move";
         version = "unstable-2022-08-28";
@@ -49,22 +44,23 @@ let
         cargoSha256 = "sha256-BTbChMtwSD5GIHLXUaEMlk3PMMh7jgR9yWk2W4J4El8=";
 
         nativeBuildInputs = [ pkg-config ];
-        buildInputs = [ openssl zlib git ] ++ (lib.optionals stdenv.isDarwin ([
+        buildInputs = [ openssl zlib git ]
+          ++ lib.optionals stdenv.isDarwin ([
           IOKit
           Security
           CoreFoundation
           AppKit
-        ] ++ (lib.optionals stdenv.isAarch64 [ System ])))
-          ++ (lib.optionals installProver [
+        ] ++ lib.optionals stdenv.isAarch64 [ System ])
+          ++ lib.optionals installProver [
           z3
           icu
           boogie
           dotnet-sdk
-        ]);
+        ];
 
         # Set $MOVE_HOME to $TMPDIR to prevent tests from writing to the home directory.
         preCheck = ''
-          export MOVE_HOME=$TMPDIR
+          export MOVE_HOME=$TMPDIR/.move
           ${lib.optionalString installProver ''
             export BOOGIE_EXE=${boogie}/bin/boogie
             export Z3_EXE=${z3}/bin/z3
@@ -85,11 +81,17 @@ let
           "evm-exec-utils"
           "--exclude"
           "move-to-yul"
-        ] ++ (lib.optionals (!installProver) [
+        ] ++ lib.optionals (!installProver) [
           "--exclude"
           "move-prover"
-        ]);
-        cargoCheckFlags = lib.optionals (!installProver) [
+        ];
+
+        # Tests do not pass with the `address20` or `address32` features enabled, since
+        # expected outputs were generated with no features. (16 byte addresses)
+        # We should run tests on `move-cli` with no features enabled.
+        checkFeatures = [ ];
+
+        checkFlags = lib.optionals (!installProver) [
           "--skip"
           "prove"
         ];
@@ -109,7 +111,7 @@ let
         };
       };
     in
-    wrapWithMoveProverDeps {
+    move-wrapWithMoveProverDeps {
       inherit package;
       bin = "move";
     };
