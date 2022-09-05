@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "benchkram";
     repo = pname;
     rev = "${version}";
-    sha256 = "sha256-JG1fysCqqd/MwpNhKJwLr4cTGq4/88f9OMMapb+r3bc=";
+    hash = "sha256-JG1fysCqqd/MwpNhKJwLr4cTGq4/88f9OMMapb+r3bc=";
   };
 
   vendorSha256 = "sha256-R+zXGR5isoo76oc4lsFf9uCM0Kyi8dQiKEg4BUxtv+k=";
