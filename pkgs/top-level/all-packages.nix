@@ -18873,14 +18873,15 @@ with pkgs;
     nodejs = nodejs-14_x;
   };
 
-  itk4 = callPackage ../development/libraries/itk/4.x.nix {
-    stdenv = if stdenv.cc.isGNU && stdenv.system == "x86_64-linux" then gcc10Stdenv else stdenv;
+  itk_5 = callPackage ../development/libraries/itk/5.x.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  itk = callPackage ../development/libraries/itk {
+  itk-unstable = callPackage ../development/libraries/itk/unstable.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
+
+  itk = itk_5;
 
   jama = callPackage ../development/libraries/jama { };
 
@@ -21941,14 +21942,6 @@ with pkgs;
 
   vte_290 = callPackage ../development/libraries/vte/2.90.nix { };
 
-  vtk_7 = libsForQt515.callPackage ../development/libraries/vtk/7.x.nix {
-    stdenv = gcc9Stdenv;
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.libs) xpc;
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices DiskArbitration
-                                          IOKit CFNetwork Security ApplicationServices
-                                          CoreText IOSurface ImageIO OpenGL GLUT;
-  };
   vtk_8 = libsForQt515.callPackage ../development/libraries/vtk/8.x.nix {
     stdenv = gcc9Stdenv;
     inherit (darwin) libobjc;
@@ -34033,7 +34026,6 @@ with pkgs;
   angsd = callPackage ../applications/science/biology/angsd { };
 
   ants = callPackage ../applications/science/biology/ants {
-    stdenv = if stdenv.cc.isGNU && stdenv.system == "x86_64-linux" then gcc10Stdenv else stdenv;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
