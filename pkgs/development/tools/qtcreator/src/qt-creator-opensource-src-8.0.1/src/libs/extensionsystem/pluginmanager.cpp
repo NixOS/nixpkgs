@@ -1369,10 +1369,15 @@ void PluginManagerPrivate::loadPlugins()
         loadPlugin(spec, PluginSpec::Initialized);
     }
 
+    qDebug() << "PluginManagerPrivate::loadPlugins PluginSpec::Loaded" << PluginSpec::Loaded;
+    qDebug() << "PluginManagerPrivate::loadPlugins PluginSpec::Initialized" << PluginSpec::Initialized;
+    qDebug() << "PluginManagerPrivate::loadPlugins PluginSpec::Running" << PluginSpec::Running;
+
     Utils::setMimeStartupPhase(MimeStartupPhase::PluginsDelayedInitializing);
     Utils::reverseForeach(queue, [this](PluginSpec *spec) {
         qDebug() << "PluginManagerPrivate::loadPlugins spec" << spec << spec->name() << spec->version() << "loadPlugin Running";
         loadPlugin(spec, PluginSpec::Running);
+        qDebug() << "PluginManagerPrivate::loadPlugins spec" << spec << spec->name() << spec->version() << "state" << spec->state();
         if (spec->state() == PluginSpec::Running) {
             delayedInitializeQueue.push(spec);
         } else {
