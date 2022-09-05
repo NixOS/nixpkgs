@@ -18,7 +18,7 @@
 # want it to match the upstream format because sage depends on it.
 , texinfo4
 , texlive
-, enableDocs ? true
+, enableDocs ? !stdenv.isDarwin
 , enableGfanlib ? true
 }:
 
