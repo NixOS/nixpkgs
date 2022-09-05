@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, git }:
 
 buildGoModule rec {
   pname = "bob";
@@ -15,6 +15,7 @@ buildGoModule rec {
 
   excludedPackages = ["example/server-db" "test/e2e"];
 
+  # tests require network access
   doCheck = false;
 
   meta = with lib; {
