@@ -7872,6 +7872,8 @@ in {
 
   pylibconfig2 = callPackage ../development/python-modules/pylibconfig2 { };
 
+  pylibdmtx = callPackage ../development/python-modules/pylibdmtx { };
+
   pylibftdi = callPackage ../development/python-modules/pylibftdi {
     inherit (pkgs) libusb1;
   };
@@ -9436,6 +9438,8 @@ in {
   releases = callPackage ../development/python-modules/releases { };
 
   remarshal = callPackage ../development/python-modules/remarshal { };
+
+  remi = callPackage ../development/python-modules/remi { };
 
   renault-api = callPackage ../development/python-modules/renault-api { };
 
