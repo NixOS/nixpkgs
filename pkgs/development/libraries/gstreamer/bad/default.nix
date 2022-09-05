@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, substituteAll
 , meson
 , ninja
 , gettext
@@ -77,6 +78,7 @@
 , mjpegtools
 , libGLU
 , libGL
+, addOpenGLRunpath
 , libintl
 , game-music-emu
 , openssl
@@ -106,6 +108,14 @@ stdenv.mkDerivation rec {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
     sha256 = "sha256-ehHBO1XdHSOG3ZAiGeQcv83ajh4Ko+c4GGyVB0s12k8=";
   };
+
+  patches = [
+    # Add fallback paths for nvidia userspace libraries
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit (addOpenGLRunpath) driverLink;
+    })
+  ];
 
   nativeBuildInputs = [
     meson
