@@ -10662,6 +10662,8 @@ in {
 
   telegram = callPackage ../development/python-modules/telegram { };
 
+  telegraph = callPackage ../development/python-modules/telegraph { };
+
   telethon = callPackage ../development/python-modules/telethon {
     inherit (pkgs) openssl;
   };
