@@ -29655,6 +29655,8 @@ with pkgs;
 
   novnc = callPackage ../applications/networking/novnc { };
 
+  nwg-bar = callPackage ../applications/misc/nwg-bar { };
+
   nwg-drawer = callPackage ../applications/misc/nwg-drawer { };
 
   nwg-launchers = callPackage ../applications/misc/nwg-launchers { };
