@@ -297,7 +297,7 @@ in
       };
       environment = env // {
         PATH = mkForce pkg.path;
-        PYTHONPATH = "${pkg.pythonPath}:${pkg}/lib/paperless-ngx/src";
+        PYTHONPATH = "${pkg.python.pkgs.makePythonPath pkg.propagatedBuildInputs}:${pkg}/lib/paperless-ngx/src";
       };
       # Allow the web interface to access the private /tmp directory of the server.
       # This is required to support uploading files via the web interface.
