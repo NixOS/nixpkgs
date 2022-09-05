@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-R+zXGR5isoo76oc4lsFf9uCM0Kyi8dQiKEg4BUxtv+k=";
 
-  excludedPackages = ["example/server-db" "test/e2e"];
+  excludedPackages = ["example/server-db" "test/e2e" "tui-example"];
 
   # tests require network access
   doCheck = false;
