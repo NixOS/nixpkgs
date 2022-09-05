@@ -78,13 +78,11 @@ let
         rocksdb
         postgresql # libpq
         openssl # libssl
-      ] ++ (
-        lib.optional stdenv.isDarwin [
-          libiconv
-          DiskArbitration
-          Foundation
-        ]
-      );
+      ] ++ lib.optionals stdenv.isDarwin [
+        libiconv
+        DiskArbitration
+        Foundation
+      ];
 
       meta = with lib; {
         description = "A layer 1 for everyone";
