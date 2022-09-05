@@ -20746,9 +20746,10 @@ with pkgs;
   opencascade = callPackage ../development/libraries/opencascade {
     inherit (darwin.apple_sdk.frameworks) OpenCL Cocoa;
   };
+
   opencascade-occt = callPackage ../development/libraries/opencascade-occt { };
 
-  opencascade-occt_7-4 = callPackage ../development/libraries/opencascade-occt_7-4 { };
+  opencascade-occt_7-4 = callPackage ../development/libraries/opencascade-occt/7.4.nix { };
 
   opencl-headers = callPackage ../development/libraries/opencl-headers { };
 
