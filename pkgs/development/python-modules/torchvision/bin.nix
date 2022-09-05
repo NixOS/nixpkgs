@@ -9,14 +9,14 @@
 , patchelf
 , pillow
 , python
-, pytorch-bin
+, torch-bin
 }:
 
 let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "0.12.0";
+  version = "0.13.1";
 in buildPythonPackage {
   inherit version;
 
@@ -34,7 +34,7 @@ in buildPythonPackage {
 
   propagatedBuildInputs = [
     pillow
-    pytorch-bin
+    torch-bin
   ];
 
   # The wheel-binary is not stripped to avoid the error of `ImportError: libtorch_cuda_cpp.so: ELF load command address/offset not properly aligned.`.
@@ -48,7 +48,7 @@ in buildPythonPackage {
     # Note: after patchelf'ing, libcudart can still not be found. However, this should
     #       not be an issue, because PyTorch is loaded before torchvision and brings
     #       in the necessary symbols.
-    patchelf --set-rpath "${rpath}:${pytorch-bin}/${python.sitePackages}/torch/lib:" \
+    patchelf --set-rpath "${rpath}:${torch-bin}/${python.sitePackages}/torch/lib:" \
       "$out/${python.sitePackages}/torchvision/_C.so"
   '';
 

@@ -39,14 +39,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "${basename}-bin";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "https://github.com/streamlink/${basename}/releases/download/v${version}/${basename}-v${version}-${arch}.tar.gz";
     hash =
       if arch == "linux64"
       then
-        "sha256-5AgQ+nvv/J493Zi+F+6QRT/DGg8JyusXsP5qVuXtiG4="
+        "sha256-kfCGhIgKMI0siDqnmIHSMk6RMHFlW6uwVsW48aiRua0="
       else
         "sha256-+jgTpIYb4BPM7Ixmo+YUeOX5OlQlMaRVEXf3WzS2lAI=";
   };

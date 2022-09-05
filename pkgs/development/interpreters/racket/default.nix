@@ -49,7 +49,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "8.5"; # always change at once with ./minimal.nix
+  version = "8.6"; # always change at once with ./minimal.nix
 
   src = (lib.makeOverridable ({ name, sha256 }:
     fetchurl {
@@ -58,14 +58,13 @@ stdenv.mkDerivation rec {
     }
   )) {
     name = "${pname}-${version}";
-    sha256 = "sha256-dWnOnpxh5zmou9eqVdcfhuCr8ts1CTqqEF1j/dk0jhs=";
+    sha256 = "sha256-Lv8+l7x6EM+gMg2psH8NSIZTsLW4SQMiyC84SuD6Gig=";
   };
 
   FONTCONFIG_FILE = fontsConf;
   LD_LIBRARY_PATH = libPath;
   NIX_LDFLAGS = lib.concatStringsSep " " [
     (lib.optionalString (stdenv.cc.isGNU && ! stdenv.isDarwin) "-lgcc_s")
-    (lib.optionalString stdenv.isDarwin "-framework CoreFoundation")
   ];
 
   nativeBuildInputs = [ cacert wrapGAppsHook ];
@@ -89,7 +88,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     unset AR
-    for f in src/lt/configure src/cs/c/configure src/bc/src/string.c src/ChezScheme/workarea; do
+    for f in src/lt/configure src/cs/c/configure src/bc/src/string.c; do
       substituteInPlace "$f" \
         --replace /usr/bin/uname ${coreutils}/bin/uname \
         --replace /bin/cp ${coreutils}/bin/cp \

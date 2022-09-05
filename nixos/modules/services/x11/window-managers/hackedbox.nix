@@ -8,7 +8,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.hackedbox.enable = mkEnableOption "hackedbox";
+    services.xserver.windowManager.hackedbox.enable = mkEnableOption (lib.mdDoc "hackedbox");
   };
 
   ###### implementation

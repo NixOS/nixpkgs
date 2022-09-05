@@ -8,7 +8,7 @@
 
 let
   pname = "sphinx-autodoc-typehints";
-  version = "1.19.1";
+  version = "1.19.2";
 in
 
 buildPythonPackage {
@@ -20,7 +20,7 @@ buildPythonPackage {
   src = fetchPypi {
     pname = "sphinx_autodoc_typehints";
     inherit version;
-    hash = "sha256-bIQdtV4Om+BIP/OWKiFStg55MG9CiNjE5+hqyESGpeo=";
+    hash = "sha256-hy+y17PXlIJsKONu32c56TVJSRRH3KvrB8WIVen5FN4=";
   };
 
   propagatedBuildInputs = [

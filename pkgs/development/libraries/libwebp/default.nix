@@ -27,16 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libwebp";
-  version = "1.2.2";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner  = "webmproject";
     repo   = pname;
     rev    = "v${version}";
-    hash   = "sha256-WF2HZPS7mbotk+d1oLM/JC5l/FWfkrk+T3Z6EW9oYEI=";
+    hash   = "sha256-XX6qOWlIl8TqOQMiGpmmDVKwQnM1taG6lrqq1ZFVk5s=";
   };
-
-  prePatch = "patchShebangs .";
 
   configureFlags = [
     (lib.enableFeature threadingSupport "threading")

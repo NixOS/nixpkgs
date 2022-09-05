@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bitwig-studio";
-  version = "4.3.2";
+  version = "4.3.4";
 
   src = fetchurl {
     url = "https://downloads.bitwig.com/stable/${version}/${pname}-${version}.deb";
-    sha256 = "sha256-vR5C7imMA5oJ5F3Q/tmVNN/FLhFjegFjls9HR4CYoVk=";
+    sha256 = "sha256-2CCxpQPZB5F5jwJCux1OqGuxCuFZus5vlCrmStmI0F8=";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook ];
@@ -53,9 +53,11 @@ stdenv.mkDerivation rec {
       -not -path '*/resources/*' | \
     while IFS= read -r f ; do
       patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $f
+      # make xdg-open overrideable at runtime
       wrapProgram $f \
         "''${gappsWrapperArgs[@]}" \
-        --prefix PATH : "${lib.makeBinPath [ xdg-utils ffmpeg ]}" \
+        --prefix PATH : "${lib.makeBinPath [ ffmpeg ]}" \
+        --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}" \
         --suffix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath buildInputs}"
     done
 

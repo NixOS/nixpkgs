@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , cmake, pkg-config, flex, bison
 , llvmPackages, elfutils
 , libbfd, libbpf, libopcodes, bcc
@@ -35,6 +35,17 @@ stdenv.mkDerivation rec {
     rev    = "v${version}";
     sha256 = "sha256-9adZAKSn00W2yNwVDbVB1/O5Y+10c4EkVJGCHyd4Tgg=";
   };
+
+  patches = [
+    # Pull upstream fix for binutils-2.39:
+    #   https://github.com/iovisor/bpftrace/pull/2328
+    (fetchpatch {
+      name = "binutils-2.39.patch";
+      url = "https://github.com/iovisor/bpftrace/commit/3be6e708d514d3378a4fe985ab907643ecbc77ee.patch";
+      sha256 = "sha256-WWEh8ViGw8053nEG/29KeKEHV5ossWPtL/AAV/l+pnY=";
+      excludes = [ "CHANGELOG.md" ];
+    })
+  ];
 
   buildInputs = with llvmPackages;
     [ llvm libclang

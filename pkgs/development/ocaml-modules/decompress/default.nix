@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage
+{ lib, fetchurl, buildDunePackage, ocaml
 , checkseum, bigarray-compat, optint, cmdliner
 , bigstringaf, alcotest, camlzip, base64, ctypes, fmt
 }:
@@ -19,7 +19,7 @@ buildDunePackage rec {
   buildInputs = [ cmdliner ];
   propagatedBuildInputs = [ optint bigarray-compat checkseum ];
   checkInputs = [ alcotest bigstringaf ctypes fmt camlzip base64 ];
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     description = "Pure OCaml implementation of Zlib";

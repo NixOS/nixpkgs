@@ -55,15 +55,15 @@ in
 
     services.haka = {
 
-      enable = mkEnableOption "Haka";
+      enable = mkEnableOption (lib.mdDoc "Haka");
 
       package = mkOption {
         default = pkgs.haka;
         defaultText = literalExpression "pkgs.haka";
         type = types.package;
-        description = "
+        description = lib.mdDoc ''
           Which Haka derivation to use.
-        ";
+        '';
       };
 
       configFile = mkOption {
@@ -103,9 +103,9 @@ in
         description = lib.mdDoc "Whether to enable pcap";
       };
 
-      nfqueue = mkEnableOption "nfqueue";
+      nfqueue = mkEnableOption (lib.mdDoc "nfqueue");
 
-      dump.enable = mkEnableOption "dump";
+      dump.enable = mkEnableOption (lib.mdDoc "dump");
       dump.input  = mkOption {
         default = "/tmp/input.pcap";
         example = "/path/to/file.pcap";

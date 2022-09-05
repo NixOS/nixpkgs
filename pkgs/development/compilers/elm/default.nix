@@ -1,4 +1,4 @@
-{ pkgs, lib }:
+{ pkgs, lib, makeWrapper }:
 
 let
 
@@ -18,7 +18,7 @@ let
           elmVersion = drv.version;
           registryDat = ./registry.dat;
         };
-        buildTools = drv.buildTools or [] ++ [ pkgs.makeWrapper ];
+        buildTools = drv.buildTools or [] ++ [ makeWrapper ];
         jailbreak = true;
         postInstall = ''
           wrapProgram $out/bin/elm \
@@ -214,7 +214,7 @@ in lib.makeScope pkgs.newScope (self: with self; {
 
       elm-pages = nodePkgs."elm-pages".overrideAttrs (
         old: {
-          buildInputs = old.buildInputs ++ [ pkgs.makeWrapper ];
+          nativeBuildInputs = [ makeWrapper ];
 
           # can't use `patches = [ <patch_file> ]` with a nodePkgs derivation;
           # need to patch in one of the build phases instead.
@@ -237,6 +237,8 @@ in lib.makeScope pkgs.newScope (self: with self; {
           };
         }
       );
+
+      lamdera = callPackage ./packages/lamdera.nix {};
 
       inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse elm-git-install;
     })

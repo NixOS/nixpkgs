@@ -2,19 +2,14 @@
 
 buildPythonPackage rec {
   pname = "HyFetch";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     repo = "hyfetch";
     owner = "hykilpikonna";
-    rev = version;
-    sha256 = "sha256-8Mp3MV9HVzXzT/W6F/lD34tT0uOgqyydg31PlR3sMUA=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-15FeW3yaM7eUJ1O20H/bQquDRAsRWTJMzkzQ5Kv1ezE=";
   };
-
-  # TODO: Remove with next release bump since it has been fixed upstream (hykilpikonna/hyfetch@d797a8c)
-  postPatch = ''
-    chmod +x neofetch
-  '';
 
   propagatedBuildInputs = [
     typing-extensions

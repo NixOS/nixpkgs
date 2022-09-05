@@ -11,7 +11,7 @@ in
   };
 
   options.services.grafana-agent = {
-    enable = mkEnableOption "grafana-agent";
+    enable = mkEnableOption (lib.mdDoc "grafana-agent");
 
     package = mkOption {
       type = types.package;
@@ -38,8 +38,8 @@ in
     };
 
     settings = mkOption {
-      description = ''
-        Configuration for <package>grafana-agent</package>.
+      description = lib.mdDoc ''
+        Configuration for `grafana-agent`.
 
         See https://grafana.com/docs/agent/latest/configuration/
       '';

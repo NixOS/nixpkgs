@@ -36,47 +36,42 @@ let
   serverConfig = pkgs.writeText "neo4j.conf" ''
     # General
     dbms.allow_upgrade=${boolToString cfg.allowUpgrade}
-    dbms.connectors.default_listen_address=${cfg.defaultListenAddress}
-    dbms.read_only=${boolToString cfg.readOnly}
+    dbms.default_listen_address=${cfg.defaultListenAddress}
+    dbms.databases.default_to_read_only=${boolToString cfg.readOnly}
     ${optionalString (cfg.workerCount > 0) ''
       dbms.threads.worker_count=${toString cfg.workerCount}
     ''}
 
-    # Directories
+    # Directories (readonly)
     dbms.directories.certificates=${cfg.directories.certificates}
-    dbms.directories.data=${cfg.directories.data}
-    dbms.directories.logs=${cfg.directories.home}/logs
     dbms.directories.plugins=${cfg.directories.plugins}
+    dbms.directories.lib=${cfg.package}/share/neo4j/lib
     ${optionalString (cfg.constrainLoadCsv) ''
       dbms.directories.import=${cfg.directories.imports}
-    ''}
+   ''}
+
+    # Directories (read and write)
+    dbms.directories.data=${cfg.directories.data}
+    dbms.directories.logs=${cfg.directories.home}/logs
+    dbms.directories.run=${cfg.directories.home}/run
 
     # HTTP Connector
     ${optionalString (cfg.http.enable) ''
       dbms.connector.http.enabled=${boolToString cfg.http.enable}
       dbms.connector.http.listen_address=${cfg.http.listenAddress}
-    ''}
-    ${optionalString (!cfg.http.enable) ''
-      # It is not possible to disable the HTTP connector. To fully prevent
-      # clients from connecting to HTTP, block the HTTP port (7474 by default)
-      # via firewall. listen_address is set to the loopback interface to
-      # prevent remote clients from connecting.
-      dbms.connector.http.listen_address=127.0.0.1
+      dbms.connector.http.advertised_address=${cfg.http.listenAddress}
     ''}
 
     # HTTPS Connector
     dbms.connector.https.enabled=${boolToString cfg.https.enable}
     dbms.connector.https.listen_address=${cfg.https.listenAddress}
-    https.ssl_policy=${cfg.https.sslPolicy}
+    dbms.connector.https.advertised_address=${cfg.https.listenAddress}
 
     # BOLT Connector
     dbms.connector.bolt.enabled=${boolToString cfg.bolt.enable}
     dbms.connector.bolt.listen_address=${cfg.bolt.listenAddress}
-    bolt.ssl_policy=${cfg.bolt.sslPolicy}
+    dbms.connector.bolt.advertised_address=${cfg.bolt.listenAddress}
     dbms.connector.bolt.tls_level=${cfg.bolt.tlsLevel}
-
-    # neo4j-shell
-    dbms.shell.enabled=${boolToString cfg.shell.enable}
 
     # SSL Policies
     ${concatStringsSep "\n" sslPolicies}
@@ -95,8 +90,10 @@ let
     dbms.jvm.additional=-Djdk.tls.rejectClientInitiatedRenegotiation=true
     dbms.jvm.additional=-Dunsupported.dbms.udc.source=tarball
 
-    # Usage Data Collector
-    dbms.udc.enabled=${boolToString cfg.udc.enable}
+    #dbms.memory.heap.initial_size=12000m
+    #dbms.memory.heap.max_size=12000m
+    #dbms.memory.pagecache.size=4g
+    #dbms.tx_state.max_off_heap_memory=8000m
 
     # Extra Configuration
     ${cfg.extraServerConfig}
@@ -114,6 +111,8 @@ in {
     (mkRemovedOptionModule [ "services" "neo4j" "port" ] "Use services.neo4j.http.listenAddress instead.")
     (mkRemovedOptionModule [ "services" "neo4j" "boltPort" ] "Use services.neo4j.bolt.listenAddress instead.")
     (mkRemovedOptionModule [ "services" "neo4j" "httpsPort" ] "Use services.neo4j.https.listenAddress instead.")
+    (mkRemovedOptionModule [ "services" "neo4j" "shell" "enabled" ] "shell.enabled was removed upstream")
+    (mkRemovedOptionModule [ "services" "neo4j" "udc" "enabled" ] "udc.enabled was removed upstream")
   ];
 
   ###### interface
@@ -335,12 +334,9 @@ in {
         type = types.bool;
         default = true;
         description = lib.mdDoc ''
-          The HTTP connector is required for Neo4j, and cannot be disabled.
-          Setting this option to `false` will force the HTTP
-          connector's {option}`listenAddress` to the loopback
-          interface to prevent connection of remote clients. To prevent all
-          clients from connecting, block the HTTP port (7474 by default) by
-          firewall.
+          Enable the HTTP connector for Neo4j. Setting this option to
+          `false` will stop Neo4j from listening for incoming
+          connections on the HTTPS port (7474 by default).
         '';
       };
 
@@ -542,7 +538,7 @@ in {
             type = types.listOf types.path;
             internal = true;
             readOnly = true;
-            description = ''
+            description = lib.mdDoc ''
               Directories of this policy that will be created automatically
               when the certificates directory is left at its default value.
               This includes all options of type path that are left at their
@@ -566,19 +562,6 @@ in {
         [SSL Framework](https://neo4j.com/docs/operations-manual/current/security/ssl-framework/)
         for further details.
       '';
-    };
-
-    udc = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Enable the Usage Data Collector which Neo4j uses to collect usage
-          data. Refer to the operations manual section on the
-          [Usage Data Collector](https://neo4j.com/docs/operations-manual/current/configuration/usage-data-collector/)
-          for more information.
-        '';
-      };
     };
 
   };
@@ -612,7 +595,7 @@ in {
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         environment = {
-          NEO4J_HOME = "${cfg.package}/share/neo4j";
+          NEO4J_HOME = "${cfg.directories.home}";
           NEO4J_CONF = "${cfg.directories.home}/conf";
         };
         serviceConfig = {
@@ -653,6 +636,6 @@ in {
     };
 
   meta = {
-    maintainers = with lib.maintainers; [ patternspandemic ];
+    maintainers = with lib.maintainers; [ patternspandemic jonringer erictapen ];
   };
 }

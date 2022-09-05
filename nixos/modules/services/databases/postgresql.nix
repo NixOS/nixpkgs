@@ -40,7 +40,7 @@ in
 
     services.postgresql = {
 
-      enable = mkEnableOption "PostgreSQL Server";
+      enable = mkEnableOption (lib.mdDoc "PostgreSQL Server");
 
       package = mkOption {
         type = types.package;
@@ -79,15 +79,15 @@ in
       authentication = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Defines how users authenticate themselves to the server. See the
-          <link xlink:href="https://www.postgresql.org/docs/current/auth-pg-hba-conf.html">PostgreSQL documentation for pg_hba.conf</link>
+          [PostgreSQL documentation for pg_hba.conf](https://www.postgresql.org/docs/current/auth-pg-hba-conf.html)
           for details on the expected format of this option. By default,
           peer based authentication will be used for users connecting
           via the Unix socket, and md5 password authentication will be
           used for users connecting via TCP. Any added rules will be
           inserted above the default rules. If you'd like to replace the
-          default rules entirely, you can use <function>lib.mkForce</function> in your
+          default rules entirely, you can use `lib.mkForce` in your
           module.
         '';
       };
@@ -230,15 +230,15 @@ in
       settings = mkOption {
         type = with types; attrsOf (oneOf [ bool float int str ]);
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           PostgreSQL configuration. Refer to
-          <link xlink:href="https://www.postgresql.org/docs/11/config-setting.html#CONFIG-SETTING-CONFIGURATION-FILE"/>
-          for an overview of <literal>postgresql.conf</literal>.
+          <https://www.postgresql.org/docs/11/config-setting.html#CONFIG-SETTING-CONFIGURATION-FILE>
+          for an overview of `postgresql.conf`.
 
-          <note><para>
-            String values will automatically be enclosed in single quotes. Single quotes will be
-            escaped with two single quotes as described by the upstream documentation linked above.
-          </para></note>
+          ::: {.note}
+          String values will automatically be enclosed in single quotes. Single quotes will be
+          escaped with two single quotes as described by the upstream documentation linked above.
+          :::
         '';
         example = literalExpression ''
           {
@@ -264,7 +264,7 @@ in
         default = "postgres";
         internal = true;
         readOnly = true;
-        description = ''
+        description = lib.mdDoc ''
           PostgreSQL superuser account to use for various operations. Internal since changing
           this value would lead to breakage while setting up databases.
         '';

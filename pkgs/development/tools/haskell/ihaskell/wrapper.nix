@@ -14,7 +14,7 @@ let
 in
 buildEnv {
   name = "ihaskell-with-packages";
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   paths = [ ihaskellEnv jupyter ];
   postBuild = ''
     ln -s ${ihaskellSh}/bin/ihaskell-notebook $out/bin/
@@ -24,4 +24,9 @@ buildEnv {
       fi
     done
   '';
+  meta = {
+    # ihaskell has an indirect dependency on the Python package mistune, which
+    # is marked insecure.
+    hydraPlatforms = lib.platforms.none;
+  };
 }

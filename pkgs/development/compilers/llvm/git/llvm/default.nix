@@ -89,6 +89,9 @@ in stdenv.mkDerivation (rec {
     rm test/DebugInfo/X86/convert-inlined.ll
     rm test/DebugInfo/X86/convert-linked.ll
     rm test/tools/dsymutil/X86/op-convert.test
+    rm test/tools/gold/X86/split-dwarf.ll
+    rm test/tools/llvm-dwarfdump/X86/prettyprint_types.s
+    rm test/tools/llvm-dwarfdump/X86/simplified-template-names.s
   '' + optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
     # Seems to require certain floating point hardware (NEON?)
     rm test/ExecutionEngine/frem.ll
@@ -114,7 +117,7 @@ in stdenv.mkDerivation (rec {
     # Some flags don't need to be repassed because LLVM already does so (like
     # CMAKE_BUILD_TYPE), others are irrelevant to the result.
     flagsForLlvmConfig = [
-      "-DLLVM_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake/llvm/"
+      "-DLLVM_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/llvm"
       "-DLLVM_ENABLE_RTTI=ON"
     ] ++ optionals enableSharedLibraries [
       "-DLLVM_LINK_LLVM_DYLIB=ON"
@@ -194,7 +197,7 @@ in stdenv.mkDerivation (rec {
       --replace "\''${_IMPORT_PREFIX}/lib/lib" "$lib/lib/lib" \
       --replace "$out/bin/llvm-config" "$dev/bin/llvm-config"
     substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
-      --replace 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}'"$lib"'")'
+      --replace 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
   ''
   + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
@@ -208,6 +211,9 @@ in stdenv.mkDerivation (rec {
     && (stdenv.hostPlatform == stdenv.buildPlatform);
 
   checkTarget = "check-all";
+
+  # For the update script:
+  passthru.monorepoSrc = monorepoSrc;
 
   requiredSystemFeatures = [ "big-parallel" ];
   meta = llvm_meta // {

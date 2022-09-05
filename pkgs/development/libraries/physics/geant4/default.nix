@@ -88,11 +88,11 @@ stdenv.mkDerivation rec {
   ];
   dontWrapQtApps = true; # no binaries
 
-  buildInputs = [ clhep libGLU xlibsWrapper libXmu ]
+  buildInputs = [ libGLU xlibsWrapper libXmu ]
     ++ lib.optionals enableInventor [ libXpm coin3d soxt motif ]
     ++ lib.optionals enablePython [ boost_python python3 ];
 
-  propagatedBuildInputs = [ expat xercesc zlib libGL ]
+  propagatedBuildInputs = [ clhep expat xercesc zlib libGL ]
     ++ lib.optionals enableXM [ motif ]
     ++ lib.optionals enableQt [ qtbase ];
 

@@ -6,16 +6,13 @@
 , astroid
 , pytestCheckHook
 , docstring-parser
-, isort
 , marshmallow
-, pytest-cov
 , sphinx
 , hypothesis
 , vaa
 , deal-solver
 , pygments
 , typeguard
-, coverage
 , urllib3
 }:
 

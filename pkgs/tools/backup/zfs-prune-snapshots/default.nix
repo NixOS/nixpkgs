@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, go-md2man }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.0";
+  version = "1.5.0";
   pname = "zfs-prune-snapshots";
 
   src = fetchFromGitHub {
     owner = "bahamas10";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-udzC4AUXk7h7HpRcz0V+kPECzATAYZtX8z2fvKPCZ/c=";
+    sha256 = "sha256-gCf/ZIeIh84WQNs5wZO1/l3zpnl2sNxsFO7cOa92JUM=";
   };
 
   nativeBuildInputs = [ go-md2man ];

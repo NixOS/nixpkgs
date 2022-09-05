@@ -523,7 +523,7 @@ in
       type = types.bool;
       default = false;
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to configure luks support in the initrd, when no luks
         devices are configured.
       '';
@@ -532,15 +532,15 @@ in
     boot.initrd.luks.reusePassphrases = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         When opening a new LUKS device try reusing last successful
         passphrase.
 
         Useful for mounting a number of devices that use the same
         passphrase without retyping it several times.
 
-        Such setup can be useful if you use <command>cryptsetup
-        luksSuspend</command>. Different LUKS devices will still have
+        Such setup can be useful if you use {command}`cryptsetup luksSuspend`.
+        Different LUKS devices will still have
         different master keys even when using the same passphrase.
       '';
     };
@@ -563,7 +563,7 @@ in
             default = name;
             example = "luksroot";
             type = types.str;
-            description = "Name of the unencrypted device in <filename>/dev/mapper</filename>.";
+            description = lib.mdDoc "Name of the unencrypted device in {file}`/dev/mapper`.";
           };
 
           device = mkOption {
@@ -819,7 +819,7 @@ in
             default = [];
             example = [ "_netdev" ];
             visible = false;
-            description = ''
+            description = lib.mdDoc ''
               Only used with systemd stage 1.
 
               Extra options to append to the last column of the generated crypttab file.

@@ -10,7 +10,7 @@ in {
   options = {
     services.rsyncd = {
 
-      enable = mkEnableOption "the rsync daemon";
+      enable = mkEnableOption (lib.mdDoc "the rsync daemon");
 
       port = mkOption {
         default = 873;
@@ -39,10 +39,9 @@ in {
             "secrets file" = "/etc/rsyncd.secrets";
           };
         };
-        description = ''
+        description = lib.mdDoc ''
           Configuration for rsyncd. See
-          <citerefentry><refentrytitle>rsyncd.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          {manpage}`rsyncd.conf(5)`.
         '';
       };
 

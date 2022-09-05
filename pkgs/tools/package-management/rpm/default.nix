@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rpm";
-  version = "4.17.0";
+  version = "4.17.1";
 
   src = fetchurl {
-    url = "http://ftp.rpm.org/releases/rpm-${lib.versions.majorMinor version}.x/rpm-${version}.tar.bz2";
-    sha256 = "2e0d220b24749b17810ed181ac1ed005a56bbb6bc8ac429c21f314068dc65e6a";
+    url = "https://ftp.osuosl.org/pub/rpm/releases/rpm-${lib.versions.majorMinor version}.x/rpm-${version}.tar.bz2";
+    hash = "sha256-DBG3k0ZucliFH/gr1lyP/Ywtu8cKzIaaXTQVBUmSbl0=";
   };
 
   outputs = [ "out" "dev" "man" ];

@@ -452,6 +452,8 @@ The list of source files or directories to be unpacked or copied. One of these m
 
 After running `unpackPhase`, the generic builder changes the current directory to the directory created by unpacking the sources. If there are multiple source directories, you should set `sourceRoot` to the name of the intended directory. Set `sourceRoot = ".";` if you use `srcs` and control the unpack phase yourself.
 
+By default the `sourceRoot` is set to `"source"`. If you want to point to a sub-directory inside your project, you therefore need to set `sourceRoot = "source/my-sub-directory"`.
+
 ##### `setSourceRoot` {#var-stdenv-setSourceRoot}
 
 Alternatively to setting `sourceRoot`, you can set `setSourceRoot` to a shell command to be evaluated by the unpack phase after the sources have been unpacked. This command must set `sourceRoot`.
@@ -871,11 +873,26 @@ Constructs a wrapper for a program with various possible arguments. It is define
 # adds `FOOBAR=baz` to `$out/bin/foo`’s environment
 makeWrapper $out/bin/foo $wrapperfile --set FOOBAR baz
 
-# prefixes the binary paths of `hello` and `git`
+# Prefixes the binary paths of `hello` and `git`
+# and suffixes the binary path of `xdg-utils`.
 # Be advised that paths often should be patched in directly
 # (via string replacements or in `configurePhase`).
-makeWrapper $out/bin/foo $wrapperfile --prefix PATH : ${lib.makeBinPath [ hello git ]}
+makeWrapper $out/bin/foo $wrapperfile \
+  --prefix PATH : ${lib.makeBinPath [ hello git ]} \
+  --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
 ```
+
+Packages may expect or require other utilities to be available at runtime.
+`makeWrapper` can be used to add packages to a `PATH` environment variable local to a wrapper.
+
+Use `--prefix` to explicitly set dependencies in `PATH`.
+
+:::{note}
+`--prefix` essentially hard-codes dependencies into the wrapper.
+They cannot be overridden without rebuilding the package.
+:::
+
+If dependencies should be resolved at runtime, use `--suffix` to append fallback values to `PATH`.
 
 There’s many more kinds of arguments, they are documented in `nixpkgs/pkgs/build-support/setup-hooks/make-wrapper.sh` for the `makeWrapper` implementation and in `nixpkgs/pkgs/build-support/setup-hooks/make-binary-wrapper/make-binary-wrapper.sh` for the `makeBinaryWrapper` implementation.
 

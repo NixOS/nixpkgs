@@ -20,7 +20,7 @@ in {
   options.virtualisation.digitalOcean.defaultConfigFile = mkOption {
     type = types.path;
     default = defaultConfigFile;
-    defaultText = literalDocBook ''
+    defaultText = literalMD ''
       The default configuration imports user-data if applicable and
       `(modulesPath + "/virtualisation/digital-ocean-config.nix")`.
     '';

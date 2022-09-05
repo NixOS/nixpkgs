@@ -16,9 +16,9 @@ in {
   options = {
     services.jack = {
       jackd = {
-        enable = mkEnableOption ''
+        enable = mkEnableOption (lib.mdDoc ''
           JACK Audio Connection Kit. You need to add yourself to the "jackaudio" group
-        '';
+        '');
 
         package = mkOption {
           # until jack1 promiscuous mode is fixed
@@ -27,7 +27,7 @@ in {
           default = pkgs.jack2;
           defaultText = literalExpression "pkgs.jack2";
           example = literalExpression "pkgs.jack1";
-          description = ''
+          description = lib.mdDoc ''
             The JACK package to use.
           '';
         };

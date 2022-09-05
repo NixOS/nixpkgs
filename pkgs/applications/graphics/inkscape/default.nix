@@ -48,6 +48,7 @@ let
       cachecontrol
       numpy
       lxml
+      packaging
       pillow
       scour
       pyserial

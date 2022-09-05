@@ -42,21 +42,19 @@ in
         exports = mkOption {
           type = types.lines;
           default = "";
-          description = ''
+          description = lib.mdDoc ''
             Contents of the /etc/exports file.  See
-            <citerefentry><refentrytitle>exports</refentrytitle>
-            <manvolnum>5</manvolnum></citerefentry> for the format.
+            {manpage}`exports(5)` for the format.
           '';
         };
 
         hostName = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             Hostname or address on which NFS requests will be accepted.
-            Default is all.  See the <option>-H</option> option in
-            <citerefentry><refentrytitle>nfsd</refentrytitle>
-            <manvolnum>8</manvolnum></citerefentry>.
+            Default is all.  See the {option}`-H` option in
+            {manpage}`nfsd(8)`.
           '';
         };
 

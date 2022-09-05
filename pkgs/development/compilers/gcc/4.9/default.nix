@@ -215,7 +215,7 @@ stdenv.mkDerivation ({
 
   preConfigure = import ../common/pre-configure.nix {
     inherit lib;
-    inherit version targetPlatform hostPlatform langJava langGo crossStageStatic;
+    inherit version targetPlatform hostPlatform langJava langGo crossStageStatic enableMultilib;
   };
 
   dontDisableStatic = true;
@@ -256,7 +256,7 @@ stdenv.mkDerivation ({
     (if profiledCompiler then "profiledbootstrap" else "bootstrap");
 
   inherit
-    (import ../common/strip-attributes.nix { inherit stdenv; })
+    (import ../common/strip-attributes.nix { inherit lib stdenv langJit; })
     stripDebugList
     stripDebugListTarget
     preFixup;
@@ -310,8 +310,6 @@ stdenv.mkDerivation ({
   enableParallelBuilding = true;
   inherit enableShared enableMultilib;
 
-  inherit (stdenv) is64bit;
-
   meta = {
     homepage = "https://gcc.gnu.org/";
     license = lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
@@ -329,6 +327,7 @@ stdenv.mkDerivation ({
     maintainers = with lib.maintainers; [ veprbl ];
 
     platforms = lib.platforms.unix;
+    badPlatforms = [ "aarch64-darwin" ];
   };
 }
 

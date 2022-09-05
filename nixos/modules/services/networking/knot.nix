@@ -37,7 +37,7 @@ let
 in {
   options = {
     services.knot = {
-      enable = mkEnableOption "Knot authoritative-only DNS server";
+      enable = mkEnableOption (lib.mdDoc "Knot authoritative-only DNS server");
 
       extraArgs = mkOption {
         type = types.listOf types.str;

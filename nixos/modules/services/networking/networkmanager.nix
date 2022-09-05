@@ -106,30 +106,14 @@ let
     type = types.either types.str (types.enum ["permanent" "preserve" "random" "stable"]);
     default = "preserve";
     example = "00:11:22:33:44:55";
-    description = ''
+    description = lib.mdDoc ''
       Set the MAC address of the interface.
-      <variablelist>
-        <varlistentry>
-          <term>"XX:XX:XX:XX:XX:XX"</term>
-          <listitem><para>MAC address of the interface</para></listitem>
-        </varlistentry>
-        <varlistentry>
-          <term><literal>"permanent"</literal></term>
-          <listitem><para>Use the permanent MAC address of the device</para></listitem>
-        </varlistentry>
-        <varlistentry>
-          <term><literal>"preserve"</literal></term>
-          <listitem><para>Don’t change the MAC address of the device upon activation</para></listitem>
-        </varlistentry>
-        <varlistentry>
-          <term><literal>"random"</literal></term>
-          <listitem><para>Generate a randomized value upon each connect</para></listitem>
-        </varlistentry>
-        <varlistentry>
-          <term><literal>"stable"</literal></term>
-          <listitem><para>Generate a stable, hashed MAC address</para></listitem>
-        </varlistentry>
-      </variablelist>
+
+      - `"XX:XX:XX:XX:XX:XX"`: MAC address of the interface
+      - `"permanent"`: Use the permanent MAC address of the device
+      - `"preserve"`: Don’t change the MAC address of the device upon activation
+      - `"random"`: Generate a randomized value upon each connect
+      - `"stable"`: Generate a stable, hashed MAC address
     '';
   };
 
@@ -173,17 +157,14 @@ in {
           str
         ]));
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Configuration for the [connection] section of NetworkManager.conf.
           Refer to
-          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
+          [
             https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#id-1.2.3.11
-          </link>
+          ](https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html)
           or
-          <citerefentry>
-            <refentrytitle>NetworkManager.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          {manpage}`NetworkManager.conf(5)`
           for more information.
         '';
       };
@@ -191,17 +172,14 @@ in {
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Configuration appended to the generated NetworkManager.conf.
           Refer to
-          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
+          [
             https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
-          </link>
+          ](https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html)
           or
-          <citerefentry>
-            <refentrytitle>NetworkManager.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          {manpage}`NetworkManager.conf(5)`
           for more information.
         '';
       };
@@ -209,18 +187,15 @@ in {
       unmanaged = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           List of interfaces that will not be managed by NetworkManager.
           Interface name can be specified here, but if you need more fidelity,
           refer to
-          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#device-spec">
+          [
             https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#device-spec
-          </link>
+          ](https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#device-spec)
           or the "Device List Format" Appendix of
-          <citerefentry>
-            <refentrytitle>NetworkManager.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>.
+          {manpage}`NetworkManager.conf(5)`.
         '';
       };
 
@@ -327,18 +302,15 @@ in {
       dns = mkOption {
         type = types.enum [ "default" "dnsmasq" "unbound" "systemd-resolved" "none" ];
         default = "default";
-        description = ''
-          Set the DNS (<literal>resolv.conf</literal>) processing mode.
+        description = lib.mdDoc ''
+          Set the DNS (`resolv.conf`) processing mode.
 
           A description of these modes can be found in the main section of
-          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
+          [
             https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
-          </link>
+          ](https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html)
           or in
-          <citerefentry>
-            <refentrytitle>NetworkManager.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>.
+          {manpage}`NetworkManager.conf(5)`.
         '';
       };
 
@@ -355,9 +327,9 @@ in {
             type = mkOption {
               type = types.enum (attrNames dispatcherTypesSubdirMap);
               default = "basic";
-              description = ''
+              description = lib.mdDoc ''
                 Dispatcher hook type. Look up the hooks described at
-                <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.html">https://developer.gnome.org/NetworkManager/stable/NetworkManager.html</link>
+                [https://developer.gnome.org/NetworkManager/stable/NetworkManager.html](https://developer.gnome.org/NetworkManager/stable/NetworkManager.html)
                 and choose the type depending on the output folder.
                 You should then filter the event type (e.g., "up"/"down") from within your script.
               '';

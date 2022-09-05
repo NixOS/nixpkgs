@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "tinyproxy";
-  version = "1.11.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
-    sha256 = "13fhkmmrwzl657dq04x2wagkpjwdrzhkl141qvzr7y7sli8j0w1n";
+    sha256 = "sha256-tipFXh9VG5auWTI2/IC5rwMQFls7aZr6dkzhYTZZkXM=";
     rev = version;
     repo = "tinyproxy";
     owner = "tinyproxy";

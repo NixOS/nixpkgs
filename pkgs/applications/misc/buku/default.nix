@@ -1,26 +1,7 @@
 { lib, python3, fetchFromGitHub, withServer ? false }:
 
 let
-  python3' = python3.override {
-    packageOverrides = self: super: {
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.3.24";
-        src = oldAttrs.src.override {
-          inherit version;
-          hash = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";
-        };
-        doCheck = false;
-      });
-      sqlalchemy-utils = super.sqlalchemy-utils.overridePythonAttrs (oldAttrs: rec {
-        version = "0.36.6";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0srs5w486wp5zydjs70igi5ypgxhm6h73grb85jz03fqpqaanzvs";
-        };
-      });
-    };
-  };
-  serverRequire = with python3'.pkgs; [
+  serverRequire = with python3.pkgs; [
     requests
     flask
     flask-admin
@@ -36,7 +17,7 @@ let
     toml
   ];
 in
-with python3'.pkgs; buildPythonApplication rec {
+with python3.pkgs; buildPythonApplication rec {
   version = "4.7";
   pname = "buku";
 
@@ -54,6 +35,10 @@ with python3'.pkgs; buildPythonApplication rec {
     pyyaml
     mypy-extensions
     click
+    pylint
+    flake8
+    pytest-cov
+    pyyaml
   ];
 
   propagatedBuildInputs = [
@@ -64,20 +49,7 @@ with python3'.pkgs; buildPythonApplication rec {
     html5lib
   ] ++ lib.optionals withServer serverRequire;
 
-  postPatch = ''
-    # Jailbreak problematic dependencies
-    sed -i \
-      -e "s,'PyYAML.*','PyYAML',g" \
-      -e "/'pytest-cov/d" \
-      -e "/'pylint/d" \
-      -e "/'flake8/d" \
-      setup.py
-  '';
-
   preCheck = ''
-    # Fixes two tests for wrong encoding
-    export PYTHONIOENCODING=utf-8
-
     # Disables a test which requires internet
     substituteInPlace tests/test_bukuDb.py \
       --replace "@pytest.mark.slowtest" "@unittest.skip('skipping')" \

@@ -47,7 +47,7 @@ let
 
 in {
   options.services.dockerRegistry = {
-    enable = mkEnableOption "Docker Registry";
+    enable = mkEnableOption (lib.mdDoc "Docker Registry");
 
     listenAddress = mkOption {
       description = lib.mdDoc "Docker registry host or ip to bind to.";
@@ -76,7 +76,7 @@ in {
       description = lib.mdDoc "Enable delete for manifests and blobs.";
     };
 
-    enableRedisCache = mkEnableOption "redis as blob cache";
+    enableRedisCache = mkEnableOption (lib.mdDoc "redis as blob cache");
 
     redisUrl = mkOption {
       type = types.str;
@@ -98,15 +98,14 @@ in {
       type = types.attrs;
     };
 
-    enableGarbageCollect = mkEnableOption "garbage collect";
+    enableGarbageCollect = mkEnableOption (lib.mdDoc "garbage collect");
 
     garbageCollectDates = mkOption {
       default = "daily";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Specification (in the format described by
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>) of the time at
+        {manpage}`systemd.time(7)`) of the time at
         which the garbage collect will occur.
       '';
     };

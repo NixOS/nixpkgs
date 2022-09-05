@@ -62,7 +62,7 @@ in
 
     boot.plymouth = {
 
-      enable = mkEnableOption "Plymouth boot splash screen";
+      enable = mkEnableOption (lib.mdDoc "Plymouth boot splash screen");
 
       font = mkOption {
         default = "${pkgs.dejavu_fonts.minimal}/share/fonts/truetype/DejaVuSans.ttf";
@@ -75,10 +75,10 @@ in
 
       themePackages = mkOption {
         default = lib.optional (cfg.theme == "breeze") nixosBreezePlymouth;
-        defaultText = literalDocBook ''
+        defaultText = literalMD ''
           A NixOS branded variant of the breeze theme when
-          <literal>config.${opt.theme} == "breeze"</literal>, otherwise
-          <literal>[ ]</literal>.
+          `config.${opt.theme} == "breeze"`, otherwise
+          `[ ]`.
         '';
         type = types.listOf types.package;
         description = lib.mdDoc ''
@@ -184,9 +184,14 @@ in
           mkdir $out
           cp -r ${themesEnv}/share/plymouth/themes/${cfg.theme} $out
           # Copy more themes if the theme depends on others
-          for theme in $(grep -hRo '/etc/plymouth/themes/.*$' ${themesEnv} | xargs -n1 basename); do
-              if [[ -d "${themesEnv}/theme" ]]; then
-                  cp -r "${themesEnv}/theme" $out
+          for theme in $(grep -hRo '/etc/plymouth/themes/.*$' $out | xargs -n1 basename); do
+              if [[ -d "${themesEnv}/share/plymouth/themes/$theme" ]]; then
+                  if [[ ! -d "$out/$theme" ]]; then
+                    echo "Adding dependent theme: $theme"
+                    cp -r "${themesEnv}/share/plymouth/themes/$theme" $out
+                  fi
+              else
+                echo "Missing theme dependency: $theme"
               fi
           done
         '';

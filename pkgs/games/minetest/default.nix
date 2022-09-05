@@ -10,9 +10,7 @@
 , libogg
 , jsoncpp
 , libjpeg
-, libXxf86vm
 , libGLU
-, libGL
 , openal
 , libvorbis
 , sqlite
@@ -75,7 +73,6 @@ let
       "-DENABLE_GETTEXT=1"
       "-DENABLE_SPATIAL=1"
       "-DENABLE_SYSTEM_JSONCPP=1"
-      "-DIRRLICHT_INCLUDE_DIR=${irrlichtmtInput.dev}/include/irrlichtmt"
 
       # Remove when https://github.com/NixOS/nixpkgs/issues/144170 is fixed
       "-DCMAKE_INSTALL_BINDIR=bin"
@@ -85,8 +82,6 @@ let
       "-DCMAKE_INSTALL_MANDIR=share/man"
       "-DCMAKE_INSTALL_LOCALEDIR=share/locale"
 
-    ] ++ optionals buildClient [
-      "-DOpenGL_GL_PREFERENCE=GLVND"
     ] ++ optionals buildServer [
       "-DENABLE_PROMETHEUS=1"
     ] ++ optionals withTouchSupport [
@@ -103,7 +98,7 @@ let
     ] ++ optionals stdenv.isDarwin [
       libiconv OpenGL OpenAL Carbon Cocoa
     ] ++ optionals buildClient [
-      libpng libjpeg libGLU libGL openal libogg libvorbis xorg.libX11 libXxf86vm
+      libpng libjpeg libGLU openal libogg libvorbis xorg.libX11
     ] ++ optionals buildServer [
       leveldb postgresql hiredis prometheus-cpp
     ];
@@ -132,12 +127,14 @@ let
   };
 
   v5 = {
-    version = "5.5.1";
-    sha256 = "sha256-ssaDy6tYxhXGZ1+05J5DwoKYnfhKIKtZj66DOV84WxA=";
-    dataSha256 = "sha256-SI6I1wXbB0CgTmIemm3VY9DNnWMoI5bt/hqRwHlUl4k=";
+    version = "5.6.0";
+    sha256 = "sha256-wcbYcVHs4L0etOwUBjKvzsmZtnpOxpFgLV8nx3UfJQI=";
+    dataSha256 = "sha256-TVaDHYstFEuT0nBExwLE1PtM1CZh71t9CRxC9rEYTd4=";
   };
 
+  mkClient = version: generic (version // { buildClient = true; buildServer = false; });
+  mkServer = version: generic (version // { buildClient = false; buildServer = true; });
 in {
-  minetestclient_5 = generic (v5 // { buildClient = true; buildServer = false; });
-  minetestserver_5 = generic (v5 // { buildClient = false; buildServer = true; });
+  minetestclient_5 = mkClient v5;
+  minetestserver_5 = mkServer v5;
 }

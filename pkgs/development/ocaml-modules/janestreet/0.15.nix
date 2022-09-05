@@ -785,6 +785,7 @@ with self;
     meta.description = "A library to help writing wrappers around ocaml code for python";
     patches = lib.optional (lib.versionAtLeast ocaml.version "4.13") ./pythonlib.patch;
     propagatedBuildInputs = [ ppx_expect ppx_let ppx_python stdio typerep ];
+    meta.broken = lib.versionAtLeast ocaml.version "4.14";
   };
 
   re2 = janePackage {

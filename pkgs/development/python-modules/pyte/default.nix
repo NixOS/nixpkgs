@@ -1,23 +1,32 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pytest-runner, wcwidth }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, wcwidth
+}:
 
 buildPythonPackage rec {
   pname = "pyte";
   version = "0.8.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-ub/Rt4F1nnVypuVTwBDMk+71ihnY0VkERthMGbGwl7A=";
+  src = fetchFromGitHub {
+    owner = "selectel";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-gLvsW4ou6bGq9CxT6XdX+r2ViMk7z+aejemrdLwJb3M=";
   };
 
-  nativeBuildInputs = [ pytest-runner ];
+  postPatch = ''
+    # Remove pytest-runner dependency since it is not supported in the NixOS
+    # sandbox
+    sed -i '/pytest-runner/d' setup.py
+  '';
 
   propagatedBuildInputs = [ wcwidth ];
 
   checkInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    "test_input_output"
-  ];
+  pythonImportsCheck = [ "pyte" ];
 
   meta = with lib; {
     description = "Simple VTXXX-compatible linux terminal emulator";

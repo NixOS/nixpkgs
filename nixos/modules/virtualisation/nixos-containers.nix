@@ -536,13 +536,13 @@ in
               type = types.path;
               default = pkgs.path;
               defaultText = literalExpression "pkgs.path";
-              description = ''
+              description = lib.mdDoc ''
                 A path to the nixpkgs that provide the modules, pkgs and lib for evaluating the container.
 
-                To only change the <literal>pkgs</literal> argument used inside the container modules,
-                set the <literal>nixpkgs.*</literal> options in the container <option>config</option>.
-                Setting <literal>config.nixpkgs.pkgs = pkgs</literal> speeds up the container evaluation
-                by reusing the system pkgs, but the <literal>nixpkgs.config</literal> option in the
+                To only change the `pkgs` argument used inside the container modules,
+                set the `nixpkgs.*` options in the container {option}`config`.
+                Setting `config.nixpkgs.pkgs = pkgs` speeds up the container evaluation
+                by reusing the system pkgs, but the `nixpkgs.config` option in the
                 container config is ignored in this case.
               '';
             };
@@ -550,7 +550,7 @@ in
             ephemeral = mkOption {
               type = types.bool;
               default = false;
-              description = ''
+              description = lib.mdDoc ''
                 Runs container in ephemeral mode with the empty root filesystem at boot.
                 This way container will be bootstrapped from scratch on each boot
                 and will be cleaned up on shutdown leaving no traces behind.
@@ -558,8 +558,8 @@ in
 
                 Note that this option might require to do some adjustments to the container configuration,
                 e.g. you might want to set
-                <varname>systemd.network.networks.$interface.dhcpV4Config.ClientIdentifier</varname> to "mac"
-                if you use <varname>macvlans</varname> option.
+                {var}`systemd.network.networks.$interface.dhcpV4Config.ClientIdentifier` to "mac"
+                if you use {var}`macvlans` option.
                 This way dhcp client identifier will be stable between the container restarts.
 
                 Note that the container journal will not be linked to the host if this option is enabled.
@@ -629,11 +629,10 @@ in
             timeoutStartSec = mkOption {
               type = types.str;
               default = "1min";
-              description = ''
+              description = lib.mdDoc ''
                 Time for the container to start. In case of a timeout,
                 the container processes get killed.
-                See <citerefentry><refentrytitle>systemd.time</refentrytitle>
-                <manvolnum>7</manvolnum></citerefentry>
+                See {manpage}`systemd.time(7)`
                 for more information about the format.
                '';
             };

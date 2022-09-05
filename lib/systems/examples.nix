@@ -22,12 +22,11 @@ rec {
   };
 
   ppc64 = {
-    config = "powerpc64-unknown-linux-gnu";
-    gcc = { abi = "elfv2"; }; # for gcc configuration
+    config = "powerpc64-unknown-linux-gnuabielfv2";
   };
   ppc64-musl = {
     config = "powerpc64-unknown-linux-musl";
-    gcc = { abi = "elfv2"; }; # for gcc configuration
+    gcc = { abi = "elfv2"; };
   };
 
   sheevaplug = {

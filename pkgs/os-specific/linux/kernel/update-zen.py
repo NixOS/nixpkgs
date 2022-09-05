@@ -78,6 +78,29 @@ def update_file(relpath, variant, version, suffix, sha256):
             print(result, end='')
 
 
+def read_file(relpath, variant):
+    file_path = os.path.join(DIR, relpath)
+    re_version = re.compile(fr'^\s*version = "(.+)"; #{variant}')
+    re_suffix = re.compile(fr'^\s*suffix = "(.+)"; #{variant}')
+    version = None
+    suffix = None
+    with fileinput.FileInput(file_path, mode='r') as f:
+        for line in f:
+            version_match = re_version.match(line)
+            if version_match:
+                version = version_match.group(1)
+                continue
+
+            suffix_match = re_suffix.match(line)
+            if suffix_match:
+                suffix = suffix_match.group(1)
+                continue
+
+            if version and suffix:
+                break
+    return version, suffix
+
+
 if __name__ == "__main__":
     if len(sys.argv) == 1:
         panic("Update variant expected")
@@ -93,5 +116,7 @@ if __name__ == "__main__":
             zen_version = zen_match.group(1)
             zen_suffix = zen_match.group(2)
             break
-    zen_hash = nix_prefetch_git('https://github.com/zen-kernel/zen-kernel.git', zen_tag)
-    update_file('zen-kernels.nix', variant, zen_version, zen_suffix, zen_hash)
+    old_version, old_suffix = read_file('zen-kernels.nix', variant)
+    if old_version != zen_version or old_suffix != zen_suffix:
+        zen_hash = nix_prefetch_git('https://github.com/zen-kernel/zen-kernel.git', zen_tag)
+        update_file('zen-kernels.nix', variant, zen_version, zen_suffix, zen_hash)

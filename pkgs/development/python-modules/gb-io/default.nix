@@ -4,6 +4,7 @@
 , buildPythonPackage
 , rustPlatform
 , setuptools-rust
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
     rust.rustc
   ]);
 
-  checkPhase = ''
-    python -m unittest discover
-  '';
+  checkInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "gb_io" ];
 

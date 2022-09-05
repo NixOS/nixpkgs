@@ -13,6 +13,10 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-e6euOtvJx+xUq5pWmWK6l7nv/twOa+0OABUTYvMd8Ow=";
   };
 
+  patches = [
+    ./unwrap-subprocess.patch
+  ];
+
   checkInputs = with python3Packages; [
     mock
     python-snappy

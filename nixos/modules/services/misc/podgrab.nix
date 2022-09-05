@@ -4,7 +4,7 @@ let
 in
 {
   options.services.podgrab = with lib; {
-    enable = mkEnableOption "Podgrab, a self-hosted podcast manager";
+    enable = mkEnableOption (lib.mdDoc "Podgrab, a self-hosted podcast manager");
 
     passwordFile = mkOption {
       type = with types; nullOr str;

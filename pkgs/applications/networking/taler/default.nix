@@ -77,7 +77,7 @@ in rec {
 
     src = fetchgit {
       url = "https://git.taler.net/merchant.git";
-      rev = "60dcacf25e51cc2bff359ea1fc86cdd3d9e6083";
+      rev = "960dcacf25e51cc2bff359ea1fc86cdd3d9e6083";
       sha256 = "sha256-Wn11z6YjnylZl3z2JjBlrtZ1KHfQUHLIYWo5F+mAmNo=";
     };
     postUnpack = ''

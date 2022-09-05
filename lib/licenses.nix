@@ -148,6 +148,11 @@ in mkLicense lset) ({
     fullName = ''BSD 4-clause "Original" or "Old" License'';
   };
 
+  bsdOriginalShortened = {
+    spdxId = "BSD-4-Clause-Shortened";
+    fullName = "BSD 4 Clause Shortened";
+  };
+
   bsdOriginalUC = {
     spdxId = "BSD-4-Clause-UC";
     fullName = "BSD 4-Clause University of California-Specific";
@@ -693,6 +698,11 @@ in mkLicense lset) ({
     fullName = "SIL Open Font License 1.1";
   };
 
+  oml = {
+    spdxId = "OML";
+    fullName = "Open Market License";
+  };
+
   openldap = {
     spdxId = "OLDAP-2.8";
     fullName = "Open LDAP Public License v2.8";
@@ -824,6 +834,11 @@ in mkLicense lset) ({
     fullName = "TCL/TK License";
   };
 
+  ucd = {
+    fullName = "Unicode Character Database License";
+    url = "https://fedoraproject.org/wiki/Licensing:UCD";
+  };
+
   ufl = {
     fullName = "Ubuntu Font License 1.0";
     url = "https://ubuntu.com/legal/font-licence";
@@ -876,6 +891,11 @@ in mkLicense lset) ({
     fullName = "Oracle VM VirtualBox Extension Pack Personal Use and Evaluation License (PUEL)";
     url = "https://www.virtualbox.org/wiki/VirtualBox_PUEL";
     free = false;
+  };
+
+  vol-sl = {
+    fullName = "Volatility Software License, Version 1.0";
+    url = "https://www.volatilityfoundation.org/license/vsl-v1.0";
   };
 
   vsl10 = {

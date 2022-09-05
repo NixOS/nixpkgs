@@ -62,25 +62,26 @@ many CODEOWNERS will be inadvertently requested for review.  To achieve this,
 rebasing should not be performed directly on the target branch, but on the merge
 base between the current and target branch.
 
-In the following example, we see a rebase from `master` onto the merge base
-between `master` and `staging`, so that a change can eventually be retargeted to
-`staging`. The example uses `upstream` as the remote for `NixOS/nixpkgs.git`
-while the `origin` remote is used for the remote you are pushing to.
+In the following example, we assume that the current branch, called `feature`,
+is based on `master`, and we rebase it onto the merge base between
+`master` and `staging` so that the PR can eventually be retargeted to
+`staging` without causing a mess. The example uses `upstream` as the remote for `NixOS/nixpkgs.git`
+while `origin` is the remote you are pushing to.
 
 
 ```console
-# Find the common base between two branches
-common=$(git merge-base upstream/master upstream/staging)
-# Find the common base between your feature branch and master
-commits=$(git merge-base $(git branch --show-current) upstream/master)
-# Rebase all commits onto the common base
-git rebase --onto=$common $commits
+# Rebase your commits onto the common merge base
+git rebase --onto upstream/staging... upstream/master
 # Force push your changes
-git push origin $(git branch --show-current) --force-with-lease
+git push origin feature --force-with-lease
 ```
 
+The syntax `upstream/staging...` is equivalent to `upstream/staging...HEAD` and
+stands for the merge base between `upstream/staging` and `HEAD` (hence between
+`upstream/staging` and `upstream/master`).
+
 Then change the base branch in the GitHub PR using the *Edit* button in the upper
-right corner, and switch from `master` to `staging`. After the PR has been
+right corner, and switch from `master` to `staging`. *After* the PR has been
 retargeted it might be necessary to do a final rebase onto the target branch, to
 resolve any outstanding merge conflicts.
 
@@ -90,7 +91,7 @@ git rebase upstream/staging
 # Review and fixup possible conflicts
 git status
 # Force push your changes
-git push origin $(git branch --show-current) --force-with-lease
+git push origin feature --force-with-lease
 ```
 
 ## Backporting changes

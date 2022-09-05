@@ -1,6 +1,6 @@
 { lib
 , buildDunePackage
-, fetchFromGitHub
+, fetchzip
 , cstruct
 , mirage-crypto
 , alcotest
@@ -10,13 +10,12 @@ buildDunePackage rec {
   pname = "pbkdf";
   version = "1.2.0";
 
-  src = fetchFromGitHub {
-    owner = "abeaumont";
-    repo = "ocaml-pbkdf";
-    rev = version;
+  src = fetchzip {
+    url = "https://github.com/abeaumont/ocaml-pbkdf/archive/${version}.tar.gz";
     sha256 = "sha256-dGi4Vw+7VBpK/NpJ6zdpogm+E6G/oJovXCksJBSmqjI=";
   };
 
+  minimalOCamlVersion = "4.07";
   propagatedBuildInputs = [ cstruct mirage-crypto ];
   checkInputs = [ alcotest ];
   doCheck = true;

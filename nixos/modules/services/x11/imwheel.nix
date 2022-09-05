@@ -6,7 +6,7 @@ in
   {
     options = {
       services.xserver.imwheel = {
-        enable = mkEnableOption "IMWheel service";
+        enable = mkEnableOption (lib.mdDoc "IMWheel service");
 
         extraOptions = mkOption {
           type = types.listOf types.str;

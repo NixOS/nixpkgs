@@ -22,6 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-CRZG898xCwukq+9YVkyXMP8HcuJ9GtvDhy96kxvRFks=";
   };
 
+  postPatch = ''
+    # Our Python release is not in the test matrix
+    substituteInPlace xdis/magics.py \
+      --replace "3.10.4" "3.10.5 3.10.6"
+  '';
+
   propagatedBuildInputs = [
     click
     six
@@ -35,13 +41,19 @@ buildPythonPackage rec {
     "xdis"
   ];
 
+  # import file mismatch:
+  # imported module 'test_disasm' has this __file__ attribute:
+  #   /build/source/pytest/test_disasm.py
+  # which is not the same as the test file we want to collect:
+  #   /build/source/test_unit/test_disasm.py
   disabledTestPaths = [
-    # Our Python release is not in the test matrix
     "test_unit/test_disasm.py"
   ];
 
   disabledTests = [
+    # AssertionError: events did not match expectation
     "test_big_linenos"
+    # AssertionError: False is not true : PYTHON VERSION 4.0 is not in magic.magics.keys
     "test_basic"
   ];
 
@@ -49,6 +61,6 @@ buildPythonPackage rec {
     description = "Python cross-version byte-code disassembler and marshal routines";
     homepage = "https://github.com/rocky/python-xdis";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ onny ];
   };
 }

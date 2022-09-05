@@ -28,7 +28,7 @@ in
 
   options = {
     programs.dconf = {
-      enable = mkEnableOption "dconf";
+      enable = mkEnableOption (lib.mdDoc "dconf");
 
       profiles = mkOption {
         type = types.attrsOf types.path;

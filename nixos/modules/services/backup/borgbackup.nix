@@ -23,12 +23,10 @@ let
     on_exit()
     {
       exitStatus=$?
-      # Reset the EXIT handler, or else we're called again on 'exit' below
-      trap - EXIT
       ${cfg.postHook}
       exit $exitStatus
     }
-    trap 'on_exit' INT TERM QUIT EXIT
+    trap on_exit EXIT
 
     archiveName="${if cfg.archiveBaseName == null then "" else cfg.archiveBaseName + "-"}$(date ${cfg.dateFormat})"
     archiveSuffix="${optionalString cfg.appendFailedSuffix ".failed"}"
@@ -320,13 +318,12 @@ in {
           startAt = mkOption {
             type = with types; either str (listOf str);
             default = "daily";
-            description = ''
+            description = lib.mdDoc ''
               When or how often the backup should run.
               Must be in the format described in
-              <citerefentry><refentrytitle>systemd.time</refentrytitle>
-              <manvolnum>7</manvolnum></citerefentry>.
+              {manpage}`systemd.time(7)`.
               If you do not want the backup to start
-              automatically, use <literal>[ ]</literal>.
+              automatically, use `[ ]`.
               It will generate a systemd service borgbackup-job-NAME.
               You may trigger it manually via systemctl restart borgbackup-job-NAME.
             '';
@@ -336,10 +333,9 @@ in {
             default = false;
             type = types.bool;
             example = true;
-            description = ''
-              Set the <literal>persistentTimer</literal> option for the
-              <citerefentry><refentrytitle>systemd.timer</refentrytitle>
-              <manvolnum>5</manvolnum></citerefentry>
+            description = lib.mdDoc ''
+              Set the `persistentTimer` option for the
+              {manpage}`systemd.timer(5)`
               which triggers the backup immediately if the last trigger
               was missed (e.g. if the system was powered down).
             '';

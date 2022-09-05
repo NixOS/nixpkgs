@@ -5,7 +5,7 @@
   karchive, kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
   kdbusaddons, kdegraphics-mobipocket, kiconthemes, kjs, khtml, kio, kparts,
   kpty, kpurpose, kwallet, kwindowsystem, libkexiv2, libspectre, libzip, phonon, poppler,
-  qca-qt5, qtdeclarative, qtsvg, threadweaver, kcrash
+  qca-qt5, qtdeclarative, qtsvg, threadweaver, kcrash, qtspeech
 }:
 
 mkDerivation {
@@ -16,7 +16,7 @@ mkDerivation {
     kcompletion kconfig kconfigwidgets kcoreaddons kdbusaddons
     kdegraphics-mobipocket kiconthemes kjs khtml kio kparts kpty kpurpose kwallet
     kwindowsystem libkexiv2 libspectre libzip phonon poppler qca-qt5
-    qtdeclarative qtsvg threadweaver kcrash
+    qtdeclarative qtsvg threadweaver kcrash qtspeech
   ] ++ lib.optional (!stdenv.isAarch64) chmlib;
 
   # InitialPreference values are too high and end up making okular

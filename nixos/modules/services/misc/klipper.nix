@@ -14,7 +14,7 @@ in
   ##### interface
   options = {
     services.klipper = {
-      enable = mkEnableOption "Klipper, the 3D printer firmware";
+      enable = mkEnableOption (lib.mdDoc "Klipper, the 3D printer firmware");
 
       package = mkOption {
         type = types.package;
@@ -76,13 +76,13 @@ in
         type = with types; attrsOf
           (submodule {
             options = {
-              enable = mkEnableOption ''
+              enable = mkEnableOption (lib.mdDoc ''
                 building of firmware and addition of klipper-flash tools for manual flashing.
                 This will add `klipper-flash-$mcu` scripts to your environment which can be called to flash the firmware.
-              '';
+              '');
               configFile = mkOption {
                 type = path;
-                description = "Path to firmware config which is generated using `klipper-genconf`";
+                description = lib.mdDoc "Path to firmware config which is generated using `klipper-genconf`";
               };
             };
           });
@@ -129,6 +129,11 @@ in
           RuntimeDirectory = "klipper";
           SupplementaryGroups = [ "dialout" ];
           WorkingDirectory = "${cfg.package}/lib";
+          OOMScoreAdjust = "-999";
+          CPUSchedulingPolicy = "rr";
+          CPUSchedulingPriority = 99;
+          IOSchedulingClass = "realtime";
+          IOSchedulingPriority = 0;
         } // (if cfg.user != null then {
           Group = cfg.group;
           User = cfg.user;

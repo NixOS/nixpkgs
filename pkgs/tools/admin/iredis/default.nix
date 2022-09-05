@@ -15,8 +15,7 @@ buildPythonApplication rec {
     substituteInPlace setup.py \
       --replace "click>=7.0,<8.0" "click" \
       --replace "wcwidth==0.1.9" "wcwidth" \
-      --replace "redis>=3.4.0,<4.0.0" "redis" \
-      --replace "mistune>=2.0,<3.0" "mistune"
+      --replace "redis>=3.4.0,<4.0.0" "redis"
   '';
 
   propagatedBuildInputs = [
@@ -24,7 +23,7 @@ buildPythonApplication rec {
     click
     configobj
     importlib-resources
-    mistune_2_0
+    mistune
     packaging
     pendulum
     prompt-toolkit

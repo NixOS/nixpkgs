@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "smug";
-  version = "0.2.7";
+  version = "0.3.2";
 
   subPackages = [ "." ];
 
@@ -10,10 +10,10 @@ buildGoModule rec {
     owner = "ivaaaan";
     repo = "smug";
     rev = "v${version}";
-    sha256 = "178125835dhnaq9k42yv4pfxpyhgb5179wrxkimb59fy0nk8jzx8";
+    sha256 = "sha256-JZV4UfrmvcM7d8Ld4m/jC3GvzJCUgXqsGBSSnz81fXk=";
   };
 
-  vendorSha256 = "1rba5rpvlr8dyhj145b5i57pm4skfpj3vm7vydkn79k6ak6x985x";
+  vendorSha256 = "sha256-vaDUzVRmpmNn8/vUPeR1U5N6T4llFRIk9A1lum8uauU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -21,6 +21,7 @@ buildGoModule rec {
 
   postInstall = ''
     installManPage ./man/man1/smug.1
+    installShellCompletion completion/smug.{bash,fish}
   '';
 
   meta = with lib; {

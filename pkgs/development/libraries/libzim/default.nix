@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libzim";
-  version = "7.2.2";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "openzim";
     repo = pname;
     rev = version;
-    sha256 = "sha256-AEhhjinnnMA4NbYL7NVHYeRZX/zfNiidbY/VeFjZuQs=";
+    sha256 = "sha256-FSotc2hkWvkYEdZ3HI3JLzjtKFaWOc1Bx6r0WyeS/Kg=";
   };
 
   nativeBuildInputs = [

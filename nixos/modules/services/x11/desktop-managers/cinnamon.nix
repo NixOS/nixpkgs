@@ -17,11 +17,11 @@ in
 {
   options = {
     services.cinnamon = {
-      apps.enable = mkEnableOption "Cinnamon default applications";
+      apps.enable = mkEnableOption (lib.mdDoc "Cinnamon default applications");
     };
 
     services.xserver.desktopManager.cinnamon = {
-      enable = mkEnableOption "the cinnamon desktop manager";
+      enable = mkEnableOption (lib.mdDoc "the cinnamon desktop manager");
 
       sessionPath = mkOption {
         default = [];
@@ -58,13 +58,18 @@ in
   };
 
   config = mkMerge [
-    (mkIf (cfg.enable && config.services.xserver.displayManager.lightdm.enable && config.services.xserver.displayManager.lightdm.greeters.gtk.enable) {
-      services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = mkDefault (builtins.readFile "${pkgs.cinnamon.mint-artwork}/etc/lightdm/lightdm-gtk-greeter.conf.d/99_linuxmint.conf");
-      })
-
     (mkIf cfg.enable {
       services.xserver.displayManager.sessionPackages = [ pkgs.cinnamon.cinnamon-common ];
 
+      services.xserver.displayManager.lightdm.greeters.slick = {
+        enable = mkDefault true;
+
+        # Taken from mint-artwork.gschema.override
+        theme.name = mkDefault "Mint-X";
+        theme.package = mkDefault pkgs.cinnamon.mint-themes;
+        iconTheme.name = mkDefault "Mint-X-Dark";
+        iconTheme.package = mkDefault pkgs.cinnamon.mint-x-icons;
+      };
       services.xserver.displayManager.sessionCommands = ''
         if test "$XDG_CURRENT_DESKTOP" = "Cinnamon"; then
             true
@@ -212,6 +217,7 @@ in
         # external apps shipped with linux-mint
         hexchat
         gnome-calculator
+        gnome-screenshot
       ] config.environment.cinnamon.excludePackages;
     })
   ];

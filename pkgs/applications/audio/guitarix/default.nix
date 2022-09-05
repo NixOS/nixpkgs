@@ -6,6 +6,7 @@
 , boost
 , curl
 , eigen
+, faust
 , fftw
 , gettext
 , glib
@@ -42,21 +43,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "guitarix";
-  version = "0.42.1";
+  version = "0.44.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.xz";
-    sha256 = "101c2hdpipj3s6rmva5wf3q9hfjv7bkyzi7s8sgaiys8f7h4czkr";
+    sha256 = "d+g9dU9RrDjFQj847rVd5bPiYSjmC1EbAtLe/PNubBg=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "guitarix-gcc11.patch";
-      url = "https://github.com/brummer10/guitarix/commit/d8f003484c57d808682025dfb07a7a1fb848afdc.patch";
-      stripLen = 1;
-      sha256 = "1qhlbf18cn6m9jdz3741nrdfqvznjna3daqmn9l10k5nd3asy4il";
-    })
-  ];
 
   nativeBuildInputs = [
     gettext
@@ -74,6 +66,7 @@ stdenv.mkDerivation rec {
     boost
     curl
     eigen
+    faust
     fftw
     glib
     glib-networking.out
@@ -96,11 +89,7 @@ stdenv.mkDerivation rec {
     zita-resampler
   ];
 
-  # this doesnt build, probably because we have the wrong faust version:
-  #       "--faust"
-  # aproved versions are 2.20.2 and 2.15.11
   wafConfigureFlags = [
-    "--no-faust"
     "--no-font-cache-update"
     "--shared-lib"
     "--no-desktop-update"

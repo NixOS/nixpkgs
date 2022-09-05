@@ -40,7 +40,7 @@ let
 in
 buildPythonPackage rec {
   pname = "rdkit";
-  version = "2022.03.4";
+  version = "2022.03.5";
 
   src =
     let
@@ -50,7 +50,7 @@ buildPythonPackage rec {
       owner = pname;
       repo = pname;
       rev = "Release_${versionTag}";
-      sha256 = "13aga2fy1hgldb229n16niv30n3lwlypd7xv16smpbgw0cp1xpp2";
+      sha256 = "19idgilabh04cbr1qj6zgrgsfjm248mmfz6fsr0smrd68d0xnml9";
     };
 
   unpackPhase = ''

@@ -10,7 +10,7 @@ in
   meta.doc = ./pict-rs.xml;
 
   options.services.pict-rs = {
-    enable = mkEnableOption "pict-rs server";
+    enable = mkEnableOption (lib.mdDoc "pict-rs server");
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/pict-rs";

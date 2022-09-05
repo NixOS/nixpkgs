@@ -237,6 +237,11 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
+  # matterhorn-50200.17.0 won't work with brick >= 0.71
+  matterhorn = doJailbreak (super.matterhorn.overrideScope (self: super: {
+    brick = self.brick_0_70_1;
+  }));
+
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
   # 2022-06-17: Use hnix-store 0.5 until hnix 0.17
   hnix = generateOptparseApplicativeCompletion "hnix" (dontCheck (
@@ -351,24 +356,6 @@ self: super: {
   lensref = dontCheck super.lensref;
   lvmrun = disableHardening ["format"] (dontCheck super.lvmrun);
   matplotlib = dontCheck super.matplotlib;
-
-  brick_0_73 = doDistribute (super.brick_0_73.overrideScope (self: super: {
-    vty = self.vty_5_36;
-    text-zipper = self.text-zipper_0_12;
-  }));
-
-  # https://github.com/matterhorn-chat/matterhorn/issues/679 they do not want to be on stackage
-  matterhorn = doJailbreak (appendPatches [
-    # Fix build with brick 0.73
-    (fetchpatch {
-      name = "matterhorn-brick-0.72.patch";
-      url = "https://github.com/matterhorn-chat/matterhorn/commit/d52df3342b8420e219095aad477205e47fbef11b.patch";
-      sha256 = "1ifvv926g9m8niyc9nl1hy9bkx4kf12ciyv2v8vnrzz3njp4fsrz";
-    })
-  ] (super.matterhorn.overrideScope (self: super: {
-    brick = self.brick_0_73;
-  })));
-
   memcache = dontCheck super.memcache;
   metrics = dontCheck super.metrics;
   milena = dontCheck super.milena;
@@ -1786,21 +1773,6 @@ self: super: {
   vivid-osc = dontCheck super.vivid-osc;
   vivid-supercollider = dontCheck super.vivid-supercollider;
 
-  # cabal-install switched to build type simple in 3.2.0.0
-  # as a result, the cabal(1) man page is no longer installed
-  # automatically. Instead we need to use the `cabal man`
-  # command which generates the man page on the fly and
-  # install it to $out/share/man/man1 ourselves in this
-  # override.
-  # The commit that introduced this change:
-  # https://github.com/haskell/cabal/commit/91ac075930c87712eeada4305727a4fa651726e7
-  cabal-install = overrideCabal (old: {
-    postInstall = old.postInstall + ''
-      mkdir -p "$out/share/man/man1"
-      "$out/bin/cabal" man --raw > "$out/share/man/man1/cabal.1"
-    '';
-  }) super.cabal-install;
-
   # while waiting for a new release: https://github.com/brendanhay/amazonka/pull/572
   amazonka = appendPatches [
     (fetchpatch {
@@ -2430,13 +2402,12 @@ self: super: {
     }))
   ];
 
-  # 2022-02-25: Not compatible with relude 1.0
-  ema = assert super.ema.version == "0.6.0.0";
-    super.ema.overrideScope (self: super: { relude = doJailbreak self.relude_0_7_0_0; });
+  # Tests require ghc-9.2.
+  ema = dontCheck super.ema;
 
-  glirc = super.glirc.override {
+  glirc = doJailbreak (super.glirc.override {
     vty = self.vty_5_35_1;
-  };
+  });
 
   # 2022-02-25: Unmaintained and to strict upper bounds
   paths = doJailbreak super.paths;
@@ -2504,11 +2475,6 @@ self: super: {
     url = "https://github.com/erebe/wstunnel/pull/107/commits/47c1f62bdec1dbe77088d9e3ceb6d872f922ce34.patch";
     sha256 = "sha256-fW5bVbAGQxU/gd9zqgVNclwKraBtUjkKDek7L0c4+O0=";
   }) super.wstunnel;
-
-  # Adjustment of bounds on servant is unreleased
-  # https://github.com/haskell-servant/servant-cassava/commit/66617547851d38d48f5f1d1b786db1286bdafa9d
-  servant-cassava = assert super.servant-cassava.version == "0.10.1";
-    doJailbreak super.servant-cassava;
 
   # Test data missing from sdist
   # https://github.com/ngless-toolkit/ngless/issues/152

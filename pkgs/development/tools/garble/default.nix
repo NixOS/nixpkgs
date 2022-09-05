@@ -6,16 +6,16 @@
 }:
 buildGoModule rec {
   pname = "garble";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "burrowers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VeqF1MB8knM+NtG9Y+x1g2OF7LFZRC8/c8jicGP3vpo=";
+    sha256 = "sha256-QQRnnH/lbleZYkmHj4XUj2uMB9h/mwolhqWfaWMk2ys=";
   };
 
-  vendorSha256 = "sha256-FQMeA6VUDQa6wpvMoYsigkzukQ0dArAkysiksJWq+iY=";
+  vendorSha256 = "sha256-Xax8KfNcFCLKqcLBNtRUNaneVCW4eUMFe4Ml+D4wLNA=";
 
   # Used for some of the tests.
   checkInputs = [git];

@@ -7,7 +7,7 @@
 , protobuf
 , requests
 , six
-, pytorch
+, torch
 , tqdm
 }:
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     protobuf
     requests
     six
-    pytorch
+    torch
     tqdm
   ];
 

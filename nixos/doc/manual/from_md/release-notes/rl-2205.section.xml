@@ -2132,6 +2132,13 @@ sudo cp /var/lib/redis/dump.rdb /var/lib/redis-peertube/dump.rdb
       </listitem>
       <listitem>
         <para>
+          Added the <literal>keter</literal> NixOS module. Keter reverse
+          proxies requests to your loaded application based on virtual
+          hostnames.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           If you are using Wayland you can choose to use the Ozone
           Wayland support in Chrome and several Electron apps by setting
           the environment variable <literal>NIXOS_OZONE_WL=1</literal>

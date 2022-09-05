@@ -103,6 +103,8 @@ mapAliases ({
   mailman = throw "Please use pkgs.mailman"; # added 2022-04-29
   mailman-hyperkitty = throw "Please use pkgs.mailmanPackages.mailman-hyperkitty"; # added 2022-04-29
   mailman-web = throw "Please use pkgs.mailman-web"; # added 2022-04-29
+  mistune_0_8 = throw "mistune_0_8 was removed because it was outdated and insecure"; # added 2022-08-12
+  mistune_2_0 = mistune; # added 2022-08-12
   net2grid = gridnet; # add 2022-04-22
   nose-cover3 = throw "nose-cover3 has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-02-16
   ordereddict = throw "ordereddict has been removed because it is only useful on unsupported python versions."; # added 2022-05-28
@@ -124,6 +126,7 @@ mapAliases ({
   pycryptodome-test-vectors = throw "pycryptodome-test-vectors has been removed because it is an internal package to pycryptodome"; # added 2022-05-28
   pyialarmxr = pyialarmxr-homeassistant; # added 2022-06-07
   pyialarmxr-homeassistant = throw "The package was removed together with the component support in home-assistant 2022.7.0"; # added 2022-07-07
+  pyjson5 = json5; # added 2022-08-28
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   PyLD = pyld; # added 2022-06-22
   pymc3 = pymc; # added 2022-06-05, module was rename starting with 4.0.0
@@ -155,6 +158,10 @@ mapAliases ({
   python-subunit = subunit; # added 2021-09-10
   pytest_xdist = pytest-xdist; # added 2021-01-04
   python_simple_hipchat = python-simple-hipchat; # added 2021-07-21
+  pytorch = torch; # added 2022-09-30
+  pytorch-bin = torch-bin; # added 2022-09-30
+  pytorchWithCuda = torchWithCuda; # added 2022-09-30
+  pytorchWithoutCuda = torchWithoutCuda; # added 2022-09-30
   pytwitchapi = twitchapi; # added 2022-03-07
   qasm2image = throw "qasm2image is no longer maintained (since November 2018), and is not compatible with the latest pythonPackages.qiskit versions."; # added 2020-12-09
   qiskit-aqua = throw "qiskit-aqua has been removed due to deprecation, with its functionality moved to different qiskit packages";

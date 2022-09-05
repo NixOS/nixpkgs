@@ -1,9 +1,9 @@
 { branch ? "stable", callPackage, fetchurl, lib, stdenv }:
 let
   versions = if stdenv.isLinux then {
-    stable = "0.0.18";
+    stable = "0.0.19";
     ptb = "0.0.29";
-    canary = "0.0.136";
+    canary = "0.0.138";
   } else {
     stable = "0.0.264";
     ptb = "0.0.59";
@@ -14,7 +14,7 @@ let
     x86_64-linux = {
       stable = fetchurl {
         url = "https://dl.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
-        sha256 = "1hl01rf3l6kblx5v7rwnwms30iz8zw6dwlkjsx2f1iipljgkh5q4";
+        sha256 = "GfSyddbGF8WA6JmHo4tUM27cyHV5kRAyrEiZe1jbA5A=";
       };
       ptb = fetchurl {
         url = "https://dl-ptb.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
@@ -22,7 +22,7 @@ let
       };
       canary = fetchurl {
         url = "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-        sha256 = "sha256-OrGg4jXziesHBhQORxREN/wq776RgNGaTyjJNV4pSAU=";
+        sha256 = "sha256-NojoHrrgdvLiMgWYPClXzWjWXuvHz7urhyHzMnZwvBY=";
       };
     };
     aarch64-darwin = {
@@ -53,7 +53,7 @@ let
     downloadPage = "https://discordapp.com/download";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ ldesgoui MP2E devins2518 ];
+    maintainers = with maintainers; [ MP2E devins2518 ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ]
       ++ lib.optionals (branch != "stable") [ "aarch64-darwin" ];
   };

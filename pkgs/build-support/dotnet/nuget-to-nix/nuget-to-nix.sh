@@ -5,11 +5,12 @@ set -euo pipefail
 export PATH="@binPath@"
 
 if [ $# -eq 0 ]; then
-  >&2 echo "Usage: $0 [packages directory] > deps.nix"
+  >&2 echo "Usage: $0 <packages directory> [path to file with a list of excluded packages] > deps.nix"
   exit 1
 fi
 
 pkgs=$1
+exclusions="${2:-/dev/null}"
 tmpfile=$(mktemp /tmp/nuget-to-nix.XXXXXX)
 trap "rm -f ${tmpfile}" EXIT
 
@@ -21,6 +22,11 @@ while read pkg_spec; do
   { read pkg_name; read pkg_version; } < <(
     # Build version part should be ignored: `3.0.0-beta2.20059.3+77df2220` -> `3.0.0-beta2.20059.3`
     sed -nE 's/.*<id>([^<]*).*/\1/p; s/.*<version>([^<+]*).*/\1/p' "$pkg_spec")
+
+  if grep "$pkg_name" "$exclusions" > /dev/null; then
+    continue
+  fi
+
   pkg_sha256="$(nix-hash --type sha256 --flat --base32 "$(dirname "$pkg_spec")"/*.nupkg)"
 
   pkg_src="$(jq --raw-output '.source' "$(dirname "$pkg_spec")/.nupkg.metadata")"

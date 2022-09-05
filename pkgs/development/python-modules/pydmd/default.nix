@@ -8,6 +8,7 @@
 , pytestCheckHook
 , pythonOlder
 , scipy
+, ezyrb
 }:
 
 buildPythonPackage rec {
@@ -29,6 +30,7 @@ buildPythonPackage rec {
     matplotlib
     numpy
     scipy
+    ezyrb
   ];
 
   checkInputs = [

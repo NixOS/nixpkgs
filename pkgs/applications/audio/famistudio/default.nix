@@ -3,27 +3,31 @@
 , fetchzip
 , autoPatchelfHook
 , makeWrapper
-, alsa-lib
-, gtk-sharp-2_0
-, glib
-, gtk2
 , mono
 , openal
+, libGL
 }:
 
 stdenv.mkDerivation rec {
   pname = "famistudio";
-  version = "3.3.1";
+  version = "4.0.1";
 
   src = fetchzip {
     url = "https://github.com/BleuBleu/FamiStudio/releases/download/${version}/FamiStudio${lib.strings.concatStrings (lib.splitVersion version)}-LinuxAMD64.zip";
     stripRoot = false;
-    sha256 = "sha256-Bgry+cRsmC+aBff6EaeHoGBygpiZS5SmgICPU32zO+c=";
+    sha256 = "sha256-pAULW2aIaKiA61rARpL+hSoffnQO6hfqVpOcEMwD7oo=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+  ];
 
-  buildInputs = [ alsa-lib gtk-sharp-2_0 glib gtk2 mono openal ];
+  buildInputs = [
+    mono
+    openal
+    libGL
+  ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -36,16 +40,11 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${mono}/bin/mono $out/bin/famistudio \
       --add-flags $out/lib/famistudio/FamiStudio.exe \
-      --prefix MONO_GAC_PREFIX : ${gtk-sharp-2_0} \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ glib gtk2 gtk-sharp-2_0 ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL ]}
 
-    # Fails to find openal32.dll on its own, needs abit of help
+    # Bundled openal lib freezes the application
     rm $out/lib/famistudio/libopenal32.so
-    cat <<EOF >$out/lib/famistudio/OpenTK.dll.config
-    <configuration>
-      <dllmap dll="openal32.dll" target="${openal}/lib/libopenal.so"/>
-    </configuration>
-    EOF
+    ln -s ${openal}/lib/libopenal.so $out/lib/famistudio/libopenal32.so
 
     runHook postInstall
   '';

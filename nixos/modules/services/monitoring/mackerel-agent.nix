@@ -7,24 +7,24 @@ let
   settingsFmt = pkgs.formats.toml {};
 in {
   options.services.mackerel-agent = {
-    enable = mkEnableOption "mackerel.io agent";
+    enable = mkEnableOption (lib.mdDoc "mackerel.io agent");
 
     # the upstream package runs as root, but doesn't seem to be strictly
     # necessary for basic functionality
-    runAsRoot = mkEnableOption "Whether to run as root.";
+    runAsRoot = mkEnableOption (lib.mdDoc "Whether to run as root.");
 
-    autoRetirement = mkEnableOption ''
+    autoRetirement = mkEnableOption (lib.mdDoc ''
       Whether to automatically retire the host upon OS shutdown.
-    '';
+    '');
 
     apiKeyFile = mkOption {
       type = types.path;
       example = "/run/keys/mackerel-api-key";
-      description = ''
+      description = lib.mdDoc ''
         Path to file containing the Mackerel API key. The file should contain a
         single line of the following form:
 
-        <literallayout>apikey = "EXAMPLE_API_KEY"</literallayout>
+        `apikey = "EXAMPLE_API_KEY"`
       '';
     };
 
@@ -59,7 +59,7 @@ in {
         };
 
         options.diagnostic =
-          mkEnableOption "Collect memory usage for the agent itself";
+          mkEnableOption (lib.mdDoc "Collect memory usage for the agent itself");
       };
     };
   };

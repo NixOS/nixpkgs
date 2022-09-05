@@ -6,6 +6,7 @@ let
   # some components' tests have additional dependencies
   extraCheckInputs = with home-assistant.python.pkgs; {
     alexa = [ av ];
+    bluetooth = [ pyswitchbot ];
     camera = [ av ];
     cloud = [ mutagen ];
     config = [ pydispatcher ];

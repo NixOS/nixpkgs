@@ -52,15 +52,13 @@ in
       loginOptions = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Template for arguments to be passed to
-          <citerefentry><refentrytitle>login</refentrytitle>
-          <manvolnum>1</manvolnum></citerefentry>.
+          {manpage}`login(1)`.
 
-          See <citerefentry><refentrytitle>agetty</refentrytitle>
-          <manvolnum>1</manvolnum></citerefentry> for details,
+          See {manpage}`agetty(1)` for details,
           including security considerations.  If unspecified, agetty
-          will not be invoked with a <option>--login-options</option>
+          will not be invoked with a {option}`--login-options`
           option.
         '';
         example = "-h darkstar -- \\u";

@@ -19,6 +19,11 @@ let
       sha256 = "sha256-2su1uQaWl9WG41207dRvOTdVKcQsEz/y0uTi9JX52uI=";
     };
 
+    patches = [
+      # Unconditionally look for translation files in $out/share/locale
+      ./locale-path-stable.patch
+    ];
+
     makeFlags = common.makeFlags ++ [
       # Makefile declares version as 0.F, with no minor release number
       "VERSION=${version}"

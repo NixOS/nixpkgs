@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "ghapi";
-  version = "1.0.0";
+  version = "1.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "fastai";
     repo = "ghapi";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-yFJ7Ek2kfFvkZwjrvvx3AXKFE4vRVsLYTSHfs+nr0Rg=";
+    sha256 = "sha256-BbgI9SS5NqYCbcT3F+jximVILF2LlyeQyEdR84L6JIc=";
   };
 
   propagatedBuildInputs = [

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "closure-compiler";
-  version = "20220719";
+  version = "20220803";
 
   src = fetchurl {
     url = "mirror://maven/com/google/javascript/closure-compiler/v${version}/closure-compiler-v${version}.jar";
-    sha256 = "sha256-eEWNhMUjp+iBB9uzVB430kAfkojtKx2DTUGwpxMc+Us=";
+    sha256 = "sha256-1h+/i2csV/rCdMVOFsoNG/HrzGfUPPEEfAeRUKnPNSs=";
   };
 
   dontUnpack = true;

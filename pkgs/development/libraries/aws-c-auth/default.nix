@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , aws-c-cal
 , aws-c-common
@@ -7,18 +8,19 @@
 , aws-c-io
 , aws-c-sdkutils
 , cmake
+, nix
 , s2n-tls
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-auth";
-  version = "0.6.13";
+  version = "0.6.16";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-auth";
     rev = "v${version}";
-    sha256 = "sha256-f1STZdxj8cdK60dCgl2Xfsqaa/x3Z1xEjH3p4GUwGUg=";
+    sha256 = "sha256-JUCnrnJnXDCsdw9UcmujoxZ+cE9PDmqQNHYyvjSVBpw=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +43,10 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
   ];
+
+  passthru.tests = {
+    inherit nix;
+  };
 
   meta = with lib; {
     description = "C99 library implementation of AWS client-side authentication";

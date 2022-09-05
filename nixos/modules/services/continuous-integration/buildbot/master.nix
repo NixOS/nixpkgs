@@ -94,7 +94,7 @@ in {
         type = types.path;
         description = lib.mdDoc "Optionally pass master.cfg path. Other options in this configuration will be ignored.";
         default = defaultMasterCfg;
-        defaultText = literalDocBook ''generated configuration file'';
+        defaultText = literalMD ''generated configuration file'';
         example = "/etc/nixos/buildbot/master.cfg";
       };
 

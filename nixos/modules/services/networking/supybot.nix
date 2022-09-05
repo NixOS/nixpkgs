@@ -67,10 +67,10 @@ in
         type = types.functionTo (types.listOf types.package);
         default = p: [];
         defaultText = literalExpression "p: []";
-        description = ''
+        description = lib.mdDoc ''
           Extra Python packages available to supybot plugins. The
           value must be a function which receives the attrset defined
-          in <varname>python3Packages</varname> as the sole argument.
+          in {var}`python3Packages` as the sole argument.
         '';
         example = literalExpression "p: [ p.lxml p.requests ]";
       };

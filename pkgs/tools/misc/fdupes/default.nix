@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fdupes";
-  version = "2.1.2";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "adrianlopezroche";
     repo  = "fdupes";
     rev   = "v${version}";
-    hash  = "sha256-WtSuFWRqQo5D/FLwl3AaIIfg6q+09A3aP5//J4AUzus=";
+    hash  = "sha256-w1vIZexuXoCpc509QKdKnUaD4Obs5rsjptYAE4T/T+g=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

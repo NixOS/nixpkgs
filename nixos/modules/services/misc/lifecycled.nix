@@ -25,10 +25,10 @@ in
 
   options = {
     services.lifecycled = {
-      enable = mkEnableOption "lifecycled";
+      enable = mkEnableOption (lib.mdDoc "lifecycled");
 
       queueCleaner = {
-        enable = mkEnableOption "lifecycled-queue-cleaner";
+        enable = mkEnableOption (lib.mdDoc "lifecycled-queue-cleaner");
 
         frequency = mkOption {
           type = types.str;

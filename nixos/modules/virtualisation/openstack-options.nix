@@ -9,13 +9,13 @@ in
         enable = lib.mkOption {
           default = false;
           internal = true;
-          description = ''
+          description = lib.mdDoc ''
             Whether the OpenStack instance uses a ZFS root.
           '';
         };
 
         datasets = lib.mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Datasets to create under the `tank` and `boot` zpools.
 
             **NOTE:** This option is used only at image creation time, and
@@ -47,7 +47,7 @@ in
         default = pkgs.stdenv.hostPlatform.isAarch64;
         defaultText = literalExpression "pkgs.stdenv.hostPlatform.isAarch64";
         internal = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether the instance is using EFI.
         '';
       };

@@ -172,13 +172,13 @@ let
         type = types.enum (lib.attrNames tempaddrValues);
         default = cfg.tempAddresses;
         defaultText = literalExpression ''config.networking.tempAddresses'';
-        description = ''
+        description = lib.mdDoc ''
           When IPv6 is enabled with SLAAC, this option controls the use of
           temporary address (aka privacy extensions) on this
           interface. This is used to reduce tracking.
 
           See also the global option
-          <xref linkend="opt-networking.tempAddresses"/>, which
+          [](#opt-networking.tempAddresses), which
           applies to all interfaces where this is not set.
 
           Possible values are:
@@ -227,15 +227,19 @@ let
           { address = "192.168.2.0"; prefixLength = 24; via = "192.168.1.1"; }
         ];
         type = with types; listOf (submodule (routeOpts 4));
-        description = ''
+        description = lib.mdDoc ''
           List of extra IPv4 static routes that will be assigned to the interface.
-          <warning><para>If the route type is the default <literal>unicast</literal>, then the scope
-          is set differently depending on the value of <option>networking.useNetworkd</option>:
-          the script-based backend sets it to <literal>link</literal>, while networkd sets
-          it to <literal>global</literal>.</para></warning>
+
+          ::: {.warning}
+          If the route type is the default `unicast`, then the scope
+          is set differently depending on the value of {option}`networking.useNetworkd`:
+          the script-based backend sets it to `link`, while networkd sets
+          it to `global`.
+          :::
+
           If you want consistency between the two implementations,
           set the scope of the route manually with
-          <literal>networking.interfaces.eth0.ipv4.routes = [{ options.scope = "global"; }]</literal>
+          `networking.interfaces.eth0.ipv4.routes = [{ options.scope = "global"; }]`
           for example.
         '';
       };
@@ -407,17 +411,10 @@ let
       description = "generate IPv6 temporary addresses and use these as source addresses in routing";
     };
   };
-  tempaddrDoc = ''
-    <itemizedlist>
-     ${concatStringsSep "\n" (mapAttrsToList (name: { description, ... }: ''
-       <listitem>
-         <para>
-           <literal>"${name}"</literal> to ${description};
-         </para>
-       </listitem>
-     '') tempaddrValues)}
-    </itemizedlist>
-  '';
+  tempaddrDoc = concatStringsSep "\n"
+    (mapAttrsToList
+      (name: { description, ... }: ''- `"${name}"` to ${description};'')
+      tempaddrValues);
 
   hostidFile = pkgs.runCommand "gen-hostid" { preferLocalBuild = true; } ''
       hi="${cfg.hostId}"
@@ -785,7 +782,7 @@ in
               default = null;
               example = "fast";
               type = types.nullOr types.str;
-              description = ''
+              description = lib.mdDoc ''
                 DEPRECATED, use `driverOptions`.
                 Option specifying the rate in which we'll ask our link partner
                 to transmit LACPDU packets in 802.3ad mode.
@@ -796,7 +793,7 @@ in
               default = null;
               example = 100;
               type = types.nullOr types.int;
-              description = ''
+              description = lib.mdDoc ''
                 DEPRECATED, use `driverOptions`.
                 Miimon is the number of millisecond in between each round of polling
                 by the device driver for failed links. By default polling is not
@@ -809,7 +806,7 @@ in
               default = null;
               example = "active-backup";
               type = types.nullOr types.str;
-              description = ''
+              description = lib.mdDoc ''
                 DEPRECATED, use `driverOptions`.
                 The mode which the bond will be running. The default mode for
                 the bonding driver is balance-rr, optimizing for throughput.
@@ -822,7 +819,7 @@ in
               default = null;
               example = "layer2+3";
               type = types.nullOr types.str;
-              description = ''
+              description = lib.mdDoc ''
                 DEPRECATED, use `driverOptions`.
                 Selects the transmit hash policy to use for slave selection in
                 balance-xor, 802.3ad, and tlb modes.
@@ -876,10 +873,9 @@ in
           primary = { port = 9001; local = { address = "192.0.2.1"; dev = "eth0"; }; };
           backup =  { port = 9002; };
         };
-      description = ''
+      description = lib.mdDoc ''
         This option allows you to configure Foo Over UDP and Generic UDP Encapsulation
-        endpoints. See <citerefentry><refentrytitle>ip-fou</refentrytitle>
-        <manvolnum>8</manvolnum></citerefentry> for details.
+        endpoints. See {manpage}`ip-fou(8)` for details.
       '';
       type = with types; attrsOf (submodule {
         options = {
@@ -998,10 +994,9 @@ in
               options = {
                 type = mkOption {
                   type = enum [ "fou" "gue" ];
-                  description = ''
+                  description = lib.mdDoc ''
                     Selects encapsulation type. See
-                    <citerefentry><refentrytitle>ip-link</refentrytitle>
-                    <manvolnum>8</manvolnum></citerefentry> for details.
+                    {manpage}`ip-link(8)` for details.
                   '';
                 };
 
@@ -1243,17 +1238,15 @@ in
             type = types.nullOr types.str;
             default = null;
             example = "02:00:00:00:00:01";
-            description = ''
-              MAC address to use for the device. If <literal>null</literal>, then the MAC of the
+            description = lib.mdDoc ''
+              MAC address to use for the device. If `null`, then the MAC of the
               underlying hardware WLAN device is used.
 
               INFO: Locally administered MAC addresses are of the form:
-              <itemizedlist>
-              <listitem><para>x2:xx:xx:xx:xx:xx</para></listitem>
-              <listitem><para>x6:xx:xx:xx:xx:xx</para></listitem>
-              <listitem><para>xA:xx:xx:xx:xx:xx</para></listitem>
-              <listitem><para>xE:xx:xx:xx:xx:xx</para></listitem>
-              </itemizedlist>
+              - x2:xx:xx:xx:xx:xx
+              - x6:xx:xx:xx:xx:xx
+              - xA:xx:xx:xx:xx:xx
+              - xE:xx:xx:xx:xx:xx
             '';
           };
 
@@ -1289,10 +1282,10 @@ in
         if ''${config.${opt.enableIPv6}} then "default" else "disabled"
       '';
       type = types.enum (lib.attrNames tempaddrValues);
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable IPv6 Privacy Extensions for interfaces not
         configured explicitly in
-        <xref linkend="opt-networking.interfaces._name_.tempAddress"/>.
+        [](#opt-networking.interfaces._name_.tempAddress).
 
         This sets the ipv6.conf.*.use_tempaddr sysctl for all
         interfaces. Possible values are:

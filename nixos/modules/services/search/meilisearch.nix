@@ -16,7 +16,7 @@ in
   ###### interface
 
   options.services.meilisearch = {
-    enable = mkEnableOption "MeiliSearch - a RESTful search API";
+    enable = mkEnableOption (lib.mdDoc "MeiliSearch - a RESTful search API");
 
     package = mkOption {
       description = lib.mdDoc "The package to use for meilisearch. Use this if you require specific features to be enabled. The default package has no features.";
@@ -68,7 +68,7 @@ in
     };
 
     logLevel = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Defines how much detail should be present in MeiliSearch's logs.
         MeiliSearch currently supports four log levels, listed in order of increasing verbosity:
         - 'ERROR': only log unexpected events indicating MeiliSearch is not functioning as expected

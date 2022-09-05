@@ -3,13 +3,13 @@ GEM
   specs:
     CFPropertyList (3.0.5)
       rexml
-    addressable (2.8.0)
-      public_suffix (>= 2.0.2, < 5.0)
+    addressable (2.8.1)
+      public_suffix (>= 2.0.2, < 6.0)
     artifactory (3.0.15)
     atomos (0.1.3)
     aws-eventstream (1.2.0)
-    aws-partitions (1.608.0)
-    aws-sdk-core (3.131.3)
+    aws-partitions (1.622.0)
+    aws-sdk-core (3.136.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
@@ -34,10 +34,10 @@ GEM
       rake (>= 12.0.0, < 14.0.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    dotenv (2.7.6)
+    dotenv (2.8.1)
     emoji_regex (3.2.3)
-    excon (0.92.3)
-    faraday (1.10.0)
+    excon (0.92.4)
+    faraday (1.10.2)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -66,7 +66,7 @@ GEM
     faraday_middleware (1.2.0)
       faraday (~> 1.0)
     fastimage (2.2.6)
-    fastlane (2.208.0)
+    fastlane (2.209.1)
       CFPropertyList (>= 2.3, < 4.0.0)
       addressable (>= 2.8, < 3.0.0)
       artifactory (~> 3.0)
@@ -150,7 +150,7 @@ GEM
     httpclient (2.8.3)
     jmespath (1.6.1)
     json (2.6.2)
-    jwt (2.4.1)
+    jwt (2.5.0)
     memoist (0.16.2)
     mini_magick (4.11.0)
     mini_mime (1.1.2)
@@ -161,7 +161,7 @@ GEM
     optparse (0.1.1)
     os (1.1.4)
     plist (3.6.0)
-    public_suffix (4.0.7)
+    public_suffix (5.0.0)
     rake (13.0.6)
     representable (3.2.0)
       declarative (< 0.1.0)
@@ -215,4 +215,4 @@ DEPENDENCIES
   fastlane
 
 BUNDLED WITH
-   2.3.9
+   2.3.20

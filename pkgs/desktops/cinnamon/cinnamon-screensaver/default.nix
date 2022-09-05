@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , meson
 , ninja
@@ -30,22 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-screensaver";
-  version = "5.4.1";
-
-  patches = [
-    # Add missing gio-unix-2.0 dependency, can be removed on next update
-    # https://github.com/linuxmint/cinnamon-screensaver/pull/411
-    (fetchpatch {
-      url = "https://github.com/linuxmint/cinnamon-screensaver/commit/8d658e7f313879579322dce666551f132795540b.patch";
-      sha256 = "sha256-HjVQSX2yYqgZVIio2I8GBWLYOddvaFiqZzf0zaYf+OE=";
-    })
-  ];
+  version = "5.4.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-PpBtLAIboXMnX5V/u06aoZ6WfPrn4mdCu0NXTGb6pAE=";
+    hash = "sha256-D+SpAO4i4KGFWJI94LalTMB3j1YPvV63cKb34FDDprk=";
   };
 
   nativeBuildInputs = [

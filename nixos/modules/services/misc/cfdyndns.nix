@@ -14,7 +14,7 @@ in
 
   options = {
     services.cfdyndns = {
-      enable = mkEnableOption "Cloudflare Dynamic DNS Client";
+      enable = mkEnableOption (lib.mdDoc "Cloudflare Dynamic DNS Client");
 
       email = mkOption {
         type = types.str;

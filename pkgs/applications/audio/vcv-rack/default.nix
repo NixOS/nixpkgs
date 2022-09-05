@@ -1,4 +1,5 @@
 { alsa-lib
+, cmake
 , copyDesktopItems
 , curl
 , fetchFromBitbucket
@@ -23,7 +24,6 @@
 , makeDesktopItem
 , makeWrapper
 , pkg-config
-, rtaudio
 , rtmidi
 , speex
 , stdenv
@@ -75,13 +75,35 @@ let
   fundamental-source = fetchFromGitHub {
     owner = "VCVRack";
     repo = "Fundamental";
-    rev = "533397cdcad5c6401ebd3937d6c1663de2473627"; # tip of branch v2
-    sha256 = "QnwOgrYxiCa/7t/u6F63Ks8C9E8k6T+hia4JZFhp1LI=";
+    rev = "03bd00b96ad19e0575939bb7a0b8b08eff22f076"; # tip of branch v2
+    sha256 = "1rd5yvdr6k03mc3r2y7wxhmiqd69jfvqmpqagxb83y1mn0zfv0pr";
+  };
+  vcv-rtaudio = stdenv.mkDerivation rec {
+    pname = "vcv-rtaudio";
+    version = "unstable-2020-01-30";
+
+    src = fetchFromGitHub {
+      owner = "VCVRack";
+      repo = "rtaudio";
+      rev = "ece277bd839603648c80c8a5f145678e13bc23f3"; # tip of master branch
+      sha256 = "11gpl0ak757ilrq4fi0brj0chmlcr1hihc32yd7qza4fxjw2yx2v";
+    };
+
+    nativeBuildInputs = [ cmake pkg-config ];
+
+    buildInputs = [ alsa-lib libjack2 libpulseaudio ];
+
+    cmakeFlags = [
+      "-DRTAUDIO_API_ALSA=ON"
+      "-DRTAUDIO_API_PULSE=ON"
+      "-DRTAUDIO_API_JACK=ON"
+      "-DRTAUDIO_API_CORE=OFF"
+    ];
   };
 in
 stdenv.mkDerivation rec {
   pname = "VCV-Rack";
-  version = "2.0.6";
+  version = "2.1.2";
 
   desktopItems = [
     (makeDesktopItem {
@@ -101,7 +123,7 @@ stdenv.mkDerivation rec {
     owner = "VCVRack";
     repo = "Rack";
     rev = "v${version}";
-    sha256 = "vvGx8tnE7gMiboVUTywIzBB1q/IfiJ8TPnSHvmfHUQg=";
+    sha256 = "0583izk3j36mg7wm30ss2387j9dqsbbxkxrdh3993azb4q5naf02";
   };
 
   patches = [
@@ -137,8 +159,6 @@ stdenv.mkDerivation rec {
       --replace 'zenityBin[] = "zenity"' 'zenityBin[] = "${gnome.zenity}/bin/zenity"'
   '';
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [
     copyDesktopItems
     imagemagick
@@ -161,9 +181,9 @@ stdenv.mkDerivation rec {
     libjack2
     libpulseaudio
     libsamplerate
-    rtaudio
     rtmidi
     speex
+    vcv-rtaudio
     zstd
   ];
 

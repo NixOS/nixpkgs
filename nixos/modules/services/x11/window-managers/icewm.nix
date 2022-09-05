@@ -8,7 +8,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.icewm.enable = mkEnableOption "icewm";
+    services.xserver.windowManager.icewm.enable = mkEnableOption (lib.mdDoc "icewm");
   };
 
   ###### implementation

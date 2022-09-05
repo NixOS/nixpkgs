@@ -23,13 +23,13 @@
 
 mkDerivation rec {
   pname = "cloudcompare";
-  version = "2.12.1";
+  version = "2.12.4";
 
   src = fetchFromGitHub {
     owner = "CloudCompare";
     repo = "CloudCompare";
     rev = "v${version}";
-    sha256 = "sha256-gX07Km+DNnsz5eDAC2RueMHjmIfQvgGnNOujZ/yM/vE=";
+    sha256 = "sha256-rQ9/vS/fyRWGBL4UGPNSeeNsDtnRHEp9NCViBtu/QEs=";
     fetchSubmodules = true;
   };
 

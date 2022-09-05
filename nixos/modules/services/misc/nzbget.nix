@@ -25,7 +25,7 @@ in
 
   options = {
     services.nzbget = {
-      enable = mkEnableOption "NZBGet";
+      enable = mkEnableOption (lib.mdDoc "NZBGet");
 
       user = mkOption {
         type = types.str;

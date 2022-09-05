@@ -384,7 +384,7 @@ else let
 
           crossFile = builtins.toFile "cross-file.conf" ''
             [properties]
-            needs_exe_wrapper = true
+            needs_exe_wrapper = ${lib.boolToString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)}
 
             [host_machine]
             system = '${stdenv.targetPlatform.parsed.kernel.name}'

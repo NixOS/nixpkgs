@@ -54,7 +54,7 @@ with lib;
 with builtins;
 
 let majorVersion = "12";
-    version = "${majorVersion}.1.0";
+    version = "${majorVersion}.2.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -66,12 +66,12 @@ let majorVersion = "12";
         ../gnat-cflags-11.patch
         ../gcc-12-gfortran-driving.patch
         ../ppc-musl.patch
-        # Backports. Should be removed with 12.2.0 release:
-        ./PR106102-musl-poison-cpp.patch
-        ./PR106102-musl-poison-jit.patch
       ] ++ optional (stdenv.isDarwin && stdenv.isAarch64) (fetchpatch {
-        url = "https://github.com/fxcoudert/gcc/compare/releases/gcc-11.1.0...gcc-11.1.0-arm-20210504.diff";
-        sha256 = "sha256-JqCGJAfbOxSmkNyq49aFHteK/RFsCSLQrL9mzUCnaD0=";
+        # TODO: switch back to Homebrew patches:
+        #   was "https://github.com/Homebrew/formula-patches/raw/76677f2b/gcc/gcc-12.1.0-arm.diff"
+        name = "gcc-12-darwin-aarch64-support.patch";
+        url = "https://github.com/tjni/gcc-12-branch/compare/releases/gcc-12.2...gcc-12-2-darwin.diff";
+        sha256 = "sha256-hjM9q6tsdzoGOQWJ7v3BaeVxdWQGTaEnep2ZSwX5+74=";
       })
       ++ optional langD ../libphobos.patch
 
@@ -93,7 +93,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "sha256-Yv1jSInzHAK2SvLEaPBktHrRynhBHEWr5qxLX43RnHs=";
+    sha256 = "sha256-5UnPnPNZSgDie2WJ1DItcOByDN0hPzm+tBgeBpJiMP8=";
   };
 
   inherit patches;
@@ -191,7 +191,7 @@ stdenv.mkDerivation ({
 
   preConfigure = import ../common/pre-configure.nix {
     inherit lib;
-    inherit version targetPlatform hostPlatform gnatboot langAda langGo langJit crossStageStatic;
+    inherit version targetPlatform hostPlatform gnatboot langAda langGo langJit crossStageStatic enableMultilib;
   };
 
   dontDisableStatic = true;
@@ -232,7 +232,7 @@ stdenv.mkDerivation ({
     (if profiledCompiler then "profiledbootstrap" else "bootstrap");
 
   inherit
-    (import ../common/strip-attributes.nix { inherit stdenv; })
+    (import ../common/strip-attributes.nix { inherit lib stdenv langJit; })
     stripDebugList
     stripDebugListTarget
     preFixup;
@@ -270,8 +270,6 @@ stdenv.mkDerivation ({
 
   enableParallelBuilding = true;
   inherit enableShared enableMultilib;
-
-  inherit (stdenv) is64bit;
 
   meta = {
     homepage = "https://gcc.gnu.org/";

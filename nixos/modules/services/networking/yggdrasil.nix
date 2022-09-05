@@ -4,16 +4,23 @@ let
   keysPath = "/var/lib/yggdrasil/keys.json";
 
   cfg = config.services.yggdrasil;
-  configProvided = cfg.config != { };
+  settingsProvided = cfg.settings != { };
   configFileProvided = cfg.configFile != null;
 
+  format = pkgs.formats.json { };
 in {
+  imports = [
+    (mkRenamedOptionModule
+      [ "services" "yggdrasil" "config" ]
+      [ "services" "yggdrasil" "settings" ])
+  ];
+
   options = with types; {
     services.yggdrasil = {
-      enable = mkEnableOption "the yggdrasil system service";
+      enable = mkEnableOption (lib.mdDoc "the yggdrasil system service");
 
-      config = mkOption {
-        type = attrs;
+      settings = mkOption {
+        type = format.type;
         default = {};
         example = {
           Peers = [
@@ -24,29 +31,28 @@ in {
             "tcp://0.0.0.0:xxxxx"
           ];
         };
-        description = ''
+        description = lib.mdDoc ''
           Configuration for yggdrasil, as a Nix attribute set.
 
           Warning: this is stored in the WORLD-READABLE Nix store!
           Therefore, it is not appropriate for private keys. If you
-          wish to specify the keys, use <option>configFile</option>.
+          wish to specify the keys, use {option}`configFile`.
 
-          If the <option>persistentKeys</option> is enabled then the
+          If the {option}`persistentKeys` is enabled then the
           keys that are generated during activation will override
-          those in <option>config</option> or
-          <option>configFile</option>.
+          those in {option}`config` or
+          {option}`configFile`.
 
           If no keys are specified then ephemeral keys are generated
           and the Yggdrasil interface will have a random IPv6 address
           each time the service is started, this is the default.
 
-          If both <option>configFile</option> and <option>config</option>
+          If both {option}`configFile` and {option}`config`
           are supplied, they will be combined, with values from
-          <option>configFile</option> taking precedence.
+          {option}`configFile` taking precedence.
 
-          You can use the command <literal>nix-shell -p yggdrasil --run
-          "yggdrasil -genconf"</literal> to generate default
-          configuration values with documentation.
+          You can use the command `nix-shell -p yggdrasil --run "yggdrasil -genconf"`
+          to generate default configuration values with documentation.
         '';
       };
 
@@ -103,11 +109,11 @@ in {
         description = lib.mdDoc "Yggdrasil package to use.";
       };
 
-      persistentKeys = mkEnableOption ''
+      persistentKeys = mkEnableOption (lib.mdDoc ''
         If enabled then keys will be generated once and Yggdrasil
         will retain the same IPv6 address when the service is
         restarted. Keys are stored at ${keysPath}.
-      '';
+      '');
 
     };
   };
@@ -138,11 +144,11 @@ in {
       wantedBy = [ "multi-user.target" ];
 
       preStart =
-        (if configProvided || configFileProvided || cfg.persistentKeys then
+        (if settingsProvided || configFileProvided || cfg.persistentKeys then
           "echo "
 
-          + (lib.optionalString configProvided
-            "'${builtins.toJSON cfg.config}'")
+          + (lib.optionalString settingsProvided
+            "'${builtins.toJSON cfg.settings}'")
           + (lib.optionalString configFileProvided "$(cat ${cfg.configFile})")
           + (lib.optionalString cfg.persistentKeys "$(cat ${keysPath})")
           + " | ${pkgs.jq}/bin/jq -s add | ${binYggdrasil} -normaliseconf -useconf"

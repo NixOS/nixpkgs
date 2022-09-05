@@ -451,14 +451,13 @@ let
       renewInterval = mkOption {
         type = types.str;
         inherit (defaultAndText "renewInterval" "daily") default defaultText;
-        description = ''
+        description = lib.mdDoc ''
           Systemd calendar expression when to check for renewal. See
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
+          {manpage}`systemd.time(7)`.
         '';
       };
 
-      enableDebugLogs = mkEnableOption "debug logging for this certificate" // {
+      enableDebugLogs = mkEnableOption (lib.mdDoc "debug logging for this certificate") // {
         inherit (defaultAndText "enableDebugLogs" true) default defaultText;
       };
 
@@ -577,13 +576,12 @@ let
       ocspMustStaple = mkOption {
         type = types.bool;
         inherit (defaultAndText "ocspMustStaple" false) default defaultText;
-        description = ''
+        description = lib.mdDoc ''
           Turns on the OCSP Must-Staple TLS extension.
           Make sure you know what you're doing! See:
-          <itemizedlist>
-            <listitem><para><link xlink:href="https://blog.apnic.net/2019/01/15/is-the-web-ready-for-ocsp-must-staple/"/></para></listitem>
-            <listitem><para><link xlink:href="https://blog.hboeck.de/archives/886-The-Problem-with-OCSP-Stapling-and-Must-Staple-and-why-Certificate-Revocation-is-still-broken.html"/></para></listitem>
-          </itemizedlist>
+
+          - <https://blog.apnic.net/2019/01/15/is-the-web-ready-for-ocsp-must-staple/>
+          - <https://blog.hboeck.de/archives/886-The-Problem-with-OCSP-Stapling-and-Must-Staple-and-why-Certificate-Revocation-is-still-broken.html>
         '';
       };
 
@@ -677,7 +675,7 @@ let
       inheritDefaults = mkOption {
         default = true;
         example = true;
-        description = "Whether to inherit values set in `security.acme.defaults` or not.";
+        description = lib.mdDoc "Whether to inherit values set in `security.acme.defaults` or not.";
         type = lib.types.bool;
       };
     };

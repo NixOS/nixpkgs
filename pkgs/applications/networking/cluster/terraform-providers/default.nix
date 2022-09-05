@@ -70,6 +70,8 @@ let
     in
     lib.optionalAttrs config.allowAliases {
       b2 = removed "b2" "2022/06";
+      dome9 = removed "dome9" "2022/08";
+      ncloud = removed "ncloud" "2022/08";
       opc = archived "opc" "2022/05";
       oraclepaas = archived "oraclepaas" "2022/05";
       template = archived "template" "2022/05";

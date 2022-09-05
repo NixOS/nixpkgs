@@ -8,6 +8,7 @@
 , gnused
 , jq
 , curl
+, gnugrep
 }:
 
 runCommandLocal "nuget-to-nix" {
@@ -22,6 +23,7 @@ runCommandLocal "nuget-to-nix" {
       gnused
       jq
       curl
+      gnugrep
     ];
   };
 

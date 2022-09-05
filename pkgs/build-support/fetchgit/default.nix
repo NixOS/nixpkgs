@@ -16,6 +16,7 @@ in
 , fetchSubmodules ? true, deepClone ? false
 , branchName ? null
 , sparseCheckout ? ""
+, nonConeMode ? false
 , name ? urlToName url rev
 , # Shell code executed after the file has been fetched
   # successfully. This can do things like check or transform the file.
@@ -54,6 +55,7 @@ in
 */
 
 assert deepClone -> leaveDotGit;
+assert nonConeMode -> (sparseCheckout != "");
 
 if md5 != "" then
   throw "fetchgit does not support md5 anymore, please use sha256"
@@ -77,7 +79,7 @@ stdenvNoCC.mkDerivation {
   else
     lib.fakeSha256;
 
-  inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone branchName sparseCheckout postFetch;
+  inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone branchName sparseCheckout nonConeMode postFetch;
 
   postHook = if netrcPhase == null then null else ''
     ${netrcPhase}

@@ -156,11 +156,10 @@ in
       gatewayPorts = mkOption {
         type = types.str;
         default = "no";
-        description = ''
+        description = lib.mdDoc ''
           Specifies whether remote hosts are allowed to connect to
           ports forwarded for the client.  See
-          <citerefentry><refentrytitle>sshd_config</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          {manpage}`sshd_config(5)`.
         '';
       };
 
@@ -237,11 +236,10 @@ in
           [ { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; rounds = 100; openSSHFormat = true; }
             { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; rounds = 100; comment = "key comment"; }
           ];
-        description = ''
+        description = lib.mdDoc ''
           NixOS can automatically generate SSH host keys.  This option
           specifies the path, type and size of each key.  See
-          <citerefentry><refentrytitle>ssh-keygen</refentrytitle>
-          <manvolnum>1</manvolnum></citerefentry> for supported types
+          {manpage}`ssh-keygen(1)` for supported types
           and sizes.
         '';
       };
@@ -435,13 +433,12 @@ in
                 # socket activation, it goes to the remote side (#19589).
                 exec >&2
 
-                mkdir -m 0755 -p /etc/ssh
-
                 ${flip concatMapStrings cfg.hostKeys (k: ''
                   if ! [ -s "${k.path}" ]; then
                       if ! [ -h "${k.path}" ]; then
                           rm -f "${k.path}"
                       fi
+                      mkdir -m 0755 -p "$(dirname '${k.path}')"
                       ssh-keygen \
                         -t "${k.type}" \
                         ${if k ? bits then "-b ${toString k.bits}" else ""} \

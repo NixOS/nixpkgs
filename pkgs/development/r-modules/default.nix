@@ -1041,6 +1041,11 @@ let
       '';
     });
 
+    s2 = old.s2.overrideDerivation (attrs: {
+      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
+      PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
+    });
+
     Rmpi = old.Rmpi.overrideDerivation (attrs: {
       configureFlags = [
         "--with-Rmpi-type=OPENMPI"

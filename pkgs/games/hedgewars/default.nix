@@ -33,6 +33,10 @@ stdenv.mkDerivation rec {
     qtbase
   ] ++ lib.optional withServer ghc;
 
+  patches = [
+    ./qt515.patch
+  ];
+
   postPatch = ''
     substituteInPlace gameServer/CMakeLists.txt \
       --replace mask evaluate
@@ -103,5 +107,8 @@ stdenv.mkDerivation rec {
        all movement on the battlefield has ceased).'';
     maintainers = with maintainers; [ kragniz fpletz ];
     inherit (fpc.meta) platforms;
+    # https://github.com/NixOS/nixpkgs/pull/185755#issuecomment-1219024584
+    broken = true;
+    hydraPlatforms = platforms.none;
   };
 }

@@ -73,7 +73,7 @@ in
         default = [];
         type = types.listOf types.package;
         example = lib.literalExpression "[ pkgs.ipset ]";
-        description = ''
+        description = lib.mdDoc ''
           Extra packages to be made available to the fail2ban service. The example contains
           the packages needed by the `iptables-ipset-proto6` action.
         '';

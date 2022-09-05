@@ -24,9 +24,14 @@ buildGoModule rec {
     "-X ${t}/util.CommitHash=${src.rev}"
   ];
 
+  preBuild = ''
+    go generate ./runtime
+  '';
+
   postInstall = ''
     installManPage assets/packaging/micro.1
     install -Dt $out/share/applications assets/packaging/micro.desktop
+    install -Dm644 assets/micro-logo-mark.svg $out/share/icons/hicolor/scalable/apps/micro.svg
   '';
 
   passthru.tests.expect = callPackage ./test-with-expect.nix {};

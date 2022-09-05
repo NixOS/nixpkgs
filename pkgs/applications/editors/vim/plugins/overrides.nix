@@ -53,7 +53,6 @@
 , zsh
 
   # command-t dependencies
-, rake
 , ruby
 
   # cpsm dependencies
@@ -103,6 +102,7 @@
 , golint
 , gomodifytags
 , gopls
+, gotags
 , gotools
 , iferr
 , impl
@@ -239,9 +239,11 @@ self: super: {
   };
 
   command-t = super.command-t.overrideAttrs (old: {
-    buildInputs = [ ruby rake ];
+    buildInputs = [ ruby ];
     buildPhase = ''
-      rake make
+      substituteInPlace lua/wincent/commandt/lib/Makefile \
+        --replace '/bin/bash' 'bash'
+      make build
       rm ruby/command-t/ext/command-t/*.o
     '';
   });
@@ -978,7 +980,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-prqS4cx5T+EiilXf3v7ResNBtgst0Kpgvayknf0QDXA=";
+          cargoSha256 = "sha256-QAfHhpXABuOPaHCfQQZYhBERGXMaJPFipWHt/MeSc3c=";
         };
       in
       ''
@@ -1045,7 +1047,7 @@ self: super: {
         gomodifytags
         gopls
         # gorename
-        # gotags
+        gotags
         gotools
         # guru
         iferr
@@ -1101,7 +1103,7 @@ self: super: {
   vim-isort = super.vim-isort.overrideAttrs (old: {
     postPatch = ''
       substituteInPlace ftplugin/python_vimisort.vim \
-        --replace 'import vim' 'import vim; import sys; sys.path.append("${python2.pkgs.isort}/${python2.sitePackages}")'
+        --replace 'import vim' 'import vim; import sys; sys.path.append("${python3.pkgs.isort}/${python3.sitePackages}")'
     '';
   });
 

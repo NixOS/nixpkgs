@@ -19,7 +19,7 @@ in
 
     ids.uids = lib.mkOption {
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         The user IDs used in NixOS.
       '';
       type = types.attrsOf types.int;
@@ -27,7 +27,7 @@ in
 
     ids.gids = lib.mkOption {
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         The group IDs used in NixOS.
       '';
       type = types.attrsOf types.int;
@@ -354,6 +354,7 @@ in
       webdav = 322;
       pipewire = 323;
       rstudio-server = 324;
+      localtimed = 325;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -662,6 +663,7 @@ in
       webdav = 322;
       pipewire = 323;
       rstudio-server = 324;
+      localtimed = 325;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

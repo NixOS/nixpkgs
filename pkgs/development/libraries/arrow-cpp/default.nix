@@ -18,7 +18,6 @@
 , google-cloud-cpp
 , grpc
 , gtest
-, jemalloc
 , libbacktrace
 , lz4
 , minio
@@ -56,55 +55,58 @@ let
   arrow-testing = fetchFromGitHub {
     owner = "apache";
     repo = "arrow-testing";
-    rev = "634739c664433cec366b4b9a81d1e1044a8c5eda";
-    hash = "sha256-r1WVgJJsI7v485L6Qb+5i7kFO4Tvxyk1T0JBb4og6pg=";
+    rev = "5bab2f264a23f5af68f69ea93d24ef1e8e77fc88";
+    hash = "sha256-Pxx8ohUpXb5u1995IvXmxQMqWiDJ+7LAll/AjQP7ph8=";
   };
 
   parquet-testing = fetchFromGitHub {
     owner = "apache";
     repo = "parquet-testing";
-    rev = "acd375eb86a81cd856476fca0f52ba6036a067ff";
-    hash = "sha256-z/kmi+4dBO/dsVkJA4NgUoxl0pXi8RWIGvI8MGu/gcc=";
+    rev = "aafd3fc9df431c2625a514fb46626e5614f1d199";
+    hash = "sha256-cO5t/mgsbBhbSefx8EMGTyxmgTjhZ8mFujkFQ3p/JS0=";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "8.0.0";
+  version = "9.0.0";
 
   src = fetchurl {
     url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    hash = "sha256-rZoFcFEXyYnBFrrprHBJL+AVBQ4bgPsOOP3ktdhjqqM=";
+    hash = "sha256-qaAz8KNJAomZj0WGgNGVec8HkRcXumWv3my4AHD3qbU=";
   };
   sourceRoot = "apache-arrow-${version}/cpp";
 
   # versions are all taken from
-  # https://github.com/apache/arrow/blob/apache-arrow-8.0.0/cpp/thirdparty/versions.txt
+  # https://github.com/apache/arrow/blob/apache-arrow-${version}/cpp/thirdparty/versions.txt
 
+  # jemalloc: arrow uses a custom prefix to prevent default allocator symbol
+  # collisions as well as custom build flags
   ${if enableJemalloc then "ARROW_JEMALLOC_URL" else null} = fetchurl {
-    url = "https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2";
-    hash = "sha256-NDMOXOJ2CZ4uiVDZM121qHVomkxqVnUe87HYxTf4h/Y=";
+    url = "https://github.com/jemalloc/jemalloc/releases/download/5.3.0/jemalloc-5.3.0.tar.bz2";
+    hash = "sha256-LbgtHnEZ3z5xt2QCGbbf6EeJvAU3mDw7esT3GJrs/qo=";
   };
 
+  # mimalloc: arrow uses custom build flags for mimalloc
   ARROW_MIMALLOC_URL = fetchFromGitHub {
     owner = "microsoft";
     repo = "mimalloc";
-    rev = "v1.7.3";
-    hash = "sha256-Ca877VitpWyKmZNHavqgewk/P+tyd2xHDNVqveKh87M=";
+    rev = "v2.0.6";
+    hash = "sha256-u2ITXABBN/dwU+mCIbL3tN1f4c17aBuSdNTV+Adtohc=";
   };
 
   ARROW_XSIMD_URL = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xsimd";
-    rev = "7d1778c3b38d63db7cec7145d939f40bc5d859d1";
-    hash = "sha256-89AysBUVnTdWyMPazeJegnQ6WEH90Ns7qQInZLMSXY4=";
+    rev = "8.1.0";
+    hash = "sha256-Aqs6XJkGjAjGAp0PprabSM4m+32M/UXpSHppCHdzaZk=";
   };
 
   ARROW_SUBSTRAIT_URL = fetchFromGitHub {
     owner = "substrait-io";
     repo = "substrait";
-    rev = "e1b4c04a1b518912f4c4065b16a1b2c0ac8e14cf";
-    hash = "sha256-56FSjDngsROSHLjMv+OYAIYqphEu3GzgIMHbgh/ZQw0=";
+    rev = "v0.6.0";
+    hash = "sha256-hxCBomL4Qg9cHLRg9ZiO9k+JVOZXn6f4ikPtK+V9tno=";
   };
 
   patches = [
@@ -159,7 +161,6 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
     "-DARROW_BUILD_SHARED=${if enableShared then "ON" else "OFF"}"
     "-DARROW_BUILD_STATIC=${if enableShared then "OFF" else "ON"}"
     "-DARROW_BUILD_TESTS=ON"
@@ -168,7 +169,7 @@ stdenv.mkDerivation rec {
     "-DARROW_EXTRA_ERROR_CONTEXT=ON"
     "-DARROW_VERBOSE_THIRDPARTY_BUILD=ON"
     "-DARROW_DEPENDENCY_SOURCE=SYSTEM"
-    "-DThrift_SOURCE=AUTO" # search for Thrift using pkg-config (ThriftConfig.cmake requires OpenSSL and libevent)
+    "-Dxsimd_SOURCE=AUTO"
     "-DARROW_DEPENDENCY_USE_SHARED=${if enableShared then "ON" else "OFF"}"
     "-DARROW_COMPUTE=ON"
     "-DARROW_CSV=ON"
@@ -229,6 +230,7 @@ stdenv.mkDerivation rec {
       ];
     in
     lib.optionalString doInstallCheck "-${builtins.concatStringsSep ":" filteredTests}";
+  __darwinAllowLocalNetworking = true;
   installCheckInputs = [ perl which sqlite ] ++ lib.optional enableS3 minio;
   installCheckPhase =
     let

@@ -157,6 +157,8 @@ stdenv.mkDerivation {
         '(${concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
     '';
 
+    inherit expand-response-params;
+
     inherit nixSupport;
   };
 
@@ -494,6 +496,8 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" format"
     '' + optionalString targetPlatform.isWasm ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
+    '' + optionalString targetPlatform.isMicroBlaze ''
+      hardening_unsupported_flags+=" stackprotector"
     ''
 
     + optionalString (libc != null && targetPlatform.isAvr) ''
@@ -540,7 +544,6 @@ stdenv.mkDerivation {
         (name: value: "echo ${toString value} >> $out/nix-support/${name}")
         nixSupport);
 
-  inherit expand-response-params;
 
   # for substitution in utils.bash
   expandResponseParams = "${expand-response-params}/bin/expand-response-params";

@@ -1,19 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, flit-core
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pep440";
-  version = "0.1.0";
-  format = "setuptools";
+  version = "0.1.1";
+  format = "flit";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "m1H/yqqDiFrj6tmD9jo8nDakCBZxkBPq/HtSOXMH4ZQ=";
+    hash = "sha256-E9F4mHaavQKK8PYnRcnOdfW7mXcBKn1dTInCknLeNO4=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   checkInputs = [
     pytestCheckHook

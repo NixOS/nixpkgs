@@ -9,7 +9,7 @@ in
 {
   options.services.hadoop = {
 
-    gatewayRole.enableHbaseCli = mkEnableOption "HBase CLI tools";
+    gatewayRole.enableHbaseCli = mkEnableOption (lib.mdDoc "HBase CLI tools");
 
     hbaseSiteDefault = mkOption {
       default = {
@@ -21,7 +21,7 @@ in
         "hbase.cluster.distributed" = "true";
       };
       type = types.attrsOf types.anything;
-      description = ''
+      description = lib.mdDoc ''
         Default options for hbase-site.xml
       '';
     };
@@ -30,16 +30,16 @@ in
       type = with types; attrsOf anything;
       example = literalExpression ''
       '';
-      description = ''
+      description = lib.mdDoc ''
         Additional options and overrides for hbase-site.xml
-        <link xlink:href="https://github.com/apache/hbase/blob/rel/2.4.11/hbase-common/src/main/resources/hbase-default.xml"/>
+        <https://github.com/apache/hbase/blob/rel/2.4.11/hbase-common/src/main/resources/hbase-default.xml>
       '';
     };
     hbaseSiteInternal = mkOption {
       default = {};
       type = with types; attrsOf anything;
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         Internal option to add configs to hbase-site.xml based on module options
       '';
     };
@@ -50,11 +50,11 @@ in
         type = types.package;
         default = pkgs.hbase;
         defaultText = literalExpression "pkgs.hbase";
-        description = "HBase package";
+        description = lib.mdDoc "HBase package";
       };
 
       rootdir = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           This option will set "hbase.rootdir" in hbase-site.xml and determine
           the directory shared by region servers and into which HBase persists.
           The URL should be 'fully-qualified' to include the filesystem scheme.
@@ -68,7 +68,7 @@ in
         default = "/hbase";
       };
       zookeeperQuorum = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           This option will set "hbase.zookeeper.quorum" in hbase-site.xml.
           Comma separated list of servers in the ZooKeeper ensemble.
         '';
@@ -77,24 +77,24 @@ in
         default = null;
       };
       master = {
-        enable = mkEnableOption "HBase Master";
-        initHDFS = mkEnableOption "initialization of the hbase directory on HDFS";
+        enable = mkEnableOption (lib.mdDoc "HBase Master");
+        initHDFS = mkEnableOption (lib.mdDoc "initialization of the hbase directory on HDFS");
 
         openFirewall = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Open firewall ports for HBase master.
           '';
         };
       };
       regionServer = {
-        enable = mkEnableOption "HBase RegionServer";
+        enable = mkEnableOption (lib.mdDoc "HBase RegionServer");
 
         overrideHosts = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Remove /etc/hosts entries for "127.0.0.2" and "::1" defined in nixos/modules/config/networking.nix
             Regionservers must be able to resolve their hostnames to their IP addresses, through PTR records
             or /etc/hosts entries.
@@ -105,7 +105,7 @@ in
         openFirewall = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Open firewall ports for HBase master.
           '';
         };

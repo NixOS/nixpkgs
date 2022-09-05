@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchurl, cabextract }:
+{ stdenvNoCC, lib, fetchurl, cabextract }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "xow_dongle-firmware";
   version = "2017-07";
 
@@ -32,5 +32,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-
-

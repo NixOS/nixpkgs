@@ -10,6 +10,11 @@
 , werkzeug
 , pytestCheckHook
 , pythonOlder
+  # used in passthru.tests
+, flask-limiter
+, flask-restful
+, flask-restx
+, moto
 }:
 
 buildPythonPackage rec {
@@ -34,6 +39,10 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
+
+  passthru.tests = {
+    inherit flask-limiter flask-restful flask-restx moto;
+  };
 
   meta = with lib; {
     homepage = "https://flask.palletsprojects.com/";

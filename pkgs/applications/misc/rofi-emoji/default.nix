@@ -46,13 +46,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    makeWrapper
   ];
 
   buildInputs = [
     cairo
     glib
     libnotify
-    makeWrapper
     rofi-unwrapped
     wl-clipboard
     xclip

@@ -17,35 +17,35 @@ let
       ]);
 
   passwordDescription = ''
-    The options <option>hashedPassword</option>,
-    <option>password</option> and <option>passwordFile</option>
+    The options {option}`hashedPassword`,
+    {option}`password` and {option}`passwordFile`
     controls what password is set for the user.
-    <option>hashedPassword</option> overrides both
-    <option>password</option> and <option>passwordFile</option>.
-    <option>password</option> overrides <option>passwordFile</option>.
+    {option}`hashedPassword` overrides both
+    {option}`password` and {option}`passwordFile`.
+    {option}`password` overrides {option}`passwordFile`.
     If none of these three options are set, no password is assigned to
     the user, and the user will not be able to do password logins.
-    If the option <option>users.mutableUsers</option> is true, the
+    If the option {option}`users.mutableUsers` is true, the
     password defined in one of the three options will only be set when
     the user is created for the first time. After that, you are free to
     change the password with the ordinary user management commands. If
-    <option>users.mutableUsers</option> is false, you cannot change
+    {option}`users.mutableUsers` is false, you cannot change
     user passwords, they will always be set according to the password
     options.
   '';
 
   hashedPasswordDescription = ''
-    To generate a hashed password run <literal>mkpasswd -m sha-512</literal>.
+    To generate a hashed password run `mkpasswd -m sha-512`.
 
-    If set to an empty string (<literal>""</literal>), this user will
+    If set to an empty string (`""`), this user will
     be able to log in without being asked for a password (but not via remote
-    services such as SSH, or indirectly via <command>su</command> or
-    <command>sudo</command>). This should only be used for e.g. bootable
+    services such as SSH, or indirectly via {command}`su` or
+    {command}`sudo`). This should only be used for e.g. bootable
     live systems. Note: this is different from setting an empty password,
-    which can be achieved using <option>users.users.&lt;name?&gt;.password</option>.
+    which can be achieved using {option}`users.users.<name?>.password`.
 
-    If set to <literal>null</literal> (default) this user will not
-    be able to log in using a password (i.e. via <command>login</command>
+    If set to `null` (default) this user will not
+    be able to log in using a password (i.e. via {command}`login`
     command).
   '';
 
@@ -234,7 +234,7 @@ let
       hashedPassword = mkOption {
         type = with types; nullOr (passwdEntry str);
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Specifies the hashed password for the user.
           ${passwordDescription}
           ${hashedPasswordDescription}
@@ -244,7 +244,7 @@ let
       password = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Specifies the (clear text) password for the user.
           Warning: do not set confidential information here
           because it is world-readable in the Nix store. This option
@@ -256,11 +256,11 @@ let
       passwordFile = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The full path to a file that contains the user's password. The password
           file is read on each system activation. The file should contain
           exactly one line, which should be the password in an encrypted form
-          that is suitable for the <literal>chpasswd -e</literal> command.
+          that is suitable for the `chpasswd -e` command.
           ${passwordDescription}
         '';
       };
@@ -268,13 +268,13 @@ let
       initialHashedPassword = mkOption {
         type = with types; nullOr (passwdEntry str);
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Specifies the initial hashed password for the user, i.e. the
           hashed password assigned if the user does not already
-          exist. If <option>users.mutableUsers</option> is true, the
+          exist. If {option}`users.mutableUsers` is true, the
           password can be changed subsequently using the
-          <command>passwd</command> command. Otherwise, it's
-          equivalent to setting the <option>hashedPassword</option> option.
+          {command}`passwd` command. Otherwise, it's
+          equivalent to setting the {option}`hashedPassword` option.
 
           ${hashedPasswordDescription}
         '';
@@ -458,25 +458,25 @@ in {
     users.mutableUsers = mkOption {
       type = types.bool;
       default = true;
-      description = ''
-        If set to <literal>true</literal>, you are free to add new users and groups to the system
-        with the ordinary <literal>useradd</literal> and
-        <literal>groupadd</literal> commands. On system activation, the
-        existing contents of the <literal>/etc/passwd</literal> and
-        <literal>/etc/group</literal> files will be merged with the
-        contents generated from the <literal>users.users</literal> and
-        <literal>users.groups</literal> options.
+      description = lib.mdDoc ''
+        If set to `true`, you are free to add new users and groups to the system
+        with the ordinary `useradd` and
+        `groupadd` commands. On system activation, the
+        existing contents of the `/etc/passwd` and
+        `/etc/group` files will be merged with the
+        contents generated from the `users.users` and
+        `users.groups` options.
         The initial password for a user will be set
-        according to <literal>users.users</literal>, but existing passwords
+        according to `users.users`, but existing passwords
         will not be changed.
 
-        <warning><para>
-        If set to <literal>false</literal>, the contents of the user and
+        ::: {.warning}
+        If set to `false`, the contents of the user and
         group files will simply be replaced on system activation. This also
         holds for the user passwords; all changed
         passwords will be reset according to the
-        <literal>users.users</literal> configuration on activation.
-        </para></warning>
+        `users.users` configuration on activation.
+        :::
       '';
     };
 

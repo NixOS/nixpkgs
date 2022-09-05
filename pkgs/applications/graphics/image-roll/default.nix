@@ -27,6 +27,9 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # fails in the sandbox
     "--skip=file_list::tests"
+
+    # sometimes fails on darwin
+    "image_list::tests::save_current_image_overwrites_image_at_current_image_path_when_filename_is_set_to_none"
   ];
 
   postInstall = ''

@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "genpy";
-  version = "2021.1";
+  version = "2022.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9bc062fa98c5c466ff464d8974be81a6bf67af9247b5e5176215ad1e81a6cdac";
+    sha256 = "sha256-FGZbQlUgbJjnuiDaKS/vVlraMVmFF1cAQk7S3aPWXx4=";
   };
 
   propagatedBuildInputs = [

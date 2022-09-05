@@ -11,7 +11,7 @@ let
 in {
   options = {
     services.dnsdist = {
-      enable = mkEnableOption "dnsdist domain name server";
+      enable = mkEnableOption (lib.mdDoc "dnsdist domain name server");
 
       listenAddress = mkOption {
         type = types.str;

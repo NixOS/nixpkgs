@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ prusnak mmahut ];
     platforms = platforms.linux;
+    broken = true; # 2022-08-28
   };
 }

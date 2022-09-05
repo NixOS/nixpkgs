@@ -6,6 +6,7 @@
 , zlib, zstd, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
+, hipSupport ? false, hip # comes with a significantly larger closure size
 , colladaSupport ? true, opencollada
 , spaceNavSupport ? stdenv.isLinux, libspnav
 , makeWrapper
@@ -86,7 +87,11 @@ stdenv.mkDerivation rec {
                   '${python310Packages.numpy}/${python.sitePackages}/numpy'
     '' else ''
       substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
-    '');
+    '') +
+    (if hipSupport then ''
+      substituteInPlace extern/hipew/src/hipew.c --replace '"/opt/rocm/hip/lib/libamdhip64.so"' '"${hip}/lib/libamdhip64.so"'
+      substituteInPlace extern/hipew/src/hipew.c --replace '"opt/rocm/hip/bin"' '"${hip}/bin"'
+    '' else "");
 
   cmakeFlags =
     [

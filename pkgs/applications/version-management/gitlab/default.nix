@@ -46,6 +46,8 @@ let
     # N.B. omniauth_oauth2_generic and apollo_upload_server both provide a
     # `console` executable.
     ignoreCollisions = true;
+
+    extraConfigPaths = lib.forEach data.vendored_gems (gem: "${src}/vendor/gems/${gem}");
   };
 
   yarnOfflineCache = fetchYarnDeps {
@@ -127,13 +129,17 @@ stdenv.mkDerivation {
 
   inherit src;
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
-    rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git nettools makeWrapper
+    rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git nettools
   ];
 
   patches = [
     # Change hardcoded paths to the NixOS equivalent
     ./remove-hardcoded-locations.patch
+
+    # Bump pg to 1.4.3 (see https://github.com/NixOS/nixpkgs/pull/187946)
+    ./update-pg.patch
   ];
 
   postPatch = ''

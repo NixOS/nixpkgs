@@ -5,24 +5,20 @@
 }:
 nimPackages.buildNimPackage rec{
   pname = "swaycwd";
-  version = "0.0.2";
+  version = "0.1.0";
 
   src = fetchFromGitLab {
     owner = "cab404";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-OZWOPtOqcX+fVQCxWntrn98EzFu70WH55rfYCPDMSKk=";
+    hash = "sha256-VrG3H6oTeYsfncdD0IBp3zbmkoF5YF146LRxL064ZAE=";
   };
 
   preConfigure = ''
     {
       echo 'let enabledShells: seq[string] = @${builtins.toJSON enableShells}'
       echo 'export enabledShells'
-    } > shells.nim
-    cat << EOF > swaycwd.nimble
-    srcDir = "."
-    bin = "swaycwd"
-    EOF
+    } > src/shells.nim
   '';
 
   nimFlags = [ "--opt:speed" ];

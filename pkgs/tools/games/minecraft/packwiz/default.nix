@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "packwiz";
-  version = "unstable-2022-06-08";
+  version = "unstable-2022-08-25";
 
   src = fetchFromGitHub {
     owner = "packwiz";
     repo = "packwiz";
-    rev = "d051932bbbeb7b16cd21a1897019428e71f63bfd";
-    sha256 = "sha256-H1v5pY9hJYGP0ZiE/GrsATf1ljw69085t6PQhPOfYCs=";
+    rev = "11671421acff9794b9ca5c7e083a514f8a3f55a4";
+    sha256 = "sha256-A+DVRi0YByF4WP/okqhWrKRmci2ybAvbXYmODScIrYg=";
   };
 
-  vendorSha256 = "sha256-M9u7N4IrL0B4pPRQwQG5TlMaGT++w3ZKHZ0RdxEHPKk=";
+  vendorSha256 = "sha256-09S8RFdCvtE50EICLIKCTnTjG/0XsGf+yq9SNObKmRA=";
 
   nativeBuildInputs = [
     installShellFiles

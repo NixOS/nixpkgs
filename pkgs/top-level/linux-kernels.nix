@@ -36,7 +36,7 @@ let
       modDirVersion' = builtins.replaceStrings [ kernel.version ] [ version ] kernel.modDirVersion;
     in kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
-        inherit lib version;
+        inherit stdenv lib version;
       };
       argsOverride = {
         inherit version;
@@ -356,16 +356,20 @@ in {
 
     nvidiaPackages = dontRecurseIntoAttrs (lib.makeExtensible (_: callPackage ../os-specific/linux/nvidia-x11 { }));
 
+    nvidia_x11             = nvidiaPackages.stable;
+    nvidia_x11_beta        = nvidiaPackages.beta;
     nvidia_x11_legacy340   = nvidiaPackages.legacy_340;
     nvidia_x11_legacy390   = nvidiaPackages.legacy_390;
     nvidia_x11_legacy470   = nvidiaPackages.legacy_470;
-    nvidia_x11_beta        = nvidiaPackages.beta;
+    nvidia_x11_production  = nvidiaPackages.production;
     nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
-    nvidia_x11             = nvidiaPackages.stable;
 
-    # this is not a replacement for nvidia_x11
+    # this is not a replacement for nvidia_x11*
     # only the opensource kernel driver exposed for hydra to build
-    nvidia_x11_beta_open   = nvidiaPackages.beta.open;
+    nvidia_x11_beta_open         = nvidiaPackages.beta.open;
+    nvidia_x11_production_open   = nvidiaPackages.production.open;
+    nvidia_x11_stable_open       = nvidiaPackages.stable.open;
+    nvidia_x11_vulkan_beta_open  = nvidiaPackages.vulkan_beta.open;
 
     openrazer = callPackage ../os-specific/linux/openrazer/driver.nix { };
 
@@ -430,7 +434,7 @@ in {
 
     oci-seccomp-bpf-hook = if lib.versionAtLeast kernel.version "5.4" then callPackage ../os-specific/linux/oci-seccomp-bpf-hook { } else null;
 
-    perf = callPackage ../os-specific/linux/kernel/perf.nix { };
+    perf = callPackage ../os-specific/linux/kernel/perf { };
 
     phc-intel = if lib.versionAtLeast kernel.version "4.10" then callPackage ../os-specific/linux/phc-intel { } else null;
 

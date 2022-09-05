@@ -6,15 +6,15 @@ with lib;
     dataPath = mkOption {
       type = types.path;
       default = "/var/lib/pantalaimon-${name}";
-      description = ''
-        The directory where <literal>pantalaimon</literal> should store its state such as the database file.
+      description = lib.mdDoc ''
+        The directory where `pantalaimon` should store its state such as the database file.
       '';
     };
 
     logLevel = mkOption {
       type = types.enum [ "info" "warning" "error" "debug" ];
       default = "warning";
-      description = ''
+      description = lib.mdDoc ''
         Set the log level of the daemon.
       '';
     };
@@ -22,8 +22,8 @@ with lib;
     homeserver = mkOption {
       type = types.str;
       example = "https://matrix.org";
-      description = ''
-        The URI of the homeserver that the <literal>pantalaimon</literal> proxy should
+      description = lib.mdDoc ''
+        The URI of the homeserver that the `pantalaimon` proxy should
         forward requests to, without the matrix API path but including
         the http(s) schema.
       '';
@@ -32,7 +32,7 @@ with lib;
     ssl = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether or not SSL verification should be enabled for outgoing
         connections to the homeserver.
       '';
@@ -41,7 +41,7 @@ with lib;
     listenAddress = mkOption {
       type = types.str;
       default = "localhost";
-      description = ''
+      description = lib.mdDoc ''
         The address where the daemon will listen to client connections
         for this homeserver.
       '';
@@ -50,7 +50,7 @@ with lib;
     listenPort = mkOption {
       type = types.port;
       default = 8009;
-      description = ''
+      description = lib.mdDoc ''
         The port where the daemon will listen to client connections for
         this homeserver. Note that the listen address/port combination
         needs to be unique between different homeservers.
@@ -60,9 +60,9 @@ with lib;
     extraSettings = mkOption {
       type = types.attrs;
       default = { };
-      description = ''
+      description = lib.mdDoc ''
         Extra configuration options. See
-        <link xlink:href="https://github.com/matrix-org/pantalaimon/blob/master/docs/man/pantalaimon.5.md">pantalaimon(5)</link>
+        [pantalaimon(5)](https://github.com/matrix-org/pantalaimon/blob/master/docs/man/pantalaimon.5.md)
         for available options.
       '';
     };

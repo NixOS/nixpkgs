@@ -10,7 +10,7 @@ with lib;
         type = types.str;
         default = "";
         example = "order=scsi0;net0";
-        description = ''
+        description = lib.mdDoc ''
           Default boot device. PVE will try all devices in its default order if this value is empty.
         '';
       };
@@ -18,16 +18,16 @@ with lib;
         type = types.str;
         default = "virtio-scsi-pci";
         example = "lsi";
-        description = ''
+        description = lib.mdDoc ''
           SCSI controller type. Must be one of the supported values given in
-          <link xlink:href="https://pve.proxmox.com/wiki/Qemu/KVM_Virtual_Machines"/>
+          <https://pve.proxmox.com/wiki/Qemu/KVM_Virtual_Machines>
         '';
       };
       virtio0 = mkOption {
         type = types.str;
         default = "local-lvm:vm-9999-disk-0";
         example = "ceph:vm-123-disk-0";
-        description = ''
+        description = lib.mdDoc ''
           Configuration for the default virtio disk. It can be used as a cue for PVE to autodetect the target sotrage.
           This parameter is required by PVE even if it isn't used.
         '';
@@ -35,21 +35,21 @@ with lib;
       ostype = mkOption {
         type = types.str;
         default = "l26";
-        description = ''
+        description = lib.mdDoc ''
           Guest OS type
         '';
       };
       cores = mkOption {
         type = types.ints.positive;
         default = 1;
-        description = ''
+        description = lib.mdDoc ''
           Guest core count
         '';
       };
       memory = mkOption {
         type = types.ints.positive;
         default = 1024;
-        description = ''
+        description = lib.mdDoc ''
           Guest memory in MB
         '';
       };
@@ -58,14 +58,14 @@ with lib;
       name = mkOption {
         type = types.str;
         default = "nixos-${config.system.nixos.label}";
-        description = ''
+        description = lib.mdDoc ''
           VM name
         '';
       };
       net0 = mkOption {
         type = types.commas;
         default = "virtio=00:00:00:00:00:00,bridge=vmbr0,firewall=1";
-        description = ''
+        description = lib.mdDoc ''
           Configuration for the default interface. When restoring from VMA, check the
           "unique" box to ensure device mac is randomized.
         '';
@@ -74,7 +74,7 @@ with lib;
         type = types.str;
         default = "socket";
         example = "/dev/ttyS0";
-        description = ''
+        description = lib.mdDoc ''
           Create a serial device inside the VM (n is 0 to 3), and pass through a host serial device (i.e. /dev/ttyS0),
           or create a unix socket on the host side (use qm terminal to open a terminal connection).
         '';
@@ -83,7 +83,7 @@ with lib;
         type = types.bool;
         apply = x: if x then "1" else "0";
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Expect guest to have qemu agent running
         '';
       };
@@ -95,7 +95,7 @@ with lib;
         cpu = "host";
         onboot = 1;
       }'';
-      description = ''
+      description = lib.mdDoc ''
         Additional options appended to qemu-server.conf
       '';
     };
@@ -103,7 +103,7 @@ with lib;
       type = types.str;
       default = config.proxmox.qemuConf.name;
       example = "999-nixos_template";
-      description = ''
+      description = lib.mdDoc ''
         Filename of the image will be vzdump-qemu-''${filenameSuffix}.vma.zstd.
         This will also determine the default name of the VM on restoring the VMA.
         Start this value with a number if you want the VMA to be detected as a backup of
@@ -129,21 +129,16 @@ with lib;
         # Build qemu with PVE's patch that adds support for the VMA format
         vma = pkgs.qemu_kvm.overrideAttrs ( super: rec {
 
-          # proxmox's VMA patch doesn't work with qemu 7.0 yet
-          version = "6.2.0";
-          src = pkgs.fetchurl {
-            url= "https://download.qemu.org/qemu-${version}.tar.xz";
-            hash = "sha256-aOFdjkWsVjJuC5pK+otJo9/oq6NIgiHQmMhGmLymW0U=";
-          };
-
-          patches = let
-            rev = "b37b17c286da3d32945fbee8ee4fd97a418a50db";
-            path = "debian/patches/pve/0026-PVE-Backup-add-vma-backup-format-code.patch";
-            vma-patch = pkgs.fetchpatch {
-              url = "https://git.proxmox.com/?p=pve-qemu.git;a=blob_plain;h=${rev};f=${path}";
-              hash = "sha256-siuDWDUnM9Zq0/L2Faww3ELAOUHhVIHu5RAQn6L4Atc=";
-            };
-          in [ vma-patch ];
+          patches = [
+            (pkgs.fetchpatch {
+              url =
+                let
+                  rev = "1976ca460796f28447b41e3618e5c1e234035dd5";
+                  path = "debian/patches/pve/0026-PVE-Backup-add-vma-backup-format-code.patch";
+                in "https://git.proxmox.com/?p=pve-qemu.git;a=blob_plain;hb=${rev};f=${path}";
+              hash = "sha256-2Dz+ceTwrcyYYxi76RtyY3v15/2pwGcDhFuoZWlgbjc=";
+            })
+          ];
 
           buildInputs = super.buildInputs ++ [ pkgs.libuuid ];
 
@@ -155,6 +150,9 @@ with lib;
         rm $diskImage
         ${pkgs.zstd}/bin/zstd "vzdump-qemu-${cfg.filenameSuffix}.vma"
         mv "vzdump-qemu-${cfg.filenameSuffix}.vma.zst" $out/
+
+        mkdir -p $out/nix-support
+        echo "file vma $out/vzdump-qemu-${cfg.filenameSuffix}.vma.zst" >> $out/nix-support/hydra-build-products
       '';
       format = "raw";
       inherit config lib pkgs;

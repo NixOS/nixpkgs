@@ -430,11 +430,6 @@ in with passthru; stdenv.mkDerivation {
     # This allows build Python to import host Python's sysconfigdata
     mkdir -p "$out/${sitePackages}"
     ln -s "$out/lib/${libPrefix}/"_sysconfigdata*.py "$out/${sitePackages}/"
-
-    # debug info can't be separated from a static library and would otherwise be
-    # left in place by a separateDebugInfo build. force its removal here to save
-    # space in output.
-    $STRIP -S $out/lib/${libPrefix}/config-*/libpython*.a || true
     '' + optionalString stripConfig ''
     rm -R $out/bin/python*-config $out/lib/python*/config-*
     '' + optionalString stripIdlelib ''

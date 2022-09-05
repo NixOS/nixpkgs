@@ -27,16 +27,15 @@ in
   ###### interface
 
   options.services.soju = {
-    enable = mkEnableOption "soju";
+    enable = mkEnableOption (lib.mdDoc "soju");
 
     listen = mkOption {
       type = types.listOf types.str;
       default = [ ":6697" ];
-      description = ''
+      description = lib.mdDoc ''
         Where soju should listen for incoming connections. See the
-        <literal>listen</literal> directive in
-        <citerefentry><refentrytitle>soju</refentrytitle>
-        <manvolnum>1</manvolnum></citerefentry>.
+        `listen` directive in
+        {manpage}`soju(1)`.
       '';
     };
 
@@ -70,18 +69,17 @@ in
     httpOrigins = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         List of allowed HTTP origins for WebSocket listeners. The parameters are
         interpreted as shell patterns, see
-        <citerefentry><refentrytitle>glob</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>.
+        {manpage}`glob(7)`.
       '';
     };
 
     acceptProxyIP = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Allow the specified IPs to act as a proxy. Proxys have the ability to
         overwrite the remote and local connection addresses (via the X-Forwarded-\*
         HTTP header fields). The special name "localhost" accepts the loopback

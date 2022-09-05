@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   '';
   dontStrip = true;
 
-  desktopItem = makeDesktopItem {
+  desktopItems = [ (makeDesktopItem {
     name = "ILSpy";
     desktopName = "ILSpy";
     exec = "ILSpy";
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
       "il"
       "assembly"
     ];
-  };
+  }) ];
 
   meta = with lib; {
     description = ".NET assembly browser and decompiler";

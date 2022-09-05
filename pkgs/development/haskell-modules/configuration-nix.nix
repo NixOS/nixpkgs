@@ -990,6 +990,42 @@ self: super: builtins.intersectAttrs super {
     enableSeparateBinOutput = true;
   }) super.nfc;
 
+  # Wants to execute cabal-install to (re-)build itself
+  hint = dontCheck super.hint;
+
+  # Make sure that Cabal 3.8.* can be built as-is
+  Cabal_3_8_1_0 = doDistribute (super.Cabal_3_8_1_0.override {
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+    process = self.process_1_6_15_0;
+  });
+
+  # cabal-install switched to build type simple in 3.2.0.0
+  # as a result, the cabal(1) man page is no longer installed
+  # automatically. Instead we need to use the `cabal man`
+  # command which generates the man page on the fly and
+  # install it to $out/share/man/man1 ourselves in this
+  # override.
+  # The commit that introduced this change:
+  # https://github.com/haskell/cabal/commit/91ac075930c87712eeada4305727a4fa651726e7
+  # Since cabal-install 3.8, the cabal man (without the raw) command
+  # uses nroff(1) instead of man(1) for macOS/BSD compatibility. That utility
+  # is not commonly installed on systems, so we add it to PATH. Closure size
+  # penalty is about 10MB at the time of writing this (2022-08-20).
+  cabal-install = overrideCabal (old: {
+    executableToolDepends = [
+      pkgs.buildPackages.makeWrapper
+    ] ++ old.buildToolDepends or [];
+    postInstall = old.postInstall + ''
+      mkdir -p "$out/share/man/man1"
+      "$out/bin/cabal" man --raw > "$out/share/man/man1/cabal.1"
+
+      wrapProgram "$out/bin/cabal" \
+        --prefix PATH : "${pkgs.lib.makeBinPath [ pkgs.groff ]}"
+    '';
+    hydraPlatforms = pkgs.lib.platforms.all;
+    broken = false;
+  }) super.cabal-install;
+
 # haskell-language-server plugins all use the same test harness so we give them what we want in this loop.
 } // pkgs.lib.mapAttrs
   (_: overrideCabal (drv: {
@@ -1021,7 +1057,4 @@ self: super: builtins.intersectAttrs super {
   hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
   hls-selection-range-plugin = dontCheck super.hls-selection-range-plugin;
   hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
-
-  # Wants to execute cabal-install to (re-)build itself
-  hint = dontCheck super.hint;
 }

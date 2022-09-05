@@ -95,8 +95,9 @@ let
     (self: super: {
       pytest-aiohttp = super.pytest-aiohttp.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.0";
-        src = oldAttrs.src.override {
+        src = self.fetchPypi {
           inherit version;
+          pname = "pytest-aiohttp";
           hash = "sha256-ySmFQzljeXc3WDhwO2L+9jUoWYvAqdRRY566lfSqpE8=";
         };
         propagatedBuildInputs = with python3.pkgs; [ aiohttp pytest ];
@@ -142,7 +143,16 @@ let
     })
 
     # Pinned due to API changes in 0.1.0
-    (mkOverride "poolsense" "0.0.8" "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=")
+    (self: super: {
+      poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.8";
+        src = super.fetchPypi {
+          pname = "poolsense";
+          inherit version;
+          hash = "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=";
+        };
+      });
+    })
 
     # Pinned due to API changes >0.3.5.3
     (self: super: {
@@ -185,13 +195,6 @@ let
 
     (self: super: {
       pydeconz = super.pydeconz.overridePythonAttrs (oldAttrs: rec {
-        version = "102";
-        src = fetchFromGitHub {
-          owner = "Kane610";
-          repo = "deconz";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-Dbhp/+xyyWhFcYp2VRnivn5d1JMR5hBctdArIzLKIjM=";
-        };
         doCheck = false; # requires pytest-aiohttp>=1.0.0
       });
     })
@@ -274,16 +277,6 @@ let
     })
   ];
 
-  mkOverride = attrName: version: hash:
-    self: super: {
-      ${attrName} = super.${attrName}.overridePythonAttrs (oldAttrs: {
-        inherit version;
-        src = oldAttrs.src.override {
-          inherit version hash;
-        };
-      });
-    };
-
   python = python3.override {
     # Put packageOverrides at the start so they are applied after defaultOverrides
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
@@ -307,7 +300,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.8.3";
+  hassVersion = "2022.8.7";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -325,7 +318,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-Wx5l51+vcByOqdwqcnOn1+yYgp98kXggRmgO/wtiI+U=";
+    hash = "sha256-FkI0EHO+M3dpt5xt73QkneQlCqgYUGKuO9MT3bRK2jI=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling

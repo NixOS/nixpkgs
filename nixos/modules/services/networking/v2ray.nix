@@ -51,12 +51,12 @@ with lib;
             protocol = "freedom";
           }];
         };
-        description = ''
+        description = lib.mdDoc ''
           The configuration object.
 
           Either `configFile` or `config` must be specified.
 
-          See <link xlink:href="https://www.v2fly.org/en_US/config/overview.html"/>.
+          See <https://www.v2fly.org/en_US/config/overview.html>.
         '';
       };
     };

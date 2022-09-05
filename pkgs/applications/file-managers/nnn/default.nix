@@ -8,6 +8,7 @@
 , ncurses
 , readline
 , which
+, musl-fts
 # options
 , conf ? null
 , withIcons ? false
@@ -33,7 +34,10 @@ stdenv.mkDerivation rec {
   preBuild = lib.optionalString (conf != null) "cp ${configFile} src/nnn.h";
 
   nativeBuildInputs = [ installShellFiles makeWrapper pkg-config ];
-  buildInputs = [ readline ncurses ];
+  buildInputs = [ readline ncurses ] ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
+
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-I${musl-fts}/include";
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-lfts";
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ]
     ++ lib.optional withIcons [ "O_ICONS=1" ]

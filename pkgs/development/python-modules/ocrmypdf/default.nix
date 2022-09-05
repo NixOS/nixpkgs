@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "13.6.0";
+  version = "13.7.0";
 
   src = fetchFromGitHub {
     owner = "ocrmypdf";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-EY0dXma6tyXLT8XogS5iFdVgJPrtwB9YVrplhDT4gWw=";
+    hash = "sha256-cw2wZMPhWzxRpeM90g9NmuYBYpU13R2iDzs7a8SS/CY=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

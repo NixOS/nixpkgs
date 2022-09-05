@@ -142,6 +142,16 @@ let
         '';
       };
 
+      mysqlAuth = mkOption {
+        default = config.users.mysql.enable;
+        defaultText = literalExpression "config.users.mysql.enable";
+        type = types.bool;
+        description = lib.mdDoc ''
+          If set, the `pam_mysql` module will be used to
+          authenticate users against a MySQL/MariaDB database.
+        '';
+      };
+
       fprintAuth = mkOption {
         default = config.services.fprintd.enable;
         defaultText = literalExpression "config.services.fprintd.enable";
@@ -310,12 +320,10 @@ let
       limits = mkOption {
         default = [];
         type = limitsType;
-        description = ''
+        description = lib.mdDoc ''
           Attribute set describing resource limits.  Defaults to the
-          value of <option>security.pam.loginLimits</option>.
-          The meaning of the values is explained in <citerefentry>
-          <refentrytitle>limits.conf</refentrytitle><manvolnum>5</manvolnum>
-          </citerefentry>.
+          value of {option}`security.pam.loginLimits`.
+          The meaning of the values is explained in {manpage}`limits.conf(5)`.
         '';
       };
 
@@ -442,10 +450,12 @@ let
         (
           ''
             # Account management.
-            account required pam_unix.so
           '' +
           optionalString use_ldap ''
             account sufficient ${pam_ldap}/lib/security/pam_ldap.so
+          '' +
+          optionalString cfg.mysqlAuth ''
+            account sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
           '' +
           optionalString (config.services.sssd.enable && cfg.sssdStrictAccess==false) ''
             account sufficient ${pkgs.sssd}/lib/security/pam_sss.so
@@ -460,7 +470,11 @@ let
             account [success=ok ignore=ignore default=die] ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so
             account [success=ok default=ignore] ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_admin.so
           '' +
+          # The required pam_unix.so module has to come after all the sufficient modules
+          # because otherwise, the account lookup will fail if the user does not exist
+          # locally, for example with MySQL- or LDAP-auth.
           ''
+            account required pam_unix.so
 
             # Authentication management.
           '' +
@@ -475,6 +489,9 @@ let
           '' +
           optionalString cfg.logFailures ''
             auth required pam_faillock.so
+          '' +
+          optionalString cfg.mysqlAuth ''
+            auth sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
           '' +
           optionalString (config.security.pam.enableSSHAgentAuth && cfg.sshAgentAuth) ''
             auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=${lib.concatStringsSep ":" config.services.openssh.authorizedKeysFiles}
@@ -504,7 +521,7 @@ let
           # Modules in this block require having the password set in PAM_AUTHTOK.
           # pam_unix is marked as 'sufficient' on NixOS which means nothing will run
           # after it succeeds. Certain modules need to run after pam_unix
-          # prompts the user for password so we run it once with 'required' at an
+          # prompts the user for password so we run it once with 'optional' at an
           # earlier point and it will run again with 'sufficient' further down.
           # We use try_first_pass the second time to avoid prompting password twice
           (optionalString (cfg.unixAuth &&
@@ -517,7 +534,7 @@ let
               || cfg.duoSecurity.enable))
             (
               ''
-                auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} ${optionalString cfg.nodelay "nodelay"} likeauth
+                auth optional pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} ${optionalString cfg.nodelay "nodelay"} likeauth
               '' +
               optionalString config.security.pam.enableEcryptfs ''
                 auth optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap
@@ -573,6 +590,9 @@ let
           optionalString use_ldap ''
             password sufficient ${pam_ldap}/lib/security/pam_ldap.so
           '' +
+          optionalString cfg.mysqlAuth ''
+            password sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
+          '' +
           optionalString config.services.sssd.enable ''
             password sufficient ${pkgs.sssd}/lib/security/pam_sss.so use_authtok
           '' +
@@ -615,6 +635,9 @@ let
           '' +
           optionalString use_ldap ''
             session optional ${pam_ldap}/lib/security/pam_ldap.so
+          '' +
+          optionalString cfg.mysqlAuth ''
+            session optional ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
           '' +
           optionalString config.services.sssd.enable ''
             session optional ${pkgs.sssd}/lib/security/pam_sss.so
@@ -750,19 +773,18 @@ in
           }
        ];
 
-     description =
-       '' Define resource limits that should apply to users or groups.
-          Each item in the list should be an attribute set with a
-          <varname>domain</varname>, <varname>type</varname>,
-          <varname>item</varname>, and <varname>value</varname>
-          attribute.  The syntax and semantics of these attributes
-          must be that described in <citerefentry><refentrytitle>limits.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+     description = lib.mdDoc ''
+       Define resource limits that should apply to users or groups.
+       Each item in the list should be an attribute set with a
+       {var}`domain`, {var}`type`,
+       {var}`item`, and {var}`value`
+       attribute.  The syntax and semantics of these attributes
+       must be that described in {manpage}`limits.conf(5)`.
 
-          Note that these limits do not apply to systemd services,
-          whose limits can be changed via <option>systemd.extraConfig</option>
-          instead.
-       '';
+       Note that these limits do not apply to systemd services,
+       whose limits can be changed via {option}`systemd.extraConfig`
+       instead.
+     '';
     };
 
     security.pam.services = mkOption {
@@ -800,7 +822,7 @@ in
         '';
     };
 
-    security.pam.enableOTPW = mkEnableOption "the OTPW (one-time password) PAM module";
+    security.pam.enableOTPW = mkEnableOption (lib.mdDoc "the OTPW (one-time password) PAM module");
 
     security.pam.krb5 = {
       enable = mkOption {
@@ -838,17 +860,14 @@ in
       control = mkOption {
         default = "sufficient";
         type = types.enum [ "required" "requisite" "sufficient" "optional" ];
-        description = ''
+        description = lib.mdDoc ''
           This option sets pam "control".
           If you want to have multi factor authentication, use "required".
           If you want to use the PKCS#11 device instead of the regular password,
           use "sufficient".
 
           Read
-          <citerefentry>
-            <refentrytitle>pam.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          {manpage}`pam.conf(5)`
           for better understanding of this option.
         '';
       };
@@ -929,16 +948,13 @@ in
       control = mkOption {
         default = "sufficient";
         type = types.enum [ "required" "requisite" "sufficient" "optional" ];
-        description = ''
+        description = lib.mdDoc ''
           This option sets pam "control".
           If you want to have multi factor authentication, use "required".
           If you want to use U2F device instead of regular password, use "sufficient".
 
           Read
-          <citerefentry>
-            <refentrytitle>pam.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          {manpage}`pam.conf(5)`
           for better understanding of this option.
         '';
       };
@@ -1047,17 +1063,14 @@ in
       control = mkOption {
         default = "sufficient";
         type = types.enum [ "required" "requisite" "sufficient" "optional" ];
-        description = ''
+        description = lib.mdDoc ''
           This option sets pam "control".
           If you want to have multi factor authentication, use "required".
           If you want to use the SSH certificate instead of the regular password,
           use "sufficient".
 
           Read
-          <citerefentry>
-            <refentrytitle>pam.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          {manpage}`pam.conf(5)`
           for better understanding of this option.
         '';
       };
@@ -1082,16 +1095,13 @@ in
       control = mkOption {
         default = "sufficient";
         type = types.enum [ "required" "requisite" "sufficient" "optional" ];
-        description = ''
+        description = lib.mdDoc ''
           This option sets pam "control".
           If you want to have multi factor authentication, use "required".
           If you want to use Yubikey instead of regular password, use "sufficient".
 
           Read
-          <citerefentry>
-            <refentrytitle>pam.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          {manpage}`pam.conf(5)`
           for better understanding of this option.
         '';
       };
@@ -1135,7 +1145,7 @@ in
       };
     };
 
-    security.pam.enableEcryptfs = mkEnableOption "eCryptfs PAM module (mounting ecryptfs home directory on login)";
+    security.pam.enableEcryptfs = mkEnableOption (lib.mdDoc "eCryptfs PAM module (mounting ecryptfs home directory on login)");
 
     users.motd = mkOption {
       default = null;
@@ -1249,6 +1259,9 @@ in
       '' +
       optionalString (isEnabled (cfg: cfg.oathAuth)) ''
         "mr ${pkgs.oath-toolkit}/lib/security/pam_oath.so,
+      '' +
+      optionalString (isEnabled (cfg: cfg.mysqlAuth)) ''
+        mr ${pkgs.pam_mysql}/lib/security/pam_mysql.so,
       '' +
       optionalString (isEnabled (cfg: cfg.yubicoAuth)) ''
         mr ${pkgs.yubico-pam}/lib/security/pam_yubico.so,

@@ -209,7 +209,7 @@ in
         readOnly = true;
         type = types.bool;
         default = inInitrd || inSystem;
-        defaultText = literalDocBook "<literal>true</literal> if ZFS filesystem support is enabled";
+        defaultText = literalMD "`true` if ZFS filesystem support is enabled";
         description = lib.mdDoc "True if ZFS filesystem support is enabled";
       };
 
@@ -277,12 +277,12 @@ in
       forceImportAll = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Forcibly import all ZFS pool(s).
 
-          If you set this option to <literal>false</literal> and NixOS subsequently fails to
+          If you set this option to `false` and NixOS subsequently fails to
           import your non-root ZFS pool(s), you should manually import each pool with
-          "zpool import -f &lt;pool-name&gt;", and then reboot. You should only need to do
+          "zpool import -f \<pool-name\>", and then reboot. You should only need to do
           this once.
         '';
       };
@@ -388,28 +388,26 @@ in
         default = "weekly";
         type = types.str;
         example = "daily";
-        description = ''
+        description = lib.mdDoc ''
           How often we run trim. For most desktop and server systems
           a sufficient trimming frequency is once a week.
 
           The format is described in
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
+          {manpage}`systemd.time(7)`.
         '';
       };
     };
 
     services.zfs.autoScrub = {
-      enable = mkEnableOption "periodic scrubbing of ZFS pools";
+      enable = mkEnableOption (lib.mdDoc "periodic scrubbing of ZFS pools");
 
       interval = mkOption {
         default = "Sun, 02:00";
         type = types.str;
         example = "daily";
-        description = ''
+        description = lib.mdDoc ''
           Systemd calendar expression when to scrub ZFS pools. See
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
+          {manpage}`systemd.time(7)`.
         '';
       };
 
@@ -428,7 +426,7 @@ in
       type = types.either (types.enum [ "disabled" "all" ]) (types.listOf types.str);
       default = "disabled";
       example = [ "tank" "dozer" ];
-      description = ''
+      description = lib.mdDoc ''
         After importing, expand each device in the specified pools.
 
         Set the value to the plain string "all" to expand all pools on boot:
@@ -442,7 +440,7 @@ in
     };
 
     services.zfs.zed = {
-      enableMail = mkEnableOption "ZED's ability to send emails" // {
+      enableMail = mkEnableOption (lib.mdDoc "ZED's ability to send emails") // {
         default = cfgZfs.package.enableMail;
         defaultText = literalExpression "config.${optZfs.package}.enableMail";
       };

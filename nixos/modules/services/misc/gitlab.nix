@@ -168,7 +168,7 @@ let
         port = cfg.registry.externalPort;
         key = cfg.registry.keyFile;
         api_url = "http://${config.services.dockerRegistry.listenAddress}:${toString config.services.dockerRegistry.port}/";
-        issuer = "gitlab-issuer";
+        issuer = cfg.registry.issuer;
       };
       extra = {};
       uploads.storage_path = cfg.statePath;
@@ -319,11 +319,10 @@ in {
         type = with types; either str (listOf str);
         default = [];
         example = "03:00";
-        description = ''
+        description = lib.mdDoc ''
           The time(s) to run automatic backup of GitLab
           state. Specified in systemd's time format; see
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
+          {manpage}`systemd.time(7)`.
         '';
       };
 
@@ -339,10 +338,9 @@ in {
         default = 0;
         example = 48;
         apply = x: x * 60 * 60;
-        description = ''
+        description = lib.mdDoc ''
           How long to keep the backups around, in
-          hours. <literal>0</literal> means <quote>keep
-          forever</quote>.
+          hours. `0` means “keep forever”.
         '';
       };
 
@@ -416,9 +414,9 @@ in {
       databaseHost = mkOption {
         type = types.str;
         default = "";
-        description = ''
-          GitLab database hostname. An empty string means <quote>use
-          local unix socket connection</quote>.
+        description = lib.mdDoc ''
+          GitLab database hostname. An empty string means
+          “use local unix socket connection”.
         '';
       };
 
@@ -750,18 +748,15 @@ in {
         type = types.int;
         default = 2;
         apply = x: builtins.toString x;
-        description = ''
+        description = lib.mdDoc ''
           The number of worker processes Puma should spawn. This
           controls the amount of parallel Ruby code can be
-          executed. GitLab recommends <quote>Number of CPU cores -
-          1</quote>, but at least two.
+          executed. GitLab recommends `Number of CPU cores - 1`, but at least two.
 
-          <note>
-            <para>
-              Each worker consumes quite a bit of memory, so
-              be careful when increasing this.
-            </para>
-          </note>
+          ::: {.note}
+          Each worker consumes quite a bit of memory, so
+          be careful when increasing this.
+          :::
         '';
       };
 
@@ -769,16 +764,14 @@ in {
         type = types.int;
         default = 0;
         apply = x: builtins.toString x;
-        description = ''
+        description = lib.mdDoc ''
           The minimum number of threads Puma should use per
           worker.
 
-          <note>
-            <para>
-              Each thread consumes memory and contributes to Global VM
-              Lock contention, so be careful when increasing this.
-            </para>
-          </note>
+          ::: {.note}
+          Each thread consumes memory and contributes to Global VM
+          Lock contention, so be careful when increasing this.
+          :::
         '';
       };
 
@@ -786,19 +779,17 @@ in {
         type = types.int;
         default = 4;
         apply = x: builtins.toString x;
-        description = ''
+        description = lib.mdDoc ''
           The maximum number of threads Puma should use per
           worker. This limits how many threads Puma will automatically
           spawn in response to requests. In contrast to workers,
           threads will never be able to run Ruby code in parallel, but
           give higher IO parallelism.
 
-          <note>
-            <para>
-              Each thread consumes memory and contributes to Global VM
-              Lock contention, so be careful when increasing this.
-            </para>
-          </note>
+          ::: {.note}
+          Each thread consumes memory and contributes to Global VM
+          Lock contention, so be careful when increasing this.
+          :::
         '';
       };
 

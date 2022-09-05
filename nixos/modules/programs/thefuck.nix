@@ -16,13 +16,13 @@ in
   {
     options = {
       programs.thefuck = {
-        enable = mkEnableOption "thefuck";
+        enable = mkEnableOption (lib.mdDoc "thefuck");
 
         alias = mkOption {
           default = "fuck";
           type = types.str;
 
-          description = ''
+          description = lib.mdDoc ''
             `thefuck` needs an alias to be configured.
             The default value is `fuck`, but you can use anything else as well.
           '';

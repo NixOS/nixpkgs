@@ -33,15 +33,15 @@
 }:
 
 let
-  version = "0.52.1";
-  binary-deps-version = "5";
+  version = "0.53.1";
+  binary-deps-version = "6";
 
   src = fetchFromGitHub {
     owner = "Unvanquished";
     repo = "Unvanquished";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-zNysAPPnnWO31K81oFiKHF4IStraveOlYwRqa1yyOLo=";
+    sha256 = "sha256-AWXuPXOhhPfdDrcyZF5o7uBnieSCGhwCzOYN8MjgTl8=";
   };
 
   unvanquished-binary-deps = stdenv.mkDerivation rec {
@@ -51,7 +51,7 @@ let
 
     src = fetchzip {
       url = "https://dl.unvanquished.net/deps/linux64-${version}.tar.bz2";
-      sha256 = "sha256-N/zkUhPFnU15QSe4NGmVLmhU7UslYrzz9ZUWuLbydyE=";
+      sha256 = "sha256-ERfg89oTf9JTtv/qRnTRIzFP+zMpHT8W4WAIxqogy9E=";
     };
 
     dontPatchELF = true;
@@ -119,7 +119,7 @@ let
     pname = "unvanquished-assets";
     inherit version src;
 
-    outputHash = "sha256-/dPr3ASNew1naB9FLcZ70jZtqQXWRflUmr4jsnRskiA=";
+    outputHash = "sha256-+mO4HQwFfy7SeGrN4R52KOr/uNQXkHMvYir3k0l5rDo=";
     outputHashMode = "recursive";
 
     nativeBuildInputs = [ aria2 cacert ];
@@ -139,24 +139,6 @@ in stdenv.mkDerivation rec {
     cp -r ${unvanquished-binary-deps}/* daemon/external_deps/linux64-${binary-deps-version}/
     chmod +w -R daemon/external_deps/linux64-${binary-deps-version}/
   '';
-
-  patches = [
-    (fetchpatch {
-      name = "fix-sdl-eventqueue-part1.patch";
-      url = "https://github.com/DaemonEngine/Daemon/commit/3a978c485f2a7e02c0bc5aeed2c7c4378026cb33.patch";
-      sha256 = "sha256-wVDscGf5zOOmivItNK913l0cfNFR6RpApewrxbmfG8s=";
-      stripLen = 1;
-      extraPrefix = "daemon/";
-    })
-    (fetchpatch {
-      name = "fix-sdl-eventqueue-part2.patch";
-      url = "https://github.com/DaemonEngine/Daemon/commit/54f98909c8871a57efb40263b215b81f22010b22.patch";
-      sha256 = "sha256-9qlyJnUEyZgFaclpXthKHm3qq+cW4E4LMOpLukcwBCU=";
-      stripLen = 1;
-      extraPrefix = "daemon/";
-      excludes = [ "*/CMakeLists.txt" ];
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

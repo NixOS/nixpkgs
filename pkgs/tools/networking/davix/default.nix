@@ -29,7 +29,7 @@ let
   boolToUpper = b: lib.toUpper (lib.boolToString b);
 in
 stdenv.mkDerivation rec {
-  version = "0.8.0";
+  version = "0.8.2";
   pname = "davix" + lib.optionalString enableThirdPartyCopy "-copy";
   nativeBuildInputs = [ cmake pkg-config python3 ];
   buildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   # https://github.com/cern-fts/davix/releases/tag/R_0_8_0
   src = fetchurl {
     url = "https://github.com/cern-fts/davix/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/davix-${version}.tar.gz";
-    sha256 = "LxCNoECKg/tbnwxoFQ02C6cz5LOg/imNRbDTLSircSQ=";
+    sha256 = "sha256-iBeiTCPxMJud4jO5qIJFX0V8Qu3CpknccP4lJM922Uw=";
   };
 
   preConfigure = ''

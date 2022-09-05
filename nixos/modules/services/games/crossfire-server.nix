@@ -41,7 +41,7 @@ in {
     stateDir = mkOption {
       type = types.str;
       default = "/var/lib/crossfire";
-      description = ''
+      description = lib.mdDoc ''
         Where to store runtime data (save files, persistent items, etc).
 
         If left at the default, this will be automatically created on server
@@ -61,7 +61,7 @@ in {
 
     configFiles = mkOption {
       type = types.attrsOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         Text to append to the corresponding configuration files. Note that the
         files given in the example are *not* the complete set of files available
         to customize; look in /etc/crossfire after enabling the server to see

@@ -35,11 +35,11 @@
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.32.5";
+  version = "1.32.7";
 
   src = fetchurl {
     url = "https://www.lesbonscomptes.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-UvRpJkapN9nXHy3TY7SVdZ/sy8f3QCHkg3/FM0oP9VY=";
+    sha256 = "sha256-ygim9LsLUZv5FaBiqbeq3E80NHPMHweJVwggjWYzfbo=";
   };
 
   configureFlags = [ "--enable-recollq" "--disable-webkit" "--without-systemd" ]
@@ -103,6 +103,6 @@ mkDerivation rec {
     homepage = "https://www.lesbonscomptes.com/recoll/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ jcumming kiyengar ];
+    maintainers = with maintainers; [ jcumming ];
   };
 }

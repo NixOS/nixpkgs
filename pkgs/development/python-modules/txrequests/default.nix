@@ -4,7 +4,7 @@
 , twisted
 , requests
 , cryptography
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -21,9 +21,7 @@ buildPythonPackage rec {
   # Require network access
   doCheck = false;
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  checkInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     description = "Asynchronous Python HTTP for Humans.";

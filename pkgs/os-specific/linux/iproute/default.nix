@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "5.18.0";
+  version = "5.19.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "W6PUZNUcjCg1UNUH/6w9EPeuxYe3xmsMy2lQZDZGOJ4=";
+    sha256 = "JrejTWp/0vekLis5xakMthusUi0QlgZ//rGV5Wk9d5E=";
   };
 
   patches = [

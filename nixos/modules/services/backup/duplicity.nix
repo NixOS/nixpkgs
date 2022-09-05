@@ -13,7 +13,7 @@ let
 in
 {
   options.services.duplicity = {
-    enable = mkEnableOption "backups with duplicity";
+    enable = mkEnableOption (lib.mdDoc "backups with duplicity");
 
     root = mkOption {
       type = types.path;
@@ -27,56 +27,51 @@ in
       type = types.listOf types.str;
       default = [ ];
       example = [ "/home" ];
-      description = ''
+      description = lib.mdDoc ''
         List of paths to include into the backups. See the FILE SELECTION
-        section in <citerefentry><refentrytitle>duplicity</refentrytitle>
-        <manvolnum>1</manvolnum></citerefentry> for details on the syntax.
+        section in {manpage}`duplicity(1)` for details on the syntax.
       '';
     };
 
     exclude = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         List of paths to exclude from backups. See the FILE SELECTION section in
-        <citerefentry><refentrytitle>duplicity</refentrytitle>
-        <manvolnum>1</manvolnum></citerefentry> for details on the syntax.
+        {manpage}`duplicity(1)` for details on the syntax.
       '';
     };
 
     targetUrl = mkOption {
       type = types.str;
       example = "s3://host:port/prefix";
-      description = ''
+      description = lib.mdDoc ''
         Target url to backup to. See the URL FORMAT section in
-        <citerefentry><refentrytitle>duplicity</refentrytitle>
-        <manvolnum>1</manvolnum></citerefentry> for supported urls.
+        {manpage}`duplicity(1)` for supported urls.
       '';
     };
 
     secretFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Path of a file containing secrets (gpg passphrase, access key...) in
         the format of EnvironmentFile as described by
-        <citerefentry><refentrytitle>systemd.exec</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry>. For example:
-        <programlisting>
+        {manpage}`systemd.exec(5)`. For example:
+        ```
         PASSPHRASE=«...»
         AWS_ACCESS_KEY_ID=«...»
         AWS_SECRET_ACCESS_KEY=«...»
-        </programlisting>
+        ```
       '';
     };
 
     frequency = mkOption {
       type = types.nullOr types.str;
       default = "daily";
-      description = ''
+      description = lib.mdDoc ''
         Run duplicity with the given frequency (see
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry> for the format).
+        {manpage}`systemd.time(7)` for the format).
         If null, do not run automatically.
       '';
     };
@@ -85,10 +80,9 @@ in
       type = types.listOf types.str;
       default = [ ];
       example = [ "--backend-retry-delay" "100" ];
-      description = ''
+      description = lib.mdDoc ''
         Extra command-line flags passed to duplicity. See
-        <citerefentry><refentrytitle>duplicity</refentrytitle>
-        <manvolnum>1</manvolnum></citerefentry>.
+        {manpage}`duplicity(1)`.
       '';
     };
 

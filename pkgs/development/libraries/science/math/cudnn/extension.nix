@@ -37,7 +37,7 @@ final: prev: let
       rec {
         fileVersion = "10.0";
         fullVersion = "7.4.2.24";
-        sha256 = "18ys0apiz9afid2s6lvy9qbyi8g66aimb2a7ikl1f3dm09mciprf";
+        hash = "sha256-Lt/IagK1DRfojEeJVaMy5qHoF05+U6NFi06lH68C2qM=";
         url = "${urlPrefix}/v${majorMinorPatch fullVersion}/cudnn-10.0-linux-x64-v${fullVersion}.tgz";
         supportedCudaVersions = [ "10.0" ];
       }

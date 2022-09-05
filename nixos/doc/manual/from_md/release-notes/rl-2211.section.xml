@@ -72,6 +72,34 @@
       </listitem>
       <listitem>
         <para>
+          <literal>emacs</literal> enables native compilation which
+          means:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              emacs packages from nixpkgs, builtin or not, will do
+              native compilation ahead of time so you can enjoy the
+              benefit of native compilation without compiling them on
+              you machine;
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              emacs packages from somewhere else, e.g.
+              <literal>package-install</literal>, will do asynchronously
+              deferred native compilation. If you do not want this,
+              maybe to avoid CPU consumption for compilation, you can
+              use
+              <literal>(setq native-comp-deferred-compilation nil)</literal>
+              to disable it while still enjoy the benefit of native
+              compilation for packages from nixpkgs.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           <literal>nixos-generate-config</literal> now generates
           configurations that can be built in pure mode. This is
           achieved by setting the new
@@ -97,7 +125,9 @@
       </listitem>
       <listitem>
         <para>
-          Cinnamon has been updated to 5.4.
+          Cinnamon has been updated to 5.4. While at it, the cinnamon
+          module now defaults to blueman as bluetooth manager and
+          slick-greeter as lightdm greeter to match upstream.
         </para>
       </listitem>
       <listitem>
@@ -126,9 +156,23 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/mozilla-services/syncstorage-rs">syncstorage-rs</link>,
+          a self-hostable sync server for Firefox. Available as
+          <link xlink:href="options.html#opt-services.firefox-syncserver.enable">services.firefox-syncserver</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://dragonflydb.io/">dragonflydb</link>,
           a modern replacement for Redis and Memcached. Available as
           <link linkend="opt-services.dragonflydb.enable">services.dragonflydb</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://komga.org/">Komga</link>, a free and
+          open source comics/mangas media server. Available as
+          <link linkend="opt-services.komga.enable">services.komga</link>.
         </para>
       </listitem>
       <listitem>
@@ -137,6 +181,14 @@
           cluster</link>, a distributed, scalable, big data store.
           Available as
           <link xlink:href="options.html#opt-services.hadoop.hbase.enable">services.hadoop.hbase</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/messagebird/sachet/">Sachet</link>,
+          an SMS alerting tool for the Prometheus Alertmanager.
+          Available as
+          <link linkend="opt-services.prometheus.sachet.enable">services.prometheus.sachet</link>.
         </para>
       </listitem>
       <listitem>
@@ -152,6 +204,27 @@
           a tool to improve keyboard comfort and usability with advanced
           customization. Available as
           <link xlink:href="options.html#opt-services.kanata.enable">services.kanata</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://languagetool.org/">languagetool</link>,
+          a multilingual grammar, style, and spell checker. Available as
+          <link xlink:href="options.html#opt-services.languagetool.enable">services.languagetool</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.getoutline.com/">Outline</link>,
+          a wiki and knowledge base similar to Notion. Available as
+          <link linkend="opt-services.outline.enable">services.outline</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://netbird.io">netbird</link>, a zero
+          configuration VPN. Available as
+          <link xlink:href="options.html#opt-services.netbird.enable">services.netbird</link>.
         </para>
       </listitem>
       <listitem>
@@ -172,6 +245,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://www.dolibarr.org/">Dolibarr</link>,
+          an enterprise resource planning and customer relationship
+          manager. Enable using
+          <link linkend="opt-services.dolibarr.enable">services.dolibarr</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.expressvpn.com">expressvpn</link>,
           the CLI client for ExpressVPN. Available as
           <link linkend="opt-services.expressvpn.enable">services.expressvpn</link>.
@@ -184,11 +265,32 @@
           <link linkend="opt-services.tempo.enable">services.tempo</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/zalando/patroni">Patroni</link>,
+          a template for PostgreSQL HA with ZooKeeper, etcd or Consul.
+          Available as
+          <link xlink:href="options.html#opt-services.patroni.enable">services.patroni</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://writefreely.org">WriteFreely</link>,
+          a simple blogging platform with ActivityPub support. Available
+          as
+          <link xlink:href="options.html#opt-services.writefreely.enable">services.writefreely</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-incompatibilities">
     <title>Backward Incompatibilities</title>
     <itemizedlist>
+      <listitem>
+        <para>
+          Nixpkgs now requires Nix 2.3 or newer.
+        </para>
+      </listitem>
       <listitem>
         <para>
           The <literal>isCompatible</literal> predicate checking CPU
@@ -246,6 +348,18 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>fetchgit</literal> fetcher now uses
+          <link xlink:href="https://www.git-scm.com/docs/git-sparse-checkout/2.37.0#_internalscone_mode_handling">cone
+          mode</link> by default for sparse checkouts.
+          <link xlink:href="https://www.git-scm.com/docs/git-sparse-checkout/2.37.0#_internalsnon_cone_problems">Non-cone
+          mode</link> can be enabled by passing
+          <literal>nonConeMode = true</literal>, but note that non-cone
+          mode is deprecated and this option may be removed alongside a
+          future Git update without notice.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>bsp-layout</literal> no longer uses the command
           <literal>cycle</literal> to switch to other window layouts, as
           it got replaced by the commands <literal>previous</literal>
@@ -275,6 +389,17 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>coq</literal> package and versioned variants
+          starting at <literal>coq_8_14</literal> no longer include
+          CoqIDE, which is now available through
+          <literal>coqPackages.coqide</literal>. It is still possible to
+          get CoqIDE as part of the <literal>coq</literal> package by
+          overriding the <literal>buildIde</literal> argument of the
+          derivation.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           PHP 7.4 is no longer supported due to upstream not supporting
           this version for the entire lifecycle of the 22.11 release.
         </para>
@@ -283,6 +408,14 @@
         <para>
           <literal>pkgs.cosign</literal> does not provide the
           <literal>cosigned</literal> binary anymore.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Emacs now uses the Lucid toolkit by default instead of GTK
+          because of stability and compatibility issues. Users who still
+          wish to remain using GTK can do so by using
+          <literal>emacs-gtk</literal>.
         </para>
       </listitem>
       <listitem>
@@ -325,6 +458,13 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>paperless</literal> module now defaults
+          <literal>PAPERLESS_TIME_ZONE</literal> to your configured
+          system timezone.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           (Neo)Vim can not be configured with
           <literal>configure.pathogen</literal> anymore to reduce
           maintainance burden. Use <literal>configure.packages</literal>
@@ -335,6 +475,12 @@
         <para>
           <literal>k3s</literal> no longer supports docker as runtime
           due to upstream dropping support.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>k3s</literal> supports <literal>clusterInit</literal>
+          option, and it is enabled by default, for servers.
         </para>
       </listitem>
     </itemizedlist>
@@ -348,6 +494,16 @@
           0.18.0 to 0.19.0, which brings some breaking changes. See the
           <link xlink:href="https://github.com/sayanarijit/xplr/releases/tag/v0.19.0">upstream
           release notes</link> for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>github-runner</literal> gained support for ephemeral
+          runners and registrations using a personal access token (PAT)
+          instead of a registration token. See
+          <literal>services.github-runner.ephemeral</literal> and
+          <literal>services.github-runner.tokenFile</literal> for
+          details.
         </para>
       </listitem>
       <listitem>
@@ -367,6 +523,19 @@
       </listitem>
       <listitem>
         <para>
+          Neo4j was updated from version 3 to version 4. See this
+          <link xlink:href="https://neo4j.com/docs/upgrade-migration-guide/current/">migration
+          guide</link> on how to migrate your Neo4j instance.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.matrix-synapse</literal> systemd unit
+          has been hardened.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Matrix Synapse now requires entries in the
           <literal>state_group_edges</literal> table to be unique, in
           order to prevent accidentally introducing duplicate
@@ -374,6 +543,14 @@
           restored multiple times). If your Synapse database already has
           duplicate rows in this table, this could fail with an error
           and require manual remediation.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>diamond</literal> package has been update from
+          0.8.36 to 2.0.15. See the
+          <link xlink:href="https://github.com/bbuchfink/diamond/releases">upstream
+          release notes</link> for more details.
         </para>
       </listitem>
       <listitem>
@@ -394,6 +571,18 @@
       </listitem>
       <listitem>
         <para>
+          The udisks2 service, available at
+          <literal>services.udisks2.enable</literal>, is now disabled by
+          default. It will automatically be enabled through services and
+          desktop environments as needed. This also means that polkit
+          will now actually be disabled by default. The default for
+          <literal>security.polkit.enable</literal> was already flipped
+          in the previous release, but udisks2 being enabled by default
+          re-enabled it.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Add udev rules for the Teensy family of microcontrollers.
         </para>
       </listitem>
@@ -404,6 +593,12 @@
           NixOS <literal>services.dbus.packages</literal> option will
           make it start automatically as a systemd user service when an
           application tries to talk to the libsecret D-Bus API.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          There is a new module for AMD SEV CPU functionality, which
+          grants access to the hardware.
         </para>
       </listitem>
       <listitem>
@@ -423,6 +618,12 @@
           There is a new module for the <literal>xfconf</literal>
           program (the Xfce configuration storage system), which has a
           dbus service.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>nomad</literal> package now defaults to 1.3,
+          which no longer has a downgrade path to releases 1.2 or older.
         </para>
       </listitem>
     </itemizedlist>

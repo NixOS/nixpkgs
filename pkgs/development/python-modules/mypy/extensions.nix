@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , typing
-, python
+, unittestCheckHook
 , pythonOlder
 }:
 
@@ -19,9 +19,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = lib.optional (pythonOlder "3.5") typing;
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover tests
-  '';
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "tests" ];
 
   pythonImportsCheck = [ "mypy_extensions" ];
 

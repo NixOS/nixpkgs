@@ -1,13 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config
-, openssl ? null, zlib ? null, gnutls ? null
+, gnutls
 }:
-
-let
-  xor = a: b: (a || b) && (!(a && b));
-in
-
-assert xor (openssl != null) (gnutls != null);
-assert !(xor (openssl != null) (zlib != null));
 
 stdenv.mkDerivation rec {
   pname = "ucommon";
@@ -29,8 +22,8 @@ stdenv.mkDerivation rec {
       --replace 'ifndef UCOMMON_SYSRUNTIME' 'if 0'
   '';
 
-  # ucommon.pc has link time depdendencies on -lssl, -lcrypto, -lz, -lgnutls
-  propagatedBuildInputs = [ openssl zlib gnutls ];
+  # ucommon.pc has link time depdendencies on -lusecure -lucommon -lgnutls
+  propagatedBuildInputs = [ gnutls ];
 
   doCheck = true;
 
@@ -38,7 +31,6 @@ stdenv.mkDerivation rec {
     description = "C++ library to facilitate using C++ design patterns";
     homepage = "https://www.gnu.org/software/commoncpp/";
     license = lib.licenses.lgpl3Plus;
-
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };

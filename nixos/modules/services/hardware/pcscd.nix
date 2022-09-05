@@ -16,7 +16,7 @@ in
   ###### interface
 
   options.services.pcscd = {
-    enable = mkEnableOption "PCSC-Lite daemon";
+    enable = mkEnableOption (lib.mdDoc "PCSC-Lite daemon");
 
     plugins = mkOption {
       type = types.listOf types.package;
@@ -35,11 +35,10 @@ in
         LIBPATH           /path/to/serial_reader.so
         CHANNELID         1
       '';
-      description = ''
+      description = lib.mdDoc ''
         Configuration for devices that aren't hotpluggable.
 
-        See <citerefentry><refentrytitle>reader.conf</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for valid options.
+        See {manpage}`reader.conf(5)` for valid options.
       '';
     };
   };

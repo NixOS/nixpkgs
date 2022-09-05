@@ -26,8 +26,8 @@ let
 in
 {
   options.services.healthchecks = {
-    enable = mkEnableOption "healthchecks" // {
-      description = ''
+    enable = mkEnableOption (lib.mdDoc "healthchecks") // {
+      description = lib.mdDoc ''
         Enable healthchecks.
         It is expected to be run behind a HTTP reverse proxy.
       '';
@@ -43,28 +43,28 @@ in
     user = mkOption {
       default = defaultUser;
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         User account under which healthchecks runs.
 
-        <note><para>
+        ::: {.note}
         If left as the default value this user will automatically be created
         on system activation, otherwise you are responsible for
         ensuring the user exists before the healthchecks service starts.
-        </para></note>
+        :::
       '';
     };
 
     group = mkOption {
       default = defaultUser;
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Group account under which healthchecks runs.
 
-        <note><para>
+        ::: {.note}
         If left as the default value this group will automatically be created
         on system activation, otherwise you are responsible for
         ensuring the group exists before the healthchecks service starts.
-        </para></note>
+        :::
       '';
     };
 
@@ -83,28 +83,28 @@ in
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/healthchecks";
-      description = ''
+      description = lib.mdDoc ''
         The directory used to store all data for healthchecks.
 
-        <note><para>
+        ::: {.note}
         If left as the default value this directory will automatically be created before
         the healthchecks server starts, otherwise you are responsible for ensuring the
         directory exists with appropriate ownership and permissions.
-        </para></note>
+        :::
       '';
     };
 
     settings = lib.mkOption {
-      description = ''
-        Environment variables which are read by healthchecks <literal>(local)_settings.py</literal>.
+      description = lib.mdDoc ''
+        Environment variables which are read by healthchecks `(local)_settings.py`.
 
         Settings which are explictly covered in options bewlow, are type-checked and/or transformed
         before added to the environment, everything else is passed as a string.
 
-        See <link xlink:href="">https://healthchecks.io/docs/self_hosted_configuration/</link>
+        See <https://healthchecks.io/docs/self_hosted_configuration/>
         for a full documentation of settings.
 
-        We add two variables to this list inside the packages <literal>local_settings.py.</literal>
+        We add two variables to this list inside the packages `local_settings.py.`
         - STATIC_ROOT to set a state directory for dynamically generated static files.
         - SECRET_KEY_FILE to read SECRET_KEY from a file at runtime and keep it out of /nix/store.
       '';

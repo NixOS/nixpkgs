@@ -1,4 +1,4 @@
-{ stdenv, lib, nodejs, nodePackages, remarshal
+{ stdenv, lib, pkgs, fetchFromGitHub, nodejs, remarshal
 , ttfautohint-nox
   # Custom font set options.
   # See https://typeof.net/Iosevka/customizer
@@ -55,13 +55,18 @@ let
   #
   # Doing it this way ensures that the package can always be built,
   # although possibly an older version than ioseva-bin.
-  nodeIosevka = (
-    lib.findSingle
-      (drv: drv ? packageName && drv.packageName == "iosevka")
-      (throw "no 'iosevka' package found in nodePackages")
-      (throw "multiple 'iosevka' packages found in nodePackages")
-      (lib.attrValues nodePackages)
-  ).override (drv: { dontNpmInstall = true; });
+  nodeIosevka = (import ./node-composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  }).package.override {
+    src = fetchFromGitHub {
+      owner = "be5invis";
+      repo = "Iosevka";
+      rev = "v15.6.3";
+      hash = "sha256-wsFx5sD1CjQTcmwpLSt97OYFI8GtVH54uvKQLU1fWTg=";
+    };
+  };
+
 in
 stdenv.mkDerivation rec {
   pname = if set != null then "iosevka-${set}" else "iosevka";
@@ -69,7 +74,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     nodejs
-    nodeIosevka
     remarshal
     ttfautohint-nox
   ];
@@ -108,7 +112,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     export HOME=$TMPDIR
     runHook preBuild
-    npm run build --no-update-notifier -- --jCmd=$NIX_BUILD_CORES ttf::$pname >/dev/null
+    npm run build --no-update-notifier -- --jCmd=$NIX_BUILD_CORES --verbose=9 ttf::$pname
     runHook postBuild
   '';
 

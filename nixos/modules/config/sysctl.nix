@@ -26,13 +26,12 @@ in
         { "net.ipv4.tcp_syncookies" = false; "vm.swappiness" = 60; }
       '';
       type = types.attrsOf sysctlOption;
-      description = ''
+      description = lib.mdDoc ''
         Runtime parameters of the Linux kernel, as set by
-        <citerefentry><refentrytitle>sysctl</refentrytitle>
-        <manvolnum>8</manvolnum></citerefentry>.  Note that sysctl
+        {manpage}`sysctl(8)`.  Note that sysctl
         parameters names must be enclosed in quotes
-        (e.g. <literal>"vm.swappiness"</literal> instead of
-        <literal>vm.swappiness</literal>).  The value of each
+        (e.g. `"vm.swappiness"` instead of
+        `vm.swappiness`).  The value of each
         parameter may be a string, integer, boolean, or null
         (signifying the option will not appear at all).
       '';

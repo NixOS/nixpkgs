@@ -664,6 +664,8 @@ let
 
     ke = callPackage ../development/ocaml-modules/ke { };
 
+    kicadsch = callPackage ../development/ocaml-modules/kicadsch { };
+
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
 
     lablgtk3 = callPackage ../development/ocaml-modules/lablgtk3 { };
@@ -787,11 +789,13 @@ let
     menhirSdk = callPackage ../development/ocaml-modules/menhir/sdk.nix { };
 
     merlin =
-      if lib.versionAtLeast ocaml.version "4.11"
+      if lib.versionAtLeast ocaml.version "4.12"
       then callPackage ../development/tools/ocaml/merlin/4.x.nix { }
       else callPackage ../development/tools/ocaml/merlin { };
 
     merlin-extend = callPackage ../development/ocaml-modules/merlin-extend { };
+
+    merlin-lib = callPackage ../development/tools/ocaml/merlin/lib.nix { };
 
     dot-merlin-reader = callPackage ../development/tools/ocaml/merlin/dot-merlin-reader.nix { };
 
@@ -1013,6 +1017,8 @@ let
 
     ocaml-syntax-shims = callPackage ../development/ocaml-modules/ocaml-syntax-shims { };
 
+    ocaml-vdom = callPackage ../development/ocaml-modules/ocaml-vdom { };
+
     syslog = callPackage ../development/ocaml-modules/syslog { };
 
     syslog-message = callPackage ../development/ocaml-modules/syslog-message { };
@@ -1141,6 +1147,10 @@ let
 
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
 
+    plotkicadsch = callPackage ../development/ocaml-modules/plotkicadsch {
+      inherit (pkgs) coreutils imagemagick;
+    };
+
     posix-base = callPackage ../development/ocaml-modules/posix/base.nix { };
 
     posix-socket = callPackage ../development/ocaml-modules/posix/socket.nix { };
@@ -1228,7 +1238,7 @@ let
     tls-mirage = callPackage ../development/ocaml-modules/tls/mirage.nix { };
 
     torch = callPackage ../development/ocaml-modules/torch {
-      inherit (pkgs.python3Packages) pytorch;
+      inherit (pkgs.python3Packages) torch;
     };
 
     ocaml-protoc = callPackage ../development/ocaml-modules/ocaml-protoc { };
@@ -1304,6 +1314,8 @@ let
     prof_spacetime = callPackage ../development/ocaml-modules/prof_spacetime { };
 
     progress = callPackage ../development/ocaml-modules/progress { };
+
+    promise_jsoo = callPackage ../development/ocaml-modules/promise_jsoo { };
 
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
 
@@ -1628,5 +1640,5 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_latest = ocamlPackages_4_14;
 
-  ocamlPackages = ocamlPackages_4_13;
+  ocamlPackages = ocamlPackages_4_14;
 }

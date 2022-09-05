@@ -6,7 +6,7 @@ let cfg = config.services.vector;
 in
 {
   options.services.vector = {
-    enable = mkEnableOption "Vector";
+    enable = mkEnableOption (lib.mdDoc "Vector");
 
     journaldAccess = mkOption {
       type = types.bool;

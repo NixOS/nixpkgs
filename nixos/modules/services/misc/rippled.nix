@@ -207,7 +207,7 @@ in
 
   options = {
     services.rippled = {
-      enable = mkEnableOption "rippled";
+      enable = mkEnableOption (lib.mdDoc "rippled");
 
       package = mkOption {
         description = lib.mdDoc "Which rippled package to use.";
@@ -375,7 +375,7 @@ in
       };
 
       statsd = {
-        enable = mkEnableOption "statsd monitoring for rippled";
+        enable = mkEnableOption (lib.mdDoc "statsd monitoring for rippled");
 
         address = mkOption {
           description = lib.mdDoc "The UDP address and port of the listening StatsD server.";
@@ -401,7 +401,7 @@ in
       config = mkOption {
         internal = true;
         default = pkgs.writeText "rippled.conf" rippledCfg;
-        defaultText = literalDocBook "generated config file";
+        defaultText = literalMD "generated config file";
       };
     };
   };

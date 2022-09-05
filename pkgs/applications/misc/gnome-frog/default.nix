@@ -51,11 +51,11 @@ python3Packages.buildPythonApplication rec {
     pkg-config
     glib
     wrapGAppsHook4
+    gobject-introspection
   ];
 
   buildInputs = [
     librsvg
-    gobject-introspection
     libnotify
     libadwaita
     libportal

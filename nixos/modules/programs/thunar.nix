@@ -11,7 +11,7 @@ in {
 
   options = {
     programs.thunar = {
-      enable = mkEnableOption "Thunar, the Xfce file manager";
+      enable = mkEnableOption (lib.mdDoc "Thunar, the Xfce file manager");
 
       plugins = mkOption {
         default = [];

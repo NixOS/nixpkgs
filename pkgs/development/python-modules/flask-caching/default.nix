@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "Flask-Caching";
-  version = "2.0.0";
+  version = "2.0.1";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MwDvzNo1nWnODmgkuQy1cf+JWjkHwxJmwDQsykvEA0A=";
+    sha256 = "sha256-EN8gCgPwMq9gB3vv5Bd53ZSJi2fIIEDTTochC3G6Jjg=";
   };
 
   postPatch = ''

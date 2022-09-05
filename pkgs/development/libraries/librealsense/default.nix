@@ -8,8 +8,14 @@
 , ninja
 , pkg-config
 , gcc
+, mesa
+, gtk3
+, glfw
+, libGLU
+, curl
 , cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
 , enablePython ? false, pythonPackages ? null
+, enableGUI ? false,
 }:
 
 assert cudaSupport -> (cudaPackages?cudatoolkit && cudaPackages.cudatoolkit != null);
@@ -32,7 +38,8 @@ stdenv.mkDerivation rec {
     libusb1
     gcc.cc.lib
   ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit
-    ++ lib.optionals enablePython (with pythonPackages; [python pybind11 ]);
+    ++ lib.optionals enablePython (with pythonPackages; [ python pybind11 ])
+    ++ lib.optionals enableGUI [ mesa gtk3 glfw libGLU curl ];
 
   patches = [
     # fix build on aarch64-darwin
@@ -53,8 +60,9 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_EXAMPLES=ON"
-    "-DBUILD_GRAPHICAL_EXAMPLES=OFF"
-    "-DBUILD_GLSL_EXTENSIONS=OFF"
+    "-DBUILD_GRAPHICAL_EXAMPLES=${lib.boolToString enableGUI}"
+    "-DBUILD_GLSL_EXTENSIONS=${lib.boolToString enableGUI}"
+    "-DCHECK_FOR_UPDATES=OFF" # activated by BUILD_GRAPHICAL_EXAMPLES, will make it download and compile libcurl
   ] ++ lib.optionals enablePython [
     "-DBUILD_PYTHON_BINDINGS:bool=true"
     "-DXXNIX_PYTHON_SITEPACKAGES=${placeholder "out"}/${pythonPackages.python.sitePackages}"
@@ -72,7 +80,7 @@ stdenv.mkDerivation rec {
     description = "A cross-platform library for Intel® RealSense™ depth cameras (D400 series and the SR300)";
     homepage = "https://github.com/IntelRealSense/librealsense";
     license = licenses.asl20;
-    maintainers = with maintainers; [ brian-dawn ];
+    maintainers = with maintainers; [ brian-dawn pbsds ];
     platforms = platforms.unix;
   };
 }

@@ -100,12 +100,6 @@ let
 
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
-  fstab = pkgs.writeText "initrd-fstab" (lib.concatMapStringsSep "\n"
-    ({ fsType, mountPoint, device, options, autoFormat, autoResize, ... }@fs: let
-        opts = options ++ optional autoFormat "x-systemd.makefs" ++ optional autoResize "x-systemd.growfs";
-        finalDevice = if (lib.elem "bind" options) then "/sysroot${device}" else device;
-      in "${finalDevice} /sysroot${mountPoint} ${fsType} ${lib.concatStringsSep "," opts}") fileSystems);
-
   needMakefs = lib.any (fs: fs.autoFormat) fileSystems;
   needGrowfs = lib.any (fs: fs.autoResize) fileSystems;
 
@@ -138,12 +132,15 @@ let
 
 in {
   options.boot.initrd.systemd = {
-    enable = mkEnableOption ''systemd in initrd.
+    enable = mkEnableOption (lib.mdDoc "systemd in initrd") // {
+      description = lib.mdDoc ''
+        Whether to enable systemd in initrd.
 
-      Note: This is in very early development and is highly
-      experimental. Most of the features NixOS supports in initrd are
-      not yet supported by the intrd generated with this option.
-    '';
+        Note: This is in very early development and is highly
+        experimental. Most of the features NixOS supports in initrd are
+        not yet supported by the intrd generated with this option.
+      '';
+    };
 
     package = (mkPackageOption pkgs "systemd" {
       default = "systemdStage1";
@@ -353,8 +350,6 @@ in {
           [Manager]
           DefaultEnvironment=PATH=/bin:/sbin ${optionalString (isBool cfg.emergencyAccess && cfg.emergencyAccess) "SYSTEMD_SULOGIN_FORCE=1"}
         '';
-
-        "/etc/fstab".source = fstab;
 
         "/lib/modules".source = "${modulesClosure}/lib/modules";
         "/lib/firmware".source = "${modulesClosure}/lib/firmware";

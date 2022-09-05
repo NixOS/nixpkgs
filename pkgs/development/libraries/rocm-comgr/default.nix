@@ -1,31 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, writeScript, cmake, clang, rocm-device-libs, lld, llvm }:
+{ lib, stdenv, fetchFromGitHub, writeScript, cmake, clang, rocm-device-libs, llvm }:
 
 stdenv.mkDerivation rec {
   pname = "rocm-comgr";
-  version = "5.1.0";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-CompilerSupport";
     rev = "rocm-${version}";
-    hash = "sha256-zlCM3Zue7MEhL1c0gUPwRNgdjzyyF9BEP3UxE8RYkKk=";
+    hash = "sha256-5C5bRdrt3xZAlRgtiIRTMAuwsFvVM4Win96P5+Pf5ZM=";
   };
 
   sourceRoot = "source/lib/comgr";
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ clang rocm-device-libs lld llvm ];
+  buildInputs = [ clang rocm-device-libs llvm ];
 
   cmakeFlags = [
-    "-DCLANG=${clang}/bin/clang"
     "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_C_COMPILER=${clang}/bin/clang"
     "-DCMAKE_CXX_COMPILER=${clang}/bin/clang++"
     "-DCMAKE_PREFIX_PATH=${llvm}/lib/cmake/llvm"
-    "-DLLD_INCLUDE_DIRS=${lld.src}/include"
+    "-DLLD_INCLUDE_DIRS=${llvm}/include"
     "-DLLVM_TARGETS_TO_BUILD=\"AMDGPU;X86\""
   ];
+
+  patches = [ ./cmake.patch ];
 
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell

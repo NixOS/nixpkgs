@@ -6,7 +6,7 @@
 
 , coqpit
 , fsspec
-, pytorch-bin
+, torch-bin
 , tensorboardx
 , protobuf
 
@@ -17,7 +17,7 @@
 
 let
   pname = "coqui-trainer";
-  version = "0.0.13";
+  version = "0.0.14";
 in
 buildPythonPackage {
   inherit pname version;
@@ -27,13 +27,13 @@ buildPythonPackage {
     owner = "coqui-ai";
     repo = "Trainer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tRm/TElGjVTgCrI80wCt4F1hO82CsDPz2ynJzQKmbIs=";
+    hash = "sha256-WvJDGV7gmf/QQN3SswTq/ABy9ppPFi5xYnMeL/M7GxY=";
   };
 
   propagatedBuildInputs = [
     coqpit
     fsspec
-    pytorch-bin
+    torch-bin
     soundfile
     tensorboardx
     protobuf

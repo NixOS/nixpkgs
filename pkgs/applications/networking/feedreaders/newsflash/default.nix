@@ -15,8 +15,8 @@
 , webkitgtk
 , glib-networking
 , librsvg
-, xdg-utils
 , gst_all_1
+, xdg-utils
 }:
 
 stdenv.mkDerivation rec {
@@ -78,9 +78,6 @@ stdenv.mkDerivation rec {
 
     # SVG support for gdk-pixbuf
     librsvg
-
-    # Open links in browser
-    xdg-utils
   ] ++ (with gst_all_1; [
     # Audio & video support for webkitgtk WebView
     gstreamer
@@ -88,6 +85,13 @@ stdenv.mkDerivation rec {
     gst-plugins-good
     gst-plugins-bad
   ]);
+
+  preFixup = ''
+    gappsWrapperArgs+=(--suffix PATH : "${lib.makeBinPath [
+      # Open links in browser
+      xdg-utils
+    ]}")
+  '';
 
   meta = with lib; {
     description = "A modern feed reader designed for the GNOME desktop";

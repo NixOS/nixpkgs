@@ -1,4 +1,5 @@
-{ lib, stdenv, autoreconfHook, pkg-config, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, autoreconfHook, pkg-config, SDL2, SDL2_mixer, SDL2_net
+, fetchFromGitHub, fetchpatch, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "chocolate-doom";
@@ -21,11 +22,19 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  outputs = [ "out" "man" ];
+
   postPatch = ''
     sed -e 's#/games#/bin#g' -i src{,/setup}/Makefile.am
+    patchShebangs --build man/{simplecpp,docgen}
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    # for documentation
+    python3
+  ];
   buildInputs = [ SDL2 SDL2_mixer SDL2_net ];
   enableParallelBuilding = true;
 

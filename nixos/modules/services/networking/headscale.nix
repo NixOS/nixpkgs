@@ -12,7 +12,7 @@ in
 {
   options = {
     services.headscale = {
-      enable = mkEnableOption "headscale, Open Source coordination server for Tailscale";
+      enable = mkEnableOption (lib.mdDoc "headscale, Open Source coordination server for Tailscale");
 
       package = mkOption {
         type = types.package;
@@ -26,26 +26,28 @@ in
       user = mkOption {
         default = "headscale";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           User account under which headscale runs.
-          <note><para>
+
+          ::: {.note}
           If left as the default value this user will automatically be created
           on system activation, otherwise you are responsible for
           ensuring the user exists before the headscale service starts.
-          </para></note>
+          :::
         '';
       };
 
       group = mkOption {
         default = "headscale";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Group under which headscale runs.
-          <note><para>
+
+          ::: {.note}
           If left as the default value this group will automatically be created
           on system activation, otherwise you are responsible for
           ensuring the user exists before the headscale service starts.
-          </para></note>
+          :::
         '';
       };
 
@@ -216,7 +218,7 @@ in
         magicDns = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Whether to use [MagicDNS](https://tailscale.com/kb/1081/magicdns/).
             Only works if there is at least a nameserver defined.
           '';
@@ -286,11 +288,11 @@ in
             '';
           };
           challengeType = mkOption {
-            type = types.enum [ "TLS_ALPN-01" "HTTP-01" ];
+            type = types.enum [ "TLS-ALPN-01" "HTTP-01" ];
             default = "HTTP-01";
             description = lib.mdDoc ''
               Type of ACME challenge to use, currently supported types:
-              `HTTP-01` or `TLS_ALPN-01`.
+              `HTTP-01` or `TLS-ALPN-01`.
             '';
           };
           httpListen = mkOption {

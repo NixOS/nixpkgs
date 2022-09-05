@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dvdisaster";
-  version = "0.79.9";
+  version = "0.79.10";
 
   src = fetchurl {
     url = "https://dvdisaster.jcea.es/downloads/${pname}-${version}.tar.bz2";
-    hash = "sha256-eclOJ33pS2aP4F7RUHc84ynpH7sTv2dsO4vn5vB248M=";
+    hash = "sha256-3Qqf9i8aSL9z2uJvm8P/QOPp83nODC3fyLL1iBIgf+g=";
   };
 
   nativeBuildInputs = [ gettext pkg-config which ];

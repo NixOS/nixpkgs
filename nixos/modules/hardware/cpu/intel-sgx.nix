@@ -20,7 +20,7 @@ in
   };
 
   options.hardware.cpu.intel.sgx.provision = {
-    enable = mkEnableOption "access to the Intel SGX provisioning device";
+    enable = mkEnableOption (lib.mdDoc "access to the Intel SGX provisioning device");
     user = mkOption {
       description = lib.mdDoc "Owner to assign to the SGX provisioning device.";
       type = types.str;

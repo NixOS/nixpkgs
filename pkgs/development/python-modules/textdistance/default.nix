@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "textdistance";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-T2vAf2ZX5pNA1MytsleAoScCWy9rccQELi0BByC0yo4=";
+    sha256 = "sha256-MzGJQ/TV1fBdV3oNvtseToO/ajUVPovOrOUsxR4fCOM=";
   };
 
   # There aren't tests
