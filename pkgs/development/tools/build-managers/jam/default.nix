@@ -1,7 +1,8 @@
-{ lib, stdenv, fetchurl, bison }:
+{ lib, stdenv, fetchurl, bison, buildPackages }:
 
 let
   mkJam = { meta ? { }, ... } @ args: stdenv.mkDerivation (args // {
+    depsBuildBuild = [ buildPackages.stdenv.cc ];
     nativeBuildInputs = [ bison ];
 
     # Jambase expects ar to have flags.
@@ -9,13 +10,21 @@ let
       export AR="$AR rc"
     '';
 
+    LOCATE_TARGET = "bin.unix";
+
+    buildPhase = ''
+      runHook preBuild
+      make $makeFlags jam0
+      ./jam0 -j$NIX_BUILD_CORES -sCC=${buildPackages.stdenv.cc.targetPrefix}cc jambase.c
+      ./jam0 -j$NIX_BUILD_CORES
+      runHook postBuild
+    '';
+
     installPhase = ''
       runHook preInstall
-
-      ./jam0 -j$NIX_BUILD_CORES -sBINDIR=$out/bin install
-      mkdir -p $out/doc/jam
+      mkdir -p $out/bin $out/doc/jam
+      cp bin.unix/jam $out/bin/jam
       cp *.html $out/doc/jam
-
       runHook postInstall
     '';
 
@@ -35,8 +44,6 @@ in
   in mkJam {
     inherit pname version;
 
-    makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
-
     src = fetchurl {
       url = "https://swarm.workshop.perforce.com/projects/perforce_software-jam/download/main/${pname}-${version}.tar";
       sha256 = "19xkvkpycxfsncxvin6yqrql3x3z9ypc1j8kzls5k659q4kv5rmc";
@@ -55,14 +62,22 @@ in
   in mkJam {
     inherit pname version;
 
-    postPatch = ''
-      substituteInPlace Jamfile --replace strip ${stdenv.cc.targetPrefix}strip
-    '';
-
     src = fetchurl {
       url = "https://downloads.sourceforge.net/project/freetype/${pname}/${version}/${pname}-${version}.tar.bz2";
       hash = "sha256-6JdzUAqSkS3pGOn+v/q+S2vOedaa8ZRDX04DK4ptZqM=";
     };
+
+    postPatch = ''
+      substituteInPlace Jamfile --replace strip ${stdenv.cc.targetPrefix}strip
+    '';
+
+    # Doesn't understand how to cross compile once bootstrapped, so we'll just
+    # use the Makefile for the bootstrapping portion.
+    configurePlatforms = [ "build" "target" ];
+    configureFlags = [
+      "CC=${buildPackages.stdenv.cc.targetPrefix}cc"
+      "--host=${stdenv.buildPlatform.config}"
+    ];
 
     meta = with lib; {
       description = "FreeType's enhanced, backwards-compatible Jam clone";
