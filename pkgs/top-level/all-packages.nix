@@ -6338,6 +6338,8 @@ with pkgs;
 
   findutils = callPackage ../tools/misc/findutils { };
 
+  findup = callPackage ../tools/misc/findup { };
+
   bsd-finger = callPackage ../tools/networking/bsd-finger { };
   bsd-fingerd = bsd-finger.override({ buildClient = false; });
 
