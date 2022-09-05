@@ -15196,4 +15196,10 @@
       fingerprint = "7B9E E848 D074 AE03 7A0C  651A 8ED4 DEF7 375A 30C8";
     }];
   };
+  zuzuleinen = {
+      email = "andrey.boar@gmail.com";
+      name = "Andrei Boar";
+      github = "zuzuleinen";
+      githubId = 944919;
+  };
 }

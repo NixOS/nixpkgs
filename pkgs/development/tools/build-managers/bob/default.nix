@@ -23,7 +23,7 @@ buildGoModule rec {
     homepage    = "https://bob.build";
     license     = licenses.asl20;
     platforms   = platforms.unix;
-    maintainers = [ "zuzuleinen" ];
+    maintainers = with maintainers; [ zuzuleinen ];
   };
 }
 
