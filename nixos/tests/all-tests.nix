@@ -120,6 +120,7 @@ in {
   cfssl = handleTestOn ["x86_64-linux"] ./cfssl.nix {};
   charliecloud = handleTest ./charliecloud.nix {};
   chromium = (handleTestOn ["x86_64-linux"] ./chromium.nix {}).stable or {};
+  cinnamon = handleTest ./cinnamon.nix {};
   cjdns = handleTest ./cjdns.nix {};
   clickhouse = handleTest ./clickhouse.nix {};
   cloud-init = handleTest ./cloud-init.nix {};
