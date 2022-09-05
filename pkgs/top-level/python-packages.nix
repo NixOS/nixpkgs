@@ -5045,6 +5045,8 @@ in {
 
   leb128 = callPackage ../development/python-modules/leb128 { };
 
+  led-ble = callPackage ../development/python-modules/led-ble { };
+
   ledger = (toPythonModule (pkgs.ledger.override {
     usePython = true;
     python3 = python;
