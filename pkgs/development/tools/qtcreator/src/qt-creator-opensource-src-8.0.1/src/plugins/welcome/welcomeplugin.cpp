@@ -62,6 +62,7 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QDebug>
+#include <iostream>
 
 using namespace Core;
 using namespace Core::WelcomePageHelpers;
@@ -145,6 +146,7 @@ public:
 
     bool initialize(const QStringList &arguments, QString *) final
     {
+        std::cout << "WelcomePlugin::initialize" << this;
         qDebug() << "WelcomePlugin::initialize" << this;
 
         m_welcomeMode = new WelcomeMode;
@@ -171,7 +173,9 @@ public:
 
     void extensionsInitialized() final
     {
+        std::cout << "WelcomePlugin::extensionsInitialized" << this;
         qDebug() << "WelcomePlugin::extensionsInitialized" << this;
+
         m_welcomeMode->initPlugins();
         ModeManager::activateMode(m_welcomeMode->id());
     }
@@ -364,6 +368,7 @@ public:
 
 WelcomeMode::WelcomeMode()
 {
+    std::cout << "WelcomeMode::WelcomeMode" << this;
     qDebug() << "WelcomeMode::WelcomeMode" << this;
 
     setDisplayName(tr("Welcome"));
@@ -432,7 +437,9 @@ WelcomeMode::~WelcomeMode()
 
 void WelcomeMode::initPlugins()
 {
+    std::cout << "WelcomeMode::initPlugins" << this;
     qDebug() << "WelcomeMode::initPlugins" << this;
+
     QSettings *settings = ICore::settings();
     m_activePage = Id::fromSetting(settings->value(currentPageSettingsKeyC));
 
