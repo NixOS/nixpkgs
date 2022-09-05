@@ -9913,6 +9913,8 @@ with pkgs;
 
   pingtcp = callPackage ../tools/networking/pingtcp { };
 
+  pingu = callPackage ../tools/networking/pingu { };
+
   pinnwand = callPackage ../servers/pinnwand { };
 
   pinsel = callPackage ../tools/misc/pinsel { };
@@ -11330,6 +11332,8 @@ with pkgs;
   };
 
   swaks = callPackage ../tools/networking/swaks { };
+
+  swiftbar = callPackage ../os-specific/darwin/swiftbar { };
 
   swiften = callPackage ../development/libraries/swiften { };
 
@@ -24895,6 +24899,8 @@ with pkgs;
 
   statifier = callPackage ../os-specific/linux/statifier { };
 
+  swiftdefaultapps = callPackage ../os-specific/darwin/swiftdefaultapps { };
+
   sysdig = callPackage ../os-specific/linux/sysdig {
     openssl = openssl_1_1;
     kernel = null;
@@ -28475,6 +28481,8 @@ with pkgs;
   waybar = callPackage ../applications/misc/waybar {};
 
   wayshot = callPackage ../tools/misc/wayshot { };
+
+  waylevel = callPackage ../tools/misc/waylevel { };
 
   wbg = callPackage ../applications/misc/wbg { };
 
@@ -34212,6 +34220,8 @@ with pkgs;
 
   inormalize = callPackage ../applications/science/biology/inormalize { };
 
+  iqtree = callPackage ../applications/science/biology/iqtree { };
+
   itsx = callPackage ../applications/science/biology/itsx { };
 
   iv = callPackage ../applications/science/biology/iv {
@@ -36249,6 +36259,8 @@ with pkgs;
   twiggy = callPackage ../development/tools/twiggy { };
 
   uacme = callPackage ../tools/admin/uacme { };
+
+  ufiformat = callPackage ../tools/system/ufiformat { };
 
   ums = callPackage ../servers/ums { };
 
