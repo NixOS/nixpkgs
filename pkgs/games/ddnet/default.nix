@@ -22,17 +22,21 @@
 , vulkan-loader
 , glslang
 , spirv-tools
+, Carbon
+, Cocoa
+, OpenGL
+, Security
 }:
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "16.3.1";
+  version = "16.3.2";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0SkTIpCnoEbu1sOagYjHBHj1I3EgLwJ8sYxWqnJGYLc=";
+    sha256 = "sha256-VvMcb3Im071MZmOvTOu7zRNKcp5dSJGS3kMvTLD/sFQ=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config ];
@@ -56,7 +60,7 @@ stdenv.mkDerivation rec {
     vulkan-headers
     glslang
     spirv-tools
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa OpenGL Security ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
@@ -82,5 +86,7 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ sirseruju lom ];
     mainProgram = "DDNet";
+    # error: use of undeclared identifier 'pthread_attr_set_qos_class_np'
+    broken = stdenv.isDarwin;
   };
 }
