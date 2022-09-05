@@ -622,6 +622,16 @@ rec {
   dontRecurseIntoAttrs =
     attrs: attrs // { recurseForDerivations = false; };
 
+  /* `unionOfDisjoint x y` is equal to `x // y // z` where the
+     attrnames in `z` are the intersection of the attrnames in `x` and
+     `y`, and all values `assert` with an error message */
+  unionOfDisjoint = x: y:
+    x // (mapAttrs
+      (name: val:
+        if hasAttr name x
+        then builtins.throw "attribute collision: ${name}"
+        else val) y);
+
   /*** deprecated stuff ***/
 
   zipWithNames = zipAttrsWithNames;
