@@ -127,8 +127,28 @@ with lib;
       name = "proxmox-${cfg.filenameSuffix}";
       postVM = let
         # Build qemu with PVE's patch that adds support for the VMA format
-        vma = pkgs.qemu_kvm.overrideAttrs ( super: rec {
+        vma = (pkgs.qemu_kvm.override {
+          alsaSupport = false;
+          pulseSupport = false;
+          sdlSupport = false;
+          jackSupport = false;
+          gtkSupport = false;
+          vncSupport = false;
+          smartcardSupport = false;
+          spiceSupport = false;
+          ncursesSupport = false;
+          libiscsiSupport = false;
+          tpmSupport = false;
+          numaSupport = false;
+          seccompSupport = false;
+          guestAgentSupport = false;
+        }).overrideAttrs ( super: rec {
 
+          version = "7.0.0";
+          src = pkgs.fetchurl {
+            url= "https://download.qemu.org/qemu-${version}.tar.xz";
+            sha256 = "sha256-9rN1x5UfcoQCeYsLqrsthkeMpT1Eztvvq74cRr9G+Dk=";
+          };
           patches = [
             (pkgs.fetchpatch {
               url =
