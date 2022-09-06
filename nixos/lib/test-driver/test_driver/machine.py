@@ -712,7 +712,7 @@ class Machine:
             status, _ = self.execute("nc -z localhost {}".format(port))
             return status != 0
 
-        with self.nested("waiting for TCP port {} to be closed"):
+        with self.nested("waiting for TCP port {} to be closed".format(port)):
             retry(port_is_closed)
 
     def start_job(self, jobname: str, user: Optional[str] = None) -> Tuple[int, str]:
