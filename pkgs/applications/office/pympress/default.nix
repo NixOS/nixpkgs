@@ -12,11 +12,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pympress";
-  version = "1.7.0";
+  version = "1.7.2";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AxH0PyAWYEEIqQAx9gG2eYyXMijLZGZqXkRhld32ieE=";
+    sha256 = "LFUzrGHr8jmUqoIcKokC0gNDVmW1EUZlj9eI+GDycvI=";
   };
 
   nativeBuildInputs = [
