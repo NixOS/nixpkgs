@@ -10894,6 +10894,8 @@ in {
 
   tilestache = callPackage ../development/python-modules/tilestache { };
 
+  tilt-ble = callPackage ../development/python-modules/tilt-ble { };
+
   timeago = callPackage ../development/python-modules/timeago { };
 
   timecop = callPackage ../development/python-modules/timecop { };
