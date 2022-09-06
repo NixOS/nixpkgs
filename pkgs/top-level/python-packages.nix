@@ -6760,6 +6760,8 @@ in {
 
   picos = callPackage ../development/python-modules/picos { };
 
+  piccolo-theme = callPackage ../development/python-modules/piccolo-theme { };
+
   pid = callPackage ../development/python-modules/pid { };
 
   piep = callPackage ../development/python-modules/piep { };
@@ -7866,6 +7868,8 @@ in {
 
   pylibconfig2 = callPackage ../development/python-modules/pylibconfig2 { };
 
+  pylibdmtx = callPackage ../development/python-modules/pylibdmtx { };
+
   pylibftdi = callPackage ../development/python-modules/pylibftdi {
     inherit (pkgs) libusb1;
   };
@@ -7981,6 +7985,8 @@ in {
   pymodbus = callPackage ../development/python-modules/pymodbus { };
 
   pymongo = callPackage ../development/python-modules/pymongo { };
+
+  pymoo = callPackage ../development/python-modules/pymoo { };
 
   pymorphy2 = callPackage ../development/python-modules/pymorphy2 { };
 
@@ -9430,6 +9436,8 @@ in {
   releases = callPackage ../development/python-modules/releases { };
 
   remarshal = callPackage ../development/python-modules/remarshal { };
+
+  remi = callPackage ../development/python-modules/remi { };
 
   renault-api = callPackage ../development/python-modules/renault-api { };
 

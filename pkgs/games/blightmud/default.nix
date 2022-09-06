@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "blightmud";
-  version = "3.5.0";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-DaICzwBew90YstV42wiY0IbvR1W4Hm8dzo3xY2qlMGQ=";
+    sha256 = "sha256-0TFJjOuaixBqpo6gHJynIbVHvI+PxRhwdubIXDcR098=";
   };
 
-  cargoSha256 = "sha256-BamMTPh+GN9GG4puxyTauPhjCC8heCu1wsgFaw98s9U=";
+  cargoSha256 = "sha256-jTyXoEC/QBeVbAnv2BspflGP1jA9qH+NPrRAx3x2kEg=";
 
   buildFeatures = lib.optional withTTS "tts";
 
@@ -51,6 +51,7 @@ rustPlatform.buildRustPackage rec {
       "test_gmcp_negotiation"
       "test_ttype_negotiation"
       "test_reconnect"
+      "test_is_connected"
       "test_mud"
       "test_server"
       "test_lua_script"
@@ -75,7 +76,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ cpu ];
     platforms = platforms.linux;
-    # See https://github.com/NixOS/nixpkgs/pull/160120
-    broken = withTTS;
   };
 }
