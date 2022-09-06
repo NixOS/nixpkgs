@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config, file
+, cmake
 , libev, nghttp3, quictls
 , cunit, ncurses
 , withJemalloc ? false, jemalloc
@@ -18,13 +18,13 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config file ];
+  nativeBuildInputs = [ cmake ];
   buildInputs = [ libev nghttp3 quictls ] ++ lib.optional withJemalloc jemalloc;
   checkInputs = [ cunit ncurses ];
 
-  preConfigure = ''
-    substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
-  '';
+  cmakeFlags = [
+    "-DENABLE_STATIC_LIB=OFF"
+  ];
 
   doCheck = true;
   enableParallelBuilding = true;
