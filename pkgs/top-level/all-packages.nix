@@ -6178,7 +6178,7 @@ with pkgs;
 
   expect = callPackage ../tools/misc/expect { };
 
-  exportarr = callPackage ../servers/monitoring/exportarr { };
+  exportarr = callPackage ../servers/monitoring/prometheus/exportarr { };
 
   expliot = callPackage ../tools/security/expliot { };
 
