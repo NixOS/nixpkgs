@@ -1,7 +1,10 @@
 { writeShellScript
+, writeText
+, writers
 , nix-prefetch-git
 , formats
 , lib
+, coreutils
 , curl
 , jq
 , xe
@@ -404,28 +407,80 @@ let
   # TODO
   urlEscape = x: x;
 
-  # generic bash script to find the latest github release for a repo
-  latestGithubRelease = { orga, repo }: writeShellScript "latest-github-release" ''
-    set -euo pipefail
+  # update one tree-sitter grammar repo and print their nix-prefetch-git output
+  updateGrammar = writers.writePython3 "latest-github-release" {
+    flakeIgnore = ["E501"];
+  } ''
+    from urllib.parse import quote
+    import json
+    import subprocess as sub
+    import os
+    import sys
 
-    args=( '--silent' )
-    if [ -n "''${GITHUB_TOKEN:-}" ]; then
-      args+=( "-H" "Authorization: token ''${GITHUB_TOKEN}" )
-    fi
-    args+=( "https://api.github.com/repos/${urlEscape orga}/${urlEscape repo}/releases/latest" )
+    debug = True if os.environ.get("DEBUG", False) else False
 
-    res=$(${curl}/bin/curl "''${args[@]}")
+    jsonArg = sys.argv[1]
 
-    if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
-      echo "rate limited" >&2
-    fi
-    release="$(printf "%s" "$res" | ${jq}/bin/jq -r '.tag_name' | tr -d \")"
-    # github sometimes returns an empty list even tough there are releases
-    if [ "$release" = "null" ]; then
-      echo "uh-oh, latest for ${orga + "/" + repo} is not there, using HEAD" >&2
-      release="HEAD"
-    fi
-    echo "$release"
+
+    def curl_args(orga, repo, token):
+        """Query the github API via curl"""
+        yield "curl"
+        if not debug:
+            yield "--silent"
+        if token:
+            yield "-H"
+            yield f"Authorization: token {token}"
+        yield f"https://api.github.com/repos/{quote(orga)}/{quote(repo)}/releases/latest"
+
+
+    def curl_result(orga, repo, output):
+        """Parse the curl result of the github API"""
+        res = json.loads(output)
+        message = res.get("message", "")
+        if "rate limit" in message:
+            sys.exit("Rate limited by the Github API")
+        if "Not Found" in message:
+            # repository not there or no releases; if the repo is missing,
+            # we’ll notice when we try to clone it
+            return {}
+        return res
+
+
+    def nix_prefetch_args(url, version_rev):
+        """Prefetch a git repository"""
+        yield "nix-prefetch-git"
+        if not debug:
+            yield "--quiet"
+        yield "--no-deepClone"
+        yield "--url"
+        yield url
+        yield "--rev"
+        yield version_rev
+
+
+    match json.loads(jsonArg):
+        case {"orga": orga, "repo": repo}:
+            token = os.environ.get("GITHUB_TOKEN", None)
+            curl_cmd = list(curl_args(orga, repo, token))
+            if debug:
+                print(curl_cmd, file=sys.stderr)
+            out = sub.check_output(curl_cmd)
+            release = curl_result(orga, repo, out).get("tag_name", None)
+
+            # github sometimes returns an empty list even tough there are releases
+            if not release:
+                print(f"uh-oh, latest for {orga}/{repo} is not there, using HEAD", file=sys.stderr)
+                release = "HEAD"
+
+            print(f"Fetching latest release ({release}) of {orga}/{repo} …", file=sys.stderr)
+            sub.check_call(
+                list(nix_prefetch_args(
+                    url=f"https://github.com/{quote(orga)}/{quote(repo)}",
+                    version_rev=release
+                ))
+            )
+        case _:
+            sys.exit("input json must have `orga` and `repo` keys")
   '';
 
   # find the latest repos of a github organization
@@ -452,18 +507,6 @@ let
       || echo "failed $res"
   '';
 
-  # update one tree-sitter grammar repo and print their nix-prefetch-git output
-  updateGrammar = { orga, repo }: writeShellScript "update-grammar.sh" ''
-    set -euo pipefail
-    latest="$(${latestGithubRelease { inherit orga repo; }})"
-    echo "Fetching latest release ($latest) of ${repo} …" >&2
-    ${nix-prefetch-git}/bin/nix-prefetch-git \
-      --quiet \
-      --no-deepClone \
-      --url "https://github.com/${urlEscape orga}/${urlEscape repo}" \
-      --rev "$latest"
-  '';
-
   foreachSh = attrs: f:
     lib.concatMapStringsSep "\n" f
       (lib.mapAttrsToList (k: v: { name = k; } // v) attrs);
@@ -478,7 +521,10 @@ let
     echo "writing files to $outputDir" 1>&2
     mkdir -p "$outputDir"
     ${foreachSh allGrammars
-      ({name, orga, repo}: ''${updateGrammar { inherit orga repo; }} > $outputDir/${name}.json'')}
+      ({name, orga, repo}: ''
+        ${updateGrammar} '${lib.generators.toJSON {} {inherit orga repo;}}' \
+          > $outputDir/${name}.json
+      '')}
     ( echo "{ lib }:"
       echo "{"
       ${foreachSh allGrammars
