@@ -8,6 +8,8 @@
 , gettext
 , gobject-introspection
 , cairo
+, colord
+, lcms2
 , pango
 , json-glib
 , libstartup_notification
@@ -117,6 +119,8 @@ let self = stdenv.mkDerivation rec {
     libxkbcommon
     libxkbfile
     libXdamage
+    colord
+    lcms2
     pango
     pipewire
     sysprof # for D-Bus interfaces
