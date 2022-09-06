@@ -63,7 +63,7 @@ let
           maintainers = with maintainers; [ CompEng0001 ];
         };
       };
-      
+ 
       _4ops.terraform = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "4ops";

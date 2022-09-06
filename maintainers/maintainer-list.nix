@@ -2622,6 +2622,12 @@
     github = "uninsane";
     githubId = 106709944;
   };
+  CompEng0001 = {
+    email = "sb1501@canterbury.ac.uk";
+    github = "CompEng0001";
+    githubId = 40290417;
+    name = "Seb Blair";
+  };
   collares = {
     email = "mauricio@collares.org";
     github = "collares";
