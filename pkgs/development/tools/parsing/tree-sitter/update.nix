@@ -408,9 +408,15 @@ let
   urlEscape = x: x;
 
   # implementation of the fetching of repo information from github
-  fetchImpl = writers.writePython3 "fetchImpl" {
-    flakeIgnore = ["E501"];
-  } ./update_impl.py;
+  fetchImpl = writeShellScript "fetchImpl-wrapped" ''
+    env ARGLIB_JSON=${lib.escapeShellArg (lib.generators.toJSON {} {
+      curl = "${curl}/bin/curl";
+      nix-prefetch-git = "${nix-prefetch-git}/bin/nix-prefetch-git";
+    })} \
+      ${writers.writePython3 "fetchImpl" {
+          flakeIgnore = ["E501"];
+        } ./update_impl.py} "$@"
+  '';
 
   # find the latest repos of a github organization
   latestGithubRepos = { orga }: writeShellScript "latest-github-repos" ''

@@ -5,6 +5,7 @@ import os
 import sys
 
 debug = True if os.environ.get("DEBUG", False) else False
+bins = json.loads(os.environ['ARGLIB_JSON'])
 
 mode = sys.argv[1]
 jsonArg = json.loads(sys.argv[2])
@@ -12,7 +13,7 @@ jsonArg = json.loads(sys.argv[2])
 
 def curl_github_args(token, url):
     """Query the github API via curl"""
-    yield "curl"
+    yield bins["curl"]
     if not debug:
         yield "--silent"
     if token:
@@ -36,7 +37,7 @@ def curl_result(orga, repo, output):
 
 def nix_prefetch_args(url, version_rev):
     """Prefetch a git repository"""
-    yield "nix-prefetch-git"
+    yield bins["nix-prefetch-git"]
     if not debug:
         yield "--quiet"
     yield "--no-deepClone"
