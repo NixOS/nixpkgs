@@ -5562,6 +5562,12 @@
     githubId = 1550265;
     name = "Dominic Steinitz";
   };
+  ifurther = {
+    email = "55025025+ifurther@users.noreply.github.com";
+    github = "ifurther";
+    githubId = 55025025;
+    name = "Feather Lin";
+  };
   igsha = {
     email = "igor.sharonov@gmail.com";
     github = "igsha";
