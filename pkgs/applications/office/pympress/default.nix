@@ -21,11 +21,11 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
     gtk3
-    gobject-introspection
     poppler_gi
   ] ++ lib.optional withGstreamer libcanberra-gtk3;
 
