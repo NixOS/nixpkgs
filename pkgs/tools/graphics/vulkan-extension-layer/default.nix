@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-extension-layer";
-  version = "1.3.224.0";
+  version = "1.3.224.1";
 
   src = (assert version == vulkan-headers.version;
     fetchFromGitHub {

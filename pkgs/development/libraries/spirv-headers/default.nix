@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "spirv-headers";
-  version = "1.3.224.0";
+  version = "1.3.224.1";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
