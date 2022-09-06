@@ -490,6 +490,15 @@
     github = "akho";
     githubId = 104951;
   };
+  akkesm = {
+    name = "Alessandro Barenghi";
+    email = "alessandro.barenghi@tuta.io";
+    github = "akkesm";
+    githubId = 56970006;
+    keys = [{
+      fingerprint = "50E2 669C AB38 2F4A 5F72  1667 0D6B FC01 D45E DADD";
+    }];
+  };
   akru = {
     email = "mail@akru.me";
     github = "akru";
@@ -2628,6 +2637,12 @@
     githubId = 244239;
     name = "Mauricio Collares";
   };
+  CompEng0001 = {
+    email = "sb1501@canterbury.ac.uk";
+    github = "CompEng0001";
+    githubId = 40290417;
+    name = "Seb Blair";
+  };
   copumpkin = {
     email = "pumpkingod@gmail.com";
     github = "copumpkin";
@@ -3120,6 +3135,12 @@
     email = "delan@azabani.com";
     github = "delan";
     githubId = 465303;
+  };
+  delehef = {
+    name = "Franklin Delehelle";
+    email = "nix@odena.eu";
+    github = "delehef";
+    githubId = 1153808;
   };
   deliciouslytyped = {
     email = "47436522+deliciouslytyped@users.noreply.github.com";
@@ -4891,6 +4912,15 @@
     githubId = 6375438;
     keys = [{
       fingerprint = "5214 2D39 A7CE F8FA 872B  CA7F DE62 E1E2 A614 5556";
+    }];
+  };
+  gp2112 = {
+    email = "me@guip.dev";
+    github = "gp2112";
+    githubId = 26512375;
+    name = "Guilherme Paixão";
+    keys = [{
+      fingerprint = "4382 7E28 86E5 C34F 38D5  7753 8C81 4D62 5FBD 99D1";
     }];
   };
   gpanders = {

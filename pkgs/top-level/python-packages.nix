@@ -1404,6 +1404,8 @@ in {
 
   blspy = callPackage ../development/python-modules/blspy { };
 
+  bluemaestro-ble = callPackage ../development/python-modules/bluemaestro-ble { };
+
   bluepy = callPackage ../development/python-modules/bluepy { };
 
   bluepy-devices = callPackage ../development/python-modules/bluepy-devices { };
@@ -2987,6 +2989,8 @@ in {
   escapism = callPackage ../development/python-modules/escapism { };
 
   etcd = callPackage ../development/python-modules/etcd { };
+
+  ete3 = callPackage ../development/python-modules/ete3 { };
 
   etelemetry = callPackage ../development/python-modules/etelemetry { };
 
@@ -5175,6 +5179,11 @@ in {
   };
 
   libsavitar = callPackage ../development/python-modules/libsavitar { };
+
+
+  libsixel = callPackage ../development/python-modules/libsixel {
+    inherit (pkgs) libsixel;
+  };
 
   libselinux = lib.pipe pkgs.libselinux [
     toPythonModule
@@ -10678,9 +10687,13 @@ in {
 
   tbm-utils = callPackage ../development/python-modules/tbm-utils { };
 
+  tcxreader = callPackage ../development/python-modules/tcxreader { };
+
   teamcity-messages = callPackage ../development/python-modules/teamcity-messages { };
 
   telegram = callPackage ../development/python-modules/telegram { };
+
+  telegraph = callPackage ../development/python-modules/telegraph { };
 
   telethon = callPackage ../development/python-modules/telethon {
     inherit (pkgs) openssl;
