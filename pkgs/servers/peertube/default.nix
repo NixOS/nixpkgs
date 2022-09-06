@@ -109,7 +109,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     plugins = callPackage ./plugins { };
-    tests.peertube = nixosTests.peertube;
+    tests = nixosTests.peertube;
   };
 
   meta = with lib; {

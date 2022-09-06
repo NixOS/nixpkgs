@@ -433,7 +433,7 @@ in {
   parsedmarc = handleTest ./parsedmarc {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   peerflix = handleTest ./peerflix.nix {};
-  peertube = handleTestOn ["x86_64-linux"] ./web-apps/peertube.nix {};
+  peertube = handleTestOn ["x86_64-linux"] ./web-apps/peertube {};
   pgadmin4 = handleTest ./pgadmin4.nix {};
   pgadmin4-standalone = handleTest ./pgadmin4-standalone.nix {};
   pgjwt = handleTest ./pgjwt.nix {};
