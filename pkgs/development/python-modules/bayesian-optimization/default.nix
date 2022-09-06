@@ -43,7 +43,7 @@ buildPythonPackage rec {
     # https://github.com/fmfn/BayesianOptimization/issues/243
     "test_suggest_with_one_observation"
   ];
-  
+
   pythonImportsCheck = [ "bayes_opt" ];
 
   meta = with lib; {
