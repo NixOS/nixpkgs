@@ -404,9 +404,6 @@ let
     fi
   '';
 
-  # TODO
-  urlEscape = x: x;
-
   # implementation of the fetching of repo information from github
   fetchImpl = writeShellScript "fetchImpl-wrapped" ''
     env ARGLIB_JSON=${lib.escapeShellArg (lib.generators.toJSON {} {
@@ -418,30 +415,6 @@ let
         } ./update_impl.py} "$@"
   '';
 
-  # find the latest repos of a github organization
-  latestGithubRepos = { orga }: writeShellScript "latest-github-repos" ''
-    set -euo pipefail
-
-    args=( '--silent' )
-    if [ -n "''${GITHUB_TOKEN:-}" ]; then
-      args+=( "-H" "Authorization: token ''${GITHUB_TOKEN}" )
-    fi
-    args+=( 'https://api.github.com/orgs/${urlEscape orga}/repos?per_page=100' )
-
-    res=$(${curl}/bin/curl "''${args[@]}")
-
-    if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
-      echo "rate limited" >&2
-      exit 1
-    elif [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "Bad credentials" ]]; then
-      echo "bad credentials" >&2
-      exit 1
-    fi
-
-    printf "%s" "$res" | ${jq}/bin/jq 'map(.name)' \
-      || echo "failed $res"
-  '';
-
   foreachSh = attrs: f:
     lib.concatMapStringsSep "\n" f
       (lib.mapAttrsToList (k: v: { name = k; } // v) attrs);
@@ -449,7 +422,7 @@ let
   update-all-grammars = writeShellScript "update-all-grammars.sh" ''
     set -euo pipefail
     echo "fetching list of grammars" 1>&2
-    treeSitterRepos=$(${latestGithubRepos { orga = "tree-sitter"; }})
+    treeSitterRepos=$(${fetchImpl} fetch-orga-latest-repos '{"orga": "tree-sitter"}')
     echo "checking the tree-sitter repo list against the grammars we know" 1>&2
     printf '%s' "$treeSitterRepos" | ${checkTreeSitterRepos}
     outputDir="${toString ./.}/grammars"
