@@ -27150,7 +27150,6 @@ with pkgs;
   emacs28 = callPackage ../applications/editors/emacs/28.nix {
     # use override to enable additional features
     libXaw = xorg.libXaw;
-    Xaw3d = null;
     gconf = null;
     alsa-lib = null;
     acl = null;
