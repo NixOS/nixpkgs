@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchpatch
 , fetchPypi
 , buildPythonPackage
 , appdirs
@@ -43,10 +44,13 @@ in buildPythonPackage rec {
     sha256 = "sha256-+Ih9VOZUWY84VEclQLLrIorFa1aiSRuVvfrI8VvhyUM=";
   };
 
-  # py.test is not needed during runtime, so remove it from `install_requires`
-  postPatch = ''
-    substituteInPlace setup.py --replace "pytest>=2" ""
-  '';
+  patches = [
+    # Fix compilation error with pybind 2.10
+    (fetchpatch {
+      url = "https://github.com/inducer/pyopencl/commit/bf3cb670f30bc2c5dfec102b147b41146381d769.patch";
+      hash = "sha256-TooY9o8BhH6xa1uwTPCPG6R2dMdA5MRTA6GS1u4LHak=";
+    })
+  ];
 
   preBuild = ''
     export HOME=$(mktemp -d)
