@@ -33,6 +33,7 @@
 , readline
 , rpcsvc-proto
 , stdenv
+, substituteAll
 , xhtml1
 , yajl
 , writeScript
@@ -126,6 +127,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
+    (substituteAll {
+      src = ./0002-substitute-zfs-and-zpool-commands.patch;
+      zfs = "${zfs}/bin/zfs";
+      zpool = "${zfs}/bin/zpool";
+    })
   ];
 
   # remove some broken tests
