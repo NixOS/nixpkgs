@@ -23,7 +23,7 @@ buildGoModule rec {
     Version = version;
     Commit = rev;
     Date = "1970-01-01T00:00:00Z";
-  }) ++ [ "-s" "-w" "-extldflags '-static'" ];
+  }) ++ [ "-s" "-w" ];
 
   meta = with lib; {
     description = "Versatile HTTP load testing tool";

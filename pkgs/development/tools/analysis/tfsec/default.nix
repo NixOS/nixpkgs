@@ -18,8 +18,6 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X github.com/aquasecurity/tfsec/version.Version=${version}"
-    ## not sure if this is needed (https://github.com/aquasecurity/tfsec/blob/master/.goreleaser.yml#L6)
-    # "-extldflags '-fno-PIC -static'"
   ];
 
   vendorSha256 = "sha256-QwMoieziiQsD22qrjHJA+Yjar+wrwx1/37PaS3ghUiU=";

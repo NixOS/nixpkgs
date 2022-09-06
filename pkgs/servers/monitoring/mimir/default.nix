@@ -23,7 +23,6 @@ buildGoModule rec {
 
   ldflags = let t = "github.com/grafana/mimir/pkg/util/version";
   in [
-    ''-extldflags "-static"''
     "-s"
     "-w"
     "-X ${t}.Version=${version}"

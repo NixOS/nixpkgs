@@ -15,7 +15,7 @@ buildGoModule rec {
     export CGO_ENABLED=0
   '';
 
-  ldflags = [ "-s" "-w" "-extldflags '-static'" ];
+  ldflags = [ "-s" "-w" ];
 
   vendorSha256 = "sha256-dzHdPgOjYXSozDxehkVNQocsYdH0u0p80c1THUzedk8=";
 

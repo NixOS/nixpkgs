@@ -20,8 +20,11 @@ let
     doCheck = false;
 
     ldflags = [
-      "-s" "-w" "-X github.com/arduino/arduino-cli/version.versionString=${version}" "-X github.com/arduino/arduino-cli/version.commit=unknown"
-    ] ++ lib.optionals stdenv.isLinux [ "-extldflags '-static'" ];
+      "-s"
+      "-w"
+      "-X github.com/arduino/arduino-cli/version.versionString=${version}"
+      "-X github.com/arduino/arduino-cli/version.commit=unknown"
+    ];
 
     meta = with lib; {
       inherit (src.meta) homepage;

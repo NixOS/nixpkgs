@@ -15,8 +15,6 @@ buildGoModule rec {
     "-w"
     "-s"
     "-X main.VERSION=${version}"
-    "-extldflags"
-    "-static"
   ];
 
   vendorSha256 = "sha256-oclMnt6uJa8SG2fNM0fi+HCVMMi4rkykx8VpK/tXilQ=";

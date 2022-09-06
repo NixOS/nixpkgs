@@ -14,7 +14,6 @@ buildGoModule rec {
   vendorSha256 = "sha256-FvLNG7zz/tPW8SdUvfD1e4/a7nBHFOvhpyn2cXZE9AA=";
 
   ldflags = [
-    "-extldflags '-static'"
     "-s"
     "-w"
     "-X github.com/datreeio/datree/cmd.CliVersion=${version}"

@@ -15,8 +15,6 @@ buildGoModule rec {
 
   ldflags = [
     "-w"
-    "-extldflags"
-    "-static"
     "-X main.Version=${version}"
     "-X main.GitCommit=ref/tags/${version}"
     "-X main.GitBranch=HEAD"
