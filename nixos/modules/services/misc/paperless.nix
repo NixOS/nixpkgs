@@ -3,6 +3,7 @@
 with lib;
 let
   cfg = config.services.paperless;
+  pkg = cfg.package;
 
   defaultUser = "paperless";
 
@@ -25,7 +26,7 @@ let
     setupEnv = lib.concatStringsSep "\n" (mapAttrsToList (name: val: "export ${name}=\"${val}\"") env);
   in pkgs.writeShellScript "manage" ''
     ${setupEnv}
-    exec ${cfg.package}/bin/paperless-ngx "$@"
+    exec ${pkg}/bin/paperless-ngx "$@"
   '';
 
   # Secure the services
@@ -211,7 +212,7 @@ in
       description = "Paperless scheduler";
       serviceConfig = defaultServiceConfig // {
         User = cfg.user;
-        ExecStart = "${cfg.package}/bin/paperless-ngx qcluster";
+        ExecStart = "${pkg}/bin/paperless-ngx qcluster";
         Restart = "on-failure";
         # The `mbind` syscall is needed for running the classifier.
         SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ [ "mbind" ];
@@ -227,9 +228,9 @@ in
 
         # Auto-migrate on first run or if the package has changed
         versionFile="${cfg.dataDir}/src-version"
-        if [[ $(cat "$versionFile" 2>/dev/null) != ${cfg.package} ]]; then
-          ${cfg.package}/bin/paperless-ngx migrate
-          echo ${cfg.package} > "$versionFile"
+        if [[ $(cat "$versionFile" 2>/dev/null) != ${pkg} ]]; then
+          ${pkg}/bin/paperless-ngx migrate
+          echo ${pkg} > "$versionFile"
         fi
       ''
       + optionalString (cfg.passwordFile != null) ''
@@ -239,7 +240,7 @@ in
         superuserStateFile="${cfg.dataDir}/superuser-state"
 
         if [[ $(cat "$superuserStateFile" 2>/dev/null) != $superuserState ]]; then
-          ${cfg.package}/bin/paperless-ngx manage_superuser
+          ${pkg}/bin/paperless-ngx manage_superuser
           echo "$superuserState" > "$superuserStateFile"
         fi
       '';
@@ -264,7 +265,7 @@ in
       description = "Paperless document consumer";
       serviceConfig = defaultServiceConfig // {
         User = cfg.user;
-        ExecStart = "${cfg.package}/bin/paperless-ngx document_consumer";
+        ExecStart = "${pkg}/bin/paperless-ngx document_consumer";
         Restart = "on-failure";
       };
       environment = env;
@@ -280,7 +281,7 @@ in
         User = cfg.user;
         ExecStart = ''
           ${pkgs.python3Packages.gunicorn}/bin/gunicorn \
-            -c ${cfg.package}/lib/paperless-ngx/gunicorn.conf.py paperless.asgi:application
+            -c ${pkg}/lib/paperless-ngx/gunicorn.conf.py paperless.asgi:application
         '';
         Restart = "on-failure";
 
@@ -293,8 +294,8 @@ in
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
       };
       environment = env // {
-        PATH = mkForce cfg.package.path;
-        PYTHONPATH = "${cfg.package.pythonPath}:${cfg.package}/lib/paperless-ngx/src";
+        PATH = mkForce pkg.path;
+        PYTHONPATH = "${pkg.python.pkgs.makePythonPath pkg.propagatedBuildInputs}:${pkg}/lib/paperless-ngx/src";
       };
       # Allow the web interface to access the private /tmp directory of the server.
       # This is required to support uploading files via the web interface.
