@@ -417,6 +417,21 @@
       </listitem>
       <listitem>
         <para>
+          <literal>pkgs.gcs</literal> no longer supports the XML-based
+          character sheet format.
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              A tool can be downloaded from the
+              <link xlink:href="https://gurpscharactersheet.com/">gcs
+              website</link> to update old character sheets
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>meta.mainProgram</literal> attribute of packages
           in <literal>wineWowPackages</literal> now defaults to
           <literal>&quot;wine64&quot;</literal>.

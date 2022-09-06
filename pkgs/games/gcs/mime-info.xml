@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/gcs.adm">
+    <comment>GCS Advantage Modifiers Library</comment>
+    <glob pattern="*.adm"></glob>
+  </mime-type>
+  <mime-type type="application/gcs.adq">
+    <comment>GCS Advantages Library</comment>
+    <glob pattern="*.adq"></glob>
+  </mime-type>
+  <mime-type type="application/gcs.eqm">
+    <comment>GCS Equipment Modifiers Library</comment>
+    <glob pattern="*.eqm"></glob>
+  </mime-type>
+  <mime-type type="application/gcs.eqp">
+    <comment>GCS Equipment Library</comment>
+    <glob pattern="*.eqp"></glob>
+  </mime-type>
+  <mime-type type="application/gcs.gcs">
+    <comment>GURPS Character Sheet</comment>
+    <glob pattern="*.gcs"></glob>
+  </mime-type>
+  <mime-type type="application/gcs.gct">
+    <comment>GCS Character Template</comment>
+    <glob pattern="*.gct"></glob>
+  </mime-type>
+  <mime-type type="application/gcs.not">
+    <comment>GCS Notes Library</comment>
+    <glob pattern="*.not"></glob>
+  </mime-type>
+  <mime-type type="application/gcs.skl">
+    <comment>GCS Skills Library</comment>
+    <glob pattern="*.skl"></glob>
+  </mime-type>
+  <mime-type type="application/gcs.spl">
+    <comment>GCS Spells Library</comment>
+    <glob pattern="*.spl"></glob>
+  </mime-type>
+</mime-info>

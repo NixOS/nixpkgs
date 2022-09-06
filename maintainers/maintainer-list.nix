@@ -13222,6 +13222,15 @@
       fingerprint = "556A 403F B0A2 D423 F656  3424 8489 B911 F9ED 617B";
     }];
   };
+  tlater = {
+    email = "tm@tlater.net";
+    github = "TLATER";
+    githubId = 6654841;
+    name = "Tristan Daniël Maat";
+    keys = [{
+      fingerprint = "535B 6101 5823 4439 41C7  44DD 1226 4F6B BDFA BA89";
+    }];
+  };
   tljuniper = {
     email = "tljuniper1@gmail.com";
     github = "tljuniper";
