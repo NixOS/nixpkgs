@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "alfis";
-  version = "0.7.7";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "Revertron";
     repo = "Alfis";
     rev = "v${version}";
-    sha256 = "sha256-I9vJc3J3OoUA6GOc8NkWBKSCkjHC4KOztglJOg9S0Eo=";
+    sha256 = "sha256-XAThBJNM8KtdVuwJBFjnPsf6nJ8GHOE7ScvkdVsXPDg=";
   };
 
-  cargoSha256 = "sha256-VVBO2w6iwZ+K4gnN6+TckgBXCCc/dGO6/yZEunWGK8g=";
+  cargoSha256 = "sha256-HCHkJBHnWOM8/OTQw2Freqz3bvVxQyS/oXPC+ZQGFR8=";
 
   checkFlags = [
     # these want internet access, disable them
