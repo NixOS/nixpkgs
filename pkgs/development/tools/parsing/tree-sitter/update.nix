@@ -407,8 +407,8 @@ let
   # TODO
   urlEscape = x: x;
 
-  # update one tree-sitter grammar repo and print their nix-prefetch-git output
-  updateGrammar = writers.writePython3 "latest-github-release" {
+  # implementation of the fetching of repo information from github
+  fetchImpl = writers.writePython3 "fetchImpl" {
     flakeIgnore = ["E501"];
   } ''
     from urllib.parse import quote
@@ -419,7 +419,8 @@ let
 
     debug = True if os.environ.get("DEBUG", False) else False
 
-    jsonArg = sys.argv[1]
+    mode = sys.argv[1]
+    jsonArg = json.loads(sys.argv[2])
 
 
     def curl_args(orga, repo, token):
@@ -458,29 +459,38 @@ let
         yield version_rev
 
 
-    match json.loads(jsonArg):
-        case {"orga": orga, "repo": repo}:
-            token = os.environ.get("GITHUB_TOKEN", None)
-            curl_cmd = list(curl_args(orga, repo, token))
-            if debug:
-                print(curl_cmd, file=sys.stderr)
-            out = sub.check_output(curl_cmd)
-            release = curl_result(orga, repo, out).get("tag_name", None)
+    def fetchRepo():
+        """fetch the given repo and print its nix-prefetch output to stdout"""
+        match jsonArg:
+            case {"orga": orga, "repo": repo}:
+                token = os.environ.get("GITHUB_TOKEN", None)
+                curl_cmd = list(curl_args(orga, repo, token))
+                if debug:
+                    print(curl_cmd, file=sys.stderr)
+                out = sub.check_output(curl_cmd)
+                release = curl_result(orga, repo, out).get("tag_name", None)
 
-            # github sometimes returns an empty list even tough there are releases
-            if not release:
-                print(f"uh-oh, latest for {orga}/{repo} is not there, using HEAD", file=sys.stderr)
-                release = "HEAD"
+                # github sometimes returns an empty list even tough there are releases
+                if not release:
+                    print(f"uh-oh, latest for {orga}/{repo} is not there, using HEAD", file=sys.stderr)
+                    release = "HEAD"
 
-            print(f"Fetching latest release ({release}) of {orga}/{repo} …", file=sys.stderr)
-            sub.check_call(
-                list(nix_prefetch_args(
-                    url=f"https://github.com/{quote(orga)}/{quote(repo)}",
-                    version_rev=release
-                ))
-            )
+                print(f"Fetching latest release ({release}) of {orga}/{repo} …", file=sys.stderr)
+                sub.check_call(
+                    list(nix_prefetch_args(
+                        url=f"https://github.com/{quote(orga)}/{quote(repo)}",
+                        version_rev=release
+                    ))
+                )
+            case _:
+                sys.exit("input json must have `orga` and `repo` keys")
+
+
+    match mode:
+        case "fetch-repo":
+            fetchRepo()
         case _:
-            sys.exit("input json must have `orga` and `repo` keys")
+            sys.exit(f"mode {mode} unknown")
   '';
 
   # find the latest repos of a github organization
@@ -522,7 +532,7 @@ let
     mkdir -p "$outputDir"
     ${foreachSh allGrammars
       ({name, orga, repo}: ''
-        ${updateGrammar} '${lib.generators.toJSON {} {inherit orga repo;}}' \
+        ${fetchImpl} fetch-repo '${lib.generators.toJSON {} {inherit orga repo;}}' \
           > $outputDir/${name}.json
       '')}
     ( echo "{ lib }:"
