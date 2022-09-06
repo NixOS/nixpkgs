@@ -10,6 +10,7 @@
 , libxml2
 , gnome-desktop
 , libadwaita
+, fribidi
 , wrapGAppsHook4
 , gnome
 , harfbuzz
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     gnome-desktop
     harfbuzz
     libadwaita
+    fribidi
   ];
 
   # Do not run meson-postinstall.sh
