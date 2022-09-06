@@ -1,107 +1,38 @@
 { stdenv
 , fetchurl
 , lib
-, autoPatchelfHook
-, cups
-, dbus
-, fontconfig
-, gccForLibs
-, libX11
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXi
-, libXrandr
-, libXrender
-, libXtst
-, libinput
-, libxcb
-, libxkbcommon
-, nss
-, qttools
-, qtwebengine
-, xcbutilimage
-, xcbutilkeysyms
-, xcbutilrenderutil
-, xcbutilwm
+, callPackage
+, libsForQt5
 }:
 
 let
+  # Upstream replaces minor versions, so use archived URLs.
+  srcs = {
+    "x86_64-linux" = fetchurl {
+      url = "https://web.archive.org/web/20220902181457id_/https://ftp.perforce.com/perforce/r22.2/bin.linux26x86_64/p4v.tgz";
+      sha256 = "8fdade4aafe25f568a61cfd80823aa90599c2a404b7c6b4a0862c84b07a9f8d2";
+    };
+    "x86_64-darwin" = fetchurl {
+      url = "https://web.archive.org/web/20220902194716id_/https://ftp.perforce.com/perforce/r22.2/bin.macosx1015x86_64/P4V.dmg";
+      sha256 = "c4a9460c0f849be193c68496c500f8a785c740f5bea5b5e7f617969c20be3cd7";
+    };
+  };
+
+  mkDerivation =
+    if stdenv.isDarwin then callPackage ./darwin.nix { }
+    else libsForQt5.callPackage ./linux.nix { };
+in mkDerivation {
   pname = "p4v";
   version = "2022.2.2336701";
 
-  unwrapped = stdenv.mkDerivation {
-    pname = "${pname}-unwrapped";
-    inherit version;
+  src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-    src = fetchurl {
-      url = "https://web.archive.org/web/20220902181457/https://ftp.perforce.com/perforce/r22.2/bin.linux26x86_64/p4v.tgz";
-      sha256 = "8fdade4aafe25f568a61cfd80823aa90599c2a404b7c6b4a0862c84b07a9f8d2";
-    };
-
-    nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [
-      cups
-      dbus
-      fontconfig
-      gccForLibs
-      libX11
-      libXcomposite
-      libXcursor
-      libXdamage
-      libXext
-      libXi
-      libXrandr
-      libXrender
-      libXtst
-      libinput
-      libxcb
-      libxkbcommon
-      nss
-      qttools
-      qtwebengine
-      xcbutilimage
-      xcbutilkeysyms
-      xcbutilrenderutil
-      xcbutilwm
-    ];
-
-    dontBuild = true;
-
-    # Don't wrap the Qt apps; upstream has its own wrapper scripts.
-    dontWrapQtApps = true;
-
-    installPhase = ''
-      mkdir -p $out
-      cp -r bin lib $out
-      addAutoPatchelfSearchPath $out/lib
-    '';
-
-    meta = {
-      description = "Perforce Helix Visual Client";
-      homepage = "https://www.perforce.com";
-      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-      license = lib.licenses.unfreeRedistributable;
-      platforms = [ "x86_64-linux" ];
-      maintainers = with lib.maintainers; [ impl nathyong nioncode ];
-    };
+  meta = {
+    description = "Perforce Helix Visual Client";
+    homepage = "https://www.perforce.com";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfreeRedistributable;
+    platforms = builtins.attrNames srcs;
+    maintainers = with lib.maintainers; [ impl nathyong nioncode ];
   };
-in
-stdenv.mkDerivation {
-  inherit pname version;
-
-  # Build a "clean" version of the package so that we don't add extra ".bin" or
-  # configuration files to users' PATHs. We can't easily put the unwrapped
-  # package files in libexec (where they belong, probably) because the upstream
-  # wrapper scripts have the bin directory hardcoded.
-  buildCommand = ''
-    mkdir -p $out/bin
-    for f in p4admin p4merge p4v p4vc; do
-      ln -s ${unwrapped}/bin/$f $out/bin
-    done
-  '';
-  preferLocalBuild = true;
-
-  inherit (unwrapped) meta passthru;
 }
