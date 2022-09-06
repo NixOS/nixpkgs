@@ -32,19 +32,20 @@
 
 let
   pname = "psycopg";
-  version = "3.1";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-N0Qc8pSWN2NFZn06lYZ7DKMbk6H8aIByS+wDnOQ/O+Y=";
+    hash = "sha256-PrWHjs8PLmx7bgKtyhXaiSKmz9oT2OhXDkKd4xi7e0A=";
   };
 
   patches = [
     (substituteAll {
-      src = ./libpq.patch;
+      src = ./ctypes.patch;
       libpq = "${postgresql.lib}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
+      libc = "${stdenv.cc.libc}/lib/libc.so.6";
     })
   ];
 
