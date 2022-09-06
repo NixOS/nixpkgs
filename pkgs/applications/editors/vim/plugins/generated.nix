@@ -5350,6 +5350,18 @@ final: prev:
     meta.homepage = "https://github.com/pwntester/octo.nvim/";
   };
 
+  oldbook-vim = buildVimPluginFrom2Nix {
+    pname = "oldbook-vim";
+    version = "2020-09-18";
+    src = fetchFromGitHub {
+      owner = "karoliskoncevicius";
+      repo = "oldbook-vim";
+      rev = "c101733193d8c4cc250d892a69d322b524d6d56f";
+      sha256 = "1jrnl2947kv7gxw6jhybjglxav3w9173lp3421jv59xmi5bw0a9x";
+    };
+    meta.homepage = "https://github.com/karoliskoncevicius/oldbook-vim/";
+  };
+
   one-nvim = buildVimPluginFrom2Nix {
     pname = "one-nvim";
     version = "2021-06-10";
