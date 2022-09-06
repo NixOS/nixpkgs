@@ -11,6 +11,10 @@ buildGoModule rec {
     hash = "sha256-JG1fysCqqd/MwpNhKJwLr4cTGq4/88f9OMMapb+r3bc=";
   };
 
+  CGO_ENABLED = 0;
+
+  ldflags = ["-s" "-w" "-X main.Version=${version}"];
+
   vendorHash = "sha256-R+zXGR5isoo76oc4lsFf9uCM0Kyi8dQiKEg4BUxtv+k=";
 
   excludedPackages = ["example/server-db" "test/e2e" "tui-example"];
