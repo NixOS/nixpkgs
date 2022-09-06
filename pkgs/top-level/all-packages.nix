@@ -1369,7 +1369,9 @@ with pkgs;
 
   veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
 
-  ventoy-bin = callPackage ../tools/cd-dvd/ventoy-bin { };
+  ventoy-bin = callPackage ../tools/cd-dvd/ventoy-bin {
+    inherit (libsForQt5) qtbase wrapQtAppsHook;
+  };
   ventoy-bin-full = ventoy-bin.override {
     withCryptsetup = true;
     withXfs = true;
@@ -16550,9 +16552,9 @@ with pkgs;
 
   itstool = callPackage ../development/tools/misc/itstool { };
 
-  jam = callPackage ../development/tools/build-managers/jam { };
-
-  ftjam = callPackage ../development/tools/build-managers/jam/ftjam.nix { };
+  inherit (callPackage ../development/tools/build-managers/jam { })
+    jam
+    ftjam;
 
   javacc = callPackage ../development/tools/parsing/javacc {
     # Upstream doesn't support anything newer than Java 8.
