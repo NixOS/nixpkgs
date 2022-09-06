@@ -107,7 +107,7 @@ in clangStdenv.mkDerivation rec {
     description = "Fcitx5 Module of A Japanese Input Method for Chromium OS, Windows, Mac and Linux (the Open Source Edition of Google Japanese Input)";
     homepage = "https://github.com/fcitx/mozc";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ berberman ];
+    maintainers = with maintainers; [ berberman govanify ];
     platforms = platforms.linux;
   };
 }
