@@ -83,34 +83,19 @@ with lib;
     security.virtualisation.flushL1DataCache = mkOption {
       type = types.nullOr (types.enum [ "never" "cond" "always" ]);
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Whether the hypervisor should flush the L1 data cache before
         entering guests.
-        See also <xref linkend="opt-security.allowSimultaneousMultithreading"/>.
+        See also [](#opt-security.allowSimultaneousMultithreading).
 
-        <variablelist>
-          <varlistentry>
-            <term><literal>null</literal></term>
-            <listitem><para>uses the kernel default</para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term><literal>"never"</literal></term>
-            <listitem><para>disables L1 data cache flushing entirely.
-            May be appropriate if all guests are trusted.</para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term><literal>"cond"</literal></term>
-            <listitem><para>flushes L1 data cache only for pre-determined
-            code paths.  May leak information about the host address space
-            layout.</para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term><literal>"always"</literal></term>
-            <listitem><para>flushes L1 data cache every time the hypervisor
-            enters the guest.  May incur significant performance cost.
-            </para></listitem>
-          </varlistentry>
-        </variablelist>
+        - `null`: uses the kernel default
+        - `"never"`: disables L1 data cache flushing entirely.
+          May be appropriate if all guests are trusted.
+        - `"cond"`: flushes L1 data cache only for pre-determined
+          code paths.  May leak information about the host address space
+          layout.
+        - `"always"`: flushes L1 data cache every time the hypervisor
+          enters the guest.  May incur significant performance cost.
       '';
     };
   };

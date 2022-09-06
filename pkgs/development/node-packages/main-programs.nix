@@ -19,7 +19,6 @@
   "@forge/cli" = "forge";
   "@gitbeaker/cli" = "gitbeaker";
   "@google/clasp" = "clasp";
-  "@hyperspace/cli" = "hyp";
   "@medable/mdctl-cli" = "mdctl";
   "@mermaid-js/mermaid-cli" = "mmdc";
   "@nerdwallet/shepherd" = "shepherd";

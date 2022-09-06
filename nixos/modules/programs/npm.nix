@@ -11,7 +11,7 @@ in
 
   options = {
     programs.npm = {
-      enable = mkEnableOption "<command>npm</command> global config";
+      enable = mkEnableOption (lib.mdDoc "{command}`npm` global config");
 
       package = mkOption {
         type = types.package;

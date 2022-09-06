@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sioyek";
-  version = "1.4.0";
+  version = "unstable-2022-08-30";
 
   src = fetchFromGitHub {
     owner = "ahrm";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-F71JXgYaWAye+nlSrZvGjJ4ucvHTx3tPZHRC5QI4QiU=";
+    rev = "8d0a63484334e2cb2b0571a07a3875e6ab6c8916";
+    sha256 = "sha256-29Wxg/VVQPDDzzxKcvMa1+rtiP4bDkPAB/JJsj+F+WQ=";
   };
 
   buildInputs = [ gumbo harfbuzz jbig2dec mupdf mujs openjpeg qt3d qtbase ]

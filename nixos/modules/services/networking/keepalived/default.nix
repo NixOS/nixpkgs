@@ -264,6 +264,19 @@ in
         '';
       };
 
+      secretFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/run/keys/keepalived.env";
+        description = ''
+          Environment variables from this file will be interpolated into the
+          final config file using envsubst with this syntax: <literal>$ENVIRONMENT</literal>
+          or <literal>''${VARIABLE}</literal>.
+          The file should contain lines formatted as <literal>SECRET_VAR=SECRET_VALUE</literal>.
+          This is useful to avoid putting secrets into the nix store.
+        '';
+      };
+
     };
   };
 
@@ -282,7 +295,9 @@ in
       };
     };
 
-    systemd.services.keepalived = {
+    systemd.services.keepalived = let
+      finalConfigFile = if cfg.secretFile == null then keepalivedConf else "/run/keepalived/keepalived.conf";
+    in {
       description = "Keepalive Daemon (LVS and VRRP)";
       after = [ "network.target" "network-online.target" "syslog.target" ];
       wants = [ "network-online.target" ];
@@ -290,8 +305,15 @@ in
         Type = "forking";
         PIDFile = pidFile;
         KillMode = "process";
+        RuntimeDirectory = "keepalived";
+        EnvironmentFile = lib.optional (cfg.secretFile != null) cfg.secretFile;
+        ExecStartPre = lib.optional (cfg.secretFile != null)
+        (pkgs.writeShellScript "keepalived-pre-start" ''
+          umask 077
+          ${pkgs.envsubst}/bin/envsubst -i "${keepalivedConf}" > ${finalConfigFile}
+        '');
         ExecStart = "${pkgs.keepalived}/sbin/keepalived"
-          + " -f ${keepalivedConf}"
+          + " -f ${finalConfigFile}"
           + " -p ${pidFile}"
           + optionalString cfg.snmp.enable " --snmp";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";

@@ -8,7 +8,7 @@ let
 in {
   options = {
     services.create_ap = {
-      enable = mkEnableOption "setup wifi hotspots using create_ap";
+      enable = mkEnableOption (lib.mdDoc "setup wifi hotspots using create_ap");
       settings = mkOption {
         type = with types; attrsOf (oneOf [ int bool str ]);
         default = {};

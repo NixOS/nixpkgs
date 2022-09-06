@@ -9,7 +9,7 @@ in {
   options = {
     services = {
       mtr-exporter = {
-        enable = mkEnableOption "a Prometheus exporter for MTR";
+        enable = mkEnableOption (lib.mdDoc "a Prometheus exporter for MTR");
 
         target = mkOption {
           type = types.str;

@@ -26,7 +26,7 @@ buildDunePackage {
     astring cohttp-lwt-unix decompress
     domain-name ipaddr mtime mirage-flow
     cstruct ptime mimic ca-certs-nss
-    tls tls-mirage
+    tls tls-mirage git
   ];
   checkInputs = [
     alcotest alcotest-lwt base64 ke

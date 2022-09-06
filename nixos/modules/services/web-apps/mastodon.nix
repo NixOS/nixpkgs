@@ -104,26 +104,26 @@ in {
 
   options = {
     services.mastodon = {
-      enable = lib.mkEnableOption "Mastodon, a federated social network server";
+      enable = lib.mkEnableOption (lib.mdDoc "Mastodon, a federated social network server");
 
       configureNginx = lib.mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Configure nginx as a reverse proxy for mastodon.
           Note that this makes some assumptions on your setup, and sets settings that will
           affect other virtualHosts running on your nginx instance, if any.
           Alternatively you can configure a reverse-proxy of your choice to serve these paths:
 
-          <literal>/ -> $(nix-instantiate --eval '&lt;nixpkgs&gt;' -A mastodon.outPath)/public</literal>
+          `/ -> $(nix-instantiate --eval '<nixpkgs>' -A mastodon.outPath)/public`
 
-          <literal>/ -> 127.0.0.1:{{ webPort }} </literal>(If there was no file in the directory above.)
+          `/ -> 127.0.0.1:{{ webPort }} `(If there was no file in the directory above.)
 
-          <literal>/system/ -> /var/lib/mastodon/public-system/</literal>
+          `/system/ -> /var/lib/mastodon/public-system/`
 
-          <literal>/api/v1/streaming/ -> 127.0.0.1:{{ streamingPort }}</literal>
+          `/api/v1/streaming/ -> 127.0.0.1:{{ streamingPort }}`
 
           Make sure that websockets are forwarded properly. You might want to set up caching
           of some requests. Take a look at mastodon's provided nginx configuration at
-          <literal>https://github.com/mastodon/mastodon/blob/master/dist/nginx.conf</literal>.
+          `https://github.com/mastodon/mastodon/blob/master/dist/nginx.conf`.
         '';
         type = lib.types.bool;
         default = false;

@@ -12,7 +12,7 @@ let
 in
 {
   options.services.routedns = {
-    enable = mkEnableOption "RouteDNS - DNS stub resolver, proxy and router";
+    enable = mkEnableOption (lib.mdDoc "RouteDNS - DNS stub resolver, proxy and router");
 
     settings = mkOption {
       type = settingsFormat.type;

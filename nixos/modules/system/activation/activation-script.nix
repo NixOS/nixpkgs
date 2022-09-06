@@ -78,21 +78,21 @@ let
       { deps = mkOption
           { type = types.listOf types.str;
             default = [ ];
-            description = "List of dependencies. The script will run after these.";
+            description = lib.mdDoc "List of dependencies. The script will run after these.";
           };
         text = mkOption
           { type = types.lines;
-            description = "The content of the script.";
+            description = lib.mdDoc "The content of the script.";
           };
       } // optionalAttrs withDry {
         supportsDryActivation = mkOption
           { type = types.bool;
             default = false;
-            description = ''
+            description = lib.mdDoc ''
               Whether this activation script supports being dry-activated.
               These activation scripts will also be executed on dry-activate
               activations with the environment variable
-              <literal>NIXOS_ACTION</literal> being set to <literal>dry-activate</literal>.
+              `NIXOS_ACTION` being set to `dry-activate`.
               it's important that these activation scripts  don't
               modify anything about the system when the variable is set.
             '';
@@ -139,7 +139,7 @@ in
     };
 
     system.dryActivationScript = mkOption {
-      description = "The shell script that is to be run when dry-activating a system.";
+      description = lib.mdDoc "The shell script that is to be run when dry-activating a system.";
       readOnly = true;
       internal = true;
       default = systemActivationScript (removeAttrs config.system.activationScripts [ "script" ]) true;
@@ -199,9 +199,9 @@ in
       example = literalExpression ''"''${pkgs.busybox}/bin/env"'';
       type = types.nullOr types.path;
       visible = false;
-      description = ''
+      description = lib.mdDoc ''
         The env(1) executable that is linked system-wide to
-        <literal>/usr/bin/env</literal>.
+        `/usr/bin/env`.
       '';
     };
   };

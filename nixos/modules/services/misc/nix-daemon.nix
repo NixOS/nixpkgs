@@ -231,10 +231,10 @@ in
               type = types.nullOr types.str;
               default = null;
               example = "x86_64-linux";
-              description = ''
+              description = lib.mdDoc ''
                 The system type the build machine can execute derivations on.
-                Either this attribute or <varname>systems</varname> must be
-                present, where <varname>system</varname> takes precedence if
+                Either this attribute or {var}`systems` must be
+                present, where {var}`system` takes precedence if
                 both are set.
               '';
             };
@@ -242,10 +242,10 @@ in
               type = types.listOf types.str;
               default = [ ];
               example = [ "x86_64-linux" "aarch64-linux" ];
-              description = ''
+              description = lib.mdDoc ''
                 The system types the build machine can execute derivations on.
-                Either this attribute or <varname>system</varname> must be
-                present, where <varname>system</varname> takes precedence if
+                Either this attribute or {var}`system` must be
+                present, where {var}`system` takes precedence if
                 both are set.
               '';
             };
@@ -297,11 +297,11 @@ in
               type = types.listOf types.str;
               default = [ ];
               example = [ "big-parallel" ];
-              description = ''
+              description = lib.mdDoc ''
                 A list of features mandatory for this builder. The builder will
                 be ignored for derivations that don't require all features in
                 this list. All mandatory features are automatically included in
-                <varname>supportedFeatures</varname>.
+                {var}`supportedFeatures`.
               '';
             };
             supportedFeatures = mkOption {
@@ -340,7 +340,7 @@ in
         type = types.attrs;
         internal = true;
         default = { };
-        description = "Environment variables used by Nix.";
+        description = lib.mdDoc "Environment variables used by Nix.";
       };
 
       nrBuildUsers = mkOption {
@@ -628,17 +628,17 @@ in
             sandbox-paths = { "/bin/sh" = "''${pkgs.busybox-sandbox-shell.out}/bin/busybox"; };
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           Configuration for Nix, see
-          <link xlink:href="https://nixos.org/manual/nix/stable/#sec-conf-file"/> or
-          <citerefentry><refentrytitle>nix.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry> for avalaible options.
+          <https://nixos.org/manual/nix/stable/#sec-conf-file> or
+          {manpage}`nix.conf(5)` for avalaible options.
           The value declared here will be translated directly to the key-value pairs Nix expects.
 
-          You can use <command>nix-instantiate --eval --strict '&lt;nixpkgs/nixos&gt;' -A config.nix.settings</command>
+          You can use {command}`nix-instantiate --eval --strict '<nixpkgs/nixos>' -A config.nix.settings`
           to view the current value. By default it is empty.
 
-          Nix configurations defined under <option>nix.*</option> will be translated and applied to this
-          option. In addition, configuration specified in <option>nix.extraOptions</option> which will be appended
+          Nix configurations defined under {option}`nix.*` will be translated and applied to this
+          option. In addition, configuration specified in {option}`nix.extraOptions` which will be appended
           verbatim to the resulting config file.
         '';
       };

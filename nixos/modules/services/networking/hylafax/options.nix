@@ -118,7 +118,7 @@ in
 
   options.services.hylafax = {
 
-    enable = mkEnableOption "HylaFAX server";
+    enable = mkEnableOption (lib.mdDoc "HylaFAX server");
 
     autostart = mkOption {
       type = bool;
@@ -172,23 +172,23 @@ in
     userAccessFile = mkOption {
       type = path;
       default = "/etc/hosts.hfaxd";
-      description = ''
-        The <filename>hosts.hfaxd</filename>
+      description = lib.mdDoc ''
+        The {file}`hosts.hfaxd`
         file entry in the spooling area
         will be symlinked to the location given here.
         This file must exist and be
-        readable only by the <literal>uucp</literal> user.
+        readable only by the `uucp` user.
         See hosts.hfaxd(5) for details.
         This configuration permits access for all users:
-        <literal>
+        ```
           environment.etc."hosts.hfaxd" = {
             mode = "0600";
             user = "uucp";
             text = ".*";
           };
-        </literal>
+        ```
         Note that host-based access can be controlled with
-        <option>config.systemd.sockets.hylafax-hfaxd.listenStreams</option>;
+        {option}`config.systemd.sockets.hylafax-hfaxd.listenStreams`;
         by default, only 127.0.0.1 is permitted to connect.
       '';
     };
@@ -271,11 +271,11 @@ in
       '';
     };
 
-    faxcron.enable.spoolInit = mkEnableOption ''
+    faxcron.enable.spoolInit = mkEnableOption (lib.mdDoc ''
       Purge old files from the spooling area with
-      <filename>faxcron</filename>
+      {file}`faxcron`
       each time the spooling area is initialized.
-    '';
+    '');
     faxcron.enable.frequency = mkOption {
       type = nullOr nonEmptyStr;
       default = null;
@@ -311,11 +311,11 @@ in
       '';
     };
 
-    faxqclean.enable.spoolInit = mkEnableOption ''
+    faxqclean.enable.spoolInit = mkEnableOption (lib.mdDoc ''
       Purge old files from the spooling area with
-      <filename>faxqclean</filename>
+      {file}`faxqclean`
       each time the spooling area is initialized.
-    '';
+    '');
     faxqclean.enable.frequency = mkOption {
       type = nullOr nonEmptyStr;
       default = null;

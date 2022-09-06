@@ -40,7 +40,7 @@ in
         description = lib.mdDoc "Authentication to use when connecting to xpra";
       };
 
-      pulseaudio = mkEnableOption "pulseaudio audio streaming";
+      pulseaudio = mkEnableOption (lib.mdDoc "pulseaudio audio streaming");
 
       extraOptions = mkOption {
         description = lib.mdDoc "Extra xpra options";

@@ -19,7 +19,7 @@ let
 in
 {
   options.services.aesmd = {
-    enable = mkEnableOption "Intel's Architectural Enclave Service Manager (AESM) for Intel SGX";
+    enable = mkEnableOption (lib.mdDoc "Intel's Architectural Enclave Service Manager (AESM) for Intel SGX");
     debug = mkOption {
       type = types.bool;
       default = false;

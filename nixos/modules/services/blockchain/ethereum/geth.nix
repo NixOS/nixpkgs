@@ -9,7 +9,7 @@ let
 
     options = {
 
-      enable = lib.mkEnableOption "Go Ethereum Node";
+      enable = lib.mkEnableOption (lib.mdDoc "Go Ethereum Node");
 
       port = mkOption {
         type = types.port;
@@ -18,7 +18,7 @@ let
       };
 
       http = {
-        enable = lib.mkEnableOption "Go Ethereum HTTP API";
+        enable = lib.mkEnableOption (lib.mdDoc "Go Ethereum HTTP API");
         address = mkOption {
           type = types.str;
           default = "127.0.0.1";
@@ -40,7 +40,7 @@ let
       };
 
       websocket = {
-        enable = lib.mkEnableOption "Go Ethereum WebSocket API";
+        enable = lib.mkEnableOption (lib.mdDoc "Go Ethereum WebSocket API");
         address = mkOption {
           type = types.str;
           default = "127.0.0.1";
@@ -62,7 +62,7 @@ let
       };
 
       authrpc = {
-        enable = lib.mkEnableOption "Go Ethereum Auth RPC API";
+        enable = lib.mkEnableOption (lib.mdDoc "Go Ethereum Auth RPC API");
         address = mkOption {
           type = types.str;
           default = "127.0.0.1";
@@ -91,7 +91,7 @@ let
       };
 
       metrics = {
-        enable = lib.mkEnableOption "Go Ethereum prometheus metrics";
+        enable = lib.mkEnableOption (lib.mdDoc "Go Ethereum prometheus metrics");
         address = mkOption {
           type = types.str;
           default = "127.0.0.1";

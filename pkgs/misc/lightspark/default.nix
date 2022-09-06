@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lightspark";
-  version = "0.8.6";
+  version = "0.8.6.1";
 
   src = fetchFromGitHub {
     owner = "lightspark";
     repo = "lightspark";
     rev = version;
-    sha256 = "sha256-/Nd69YFctLDJ8SM9WvYp6okyPQd6+ob2mBN3sPg+7Ww=";
+    sha256 = "sha256-/w0cqPIeQC1Oz1teSjMpeiQEI6bIpnyOOu0GoGyi6Kg=";
   };
 
   postPatch = ''

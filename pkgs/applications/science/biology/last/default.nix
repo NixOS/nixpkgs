@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "last";
-  version = "1406";
+  version = "1409";
 
   src = fetchFromGitLab {
     owner = "mcfrith";
     repo = "last";
     rev = version;
-    sha256 = "sha256-N1B9W++4SiMRMUjDi8ZexOWF/HQpN8BBPuDKYh4bCS8=";
+    sha256 = "sha256-AFK0va1HonSWJdzJLdLraiu4LhUCJFgq6qajbbPmHuY=";
   };
 
   nativeBuildInputs = [ unzip ];

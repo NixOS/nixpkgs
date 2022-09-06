@@ -23,7 +23,7 @@ let
 in
 {
   options.services.self-deploy = {
-    enable = lib.mkEnableOption "self-deploy";
+    enable = lib.mkEnableOption (lib.mdDoc "self-deploy");
 
     nixFile = lib.mkOption {
       type = lib.types.path;

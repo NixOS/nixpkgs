@@ -9,12 +9,12 @@ in
 {
   options = with types; {
     services.replay-sorcery = {
-      enable = mkEnableOption "the ReplaySorcery service for instant-replays";
+      enable = mkEnableOption (lib.mdDoc "the ReplaySorcery service for instant-replays");
 
-      enableSysAdminCapability = mkEnableOption ''
+      enableSysAdminCapability = mkEnableOption (lib.mdDoc ''
         the system admin capability to support hardware accelerated
         video capture. This is equivalent to running ReplaySorcery as
-        root, so use with caution'';
+        root, so use with caution'');
 
       autoStart = mkOption {
         type = bool;

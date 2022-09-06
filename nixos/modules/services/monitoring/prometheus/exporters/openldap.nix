@@ -10,16 +10,16 @@ in {
     ldapCredentialFile = mkOption {
       type = types.path;
       example = "/run/keys/ldap_pass";
-      description = ''
+      description = lib.mdDoc ''
         Environment file to contain the credentials to authenticate against
-        <literal>openldap</literal>.
+        `openldap`.
 
         The file should look like this:
-        <programlisting>
+        ```
         ---
         ldapUser: "cn=monitoring,cn=Monitor"
         ldapPass: "secret"
-        </programlisting>
+        ```
       '';
     };
     protocol = mkOption {

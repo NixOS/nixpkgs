@@ -6,25 +6,24 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       { ... }:
       {
         imports = [ ../modules/profiles/minimal.nix ];
-        networking.firewall.allowedTCPPorts = [ 8200 ];
-        services.minidlna = {
-          enable = true;
-          loglevel = "error";
-          mediaDirs = [
-           "PV,/tmp/stuff"
+        services.minidlna.enable = true;
+        services.minidlna.openFirewall = true;
+        services.minidlna.settings = {
+          log_level = "error";
+          media_dir = [
+            "PV,/tmp/stuff"
           ];
-          friendlyName = "rpi3";
-          rootContainer = "B";
-          extraConfig =
-          ''
-            album_art_names=Cover.jpg/cover.jpg/AlbumArtSmall.jpg/albumartsmall.jpg
-            album_art_names=AlbumArt.jpg/albumart.jpg/Album.jpg/album.jpg
-            album_art_names=Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg
-            notify_interval=60
-          '';
+          friendly_name = "rpi3";
+          root_container = "B";
+          notify_interval = 60;
+          album_art_names = [
+            "Cover.jpg/cover.jpg/AlbumArtSmall.jpg/albumartsmall.jpg"
+            "AlbumArt.jpg/albumart.jpg/Album.jpg/album.jpg"
+            "Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg"
+          ];
         };
       };
-      client = { ... }: { };
+    client = { ... }: { };
   };
 
   testScript =

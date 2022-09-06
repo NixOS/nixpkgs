@@ -33,7 +33,7 @@ in {
   options = {
 
     services.ergo = {
-      enable = mkEnableOption "Ergo service";
+      enable = mkEnableOption (lib.mdDoc "Ergo service");
 
       dataDir = mkOption {
         type = types.path;

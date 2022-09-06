@@ -44,7 +44,7 @@ in
 
     services.namecoind = {
 
-      enable = mkEnableOption "namecoind, Namecoin client";
+      enable = mkEnableOption (lib.mdDoc "namecoind, Namecoin client");
 
       wallet = mkOption {
         type = types.path;

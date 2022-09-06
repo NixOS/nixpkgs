@@ -12,13 +12,13 @@ in
   };
 
   options.xdg.portal.lxqt = {
-    enable = mkEnableOption ''
+    enable = mkEnableOption (lib.mdDoc ''
       the desktop portal for the LXQt desktop environment.
 
-      This will add the <literal>lxqt.xdg-desktop-portal-lxqt</literal>
+      This will add the `lxqt.xdg-desktop-portal-lxqt`
       package (with the extra Qt styles) into the
-      <option>xdg.portal.extraPortals</option> option
-    '';
+      {option}`xdg.portal.extraPortals` option
+    '');
 
     styles = mkOption {
       type = types.listOf types.package;

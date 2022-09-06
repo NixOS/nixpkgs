@@ -34,7 +34,7 @@ in
 
   options = {
     programs.captive-browser = {
-      enable = mkEnableOption "captive browser";
+      enable = mkEnableOption (lib.mdDoc "captive browser");
 
       package = mkOption {
         type = types.package;

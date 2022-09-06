@@ -208,6 +208,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://languagetool.org/">languagetool</link>,
+          a multilingual grammar, style, and spell checker. Available as
+          <link xlink:href="options.html#opt-services.languagetool.enable">services.languagetool</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.getoutline.com/">Outline</link>,
           a wiki and knowledge base similar to Notion. Available as
           <link linkend="opt-services.outline.enable">services.outline</link>.
@@ -234,6 +241,14 @@
           <link xlink:href="https://schleuder.org/">schleuder</link>, a
           mailing list manager with PGP support. Enable using
           <link linkend="opt-services.schleuder.enable">services.schleuder</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.dolibarr.org/">Dolibarr</link>,
+          an enterprise resource planning and customer relationship
+          manager. Enable using
+          <link linkend="opt-services.dolibarr.enable">services.dolibarr</link>.
         </para>
       </listitem>
       <listitem>
@@ -374,6 +389,17 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>coq</literal> package and versioned variants
+          starting at <literal>coq_8_14</literal> no longer include
+          CoqIDE, which is now available through
+          <literal>coqPackages.coqide</literal>. It is still possible to
+          get CoqIDE as part of the <literal>coq</literal> package by
+          overriding the <literal>buildIde</literal> argument of the
+          derivation.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           PHP 7.4 is no longer supported due to upstream not supporting
           this version for the entire lifecycle of the 22.11 release.
         </para>
@@ -382,6 +408,14 @@
         <para>
           <literal>pkgs.cosign</literal> does not provide the
           <literal>cosigned</literal> binary anymore.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Emacs now uses the Lucid toolkit by default instead of GTK
+          because of stability and compatibility issues. Users who still
+          wish to remain using GTK can do so by using
+          <literal>emacs-gtk</literal>.
         </para>
       </listitem>
       <listitem>
@@ -424,6 +458,13 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>paperless</literal> module now defaults
+          <literal>PAPERLESS_TIME_ZONE</literal> to your configured
+          system timezone.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           (Neo)Vim can not be configured with
           <literal>configure.pathogen</literal> anymore to reduce
           maintainance burden. Use <literal>configure.packages</literal>
@@ -434,6 +475,12 @@
         <para>
           <literal>k3s</literal> no longer supports docker as runtime
           due to upstream dropping support.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>k3s</literal> supports <literal>clusterInit</literal>
+          option, and it is enabled by default, for servers.
         </para>
       </listitem>
     </itemizedlist>

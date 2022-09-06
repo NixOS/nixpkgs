@@ -10,7 +10,7 @@ in {
 
   options = {
     programs.msmtp = {
-      enable = mkEnableOption "msmtp - an SMTP client";
+      enable = mkEnableOption (lib.mdDoc "msmtp - an SMTP client");
 
       setSendmail = mkOption {
         type = types.bool;

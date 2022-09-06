@@ -46,7 +46,7 @@ let
 in
 {
   options.services.jitsi-meet = with types; {
-    enable = mkEnableOption "Jitsi Meet - Secure, Simple and Scalable Video Conferences";
+    enable = mkEnableOption (lib.mdDoc "Jitsi Meet - Secure, Simple and Scalable Video Conferences");
 
     hostName = mkOption {
       type = str;
@@ -159,7 +159,7 @@ in
       '';
     };
 
-    caddy.enable = mkEnableOption "Whether to enable caddy reverse proxy to expose jitsi-meet";
+    caddy.enable = mkEnableOption (lib.mdDoc "Whether to enable caddy reverse proxy to expose jitsi-meet");
 
     prosody.enable = mkOption {
       type = bool;

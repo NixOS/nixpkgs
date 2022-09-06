@@ -35,7 +35,7 @@ let
 in {
   options = {
     services.rippleDataApi = {
-      enable = mkEnableOption "ripple data api";
+      enable = mkEnableOption (lib.mdDoc "ripple data api");
 
       port = mkOption {
         description = lib.mdDoc "Ripple data api port";

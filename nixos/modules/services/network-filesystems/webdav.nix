@@ -8,7 +8,7 @@ in
 {
   options = {
     services.webdav = {
-      enable = mkEnableOption "WebDAV server";
+      enable = mkEnableOption (lib.mdDoc "WebDAV server");
 
       user = mkOption {
         type = types.str;

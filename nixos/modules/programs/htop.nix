@@ -26,7 +26,7 @@ in
       '';
     };
 
-    enable = mkEnableOption "htop process monitor";
+    enable = mkEnableOption (lib.mdDoc "htop process monitor");
 
     settings = mkOption {
       type = with types; attrsOf (oneOf [ str int bool (listOf (oneOf [ str int bool ])) ]);

@@ -97,9 +97,12 @@ let
         plugins = mkOption {
           type = types.listOf types.path;
           default = [];
-          description = ''
+          description = lib.mdDoc ''
             List of path(s) to respective plugin(s) which are copied from the 'plugins' directory.
-            <note><para>These plugins need to be packaged before use, see example.</para></note>
+
+            ::: {.note}
+            These plugins need to be packaged before use, see example.
+            :::
           '';
           example = literalExpression ''
             let
@@ -124,9 +127,12 @@ let
         themes = mkOption {
           type = types.listOf types.path;
           default = [];
-          description = ''
+          description = lib.mdDoc ''
             List of path(s) to respective theme(s) which are copied from the 'theme' directory.
-            <note><para>These themes need to be packaged before use, see example.</para></note>
+
+            ::: {.note}
+            These themes need to be packaged before use, see example.
+            :::
           '';
           example = literalExpression ''
             let

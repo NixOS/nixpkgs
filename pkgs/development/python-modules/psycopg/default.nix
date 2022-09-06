@@ -32,13 +32,13 @@
 
 let
   pname = "psycopg";
-  version = "3.0.16";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
-    rev = version;
-    hash = "sha256-jKhpmCcDi7FyMSpn51eSukFvmu3yacNovmRYG9jnu3g=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-N0Qc8pSWN2NFZn06lYZ7DKMbk6H8aIByS+wDnOQ/O+Y=";
   };
 
   patches = [
@@ -192,6 +192,7 @@ buildPythonPackage rec {
     "tests/test_dns_srv.py"
     # Mypy typing test
     "tests/test_typing.py"
+    "tests/crdb/test_typing.py"
   ];
 
   pytestFlagsArray = [

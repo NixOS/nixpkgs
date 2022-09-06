@@ -3505,10 +3505,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1iiavwlx9k3v9vyj2pswnc88vmn60prrg8dnsrpg4iglh40da64m";
+      sha256 = "0ihfnl0maszdq821h6mivr8xickjab6ccyncnm5rn2vgrj6imwxf";
       type = "gem";
     };
-    version = "3.13.20";
+    version = "3.13.21";
   };
   omniauth = {
     dependencies = ["hashie" "rack"];

@@ -10,7 +10,7 @@ in
   ###### interface
   options = {
     services.bird2 = {
-      enable = mkEnableOption "BIRD Internet Routing Daemon";
+      enable = mkEnableOption (lib.mdDoc "BIRD Internet Routing Daemon");
       config = mkOption {
         type = types.lines;
         description = lib.mdDoc ''

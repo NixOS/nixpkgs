@@ -32,7 +32,7 @@ let
 
 in {
   options.services.kibana = {
-    enable = mkEnableOption "kibana service";
+    enable = mkEnableOption (lib.mdDoc "kibana service");
 
     listenAddress = mkOption {
       description = lib.mdDoc "Kibana listening host";
@@ -122,13 +122,13 @@ in {
       };
 
       certificateAuthorities = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           CA files to auth against elasticsearch.
 
-          Please use the <option>ca</option> option when using kibana &lt; 5.4
+          Please use the {option}`ca` option when using kibana \< 5.4
           because those old versions don't support setting multiple CA's.
 
-          This defaults to the singleton list [ca] when the <option>ca</option> option is defined.
+          This defaults to the singleton list [ca] when the {option}`ca` option is defined.
         '';
         default = if cfg.elasticsearch.ca == null then [] else [ca];
         defaultText = literalExpression ''

@@ -72,6 +72,7 @@ let
     "unbound"
     "unifi"
     "unifi-poller"
+    "v2ray"
     "varnish"
     "wireguard"
     "flow"
@@ -80,7 +81,7 @@ let
   );
 
   mkExporterOpts = ({ name, port }: {
-    enable = mkEnableOption "the prometheus ${name} exporter";
+    enable = mkEnableOption (lib.mdDoc "the prometheus ${name} exporter");
     port = mkOption {
       type = types.port;
       default = port;
@@ -115,10 +116,10 @@ let
       example = literalExpression ''
         "-i eth0 -p tcp -m tcp --dport ${toString port}"
       '';
-      description = ''
+      description = lib.mdDoc ''
         Specify a filter for iptables to use when
-        <option>services.prometheus.exporters.${name}.openFirewall</option>
-        is true. It is used as `ip46tables -I nixos-fw <option>firewallFilter</option> -j nixos-fw-accept`.
+        {option}`services.prometheus.exporters.${name}.openFirewall`
+        is true. It is used as `ip46tables -I nixos-fw firewallFilter -j nixos-fw-accept`.
       '';
     };
     user = mkOption {

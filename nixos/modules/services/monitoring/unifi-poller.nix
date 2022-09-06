@@ -11,7 +11,7 @@ let
 
 in {
   options.services.unifi-poller = {
-    enable = mkEnableOption "unifi-poller";
+    enable = mkEnableOption (lib.mdDoc "unifi-poller");
 
     poller = {
       debug = mkOption {

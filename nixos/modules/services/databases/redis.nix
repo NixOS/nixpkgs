@@ -61,22 +61,22 @@ in {
         description = lib.mdDoc "Which Redis derivation to use.";
       };
 
-      vmOverCommit = mkEnableOption ''
+      vmOverCommit = mkEnableOption (lib.mdDoc ''
         setting of vm.overcommit_memory to 1
         (Suggested for Background Saving: http://redis.io/topics/faq)
-      '';
+      '');
 
       servers = mkOption {
         type = with types; attrsOf (submodule ({config, name, ...}@args: {
           options = {
-            enable = mkEnableOption ''
+            enable = mkEnableOption (lib.mdDoc ''
               Redis server.
 
               Note that the NixOS module for Redis disables kernel support
               for Transparent Huge Pages (THP),
               because this features causes major performance problems for Redis,
               e.g. (https://redis.io/topics/latency).
-            '';
+            '');
 
             user = mkOption {
               type = types.str;

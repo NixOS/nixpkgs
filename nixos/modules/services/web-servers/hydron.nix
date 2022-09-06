@@ -4,7 +4,7 @@ let
   cfg = config.services.hydron;
 in with lib; {
   options.services.hydron = {
-    enable = mkEnableOption "hydron";
+    enable = mkEnableOption (lib.mdDoc "hydron");
 
     dataDir = mkOption {
       type = types.path;

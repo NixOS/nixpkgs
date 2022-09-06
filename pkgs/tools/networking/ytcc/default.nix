@@ -37,6 +37,10 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     installManPage doc/ytcc.1
+    installShellCompletion --cmd ytcc \
+      --bash scripts/completions/bash/ytcc.completion.sh \
+      --fish scripts/completions/fish/ytcc.fish \
+      --zsh scripts/completions/zsh/_ytcc
   '';
 
   meta = {

@@ -523,7 +523,7 @@ in
       type = types.bool;
       default = false;
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to configure luks support in the initrd, when no luks
         devices are configured.
       '';
@@ -563,7 +563,7 @@ in
             default = name;
             example = "luksroot";
             type = types.str;
-            description = "Name of the unencrypted device in <filename>/dev/mapper</filename>.";
+            description = lib.mdDoc "Name of the unencrypted device in {file}`/dev/mapper`.";
           };
 
           device = mkOption {
@@ -819,7 +819,7 @@ in
             default = [];
             example = [ "_netdev" ];
             visible = false;
-            description = ''
+            description = lib.mdDoc ''
               Only used with systemd stage 1.
 
               Extra options to append to the last column of the generated crypttab file.

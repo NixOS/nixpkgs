@@ -5,7 +5,7 @@
 , onnx
 , packaging
 , pytestCheckHook
-, pytorch
+, torch
 , torchvision
 , typing-extensions
 }:
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "sha256-w4WSEgNLdVLDnKS4kzJBK9BkrrGzbk2aCIhk4HCM/Bk=";
   };
 
-  propagatedBuildInputs = [ numpy packaging pytorch typing-extensions ];
+  propagatedBuildInputs = [ numpy packaging torch typing-extensions ];
 
   checkInputs = [ onnx pytestCheckHook torchvision ];
 
