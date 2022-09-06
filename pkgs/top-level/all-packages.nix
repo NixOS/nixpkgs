@@ -644,6 +644,8 @@ with pkgs;
 
   dump1090 = callPackage ../applications/radio/dump1090 { };
 
+  dwarf2json = callPackage ../tools/misc/dwarf2json { };
+
   ebook2cw = callPackage ../applications/radio/ebook2cw { };
 
   edwin = callPackage ../data/fonts/edwin { };
@@ -702,6 +704,8 @@ with pkgs;
   prefer-remote-fetch = import ../build-support/prefer-remote-fetch;
 
   global-platform-pro = callPackage ../development/tools/global-platform-pro { };
+
+  gomi = callPackage ../tools/misc/gomi { };
 
   graph-easy = callPackage ../tools/graphics/graph-easy { };
 
