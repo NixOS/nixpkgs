@@ -28,11 +28,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "p4v";
-  version = "2021.3.2186916";
+  version = "2022.2.2336701";
 
   src = fetchurl {
-    url = "http://web.archive.org/web/20211118024745/https://cdist2.perforce.com/perforce/r21.3/bin.linux26x86_64/p4v.tgz";
-    sha256 = "1zldg21xq4srww9pcfbv3p8320ghjnh333pz5r70z1gwbq4vf3jq";
+    url = "https://web.archive.org/web/20220902181457/https://ftp.perforce.com/perforce/r22.2/bin.linux26x86_64/p4v.tgz";
+    sha256 = "8fdade4aafe25f568a61cfd80823aa90599c2a404b7c6b4a0862c84b07a9f8d2";
   };
 
   dontBuild = true;
