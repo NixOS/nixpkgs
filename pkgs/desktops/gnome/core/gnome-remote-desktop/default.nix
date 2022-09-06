@@ -81,11 +81,9 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs \
       tests/vnc-test-runner.sh \
-      tests/run-vnc-tests.py \
-      meson_post_install.py
+      tests/run-vnc-tests.py
 
     substituteInPlace tests/vnc-test-runner.sh \
       --replace "dbus-run-session" "dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf"
