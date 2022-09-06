@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , python3
 , installShellFiles
 }:
@@ -13,6 +14,9 @@ let
     pip
     virtualenv
     virtualenv-clone
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAndroid [
+    pyjnius
   ];
 
   pythonEnv = python3.withPackages runtimeDeps;
