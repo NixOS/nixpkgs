@@ -1,13 +1,9 @@
+diff --git a/packages/flutter_tools/lib/src/artifacts.dart b/packages/flutter_tools/lib/src/artifacts.dart
 diff --git a/packages/flutter_tools/lib/src/asset.dart b/packages/flutter_tools/lib/src/asset.dart
-index 9dd7272fbe..62eb5f1277 100644
+index 9dd7272fbe..642c8e48e4 100644
 --- a/packages/flutter_tools/lib/src/asset.dart
 +++ b/packages/flutter_tools/lib/src/asset.dart
-@@ -11,11 +11,11 @@ import 'base/file_system.dart';
- import 'base/logger.dart';
- import 'base/platform.dart';
- import 'build_info.dart';
--import 'cache.dart';
- import 'convert.dart';
+@@ -16,6 +16,7 @@ import 'convert.dart';
  import 'dart/package_map.dart';
  import 'devfs.dart';
  import 'flutter_manifest.dart';
@@ -15,7 +11,7 @@ index 9dd7272fbe..62eb5f1277 100644
  import 'license_collector.dart';
  import 'project.dart';
  
-@@ -530,8 +530,7 @@ class ManifestAssetBundle implements AssetBundle {
+@@ -530,8 +531,7 @@ class ManifestAssetBundle implements AssetBundle {
          final Uri entryUri = _fileSystem.path.toUri(asset);
          result.add(_Asset(
            baseDir: _fileSystem.path.join(
@@ -71,7 +67,6 @@ index dd80b1e46e..8e54517765 100644
      }
    }
  
-diff --git a/packages/flutter_tools/lib/src/artifacts.dart b/packages/flutter_tools/lib/src/artifacts.dart
 index c539d67156..4e0a64f7a9 100644
 --- a/packages/flutter_tools/lib/src/artifacts.dart
 +++ b/packages/flutter_tools/lib/src/artifacts.dart
