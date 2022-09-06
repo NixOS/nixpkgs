@@ -1269,6 +1269,8 @@ with pkgs;
 
   gam = callPackage ../tools/admin/gam { };
 
+  gen6dns = callPackage ../tools/networking/gen6dns { };
+
   gfshare = callPackage ../tools/security/gfshare { };
 
   gh-cal = callPackage ../tools/misc/gh-cal {
