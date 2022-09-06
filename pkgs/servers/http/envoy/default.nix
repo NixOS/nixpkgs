@@ -1,14 +1,14 @@
 { lib
-, bazel_4
+, bazel_5
 , buildBazelPackage
 , fetchFromGitHub
-, fetchpatch
 , stdenv
 , cmake
 , gn
 , go
 , jdk
 , ninja
+, patchelf
 , python3
 , linuxHeaders
 , nixosTests
@@ -23,19 +23,19 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.21.4";
-    rev = "782ba5e5ab9476770378ec9f1901803e0d38ac41";
+    version = "1.23.1";
+    rev = "edd69583372955fdfa0b8ca3820dd7312c094e46";
   };
 in
 buildBazelPackage rec {
   pname = "envoy";
   inherit (srcVer) version;
-  bazel = bazel_4;
+  bazel = bazel_5;
   src = fetchFromGitHub {
     owner = "envoyproxy";
     repo = "envoy";
     inherit (srcVer) rev;
-    hash = "sha256-SthKDMQs5yNU0iouAPVsDeCPKcsBXmO9ebDwu58UQRs=";
+    sha256 = "sha256:157dbmp479xv5507n48yibvlgi2ac0l3sl9rzm28cm9lhzwva3k0";
 
     postFetch = ''
       chmod -R +w $out
@@ -48,26 +48,21 @@ buildBazelPackage rec {
   postPatch = ''
     sed -i 's,#!/usr/bin/env python3,#!${python3}/bin/python,' bazel/foreign_cc/luajit.patch
     sed -i '/javabase=/d' .bazelrc
-    # Patch paths to build tools, and disable gold because it just segfaults.
-    substituteInPlace bazel/external/wee8.genrule_cmd \
-      --replace '"''$$gn"' '"''$$(command -v gn)"' \
-      --replace '"''$$ninja"' '"''$$(command -v ninja)"' \
-      --replace '"''$$WEE8_BUILD_ARGS"' '"''$$WEE8_BUILD_ARGS use_gold=false"'
+
+    # Use system Python.
+    sed -i -e '/python_interpreter_target =/d' -e '/@python3_10/d' bazel/python_dependencies.bzl
   '';
 
   patches = [
-    # make linux/tcp.h relative. drop when upgrading to >1.21
-    (fetchpatch {
-      url = "https://github.com/envoyproxy/envoy/commit/68448aae7a78a3123097b6ea96016b270457e7b8.patch";
-      sha256 = "123kv3x37p8fgfp29jhw5xg5js5q5ipibs8hsm7gzfd5bcllnpfh";
-    })
-
     # fix issues with brotli and GCC 11.2.0+ (-Werror=vla-parameter)
     ./bump-brotli.patch
 
     # fix linux-aarch64 WAMR builds
     # (upstream WAMR only detects aarch64 on Darwin, not Linux)
     ./fix-aarch64-wamr.patch
+
+    # use system Python, not bazel-fetched binary Python
+    ./use-system-python.patch
   ];
 
   nativeBuildInputs = [
@@ -77,6 +72,7 @@ buildBazelPackage rec {
     go
     jdk
     ninja
+    patchelf
   ];
 
   buildInputs = [
@@ -85,8 +81,8 @@ buildBazelPackage rec {
 
   fetchAttrs = {
     sha256 = {
-      x86_64-linux = "sha256-/SA+WFHcMjk6iLwuEmuBIzy3pMhw7TThIEx292dv6IE=";
-      aarch64-linux = "sha256-0XdeirdIP7+nKy8zZbr2uHN2RZ4ZFOJt9i/+Ow1s/W4=";
+      x86_64-linux = "0y3gpvx148bnn6kljdvkg99m681vw39l0avrhvncbf62hvpifqkw";
+      aarch64-linux = "0lln5mdlskahz5hb4w268ys2ksy3051drrwlhracmk4i7rpm7fq3";
     }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
@@ -94,6 +90,12 @@ buildBazelPackage rec {
       # Strip out the path to the build location (by deleting the comment line).
       find $bazelOut/external -name requirements.bzl | while read requirements; do
         sed -i '/# Generated from /d' "$requirements"
+      done
+      find $bazelOut/external -type f -executable | while read execbin; do
+        file "$execbin" | grep -q ': ELF .*, dynamically linked,' || continue
+        patchelf \
+          --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
+          "$execbin"
       done
 
       # Remove references to paths in the Nix store.
@@ -138,6 +140,12 @@ buildBazelPackage rec {
     "--cxxopt=-Wno-maybe-uninitialized"
     "--cxxopt=-Wno-uninitialized"
     "--cxxopt=-Wno-error=type-limits"
+    "--cxxopt=-Wno-error=range-loop-construct"
+
+    # Force use of system Java.
+    "--extra_toolchains=@local_jdk//:all"
+    "--java_runtime_version=local_jdk"
+    "--tool_java_runtime_version=local_jdk"
 
     "--define=wasm=${wasmRuntime}"
   ];
