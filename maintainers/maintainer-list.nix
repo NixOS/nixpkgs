@@ -496,7 +496,6 @@
     github = "akkesm";
     githubId = 56970006;
     keys = [{
-      longkeyid = "ed25519/0x0D6BFC01D45EDADD";
       fingerprint = "50E2 669C AB38 2F4A 5F72  1667 0D6B FC01 D45E DADD";
     }];
   };
