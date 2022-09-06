@@ -4,7 +4,7 @@
 , meson
 , ninja
 , pkg-config
-, gtk-doc
+, gi-docgen
 , docbook-xsl-nons
 , gettext
 , libxml2
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    gtk-doc
+    gi-docgen
     docbook-xsl-nons
     wrapGAppsHook4
   ];
@@ -106,6 +106,11 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
