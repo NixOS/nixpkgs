@@ -174,17 +174,37 @@ addToSearchPath() {
     addToSearchPathWithCustomDelimiter ":" "$@"
 }
 
+# same as in pkgs/build-support/wrapper-common/utils.bash
+_encodeURLWhitespace() {
+    local LC_ALL=C
+    local c h i n=${#1}
+    for ((i=0;i<n;i++)); do
+        c="${1:i:1}"; printf -v h '%02X' "'$c"
+        case $h in
+            09|0A|0D|20|25) printf '%%%s' $h ;;
+            *) printf '%s' "$c" ;;
+        esac
+    done
+}
+
+# same as in pkgs/build-support/wrapper-common/utils.bash
+_encodeWhitespaceFileURL() {
+    local LC_ALL=C
+    local r="$(_encodeURLWhitespace "$1")"
+    if [ ${#1} = ${#r} ]; then echo "$1"; else echo "file:$r"; fi
+}
+
 # Add $1/lib* into rpaths.
 # The function is used in multiple-outputs.sh hook,
 # so it is defined here but tried after the hook.
 _addRpathPrefix() {
     if [ "${NIX_NO_SELF_RPATH:-0}" != 1 ]; then
-        export NIX_LDFLAGS="-rpath $1/lib ${NIX_LDFLAGS-}"
+        export NIX_LDFLAGS="-rpath $(_encodeWhitespaceFileURL "$1/lib") ${NIX_LDFLAGS-}"
         if [ -n "${NIX_LIB64_IN_SELF_RPATH:-}" ]; then
-            export NIX_LDFLAGS="-rpath $1/lib64 ${NIX_LDFLAGS-}"
+            export NIX_LDFLAGS="-rpath $(_encodeWhitespaceFileURL "$1/lib64") ${NIX_LDFLAGS-}"
         fi
         if [ -n "${NIX_LIB32_IN_SELF_RPATH:-}" ]; then
-            export NIX_LDFLAGS="-rpath $1/lib32 ${NIX_LDFLAGS-}"
+            export NIX_LDFLAGS="-rpath $(_encodeWhitespaceFileURL "$1/lib32") ${NIX_LDFLAGS-}"
         fi
     fi
 }
