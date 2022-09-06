@@ -858,7 +858,8 @@ in
         # If the disk image appears to be empty, run mke2fs to
         # initialise.
         FSTYPE=$(blkid -o value -s TYPE ${cfg.bootDevice} || true)
-        if test -z "$FSTYPE"; then
+        PARTTYPE=$(blkid -o value -s PTTYPE ${cfg.bootDevice} || true)
+        if test -z "$FSTYPE" -a -z "$PARTTYPE"; then
             mke2fs -t ext4 ${cfg.bootDevice}
         fi
       '';
