@@ -68,6 +68,12 @@ stdenv.mkDerivation {
     # Make binutils output deterministic by default.
     ./deterministic.patch
 
+
+    # Breaks nm BSD flag detection, heeds an upstream fix:
+    #   https://sourceware.org/PR29547
+    ./0001-Revert-libtool.m4-fix-the-NM-nm-over-here-B-option-w.patch
+    ./0001-Revert-libtool.m4-fix-nm-BSD-flag-detection.patch
+
     # Required for newer macos versions
     ./0001-libtool.m4-update-macos-version-detection-block.patch
 
