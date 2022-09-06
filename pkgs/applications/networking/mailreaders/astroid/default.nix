@@ -50,8 +50,10 @@ stdenv.mkDerivation rec {
   pythonPath = with python3.pkgs; requiredPythonModules [ pygobject3 ] ++ extraPythonPackages;
   preFixup = ''
     buildPythonPath "$out $pythonPath"
+    # fixes mail display blank screen, see https://github.com/astroidmail/astroid/issues/717
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$program_PYTHONPATH"
+      --set WEBKIT_DISABLE_COMPOSITING_MODE 1
     )
   '';
 
