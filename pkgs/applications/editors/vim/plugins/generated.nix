@@ -5362,6 +5362,18 @@ final: prev:
     meta.homepage = "https://github.com/karoliskoncevicius/oldbook-vim/";
   };
 
+  oldbook-vim = buildVimPluginFrom2Nix {
+    pname = "oldbook-vim";
+    version = "2020-09-18";
+    src = fetchFromGitHub {
+      owner = "karoliskoncevicius";
+      repo = "oldbook-vim";
+      rev = "c101733193d8c4cc250d892a69d322b524d6d56f";
+      sha256 = "1jrnl2947kv7gxw6jhybjglxav3w9173lp3421jv59xmi5bw0a9x";
+    };
+    meta.homepage = "https://github.com/karoliskoncevicius/oldbook-vim/";
+  };
+
   one-nvim = buildVimPluginFrom2Nix {
     pname = "one-nvim";
     version = "2021-06-10";
@@ -7672,6 +7684,18 @@ final: prev:
       sha256 = "1xr8h8n1vxdbl7cm6jxqb2y3ywdq53vm9vq4qbz2xpg8w5fvm3z7";
     };
     meta.homepage = "https://github.com/vim-airline/vim-airline-themes/";
+  };
+
+  vim-alayas = buildVimPluginFrom2Nix {
+    pname = "vim-alayas";
+    version = "2020-07-17";
+    src = fetchFromGitHub {
+      owner = "pgdouyon";
+      repo = "vim-alayas";
+      rev = "f3a4dcfbc7eb71e551a5d8e3672e823a3b385ec3";
+      sha256 = "1acb8wkp3szdap4wbbscjdfqxg1zprx3sa6yfzjcjmsgawj28gig";
+    };
+    meta.homepage = "https://github.com/pgdouyon/vim-alayas/";
   };
 
   vim-alias = buildVimPluginFrom2Nix {
@@ -12198,8 +12222,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "catppuccin";
       repo = "nvim";
-      rev = "6bc6e6ab783e041135a95c4b9fc67fcbcaa73e0d";
-      sha256 = "0qcaawyh3aia88i2gmgn41g36idxabasvqvj46a47z0p5fyxz2c2";
+      rev = "8e94e04a72edfe148d1112586cdae77ef997c305";
+      sha256 = "0g6qy8k96dxf61hhm9b2gygqzp8zp1cn39q69lj2akc2rlsrzmv6";
     };
     meta.homepage = "https://github.com/catppuccin/nvim/";
   };
