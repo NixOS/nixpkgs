@@ -7686,6 +7686,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-airline/vim-airline-themes/";
   };
 
+  vim-alayas = buildVimPluginFrom2Nix {
+    pname = "vim-alayas";
+    version = "2020-07-17";
+    src = fetchFromGitHub {
+      owner = "pgdouyon";
+      repo = "vim-alayas";
+      rev = "f3a4dcfbc7eb71e551a5d8e3672e823a3b385ec3";
+      sha256 = "1acb8wkp3szdap4wbbscjdfqxg1zprx3sa6yfzjcjmsgawj28gig";
+    };
+    meta.homepage = "https://github.com/pgdouyon/vim-alayas/";
+  };
+
   vim-alias = buildVimPluginFrom2Nix {
     pname = "vim-alias";
     version = "2021-05-25";
