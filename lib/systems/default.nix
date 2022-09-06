@@ -158,38 +158,47 @@ rec {
         if final.isMacOS then "MACOSX_DEPLOYMENT_TARGET"
         else if final.isiOS then "IPHONEOS_DEPLOYMENT_TARGET"
         else null;
+    } // (
+      let
+        selectEmulator = pkgs:
+          let
+            qemu-user = pkgs.qemu.override {
+              smartcardSupport = false;
+              spiceSupport = false;
+              openGLSupport = false;
+              virglSupport = false;
+              vncSupport = false;
+              gtkSupport = false;
+              sdlSupport = false;
+              pulseSupport = false;
+              smbdSupport = false;
+              seccompSupport = false;
+              hostCpuTargets = [ "${final.qemuArch}-linux-user" ];
+            };
+            wine-name = "wine${toString final.parsed.cpu.bits}";
+            wine = (pkgs.winePackagesFor wine-name).minimal;
+          in
+          if final.parsed.kernel.name == pkgs.stdenv.hostPlatform.parsed.kernel.name &&
+            pkgs.stdenv.hostPlatform.canExecute final
+          then "${pkgs.runtimeShell} -c '\"$@\"' --"
+          else if final.isWindows
+          then "${wine}/bin/${wine-name}"
+          else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux
+          then "${qemu-user}/bin/qemu-${final.qemuArch}"
+          else if final.isWasi
+          then "${pkgs.wasmtime}/bin/wasmtime"
+          else if final.isMmix
+          then "${pkgs.mmixware}/bin/mmix"
+          else null;
+      in {
+        emulatorAvailable = pkgs: (selectEmulator pkgs) != null;
 
-      emulator = pkgs: let
-        qemu-user = pkgs.qemu.override {
-          smartcardSupport = false;
-          spiceSupport = false;
-          openGLSupport = false;
-          virglSupport = false;
-          vncSupport = false;
-          gtkSupport = false;
-          sdlSupport = false;
-          pulseSupport = false;
-          smbdSupport = false;
-          seccompSupport = false;
-          hostCpuTargets = ["${final.qemuArch}-linux-user"];
-        };
-        wine-name = "wine${toString final.parsed.cpu.bits}";
-        wine = (pkgs.winePackagesFor wine-name).minimal;
-      in
-        if final.parsed.kernel.name == pkgs.stdenv.hostPlatform.parsed.kernel.name &&
-           pkgs.stdenv.hostPlatform.canExecute final
-        then "${pkgs.runtimeShell} -c '\"$@\"' --"
-        else if final.isWindows
-        then "${wine}/bin/${wine-name}"
-        else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux
-        then "${qemu-user}/bin/qemu-${final.qemuArch}"
-        else if final.isWasi
-        then "${pkgs.wasmtime}/bin/wasmtime"
-        else if final.isMmix
-        then "${pkgs.mmixware}/bin/mmix"
-        else throw "Don't know how to run ${final.config} executables.";
+        emulator = pkgs:
+          if (final.emulatorAvailable pkgs)
+          then selectEmulator pkgs
+          else throw "Don't know how to run ${final.config} executables.";
 
-    } // mapAttrs (n: v: v final.parsed) inspect.predicates
+    }) // mapAttrs (n: v: v final.parsed) inspect.predicates
       // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
       // args;
   in assert final.useAndroidPrebuilt -> final.isAndroid;
