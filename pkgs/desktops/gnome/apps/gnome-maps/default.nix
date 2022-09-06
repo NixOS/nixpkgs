@@ -1,12 +1,14 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , gettext
 , python3
 , pkg-config
 , gnome
+, glib
 , gtk4
 , gobject-introspection
 , gdk-pixbuf
@@ -14,6 +16,7 @@
 , libgweather
 , geoclue2
 , wrapGAppsHook4
+, desktop-file-utils
 , libshumate
 , libsecret
 , libsoup_3
@@ -32,6 +35,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-NBqS8OTo+lOaOggrdYXYA/4Od7byiF7ztq9zZxKSQ5k=";
   };
 
+  patches = [
+    # Fix build without GTK 3.
+    # https://gitlab.gnome.org/GNOME/gnome-maps/-/merge_requests/248
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-maps/-/merge_requests/248.patch";
+      sha256 = "TxPzDYiqvFkXeIbtIXabb8XOajlMdShaWzQGsPjweGw=";
+      postFetch = ''
+        # Make the patch apply.
+        substituteInPlace "$out" --replace "version: '43.0'," "version: '43.beta',"
+      '';
+    })
+  ];
+
   doCheck = true;
 
   nativeBuildInputs = [
@@ -39,13 +55,17 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     wrapGAppsHook4
     gobject-introspection
+    # For post install script
+    desktop-file-utils
+    glib
+    gtk4
   ];
 
   buildInputs = [
     gdk-pixbuf
+    glib
     geoclue2
     geocode-glib_2
     gjs
@@ -60,9 +80,6 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-
     # The .service file isn't wrapped with the correct environment
     # so misses GIR files when started. By re-pointing from the gjs
     # entry point to the wrapped binary we get back to a wrapped
