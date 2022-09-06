@@ -78,6 +78,7 @@ luazip,,,,,,
 lua-yajl,,,,,,pstn
 luuid,,,,,,
 luv,,,,1.43.0-0,,
+lush.nvim,https://github.com/rktjmp/lush.nvim,,,,,teto
 lyaml,,,,,,lblasc
 markdown,,,,,,
 mediator_lua,,,,,,
