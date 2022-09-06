@@ -139,12 +139,14 @@ if [ "$dontLink" != 1 ]; then
 
     # Add the flags that should only be passed to the compiler when
     # linking.
-    extraAfter+=($(filterRpathFlags "$linkType" $NIX_CFLAGS_LINK_@suffixSalt@))
+    for i in $(filterRpathFlags "$linkType" $NIX_CFLAGS_LINK_@suffixSalt@); do
+        extraAfter+=("$(decodeWhitespaceFileURL $i)")
+    done
 
     # Add the flags that should be passed to the linker (and prevent
     # `ld-wrapper' from adding NIX_LDFLAGS_@suffixSalt@ again).
     for i in $(filterRpathFlags "$linkType" $NIX_LDFLAGS_BEFORE_@suffixSalt@); do
-        extraBefore+=("-Wl,$i")
+        extraBefore+=("-Wl,$(decodeWhitespaceFileURL $i)")
     done
     if [[ "$linkType" == dynamic && -n "$NIX_DYNAMIC_LINKER_@suffixSalt@" ]]; then
         extraBefore+=("-Wl,-dynamic-linker=$NIX_DYNAMIC_LINKER_@suffixSalt@")
@@ -152,8 +154,10 @@ if [ "$dontLink" != 1 ]; then
     for i in $(filterRpathFlags "$linkType" $NIX_LDFLAGS_@suffixSalt@); do
         if [ "${i:0:3}" = -L/ ]; then
             extraAfter+=("$i")
+        elif [ "${i:0:7}" = -Lfile: ]; then
+            extraAfter+=("-L$(decodeWhitespaceFileURL ${i:2})")
         else
-            extraAfter+=("-Wl,$i")
+            extraAfter+=("-Wl,$(decodeWhitespaceFileURL $i)")
         fi
     done
     export NIX_LINK_TYPE_@suffixSalt@=$linkType
