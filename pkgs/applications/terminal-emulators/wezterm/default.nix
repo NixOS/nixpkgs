@@ -29,14 +29,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "20220903-194523-3bb1ed61";
+  version = "20220905-102802-7d4b8249";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-R5DFBO6U1hVDCjvvNF2nDoldl+mzkrjaXR5rIPCosmM=";
+    sha256 = "sha256-Xvi0bluLM4F3BFefIPhkhTF3dmRvP8u+qV70Rz4CGKI=";
   };
 
   postPatch = ''
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     rm -r wezterm-ssh/tests
   '';
 
-  cargoSha256 = "sha256-x2n8ti9zk+h2MrwDg/FgRWTQJmCAckxE2fOHgrWdayA=";
+  cargoSha256 = "sha256-XJAeMDwtLtBzHMU/cb3lZgmcw5F3ifjKzKVmuP85/RY=";
 
   nativeBuildInputs = [
     pkg-config
