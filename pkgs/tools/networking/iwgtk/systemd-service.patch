@@ -1,0 +1,12 @@
+--- a/misc/iwgtk.service
++++ b/misc/iwgtk.service
+@@ -6,7 +6,8 @@ PartOf=graphical-session.target
+ After=graphical-session.target
+ 
+ [Service]
+-ExecStart=iwgtk -i
++ExecStart=@out@/bin/iwgtk -i
++PassEnvironment=DISPLAY XAUTHORITY
+ Restart=on-failure
+ 
+ [Install]
