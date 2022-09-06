@@ -1,17 +1,17 @@
 { lib
 , nimPackages
 , fetchFromGitLab
-, enableShells ? [ "bash" "zsh" "fish" "sh" "posh" ]
+, enableShells ? [ "bash" "zsh" "fish" "sh" "posh" "codium" ]
 }:
 nimPackages.buildNimPackage rec{
   pname = "swaycwd";
-  version = "0.1.0";
+  version = "0.2.1";
 
   src = fetchFromGitLab {
     owner = "cab404";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-VrG3H6oTeYsfncdD0IBp3zbmkoF5YF146LRxL064ZAE=";
+    hash = "sha256-R/LnojbA0vBQVivGLaoM0+M4qVJ7vjf4kggB59i896w=";
   };
 
   preConfigure = ''
