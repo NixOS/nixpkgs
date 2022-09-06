@@ -164,3 +164,46 @@ filterRpathFlags() {
     fi
     echo "${ret[@]}"
 }
+
+# LC_ALL=C # unicode: handle bytes, not characters
+
+# whitespace: tab newline return space
+encodeURLWhitespace() {
+    local LC_ALL=C
+    local c h i n=${#1}
+    for ((i=0;i<n;i++)); do
+        c="${1:i:1}"; printf -v h '%02X' "'$c"
+        case $h in
+            09|0A|0D|20|25) printf '%%%s' $h ;;
+            *) printf '%s' "$c" ;;
+        esac
+    done
+}
+
+decodeURLWhitespace() {
+    local LC_ALL=C
+    local c h i n=${#1} e
+    e='echo "decodeURLWhitespace: error in escape ${1:i}'
+    e+=' at index $i of $((n-1)) in $1" >&2; return 1'
+    for ((i=0;i<n;i++)); do
+        c="${1:i:1}"
+        if [[ "$c" != % ]]; then echo -n "$c"; continue; fi
+        ((i+3>n)) && eval "$e"
+        : $((i++)); h="${1:i:2}"; : $((i++))
+        case "$h" in
+            09|0A|0D|20|25|0a|0d) echo -n -e "\\x$h" ;;
+            *) echo -n "%$h" ;;
+        esac
+    done
+}
+
+encodeWhitespaceFileURL() {
+    local LC_ALL=C
+    local r="$(encodeURLWhitespace "$1")"
+    if [ ${#1} = ${#r} ]; then echo "$1"; else echo "file:$r"; fi
+}
+
+decodeWhitespaceFileURL() {
+    local LC_ALL=C
+    if [[ "${1:0:5}" != file: ]]; then echo "$1"; else decodeURLWhitespace "${1:5}"; fi
+}
