@@ -423,7 +423,7 @@ let
     jsonArg = json.loads(sys.argv[2])
 
 
-    def curl_args(orga, repo, token):
+    def curl_github_args(token, url):
         """Query the github API via curl"""
         yield "curl"
         if not debug:
@@ -431,7 +431,7 @@ let
         if token:
             yield "-H"
             yield f"Authorization: token {token}"
-        yield f"https://api.github.com/repos/{quote(orga)}/{quote(repo)}/releases/latest"
+        yield url
 
 
     def curl_result(orga, repo, output):
@@ -464,7 +464,10 @@ let
         match jsonArg:
             case {"orga": orga, "repo": repo}:
                 token = os.environ.get("GITHUB_TOKEN", None)
-                curl_cmd = list(curl_args(orga, repo, token))
+                curl_cmd = list(curl_github_args(
+                    token,
+                    url=f"https://api.github.com/repos/{quote(orga)}/{quote(repo)}/releases/latest"
+                ))
                 if debug:
                     print(curl_cmd, file=sys.stderr)
                 out = sub.check_output(curl_cmd)
