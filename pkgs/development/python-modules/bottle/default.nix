@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "bottle";
-  version = "0.12.21";
+  version = "0.12.23";
 
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "787c61b6cc02b9c229bf2663011fac53dd8fc197f7f8ad2eeede29d888d7887e";
+    sha256 = "683de3aa399fb26e87b274dbcf70b1a651385d459131716387abdc3792e04167";
   };
 
   checkInputs = [
