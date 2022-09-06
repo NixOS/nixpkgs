@@ -99,7 +99,7 @@ rec {
           genode = "Genode";
         }.${final.parsed.kernel.name} or null;
 
-         # uname -p
+         # uname -m
          processor = final.parsed.cpu.name;
 
          # uname -r
