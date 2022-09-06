@@ -33583,6 +33583,8 @@ with pkgs;
 
   gnushogi = callPackage ../games/gnushogi { };
 
+  gogdl = python3Packages.callPackage ../games/gogdl { };
+
   gogui = callPackage ../games/gogui { };
 
   gscrabble = python3Packages.callPackage ../games/gscrabble { };
