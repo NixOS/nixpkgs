@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, fetchurl, wrapGAppsHook, autoreconfHook, bison, flex
+{ stdenv, lib, fetchurl, wrapGAppsHook, autoreconfHook, bison, flex
 , curl, gtk3, pkg-config, python3, shared-mime-info
 , glib-networking, gsettings-desktop-schemas
 
@@ -100,10 +100,9 @@ in stdenv.mkDerivation rec {
   pname = "claws-mail";
   version = "4.1.0";
 
-  src = fetchgit {
-    rev = version;
-    url = "git://git.claws-mail.org/claws.git";
-    sha256 = "1pgl7z87qs3ksh1pazq9cml3h0vb7kr9b97gkkrzgsgfg1vbx390";
+  src = fetchurl {
+    url = "https://claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
+    hash = "sha256-DhqcoNuNKp4FiuMM3H/JGXeSFOw8Vu4Min+IzCOBeo4=";
   };
 
   outputs = [ "out" "dev" ];
