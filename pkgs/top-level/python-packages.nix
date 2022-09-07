@@ -3898,6 +3898,8 @@ in {
 
   gpapi = callPackage ../development/python-modules/gpapi { };
 
+  gpaw = callPackage ../development/python-modules/gpaw { };
+
   gpiozero = callPackage ../development/python-modules/gpiozero { };
 
   gplaycli = callPackage ../development/python-modules/gplaycli { };
