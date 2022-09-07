@@ -14,7 +14,6 @@
 , gtk3
 , libvirt
 , spice-gtk
-, python3
 , appstream-glib
 , spice-protocol
 , libhandy
@@ -70,16 +69,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     appstream-glib # for appstream-util
-    desktop-file-utils
     gettext
     gobject-introspection
     itstool
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook
+    # For post install script
+    glib
+    gtk3
+    desktop-file-utils
   ];
 
   # Required for USB redirection PolicyKit rules file
@@ -124,11 +125,6 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ mtools cdrkit libcdio qemu-utils qemu ]}")
-  '';
-
-  postPatch = ''
-    chmod +x build-aux/post_install.py # patchShebangs requires executable file
-    patchShebangs build-aux/post_install.py
   '';
 
   passthru = {
