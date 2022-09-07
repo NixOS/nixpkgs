@@ -22,14 +22,13 @@
 , vala
 , withIntrospection ? stdenv.hostPlatform == stdenv.buildPlatform
 , gobject-introspection
-, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "librsvg";
   version = "2.55.1";
 
-  outputs = [ "out" "dev" "installedTests" ] ++ lib.optionals withIntrospection [
+  outputs = [ "out" "dev" ] ++ lib.optionals withIntrospection [
     "devdoc"
   ];
 
@@ -89,15 +88,9 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/pull/117081#issuecomment-827782004
     (lib.enableFeature (withIntrospection && !stdenv.isDarwin) "vala")
 
-    "--enable-installed-tests"
     "--enable-always-build-tests"
   ] ++ lib.optional stdenv.isDarwin "--disable-Bsymbolic"
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "RUST_TARGET=${rust.toRustTarget stdenv.hostPlatform}";
-
-  makeFlags = [
-    "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/RSVG"
-    "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/RSVG"
-  ];
 
   doCheck = false; # all tests fail on libtool-generated rsvg-convert not being able to find coreutils
 
@@ -140,10 +133,6 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
-    };
-
-    tests = {
-      installedTests = nixosTests.installed-tests.librsvg;
     };
   };
 
