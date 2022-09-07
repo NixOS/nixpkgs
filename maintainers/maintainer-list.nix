@@ -13868,6 +13868,15 @@
     githubId = 245573;
     name = "Dmitry Kalinkin";
   };
+  victormignot = {
+    email = "victor.mignot@protonmail.com";
+    github = "victormignot";
+    githubId = 58660971;
+    name = "Victor Mignot";
+    keys = [{
+      fingerprint = "CA5D F91A D672 683A 1F65  BBC9 0317 096D 20E0 067B";
+    }];
+  };
   vidbina = {
     email = "vid@bina.me";
     github = "vidbina";
