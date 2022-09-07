@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     gettext
     gobject-introspection
@@ -61,6 +63,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     fribidi
+    gobject-introspection
     gnutls
     pcre2
     zlib
