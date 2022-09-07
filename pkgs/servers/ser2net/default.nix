@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ser2net";
-  version = "4.3.7";
+  version = "4.3.8";
 
   src = fetchFromGitHub {
     owner = "cminyard";
