@@ -2616,6 +2616,8 @@ in {
 
   django-storages = callPackage ../development/python-modules/django-storages { };
 
+  django-stubs-ext = callPackage ../development/python-modules/django-stubs-ext { };
+
   django-tables2 = callPackage ../development/python-modules/django-tables2 { };
 
   django_tagging = callPackage ../development/python-modules/django_tagging { };
