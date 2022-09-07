@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, matplotlib
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, lxml, matplotlib
 , nibabel, numpy, pandas, scikit-learn, scipy, joblib, requests }:
 
 buildPythonPackage rec {
@@ -17,6 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     joblib
+    lxml
     matplotlib
     nibabel
     numpy
