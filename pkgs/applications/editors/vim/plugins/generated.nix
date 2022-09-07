@@ -9873,6 +9873,18 @@ final: prev:
     meta.homepage = "https://github.com/phanviet/vim-monokai-pro/";
   };
 
+  vim-monotone = buildVimPluginFrom2Nix {
+    pname = "vim-monotone";
+    version = "2020-07-19";
+    src = fetchFromGitHub {
+      owner = "Lokaltog";
+      repo = "vim-monotone";
+      rev = "5393343ff2d639519e4bcebdb54572dfe5c35686";
+      sha256 = "0wyz5biw6vqgrlq1k2354mda6r36wga30rjaj06div05k3g7xhq4";
+    };
+    meta.homepage = "https://github.com/Lokaltog/vim-monotone/";
+  };
+
   vim-move = buildVimPluginFrom2Nix {
     pname = "vim-move";
     version = "2022-07-01";
