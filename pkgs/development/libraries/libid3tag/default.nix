@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, zlib, gperf}:
+{ lib, stdenv, fetchurl, zlib, gperf_3_0 }:
 
 stdenv.mkDerivation rec {
   pname = "libid3tag";
@@ -12,7 +12,11 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   setOutputFlags = false;
 
-  propagatedBuildInputs = [ zlib gperf ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ gperf_3_0 ];
+
+  buildInputs = [ zlib ];
 
   patches = [
     ./debian-patches.patch
