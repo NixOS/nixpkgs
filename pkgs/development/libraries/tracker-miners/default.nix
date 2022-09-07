@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , asciidoc
 , docbook-xsl-nons
 , docbook_xml_dtd_45
@@ -49,19 +48,12 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "3.4.0.beta";
+  version = "3.4.0.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "49XkMVzkLwKf6VKIPnCqb4uXLY+qwmGAjDdKSzglLwo=";
+    sha256 = "SWjC2YHQ7SKtR42DP9tzocejQkiIbFOFrY49azYyxWU=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/tracker-miners/-/commit/9e613ceb37ec41fd1cd88c3d539e3ee03e8f6ba6.patch";
-      sha256 = "sha256-ht7EfZztyl0st0Sv7H92Q37vwXY4T61GQm9WJ8IxTTg=";
-    })
-  ];
 
   nativeBuildInputs = [
     asciidoc
