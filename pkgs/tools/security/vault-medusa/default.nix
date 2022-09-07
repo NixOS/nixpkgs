@@ -17,6 +17,6 @@ buildGoModule rec {
     description = "A cli tool for importing and exporting Hashicorp Vault secrets";
     homepage = "https://github.com/jonasvinther/medusa";
     license = licenses.mit;
-    maintainers = with maintainers; [ "bpaulin" ];
+    maintainers = with maintainers; [ onny ];
   };
 }
