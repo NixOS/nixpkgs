@@ -169,3 +169,9 @@ filterRpathFlags() {
 escapeString() {
     printf '%q' "$1"
 }
+
+# quote a string.
+# always add quotes, also when not needed.
+quoteString() {
+    echo "${1@Q}"
+}
