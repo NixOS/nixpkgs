@@ -78,5 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ podocarp ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 })
