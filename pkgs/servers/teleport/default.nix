@@ -14,7 +14,6 @@
 , nixosTests
 
 , withRdpClient ? true
-, withRoleTester ? true
 }:
 let
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.
@@ -22,13 +21,13 @@ let
     owner = "gravitational";
     repo = "teleport";
     rev = "v${version}";
-    sha256 = "sha256-KQfdeMuZ9LJHhEJLMl58Yb0+gxgDT7VcVnK1JxjVZaI=";
+    sha256 = "sha256-1cV07Ly4ycHqalLtA0jdBuQLRurUszQ1g8Uh+9ErkFs=";
   };
-  version = "9.1.2";
+  version = "10.2.0";
 
   rdpClient = rustPlatform.buildRustPackage rec {
     name = "teleport-rdpclient";
-    cargoSha256 = "sha256-Jz7bB/f4HRxBhSevmfELSrIm+IXUVlADIgp2qWQd5PY=";
+    cargoSha256 = "sha256-/roAxkpvcJ7GsTxKifDFwI50zlwjj5LMmgbx7r+VCUI=";
     inherit version src;
 
     buildAndTestSubdir = "lib/srv/desktop/rdp/rdpclient";
@@ -44,42 +43,26 @@ let
     OPENSSL_NO_VENDOR = "1";
 
     postInstall = ''
-      cp -r target $out
-    '';
-  };
-
-  roleTester = rustPlatform.buildRustPackage {
-    name = "teleport-roletester";
-    inherit version src;
-
-    cargoSha256 = "sha256-gCm4ETbXy6tGJQVSzUkoAWUmKD3poYgkw133LtziASI=";
-    buildAndTestSubdir = "lib/datalog/roletester";
-
-    PROTOC = "${protobuf}/bin/protoc";
-    PROTOC_INCLUDE = "${protobuf}/include";
-
-    postInstall = ''
-      cp -r target $out
+      cp ${buildAndTestSubdir}/librdprs.h $out/lib
     '';
   };
 
   webassets = fetchFromGitHub {
     owner = "gravitational";
     repo = "webassets";
-    rev = "67e608db77300d8a6cb17709be67f12c1d3271c3";
-    sha256 = "sha256-o4qjXGaNi5XDSUQrUuU+G77EdRnvJ1WUPWrryZU1CUE=";
+    rev = "eb34904732b6b23f7382dfbb20fed050a9369b31";
+    sha256 = "sha256-pGIT1jZs5MRFzrrrYnMCL5gwMSFmiPPQN6hGXw5F47Q=";
   };
 in
 buildGoModule rec {
   pname = "teleport";
 
   inherit src version;
-  vendorSha256 = "sha256-UMgWM7KHag99JR4i4mwVHa6yd9aHQ6Dy+pmUijNL4Ew=";
+  vendorSha256 = "sha256-EqfAxTq8KRkwzMAbrk4sRVzcWpTB6sTD58Z1J/BXIvg=";
 
   subPackages = [ "tool/tbot" "tool/tctl" "tool/teleport" "tool/tsh" ];
   tags = [ "webassets_embed" ]
-    ++ lib.optional withRdpClient "desktop_access_rdp"
-    ++ lib.optional withRoleTester "roletester";
+    ++ lib.optional withRdpClient "desktop_access_rdp";
 
   buildInputs = [ openssl ]
     ++ lib.optionals (stdenv.isDarwin && withRdpClient) [ CoreFoundation Security ];
@@ -97,35 +80,29 @@ buildGoModule rec {
   # Reduce closure size for client machines
   outputs = [ "out" "client" ];
 
-  preBuild =
-    let rustDeps = symlinkJoin {
-      name = "teleport-rust-deps";
-      paths = lib.optional withRdpClient rdpClient
-        ++ lib.optional withRoleTester roleTester;
-    };
-    in
-    ''
-      mkdir -p build
-      echo "making webassets"
-      cp -r ${webassets}/* webassets/
-      make lib/web/build/webassets
-
-      cp -r ${rustDeps}/. .
-    '';
+  preBuild = ''
+    mkdir -p build
+    echo "making webassets"
+    cp -r ${webassets}/* webassets/
+    make lib/web/build/webassets
+  '' + lib.optionals withRdpClient ''
+    cp -r ${rdpClient}/. .
+    cp ./lib/librdprs.h lib/srv/desktop/rdp/rdpclient
+  '';
 
   # Multiple tests fail in the build sandbox
   # due to trying to spawn nixbld's shell (/noshell), etc.
   doCheck = false;
 
   postInstall = ''
-    install -Dm755 -t $client/bin $out/bin/tsh
+    mkdir -p $client/bin
+    mv {$out,$client}/bin/tsh
     # make xdg-open overrideable at runtime
     wrapProgram $client/bin/tsh --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
-    wrapProgram $out/bin/tsh --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+    ln -s {$client,$out}/bin/tsh
   '';
 
   doInstallCheck = true;
-
   installCheckPhase = ''
     $out/bin/tsh version | grep ${version} > /dev/null
     $client/bin/tsh version | grep ${version} > /dev/null
