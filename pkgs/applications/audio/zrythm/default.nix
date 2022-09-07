@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , SDL2
 , alsa-lib
-, libaudec
 , bash
 , bash-completion
 , breeze-icons
@@ -24,12 +23,14 @@
 , help2man
 , json-glib
 , jq
+, libadwaita
+, libaudec
 , libbacktrace
 , libcyaml
 , libgtop
 , libjack2
+, libpanel
 , libpulseaudio
-, libsamplerate
 , libsndfile
 , libsoundio
 , libxml2
@@ -49,6 +50,7 @@
 , rubberband
 , serd
 , sord
+, sox
 , sratom
 , texi2html
 , wrapGAppsHook
@@ -56,19 +58,18 @@
 , xxHash
 , vamp-plugin-sdk
 , zstd
-, libadwaita
 , sassc
 }:
 
 stdenv.mkDerivation rec {
   pname = "zrythm";
-  version = "1.0.0-alpha.28.1.3";
+  version = "1.0.0-beta.3.4.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ERE7I6E3+RmmpnZEtcJL/1v9a37IwFauVsbJvI9gsRQ=";
+    hash = "sha256-J5yS33vShq/xQI2lNWGvskXp8fCBn0gqb4adG16Fnnw=";
   };
 
   nativeBuildInputs = [
@@ -106,12 +107,13 @@ stdenv.mkDerivation rec {
     graphviz
     guile
     json-glib
+    libadwaita
     libbacktrace
     libcyaml
     libgtop
     libjack2
+    libpanel
     libpulseaudio
-    libsamplerate
     libsndfile
     libsoundio
     libyaml
@@ -125,12 +127,12 @@ stdenv.mkDerivation rec {
     rubberband
     serd
     sord
+    sox
     sratom
     vamp-plugin-sdk
     xdg-utils
     xxHash
     zstd
-    libadwaita
     sassc
   ];
 

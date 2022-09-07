@@ -36876,6 +36876,8 @@ with pkgs;
 
   zrythm = callPackage ../applications/audio/zrythm {
     inherit (plasma5Packages) breeze-icons;
+    libadwaita = libadwaita1_2;
+    gtk4 = gtk4_8;
   };
 
   zthrottle = callPackage ../tools/misc/zthrottle { };
