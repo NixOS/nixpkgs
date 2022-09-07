@@ -10,14 +10,13 @@
 , glib
 , libgcrypt
 , libtasn1
-, gtk3
 , gtk4
 , pango
 , libsecret
 , openssh
 , systemd
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook4
 , vala
 , gi-docgen
 , gnome
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
   pname = "gcr";
   version = "3.92.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "bin" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -43,7 +42,7 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     gi-docgen
-    wrapGAppsHook
+    wrapGAppsHook4
     vala
     gi-docgen
     shared-mime-info
@@ -57,12 +56,11 @@ stdenv.mkDerivation rec {
     libsecret
     openssh
     systemd
+    gtk4
   ];
 
   propagatedBuildInputs = [
     glib
-    gtk3
-    gtk4
     p11-kit
   ];
 
