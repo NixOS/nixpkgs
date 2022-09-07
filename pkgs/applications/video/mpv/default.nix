@@ -24,6 +24,7 @@
 , waylandSupport ? stdenv.isLinux
   , wayland
   , wayland-protocols
+  , wayland-scanner
   , libxkbcommon
 
 , x11Support ? stdenv.isLinux
@@ -100,6 +101,8 @@ in stdenv.mkDerivation rec {
   NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext "
     + lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
 
+  dontAddWafCrossFlags = true;
+
   wafConfigureFlags = [
     "--enable-libmpv-shared"
     "--enable-manpage-build"
@@ -127,7 +130,8 @@ in stdenv.mkDerivation rec {
     python3
     wafHook
     which
-  ] ++ lib.optionals swiftSupport [ swift ];
+  ] ++ lib.optionals swiftSupport [ swift ]
+    ++ lib.optionals waylandSupport [ wayland-scanner ];
 
   buildInputs = [
     ffmpeg
