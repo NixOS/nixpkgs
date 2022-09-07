@@ -419,29 +419,43 @@ let
     lib.concatMapStringsSep "\n" f
       (lib.mapAttrsToList (k: v: { name = k; } // v) attrs);
 
+  jsonNewlines = lib.concatMapStringsSep "\n" (lib.generators.toJSON {});
+
+  # Run the given script for each of the attr list.
+  # The attrs are passed to the script as a json value.
+  forEachParallel = name: script: listOfAttrs: writeShellScript "for-each-parallel.sh" ''
+    < ${writeText "${name}.json" (jsonNewlines listOfAttrs)} \
+      ${xe}/bin/xe -F -j5 ${script} {}
+  '';
+
+  outputDir = "${toString ./.}/grammars";
   update-all-grammars = writeShellScript "update-all-grammars.sh" ''
     set -euo pipefail
     echo "fetching list of grammars" 1>&2
     treeSitterRepos=$(${fetchImpl} fetch-orga-latest-repos '{"orga": "tree-sitter"}')
     echo "checking the tree-sitter repo list against the grammars we know" 1>&2
     printf '%s' "$treeSitterRepos" | ${checkTreeSitterRepos}
-    outputDir="${toString ./.}/grammars"
-    echo "writing files to $outputDir" 1>&2
-    mkdir -p "$outputDir"
-    ${foreachSh allGrammars
-      ({name, orga, repo}: ''
-        ${atomically-write} \
-          $outputDir/${name}.json \
-          ${fetchImpl} fetch-repo '${lib.generators.toJSON {} {inherit orga repo;}}'
-      '')}
-    ( echo "{ lib }:"
-      echo "{"
-      ${foreachSh allGrammars
-        ({name, ...}: ''
-           # indentation hack
-             printf "  %s = lib.importJSON ./%s.json;\n" "${name}" "${name}"'')}
-      echo "}" ) \
-      > "$outputDir/default.nix"
+    echo "writing files to ${outputDir}" 1>&2
+    mkdir -p "${outputDir}"
+    ${forEachParallel
+        "repos-to-fetch"
+        (writeShellScript "fetch-repo" ''
+          ${atomically-write} \
+            "${outputDir}/$(jq --raw-output --null-input '$ARGS.positional[0].name' --jsonargs "$1").json" \
+            ${fetchImpl} fetch-repo "$1"
+        '')
+        (lib.mapAttrsToList (name: attrs: attrs // { inherit name; }) allGrammars)
+    }
+    ${atomically-write} \
+      "${outputDir}/default.nix" \
+      ${writeShellScript "print-all-grammars" ''
+          echo "{ lib }:"
+          echo "{"
+          ${foreachSh allGrammars
+            ({name, ...}: ''
+              printf "  %s = lib.importJSON ./%s.json;\n" "${name}" "${name}"'')}
+          echo "}"
+       ''}
   '';
 
   # Atomically write a file (just `>` redirection in bash

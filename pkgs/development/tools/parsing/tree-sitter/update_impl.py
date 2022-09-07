@@ -19,6 +19,8 @@ def curl_github_args(token: str | None, url: str) -> Args:
     """Query the github API via curl"""
     if not debug:
         yield "--silent"
+    # follow redirects
+    yield "--location"
     if token:
         yield "-H"
         yield f"Authorization: token {token}"
@@ -79,7 +81,7 @@ def fetchRepo() -> None:
                 case {"tag_name": tag_name}:
                     release = tag_name
                 case _:
-                    sys.exit("git result did not have a `tag_name` field")
+                    sys.exit(f"git result for {orga}/{repo} did not have a `tag_name` field")
 
             print(f"Fetching latest release ({release}) of {orga}/{repo} …", file=sys.stderr)
             res = run_bin(
