@@ -133,12 +133,6 @@ if [[ $(grep --count "$oldHash" "$nixFile") != 1 ]]; then
     die "Couldn't locate old source hash '$oldHash' (or it appeared more than once) in '$nixFile'!"
 fi
 
-oldUrl=$(nix-instantiate $systemArg --eval -E "with $importTree; builtins.elemAt ($attr.$sourceKey.drvAttrs.urls or [ $attr.$sourceKey.url ]) 0" | tr -d '"')
-
-if [[ -z "$oldUrl" ]]; then
-    die "Couldn't evaluate source url from '$attr.$sourceKey'!"
-fi
-
 oldVersion=$(nix-instantiate $systemArg --eval -E "with $importTree; $attr.${versionKey} or (builtins.parseDrvName $attr.name).version" | tr -d '"')
 
 if [[ -z "$oldVersion" ]]; then
@@ -162,7 +156,6 @@ fi
 
 # Escape regex metacharacter that are allowed in store path names
 oldVersionEscaped=$(echo "$oldVersion" | sed -re 's|[.+]|\\&|g')
-oldUrlEscaped=$(echo "$oldUrl" | sed -re 's|[${}.+]|\\&|g')
 
 if [[ $(grep --count --extended-regexp "^\s*(let\b)?\s*$versionKey\s*=\s*\"$oldVersionEscaped\"" "$nixFile") = 1 ]]; then
     pattern="/\b$versionKey\b\s*=/ s|\"$oldVersionEscaped\"|\"$newVersion\"|"
@@ -213,6 +206,14 @@ fi
 
 # Replace new URL
 if [[ -n "$newUrl" ]]; then
+    oldUrl=$(nix-instantiate $systemArg --eval -E "with $importTree; builtins.elemAt ($attr.$sourceKey.drvAttrs.urls or [ $attr.$sourceKey.url ]) 0" | tr -d '"')
+    if [[ -z "$oldUrl" ]]; then
+        die "Couldn't evaluate source url from '$attr.$sourceKey'!"
+    fi
+
+    # Escape regex metacharacter that are allowed in store path names
+    oldUrlEscaped=$(echo "$oldUrl" | sed -re 's|[${}.+]|\\&|g')
+
     sed -i.cmp "$nixFile" -re "s|\"$oldUrlEscaped\"|\"$newUrl\"|"
     if cmp -s "$nixFile" "$nixFile.cmp"; then
         die "Failed to replace source URL '$oldUrl' to '$newUrl' in '$attr'!"
