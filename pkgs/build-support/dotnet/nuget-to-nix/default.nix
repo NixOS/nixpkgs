@@ -9,6 +9,7 @@
 , jq
 , curl
 , gnugrep
+, xmlstarlet
 }:
 
 runCommandLocal "nuget-to-nix" {
@@ -17,13 +18,14 @@ runCommandLocal "nuget-to-nix" {
     inherit runtimeShell;
 
     binPath = lib.makeBinPath [
-      nix
       coreutils
+      curl
       findutils
+      gnugrep
       gnused
       jq
-      curl
-      gnugrep
+      nix
+      xmlstarlet
     ];
   };
 
