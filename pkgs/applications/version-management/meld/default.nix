@@ -74,7 +74,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Visual diff and merge tool";
-    homepage = "http://meldmerge.org/";
+    homepage = "https://meld.app/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ jtojnar mimame ];
