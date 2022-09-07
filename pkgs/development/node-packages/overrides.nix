@@ -125,6 +125,10 @@ final: prev: {
     meta = oldAttrs.meta // { broken = true; }; # use the top-level package instead
   });
 
+  eask = prev."@emacs-eask/cli".override {
+    name = "eask";
+  };
+
   # NOTE: this is a stub package to fetch npm dependencies for
   # ../../applications/video/epgstation
   epgstation = prev."epgstation-../../applications/video/epgstation".override (oldAttrs: {
