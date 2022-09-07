@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gcr";
-  version = "3.90.0";
+  version = "3.92.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "5ZB0nsh2A38LDimVDCyyCIEnDAX0fsUmlSCog9iTSE4=";
+    sha256 = "iWq/jh2w9A6ygHPzZPNqcjhayKv4zRNisQFul3If9Rg=";
   };
 
   nativeBuildInputs = [
