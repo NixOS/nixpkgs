@@ -175,3 +175,10 @@ escapeString() {
 quoteString() {
     echo "${1@Q}"
 }
+
+# read array of strings from a string.
+# decode escapes and quotes, preserve whitespace in strings.
+# compatible with escapeString and quoteString.
+readArrayString() {
+    readarray -d '' "$1" < <(<<<"$2" xargs -r printf '%s\0')
+}
