@@ -35189,6 +35189,8 @@ with pkgs;
 
   atlantis = callPackage ../applications/networking/cluster/atlantis { };
 
+  atmos = callPackage ../applications/networking/cluster/atmos {};
+
   fn-cli = callPackage ../applications/networking/cluster/fn-cli { };
 
   auctex = callPackage ../tools/typesetting/tex/auctex { };
