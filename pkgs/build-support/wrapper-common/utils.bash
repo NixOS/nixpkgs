@@ -164,3 +164,8 @@ filterRpathFlags() {
     fi
     echo "${ret[@]}"
 }
+
+# backslash-escape a string.
+escapeString() {
+    printf '%q' "$1"
+}
