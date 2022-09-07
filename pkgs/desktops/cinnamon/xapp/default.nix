@@ -1,5 +1,4 @@
 { fetchFromGitHub
-, fetchpatch
 , glib
 , gobject-introspection
 , gtk3
@@ -23,24 +22,15 @@
 
 stdenv.mkDerivation rec {
   pname = "xapp";
-  version = "2.2.14";
+  version = "2.2.15";
 
   outputs = [ "out" "dev" ];
-
-  patches = [
-    # Add missing gio-unix-2.0 dependency, can be removed on next update
-    # https://github.com/linuxmint/xapp/pull/156
-    (fetchpatch {
-      url = "https://github.com/linuxmint/xapp/commit/052081f75d1c1212aeb6a913772723c81607bcb3.patch";
-      sha256 = "sha256-VL70Y1FIa7lQ/zKjEx0GhaU1QRu4z6Yu400/bDbgZgM=";
-    })
-  ];
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-BebsS7y/hRQSc4rYOIWJ+sSJ5fLZaCpNAE48JnviUUc=";
+    hash = "sha256-X/exXQY/v+TU8HnnquleP21tCYR9h7t43AIw4tTKVOY=";
   };
 
   nativeBuildInputs = [
