@@ -7827,6 +7827,8 @@ in {
 
   pyjks = callPackage ../development/python-modules/pyjks { };
 
+  pyjnius = callPackage ../development/python-modules/pyjnius { };
+
   pyjsparser = callPackage ../development/python-modules/pyjsparser { };
 
   pyjwkest = callPackage ../development/python-modules/pyjwkest { };
