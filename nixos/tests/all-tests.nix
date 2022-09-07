@@ -170,6 +170,7 @@ in {
   fluidd = handleTest ./fluidd.nix {};
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
   freeswitch = handleTest ./freeswitch.nix {};
+  freshrss = handleTest ./freshrss.nix {};
   frr = handleTest ./frr.nix {};
   fsck = handleTest ./fsck.nix {};
   ft2-clone = handleTest ./ft2-clone.nix {};

@@ -272,6 +272,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://freshrss.org/">FreshRSS</link>, a
+          free, self-hostable RSS feed aggregator. Available as
+          <link linkend="opt-services.freshrss.enable">services.freshrss</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.expressvpn.com">expressvpn</link>,
           the CLI client for ExpressVPN. Available as
           <link linkend="opt-services.expressvpn.enable">services.expressvpn</link>.
