@@ -5,10 +5,10 @@ with lib;
 let
   cfg = config.services.mautrix-whatsapp;
   dataDir = "/var/lib/mautrix-whatsapp";
-  format = pkgs.formats.json {};
+  settingsFormat = pkgs.formats.json {};
 
   registrationFile = "${dataDir}/whatsapp-registration.yaml";
-  settingsFile = format.generate "config.json" cfg.settings;
+  settingsFile = settingsFormat.generate "config.json" cfg.settings;
 
   startupScript = ''
     ${pkgs.yq}/bin/yq -s '.[0].appservice.as_token = .[1].as_token
@@ -27,12 +27,12 @@ in
 
     settings = mkOption rec {
       apply = recursiveUpdate default;
-      inherit (format) type;
+      inherit (settingsFormat) type;
 
-      description = ''
-        This options will be transform in YAML configuration file for the bridge
-
-        Look <link xlink:href="https://github.com/tulir/mautrix-whatsapp/wiki/Bridge-setup">here</link> for documentation.
+      description = lib.mdDoc ''
+        {file}`config.yaml` configuration as a Nix attribute set.
+        Configuration options should match those described in
+        [example-config.yaml](https://github.com/mautrix/whatsapp/blob/master/example-config.yaml).
       '';
       default = {
         homeserver = {
@@ -82,14 +82,26 @@ in
         };
       };
     };
+
+    serviceDependencies = mkOption {
+      type = with types; listOf str;
+      default = optional config.services.matrix-synapse.enable "matrix-synapse.service";
+      defaultText = literalExpression ''
+        optional config.services.matrix-synapse.enable "matrix-synapse.service"
+      '';
+      description = lib.mdDoc ''
+        List of Systemd services to require and wait for when starting the application service.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
     systemd.services.mautrix-whatsapp = {
       description = "Mautrix-WhatsApp Service - A WhatsApp bridge for Matrix";
-      after = [ "network-online.target" "matrix-synapse.service" ];
-      wants = [ "network-online.target" ];
+
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
+      after = [ "network-online.target" ] ++ cfg.serviceDependencies;
 
       preStart = ''
         # generate the appservice's registration file if absent
