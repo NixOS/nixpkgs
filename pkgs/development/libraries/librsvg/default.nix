@@ -30,7 +30,7 @@
 
 stdenv.mkDerivation rec {
   pname = "librsvg";
-  version = "2.55.0";
+  version = "2.55.1";
 
   outputs = [ "out" "dev" ] ++ lib.optionals withIntrospection [
     "devdoc"
@@ -38,13 +38,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "bmJsVk41S82MOEuQ+OTzCzA6+mweDLXMVroUkAxdtzA=";
+    sha256 = "a69IqdOlb9E7v7ufH3Z1myQLcKH6Ig/SOEdNZqkm+Yw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-tvfdRGyrEkEh6sb69f0ugfzR2bgGdWa05pSyovpXAF8=";
+    hash = "sha256-nRmOB9Jo+mmB0+wXrQvoII4e0ucV7bNCDeuk6CbcPdk=";
     # TODO: move this to fetchCargoTarball
     dontConfigure = true;
   };
@@ -138,7 +138,6 @@ stdenv.mkDerivation rec {
       let
         updateSource = gnome.updateScript {
           packageName = "librsvg";
-          versionPolicy = "odd-unstable";
         };
 
         updateLockfile = {
