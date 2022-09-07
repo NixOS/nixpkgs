@@ -179,12 +179,12 @@ addToSearchPath() {
 # so it is defined here but tried after the hook.
 _addRpathPrefix() {
     if [ "${NIX_NO_SELF_RPATH:-0}" != 1 ]; then
-        export NIX_LDFLAGS="-rpath $1/lib ${NIX_LDFLAGS-}"
+        export NIX_LDFLAGS="-rpath $(printf '%q' "$1/lib") ${NIX_LDFLAGS-}"
         if [ -n "${NIX_LIB64_IN_SELF_RPATH:-}" ]; then
-            export NIX_LDFLAGS="-rpath $1/lib64 ${NIX_LDFLAGS-}"
+            export NIX_LDFLAGS="-rpath $(printf '%q' "$1/lib64") ${NIX_LDFLAGS-}"
         fi
         if [ -n "${NIX_LIB32_IN_SELF_RPATH:-}" ]; then
-            export NIX_LDFLAGS="-rpath $1/lib32 ${NIX_LDFLAGS-}"
+            export NIX_LDFLAGS="-rpath $(printf '%q' "$1/lib32") ${NIX_LDFLAGS-}"
         fi
     fi
 }
