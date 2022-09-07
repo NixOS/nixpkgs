@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "led-ble";
-  version = "0.7.0";
+  version = "0.7.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,8 +21,13 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-B7ywK0xkSoO9Cg2VTxxzebnnHXSCD8jf2Ylk4Fw4VY4=";
+    hash = "sha256-WjSMyuxxScJMtrQAvCHX98IXzbO2dWAsAaOwXf6TEDg=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=led_ble --cov-report=term-missing:skip-covered" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -38,11 +43,6 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=led_ble --cov-report=term-missing:skip-covered" ""
-  '';
 
   pythonImportsCheck = [
     "led_ble"
