@@ -997,9 +997,10 @@ patchPhase() {
 
 
 fixLibtool() {
-    local search_path
-    for flag in $NIX_LDFLAGS; do
-        case $flag in
+    local search_path flags flag
+    readarray -d '' flags < <(<<<"$NIX_LDFLAGS" xargs -r printf '%s\0')
+    for flag in "${flags[@]}"; do
+        case "$flag" in
             -L*)
                 search_path+=" ${flag#-L}"
                 ;;
