@@ -78,8 +78,13 @@ extraAfter=()
 extraBefore=(${hardeningLDFlags[@]+"${hardeningLDFlags[@]}"})
 
 if [ -z "${NIX_LINK_TYPE_@suffixSalt@:-}" ]; then
-    extraAfter+=($(filterRpathFlags "$linkType" $NIX_LDFLAGS_@suffixSalt@))
-    extraBefore+=($(filterRpathFlags "$linkType" $NIX_LDFLAGS_BEFORE_@suffixSalt@))
+    readArrayString _flags "$NIX_LDFLAGS_@suffixSalt@"
+    filterRpathFlagsArray _flags "$linkType"
+    extraAfter+=("${_flags[@]}")
+
+    readArrayString _flags "$NIX_LDFLAGS_BEFORE_@suffixSalt@"
+    filterRpathFlagsArray _flags "$linkType"
+    extraBefore+=("${_flags[@]}")
 
     # By adding dynamic linker to extraBefore we allow the users set their
     # own dynamic linker as NIX_LD_FLAGS will override earlier set flags
