@@ -1002,11 +1002,14 @@ fixLibtool() {
     for flag in "${flags[@]}"; do
         case "$flag" in
             -L*)
-                search_path+=" ${flag#-L}"
+                search_path+=" $(printf '%q' "${flag#-L}")"
                 ;;
         esac
     done
 
+    # TODO(@milahu): verify parsing of escaped strings:
+    # sys_lib_search_path='/a\ a/ /b\ b/'
+    # TODO(@milahu): escape backslashes for sed?
     sed -i "$1" \
         -e "s^eval \(sys_lib_search_path=\).*^\1'$search_path'^" \
         -e 's^eval sys_lib_.+search_path=.*^^'
