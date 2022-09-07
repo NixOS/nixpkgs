@@ -58,4 +58,6 @@ rec {
     libraryFramework = "netstandard2.0";
     testFramework = "net5.0";
   };
+
+  hello = callPackage ./hello {};
 } // dotnet_3_1 // dotnet_5_0 // dotnet_6_0 // dotnet_7_0
