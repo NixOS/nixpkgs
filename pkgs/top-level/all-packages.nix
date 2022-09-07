@@ -11254,6 +11254,8 @@ with pkgs;
 
   sysbench = callPackage ../development/tools/misc/sysbench {};
 
+  systemc = callPackage ../applications/science/electronics/systemc { };
+
   system-config-printer = callPackage ../tools/misc/system-config-printer {
     autoreconfHook = buildPackages.autoreconfHook269;
     libxml2 = libxml2Python;
