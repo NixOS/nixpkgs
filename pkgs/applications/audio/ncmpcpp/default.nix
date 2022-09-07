@@ -25,13 +25,17 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
+
+  strictDeps = true;
+
   configureFlags = [ "BOOST_LIB_SUFFIX=" ]
     ++ lib.optional outputsSupport "--enable-outputs"
     ++ lib.optional visualizerSupport "--enable-visualizer --with-fftw"
     ++ lib.optional clockSupport "--enable-clock"
     ++ lib.optional taglibSupport "--with-taglib";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ]
+    ++ lib.optional taglibSupport taglib;
 
   buildInputs = [ boost libmpdclient ncurses readline libiconv icu curl ]
     ++ lib.optional visualizerSupport fftw
