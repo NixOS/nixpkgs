@@ -1,4 +1,6 @@
-{ buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , atpublic
 , pdm-pep517
 }:
@@ -18,5 +20,13 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-wKz6aggkJ9YBJ+o75XjC4Ddnn+Zi9hlYDnliwTc7DNs=";
+  };
+
+  meta = with lib; {
+    description = "A high level API for internationalizing Python libraries and applications";
+    homepage = "https://gitlab.com/warsaw/flufl.i18n";
+    changelog = "https://gitlab.com/warsaw/flufl.i18n/-/raw/${version}/docs/NEWS.rst";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
 }
