@@ -118,8 +118,8 @@ def fetchOrgaLatestRepos() -> None:
                         if name:
                             res.append(name)
                     json.dump(res, sys.stdout)
-                case _:
-                    sys.exit("github result was not a list of repos")
+                case other:
+                    sys.exit(f"github result was not a list of repos, but {other}")
         case _:
             sys.exit("input json must have `orga` key")
 
