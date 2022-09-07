@@ -7811,6 +7811,8 @@ with pkgs;
 
   jmespath = callPackage ../development/tools/jmespath { };
 
+  juicefs = callPackage ../tools/filesystems/juicefs { };
+
   jmtpfs = callPackage ../tools/filesystems/jmtpfs { };
 
   jnettop = callPackage ../tools/networking/jnettop { };
