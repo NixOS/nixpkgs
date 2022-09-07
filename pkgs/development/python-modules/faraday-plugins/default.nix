@@ -12,6 +12,7 @@
 , requests
 , simplejson
 , tabulate
+, faraday
 }:
 
 buildPythonPackage rec {
@@ -40,18 +41,8 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    faraday
     pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    # faraday itself is currently not available
-    "tests/test_report_collection.py"
-  ];
-
-  disabledTests = [
-    # Fail because of missing faraday
-    "test_detect_report"
-    "test_process_report_summary"
   ];
 
   pythonImportsCheck = [
