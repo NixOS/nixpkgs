@@ -4932,6 +4932,12 @@
       fingerprint = "B9D5 0EDF E95E ECD0 C135  00A9 56E9 3C2F B6B0 8BDB";
     }];
   };
+  gpl = {
+    email = "nixos-6c64ce18-bbbc-414f-8dcb-f9b6b47fe2bc@isopleth.org";
+    github = "gpl";
+    githubId = 39648069;
+    name = "isogram";
+  };
   gpyh = {
     email = "yacine.hmito@gmail.com";
     github = "yacinehmito";
