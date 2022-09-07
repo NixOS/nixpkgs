@@ -48,6 +48,22 @@ let
         };
       };
 
+      _2gua.rainbow-brackets = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "2gua";
+          name = "rainbow-brackets";
+          version = "0.0.6";
+          sha256 = "TVBvF/5KQVvWX1uHwZDlmvwGjOO5/lXbgVzB26U8rNQ=";
+        };
+        meta = with lib; {
+          description = "A Visual Studio Code extension providing rainbow brackets";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=2gua.rainbow-brackets";
+          homepage = "https://github.com/lcultx/rainbow-brackets";
+          license = licenses.mit;
+          maintainers = with maintainers; [ CompEng0001 ];
+        };
+      };
+
       _4ops.terraform = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "4ops";

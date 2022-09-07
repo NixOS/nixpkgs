@@ -1301,6 +1301,8 @@ with pkgs;
 
   kanata-with-cmd = callPackage ../tools/system/kanata { withCmd = true; };
 
+  ksmbd-tools = callPackage ../os-specific/linux/ksmbd-tools { };
+
   ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
 
   kubevirt = callPackage ../tools/virtualization/kubevirt { };
@@ -1369,7 +1371,9 @@ with pkgs;
 
   veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
 
-  ventoy-bin = callPackage ../tools/cd-dvd/ventoy-bin { };
+  ventoy-bin = callPackage ../tools/cd-dvd/ventoy-bin {
+    inherit (libsForQt5) qtbase wrapQtAppsHook;
+  };
   ventoy-bin-full = ventoy-bin.override {
     withCryptsetup = true;
     withXfs = true;
@@ -6174,7 +6178,7 @@ with pkgs;
 
   expect = callPackage ../tools/misc/expect { };
 
-  exportarr = callPackage ../servers/monitoring/exportarr { };
+  exportarr = callPackage ../servers/monitoring/prometheus/exportarr { };
 
   expliot = callPackage ../tools/security/expliot { };
 
@@ -9872,6 +9876,8 @@ with pkgs;
   phoc = callPackage ../applications/misc/phoc {
     wlroots = wlroots_0_14;
   };
+
+  phockup = callPackage ../applications/misc/phockup { };
 
   phodav = callPackage ../tools/networking/phodav { };
 
@@ -16406,6 +16412,8 @@ with pkgs;
 
   gocd-server = callPackage ../development/tools/continuous-integration/gocd-server { };
 
+  goredo = callPackage ../development/tools/build-managers/goredo { };
+
   gotify-server = callPackage ../servers/gotify { };
 
   gotty = callPackage ../servers/gotty { };
@@ -16510,9 +16518,9 @@ with pkgs;
 
   itstool = callPackage ../development/tools/misc/itstool { };
 
-  jam = callPackage ../development/tools/build-managers/jam { };
-
-  ftjam = callPackage ../development/tools/build-managers/jam/ftjam.nix { };
+  inherit (callPackage ../development/tools/build-managers/jam { })
+    jam
+    ftjam;
 
   javacc = callPackage ../development/tools/parsing/javacc {
     # Upstream doesn't support anything newer than Java 8.
@@ -27141,7 +27149,6 @@ with pkgs;
   emacs28 = callPackage ../applications/editors/emacs/28.nix {
     # use override to enable additional features
     libXaw = xorg.libXaw;
-    Xaw3d = null;
     gconf = null;
     alsa-lib = null;
     acl = null;
@@ -28303,6 +28310,8 @@ with pkgs;
   pass2csv = python3Packages.callPackage ../tools/security/pass2csv {};
 
   pass-secret-service = callPackage ../applications/misc/pass-secret-service { };
+
+  passky-desktop = callPackage ../applications/misc/passky-desktop { };
 
   pinboard = with python3Packages; toPythonApplication pinboard;
 
@@ -32809,6 +32818,10 @@ with pkgs;
   banner = callPackage ../games/banner { };
 
   bastet = callPackage ../games/bastet { };
+
+  beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix {
+    inherit (python3Packages) buildPythonApplication;
+  };
 
   black-hole-solver = callPackage ../games/black-hole-solver {
     inherit (perlPackages) PathTiny;

@@ -490,6 +490,15 @@
     github = "akho";
     githubId = 104951;
   };
+  akkesm = {
+    name = "Alessandro Barenghi";
+    email = "alessandro.barenghi@tuta.io";
+    github = "akkesm";
+    githubId = 56970006;
+    keys = [{
+      fingerprint = "50E2 669C AB38 2F4A 5F72  1667 0D6B FC01 D45E DADD";
+    }];
+  };
   akru = {
     email = "mail@akru.me";
     github = "akru";
@@ -2628,6 +2637,12 @@
     githubId = 244239;
     name = "Mauricio Collares";
   };
+  CompEng0001 = {
+    email = "sb1501@canterbury.ac.uk";
+    github = "CompEng0001";
+    githubId = 40290417;
+    name = "Seb Blair";
+  };
   copumpkin = {
     email = "pumpkingod@gmail.com";
     github = "copumpkin";
@@ -3120,6 +3135,12 @@
     email = "delan@azabani.com";
     github = "delan";
     githubId = 465303;
+  };
+  delehef = {
+    name = "Franklin Delehelle";
+    email = "nix@odena.eu";
+    github = "delehef";
+    githubId = 1153808;
   };
   deliciouslytyped = {
     email = "47436522+deliciouslytyped@users.noreply.github.com";
@@ -4893,6 +4914,15 @@
       fingerprint = "5214 2D39 A7CE F8FA 872B  CA7F DE62 E1E2 A614 5556";
     }];
   };
+  gp2112 = {
+    email = "me@guip.dev";
+    github = "gp2112";
+    githubId = 26512375;
+    name = "Guilherme Paixão";
+    keys = [{
+      fingerprint = "4382 7E28 86E5 C34F 38D5  7753 8C81 4D62 5FBD 99D1";
+    }];
+  };
   gpanders = {
     name = "Gregory Anders";
     email = "greg@gpanders.com";
@@ -5532,6 +5562,12 @@
     githubId = 1550265;
     name = "Dominic Steinitz";
   };
+  ifurther = {
+    email = "55025025+ifurther@users.noreply.github.com";
+    github = "ifurther";
+    githubId = 55025025;
+    name = "Feather Lin";
+  };
   igsha = {
     email = "igor.sharonov@gmail.com";
     github = "igsha";
@@ -5642,6 +5678,16 @@
     github = "immae";
     githubId = 510202;
     name = "Ismaël Bouya";
+  };
+  impl = {
+    email = "noah@noahfontes.com";
+    matrix = "@impl:matrix.org";
+    github = "impl";
+    githubId = 41129;
+    name = "Noah Fontes";
+    keys = [{
+      fingerprint = "F5B2 BE1B 9AAD 98FE 2916  5597 3665 FFF7 9D38 7BAA";
+    }];
   };
   imsofi = {
     email = "sofi+git@mailbox.org";

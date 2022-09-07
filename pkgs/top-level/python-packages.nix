@@ -754,6 +754,8 @@ in {
 
   aspy-yaml = callPackage ../development/python-modules/aspy.yaml { };
 
+  assay = callPackage ../development/python-modules/assay { };
+
   assertpy = callPackage ../development/python-modules/assertpy { };
 
   asterisk-mbox = callPackage ../development/python-modules/asterisk-mbox { };
@@ -1401,6 +1403,8 @@ in {
   blocksat-cli = callPackage ../development/python-modules/blocksat-cli { };
 
   blspy = callPackage ../development/python-modules/blspy { };
+
+  bluemaestro-ble = callPackage ../development/python-modules/bluemaestro-ble { };
 
   bluepy = callPackage ../development/python-modules/bluepy { };
 
@@ -2984,6 +2988,8 @@ in {
   escapism = callPackage ../development/python-modules/escapism { };
 
   etcd = callPackage ../development/python-modules/etcd { };
+
+  ete3 = callPackage ../development/python-modules/ete3 { };
 
   etelemetry = callPackage ../development/python-modules/etelemetry { };
 
@@ -4722,6 +4728,8 @@ in {
     inherit (self) systemd pytest;
   };
 
+  jplephem = callPackage ../development/python-modules/jplephem { };
+
   jproperties = callPackage ../development/python-modules/jproperties { };
 
   jpylyzer = callPackage ../development/python-modules/jpylyzer { };
@@ -5170,6 +5178,11 @@ in {
   };
 
   libsavitar = callPackage ../development/python-modules/libsavitar { };
+
+
+  libsixel = callPackage ../development/python-modules/libsixel {
+    inherit (pkgs) libsixel;
+  };
 
   libselinux = lib.pipe pkgs.libselinux [
     toPythonModule
@@ -7810,6 +7823,8 @@ in {
 
   pyjks = callPackage ../development/python-modules/pyjks { };
 
+  pyjnius = callPackage ../development/python-modules/pyjnius { };
+
   pyjsparser = callPackage ../development/python-modules/pyjsparser { };
 
   pyjwkest = callPackage ../development/python-modules/pyjwkest { };
@@ -9956,6 +9971,8 @@ in {
 
   sgmllib3k = callPackage ../development/python-modules/sgmllib3k { };
 
+  sgp4 = callPackage ../development/python-modules/sgp4 { };
+
   shamir-mnemonic = callPackage ../development/python-modules/shamir-mnemonic { };
 
   shap = callPackage ../development/python-modules/shap { };
@@ -10065,6 +10082,8 @@ in {
   skorch = callPackage ../development/python-modules/skorch { };
 
   skybellpy = callPackage ../development/python-modules/skybellpy { };
+
+  skyfield = callPackage ../development/python-modules/skyfield { };
 
   skytemple-dtef = callPackage ../development/python-modules/skytemple-dtef { };
 
@@ -10666,9 +10685,13 @@ in {
 
   tbm-utils = callPackage ../development/python-modules/tbm-utils { };
 
+  tcxreader = callPackage ../development/python-modules/tcxreader { };
+
   teamcity-messages = callPackage ../development/python-modules/teamcity-messages { };
 
   telegram = callPackage ../development/python-modules/telegram { };
+
+  telegraph = callPackage ../development/python-modules/telegraph { };
 
   telethon = callPackage ../development/python-modules/telethon {
     inherit (pkgs) openssl;
