@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "uncover";
-  version = "0.0.7";
+  version = "0.0.8";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-xQHcJgbWYOvAsoZNzBB7uEs9qIsKGitmurruE+dwjt8=";
+    hash = "sha256-euf6ufKVaDEJdaUCzjog32Gpoi7CPa3X22p60UgnOOQ=";
   };
 
   vendorSha256 = "sha256-FePZWseFEbBhBIsojw67SCZufSJygekZjlk0d7aceak=";
