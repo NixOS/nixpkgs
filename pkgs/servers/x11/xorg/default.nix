@@ -858,11 +858,11 @@ lib.makeScope newScope (self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libX11 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libxcb, xtrans }: stdenv.mkDerivation {
     pname = "libX11";
-    version = "1.7.2";
+    version = "1.8.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libX11-1.7.2.tar.bz2";
-      sha256 = "0v7aj8q3rlchdyfwdna7n7vgpyzyir391dlv5rwy9fxagbikbyhw";
+      url = "mirror://xorg/individual/lib/libX11-1.8.1.tar.xz";
+      sha256 = "1xyry8i7zqmlkvpbyyqwi18rrdw6ycczlvfp63rh2570pfhimi0v";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
