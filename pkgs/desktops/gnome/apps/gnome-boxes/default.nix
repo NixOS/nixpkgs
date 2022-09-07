@@ -14,7 +14,6 @@
 , gtk3
 , libvirt
 , spice-gtk
-, python3
 , appstream-glib
 , spice-protocol
 , libhandy
@@ -52,11 +51,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-boxes";
-  version = "43.beta";
+  version = "43.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "WqNgpIepZCy/qJLNVFlgCXCRLT6FjyCKJDlz0Jev7Ts=";
+    sha256 = "NVes9/6x1eIEa8HcOnKayAFr3DehaYEOQ8aFEArnxq8=";
   };
 
   patches = [
@@ -69,16 +68,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     appstream-glib # for appstream-util
-    desktop-file-utils
     gettext
     gobject-introspection
     itstool
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook
+    # For post install script
+    glib
+    gtk3
+    desktop-file-utils
   ];
 
   # Required for USB redirection PolicyKit rules file
@@ -123,11 +124,6 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ mtools cdrkit libcdio qemu-utils ]}")
-  '';
-
-  postPatch = ''
-    chmod +x build-aux/post_install.py # patchShebangs requires executable file
-    patchShebangs build-aux/post_install.py
   '';
 
   passthru = {
