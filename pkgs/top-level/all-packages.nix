@@ -464,6 +464,8 @@ with pkgs;
 
   gojq = callPackage ../development/tools/gojq { };
 
+  govulncheck = callPackage ../tools/security/govulncheck { };
+
   gpick = callPackage ../tools/misc/gpick { };
 
   hwatch = callPackage ../tools/misc/hwatch { };
