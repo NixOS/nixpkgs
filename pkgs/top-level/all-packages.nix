@@ -18618,6 +18618,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
 
+  gtk4_8 = callPackage ../development/libraries/gtk/4.8.nix {
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
+  };
+
 
   # On darwin gtk uses cocoa by default instead of x11.
   gtk3-x11 = gtk3.override {
@@ -19043,6 +19047,11 @@ with pkgs;
 
   libadwaita = callPackage ../development/libraries/libadwaita {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit Foundation;
+  };
+
+  libadwaita1_2 = callPackage ../development/libraries/libadwaita/1.2.nix {
+    inherit (pkgs.darwin.apple_sdk.frameworks) AppKit Foundation;
+    gtk4 = gtk4_8;
   };
 
   libaec = callPackage ../development/libraries/libaec { };
@@ -19669,6 +19678,11 @@ with pkgs;
   libnsl = callPackage ../development/libraries/libnsl { };
 
   liboping = callPackage ../development/libraries/liboping { };
+
+  libpanel = callPackage ../development/libraries/libpanel {
+    libadwaita = libadwaita1_2;
+    gtk4 = gtk4_8;
+  };
 
   libplist = callPackage ../development/libraries/libplist { };
 
@@ -27772,16 +27786,8 @@ with pkgs;
 
   fractal-next = callPackage ../applications/networking/instant-messengers/fractal-next {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad;
-    libadwaita = libadwaita.overrideAttrs (finalAtts: rec {
-      version = "1.2.alpha";
-      src = fetchFromGitLab {
-        domain = "gitlab.gnome.org";
-        owner = "GNOME";
-        repo = "libadwaita";
-        rev = version;
-        hash = "sha256-JMxUeIOUPp9k5pImQqWLVkQ2GHaKvopvg6ol9pvA+Bk=";
-      };
-    });
+    libadwaita = libadwaita1_2;
+    gtk4 = gtk4_8;
   };
 
   fragments = callPackage ../applications/networking/p2p/fragments { };
