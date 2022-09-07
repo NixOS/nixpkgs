@@ -424,7 +424,9 @@ with pkgs;
 
   cryptowatch-desktop = callPackage ../applications/finance/cryptowatch { };
 
-  datalad = callPackage ../applications/version-management/datalad { };
+  datalad = callPackage ../applications/version-management/datalad {
+    python3 = python39;  # `boto` currently broken with Python3.10
+  };
 
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
