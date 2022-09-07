@@ -3,15 +3,16 @@
 , fetchFromGitHub
 , SDL2
 , alsa-lib
-, libaudec
 , bash
 , bash-completion
+, boost
 , breeze-icons
 , carla
 , chromaprint
 , cmake
 , curl
 , dconf
+, dbus
 , libepoxy
 , fftw
 , fftwFloat
@@ -24,10 +25,13 @@
 , help2man
 , json-glib
 , jq
+, libadwaita
+, libaudec
 , libbacktrace
 , libcyaml
 , libgtop
 , libjack2
+, libpanel
 , libpulseaudio
 , libsamplerate
 , libsndfile
@@ -49,26 +53,27 @@
 , rubberband
 , serd
 , sord
+, sox
 , sratom
 , texi2html
 , wrapGAppsHook
 , xdg-utils
 , xxHash
 , vamp-plugin-sdk
+, zix
 , zstd
-, libadwaita
 , sassc
 }:
 
 stdenv.mkDerivation rec {
   pname = "zrythm";
-  version = "1.0.0-alpha.28.1.3";
+  version = "1.0.0-beta.3.4.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ERE7I6E3+RmmpnZEtcJL/1v9a37IwFauVsbJvI9gsRQ=";
+    hash = "sha256-J5yS33vShq/xQI2lNWGvskXp8fCBn0gqb4adG16Fnnw=";
   };
 
   nativeBuildInputs = [
@@ -84,17 +89,19 @@ stdenv.mkDerivation rec {
     python3.pkgs.sphinx
     texi2html
     wrapGAppsHook
-    cmake
+    cmake # put cmake at the end to make sure meson is used
   ];
 
   buildInputs = [
     SDL2
     alsa-lib
     bash-completion
+    boost
     carla
     chromaprint
     curl
     dconf
+    dbus
     libepoxy
     fftw
     fftwFloat
@@ -106,10 +113,12 @@ stdenv.mkDerivation rec {
     graphviz
     guile
     json-glib
+    libadwaita
     libbacktrace
     libcyaml
     libgtop
     libjack2
+    libpanel
     libpulseaudio
     libsamplerate
     libsndfile
@@ -125,12 +134,13 @@ stdenv.mkDerivation rec {
     rubberband
     serd
     sord
+    sox
     sratom
     vamp-plugin-sdk
     xdg-utils
     xxHash
+    zix
     zstd
-    libadwaita
     sassc
   ];
 
@@ -149,6 +159,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = ''
     -lfftw3_threads -lfftw3f_threads
   '';
+  GUILE_AUTO_COMPILE = 0;
 
   dontStrip = true;
 
