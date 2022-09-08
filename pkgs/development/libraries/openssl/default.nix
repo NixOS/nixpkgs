@@ -7,7 +7,6 @@
 # This will cause c_rehash to refer to perl via the environment, but otherwise
 # will produce a perfectly functional openssl binary and library.
 , withPerl ? stdenv.hostPlatform == stdenv.buildPlatform
-, removeReferencesTo
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -154,7 +153,7 @@ let
     postInstall =
     (if static then ''
       # OPENSSLDIR has a reference to self
-      ${removeReferencesTo}/bin/remove-references-to -t $out $out/lib/*.a
+      ${buildPackages.removeReferencesTo}/bin/remove-references-to -t $out $out/lib/*.a
     '' else ''
       # If we're building dynamic libraries, then don't install static
       # libraries.
