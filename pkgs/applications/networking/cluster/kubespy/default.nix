@@ -13,17 +13,18 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-HmMh5jrRGs4rtN9GLddS9IwITyvVmOrL5TShhQeyxKU=";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   doCheck = false;
 
   ldflags = [ "-X" "github.com/pulumi/kubespy/version.Version=${version}" ];
 
-  # TODO: enable after https://github.com/pulumi/kubespy/issues/72 is addressed.
-  # postInstall = ''
-  # 	for shell in bash zsh; do
-  # 		$out/bin/kubespy completion $shell > kubespy.$shell
-  # 		installShellCompletion kubespy.$shell
-  # 	done
-  # '';
+  postInstall = ''
+    for shell in bash fish zsh; do
+      $out/bin/kubespy completion $shell > kubespy.$shell
+      installShellCompletion kubespy.$shell
+    done
+  '';
 
   meta = with lib; {
     description = "A tool to observe Kubernetes resources in real time";
