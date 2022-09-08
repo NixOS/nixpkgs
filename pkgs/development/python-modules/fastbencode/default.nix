@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "fastbencode";
-  version = "0.0.9";
+  version = "0.0.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-pQhjLGRfLj/7tJhMtUQDXIlG1v7Iz+CuxeVWNAdzzpw=";
+    sha256 = "sha256-hMLS59/BlzK7aPoTWN5YgE77xEBBYpvYurUD98XqkDI=";
   };
 
   nativeBuildInputs = [ cython ];
