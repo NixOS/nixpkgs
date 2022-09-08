@@ -78,8 +78,12 @@ extraAfter=()
 extraBefore=(${hardeningLDFlags[@]+"${hardeningLDFlags[@]}"})
 
 if [ -z "${NIX_LINK_TYPE_@suffixSalt@:-}" ]; then
-    extraAfter+=($(filterRpathFlags "$linkType" $NIX_LDFLAGS_@suffixSalt@))
-    extraBefore+=($(filterRpathFlags "$linkType" $NIX_LDFLAGS_BEFORE_@suffixSalt@))
+    for i in $(filterRpathFlags "$linkType" $NIX_LDFLAGS_@suffixSalt@); do
+        extraAfter+=("$(decodeWhitespaceFileURL $i)")
+    done
+    for i in $(filterRpathFlags "$linkType" $NIX_LDFLAGS_BEFORE_@suffixSalt@); do
+        extraBefore+=("$(decodeWhitespaceFileURL $i)")
+    done
 
     # By adding dynamic linker to extraBefore we allow the users set their
     # own dynamic linker as NIX_LD_FLAGS will override earlier set flags
@@ -88,7 +92,9 @@ if [ -z "${NIX_LINK_TYPE_@suffixSalt@:-}" ]; then
     fi
 fi
 
-extraAfter+=($(filterRpathFlags "$linkType" $NIX_LDFLAGS_AFTER_@suffixSalt@))
+for i in $(filterRpathFlags "$linkType" $NIX_LDFLAGS_AFTER_@suffixSalt@); do
+    extraAfter+=("$(decodeWhitespaceFileURL $i)")
+done
 
 # These flags *must not* be pulled up to -Wl, flags, so they can't go in
 # add-flags.sh. They must always be set, so must not be disabled by
