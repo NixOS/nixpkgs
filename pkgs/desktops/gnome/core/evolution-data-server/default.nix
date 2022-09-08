@@ -7,7 +7,7 @@
 , coccinelle
 , pkg-config
 , gnome
-, update-script-combinators
+, _experimental-update-script-combinators
 , python3
 , gobject-introspection
 , gettext
@@ -158,9 +158,9 @@ stdenv.mkDerivation rec {
           versionPolicy = "odd-unstable";
         };
 
-        updateGsettingsPatch = update-script-combinators.copyAttrOutputToFile "evolution-data-server.hardcodeGsettingsPatch" ./hardcode-gsettings.patch;
+        updateGsettingsPatch = _experimental-update-script-combinators.copyAttrOutputToFile "evolution-data-server.hardcodeGsettingsPatch" ./hardcode-gsettings.patch;
       in
-      update-script-combinators.sequence [
+      _experimental-update-script-combinators.sequence [
         updateSource
         updateGsettingsPatch
       ];
