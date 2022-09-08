@@ -1,7 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{ lib, fetchurl, trivialBuild }:
 
-stdenv.mkDerivation {
-  name = "yes-no";
+trivialBuild {
+  pname = "yes-no";
+  version = "0";
 
   src = fetchurl {
     url = "https://github.com/emacsmirror/emacswiki.org/blob/185fdc34fb1e02b43759ad933d3ee5646b0e78f8/yes-no.el";
