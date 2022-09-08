@@ -27,7 +27,7 @@ in
       export bash="${buildPackages.bash}"
       export emulator=${lib.escapeShellArg (stdenv.targetPlatform.emulator buildPackages)}
       export emulatorwrapper="$dev/bin/g-ir-scanner-qemuwrapper"
-      export buildobjdump="${buildPackages.stdenv.cc.bintools}/bin/objdump"
+      export buildlddtree="${buildPackages.pax-utils}/bin/lddtree"
 
       export targetgir="${lib.getDev (targetPackages.gobject-introspection-unwrapped.override argsForTarget)}"
 

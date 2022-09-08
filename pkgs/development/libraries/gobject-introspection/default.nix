@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
       isExecutable = true;
       src = ./wrappers/g-ir-scanner-lddwrapper.sh;
       inherit (buildPackages) bash;
-      buildobjdump = "${buildPackages.stdenv.cc.bintools}/bin/objdump";
+      buildlddtree = "${buildPackages.pax-utils}/bin/lddtree";
     }}"
     "-Dgi_cross_use_prebuilt_gi=true"
     "-Dgi_cross_binary_wrapper=${stdenv.hostPlatform.emulator buildPackages}"
