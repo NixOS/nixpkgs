@@ -7245,6 +7245,8 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) IOKit;
   };
 
+  psutil-home-assistant = callPackage ../development/python-modules/psutil-home-assistant { };
+
   psycopg = callPackage ../development/python-modules/psycopg { };
 
   psycopg2 = callPackage ../development/python-modules/psycopg2 { };
