@@ -19,6 +19,8 @@ buildPythonPackage rec {
       "'${lib.getLib openssl}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
+  pythonImportsCheck = [ "bitcoin" "bitcoin.core.key" ];
+
   meta = with lib; {
     homepage = "https://github.com/petertodd/python-bitcoinlib";
     description = "Easy interface to the Bitcoin data structures and protocol";
