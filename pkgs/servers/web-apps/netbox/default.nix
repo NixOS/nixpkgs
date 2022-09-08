@@ -17,13 +17,13 @@ let
 in
 py.pkgs.buildPythonApplication rec {
     pname = "netbox";
-    version = "3.3.0";
+    version = "3.3.2";
 
     src = fetchFromGitHub {
       owner = "netbox-community";
       repo = pname;
       rev = "refs/tags/v${version}";
-      sha256 = "sha256-tdl3A5l8CDNdVpNMKHg31QJoQSdr1v0COTcX33Sh7nc=";
+      sha256 = "sha256-G7d9CG7mxdtdShWOdbbcWTVD3qrTKjh7j3MX/cTJbPw=";
     };
 
     format = "other";
