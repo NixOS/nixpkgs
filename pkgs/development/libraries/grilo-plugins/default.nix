@@ -31,11 +31,11 @@
 
 stdenv.mkDerivation rec {
   pname = "grilo-plugins";
-  version = "0.3.14";
+  version = "0.3.15";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "aGhEs07HOySTH/bMT2Az8AcpR6bbYKzcf7Pq8Velgcg=";
+    sha256 = "hRjD2VT5MJXZVWJKBEzhanNFUy+BHSmdv6HhFM/rqzM=";
   };
 
   patches = [
