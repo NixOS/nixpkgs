@@ -1906,6 +1906,8 @@ with pkgs;
 
   pikchr = callPackage ../tools/graphics/pikchr { };
 
+  popl = callPackage ../development/libraries/popl { };
+
   popsicle = callPackage ../tools/misc/popsicle { };
 
   terminal-colors = callPackage ../applications/misc/terminal-colors { };
