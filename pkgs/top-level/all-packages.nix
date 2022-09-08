@@ -1210,6 +1210,8 @@ with pkgs;
 
   airwindows-lv2 = callPackage ../applications/audio/airwindows-lv2 { };
 
+  aixlog = callPackage ../development/libraries/aixlog { };
+
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
   ajour = callPackage ../tools/games/ajour {
