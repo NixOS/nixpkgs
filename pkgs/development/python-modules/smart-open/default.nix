@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "smart-open";
-  version = "6.0.0";
+  version = "6.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RaRe-Technologies";
     repo = "smart_open";
-    rev = "v${version}";
-    sha256 = "sha256-FEIJ1DBW0mz7n+J03C1Lg8uAs2ZxI0giM7+mvuNPyGg=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-N6xsWQyb04pS7YfWFLHehh/HTuHf3YMG5h/8JJ1H/3A=";
   };
 
   propagatedBuildInputs = [
