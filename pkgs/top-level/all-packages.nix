@@ -10191,6 +10191,8 @@ with pkgs;
 
   quickbms = pkgsi686Linux.callPackage ../tools/archivers/quickbms { };
 
+  quickstack = pkgs.callPackage ../development/tools/quickstack { };
+
   q-text-as-data = callPackage ../tools/misc/q-text-as-data { };
 
   qalculate-gtk = callPackage ../applications/science/math/qalculate-gtk { };
