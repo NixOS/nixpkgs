@@ -8726,6 +8726,8 @@ with pkgs;
 
   monit = callPackage ../tools/system/monit { };
 
+  monocraft = callPackage ../data/fonts/monocraft { };
+
   monolith = callPackage ../tools/backup/monolith {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
