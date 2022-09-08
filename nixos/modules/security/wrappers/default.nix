@@ -52,10 +52,11 @@ let
       { type = lib.types.commas;
         default = "";
         description = lib.mdDoc ''
-          A comma-separated list of capabilities to be given to the wrapper
-          program. For capabilities supported by the system check the
-          {manpage}`capabilities(7)`
-          manual page.
+          A comma-separated list of capability clauses to be given to the
+          wrapper program. The format for capability clauses is described in the
+          “TEXTUAL REPRESENTATION” section of the {manpage}`cap_from_text(3)`
+          manual page. For a list of capabilities supported by the system, check
+          the {manpage}`capabilities(7)` manual page.
 
           ::: {.note}
           `cap_setpcap`, which is required for the wrapper
