@@ -15327,4 +15327,10 @@
     githubId = 115711;
     name = "bpaulin";
   };
+  zuzuleinen = {
+    email = "andrey.boar@gmail.com";
+    name = "Andrei Boar";
+    github = "zuzuleinen";
+    githubId = 944919;
+  };
 }
