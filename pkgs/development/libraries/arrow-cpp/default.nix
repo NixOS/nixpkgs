@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , fetchFromGitHub
 , fixDarwinDylibNames
 , abseil-cpp
@@ -112,6 +113,14 @@ stdenv.mkDerivation rec {
   patches = [
     # patch to fix python-test
     ./darwin.patch
+    # in master post 8.0.0, see https://github.com/apache/arrow/pull/13182
+    (fetchpatch {
+      name = "fix-pkg-config.patch";
+      stripLen = 1;
+      excludes = [ "src/arrow/engine/arrow-substrait.pc.in" ]; # for < 8.0.0
+      url = "https://github.com/apache/arrow/commit/a242eb17362c0352fc3291213542c48abfe18669.patch";
+      sha256 = "15gz13f8q75l7d4z5blyvxd805hwfcvrbrxs2kbfal9vcbnirycx";
+    })
   ];
 
   nativeBuildInputs = [

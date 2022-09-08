@@ -13,6 +13,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
+  # https://github.com/greatscottgadgets/libbtbb/issues/63
+  postPatch = ''
+    substituteInPlace lib/libbtbb.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
+
   meta = with lib; {
     description = "Bluetooth baseband decoding library";
     homepage = "https://github.com/greatscottgadgets/libbtbb";

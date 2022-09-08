@@ -26,6 +26,17 @@ stdenv.mkDerivation rec {
     "-DBUILD_BLACKBOX_TESTS=OFF"
   ];
 
+  # https://github.com/nu-book/zxing-cpp/issues/335
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace 'configure_file(zxing.pc.in' \
+                'include(GNUInstallDirs)
+                 configure_file(zxing.pc.in'
+    substituteInPlace zxing.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/nu-book/zxing-cpp";
     description = "C++ port of zxing (a Java barcode image processing library)";
