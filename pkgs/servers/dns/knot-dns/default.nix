@@ -3,16 +3,15 @@
 , ngtcp2-gnutls
 , autoreconfHook
 , nixosTests, knot-resolver, knot-dns, runCommandLocal
-, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "426d120994daf93af348aa6c48428e583dd286656415de4daf7a59106fd98631";
+    sha256 = "51efa36f92679b25d43dbf8ba543e9f26138559f0fa1ba5fae172f5400659c8f";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -24,11 +23,6 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    (fetchpatch {
-      name = "test-32bit-xdp.patch";
-      url = "https://gitlab.nic.cz/knot/knot-dns/-/commit/325dfeefdfd8a3dd318cfe0ab52cd7efbf839ccd.diff";
-      sha256 = "E5J2Jf4/m5H59Xn6TyATu2gKs3CgShYlMF2Qj1SW1zw=";
-    })
     # Don't try to create directories like /var/lib/knot at build time.
     # They are later created from NixOS itself.
     ./dont-create-run-time-dirs.patch
