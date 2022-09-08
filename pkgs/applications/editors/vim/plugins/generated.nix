@@ -1852,6 +1852,18 @@ final: prev:
     meta.homepage = "https://github.com/tamago324/compe-zsh/";
   };
 
+  compiler-explorer-nvim = buildVimPluginFrom2Nix {
+    pname = "compiler-explorer.nvim";
+    version = "2022-09-08";
+    src = fetchFromGitHub {
+      owner = "krady21";
+      repo = "compiler-explorer.nvim";
+      rev = "5fe1bdd9ff255d7ad2cc952b844c59fd71bd58a9";
+      sha256 = "06klr4mgqr30p33pcm74h7isajkq4rj0wk7ibl5h9jg7l0d4jiqh";
+    };
+    meta.homepage = "https://github.com/krady21/compiler-explorer.nvim/";
+  };
+
   completion-buffers = buildVimPluginFrom2Nix {
     pname = "completion-buffers";
     version = "2021-01-17";
