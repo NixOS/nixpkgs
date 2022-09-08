@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     homepage = "https://github.com/openSUSE/xinetd";
     license = lib.licenses.free;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }
