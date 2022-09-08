@@ -7464,6 +7464,8 @@ with pkgs;
 
   hostess = callPackage ../development/tools/hostess {};
 
+  hostname-debian = callPackage ../tools/networking/hostname-debian { };
+
   hotpatch = callPackage ../development/libraries/hotpatch { };
 
   hotspot = libsForQt5.callPackage ../development/tools/analysis/hotspot { };
