@@ -24,19 +24,25 @@ dotnetBuildHook() {
         local -r versionFlag="-p:Version=${version-}"
     fi
 
+    dotnetBuild() {
+        local -r project="${1-}"
+        env dotnet build ${project-} \
+            -maxcpucount:$maxCpuFlag \
+            -p:BuildInParallel=$parallelBuildFlag \
+            -p:ContinuousIntegrationBuild=true \
+            -p:Deterministic=true \
+            -p:UseAppHost=true \
+            --configuration "@buildType@" \
+            --no-restore \
+            ${versionFlag-} \
+            ${dotnetBuildFlags[@]}  \
+            ${dotnetFlags[@]}
+    }
+
+    (( "${#projectFile[@]}" == 0 )) && dotnetBuild
+
     for project in ${projectFile[@]} ${testProjectFile[@]-}; do
-        env \
-            dotnet build "$project" \
-                -maxcpucount:$maxCpuFlag \
-                -p:BuildInParallel=$parallelBuildFlag \
-                -p:ContinuousIntegrationBuild=true \
-                -p:Deterministic=true \
-                -p:UseAppHost=true \
-                --configuration "@buildType@" \
-                --no-restore \
-                ${versionFlag-} \
-                ${dotnetBuildFlags[@]}  \
-                ${dotnetFlags[@]}
+        dotnetBuild "$project"
     done
 
     runHook postBuild

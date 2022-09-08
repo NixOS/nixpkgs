@@ -13,15 +13,21 @@ dotnetConfigureHook() {
         local -r parallelFlag="--disable-parallel"
     fi
 
+    dotnetRestore() {
+        local -r project="${1-}"
+        env dotnet restore ${project-} \
+            -p:ContinuousIntegrationBuild=true \
+            -p:Deterministic=true \
+            --source "@nugetSource@/lib" \
+            ${parallelFlag-} \
+            ${dotnetRestoreFlags[@]} \
+            ${dotnetFlags[@]}
+    }
+
+    (( "${#projectFile[@]}" == 0 )) && dotnetRestore
+
     for project in ${projectFile[@]} ${testProjectFile[@]-}; do
-        env \
-            dotnet restore "$project" \
-                -p:ContinuousIntegrationBuild=true \
-                -p:Deterministic=true \
-                --source "@nugetSource@/lib" \
-                ${parallelFlag-} \
-                ${dotnetRestoreFlags[@]} \
-                ${dotnetFlags[@]}
+        dotnetRestore "$project"
     done
 
     runHook postConfigure

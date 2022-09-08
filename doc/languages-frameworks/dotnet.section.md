@@ -71,7 +71,7 @@ The `dotnetCorePackages.sdk` contains both a runtime and the full sdk of a given
 
 To package Dotnet applications, you can use `buildDotnetModule`. This has similar arguments to `stdenv.mkDerivation`, with the following additions:
 
-* `projectFile` has to be used for specifying the dotnet project file relative to the source root. These usually have `.sln` or `.csproj` file extensions. This can be an array of multiple projects as well.
+* `projectFile` is used for specifying the dotnet project file relative to the source root. These usually have `.sln` or `.csproj` file extensions. This can be an array of multiple projects as well.
 * `nugetDeps` takes either a path to a `deps.nix` file, or a derivation. The `deps.nix` file can be generated using the script attached to `passthru.fetch-deps`. This file can also be generated manually using `nuget-to-nix` tool, which is available in nixpkgs. If the argument is a derivation, it will be used directly and assume it has the same output as `mkNugetDeps`.
 * `packNupkg` is used to pack project as a `nupkg`, and installs it to `$out/share`. If set to `true`, the derivation can be used as a dependency for another dotnet project by adding it to `projectReferences`.
 * `projectReferences` can be used to resolve `ProjectReference` project items. Referenced projects can be packed with `buildDotnetModule` by setting the `packNupkg = true` attribute and passing a list of derivations to `projectReferences`. Since we are sharing referenced projects as NuGets they must be added to csproj/fsproj files as `PackageReference` as well.
