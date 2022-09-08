@@ -8276,6 +8276,8 @@ with pkgs;
 
   minidlna = callPackage ../tools/networking/minidlna { };
 
+  miniplayer = callPackage ../applications/audio/miniplayer { };
+
   minipro = callPackage ../tools/misc/minipro { };
 
   minisign = callPackage ../tools/security/minisign { };
