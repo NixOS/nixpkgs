@@ -257,6 +257,10 @@ self: super: {
     '';
   });
 
+  compiler-explorer-nvim = super.compiler-explorer-nvim.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
+  });
+
   completion-buffers = super.completion-buffers.overrideAttrs (old: {
     dependencies = with self; [ completion-nvim ];
   });
