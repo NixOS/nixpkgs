@@ -1,8 +1,8 @@
 { stdenv, lib, fetchsvn, linux
 , scripts ? fetchsvn {
     url = "https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/branches/";
-    rev = "18885";
-    sha256 = "1ywd4bhjh6pqxvv20jgadmyvrcrdwf8333z8rzbjy6r0b4fggpra";
+    rev = "18897";
+    sha256 = "09bjzkmfyybnpcblqfy3k9wm9hnppz1m61yz5z2gm7c50qpam0ym";
   }
 , ...
 }:
