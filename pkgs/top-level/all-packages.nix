@@ -20902,6 +20902,10 @@ with pkgs;
 
   opensupaplex = callPackage ../games/opensupaplex { };
 
+  openturns = callPackage ../development/libraries/openturns {
+      inherit (darwin.apple_sdk.frameworks) Accelerate;
+  };
+
   open-wbo = callPackage ../applications/science/logic/open-wbo {};
 
   openwsman = callPackage ../development/libraries/openwsman {};
