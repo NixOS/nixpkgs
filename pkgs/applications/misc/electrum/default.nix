@@ -2,7 +2,6 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
-, fetchpatch
 , wrapQtAppsHook
 , python3
 , zbar
@@ -21,7 +20,7 @@
 }:
 
 let
-  version = "4.3.0";
+  version = "4.3.1";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -38,7 +37,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "sha256-/bYz2KB9Fggo6cnKM3hvwL/Jy4Xsw2phx1sInuqZpFg=";
+    sha256 = "wYblwD+ej65TVkYS7u5MiB37Ka8jENI3aoHi64xAFtU=";
 
     postFetch = ''
       mv $out ./all
@@ -54,7 +53,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "sha256-E941wseIQEn1+d06NWKQLQM0C+A8a0+Xxl+LzBTwEcw=";
+    sha256 = "pAhsHKIMCB3OutJTrgGNT9PKfTcXcgxUj/x16uBK2Is=";
   };
 
   postUnpack = ''
@@ -115,10 +114,6 @@ python3.pkgs.buildPythonApplication {
   checkInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
 
   pytestFlagsArray = [ "electrum/tests" ];
-
-  disabledTests = [
-    "test_loop"  # test tries to bind 127.0.0.1 causing permission error
-  ];
 
   postCheck = ''
     $out/bin/electrum help >/dev/null
