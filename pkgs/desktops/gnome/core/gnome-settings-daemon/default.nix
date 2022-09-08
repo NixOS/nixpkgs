@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
 
 
   postPatch = ''
-    for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl meson_post_install.py; do
+    for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl; do
       chmod +x $f
       patchShebangs $f
     done
