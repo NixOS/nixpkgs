@@ -7,11 +7,11 @@ dotnetBuildHook() {
     runHook preBuild
 
     if [ "${enableParallelBuilding-}" ]; then
-        maxCpuFlag="$NIX_BUILD_CORES"
-        parallelBuildFlag="true"
+        local -r maxCpuFlag="$NIX_BUILD_CORES"
+        local -r parallelBuildFlag="true"
     else
-        maxCpuFlag="1"
-        parallelBuildFlag="false"
+        local -r maxCpuFlag="1"
+        local -r parallelBuildFlag="false"
     fi
 
     if [ "${selfContainedBuild-}" ]; then
@@ -21,10 +21,10 @@ dotnetBuildHook() {
     fi
 
     if [ "${version-}" ]; then
-        versionFlag="-p:Version=${version-}"
+        local -r versionFlag="-p:Version=${version-}"
     fi
 
-    for project in ${projectFile[@]} ${testProjectFile[@]}; do
+    for project in ${projectFile[@]} ${testProjectFile[@]-}; do
         env \
             dotnet build "$project" \
                 -maxcpucount:$maxCpuFlag \

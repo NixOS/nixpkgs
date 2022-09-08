@@ -10,10 +10,10 @@ dotnetConfigureHook() {
     runHook preConfigure
 
     if [ -z "${enableParallelBuilding-}" ]; then
-        parallelFlag="--disable-parallel"
+        local -r parallelFlag="--disable-parallel"
     fi
 
-    for project in ${projectFile[@]} ${testProjectFile[@]}; do
+    for project in ${projectFile[@]} ${testProjectFile[@]-}; do
         env \
             dotnet restore "$project" \
                 -p:ContinuousIntegrationBuild=true \
