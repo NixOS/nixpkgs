@@ -1,22 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, openssl, pkg-config, libiconv, curl }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libgit2
+, openssl
+, stdenv
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-generate";
-  version = "0.14.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
-    owner = "ashleygwilliams";
+    owner = "cargo-generate";
     repo = "cargo-generate";
     rev = "v${version}";
-    sha256 = "sha256-OYYGOB1NfNnOl8bd8KozgMCyW4Gb39LoFtD80DPzpdw=";
+    sha256 = "sha256-qL5ZbLimpsi/7yuhubHF3/tAouE/5zCWRx4nZG841cU=";
   };
 
-  cargoSha256 = "sha256-qmRKjPhPLpzVVuTHuoo0iTlX3BnT2Udo1kFXvA3zNQE=";
+  # patch Cargo.toml to not vendor libgit2 and openssl
+  cargoPatches = [ ./no-vendor.patch ];
+
+  cargoSha256 = "sha256-OB3rjJNxkUKRQPsWRvCniNPfYBgLFV4yXO7dnVvL7wo=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl  ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv curl ];
+  buildInputs = [ libgit2 openssl ]
+    ++ lib.optionals stdenv.isDarwin [ Security ];
 
   preCheck = ''
     export HOME=$(mktemp -d) USER=nixbld
@@ -32,8 +43,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "cargo, make me a project";
-    homepage = "https://github.com/ashleygwilliams/cargo-generate";
-    license = licenses.asl20;
-    maintainers = [ maintainers.turbomack ];
+    homepage = "https://github.com/cargo-generate/cargo-generate";
+    changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [ asl20 /* or */ mit ];
+    maintainers = with maintainers; [ figsoda turbomack ];
   };
 }
