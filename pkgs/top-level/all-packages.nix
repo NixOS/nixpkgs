@@ -2499,6 +2499,8 @@ with pkgs;
 
   git-privacy = callPackage ../development/tools/git-privacy { };
 
+  git-publish = python3Packages.callPackage ../applications/version-management/git-and-tools/git-publish { };
+
   git-repo-updater = python3Packages.callPackage ../development/tools/git-repo-updater { };
 
   git-revise = with python3Packages; toPythonApplication git-revise;
