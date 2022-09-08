@@ -147,14 +147,20 @@ stdenv.mkDerivation rec {
     sed -i '/virnetdaemontest/d' tests/meson.build
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    meson
+    meson # needs to be first
 
     cmake
     docutils
+    libxml2 # for xmllint
+    libxslt # for xsltproc
     makeWrapper
     ninja
+    perl
     pkg-config
+    util-linux # for mount
   ]
   ++ optional (!isDarwin) rpcsvc-proto
   # NOTE: needed for rpcgen
@@ -171,8 +177,6 @@ stdenv.mkDerivation rec {
     libpcap
     libtasn1
     libxml2
-    libxslt
-    perl
     perlPackages.XMLXPath
     pkg-config
     python3
