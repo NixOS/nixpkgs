@@ -3,15 +3,15 @@
 let ext = if stdenv.isDarwin then "dylib" else "so";
 in buildPythonPackage rec {
   pname = "bitcoinlib";
-  version = "0.11.0";
+  version = "0.11.2";
 
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner  = "petertodd";
     repo   = "python-bitcoinlib";
-    rev    = "python-${pname}-v${version}";
-    sha256 = "0pwypd966zzivb37fvg4l6yr7ihplqnr1jwz9zm3biip7x89bdzm";
+    rev = "refs/tags/python-bitcoinlib-v${version}";
+    sha256 = "sha256-/VgCTN010W/Svdrs0mGA8W1YZnyTHhcaWJKgP/c8CN8=";
   };
 
   postPatch = ''
