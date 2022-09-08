@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pyradio";
-  version = "0.8.9.25";
+  version = "0.8.9.26";
 
   src = fetchFromGitHub {
     owner = "coderholic";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-bkZ+zgFtENQUjks9HwVcqHIREcKQ5XCt3AEh3QAyiEc=";
+    sha256 = "sha256-RuQAbmzB8s+YmJLSbzJTQtpiYLr1oFtrxKF8P+MlHeU=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
