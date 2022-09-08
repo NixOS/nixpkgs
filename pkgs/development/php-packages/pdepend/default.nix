@@ -2,14 +2,14 @@
 
 let
   pname = "pdepend";
-  version = "2.11.1";
+  version = "2.12.0";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/pdepend/pdepend/releases/download/${version}/pdepend.phar";
-    sha256 = "sha256-3jZAhOw9wfR9Fl6Mlj8o0uinjUZO46CAHRkZxrQP5rU=";
+    sha256 = "sha256-FiCqXQenr4PJ2KydRlKv66xWoi55LTOEunK0m5oxrjA=";
   };
 
   dontUnpack = true;
