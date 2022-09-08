@@ -3,6 +3,7 @@
 , fetchurl
 , gnome
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , gtk4
@@ -49,6 +50,8 @@ stdenv.mkDerivation rec {
     docbook-xsl-nons
     docbook_xml_dtd_43
     python3
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [

@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
 , meson
+, mesonEmulatorHook
 , ninja
 , gettext
 , gtk-doc
@@ -51,6 +52,8 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
     libxml2
     vala
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -72,7 +75,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/nma-ws/nma-eap.c --subst-var-by \
-      NM_APPLET_GSETTINGS ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+      NM_APPLET_GSETTINGS ${glib.makeSchemaPath "$out" "$name"}
   '';
 
   postInstall = ''

@@ -31,13 +31,14 @@ stdenv.mkDerivation rec {
     ninja
     wrapGAppsHook
     python3
+    gobject-introspection
+    gjs
   ];
 
   buildInputs = [
     gtk4
     libadwaita
     gjs
-    gobject-introspection
     libgweather
     gnome.adwaita-icon-theme
     geoclue2

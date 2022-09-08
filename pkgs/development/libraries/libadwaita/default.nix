@@ -33,6 +33,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-xxnLgPKPOND/ITvDC6SOD2GlkzlIX3BzBbt6p2AEjgY=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     gi-docgen
     meson
@@ -40,6 +44,7 @@ stdenv.mkDerivation rec {
     pkg-config
     sassc
     vala
+    gobject-introspection
   ];
 
   mesonFlags = [
@@ -50,7 +55,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     fribidi
-    gobject-introspection
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
     Foundation
