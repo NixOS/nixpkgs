@@ -23652,6 +23652,8 @@ with pkgs;
 
   memcached = callPackage ../servers/memcached {};
 
+  merecat = callPackage ../servers/http/merecat { };
+
   meteor = callPackage ../servers/meteor { };
 
   micronaut = callPackage ../development/tools/micronaut {};
