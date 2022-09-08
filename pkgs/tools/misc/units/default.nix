@@ -11,11 +11,11 @@ assert enableCurrenciesUpdater -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
   pname = "units";
-  version = "2.21";
+  version = "2.22";
 
   src = fetchurl {
     url = "mirror://gnu/units/${pname}-${version}.tar.gz";
-    sha256 = "sha256-bD6AqfmAWJ/ZYqWFKiZ0ZCJX2xxf1bJ8TZ5mTzSGy68=";
+    sha256 = "sha256-XRPhIHch/ncm2Qa6HZLcDt2qn8JnWe0i47jRp5MSWEg=";
   };
 
   pythonEnv = pythonPackages.python.withPackages(ps: [
