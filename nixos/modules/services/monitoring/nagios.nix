@@ -88,7 +88,7 @@ in
 
   options = {
     services.nagios = {
-      enable = mkEnableOption ''<link xlink:href="http://www.nagios.org/">Nagios</link> to monitor your system or network.'';
+      enable = mkEnableOption (lib.mdDoc ''[Nagios](http://www.nagios.org/) to monitor your system or network.'');
 
       objectDefs = mkOption {
         description = lib.mdDoc ''
@@ -104,8 +104,8 @@ in
         type = types.listOf types.package;
         default = with pkgs; [ monitoring-plugins msmtp mailutils ];
         defaultText = literalExpression "[pkgs.monitoring-plugins pkgs.msmtp pkgs.mailutils]";
-        description = ''
-          Packages to be added to the Nagios <envar>PATH</envar>.
+        description = lib.mdDoc ''
+          Packages to be added to the Nagios {env}`PATH`.
           Typically used to add plugins, but can be anything.
         '';
       };

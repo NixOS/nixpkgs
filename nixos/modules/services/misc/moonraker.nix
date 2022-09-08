@@ -14,7 +14,7 @@ let
 in {
   options = {
     services.moonraker = {
-      enable = mkEnableOption "Moonraker, an API web server for Klipper";
+      enable = mkEnableOption (lib.mdDoc "Moonraker, an API web server for Klipper");
 
       klipperSocket = mkOption {
         type = types.path;

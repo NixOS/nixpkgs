@@ -95,7 +95,10 @@ rec {
     name: mkOption {
     default = false;
     example = true;
-    description = "Whether to enable ${name}.";
+    description =
+      if name ? _type && name._type == "mdDoc"
+      then lib.mdDoc "Whether to enable ${name.text}."
+      else "Whether to enable ${name}.";
     type = lib.types.bool;
   };
 
@@ -134,7 +137,7 @@ rec {
       let default' = if !isList default then [ default ] else default;
       in mkOption {
         type = lib.types.package;
-        description = "The ${name} package to use.";
+        description = lib.mdDoc "The ${name} package to use.";
         default = attrByPath default'
           (throw "${concatStringsSep "." default'} cannot be found in pkgs") pkgs;
         defaultText = literalExpression ("pkgs." + concatStringsSep "." default');

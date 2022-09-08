@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "timescaledb-tune";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-veqsVqG2UCKRRXAcJVF0bPv2FwgC/0KQ49pU+ASuIhA=";
+    sha256 = "sha256-Met+bFvTlbn7JAE2A2IFBD4f6qVtS/4gXffwV71xvZI=";
   };
 
   vendorSha256 = "sha256-n2jrg9FiR/gSrbds/QVV8Duf7BTEs36yYi4F3Ve+d0E=";

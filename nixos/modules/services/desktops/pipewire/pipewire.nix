@@ -50,7 +50,7 @@ in {
   ###### interface
   options = {
     services.pipewire = {
-      enable = mkEnableOption "pipewire service";
+      enable = mkEnableOption (lib.mdDoc "pipewire service");
 
       package = mkOption {
         type = types.package;
@@ -127,16 +127,16 @@ in {
       };
 
       alsa = {
-        enable = mkEnableOption "ALSA support";
-        support32Bit = mkEnableOption "32-bit ALSA support on 64-bit systems";
+        enable = mkEnableOption (lib.mdDoc "ALSA support");
+        support32Bit = mkEnableOption (lib.mdDoc "32-bit ALSA support on 64-bit systems");
       };
 
       jack = {
-        enable = mkEnableOption "JACK audio emulation";
+        enable = mkEnableOption (lib.mdDoc "JACK audio emulation");
       };
 
       pulse = {
-        enable = mkEnableOption "PulseAudio server emulation";
+        enable = mkEnableOption (lib.mdDoc "PulseAudio server emulation");
       };
 
       systemWide = lib.mkOption {

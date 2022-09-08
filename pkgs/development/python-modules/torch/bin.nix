@@ -20,7 +20,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "1.11.0";
+  version = "1.12.1";
 in buildPythonPackage {
   inherit version;
 
@@ -68,7 +68,7 @@ in buildPythonPackage {
   pythonImportsCheck = [ "torch" ];
 
   meta = with lib; {
-    description = "Open source, prototype-to-production deep learning platform";
+    description = "PyTorch: Tensors and Dynamic neural networks in Python with strong GPU acceleration";
     homepage = "https://pytorch.org/";
     changelog = "https://github.com/pytorch/pytorch/releases/tag/v${version}";
     # Includes CUDA and Intel MKL, but redistributions of the binary are not limited.

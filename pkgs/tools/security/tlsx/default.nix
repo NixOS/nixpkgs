@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "tlsx";
-  version = "0.0.6";
+  version = "0.0.7";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-0/J+2TDY63Zj40GzdL7M4ApJJ6xtqZWMIQnl3GSlvQA=";
+    hash = "sha256-tyZDmtqQLTV06mLo1lg/qWRjvxvgVvGpoRXWX9HtXeo=";
   };
 
   vendorSha256 = "sha256-ERZ4mWmtOsW1nYUshSbCzhy+KcujviPtL4LS/soPrFQ=";

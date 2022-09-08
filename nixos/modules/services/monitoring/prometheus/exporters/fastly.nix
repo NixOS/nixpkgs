@@ -7,7 +7,7 @@ in
 {
   port = 9118;
   extraOpts = {
-    debug = mkEnableOption "Debug logging mode for fastly-exporter";
+    debug = mkEnableOption (lib.mdDoc "Debug logging mode for fastly-exporter");
 
     configFile = mkOption {
       type = types.nullOr types.path;

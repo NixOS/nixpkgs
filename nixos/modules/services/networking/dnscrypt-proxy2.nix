@@ -6,7 +6,7 @@ in
 
 {
   options.services.dnscrypt-proxy2 = {
-    enable = mkEnableOption "dnscrypt-proxy2";
+    enable = mkEnableOption (lib.mdDoc "dnscrypt-proxy2");
 
     settings = mkOption {
       description = lib.mdDoc ''

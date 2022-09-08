@@ -41,6 +41,10 @@ python3.pkgs.buildPythonApplication rec {
     # `shutil.get_terminal_size` instead.
     # (https://github.com/pallets/click/pull/2130)
     ./support-click-8-1.patch
+    # Werkzeug >= 2.1.0 breaks the `sam local start-lambda` command because
+    # aws-sam-cli uses a "WERKZEUG_RUN_MAIN" hack to suppress flask output.
+    # (https://github.com/cs01/gdbgui/issues/425)
+    ./use_forward_compatible_log_silencing.patch
   ];
 
   # fix over-restrictive version bounds

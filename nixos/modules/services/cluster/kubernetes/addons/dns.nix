@@ -12,7 +12,7 @@ let
   };
 in {
   options.services.kubernetes.addons.dns = {
-    enable = mkEnableOption "kubernetes dns addon";
+    enable = mkEnableOption (lib.mdDoc "kubernetes dns addon");
 
     clusterIp = mkOption {
       description = lib.mdDoc "Dns addon clusterIP";

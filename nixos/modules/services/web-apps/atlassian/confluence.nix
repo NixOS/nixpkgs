@@ -29,7 +29,7 @@ in
 {
   options = {
     services.confluence = {
-      enable = mkEnableOption "Atlassian Confluence service";
+      enable = mkEnableOption (lib.mdDoc "Atlassian Confluence service");
 
       user = mkOption {
         type = types.str;
@@ -69,7 +69,7 @@ in
       };
 
       proxy = {
-        enable = mkEnableOption "proxy support";
+        enable = mkEnableOption (lib.mdDoc "proxy support");
 
         name = mkOption {
           type = types.str;
@@ -93,7 +93,7 @@ in
       };
 
       sso = {
-        enable = mkEnableOption "SSO with Atlassian Crowd";
+        enable = mkEnableOption (lib.mdDoc "SSO with Atlassian Crowd");
 
         crowd = mkOption {
           type = types.str;

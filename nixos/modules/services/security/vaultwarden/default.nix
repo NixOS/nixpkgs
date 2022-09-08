@@ -39,7 +39,7 @@ in {
   ];
 
   options.services.vaultwarden = with types; {
-    enable = mkEnableOption "vaultwarden";
+    enable = mkEnableOption (lib.mdDoc "vaultwarden");
 
     dbBackend = mkOption {
       type = enum [ "sqlite" "mysql" "postgresql" ];
@@ -97,26 +97,26 @@ in {
           SMTP_FROM_NAME = "example.com Bitwarden server";
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         The configuration of vaultwarden is done through environment variables,
-        therefore it is recommended to use upper snake case (e.g. <envar>DISABLE_2FA_REMEMBER</envar>).
+        therefore it is recommended to use upper snake case (e.g. {env}`DISABLE_2FA_REMEMBER`).
 
-        However, camel case (e.g. <literal>disable2FARemember</literal>) is also supported:
+        However, camel case (e.g. `disable2FARemember`) is also supported:
         The NixOS module will convert it automatically to
-        upper case snake case (e.g. <envar>DISABLE_2FA_REMEMBER</envar>).
+        upper case snake case (e.g. {env}`DISABLE_2FA_REMEMBER`).
         In this conversion digits (0-9) are handled just like upper case characters,
-        so <literal>foo2</literal> would be converted to <envar>FOO_2</envar>.
-        Names already in this format remain unchanged, so <literal>FOO2</literal> remains <literal>FOO2</literal> if passed as such,
-        even though <literal>foo2</literal> would have been converted to <envar>FOO_2</envar>.
+        so `foo2` would be converted to {env}`FOO_2`.
+        Names already in this format remain unchanged, so `FOO2` remains `FOO2` if passed as such,
+        even though `foo2` would have been converted to {env}`FOO_2`.
         This allows working around any potential future conflicting naming conventions.
 
         Based on the attributes passed to this config option an environment file will be generated
         that is passed to vaultwarden's systemd service.
 
         The available configuration options can be found in
-        <link xlink:href="https://github.com/dani-garcia/vaultwarden/blob/${vaultwarden.version}/.env.template">the environment template file</link>.
+        [the environment template file](https://github.com/dani-garcia/vaultwarden/blob/${vaultwarden.version}/.env.template).
 
-        See <xref linkend="opt-services.vaultwarden.environmentFile"/> for how
+        See ()[#opt-services.vaultwarden.environmentFile) for how
         to set up access to the Admin UI to invite initial users.
       '';
     };
@@ -125,31 +125,31 @@ in {
       type = with types; nullOr path;
       default = null;
       example = "/var/lib/vaultwarden.env";
-      description = ''
-        Additional environment file as defined in <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+      description = lib.mdDoc ''
+        Additional environment file as defined in {manpage}`systemd.exec(5)`.
 
-        Secrets like <envar>ADMIN_TOKEN</envar> and <envar>SMTP_PASSWORD</envar>
+        Secrets like {env}`ADMIN_TOKEN` and {env}`SMTP_PASSWORD`
         may be passed to the service without adding them to the world-readable Nix store.
 
         Note that this file needs to be available on the host on which
-        <literal>vaultwarden</literal> is running.
+        `vaultwarden` is running.
 
         As a concrete example, to make the Admin UI available
         (from which new users can be invited initially),
-        the secret <envar>ADMIN_TOKEN</envar> needs to be defined as described
-        <link xlink:href="https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page">here</link>.
-        Setting <literal>environmentFile</literal> to <literal>/var/lib/vaultwarden.env</literal>
+        the secret {env}`ADMIN_TOKEN` needs to be defined as described
+        [here](https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page).
+        Setting `environmentFile` to `/var/lib/vaultwarden.env`
         and ensuring permissions with e.g.
-        <literal>chown vaultwarden:vaultwarden /var/lib/vaultwarden.env</literal>
-        (the <literal>vaultwarden</literal> user will only exist after activating with
-        <literal>enable = true;</literal> before this), we can set the contents of the file to have
+        `chown vaultwarden:vaultwarden /var/lib/vaultwarden.env`
+        (the `vaultwarden` user will only exist after activating with
+        `enable = true;` before this), we can set the contents of the file to have
         contents such as:
 
-<programlisting>
-# Admin secret token, see
-# https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page
-ADMIN_TOKEN=...copy-paste a unique generated secret token here...
-</programlisting>
+        ```
+        # Admin secret token, see
+        # https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page
+        ADMIN_TOKEN=...copy-paste a unique generated secret token here...
+        ```
       '';
     };
 

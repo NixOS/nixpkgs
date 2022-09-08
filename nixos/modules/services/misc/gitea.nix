@@ -322,14 +322,14 @@ in
             };
 
             service = {
-              DISABLE_REGISTRATION = mkEnableOption "the registration lock" // {
-                description = ''
-                  By default any user can create an account on this <literal>gitea</literal> instance.
+              DISABLE_REGISTRATION = mkEnableOption (lib.mdDoc "the registration lock") // {
+                description = lib.mdDoc ''
+                  By default any user can create an account on this `gitea` instance.
                   This can be disabled by using this option.
 
-                  <emphasis>Note:</emphasis> please keep in mind that this should be added after the initial
-                  deploy unless <link linkend="opt-services.gitea.useWizard">services.gitea.useWizard</link>
-                  is <literal>true</literal> as the first registered user will be the administrator if
+                  *Note:* please keep in mind that this should be added after the initial
+                  deploy unless [](#opt-services.gitea.useWizard)
+                  is `true` as the first registered user will be the administrator if
                   no install wizard is used.
                 '';
               };

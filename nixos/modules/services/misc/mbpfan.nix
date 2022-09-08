@@ -10,7 +10,7 @@ let
 
 in {
   options.services.mbpfan = {
-    enable = mkEnableOption "mbpfan, fan controller daemon for Apple Macs and MacBooks";
+    enable = mkEnableOption (lib.mdDoc "mbpfan, fan controller daemon for Apple Macs and MacBooks");
 
     package = mkOption {
       type = types.package;
@@ -38,10 +38,10 @@ in {
         options.general.min_fan1_speed = mkOption {
           type = types.nullOr types.int;
           default = 2000;
-          description = ''
+          description = lib.mdDoc ''
             You can check minimum and maximum fan limits with
-            "cat /sys/devices/platform/applesmc.768/fan*_min" and
-            "cat /sys/devices/platform/applesmc.768/fan*_max" respectively.
+            `cat /sys/devices/platform/applesmc.768/fan*_min` and
+            `cat /sys/devices/platform/applesmc.768/fan*_max` respectively.
             Setting to null implies using default value from applesmc.
           '';
         };

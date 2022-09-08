@@ -8,22 +8,22 @@ in
   };
 
   options.services.keter = {
-    enable = lib.mkEnableOption ''keter, a web app deployment manager.
+    enable = lib.mkEnableOption (lib.mdDoc ''keter, a web app deployment manager.
 Note that this module only support loading of webapps:
 Keep an old app running and swap the ports when the new one is booted.
-'';
+'');
 
     keterRoot = lib.mkOption {
       type = lib.types.str;
       default = "/var/lib/keter";
-      description = "Mutable state folder for keter";
+      description = lib.mdDoc "Mutable state folder for keter";
     };
 
     keterPackage = lib.mkOption {
       type = lib.types.package;
       default = pkgs.haskellPackages.keter;
       defaultText = lib.literalExpression "pkgs.haskellPackages.keter";
-      description = "The keter package to be used";
+      description = lib.mdDoc "The keter package to be used";
     };
 
     globalKeterConfig = lib.mkOption {
@@ -47,31 +47,31 @@ Keep an old app running and swap the ports when the new one is booted.
           }];
         }
       '';
-      description = "Global config for keter";
+      description = lib.mdDoc "Global config for keter";
     };
 
     bundle = {
       appName = lib.mkOption {
         type = lib.types.str;
         default = "myapp";
-        description = "The name keter assigns to this bundle";
+        description = lib.mdDoc "The name keter assigns to this bundle";
       };
 
       executable = lib.mkOption {
         type = lib.types.path;
-        description = "The executable to be run";
+        description = lib.mdDoc "The executable to be run";
       };
 
       domain = lib.mkOption {
         type = lib.types.str;
         default = "example.com";
-        description = "The domain keter will bind to";
+        description = lib.mdDoc "The domain keter will bind to";
       };
 
       publicScript = lib.mkOption {
         type = lib.types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Allows loading of public environment variables,
           these are emitted to the log so it shouldn't contain secrets.
         '';
@@ -81,7 +81,7 @@ Keep an old app running and swap the ports when the new one is booted.
       secretScript = lib.mkOption {
         type = lib.types.str;
         default = "";
-        description = "Allows loading of private environment variables";
+        description = lib.mdDoc "Allows loading of private environment variables";
         example = "MY_AWS_KEY=$(cat /run/keys/AWS_ACCESS_KEY_ID)";
       };
     };

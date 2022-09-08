@@ -589,6 +589,7 @@
   ./services/misc/jackett.nix
   ./services/misc/jellyfin.nix
   ./services/misc/klipper.nix
+  ./services/misc/languagetool.nix
   ./services/misc/logkeys.nix
   ./services/misc/leaps.nix
   ./services/misc/lidarr.nix
@@ -1064,6 +1065,7 @@
   ./services/web-apps/discourse.nix
   ./services/web-apps/documize.nix
   ./services/web-apps/dokuwiki.nix
+  ./services/web-apps/dolibarr.nix
   ./services/web-apps/engelsystem.nix
   ./services/web-apps/ethercalc.nix
   ./services/web-apps/fluidd.nix

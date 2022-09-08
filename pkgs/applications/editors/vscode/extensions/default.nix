@@ -48,6 +48,22 @@ let
         };
       };
 
+      _2gua.rainbow-brackets = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "2gua";
+          name = "rainbow-brackets";
+          version = "0.0.6";
+          sha256 = "TVBvF/5KQVvWX1uHwZDlmvwGjOO5/lXbgVzB26U8rNQ=";
+        };
+        meta = with lib; {
+          description = "A Visual Studio Code extension providing rainbow brackets";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=2gua.rainbow-brackets";
+          homepage = "https://github.com/lcultx/rainbow-brackets";
+          license = licenses.mit;
+          maintainers = with maintainers; [ CompEng0001 ];
+        };
+      };
+
       _4ops.terraform = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "4ops";
@@ -535,6 +551,21 @@ let
           homepage = "https://github.com/bungcip/better-toml/blob/master/README.md";
           license = licenses.mit;
           maintainers = with maintainers; [ datafoo ];
+        };
+      };
+
+      catppuccin.catppuccin-vsc = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "catppuccin-vsc";
+          publisher = "catppuccin";
+          version = "2.1.0";
+          sha256 = "sha256-1pX9NQxW2Rm9p912Pn7QmLmXPI7EmiXTnCLWsIQNFhY=";
+        };
+        meta = with lib; {
+          description = "Soothing pastel theme for VSCode";
+          license = licenses.mit;
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Catppuccin.catppuccin-vsc";
+          maintainers = with maintainers; [ nullx76 ];
         };
       };
 

@@ -14,14 +14,12 @@ in
 
 {
   options.services.globalprotect = {
-    enable = mkEnableOption "globalprotect";
+    enable = mkEnableOption (lib.mdDoc "globalprotect");
 
     settings = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         GlobalProtect-openconnect configuration. For more information, visit
-        <link
-        xlink:href="https://github.com/yuezk/GlobalProtect-openconnect/wiki/Configuration"
-        />.
+        <https://github.com/yuezk/GlobalProtect-openconnect/wiki/Configuration>.
       '';
       default = { };
       example = {

@@ -12,7 +12,7 @@ in
 {
   options = {
     services.galene = {
-      enable = mkEnableOption "Galene Service.";
+      enable = mkEnableOption (lib.mdDoc "Galene Service.");
 
       stateDir = mkOption {
         default = defaultstateDir;

@@ -30,7 +30,7 @@ in
   options = {
     services.automysqlbackup = {
 
-      enable = mkEnableOption "AutoMySQLBackup";
+      enable = mkEnableOption (lib.mdDoc "AutoMySQLBackup");
 
       calendar = mkOption {
         type = types.str;

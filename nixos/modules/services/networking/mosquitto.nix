@@ -443,7 +443,7 @@ let
   };
 
   globalOptions = with types; {
-    enable = mkEnableOption "the MQTT Mosquitto broker";
+    enable = mkEnableOption (lib.mdDoc "the MQTT Mosquitto broker");
 
     package = mkOption {
       type = package;

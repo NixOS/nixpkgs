@@ -21,7 +21,7 @@ in
 
     services.xserver.windowManager.awesome = {
 
-      enable = mkEnableOption "Awesome window manager";
+      enable = mkEnableOption (lib.mdDoc "Awesome window manager");
 
       luaModules = mkOption {
         default = [];

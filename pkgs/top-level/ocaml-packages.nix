@@ -664,6 +664,8 @@ let
 
     ke = callPackage ../development/ocaml-modules/ke { };
 
+    kicadsch = callPackage ../development/ocaml-modules/kicadsch { };
+
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
 
     lablgtk3 = callPackage ../development/ocaml-modules/lablgtk3 { };
@@ -1144,6 +1146,10 @@ let
     piqi = callPackage ../development/ocaml-modules/piqi { };
 
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
+
+    plotkicadsch = callPackage ../development/ocaml-modules/plotkicadsch {
+      inherit (pkgs) coreutils imagemagick;
+    };
 
     posix-base = callPackage ../development/ocaml-modules/posix/base.nix { };
 

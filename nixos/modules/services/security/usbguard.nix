@@ -39,7 +39,7 @@ in
 
   options = {
     services.usbguard = {
-      enable = mkEnableOption "USBGuard daemon";
+      enable = mkEnableOption (lib.mdDoc "USBGuard daemon");
 
       package = mkOption {
         type = types.package;

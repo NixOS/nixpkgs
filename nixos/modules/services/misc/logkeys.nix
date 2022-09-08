@@ -6,7 +6,7 @@ let
   cfg = config.services.logkeys;
 in {
   options.services.logkeys = {
-    enable = mkEnableOption "logkeys service";
+    enable = mkEnableOption (lib.mdDoc "logkeys service");
 
     device = mkOption {
       description = lib.mdDoc "Use the given device as keyboard input event device instead of /dev/input/eventX default.";

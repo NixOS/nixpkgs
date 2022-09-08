@@ -12,7 +12,7 @@ in
 
   options = {
     services.plex = {
-      enable = mkEnableOption "Plex Media Server";
+      enable = mkEnableOption (lib.mdDoc "Plex Media Server");
 
       dataDir = mkOption {
         type = types.str;

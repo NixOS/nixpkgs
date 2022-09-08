@@ -13,13 +13,13 @@
 
 trivialBuild {
   pname = "ement";
-  version = "unstable-2022-05-14";
+  version = "unstable-2022-09-01";
 
   src = fetchFromGitHub {
     owner = "alphapapa";
     repo = "ement.el";
-    rev = "961d650377f9e7440e47c36c0386e899f5b2d86b";
-    sha256 = "sha256-4KTSPgso7UvzCRKNFI3YaPR1t4DUwggO4KtBYLm0W4Y=";
+    rev = "4ec2107e6a90ed962ddd3875d47caa523eb466b9";
+    sha256 = "sha256-zKkBpaOj3qb/Oy89rt7BxmWZDZzDzMIJjjOm+1rrnnc=";
   };
 
   packageRequires = [

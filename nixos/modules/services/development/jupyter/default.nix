@@ -24,7 +24,7 @@ in {
   meta.maintainers = with maintainers; [ aborsu ];
 
   options.services.jupyter = {
-    enable = mkEnableOption "Jupyter development server";
+    enable = mkEnableOption (lib.mdDoc "Jupyter development server");
 
     ip = mkOption {
       type = types.str;

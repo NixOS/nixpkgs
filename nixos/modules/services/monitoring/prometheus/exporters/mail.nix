@@ -112,14 +112,14 @@ let
           detectionDir = "/path/to/Maildir/new";
         } ]
       '';
-      description = ''
+      description = lib.mdDoc ''
         List of servers that should be probed.
 
-        <emphasis>Note:</emphasis> if your mailserver has <citerefentry><refentrytitle>rspamd</refentrytitle><manvolnum>8</manvolnum></citerefentry> configured,
+        *Note:* if your mailserver has {manpage}`rspamd(8)` configured,
         it can happen that emails from this exporter are marked as spam.
 
         It's possible to work around the issue with a config like this:
-        <programlisting>
+        ```
         {
           services.rspamd.locals."multimap.conf".text = '''
             ALLOWLIST_PROMETHEUS {
@@ -130,7 +130,7 @@ let
             }
           ''';
         }
-        </programlisting>
+        ```
       '';
     };
   };

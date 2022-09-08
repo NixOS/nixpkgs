@@ -24,13 +24,13 @@
 , libvpx
 }:
 stdenv.mkDerivation rec {
-  version = "2.6.0";
+  version = "2.7.0";
   pname = "baresip";
   src = fetchFromGitHub {
     owner = "baresip";
     repo = "baresip";
     rev = "v${version}";
-    sha256 = "sha256-YcXLRhW7PyvK0R1+7DOjmtxg+Ajq9u7fvZFQO7DJapQ=";
+    sha256 = "sha256-ouevompKkWn5CXuDcPuKiTE9GrIXBs/NFsNu6GHgReE=";
   };
   postPatch = ''
     patchShebangs modules/ctrl_dbus/gen.sh
@@ -116,5 +116,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/baresip/baresip";
     maintainers = with lib.maintainers; [ elohmeier raskin ];
     license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

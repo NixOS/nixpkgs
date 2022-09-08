@@ -9,7 +9,7 @@ in
 {
   options = {
     services.prowlarr = {
-      enable = mkEnableOption "Prowlarr";
+      enable = mkEnableOption (lib.mdDoc "Prowlarr");
 
       openFirewall = mkOption {
         type = types.bool;

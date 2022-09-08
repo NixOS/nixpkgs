@@ -754,6 +754,8 @@ in {
 
   aspy-yaml = callPackage ../development/python-modules/aspy.yaml { };
 
+  assay = callPackage ../development/python-modules/assay { };
+
   assertpy = callPackage ../development/python-modules/assertpy { };
 
   asterisk-mbox = callPackage ../development/python-modules/asterisk-mbox { };
@@ -1402,6 +1404,8 @@ in {
 
   blspy = callPackage ../development/python-modules/blspy { };
 
+  bluemaestro-ble = callPackage ../development/python-modules/bluemaestro-ble { };
+
   bluepy = callPackage ../development/python-modules/bluepy { };
 
   bluepy-devices = callPackage ../development/python-modules/bluepy-devices { };
@@ -1947,6 +1951,8 @@ in {
 
   cogapp = callPackage ../development/python-modules/cogapp { };
 
+  coinmetrics-api-client = callPackage ../development/python-modules/coinmetrics-api-client { };
+
   ColanderAlchemy = callPackage ../development/python-modules/colanderalchemy { };
 
   colander = callPackage ../development/python-modules/colander { };
@@ -2112,6 +2118,8 @@ in {
   crownstone-uart = callPackage ../development/python-modules/crownstone-uart { };
 
   cryptacular = callPackage ../development/python-modules/cryptacular { };
+
+  cryptg = callPackage ../development/python-modules/cryptg { };
 
   cryptography = callPackage ../development/python-modules/cryptography {
     inherit (pkgs.darwin) libiconv;
@@ -2716,6 +2724,8 @@ in {
 
   doit-py = callPackage ../development/python-modules/doit-py { };
 
+  domeneshop = callPackage ../development/python-modules/domeneshop { };
+
   dominate = callPackage ../development/python-modules/dominate { };
 
   doorbirdpy = callPackage ../development/python-modules/doorbirdpy { };
@@ -2978,6 +2988,8 @@ in {
   escapism = callPackage ../development/python-modules/escapism { };
 
   etcd = callPackage ../development/python-modules/etcd { };
+
+  ete3 = callPackage ../development/python-modules/ete3 { };
 
   etelemetry = callPackage ../development/python-modules/etelemetry { };
 
@@ -3786,6 +3798,8 @@ in {
 
   google-cloud-bigtable = callPackage ../development/python-modules/google-cloud-bigtable { };
 
+  google-cloud-compute = callPackage ../development/python-modules/google-cloud-compute { };
+
   google-cloud-container = callPackage ../development/python-modules/google-cloud-container { };
 
   google-cloud-core = callPackage ../development/python-modules/google-cloud-core { };
@@ -3883,6 +3897,8 @@ in {
   goveelights = callPackage ../development/python-modules/goveelights { };
 
   gpapi = callPackage ../development/python-modules/gpapi { };
+
+  gpaw = callPackage ../development/python-modules/gpaw { };
 
   gpiozero = callPackage ../development/python-modules/gpiozero { };
 
@@ -4095,6 +4111,8 @@ in {
   hatasmota = callPackage ../development/python-modules/hatasmota { };
 
   hatchling = callPackage ../development/python-modules/hatchling { };
+
+  hatch-fancy-pypi-readme = callPackage ../development/python-modules/hatch-fancy-pypi-readme { };
 
   hatch-vcs = callPackage ../development/python-modules/hatch-vcs { };
 
@@ -4712,6 +4730,8 @@ in {
     inherit (self) systemd pytest;
   };
 
+  jplephem = callPackage ../development/python-modules/jplephem { };
+
   jproperties = callPackage ../development/python-modules/jproperties { };
 
   jpylyzer = callPackage ../development/python-modules/jpylyzer { };
@@ -5160,6 +5180,11 @@ in {
   };
 
   libsavitar = callPackage ../development/python-modules/libsavitar { };
+
+
+  libsixel = callPackage ../development/python-modules/libsixel {
+    inherit (pkgs) libsixel;
+  };
 
   libselinux = lib.pipe pkgs.libselinux [
     toPythonModule
@@ -6626,6 +6651,8 @@ in {
 
   pdm-pep517 = callPackage ../development/python-modules/pdm-pep517 { };
 
+  pdoc = callPackage ../development/python-modules/pdoc { };
+
   pdoc3 = callPackage ../development/python-modules/pdoc3 { };
 
   peaqevcore = callPackage ../development/python-modules/peaqevcore { };
@@ -6747,6 +6774,8 @@ in {
   picobox = callPackage ../development/python-modules/picobox { };
 
   picos = callPackage ../development/python-modules/picos { };
+
+  piccolo-theme = callPackage ../development/python-modules/piccolo-theme { };
 
   pid = callPackage ../development/python-modules/pid { };
 
@@ -7796,6 +7825,8 @@ in {
 
   pyjks = callPackage ../development/python-modules/pyjks { };
 
+  pyjnius = callPackage ../development/python-modules/pyjnius { };
+
   pyjsparser = callPackage ../development/python-modules/pyjsparser { };
 
   pyjwkest = callPackage ../development/python-modules/pyjwkest { };
@@ -7853,6 +7884,8 @@ in {
   pylibacl = callPackage ../development/python-modules/pylibacl { };
 
   pylibconfig2 = callPackage ../development/python-modules/pylibconfig2 { };
+
+  pylibdmtx = callPackage ../development/python-modules/pylibdmtx { };
 
   pylibftdi = callPackage ../development/python-modules/pylibftdi {
     inherit (pkgs) libusb1;
@@ -7969,6 +8002,8 @@ in {
   pymodbus = callPackage ../development/python-modules/pymodbus { };
 
   pymongo = callPackage ../development/python-modules/pymongo { };
+
+  pymoo = callPackage ../development/python-modules/pymoo { };
 
   pymorphy2 = callPackage ../development/python-modules/pymorphy2 { };
 
@@ -9419,6 +9454,8 @@ in {
 
   remarshal = callPackage ../development/python-modules/remarshal { };
 
+  remi = callPackage ../development/python-modules/remi { };
+
   renault-api = callPackage ../development/python-modules/renault-api { };
 
   rencode = callPackage ../development/python-modules/rencode { };
@@ -9877,6 +9914,8 @@ in {
 
   sensor-state-data = callPackage ../development/python-modules/sensor-state-data { };
 
+  sensorpro-ble = callPackage ../development/python-modules/sensorpro-ble { };
+
   sensorpush-ble = callPackage ../development/python-modules/sensorpush-ble { };
 
   sentencepiece = callPackage ../development/python-modules/sentencepiece {
@@ -9935,6 +9974,8 @@ in {
   sfepy = callPackage ../development/python-modules/sfepy { };
 
   sgmllib3k = callPackage ../development/python-modules/sgmllib3k { };
+
+  sgp4 = callPackage ../development/python-modules/sgp4 { };
 
   shamir-mnemonic = callPackage ../development/python-modules/shamir-mnemonic { };
 
@@ -10045,6 +10086,8 @@ in {
   skorch = callPackage ../development/python-modules/skorch { };
 
   skybellpy = callPackage ../development/python-modules/skybellpy { };
+
+  skyfield = callPackage ../development/python-modules/skyfield { };
 
   skytemple-dtef = callPackage ../development/python-modules/skytemple-dtef { };
 
@@ -10646,9 +10689,13 @@ in {
 
   tbm-utils = callPackage ../development/python-modules/tbm-utils { };
 
+  tcxreader = callPackage ../development/python-modules/tcxreader { };
+
   teamcity-messages = callPackage ../development/python-modules/teamcity-messages { };
 
   telegram = callPackage ../development/python-modules/telegram { };
+
+  telegraph = callPackage ../development/python-modules/telegraph { };
 
   telethon = callPackage ../development/python-modules/telethon {
     inherit (pkgs) openssl;
@@ -10849,6 +10896,8 @@ in {
 
   tilestache = callPackage ../development/python-modules/tilestache { };
 
+  tilt-ble = callPackage ../development/python-modules/tilt-ble { };
+
   timeago = callPackage ../development/python-modules/timeago { };
 
   timecop = callPackage ../development/python-modules/timecop { };
@@ -10924,7 +10973,6 @@ in {
   };
 
   torch-bin = callPackage ../development/python-modules/torch/bin.nix { };
-
 
   torchWithCuda = self.torch.override {
     cudaSupport = true;

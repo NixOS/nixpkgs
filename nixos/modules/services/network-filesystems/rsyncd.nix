@@ -10,7 +10,7 @@ in {
   options = {
     services.rsyncd = {
 
-      enable = mkEnableOption "the rsync daemon";
+      enable = mkEnableOption (lib.mdDoc "the rsync daemon");
 
       port = mkOption {
         default = 873;

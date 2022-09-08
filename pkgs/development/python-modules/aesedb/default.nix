@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "aesedb";
-  version = "0.0.7";
+  version = "0.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zDzTQ7drq2jFvTO170GKbY76HjnWcFbcw9YSfDnltGQ=";
+    hash = "sha256-TetXhDrWG6MECm/nhsZDUwcOJwP5drFO+YLarGC2pak=";
   };
 
   propagatedBuildInputs = [

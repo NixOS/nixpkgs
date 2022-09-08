@@ -114,6 +114,10 @@ class Renderer(mistune.renderers.BaseRenderer):
         return f"<option>{escape(text)}</option>"
     def file(self, text):
         return f"<filename>{escape(text)}</filename>"
+    def var(self, text):
+        return f"<varname>{escape(text)}</varname>"
+    def env(self, text):
+        return f"<envar>{escape(text)}</envar>"
     def manpage(self, page, section):
         title = f"<refentrytitle>{escape(page)}</refentrytitle>"
         vol = f"<manvolnum>{escape(section)}</manvolnum>"
@@ -135,6 +139,20 @@ def p_file(md):
         return ('file', m.group(1))
     md.inline.register_rule('file', FILE_PATTERN, parse)
     md.inline.rules.append('file')
+
+def p_var(md):
+    VAR_PATTERN = r'\{var\}`(.*?)`'
+    def parse(self, m, state):
+        return ('var', m.group(1))
+    md.inline.register_rule('var', VAR_PATTERN, parse)
+    md.inline.rules.append('var')
+
+def p_env(md):
+    ENV_PATTERN = r'\{env\}`(.*?)`'
+    def parse(self, m, state):
+        return ('env', m.group(1))
+    md.inline.register_rule('env', ENV_PATTERN, parse)
+    md.inline.rules.append('env')
 
 def p_option(md):
     OPTION_PATTERN = r'\{option\}`(.*?)`'
@@ -162,7 +180,7 @@ def p_admonition(md):
     md.block.rules.append('admonition')
 
 md = mistune.create_markdown(renderer=Renderer(), plugins=[
-    p_command, p_file, p_option, p_manpage, p_admonition
+    p_command, p_file, p_var, p_env, p_option, p_manpage, p_admonition
 ])
 
 # converts in-place!

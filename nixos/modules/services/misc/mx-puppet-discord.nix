@@ -12,10 +12,10 @@ let
 in {
   options = {
     services.mx-puppet-discord = {
-      enable = mkEnableOption ''
+      enable = mkEnableOption (lib.mdDoc ''
         mx-puppet-discord is a discord puppeting bridge for matrix.
         It handles bridging private and group DMs, as well as Guilds (servers)
-      '';
+      '');
 
       settings = mkOption rec {
         apply = recursiveUpdate default;

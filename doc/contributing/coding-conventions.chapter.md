@@ -453,6 +453,9 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
   }
   ```
 
+When fetching from GitHub, commits must always be referenced by their full commit hash. This is because GitHub shares commit hashes among all forks and returns `404 Not Found` when a short commit hash is ambiguous. It already happens for some short, 6-character commit hashes in `nixpkgs`.
+It is a practical vector for a denial-of-service attack by pushing large amounts of auto generated commits into forks and was already [demonstrated against GitHub Actions Beta](https://blog.teddykatz.com/2019/11/12/github-actions-dos.html).
+
 Find the value to put as `sha256` by running `nix-shell -p nix-prefetch-github --run "nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS nix"`. 
 
 ## Obtaining source hash {#sec-source-hashes}

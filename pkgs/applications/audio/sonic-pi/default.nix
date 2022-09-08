@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sonic-pi";
-  version = "4.0.3";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "sonic-pi-net";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-kTuW+i/kdPhyG3L6SkgQTE9UvADY49KahJcw3+5Uz4k=";
+    hash = "sha256-kEZNVTAWkiqxyPJHSL4Gismpwxd+PnXiH8CgQCV3+PQ=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
@@ -61,10 +61,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     wrapQtAppsHook
     copyDesktopItems
-
     cmake
     pkg-config
-
     erlang
     elixir
     beamPackages.hex

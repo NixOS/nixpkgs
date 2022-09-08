@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "exoscale-cli";
-  version = "1.59.0";
+  version = "1.59.1";
 
   src = fetchFromGitHub {
     owner = "exoscale";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-QLIxoCV+QL+uXmT0IdeztzefiOpW9xNVf0XuZPVpp/Y=";
+    sha256 = "sha256-dkiUO68NtWU/GOOuJvihlOfnEjF+5sNSkOAttCrQEHI=";
   };
 
   vendorSha256 = null;

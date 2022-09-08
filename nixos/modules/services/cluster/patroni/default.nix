@@ -15,7 +15,7 @@ in
 {
   options.services.patroni = {
 
-    enable = mkEnableOption "Patroni";
+    enable = mkEnableOption (lib.mdDoc "Patroni");
 
     postgresqlPackage = mkOption {
       type = types.package;

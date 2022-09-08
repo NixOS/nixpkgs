@@ -146,7 +146,7 @@ let
 in
 {
   options.services.invidious = {
-    enable = lib.mkEnableOption "Invidious";
+    enable = lib.mkEnableOption (lib.mdDoc "Invidious");
 
     package = lib.mkOption {
       type = types.package;

@@ -82,6 +82,7 @@ in {
   cfssl = handleTestOn ["x86_64-linux"] ./cfssl.nix {};
   charliecloud = handleTest ./charliecloud.nix {};
   chromium = (handleTestOn ["x86_64-linux"] ./chromium.nix {}).stable or {};
+  cinnamon = handleTest ./cinnamon.nix {};
   cjdns = handleTest ./cjdns.nix {};
   clickhouse = handleTest ./clickhouse.nix {};
   cloud-init = handleTest ./cloud-init.nix {};
@@ -276,8 +277,10 @@ in {
   krb5 = discoverTests (import ./krb5 {});
   ksm = handleTest ./ksm.nix {};
   kubernetes = handleTestOn ["x86_64-linux"] ./kubernetes {};
+  languagetool = handleTest ./languagetool.nix {};
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   leaps = handleTest ./leaps.nix {};
+  lemmy = handleTest ./lemmy.nix {};
   libinput = handleTest ./libinput.nix {};
   libreddit = handleTest ./libreddit.nix {};
   libresprite = handleTest ./libresprite.nix {};

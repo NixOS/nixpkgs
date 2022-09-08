@@ -125,6 +125,10 @@ final: prev: {
     meta = oldAttrs.meta // { broken = true; }; # use the top-level package instead
   });
 
+  eask = prev."@emacs-eask/cli".override {
+    name = "eask";
+  };
+
   # NOTE: this is a stub package to fetch npm dependencies for
   # ../../applications/video/epgstation
   epgstation = prev."epgstation-../../applications/video/epgstation".override (oldAttrs: {
@@ -517,8 +521,8 @@ final: prev: {
       postInstall = ''
         cd node_modules
         for dep in ${final.vega-cli}/lib/node_modules/vega-cli/node_modules/*; do
-          if [[ ! -d $dep ]]; then
-            ln -s "${final.vega-cli}/lib/node_modules/vega-cli/node_modules/$dep"
+          if [[ ! -d ''${dep##*/} ]]; then
+            ln -s "${final.vega-cli}/lib/node_modules/vega-cli/node_modules/''${dep##*/}"
           fi
         done
       '';
