@@ -15,6 +15,8 @@ buildGoModule rec {
 
   doCheck = false;
 
+  ldflags = [ "-X" "github.com/pulumi/kubespy/version.Version=${version}" ];
+
   # TODO: enable after https://github.com/pulumi/kubespy/issues/72 is addressed.
   # postInstall = ''
   # 	for shell in bash zsh; do
