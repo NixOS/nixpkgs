@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A tool to compile Cargo project with zig as linker";
+    description = "A tool to compile Cargo projects with zig as the linker";
     homepage = "https://github.com/messense/cargo-zigbuild";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
