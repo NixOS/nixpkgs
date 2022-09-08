@@ -5,6 +5,7 @@
 , copyDesktopItems
 , makeDesktopItem
 , desktopToDarwinBundle
+, buildPackages
 , pkg-config
 , freetype
 , harfbuzz
@@ -49,13 +50,17 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
+    substituteInPlace Makerules --replace "(shell pkg-config" "(shell $PKG_CONFIG"
   '';
 
   # Use shared libraries to decrease size
   buildFlags = [ "shared" ];
 
-  makeFlags = [ "prefix=$(out)" "USE_SYSTEM_LIBS=yes" ]
-    ++ lib.optionals (!enableX11) [ "HAVE_X11=no" ]
+  makeFlags = [
+    "prefix=$(out)"
+    "USE_SYSTEM_LIBS=yes"
+    "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
+  ] ++ lib.optionals (!enableX11) [ "HAVE_X11=no" ]
     ++ lib.optionals (!enableGL) [ "HAVE_GLUT=no" ];
 
   nativeBuildInputs = [ pkg-config ]

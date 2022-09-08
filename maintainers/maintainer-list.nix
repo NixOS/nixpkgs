@@ -4932,6 +4932,12 @@
       fingerprint = "B9D5 0EDF E95E ECD0 C135  00A9 56E9 3C2F B6B0 8BDB";
     }];
   };
+  gpl = {
+    email = "nixos-6c64ce18-bbbc-414f-8dcb-f9b6b47fe2bc@isopleth.org";
+    github = "gpl";
+    githubId = 39648069;
+    name = "isogram";
+  };
   gpyh = {
     email = "yacine.hmito@gmail.com";
     github = "yacinehmito";
@@ -13862,6 +13868,15 @@
     githubId = 245573;
     name = "Dmitry Kalinkin";
   };
+  victormignot = {
+    email = "victor.mignot@protonmail.com";
+    github = "victormignot";
+    githubId = 58660971;
+    name = "Victor Mignot";
+    keys = [{
+      fingerprint = "CA5D F91A D672 683A 1F65  BBC9 0317 096D 20E0 067B";
+    }];
+  };
   vidbina = {
     email = "vid@bina.me";
     github = "vidbina";
@@ -15246,5 +15261,11 @@
     keys = [{
       fingerprint = "7B9E E848 D074 AE03 7A0C  651A 8ED4 DEF7 375A 30C8";
     }];
+  };
+  rb = {
+    email = "maintainers@cloudposse.com";
+    github = "nitrocode";
+    githubId = 7775707;
+    name = "RB";
   };
 }

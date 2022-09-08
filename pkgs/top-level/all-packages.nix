@@ -124,6 +124,8 @@ with pkgs;
 
   genericUpdater = callPackage ../common-updater/generic-updater.nix { };
 
+  update-script-combinators = callPackage ../common-updater/combinators.nix { };
+
   gitUpdater = callPackage ../common-updater/git-updater.nix { };
 
   httpTwoLevelsUpdater = callPackage ../common-updater/http-two-levels-updater.nix { };
@@ -463,6 +465,8 @@ with pkgs;
   goda = callPackage ../development/tools/goda { };
 
   gojq = callPackage ../development/tools/gojq { };
+
+  govulncheck = callPackage ../tools/security/govulncheck { };
 
   gpick = callPackage ../tools/misc/gpick { };
 
@@ -11301,6 +11305,8 @@ with pkgs;
 
   sysbench = callPackage ../development/tools/misc/sysbench {};
 
+  systemc = callPackage ../applications/science/electronics/systemc { };
+
   system-config-printer = callPackage ../tools/misc/system-config-printer {
     autoreconfHook = buildPackages.autoreconfHook269;
     libxml2 = libxml2Python;
@@ -14001,10 +14007,10 @@ with pkgs;
   julia = julia-stable;
 
   julia_16-bin = callPackage ../development/compilers/julia/1.6-bin.nix { };
-  julia_17-bin = callPackage ../development/compilers/julia/1.7-bin.nix { };
+  julia_18-bin = callPackage ../development/compilers/julia/1.8-bin.nix { };
 
   julia-lts-bin = julia_16-bin;
-  julia-stable-bin = julia_17-bin;
+  julia-stable-bin = julia_18-bin;
   julia-bin = julia-stable-bin;
 
   jwasm =  callPackage ../development/compilers/jwasm { };
@@ -18033,6 +18039,7 @@ with pkgs;
   fftwSinglePrec = fftw.override { precision = "single"; };
   fftwFloat = fftwSinglePrec; # the configure option is just an alias
   fftwLongDouble = fftw.override { precision = "long-double"; };
+  fftwMpi = fftw.override { enableMpi = true; };
 
   filter-audio = callPackage ../development/libraries/filter-audio {};
 
@@ -20221,6 +20228,8 @@ with pkgs;
   libvarlink = callPackage ../development/libraries/libvarlink { };
 
   libvdpau = callPackage ../development/libraries/libvdpau { };
+
+  libvdwxc = callPackage ../development/libraries/science/chemistry/libvdwxc { };
 
   libmodulemd = callPackage ../development/libraries/libmodulemd { };
 
@@ -28125,8 +28134,6 @@ with pkgs;
 
   gvisor = callPackage ../applications/virtualization/gvisor { };
 
-  gvisor-containerd-shim = callPackage ../applications/virtualization/gvisor/containerd-shim.nix { };
-
   guvcview = libsForQt5.callPackage ../os-specific/linux/guvcview { };
 
   gwc = callPackage ../applications/audio/gwc { };
@@ -29700,6 +29707,7 @@ with pkgs;
   ostinato = libsForQt5.callPackage ../applications/networking/ostinato { };
 
   p4 = callPackage ../applications/version-management/p4 { };
+  p4d = callPackage ../applications/version-management/p4d { };
   p4v = libsForQt515.callPackage ../applications/version-management/p4v { };
 
   partio = callPackage ../development/libraries/partio {};
@@ -30762,7 +30770,9 @@ with pkgs;
 
   simple-scan = gnome.simple-scan;
 
-  sioyek = libsForQt5.callPackage ../applications/misc/sioyek { };
+  sioyek = callPackage ../applications/misc/sioyek {
+    inherit (libsForQt5) qmake qt3d qtbase wrapQtAppsHook;
+  };
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
@@ -35181,6 +35191,8 @@ with pkgs;
   antimicrox = libsForQt5.callPackage ../tools/misc/antimicrox { };
 
   atlantis = callPackage ../applications/networking/cluster/atlantis { };
+
+  atmos = callPackage ../applications/networking/cluster/atmos {};
 
   fn-cli = callPackage ../applications/networking/cluster/fn-cli { };
 
