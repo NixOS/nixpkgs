@@ -19003,6 +19003,8 @@ with pkgs;
 
   ldb = callPackage ../development/libraries/ldb { };
 
+  ldproxy = callPackage ../development/tools/rust/ldproxy { };
+
   lensfun = callPackage ../development/libraries/lensfun {};
 
   lesstif = callPackage ../development/libraries/lesstif { };
