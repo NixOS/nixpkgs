@@ -124,7 +124,7 @@ with pkgs;
 
   genericUpdater = callPackage ../common-updater/generic-updater.nix { };
 
-  update-script-combinators = callPackage ../common-updater/combinators.nix { };
+  _experimental-update-script-combinators = callPackage ../common-updater/combinators.nix { };
 
   gitUpdater = callPackage ../common-updater/git-updater.nix { };
 
@@ -24575,7 +24575,8 @@ with pkgs;
   nsh = callPackage ../shells/nsh { };
 
   nushell = callPackage ../shells/nushell {
-    inherit (darwin.apple_sdk.frameworks) AppKit Security;
+    inherit (darwin.apple_sdk.frameworks) AppKit Foundation Security;
+    inherit (darwin.apple_sdk) sdk;
   };
 
   nettools = if stdenv.isLinux
