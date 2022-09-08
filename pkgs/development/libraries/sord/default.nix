@@ -1,26 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, python3, serd, pcre, wafHook }:
+{ lib
+, stdenv
+, doxygen
+, fetchFromGitHub
+, meson
+, ninja
+, pcre
+, pkg-config
+, python3
+, serd
+}:
 
 stdenv.mkDerivation rec {
   pname = "sord";
-  version = "unstable-2021-01-12";
+  version = "unstable-2022-09-08";
 
-  # Commit picked in mitigation of #109729
+  # Commit picked in mitigation of https://github.com/drobilla/sord/issues/5
   src = fetchFromGitHub {
     owner = "drobilla";
     repo = pname;
-    rev = "d2efdb2d026216449599350b55c2c85c0d3efb89";
-    sha256 = "hHTwK+K6cj9MGO77a1IXiUZtEbXZ08cLGkYZ5eMOIVA=";
+    rev = "46111484e2c5b611a15a77e6142c59465bcfd643";
+    hash = "sha256-7mPiwSApaHiRnG5zW7J/6CtjZv3QE4tmFs6h3G+q4Z0=";
     fetchSubmodules = true;
   };
 
-  preConfigure = ''
-    export PKGCONFIG="$PKG_CONFIG"
-  '';
-
-  nativeBuildInputs = [ pkg-config python3 wafHook ];
+  nativeBuildInputs = [
+    doxygen
+    meson
+    ninja
+    pkg-config
+    python3
+  ];
   buildInputs = [ pcre ];
   propagatedBuildInputs = [ serd ];
-  dontAddWafCrossFlags = true;
 
   meta = with lib; {
     homepage = "http://drobilla.net/software/sord";

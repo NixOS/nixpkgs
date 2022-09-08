@@ -21496,7 +21496,7 @@ with pkgs;
 
   sope = callPackage ../development/libraries/sope { };
 
-  sord = callPackage ../development/libraries/sord {};
+  sord = callPackage ../development/libraries/sord { };
 
   soundtouch = callPackage ../development/libraries/soundtouch {};
 
