@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "blueprint-compiler";
-  version = "0.2.0";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jwestman";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LXZ6n1oCbPa0taVbUZf52mGECrzXIcF8EaMVJ30rMtc=";
+    sha256 = "sha256-vnnyYRHV10kveQYgf/Xg7gy+KONc05HF6IRJDjtxR0I=";
   };
 
   # Requires pythonfuzz, which I've found difficult to package
