@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "gen6dns";
@@ -9,8 +9,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-MhYfgzbGPmrhPx89EpObrEkxaII7uz4TbWXeEGF7Xws=";
   };
 
+  nativeBuildInputs = [ installShellFiles ];
+
   preInstall = ''
     mkdir -p $out/bin
+  '';
+
+  postInstall = ''
+    installManPage gen6dns.1
   '';
 
   makeFlags = [ "INSTALL_DIR=$(out)/bin" ];
