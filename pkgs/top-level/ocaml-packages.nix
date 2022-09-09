@@ -78,6 +78,8 @@ let
 
     bigstring = callPackage ../development/ocaml-modules/bigstring { };
 
+    bindlib = callPackage ../development/ocaml-modules/bindlib { };
+
     biocaml = callPackage ../development/ocaml-modules/biocaml { };
 
     bistro = callPackage ../development/ocaml-modules/bistro { };
