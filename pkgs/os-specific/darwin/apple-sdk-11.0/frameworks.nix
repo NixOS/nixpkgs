@@ -169,7 +169,7 @@
   Speech                           = {};
   SpriteKit                        = {};
   StoreKit                         = {};
-  SwiftUI                          = {};
+  SwiftUI                          = { inherit AppKit DeveloperToolsSupport UniformTypeIdentifiers; };
   SyncServices                     = {};
   System                           = {};
   SystemConfiguration              = { inherit Security; };
