@@ -43,8 +43,10 @@ in
           format = pkgs.formats.toml { };
           conf = format.generate "vector.toml" cfg.settings;
           validateConfig = file:
-            pkgs.runCommand "validate-vector-conf" { } ''
-              ${pkgs.vector}/bin/vector validate --no-environment "${file}"
+          pkgs.runCommand "validate-vector-conf" {
+            nativeBuildInputs = [ pkgs.buildPackages.vector ];
+          } ''
+              vector validate --no-environment "${file}"
               ln -s "${file}" "$out"
             '';
         in
