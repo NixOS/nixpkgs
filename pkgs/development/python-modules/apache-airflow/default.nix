@@ -71,6 +71,7 @@
 , pytestCheckHook
 , freezegun
 , mkYarnPackage
+, writeScript
 
 # Extra airflow providers to enable
 , enabledProviders ? []
@@ -89,11 +90,6 @@ let
 
   # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
   # This replicates this shell script, fixing bugs in yarn.lock and package.json
-  # To update yarn.lock and package.json:
-  # cd pkgs/development/python-modules/apache-airflow
-  # curl -O https://raw.githubusercontent.com/apache/airflow/$version/airflow/www/yarn.lock
-  # curl -O https://raw.githubusercontent.com/apache/airflow/$version/airflow/www/package.json
-  # yarn2nix > yarn.nix
 
   airflow-frontend = mkYarnPackage {
     name = "airflow-frontend";
@@ -265,6 +261,33 @@ buildPythonPackage rec {
 
   postInstall = ''
     cp -rv ${airflow-frontend}/static/dist $out/lib/${python.libPrefix}/site-packages/airflow/www/static
+  '';
+
+  # Updates yarn.lock and package.json
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts curl pcre "python3.withPackages (ps: with ps; [ pyyaml ])" yarn2nix
+
+    set -euo pipefail
+
+    # Get new version
+    new_version="$(curl -s https://airflow.apache.org/docs/apache-airflow/stable/release_notes.html |
+      pcregrep -o1 'Airflow ([0-9.]+).' | head -1)"
+    update-source-version ${pname} "$new_version"
+
+    # Update frontend
+    cd ./pkgs/development/python-modules/apache-airflow
+    curl -O https://raw.githubusercontent.com/apache/airflow/$new_version/airflow/www/yarn.lock
+    curl -O https://raw.githubusercontent.com/apache/airflow/$new_version/airflow/www/package.json
+    # Note: for 2.3.4 a manual change was needed to get a fully resolved URL for
+    # caniuse-lite@1.0.30001312 (with the sha after the #). The error from yarn
+    # was 'Can't make a request in offline mode' from yarn. Corrected install by
+    # manually running yarn add caniuse-lite@1.0.30001312 and copying the
+    # requisite section from the generated yarn.lock.
+    yarn2nix > yarn.nix
+
+    # update provider dependencies
+    ./update-providers.py
   '';
 
   meta = with lib; {
