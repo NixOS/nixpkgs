@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
     # to the path of liberation_ttf instead
     substituteInPlace src/Platform_Posix.c \
       --replace '%NIXPKGS_FONT_PATH%' "${font_path}"
-  '' + lib.optionalString enableParallelBuilding ''
     # ClassiCube's Makefile hardcodes JOBS=1 for some reason,
     # even though it works perfectly well multi-threaded.
     substituteInPlace src/Makefile \
