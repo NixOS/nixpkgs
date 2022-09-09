@@ -140,6 +140,11 @@ merging is handled.
 
 :   A floating point number.
 
+    ::: {.warning}
+    Converting a floating point number to a string with `toString` or `toJSON`
+    may result in [precision loss](https://github.com/NixOS/nix/issues/5733).
+    :::
+
 `types.number`
 
 :   Either a signed integer or a floating point number. No implicit conversion

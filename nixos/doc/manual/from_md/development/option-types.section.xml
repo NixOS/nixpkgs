@@ -256,6 +256,15 @@
             <para>
               A floating point number.
             </para>
+            <warning>
+              <para>
+                Converting a floating point number to a string with
+                <literal>toString</literal> or <literal>toJSON</literal>
+                may result in
+                <link xlink:href="https://github.com/NixOS/nix/issues/5733">precision
+                loss</link>.
+              </para>
+            </warning>
           </listitem>
         </varlistentry>
         <varlistentry>
