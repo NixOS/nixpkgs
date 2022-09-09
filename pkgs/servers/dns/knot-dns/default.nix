@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
 , systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2, libmnl
-, ngtcp2-gnutls
+, ngtcp2-gnutls, xdp-tools
 , autoreconfHook
 , nixosTests, knot-resolver, knot-dns, runCommandLocal
 }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     # TODO: add dnstap support?
   ] ++ lib.optionals stdenv.isLinux [
     libcap_ng systemd
-    libbpf libmnl # XDP support (it's Linux kernel API)
+    xdp-tools libbpf libmnl # XDP support (it's Linux kernel API)
   ] ++ lib.optional stdenv.isDarwin zlib; # perhaps due to gnutls
 
   enableParallelBuilding = true;
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     deps = runCommandLocal "knot-deps-test"
       { nativeBuildInputs = [ (lib.getBin stdenv.cc.libc) ]; }
       ''
-        for libname in libngtcp2 libbpf; do
+        for libname in libngtcp2 libxdp libbpf; do
           echo "Checking for $libname:"
           ldd '${knot-dns.bin}/bin/knotd' | grep -F "$libname"
           echo "OK"
