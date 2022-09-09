@@ -1181,6 +1181,8 @@ let
 
     ppxlib = callPackage ../development/ocaml-modules/ppxlib { };
 
+    pratter = callPackage ../development/ocaml-modules/pratter { };
+
     psmt2-frontend = callPackage ../development/ocaml-modules/psmt2-frontend { };
 
     psq = callPackage ../development/ocaml-modules/psq { };
