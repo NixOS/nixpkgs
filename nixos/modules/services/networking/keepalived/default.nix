@@ -264,15 +264,15 @@ in
         '';
       };
 
-      secretFile = mkOption {
-        type = types.nullOr types.path;
-        default = null;
-        example = "/run/keys/keepalived.env";
+      secrets = mkOption {
+        type = types.attrsOf types.path;
+        default = {};
+        example = literalExpression ''          {
+                    secret-foo = "/run/secrets/foo";
+                    secret-bar = "/run/secrets/bar";
+                  }'';
         description = ''
-          Environment variables from this file will be interpolated into the
-          final config file using envsubst with this syntax: <literal>$ENVIRONMENT</literal>
-          or <literal>''${VARIABLE}</literal>.
-          The file should contain lines formatted as <literal>SECRET_VAR=SECRET_VALUE</literal>.
+          Strings in the config file which match the attribute name get replaced by the content of the file given as the value.
           This is useful to avoid putting secrets into the nix store.
         '';
       };
@@ -296,7 +296,10 @@ in
     };
 
     systemd.services.keepalived = let
-      finalConfigFile = if cfg.secretFile == null then keepalivedConf else "/run/keepalived/keepalived.conf";
+      finalConfigFile =
+        if cfg.secrets == {}
+        then keepalivedConf
+        else "/run/keepalived/keepalived.conf";
     in {
       description = "Keepalive Daemon (LVS and VRRP)";
       after = [ "network.target" "network-online.target" "syslog.target" ];
@@ -306,13 +309,15 @@ in
         PIDFile = pidFile;
         KillMode = "process";
         RuntimeDirectory = "keepalived";
-        EnvironmentFile = lib.optional (cfg.secretFile != null) cfg.secretFile;
-        ExecStartPre = lib.optional (cfg.secretFile != null)
-        (pkgs.writeShellScript "keepalived-pre-start" ''
-          umask 077
-          ${pkgs.envsubst}/bin/envsubst -i "${keepalivedConf}" > ${finalConfigFile}
-        '');
-        ExecStart = "${pkgs.keepalived}/sbin/keepalived"
+        ExecStartPre =
+          lib.optional (cfg.secrets != {})
+          (
+            pkgs.writeShellScript "keepalived-pre-start"
+            concatStringsSep "\n"
+            (mapAttrs (name: path: "${pkgs.replace-secret}/bin/replace-secret ${name} ${path} ${finalConfigFile}") cfg.secrets)
+          );
+        ExecStart =
+          "${pkgs.keepalived}/sbin/keepalived"
           + " -f ${finalConfigFile}"
           + " -p ${pidFile}"
           + optionalString cfg.snmp.enable " --snmp";
