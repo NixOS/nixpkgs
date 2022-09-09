@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   version = "unstable-2021-03-05";
 
   src = fetchFromGitHub {
-    repo = pname;
     owner = "nickclyde";
+    repo = "rofi-bluetooth";
     # https://github.com/nickclyde/rofi-bluetooth/issues/19
     rev = "893db1f2b549e7bc0e9c62e7670314349a29cdf2";
     sha256 = "sha256-3oROJKEQCuSnLfbJ+JSSc9hcmJTPrLHRQJsrUcaOMss=";
