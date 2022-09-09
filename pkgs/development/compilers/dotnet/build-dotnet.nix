@@ -21,6 +21,8 @@ assert if type == "sdk" then packages != null else true;
 , libkrb5
 , curl
 , lttng-ust_2_12
+, testers
+, runCommand
 }:
 
 let
@@ -38,7 +40,7 @@ let
     sdk = ".NET SDK ${version}";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   inherit pname version;
 
   # Some of these dependencies are `dlopen()`ed.
@@ -121,6 +123,23 @@ stdenv.mkDerivation rec {
 
     # Convert a "stdenv.hostPlatform.system" to a dotnet RID
     systemToDotnetRid = system: runtimeIdentifierMap.${system} or (throw "unsupported platform ${system}");
+
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+      };
+
+      smoke-test = runCommand "dotnet-sdk-smoke-test" {
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
+      } ''
+        HOME=$(pwd)/fake-home
+        dotnet new console
+        dotnet build
+        output="$(dotnet run)"
+        # yes, older SDKs omit the comma
+        [[ "$output" =~ Hello,?\ World! ]] && touch "$out"
+      '';
+    };
   };
 
   meta = with lib; {
@@ -131,4 +150,4 @@ stdenv.mkDerivation rec {
     mainProgram = "dotnet";
     platforms = builtins.attrNames srcs;
   };
-}
+})
