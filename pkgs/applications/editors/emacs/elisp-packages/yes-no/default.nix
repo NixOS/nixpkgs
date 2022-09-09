@@ -2,19 +2,12 @@
 
 trivialBuild {
   pname = "yes-no";
-  version = "0";
+  version = "2017-10-01";
 
   src = fetchurl {
-    url = "https://github.com/emacsmirror/emacswiki.org/blob/185fdc34fb1e02b43759ad933d3ee5646b0e78f8/yes-no.el";
-    sha256 = "1k0nn619i82jiqm48k5nk6b8cv2rggh0i5075nhc85a2s9pwhx32";
+    url = "https://raw.githubusercontent.com/emacsmirror/emacswiki.org/143bcaeb679a8fa8a548e92a5a9d5c2baff50d9c/yes-no.el";
+    sha256 = "03w4wfx885y89ckyd5d95n2571nmmzrll6kr0yan3ip2aw28xq3i";
   };
-
-  dontUnpack = true;
-
-  installPhase = ''
-    install -d $out/share/emacs/site-lisp
-    install $src $out/share/emacs/site-lisp/yes-no.el
-  '';
 
   meta = with lib; {
     description = "Specify use of `y-or-n-p' or `yes-or-no-p' on a case-by-case basis";
