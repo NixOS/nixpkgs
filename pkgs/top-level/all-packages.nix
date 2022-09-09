@@ -368,6 +368,8 @@ with pkgs;
 
   chrysalis = callPackage ../applications/misc/chrysalis { };
 
+  classicube = callPackage ../games/classicube { };
+
   clj-kondo = callPackage ../development/tools/clj-kondo { };
 
   cloak = callPackage ../applications/misc/cloak {
@@ -14627,6 +14629,8 @@ with pkgs;
 
   cargo-public-api = callPackage ../development/tools/rust/cargo-public-api { };
 
+  cargo-zigbuild = callPackage ../development/tools/rust/cargo-zigbuild { };
+
   crate2nix = callPackage ../development/tools/rust/crate2nix { };
 
   convco = callPackage ../development/tools/convco {
@@ -18868,6 +18872,8 @@ with pkgs;
   ilmbase = callPackage ../development/libraries/ilmbase { };
 
   imgui = callPackage ../development/libraries/imgui { };
+
+  imtui = callPackage ../development/libraries/imtui { };
 
   imlib = callPackage ../development/libraries/imlib {
     libpng = libpng12;
