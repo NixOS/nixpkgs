@@ -18828,6 +18828,8 @@ with pkgs;
 
   imgui = callPackage ../development/libraries/imgui { };
 
+  cimgui = callPackage ../development/libraries/imgui/cimgui.nix { };
+
   imlib = callPackage ../development/libraries/imlib {
     libpng = libpng12;
   };
