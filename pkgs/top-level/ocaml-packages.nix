@@ -1221,6 +1221,8 @@ let
 
     tcpip = callPackage ../development/ocaml-modules/tcpip { };
 
+    timed = callPackage ../development/ocaml-modules/timed { };
+
     tiny_httpd = callPackage ../development/ocaml-modules/tiny_httpd { };
 
     tsort = callPackage ../development/ocaml-modules/tsort { };
