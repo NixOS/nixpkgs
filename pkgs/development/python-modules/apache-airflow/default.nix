@@ -71,6 +71,9 @@
 , pytestCheckHook
 , freezegun
 , mkYarnPackage
+
+# Extra airflow providers to enable
+, enabledProviders ? []
 }:
 let
   version = "2.3.4";
@@ -123,6 +126,13 @@ let
     '';
   };
 
+  # Import generated file with metadata for provider dependencies and imports.
+  # Enable additional providers using enabledProviders above.
+  providers = import ./providers.nix;
+  getProviderDeps = provider: map (dep: python.pkgs.${dep}) providers.${provider}.deps;
+  getProviderImports = provider: providers.${provider}.imports;
+  providerDependencies = lib.concatMap getProviderDeps enabledProviders;
+  providerImports = lib.concatMap getProviderImports enabledProviders;
 in
 buildPythonPackage rec {
   pname = "apache-airflow";
@@ -198,7 +208,7 @@ buildPythonPackage rec {
     dataclasses
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-metadata
-  ];
+  ] ++ providerDependencies;
 
   buildInputs = [
     airflow-frontend
@@ -209,6 +219,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # By default, source code of providers is included but unusable due to missing
+  # transitive dependencies. To enable a provider, add it to extraProviders
+  # above
   INSTALL_PROVIDERS_FROM_SOURCES = "true";
 
   postPatch = ''
@@ -228,7 +241,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "airflow"
-  ];
+  ] ++ providerImports;
 
   checkPhase = ''
     export HOME=$(mktemp -d)
