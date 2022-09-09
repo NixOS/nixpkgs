@@ -6,7 +6,6 @@
 , attrs
 , cached-property
 , click
-, six
 , packaging
 , pytest-cov
 , pytest-timeout
@@ -28,7 +27,6 @@ buildPythonPackage rec {
     attrs
     cached-property
     click
-    six
     packaging
   ];
 
