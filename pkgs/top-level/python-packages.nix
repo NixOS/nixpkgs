@@ -119,6 +119,7 @@ in {
     pythonCatchConflictsHook
     pythonImportsCheckHook
     pythonNamespacesHook
+    pythonOutputDistHook
     pythonRecompileBytecodeHook
     pythonRelaxDepsHook
     pythonRemoveBinBytecodeHook
