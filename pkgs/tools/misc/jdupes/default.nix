@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "jdupes";
@@ -14,6 +14,14 @@ stdenv.mkDerivation rec {
     # directories have such files and will be removed.
     postFetch = "rm -r $out/testdir";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "darwin-stack-size.patch";
+      url = "https://github.com/jbruchon/jdupes/commit/8f5b06109b44a9e4316f9445da3044590a6c63e2.patch";
+      sha256 = "0saq92v0mm5g979chr062psvwp3i3z23mgqrcliq4m07lvwc7i3s";
+    })
+  ];
 
   dontConfigure = true;
 
