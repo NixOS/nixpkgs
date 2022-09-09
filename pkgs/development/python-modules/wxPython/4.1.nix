@@ -13,6 +13,7 @@
 , wxGTK
 , pillow
 , numpy
+, six
 , libXinerama
 , libSM
 , libXxf86vm
@@ -70,7 +71,11 @@ buildPythonPackage rec {
     webkitgtk
   ];
 
-  propagatedBuildInputs = [ pillow numpy ];
+  propagatedBuildInputs = [
+    pillow
+    numpy
+    six
+  ];
 
   DOXYGEN = "${doxygen}/bin/doxygen";
 
