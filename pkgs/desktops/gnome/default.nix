@@ -96,8 +96,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   mutter = callPackage ./core/mutter { };
 
-  # Needed for elementary's gala and greeter until support for higher versions is provided
-  mutter338 = callPackage ./core/mutter/3.38 { };
+  # Needed for elementary's gala, wingpanel and greeter until support for higher versions is provided
+  mutter42 = callPackage ./core/mutter/42 { };
 
   nautilus = callPackage ./core/nautilus { };
 
@@ -271,4 +271,5 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-documents = throw "The ‘gnome.gnome-documents’ package was removed as it is broken and abandoned."; # added 2022-10-26
   gnome-devel-docs = throw "The ‘gnome.gnome-devel-docs’ package was removed as it is outdated and no longer relevant."; # added 2022-10-26
 
+  mutter338 = throw "The ‘gnome.mutter338’ package was removed as it is no longer needed by Pantheon."; # added 2023-02-22
 }
