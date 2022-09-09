@@ -20,7 +20,8 @@
 }:
 
 # Note:
-# The command line tools are written in Go as part of a different package (mongodb-tools)
+#   The command line administrative tools are part of other packages:
+#   see pkgs.mongodb-tools and pkgs.mongosh.
 
 with lib;
 
