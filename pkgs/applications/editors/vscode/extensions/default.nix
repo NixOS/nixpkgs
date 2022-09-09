@@ -2621,6 +2621,18 @@ let
         };
       };
 
+      vscjava.vscode-java-test = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-java-test";
+          publisher = "vscjava";
+          version = "0.37.1";
+          sha256 = "sha256-QpDMG+0RbiRY9YQYXQhA6ESBoIjBeUxq+bEZ1Y71oSM=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       vscodevim.vim = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vim";
