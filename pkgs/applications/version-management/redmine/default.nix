@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, bundlerEnv, ruby, makeWrapper, nixosTests }:
 
 let
-  version = "4.2.5";
+  version = "4.2.7";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
@@ -16,7 +16,7 @@ in
 
     src = fetchurl {
       url = "https://www.redmine.org/releases/${pname}-${version}.tar.gz";
-      sha256 = "112rc2sjx6x7046fjz7np0ilszvkqapc180ld02ncwmdxaq88w6r";
+      sha256 = "sha256-7UvgO1q2PCZBqH24l4c53Zl8D2Rr+hAQrJ5SEMNDck4=";
     };
 
     nativeBuildInputs = [ makeWrapper ];
