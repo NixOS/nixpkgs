@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, bundlerEnv, ruby, makeWrapper }:
+{ lib, stdenv, fetchurl, bundlerEnv, ruby, makeWrapper, nixosTests }:
 
 let
   version = "4.2.5";
@@ -41,6 +41,8 @@ in
 
       makeWrapper ${rubyEnv.wrappedRuby}/bin/ruby $out/bin/rdm-mailhandler.rb --add-flags $out/share/redmine/extra/mail_handler/rdm-mailhandler.rb
     '';
+
+    passthru.tests.redmine = nixosTests.redmine;
 
     meta = with lib; {
       homepage = "https://www.redmine.org/";
