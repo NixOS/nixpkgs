@@ -702,6 +702,8 @@ let
 
     ladspa = callPackage ../development/ocaml-modules/ladspa { };
 
+    lambdapi = callPackage ../development/ocaml-modules/lambdapi { };
+
     lambdasoup = callPackage ../development/ocaml-modules/lambdasoup { };
 
     lambda-term = callPackage ../development/ocaml-modules/lambda-term { };
