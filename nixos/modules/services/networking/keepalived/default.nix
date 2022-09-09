@@ -296,32 +296,31 @@ in
     };
 
     systemd.services.keepalived = let
-      finalConfigFile =
-        if cfg.secrets == {}
-        then keepalivedConf
-        else "/run/keepalived/keepalived.conf";
+      finalConfigFile = "/run/keepalived/keepalived.conf";
+      populateSecrets =
+        concatStringsSep "\n"
+        (mapAttrs (name: path: "${pkgs.replace-secret}/bin/replace-secret ${name} ${path} ${finalConfigFile}") cfg.secrets);
     in {
       description = "Keepalive Daemon (LVS and VRRP)";
-      after = [ "network.target" "network-online.target" "syslog.target" ];
-      wants = [ "network-online.target" ];
+      after = ["network.target" "network-online.target" "syslog.target"];
+      wants = ["network-online.target"];
+      reloadIfChanged = true;
+      restartTriggers = [ pkgs.keepalived cfg.snmp.enable ];
       serviceConfig = {
         Type = "forking";
         PIDFile = pidFile;
         KillMode = "process";
         RuntimeDirectory = "keepalived";
-        ExecStartPre =
-          lib.optional (cfg.secrets != {})
-          (
-            pkgs.writeShellScript "keepalived-pre-start"
-            concatStringsSep "\n"
-            (mapAttrs (name: path: "${pkgs.replace-secret}/bin/replace-secret ${name} ${path} ${finalConfigFile}") cfg.secrets)
-          );
+        ExecStartPre = pkgs.writeShellScript "keepalived-pre-start" populateSecrets;
         ExecStart =
           "${pkgs.keepalived}/sbin/keepalived"
           + " -f ${finalConfigFile}"
           + " -p ${pidFile}"
           + optionalString cfg.snmp.enable " --snmp";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        ExecReload = pkgs.writeShellScript "keepalived-reload" ''
+          ${populateSecrets}
+          ${pkgs.coreutils}/bin/kill -HUP $MAINPID
+        '';
         Restart = "always";
         RestartSec = "1s";
       };
