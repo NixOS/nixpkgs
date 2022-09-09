@@ -417,10 +417,6 @@ rec {
       in
         builtins.listToAttrs (map toKeyVal haskellPaths);
 
-  addOptparseApplicativeCompletionScripts = exeName: pkg:
-    lib.warn "addOptparseApplicativeCompletionScripts is deprecated in favor of haskellPackages.generateOptparseApplicativeCompletions. Please change ${pkg.name} to use the latter and make sure it uses its matching haskell.packages set!"
-    (__generateOptparseApplicativeCompletion exeName pkg);
-
   /*
     INTERNAL function retained for backwards compatibility, use
     haskell.packages.*.generateOptparseApplicativeCompletions instead!
