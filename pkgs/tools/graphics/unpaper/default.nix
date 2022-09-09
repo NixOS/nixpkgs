@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, ffmpeg_4, libxslt }:
+{ lib, stdenv, fetchurl, buildPackages, pkg-config, ffmpeg_4 }:
 
 stdenv.mkDerivation rec {
   pname = "unpaper";
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0c5rbkxbmy9k8vxjh4cv0bgnqd3wqc99yzw215vkyjslvbsq8z13";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ffmpeg_4 libxslt ];
+  nativeBuildInputs = [ pkg-config buildPackages.libxslt.bin ];
+  buildInputs = [ ffmpeg_4 ];
 
   meta = with lib; {
     homepage = "https://www.flameeyes.eu/projects/unpaper";

@@ -275,6 +275,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/prometheus-community/ipmi_exporter">Prometheus
+          IPMI exporter</link>, an IPMI exporter for Prometheus.
+          Available as
+          <link linkend="opt-services.prometheus.exporters.ipmi.enable">services.prometheus.exporters.ipmi</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://writefreely.org">WriteFreely</link>,
           a simple blogging platform with ActivityPub support. Available
           as
