@@ -59,11 +59,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL2 libGL curl openal liberation_ttf ];
 
-  buildPhase = ''
-    cd 'src'
-    make
-    cd -
-  '';
+  preBuild = "cd src";
+
+  postBuild = "cd -";
 
   installPhase = ''
     mkdir -p "$out/bin"
