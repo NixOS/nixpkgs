@@ -1,15 +1,12 @@
 { lib
 , stdenv
 , fetchFromGitHub
-  # native build dependencies
 , dos2unix
 , makeWrapper
-  # build dependencies
 , SDL2
 , libGL
 , curl
 , openal
-  # runtime dependencies
 , liberation_ttf
 }:
 
