@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitLab }:
 
 stdenv.mkDerivation rec {
   pname = "mafft";
-  version = "7.505";
+  version = "7.508";
 
-  src = fetchurl {
-    url = "https://mafft.cbrc.jp/alignment/software/mafft-${version}-with-extensions-src.tgz";
-    sha256 = "sha256-9Up4Zw/NmWAjO8w7PdNZ85WnHAztRae+HP6uGZUM5v8=";
+  src = fetchFromGitLab {
+    owner = "sysimm";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-XQllmTgLntCBUFJzV2HL4f4oMilcUVTRgcfeZBdD5c0=";
   };
 
   preBuild = ''
