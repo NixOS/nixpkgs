@@ -980,6 +980,14 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.jacinda;
 
+  # Smoke test can't be executed in sandbox
+  # https://github.com/georgefst/evdev/issues/25
+  evdev = overrideCabal (drv: {
+    testFlags = drv.testFlags or [] ++ [
+      "-p" "!/Smoke/"
+    ];
+  }) super.evdev;
+
   # Tests assume dist-newstyle build directory is present
   cabal-hoogle = dontCheck super.cabal-hoogle;
 
