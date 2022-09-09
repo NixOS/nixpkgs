@@ -6,7 +6,7 @@
     in case of multiple value definitions.
   </para>
   <section xml:id="sec-option-types-basic">
-    <title>Basic Types</title>
+    <title>Basic types</title>
     <para>
       Basic types are the simplest available types in the module system.
       Basic types include multiple string types that mainly differ in
@@ -46,6 +46,20 @@
             A top-level store path. This can be an attribute set
             pointing to a store path, like a derivation or a flake
             input.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>types.enum</literal>
+          <emphasis><literal>l</literal></emphasis>
+        </term>
+        <listitem>
+          <para>
+            One element of the list
+            <emphasis><literal>l</literal></emphasis>, e.g.
+            <literal>types.enum [ &quot;left&quot; &quot;right&quot; ]</literal>.
+            Multiple definitions cannot be merged.
           </para>
         </listitem>
       </varlistentry>
@@ -150,186 +164,241 @@
         </listitem>
       </varlistentry>
     </variablelist>
-    <para>
-      Integer-related types:
-    </para>
-    <variablelist>
-      <varlistentry>
-        <term>
-          <literal>types.int</literal>
-        </term>
-        <listitem>
-          <para>
-            A signed integer.
-          </para>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term>
-          <literal>types.ints.{s8, s16, s32}</literal>
-        </term>
-        <listitem>
-          <para>
-            Signed integers with a fixed length (8, 16 or 32 bits). They
-            go from −2^n/2 to 2^n/2−1 respectively (e.g.
-            <literal>−128</literal> to <literal>127</literal> for 8
-            bits).
-          </para>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term>
-          <literal>types.ints.unsigned</literal>
-        </term>
-        <listitem>
-          <para>
-            An unsigned integer (that is &gt;= 0).
-          </para>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term>
-          <literal>types.ints.{u8, u16, u32}</literal>
-        </term>
-        <listitem>
-          <para>
-            Unsigned integers with a fixed length (8, 16 or 32 bits).
-            They go from 0 to 2^n−1 respectively (e.g.
-            <literal>0</literal> to <literal>255</literal> for 8 bits).
-          </para>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term>
-          <literal>types.ints.positive</literal>
-        </term>
-        <listitem>
-          <para>
-            A positive integer (that is &gt; 0).
-          </para>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term>
-          <literal>types.port</literal>
-        </term>
-        <listitem>
-          <para>
-            A port number. This type is an alias to
-            <literal>types.ints.u16</literal>.
-          </para>
-        </listitem>
-      </varlistentry>
-    </variablelist>
-    <para>
-      String-related types:
-    </para>
-    <variablelist>
-      <varlistentry>
-        <term>
-          <literal>types.str</literal>
-        </term>
-        <listitem>
-          <para>
-            A string. Multiple definitions cannot be merged.
-          </para>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term>
-          <literal>types.lines</literal>
-        </term>
-        <listitem>
-          <para>
-            A string. Multiple definitions are concatenated with a new
-            line <literal>&quot;\n&quot;</literal>.
-          </para>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term>
-          <literal>types.commas</literal>
-        </term>
-        <listitem>
-          <para>
-            A string. Multiple definitions are concatenated with a comma
-            <literal>&quot;,&quot;</literal>.
-          </para>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term>
-          <literal>types.envVar</literal>
-        </term>
-        <listitem>
-          <para>
-            A string. Multiple definitions are concatenated with a
-            collon <literal>&quot;:&quot;</literal>.
-          </para>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term>
-          <literal>types.strMatching</literal>
-        </term>
-        <listitem>
-          <para>
-            A string matching a specific regular expression. Multiple
-            definitions cannot be merged. The regular expression is
-            processed using <literal>builtins.match</literal>.
-          </para>
-        </listitem>
-      </varlistentry>
-    </variablelist>
+    <section xml:id="sec-option-types-numeric">
+      <title>Numeric types</title>
+      <variablelist>
+        <varlistentry>
+          <term>
+            <literal>types.int</literal>
+          </term>
+          <listitem>
+            <para>
+              A signed integer.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>types.ints.{s8, s16, s32}</literal>
+          </term>
+          <listitem>
+            <para>
+              Signed integers with a fixed length (8, 16 or 32 bits).
+              They go from −2^n/2 to 2^n/2−1 respectively (e.g.
+              <literal>−128</literal> to <literal>127</literal> for 8
+              bits).
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>types.ints.unsigned</literal>
+          </term>
+          <listitem>
+            <para>
+              An unsigned integer (that is &gt;= 0).
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>types.ints.{u8, u16, u32}</literal>
+          </term>
+          <listitem>
+            <para>
+              Unsigned integers with a fixed length (8, 16 or 32 bits).
+              They go from 0 to 2^n−1 respectively (e.g.
+              <literal>0</literal> to <literal>255</literal> for 8
+              bits).
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>types.ints.between</literal>
+            <emphasis><literal>lowest highest</literal></emphasis>
+          </term>
+          <listitem>
+            <para>
+              An integer between
+              <emphasis><literal>lowest</literal></emphasis> and
+              <emphasis><literal>highest</literal></emphasis> (both
+              inclusive).
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>types.ints.positive</literal>
+          </term>
+          <listitem>
+            <para>
+              A positive integer (that is &gt; 0).
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>types.port</literal>
+          </term>
+          <listitem>
+            <para>
+              A port number. This type is an alias to
+              <literal>types.ints.u16</literal>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>types.float</literal>
+          </term>
+          <listitem>
+            <para>
+              A floating point number.
+            </para>
+            <warning>
+              <para>
+                Converting a floating point number to a string with
+                <literal>toString</literal> or <literal>toJSON</literal>
+                may result in
+                <link xlink:href="https://github.com/NixOS/nix/issues/5733">precision
+                loss</link>.
+              </para>
+            </warning>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>types.number</literal>
+          </term>
+          <listitem>
+            <para>
+              Either a signed integer or a floating point number. No
+              implicit conversion is done between the two types, and
+              multiple equal definitions will only be merged if they
+              have the same type.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>types.numbers.between</literal>
+            <emphasis><literal>lowest highest</literal></emphasis>
+          </term>
+          <listitem>
+            <para>
+              An integer or floating point number between
+              <emphasis><literal>lowest</literal></emphasis> and
+              <emphasis><literal>highest</literal></emphasis> (both
+              inclusive).
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>types.numbers.nonnegative</literal>
+          </term>
+          <listitem>
+            <para>
+              A nonnegative integer or floating point number (that is
+              &gt;= 0).
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>types.numbers.positive</literal>
+          </term>
+          <listitem>
+            <para>
+              A positive integer or floating point number (that is &gt;
+              0).
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+    <section xml:id="sec-option-types-string">
+      <title>String types</title>
+      <variablelist>
+        <varlistentry>
+          <term>
+            <literal>types.str</literal>
+          </term>
+          <listitem>
+            <para>
+              A string. Multiple definitions cannot be merged.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>types.separatedString</literal>
+            <emphasis><literal>sep</literal></emphasis>
+          </term>
+          <listitem>
+            <para>
+              A string. Multiple definitions are concatenated with
+              <emphasis><literal>sep</literal></emphasis>, e.g.
+              <literal>types.separatedString &quot;|&quot;</literal>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>types.lines</literal>
+          </term>
+          <listitem>
+            <para>
+              A string. Multiple definitions are concatenated with a new
+              line <literal>&quot;\n&quot;</literal>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>types.commas</literal>
+          </term>
+          <listitem>
+            <para>
+              A string. Multiple definitions are concatenated with a
+              comma <literal>&quot;,&quot;</literal>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>types.envVar</literal>
+          </term>
+          <listitem>
+            <para>
+              A string. Multiple definitions are concatenated with a
+              colon <literal>&quot;:&quot;</literal>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>types.strMatching</literal>
+          </term>
+          <listitem>
+            <para>
+              A string matching a specific regular expression. Multiple
+              definitions cannot be merged. The regular expression is
+              processed using <literal>builtins.match</literal>.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
   </section>
-  <section xml:id="sec-option-types-value">
-    <title>Value Types</title>
+  <section xml:id="sec-option-types-submodule">
+    <title>Submodule types</title>
     <para>
-      Value types are types that take a value parameter.
+      Submodules are detailed in
+      <link linkend="section-option-types-submodule">Submodule</link>.
     </para>
     <variablelist>
-      <varlistentry>
-        <term>
-          <literal>types.enum</literal>
-          <emphasis><literal>l</literal></emphasis>
-        </term>
-        <listitem>
-          <para>
-            One element of the list
-            <emphasis><literal>l</literal></emphasis>, e.g.
-            <literal>types.enum [ &quot;left&quot; &quot;right&quot; ]</literal>.
-            Multiple definitions cannot be merged.
-          </para>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term>
-          <literal>types.separatedString</literal>
-          <emphasis><literal>sep</literal></emphasis>
-        </term>
-        <listitem>
-          <para>
-            A string with a custom separator
-            <emphasis><literal>sep</literal></emphasis>, e.g.
-            <literal>types.separatedString &quot;|&quot;</literal>.
-          </para>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term>
-          <literal>types.ints.between</literal>
-          <emphasis><literal>lowest highest</literal></emphasis>
-        </term>
-        <listitem>
-          <para>
-            An integer between
-            <emphasis><literal>lowest</literal></emphasis> and
-            <emphasis><literal>highest</literal></emphasis> (both
-            inclusive). Useful for creating types like
-            <literal>types.port</literal>.
-          </para>
-        </listitem>
-      </varlistentry>
       <varlistentry>
         <term>
           <literal>types.submodule</literal>
@@ -345,8 +414,6 @@
             in composed types to create modular options. This is
             equivalent to
             <literal>types.submoduleWith { modules = toList o; shorthandOnlyDefinesConfig = true; }</literal>.
-            Submodules are detailed in
-            <link linkend="section-option-types-submodule">Submodule</link>.
           </para>
         </listitem>
       </varlistentry>
@@ -467,7 +534,7 @@
     </variablelist>
   </section>
   <section xml:id="sec-option-types-composed">
-    <title>Composed Types</title>
+    <title>Composed types</title>
     <para>
       Composed types are types that take a type as parameter.
       <literal>listOf int</literal> and
@@ -850,7 +917,7 @@ nixThings = mkOption {
     </variablelist>
   </section>
   <section xml:id="sec-option-types-custom">
-    <title>Custom Types</title>
+    <title>Custom types</title>
     <para>
       Custom types can be created with the
       <literal>mkOptionType</literal> function. As type creation
