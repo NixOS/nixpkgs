@@ -28701,6 +28701,8 @@ with pkgs;
 
   marker = callPackage ../applications/editors/marker { };
 
+  meerk40t = callPackage ../applications/misc/meerk40t { };
+
   musikcube = callPackage ../applications/audio/musikcube {
     inherit (darwin.apple_sdk.frameworks) Cocoa SystemConfiguration;
   };
