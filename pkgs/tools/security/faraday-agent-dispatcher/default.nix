@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "faraday-agent-dispatcher";
-  version = "2.2.0";
+  version = "2.3.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_agent_dispatcher";
     rev = "refs/tags/${version}";
-    hash = "sha256-dTXTR2H37FDfnpY4Ts6NoYAnJX52yqRZeD2Yf8S/kS8=";
+    hash = "sha256-lsSpD3XJ6Yw9viRCRB7zhl/KTC6Nwle2vnZ9xWr4Ujo=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
