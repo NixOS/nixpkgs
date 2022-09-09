@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=../../../../.. -i bash -p coreutils curl git jq moreutils nix nix-prefetch
+#! nix-shell -i bash -p coreutils curl git jq moreutils nix nix-prefetch
 # shellcheck shell=bash
 # vim: ft=sh
 #
@@ -100,6 +100,8 @@ echo_provider() {
   echo "== terraform-providers.${provider}: $* =="
 }
 
+pushd "$(dirname "$0")"
+
 if [[ ${provider} =~ ^[^/]+/[^/]+$ ]]; then
   echo_provider "init"
   source_address=registry.terraform.io/${provider}
@@ -164,3 +166,5 @@ if [[ ${build} == 1 ]]; then
   echo_provider "building"
   nix-build --no-out-link "${repo_root}" -A "terraform-providers.${provider}"
 fi
+
+popd
