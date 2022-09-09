@@ -10636,6 +10636,12 @@
       fingerprint = "48AD DE10 F27B AFB4 7BB0  CCAF 2D25 95A0 0D08 ACE0";
     }];
   };
+  posch = {
+    email = "tp@fonz.de";
+    github = "posch";
+    githubId = 146413;
+    name = "Tobias Poschwatta";
+  };
   ppenguin = {
     name = "Jeroen Versteeg";
     email = "hieronymusv@gmail.com";
