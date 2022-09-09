@@ -7,15 +7,15 @@
 
 buildPythonPackage rec {
   pname = "nototools";
-  version = "0.2.16";
+  version = "0.2.17";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "nototools";
-    rev = "v${version}";
-    sha256 = "14rrdamkmhrykff8ln07fq9cm8zwj3k113lzwjcy0lgz23g51jyl";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-1+9cjH9VkXkBJLWoXL8h5k2pcyXrbBkGy/G9j3dsvks=";
   };
 
   postPatch = ''
