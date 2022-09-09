@@ -10,11 +10,12 @@
 , patches ? []
 , elixir ? inputs.elixir
 , hex ? inputs.hex.override { inherit elixir; }
+, nativeBuildInputs ? []
 , ...
 }@attrs:
 
 stdenvNoCC.mkDerivation (attrs // {
-  nativeBuildInputs = [ elixir hex cacert git ];
+  nativeBuildInputs = nativeBuildInputs ++ [ elixir hex cacert git ];
 
   MIX_ENV = mixEnv;
   MIX_DEBUG = if debug then 1 else 0;
@@ -41,11 +42,14 @@ stdenvNoCC.mkDerivation (attrs // {
 
   inherit patches;
 
-  dontBuild = true;
+  buildPhase = ''
+    runHoop preBuild
+    mix deps.get --only ${mixEnv}
+    runHook postBuild
+  '';
 
   installPhase = attrs.installPhase or ''
     runHook preInstall
-    mix deps.get --only ${mixEnv}
     find "$TEMPDIR/deps" -path '*/.git/*' -a ! -name HEAD -exec rm -rf {} +
     cp -r --no-preserve=mode,ownership,timestamps $TEMPDIR/deps $out
     runHook postInstall
