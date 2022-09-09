@@ -32,7 +32,11 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "dpkg-deb -x $curSrc source";
 
-  installPhase = "mv usr $out";
+  installPhase = ''
+    runHook preInstall
+    mv usr $out
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Yet another matrix client for desktop";
