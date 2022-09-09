@@ -1344,7 +1344,6 @@ broken-packages:
   - etcd
   - ethereum-rlp
   - eurofxref
-  - evdev
   - eve
   - eved
   - event
