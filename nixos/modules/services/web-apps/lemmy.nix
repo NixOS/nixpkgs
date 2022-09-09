@@ -117,7 +117,7 @@ in
               file_server
             }
             @for_backend {
-              path /api/* /pictrs/* feeds/* nodeinfo/*
+              path /api/* /pictrs/* /feeds/* /nodeinfo/*
             }
             handle @for_backend {
               reverse_proxy 127.0.0.1:${toString cfg.settings.port}
