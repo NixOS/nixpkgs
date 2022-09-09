@@ -284,6 +284,8 @@ let
 
     decompress =  callPackage ../development/ocaml-modules/decompress { };
 
+    dedukti =  callPackage ../development/ocaml-modules/dedukti { };
+
     diet =  callPackage ../development/ocaml-modules/diet { };
 
     digestif =  callPackage ../development/ocaml-modules/digestif { };
