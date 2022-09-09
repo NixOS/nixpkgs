@@ -2609,6 +2609,18 @@ let
 
       ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare-vsliveshare { };
 
+      vscjava.vscode-java-debug = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-java-debug";
+          publisher = "vscjava";
+          version = "0.44.0";
+          sha256 = "sha256-8/H7rihSKAvXp8QxK949txgMKwt6aYVN4EQdwhphIiQ=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       vscodevim.vim = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vim";
