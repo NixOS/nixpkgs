@@ -182,6 +182,7 @@ in rec {
       nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
       meta.description = "The NixOS manual in HTML format";
       allowedReferences = ["out"];
+      passthru = { inherit optionsDoc; };
     }
     ''
       # Generate the HTML manual.
