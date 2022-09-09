@@ -11491,6 +11491,8 @@ with pkgs;
 
   thefuck = python3Packages.callPackage ../tools/misc/thefuck { };
 
+  theme-sh = callPackage ../tools/misc/theme-sh { };
+
   thicket = callPackage ../applications/version-management/git-and-tools/thicket { };
 
   thiefmd = callPackage ../applications/editors/thiefmd { };
