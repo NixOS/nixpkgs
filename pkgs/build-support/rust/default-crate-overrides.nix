@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, atk
 , pkg-config
 , curl
 , darwin
@@ -227,4 +228,10 @@ in
   xcb = attrs: {
     buildInputs = [ python3 ];
   };
+
+  atk-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ atk ];
+  };
+
 }
