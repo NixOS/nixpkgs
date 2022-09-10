@@ -15478,6 +15478,15 @@
     github = "zuzuleinen";
     githubId = 944919;
   };
+  andreoss = {
+    email = "andreoss@sdf.org";
+    github = "andreoss";
+    githubId = 49783909;
+    name = "andreoss";
+    keys = [{
+      fingerprint = "DC8C DAFD 4571 C1BA A867  09D6 2DB3 9B41 2CDF 97C7";
+    }];
+  };
   quasigod-io = {
     email = "quasigod-io@protonmail.com";
     name = "Michael Belsanti";
