@@ -51,8 +51,8 @@ in {
   };
 
   nextcloud24 = generic {
-    version = "24.0.4";
-    sha256 = "d107426f8e1c193db882a04c844f9bc7e7eeb7c21e46c46197e5154d6d6ac28e";
+    version = "24.0.5";
+    sha256 = "sha256-sieIN3zLk5Hn+eztP2mpI2Zprqqy4OpSUKc+318e8CY=";
   };
 
   # tip: get the sha with:
