@@ -16750,6 +16750,8 @@ with pkgs;
 
   nailgun = callPackage ../development/tools/nailgun { };
 
+  nil = callPackage ../development/tools/nil { };
+
   ninja = callPackage ../development/tools/build-managers/ninja { };
 
   nimbo = with python3Packages; callPackage ../applications/misc/nimbo { };
