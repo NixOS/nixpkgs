@@ -17706,7 +17706,9 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  ndn-tools = callPackage ../tools/networking/ndn-tools { };
+  ndn-tools = callPackage ../tools/networking/ndn-tools {
+    openssl = openssl_1_1;
+  };
 
   nfd = callPackage ../servers/nfd { };
 
