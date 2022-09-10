@@ -8,7 +8,7 @@ let
 
   makeColor = i: concatMapStringsSep "," (x: "0x" + substring (2*i) 2 x);
 
-  isUnicode = hasSuffix "UTF-8" (toUpper config.i18n.defaultLocale);
+  isUnicode = config.i18n.defaultCharacterSet == "UTF-8";
 
   optimizedKeymap = pkgs.runCommand "keymap" {
     nativeBuildInputs = [ pkgs.buildPackages.kbd ];
