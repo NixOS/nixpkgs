@@ -37,9 +37,8 @@ in {
         };
       };
 
-      services.redis = {
-        enable = true;
-      };
+      services.redis.servers."nextcloud".enable = true;
+      services.redis.servers."nextcloud".port = 6379;
 
       systemd.services.nextcloud-setup= {
         requires = ["postgresql.service"];
