@@ -12,14 +12,14 @@
 , buildDocs ? true
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "ninja";
   version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "ninja-build";
     repo = "ninja";
-    rev = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-LvV/Fi2ARXBkfyA1paCRmLUwCh/rTyz+tGMg2/qEepI=";
   };
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice bjornfor orivej ];
   };
-})
+}
