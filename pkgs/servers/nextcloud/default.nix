@@ -13,6 +13,8 @@ let
       inherit sha256;
     };
 
+    patches = [ ./0001-Setup-remove-custom-dbuser-creation-behavior.patch ];
+
     passthru.tests = nixosTests.nextcloud;
 
     installPhase = ''
