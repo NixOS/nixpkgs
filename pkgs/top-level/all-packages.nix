@@ -17802,7 +17802,9 @@ with pkgs;
 
   CoinMP = callPackage ../development/libraries/CoinMP { };
 
-  coinlive = callPackage ../tools/misc/coinlive { };
+  coinlive = callPackage ../tools/misc/coinlive {
+    openssl = openssl_1_1;
+  };
 
   cointop = callPackage ../applications/misc/cointop { };
 
