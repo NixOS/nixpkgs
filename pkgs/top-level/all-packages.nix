@@ -17713,7 +17713,9 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  nfd = callPackage ../servers/nfd { };
+  nfd = callPackage ../servers/nfd {
+    openssl = openssl_1_1;
+  };
 
   cddlib = callPackage ../development/libraries/cddlib {};
 
