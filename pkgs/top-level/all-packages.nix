@@ -2501,6 +2501,8 @@ with pkgs;
 
   droidmote = callPackage ../tools/inputmethods/droidmote { };
 
+  eartag = callPackage ../applications/audio/eartag { };
+
   ecdsautils = callPackage ../tools/security/ecdsautils { };
 
   echidna = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage (../tools/security/echidna) { });
