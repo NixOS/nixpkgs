@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -28,11 +27,12 @@
 , networkmanager
 , polkit
 , libsecret
+, evolution-data-server
 }:
 
 stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.17.0";
+  version = "0.21.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
-    sha256 = "sha256-o/0NJZo1EPpXguN/tkUc+/9XaVTQWaLGe+2pU0B91Cg=";
+    sha256 = "sha256-NJLuOUBQmgphGMFZN3MsIOP99YI+CxyR+JuybX3Vnpc=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
     libxkbcommon
     libgudev
     callaudiod
+    evolution-data-server
     pulseaudio
     glib
     gcr
@@ -83,19 +84,11 @@ stdenv.mkDerivation rec {
   # Temporarily disabled - Test is broken (SIGABRT)
   doCheck = false;
 
-  mesonFlags = [ "-Dsystemd=true" "-Dcompositor=${phoc}/bin/phoc" ];
-
-  patches = [
-    # build: Adjust to polkit version changes
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/World/Phosh/phosh/-/commit/16b46e295b86cbf1beaccf8218cf65ebb4b7a6f1.patch";
-      sha256 = "sha256-Db1OEdiI1QBHGEBs1Coi7LTF9bCScdDgxmovpBdIY/g=";
-    })
-    # polkit-auth-agent: Scope cleanup function for PolkitAgentListener
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/World/Phosh/phosh/-/commit/b864653df50bfd8f34766fc6b37a3bf32cfbdfa4.patch";
-      sha256 = "sha256-YCw3tGk94NAa6PPTmA1lCJVzzi9GC74BmvtTcvuHPh0=";
-    })
+  mesonFlags = [
+    "-Dsystemd=true"
+    "-Dcompositor=${phoc}/bin/phoc"
+    # https://github.com/NixOS/nixpkgs/issues/36468
+    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
   ];
 
   postPatch = ''
