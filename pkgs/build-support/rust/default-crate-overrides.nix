@@ -17,6 +17,7 @@
 , libsodium
 , postgresql
 , gmp
+, gobject-introspection
 , foundationdb
 , capnproto
 , nettle
