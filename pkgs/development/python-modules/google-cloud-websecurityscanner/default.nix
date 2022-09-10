@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-websecurityscanner";
-  version = "1.8.2";
+  version = "1.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PJ1qqLAAyTmOqfLDxV2IASX9nnHOQTfAwSAotC4qlLQ=";
+    hash = "sha256-T+a154A4EakPGk7OL65mweveLBEL1ol3ZYYh2MTyxy8=";
   };
 
   propagatedBuildInputs = [
