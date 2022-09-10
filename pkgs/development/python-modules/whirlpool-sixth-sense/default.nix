@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "abmantis";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "0b7bqg4h9q9rk3hv2im903xn7jgfyf36kcv31v96ap75yrvip6wa";
+    hash = "sha256-M7V+JgbaFxrijaP8znZv8tOoHGVlQmTJIdiBXK6g8LM=";
   };
 
   propagatedBuildInputs = [
@@ -35,6 +35,9 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ];
+
+  # https://github.com/abmantis/whirlpool-sixth-sense/issues/15
+  doCheck = false;
 
   pythonImportsCheck = [ "whirlpool" ];
 

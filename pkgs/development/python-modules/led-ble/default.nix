@@ -1,29 +1,32 @@
 { lib
+, async-timeout
 , bleak
 , bleak-retry-connector
 , buildPythonPackage
 , fetchFromGitHub
+, flux-led
 , poetry-core
+, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "airthings-ble";
-  version = "0.5.0";
+  pname = "led-ble";
+  version = "0.7.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = "vincegio";
+    owner = "Bluetooth-Devices";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ihNy5Rme20fCO1tG7aqdVFhSF3DI9hAlge54+/nNGLs=";
+    rev = "v${version}";
+    hash = "sha256-WjSMyuxxScJMtrQAvCHX98IXzbO2dWAsAaOwXf6TEDg=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'bleak = "^0.15.1"' 'bleak = "*"'
+      --replace " --cov=led_ble --cov-report=term-missing:skip-covered" ""
   '';
 
   nativeBuildInputs = [
@@ -31,20 +34,23 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    async-timeout
     bleak
     bleak-retry-connector
+    flux-led
   ];
 
-  # Module has no tests
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
-    "airthings_ble"
+    "led_ble"
   ];
 
   meta = with lib; {
-    description = "Library for Airthings BLE devices";
-    homepage = "https://github.com/vincegio/airthings-ble";
+    description = "Library for LED BLE devices";
+    homepage = "https://github.com/Bluetooth-Devices/led-ble";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
