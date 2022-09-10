@@ -110,6 +110,8 @@ in stdenv.mkDerivation rec {
   ] ++ optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # https://github.com/rust-lang/rust/issues/92173
     "--set rust.jemalloc"
+  ] ++ optionals ((rust.toTargetOs stdenv.targetPlatform) == "none") [
+    "--disable-docs"
   ];
 
   # The bootstrap.py will generated a Makefile that then executes the build.
