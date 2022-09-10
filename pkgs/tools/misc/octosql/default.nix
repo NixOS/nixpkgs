@@ -3,8 +3,6 @@
 , fetchFromGitHub
 }:
 
-with lib;
-
 buildGoModule rec {
   pname = "octosql";
   version = "0.9.3";
