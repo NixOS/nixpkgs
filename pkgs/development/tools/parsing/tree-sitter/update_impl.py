@@ -3,7 +3,7 @@ import json
 import subprocess as sub
 import os
 import sys
-from typing import Generator, Any, Literal
+from typing import Iterator, Any, Literal
 
 debug: bool = True if os.environ.get("DEBUG", False) else False
 Bin = str
@@ -12,11 +12,12 @@ bins: dict[str, Bin] = json.loads(os.environ["BINARIES"])
 mode: str = sys.argv[1]
 jsonArg: dict = json.loads(sys.argv[2])
 
-Args = Generator[str, None, None]
+Args = Iterator[str]
 
 
 def curl_github_args(token: str | None, url: str) -> Args:
     """Query the github API via curl"""
+    yield bins["curl"]
     if not debug:
         yield "--silent"
     # follow redirects
@@ -43,6 +44,7 @@ def curl_result(output: bytes) -> Any | Literal["not found"]:
 
 def nix_prefetch_git_args(url: str, version_rev: str) -> Args:
     """Prefetch a git repository"""
+    yield bins["nix-prefetch-git"]
     if not debug:
         yield "--quiet"
     yield "--no-deepClone"
@@ -52,21 +54,33 @@ def nix_prefetch_git_args(url: str, version_rev: str) -> Args:
     yield version_rev
 
 
-def run_bin(cmd: str, args: Args) -> bytes:
-    bin: Bin = bins[cmd]
-    all = [bin] + list(args)
+def run_cmd(args: Args) -> bytes:
+    all = list(args)
     if debug:
         print(all, file=sys.stderr)
     return sub.check_output(all)
 
 
+Dir = str
+
+
+def atomically_write_args(to: Dir, cmd: Args) -> Args:
+    yield bins["atomically-write"]
+    yield to
+    yield from cmd
+
+
 def fetchRepo() -> None:
-    """fetch the given repo and print its nix-prefetch output to stdout"""
+    """fetch the given repo and write its nix-prefetch output to the corresponding grammar json file"""
     match jsonArg:
-        case {"orga": orga, "repo": repo}:
+        case {
+            "orga": orga,
+            "repo": repo,
+            "outputDir": outputDir,
+            "nixRepoAttrName": nixRepoAttrName,
+        }:
             token: str | None = os.environ.get("GITHUB_TOKEN", None)
-            out = run_bin(
-                "curl",
+            out = run_cmd(
                 curl_github_args(
                     token,
                     url=f"https://api.github.com/repos/{quote(orga)}/{quote(repo)}/releases/latest"
@@ -84,11 +98,17 @@ def fetchRepo() -> None:
                     sys.exit(f"git result for {orga}/{repo} did not have a `tag_name` field")
 
             print(f"Fetching latest release ({release}) of {orga}/{repo} …", file=sys.stderr)
-            res = run_bin(
-                "nix-prefetch-git",
-                nix_prefetch_git_args(
-                    url=f"https://github.com/{quote(orga)}/{quote(repo)}",
-                    version_rev=release
+            res = run_cmd(
+                atomically_write_args(
+                    os.path.join(
+                        outputDir,
+                        f"{nixRepoAttrName}.json"
+                    ),
+                    nix_prefetch_git_args(
+                        url=f"https://github.com/{quote(orga)}/{quote(repo)}",
+                        version_rev=release
+
+                    )
                 )
             )
             sys.stdout.buffer.write(res)
@@ -101,8 +121,7 @@ def fetchOrgaLatestRepos() -> None:
     match jsonArg:
         case {"orga": orga}:
             token: str | None = os.environ.get("GITHUB_TOKEN", None)
-            out = run_bin(
-                "curl",
+            out = run_cmd(
                 curl_github_args(
                     token,
                     url=f"https://api.github.com/orgs/{quote(orga)}/repos?per_page=100"
