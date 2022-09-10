@@ -33139,7 +33139,9 @@ with pkgs;
 
   egoboo = callPackage ../games/egoboo { };
 
-  eidolon = callPackage ../games/eidolon { };
+  eidolon = callPackage ../games/eidolon {
+    openssl = openssl_1_1;
+  };
 
   EmptyEpsilon = callPackage ../games/empty-epsilon { };
 
