@@ -13,7 +13,6 @@
 , pkg-config
 , gettext
 , gobject-introspection
-, libnotify
 , gnutls
 , libgcrypt
 , libgpg-error
@@ -68,7 +67,7 @@
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.37.1";
+  version = "2.37.90";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -76,7 +75,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-xTMmsXUfjG2j2y9L+pHBgBdViT4ofQ4fbAc0RYnUpqc=";
+    sha256 = "sha256-5VRyTvUnhJ02+3VNQrDNs5/0pscRhhtU25h0DV3mD5E=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -138,7 +137,6 @@ stdenv.mkDerivation rec {
     libidn
     libintl
     lcms2
-    libnotify
     libpthreadstubs
     libtasn1
     libwebp
