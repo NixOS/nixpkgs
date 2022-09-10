@@ -3251,6 +3251,8 @@ in {
 
   fire = callPackage ../development/python-modules/fire { };
 
+  fireflyalgorithm = callPackage ../development/python-modules/fireflyalgorithm { };
+
   firetv = callPackage ../development/python-modules/firetv { };
 
   first = callPackage ../development/python-modules/first { };
