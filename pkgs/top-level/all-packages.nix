@@ -31308,6 +31308,7 @@ with pkgs;
 
   taizen = callPackage ../applications/misc/taizen {
     inherit (darwin.apple_sdk.frameworks) Security;
+    openssl = openssl_1_1;
   };
 
   talosctl = callPackage ../applications/networking/cluster/talosctl { };
