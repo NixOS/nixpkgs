@@ -1,19 +1,26 @@
-{ stdenv, lib, fetchFromGitLab, meson, ninja, pkg-config, obs-studio, libGL
-, qtbase }:
+{ stdenv, lib, fetchFromGitHub, cmake, flatbuffers, git, obs-studio, qtbase }:
 
 stdenv.mkDerivation rec {
   pname = "obs-hyperion";
   version = "1.0.1";
 
-  src = fetchFromGitLab {
+  src = fetchFromGitHub {
     owner = "hyperion-project";
     repo = "hyperion-obs-plugin";
-    rev = "v${version}";
-    sha256 = "sha256-Si+TGYWpNPtUUFT+M571lCYslPyeYX92MdYV2EGgcyQ=";
+    rev = version;
+    sha256 = "sha256-pfWfJWuIoa+74u5J76/GE+OuHkksbwOAPfsR9OGX3L4=";
   };
 
-  nativeBuildInputs = [ meson pkg-config ninja ];
-  buildInputs = [ obs-studio libGL qtbase ];
+  nativeBuildInputs = [ cmake flatbuffers git ];
+  buildInputs = [ obs-studio qtbase flatbuffers git ];
+
+  cmakeFlags = [
+    "-DOBS_SOURCE=${obs-studio.src}"
+    "-DFLATBUFFERS_FLATC_EXECUTABLE=${flatbuffers}/bin/flatc"
+    "-DGLOBAL_INSTALLATION=ON"
+  ];
+
+  dontWrapQtApps = true;
 
   meta = with lib; {
     description = "OBS Studio plugin to connect to a Hyperion.ng server";
