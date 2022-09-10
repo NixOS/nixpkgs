@@ -105,7 +105,8 @@ in
   };
 
   gio-sys = attrs: {
-    buildInputs = [ dbus-glib ];
+    buildInputs = [ glib dbus-glib ];
+    nativeBuildInputs = [ pkg-config ];
   };
 
   gdk-pixbuf-sys = attrs: {
