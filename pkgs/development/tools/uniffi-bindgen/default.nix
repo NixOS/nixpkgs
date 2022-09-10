@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "uniffi-bindgen";
-  version = "0.19.3";
+  version = "0.19.6";
 
   src = fetchFromGitHub {
     owner = "mozilla";
