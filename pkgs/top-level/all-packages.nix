@@ -7374,7 +7374,9 @@ with pkgs;
 
   haveged = callPackage ../tools/security/haveged { };
 
-  habitat = callPackage ../applications/networking/cluster/habitat { };
+  habitat = callPackage ../applications/networking/cluster/habitat {
+    openssl = openssl_1_1;
+  };
 
   hashcash = callPackage ../tools/security/hashcash { };
 
