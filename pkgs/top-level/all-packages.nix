@@ -23368,8 +23368,6 @@ with pkgs;
     tpmSupport = true;
   };
 
-  ovmfvartool = callPackage ../applications/virtualization/ovmfvartool { };
-
   ops = callPackage ../applications/virtualization/ops { };
 
   seabios = callPackage ../applications/virtualization/seabios { };
