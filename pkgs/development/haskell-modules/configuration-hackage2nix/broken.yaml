@@ -70,6 +70,7 @@ broken-packages:
   - aeson-bson
   - aeson-decode
   - aeson-default
+  - aeson-dependent-sum
   - aeson-deriving
   - aeson-diff-generic
   - aeson-filthy
@@ -1144,6 +1145,7 @@ broken-packages:
   - djinn-th
   - dmcc
   - dmenu
+  - dns-patterns
   - dnsrbl
   - dnssd
   - dobutok
@@ -2419,6 +2421,7 @@ broken-packages:
   - hsns
   - hsntp
   - hs-openmoji-data
+  - hs-opentelemetry-instrumentation-hspec
   - hsoptions
   - hsoz
   - hsparql
@@ -4065,6 +4068,7 @@ broken-packages:
   - proxy-mapping
   - psc-ide
   - pseudo-trie
+  - psx
   - PTQ
   - publicsuffix
   - publicsuffixlistcreate
@@ -5064,6 +5068,7 @@ broken-packages:
   - text-ascii
   - text-builder-linear
   - text-containers
+  - text-display
   - text-format-heavy
   - text-generic-pretty
   - text-icu-normalized
@@ -5194,6 +5199,7 @@ broken-packages:
   - tracetree
   - tracked-files
   - tracker
+  - trackit
   - traction
   - tracy
   - traildb
