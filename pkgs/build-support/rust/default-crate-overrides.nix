@@ -22,6 +22,7 @@
 , clang
 , llvmPackages
 , linux-pam
+, pango
 , cmake
 , glib
 , freetype
