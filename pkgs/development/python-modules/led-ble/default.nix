@@ -1,17 +1,18 @@
 { lib
 , async-timeout
-, btsocket
+, bleak
+, bleak-retry-connector
 , buildPythonPackage
 , fetchFromGitHub
+, flux-led
 , poetry-core
-, pyric
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "bluetooth-auto-recovery";
-  version = "0.3.2";
+  pname = "led-ble";
+  version = "0.7.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,8 +21,13 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-1lzg4OY2FRCgpOVK79Pi5J2zPsL+zDWYLeSX0Icknkw=";
+    hash = "sha256-WjSMyuxxScJMtrQAvCHX98IXzbO2dWAsAaOwXf6TEDg=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=led_ble --cov-report=term-missing:skip-covered" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -29,26 +35,22 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     async-timeout
-    btsocket
-    pyric
+    bleak
+    bleak-retry-connector
+    flux-led
   ];
 
   checkInputs = [
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=bluetooth_auto_recovery --cov-report=term-missing:skip-covered" ""
-  '';
-
   pythonImportsCheck = [
-    "bluetooth_auto_recovery"
+    "led_ble"
   ];
 
   meta = with lib; {
-    description = "Library for recovering Bluetooth adapters";
-    homepage = "https://github.com/Bluetooth-Devices/bluetooth-auto-recovery";
+    description = "Library for LED BLE devices";
+    homepage = "https://github.com/Bluetooth-Devices/led-ble";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -7,11 +7,12 @@
 , pytest-aio
 , pytest-asyncio
 , pytestCheckHook
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "python-izone";
-  version = "1.2.7";
+  version = "1.2.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,9 +20,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Swamp-Ig";
     repo = "pizone";
-    rev = "v${version}";
-    hash = "sha256-CvFOhs56dfNerK3junWElQfTJi1YXA86zMbv0tseQC8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-0rj+tKn2pbFe+nczTMGLwIwmc4jCznGGF4/IMjlEvQg=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
     aiohttp
