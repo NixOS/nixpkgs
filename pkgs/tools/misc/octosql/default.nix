@@ -1,11 +1,11 @@
 { lib
-, buildGo118Module
+, buildGoModule
 , fetchFromGitHub
 }:
 
 with lib;
 
-buildGo118Module rec {
+buildGoModule rec {
   pname = "octosql";
   version = "0.9.3";
 
