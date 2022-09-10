@@ -13,11 +13,6 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  # Make this a fixed-output derivation
-  outputHashMode = "recursive";
-  outputHashAlgo = "sha256";
-  ouputHash = "2c2def57092a399aa1c450699cbb8639f47d751157b18db17";
-
   meta = {
     description = "A port of the arc theme for Plasma";
     homepage = "https://git.io/arc-kde";
