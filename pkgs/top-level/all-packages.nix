@@ -18846,7 +18846,9 @@ with pkgs;
 
   hydra_unstable = callPackage ../development/tools/misc/hydra/unstable.nix { nix = nixVersions.nix_2_11; };
 
-  hydra-cli = callPackage ../development/tools/misc/hydra-cli { };
+  hydra-cli = callPackage ../development/tools/misc/hydra-cli {
+    openssl = openssl_1_1;
+  };
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
