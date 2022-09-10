@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation (attrs // {
   inherit patches;
 
   buildPhase = ''
-    runHoop preBuild
+    runHook preBuild
     mix deps.get --only ${mixEnv}
     runHook postBuild
   '';
