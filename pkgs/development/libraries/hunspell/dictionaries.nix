@@ -868,4 +868,14 @@ rec {
     shortDescription = "Norwegian Bokmål (Norway)";
     license = with lib.licenses; [ gpl2Only ];
   };
+
+  nn_NO = nn-no;
+  nn-no = mkDictFromLibreOffice {
+    shortName = "nn-no";
+    dictFileName = "nn_NO";
+    sourceRoot = "no";
+    readmeFile = "README_hyph_NO.txt";
+    shortDescription = "Norwegian Nynorsk (Norway)";
+    license = with lib.licenses; [ gpl2Only ];
+  };
 }
