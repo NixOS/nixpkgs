@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-gtk";
-  version = "5.0.17";
+  version = "5.0.18";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-sAPbbMoZ4NGiE7lbtcdzQQsPib6i52JwWsLe+bmTshU=";
+    sha256 = "sha256-rQ2HLiI0dIerxRV+fbHpTJy4aGmFKmGd6YckKxXmp4s=";
   };
 
   cmakeFlags = [
