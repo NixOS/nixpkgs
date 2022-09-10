@@ -5,6 +5,7 @@
 , asciidoc
 , docbook_xml_dtd_45
 , docbook_xsl
+, installShellFiles
 , libxslt
 , python3
 , re2c
@@ -25,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     python3
     re2c
+    installShellFiles
   ]
   ++ lib.optionals buildDocs [
     asciidoc
@@ -50,8 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm555 -t $out/bin ninja
-    install -Dm444 misc/bash-completion $out/share/bash-completion/completions/ninja
-    install -Dm444 misc/zsh-completion $out/share/zsh/site-functions/_ninja
+    installShellCompletion --name ninja \
+      --bash misc/bash-completion \
+      --zsh misc/zsh-completion
   '' + lib.optionalString buildDocs ''
     install -Dm444 -t $out/share/doc/ninja doc/manual.asciidoc doc/manual.html
   '' + ''
