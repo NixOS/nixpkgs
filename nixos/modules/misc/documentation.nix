@@ -99,7 +99,7 @@ let
               exit 1
             } >&2
         '';
-    inherit (cfg.nixos.options) warningsAreErrors;
+    inherit (cfg.nixos.options) warningsAreErrors allowDocBook;
   };
 
 
@@ -252,6 +252,23 @@ in
           Whether to split the option docs build into a cacheable and an uncacheable part.
           Splitting the build can substantially decrease the amount of time needed to build
           the manual, but some user modules may be incompatible with this splitting.
+        '';
+      };
+
+      nixos.options.allowDocBook = mkOption {
+        type = types.bool;
+        default = true;
+        description = lib.mdDoc ''
+          Whether to allow DocBook option docs. When set to `false` all option using
+          DocBook documentation will cause a manual build error; additionally a new
+          renderer may be used.
+
+          ::: {.note}
+          The `false` setting for this option is not yet fully supported. While it
+          should work fine and produce the same output as the previous toolchain
+          using DocBook it may not work in all circumstances. Whether markdown option
+          documentation is allowed is independent of this option.
+          :::
         '';
       };
 

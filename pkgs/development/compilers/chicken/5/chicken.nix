@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   ] ++ (lib.optionals stdenv.isDarwin [
     "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
     "C_COMPILER=$(CC)"
+    "LINKER_OPTIONS=-headerpad_max_install_names"
   ]);
 
   nativeBuildInputs = [

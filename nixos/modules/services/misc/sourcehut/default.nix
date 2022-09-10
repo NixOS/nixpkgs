@@ -101,7 +101,7 @@ let
     todosrht
   ]);
   mkOptionNullOrStr = description: mkOption {
-    inherit description;
+    description = lib.mdDoc description;
     type = with types; nullOr str;
     default = null;
   };

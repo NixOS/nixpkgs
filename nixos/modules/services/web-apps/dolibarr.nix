@@ -48,12 +48,12 @@ in
 {
   # interface
   options.services.dolibarr = {
-    enable = mkEnableOption "dolibarr";
+    enable = mkEnableOption (lib.mdDoc "dolibarr");
 
     domain = mkOption {
       type = types.str;
       default = "localhost";
-      description = ''
+      description = lib.mdDoc ''
         Domain name of your server.
       '';
     };
@@ -61,35 +61,35 @@ in
     user = mkOption {
       type = types.str;
       default = "dolibarr";
-      description = ''
+      description = lib.mdDoc ''
         User account under which dolibarr runs.
 
-        <note><para>
-          If left as the default value this user will automatically be created
-          on system activation, otherwise you are responsible for
-          ensuring the user exists before the dolibarr application starts.
-        </para></note>
+        ::: {.note}
+        If left as the default value this user will automatically be created
+        on system activation, otherwise you are responsible for
+        ensuring the user exists before the dolibarr application starts.
+        :::
       '';
     };
 
     group = mkOption {
       type = types.str;
       default = "dolibarr";
-      description = ''
+      description = lib.mdDoc ''
         Group account under which dolibarr runs.
 
-        <note><para>
-          If left as the default value this group will automatically be created
-          on system activation, otherwise you are responsible for
-          ensuring the group exists before the dolibarr application starts.
-        </para></note>
+        ::: {.note}
+        If left as the default value this group will automatically be created
+        on system activation, otherwise you are responsible for
+        ensuring the group exists before the dolibarr application starts.
+        :::
       '';
     };
 
     stateDir = mkOption {
       type = types.str;
       default = "/var/lib/dolibarr";
-      description = ''
+      description = lib.mdDoc ''
         State and configuration directory dolibarr will use.
       '';
     };
@@ -98,33 +98,33 @@ in
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = "Database host address.";
+        description = lib.mdDoc "Database host address.";
       };
       port = mkOption {
         type = types.port;
         default = 3306;
-        description = "Database host port.";
+        description = lib.mdDoc "Database host port.";
       };
       name = mkOption {
         type = types.str;
         default = "dolibarr";
-        description = "Database name.";
+        description = lib.mdDoc "Database name.";
       };
       user = mkOption {
         type = types.str;
         default = "dolibarr";
-        description = "Database username.";
+        description = lib.mdDoc "Database username.";
       };
       passwordFile = mkOption {
         type = with types; nullOr path;
         default = null;
         example = "/run/keys/dolibarr-dbpassword";
-        description = "Database password file.";
+        description = lib.mdDoc "Database password file.";
       };
       createLocally = mkOption {
         type = types.bool;
         default = true;
-        description = "Create the database and database user locally.";
+        description = lib.mdDoc "Create the database and database user locally.";
       };
     };
 

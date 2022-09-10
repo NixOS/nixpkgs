@@ -274,6 +274,10 @@ let
 
     ctypes = callPackage ../development/ocaml-modules/ctypes { };
 
+    ctypes_stubs_js = callPackage ../development/ocaml-modules/ctypes_stubs_js {
+      inherit (pkgs) nodejs;
+    };
+
     dap =  callPackage ../development/ocaml-modules/dap { };
 
     data-encoding = callPackage ../development/ocaml-modules/data-encoding { };
@@ -532,6 +536,8 @@ let
     inotify = callPackage ../development/ocaml-modules/inotify { };
 
     integers = callPackage ../development/ocaml-modules/integers { };
+
+    integers_stubs_js = callPackage ../development/ocaml-modules/integers_stubs_js { };
 
     io-page = callPackage ../development/ocaml-modules/io-page { };
 
@@ -1420,6 +1426,8 @@ let
     terminal = callPackage ../development/ocaml-modules/terminal { };
 
     terminal_size = callPackage ../development/ocaml-modules/terminal_size { };
+
+    tezos-base58 = callPackage ../development/ocaml-modules/tezos-base58 { };
 
     theora = callPackage ../development/ocaml-modules/theora { };
 
