@@ -17702,7 +17702,9 @@ with pkgs;
 
   captive-browser = callPackage ../applications/networking/browsers/captive-browser { };
 
-  ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
+  ndn-cxx = callPackage ../development/libraries/ndn-cxx {
+    openssl = openssl_1_1;
+  };
 
   ndn-tools = callPackage ../tools/networking/ndn-tools { };
 
