@@ -232,6 +232,8 @@
   tree-sitter-langs = callPackage ./tree-sitter-langs { final = self; };
   tsc = callPackage ./tsc { };
 
+  yes-no = callPackage ./yes-no { };
+
   youtube-dl = callPackage ./youtube-dl { };
 
   # From old emacsPackages (pre emacsPackagesNg)
