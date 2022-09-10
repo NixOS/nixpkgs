@@ -7384,7 +7384,9 @@ with pkgs;
 
   hashcat-utils = callPackage ../tools/security/hashcat-utils { };
 
-  hash_extender = callPackage ../tools/security/hash_extender { };
+  hash_extender = callPackage ../tools/security/hash_extender {
+    openssl = openssl_1_1;
+  };
 
   hash-identifier = callPackage ../tools/security/hash-identifier { };
 
