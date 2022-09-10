@@ -5177,6 +5177,8 @@ with pkgs;
 
   evdevremapkeys = callPackage ../tools/inputmethods/evdevremapkeys { };
 
+  eyedropper = callPackage ../applications/graphics/eyedropper { };
+
   persistent-evdev = python3Packages.callPackage ../servers/persistent-evdev { };
 
   evscript = callPackage ../tools/inputmethods/evscript { };
@@ -23367,8 +23369,6 @@ with pkgs;
     tpmSupport = true;
   };
 
-  ovmfvartool = callPackage ../applications/virtualization/ovmfvartool { };
-
   ops = callPackage ../applications/virtualization/ops { };
 
   seabios = callPackage ../applications/virtualization/seabios { };
@@ -30544,33 +30544,44 @@ with pkgs;
   quiterss = libsForQt514.callPackage ../applications/networking/newsreaders/quiterss {};
 
   quodlibet = callPackage ../applications/audio/quodlibet {
-    keybinder3 = null;
-    libmodplug = null;
+    inherit (gnome) adwaita-icon-theme;
     kakasi = null;
+    keybinder3 = null;
     libappindicator-gtk3 = null;
+    libmodplug = null;
   };
 
   quodlibet-without-gst-plugins = quodlibet.override {
-    withGstPlugins = false;
     tag = "-without-gst-plugins";
+    withGstPlugins = false;
   };
 
-  quodlibet-xine = quodlibet.override { xineBackend = true; tag = "-xine"; };
+  quodlibet-xine = quodlibet.override {
+    tag = "-xine";
+    withGstreamerBackend = false;
+    withXineBackend = true;
+  };
 
   quodlibet-full = quodlibet.override {
     inherit gtksourceview webkitgtk;
+    kakasi = kakasi;
+    keybinder3 = keybinder3;
+    libappindicator-gtk3 = libappindicator-gtk3;
+    libmodplug = libmodplug;
+    tag = "-full";
     withDbusPython = true;
-    withPyInotify = true;
     withMusicBrainzNgs = true;
     withPahoMqtt = true;
-    keybinder3 = keybinder3;
-    libmodplug = libmodplug;
-    kakasi = kakasi;
-    libappindicator-gtk3 = libappindicator-gtk3;
-    tag = "-full";
+    withPyInotify = true;
+    withPypresence = true;
+    withSoco = true;
   };
 
-  quodlibet-xine-full = quodlibet-full.override { xineBackend = true; tag = "-xine-full"; };
+  quodlibet-xine-full = quodlibet-full.override {
+    tag = "-xine-full";
+    withGstreamerBackend = false;
+    withXineBackend = true;
+  };
 
   qutebrowser = libsForQt5.callPackage ../applications/networking/browsers/qutebrowser { };
 
