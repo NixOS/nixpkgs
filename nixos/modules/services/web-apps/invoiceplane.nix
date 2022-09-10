@@ -184,6 +184,26 @@ let
           '';
         };
 
+        cron = {
+
+          enable = mkOption {
+            type = types.bool;
+            default = false;
+            description = lib.mdDoc ''
+              Enable cron service which periodically runs Invoiceplane tasks.
+              Requires key taken from the administration page. Refer to
+              <https://wiki.invoiceplane.com/en/1.0/modules/recurring-invoices>
+              on how to configure it.
+            '';
+          };
+
+          key = mkOption {
+            type = types.str;
+            description = lib.mdDoc "Cron key taken from the administration page.";
+          };
+
+        };
+
       };
 
     };
@@ -224,8 +244,11 @@ in
       }
       { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
         message = ''services.invoiceplane.sites."${hostName}".database.passwordFile cannot be specified if services.invoiceplane.sites."${hostName}".database.createLocally is set to true.'';
-      }]
-    ) eachSite);
+      }
+      { assertion = cfg.cron.enable -> cfg.cron.key != null;
+        message = ''services.invoiceplane.sites."${hostName}".cron.key must be set in order to use cron service.'';
+      }
+    ]) eachSite);
 
     services.mysql = mkIf (any (v: v.database.createLocally) (attrValues eachSite)) {
       enable = true;
@@ -255,6 +278,7 @@ in
   }
 
   {
+
     systemd.tmpfiles.rules = flatten (mapAttrsToList (hostName: cfg: [
       "d ${cfg.stateDir} 0750 ${user} ${webserver.group} - -"
       "f ${cfg.stateDir}/ipconfig.php 0750 ${user} ${webserver.group} - -"
@@ -284,6 +308,34 @@ in
       group = webserver.group;
       isSystemUser = true;
     };
+
+  }
+  {
+
+    # Cron service implementation
+
+    systemd.timers = mapAttrs' (hostName: cfg: (
+      nameValuePair "invoiceplane-cron-${hostName}" (mkIf cfg.cron.enable {
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnBootSec = "5m";
+          OnUnitActiveSec = "5m";
+          Unit = "invoiceplane-cron-${hostName}.service";
+        };
+      })
+    )) eachSite;
+
+    systemd.services =
+      (mapAttrs' (hostName: cfg: (
+        nameValuePair "invoiceplane-cron-${hostName}" (mkIf cfg.cron.enable {
+          serviceConfig = {
+            Type = "oneshot";
+            User = user;
+            ExecStart = "${pkgs.curl}/bin/curl --header 'Host: ${hostName}' http://localhost/index.php/invoices/cron/recur/${cfg.cron.key}";
+          };
+        })
+    )) eachSite);
+
   }
 
   (mkIf (cfg.webserver == "caddy") {
@@ -301,7 +353,6 @@ in
       )) eachSite;
     };
   })
-
 
   ]);
 }
