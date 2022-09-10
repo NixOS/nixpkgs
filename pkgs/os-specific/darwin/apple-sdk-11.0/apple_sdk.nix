@@ -171,6 +171,15 @@ in rec {
 
     # Seems to be appropriate given https://developer.apple.com/forums/thread/666686
     JavaVM = super.JavaNativeFoundation;
+
+    CoreVideo = lib.overrideDerivation super.CoreVideo (drv: {
+      installPhase = drv.installPhase + ''
+        # When used as a module, complains about a missing import for
+        # Darwin.C.stdint. Apparently fixed in later SDKs.
+        awk -i inplace '/CFBase.h/ { print "#include <stdint.h>" } { print }' \
+          $out/Library/Frameworks/CoreVideo.framework/Headers/CVBase.h
+      '';
+    });
   };
 
   bareFrameworks = (
