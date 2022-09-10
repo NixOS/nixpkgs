@@ -197,6 +197,9 @@ in stdenv.mkDerivation rec {
     inherit license;
 
     maintainers = with maintainers; [ bluescreen303 offline cstrahan ];
-    platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
+    platforms = subtractLists systems.doubles.i686 (
+      if (versionAtLeast version "6.0") then systems.doubles.linux
+      else systems.doubles.unix
+    );
   };
 }
