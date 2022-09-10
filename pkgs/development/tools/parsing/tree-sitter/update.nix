@@ -408,6 +408,7 @@ let
   fetchImpl = passBinaries "fetchImpl-wrapped" {
       curl = "${curl}/bin/curl";
       nix-prefetch-git = "${nix-prefetch-git}/bin/nix-prefetch-git";
+      inherit atomically-write;
     }
     (writers.writePython3 "fetchImpl" {
         flakeIgnore = ["E501"];
@@ -434,6 +435,7 @@ let
   '';
 
   outputDir = "${toString ./.}/grammars";
+
   update-all-grammars = writeShellScript "update-all-grammars.sh" ''
     set -euo pipefail
     echo "fetching list of grammars" 1>&2
@@ -445,11 +447,15 @@ let
     ${forEachParallel
         "repos-to-fetch"
         (writeShellScript "fetch-repo" ''
-          ${atomically-write} \
-            "${outputDir}/$(jq --raw-output --null-input '$ARGS.positional[0].name' --jsonargs "$1").json" \
             ${fetchImpl} fetch-repo "$1"
         '')
-        (lib.mapAttrsToList (name: attrs: attrs // { inherit name; }) allGrammars)
+        (lib.mapAttrsToList
+          (nixRepoAttrName: attrs: attrs // {
+            inherit
+              nixRepoAttrName
+              outputDir;
+          })
+          allGrammars)
     }
     ${atomically-write} \
       "${outputDir}/default.nix" \
