@@ -1081,6 +1081,12 @@
     githubId = 628387;
     name = "Arian van Putten";
   };
+  arikgrahl = {
+    email = "mail@arik-grahl.de";
+    github = "arikgrahl";
+    githubId = 8049011;
+    name = "Arik Grahl";
+  };
   aristid = {
     email = "aristidb@gmail.com";
     github = "aristidb";
