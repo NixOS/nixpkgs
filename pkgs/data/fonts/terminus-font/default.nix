@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, python3
 , bdftopcf, mkfontscale
+, variants ? []
 }:
-
 stdenv.mkDerivation rec {
   pname = "terminus-font";
   version = "4.49.1";
@@ -19,8 +19,13 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postPatch = ''
-    substituteInPlace Makefile --replace 'fc-cache' '#fc-cache'
-    substituteInPlace Makefile --replace 'gzip'     'gzip -n'
+    substituteInPlace Makefile \
+      --replace 'fc-cache' '#fc-cache' \
+      --replace 'gzip' 'gzip -n'
+    for variant in ${builtins.concatStringsSep " " (map (s: ''"${s}"'' ) variants)}
+    do
+      patch -p1 -i alt/"$variant".diff
+    done
   '';
 
   installTargets = [ "install" "install-otb" "fontdir" ];
