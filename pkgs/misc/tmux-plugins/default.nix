@@ -237,12 +237,12 @@ in rec {
   fzf-tmux-url = mkTmuxPlugin {
     pluginName = "fzf-tmux-url";
     rtpFilePath = "fzf-url.tmux";
-    version = "unstable-2019-12-02";
+    version = "unstable-2021-12-27";
     src = fetchFromGitHub {
       owner = "wfxr";
       repo = "tmux-fzf-url";
-      rev = "2baa410bf7a0f6ceb62a83770baf90d570406ac0";
-      sha256 = "0rjzzlmxgjrr8g19bg2idcqr9ny07mrq2s39vndg24n0m7znh3fz";
+      rev = "1241fc5682850fe41812cad81c76541674ee305b";
+      sha256 = "1270c5nfvgsdajgfahlacqfb5xwg4hwfrciiy0v03d50vg4h0kdi";
     };
   };
 
