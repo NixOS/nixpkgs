@@ -170,11 +170,22 @@ with builtins; with lib; recursiveUpdate lib (rec {
      different versions of dependencies:
 
      ```nix
-     coqPackages.QuickCick.override { ssreflect = my-cool-ssreflect; }
+     coqPackages.QuickChick.override { ssreflect = my-cool-ssreflect; }
      ```
 
      whereas `overrideCoqDerivation` allows you to override arguments to the
      call to `mkCoqDerivation` in the Coq library.
+
+     Note that all Coq libraries in Nixpkgs have a `version` argument for
+     easily using a different version.  So if all you want to do is use a
+     different version, and the derivation for the Coq library already has
+     support for the version you want, you likely only need to update the
+     `version` argument on the library derivation.  This is done with
+     `.override`:
+
+     ```nix
+     coqPackages.QuickChick.override { version = "1.4.0"; }
+     ```
   */
   overrideCoqDerivation = f: drv: (drv.override (args: {
     mkCoqDerivation = drv_: (args.mkCoqDerivation drv_).override f;
