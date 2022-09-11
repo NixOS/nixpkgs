@@ -361,6 +361,12 @@ in
     buildInputs = [ which v8 python2 ];
     buildFlags = [ "--with-system-v8=true" ];
     dontBuild = false;
+    # The gem includes broken symlinks which are ignored during unpacking, but
+    # then fail during build. Since the content is missing anyway, touching the
+    # files is enough to unblock the build.
+    preBuild = ''
+      touch vendor/depot_tools/cbuildbot vendor/depot_tools/chrome_set_ver vendor/depot_tools/cros_sdk
+    '';
     postPatch = ''
       substituteInPlace ext/libv8/extconf.rb \
         --replace "location = Libv8::Location::Vendor.new" \

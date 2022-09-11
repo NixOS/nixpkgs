@@ -70,6 +70,7 @@ broken-packages:
   - aeson-bson
   - aeson-decode
   - aeson-default
+  - aeson-dependent-sum
   - aeson-deriving
   - aeson-diff-generic
   - aeson-filthy
@@ -1144,6 +1145,7 @@ broken-packages:
   - djinn-th
   - dmcc
   - dmenu
+  - dns-patterns
   - dnsrbl
   - dnssd
   - dobutok
@@ -1344,7 +1346,6 @@ broken-packages:
   - etcd
   - ethereum-rlp
   - eurofxref
-  - evdev
   - eve
   - eved
   - event
@@ -2144,7 +2145,6 @@ broken-packages:
   - heterogeneous-list-literals
   - hetris
   - heukarya
-  - hevm
   - HExcel
   - hexchat
   - hexif
@@ -2421,6 +2421,7 @@ broken-packages:
   - hsns
   - hsntp
   - hs-openmoji-data
+  - hs-opentelemetry-instrumentation-hspec
   - hsoptions
   - hsoz
   - hsparql
@@ -2809,7 +2810,6 @@ broken-packages:
   - kd-tree
   - keccak
   - keera-hails-reactivevalues
-  - keid-render-basic
   - keid-ui-dearimgui
   - keiretsu
   - kempe
@@ -3273,7 +3273,6 @@ broken-packages:
   - monadacme
   - monad-atom
   - monad-atom-simple
-  - monad-bayes
   - monad-branch
   - MonadCatchIO-transformers
   - monad-choice
@@ -4069,6 +4068,7 @@ broken-packages:
   - proxy-mapping
   - psc-ide
   - pseudo-trie
+  - psx
   - PTQ
   - publicsuffix
   - publicsuffixlistcreate
@@ -5068,6 +5068,7 @@ broken-packages:
   - text-ascii
   - text-builder-linear
   - text-containers
+  - text-display
   - text-format-heavy
   - text-generic-pretty
   - text-icu-normalized
@@ -5198,6 +5199,7 @@ broken-packages:
   - tracetree
   - tracked-files
   - tracker
+  - trackit
   - traction
   - tracy
   - traildb

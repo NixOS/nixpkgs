@@ -87,7 +87,7 @@ self: super: {
   constraints = doJailbreak super.constraints;
   cpphs = overrideCabal (drv: { postPatch = "sed -i -e 's,time >=1.5 && <1.11,time >=1.5 \\&\\& <1.12,' cpphs.cabal";}) super.cpphs;
   data-fix = doJailbreak super.data-fix;
-  dbus = self.dbus_1_2_25;
+  dbus = self.dbus_1_2_26;
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
@@ -130,13 +130,27 @@ self: super: {
   retrie = doDistribute (dontCheck self.retrie_1_2_0_1);
   singleton-bool = doJailbreak super.singleton-bool;
   servant = doJailbreak super.servant;
-  servant-auth = doJailbreak super.servant-auth;
   servant-swagger = doJailbreak super.servant-swagger;
+
+  # 2022-09-02: Too strict bounds on lens
+  # https://github.com/haskell-servant/servant/pull/1607/files
+  servant-docs = doJailbreak super.servant-docs;
+  servant-foreign = doJailbreak super.servant-foreign;
+  servant-auth = doJailbreak super.servant-auth;
+  servant-auth-docs = doJailbreak super.servant-auth-docs;
+  servant-auth-server = doJailbreak super.servant-auth-server;
   servant-auth-swagger = doJailbreak super.servant-auth-swagger;
+  # 2022-09-02: Too strict bounds on lens
+  # https://github.com/haskell-servant/servant-multipart/pull/64
+  servant-multipart = doJailbreak super.servant-multipart;
+  # 2022-09-02: Too strict bounds on lens
+  # https://github.com/GetShopTV/swagger2/pull/242
+  swagger2 = doJailbreak super.swagger2;
+
   shelly = doJailbreak super.shelly;
   splitmix = doJailbreak super.splitmix;
   tasty-hspec = doJailbreak super.tasty-hspec;
-  th-desugar = self.th-desugar_1_13_1;
+  th-desugar = self.th-desugar_1_14;
   time-compat = doJailbreak super.time-compat;
   tomland = doJailbreak super.tomland;
   type-equality = doJailbreak super.type-equality;
