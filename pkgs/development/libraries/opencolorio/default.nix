@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , expat
 , libyamlcpp
@@ -34,6 +35,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-e1PpWjjfSjtgN9Rs/+lsA45Z9S4y4T6nqrJ02DZ4vjs=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "darwin-no-hidden-l.patch";
+      url = "https://github.com/AcademySoftwareFoundation/OpenColorIO/commit/48bab7c643ed8d108524d718e5038d836f906682.patch";
+      revert = true;
+      sha256 = "sha256-0DF+lwi2nfkUFG0wYvL3HYbhZS6SqGtPWoOabrFS1Eo=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
