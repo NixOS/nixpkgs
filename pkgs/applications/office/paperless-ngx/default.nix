@@ -49,7 +49,16 @@ let
     };
   };
 
-  path = lib.makeBinPath [ ghostscript imagemagick jbig2enc optipng pngquant qpdf tesseract4 unpaper ];
+  path = lib.makeBinPath [
+    ghostscript
+    imagemagick
+    jbig2enc
+    optipng
+    pngquant
+    qpdf
+    tesseract4
+    unpaper
+  ];
 in
 python.pkgs.pythonPackages.buildPythonApplication rec {
   pname = "paperless-ngx";
