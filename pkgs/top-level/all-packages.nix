@@ -32247,7 +32247,7 @@ with pkgs;
   };
 
   neovimUtils = callPackage ../applications/editors/neovim/utils.nix {
-    inherit (lua51Packages) buildLuarocksPackage;
+    lua = lua5_1;
   };
   neovim = wrapNeovim neovim-unwrapped { };
 
