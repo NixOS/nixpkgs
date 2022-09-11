@@ -253,6 +253,7 @@
   ./security/audit.nix
   ./security/auditd.nix
   ./security/ca.nix
+  ./security/certbot.nix
   ./security/chromium-suid-sandbox.nix
   ./security/dhparams.nix
   ./security/duosec.nix
