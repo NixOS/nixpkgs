@@ -8044,7 +8044,9 @@ with pkgs;
 
   knockpy = callPackage ../tools/security/knockpy { };
 
-  kore = callPackage ../development/web/kore { };
+  kore = callPackage ../development/web/kore {
+    openssl = openssl_1_1;
+  };
 
   krakenx = callPackage ../tools/system/krakenx { };
 
