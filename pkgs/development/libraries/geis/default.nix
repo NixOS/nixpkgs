@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     gtk3 libX11 libXext libXi libXtst pango python3Packages.python xorgserver
   ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace python/geis/geis_v2.py --replace \
       "ctypes.util.find_library(\"geis\")" "'$out/lib/libgeis.so'"
   '';

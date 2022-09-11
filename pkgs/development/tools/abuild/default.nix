@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     file
   ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./Makefile \
       --replace 'chmod 4555' '#chmod 4555'
   '';

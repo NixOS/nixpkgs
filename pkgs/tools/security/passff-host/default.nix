@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 ];
   makeFlags = [ "VERSION=${version}" ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's#COMMAND = "pass"#COMMAND = "${pass}/bin/pass"#' src/passff.py
   '';
 

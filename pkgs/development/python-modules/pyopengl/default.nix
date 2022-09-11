@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pillow ];
 
-  patchPhase = let
+  postPatch = let
     ext = stdenv.hostPlatform.extensions.sharedLibrary; in ''
     # Theses lines are patching the name of dynamic libraries
     # so pyopengl can find them at runtime.

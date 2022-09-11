@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     ./remove-pot-creation-date.patch
   ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -e "s@= /usr/bin/@= @g" \
       -e "s@/usr/@$out/@" \
       -i Makefile

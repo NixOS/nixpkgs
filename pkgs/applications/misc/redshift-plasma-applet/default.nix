@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace package/contents/ui/main.qml \
       --replace "redshiftCommand: 'redshift'" \
                 "redshiftCommand: '${redshift}/bin/redshift'" \

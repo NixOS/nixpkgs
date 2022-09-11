@@ -10,7 +10,7 @@ in appleDerivation {
 
   NIX_CFLAGS_COMPILE = "-I.";
   NIX_LDFLAGS = "-lutil";
-  patchPhase = ''
+  postPatch = ''
     # ugly hacks for missing headers
     # most are bsd related - probably should make this a drv
     unpackFile ${Libc.src}

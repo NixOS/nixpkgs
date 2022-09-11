@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace svg_reader.py \
       --replace '"/usr/bin/inkscape"' '"${inkscape}/bin/inkscape"'
   '';

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [udev bison sysfsutils kmod flex];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i "
       s,/sbin/modprobe,${kmod}&,;
       s,/lib/udev/,$out/sbin/,;

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   ERL_LIBS = "${cl}/lib/erlang/lib";
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's,-Werror ,,' e3d/Makefile
     sed -i 's,../../wings/,../,' icons/Makefile
     find plugins_src -mindepth 2 -type f -name "*.[eh]rl" -exec sed -i 's,wings/src/,../../src/,' {} \;

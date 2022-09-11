@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     makeFlags="PREFIX=$out"
   '';
 
-  patchPhase=''
+  postPatch=''
     tar -xf testsuite.tar
     patchShebangs .
   '';

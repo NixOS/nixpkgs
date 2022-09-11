@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     abseil-cpp_202111
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices ]);
 
-  patchPhase = ''
+  postPatch = ''
     # this is just incorrect upstream
     # see https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/4
     substituteInPlace meson.build \

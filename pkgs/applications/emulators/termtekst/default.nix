@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [ ncurses requests ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace setup.py \
       --replace "assert" "assert 1==1 #"
     substituteInPlace src/tt \

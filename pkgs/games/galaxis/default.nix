@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses xmlto ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i\
      -e 's|^install: galaxis\.6 uninstall|install: galaxis.6|'\
      -e 's|usr/||g' -e 's|ROOT|DESTDIR|g'\

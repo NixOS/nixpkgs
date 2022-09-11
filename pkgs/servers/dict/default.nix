@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # In earlier versions, parallel building was not supported but it's OK with 1.13
   enableParallelBuilding = true;
 
-  patchPhase = "patch -p0 < ${./buildfix.diff}";
+  postPatch = "patch -p0 < ${./buildfix.diff}";
 
   configureFlags = [
     "--datadir=/run/current-system/sw/share/dictd"

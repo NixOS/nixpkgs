@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   # Jasper is disabled because the library is abandoned and has many
   # CVEs.
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace install \
       --replace 'prefix=/usr/local' 'prefix=$out' \
       --replace gcc '$CC' \

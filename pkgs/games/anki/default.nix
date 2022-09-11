@@ -50,7 +50,7 @@ let
     };
     dontInstall = true;
     nativeBuildInputs = [ asciidoc ];
-    patchPhase = ''
+    postPatch = ''
       # rsync isnt needed
       # WEB is the PREFIX
       # We remove any special ankiweb output generation

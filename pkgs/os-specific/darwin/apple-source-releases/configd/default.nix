@@ -9,7 +9,7 @@ appleDerivation' stdenv {
 
   propagatedBuildInputs = lib.optionals (!headersOnly) [ Security ];
 
-  patchPhase = lib.optionalString (!headersOnly) ''
+  postPatch = lib.optionalString (!headersOnly) ''
     HACK=$PWD/hack
     mkdir $HACK
     cp -r ${xnu}/Library/Frameworks/System.framework/Versions/B/PrivateHeaders/net $HACK

@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "sha256-h+jYIRSNdrGkW3tBV1ifIDEXU46EQGyeJoz/Mxym4pI=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e '13,14d;37d' setup.py
   '';
 

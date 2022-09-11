@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libmtsupport ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e 's@\$(DESTDIR)/usr@'$out'@' \
       -e 's@/usr/include/mt/support@${libmtsupport}/include/mt/support@' \
       src/Makefile;

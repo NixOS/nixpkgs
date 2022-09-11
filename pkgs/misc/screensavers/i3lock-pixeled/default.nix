@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)/bin"
   ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace i3lock-pixeled \
        --replace i3lock    "${i3lock}/bin/i3lock" \
        --replace convert   "${imagemagick}/bin/convert" \

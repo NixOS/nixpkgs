@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1i00rfnddrrb9lb1l6ib19g3a76pyasl9lb7rqz2p998gav1gjp2";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace abi-dumper.pl \
       --replace eu-readelf ${elfutils}/bin/eu-readelf \
       --replace vtable-dumper ${vtable-dumper}/bin/vtable-dumper \

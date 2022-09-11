@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gm0gzyp4d9rxqddbaskbz5zvmlhyr4nyb5x9g7x4abyyxqjlnkq";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed 's/-o root -g root//' -i Makefile
   '';
 

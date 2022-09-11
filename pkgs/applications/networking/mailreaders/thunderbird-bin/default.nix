@@ -156,7 +156,7 @@ stdenv.mkDerivation {
   dontStrip = true;
   dontPatchELF = true;
 
-  patchPhase = ''
+  postPatch = ''
     # Don't download updates from Mozilla directly
     echo 'pref("app.update.auto", "false");' >> defaults/pref/channel-prefs.js
   '';

@@ -23,7 +23,7 @@ buildPythonPackage rec {
   # Tests fail on Darwin with `OSError: AF_UNIX path too long`
   doCheck = !stdenv.isDarwin;
 
-  patchPhase = ''
+  postPatch = ''
     # Disable all tests that need to terminate within a predetermined amount of
     # time. This is nondeterministic.
     sed -i 's/with self.assertCompletesWithin.*:/if True:/' \

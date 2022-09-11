@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i "s:~/astrolog:$out/astrolog:g" astrolog.h
     substituteInPlace Makefile --replace cc "$CC" --replace strip "$STRIP"
   '';

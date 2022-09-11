@@ -14,7 +14,7 @@ stdenv.mkDerivation {
       sha256 = "9c2ff5027c2fe72b0cdf056311cd7543f447feb02b455982f20d4a3966b7828c";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e 's@\$(DESTDIR)/usr@'$out'@' Makefile
   '';
 

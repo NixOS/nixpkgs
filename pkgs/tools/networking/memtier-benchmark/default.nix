@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1ZgSmHOLvPecqVN9P/Mr/2cOdbdl4oe4GgMjLaDX7YQ=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./configure.ac \
       --replace '1.2.8' '${version}'
   '';

@@ -29,9 +29,7 @@ in let
     nativeBuildInputs = [ zip unzip makeWrapper wrapGAppsHook ];
 
     # make exec.py in Default.sublime-package use own bash with an LD_PRELOAD instead of "/bin/bash"
-    patchPhase = ''
-      runHook prePatch
-
+    postPatch = ''
       # TODO: Should not be necessary even in 3
       mkdir Default.sublime-package-fix
       ( cd Default.sublime-package-fix
@@ -42,8 +40,6 @@ in let
         zip -q ../Packages/Default.sublime-package **/*
       )
       rm -r Default.sublime-package-fix
-
-      runHook postPatch
     '';
 
     buildPhase = ''

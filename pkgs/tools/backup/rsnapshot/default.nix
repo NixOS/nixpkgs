@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--sysconfdir=/etc --prefix=/" ];
   makeFlags = [ "DESTDIR=$(out)" ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace "Makefile.in" --replace \
       "/usr/bin/pod2man" "${perl}/bin/pod2man"
   '';

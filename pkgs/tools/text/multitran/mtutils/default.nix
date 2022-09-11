@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libmtsupport libfacet libbtree libmtquery help2man ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e 's@\$(DESTDIR)/usr@'$out'@' \
       -e 's@/usr/include/mt/support@${libmtsupport}/include/mt/support@' \
       -e 's@/usr/include/btree@${libbtree}/include/btree@' \

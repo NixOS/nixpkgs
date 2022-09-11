@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "AR:=$(AR)" # libtool is used for darwin
   ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile \
       --replace '-ltermcap' ' '
   '';

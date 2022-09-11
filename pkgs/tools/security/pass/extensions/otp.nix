@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e 's|OATH=\$(which oathtool)|OATH=${oath-toolkit}/bin/oathtool|' otp.bash
   '';
 

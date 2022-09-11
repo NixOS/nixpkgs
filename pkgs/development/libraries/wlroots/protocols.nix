@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   nativeBuildInputs = [ wayland-scanner ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace wlr-protocols.pc.in \
       --replace '=''${pc_sysrootdir}' "=" \
       --replace '=@prefix@' "=$out"

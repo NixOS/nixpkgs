@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libxml2 pcre ];
 
-  patchPhase = ''
+  postPatch = ''
     patch -p1 < ${./pcre.patch}
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp \

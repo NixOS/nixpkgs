@@ -1165,7 +1165,7 @@ self: super: {
   });
 
   vim-xkbswitch = super.vim-xkbswitch.overrideAttrs (old: {
-    patchPhase = ''
+    postPatch = ''
       substituteInPlace plugin/xkbswitch.vim \
         --replace /usr/local/lib/libxkbswitch.so ${xkb-switch}/lib/libxkbswitch.so
     '';

@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  patchPhase = ''
+  postPatch = ''
     # The path to Icarus can still be overridden via an environment variable at runtime.
     substituteInPlace pyverilog/vparser/preprocessor.py \
       --replace "iverilog = 'iverilog'" "iverilog = '${verilog}/bin/iverilog'"

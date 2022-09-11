@@ -70,7 +70,7 @@ pname
 , ... } @ attrs:
 
 
-# Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
+# Keep extra attributes from `attrs`, e.g., `postPatch', etc.
 
 let
   generatedRockspecFilename = "${rockspecDir}/${pname}-${version}.rockspec";

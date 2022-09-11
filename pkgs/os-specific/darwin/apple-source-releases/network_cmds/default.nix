@@ -12,7 +12,7 @@ appleDerivation {
   # "spray" requires some files that aren't compiling correctly in xcbuild.
   # "rtadvd" seems to fail with some missing constants.
   # "traceroute6" and "ping6" require ipsec which doesn't build correctly
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace network_cmds.xcodeproj/project.pbxproj \
       --replace "7294F0EA0EE8BAC80052EC88 /* PBXTargetDependency */," "" \
       --replace "7216D34D0EE89FEC00AE70E4 /* PBXTargetDependency */," "" \

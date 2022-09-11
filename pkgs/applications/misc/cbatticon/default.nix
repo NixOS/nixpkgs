@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =  [ glib gtk3 libnotify ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e 's/ -Wno-format//g' Makefile
   '';
 

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
      -  <http://ubuntuforums.org/showthread.php?t=1496878>
      -  <http://www.planet-libre.org/index.php?post_id=10937>
   */
-  patchPhase = ''
+  postPatch = ''
     sed -i -e s/SYSFS/ATTR/g opt/brother/scanner/udev-rules/type1/*.rules
   '';
 

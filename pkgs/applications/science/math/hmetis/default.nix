@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   binaryFiles = "hmetis khmetis shmetis";
 
-  patchPhase = ''
+  postPatch = ''
     for binaryfile in $binaryFiles; do
       patchelf \
         --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 \

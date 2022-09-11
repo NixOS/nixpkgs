@@ -18,7 +18,7 @@ in stdenvNoCC.mkDerivation {
   doCheck = true;
   dontBuild = true;
 
-  patchPhase = ''
+  postPatch = ''
     # Needed since the tests expect that HISTCONTROL is set.
     sed -i '/setup()/a HISTCONTROL=""' test/bash-preexec.bats
 

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "378549808eece574c3b5dcea82b216534949423d5c7ac241d9419212d676bc8d";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace acme_tiny.py --replace '"openssl"' '"${openssl.bin}/bin/openssl"'
     substituteInPlace tests/test_module.py --replace '"openssl"' '"${openssl.bin}/bin/openssl"'
     substituteInPlace tests/utils.py --replace /etc/ssl/openssl.cnf ${openssl.out}/etc/ssl/openssl.cnf

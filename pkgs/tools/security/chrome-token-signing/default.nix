@@ -14,7 +14,7 @@ mkDerivation rec {
   buildInputs = [ qmake pcsclite pkg-config ];
   dontUseQmakeConfigure = true;
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace host-linux/ee.ria.esteid.json --replace /usr $out
     # TODO: macos
     substituteInPlace host-shared/PKCS11Path.cpp \

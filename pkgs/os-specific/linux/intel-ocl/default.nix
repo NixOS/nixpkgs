@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     rpmextract source/intel-opencl-cpu-r${version}.x86_64.rpm
   '';
 
-  patchPhase = ''
+  postPatch = ''
     runHook prePatch
 
     # Remove libOpenCL.so, since we use ocl-icd's libOpenCL.so instead and this would cause a clash.

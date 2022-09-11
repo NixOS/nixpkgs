@@ -30,7 +30,7 @@ python27Packages.buildPythonApplication {
     }))
   ];
 
-  patchPhase = ''
+  postPatch = ''
     for file in setup.cfg _resholve/version.py; do
       substituteInPlace $file --subst-var-by version ${version}
     done

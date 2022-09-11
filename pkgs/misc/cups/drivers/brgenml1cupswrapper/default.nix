@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  patchPhase = ''
+  postPatch = ''
     WRAPPER=opt/brother/Printers/BrGenML1/cupswrapper/brother_lpdwrapper_BrGenML1
     PAPER_CFG=opt/brother/Printers/BrGenML1/cupswrapper/paperconfigml1
 

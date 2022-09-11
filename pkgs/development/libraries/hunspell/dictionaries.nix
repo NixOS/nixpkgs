@@ -46,7 +46,7 @@ let
         platforms = platforms.all;
       };
       nativeBuildInputs = [ bash coreutils which zip unzip ];
-      patchPhase = ''
+      postPatch = ''
         substituteInPlace ortograf/herramientas/make_dict.sh \
            --replace /bin/bash bash \
            --replace /dev/stderr stderr.log

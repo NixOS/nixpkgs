@@ -118,7 +118,7 @@ let
 
     PATCH_RPATH = mkrpath [ gcc.cc glib nspr nss ];
 
-    patchPhase = ''
+    postPatch = ''
       patchelf --set-rpath "$PATCH_RPATH" _platform_specific/linux_x64/libwidevinecdm.so
     '';
 

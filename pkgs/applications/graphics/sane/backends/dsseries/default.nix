@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace etc/udev/rules.d/50-Brother_DSScanner.rules \
       --replace 'GROUP="users"' 'GROUP="scanner", ENV{libsane_matched}="yes"'
 

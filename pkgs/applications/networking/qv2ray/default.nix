@@ -29,7 +29,7 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  patchPhase = lib.optionals stdenv.isDarwin ''
+  postPatch = lib.optionals stdenv.isDarwin ''
     substituteInPlace cmake/platforms/macos.cmake \
       --replace \''${QV2RAY_QtX_DIR}/../../../bin/macdeployqt macdeployqt
   '';

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=1" ];
 
   # Fix dlopen path
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace include/cecloader.h --replace "libcec.so" "$out/lib/libcec.so"
   '';
 

@@ -996,12 +996,12 @@ let
     });
 
     RcppArmadillo = old.RcppArmadillo.overrideDerivation (attrs: {
-      patchPhase = "patchShebangs configure";
+      postPatch = "patchShebangs configure";
     });
 
     data_table = old.data_table.overrideDerivation (attrs: {
       NIX_CFLAGS_COMPILE = attrs.NIX_CFLAGS_COMPILE + " -fopenmp";
-      patchPhase = "patchShebangs configure";
+      postPatch = "patchShebangs configure";
     });
 
     ModelMetrics = old.ModelMetrics.overrideDerivation (attrs: {
@@ -1010,7 +1010,7 @@ let
     });
 
     rpf = old.rpf.overrideDerivation (attrs: {
-      patchPhase = "patchShebangs configure";
+      postPatch = "patchShebangs configure";
     });
 
     rJava = old.rJava.overrideDerivation (attrs: {

@@ -5,7 +5,7 @@ appleDerivation {
 
   # These PBXcp calls should be patched in xcbuild to allow them to
   # automatically be prefixed.
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace basic_cmds.xcodeproj/project.pbxproj \
       --replace "dstPath = /usr/share/man/man1;" "dstPath = $out/share/man/man1;" \
       --replace "dstPath = /usr/share/man/man5;" "dstPath = $out/share/man/man5;"

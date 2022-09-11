@@ -43,7 +43,7 @@ let
     yarnNix = ./yarndeps.nix;
 
     nativeBuildInputs = pythonDeps;
-    patchPhase = ''
+    postPatch = ''
       sed -i -r -e "s|'cssmin',\s?'cssrewrite'|'cssmin'|g" powerdnsadmin/assets.py
     '';
     buildPhase = ''

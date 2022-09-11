@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile --replace "-o 0 -g 0" "" --replace "\$(RPMDIR)" ""
   '';
   makeFlags = [

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [openssl] ++ optional stdenv.is64bit jdk;
-  patchPhase = ''
+  postPatch = ''
     sed -i "s/which java/command -v java/g" mkAsm
 
     ${optionalString stdenv.isAarch32 ''

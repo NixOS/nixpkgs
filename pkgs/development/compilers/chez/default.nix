@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ** paths in some helper scripts, otherwise the build will fail on
   ** NixOS or in any chroot build.
   */
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./configure \
       --replace "git submodule init && git submodule update || exit 1" "true"
 

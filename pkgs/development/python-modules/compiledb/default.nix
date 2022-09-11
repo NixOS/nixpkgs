@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   # fix the tests
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace tests/data/multiple_commands_oneline.txt \
                       --replace /bin/echo ${coreutils}/bin/echo
   '';

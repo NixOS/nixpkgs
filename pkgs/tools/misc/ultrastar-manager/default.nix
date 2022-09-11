@@ -30,7 +30,7 @@ let
 
       dontInstall = true;
 
-      patchPhase = with lib; ''
+      postPatch = with lib; ''
         # we don’t want prebuild binaries checked into version control!
         rm -rf lib include
 

@@ -272,7 +272,7 @@ stdenv.mkDerivation {
     chmod -R u+w .
   '';
 
-  patchPhase = ''
+  postPatch = ''
     # Just patch all the things for now, we can focus this later.
     patchShebangs $SWIFT_SOURCE_ROOT
 

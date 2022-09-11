@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     qtdeclarative
   ];
 
-  patchPhase = ''
+  postPatch = ''
     # force ordered build of subdirs
     sed -i -e "\$aCONFIG += ordered" gsettings-qt.pro
 

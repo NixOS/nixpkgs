@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   #   does.
   # - perl shebang patches for acpi/sys scripts
   # - unhardcode path to checker scripts
-  patchPhase = ''
+  postPatch = ''
     patch -p1 < ${./sys-by-default.patch}
     sed -i -e "s,/usr/lib/xbattbar/,$out/libexec/," xbattbar.c
     sed -i -e "s,/usr/bin/perl,${perl}/bin/perl," xbattbar-check-acpi

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose mock ];
 
-  patchPhase = ''
+  postPatch = ''
     # Failing test: ERROR: statsd.tests.test_ipv6_resolution_udp
     sed -i 's/test_ipv6_resolution_udp/noop/' statsd/tests.py
     # well this is a noop, but so it was before

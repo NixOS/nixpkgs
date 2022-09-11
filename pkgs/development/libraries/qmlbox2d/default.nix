@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ qtdeclarative ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace box2d.pro \
       --replace '$$[QT_INSTALL_QML]' "/$qtQmlPrefix/"
     qmakeFlags="$qmakeFlags PREFIXSHORTCUT=$out"

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1k3hc7xbxz6hkc55kvddi3cibafwf93ivn58sy1l888d3l5dwmrk";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's/^CFLAGS.*/CFLAGS=-O2 -fPIC/' Makefile
     sed -i -e 's,PATH=.*;,,' conf.h
     sed -i -e '/ENTROPY_ENV/d' otpw-gen.c

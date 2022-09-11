@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ bash ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile \
       --replace 'which' 'ls' \
       --replace 'grim' "${grim}/bin/grim" \

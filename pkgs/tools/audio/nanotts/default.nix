@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoconf automake libtool ];
   buildInputs = [ popt alsa-lib ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace "src/main.cpp" --replace "/usr/share/pico/lang" "$out/share/lang"
     echo "" > update_build_version.sh
   '';

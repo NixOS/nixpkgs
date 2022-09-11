@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
   enableParallelBuilding = true;
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs tests
   '';
 

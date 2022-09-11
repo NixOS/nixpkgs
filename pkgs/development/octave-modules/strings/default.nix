@@ -23,7 +23,7 @@ buildOctavePackage rec {
   # toascii is a deprecated function. Has been fixed in recent commits, but has
   # not been released yet.
   # https://sourceforge.net/p/octave/strings/ci/2db1dbb75557eef94605cb4ac682783ab78ac8d8/
-  patchPhase = ''
+  postPatch = ''
     sed -i -s -e 's/gripes.h/errwarn.h/' -e 's/gripe_/err_/g' src/*.cc
     sed -i s/toascii/double/g inst/*.m
   '';

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Keyboard/ckbcomp --replace "/usr/share/X11/xkb" "${xkeyboard_config}/share/X11/xkb"
     substituteInPlace Keyboard/ckbcomp --replace "rules = 'xorg'" "rules = 'base'"
   '';

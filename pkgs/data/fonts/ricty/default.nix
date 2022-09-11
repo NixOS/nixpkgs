@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     install -m 0770 $src ricty_generator.sh
   '';
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's/fonts_directories=".*"/fonts_directories="$inconsolata $migu"/' ricty_generator.sh
   '';
 

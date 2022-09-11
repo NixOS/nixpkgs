@@ -707,7 +707,7 @@ lib.composeManyExtensions [
 
       imagecodecs = super.imagecodecs.overridePythonAttrs (
         old: {
-          patchPhase = ''
+          postPatch = ''
             substituteInPlace setup.py \
               --replace "/usr/include/openjpeg-2.3" \
                         "${pkgs.openjpeg.dev}/include/${pkgs.openjpeg.dev.incDir}
@@ -2392,7 +2392,7 @@ lib.composeManyExtensions [
 
       pysqlite = super.pysqlite.overridePythonAttrs (old: {
         propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ pkgs.sqlite ];
-        patchPhase = ''
+        postPatch = ''
           substituteInPlace "setup.cfg"                                     \
                   --replace "/usr/local/include" "${pkgs.sqlite.dev}/include"   \
                   --replace "/usr/local/lib" "${pkgs.sqlite.out}/lib"

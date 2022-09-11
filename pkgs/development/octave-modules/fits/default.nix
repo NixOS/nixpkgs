@@ -16,7 +16,7 @@ buildOctavePackage rec {
   };
 
   # Found here: https://build.opensuse.org/package/view_file/science/octave-forge-fits/octave-forge-fits.spec?expand=1
-  patchPhase = ''
+  postPatch = ''
     sed -i -s -e 's/D_NINT/octave::math::x_nint/g' src/*.cc
   '';
 

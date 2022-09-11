@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   installPhase=''make install "PREFIX=$out"'';
 
-  patchPhase = ''
+  postPatch = ''
     sed -i s,/usr/sbin/sendmail,${sendmailPath}, mail.c ts.1
   '';
 

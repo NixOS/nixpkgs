@@ -15,7 +15,7 @@ buildGoModule rec {
   };
   vendorSha256 = null;
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace main.go --replace 0.0.0 ${version}
   '';
 

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs .
 
     # Dpkg commands sometimes calls out to shell commands

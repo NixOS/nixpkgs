@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   # dependency installation in setup.py doesn't work
-  patchPhase = ''
+  postPatch = ''
     echo -n > requirements.txt
   '';
 

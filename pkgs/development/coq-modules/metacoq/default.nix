@@ -43,7 +43,7 @@ let
         mlPlugin = true;
         propagatedBuildInputs = [ equations coq.ocamlPackages.zarith ] ++ metacoq-deps;
 
-        patchPhase =  ''
+        postPatch =  ''
           patchShebangs ./configure.sh
           patchShebangs ./template-coq/update_plugin.sh
           patchShebangs ./template-coq/gen-src/to-lower.sh

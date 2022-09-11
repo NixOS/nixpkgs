@@ -15,7 +15,7 @@ buildOctavePackage rec {
   # The only compilation problem is that no formatting specifier was provided
   # for the error function. Because errorText is a string, I provide such a
   # formatting specifier.
-  patchPhase = ''
+  postPatch = ''
     sed -i s/"error(errorText)"/"error(\"%s\", errorText)"/g src/*.cc
   '';
 

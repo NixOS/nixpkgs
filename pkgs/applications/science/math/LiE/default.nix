@@ -30,7 +30,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ bison readline ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace make_lie \
       --replace \`/bin/pwd\` $out
   '';

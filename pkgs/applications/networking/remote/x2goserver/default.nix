@@ -16,7 +16,7 @@ let
     pname = "X2Go";
     inherit version src;
     makeFlags = [ "-f" "Makefile.perl" ];
-    patchPhase = ''
+    postPatch = ''
       substituteInPlace X2Go/Config.pm --replace '/etc/x2go' '/var/lib/x2go/conf'
       substituteInPlace X2Go/Server/DB.pm \
         --replace '$x2go_lib_path/libx2go-server-db-sqlite3-wrapper' \

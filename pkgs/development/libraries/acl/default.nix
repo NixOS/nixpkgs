@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   # Upstream use C++-style comments in C code. Remove them.
   # This comment breaks compilation if too strict gcc flags are used.
-  patchPhase = ''
+  postPatch = ''
     echo "Removing C++-style comments from include/acl.h"
     sed -e '/^\/\//d' -i include/acl.h
 

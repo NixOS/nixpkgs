@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fftwFloat ];
 
-  patchPhase = ''
+  postPatch = ''
     cd source
     sed -e "s@ldconfig@@" -i Makefile
   '';

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     librep
   ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -e 's|installdir=$(repexecdir)|installdir=$(libdir)/rep|g' -i Makefile.in
   '';
 

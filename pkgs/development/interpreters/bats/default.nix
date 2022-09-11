@@ -31,7 +31,7 @@ resholve.mkDerivation rec {
     sha256 = "sha256-joNne/dDVCNtzdTQ64rK8GimT+DOWUa7f410hml2s8Q=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs .
   '';
 

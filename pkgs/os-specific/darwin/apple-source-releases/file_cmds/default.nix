@@ -8,7 +8,7 @@ appleDerivation {
   # mtree: _simple.h not found
   # ipcs: sys/ipcs.h not found
   # so remove their targets from the project
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace file_cmds.xcodeproj/project.pbxproj \
       --replace "FC8A8CAA14B655FD001B97AD /* PBXTargetDependency */," "" \
       --replace "FC8A8C9C14B655FD001B97AD /* PBXTargetDependency */," "" \

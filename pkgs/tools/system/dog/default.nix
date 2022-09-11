@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "3ef25907ec5d1dfb0df94c9388c020b593fbe162d7aaa9bd08f35d2a125af056";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile \
       --replace "gcc" "cc"
   '';

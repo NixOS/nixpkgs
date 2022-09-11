@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation {
     sha256 = "sha256-IFkKwRRyZeOXD8/9n8UDrruUKK6oQK4BD9wYN2dmSAc=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     # These directories need to be removed because they contain
     # older or duplicate versions of fonts also present in other
     # directories. This causes non-determinism in the install since

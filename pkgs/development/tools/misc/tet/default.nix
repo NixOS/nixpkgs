@@ -11,7 +11,7 @@ stdenv.mkDerivation ({
 
   buildInputs = [ ];
 
-  patchPhase = "chmod +x configure";
+  postPatch = "chmod +x configure";
 
   configurePhase = "./configure -t lite";
 

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mxsjip9x782z6qa6k5781wjwpvj5aczrn782m9yspa7lhgfzx1v";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace levmar.h --replace "define HAVE_LAPACK" "undef HAVE_LAPACK"
     sed -i 's/LAPACKLIBS=.*/LAPACKLIBS=/' Makefile
     substituteInPlace Makefile --replace "gcc" "${stdenv.cc.targetPrefix}cc"

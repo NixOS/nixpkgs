@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vqva99lyv7r6f9c7yikk8ahcfh9aq3clvwm4pz964wlbr9mj1v6";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i '
       s:/usr/local/bin:'$out'/bin:
       s:/usr/local/man:'$out'/share/man:

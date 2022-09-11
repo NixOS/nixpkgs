@@ -19,7 +19,7 @@ mkDerivation {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs configure
   '';
 

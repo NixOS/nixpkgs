@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # Fix impurity. TODO: Do the font lookup using fontconfig instead of this
   # manual method. Until that is fixed, we get this whenever we run aafigure:
   #   WARNING: font not found, using PIL default font
-  patchPhase = ''
+  postPatch = ''
     sed -i "s|/usr/share/fonts|/nonexisting-fonts-path|" aafigure/PILhelper.py
   '';
 

@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1dfdea35e40744d46aada72831f7613d67bf38e8b20ccaaa9e91fdc37aa3b8c2";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace tests/test_integration.py --replace 'static_path=' 'static_url_path='
     substituteInPlace tests/test_integration.py --replace "static_folder = '/'" "static_folder = '/x'"
     substituteInPlace tests/test_integration.py --replace "'/foo'" "'/x/foo'"

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YxXDhRi4HomcP8LtRjzGI68pxcIxpIwTeyQwIjSukL8=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile \
       --replace "= gcc " "?= gcc "
     # Fix include directory

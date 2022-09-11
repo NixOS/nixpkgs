@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "sha256-UQI3av+0zj1SNwEonwuk5n2RjZN3+tSJFJuFCjrorFM=";
   };
 
-  patchPhase = let
+  postPatch = let
     matchExecution = ''(\<(output_of|system|run)\([^"%]*("|%w\()|^[^"`]*`)'';
   in ''
     sed -r -i \

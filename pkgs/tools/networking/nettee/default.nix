@@ -23,7 +23,7 @@ in stdenv.mkDerivation {
 
   outputs = [ "bin" "man" "doc" "out" ];
 
-  patchPhase = ''
+  postPatch = ''
     # h_addr field was removed
     sed -e '1 i #define h_addr h_addr_list[0]' \
         -i nettee.c

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "-Wno-error=misleading-indentation"
    ]) ++ optional stdenv.cc.isClang "-Wno-error=null-dereference");
 
-  patchPhase = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/LApack.cc --replace "malloc.h" "malloc/malloc.h"
   '';
 

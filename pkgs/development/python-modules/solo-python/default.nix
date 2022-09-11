@@ -26,7 +26,7 @@
     sha256 = "sha256-OguAHeNpom+zthREzdhejy5HJUIumrtwB0WJAwUNiSA=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i '/fido2/c\"fido2",' pyproject.toml
   '';
 

@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     rm -rf __MACOSX
   '';
 
-  patchPhase = ''
+  postPatch = ''
     mkdir -p $out/helmholtz~
     sed -i "s@current: pd_darwin@current: pd_linux@g" Makefile
     sed -i "s@-Wl@@g" Makefile

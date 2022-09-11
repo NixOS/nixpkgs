@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml ];
 
-  patchPhase = "patch -p1 < ${pf-patch}";
+  postPatch = "patch -p1 < ${pf-patch}";
   buildPhase = "./build";
   installPhase = ''
     mkdir -p $out/bin

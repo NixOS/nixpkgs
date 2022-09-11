@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's/ `dpkg-buildflags[^`]*`//g;
             /mkdir -p/d;
             s/cp -a/install -D/;

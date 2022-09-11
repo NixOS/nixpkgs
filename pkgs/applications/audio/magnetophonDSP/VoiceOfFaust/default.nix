@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   runtimeInputs = [ pitchTracker ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i "s@pd -nodac@${pitchTracker}/bin/pd -nodac@g" launchers/synthWrapper
     sed -i "s@../PureData/OscSendVoc.pd@$out/PureData/OscSendVoc.pd@g" launchers/pitchTracker
   '';

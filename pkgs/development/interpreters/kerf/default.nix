@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     "unused-result"
   ] ++ lib.optional stdenv.isDarwin [ "-fcommon" ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./Makefile \
       --replace 'CPUS ?=' 'CPUS = $(NIX_BUILD_CORES) #' \
       --replace 'termcap' 'ncurses'

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ mfcj470dwlpr ];
 
-  patchPhase = ''
+  postPatch = ''
     WRAPPER=cupswrapper/cupswrappermfcj470dw
 
     substituteInPlace $WRAPPER \

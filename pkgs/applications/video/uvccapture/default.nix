@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libjpeg ];
 
-  patchPhase = ''
+  postPatch = ''
     tar xvf "${debianPatches}"
     for fname in debian/patches/fix_videodev_include_FTBFS.patch \
                  debian/patches/warnings.patch \

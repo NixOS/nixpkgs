@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ladspaH ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's@/usr/bin/install@install@g' Makefile
     sed -i 's@/bin/rm@rm@g' Makefile
     sed -i 's@/usr/lib/ladspa@$(out)/lib/ladspa@g' Makefile

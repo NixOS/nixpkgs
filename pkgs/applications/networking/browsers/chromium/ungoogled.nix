@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i '/chromium-widevine/d' patches/series
   '';
 

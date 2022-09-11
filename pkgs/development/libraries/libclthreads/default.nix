@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0cbs1w89q8wfjrrhvxf6xk0y02nkjl5hd0yb692c8ma01i6b2nf6";
   };
 
-  patchPhase = ''
+  postPatch = ''
     cd source
     # don't run ldconfig:
     sed -e "/ldconfig/d" -i ./Makefile

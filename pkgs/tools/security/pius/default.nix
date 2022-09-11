@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication {
     sha256 = "0l87dx7n6iwy8alxnhvval8h1kl4da6a59hsilbi65c6bpj4dh3y";
   };
 
-  patchPhase = ''
+  postPatch = ''
     for file in libpius/constants.py pius-keyring-mgr; do
       sed -i "$file" -E -e's|/usr/bin/gpg2?|${gnupg}/bin/gpg|g'
     done

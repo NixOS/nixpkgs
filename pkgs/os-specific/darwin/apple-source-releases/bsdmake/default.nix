@@ -3,7 +3,7 @@
 appleDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace mk/bsd.prog.mk \
       --replace '-o ''${BINOWN} -g ''${BINGRP}' "" \
       --replace '-o ''${SCRIPTSOWN_''${.ALLSRC:T}}' "" \

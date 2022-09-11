@@ -56,7 +56,7 @@ mkDerivation rec {
     libv4l
   ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace "find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml" \
                 "find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml Multimedia"

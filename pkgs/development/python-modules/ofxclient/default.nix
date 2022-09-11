@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0jdhqsbl34yn3n0x6mwsnl58c25v5lp6vr910c2hk7l74l5y7538";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace setup.py --replace '"argparse",' ""
   '';
 

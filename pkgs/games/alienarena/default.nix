@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libjpeg libX11 curl libogg libvorbis
                   freetype openal libGL libXxf86vm ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./configure \
       --replace libopenal.so.1 ${openal}/lib/libopenal.so.1 \
       --replace libGL.so.1 ${libGL}/lib/libGL.so.1

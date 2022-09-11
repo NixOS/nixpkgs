@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs lib/
     gunzip                share/cups/model/Toshiba/TOSHIBA_ColorMFP_CUPS.gz
     sed -i "s+/usr+$out+" share/cups/model/Toshiba/TOSHIBA_ColorMFP_CUPS

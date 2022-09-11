@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ qt4 quazip qt-mobility qxt python2Packages.python python2Packages.pycrypto ];
 
-  patchPhase = ''
+  postPatch = ''
     # Required to make the configure script work. Normally, screencloud's
     # CMakeLists file sets the install prefix to /opt by force. This is stupid
     # and breaks nix, so we force it to install where we want. Please don't

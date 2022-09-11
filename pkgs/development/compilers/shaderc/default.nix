@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-RfSMzrGVtdXbr/mjSrHoN447e3vMQfJbesQMvLOARBs=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     cp -r --no-preserve=mode ${glslang} third_party/glslang
     cp -r --no-preserve=mode ${spirv-tools} third_party/spirv-tools
     ln -s ${spirv-headers} third_party/spirv-tools/external/spirv-headers

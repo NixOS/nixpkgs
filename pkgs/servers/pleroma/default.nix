@@ -107,7 +107,7 @@ beamPackages.mixRelease rec {
           rev = "289cda1b6d0d70ccb2ba508a2b0bd24638db2880";
           sha256 = "15605lsdd74bmsp5z96f76ihn7m2g3p1hjbhs2x7v7309n1k108n";
         };
-        patchPhase = ''
+        postPatch = ''
           substituteInPlace lib/majic/server.ex --replace "erlang.now" "erlang.time"
         '';
         buildInputs = [ file ];
@@ -143,7 +143,7 @@ beamPackages.mixRelease rec {
 
       # Some additional build inputs and build fixes
       http_signatures = prev.http_signatures.override {
-        patchPhase = ''
+        postPatch = ''
           substituteInPlace mix.exs --replace ":logger" ":logger, :public_key"
         '';
       };
@@ -167,7 +167,7 @@ beamPackages.mixRelease rec {
           sha256 = "0fnx2pm1n2m0zs2skivv43s42hrgpq9i143p9mngw9f3swjqpxvx";
         };
 
-        patchPhase = ''
+        postPatch = ''
           echo '{plugins, [pc]}.' >> rebar.config
         '';
         buildPlugins = with beamPackages; [ pc ];
@@ -176,7 +176,7 @@ beamPackages.mixRelease rec {
       };
 
       mime = prev.mime.override {
-        patchPhase = let
+        postPatch = let
           cfgFile = writeText "config.exs" ''
             use Mix.Config
             config :mime, :types, %{

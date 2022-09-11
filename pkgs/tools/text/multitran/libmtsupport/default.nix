@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/multitran/libmtsupport-${version}.tar.bz2";
     sha256 = "481f0f1ec15d7274f1e4eb93e7d060df10a181efd037eeff5e8056d283a9298b";
   };
-  patchPhase = ''
+  postPatch = ''
     sed -i -e 's@\$(DESTDIR)/usr@'$out'@' src/Makefile;
   '';
 

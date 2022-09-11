@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = [ "-lcrypto" ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs \
       build.sh \
       tests/test.sh \

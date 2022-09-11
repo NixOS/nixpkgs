@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ tex ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -ie 's|nuweb -r|./nuweb -r|' Makefile
   '';
 

@@ -24,7 +24,7 @@ buildPythonPackage rec {
     adslib
   ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace pyads/pyads_ex.py \
       --replace "ctypes.CDLL(adslib)" "ctypes.CDLL(\"${adslib}/lib/adslib.so\")"
   '';

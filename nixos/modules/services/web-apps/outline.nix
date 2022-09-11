@@ -24,7 +24,7 @@ in
           # be helpful if you want multiple users with different email providers
           # to still land in the same team. Note that this effectively makes
           # Outline a single-team instance.
-          patchPhase = ${"''"}
+          postPatch = ${"''"}
             sed -i 's/const domain = parts\.length && parts\[1\];/const domain = "example.com";/g' server/routes/auth/providers/oidc.ts
           ${"''"};
         })

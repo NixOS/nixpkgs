@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "BUILD_JACK=true"
   ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs ./dpf/utils/generate-ttl.sh
   '';
 

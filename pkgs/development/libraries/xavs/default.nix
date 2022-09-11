@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs configure
     patchShebangs config.sub
     patchShebangs version.sh

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     vulkan-loader
   ] ++ lib.lists.optionals withX11 [ qtx11extras ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace vulkanCapsViewer.pro \
       --replace '/usr/' "/"
   '';

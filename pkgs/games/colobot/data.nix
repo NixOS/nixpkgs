@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
   # Build procedure requires the data folder
-  patchPhase = ''
+  postPatch = ''
     cp -r $src localSrc
     chmod +w localSrc/help/bots/po
     find -type d -exec chmod +w {} \;

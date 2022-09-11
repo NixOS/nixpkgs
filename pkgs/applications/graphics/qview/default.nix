@@ -26,7 +26,7 @@ mkDerivation rec {
     qtsvg
   ];
 
-  patchPhase = ''
+  postPatch = ''
     sed "s|/usr/|$out/|g" -i qView.pro
   '';
 

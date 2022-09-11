@@ -36,7 +36,7 @@ let
     version = src.version;
     src = pkgs.invoiceplane;
 
-    patchPhase = ''
+    postPatch = ''
       # Patch index.php file to load additional config file
       substituteInPlace index.php \
         --replace "require('vendor/autoload.php');" "require('vendor/autoload.php'); \$dotenv = new \Dotenv\Dotenv(__DIR__, 'extraConfig.php'); \$dotenv->load();";

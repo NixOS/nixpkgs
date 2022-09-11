@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorSha256 = "sha256-x57IvMKSE2F5bGTC8ao+wLJmYlz8nMh4SoMhtGlwQyE=";
   proxyVendor = true;
 
-  patchPhase = ''
+  postPatch = ''
     # Patch test that relies on looking up homedir in user struct to prefer ~
     substituteInPlace pkg/steampipeconfig/shared_test.go \
       --replace '"github.com/turbot/go-kit/helpers"' "" \

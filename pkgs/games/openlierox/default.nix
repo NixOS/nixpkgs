@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     cmakeFlags="$cmakeFlags -DSYSTEM_DATA_DIR=$out/share"
   '';
 
-  patchPhase = ''
+  postPatch = ''
     sed -i s,curl/types.h,curl/curl.h, include/HTTP.h src/common/HTTP.cpp
   '';
 

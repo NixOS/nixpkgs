@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   # allow async mode. from ubuntu. see:
   #   https://bazaar.launchpad.net/~ubuntu-branches/ubuntu/trusty/libftdi/trusty/view/head:/debian/patches/04_async_mode.diff
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./src/ftdi.c \
       --replace "ifdef USB_CLASS_PTP" "if 0"
   '';

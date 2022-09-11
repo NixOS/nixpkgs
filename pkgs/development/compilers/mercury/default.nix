@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ gcc flex bison texinfo jdk erlang readline ];
 
-  patchPhase = ''
+  postPatch = ''
     # Fix calls to programs in /bin
     for p in uname pwd ; do
       for f in $(egrep -lr /bin/$p *) ; do

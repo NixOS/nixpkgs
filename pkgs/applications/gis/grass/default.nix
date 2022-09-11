@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   patches = [ ./no_symbolic_links.patch ];
 
   # Correct mysql_config query
-  patchPhase = ''
+  postPatch = ''
       substituteInPlace configure --replace "--libmysqld-libs" "--libs"
   '';
 

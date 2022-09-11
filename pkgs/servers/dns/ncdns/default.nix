@@ -78,7 +78,7 @@ buildGoModule {
 
   # Same as above: can't use `patches` because that would
   # be also applied to the fetcher derivation, thus failing.
-  patchPhase = ''
+  postPatch = ''
     runHook prePatch
     patch -p1 < ${./fix-tpl-path.patch}
     runHook postPatch

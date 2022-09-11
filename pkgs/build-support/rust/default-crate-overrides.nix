@@ -80,7 +80,7 @@ in
     buildInputs = [ foundationdb ];
     # needed for 0.4+ release, when the FFI bindings are auto-generated
     #
-    # patchPhase = ''
+    # postPatch = ''
     #   substituteInPlace ./foundationdb-sys/build.rs \
     #     --replace /usr/local/include ${foundationdb.dev}/include
     # '';

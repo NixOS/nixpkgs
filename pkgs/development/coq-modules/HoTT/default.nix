@@ -21,7 +21,7 @@ with lib; mkCoqDerivation {
     "--bindir=$(out)/bin"
   ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs etc
     patchShebangs hoqc hoqchk hoqdep hoqide hoqtop
   '';

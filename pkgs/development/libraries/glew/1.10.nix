@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = if stdenv.isDarwin then [ AGL ] else [ xlibsWrapper libXmu libXi ];
   propagatedBuildInputs = if stdenv.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's|lib64|lib|' config/Makefile.linux
     ${optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed -i -e 's/\(INSTALL.*\)-s/\1/' Makefile

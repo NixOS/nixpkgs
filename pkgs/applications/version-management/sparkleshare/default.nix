@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     webkit2-sharp
   ];
 
-  patchPhase = ''
+  postPatch = ''
     # Nix will manage the icon cache.
     echo '#!/bin/sh' >scripts/post-install.sh
   '';

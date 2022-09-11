@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1zxsxg49a02k7zidx3kgk2maa0vv0n1f9wrl5vch07sq3ghvpphx";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace lightyears \
       --replace \
         "LIGHTYEARS_DIR = \".\"" \

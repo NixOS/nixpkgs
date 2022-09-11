@@ -20,7 +20,7 @@ in appleDerivation {
   nativeBuildInputs = [ bsdmake perl bison flex ];
   buildInputs = [ flex ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace BSDmakefile \
       --replace chgrp true \
       --replace /Developer/Makefiles/bin/compress-man-pages.pl true \

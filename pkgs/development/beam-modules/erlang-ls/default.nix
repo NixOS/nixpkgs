@@ -12,7 +12,7 @@ let
         configurePhase = "true";
       });
       redbug = super.redbug.overrideAttrs (_: {
-        patchPhase = ''
+        postPatch = ''
           substituteInPlace rebar.config --replace ", warnings_as_errors" ""
           '';
       });

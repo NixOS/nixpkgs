@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ libusb1 ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i "s@/usr/@$out/@g" main.c
   '';
 

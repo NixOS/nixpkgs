@@ -3,7 +3,7 @@
 appleDerivation {
   nativeBuildInputs = [ xcbuildHook launchd ];
 
-  patchPhase = ''
+  postPatch = ''
     # NOTE: these hashes must be recalculated for each version change
 
     # disables:

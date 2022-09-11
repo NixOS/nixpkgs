@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=667328
-  patchPhase = ''
+  postPatch = ''
     sed "s/\(#define CASESENSITIVESTRCMP strcasecmp\)/#include <unistd.h>\n\1/" -i FlPosteRazorDialog.cpp
   '';
 

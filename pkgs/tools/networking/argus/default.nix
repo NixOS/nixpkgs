@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpcap cyrus_sasl tcp_wrappers ];
   propagatedBuildInputs = [ procps which wget lsof net-snmp ];
 
-  patchPhase = ''
+  postPatch = ''
      substituteInPlace events/argus-extip.pl \
        --subst-var-by PERLBIN ${perl}/bin/perl
     substituteInPlace events/argus-lsof.pl \

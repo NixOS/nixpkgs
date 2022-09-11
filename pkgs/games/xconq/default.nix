@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  patchPhase = ''
+  postPatch = ''
     # Fix Makefiles
     find . -name 'Makefile.in' -exec sed -re 's@^        ( *)(cd|[&][&])@	\1\2@' -i '{}' ';'
     find . -name 'Makefile.in' -exec sed -e '/chown/d; /chgrp/d' -i '{}' ';'

@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "sha256-Z22XuSbm0w2+0x1sbmYRzeyfyCdZeFzqVcR3C3RhQpA=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace telethon/crypto/libssl.py --replace \
       "ctypes.util.find_library('ssl')" "'${lib.getLib openssl}/lib/libssl.so'"
   '';

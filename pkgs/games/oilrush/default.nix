@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     cd oilrush
     "$shell" "$src" --tar xf
   '';
-  patchPhase = ''
+  postPatch = ''
     cd bin
     for f in launcher_$arch libQtCoreUnigine_$arch.so.4 OilRush_$arch
     do

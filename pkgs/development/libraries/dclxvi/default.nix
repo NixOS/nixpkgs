@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   buildFlags = [ "libdclxvipairing.so" ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile \
       --replace "gcc" "cc"
   '' + lib.optionalString stdenv.isDarwin ''

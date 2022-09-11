@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "0vaapn2p4257m1d5nbnwnh252b7lhl00560gr9pqh2b7xqm1bh6g";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i '30i entry_points = { "console_scripts": [ "patray = patray.__main__:main" ] },' setup.py
     sed -i 's/production.txt/production.in/' setup.py
     sed -i '/pyside2/d' requirements/production.in
