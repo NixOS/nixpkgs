@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, pkg-config, cmake }:
 
 stdenv.mkDerivation rec {
-  version = "6.5.2";
+  version = "7.0.0";
   pname = "multitail";
 
   src = fetchFromGitHub {
-    owner = "halturin";
+    owner = "folkertvanheusden";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-DMYcoHOaX4bToDE8qpXmg5tbTYGkiwtPJd0/qy4uD54=";
+    rev = version;
+    sha256 = "sha256-AMW55Bmwn0BsD36qGXI5WmEfydrMBob8NRY3Tyq92vA=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   buildInputs = [ ncurses ];
 
@@ -19,8 +19,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp multitail $out/bin
+    cp bin/multitail $out/bin
   '';
+
+  hardeningDisable = [ "format" ];
 
   meta = {
     homepage = "https://github.com/halturin/multitail";
