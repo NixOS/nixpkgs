@@ -1,4 +1,4 @@
-{ borgbackup, coreutils, lib, python3Packages, systemd, installShellFiles }:
+{ borgbackup, coreutils, lib, python3Packages, systemd, installShellFiles, borgmatic, testers }:
 
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
@@ -40,6 +40,8 @@ python3Packages.buildPythonApplication rec {
                --replace systemd-inhibit ${systemd}/bin/systemd-inhibit \
                --replace sleep ${coreutils}/bin/sleep
   '';
+
+  passthru.tests.version = testers.testVersion { package = borgmatic; };
 
   meta = with lib; {
     description = "Simple, configuration-driven backup software for servers and workstations";
