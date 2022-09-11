@@ -44,6 +44,7 @@ jobs:
       - name: Compare DocBook and MD manuals
         id: check
         run: |
+          export NIX_PATH=nixpkgs=$(pwd)
           .github/workflows/compare-manuals.sh \
             docbook/share/doc/nixos/options.html \
             md/share/doc/nixos/options.html
