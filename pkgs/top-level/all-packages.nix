@@ -3811,6 +3811,7 @@ with pkgs;
 
   espanso = callPackage ../applications/office/espanso {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation;
+    openssl = openssl_1_1;
   };
 
   esphome = callPackage ../tools/misc/esphome { };
