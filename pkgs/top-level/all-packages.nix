@@ -12168,6 +12168,8 @@ with pkgs;
 
   td = callPackage ../tools/misc/td { };
 
+  tdfgo = callPackage ../tools/misc/tdfgo { };
+
   tftp-hpa = callPackage ../tools/networking/tftp-hpa {};
 
   tigervnc = callPackage ../tools/admin/tigervnc {};
