@@ -94,6 +94,10 @@ with prev;
     ];
   });
 
+  lush-nvim = prev.lib.overrideLuarocks prev.lush-nvim (drv: rec {
+    doCheck = false;
+  });
+
   ljsyscall = prev.lib.overrideLuarocks prev.ljsyscall (drv: rec {
     version = "unstable-20180515";
     # package hasn't seen any release for a long time
