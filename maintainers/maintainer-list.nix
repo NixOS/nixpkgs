@@ -8037,6 +8037,12 @@
     githubId = 39707188;
     name = "Lynn Dong";
   };
+    lazygeniusman = {
+    email = "lazygeniusman@gmail.com";
+    github = "LazyGeniusMan";
+    githubId = 58850480;
+    name = "Andriyansyah Nurrachman";
+  };
   m00wl = {
     name = "Moritz Lumme";
     email = "moritz.lumme@gmail.com";
