@@ -6549,6 +6549,7 @@ with pkgs;
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
 
   fusuma = callPackage ../tools/inputmethods/fusuma {};
+  fusumaPlugins = recurseIntoAttrs (callPackage ../tools/inputmethods/fusuma/plugins.nix { });
 
   fdbPackages = dontRecurseIntoAttrs (callPackage ../servers/foundationdb {
     openjdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731

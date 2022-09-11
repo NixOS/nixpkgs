@@ -1,0 +1,20 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    fusuma (2.4.1)
+    fusuma-plugin-appmatcher (0.4.0)
+      fusuma (~> 2.4)
+      rexml
+      ruby-dbus
+    rexml (3.2.5)
+    ruby-dbus (0.18.1)
+      rexml
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  fusuma-plugin-appmatcher
+
+BUNDLED WITH
+   2.1.4
