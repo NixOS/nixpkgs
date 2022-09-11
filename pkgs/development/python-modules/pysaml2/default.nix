@@ -33,7 +33,7 @@ let
   });
 in buildPythonPackage rec {
   pname = "pysaml2";
-  version = "7.1.2";
+  version = "7.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -42,7 +42,7 @@ in buildPythonPackage rec {
     owner = "IdentityPython";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nyQcQ1OO9PuuQROg+km2vIRF1sZ22MZhiHpmVXWl+is=";
+    sha256 = "sha256-lnaizwbtBYdKx1puizah+UWsw54NVW6UhEw/eStl1WI=";
   };
 
   propagatedBuildInputs = [
