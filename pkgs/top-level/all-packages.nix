@@ -26782,7 +26782,9 @@ with pkgs;
 
   brave = callPackage ../applications/networking/browsers/brave { };
 
-  break-time = callPackage ../applications/misc/break-time { };
+  break-time = callPackage ../applications/misc/break-time {
+    openssl = openssl_1_1;
+  };
 
   breezy = with python3Packages; toPythonApplication breezy;
 
