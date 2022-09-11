@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgsHostHost
+{ lib, stdenv, pkgsBuildHost, pkgsHostHost
 , file, curl, pkg-config, python3, openssl, cmake, zlib
 , installShellFiles, makeWrapper, cacert, rustPlatform, rustc
 , libiconv, CoreFoundation, Security
@@ -16,6 +16,42 @@ rustPlatform.buildRustPackage {
     rustc = rustc;
     inherit (rustc) tests;
   };
+
+  # Upstream rustc still assumes that musl = static[1].  The fix for
+  # this is to disable crt-static by default for non-static musl
+  # targets.
+  #
+  # For every package apart from Cargo, we can fix this by just
+  # patching rustc to not have crt-static by default.  But Cargo is
+  # built with the upstream bootstrap binary for rustc, which we can't
+  # easily patch.  This means we need to find another way to make sure
+  # crt-static is not used during the build of pkgsMusl.cargo.
+  #
+  # By default, Cargo doesn't apply RUSTFLAGS when building build.rs
+  # if --target is passed, so the only good way to set -crt-static for
+  # build.rs files used in the Cargo build is to use the unstable
+  # -Zhost-config Cargo feature.  This allows us to specify flags that
+  # should be passed to rustc when building for the build platform.
+  # We also need to use -Ztarget-applies-to-host, because using
+  # -Zhost-config requires it.
+  #
+  # When doing this, we also have to specify the linker, or cargo
+  # won't pass a -C linker= argument to rustc.  This will make rustc
+  # try to use its default value of "cc", which won't be available
+  # when cross-compiling.
+  #
+  # [1]: https://github.com/rust-lang/compiler-team/issues/422
+  postPatch = lib.optionalString (with stdenv.buildPlatform; isMusl && !isStatic) ''
+    mkdir -p .cargo
+    cat <<EOF >> .cargo/config
+    [host]
+    rustflags = "-C target-feature=-crt-static"
+    linker = "${pkgsBuildHost.stdenv.cc}/bin/${pkgsBuildHost.stdenv.cc.targetPrefix}cc"
+    [unstable]
+    host-config = true
+    target-applies-to-host = true
+    EOF
+  '';
 
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
@@ -75,7 +111,5 @@ rustPlatform.buildRustPackage {
     maintainers = with maintainers; [ retrry ];
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.unix;
-    # weird segfault in a build script
-    broken = stdenv.targetPlatform.isMusl && !stdenv.targetPlatform.isStatic;
   };
 }
