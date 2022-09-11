@@ -63,7 +63,7 @@ in {
         KillMode = "process";
         Restart = "on-failure";
         EnvironmentFile = cfg.credentialsFile;
-        ExecStart = "${cfg.package}/bin/cachix ${lib.optionalString cfg.verbose "--verbose"} deploy agent ${cfg.name} ${if cfg.profile != null then profile else ""}";
+        ExecStart = "${cfg.package}/bin/cachix ${lib.optionalString cfg.verbose "--verbose"} deploy agent ${cfg.name} ${if cfg.profile != null then cfg.profile else ""}";
       };
     };
   };
