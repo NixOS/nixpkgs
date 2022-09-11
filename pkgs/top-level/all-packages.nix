@@ -7445,6 +7445,8 @@ with pkgs;
 
   hevea = callPackage ../tools/typesetting/hevea { };
 
+  hex = callPackage ../tools/misc/hex { };
+
   hexd = callPackage ../tools/misc/hexd { };
   pixd = callPackage ../tools/misc/pixd { };
 
