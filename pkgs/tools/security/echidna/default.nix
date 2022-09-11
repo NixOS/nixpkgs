@@ -11,13 +11,13 @@
 }:
 mkDerivation rec {
   pname = "echidna";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "echidna";
     rev = "v${version}";
-    sha256 = "sha256-WmlQWgn4qfRmx3PdzY7wzT9AyU7Re2T1CWJ7yGjcVac=";
+    sha256 = "sha256-ZLk3K00O6aERf+G5SagDVUk1/ba9U+9n9dqCImkczJs=";
   };
 
   # NOTE: echidna is behind with aeson because of hevm, this patch updates
