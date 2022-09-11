@@ -31,6 +31,7 @@
 , gnome-desktop
 , gst_all_1
 , gsettings-desktop-schemas
+, gnome-user-share
 , gobject-introspection
 }:
 
@@ -75,6 +76,7 @@ stdenv.mkDerivation rec {
     gnome-desktop
     gnome.adwaita-icon-theme
     gsettings-desktop-schemas
+    gnome-user-share
     gst_all_1.gst-plugins-base
     gtk4
     libadwaita
