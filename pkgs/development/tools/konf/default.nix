@@ -11,10 +11,10 @@ buildGoModule rec {
     rev = "main";
     owner = "SimonTheLeg";
     repo = "konf-go";
-    sha256 = "sha256-UeuR7lsNG2Y0hdpQA5NXBUlSvYeixyKS73N95z5TZ7k=";
+    hash = "sha256-UeuR7lsNG2Y0hdpQA5NXBUlSvYeixyKS73N95z5TZ7k=";
   };
 
-  vendorSha256 = "sha256-sB3j19HrTtaRqNcooqNy8vBvuzxxyGDa7MOtiGoVgN8=";
+  vendorHash = "sha256-sB3j19HrTtaRqNcooqNy8vBvuzxxyGDa7MOtiGoVgN8=";
 
   meta = with lib; {
     description = "Lightweight and blazing fast kubeconfig manager which allows to use different kubeconfigs at the same time";
