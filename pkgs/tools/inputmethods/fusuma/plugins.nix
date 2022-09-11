@@ -61,4 +61,20 @@
       platforms = platforms.linux;
     };
   };
+
+  tap = bundlerApp {
+    pname = "fusuma-plugin-tap";
+    gemdir = ./fusuma-plugin-tap;
+    exes = [ "fusuma-tap" ];
+                                       
+    passthru.updateScript = bundlerUpdateScript "fusuma-plugin-tap";
+    
+    meta = with lib; {
+      description = "Recognize multitouch tap plugin for Fusuma";
+      homepage = "https://github.com/iberianpig/fusuma-plugin-tap";
+      license = licenses.mit;
+      maintainers = with maintainers; [ lazygeniusman ];
+      platforms = platforms.linux;
+    };
+  };
 }

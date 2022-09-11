@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    fusuma (2.4.1)
+    fusuma-plugin-tap (0.4.2)
+      fusuma (~> 2.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  fusuma-plugin-tap
+
+BUNDLED WITH
+   2.1.4
