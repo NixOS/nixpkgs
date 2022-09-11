@@ -11927,6 +11927,8 @@ with pkgs;
 
   vcftools = callPackage ../applications/science/biology/vcftools { };
 
+  vcmi = libsForQt5.callPackage ../games/vcmi { };
+
   vcsh = callPackage ../applications/version-management/vcsh { };
 
   vcs_query = callPackage ../tools/misc/vcs_query { };
