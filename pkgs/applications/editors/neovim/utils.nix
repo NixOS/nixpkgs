@@ -1,11 +1,11 @@
 { lib
-, buildLuarocksPackage
 , callPackage
 , vimUtils
 , nodejs
 , neovim-unwrapped
 , bundlerEnv
 , ruby
+, lua
 , python3Packages
 , writeText
 , wrapNeovimUnstable
@@ -193,7 +193,7 @@ in
   inherit legacyWrapper;
 
   buildNeovimPluginFrom2Nix = callPackage ./build-neovim-plugin.nix {
-    inherit (vimUtils) buildVimPluginFrom2Nix toVimPlugin;
-    inherit buildLuarocksPackage;
+    inherit (vimUtils) toVimPlugin;
+    inherit lua;
   };
 }
