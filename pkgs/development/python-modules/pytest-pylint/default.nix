@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-pylint";
-  version = "0.18.0";
+  version = "0.19.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "790c7a8019fab08e59bd3812db1657a01995a975af8b1c6ce95b9aa39d61da27";
+    sha256 = "sha256-2I6DwQI8ZBVIqew1Z3B87udhZjKphq8TNCbUp00GaTI=";
   };
 
   nativeBuildInputs = [ pytest-runner ];
