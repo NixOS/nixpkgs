@@ -8,7 +8,7 @@ buildGoModule rec {
   version = "0.2.0";
 
   src = fetchFromGitHub {
-    rev = "main";
+    rev = "v${version}";
     owner = "SimonTheLeg";
     repo = "konf-go";
     hash = "sha256-UeuR7lsNG2Y0hdpQA5NXBUlSvYeixyKS73N95z5TZ7k=";
