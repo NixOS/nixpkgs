@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, wxGTK30, boost, firebird }:
+{ lib, stdenv, fetchFromGitHub, wxGTK30, boost, firebird-client-lib }:
 
 stdenv.mkDerivation rec {
   version = "0.9.3.1";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ wxGTK30 boost firebird ];
+  buildInputs = [ wxGTK30 boost firebird-client-lib ];
 
   preBuild = ''
     sed -i 's/CXXFLAGS = -g -O2/CXXFLAGS = -g -O2 -nostartfiles/' Makefile
