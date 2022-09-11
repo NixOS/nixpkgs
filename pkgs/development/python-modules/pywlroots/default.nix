@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pywlroots";
-  version = "0.15.20";
+  version = "0.15.21";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hHZzMK7ge2Hs7tzHo4LV3rumEoEoL2OODRQRM60Vlz0=";
+    sha256 = "sha256-1wHV1+xrGFJWLoMIaG5jc01FfC7mV0+ArhPmWS5yG04=";
   };
 
   nativeBuildInputs = [ pkg-config ];
