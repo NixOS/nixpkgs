@@ -18954,6 +18954,8 @@ with pkgs;
 
   json2hcl = callPackage ../development/tools/json2hcl { };
 
+  json2tsv = callPackage ../development/tools/json2tsv { };
+
   json2yaml = haskell.lib.compose.justStaticExecutables haskellPackages.json2yaml;
 
   json-glib = callPackage ../development/libraries/json-glib { };
