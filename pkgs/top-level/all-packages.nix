@@ -20567,6 +20567,8 @@ with pkgs;
 
   mlt = callPackage ../development/libraries/mlt { };
 
+  mlib = callPackage ../development/libraries/mlib { };
+
   mlv-app = libsForQt5.callPackage ../applications/video/mlv-app { };
 
   mono-addins = callPackage ../development/libraries/mono-addins { };
