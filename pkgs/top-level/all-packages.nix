@@ -14574,6 +14574,7 @@ with pkgs;
   cargo-depgraph = callPackage ../development/tools/rust/cargo-depgraph { };
   cargo-dephell = callPackage ../development/tools/rust/cargo-dephell {
     inherit (darwin.apple_sdk.frameworks) Security;
+    openssl = openssl_1_1;
   };
   cargo-diet = callPackage ../development/tools/rust/cargo-diet { };
   cargo-embed = callPackage ../development/tools/rust/cargo-embed {
