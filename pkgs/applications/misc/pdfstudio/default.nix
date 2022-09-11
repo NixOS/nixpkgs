@@ -34,7 +34,7 @@ in
       PDF Studio Viewer is an easy to use, full-featured PDF editing software. This is the free edition. For the standard/pro edition, see the package pdfstudio.
     '';
     src = fetchurl {
-      url = "https://download.qoppa.com/pdfstudioviewer/PDFStudioViewer_linux64.deb";
+      url = "https://web.archive.org/web/20220909093140/https://download.qoppa.com/pdfstudioviewer/PDFStudioViewer_linux64.deb";
       sha256 = "sha256-0CPVyJ31xQSfReMPULgFL1dURh9/zfvwzidwfY6gFI0=";
     };
     jdk = jdk11;
