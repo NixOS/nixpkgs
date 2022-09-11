@@ -25,6 +25,7 @@ let
     if (program == "pdfstudio")
     then "PDF Studio ${year}"
     else "PDF Studio Viewer";
+  dot2dash = str: builtins.replaceStrings [ "." ] [ "_" ] str;
 in
 {
   pdfstudioviewer = callPackage ./common.nix rec {
@@ -44,7 +45,7 @@ in
     inherit desktopName longDescription pname program year;
     version = "${year}.2.0";
     src = fetchurl {
-      url = "https://download.qoppa.com/pdfstudio/v2021/PDFStudio_v2021_2_0_linux64.deb";
+      url = "https://download.qoppa.com/pdfstudio/v${year}/PDFStudio_v${dot2dash version}_linux64.deb";
       sha256 = "sha256-wQgVWz2kS+XkrqvCAUishizfDrCwGyVDAAU4Yzj4uYU=";
     };
     extraBuildInputs = [
@@ -57,7 +58,7 @@ in
     inherit desktopName longDescription pname program year;
     version = "${year}.0.2";
     src = fetchurl {
-      url = "https://download.qoppa.com/pdfstudio/v2022/PDFStudio_v2022_0_2_linux64_adoptium17.deb";
+      url = "https://download.qoppa.com/pdfstudio/v${year}/PDFStudio_v${dot2dash version}_linux64_adoptium17.deb";
       sha256 = "sha256-fWZXCyizP++pkmC+UpgCzGvb0QrNs4RI6iC4ZBL8hLE=";
     };
     extraBuildInputs = [
