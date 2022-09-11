@@ -65,16 +65,17 @@
 , systemdSupport ? stdenv.isLinux
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
   version = "2.37.90";
+  name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "5.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   separateDebugInfo = stdenv.isLinux;
 
   src = fetchurl {
-    url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
+    url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-5VRyTvUnhJ02+3VNQrDNs5/0pscRhhtU25h0DV3mD5E=";
   };
 
@@ -162,7 +163,7 @@ stdenv.mkDerivation rec {
     # (We pick just that one because using the other headers from `sdk` is not
     # compatible with our C++ standard library. This header is already in
     # the standard library on aarch64)
-    runCommand "${pname}_headers" { } ''
+    runCommand "webkitgtk_headers" { } ''
       install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
     ''
   ) ++ lib.optionals stdenv.isLinux [
@@ -236,4 +237,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     broken = stdenv.isDarwin;
   };
-}
+})
