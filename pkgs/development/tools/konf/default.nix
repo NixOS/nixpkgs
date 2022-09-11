@@ -1,15 +1,16 @@
 { lib
 , buildGoModule
-, fetchFromGitHub }:
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "konf";
   version = "0.2.0";
 
   src = fetchFromGitHub {
-    rev    = "main";
-    owner  = "SimonTheLeg";
-    repo   = "konf-go";
+    rev = "main";
+    owner = "SimonTheLeg";
+    repo = "konf-go";
     sha256 = "sha256-UeuR7lsNG2Y0hdpQA5NXBUlSvYeixyKS73N95z5TZ7k=";
   };
 
