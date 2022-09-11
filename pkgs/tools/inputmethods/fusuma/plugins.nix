@@ -38,4 +38,27 @@
       platforms = platforms.linux;
     };
   };
+
+  sendkey = bundlerApp {
+    pname = "fusuma-plugin-sendkey";
+    gemdir = ./fusuma-plugin-sendkey;
+    exes = [ "fusuma-sendkey" ];
+    
+    nativeBuildInputs = [ makeWrapper ];
+    
+    postBuild = ''
+    wrapProgram "$out/bin/fusuma-sendkey" \
+      --prefix PATH : ${lib.makeBinPath [ libinput fusuma ]}
+    '';
+    
+    passthru.updateScript = bundlerUpdateScript "fusuma-plugin-sendkey";
+    
+    meta = with lib; {
+      description = "Send virtual keyboard events plugin for Fusuma";
+      homepage = "https://github.com/iberianpig/fusuma-plugin-sendkey";
+      license = licenses.mit;
+      maintainers = with maintainers; [ lazygeniusman ];
+      platforms = platforms.linux;
+    };
+  };
 }
