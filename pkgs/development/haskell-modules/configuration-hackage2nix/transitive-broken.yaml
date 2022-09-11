@@ -1332,7 +1332,6 @@ dont-distribute-packages:
  - ethereum-client-haskell
  - ethereum-merkle-patricia-db
  - euphoria
- - evdev-streamly
  - eve-cli
  - event-monad
  - eventful-dynamodb
@@ -2184,6 +2183,7 @@ dont-distribute-packages:
  - hsx-jmacro
  - hsx-xhtml
  - html-kure
+ - html-parse-util
  - htoml-parse
  - hts
  - htsn-import
