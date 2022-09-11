@@ -532,6 +532,8 @@ in {
     };
 
     systemd.services = {
+      # upstream reference:
+      # https://github.com/syncthing/syncthing/blob/main/etc/linux-systemd/system/syncthing%40.service
       syncthing = mkIf cfg.systemService {
         description = "Syncthing service";
         after = [ "network.target" ];
@@ -543,7 +545,7 @@ in {
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Restart = "on-failure";
-          SuccessExitStatus = "2 3 4";
+          SuccessExitStatus = "3 4";
           RestartForceExitStatus="3 4";
           User = cfg.user;
           Group = cfg.group;
