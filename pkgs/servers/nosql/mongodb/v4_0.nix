@@ -21,5 +21,11 @@ in buildMongoDB {
       sha256 = "sha256-RvfCP462RG+ZVjcb23DgCuxCdfPl2/UgH8N7FgCghGI=";
     })
   ]
-    ++ lib.optionals stdenv.isDarwin [ ./asio-no-experimental-string-view.patch ];
+    ++ lib.optionals stdenv.isDarwin [
+      (fetchpatch {
+        name = "fix double link of isNamedError.";
+        url = "https://github.com/mongodb/mongo/commit/9c6751b9765d269b667324bb2efe1ca76a916d20.patch";
+        sha256 = "sha256-4mcafqhBh7039ocEI9d/gXWck51X68PqtWtz4dapwwI=";
+       })
+    ];
 }

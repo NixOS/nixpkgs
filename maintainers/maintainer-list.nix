@@ -2780,6 +2780,12 @@
     githubId = 34543609;
     name = "creator54";
   };
+  crinklywrappr = {
+    email = "crinklywrappr@pm.me";
+    name = "Daniel Fitzpatrick";
+    github = "crinklywrappr";
+    githubId = 56522;
+  };
   cript0nauta = {
     email = "shareman1204@gmail.com";
     github = "cript0nauta";
@@ -4309,6 +4315,12 @@
     github = "fedeinthemix";
     githubId = 7670450;
     name = "Federico Beffa";
+  };
+  fbergroth = {
+    email = "fbergroth@gmail.com";
+    github = "fbergroth";
+    githubId = 1211003;
+    name = "Fredrik Bergroth";
   };
   fbrs = {
     email = "yuuki@protonmail.com";
@@ -15314,5 +15326,11 @@
     github = "nitrocode";
     githubId = 7775707;
     name = "RB";
+  };
+  bpaulin = {
+    email = "brunopaulin@bpaulin.net";
+    github = "bpaulin";
+    githubId = 115711;
+    name = "bpaulin";
   };
 }
