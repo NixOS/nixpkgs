@@ -40,5 +40,13 @@ import ./make-test-python.nix ({ lib, ... }: {
         docs = json.loads(machine.succeed("curl -u admin:admin -fs localhost:28981/api/documents/"))['results']
         assert "2005-10-16" in docs[0]['created']
         assert "2005-10-16" in docs[1]['created']
+
+    # Detects gunicorn issues, see PR #190888
+    with subtest("Document metadata can be accessed"):
+        metadata = json.loads(machine.succeed("curl -u admin:admin -fs localhost:28981/api/documents/1/metadata/"))
+        assert "original_checksum" in metadata
+
+        metadata = json.loads(machine.succeed("curl -u admin:admin -fs localhost:28981/api/documents/2/metadata/"))
+        assert "original_checksum" in metadata
   '';
 })
