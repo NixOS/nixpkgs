@@ -19,6 +19,7 @@
 , "@tailwindcss/language-server"
 , "@tailwindcss/line-clamp"
 , "@tailwindcss/typography"
+, "@typescript-eslint/parser"
 , "@uppy/companion"
 , "@vue/cli"
 , {"@webassemblyjs/cli": "1.11.1"}
