@@ -2,6 +2,7 @@
 , callPackage
 , makeSetupHook
 , makeWrapper
+, jq
 , dotnet-sdk
 , dotnet-test-sdk
 , disabledTests
@@ -9,6 +10,7 @@
 , dotnet-runtime
 , runtimeDeps
 , buildType
+, dontSetNugetSource
 }:
 
 let
@@ -18,11 +20,17 @@ in
   dotnetConfigureHook = callPackage ({ }:
     makeSetupHook {
       name = "dotnet-configure-hook";
-      deps = [ dotnet-sdk nuget-source ];
+      deps = [ dotnet-sdk ];
       substitutions = {
-        nugetSource = nuget-source;
+        nugetSource = lib.optional (!dontSetNugetSource) nuget-source;
       };
     } ./dotnet-configure-hook.sh) { };
+
+  dotnetValidateLockfileHook = callPackage ({ }:
+    makeSetupHook {
+      name = "dotnet-validate-lockfile-hook";
+      deps = [ jq ];
+    } ./dotnet-validate-lockfile.sh) { };
 
   dotnetBuildHook = callPackage ({ }:
     makeSetupHook {

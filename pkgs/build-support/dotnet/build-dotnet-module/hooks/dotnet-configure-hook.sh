@@ -13,12 +13,22 @@ dotnetConfigureHook() {
         parallelFlag="--disable-parallel"
     fi
 
+    if [ -z "${dontSetNugetSource-}" ]; then
+        nugetSourceFlag="--source @nugetSource@/lib"
+    fi
+
+    if [ "${generateLockfile-}" ]; then
+        lockfilePath="$HOME/lockfile.json"
+        lockfileFlag="--use-lock-file --lock-file-path ${lockfilePath}"
+    fi
+
     for project in ${projectFile[@]} ${testProjectFile[@]}; do
         env \
             dotnet restore "$project" \
                 -p:ContinuousIntegrationBuild=true \
                 -p:Deterministic=true \
-                --source "@nugetSource@/lib" \
+                ${nugetSourceFlag-} \
+                ${lockfileFlag-} \
                 ${parallelFlag-} \
                 ${dotnetRestoreFlags[@]} \
                 ${dotnetFlags[@]}
