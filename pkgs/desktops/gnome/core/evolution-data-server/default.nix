@@ -38,6 +38,7 @@
 , json-glib
 , glib
 , gtk3
+, gtk4
 , libphonenumber
 , gnome-online-accounts
 , libgweather
@@ -85,6 +86,7 @@ stdenv.mkDerivation rec {
     glib
     libsoup_3
     gtk3
+    gtk4
     gnome-online-accounts
     p11-kit
     libgweather
