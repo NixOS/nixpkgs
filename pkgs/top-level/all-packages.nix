@@ -725,6 +725,8 @@ with pkgs;
 
   owl = callPackage ../tools/networking/owl { };
 
+  packcc = callPackage ../development/tools/packcc { };
+
   packer = callPackage ../development/tools/packer { };
 
   packr = callPackage ../development/libraries/packr { };
