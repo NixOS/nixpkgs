@@ -639,7 +639,16 @@ in
     buildInputs = [ args.snappy ];
   };
 
-  sqlite3 = attrs: {
+  sqlite3 = attrs: if lib.versionAtLeast attrs.version "1.5.0"
+  then {
+    nativeBuildInputs = [ pkg-config sqlite.dev ];
+    buildInputs = [ sqlite.out ];
+    buildFlags = [
+      "--enable-system-libraries"
+      "--with-pkg-config=${pkg-config}/bin/pkg-config"
+    ];
+  }
+  else {
     buildFlags = [
       "--with-sqlite3-include=${sqlite.dev}/include"
       "--with-sqlite3-lib=${sqlite.out}/lib"
