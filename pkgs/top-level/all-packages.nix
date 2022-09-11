@@ -3277,7 +3277,9 @@ with pkgs;
                           { inherit (haskellPackages) alex happy Agda ghcWithPackages;
                           };
 
-  cfdyndns = callPackage ../applications/networking/dyndns/cfdyndns { };
+  cfdyndns = callPackage ../applications/networking/dyndns/cfdyndns {
+    openssl = openssl_1_1;
+  };
 
   charliecloud = callPackage ../applications/virtualization/charliecloud { };
 
