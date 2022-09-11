@@ -14963,7 +14963,7 @@ with pkgs;
 
   clojure = callPackage ../development/interpreters/clojure {
     # set this to an LTS version of java
-    jdk = jdk11;
+    jdk = jdk17;
   };
 
   clojure-lsp = callPackage ../development/tools/misc/clojure-lsp { };
