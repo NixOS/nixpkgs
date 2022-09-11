@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, installShellFiles, makeWrapper, asciidoc
+{ lib, stdenv, fetchFromGitHub, fetchpatch, installShellFiles, makeWrapper, asciidoc
 , docbook_xml_dtd_45, git, docbook_xsl, libxml2, libxslt, coreutils, gawk
 , gnugrep, gnused, jq, nix }:
 
@@ -16,6 +16,14 @@ stdenv.mkDerivation rec {
       echo $(stat -c %Y $out) > $out/.timestamp
     '';
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-prefetching-hash-key.patch";
+      url = "https://github.com/msteen/nix-prefetch/commit/877f80ac7e91d684857e2c940cdb3c423efa1833.patch";
+      hash = "sha256-nkVQ2c+zezPQBOCDeMg+GHW3uz9EBnHIT+ZafdC8nQQ=";
+    })
+  ];
 
   postPatch = ''
     lib=$out/lib/${pname}
