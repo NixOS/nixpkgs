@@ -22,4 +22,20 @@
       platforms = platforms.linux;
     };
   };
+
+  keypress = bundlerApp {
+    pname = "fusuma-plugin-keypress";
+    gemdir = ./fusuma-plugin-keypress;
+    exes = [ "fusuma-keypress" ];
+                            
+    passthru.updateScript = bundlerUpdateScript "fusuma-plugin-keypress";
+    
+    meta = with lib; {
+      description = "Keypress combination plugin for Fusuma";
+      homepage = "https://github.com/iberianpig/fusuma-plugin-keypress";
+      license = licenses.mit;
+      maintainers = with maintainers; [ lazygeniusman ];
+      platforms = platforms.linux;
+    };
+  };
 }

@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    fusuma (2.4.1)
+    fusuma-plugin-keypress (0.5.0)
+      fusuma (~> 2.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  fusuma-plugin-keypress
+
+BUNDLED WITH
+   2.1.4
