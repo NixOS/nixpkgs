@@ -1,2 +1,2 @@
 source 'https://rubygems.org'
-gem 'fusuma', '2.4.1'
+gem 'fusuma'
