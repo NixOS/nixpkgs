@@ -267,6 +267,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://www.ausweisapp.bund.de/">AusweisApp2</link>,
+          the authentication software for the German ID card. Available
+          as
+          <link linkend="opt-programs.ausweisapp.enable">programs.ausweisapp</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/zalando/patroni">Patroni</link>,
           a template for PostgreSQL HA with ZooKeeper, etcd or Consul.
           Available as
@@ -575,6 +583,25 @@
           memtest86+ was updated from 5.00-coreboot-002 to 6.00-beta2.
           It is now the upstream version from https://www.memtest.org/,
           as coreboot’s fork is no longer available.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Option descriptions, examples, and defaults writting in
+          DocBook are now deprecated. Using CommonMark is preferred and
+          will become the default in a future release.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <literal>documentation.nixos.options.allowDocBook</literal>
+          option was added to ease the transition to CommonMark option
+          documentation. Setting this option to <literal>false</literal>
+          causes an error for every option included in the manual that
+          uses DocBook documentation; it defaults to
+          <literal>true</literal> to preserve the previous behavior and
+          will be removed once the transition to CommonMark is complete.
         </para>
       </listitem>
       <listitem>

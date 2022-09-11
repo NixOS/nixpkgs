@@ -546,6 +546,8 @@ with pkgs;
 
   erosmb = callPackage ../tools/security/erosmb { };
 
+  octosql = callPackage ../tools/misc/octosql { };
+
   onesixtyone = callPackage ../tools/security/onesixtyone {};
 
   oletools = with python3.pkgs; toPythonApplication oletools;
@@ -6629,6 +6631,8 @@ with pkgs;
 
   gawkInteractive = gawk.override { interactive = true; };
 
+  gatk = callPackage ../applications/science/biology/gatk {} ;
+
   gbdfed = callPackage ../tools/misc/gbdfed {
     gtk = gtk2-x11;
   };
@@ -8286,6 +8290,8 @@ with pkgs;
 
   minidlna = callPackage ../tools/networking/minidlna { };
 
+  miniplayer = callPackage ../applications/audio/miniplayer { };
+
   minipro = callPackage ../tools/misc/minipro { };
 
   minisign = callPackage ../tools/security/minisign { };
@@ -9887,9 +9893,7 @@ with pkgs;
 
   pfstools = libsForQt5.callPackage ../tools/graphics/pfstools { };
 
-  phoc = callPackage ../applications/misc/phoc {
-    wlroots = wlroots_0_14;
-  };
+  phoc = callPackage ../applications/misc/phoc { };
 
   phockup = callPackage ../applications/misc/phockup { };
 
@@ -11502,6 +11506,8 @@ with pkgs;
   };
 
   thefuck = python3Packages.callPackage ../tools/misc/thefuck { };
+
+  theme-sh = callPackage ../tools/misc/theme-sh { };
 
   thicket = callPackage ../applications/version-management/git-and-tools/thicket { };
 
@@ -16748,6 +16754,8 @@ with pkgs;
   };
 
   nailgun = callPackage ../development/tools/nailgun { };
+
+  nil = callPackage ../development/tools/nil { };
 
   ninja = callPackage ../development/tools/build-managers/ninja { };
 

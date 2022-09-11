@@ -212,8 +212,17 @@ def convertMD(options: Dict[str, Any]) -> str:
 
     return options
 
-warningsAreErrors = sys.argv[1] == "--warnings-are-errors"
-optOffset = 1 if warningsAreErrors else 0
+warningsAreErrors = False
+errorOnDocbook = False
+optOffset = 0
+for arg in sys.argv[1:]:
+    if arg == "--warnings-are-errors":
+        optOffset += 1
+        warningsAreErrors = True
+    if arg == "--error-on-docbook":
+        optOffset += 1
+        errorOnDocbook = True
+
 options = pivot(json.load(open(sys.argv[1 + optOffset], 'r')))
 overrides = pivot(json.load(open(sys.argv[2 + optOffset], 'r')))
 
@@ -241,9 +250,33 @@ for (k, v) in overrides.items():
 
 severity = "error" if warningsAreErrors else "warning"
 
+def is_docbook(o, key):
+    val = o.get(key, {})
+    if not isinstance(val, dict):
+        return False
+    return val.get('_type', '') == 'literalDocBook'
+
 # check that every option has a description
 hasWarnings = False
+hasErrors = False
 for (k, v) in options.items():
+    if errorOnDocbook:
+        if isinstance(v.value.get('description', {}), str):
+            hasErrors = True
+            print(
+                f"\x1b[1;31merror: option {v.name} description uses DocBook\x1b[0m",
+                file=sys.stderr)
+        elif is_docbook(v.value, 'defaultText'):
+            hasErrors = True
+            print(
+                f"\x1b[1;31merror: option {v.name} default uses DocBook\x1b[0m",
+                file=sys.stderr)
+        elif is_docbook(v.value, 'example'):
+            hasErrors = True
+            print(
+                f"\x1b[1;31merror: option {v.name} example uses DocBook\x1b[0m",
+                file=sys.stderr)
+
     if v.value.get('description', None) is None:
         hasWarnings = True
         print(f"\x1b[1;31m{severity}: option {v.name} has no description\x1b[0m", file=sys.stderr)
@@ -254,6 +287,8 @@ for (k, v) in options.items():
             f"\x1b[1;31m{severity}: option {v.name} has no type. Please specify a valid type, see " +
             "https://nixos.org/manual/nixos/stable/index.html#sec-option-types\x1b[0m", file=sys.stderr)
 
+if hasErrors:
+    sys.exit(1)
 if hasWarnings and warningsAreErrors:
     print(
         "\x1b[1;31m" +

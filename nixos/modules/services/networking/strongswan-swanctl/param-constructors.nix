@@ -152,7 +152,7 @@ rec {
     option = mkOption {
       type = types.attrsOf (types.submodule {options = paramsToOptions params;});
       default = {};
-      inherit description;
+      description = lib.mdDoc description;
     };
     render = postfix: attrs:
       let postfixedAttrs = mapAttrs' (name: nameValuePair "${name}-${postfix}") attrs;

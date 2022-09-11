@@ -4804,6 +4804,8 @@ in {
 
   jsonrpc-websocket = callPackage ../development/python-modules/jsonrpc-websocket { };
 
+  jsons = callPackage ../development/python-modules/jsons { };
+
   jsonschema = callPackage ../development/python-modules/jsonschema { };
 
   jsonstreams = callPackage ../development/python-modules/jsonstreams { };
