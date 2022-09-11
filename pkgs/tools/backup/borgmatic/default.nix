@@ -1,4 +1,4 @@
-{ borgbackup, coreutils, lib, python3Packages, systemd }:
+{ borgbackup, coreutils, lib, python3Packages, systemd, installShellFiles }:
 
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
@@ -17,6 +17,8 @@ python3Packages.buildPythonApplication rec {
     "test_borgmatic_version_matches_news_version"
   ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   propagatedBuildInputs = with python3Packages; [
     borgbackup
     colorama
@@ -27,6 +29,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postInstall = ''
+    installShellCompletion --cmd borgmatic \
+      --bash <($out/bin/borgmatic --bash-completion)
+
     mkdir -p $out/lib/systemd/system
     cp sample/systemd/borgmatic.timer $out/lib/systemd/system/
     substitute sample/systemd/borgmatic.service \
