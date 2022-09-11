@@ -15315,4 +15315,10 @@
     githubId = 7775707;
     name = "RB";
   };
+  bpaulin = {
+    email = "brunopaulin@bpaulin.net";
+    github = "bpaulin";
+    githubId = 115711;
+    name = "bpaulin";
+  };
 }
