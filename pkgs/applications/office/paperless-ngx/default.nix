@@ -3,7 +3,7 @@
 , nixosTests
 , python3
 , ghostscript
-, imagemagick
+, imagemagickBig
 , jbig2enc
 , optipng
 , pngquant
@@ -51,7 +51,7 @@ let
 
   path = lib.makeBinPath [
     ghostscript
-    imagemagick
+    imagemagickBig
     jbig2enc
     optipng
     pngquant
