@@ -14,15 +14,15 @@
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "warpinator";
-  version = "1.2.14";
+  version = "21";
 
   format = "other";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
-    rev = version;
-    hash = "sha256-0OmrviDti843c+nvpt7ennSrso0PD7eZOJ94JiWJT58=";
+    rev = "refs/tags/master.mint${version}";
+    hash = "sha256-wd6gNQ6+Jj5PiSySzeWrT7Ab+vzzea+2Jzk3Z4oY8mA=";
   };
 
   nativeBuildInputs = [
