@@ -405,19 +405,21 @@ let
   '';
 
   # implementation of the fetching of repo information from github
-  fetchImpl = passBinaries "fetchImpl-wrapped" {
-      curl = "${curl}/bin/curl";
-      nix-prefetch-git = "${nix-prefetch-git}/bin/nix-prefetch-git";
-      inherit atomically-write;
+  fetchImpl = passArgs "fetchImpl-with-args" {
+      binaries = {
+        curl = "${curl}/bin/curl";
+        nix-prefetch-git = "${nix-prefetch-git}/bin/nix-prefetch-git";
+        inherit atomically-write;
+      };
     }
     (writers.writePython3 "fetchImpl" {
         flakeIgnore = ["E501"];
     } ./update_impl.py);
 
-  # Pass the given binaries to the command, in the BINARIES environment variable.
-  # The binaries are just an attrset from name to executable.
-  passBinaries = name: binAttrs: script: writeShellScript name ''
-    env BINARIES=${lib.escapeShellArg (lib.generators.toJSON {} binAttrs)} \
+  # Pass the given arguments to the command, in the ARGS environment variable.
+  # The arguments are just a json object that should be available in the script.
+  passArgs = name: argAttrs: script: writeShellScript name ''
+    env ARGS="$(< ${jsonFile "${name}-args" argAttrs})" \
       ${script} "$@"
   '';
 

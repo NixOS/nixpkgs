@@ -7,7 +7,8 @@ from typing import Iterator, Any, Literal
 
 debug: bool = True if os.environ.get("DEBUG", False) else False
 Bin = str
-bins: dict[str, Bin] = json.loads(os.environ["BINARIES"])
+args: dict[str, Any] = json.loads(os.environ["ARGS"])
+bins: dict[str, Bin] = args["binaries"]
 
 mode: str = sys.argv[1]
 jsonArg: dict = json.loads(sys.argv[2])
