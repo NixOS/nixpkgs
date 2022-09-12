@@ -19807,9 +19807,7 @@ with pkgs;
   # On non-GNU systems we need GNU Gettext for libintl.
   libintl = if stdenv.hostPlatform.libc != "glibc" then gettext else null;
 
-  libid3tag = callPackage ../development/libraries/libid3tag {
-    gperf = gperf_3_0;
-  };
+  libid3tag = callPackage ../development/libraries/libid3tag { };
 
   libidn = callPackage ../development/libraries/libidn { };
 
