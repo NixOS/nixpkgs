@@ -23,11 +23,13 @@ import ../make-test-python.nix ({ pkgs, ... }:
       machine.succeed("stratis filesystem rename testpool testfs0 testfs1")
       # test snapshot
       machine.succeed("mkdir -p /mnt/testfs1 /mnt/testfs2")
+      machine.wait_for_file("/dev/stratis/testpool/testfs1")
       machine.succeed("mount /dev/stratis/testpool/testfs1 /mnt/testfs1")
       machine.succeed("echo test0 > /mnt/testfs1/test0")
       machine.succeed("echo test1 > /mnt/testfs1/test1")
       machine.succeed("stratis filesystem snapshot testpool testfs1 testfs2")
       machine.succeed("echo test2 > /mnt/testfs1/test1")
+      machine.wait_for_file("/dev/stratis/testpool/testfs2")
       machine.succeed("mount /dev/stratis/testpool/testfs2 /mnt/testfs2")
       assert "test0" in machine.succeed("cat /mnt/testfs1/test0")
       assert "test0" in machine.succeed("cat /mnt/testfs2/test0")
