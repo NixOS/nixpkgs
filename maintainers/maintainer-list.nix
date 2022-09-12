@@ -4948,6 +4948,12 @@
       fingerprint = "5214 2D39 A7CE F8FA 872B  CA7F DE62 E1E2 A614 5556";
     }];
   };
+  gunnar = {
+    email = "gunnar@magnsson.io";
+    github = "gunnihinn";
+    githubId = 6123958;
+    name = "Gunnar Þór Magnússon";
+  };
   gp2112 = {
     email = "me@guip.dev";
     github = "gp2112";

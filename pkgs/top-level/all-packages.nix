@@ -24564,6 +24564,8 @@ with pkgs;
 
   air = callPackage ../development/tools/air { };
 
+  austin = callPackage ../development/tools/austin { };
+
   delve = callPackage ../development/tools/delve { };
 
   dep = callPackage ../development/tools/dep { };
