@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "fix-prefetching-hash-key.patch";
-      url = "https://github.com/msteen/nix-prefetch/commit/877f80ac7e91d684857e2c940cdb3c423efa1833.patch";
-      hash = "sha256-nkVQ2c+zezPQBOCDeMg+GHW3uz9EBnHIT+ZafdC8nQQ=";
+      url = "https://github.com/msteen/nix-prefetch/commit/508237f48f7e2d8496ce54f38abbe57f44d0cbca.patch";
+      hash = "sha256-9SYPcRFZaVyNjMUVdXbef5eGvLp/kr379eU9lG5GgE0=";
     })
   ];
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p gnused jq common-updater-scripts nuget-to-nix dotnet-sdk_3 nix-prefetch-github
+#!nix-shell -I nixpkgs=./. -i bash -p gnused jq common-updater-scripts nix-prefetch-github
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
@@ -21,20 +21,4 @@ rm repo_info
 pushd ../../../..
 
 update-source-version baget "$new_version" "$new_hash"
-store_src="$(nix-build -A baget.src --no-out-link)"
-src="$(mktemp -d /tmp/baget-src.XXX)"
-cp -rT "$store_src" "$src"
-
-trap 'rm -r "$src"' EXIT
-
-chmod -R +w "$src"
-
-pushd "$src"
-
-export DOTNET_NOLOGO=1
-export DOTNET_CLI_TELEMETRY_OPTOUT=1
-
-mkdir ./nuget_pkgs
-dotnet restore src/BaGet/BaGet.csproj --packages ./nuget_pkgs
-
-nuget-to-nix ./nuget_pkgs > "$deps_file"
+$(nix-build -A baget.fetch-deps --no-out-link) "$deps_file"

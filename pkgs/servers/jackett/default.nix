@@ -36,13 +36,12 @@ buildDotnetModule rec {
     ln -s $out/bin/jackett $out/bin/Jackett || :
     ln -s $out/bin/Jackett $out/bin/jackett || :
   '';
+  passthru.updateScript = ./updater.sh;
 
   meta = with lib; {
     description = "API Support for your favorite torrent trackers";
     homepage = "https://github.com/Jackett/Jackett/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ edwtjo nyanloutre purcell ];
-    platforms = platforms.all;
   };
-  passthru.updateScript = ./updater.sh;
 }

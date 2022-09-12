@@ -725,6 +725,8 @@ with pkgs;
 
   owl = callPackage ../tools/networking/owl { };
 
+  packcc = callPackage ../development/tools/packcc { };
+
   packer = callPackage ../development/tools/packer { };
 
   packr = callPackage ../development/libraries/packr { };
@@ -19703,7 +19705,7 @@ with pkgs;
   libliftoff = callPackage ../development/libraries/libliftoff { };
 
   liblqr1 = callPackage ../development/libraries/liblqr-1 {
-    inherit (darwin.apple_sdk.frameworks) Carbon;
+    inherit (darwin.apple_sdk.frameworks) Carbon AppKit;
   };
 
   liblockfile = callPackage ../development/libraries/liblockfile { };
@@ -20625,6 +20627,8 @@ with pkgs;
   mlc = callPackage ../tools/system/mlc { };
 
   mlt = callPackage ../development/libraries/mlt { };
+
+  mlib = callPackage ../development/libraries/mlib { };
 
   mlv-app = libsForQt5.callPackage ../applications/video/mlv-app { };
 
