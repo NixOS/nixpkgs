@@ -10908,6 +10908,8 @@ with pkgs;
 
   shadowsocks-v2ray-plugin = callPackage ../tools/networking/shadowsocks-v2ray-plugin { };
 
+  shapeshifter-dispatcher = callPackage ../tools/networking/shapeshifter-dispatcher { };
+
   sharutils = callPackage ../tools/archivers/sharutils { };
 
   shelldap = callPackage ../tools/misc/shelldap { };
