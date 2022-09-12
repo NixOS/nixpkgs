@@ -35261,6 +35261,8 @@ with pkgs;
 
   seqtk = callPackage ../applications/science/biology/seqtk { };
 
+  seqkit = callPackage ../applications/science/biology/seqkit { };
+
   snpeff = callPackage ../applications/science/biology/snpeff { };
 
   somafm-cli = callPackage ../tools/misc/somafm-cli { };
