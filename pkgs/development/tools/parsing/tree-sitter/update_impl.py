@@ -16,6 +16,10 @@ jsonArg: dict = json.loads(sys.argv[2])
 Args = Iterator[str]
 
 
+def log(msg: str) -> None:
+    print(msg, file=sys.stderr)
+
+
 def curl_github_args(token: str | None, url: str) -> Args:
     """Query the github API via curl"""
     yield bins["curl"]
@@ -58,7 +62,7 @@ def nix_prefetch_git_args(url: str, version_rev: str) -> Args:
 def run_cmd(args: Args) -> bytes:
     all = list(args)
     if debug:
-        print(all, file=sys.stderr)
+        log(str(all))
     return sub.check_output(all)
 
 
@@ -91,14 +95,14 @@ def fetchRepo() -> None:
             match curl_result(out):
                 case "not found":
                     # github sometimes returns an empty list even tough there are releases
-                    print(f"uh-oh, latest for {orga}/{repo} is not there, using HEAD", file=sys.stderr)
+                    log(f"uh-oh, latest for {orga}/{repo} is not there, using HEAD")
                     release = "HEAD"
                 case {"tag_name": tag_name}:
                     release = tag_name
                 case _:
                     sys.exit(f"git result for {orga}/{repo} did not have a `tag_name` field")
 
-            print(f"Fetching latest release ({release}) of {orga}/{repo} …", file=sys.stderr)
+            log(f"Fetching latest release ({release}) of {orga}/{repo} …")
             res = run_cmd(
                 atomically_write_args(
                     os.path.join(
@@ -144,10 +148,24 @@ def fetchOrgaLatestRepos() -> None:
             sys.exit("input json must have `orga` key")
 
 
+def checkTreeSitterRepos() -> None:
+    """Make sure we know about all tree sitter repos on the tree sitter orga."""
+    github_tree_sitter_repos: set[str] = set(json.load(sys.stdin))
+    known: set[str] = set(args["knownTreeSitterOrgGrammarRepos"])
+    ignored: set[str] = set(args["ignoredTreeSitterOrgRepos"])
+
+    unknown = github_tree_sitter_repos - (known | ignored)
+
+    if unknown:
+        sys.exit(f"These repositories are neither known nor ignored:\n{unknown}")
+
+
 match mode:
     case "fetch-repo":
         fetchRepo()
     case "fetch-orga-latest-repos":
         fetchOrgaLatestRepos()
+    case "check-tree-sitter-repos":
+        checkTreeSitterRepos()
     case _:
         sys.exit(f"mode {mode} unknown")
