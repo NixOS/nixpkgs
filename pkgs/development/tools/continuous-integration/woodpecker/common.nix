@@ -31,6 +31,6 @@ in
   meta = with lib; {
     homepage = "https://woodpecker-ci.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ambroisie ];
+    maintainers = with maintainers; [ ambroisie thehedgeh0g ];
   };
 }

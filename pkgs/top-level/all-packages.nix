@@ -12124,6 +12124,8 @@ with pkgs;
 
   woodpecker-cli = callPackage ../development/tools/continuous-integration/woodpecker/cli.nix { };
 
+  woodpecker-plugin-git = callPackage ../development/tools/continuous-integration/woodpecker/plugin-git.nix { };
+
   woodpecker-server = callPackage ../development/tools/continuous-integration/woodpecker/server.nix {
     woodpecker-frontend = callPackage ../development/tools/continuous-integration/woodpecker/frontend.nix { };
   };
