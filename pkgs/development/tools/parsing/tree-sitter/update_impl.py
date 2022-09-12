@@ -4,6 +4,7 @@ import subprocess as sub
 import os
 import sys
 from typing import Iterator, Any, Literal, TypedDict
+from tempfile import NamedTemporaryFile
 
 debug: bool = True if os.environ.get("DEBUG", False) else False
 Bin = str
@@ -18,6 +19,23 @@ Args = Iterator[str]
 
 def log(msg: str) -> None:
     print(msg, file=sys.stderr)
+
+
+def atomically_write(file_path: str, content: bytes) -> None:
+    """atomically write the content into `file_path`"""
+    with NamedTemporaryFile(
+        # write to the parent dir, so that it’s guaranteed to be on the same filesystem
+        dir=os.path.dirname(file_path),
+        delete=False
+    ) as tmp:
+        try:
+            tmp.write(content)
+            os.rename(
+                src=tmp.name,
+                dst=file_path
+            )
+        except Exception:
+            os.unlink(tmp.name)
 
 
 def curl_github_args(token: str | None, url: str) -> Args:
@@ -69,12 +87,6 @@ def run_cmd(args: Args) -> bytes:
 Dir = str
 
 
-def atomically_write_args(to: Dir, cmd: Args) -> Args:
-    yield bins["atomically-write"]
-    yield to
-    yield from cmd
-
-
 def fetchRepo() -> None:
     """fetch the given repo and write its nix-prefetch output to the corresponding grammar json file"""
     match jsonArg:
@@ -104,19 +116,18 @@ def fetchRepo() -> None:
 
             log(f"Fetching latest release ({release}) of {orga}/{repo} …")
             res = run_cmd(
-                atomically_write_args(
-                    os.path.join(
-                        outputDir,
-                        f"{nixRepoAttrName}.json"
-                    ),
-                    nix_prefetch_git_args(
-                        url=f"https://github.com/{quote(orga)}/{quote(repo)}",
-                        version_rev=release
-
-                    )
+                nix_prefetch_git_args(
+                    url=f"https://github.com/{quote(orga)}/{quote(repo)}",
+                    version_rev=release
                 )
             )
-            sys.stdout.buffer.write(res)
+            atomically_write(
+                file_path=os.path.join(
+                    outputDir,
+                    f"{nixRepoAttrName}.json"
+                ),
+                content=res
+            )
         case _:
             sys.exit("input json must have `orga` and `repo` keys")
 
@@ -184,18 +195,13 @@ def printAllGrammarsNixFile() -> None:
         yield "}"
         yield ""
 
-    out = run_cmd(
-        # TODO: implement atomic file write in python
-        atomically_write_args(
-            os.path.join(
-                outputDir,
-                "default.nix"
-            ),
-            iter([bins["printf"], "%s", "\n".join(list(file()))])
-        )
+    atomically_write(
+        file_path=os.path.join(
+            outputDir,
+            "default.nix"
+        ),
+        content="\n".join(file()).encode()
     )
-    if out:
-        log(str(out))
 
 
 match mode:
