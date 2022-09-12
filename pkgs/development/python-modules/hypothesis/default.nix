@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "hypothesis";
-  version = "6.50.1";
+  version = "6.54.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "HypothesisWorks";
     repo = "hypothesis";
     rev = "hypothesis-python-${version}";
-    hash = "sha256-G7OXlYaCPBfdXtmX/f/6i2LRCZZk5yvzhLc6sissuRo=";
+    hash = "sha256-mr8ctmAzRgWNVpW+PZlOhaQ0l28P0U8PxvjoVjfHX78=";
   };
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
