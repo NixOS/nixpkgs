@@ -8,6 +8,7 @@
 , pkg-config
 , gst_all_1
 , cairo
+, gtk3
 , mpg123
 , alsa-lib
 , SDL2
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     libre
     librem
     cairo
+    gtk3
     mpg123
     alsa-lib
     SDL2
@@ -75,6 +77,7 @@ stdenv.mkDerivation rec {
     "USE_FFMPEG=1"
     "USE_GSM=1"
     "USE_GST1=1"
+    "USE_GTK=1"
     "USE_L16=1"
     "USE_MPG123=1"
     "USE_OSS=1"

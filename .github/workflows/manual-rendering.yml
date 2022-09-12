@@ -13,7 +13,7 @@ permissions:
 jobs:
   check-rendering-equivalence:
     permissions:
-      issues: write  # for peter-evans/create-or-update-comment to create or update comment
+      pull-requests: write  # for peter-evans/create-or-update-comment to create or update comment
     if: github.repository_owner == 'NixOS'
     runs-on: ubuntu-latest
     steps:
