@@ -1615,6 +1615,12 @@
     githubId = 214787;
     name = "Herwig Hochleitner";
   };
+  benjajaja = {
+    email = "ste3ls@gmail.com";
+    github = "benjajaja";
+    githubId = 310215;
+    name = "Benjamin Große";
+  };
   benley = {
     email = "benley@gmail.com";
     github = "benley";
