@@ -725,6 +725,8 @@ with pkgs;
 
   owl = callPackage ../tools/networking/owl { };
 
+  packcc = callPackage ../development/tools/packcc { };
+
   packer = callPackage ../development/tools/packer { };
 
   packr = callPackage ../development/libraries/packr { };
@@ -8021,7 +8023,9 @@ with pkgs;
 
   krunner-pass = libsForQt5.callPackage ../tools/security/krunner-pass { };
 
-  krunvm = callPackage ../applications/virtualization/krunvm { };
+  krunvm = callPackage ../applications/virtualization/krunvm {
+    inherit (darwin) sigtool;
+  };
 
   kronometer = libsForQt5.callPackage ../tools/misc/kronometer { };
 
@@ -11701,6 +11705,8 @@ with pkgs;
 
   trashy = callPackage ../tools/misc/trashy { };
 
+  trdl-client = callPackage ../tools/misc/trdl-client { };
+
   trenchbroom = libsForQt5.callPackage ../applications/misc/trenchbroom {
     inherit (xorg) libXxf86vm;
   };
@@ -12167,6 +12173,8 @@ with pkgs;
   rcm = callPackage ../tools/misc/rcm {};
 
   td = callPackage ../tools/misc/td { };
+
+  tdfgo = callPackage ../tools/misc/tdfgo { };
 
   tftp-hpa = callPackage ../tools/networking/tftp-hpa {};
 
@@ -14627,7 +14635,6 @@ with pkgs;
   ograc = callPackage ../development/tools/rust/ograc { };
 
   rhack = callPackage ../development/tools/rust/rhack { };
-  inherit (rustPackages) rls;
   roogle = callPackage ../development/tools/rust/roogle { };
   rustfmt = rustPackages.rustfmt;
   rustracer = callPackage ../development/tools/rust/racer {
@@ -14776,9 +14783,7 @@ with pkgs;
     wasi-libc = pkgsCross.wasi32.wasilibc;
   };
 
-  tinyscheme = callPackage ../development/interpreters/tinyscheme {
-    stdenv = gccStdenv;
-  };
+  tinyscheme = callPackage ../development/interpreters/tinyscheme { };
 
   bupc = callPackage ../development/compilers/bupc { };
 
@@ -15356,8 +15361,6 @@ with pkgs;
     inherit (darwin) libobjc;
   };
   defaultGemConfig = callPackage ../development/ruby-modules/gem-config {
-    # recent v8 doesn't build on nixpkgs Darwin yet. https://github.com/NixOS/nixpkgs/issues/158076
-    v8 = if stdenv.isDarwin then v8_8_x else v8;
     inherit (darwin) DarwinTools cctools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -16660,6 +16663,8 @@ with pkgs;
   lemon = callPackage ../development/tools/parsing/lemon { };
 
   lenmus = callPackage ../applications/misc/lenmus { };
+
+  lightningcss = callPackage ../development/tools/lightningcss { };
 
   libtool = libtool_2;
 
@@ -18953,6 +18958,8 @@ with pkgs;
 
   json2hcl = callPackage ../development/tools/json2hcl { };
 
+  json2tsv = callPackage ../development/tools/json2tsv { };
+
   json2yaml = haskell.lib.compose.justStaticExecutables haskellPackages.json2yaml;
 
   json-glib = callPackage ../development/libraries/json-glib { };
@@ -19648,7 +19655,7 @@ with pkgs;
   libliftoff = callPackage ../development/libraries/libliftoff { };
 
   liblqr1 = callPackage ../development/libraries/liblqr-1 {
-    inherit (darwin.apple_sdk.frameworks) Carbon;
+    inherit (darwin.apple_sdk.frameworks) Carbon AppKit;
   };
 
   liblockfile = callPackage ../development/libraries/liblockfile { };
@@ -20566,6 +20573,8 @@ with pkgs;
   mlc = callPackage ../tools/system/mlc { };
 
   mlt = callPackage ../development/libraries/mlt { };
+
+  mlib = callPackage ../development/libraries/mlib { };
 
   mlv-app = libsForQt5.callPackage ../applications/video/mlv-app { };
 
@@ -21941,7 +21950,7 @@ with pkgs;
 
   ucommon = callPackage ../development/libraries/ucommon { };
 
-  v8 = callPackage ../development/libraries/v8 { };
+  v8 = darwin.apple_sdk_11_0.callPackage ../development/libraries/v8 { };
 
   v8_8_x = callPackage ../development/libraries/v8/8_x.nix { };
 
@@ -24233,7 +24242,9 @@ with pkgs;
 
   libcgroup = callPackage ../os-specific/linux/libcgroup { };
 
-  libkrun = callPackage ../development/libraries/libkrun { };
+  libkrun = callPackage ../development/libraries/libkrun {
+    inherit (darwin.apple_sdk.frameworks) Hypervisor;
+  };
 
   libkrun-sev = callPackage ../development/libraries/libkrun { sevVariant = true; };
 
@@ -28923,6 +28934,8 @@ with pkgs;
 
   ktunnel = callPackage ../applications/networking/cluster/ktunnel { };
 
+  pinniped = callPackage ../applications/networking/cluster/pinniped { };
+
   pgo-client = callPackage ../applications/networking/cluster/pgo-client { };
 
   popeye = callPackage ../applications/networking/cluster/popeye { };
@@ -30328,6 +30341,8 @@ with pkgs;
 
   piston-cli = callPackage ../tools/misc/piston-cli { python3Packages = python39Packages; };
 
+  pizarra = callPackage ../applications/graphics/pizarra { };
+
   plater = libsForQt5.callPackage ../applications/misc/plater { };
 
   plexamp = callPackage ../applications/audio/plexamp { };
@@ -31391,6 +31406,8 @@ with pkgs;
   todofi-sh = callPackage ../applications/office/todofi.sh { };
 
   todoman = callPackage ../applications/office/todoman { };
+
+  tofi = callPackage ../applications/misc/tofi { };
 
   topydo = callPackage ../applications/misc/topydo {};
 
@@ -33704,6 +33721,8 @@ with pkgs;
   };
 
   tbe = libsForQt5.callPackage ../games/the-butterfly-effect { };
+
+  tbls = callPackage ../tools/misc/tbls { };
 
   tecnoballz = callPackage ../games/tecnoballz { };
 

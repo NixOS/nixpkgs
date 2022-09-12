@@ -78,6 +78,8 @@ let
 
     bigstring = callPackage ../development/ocaml-modules/bigstring { };
 
+    bindlib = callPackage ../development/ocaml-modules/bindlib { };
+
     biocaml = callPackage ../development/ocaml-modules/biocaml { };
 
     bistro = callPackage ../development/ocaml-modules/bistro { };
@@ -285,6 +287,8 @@ let
     dbf =  callPackage ../development/ocaml-modules/dbf { };
 
     decompress =  callPackage ../development/ocaml-modules/decompress { };
+
+    dedukti =  callPackage ../development/ocaml-modules/dedukti { };
 
     diet =  callPackage ../development/ocaml-modules/diet { };
 
@@ -697,6 +701,8 @@ let
     lacaml = callPackage ../development/ocaml-modules/lacaml { };
 
     ladspa = callPackage ../development/ocaml-modules/ladspa { };
+
+    lambdapi = callPackage ../development/ocaml-modules/lambdapi { };
 
     lambdasoup = callPackage ../development/ocaml-modules/lambdasoup { };
 
@@ -1177,6 +1183,8 @@ let
 
     ppxlib = callPackage ../development/ocaml-modules/ppxlib { };
 
+    pratter = callPackage ../development/ocaml-modules/pratter { };
+
     psmt2-frontend = callPackage ../development/ocaml-modules/psmt2-frontend { };
 
     psq = callPackage ../development/ocaml-modules/psq { };
@@ -1226,6 +1234,8 @@ let
     tar = callPackage ../development/ocaml-modules/tar { };
 
     tcpip = callPackage ../development/ocaml-modules/tcpip { };
+
+    timed = callPackage ../development/ocaml-modules/timed { };
 
     tiny_httpd = callPackage ../development/ocaml-modules/tiny_httpd { };
 

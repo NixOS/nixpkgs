@@ -8,7 +8,7 @@ Loading can be deferred; see examples.
 At the moment we support two different methods for managing plugins:
 
 - Vim packages (*recommended*)
-- vim-plug
+- vim-plug (vim only)
 
 ## Custom configuration {#custom-configuration}
 
@@ -196,20 +196,8 @@ vim_configurable.customize {
 }
 ```
 
-For Neovim the syntax is:
+Note: this is not possible anymore for Neovim.
 
-```nix
-neovim.override {
-  configure = {
-    customRC = ''
-      # your custom configuration goes here! 
-    '';
-    plug.plugins = with pkgs.vimPlugins; [
-      vim-go
-    ];
-  };
-}
-```
 
 ## Adding new plugins to nixpkgs {#adding-new-plugins-to-nixpkgs}
 
@@ -227,7 +215,7 @@ Sometimes plugins require an override that must be changed when the plugin is up
 
 To add a new plugin, run `./update.py --add "[owner]/[name]"`. **NOTE**: This script automatically commits to your git repository. Be sure to check out a fresh branch before running.
 
-Finally, there are some plugins that are also packaged in nodePackages because they have Javascript-related build steps, such as running webpack. Those plugins are not listed in `vim-plugin-names` or managed by `update.py` at all, and are included separately in `overrides.nix`. Currently, all these plugins are related to the `coc.nvim` ecosystem of the Language Server Protocol integration with vim/neovim.
+Finally, there are some plugins that are also packaged in nodePackages because they have Javascript-related build steps, such as running webpack. Those plugins are not listed in `vim-plugin-names` or managed by `update.py` at all, and are included separately in `overrides.nix`. Currently, all these plugins are related to the `coc.nvim` ecosystem of the Language Server Protocol integration with Vim/Neovim.
 
 ## Updating plugins in nixpkgs {#updating-plugins-in-nixpkgs}
 
@@ -243,10 +231,27 @@ Alternatively, set the number of processes to a lower count to avoid rate-limiti
 ./pkgs/applications/editors/vim/plugins/update.py --proc 1
 ```
 
-## Important repositories {#important-repositories}
+## How to maintain an out-of-tree overlay of vim plugins ?
 
-- [vim-pi](https://bitbucket.org/vimcommunity/vim-pi) is a plugin repository
-  from VAM plugin manager meant to be used by others as well used by
+You can use the updater script to generate basic packages out of a custom vim
+plugin list:
 
-- [vim2nix](https://github.com/MarcWeber/vim-addon-vim2nix) which generates the
-  .nix code
+```
+pkgs/applications/editors/vim/plugins/update.py -i vim-plugin-names -o generated.nix --no-commit
+```
+
+with the contents of `vim-plugin-names` being for example:
+
+```
+repo,branch,alias
+pwntester/octo.nvim,,
+```
+
+You can then reference the generated vim plugins via:
+
+```nix
+myVimPlugins = pkgs.vimPlugins.extend (
+  (pkgs.callPackage generated.nix {})
+);
+```
+

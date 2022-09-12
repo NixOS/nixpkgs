@@ -361,6 +361,12 @@ in
     buildInputs = [ which v8 python2 ];
     buildFlags = [ "--with-system-v8=true" ];
     dontBuild = false;
+    # The gem includes broken symlinks which are ignored during unpacking, but
+    # then fail during build. Since the content is missing anyway, touching the
+    # files is enough to unblock the build.
+    preBuild = ''
+      touch vendor/depot_tools/cbuildbot vendor/depot_tools/chrome_set_ver vendor/depot_tools/cros_sdk
+    '';
     postPatch = ''
       substituteInPlace ext/libv8/extconf.rb \
         --replace "location = Libv8::Location::Vendor.new" \
@@ -633,7 +639,16 @@ in
     buildInputs = [ args.snappy ];
   };
 
-  sqlite3 = attrs: {
+  sqlite3 = attrs: if lib.versionAtLeast attrs.version "1.5.0"
+  then {
+    nativeBuildInputs = [ pkg-config sqlite.dev ];
+    buildInputs = [ sqlite.out ];
+    buildFlags = [
+      "--enable-system-libraries"
+      "--with-pkg-config=${pkg-config}/bin/pkg-config"
+    ];
+  }
+  else {
     buildFlags = [
       "--with-sqlite3-include=${sqlite.dev}/include"
       "--with-sqlite3-lib=${sqlite.out}/lib"
