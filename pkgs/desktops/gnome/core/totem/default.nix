@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation rec {
   pname = "totem";
-  version = "43.beta";
+  version = "43.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/totem/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "qkgMw4JT7Y07M0/qfj550hQ/J6N27dXbZjvIccKGSHA=";
+    sha256 = "5dj9wbs3Wd92e/n7tUg4iz/CybL0cmyXqbrTXq1Xz8g=";
   };
 
   patches = [
@@ -110,10 +110,9 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   postPatch = ''
-    chmod +x meson_compile_python.py meson_post_install.py # patchShebangs requires executable file
+    chmod +x meson_compile_python.py # patchShebangs requires executable file
     patchShebangs \
-      ./meson_compile_python.py \
-      ./meson_post_install.py
+      ./meson_compile_python.py
   '';
 
   checkPhase = ''
