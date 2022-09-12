@@ -1,6 +1,7 @@
 { lib
 , python3Packages
 , fetchFromGitHub
+, nixosTests
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -23,6 +24,8 @@ python3Packages.buildPythonApplication rec {
     dbus-python-client-gen
     packaging
   ];
+
+  passthru.tests = nixosTests.stratis;
 
   meta = with lib; {
     description = "CLI for the Stratis project";
