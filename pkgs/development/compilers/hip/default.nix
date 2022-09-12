@@ -21,6 +21,7 @@
 , rocm-runtime
 , rocm-thunk
 , rocminfo
+, substituteAll
 , writeScript
 , writeText
 }:
@@ -36,6 +37,14 @@ let
       rev = "rocm-${version}";
       hash = "sha256-QaN666Rku2Tkio2Gm5/3RD8D5JgmCZLe0Yun1fGxa8U=";
     };
+
+    patches = [
+      (substituteAll {
+        src = ./hip-config-paths.patch;
+        inherit llvm;
+        rocm_runtime = rocm-runtime;
+      })
+    ];
 
     # - fix bash paths
     # - fix path to rocm_agent_enumerator
@@ -119,6 +128,14 @@ stdenv.mkDerivation rec {
     rocm-runtime
     rocm-thunk
     rocminfo
+  ];
+
+  patches = [
+    (substituteAll {
+      src = ./hipamd-config-paths.patch;
+      inherit llvm hip;
+      rocm_runtime = rocm-runtime;
+    })
   ];
 
   preConfigure = ''
