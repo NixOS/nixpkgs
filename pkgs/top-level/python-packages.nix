@@ -8193,6 +8193,8 @@ self: super: with self; {
 
   pyuca = callPackage ../development/python-modules/pyuca { };
 
+  pyunpack = callPackage ../development/python-modules/pyunpack { };
+
   pyutil = callPackage ../development/python-modules/pyutil { };
 
   pyzbar = callPackage ../development/python-modules/pyzbar { };
