@@ -393,6 +393,7 @@ let
         curl = "${curl}/bin/curl";
         nix-prefetch-git = "${nix-prefetch-git}/bin/nix-prefetch-git";
         inherit atomically-write;
+        printf = "${coreutils}/bin/printf";
       };
       inherit
         knownTreeSitterOrgGrammarRepos
@@ -446,16 +447,17 @@ let
           })
           allGrammars)
     }
-    ${atomically-write} \
-      "${outputDir}/default.nix" \
-      ${writeShellScript "print-all-grammars" ''
-          echo "{ lib }:"
-          echo "{"
-          ${foreachSh allGrammars
-            ({name, ...}: ''
-              printf "  %s = lib.importJSON ./%s.json;\n" "${name}" "${name}"'')}
-          echo "}"
-       ''}
+    ${fetchImpl} print-all-grammars-nix-file "$(< ${
+        jsonFile "all-grammars.json" {
+          allGrammars =
+            (lib.mapAttrsToList
+              (nixRepoAttrName: attrs: attrs // {
+                inherit nixRepoAttrName;
+              })
+              allGrammars);
+          inherit outputDir;
+        }
+    })"
   '';
 
   # Atomically write a file (just `>` redirection in bash

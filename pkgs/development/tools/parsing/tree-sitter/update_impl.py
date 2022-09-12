@@ -3,7 +3,7 @@ import json
 import subprocess as sub
 import os
 import sys
-from typing import Iterator, Any, Literal
+from typing import Iterator, Any, Literal, TypedDict
 
 debug: bool = True if os.environ.get("DEBUG", False) else False
 Bin = str
@@ -160,6 +160,44 @@ def checkTreeSitterRepos() -> None:
         sys.exit(f"These repositories are neither known nor ignored:\n{unknown}")
 
 
+Grammar = TypedDict(
+    "Grammar",
+    {
+        "nixRepoAttrName": str,
+        "orga": str,
+        "repo": str
+    }
+)
+
+
+def printAllGrammarsNixFile() -> None:
+    """Print a .nix file that imports all grammars."""
+    allGrammars: list[dict[str, Grammar]] = jsonArg["allGrammars"]
+    outputDir: Dir = jsonArg["outputDir"]
+
+    def file() -> Iterator[str]:
+        yield "{ lib }:"
+        yield "{"
+        for grammar in allGrammars:
+            n = grammar["nixRepoAttrName"]
+            yield f"  {n} = lib.importJSON ./{n}.json;"
+        yield "}"
+        yield ""
+
+    out = run_cmd(
+        # TODO: implement atomic file write in python
+        atomically_write_args(
+            os.path.join(
+                outputDir,
+                "default.nix"
+            ),
+            iter([bins["printf"], "%s", "\n".join(list(file()))])
+        )
+    )
+    if out:
+        log(str(out))
+
+
 match mode:
     case "fetch-repo":
         fetchRepo()
@@ -167,5 +205,7 @@ match mode:
         fetchOrgaLatestRepos()
     case "check-tree-sitter-repos":
         checkTreeSitterRepos()
+    case "print-all-grammars-nix-file":
+        printAllGrammarsNixFile()
     case _:
         sys.exit(f"mode {mode} unknown")
