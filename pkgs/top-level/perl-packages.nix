@@ -27801,12 +27801,12 @@ let
       url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-LDNS-2.2.2.tar.gz";
       hash = "sha256-4KccPjWqdhkJvjI9QQGCPX/B8vRUGw91eUUgxhHk788=";
     };
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include -I${pkgs.libidn2}.dev}/include";
-    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.libidn2}/lib -lcrypto -lidn2";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_1.dev}/include -I${pkgs.libidn2}.dev}/include";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl_1_1}/lib -L${lib.getLib pkgs.libidn2}/lib -lcrypto -lidn2";
 
-    makeMakerFlags = "--prefix-openssl=${pkgs.openssl.dev}";
+    makeMakerFlags = "--prefix-openssl=${pkgs.openssl_1_1.dev}";
 
-    buildInputs = [ DevelChecklib ModuleInstall ModuleInstallXSUtil TestFatal pkgs.ldns pkgs.libidn2 pkgs.openssl pkgs.pkg-config ];
+    buildInputs = [ DevelChecklib ModuleInstall ModuleInstallXSUtil TestFatal pkgs.ldns pkgs.libidn2 pkgs.openssl_1_1 pkgs.pkg-config ];
     meta = {
       description = "Perl wrapper for the ldns DNS library";
       license = with lib.licenses; [ bsd3 ];

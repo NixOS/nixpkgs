@@ -2578,7 +2578,9 @@ with pkgs;
 
   gmni = callPackage ../applications/networking/browsers/gmni { };
 
-  gmnisrv = callPackage ../servers/gemini/gmnisrv { };
+  gmnisrv = callPackage ../servers/gemini/gmnisrv {
+    openssl = openssl_1_1;
+  };
 
   gmnitohtml = callPackage ../applications/misc/gmnitohtml { };
 
@@ -3277,7 +3279,9 @@ with pkgs;
                           { inherit (haskellPackages) alex happy Agda ghcWithPackages;
                           };
 
-  cfdyndns = callPackage ../applications/networking/dyndns/cfdyndns { };
+  cfdyndns = callPackage ../applications/networking/dyndns/cfdyndns {
+    openssl = openssl_1_1;
+  };
 
   charliecloud = callPackage ../applications/virtualization/charliecloud { };
 
@@ -3809,6 +3813,7 @@ with pkgs;
 
   espanso = callPackage ../applications/office/espanso {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation;
+    openssl = openssl_1_1;
   };
 
   esphome = callPackage ../tools/misc/esphome { };
@@ -5044,7 +5049,9 @@ with pkgs;
 
   checkmake = callPackage ../development/tools/checkmake { };
 
-  chit = callPackage ../development/tools/chit { };
+  chit = callPackage ../development/tools/chit {
+    openssl = openssl_1_1;
+  };
 
   chkrootkit = callPackage ../tools/security/chkrootkit { };
 
@@ -6852,7 +6859,9 @@ with pkgs;
 
   git-secrets = callPackage ../applications/version-management/git-and-tools/git-secrets { };
 
-  git-series = callPackage ../development/tools/git-series { };
+  git-series = callPackage ../development/tools/git-series {
+    openssl = openssl_1_1;
+  };
 
   git-sizer = callPackage ../applications/version-management/git-sizer { };
 
@@ -7370,7 +7379,9 @@ with pkgs;
 
   haveged = callPackage ../tools/security/haveged { };
 
-  habitat = callPackage ../applications/networking/cluster/habitat { };
+  habitat = callPackage ../applications/networking/cluster/habitat {
+    openssl = openssl_1_1;
+  };
 
   hashcash = callPackage ../tools/security/hashcash { };
 
@@ -7378,7 +7389,9 @@ with pkgs;
 
   hashcat-utils = callPackage ../tools/security/hashcat-utils { };
 
-  hash_extender = callPackage ../tools/security/hash_extender { };
+  hash_extender = callPackage ../tools/security/hash_extender {
+    openssl = openssl_1_1;
+  };
 
   hash-identifier = callPackage ../tools/security/hash-identifier { };
 
@@ -7869,7 +7882,9 @@ with pkgs;
 
   joplin-desktop = callPackage ../applications/misc/joplin-desktop { };
 
-  journaldriver = callPackage ../tools/misc/journaldriver { };
+  journaldriver = callPackage ../tools/misc/journaldriver {
+    openssl = openssl_1_1;
+  };
 
   jp = callPackage ../development/tools/jp { };
 
@@ -8031,7 +8046,9 @@ with pkgs;
 
   knockpy = callPackage ../tools/security/knockpy { };
 
-  kore = callPackage ../development/web/kore { };
+  kore = callPackage ../development/web/kore {
+    openssl = openssl_1_1;
+  };
 
   krakenx = callPackage ../tools/system/krakenx { };
 
@@ -8285,6 +8302,7 @@ with pkgs;
 
   mdbook-plantuml = callPackage ../tools/text/mdbook-plantuml {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
+    openssl = openssl_1_1;
   };
 
   mdbook-admonish = callPackage ../tools/text/mdbook-admonish {
@@ -9765,6 +9783,7 @@ with pkgs;
 
   paperoni = callPackage ../tools/text/paperoni {
     inherit (darwin.apple_sdk.frameworks) Security;
+    openssl = openssl_1_1;
   };
 
   paperwork = callPackage ../applications/office/paperwork/paperwork-gtk.nix { };
@@ -11218,7 +11237,9 @@ with pkgs;
 
   ssldump = callPackage ../tools/networking/ssldump { };
 
-  sslsplit = callPackage ../tools/networking/sslsplit { };
+  sslsplit = callPackage ../tools/networking/sslsplit {
+    openssl = openssl_1_1;
+  };
 
   sstp = callPackage ../tools/networking/sstp {};
 
@@ -11804,6 +11825,7 @@ with pkgs;
 
   tunnelto = callPackage ../tools/networking/tunnelto {
     inherit (darwin.apple_sdk.frameworks) Security;
+    openssl = openssl_1_1;
   };
 
   tuptime = callPackage ../tools/system/tuptime { };
@@ -12240,6 +12262,7 @@ with pkgs;
 
   tremor-rs = callPackage ../tools/misc/tremor-rs {
     inherit (darwin.apple_sdk.frameworks) Security;
+    openssl = openssl_1_1;
   };
 
   truecrack = callPackage ../tools/security/truecrack { };
@@ -12476,6 +12499,7 @@ with pkgs;
 
   wkhtmltopdf-bin = callPackage ../tools/graphics/wkhtmltopdf-bin {
     libjpeg8 = libjpeg.override { enableJpeg8 = true; };
+    openssl = openssl_1_1;
   };
 
   wml = callPackage ../development/web/wml { };
@@ -14471,7 +14495,10 @@ with pkgs;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
-  mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { stdenv = gcc10StdenvCompat; };
+  mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix {
+    stdenv = gcc10StdenvCompat;
+    openssl = openssl_1_1;
+  };
 
   rustPackages_1_63 = rust_1_63.packages.stable;
   rustPackages = rustPackages_1_63;
@@ -14504,6 +14531,7 @@ with pkgs;
   };
   cargo-bisect-rustc = callPackage ../development/tools/rust/cargo-bisect-rustc {
     inherit (darwin.apple_sdk.frameworks) Security;
+    openssl = openssl_1_1;
   };
   cargo-bitbake = callPackage ../development/tools/rust/cargo-bitbake { };
   cargo-c = callPackage ../development/tools/rust/cargo-c {
@@ -14561,6 +14589,7 @@ with pkgs;
   cargo-depgraph = callPackage ../development/tools/rust/cargo-depgraph { };
   cargo-dephell = callPackage ../development/tools/rust/cargo-dephell {
     inherit (darwin.apple_sdk.frameworks) Security;
+    openssl = openssl_1_1;
   };
   cargo-diet = callPackage ../development/tools/rust/cargo-diet { };
   cargo-embed = callPackage ../development/tools/rust/cargo-embed {
@@ -14601,6 +14630,7 @@ with pkgs;
   cargo-profiler = callPackage ../development/tools/rust/cargo-profiler {};
   cargo-raze = callPackage ../development/tools/rust/cargo-raze {
     inherit (darwin.apple_sdk.frameworks) Security;
+    openssl = openssl_1_1;
   };
   cargo-readme = callPackage ../development/tools/rust/cargo-readme {};
   cargo-semver-checks = callPackage ../development/tools/rust/cargo-semver-checks {
@@ -14657,6 +14687,7 @@ with pkgs;
 
   devserver = callPackage ../development/tools/rust/devserver {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
+    openssl = openssl_1_1;
   };
 
   devspace = callPackage ../development/tools/misc/devspace { };
@@ -14992,6 +15023,7 @@ with pkgs;
 
   cliscord = callPackage ../misc/cliscord {
     inherit (darwin.apple_sdk.frameworks) Security;
+    openssl = openssl_1_1;
   };
 
   clisp = callPackage ../development/interpreters/clisp { };
@@ -15073,7 +15105,9 @@ with pkgs;
 
   groovy = callPackage ../development/interpreters/groovy { };
 
-  inherit (callPackages ../applications/networking/cluster/hadoop { })
+  inherit (callPackages ../applications/networking/cluster/hadoop {
+    openssl = openssl_1_1;
+  })
     hadoop_3_3
     hadoop_3_2
     hadoop2;
@@ -17690,11 +17724,17 @@ with pkgs;
 
   captive-browser = callPackage ../applications/networking/browsers/captive-browser { };
 
-  ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
+  ndn-cxx = callPackage ../development/libraries/ndn-cxx {
+    openssl = openssl_1_1;
+  };
 
-  ndn-tools = callPackage ../tools/networking/ndn-tools { };
+  ndn-tools = callPackage ../tools/networking/ndn-tools {
+    openssl = openssl_1_1;
+  };
 
-  nfd = callPackage ../servers/nfd { };
+  nfd = callPackage ../servers/nfd {
+    openssl = openssl_1_1;
+  };
 
   cddlib = callPackage ../development/libraries/cddlib {};
 
@@ -17802,7 +17842,9 @@ with pkgs;
 
   CoinMP = callPackage ../development/libraries/CoinMP { };
 
-  coinlive = callPackage ../tools/misc/coinlive { };
+  coinlive = callPackage ../tools/misc/coinlive {
+    openssl = openssl_1_1;
+  };
 
   cointop = callPackage ../applications/misc/cointop { };
 
@@ -18834,7 +18876,9 @@ with pkgs;
 
   hydra_unstable = callPackage ../development/tools/misc/hydra/unstable.nix { nix = nixVersions.nix_2_11; };
 
-  hydra-cli = callPackage ../development/tools/misc/hydra-cli { };
+  hydra-cli = callPackage ../development/tools/misc/hydra-cli {
+    openssl = openssl_1_1;
+  };
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
@@ -20636,6 +20680,7 @@ with pkgs;
 
   movine = callPackage ../development/tools/database/movine {
     inherit (darwin.apple_sdk.frameworks) Security;
+    openssl = openssl_1_1;
   };
 
   movit = callPackage ../development/libraries/movit { };
@@ -21315,6 +21360,7 @@ with pkgs;
 
   quill = callPackage ../tools/security/quill {
     inherit (darwin.apple_sdk.frameworks) Security;
+    openssl = openssl_1_1;
   };
 
   qv2ray = libsForQt5.callPackage ../applications/networking/qv2ray {};
@@ -22652,7 +22698,9 @@ with pkgs;
 
   appdaemon = callPackage ../servers/home-assistant/appdaemon.nix { };
 
-  archiveopteryx = callPackage ../servers/mail/archiveopteryx { };
+  archiveopteryx = callPackage ../servers/mail/archiveopteryx {
+    openssl = openssl_1_1;
+  };
 
   asouldocs = callPackage ../servers/asouldocs { };
 
@@ -25828,7 +25876,9 @@ with pkgs;
 
   national-park-typeface = callPackage ../data/fonts/national-park { };
 
-  netease-music-tui = callPackage ../applications/audio/netease-music-tui { };
+  netease-music-tui = callPackage ../applications/audio/netease-music-tui {
+    openssl = openssl_1_1;
+  };
 
   netease-cloud-music-gtk = callPackage ../applications/audio/netease-cloud-music-gtk {
     inherit (darwin.apple_sdk.frameworks) Foundation SystemConfiguration;
@@ -26753,7 +26803,9 @@ with pkgs;
 
   brave = callPackage ../applications/networking/browsers/brave { };
 
-  break-time = callPackage ../applications/misc/break-time { };
+  break-time = callPackage ../applications/misc/break-time {
+    openssl = openssl_1_1;
+  };
 
   breezy = with python3Packages; toPythonApplication breezy;
 
@@ -27490,6 +27542,7 @@ with pkgs;
 
   finalfrontier = callPackage ../applications/science/machine-learning/finalfrontier {
     inherit (darwin.apple_sdk.frameworks) Security;
+    openssl = openssl_1_1;
   };
 
   finalfusion-utils = callPackage ../applications/science/machine-learning/finalfusion-utils {
@@ -28669,6 +28722,7 @@ with pkgs;
 
   imag = callPackage ../applications/misc/imag {
     inherit (darwin.apple_sdk.frameworks) Security;
+    openssl = openssl_1_1;
   };
 
   image-roll = callPackage ../applications/graphics/image-roll { };
@@ -28792,7 +28846,9 @@ with pkgs;
 
   istioctl = callPackage ../applications/networking/cluster/istioctl { };
 
-  bip = callPackage ../applications/networking/irc/bip { };
+  bip = callPackage ../applications/networking/irc/bip {
+    openssl = openssl_1_1;
+  };
 
   j4-dmenu-desktop = callPackage ../applications/misc/j4-dmenu-desktop { };
 
@@ -29964,6 +30020,7 @@ with pkgs;
 
   synapse-bt = callPackage ../applications/networking/p2p/synapse-bt {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+    openssl = openssl_1_1;
   };
 
   synfigstudio = callPackage ../applications/graphics/synfigstudio { };
@@ -30844,6 +30901,7 @@ with pkgs;
 
   rucredstash = callPackage ../tools/security/rucredstash {
     inherit (darwin.apple_sdk.frameworks) Security;
+    openssl = openssl_1_1;
   };
 
   runc = callPackage ../applications/virtualization/runc {};
@@ -30972,7 +31030,9 @@ with pkgs;
 
   spike = callPackage ../applications/virtualization/spike { };
 
-  tensorman = callPackage ../tools/misc/tensorman { };
+  tensorman = callPackage ../tools/misc/tensorman {
+    openssl = openssl_1_1;
+  };
 
   spideroak = callPackage ../applications/networking/spideroak { };
 
@@ -30982,6 +31042,7 @@ with pkgs;
 
   spotify-tui = callPackage ../applications/audio/spotify-tui {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
+    openssl = openssl_1_1;
   };
 
   sptlrx = callPackage ../applications/audio/sptlrx { };
@@ -31290,6 +31351,7 @@ with pkgs;
 
   taizen = callPackage ../applications/misc/taizen {
     inherit (darwin.apple_sdk.frameworks) Security;
+    openssl = openssl_1_1;
   };
 
   talosctl = callPackage ../applications/networking/cluster/talosctl { };
@@ -33151,7 +33213,9 @@ with pkgs;
 
   egoboo = callPackage ../games/egoboo { };
 
-  eidolon = callPackage ../games/eidolon { };
+  eidolon = callPackage ../games/eidolon {
+    openssl = openssl_1_1;
+  };
 
   EmptyEpsilon = callPackage ../games/empty-epsilon { };
 
@@ -33723,7 +33787,9 @@ with pkgs;
 
   shattered-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon { };
 
-  shticker-book-unwritten = callPackage ../games/shticker-book-unwritten { };
+  shticker-book-unwritten = callPackage ../games/shticker-book-unwritten {
+    openssl = openssl_1_1;
+  };
 
   sienna = callPackage ../games/sienna { love = love_0_10; };
 
@@ -36563,7 +36629,9 @@ with pkgs;
 
   xorex = callPackage ../tools/security/xorex { };
 
-  xbps = callPackage ../tools/package-management/xbps { };
+  xbps = callPackage ../tools/package-management/xbps {
+    openssl = openssl_1_1;
+  };
 
   xcftools = callPackage ../tools/graphics/xcftools { };
 
