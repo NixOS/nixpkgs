@@ -30,7 +30,9 @@ in
 let hash_ =
   if args ? hash then { outputHashAlgo = null; outputHash = args.hash; }
   else if args ? sha256 then { outputHashAlgo = "sha256"; outputHash = args.sha256; }
-  else throw "fetchCargoTarball requires a hash for ${name}";
+  # Prints 'warning: empty hash found, assuming <lib.fakeHash>', generates the FOD hash, and exits afterwards.
+  # This is useful because it allows you to generate the output hash without any boilerplate.
+  else { outputHashAlgo = "sha256"; outputHash = ""; };
 in stdenv.mkDerivation ({
   name = "${name}-vendor.tar.gz";
   nativeBuildInputs = [ cacert git cargo-vendor-normalise cargo ] ++ nativeBuildInputs;
