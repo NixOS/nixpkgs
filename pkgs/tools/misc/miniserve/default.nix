@@ -1,11 +1,8 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
-, pkg-config
-, zlib
-, libiconv
+, stdenv
 , Security
 }:
 
@@ -24,12 +21,9 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
-    pkg-config
-    zlib
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv
     Security
   ];
 
@@ -51,9 +45,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "CLI tool to serve files and directories over HTTP";
     homepage = "https://github.com/svenstaro/miniserve";
+    changelog = "https://github.com/svenstaro/miniserve/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ figsoda ];
     # https://hydra.nixos.org/build/162650896/nixlog/1
     broken = stdenv.isDarwin && stdenv.isAarch64;
   };
