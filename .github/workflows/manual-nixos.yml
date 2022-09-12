@@ -27,5 +27,13 @@ jobs:
           # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
           name: nixpkgs-ci
           signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
-      - name: Building NixOS manual
+      - name: Building NixOS manual with DocBook options
         run: NIX_PATH=nixpkgs=$(pwd) nix-build --option restrict-eval true nixos/release.nix -A manual.x86_64-linux
+      - name: Building NixOS manual with Markdown options
+        run: |
+          export NIX_PATH=nixpkgs=$(pwd)
+          nix-build \
+            --option restrict-eval true \
+            --arg configuration '{ documentation.nixos.options.allowDocBook = false; }' \
+            nixos/release.nix \
+            -A manual.x86_64-linux

@@ -23,7 +23,10 @@ buildDotnetModule rec {
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
 
-  nugetDeps = if stdenvNoCC.isAarch64 then ./deps-aarch64-linux.nix else ./deps-x86_64-linux.nix;
+  nugetDeps = ./deps.nix;
+
+  # Without this dotnet attempts to restore for Windows targets, which it cannot find the dependencies for
+  dotnetRestoreFlags = [ "--runtime ${dotnetCorePackages.sdk_6_0.systemToDotnetRid stdenvNoCC.targetPlatform.system}" ];
 
   projectFile = "ArchiSteamFarm.sln";
   executables = [ "ArchiSteamFarm" ];

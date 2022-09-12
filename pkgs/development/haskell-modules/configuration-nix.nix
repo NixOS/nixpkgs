@@ -738,8 +738,10 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.haskell-language-server;
 
+  # NOTE: this patch updates the hevm code to work with the latest packages that broke the build
+  # it's temporary until hevm version 0.50.0 is released - https://github.com/ethereum/hevm/milestone/1
   # tests depend on a specific version of solc
-  hevm = dontCheck (doJailbreak super.hevm);
+  hevm = dontCheck (appendPatch ./patches/hevm-update-deps.patch super.hevm);
 
   # hadolint enables static linking by default in the cabal file, so we have to explicitly disable it.
   # https://github.com/hadolint/hadolint/commit/e1305042c62d52c2af4d77cdce5d62f6a0a3ce7b
@@ -980,6 +982,14 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.jacinda;
 
+  # Smoke test can't be executed in sandbox
+  # https://github.com/georgefst/evdev/issues/25
+  evdev = overrideCabal (drv: {
+    testFlags = drv.testFlags or [] ++ [
+      "-p" "!/Smoke/"
+    ];
+  }) super.evdev;
+
   # Tests assume dist-newstyle build directory is present
   cabal-hoogle = dontCheck super.cabal-hoogle;
 
@@ -1025,6 +1035,8 @@ self: super: builtins.intersectAttrs super {
     hydraPlatforms = pkgs.lib.platforms.all;
     broken = false;
   }) super.cabal-install;
+
+  keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
 
 # haskell-language-server plugins all use the same test harness so we give them what we want in this loop.
 } // pkgs.lib.mapAttrs

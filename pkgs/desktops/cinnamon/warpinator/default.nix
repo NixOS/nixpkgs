@@ -10,6 +10,7 @@
 , gettext
 , polkit
 , glib
+, gitUpdater
 }:
 
 python3.pkgs.buildPythonApplication rec  {
@@ -71,6 +72,12 @@ python3.pkgs.buildPythonApplication rec  {
     # these get loaded via import from bin, so don't need wrapping
     chmod -x+X $out/libexec/warpinator/*.py
   '';
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    attrPath = "cinnamon.warpinator";
+    ignoredVersions = "^master.*";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/warpinator";

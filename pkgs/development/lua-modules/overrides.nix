@@ -361,6 +361,10 @@ with prev;
     ];
   });
 
+  lush-nvim = prev.luaLib.overrideLuarocks prev.lush-nvim (drv: rec {
+    doCheck = false;
+  });
+
   luuid = (prev.luaLib.overrideLuarocks prev.luuid (drv: {
     externalDeps = [
       { name = "LIBUUID"; dep = libuuid; }

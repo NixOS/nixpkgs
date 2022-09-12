@@ -78,6 +78,8 @@ let
 
     bigstring = callPackage ../development/ocaml-modules/bigstring { };
 
+    bindlib = callPackage ../development/ocaml-modules/bindlib { };
+
     biocaml = callPackage ../development/ocaml-modules/biocaml { };
 
     bistro = callPackage ../development/ocaml-modules/bistro { };
@@ -274,6 +276,10 @@ let
 
     ctypes = callPackage ../development/ocaml-modules/ctypes { };
 
+    ctypes_stubs_js = callPackage ../development/ocaml-modules/ctypes_stubs_js {
+      inherit (pkgs) nodejs;
+    };
+
     dap =  callPackage ../development/ocaml-modules/dap { };
 
     data-encoding = callPackage ../development/ocaml-modules/data-encoding { };
@@ -281,6 +287,8 @@ let
     dbf =  callPackage ../development/ocaml-modules/dbf { };
 
     decompress =  callPackage ../development/ocaml-modules/decompress { };
+
+    dedukti =  callPackage ../development/ocaml-modules/dedukti { };
 
     diet =  callPackage ../development/ocaml-modules/diet { };
 
@@ -533,6 +541,8 @@ let
 
     integers = callPackage ../development/ocaml-modules/integers { };
 
+    integers_stubs_js = callPackage ../development/ocaml-modules/integers_stubs_js { };
+
     io-page = callPackage ../development/ocaml-modules/io-page { };
 
     ipaddr = callPackage ../development/ocaml-modules/ipaddr { };
@@ -691,6 +701,8 @@ let
     lacaml = callPackage ../development/ocaml-modules/lacaml { };
 
     ladspa = callPackage ../development/ocaml-modules/ladspa { };
+
+    lambdapi = callPackage ../development/ocaml-modules/lambdapi { };
 
     lambdasoup = callPackage ../development/ocaml-modules/lambdasoup { };
 
@@ -1171,6 +1183,8 @@ let
 
     ppxlib = callPackage ../development/ocaml-modules/ppxlib { };
 
+    pratter = callPackage ../development/ocaml-modules/pratter { };
+
     psmt2-frontend = callPackage ../development/ocaml-modules/psmt2-frontend { };
 
     psq = callPackage ../development/ocaml-modules/psq { };
@@ -1220,6 +1234,8 @@ let
     tar = callPackage ../development/ocaml-modules/tar { };
 
     tcpip = callPackage ../development/ocaml-modules/tcpip { };
+
+    timed = callPackage ../development/ocaml-modules/timed { };
 
     tiny_httpd = callPackage ../development/ocaml-modules/tiny_httpd { };
 
@@ -1420,6 +1436,8 @@ let
     terminal = callPackage ../development/ocaml-modules/terminal { };
 
     terminal_size = callPackage ../development/ocaml-modules/terminal_size { };
+
+    tezos-base58 = callPackage ../development/ocaml-modules/tezos-base58 { };
 
     theora = callPackage ../development/ocaml-modules/theora { };
 

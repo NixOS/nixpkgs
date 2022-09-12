@@ -147,7 +147,7 @@ let
         // extraPolicies;
       };
 
-      mozillaCfg =  writeText "mozilla.cfg" ''
+      mozillaCfg = ''
         // First line must be a comment
 
         // Disables addon signature checking
@@ -155,7 +155,6 @@ let
         // Security is maintained because only user whitelisted addons
         // with a checksum can be installed
         ${ lib.optionalString usesNixExtensions ''lockPref("xpinstall.signatures.required", false)'' };
-        ${extraPrefs}
       '';
 
       #############################
@@ -345,12 +344,18 @@ let
         echo 'pref("general.config.filename", "mozilla.cfg");' > "$out/lib/${libName}/defaults/pref/autoconfig.js"
         echo 'pref("general.config.obscure_value", 0);' >> "$out/lib/${libName}/defaults/pref/autoconfig.js"
 
-        cat > "$out/lib/${libName}/mozilla.cfg" < ${mozillaCfg}
+        cat > "$out/lib/${libName}/mozilla.cfg" << EOF
+        ${mozillaCfg}
+        EOF
 
         extraPrefsFiles=(${builtins.toString extraPrefsFiles})
         for extraPrefsFile in "''${extraPrefsFiles[@]}"; do
           cat "$extraPrefsFile" >> "$out/lib/${libName}/mozilla.cfg"
         done
+
+        cat >> "$out/lib/${libName}/mozilla.cfg" << EOF
+        ${extraPrefs}
+        EOF
 
         mkdir -p $out/lib/${libName}/distribution/extensions
 

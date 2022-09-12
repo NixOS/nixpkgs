@@ -17,9 +17,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vincegio";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-ihNy5Rme20fCO1tG7aqdVFhSF3DI9hAlge54+/nNGLs=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'bleak = "^0.15.1"' 'bleak = "*"'
+  '';
 
   nativeBuildInputs = [
     poetry-core

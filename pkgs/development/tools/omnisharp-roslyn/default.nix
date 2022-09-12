@@ -75,7 +75,6 @@ buildDotnetModule rec {
   meta = with lib; {
     description = "OmniSharp based on roslyn workspaces";
     homepage = "https://github.com/OmniSharp/omnisharp-roslyn";
-    platforms = platforms.unix;
     sourceProvenance = with sourceTypes; [
       fromSource
       binaryNativeCode # dependencies

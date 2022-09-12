@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3, python3Packages, zlib, pkg-config, glib, buildPackages
+{ lib, stdenv, fetchurl, fetchpatch, python3, zlib, pkg-config, glib, buildPackages
 , perl, pixman, vde2, alsa-lib, texinfo, flex
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
 , makeWrapper, runtimeShell, removeReferencesTo
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ makeWrapper removeReferencesTo pkg-config flex bison meson ninja perl python3 python3Packages.sphinx python3Packages.sphinx-rtd-theme ]
+  nativeBuildInputs = [ makeWrapper removeReferencesTo pkg-config flex bison meson ninja perl python3 python3.pkgs.sphinx python3.pkgs.sphinx-rtd-theme ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 

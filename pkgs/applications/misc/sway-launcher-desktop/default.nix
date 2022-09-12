@@ -37,6 +37,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.thehedgeh0g ];
-    mainProgram = "${pname}";
   };
 }

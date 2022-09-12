@@ -270,6 +270,9 @@ let
     };
 
     video = {
+      DRM_LEGACY = no;
+      NOUVEAU_LEGACY_CTX_SUPPORT = whenAtLeast "5.2" no;
+
       # Allow specifying custom EDID on the kernel command line
       DRM_LOAD_EDID_FIRMWARE = yes;
       VGA_SWITCHEROO         = yes; # Hybrid graphics support

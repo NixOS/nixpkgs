@@ -7,13 +7,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "virt-manager";
-  version = "4.0.0";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-3ycXNBuf91kI2cJCRw0ZzaWkaIVwb/lmkOKeHNwpH9Y=";
+    hash = "sha256-UgZ58WLXq0U3EDt4311kv0kayVU17In4kwnQ+QN1E7A=";
   };
 
   nativeBuildInputs = [
@@ -31,16 +31,6 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     pygobject3 libvirt libxml2 requests cdrtools
-  ];
-
-   patches = [
-     # due to a recent change in setuptools-61, "packages=[]" needs to be included
-     # this patch can hopefully be removed, once virt-manager has an upstream version bump
-    (fetchpatch {
-      name = "fix-for-setuptools-61.patch";
-      url = "https://github.com/virt-manager/virt-manager/commit/46dc0616308a73d1ce3ccc6d716cf8bbcaac6474.patch";
-      sha256 = "sha256-/RZG+7Pmd7rmxMZf8Fvg09dUggs2MqXZahfRQ5cLcuM=";
-    })
   ];
 
   postPatch = ''
@@ -80,6 +70,8 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     "testAlterDisk"
     "test_misc_nonpredicatble_generate"
+    "test_disk_dir_searchable"  # does something strange with permissions
+    "testCLI0001virt_install_many_devices"  # expects /var to exist
   ];
 
   preCheck = ''

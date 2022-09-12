@@ -132,7 +132,7 @@ in stdenv.mkDerivation rec {
     python3
     wafHook
     which
-  ] ++ lib.optionals swiftSupport   [ swift ]
+  ] ++ lib.optionals swiftSupport [ swift ]
     ++ lib.optionals waylandSupport [ wayland-scanner ];
 
   buildInputs = [

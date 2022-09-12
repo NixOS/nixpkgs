@@ -128,6 +128,7 @@
   ./programs/adb.nix
   ./programs/appgate-sdp.nix
   ./programs/atop.nix
+  ./programs/ausweisapp.nix
   ./programs/autojump.nix
   ./programs/bandwhich.nix
   ./programs/bash/bash.nix

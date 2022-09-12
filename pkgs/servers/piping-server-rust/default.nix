@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "piping-server-rust";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "nwtgck";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ON3/GaDwQ9DtApRZuYClZWzFhmiLi988jIBvl0DgYSM=";
+    sha256 = "sha256-QgOrKAPLphvIMqcOrbYuo4ra65IV8dK5+6tyh+YyyP4=";
   };
 
-  cargoSha256 = "sha256-rc3VTJllDu4oIFcswCNUJejJHzC2PoJJV9EU5fOC7fQ=";
+  cargoSha256 = "sha256-Nd+Frhospp6ERYFuxzEzKbkLAFqTv7Lp7MWwv09S+KA=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Security ];
 

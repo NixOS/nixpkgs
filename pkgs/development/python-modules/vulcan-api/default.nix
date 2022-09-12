@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "vulcan-api";
-  version = "2.1.1";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kapi2289";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-XYpQ1uqRmdqsGeKyHKGxFyXMN9HugTiPUx9tFUiGSpU=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-decp3wq/O4QTBE40iSkMaCTJYM6XPP7nLlSAEL1bemY=";
   };
 
   propagatedBuildInputs = [
