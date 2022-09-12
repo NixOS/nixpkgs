@@ -55,20 +55,9 @@ used for [SRI](https://www.w3.org/TR/SRI/) hashes. For example:
 ```
 
 Both types of hashes are permitted when contributing to nixpkgs. The
-Cargo hash is obtained by inserting a fake checksum into the
-expression and building the package once. The correct checksum can
-then be taken from the failed build. A fake hash can be used for
-`cargoSha256` as follows:
-
-```nix
-  cargoSha256 = lib.fakeSha256;
-```
-
-For `cargoHash` you can use:
-
-```nix
-  cargoHash = lib.fakeHash;
-```
+Cargo hash is obtained by building the package once without
+`cargoSha256` or `cargoHash` set. The correct checksum can then be
+taken from the failed build.
 
 Per the instructions in the [Cargo Book](https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html)
 best practices guide, Rust applications should always commit the `Cargo.lock`
