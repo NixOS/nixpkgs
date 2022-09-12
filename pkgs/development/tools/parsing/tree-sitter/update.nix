@@ -6,9 +6,7 @@
 , lib
 , coreutils
 , curl
-, jq
 , xe
-, src
 }:
 
 # Grammar list:
@@ -389,21 +387,6 @@ let
 
   jsonFile = name: val: (formats.json { }).generate name val;
 
-  # check the tree-sitter orga repos
-  checkTreeSitterRepos = writeShellScript "get-grammars.sh" ''
-    set -euo pipefail
-    res=$(${jq}/bin/jq \
-      --slurpfile known "${knownTreeSitterOrgGrammarReposJson}" \
-      --slurpfile ignore "${ignoredTreeSitterOrgReposJson}" \
-      '. - ($known[0] + $ignore[0])' \
-      )
-    if [ ! "$res" == "[]" ]; then
-      echo "These repositories are neither known nor ignored:" 1>&2
-      echo "$res" 1>&2
-      exit 1
-    fi
-  '';
-
   # implementation of the fetching of repo information from github
   fetchImpl = passArgs "fetchImpl-with-args" {
       binaries = {
@@ -411,6 +394,10 @@ let
         nix-prefetch-git = "${nix-prefetch-git}/bin/nix-prefetch-git";
         inherit atomically-write;
       };
+      inherit
+        knownTreeSitterOrgGrammarRepos
+        ignoredTreeSitterOrgRepos
+        ;
     }
     (writers.writePython3 "fetchImpl" {
         flakeIgnore = ["E501"];
@@ -443,7 +430,7 @@ let
     echo "fetching list of grammars" 1>&2
     treeSitterRepos=$(${fetchImpl} fetch-orga-latest-repos '{"orga": "tree-sitter"}')
     echo "checking the tree-sitter repo list against the grammars we know" 1>&2
-    printf '%s' "$treeSitterRepos" | ${checkTreeSitterRepos}
+    printf '%s' "$treeSitterRepos" | ${fetchImpl} check-tree-sitter-repos '{}'
     echo "writing files to ${outputDir}" 1>&2
     mkdir -p "${outputDir}"
     ${forEachParallel

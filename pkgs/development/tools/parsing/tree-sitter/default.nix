@@ -42,9 +42,7 @@ let
     fetchSubmodules = true;
   };
 
-  update-all-grammars = callPackage ./update.nix {
-    inherit src;
-  };
+  update-all-grammars = callPackage ./update.nix {};
 
   fetchGrammar = (v: fetchgit { inherit (v) url rev sha256 fetchSubmodules; });
 
