@@ -32,7 +32,7 @@ in {
     host = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc "Cachix uri to use.";
+      description = "Cachix uri to use.";
     };
 
     package = mkOption {
