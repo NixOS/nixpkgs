@@ -6,13 +6,13 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "nanovna-saver";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "NanoVNA-Saver";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-2/A9uFYa682cvK2uzvBLZBDouhS6C6Q91v8Pun7GgSw=";
+    sha256 = "sha256-PP4VHEp6NSSLsuYABr0/S3+YuhpAyvh/xGnQGyszCtM=";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook ];
