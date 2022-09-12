@@ -10708,6 +10708,8 @@ in {
 
   tbm-utils = callPackage ../development/python-modules/tbm-utils { };
 
+  tcxparser = callPackage ../development/python-modules/tcxparser { };
+
   tcxreader = callPackage ../development/python-modules/tcxreader { };
 
   teamcity-messages = callPackage ../development/python-modules/teamcity-messages { };
