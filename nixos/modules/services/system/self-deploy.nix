@@ -139,6 +139,7 @@ in
 
       path = with pkgs; [
         git
+        gnutar
         nix
       ] ++ lib.optionals (cfg.switchCommand == "boot") [ systemd ];
 
