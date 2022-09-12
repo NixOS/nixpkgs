@@ -23,20 +23,14 @@
 
 stdenv.mkDerivation rec {
   pname = "exaile";
-  version = "4.1.1";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "exaile";
     repo = pname;
     rev = version;
-    sha256 = "0s29lm0i4slgaw5l5s9a2zx0b83xac43rnil5cvyi210dxm5s048";
+    sha256 = "sha256-GZyCuPy57NhGwgbLMrRKW5xmc1Udon7WtsrD4upviuQ=";
   };
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/exaile/exaile/pull/751.patch";
-      sha256 = "sha256-jCJh85Z3HQcyS4ntQP5HwYJgM7WNHcWzjf0BdNJitsM=";
-    })
-  ];
 
   nativeBuildInputs = [
     gobject-introspection
@@ -76,7 +70,6 @@ stdenv.mkDerivation rec {
   ++ lib.optional wikipediaSupport webkitgtk;
 
   checkInputs = with python3.pkgs; [
-    mox3
     pytest
   ];
 
