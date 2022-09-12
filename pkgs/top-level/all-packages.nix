@@ -1428,7 +1428,7 @@ with pkgs;
 
   breitbandmessung = callPackage ../applications/networking/breitbandmessung { };
 
-  zq = callPackage ../development/tools/zq { buildGoModule = buildGo118Module; };
+  zq = callPackage ../development/tools/zq { };
 
   ### APPLICATIONS/EMULATORS
 
@@ -7475,6 +7475,8 @@ with pkgs;
   helio-workstation = callPackage ../applications/audio/helio-workstation { };
 
   hevea = callPackage ../tools/typesetting/hevea { };
+
+  hex = callPackage ../tools/misc/hex { };
 
   hexd = callPackage ../tools/misc/hexd { };
   pixd = callPackage ../tools/misc/pixd { };
@@ -15035,7 +15037,7 @@ with pkgs;
 
   clojure = callPackage ../development/interpreters/clojure {
     # set this to an LTS version of java
-    jdk = jdk11;
+    jdk = jdk17;
   };
 
   clojure-lsp = callPackage ../development/tools/misc/clojure-lsp { };

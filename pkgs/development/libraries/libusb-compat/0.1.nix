@@ -2,7 +2,6 @@
 , lib
 , fetchFromGitHub
 , autoreconfHook
-, patchelf
 , pkg-config
 , libusb1
 }:
@@ -14,10 +13,6 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ]; # get rid of propagating systemd closure
   outputBin = "dev";
 
-  nativeBuildInputs = [ autoreconfHook patchelf pkg-config ];
-
-  buildInputs = [ libusb1 ];
-
   src = fetchFromGitHub {
     owner = "libusb";
     repo = "libusb-compat-0.1";
@@ -26,6 +21,10 @@ stdenv.mkDerivation rec {
   };
 
   patches = lib.optional stdenv.hostPlatform.isMusl ./fix-headers.patch;
+
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+
+  buildInputs = [ libusb1 ];
 
   # without this, libusb-compat is unable to find libusb1
   postFixup = ''
