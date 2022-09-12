@@ -2,7 +2,8 @@
 , libgpg-error, libiconv, npth, gettext, texinfo, buildPackages
 , guiSupport ? stdenv.isDarwin, enableMinimal ? false
 , adns, bzip2, gnutls, libusb1, openldap
-, tpm2-tss, pcsclite, pinentry, readline, sqlite, zlib
+, tpm2-tss, pinentry, readline, sqlite, zlib
+, withPcsc ? !enableMinimal, pcsclite
 }:
 
 assert guiSupport -> enableMinimal == false;
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
   postPatch = ''
     sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1
-  '' + lib.optionalString (stdenv.isLinux && (!enableMinimal)) ''
+  '' + lib.optionalString (stdenv.isLinux && withPcsc) ''
     sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   '';
 
