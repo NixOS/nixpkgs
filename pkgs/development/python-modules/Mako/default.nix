@@ -13,17 +13,19 @@
 # tests
 , mock
 , pytestCheckHook
+, lingua
+, chameleon
 }:
 
 buildPythonPackage rec {
   pname = "Mako";
-  version = "1.2.0";
+  version = "1.2.2";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-mnx+kiuH2zaGIQz0nV12cDOkHUAQsoTnR2gskr3dizk=";
+    sha256 = "sha256-NySGmzY7pjCicqX4n2jAcDUhN7j9F1dlABe34G/aFj8=";
   };
 
   propagatedBuildInputs = [
@@ -37,8 +39,10 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
-    pytestCheckHook
+    chameleon
+    lingua
     mock
+    pytestCheckHook
   ] ++ passthru.optional-dependencies.babel;
 
   disabledTests = lib.optionals isPyPy [
@@ -49,11 +53,6 @@ buildPythonPackage rec {
     "test_stdin_success"
     # fails on pypy2.7
     "test_bytestring_passthru"
-  ];
-
-  disabledTestPaths = [
-    # lingua dependency is not packaged
-    "test/ext/test_linguaplugin.py"
   ];
 
   meta = with lib; {
