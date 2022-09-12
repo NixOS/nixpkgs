@@ -57,7 +57,6 @@ buildGoModule rec {
     homepage = "https://github.com/xo/usql";
     license = licenses.mit;
     maintainers = with maintainers; [ georgyo anthonyroussel ];
-    # usql does not build on ARM.
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = with platforms; linux ++ darwin;
   };
 }
