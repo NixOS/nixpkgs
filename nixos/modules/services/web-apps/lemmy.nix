@@ -167,14 +167,11 @@ in
 
         requires = lib.optionals cfg.settings.database.createLocally [ "lemmy-postgresql.service" ];
 
-        script = ''
-          ${pkgs.coreutils}/bin/install -m 600 ${settingsFormat.generate "config.hjson" cfg.settings} /run/lemmy/config.hjson
-          ${pkgs.lemmy-server}/bin/lemmy_server
-        '';
-
         serviceConfig = {
           DynamicUser = true;
           RuntimeDirectory = "lemmy";
+          ExecStartPre = "${pkgs.coreutils}/bin/install -m 600 ${settingsFormat.generate "config.hjson" cfg.settings} /run/lemmy/config.hjson";
+          ExecStart = "${pkgs.lemmy-server}/bin/lemmy_server";
         };
       };
 
