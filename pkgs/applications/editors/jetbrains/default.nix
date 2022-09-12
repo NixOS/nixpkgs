@@ -1,5 +1,5 @@
 { lib, stdenv, callPackage, fetchurl
-, jdk, cmake, gdb, zlib, python3
+, jdk, cmake, gdb, zlib, python3, icu
 , lldb
 , dotnet-sdk_6
 , maven
@@ -211,6 +211,8 @@ let
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk;
       product = "Rider";
+      # icu is required by Rider.Backend
+      extraLdPath = [ icu ];
       meta = with lib; {
         homepage = "https://www.jetbrains.com/rider/";
         inherit description license platforms;
@@ -222,13 +224,15 @@ let
           apps, services and libraries, Unity games, ASP.NET and
           ASP.NET Core web applications.
         '';
-        maintainers = [ ];
+        maintainers = with maintainers; [ raphaelr ];
       };
     }).overrideAttrs (attrs: {
       postPatch = lib.optionalString (!stdenv.isDarwin) (attrs.postPatch + ''
+        interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
+        patchelf --set-interpreter $interp lib/ReSharperHost/linux-x64/Rider.Backend
+
         rm -rf lib/ReSharperHost/linux-x64/dotnet
-        mkdir -p lib/ReSharperHost/linux-x64/dotnet/
-        ln -s ${dotnet-sdk_6}/bin/dotnet lib/ReSharperHost/linux-x64/dotnet/dotnet
+        ln -s ${dotnet-sdk_6} lib/ReSharperHost/linux-x64/dotnet
       '');
     });
 
