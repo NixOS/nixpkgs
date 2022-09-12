@@ -387,8 +387,8 @@ let
 
   jsonFile = name: val: (formats.json { }).generate name val;
 
-  # implementation of the fetching of repo information from github
-  fetchImpl = passArgs "fetchImpl-with-args" {
+  # implementation of the updater
+  updateImpl = passArgs "updateImpl-with-args" {
       binaries = {
         curl = "${curl}/bin/curl";
         nix-prefetch-git = "${nix-prefetch-git}/bin/nix-prefetch-git";
@@ -399,7 +399,7 @@ let
         ignoredTreeSitterOrgRepos
         ;
     }
-    (writers.writePython3 "fetchImpl" {
+    (writers.writePython3 "updateImpl" {
         flakeIgnore = ["E501"];
     } ./update_impl.py);
 
@@ -423,20 +423,22 @@ let
       ${xe}/bin/xe -F -j5 ${script} {}
   '';
 
+  # The output directory in the current source tree.
+  # This will depend on your local environment, but that is intentional.
   outputDir = "${toString ./.}/grammars";
 
   update-all-grammars = writeShellScript "update-all-grammars.sh" ''
     set -euo pipefail
     echo "fetching list of grammars" 1>&2
-    treeSitterRepos=$(${fetchImpl} fetch-orga-latest-repos '{"orga": "tree-sitter"}')
+    treeSitterRepos=$(${updateImpl} fetch-orga-latest-repos '{"orga": "tree-sitter"}')
     echo "checking the tree-sitter repo list against the grammars we know" 1>&2
-    printf '%s' "$treeSitterRepos" | ${fetchImpl} check-tree-sitter-repos '{}'
+    printf '%s' "$treeSitterRepos" | ${updateImpl} check-tree-sitter-repos '{}'
     echo "writing files to ${outputDir}" 1>&2
     mkdir -p "${outputDir}"
     ${forEachParallel
         "repos-to-fetch"
         (writeShellScript "fetch-repo" ''
-            ${fetchImpl} fetch-repo "$1"
+            ${updateImpl} fetch-repo "$1"
         '')
         (lib.mapAttrsToList
           (nixRepoAttrName: attrs: attrs // {
@@ -446,7 +448,7 @@ let
           })
           allGrammars)
     }
-    ${fetchImpl} print-all-grammars-nix-file "$(< ${
+    ${updateImpl} print-all-grammars-nix-file "$(< ${
         jsonFile "all-grammars.json" {
           allGrammars =
             (lib.mapAttrsToList
