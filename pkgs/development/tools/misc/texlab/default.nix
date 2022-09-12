@@ -12,13 +12,14 @@
 
 let
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
-in rustPlatform.buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "texlab";
   version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
-    repo = pname;
+    repo = "texlab";
     rev = "refs/tags/v${version}";
     sha256 = "sha256-gtPnuKmKfUBZDM6DATJB5NxndOwvG5JpBRO4cEU6lIU=";
   };
@@ -28,7 +29,7 @@ in rustPlatform.buildRustPackage rec {
   outputs = [ "out" ] ++ lib.optional (!isCross) "man";
 
   nativeBuildInputs = [ installShellFiles ]
-  ++ lib.optional (!isCross) help2man;
+    ++ lib.optional (!isCross) help2man;
 
   buildInputs = lib.optionals stdenv.isDarwin [
     libiconv
