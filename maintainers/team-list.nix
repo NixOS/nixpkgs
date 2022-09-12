@@ -657,7 +657,6 @@ with lib.maintainers; {
     # Verify additions by approval of an already existing member of the team.
     members = [
       balsoft
-      mkaito
     ];
     scope = "Group registration for Serokell employees who collectively maintain packages.";
     shortName = "Serokell employees";
