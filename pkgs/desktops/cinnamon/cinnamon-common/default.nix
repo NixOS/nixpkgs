@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
     sed "s|/usr/share/sounds|/run/current-system/sw/share/sounds|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/SettingsWidgets.py
 
     sed "s|/usr/bin/upload-system-info|${xapp}/bin/upload-system-info|g" -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_info.py
-    sed "s|upload-system-info|${xapp}/bin/upload-system-info|g" -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_info.py
+    sed "s|\"upload-system-info\"|\"${xapp}/bin/upload-system-info\"|g" -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_info.py
 
     sed "s|/usr/bin/cinnamon-control-center|${cinnamon-control-center}/bin/cinnamon-control-center|g" -i ./files/usr/bin/cinnamon-settings
     # this one really IS optional
