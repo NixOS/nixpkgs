@@ -18,11 +18,9 @@ let
     GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
   } // (
     lib.mapAttrs (_: toString) cfg.extraConfig
-  ) // optionalAttrs (config.time.timeZone != null) {
-    PAPERLESS_TIME_ZONE = lib.mkDefault config.time.timeZone;
-  } // optionalAttrs enableRedis {
+  ) // (optionalAttrs enableRedis {
     PAPERLESS_REDIS = "unix://${redisServer.unixSocket}";
-  };
+  });
 
   manage = let
     setupEnv = lib.concatStringsSep "\n" (mapAttrsToList (name: val: "export ${name}=\"${val}\"") env);
