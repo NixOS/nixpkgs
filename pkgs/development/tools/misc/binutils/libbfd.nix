@@ -1,4 +1,5 @@
 { lib, stdenv
+, buildPackages
 , gnu-config, autoreconfHook, bison, binutils-unwrapped, texinfo
 , libiberty, libintl, zlib
 }:
@@ -29,6 +30,7 @@ stdenv.mkDerivation {
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook bison texinfo ];
   buildInputs = [ libiberty zlib ] ++ lib.optionals stdenv.isDarwin [ libintl ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [
