@@ -1,0 +1,30 @@
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
+
+buildGoModule rec {
+  pname = "restish";
+  version = "0.14.0";
+
+  src = fetchFromGitHub {
+    rev = "v${version}";
+    owner = "danielgtaylor";
+    repo = pname;
+    sha256 = "sha256-AzZwu9NjRRxBu4RCa8Pzi4yg6g1SIiE8V1VC2SqLiKk=";
+  };
+
+  vendorSha256 = "sha256-NT928HSXWbxeyT4uunKKTjIsIAGTQtZUFh26WA/wH8Q=";
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  meta = with lib; {
+    description = "CLI for interacting with REST-ish HTTP APIs with some nice features built-in";
+    homepage = "https://rest.sh/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fumesover ];
+    platforms = platforms.linux ++ platforms.darwin;
+  };
+}
