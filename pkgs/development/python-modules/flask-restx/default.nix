@@ -41,6 +41,12 @@ buildPythonPackage rec {
       url = "https://github.com/python-restx/flask-restx/commit/bb3e9dd83b9d4c0d0fa0de7d7ff713fae71eccee.patch";
       hash = "sha256-HJpjG4aQWzEPCMfbXfkw4mz5TH9d89BCvGH2dE6Jfv0=";
     })
+    # Fixes werkzeug 2.2 compatibility
+    (fetchpatch {
+      # https://github.com/python-restx/flask-restx/pull/463
+      url = "https://github.com/python-restx/flask-restx/commit/82f7340ebb51e5c143b804bc0f20f785e96968c0.patch";
+      hash = "sha256-GA+UlFDu771ul3qplsukce/mjGvJ3E4Dw/IoJQLevNU=";
+    })
   ];
 
   propagatedBuildInputs = [

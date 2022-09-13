@@ -22,7 +22,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.3.216.0";
+  version = "1.3.224.0";
 
   # If we were to use "dev" here instead of headers, the setupHook would be
   # placed in that output instead of "out".
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       owner = "KhronosGroup";
       repo = "Vulkan-ValidationLayers";
       rev = "sdk-${version}";
-      hash = "sha256-ri6ImAuskbvYL/ZM8kaVDZRP2v1qfSaafVacwwRF424=";
+      hash = "sha256-MmAxUuV9CVJ6LHUb6ePEiE37meDB1TqPAwLsPdHQ1u8=";
     });
 
   # Include absolute paths to layer libraries in their associated

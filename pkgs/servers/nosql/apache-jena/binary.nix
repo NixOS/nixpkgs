@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-jena";
-  version = "4.6.0";
+  version = "4.6.1";
   src = fetchurl {
     url = "https://dlcdn.apache.org/jena/binaries/apache-jena-${version}.tar.gz";
-    sha256 = "sha256-1fNl6O9FVLzBx4U+4E72GY60UGMSRFdKNxIrPdcb/aA=";
+    sha256 = "sha256-XCExqN0S5aIeLUNkAXjBHPW/fvj+MxQP3GEOP9gSdLE=";
   };
   nativeBuildInputs = [
     makeWrapper

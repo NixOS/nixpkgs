@@ -197,6 +197,7 @@ in {
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         StateDirectory = "bitwarden_rs";
         StateDirectoryMode = "0700";
+        Restart = "always";
       };
       wantedBy = [ "multi-user.target" ];
     };
@@ -209,6 +210,8 @@ in {
         BACKUP_FOLDER = cfg.backupDir;
       };
       path = with pkgs; [ sqlite ];
+      # if both services are started at the same time, vaultwarden fails with "database is locked"
+      before = [ "vaultwarden.service" ];
       serviceConfig = {
         SyslogIdentifier = "backup-vaultwarden";
         Type = "oneshot";
@@ -220,7 +223,7 @@ in {
     };
 
     systemd.timers.backup-vaultwarden = mkIf (cfg.backupDir != null) {
-      aliases = [ "backup-bitwarden_rs.service" ];
+      aliases = [ "backup-bitwarden_rs.timer" ];
       description = "Backup vaultwarden on time";
       timerConfig = {
         OnCalendar = mkDefault "23:00";

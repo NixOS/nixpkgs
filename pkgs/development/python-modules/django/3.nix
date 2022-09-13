@@ -8,6 +8,7 @@
 , asgiref
 , pytz
 , sqlparse
+, tzdata
 , pythonOlder
 , withGdal ? false
 }:
@@ -24,7 +25,12 @@ buildPythonPackage rec {
     hash = "sha256-9xk0sagi8UqGyayWNAU2iSec0ErmnLat5KWUcbiGWCs=";
   };
 
-  patches = lib.optional withGdal
+  patches = [
+    (substituteAll {
+      src = ./django_3_set_zoneinfo_dir.patch;
+      zoneinfo = tzdata + "/share/zoneinfo";
+    })
+  ] ++ lib.optional withGdal
     (substituteAll {
       src = ./django_3_set_geos_gdal_lib.patch;
       inherit geos39;

@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     abseil-cpp
     c-ares
     crc32c
-    curl
+    (curl.override { inherit openssl; })
     grpc
     nlohmann_json
     openssl

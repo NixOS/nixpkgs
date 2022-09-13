@@ -21,14 +21,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.1";
+  version = "1.1.2";
   pname = "usbguard";
 
   src = fetchFromGitHub {
     owner = "USBGuard";
     repo = pname;
     rev = "usbguard-${version}";
-    sha256 = "sha256-lAh+l9GF+FHQqv2kEYU5JienZKGwR5e45BYAwjieYgw=";
+    sha256 = "sha256-uwNoKczmVOMpkU4KcKTOtbcTHiYVGXjk/rVbqMl5pGk=";
     fetchSubmodules = true;
   };
 

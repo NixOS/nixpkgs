@@ -6,6 +6,7 @@
 , rustPlatform
 , makeWrapper
 , pkg-config
+, openssl
 , curl
 , zlib
 , Security
@@ -36,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
   buildInputs = [
-    curl
+    (curl.override { inherit openssl; })
     zlib
   ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security libiconv xz ];
 

@@ -7,6 +7,7 @@
 , mailcap, mimetypesSupport ? true
 , ncurses
 , openssl
+, openssl_1_1
 , readline
 , sqlite
 , tcl ? null, tk ? null, tix ? null, libX11 ? null, xorgproto ? null, x11Support ? false
@@ -75,6 +76,10 @@ assert lib.assertMsg (reproducibleBuild -> (!rebuildBytecode))
 with lib;
 
 let
+  # cpython does support/build with openssl 3.0, but some libraries using the ssl module seem to have issues with it
+  # null check for Minimal
+  openssl' = if openssl != null then openssl_1_1 else null;
+
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonForBuild;
 
@@ -115,7 +120,7 @@ let
   ];
 
   buildInputs = filter (p: p != null) ([
-    zlib bzip2 expat xz libffi gdbm sqlite readline ncurses openssl ]
+    zlib bzip2 expat xz libffi gdbm sqlite readline ncurses openssl' ]
     ++ optionals x11Support [ tcl tk libX11 xorgproto ]
     ++ optionals (bluezSupport && stdenv.isLinux) [ bluez ]
     ++ optionals stdenv.isDarwin [ configd ])
@@ -321,8 +326,8 @@ in with passthru; stdenv.mkDerivation {
     "--with-threads"
   ] ++ optionals (sqlite != null && isPy3k) [
     "--enable-loadable-sqlite-extensions"
-  ] ++ optionals (openssl != null) [
-    "--with-openssl=${openssl.dev}"
+  ] ++ optionals (openssl' != null) [
+    "--with-openssl=${openssl'.dev}"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_buggy_getaddrinfo=no"
     # Assume little-endian IEEE 754 floating point when cross compiling
@@ -484,7 +489,7 @@ in with passthru; stdenv.mkDerivation {
   # Enforce that we don't have references to the OpenSSL -dev package, which we
   # explicitly specify in our configure flags above.
   disallowedReferences =
-    lib.optionals (openssl != null && !static) [ openssl.dev ]
+    lib.optionals (openssl' != null && !static) [ openssl'.dev ]
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Ensure we don't have references to build-time packages.
     # These typically end up in shebangs.

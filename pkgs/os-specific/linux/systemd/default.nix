@@ -83,7 +83,7 @@
 , withHostnamed ? true
 , withHwdb ? true
 , withImportd ? !stdenv.hostPlatform.isMusl
-, withLibBPF ? false # currently fails while generating BPF objects
+, withLibBPF ? true
 , withLocaled ? true
 , withLogind ? true
 , withMachined ? true
@@ -207,6 +207,12 @@ stdenv.mkDerivation {
       --replace \
       "run_command(cc.cmd_array(), '-print-prog-name=objcopy', check: true).stdout().strip()" \
       "'${stdenv.cc.bintools.targetPrefix}objcopy'"
+  '' + lib.optionalString withLibBPF ''
+    substituteInPlace meson.build \
+      --replace "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
+    # BPF does not work with stack protector
+    substituteInPlace src/core/bpf/meson.build \
+      --replace "clang_flags = [" "clang_flags = [ '-fno-stack-protector',"
   '' + (
     let
       # The following patches references to dynamic libraries to ensure that
@@ -348,7 +354,7 @@ stdenv.mkDerivation {
       docbook_xml_dtd_45
       (buildPackages.python3Packages.python.withPackages (ps: with ps; [ lxml jinja2 ]))
     ]
-    ++ lib.optional withLibBPF [
+    ++ lib.optionals withLibBPF [
       bpftools
       llvmPackages.clang
       llvmPackages.libllvm

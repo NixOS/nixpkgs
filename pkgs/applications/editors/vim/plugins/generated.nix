@@ -3392,6 +3392,18 @@ final: prev:
     meta.homepage = "https://github.com/neovimhaskell/haskell-vim/";
   };
 
+  haskell-with-unicode-vim = buildVimPluginFrom2Nix {
+    pname = "haskell-with-unicode.vim";
+    version = "2022-09-11";
+    src = fetchFromGitHub {
+      owner = "wenzel-hoffman";
+      repo = "haskell-with-unicode.vim";
+      rev = "28899d6795efe2feaca6b53c20ec5ef3b5a1b761";
+      sha256 = "11a3a981x4av2lvknq1xbxbr8ybgazxfikr45qdm1mby6533kx69";
+    };
+    meta.homepage = "https://github.com/wenzel-hoffman/haskell-with-unicode.vim/";
+  };
+
   hasksyn = buildVimPluginFrom2Nix {
     pname = "hasksyn";
     version = "2014-09-04";
