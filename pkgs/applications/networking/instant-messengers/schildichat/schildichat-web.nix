@@ -97,12 +97,12 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Matrix client / Element Web fork";
     homepage = "https://schildi.chat/";
     changelog = "https://github.com/SchildiChat/schildichat-desktop/releases";
-    maintainers = lib.teams.matrix.members ++ [ lib.maintainers.kloenk ];
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.all;
+    maintainers = teams.matrix.members ++ with maintainers; [ kloenk ];
+    license = licenses.asl20;
+    platforms = platforms.all;
   };
 }
