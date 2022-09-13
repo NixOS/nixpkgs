@@ -19,6 +19,14 @@ buildPerlPackage rec {
     export PERL_MB_OPT="--install_base=$out --prefix=$out"
   '';
   buildPhase = "perl Build.PL --install_base=$out --install_path=\"lib=$out/${perl.libPrefix}\"; ./Build build";
+
+  # Disabling tests on musl
+  # Void linux package have investigated the failure and tracked it down to differences in gettext behavior. They decided to disable tests.
+  # https://github.com/void-linux/void-packages/pull/34029#issuecomment-973267880
+  # Alpine packagers have not worried about running the tests until now:
+  # https://git.alpinelinux.org/aports/tree/main/po4a/APKBUILD#n11
+  doCheck = !stdenv.hostPlatform.isMusl;
+
   checkPhase = ''
     export SGML_CATALOG_FILES=${docbook_sgml_dtd_41}/sgml/dtd/docbook-4.1/docbook.cat
     ./Build test
