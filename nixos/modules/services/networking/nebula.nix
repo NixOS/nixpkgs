@@ -200,6 +200,10 @@ in
             after = [ "basic.target" "network.target" ];
             before = [ "sshd.service" ];
             wantedBy = [ "multi-user.target" ];
+            # Restart nebula when the config file changes.
+            # Without this, we may get "Current command vanished from the unit file"
+            # when the file changes and systemd will _not_ restart it.
+            restartTriggers = [ configFile ];
             serviceConfig = {
               Type = "simple";
               Restart = "always";
