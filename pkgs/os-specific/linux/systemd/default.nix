@@ -100,6 +100,7 @@
 , withTimesyncd ? true
 , withTpm2Tss ? !stdenv.hostPlatform.isMusl
 , withUserDb ? !stdenv.hostPlatform.isMusl
+, withUtmp ? !stdenv.hostPlatform.isMusl
   # tests assume too much system access for them to be feasible for us right now
 , withTests ? false
 
@@ -502,9 +503,10 @@ stdenv.mkDerivation {
     "-Dbpf-framework=true"
   ] ++ lib.optionals withTpm2Tss [
     "-Dtpm2=true"
+  ] ++ lib.optionals (!withUtmp) [
+    "-Dutmp=false"
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     "-Dgshadow=false"
-    "-Dutmp=false"
     "-Didn=false"
   ];
   preConfigure =
@@ -683,7 +685,7 @@ stdenv.mkDerivation {
     # runtime; otherwise we can't and we need to reboot.
     interfaceVersion = 2;
 
-    inherit withCryptsetup withHostnamed withImportd withLocaled withMachined withTimedated util-linux kmod kbd;
+    inherit withCryptsetup withHostnamed withImportd withLocaled withMachined withTimedated withUtmp util-linux kmod kbd;
 
     tests = {
       inherit (nixosTests) switchTest;
