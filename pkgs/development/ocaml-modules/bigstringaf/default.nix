@@ -21,7 +21,7 @@ buildDunePackage rec {
   nativeBuildInputs = [ pkg-config ];
   checkInputs = [ alcotest ];
   propagatedBuildInputs = [ bigarray-compat ];
-  doCheck = lib.versionAtLeast ocaml.version "4.05";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     description = "Bigstring intrinsics and fast blits based on memcpy/memmove";

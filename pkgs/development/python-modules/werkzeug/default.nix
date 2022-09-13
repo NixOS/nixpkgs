@@ -9,13 +9,14 @@
 , pytest-timeout
 , pytest-xprocess
 , pytestCheckHook
+, markupsafe
 # for passthru.tests
 , moto, sentry-sdk
 }:
 
 buildPythonPackage rec {
   pname = "werkzeug";
-  version = "2.1.2";
+  version = "2.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,10 +24,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Werkzeug";
     inherit version;
-    sha256 = "sha256-HOCOgJPtZ9Y41jh5/Rujc1gX96gN42dNKT9ZhPJftuY=";
+    sha256 = "sha256-fqLUgyLMfA+LOiFe1z6r17XXXQtQ4xqwBihsz/ngC48=";
   };
 
-  propagatedBuildInputs = lib.optionals (!stdenv.isDarwin) [
+  propagatedBuildInputs = [
+    markupsafe
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     # watchdog requires macos-sdk 10.13+
     watchdog
   ] ++ lib.optionals (pythonOlder "3.7") [

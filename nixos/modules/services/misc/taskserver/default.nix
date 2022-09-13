@@ -10,10 +10,12 @@ let
   mkManualPkiOption = desc: mkOption {
     type = types.nullOr types.path;
     default = null;
-    description = desc + ''
-      <note><para>
+    description = lib.mdDoc ''
+      ${desc}
+
+      ::: {.note}
       Setting this option will prevent automatic CA creation and handling.
-      </para></note>
+      :::
     '';
   };
 
@@ -35,13 +37,13 @@ let
     '';
   };
 
-  mkAutoDesc = preamble: ''
+  mkAutoDesc = preamble: lib.mdDoc ''
     ${preamble}
 
-    <note><para>
+    ::: {.note}
     This option is for the automatically handled CA and will be ignored if any
-    of the <option>services.taskserver.pki.manual.*</option> options are set.
-    </para></note>
+    of the {option}`services.taskserver.pki.manual.*` options are set.
+    :::
   '';
 
   mkExpireOption = desc: mkOption {
@@ -50,7 +52,7 @@ let
     example = 365;
     apply = val: if val == null then -1 else val;
     description = mkAutoDesc ''
-      The expiration time of ${desc} in days or <literal>null</literal> for no
+      The expiration time of ${desc} in days or `null` for no
       expiration time.
     '';
   };
@@ -140,11 +142,11 @@ in {
         default = false;
         description = let
           url = "https://nixos.org/manual/nixos/stable/index.html#module-services-taskserver";
-        in ''
+        in lib.mdDoc ''
           Whether to enable the Taskwarrior server.
 
           More instructions about NixOS in conjuction with Taskserver can be
-          found <link xlink:href="${url}">in the NixOS manual</link>.
+          found [in the NixOS manual](${url}).
         '';
       };
 
@@ -172,9 +174,9 @@ in {
         example = "NORMAL:-VERS-SSL3.0";
         description = let
           url = "https://gnutls.org/manual/html_node/Priority-Strings.html";
-        in ''
+        in lib.mdDoc ''
           List of GnuTLS ciphers to use. See the GnuTLS documentation about
-          priority strings at <link xlink:href="${url}"/> for full details.
+          priority strings at <${url}> for full details.
         '';
       };
 

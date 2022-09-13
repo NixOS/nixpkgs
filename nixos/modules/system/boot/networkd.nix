@@ -879,6 +879,15 @@ let
         (assertValueOneOf "OnLink" boolValues)
       ];
 
+      sectionIPv6RoutePrefix = checkUnitConfig "IPv6RoutePrefix" [
+        (assertOnlyFields [
+          "Route"
+          "LifetimeSec"
+        ])
+        (assertHasField "Route")
+        (assertInt "LifetimeSec")
+      ];
+
       sectionDHCPServerStaticLease = checkUnitConfig "DHCPServerStaticLease" [
         (assertOnlyFields [
           "MACAddress"
@@ -1242,6 +1251,21 @@ let
     };
   };
 
+  ipv6RoutePrefixOptions = {
+    options = {
+      ipv6RoutePrefixConfig = mkOption {
+        default = {};
+        example = { Route = "fd00::/64"; };
+        type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6RoutePrefix;
+        description = lib.mdDoc ''
+          Each attribute in this set specifies an option in the
+          `[IPv6RoutePrefix]` section of the unit.  See
+          {manpage}`systemd.network(5)` for details.
+        '';
+      };
+    };
+  };
+
   dhcpServerStaticLeaseOptions = {
     options = {
       dhcpServerStaticLeaseConfig = mkOption {
@@ -1380,6 +1404,16 @@ let
       type = with types; listOf (submodule ipv6PrefixOptions);
       description = lib.mdDoc ''
         A list of ipv6Prefix sections to be added to the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
+    ipv6RoutePrefixes = mkOption {
+      default = [];
+      example = [ { ipv6RoutePrefixConfig = { Route = "fd00::/64"; LifetimeSec = 3600; }; } ];
+      type = with types; listOf (submodule ipv6RoutePrefixOptions);
+      description = lib.mdDoc ''
+        A list of ipv6RoutePrefix sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
       '';
     };
@@ -1775,6 +1809,10 @@ let
           [IPv6Prefix]
           ${attrsToSection x.ipv6PrefixConfig}
         '')
+        + flip concatMapStrings def.ipv6RoutePrefixes (x: ''
+          [IPv6RoutePrefix]
+          ${attrsToSection x.ipv6RoutePrefixConfig}
+        '')
         + flip concatMapStrings def.dhcpServerStaticLeases (x: ''
           [DHCPServerStaticLease]
           ${attrsToSection x.dhcpServerStaticLeaseConfig}
@@ -1824,7 +1862,7 @@ in
     };
 
     systemd.network.units = mkOption {
-      description = "Definition of networkd units.";
+      description = lib.mdDoc "Definition of networkd units.";
       default = {};
       internal = true;
       type = with types; attrsOf (submodule (

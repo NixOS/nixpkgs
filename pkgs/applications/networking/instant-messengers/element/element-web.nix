@@ -42,6 +42,11 @@ in stdenv.mkDerivation rec {
     runHook preConfigure
 
     export HOME=$PWD/tmp
+    # with the update of openssl3, some key ciphers are not supported anymore
+    # this flag will allow those codecs again as a workaround
+    # see https://medium.com/the-node-js-collection/node-js-17-is-here-8dba1e14e382#5f07
+    # and https://github.com/vector-im/element-web/issues/21043
+    export NODE_OPTIONS=--openssl-legacy-provider
     mkdir -p $HOME
 
     fixup_yarn_lock yarn.lock

@@ -79,18 +79,6 @@ let
       });
     })
 
-    (self: super: {
-      p1monitor = super.p1monitor.overridePythonAttrs (oldAttrs: rec {
-        version = "1.0.1";
-        src = fetchFromGitHub {
-          owner = "klaasnicolaas";
-          repo = "python-p1monitor";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-g3isA2gF2AD+VVzTqpnD+YiJQ9Kcl0VKvwd5l5Yx/Uo=";
-        };
-      });
-    })
-
     # pytest-aiohttp>0.3.0 breaks home-assistant tests
     (self: super: {
       pytest-aiohttp = super.pytest-aiohttp.overridePythonAttrs (oldAttrs: rec {
@@ -104,7 +92,13 @@ let
         doCheck = false;
         patches = [];
       });
+      aioecowitt = super.aioecowitt.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
       aiohomekit = super.aiohomekit.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
+      aioopenexchangerates = super.aioopenexchangerates.overridePythonAttrs (oldAttrs: {
         doCheck = false; # requires aiohttp>=1.0.0
       });
       gcal-sync = super.gcal-sync.overridePythonAttrs (oldAttrs: {
@@ -112,6 +106,9 @@ let
       });
       hass-nabucasa = super.hass-nabucasa.overridePythonAttrs (oldAttrs: {
         doCheck = false; # requires aiohttp>=1.0.0
+      });
+      pylitterbot = super.pylitterbot.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires pytest-aiohttp>=1.0.0
       });
       pynws = super.pynws.overridePythonAttrs (oldAttrs: {
         doCheck = false; # requires pytest-aiohttp>=1.0.0
@@ -245,6 +242,19 @@ let
       });
     })
 
+    # Pinned due to API changes in 0.3.0
+    (self: super: {
+      tailscale = super.tailscale.overridePythonAttrs (oldAttrs: rec {
+        version = "0.2.0";
+        src = fetchFromGitHub {
+          owner = "frenck";
+          repo = "python-tailscale";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-/tS9ZMUWsj42n3MYPZJYJELzX3h02AIHeRZmD2SuwWE=";
+        };
+      });
+    })
+
     # Pinned due to API changes in 0.4.0
     (self: super: {
       vilfo-api-client = super.vilfo-api-client.overridePythonAttrs (oldAttrs: rec {
@@ -267,6 +277,18 @@ let
           repo = "python-vultr";
           rev = "v${version}";
           sha256 = "1qjvvr2v9gfnwskdl0ayazpcmiyw9zlgnijnhgq9mcri5gq9jw5h";
+        };
+      });
+    })
+
+    (self: super: {
+      xiaomi-ble = super.xiaomi-ble.overridePythonAttrs (oldAttrs: rec {
+        version = "0.9.0";
+        src = fetchFromGitHub {
+          owner = "Bluetooth-Devices";
+          repo = "xiaomi-ble";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-xdh8WHrSkbuOGqSiIiufjiVaO719DMDYzbprE3s2kmQ=";
         };
       });
     })
@@ -300,7 +322,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.8.7";
+  hassVersion = "2022.9.1";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -318,7 +340,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-FkI0EHO+M3dpt5xt73QkneQlCqgYUGKuO9MT3bRK2jI=";
+    hash = "sha256-JXMLIMiwM1givdV6HcSGHI9v3zh8gMiF9khaGWR5e9I=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -327,7 +349,6 @@ in python.pkgs.buildPythonApplication rec {
       src = ./patches/ffmpeg-path.patch;
       ffmpeg = "${lib.getBin ffmpeg}/bin/ffmpeg";
     })
-    ./patches/wilight-import.patch
   ];
 
   postPatch = let

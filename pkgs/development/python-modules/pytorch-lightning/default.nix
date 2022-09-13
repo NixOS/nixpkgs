@@ -6,7 +6,7 @@
 , fsspec
 , packaging
 , pytestCheckHook
-, pytorch
+, torch
 , pyyaml
 , tensorboard
 , torchmetrics
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     packaging
     future
     fsspec
-    pytorch
+    torch
     pyyaml
     tensorboard
     torchmetrics

@@ -102,7 +102,9 @@ let
   # Shell script to start the VM.
   startVM =
     ''
-      #! ${pkgs.runtimeShell}
+      #! ${cfg.host.pkgs.runtimeShell}
+
+      export PATH=${makeBinPath [ cfg.host.pkgs.coreutils ]}''${PATH:+:}$PATH
 
       set -e
 
@@ -463,14 +465,13 @@ in
             type = types.enum [ "host" "guest" ];
             default = "host";
             description =
-              ''
+              lib.mdDoc ''
                 Controls the direction in which the ports are mapped:
 
-                - <literal>"host"</literal> means traffic from the host ports
-                is forwarded to the given guest port.
-
-                - <literal>"guest"</literal> means traffic from the guest ports
-                is forwarded to the given host port.
+                - `"host"` means traffic from the host ports
+                  is forwarded to the given guest port.
+                - `"guest"` means traffic from the guest ports
+                  is forwarded to the given host port.
               '';
           };
           options.proto = mkOption {
@@ -511,17 +512,19 @@ in
         ]
         '';
       description =
-        ''
+        lib.mdDoc ''
           When using the SLiRP user networking (default), this option allows to
           forward ports to/from the host/guest.
 
-          <warning><para>
-            If the NixOS firewall on the virtual machine is enabled, you also
-            have to open the guest ports to enable the traffic between host and
-            guest.
-          </para></warning>
+          ::: {.warning}
+          If the NixOS firewall on the virtual machine is enabled, you also
+          have to open the guest ports to enable the traffic between host and
+          guest.
+          :::
 
-          <note><para>Currently QEMU supports only IPv4 forwarding.</para></note>
+          ::: {.note}
+          Currently QEMU supports only IPv4 forwarding.
+          :::
         '';
     };
 
@@ -571,14 +574,27 @@ in
         type = types.str;
         default = "";
         internal = true;
-        description = "Primary IP address used in /etc/hosts.";
+        description = lib.mdDoc "Primary IP address used in /etc/hosts.";
       };
+
+    virtualisation.host.pkgs = mkOption {
+      type = options.nixpkgs.pkgs.type;
+      default = pkgs;
+      defaultText = "pkgs";
+      example = literalExpression ''
+        import pkgs.path { system = "x86_64-darwin"; }
+      '';
+      description = lib.mdDoc ''
+        pkgs set to use for the host-specific packages of the vm runner.
+        Changing this to e.g. a Darwin package set allows running NixOS VMs on Darwin.
+      '';
+    };
 
     virtualisation.qemu = {
       package =
         mkOption {
           type = types.package;
-          default = pkgs.qemu_kvm;
+          default = cfg.host.pkgs.qemu_kvm;
           example = "pkgs.qemu_test";
           description = lib.mdDoc "QEMU package to use.";
         };
@@ -1075,14 +1091,14 @@ in
 
     services.qemuGuest.enable = cfg.qemu.guestAgent.enable;
 
-    system.build.vm = pkgs.runCommand "nixos-vm" {
+    system.build.vm = cfg.host.pkgs.runCommand "nixos-vm" {
       preferLocalBuild = true;
       meta.mainProgram = "run-${config.system.name}-vm";
     }
       ''
         mkdir -p $out/bin
         ln -s ${config.system.build.toplevel} $out/system
-        ln -s ${pkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${config.system.name}-vm
+        ln -s ${cfg.host.pkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${config.system.name}-vm
       '';
 
     # When building a regular system configuration, override whatever

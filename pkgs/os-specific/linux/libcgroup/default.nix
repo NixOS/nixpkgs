@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libcgroup";
-  version = "2.0.2";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-o9eXbsgtGhODEbpbEn30RbYfYpXo6xkU5ptU1och5tU=";
+    hash = "sha256-x2yBqpr3LedtWmpZ4K1ipZxIualNJuDtC4FVGzzcQn8=";
   };
 
   buildInputs = [ pam bison flex ];

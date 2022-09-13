@@ -1,18 +1,15 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, fetchpatch
 , rustPlatform
 , gnome
 , pkg-config
 , meson
 , wrapGAppsHook4
-, appstream-glib
 , desktop-file-utils
 , blueprint-compiler
 , ninja
-, python3
-, gtk3-x11
-, glib
 , gobject-introspection
 , gtk4
 , libadwaita
@@ -37,31 +34,25 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # The metainfo.xml file has a URL to a screenshot of the application,
-    # unaccessible in the build's sandbox. We don't need the screenshot, so
-    # it's best to remove it.
-    ./remove-screenshot-metainfo.diff
+    # https://gitlab.gnome.org/YaLTeR/video-trimmer/-/merge_requests/12
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/YaLTeR/video-trimmer/-/commit/2faf4bb13d44463ea940c39ece9187f76627dbe9.diff";
+      sha256 = "sha256-BPjwfFCDIqnS1rAlIinQ982VKdAYLyzDAPLCmPDvdp4=";
+    })
   ];
-
-  postPatch = ''
-    patchShebangs \
-      build-aux/meson/postinstall.py \
-      build-aux/cargo.sh \
-      build-aux/dist-vendor.sh
-  '';
 
   nativeBuildInputs = [
     pkg-config
     meson
     wrapGAppsHook4
-    appstream-glib
+    gobject-introspection
     desktop-file-utils
     blueprint-compiler
     ninja
-    # For post-install.py
-    python3
-    gtk3-x11 # For gtk-update-icon-cache
-    glib # For glib-compile-schemas
+    # Present here in addition to buildInputs, because meson runs
+    # `gtk4-update-icon-cache` during installPhase, thanks to:
+    # https://gitlab.gnome.org/YaLTeR/video-trimmer/-/merge_requests/12
+    gtk4
   ] ++ (with rustPlatform; [
     cargoSetupHook
     rust.cargo
@@ -69,7 +60,6 @@ stdenv.mkDerivation rec {
   ]);
 
   buildInputs = [
-    gobject-introspection
     gtk4
     libadwaita
     gst_all_1.gstreamer
@@ -78,10 +68,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  passthru.updateScript = gnome.updateScript {
-    packageName = pname;
-  };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/YaLTeR/video-trimmer";

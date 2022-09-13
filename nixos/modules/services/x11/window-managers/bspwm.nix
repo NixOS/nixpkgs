@@ -9,7 +9,7 @@ in
 {
   options = {
     services.xserver.windowManager.bspwm = {
-      enable = mkEnableOption "bspwm";
+      enable = mkEnableOption (lib.mdDoc "bspwm");
 
       package = mkOption {
         type        = types.package;

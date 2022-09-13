@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "dparse";
-  version = "0.5.2";
+  version = "0.6.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-w0iZSh9ByF9mTY9aR0QmR7xOIsWvWxsm7ymv8Ppd3c0=";
+    sha256 = "sha256-VwaLthhZsWdsa+sQ85mQbuy0GnW10/vJnQMRBZy2chM=";
   };
 
   propagatedBuildInputs = [

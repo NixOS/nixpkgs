@@ -167,7 +167,7 @@ in
         type = types.lines;
         internal = true;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Additional commands executed while creating the directory
           containing the CUPS server binaries.
         '';

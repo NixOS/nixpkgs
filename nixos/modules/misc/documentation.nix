@@ -99,7 +99,7 @@ let
               exit 1
             } >&2
         '';
-    inherit (cfg.nixos.options) warningsAreErrors;
+    inherit (cfg.nixos.options) warningsAreErrors allowDocBook;
   };
 
 
@@ -226,15 +226,14 @@ in
       nixos.enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to install NixOS's own documentation.
-          <itemizedlist>
-          <listitem><para>This includes man pages like
-                    <citerefentry><refentrytitle>configuration.nix</refentrytitle><manvolnum>5</manvolnum></citerefentry> if <option>documentation.man.enable</option> is
-                    set.</para></listitem>
-          <listitem><para>This includes the HTML manual and the <command>nixos-help</command> command if
-                    <option>documentation.doc.enable</option> is set.</para></listitem>
-          </itemizedlist>
+
+          - This includes man pages like
+            {manpage}`configuration.nix(5)` if {option}`documentation.man.enable` is
+            set.
+          - This includes the HTML manual and the {command}`nixos-help` command if
+            {option}`documentation.doc.enable` is set.
         '';
       };
 
@@ -253,6 +252,23 @@ in
           Whether to split the option docs build into a cacheable and an uncacheable part.
           Splitting the build can substantially decrease the amount of time needed to build
           the manual, but some user modules may be incompatible with this splitting.
+        '';
+      };
+
+      nixos.options.allowDocBook = mkOption {
+        type = types.bool;
+        default = true;
+        description = lib.mdDoc ''
+          Whether to allow DocBook option docs. When set to `false` all option using
+          DocBook documentation will cause a manual build error; additionally a new
+          renderer may be used.
+
+          ::: {.note}
+          The `false` setting for this option is not yet fully supported. While it
+          should work fine and produce the same output as the previous toolchain
+          using DocBook it may not work in all circumstances. Whether markdown option
+          documentation is allowed is independent of this option.
+          :::
         '';
       };
 

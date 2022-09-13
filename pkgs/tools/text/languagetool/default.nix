@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, jre, makeWrapper }:
+{ lib, stdenv, fetchzip, jre, makeWrapper, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "LanguageTool";
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.languagetool = nixosTests.languagetool;
 
   meta = with lib; {
     homepage = "https://languagetool.org";

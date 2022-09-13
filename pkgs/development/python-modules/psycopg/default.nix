@@ -32,19 +32,20 @@
 
 let
   pname = "psycopg";
-  version = "3.0.16";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
-    rev = version;
-    hash = "sha256-jKhpmCcDi7FyMSpn51eSukFvmu3yacNovmRYG9jnu3g=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-PrWHjs8PLmx7bgKtyhXaiSKmz9oT2OhXDkKd4xi7e0A=";
   };
 
   patches = [
     (substituteAll {
-      src = ./libpq.patch;
+      src = ./ctypes.patch;
       libpq = "${postgresql.lib}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
+      libc = "${stdenv.cc.libc}/lib/libc.so.6";
     })
   ];
 
@@ -192,6 +193,7 @@ buildPythonPackage rec {
     "tests/test_dns_srv.py"
     # Mypy typing test
     "tests/test_typing.py"
+    "tests/crdb/test_typing.py"
   ];
 
   pytestFlagsArray = [

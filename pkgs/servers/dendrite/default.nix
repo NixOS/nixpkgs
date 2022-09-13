@@ -3,16 +3,16 @@
 
 buildGoModule rec {
   pname = "matrix-dendrite";
-  version = "0.9.5";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "dendrite";
     rev = "v${version}";
-    sha256 = "sha256-iaFVYvMEgjNAvjesMPwBNNput5IyVlBxoFCoJ+HTCdI=";
+    sha256 = "sha256-BA+jI5S8pDXIWzCelUh8pWiXy98E94DJgLvqiy0r23g=";
   };
 
-  vendorSha256 = "sha256-KTux4XTIuyps5esvkEZIOfv3BTSU31kxxOeWeAavDMk=";
+  vendorSha256 = "sha256-xcgnpaq0owlCD4nA4I1oD8FpsTGziUghRFy/7ZPVpKY=";
 
   # some tests are racy, re-enable once upstream has fixed them
   doCheck = false;

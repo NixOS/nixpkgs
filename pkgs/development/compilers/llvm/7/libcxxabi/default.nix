@@ -44,27 +44,20 @@ stdenv.mkDerivation {
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
   ] ++ lib.optional (!enableShared) "-DLIBCXXABI_ENABLE_SHARED=OFF";
 
-  installPhase = if stdenv.isDarwin
-    then ''
-      for file in lib/*.dylib; do
-        # this should be done in CMake, but having trouble figuring out
-        # the magic combination of necessary CMake variables
-        # if you fancy a try, take a look at
-        # https://gitlab.kitware.com/cmake/community/-/wikis/doc/cmake/RPATH-handling
-        install_name_tool -id $out/$file $file
-      done
-      make install
-      install -d 755 $out/include
-      install -m 644 ../include/*.h $out/include
-    ''
-    else ''
-      install -d -m 755 $out/include $out/lib
-      install -m 644 lib/libc++abi.a $out/lib
-      ${lib.optionalString enableShared "install -m 644 lib/libc++abi.so.1.0 $out/lib"}
-      install -m 644 ../include/cxxabi.h $out/include
-      ${lib.optionalString enableShared "ln -s libc++abi.so.1.0 $out/lib/libc++abi.so"}
-      ${lib.optionalString enableShared "ln -s libc++abi.so.1.0 $out/lib/libc++abi.so.1"}
-    '';
+  preInstall = lib.optionalString stdenv.isDarwin ''
+    for file in lib/*.dylib; do
+      # this should be done in CMake, but having trouble figuring out
+      # the magic combination of necessary CMake variables
+      # if you fancy a try, take a look at
+      # https://gitlab.kitware.com/cmake/community/-/wikis/doc/cmake/RPATH-handling
+      install_name_tool -id $out/$file $file
+    done
+  '';
+
+  postInstall = ''
+    mkdir -p "$dev/include"
+    install -m 644 ../include/${if stdenv.isDarwin then "*" else "cxxabi.h"} "$dev/include"
+  '';
 
   meta = llvm_meta // {
     homepage = "https://libcxxabi.llvm.org/";

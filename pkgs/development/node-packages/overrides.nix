@@ -38,13 +38,6 @@ final: prev: {
     ];
   };
 
-  "@hyperspace/cli" = prev."@hyperspace/cli".override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    buildInputs = [ final.node-gyp-build ];
-    postInstall = ''wrapProgram "$out/bin/hyp" --prefix PATH : ${ lib.makeBinPath [ nodejs ] }'';
-  };
-  hyperspace-cli = final."@hyperspace/cli";
-
   "@medable/mdctl-cli" = prev."@medable/mdctl-cli".override {
     nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
       glib
@@ -131,6 +124,10 @@ final: prev: {
   deltachat-desktop = prev."deltachat-desktop-../../applications/networking/instant-messengers/deltachat-desktop".override (oldAttrs: {
     meta = oldAttrs.meta // { broken = true; }; # use the top-level package instead
   });
+
+  eask = prev."@emacs-eask/cli".override {
+    name = "eask";
+  };
 
   # NOTE: this is a stub package to fetch npm dependencies for
   # ../../applications/video/epgstation
@@ -524,8 +521,8 @@ final: prev: {
       postInstall = ''
         cd node_modules
         for dep in ${final.vega-cli}/lib/node_modules/vega-cli/node_modules/*; do
-          if [[ ! -d $dep ]]; then
-            ln -s "${final.vega-cli}/lib/node_modules/vega-cli/node_modules/$dep"
+          if [[ ! -d ''${dep##*/} ]]; then
+            ln -s "${final.vega-cli}/lib/node_modules/vega-cli/node_modules/''${dep##*/}"
           fi
         done
       '';

@@ -12,7 +12,7 @@ in
 
   options.programs.zsh.autosuggestions = {
 
-    enable = mkEnableOption "zsh-autosuggestions";
+    enable = mkEnableOption (lib.mdDoc "zsh-autosuggestions");
 
     highlightStyle = mkOption {
       type = types.str;

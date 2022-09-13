@@ -9,7 +9,7 @@ in
         enable = lib.mkOption {
           default = false;
           internal = true;
-          description = ''
+          description = lib.mdDoc ''
             Whether the OpenStack instance uses a ZFS root.
           '';
         };
@@ -47,7 +47,7 @@ in
         default = pkgs.stdenv.hostPlatform.isAarch64;
         defaultText = literalExpression "pkgs.stdenv.hostPlatform.isAarch64";
         internal = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether the instance is using EFI.
         '';
       };

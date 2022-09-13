@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib libjpeg ];
 
+  configureFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+                     "--with-random=/dev/urandom";
+
   preCheck = ''
     patchShebangs qtest/bin/qtest-driver
   '';

@@ -11,7 +11,7 @@ in {
   ###### interface
   options = {
     services.code-server = {
-      enable = mkEnableOption "code-server";
+      enable = mkEnableOption (lib.mdDoc "code-server");
 
       package = mkOption {
         default = pkgs.code-server;

@@ -11,9 +11,7 @@
 , qiskit-terra
 , scikit-learn
 , sparse
-  # Optional inputs
-, withTorch ? true
-, pytorch
+, torch
   # Check Inputs
 , pytestCheckHook
 , ddt
@@ -38,10 +36,11 @@ buildPythonPackage rec {
     fastdtw
     numpy
     psutil
+    torch
     qiskit-terra
     scikit-learn
     sparse
-  ] ++ lib.optional withTorch pytorch;
+  ];
 
   doCheck = false;  # TODO: enable. Tests fail on unstable due to some multithreading issue?
   checkInputs = [

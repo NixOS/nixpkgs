@@ -52,33 +52,33 @@ in
 
   # interface
   options.services.caddy = {
-    enable = mkEnableOption "Caddy web server";
+    enable = mkEnableOption (lib.mdDoc "Caddy web server");
 
     user = mkOption {
       default = "caddy";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         User account under which caddy runs.
 
-        <note><para>
-          If left as the default value this user will automatically be created
-          on system activation, otherwise you are responsible for
-          ensuring the user exists before the Caddy service starts.
-        </para></note>
+        ::: {.note}
+        If left as the default value this user will automatically be created
+        on system activation, otherwise you are responsible for
+        ensuring the user exists before the Caddy service starts.
+        :::
       '';
     };
 
     group = mkOption {
       default = "caddy";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Group account under which caddy runs.
 
-        <note><para>
-          If left as the default value this user will automatically be created
-          on system activation, otherwise you are responsible for
-          ensuring the user exists before the Caddy service starts.
-        </para></note>
+        ::: {.note}
+        If left as the default value this user will automatically be created
+        on system activation, otherwise you are responsible for
+        ensuring the user exists before the Caddy service starts.
+        :::
       '';
     };
 
@@ -94,34 +94,31 @@ in
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/caddy";
-      description = ''
+      description = lib.mdDoc ''
         The data directory for caddy.
 
-        <note>
-          <para>
-            If left as the default value this directory will automatically be created
-            before the Caddy server starts, otherwise you are responsible for ensuring
-            the directory exists with appropriate ownership and permissions.
-          </para>
-          <para>
-            Caddy v2 replaced <literal>CADDYPATH</literal> with XDG directories.
-            See <link xlink:href="https://caddyserver.com/docs/conventions#file-locations"/>.
-          </para>
-        </note>
+        ::: {.note}
+        If left as the default value this directory will automatically be created
+        before the Caddy server starts, otherwise you are responsible for ensuring
+        the directory exists with appropriate ownership and permissions.
+
+        Caddy v2 replaced `CADDYPATH` with XDG directories.
+        See <https://caddyserver.com/docs/conventions#file-locations>.
+        :::
       '';
     };
 
     logDir = mkOption {
       type = types.path;
       default = "/var/log/caddy";
-      description = ''
+      description = lib.mdDoc ''
         Directory for storing Caddy access logs.
 
-        <note><para>
-          If left as the default value this directory will automatically be created
-          before the Caddy server starts, otherwise the sysadmin is responsible for
-          ensuring the directory exists with appropriate ownership and permissions.
-        </para></note>
+        ::: {.note}
+        If left as the default value this directory will automatically be created
+        before the Caddy server starts, otherwise the sysadmin is responsible for
+        ensuring the directory exists with appropriate ownership and permissions.
+        :::
       '';
     };
 
@@ -163,15 +160,15 @@ in
       default = "caddyfile";
       example = "nginx";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Name of the config adapter to use.
-        See <link xlink:href="https://caddyserver.com/docs/config-adapters"/>
+        See <https://caddyserver.com/docs/config-adapters>
         for the full list.
 
-        <note><para>
-          Any value other than <literal>caddyfile</literal> is only valid when
-          providing your own <option>configFile</option>.
-        </para></note>
+        ::: {.note}
+        Any value other than `caddyfile` is only valid when
+        providing your own {option}`configFile`.
+        :::
       '';
     };
 

@@ -19,7 +19,7 @@ buildDunePackage rec {
   buildInputs = [ cmdliner_1_1 ];
   propagatedBuildInputs = [ optint bigarray-compat checkseum ];
   checkInputs = [ alcotest bigstringaf ctypes fmt camlzip base64 ];
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     description = "Pure OCaml implementation of Zlib";

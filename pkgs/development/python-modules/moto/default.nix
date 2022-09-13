@@ -130,6 +130,9 @@ buildPythonPackage rec {
   disabledTests = [
     # only appears in aarch64 currently, but best to be safe
     "test_state_machine_list_executions_with_filter"
+    # tests fail with 404 after Werkzeug 2.2 upgrade, see https://github.com/spulec/moto/issues/5341#issuecomment-1206995825
+    "test_appsync_list_tags_for_resource"
+    "test_s3_server_post_to_bucket_redirect"
   ];
 
   meta = with lib; {

@@ -7,11 +7,13 @@ let
   extraCheckInputs = with home-assistant.python.pkgs; {
     alexa = [ av ];
     bluetooth = [ pyswitchbot ];
+    bthome = [ xiaomi-ble ];
     camera = [ av ];
     cloud = [ mutagen ];
     config = [ pydispatcher ];
     generic = [ av ];
     google_translate = [ mutagen ];
+    homeassistant_sky_connect = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
     homeassistant_yellow = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
     lovelace = [ PyChromecast ];
     nest = [ av ];
@@ -19,6 +21,7 @@ let
     raspberry_pi = [ rpi-bad-power ];
     tomorrowio = [ pyclimacell ];
     version = [ aioaseko ];
+    xiaomi_miio = [ arrow ];
     voicerss = [ mutagen ];
     yandextts = [ mutagen ];
     zha = [ pydeconz ];

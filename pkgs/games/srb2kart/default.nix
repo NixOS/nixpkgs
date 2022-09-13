@@ -7,7 +7,7 @@
 , curl
 , nasm
 , unzip
-, libgme
+, game-music-emu
 , libpng
 , SDL2
 , SDL2_mixer
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     curl
-    libgme
+    game-music-emu
     libpng
     SDL2
     SDL2_mixer
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
 
   cmakeFlags = [
     #"-DSRB2_ASSET_DIRECTORY=/build/source/assets"
-    "-DGME_INCLUDE_DIR=${libgme}/include"
+    "-DGME_INCLUDE_DIR=${game-music-emu}/include"
     "-DSDL2_MIXER_INCLUDE_DIR=${SDL2_mixer}/include/SDL2"
     "-DSDL2_INCLUDE_DIR=${SDL2.dev}/include/SDL2"
   ];

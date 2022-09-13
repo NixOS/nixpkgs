@@ -550,7 +550,7 @@ in
             ephemeral = mkOption {
               type = types.bool;
               default = false;
-              description = ''
+              description = lib.mdDoc ''
                 Runs container in ephemeral mode with the empty root filesystem at boot.
                 This way container will be bootstrapped from scratch on each boot
                 and will be cleaned up on shutdown leaving no traces behind.
@@ -558,8 +558,8 @@ in
 
                 Note that this option might require to do some adjustments to the container configuration,
                 e.g. you might want to set
-                <varname>systemd.network.networks.$interface.dhcpV4Config.ClientIdentifier</varname> to "mac"
-                if you use <varname>macvlans</varname> option.
+                {var}`systemd.network.networks.$interface.dhcpV4Config.ClientIdentifier` to "mac"
+                if you use {var}`macvlans` option.
                 This way dhcp client identifier will be stable between the container restarts.
 
                 Note that the container journal will not be linked to the host if this option is enabled.

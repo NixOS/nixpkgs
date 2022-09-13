@@ -37,7 +37,7 @@ in
 
     services.mtprotoproxy = {
 
-      enable = mkEnableOption "mtprotoproxy";
+      enable = mkEnableOption (lib.mdDoc "mtprotoproxy");
 
       port = mkOption {
         type = types.int;

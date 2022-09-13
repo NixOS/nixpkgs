@@ -3,7 +3,7 @@
 , fetchPypi
 , buildPythonPackage
 , dataclasses
-, pytorch
+, torch
 , pythonOlder
 , spacy
 , spacy-alignments
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    pytorch
+    torch
     spacy
     spacy-alignments
     srsly

@@ -23,7 +23,7 @@ in {
   options = {
     services.stubby = {
 
-      enable = mkEnableOption "Stubby DNS resolver";
+      enable = mkEnableOption (lib.mdDoc "Stubby DNS resolver");
 
       settings = mkOption {
         type = types.attrsOf settingsFormat.type;

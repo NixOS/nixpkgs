@@ -5,11 +5,12 @@ with lib; let hb = mkCoqDerivation {
   owner = "math-comp";
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.15" "8.16"; out = "1.2.1"; }
+    { case = range "8.15" "8.16"; out = "1.3.0"; }
     { case = range "8.13" "8.14"; out = "1.2.0"; }
     { case = range "8.12" "8.13"; out = "1.1.0"; }
     { case = isEq "8.11";         out = "0.10.0"; }
   ] null;
+  release."1.3.0".sha256  = "17k7rlxdx43qda6i1yafpgc64na8br285cb0mbxy5wryafcdrkrc";
   release."1.2.1".sha256  = "sha256-pQYZJ34YzvdlRSGLwsrYgPdz3p/l5f+KhJjkYT08Mj0=";
   release."1.2.0".sha256  = "0sk01rvvk652d86aibc8rik2m8iz7jn6mw9hh6xkbxlsvh50719d";
   release."1.1.0".sha256  = "sha256-spno5ty4kU4WWiOfzoqbXF8lWlNSlySWcRReR3zE/4Q=";

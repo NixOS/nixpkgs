@@ -125,7 +125,7 @@ buildLuarocksPackage {
   pname = "bit32";
   version = "5.3.0-1";
   knownRockspec = (fetchurl {
-    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/bit32-5.3.0-1.rockspec";
+    url    = "mirror://luarocks/bit32-5.3.0-1.rockspec";
     sha256 = "1d6xdihpksrj5a3yvsvnmf3vfk15hj6f8n1rrs65m7adh87hc0yd";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
@@ -153,32 +153,40 @@ buildLuarocksPackage {
 }) {};
 
 busted = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchurl, lua, lua_cliargs, luafilesystem, luasystem, dkjson, say, luassert, lua-term, penlight, mediator_lua
+, fetchgit, penlight, luafilesystem, dkjson, lua_cliargs, lua, say, mediator_lua, luasystem, lua-term, luassert
 }:
 buildLuarocksPackage {
   pname = "busted";
-  version = "2.0.0-1";
+  version = "2.1.1-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/busted-2.0.0-1.rockspec";
-    sha256 = "0cbw95bjxl667n9apcgng2kr5hq6bc7gp3vryw4dzixmfabxkcbw";
+    url    = "mirror://luarocks/busted-2.1.1-1.rockspec";
+    sha256 = "0f9iz3pa2gmb2vccvygp6zdiji7l8bap0vlgqgrcg331qsrkf70h";
   }).outPath;
-  src = fetchurl {
-    url    = "https://github.com/Olivine-Labs/busted/archive/v2.0.0.tar.gz";
-    sha256 = "1ps7b3f4diawfj637mibznaw4x08gn567pyni0m2s50hrnw4v8zx";
-  };
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/lunarmodules/busted.git",
+  "rev": "e3ed48759b625f2e37bf02ccc057b2b98108f108",
+  "date": "2022-08-24T17:34:58+03:00",
+  "path": "/nix/store/7g9rxkyhabgx0acwmzl4r4xfh193avpw-busted",
+  "sha256": "0nab0s5lhk0nhh58c4jspv5sj4g7839gb5q145hrlgbsxqncp8wy",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
 
   disabled = with lua; (luaOlder "5.1");
-  propagatedBuildInputs = [ lua lua_cliargs luafilesystem luasystem dkjson say luassert lua-term penlight mediator_lua ];
+  propagatedBuildInputs = [ penlight luafilesystem dkjson lua_cliargs lua say mediator_lua luasystem lua-term luassert ];
 
   meta = {
-    homepage = "http://olivinelabs.com/busted/";
-    description = "Elegant Lua unit testing.";
+    homepage = "https://lunarmodules.github.io/busted/";
+    description = "Elegant Lua unit testing";
     license.fullName = "MIT <http://opensource.org/licenses/MIT>";
   };
 }) {};
 
 cassowary = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchgit, lua, penlight
+, fetchgit, penlight, lua
 }:
 buildLuarocksPackage {
   pname = "cassowary";
@@ -201,7 +209,7 @@ buildLuarocksPackage {
  '') ["date" "path"]) ;
 
   disabled = with lua; (luaOlder "5.1");
-  propagatedBuildInputs = [ lua penlight ];
+  propagatedBuildInputs = [ penlight lua ];
 
   meta = {
     homepage = "https://github.com/sile-typesetter/cassowary.lua";
@@ -212,7 +220,7 @@ buildLuarocksPackage {
 }) {};
 
 cldr = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchgit, lua, penlight
+, fetchgit, penlight, lua
 }:
 buildLuarocksPackage {
   pname = "cldr";
@@ -235,7 +243,7 @@ buildLuarocksPackage {
  '') ["date" "path"]) ;
 
   disabled = with lua; (luaOlder "5.1");
-  propagatedBuildInputs = [ lua penlight ];
+  propagatedBuildInputs = [ penlight lua ];
 
   meta = {
     homepage = "https://github.com/alerque/cldr-lua";
@@ -246,7 +254,7 @@ buildLuarocksPackage {
 }) {};
 
 compat53 = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchurl, lua
+, fetchzip, lua
 }:
 buildLuarocksPackage {
   pname = "compat53";
@@ -255,9 +263,9 @@ buildLuarocksPackage {
     url    = "mirror://luarocks/compat53-0.7-1.rockspec";
     sha256 = "1r7a3q1cjrcmdycrv2ikgl83irjhxs53sa88v2fdpr9aaamlb101";
   }).outPath;
-  src = fetchurl {
+  src = fetchzip {
     url    = "https://github.com/keplerproject/lua-compat-5.3/archive/v0.7.zip";
-    sha256 = "1x3wv1qx7b2zlf3fh4q9pmi2xxkcdm024g7bf11rpv0yacnhran3";
+    sha256 = "02a14nvn7aggg1yikj9h3dcf8aqjbxlws1bfvqbpfxv9d5phnrpz";
   };
 
   disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.4");
@@ -391,7 +399,7 @@ buildLuarocksPackage {
 }) {};
 
 digestif = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchgit, lua, lpeg
+, fetchgit, lpeg, lua
 }:
 buildLuarocksPackage {
   pname = "digestif";
@@ -399,10 +407,10 @@ buildLuarocksPackage {
 
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/astoff/digestif",
-  "rev": "1fac471a153b99da7f858e63edfa19ec2afee791",
-  "date": "2022-03-13T17:25:22+01:00",
-  "path": "/nix/store/4fxlwjvv07gbdi094abl59h8j5ly4ghm-digestif",
-  "sha256": "1mlmn3v97il5jsl28hjjgvm0dix5r6rsrdzavq25pbv0c46b3zzf",
+  "rev": "95b13ba7ed33605406353b200920ece08868d5a8",
+  "date": "2022-07-03T13:41:35+02:00",
+  "path": "/nix/store/k8y6gk4pqri76657c2sy4j4bkyh30jz5-digestif",
+  "sha256": "12pksz1l84iml7ng6yhywf0fyy8lclmcn2jjkdrh994lb7q9ya99",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
@@ -411,7 +419,7 @@ buildLuarocksPackage {
  '') ["date" "path"]) ;
 
   disabled = with lua; (luaOlder "5.3");
-  propagatedBuildInputs = [ lua lpeg ];
+  propagatedBuildInputs = [ lpeg lua ];
 
   meta = {
     homepage = "https://github.com/astoff/digestif/";
@@ -427,7 +435,7 @@ buildLuarocksPackage {
   pname = "dkjson";
   version = "2.6-1";
   knownRockspec = (fetchurl {
-    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/dkjson-2.6-1.rockspec";
+    url    = "mirror://luarocks/dkjson-2.6-1.rockspec";
     sha256 = "1hhmgz2nixqg23shfnl0kq6wxdadx36z6hhsrz33g7idbm6rbwm1";
   }).outPath;
   src = fetchurl {
@@ -446,7 +454,7 @@ buildLuarocksPackage {
 }) {};
 
 fifo = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchurl, lua
+, fetchzip, lua
 }:
 buildLuarocksPackage {
   pname = "fifo";
@@ -455,9 +463,9 @@ buildLuarocksPackage {
     url    = "mirror://luarocks/fifo-0.2-0.rockspec";
     sha256 = "0vr9apmai2cyra2n573nr3dyk929gzcs4nm1096jdxcixmvh2ymq";
   }).outPath;
-  src = fetchurl {
+  src = fetchzip {
     url    = "https://github.com/daurnimator/fifo.lua/archive/0.2.zip";
-    sha256 = "1a028yyc1xlkaavij8rkz18dqf96risrj65xp0p72y2mhsrckdp1";
+    sha256 = "1800k7h5hxsvm05bjdr65djjml678lwb0661cll78z1ys2037nzn";
   };
 
   propagatedBuildInputs = [ lua ];
@@ -470,7 +478,7 @@ buildLuarocksPackage {
 }) {};
 
 fluent = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchgit, lua, cldr, luaepnf, penlight
+, fetchgit, penlight, cldr, luaepnf, lua
 }:
 buildLuarocksPackage {
   pname = "fluent";
@@ -493,7 +501,7 @@ buildLuarocksPackage {
  '') ["date" "path"]) ;
 
   disabled = with lua; (luaOlder "5.1");
-  propagatedBuildInputs = [ lua cldr luaepnf penlight ];
+  propagatedBuildInputs = [ penlight cldr luaepnf lua ];
 
   meta = {
     homepage = "https://github.com/alerque/fluent-lua";
@@ -512,10 +520,10 @@ buildLuarocksPackage {
 
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/lewis6991/gitsigns.nvim",
-  "rev": "27aeb2e715c32cbb99aa0b326b31739464b61644",
-  "date": "2022-05-26T12:55:53+01:00",
-  "path": "/nix/store/bfz0bk523dk4dciiknrzvp87yvnbgcb2-gitsigns.nvim",
-  "sha256": "04m1767cndrx46xsa6frf77xv64hmr6w21dk2wh4s0sqjvqqm1r6",
+  "rev": "d7e0bcbe45bd9d5d106a7b2e11dc15917d272c7a",
+  "date": "2022-09-01T14:06:41+01:00",
+  "path": "/nix/store/3i20afjhjknqk3wggbrk3kwcbnnjqqxd-gitsigns.nvim",
+  "sha256": "1h4gxyamynwygxpqfib2a7sd1xbi6sh8ixg85j6qiaqqpahr0a4k",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
@@ -534,22 +542,22 @@ buildLuarocksPackage {
 }) {};
 
 http = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchurl, lua, compat53, bit32, cqueues, luaossl, basexx, lpeg, lpeg_patterns, binaryheap, fifo
+, fetchzip, basexx, lpeg_patterns, compat53, bit32, fifo, lua, binaryheap, cqueues, lpeg, luaossl
 }:
 buildLuarocksPackage {
   pname = "http";
   version = "0.3-0";
   knownRockspec = (fetchurl {
-    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/http-0.3-0.rockspec";
+    url    = "mirror://luarocks/http-0.3-0.rockspec";
     sha256 = "0fn3irkf5nnmfc83alc40b316hs8l7zdq2xlaiaa65sjd8acfvia";
   }).outPath;
-  src = fetchurl {
+  src = fetchzip {
     url    = "https://github.com/daurnimator/lua-http/archive/v0.3.zip";
-    sha256 = "13xyj8qx42mzn1z4lwwdfd7ha06a720q4b7d04ir6vvp2fwp3s4q";
+    sha256 = "1pqxxxifl2j1cik3kgayx43v6py5jp6r22myhvxfffysb3b84a2l";
   };
 
   disabled = with lua; (luaOlder "5.1");
-  propagatedBuildInputs = [ lua compat53 bit32 cqueues luaossl basexx lpeg lpeg_patterns binaryheap fifo ];
+  propagatedBuildInputs = [ basexx lpeg_patterns compat53 bit32 fifo lua binaryheap cqueues lpeg luaossl ];
 
   meta = {
     homepage = "https://github.com/daurnimator/lua-http";
@@ -626,10 +634,10 @@ buildLuarocksPackage {
 
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/stevedonovan/LDoc.git",
-  "rev": "e97398356b27473e5ba0626427daaec54f407e22",
-  "date": "2022-01-17T13:53:47+03:00",
-  "path": "/nix/store/6s0dmcz2jgjhjhakr5miq8ffgkchd0wh-LDoc",
-  "sha256": "13k4vi12s37izsjqcnfcliwlizr1ic0vwb0zlxcsghi31k031him",
+  "rev": "71dd5edbda829cd87b312956f4eae1ff8133fb14",
+  "date": "2022-06-17T13:41:29+03:00",
+  "path": "/nix/store/ywgvf4a5bdh7b7jzx8xgibch0a9kr9d2-LDoc",
+  "sha256": "0wwr28fl46y84p78bxaw9wsb7b4x7hmjywfdx5d70axh0amnlyrv",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
@@ -653,7 +661,7 @@ buildLuarocksPackage {
   pname = "lgi";
   version = "0.9.2-1";
   knownRockspec = (fetchurl {
-    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/lgi-0.9.2-1.rockspec";
+    url    = "mirror://luarocks/lgi-0.9.2-1.rockspec";
     sha256 = "1gqi07m4bs7xibsy4vx8qgyp3yb1wnh0gdq1cpwqzv35y6hn5ds3";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
@@ -839,7 +847,7 @@ buildLuarocksPackage {
 }) {};
 
 lpeg_patterns = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchurl, lua, lpeg
+, fetchzip, lua, lpeg
 }:
 buildLuarocksPackage {
   pname = "lpeg_patterns";
@@ -848,9 +856,9 @@ buildLuarocksPackage {
     url    = "mirror://luarocks/lpeg_patterns-0.5-0.rockspec";
     sha256 = "1vzl3ryryc624mchclzsfl3hsrprb9q214zbi1xsjcc4ckq5qfh7";
   }).outPath;
-  src = fetchurl {
+  src = fetchzip {
     url    = "https://github.com/daurnimator/lpeg_patterns/archive/v0.5.zip";
-    sha256 = "17jizbyalzdg009p3x2260bln65xf8xhv9npr0kr93kv986j463b";
+    sha256 = "1s3c179a64r45ffkawv9dnxw4mzwkzj00nr9z2gs5haajgpjivw6";
   };
 
   propagatedBuildInputs = [ lua lpeg ];
@@ -1104,7 +1112,7 @@ buildLuarocksPackage {
 }) {};
 
 lua-lsp = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchgit, lua, dkjson, lpeglabel, inspect
+, fetchgit, lua, inspect, lpeglabel, dkjson
 }:
 buildLuarocksPackage {
   pname = "lua-lsp";
@@ -1127,7 +1135,7 @@ buildLuarocksPackage {
  '') ["date" "path"]) ;
 
   disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.4");
-  propagatedBuildInputs = [ lua dkjson lpeglabel inspect ];
+  propagatedBuildInputs = [ lua inspect lpeglabel dkjson ];
 
   meta = {
     homepage = "https://github.com/Alloyed/lua-lsp";
@@ -1262,7 +1270,7 @@ buildLuarocksPackage {
 }) {};
 
 lua-resty-openidc = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchgit, lua, lua-resty-http, lua-resty-session, lua-resty-jwt
+, fetchgit, lua-resty-http, lua-resty-jwt, lua-resty-session, lua
 }:
 buildLuarocksPackage {
   pname = "lua-resty-openidc";
@@ -1285,7 +1293,7 @@ buildLuarocksPackage {
  '') ["date" "path"]) ;
 
   disabled = with lua; (luaOlder "5.1");
-  propagatedBuildInputs = [ lua lua-resty-http lua-resty-session lua-resty-jwt ];
+  propagatedBuildInputs = [ lua-resty-http lua-resty-jwt lua-resty-session lua ];
 
   meta = {
     homepage = "https://github.com/zmartzone/lua-resty-openidc";
@@ -1298,17 +1306,17 @@ lua-resty-openssl = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 , fetchgit}:
 buildLuarocksPackage {
   pname = "lua-resty-openssl";
-  version = "0.8.8-1";
+  version = "0.8.10-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/lua-resty-openssl-0.8.8-1.rockspec";
-    sha256 = "17arjjhrxs3sas6d65ffh8nmvb220vrhwiwac3qam42im7zc8544";
+    url    = "mirror://luarocks/lua-resty-openssl-0.8.10-1.rockspec";
+    sha256 = "0rwqc8yy9jk419vyil3c1dc2cmlsy1yf2f8b85i1xvwd8safvc8g";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/fffonion/lua-resty-openssl.git",
-  "rev": "7aad15a46bf9f5b81809be53f86ebbdb20ee2e8d",
-  "date": "2022-04-14T19:05:18+08:00",
-  "path": "/nix/store/3a8qz63k5xmkx44djm3prwhmig8wmjnf-lua-resty-openssl",
-  "sha256": "07h1sbfp9l04hr8h6zfgbhs9ray26gr3pa149733wzbdxfkl3bcz",
+  "rev": "c569d6c2ed4512f2228b61a52c9bb1949dc55f7c",
+  "date": "2022-06-24T12:22:19+08:00",
+  "path": "/nix/store/kbpwc7yhba4gqp6lkmdphkvkvhc1m4h6-lua-resty-openssl",
+  "sha256": "08cw03kihqa2j23p29dxli84zafpdxnx5a4zm625dqzlqnq86ajc",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
@@ -1564,21 +1572,21 @@ buildLuarocksPackage {
 }) {};
 
 luacheck = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchgit, lua, argparse, luafilesystem
+, fetchgit, lua, luafilesystem, argparse
 }:
 buildLuarocksPackage {
   pname = "luacheck";
-  version = "0.26.1-1";
+  version = "1.0.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/luacheck-0.26.1-1.rockspec";
-    sha256 = "11r5g6xi1s2d7cpmz2fysfgi78wpszy58rxfkwikqpi6kyc8qmf5";
+    url    = "mirror://luarocks/luacheck-1.0.0-1.rockspec";
+    sha256 = "0q5kqix5n016piqhasp4h22srz1lzp96cjls4fgsbirjn87gsnxv";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/lunarmodules/luacheck.git",
-  "rev": "2445a9dd3859655646bd6eb848459f2b46b4a3e3",
-  "date": "2022-04-23T17:22:03+03:00",
-  "path": "/nix/store/7a8qrmy41bnn1wgs93b5gi48k30v5bfj-luacheck",
-  "sha256": "0zrcni7p0bpqmb383608kmfyxwfxs9qa42g3sb4lhvzg2zggri5q",
+  "rev": "4d2979930245415e556a7c9f47b63ea038afcfee",
+  "date": "2022-08-24T12:50:43+03:00",
+  "path": "/nix/store/kfqdn4v9nzqqdw02fri10ic7v61r99n7-luacheck",
+  "sha256": "1dkqcaf0yrbcwbjiqbpdksj39sj8rbkd8432q568dgq2z5y9khcf",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
@@ -1587,7 +1595,7 @@ buildLuarocksPackage {
  '') ["date" "path"]) ;
 
   disabled = with lua; (luaOlder "5.1");
-  propagatedBuildInputs = [ lua argparse luafilesystem ];
+  propagatedBuildInputs = [ lua luafilesystem argparse ];
 
   meta = {
     homepage = "https://github.com/lunarmodules/luacheck";
@@ -1696,7 +1704,7 @@ buildLuarocksPackage {
 }) {};
 
 luadbi-postgresql = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchgit, lua, luadbi
+, fetchgit, luadbi, lua
 }:
 buildLuarocksPackage {
   pname = "luadbi-postgresql";
@@ -1719,7 +1727,7 @@ buildLuarocksPackage {
  '') ["date" "path"]) ;
 
   disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.4");
-  propagatedBuildInputs = [ lua luadbi ];
+  propagatedBuildInputs = [ luadbi lua ];
 
   meta = {
     homepage = "https://github.com/mwild1/luadbi";
@@ -1729,7 +1737,7 @@ buildLuarocksPackage {
 }) {};
 
 luadbi-sqlite3 = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchgit, lua, luadbi
+, fetchgit, luadbi, lua
 }:
 buildLuarocksPackage {
   pname = "luadbi-sqlite3";
@@ -1752,7 +1760,7 @@ buildLuarocksPackage {
  '') ["date" "path"]) ;
 
   disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.4");
-  propagatedBuildInputs = [ lua luadbi ];
+  propagatedBuildInputs = [ luadbi lua ];
 
   meta = {
     homepage = "https://github.com/mwild1/luadbi";
@@ -1801,7 +1809,7 @@ buildLuarocksPackage {
   pname = "luaevent";
   version = "0.4.6-1";
   knownRockspec = (fetchurl {
-    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/luaevent-0.4.6-1.rockspec";
+    url    = "mirror://luarocks/luaevent-0.4.6-1.rockspec";
     sha256 = "03zixadhx4a7nh67n0sm6sy97c8i9va1a78hibhrl7cfbqc2zc7f";
   }).outPath;
   src = fetchurl {
@@ -1831,10 +1839,10 @@ buildLuarocksPackage {
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/lunarmodules/luaexpat.git",
-  "rev": "7d99eec9685087e6b3a57a09d672591c2aa0f4f6",
-  "date": "2022-04-01T17:08:05+02:00",
-  "path": "/nix/store/b6jyh79ggjdqgizk9amzh74lq4lwm3nm-luaexpat",
-  "sha256": "0yia3xpf6pwmy10yg2dnyfg3v774jay24qfyvm9pj21h2ad7ckm1",
+  "rev": "10b10ca30536ee5df8c814dd18991148984efe24",
+  "date": "2022-08-29T13:45:12+02:00",
+  "path": "/nix/store/prmd5hiippdd32qa0xicbf9rw8k39md7-luaexpat",
+  "sha256": "0rzwrmjy2kbkvhgmprnlqmkl6kqvxqlb5kh9ww3zff0xv7xf03vb",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
@@ -1953,18 +1961,18 @@ buildLuarocksPackage {
 }) {};
 
 luaossl = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchurl, lua
+, fetchzip, lua
 }:
 buildLuarocksPackage {
   pname = "luaossl";
-  version = "20200709-0";
+  version = "20220711-0";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/luaossl-20200709-0.rockspec";
-    sha256 = "0izxxrzc49q4jancza43b2y4hfvasflpcag771nrhapk1n8k45f3";
+    url    = "mirror://luarocks/luaossl-20220711-0.rockspec";
+    sha256 = "0b68kvfz587ilmb5c1p7920kysg9q4m4fl4cz4d93jl3270mzh8y";
   }).outPath;
-  src = fetchurl {
-    url    = "https://github.com/wahern/luaossl/archive/rel-20200709.zip";
-    sha256 = "07j1rqqypjb24x11x6v6qpwf12g0ib23qwg47sw3c2yqkbq744j4";
+  src = fetchzip {
+    url    = "https://github.com/wahern/luaossl/archive/rel-20220711.zip";
+    sha256 = "1a9pgmc6fbhgh1m9ksz9fq057yzz46npqgakcsy9vngg47xacfdb";
   };
 
   propagatedBuildInputs = [ lua ];
@@ -1977,7 +1985,7 @@ buildLuarocksPackage {
 }) {};
 
 luaposix = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchurl, bit32, lua
+, fetchzip, lua, bit32
 }:
 buildLuarocksPackage {
   pname = "luaposix";
@@ -1986,13 +1994,13 @@ buildLuarocksPackage {
     url    = "mirror://luarocks/luaposix-34.1.1-1.rockspec";
     sha256 = "0hx6my54axjcb3bklr991wji374qq6mwa3ily6dvb72vi2534nwz";
   }).outPath;
-  src = fetchurl {
+  src = fetchzip {
     url    = "http://github.com/luaposix/luaposix/archive/v34.1.1.zip";
-    sha256 = "1xqx764ji054jphxdhkynsmwzqzkfgxqfizxkf70za6qfrvnl3yh";
+    sha256 = "0863r8c69yx92lalj174qdhavqmcs2cdimjim6k55qj9yn78v9zl";
   };
 
   disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.4");
-  propagatedBuildInputs = [ bit32 lua ];
+  propagatedBuildInputs = [ lua bit32 ];
 
   meta = {
     homepage = "http://github.com/luaposix/luaposix/";
@@ -2032,17 +2040,17 @@ luasec = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 }:
 buildLuarocksPackage {
   pname = "luasec";
-  version = "1.1.0-1";
+  version = "1.2.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/luasec-1.1.0-1.rockspec";
-    sha256 = "1j080wx40cfxfmb42w6jf06yp2wqfnlf281lda6i7lwh4rh2800m";
+    url    = "mirror://luarocks/luasec-1.2.0-1.rockspec";
+    sha256 = "0zavdkwd701j8zqyzrpn1n5xd242vziq2l79amjdn5mcw81nrsdf";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/brunoos/luasec",
-  "rev": "df27c62f4cea33cb3525fed2a4b280997ed11aad",
-  "date": "2022-04-13T10:46:36-03:00",
-  "path": "/nix/store/h9bxbfm36ab2z314lpny78jympq9cxli-luasec",
-  "sha256": "04zch1ims50phgzqnbpxdfnxyrr9kpb8wi5bm9hhsizrzsx637is",
+  "rev": "d9215ee00f6694a228daad50ee85827a4cd13583",
+  "date": "2022-07-30T08:42:53-03:00",
+  "path": "/nix/store/77m3g768a230h77nxiw23ay73aryq1zh-luasec",
+  "sha256": "1rz2lhf243lrsjsyjwxhijhqr88l8l8sndzzv9w4x1j0zpa9sblb",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
@@ -2066,17 +2074,17 @@ luasocket = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 }:
 buildLuarocksPackage {
   pname = "luasocket";
-  version = "3.0.0-1";
+  version = "3.1.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/luasocket-3.0.0-1.rockspec";
-    sha256 = "00j6jss7ifrqsylh1k9254i715z17j99hhawhlkmha1y6wn4glam";
+    url    = "mirror://luarocks/luasocket-3.1.0-1.rockspec";
+    sha256 = "0wg9735cyz2gj7r9za8yi83w765g0f4pahnny7h0pdpx58pgfx4r";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/lunarmodules/luasocket.git",
-  "rev": "88c8a85cb6528232288ec590910b7a966aace52b",
-  "date": "2022-03-25T11:05:48+03:00",
-  "path": "/nix/store/vn80kf268mjilsnm7850ag4zhan5na2c-luasocket",
-  "sha256": "0263gmxdpb2snv9yrwqsg3q641a9gm6migqsmi871hrhxaq0l9c1",
+  "rev": "95b7efa9da506ef968c1347edf3fc56370f0deed",
+  "date": "2022-07-27T10:07:00+03:00",
+  "path": "/nix/store/r5pqxqjkdwl80nmjkv400mbls7cfymjc-luasocket",
+  "sha256": "13hyf9cvny0kxwyg08929kkl31w74j66fj6zg1myyjr9nh5b795h",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
@@ -2106,10 +2114,10 @@ buildLuarocksPackage {
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/keplerproject/luasql.git",
-  "rev": "fb70ea47433a66f9b72811cd046dd7d7418a0e89",
-  "date": "2022-05-29T22:25:54-03:00",
-  "path": "/nix/store/zkir0i3j5jxb704bi5cnn2i51niabl7c-luasql",
-  "sha256": "1gnp1892v0g5kzsfrg3l3ykhq81nfv11mhb0djhgrjqx7zaxi24l",
+  "rev": "b7da7097d91b3233156aba2e7d0c6e5590766884",
+  "date": "2022-07-27T13:39:06-03:00",
+  "path": "/nix/store/rb4i0qxm8yy552hhmxdh65sf463qn02f-luasql",
+  "sha256": "046zv23kk2riyiw1vngbwn2a4rkg9wm3ra2b1vmmhkr9idlncq94",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
@@ -2129,26 +2137,34 @@ buildLuarocksPackage {
 }) {};
 
 luassert = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchurl, lua, say
+, fetchgit, say, lua
 }:
 buildLuarocksPackage {
   pname = "luassert";
-  version = "1.8.0-0";
+  version = "1.9.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/luassert-1.8.0-0.rockspec";
-    sha256 = "1194y81nlkq4qmrrgl7z82i6vgvhqvp1p673kq0arjix8mv3zyz1";
+    url    = "mirror://luarocks/luassert-1.9.0-1.rockspec";
+    sha256 = "1bkzr03190p33lprgy51nl84aq082fyc3f7s3wkk7zlay4byycxd";
   }).outPath;
-  src = fetchurl {
-    url    = "https://github.com/Olivine-Labs/luassert/archive/v1.8.0.tar.gz";
-    sha256 = "0xlwlb32215524bg33svp1ci8mdvh9wykchl8dkhihpxcd526mar";
-  };
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/lunarmodules/luassert.git",
+  "rev": "8d8dc8a54cc468048a128a867f6449a6c3fdd11a",
+  "date": "2022-08-24T00:00:45+03:00",
+  "path": "/nix/store/vfcl25wxps5kvh5prjkkjlj1ga3kgw63-luassert",
+  "sha256": "0wlp6qdm9dkwzs8lvnj7zvmid4y12v717ywlhxn2brkbjpvl2dwf",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
 
   disabled = with lua; (luaOlder "5.1");
-  propagatedBuildInputs = [ lua say ];
+  propagatedBuildInputs = [ say lua ];
 
   meta = {
-    homepage = "http://olivinelabs.com/busted/";
-    description = "Lua Assertions Extension";
+    homepage = "https://lunarmodules.github.io/busted/";
+    description = "Lua assertions extension";
     license.fullName = "MIT <http://opensource.org/licenses/MIT>";
   };
 }) {};
@@ -2204,7 +2220,7 @@ buildLuarocksPackage {
 }) {};
 
 luaunit = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchurl, lua
+, fetchzip, lua
 }:
 buildLuarocksPackage {
   pname = "luaunit";
@@ -2213,13 +2229,13 @@ buildLuarocksPackage {
     url    = "mirror://luarocks/luaunit-3.4-1.rockspec";
     sha256 = "111435fa8p2819vcvg76qmknj0wqk01gy9d1nh55c36616xnj54n";
   }).outPath;
-  src = fetchurl {
+  src = fetchzip {
     url    = "https://github.com/bluebird75/luaunit/releases/download/LUAUNIT_V3_4/rock-luaunit-3.4.zip";
-    sha256 = "1v8nkiwz2nr242h5cl4af6vmn5gxmn94skps1qhb55ak60j20nvr";
+    sha256 = "0qf07y3229lq3qq1mfkv83gzbc7dgyr67hysqjb5bbk333flv56r";
   };
 
   disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.5");
-  propagatedBuildInputs = [ lua lua ];
+  propagatedBuildInputs = [ lua ];
 
   meta = {
     homepage = "http://github.com/bluebird75/luaunit";
@@ -2288,6 +2304,38 @@ buildLuarocksPackage {
   };
 }) {};
 
+lush-nvim = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchgit, lua
+, moonscript}:
+buildLuarocksPackage {
+  pname = "lush.nvim";
+  version = "scm-1";
+
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/rktjmp/lush.nvim",
+  "rev": "6b9f399245de7bea8dac2c3bf91096ffdedfcbb7",
+  "date": "2022-08-10T01:43:55+10:00",
+  "path": "/nix/store/ljfhbz8s6pjnngbixk3m6ivpb7nx1gv0-lush.nvim",
+  "sha256": "0rb77rwmbm438bmbjfk5hwrrcn5sihsa1413bdpc27rw3rrn8v8z",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ lua ];
+  checkInputs = [ moonscript ];
+
+  meta = {
+    homepage = "https://github.com/rktjmp/lush.nvim";
+    description = "Define Neovim themes as a DSL in lua, with real-time feedback.";
+    maintainers = with lib.maintainers; [ teto ];
+    license.fullName = "MIT/X11";
+  };
+}) {};
+
 luuid = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 , fetchurl, lua
 }:
@@ -2314,8 +2362,8 @@ buildLuarocksPackage {
 }) {};
 
 luv = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, cmake, fetchurl, lua
-}:
+, fetchurl, lua
+, cmake}:
 buildLuarocksPackage {
   pname = "luv";
   version = "1.43.0-0";
@@ -2340,7 +2388,7 @@ buildLuarocksPackage {
 }) {};
 
 lyaml = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchurl, lua
+, fetchzip, lua
 }:
 buildLuarocksPackage {
   pname = "lyaml";
@@ -2349,9 +2397,9 @@ buildLuarocksPackage {
     url    = "mirror://luarocks/lyaml-6.2.7-1.rockspec";
     sha256 = "0m5bnzg24nyk35gcn4rydgzk0ysk1f6rslxwxd0w3drl1bg64zja";
   }).outPath;
-  src = fetchurl {
+  src = fetchzip {
     url    = "http://github.com/gvvaughan/lyaml/archive/v6.2.7.zip";
-    sha256 = "165mr3krf8g8070j4ax9z0j2plfbdwb8x2zk2hydpqaqa0kcdb0c";
+    sha256 = "1qfvk610xgglyv9n2dp0cnh21f20q2zkl941qsv9qcbnm2f03vna";
   };
 
   disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.5");
@@ -2424,7 +2472,7 @@ buildLuarocksPackage {
 }) {};
 
 moonscript = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchgit, lua, lpeg, argparse, luafilesystem
+, fetchgit, lua, luafilesystem, lpeg, argparse
 }:
 buildLuarocksPackage {
   pname = "moonscript";
@@ -2444,7 +2492,7 @@ buildLuarocksPackage {
  '') ["date" "path"]) ;
 
   disabled = with lua; (luaOlder "5.1");
-  propagatedBuildInputs = [ lua lpeg argparse luafilesystem ];
+  propagatedBuildInputs = [ lua luafilesystem lpeg argparse ];
 
   meta = {
     homepage = "http://moonscript.org";
@@ -2477,19 +2525,19 @@ buildLuarocksPackage {
 }) {};
 
 nvim-client = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchurl, lua, mpack, luv, coxpcall
+, fetchurl, coxpcall, luv, mpack, lua
 }:
 buildLuarocksPackage {
   pname = "nvim-client";
-  version = "0.2.3-1";
+  version = "0.2.4-1";
 
   src = fetchurl {
-    url    = "https://github.com/neovim/lua-client/archive/0.2.3-1.tar.gz";
-    sha256 = "0w6rc7b9gmz17x4l1q2nv275bkzwvg3pfg5mzsd4wymy2iwrqphf";
+    url    = "https://github.com/neovim/lua-client/archive/0.2.4-1.tar.gz";
+    sha256 = "0sk1lmj0r7pyj9k3p6n0wqjbd95br44ansz0ck3amp6ql8f9kprf";
   };
 
   disabled = with lua; (luaOlder "5.1");
-  propagatedBuildInputs = [ lua mpack luv coxpcall ];
+  propagatedBuildInputs = [ coxpcall luv mpack lua ];
 
   meta = {
     homepage = "https://github.com/neovim/lua-client";
@@ -2498,19 +2546,44 @@ buildLuarocksPackage {
   };
 }) {};
 
-penlight = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchgit, lua, luafilesystem
+nvim-cmp = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchzip, lua
 }:
+buildLuarocksPackage {
+  pname = "nvim-cmp";
+  version = "0.0.1-2";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/nvim-cmp-0.0.1-2.rockspec";
+    sha256 = "0jx4i2rnc7zmy1bbqp6fqymlklc7xvqyv35prjl3ld05c4dpg7nq";
+  }).outPath;
+  src = fetchzip {
+    url    = "http://github.com/hrsh7th/nvim-cmp/archive/v0.0.1.zip";
+    sha256 = "0649n476jd6dqd79fmywmigz19sb0s344ablwr25gr23fp46hzaz";
+  };
+
+  disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/hrsh7th/nvim-cmp";
+    description = "A completion plugin for neovim";
+    license.fullName = "MIT";
+  };
+}) {};
+
+penlight = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchgit, luafilesystem, lua
+, busted}:
 buildLuarocksPackage {
   pname = "penlight";
   version = "dev-1";
 
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/lunarmodules/penlight.git",
-  "rev": "a7b9f888cd72dfa875e3b7cc3b88be632f567d79",
-  "date": "2022-03-24T13:21:29+01:00",
-  "path": "/nix/store/vk0z1hx9rwl45g3nn0f6c4m6mx8d9p65-penlight",
-  "sha256": "0w5w13gdbbnli23zmixy20jq6z3j5p6z3br3abpl5qh36b01i5p4",
+  "rev": "d5958e242b95984a278c39c63fadc5ef1258978b",
+  "date": "2022-08-14T10:06:20+02:00",
+  "path": "/nix/store/91nha43c2gdjyn8146fn9zfghlgvvdzz-penlight",
+  "sha256": "0bvc1a3g41mx8wlaq4ig3cl568rsysyggsr00hf7bi0ygf529sny",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
@@ -2519,7 +2592,8 @@ buildLuarocksPackage {
  '') ["date" "path"]) ;
 
   disabled = with lua; (luaOlder "5.1");
-  propagatedBuildInputs = [ lua luafilesystem ];
+  propagatedBuildInputs = [ luafilesystem lua ];
+  checkInputs = [ busted ];
 
   meta = {
     homepage = "https://lunarmodules.github.io/penlight";
@@ -2538,10 +2612,10 @@ buildLuarocksPackage {
 
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/nvim-lua/plenary.nvim",
-  "rev": "54b2e3d58f567983feabaeb9408eccf6b7f32206",
-  "date": "2022-06-01T15:32:39+02:00",
-  "path": "/nix/store/j29rrzs7dsm6720rsjmzk7r1a27zv7h1-plenary.nvim",
-  "sha256": "1ldjdc7yq4awlllr9dcv8fnkcwgdpvj0py5mhvx3v1yjniwrkn2i",
+  "rev": "4b66054e75356ac0b909bbfee9c682e703f535c2",
+  "date": "2022-09-03T11:21:04+02:00",
+  "path": "/nix/store/gaphh0qlf40ryk2000plscvzcbzg0kz5-plenary.nvim",
+  "sha256": "1yl5m7is35bk30swr5m1pcl2i0wf8gjcnas6bpahlxqa4x0yr1x8",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
@@ -2560,8 +2634,8 @@ buildLuarocksPackage {
 }) {};
 
 rapidjson = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, cmake, fetchgit, lua
-}:
+, fetchgit, lua
+, cmake}:
 buildLuarocksPackage {
   pname = "rapidjson";
   version = "0.7.1-1";
@@ -2591,7 +2665,7 @@ buildLuarocksPackage {
 }) {};
 
 readline = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchurl, lua, luaposix
+, fetchurl, luaposix, lua
 }:
 buildLuarocksPackage {
   pname = "readline";
@@ -2606,7 +2680,7 @@ buildLuarocksPackage {
   };
 
   disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.5");
-  propagatedBuildInputs = [ lua luaposix ];
+  propagatedBuildInputs = [ luaposix lua ];
 
   meta = {
     homepage = "http://pjb.com.au/comp/lua/readline.html";
@@ -2615,25 +2689,59 @@ buildLuarocksPackage {
   };
 }) {};
 
-say = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchurl, lua
+rest-nvim = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchzip, lua, plenary-nvim
 }:
 buildLuarocksPackage {
-  pname = "say";
-  version = "1.3-1";
-
-  src = fetchurl {
-    url    = "https://github.com/Olivine-Labs/say/archive/v1.3-1.tar.gz";
-    sha256 = "1jh76mxq9dcmv7kps2spwcc6895jmj2sf04i4y9idaxlicvwvs13";
+  pname = "rest.nvim";
+  version = "0.1-2";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/rest.nvim-0.1-2.rockspec";
+    sha256 = "0l8k91483nz75ijgnyfb8r7mynsaps7ikvjkziimf62bv7aks3qh";
+  }).outPath;
+  src = fetchzip {
+    url    = "http://github.com/rest-nvim/rest.nvim/archive/0.1.zip";
+    sha256 = "0yf1a1cjrrzw0wmjgg48g3qn9kfxn7hv38yx88l1sc1r1nsfijrq";
   };
+
+  disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ lua plenary-nvim ];
+
+  meta = {
+    homepage = "https://github.com/rest-nvim/rest.nvim";
+    description = "A fast Neovim http client written in Lua";
+    license.fullName = "MIT";
+  };
+}) {};
+
+say = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchgit, lua
+, busted}:
+buildLuarocksPackage {
+  pname = "say";
+  version = "scm-1";
+
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/lunarmodules/say.git",
+  "rev": "45a3057e68c52b34ab59ef167efeb2340e356661",
+  "date": "2022-08-27T11:00:01+03:00",
+  "path": "/nix/store/324ryi5hlaisnyp4wpd1hvzcfv508i4s-say",
+  "sha256": "178pdsswwnja2f106701xmdxsdijjl5smm28dhhdcmjyb4mn8cr2",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
 
   disabled = with lua; (luaOlder "5.1");
   propagatedBuildInputs = [ lua ];
+  checkInputs = [ busted ];
 
   meta = {
-    homepage = "http://olivinelabs.com/busted/";
-    description = "Lua String Hashing/Indexing Library";
-    license.fullName = "MIT <http://opensource.org/licenses/MIT>";
+    homepage = "https://lunarmodules.github.io/say";
+    description = "Lua string hashing/indexing library";
+    license.fullName = "MIT";
   };
 }) {};
 
@@ -2666,13 +2774,14 @@ buildLuarocksPackage {
   meta = {
     homepage = "https://github.com/pkulchenko/serpent";
     description = "Lua serializer and pretty printer";
+    maintainers = with lib.maintainers; [ lockejan ];
     license.fullName = "MIT";
   };
 }) {};
 
 sqlite = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 , fetchgit, luv
-}:
+, plenary-nvim}:
 buildLuarocksPackage {
   pname = "sqlite";
   version = "v1.2.2-0";
@@ -2694,6 +2803,7 @@ buildLuarocksPackage {
  '') ["date" "path"]) ;
 
   propagatedBuildInputs = [ luv ];
+  checkInputs = [ plenary-nvim ];
 
   meta = {
     homepage = "https://github.com/tami5/sqlite.lua";
@@ -2711,10 +2821,10 @@ buildLuarocksPackage {
 
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/lua-stdlib/_debug.git",
-  "rev": "eaaa493937974889007158fa8681835b312d2a35",
-  "date": "2022-01-02T17:12:19-08:00",
-  "path": "/nix/store/qrzwpcg9airmlnayfgxspy7p7pa8csyl-_debug",
-  "sha256": "0nik882xm0d243ah8v2z5przcny7pfbbj529yn4qyvvz67lsfydb",
+  "rev": "6ab5e78ef21ad9877e9733a178df4799b983e178",
+  "date": "2022-06-29T11:27:54-07:00",
+  "path": "/nix/store/c3p5jq6bawdmfnq1ayw6d7kwwc9sqmig-_debug",
+  "sha256": "1q0gvwwjclf4galz9c9h2xbzh799xswr9z9b7lncmwb5ky2jwpcy",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
@@ -2763,7 +2873,7 @@ buildLuarocksPackage {
 }) {};
 
 stdlib = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchurl, lua
+, fetchzip, lua
 }:
 buildLuarocksPackage {
   pname = "stdlib";
@@ -2772,9 +2882,9 @@ buildLuarocksPackage {
     url    = "mirror://luarocks/stdlib-41.2.2-1.rockspec";
     sha256 = "0rscb4cm8s8bb8fk8rknc269y7bjqpslspsaxgs91i8bvabja6f6";
   }).outPath;
-  src = fetchurl {
+  src = fetchzip {
     url    = "http://github.com/lua-stdlib/lua-stdlib/archive/release-v41.2.2.zip";
-    sha256 = "0is8i8lk4qq4afnan0vj1bwr8brialyrva7cjy43alzgwdphwynx";
+    sha256 = "0ry6k0wh4vyar1z68s0qmqzkdkfn9lcznsl8av7x78qz6l16wfw4";
   };
 
   disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.5");
@@ -2789,21 +2899,21 @@ buildLuarocksPackage {
 }) {};
 
 tl = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchgit, compat53, argparse, luafilesystem
-}:
+, fetchgit, compat53, luafilesystem, argparse
+, dkjson}:
 buildLuarocksPackage {
   pname = "tl";
-  version = "0.13.2-1";
+  version = "0.14.1-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/tl-0.13.2-1.rockspec";
-    sha256 = "0a9nr03q6w1689drd0r2y8m7qbyxm8n6bkgjplwkr6c6abvbis3f";
+    url    = "mirror://luarocks/tl-0.14.1-1.rockspec";
+    sha256 = "09nm8vgn1j33bj6612h48jqv7vd72qm06f6rly0angkpcdzb2cd7";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/teal-language/tl",
-  "rev": "473fef59f21e836e1337a0e3da3c759a1e3556bd",
-  "date": "2021-07-30T21:02:34-03:00",
-  "path": "/nix/store/29dm1abr2cc9zqs9n9lymg92gaxqh09g-tl",
-  "sha256": "1cj7ihw1kz1n1jkha6q0mq0qmlw1vi04i6pcbw3w1cdf2i4fcglh",
+  "rev": "2a0426ed42a3616981410bab0ef1faa55ab9795d",
+  "date": "2022-08-23T02:17:01-03:00",
+  "path": "/nix/store/50p7nazikq1n1nffl84lnh8l39nm18pq-tl",
+  "sha256": "04bbls8dc0jg7vbqwafn24gqna4swk3aa760i98hnrbmax39pzh2",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
@@ -2811,7 +2921,8 @@ buildLuarocksPackage {
 }
  '') ["date" "path"]) ;
 
-  propagatedBuildInputs = [ compat53 argparse luafilesystem ];
+  propagatedBuildInputs = [ compat53 luafilesystem argparse ];
+  checkInputs = [ dkjson ];
 
   meta = {
     homepage = "https://github.com/teal-language/tl";

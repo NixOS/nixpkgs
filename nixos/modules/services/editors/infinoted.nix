@@ -6,7 +6,7 @@ let
   cfg = config.services.infinoted;
 in {
   options.services.infinoted = {
-    enable = mkEnableOption "infinoted";
+    enable = mkEnableOption (lib.mdDoc "infinoted");
 
     package = mkOption {
       type = types.package;

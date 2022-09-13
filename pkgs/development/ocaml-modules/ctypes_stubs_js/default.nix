@@ -1,25 +1,28 @@
 {
-  pkgs, stdenv, lib, fetchurl, buildDunePackage
+  lib, fetchFromGitLab, buildDunePackage
 , integers_stubs_js, ctypes, ppx_expect
+, js_of_ocaml-compiler
+, nodejs
 }:
 
 buildDunePackage rec {
   pname = "ctypes_stubs_js";
   version = "0.1";
+  minimalOCamlVersion = "4.08";
 
-  minimumOCamlVersion = "4.08";
-  useDune2 = true;
-
-  src = fetchurl {
-    url = "https://gitlab.com/nomadic-labs/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
-    sha256 = "74ab170e064bff88eaa592efc992d24fa1665c67047fc822276eae52c0f3384d";
+  src = fetchFromGitLab {
+    owner = "nomadic-labs";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-OJIzg2hnwkXkQHd4bRR051eLf4HNWa/XExxbj46SyUs=";
   };
 
   propagatedBuildInputs = [ integers_stubs_js ];
   checkInputs = [
     ctypes
+    js_of_ocaml-compiler
     ppx_expect
-    pkgs.nodejs
+    nodejs
   ];
   doCheck = true;
 

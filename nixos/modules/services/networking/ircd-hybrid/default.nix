@@ -36,7 +36,7 @@ in
 
     services.ircdHybrid = {
 
-      enable = mkEnableOption "IRCD";
+      enable = mkEnableOption (lib.mdDoc "IRCD");
 
       serverName = mkOption {
         default = "hades.arpa";

@@ -8,7 +8,7 @@ in
 {
   options = {
     services.snowflake-proxy = {
-      enable = mkEnableOption "System to defeat internet censorship";
+      enable = mkEnableOption (lib.mdDoc "System to defeat internet censorship");
 
       broker = mkOption {
         description = lib.mdDoc "Broker URL (default \"https://snowflake-broker.torproject.net/\")";

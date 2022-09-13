@@ -46,7 +46,6 @@ in
   imports = [
     ./dnsname.nix
     ./network-socket.nix
-    (lib.mkRenamedOptionModule [ "virtualisation" "podman" "libpod" ] [ "virtualisation" "containers" "containersConf" ])
   ];
 
   meta = {
@@ -114,7 +113,7 @@ in
       type = types.package;
       default = podmanPackage;
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         The final Podman package (including extra packages).
       '';
     };

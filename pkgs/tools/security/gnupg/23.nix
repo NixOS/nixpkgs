@@ -32,6 +32,14 @@ stdenv.mkDerivation rec {
 
     # Patch for DoS vuln from https://seclists.org/oss-sec/2022/q3/27
     ./v3-0001-Disallow-compressed-signatures-and-certificates.patch
+
+    # Fix regression when using YubiKey devices as smart cards.
+    # See https://dev.gnupg.org/T6070 for details.
+    # Committed upstream, remove this patch when updating to the next release.
+    (fetchpatch {
+      url = "https://dev.gnupg.org/rGf34b9147eb3070bce80d53febaa564164cd6c977?diff=1";
+      sha256 = "sha256-J/PLSz8yiEgtGv+r3BTGTHrikV70AbbHQPo9xbjaHFE=";
+    })
   ];
   postPatch = ''
     sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1

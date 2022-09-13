@@ -2,7 +2,7 @@
 , fetchurl, zip, unzip, jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
-, ffmpeg, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
+, ffmpeg_5, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
 , gnome/*.gnome-shell*/
 , browserpass, chrome-gnome-shell, uget-integrator, plasma5Packages, bukubrow, pipewire
 , tridactyl-native
@@ -73,7 +73,7 @@ let
         );
       libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
             ++ lib.optional pipewireSupport pipewire
-            ++ lib.optional ffmpegSupport ffmpeg
+            ++ lib.optional ffmpegSupport ffmpeg_5
             ++ lib.optional gssSupport libkrb5
             ++ lib.optional useGlvnd libglvnd
             ++ lib.optionals (cfg.enableQuakeLive or false)
@@ -147,7 +147,7 @@ let
         // extraPolicies;
       };
 
-      mozillaCfg =  writeText "mozilla.cfg" ''
+      mozillaCfg = ''
         // First line must be a comment
 
         // Disables addon signature checking
@@ -155,7 +155,6 @@ let
         // Security is maintained because only user whitelisted addons
         // with a checksum can be installed
         ${ lib.optionalString usesNixExtensions ''lockPref("xpinstall.signatures.required", false)'' };
-        ${extraPrefs}
       '';
 
       #############################
@@ -345,12 +344,18 @@ let
         echo 'pref("general.config.filename", "mozilla.cfg");' > "$out/lib/${libName}/defaults/pref/autoconfig.js"
         echo 'pref("general.config.obscure_value", 0);' >> "$out/lib/${libName}/defaults/pref/autoconfig.js"
 
-        cat > "$out/lib/${libName}/mozilla.cfg" < ${mozillaCfg}
+        cat > "$out/lib/${libName}/mozilla.cfg" << EOF
+        ${mozillaCfg}
+        EOF
 
         extraPrefsFiles=(${builtins.toString extraPrefsFiles})
         for extraPrefsFile in "''${extraPrefsFiles[@]}"; do
           cat "$extraPrefsFile" >> "$out/lib/${libName}/mozilla.cfg"
         done
+
+        cat >> "$out/lib/${libName}/mozilla.cfg" << EOF
+        ${extraPrefs}
+        EOF
 
         mkdir -p $out/lib/${libName}/distribution/extensions
 

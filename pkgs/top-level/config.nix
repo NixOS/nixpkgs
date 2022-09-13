@@ -35,6 +35,7 @@ let
 
     warnUndeclaredOptions = mkOption {
       description = "Whether to warn when <literal>config</literal> contains an unrecognized attribute.";
+      type = types.bool;
       default = false;
     };
 

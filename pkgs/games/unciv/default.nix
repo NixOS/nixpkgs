@@ -25,11 +25,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "unciv";
-  version = "4.2.5-patch1";
+  version = "4.2.6";
 
   src = fetchurl {
     url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
-    sha256 = "sha256-xrFC2HU74+ehoaCZ5Dfgcxq67h6d97/6jtNXIkP4yEQ=";
+    sha256 = "sha256-AJqD8xF+FIKw34NhcnYCexXRs8aIzL8XDHhs5fGBTn0=";
   };
 
   dontUnpack = true;

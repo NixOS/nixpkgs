@@ -2,7 +2,7 @@
 , zarith, digestif, fmt
 }:
 
-buildDunePackage rec{
+buildDunePackage rec {
   pname = "tezos-base58";
   version = "1.0.0";
 
@@ -11,9 +11,7 @@ buildDunePackage rec{
     sha256 = "14w2pff5dy6mxnz588pxaf2k8xpkd51sbsys065wr51kbv1f36da";
   };
 
-  minimumOCamlVersion = "4.08";
-
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [
     zarith digestif fmt
@@ -25,6 +23,5 @@ buildDunePackage rec{
     license = licenses.mit;
     maintainers = with maintainers; [ bezmuth ];
   };
-
 
 }

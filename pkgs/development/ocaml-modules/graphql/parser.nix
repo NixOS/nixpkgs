@@ -1,10 +1,10 @@
-{ lib, buildDunePackage, ocaml, fetchurl, alcotest, fmt, menhir, re }:
+{ lib, buildDunePackage, fetchurl, alcotest, fmt, menhir, re }:
 
 buildDunePackage rec {
   pname = "graphql_parser";
   version = "0.14.0";
 
-  minimalOCamlVersion = "4.05";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/andreas/ocaml-graphql-server/releases/download/${version}/graphql-${version}.tbz";
@@ -16,7 +16,7 @@ buildDunePackage rec {
 
   checkInputs = [ alcotest ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  doCheck = true;
 
   meta = {
     homepage = "https://github.com/andreas/ocaml-graphql-server";

@@ -30,7 +30,7 @@ in
 
   options = {
     services.ttyd = {
-      enable = mkEnableOption "ttyd daemon";
+      enable = mkEnableOption (lib.mdDoc "ttyd daemon");
 
       port = mkOption {
         type = types.port;

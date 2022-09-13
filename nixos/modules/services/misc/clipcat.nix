@@ -7,7 +7,7 @@ let
 in {
 
   options.services.clipcat= {
-    enable = mkEnableOption "Clipcat clipboard daemon";
+    enable = mkEnableOption (lib.mdDoc "Clipcat clipboard daemon");
 
     package = mkOption {
       type = types.package;
