@@ -280,7 +280,7 @@ in
       serviceConfig = defaultServiceConfig // {
         User = cfg.user;
         ExecStart = ''
-          ${pkgs.python3Packages.gunicorn}/bin/gunicorn \
+          ${pkg.python.pkgs.gunicorn}/bin/gunicorn \
             -c ${pkg}/lib/paperless-ngx/gunicorn.conf.py paperless.asgi:application
         '';
         Restart = "on-failure";
