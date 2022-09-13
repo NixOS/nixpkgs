@@ -1,4 +1,4 @@
-{ lib, fetchurl, docbook_xsl, docbook_xsl_ns, gettext, libxslt, glibcLocales, docbook_xml_dtd_412, docbook_sgml_dtd_41, texlive, opensp
+{ stdenv, lib, fetchurl, docbook_xsl, docbook_xsl_ns, gettext, libxslt, glibcLocales, docbook_xml_dtd_412, docbook_sgml_dtd_41, texlive, opensp
 , perl, buildPerlPackage, ModuleBuild, TextWrapI18N, LocaleGettext, TermReadKey, SGMLSpm, UnicodeLineBreak, PodParser, YAMLTiny }:
 
 buildPerlPackage rec {
@@ -9,7 +9,7 @@ buildPerlPackage rec {
     sha256 = "0eb510a66f59de68cf7a205342036cc9fc08b39334b91f1456421a5f3359e68b";
   };
   nativeBuildInputs = [ docbook_xsl docbook_xsl_ns ModuleBuild ];
-  propagatedBuildInputs = [ TextWrapI18N LocaleGettext SGMLSpm UnicodeLineBreak PodParser YAMLTiny ];
+  propagatedBuildInputs = lib.optional (!stdenv.hostPlatform.isMusl) TextWrapI18N ++ [ LocaleGettext SGMLSpm UnicodeLineBreak PodParser YAMLTiny ];
   # TODO: TermReadKey was temporarily removed from propagatedBuildInputs to unfreeze the build
   buildInputs = [ gettext libxslt glibcLocales docbook_xml_dtd_412 docbook_sgml_dtd_41 texlive.combined.scheme-basic opensp ];
   LC_ALL = "en_US.UTF-8";
