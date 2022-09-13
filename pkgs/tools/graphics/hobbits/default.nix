@@ -1,16 +1,16 @@
 { lib, stdenv, mkDerivation, fetchFromGitHub
-, cmake, pkg-config, pffft, libpcap, libusb1, python3
+, cmake, pkg-config, pffft, libpcap, libusb1, python3, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "hobbits";
-  version = "0.53.1";
+  version = "0.53.2";
 
   src = fetchFromGitHub {
     owner = "Mahlet-Inc";
-    repo = pname;
+    repo = "hobbits";
     rev = "v${version}";
-    sha256 = "sha256-dMFsv2M96+65JxTOq0CG+vm7a75GkD7N7PmbsyZ2Fog=";
+    hash = "sha256-X2DotmzqeIESkO6o39si4kEkRhLO7yBr6Djh+0s+lFc=";
   };
 
   postPatch = ''
@@ -22,7 +22,9 @@ mkDerivation rec {
 
   buildInputs = [ pffft libpcap libusb1 python3 ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
+
+  cmakeFlags = [ "-DUSE_SYSTEM_PFFFT=ON" ];
 
   NIX_CFLAGS_COMPILE = lib.optional stdenv.hostPlatform.isAarch64 "-Wno-error=narrowing";
 

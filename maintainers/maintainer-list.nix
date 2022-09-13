@@ -9395,6 +9395,13 @@
     githubId = 137805;
     name = "Alexander Tsvyashchenko";
   };
+  Necior = {
+    email = "adrian@sadlocha.eu";
+    github = "Necior";
+    githubId = 2404518;
+    matrix = "@n3t:matrix.org";
+    name = "Adrian Sadłocha";
+  };
   neeasade = {
     email = "nathanisom27@gmail.com";
     github = "neeasade";

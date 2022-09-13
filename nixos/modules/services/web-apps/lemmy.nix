@@ -10,14 +10,13 @@ in
   # `pandoc lemmy.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > lemmy.xml`
   meta.doc = ./lemmy.xml;
 
+  imports = [
+    (mkRemovedOptionModule [ "services" "lemmy" "jwtSecretPath" ] "As of v0.13.0, Lemmy auto-generates the JWT secret.")
+  ];
+
   options.services.lemmy = {
 
     enable = mkEnableOption (lib.mdDoc "lemmy a federated alternative to reddit in rust");
-
-    jwtSecretPath = mkOption {
-      type = types.path;
-      description = lib.mdDoc "Path to read the jwt secret from.";
-    };
 
     ui = {
       port = mkOption {
@@ -168,18 +167,11 @@ in
 
         requires = lib.optionals cfg.settings.database.createLocally [ "lemmy-postgresql.service" ];
 
-        # script is needed here since loadcredential is not accessible on ExecPreStart
-        script = ''
-          ${pkgs.coreutils}/bin/install -m 600 ${settingsFormat.generate "config.hjson" cfg.settings} /run/lemmy/config.hjson
-          jwtSecret="$(< $CREDENTIALS_DIRECTORY/jwt_secret )"
-          ${pkgs.jq}/bin/jq ".jwt_secret = \"$jwtSecret\"" /run/lemmy/config.hjson | ${pkgs.moreutils}/bin/sponge /run/lemmy/config.hjson
-          ${pkgs.lemmy-server}/bin/lemmy_server
-        '';
-
         serviceConfig = {
           DynamicUser = true;
           RuntimeDirectory = "lemmy";
-          LoadCredential = "jwt_secret:${cfg.jwtSecretPath}";
+          ExecStartPre = "${pkgs.coreutils}/bin/install -m 600 ${settingsFormat.generate "config.hjson" cfg.settings} /run/lemmy/config.hjson";
+          ExecStart = "${pkgs.lemmy-server}/bin/lemmy_server";
         };
       };
 
