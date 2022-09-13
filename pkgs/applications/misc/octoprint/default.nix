@@ -168,6 +168,7 @@ let
                     "zeroconf"
                     "Flask-Login"
                     "werkzeug"
+                    "flask"
                   ];
                 in
                 ''

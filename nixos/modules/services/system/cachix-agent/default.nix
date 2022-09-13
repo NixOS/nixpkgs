@@ -30,7 +30,7 @@ in {
     };
 
     host = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
       default = null;
       description = lib.mdDoc "Cachix uri to use.";
     };
