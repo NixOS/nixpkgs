@@ -244,6 +244,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://pixelfed.org/">Pixelfed</link>, a
+          federated image sharing application
+          <link linkend="opt-services.pixelfed.enable">services.pixelfed</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/zalando/patroni">Patroni</link>,
           a template for PostgreSQL HA with ZooKeeper, etcd or Consul.
           Available as
