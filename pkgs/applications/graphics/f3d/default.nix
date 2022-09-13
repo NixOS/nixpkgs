@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "f3d";
-  version = "1.2.1";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "f3d-app";
     repo = "f3d";
     rev = "v${version}";
-    sha256 = "sha256-Yn1IcGWAbXjG0wJQjRimvreozFu9mf0FMwyGNYc4P+U=";
+    hash = "sha256-dOpiX7xJWDKHqPLGvlgv7NHgfzyeZhJd898+KzAmD4Q=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -16,6 +16,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ vtk_9 ]
     ++ lib.optionals stdenv.isLinux [ libGL libX11 ]
     ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
+
+  # conflict between VTK and Nixpkgs;
+  # see https://github.com/NixOS/nixpkgs/issues/89167
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_BINDIR=bin"
+  ];
 
   meta = with lib; {
     description = "Fast and minimalist 3D viewer using VTK";
