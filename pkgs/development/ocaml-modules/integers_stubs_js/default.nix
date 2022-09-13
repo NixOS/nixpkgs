@@ -6,7 +6,7 @@
 buildDunePackage rec {
   pname = "integers_stubs_js";
   version = "1.0";
-  
+
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
