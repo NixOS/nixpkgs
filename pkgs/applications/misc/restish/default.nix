@@ -14,7 +14,7 @@ buildGoModule rec {
     hash = "sha256-AzZwu9NjRRxBu4RCa8Pzi4yg6g1SIiE8V1VC2SqLiKk=";
   };
 
-  vendorSha256 = "sha256-NT928HSXWbxeyT4uunKKTjIsIAGTQtZUFh26WA/wH8Q=";
+  vendorHash = "sha256-NT928HSXWbxeyT4uunKKTjIsIAGTQtZUFh26WA/wH8Q=";
 
   preCheck = ''
     export HOME=$(mktemp -d)
