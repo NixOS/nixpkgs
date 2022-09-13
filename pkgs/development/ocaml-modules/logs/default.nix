@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild
 , topkg, result, lwt, cmdliner_1_1, fmt
+, fmtSupport ? lib.versionAtLeast ocaml.version "4.08"
 , js_of_ocaml
 , jsooSupport ? true
 }:
