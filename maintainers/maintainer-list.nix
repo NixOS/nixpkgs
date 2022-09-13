@@ -4665,6 +4665,12 @@
     githubId = 36706276;
     name = "Fufezan Mihai";
   };
+  fumesover = {
+    name = "Albin Parou";
+    email = "nixpkgs@parou.eu";
+    github = "fumesover";
+    githubId = 24977217;
+  };
   fusion809 = {
     email = "brentonhorne77@gmail.com";
     github = "fusion809";
