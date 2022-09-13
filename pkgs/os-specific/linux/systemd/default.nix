@@ -98,8 +98,8 @@
 , withShellCompletions ? true
 , withTimedated ? true
 , withTimesyncd ? true
-, withTpm2Tss ? !stdenv.hostPlatform.isMusl
-, withUserDb ? !stdenv.hostPlatform.isMusl
+, withTpm2Tss ? true
+, withUserDb ? true
 , withUtmp ? !stdenv.hostPlatform.isMusl
   # tests assume too much system access for them to be feasible for us right now
 , withTests ? false
