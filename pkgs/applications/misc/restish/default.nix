@@ -25,6 +25,6 @@ buildGoModule rec {
     homepage = "https://rest.sh/";
     license = licenses.mit;
     maintainers = with maintainers; [ fumesover ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }
