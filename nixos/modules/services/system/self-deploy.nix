@@ -23,7 +23,7 @@ let
 in
 {
   options.services.self-deploy = {
-    enable = lib.mkEnableOption "self-deploy";
+    enable = lib.mkEnableOption (lib.mdDoc "self-deploy");
 
     nixFile = lib.mkOption {
       type = lib.types.path;
@@ -139,6 +139,7 @@ in
 
       path = with pkgs; [
         git
+        gnutar
         nix
       ] ++ lib.optionals (cfg.switchCommand == "boot") [ systemd ];
 

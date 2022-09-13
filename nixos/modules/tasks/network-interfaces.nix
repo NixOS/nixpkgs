@@ -172,13 +172,13 @@ let
         type = types.enum (lib.attrNames tempaddrValues);
         default = cfg.tempAddresses;
         defaultText = literalExpression ''config.networking.tempAddresses'';
-        description = ''
+        description = lib.mdDoc ''
           When IPv6 is enabled with SLAAC, this option controls the use of
           temporary address (aka privacy extensions) on this
           interface. This is used to reduce tracking.
 
           See also the global option
-          <xref linkend="opt-networking.tempAddresses"/>, which
+          [](#opt-networking.tempAddresses), which
           applies to all interfaces where this is not set.
 
           Possible values are:
@@ -227,15 +227,19 @@ let
           { address = "192.168.2.0"; prefixLength = 24; via = "192.168.1.1"; }
         ];
         type = with types; listOf (submodule (routeOpts 4));
-        description = ''
+        description = lib.mdDoc ''
           List of extra IPv4 static routes that will be assigned to the interface.
-          <warning><para>If the route type is the default <literal>unicast</literal>, then the scope
-          is set differently depending on the value of <option>networking.useNetworkd</option>:
-          the script-based backend sets it to <literal>link</literal>, while networkd sets
-          it to <literal>global</literal>.</para></warning>
+
+          ::: {.warning}
+          If the route type is the default `unicast`, then the scope
+          is set differently depending on the value of {option}`networking.useNetworkd`:
+          the script-based backend sets it to `link`, while networkd sets
+          it to `global`.
+          :::
+
           If you want consistency between the two implementations,
           set the scope of the route manually with
-          <literal>networking.interfaces.eth0.ipv4.routes = [{ options.scope = "global"; }]</literal>
+          `networking.interfaces.eth0.ipv4.routes = [{ options.scope = "global"; }]`
           for example.
         '';
       };
@@ -407,17 +411,10 @@ let
       description = "generate IPv6 temporary addresses and use these as source addresses in routing";
     };
   };
-  tempaddrDoc = ''
-    <itemizedlist>
-     ${concatStringsSep "\n" (mapAttrsToList (name: { description, ... }: ''
-       <listitem>
-         <para>
-           <literal>"${name}"</literal> to ${description};
-         </para>
-       </listitem>
-     '') tempaddrValues)}
-    </itemizedlist>
-  '';
+  tempaddrDoc = concatStringsSep "\n"
+    (mapAttrsToList
+      (name: { description, ... }: ''- `"${name}"` to ${description};'')
+      tempaddrValues);
 
   hostidFile = pkgs.runCommand "gen-hostid" { preferLocalBuild = true; } ''
       hi="${cfg.hostId}"
@@ -1241,17 +1238,15 @@ in
             type = types.nullOr types.str;
             default = null;
             example = "02:00:00:00:00:01";
-            description = ''
-              MAC address to use for the device. If <literal>null</literal>, then the MAC of the
+            description = lib.mdDoc ''
+              MAC address to use for the device. If `null`, then the MAC of the
               underlying hardware WLAN device is used.
 
               INFO: Locally administered MAC addresses are of the form:
-              <itemizedlist>
-              <listitem><para>x2:xx:xx:xx:xx:xx</para></listitem>
-              <listitem><para>x6:xx:xx:xx:xx:xx</para></listitem>
-              <listitem><para>xA:xx:xx:xx:xx:xx</para></listitem>
-              <listitem><para>xE:xx:xx:xx:xx:xx</para></listitem>
-              </itemizedlist>
+              - x2:xx:xx:xx:xx:xx
+              - x6:xx:xx:xx:xx:xx
+              - xA:xx:xx:xx:xx:xx
+              - xE:xx:xx:xx:xx:xx
             '';
           };
 
@@ -1287,10 +1282,10 @@ in
         if ''${config.${opt.enableIPv6}} then "default" else "disabled"
       '';
       type = types.enum (lib.attrNames tempaddrValues);
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable IPv6 Privacy Extensions for interfaces not
         configured explicitly in
-        <xref linkend="opt-networking.interfaces._name_.tempAddress"/>.
+        [](#opt-networking.interfaces._name_.tempAddress).
 
         This sets the ipv6.conf.*.use_tempaddr sysctl for all
         interfaces. Possible values are:

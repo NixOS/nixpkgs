@@ -33,6 +33,7 @@
 stdenv.mkDerivation rec {
   pname = "pcsx2";
   version = "1.7.3165";
+  # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "PCSX2";

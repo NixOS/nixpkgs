@@ -22,13 +22,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-frog";
-  version = "1.1.3";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "TenderOwl";
     repo = "Frog";
-    rev = version;
-    sha256 = "sha256-yOjfiGJUU25zb/4WprPU59yDAMpttS3jREp1kB5mXUE=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-AJ6pFtTM4ViZ9dB41wzHoPSHDdmu+SOzD5fkoAiRLzQ=";
   };
 
   format = "other";
@@ -51,11 +51,11 @@ python3Packages.buildPythonApplication rec {
     pkg-config
     glib
     wrapGAppsHook4
+    gobject-introspection
   ];
 
   buildInputs = [
     librsvg
-    gobject-introspection
     libnotify
     libadwaita
     libportal

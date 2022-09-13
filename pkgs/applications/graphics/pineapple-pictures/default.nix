@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pineapple-pictures";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "BLumia";
     repo = "pineapple-pictures";
     rev = version;
-    sha256 = "sha256-1fsEHyepmoZfNOFEnW6RQJyccOlQr5LTp8TjRqyXkcw";
+    sha256 = "sha256-9Nlrei3TxZr3tv0BtlfsKAvDJhQHgd21FzLnzitYF3U=";
   };
 
   nativeBuildInputs = [

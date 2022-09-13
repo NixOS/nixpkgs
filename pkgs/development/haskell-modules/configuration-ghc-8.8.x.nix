@@ -54,10 +54,16 @@ self: super: {
   # This build needs a newer version of Cabal.
   cabal2spec = super.cabal2spec.override { Cabal = self.Cabal_3_2_1_0; };
 
-  # cabal-install needs more recent versions of Cabal and random, but an older
-  # version of base16-bytestring.
+  # cabal-install needs most recent versions of Cabal and Cabal-syntax
   cabal-install = super.cabal-install.overrideScope (self: super: {
-    Cabal = self.Cabal_3_6_3_0;
+    Cabal = self.Cabal_3_8_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+    process = self.process_1_6_15_0;
+  });
+  cabal-install-solver = super.cabal-install-solver.overrideScope (self: super: {
+    Cabal = self.Cabal_3_8_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+    process = self.process_1_6_15_0;
   });
 
   # Ignore overly restrictive upper version bounds.
@@ -87,7 +93,8 @@ self: super: {
   time-compat = doJailbreak super.time-compat;
   http-media = unmarkBroken (doJailbreak super.http-media);
   servant-server = unmarkBroken (doJailbreak super.servant-server);
-  foundation = dontCheck super.foundation;
+  basement = doDistribute self.basement_0_0_14;
+  foundation = doDistribute (dontCheck self.foundation_0_0_28);
   vault = dontHaddock super.vault;
 
   # https://github.com/snapframework/snap-core/issues/288

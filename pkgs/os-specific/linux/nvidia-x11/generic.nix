@@ -15,6 +15,7 @@
 , prePatch ? ""
 , patches ? []
 , broken ? false
+, brokenOpen ? broken
 }@args:
 
 { lib, stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
@@ -104,8 +105,9 @@ let
 
     passthru = {
       open = mapNullable (hash: callPackage ./open.nix {
-        inherit hash broken;
+        inherit hash;
         nvidia_x11 = self;
+        broken = brokenOpen;
       }) openSha256;
       settings = (if settings32Bit then pkgsi686Linux.callPackage else callPackage) (import ./settings.nix self settingsSha256) {
         withGtk2 = preferGtk2;

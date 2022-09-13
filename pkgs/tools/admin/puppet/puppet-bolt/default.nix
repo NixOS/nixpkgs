@@ -5,7 +5,7 @@ bundlerApp {
 
   gemdir = ./.;
   exes = [ "bolt" ];
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   gemConfig.bolt = attrs: {
     # scripts in libexec will be executed by remote host,

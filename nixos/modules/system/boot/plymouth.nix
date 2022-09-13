@@ -62,7 +62,7 @@ in
 
     boot.plymouth = {
 
-      enable = mkEnableOption "Plymouth boot splash screen";
+      enable = mkEnableOption (lib.mdDoc "Plymouth boot splash screen");
 
       font = mkOption {
         default = "${pkgs.dejavu_fonts.minimal}/share/fonts/truetype/DejaVuSans.ttf";
@@ -75,10 +75,10 @@ in
 
       themePackages = mkOption {
         default = lib.optional (cfg.theme == "breeze") nixosBreezePlymouth;
-        defaultText = literalDocBook ''
+        defaultText = literalMD ''
           A NixOS branded variant of the breeze theme when
-          <literal>config.${opt.theme} == "breeze"</literal>, otherwise
-          <literal>[ ]</literal>.
+          `config.${opt.theme} == "breeze"`, otherwise
+          `[ ]`.
         '';
         type = types.listOf types.package;
         description = lib.mdDoc ''

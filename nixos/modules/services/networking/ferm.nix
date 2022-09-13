@@ -30,7 +30,7 @@ in {
       config = mkOption {
         description = lib.mdDoc "Verbatim ferm.conf configuration.";
         default = "";
-        defaultText = literalDocBook "empty firewall, allows any traffic";
+        defaultText = literalMD "empty firewall, allows any traffic";
         type = types.lines;
       };
       package = mkOption {

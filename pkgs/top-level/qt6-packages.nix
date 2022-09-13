@@ -20,4 +20,10 @@ in
   # LIBRARIES
 
   quazip = callPackage ../development/libraries/quazip { };
+
+  poppler = callPackage ../development/libraries/poppler {
+    lcms = pkgs.lcms2;
+    qt6Support = true;
+    suffix = "qt6";
+  };
 })))

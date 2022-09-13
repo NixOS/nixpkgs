@@ -10,7 +10,7 @@
 let
   inherit (lib)
     filterAttrs
-    literalDocBook
+    literalMD
     literalExpression
     mkIf
     mkOption
@@ -235,8 +235,8 @@ in
     tomlFile = mkOption {
       type = types.path;
       internal = true;
-      defaultText = literalDocBook "generated <literal>hercules-ci-agent.toml</literal>";
-      description = ''
+      defaultText = literalMD "generated `hercules-ci-agent.toml`";
+      description = lib.mdDoc ''
         The fully assembled config file.
       '';
     };

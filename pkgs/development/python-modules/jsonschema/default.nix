@@ -14,15 +14,19 @@
 
 buildPythonPackage rec {
   pname = "jsonschema";
-  version = "4.9.1";
+  version = "4.13.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-QIxMjtDe3jsmj3pEF4T3QgY4CwT5PrLVN8e++z3zCZ8=";
+    sha256 = "sha256-N3ZRLfT1P3Tm4o/jVxe1siPBdWh1SGmEoxvJFl5/ySA=";
   };
+
+  patches = [
+    ./remove-fancy-pypi-readme.patch
+  ];
 
   postPatch = ''
     patchShebangs json/bin/jsonschema_suite

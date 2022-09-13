@@ -1,12 +1,12 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k, funcsigs, pytest, numpy }:
 
 buildPythonPackage rec {
-  version = "1.3.5";
+  version = "1.4.0";
   pname = "mockito";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-gZko9eR1yM4NWX5wUlj7GQ+A/KflYYVojR595VhmMzc=";
+    sha256 = "sha256-QJq2BMnr4bt9wY7GsO2YqK1RJ7CCc/WASyL00bUeUiI=";
   };
 
   propagatedBuildInputs = lib.optionals (!isPy3k) [ funcsigs ];

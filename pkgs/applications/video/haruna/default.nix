@@ -26,15 +26,20 @@
 
 mkDerivation rec {
   pname = "haruna";
-  version = "0.8.0";
+  version = "0.9.1";
 
   src = fetchFromGitLab {
     owner = "multimedia";
     repo = "haruna";
     rev = "v${version}";
-    sha256 = "sha256-Lom9iQUKH3lQHrVK4dJzo+FG79xSCg0b4gY/KAevL6I=";
+    hash = "sha256-pkskrzpKDsMg7DOC335zXknEIKh9Ku2NgyeinawQtiY=";
     domain = "invent.kde.org";
   };
+
+  postPatch = ''
+    substituteInPlace src/application.cpp \
+      --replace '"yt-dlp"' '"${lib.getExe yt-dlp}"'
+  '';
 
   buildInputs = [
     breeze-icons

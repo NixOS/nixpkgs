@@ -2,7 +2,7 @@
 # Native buildInputs components
 , bison, boost, cmake, fixDarwinDylibNames, flex, makeWrapper, pkg-config
 # Common components
-, curl, libiconv, ncurses, openssl, pcre, pcre2
+, curl, libiconv, ncurses, openssl, openssl_1_1, pcre, pcre2
 , libkrb5, libaio, liburing, systemd
 , CoreServices, cctools, perl
 , jemalloc, less, libedit
@@ -39,13 +39,16 @@ commonOptions = packageSettings: rec { # attributes common to both builds
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) makeWrapper;
 
   buildInputs = [
-    curl libiconv ncurses openssl zlib
+    libiconv ncurses zlib
   ] ++ (packageSettings.extraBuildInputs or [])
     ++ lib.optionals stdenv.hostPlatform.isLinux ([ libkrb5 systemd ]
     ++ (if (lib.versionOlder version "10.6") then [ libaio ] else [ liburing ]))
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl libedit ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) [ jemalloc ]
-    ++ (if (lib.versionOlder version "10.5") then [ pcre ] else [ pcre2 ]);
+    ++ (if (lib.versionOlder version "10.5") then [ pcre ] else [ pcre2 ])
+    ++ (if (lib.versionOlder version "10.8")
+      then [ openssl_1_1 (curl.override { openssl = openssl_1_1; }) ]
+      else [ openssl curl ]);
 
   prePatch = ''
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
@@ -94,6 +97,10 @@ commonOptions = packageSettings: rec { # attributes common to both builds
     # to pass in java explicitly.
     "-DCONNECT_WITH_JDBC=OFF"
     "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # revisit this if nixpkgs supports any architecture whose stack grows upwards
+    "-DSTACK_DIRECTION=-1"
+    "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   postInstall = ''
@@ -211,10 +218,6 @@ in stdenv.mkDerivation (common // {
     "-DPLUGIN_AUTH_PAM_V1=NO"
     "-DWITHOUT_OQGRAPH=1"
     "-DWITHOUT_PLUGIN_S3=1"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    # revisit this if nixpkgs supports any architecture whose stack grows upwards
-    "-DSTACK_DIRECTION=-1"
-    "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   preConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
@@ -234,6 +237,7 @@ in stdenv.mkDerivation (common // {
   '';
 
   CXXFLAGS = lib.optionalString stdenv.hostPlatform.isi686 "-fpermissive";
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 });
 in {
   mariadb_104 = mariadbPackage {
@@ -260,5 +264,10 @@ in {
     # Supported until 2023-05
     version = "10.8.4";
     hash = "sha256-ZexgyjZYjs0RzYw/wM414dYDAp4SN4z4i6qGX9CJEWY=";
+  };
+  mariadb_109 = mariadbPackage {
+    # Supported until 2023-08(?)
+    version = "10.9.2";
+    hash = "sha256-X0X/deBDlmVVqV+9uPCS5gzipsR7pZ0UTbRuE46SL0g=";
   };
 }

@@ -15,7 +15,7 @@ assert if type == "sdk" then packages != null else true;
 , autoPatchelfHook
 , makeWrapper
 , libunwind
-, openssl
+, openssl_1_1
 , libuuid
 , zlib
 , curl
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     icu
     libunwind
     libuuid
-    openssl
+    openssl_1_1
   ] ++ lib.optional stdenv.isLinux lttng-ust_2_12);
 
   nativeBuildInputs = [
@@ -105,8 +105,18 @@ stdenv.mkDerivation rec {
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
   '';
 
-  passthru = {
+  passthru = rec {
     inherit icu packages;
+
+    runtimeIdentifierMap = {
+      "x86_64-linux" = "linux-x64";
+      "aarch64-linux" = "linux-arm64";
+      "x86_64-darwin" = "osx-x64";
+      "aarch64-darwin" = "osx-arm64";
+    };
+
+    # Convert a "stdenv.hostPlatform.system" to a dotnet RID
+    systemToDotnetRid = system: runtimeIdentifierMap.${system} or (throw "unsupported platform ${system}");
   };
 
   meta = with lib; {

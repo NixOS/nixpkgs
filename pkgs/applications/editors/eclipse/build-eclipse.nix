@@ -17,9 +17,10 @@ stdenv.mkDerivation rec {
     categories = [ "Development" ];
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     fontconfig freetype glib gsettings-desktop-schemas gtk jdk libX11
-    libXrender libXtst libsecret makeWrapper zlib
+    libXrender libXtst libsecret zlib
   ] ++ lib.optional (webkitgtk != null) webkitgtk;
 
   buildCommand = ''

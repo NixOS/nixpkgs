@@ -417,7 +417,7 @@ in
       checkReversePath = mkOption {
         type = types.either types.bool (types.enum ["strict" "loose"]);
         default = kernelHasRPFilter;
-        defaultText = literalDocBook "<literal>true</literal> if supported by the chosen kernel";
+        defaultText = literalMD "`true` if supported by the chosen kernel";
         example = "loose";
         description =
           lib.mdDoc ''

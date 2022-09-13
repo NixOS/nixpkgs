@@ -2,7 +2,7 @@
 with lib;
 
 {
-  options.hardware.video.hidpi.enable = mkEnableOption "Font/DPI configuration optimized for HiDPI displays";
+  options.hardware.video.hidpi.enable = mkEnableOption (lib.mdDoc "Font/DPI configuration optimized for HiDPI displays");
 
   config = mkIf config.hardware.video.hidpi.enable {
     console.font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-v32n.psf.gz";

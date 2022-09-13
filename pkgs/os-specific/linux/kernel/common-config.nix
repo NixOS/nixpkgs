@@ -270,6 +270,9 @@ let
     };
 
     video = {
+      DRM_LEGACY = no;
+      NOUVEAU_LEGACY_CTX_SUPPORT = whenAtLeast "5.2" no;
+
       # Allow specifying custom EDID on the kernel command line
       DRM_LOAD_EDID_FIRMWARE = yes;
       VGA_SWITCHEROO         = yes; # Hybrid graphics support
@@ -393,6 +396,10 @@ let
       EXT4_FS_POSIX_ACL = yes;
       EXT4_FS_SECURITY  = yes;
       EXT4_ENCRYPTION   = option yes;
+
+      NTFS_FS            = whenAtLeast "5.15" no;
+      NTFS3_LZX_XPRESS   = whenAtLeast "5.15" yes;
+      NTFS3_FS_POSIX_ACL = whenAtLeast "5.15" yes;
 
       REISERFS_FS_XATTR     = option yes;
       REISERFS_FS_POSIX_ACL = option yes;
@@ -873,6 +880,9 @@ let
 
       SCSI_LOGGING = yes; # SCSI logging facility
       SERIAL_8250  = yes; # 8250/16550 and compatible serial support
+
+      SLAB_FREELIST_HARDENED = whenAtLeast "4.14" yes;
+      SLAB_FREELIST_RANDOM   = whenAtLeast "4.10" yes;
 
       SLIP_COMPRESSED = yes; # CSLIP compressed headers
       SLIP_SMART      = yes;

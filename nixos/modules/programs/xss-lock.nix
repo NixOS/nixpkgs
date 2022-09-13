@@ -7,7 +7,7 @@ let
 in
 {
   options.programs.xss-lock = {
-    enable = mkEnableOption "xss-lock";
+    enable = mkEnableOption (lib.mdDoc "xss-lock");
 
     lockerCommand = mkOption {
       default = "${pkgs.i3lock}/bin/i3lock";

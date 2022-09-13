@@ -1,14 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qttools, qttranslations, qtlocation, qtpbfimageplugin, wrapQtAppsHook, substituteAll }:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, substituteAll
+, qmake, qttools, qttranslations, qtlocation, qtpbfimageplugin, wrapQtAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "gpxsee";
-  version = "11.3";
+  version = "11.4";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    sha256 = "sha256-n8busir6IYyWyGOv9AzYjm8erR0fjMAduIzITH+EvVI=";
+    hash = "sha256-aePX82B810I45n2t0OVCt1FlmkVKWgNgzCD71lYyngU=";
   };
 
   patches = (substituteAll {
@@ -29,6 +31,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/Applications
     mv GPXSee.app $out/Applications
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with lib; {
     description = "GPS log file viewer and analyzer";

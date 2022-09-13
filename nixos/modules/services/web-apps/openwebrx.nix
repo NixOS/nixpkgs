@@ -4,7 +4,7 @@ let
 in
 {
   options.services.openwebrx = with lib; {
-    enable = mkEnableOption "OpenWebRX Web interface for Software-Defined Radios on http://localhost:8073";
+    enable = mkEnableOption (lib.mdDoc "OpenWebRX Web interface for Software-Defined Radios on http://localhost:8073");
 
     package = mkOption {
       type = types.package;

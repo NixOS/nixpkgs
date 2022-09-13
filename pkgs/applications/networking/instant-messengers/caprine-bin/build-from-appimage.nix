@@ -9,16 +9,19 @@
 }:
 
 let
-  name = "${pname}-${version}";
   src = fetchurl {
     url = "https://github.com/sindresorhus/caprine/releases/download/v${version}/Caprine-${version}.AppImage";
     name = "Caprine-${version}.AppImage";
     inherit sha256;
   };
-  extracted = appimageTools.extractType2 { inherit name src; };
+  extracted = appimageTools.extractType2 { inherit pname version src; };
 in
 (appimageTools.wrapType2 {
-  inherit name src;
+  inherit pname version src;
+
+  passthru = {
+    inherit pname version src;
+  };
 
   profile = ''
     export LC_ALL=C.UTF-8
@@ -27,7 +30,7 @@ in
   extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs;
 
   extraInstallCommands = ''
-    mv $out/bin/{${name},caprine}
+    mv $out/bin/{${pname}-${version},caprine}
 
     mkdir -p $out/share
     "${xorg.lndir}/bin/lndir" -silent "${extracted}/usr/share" "$out/share"
@@ -42,6 +45,4 @@ in
     platforms = [ "x86_64-linux" ];
     mainProgram = "caprine";
   };
-}) // {
-  inherit pname version;
-}
+})

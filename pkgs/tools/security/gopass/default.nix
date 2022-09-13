@@ -13,7 +13,7 @@
 
 buildGoModule rec {
   pname = "gopass";
-  version = "1.14.4";
+  version = "1.14.6";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
@@ -21,10 +21,10 @@ buildGoModule rec {
     owner = "gopasspw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UQvwkprHGez5qRpk6KodtgX99013rcezbgpaCateI4k=";
+    sha256 = "sha256-TTifpIZdv2KVsWQGHR1seYL+A8MSmngnvm/zUqrz5CM=";
   };
 
-  vendorSha256 = "sha256-169KBsJhytzfOgIOHb54gEsLAmhVv+O64hP/DU6cT6A=";
+  vendorSha256 = "sha256-57fvb0UF90S+OhZcxi5ZFMOLXW72kKVjls5cia9pitA=";
 
   subPackages = [ "." ];
 

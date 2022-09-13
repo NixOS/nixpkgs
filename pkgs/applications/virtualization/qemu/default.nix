@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3, python3Packages, zlib, pkg-config, glib, buildPackages
+{ lib, stdenv, fetchurl, fetchpatch, python3, zlib, pkg-config, glib, buildPackages
 , perl, pixman, vde2, alsa-lib, texinfo, flex
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
 , makeWrapper, runtimeShell, removeReferencesTo
@@ -41,16 +41,16 @@ stdenv.mkDerivation rec {
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "7.0.0";
+  version = "7.1.0";
 
   src = fetchurl {
-    url= "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "sha256-9rN1x5UfcoQCeYsLqrsthkeMpT1Eztvvq74cRr9G+Dk=";
+    url = "https://download.qemu.org/qemu-${version}.tar.xz";
+    sha256 = "1rmvrgqjhrvcmchnz170dxvrrf14n6nm39y8ivrprmfydd9lwqx0";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ makeWrapper removeReferencesTo pkg-config flex bison meson ninja perl python3 python3Packages.sphinx python3Packages.sphinx-rtd-theme ]
+  nativeBuildInputs = [ makeWrapper removeReferencesTo pkg-config flex bison meson ninja perl python3 python3.pkgs.sphinx python3.pkgs.sphinx-rtd-theme ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
@@ -108,23 +108,6 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/3e4546d5bd38a1e98d4bd2de48631abf0398a3a2.diff";
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
-    })
-    # make nixos tests that boot from USB more stable
-    # https://lists.nongnu.org/archive/html/qemu-devel/2022-05/msg01484.html
-    (fetchpatch {
-      url = "https://gitlab.com/raboof/qemu/-/commit/3fb5e8fe4434130b1167a995b2a01c077cca2cd5.patch";
-      sha256 = "sha256-evzrN3i4ntc/AFG0C0rezQpQbWcnx74nXO+5DLErX8o=";
-    })
-    # fix 9p on macOS host, landed in master
-    (fetchpatch {
-      name = "fix-9p-on-macos.patch";
-      url = "https://gitlab.com/qemu/qemu/-/commit/f5643914a9e8f79c606a76e6a9d7ea82a3fc3e65.patch";
-      sha256 = "sha256-8i13wU135h+YxoXFtkXweBN3hMslpWoNoeQ7Ydmn3V4=";
-    })
-    (fetchpatch {
-      name = "CVE-2022-35414.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/418ade7849ce7641c0f7333718caf5091a02fd4c.patch";
-      sha256 = "sha256-zQHDXedIXZBnabv4+3TA4z5mY1+KZiPmqUbhaSkGLgA=";
     })
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;

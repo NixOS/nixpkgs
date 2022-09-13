@@ -1,4 +1,4 @@
-{ callPackage, python3, fetchpatch, enableNpm ? true }:
+{ callPackage, fetchpatch, python3, enableNpm ? true }:
 
 let
   buildNodejs = callPackage ./nodejs.nix {
@@ -7,17 +7,17 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "18.7.0";
-  sha256 = "sha256-iDSjPJLf5rqJA+ZxXK6qJd/0ZX5wPFTNBuwRNJPiw8I=";
+  version = "18.9.0";
+  sha256 = "sha256-x1zImv6tl2eRkArM3gKnsefnYnAvD2+mjqrLAZhNllQ=";
   patches = [
-    ./disable-darwin-v8-system-instrumentation.patch
-    # Fix npm silently fail without a HOME directory https://github.com/npm/cli/issues/4996
     (fetchpatch {
-      url = "https://github.com/npm/cli/commit/9905d0e24c162c3f6cc006fa86b4c9d0205a4c6f.patch";
-      sha256 = "sha256-RlabXWtjzTZ5OgrGf4pFkolonvTDIPlzPY1QcYDd28E=";
-      includes = [ "deps/npm/lib/npm.js" "deps/npm/lib/utils/log-file.js" ];
-      stripLen = 1;
-      extraPrefix = "deps/npm/";
+      # Fixes cross compilation to aarch64-linux by reverting https://github.com/nodejs/node/pull/43200
+      name = "revert-arm64-pointer-auth.patch";
+      url = "https://github.com/nodejs/node/pull/43200/commits/d42c42cc8ac652ab387aa93205aed6ece8a5040a.patch";
+      sha256 = "sha256-ipGzg4lEoftTJbt6sW+0QJO/AZqHvUkFKe0qlum+iLY=";
+      revert = true;
     })
+
+    ./disable-darwin-v8-system-instrumentation.patch
   ];
 }

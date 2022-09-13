@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage
+{ lib, fetchFromGitHub, buildDunePackage, ocaml
 , cppo, logs, ptime, uri, bigstringaf
 , re, cmdliner, alcotest }:
 
@@ -20,7 +20,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ logs ptime uri bigstringaf ];
   checkInputs = [ re cmdliner alcotest ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     description = "Unified interface to relational database libraries";

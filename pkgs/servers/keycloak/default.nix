@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "keycloak";
-  version = "18.0.0";
+  version = "19.0.1";
 
   src = fetchzip {
     url = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
-    sha256 = "0fxf9m50hpjplj077z2zjp0qibixz5y4lbc8159cnxbd4gzpkaaf";
+    sha256 = "sha256-3hqnFH0zWvgOgpQHV4eMqTGzUWEoRwxvOcOUL2s8YQk=";
   };
 
   nativeBuildInputs = [ makeWrapper jre ];
@@ -28,17 +28,14 @@ stdenv.mkDerivation rec {
     install -m 0600 ${confFile} conf/keycloak.conf
   '' + ''
     install_plugin() {
-    if [ -d "$1" ]; then
-      find "$1" -type f \( -iname \*.ear -o -iname \*.jar \) -exec install -m 0500 "{}" "providers/" \;
-    else
-      install -m 0500 "$1" "providers/"
-    fi
+      if [ -d "$1" ]; then
+        find "$1" -type f \( -iname \*.ear -o -iname \*.jar \) -exec install -m 0500 "{}" "providers/" \;
+      else
+        install -m 0500 "$1" "providers/"
+      fi
     }
     ${lib.concatMapStringsSep "\n" (pl: "install_plugin ${lib.escapeShellArg pl}") plugins}
   '' + ''
-    export KC_HOME_DIR=$out
-    export KC_CONF_DIR=$out/conf
-
     patchShebangs bin/kc.sh
     bin/kc.sh build
 

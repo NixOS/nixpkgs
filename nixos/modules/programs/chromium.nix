@@ -19,7 +19,7 @@ in
 
   options = {
     programs.chromium = {
-      enable = mkEnableOption "<command>chromium</command> policies";
+      enable = mkEnableOption (lib.mdDoc "{command}`chromium` policies");
 
       extensions = mkOption {
         type = types.listOf types.str;

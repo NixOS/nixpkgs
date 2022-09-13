@@ -58,23 +58,23 @@
 , util-linux ? null
 
   # Darwin
-, gmp ? null
-, libiconv ? null
-, Carbon ? null
-, AppKit ? null
+, gmp
+, libiconv
+, Carbon
+, AppKit
 
   # Options
 , enableCeph ? false
-, ceph ? null
+, ceph
 , enableGlusterfs ? false
-, glusterfs ? null
+, glusterfs
 , enableIscsi ? false
-, openiscsi ? null
-, libiscsi ? null
+, openiscsi
+, libiscsi
 , enableXen ? false
-, xen ? null
+, xen
 , enableZfs ? stdenv.isLinux
-, zfs ? null
+, zfs
 }:
 
 with lib;
@@ -114,13 +114,13 @@ stdenv.mkDerivation rec {
   # NOTE: You must also bump:
   # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "8.6.0";
+  version = "8.7.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bSId7G2o808WfHGt5ioFEIhPyy4+XW+R349UgHKOvQU=";
+    sha256 = "sha256-5F6Ibp3k7I1mwv8DNZ7rsW0wOw5q3vHtCUc7jJUNzrs=";
     fetchSubmodules = true;
   };
 
@@ -147,14 +147,20 @@ stdenv.mkDerivation rec {
     sed -i '/virnetdaemontest/d' tests/meson.build
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    meson
+    meson # needs to be first
 
     cmake
     docutils
+    libxml2 # for xmllint
+    libxslt # for xsltproc
     makeWrapper
     ninja
+    perl
     pkg-config
+    util-linux # for mount
   ]
   ++ optional (!isDarwin) rpcsvc-proto
   # NOTE: needed for rpcgen
@@ -171,8 +177,6 @@ stdenv.mkDerivation rec {
     libpcap
     libtasn1
     libxml2
-    libxslt
-    perl
     perlPackages.XMLXPath
     pkg-config
     python3
@@ -354,10 +358,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://libvirt.org/";
-    description = ''
-      A toolkit to interact with the virtualization capabilities of recent
-      versions of Linux (and other OSes)
-    '';
+    description = "A toolkit to interact with the virtualization capabilities of recent versions of Linux and other OSes";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz globin lovesegfault ];

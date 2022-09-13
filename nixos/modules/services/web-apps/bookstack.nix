@@ -34,7 +34,7 @@ in {
 
   options.services.bookstack = {
 
-    enable = mkEnableOption "BookStack";
+    enable = mkEnableOption (lib.mdDoc "BookStack");
 
     user = mkOption {
       default = "bookstack";
@@ -234,7 +234,7 @@ in {
                 options = {
                   _secret = mkOption {
                     type = nullOr str;
-                    description = ''
+                    description = lib.mdDoc ''
                       The path to a file containing the value the
                       option should be set to in the final
                       configuration file.

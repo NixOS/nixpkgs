@@ -1,4 +1,5 @@
 { lib
+, bluetooth-data-tools
 , bluetooth-sensor-state-data
 , buildPythonPackage
 , fetchFromGitHub
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "qingping-ble";
-  version = "0.3.0";
+  version = "0.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "bluetooth-devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-EZH6G/dvXU1sVH3pYoJeQQkJD1xMKuqb3omCVhHTS0A=";
+    hash = "sha256-0fa5KocDyy3JL7gohbbBghXwbCzbcjK4pVM+zckboHc=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    bluetooth-data-tools
     bluetooth-sensor-state-data
     sensor-state-data
   ];

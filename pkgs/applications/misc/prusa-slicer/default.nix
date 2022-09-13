@@ -3,8 +3,6 @@
 , binutils
 , fetchFromGitHub
 , cmake
-, copyDesktopItems
-, makeDesktopItem
 , pkg-config
 , wrapGAppsHook
 , boost
@@ -24,6 +22,7 @@
 , libpng
 , mpfr
 , nlopt
+, opencascade-occt
 , openvdb
 , pcre
 , qhull
@@ -50,11 +49,10 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "prusa-slicer";
-  version = "2.4.2";
+  version = "2.5.0";
 
   nativeBuildInputs = [
     cmake
-    copyDesktopItems
     pkg-config
     wrapGAppsHook
   ];
@@ -77,6 +75,7 @@ stdenv.mkDerivation rec {
     libpng
     mpfr
     nlopt
+    opencascade-occt
     openvdb
     pcre
     systemd
@@ -136,7 +135,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    sha256 = "17p56f0zmiryy8k4da02in1l6yxniz286gf9yz8s1gaz5ksqj4af";
+    sha256 = "sha256-wLe+5TFdkgQ1mlGYgp8HBzugeONSne17dsBbwblILJ4=";
     rev = "version_${version}";
   };
 
@@ -152,27 +151,6 @@ stdenv.mkDerivation rec {
     ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer.png" "$out/share/pixmaps/PrusaSlicer.png"
     ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer-gcodeviewer_192px.png" "$out/share/pixmaps/PrusaSlicer-gcodeviewer.png"
   '';
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "prusa-slicer";
-      exec = "prusa-slicer";
-      icon = "PrusaSlicer";
-      comment = "G-code generator for 3D printers";
-      desktopName = "PrusaSlicer";
-      genericName = "3D printer tool";
-      categories = [ "Development" ];
-    })
-    (makeDesktopItem {
-      name = "prusa-gcodeviewer";
-      exec = "prusa-gcodeviewer";
-      icon = "PrusaSlicer-gcodeviewer";
-      comment = "G-code viewer for 3D printers";
-      desktopName = "PrusaSlicer G-code Viewer";
-      genericName = "G-code Viewer";
-      categories = [ "Development" ];
-    })
-  ];
 
   meta = with lib; {
     description = "G-code generator for 3D printer";

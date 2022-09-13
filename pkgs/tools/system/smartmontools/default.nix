@@ -18,7 +18,7 @@ let
     sha256 = "sha256-0dtLev4JjeHsS259+qOgg19rz4yjkeX4D3ooUgS4RTI=";
     name = "smartmontools-drivedb.h";
   };
-  scriptPath = lib.makeBinPath ([ gnused ] ++ lib.optional enableMail [ inetutils mailutils ]);
+  scriptPath = lib.makeBinPath ([ gnused ] ++ lib.optionals enableMail [ inetutils mailutils ]);
 
 in
 stdenv.mkDerivation rec {

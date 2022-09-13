@@ -1,8 +1,18 @@
-35cab741af069571cf4c55e0ce1ae96617d5778c nixify
 diff --git a/scripts/msmtpq/msmtpq b/scripts/msmtpq/msmtpq
-index d8b4039..1ab89f8 100755
+index d8b4039..1f2a7b5 100755
 --- a/scripts/msmtpq/msmtpq
 +++ b/scripts/msmtpq/msmtpq
+@@ -60,8 +60,8 @@ err() { dsp '' "$@" '' ; exit 1 ; }
+ ##   e.g. ( export MSMTP=/path/to/msmtp )
+ if [ "$MSMTP" = "" ] ; then  # If MSMTP is unset or empty...
+   MSMTP=msmtp
+-elif [ ! -x "$MSMTP" ] ; then
+-  log -e 1 "msmtpq : can't find the msmtp executable [ $MSMTP ]"   # if not found - complain ; quit
++# elif [ ! -x "$MSMTP" ] ; then
++#   log -e 1 "msmtpq : can't find the msmtp executable [ $MSMTP ]"   # if not found - complain ; quit
+ fi
+ ##
+ ## set the queue var to the location of the msmtp queue directory
 @@ -71,7 +71,7 @@ fi
  ##            ( chmod 0700 msmtp.queue )
  ##

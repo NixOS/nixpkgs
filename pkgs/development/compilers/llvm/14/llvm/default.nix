@@ -148,6 +148,7 @@ in stdenv.mkDerivation (rec {
     # Disables building of shared libs, -fPIC is still injected by cc-wrapper
     "-DLLVM_ENABLE_PIC=OFF"
     "-DLLVM_BUILD_STATIC=ON"
+    "-DLLVM_LINK_LLVM_DYLIB=off"
     # libxml2 needs to be disabled because the LLVM build system ignores its .la
     # file and doesn't link zlib as well.
     # https://github.com/ClangBuiltLinux/tc-build/issues/150#issuecomment-845418812

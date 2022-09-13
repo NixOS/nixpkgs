@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     # but use a conventional runtime sysconfdir outside the store
     ./add-option-for-installation-sysconfdir.patch
     # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/654
-    (./0001-Make-gio-2.0-optional-${lib.versions.major version}.patch)
+    ./0001-Make-gio-2.0-optional-16.patch
     # TODO (not sent upstream)
     ./0002-Ignore-SCM_CREDS-on-darwin.patch
     ./0003-Ignore-HAVE_CPUID_H-on-aarch64-darwin.patch
@@ -147,19 +147,11 @@ stdenv.mkDerivation rec {
   ''
   # add .so symlinks for modules to be found under macOS
   + lib.optionalString stdenv.isDarwin ''
-    for file in $out/${passthru.pulseDir}/modules/*.dylib; do
+    for file in $out/lib/pulseaudio/modules/*.dylib; do
       ln -s "''$file" "''${file%.dylib}.so"
       ln -s "''$file" "$out/lib/pulseaudio/''$(basename ''$file .dylib).so"
     done
   '';
-
-  passthru = {
-    pulseDir =
-      if (lib.versionAtLeast version "16.0") then
-        "lib/pulseaudio"
-      else
-        "lib/pulse-" + lib.versions.majorMinor version;
-  };
 
   meta = {
     description = "Sound server for POSIX and Win32 systems";

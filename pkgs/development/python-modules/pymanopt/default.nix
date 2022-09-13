@@ -3,7 +3,7 @@
 , buildPythonPackage
 , numpy
 , scipy
-, pytorch
+, torch
 , autograd
 , nose2
 , matplotlib
@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "pymanopt";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-dqyduExNgXIbEFlgkckaPfhLFSVLqPgwAOyBUdowwiQ=";
+    sha256 = "sha256-VwCUqKI1PkR8nUVaa73bkTw67URKPaza3VU9g+rB+Mg=";
   };
 
-  propagatedBuildInputs = [ numpy scipy pytorch ];
+  propagatedBuildInputs = [ numpy scipy torch ];
   checkInputs = [ nose2 autograd matplotlib tensorflow ];
 
   checkPhase = ''

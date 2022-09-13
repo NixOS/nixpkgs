@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
     install -Dm755 tauon.py $out/bin/tauon
     mkdir -p $out/share/tauon
     cp -r lib $out
-    cp -r assets input.txt t_modules theme $out/share/tauon
+    cp -r assets input.txt t_modules theme templates $out/share/tauon
 
     wrapPythonPrograms
 

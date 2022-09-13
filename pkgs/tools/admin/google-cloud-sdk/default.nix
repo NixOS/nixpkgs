@@ -7,7 +7,7 @@
 #   3) used by `google-cloud-sdk` only on GCE guests
 #
 
-{ stdenv, lib, fetchurl, makeWrapper, nixosTests, python, openssl, jq, with-gce ? false }:
+{ stdenv, lib, fetchurl, makeWrapper, nixosTests, python, openssl, jq, callPackage, with-gce ? false }:
 
 let
   pythonEnv = python.withPackages (p: with p; [
@@ -20,6 +20,12 @@ let
   data = import ./data.nix { };
   sources = system:
     data.googleCloudSdkPkgs.${system} or (throw "Unsupported system: ${system}");
+
+  components = callPackage ./components.nix {
+    snapshotPath = ./components.json;
+  };
+
+  withExtraComponents = callPackage ./withExtraComponents.nix { inherit components; };
 
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
@@ -104,6 +110,10 @@ in stdenv.mkDerivation rec {
   installCheckPhase = ''
     $out/bin/gcloud version --format json | jq '."Google Cloud SDK"' | grep "${version}"
   '';
+
+  passthru = {
+    inherit components withExtraComponents;
+  };
 
   meta = with lib; {
     description = "Tools for the google cloud platform";

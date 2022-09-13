@@ -4,6 +4,7 @@ broken-packages:
   - 3d-graphics-examples
   - 3dmodels
   - AAI
+  - aasam
   - abacate
   - abcnotation
   - abeson
@@ -69,6 +70,7 @@ broken-packages:
   - aeson-bson
   - aeson-decode
   - aeson-default
+  - aeson-dependent-sum
   - aeson-deriving
   - aeson-diff-generic
   - aeson-filthy
@@ -1143,6 +1145,7 @@ broken-packages:
   - djinn-th
   - dmcc
   - dmenu
+  - dns-patterns
   - dnsrbl
   - dnssd
   - dobutok
@@ -1343,7 +1346,6 @@ broken-packages:
   - etcd
   - ethereum-rlp
   - eurofxref
-  - evdev
   - eve
   - eved
   - event
@@ -2143,7 +2145,6 @@ broken-packages:
   - heterogeneous-list-literals
   - hetris
   - heukarya
-  - hevm
   - HExcel
   - hexchat
   - hexif
@@ -2420,6 +2421,7 @@ broken-packages:
   - hsns
   - hsntp
   - hs-openmoji-data
+  - hs-opentelemetry-instrumentation-hspec
   - hsoptions
   - hsoz
   - hsparql
@@ -2660,6 +2662,7 @@ broken-packages:
   - intrinsic-superclasses
   - introduction
   - intro-prelude
+  - invertible
   - invertible-hlist
   - invertible-syntax
   - involutive-semigroups
@@ -2807,7 +2810,6 @@ broken-packages:
   - kd-tree
   - keccak
   - keera-hails-reactivevalues
-  - keid-render-basic
   - keid-ui-dearimgui
   - keiretsu
   - kempe
@@ -2868,6 +2870,7 @@ broken-packages:
   - lambda-toolbox
   - lame
   - lame-tester
+  - landlock
   - language-asn
   - language-c-comments
   - language-c-inline
@@ -2966,6 +2969,7 @@ broken-packages:
   - libpq
   - librandomorg
   - librarian
+  - libsecp256k1
   - libsystemd-daemon
   - libsystemd-journal
   - libtagc
@@ -3269,7 +3273,6 @@ broken-packages:
   - monadacme
   - monad-atom
   - monad-atom-simple
-  - monad-bayes
   - monad-branch
   - MonadCatchIO-transformers
   - monad-choice
@@ -3489,6 +3492,7 @@ broken-packages:
   - next-ref
   - nextstep-plist
   - NGrams
+  - ngx-export-log
   - niagra
   - nibblestring
   - nice-html
@@ -3820,6 +3824,7 @@ broken-packages:
   - phone-numbers
   - phone-push
   - phonetic-languages-constaints
+  - phonetic-languages-simplified-properties-array-old
   - phonetic-languages-vector
   - phraskell
   - Phsu
@@ -4063,6 +4068,7 @@ broken-packages:
   - proxy-mapping
   - psc-ide
   - pseudo-trie
+  - psx
   - PTQ
   - publicsuffix
   - publicsuffixlistcreate
@@ -4312,6 +4318,7 @@ broken-packages:
   - ReviewBoard
   - rewrite-inspector
   - rfc-prelude
+  - r-glpk-phonetic-languages-ukrainian-durations
   - rhbzquery
   - riak
   - riak-protobuf-lens
@@ -5061,6 +5068,7 @@ broken-packages:
   - text-ascii
   - text-builder-linear
   - text-containers
+  - text-display
   - text-format-heavy
   - text-generic-pretty
   - text-icu-normalized
@@ -5191,6 +5199,7 @@ broken-packages:
   - tracetree
   - tracked-files
   - tracker
+  - trackit
   - traction
   - tracy
   - traildb

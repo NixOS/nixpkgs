@@ -18,7 +18,7 @@ in
 
     services.heartbeat = {
 
-      enable = mkEnableOption "heartbeat";
+      enable = mkEnableOption (lib.mdDoc "heartbeat");
 
       package = mkOption {
         type = types.package;

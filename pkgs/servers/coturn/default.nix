@@ -8,6 +8,7 @@
 , libprom
 , libpromhttp
 , libmicrohttpd
+, sqlite
 , nixosTests
 }:
 
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
     libprom
     libpromhttp
     libmicrohttpd
+    sqlite.dev
   ];
 
   patches = [

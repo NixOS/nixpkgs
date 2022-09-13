@@ -9,7 +9,7 @@ in
   port = 9103;
   extraOpts = {
     collectdBinary = {
-      enable = mkEnableOption "collectd binary protocol receiver";
+      enable = mkEnableOption (lib.mdDoc "collectd binary protocol receiver");
 
       authFile = mkOption {
         default = null;

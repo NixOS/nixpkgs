@@ -39,6 +39,7 @@ let
     "tree-sitter-verilog"
     "tree-sitter-jsdoc"
     "tree-sitter-ql"
+    "tree-sitter-ql-dbscheme"
     "tree-sitter-embedded-template"
     "tree-sitter-tsq"
     "tree-sitter-toml"

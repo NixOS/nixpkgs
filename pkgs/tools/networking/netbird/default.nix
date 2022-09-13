@@ -14,16 +14,16 @@ let
 in
 buildGoModule rec {
   pname = "netbird";
-  version = "0.8.9";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bQrfYbzYd6T9PD2lLuldp1pGoZKpU71bO1D1SXcoZ7M=";
+    sha256 = "sha256-ECQ9W4YJdqjFP/Fs2P/JlPLJntewi1kowzYyid7IQGc=";
   };
 
-  vendorSha256 = "sha256-KtRQwrCBsOX7Jk9mKdDNOD7zfssADfBXCO1RPZbp5Aw=";
+  vendorSha256 = "sha256-qBglJ9PYUApyOrZhZRvyK3WMcZQglDHmsy3Qv5K1PqA=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
 
@@ -84,6 +84,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://netbird.io";
+    changelog = "https://github.com/netbirdio/netbird/releases/tag/v${version}";
     description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
     license = licenses.bsd3;
     maintainers = with maintainers; [ misuzu ];

@@ -50,6 +50,9 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir $out
     mv parser $out/
+    if [[ -d "$src/queries" ]]; then
+      cp -r $src/queries $out/
+    fi
     runHook postInstall
   '';
 }

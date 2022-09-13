@@ -26,36 +26,21 @@
 
 buildPythonPackage rec {
   pname = "requests-cache";
-  version = "0.9.5";
+  version = "0.9.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "reclosedev";
+    owner = "requests-cache";
     repo = "requests-cache";
     rev = "v${version}";
-    hash = "sha256-oVEai7SceZUdsGYlOOMxO6DxMZMVsvqXvEu0cHzq7lY=";
+    hash = "sha256-oFI5Rv/MAiPHiZts0PrNS+YMDFD/RxnMJ6deTxZNkSM=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
-
-  postPatch = ''
-    #
-    # There is no functional reason why attrs (and cattrs) need to be
-    # restricted, but the versions are in flux right now. Please read
-    # and follow the following issue for the latest:
-    #
-    #   https://github.com/requests-cache/requests-cache/issues/675
-    #
-    # This can be removed once that issue is resolved, or if the new
-    # major version is released.
-    #
-    substituteInPlace pyproject.toml \
-      --replace 'attrs         = "^21.2"' 'attrs         = ">=21.2"'
-  '';
 
   propagatedBuildInputs = [
     appdirs

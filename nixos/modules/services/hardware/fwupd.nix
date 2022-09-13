@@ -126,6 +126,8 @@ in {
     services.udev.packages = [ cfg.package ];
 
     systemd.packages = [ cfg.package ];
+
+    security.polkit.enable = true;
   };
 
   meta = {

@@ -10,7 +10,7 @@
 , pillow
 , protobuf3_8
 , pytestCheckHook
-, pytorch
+, torch
 , six
 , soundfile
 , tensorboard
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     moto
     pillow
     pytestCheckHook
-    pytorch
+    torch
     tensorboard
     torchvision
   ];

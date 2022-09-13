@@ -31,20 +31,20 @@ let
     (name: spec:
       fetchFromGitHub {
         repo = name;
-        inherit (spec) owner rev sha256;
+        inherit (spec) owner rev hash;
       }
     )
     (lib.importJSON ./deps.json);
 in
 stdenv.mkDerivation rec {
   pname = "cudatext";
-  version = "1.168.0";
+  version = "1.169.2";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     rev = version;
-    sha256 = "sha256-/06eZ79Zeq6jtcfq+lOcumBgP59bqCX/Km7k21FroSc=";
+    hash = "sha256-EQAoKft/L4sbdY8hOvyu+Cy+3I8Lt4g1KTxTlSYALac=";
   };
 
   postPatch = ''

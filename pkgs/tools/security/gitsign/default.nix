@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "gitsign";
-  version = "0.1.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0cu5uJVFiqkvfVxCbrruHLa4Zj0EU75cbgrTrwzo7+U=";
+    sha256 = "sha256-ldVBaKBa9Rq15OXb0nAqY70RH5Ww9DRNmKZ5spuBOzc=";
   };
-  vendorSha256 = "sha256-JMS/OFL2oxQFWa+wNhxS7fXSYQbCSEV3Sakq4rmsolI=";
+  vendorSha256 = "sha256-hE+P6dS/tC+y9Pf5IGy23a5j7VSDvedzcNTkLK4soiA=";
 
   ldflags = [ "-s" "-w" "-buildid=" "-X github.com/sigstore/gitsign/pkg/version.gitVersion=${version}" ];
 

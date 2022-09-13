@@ -9,28 +9,28 @@
 , numpy
 , scipy
 , pillow
-, pytorch
+, torch
 , pytest
-, cudaSupport ? pytorch.cudaSupport or false # by default uses the value from pytorch
+, cudaSupport ? torch.cudaSupport or false # by default uses the value from torch
 }:
 
 let
-  inherit (pytorch.cudaPackages) cudatoolkit cudnn;
+  inherit (torch.cudaPackages) cudatoolkit cudnn;
 
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
     paths = [ cudatoolkit.out cudatoolkit.lib ];
   };
-  cudaArchStr = lib.optionalString cudaSupport lib.strings.concatStringsSep ";" pytorch.cudaArchList;
+  cudaArchStr = lib.optionalString cudaSupport lib.strings.concatStringsSep ";" torch.cudaArchList;
 in buildPythonPackage rec {
   pname = "torchvision";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "vision";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-nIE1HvmAhRh3Hvj3qlF52sN9LGIorLiXlLtN7tzQxqU=";
+    hash = "sha256-QlUAFAG6zEDCDSXR5n2CznspU3fT0kbqySzofGLPgK4=";
   };
 
   nativeBuildInputs = [ libpng ninja which ]
@@ -42,7 +42,7 @@ in buildPythonPackage rec {
   buildInputs = [ libjpeg_turbo libpng ]
     ++ lib.optionals cudaSupport [ cudnn ];
 
-  propagatedBuildInputs = [ numpy pillow pytorch scipy ];
+  propagatedBuildInputs = [ numpy pillow torch scipy ];
 
   preBuild = lib.optionalString cudaSupport ''
     export TORCH_CUDA_ARCH_LIST="${cudaArchStr}"

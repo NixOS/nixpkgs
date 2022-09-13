@@ -1,32 +1,42 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pythonOlder
 , coverage
+, fetchPypi
 , pytest
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pytest-testmon";
-  version = "1.3.4";
-  disabled = pythonOlder "3.6";
+  version = "1.3.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jr+uKjtm5nFYHrZpG63VNK/wO93TQJh1x4SoTxJtlw0=";
+    hash = "sha256-KcDVOKAuQ5iVKgK3o1Vnc+LUVsI1izTnkOmByiyCJ1E=";
   };
 
-  propagatedBuildInputs = [ pytest coverage ];
+  buildInputs = [
+    pytest
+  ];
+
+  propagatedBuildInputs = [
+    coverage
+  ];
 
   # The project does not include tests since version 1.3.0
   doCheck = false;
-  pythonImportsCheck = [ "testmon" ];
+
+  pythonImportsCheck = [
+    "testmon"
+  ];
 
   meta = with lib; {
+    description = "Pytest plug-in which automatically selects and re-executes only tests affected by recent changes";
     homepage = "https://github.com/tarpas/pytest-testmon/";
-    description = "This is a py.test plug-in which automatically selects and re-executes only tests affected by recent changes";
     license = licenses.mit;
-    maintainers = [ maintainers.dmvianna ];
+    maintainers = with maintainers; [ dmvianna ];
   };
 }
-

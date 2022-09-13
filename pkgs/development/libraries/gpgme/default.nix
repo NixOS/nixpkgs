@@ -110,7 +110,12 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.hostPlatform.is32bit "-D_FILE_OFFSET_BITS=64"
   );
 
+  # prevent tests from being run during the buildPhase
+  makeFlags = [ "tests=" ];
+
   doCheck = true;
+
+  checkFlags = [ "-C" "tests" ];
 
   passthru.tests = {
     python = python3.pkgs.gpgme;

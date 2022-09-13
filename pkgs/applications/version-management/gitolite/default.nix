@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, git, lib, makeWrapper, nettools, perl, perlPackages, nixosTests }:
+{ stdenv, coreutils, fetchFromGitHub, git, lib, makeWrapper, nettools, perl, perlPackages, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "gitolite";
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
       --replace /usr/bin/perl "${perl}/bin/perl"
     substituteInPlace src/lib/Gitolite/Setup.pm \
       --replace hostname "${nettools}/bin/hostname"
+    substituteInPlace src/commands/sskm \
+      --replace /bin/rm "${coreutils}/bin/rm"
   '';
 
   postFixup = ''

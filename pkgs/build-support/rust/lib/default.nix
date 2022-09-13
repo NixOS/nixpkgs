@@ -5,6 +5,8 @@ rec {
   toTargetArch = platform:
     /**/ if platform ? rustc.platform then platform.rustc.platform.arch
     else if platform.isAarch32 then "arm"
+    else if platform.isMips64  then "mips64"     # never add "el" suffix
+    else if platform.isPower64 then "powerpc64"  # never add "le" suffix
     else platform.parsed.cpu.name;
 
   # https://doc.rust-lang.org/reference/conditional-compilation.html#target_os

@@ -99,6 +99,7 @@ extra-packages:
   - Cabal == 2.4.*                      # required for cabal-install etc.
   - Cabal == 3.2.*                      # required for cabal-install etc.
   - Cabal == 3.4.*                      # required for cabal-install etc.
+  - Cabal == 3.6.*                      # required for cabal-install-parsers etc.
   - Diff < 0.4                          # required by liquidhaskell-0.8.10.2: https://github.com/ucsd-progsys/liquidhaskell/issues/1729
   - ShellCheck == 0.7.2                 # 2022-02-20: haskell-ci 0.14 needs this
   - aeson < 2                           # required by pantry-0.5.2
@@ -149,6 +150,9 @@ extra-packages:
   - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
   - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
   - brick == 0.70.*                     # 2022-08-13: needed by matterhorn-50200.17.0
+  - basement < 0.0.15                   # 2022-08-30: last version to support GHC < 8.10
+  - foundation < 0.0.29                 # 2022-08-30: last version to support GHC < 8.10
+  - cabal-install-parsers < 0.5         # 2022-08-31: required by haskell-ci 0.14.3
 
 package-maintainers:
   abbradar:
@@ -534,6 +538,8 @@ supported-platforms:
   dx9base:                                      [ platforms.windows ]
   dx9d3d:                                       [ platforms.windows ]
   dx9d3dx:                                      [ platforms.windows ]
+  evdev:                                        [ platforms.linux ]
+  evdev-streamly:                               [ platforms.linux ]
   geomancy:                                     [ platforms.x86 ] # x86 intrinsics
   gi-gtkosxapplication:                         [ platforms.darwin ]
   gtk-mac-integration:                          [ platforms.darwin ]

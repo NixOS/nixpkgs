@@ -8,7 +8,7 @@ in {
   meta.maintainers = [ lib.maintainers.domenkozar ];
 
   options.services.cachix-agent = {
-    enable = mkEnableOption "Cachix Deploy Agent: https://docs.cachix.org/deploy/";
+    enable = mkEnableOption (lib.mdDoc "Cachix Deploy Agent: https://docs.cachix.org/deploy/");
 
     name = mkOption {
       type = types.str;
@@ -27,6 +27,12 @@ in {
       type = types.nullOr types.str;
       default = null;
       description = lib.mdDoc "Profile name, defaults to 'system' (NixOS).";
+    };
+
+    host = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = lib.mdDoc "Cachix uri to use.";
     };
 
     package = mkOption {
@@ -63,7 +69,10 @@ in {
         KillMode = "process";
         Restart = "on-failure";
         EnvironmentFile = cfg.credentialsFile;
-        ExecStart = "${cfg.package}/bin/cachix ${lib.optionalString cfg.verbose "--verbose"} deploy agent ${cfg.name} ${if cfg.profile != null then profile else ""}";
+        ExecStart = ''
+          ${cfg.package}/bin/cachix ${lib.optionalString cfg.verbose "--verbose"} ${lib.optionalString (cfg.host != null) "--host ${cfg.host}"} \
+            deploy agent ${cfg.name} ${if cfg.profile != null then cfg.profile else ""}
+        '';
       };
     };
   };

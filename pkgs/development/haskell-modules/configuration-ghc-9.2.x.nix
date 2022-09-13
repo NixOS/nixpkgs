@@ -55,9 +55,16 @@ self: super: {
   # 0.30 introduced support for GHC 9.2.
   cryptonite = doDistribute self.cryptonite_0_30;
 
-  # cabal-install needs more recent versions of Cabal
-  cabal-install = (doJailbreak super.cabal-install).overrideScope (self: super: {
-    Cabal = self.Cabal_3_6_3_0;
+  # cabal-install needs most recent versions of Cabal and Cabal-syntax
+  cabal-install = super.cabal-install.overrideScope (self: super: {
+    Cabal = self.Cabal_3_8_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+    process = self.process_1_6_15_0;
+  });
+  cabal-install-solver = super.cabal-install-solver.overrideScope (self: super: {
+    Cabal = self.Cabal_3_8_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+    process = self.process_1_6_15_0;
   });
 
   doctest = dontCheck (doJailbreak super.doctest);
@@ -73,14 +80,14 @@ self: super: {
   assoc = doJailbreak super.assoc;
   async = doJailbreak super.async;
   base64-bytestring = doJailbreak super.base64-bytestring;
-  base-compat = self.base-compat_0_12_1;
-  base-compat-batteries = self.base-compat-batteries_0_12_1;
+  base-compat = self.base-compat_0_12_2;
+  base-compat-batteries = self.base-compat-batteries_0_12_2;
   binary-instances = doJailbreak super.binary-instances;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   constraints = doJailbreak super.constraints;
   cpphs = overrideCabal (drv: { postPatch = "sed -i -e 's,time >=1.5 && <1.11,time >=1.5 \\&\\& <1.12,' cpphs.cabal";}) super.cpphs;
   data-fix = doJailbreak super.data-fix;
-  dbus = self.dbus_1_2_25;
+  dbus = self.dbus_1_2_26;
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
@@ -102,7 +109,7 @@ self: super: {
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_2_4_20220729;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_2_1_1;
   hackage-security = doJailbreak super.hackage-security;
-  hashable = super.hashable_1_4_0_2;
+  hashable = super.hashable_1_4_1_0;
   hashable-time = doJailbreak super.hashable-time;
   # 1.1.1 introduced support for GHC 9.2.x, so when this assert fails, the jailbreak can be removed
   hedgehog = assert super.hedgehog.version == "1.0.5"; doJailbreak super.hedgehog;
@@ -123,13 +130,27 @@ self: super: {
   retrie = doDistribute (dontCheck self.retrie_1_2_0_1);
   singleton-bool = doJailbreak super.singleton-bool;
   servant = doJailbreak super.servant;
-  servant-auth = doJailbreak super.servant-auth;
   servant-swagger = doJailbreak super.servant-swagger;
+
+  # 2022-09-02: Too strict bounds on lens
+  # https://github.com/haskell-servant/servant/pull/1607/files
+  servant-docs = doJailbreak super.servant-docs;
+  servant-foreign = doJailbreak super.servant-foreign;
+  servant-auth = doJailbreak super.servant-auth;
+  servant-auth-docs = doJailbreak super.servant-auth-docs;
+  servant-auth-server = doJailbreak super.servant-auth-server;
   servant-auth-swagger = doJailbreak super.servant-auth-swagger;
+  # 2022-09-02: Too strict bounds on lens
+  # https://github.com/haskell-servant/servant-multipart/pull/64
+  servant-multipart = doJailbreak super.servant-multipart;
+  # 2022-09-02: Too strict bounds on lens
+  # https://github.com/GetShopTV/swagger2/pull/242
+  swagger2 = doJailbreak super.swagger2;
+
   shelly = doJailbreak super.shelly;
   splitmix = doJailbreak super.splitmix;
   tasty-hspec = doJailbreak super.tasty-hspec;
-  th-desugar = self.th-desugar_1_13_1;
+  th-desugar = self.th-desugar_1_14;
   time-compat = doJailbreak super.time-compat;
   tomland = doJailbreak super.tomland;
   type-equality = doJailbreak super.type-equality;
@@ -146,7 +167,7 @@ self: super: {
   }) (doJailbreak super.hpack);
 
   # lens >= 5.1 supports 9.2.1
-  lens = doDistribute self.lens_5_1_1;
+  lens = doDistribute self.lens_5_2;
 
   # Syntax error in tests fixed in https://github.com/simonmar/alex/commit/84b29475e057ef744f32a94bc0d3954b84160760
   alex = dontCheck super.alex;

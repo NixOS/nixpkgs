@@ -11,7 +11,7 @@ let
 
 in {
   options.programs.starship = {
-    enable = mkEnableOption "the Starship shell prompt";
+    enable = mkEnableOption (lib.mdDoc "the Starship shell prompt");
 
     settings = mkOption {
       inherit (settingsFormat) type;

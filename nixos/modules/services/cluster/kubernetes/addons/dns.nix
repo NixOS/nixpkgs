@@ -12,7 +12,7 @@ let
   };
 in {
   options.services.kubernetes.addons.dns = {
-    enable = mkEnableOption "kubernetes dns addon";
+    enable = mkEnableOption (lib.mdDoc "kubernetes dns addon");
 
     clusterIp = mkOption {
       description = lib.mdDoc "Dns addon clusterIP";
@@ -23,9 +23,9 @@ in {
           take 3 (splitString "." config.services.kubernetes.apiserver.serviceClusterIpRange
         ))
       ) + ".254";
-      defaultText = literalDocBook ''
-        The <literal>x.y.z.254</literal> IP of
-        <literal>config.${options.services.kubernetes.apiserver.serviceClusterIpRange}</literal>.
+      defaultText = literalMD ''
+        The `x.y.z.254` IP of
+        `config.${options.services.kubernetes.apiserver.serviceClusterIpRange}`.
       '';
       type = types.str;
     };

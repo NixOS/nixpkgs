@@ -8,7 +8,7 @@ let
 
   # Generator for HDFS service options
   hadoopServiceOption = { serviceName, firewallOption ? true, extraOpts ? null }: {
-    enable = mkEnableOption serviceName;
+    enable = mkEnableOption (lib.mdDoc serviceName);
     restartIfChanged = mkOption {
       type = types.bool;
       description = lib.mdDoc ''

@@ -33,12 +33,14 @@ python3.pkgs.buildPythonApplication rec {
     setuptools-scm
 
     # docs
-    sphinx
+    sphinxHook
     guzzle_sphinx_theme
 
     # shell completions
     installShellFiles
   ];
+
+  sphinxBuilders = [ "singlehtml" "man" ];
 
   buildInputs = [
     libb2
@@ -67,14 +69,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    make -C docs singlehtml
-    mkdir -p $out/share/doc/borg
-    cp -R docs/_build/singlehtml $out/share/doc/borg/html
-
-    make -C docs man
-    mkdir -p $out/share/man
-    cp -R docs/_build/man $out/share/man/man1
-
     installShellCompletion --cmd borg \
       --bash scripts/shell_completions/bash/borg \
       --fish scripts/shell_completions/fish/borg.fish \

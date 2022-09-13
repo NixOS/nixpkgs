@@ -14,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "claripy";
-  version = "9.2.14";
+  version = "9.2.15";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-802ToJGxwJSFcnl3suQMPNz0/7HnqvqxCpy9u7iU6EE=";
+    hash = "sha256-3v5te+j3I4yzxoBO8kY8VGLCrWfb1iOz9GHzun1DT0I=";
   };
 
   propagatedBuildInputs = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Use upstream z3 implementation
     substituteInPlace setup.cfg \
-      --replace "z3-solver >= 4.8.5.0" ""
+      --replace "z3-solver == 4.10.2.0" ""
   '';
 
   pythonImportsCheck = [

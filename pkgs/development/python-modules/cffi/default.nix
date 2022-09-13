@@ -11,8 +11,6 @@ if isPyPy then null else buildPythonPackage rec {
     sha256 = "sha256-1AC/uaN7E1ElPLQCZxzqfom97MKU6AFqcH9tHYrJNPk=";
   };
 
-  outputs = [ "out" "dev" ];
-
   buildInputs = [ libffi ];
 
   nativeBuildInputs = [ pkg-config ];

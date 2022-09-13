@@ -16,7 +16,7 @@
 # wrapped to be able to find aioconsole and any other packages.
 buildPythonPackage rec {
   pname = "aioconsole";
-  version = "0.5.0";
+  version = "0.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "vxgmichel";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-/20FR7yc2aMA9cL3l7XAL/kak3cBBTniAICLC/TOI+U=";
+    sha256 = "sha256-PSXYXIWb2zTVC6kwMgkDovF+BVtEnqQh8NFPb96tFRY=";
   };
 
   checkInputs = [
