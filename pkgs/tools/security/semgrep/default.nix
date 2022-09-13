@@ -22,6 +22,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRelaxDeps = [
+    "attrs"
     "boltons"
     "jsonschema"
     "typing-extensions"
