@@ -1446,8 +1446,6 @@ let
 
     theora = callPackage ../development/ocaml-modules/theora { };
 
-    tezos-base58 = callPackage ../development/ocaml-modules/tezos-base58 { };
-
     toml = callPackage ../development/ocaml-modules/toml { };
 
     topkg = callPackage ../development/ocaml-modules/topkg { };
