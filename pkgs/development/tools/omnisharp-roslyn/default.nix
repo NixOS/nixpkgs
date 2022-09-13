@@ -30,7 +30,7 @@ let finalPackage = buildDotnetModule rec {
   ];
 
   dotnetInstallFlags = [ "--framework net6.0" ];
-  dotnetBuildFlags = [ "--framework net6.0" ];
+  dotnetBuildFlags = [ "--framework net6.0" "--no-self-contained" ];
   dotnetFlags = [
     # These flags are set by the cake build.
     "-property:PackageVersion=${version}"
@@ -39,12 +39,13 @@ let finalPackage = buildDotnetModule rec {
     "-property:InformationalVersion=${version}"
     "-property:RuntimeFrameworkVersion=${runtime_6_0.version}"
     "-property:RollForward=LatestMajor"
+    "--runtime" (dotnet-sdk.systemToDotnetRid stdenv.hostPlatform.system)
   ];
 
   postPatch = ''
     # Relax the version requirement
     substituteInPlace global.json \
-      --replace '7.0.100-preview.4.22252.9' '${sdk_6_0.version}'
+      --replace '7.0.100-preview.4.22252.9' '${dotnet-sdk.version}'
     # Patch the project files so we can compile them properly
     for project in src/OmniSharp.Http.Driver/OmniSharp.Http.Driver.csproj src/OmniSharp.LanguageServerProtocol/OmniSharp.LanguageServerProtocol.csproj src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj; do
       substituteInPlace $project \
