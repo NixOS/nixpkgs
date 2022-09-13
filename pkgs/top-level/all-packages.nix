@@ -15148,6 +15148,8 @@ with pkgs;
 
   kona = callPackage ../development/interpreters/kona {};
 
+  konf = callPackage ../development/tools/konf { };
+
   lolcode = callPackage ../development/interpreters/lolcode { };
 
   love_0_10 = callPackage ../development/interpreters/love/0.10.nix { };
