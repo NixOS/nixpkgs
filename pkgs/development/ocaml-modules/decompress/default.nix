@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage
+{ lib, fetchurl, buildDunePackage, ocaml
 , checkseum, bigarray-compat, optint, cmdliner_1_1
 , bigstringaf, alcotest, camlzip, base64, ctypes, fmt
 }:
