@@ -11665,6 +11665,8 @@ with pkgs;
 
   tmsu = callPackage ../tools/filesystems/tmsu { };
 
+  tncattach = callPackage ../applications/radio/tncattach { };
+
   toilet = callPackage ../tools/misc/toilet { };
 
   tokei = callPackage ../development/tools/misc/tokei {
