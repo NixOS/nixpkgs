@@ -14,10 +14,6 @@ in
     "${lemmyNodeName}" = {
       services.lemmy = {
         enable = true;
-        jwtSecretPath = pkgs.writeTextFile {
-          name = "lemmy-secret";
-          text = "very-secret-password123";
-        };
         ui.port = uiPort;
         settings = {
           hostname = "http://${lemmyNodeName}";

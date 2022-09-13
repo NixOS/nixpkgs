@@ -37052,4 +37052,6 @@ with pkgs;
   swift-corelibs-libdispatch = callPackage ../development/libraries/swift-corelibs-libdispatch { };
 
   swaysettings = callPackage ../applications/misc/swaysettings { };
+
+  aitrack = libsForQt5.callPackage ../applications/misc/aitrack { };
 }
