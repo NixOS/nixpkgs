@@ -30,9 +30,10 @@ let
       # requests that look like: https://example.com/wp-content//nix/store/...plugin/path/some-file.js
       # Since hard linking directories is not allowed, copying is the next best thing.
 
-      # copy additional plugin(s) and theme(s)
+      # copy additional plugin(s), theme(s) and language(s)
       ${concatMapStringsSep "\n" (theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${theme.name}") cfg.themes}
       ${concatMapStringsSep "\n" (plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${plugin.name}") cfg.plugins}
+      ${concatMapStringsSep "\n" (language: "cp -r ${language} $out/share/wordpress/wp-content/languages/") cfg.languages}
     '';
   };
 
@@ -151,6 +152,32 @@ let
               };
             # And then pass this theme to the themes list like this:
             in [ responsiveTheme ]
+          '';
+        };
+
+        languages = mkOption {
+          type = types.listOf types.path;
+          default = [];
+          description = lib.mdDoc ''
+            List of path(s) to respective language(s) which are copied from the 'languages' directory.
+          '';
+          example = literalExpression ''
+            [(
+              # Let's package the German language.
+              # For other languages try to replace language and country code in the download URL with your desired one.
+              # Reference https://translate.wordpress.org for available translations and
+              # codes.
+              language-de = pkgs.stdenv.mkDerivation {
+                name = "language-de";
+                src = pkgs.fetchurl {
+                  url = "https://de.wordpress.org/wordpress-''${pkgs.wordpress.version}-de_DE.tar.gz";
+                  # Name is required to invalidate the hash when wordpress is updated
+                  name = "wordpress-''${pkgs.wordpress.version}-language-de"
+                  sha256 = "sha256-dlas0rXTSV4JAl8f/UyMbig57yURRYRhTMtJwF9g8h0=";
+                };
+                installPhase = "mkdir -p $out; cp -r ./wp-content/languages/* $out/";
+              };
+            )];
           '';
         };
 
