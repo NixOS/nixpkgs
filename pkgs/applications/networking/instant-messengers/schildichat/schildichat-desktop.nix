@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
     description = "Matrix client / Element Desktop fork";
     homepage = "https://schildi.chat/";
     changelog = "https://github.com/SchildiChat/schildichat-desktop/releases";
-    maintainers = teams.matrix.members ++ (with maintainers; [ kloenk ]);
+    maintainers = teams.matrix.members ++ (with maintainers; [ kloenk yuka ]);
     license = licenses.asl20;
     platforms = platforms.all;
   };
