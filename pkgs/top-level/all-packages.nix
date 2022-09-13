@@ -1309,6 +1309,8 @@ with pkgs;
 
   headset-charge-indicator = callPackage ../tools/audio/headset-charge-indicator { };
 
+  heketi = callPackage ../tools/filesystems/heketi { };
+
   httm = callPackage ../tools/filesystems/httm { };
 
   kanata = callPackage ../tools/system/kanata { };
