@@ -2436,6 +2436,8 @@ in {
 
   directv = callPackage ../development/python-modules/directv { };
 
+  dirsearch = callPackage ../development/python-modules/dirsearch { };
+
   dirty-equals = callPackage ../development/python-modules/dirty-equals { };
 
   discid = callPackage ../development/python-modules/discid { };
