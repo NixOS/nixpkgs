@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, nix-update-script
 , rustPlatform
 , desktop-file-utils
 , appstream-glib
@@ -66,6 +67,12 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-libav
     dbus
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/amberol";
