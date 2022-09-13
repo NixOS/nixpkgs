@@ -2,11 +2,11 @@
 
 buildDunePackage rec {
   pname = "mirage-unix";
-  version = "4.0.1";
+  version = "5.0.0";
 
   src = fetchurl {
-    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "sha256-9ymVBb3dkhb+MN97/sXe/oQ36CVx0kruj3sd19LiFZ4=";
+    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-${version}.tbz";
+    sha256 = "sha256-gQ16af73ebsg131d+DqUy7iKzdlWrxp2aczQJ4T8Hps=";
   };
 
   propagatedBuildInputs = [ lwt duration mirage-runtime io-page ];
