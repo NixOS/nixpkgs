@@ -2035,6 +2035,8 @@ in {
 
   consul = callPackage ../development/python-modules/consul { };
 
+  consul2 = callPackage ../development/python-modules/consul2 { };
+
   container-inspector = callPackage ../development/python-modules/container-inspector { };
 
   contexter = callPackage ../development/python-modules/contexter { };
