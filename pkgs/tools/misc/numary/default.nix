@@ -21,6 +21,8 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-P4/wq2Sn6xEcIzYUFf6Vus1wrBBGKumTYFRoCEfkvrQ=";
 
+  tags = ["json1" "netgo"];
+
   ldflags = ["-X github.com/numary/ledger/cmd.Version=${version}"];
 
   # ldflags based on metadata from git and source
@@ -29,7 +31,9 @@ buildGoModule rec {
     ldflags+=" -X 'github.com/numary/ledger/cmd.BuildDate=$(cat DATE)'"
   '';
 
-  tags = ["json1" "netgo"];
+  preInstall = ''
+    mv $GOPATH/bin/ledger $GOPATH/bin/numary
+  '';
 
   # tests depend on docker runtime
   doCheck = false;
