@@ -377,6 +377,8 @@ See also the section about [`passthru.tests`](#var-meta-tests).
 
 This generic command invokes a number of *phases*. Package builds are split into phases to make it easier to override specific parts of the build (e.g., unpacking the sources or installing the binaries).
 
+Phases are topologically sorted. With the `addPhase` and `addPhases` functions it is possible to define the relative ordering of phases. This also makes it possible to add new phases at any position in the build.
+
 Each phase can be overridden in its entirety either by setting the environment variable `namePhase` to a string containing some shell commands to be executed, or by redefining the shell function `namePhase`. The former is convenient to override a phase from the derivation, while the latter is convenient from a build script. However, typically one only wants to *add* some commands to a phase, e.g. by defining `postInstall` or `preFixup`, as skipping some of the default actions may have unexpected consequences. The default script for each phase is defined in the file `pkgs/stdenv/generic/setup.sh`.
 
 When overriding a phase, for example `installPhase`, it is important to start with `runHook preInstall` and end it with `runHook postInstall`, otherwise `preInstall` and `postInstall` will not be run. Even if you don't use them directly, it is good practice to do so anyways for downstream users who would want to add a `postInstall` by overriding your derivation.
@@ -386,6 +388,19 @@ While inside an interactive `nix-shell`, if you wanted to run all phases in the 
 ### Controlling phases {#ssec-controlling-phases}
 
 There are a number of variables that control what phases are executed and in what order:
+
+#### Functions affecting phase control
+{#functions-affecting-phase-control}
+
+##### `addPhase`
+
+The `addPhase` function allows one to define the order between two phases. It takes two arguments, each the name of a phase, where the first corresponds to the phase that needs to be run before the second.
+
+##### `addPhases`
+
+The `addPhase` function allows one to define the order between multiple phases. It takes an array of phase names as argument. Phases are to be executed in the given order with the first phase executed before all others.
+
+Note that the topological sorting may cause additional phases to be inserted in before, after, or in between.
 
 #### Variables affecting phase control {#variables-affecting-phase-control}
 

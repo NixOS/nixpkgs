@@ -1,4 +1,9 @@
-{ makeSetupHook
+# `makePhase`
+#
+# This functions allows one to define a phase declaratively.
+
+{ lib
+, makeSetupHook
 }:
 
 
@@ -14,8 +19,8 @@
 
 let
 
-  before_ = lib.concatMapStringsSep ";" (phase: "addPhase ${phase} ${name}");
-  after_ = lib.concatMapStringsSep ";" (phase: "addPhase ${name} ${phase}");
+  before_ = lib.concatMapStringsSep ";" (phase: "addPhase ${phase} ${name}") before;
+  after_ = lib.concatMapStringsSep ";" (phase: "addPhase ${name} ${phase}") after;
 
   disabled_ = attribute: ''
     if []
@@ -44,5 +49,8 @@ let
 
 in makeSetupHook (makeSetupHookAttrs // {
   inherit name;
-  deps = requires ++ makeSetupHookAttrs.deps;
+  deps = requires ++ (makeSetupHookAttrs.deps or []);
+  passthru = {
+    inherit script;
+  };
 }) script

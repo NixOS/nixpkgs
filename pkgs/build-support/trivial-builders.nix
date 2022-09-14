@@ -526,10 +526,10 @@ rec {
    *                 meta.platforms = lib.platforms.linux;
    *               } ./myscript.sh;
    */
-  makeSetupHook = { name ? "hook", deps ? [], substitutions ? {}, meta ? {} }: script:
+  makeSetupHook = { name ? "hook", deps ? [], substitutions ? {}, meta ? {}, passthru ? {} }: script:
     runCommand name
       (substitutions // {
-        inherit meta;
+        inherit meta passthru;
         strictDeps = true;
       })
       (''
@@ -541,6 +541,7 @@ rec {
         substituteAll ${script} $out/nix-support/setup-hook
       '');
 
+  makePhase = import ./make-phase { inherit lib makeSetupHook; };
 
   # Write the references (i.e. the runtime dependencies in the Nix store) of `path' to a file.
 
