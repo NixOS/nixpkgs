@@ -10355,6 +10355,8 @@ in {
 
   sphinxcontrib-applehelp = callPackage ../development/python-modules/sphinxcontrib-applehelp { };
 
+  sphinxcontrib-asyncio = callPackage ../development/python-modules/sphinxcontrib-asyncio { };
+
   sphinxcontrib-autoapi = callPackage ../development/python-modules/sphinxcontrib-autoapi { };
 
   sphinxcontrib-bayesnet = callPackage ../development/python-modules/sphinxcontrib-bayesnet { };
