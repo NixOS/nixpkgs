@@ -18,14 +18,14 @@
 , typing-extensions }:
 
 buildPythonPackage rec {
-  version = "1.24.2";
+  version = "1.25.1";
   pname = "azure-core";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-Dzog0kVlm/gfs2cAcKVBDI1KQymNWpgeYtzjkwAKkIQ=";
+    sha256 = "sha256-PBzzaGUOduwAnAfNEXSpXNy0cbJHu3LRgkX31WwYCbI=";
   };
 
   propagatedBuildInputs = [
