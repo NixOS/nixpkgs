@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.9.2";
+  version = "1.10.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://github.com/libgit2/pygit2/commit/14b1df84060ea4ab085202382e80672ec1a104e3.patch";
       includes = [ "src/types.h" ];
-      sha256 = "sha256-2krkyAT30l/olSEl2ugWCsylvGuT7VvkuSFVshIXktA=";
+      sha256 = "sha256-NUZRvwYsAtHwgEHW+/GptL96k6/OZZeb3Ai9xlZTqi4=";
     })
   ];
 
