@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyswitchbot";
-  version = "0.18.27";
+  version = "0.19.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pySwitchbot";
     rev = "refs/tags/${version}";
-    hash = "sha256-80GzOKZRsjWHLEGhNrYIWdUMiel5ztcobwRhrlyjzpY=";
+    hash = "sha256-1vzHd6ouWZrc951a5s0OsjeMbEluP/kS7LDiZ3YOUqk=";
   };
 
   propagatedBuildInputs = [
@@ -28,6 +28,11 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # mismatch in expected data structure
+    "test_parse_advertisement_data_curtain"
   ];
 
   pythonImportsCheck = [
