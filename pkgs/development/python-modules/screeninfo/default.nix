@@ -12,13 +12,13 @@
 
 buildPythonApplication rec {
   pname = "screeninfo";
-  version = "0.8";
+  version = "0.8.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9501bf8b8458c7d1be4cb0ac9abddddfa80b932fb3f65bfcb54f5586434b1dc5";
+    sha256 = "sha256-mYMHa8x+NEAqGp5NfavzcpQR/Sq7PztL5+unNRnNLtE=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [
