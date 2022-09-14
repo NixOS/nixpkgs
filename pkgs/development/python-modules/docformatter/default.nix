@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "docformatter";
-  version = "1.4";
+  version = "1.5.0";
 
   disabled = pythonOlder "3.6";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "064e6d81f04ac96bc0d176cbaae953a0332482b22d3ad70d47c8a7f2732eef6f";
+    sha256 = "sha256-nccWWdO4U8MBjNey7DTV0FQ3ASjhK3nuZVSYyzOcxxE=";
   };
 
   propagatedBuildInputs = [
