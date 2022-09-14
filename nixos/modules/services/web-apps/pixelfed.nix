@@ -26,7 +26,7 @@ let
 in {
   options.services = {
     pixelfed = {
-      enable = mkEnableOption "the pixelfed service";
+      enable = mkEnableOption (lib.mdDoc "the pixelfed service");
 
       envFile = mkOption {
         type = types.str;
@@ -165,7 +165,7 @@ in {
       maxUploadSize = mkOption {
         type =  types.ints.positive;
         default = 8;
-        description = ''
+        description = lib.mdDoc ''
       Max upload size in megabytes.
       '';
       };
