@@ -220,6 +220,7 @@
 , "multi-file-swagger"
 , "musescore-downloader"
 , "near-cli"
+, "next"
 , "neovim"
 , "nijs"
 , "node-gyp"
