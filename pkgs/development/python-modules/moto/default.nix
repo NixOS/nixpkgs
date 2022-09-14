@@ -36,15 +36,20 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "3.1.16";
+  version = "4.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-y+itipSfUZdx5dJbZwc4YEdX+2fNR0110UwgZ3WC6B8=";
+    sha256 = "sha256-iutWdX5oavPkpj+Qr7yXPLIxrarYfFzonmiTbBCbC+k=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "werkzeug>=0.5,<2.2.0" "werkzeug>=0.5"
+  '';
 
   propagatedBuildInputs = [
     aws-xray-sdk
@@ -96,6 +101,7 @@ buildPythonPackage rec {
     "--deselect=tests/test_iotdata/test_iotdata.py::test_delete_field_from_device_shadow"
     "--deselect=tests/test_iotdata/test_iotdata.py::test_publish"
     "--deselect=tests/test_s3/test_server.py::test_s3_server_bucket_versioning"
+    "--deselect=tests/test_s3/test_multiple_accounts_server.py::TestAccountIdResolution::test_with_custom_request_header"
 
     # Disalbe test that require docker daemon
     "--deselect=tests/test_events/test_events_lambdatriggers_integration.py::test_creating_bucket__invokes_lambda"
