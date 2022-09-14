@@ -6,7 +6,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "cloudflare";
-    repo = pname;
+    repo = "wrangler";
     rev = "v${version}";
     sha256 = "sha256-HnenF3X/6tvzwlbuOiQAvB76GrdRsqETG+3fp1fx334=";
   };
