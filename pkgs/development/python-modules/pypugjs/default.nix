@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "pypugjs";
-  version = "5.9.11";
+  version = "5.9.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-kStaT1S8cPJF+iDFk/jLGKi3JVOMmtf7PzeYDKCdD0E=";
+    sha256 = "sha256-yXS+g9VUpicFMLM9GYVcLVSXXQKyyDDcNjX2Y7XvYEI=";
   };
 
   propagatedBuildInputs = [ six chardet ];
