@@ -7,24 +7,13 @@
 , qtbase
 , bluez
 , ffmpeg
-, libao
-, libGLU
 , libGL
-, pcre
-, gettext
 , libXrandr
 , libusb1
-, libpthreadstubs
 , libXext
-, libXxf86vm
-, libXinerama
-, libSM
-, libXdmcp
-, readline
 , openal
 , udev
 , libevdev
-, portaudio
 , curl
 , alsa-lib
 , miniupnpc
@@ -38,6 +27,9 @@
 , vulkan-loader
 , libpulseaudio
 , bzip2
+, libiconv
+, pugixml
+, xxHash
 
   # Used in passthru
 , testers
@@ -83,18 +75,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     ffmpeg
-    libao
-    libGLU
+    pugixml
+    xxHash
     libGL
-    pcre
-    gettext
-    libpthreadstubs
     libpulseaudio
-    libSM
-    readline
     openal
-    portaudio
     libusb1
+    libiconv
     libpng
     hidapi
     miniupnpc
@@ -109,9 +96,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [
     libXrandr
     libXext
-    libXxf86vm
-    libXinerama
-    libXdmcp
     bluez
     udev
     libevdev
@@ -127,6 +111,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-DDISTRIBUTOR=NixOS"
     "-DUSE_SHARED_ENET=ON"
     "-DENABLE_LTO=ON"
     "-DDOLPHIN_WC_REVISION=${src.rev}"
@@ -149,13 +134,11 @@ stdenv.mkDerivation rec {
     "--set QT_QPA_PLATFORM xcb"
   ];
 
-  postPatch = ''
-    sed -i -e 's,DISTRIBUTOR "None",DISTRIBUTOR "NixOS",g' CMakeLists.txt
-  '' + lib.optionalString stdenv.isDarwin ''
-    # Allow Dolphin to use nix-provided libraries instead of submodules
-    sed -i -e 's,if(NOT APPLE),if(true),g' CMakeLists.txt
-    sed -i -e 's,if(LIBUSB_FOUND AND NOT APPLE),if(LIBUSB_FOUND),g' \
-      CMakeLists.txt
+  # Use nix-provided libraries instead of submodules
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace CMakeLists.txt \
+      --replace "if(NOT APPLE)" "if(true)" \
+      --replace "if(LIBUSB_FOUND AND NOT APPLE)" "if(LIBUSB_FOUND)"
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -166,7 +149,6 @@ stdenv.mkDerivation rec {
     cp -r ./Binaries/Dolphin.app $out/Applications
     ln -s $out/Applications/Dolphin.app/Contents/MacOS/Dolphin $out/bin
   '';
-
 
   passthru = {
     tests.version = testers.testVersion {
@@ -188,10 +170,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://dolphin-emu.org";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
-    branch = "master";
     mainProgram = "Dolphin";
-    platforms = platforms.unix;
+    branch = "master";
     license = licenses.gpl2Plus;
+    platforms = platforms.unix;
     maintainers = with maintainers; [
       MP2E
       ashkitten
