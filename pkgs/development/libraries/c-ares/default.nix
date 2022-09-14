@@ -12,6 +12,7 @@ let self =
 stdenv.mkDerivation rec {
   pname = "c-ares";
   version = "1.18.1";
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://c-ares.haxx.se/download/${pname}-${version}.tar.gz";
