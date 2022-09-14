@@ -642,11 +642,10 @@ in
 
   sqlite3 = attrs: if lib.versionAtLeast attrs.version "1.5.0"
   then {
-    nativeBuildInputs = [ pkg-config sqlite.dev ];
-    buildInputs = [ sqlite.out ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ sqlite ];
     buildFlags = [
       "--enable-system-libraries"
-      "--with-pkg-config=${pkg-config}/bin/pkg-config"
     ];
   }
   else {

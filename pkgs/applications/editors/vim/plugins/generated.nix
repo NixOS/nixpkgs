@@ -5255,14 +5255,14 @@ final: prev:
 
   nvim-colorizer-lua = buildVimPluginFrom2Nix {
     pname = "nvim-colorizer.lua";
-    version = "2020-06-11";
+    version = "2022-09-10";
     src = fetchFromGitHub {
-      owner = "norcalli";
+      owner = "nvchad";
       repo = "nvim-colorizer.lua";
-      rev = "36c610a9717cc9ec426a07c8e6bf3b3abcb139d6";
-      sha256 = "0gvqdfkqf6k9q46r0vcc3nqa6w45gsvp8j4kya1bvi24vhifg2p9";
+      rev = "2664070cd04f2b9f803a10dd328a562be8ab15ca";
+      sha256 = "16myjv2hrqr2kk14mqidyrhdnz1i3p00yf0w97f4kxrdd158p1nz";
     };
-    meta.homepage = "https://github.com/norcalli/nvim-colorizer.lua/";
+    meta.homepage = "https://github.com/nvchad/nvim-colorizer.lua/";
   };
 
   nvim-comment = buildVimPluginFrom2Nix {

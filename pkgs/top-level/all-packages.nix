@@ -7158,6 +7158,8 @@ with pkgs;
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
+  grafterm = callPackage ../tools/misc/grafterm { };
+
   grafx2 = callPackage ../applications/graphics/grafx2 {};
 
   grails = callPackage ../development/web/grails { jdk = null; };
@@ -8676,6 +8678,8 @@ with pkgs;
   liquidctl = with python3Packages; toPythonApplication liquidctl;
 
   lmp = callPackage ../tools/security/lmp { };
+
+  localstack = with python3Packages; toPythonApplication localstack;
 
   localtime = callPackage ../tools/system/localtime { };
 
@@ -15145,6 +15149,8 @@ with pkgs;
   kanif = callPackage ../applications/networking/cluster/kanif { };
 
   kona = callPackage ../development/interpreters/kona {};
+
+  konf = callPackage ../development/tools/konf { };
 
   lolcode = callPackage ../development/interpreters/lolcode { };
 
@@ -23562,6 +23568,8 @@ with pkgs;
   redshift_jdbc = callPackage ../development/java-modules/redshift_jdbc { };
 
   liquibase_redshift_extension = callPackage ../development/java-modules/liquibase_redshift_extension { };
+
+  promql-cli = callPackage ../tools/misc/promql-cli { };
 
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
   prometheus = callPackage ../servers/monitoring/prometheus { };
@@ -36584,6 +36592,8 @@ with pkgs;
   wine-wayland = lowPrio (winePackages.full.override {
     wineRelease = "wayland";
   });
+
+  wineasio = callPackage ../applications/emulators/wineasio { };
 
   wishbone-tool = callPackage ../development/tools/misc/wishbone-tool { };
 

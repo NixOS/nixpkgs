@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jquake";
-  version = "1.7.1";
+  version = "1.8.1";
 
   src = fetchurl {
     url = "https://fleneindre.github.io/downloads/JQuake_${version}_linux.zip";
-    sha256 = "sha256-sdTt1+1eAU/DJAszPQnmoaBZThJ9yC9GL1k+OpD+tp4=";
+    sha256 = "sha256-fIxCcqpv0KAXUBbyinTXr/fkAcufVtpr9FUTJkXSgTs=";
   };
 
   nativeBuildInputs = [ unzip copyDesktopItems ];
