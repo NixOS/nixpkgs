@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "atpublic";
-  version = "3.0.1";
+  version = "3.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bb072b50e6484490404e5cb4034e782aaa339fdd6ac36434e53c10791aef18bf";
+    sha256 = "sha256-MJjuEtAQfMUAnWH06A5e3PrEzaK9qgRkSvdYJ8sSGxg=";
   };
 
   nativeBuildInputs = [
