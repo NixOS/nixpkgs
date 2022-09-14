@@ -44,12 +44,12 @@
 
 buildPythonPackage rec {
   pname = "flask-security-too";
-  version = "4.1.5";
+  version = "5.0.1";
 
   src = fetchPypi {
     pname = "Flask-Security-Too";
     inherit version;
-    sha256 = "sha256-98jKcHDv/+mls7QVWeGvGcmoYOGCspxM7w5/2RjJxoM=";
+    sha256 = "sha256-Q247oFmE8BDid0EFXGm8EsxFVmlG5NgFmQomKMNlZZQ=";
   };
 
   propagatedBuildInputs = [
