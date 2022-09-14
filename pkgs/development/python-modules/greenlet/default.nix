@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "greenlet";
-  version = "1.1.2";
+  version = "1.1.3";
   disabled = isPyPy; # builtin for pypy
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e30f5ea4ae2346e62cedde8794a56858a67b878dd79f7df76a0767e356b1744a";
+    sha256 = "sha256-vLbG3R1r5tONbbKDdH0H/aCJ/4xVmoNSNlYKRBA0BFU=";
   };
 
   checkInputs = [ unittestCheckHook ];
