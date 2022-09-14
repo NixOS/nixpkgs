@@ -4670,6 +4670,8 @@ with pkgs;
 
   swappy = callPackage ../applications/misc/swappy { gtk = gtk3; };
 
+  swapspace = callPackage ../tools/admin/swapspace { };
+
   swego = callPackage ../servers/swego { };
 
   sydbox = callPackage ../os-specific/linux/sydbox { };
