@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname   = "pathspec";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e564499435a2673d586f6b2130bb5b95f04a3ba06f81b8f895b651a3c76aabb1";
+    sha256 = "sha256-es5hYbYh0x55AutrWuFI0Sz9I/SiSbn/trn+4SCEMj0=";
   };
 
   meta = {
