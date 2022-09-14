@@ -18032,7 +18032,13 @@ with pkgs;
 
   bzrtp = callPackage ../development/libraries/bzrtp { };
 
-  c-ares = callPackage ../development/libraries/c-ares { };
+  c-ares = callPackage ../development/libraries/c-ares {
+    inherit (buildPackages) cmake;
+  };
+
+  c-aresMinimal = callPackage ../development/libraries/c-ares {
+    withCMake = false;
+  };
 
   c-blosc = callPackage ../development/libraries/c-blosc { };
 

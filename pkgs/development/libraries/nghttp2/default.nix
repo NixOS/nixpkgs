@@ -6,7 +6,7 @@
 
 # Optional dependencies
 , enableApp ? with stdenv.hostPlatform; !isWindows && !isStatic
-, c-ares, libev, openssl, zlib
+, c-aresMinimal, libev, openssl, zlib
 , enableAsioLib ? false, boost
 , enableGetAssets ? false, libxml2
 , enableHpack ? false, jansson
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (enableApp) [ installShellFiles ]
     ++ lib.optionals (enablePython) [ python3Packages.cython ];
 
-  buildInputs = lib.optionals enableApp [ c-ares libev openssl zlib ]
+  buildInputs = lib.optionals enableApp [ c-aresMinimal libev openssl zlib ]
     ++ lib.optionals (enableAsioLib) [ boost ]
     ++ lib.optionals (enableGetAssets) [ libxml2 ]
     ++ lib.optionals (enableHpack) [ jansson ]
