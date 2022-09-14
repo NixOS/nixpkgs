@@ -1,0 +1,10 @@
+diff -urN steghide-0.5.1/src/Makefile.am steghide-0.5.1-new/src/Makefile.am
+--- steghide-0.5.1/src/Makefile.am	2003-09-28 09:33:21.000000000 -0700
++++ steghide-0.5.1-new/src/Makefile.am	2003-10-30 21:05:40.000000000 -0800
+@@ -33,5 +33,5 @@
+ WavPCMSampleValue.cc error.cc main.cc msg.cc SMDConstructionHeuristic.cc
+ LIBS = @LIBINTL@ @LIBS@
+ localedir = $(datadir)/locale
+-LIBTOOL = $(SHELL) libtool
++LIBTOOL = /usr/bin/libtool
+ MAINTAINERCLEANFILES = Makefile.in

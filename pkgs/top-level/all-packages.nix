@@ -1244,6 +1244,8 @@ with pkgs;
 
   spectre-cli = callPackage ../tools/security/spectre-cli { };
 
+  steghide = callPackage ../tools/graphics/steghide { };
+
   sx-go = callPackage ../tools/security/sx-go { };
 
   systeroid = callPackage ../tools/system/systeroid { };

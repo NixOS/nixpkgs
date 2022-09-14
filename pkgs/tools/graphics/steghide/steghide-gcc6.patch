@@ -1,0 +1,22 @@
+--- steghide-0.5.1/src/Arguments.h.orig	2018-06-09 11:04:48.795952519 +0000
++++ steghide-0.5.1/src/Arguments.h	2018-06-09 11:00:57.239290249 +0000
+@@ -100,7 +100,7 @@
+ 	static const VERBOSITY	Default_Verbosity = NORMAL ;
+ 	static const unsigned long	Default_Radius = 0 ; // there is no default radius for all file formats
+ 	static const unsigned int	Max_Algorithm = 3 ;
+-	static const float		Default_Goal = 100.0 ;
++	static constexpr float		Default_Goal = 100.0 ;
+ 	static const DEBUGCOMMAND	Default_DebugCommand = NONE ;
+ 	static const bool		Default_Check = false ;
+ 	static const unsigned int	Default_DebugLevel = 0 ;
+--- steghide-0.5.1/src/ProgressOutput.h.orig	2018-06-09 11:01:44.662622682 +0000
++++ steghide-0.5.1/src/ProgressOutput.h	2018-06-09 11:01:57.755955767 +0000
+@@ -64,7 +64,7 @@
+ 	 **/
+ 	void done (float rate, float avgweight = NoAvgWeight) const ;
+ 
+-	static const float NoAvgWeight = -1.0 ;
++	static constexpr float NoAvgWeight = -1.0 ;
+ 
+ 	protected:
+ 	std::string vcompose (const char *msgfmt, va_list ap) const ;

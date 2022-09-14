@@ -1,0 +1,11 @@
+diff -ruN steghide-0.5.1.orig/src/Graph.cc steghide-0.5.1/src/Graph.cc
+--- steghide-0.5.1.orig/src/Graph.cc	2003-10-11 23:54:26.000000000 +0200
++++ steghide-0.5.1/src/Graph.cc	2008-12-14 14:23:27.000000000 +0100
+@@ -22,6 +22,7 @@
+ #include <list>
+ #include <map>
+ #include <vector>
++#include <climits>
+ 
+ #include "BitString.h"
+ #include "CvrStgFile.h"
