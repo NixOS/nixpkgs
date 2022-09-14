@@ -38,7 +38,9 @@ for flag in "${!hardeningEnableMap[@]}"; do
   case $flag in
     fortify)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify >&2; fi
-      hardeningCFlags+=('-O2' '-D_FORTIFY_SOURCE=2')
+      if [ "${dontFortify}" -eq 0 ]; then
+        hardeningCFlags+=('-O2' '-D_FORTIFY_SOURCE=2')
+      fi
       ;;
     stackprotector)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stackprotector >&2; fi

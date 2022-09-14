@@ -29,6 +29,9 @@ cc1=0
 cxxInclude=1
 cxxLibrary=1
 cInclude=1
+# ASan need to disable _FORTIFY_SOURCE to works
+# https://github.com/google/sanitizers/issues/247
+dontFortify=0
 
 expandResponseParams "$@"
 linkType=$(checkLinkType "${params[@]}")
@@ -46,6 +49,7 @@ while (( "$n" < "$nParams" )); do
         -nostdinc) cInclude=0 cxxInclude=0 ;;
         -nostdinc++) cxxInclude=0 ;;
         -nostdlib) cxxLibrary=0 ;;
+        *_FORTIFY_SOURCE*) dontFortify=1 ;;
         -x)
             case "$p2" in
                 *-header) dontLink=1 ;;
