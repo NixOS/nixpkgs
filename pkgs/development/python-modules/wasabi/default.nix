@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "wasabi";
-  version = "0.9.1";
+  version = "0.10.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rabxPptw7ya/lfrQ/r396+IAXimgitWPS7rjg6lymM8=";
+    sha256 = "sha256-yONyeBvhknKUI4KxTZkxTRdVGNeCIFfLepcBDEJZ0kk=";
   };
 
   checkInputs = [
