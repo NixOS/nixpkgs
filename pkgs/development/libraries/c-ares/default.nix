@@ -8,7 +8,6 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-let self =
 stdenv.mkDerivation rec {
   pname = "c-ares";
   version = "1.18.1";
@@ -38,32 +37,4 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
   };
-
-  # Adapted from running a cmake build
-  passthru.cmake-config = let
-    extension = if stdenv.hostPlatform.isStatic then ".a" else stdenv.hostPlatform.extensions.sharedLibrary;
-    buildType = if stdenv.hostPlatform.isStatic then "STATIC" else "SHARED";
-    buildTypeLower = if stdenv.hostPlatform.isStatic then "static" else "shared";
-    in writeTextDir "c-ares-config.cmake"
-    ''
-      set(c-ares_INCLUDE_DIR "${self}/include")
-
-      set(c-ares_LIBRARY c-ares::cares)
-
-      add_library(c-ares::cares ${buildType} IMPORTED)
-
-      set_target_properties(c-ares::cares PROPERTIES
-        INTERFACE_INCLUDE_DIRECTORIES "${self}/include"
-        ${lib.optionalString stdenv.isLinux ''INTERFACE_LINK_LIBRARIES "nsl;rt"''}
-      )
-      set_property(TARGET c-ares::cares APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-      set_target_properties(c-ares::cares PROPERTIES
-        IMPORTED_LOCATION_RELEASE "${self}/lib/libcares${extension}"
-        IMPORTED_SONAME_RELEASE "libcares${extension}"
-        )
-      add_library(c-ares::cares_${buildTypeLower} INTERFACE IMPORTED)
-      set_target_properties(c-ares::cares_${buildTypeLower} PROPERTIES INTERFACE_LINK_LIBRARIES "c-ares::cares")
-      set(c-ares_${buildType}_LIBRARY c-ares::cares_${buildTypeLower})
-    '';
-
-}; in self
+}
