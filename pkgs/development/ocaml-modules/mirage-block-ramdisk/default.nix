@@ -23,7 +23,7 @@ buildDunePackage rec {
     maintainers = with maintainers; [ ehmry ];
     # mirage-block-ramdisk uses an incompatable version of cstruct (<6.1.0) and
     # is only dependen on by other broken packages. No update has been pushed
-    # since 2022-07-06, so might be abandoned?
+    # since 2020-07-06, so might be abandoned?
     broken = true;
   };
 }
