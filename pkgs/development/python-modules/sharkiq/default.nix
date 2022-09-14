@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "sharkiq";
-  version = "0.0.1";
+  version = "1.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e5efb0ad13a66cf6a097da5c128347ef7bd0b2abe53a8ca65cbc847ec1190c8b";
+    sha256 = "sha256-BGf7wjqB+ty/UQnTqEYzLkWuoikWA4kHPvth7h1F53I=";
   };
 
   propagatedBuildInputs = [
