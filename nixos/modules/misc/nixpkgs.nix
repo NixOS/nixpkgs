@@ -337,7 +337,7 @@ in
 
   config = {
     _module.args = {
-      pkgs = finalPkgs;
+      pkgs = finalPkgs.__splicedPackages;
     };
 
     assertions = [
