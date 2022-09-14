@@ -463,6 +463,15 @@
       </listitem>
       <listitem>
         <para>
+          dd-agent package removed along with the
+          <literal>services.dd-agent</literal> module, due to the
+          project being deprecated in favor of
+          <literal>datadog-agent</literal>, which is available via the
+          <literal>services.datadog-agent</literal> module.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           virtlyst package and <literal>services.virtlyst</literal>
           module removed, due to lack of maintainers.
         </para>
