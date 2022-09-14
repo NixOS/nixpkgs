@@ -2,11 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "flac";
-  version = "1.3.4";
+  version = "1.4.0";
 
   src = fetchurl {
     url = "http://downloads.xiph.org/releases/flac/${pname}-${version}.tar.xz";
-    sha256 = "0dz7am8kbc97a6afml1h4yp085274prg8j7csryds8m3fmz61w4g";
+    # Official checksum is published at https://github.com/xiph/flac/releases/tag/1.4.0.
+    sha256 = "af41c0733c93c237c3e52f64dd87e3b0d9af38259f1c7d11e8cbf583c48c2506";
   };
 
   buildInputs = [ libogg ];
@@ -20,5 +21,6 @@ stdenv.mkDerivation rec {
     description = "Library and tools for encoding and decoding the FLAC lossless audio file format";
     platforms = platforms.all;
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ruuda ];
   };
 }
