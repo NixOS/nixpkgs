@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "sniffio";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c4666eecec1d3f50960c6bdf61ab7bc350648da6c126e3cf6898d8cd4ddcd3de";
+    sha256 = "sha256-5gMFxeXTFPU4klm38iqqM9j33uSXYxGSNK83VcVbkQE=";
   };
 
   disabled = !isPy3k;
