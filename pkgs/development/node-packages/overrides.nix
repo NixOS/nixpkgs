@@ -550,6 +550,16 @@ final: prev: {
     buildInputs = [ final.node-gyp-build ];
   };
 
+  wrangler = prev.wrangler.override (oldAttrs: {
+    dontNpmInstall = true;
+    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
+    postInstall = ''
+      makeWrapper "$out/lib/node_modules/wrangler/bin/wrangler.js" "$out/bin/wrangler" \
+        --inherit-argv0
+    '';
+    meta = oldAttrs.meta // { broken = before "16.13"; };
+  });
+
   yaml-language-server = prev.yaml-language-server.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''

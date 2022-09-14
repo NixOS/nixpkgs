@@ -84,8 +84,10 @@ in stdenv.mkDerivation rec {
     runHook preBuild
 
     pushd element-web
-    node scripts/copy-res.js
-    node_modules/.bin/webpack --progress --mode production
+    export VERSION=${version}
+    yarn build:res --offline
+    yarn build:module_system --offline
+    yarn build:bundle --offline
     popd
 
     runHook postBuild
@@ -100,12 +102,12 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Matrix client / Element Web fork";
     homepage = "https://schildi.chat/";
     changelog = "https://github.com/SchildiChat/schildichat-desktop/releases";
-    maintainers = lib.teams.matrix.members ++ [ lib.maintainers.kloenk ];
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.all;
+    maintainers = teams.matrix.members ++ (with maintainers; [ kloenk yuka ]);
+    license = licenses.asl20;
+    platforms = platforms.all;
   };
 }
