@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gameoftrees.org";
     license = licenses.isc;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ abbe ];
+    maintainers = with maintainers; [ abbe afh ];
   };
 }
