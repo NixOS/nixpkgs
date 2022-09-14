@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "jwcrypto";
-  version = "1.3.1";
+  version = "1.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VLVRsRX/tNErHx7pO4uipxu4VWuj2F1i9wdUlhPah3w=";
+    hash = "sha256-MLz8LRmfLxpS0EVY/6mREq2B17eH8p4NmqTvSZk0MH4=";
   };
 
   propagatedBuildInputs = [
