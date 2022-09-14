@@ -4,6 +4,7 @@
 , fetchpatch
 , pytestCheckHook
 , pythonOlder
+, buildAsUnicode ? true
 }:
 
 buildPythonPackage rec {
@@ -19,6 +20,10 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-APpL99kOwzIQjePvRDeJ0FDm1kjBi6083JMKuBqtaRk=";
   };
+
+  preBuild = lib.optionalString (!buildAsUnicode) ''
+    export AHOCORASICK_BYTES=1
+  '';
 
   checkInputs = [
     pytestCheckHook
