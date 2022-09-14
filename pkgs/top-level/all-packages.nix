@@ -31625,7 +31625,9 @@ with pkgs;
 
   transcribe = callPackage ../applications/audio/transcribe { };
 
-  transmission = callPackage ../applications/networking/p2p/transmission { };
+  transmission = callPackage ../applications/networking/p2p/transmission {
+    openssl = openssl_1_1;
+  };
   libtransmission = transmission.override {
     installLib = true;
     enableDaemon = false;
