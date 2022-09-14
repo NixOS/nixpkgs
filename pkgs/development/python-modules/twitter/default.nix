@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "twitter";
-  version = "1.19.4";
+  version = "1.19.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-g7jSSEpsdEihGuHG9MJTNVFe6NyB272vEsvAocRo72U=";
+    hash = "sha256-gN3WmuLuuIMT/u3uoxvxGf1ueVQe5bN6u5xD0jMZThA=";
   };
 
   nativeBuildInputs = [
