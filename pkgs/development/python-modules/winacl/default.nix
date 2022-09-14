@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "winacl";
-  version = "0.1.3";
+  version = "0.1.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-G6xWep0hMACCqiJGuw+UpZH8qOIY4WO6sY3w4y7v6gY=";
+    hash = "sha256-sgpTQovEps19e05sgfznyiP9k2SwKsjcC1ZTfAHeQqQ=";
   };
 
   # Project doesn't have tests
