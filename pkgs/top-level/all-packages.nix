@@ -15540,6 +15540,8 @@ with pkgs;
 
   tclreadline = callPackage ../development/interpreters/tclreadline { };
 
+  eltclsh = callPackage ../development/tools/eltclsh { };
+
   trealla = callPackage ../development/interpreters/trealla { };
 
   wapm-cli = callPackage ../tools/package-management/wapm/cli {
