@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , fastjsonschema
+, flit-core
 , pytestCheckHook
 , glibcLocales
 , ipython_genutils
@@ -9,21 +10,36 @@
 , testpath
 , jsonschema
 , jupyter_core
+, pep440
 }:
 
 buildPythonPackage rec {
   pname = "nbformat";
-  version = "5.4.0";
+  version = "5.5.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RLpcpqy4DF1aUA8eW4Pt6MvjZNWklcTIz2Cq8bplZQE=";
+    sha256 = "sha256-nr4w5sOz5bR9Of8KOJehrPUj0r+vy04tBM23D4pmxQc=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   LC_ALL="en_US.utf8";
 
+  propagatedBuildInputs = [
+    fastjsonschema
+    ipython_genutils
+    jsonschema
+    jupyter_core
+    pep440
+    testpath
+    traitlets
+  ];
+
   checkInputs = [ pytestCheckHook glibcLocales ];
-  propagatedBuildInputs = [ ipython_genutils traitlets testpath jsonschema jupyter_core fastjsonschema ];
 
   preCheck = ''
     mkdir tmp
