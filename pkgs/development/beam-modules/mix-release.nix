@@ -1,10 +1,11 @@
-{ stdenv, lib, elixir, erlang, findutils, hex, rebar, rebar3, fetchMixDeps, makeWrapper, git, ripgrep }@inputs:
+{ stdenv, lib, elixir, erlang, findutils, hex, rebar, rebar3WithPlugins, fetchMixDeps, makeWrapper, git, ripgrep }@inputs:
 
 { pname
 , version
 , src
 , nativeBuildInputs ? [ ]
 , buildInputs ? [ ]
+, buildPlugins ? [ ]
 , meta ? { }
 , enableDebugInfo ? false
 , mixEnv ? "prod"
@@ -21,6 +22,9 @@
 , ...
 }@attrs:
 let
+  rebar3 = rebar3WithPlugins {
+    plugins = buildPlugins;
+  };
   # remove non standard attributes that cannot be coerced to strings
   overridable = builtins.removeAttrs attrs [ "compileFlags" "mixNixDeps" ];
 in
