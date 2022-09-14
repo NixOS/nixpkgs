@@ -23080,7 +23080,10 @@ with pkgs;
 
   protobuf = protobuf3_21;
 
-  protobuf3_21 = callPackage ../development/libraries/protobuf/3.21.nix { };
+  # Versioning for protobuf changed scheme during 3.21.x releases
+  # See: https://developers.google.com/protocol-buffers/docs/news/2022-05-06
+  protobuf_21 = callPackage ../development/libraries/protobuf/21.nix { };
+  protobuf3_21 = protobuf_21;
   protobuf3_20 = callPackage ../development/libraries/protobuf/3.20.nix { };
   protobuf3_19 = callPackage ../development/libraries/protobuf/3.19.nix { };
   protobuf3_17 = callPackage ../development/libraries/protobuf/3.17.nix { };

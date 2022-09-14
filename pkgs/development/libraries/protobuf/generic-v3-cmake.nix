@@ -46,7 +46,7 @@ let
         --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
     '';
 
-    patches = lib.optionals (lib.versionOlder version "3.22") [
+    patches = lib.optionals (lib.versionOlder version "22") [
       # fix protobuf-targets.cmake installation paths, and allow for CMAKE_INSTALL_LIBDIR to be absolute
       # https://github.com/protocolbuffers/protobuf/pull/10090
       (fetchpatch {
