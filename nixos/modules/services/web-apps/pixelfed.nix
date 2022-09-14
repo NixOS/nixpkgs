@@ -3,6 +3,7 @@
 with lib;
 
 let
+
   cfg = config.services.pixelfed;
   opt = options.services.pixelfed;
 
@@ -11,19 +12,26 @@ let
 
   configFile = pkgs.writeTextFile {
     name = "env";
-    text = cfg.envFile;
+    text = cfg.envFile + ''
+    APP_KEY = ${cfg.appKey}
+    DB_CONNECTION=${cfg.database.type}
+    DB_HOST=${cfg.database.host}
+    DB_PORT= ${toString cfg.database.port}
+    DB_DATABASE=${cfg.database.name}
+    DB_USERNAME=${cfg.database.user}
+    DB_PASSWORD=${cfg.database.password}
+    '';
   };
 
 in {
   options.services = {
     pixelfed = {
-      enable = mkEnableOption (lib.mdDoc "pixelfed");
+      enable = mkEnableOption "the pixelfed service";
 
       envFile = mkOption {
         type = types.str;
         description = lib.mdDoc "Pixelfed .env file used to configure the application";
         default = ''
-        APP_KEY = ${cfg.appKey}
         APP_NAME=Pixelfed
         APP_ENV=production
         APP_DEBUG=true
@@ -48,13 +56,6 @@ in {
         SESSION_DOMAIN=127.0.0.1
         TRUST_PROXIES=*
 
-        # Database Configuration
-        DB_CONNECTION=${cfg.database.type}
-        DB_HOST=${cfg.database.host}
-        DB_PORT= ${toString cfg.database.port}
-        DB_DATABASE=${cfg.database.name}
-        DB_USERNAME=${cfg.database.user}
-        DB_PASSWORD=${cfg.database.password}
 
         # Redis Configuration
         REDIS_CLIENT=predis
