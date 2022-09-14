@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "twisted";
-  version = "22.4.0";
+  version = "22.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     pname = "Twisted";
     inherit version;
     extension = "tar.gz";
-    sha256 = "sha256-oEeZD1ffrh4L0rffJSbU8W3NyEN3TcEIt4xS8qXxNoA=";
+    sha256 = "sha256-5bYN458tHaFT++GHTYhf4/y9sh/MRG+nWaU+j8NRO+0=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -76,9 +76,6 @@ buildPythonPackage rec {
     echo 'ListingTests.test_oldFile.skip = "Timezone issue"'>> src/twisted/conch/test/test_cftp.py
     echo 'ListingTests.test_oldSingleDigitDayOfMonth.skip = "Timezone issue"'>> src/twisted/conch/test/test_cftp.py
 
-    echo 'PTYProcessTestsBuilder_AsyncioSelectorReactorTests.test_openFileDescriptors.skip = "invalid syntax"'>> src/twisted/internet/test/test_process.py
-    echo 'PTYProcessTestsBuilder_SelectReactorTests.test_openFileDescriptors.skip = "invalid syntax"'>> src/twisted/internet/test/test_process.py
-
     echo 'UNIXTestsBuilder_AsyncioSelectorReactorTests.test_sendFileDescriptorTriggersPauseProducing.skip = "sendFileDescriptor producer was not paused"'>> src/twisted/internet/test/test_unix.py
     echo 'UNIXTestsBuilder_SelectReactorTests.test_sendFileDescriptorTriggersPauseProducing.skip = "sendFileDescriptor producer was not paused"'>> src/twisted/internet/test/test_unix.py
 
@@ -90,8 +87,6 @@ buildPythonPackage rec {
     echo 'MulticastTests.test_loopback.skip = "No such device"'>> src/twisted/test/test_udp.py
     echo 'MulticastTests.test_multicast.skip = "Reactor was unclean"'>> src/twisted/test/test_udp.py
     echo 'MulticastTests.test_multiListen.skip = "No such device"'>> src/twisted/test/test_udp.py
-
-    echo 'DomishExpatStreamTests.test_namespaceWithWhitespace.skip = "syntax error: line 1, column 0"'>> src/twisted/words/test/test_domish.py
 
     # not packaged
     substituteInPlace src/twisted/test/test_failure.py \
