@@ -30,6 +30,7 @@
 , Foundation
 , testers
 , imagemagick
+, img2pdf
 }:
 
 assert libXtSupport -> libX11Support;
@@ -118,8 +119,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.tests.version =
-    testers.testVersion { package = imagemagick; };
+  passthru.tests = {
+    version = testers.testVersion { package = imagemagick; };
+    inherit img2pdf;
+  };
 
   meta = with lib; {
     homepage = "http://www.imagemagick.org/";
