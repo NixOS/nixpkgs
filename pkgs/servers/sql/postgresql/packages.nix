@@ -2,6 +2,8 @@ self: super: {
 
     age = super.callPackage ./ext/age.nix { };
 
+    citus = super.callPackage ./ext/citus.nix { };
+
     jsonb_deep_sum = super.callPackage ./ext/jsonb_deep_sum.nix { };
 
     periods = super.callPackage ./ext/periods.nix { };
