@@ -17,6 +17,10 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X github.com/CircleCI-Public/circleci-cli/version.Version=${version}" "-X github.com/CircleCI-Public/circleci-cli/version.Commit=${src.rev}" "-X github.com/CircleCI-Public/circleci-cli/version.packageManager=nix" ];
 
+  postInstall = ''
+    mv $out/bin/circleci-cli $out/bin/circleci
+  '';
+
   meta = with lib; {
     # Box blurb edited from the AUR package circleci-cli
     description = ''
@@ -24,6 +28,7 @@ buildGoModule rec {
       run jobs as if they were running on the hosted CirleCI application.
     '';
     maintainers = with maintainers; [ synthetica ];
+    mainProgram = "circleci";
     license = licenses.mit;
     homepage = "https://circleci.com/";
   };
