@@ -17,6 +17,13 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X" "main.Version=${version}" ];
 
+  tags = [ "netgo" "osusergo" "static_build" ];
+
+  postInstall = ''
+    mkdir -p $out/share/oh-my-posh
+    cp -r ${src}/themes $out/share/oh-my-posh/
+  '';
+
   meta = with lib; {
     description = "A prompt theme engine for any shell";
     homepage = "https://ohmyposh.dev";
