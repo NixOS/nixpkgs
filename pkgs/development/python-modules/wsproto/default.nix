@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "wsproto";
-  version = "1.1.0";
+  version = "1.2.0";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ouVr/Vx82DwTadg7X+zNbTd5i3SHKGbmJhbg7PERvag=";
+    sha256 = "sha256-rVZfJuy5JYij5DvD2WFk3oTNmQJIKxMNDduqlmSoUGU=";
   };
 
   propagatedBuildInputs = [ h11 ];
