@@ -2,20 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gptfdisk";
-  version = "1.0.8";
+  version = "1.0.9";
 
   src = fetchurl {
     # https://www.rodsbooks.com/gdisk/${name}.tar.gz also works, but the home
     # page clearly implies a preference for using SourceForge's bandwidth:
     url = "mirror://sourceforge/gptfdisk/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ldGYVvAE2rxLjDQrJhLo0KnuvdUgBClxiDafFS6dxt8=";
+    sha256 = "sha256-2v6tJpP6646Ll4MrI0B/btWzIZvBeE9ILdhVd04tUMI=";
   };
-
-  patches = [
-    # fix build failure against ncurses-6.3 (pending upstream inclusion):
-    #  https://sourceforge.net/p/gptfdisk/mailman/message/37392412/
-    ./ncurses-6.3.patch
-  ];
 
   postPatch = ''
     patchShebangs gdisk_test.sh
