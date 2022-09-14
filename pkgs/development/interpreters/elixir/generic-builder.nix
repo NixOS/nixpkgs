@@ -7,6 +7,7 @@
 , coreutils
 , curl
 , bash
+, removeReferencesTo
 , debugInfo ? false
 }:
 
@@ -29,7 +30,7 @@ stdenv.mkDerivation ({
 
   inherit src version debugInfo;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper removeReferencesTo ];
   buildInputs = [ erlang ];
 
   LANG = "C.UTF-8";
@@ -57,6 +58,11 @@ stdenv.mkDerivation ({
 
     substituteInPlace $out/bin/mix \
           --replace "/usr/bin/env elixir" "${coreutils}/bin/env elixir"
+
+    # Some of the beam files contain references to the erlang derivation
+    # and these references make erlang a hard dependency when building mix
+    # releases. This intends to remove them.
+    find $out -name '*.beam' -exec remove-references-to -t ${erlang} '{}' +
   '';
 
   pos = builtins.unsafeGetAttrPos "sha256" args;
