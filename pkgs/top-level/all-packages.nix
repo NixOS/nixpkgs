@@ -5936,7 +5936,7 @@ with pkgs;
 
   schildichat-desktop = callPackage ../applications/networking/instant-messengers/schildichat/schildichat-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_17;
+    electron = electron_20;
   };
   schildichat-desktop-wayland = writeScriptBin "schildichat-desktop" ''
     #!/bin/sh
@@ -6011,7 +6011,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  wrangler = callPackage ../development/tools/wrangler {
+  inherit (nodePackages_latest) wrangler;
+
+  wrangler_1 = callPackage ../development/tools/wrangler_1 {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security;
   };
 
@@ -10765,7 +10767,7 @@ with pkgs;
 
   safe-rm = callPackage ../tools/system/safe-rm { };
 
-  safeeyes = callPackage ../applications/misc/safeeyes { };
+  safeeyes = with python3.pkgs; toPythonApplication safeeyes;
 
   sahel-fonts = callPackage ../data/fonts/sahel-fonts { };
 
@@ -22922,6 +22924,8 @@ with pkgs;
   glabels = callPackage ../applications/graphics/glabels { };
 
   nats-server = callPackage ../servers/nats-server { };
+
+  go-autoconfig = callPackage ../servers/go-autoconfig { };
 
   go-camo = callPackage ../servers/http/go-camo { };
 
