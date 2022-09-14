@@ -11,6 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-2v6tJpP6646Ll4MrI0B/btWzIZvBeE9ILdhVd04tUMI=";
   };
 
+  patches = [
+    # fix UUID generation (from upstream but not yet released):
+    # https://sourceforge.net/p/gptfdisk/code/ci/6a8416cbd12d55f882bb751993b94f72d338d96f/
+    # https://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg1853985.html
+    ./uuid.patch
+  ];
+
   postPatch = ''
     patchShebangs gdisk_test.sh
   '' + lib.optionalString stdenv.isDarwin ''
