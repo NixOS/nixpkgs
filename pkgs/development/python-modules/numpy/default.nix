@@ -11,7 +11,6 @@
 , lapack
 , writeTextFile
 , cython
-, setuptoolsBuildHook
 , pythonOlder
 }:
 
@@ -41,13 +40,8 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-
-  # Attention! v1.22.0 breaks scipy and by extension scikit-learn, so
-  # build both to verify they don't break.
-  # https://github.com/scipy/scipy/issues/15414
   version = "1.23.3";
-
-  format = "pyproject";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
@@ -63,7 +57,7 @@ in buildPythonPackage rec {
     ./numpy-distutils-C++.patch
   ];
 
-  nativeBuildInputs = [ gfortran cython setuptoolsBuildHook ];
+  nativeBuildInputs = [ gfortran cython ];
   buildInputs = [ blas lapack ];
 
   # we default openblas to build with 64 threads
