@@ -8,12 +8,12 @@ buildGoModule rec {
     owner = "numary";
     repo = "ledger";
     rev = "v${version}";
-    hash = "sha256-wMfdCCycVXv6Lg1OVzyNXCDk39OdD9mZvbirPtRQols=";
+    hash = "sha256-ZHiWGKl63Tl0Es9W+ChY9dHsnke8NcoDIOzmlxbzHKI=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
     postFetch = ''
-      date -u -d "@$(git -C $out log -1 --pretty=%ct)" "+%Y-%m-%d %H:%M UTC" > $out/DATE
+      date -u -d "@$(git -C $out log -1 --pretty=%ct)" --iso-8601=seconds > $out/DATE
       git -C $out rev-parse HEAD > $out/COMMIT
       rm -rf $out/.git
     '';
