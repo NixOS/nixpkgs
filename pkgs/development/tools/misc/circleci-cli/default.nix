@@ -23,8 +23,8 @@ buildGoModule rec {
     mv $out/bin/circleci-cli $out/bin/circleci
 
     installShellCompletion --cmd circleci \
-      --bash <($out/bin/circleci completion bash --skip-update-check) \
-      --zsh <($out/bin/circleci completion zsh --skip-update-check)
+      --bash <(HOME=$TMPDIR $out/bin/circleci completion bash --skip-update-check) \
+      --zsh <(HOME=$TMPDIR $out/bin/circleci completion zsh --skip-update-check)
   '';
 
   meta = with lib; {

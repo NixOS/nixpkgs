@@ -13067,6 +13067,8 @@ with pkgs;
 
   algol68g = callPackage ../development/compilers/algol68g { };
 
+  ante = callPackage ../development/compilers/ante { };
+
   armips = callPackage ../development/compilers/armips {
     stdenv = gcc10Stdenv;
   };
@@ -28999,7 +29001,11 @@ with pkgs;
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
 
-  klee = callPackage ../applications/science/logic/klee { };
+  klee = callPackage ../applications/science/logic/klee (with llvmPackages_11; {
+    clang = clang;
+    llvm = llvm;
+    stdenv = stdenv;
+  });
 
   kmetronome = libsForQt5.callPackage ../applications/audio/kmetronome { };
 
