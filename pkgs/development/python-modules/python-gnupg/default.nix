@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, gnupg }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, gnupg
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "python-gnupg";
@@ -17,6 +23,19 @@ buildPythonPackage rec {
     substituteInPlace test_gnupg.py \
       --replace "os.environ.get('GPGBINARY', 'gpg')" "os.environ.get('GPGBINARY', '${gnupg}/bin/gpg')"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # network access
+    "test_search_keys"
+  ];
 
   pythonImportsCheck = [ "gnupg" ];
 
