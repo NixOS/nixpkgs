@@ -27,7 +27,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "acme==" "acme>=" \
-      --replace "cryptography>=2.8,<37.0" "cryptography" \
+      --replace "cryptography>=2.8,<38.0" "cryptography" \
       --replace "pycognito==" "pycognito>=" \
       --replace "snitun==" "snitun>=" \
   '';
