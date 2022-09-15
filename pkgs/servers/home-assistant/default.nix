@@ -363,6 +363,7 @@ in python.pkgs.buildPythonApplication rec {
       "orjson"
       "PyJWT"
       "requests"
+      "yarl"
     ];
   in ''
     sed -r -i \
