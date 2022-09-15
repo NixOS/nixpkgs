@@ -480,15 +480,10 @@ Preferred source hash type is sha256. There are several ways to get it.
 
 4. Extracting hash from local source tarball can be done with `sha256sum`. Use `nix-prefetch-url file:///path/to/tarball` if you want base32 hash.
 
-5. Fake hash: set fake hash in package expression, perform build and extract correct hash from error Nix prints.
-
-    For package updates it is enough to change one symbol to make hash fake. For new packages, you can use `lib.fakeSha256`, `lib.fakeSha512` or any other fake hash.
+5. Fake hash: set the hash to `""`, `lib.fakeHash`, `lib.fakeSha256`, or `lib.fakeSha512` in the package expression, perform build and extract correct hash from error Nix prints.  You must use one of these four fake hashes and not some randomly-chosen hash; see below for the reason.
 
     This is last resort method when reconstructing source URL is non-trivial and `nix-prefetch-url -A` isn’t applicable (for example, [one of `kodi` dependencies](https://github.com/NixOS/nixpkgs/blob/d2ab091dd308b99e4912b805a5eb088dd536adb9/pkgs/applications/video/kodi/default.nix#L73)). The easiest way then would be replace hash with a fake one and rebuild. Nix build will fail and error message will contain desired hash.
 
-::: {.warning}
-This method has security problems. Check below for details.
-:::
 
 ### Obtaining hashes securely {#sec-source-hashes-security}
 
@@ -500,7 +495,7 @@ Let's say Man-in-the-Middle (MITM) sits close to your network. Then instead of f
 
 - `https://` URLs are secure in methods 1, 2, 3;
 
-- `https://` URLs are not secure in method 5. When obtaining hashes with fake hash method, TLS checks are disabled. So refetch source hash from several different networks to exclude MITM scenario. Alternatively, use fake hash method to make Nix error, but instead of extracting hash from error, extract `https://` URL and prefetch it with method 1.
+- `https://` URLs are not secure in method 5 *if* you use `""`, `lib.fakeHash`, `lib.fakeSha256`, or `lib.fakeSha512`.  If you use any other hash, `fetchurl` will pass `--insecure` to `curl` in order to be robust in the face of TLS certificate expiration and to allow fetching over protocols like HTTP which do not incur the overhead of TLS.
 
 ## Patches {#sec-patches}
 
