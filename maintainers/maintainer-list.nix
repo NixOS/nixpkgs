@@ -5263,6 +5263,15 @@
     githubId = 313929;
     name = "Gabriel Ebner";
   };
+  genericnerdyusername = {
+    name = "GenericNerdyUsername";
+    email = "genericnerdyusername@proton.me";
+    github = "GenericNerdyUsername";
+    githubId = 111183546;
+    keys = [{
+      fingerprint = "58CE D4BE 6B10 149E DA80  A990 2F48 6356 A4CB 30F3";
+    }];
+  };
   genofire = {
     name = "genofire";
     email = "geno+dev@fireorbit.de";
