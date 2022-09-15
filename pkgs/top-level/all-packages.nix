@@ -23711,6 +23711,8 @@ with pkgs;
     libtool = darwin.cctools;
   };
 
+  surrealdb = callPackage ../servers/nosql/surrealdb { };
+
   # Fails to compile with boost <= 1.72
   rippled = callPackage ../servers/rippled {
     boost = boost172;
