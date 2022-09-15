@@ -5071,10 +5071,6 @@ in {
 
   lc7001 = callPackage ../development/python-modules/lc7001 { };
 
-  ldap = callPackage ../development/python-modules/ldap {
-    inherit (pkgs) openldap cyrus_sasl;
-  };
-
   ldap3 = callPackage ../development/python-modules/ldap3 { };
 
   ldapdomaindump = callPackage ../development/python-modules/ldapdomaindump { };
@@ -8934,6 +8930,10 @@ in {
   python-jsonrpc-server = callPackage ../development/python-modules/python-jsonrpc-server { };
 
   python_keyczar = callPackage ../development/python-modules/python_keyczar { };
+
+  python-ldap = callPackage ../development/python-modules/python-ldap {
+    inherit (pkgs) openldap cyrus_sasl;
+  };
 
   python-ldap-test = callPackage ../development/python-modules/python-ldap-test { };
 
