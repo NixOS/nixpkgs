@@ -17,6 +17,8 @@ rec {
 
   vendorSha256 = "sha256-CdvxY3uX6i3Xtg50jqlNr+VXpeOeg8M27huasbzA96M=";
 
+  ldflags = [ "-X main.version=${version}" ];
+
   meta = with lib; {
     homepage = "https://gitlab.com/greut/eclint";
     description = "EditorConfig linter written in Go";
