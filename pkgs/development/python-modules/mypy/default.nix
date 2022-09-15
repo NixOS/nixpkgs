@@ -13,6 +13,7 @@
 , pytestCheckHook
 , python
 , pythonOlder
+, setuptools
 , six
 , typed-ast
 , typing-extensions
@@ -35,6 +36,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    setuptools
     types-typed-ast
   ];
 
