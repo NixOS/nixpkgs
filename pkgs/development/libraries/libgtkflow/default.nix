@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libgtkflow";
-  version = "0.8.0";
+  version = "0.10.0";
 
   src = fetchFromGitea {
     domain = "notabug.org";
     owner = "grindhold";
     repo = pname;
     rev = version;
-    hash = "sha256:1m30rvj5hx3b4cj8lbzrxv4j8lp3hx4jlb8vpf4rh46vc1rdkxpz";
+    hash = "sha256-iTOoga94yjGTowQOM/EvHEDOO9Z3UutPGRgEoI1UWkI=";
   };
 
   nativeBuildInputs = [
