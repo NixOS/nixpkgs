@@ -5,6 +5,7 @@
 , python
 , libev
 , greenlet
+, setuptools
 , zope_event
 , zope_interface
 , pythonOlder
@@ -21,6 +22,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-9ItkV4w2e5H6eTv46qr0mVy5PIvEWGDkc7+GgHCtCU4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   buildInputs = [
     libev
