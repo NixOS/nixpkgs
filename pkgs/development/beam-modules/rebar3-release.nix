@@ -61,8 +61,10 @@ let
 
       configurePhase = ''
         runHook preConfigure
-        ${lib.optionalString (checkouts != null)
-        "cp --no-preserve=all -R ${checkouts}/_checkouts ."}
+        ${lib.optionalString (checkouts != null) ''
+          cp -R ${checkouts}/_checkouts .
+          chmod -R u+w _checkouts
+        ''}
         runHook postConfigure
       '';
 
