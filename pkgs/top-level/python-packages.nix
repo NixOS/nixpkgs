@@ -9414,7 +9414,9 @@ in {
 
   rachiopy = callPackage ../development/python-modules/rachiopy { };
 
-  radicale_infcloud = callPackage ../development/python-modules/radicale_infcloud { };
+  radicale_infcloud = callPackage ../development/python-modules/radicale_infcloud {
+    radicale = pkgs.radicale.override { python3 = python; };
+  };
 
   radio_beam = callPackage ../development/python-modules/radio_beam { };
 
