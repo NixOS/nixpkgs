@@ -10,15 +10,15 @@ stdenv.mkDerivation rec {
   # base_version is of the form major.minor.patch
   # vc_version is of the form YYMMDDCC
   # version corresponds to the tag on GitHub
-  base_version = "8.0.1";
-  vc_version = "22070801";
+  base_version = "8.0.3";
+  vc_version = "22090809";
   version = "${base_version}.${vc_version}";
 
   src = fetchFromGitHub {
     owner = "renpy";
     repo = "renpy";
     rev = version;
-    sha256 = "sha256-rwRykovY8vv+boQiaSjCBoGxGpT1dF3qdEyxkykrKyk=";
+    sha256 = "sha256-0/wkUk7PMPbBSGzDuSd82yxRzvAYxkbEhM5LTVt4bMA=";
   };
 
   nativeBuildInputs = [
