@@ -1,21 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, perl, buildPackages }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libstemmer";
-  version = "unstable-2017-03-02";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
-    owner = "zvelo";
-    repo = "libstemmer";
-    rev = "78c149a3a6f262a35c7f7351d3f77b725fc646cf";
-    sha256 = "06md6n6h1f2zvnjrpfrq7ng46l1x12c14cacbrzmh5n0j98crpq7";
+    owner = "snowballstem";
+    repo = "snowball";
+    rev = "v${version}";
+    sha256 = "sha256-qXrypwv/I+5npvGHGsHveijoui0ZnoGYhskCfLkewVE=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ perl ];
+
+  prePatch = ''
+    patchShebangs .
+  '' + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    substituteInPlace GNUmakefile \
+      --replace './snowball' '${lib.getBin buildPackages.libstemmer}/bin/snowball'
+  '';
+
+  makeTarget = "libstemmer.a";
+
+  installPhase = ''
+    runHook preInstall
+    install -Dt $out/lib libstemmer.a
+    install -Dt $out/include include/libstemmer.h
+    install -Dt $out/bin {snowball,stemwords}
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Snowball Stemming Algorithms";
-    homepage = "http://snowball.tartarus.org/";
+    homepage = "https://snowballstem.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.all;

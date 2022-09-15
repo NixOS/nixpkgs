@@ -61,13 +61,15 @@ stdenv.mkDerivation rec {
   outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" "info" ];
   setOutputFlags = false;
 
-  setupHook = ./setup-hook.sh;
+  setupHooks = [
+    ./setup-hook.sh
+    ./check-pc-files-hook.sh
+  ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = setupHooks ++ [
     pkg-config
-    setupHook
   ]
   ++ lib.optionals buildDocs [ texinfo ]
   ++ lib.optionals qt5UI [ wrapQtAppsHook ];

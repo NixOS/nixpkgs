@@ -1,7 +1,6 @@
 { lib, fetchFromGitHub
 , version
 , suffix ? ""
-, curl
 , sha256 ? null
 , src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit sha256; }
 , patches ? [ ]
@@ -25,6 +24,7 @@ in
 , bzip2
 , callPackage
 , coreutils
+, curl
 , editline
 , flex
 , gnutar

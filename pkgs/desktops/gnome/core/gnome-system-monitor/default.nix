@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     meson
     ninja
+    glib
   ];
 
   buildInputs = [

@@ -73,13 +73,13 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     rsync
+    gobject-introspection
   ];
 
   buildInputs = [
     accountsservice
     audit
     glib
-    gobject-introspection
     gtk3
     keyutils
     libX11

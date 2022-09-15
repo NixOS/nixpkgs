@@ -18,6 +18,7 @@ in
 
 (gobject-introspection-unwrapped.override args).overrideAttrs (previousAttrs: {
   pname = "gobject-introspection-wrapped";
+  depsTargetTargetPropagated = [ gobject-introspection-unwrapped ];
   postFixup = (previousAttrs.postFixup or "") + ''
     mv $dev/bin/g-ir-compiler $dev/bin/.g-ir-compiler-wrapped
     mv $dev/bin/g-ir-scanner $dev/bin/.g-ir-scanner-wrapped
@@ -25,16 +26,16 @@ in
     (
       export bash="${buildPackages.bash}"
       export emulator=${lib.escapeShellArg (stdenv.targetPlatform.emulator buildPackages)}
-      export buildobjdump="${buildPackages.stdenv.cc.bintools}/bin/objdump"
+      export emulatorwrapper="$dev/bin/g-ir-scanner-qemuwrapper"
+      export buildlddtree="${buildPackages.pax-utils}/bin/lddtree"
 
       export targetgir="${lib.getDev (targetPackages.gobject-introspection-unwrapped.override argsForTarget)}"
 
       substituteAll "${./wrappers/g-ir-compiler.sh}" "$dev/bin/g-ir-compiler"
       substituteAll "${./wrappers/g-ir-scanner.sh}" "$dev/bin/g-ir-scanner"
       substituteAll "${./wrappers/g-ir-scanner-lddwrapper.sh}" "$dev/bin/g-ir-scanner-lddwrapper"
-      chmod +x "$dev/bin/g-ir-compiler"
-      chmod +x "$dev/bin/g-ir-scanner"
-      chmod +x "$dev/bin/g-ir-scanner-lddwrapper"
+      substituteAll "${./wrappers/g-ir-scanner-qemuwrapper.sh}" "$dev/bin/g-ir-scanner-qemuwrapper"
+      chmod +x $dev/bin/g-ir-*
     )
   ''
   # when cross-compiling and using the wrapper then when a package looks up the g_ir_X

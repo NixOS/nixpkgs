@@ -4,13 +4,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "ninja";
-  version = "1.11.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "ninja-build";
     repo = "ninja";
     rev = "v${version}";
-    sha256 = "sha256-xZwMdwvg29lauHKk9M318Vz7pXZFhf3kFcyOTBdjmJM=";
+    sha256 = "sha256-LvV/Fi2ARXBkfyA1paCRmLUwCh/rTyz+tGMg2/qEepI=";
   };
 
   nativeBuildInputs = [ python3 re2c ] ++ optionals buildDocs [ asciidoc docbook_xml_dtd_45 docbook_xsl libxslt.bin ];

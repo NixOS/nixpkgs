@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     # Fixup adapted from export-zips.sh in the source.
 
     extensiondir=$out/share/gnome-shell/extensions
-    schemadir=${glib.makeSchemaPath "$out" "${pname}-${version}"}
+    schemadir=${glib.makeSchemaPath "$out" "$name"}
 
     glib-compile-schemas $schemadir
 

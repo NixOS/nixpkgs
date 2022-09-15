@@ -12946,113 +12946,48 @@ with pkgs;
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
-  adoptopenjdk-bin-16-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk16-linux.nix { inherit lib; };
-  adoptopenjdk-bin-16-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk16-darwin.nix { inherit lib; };
+  temurin-bin-17 = javaPackages.compiler.temurin-bin.jdk-17;
+  temurin-jre-bin-17 = javaPackages.compiler.temurin-bin.jre-17;
+  temurin-bin-16 = javaPackages.compiler.temurin-bin.jdk-16;
+  temurin-bin-11 = javaPackages.compiler.temurin-bin.jdk-11;
+  temurin-jre-bin-11 = javaPackages.compiler.temurin-bin.jre-11;
+  temurin-bin-8 = javaPackages.compiler.temurin-bin.jdk-8;
+  temurin-jre-bin-8 = javaPackages.compiler.temurin-bin.jre-8;
 
-  adoptopenjdk-hotspot-bin-16 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-16-packages-linux.jdk-hotspot {}
-    else callPackage adoptopenjdk-bin-16-packages-darwin.jdk-hotspot {};
-  adoptopenjdk-jre-hotspot-bin-16 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-16-packages-linux.jre-hotspot {}
-    else callPackage adoptopenjdk-bin-16-packages-darwin.jre-hotspot {};
+  temurin-bin = temurin-bin-17;
+  temurin-jre-bin = temurin-jre-bin-17;
 
-  adoptopenjdk-openj9-bin-16 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-16-packages-linux.jdk-openj9 {}
-    else callPackage adoptopenjdk-bin-16-packages-darwin.jdk-openj9 {};
+  semeru-bin-17 = javaPackages.compiler.semeru-bin.jdk-17;
+  semeru-jre-bin-17 = javaPackages.compiler.semeru-bin.jre-17;
+  semeru-bin-16 = javaPackages.compiler.semeru-bin.jdk-16;
+  semeru-jre-bin-16 = javaPackages.compiler.semeru-bin.jre-16;
+  semeru-bin-11 = javaPackages.compiler.semeru-bin.jdk-11;
+  semeru-jre-bin-11 = javaPackages.compiler.semeru-bin.jre-11;
+  semeru-bin-8 = javaPackages.compiler.semeru-bin.jdk-8;
+  semeru-jre-bin-8 = javaPackages.compiler.semeru-bin.jre-8;
 
-  adoptopenjdk-jre-openj9-bin-16 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-16-packages-linux.jre-openj9 {}
-    else callPackage adoptopenjdk-bin-16-packages-darwin.jre-openj9 {};
+  semeru-bin = semeru-bin-17;
+  semeru-jre-bin = semeru-jre-bin-17;
 
-  adoptopenjdk-bin-15-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk15-linux.nix { inherit lib; };
-  adoptopenjdk-bin-15-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk15-darwin.nix { inherit lib; };
+  adoptopenjdk-hotspot-bin-16 = javaPackages.compiler.adoptopenjdk-16.jdk-hotspot;
+  adoptopenjdk-jre-hotspot-bin-16 = javaPackages.compiler.adoptopenjdk-16.jre-hotspot;
+  adoptopenjdk-openj9-bin-16 = javaPackages.compiler.adoptopenjdk-16.jdk-openj9;
+  adoptopenjdk-jre-openj9-bin-16 = javaPackages.compiler.adoptopenjdk-16.jre-openj9;
 
-  adoptopenjdk-hotspot-bin-15 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-15-packages-linux.jdk-hotspot {}
-    else callPackage adoptopenjdk-bin-15-packages-darwin.jdk-hotspot {};
-  adoptopenjdk-jre-hotspot-bin-15 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-15-packages-linux.jre-hotspot {}
-    else callPackage adoptopenjdk-bin-15-packages-darwin.jre-hotspot {};
+  adoptopenjdk-hotspot-bin-15 = javaPackages.compiler.adoptopenjdk-15.jdk-hotspot;
+  adoptopenjdk-jre-hotspot-bin-15 = javaPackages.compiler.adoptopenjdk-15.jre-hotspot;
+  adoptopenjdk-openj9-bin-15 = javaPackages.compiler.adoptopenjdk-15.jdk-openj9;
+  adoptopenjdk-jre-openj9-bin-15 = javaPackages.compiler.adoptopenjdk-15.jre-openj9;
 
-  adoptopenjdk-openj9-bin-15 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-15-packages-linux.jdk-openj9 {}
-    else callPackage adoptopenjdk-bin-15-packages-darwin.jdk-openj9 {};
+  adoptopenjdk-hotspot-bin-11 = javaPackages.compiler.adoptopenjdk-11.jdk-hotspot;
+  adoptopenjdk-jre-hotspot-bin-11 = javaPackages.compiler.adoptopenjdk-11.jre-hotspot;
+  adoptopenjdk-openj9-bin-11 = javaPackages.compiler.adoptopenjdk-11.jdk-openj9;
+  adoptopenjdk-jre-openj9-bin-11 = javaPackages.compiler.adoptopenjdk-11.jre-openj9;
 
-  adoptopenjdk-jre-openj9-bin-15 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-15-packages-linux.jre-openj9 {}
-    else callPackage adoptopenjdk-bin-15-packages-darwin.jre-openj9 {};
-
-  adoptopenjdk-bin-14-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk14-linux.nix { inherit lib; };
-  adoptopenjdk-bin-14-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk14-darwin.nix { inherit lib; };
-
-  adoptopenjdk-hotspot-bin-14 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-14-packages-linux.jdk-hotspot {}
-    else callPackage adoptopenjdk-bin-14-packages-darwin.jdk-hotspot {};
-  adoptopenjdk-jre-hotspot-bin-14 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-14-packages-linux.jre-hotspot {}
-    else callPackage adoptopenjdk-bin-14-packages-darwin.jre-hotspot {};
-
-  adoptopenjdk-openj9-bin-14 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-14-packages-linux.jdk-openj9 {}
-    else callPackage adoptopenjdk-bin-14-packages-darwin.jdk-openj9 {};
-
-  adoptopenjdk-jre-openj9-bin-14 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-14-packages-linux.jre-openj9 {}
-    else callPackage adoptopenjdk-bin-14-packages-darwin.jre-openj9 {};
-
-  adoptopenjdk-bin-13-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk13-linux.nix { inherit lib; };
-  adoptopenjdk-bin-13-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk13-darwin.nix { inherit lib; };
-
-  adoptopenjdk-hotspot-bin-13 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-13-packages-linux.jdk-hotspot {}
-    else callPackage adoptopenjdk-bin-13-packages-darwin.jdk-hotspot {};
-  adoptopenjdk-jre-hotspot-bin-13 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-13-packages-linux.jre-hotspot {}
-    else callPackage adoptopenjdk-bin-13-packages-darwin.jre-hotspot {};
-
-  adoptopenjdk-openj9-bin-13 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-13-packages-linux.jdk-openj9 {}
-    else callPackage adoptopenjdk-bin-13-packages-darwin.jdk-openj9 {};
-
-  adoptopenjdk-jre-openj9-bin-13 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-13-packages-linux.jre-openj9 {}
-    else callPackage adoptopenjdk-bin-13-packages-darwin.jre-openj9 {};
-
-  adoptopenjdk-bin-11-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk11-linux.nix { inherit lib; };
-  adoptopenjdk-bin-11-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk11-darwin.nix { inherit lib; };
-
-  adoptopenjdk-hotspot-bin-11 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-11-packages-linux.jdk-hotspot {}
-    else callPackage adoptopenjdk-bin-11-packages-darwin.jdk-hotspot {};
-  adoptopenjdk-jre-hotspot-bin-11 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-11-packages-linux.jre-hotspot {}
-    else callPackage adoptopenjdk-bin-11-packages-darwin.jre-hotspot {};
-
-  adoptopenjdk-openj9-bin-11 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-11-packages-linux.jdk-openj9 {}
-    else callPackage adoptopenjdk-bin-11-packages-darwin.jdk-openj9 {};
-
-  adoptopenjdk-jre-openj9-bin-11 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-11-packages-linux.jre-openj9 {}
-    else callPackage adoptopenjdk-bin-11-packages-darwin.jre-openj9 {};
-
-  adoptopenjdk-bin-8-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk8-linux.nix { inherit lib; };
-  adoptopenjdk-bin-8-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk8-darwin.nix { inherit lib; };
-
-  adoptopenjdk-hotspot-bin-8 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-8-packages-linux.jdk-hotspot {}
-    else callPackage adoptopenjdk-bin-8-packages-darwin.jdk-hotspot {};
-  adoptopenjdk-jre-hotspot-bin-8 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-8-packages-linux.jre-hotspot {}
-    else callPackage adoptopenjdk-bin-8-packages-darwin.jre-hotspot {};
-
-  adoptopenjdk-openj9-bin-8 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-8-packages-linux.jdk-openj9 {}
-    else callPackage adoptopenjdk-bin-8-packages-darwin.jdk-openj9 {};
-
-  adoptopenjdk-jre-openj9-bin-8 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-8-packages-linux.jre-openj9 {}
-    else callPackage adoptopenjdk-bin-8-packages-darwin.jre-openj9 {};
+  adoptopenjdk-hotspot-bin-8 = javaPackages.compiler.adoptopenjdk-8.jdk-hotspot;
+  adoptopenjdk-jre-hotspot-bin-8 = javaPackages.compiler.adoptopenjdk-8.jre-hotspot;
+  adoptopenjdk-openj9-bin-8 = javaPackages.compiler.adoptopenjdk-8.jdk-openj9;
+  adoptopenjdk-jre-openj9-bin-8 = javaPackages.compiler.adoptopenjdk-8.jre-openj9;
 
   adoptopenjdk-bin = adoptopenjdk-hotspot-bin-11;
   adoptopenjdk-jre-bin = adoptopenjdk-jre-hotspot-bin-11;
@@ -18656,7 +18591,7 @@ with pkgs;
   gtkimageview = callPackage ../development/libraries/gtkimageview { };
 
   glib = callPackage ../development/libraries/glib (let
-    glib-untested = glib.override { doCheck = false; };
+    glib-untested = glib.overrideAttrs (_: { doCheck = false; });
   in {
     # break dependency cycles
     # these things are only used for tests, they don't get into the closure
@@ -19893,9 +19828,7 @@ with pkgs;
   # On non-GNU systems we need GNU Gettext for libintl.
   libintl = if stdenv.hostPlatform.libc != "glibc" then gettext else null;
 
-  libid3tag = callPackage ../development/libraries/libid3tag {
-    gperf = gperf_3_0;
-  };
+  libid3tag = callPackage ../development/libraries/libid3tag { };
 
   libidn = callPackage ../development/libraries/libidn { };
 
@@ -24611,11 +24544,7 @@ with pkgs;
 
   libcap = callPackage ../os-specific/linux/libcap { };
 
-  libcap_ng = callPackage ../os-specific/linux/libcap-ng {
-    swig = null; # Currently not using the python2/3 bindings
-    python2 = null; # Currently not using the python2 bindings
-    python3 = null; # Currently not using the python3 bindings
-  };
+  libcap_ng = callPackage ../os-specific/linux/libcap-ng { };
 
   libnotify = callPackage ../development/libraries/libnotify { };
 
@@ -35857,7 +35786,6 @@ with pkgs;
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
     inherit (darwin.apple_sdk.frameworks) Security;
-    curl = curl.override { patchNetrcRegression = true; };
   });
 
   nix = nixVersions.stable;

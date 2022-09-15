@@ -45,6 +45,9 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     libxml2
     gobject-introspection # for finding vapi files
+    # error: Package `...' not found in specified Vala API directories or GObject-Introspection GIR directories
+    # TODO: the vala setuphook should look for vala filess in targetOffset instead of hostOffset
+    gsound
   ];
 
   buildInputs = [

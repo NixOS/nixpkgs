@@ -52,6 +52,10 @@ python.pkgs.buildPythonApplication rec {
 
     substituteAll ${./absolute-ausyscall.patch} ./absolute-ausyscall.patch
     patch -p1 < absolute-ausyscall.patch
+
+    # https://github.com/iovisor/bcc/issues/3996
+    substituteInPlace src/cc/libbcc.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
   postInstall = ''

@@ -1,4 +1,5 @@
 { lib, stdenv
+, buildPackages
 , fetchurl
 , pkg-config
 , libxml2
@@ -38,10 +39,10 @@ stdenv.mkDerivation rec {
     libxml2
     autoreconfHook
     gtk-doc
+    glib
   ];
 
   buildInputs = [
-    glib
     gtk3
     icu
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -51,6 +52,11 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     # required for pkg-config
     enchant2
+  ];
+
+  configureFlags = [
+    "GLIB_COMPILE_RESOURCES=${lib.getDev buildPackages.glib}/bin/glib-compile-resources"
+    "GLIB_MKENUMS=${lib.getDev buildPackages.glib}/bin/glib-mkenums"
   ];
 
   passthru = {

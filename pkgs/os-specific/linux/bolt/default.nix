@@ -44,6 +44,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     asciidoc
     docbook_xml_dtd_45
@@ -53,10 +57,10 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    glib
   ] ++ lib.optional (!doCheck) python3;
 
   buildInputs = [
-    glib
     polkit
     systemd
   ];
@@ -71,7 +75,7 @@ stdenv.mkDerivation rec {
     dbus
     gobject-introspection
     umockdev
-    (python3.withPackages
+    (python3.pythonForBuild.withPackages
       (p: [ p.pygobject3 p.dbus-python p.python-dbusmock ]))
   ];
 

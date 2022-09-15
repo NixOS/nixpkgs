@@ -119,6 +119,7 @@ in {
     pythonCatchConflictsHook
     pythonImportsCheckHook
     pythonNamespacesHook
+    pythonOutputDistHook
     pythonRecompileBytecodeHook
     pythonRelaxDepsHook
     pythonRemoveBinBytecodeHook
@@ -4030,8 +4031,8 @@ in {
   };
 
   gst-python = callPackage ../development/python-modules/gst-python {
-    inherit (pkgs) meson;
-    inherit (pkgs.gst_all_1) gst-plugins-base;
+    # inherit (pkgs) meson won't work because it won't be spliced
+    inherit (pkgs.buildPackages) meson;
   };
 
   gtfs-realtime-bindings = callPackage ../development/python-modules/gtfs-realtime-bindings { };
@@ -9549,6 +9550,8 @@ in {
 
   requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket { };
 
+  requests-wsgi-adapter = callPackage ../development/python-modules/requests-wsgi-adapter { };
+
   requirements-detector = callPackage ../development/python-modules/requirements-detector { };
 
   requirements-parser = callPackage ../development/python-modules/requirements-parser { };
@@ -11325,6 +11328,8 @@ in {
   uncertainties = callPackage ../development/python-modules/uncertainties { };
 
   uncompyle6 = callPackage ../development/python-modules/uncompyle6 { };
+
+  unearth = callPackage ../development/python-modules/unearth { };
 
   unicodecsv = callPackage ../development/python-modules/unicodecsv { };
 

@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , fetchpatch
+, fetchFromGitLab
 , cairo
 , cmake
 , pcre
@@ -32,8 +33,20 @@
 
 let
   mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
+
+  # unclear relationship between test data repo versions and poppler
+  # versions, though files don't appear to be updated after they're
+  # added, so it's probably safe to just always use the latest available
+  # version.
+  testData = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "poppler";
+    repo = "test";
+    rev = "920c89f8f43bdfe8966c8e397e7f67f5302e9435";
+    sha256 = "sha256-ySP7zcVI3HW4lk8oqVMPTlFh5pgvBwqcE0EXE71iWos=";
+  };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "poppler-${suffix}";
   version = "22.08.0"; # beware: updates often break cups-filters build, check texlive and scribus too!
 
@@ -94,7 +107,10 @@ stdenv.mkDerivation rec {
     (mkFlag utils "UTILS")
     (mkFlag qt5Support "QT5")
     (mkFlag qt6Support "QT6")
+  ] ++ lib.optionals finalAttrs.doCheck [
+    "-DTESTDATADIR=${testData}"
   ];
+  disallowedReferences = lib.optional finalAttrs.doCheck testData;
 
   dontWrapQtApps = true;
 
@@ -103,7 +119,10 @@ stdenv.mkDerivation rec {
     sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
   '';
 
+  doCheck = true;
+
   passthru = {
+    inherit testData;
     tests = {
       # These depend on internal poppler code that frequently changes.
       inherit inkscape cups-filters texlive scribus;
@@ -121,4 +140,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel ] ++ teams.freedesktop.members;
   };
-}
+})

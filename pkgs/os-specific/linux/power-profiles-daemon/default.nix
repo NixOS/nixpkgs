@@ -2,6 +2,7 @@
 , lib
 , pkg-config
 , meson
+, mesonEmulatorHook
 , ninja
 , fetchFromGitLab
 , fetchpatch
@@ -24,13 +25,6 @@
 , nixosTests
 }:
 
-let
-  testPythonPkgs = ps: with ps; [
-    pygobject3
-    dbus-python
-    python-dbusmock
-  ];
-in
 stdenv.mkDerivation rec {
   pname = "power-profiles-daemon";
   version = "0.12";
@@ -58,6 +52,14 @@ stdenv.mkDerivation rec {
     gobject-introspection
     wrapGAppsNoGuiHook
     python3.pkgs.wrapPython
+    # checkInput but cheked for during the configuring
+    (python3.pythonForBuild.withPackages (ps: with ps; [
+      pygobject3
+      dbus-python
+      python-dbusmock
+    ]))
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -81,13 +83,12 @@ stdenv.mkDerivation rec {
   checkInputs = [
     umockdev
     dbus
-    (python3.withPackages testPythonPkgs)
   ];
 
   mesonFlags = [
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dgtk_doc=true"
-    "-Dtests=true"
+    "-Dtests=${lib.boolToString (stdenv.buildPlatform.canExecute stdenv.hostPlatform)}"
   ];
 
   doCheck = true;

@@ -92,9 +92,8 @@ in rec {
   pythonCatchConflictsHook = callPackage ({ setuptools }:
     makeSetupHook {
       name = "python-catch-conflicts-hook";
-      deps = [ setuptools ];
       substitutions = {
-        inherit pythonInterpreter;
+        inherit pythonInterpreter pythonSitePackages setuptools;
         catchConflicts=../catch_conflicts/catch_conflicts.py;
       };
     } ./python-catch-conflicts-hook.sh) {};
@@ -114,6 +113,11 @@ in rec {
         inherit pythonSitePackages findutils;
       };
     } ./python-namespaces-hook.sh) {};
+
+  pythonOutputDistHook = callPackage ({ }:
+    makeSetupHook {
+      name = "python-output-dist-hook";
+  } ./python-output-dist-hook.sh ) {};
 
   pythonRecompileBytecodeHook = callPackage ({ }:
     makeSetupHook {
