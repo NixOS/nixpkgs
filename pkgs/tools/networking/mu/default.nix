@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.8.9";
+  version = "1.8.10";
 
   src = fetchFromGitHub {
     owner = "djcb";
     repo = "mu";
     rev = "v${version}";
-    hash = "sha256-AqbTYcPwV9iNar34pESbz9Vp/88hhB+/VxcLIhLZ16o=";
+    hash = "sha256-hwroSuxn9zVjQBz8r2y93o42zzVkHWAZaEKKEVgSb5s=";
   };
 
   postPatch = ''
@@ -39,8 +39,6 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config meson ninja ];
-
-  enableParallelBuilding = true;
 
   doCheck = true;
 
