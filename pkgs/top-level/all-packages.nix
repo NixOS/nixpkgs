@@ -126,6 +126,8 @@ with pkgs;
 
   _experimental-update-script-combinators = callPackage ../common-updater/combinators.nix { };
 
+  directoryListingUpdater = callPackage ../common-updater/directory-listing-updater.nix { };
+
   gitUpdater = callPackage ../common-updater/git-updater.nix { };
 
   httpTwoLevelsUpdater = callPackage ../common-updater/http-two-levels-updater.nix { };
