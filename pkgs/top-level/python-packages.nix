@@ -11220,6 +11220,8 @@ in {
 
   typer = callPackage ../development/python-modules/typer { };
 
+  types-colorama = callPackage ../development/python-modules/types-colorama { };
+
   types-dateutil = callPackage ../development/python-modules/types-dateutil { };
 
   types-decorator = callPackage ../development/python-modules/types-decorator { };
