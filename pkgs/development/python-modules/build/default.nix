@@ -3,7 +3,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , filelock
-, setuptools
 , importlib-metadata
 , packaging
 , pep517
@@ -12,6 +11,7 @@
 , pytest-xdist
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , toml
 , tomli
 }:
