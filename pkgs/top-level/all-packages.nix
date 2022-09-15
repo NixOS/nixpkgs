@@ -15983,6 +15983,8 @@ with pkgs;
 
   antlr4_9 = callPackage ../development/tools/parsing/antlr/4.9.nix { };
 
+  antlr4_11 = callPackage ../development/tools/parsing/antlr/4.11.nix { };
+
   antlr4 = antlr4_8;
 
   antlr = antlr4;
