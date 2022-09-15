@@ -883,6 +883,8 @@ in {
 
   autobahn = callPackage ../development/python-modules/autobahn { };
 
+  autocommand = callPackage ../development/python-modules/autocommand { };
+
   autograd = callPackage ../development/python-modules/autograd { };
 
   autoit-ripper = callPackage ../development/python-modules/autoit-ripper { };
