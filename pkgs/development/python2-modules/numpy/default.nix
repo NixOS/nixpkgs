@@ -39,7 +39,7 @@ let
 in buildPythonPackage rec {
   pname = "numpy";
   version = "1.16.6";
-  format = "pyproject.toml";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
@@ -73,7 +73,7 @@ in buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    pushd dist
+    pushd "$out"
     ${python.interpreter} -c 'import numpy; numpy.test("fast", verbose=10)'
     popd
     runHook postCheck
