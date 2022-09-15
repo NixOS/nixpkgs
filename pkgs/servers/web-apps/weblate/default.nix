@@ -15,8 +15,8 @@
   src = fetchFromGitHub {
     owner = "WeblateOrg";
     repo = "weblate";
-    rev = "weblate-4.14";
-    sha256 = "sha256-PsFYL/yKu90QQ0/XdbVFHY1uTU/6H+YfitqFb6Ic4E8=";
+    rev = "weblate-4.14.1";
+    sha256 = "sha256-p+nwNEgHmMxQLhG+n9/6nywE71vO8kZgq77JwHYqPUs=";
   };
 
   pyproject = ./pyproject.toml;

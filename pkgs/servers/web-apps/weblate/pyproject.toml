@@ -8,7 +8,7 @@ target-version = ['py37']
 
 [tool.poetry]
 name = "weblate"
-version = "4.14"
+version = "4.14.1"
 description = ""
 authors = ["Your Name <you@example.com>"]
 license = "GPLv3+"
