@@ -2,6 +2,7 @@
 , buildPythonPackage
 , bootstrapped-pip
 , fetchFromGitHub
+, setuptools
 , mock
 , scripttest
 , virtualenv
@@ -26,6 +27,11 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ bootstrapped-pip ];
+  propagatedBuildInputs = [
+    # vendored pep517 uses it to parse wheels:
+    #   https://github.com/NixOS/nixpkgs/pull/185815#issuecomment-1247660712
+    setuptools
+  ];
 
   # pip detects that we already have bootstrapped_pip "installed", so we need
   # to force it a little.
