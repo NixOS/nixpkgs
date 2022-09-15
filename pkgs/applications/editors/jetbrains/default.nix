@@ -213,7 +213,7 @@ let
           providing you almost everything you need for your comfortable
           and productive development!
         '';
-        maintainers = with maintainers; [ ];
+        maintainers = with maintainers; [ genericnerdyusername ];
       };
     }).overrideAttrs (finalAttrs: previousAttrs: lib.optionalAttrs cythonSpeedup {
       buildInputs = with python3.pkgs; [ python3 setuptools ];
@@ -466,5 +466,7 @@ in
     wmClass = "jetbrains-webstorm";
     update-channel = products.webstorm.update-channel;
   };
+
+  plugins = callPackage ./plugins {};
 
 }

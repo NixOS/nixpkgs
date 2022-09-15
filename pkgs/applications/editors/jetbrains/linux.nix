@@ -3,7 +3,17 @@
 , vmopts ? null
 }:
 
-{ pname, product, productShort ? product, version, src, wmClass, jdk, meta, extraLdPath ? [], extraWrapperArgs ? [] }@args:
+{ pname
+, product
+, productShort ? product
+, version
+, src
+, wmClass
+, jdk
+, meta
+, extraLdPath ? []
+, extraWrapperArgs ? []
+}@args:
 
 let loName = lib.toLower productShort;
     hiName = lib.toUpper productShort;
@@ -32,17 +42,17 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
   nativeBuildInputs = [ makeWrapper patchelf unzip ];
 
   postPatch = ''
-      get_file_size() {
-        local fname="$1"
-        echo $(ls -l $fname | cut -d ' ' -f5)
-      }
+    get_file_size() {
+      local fname="$1"
+      echo $(ls -l $fname | cut -d ' ' -f5)
+    }
 
-      munge_size_hack() {
-        local fname="$1"
-        local size="$2"
-        strip $fname
-        truncate --size=$size $fname
-      }
+    munge_size_hack() {
+      local fname="$1"
+      local size="$2"
+      strip $fname
+      truncate --size=$size $fname
+    }
 
       rm -rf jbr
 
