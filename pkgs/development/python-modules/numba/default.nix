@@ -5,10 +5,11 @@
 , fetchPypi
 , python
 , buildPythonPackage
+, setuptools
 , numpy
 , llvmlite
-, setuptools
 , libcxx
+, importlib-metadata
 , substituteAll
 
 # CUDA-only dependencies:
@@ -24,6 +25,7 @@ let
 in buildPythonPackage rec {
   version = "0.56.2";
   pname = "numba";
+  format = "setuptools";
   disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
 
   src = fetchPypi {
@@ -32,27 +34,25 @@ in buildPythonPackage rec {
   };
 
   postPatch = ''
-    # numpy
     substituteInPlace setup.py \
-      --replace "1.23" "2"
-
-    substituteInPlace numba/__init__.py \
-      --replace "(1, 22)" "(2, 0)"
+      --replace "setuptools<60" "setuptools"
   '';
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+
+  nativeBuildInputs = lib.optional cudaSupport [
+    addOpenGLRunpath
+  ];
 
   propagatedBuildInputs = [
     numpy
     llvmlite
     setuptools
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-metadata
   ] ++ lib.optionals cudaSupport [
     cudatoolkit
     cudatoolkit.lib
-  ];
-
-  nativeBuildInputs = lib.optional cudaSupport [
-    addOpenGLRunpath
   ];
 
   patches = lib.optionals cudaSupport [
