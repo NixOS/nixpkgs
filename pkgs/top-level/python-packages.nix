@@ -11233,6 +11233,8 @@ in {
 
   types-ipaddress = callPackage ../development/python-modules/types-ipaddress { };
 
+  types-pillow = callPackage ../development/python-modules/types-pillow { };
+
   types-protobuf = callPackage ../development/python-modules/types-protobuf { };
 
   types-pytz = callPackage ../development/python-modules/types-pytz { };
