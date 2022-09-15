@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchzip, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "gatk";
@@ -8,10 +8,16 @@ stdenv.mkDerivation rec {
     sha256 = "0hjlsl7fxf3ankyjidqhwxc70gjh6z4lnjzw6b5fldzb0qvgfvy8";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre ];
+
+  dontUnpack = true;
+
   installPhase = ''
+    mkdir -p $out/libexec/gatk
+    cp $src/gatk-package-${version}-local.jar $out/libexec/gatk/gatk.jar
     mkdir -p $out/bin
-    install -m755 -D $src/gatk $out/bin/
-    install -m755 -D $src/gatk-package-${version}-local.jar $out/bin/
+    makeWrapper ${jre}/bin/java $out/bin/gatk --add-flags "-jar $out/libexec/gatk/gatk.jar"
   '';
 
   meta = with lib; {
