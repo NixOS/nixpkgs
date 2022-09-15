@@ -29,6 +29,7 @@ buildPythonPackage rec {
     setuptools
     pytestCheckHook
     git
+    setuptools
   ];
 
   meta = with lib; {
