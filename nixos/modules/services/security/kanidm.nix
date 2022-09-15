@@ -248,6 +248,8 @@ in
           "-/etc/localtime"
           "-/etc/kanidm"
           "-/etc/static/kanidm"
+          "-/etc/ssl"
+          "-/etc/static/ssl"
         ];
         BindPaths = [
           # To create the socket
