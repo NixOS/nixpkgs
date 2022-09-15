@@ -28,6 +28,5 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ bezmuth ];
-    platforms = platforms.unix;
   };
 }
