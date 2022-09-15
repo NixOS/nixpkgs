@@ -47,7 +47,7 @@ in buildPythonPackage rec {
   # https://github.com/scipy/scipy/issues/15414
   version = "1.23.1";
 
-  format = "pyproject.toml";
+  format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
@@ -89,7 +89,7 @@ in buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    pushd dist
+    pushd "$out"
     ${python.interpreter} -c 'import numpy; numpy.test("fast", verbose=10)'
     popd
     runHook postCheck
