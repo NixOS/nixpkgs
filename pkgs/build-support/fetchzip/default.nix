@@ -52,7 +52,7 @@ in {
       chmod -R +w "$unpackDir"
     ''
     + (if stripRoot then ''
-      if [ $(ls "$unpackDir" | wc -l) != 1 ]; then
+      if [ $(ls -A "$unpackDir" | wc -l) != 1 ]; then
         echo "error: zip file must contain a single file or directory."
         echo "hint: Pass stripRoot=false; to fetchzip to assume flat list of files."
         exit 1
