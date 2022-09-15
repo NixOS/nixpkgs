@@ -495,7 +495,7 @@ Let's say Man-in-the-Middle (MITM) sits close to your network. Then instead of f
 
 - `https://` URLs are secure in methods 1, 2, 3;
 
-- `https://` URLs are not secure in method 5 *if* you use `""`, `lib.fakeHash`, `lib.fakeSha256`, or `lib.fakeSha512`.  If you use any other hash, `fetchurl` will pass `--insecure` to `curl` in order to be robust in the face of TLS certificate expiration and to allow fetching over protocols like HTTP which do not incur the overhead of TLS.
+- `https://` URLs are secure in method 5 *if* you use `""`, `lib.fakeHash`, `lib.fakeSha256`, or `lib.fakeSha512`.  If you use any other hash, `fetchurl` will pass `--insecure` to `curl` in order to be robust in the face of TLS certificate expiration and to allow fetching over protocols like HTTP which do not incur the overhead of TLS.
 
 ## Patches {#sec-patches}
 
