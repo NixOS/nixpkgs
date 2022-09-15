@@ -3,6 +3,7 @@
 , fetchPypi
 , pythonAtLeast
 , pythonOlder
+, setuptools
 , backports-zoneinfo
 , python-dateutil
 , tzdata
@@ -22,6 +23,10 @@ buildPythonPackage rec {
     inherit version;
     sha256 = "af097bae1b616dde5c5744441e2ddc69e74dfdcb0c263129610d85b87445a59d";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = (lib.optionals (pythonAtLeast "3.6" && pythonOlder "3.9") [
     backports-zoneinfo
