@@ -148,6 +148,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     license = licenses.mit;
     maintainers = with maintainers; [ kuznero mdarocha ];
     mainProgram = "dotnet";
-    platforms = builtins.attrNames srcs;
+    platforms = attrNames srcs;
   };
 })
