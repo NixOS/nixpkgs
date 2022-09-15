@@ -2953,6 +2953,8 @@ with pkgs;
     inherit (plasma5Packages) breeze-icons;
   };
 
+  beautysh = callPackage ../development/tools/beautysh { };
+
   bc = callPackage ../tools/misc/bc { };
 
   bdf2psf = callPackage ../tools/misc/bdf2psf { };
