@@ -5,6 +5,7 @@
 , pytest-subtests
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -16,6 +17,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-i1NqjsY9wHUTQrOYQZOjEY+Pyir+JXUrubf//TmFUtM=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   checkInputs = [
     pytestCheckHook
