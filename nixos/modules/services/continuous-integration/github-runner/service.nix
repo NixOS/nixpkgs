@@ -181,9 +181,6 @@ with lib;
       "${stateDir}/${currentConfigTokenFilename}"
     ];
 
-    # By default, use a dynamically allocated user
-    DynamicUser = true;
-
     KillSignal = "SIGINT";
 
     # Hardening (may overlap with DynamicUser=)
