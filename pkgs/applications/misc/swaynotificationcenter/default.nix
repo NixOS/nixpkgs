@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     owner = "ErikReider";
     repo = "SwayNotificationCenter";
     rev = "v${version}";
-    hash = "sha256-/rLzdli+/YTfk+jQ+RhHUEzeORVnJU4KHDlOG3QCPr0=";
+    hash = "sha256-s4yacSK5ajuq+BeGcPX+/o9wuDOcTOdZu4p8nPS8wk4=";
   };
 
   nativeBuildInputs = [
