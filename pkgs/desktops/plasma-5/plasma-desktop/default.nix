@@ -1,10 +1,10 @@
 {
   mkDerivation, lib,
-  extra-cmake-modules, kdoctools,
+  extra-cmake-modules, kdoctools, wayland-scanner,
 
   boost, fontconfig, ibus, libXcursor, libXft, libcanberra_kde, libpulseaudio,
   libxkbfile, xf86inputevdev, xf86inputsynaptics, xinput, xkeyboard_config,
-  xorgserver, util-linux,
+  xorgserver, util-linux, wayland, wayland-protocols,
 
   accounts-qt, qtdeclarative, qtquickcontrols, qtquickcontrols2, qtsvg,
   qtx11extras,
@@ -18,11 +18,11 @@
 
 mkDerivation {
   pname = "plasma-desktop";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wayland-scanner ];
   buildInputs = [
     boost fontconfig ibus libcanberra_kde libpulseaudio libXcursor libXft xorgserver
     libxkbfile phonon xf86inputlibinput xf86inputevdev xf86inputsynaptics xinput
-    xkeyboard_config
+    xkeyboard_config wayland wayland-protocols
 
     accounts-qt qtdeclarative qtquickcontrols qtquickcontrols2 qtsvg qtx11extras
 

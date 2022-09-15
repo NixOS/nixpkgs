@@ -1,7 +1,7 @@
 {
   mkDerivation, lib, substituteAll,
   extra-cmake-modules, kdoctools,
-  kcompletion, kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative,
+  kcmutils, kcompletion, kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative,
   ki18n, kiconthemes, kinit, kio, kitemviews, knotifications, kservice, kwallet,
   kwidgetsaddons, kwindowsystem, kxmlgui, plasma-framework, prison, solid,
 
@@ -15,7 +15,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools qttools ];
   buildInputs = [
     kdeclarative ki18n kio kwindowsystem plasma-framework kcompletion
-    kconfigwidgets kcoreaddons kdbusaddons kiconthemes
+    kcmutils kconfigwidgets kcoreaddons kdbusaddons kiconthemes
     kinit kitemviews knotifications kservice kwallet kwidgetsaddons kxmlgui
     prison solid
 

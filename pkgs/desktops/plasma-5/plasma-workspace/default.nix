@@ -12,10 +12,10 @@
   kscreenlocker, ktexteditor, ktextwidgets, kwallet, kwayland, kwin,
   kxmlrpcclient, libkscreen, libksysguard, libqalculate, networkmanager-qt,
   phonon, plasma-framework, prison, solid, kholidays, kquickcharts,
-  appstream-qt, plasma-wayland-protocols,
+  appstream-qt, plasma-wayland-protocols, kpipewire, libkexiv2,
 
   qtgraphicaleffects, qtquickcontrols, qtquickcontrols2, qtscript, qttools,
-  qtwayland, qtx11extras, qqc2-desktop-style,
+  qtwayland, qtx11extras, qqc2-desktop-style, polkit-qt,
 
   pipewire, libdrm
 }:
@@ -35,10 +35,11 @@ mkDerivation {
     knotifyconfig kpackage kpeople krunner kscreenlocker ktexteditor
     ktextwidgets kwallet kwayland kwin kxmlrpcclient libkscreen libksysguard
     libqalculate networkmanager-qt phonon plasma-framework prison solid
-    kholidays kquickcharts appstream-qt plasma-wayland-protocols
+    kholidays kquickcharts appstream-qt plasma-wayland-protocols kpipewire
+    libkexiv2
 
     qtgraphicaleffects qtquickcontrols qtquickcontrols2 qtscript qtwayland
-    qtx11extras qqc2-desktop-style
+    qtx11extras qqc2-desktop-style polkit-qt
 
     pipewire libdrm
   ];
@@ -58,6 +59,12 @@ mkDerivation {
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace 'ecm_query_qt(QtBinariesDir QT_INSTALL_BINS)' 'set(QtBinariesDir "${lib.getBin qttools}/bin")'
+  '';
+
+  # work around wrapQtAppsHook double-wrapping kcminit_startup,
+  # which is a symlink to kcminit
+  postFixup = ''
+    ln -sf $out/bin/kcminit $out/bin/kcminit_startup
   '';
 
   NIX_CFLAGS_COMPILE = [

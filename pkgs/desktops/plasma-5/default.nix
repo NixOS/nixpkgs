@@ -103,6 +103,7 @@ let
       };
 
     in {
+      aura-browser = callPackage ./aura-browser.nix {};
       bluedevil = callPackage ./bluedevil.nix {};
       breeze-gtk = callPackage ./breeze-gtk.nix {};
       breeze-qt5 = callPackage ./breeze-qt5.nix {};
@@ -118,6 +119,7 @@ let
       khotkeys = callPackage ./khotkeys.nix {};
       kinfocenter = callPackage ./kinfocenter.nix {};
       kmenuedit = callPackage ./kmenuedit.nix {};
+      kpipewire = callPackage ./kpipewire.nix {};
       kscreen = callPackage ./kscreen.nix {};
       kscreenlocker = callPackage ./kscreenlocker.nix {};
       ksshaskpass = callPackage ./ksshaskpass.nix {};
@@ -132,6 +134,8 @@ let
       milou = callPackage ./milou.nix {};
       oxygen = callPackage ./oxygen.nix {};
       oxygen-sounds = callPackage ./oxygen-sounds.nix {};
+      plank-player = callPackage ./plank-player.nix {};
+      plasma-bigscreen = callPackage ./plasma-bigscreen.nix {};
       plasma-browser-integration = callPackage ./plasma-browser-integration.nix {};
       plasma-desktop = callPackage ./plasma-desktop {};
       plasma-disks = callPackage ./plasma-disks.nix {};
@@ -140,6 +144,7 @@ let
       plasma-nano = callPackage ./plasma-nano {};
       plasma-nm = callPackage ./plasma-nm {};
       plasma-pa = callPackage ./plasma-pa.nix { inherit gconf; };
+      plasma-remotecontrollers = callPackage ./plasma-remotecontrollers.nix {};
       plasma-sdk = callPackage ./plasma-sdk.nix {};
       plasma-systemmonitor = callPackage ./plasma-systemmonitor.nix { };
       plasma-thunderbolt = callPackage ./plasma-thunderbolt.nix { };

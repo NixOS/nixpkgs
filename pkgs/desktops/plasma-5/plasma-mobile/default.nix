@@ -27,7 +27,7 @@ mkDerivation {
   ];
 
   postPatch = ''
-    substituteInPlace bin/kwinwrapper.in \
+    substituteInPlace bin/startplasmamobile.in \
       --replace @KDE_INSTALL_FULL_LIBEXECDIR@ "${plasma-workspace}/libexec"
 
     substituteInPlace bin/plasma-mobile.desktop.cmake \
@@ -36,7 +36,7 @@ mkDerivation {
 
   # Ensures dependencies like libqofono (at the very least) are present for the shell.
   preFixup = ''
-    wrapQtApp "$out/bin/kwinwrapper"
+    wrapQtApp "$out/bin/startplasmamobile"
   '';
 
   passthru.providedSessions = [ "plasma-mobile" ];
