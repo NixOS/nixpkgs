@@ -11,6 +11,7 @@
 , pynacl
 , pytest-relaxed
 , pytestCheckHook
+, six
 }:
 
 buildPythonPackage rec {
@@ -33,26 +34,27 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    bcrypt
     cryptography
     pyasn1
+    six
   ] ++ passthru.optional-dependencies.ed25519; # remove on 3.0 update
 
-  checkInputs = [
-    invoke
-    mock
-    pytest-relaxed
-    pytestCheckHook
-  ];
+  passthru.optional-dependencies = {
+    gssapi = [ pyasn1 gssapi ];
+    ed25519 = [ pynacl bcrypt ];
+    invoke = [ invoke ];
+  };
 
-  # with python 3.9.6+, the deprecation warnings will fail the test suite
-  # see: https://github.com/pyinvoke/invoke/issues/829
-  # pytest-relaxed does not work with pytest 6
-  # see: https://github.com/bitprophet/pytest-relaxed/issues/12
-  doCheck = false;
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   disabledTestPaths = [
-    "tests/test_sftp.py"
-    "tests/test_config.py"
+    # disable tests that require pytest-relaxed, which is broken
+    "tests/test_client.py"
+    "tests/test_ssh_gss.py"
   ];
 
   pythonImportsCheck = [
@@ -60,12 +62,6 @@ buildPythonPackage rec {
   ];
 
   __darwinAllowLocalNetworking = true;
-
-  passthru.optional-dependencies = {
-    gssapi = [ pyasn1 gssapi ];
-    ed25519 = [ pynacl bcrypt ];
-    invoke = [ invoke ];
-  };
 
   meta = with lib; {
     homepage = "https://github.com/paramiko/paramiko/";
