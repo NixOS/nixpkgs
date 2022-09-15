@@ -265,6 +265,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/L11R/go-autoconfig">go-autoconfig</link>,
+          IMAP/SMTP autodiscover server. Available as
+          <link linkend="opt-services.go-autoconfig.enable">services.go-autoconfig</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.grafana.com/oss/tempo/">Grafana
           Tempo</link>, a distributed tracing store. Available as
           <link linkend="opt-services.tempo.enable">services.tempo</link>.
@@ -452,6 +459,15 @@
           <literal>hardware.xow</literal> module, due to the project
           being deprecated in favor of <literal>xone</literal>, which is
           available via the <literal>hardware.xone</literal> module.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          dd-agent package removed along with the
+          <literal>services.dd-agent</literal> module, due to the
+          project being deprecated in favor of
+          <literal>datadog-agent</literal>, which is available via the
+          <literal>services.datadog-agent</literal> module.
         </para>
       </listitem>
       <listitem>

@@ -388,6 +388,7 @@
 , "webpack-dev-server"
 , "copy-webpack-plugin"
 , "webtorrent-cli"
+, "wrangler"
 , "wring"
 , "write-good"
 , "@yaegassy/coc-nginx"

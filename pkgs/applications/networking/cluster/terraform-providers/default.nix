@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , callPackage
 , config
+, writeShellScript
 
 , cdrtools # libvirt
 }:
@@ -47,7 +48,12 @@ let
         '';
 
         # Keep the attributes around for later consumption
-        passthru = attrs;
+        passthru = attrs // {
+          updateScript = writeShellScript "update" ''
+            provider="$(basename ${provider-source-address})"
+            ./pkgs/applications/networking/cluster/terraform-providers/update-provider --no-build "$provider"
+          '';
+        };
       });
 
   list = lib.importJSON ./providers.json;
