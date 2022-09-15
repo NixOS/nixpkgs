@@ -2,7 +2,7 @@
 
 { fetchurl, stdenv, lib, xorg, glib, libglvnd, glibcLocales, gtk3, cairo, pango, makeWrapper, wrapGAppsHook
 , writeShellScript, common-updater-scripts, curl
-, openssl, bzip2, bash, unzip, zip
+, openssl_1_1, bzip2, bash, unzip, zip
 }:
 
 let
@@ -15,7 +15,7 @@ let
   versionUrl = "https://download.sublimetext.com/latest/${if dev then "dev" else "stable"}";
   versionFile = builtins.toString ./packages.nix;
 
-  libPath = lib.makeLibraryPath [ xorg.libX11 xorg.libXtst glib libglvnd openssl gtk3 cairo pango curl ];
+  libPath = lib.makeLibraryPath [ xorg.libX11 xorg.libXtst glib libglvnd openssl_1_1 gtk3 cairo pango curl ];
 in let
   binaryPackage = stdenv.mkDerivation rec {
     pname = "${pnameBase}-bin";
@@ -64,6 +64,9 @@ in let
 
     installPhase = ''
       runHook preInstall
+
+      # No need to patch these libraries, it works well with our own
+      rm libcrypto.so.1.1 libssl.so.1.1
 
       mkdir -p $out
       cp -r * $out/
