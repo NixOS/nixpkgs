@@ -22,9 +22,9 @@ buildGoModule rec {
   doCheck = false;
   doInstallCheck = true;
 
-  passthru.tests.testVersion = testers.testVersion {
+  passthru.tests.version = testers.testVersion {
     package = ghr;
-    version = "ghr version v${version}";
+    version = "v${version}";
   };
 
   meta = with lib; {
