@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromGitLab
 , fetchpatch
 , meson
 , ninja
@@ -8,7 +8,7 @@
 , python3
 , libxml2
 , gnome
-, dconf
+, nix-update-script
 , nautilus
 , glib
 , gtk4
@@ -30,23 +30,22 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-terminal";
-  version = "3.44.1";
+  version = "3.47.0";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/gnome-terminal/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "+28g7h/yMamq7asT1dxuWmTJVXESJISLeQCG6IlZ03s=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "gnome-terminal";
+    rev = version;
+    sha256 = "sha256-CriI1DtDBeujaz0HtXCyzoGxnas7NmD6EMQ+gLph3E4=";
   };
 
   patches = [
-    # Fix Nautilus extension in 43.
-    # https://gitlab.gnome.org/GNOME/gnome-terminal/-/issues/7911
-    (fetchurl {
-      url = "https://gitlab.gnome.org/GNOME/gnome-terminal/-/commit/e0999b42fb4954d3935f1705bea54b99a45734e5.patch";
-      sha256 = "2+25xXXiVtIeq/Djo/kvVHaSmYjgGYUqK6OMHU7kPKc=";
-    })
+    # Fix Nautilus extension build.
+    # https://gitlab.gnome.org/GNOME/gnome-terminal/-/issues/7916
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-terminal/-/commit/17f4ad7909c819f0fe574d723de119dc10ec397f.patch";
-      sha256 = "6BIfp9qNecqJHify7qyjzgdfXrs8EvafeXiqHPL54Eg=";
+      url = "https://gitlab.gnome.org/GNOME/gnome-terminal/-/commit/614ea99b16fb09e10341fc6ccf5e115ac3f93caf.patch";
+      sha256 = "K7JHPfXywF3QSjSjyUnNZ11/ed+QXHQ47i135QBMIR8=";
     })
   ];
 
@@ -75,7 +74,6 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     vte
     libuuid
-    dconf
     nautilus # For extension
   ];
 
@@ -93,13 +91,14 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-terminal";
+    updateScript = nix-update-script {
       attrPath = "gnome.gnome-terminal";
     };
-  };
 
-  passthru.tests.test = nixosTests.terminal-emulators.gnome-terminal;
+    tests = {
+      test = nixosTests.terminal-emulators.gnome-terminal;
+    };
+  };
 
   meta = with lib; {
     description = "The GNOME Terminal Emulator";
