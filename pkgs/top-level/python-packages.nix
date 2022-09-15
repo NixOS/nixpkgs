@@ -9927,6 +9927,8 @@ in {
 
   segments = callPackage ../development/python-modules/segments { };
 
+  segments-ai = callPackage ../development/python-modules/segments-ai { };
+
   segno = callPackage ../development/python-modules/segno { };
 
   segyio = toPythonModule (callPackage ../development/python-modules/segyio {
