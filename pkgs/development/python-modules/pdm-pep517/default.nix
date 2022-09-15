@@ -4,6 +4,7 @@
 , fetchPypi
 , git
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [
+    setuptools
     pytestCheckHook
     git
   ];
