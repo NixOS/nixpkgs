@@ -152,7 +152,7 @@ with lib;
   };
 
   user = mkOption {
-    type = types.string;
+    type = types.str;
     description = ''
       User under which to run the service. If null, will use a systemd dynamic user.
     '';
