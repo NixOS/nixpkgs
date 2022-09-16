@@ -20797,6 +20797,8 @@ with pkgs;
 
   stb = callPackage ../development/libraries/stb { };
 
+  stduuid = callPackage ../development/libraries/stduuid { };
+
   StormLib = callPackage ../development/libraries/StormLib { };
 
   stxxl = callPackage ../development/libraries/stxxl { };
