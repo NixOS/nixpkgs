@@ -1,0 +1,254 @@
+From 13d3234e4e265b11f62176da4c71a56377e39208 Mon Sep 17 00:00:00 2001
+From: Chocobozzz <me@florianbigard.com>
+Date: Tue, 12 Jul 2022 10:54:21 +0200
+Subject: [PATCH] Add compat with openssl 3
+
+---
+ package.json                                  |  4 +-
+ server/helpers/core-utils.ts                  | 56 +++++++++++++++++--
+ .../custom-validators/activitypub/actor.ts    |  4 +-
+ server/helpers/peertube-crypto.ts             |  9 +--
+ .../migrations/0605-actor-missing-keys.ts     |  7 +--
+ yarn.lock                                     | 25 ++-------
+ 6 files changed, 63 insertions(+), 42 deletions(-)
+
+diff --git a/package.json b/package.json
+index 2e7530e4d..67df7d22e 100644
+--- a/package.json
++++ b/package.json
+@@ -85,7 +85,7 @@
+     "@aws-sdk/node-http-handler": "^3.82.0",
+     "@babel/parser": "7.17.8",
+     "@peertube/feed": "^5.0.1",
+-    "@peertube/http-signature": "^1.6.0",
++    "@peertube/http-signature": "^1.7.0",
+     "@uploadx/core": "^5.1.2",
+     "async": "^3.0.1",
+     "async-lru": "^1.1.1",
+@@ -135,7 +135,6 @@
+     "oauth2-server": "3.1.1",
+     "parse-torrent": "^9.1.0",
+     "password-generator": "^2.0.2",
+-    "pem": "^1.12.3",
+     "pg": "^8.2.1",
+     "prompt": "^1.0.0",
+     "proxy-addr": "^2.0.7",
+@@ -189,7 +188,6 @@
+     "@types/node": "^14.14.31",
+     "@types/nodemailer": "^6.2.0",
+     "@types/oauth2-server": "^3.0.8",
+-    "@types/pem": "^1.9.3",
+     "@types/request": "^2.0.3",
+     "@types/supertest": "^2.0.3",
+     "@types/validator": "^13.0.0",
+diff --git a/server/helpers/core-utils.ts b/server/helpers/core-utils.ts
+index 0ec45eb2e..49e1e0fc6 100644
+--- a/server/helpers/core-utils.ts
++++ b/server/helpers/core-utils.ts
+@@ -6,9 +6,8 @@
+ */
+ 
+ import { exec, ExecOptions } from 'child_process'
+-import { randomBytes } from 'crypto'
++import { ED25519KeyPairOptions, generateKeyPair, randomBytes, RSAKeyPairOptions } from 'crypto'
+ import { truncate } from 'lodash'
+-import { createPrivateKey as createPrivateKey_1, getPublicKey as getPublicKey_1 } from 'pem'
+ import { pipeline } from 'stream'
+ import { URL } from 'url'
+ import { promisify } from 'util'
+@@ -217,6 +216,51 @@ function toEven (num: number) {
+ 
+ // ---------------------------------------------------------------------------
+ 
++function generateRSAKeyPairPromise (size: number) {
++  return new Promise<{ publicKey: string, privateKey: string }>((res, rej) => {
++    const options: RSAKeyPairOptions<'pem', 'pem'> = {
++      modulusLength: size,
++      publicKeyEncoding: {
++        type: 'spki',
++        format: 'pem'
++      },
++      privateKeyEncoding: {
++        type: 'pkcs1',
++        format: 'pem'
++      }
++    }
++
++    generateKeyPair('rsa', options, (err, publicKey, privateKey) => {
++      if (err) return rej(err)
++
++      return res({ publicKey, privateKey })
++    })
++  })
++}
++
++function generateED25519KeyPairPromise () {
++  return new Promise<{ publicKey: string, privateKey: string }>((res, rej) => {
++    const options: ED25519KeyPairOptions<'pem', 'pem'> = {
++      publicKeyEncoding: {
++        type: 'spki',
++        format: 'pem'
++      },
++      privateKeyEncoding: {
++        type: 'pkcs8',
++        format: 'pem'
++      }
++    }
++
++    generateKeyPair('ed25519', options, (err, publicKey, privateKey) => {
++      if (err) return rej(err)
++
++      return res({ publicKey, privateKey })
++    })
++  })
++}
++
++// ---------------------------------------------------------------------------
++
+ function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {
+   return function promisified (): Promise<A> {
+     return new Promise<A>((resolve: (arg: A) => void, reject: (err: any) => void) => {
+@@ -243,8 +287,6 @@ function promisify2<T, U, A> (func: (arg1: T, arg2: U, cb: (err: any, result: A)
+ }
+ 
+ const randomBytesPromise = promisify1<number, Buffer>(randomBytes)
+-const createPrivateKey = promisify1<number, { key: string }>(createPrivateKey_1)
+-const getPublicKey = promisify1<string, { publicKey: string }>(getPublicKey_1)
+ const execPromise2 = promisify2<string, any, string>(exec)
+ const execPromise = promisify1<string, string>(exec)
+ const pipelinePromise = promisify(pipeline)
+@@ -272,8 +314,10 @@ export {
+   promisify2,
+ 
+   randomBytesPromise,
+-  createPrivateKey,
+-  getPublicKey,
++
++  generateRSAKeyPairPromise,
++  generateED25519KeyPairPromise,
++
+   execPromise2,
+   execPromise,
+   pipelinePromise,
+diff --git a/server/helpers/custom-validators/activitypub/actor.ts b/server/helpers/custom-validators/activitypub/actor.ts
+index a4b152722..f43c35b23 100644
+--- a/server/helpers/custom-validators/activitypub/actor.ts
++++ b/server/helpers/custom-validators/activitypub/actor.ts
+@@ -41,9 +41,9 @@ function isActorPreferredUsernameValid (preferredUsername: string) {
+ function isActorPrivateKeyValid (privateKey: string) {
+   return exists(privateKey) &&
+     typeof privateKey === 'string' &&
+-    privateKey.startsWith('-----BEGIN RSA PRIVATE KEY-----') &&
++    (privateKey.startsWith('-----BEGIN RSA PRIVATE KEY-----') || privateKey.startsWith('-----BEGIN PRIVATE KEY-----')) &&
+     // Sometimes there is a \n at the end, so just assert the string contains the end mark
+-    privateKey.includes('-----END RSA PRIVATE KEY-----') &&
++    (privateKey.includes('-----END RSA PRIVATE KEY-----') || privateKey.includes('-----END PRIVATE KEY-----')) &&
+     validator.isLength(privateKey, CONSTRAINTS_FIELDS.ACTORS.PRIVATE_KEY)
+ }
+ 
+diff --git a/server/helpers/peertube-crypto.ts b/server/helpers/peertube-crypto.ts
+index 1a7ee24a7..1d9cab2ce 100644
+--- a/server/helpers/peertube-crypto.ts
++++ b/server/helpers/peertube-crypto.ts
+@@ -5,7 +5,7 @@ import { cloneDeep } from 'lodash'
+ import { sha256 } from '@shared/extra-utils'
+ import { BCRYPT_SALT_SIZE, HTTP_SIGNATURE, PRIVATE_RSA_KEY_SIZE } from '../initializers/constants'
+ import { MActor } from '../types/models'
+-import { createPrivateKey, getPublicKey, promisify1, promisify2 } from './core-utils'
++import { generateRSAKeyPairPromise, promisify1, promisify2 } from './core-utils'
+ import { jsonld } from './custom-jsonld-signature'
+ import { logger } from './logger'
+ 
+@@ -15,13 +15,10 @@ const bcryptHashPromise = promisify2<any, string | number, string>(hash)
+ 
+ const httpSignature = require('@peertube/http-signature')
+ 
+-async function createPrivateAndPublicKeys () {
++function createPrivateAndPublicKeys () {
+   logger.info('Generating a RSA key...')
+ 
+-  const { key } = await createPrivateKey(PRIVATE_RSA_KEY_SIZE)
+-  const { publicKey } = await getPublicKey(key)
+-
+-  return { privateKey: key, publicKey }
++  return generateRSAKeyPairPromise(PRIVATE_RSA_KEY_SIZE)
+ }
+ 
+ // User password checks
+diff --git a/server/initializers/migrations/0605-actor-missing-keys.ts b/server/initializers/migrations/0605-actor-missing-keys.ts
+index 72d9b359d..aa89a500c 100644
+--- a/server/initializers/migrations/0605-actor-missing-keys.ts
++++ b/server/initializers/migrations/0605-actor-missing-keys.ts
+@@ -1,5 +1,5 @@
+ import * as Sequelize from 'sequelize'
+-import { createPrivateKey, getPublicKey } from '../../helpers/core-utils'
++import { generateRSAKeyPairPromise } from '../../helpers/core-utils'
+ import { PRIVATE_RSA_KEY_SIZE } from '../constants'
+ 
+ async function up (utils: {
+@@ -15,10 +15,9 @@ async function up (utils: {
+     const actors = await utils.sequelize.query<any>(query, options)
+ 
+     for (const actor of actors) {
+-      const { key } = await createPrivateKey(PRIVATE_RSA_KEY_SIZE)
+-      const { publicKey } = await getPublicKey(key)
++      const { privateKey, publicKey } = await generateRSAKeyPairPromise(PRIVATE_RSA_KEY_SIZE)
+ 
+-      const queryUpdate = `UPDATE "actor" SET "publicKey" = '${publicKey}', "privateKey" = '${key}' WHERE id = ${actor.id}`
++      const queryUpdate = `UPDATE "actor" SET "publicKey" = '${publicKey}', "privateKey" = '${privateKey}' WHERE id = ${actor.id}`
+       await utils.sequelize.query(queryUpdate)
+     }
+   }
+diff --git a/yarn.lock b/yarn.lock
+index 9f0654709..9bd2e9bb4 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -1601,10 +1601,10 @@
+   dependencies:
+     xml-js "^1.6.11"
+ 
+-"@peertube/http-signature@^1.6.0":
+-  version "1.6.0"
+-  resolved "https://registry.yarnpkg.com/@peertube/http-signature/-/http-signature-1.6.0.tgz#22bef028384e6437e8dbd94052ba7b8bd7f7f1ae"
+-  integrity sha512-Bx780c7FPYtkV4LgCoaJcXYcKQqaMef2iQR2V2r5klkYkIQWFxbTOpyhKxvVXYIBIFpj5Cb8DGVDAmhkm7aavg==
++"@peertube/http-signature@^1.7.0":
++  version "1.7.0"
++  resolved "https://registry.yarnpkg.com/@peertube/http-signature/-/http-signature-1.7.0.tgz#12a84f3fc62e786aa3a2eb09426417bad65736dc"
++  integrity sha512-aGQIwo6/sWtyyqhVK4e1MtxYz4N1X8CNt6SOtCc+Wnczs5S5ONaLHDDR8LYaGn0MgOwvGgXyuZ5sJIfd7iyoUw==
+   dependencies:
+     assert-plus "^1.0.0"
+     jsprim "^1.2.2"
+@@ -2006,13 +2006,6 @@
+     "@types/node" "*"
+     "@types/parse-torrent-file" "*"
+ 
+-"@types/pem@^1.9.3":
+-  version "1.9.6"
+-  resolved "https://registry.yarnpkg.com/@types/pem/-/pem-1.9.6.tgz#c3686832e935947fdd9d848dec3b8fe830068de7"
+-  integrity sha512-IC67SxacM9fxEi/w7hf98dTun83OwUMeLMo1NS2gE0wdM9MHeg73iH/Pp9nB02OUCQ7Zb2UuKE/IpFCmQw9jxw==
+-  dependencies:
+-    "@types/node" "*"
+-
+ "@types/qs@*":
+   version "6.9.7"
+   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.7.tgz#63bb7d067db107cc1e457c303bc25d511febf6cb"
+@@ -6973,16 +6966,6 @@ peek-stream@^1.1.1:
+     duplexify "^3.5.0"
+     through2 "^2.0.3"
+ 
+-pem@^1.12.3:
+-  version "1.14.6"
+-  resolved "https://registry.yarnpkg.com/pem/-/pem-1.14.6.tgz#89babca3a73466fb844df70666dbf1b25eb0dc56"
+-  integrity sha512-I5GKUer2PPv5qzUfxaZ6IGRkhp+357Kyv2t1JJg9vP8hGGI13qU34N2QupmggbpIZGPuudH0jn8KU5hjFpPk3g==
+-  dependencies:
+-    es6-promisify "^6.0.0"
+-    md5 "^2.2.1"
+-    os-tmpdir "^1.0.1"
+-    which "^2.0.2"
+-
+ pg-connection-string@^2.5.0:
+   version "2.5.0"
+   resolved "https://registry.yarnpkg.com/pg-connection-string/-/pg-connection-string-2.5.0.tgz#538cadd0f7e603fc09a12590f3b8a452c2c0cf34"
+-- 
+2.36.2
+
