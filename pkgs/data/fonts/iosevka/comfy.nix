@@ -8,10 +8,12 @@ let
     "comfy-duo"
     # The compact, serif set:
     "comfy-motion"
+    "comfy-motion-fixed"
     "comfy-motion-duo"
     # The wide, sans-serif set:
     "comfy-wide"
     "comfy-wide-fixed"
+    "comfy-wide-duo"
   ];
   version = "1.0.0";
   src = fetchFromSourcehut {
