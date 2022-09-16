@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/+XYf8FiH4lk7f7/pMt43hm13mRK+UqvaNOpf1TI6m4=";
   };
 
+  patches = [
+    # source: https://github.com/archlinux/svntogit-community/blob/2fae8c15a0459ac6562daee5b0d39ac6f038ba13/repos/community-x86_64/systemd-dbus-activation.patch
+    ./systemd-dbus-activation.patch
+  ];
+
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-protocols wrapGAppsHook ];
   buildInputs = [ systemd pango cairo gdk-pixbuf wayland ];
 

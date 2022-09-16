@@ -1,0 +1,7 @@
+--- a/fr.emersion.mako.service.in
++++ b/fr.emersion.mako.service.in
+@@ -1,3 +1,4 @@
+ [D-BUS Service]
+ Name=org.freedesktop.Notifications
+ Exec=@bindir@/mako
++SystemdService=mako.service
