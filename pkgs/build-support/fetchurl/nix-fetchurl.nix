@@ -15,6 +15,7 @@
 , executable ? false
 , unpack ? false
 , name ? baseNameOf (toString url)
+, impure ? false
 }:
 
 derivation ({
@@ -22,7 +23,6 @@ derivation ({
 
   # New-style output content requirements.
   outputHashMode = if unpack || executable then "recursive" else "flat";
-  __impure = outputHash=="";
 
   inherit name url executable unpack;
 
@@ -41,4 +41,4 @@ derivation ({
 
   # To make "nix-prefetch-url" work.
   urls = [ url ];
-} // (if outputHash=="" then { } else { inherit outputHashAlgo outputHash; }))
+} // (if impure then { __impure = true; } else { inherit outputHashAlgo outputHash; }))
