@@ -126,7 +126,7 @@ let
       ensureNewerSourcesForZipFilesHook  # move to wheel installer (pip) or builder (setuptools, flit, ...)?
       pythonRemoveTestsDirHook
     ] ++ lib.optionals catchConflicts [
-      pythonCatchConflictsHook
+      setuptools pythonCatchConflictsHook
     ] ++ lib.optionals removeBinBytecode [
       pythonRemoveBinBytecodeHook
     ] ++ lib.optionals (lib.hasSuffix "zip" (attrs.src.name or "")) [
