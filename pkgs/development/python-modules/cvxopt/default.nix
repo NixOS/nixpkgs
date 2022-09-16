@@ -53,7 +53,7 @@ buildPythonPackage rec {
 
   checkInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "tests" ];
+  unittestFlags = [ "-s" "tests" ];
 
   meta = with lib; {
     homepage = "http://cvxopt.org/";

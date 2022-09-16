@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   checkInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "tests" ];
+  unittestFlags = [ "-s" "tests" ];
 
   pythonImportsCheck = [
     "webcolors"

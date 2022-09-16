@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   checkInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "tests" ];
+  unittestFlags = [ "-s" "tests" ];
 
   meta = {
     description = "Backport of new features in Python's tempfile module";

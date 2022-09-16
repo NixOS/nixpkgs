@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ unittestCheckHook mock ];
-  unittestFlagsArray = [ "-s" "tests" ];
+  unittestFlags = [ "-s" "tests" ];
 
   meta = with lib; {
     description = "Get a BibTeX entry from an arXiv id number, using the arxiv.org API";

@@ -17,7 +17,7 @@ buildPythonPackage {
     unittestCheckHook
   ];
 
-  unittestFlagsArray = [ "-s" "$src/test" "-p" "'*test.py'" ];
+  unittestFlags = [ "-s" "$src/test" "-p" "'*test.py'" ];
 
   passthru = {
     withPlugins = plugins:

@@ -26,7 +26,7 @@ buildPythonPackage rec {
     speaklater
   ];
 
-  unittestFlagsArray = [ "-s" "tests" ];
+  unittestFlags = [ "-s" "tests" ];
 
   meta = with lib; {
     description = "Adds i18n/l10n support to Flask applications";

@@ -67,7 +67,7 @@ buildPythonPackage rec {
     export DB_NAME=":memory:";
   '';
 
-  unittestFlagsArray = [ "-s" "trytond.tests" ];
+  unittestFlags = [ "-s" "trytond.tests" ];
 
   meta = with lib; {
     description = "The server of the Tryton application platform";

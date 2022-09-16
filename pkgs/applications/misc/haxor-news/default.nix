@@ -54,7 +54,7 @@ buildPythonApplication rec {
 
   checkInputs = [ unittestCheckHook mock ];
 
-  unittestFlagsArray = [ "-s" "tests" "-v" ];
+  unittestFlags = [ "-s" "tests" "-v" ];
 
   meta = with lib; {
     homepage = "https://github.com/donnemartin/haxor-news";

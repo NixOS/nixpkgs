@@ -19,7 +19,7 @@ buildPythonPackage rec {
   checkInputs = [ unittestCheckHook mock ];
   propagatedBuildInputs = [ sphinx six ];
 
-  unittestFlagsArray = [ "-s" "tests" ];
+  unittestFlags = [ "-s" "tests" ];
 
   # Test failures https://github.com/sphinx-doc/sphinx-testing/issues/5
   doCheck = false;

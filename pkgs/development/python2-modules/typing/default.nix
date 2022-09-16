@@ -22,7 +22,7 @@ in buildPythonPackage rec {
 
   checkInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" testDir ];
+  unittestFlags = [ "-s" testDir ];
 
   meta = with lib; {
     description = "Backport of typing module to Python versions older than 3.5";

@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   checkInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "pytz/tests" ];
+  unittestFlags = [ "-s" "pytz/tests" ];
 
   pythonImportsCheck = [ "pytz" ];
 

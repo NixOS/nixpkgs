@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   checkInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "tests" ];
+  unittestFlags = [ "-s" "tests" ];
 
   meta = with lib; {
     description = "C parser in Python";

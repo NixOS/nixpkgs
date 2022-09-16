@@ -23,7 +23,7 @@ buildPythonPackage rec {
   doCheck = !isPy27; # namespace conflicts
   checkInputs = [ unittestCheckHook zope_location zope_schema ];
 
-  unittestFlagsArray = [ "-s" "src/zope/copy" ];
+  unittestFlags = [ "-s" "src/zope/copy" ];
 
   meta = {
     maintainers = with lib.maintainers; [ domenkozar ];

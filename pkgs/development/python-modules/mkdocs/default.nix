@@ -52,7 +52,7 @@ buildPythonPackage rec {
     mock
   ];
 
-  unittestFlagsArray = [ "-v" "-p" "'*tests.py'" "mkdocs" ];
+  unittestFlags = [ "-v" "-p" "'*tests.py'" "mkdocs" ];
 
   pythonImportsCheck = [ "mkdocs" ];
 

@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   checkInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "test" ];
+  unittestFlags = [ "-s" "test" ];
 
   pythonImportsCheck = [ "bitstring" ];
 

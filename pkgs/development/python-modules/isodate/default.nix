@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   checkInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "src/isodate/tests" ];
+  unittestFlags = [ "-s" "src/isodate/tests" ];
 
   meta = with lib; {
     description = "ISO 8601 date/time parser";

@@ -19,7 +19,7 @@ buildPythonPackage {
 
   checkInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "tests" ];
+  unittestFlags = [ "-s" "tests" ];
 
   meta = with lib; {
     maintainers = with maintainers; [ guibou ];

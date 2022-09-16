@@ -25,7 +25,7 @@ buildPythonPackage rec {
       --replace "test_child_watch_no_create" "_test_child_watch_no_create"
   '';
 
-  unittestFlagsArray = [ "zake/tests" ];
+  unittestFlags = [ "zake/tests" ];
 
   meta = with lib; {
     homepage = "https://github.com/yahoo/Zake";

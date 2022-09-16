@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   checkInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "tests" ];
+  unittestFlags = [ "tests" ];
 
   meta = with lib; {
     description = "Backports of new features in Python’s weakref module";

@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   checkInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-v" "greenlet.tests" ];
+  unittestFlags = [ "-v" "greenlet.tests" ];
 
   meta = with lib; {
     homepage = "https://github.com/python-greenlet/greenlet";

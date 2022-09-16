@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   checkInputs = [ unittestCheckHook mock pyfakefs ];
 
-  unittestFlagsArray = [ "-v" ];
+  unittestFlags = [ "-v" ];
 
   pythonImportsCheck = [ "fido2" ];
 

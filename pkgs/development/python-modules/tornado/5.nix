@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   # We specify the name of the test files to prevent
   # https://github.com/NixOS/nixpkgs/issues/14634
-  unittestFlagsArray = [ "*_test.py" ];
+  unittestFlags = [ "*_test.py" ];
 
   __darwinAllowLocalNetworking = true;
 

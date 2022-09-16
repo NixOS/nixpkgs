@@ -95,7 +95,7 @@ buildPythonPackage rec {
 
   checkInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-v" ];
+  unittestFlags = [ "-v" ];
 
   meta = with lib; {
     description = "A handy tool to trash your metadata";
