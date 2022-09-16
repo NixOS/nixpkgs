@@ -190,6 +190,17 @@ in
       };
       coreutils = bootstrapTools;
       gnugrep = bootstrapTools;
+
+      fetchpatch = import ../../build-support/fetchpatch/default.nix {
+        inherit lib;
+        buildPackages.patchutils_0_3_3 = prevStage.patchutils_0_3_3.override {
+          forStdenvBootstrap = true;
+          # the parts of patchutils used by fetchpatch do not
+          # require perl, so we could eliminate this by patching
+          # patchutils' build scripts...
+          perl = bootstrapTools;
+        };
+      };
     };
   })
 
