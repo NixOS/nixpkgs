@@ -17,6 +17,7 @@
 buildPythonApplication rec {
   pname = "cvise";
   version = "2.5.0";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "marxin";
@@ -68,10 +69,6 @@ buildPythonApplication rec {
     # Needs gcc, fails when run noninteractively (without tty).
     "test_simple_reduction"
   ];
-
-  dontUsePipInstall = true;
-  dontUseSetuptoolsBuild = true;
-  dontUseSetuptoolsCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/marxin/cvise";
