@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, async-timeout
 , pysnmp
 }:
 
@@ -13,7 +14,10 @@ buildPythonPackage rec {
     sha256 = "sha256-vvq8InmJUgvm/PpvZutpsBR3Fj1gR+xrkgfEGlw04Ek=";
   };
 
-  propagatedBuildInputs = [ pysnmp ];
+  propagatedBuildInputs = [
+    async-timeout
+    pysnmp
+  ];
 
   # Project has no test
   doCheck = false;
