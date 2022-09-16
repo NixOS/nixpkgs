@@ -4149,6 +4149,18 @@ final: prev:
     meta.homepage = "https://github.com/lukas-reineke/lsp-format.nvim/";
   };
 
+  lsp-overloads-nvim = buildVimPluginFrom2Nix {
+    pname = "lsp-overloads.nvim";
+    version = "2022-08-12";
+    src = fetchFromGitHub {
+      owner = "Issafalcon";
+      repo = "lsp-overloads.nvim";
+      rev = "1258bfa3e21f5665b7a2c6c9b921a2ad8d8d8373";
+      sha256 = "146pykcnpf9b8c4mqvs1q4wnp5jqg8i21as3gvjygwm5b71lxbky";
+    };
+    meta.homepage = "https://github.com/Issafalcon/lsp-overloads.nvim/";
+  };
+
   lsp-rooter-nvim = buildVimPluginFrom2Nix {
     pname = "lsp-rooter.nvim";
     version = "2021-08-13";
