@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "jaraco.logging";
   version = "3.1.2";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
@@ -13,8 +14,15 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "jaraco" ];
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ tempora six ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    tempora
+    six
+  ];
 
   # test no longer packaged with pypi
   doCheck = false;
