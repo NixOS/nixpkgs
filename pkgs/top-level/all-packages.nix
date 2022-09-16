@@ -3287,6 +3287,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
+  cf-terraforming = callPackage ../tools/misc/cf-terraforming { };
+
   charliecloud = callPackage ../applications/virtualization/charliecloud { };
 
   chelf = callPackage ../tools/misc/chelf { };
