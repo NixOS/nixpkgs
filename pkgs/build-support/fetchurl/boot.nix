@@ -9,9 +9,9 @@ let mirrors = import ./mirrors.nix; in
 , name ? baseNameOf (toString url)
 }:
 
-# assert exactly one hash is set
-assert hash != "" || sha256 != "";
+# assert at most one hash is set
 assert hash != "" -> sha256 == "";
+assert sha256 != "" -> hash == "";
 
 import <nix/fetchurl.nix> {
   inherit system hash sha256 name;
