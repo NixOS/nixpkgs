@@ -14413,7 +14413,7 @@ with pkgs;
 
   muonlang = callPackage ../development/compilers/muonlang { };
 
-  inherit (callPackages ../development/compilers/nim { })
+  inherit (callPackages ../development/compilers/nim { openssl = openssl_1_1; })
     nim-unwrapped nimble-unwrapped nim;
   nimPackages = recurseIntoAttrs nim.pkgs;
 
