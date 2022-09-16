@@ -21857,6 +21857,8 @@ with pkgs;
 
   stb = callPackage ../development/libraries/stb { };
 
+  stduuid = callPackage ../development/libraries/stduuid { };
+
   stegsolve = callPackage ../tools/graphics/stegsolve { };
 
   StormLib = callPackage ../development/libraries/StormLib { };
