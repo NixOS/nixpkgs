@@ -7,6 +7,7 @@
 , pytestCheckHook
 , pythonOlder
 , typing-extensions
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -20,6 +21,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-pUn0PjxdjeRkxytLkFU0w/R4F0bpgV7NUxtyVd4uGcc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     async-timeout

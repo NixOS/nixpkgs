@@ -2,6 +2,7 @@
 , lib
 , fetchurl
 , fetchpatch
+, fetchFromGitHub
 , copyDesktopItems
 , makeDesktopItem
 , desktopToDarwinBundle
@@ -33,6 +34,16 @@ let
   openJpegVersion = with stdenv;
     lib.versions.majorMinor (lib.getVersion openjpeg);
 
+  freeglut-mupdf = freeglut.overrideAttrs (old: rec {
+    pname = "freeglut-mupdf";
+    version = "3.0.0-r${src.rev}";
+    src = fetchFromGitHub {
+      owner = "ArtifexSoftware";
+      repo = "thirdparty-freeglut";
+      rev = "13ae6aa2c2f9a7b4266fc2e6116c876237f40477";
+      hash = "sha256-0fuE0lm9rlAaok2Qe0V1uUrgP4AjMWgp3eTbw8G6PMM=";
+    };
+  });
 
 in
 stdenv.mkDerivation rec {
@@ -75,7 +86,7 @@ stdenv.mkDerivation rec {
     if stdenv.isDarwin then
       with darwin.apple_sdk.frameworks; [ GLUT OpenGL ]
     else
-      [ freeglut libGLU ]
+      [ freeglut-mupdf libGLU ]
   )
   ;
   outputs = [ "bin" "dev" "out" "man" "doc" ];

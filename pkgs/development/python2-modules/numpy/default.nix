@@ -9,7 +9,7 @@
 , writeTextFile
 , isPyPy
 , cython
-, setuptoolsBuildHook
+, setuptools
  }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -47,7 +47,7 @@ in buildPythonPackage rec {
     sha256 = "e5cf3fdf13401885e8eea8170624ec96225e2174eb0c611c6f26dd33b489e3ff";
   };
 
-  nativeBuildInputs = [ gfortran pytest cython setuptoolsBuildHook ];
+  nativeBuildInputs = [ gfortran pytest cython setuptools ];
   buildInputs = [ blas lapack ];
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
