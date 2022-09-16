@@ -14623,6 +14623,7 @@ with pkgs;
   cargo-embed = callPackage ../development/tools/rust/cargo-embed {
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
+  cargo-espmonitor = callPackage ../development/tools/rust/cargo-espmonitor { };
   cargo-expand = callPackage ../development/tools/rust/cargo-expand { };
   cargo-hakari = callPackage ../development/tools/rust/cargo-hakari { };
   cargo-feature = callPackage ../development/tools/rust/cargo-feature { };
