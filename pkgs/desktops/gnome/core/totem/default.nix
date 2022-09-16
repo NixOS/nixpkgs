@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation rec {
   pname = "totem";
-  version = "43.rc";
+  version = "43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/totem/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "5dj9wbs3Wd92e/n7tUg4iz/CybL0cmyXqbrTXq1Xz8g=";
+    sha256 = "s202VZKLWJZGKk05+Dtq1m0328nJnc6wLqii43OUpB4=";
   };
 
   patches = [
