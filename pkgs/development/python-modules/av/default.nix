@@ -6,6 +6,7 @@
 # build
 , cython
 , pkg-config
+, setuptools
 
 # runtime
 , ffmpeg
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cython
     pkg-config
+    setuptools
   ];
 
   buildInputs = [
