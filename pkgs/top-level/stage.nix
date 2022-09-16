@@ -259,6 +259,8 @@ let
       crossSystem = {
         isStatic = true;
         parsed = makeMuslParsedPlatform stdenv.hostPlatform.parsed;
+      } // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
+        gcc.abi = "elfv2";
       };
     });
   };
