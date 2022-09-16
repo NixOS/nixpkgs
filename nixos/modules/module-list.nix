@@ -477,6 +477,7 @@
   ./services/hardware/sane_extra_backends/brscan5.nix
   ./services/hardware/sane_extra_backends/dsseries.nix
   ./services/hardware/spacenavd.nix
+  ./services/hardware/supergfxd.nix
   ./services/hardware/tcsd.nix
   ./services/hardware/tlp.nix
   ./services/hardware/thinkfan.nix
