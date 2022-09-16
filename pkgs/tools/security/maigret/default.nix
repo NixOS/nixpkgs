@@ -69,11 +69,6 @@ python3.pkgs.buildPythonApplication rec {
       --replace "future-annotations" ""
   '';
 
-  pytestFlagsArray = [
-    # DeprecationWarning: There is no current event loop
-    "-W ignore::DeprecationWarning"
-  ];
-
   disabledTests = [
     # Tests require network access
     "test_extract_ids_from_page"

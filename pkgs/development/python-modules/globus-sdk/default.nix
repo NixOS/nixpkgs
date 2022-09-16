@@ -46,11 +46,6 @@ buildPythonPackage rec {
     --replace "pyjwt[crypto]>=2.0.0,<3.0.0" "pyjwt[crypto]>=2.0.0,<3.0.0"
   '';
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
   pythonImportsCheck = [
     "globus_sdk"
   ];

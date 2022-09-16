@@ -84,11 +84,6 @@ buildPythonPackage rec {
     export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
   disabledTests = [
     # httpcore.ConnectError: [Errno 101] Network is unreachable
     "test_connect_timeout"

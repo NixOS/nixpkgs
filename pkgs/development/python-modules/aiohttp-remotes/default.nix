@@ -42,8 +42,6 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
     "--asyncio-mode=auto"
   ];
 

@@ -63,10 +63,6 @@ buildPythonPackage rec {
     "fallback_when_no_hook_claims_it"
   ];
 
-  pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
-  ];
-
   meta = {
     description = "An async/await-native I/O library for humans and snake people";
     homepage = "https://github.com/python-trio/trio";

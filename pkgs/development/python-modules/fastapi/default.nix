@@ -55,12 +55,6 @@ buildPythonPackage rec {
     trio
   ] ++ passlib.optional-dependencies.bcrypt;
 
-  pytestFlagsArray = [
-    # ignoring deprecation warnings to avoid test failure from
-    # tests/test_tutorial/test_testing/test_tutorial001.py
-    "-W ignore::DeprecationWarning"
-  ];
-
   disabledTestPaths = [
     # Disabled tests require orjson which requires rust nightly
     "tests/test_default_response_class.py"

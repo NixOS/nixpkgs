@@ -38,12 +38,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    # https://github.com/python-trio/trio-asyncio/issues/112
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
   disabledTestPaths = [
     "tests/python" # tries to import internal API test.test_asyncio
   ];

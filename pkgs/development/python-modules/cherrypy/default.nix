@@ -64,11 +64,6 @@ buildPythonPackage rec {
     requests-toolbelt
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
   disabledTests = [
     # Keyboard interrupt ends test suite run
     "KeyboardInterrupt"

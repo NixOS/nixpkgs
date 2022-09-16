@@ -39,10 +39,6 @@ buildPythonPackage rec {
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
   '';
 
-  pytestFlagsArray = [
-    "-Wignore::DeprecationWarning"
-  ];
-
   disabledTestPaths = [
     # All tests fail with TypeError
     "tests/test_aio.py"

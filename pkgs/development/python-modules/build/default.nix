@@ -51,11 +51,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
   disabledTests = [
     # Tests often fail with StopIteration
     "test_isolat"
