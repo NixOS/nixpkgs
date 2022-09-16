@@ -12719,6 +12719,8 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  zbctl = callPackage ../tools/admin/zbctl { };
+
   zdelta = callPackage ../tools/compression/zdelta { };
 
   zed = callPackage ../development/tools/zed { };

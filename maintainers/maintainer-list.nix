@@ -13263,6 +13263,12 @@
     }];
     name = "Karim Vergnes";
   };
+  thetallestjj = {
+    email = "me+nixpkgs@jeroen-jetten.com";
+    github = "thetallestjj";
+    githubId = 6579555;
+    name = "Jeroen Jetten";
+  };
   theuni = {
     email = "ct@flyingcircus.io";
     github = "ctheune";
