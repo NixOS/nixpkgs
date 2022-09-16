@@ -4523,6 +4523,8 @@ with pkgs;
 
   pcb2gcode = callPackage ../tools/misc/pcb2gcode { };
 
+  pcp = callPackage ../tools/misc/pcp { };
+
   persepolis = python3Packages.callPackage ../tools/networking/persepolis {
     wrapQtAppsHook = qt5.wrapQtAppsHook;
   };
@@ -4710,6 +4712,8 @@ with pkgs;
   razergenie = libsForQt5.callPackage ../applications/misc/razergenie { };
 
   replay-sorcery = callPackage ../tools/video/replay-sorcery { };
+
+  tsduck = callPackage ../tools/video/tsduck { };
 
   ripasso-cursive = callPackage ../tools/security/ripasso/cursive.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
@@ -5935,6 +5939,8 @@ with pkgs;
   soupault = callPackage ../tools/typesetting/soupault { };
 
   stratisd = callPackage ../tools/filesystems/stratisd { };
+
+  stratis-cli = callPackage ../tools/filesystems/stratis-cli { };
 
   strawberry = libsForQt5.callPackage ../applications/audio/strawberry { };
 
@@ -7518,6 +7524,8 @@ with pkgs;
   host = bind.host;
 
   hostess = callPackage ../development/tools/hostess {};
+
+  hostname-debian = callPackage ../tools/networking/hostname-debian { };
 
   hotpatch = callPackage ../development/libraries/hotpatch { };
 
@@ -11671,6 +11679,8 @@ with pkgs;
 
   tmsu = callPackage ../tools/filesystems/tmsu { };
 
+  tncattach = callPackage ../applications/radio/tncattach { };
+
   toilet = callPackage ../tools/misc/toilet { };
 
   tokei = callPackage ../development/tools/misc/tokei {
@@ -15483,6 +15493,8 @@ with pkgs;
 
   tclreadline = callPackage ../development/interpreters/tclreadline { };
 
+  eltclsh = callPackage ../development/tools/eltclsh { };
+
   trealla = callPackage ../development/interpreters/trealla { };
 
   wapm-cli = callPackage ../tools/package-management/wapm/cli {
@@ -15920,6 +15932,8 @@ with pkgs;
   bossa = callPackage ../development/embedded/bossa {
     wxGTK = wxGTK30;
   };
+
+  bob = callPackage ../development/tools/build-managers/bob { };
 
   buck = callPackage ../development/tools/build-managers/buck { };
 
@@ -31568,7 +31582,9 @@ with pkgs;
 
   transcribe = callPackage ../applications/audio/transcribe { };
 
-  transmission = callPackage ../applications/networking/p2p/transmission { };
+  transmission = callPackage ../applications/networking/p2p/transmission {
+    openssl = openssl_1_1;
+  };
   libtransmission = transmission.override {
     installLib = true;
     enableDaemon = false;
