@@ -10,13 +10,19 @@
  buildPythonPackage rec {
   pname = "nunavut";
   version = "1.8.3";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-JI+0IpQWikE6vXfpZHWsVjx3JPaVJ/f4oAjTSNs1Wuk=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pydsdl ~= 1.16" "pydsdl"
+  '';
 
   propagatedBuildInputs = [
     importlib-resources
