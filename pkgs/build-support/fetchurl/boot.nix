@@ -33,7 +33,7 @@ else stdenv.mkDerivation {
   srcs = [ ];
   unpackPhase = ''
     runHook preUnpack
-    cp '${fetchurl (args // { postFetch=null; hash=""; sha256=""; __impure=true; })}' $out
+    cp '${fetchurl (args // { postFetch = null; hash = ""; sha256 = ""; __impure=true; })}' $out
     chmod +w $out
     runHook postUnpack
   '';
