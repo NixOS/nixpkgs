@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , fetchzip
 , writeShellScript
@@ -17,7 +18,7 @@
 
 let
   pname = "yabai";
-  version = "4.0.2";
+  version = "4.0.4";
 
   test-version = testers.testVersion {
     package = yabai;
@@ -46,12 +47,12 @@ in
 {
   # Unfortunately compiling yabai from source on aarch64-darwin is a bit complicated. We use the precompiled binary instead for now.
   # See the comments on https://github.com/NixOS/nixpkgs/pull/188322 for more information.
-  aarch64-darwin = stdenv.mkDerivation {
+  aarch64-darwin = stdenvNoCC.mkDerivation {
     inherit pname version;
 
     src = fetchzip {
       url = "https://github.com/koekeishiya/yabai/releases/download/v${version}/yabai-v${version}.tar.gz";
-      sha256 = "sha256-RwARzK3e0e2N3ndFNikfo8srDjeo6jsWN2xQ18bXt/I=";
+      sha256 = "sha256-NS8tMUgovhWqc6WdkNI4wKee411i/e/OE++JVc86kFE=";
     };
 
     nativeBuildInputs = [
@@ -87,7 +88,7 @@ in
       owner = "koekeishiya";
       repo = "yabai";
       rev = "v${version}";
-      sha256 = "sha256-DXDdjI4kkLcRUNtMoSu7fJ0f3fUty88o5ZS6lJz0cGU=";
+      sha256 = "sha256-TeT+8UAV2jR60XvTs4phkp611Gi0nzLmQnezLA0xb44=";
     };
 
     nativeBuildInputs = [
