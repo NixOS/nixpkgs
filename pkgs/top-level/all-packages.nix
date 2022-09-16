@@ -16421,6 +16421,8 @@ with pkgs;
 
   eweb = callPackage ../development/tools/literate-programming/eweb { };
 
+  explain = callPackage ../development/tools/explain { };
+
   funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
 
   license_finder = callPackage ../development/tools/license_finder { };
