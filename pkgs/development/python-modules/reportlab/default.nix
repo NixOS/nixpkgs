@@ -19,6 +19,10 @@ in buildPythonPackage rec {
     sha256 = "sha256-XQzDaCRWrSExUPbb/+fUfqtzfYCeUXwxYQM3a+VI+4Q=";
   };
 
+  patches = [
+    ./darwin-m1-compat.patch
+  ];
+
   checkInputs = [ glibcLocales ];
 
   buildInputs = [ ft pillow ];
