@@ -6,7 +6,7 @@
 buildDunePackage rec {
   pname = "mirage-crypto-rng-mirage";
 
-  inherit (mirage-crypto-rng) version src useDune2 minimumOCamlVersion;
+  inherit (mirage-crypto-rng) version src;
 
   doCheck = true;
   checkInputs = [ mirage-unix mirage-clock-unix mirage-time-unix ];

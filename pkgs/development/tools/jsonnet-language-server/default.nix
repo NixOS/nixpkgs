@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "jsonnet-language-server";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "jsonnet-language-server";
     rev = "v${version}";
-    sha256 = "sha256-Qp01JcgDdIK1yqXJCasZkh6rWXujdCHSFVxHSVySj50=";
+    sha256 = "sha256-JNRMV52sSA45lp1UdJ4wBGrhlGIFhYHhgZU0lop1HcI=";
   };
 
   vendorSha256 = "sha256-tsVevkMHuCv70A9Ohg9L+ghH5+v52X4sToI4bMlDzzo=";

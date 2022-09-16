@@ -136,7 +136,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ++ lib.optionals (stdenv.isLinux && withX) [ m17n_lib libotf ]
     ++ lib.optional (withX && withGTK2) gtk2-x11
     ++ lib.optional (withX && withGTK3) gtk3-x11
-    ++ lib.optional withGTK3 gsettings-desktop-schemas
+    ++ lib.optional (!stdenv.isDarwin && withGTK3) gsettings-desktop-schemas
     ++ lib.optional withPgtk gtk3
     ++ lib.optional (withX && withMotif) motif
     ++ lib.optional withSQLite3 sqlite

@@ -2953,6 +2953,8 @@ with pkgs;
     inherit (plasma5Packages) breeze-icons;
   };
 
+  beautysh = callPackage ../development/tools/beautysh { };
+
   bc = callPackage ../tools/misc/bc { };
 
   bdf2psf = callPackage ../tools/misc/bdf2psf { };
@@ -7869,6 +7871,8 @@ with pkgs;
   };
 
   jmespath = callPackage ../development/tools/jmespath { };
+
+  juicefs = callPackage ../tools/filesystems/juicefs { };
 
   jmtpfs = callPackage ../tools/filesystems/jmtpfs { };
 
@@ -13064,6 +13068,8 @@ with pkgs;
   alan_2 = callPackage ../development/compilers/alan/2.nix { };
 
   algol68g = callPackage ../development/compilers/algol68g { };
+
+  ante = callPackage ../development/compilers/ante { };
 
   armips = callPackage ../development/compilers/armips {
     stdenv = gcc10Stdenv;
@@ -25301,6 +25307,8 @@ with pkgs;
 
   adwaita-qt = libsForQt5.callPackage ../data/themes/adwaita-qt { };
 
+  adw-gtk3 = callPackage ../data/themes/adw-gtk3 { };
+
   agave = callPackage ../data/fonts/agave { };
 
   aileron = callPackage ../data/fonts/aileron { };
@@ -28995,7 +29003,11 @@ with pkgs;
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
 
-  klee = callPackage ../applications/science/logic/klee { };
+  klee = callPackage ../applications/science/logic/klee (with llvmPackages_11; {
+    clang = clang;
+    llvm = llvm;
+    stdenv = stdenv;
+  });
 
   kmetronome = libsForQt5.callPackage ../applications/audio/kmetronome { };
 

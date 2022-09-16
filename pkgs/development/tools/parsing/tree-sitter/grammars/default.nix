@@ -54,6 +54,7 @@
   tree-sitter-lua = lib.importJSON ./tree-sitter-lua.json;
   tree-sitter-make = lib.importJSON ./tree-sitter-make.json;
   tree-sitter-markdown = lib.importJSON ./tree-sitter-markdown.json;
+  tree-sitter-nickel = lib.importJSON ./tree-sitter-nickel.json;
   tree-sitter-nix = lib.importJSON ./tree-sitter-nix.json;
   tree-sitter-norg = lib.importJSON ./tree-sitter-norg.json;
   tree-sitter-ocaml = lib.importJSON ./tree-sitter-ocaml.json;
