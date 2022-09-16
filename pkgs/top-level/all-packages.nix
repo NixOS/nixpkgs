@@ -2766,6 +2766,8 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  asusctl = callPackage ../applications/system/asusctl { };
+
   autorevision = callPackage ../tools/misc/autorevision { };
 
   automirror = callPackage ../tools/misc/automirror { };
