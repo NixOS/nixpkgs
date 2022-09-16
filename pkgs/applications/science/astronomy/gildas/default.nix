@@ -7,8 +7,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  srcVersion = "nov21a";
-  version = "20211101_a";
+  srcVersion = "jun22a";
+  version = "20220601_a";
   pname = "gildas";
 
   src = fetchurl {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     # source code of the previous release to a different directory
     urls = [ "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
       "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz" ];
-    sha256 = "0fb6iqwh4hm7v7sib7sx98vxdavn3d6q2gq6y6vxg2z29g31f8g2";
+    sha256 = "sha256-RsU8vGBLbCLfQ0c2hMKpa3n05TYuR8HvHT0GaJBmiBQ=";
   };
 
   nativeBuildInputs = [ pkg-config groff perl getopt gfortran which ];
@@ -50,7 +50,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    broken = stdenv.isDarwin;
     description = "Radioastronomy data analysis software";
     longDescription = ''
       GILDAS is a collection of state-of-the-art software
