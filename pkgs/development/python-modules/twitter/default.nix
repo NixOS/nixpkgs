@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools-scm
+, certifi
 , pythonOlder
 }:
 
@@ -19,6 +20,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    certifi
   ];
 
   doCheck = false;
