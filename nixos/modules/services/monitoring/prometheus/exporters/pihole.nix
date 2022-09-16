@@ -7,6 +7,12 @@ let
 in
 {
   port = 9617;
+  imports = [
+    # removed option 'services.prometheus.exporters.pihole.interval'
+    (mkRemovedOptionModule [ "interval" ] ''
+      As of prometheus-pihole-exporter 0.3.0 this option no-longer exists.
+    '')
+  ];
   extraOpts = {
     apiToken = mkOption {
       type = types.str;
