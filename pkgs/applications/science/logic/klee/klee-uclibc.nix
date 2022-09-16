@@ -1,10 +1,11 @@
 { lib
+, stdenv
 , fetchurl
 , fetchFromGitHub
 , which
 , linuxHeaders
 , clang
-, llvmPackages_11
+, llvm
 , python3
 , curl
 , debugRuntime ? true
@@ -23,8 +24,7 @@ let
     "RUNTIME_PREFIX" = "/";
     "DEVEL_PREFIX" = "/";
   });
-in
-clang.stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "klee-uclibc";
   version = "1.3";
   src = fetchFromGitHub {
@@ -37,7 +37,7 @@ clang.stdenv.mkDerivation rec {
   nativeBuildInputs = [
     clang
     curl
-    llvmPackages_11.llvm
+    llvm
     python3
     which
   ];

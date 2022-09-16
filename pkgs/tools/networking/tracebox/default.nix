@@ -1,34 +1,45 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libcrafter, libpcap, lua }:
-
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libpcap
+, lua5_1
+, json_c
+}:
 stdenv.mkDerivation rec {
   pname = "tracebox";
-  version = "0.2";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "tracebox";
     repo = "tracebox";
     rev = "v${version}";
-    hash = "sha256-2r503xEF3/F9QQCEaSnd4Hw/RbbAhVj9C0SVZepVrT8=";
+    hash = "sha256-1KBJ4uXa1XpzEw23IjndZg+aGJXk3PVw8LYKAvxbxCA=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libcrafter lua ];
+  buildInputs = [
+    libpcap
+    lua5_1
+    json_c
+  ];
 
-  configureFlags = [ "--with-lua=yes" ];
+  configureFlags = [
+    "--with-lua=yes"
+    "--with-libpcap=yes"
+  ];
 
-  NIX_LDFLAGS = "${libpcap}/lib/libpcap.so ${libcrafter}/lib/libcrafter.so";
+  PCAPLIB="-lpcap";
+  LUA_LIB="-llua";
 
-  preAutoreconf = ''
-    substituteInPlace Makefile.am --replace "noinst" ""
-    sed '/noinst/d' -i configure.ac
-    sed '/libcrafter/d' -i src/tracebox/Makefile.am
-  '';
+  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "http://www.tracebox.org/";
     description = "A middlebox detection tool";
-    license = lib.licenses.gpl2;
-    maintainers = [ ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ ck3d ];
     platforms = platforms.linux;
   };
 }

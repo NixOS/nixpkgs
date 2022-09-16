@@ -373,6 +373,12 @@
     githubId = 10677343;
     name = "Eugene";
   };
+  afh = {
+    email = "surryhill+nix@gmail.com";
+    github = "afh";
+    githubId = 16507;
+    name = "Alexis Hildebrandt";
+  };
   aflatter = {
     email = "flatter@fastmail.fm";
     github = "aflatter";
@@ -2443,6 +2449,12 @@
     githubId = 42220376;
     name = "Charlotte Van Petegem";
   };
+  ciferkey = {
+    name = "Matthew Brunelle";
+    email = "ciferkey@gmail.com";
+    github = "ciferkey";
+    githubId = 101422;
+  };
   cigrainger = {
     name = "Christopher Grainger";
     email = "chris@amplified.ai";
@@ -3738,6 +3750,12 @@
     email = "edli.merkaj@identinet.io";
     github = "edlimerkaj";
     githubId = 71988351;
+  };
+  ehllie = {
+    email = "me@ehllie.xyz";
+    github = "ehllie";
+    githubId = 20847625;
+    name = "Elizabeth Paź";
   };
   elliottslaughter = {
     name = "Elliott Slaughter";
@@ -10690,6 +10708,12 @@
       fingerprint = "48AD DE10 F27B AFB4 7BB0  CCAF 2D25 95A0 0D08 ACE0";
     }];
   };
+  posch = {
+    email = "tp@fonz.de";
+    github = "posch";
+    githubId = 146413;
+    name = "Tobias Poschwatta";
+  };
   ppenguin = {
     name = "Jeroen Versteeg";
     email = "hieronymusv@gmail.com";
@@ -13239,6 +13263,12 @@
     }];
     name = "Karim Vergnes";
   };
+  thetallestjj = {
+    email = "me+nixpkgs@jeroen-jetten.com";
+    github = "thetallestjj";
+    githubId = 6579555;
+    name = "Jeroen Jetten";
+  };
   theuni = {
     email = "ct@flyingcircus.io";
     github = "ctheune";
@@ -15346,5 +15376,11 @@
     github = "bpaulin";
     githubId = 115711;
     name = "bpaulin";
+  };
+  zuzuleinen = {
+    email = "andrey.boar@gmail.com";
+    name = "Andrei Boar";
+    github = "zuzuleinen";
+    githubId = 944919;
   };
 }

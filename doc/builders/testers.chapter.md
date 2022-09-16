@@ -14,18 +14,24 @@ for example when using an 'old' hash in a fixed-output derivation.
 Examples:
 
 ```nix
-passthru.tests.version = testVersion { package = hello; };
+passthru.tests.version = testers.testVersion { package = hello; };
 
-passthru.tests.version = testVersion {
+passthru.tests.version = testers.testVersion {
   package = seaweedfs;
   command = "weed version";
 };
 
-passthru.tests.version = testVersion {
+passthru.tests.version = testers.testVersion {
   package = key;
   command = "KeY --help";
   # Wrong '2.5' version in the code. Drop on next version.
   version = "2.5";
+};
+
+passthru.tests.version = testers.testVersion {
+  package = ghr;
+  # The output needs to contain the 'version' string without any prefix or suffix.
+  version = "v${version}";
 };
 ```
 
@@ -42,7 +48,7 @@ Otherwise, the build log explains the difference via `nix-diff`.
 Example:
 
 ```nix
-testEqualDerivation
+testers.testEqualDerivation
   "The hello package must stay the same when enabling checks."
   hello
   (hello.overrideAttrs(o: { doCheck = true; }))
@@ -73,7 +79,7 @@ fixed output derivation.
 Example:
 
 ```nix
-tests.fetchgit = invalidateFetcherByDrvHash fetchgit {
+tests.fetchgit = testers.invalidateFetcherByDrvHash fetchgit {
   name = "nix-source";
   url = "https://github.com/NixOS/nix";
   rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";

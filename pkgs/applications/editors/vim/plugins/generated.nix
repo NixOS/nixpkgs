@@ -10628,6 +10628,18 @@ final: prev:
     meta.homepage = "https://github.com/kana/vim-niceblock/";
   };
 
+  vim-nickel = buildVimPluginFrom2Nix {
+    pname = "vim-nickel";
+    version = "2022-03-16";
+    src = fetchFromGitHub {
+      owner = "nickel-lang";
+      repo = "vim-nickel";
+      rev = "2f0f5f8ce2a8e719a5e39d7210ca914ae403374c";
+      sha256 = "1li3wc5164mcqrvj42dc8zh3j8wml10gpgffapnjilwa5c85kv3q";
+    };
+    meta.homepage = "https://github.com/nickel-lang/vim-nickel/";
+  };
+
   vim-ninja-feet = buildVimPluginFrom2Nix {
     pname = "vim-ninja-feet";
     version = "2021-05-27";

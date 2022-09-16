@@ -209,7 +209,7 @@ in {
         "curl --fail -L --cacert ${ca_pem} https://localhost:8448/"
     )
     serverpostgres.require_unit_state("postgresql.service")
-    serverpostgres.succeed("register_new_matrix_user -u ${testUser} -p ${testPassword} -a -k ${registrationSharedSecret} ")
+    serverpostgres.succeed("register_new_matrix_user -u ${testUser} -p ${testPassword} -a -k ${registrationSharedSecret} https://localhost:8448/")
     serverpostgres.succeed("obtain-token-and-register-email")
     serversqlite.wait_for_unit("matrix-synapse.service")
     serversqlite.wait_until_succeeds(

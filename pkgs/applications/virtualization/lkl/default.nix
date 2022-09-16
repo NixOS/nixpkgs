@@ -3,15 +3,15 @@
 
 stdenv.mkDerivation rec {
   pname = "lkl";
-  version = "2019-10-04";
+  version = "2022-05-18";
 
   outputs = [ "dev" "lib" "out" ];
 
   src = fetchFromGitHub {
     owner  = "lkl";
     repo   = "linux";
-    rev  = "06ca3ddb74dc5b84fa54fa1746737f2df502e047";
-    sha256 = "0qjp0r338bwgrqdsvy5mkdh7ryas23m47yvxfwdknfyl0k3ylq62";
+    rev  = "10c7b5dee8c424cc2ab754e519ecb73350283ff9";
+    sha256 = "sha256-D3HQdKzhB172L62a+8884bNhcv7vm/c941wzbYtbf4I=";
   };
 
   nativeBuildInputs = [ bc bison flex python3 ];
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Fix a /usr/bin/env reference in here that breaks sandboxed builds
     patchShebangs arch/lkl/scripts
+
+    patchShebangs scripts/ld-version.sh
 
     # Fixup build with newer Linux headers: https://github.com/lkl/linux/pull/484
     sed '1i#include <linux/sockios.h>' -i tools/lkl/lib/hijack/xlate.c

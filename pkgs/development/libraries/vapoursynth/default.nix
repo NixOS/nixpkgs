@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, makeWrapper
 , runCommandCC, runCommand, vapoursynth, writeText, patchelf, buildEnv
-, zimg, libass, python3, libiconv
+, zimg, libass, python3, libiconv, testers
 , ApplicationServices
 }:
 
@@ -38,6 +38,12 @@ stdenv.mkDerivation rec {
       inherit lib python3 buildEnv writeText runCommandCC stdenv runCommand
         vapoursynth makeWrapper withPlugins;
     };
+
+    tests.version = testers.testVersion {
+      package = vapoursynth;
+      # Check Core version to prevent false positive with API version
+      version = "Core R${version}";
+    };
   };
 
   postInstall = ''
@@ -56,5 +62,6 @@ stdenv.mkDerivation rec {
     license     = licenses.lgpl21;
     platforms   = platforms.x86_64;
     maintainers = with maintainers; [ rnhmjoj sbruder tadeokondrak ];
+    mainProgram = "vspipe";
   };
 }

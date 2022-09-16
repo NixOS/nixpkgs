@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "got";
-  version = "0.75";
+  version = "0.75.1";
 
   src = fetchurl {
     url = "https://gameoftrees.org/releases/portable/got-portable-${version}.tar.gz";
-    sha256 = "sha256-s1MkiTya771r9JYCpsm7nW4gZwr/PJc0/v6tAgW7nLI=";
+    sha256 = "sha256-GlEXB89fZPRZAwvUUHcyKCH3Jj5AOvMSHFodsVKepSQ=";
   };
 
   nativeBuildInputs = [ pkg-config bison ];
@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gameoftrees.org";
     license = licenses.isc;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ abbe ];
+    maintainers = with maintainers; [ abbe afh ];
   };
 }

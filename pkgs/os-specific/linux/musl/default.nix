@@ -67,6 +67,12 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/openwrt/openwrt/87606e25afac6776d1bbc67ed284434ec5a832b4/toolchain/musl/patches/300-relative.patch";
       sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
     })
+
+    # fix parsing lines with optional fields in fstab etc. NOTE: Remove for the next release since it has been merged upstream
+    (fetchurl {
+      url = "https://git.musl-libc.org/cgit/musl/patch/?id=751bee0ee727e8d8b003c87cff77ac76f1dbecd6";
+      sha256 = "sha256-qCw132TCSaZrkISmtDb8Q8ufyt8sAJdwACkvfwuoi/0=";
+    })
   ];
   CFLAGS = [ "-fstack-protector-strong" ]
     ++ lib.optional stdenv.hostPlatform.isPower "-mlong-double-64";
