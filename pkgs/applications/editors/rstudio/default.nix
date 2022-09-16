@@ -130,6 +130,7 @@ in
       ./fix-resources-path.patch
       ./pandoc-nix-path.patch
       ./remove-quarto-from-generator.patch
+      ./do-not-install-pandoc.patch
     ];
 
     postPatch = ''
