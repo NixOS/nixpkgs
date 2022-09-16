@@ -33,6 +33,8 @@ function pytestCheckPhase() {
 
     # Compose arguments
     args=" -m pytest"
+    args+=" -W ignore::DeprecationWarning"
+    args+=" -W ignore::ResourceWarning"
     if [ -n "$disabledTests" ]; then
         disabledTestsString=$(_pytestComputeDisabledTestsString "${disabledTests[@]}")
       args+=" -k \""$disabledTestsString"\""
