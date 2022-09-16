@@ -1,6 +1,7 @@
 { lib
 , aiofiles
 , aiohttp
+, backoff
 , botocore
 , buildPythonPackage
 , fetchFromGitHub
@@ -34,6 +35,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    backoff
     botocore
     graphql-core
     requests
