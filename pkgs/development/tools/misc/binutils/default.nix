@@ -85,7 +85,6 @@ stdenv.mkDerivation {
       url = "https://sourceware.org/git/?p=binutils-gdb.git;a=patch;h=bef9ef8ca0f941d743c77cc55b5fe7985990b2a7";
       revert = true;
       excludes = [ "ChangeLog" ];
-      #hash = "sha256-VQyyPmY1P9NT7PYwu0vqocWmQGSyt45tADe6ecTc8fk=";
       hash = "sha256-FcTkFK9FfbgDR6iS+H6w7KRpPo/mFJ+0u7v5EvIlecQ=";
     })
     #./0001-Revert-libtool.m4-fix-nm-BSD-flag-detection.patch
