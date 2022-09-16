@@ -16,14 +16,6 @@ in
         pi-hole API token which can be used instead of a password
       '';
     };
-    interval = mkOption {
-      type = types.str;
-      default = "10s";
-      example = "30s";
-      description = lib.mdDoc ''
-        How often to scrape new data
-      '';
-    };
     password = mkOption {
       type = types.str;
       default = "";
@@ -61,7 +53,6 @@ in
     serviceConfig = {
       ExecStart = ''
         ${pkgs.bash}/bin/bash -c "${pkgs.prometheus-pihole-exporter}/bin/pihole-exporter \
-          -interval ${cfg.interval} \
           ${optionalString (cfg.apiToken != "") "-pihole_api_token ${cfg.apiToken}"} \
           -pihole_hostname ${cfg.piholeHostname} \
           ${optionalString (cfg.password != "") "-pihole_password ${cfg.password}"} \
