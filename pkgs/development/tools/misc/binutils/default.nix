@@ -87,7 +87,6 @@ stdenv.mkDerivation {
       excludes = [ "ChangeLog" ];
       hash = "sha256-FcTkFK9FfbgDR6iS+H6w7KRpPo/mFJ+0u7v5EvIlecQ=";
     })
-    #./0001-Revert-libtool.m4-fix-nm-BSD-flag-detection.patch
 
     # Required for newer macos versions
     ./0001-libtool.m4-update-macos-version-detection-block.patch
