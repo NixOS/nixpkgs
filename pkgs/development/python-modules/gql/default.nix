@@ -9,6 +9,7 @@
 , mock
 , parse
 , pytest-asyncio
+, pytest-console-scripts
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -50,8 +51,17 @@ buildPythonPackage rec {
     mock
     parse
     pytest-asyncio
+    pytest-console-scripts
     pytestCheckHook
     vcrpy
+  ];
+
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
+
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
   ];
 
   disabledTests = [
