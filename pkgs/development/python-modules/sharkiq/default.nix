@@ -1,17 +1,20 @@
 { lib
 , aiohttp
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "sharkiq";
   version = "1.0.2";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-BGf7wjqB+ty/UQnTqEYzLkWuoikWA4kHPvth7h1F53I=";
+  src = fetchFromGitHub {
+    owner = "JeffResc";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-UG460uEv1U/KTuVEcXMZlVbK/7REFpotkUk4U7z7KpA=";
   };
 
   propagatedBuildInputs = [
