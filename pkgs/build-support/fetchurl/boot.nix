@@ -9,6 +9,7 @@ let mirrors = import ./mirrors.nix; in
 , sha256 ? ""
 , hash ? ""
 , name ? baseNameOf (toString url)
+, __impure ? false
 , postFetch ? null
 }@args:
 
@@ -17,8 +18,8 @@ assert hash != "" -> sha256 == "";
 assert sha256 != "" -> hash == "";
 
 if postFetch==null
-then import ./nix-fetchurl.nix {
-  inherit system hash sha256 name;
+then import <nix/fetchurl.nix> {
+  inherit system hash sha256 name __impure;
 
   url =
     # Handle mirror:// URIs. Since <nix/fetchurl.nix> currently
@@ -32,7 +33,7 @@ else stdenv.mkDerivation {
   srcs = [ ];
   unpackPhase = ''
     runHook preUnpack
-    cp '${fetchurl (args // { postFetch=null; hash=""; sha256=""; })}' $out
+    cp '${fetchurl (args // { postFetch=null; hash=""; sha256=""; __impure=true; })}' $out
     chmod +w $out
     runHook postUnpack
   '';
