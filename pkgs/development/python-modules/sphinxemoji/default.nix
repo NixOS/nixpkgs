@@ -29,7 +29,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sphinxemoji" ];
 
   meta = with lib; {
-    description = "extension to use emoji codes in your Sphinx documentation";
+    description = "Extension to use emoji codes in your Sphinx documentation";
     homepage = "https://github.com/sphinx-contrib/emojicodes";
     license = licenses.mit;
     maintainers = with maintainers; [ kaction ];
