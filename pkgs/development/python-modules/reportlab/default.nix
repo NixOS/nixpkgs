@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , freetype
@@ -37,7 +38,8 @@ in buildPythonPackage rec {
     rm tests/test_graphics_charts.py
   '';
 
-  checkPhase = ''
+  # Tests on aarch64-darwin suddenly started to complain about (expired?) certificates.
+  checkPhase = lib.optionalString (stdenv.system != "aarch64-darwin") ''
     cd tests
     LC_ALL="en_US.UTF-8" ${python.interpreter} runAll.py
   '';
