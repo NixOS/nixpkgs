@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-user-share";
-  version = "43.alpha";
+  version = "43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-user-share/${lib.versions.major version}/gnome-user-share-${version}.tar.xz";
-    sha256 = "7XmBH77PI6o0rIUx9j7y4nSw73/CjyXo7Iz3Oy9DPpo=";
+    sha256 = "DfMGqgVYMT81Pvf1G/onwDYoGtxFZ34c+/p8n4YVOM4=";
   };
 
   preConfigure = ''
