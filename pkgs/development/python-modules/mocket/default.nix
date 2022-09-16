@@ -10,7 +10,9 @@
 , pytestCheckHook
 , pytest-mock
 , aiohttp
+, fastapi
 , gevent
+, httpx
 , redis
 , requests
 , sure
@@ -38,7 +40,9 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-mock
     aiohttp
+    fastapi
     gevent
+    httpx
     redis
     requests
     sure
