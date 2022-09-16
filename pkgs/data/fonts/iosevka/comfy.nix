@@ -2,13 +2,16 @@
 
 let
   sets = [
+    # The compact, sans-serif set:
     "comfy"
     "comfy-fixed"
     "comfy-duo"
-    "comfy-wide"
-    "comfy-wide-fixed"
+    # The compact, serif set:
     "comfy-motion"
     "comfy-motion-duo"
+    # The wide, sans-serif set:
+    "comfy-wide"
+    "comfy-wide-fixed"
   ];
   version = "0.4.0";
   src = fetchFromSourcehut {
