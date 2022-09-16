@@ -9,6 +9,7 @@ in
 , buildPackages
 , fetchFromGitHub
 , fetchurl
+, fetchpatch
 , flex
 , gettext
 , lib
@@ -68,11 +69,26 @@ stdenv.mkDerivation {
     # Make binutils output deterministic by default.
     ./deterministic.patch
 
-
     # Breaks nm BSD flag detection, heeds an upstream fix:
     #   https://sourceware.org/PR29547
     ./0001-Revert-libtool.m4-fix-the-NM-nm-over-here-B-option-w.patch
-    ./0001-Revert-libtool.m4-fix-nm-BSD-flag-detection.patch
+
+    # If the following patch is ever dropped, please ensure that at
+    # least one other patch in binutils uses `fetchpatch`, and move
+    # this comment to that patch.  Having a `fetchpatch` in binutils
+    # serves as a regression test to ensure that there are no
+    # dependency cycles preventing it from being used in even the
+    # earliest stages of stdenv bootstrapping.
+    (fetchpatch {
+      # Breaks nm BSD flag detection
+      name = "0001-Revert-libtool.m4-fix-nm-BSD-flag-detection.patch";
+      url = "https://sourceware.org/git/?p=binutils-gdb.git;a=patch;h=bef9ef8ca0f941d743c77cc55b5fe7985990b2a7";
+      revert = true;
+      excludes = [ "ChangeLog" ];
+      #hash = "sha256-VQyyPmY1P9NT7PYwu0vqocWmQGSyt45tADe6ecTc8fk=";
+      hash = "sha256-FcTkFK9FfbgDR6iS+H6w7KRpPo/mFJ+0u7v5EvIlecQ=";
+    })
+    #./0001-Revert-libtool.m4-fix-nm-BSD-flag-detection.patch
 
     # Required for newer macos versions
     ./0001-libtool.m4-update-macos-version-detection-block.patch
