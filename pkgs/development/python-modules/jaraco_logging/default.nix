@@ -39,5 +39,6 @@ buildPythonPackage rec {
     description = "Support for Python logging facility";
     homepage = "https://github.com/jaraco/jaraco.logging";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }
