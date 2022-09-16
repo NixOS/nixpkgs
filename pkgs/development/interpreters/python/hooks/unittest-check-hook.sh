@@ -5,7 +5,13 @@ unittestCheckPhase() {
     echo "Executing unittestCheckPhase"
     runHook preCheck
 
-    eval "@pythonCheckInterpreter@ -m unittest discover $unittestFlagsArray"
+    # Old bash empty array hack
+    # shellcheck disable=SC2086
+    local flagsArray=(
+        ${unittestFlags:-} "${unittestFlagsArray[@]}"
+    )
+    echoCmd 'unittest check flags' "${flagsArray[@]}"
+    @pythonCheckInterpreter@ -m unittest discover "${flagsArray[@]}"
 
     runHook postCheck
     echo "Finished executing unittestCheckPhase"
