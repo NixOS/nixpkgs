@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation rec {
     cp -r lib $out
 
     for i in 16 32 48 64 96 128 256 512 1024; do
-      install -D ${src}/icon.png $out/share/icons/hicolor/$ix$i/apps/agi.png
+      install -D ${src}/icon.png $out/share/icons/hicolor/''${i}x$i/apps/agi.png
     done
 
     runHook postInstall
