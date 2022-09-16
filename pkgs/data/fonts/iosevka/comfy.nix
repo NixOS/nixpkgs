@@ -13,12 +13,12 @@ let
     "comfy-wide"
     "comfy-wide-fixed"
   ];
-  version = "0.4.0";
+  version = "1.0.0";
   src = fetchFromSourcehut {
     owner = "~protesilaos";
     repo = "iosevka-comfy";
     rev = version;
-    sha256 = "sha256-d3C5HNiZCd0xva6zvMP9NmvmeU4uXuaO04pbgIepwfw=";
+    sha256 = "0psbz40hicv3v3x7yq26hy6nfbzml1kha24x6a88rfrncdp6bds7";
   };
   privateBuildPlan = src.outPath + "/private-build-plans.toml";
   overrideAttrs = (attrs: {
