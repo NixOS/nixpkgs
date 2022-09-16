@@ -1,4 +1,5 @@
-# this file was copied from https://github.com/NixOS/nix
+# this file was copied from https://github.com/NixOS/nix and modified to
+# add support for marking fetches as __impure derivations.
 
 { system ? "" # obsolete
 , url
@@ -16,12 +17,12 @@
 , name ? baseNameOf (toString url)
 }:
 
-derivation {
+derivation ({
   builder = "builtin:fetchurl";
 
   # New-style output content requirements.
-  inherit outputHashAlgo outputHash;
   outputHashMode = if unpack || executable then "recursive" else "flat";
+  __impure = outputHash=="";
 
   inherit name url executable unpack;
 
@@ -40,4 +41,4 @@ derivation {
 
   # To make "nix-prefetch-url" work.
   urls = [ url ];
-}
+} // (if outputHash=="" then { } else { inherit outputHashAlgo outputHash; }))
