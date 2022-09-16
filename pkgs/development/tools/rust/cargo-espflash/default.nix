@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, udev, stdenv }:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, udev }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-espflash";
