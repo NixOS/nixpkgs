@@ -4,7 +4,6 @@
 , cacert
 , cached-property
 , cffi
-, fetchpatch
 , fetchPypi
 , isPyPy
 , libgit2
@@ -22,17 +21,8 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IIlEM98RRkgarK434rDzu7/eoCbbL1UGEXC9mCPkCxk=";
+    hash = "sha256-NUZRvwYsAtHwgEHW+/GptL96k6/OZZeb3Ai9xlZTqi4=";
   };
-
-  patches = [
-    # libgit 2 fix
-    (fetchpatch {
-      url = "https://github.com/libgit2/pygit2/commit/14b1df84060ea4ab085202382e80672ec1a104e3.patch";
-      includes = [ "src/types.h" ];
-      sha256 = "sha256-NUZRvwYsAtHwgEHW+/GptL96k6/OZZeb3Ai9xlZTqi4=";
-    })
-  ];
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
     export DYLD_LIBRARY_PATH="${libgit2}/lib"
