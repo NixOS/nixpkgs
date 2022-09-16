@@ -23,6 +23,8 @@ let
     hash = "sha256-gTvJI+brdEpdpbEcdQycqw15seI+k5dMDVrjY3v6i14=";
   };
 
+  # FIXME: we currently manually inject a patch for react-scripts in here
+  # See https://github.com/navidrome/navidrome/pull/1767
   ui = callPackage ./ui {
     inherit src version;
   };
