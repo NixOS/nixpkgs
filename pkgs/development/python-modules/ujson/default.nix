@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPyPy
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
@@ -9,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "ujson";
-  version = "5.4.0";
-  disabled = isPyPy || pythonOlder "3.7";
+  version = "5.5.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-a5U+CUQeMHUEEwdV5b1rFYUBeNWR9mKSu6RgjE9/mwA=";
+    sha256 = "sha256-slB3qXHH2ke9aEapEqdH9pY3dtkHIMiGA7G1XYF5B4A=";
   };
 
   nativeBuildInputs = [
