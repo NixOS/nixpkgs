@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , filelock
-, flit-core
+, setuptools
 , importlib-metadata
 , packaging
 , pep517
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    flit-core
+    setuptools
   ];
 
   propagatedBuildInputs = [
