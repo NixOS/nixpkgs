@@ -4442,6 +4442,13 @@
       fingerprint = "8129 5B85 9C5A F703 C2F4  1E29 2D1D 402E 1776 3DD6";
     }];
   };
+  evan-goode = {
+    email = "mail@evangoo.de";
+    name = "Evan Goode";
+    github = "evan-goode";
+    githubId = 7495216;
+    matrix = "@goode:matrix.org";
+  };
   evanjs = {
     email = "evanjsx@gmail.com";
     github = "evanjs";
