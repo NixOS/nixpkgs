@@ -15,6 +15,9 @@
 }:
 
 buildPythonApplication rec {
+  # The package is not compatible with setuptools conventions:
+  # build and install phases are provided by cmake
+  format = "other";
   pname = "cvise";
   version = "2.5.0";
 
