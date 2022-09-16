@@ -101,6 +101,7 @@ stdenv.mkDerivation rec {
     libXext
     libXfixes
     ncurses
+    xorg.libX11
     xorg.libXfixes
     xorg.libXdamage
     wavpack

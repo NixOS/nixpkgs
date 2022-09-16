@@ -22,6 +22,7 @@
 , enableX11 ? stdenv.isLinux
 , libXv
 , libXext
+, xorg
 , enableWayland ? stdenv.isLinux
 , wayland
 , wayland-protocols
@@ -78,7 +79,6 @@ stdenv.mkDerivation rec {
     libpng
     libjpeg
     tremor
-    libGL
     pango
   ] ++ lib.optionals (!stdenv.isDarwin) [
     libvisual
@@ -97,6 +97,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     gstreamer
+  ] ++ lib.optionals (enableX11 && enableGl) [
+    xorg.libxcb
+  ] ++ lib.optionals enableGl [
+    libGL
   ];
 
   mesonFlags = [
