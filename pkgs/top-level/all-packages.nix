@@ -3330,6 +3330,8 @@ with pkgs;
 
   sshs = callPackage ../development/tools/sshs { };
 
+  supergfxctl = callPackage ../applications/system/supergfxctl { };
+
   titaniumenv = callPackage ../development/mobile/titaniumenv { };
 
   abootimg = callPackage ../development/mobile/abootimg {};
