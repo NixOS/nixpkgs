@@ -11,7 +11,6 @@ let
     url = "https://github.com/codenotary/immudb-webconsole/releases/download/v${webconsoleVersion}/immudb-webconsole.tar.gz";
     sha256 = "sha256-hFSvPwSRXyrSBYktTOwIRa1+aH+mX/scDYDokvZuW1s=";
   };
-
 in
 buildGoModule rec {
   pname = "immudb";
@@ -47,14 +46,14 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-      mkdir -p share/completions
-      for executable in immudb immuclient immuadmin; do
-          for shell in bash fish zsh; do
-            $out/bin/$executable completion $shell > share/completions/$executable.$shell
-            installShellCompletion share/completions/$executable.$shell
-          done
-        done
-    '';
+    mkdir -p share/completions
+    for executable in immudb immuclient immuadmin; do
+      for shell in bash fish zsh; do
+        $out/bin/$executable completion $shell > share/completions/$executable.$shell
+        installShellCompletion share/completions/$executable.$shell
+      done
+    done
+  '';
 
   meta = with lib; {
     description = "Immutable database based on zero trust, SQL and Key-Value, tamperproof, data change history";
