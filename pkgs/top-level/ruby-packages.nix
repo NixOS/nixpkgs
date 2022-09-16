@@ -3097,6 +3097,16 @@
     };
     version = "1.6.11";
   };
+  tty-option = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0xibs7kgbsw401ywfw67wg47fmm7sdcypy85m25af9r2q2hbq7gb";
+      type = "gem";
+    };
+    version = "0.2.0";
+  };
   typhoeus = {
     dependencies = ["ethon"];
     groups = ["default"];
