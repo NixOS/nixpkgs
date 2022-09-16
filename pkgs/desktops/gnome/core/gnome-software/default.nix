@@ -45,11 +45,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnome-software";
-  version = "43.rc";
+  version = "43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "of6JJ7H/c6JXJTbYPCEdPrm/WP0RlSIu7LHGQuaVmzg=";
+    sha256 = "8WUuquJ0pqhwlQAENRZGUgDMdVlNzM2bShWZsKxJ5o8=";
   };
 
   patches = [
