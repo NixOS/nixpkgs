@@ -79,6 +79,7 @@ stdenv.mkDerivation {
     # serves as a regression test to ensure that there are no
     # dependency cycles preventing it from being used in even the
     # earliest stages of stdenv bootstrapping.
+    #./0001-Revert-libtool.m4-fix-nm-BSD-flag-detection.patch
     (fetchpatch {
       # Breaks nm BSD flag detection
       name = "0001-Revert-libtool.m4-fix-nm-BSD-flag-detection.patch";
