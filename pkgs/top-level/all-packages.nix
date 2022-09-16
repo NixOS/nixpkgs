@@ -5940,6 +5940,8 @@ with pkgs;
 
   stratisd = callPackage ../tools/filesystems/stratisd { };
 
+  stratis-cli = callPackage ../tools/filesystems/stratis-cli { };
+
   strawberry = libsForQt5.callPackage ../applications/audio/strawberry { };
 
   schildichat-desktop = callPackage ../applications/networking/instant-messengers/schildichat/schildichat-desktop.nix {
