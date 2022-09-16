@@ -15,7 +15,7 @@
 , libgccjit, targetPlatform, makeWrapper # native-comp params
 , fetchFromSavannah
 , systemd ? null
-, withX ? !stdenv.isDarwin
+, withX ? !stdenv.isDarwin && !withPgtk
 , withNS ? stdenv.isDarwin
 , withGTK2 ? false, gtk2-x11 ? null
 , withGTK3 ? true, gtk3-x11 ? null, gsettings-desktop-schemas ? null
@@ -29,7 +29,7 @@
 , nativeComp ? false
 , withAthena ? false
 , withToolkitScrollBars ? true
-, withPgtk ? false
+, withPgtk ? false, gtk3 ? null
 , withXinput2 ? withX && lib.versionAtLeast version "29"
 , withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
 , toolkit ? (
@@ -45,9 +45,10 @@ assert stdenv.isDarwin -> libXaw != null;       # fails to link otherwise
 assert withNS -> !withX;
 assert withNS -> stdenv.isDarwin;
 assert (withGTK2 && !withNS) -> withX;
-assert (withGTK3 && !withNS) -> withX;
-assert withGTK2 -> !withGTK3 && gtk2-x11 != null;
-assert withGTK3 -> !withGTK2 && gtk3-x11 != null;
+assert (withGTK3 && !withNS) -> withX || withPgtk;
+assert withGTK2 -> !withGTK3 && gtk2-x11 != null && !withPgtk;
+assert withGTK3 -> !withGTK2 && ((gtk3-x11 != null) || withPgtk);
+assert withPgtk -> withGTK3 && !withX && gtk3 != null;
 assert withXwidgets -> withGTK3 && webkitgtk != null;
 
 
@@ -134,7 +135,9 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ++ lib.optionals withImageMagick [ imagemagick ]
     ++ lib.optionals (stdenv.isLinux && withX) [ m17n_lib libotf ]
     ++ lib.optional (withX && withGTK2) gtk2-x11
-    ++ lib.optionals (withX && withGTK3) [ gtk3-x11 gsettings-desktop-schemas ]
+    ++ lib.optional (withX && withGTK3) gtk3-x11
+    ++ lib.optional (!stdenv.isDarwin && withGTK3) gsettings-desktop-schemas
+    ++ lib.optional withPgtk gtk3
     ++ lib.optional (withX && withMotif) motif
     ++ lib.optional withSQLite3 sqlite
     ++ lib.optional withWebP libwebp
