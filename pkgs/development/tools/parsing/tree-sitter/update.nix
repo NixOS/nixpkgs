@@ -339,6 +339,10 @@ let
       orga = "ambroisie";
       repo = "tree-sitter-tiger";
     };
+    "tree-sitter-nickel" = {
+      orga = "nickel-lang";
+      repo = "tree-sitter-nickel";
+    };
   };
 
   allGrammars =
