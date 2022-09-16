@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, flit-core
 , matplotlib
 , pytestCheckHook
 , numpy
@@ -13,7 +14,7 @@
 buildPythonPackage rec {
   pname = "seaborn";
   version = "0.12.0";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -21,6 +22,10 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-iT8XKS2LrKYWwVeN21jrJcctYi9U/F7jKcggfcm1eyM=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     matplotlib
