@@ -6,6 +6,7 @@
 , pep517
 , pytest-mock
 , pytestCheckHook
+, setuptools
 , tomlkit
 , typing ? null
 , virtualenv
@@ -46,6 +47,7 @@ buildPythonPackage rec {
     pep517
     pytest-mock
     pytestCheckHook
+    setuptools
     tomlkit
     virtualenv
   ];
