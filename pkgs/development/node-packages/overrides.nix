@@ -101,6 +101,17 @@ final: prev: {
     '';
   };
 
+  btc-rpc-explorer = prev.btc-rpc-explorer.override (oldAttrs: {
+    # Package refers to this dependency as btc-rpc-client, but the dependency
+    # calls itself bitcoin-core, so we have to put it back to the expected name.
+    dependencies = map
+      (dep:
+        if dep.packageName == "bitcoin-core"
+        then dep // { packageName = "btc-rpc-client"; }
+        else dep)
+      oldAttrs.dependencies;
+  });
+
   carbon-now-cli = prev.carbon-now-cli.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     prePatch = ''
