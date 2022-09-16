@@ -24,8 +24,8 @@ let
     meta = with lib; {
       inherit (src.meta) homepage;
       description = ''
-        Custom build of Iosevka with a rounded style and open shapes,
-        adjusted metrics, and overrides for almost all individual glyphs
+        Customised build of the Iosevka typeface, with a consistent
+        rounded style and overrides for almost all individual glyphs
         in both roman (upright) and italic (slanted) variants.
       '';
       license = licenses.ofl;
