@@ -283,6 +283,7 @@ def update_plugins():
     """Update plugins to their latest revision."""
     plugins = [
         {'name': 'discourse-assign'},
+        {'name': 'discourse-bbcode-color'},
         {'name': 'discourse-calendar'},
         {'name': 'discourse-canned-replies'},
         {'name': 'discourse-chat-integration'},
