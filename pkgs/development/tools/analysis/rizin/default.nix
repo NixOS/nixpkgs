@@ -18,16 +18,15 @@
 , ninja
 , capstone
 , tree-sitter
-, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "rizin";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchurl {
     url = "https://github.com/rizinorg/rizin/releases/download/v${version}/rizin-src-v${version}.tar.xz";
-    sha256 = "sha256-CeuoaE/oE89Cpxa1mobT1lr84BPX6LJ14UXoSdM2a1o=";
+    sha256 = "sha256-Zp2Va5l4IKNuQjzzXUgqqZhJJUuWWM72hERZkS39v7g=";
   };
 
   mesonFlags = [
@@ -41,7 +40,13 @@ stdenv.mkDerivation rec {
     "-Duse_sys_tree_sitter=enabled"
   ];
 
-  nativeBuildInputs = [ pkg-config meson ninja cmake (python3.withPackages (ps: [ ps.setuptools ])) ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    meson.python3.pkgs.pyyaml
+    ninja
+    cmake
+  ];
 
   # meson's find_library seems to not use our compiler wrapper if static parameter
   # is either true/false... We work around by also providing LIBRARY_PATH
