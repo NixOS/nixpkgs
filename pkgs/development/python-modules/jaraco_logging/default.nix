@@ -8,12 +8,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "jaraco.logging";
+  pname = "jaraco-logging";
   version = "3.1.2";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "jaraco.logging";
+    inherit version;
     sha256 = "sha256-k6cLizdnd5rWx7Vu6YV5ztd7afFqu8rnSfYsLFnmeTE=";
   };
 
