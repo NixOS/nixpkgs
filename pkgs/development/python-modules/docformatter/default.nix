@@ -1,8 +1,9 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
 , untokenize
+, mock
 , pytestCheckHook
 }:
 
@@ -14,9 +15,11 @@ buildPythonPackage rec {
 
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-nccWWdO4U8MBjNey7DTV0FQ3ASjhK3nuZVSYyzOcxxE=";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GSfsM6sPSLOIH0YJYFVTB3SigI62/ps51mA2iZ7GOEg=";
   };
 
   propagatedBuildInputs = [
@@ -24,6 +27,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    mock
     pytestCheckHook
   ];
 
