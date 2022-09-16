@@ -2,20 +2,25 @@
 
 let
   sets = [
+    # The compact, sans-serif set:
     "comfy"
     "comfy-fixed"
     "comfy-duo"
+    # The compact, serif set:
+    "comfy-motion"
+    "comfy-motion-fixed"
+    "comfy-motion-duo"
+    # The wide, sans-serif set:
     "comfy-wide"
     "comfy-wide-fixed"
-    "comfy-motion"
-    "comfy-motion-duo"
+    "comfy-wide-duo"
   ];
-  version = "0.4.0";
+  version = "1.0.0";
   src = fetchFromSourcehut {
     owner = "~protesilaos";
     repo = "iosevka-comfy";
     rev = version;
-    sha256 = "sha256-d3C5HNiZCd0xva6zvMP9NmvmeU4uXuaO04pbgIepwfw=";
+    sha256 = "0psbz40hicv3v3x7yq26hy6nfbzml1kha24x6a88rfrncdp6bds7";
   };
   privateBuildPlan = src.outPath + "/private-build-plans.toml";
   overrideAttrs = (attrs: {
@@ -24,8 +29,8 @@ let
     meta = with lib; {
       inherit (src.meta) homepage;
       description = ''
-        Custom build of Iosevka with a rounded style and open shapes,
-        adjusted metrics, and overrides for almost all individual glyphs
+        Customised build of the Iosevka typeface, with a consistent
+        rounded style and overrides for almost all individual glyphs
         in both roman (upright) and italic (slanted) variants.
       '';
       license = licenses.ofl;
