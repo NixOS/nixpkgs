@@ -186,6 +186,8 @@ rec {
 
         fetchurlBoot = import ../../build-support/fetchurl {
           inherit lib;
+          inherit (prevStage) stdenv;
+          fetchurl = thisStdenv.fetchurlBoot;
           stdenvNoCC = stage0.stdenv;
           curl = bootstrapTools;
         };

@@ -104,6 +104,8 @@ let
 
         fetchurlBoot = import ../../build-support/fetchurl/boot.nix {
           inherit system;
+          inherit (prevStage) stdenv;
+          fetchurl = thisStdenv.fetchurlBoot;
         };
 
         cc = if prevStage.gcc-unwrapped == null
