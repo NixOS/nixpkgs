@@ -23,11 +23,14 @@ buildPythonPackage rec {
     dbus-signature-pyparsing
     dbus-python
   ];
+
   checkInputs = [
     pytestCheckHook
     hypothesis
     hs-dbus-signature
   ];
+
+  pythonImportsCheck = [ "into_dbus_python" ];
 
   meta = with lib; {
     description = "A transformer to dbus-python types";
