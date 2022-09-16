@@ -1,47 +1,25 @@
-{ autoPatchelfHook
-, coreutils
-, curl
-, dotnetCorePackages
-, dotnetPackages
+{ lib
+, stdenv
+, buildDotnetModule
 , fetchFromGitHub
-, fetchurl
-, git
-, glibc
-, icu
-, libkrb5
-, lib
-, linkFarmFromDrvs
-, lttng-ust
+, autoPatchelfHook
 , makeWrapper
+, dotnet-sdk_6
+, coreutils
 , nodejs-16_x
 , openssl
-, stdenv
+, glibc
+, lttng-ust
 , zlib
-, writeShellApplication
-, nuget-to-nix
+, icu
+, git
 }:
+
 let
-  fetchNuGet = { pname, version, sha256 }: fetchurl {
-    name = "${pname}.${version}.nupkg";
-    url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
-    inherit sha256;
-  };
-
-  nugetSource = linkFarmFromDrvs "nuget-packages" (
-    import ./deps.nix { inherit fetchNuGet; } ++
-    dotnetSdk.passthru.packages { inherit fetchNuGet; }
-  );
-
-  dotnetSdk = dotnetCorePackages.sdk_6_0;
-  # Map Nix systems to .NET runtime ids
-  runtimeIds = {
-    "x86_64-linux" = "linux-x64";
-    "aarch64-linux" = "linux-arm64";
-  };
-  runtimeId = runtimeIds.${stdenv.system};
+  runtimeId = dotnet-sdk_6.systemToDotnetRid stdenv.hostPlatform.system;
   fakeSha1 = "0000000000000000000000000000000000000000";
 in
-stdenv.mkDerivation rec {
+buildDotnetModule rec {
   pname = "github-runner";
   version = "2.296.2";
 
@@ -52,21 +30,25 @@ stdenv.mkDerivation rec {
     hash = "sha256-Cpg17N4LXjMpKx9SB6Bq/1eKJH5B8yVDUwjxak7xykY=";
   };
 
-  nativeBuildInputs = [
-    dotnetSdk
-    dotnetPackages.Nuget
-    makeWrapper
-    autoPatchelfHook
-  ];
+  postPatch = ''
+    # Relax the version requirement
+    substituteInPlace src/global.json \
+      --replace '6.0.300' '${dotnet-sdk_6.version}'
 
-  buildInputs = [
-    curl # libcurl.so.4
-    libkrb5 # libgssapi_krb5.so.2
-    lttng-ust # liblttng-ust.so.0
-    stdenv.cc.cc.lib # libstdc++.so.6
-    zlib # libz.so.1
-    icu
-  ];
+    # We don't use a Git checkout
+    substituteInPlace src/dir.proj \
+      --replace 'git update-index --assume-unchanged ./Runner.Sdk/BuildConstants.cs' \
+                'echo Patched out.'
+
+    # Disable specific tests
+    substituteInPlace src/dir.proj \
+      --replace 'dotnet test Test/Test.csproj' \
+                "dotnet test Test/Test.csproj --filter '${lib.concatStringsSep "&amp;" (map (x: "FullyQualifiedName!=${x}") disabledTests)}'"
+
+    # Fix FHS path
+    substituteInPlace src/Test/L0/Util/IOUtilL0.cs \
+      --replace '/bin/ln' '${coreutils}/bin/ln'
+  '';
 
   patches = [
     # Don't run Git, no restore on build/test
@@ -79,49 +61,31 @@ stdenv.mkDerivation rec {
     ./patches/dont-install-systemd-service.patch
   ];
 
-  postPatch = ''
-    # Relax the version requirement
-    substituteInPlace src/global.json \
-      --replace '6.0.300' '${dotnetSdk.version}'
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+  ];
 
-    # Disable specific tests
-    substituteInPlace src/dir.proj \
-      --replace 'dotnet test Test/Test.csproj' \
-                "dotnet test Test/Test.csproj --filter '${lib.concatStringsSep "&amp;" (map (x: "FullyQualifiedName!=${x}") disabledTests)}'"
+  buildInputs = [
+    stdenv.cc.cc.lib
+    lttng-ust
+    zlib
+    icu
+  ];
 
-    # We don't use a Git checkout
-    substituteInPlace src/dir.proj \
-      --replace 'git update-index --assume-unchanged ./Runner.Sdk/BuildConstants.cs' \
-                'echo Patched out.'
-
-    # Fix FHS path
-    substituteInPlace src/Test/L0/Util/IOUtilL0.cs \
-      --replace '/bin/ln' '${coreutils}/bin/ln'
-  '';
-
-  configurePhase = ''
-    runHook preConfigure
-
-    export HOME=$(mktemp -d)
-
-    # Never use nuget.org
-    nuget sources Disable -Name "nuget.org"
-
-    # Restore the dependencies
-    dotnet restore src/ActionsRunner.sln \
-      --runtime "${runtimeId}" \
-      --source "${nugetSource}"
-
-    runHook postConfigure
-  '';
+  dotnetRestoreFlags = [ "--runtime ${runtimeId}" ];
+  projectFile = [ "src/ActionsRunner.sln" ];
+  nugetDeps = ./deps.nix;
 
   buildPhase = ''
     runHook preBuild
 
     dotnet msbuild \
       -t:Build \
-      -p:PackageRuntime="${runtimeId}" \
       -p:BUILDCONFIG="Release" \
+      -p:ContinuousIntegrationBuild=true \
+      -p:Deterministic=true \
+      -p:PackageRuntime="${runtimeId}" \
       -p:RunnerVersion="${version}" \
       -p:GitInfoCommitHash="${fakeSha1}" \
       src/dir.proj
@@ -190,6 +154,7 @@ stdenv.mkDerivation rec {
       # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
       "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
     ];
+
   checkInputs = [ git ];
 
   checkPhase = ''
@@ -203,6 +168,8 @@ stdenv.mkDerivation rec {
     # BUILDCONFIG needs to be "Debug"
     dotnet msbuild \
       -t:test \
+      -p:ContinuousIntegrationBuild=true \
+      -p:Deterministic=true \
       -p:PackageRuntime="${runtimeId}" \
       -p:BUILDCONFIG="Debug" \
       -p:RunnerVersion="${version}" \
@@ -233,7 +200,6 @@ stdenv.mkDerivation rec {
     install -m755 src/Misc/layoutroot/env.sh                   $out/lib/
 
     # Rewrite reference in helper scripts from bin/ to lib/
-    substituteInPlace $out/lib/run.sh    --replace '"$DIR"/bin' '"$DIR"/lib'
     substituteInPlace $out/lib/config.sh --replace './bin' $out'/lib' \
       --replace 'source ./env.sh' $out/bin/env.sh
 
@@ -259,9 +225,6 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-
-  # Stripping breaks the binaries
-  dontStrip = true;
 
   preFixup = ''
     patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so $out/lib/libcoreclrtraceptprovider.so
@@ -294,49 +257,15 @@ stdenv.mkDerivation rec {
       --chdir $out
   '';
 
-  # Script to create deps.nix file for dotnet dependencies. Run it with
-  # $(nix-build -A github-runner.passthru.createDepsFile)/bin/create-deps-file
-  #
-  # Default output path is /tmp/${pname}-deps.nix, but can be overriden with cli argument.
-  #
-  # Inspired by passthru.fetch-deps in pkgs/build-support/build-dotnet-module/default.nix
-  passthru.createDepsFile = writeShellApplication {
-    name = "create-deps-file";
-    runtimeInputs = [ dotnetSdk nuget-to-nix ];
-    text = ''
-      # Disable telemetry data
-      export DOTNET_CLI_TELEMETRY_OPTOUT=1
-
-      rundir=$(pwd)
-
-      printf "\n* Setup workdir\n"
-      workdir="$(mktemp -d /tmp/${pname}.XXX)"
-      cp -rT "${src}" "$workdir"
-      chmod -R +w "$workdir"
-      trap 'rm -rf "$workdir"' EXIT
-
-      pushd "$workdir"
-
-      mkdir nuget_pkgs
-
-      ${lib.concatMapStrings (rid: ''
-      printf "\n* Restore ${pname} (${rid}) dotnet project\n"
-      dotnet restore src/ActionsRunner.sln --packages nuget_pkgs --no-cache --force --runtime "${rid}"
-      '') (lib.attrValues runtimeIds)}
-
-      cd "$rundir"
-      deps_file=''${1-"/tmp/${pname}-deps.nix"}
-      printf "\n* Make %s file\n" "$(basename "$deps_file")"
-      nuget-to-nix "$workdir/nuget_pkgs" > "$deps_file"
-      printf "\n* Dependency file writen to %s" "$deps_file"
-    '';
-  };
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Self-hosted runner for GitHub Actions";
+    changelog = "https://github.com/actions/runner/releases/tag/v${version}";
     homepage = "https://github.com/actions/runner";
     license = licenses.mit;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ veehaitch newam kfollesdal ];
-    platforms = attrNames runtimeIds;
   };
 }
