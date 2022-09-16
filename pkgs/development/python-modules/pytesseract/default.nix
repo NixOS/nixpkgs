@@ -1,5 +1,12 @@
-{ buildPythonPackage, fetchFromGitHub, lib, packaging, pillow, tesseract, substituteAll
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, packaging
+, pillow
+, tesseract
+, substituteAll
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -19,6 +26,10 @@ buildPythonPackage rec {
       src = ./tesseract-binary.patch;
       drv = tesseract;
     })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
   ];
 
   buildInputs = [
