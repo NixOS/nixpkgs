@@ -6,6 +6,7 @@
 , importlib-metadata
 , packaging
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -39,6 +40,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+    setuptools
   ];
 
   pythonImportsCheck = [ "dunamai" ];

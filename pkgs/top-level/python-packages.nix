@@ -2341,6 +2341,8 @@ in {
 
   deemix = callPackage ../development/python-modules/deemix { };
 
+  deep-chainmap = callPackage ../development/python-modules/deep-chainmap { };
+
   deep_merge = callPackage ../development/python-modules/deep_merge { };
 
   deepdiff = callPackage ../development/python-modules/deepdiff { };

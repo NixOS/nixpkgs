@@ -428,7 +428,9 @@ with pkgs;
 
   cryptowatch-desktop = callPackage ../applications/finance/cryptowatch { };
 
-  datalad = callPackage ../applications/version-management/datalad { };
+  datalad = callPackage ../applications/version-management/datalad {
+    python3 = python39;  # `boto` currently broken with Python3.10
+  };
 
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
@@ -12719,6 +12721,8 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  zbctl = callPackage ../tools/admin/zbctl { };
+
   zdelta = callPackage ../tools/compression/zdelta { };
 
   zed = callPackage ../development/tools/zed { };
@@ -14473,6 +14477,8 @@ with pkgs;
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate { };
   buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
   cratesIO = callPackage ../build-support/rust/crates-io.nix { };
+
+  cargo-espflash = callPackage ../development/tools/rust/cargo-espflash { };
 
   cargo-web = callPackage ../development/tools/rust/cargo-web {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
@@ -32210,7 +32216,7 @@ with pkgs;
 
   kodi-cli = callPackage ../tools/misc/kodi-cli { };
 
-  xca = libsForQt5.callPackage ../applications/misc/xca { };
+  xca = libsForQt5_openssl_1_1.callPackage ../applications/misc/xca { };
 
   xcalib = callPackage ../tools/X11/xcalib { };
 

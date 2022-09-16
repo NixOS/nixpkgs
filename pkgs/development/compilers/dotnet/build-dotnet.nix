@@ -18,8 +18,11 @@ assert if type == "sdk" then packages != null else true;
 , openssl_1_1
 , libuuid
 , zlib
+, libkrb5
 , curl
 , lttng-ust_2_12
+, testers
+, runCommand
 }:
 
 let
@@ -37,27 +40,24 @@ let
     sdk = ".NET SDK ${version}";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   inherit pname version;
 
   # Some of these dependencies are `dlopen()`ed.
-  rpath = lib.makeLibraryPath ([
-    stdenv.cc.cc
-    zlib
-    curl
-    icu
-    libunwind
-    libuuid
-    openssl_1_1
-  ] ++ lib.optional stdenv.isLinux lttng-ust_2_12);
-
   nativeBuildInputs = [
     makeWrapper
   ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
 
   buildInputs = [
     stdenv.cc.cc
-  ];
+    zlib
+    icu
+    libkrb5
+    # this must be before curl for autoPatchElf to find it
+    # curl brings in its own openssl
+    openssl_1_1
+    curl
+  ] ++ lib.optional stdenv.isLinux lttng-ust_2_12;
 
   src = fetchurl (
     srcs."${stdenv.hostPlatform.system}" or (throw
@@ -77,22 +77,28 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
-    patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $out/dotnet
-    patchelf --set-rpath "${rpath}" $out/dotnet
-    find $out -type f -name "*.so" -exec patchelf --set-rpath '$ORIGIN:${rpath}' {} \;
-    find $out -type f \( -name "apphost" -or -name "createdump" \) -exec patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" --set-rpath '$ORIGIN:${rpath}' {} \;
-
-    wrapProgram $out/bin/dotnet \
-      --prefix LD_LIBRARY_PATH : ${icu}/lib
-  '';
-
   doInstallCheck = true;
   installCheckPhase = ''
-    # Fixes cross
-    export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
-
     $out/bin/dotnet --info
+  '';
+
+  # Tell autoPatchelf about runtime dependencies.
+  # (postFixup phase is run before autoPatchelfHook.)
+  postFixup = lib.optionalString stdenv.isLinux ''
+    patchelf \
+      --add-needed libicui18n.so \
+      --add-needed libicuuc.so \
+      $out/shared/Microsoft.NETCore.App/*/libcoreclr.so \
+      $out/shared/Microsoft.NETCore.App/*/*System.Globalization.Native.so \
+      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
+    patchelf \
+      --add-needed libgssapi_krb5.so \
+      $out/shared/Microsoft.NETCore.App/*/*System.Net.Security.Native.so \
+      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
+    patchelf \
+      --add-needed libssl.so \
+      $out/shared/Microsoft.NETCore.App/*/*System.Security.Cryptography.Native.OpenSsl.so \
+      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
   '';
 
   setupHook = writeText "dotnet-setup-hook" ''
@@ -117,6 +123,23 @@ stdenv.mkDerivation rec {
 
     # Convert a "stdenv.hostPlatform.system" to a dotnet RID
     systemToDotnetRid = system: runtimeIdentifierMap.${system} or (throw "unsupported platform ${system}");
+
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+      };
+
+      smoke-test = runCommand "dotnet-sdk-smoke-test" {
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
+      } ''
+        HOME=$(pwd)/fake-home
+        dotnet new console
+        dotnet build
+        output="$(dotnet run)"
+        # yes, older SDKs omit the comma
+        [[ "$output" =~ Hello,?\ World! ]] && touch "$out"
+      '';
+    };
   };
 
   meta = with lib; {
@@ -125,6 +148,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ kuznero mdarocha ];
     mainProgram = "dotnet";
-    platforms = builtins.attrNames srcs;
+    platforms = attrNames srcs;
   };
-}
+})

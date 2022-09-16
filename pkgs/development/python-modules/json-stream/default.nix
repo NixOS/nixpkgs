@@ -4,6 +4,7 @@
 , pytestCheckHook
 , pythonOlder
 , requests
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -17,6 +18,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-ebB8l8H6yPLoCXmVOy60IijdBI61SEzJInC30aMe9Bk=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests

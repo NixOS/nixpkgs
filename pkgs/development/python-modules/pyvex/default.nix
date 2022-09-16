@@ -8,6 +8,7 @@
 , future
 , pycparser
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -21,6 +22,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-Yik1RTz4SQBFJxgPzp7LnPHV4EMbxGEhD2fBVcKJC7c=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     archinfo

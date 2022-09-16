@@ -5,6 +5,7 @@
 , passlib
 , pythonOlder
 , scramp
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -18,6 +19,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-gLT03ksCVIMreUhRHg3UY0LRwERszU/diStj0C5PvHs=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     passlib
