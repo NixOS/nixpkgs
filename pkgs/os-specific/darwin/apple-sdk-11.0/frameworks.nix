@@ -1,4 +1,4 @@
-{ frameworks, libs, libobjc, Libsystem, libnetwork }: with frameworks; with libs;
+{ frameworks, libs, libobjc, libnetwork }: with frameworks; with libs;
 {
   AGL                              = { inherit Carbon OpenGL; };
   AVFoundation                     = { inherit ApplicationServices AVFCapture AVFCore CoreGraphics simd UniformTypeIdentifiers; };
