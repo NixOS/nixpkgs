@@ -74,6 +74,7 @@ let
 
   datasourceConfiguration = {
     apiVersion = 1;
+    deleteDatasources = cfg.provision.deleteDatasources;
     datasources = cfg.provision.datasources;
   };
 
@@ -192,6 +193,21 @@ let
         type = types.bool;
         default = false;
         description = lib.mdDoc "Allow users to edit datasources from the UI.";
+      };
+    };
+  };
+
+  # https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources
+  grafanaTypes.deleteDatasourceConfig = types.submodule {
+    options = {
+      name = mkOption {
+        type = types.str;
+        description = lib.mdDoc "Name of the datasource. Required.";
+      };
+      orgId = mkOption {
+        type = types.int;
+        default = 1;
+        description = lib.mdDoc "Org id. will default to orgId 1 if not specified.";
       };
     };
   };
@@ -450,6 +466,12 @@ in {
         description = lib.mdDoc "Grafana datasources configuration.";
         default = [];
         type = types.listOf grafanaTypes.datasourceConfig;
+        apply = x: map _filter x;
+      };
+      deleteDatasources = mkOption {
+        description = lib.mdDoc "Grafana deleteDatasources configuration.";
+        default = [];
+        type = types.listOf grafanaTypes.deleteDatasourceConfig;
         apply = x: map _filter x;
       };
       dashboards = mkOption {
