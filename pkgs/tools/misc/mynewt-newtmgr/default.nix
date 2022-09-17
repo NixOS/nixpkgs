@@ -17,16 +17,15 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-+vOZoueoMqlGnopLKc6pCgTmcgI34pxaMNbr6Y+JCfQ=";
 
-  doCheck = false;
-
   meta = with lib; {
     homepage = "https://mynewt.apache.org/";
     description = "Tool to communicate with devices running Mynewt OS";
     longDescription = ''
-    Newt Manager (newtmgr) is the application tool that enables a user to
-    communicate with and manage remote devices running the Mynewt OS
+      Newt Manager (newtmgr) is the application tool that enables a user to
+      communicate with and manage remote devices running the Mynewt OS
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ bezmuth ];
+    platforms = platforms.unix;
   };
 }
