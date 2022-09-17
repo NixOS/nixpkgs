@@ -3833,6 +3833,8 @@ in {
 
   hatchling = callPackage ../development/python-modules/hatchling { };
 
+  hatch-fancy-pypi-readme = callPackage ../development/python-modules/hatch-fancy-pypi-readme { };
+
   hatch-vcs = callPackage ../development/python-modules/hatch-vcs { };
 
   haversine = callPackage ../development/python-modules/haversine { };
@@ -4938,6 +4940,8 @@ in {
   linecache2 = callPackage ../development/python-modules/linecache2 { };
 
   line_profiler = callPackage ../development/python-modules/line_profiler { };
+
+  lingua = callPackage ../development/python-modules/lingua { };
 
   linkify-it-py = callPackage ../development/python-modules/linkify-it-py { };
 

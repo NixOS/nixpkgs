@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, autoreconfHook, libkrb5 }:
+{ fetchurl, lib, stdenv, autoreconfHook, libkrb5, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "libtirpc";
@@ -11,6 +11,16 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" ];
+
+  patches = [
+    # https://nvd.nist.gov/vuln/detail/CVE-2021-46828
+    (fetchpatch {
+      name = "CVE-2021-46828.patch";
+      url = "https://git.linux-nfs.org/?p=steved/libtirpc.git;a=patch;h=86529758570cef4c73fb9b9c4104fdc510f701ed";
+      sha256 = "sha256-7dOICbAGq1NMl0zV/RdzXkxrcE5NRDylfyiadwIIMtM=";
+      excludes = [ "INSTALL" ];
+    })
+  ];
 
   postPatch = ''
     sed '1i#include <stdint.h>' -i src/xdr_sizeof.c

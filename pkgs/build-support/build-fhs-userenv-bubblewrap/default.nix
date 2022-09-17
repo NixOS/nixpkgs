@@ -88,6 +88,8 @@ let
     /lib32
     /usr/lib/i386-linux-gnu
     /usr/lib32
+    /run/opengl-driver/lib
+    /run/opengl-driver-32/lib
     EOF
     ldconfig &> /dev/null
   '';

@@ -48,6 +48,9 @@ in {
           };
           # Take snapshot and sync
           "pool/syncoid".target = "root@target:pool/syncoid";
+
+          # Test pool without parent (regression test for https://github.com/NixOS/nixpkgs/pull/180111)
+          "pool".target = "root@target:pool/full-pool";
         };
       };
     };
@@ -104,6 +107,9 @@ in {
     target.succeed("cat /mnt/pool/sanoid/test.txt")
     source.systemctl("start --wait syncoid-pool-syncoid.service")
     target.succeed("cat /mnt/pool/syncoid/test.txt")
+
+    source.systemctl("start --wait syncoid-pool.service")
+    target.succeed("[[ -d /mnt/pool/full-pool/syncoid ]]")
 
     assert len(source.succeed("zfs allow pool")) == 0, "Pool shouldn't have delegated permissions set after syncing snapshots"
     assert len(source.succeed("zfs allow pool/sanoid")) == 0, "Sanoid dataset shouldn't have delegated permissions set after syncing snapshots"

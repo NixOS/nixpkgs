@@ -1,8 +1,8 @@
 diff --git a/src/dist/component/package.rs b/src/dist/component/package.rs
-index 3beddf54..0f859b8d 100644
+index 73a533b5..408ab815 100644
 --- a/src/dist/component/package.rs
 +++ b/src/dist/component/package.rs
-@@ -113,6 +113,7 @@ impl Package for DirectoryPackage {
+@@ -113,6 +113,7 @@ fn install<'a>(
                      } else {
                          builder.move_file(path.clone(), &src_path)?
                      }
@@ -10,13 +10,13 @@ index 3beddf54..0f859b8d 100644
                  }
                  "dir" => {
                      if self.copy {
-@@ -135,6 +136,29 @@ impl Package for DirectoryPackage {
+@@ -135,6 +136,29 @@ fn components(&self) -> Vec<String> {
      }
  }
  
 +fn nix_patchelf_if_needed(dest_path: &Path, src_path: &Path) {
 +    let (is_bin, is_lib) = if let Some(p) = src_path.parent() {
-+        (p.ends_with("bin"), p.ends_with("lib"))
++        (p.ends_with("bin") || p.ends_with("libexec"), p.ends_with("lib"))
 +    } else {
 +        (false, false)
 +    };
@@ -38,5 +38,5 @@ index 3beddf54..0f859b8d 100644
 +}
 +
  #[derive(Debug)]
- pub struct TarPackage<'a>(DirectoryPackage, temp::Dir<'a>);
+ pub(crate) struct TarPackage<'a>(DirectoryPackage, temp::Dir<'a>);
  

@@ -11,39 +11,55 @@ let
     gemdir = ./.;
   };
 
-  version = "15.1.2";
+  version = "15.3.3";
   package_version = "v${lib.versions.major version}";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
-in
 
-buildGoModule {
-  pname = "gitaly";
-  inherit version;
+  commonOpts = {
+    inherit version;
 
-  src = fetchFromGitLab {
-    owner = "gitlab-org";
-    repo = "gitaly";
-    rev = "v${version}";
-    sha256 = "sha256-g/SlrE/NVMYqZaEgKncMLjsfI8jAE0xfyy6rpShsi2Q=";
+    src = fetchFromGitLab {
+      owner = "gitlab-org";
+      repo = "gitaly";
+      rev = "v${version}";
+      sha256 = "sha256-JapesdZbEjGsiR9o1J/exkqlV6Y9a69PVVPS22AaJG0=";
+    };
+
+    vendorSha256 = "sha256-aPCcTS5zflpjzb2L/oDOQotdL8cFsgKPa8b+lhCpbag=";
+
+    ldflags = [ "-X ${gitaly_package}/internal/version.version=${version}" "-X ${gitaly_package}/internal/version.moduleVersion=${version}" ];
+
+    tags = [ "static,system_libgit2" ];
+
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ rubyEnv.wrappedRuby libgit2_1_3_0 openssl zlib pcre http-parser ];
+
+    doCheck = false;
   };
 
-  vendorSha256 = "sha256-0JWJ2mpf79gJdnNRdlQLi0oDvnj6VmibkW2XcPnaCww=";
+  auxBins = buildGoModule ({
+    pname = "gitaly-aux";
+
+    subPackages = [ "cmd/gitaly-hooks" "cmd/gitaly-ssh" "cmd/gitaly-git2go" "cmd/gitaly-lfs-smudge" ];
+  } // commonOpts);
+in
+buildGoModule ({
+  pname = "gitaly";
 
   passthru = {
     inherit rubyEnv;
   };
 
-  ldflags = "-X ${gitaly_package}/internal/version.version=${version} -X ${gitaly_package}/internal/version.moduleVersion=${version}";
+  subPackages = [ "cmd/gitaly" "cmd/gitaly-backup" ];
 
-  tags = [ "static,system_libgit2" ];
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ rubyEnv.wrappedRuby libgit2_1_3_0 openssl zlib pcre http-parser ];
-  doCheck = false;
+  preConfigure = ''
+    mkdir -p _build/bin
+    cp -r ${auxBins}/bin/* _build/bin
+  '';
 
   postInstall = ''
     mkdir -p $ruby
     cp -rv $src/ruby/{bin,lib,proto} $ruby
-    mv $out/bin/gitaly-git2go-${package_version} $out/bin/gitaly-git2go-${version}
   '';
 
   outputs = [ "out" "ruby" ];
@@ -55,4 +71,4 @@ buildGoModule {
     maintainers = with maintainers; [ roblabla globin fpletz talyz yayayayaka ];
     license = licenses.mit;
   };
-}
+} // commonOpts)

@@ -1,29 +1,19 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , kernel
 }:
 
 stdenv.mkDerivation {
   pname = "apfs";
-  version = "unstable-2022-02-03-${kernel.version}";
+  version = "unstable-2022-07-24-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "linux-apfs";
     repo = "linux-apfs-rw";
-    rev = "a0d6a4dca69b6eab3cabaaee4d4284807828a266";
-    sha256 = "sha256-3T1BNc6g3SDTxb0VrronLUIp/CWbwnzXTsc8Qk5c4jY=";
+    rev = "925d86b7be3ccf21b17734cfececf40e43c4598e";
+    sha256 = "sha256-N5lGJu4c03cVDk3WTcegzZHBDmguPEX8dCedJS2TMSI=";
   };
-
-  patches = [
-    # Fix build for Linux 5.18+.
-    # https://github.com/linux-apfs/linux-apfs-rw/pull/24
-    (fetchpatch {
-      url = "https://github.com/linux-apfs/linux-apfs-rw/commit/93b93767acab614c4e6426c9fd38bdf9af00bc13.patch";
-      sha256 = "1ss7cal851qadcmkn3jcckpa2f003nzb03xsx1g8vkb1cl0n8gi7";
-    })
-  ];
 
   hardeningDisable = [ "pic" ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -39,7 +29,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/linux-apfs/linux-apfs-rw";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "4.9";
+    broken = kernel.kernelOlder "4.9" || kernel.kernelAtLeast "5.19";
     maintainers = with maintainers; [ Luflosi ];
   };
 }

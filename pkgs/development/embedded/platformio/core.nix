@@ -148,7 +148,6 @@ with python.pkgs; buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isAarch64;
     description = "An open source ecosystem for IoT development";
     homepage = "https://platformio.org";
     license = licenses.asl20;

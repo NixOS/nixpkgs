@@ -195,6 +195,8 @@ in buildFHSUserEnv rec {
     SDL2_ttf
     SDL2_mixer
     libappindicator-gtk2
+    libdbusmenu-gtk2
+    libindicator-gtk2
     libcaca
     libcanberra
     libgcrypt
@@ -222,6 +224,14 @@ in buildFHSUserEnv rec {
         export TZ="$new_TZ"
       fi
     fi
+
+    # udev event notifications don't work reliably inside containers.
+    # SDL2 already tries to automatically detect flatpak and pressure-vessel
+    # and falls back to inotify-based discovery [1]. We make SDL2 do the
+    # same by telling it explicitly.
+    #
+    # [1] <https://github.com/libsdl-org/SDL/commit/8e2746cfb6e1f1a1da5088241a1440fd2535e321>
+    export SDL_JOYSTICK_DISABLE_UDEV=1
   '' + extraProfile;
 
   runScript = writeScript "steam-wrapper.sh" ''

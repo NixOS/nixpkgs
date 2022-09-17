@@ -5,10 +5,10 @@
 
 stdenv.mkDerivation rec {
   pname = "pcre2";
-  version = "10.39";
+  version = "10.40";
   src = fetchurl {
     url = "https://github.com/PhilipHazel/pcre2/releases/download/pcre2-${version}/pcre2-${version}.tar.bz2";
-    hash = "sha256-DwPK9X+B2f82KsKM04nAVewr8GeNJ3NJoaS+4ArW1EA=";
+    hash = "sha256-FOS4PEeDkz3BfpZDGOYyT3yuG8ddjzx5vGlp8AwVnWg=";
   };
 
   # Disable jit on Apple Silicon, https://github.com/zherczeg/sljit/issues/51

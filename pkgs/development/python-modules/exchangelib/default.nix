@@ -5,6 +5,7 @@
 , defusedxml
 , dnspython
 , fetchFromGitHub
+, fetchpatch
 , flake8
 , isodate
 , lxml
@@ -37,6 +38,14 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-79113cUVl07oeXjlDaqfdfwNZvD7EWJK8JKHsPnBRG8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "tests-timezones.patch";
+      url = "https://github.com/ecederstrand/exchangelib/commit/d5d386f54adec8ab02f871332b89e1176c214ba2.diff";
+      hash = "sha256-E3Ys6IDJ/yMsvi+1GKbwckkhbNrc9JLM/+GrPtUz+mY=";
+    })
+  ];
 
   propagatedBuildInputs = [
     cached-property

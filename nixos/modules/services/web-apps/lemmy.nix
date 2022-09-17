@@ -164,7 +164,7 @@ in
 
         wantedBy = [ "multi-user.target" ];
 
-        after = [ "pict-rs.service " ] ++ lib.optionals cfg.settings.database.createLocally [ "lemmy-postgresql.service" ];
+        after = [ "pict-rs.service" ] ++ lib.optionals cfg.settings.database.createLocally [ "lemmy-postgresql.service" ];
 
         requires = lib.optionals cfg.settings.database.createLocally [ "lemmy-postgresql.service" ];
 

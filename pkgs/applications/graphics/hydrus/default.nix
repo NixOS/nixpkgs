@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "488d";
+  version = "495";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-FWiopOf+eabiWAfjQW83V7I/e5lOLUVW3djoQePHPRs=";
+    sha256 = "sha256-MuSK19oSrRJZebATRpDW1CmUq4NKcpuoPmOuLyvL8A8=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ python3Packages.buildPythonPackage rec {
     pyopenssl
     pyside2
     pysocks
-    pythonPackages.mpv
+    python3Packages.mpv
     pyyaml
     qtpy
     requests

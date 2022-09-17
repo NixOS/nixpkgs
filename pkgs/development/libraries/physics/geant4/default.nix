@@ -12,7 +12,7 @@
 , lib, stdenv, fetchurl, fetchpatch, cmake
 
 # Optional system packages, otherwise internal GEANT4 packages are used.
-, clhep ? null # not packaged currently
+, clhep
 , expat
 , zlib
 
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = !enableQT;
 
-  buildInputs = [ libGLU xlibsWrapper libXmu ]
+  buildInputs = [ clhep libGLU xlibsWrapper libXmu ]
     ++ lib.optionals enableInventor [ libXpm coin3d soxt motif ]
     ++ lib.optionals enablePython [ boost_python python3 ];
 

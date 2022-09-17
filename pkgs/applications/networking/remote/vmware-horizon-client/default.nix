@@ -18,7 +18,9 @@ let
 
   # For USB support, ensure that /var/run/vmware/<YOUR-UID>
   # exists and is owned by you. Then run vmware-usbarbitrator as root.
-  bins = [ "vmware-view" "vmware-usbarbitrator" ];
+  bins = [ "vmware-view" "vmware-view-legacy" "vmware-usbarbitrator" ];
+
+  mainProgram = "vmware-view-legacy";
 
   # This forces the default GTK theme (Adwaita) because Horizon is prone to
   # UI usability issues when using non-default themes, such as Adwaita-dark.
@@ -30,7 +32,7 @@ let
   '';
 
   vmwareHorizonClientFiles = stdenv.mkDerivation {
-    name = "vmwareHorizonClientFiles";
+    pname = "vmware-horizon-files";
     inherit version;
     src = fetchurl {
       url = "https://download3.vmware.com/software/CART23FQ1_LIN_2203_TARBALL/VMware-Horizon-Client-Linux-2203-8.5.0-19586897.tar.gz";
@@ -104,7 +106,7 @@ let
     name = "vmware-view";
     desktopName = "VMware Horizon Client";
     icon = "${vmwareHorizonClientFiles}/share/icons/vmware-view.png";
-    exec = "${vmwareFHSUserEnv "vmware-view"}/bin/vmware-view %u";
+    exec = "${vmwareFHSUserEnv mainProgram}/bin/${mainProgram} %u";
     mimeTypes = [ "x-scheme-handler/vmware-view" ];
   };
 
@@ -131,7 +133,7 @@ stdenv.mkDerivation {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    mainProgram = "vmware-view";
+    inherit mainProgram;
     description = "Allows you to connect to your VMware Horizon virtual desktop";
     homepage = "https://www.vmware.com/go/viewclients";
     license = licenses.unfree;

@@ -4,7 +4,7 @@
 , nixosTests
 , python3
 , ghostscript
-, imagemagick
+, imagemagickBig
 , jbig2enc
 , optipng
 , pngquant
@@ -15,7 +15,8 @@
 }:
 
 let
-  py = python3.override {
+  # Use specific package versions required by paperless-ngx
+  python = python3.override {
     packageOverrides = self: super: {
       django = super.django_3;
 
@@ -30,9 +31,18 @@ let
     };
   };
 
-  path = lib.makeBinPath [ ghostscript imagemagick jbig2enc optipng pngquant qpdf tesseract4 unpaper ];
+  path = lib.makeBinPath [
+    ghostscript
+    imagemagickBig
+    jbig2enc
+    optipng
+    pngquant
+    qpdf
+    tesseract4
+    unpaper
+  ];
 in
-py.pkgs.pythonPackages.buildPythonApplication rec {
+python.pkgs.pythonPackages.buildPythonApplication rec {
   pname = "paperless-ngx";
   version = "1.6.0";
 
@@ -43,7 +53,7 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
 
   format = "other";
 
-  propagatedBuildInputs = with py.pkgs.pythonPackages; [
+  propagatedBuildInputs = with python.pkgs.pythonPackages; [
     aioredis
     arrow
     asgiref
@@ -140,7 +150,7 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
   # Compile manually because `pythonRecompileBytecodeHook` only works for
   # files in `python.sitePackages`
   postBuild = ''
-    ${py.interpreter} -OO -m compileall src
+    ${python.interpreter} -OO -m compileall src
   '';
 
   installPhase = ''
@@ -152,7 +162,7 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
       --prefix PATH : "${path}"
   '';
 
-  checkInputs = with py.pkgs.pythonPackages; [
+  checkInputs = with python.pkgs.pythonPackages; [
     pytest-django
     pytest-env
     pytest-sugar
@@ -180,8 +190,7 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
   passthru = {
     # PYTHONPATH of all dependencies used by the package
     pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
-    inherit path;
-
+    inherit python path;
     tests = { inherit (nixosTests) paperless; };
   };
 

@@ -13,11 +13,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.2.0";
+  version = "1.2.2";
+  format = "pyproject";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-45pVR5Au9FYQGqTHefpms0W9pw0WeI6L0Y5Fj5Ovf2c=";
+    sha256 = "sha256-1zBodEPxvrYCsdcrrjYxj2+WVIGPzcUEWFQOxXnlcmA=";
   };
 
   postPatch = ''
@@ -120,13 +121,14 @@ python3.pkgs.buildPythonApplication rec {
     inherit (nixosTests) borgbackup;
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "doc" "man" ];
 
   meta = with lib; {
     description = "Deduplicating archiver with compression and encryption";
     homepage = "https://www.borgbackup.org";
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
+    mainProgram = "borg";
     maintainers = with maintainers; [ flokli dotlambda globin ];
   };
 }

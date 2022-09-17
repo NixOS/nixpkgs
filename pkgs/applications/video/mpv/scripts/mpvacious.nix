@@ -18,10 +18,7 @@ stdenvNoCC.mkDerivation rec {
   };
 
   postPatch = ''
-    # 'require' replaced with 'dofile' to work around
-    # https://github.com/mpv-player/mpv/issues/7399 until fixed in mpvacious
     substituteInPlace subs2srs.lua \
-      --replace "require('osd_styler')" "dofile('"$out/share/mpv/scripts/mpvacious/osd_styler.lua"')" \
       --replace "'curl'" "'${curl}/bin/curl'" \
       --replace "'wl-copy'" "'${wl-clipboard}/bin/wl-copy'" \
       --replace "xclip" "${xclip}/bin/xclip"
@@ -36,7 +33,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.scriptName = "mpvacious/subs2srs.lua";
+  passthru.scriptName = "mpvacious";
 
   meta = with lib; {
     description = "Adds mpv keybindings to create Anki cards from movies and TV shows";

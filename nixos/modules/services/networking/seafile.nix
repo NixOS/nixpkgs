@@ -19,6 +19,8 @@ let
     MEDIA_ROOT = '${seahubDir}/media/'
     THUMBNAIL_ROOT = '${seahubDir}/thumbnail/'
 
+    SERVICE_URL = '${cfg.ccnetSettings.General.SERVICE_URL}'
+
     with open('${seafRoot}/.seahubSecret') as f:
         SECRET_KEY = f.readline().rstrip()
 
@@ -177,6 +179,7 @@ in {
         after = [ "network.target" ];
         wantedBy = [ "seafile.target" ];
         restartTriggers = [ ccnetConf seafileConf ];
+        path = [ pkgs.sqlite ];
         serviceConfig = securityOptions // {
           User = "seafile";
           Group = "seafile";
@@ -200,11 +203,11 @@ in {
           if [ ! -f "${seafRoot}/server-setup" ]; then
               mkdir -p ${dataDir}/library-template
               mkdir -p ${ccnetDir}/{GroupMgr,misc,OrgMgr,PeerMgr}
-              ${pkgs.sqlite}/bin/sqlite3 ${ccnetDir}/GroupMgr/groupmgr.db ".read ${cfg.seafilePackage}/share/seafile/sql/sqlite/groupmgr.sql"
-              ${pkgs.sqlite}/bin/sqlite3 ${ccnetDir}/misc/config.db ".read ${cfg.seafilePackage}/share/seafile/sql/sqlite/config.sql"
-              ${pkgs.sqlite}/bin/sqlite3 ${ccnetDir}/OrgMgr/orgmgr.db ".read ${cfg.seafilePackage}/share/seafile/sql/sqlite/org.sql"
-              ${pkgs.sqlite}/bin/sqlite3 ${ccnetDir}/PeerMgr/usermgr.db ".read ${cfg.seafilePackage}/share/seafile/sql/sqlite/user.sql"
-              ${pkgs.sqlite}/bin/sqlite3 ${dataDir}/seafile.db ".read ${cfg.seafilePackage}/share/seafile/sql/sqlite/seafile.sql"
+              sqlite3 ${ccnetDir}/GroupMgr/groupmgr.db ".read ${cfg.seafilePackage}/share/seafile/sql/sqlite/groupmgr.sql"
+              sqlite3 ${ccnetDir}/misc/config.db ".read ${cfg.seafilePackage}/share/seafile/sql/sqlite/config.sql"
+              sqlite3 ${ccnetDir}/OrgMgr/orgmgr.db ".read ${cfg.seafilePackage}/share/seafile/sql/sqlite/org.sql"
+              sqlite3 ${ccnetDir}/PeerMgr/usermgr.db ".read ${cfg.seafilePackage}/share/seafile/sql/sqlite/user.sql"
+              sqlite3 ${dataDir}/seafile.db ".read ${cfg.seafilePackage}/share/seafile/sql/sqlite/seafile.sql"
               echo "${cfg.seafilePackage.version}-sqlite" > "${seafRoot}"/server-setup
           fi
           # checking for upgrades and handling them
@@ -213,7 +216,14 @@ in {
           installedMinor=$(cat "${seafRoot}/server-setup" | cut -d"-" -f1 | cut -d"." -f2)
           pkgMajor=$(echo "${cfg.seafilePackage.version}" | cut -d"." -f1)
           pkgMinor=$(echo "${cfg.seafilePackage.version}" | cut -d"." -f2)
-          if [ $installedMajor != $pkgMajor ] || [ $installedMinor != $pkgMinor ]; then
+
+          if [[ $installedMajor == $pkgMajor && $installedMinor == $pkgMinor ]]; then
+             :
+          elif [[ $installedMajor == 8 && $installedMinor == 0 && $pkgMajor == 9 && $pkgMinor == 0 ]]; then
+              # Upgrade from 8.0 to 9.0
+              sqlite3 ${dataDir}/seafile.db ".read ${pkgs.seahub}/scripts/upgrade/sql/9.0.0/sqlite3/seafile.sql"
+              echo "${cfg.seafilePackage.version}-sqlite" > "${seafRoot}"/server-setup
+          else
               echo "Unsupported upgrade" >&2
               exit 1
           fi

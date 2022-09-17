@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, patchelf }:
 stdenv.mkDerivation rec {
   pname = "mlc";
-  version = "3.9";
+  version = "3.9a";
 
   src = fetchurl {
-    url = "https://software.intel.com/content/dam/develop/external/us/en/protected/mlc_v${version}.tgz";
-    sha256 = "1x7abm9hbv9hkqa3cgxz6l04m3ycyl40i4zgx1w819pc10n6dhdb";
+    url = "https://downloadmirror.intel.com/736634/mlc_v${version}.tgz";
+    sha256 = "3vNI/CQwyY4KMFest1wkVYecsxigjXyGIUIKai979W4=";
   };
 
   sourceRoot = "Linux";

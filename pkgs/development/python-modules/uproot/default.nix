@@ -4,6 +4,7 @@
 , awkward
 , numpy
 , lz4
+, setuptools
 , xxhash
 , zstandard
 , pytestCheckHook
@@ -26,6 +27,7 @@ buildPythonPackage rec {
     awkward
     numpy
     lz4
+    setuptools
     xxhash
     zstandard
   ];
@@ -53,7 +55,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "uproot" ];
 
   meta = with lib; {
-    homepage = "https://github.com/scikit-hep/uproot4";
+    homepage = "https://github.com/scikit-hep/uproot5";
     description = "ROOT I/O in pure Python and Numpy";
     license = licenses.bsd3;
     maintainers = with maintainers; [ veprbl ];

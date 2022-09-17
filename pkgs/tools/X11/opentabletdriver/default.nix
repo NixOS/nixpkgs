@@ -59,6 +59,8 @@ buildDotnetModule rec {
     udev
   ];
 
+  buildInputs = runtimeDeps;
+
   doCheck = true;
   testProjectFile = "OpenTabletDriver.Tests/OpenTabletDriver.Tests.csproj";
 

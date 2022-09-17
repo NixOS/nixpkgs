@@ -253,9 +253,20 @@ in
         '';
       };
     };
-    systemd.services.prosody.serviceConfig = mkIf cfg.prosody.enable {
-      EnvironmentFile = [ "/var/lib/jitsi-meet/secrets-env" ];
-      SupplementaryGroups = [ "jitsi-meet" ];
+    systemd.services.prosody = mkIf cfg.prosody.enable {
+      preStart = let
+        videobridgeSecret = if cfg.videobridge.passwordFile != null then cfg.videobridge.passwordFile else "/var/lib/jitsi-meet/videobridge-secret";
+      in ''
+        ${config.services.prosody.package}/bin/prosodyctl register focus auth.${cfg.hostName} "$(cat /var/lib/jitsi-meet/jicofo-user-secret)"
+        ${config.services.prosody.package}/bin/prosodyctl register jvb auth.${cfg.hostName} "$(cat ${videobridgeSecret})"
+        ${config.services.prosody.package}/bin/prosodyctl mod_roster_command subscribe focus.${cfg.hostName} focus@auth.${cfg.hostName}
+        ${config.services.prosody.package}/bin/prosodyctl register jibri auth.${cfg.hostName} "$(cat /var/lib/jitsi-meet/jibri-auth-secret)"
+        ${config.services.prosody.package}/bin/prosodyctl register recorder recorder.${cfg.hostName} "$(cat /var/lib/jitsi-meet/jibri-recorder-secret)"
+      '';
+      serviceConfig = {
+        EnvironmentFile = [ "/var/lib/jitsi-meet/secrets-env" ];
+        SupplementaryGroups = [ "jitsi-meet" ];
+      };
     };
 
     users.groups.jitsi-meet = {};
@@ -266,14 +277,12 @@ in
     systemd.services.jitsi-meet-init-secrets = {
       wantedBy = [ "multi-user.target" ];
       before = [ "jicofo.service" "jitsi-videobridge2.service" ] ++ (optional cfg.prosody.enable "prosody.service");
-      path = [ config.services.prosody.package ];
       serviceConfig = {
         Type = "oneshot";
       };
 
       script = let
         secrets = [ "jicofo-component-secret" "jicofo-user-secret" "jibri-auth-secret" "jibri-recorder-secret" ] ++ (optional (cfg.videobridge.passwordFile == null) "videobridge-secret");
-        videobridgeSecret = if cfg.videobridge.passwordFile != null then cfg.videobridge.passwordFile else "/var/lib/jitsi-meet/videobridge-secret";
       in
       ''
         cd /var/lib/jitsi-meet
@@ -291,12 +300,6 @@ in
         chmod 640 secrets-env
       ''
       + optionalString cfg.prosody.enable ''
-        prosodyctl register focus auth.${cfg.hostName} "$(cat /var/lib/jitsi-meet/jicofo-user-secret)"
-        prosodyctl register jvb auth.${cfg.hostName} "$(cat ${videobridgeSecret})"
-        prosodyctl mod_roster_command subscribe focus.${cfg.hostName} focus@auth.${cfg.hostName}
-        prosodyctl register jibri auth.${cfg.hostName} "$(cat /var/lib/jitsi-meet/jibri-auth-secret)"
-        prosodyctl register recorder recorder.${cfg.hostName} "$(cat /var/lib/jitsi-meet/jibri-recorder-secret)"
-
         # generate self-signed certificates
         if [ ! -f /var/lib/jitsi-meet.crt ]; then
           ${getBin pkgs.openssl}/bin/openssl req \

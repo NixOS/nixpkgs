@@ -1,4 +1,4 @@
-{ lib, python3, aria2, mpv, nodejs, fetchFromGitHub }:
+{ lib, python3, aria2, mpv, nodejs, qt5, fetchFromGitHub }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "anime-downloader";
@@ -10,6 +10,8 @@ python3.pkgs.buildPythonApplication rec {
     rev = version;
     sha256 = "sha256-Uk2mtsSrb8fCD9JCFzvLBzMEB7ViVDrKPSOKy9ALJ6o=";
   };
+
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
   propagatedBuildInputs = [
     aria2
@@ -30,6 +32,10 @@ python3.pkgs.buildPythonApplication rec {
     selenium
     tabulate
   ]);
+
+  preFixup = ''
+    wrapQtApp "$out/bin/anime" --prefix PATH : ${lib.makeBinPath propagatedBuildInputs}
+  '';
 
   doCheck = false;
   # FIXME: checks must be disabled because they are lacking the qt env.

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sakura";
-  version = "3.8.4";
+  version = "3.8.5";
 
   src = fetchFromGitHub {
     owner = "dabisu";
     repo = pname;
     rev = "SAKURA_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-Sqo1gyCvCMlEv1rYqw6P3Dmu10osi/KqB7/WlgTTNAc=";
+    hash = "sha256-eMGhPkfhpPHMg69J+XgK/ssJjwRSFgd/a64lAYi7hd0=";
   };
 
   nativeBuildInputs = [

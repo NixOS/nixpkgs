@@ -3,6 +3,7 @@
 , fetchPypi
 , packaging
 , tomli
+, setuptools
 , lib
 }:
 
@@ -19,6 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     packaging
     tomli
+    setuptools
   ];
 
   pythonImportsCheck = [

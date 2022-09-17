@@ -3,6 +3,10 @@
   lib,
   buildPythonApplication,
   fetchPypi,
+  fetchpatch,
+
+  unzip,
+  zip,
 
   # Build inputs
   altair,
@@ -48,6 +52,37 @@ in buildPythonApplication rec {
     inherit pname version format;
     sha256 = "1dzb68a8n8wvjppcmqdaqnh925b2dg6rywv51ac9q09zjxb6z11n";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-35918.patch";
+      url = "https://github.com/streamlit/streamlit/commit/80d9979d5f4a00217743d607078a1d867fad8acf.patch";
+      sha256 = "sha256-AyVF/VUKUEKz0RF9CzW2eco0lY0xVd3hPc88D7VZ5Xw=";
+      stripLen = 1;
+      # tests not included in wheel
+      excludes = [ "tests/streamlit/components_test.py" ];
+    })
+  ];
+  # extract wheel, run normal patch phase, repack wheel.
+  # effectively a "wheelPatchPhase". not a normal thing
+  # to do but needs must.
+  patchPhase = ''
+    wheelFile="$(realpath -s dist/*.whl)"
+    pushd "$(mktemp -d)"
+
+    unzip -q "$wheelFile"
+
+    patchPhase
+
+    newZip="$(mktemp -d)"/new.zip
+    zip -rq "$newZip" *
+    rm -rf "$wheelFile"
+    cp "$newZip" "$wheelFile"
+
+    popd
+  '';
+
+  nativeBuildInputs = [ unzip zip ];
 
   propagatedBuildInputs = [
     altair

@@ -87,6 +87,7 @@ let chia = python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://www.chia.net/";
     description = "Chia is a modern cryptocurrency built from scratch, designed to be efficient, decentralized, and secure.";
+    knownVulnerabilities = [ "CVE-2022-36447" ];
     license = with licenses; [ asl20 ];
     maintainers = teams.chia.members;
     platforms = platforms.all;

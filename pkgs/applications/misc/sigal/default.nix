@@ -28,6 +28,8 @@ python3.pkgs.buildPythonApplication rec {
     feedgenerator
     zopfli
     cryptography
+
+    setuptools # needs pkg_resources
   ];
 
   checkInputs = [

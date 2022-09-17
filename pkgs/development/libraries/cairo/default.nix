@@ -52,6 +52,15 @@ in stdenv.mkDerivation rec {
       url = "https://github.com/freedesktop/cairo/commit/78266cc8c0f7a595cfe8f3b694bfb9bcc3700b38.patch";
       sha256 = "048nzfz7rkgqb9xs0dfs56qdw7ckkxr87nbj3p0qziqdq4nb6wki";
     })
+
+    # Fix unexpected color addition on grayscale images (usually text).
+    # Upstream fix: https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/114
+    # Can be removed after 1.18 release
+    (fetchpatch {
+      name = "fix-grayscale-anialias.patch";
+      url = "https://gitlab.freedesktop.org/cairo/cairo/-/commit/4f4d89506f58a64b4829b1bb239bab9e46d63727.diff";
+      sha256 = "sha256-mbTg67e7APfdELsuMAgXdY3xokWbGtHF7VDD5UyYqKM=";
+    })
   ] ++ optionals stdenv.hostPlatform.isDarwin [
     # Workaround https://gitlab.freedesktop.org/cairo/cairo/-/issues/121
     ./skip-configure-stderr-check.patch

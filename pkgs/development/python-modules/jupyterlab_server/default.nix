@@ -42,6 +42,10 @@ buildPythonPackage rec {
     ruamel-yaml
   ];
 
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {

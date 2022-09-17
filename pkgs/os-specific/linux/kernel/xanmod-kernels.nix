@@ -1,19 +1,23 @@
 { lib, stdenv, fetchFromGitHub, buildLinux, ... } @ args:
 
 let
-  stableVariant = {
-    version = "5.15.40";
-    suffix = "xanmod1";
-    hash = "sha256-P9pRPfzBVQNhWp6ulDiBgV/ki2C0CTbIRV6KRhUD+vQ=";
+  ltsVariant = {
+    version = "5.15.54";
+    hash = "sha256-0Odo+ZrQok3MMPl/512F8kIQ31mGZH6e9FyVVpXrYf0=";
   };
 
   edgeVariant = {
-    version = "5.17.8";
-    suffix = "xanmod1";
-    hash = "sha256-Q8YmBeocolr6Ds2inwV299Td6/zE8RTA1SWve5ZykAs=";
+    version = "5.18.11";
+    hash = "sha256-UPLwaEWhBu1yriCUJu9L/B8yy+1zxnTQzHaKlT507UY=";
   };
 
-  xanmodKernelFor = { version, suffix, hash }: buildLinux (args // rec {
+  ttVariant = {
+    version = "5.15.54";
+    suffix = "xanmod1-tt";
+    hash = "sha256-4ck9PAFuIt/TxA/U+moGlVfCudJnzSuAw7ooFG3OJis=";
+  };
+
+  xanmodKernelFor = { version, suffix ? "xanmod1", hash }: buildLinux (args // rec {
     inherit version;
     modDirVersion = "${version}-${suffix}";
 
@@ -32,9 +36,6 @@ let
 
       # AMD P-state driver
       X86_AMD_PSTATE = yes;
-
-      # Linux RNG framework
-      LRNG = yes;
 
       # Paragon's NTFS3 driver
       NTFS3_FS = module;
@@ -76,6 +77,7 @@ let
   } // (args.argsOverride or { }));
 in
 {
-  stable = xanmodKernelFor stableVariant;
+  lts = xanmodKernelFor ltsVariant;
   edge = xanmodKernelFor edgeVariant;
+  tt = xanmodKernelFor ttVariant;
 }
