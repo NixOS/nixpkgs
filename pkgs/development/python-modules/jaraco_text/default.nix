@@ -7,6 +7,7 @@
 , jaraco_functools
 , jaraco-context
 , inflect
+, pathlib2
 , pytestCheckHook
 , setuptools-scm
 }:
@@ -42,6 +43,8 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+  ] ++ lib.optional (pythonOlder "3.10") [
+    pathlib2
   ];
 
   pythonImportsCheck = [
