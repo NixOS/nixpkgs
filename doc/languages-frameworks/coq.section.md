@@ -88,3 +88,58 @@ with lib; mkCoqDerivation {
   };
 }
 ```
+
+## Three ways of overriding Coq packages {#coq-overriding-packages}
+
+There are three distinct ways of changing a Coq package by overriding one of its values: `.override`, `overrideCoqDerivation`, and `.overrideAttrs`.  This section explains what sort of values can be overridden with each of these methods.
+
+### `.override` {#coq-override}
+
+`.override` lets you change arguments to a Coq derivation.  In the case of the `multinomials` package above, `.override` would let you override arguments like `mkCoqDerivation`, `version`, `coq`, `mathcomp`, `mathcom-finmap`, etc.
+
+For example, assuming you have a special `mathcomp` dependency you want to use, here is how you could override the `mathcomp` dependency:
+
+```nix
+multinomials.override {
+  mathcomp = my-special-mathcomp;
+}
+```
+
+In Nixpkgs, all Coq derivations take a `version` argument.  This can be overridden in order to easily use a different version:
+
+```nix
+coqPackages.multinomials.override {
+  version = "1.5.1";
+}
+```
+
+Refer to [](#coq-packages-attribute-sets-coqpackages) for all the different formats that you can potentially pass to `version`, as well as the restrictions.
+
+### `overrideCoqDerivation` {#coq-overrideCoqDerivation}
+
+The `overrideCoqDerivation` function lets you easily change arguments to `mkCoqDerivation`.  These arguments are described in [](#coq-packages-attribute-sets-coqpackages).
+
+For example, here is how you could locally add a new release of the `multinomials` library, and set the `defaultVersion` to use this release:
+
+```nix
+coqPackages.lib.overrideCoqDerivation
+  {
+    defaultVersion = "2.0";
+    release."2.0".sha256 = "1lq8x86vd3vqqh2yq6hvyagpnhfq5wmk5pg2z0xq7b7dbbbhyfkk";
+  }
+  coqPackages.multinomials
+```
+
+### `.overrideAttrs` {#coq-overrideAttrs}
+
+`.overrideAttrs` lets you override arguments to the underlying `stdenv.mkDerivation` call. Internally, `mkCoqDerivation` uses `stdenv.mkDerivation` to create derivations for Coq libraries.  You can override arguments to `stdenv.mkDerivation` with `.overrideAttrs`.
+
+For instance, here is how you could add some code to be performed in the derivation after installation is complete:
+
+```nix
+coqPackages.multinomials.overrideAttrs (oldAttrs: {
+  postInstall = oldAttrs.postInstall or "" + ''
+    echo "you can do anything you want here"
+  '';
+})
+```

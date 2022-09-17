@@ -10708,6 +10708,12 @@
       fingerprint = "48AD DE10 F27B AFB4 7BB0  CCAF 2D25 95A0 0D08 ACE0";
     }];
   };
+  posch = {
+    email = "tp@fonz.de";
+    github = "posch";
+    githubId = 146413;
+    name = "Tobias Poschwatta";
+  };
   ppenguin = {
     name = "Jeroen Versteeg";
     email = "hieronymusv@gmail.com";
@@ -13257,6 +13263,12 @@
     }];
     name = "Karim Vergnes";
   };
+  thetallestjj = {
+    email = "me+nixpkgs@jeroen-jetten.com";
+    github = "thetallestjj";
+    githubId = 6579555;
+    name = "Jeroen Jetten";
+  };
   theuni = {
     email = "ct@flyingcircus.io";
     github = "ctheune";
@@ -15364,5 +15376,11 @@
     github = "bpaulin";
     githubId = 115711;
     name = "bpaulin";
+  };
+  zuzuleinen = {
+    email = "andrey.boar@gmail.com";
+    name = "Andrei Boar";
+    github = "zuzuleinen";
+    githubId = 944919;
   };
 }

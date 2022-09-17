@@ -180,12 +180,12 @@ in stdenvNoCC.mkDerivation (args // {
               ;;
       esac
 
-      deps_file="$(realpath "''${1:-$(mktemp -t "XXXXXX-${pname}-deps.nix")}")"
-      export HOME=$(mktemp -td "XXXXXX-${pname}-home")
+      deps_file="$(realpath "''${1:-$(mktemp -t "${pname}-deps-XXXXXX.nix")}")"
+      export HOME=$(mktemp -td "${pname}-home-XXXXXX")
       mkdir -p "$HOME/nuget_pkgs"
 
       store_src="${srcOnly args}"
-      src="$(mktemp -td "XXXXXX-${pname}-src")"
+      src="$(mktemp -td "${pname}-src-XXXXXX")"
       cp -rT "$store_src" "$src"
       chmod -R +w "$src"
       trap "rm -rf $src $HOME" EXIT

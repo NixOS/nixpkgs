@@ -7,21 +7,21 @@
 
 buildGoModule rec {
   pname = "mattermost";
-  version = "7.2.0";
+  version = "7.3.0";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "mattermost-server";
     rev = "v${version}";
-    sha256 = "sha256-gwp09E47B0Y9wURH75DbWcS8qQ+TK/SVDcFRKLtuoq0=";
+    sha256 = "sha256-WDFay0XeaeNR/yX5if9Ab9XwzFF4cIGwBOrhc2rlX/c=";
   };
 
   webapp = fetchurl {
     url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
-    sha256 = "sha256-FATtO6xFa/bKwywyhKEFZgrle0QPKZI8BQbrA3IlPRg=";
+    sha256 = "sha256-fIjasaaAEMPLaxo86MfASqTp/0WzzTDKJACKWuWby/A=";
   };
 
-  vendorSha256 = "sha256-98riYN6MaBsKyaueogjXI7x3Lcionk0xcGt4DH684QU=";
+  vendorSha256 = "sha256-qZQXNVbJZDddVE+xk6F8XJCEg5dhhuXz68wcn2Uvmxk=";
 
   subPackages = [ "cmd/mattermost" ];
 

@@ -16,9 +16,8 @@ let
     let attrs' = builtins.removeAttrs attrs [ "version" "sha256" "vendorSha256" ];
     in
     buildGoModule ({
-      name = "terraform-${version}";
-
-      inherit vendorSha256;
+      pname = "terraform";
+      inherit version vendorSha256;
 
       src = fetchFromGitHub {
         owner = "hashicorp";
