@@ -7,12 +7,12 @@
 , pv
 , squashfsTools
 , buildFHSUserEnv
-, runCommandNoCC
+, runCommand
 , substituteAll
 }:
 
 rec {
-  # for compatibility, deprecated. TODO: find a clean way to add these to top-level/aliases.nix
+  # for compatibility, deprecated. TODO: guard these behind config.allowAliases
   extractType1 = extract;
   extractType2 = extract;
   wrapType1 = wrapType2;
@@ -37,9 +37,9 @@ rec {
     , src
     , ...
     } @ args:
-    runCommandNoCC "${name}-extracted"
+    runCommand "${name}-extracted"
       {
-        buildInputs = [ appimage-exec ];
+        nativeBuildInputs = [ appimage-exec ];
       } ''
       appimage-exec.sh -x $out ${src}
     '';
@@ -47,12 +47,13 @@ rec {
   wrapAppImage =
     { name ? "${args.pname}-${args.version}"
     , src
-    , extraPkgs
+    , extraPkgs ? pkgs: [ ]
+    , extraInstallCommands ? ""
     , meta ? { }
     , ...
     } @ args:
     buildFHSUserEnv (defaultFhsEnvArgs // {
-      inherit name;
+      inherit name extraInstallCommands;
 
       targetPkgs = pkgs: [ appimage-exec ]
         ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
@@ -68,11 +69,27 @@ rec {
     { name ? "${args.pname}-${args.version}"
     , src
     , extraPkgs ? pkgs: [ ]
+    , extraInstall ? extracted: ""
     , ...
     } @ args:
-    wrapAppImage (args // {
+    let
+      extracted = extract { inherit name src; };
+    in
+    wrapAppImage (removeAttrs args [ "extraInstall" ] // {
       inherit name extraPkgs;
-      src = extract { inherit name src; };
+      src = extracted;
+
+      extraInstallCommands = args.extraInstallCommands or ''
+        # Dont include the version number in the binary name. It would be better
+        # if we could do this in wrapAppImage, but that would break existing uses
+        if [ -f "$out/bin/${name}" ]; then
+          mv "$out/bin/${name}" "$out/bin/${lib.getName name}"
+        fi
+
+        # Appimages always have a desktop file, copy it to our output
+        mkdir -p $out/share/applications
+        cp ${extracted}/*.desktop $out/share/applications
+      '' + extraInstall extracted;
     });
 
   defaultFhsEnvArgs = {
