@@ -25,6 +25,8 @@ buildPythonPackage rec {
     hs-dbus-signature
   ];
 
+  pythonImportsCheck = [ "dbus_signature_pyparsing" ];
+
   meta = with lib; {
     description = "A Parser for a D-Bus Signature";
     homepage = "https://github.com/stratis-storage/dbus-signature-pyparsing";
