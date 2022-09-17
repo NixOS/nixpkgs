@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "go-graft";
-  version = "0.2.9";
+  version = "0.2.11";
 
   src = fetchFromGitHub {
     owner = "mzz2017";
     repo = "gg";
     rev = "v${version}";
-    sha256 = "sha256-lsxZBhXgLJIy39kaOj5cCQUgZEDhlylklOdD4qHXks0=";
+    sha256 = "sha256-RIHlAE+hsMXA/kWfazAmhsEi298tPY4Mt4RR6vmo1oQ=";
   };
 
   CGO_ENABLED = 0;
