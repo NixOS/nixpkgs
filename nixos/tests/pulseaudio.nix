@@ -1,10 +1,10 @@
 let
-  mkTest = { systemWide ? false }:
+  mkTest = { systemWide ? false , fullVersion ? false }:
     import ./make-test-python.nix ({ pkgs, lib, ... }:
       let
         testFile = pkgs.fetchurl {
           url =
-            "https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3";
+            "https://file-examples.com/storage/fe5947fd2362fc197a3c2df/2017/11/file_example_MP3_700KB.mp3";
           hash = "sha256-+iggJW8s0/LfA/okfXsB550/55Q0Sq3OoIzuBrzOPJQ=";
         };
 
@@ -22,7 +22,7 @@ let
           testPlay32 = { inherit (pkgs.pkgsi686Linux) sox alsa-utils; };
         };
       in {
-        name = "pulseaudio${lib.optionalString systemWide "-systemWide"}";
+        name = "pulseaudio${lib.optionalString fullVersion "Full"}${lib.optionalString systemWide "-systemWide"}";
         meta = with pkgs.lib.maintainers; {
           maintainers = [ synthetica ] ++ pkgs.pulseaudio.meta.maintainers;
         };
@@ -35,12 +35,14 @@ let
               enable = true;
               support32Bit = true;
               inherit systemWide;
+            } // lib.optionalAttrs fullVersion {
+              package = pkgs.pulseaudioFull;
             };
 
             environment.systemPackages = [ testers.testPlay pkgs.pavucontrol ]
               ++ lib.optional pkgs.stdenv.isx86_64 testers.testPlay32;
           } // lib.optionalAttrs systemWide {
-            users.users.alice.extraGroups = [ "audio" ];
+            users.users.alice.extraGroups = [ "pulse-access" ];
             systemd.services.pulseaudio.wantedBy = [ "multi-user.target" ];
           };
 
@@ -58,14 +60,21 @@ let
           ''}
           machine.screenshot("testPlay")
 
+          ${lib.optionalString (!systemWide) ''
+            machine.send_chars("pacmd info && touch /tmp/pacmd_success\n")
+            machine.wait_for_file("/tmp/pacmd_success")
+          ''}
+
           # Pavucontrol only loads when Pulseaudio is running. If it isn't, the
-          # text "Playback" (one of the tabs) will never show.
+          # text "Dummy Output" (sound device name) will never show.
           machine.send_chars("pavucontrol\n")
-          machine.wait_for_text("Playback")
+          machine.wait_for_text("Dummy Output")
           machine.screenshot("Pavucontrol")
         '';
       });
 in builtins.mapAttrs (key: val: mkTest val) {
-  user = { systemWide = false; };
-  system = { systemWide = true; };
+  user = { systemWide = false; fullVersion = false; };
+  system = { systemWide = true; fullVersion = false; };
+  userFull = { systemWide = false; fullVersion = true; };
+  systemFull = { systemWide = true; fullVersion = true; };
 }
