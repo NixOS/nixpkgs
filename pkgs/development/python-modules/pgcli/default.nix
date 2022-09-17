@@ -1,11 +1,12 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , cli-helpers
 , click
 , configobj
 , prompt-toolkit
-, psycopg2
+, psycopg
 , pygments
 , sqlparse
 , pgspecial
@@ -28,17 +29,12 @@ buildPythonPackage rec {
     sha256 = "sha256-zESNlRWfwJA9NhgpkneKCW7aV1LWYNR2cTg8jiv2M/E=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pgspecial>=1.13.1,<2.0.0" "pgspecial>=1.13.1"
-  '';
-
   propagatedBuildInputs = [
     cli-helpers
     click
     configobj
     prompt-toolkit
-    psycopg2
+    psycopg
     pygments
     sqlparse
     pgspecial
