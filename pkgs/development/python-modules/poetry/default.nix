@@ -53,6 +53,11 @@ buildPythonPackage rec {
     hash = "sha256-+Nsg7oPh9tAHEKt1R9C+nY9UPy+9vbf/+A6vQWgTi+4=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'crashtest = "^0.3.0"' 'crashtest = "*"'
+  '';
+
   nativeBuildInputs = [
     installShellFiles
   ];
