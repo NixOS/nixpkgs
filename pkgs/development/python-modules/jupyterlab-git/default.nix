@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-git";
-  version = "0.36.0";
+  version = "0.39.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "jupyterlab_git";
     inherit version;
-    sha256 = "sha256-K+h1ra9PsqKlSSPnc1jgSODICv3FoEdwqBGYWQYs6wE=";
+    sha256 = "sha256-2BMSbZ5ICISavg1JON7fiKd4e4vAyWW+geSgxbMowis=";
   };
 
   nativeBuildInputs = [

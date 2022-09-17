@@ -15,23 +15,24 @@ with prev;
   });
 
   busted = prev.busted.overrideAttrs(oa: {
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
+      pkgs.installShellFiles
+    ];
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
         --replace "'lua_cliargs = 3.0-1'," "'lua_cliargs >= 3.0-1',"
     '';
     postInstall = ''
-      install -D completions/zsh/_busted $out/share/zsh/site-functions/_busted
-      install -D completions/bash/busted.bash $out/share/bash-completion/completions/busted
+      installShellCompletion --cmd busted \
+        --zsh completions/zsh/_busted \
+        --bash completions/bash/busted.bash
     '';
   });
 
   cqueues = (prev.lib.overrideLuarocks prev.cqueues (drv: {
-    nativeBuildInputs = [
-      pkgs.gnum4
-    ];
     externalDeps = [
-      { name = "CRYPTO"; dep = pkgs.openssl; }
-      { name = "OPENSSL"; dep = pkgs.openssl; }
+      { name = "CRYPTO"; dep = pkgs.openssl_1_1; }
+      { name = "OPENSSL"; dep = pkgs.openssl_1_1; }
     ];
     disabled = luaOlder "5.1" || luaAtLeast "5.4";
   })).overrideAttrs(oa: rec {
@@ -42,6 +43,11 @@ with prev;
       date = head rel;
       rev = last (splitString "-" (last rel));
     in "${date}-${rev}";
+
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
+      pkgs.gnum4
+    ];
+
     # Upstream rockspec is pointlessly broken into separate rockspecs, per Lua
     # version, which doesn't work well for us, so modify it
     postConfigure = let inherit (prev.cqueues) pname; in ''
@@ -88,6 +94,10 @@ with prev;
     ];
   });
 
+  lush-nvim = prev.lib.overrideLuarocks prev.lush-nvim (drv: rec {
+    doCheck = false;
+  });
+
   ljsyscall = prev.lib.overrideLuarocks prev.ljsyscall (drv: rec {
     version = "unstable-20180515";
     # package hasn't seen any release for a long time
@@ -107,8 +117,8 @@ with prev;
     propagatedBuildInputs = with pkgs.lib; optional (!isLuaJIT) luaffi;
   });
 
-  lgi = prev.lib.overrideLuarocks prev.lgi (drv: {
-    nativeBuildInputs = [
+  lgi = prev.lgi.overrideAttrs (oa: {
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
       pkgs.pkg-config
     ];
     buildInputs = [
@@ -199,7 +209,7 @@ with prev;
     # until Alloyed/lua-lsp#28
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
-        --replace '"lpeglabel ~> 1.5",' '"lpeglabel >= 1.5",'
+        --replace '"dkjson ~> 2.5",' '"dkjson >= 2.5",'
     '';
   });
 
@@ -265,14 +275,15 @@ with prev;
 
   luaossl = prev.lib.overrideLuarocks prev.luaossl (drv: {
     externalDeps = [
-      { name = "CRYPTO"; dep = pkgs.openssl; }
-      { name = "OPENSSL"; dep = pkgs.openssl; }
+      # https://github.com/wahern/luaossl/pull/199
+      { name = "CRYPTO"; dep = pkgs.openssl_1_1; }
+      { name = "OPENSSL"; dep = pkgs.openssl_1_1; }
     ];
   });
 
   luasec = prev.lib.overrideLuarocks prev.luasec (drv: {
     externalDeps = [
-      { name = "OPENSSL"; dep = pkgs.openssl; }
+      { name = "OPENSSL"; dep = pkgs.openssl_1_1; }
     ];
   });
 
@@ -332,15 +343,23 @@ with prev;
   # we shouldn't use luarocks machinery to build complex cmake components
   libluv = pkgs.stdenv.mkDerivation {
 
-    inherit (prev.luv) pname version meta src;
+    pname = "libluv";
+    inherit (prev.luv) version meta src;
 
       cmakeFlags = [
         "-DBUILD_SHARED_LIBS=ON"
         "-DBUILD_MODULE=OFF"
         "-DWITH_SHARED_LIBUV=ON"
+        "-DLUA_BUILD_TYPE=System"
+        "-DWITH_LUA_ENGINE=${if isLuaJIT then "LuaJit" else "Lua"}"
       ];
 
-      buildInputs = [ pkgs.libuv ];
+      # to make sure we dont use bundled deps
+      postUnpack = ''
+        rm -rf deps/lua deps/libuv
+      '';
+
+      buildInputs = [ pkgs.libuv final.lua ];
 
       nativeBuildInputs = [ pkgs.pkg-config pkgs.cmake ]
         ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.fixDarwinDylibNames ];
@@ -350,18 +369,16 @@ with prev;
 
     buildInputs = [ pkgs.pkg-config pkgs.libuv ];
 
-    doInstallCheck = true;
-
     # Use system libuv instead of building local and statically linking
     extraVariables = {
       "WITH_SHARED_LIBUV" = "ON";
     };
 
     # we unset the LUA_PATH since the hook erases the interpreter defaults (To fix)
-    installCheckPhase = ''
+    # tests is not run since they are not part of the tarball anymore
+    preCheck = ''
       unset LUA_PATH
       rm tests/test-{dns,thread}.lua
-      lua tests/run.lua
     '';
 
     passthru.libluv = final.libluv;
@@ -401,8 +418,25 @@ with prev;
   })).overrideAttrs (old: {
     # Without this, source root is wrongly set to ./readline-2.6/doc
     setSourceRoot = ''
-      sourceRoot=./readline-3.0
+      sourceRoot=./readline-${pkgs.lib.versions.majorMinor old.version}
     '';
+  });
+
+  sqlite = prev.lib.overrideLuarocks  prev.sqlite (drv: {
+
+    doCheck = true;
+    checkInputs = [ final.plenary-nvim pkgs.neovim-unwrapped ];
+
+    # we override 'luarocks test' because otherwise neovim doesn't find/load the plenary plugin
+    checkPhase = ''
+      export LIBSQLITE="${pkgs.sqlite.out}/lib/libsqlite3.so"
+      export HOME="$TMPDIR";
+
+      nvim --headless -i NONE \
+        -u test/minimal_init.vim --cmd "set rtp+=${pkgs.vimPlugins.plenary-nvim}" \
+        -c "PlenaryBustedDirectory test/auto/ { minimal_init = './test/minimal_init.vim' }"
+    '';
+
   });
 
   std-_debug = prev.std-_debug.overrideAttrs(oa: {

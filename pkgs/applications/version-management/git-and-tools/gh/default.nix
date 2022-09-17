@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gh";
-  version = "2.10.1";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "cli";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-2lIHEO4+oW9+C7VSulmVwZJ1l6RYBbV6wlKMvdOGqi8=";
+    sha256 = "sha256-+RHKrCW/5qCHO1KxjGdpbvqZxZe8hd+EWpUAfMr5FFI=";
   };
 
-  vendorSha256 = "sha256-EFJfd6sUK5iquFW0kXaiH6tLiNqbZNe9awpIqmqhp7I=";
+  vendorSha256 = "sha256-Q8XnXa5zTo6YbM5DEau2AsChd8kZrpFNRLhTZzogL9U=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,14 +32,14 @@ buildGoModule rec {
     install -Dm755 bin/gh -t $out/bin
     installManPage share/man/*/*.[1-9]
 
-    for shell in bash fish zsh; do
-      $out/bin/gh completion -s $shell > gh.$shell
-      installShellCompletion gh.$shell
-    done
+    installShellCompletion --cmd gh \
+      --bash <($out/bin/gh completion -s bash) \
+      --fish <($out/bin/gh completion -s fish) \
+      --zsh <($out/bin/gh completion -s zsh)
     runHook postInstall
   '';
 
-  # fails with `unable to find git executable in PATH`
+  # most tests require network access
   doCheck = false;
 
   meta = with lib; {

@@ -1,32 +1,38 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, python2
+, python3
 , unstableGitUpdater
 }:
 stdenv.mkDerivation rec {
   pname = "klipper";
-  version = "unstable-2022-03-14";
+  version = "unstable-2022-09-11";
 
   src = fetchFromGitHub {
     owner = "KevinOConnor";
     repo = "klipper";
-    rev = "30098db22a43274ceb87e078e603889f403a35c4";
-    sha256 = "sha256-ORpXBFGPY6A/HEYX9Hhwb3wP2KcAE+z3pTxf6j7CwGg=";
+    rev = "ee5bdbadd1d00cf161e0b2cdfbcf5c622abc8326";
+    sha256 = "sha256-nVnJQEi6xNMNpC5byG1ce3M5hpJOd53g1ugjHXKY2zI=";
   };
 
   sourceRoot = "source/klippy";
 
-  # there is currently an attempt at moving it to Python 3, but it will remain
-  # Python 2 for the foreseeable future.
-  # c.f. https://github.com/KevinOConnor/klipper/pull/3278
   # NB: This is needed for the postBuild step
-  nativeBuildInputs = [ (python2.withPackages ( p: with p; [ cffi ] )) ];
+  nativeBuildInputs = [ (python3.withPackages ( p: with p; [ cffi ] )) ];
 
-  buildInputs = [ (python2.withPackages (p: with p; [ cffi pyserial greenlet jinja2 numpy ])) ];
+  buildInputs = [ (python3.withPackages (p: with p; [ cffi pyserial greenlet jinja2 markupsafe ])) ];
 
   # we need to run this to prebuild the chelper.
-  postBuild = "python2 ./chelper/__init__.py";
+  postBuild = "python ./chelper/__init__.py";
+
+  # 2022-06-28: Python 3 is already supported in klipper, alas shebangs remained
+  # the same - we replace them in patchPhase.
+  patchPhase = ''
+    for F in klippy.py console.py parsedump.py; do
+      substituteInPlace $F \
+        --replace '/usr/bin/env python2' '/usr/bin/env python'
+    done
+  '';
 
   # NB: We don't move the main entry point into `/bin`, or even symlink it,
   # because it uses relative paths to find necessary modules. We could wrap but
@@ -50,7 +56,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The Klipper 3D printer firmware";
     homepage = "https://github.com/KevinOConnor/klipper";
-    maintainers = with maintainers; [ lovesegfault zhaofengli ];
+    maintainers = with maintainers; [ lovesegfault zhaofengli cab404 ];
     platforms = platforms.linux;
     license = licenses.gpl3Only;
   };

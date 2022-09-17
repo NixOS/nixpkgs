@@ -10,13 +10,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "souffle";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner  = "souffle-lang";
     repo   = "souffle";
     rev    = version;
-    sha256 = "sha256-whvC+DL9XbQLc4wf2kFxUKXSyJnGkYq0/0uLCLbliJU=";
+    sha256 = "sha256-wdTBSmyA2I+gaSV577NNKA2oY2fdVTGmvV7h15NY1tU=";
   };
 
   nativeBuildInputs = [ bison cmake flex mcpp doxygen graphviz makeWrapper perl ];
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A translator of declarative Datalog programs into the C++ language";
     homepage    = "https://souffle-lang.github.io/";
     platforms   = platforms.unix;

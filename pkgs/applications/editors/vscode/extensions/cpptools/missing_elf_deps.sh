@@ -11,7 +11,7 @@ function get_pkg_out() {
   echo "$(nix-build -E "$nixExp" --no-out-link)${suffix}"
 }
 
-interpreter="$(get_pkg_out "stdenv.glibc" "/lib/ld-linux-x86-64.so.2")"
+interpreter="$(get_pkg_out "stdenv.cc.libc" "/lib/ld-linux-x86-64.so.2")"
 echo "interpreter='$interpreter'"
 
 # For clangformat dep on 'libtinfo.so.5'.
@@ -49,4 +49,3 @@ function print_nix_version_mono() {
   echo "nixMonoBin='$nixMonoBin'"
   $nixMonoBin/mono --version
 }
-

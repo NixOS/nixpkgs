@@ -1,12 +1,18 @@
 name: "Update terraform-providers"
 
 on:
-  schedule:
-    - cron: "14 3 * * 1"
+  #schedule:
+  #  - cron: "14 3 * * 0"
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   tf-providers:
+    permissions:
+      contents: write  # for peter-evans/create-pull-request to create branch
+      pull-requests: write  # for peter-evans/create-pull-request to create a PR, for peter-evans/create-or-update-comment to create or update comment
     if: github.repository_owner == 'NixOS' && github.ref == 'refs/heads/master' # ensure workflow_dispatch only runs on master
     runs-on: ubuntu-latest
     steps:
@@ -32,7 +38,7 @@ jobs:
 
             Check that all providers build with:
             ```
-            @ofborg build terraform-full
+            @ofborg build terraform.full
             ```
           branch: terraform-providers-update
           delete-branch: false

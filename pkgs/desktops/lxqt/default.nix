@@ -17,6 +17,7 @@ let
     lxqt-build-tools = callPackage ./lxqt-build-tools {};
     libsysstat = callPackage ./libsysstat {};
     liblxqt = callPackage ./liblxqt {};
+    qtxdg-tools = callPackage ./qtxdg-tools {};
 
     ### CORE 1
     libfm-qt = callPackage ./libfm-qt {};

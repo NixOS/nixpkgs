@@ -8,13 +8,14 @@
 #
 # See also <nixos/modules/profiles/hardened.nix>
 
-{ lib, version }:
+{ stdenv, lib, version }:
 
 with lib;
 with lib.kernel;
 with (lib.kernel.whenHelpers version);
 
 assert (versionAtLeast version "4.9");
+assert (stdenv.hostPlatform.isx86_64 -> versions.majorMinor version != "5.4");
 
 {
   # Report BUG() conditions and kill the offending process.

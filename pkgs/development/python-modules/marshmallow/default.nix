@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "marshmallow";
-  version = "3.15.0";
+  version = "3.16.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "marshmallow-code";
     repo = pname;
     rev = version;
-    hash = "sha256-ZqMrMNfP/RKW2jQDNPgfhyeqmSc40pZbnrcXHbw2emc=";
+    hash = "sha256-bR10hYViK7OrAaBpKaeM7S5XyHQZhlGUQTwH/EJ0kME=";
   };
 
   propagatedBuildInputs = [

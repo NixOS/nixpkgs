@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "camlp-streams";
-  version = "5.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256:1wd5k0irzwi841b27pbx0n5fdybbgx97184zm8cjajizd2j8w0g5";
+    sha256 = "sha256-kHuFBqu0mjFv53sOtmFZcX2reo5ToaOpItP7P53bfGQ=";
   };
 
   meta = {

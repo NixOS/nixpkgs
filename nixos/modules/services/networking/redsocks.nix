@@ -11,26 +11,26 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable redsocks.";
+        description = lib.mdDoc "Whether to enable redsocks.";
       };
 
       log_debug = mkOption {
         type = types.bool;
         default = false;
-        description = "Log connection progress.";
+        description = lib.mdDoc "Log connection progress.";
       };
 
       log_info = mkOption {
         type = types.bool;
         default = false;
-        description = "Log start and end of client sessions.";
+        description = lib.mdDoc "Log start and end of client sessions.";
       };
 
       log = mkOption {
         type = types.str;
         default = "stderr";
         description =
-          ''
+          lib.mdDoc ''
             Where to send logs.
 
             Possible values are:
@@ -45,7 +45,7 @@ in
         type = with types; nullOr str;
         default = null;
         description =
-          ''
+          lib.mdDoc ''
             Chroot under which to run redsocks. Log file is opened before
             chroot, but if logging to syslog /etc/localtime may be required.
           '';
@@ -53,7 +53,7 @@ in
 
       redsocks = mkOption {
         description =
-          ''
+          lib.mdDoc ''
             Local port to proxy associations to be performed.
 
             The example shows how to configure a proxy to handle port 80 as HTTP
@@ -74,7 +74,7 @@ in
             type = types.str;
             default = "127.0.0.1";
             description =
-              ''
+              lib.mdDoc ''
                 IP on which redsocks should listen. Defaults to 127.0.0.1 for
                 security reasons.
               '';
@@ -83,13 +83,13 @@ in
           port = mkOption {
             type = types.int;
             default = 12345;
-            description = "Port on which redsocks should listen.";
+            description = lib.mdDoc "Port on which redsocks should listen.";
           };
 
           proxy = mkOption {
             type = types.str;
             description =
-              ''
+              lib.mdDoc ''
                 Proxy through which redsocks should forward incoming traffic.
                 Example: "example.org:8080"
               '';
@@ -97,20 +97,20 @@ in
 
           type = mkOption {
             type = types.enum [ "socks4" "socks5" "http-connect" "http-relay" ];
-            description = "Type of proxy.";
+            description = lib.mdDoc "Type of proxy.";
           };
 
           login = mkOption {
             type = with types; nullOr str;
             default = null;
-            description = "Login to send to proxy.";
+            description = lib.mdDoc "Login to send to proxy.";
           };
 
           password = mkOption {
             type = with types; nullOr str;
             default = null;
             description =
-              ''
+              lib.mdDoc ''
                 Password to send to proxy. WARNING, this will end up
                 world-readable in the store! Awaiting
                 https://github.com/NixOS/nix/issues/8 to be able to fix.
@@ -122,7 +122,7 @@ in
                                 "Forwarded_ipport" ];
             default = "false";
             description =
-              ''
+              lib.mdDoc ''
                 Way to disclose client IP to the proxy.
                   - "false": do not disclose
                 http-connect supports the following ways:
@@ -135,14 +135,14 @@ in
           redirectInternetOnly = mkOption {
             type = types.bool;
             default = true;
-            description = "Exclude all non-globally-routable IPs from redsocks";
+            description = lib.mdDoc "Exclude all non-globally-routable IPs from redsocks";
           };
 
           doNotRedirect = mkOption {
             type = with types; listOf str;
             default = [];
             description =
-              ''
+              lib.mdDoc ''
                 Iptables filters that if matched will get the packet off of
                 redsocks.
               '';
@@ -153,7 +153,7 @@ in
             type = with types; either bool str;
             default = false;
             description =
-              ''
+              lib.mdDoc ''
                 Conditions to make outbound packets go through this redsocks
                 instance.
 

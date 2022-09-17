@@ -1,18 +1,16 @@
 { lib, fetchFromGitHub, buildDunePackage, lwt_log }:
 
 buildDunePackage rec {
-  version = "1.1";
+  version = "1.2";
   pname = "resource-pooling";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = pname;
     rev = version;
-    sha256 = "0wsbnwszafdv3gsiiaslgf6m6pfx74h7h19i0gp2c4ivdiv3wck9";
+    sha256 = "sha256-GNYPxjMTo7y40y7aQdseuFyeVF/hSCZKXfEaH/WIO9w=";
   };
 
   propagatedBuildInputs = [ lwt_log ];

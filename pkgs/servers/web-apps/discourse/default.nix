@@ -11,13 +11,13 @@
 }@args:
 
 let
-  version = "2.9.0.beta4";
+  version = "2.9.0.beta9";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-DpUEBGLgjcroVzdDG8/nGvC+ym19ZkGa7qvHKZZ1mH4=";
+    sha256 = "sha256-pavNdAbk9yuWRg++p1MCmpBMuYKDs63QbJpHrPS9oAY=";
   };
 
   runtimeDeps = [
@@ -161,7 +161,7 @@ let
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = src + "/app/assets/javascripts/yarn.lock";
-    sha256 = "1l4nfc14cm42lkilsawfhdcnv1ln7m7bpan9a804abv4hwrs3f52";
+    sha256 = "14d7y29460ggqcjnc9vk1q2lnxfl6ycyp8rc103g3gs2bl5sb6r0";
   };
 
   assets = stdenv.mkDerivation {
@@ -176,6 +176,8 @@ let
       yarn
       nodejs-14_x
     ];
+
+    outputs = [ "out" "javascripts" ];
 
     patches = [
       # Use the Ruby API version in the plugin gem path, to match the
@@ -253,6 +255,10 @@ let
 
       mv public/assets $out
 
+      rm -r app/assets/javascripts/plugins
+      mv app/assets/javascripts $javascripts
+      ln -sf /run/discourse/assets/javascripts/plugins $javascripts/plugins
+
       runHook postInstall
     '';
 
@@ -301,7 +307,10 @@ let
       # path, not their relative state directory path. This gets rid of
       # warnings and means we don't have to link back to lib from the
       # state directory.
-      find config -type f -execdir sed -Ei "s,(\.\./)+(lib|app)/,$out/share/discourse/\2/," {} \;
+      find config -type f -name "*.rb" -execdir \
+        sed -Ei "s,(\.\./)+(lib|app)/,$out/share/discourse/\2/," {} \;
+      find config -maxdepth 1 -type f -name "*.rb" -execdir \
+        sed -Ei "s,require_relative (\"|')([[:alnum:]].*)(\"|'),require_relative '$out/share/discourse/config/\2'," {} \;
     '';
 
     buildPhase = ''
@@ -322,9 +331,10 @@ let
       ln -sf /var/log/discourse $out/share/discourse/log
       ln -sf /var/lib/discourse/tmp $out/share/discourse/tmp
       ln -sf /run/discourse/config $out/share/discourse/config
-      ln -sf /run/discourse/assets/javascripts/plugins $out/share/discourse/app/assets/javascripts/plugins
       ln -sf /run/discourse/public $out/share/discourse/public
       ln -sf ${assets} $out/share/discourse/public.dist/assets
+      rm -r $out/share/discourse/app/assets/javascripts
+      ln -sf ${assets.javascripts} $out/share/discourse/app/assets/javascripts
       ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} $out/share/discourse/plugins/${p.pluginName or ""}") plugins}
 
       runHook postInstall

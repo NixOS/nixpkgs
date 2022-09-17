@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yubihsm-shell";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubihsm-shell";
     rev = version;
-    sha256 = "D0kXiwc+i6mKA4oHuHjgXUmLMsmY5o/VI+1aCWtNjC0=";
+    sha256 = "sha256-rSIdI6ECLte+dEbT8NOUqS8jkozRhbo+eqFrdhTIKpY=";
   };
 
   nativeBuildInputs = [
@@ -36,11 +36,6 @@ stdenv.mkDerivation rec {
     curl
     pcsclite
     openssl
-  ];
-
-  cmakeFlags = [
-    # help2man fails without this
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
   ];
 
   postPatch = ''

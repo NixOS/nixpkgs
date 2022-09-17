@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "iptsd";
-  version = "0.5";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "linux-surface";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-A/0hA4gJwzrRPn57IKYvfcAnx1KXbQl0ZX2TE8mcQhc=";
+    sha256 = "sha256-du5TC3I5+hWifjdnaeTj2QPJ6/oTXZqaOrZJkef/USU=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];

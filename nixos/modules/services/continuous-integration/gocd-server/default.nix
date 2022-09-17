@@ -8,12 +8,12 @@ let
 in {
   options = {
     services.gocd-server = {
-      enable = mkEnableOption "gocd-server";
+      enable = mkEnableOption (lib.mdDoc "gocd-server");
 
       user = mkOption {
         default = "gocd-server";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           User the Go.CD server should execute under.
         '';
       };
@@ -21,7 +21,7 @@ in {
       group = mkOption {
         default = "gocd-server";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           If the default user "gocd-server" is configured then this is the primary group of that user.
         '';
       };
@@ -30,7 +30,7 @@ in {
         default = [ ];
         type = types.listOf types.str;
         example = [ "wheel" "docker" ];
-        description = ''
+        description = lib.mdDoc ''
           List of extra groups that the "gocd-server" user should be a part of.
         '';
       };
@@ -39,7 +39,7 @@ in {
         default = "0.0.0.0";
         example = "localhost";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Specifies the bind address on which the Go.CD server HTTP interface listens.
         '';
       };
@@ -47,7 +47,7 @@ in {
       port = mkOption {
         default = 8153;
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           Specifies port number on which the Go.CD server HTTP interface listens.
         '';
       };
@@ -55,7 +55,7 @@ in {
       sslPort = mkOption {
         default = 8154;
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           Specifies port number on which the Go.CD server HTTPS interface listens.
         '';
       };
@@ -63,7 +63,7 @@ in {
       workDir = mkOption {
         default = "/var/lib/go-server";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Specifies the working directory in which the Go.CD server java archive resides.
         '';
       };
@@ -72,7 +72,7 @@ in {
         default = [ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ];
         defaultText = literalExpression "[ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ]";
         type = types.listOf types.package;
-        description = ''
+        description = lib.mdDoc ''
           Packages to add to PATH for the Go.CD server's process.
         '';
       };
@@ -80,7 +80,7 @@ in {
       initialJavaHeapSize = mkOption {
         default = "512m";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Specifies the initial java heap memory size for the Go.CD server's java process.
         '';
       };
@@ -88,7 +88,7 @@ in {
       maxJavaHeapMemory = mkOption {
         default = "1024m";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Specifies the java maximum heap memory size for the Go.CD server's java process.
         '';
       };
@@ -122,7 +122,7 @@ in {
           ]
         '';
 
-        description = ''
+        description = lib.mdDoc ''
           Specifies startup command line arguments to pass to Go.CD server
           java process.
         '';
@@ -141,7 +141,7 @@ in {
           "-XX:+PrintGCDetails"
           "-XX:+PrintGC"
         ];
-        description = ''
+        description = lib.mdDoc ''
           Specifies additional command line arguments to pass to Go.CD server's
           java process.  Example contains debug and gcLog arguments.
         '';
@@ -150,10 +150,10 @@ in {
       environment = mkOption {
         default = { };
         type = with types; attrsOf str;
-        description = ''
+        description = lib.mdDoc ''
           Additional environment variables to be passed to the gocd-server process.
           As a base environment, gocd-server receives NIX_PATH from
-          <option>environment.sessionVariables</option>, NIX_REMOTE is set to
+          {option}`environment.sessionVariables`, NIX_REMOTE is set to
           "daemon".
         '';
       };

@@ -7,18 +7,27 @@
 
 buildGoModule rec {
   pname = "usql";
-  version = "0.9.3";
+  version = "0.12.13";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
     rev = "v${version}";
-    sha256 = "sha256-NHeJSWrcX4hYBJpZu/UjQ1ZWfcUnWFCV0Meo+XveDOw=";
+    hash = "sha256-F/eOD7/w8HjJBeiXagaf4yBLZcZVuy93rfVFeSESlZo=";
   };
 
-  vendorSha256 = "sha256-EsLLBhyOcupx5LrJyWWMu4RAGWDKo3keflyZOASKldE=";
+  vendorHash = "sha256-7rMCqTfUs89AX0VP689BmKsuvLJWU5ANJVki+JMVf7g=";
 
   buildInputs = [ unixODBC icu ];
+
+  # Exclude broken impala driver
+  # The driver breaks too often and is not used.
+  #
+  # See https://github.com/xo/usql/pull/347
+  #
+  excludedPackages = [
+    "impala"
+  ];
 
   # These tags and flags are copied from build-release.sh
   tags = [
@@ -47,9 +56,7 @@ buildGoModule rec {
     description = "Universal command-line interface for SQL databases";
     homepage = "https://github.com/xo/usql";
     license = licenses.mit;
-    maintainers = with maintainers; [ georgyo ];
-    # usql does not build on ARM.
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [ georgyo anthonyroussel ];
+    platforms = with platforms; linux ++ darwin;
   };
-
 }

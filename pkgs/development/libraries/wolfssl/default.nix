@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wolfssl";
-  version = "5.3.0";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "v${version}-stable";
-    sha256 = "sha256-KteArWAgDohlqEYaNfzLPuBn6uy5ABA8vV/LRCVIPGA=";
+    sha256 = "sha256-5a83Mi+S+mASdZ6O2+0I+qulsF6yNUe80a3qZvWmXHw=";
   };
 
   postPatch = ''

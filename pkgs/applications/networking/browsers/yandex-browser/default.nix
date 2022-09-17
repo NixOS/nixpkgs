@@ -130,6 +130,7 @@ stdenv.mkDerivation rec {
     description = "Yandex Web Browser";
     homepage = "https://browser.yandex.ru/";
     license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ dan4ik605743 ];
     platforms = [ "x86_64-linux" ];
 

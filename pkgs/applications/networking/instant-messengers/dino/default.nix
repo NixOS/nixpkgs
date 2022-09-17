@@ -14,7 +14,7 @@
 , qrencode
 , icu
 , gspell
-, srtp, libnice, gnutls, gstreamer, gst-plugins-base, gst-plugins-good
+, srtp, libnice, gnutls, gstreamer, gst-plugins-base, gst-plugins-good, webrtc-audio-processing
  }:
 
 stdenv.mkDerivation rec {
@@ -65,12 +65,23 @@ stdenv.mkDerivation rec {
     gstreamer
     gst-plugins-base
     gst-plugins-good
+    webrtc-audio-processing
   ] ++ lib.optionals (!stdenv.isDarwin) [
     xorg.libxcb
     xorg.libpthreadstubs
     libXdmcp
     libxkbcommon
   ];
+
+  cmakeFlags = ["-DBUILD_TESTS=yes"];
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    ./xmpp-vala-test
+    ./signal-protocol-vala-test
+    runHook postCheck
+  '';
 
   # Dino looks for plugins with a .so filename extension, even on macOS where
   # .dylib is appropriate, and despite the fact that it builds said plugins with

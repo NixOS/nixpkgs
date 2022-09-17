@@ -3,37 +3,23 @@
 , fetchPypi
 , importlib-metadata
 , mitogen
-, pyroute2-core
-, pyroute2-ethtool
-, pyroute2-ipdb
-, pyroute2-ipset
-, pyroute2-ndb
-, pyroute2-nftables
-, pyroute2-nslink
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyroute2";
-  version = "0.6.9";
-  format = "setuptools";
+  version = "0.7.2";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PRxNGnH7VpyrV49V9xNO8C1I6LMYK05+ZrKndWKO2vs=";
+    hash = "sha256-hahWY7BIO8c6DmCgG+feZdNikbYWycFCl0E6P1uEQ/M=";
   };
 
   propagatedBuildInputs = [
     mitogen
-    pyroute2-core
-    pyroute2-ethtool
-    pyroute2-ipdb
-    pyroute2-ipset
-    pyroute2-ndb
-    pyroute2-nftables
-    pyroute2-nslink
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
@@ -43,6 +29,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "pyroute2"
+    "pr2modules.common"
+    "pr2modules.config"
+    "pr2modules.ethtool"
+    "pr2modules.ipdb"
+    "pr2modules.ipset"
+    "pr2modules.ndb"
+    "pr2modules.nftables"
+    "pr2modules.nslink"
+    "pr2modules.protocols"
+    "pr2modules.proxy"
   ];
 
   meta = with lib; {

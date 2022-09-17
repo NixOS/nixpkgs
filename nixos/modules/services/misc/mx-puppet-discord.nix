@@ -12,10 +12,10 @@ let
 in {
   options = {
     services.mx-puppet-discord = {
-      enable = mkEnableOption ''
+      enable = mkEnableOption (lib.mdDoc ''
         mx-puppet-discord is a discord puppeting bridge for matrix.
         It handles bridging private and group DMs, as well as Guilds (servers)
-      '';
+      '');
 
       settings = mkOption rec {
         apply = recursiveUpdate default;
@@ -57,11 +57,11 @@ in {
             relay.whitelist = [ "@.*:example.com" ];
           }
         '';
-        description = ''
-          <filename>config.yaml</filename> configuration as a Nix attribute set.
+        description = lib.mdDoc ''
+          {file}`config.yaml` configuration as a Nix attribute set.
           Configuration options should match those described in
-          <link xlink:href="https://github.com/matrix-discord/mx-puppet-discord/blob/master/sample.config.yaml">
-          sample.config.yaml</link>.
+          [
+          sample.config.yaml](https://github.com/matrix-discord/mx-puppet-discord/blob/master/sample.config.yaml).
         '';
       };
       serviceDependencies = mkOption {
@@ -70,7 +70,7 @@ in {
         defaultText = literalExpression ''
           optional config.services.matrix-synapse.enable "matrix-synapse.service"
         '';
-        description = ''
+        description = lib.mdDoc ''
           List of Systemd services to require and wait for when starting the application service.
         '';
       };

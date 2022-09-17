@@ -2,6 +2,7 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 }:
 
 buildGoModule rec {
@@ -12,10 +13,18 @@ buildGoModule rec {
     owner = "redcode-labs";
     repo = "SNOWCRASH";
     rev = "514cceea1ca82f44e0c8a8744280f3a16abb6745";
-    sha256 = "16p1nfi9zdlcffjyrk1phrippjqrdzf3cpc51dgdy3bfr7pds2ld";
+    sha256 = "sha256-jQrd7sluDd9eC4VdNtxvGct7Y4Y3zOylc4y2n6Kz4Zo=";
   };
 
-  vendorSha256 = "sha256-YryQKLHwUDhR/Z7eWfCdL86Z83GrqBTvdGGj+dGKvjI";
+  patches = [
+    (fetchpatch {
+      name = "update-x-sys-for-go-1.18-on-aarch64-darwin.patch";
+      url = "https://github.com/redcode-labs/SNOWCRASH/commit/24eefdcc944ade0cf435f7f35dee59ef3f0497fd.patch";
+      sha256 = "sha256-UXk7cMyEVAVcOkELcC9TlQNppZOXIvn6DBYu1j2iVNg=";
+    })
+  ];
+
+  vendorSha256 = "sha256-WTDE+MYL8CjeNvGHRNiMgBFrydDJWIcG8TYvbQTH/6o=";
 
   subPackages = [ "." ];
 

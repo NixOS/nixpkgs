@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , meson, ninja, pkg-config, scdoc, wayland-scanner
-, wayland, wayland-protocols
+, wayland, wayland-protocols, runtimeShell
 , systemdSupport ? stdenv.isLinux, systemd
 }:
 
@@ -22,7 +22,13 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [ "-Dman-pages=enabled" "-Dlogind=${if systemdSupport then "enabled" else "disabled"}" ];
 
-  postPatch = "substituteInPlace main.c --replace '%lu' '%zu'";
+  # Remove the `%zu` patch for the next release after 1.7.1.
+  # https://github.com/swaywm/swayidle/commit/e81d40fca7533f73319e76e42fa9694b21cc9e6e
+  postPatch = ''
+    substituteInPlace main.c \
+      --replace '%lu' '%zu' \
+      --replace '"sh"' '"${runtimeShell}"'
+  '';
 
   meta = with lib; {
     description = "Idle management daemon for Wayland";

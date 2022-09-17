@@ -10,32 +10,32 @@ let
 in {
   options = {
     services.unit = {
-      enable = mkEnableOption "Unit App Server";
+      enable = mkEnableOption (lib.mdDoc "Unit App Server");
       package = mkOption {
         type = types.package;
         default = pkgs.unit;
         defaultText = literalExpression "pkgs.unit";
-        description = "Unit package to use.";
+        description = lib.mdDoc "Unit package to use.";
       };
       user = mkOption {
         type = types.str;
         default = "unit";
-        description = "User account under which unit runs.";
+        description = lib.mdDoc "User account under which unit runs.";
       };
       group = mkOption {
         type = types.str;
         default = "unit";
-        description = "Group account under which unit runs.";
+        description = lib.mdDoc "Group account under which unit runs.";
       };
       stateDir = mkOption {
         type = types.path;
         default = "/var/spool/unit";
-        description = "Unit data directory.";
+        description = lib.mdDoc "Unit data directory.";
       };
       logDir = mkOption {
         type = types.path;
         default = "/var/log/unit";
-        description = "Unit log directory.";
+        description = lib.mdDoc "Unit log directory.";
       };
       config = mkOption {
         type = types.str;
@@ -75,7 +75,7 @@ in {
             }
           }
         '';
-        description = "Unit configuration in JSON format. More details here https://unit.nginx.org/configuration";
+        description = lib.mdDoc "Unit configuration in JSON format. More details here https://unit.nginx.org/configuration";
       };
     };
   };

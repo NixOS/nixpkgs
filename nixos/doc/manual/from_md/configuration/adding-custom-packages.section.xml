@@ -2,40 +2,50 @@
   <title>Adding Custom Packages</title>
   <para>
     It’s possible that a package you need is not available in NixOS. In
-    that case, you can do two things. First, you can clone the Nixpkgs
-    repository, add the package to your clone, and (optionally) submit a
-    patch or pull request to have it accepted into the main Nixpkgs
-    repository. This is described in detail in the
-    <link xlink:href="https://nixos.org/nixpkgs/manual">Nixpkgs
-    manual</link>. In short, you clone Nixpkgs:
+    that case, you can do two things. Either you can package it with
+    Nix, or you can try to use prebuilt packages from upstream. Due to
+    the peculiarities of NixOS, it is important to note that building
+    software from source is often easier than using pre-built
+    executables.
   </para>
-  <programlisting>
+  <section xml:id="sec-custom-packages-nix">
+    <title>Building with Nix</title>
+    <para>
+      This can be done either in-tree or out-of-tree. For an in-tree
+      build, you can clone the Nixpkgs repository, add the package to
+      your clone, and (optionally) submit a patch or pull request to
+      have it accepted into the main Nixpkgs repository. This is
+      described in detail in the
+      <link xlink:href="https://nixos.org/nixpkgs/manual">Nixpkgs
+      manual</link>. In short, you clone Nixpkgs:
+    </para>
+    <programlisting>
 $ git clone https://github.com/NixOS/nixpkgs
 $ cd nixpkgs
 </programlisting>
-  <para>
-    Then you write and test the package as described in the Nixpkgs
-    manual. Finally, you add it to
-    <xref linkend="opt-environment.systemPackages" />, e.g.
-  </para>
-  <programlisting language="bash">
+    <para>
+      Then you write and test the package as described in the Nixpkgs
+      manual. Finally, you add it to
+      <xref linkend="opt-environment.systemPackages" />, e.g.
+    </para>
+    <programlisting language="bash">
 environment.systemPackages = [ pkgs.my-package ];
 </programlisting>
-  <para>
-    and you run <literal>nixos-rebuild</literal>, specifying your own
-    Nixpkgs tree:
-  </para>
-  <programlisting>
+    <para>
+      and you run <literal>nixos-rebuild</literal>, specifying your own
+      Nixpkgs tree:
+    </para>
+    <programlisting>
 # nixos-rebuild switch -I nixpkgs=/path/to/my/nixpkgs
 </programlisting>
-  <para>
-    The second possibility is to add the package outside of the Nixpkgs
-    tree. For instance, here is how you specify a build of the
-    <link xlink:href="https://www.gnu.org/software/hello/">GNU
-    Hello</link> package directly in
-    <literal>configuration.nix</literal>:
-  </para>
-  <programlisting language="bash">
+    <para>
+      The second possibility is to add the package outside of the
+      Nixpkgs tree. For instance, here is how you specify a build of the
+      <link xlink:href="https://www.gnu.org/software/hello/">GNU
+      Hello</link> package directly in
+      <literal>configuration.nix</literal>:
+    </para>
+    <programlisting language="bash">
 environment.systemPackages =
   let
     my-hello = with pkgs; stdenv.mkDerivation rec {
@@ -48,17 +58,17 @@ environment.systemPackages =
   in
   [ my-hello ];
 </programlisting>
-  <para>
-    Of course, you can also move the definition of
-    <literal>my-hello</literal> into a separate Nix expression, e.g.
-  </para>
-  <programlisting language="bash">
+    <para>
+      Of course, you can also move the definition of
+      <literal>my-hello</literal> into a separate Nix expression, e.g.
+    </para>
+    <programlisting language="bash">
 environment.systemPackages = [ (import ./my-hello.nix) ];
 </programlisting>
-  <para>
-    where <literal>my-hello.nix</literal> contains:
-  </para>
-  <programlisting language="bash">
+    <para>
+      where <literal>my-hello.nix</literal> contains:
+    </para>
+    <programlisting language="bash">
 with import &lt;nixpkgs&gt; {}; # bring all of Nixpkgs into scope
 
 stdenv.mkDerivation rec {
@@ -69,12 +79,40 @@ stdenv.mkDerivation rec {
   };
 }
 </programlisting>
-  <para>
-    This allows testing the package easily:
-  </para>
-  <programlisting>
+    <para>
+      This allows testing the package easily:
+    </para>
+    <programlisting>
 $ nix-build my-hello.nix
 $ ./result/bin/hello
 Hello, world!
 </programlisting>
+  </section>
+  <section xml:id="sec-custom-packages-prebuilt">
+    <title>Using pre-built executables</title>
+    <para>
+      Most pre-built executables will not work on NixOS. There are two
+      notable exceptions: flatpaks and AppImages. For flatpaks see the
+      <link linkend="module-services-flatpak">dedicated section</link>.
+      AppImages will not run <quote>as-is</quote> on NixOS. First you
+      need to install <literal>appimage-run</literal>: add to
+      <literal>/etc/nixos/configuration.nix</literal>
+    </para>
+    <programlisting language="bash">
+environment.systemPackages = [ pkgs.appimage-run ];
+</programlisting>
+    <para>
+      Then instead of running the AppImage <quote>as-is</quote>, run
+      <literal>appimage-run foo.appimage</literal>.
+    </para>
+    <para>
+      To make other pre-built executables work on NixOS, you need to
+      package them with Nix and special helpers like
+      <literal>autoPatchelfHook</literal> or
+      <literal>buildFHSUserEnv</literal>. See the
+      <link xlink:href="https://nixos.org/nixpkgs/manual">Nixpkgs
+      manual</link> for details. This is complex and often doing a
+      source build is easier.
+    </para>
+  </section>
 </section>

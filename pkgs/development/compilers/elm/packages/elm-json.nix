@@ -10,11 +10,11 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "elm-json";
-  version = "0.2.10";
+  version = "0.2.12";
 
   src = fetchurl {
     url = "https://github.com/zwilias/elm-json/archive/v${version}.tar.gz";
-    sha256 = "sha256:03azh7wvl60h6w7ffpvl49s7jr7bxpladcm4fzcasakg26i5a71x";
+    sha256 = "sha256:nlpxlPzWk3wwDgczuMI9T6DFY1YtQpQ1R4BhdPbzZBs=";
   };
 
   cargoPatches = [ ./elm-json.patch ];
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     curl openssl
   ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  cargoSha256 = "sha256:01zasrqf1va58i52s3kwdkj1rnwy80gv00xi6npfshjirj3ix07f";
+  cargoSha256 = "sha256:8SOpL8nfhYen9vza0LYpB/5fgVmBwG7vGMmFOaJskIc=";
 
   # Tests perform networking and therefore can't work in sandbox
   doCheck = false;

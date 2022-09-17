@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     chardet
     dateparser
-    pdfminer
+    pdfminer-six
     pillow
     pyyaml
     unidecode

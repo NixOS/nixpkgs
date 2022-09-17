@@ -18,6 +18,7 @@ stdenv.mkDerivation {
 
   inherit patches;
 
+  strictDeps = true;
   buildInputs = [ gmp ];
 
   inherit configureFlags;

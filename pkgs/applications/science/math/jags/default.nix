@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "JAGS";
-  version = "4.3.0";
+  version = "4.3.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/mcmc-jags/JAGS-${version}.tar.gz";
-    sha256 = "1z3icccg2ic56vmhyrpinlsvpq7kcaflk1731rgpvz9bk1bxvica";
+    sha256 = "sha256-+SWDVbXp6xO9M8X6cg8MvrrOp9CkpCtxsPsUUB7hQik=";
   };
 
   nativeBuildInputs = [ gfortran ];

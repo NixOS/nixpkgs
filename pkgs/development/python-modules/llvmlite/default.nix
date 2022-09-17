@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "llvmlite";
-  version = "0.38.0";
+  version = "0.38.1";
 
   disabled = isPyPy || !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a99d166ccf3b116f3b9ed23b9b70ba2415640a9c978f3aaa13fad49c58f4965c";
+    sha256 = "sha256-BiKoYwH8+BzFDX7VtL6+mSwDBYDUE6hEOzKO1PTYJWE=";
   };
 
   nativeBuildInputs = [ llvm ];

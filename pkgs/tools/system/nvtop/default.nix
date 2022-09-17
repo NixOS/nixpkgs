@@ -1,7 +1,9 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
+, gtest
 , cudatoolkit
 , libdrm
 , ncurses
@@ -23,24 +25,33 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nvtop" + pname-suffix;
-  version = "2.0.1";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "Syllo";
     repo = "nvtop";
     rev = version;
-    sha256 = "sha256-4Alc5pBXb38PUhTRhdKZMiW+P3daDB0q3jiVL8qqEe4=";
+    sha256 = "sha256-LhVgNU2OSM7fOUUQHYJhKhjE0fkFvYC3FIJFgu6T68Q=";
   };
+
+  #this patch should be fine to remove with next version update
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Syllo/nvtop/commit/663a69f1c9038eabdfc3155112fb9b8d662578aa.diff";
+      sha256 = "sha256-/EJlr5b+kZnHm9UxythYreJvO+Ma+1sUI3KLBQFCCmc=";
+    })
+  ];
 
   cmakeFlags = with lib; [
     "-DCMAKE_BUILD_TYPE=Release"
+    "-DBUILD_TESTING=ON"
   ] ++ optional nvidia "-DNVML_INCLUDE_DIRS=${cudatoolkit}/include"
   ++ optional nvidia "-DNVML_LIBRARIES=${cudatoolkit}/targets/x86_64-linux/lib/stubs/libnvidia-ml.so"
   ++ optional (!amd) "-DAMDGPU_SUPPORT=OFF"
   ++ optional (!nvidia) "-DNVIDIA_SUPPORT=OFF"
   ++ optional amd "-DLibdrm_INCLUDE_DIRS=${libdrm}/lib/stubs/libdrm.so.2"
   ;
-  nativeBuildInputs = [ cmake] ++ lib.optional nvidia addOpenGLRunpath;
+  nativeBuildInputs = [ cmake gtest ] ++ lib.optional nvidia addOpenGLRunpath;
   buildInputs = with lib; [ ncurses ]
     ++ optional nvidia cudatoolkit
     ++ optional amd libdrm
@@ -49,11 +60,13 @@ stdenv.mkDerivation rec {
   # ordering of fixups is important
   postFixup = (lib.optionalString amd amd-postFixup) + (lib.optionalString nvidia nvidia-postFixup);
 
+  doCheck = true;
+
   meta = with lib; {
     description = "A (h)top like task monitor for AMD and NVIDIA GPUs";
     longDescription = ''
       Nvtop stands for Neat Videocard TOP, a (h)top like task monitor for AMD and NVIDIA GPUs. It can handle multiple GPUs and print information about them in a htop familiar way.
-  '';
+    '';
     homepage = "https://github.com/Syllo/nvtop";
     license = licenses.gpl3;
     platforms = platforms.linux;

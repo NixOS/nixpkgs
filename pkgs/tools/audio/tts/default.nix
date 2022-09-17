@@ -21,7 +21,8 @@ let
       # TypeError: mel() takes 0 positional arguments but 2 positional arguments (and 3 keyword-only arguments) were given
       librosa = super.librosa.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.1";
-        src = oldAttrs.src.override {
+        src = super.fetchPypi {
+          pname = "librosa";
           inherit version;
           sha256 = "c53d05e768ae4a3e553ae21c2e5015293e5efbfd5c12d497f1104cb519cca6b3";
         };
@@ -31,25 +32,28 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.6.1";
+  version = "0.8.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "sha256-YzMR/Tl1UvjdSqV/h4lYR6DuarEqEIM7RReqYznFU4Q=";
+    sha256 = "sha256-A48L1JGXckSEaZra00ZOBVxcYJMvhpQqzE8nABaP0TY=";
   };
 
   postPatch = let
     relaxedConstraints = [
+      "cython"
       "gruut"
+      "inflect"
       "librosa"
       "mecab-python3"
       "numba"
       "numpy"
       "umap-learn"
       "unidic-lite"
+      "pyworld"
     ];
   in ''
     sed -r -i \
@@ -81,11 +85,11 @@ python.pkgs.buildPythonApplication rec {
     pandas
     pypinyin
     pysbd
-    pytorch-bin
     pyworld
     scipy
     soundfile
     tensorflow
+    torch-bin
     torchaudio-bin
     tqdm
     umap-learn
@@ -129,6 +133,9 @@ python.pkgs.buildPythonApplication rec {
     "test_text_to_ids_phonemes_with_eos_bos_and_blank"
     # Takes too long
     "test_parametrized_wavernn_dataset"
+
+    # requires network
+    "test_voice_conversion"
   ];
 
   disabledTestPaths = [
@@ -146,7 +153,6 @@ python.pkgs.buildPythonApplication rec {
     "tests/tts_tests/test_tacotron2_d-vectors_train.py"
     "tests/tts_tests/test_tacotron2_speaker_emb_train.py"
     "tests/tts_tests/test_tacotron2_train.py"
-    "tests/tts_tests/test_tacotron2_train_fsspec_path.py"
     "tests/tts_tests/test_tacotron_train.py"
     "tests/tts_tests/test_vits_d-vectors_train.py"
     "tests/tts_tests/test_vits_multilingual_speaker_emb_train.py"

@@ -4,7 +4,7 @@
   options.services.mozillavpn.enable = lib.mkOption {
     type = lib.types.bool;
     default = false;
-    description = ''
+    description = lib.mdDoc ''
       Enable the Mozilla VPN daemon.
     '';
   };

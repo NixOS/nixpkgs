@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/imsnif/bandwhich";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ma27 SuperSandro2000 ];
+    maintainers = with maintainers; [ Br1ght0ne SuperSandro2000 ];
     platforms = platforms.unix;
   };
 }

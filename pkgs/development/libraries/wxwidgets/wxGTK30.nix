@@ -18,6 +18,7 @@
 , withGtk2 ? true
 , withWebKit ? false, webkitgtk
 , AGL
+, AVFoundation
 , Carbon
 , Cocoa
 , Kernel
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withMesa libGLU
   ++ lib.optional withWebKit webkitgtk
   ++ lib.optionals stdenv.isDarwin [
+    AVFoundation
     Carbon
     Cocoa
     Kernel
@@ -130,7 +132,6 @@ stdenv.mkDerivation rec {
     license = licenses.wxWindows;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux ++ platforms.darwin;
-    badPlatforms = [ "x86_64-darwin" ];
   };
 
   passthru = {

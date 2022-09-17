@@ -26,11 +26,20 @@ buildPythonPackage rec {
   };
 
   patches = [
+    # python310: Fix tests
+    # https://github.com/enthought/apptools/issues/303
+    (fetchpatch {
+      url = "https://github.com/enthought/apptools/commit/10fb73916124f7ae7edf6c6688a05ad95678488f.patch";
+      sha256 = "sha256-izAcP5RWobLvnk2PQx31SX/TUGkw+prbYbjamYVmtjY=";
+      name = "fix_python310_tests.patch";
+    })
+
     # python39: importlib_resources -> importlib.resources. This patch will be included
     # in the next release after 5.1.0.
     (fetchpatch {
       url = "https://github.com/enthought/apptools/commit/0ae4f52f19a8c0ca9d7926e17c7de949097f24b4.patch";
       sha256 = "165aiwjisr5c3lasg7xblcha7y1y5bq23vi3g9gc80c24bzwcbsw";
+      name = "fix_importlib-resources_naming.patch";
     })
   ];
 
@@ -51,14 +60,6 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$TMP
   '';
-
-  disabledTestPaths = lib.optionals (pythonAtLeast "3.10") [
-    # https://github.com/enthought/apptools/issues/303
-    "apptools/io/h5/tests/test_dict_node.py"
-    "apptools/io/h5/tests/test_file.py"
-    "apptools/io/h5/tests/test_table_node.py"
-  ];
-
 
   pythonImportsCheck = [
     "apptools"

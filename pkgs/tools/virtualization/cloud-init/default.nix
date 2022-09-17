@@ -51,6 +51,7 @@ python3.pkgs.buildPythonApplication rec {
     jsonschema
     netifaces
     oauthlib
+    pyserial
     pyyaml
     requests
   ];

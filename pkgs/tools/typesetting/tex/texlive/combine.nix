@@ -180,7 +180,7 @@ in (buildEnv {
       echo -n "Wrapping '$link'"
       rm "$link"
       makeWrapper "$target" "$link" \
-        --prefix PATH : "$out/bin:${perl}/bin" \
+        --prefix PATH : "${gnused}/bin:${gnugrep}/bin:${coreutils}/bin:$out/bin:${perl}/bin" \
         --prefix PERL5LIB : "$PERL5LIB" \
         --set-default TEXMFCNF "$TEXMFCNF"
 

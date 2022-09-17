@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib, which, sedlex_2, easy-format, xmlm, base64 }:
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib, which, sedlex, easy-format, xmlm, base64 }:
 
 stdenv.mkDerivation rec {
   version = "0.6.15";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml findlib which ];
-  propagatedBuildInputs = [ sedlex_2 xmlm easy-format base64 ];
+  propagatedBuildInputs = [ sedlex xmlm easy-format base64 ];
 
   strictDeps = true;
 

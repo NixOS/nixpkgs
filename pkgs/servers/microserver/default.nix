@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
    pname = "microserver";
-   version = "0.2.0";
+   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "robertohuertasm";
     repo = "microserver";
     rev = "v${version}";
-    sha256 = "1bbbdajh74wh2fbidasim2mzmzqjrgi02v8b0g7vbhpdnlim6ixz";
+    sha256 = "sha256-VgzOdJ1JLe0acjRYvaysCPox5acFmc4VD2f6HZWxT8M=";
   };
 
-  cargoSha256 = "1wh5riw1fr87wbzbzjnwi5zsc5nflwnp6qcpa8a2js54ncd01n16";
+  cargoSha256 = "sha256-JGsMtlWuww1rYE4w6i2VlyD6gGHqnLehLDZmW57R+Fo=";
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security ]);
 

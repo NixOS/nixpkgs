@@ -311,8 +311,8 @@ in
     src = fetchFromGitHub {
       owner = "jneilliii";
       repo = "OctoPrint-STLViewer";
-      rev = version;
-      sha256 = "0mkvh44fn2ch4z2avsdjwi1rp353ylmk9j5fln4x7rx8ph8y7g2b";
+      rev = "refs/tags/${version}";
+      sha256 = "sha256-S7zjEbyo59OJpa7INCv1o4ybQ+Sy6a3EJ5AJ6wiBe1Y=";
     };
 
     meta = with lib; {

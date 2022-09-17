@@ -1,32 +1,38 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy27, six
-, pytest, backports_unittest-mock, keyring, setuptools-scm
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, isPy27
+, six
+
+, pytestCheckHook
+, keyring
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "keyrings.alt";
-  version = "4.1.0";
+  version = "4.1.1";
+  format = "pyproject";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "52ccb61d6f16c10f32f30d38cceef7811ed48e086d73e3bae86f0854352c4ab2";
+    sha256 = "sha256-6HFSuVYvqCK1Ew7jECVRK02m5tsNrzjIcFZtCLhK3tY=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace "--flake8" ""
-  '';
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [
+    six
+  ];
 
-  checkInputs = [ pytest keyring ] ++ lib.optional (pythonOlder "3.3") backports_unittest-mock;
-
-  # heavily relies on importing tests from keyring package
-  doCheck = false;
-  checkPhase = ''
-    py.test
-  '';
+  checkInputs = [
+    pytestCheckHook
+    keyring
+  ];
 
   pythonImportsCheck = [
     "keyrings.alt"

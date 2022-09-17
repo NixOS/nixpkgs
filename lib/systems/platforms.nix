@@ -242,13 +242,6 @@ rec {
     };
   };
 
-  scaleway-c1 = armv7l-hf-multiplatform // {
-    gcc = {
-      cpu = "cortex-a9";
-      fpu = "vfpv3";
-    };
-  };
-
   utilite = {
     linux-kernel = {
       name = "utilite";
@@ -490,8 +483,8 @@ rec {
   };
 
   # can execute on 32bit chip
-  gcc_mips32r2_o32 = { gcc = { arch = "mips32r2"; abi = "o32"; }; };
-  gcc_mips32r6_o32 = { gcc = { arch = "mips32r6"; abi = "o32"; }; };
+  gcc_mips32r2_o32 = { gcc = { arch = "mips32r2"; abi =  "32"; }; };
+  gcc_mips32r6_o32 = { gcc = { arch = "mips32r6"; abi =  "32"; }; };
   gcc_mips64r2_n32 = { gcc = { arch = "mips64r2"; abi = "n32"; }; };
   gcc_mips64r6_n32 = { gcc = { arch = "mips64r6"; abi = "n32"; }; };
   gcc_mips64r2_64  = { gcc = { arch = "mips64r2"; abi =  "64"; }; };

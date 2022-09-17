@@ -86,6 +86,10 @@ rec {
         homepage = "https://www.gradle.org/";
         changelog = "https://docs.gradle.org/${version}/release-notes.html";
         downloadPage = "https://gradle.org/next-steps/?version=${version}";
+        sourceProvenance = with sourceTypes; [
+          binaryBytecode
+          binaryNativeCode
+        ];
         license = licenses.asl20;
         platforms = if (supportedPlatforms != null) then supportedPlatforms else platforms.unix;
         maintainers = with maintainers; [ lorenzleutgeb liff ];
@@ -96,9 +100,9 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_7 = gen {
-    version = "7.4.2";
+    version = "7.5";
     nativeVersion = "0.22-milestone-23";
-    sha256 = "1nkz9gn1vb5l94dkf9yzb1j3hkll5x2vrl5p320msn2fk089pr19";
+    sha256 = "1hjifd98dif0qy6vkqp56v9z7id5cf2bfkdd71ld8nsqqlig51yb";
     defaultJava = jdk17;
     # Gradle 7 ships some binaries that are only available for some platforms
     # See https://github.com/gradle/native-platform#supported-platforms

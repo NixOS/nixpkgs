@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/joaomgcd/JoinDesktop/";
     description = "Desktop app for Join";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     # on https://joaoapps.com/join/desktop/ "Join Desktop is an open source app" but no license
     license = licenses.free;
     platforms = [ "x86_64-linux" ];

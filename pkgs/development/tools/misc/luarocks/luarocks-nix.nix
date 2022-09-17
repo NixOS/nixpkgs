@@ -1,14 +1,24 @@
-{ luarocks, fetchFromGitHub }:
+{ luarocks, fetchFromGitHub, unstableGitUpdater }:
 luarocks.overrideAttrs(old: {
   pname = "luarocks-nix";
-  version = "2021-01-22";
+  version = "unstable-2022-09-04";
+
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "luarocks-nix";
-    rev = "6aa1d59e88eaef72d699477c3e7aa98b274ca405";
-    sha256 = "sha256-nQLl01RFYZYhpShz0gHxnhwFPvTgALpAbjFPIuTD2D0=";
+    rev = "cfc1439a29ac666fb0fcf440224adf73004655d4";
+    sha256 = "sha256-uHkE9ztOZDs2pi7to3kZ0iELRhv/gPQgTK+qyYpFZ/Y=";
   };
+
   patches = [];
 
-  meta.mainProgram = "luarocks";
+  passthru = {
+    updateScript = unstableGitUpdater {
+      branch = "use-fetchzip";
+    };
+  };
+
+  meta =  {
+    mainProgram = "luarocks";
+  };
 })

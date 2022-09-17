@@ -18,13 +18,13 @@ in
     '')
   ];
   options.services.foldingathome = {
-    enable = mkEnableOption "Enable the Folding@home client";
+    enable = mkEnableOption (lib.mdDoc "Enable the Folding@home client");
 
     package = mkOption {
       type = types.package;
       default = pkgs.fahclient;
       defaultText = literalExpression "pkgs.fahclient";
-      description = ''
+      description = lib.mdDoc ''
         Which Folding@home client to use.
       '';
     };
@@ -32,7 +32,7 @@ in
     user = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The user associated with the reported computation results. This will
         be used in the ranking statistics.
       '';
@@ -41,7 +41,7 @@ in
     team = mkOption {
       type = types.int;
       default = 236565;
-      description = ''
+      description = lib.mdDoc ''
         The team ID associated with the reported computation results. This
         will be used in the ranking statistics.
 
@@ -52,7 +52,7 @@ in
     daemonNiceLevel = mkOption {
       type = types.ints.between (-20) 19;
       default = 0;
-      description = ''
+      description = lib.mdDoc ''
         Daemon process priority for FAHClient.
         0 is the default Unix process priority, 19 is the lowest.
       '';
@@ -61,9 +61,9 @@ in
     extraArgs = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Extra startup options for the FAHClient. Run
-        <literal>FAHClient --help</literal> to find all the available options.
+        `FAHClient --help` to find all the available options.
       '';
     };
   };

@@ -15,6 +15,6 @@ buildFishPlugin rec {
     description = "Ultra-pure, lag-free prompt with async Git status";
     homepage = "https://github.com/jorgebucaran/hydro";
     license = licenses.mit;
-    maintainers = with maintainers; [ mrhedgehog ];
+    maintainers = with maintainers; [ thehedgeh0g ];
   };
 }

@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/recp/cglm";
     description = "Highly Optimized Graphics Math (glm) for C";

@@ -4,18 +4,30 @@
 }:
 
 let
+  bech32 = with python3Packages; buildPythonPackage rec {
+    pname = "bech32";
+    version = "1.2.0";
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "sha256-fW24IUYDvXhx/PpsCCbvaLhbCr2Q+iHChanF4h0r2Jk=";
+    };
+  };
+
   # onlykey requires a patched version of libagent
   lib-agent = with python3Packages; libagent.overridePythonAttrs (oa: rec{
-    version = "1.0.2";
+    version = "1.0.4";
     src = fetchPypi {
       inherit version;
       pname = "lib-agent";
-      sha256 = "sha256-NAimivO3m4UUPM4JgLWGq2FbXOaXdQEL/DqZAcy+kEw=";
+      sha256 = "sha256-MwtufyJVPWuK7bbX+9Kv6wEi/zq4ftXrfjrMOYpcIfc=";
     };
     propagatedBuildInputs = oa.propagatedBuildInputs or [ ] ++ [
-      pynacl
+      bech32
+      cryptography
       docutils
       pycryptodome
+      pynacl
       wheel
     ];
 
@@ -32,11 +44,11 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "onlykey-agent";
-  version = "1.1.11";
+  version = "1.1.13";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YH/cqQOVy5s6dTp2JwxM3s4xRTXgwhOr00whtHAwZZI=";
+    sha256 = "sha256-GAb6crtW6rLAbFtdi6fAGCPjXpKFhravguoGjuNcIxc=";
   };
 
   propagatedBuildInputs = with python3Packages; [ lib-agent onlykey-cli ];

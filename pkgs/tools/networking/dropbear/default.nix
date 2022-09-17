@@ -1,7 +1,18 @@
-{ stdenv, lib, fetchurl, glibc, zlib
+{ lib, stdenv, fetchurl, glibc, zlib
 , enableStatic ? stdenv.hostPlatform.isStatic
+, enableSCP ? false
 , sftpPath ? "/run/current-system/sw/libexec/sftp-server"
 }:
+
+let
+  # NOTE: DROPBEAR_PATH_SSH_PROGRAM is only necessary when enableSCP is true,
+  # but it is enabled here always anyways for consistency
+  dflags = {
+    SFTPSERVER_PATH = sftpPath;
+    DROPBEAR_PATH_SSH_PROGRAM = "${placeholder "out"}/bin/dbclient";
+  };
+
+in
 
 stdenv.mkDerivation rec {
   pname = "dropbear";
@@ -13,14 +24,23 @@ stdenv.mkDerivation rec {
   };
 
   dontDisableStatic = enableStatic;
-
   configureFlags = lib.optional enableStatic "LDFLAGS=-static";
 
-  CFLAGS = "-DSFTPSERVER_PATH=\\\"${sftpPath}\\\"";
+  CFLAGS = lib.pipe (lib.attrNames dflags) [
+    (builtins.map (name: "-D${name}=\\\"${dflags.${name}}\\\""))
+    (lib.concatStringsSep " ")
+  ];
 
   # https://www.gnu.org/software/make/manual/html_node/Libraries_002fSearch.html
   preConfigure = ''
-    makeFlags=VPATH=`cat $NIX_CC/nix-support/orig-libc`/lib
+    makeFlagsArray=(
+      VPATH=$(cat $NIX_CC/nix-support/orig-libc)/lib
+      PROGRAMS="${lib.concatStringsSep " " ([ "dropbear" "dbclient" "dropbearkey" "dropbearconvert" ] ++ lib.optionals enableSCP ["scp"])}"
+    )
+  '';
+
+  postInstall = lib.optionalString enableSCP ''
+    ln -rs $out/bin/scp $out/bin/dbscp
   '';
 
   patches = [

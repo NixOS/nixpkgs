@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fetchurl
 , glib
+, gnome-shell
 , gtk-engine-murrine
 , gtk_engines
 , inkscape
@@ -30,14 +31,14 @@ lib.checkListOfEnum "${pname}: theme variants" [ "default" "blue" "purple" "pink
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version = "2022-05-12";
+  version = "2022-06-07";
 
   srcs = [
     (fetchFromGitHub {
       owner = "vinceliuice";
       repo = pname;
       rev = version;
-      sha256 = "sha256-VrrxW16J+S21qBoAeVCWs0Q6bRL1jXAK7MOBpdSMJZY=";
+      sha256 = "sha256-OEqB2PSZ5KoxXAUhlyT1PRUzckVz+jTCIoAqP8gVqTk=";
     })
   ]
   ++
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     glib
+    gnome-shell
     inkscape
     jdupes
     optipng
@@ -72,7 +74,10 @@ stdenv.mkDerivation rec {
   dontRewriteSymlinks = true;
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs \
+      install.sh \
+      src/main/gtk-3.0/make_gresource_xml.sh \
+      src/main/gtk-4.0/make_gresource_xml.sh
 
     for f in \
       render-assets.sh \
@@ -87,6 +92,7 @@ stdenv.mkDerivation rec {
       src/assets/metacity-1/render-assets.sh \
       src/assets/xfwm4/render-assets.sh
     do
+      patchShebangs $f
       substituteInPlace $f \
         --replace /usr/bin/inkscape ${inkscape}/bin/inkscape \
         --replace /usr/bin/optipng ${optipng}/bin/optipng

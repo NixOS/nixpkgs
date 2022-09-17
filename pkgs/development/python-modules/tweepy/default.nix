@@ -8,12 +8,13 @@
 , pythonOlder
 , requests
 , requests-oauthlib
+, six
 , vcrpy
 }:
 
 buildPythonPackage rec {
   pname = "tweepy";
-  version = "4.10.0";
+  version = "4.10.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-D/cArsGzWr+rCC9iW9qOfc5fT7UKZDupeR/rQMNK5I4=";
+    hash = "sha256-S8lF40ioarnR1ZDSy6/9arANDYvy0NpYlVi65LQlPA8=";
   };
 
   propagatedBuildInputs = [
@@ -31,6 +32,7 @@ buildPythonPackage rec {
     oauthlib
     requests
     requests-oauthlib
+    six
   ];
 
   checkInputs = [

@@ -59,18 +59,18 @@ in {
     enable = mkOption {
       type = lib.types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable Netbox.
 
-        This module requires a reverse proxy that serves <literal>/static</literal> separately.
-        See this <link xlink:href="https://github.com/netbox-community/netbox/blob/develop/contrib/nginx.conf/">example</link> on how to configure this.
+        This module requires a reverse proxy that serves `/static` separately.
+        See this [example](https://github.com/netbox-community/netbox/blob/develop/contrib/nginx.conf/) on how to configure this.
       '';
     };
 
     listenAddress = mkOption {
       type = types.str;
       default = "[::1]";
-      description = ''
+      description = lib.mdDoc ''
         Address the server will listen on.
       '';
     };
@@ -78,7 +78,7 @@ in {
     port = mkOption {
       type = types.port;
       default = 8001;
-      description = ''
+      description = lib.mdDoc ''
         Port the server will listen on.
       '';
     };
@@ -89,7 +89,7 @@ in {
       defaultText = literalExpression ''
         python3Packages: with python3Packages; [];
       '';
-      description = ''
+      description = lib.mdDoc ''
         List of plugin packages to install.
       '';
     };
@@ -97,14 +97,14 @@ in {
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/netbox";
-      description = ''
+      description = lib.mdDoc ''
         Storage path of netbox.
       '';
     };
 
     secretKeyFile = mkOption {
       type = types.path;
-      description = ''
+      description = lib.mdDoc ''
         Path to a file containing the secret key.
       '';
     };
@@ -112,28 +112,28 @@ in {
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = ''
-        Additional lines of configuration appended to the <literal>configuration.py</literal>.
-        See the <link xlink:href="https://netbox.readthedocs.io/en/stable/configuration/optional-settings/">documentation</link> for more possible options.
+      description = lib.mdDoc ''
+        Additional lines of configuration appended to the `configuration.py`.
+        See the [documentation](https://netbox.readthedocs.io/en/stable/configuration/optional-settings/) for more possible options.
       '';
     };
 
     enableLdap = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable LDAP-Authentication for Netbox.
 
-        This requires a configuration file being pass through <literal>ldapConfigPath</literal>.
+        This requires a configuration file being pass through `ldapConfigPath`.
       '';
     };
 
     ldapConfigPath = mkOption {
       type = types.path;
       default = "";
-      description = ''
-        Path to the Configuration-File for LDAP-Authentification, will be loaded as <literal>ldap_config.py</literal>.
-        See the <link xlink:href="https://netbox.readthedocs.io/en/stable/installation/6-ldap/#configuration">documentation</link> for possible options.
+      description = lib.mdDoc ''
+        Path to the Configuration-File for LDAP-Authentification, will be loaded as `ldap_config.py`.
+        See the [documentation](https://netbox.readthedocs.io/en/stable/installation/6-ldap/#configuration) for possible options.
       '';
     };
   };

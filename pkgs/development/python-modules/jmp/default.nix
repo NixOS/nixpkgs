@@ -15,8 +15,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = pname;
-    rev = "4b94370b8de29b79d6f840b09d1990b91c1afddd";
-    sha256 = "0hh4cmp93wjyidj48gh07vhx2kjvpwd23xvy79bsjn5qaaf6q4cm";
+    rev = "260e5ba01f46b10c579a61393e6c7e546aeae93e";
+    sha256 = "sha256-BTHy/jNf6LeV+x3GTI9MDBWLK6A5z2Z1TQyBkHMTeuE=";
   };
 
   # Wheel requires only `numpy`, but the import needs `jax`.

@@ -11,7 +11,7 @@ in
     url = mkOption {
       type = types.str;
       default = "http://localhost:8080/colibri/stats";
-      description = ''
+      description = lib.mdDoc ''
         Jitsi Videobridge metrics URL to monitor.
         This is usually /colibri/stats on port 8080 of the jitsi videobridge host.
       '';
@@ -20,7 +20,7 @@ in
       type = types.str;
       default = "30s";
       example = "1min";
-      description = ''
+      description = lib.mdDoc ''
         How often to scrape new data
       '';
     };

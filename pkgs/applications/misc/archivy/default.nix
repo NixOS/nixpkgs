@@ -1,52 +1,34 @@
 { lib
 , stdenv
 , python3
-, fetchPypi
 }:
 
 let
-  defaultOverrides = [
-    (self: super: {
+  py = python3.override {
+    packageOverrides = self: super: {
       wtforms = super.wtforms.overridePythonAttrs (oldAttrs: rec {
         version = "2.3.1";
-        pname = "WTForms";
 
-        src = super.fetchPypi {
-          inherit pname version;
+        src = oldAttrs.src.override {
+          inherit version;
           sha256 = "sha256-hhoTs65SHWcA2sOydxlwvTVKY7pwQ+zDqCtSiFlqGXI=";
         };
 
         doCheck = false;
       });
-    })
-  ];
-
-  mkOverride = attrname: version: sha256:
-    self: super: {
-      ${attrname} = super.${attrname}.overridePythonAttrs (oldAttrs: {
-        inherit version;
-        src = oldAttrs.src.override {
-          inherit version sha256;
-        };
-      });
     };
-
-  py = python3.override {
-    # Put packageOverrides at the start so they are applied after defaultOverrides
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
   };
-
 in
 with py.pkgs;
 
 buildPythonApplication rec {
   pname = "archivy";
-  version = "1.7.2";
+  version = "1.7.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-o5dVJDbdKgo6hMMU9mKzoouSgVWl7xSAp+Aq61VcfeU=";
+    hash = "sha256-ns1Y0DqqnTAQMEt+oBJ/P2gqKqPsX9P3/Z4561qzuns";
   };
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];
@@ -61,7 +43,7 @@ buildPythonApplication rec {
     elasticsearch
     flask-compress
     flask_login
-    flask_wtf
+    flask-wtf
     html2text
     python-dotenv
     python-frontmatter

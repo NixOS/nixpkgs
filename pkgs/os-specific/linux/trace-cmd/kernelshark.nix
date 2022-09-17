@@ -5,12 +5,12 @@
 
 mkDerivation rec {
   pname = "kernelshark";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/utils/trace-cmd/kernel-shark.git/";
     rev = "kernelshark-v${version}";
-    sha256 = "18yx8bp2996hiy026ncw2z5yfihvkjfl6m09y19yvs72crgvpyn8";
+    sha256 = "sha256-1M35y3EkMHbGkVv93Xwo4zApvy9usIcz1spm5Z+1iUs=";
   };
 
   outputs = [ "out" ];

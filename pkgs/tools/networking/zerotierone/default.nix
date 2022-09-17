@@ -15,13 +15,13 @@
 
 let
   pname = "zerotierone";
-  version = "1.8.9";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
-    sha256 = "sha256-N1VqzjaFJRJiSG4qHqRy4Fs8TlkUqyDoq0/3JQdGwfA=";
+    sha256 = "sha256-Y0klfE7ANQl1uYMkRg+AaIiJYSVPT6zME7tDMg2xbOk=";
   };
 in stdenv.mkDerivation {
   inherit pname version src;
@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
   cargoDeps = rustPlatform.fetchCargoTarball {
     src = "${src}/zeroidc";
     name = "${pname}-${version}";
-    sha256 = "sha256-PDsJtz279P2IpgiL0T92IbcANeGSUnGKhEH1dj9VtbM=";
+    sha256 = "sha256-8K4zAXo85MT4pfIsg7DZAO+snfwzdo2TozVw17KhX4Q=";
   };
   postPatch = "cp ${src}/zeroidc/Cargo.lock Cargo.lock";
 
@@ -39,7 +39,8 @@ in stdenv.mkDerivation {
       --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
 
     substituteInPlace ./make-linux.mk \
-      --replace 'armv5' 'armv6'
+      --replace '-march=armv6zk' "" \
+      --replace '-mcpu=arm1176jzf-s' ""
   '';
 
   nativeBuildInputs = [

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "vkd3d";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchurl {
     url = "https://dl.winehq.org/vkd3d/source/vkd3d-${version}.tar.xz";
-    sha256 = "134b347806d34a4d2b39ea29ff1c2b38443793803a3adc50800855bb929fb8b2";
+    sha256 = "sha256-yLqF9gSCyHPAVs9tuw6veRvIq30W1ipH83uYQbapCr0=";
   };
 
   nativeBuildInputs = [ flex bison ];

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, libpulseaudio, glibc, substituteAll, stdenv, pulseaudio, python }:
+{ lib, buildPythonPackage, fetchPypi, libpulseaudio, glibc, substituteAll, stdenv, pulseaudio, unittestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pulsectl";
@@ -22,11 +22,10 @@ buildPythonPackage rec {
     "pulsectl"
   ];
 
-  checkInputs = [ pulseaudio ];
+  checkInputs = [ unittestCheckHook pulseaudio ];
 
-  checkPhase = ''
+  preCheck = ''
     export HOME=$TMPDIR
-    ${python.interpreter} -m unittest discover
   '';
 
   meta = with lib; {

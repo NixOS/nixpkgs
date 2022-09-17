@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "pihole-exporter";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "eko";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JxznxE4Pq1fhlt3l1jbGWD5eUg5VF0GmewkuSYECG0Y=";
+    sha256 = "sha256-LtiJpXucD9Ok1tFFCQ5/V6FhYxbgBWDPF6S49FzWPes=";
   };
 
-  vendorSha256 = "sha256-jfpM192LtFGVgsVv+F+P8avTGD5c8I+7JFsn4oVoqr0=";
+  vendorSha256 = "sha256-GCHCWnP3YPC1Dg8Tu0GF5ITDMVRoBv28QVpk6JGN5nQ=";
 
   meta = with lib; {
     description = "Prometheus exporter for PI-Hole's Raspberry PI ad blocker";

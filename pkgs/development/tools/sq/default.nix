@@ -1,18 +1,18 @@
 { lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, sq }:
 buildGoModule rec {
   pname = "sq";
-  version = "0.15.4";
+  version = "0.15.6";
 
   src = fetchFromGitHub {
     owner = "neilotoole";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4CINLOHUVXQ+4e5I1fMqog6LubMm8RnbFmeuBOwALaw=";
+    sha256 = "sha256-QEg80di2DmMfIrvsRFp7nELs7LiJRVa/wENDnf1zQ2Y=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorSha256 = "sha256-lNpWXKtnzwySzinNPxAKuaLqweWuS6zz8s2W4xXWlqM=";
+  vendorSha256 = "sha256-P1NxcjRA0g9NK2EaEG5E9G2TywTp5uvHesQE7+EG4ag=";
 
   # Some tests violates sandbox constraints.
   doCheck = false;

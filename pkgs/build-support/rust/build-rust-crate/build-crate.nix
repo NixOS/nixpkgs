@@ -1,4 +1,8 @@
-{ lib, stdenv, mkRustcDepArgs, mkRustcFeatureArgs, rust }:
+{ lib, stdenv
+, mkRustcDepArgs, mkRustcFeatureArgs, needUnstableCLI
+, rust
+}:
+
 { crateName,
   dependencies,
   crateFeatures, crateRenames, libName, release, libPath,
@@ -18,6 +22,8 @@
         (mkRustcFeatureArgs crateFeatures)
       ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
         "--target" (rust.toRustTargetSpec stdenv.hostPlatform)
+      ] ++ lib.optionals (needUnstableCLI dependencies) [
+        "-Z" "unstable-options"
       ] ++ extraRustcOpts
       # since rustc 1.42 the "proc_macro" crate is part of the default crate prelude
       # https://github.com/rust-lang/cargo/commit/4d64eb99a4#diff-7f98585dbf9d30aa100c8318e2c77e79R1021-R1022
@@ -63,7 +69,15 @@
 
 
 
-    ${lib.optionalString (lib.length crateBin > 0) (lib.concatMapStringsSep "\n" (bin: ''
+    ${lib.optionalString (lib.length crateBin > 0) (lib.concatMapStringsSep "\n" (bin:
+    let
+      haveRequiredFeature = if bin ? requiredFeatures then
+        # Check that all element in requiredFeatures are also present in crateFeatures
+        lib.intersectLists bin.requiredFeatures crateFeatures == bin.requiredFeatures
+      else
+        true;
+    in
+    if haveRequiredFeature then ''
       mkdir -p target/bin
       BIN_NAME='${bin.name or crateName}'
       ${if !bin ? path then ''
@@ -73,6 +87,8 @@
         BIN_PATH='${bin.path}'
       ''}
         ${build_bin} "$BIN_NAME" "$BIN_PATH"
+    '' else ''
+      echo Binary ${bin.name or crateName} not compiled due to not having all of the required features -- ${lib.escapeShellArg (builtins.toJSON bin.requiredFeatures)} -- enabled.
     '') crateBin)}
 
     ${lib.optionalString buildTests ''

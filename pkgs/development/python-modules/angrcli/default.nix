@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , angr
 , buildPythonPackage
 , cmd2
@@ -51,6 +52,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Python modules to allow easier interactive use of angr";
     homepage = "https://github.com/fmagin/angr-cli";
     license = with licenses; [ mit ];

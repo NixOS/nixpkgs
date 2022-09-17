@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , acl
 , cyrus_sasl
@@ -33,7 +34,7 @@
 , vala
 , wayland-protocols
 , zlib
-, withPolkit ? true
+, withPolkit ? stdenv.isLinux
 }:
 
 # If this package is built with polkit support (withPolkit=true),
@@ -59,13 +60,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spice-gtk";
-  version = "0.40";
+  version = "0.41";
 
   outputs = [ "out" "dev" "devdoc" "man" ];
 
   src = fetchurl {
     url = "https://www.spice-space.org/download/gtk/${pname}-${version}.tar.xz";
-    sha256 = "sha256-I/X/f6gLdWR85zzaXq+LMi80Mtu7f286g5Y0YYrbztM=";
+    sha256 = "sha256-2Pi1y+qRhHAu64zCdqZ9cqzbbjbnxzNJ+4RF5byglp8=";
   };
 
   postPatch = ''
@@ -95,7 +96,8 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
   ];
 
   buildInputs = [
@@ -104,8 +106,6 @@ stdenv.mkDerivation rec {
     gtk3
     json-glib
     libcacard
-    libcap_ng
-    libdrm
     libjpeg_turbo
     libopus
     libusb1
@@ -115,9 +115,15 @@ stdenv.mkDerivation rec {
     pixman
     spice-protocol
     usbredir
-    wayland-protocols
     zlib
-  ] ++ lib.optionals withPolkit [ polkit acl ] ;
+  ] ++ lib.optionals withPolkit [
+    polkit
+    acl
+  ] ++ lib.optionals stdenv.isLinux [
+    libcap_ng
+    libdrm
+    wayland-protocols
+  ];
 
   PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
@@ -126,6 +132,8 @@ stdenv.mkDerivation rec {
     "-Dusb-ids-path=${hwdata}/share/hwdata/usb.ids"
   ] ++ lib.optionals (!withPolkit) [
     "-Dpolkit=disabled"
+  ] ++ lib.optionals (!stdenv.isLinux) [
+    "-Dlibcap-ng=disabled"
   ];
 
   meta = with lib; {
@@ -140,6 +148,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.spice-space.org/";
     license = licenses.lgpl21;
     maintainers = [ maintainers.xeji ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

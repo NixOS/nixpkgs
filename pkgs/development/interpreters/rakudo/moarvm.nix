@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , perl
 , CoreServices
 , ApplicationServices
@@ -8,12 +9,22 @@
 
 stdenv.mkDerivation rec {
   pname = "moarvm";
-  version = "2022.03";
+  version = "2022.07";
 
   src = fetchurl {
     url = "https://moarvm.org/releases/MoarVM-${version}.tar.gz";
-    sha256 = "sha256-+3HNE5EkZEgrmbM/DAbp/XxRoVHG5jKpIgz5PFhV/a8=";
+    hash = "sha256-M37wTRb4JvmUZcZTuSAGAo/iIL5o09z9BylhL09rW0Y=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "mimalloc-older-macos-fixes.patch";
+      url = "https://github.com/microsoft/mimalloc/commit/40e0507a5959ee218f308d33aec212c3ebeef3bb.patch";
+      stripLen = 1;
+      extraPrefix = "3rdparty/mimalloc/";
+      sha256 = "1gcbn1850vy7xzalhn9ffnsg6x1ywi3fmnxvnal3m6lmb4kz5kb1";
+    })
+  ];
 
   postPatch = ''
     patchShebangs .

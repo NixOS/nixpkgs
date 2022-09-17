@@ -92,11 +92,13 @@ in
   fwupd = callInstalledTest ./fwupd.nix {};
   gcab = callInstalledTest ./gcab.nix {};
   gdk-pixbuf = callInstalledTest ./gdk-pixbuf.nix {};
+  geocode-glib = callInstalledTest ./geocode-glib.nix {};
   gjs = callInstalledTest ./gjs.nix {};
   glib-networking = callInstalledTest ./glib-networking.nix {};
   gnome-photos = callInstalledTest ./gnome-photos.nix {};
   graphene = callInstalledTest ./graphene.nix {};
   gsconnect = callInstalledTest ./gsconnect.nix {};
+  json-glib = callInstalledTest ./json-glib.nix {};
   ibus = callInstalledTest ./ibus.nix {};
   libgdata = callInstalledTest ./libgdata.nix {};
   librsvg = callInstalledTest ./librsvg.nix {};

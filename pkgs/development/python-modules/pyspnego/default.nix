@@ -13,15 +13,15 @@
 
 buildPythonPackage rec {
   pname = "pyspnego";
-  version = "0.5.0";
+  version = "0.5.3";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jborean93";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-CvPvyP7Vi2Ib+ikgUQt8JkVt5fxzapG590TgAehXqHE=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-awlS1VHXj6n9Ee4qUI1x5tEdkMF/ZEr9NPKh4ICkv3g=";
   };
 
   propagatedBuildInputs = [

@@ -35,6 +35,8 @@
 , stdenv
 , xhtml1
 , yajl
+, writeScript
+, nixosTests
 
   # Linux
 , acl ? null
@@ -56,23 +58,23 @@
 , util-linux ? null
 
   # Darwin
-, gmp ? null
-, libiconv ? null
-, Carbon ? null
-, AppKit ? null
+, gmp
+, libiconv
+, Carbon
+, AppKit
 
   # Options
 , enableCeph ? false
-, ceph ? null
+, ceph
 , enableGlusterfs ? false
-, glusterfs ? null
+, glusterfs
 , enableIscsi ? false
-, openiscsi ? null
-, libiscsi ? null
+, openiscsi
+, libiscsi
 , enableXen ? false
-, xen ? null
+, xen
 , enableZfs ? stdenv.isLinux
-, zfs ? null
+, zfs
 }:
 
 with lib;
@@ -96,6 +98,8 @@ let
   ] ++ optionals enableIscsi [
     libiscsi
     openiscsi
+  ] ++ optionals enableZfs [
+    zfs
   ]);
 in
 
@@ -110,28 +114,18 @@ stdenv.mkDerivation rec {
   # NOTE: You must also bump:
   # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "8.1.0";
+  version = "8.7.0";
 
-  src =
-    if isDarwin then
-      fetchurl
-        {
-          url = "https://libvirt.org/sources/${pname}-${version}.tar.xz";
-          sha256 = "sha256-PGxDvs/+s0o/OXxhYgaqaaiT/4v16CCDk8hOjnU1KTQ=";
-        }
-    else
-      fetchFromGitLab
-        {
-          owner = pname;
-          repo = pname;
-          rev = "v${version}";
-          sha256 = "sha256-nk8pBlss+g4EMy+RnAOyz6YlGGvlBvl5aBpcytsK1wY=";
-          fetchSubmodules = true;
-        };
+  src = fetchFromGitLab {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-5F6Ibp3k7I1mwv8DNZ7rsW0wOw5q3vHtCUc7jJUNzrs=";
+    fetchSubmodules = true;
+  };
 
   patches = [
     ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
-    ./0001-qemu-segmentation-fault-in-virtqemud-executing-qemuD.patch
   ];
 
   # remove some broken tests
@@ -140,19 +134,33 @@ stdenv.mkDerivation rec {
     sed -i '/virnetsockettest/d' tests/meson.build
     # delete only the first occurrence of this
     sed -i '0,/qemuxml2argvtest/{/qemuxml2argvtest/d;}' tests/meson.build
+  '' + optionalString isLinux ''
+    sed -i 's,define PARTED "parted",define PARTED "${parted}/bin/parted",' \
+      src/storage/storage_backend_disk.c \
+      src/storage/storage_util.c
   '' + optionalString isDarwin ''
     sed -i '/qemucapabilitiestest/d' tests/meson.build
+    sed -i '/vircryptotest/d' tests/meson.build
+  '' + optionalString (isDarwin && isx86_64) ''
+    sed -i '/qemucaps2xmltest/d' tests/meson.build
+    sed -i '/qemuhotplugtest/d' tests/meson.build
+    sed -i '/virnetdaemontest/d' tests/meson.build
   '';
 
+  strictDeps = true;
 
   nativeBuildInputs = [
-    meson
+    meson # needs to be first
 
     cmake
     docutils
+    libxml2 # for xmllint
+    libxslt # for xsltproc
     makeWrapper
     ninja
+    perl
     pkg-config
+    util-linux # for mount
   ]
   ++ optional (!isDarwin) rpcsvc-proto
   # NOTE: needed for rpcgen
@@ -169,8 +177,6 @@ stdenv.mkDerivation rec {
     libpcap
     libtasn1
     libxml2
-    libxslt
-    perl
     perlPackages.XMLXPath
     pkg-config
     python3
@@ -229,7 +235,7 @@ stdenv.mkDerivation rec {
         --replace "ggrep" "grep"
 
       substituteInPlace src/util/virpolkit.h \
-        --replace '"/usr/bin/pkttyagent"' '"${polkit.bin}/bin/pkttyagent"'
+        --replace '"/usr/bin/pkttyagent"' '"${if isLinux then polkit.bin else "/usr"}/bin/pkttyagent"'
 
       patchShebangs .
     ''
@@ -275,7 +281,7 @@ stdenv.mkDerivation rec {
       (feat "numactl" isLinux)
       (feat "numad" isLinux)
       (feat "pciaccess" isLinux)
-      (feat "polkit" true)
+      (feat "polkit" isLinux)
       (feat "readline" true)
       (feat "secdriver_apparmor" isLinux)
       (feat "tests" true)
@@ -335,12 +341,24 @@ stdenv.mkDerivation rec {
       --prefix PATH : /run/libvirt/nix-emulators:${binPath}
   '';
 
+  passthru.updateScript = writeScript "update-libvirt" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+
+    set -eu -o pipefail
+
+    libvirtVersion=$(curl https://gitlab.com/api/v4/projects/192693/repository/tags | jq -r '.[].name|select(. | contains("rc") | not)' | head -n1 | sed "s/v//g")
+    sysvirtVersion=$(curl https://gitlab.com/api/v4/projects/192677/repository/tags | jq -r '.[].name|select(. | contains("rc") | not)' | head -n1 | sed "s/v//g")
+    update-source-version ${pname} "$libvirtVersion"
+    update-source-version python3Packages.${pname} "$libvirtVersion"
+    update-source-version perlPackages.SysVirt "$sysvirtVersion" --file="pkgs/top-level/perl-packages.nix"
+  '';
+
+  passthru.tests.libvirtd = nixosTests.libvirtd;
+
   meta = {
     homepage = "https://libvirt.org/";
-    description = ''
-      A toolkit to interact with the virtualization capabilities of recent
-      versions of Linux (and other OSes)
-    '';
+    description = "A toolkit to interact with the virtualization capabilities of recent versions of Linux and other OSes";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz globin lovesegfault ];

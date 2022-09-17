@@ -99,6 +99,19 @@ self: super: builtins.intersectAttrs super {
   ormolu = enableSeparateBinOutput super.ormolu;
   ghcid = enableSeparateBinOutput super.ghcid;
 
+  arbtt = overrideCabal (drv: {
+    # The test suite needs the packages's executables in $PATH to succeed.
+    preCheck = ''
+      for i in $PWD/dist/build/*; do
+        export PATH="$i:$PATH"
+      done
+    '';
+    # One test uses timezone data
+    testToolDepends = drv.testToolDepends or [] ++ [
+      pkgs.tzdata
+    ];
+  }) super.arbtt;
+
   hzk = overrideCabal (drv: {
     preConfigure = "sed -i -e /include-dirs/d hzk.cabal";
     configureFlags = [ "--extra-include-dirs=${pkgs.zookeeper_mt}/include/zookeeper" ];
@@ -154,9 +167,6 @@ self: super: builtins.intersectAttrs super {
   digitalocean-kzs = dontCheck super.digitalocean-kzs;  # https://github.com/KazumaSATO/digitalocean-kzs/issues/1
   github-types = dontCheck super.github-types;          # http://hydra.cryp.to/build/1114046/nixlog/1/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
-  hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
-  hasql-interpolate = dontCheck super.hasql-interpolate; # wants to connect to postgresql
-  hasql-transaction = dontCheck super.hasql-transaction; # wants to connect to postgresql
   hjsonschema = overrideCabal (drv: { testTarget = "local"; }) super.hjsonschema;
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
   mongoDB = dontCheck super.mongoDB;
@@ -194,6 +204,14 @@ self: super: builtins.intersectAttrs super {
   holy-project = dontCheck super.holy-project;
   mustache = dontCheck super.mustache;
   arch-web = dontCheck super.arch-web;
+
+  # Test suite requires running a database server. Testing is done upstream.
+  hasql = dontCheck super.hasql;
+  hasql-dynamic-statements = dontCheck super.hasql-dynamic-statements;
+  hasql-interpolate = dontCheck super.hasql-interpolate;
+  hasql-notifications = dontCheck super.hasql-notifications;
+  hasql-pool = dontCheck super.hasql-pool;
+  hasql-transaction = dontCheck super.hasql-transaction;
 
   # Tries to mess with extended POSIX attributes, but can't in our chroot environment.
   xattr = dontCheck super.xattr;
@@ -297,6 +315,9 @@ self: super: builtins.intersectAttrs super {
   greenclip = addExtraLibrary pkgs.xorg.libXdmcp super.greenclip;
 
   # The cabal files for these libraries do not list the required system dependencies.
+  libjwt-typed = overrideCabal (drv: {
+    librarySystemDepends = [ pkgs.libjwt ];
+  }) super.libjwt-typed;
   miniball = overrideCabal (drv: {
     librarySystemDepends = [ pkgs.miniball ];
   }) super.miniball;
@@ -517,9 +538,7 @@ self: super: builtins.intersectAttrs super {
       })
       (addBuildTools (with pkgs.buildPackages; [makeWrapper python3Packages.sphinx]) super.futhark);
 
-  git-annex = let
-    pathForDarwin = pkgs.lib.makeBinPath [ pkgs.coreutils ];
-  in overrideCabal (drv: pkgs.lib.optionalAttrs (!pkgs.stdenv.isLinux) {
+  git-annex = overrideCabal (drv: {
     # This is an instance of https://github.com/NixOS/nix/pull/1085
     # Fails with:
     #   gpg: can't connect to the agent: File name too long
@@ -527,11 +546,12 @@ self: super: builtins.intersectAttrs super {
       substituteInPlace Test.hs \
         --replace ', testCase "crypto" test_crypto' ""
     '' + (drv.postPatch or "");
-    # On Darwin, git-annex mis-detects options to `cp`, so we wrap the
-    # binary to ensure it uses Nixpkgs' coreutils.
+    # Ensure git-annex uses the exact same coreutils it saw at build-time.
+    # This is especially important on Darwin but also in Linux environments
+    # where non-GNU coreutils are used by default.
     postFixup = ''
       wrapProgram $out/bin/git-annex \
-        --prefix PATH : "${pathForDarwin}"
+        --prefix PATH : "${pkgs.lib.makeBinPath (with pkgs; [ coreutils lsof ])}"
     '' + (drv.postFixup or "");
     buildTools = [
       pkgs.buildPackages.makeWrapper
@@ -620,10 +640,10 @@ self: super: builtins.intersectAttrs super {
       }) super.spago;
 
       spagoOldAeson = spagoDocs.overrideScope (hfinal: hprev: {
-        # spago (and its dependency, bower-json) is not yet updated for aeson-2.0
+        # spago is not yet updated for aeson 2.0
         aeson = hfinal.aeson_1_5_6_0;
-        # bower-json needs aeson_1_5_6_0 and is marked broken without it.
-        bower-json = doDistribute (markUnbroken hprev.bower-json);
+        # bower-json 1.1.0.0 only supports aeson 2.0, so we pull in the older version here.
+        bower-json = hprev.bower-json_1_0_0_1;
       });
 
       # Tests require network access.
@@ -718,8 +738,10 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.haskell-language-server;
 
+  # NOTE: this patch updates the hevm code to work with the latest packages that broke the build
+  # it's temporary until hevm version 0.50.0 is released - https://github.com/ethereum/hevm/milestone/1
   # tests depend on a specific version of solc
-  hevm = dontCheck (doJailbreak super.hevm);
+  hevm = dontCheck (appendPatch ./patches/hevm-update-deps.patch super.hevm);
 
   # hadolint enables static linking by default in the cabal file, so we have to explicitly disable it.
   # https://github.com/hadolint/hadolint/commit/e1305042c62d52c2af4d77cdce5d62f6a0a3ce7b
@@ -759,39 +781,8 @@ self: super: builtins.intersectAttrs super {
     })
     (generateOptparseApplicativeCompletion "pnbackup" super.pinboard-notes-backup);
 
-  # set more accurate set of platforms instead of maintaining
-  # an ever growing list of platforms to exclude via unsupported-platforms
-  cpuid = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.cpuid;
-
   # Pass the correct libarchive into the package.
   streamly-archive = super.streamly-archive.override { archive = pkgs.libarchive; };
-
-  # passes the -msse2 flag which only works on x86 platforms
-  hsignal = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.hsignal;
-
-  # uses x86 intrinsics
-  blake3 = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.blake3;
-
-  # uses x86 intrinsics, see also https://github.com/NixOS/nixpkgs/issues/122014
-  crc32c = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.crc32c;
-
-  # uses x86 intrinsics
-  seqalign = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.seqalign;
-
-  # uses x86 intrinsics
-  geomancy = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.geomancy;
 
   hlint = overrideCabal (drv: {
     postInstall = ''
@@ -810,16 +801,6 @@ self: super: builtins.intersectAttrs super {
       pkgs.zlib
     ] ++ (drv.librarySystemDepends or []);
   }) super.taglib;
-
-  # uses x86 assembler
-  inline-asm = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.inline-asm;
-
-  # uses x86 assembler in C bits
-  hw-prim-bits = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.hw-prim-bits;
 
   # random 1.2.0 has tests that indirectly depend on
   # itself causing an infinite recursion at evaluation
@@ -873,14 +854,24 @@ self: super: builtins.intersectAttrs super {
 
   rel8 = addTestToolDepend pkgs.postgresql super.rel8;
 
-  cachix = generateOptparseApplicativeCompletion "cachix" (super.cachix.override { nix = pkgs.nixVersions.nix_2_7; });
+  cachix = generateOptparseApplicativeCompletion "cachix" (super.cachix.override { nix = pkgs.nixVersions.nix_2_9; });
 
-  hercules-ci-agent = super.hercules-ci-agent.override { nix = pkgs.nixVersions.nix_2_7; };
+  hercules-ci-agent = super.hercules-ci-agent.override { nix = pkgs.nixVersions.nix_2_9; };
   hercules-ci-cnix-expr =
     addTestToolDepend pkgs.git (
-      super.hercules-ci-cnix-expr.override { nix = pkgs.nixVersions.nix_2_7; }
+      super.hercules-ci-cnix-expr.override { nix = pkgs.nixVersions.nix_2_9; }
     );
-  hercules-ci-cnix-store = super.hercules-ci-cnix-store.override { nix = pkgs.nixVersions.nix_2_7; };
+  hercules-ci-cnix-store = super.hercules-ci-cnix-store.override { nix = pkgs.nixVersions.nix_2_9; };
+
+  # the testsuite fails because of not finding tsc without some help
+  aeson-typescript = overrideCabal (drv: {
+    testToolDepends = drv.testToolDepends or [] ++ [ pkgs.nodePackages.typescript ];
+    # the testsuite assumes that tsc is in the PATH if it thinks it's in
+    # CI, otherwise trying to install it.
+    #
+    # https://github.com/codedownio/aeson-typescript/blob/ee1a87fcab8a548c69e46685ce91465a7462be89/test/Util.hs#L27-L33
+    preCheck = "export CI=true";
+  }) super.aeson-typescript;
 
   # Enable extra optimisations which increase build time, but also
   # later compiler performance, so we should do this for user's benefit.
@@ -924,6 +915,9 @@ self: super: builtins.intersectAttrs super {
       && buildPlatform.isx86;
   } super.hashes;
 
+  # Tries to access network
+  aws-sns-verify = dontCheck super.aws-sns-verify;
+
   # procex relies on close_range which has been introduced in Linux 5.9,
   # the test suite seems to force the use of this feature (or the fallback
   # mechanism is broken), so we can't run the test suite on machines with a
@@ -941,6 +935,13 @@ self: super: builtins.intersectAttrs super {
     '' + (drv.postConfigure or "");
   }) super.procex;
 
+  # Test suite wants to run main executable
+  fourmolu_0_7_0_1 = overrideCabal (drv: {
+    preCheck = drv.preCheck or "" + ''
+      export PATH="$PWD/dist/build/fourmolu:$PATH"
+    '';
+  }) super.fourmolu_0_7_0_1;
+
   # Apply a patch which hardcodes the store path of graphviz instead of using
   # whatever graphviz is in PATH.
   graphviz = overrideCabal (drv: {
@@ -951,6 +952,10 @@ self: super: builtins.intersectAttrs super {
       })
     ] ++ (drv.patches or []);
   }) super.graphviz;
+
+  # Test suite requires AWS access which requires both a network
+  # connection and payment.
+  aws = dontCheck super.aws;
 
   # Test case tries to contact the network
   http-api-data-qq = overrideCabal (drv: {
@@ -977,6 +982,62 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.jacinda;
 
+  # Smoke test can't be executed in sandbox
+  # https://github.com/georgefst/evdev/issues/25
+  evdev = overrideCabal (drv: {
+    testFlags = drv.testFlags or [] ++ [
+      "-p" "!/Smoke/"
+    ];
+  }) super.evdev;
+
+  # Tests assume dist-newstyle build directory is present
+  cabal-hoogle = dontCheck super.cabal-hoogle;
+
+  nfc = overrideCabal (drv: {
+    isExecutable = true;
+    executableHaskellDepends = with self; drv.executableHaskellDepends or [] ++ [ base base16-bytestring bytestring ];
+    configureFlags = drv.configureFlags or [] ++ [ "-fbuild-examples" ];
+    enableSeparateBinOutput = true;
+  }) super.nfc;
+
+  # Wants to execute cabal-install to (re-)build itself
+  hint = dontCheck super.hint;
+
+  # Make sure that Cabal 3.8.* can be built as-is
+  Cabal_3_8_1_0 = doDistribute (super.Cabal_3_8_1_0.override {
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+    process = self.process_1_6_15_0;
+  });
+
+  # cabal-install switched to build type simple in 3.2.0.0
+  # as a result, the cabal(1) man page is no longer installed
+  # automatically. Instead we need to use the `cabal man`
+  # command which generates the man page on the fly and
+  # install it to $out/share/man/man1 ourselves in this
+  # override.
+  # The commit that introduced this change:
+  # https://github.com/haskell/cabal/commit/91ac075930c87712eeada4305727a4fa651726e7
+  # Since cabal-install 3.8, the cabal man (without the raw) command
+  # uses nroff(1) instead of man(1) for macOS/BSD compatibility. That utility
+  # is not commonly installed on systems, so we add it to PATH. Closure size
+  # penalty is about 10MB at the time of writing this (2022-08-20).
+  cabal-install = overrideCabal (old: {
+    executableToolDepends = [
+      pkgs.buildPackages.makeWrapper
+    ] ++ old.buildToolDepends or [];
+    postInstall = old.postInstall + ''
+      mkdir -p "$out/share/man/man1"
+      "$out/bin/cabal" man --raw > "$out/share/man/man1/cabal.1"
+
+      wrapProgram "$out/bin/cabal" \
+        --prefix PATH : "${pkgs.lib.makeBinPath [ pkgs.groff ]}"
+    '';
+    hydraPlatforms = pkgs.lib.platforms.all;
+    broken = false;
+  }) super.cabal-install;
+
+  keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
+
 # haskell-language-server plugins all use the same test harness so we give them what we want in this loop.
 } // pkgs.lib.mapAttrs
   (_: overrideCabal (drv: {
@@ -992,9 +1053,7 @@ self: super: builtins.intersectAttrs super {
     hls-floskell-plugin
     hls-fourmolu-plugin
     hls-module-name-plugin
-    hls-ormolu-plugin
     hls-pragmas-plugin
-    hls-rename-plugin
     hls-splice-plugin;
   # Tests have file permissions expections that don‘t work with the nix store.
   hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
@@ -1002,13 +1061,12 @@ self: super: builtins.intersectAttrs super {
   # Flaky tests
   hls-hlint-plugin = dontCheck super.hls-hlint-plugin;
   hls-class-plugin = dontCheck super.hls-class-plugin;
+  hls-rename-plugin = dontCheck super.hls-rename-plugin;
   hls-alternate-number-format-plugin = dontCheck super.hls-alternate-number-format-plugin;
   hls-qualify-imported-names-plugin = dontCheck super.hls-qualify-imported-names-plugin;
   hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
   hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
   hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
   hls-selection-range-plugin = dontCheck super.hls-selection-range-plugin;
-
-  # Wants to execute cabal-install to (re-)build itself
-  hint = dontCheck super.hint;
+  hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
 }

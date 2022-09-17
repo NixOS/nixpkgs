@@ -8,12 +8,12 @@ let
   settingsFormat = pkgs.formats.yaml {};
 in {
   options.services.mimir = {
-    enable = mkEnableOption "mimir";
+    enable = mkEnableOption (lib.mdDoc "mimir");
 
     configuration = mkOption {
       type = (pkgs.formats.json {}).type;
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         Specify the configuration for Mimir in Nix.
       '';
     };
@@ -21,13 +21,16 @@ in {
     configFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Specify a configuration file that Mimir should use.
       '';
     };
   };
 
   config = mkIf cfg.enable {
+    # for mimirtool
+    environment.systemPackages = [ pkgs.mimir ];
+
     assertions = [{
       assertion = (
         (cfg.configuration == {} -> cfg.configFile != null) &&
@@ -50,12 +53,13 @@ in {
                else cfg.configFile;
       in
       {
-        ExecStart = "${pkgs.grafana-mimir}/bin/mimir --config.file=${conf}";
+        ExecStart = "${pkgs.mimir}/bin/mimir --config.file=${conf}";
         DynamicUser = true;
         Restart = "always";
         ProtectSystem = "full";
         DevicePolicy = "closed";
         NoNewPrivileges = true;
+        WorkingDirectory = "/var/lib/mimir";
         StateDirectory = "mimir";
       };
     };

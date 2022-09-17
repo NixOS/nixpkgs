@@ -2,20 +2,28 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, kubeone
+, testers
 }:
 
 buildGoModule rec {
   pname = "kubeone";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "kubermatic";
     repo = "kubeone";
     rev = "v${version}";
-    sha256 = "sha256-uij5daVHKIfxx+8UTmU/HKSbf/RTRFuO8mCQdsC80qI=";
+    sha256 = "sha256-GC51gKAwurrsm8/zkYpSs7bnT55kpctsTpN6ZtlYxHk=";
   };
 
-  vendorSha256 = "sha256-kI5i1us3Ooh603HOz9Y+HlfPUy/1J8z89/jvKEenpLw=";
+  vendorSha256 = "sha256-w/uLR7wi28Ub7Nouxxg39NlD1OzyIE2oEP4D88Xbwu0=";
+
+  ldflags = [
+    "-s -w"
+    "-X k8c.io/kubeone/pkg/cmd.version=${version}"
+    "-X k8c.io/kubeone/pkg/cmd.date=unknown"
+  ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -26,6 +34,11 @@ buildGoModule rec {
       --bash <($out/bin/kubeone completion bash) \
       --zsh <($out/bin/kubeone completion zsh)
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = kubeone;
+    command = "kubeone version";
+  };
 
   meta = {
     description = "Automate cluster operations on all your cloud, on-prem, edge, and IoT environments.";

@@ -2,6 +2,7 @@
 , lib
 , pkgs
 , buildDotnetPackage
+, buildDotnetModule
 , fetchurl
 , fetchFromGitHub
 , fetchNuGet
@@ -53,8 +54,8 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   SharpZipLib = fetchNuGet {
     pname = "SharpZipLib";
-    version = "0.86.0";
-    sha256 = "01w2038gckfnq31pncrlgm7d0c939pwr1x4jj5450vcqpd4c41jr";
+    version = "1.3.3";
+    sha256 = "sha256-HWEQTKh9Ktwg/zIl079dAiH+ob2ShWFAqLgG6XgIMr4=";
     outputFiles = [ "lib/*" ];
   };
 
@@ -124,7 +125,51 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   # SOURCE PACKAGES
 
-  Boogie = buildDotnetPackage rec {
+  Boogie = buildDotnetModule rec {
+    pname = "Boogie";
+    version = "2.15.7";
+
+    src = fetchFromGitHub {
+      owner = "boogie-org";
+      repo = "boogie";
+      rev = "v${version}";
+      sha256 = "16kdvkbx2zwj7m43cra12vhczbpj23wyrdnj0ygxf7np7c2aassp";
+    };
+
+    projectFile = [ "Source/Boogie.sln" ];
+    nugetDeps = ../development/dotnet-modules/boogie-deps.nix;
+
+    postInstall = ''
+        mkdir -pv "$out/lib/dotnet/${pname}"
+        ln -sv "${pkgs.z3}/bin/z3" "$out/lib/dotnet/${pname}/z3.exe"
+
+        # so that this derivation can be used as a vim plugin to install syntax highlighting
+        vimdir=$out/share/vim-plugins/boogie
+        install -Dt $vimdir/syntax/ Util/vim/syntax/boogie.vim
+        mkdir $vimdir/ftdetect
+        echo 'au BufRead,BufNewFile *.bpl set filetype=boogie' > $vimdir/ftdetect/bpl.vim
+    '';
+
+    postFixup = ''
+        ln -s "$out/bin/BoogieDriver" "$out/bin/boogie"
+    '';
+
+    meta = with lib; {
+      description = "An intermediate verification language";
+      homepage = "https://github.com/boogie-org/boogie";
+      longDescription = ''
+        Boogie is an intermediate verification language (IVL), intended as a
+        layer on which to build program verifiers for other languages.
+
+        This derivation may be used as a vim plugin to provide syntax highlighting.
+      '';
+      license = licenses.mspl;
+      maintainers = [ maintainers.taktoa ];
+      platforms = with platforms; (linux ++ darwin);
+    };
+  };
+
+  Boogie_2_4_1 = buildDotnetPackage rec {
     pname = "Boogie";
     version = "2.4.1";
 
@@ -192,7 +237,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     self' = pkgs.dotnetPackages.override ({
       pkgs = pkgs // { inherit z3; };
     });
-    Boogie = assert self'.Boogie.version == "2.4.1"; self'.Boogie;
+    Boogie = assert self'.Boogie_2_4_1.version == "2.4.1"; self'.Boogie_2_4_1;
   in buildDotnetPackage rec {
     pname = "Dafny";
     version = "2.3.0";

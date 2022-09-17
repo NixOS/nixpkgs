@@ -38,6 +38,7 @@ let
     '';
 
     meta = with lib; {
+      broken = stdenv.isDarwin;
       description = "P2P FOSS instant messaging application aimed to replace Skype";
       homepage = "https://tox.chat";
       license = licenses.gpl3Plus;

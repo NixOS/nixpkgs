@@ -42,6 +42,10 @@ stdenv.mkDerivation rec {
       name = "CVE-2019-13232-3.patch";
       sha256 = "1jvs7dkdqs97qnsqc6hk088alhv8j4c638k65dbib9chh40jd7pf";
     })
+    (fetchurl {
+      url = "https://sources.debian.org/data/main/u/unzip/6.0-26/debian/patches/06-initialize-the-symlink-flag.patch";
+      sha256 = "1h00djdvgjhwfb60wl4qrxbyfsbbnn1qw6l2hkldnif4m8f8r1zj";
+    })
   ] ++ lib.optional enableNLS
     (fetchurl {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-arch/unzip/files/unzip-6.0-natspec.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d";
@@ -60,7 +64,10 @@ stdenv.mkDerivation rec {
     "generic"
     "D_USE_BZ2=-DUSE_BZIP2"
     "L_BZ2=-lbz2"
-  ];
+  ]
+  # `lchmod` is not available on Linux, so we remove it to fix "not supported" errors (when the zip file contains symlinks).
+  # Alpine (musl) and Debian (glibc) also add this flag.
+  ++ lib.optionals stdenv.isLinux [ "LOCAL_UNZIP=-DNO_LCHMOD" ];
 
   preConfigure = ''
     sed -i -e 's@CF="-O3 -Wall -I. -DASM_CRC $(LOC)"@CF="-O3 -Wall -I. -DASM_CRC -DLARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $(LOC)"@' unix/Makefile

@@ -2,6 +2,7 @@
 , callPackage
 , fetchFromGitHub
 , fetchurl
+, fetchpatch
 , lib
   # Dependencies
 , boehmgc
@@ -96,6 +97,16 @@ let
         rev = version;
         inherit sha256;
       };
+
+      patches = lib.optionals (lib.versionOlder version "1.2.0") [
+        # add support for DWARF5 debuginfo, fixes builds on recent compilers
+        # the PR is 8 commits from 2019, so just fetch the whole thing
+        # and hope it doesn't change
+        (fetchpatch {
+          url = "https://github.com/crystal-lang/crystal/pull/11399.patch";
+          sha256 = "sha256-CjNpkQQ2UREADmlyLUt7zbhjXf0rTjFhNbFYLwJKkc8=";
+        })
+      ];
 
       outputs = [ "out" "lib" "bin" ];
 
@@ -214,13 +225,13 @@ let
       };
 
       meta = with lib; {
+        broken = stdenv.isDarwin;
         description = "A compiled language with Ruby like syntax and type inference";
         homepage = "https://crystal-lang.org/";
         license = licenses.asl20;
         maintainers = with maintainers; [ david50407 manveru peterhoeg ];
         platforms = let archNames = builtins.attrNames archs; in
           if (lib.versionOlder version "1.2.0") then remove "aarch64-darwin" archNames else archNames;
-        broken = lib.versionOlder version "0.36.1" && stdenv.isDarwin;
       };
     })
   );

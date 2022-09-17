@@ -13,6 +13,8 @@ let
       inherit sha256;
     };
 
+    patches = [ ./0001-Setup-remove-custom-dbuser-creation-behavior.patch ];
+
     passthru.tests = nixosTests.nextcloud;
 
     installPhase = ''
@@ -25,7 +27,7 @@ let
     meta = with lib; {
       description = "Sharing solution for files, calendars, contacts and more";
       homepage = "https://nextcloud.com";
-      maintainers = with maintainers; [ schneefux bachp globin fpletz ma27 ];
+      maintainers = with maintainers; [ schneefux bachp globin ma27 ];
       license = licenses.agpl3Plus;
       platforms = with platforms; unix;
       knownVulnerabilities = extraVulnerabilities
@@ -46,15 +48,15 @@ in {
   '';
 
   nextcloud23 = generic {
-    version = "23.0.5";
-    sha256 = "3cf51a795f8439e5d34f0a521d939cefafbae38450cce64c6673016984195f29";
+    version = "23.0.9";
+    sha256 = "sha256-Ysxapp8IpRcRBC3CRM4yxoGYCuedAVURT3FhDD4jNBY=";
   };
 
   nextcloud24 = generic {
-    version = "24.0.1";
-    sha256 = "d32a8f6c4722a45cb67de7018163cfafcfa22a871fbac0f623c3875fa4304e5a";
+    version = "24.0.5";
+    sha256 = "sha256-sieIN3zLk5Hn+eztP2mpI2Zprqqy4OpSUKc+318e8CY=";
   };
 
-  # tip: get she sha with:
+  # tip: get the sha with:
   # curl 'https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256'
 }

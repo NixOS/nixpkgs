@@ -16,7 +16,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-secrets";
-  version = "6.4";
+  version = "6.5";
   format = "other";
   strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = "secrets";
     rev = version;
-    sha256 = "sha256-qO2DJ/Eb9+G1R3un2+n9Tf6oxpGrEuH3SBrajQ9tCPU=";
+    sha256 = "sha256-Hy2W7cvvzVcKtd/KzTn81awoolnfM3ST0Nm70YBLTYY=";
   };
 
   nativeBuildInputs = [

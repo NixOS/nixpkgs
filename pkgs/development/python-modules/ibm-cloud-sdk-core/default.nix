@@ -4,6 +4,7 @@
 , pyjwt
 , pytestCheckHook
 , python-dateutil
+, pythonOlder
 , requests
 , responses
 , tox
@@ -11,11 +12,14 @@
 
 buildPythonPackage rec {
   pname = "ibm-cloud-sdk-core";
-  version = "3.15.1";
+  version = "3.16.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bGTr8Qf7ywlbsl6/FEJEjFB/bqyyMwfmjVVAsrgmkTg=";
+    hash = "sha256-MfWZGWbU0k586EYY0uhHHo2LuhQSmCfgs9Lz50Ds5Hc=";
   };
 
   propagatedBuildInputs = [
@@ -55,6 +59,6 @@ buildPythonPackage rec {
     description = "Client library for the IBM Cloud services";
     homepage = "https://github.com/IBM/python-sdk-core";
     license = licenses.asl20;
-    maintainers = with maintainers; [ globin lheckemann ];
+    maintainers = with maintainers; [ globin ];
   };
 }

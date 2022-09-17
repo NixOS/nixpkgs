@@ -2,16 +2,16 @@
 , ncurses
 , libX11, xorgproto, buildEnv
 , fetchpatch
+, useX11 ? stdenv.hostPlatform.isx86
 }:
 
 let
-   useX11 = stdenv.hostPlatform.isx86;
    x11deps = [ libX11 xorgproto ];
    inherit (lib) optionals;
 
-   baseOcamlBranch  = "4.07";
+   baseOcamlBranch  = "4.11";
    baseOcamlVersion = "${baseOcamlBranch}.1";
-   metaocamlPatch   = "107";
+   metaocamlPatch   = "111";
 in
 
 stdenv.mkDerivation rec {
@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://caml.inria.fr/pub/distrib/ocaml-${baseOcamlBranch}/ocaml-${baseOcamlVersion}.tar.gz";
-    sha256 = "1x4sln131mcspisr22qc304590rvg720rbl7g2i4xiymgvhkpm1a";
+    sha256 = "sha256-3Yi2OFvZLgrZInMuKMxoyHd4QXcOoAPCC9FS9dtEFc4=";
   };
 
   metaocaml = fetchurl {
-    url = "http://okmij.org/ftp/ML/ber-metaocaml-107.tar.gz";
-    sha256 = "0xy6n0yj1f53pk612zfmn49pn04bd75qa40xgmr0w0lzx6dqsfmm";
+    url = "http://okmij.org/ftp/ML/ber-metaocaml-${metaocamlPatch}.tar.gz";
+    sha256 = "sha256-hDb0w0ZCm0hCz8jktZKmr/7gPSfBoKPT/cc7sPjt0yE=";
   };
 
   x11env = buildEnv { name = "x11env"; paths = x11deps; };
@@ -33,11 +33,7 @@ stdenv.mkDerivation rec {
   x11inc = "${x11env}/include";
 
   prefixKey = "-prefix ";
-  configureFlags = optionals useX11
-    [ "-x11lib" x11lib
-      "-x11include" x11inc
-      "-flambda"
-    ];
+  configureFlags = optionals useX11 [ "--enable-flambda" ];
 
   dontStrip = true;
   buildInputs = [ ncurses ] ++ optionals useX11 x11deps;
@@ -48,8 +44,8 @@ stdenv.mkDerivation rec {
     # used SIGSTKSZ as the size of a statically-allocated array.  This
     # patch is also applied by the ocaml/4.07.nix expression.
     (fetchpatch {
-      url = "https://github.com/ocaml/ocaml/commit/00b8c4d503732343d5d01761ad09650fe50ff3a0.patch";
-      sha256 = "sha256:02cfya5ff5szx0fsl5x8ax76jyrla9zmf3qxavf3adhwq5ssrfcv";
+      url = "https://github.com/ocaml/ocaml/commit/dd28ac0cf4365bd0ea1bcc374cbc5e95a6f39bea.patch";
+      sha256 = "sha256-OmyovAu+8sgg3n5YD29Cytx3u/9PO2ofMsmrwiKUxks=";
     })
   ];
 

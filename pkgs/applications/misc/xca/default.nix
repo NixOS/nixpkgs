@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, autoreconfHook, pkg-config
+{ stdenv, mkDerivation, lib, fetchFromGitHub, autoreconfHook, pkg-config
 , libtool, openssl, qtbase, qttools, sphinx }:
 
 mkDerivation rec {
@@ -22,6 +22,7 @@ mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "An x509 certificate generation tool, handling RSA, DSA and EC keys, certificate signing requests (PKCS#10) and CRLs";
     homepage    = "https://hohnstaedt.de/xca/";
     license     = licenses.bsd3;

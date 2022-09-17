@@ -30,17 +30,15 @@ keep working.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/lib/googlecloudsdk/api_lib/container/kubeconfig.py b/lib/googlecloudsdk/api_lib/container/kubeconfig.py
-index 4330988d6..37424b841 100644
+index 5975cb8f..b98e6721 100644
 --- a/lib/googlecloudsdk/api_lib/container/kubeconfig.py
 +++ b/lib/googlecloudsdk/api_lib/container/kubeconfig.py
-@@ -352,7 +352,7 @@ def _AuthProvider(name='gcp',
+@@ -396,7 +396,7 @@ def _AuthProvider(name='gcp',
        if sdk_bin_path is None:
          log.error(SDK_BIN_PATH_NOT_FOUND)
          raise Error(SDK_BIN_PATH_NOT_FOUND)
 -      cmd_path = os.path.join(sdk_bin_path, bin_name)
 +      cmd_path = bin_name
- 
-     cfg = {
-         # Command for gcloud credential helper
--- 
-2.21.0
+       try:
+         # Print warning if gke-gcloud-auth-plugin is not present or executable
+         _GetGkeGcloudPluginCommandAndPrintWarning()

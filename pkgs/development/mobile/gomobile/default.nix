@@ -9,15 +9,15 @@
 
 buildGoModule {
   pname = "gomobile";
-  version = "unstable-2021-06-14";
+  version = "unstable-2022-05-18";
 
-  vendorSha256 = "1irgkgv72rakg7snk1bnp10ibr64ykz9l40s59l4fnl63zsh12a0";
+  vendorSha256 = "sha256-AmOy3X+d2OD7ZLbFuy+SptdlgWbZJaXYEgO79M64ufE=";
 
   src = fetchgit {
-    rev = "7c8f154d100840bc5828285bb390bbae1cb5a98c";
+    rev = "8578da9835fd365e78a6e63048c103b27a53a82c";
     name = "gomobile";
     url = "https://go.googlesource.com/mobile";
-    sha256 = "1w9mra1mqf60iafp0ywvja5196fjsjyfhvz4yizqq4qkyll5qmj1";
+    sha256 = "sha256-AOR/p+DW83f2+BOxm2rFXBCrotcIyunK3UzQ/dnauWY=";
   };
 
   subPackages = [ "bind" "cmd/gobind" "cmd/gomobile" ];
@@ -32,8 +32,7 @@ buildGoModule {
   postPatch = ''
     substituteInPlace cmd/gomobile/env.go --replace \
       'tmpdir, err = ioutil.TempDir("", "gomobile-work-")' \
-      'tmpdir = filepath.Join(os.Getenv("NIX_BUILD_TOP"), "gomobile-work")' \
-      --replace '"io/ioutil"' ""
+      'tmpdir = filepath.Join(os.Getenv("NIX_BUILD_TOP"), "gomobile-work")'
     substituteInPlace cmd/gomobile/init.go --replace \
       'tmpdir, err = ioutil.TempDir(gomobilepath, "work-")' \
       'tmpdir = filepath.Join(os.Getenv("NIX_BUILD_TOP"), "work")'
@@ -43,13 +42,18 @@ buildGoModule {
   postInstall = ''
     mkdir -p $out/src/golang.org/x
     ln -s $src $out/src/golang.org/x/mobile
-    wrapProgram $out/bin/gomobile \
+  '';
+
+  postFixup = ''
+    for bin in $(ls $out/bin); do
+      wrapProgram $out/bin/$bin \
+        --suffix GOPATH : $out \
   '' + lib.optionalString withAndroidPkgs ''
-      --prefix PATH : "${androidPkgs.androidsdk}/bin" \
-      --set ANDROID_NDK_HOME "${androidPkgs.androidsdk}/libexec/android-sdk/ndk-bundle" \
-      --set ANDROID_HOME "${androidPkgs.androidsdk}/libexec/android-sdk" \
+        --prefix PATH : "${androidPkgs.androidsdk}/bin" \
+        --set-default ANDROID_HOME "${androidPkgs.androidsdk}/libexec/android-sdk" \
   '' + ''
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ zlib ]}"
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ zlib ]}"
+    done
   '';
 
   meta = with lib; {

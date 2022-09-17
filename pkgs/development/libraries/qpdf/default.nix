@@ -2,18 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "qpdf";
-  version = "10.6.2";
+  version = "10.6.3";
 
   src = fetchFromGitHub {
     owner = "qpdf";
     repo = "qpdf";
     rev = "release-qpdf-${version}";
-    hash = "sha256-+8bH7fKJ5uZRxKX/4nMkoZGFTxm2uJEXkb1wq5FrLWs=";
+    hash = "sha256-SiZA8T7N1SWlbCFosSqFosLDV/3Q7+ywvgq1iB4umdg=";
   };
 
   nativeBuildInputs = [ perl ];
 
   buildInputs = [ zlib libjpeg ];
+
+  configureFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+                     "--with-random=/dev/urandom";
 
   preCheck = ''
     patchShebangs qtest/bin/qtest-driver

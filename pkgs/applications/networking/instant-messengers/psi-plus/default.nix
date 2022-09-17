@@ -43,13 +43,13 @@ assert enablePsiMedia -> enablePlugins;
 
 mkDerivation rec {
   pname = "psi-plus";
-  version = "1.5.1618";
+  version = "1.5.1640";
 
   src = fetchFromGitHub {
     owner = "psi-plus";
     repo = "psi-plus-snapshots";
     rev = version;
-    sha256 = "sha256-ueZYFOZFCPQrg9etZCrY5ZTn7PZMkcuwbXVPPbW9S/A=";
+    sha256 = "sha256-vzEZUY9EiOPWdk60EQneMDuX4IAQh4BbBh9MO3Fj04Y=";
   };
 
   cmakeFlags = [

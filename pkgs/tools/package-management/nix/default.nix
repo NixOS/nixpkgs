@@ -1,6 +1,7 @@
 { lib
 , aws-sdk-cpp
 , boehmgc
+, curl
 , callPackage
 , fetchFromGitHub
 , fetchurl
@@ -31,7 +32,7 @@ let
 
   common = args:
     callPackage
-      (import ./common.nix ({ inherit lib fetchFromGitHub; } // args))
+      (import ./common.nix ({ inherit lib fetchFromGitHub curl; } // args))
       {
         inherit Security storeDir stateDir confDir;
         boehmgc = boehmgc-nix;
@@ -46,24 +47,11 @@ in lib.makeExtensible (self: {
     };
   }).override { boehmgc = boehmgc-nix_2_3; };
 
-  nix_2_4 = common {
-    version = "2.4";
-    sha256 = "sha256-op48CCDgLHK0qV1Batz4Ln5FqBiRjlE6qHTiZgt3b6k=";
-    # https://github.com/NixOS/nix/pull/5537
-    patches = [ ./patches/install-nlohmann_json-headers.patch ];
-  };
+  nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
 
-  nix_2_5 = common {
-    version = "2.5.1";
-    sha256 = "sha256-GOsiqy9EaTwDn2PLZ4eFj1VkXcBUbqrqHehRE9GuGdU=";
-    # https://github.com/NixOS/nix/pull/5536
-    patches = [ ./patches/install-nlohmann_json-headers.patch ];
-  };
+  nix_2_5 = throw "nixVersions.nix_2_5 has been removed";
 
-  nix_2_6 = common {
-    version = "2.6.1";
-    sha256 = "sha256-E9iQ7f+9Z6xFcUvvfksTEfn8LsDfzmwrcRBC//5B3V0=";
-  };
+  nix_2_6 = throw "nixVersions.nix_2_6 has been removed";
 
   nix_2_7 = common {
     version = "2.7.0";
@@ -85,16 +73,24 @@ in lib.makeExtensible (self: {
     sha256 = "sha256-zldZ4SiwkISFXxrbY/UdwooIZ3Z/I6qKxtpc3zD0T/o=";
   };
 
-  stable = self.nix_2_8;
+  nix_2_9 = common {
+    version = "2.9.2";
+    sha256 = "sha256-uZCaBo9rdWRO/AlQMvVVjpAwzYijB2H5KKQqde6eHkg=";
+  };
 
-  unstable = lib.lowPrio (common rec {
-    version = "2.8";
-    suffix = "pre20220512_${lib.substring 0 7 src.rev}";
-    src = fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nix";
-      rev = "d354fc30b9768ea3dc737a88b57bf5e26d98135b";
-      sha256 = "sha256-wwhezwy3HKeHKJX48ps2qD46f6bL9GDxsFE2QJ+qPHQ=";
-    };
-  });
+  nix_2_10 = common {
+    version = "2.10.3";
+    sha256 = "sha256-B9EyDUz/9tlcWwf24lwxCFmkxuPTVW7HFYvp0C4xGbc=";
+    patches = [ ./patches/flaky-tests.patch ];
+  };
+
+  nix_2_11 = common {
+    version = "2.11.0";
+    sha256 = "sha256-9+rpYzI+SmxJn+EbYxjGv68Ucp22bdFUSy/4LkHkkDQ=";
+    patches = [ ./patches/flaky-tests.patch ];
+  };
+
+  stable = self.nix_2_11;
+
+  unstable = self.stable;
 })

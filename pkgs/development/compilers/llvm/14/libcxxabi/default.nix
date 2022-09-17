@@ -82,6 +82,5 @@ stdenv.mkDerivation rec {
     # the UIUC License (a BSD-like license)":
     license = with lib.licenses; [ mit ncsa ];
     maintainers = llvm_meta.maintainers ++ [ lib.maintainers.vlstill ];
-    broken = true; # TODO: gnu-install-dirs.patch fails to apply
   };
 }

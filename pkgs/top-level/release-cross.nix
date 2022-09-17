@@ -1,4 +1,11 @@
 /* This file defines some basic smoke tests for cross compilation.
+   Individual jobs can be tested by running:
+
+   $ nix-build pkgs/top-level/release-cross.nix -A <jobname>.<package> --arg supportedSystems '[builtins.currentSystem]'
+
+   e.g.
+
+   $ nix-build pkgs/top-level/release-cross.nix -A crossMingw32.nixUnstable --arg supportedSystems '[builtins.currentSystem]'
 */
 
 { # The platforms *from* which we cross compile.
@@ -153,7 +160,6 @@ in
 
   /* Linux on armv7l-hf */
   armv7l-hf = mapTestOnCross lib.systems.examples.armv7l-hf-multiplatform linuxCommon;
-  scaleway-c1 = mapTestOnCross lib.systems.examples.scaleway-c1 linuxCommon;
 
   pogoplug4 = mapTestOnCross lib.systems.examples.pogoplug4 linuxCommon;
 

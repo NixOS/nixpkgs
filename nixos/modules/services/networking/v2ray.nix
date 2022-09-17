@@ -9,10 +9,10 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to run v2ray server.
 
-          Either <literal>configFile</literal> or <literal>config</literal> must be specified.
+          Either `configFile` or `config` must be specified.
         '';
       };
 
@@ -20,7 +20,7 @@ with lib;
         type = types.package;
         default = pkgs.v2ray;
         defaultText = literalExpression "pkgs.v2ray";
-        description = ''
+        description = lib.mdDoc ''
           Which v2ray package to use.
         '';
       };
@@ -29,12 +29,12 @@ with lib;
         type = types.nullOr types.str;
         default = null;
         example = "/etc/v2ray/config.json";
-        description = ''
+        description = lib.mdDoc ''
           The absolute path to the configuration file.
 
-          Either <literal>configFile</literal> or <literal>config</literal> must be specified.
+          Either `configFile` or `config` must be specified.
 
-          See <link xlink:href="https://www.v2fly.org/en_US/config/overview.html"/>.
+          See <https://www.v2fly.org/en_US/config/overview.html>.
         '';
       };
 
@@ -51,12 +51,12 @@ with lib;
             protocol = "freedom";
           }];
         };
-        description = ''
+        description = lib.mdDoc ''
           The configuration object.
 
           Either `configFile` or `config` must be specified.
 
-          See <link xlink:href="https://www.v2fly.org/en_US/config/overview.html"/>.
+          See <https://www.v2fly.org/en_US/config/overview.html>.
         '';
       };
     };

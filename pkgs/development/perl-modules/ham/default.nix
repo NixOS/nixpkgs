@@ -37,6 +37,7 @@ buildPerlPackage {
     homepage = "https://github.com/kernkonzept/ham";
     license = "unknown"; # should be gpl2, but not quite sure
     maintainers = with lib.maintainers; [ aw ];
+    mainProgram = "ham";
     platforms = lib.platforms.unix;
   };
 }

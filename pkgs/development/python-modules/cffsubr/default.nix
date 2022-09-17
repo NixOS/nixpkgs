@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , fonttools
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "cffsubr" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Standalone CFF subroutinizer based on AFDKO tx";
     homepage = "https://github.com/adobe-type-tools/cffsubr";
     license = licenses.asl20;

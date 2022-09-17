@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "imagesize";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cd1750d452385ca327479d45b64d9c7729ecf0b3969a58148298c77092261f9d";
+    sha256 = "sha256-aRUERK/7nLDVzFqSs2dvCy+3zZrjnpR6XhGja0SXzUo=";
   };
 
   meta = with lib; {

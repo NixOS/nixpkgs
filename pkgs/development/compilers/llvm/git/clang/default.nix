@@ -15,6 +15,7 @@ let
       mkdir -p "$out"
       cp -r ${monorepoSrc}/cmake "$out"
       cp -r ${monorepoSrc}/${pname} "$out"
+      cp -r ${monorepoSrc}/clang-tools-extra "$out"
     '';
 
     sourceRoot = "${src.name}/${pname}";
@@ -26,6 +27,7 @@ let
     buildInputs = [ libxml2 libllvm ];
 
     cmakeFlags = [
+      "-DCLANG_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/clang"
       "-DCMAKE_CXX_FLAGS=-std=c++14"
       "-DCLANGD_BUILD_XPC=OFF"
       "-DLLVM_ENABLE_RTTI=ON"
@@ -71,7 +73,7 @@ let
       # Move libclang to 'lib' output
       moveToOutput "lib/libclang.*" "$lib"
       moveToOutput "lib/libclang-cpp.*" "$lib"
-      substituteInPlace $out/lib/cmake/clang/ClangTargets-release.cmake \
+      substituteInPlace $dev/lib/cmake/clang/ClangTargets-release.cmake \
           --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang." \
           --replace "\''${_IMPORT_PREFIX}/lib/libclang-cpp." "$lib/lib/libclang-cpp."
 

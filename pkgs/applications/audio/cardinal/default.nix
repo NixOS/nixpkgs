@@ -1,9 +1,7 @@
 {
   stdenv
 , fetchFromGitHub
-, fetchpatch
 , fetchurl
-, fetchzip
 , freetype
 , jansson
 , lib
@@ -23,12 +21,12 @@
 
 stdenv.mkDerivation rec {
   pname = "cardinal";
-  version = "22.04";
+  version = "22.07";
 
   src = fetchurl {
     url =
-      "https://github.com/DISTRHO/Cardinal/releases/download/${version}/cardinal-${version}.tar.xz";
-    sha256 = "sha256-7As4CckwByrTynOOpwAXa1R9Bpp/ft537f+PvAgz/BE=";
+      "https://github.com/DISTRHO/Cardinal/releases/download/${version}/cardinal+deps-${version}.tar.xz";
+    sha256 = "sha256-4PpqGfycIwJ7g7gnogPYUO1BnlW7dkwYzw/9QV3R3+g=";
   };
 
   prePatch = ''
@@ -55,6 +53,7 @@ stdenv.mkDerivation rec {
     speexdsp
   ];
 
+  hardeningDisable = [ "format" ];
   makeFlags = [ "SYSDEPS=true" "PREFIX=$(out)" ];
 
   meta = {

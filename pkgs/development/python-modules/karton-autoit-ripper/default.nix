@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "karton-autoit-ripper";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "CERT-Polska";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1gclrrc0n72bfj4m55kk8d69zrfvnlwm9692ni9w7d2231mvv7bw";
+    sha256 = "sha256-D+M3JsIN8LUWg8GVweEzySHI7KaBb6cNHHn4pXoq55M=";
   };
 
   propagatedBuildInputs = [

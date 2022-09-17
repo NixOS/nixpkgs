@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  checkInputs = [ wayland-scanner ];
+  nativeBuildInputs = [ wayland-scanner ];
 
   patchPhase = ''
     substituteInPlace wlr-protocols.pc.in \
@@ -25,9 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkPhase = ''
-    make check
-  '';
+  checkTarget = "check";
 
   installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 

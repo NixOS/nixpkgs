@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -D powerlevel10k.zsh-theme --target-directory=$out/share/zsh-powerlevel10k
+    install -D powerlevel9k.zsh-theme --target-directory=$out/share/zsh-powerlevel10k
     install -D config/* --target-directory=$out/share/zsh-powerlevel10k/config
     install -D internal/* --target-directory=$out/share/zsh-powerlevel10k/internal
     cp -R gitstatus $out/share/zsh-powerlevel10k/gitstatus

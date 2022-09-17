@@ -18,24 +18,34 @@ in
 
     services.heartbeat = {
 
-      enable = mkEnableOption "heartbeat";
+      enable = mkEnableOption (lib.mdDoc "heartbeat");
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.heartbeat;
+        defaultText = literalExpression "pkgs.heartbeat";
+        example = literalExpression "pkgs.heartbeat7";
+        description = lib.mdDoc ''
+          The heartbeat package to use.
+        '';
+      };
 
       name = mkOption {
         type = types.str;
         default = "heartbeat";
-        description = "Name of the beat";
+        description = lib.mdDoc "Name of the beat";
       };
 
       tags = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "Tags to place on the shipped log messages";
+        description = lib.mdDoc "Tags to place on the shipped log messages";
       };
 
       stateDir = mkOption {
         type = types.str;
         default = "/var/lib/heartbeat";
-        description = "The state directory. heartbeat's own logs and other data are stored here.";
+        description = lib.mdDoc "The state directory. heartbeat's own logs and other data are stored here.";
       };
 
       extraConfig = mkOption {
@@ -46,7 +56,7 @@ in
             urls: ["http://localhost:9200"]
             schedule: '@every 10s'
         '';
-        description = "Any other configuration options you want to add";
+        description = lib.mdDoc "Any other configuration options you want to add";
       };
 
     };
@@ -67,7 +77,7 @@ in
       serviceConfig = {
         User = "nobody";
         AmbientCapabilities = "cap_net_raw";
-        ExecStart = "${pkgs.heartbeat}/bin/heartbeat -c \"${heartbeatYml}\" -path.data \"${cfg.stateDir}/data\" -path.logs \"${cfg.stateDir}/logs\"";
+        ExecStart = "${cfg.package}/bin/heartbeat -c \"${heartbeatYml}\" -path.data \"${cfg.stateDir}/data\" -path.logs \"${cfg.stateDir}/logs\"";
       };
     };
   };

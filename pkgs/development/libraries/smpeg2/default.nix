@@ -2,7 +2,7 @@
 , autoconf
 , automake
 , darwin
-, fetchsvn
+, fetchFromGitHub
 , makeWrapper
 , pkg-config
 , SDL2
@@ -10,17 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "smpeg2";
-  version = "unstable-2017-10-18";
+  version = "unstable-2022-05-26";
 
-  src = fetchsvn {
-    url = "svn://svn.icculus.org/smpeg/trunk";
-    rev = "413";
-    sha256 = "193amdwgxkb1zp7pgr72fvrdhcg3ly72qpixfxxm85rzz8g2kr77";
+  src = fetchFromGitHub {
+    owner = "icculus";
+    repo = "smpeg";
+    rev = "c5793e5f3f2765fc09c24380d7e92136a0e33d3b";
+    sha256 = "sha256-Z0u83K1GIXd0jUYo5ZyWUH2Zt7Hn8z+yr06DAtAEukw=";
   };
-
-  patches = [
-    ./hufftable-uint_max.patch
-  ];
 
   nativeBuildInputs = [ autoconf automake makeWrapper pkg-config ];
 

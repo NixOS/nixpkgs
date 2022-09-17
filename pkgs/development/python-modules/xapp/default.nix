@@ -5,19 +5,19 @@
 , pygobject3
 , gtk3
 , gobject-introspection
-, xapps
+, xapp
 , polkit
 }:
 
 buildPythonPackage rec {
   pname = "xapp";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "python-xapp";
     rev = version;
-    hash = "sha256-UC+0nbf+SRQsF5R0LcrPpmNbaoRM14DC82JccSpsKsY=";
+    hash = "sha256-ntjJ/O6HiRZMsqsuQY4HLM4fBE0aWpn/L4n5YCRlhhg=";
   };
 
   propagatedBuildInputs = [
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     pygobject3
     gtk3
     gobject-introspection
-    xapps
+    xapp
     polkit
   ];
 

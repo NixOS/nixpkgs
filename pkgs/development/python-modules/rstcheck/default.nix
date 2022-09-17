@@ -1,26 +1,32 @@
 { lib
 , buildPythonPackage
+, colorama
 , docutils
 , fetchFromGitHub
+, importlib-metadata
 , poetry-core
+, pydantic
 , pytestCheckHook
 , pythonOlder
+, rstcheck-core
+, shellingham
+, typer
 , types-docutils
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "rstcheck";
-  version = "5.0.0";
+  version = "6.0.0.post1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "myint";
+    owner = "rstcheck";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vTUa/eP6/flxRLBuzdHoNoPoGAg6XWwu922az8tLgJM=";
+    hash = "sha256-Ljg1cciT9qKL9xtBxQ8OLygDpV/1yR5XiJOzHrLr6xw=";
   };
 
   nativeBuildInputs = [
@@ -28,14 +34,27 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    colorama
     docutils
+    rstcheck-core
+    shellingham
     types-docutils
     typing-extensions
+    pydantic
+    typer
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+    importlib-metadata
   ];
 
   checkInputs = [
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'types-docutils = ">=0.18, <0.19"' 'types-docutils = ">=0.18"'
+  '';
 
   pythonImportsCheck = [
     "rstcheck"

@@ -30,7 +30,7 @@ let
 
     postPatch = ''
       patchShebangs Configure
-    '' + lib.optionalString (lib.versionOlder version "1.1.0") ''
+    '' + lib.optionalString (lib.versionOlder version "1.1.1") ''
       patchShebangs test/*
       for a in test/t* ; do
         substituteInPlace "$a" \
@@ -40,13 +40,27 @@ let
     # config is a configure script which is not installed.
     + lib.optionalString (lib.versionAtLeast version "1.1.1") ''
       substituteInPlace config --replace '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
-    '' + lib.optionalString (lib.versionAtLeast version "1.1.0" && stdenv.hostPlatform.isMusl) ''
+    '' + lib.optionalString (lib.versionAtLeast version "1.1.1" && stdenv.hostPlatform.isMusl) ''
       substituteInPlace crypto/async/arch/async_posix.h \
         --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
                   '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
+    ''
+    # Move ENGINESDIR into OPENSSLDIR for static builds, in order to move
+    # it to the separate etc output.
+    + lib.optionalString static ''
+      substituteInPlace Configurations/unix-Makefile.tmpl \
+        --replace 'ENGINESDIR=$(libdir)/engines-{- $sover_dirname -}' \
+                  'ENGINESDIR=$(OPENSSLDIR)/engines-{- $sover_dirname -}'
     '';
 
-    outputs = [ "bin" "dev" "out" "man" ] ++ lib.optional withDocs "doc";
+    outputs = [ "bin" "dev" "out" "man" ]
+      ++ lib.optional withDocs "doc"
+      # Separate output for the runtime dependencies of the static build.
+      # Specifically, move OPENSSLDIR into this output, as its path will be
+      # compiled into 'libcrypto.a'. This makes it a runtime dependency of
+      # any package that statically links openssl, so we want to keep that
+      # output minimal.
+      ++ lib.optional static "etc";
     setOutputFlags = false;
     separateDebugInfo =
       !stdenv.hostPlatform.isDarwin &&
@@ -102,18 +116,26 @@ let
     configureFlags = [
       "shared" # "shared" builds both shared and static libraries
       "--libdir=lib"
-      "--openssldir=etc/ssl"
+      (if !static then
+         "--openssldir=etc/ssl"
+       else
+         # Move OPENSSLDIR to the 'etc' output for static builds. Prepend '/.'
+         # to the path to make it appear absolute before variable expansion,
+         # else the 'prefix' would be prepended to it.
+         "--openssldir=/.$(etc)/etc/ssl"
+      )
     ] ++ lib.optionals withCryptodev [
       "-DHAVE_CRYPTODEV"
       "-DUSE_CRYPTODEV_DIGESTS"
     ] ++ lib.optional enableSSL2 "enable-ssl2"
       ++ lib.optional enableSSL3 "enable-ssl3"
       ++ lib.optional (lib.versionAtLeast version "3.0.0") "enable-ktls"
-      ++ lib.optional (lib.versionAtLeast version "1.1.0" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
+      ++ lib.optional (lib.versionAtLeast version "1.1.1" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
       # OpenSSL needs a specific `no-shared` configure flag.
       # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
       # for a comprehensive list of configuration options.
-      ++ lib.optional (lib.versionAtLeast version "1.1.0" && static) "no-shared"
+      ++ lib.optional (lib.versionAtLeast version "1.1.1" && static) "no-shared"
+      ++ lib.optional (lib.versionAtLeast version "3.0.0" && static) "no-module"
       # This introduces a reference to the CTLOG_FILE which is undesired when
       # trying to build binaries statically.
       ++ lib.optional static "no-ct"
@@ -140,6 +162,9 @@ let
       if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib $out/lib/*.dll)" ]; then
           rm "$out/lib/"*.a
       fi
+
+      # 'etc' is a separate output on static builds only.
+      etc=$out
     '') + lib.optionalString (!stdenv.hostPlatform.isWindows)
       # Fix bin/c_rehash's perl interpreter line
       #
@@ -161,14 +186,15 @@ let
       mv $out/include $dev/
 
       # remove dependency on Perl at runtime
-      rm -r $out/etc/ssl/misc
+      rm -r $etc/etc/ssl/misc
 
-      rmdir $out/etc/ssl/{certs,private}
+      rmdir $etc/etc/ssl/{certs,private}
     '';
 
     postFixup = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
-      # Check to make sure the main output doesn't depend on perl
-      if grep -r '${buildPackages.perl}' $out; then
+      # Check to make sure the main output and the static runtime dependencies
+      # don't depend on perl
+      if grep -r '${buildPackages.perl}' $out $etc; then
         echo "Found an erroneous dependency on perl ^^^" >&2
         exit 1
       fi
@@ -186,8 +212,8 @@ in {
 
 
   openssl_1_1 = common rec {
-    version = "1.1.1o";
-    sha256 = "sha256-k4SisFcN2ANYhBRkZ3EV33he25QccSEfdQdtcv5rQ48=";
+    version = "1.1.1q";
+    sha256 = "sha256-15Oc5hQCnN/wtsIPDi5XAxWKSJpyslB7i9Ub+Mj9EMo=";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 
@@ -200,9 +226,9 @@ in {
     withDocs = true;
   };
 
-  openssl_3_0 = common {
-    version = "3.0.3";
-    sha256 = "sha256-7gB4rc7x3l8APGLIDMllJ3IWCcbzu0K3eV3zH4tVjAs=";
+  openssl_3 = common {
+    version = "3.0.5";
+    sha256 = "sha256-qn2Nm+9xrWUlxVuhHl9Dl4ic5Jwsk0nc6m0+TwsCSno=";
     patches = [
       ./3.0/nix-ssl-cert-file.patch
 

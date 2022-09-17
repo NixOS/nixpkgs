@@ -88,6 +88,9 @@ rec {
     i686     = { bits = 32; significantByte = littleEndian; family = "x86"; arch = "i686"; };
     x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; arch = "x86-64"; };
 
+    microblaze   = { bits = 32; significantByte = bigEndian;    family = "microblaze"; };
+    microblazeel = { bits = 32; significantByte = littleEndian; family = "microblaze"; };
+
     mips     = { bits = 32; significantByte = bigEndian;    family = "mips"; };
     mipsel   = { bits = 32; significantByte = littleEndian; family = "mips"; };
     mips64   = { bits = 64; significantByte = bigEndian;    family = "mips"; };
@@ -148,8 +151,10 @@ rec {
   #   Every CPU is compatible with itself.
   # - (transitivity)
   #   If A is compatible with B and B is compatible with C then A is compatible with C.
-  # - (compatible under multiple endianness)
-  #   CPUs with multiple modes of endianness are pairwise compatible.
+  #
+  # Note: Since 22.11 the archs of a mode switching CPU are no longer considered
+  # pairwise compatible. Mode switching implies that binaries built for A
+  # and B respectively can't be executed at the same time.
   isCompatible = a: b: with cpuTypes; lib.any lib.id [
     # x86
     (b == i386 && isCompatible a i486)
@@ -191,22 +196,13 @@ rec {
     (b == aarch64 && a == armv8a)
     (b == armv8a && isCompatible a aarch64)
 
-    (b == aarch64 && a == aarch64_be)
-    (b == aarch64_be && isCompatible a aarch64)
-
     # PowerPC
     (b == powerpc && isCompatible a powerpc64)
-    (b == powerpcle && isCompatible a powerpc)
-    (b == powerpc && a == powerpcle)
-    (b == powerpc64le && isCompatible a powerpc64)
-    (b == powerpc64 && a == powerpc64le)
+    (b == powerpcle && isCompatible a powerpc64le)
 
     # MIPS
     (b == mips && isCompatible a mips64)
-    (b == mips && a == mipsel)
-    (b == mipsel && isCompatible a mips)
-    (b == mips64 && a == mips64el)
-    (b == mips64el && isCompatible a mips64)
+    (b == mipsel && isCompatible a mips64el)
 
     # RISCV
     (b == riscv32 && isCompatible a riscv64)
@@ -357,6 +353,11 @@ rec {
             The "gnu" ABI is ambiguous on 32-bit ARM. Use "gnueabi" or "gnueabihf" instead.
           '';
         }
+        { assertion = platform: with platform; !(isPower64 && isBigEndian);
+          message = ''
+            The "gnu" ABI is ambiguous on big-endian 64-bit PowerPC. Use "gnuabielfv2" or "gnuabielfv1" instead.
+          '';
+        }
       ];
     };
     gnuabi64     = { abi = "64"; };
@@ -367,6 +368,9 @@ rec {
     # https://www.linux-mips.org/pub/linux/mips/doc/ABI/MIPS-N32-ABI-Handbook.pdf
     gnuabin32    = { abi = "n32"; };
     muslabin32   = { abi = "n32"; };
+
+    gnuabielfv2  = { abi = "elfv2"; };
+    gnuabielfv1  = { abi = "elfv1"; };
 
     musleabi     = { float = "soft"; };
     musleabihf   = { float = "hard"; };
@@ -471,6 +475,8 @@ rec {
             if lib.versionAtLeast (parsed.cpu.version or "0") "6"
             then abis.gnueabihf
             else abis.gnueabi
+          # Default ppc64 BE to ELFv2
+          else if isPower64 parsed && isBigEndian parsed then abis.gnuabielfv2
           else abis.gnu
         else                     abis.unknown;
     };

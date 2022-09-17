@@ -7,23 +7,12 @@
 
 stdenv.mkDerivation rec {
   pname = "redis";
-  version = "7.0.0";
+  version = "7.0.4";
 
   src = fetchurl {
     url = "https://download.redis.io/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-KE2L0f2F1qVaBe5OfDHDGXetVsvzRO2DeQvusUi6pyA=";
+    sha256 = "sha256-8OZf2nTESj3U+p1RLU1Ngz3Qk5yTTpRqXGIqYw0Ffy8=";
   };
-
-  # Cross-compiling fixes
-  configurePhase = ''
-    runHook preConfigure
-    ${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-      # This fixes hiredis, which has the AR awkwardly coded.
-      # Probably a good candidate for a patch upstream.
-      makeFlagsArray+=('STLIB_MAKE_CMD=${stdenv.cc.targetPrefix}ar rcs $(STLIBNAME)')
-    ''}
-    runHook postConfigure
-  '';
 
   nativeBuildInputs = [ pkg-config ];
 

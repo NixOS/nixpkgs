@@ -1,64 +1,134 @@
-{ lib, buildPythonApplication, fetchFromGitHub, pythonOlder, file, fetchpatch
-, cairo, ffmpeg, sox, xdg-utils, texlive
-, colour, numpy, pillow, progressbar, scipy, tqdm, opencv , pycairo, pydub
-, pbr, fetchPypi
-}:
-buildPythonApplication rec {
-  pname = "manim";
-  version = "0.1.10";
+{ lib
+, fetchFromGitHub
 
-  src = fetchPypi {
-    pname = "manimlib";
-    inherit version;
-    sha256 = "0vg9b3rwypq5zir74pi0pmj47yqlcg7hrvscwrpjzjbqq2yihn49";
+, cairo
+, ffmpeg
+, texlive
+
+, python3
+}:
+
+let
+  # According to ManimCommunity documentation manim uses tex-packages packaged
+  # in a custom distribution called "manim-latex",
+  #
+  #   https://community.chocolatey.org/packages/manim-latex#files
+  #
+  # which includes another cutom distribution called tinytex, for which the
+  # package list can be found at
+  #
+  #   https://github.com/yihui/tinytex/blob/master/tools/pkgs-custom.txt
+  #
+  # these two combined add up to:
+  manim-tinytex = {
+    inherit (texlive)
+
+    # tinytex
+    scheme-infraonly amsfonts amsmath atbegshi atveryend auxhook babel bibtex
+    bigintcalc bitset booktabs cm dehyph dvipdfmx dvips ec epstopdf-pkg etex
+    etexcmds etoolbox euenc everyshi fancyvrb filehook firstaid float fontspec
+    framed geometry gettitlestring glyphlist graphics graphics-cfg graphics-def
+    grffile helvetic hycolor hyperref hyph-utf8 iftex inconsolata infwarerr
+    intcalc knuth-lib kvdefinekeys kvoptions kvsetkeys l3backend l3kernel
+    l3packages latex latex-amsmath-dev latex-bin latex-fonts latex-tools-dev
+    latexconfig latexmk letltxmacro lm lm-math ltxcmds lua-alt-getopt luahbtex
+    lualatex-math lualibs luaotfload luatex mdwtools metafont mfware natbib
+    pdfescape pdftex pdftexcmds plain psnfss refcount rerunfilecheck stringenc
+    tex tex-ini-files times tipa tools unicode-data unicode-math uniquecounter
+    url xcolor xetex xetexconfig xkeyval xunicode zapfding
+
+    # manim-latex
+    standalone everysel preview doublestroke ms setspace rsfs relsize ragged2e
+    fundus-calligra microtype wasysym physics dvisvgm jknapltx wasy cm-super
+    babel-english gnu-freefont mathastext cbfonts-fd;
+  };
+in python3.pkgs.buildPythonApplication rec {
+  pname = "manim";
+  format = "pyproject";
+  version = "0.16.0.post0";
+  disabled = python3.pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner  = "ManimCommunity";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-iXiPnI6lTP51P1X3iLp75ArRP66o8WAANBLoStPrz4M=";
   };
 
-  patches = [ ./remove-dependency-constraints.patch ];
-
-  nativeBuildInputs = [ pbr ];
-
-  propagatedBuildInputs = [
-    colour
-    numpy
-    pillow
-    progressbar
-    scipy
-    tqdm
-    opencv
-    pycairo
-    pydub
-
-    cairo sox ffmpeg xdg-utils
+  nativeBuildInputs = [
+    python3.pkgs.poetry-core
   ];
 
-  # Test with texlive to see whether it works but don't propagate
-  # because it's huge and optional
-  # TODO: Use smaller TexLive distribution
-  #       Doesn't need everything but it's hard to figure out what it needs
-  checkInputs = [ cairo sox ffmpeg xdg-utils texlive.combined.scheme-full ];
-
-  # Simple test and complex test with LaTeX
-  checkPhase = ''
-    for scene in SquareToCircle OpeningManimExample
-    do
-      python3 manim.py example_scenes.py $scene -l
-      tail -n 20 files/Tex/*.log  # Print potential LaTeX erorrs
-      ${file}/bin/file videos/example_scenes/480p15/$scene.mp4 \
-        | tee | grep -F "ISO Media, MP4 Base Media v1 [ISO 14496-12:2003]"
-    done
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "--no-cov-on-fail --cov=manim --cov-report xml --cov-report term" "" \
+      --replace 'cloup = "^0.13.0"' 'cloup = "*"' \
+      --replace 'mapbox-earcut = "^0.12.10"' 'mapbox-earcut = "*"' \
   '';
 
-  disabled = pythonOlder "3.7";
+  buildInputs = [ cairo ];
 
-  meta = {
-    description = "Animation engine for explanatory math videos";
+  propagatedBuildInputs = with python3.pkgs; [
+    click
+    click-default-group
+    cloup
+    colour
+    grpcio
+    grpcio-tools
+    importlib-metadata
+    isosurfaces
+    jupyterlab
+    manimpango
+    mapbox-earcut
+    moderngl
+    moderngl-window
+    networkx
+    numpy
+    pillow
+    pycairo
+    pydub
+    pygments
+    pysrt
+    rich
+    scipy
+    screeninfo
+    skia-pathops
+    srt
+    tqdm
+    watchdog
+  ];
+
+  makeWrapperArgs = [
+    "--prefix" "PATH" ":" (lib.makeBinPath [
+      ffmpeg
+      (texlive.combine manim-tinytex)
+    ])
+  ];
+
+
+  checkInputs = [
+    python3.pkgs.pytest-xdist
+    python3.pkgs.pytestCheckHook
+
+    ffmpeg
+    (texlive.combine manim-tinytex)
+  ];
+
+  # about 55 of ~600 tests failing mostly due to demand for display
+  disabledTests = import ./failing_tests.nix;
+
+  pythonImportsCheck = [ "manim" ];
+
+  meta = with lib; {
+    description = "Animation engine for explanatory math videos - Community version";
     longDescription = ''
       Manim is an animation engine for explanatory math videos. It's used to
       create precise animations programmatically, as seen in the videos of
-      3Blue1Brown on YouTube.
+      3Blue1Brown on YouTube. This is the community maintained version of
+      manim.
     '';
-    homepage = "https://github.com/3b1b/manim";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ johnazoidberg ];
+    homepage = "https://github.com/ManimCommunity/manim";
+    license = licenses.mit;
+    maintainers = with maintainers; [ friedelino ];
   };
 }

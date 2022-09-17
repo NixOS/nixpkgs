@@ -23,17 +23,21 @@
 , version
 , pluginOverrides ? { }
 , disableAllPlugins ? false
+
+  # tests
+, runCommand
+, beets
 }@inputs:
 let
   inherit (lib) attrNames attrValues concatMap;
 
-  builtinPlugins = import ./builtin-plugins.nix inputs;
-
-  mkPlugin = { enable ? !disableAllPlugins, propagatedBuildInputs ? [ ], testPaths ? [ ], wrapperBins ? [ ] }: {
-    inherit enable propagatedBuildInputs testPaths wrapperBins;
+  mkPlugin = { enable ? !disableAllPlugins, builtin ? false, propagatedBuildInputs ? [ ], testPaths ? [ ], wrapperBins ? [ ] }: {
+    inherit enable builtin propagatedBuildInputs testPaths wrapperBins;
   };
 
-  allPlugins = lib.mapAttrs (_: mkPlugin) (lib.recursiveUpdate builtinPlugins pluginOverrides);
+  basePlugins = lib.mapAttrs (_: a: { builtin = true; } // a) (import ./builtin-plugins.nix inputs);
+  allPlugins = lib.mapAttrs (_: mkPlugin) (lib.recursiveUpdate basePlugins pluginOverrides);
+  builtinPlugins = lib.filterAttrs (_: p: p.builtin) allPlugins;
   enabledPlugins = lib.filterAttrs (_: p: p.enable) allPlugins;
   disabledPlugins = lib.filterAttrs (_: p: !p.enable) allPlugins;
 
@@ -62,6 +66,11 @@ python3Packages.buildPythonApplication rec {
     reflink
     unidecode
   ] ++ (concatMap (p: p.propagatedBuildInputs) (attrValues enabledPlugins));
+
+  # see: https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-1131643663
+  nativeBuildInputs = [
+    gobject-introspection
+  ];
 
   buildInputs = [
   ] ++ (with gst_all_1; [
@@ -117,7 +126,7 @@ python3Packages.buildPythonApplication rec {
       \( -name '*.py' -o -path 'beetsplug/*/__init__.py' \) -print \
       | sed -n -re 's|^beetsplug/([^/.]+).*|\1|p' \
       | sort -u > plugins_available
-    ${diffPlugins (attrNames allPlugins) "plugins_available"}
+    ${diffPlugins (attrNames builtinPlugins) "plugins_available"}
 
     export BEETS_TEST_SHELL="${bashInteractive}/bin/bash --norc"
     export HOME="$(mktemp -d)"
@@ -135,6 +144,26 @@ python3Packages.buildPythonApplication rec {
     python $args
 
     runHook postCheck
+  '';
+
+
+  passthru.plugins = allPlugins;
+
+  passthru.tests.gstreamer = runCommand "beets-gstreamer-test" {
+    meta.timeout = 60;
+  }
+  ''
+  set -euo pipefail
+  export HOME=$(mktemp -d)
+  mkdir $out
+
+  cat << EOF > $out/config.yaml
+replaygain:
+  backend: gstreamer
+EOF
+
+  echo $out/config.yaml
+  ${beets}/bin/beet -c $out/config.yaml > /dev/null
   '';
 
   meta = with lib; {

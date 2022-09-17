@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bitwuzla";
-  version = "unstable-2021-07-01";
+  version = "unstable-2022-08-07";
 
   src = fetchFromGitHub {
     owner = "bitwuzla";
     repo = "bitwuzla";
-    rev = "58d720598e359b1fdfec4a469c76f1d1f24db51a";
-    sha256 = "06ymqsdppyixb918161rmbgqvbnarj4nm4az88lkn3ri4gyimw04";
+    rev = "b6fb61736a5cf70cd0b35ec4aeeadf23971610ce";
+    hash = "sha256-T5VnnWrcZ8K1NjFf5eeg0TRpXBLRCxC67v8zWPwYF/Y=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

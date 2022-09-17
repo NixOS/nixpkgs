@@ -1,17 +1,12 @@
 { lib, fetchurl } :
 
 let
-  major = "3";
-  minor = "00";
-  version = "${major}.${minor}";
+  version = "3.00";
 in fetchurl rec {
   name = "fixedsys-excelsior-${version}";
 
-  urls = [
-    "http://www.fixedsysexcelsior.com/fonts/FSEX300.ttf"
-    "https://raw.githubusercontent.com/chrissimpkins/codeface/master/fonts/fixed-sys-excelsior/FSEX300.ttf"
-    "http://tarballs.nixos.org/sha256/6ee0f3573bc5e33e93b616ef6282f49bc0e227a31aa753ac76ed2e3f3d02056d"
-  ];
+  url = "https://raw.githubusercontent.com/chrissimpkins/codeface/master/fonts/fixed-sys-excelsior/FSEX300.ttf";
+
   downloadToTemp = true;
   recursiveHash = true;
   postFetch = ''
@@ -21,8 +16,8 @@ in fetchurl rec {
   sha256 = "32d6f07f1ff08c764357f8478892b2ba5ade23427af99759f34a0ba24bcd2e37";
 
   meta = {
-    description = "Pan-unicode version of Fixedsys, a classic DOS font";
     homepage = "http://www.fixedsysexcelsior.com/";
+    description = "Pan-unicode version of Fixedsys, a classic DOS font";
     platforms = lib.platforms.all;
     license = lib.licenses.publicDomain;
     maintainers = [ lib.maintainers.ninjatrappeur ];

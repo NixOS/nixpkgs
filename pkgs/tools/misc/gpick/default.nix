@@ -1,4 +1,15 @@
-{ stdenv, fetchFromGitHub, cmake, glib, boost, pkg-config, gtk3, ragel, lua, lib }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, glib
+, wrapGAppsHook
+, boost
+, pkg-config
+, gtk3
+, ragel
+, lua
+, lib
+}:
 
 stdenv.mkDerivation rec {
   pname = "gpick";
@@ -11,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Z67EJRtKJZLoTUtdMttVTLkzTV2F5rKZ96vaothLiFo=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
   buildInputs = [ boost gtk3 ragel lua ];
 

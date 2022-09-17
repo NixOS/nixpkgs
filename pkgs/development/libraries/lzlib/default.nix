@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC:=$(CC)" ];
   doCheck = true;
 
+  configureFlags = [ "--enable-shared" ];
+
   meta = with lib; {
     homepage = "https://www.nongnu.org/lzip/${pname}.html";
     description =

@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "autopage";
-  version = "0.5.0";
+  version = "0.5.1";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UwW0PMB5gXDXEk5aL+7Plp5F9KC691yzUROBFOr3a4M=";
+    sha256 = "sha256-Ab4+5hu3FOkJD8xcEPTPVGw5YzHGIMauUKIyGyjtMZk=";
   };
 
   pythonImportsCheck = [ "autopage" ];

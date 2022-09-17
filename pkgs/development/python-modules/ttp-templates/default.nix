@@ -2,26 +2,30 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, poetry-core
 }:
 
 buildPythonPackage rec {
   pname = "ttp-templates";
-  version = "0.1.3";
-  format = "setuptools";
+  version = "0.3.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dmulyalin";
     repo = "ttp_templates";
-    rev = version;
-    hash = "sha256-Qx+z/srYgD67FjXzYrc8xtA99n8shWK7yWj/r/ETN2U=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-35Ej76E9qy5EY41Jt2GDCldyXq7IkdqKxVFrBOJh9nE=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   postPatch = ''
     # Drop circular dependency on ttp
-    substituteInPlace setup.py \
-      --replace '"ttp>=0.6.0"' ""
+    sed -i '/ttp =/d' pyproject.toml
   '';
 
   # Circular dependency on ttp

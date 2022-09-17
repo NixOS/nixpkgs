@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "yappi";
-  version = "1.3.5";
+  version = "1.3.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "sumerc";
     repo = pname;
     rev = version;
-    hash = "sha256-XxUAYrDQAY7fD9yTSmoRUmWJEs+L6KSQ0/bIVf/o9ag=";
+    hash = "sha256-MfvaLWw7EhfzFx4aZdRWvQVOOcvZ1Mt7EgxyB2nDB2c=";
   };
 
   patches = [

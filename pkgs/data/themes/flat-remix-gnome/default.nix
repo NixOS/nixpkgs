@@ -12,20 +12,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "flat-remix-gnome";
-  version = "20220510";
+  version = "20220622";
 
   src = fetchFromGitHub {
     owner = "daniruiz";
     repo = pname;
     rev = version;
-    hash = "sha256-sqHX3APeblZai6NBgY+bnRnkzn6CGXwppiQ4pb8HTTw=";
+    hash = "sha256-fm1YOKI6TLkCnkkPZkp8I0xWkNrZt4sVktYZyD5foKU=";
   };
 
   nativeBuildInputs = [ glib fake-dconf ];
   makeFlags = [ "PREFIX=$(out)" ];
+
+  # make install will back up this file, it will fail if the file doesn't exist.
+  # https://github.com/daniruiz/flat-remix-gnome/blob/20220510/Makefile#L56
   preInstall = ''
-    # make install will back up this file, it will fail if the file doesn't exist.
-    # https://github.com/daniruiz/flat-remix-gnome/blob/20220510/Makefile#L56
     mkdir -p $out/share/gnome-shell/
     touch $out/share/gnome-shell/gnome-shell-theme.gresource
   '';

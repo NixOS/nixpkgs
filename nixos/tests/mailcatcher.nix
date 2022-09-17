@@ -24,7 +24,7 @@ import ./make-test-python.nix ({ lib, ... }:
     start_all()
 
     machine.wait_for_unit("mailcatcher.service")
-    machine.wait_for_open_port("1025")
+    machine.wait_for_open_port(1025)
     machine.succeed(
         'echo "this is the body of the email" | mail -s "subject" root@example.org'
     )

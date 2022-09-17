@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
+  # -fcommon: workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: pam.o:/build/super-3.30.0/super.h:293: multiple definition of
+  #     `Method'; super.o:/build/super-3.30.0/super.h:293: first defined here
+  NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE -fcommon";
 
   configureFlags = [
     "--sysconfdir=/etc"

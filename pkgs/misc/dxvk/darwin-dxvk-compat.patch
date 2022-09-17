@@ -1,35 +1,48 @@
-Source: https://github.com/marzent/dxvk/commit/65247afe2de5dd6b555b8fdd46dddcdc6325e1d6
----
- src/d3d11/d3d11_device.cpp        |  12 +-
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
 diff --git a/src/d3d11/d3d11_device.cpp b/src/d3d11/d3d11_device.cpp
-index 21f0d1b4a..5b1d05335 100644
+index 09f3559a..215787f9 100644
 --- a/src/d3d11/d3d11_device.cpp
 +++ b/src/d3d11/d3d11_device.cpp
-@@ -799,8 +799,12 @@ namespace dxvk {
+@@ -801,8 +801,12 @@ namespace dxvk {
      InitReturnPtr(ppGeometryShader);
      D3D11CommonShader module;
- 
+
 -    if (!m_dxvkDevice->features().extTransformFeedback.transformFeedback)
 -      return DXGI_ERROR_INVALID_CALL;
-+      if (!m_dxvkDevice->features().extTransformFeedback.transformFeedback) {
-+          Logger::err(
-+                   "D3D11: CreateGeometryShaderWithStreamOutput:"
-+                   "\n  Transform feedback not supported by device");
-+          return S_OK;
-+      }
- 
++    if (!m_dxvkDevice->features().extTransformFeedback.transformFeedback) {
++        Logger::err(
++                 "D3D11: CreateGeometryShaderWithStreamOutput:"
++                 "\n  Transform feedback not supported by device");
++        return S_OK;
++    }
+
      // Zero-init some counterss so that we can increment
      // them while walking over the stream output entries
-@@ -1973,8 +1977,8 @@ namespace dxvk {
+@@ -1920,7 +1924,7 @@ namespace dxvk {
+     DxvkDeviceFeatures supported = adapter->features();
+     DxvkDeviceFeatures enabled   = {};
+
+-    enabled.core.features.geometryShader                          = VK_TRUE;
++    enabled.core.features.geometryShader                          = supported.core.features.geometryShader;
+     enabled.core.features.robustBufferAccess                      = VK_TRUE;
+     enabled.core.features.shaderStorageImageWriteWithoutFormat    = VK_TRUE;
+     enabled.core.features.depthBounds                             = supported.core.features.depthBounds;
+@@ -1951,7 +1955,7 @@ namespace dxvk {
+       enabled.core.features.sampleRateShading                     = VK_TRUE;
+       enabled.core.features.samplerAnisotropy                     = supported.core.features.samplerAnisotropy;
+       enabled.core.features.shaderClipDistance                    = VK_TRUE;
+-      enabled.core.features.shaderCullDistance                    = VK_TRUE;
++      enabled.core.features.shaderCullDistance                    = supported.core.features.shaderCullDistance;
+       enabled.core.features.textureCompressionBC                  = VK_TRUE;
+       enabled.extDepthClipEnable.depthClipEnable                  = supported.extDepthClipEnable.depthClipEnable;
+       enabled.extHostQueryReset.hostQueryReset                    = VK_TRUE;
+@@ -1971,8 +1975,8 @@ namespace dxvk {
        enabled.core.features.logicOp                               = supported.core.features.logicOp;
        enabled.core.features.shaderImageGatherExtended             = VK_TRUE;
        enabled.core.features.variableMultisampleRate               = supported.core.features.variableMultisampleRate;
 -      enabled.extTransformFeedback.transformFeedback              = VK_TRUE;
 -      enabled.extTransformFeedback.geometryStreams                = VK_TRUE;
-+        enabled.extTransformFeedback.transformFeedback              = supported.extTransformFeedback.transformFeedback;
-+        enabled.extTransformFeedback.geometryStreams                = supported.extTransformFeedback.geometryStreams;
++      enabled.extTransformFeedback.transformFeedback              = supported.extTransformFeedback.transformFeedback;
++      enabled.extTransformFeedback.geometryStreams                = supported.extTransformFeedback.geometryStreams;
      }
-     
+
      if (featureLevel >= D3D_FEATURE_LEVEL_10_1) {

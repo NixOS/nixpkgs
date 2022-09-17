@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "hepunits";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6A5hb+8oF/PGbHXcDkHtJjYkiMzgX5Stz977jgXry1g=";
+    sha256 = "sha256-YJfmlUekg73Az+TRBuRHteuofFUBBg0xLNnWGqniJBQ=";
   };
   nativeBuildInputs = [
     setuptools-scm

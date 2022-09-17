@@ -12,7 +12,7 @@
 , flask_mail
 
 # extras: fsqla
-, flask_sqlalchemy
+, flask-sqlalchemy
 , sqlalchemy
 , sqlalchemy-utils
 
@@ -23,11 +23,11 @@
 
 # propagates
 , blinker
-, email_validator
+, email-validator
 , flask
 , flask_login
 , flask_principal
-, flask_wtf
+, flask-wtf
 , itsdangerous
 , passlib
 
@@ -44,21 +44,21 @@
 
 buildPythonPackage rec {
   pname = "flask-security-too";
-  version = "4.1.4";
+  version = "4.1.5";
 
   src = fetchPypi {
     pname = "Flask-Security-Too";
     inherit version;
-    sha256 = "sha256-j6My1CD+GY2InHlN0IXPcNqfq+ytdoDD3y+5s2o3WRI=";
+    sha256 = "sha256-98jKcHDv/+mls7QVWeGvGcmoYOGCspxM7w5/2RjJxoM=";
   };
 
   propagatedBuildInputs = [
     blinker
-    email_validator
+    email-validator
     flask
     flask_login
     flask_principal
-    flask_wtf
+    flask-wtf
     itsdangerous
     passlib
   ];
@@ -74,7 +74,7 @@ buildPythonPackage rec {
       flask_mail
     ];
     fsqla = [
-      flask_sqlalchemy
+      flask-sqlalchemy
       sqlalchemy
       sqlalchemy-utils
     ];

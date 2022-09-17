@@ -39,8 +39,11 @@ stdenv.mkDerivation {
     ./linux-5.6.patch
     # source: https://gist.github.com/joanbm/5c640ac074d27fd1d82c74a5b67a1290
     ./linux-5.9.patch
-    # source: https://github.com/archlinux/svntogit-community/blob/5ec5b248976f84fcd7e3d7fae49ee91289912d12/trunk/012-linux517.patch
+    # source: https://github.com/archlinux/svntogit-community/blob/33b4bd2b9e30679b03f5d7aa2741911d914dcf94/trunk/012-linux517.patch
     ./linux-5.17.patch
+    # source: https://github.com/archlinux/svntogit-community/blob/2e1fd240f9ce06f500feeaa3e4a9675e65e6b967/trunk/013-linux518.patch
+    ./linux-5.18.patch
+    ./pedantic-fix.patch
     ./null-pointer-fix.patch
     ./gcc.patch
   ];

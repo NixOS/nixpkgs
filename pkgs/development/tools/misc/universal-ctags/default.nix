@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "universal-ctags";
-  version = "5.9.20220220.0";
+  version = "5.9.20220814.0";
 
   src = fetchFromGitHub {
     owner = "universal-ctags";
     repo = "ctags";
     rev = "p${version}";
-    sha256 = "1118iq33snxyw1jk8nwvsl08f3zdainksh0yiapzvg0y5906jjjd";
+    sha256 = "sha256-U1PjmBb99v7N+Dd7n2r1Xx09yflf0OxRlb4f1Sg0UvI=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     # universal-ctags is preferred over emacs's ctags
     priority = 1;
+    mainProgram = "ctags";
     maintainers = [ maintainers.mimame ];
   };
 }

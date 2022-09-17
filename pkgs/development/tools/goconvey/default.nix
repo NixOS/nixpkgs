@@ -17,7 +17,9 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  checkFlags = [ "-short" ];
+  preCheck = ''
+    buildFlagsArray+="-short"
+  '';
 
   meta = {
     description = "Go testing in the browser. Integrates with `go test`. Write behavioral tests in Go";

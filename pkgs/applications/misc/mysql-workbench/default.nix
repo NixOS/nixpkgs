@@ -183,7 +183,7 @@ in stdenv.mkDerivation rec {
 
     homepage = "http://wb.mysql.com/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.kkallio ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

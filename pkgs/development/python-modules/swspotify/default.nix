@@ -35,12 +35,6 @@ buildPythonPackage rec {
     requests
   ];
 
-  postPatch = ''
-    # Detection of the  platform doesn't always works with 1.2.3
-    substituteInPlace pyproject.toml \
-      --replace 'dbus-python = {version = "^1.2.16", platform = "linux"}' ""
-  '';
-
   # Tests want to use Dbus
   doCheck = false;
 

@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
+  enableParallelBuilding = true;
+
   passthru = { inherit se_url; };
 
   meta = with lib; {

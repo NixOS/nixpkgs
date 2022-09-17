@@ -5,7 +5,7 @@
 , funcsigs
 , six
 , pbr
-, python
+, unittestCheckHook
 , pytest
 }:
 
@@ -27,11 +27,8 @@ buildPythonPackage rec {
   #doCheck = !(python.isPyPy && python.isPy27);
   doCheck = false; # Infinite recursion pytest
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
-
   checkInputs = [
+    unittestCheckHook
     pytest
   ];
 

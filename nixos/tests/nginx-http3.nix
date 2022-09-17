@@ -70,6 +70,9 @@ in
   testScript = ''
     start_all()
 
+    server.wait_for_unit("nginx")
+    server.wait_for_open_port(443)
+
     # Check http connections
     client.succeed("curl --verbose --http3 https://acme.test | grep 'Hello World!'")
 

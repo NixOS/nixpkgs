@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchurl, fetchpatch
 , texlive
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
@@ -25,6 +25,15 @@ let
       ];
       sha256 = "0jsq1p66l46k2qq0gbqmx25flj2nprsz4wrd1ybn286p11kdkvvs";
     };
+    patches = [
+      # Pull upstream fix for -fno-common toolchains.
+      (fetchpatch {
+        name = "fno-common.patch";
+        url = "https://github.com/TeX-Live/texlive-source/commit/7748582aeda70ffa02105f6e3e2fc2476e76aac6.patch";
+        sha256 = "1y59cwa41kbg0i071g488jhi9qg0h8l7hqd69brhx2yj95za8c40";
+        excludes = [ "texk/xdvik/ChangeLog" ];
+      })
+    ];
 
     prePatch = ''
       for i in texk/kpathsea/mktex*; do
@@ -33,7 +42,7 @@ let
     '';
 
     configureFlags = [
-      "--with-banner-add=/NixOS.org"
+      "--with-banner-add=/nixos.org"
       "--disable-missing" "--disable-native-texlive-build"
       "--enable-shared" # "--enable-cxx-runtime-hack" # static runtime
       "--enable-tex-synctex"
@@ -406,7 +415,7 @@ xdvi = stdenv.mkDerivation {
   pname = "texlive-xdvi.bin";
   inherit version;
 
-  inherit (common) src;
+  inherit (common) src patches;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ core/*kpathsea*/ freetype ghostscript ]

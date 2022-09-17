@@ -1,50 +1,58 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
+, attrs
 , buildPythonPackage
+, filelock
+, lxml
 , mypy-extensions
+, psutil
+, py
+, pytest-forked
+, pytest-xdist
+, pytestCheckHook
 , python
 , pythonOlder
+, six
 , typed-ast
 , typing-extensions
 , tomli
 , types-typed-ast
+, virtualenv
 }:
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "0.941";
-  disabled = pythonOlder "3.6";
+  version = "0.971";
+  format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy";
-    rev = "v${version}";
-    hash = "sha256-H2SWJA0WWyKV7/5miFawv4JRXu/J7H6Wer1eBL+Tru0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-J1lUnJco9rLYgFpJkfujGfVq1CfC4pdvvDzoan3jGkU=";
   };
 
-  patches = [
-    # FIXME: Remove patch after upstream has decided the proper solution.
-    #        https://github.com/python/mypy/pull/11143
-    (fetchpatch {
-      url = "https://github.com/python/mypy/commit/e7869f05751561958b946b562093397027f6d5fa.patch";
-      hash = "sha256-waIZ+m3tfvYE4HJ8kL6rN/C4fMjvLEe9UoPbt9mHWIM=";
-    })
-  ];
-
-  buildInputs = [
+  nativeBuildInputs = [
     types-typed-ast
   ];
 
   propagatedBuildInputs = [
     mypy-extensions
-    tomli
-    typed-ast
     typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typed-ast
   ];
 
-  # Tests not included in pip package.
+  passthru.optional-dependencies = {
+    dmypy = [ psutil ];
+    reports = [ lxml ];
+  };
+
+  # TODO: enable tests
   doCheck = false;
 
   pythonImportsCheck = [

@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libmbim";
-  version = "1.26.2";
+  version = "1.26.4";
+
+  outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/libmbim/${pname}-${version}.tar.xz";
-    sha256 = "sha256-EMd79bXrjJK6gOm1GZI62biYNivI4ZKOK8mhfuumSa8=";
+    sha256 = "sha256-9ojOxMRYahdXX14ydEjOYvIADvagfJ5FiYc9SmhWitk=";
   };
-
-  outputs = [ "out" "dev" "man" ];
 
   configureFlags = [
     "--with-udev-base-dir=${placeholder "out"}/lib/udev"

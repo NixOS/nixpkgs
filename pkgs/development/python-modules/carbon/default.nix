@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "carbon";
-  version = "1.1.8";
+  version = "1.1.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "95918c4b14e1c525d9499554d5e03b349f87e0c2bc17ec5c64d18679a30b69f1";
+    sha256 = "sha256-wTtbqRHMWBcM2iFN95yzwCf/BQ+EK0vp5MXT4mKX3lw=";
   };
 
   # Carbon-s default installation is /opt/graphite. This env variable ensures

@@ -11,6 +11,7 @@ mkFranzDerivation rec {
   meta = with lib; {
     description = "A free messaging app that combines chat & messaging services into one application";
     homepage = "https://meetfranz.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.free;
     maintainers = [ maintainers.davidtwco ];
     platforms = [ "x86_64-linux" ];

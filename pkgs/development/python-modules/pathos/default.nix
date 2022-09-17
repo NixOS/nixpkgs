@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pathos";
-  version = "0.2.8";
+  version = "0.2.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "uqfoundation";
     repo = pname;
-    rev = "${pname}-${version}";
-    sha256 = "sha256-71hMaG+3FbWMtGqwcDOZ8uit0DsHEoc9H2GXfX7TeoM=";
+    rev = "refs/tags/pathos-${version}";
+    sha256 = "sha256-39D+itH0nkOzmh3Rpg/HXLRj2F1UPsys+iU0ZiodkM0=";
   };
 
   propagatedBuildInputs = [

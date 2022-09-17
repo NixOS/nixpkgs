@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "fpyutils";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "frnmst";
     repo = pname;
     rev = version;
-    sha256 = "sha256-QO7g0wjlaboZwvA+JYL1ax7M8zzCc0hizBdaN2b1TCs=";
+    sha256 = "sha256-QnsLQq5u5Fhy9DJD/UE46NstSPvmHyDjS4WiubSTmSA=";
   };
 
   propagatedBuildInputs = [

@@ -1,19 +1,20 @@
 { stdenv, lib, fetchurl, unzip }:
 let
   # You can check the latest version with `curl -sS https://update.tabnine.com/bundles/version`
-  version = "4.0.60";
+  # There's a handy prefetch script in ./fetch-latest.sh
+  version = "4.4.139";
   supportedPlatforms = {
     "x86_64-linux" = {
       name = "x86_64-unknown-linux-musl";
-      sha256 = "sha256-v5UxRMDDQxpqIKMe9mYMXcpWiacdXzFfaQ6bgab/WmQ=";
+      hash = "sha256-CXm9WR77SMvv+9w+8QUBNHKPhe4otquLyHAwzd+jbNk=";
     };
     "x86_64-darwin" = {
       name = "x86_64-apple-darwin";
-      sha256 = "sha256-vFMMzMatuu1TY6dnBXycv0HxvkOj4Axfx8p0VW0hOic=";
+      hash = "sha256-01lotn9DzgwIj1n9GCUuGmwgtS4DtK+XOl/wduI+QyI=";
     };
     "aarch64-darwin" = {
       name = "aarch64-apple-darwin";
-      sha256 = "sha256-DUeDQLtvSY7W2nG60UunluCSO0ijJP2CYxpRIZA4LTE=";
+      hash = "sha256-RQBBsp48Xhxi3WQKsYzSiiSEW8W7UikKAyFf4sJ2JqQ=";
     };
   };
   platform =
@@ -28,7 +29,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://update.tabnine.com/bundles/${version}/${platform.name}/TabNine.zip";
-    inherit (platform) sha256;
+    inherit (platform) hash;
   };
 
   dontBuild = true;

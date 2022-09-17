@@ -27,12 +27,12 @@
 
 buildPythonPackage rec {
   pname = "pandas";
-  version = "1.4.2";
+  version = "1.4.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-krwfxYXxRjyoJ7RVNZV4FbfeshjFSbfBhALDIsdUmhI=";
+    sha256 = "sha256-L/d4hGjnWRdXTwgM1GgbJ+GnvzZGH+lotJqHtaVNAHw=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -90,6 +90,10 @@ buildPythonPackage rec {
     "test_comparison_invalid"
     # AssertionError: Regex pattern '"quotechar" must be string, not int'
     "python-kwargs2"
+    # Tests for rounding errors and fails if we have better precision
+    # than expected, e.g. on amd64 with FMA or on arm64
+    # https://github.com/pandas-dev/pandas/issues/38921
+    "test_rolling_var_numerical_issues"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_locale"
     "test_clipboard"

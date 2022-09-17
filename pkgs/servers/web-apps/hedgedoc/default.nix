@@ -1,7 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
-, fetchpatch
+, fetchzip
 , makeWrapper
 , which
 , nodejs
@@ -9,79 +8,43 @@
 , fetchYarnDeps
 , python3
 , nixosTests
-, buildGoModule
 }:
-
-let
-  pinData = lib.importJSON ./pin.json;
-
-  # we need a different version than the one already available in nixpkgs
-  esbuild-hedgedoc = buildGoModule rec {
-    pname = "esbuild";
-    version = "0.12.27";
-
-    src = fetchFromGitHub {
-      owner = "evanw";
-      repo = "esbuild";
-      rev = "v${version}";
-      sha256 = "sha256-UclUTfm6fxoYEEdEEmO/j+WLZLe8SFzt7+Tej4bR0RU=";
-    };
-
-    vendorSha256 = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
-  };
-in
 
 mkYarnPackage rec {
   pname = "hedgedoc";
-  inherit (pinData) version;
+  version = "1.9.4";
 
-  src = fetchFromGitHub {
-    owner  = "hedgedoc";
-    repo   = "hedgedoc";
-    rev    = version;
-    sha256 = pinData.srcHash;
+  # we use the upstream compiled js files because yarn2nix cannot handle different versions of dependencies
+  # in development and production and the web assets muts be compiled with js-yaml 3 while development
+  # uses js-yaml 4 which breaks the text editor
+  src = fetchzip {
+    url = "https://github.com/hedgedoc/hedgedoc/releases/download/${version}/hedgedoc-${version}.tar.gz";
+    hash = "sha256-YBPxL1/2bj+8cemSBZSNqSlD/DYJRxSG5UuyUipf3R8=";
   };
 
   nativeBuildInputs = [ which makeWrapper ];
-  extraBuildInputs = [ python3 esbuild-hedgedoc ];
+  extraBuildInputs = [ python3 ];
+
+  packageJSON = ./package.json;
+  yarnFlags = [ "--production" ];
 
   offlineCache = fetchYarnDeps {
-    inherit yarnLock;
-    sha256 = pinData.yarnHash;
+    yarnLock = src + "/yarn.lock";
+    sha256 = "sha256-tnxubtu2lv5DKYY4rwQzNwvsFu3pD3NF4VUN/xieqpc=";
   };
 
-  # FIXME(@Ma27) on the bump to 1.9.0 I had to patch this file manually:
-  # I replaced `midi "https://github.com/paulrosen/MIDI.js.git#abcjs"` with
-  # `midi "git+https://github.com/paulrosen/MIDI.js.git#abcjs"` on all occurrences.
-  #
-  # Without this change `yarn` attempted to download the code directly from GitHub, with
-  # the `git+`-prefix it actually uses the `midi.js` version from the offline cache
-  # created by `yarn2nix`. On future bumps this may be necessary as well!
-  yarnLock = ./yarn.lock;
-  packageJSON = ./package.json;
-
-  postConfigure = ''
-    rm deps/HedgeDoc/node_modules
-    cp -R "$node_modules" deps/HedgeDoc
-    chmod -R u+w deps/HedgeDoc
+  configurePhase = ''
+    cp -r "$node_modules" node_modules
+    chmod -R u+w node_modules
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    cd deps/HedgeDoc
-
     pushd node_modules/sqlite3
     export CPPFLAGS="-I${nodejs}/include/node"
     npm run install --build-from-source --nodedir=${nodejs}/include/node
     popd
-
-    pushd node_modules/esbuild
-    rm bin/esbuild
-    ln -s ${lib.getBin esbuild-hedgedoc}/bin/esbuild bin/
-    popd
-
-    npm run build
 
     patchShebangs bin/*
 
@@ -108,7 +71,6 @@ mkYarnPackage rec {
   '';
 
   passthru = {
-    updateScript = ./update.sh;
     tests = { inherit (nixosTests) hedgedoc; };
   };
 
@@ -116,7 +78,7 @@ mkYarnPackage rec {
     description = "Realtime collaborative markdown notes on all platforms";
     license = licenses.agpl3;
     homepage = "https://hedgedoc.org";
-    maintainers = with maintainers; [ willibutz ma27 globin ];
+    maintainers = with maintainers; [ willibutz SuperSandro2000 ];
     platforms = platforms.linux;
   };
 }

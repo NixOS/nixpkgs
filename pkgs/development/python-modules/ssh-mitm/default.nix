@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "ssh-mitm";
-  version = "2.0.3";
+  version = "2.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    hash = "sha256-TU+jrPZtE9SasUudg1BujvIi3uH+WRdW2TReTFYtntc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-DMXzDgSt1p3ZNGrXnSr79KH33SJNN8U4/94Hoz7Rs+I=";
   };
 
   propagatedBuildInputs = [

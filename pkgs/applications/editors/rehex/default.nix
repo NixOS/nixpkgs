@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/solemnwarning/rehex";
     changelog = "https://github.com/solemnwarning/rehex/raw/${version}/CHANGES.txt";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ markus1189 SuperSandro2000 ];
+    maintainers = with maintainers; [ markus1189 ];
     platforms = platforms.all;
   };
 }

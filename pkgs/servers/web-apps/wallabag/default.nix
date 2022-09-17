@@ -15,14 +15,15 @@
 
 let
   pname = "wallabag";
-  version = "2.4.3";
+  version = "2.5.1";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
+  # GitHub distribution does not include vendored files
   src = fetchurl {
     url = "https://static.wallabag.org/releases/wallabag-release-${version}.tar.gz";
-    hash = "sha256-u6TflAzxoaxjLhNMv5ua+NPBv4kxGycgz2QXnhtDHTo=";
+    hash = "sha256-vurjWI5Sh/SFPtxd5cHaaw7edcAzNub/duhOUF+Wshk=";
   };
 
   patches = [

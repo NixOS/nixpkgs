@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, gflags, perl }:
+{ stdenv, lib, fetchFromGitHub, cmake, gflags, gtest, perl }:
 
 stdenv.mkDerivation rec {
   pname = "glog";
@@ -13,13 +13,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  buildInputs = [ gtest ];
+
   propagatedBuildInputs = [ gflags ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-    # Mak CMake place RPATHs such that tests will find the built libraries.
-    # See https://github.com/NixOS/nixpkgs/pull/144561#discussion_r742468811 and https://github.com/NixOS/nixpkgs/pull/108496
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
   ];
 
   # TODO: Re-enable Darwin tests once we're on a release that has https://github.com/google/glog/issues/709#issuecomment-960381653 fixed
@@ -27,6 +26,17 @@ stdenv.mkDerivation rec {
   # There are some non-thread safe tests that can fail
   enableParallelChecking = false;
   checkInputs = [ perl ];
+
+  GTEST_FILTER =
+    let
+      filteredTests = lib.optionals stdenv.hostPlatform.isMusl [
+        "Symbolize.SymbolizeStackConsumption"
+        "Symbolize.SymbolizeWithDemanglingStackConsumption"
+      ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+        "LogBacktraceAt.DoesBacktraceAtRightLineWhenEnabled"
+      ];
+    in
+    lib.optionalString doCheck "-${builtins.concatStringsSep ":" filteredTests}";
 
   meta = with lib; {
     homepage = "https://github.com/google/glog";

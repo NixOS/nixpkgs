@@ -12,7 +12,7 @@
 , typing-extensions
 
 # tests
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -35,13 +35,13 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  checkInputs = [
+    unittestCheckHook
+  ];
+
   pythonImportsCheck = [
     "aioitertools"
   ];
-
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
 
   meta = with lib; {
     description = "Implementation of itertools, builtins, and more for AsyncIO and mixed-type iterables";

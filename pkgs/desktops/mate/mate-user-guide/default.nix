@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, gettext, itstool, libxml2, yelp, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, itstool
+, libxml2
+, yelp
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-user-guide";
@@ -9,9 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "1h620ngryqc4m8ybvc92ba8404djnm0l65f34mlw38g9ad8d9085";
   };
 
-  nativeBuildInputs = [ itstool gettext libxml2 ];
+  nativeBuildInputs = [
+    itstool
+    gettext
+    libxml2
+  ];
 
-  buildInputs = [ yelp ];
+  buildInputs = [
+    yelp
+  ];
 
   postPatch = ''
     substituteInPlace mate-user-guide.desktop.in.in \

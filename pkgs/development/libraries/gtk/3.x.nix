@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , substituteAll
-, fetchzip
+, fetchurl
 , pkg-config
 , gettext
 , docbook-xsl-nons
@@ -60,7 +60,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk+3";
-  version = "3.24.33-2022-03-11";
+  version = "3.24.34";
 
   outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
   outputBin = "dev";
@@ -70,9 +70,9 @@ stdenv.mkDerivation rec {
     gtkCleanImmodulesCache
   ];
 
-  src = fetchzip {
-    url = "https://gitlab.gnome.org/GNOME/gtk/-/archive/9d1d2f0a6643570274121fc1473e46a6edc2e32d/gtk-9d1d2f0a6643570274121fc1473e46a6edc2e32d.tar.gz";
-    sha256 = "sha256-+K1Kp3Sklrj/Ly0pSktfQwfcrIKpbf05NQbMDhWJZNI=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
+    sha256 = "sha256-28afkN3IIbjRRB8AN03B2kMjour6kHjmHtvl7u+oUuw=";
   };
 
   patches = [
@@ -110,6 +110,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gobject-introspection
     libxkbcommon
     (libepoxy.override { inherit x11Support; })
     isocodes
@@ -158,7 +159,6 @@ stdenv.mkDerivation rec {
     "-Dbroadway_backend=${lib.boolToString broadwaySupport}"
     "-Dx11_backend=${lib.boolToString x11Support}"
     "-Dquartz_backend=${lib.boolToString (stdenv.isDarwin && !x11Support)}"
-    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
   ];
 
   doCheck = false; # needs X11
@@ -213,6 +213,9 @@ stdenv.mkDerivation rec {
       wrapProgram $dev/bin/$program \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}"
     done
+  '' + lib.optionalString stdenv.isDarwin ''
+    # a comment created a cycle between outputs
+    sed '/^# ModulesPath =/d' -i "$out"/lib/gtk-*/*/immodules.cache
   '';
 
   passthru = {

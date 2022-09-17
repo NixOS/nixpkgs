@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-S25DmXJ7fN0gXLV0IzUdz8hXPTYEHmaSG7Mnli6GQVc=";
   };
 
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace mk/ixp.mk \
+      --replace "©" "C "
+  '';
+
   postConfigure = ''
    sed -i -e "s|^PREFIX.*=.*$|PREFIX = $out|" config.mk
   '';

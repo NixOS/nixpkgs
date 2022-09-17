@@ -9,13 +9,12 @@
 }:
 
 let
-
   pname = "pgadmin";
-  version = "6.8";
+  version = "6.12";
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    sha256 = "sha256-kS9GV/j28zkXTJZkRrG2JDgas210rQqXOJrwwxzepbw=";
+    sha256 = "sha256-cO7GdZDfJ0pq1jpMyrVy0UM49WhrKOIJOmMJauSkbyo=";
   };
 
   yarnDeps = mkYarnModules {
@@ -33,8 +32,8 @@ let
     flask_login
     flask_mail
     flask_migrate
-    flask_sqlalchemy
-    flask_wtf
+    flask-sqlalchemy
+    flask-wtf
     flask-compress
     passlib
     pytz
@@ -67,24 +66,14 @@ let
     pyotp
     botocore
     boto3
+    azure-mgmt-subscription
+    azure-mgmt-rdbms
+    azure-mgmt-resource
+    azure-identity
   ];
 
-  # override necessary on pgadmin4 6.8
+  # override necessary on pgadmin4 6.12
   pythonPackages = python3.pkgs.overrideScope (final: prev: rec {
-    flask = prev.flask.overridePythonAttrs (oldAttrs: rec {
-      version = "2.0.3";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "sha256-4RIMIoyi9VO0cN9KX6knq2YlhGdSYGmYGz6wqRkCaH0=";
-      };
-      disabledTests = (oldAttrs.disabledTests or [ ]) ++ [
-        "test_aborting"
-      ];
-    });
-    flask-paranoid = prev.flask-paranoid.overridePythonAttrs (oldAttrs: rec {
-      # tests fail due to downgrades here
-      doCheck = false;
-    });
     werkzeug = prev.werkzeug.overridePythonAttrs (oldAttrs: rec {
       version = "2.0.3";
       src = oldAttrs.src.override {
@@ -112,19 +101,16 @@ pythonPackages.buildPythonApplication rec {
   postPatch = ''
     # patching Makefile, so it doesn't try to build sphinx documentation here
     # (will do so later)
-    substituteInPlace Makefile --replace 'LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $(MAKE) -C docs/en_US -f Makefile.sphinx html' "true"
+    substituteInPlace Makefile \
+      --replace 'LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $(MAKE) -C docs/en_US -f Makefile.sphinx html' "true"
+
     # fix document which refers a non-existing document and fails
-    substituteInPlace docs/en_US/contributions.rst --replace "code_snippets" ""
+    substituteInPlace docs/en_US/contributions.rst \
+      --replace "code_snippets" ""
     patchShebangs .
+
     # relax dependencies
-    substituteInPlace requirements.txt \
-      --replace "psycopg2==2.9.*" "psycopg2>=2.9" \
-      --replace "cryptography==3.*" "cryptography>=3.0" \
-      --replace "requests==2.25.*" "requests>=2.25.0" \
-      --replace "boto3==1.20.*" "boto3>=1.20" \
-      --replace "botocore==1.23.*" "botocore>=1.23" \
-      --replace "pytz==2021.*" "pytz" \
-      --replace "Werkzeug==2.0.3" "werkzeug>=2.*"
+    sed 's|==|>=|g' -i requirements.txt
     # don't use Server Mode (can be overridden later)
     substituteInPlace pkg/pip/setup_pip.py \
       --replace "req = req.replace('psycopg2', 'psycopg2-binary')" "req = req" \
@@ -188,7 +174,7 @@ pythonPackages.buildPythonApplication rec {
   passthru.tests = {
     standalone = nixosTests.pgadmin4-standalone;
     # regression and function tests of the package itself
-    package = (import ../../../../nixos/tests/pgadmin4.nix ({ inherit pkgs; buildDeps = buildDeps; pythonEnv = pythonPackages; }));
+    package = import ../../../../nixos/tests/pgadmin4.nix { inherit pkgs buildDeps; pythonEnv = pythonPackages; };
   };
 
   meta = with lib; {

@@ -165,6 +165,11 @@
     "https://ftp.postgresql.org/pub/"
   ];
 
+  # Qt
+  qt = [
+    "https://download.qt.io/"
+  ];
+
   # Roy marples mirrors
   roy = [
     "https://roy.marples.name/downloads/"
@@ -318,7 +323,6 @@
     "https://luarocks.org/"
     "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/"
     "https://luafr.org/moonrocks/"
-    "http://luarocks.logiceditor.com/rocks/"
   ];
 
   # Python PyPI

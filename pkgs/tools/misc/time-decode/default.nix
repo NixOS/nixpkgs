@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "time-decode";
-  version = "3.2.0";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "digitalsleuth";
     repo = "time_decode";
-    rev = "v${version}";
-    sha256 = "1iwqdq1ail04hs8pkb6rxan4ng2jl2iar6pk72skj41xh4qhlyg6";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-79TReAEHvLldp0n3jTvws3mFE/1O1h6TocjMHrurwt4=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

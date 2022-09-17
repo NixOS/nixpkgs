@@ -1,7 +1,0 @@
---- a/etc/inc/whitelist-run-common.inc.org	2022-05-07 11:27:32.264849186 +0200
-+++ b/etc/inc/whitelist-run-common.inc	2022-05-07 11:27:55.577778211 +0200
-@@ -13,3 +13,4 @@
- whitelist /run/systemd/resolve/resolv.conf
- whitelist /run/systemd/resolve/stub-resolv.conf
- whitelist /run/udev/data
-+whitelist /run/opengl-driver	# NixOS

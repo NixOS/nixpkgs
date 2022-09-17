@@ -14,11 +14,14 @@
 , vulkan-loader
 , wayland
 , wayland-protocols
+, moltenvk
+, AppKit
+, Cocoa
 }:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.3.211.0";
+  version = "1.3.224.0";
 
   # It's not strictly necessary to have matching versions here, however
   # since we're using the SDK version we may as well be consistent with
@@ -28,7 +31,7 @@ stdenv.mkDerivation rec {
       owner = "KhronosGroup";
       repo = "Vulkan-Tools";
       rev = "sdk-${version}";
-      sha256 = "sha256-iXsWTKNllPZy1Kpo3JHzEEus3Hu9LofvMB3c4Gn6/DM=";
+      hash = "sha256-Z+QJBd2LBdiJD1fHhBLbOfOoLhqTg0J3tq+XQRSiQaY=";
     });
 
   nativeBuildInputs = [
@@ -38,19 +41,44 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glslang
+    vulkan-headers
+    vulkan-loader
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     libffi
     libX11
     libXau
     libxcb
     libXdmcp
     libXrandr
-    vulkan-headers
-    vulkan-loader
     wayland
     wayland-protocols
+  ] ++ lib.optionals stdenv.isDarwin [
+    moltenvk
+    moltenvk.dev
+    AppKit
+    Cocoa
   ];
 
   libraryPath = lib.strings.makeLibraryPath [ vulkan-loader ];
+
+  patches = [
+    # Vulkan-Tools expects to find the MoltenVK ICD and `libMoltenVK.dylib` in its source repo.
+    # Patch it to use the already-built binaries and ICD in nixpkgs.
+    ./use-nix-moltenvk.patch
+  ];
+
+  # vkcube.app and vkcubepp.app require `ibtool`, but the version in `xib2nib` is not capable of
+  # building these apps. Build them using `ibtool` from Xcode, but don’t allow any other binaries
+  # into the sandbox. Note that the CLT are not supported because `ibtool` requires Xcode.
+  sandboxProfile = lib.optionalString stdenv.isDarwin ''
+    (allow process-exec
+      (literal "/usr/bin/ibtool")
+      (regex "/Xcode.app/Contents/Developer/usr/bin/ibtool")
+      (regex "/Xcode.app/Contents/Developer/usr/bin/xcodebuild"))
+    (allow file-read*)
+    (deny file-read* (subpath "/usr/local") (with no-log))
+    (allow file-write* (subpath "/private/var/folders"))
+  '';
 
   dontPatchELF = true;
 
@@ -62,6 +90,9 @@ stdenv.mkDerivation rec {
     "-DPKG_CONFIG_EXECUTABLE=${pkg-config}/bin/pkg-config"
     # Hide dev warnings that are useless for packaging
     "-Wno-dev"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DMOLTENVK_REPO_ROOT=${moltenvk}/share/vulkan/icd.d"
+    "-DIBTOOL=/usr/bin/ibtool"
   ];
 
   meta = with lib; {
@@ -72,7 +103,8 @@ stdenv.mkDerivation rec {
       use of the Vulkan API.
     '';
     homepage    = "https://github.com/KhronosGroup/Vulkan-Tools";
-    platforms   = platforms.linux;
+    hydraPlatforms = [ "x86_64-linux" "i686-linux" ];
+    platforms   = platforms.unix;
     license     = licenses.asl20;
     maintainers = [ maintainers.ralith ];
   };

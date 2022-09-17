@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aiomysql";
-  version = "0.1.0";
+  version = "0.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-TNaQ4EKiHwSmPpUco0pA5SBP3fljWQ/Kd5RLs649fu0=";
+    hash = "sha256-rYEos2RuE2xI59httYlN21smBH4/fU4uT48FWwrI6Qg=";
   };
 
   nativeBuildInputs = [

@@ -4,9 +4,6 @@ buildDunePackage rec {
   pname = "lwt_ssl";
   version = "1.1.3";
 
-  minimumOCamlVersion = "4.02";
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "aantron";
     repo = "lwt_ssl";

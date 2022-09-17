@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     "-DLLVM_DIR=${llvm_11.dev}"
     "-DBUILD_SHARED_LIBS=YES"
     "-DLLVM_SPIRV_BUILD_EXTERNAL=YES"
+    # RPATH of binary /nix/store/.../bin/llvm-spirv contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
   # FIXME: CMake tries to run "/llvm-lit" which of course doesn't exist

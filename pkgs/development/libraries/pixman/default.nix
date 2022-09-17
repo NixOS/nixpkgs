@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional stdenv.isAarch32 "--disable-arm-iwmmxt";
 
+  preConfigure = ''
+    # https://gitlab.freedesktop.org/pixman/pixman/-/issues/62
+    export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 184 ? 184 : NIX_BUILD_CORES))
+  '';
+
   doCheck = true;
 
   postInstall = glib.flattenInclude;

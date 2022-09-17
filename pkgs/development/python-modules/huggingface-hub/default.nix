@@ -14,33 +14,40 @@
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.6.0";
+  version = "0.9.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-jR4aqMAAQJ5a7pOe3RpCtLgdm5JVVSPsBQtube6FeqM=";
+    hash = "sha256-/FUr66lj0wgmuLcwc84oHKBGzU8jFnBVMOXk7uKUpSk=";
   };
-
-  nativeBuildInputs = [ packaging ];
 
   propagatedBuildInputs = [
     filelock
+    packaging
     pyyaml
     requests
     ruamel-yaml
     tqdm
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
 
   # Tests require network access.
   doCheck = false;
-  pythonImportsCheck = [ "huggingface_hub" ];
+
+  pythonImportsCheck = [
+    "huggingface_hub"
+  ];
 
    meta = with lib; {
-    homepage = "https://github.com/huggingface/huggingface_hub";
     description = "Download and publish models and other files on the huggingface.co hub";
+    homepage = "https://github.com/huggingface/huggingface_hub";
     changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

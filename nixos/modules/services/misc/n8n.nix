@@ -10,19 +10,19 @@ in
 {
   options.services.n8n = {
 
-    enable = mkEnableOption "n8n server";
+    enable = mkEnableOption (lib.mdDoc "n8n server");
 
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = "Open ports in the firewall for the n8n web interface.";
+      description = lib.mdDoc "Open ports in the firewall for the n8n web interface.";
     };
 
     settings = mkOption {
       type = format.type;
       default = {};
-      description = ''
-        Configuration for n8n, see <link xlink:href="https://docs.n8n.io/reference/configuration.html"/>
+      description = lib.mdDoc ''
+        Configuration for n8n, see <https://docs.n8n.io/reference/configuration.html>
         for supported values.
       '';
     };

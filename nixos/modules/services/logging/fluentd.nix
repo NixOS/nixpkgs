@@ -15,26 +15,26 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable fluentd.";
+        description = lib.mdDoc "Whether to enable fluentd.";
       };
 
       config = mkOption {
         type = types.lines;
         default = "";
-        description = "Fluentd config.";
+        description = lib.mdDoc "Fluentd config.";
       };
 
       package = mkOption {
         type = types.path;
         default = pkgs.fluentd;
         defaultText = literalExpression "pkgs.fluentd";
-        description = "The fluentd package to use.";
+        description = lib.mdDoc "The fluentd package to use.";
       };
 
       plugins = mkOption {
         type = types.listOf types.path;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           A list of plugin paths to pass into fluentd. It will make plugins defined in ruby files
           there available in your config.
         '';

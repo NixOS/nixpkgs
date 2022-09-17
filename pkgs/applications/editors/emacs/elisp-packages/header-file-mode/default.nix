@@ -5,17 +5,21 @@
 
 trivialBuild {
   pname = "header-file-mode";
-  version = "unstable-2022-05-13";
+  version = "unstable-2022-05-25";
 
   src = fetchFromGitHub {
     owner = "aidalgol";
     repo = "header-file-mode";
-    rev = "bcfd19a2c70030ebf5fa68e87aca4b3db8fad13e";
-    sha256 = "sha256-XMXOU+vWJ/0e0ny4Dz3DxWpdEfSNXGzm03sBke32Dwc=";
+    rev = "cf6ce33b436ae9631aece1cd30a459cb0f89d1cd";
+    sha256 = "sha256-+TDJubmBc0Hl+2ms58rnOf3hTaQE3ayrIpGWl4j39GQ=";
   };
 
   postUnpack = ''
     sourceRoot="$sourceRoot/lisp"
+  '';
+
+  postBuild = ''
+    emacs -L . --batch -l package --eval '(package-generate-autoloads "header-file" ".")'
   '';
 
   meta = {

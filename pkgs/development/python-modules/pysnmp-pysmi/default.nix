@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pysnmp-pysmi";
-  version = "1.1.8";
+  version = "1.1.10";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pysnmp";
     repo = "pysmi";
-    rev = "v${version}";
-    hash = "sha256-nsIEZPD7bfbePZukkudP0ZH/m8Be88QkVDM5PdjNHVk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ZfN0nU9IurBEjSZijC2E4UoLIM54mBFgv7rcI1v/a4Q=";
   };
 
   nativeBuildInputs = [

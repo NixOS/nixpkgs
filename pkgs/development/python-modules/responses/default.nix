@@ -10,16 +10,18 @@
 
 buildPythonPackage rec {
   pname = "responses";
-  version = "0.20.0";
+  version = "0.21.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = pname;
     rev = version;
-    hash = "sha256-dhIKMQXBJfZGIanJN1bFmlr/FYL1UYgYKGYaSznKhZs=";
+    hash = "sha256-qYohrXrQkUBPo7yC+ZOwidDaCg/2nteXKAOCUvR4k2Q=";
   };
 
   propagatedBuildInputs = [

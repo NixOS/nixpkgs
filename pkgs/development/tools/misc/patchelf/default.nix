@@ -7,14 +7,18 @@
 
 stdenv.mkDerivation rec {
   pname = "patchelf";
-  version = "0.14.5";
+  version = "0.15.0";
 
   src = fetchurl {
     url = "https://github.com/NixOS/${pname}/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-uaRvKYkyLrifpPYjfiCDbFe0VapDoyVF6gk7Qx2YL1w=";
+    sha256 = "sha256-9ANtPuTY4ijewb7/8PbkbYpA6eVw4AaOOdd+YuLIvcI=";
   };
 
+  strictDeps = true;
+
   setupHook = [ ./setup-hook.sh ];
+
+  enableParallelBuilding = true;
 
   # fails 8 out of 24 tests, problems when loading libc.so.6
   doCheck = stdenv.name == "stdenv-linux";

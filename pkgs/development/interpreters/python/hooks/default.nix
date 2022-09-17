@@ -6,6 +6,7 @@
 , isPy3k
 , ensureNewerSourcesForZipFilesHook
 , findutils
+, installShellFiles
 }:
 
 let
@@ -164,6 +165,14 @@ in rec {
       };
     } ./setuptools-check-hook.sh) {};
 
+  unittestCheckHook = callPackage ({ }:
+    makeSetupHook {
+      name = "unittest-check-hook";
+      substitutions = {
+        inherit pythonCheckInterpreter;
+      };
+    } ./unittest-check-hook.sh) {};
+
   venvShellHook = disabledIf (!isPy3k) (callPackage ({ }:
     makeSetupHook {
       name = "venv-shell-hook";
@@ -182,6 +191,6 @@ in rec {
   sphinxHook = callPackage ({ sphinx }:
     makeSetupHook {
       name = "python${python.pythonVersion}-sphinx-hook";
-      deps = [ sphinx ];
+      deps = [ sphinx installShellFiles ];
     } ./sphinx-hook.sh) {};
 }

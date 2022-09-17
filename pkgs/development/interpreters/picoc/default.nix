@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Very small C interpreter for scripting";
     longDescription = ''
       PicoC is a very small C interpreter for scripting. It was originally

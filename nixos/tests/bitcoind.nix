@@ -13,9 +13,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         users.rpc2.passwordHMAC = "1495e4a3ad108187576c68f7f9b5ddc5$accce0881c74aa01bb8960ff3bdbd39f607fd33178147679e055a4ac35f53225";
       };
     };
+
+    environment.etc."test.blank".text = "";
     services.bitcoind."testnet" = {
       enable = true;
-      configFile = "/test.blank";
+      configFile = "/etc/test.blank";
       testnet = true;
       rpc = {
         port = 18332;

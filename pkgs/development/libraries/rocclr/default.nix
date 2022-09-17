@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocclr";
-  version = "5.1.0";
+  version = "5.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "ROCclr";
     rev = "rocm-${version}";
-    hash = "sha256-SFWEGKffhuiTE7ICbkElVV5cldXu4Xbwvjb6LiNmijA=";
+    hash = "sha256-DER6PBYXmZRgwFNVU5rpn87HrXMR+HnQf8cwHioUals=";
   };
 
   patches = [

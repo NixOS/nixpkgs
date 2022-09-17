@@ -2,22 +2,22 @@ Disable targets, where we use Nix packages.
 
 --- a/utils/build-presets.ini
 +++ b/utils/build-presets.ini
-@@ -776,8 +776,6 @@
- llbuild
+@@ -818,8 +818,6 @@
  swiftpm
+ swift-driver
  xctest
 -libicu
 -libcxx
-
- dash-dash
-
-@@ -785,9 +785,7 @@
- install-llbuild
+ swiftdocc
+ 
+ # build-ninja
+@@ -830,9 +828,7 @@
  install-swiftpm
+ install-swift-driver
  install-xctest
 -install-libicu
  install-prefix=%(install_prefix)s
 -install-libcxx
  install-sourcekit-lsp
+ install-swiftdocc
  build-swift-static-stdlib
- build-swift-static-sdk-overlay

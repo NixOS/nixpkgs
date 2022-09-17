@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, bc, librsvg, xcursorgen }:
+{ lib, stdenvNoCC, fetchFromGitLab, bc, librsvg, xcursorgen }:
 
 let
   dimensions = {
@@ -16,7 +16,7 @@ let
     # meta.longDescription.)
     map variantName product;
 in
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "comixcursors";
   version = "0.9.2";
 

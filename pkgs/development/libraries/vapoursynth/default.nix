@@ -1,18 +1,18 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, makeWrapper
 , runCommandCC, runCommand, vapoursynth, writeText, patchelf, buildEnv
-, zimg, libass, python3, libiconv
+, zimg, libass, python3, libiconv, testers
 , ApplicationServices
 }:
 
 stdenv.mkDerivation rec {
   pname = "vapoursynth";
-  version = "58";
+  version = "59";
 
   src = fetchFromGitHub {
     owner  = "vapoursynth";
     repo   = "vapoursynth";
     rev    = "R${version}";
-    sha256 = "sha256-LIjNfyfpyvE+Ec6f4aGzRA4ZGoWPFhjtUw4yrenDsUQ=";
+    sha256 = "sha256-6w7GSC5ZNIhLpulni4sKq0OvuxHlTJRilBFGH5PQW8U=";
   };
 
   patches = [
@@ -38,6 +38,12 @@ stdenv.mkDerivation rec {
       inherit lib python3 buildEnv writeText runCommandCC stdenv runCommand
         vapoursynth makeWrapper withPlugins;
     };
+
+    tests.version = testers.testVersion {
+      package = vapoursynth;
+      # Check Core version to prevent false positive with API version
+      version = "Core R${version}";
+    };
   };
 
   postInstall = ''
@@ -50,10 +56,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin; # see https://github.com/NixOS/nixpkgs/pull/189446 for partial fix
     description = "A video processing framework with the future in mind";
     homepage    = "http://www.vapoursynth.com/";
     license     = licenses.lgpl21;
     platforms   = platforms.x86_64;
     maintainers = with maintainers; [ rnhmjoj sbruder tadeokondrak ];
+    mainProgram = "vspipe";
   };
 }

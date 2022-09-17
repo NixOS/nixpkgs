@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Client class for calling http+json APIs in Python";
     homepage = "https://github.com/plinss/json_home_client";
     license = licenses.mit;
-    maintainers = [ maintainers.kvark ];
+    maintainers = [];
   };
 }

@@ -2,15 +2,17 @@
 , callPackage
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "attrs";
-  version = "21.4.0";
+  version = "22.1.0";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YmuoI0IR25joad92IwoTfExAoS1yRFxF1fW3FvB24v0=";
+    hash = "sha256-Ka3CZlRH5RkdDnxWj954sh+WctNEKB0MbhqwhUKbIrY=";
   };
 
   outputs = [
@@ -38,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python attributes without boilerplate";
-    homepage = "https://github.com/hynek/attrs";
+    homepage = "https://github.com/python-attrs/attrs";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

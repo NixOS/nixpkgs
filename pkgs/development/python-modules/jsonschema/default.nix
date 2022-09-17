@@ -2,35 +2,39 @@
 , attrs
 , buildPythonPackage
 , fetchPypi
+, hatch-vcs
+, hatchling
 , importlib-metadata
 , importlib-resources
 , pyrsistent
 , pythonOlder
-, setuptools-scm
 , twisted
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "jsonschema";
-  version = "4.5.1";
+  version = "4.13.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fG2IJhk0DDNHob9zFeFH5tPa5DkDOuY4PWrLkIwQHfw=";
+    sha256 = "sha256-N3ZRLfT1P3Tm4o/jVxe1siPBdWh1SGmEoxvJFl5/ySA=";
   };
+
+  patches = [
+    ./remove-fancy-pypi-readme.patch
+  ];
 
   postPatch = ''
     patchShebangs json/bin/jsonschema_suite
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   propagatedBuildInputs = [

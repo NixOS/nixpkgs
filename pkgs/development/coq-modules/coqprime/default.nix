@@ -6,7 +6,7 @@ with lib; mkCoqDerivation {
   owner = "thery";
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.12" "8.15"; out = "8.15"; }
+    { case = range "8.12" "8.16"; out = "8.15"; }
     { case = range "8.10" "8.11"; out = "8.10"; }
     { case = range "8.8"  "8.9";  out = "8.8"; }
     { case = "8.7";               out = "8.7.2"; }
@@ -20,7 +20,6 @@ with lib; mkCoqDerivation {
   release."8.7.2".sha256 = "15zlcrx06qqxjy3nhh22wzy0rb4npc8l4nx2bbsfsvrisbq1qb7k";
   releaseRev = v: "v${v}";
 
-  extraBuildInputs = [ which ];
   propagatedBuildInputs = [ bignums ];
 
   meta = with lib; {

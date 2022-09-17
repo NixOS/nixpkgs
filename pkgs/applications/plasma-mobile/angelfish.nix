@@ -20,8 +20,8 @@
 , srcs
 
 # These must be updated in tandem with package updates.
-, cargoShaForVersion ? "22.04"
-, cargoSha256 ? "RtdZMBKixC3mdHeFXY9u0pHyDv93Z8p4EVY+lz1aISM="
+, cargoShaForVersion ? "22.06"
+, cargoSha256 ? "ckxShWgqGaApYoGQdrRQKCKOsbwUH5QP82x3BNM4Jx8="
 }:
 
 # Guard against incomplete updates.

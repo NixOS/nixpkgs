@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/tomhrr/dale";
     license = licenses.bsd3;
     maintainers = with maintainers; [ amiloradovsky ];
-    platforms = with platforms; [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
     # failed on Darwin: linker couldn't find the FFI lib
     # failed on AArch64: because LLVM 3.5 is failed there
   };

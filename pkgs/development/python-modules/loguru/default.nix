@@ -21,6 +21,14 @@ buildPythonPackage rec {
     sha256 = "sha256-BmvQZ1jQpRPpg2/ZxrWnW/s/02hB9LmWvGC1R6MJ1Bw=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "fix-test-repr-infinite-recursion.patch";
+      url = "https://github.com/Delgan/loguru/commit/4fe21f66991abeb1905e24c3bc3c634543d959a2.patch";
+      hash = "sha256-NUOkgUS28TOazO0txMinFtaKwsi/J1Y7kqjjvMRCnR8=";
+    })
+  ];
+
   propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [
     aiocontextvars
   ];

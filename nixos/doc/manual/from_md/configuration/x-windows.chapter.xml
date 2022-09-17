@@ -133,7 +133,6 @@ services.xserver.displayManager.autoLogin.user = &quot;alice&quot;;
     </para>
     <programlisting language="bash">
 services.xserver.videoDrivers = [ &quot;modesetting&quot; ];
-services.xserver.useGlamor = true;
 </programlisting>
     <para>
       If you experience screen tearing no matter what, this

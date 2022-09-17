@@ -10,13 +10,13 @@ let
   configFile = format.generate "wiki-js.yml" cfg.settings;
 in {
   options.services.wiki-js = {
-    enable = mkEnableOption "wiki-js";
+    enable = mkEnableOption (lib.mdDoc "wiki-js");
 
     environmentFile = mkOption {
       type = types.nullOr types.path;
       default = null;
       example = "/root/wiki-js.env";
-      description = ''
+      description = lib.mdDoc ''
         Environment fiel to inject e.g. secrets into the configuration.
       '';
     };
@@ -24,8 +24,8 @@ in {
     stateDirectoryName = mkOption {
       default = "wiki-js";
       type = types.str;
-      description = ''
-        Name of the directory in <filename>/var/lib</filename>.
+      description = lib.mdDoc ''
+        Name of the directory in {file}`/var/lib`.
       '';
     };
 
@@ -37,7 +37,7 @@ in {
           port = mkOption {
             type = types.port;
             default = 3000;
-            description = ''
+            description = lib.mdDoc ''
               TCP port the process should listen to.
             '';
           };
@@ -45,7 +45,7 @@ in {
           bindIP = mkOption {
             default = "0.0.0.0";
             type = types.str;
-            description = ''
+            description = lib.mdDoc ''
               IPs the service should listen to.
             '';
           };
@@ -54,24 +54,24 @@ in {
             type = mkOption {
               default = "postgres";
               type = types.enum [ "postgres" "mysql" "mariadb" "mssql" ];
-              description = ''
-                Database driver to use for persistence. Please note that <literal>sqlite</literal>
+              description = lib.mdDoc ''
+                Database driver to use for persistence. Please note that `sqlite`
                 is currently not supported as the build process for it is currently not implemented
-                in <package>pkgs.wiki-js</package> and it's not recommended by upstream for
+                in `pkgs.wiki-js` and it's not recommended by upstream for
                 production use.
               '';
             };
             host = mkOption {
               type = types.str;
               example = "/run/postgresql";
-              description = ''
+              description = lib.mdDoc ''
                 Hostname or socket-path to connect to.
               '';
             };
             db = mkOption {
               default = "wiki";
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Name of the database to use.
               '';
             };
@@ -80,31 +80,28 @@ in {
           logLevel = mkOption {
             default = "info";
             type = types.enum [ "error" "warn" "info" "verbose" "debug" "silly" ];
-            description = ''
+            description = lib.mdDoc ''
               Define how much detail is supposed to be logged at runtime.
             '';
           };
 
-          offline = mkEnableOption "offline mode" // {
-            description = ''
+          offline = mkEnableOption (lib.mdDoc "offline mode") // {
+            description = lib.mdDoc ''
               Disable latest file updates and enable
-              <link xlink:href="https://docs.requarks.io/install/sideload">sideloading</link>.
+              [sideloading](https://docs.requarks.io/install/sideload).
             '';
           };
         };
       };
-      description = ''
-        Settings to configure <package>wiki-js</package>. This directly
-        corresponds to <link xlink:href="https://docs.requarks.io/install/config">the upstream
-        configuration options</link>.
+      description = lib.mdDoc ''
+        Settings to configure `wiki-js`. This directly
+        corresponds to [the upstream configuration options](https://docs.requarks.io/install/config).
 
         Secrets can be injected via the environment by
-        <itemizedlist>
-          <listitem><para>specifying <xref linkend="opt-services.wiki-js.environmentFile" />
-          to contain secrets</para></listitem>
-          <listitem><para>and setting sensitive values to <literal>$(ENVIRONMENT_VAR)</literal>
-          with this value defined in the environment-file.</para></listitem>
-        </itemizedlist>
+        - specifying [](#opt-services.wiki-js.environmentFile)
+          to contain secrets
+        - and setting sensitive values to `$(ENVIRONMENT_VAR)`
+          with this value defined in the environment-file.
       '';
     };
   };

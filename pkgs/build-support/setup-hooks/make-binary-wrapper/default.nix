@@ -1,10 +1,11 @@
 { stdenv
+, targetPackages
 , lib
 , makeSetupHook
 , dieHook
 , writeShellScript
 , tests
-, cc ? stdenv.cc
+, cc ? targetPackages.stdenv.cc
 , sanitizers ? []
 }:
 
@@ -14,7 +15,7 @@ makeSetupHook {
     ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) cc;
 
   substitutions = {
-    cc = "${cc}/bin/cc ${lib.escapeShellArgs (map (s: "-fsanitize=${s}") sanitizers)}";
+    cc = "${cc}/bin/${cc.targetPrefix}cc ${lib.escapeShellArgs (map (s: "-fsanitize=${s}") sanitizers)}";
 
     # Extract the function call used to create a binary wrapper from its embedded docstring
     passthru.extractCmd = writeShellScript "extract-binary-wrapper-cmd" ''

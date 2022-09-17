@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, doxygen, extra-cmake-modules, graphviz, kdoctools
 , wrapQtAppsHook
+, autoPatchelfHook
 
 , akonadi, alkimia, aqbanking, gmp, gwenhywfar, kactivities, karchive
 , kcmutils, kcontacts, kdewebkit, kdiagram, kholidays, kidentitymanagement
@@ -10,24 +11,24 @@
 # Needed for running tests:
 , qtbase, xvfb-run
 
-, python2, python3Packages
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "kmymoney";
-  version = "5.1.1";
+  version = "5.1.3";
 
   src = fetchurl {
     url = "mirror://kde/stable/kmymoney/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "sha256-33ufeOhZb5nSgpXKc4cI8GVe4Fd4nf2SHHsbq5ZXgpg=";
+    sha256 = "sha256-OTi4B4tzkboy4Su0I5di+uE0aDoMLsGnUQXDAso+Xj8=";
   };
 
   # Hidden dependency that wasn't included in CMakeLists.txt:
   NIX_CFLAGS_COMPILE = "-I${kitemmodels.dev}/include/KF5";
 
   nativeBuildInputs = [
-    doxygen extra-cmake-modules graphviz kdoctools python2
-    python3Packages.wrapPython wrapQtAppsHook
+    doxygen extra-cmake-modules graphviz kdoctools
+    python3.pkgs.wrapPython wrapQtAppsHook autoPatchelfHook
   ];
 
   buildInputs = [
@@ -38,20 +39,18 @@ stdenv.mkDerivation rec {
 
     # Put it into buildInputs so that CMake can find it, even though we patch
     # it into the interface later.
-    python3Packages.weboob
+    python3.pkgs.woob
   ];
 
-  weboobPythonPath = [ python3Packages.weboob ];
-
-  postInstall = ''
-    buildPythonPath "$weboobPythonPath"
-    patchPythonScript "$out/share/kmymoney/weboob/kmymoneyweboob.py"
+  postPatch = ''
+    buildPythonPath "${python3.pkgs.woob}"
+    patchPythonScript "kmymoney/plugins/woob/interface/kmymoneywoob.py"
 
     # Within the embedded Python interpreter, sys.argv is unavailable, so let's
     # assign it to a dummy value so that the assignment of sys.argv[0] injected
     # by patchPythonScript doesn't fail:
     sed -i -e '1i import sys; sys.argv = [""]' \
-      "$out/share/kmymoney/weboob/kmymoneyweboob.py"
+      "kmymoney/plugins/woob/interface/kmymoneywoob.py"
   '';
 
   doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
@@ -62,10 +61,18 @@ stdenv.mkDerivation rec {
         ARGS="-E '(reports-chart-test)'" # Test fails, so exclude it for now.
     '';
 
+  # libpython is required by the python interpreter embedded in kmymoney, so we
+  # need to explicitly tell autoPatchelf about it.
+  postFixup = ''
+    patchelf --debug --add-needed libpython${python3.pythonVersion}.so \
+      "$out/bin/.kmymoney-wrapped"
+  '';
+
   meta = {
     description = "Personal finance manager for KDE";
     homepage = "https://kmymoney.org/";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ aidalgol das-g ];
   };
 }

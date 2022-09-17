@@ -4,8 +4,12 @@ makeWrapperArgs=( ${makeWrapperArgs-} )
 # First argument is the executable you want to wrap,
 # the second is the destination for the wrapper.
 wrapDotnetProgram() {
+    if [ ! "${selfContainedBuild-}" ]; then
+        dotnetRootFlag=("--set" "DOTNET_ROOT" "@dotnetRuntime@")
+    fi
+
     makeWrapper "$1" "$2" \
-        --set "DOTNET_ROOT" "@dotnetRuntime@" \
+        "${dotnetRootFlag[@]}" \
         --suffix "LD_LIBRARY_PATH" : "@runtimeDeps@" \
         "${gappsWrapperArgs[@]}" \
         "${makeWrapperArgs[@]}"

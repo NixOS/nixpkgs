@@ -31,6 +31,7 @@
 , net-snmp
 , oniguruma
 , openldap
+, openssl_1_1
 , openssl
 , pam
 , pcre2
@@ -66,8 +67,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   #
   # Build inputs is used for extra deps that may be needed. And zendExtension
   # will mark the extension as a zend extension or not.
-  mkExtension =
-    { name
+  mkExtension = lib.makeOverridable
+    ({ name
     , configureFlags ? [ "--enable-${name}" ]
     , internalDeps ? [ ]
     , postPhpize ? ""
@@ -151,7 +152,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         description = "PHP upstream extension: ${name}";
         inherit (php.meta) maintainers homepage license;
       };
-    });
+    }));
 
   php = phpPackage;
 
@@ -196,8 +197,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     apcu = callPackage ../development/php-packages/apcu { };
 
-    apcu_bc = callPackage ../development/php-packages/apcu_bc { };
-
     ast = callPackage ../development/php-packages/ast { };
 
     blackfire = pkgs.callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
@@ -218,6 +217,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     imagick = callPackage ../development/php-packages/imagick { };
 
+    inotify = callPackage ../development/php-packages/inotify { };
+
     mailparse = callPackage ../development/php-packages/mailparse { };
 
     maxminddb = callPackage ../development/php-packages/maxminddb { };
@@ -226,13 +227,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     mongodb = callPackage ../development/php-packages/mongodb { };
 
-    oci8 = callPackage ../development/php-packages/oci8 ({
-      version = "2.2.0";
-      sha256 = "0jhivxj1nkkza4h23z33y7xhffii60d7dr51h1czjk10qywl7pyd";
-    } // lib.optionalAttrs (lib.versionAtLeast php.version "8.0") {
-      version = "3.0.1";
-      sha256 = "108ds92620dih5768z19hi0jxfa7wfg5hdvyyvpapir87c0ap914";
-    });
+    oci8 = callPackage ../development/php-packages/oci8 { };
 
     openswoole = callPackage ../development/php-packages/openswoole { };
 
@@ -259,8 +254,6 @@ lib.makeScope pkgs.newScope (self: with self; {
     };
 
     pdo_sqlsrv = callPackage ../development/php-packages/pdo_sqlsrv { };
-
-    php_excel = callPackage ../development/php-packages/php_excel { };
 
     pinba = callPackage ../development/php-packages/pinba { };
 
@@ -345,13 +338,6 @@ lib.makeScope pkgs.newScope (self: with self; {
           configureFlags = [
             "--with-iconv${lib.optionalString stdenv.isDarwin "=${libiconv}"}"
           ];
-          patches = lib.optionals (lib.versionOlder php.version "8.0") [
-            # Header path defaults to FHS location, preventing the configure script from detecting errno support.
-            (fetchpatch {
-              url = "https://github.com/fossar/nix-phps/raw/263861a8c9bdafd7abe44db6db4ef0179643680c/pkgs/iconv-header-path.patch";
-              sha256 = "7GHnEUu+hcsQ4h3itDwk6p46ZKfib9JZ2XpWlXrdn6E=";
-            })
-          ];
           doCheck = false;
         }
         {
@@ -365,7 +351,6 @@ lib.makeScope pkgs.newScope (self: with self; {
           name = "intl";
           buildInputs = [ icu64 ];
         }
-        { name = "json"; enable = lib.versionOlder php.version "8.0"; }
         {
           name = "ldap";
           buildInputs = [ openldap cyrus_sasl ];
@@ -381,9 +366,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "mbstring";
-          buildInputs = [ oniguruma ] ++ lib.optionals (lib.versionAtLeast php.version "8.0") [
-            pcre2
-          ];
+          buildInputs = [ oniguruma pcre2 ];
           doCheck = false;
         }
         {
@@ -416,11 +399,9 @@ lib.makeScope pkgs.newScope (self: with self; {
             '')
           ];
         }
-        # oci8 (7.4, 7.3, 7.2)
-        # odbc (7.4, 7.3, 7.2)
         {
           name = "opcache";
-          buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin && lib.versionAtLeast php.version "8.0") [
+          buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin) [
             valgrind.dev
           ];
           zendExtension = true;
@@ -429,7 +410,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "openssl";
-          buildInputs = [ openssl ];
+          buildInputs = if (lib.versionAtLeast php.version "8.1") then [ openssl ] else [ openssl_1_1 ];
           configureFlags = [ "--with-openssl" ];
           doCheck = false;
         }
@@ -443,14 +424,12 @@ lib.makeScope pkgs.newScope (self: with self; {
           enable = (!stdenv.isDarwin);
           doCheck = false;
         }
-        # pdo_firebird (7.4, 7.3, 7.2)
         {
           name = "pdo_mysql";
           internalDeps = with php.extensions; [ pdo mysqlnd ];
           configureFlags = [ "--with-pdo-mysql=mysqlnd" "PHP_MYSQL_SOCK=/run/mysqld/mysqld.sock" ];
           doCheck = false;
         }
-        # pdo_oci (7.4, 7.3, 7.2)
         {
           name = "pdo_odbc";
           internalDeps = [ php.extensions.pdo ];
@@ -500,7 +479,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           '';
           doCheck = false;
         }
-        { name = "session"; doCheck = lib.versionOlder php.version "8.0"; }
+        { name = "session"; doCheck = false; }
         { name = "shmop"; }
         {
           name = "simplexml";
@@ -559,15 +538,6 @@ lib.makeScope pkgs.newScope (self: with self; {
           ];
         }
         {
-          name = "xmlrpc";
-          buildInputs = [ libxml2 libiconv ];
-          # xmlrpc was unbundled in 8.0 https://php.watch/versions/8.0/xmlrpc
-          enable = lib.versionOlder php.version "8.0";
-          configureFlags = [
-            "--with-xmlrpc"
-          ];
-        }
-        {
           name = "xmlwriter";
           buildInputs = [ libxml2 ];
           configureFlags = [
@@ -577,7 +547,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "xsl";
           buildInputs = [ libxslt libxml2 ];
-          doCheck = lib.versionOlder php.version "8.0";
+          doCheck = false;
           configureFlags = [ "--with-xsl=${libxslt.dev}" ];
         }
         { name = "zend_test"; }

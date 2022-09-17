@@ -8,14 +8,14 @@
 
 rofi-unwrapped.overrideAttrs (oldAttrs: rec {
   pname = "rofi-wayland-unwrapped";
-  version = "1.7.3+wayland1";
+  version = "1.7.5+wayland1";
 
   src = fetchFromGitHub {
     owner = "lbonn";
     repo = "rofi";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-qvIxWxiQj42VgScSsrF1Yf6ifgEbZes0flNbbwc3O8I=";
+    sha256 = "sha256-ddKLV7NvqgTQl5YlAEyBK0oalcJsLASK4z3qArQPUDQ=";
   };
 
   nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ wayland-protocols ];

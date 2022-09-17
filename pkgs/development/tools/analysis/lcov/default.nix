@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lcov";
-  version = "1.15";
+  version = "1.16";
 
   src = fetchFromGitHub {
     owner = "linux-test-project";
     repo = "lcov";
     rev = "v${version}";
-    sha256 = "1kvc7fkp45w48f0bxwbxvxkicnjrrydki0hllg294n1wrp80zzyk";
+    sha256 = "sha256-X1T5OqR6NgTNGedH1on3+XZ7369007By6tRJK8xtmbk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -12,18 +12,18 @@
 , opencascade-occt
 , rapidjson
 , smesh
-, swig
+, swig4
 }:
 
 stdenv.mkDerivation rec {
   pname = "pythonocc-core";
-  version = "7.5.1";
+  version = "7.6.2";
 
   src = fetchFromGitHub {
     owner = "tpaviot";
     repo = "pythonocc-core";
     rev = version;
-    sha256 = "1md6x60pnfq0qv4lsnmjv6i96mzdrcpxcgpb316i7wmv9b5ci01s";
+    sha256 = "sha256-45pqPQ07KYlpFwJSAYVHbzuqDQTbAvPpxReal52DCzU=";
   };
 
   postPatch = ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     --replace "/usr/X11R6/lib/libGLU.dylib" "${libGLU}/lib/libGLU.dylib"
   '';
 
-  nativeBuildInputs = [ cmake swig ];
+  nativeBuildInputs = [ cmake swig4 ];
   buildInputs = [
     python opencascade-occt smesh
     freetype libGL libGLU libX11 libXext libXmu libXi

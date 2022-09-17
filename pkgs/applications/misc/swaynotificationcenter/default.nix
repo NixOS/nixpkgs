@@ -1,44 +1,83 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, testers
+, wrapGAppsHook
+, bash-completion
+, dbus
+, dbus-glib
+, fish
+, gdk-pixbuf
+, glib
+, gobject-introspection
+, gtk-layer-shell
+, gtk3
+, json-glib
+, libhandy
+, librsvg
 , meson
 , ninja
 , pkg-config
+, python3
 , scdoc
 , vala
-, gtk3
-, glib
-, gtk-layer-shell
-, dbus
-, dbus-glib
-, json-glib
-, librsvg
-, libhandy
-, gobject-introspection
-, gdk-pixbuf
-, wrapGAppsHook
+, xvfb-run
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "SwayNotificationCenter";
-  version = "0.5";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwayNotificationCenter";
     rev = "v${version}";
-    hash = "sha256-Jjbr6GJ0MHlO+T/simPNYQnB5b7Cr85j4GRjRGa5B6s=";
+    hash = "sha256-s4yacSK5ajuq+BeGcPX+/o9wuDOcTOdZu4p8nPS8wk4=";
   };
 
-  nativeBuildInputs = [ gobject-introspection meson ninja pkg-config scdoc vala wrapGAppsHook ];
+  nativeBuildInputs = [
+    bash-completion
+    # cmake # currently conflicts with meson
+    fish
+    glib
+    gobject-introspection
+    meson
+    ninja
+    pkg-config
+    python3
+    scdoc
+    vala
+    wrapGAppsHook
+  ];
 
-  buildInputs = [ dbus dbus-glib gdk-pixbuf glib gtk-layer-shell gtk3 json-glib libhandy librsvg ];
+  buildInputs = [
+    dbus
+    dbus-glib
+    gdk-pixbuf
+    glib
+    gtk-layer-shell
+    gtk3
+    json-glib
+    libhandy
+    librsvg
+    # systemd # ends with broken permission
+  ];
+
+  postPatch = ''
+    chmod +x build-aux/meson/postinstall.py
+    patchShebangs build-aux/meson/postinstall.py
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "${xvfb-run}/bin/xvfb-run swaync --version";
+  };
 
   meta = with lib; {
     description = "Simple notification daemon with a GUI built for Sway";
     homepage = "https://github.com/ErikReider/SwayNotificationCenter";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.berbiche ];
+    maintainers = with maintainers; [ berbiche pedrohlc ];
   };
-}
+})

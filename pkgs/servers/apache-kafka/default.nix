@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
     homepage = "https://kafka.apache.org";
     description = "A high-throughput distributed messaging system";
     license = licenses.asl20;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     maintainers = [ maintainers.ragge ];
     platforms = platforms.unix;
   };

@@ -12,7 +12,7 @@ with lib;
       type = types.listOf types.str;
       default = [];
       example = [ "cirrusfb" "i2c_piix4" ];
-      description = ''
+      description = lib.mdDoc ''
         List of names of kernel modules that should not be loaded
         automatically by the hardware probing code.
       '';
@@ -24,12 +24,11 @@ with lib;
         ''
           options parport_pc io=0x378 irq=7 dma=1
         '';
-      description = ''
+      description = lib.mdDoc ''
         Any additional configuration to be appended to the generated
-        <filename>modprobe.conf</filename>.  This is typically used to
+        {file}`modprobe.conf`.  This is typically used to
         specify module options.  See
-        <citerefentry><refentrytitle>modprobe.d</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        {manpage}`modprobe.d(5)` for details.
       '';
       type = types.lines;
     };

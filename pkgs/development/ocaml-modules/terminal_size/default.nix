@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, fetchurl, alcotest }:
+{ lib, buildDunePackage, ocaml, fetchurl, alcotest }:
 
 buildDunePackage rec {
   pname = "terminal_size";
@@ -12,7 +12,7 @@ buildDunePackage rec {
   };
 
   checkInputs = [ alcotest ];
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = with lib; {
     description = "Get the dimensions of the terminal";

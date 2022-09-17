@@ -1,8 +1,8 @@
-diff --git c/configure.ac w/configure.ac
-index 09cb310..30c0e2a 100644
---- c/configure.ac
-+++ w/configure.ac
-@@ -110,7 +110,7 @@ AS_CASE([$host_os],
+diff --git a/configure.ac b/configure.ac
+index 5b6d22b..98c449b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -145,7 +145,7 @@ AS_CASE([$host_os],
  AM_CONDITIONAL([OS_WINDOWS], [test "x$is_windows" = "xyes"])
  
  # Checks for header files.
@@ -11,20 +11,51 @@ index 09cb310..30c0e2a 100644
  
  # Checks for typedefs, structures, and compiler characteristics.
  AC_C_INLINE
-@@ -210,7 +210,8 @@ AC_LINK_IFELSE(
+@@ -245,7 +245,9 @@ AC_LINK_IFELSE(
  
  AC_CHECK_FUNCS([clearenv dirfd fopencookie __fpurge \
                  getauxval getentropy getexecname getline \
 -                pstat_getproc sysconf])
 +                pstat_getproc sysconf \
-+		strlcpy strlcat strnstr strmode fpurge])
++		strlcpy strlcat strnstr strmode fpurge \
++		user_from_uid group_from_gid])
  AM_CONDITIONAL([HAVE_GETENTROPY], [test "x$ac_cv_func_getentropy" = "xtrue"])
  
- AC_SUBST([LIBBSD_LIBS])
-diff --git c/include/bsd/string.h w/include/bsd/string.h
+ AC_SUBST([MD5_LIBS])
+diff --git a/include/bsd/grp.h b/include/bsd/grp.h
+index b2705e5..c9423a2 100644
+--- a/include/bsd/grp.h
++++ b/include/bsd/grp.h
+@@ -44,8 +44,10 @@
+ __BEGIN_DECLS
+ int
+ gid_from_group(const char *, gid_t *);
++#if !HAVE_GROUP_FROM_GID
+ const char *
+ group_from_gid(gid_t, int);
++#endif
+ __END_DECLS
+ 
+ #endif
+diff --git a/include/bsd/pwd.h b/include/bsd/pwd.h
+index 798af4b..6ae5244 100644
+--- a/include/bsd/pwd.h
++++ b/include/bsd/pwd.h
+@@ -44,8 +44,10 @@
+ __BEGIN_DECLS
+ int
+ uid_from_user(const char *, uid_t *);
++#if !HAVE_USER_FROM_UID
+ const char *
+ user_from_uid(uid_t, int);
++#endif
+ __END_DECLS
+ 
+ #endif
+diff --git a/include/bsd/string.h b/include/bsd/string.h
 index f987fee..a1e17ed 100644
---- c/include/bsd/string.h
-+++ w/include/bsd/string.h
+--- a/include/bsd/string.h
++++ b/include/bsd/string.h
 @@ -41,10 +41,21 @@
  #include <sys/types.h>
  
@@ -47,10 +78,10 @@ index f987fee..a1e17ed 100644
  
  #if !defined(__GLIBC__) || \
      (defined(__GLIBC__) && (!__GLIBC_PREREQ(2, 25) || !defined(_GNU_SOURCE)))
-diff --git c/src/fpurge.c w/src/fpurge.c
-index 462535a..a8941db 100644
---- c/src/fpurge.c
-+++ w/src/fpurge.c
+diff --git a/src/fpurge.c b/src/fpurge.c
+index 350f364..ff7f01e 100644
+--- a/src/fpurge.c
++++ b/src/fpurge.c
 @@ -26,9 +26,10 @@
  
  #include <errno.h>
@@ -100,10 +131,10 @@ index 462535a..a8941db 100644
  #else
  #error "Function fpurge() needs to be ported."
  #endif
-diff --git c/src/funopen.c w/src/funopen.c
+diff --git a/src/funopen.c b/src/funopen.c
 index 1e6f43a..3a3af6a 100644
---- c/src/funopen.c
-+++ w/src/funopen.c
+--- a/src/funopen.c
++++ b/src/funopen.c
 @@ -143,6 +143,7 @@ funopen(const void *cookie,
   * they will not add the needed support to implement it. Just ignore this
   * interface there, as it has never been provided anyway.
@@ -112,31 +143,32 @@ index 1e6f43a..3a3af6a 100644
  #else
  #error "Function funopen() needs to be ported or disabled."
  #endif
-diff --git c/src/local-link.h w/src/local-link.h
-index 0d4351a..fc520af 100644
---- c/src/local-link.h
-+++ w/src/local-link.h
-@@ -27,6 +27,11 @@
- #ifndef LIBBSD_LOCAL_LINK_H
- #define LIBBSD_LOCAL_LINK_H
+diff --git a/src/local-link.h b/src/local-link.h
+index 6782d9a..fb76098 100644
+--- a/src/local-link.h
++++ b/src/local-link.h
+@@ -29,6 +29,12 @@
+ 
+ #include <sys/cdefs.h>
  
 +#ifdef __MACH__
 +#define libbsd_link_warning(symbol, msg)
 +#define libbsd_symver_default(alias, symbol, version)
 +#define libbsd_symver_variant(alias, symbol, version)
++#define libbsd_symver_weak(alias, symbol, version)
 +#else
  #define libbsd_link_warning(symbol, msg) \
  	static const char libbsd_emit_link_warning_##symbol[] \
- 		__attribute__((__used__,__section__(".gnu.warning." #symbol))) = msg;
-@@ -45,3 +50,4 @@
+ 		__attribute__((__used__,__section__(".gnu.warning." #symbol))) = msg
+@@ -68,3 +74,4 @@
  #endif
  
  #endif
 +#endif
-diff --git c/src/nlist.c w/src/nlist.c
-index d22fa19..f41333f 100644
---- c/src/nlist.c
-+++ w/src/nlist.c
+diff --git a/src/nlist.c b/src/nlist.c
+index 1cb9d18..b476f1e 100644
+--- a/src/nlist.c
++++ b/src/nlist.c
 @@ -41,6 +41,7 @@
  #include <unistd.h>
  #include <nlist.h>
@@ -144,16 +176,46 @@ index d22fa19..f41333f 100644
 +#if !HAVE_NLIST_H
  #include "local-elf.h"
  
- #ifndef SIZE_T_MAX
-@@ -282,3 +283,4 @@ nlist(const char *name, struct nlist *list)
+ /* Note: This function is used by libkvm0, so we need to export it.
+@@ -277,3 +278,4 @@ nlist(const char *name, struct nlist *list)
  	(void)close(fd);
  	return (n);
  }
 +#endif
-diff --git c/src/readpassphrase.c w/src/readpassphrase.c
+diff --git a/src/pwcache.c b/src/pwcache.c
+index d54daa0..74fde9f 100644
+--- a/src/pwcache.c
++++ b/src/pwcache.c
+@@ -191,6 +191,7 @@ grptb_start(void)
+ 	return 0;
+ }
+ 
++#if !HAVE_USER_FROM_UID
+ /*
+  * user_from_uid()
+  *	caches the name (if any) for the uid. If noname clear, we always
+@@ -251,7 +252,9 @@ user_from_uid(uid_t uid, int noname)
+ 	}
+ 	return ptr->name;
+ }
++#endif
+ 
++#if !HAVE_USER_FROM_UID
+ /*
+  * group_from_gid()
+  *	caches the name (if any) for the gid. If noname clear, we always
+@@ -312,6 +315,7 @@ group_from_gid(gid_t gid, int noname)
+ 	}
+ 	return ptr->name;
+ }
++#endif
+ 
+ /*
+  * uid_from_user()
+diff --git a/src/readpassphrase.c b/src/readpassphrase.c
 index f9f6195..2bc5fb4 100644
---- c/src/readpassphrase.c
-+++ w/src/readpassphrase.c
+--- a/src/readpassphrase.c
++++ b/src/readpassphrase.c
 @@ -36,6 +36,14 @@
  #define TCSASOFT 0
  #endif
@@ -169,10 +231,10 @@ index f9f6195..2bc5fb4 100644
  static volatile sig_atomic_t signo[_NSIG];
  
  static void handler(int);
-diff --git c/src/setproctitle.c w/src/setproctitle.c
-index ff32aa3..51ed833 100644
---- c/src/setproctitle.c
-+++ w/src/setproctitle.c
+diff --git a/src/setproctitle.c b/src/setproctitle.c
+index d3e1087..0e5f64c 100644
+--- a/src/setproctitle.c
++++ b/src/setproctitle.c
 @@ -33,6 +33,10 @@
  #include <string.h>
  #include "local-link.h"
@@ -184,7 +246,7 @@ index ff32aa3..51ed833 100644
  static struct {
  	/* Original value. */
  	const char *arg0;
-@@ -287,7 +291,8 @@ libbsd_symver_default(setproctitle, setproctitle_impl, LIBBSD_0.5);
+@@ -291,7 +295,8 @@ libbsd_symver_default(setproctitle, setproctitle_impl, LIBBSD_0.5);
   * in 0.5, make the implementation available in the old version as an alias
   * for code linking against that version, and change the default to use the
   * new version, so that new code depends on the implemented version. */
@@ -194,10 +256,10 @@ index ff32aa3..51ed833 100644
  extern __typeof__(setproctitle_impl)
  setproctitle_stub
  	__attribute__((__alias__("setproctitle_impl")));
-diff --git c/src/strlcat.c w/src/strlcat.c
+diff --git a/src/strlcat.c b/src/strlcat.c
 index 14c53a1..5961c17 100644
---- c/src/strlcat.c
-+++ w/src/strlcat.c
+--- a/src/strlcat.c
++++ b/src/strlcat.c
 @@ -26,6 +26,7 @@
   * Returns strlen(src) + MIN(dsize, strlen(initial dst)).
   * If retval >= dsize, truncation occurred.
@@ -211,10 +273,10 @@ index 14c53a1..5961c17 100644
  	return(dlen + (src - osrc));	/* count does not include NUL */
  }
 +#endif
-diff --git c/src/strlcpy.c w/src/strlcpy.c
+diff --git a/src/strlcpy.c b/src/strlcpy.c
 index e9a7fe4..5137acb 100644
---- c/src/strlcpy.c
-+++ w/src/strlcpy.c
+--- a/src/strlcpy.c
++++ b/src/strlcpy.c
 @@ -24,6 +24,7 @@
   * chars will be copied.  Always NUL terminates (unless dsize == 0).
   * Returns strlen(src); if retval >= dsize, truncation occurred.
@@ -228,10 +290,10 @@ index e9a7fe4..5137acb 100644
  	return(src - osrc - 1);	/* count does not include NUL */
  }
 +#endif
-diff --git c/src/strmode.c w/src/strmode.c
+diff --git a/src/strmode.c b/src/strmode.c
 index e6afde5..da680c9 100644
---- c/src/strmode.c
-+++ w/src/strmode.c
+--- a/src/strmode.c
++++ b/src/strmode.c
 @@ -32,6 +32,7 @@
  #include <sys/stat.h>
  #include <string.h>

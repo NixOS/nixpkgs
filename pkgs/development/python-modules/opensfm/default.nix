@@ -115,6 +115,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "opensfm" ];
 
   meta = {
+    broken = stdenv.isDarwin;
     maintainers = [ lib.maintainers.SomeoneSerge ];
     license = lib.licenses.bsd2;
     changelog = "https://github.com/mapillary/OpenSfM/blob/${src.rev}/CHANGELOG.md";

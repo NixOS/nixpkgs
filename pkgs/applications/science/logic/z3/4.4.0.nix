@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ python ];
   enableParallelBuilding = true;
 
+  CXXFLAGS = if stdenv.isDarwin then "-std=gnu++98" else null;
+
   configurePhase = "python scripts/mk_make.py --prefix=$out && cd build";
 
   # z3's install phase is stupid because it tries to calculate the

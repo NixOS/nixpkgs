@@ -4,7 +4,7 @@ with lib;
 
 buildGoPackage rec {
   pname = "reporter";
-  version = "2.1.0";
+  version = "2.3.1";
   rev = "v${version}";
 
   goPackagePath = "github.com/IzakMarais/reporter";
@@ -15,7 +15,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "IzakMarais";
     repo = "reporter";
-    sha256 = "1zindyypf634l4dd2rsvp67ryz9mmzq779x9d01apd04wivd9yf1";
+    sha256 = "sha256-lsraJwx56I2Gn8CePWUlQu1qdMp78P4xwPzLxetYUcw=";
   };
 
   postInstall = ''

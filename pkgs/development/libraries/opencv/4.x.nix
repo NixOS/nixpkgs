@@ -13,6 +13,7 @@
 , protobuf
 , config
 , ocl-icd
+, buildPackages
 
 , enableJPEG ? true
 , libjpeg
@@ -25,6 +26,8 @@
 , enableEXR ? !stdenv.isDarwin
 , openexr
 , ilmbase
+, enableJPEG2000 ? true
+, openjpeg
 , enableEigen ? true
 , eigen
 , enableOpenblas ? true
@@ -244,9 +247,9 @@ stdenv.mkDerivation {
     echo '"(build info elided)"' > modules/core/version_string.inc
   '';
 
-  buildInputs =
-    [ zlib pcre hdf5 boost gflags protobuf ]
+  buildInputs = [ zlib pcre boost gflags protobuf ]
     ++ lib.optional enablePython pythonPackages.python
+    ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) hdf5
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
     ++ lib.optional enableVtk vtk
@@ -255,6 +258,7 @@ stdenv.mkDerivation {
     ++ lib.optional enableTIFF libtiff
     ++ lib.optional enableWebP libwebp
     ++ lib.optionals enableEXR [ openexr ilmbase ]
+    ++ lib.optional enableJPEG2000 openjpeg
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals (enableFfmpeg && stdenv.isDarwin)
       [ VideoDecodeAcceleration bzip2 ]
@@ -291,17 +295,23 @@ stdenv.mkDerivation {
     "-DOPENCV_GENERATE_PKGCONFIG=ON"
     "-DWITH_OPENMP=ON"
     "-DBUILD_PROTOBUF=OFF"
+    "-DProtobuf_PROTOC_EXECUTABLE=${lib.getExe buildPackages.protobuf}"
     "-DPROTOBUF_UPDATE_FILES=ON"
     "-DOPENCV_ENABLE_NONFREE=${printEnabled enableUnfree}"
     "-DBUILD_TESTS=OFF"
     "-DBUILD_PERF_TESTS=OFF"
     "-DBUILD_DOCS=${printEnabled enableDocs}"
+    # "OpenCV disables pkg-config to avoid using of host libraries. Consider using PKG_CONFIG_LIBDIR to specify target SYSROOT"
+    # but we have proper separation of build and host libs :), fixes cross
+    "-DOPENCV_ENABLE_PKG_CONFIG=ON"
     (opencvFlag "IPP" enableIpp)
     (opencvFlag "TIFF" enableTIFF)
     (opencvFlag "WEBP" enableWebP)
     (opencvFlag "JPEG" enableJPEG)
     (opencvFlag "PNG" enablePNG)
     (opencvFlag "OPENEXR" enableEXR)
+    (opencvFlag "OPENJPEG" enableJPEG2000)
+    "-DWITH_JASPER=OFF" # OpenCV falls back to a vendored copy of Jasper when OpenJPEG is disabled
     (opencvFlag "CUDA" enableCuda)
     (opencvFlag "CUBLAS" enableCuda)
     (opencvFlag "TBB" enableTbb)

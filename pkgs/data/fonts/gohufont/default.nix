@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     '';
     homepage    = "https://font.gohu.org/";
     license     = licenses.wtfpl;
-    maintainers = with maintainers; [ epitrochoid rnhmjoj ];
+    maintainers = with maintainers; [ rnhmjoj ];
   };
 }

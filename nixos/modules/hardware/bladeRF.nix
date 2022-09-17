@@ -12,7 +12,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enables udev rules for BladeRF devices. By default grants access
         to users in the "bladerf" group. You may want to install the
         libbladeRF package.

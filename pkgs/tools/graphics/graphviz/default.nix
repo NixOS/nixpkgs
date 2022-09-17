@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , autoreconfHook
 , pkg-config
 , cairo
@@ -19,23 +20,32 @@
 , xorg
 , ApplicationServices
 , python3
+, fltk
+, exiv2
 , withXorg ? true
 }:
 
 let
   inherit (lib) optional optionals optionalString;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "graphviz";
-  version = "2.50.0";
+  version = "5.0.1";
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
-    # use rev as tags have disappeared before
-    rev = "ca43e4c6a217650447e2928c2e9cb493c73ebd7d";
-    sha256 = "1psfgr8y4hh9yyzl04f7xbqb2y9k1xbja051j6b06q9dx7bmkmky";
+    rev = version;
+    sha256 = "sha256-lcU6Pb45kg7AxXQ9lmqwAazT2JpGjBz4PzK+S5lpYa0=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.com/graphviz/graphviz/-/commit/8d662734b6a34709d9475b120e7ce3de872339e2.diff";
+      includes = [ "lib/*" ];
+      sha256 = "sha256-cqzUpK//2TnzWb7oSa/g8LJ61yr3O+Wiq5LsZzw34NE=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -86,12 +96,16 @@ stdenv.mkDerivation {
   preAutoreconf = "./autogen.sh";
 
   postFixup = optionalString withXorg ''
-    substituteInPlace $out/bin/dotty --replace '`which lefty`' $out/bin/lefty
     substituteInPlace $out/bin/vimdot \
-      --replace /usr/bin/vi '$(command -v vi)' \
-      --replace /usr/bin/vim '$(command -v vim)' \
+      --replace '"/usr/bin/vi"' '"$(command -v vi)"' \
+      --replace '"/usr/bin/vim"' '"$(command -v vim)"' \
       --replace /usr/bin/vimdot $out/bin/vimdot \
   '';
+
+  passthru.tests = {
+    inherit (python3.pkgs) pygraphviz;
+    inherit fltk exiv2;
+  };
 
   meta = with lib; {
     homepage = "https://graphviz.org";

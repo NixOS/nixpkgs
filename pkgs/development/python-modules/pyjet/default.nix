@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "pyjet";
-  version = "1.8.2";
+  version = "1.9.0";
 
   # tests not included in pypi tarball
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-0EI/dbanVDvILawnnK/Ce/5n/cD4Fv7VQEZfF9yPQio=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-0g0fCf0FIwde5Vsc/BJxjgMcs5llpD8JqOgFbMjOooc=";
   };
 
   nativeBuildInputs = [ cython ];

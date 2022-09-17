@@ -6,7 +6,7 @@
 # docs
 , python
 , sphinx
-, sphinx_rtd_theme
+, sphinx-rtd-theme
 
 # tests
 , hypothesis
@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     sphinx
-    sphinx_rtd_theme
+    sphinx-rtd-theme
   ];
 
   postInstall = ''
-    ${python.interpreter} setup.py build_sphinx --build-dir=$doc
+    ${python.pythonForBuild.interpreter} setup.py build_sphinx --build-dir=$doc
   '';
 
   checkInputs = [

@@ -5,15 +5,14 @@
 
 let
   pythonPackages = python3Packages;
-  binPath = lib.makeBinPath [ xdg-utils dnsmasq dhcp iproute2 ];
 
 in stdenv.mkDerivation rec {
   pname = "blueman";
-  version = "2.2.4";
+  version = "2.3.2";
 
   src = fetchurl {
     url = "https://github.com/blueman-project/blueman/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-VdY5/u2gtDsYplnmWYUhOlS0fcsTSPO07/tSONskJgI=";
+    sha256 = "sha256-hM99f9Fzh1HHfgYF9y5M3UtyMHindo/j81MJmToDUK4=";
   };
 
   nativeBuildInputs = [
@@ -23,7 +22,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ bluez gtk3 pythonPackages.python librsvg
-                  gnome.adwaita-icon-theme iproute2 libappindicator networkmanager ]
+                  gnome.adwaita-icon-theme iproute2 networkmanager ]
                 ++ pythonPath
                 ++ lib.optional withPulseAudio libpulseaudio;
 
@@ -41,8 +40,12 @@ in stdenv.mkDerivation rec {
     (lib.enableFeature withPulseAudio "pulseaudio")
   ];
 
+  makeWrapperArgs = [
+    "--prefix PATH ':' ${lib.makeBinPath [ dnsmasq dhcp iproute2 ]}"
+    "--suffix PATH ':' ${lib.makeBinPath [ xdg-utils ]}"
+  ];
+
   postFixup = ''
-    makeWrapperArgs="--prefix PATH ':' ${binPath}"
     # This mimics ../../../development/interpreters/python/wrap.sh
     wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
     wrapPythonProgramsIn "$out/libexec" "$out $pythonPath"

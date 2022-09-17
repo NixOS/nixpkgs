@@ -39,6 +39,7 @@ rustPlatform.buildRustPackage rec {
     description = "Command-line fuzzy finder written in Rust";
     homepage = "https://github.com/lotabout/skim";
     license = licenses.mit;
+    mainProgram = "sk";
     maintainers = with maintainers; [ dywedir ];
   };
 }

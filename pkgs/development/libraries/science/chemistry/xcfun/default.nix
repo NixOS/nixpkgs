@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "A library of exchange-correlation functionals with arbitrary-order derivatives";
     homepage = "https://github.com/dftlibs/xcfun";
     license = licenses.mpl20;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.sheepforce ];
   };
 }

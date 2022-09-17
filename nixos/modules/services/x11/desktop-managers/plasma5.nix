@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 let
   xcfg = config.services.xserver;
@@ -30,7 +30,7 @@ let
   inherit (libsForQt5) kdeGear kdeFrameworks plasma5;
   inherit (pkgs) writeText;
   inherit (lib)
-    getBin optionalString
+    getBin optionalString literalExpression
     mkRemovedOptionModule mkRenamedOptionModule
     mkDefault mkIf mkMerge mkOption types;
 
@@ -157,23 +157,22 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable the Plasma 5 (KDE 5) desktop environment.";
+      description = lib.mdDoc "Enable the Plasma 5 (KDE 5) desktop environment.";
     };
 
     phononBackend = mkOption {
       type = types.enum [ "gstreamer" "vlc" ];
       default = "gstreamer";
       example = "vlc";
-      description = "Phonon audio backend to install.";
+      description = lib.mdDoc "Phonon audio backend to install.";
     };
 
     supportDDC = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Support setting monitor brightness via DDC.
-        </para>
-        <para>
+
         This is not needed for controlling brightness of the internal monitor
         of a laptop and as it is considered experimental by upstream, it is
         disabled by default.
@@ -183,13 +182,20 @@ in
     useQtScaling = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable HiDPI scaling in Qt.";
+      description = lib.mdDoc "Enable HiDPI scaling in Qt.";
     };
 
     runUsingSystemd = mkOption {
-      description = "Use systemd to manage the Plasma session";
+      description = lib.mdDoc "Use systemd to manage the Plasma session";
       type = types.bool;
-      default = false;
+      default = true;
+    };
+
+    excludePackages = mkOption {
+      description = lib.mdDoc "List of default packages to exclude from the configuration";
+      type = types.listOf types.package;
+      default = [];
+      example = literalExpression "[ pkgs.plasma5Packages.oxygen ]";
     };
 
     # Internally allows configuring kdeglobals globally
@@ -209,7 +215,7 @@ in
     mobile.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable support for running the Plasma Mobile shell.
       '';
     };
@@ -217,7 +223,7 @@ in
     mobile.installRecommendedSoftware = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Installs software recommended for use with Plasma Mobile, but which
         is not strictly required for Plasma Mobile to run.
       '';
@@ -234,11 +240,11 @@ in
     (mkIf (cfg.enable || cfg.mobile.enable) {
 
       security.wrappers = {
-        kcheckpass = {
+        kscreenlocker_greet = {
           setuid = true;
           owner = "root";
           group = "root";
-          source = "${getBin libsForQt5.kscreenlocker}/libexec/kcheckpass";
+          source = "${getBin libsForQt5.kscreenlocker}/libexec/kscreenlocker_greet";
         };
         start_kdeinit = {
           setuid = true;
@@ -263,89 +269,95 @@ in
       environment.systemPackages =
         with libsForQt5;
         with plasma5; with kdeGear; with kdeFrameworks;
-        [
-          frameworkintegration
-          kactivities
-          kauth
-          kcmutils
-          kconfig
-          kconfigwidgets
-          kcoreaddons
-          kdoctools
-          kdbusaddons
-          kdeclarative
-          kded
-          kdesu
-          kdnssd
-          kemoticons
-          kfilemetadata
-          kglobalaccel
-          kguiaddons
-          kiconthemes
-          kidletime
-          kimageformats
-          kinit
-          kirigami2 # In system profile for SDDM theme. TODO: wrapper.
-          kio
-          kjobwidgets
-          knewstuff
-          knotifications
-          knotifyconfig
-          kpackage
-          kparts
-          kpeople
-          krunner
-          kservice
-          ktextwidgets
-          kwallet
-          kwallet-pam
-          kwalletmanager
-          kwayland
-          kwayland-integration
-          kwidgetsaddons
-          kxmlgui
-          kxmlrpcclient
-          plasma-framework
-          solid
-          sonnet
-          threadweaver
+        let
+          requiredPackages = [
+            frameworkintegration
+            kactivities
+            kauth
+            kcmutils
+            kconfig
+            kconfigwidgets
+            kcoreaddons
+            kdoctools
+            kdbusaddons
+            kdeclarative
+            kded
+            kdesu
+            kdnssd
+            kemoticons
+            kfilemetadata
+            kglobalaccel
+            kguiaddons
+            kiconthemes
+            kidletime
+            kimageformats
+            kinit
+            kirigami2 # In system profile for SDDM theme. TODO: wrapper.
+            kio
+            kjobwidgets
+            knewstuff
+            knotifications
+            knotifyconfig
+            kpackage
+            kparts
+            kpeople
+            krunner
+            kservice
+            ktextwidgets
+            kwallet
+            kwallet-pam
+            kwalletmanager
+            kwayland
+            kwayland-integration
+            kwidgetsaddons
+            kxmlgui
+            kxmlrpcclient
+            plasma-framework
+            solid
+            sonnet
+            threadweaver
 
-          breeze-qt5
-          kactivitymanagerd
-          kde-cli-tools
-          kdecoration
-          kdeplasma-addons
-          kgamma5
-          khotkeys
-          kscreen
-          kscreenlocker
-          kwayland
-          kwin
-          kwrited
-          libkscreen
-          libksysguard
-          milou
-          plasma-browser-integration
-          plasma-integration
-          polkit-kde-agent
+            breeze-qt5
+            kactivitymanagerd
+            kde-cli-tools
+            kdecoration
+            kdeplasma-addons
+            kgamma5
+            khotkeys
+            kscreen
+            kscreenlocker
+            kwayland
+            kwin
+            kwrited
+            libkscreen
+            libksysguard
+            milou
+            plasma-integration
+            polkit-kde-agent
 
-          plasma-desktop
-          plasma-workspace
-          plasma-workspace-wallpapers
+            plasma-desktop
+            plasma-workspace
+            plasma-workspace-wallpapers
 
-          konsole
-          oxygen
+            breeze-icons
+            pkgs.hicolor-icon-theme
 
-          breeze-icons
-          pkgs.hicolor-icon-theme
+            kde-gtk-config
+            breeze-gtk
 
-          kde-gtk-config
-          breeze-gtk
+            qtvirtualkeyboard
 
-          qtvirtualkeyboard
-
-          pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
-        ]
+            pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+          ];
+          optionalPackages = [
+            plasma-browser-integration
+            konsole
+            oxygen
+            (lib.getBin qttools) # Expose qdbus in PATH
+          ];
+        in
+        requiredPackages
+        ++ utils.removePackagesByName optionalPackages cfg.excludePackages
 
         # Phonon audio backend
         ++ lib.optional (cfg.phononBackend == "gstreamer") libsForQt5.phonon-backend-gstreamer
@@ -387,9 +399,10 @@ in
       services.accounts-daemon.enable = true;
       # when changing an account picture the accounts-daemon reads a temporary file containing the image which systemsettings5 may place under /tmp
       systemd.services.accounts-daemon.serviceConfig.PrivateTmp = false;
+      services.power-profiles-daemon.enable = mkDefault true;
+      services.system-config-printer.enable = mkIf config.services.printing.enable (mkDefault true);
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
-      services.system-config-printer.enable = mkIf config.services.printing.enable (mkDefault true);
       services.xserver.libinput.enable = mkDefault true;
 
       # Extra UDEV rules used by Solid
@@ -457,27 +470,29 @@ in
       environment.systemPackages =
         with libsForQt5;
         with plasma5; with kdeGear; with kdeFrameworks;
-        [
-          ksystemstats
-          kinfocenter
-          kmenuedit
-          plasma-systemmonitor
-          spectacle
-          systemsettings
+        let
+          requiredPackages = [
+            ksystemstats
+            kinfocenter
+            kmenuedit
+            plasma-systemmonitor
+            spectacle
+            systemsettings
 
-          dolphin
-          dolphin-plugins
-          ffmpegthumbs
-          kdegraphics-thumbnailers
-          khelpcenter
-          kio-extras
-          print-manager
-
-          elisa
-          gwenview
-          okular
-        ]
-      ;
+            dolphin
+            dolphin-plugins
+            ffmpegthumbs
+            kdegraphics-thumbnailers
+            kio-extras
+          ];
+          optionalPackages = [
+            elisa
+            gwenview
+            okular
+            khelpcenter
+            print-manager
+          ];
+      in requiredPackages ++ utils.removePackagesByName optionalPackages cfg.excludePackages;
 
       systemd.user.services = {
         plasma-run-with-systemd = {

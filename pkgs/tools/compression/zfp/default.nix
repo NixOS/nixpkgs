@@ -1,4 +1,4 @@
-{ cmake, cudatoolkit, fetchFromGitHub, gfortran, lib, llvmPackages, pythonPackages, stdenv, targetPlatform
+{ cmake, cudatoolkit, fetchFromGitHub, gfortran, lib, llvmPackages, python3Packages, stdenv, targetPlatform
 , enableCfp ? true
 , enableCuda ? false
 , enableExamples ? true
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional enableCuda cudatoolkit
     ++ lib.optional enableFortran gfortran
     ++ lib.optional enableOpenMP llvmPackages.openmp
-    ++ lib.optionals enablePython [ pythonPackages.cython pythonPackages.numpy pythonPackages.python ];
+    ++ lib.optionals enablePython (with python3Packages; [ cython numpy python ]);
 
   cmakeFlags = [
     # More tests not enabled by default

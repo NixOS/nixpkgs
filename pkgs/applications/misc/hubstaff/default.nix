@@ -4,9 +4,9 @@
 , curl, writeShellScript, common-updater-scripts }:
 
 let
-  url = "https://hubstaff-production.s3.amazonaws.com/downloads/HubstaffClient/Builds/Release/1.6.5-31be26f1/Hubstaff-1.6.5-31be26f1.sh";
-  version = "1.6.5-31be26f1";
-  sha256 = "1z1binnqppyxavmjg0l1cvy64ylzy2v454sws2x1am2qhhbnycjm";
+  url = "https://hubstaff-production.s3.amazonaws.com/downloads/HubstaffClient/Builds/Release/1.6.7-5c6fee47/Hubstaff-1.6.7-5c6fee47.sh";
+  version = "1.6.7-5c6fee47";
+  sha256 = "0i0xlabdi4xhjkfwb6s4bwjnl4k3dj15k7aqjilmq5wb4rhhfpws";
 
   rpath = lib.makeLibraryPath
     [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft
@@ -70,6 +70,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Time tracking software";
     homepage = "https://hubstaff.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ michalrus srghma ];

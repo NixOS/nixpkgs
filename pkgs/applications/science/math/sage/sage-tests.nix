@@ -28,8 +28,8 @@ stdenv.mkDerivation {
   pname = "sage-tests";
   inherit src;
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
-    makeWrapper
     sage-with-env
   ];
 

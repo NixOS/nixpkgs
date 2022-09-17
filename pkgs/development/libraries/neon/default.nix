@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
     (lib.withFeature sslSupport "ssl")
   ];
 
+  preConfigure = ''
+    export PKG_CONFIG="$(command -v "$PKG_CONFIG")"
+  '';
+
   passthru = {inherit compressionSupport sslSupport;};
 
   meta = with lib; {

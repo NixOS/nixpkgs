@@ -12,9 +12,9 @@
 
 buildGoModule rec {
   pname = "minikube";
-  version = "1.25.2";
+  version = "1.27.0";
 
-  vendorSha256 = "sha256-8QqRIWry15/xwBxEOexMEq57ol8riy+kW8WrQqr53Q8=";
+  vendorSha256 = "sha256-wAjgeq//vRUDUyVNTsVIxLXhA6fzTrYvn4klAPAv7DE=";
 
   doCheck = false;
 
@@ -22,7 +22,7 @@ buildGoModule rec {
     owner = "kubernetes";
     repo = "minikube";
     rev = "v${version}";
-    sha256 = "sha256-WIk4ibq7jcqao0Qiz3mz9yfHdxTUlvtPuEh4gApSDBg=";
+    sha256 = "sha256-Pn0F3363YJoOdWyoPy46HmIUwWr/I5TekalBp9hHg7I=";
   };
 
   nativeBuildInputs = [ installShellFiles pkg-config which makeWrapper ];

@@ -12,6 +12,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       start_all()
 
       machine.wait_for_unit("pict-rs")
-      machine.wait_for_open_port("8080")
+      machine.wait_for_open_port(8080)
     '';
   })

@@ -1,10 +1,12 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , django
 , dnspython
 , fetchFromGitHub
 , protobuf
 , pythonOlder
+, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -28,6 +30,12 @@ buildPythonPackage rec {
     # 10.12. The patch reverts
     # https://github.com/mysql/mysql-connector-python/commit/d1e89fd3d7391084cdf35b0806cb5d2a4b413654
     ./0001-Revert-Fix-MacOS-wheels-platform-tag.patch
+
+    # Allow for clang to be used to build native extensions
+    (fetchpatch {
+      url = "https://github.com/mysql/mysql-connector-python/commit/fd24ce9dc8c60cc446a8e69458f7851d047c7831.patch";
+      sha256 = "sha256-WvU1iB53MavCsksKCjGvUl7R3Ww/38alxxMVzjpr5Xg=";
+    })
   ];
 
   propagatedBuildInputs = [

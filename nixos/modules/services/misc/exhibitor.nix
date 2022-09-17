@@ -71,78 +71,78 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "
+        description = lib.mdDoc ''
           Whether to enable the exhibitor server.
-        ";
+        '';
       };
       # See https://github.com/soabase/exhibitor/wiki/Running-Exhibitor for what these mean
       # General options for any type of config
       port = mkOption {
         type = types.int;
         default = 8080;
-        description = ''
+        description = lib.mdDoc ''
           The port for exhibitor to listen on and communicate with other exhibitors.
         '';
       };
       baseDir = mkOption {
         type = types.str;
         default = "/var/exhibitor";
-        description = ''
+        description = lib.mdDoc ''
           Baseline directory for exhibitor runtime config.
         '';
       };
       configType = mkOption {
         type = types.enum [ "file" "s3" "zookeeper" "none" ];
-        description = ''
+        description = lib.mdDoc ''
           Which configuration type you want to use. Additional config will be
           required depending on which type you are using.
         '';
       };
       hostname = mkOption {
         type = types.nullOr types.str;
-        description = ''
+        description = lib.mdDoc ''
           Hostname to use and advertise
         '';
         default = null;
       };
       nodeModification = mkOption {
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether the Explorer UI will allow nodes to be modified (use with caution).
         '';
         default = true;
       };
       configCheckMs = mkOption {
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           Period (ms) to check for shared config updates.
         '';
         default = 30000;
       };
       headingText = mkOption {
         type = types.nullOr types.str;
-        description = ''
+        description = lib.mdDoc ''
           Extra text to display in UI header
         '';
         default = null;
       };
       jqueryStyle = mkOption {
         type = types.enum [ "red" "black" "custom" ];
-        description = ''
+        description = lib.mdDoc ''
           Styling used for the JQuery-based UI.
         '';
         default = "red";
       };
       logLines = mkOption {
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
         Max lines of logging to keep in memory for display.
         '';
         default = 1000;
       };
       servo = mkOption {
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           ZooKeeper will be queried once a minute for its state via the 'mntr' four
           letter word (this requires ZooKeeper 3.4.x+). Servo will be used to publish
           this data via JMX.
@@ -151,14 +151,14 @@ in
       };
       timeout = mkOption {
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           Connection timeout (ms) for ZK connections.
         '';
         default = 30000;
       };
       autoManageInstances = mkOption {
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Automatically manage ZooKeeper instances in the ensemble
         '';
         default = false;
@@ -167,7 +167,7 @@ in
         type = types.str;
         default = "${cfg.baseDir}/zkData";
         defaultText = literalExpression ''"''${config.${opt.baseDir}}/zkData"'';
-        description = ''
+        description = lib.mdDoc ''
           The Zookeeper data directory
         '';
       };
@@ -175,56 +175,56 @@ in
         type = types.path;
         default = "${cfg.baseDir}/zkLogs";
         defaultText = literalExpression ''"''${config.${opt.baseDir}}/zkLogs"'';
-        description = ''
+        description = lib.mdDoc ''
           The Zookeeper logs directory
         '';
       };
       extraConf = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Extra Exhibitor configuration to put in the ZooKeeper config file.
         '';
       };
       zkExtraCfg = mkOption {
         type = types.str;
         default = "initLimit=5&syncLimit=2&tickTime=2000";
-        description = ''
+        description = lib.mdDoc ''
           Extra options to pass into Zookeeper
         '';
       };
       zkClientPort = mkOption {
         type = types.int;
         default = 2181;
-        description = ''
+        description = lib.mdDoc ''
           Zookeeper client port
         '';
       };
       zkConnectPort = mkOption {
         type = types.int;
         default = 2888;
-        description = ''
+        description = lib.mdDoc ''
           The port to use for followers to talk to each other.
         '';
       };
       zkElectionPort = mkOption {
         type = types.int;
         default = 3888;
-        description = ''
+        description = lib.mdDoc ''
           The port for Zookeepers to use for leader election.
         '';
       };
       zkCleanupPeriod = mkOption {
         type = types.int;
         default = 0;
-        description = ''
+        description = lib.mdDoc ''
           How often (in milliseconds) to run the Zookeeper log cleanup task.
         '';
       };
       zkServersSpec = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Zookeeper server spec for all servers in the ensemble.
         '';
         example = [ "S:1:zk1.example.com" "S:2:zk2.example.com" "S:3:zk3.example.com" "O:4:zk-observer.example.com" ];
@@ -234,14 +234,14 @@ in
       s3Backup = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable backups to S3
         '';
       };
       fileSystemBackup = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enables file system backup of ZooKeeper log files
         '';
       };
@@ -249,21 +249,21 @@ in
       # Options for using zookeeper configType
       zkConfigConnect = mkOption {
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           The initial connection string for ZooKeeper shared config storage
         '';
         example = ["host1:2181" "host2:2181"];
       };
       zkConfigExhibitorPath = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           If the ZooKeeper shared config is also running Exhibitor, the URI path for the REST call
         '';
         default = "/";
       };
       zkConfigExhibitorPort = mkOption {
         type = types.nullOr types.int;
-        description = ''
+        description = lib.mdDoc ''
           If the ZooKeeper shared config is also running Exhibitor, the port that
           Exhibitor is listening on. IMPORTANT: if this value is not set it implies
           that Exhibitor is not being used on the ZooKeeper shared config.
@@ -271,7 +271,7 @@ in
       };
       zkConfigPollMs = mkOption {
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           The period in ms to check for changes in the config ensemble
         '';
         default = 10000;
@@ -280,21 +280,21 @@ in
         sleepMs = mkOption {
           type = types.int;
           default = 1000;
-          description = ''
+          description = lib.mdDoc ''
             Retry sleep time connecting to the ZooKeeper config
           '';
         };
         retryQuantity = mkOption {
           type = types.int;
           default = 3;
-          description = ''
+          description = lib.mdDoc ''
             Retries connecting to the ZooKeeper config
           '';
         };
       };
       zkConfigZPath = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The base ZPath that Exhibitor should use
         '';
         example = "/exhibitor/config";
@@ -304,19 +304,19 @@ in
       s3Config = {
         bucketName = mkOption {
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             Bucket name to store config
           '';
         };
         objectKey = mkOption {
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             S3 key name to store the config
           '';
         };
         configPrefix = mkOption {
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             When using AWS S3 shared config files, the prefix to use for values such as locks
           '';
           default = "exhibitor-";
@@ -326,7 +326,7 @@ in
       # The next two are used for either s3backup or s3 configType
       s3Credentials = mkOption {
         type = types.nullOr types.path;
-        description = ''
+        description = lib.mdDoc ''
           Optional credentials to use for s3backup or s3config. Argument is the path
           to an AWS credential properties file with two properties:
           com.netflix.exhibitor.s3.access-key-id and com.netflix.exhibitor.s3.access-secret-key
@@ -335,7 +335,7 @@ in
       };
       s3Region = mkOption {
         type = types.nullOr types.str;
-        description = ''
+        description = lib.mdDoc ''
           Optional region for S3 calls
         '';
         default = null;
@@ -344,7 +344,7 @@ in
       # Config options for file config type
       fsConfigDir = mkOption {
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           Directory to store Exhibitor properties (cannot be used with s3config).
           Exhibitor uses file system locks so you can specify a shared location
           so as to enable complete ensemble management.
@@ -352,14 +352,14 @@ in
       };
       fsConfigLockPrefix = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           A prefix for a locking mechanism used in conjunction with fsconfigdir
         '';
         default = "exhibitor-lock-";
       };
       fsConfigName = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The name of the file to store config in
         '';
         default = "exhibitor.properties";

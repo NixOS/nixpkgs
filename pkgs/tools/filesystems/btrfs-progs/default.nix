@@ -4,24 +4,28 @@
 , acl, attr, e2fsprogs, libuuid, lzo, udev, zlib
 , runCommand, btrfs-progs
 , gitUpdater
+, udevSupport ? true
+, enablePython ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "btrfs-progs";
-  version = "5.17";
+  version = "5.19";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "sha256-Y7d4/kwrrRjjcdzljtNUiOCPWDkhNnRU/diFB6PQ2J4=";
+    sha256 = "sha256-H7zwbksvgOehJ/1oftRiWlt0+mdP4hLINv9w4O38zPk=";
   };
 
   nativeBuildInputs = [
     pkg-config
+  ] ++ lib.optionals enablePython [
     python3 python3.pkgs.setuptools
+  ] ++ [
     sphinx
   ];
 
-  buildInputs = [ acl attr e2fsprogs libuuid lzo python3 zlib zstd ] ++ lib.optionals stdenv.hostPlatform.isGnu [ udev ];
+  buildInputs = [ acl attr e2fsprogs libuuid lzo python3 udev zlib zstd ];
 
   # gcc bug with -O1 on ARM with gcc 4.8
   # This should be fine on all platforms so apply universally
@@ -31,11 +35,17 @@ stdenv.mkDerivation rec {
     install -v -m 444 -D btrfs-completion $out/share/bash-completion/completions/btrfs
   '';
 
-  configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace --disable-libudev";
+  configureFlags = lib.optionals stdenv.hostPlatform.isMusl [
+    "--disable-backtrace"
+  ] ++ lib.optionals (!enablePython) [
+    "--disable-python"
+  ] ++ lib.optionals (!udevSupport) [
+    "--disable-libudev"
+  ];
 
-  makeFlags = lib.optionals stdenv.hostPlatform.isGnu [ "udevruledir=$(out)/lib/udev/rules.d" ];
+  makeFlags = [ "udevruledir=$(out)/lib/udev/rules.d" ];
 
-  installFlags = [ "install_python" ];
+  installFlags = lib.optionals enablePython [ "install_python" ];
 
   enableParallelBuilding = true;
 

@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "django-js-asset";
-  version = "unstable-2021-06-07";
+  version = "2.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "matthiask";
     repo = pname;
-    rev = "a186aa0b5721ca95da6cc032a2fb780a152f581b";
-    sha256 = "141zxng0wwxalsi905cs8pdppy3ad717y3g4fkdxw4n3pd0fjp8r";
+    rev = "refs/tags/${version}";
+    hash = "sha256-YDOmbqB0xDBAlOSO1UBYJ8VfRjJ8Z6Hw1i24DNSrnjw=";
   };
 
   propagatedBuildInputs = [

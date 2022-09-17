@@ -38,13 +38,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crun";
-  version = "1.4.5";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = version;
-    sha256 = "sha256-YXbyGUY/E8odjljDok+yYyU8yZSyUFc22zumrUuuXXQ=";
+    sha256 = "sha256-JO07bF2Xucz8lSvj7om17a/NT0I7Vru1vayZhPDFLIw=";
     fetchSubmodules = true;
   };
 
@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (lib.elem stdenv.hostPlatform.system criu.meta.platforms) criu;
 
   enableParallelBuilding = true;
+  strictDeps = true;
 
   # we need this before autoreconfHook does its thing in order to initialize
   # config.h with the correct values

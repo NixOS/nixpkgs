@@ -175,11 +175,15 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
 
   # Until macOS SDK allows for Qt 5.15, darwin is limited to 2.3.2
-  qca-qt5_2_3_2 = callPackage ../development/libraries/qca-qt5/2.3.2.nix { };
+  qca-qt5_2_3_2 = callPackage ../development/libraries/qca-qt5/2.3.2.nix {
+    openssl = pkgs.openssl_1_1;
+  };
 
   qcoro = callPackage ../development/libraries/qcoro { };
 
   qcsxcad = callPackage ../development/libraries/science/electronics/qcsxcad { };
+
+  qjson = callPackage ../development/libraries/qjson { };
 
   qmltermwidget = callPackage ../development/libraries/qmltermwidget {
     inherit (pkgs.darwin.apple_sdk.libs) utmp;
@@ -193,7 +197,11 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   qt5ct = callPackage ../tools/misc/qt5ct { };
 
+  qtdbusextended = callPackage ../development/libraries/qtdbusextended { };
+
   qtfeedback = callPackage ../development/libraries/qtfeedback { };
+
+  qtforkawesome = callPackage ../development/libraries/qtforkawesome { };
 
   qtutilities = callPackage ../development/libraries/qtutilities { };
 
@@ -230,6 +238,10 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   signond = callPackage ../development/libraries/signond {};
 
   soundkonverter = callPackage ../applications/audio/soundkonverter {};
+
+  xp-pen-deco-01-v2-driver = callPackage ../os-specific/linux/xp-pen-drivers/deco-01-v2 { };
+
+  xp-pen-g430-driver = callPackage ../os-specific/linux/xp-pen-drivers/g430 { };
 
   yuview = callPackage ../applications/video/yuview { };
 })))

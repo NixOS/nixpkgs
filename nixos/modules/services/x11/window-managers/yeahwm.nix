@@ -8,7 +8,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.yeahwm.enable = mkEnableOption "yeahwm";
+    services.xserver.windowManager.yeahwm.enable = mkEnableOption (lib.mdDoc "yeahwm");
   };
 
   ###### implementation

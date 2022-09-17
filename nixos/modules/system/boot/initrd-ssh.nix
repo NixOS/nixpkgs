@@ -14,20 +14,20 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Start SSH service during initrd boot. It can be used to debug failing
         boot on a remote server, enter pasphrase for an encrypted partition etc.
         Service is killed when stage-1 boot is finished.
 
         The sshd configuration is largely inherited from
-        <option>services.openssh</option>.
+        {option}`services.openssh`.
       '';
     };
 
     port = mkOption {
       type = types.int;
       default = 22;
-      description = ''
+      description = lib.mdDoc ''
         Port on which SSH initrd service should listen.
       '';
     };
@@ -35,7 +35,7 @@ in
     shell = mkOption {
       type = types.str;
       default = "/bin/ash";
-      description = ''
+      description = lib.mdDoc ''
         Login shell of the remote user. Can be used to limit actions user can do.
       '';
     };
@@ -47,31 +47,29 @@ in
         "/etc/secrets/initrd/ssh_host_rsa_key"
         "/etc/secrets/initrd/ssh_host_ed25519_key"
       ];
-      description = ''
+      description = lib.mdDoc ''
         Specify SSH host keys to import into the initrd.
 
         To generate keys, use
-        <citerefentry><refentrytitle>ssh-keygen</refentrytitle><manvolnum>1</manvolnum></citerefentry>:
+        {manpage}`ssh-keygen(1)`
+        as root:
 
-        <screen>
-        <prompt># </prompt>ssh-keygen -t rsa -N "" -f /etc/secrets/initrd/ssh_host_rsa_key
-        <prompt># </prompt>ssh-keygen -t ed25519 -N "" -f /etc/secrets/initrd/ssh_host_ed25519_key
-        </screen>
+        ```
+        ssh-keygen -t rsa -N "" -f /etc/secrets/initrd/ssh_host_rsa_key
+        ssh-keygen -t ed25519 -N "" -f /etc/secrets/initrd/ssh_host_ed25519_key
+        ```
 
-        <warning>
-          <para>
-            Unless your bootloader supports initrd secrets, these keys
-            are stored insecurely in the global Nix store. Do NOT use
-            your regular SSH host private keys for this purpose or
-            you'll expose them to regular users!
-          </para>
-          <para>
-            Additionally, even if your initrd supports secrets, if
-            you're using initrd SSH to unlock an encrypted disk then
-            using your regular host keys exposes the private keys on
-            your unencrypted boot partition.
-          </para>
-        </warning>
+        ::: {.warning}
+        Unless your bootloader supports initrd secrets, these keys
+        are stored insecurely in the global Nix store. Do NOT use
+        your regular SSH host private keys for this purpose or
+        you'll expose them to regular users!
+
+        Additionally, even if your initrd supports secrets, if
+        you're using initrd SSH to unlock an encrypted disk then
+        using your regular host keys exposes the private keys on
+        your unencrypted boot partition.
+        :::
       '';
     };
 
@@ -79,7 +77,7 @@ in
       type = types.listOf types.str;
       default = config.users.users.root.openssh.authorizedKeys.keys;
       defaultText = literalExpression "config.users.users.root.openssh.authorizedKeys.keys";
-      description = ''
+      description = lib.mdDoc ''
         Authorized keys for the root user on initrd.
       '';
     };
@@ -87,7 +85,7 @@ in
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = "Verbatim contents of <filename>sshd_config</filename>.";
+      description = lib.mdDoc "Verbatim contents of {file}`sshd_config`.";
     };
   };
 

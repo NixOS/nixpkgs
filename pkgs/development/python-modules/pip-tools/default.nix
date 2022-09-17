@@ -1,30 +1,49 @@
 { lib
-, fetchPypi
-, pythonOlder
-, buildPythonPackage
-, pip
-, pytestCheckHook
-, pytest-xdist
-, click
-, setuptools-scm
-, pep517
 , stdenv
+, buildPythonPackage
+, build
+, click
+, fetchPypi
+, pep517
+, pip
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "6.6.1";
+  version = "6.8.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Y04+jUcHJXwAQxPRap1sFMHOlNPA+h+Tw40mRAHy5PI=";
+    hash = "sha256-Oeiu5GVEbgInjYDb69QyXR3YYzJI9DITxzol9Y59ilU=";
   };
 
+  patches = [ ./fix-setup-py-bad-syntax-detection.patch ];
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    build
+    click
+    pep517
+    pip
+    setuptools
+    wheel
+  ];
+
   checkInputs = [
-    pytestCheckHook
     pytest-xdist
+    pytestCheckHook
   ];
 
   preCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
@@ -32,20 +51,15 @@ buildPythonPackage rec {
     export no_proxy='*';
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
-  propagatedBuildInputs = [
-    click
-    pep517
-    pip
-  ];
-
   disabledTests = [
-    # these want internet access
+    # Tests require network access
     "network"
     "test_direct_reference_with_extras"
+    "test_local_duplicate_subdependency_combined"
+  ];
+
+  pythonImportsCheck = [
+    "piptools"
   ];
 
   meta = with lib; {

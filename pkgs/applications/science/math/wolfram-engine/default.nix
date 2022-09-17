@@ -140,6 +140,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Wolfram Engine computational software system";
     homepage = "https://www.wolfram.com/engine/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ fbeffa ];
     platforms = [ "x86_64-linux" ];

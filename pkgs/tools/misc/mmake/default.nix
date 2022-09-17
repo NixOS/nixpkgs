@@ -15,7 +15,8 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  checkFlags = [ "-short" ];
+  # Almost all tests require non-local networking, trying to resolve githubusercontent.com.
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://github.com/tj/mmake";

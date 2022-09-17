@@ -14,6 +14,9 @@ let
 
     ARCH = stdenvNoCC.hostPlatform.linuxArch;
 
+    strictDeps = true;
+    enableParallelBuilding = true;
+
     # It may look odd that we use `stdenvNoCC`, and yet explicit depend on a cc.
     # We do this so we have a build->build, not build->host, C compiler.
     depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -24,7 +27,7 @@ let
       flex bison python rsync
     ];
 
-    extraIncludeDirs = lib.optional stdenvNoCC.hostPlatform.isPowerPC ["ppc"];
+    extraIncludeDirs = lib.optional (with stdenvNoCC.hostPlatform; isPower && is32bit && isBigEndian) ["ppc"];
 
     inherit patches;
 
@@ -81,12 +84,12 @@ let
 in {
   inherit makeLinuxHeaders;
 
-  linuxHeaders = let version = "5.17"; in
+  linuxHeaders = let version = "5.19"; in
     makeLinuxHeaders {
       inherit version;
       src = fetchurl {
         url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
-        sha256 = "1cdi43x4c3l4chznh57gm55szycj4wjlxl1dss1ilnfvvmhyypsm";
+        sha256 = "1a05a3hw4w3k530mxhns96xw7hag743xw5w967yazqcykdbhq97z";
       };
       patches = [
          ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms

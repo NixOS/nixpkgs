@@ -74,6 +74,10 @@ stdenv.mkDerivation rec {
     "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
   ];
 
+  # fix "Killed: 9  test/test_bitcoin"
+  # https://github.com/NixOS/nixpkgs/issues/179474
+  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "fortify" "stackprotector" ];
+
   checkInputs = [ python3 ];
 
   doCheck = true;

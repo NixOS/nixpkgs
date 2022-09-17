@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , pythonOlder
-, pythonAtLeast
 , fetchFromGitHub
 , pillow
 , libX11
@@ -17,7 +16,7 @@ buildPythonPackage rec {
   version = "1.2.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.10";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ful1e5";

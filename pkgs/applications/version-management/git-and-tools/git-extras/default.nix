@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, unixtools, which }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, unixtools
+, which
+}:
 
 stdenv.mkDerivation rec {
   pname = "git-extras";
@@ -10,6 +16,13 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-Cn7IXMzgg0QIsNIHz+X14Gkmop0UbsSBlGlGkmg71ek=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/tj/git-extras/commit/66961ad4911cd0f1a908530f2b725bacc7d198e1.patch";
+      sha256 = "sha256-iC1lUf/NmuAPADxDWZ2JScHIMgYjIaR0edlGpq0qCOc=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs check_dependencies.sh

@@ -38,6 +38,8 @@ in {
       virtualisation.memorySize = if pkgs.stdenv.is64bit then 4096 else 2047;
       virtualisation.cores = 4;
       virtualisation.useNixStoreImage = true;
+      virtualisation.writableStore = false;
+
       systemd.services.gitlab.serviceConfig.Restart = mkForce "no";
       systemd.services.gitlab-workhorse.serviceConfig.Restart = mkForce "no";
       systemd.services.gitaly.serviceConfig.Restart = mkForce "no";

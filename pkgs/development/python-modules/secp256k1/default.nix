@@ -2,8 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pkg-config
-, pytest
-, pytest-runner
+, pytestCheckHook
 , cffi
 , secp256k1
 }:
@@ -17,28 +16,25 @@ buildPythonPackage rec {
     sha256 = "82c06712d69ef945220c8b53c1a0d424c2ff6a1f64aee609030df79ad8383397";
   };
 
+  postPatch = ''
+    # don't do hacky tarball download + setuptools check
+    sed -i '38,54d' setup.py
+    substituteInPlace setup.py --replace ", 'pytest-runner==2.6.2'" ""
+  '';
+
   nativeBuildInputs = [ pkg-config ];
-  checkInputs = [ pytest pytest-runner ];
+
   propagatedBuildInputs = [ cffi secp256k1 ];
+
+  checkInputs = [ pytestCheckHook ];
 
   # Tests are not included in archive
   doCheck = false;
 
   preConfigure = ''
     cp -r ${secp256k1.src} libsecp256k1
-    touch libsecp256k1/autogen.sh
     export INCLUDE_DIR=${secp256k1}/include
     export LIB_DIR=${secp256k1}/lib
-  '';
-
-  checkPhase = ''
-    py.test tests
-  '';
-
-  postPatch = ''
-    # don't do hacky tarball download + setuptools check
-    sed -i '38,54d' setup.py
-    substituteInPlace setup.py --replace ", 'pytest-runner==2.6.2'" ""
   '';
 
   meta = {

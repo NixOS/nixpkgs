@@ -30,11 +30,11 @@
 
 stdenv.mkDerivation rec {
   pname = "polari";
-  version = "42.0";
+  version = "42.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "WPFbv1tCwLASPv3td1cR07DyRJl1cwlAOMpVZGHgSTw=";
+    sha256 = "r5DPCEjsvkB+sjBkBINpdP048xww1HT0bRspIYqWaz0=";
   };
 
   patches = [

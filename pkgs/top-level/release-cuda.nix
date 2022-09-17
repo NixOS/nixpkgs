@@ -48,7 +48,7 @@ let
     python3.pkgs.libgpuarray = linux;
     python3.pkgs.tensorflowWithCuda = linux;
     python3.pkgs.pyrealsense2WithCuda = linux;
-    python3.pkgs.pytorchWithCuda = linux;
+    python3.pkgs.torchWithCuda = linux;
     python3.pkgs.jaxlib = linux;
   }) // (genAttrs packageSets evalPackageSet));
 

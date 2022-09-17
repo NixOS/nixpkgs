@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, python }:
+{ lib, buildPythonPackage, fetchPypi, unittestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pycparser";
@@ -9,9 +9,9 @@ buildPythonPackage rec {
     sha256 = "e644fdec12f7872f86c58ff790da456218b10f863970249516d60a5eaca77206";
   };
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests
-  '';
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "tests" ];
 
   meta = with lib; {
     description = "C parser in Python";

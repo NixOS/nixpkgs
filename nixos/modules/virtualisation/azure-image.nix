@@ -12,7 +12,7 @@ in
       type = with types; either (enum [ "auto" ]) int;
       default = "auto";
       example = 2048;
-      description = ''
+      description = lib.mdDoc ''
         Size of disk image. Unit is MB.
       '';
     };

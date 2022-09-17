@@ -12,7 +12,7 @@ in
       type = types.listOf types.str;
       default = [];
       example = [ "systemd" ];
-      description = ''
+      description = lib.mdDoc ''
         Collectors to enable. The collectors listed here are enabled in addition to the default ones.
       '';
     };
@@ -20,7 +20,7 @@ in
       type = types.listOf types.str;
       default = [];
       example = [ "timex" ];
-      description = ''
+      description = lib.mdDoc ''
         Collectors to disable which are enabled by default.
       '';
     };
@@ -44,6 +44,8 @@ in
       ];
       # The timex collector needs to access clock APIs
       ProtectClock = any (collector: collector == "timex") cfg.disabledCollectors;
+      # Allow space monitoring under /home
+      ProtectHome = true;
     };
   };
 }

@@ -18,14 +18,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "anydesk";
-  version = "6.1.1";
+  version = "6.2.0";
 
   src = fetchurl {
     urls = [
       "https://download.anydesk.com/linux/${pname}-${version}-amd64.tar.gz"
       "https://download.anydesk.com/linux/generic-linux/${pname}-${version}-amd64.tar.gz"
     ];
-    sha256 = "1ai58fsivb8al1279bayl800qavy0kfj40rjhf87g902ap3p4bhh";
+    sha256 = "k85nQH2FWyEXDgB+Pd4yStfNCjkiIGE2vA/YTXLaK4o=";
   };
 
   passthru = {
@@ -85,6 +85,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     inherit description;
     homepage = "https://www.anydesk.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ shyim ];

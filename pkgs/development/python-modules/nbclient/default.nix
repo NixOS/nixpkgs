@@ -1,28 +1,32 @@
-{ lib
+{ async_generator
 , buildPythonPackage
-, fetchPypi
-, pythonOlder
-, async_generator
-, traitlets
+, fetchFromGitHub
+, ipykernel
+, ipywidgets
+, jupyter-client
+, lib
+, nbconvert
 , nbformat
 , nest-asyncio
-, jupyter-client
+, pytest-asyncio
 , pytestCheckHook
+, pythonOlder
+, traitlets
 , xmltodict
-, nbconvert
-, ipywidgets
 }:
 
 let nbclient = buildPythonPackage rec {
   pname = "nbclient";
-  version = "0.6.3";
+  version = "0.6.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-uAcm/B+4mg6Pi+HnfijQAmsejtkLwUPIoMdiLk+M3Z4=";
+  src = fetchFromGitHub {
+    owner = "jupyter";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+GQkEGWReo9y8bgcysslQdzJUcvQiZkQTQiwmWJ1mx8=";
   };
 
   propagatedBuildInputs = [ async_generator traitlets nbformat nest-asyncio jupyter-client ];
@@ -30,7 +34,14 @@ let nbclient = buildPythonPackage rec {
   # circular dependencies if enabled by default
   doCheck = false;
 
-  checkInputs = [ pytestCheckHook xmltodict nbconvert ipywidgets ];
+  checkInputs = [
+    ipykernel
+    ipywidgets
+    nbconvert
+    pytest-asyncio
+    pytestCheckHook
+    xmltodict
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
@@ -55,7 +56,7 @@ in
 
 buildPythonPackage rec {
   pname = "qiskit-terra";
-  version = "0.20.1";
+  version = "0.21.0";
 
   disabled = pythonOlder "3.7";
 
@@ -63,7 +64,7 @@ buildPythonPackage rec {
     owner = "qiskit";
     repo = pname;
     rev = version;
-    sha256 = "sha256-spKLPUlUXBmnIo/rnBPUFf72Vxd53xFhh409KzytpkI=";
+    hash = "sha256-imktzBpgP+lq6FsVWIUK82+t76gKTgt53kPfKOnsseQ=";
   };
 
   nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [ rust.rustc rust.cargo cargoSetupHook ]);
@@ -71,7 +72,7 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-KNx7c5Jc1AWIpldMQ1AcWYuMb4W+yLY/cgB87hzPuVY=";
+    hash = "sha256-SXC0UqWjWqLlZvKCRBylSX73r4Vale130KzS0zM8gjQ=";
   };
 
   propagatedBuildInputs = [
@@ -192,6 +193,7 @@ buildPythonPackage rec {
 
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Provides the foundations for Qiskit.";
     longDescription = ''
       Allows the user to write quantum circuits easily, and takes care of the constraints of real hardware.

@@ -16,7 +16,7 @@ in
     security.googleOsLogin.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable Google OS Login.
 
         The OS Login package enables the following components:

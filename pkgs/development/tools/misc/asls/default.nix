@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "05kp44p4q4sdykfw0b4k9j3qdp0qvwgjbs48ncmnd0ass0xrmi3s";
   };
 
-  buildInputs = [ erlangR22 ];
+  nativeBuildInputs = [ erlangR22 ];
   installPhase = "install -Dm755 -t $out/bin asls";
 
   meta = with lib; {

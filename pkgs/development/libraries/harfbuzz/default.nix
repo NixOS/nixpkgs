@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , glib
 , freetype
@@ -30,11 +31,10 @@
 }:
 
 let
-  version = "3.3.2";
+  version = "5.1.0";
   inherit (lib) optional optionals optionalString;
   mesonFeatureFlag = opt: b:
     "-D${opt}=${if b then "enabled" else "disabled"}";
-  isNativeCompilation = stdenv.buildPlatform == stdenv.hostPlatform;
 in
 
 stdenv.mkDerivation {
@@ -45,8 +45,16 @@ stdenv.mkDerivation {
     owner = "harfbuzz";
     repo = "harfbuzz";
     rev = version;
-    sha256 = "sha256-UbYqV7Ch9ugTIwSsCpjnS8H7tcv4P3OVpFDFDZtQCk0=";
+    sha256 = "sha256-K6iScmg1vNfwb1UYqtXsnijLVpcC+am2ZL+W5bLFzsI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "aarch64-test-narrowing.diff";
+      url = "https://github.com/harfbuzz/harfbuzz/commit/04d28d94e576aab099891e6736fd0088dfac3366.diff";
+      sha256 = "sha256-099GP8t1G0kyYl79A6xJhfyrs3WXYitvn+He7sEz+Oo=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs src/*.py test
@@ -70,7 +78,10 @@ stdenv.mkDerivation {
     (mesonFeatureFlag "coretext" withCoreText)
     (mesonFeatureFlag "graphite" withGraphite2)
     (mesonFeatureFlag "icu" withIcu)
-    (mesonFeatureFlag "introspection" isNativeCompilation)
+  ];
+
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
@@ -85,9 +96,8 @@ stdenv.mkDerivation {
     docbook_xml_dtd_43
   ];
 
-  buildInputs = [ glib freetype ]
-    ++ lib.optionals withCoreText [ ApplicationServices CoreText ]
-    ++ lib.optionals isNativeCompilation [ gobject-introspection ];
+  buildInputs = [ glib freetype gobject-introspection ]
+    ++ lib.optionals withCoreText [ ApplicationServices CoreText ];
 
   propagatedBuildInputs = optional withGraphite2 graphite2
     ++ optionals withIcu [ icu harfbuzz ];

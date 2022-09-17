@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "metis-prover";
-  version = "2.3.20160713";
+  version = "2.4.20200713";
 
   src = fetchFromGitHub {
     owner = "gilith";
     repo = "metis";
-    rev = "f0b1a17cd57eb098077e963ab092477aee9fb340";
-    sha256 = "1i7paax7b4byk8110f5zk4071mh5603r82bq7hbprqzljvsiipk7";
+    rev = "d17c3a8cf6537212c5c4bfdadcf865bd25723132";
+    sha256 = "phu1x0yahK/B2bSOCvlze7UJw8smX9zw6dJTpDD9chM=";
   };
 
   nativeBuildInputs = [ perl ];

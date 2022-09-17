@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, ocaml, findlib, withStatic ? false }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   version = "1.1";
   pname = "ocaml${ocaml.version}-num";
   src = fetchFromGitHub {
@@ -28,4 +28,7 @@ stdenv.mkDerivation rec {
     inherit (ocaml.meta) platforms;
     inherit (src.meta) homepage;
   };
-}
+} // (if lib.versions.majorMinor ocaml.version == "4.06" then {
+    NIX_CFLAGS_COMPILE = "-fcommon";
+  } else {})
+)

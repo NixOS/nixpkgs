@@ -88,6 +88,10 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Command-line tool for working with PDFs";
     homepage = "https://gitlab.com/pdftk-java/pdftk";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin averelld ];
     platforms = platforms.unix;

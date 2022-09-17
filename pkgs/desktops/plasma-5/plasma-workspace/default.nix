@@ -57,7 +57,7 @@ mkDerivation {
   # QT_INSTALL_BINS refers to qtbase, and qdbus is in qttools
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace 'query_qmake(QtBinariesDir QT_INSTALL_BINS)' 'set(QtBinariesDir "${lib.getBin qttools}/bin")'
+      --replace 'ecm_query_qt(QtBinariesDir QT_INSTALL_BINS)' 'set(QtBinariesDir "${lib.getBin qttools}/bin")'
   '';
 
   NIX_CFLAGS_COMPILE = [

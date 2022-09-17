@@ -11,7 +11,7 @@ in
     configurationPath = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Path to a snmp exporter configuration file. Mutually exclusive with 'configuration' option.
       '';
       example = literalExpression "./snmp.yml";
@@ -20,7 +20,7 @@ in
     configuration = mkOption {
       type = types.nullOr types.attrs;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Snmp exporter configuration as nix attribute set. Mutually exclusive with 'configurationPath' option.
       '';
       example = {
@@ -36,7 +36,7 @@ in
     logFormat = mkOption {
       type = types.enum ["logfmt" "json"];
       default = "logfmt";
-      description = ''
+      description = lib.mdDoc ''
         Output format of log messages.
       '';
     };
@@ -44,7 +44,7 @@ in
     logLevel = mkOption {
       type = types.enum ["debug" "info" "warn" "error"];
       default = "info";
-      description = ''
+      description = lib.mdDoc ''
         Only log messages with the given severity or above.
       '';
     };

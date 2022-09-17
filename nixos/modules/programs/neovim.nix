@@ -11,12 +11,12 @@ let
 
 in {
   options.programs.neovim = {
-    enable = mkEnableOption "Neovim";
+    enable = mkEnableOption (lib.mdDoc "Neovim");
 
     defaultEditor = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         When enabled, installs neovim and configures neovim to be the default editor
         using the EDITOR environment variable.
       '';
@@ -25,35 +25,35 @@ in {
     viAlias = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Symlink <command>vi</command> to <command>nvim</command> binary.
+      description = lib.mdDoc ''
+        Symlink {command}`vi` to {command}`nvim` binary.
       '';
     };
 
     vimAlias = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Symlink <command>vim</command> to <command>nvim</command> binary.
+      description = lib.mdDoc ''
+        Symlink {command}`vim` to {command}`nvim` binary.
       '';
     };
 
     withRuby = mkOption {
       type = types.bool;
       default = true;
-      description = "Enable Ruby provider.";
+      description = lib.mdDoc "Enable Ruby provider.";
     };
 
     withPython3 = mkOption {
       type = types.bool;
       default = true;
-      description = "Enable Python 3 provider.";
+      description = lib.mdDoc "Enable Python 3 provider.";
     };
 
     withNodeJs = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable Node provider.";
+      description = lib.mdDoc "Enable Node provider.";
     };
 
     configure = mkOption {
@@ -72,9 +72,9 @@ in {
           };
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Generate your init file from your list of plugins and custom commands.
-        Neovim will then be wrapped to load <command>nvim -u /nix/store/<replaceable>hash</replaceable>-vimrc</command>
+        Neovim will then be wrapped to load {command}`nvim -u /nix/store/«hash»-vimrc`
       '';
     };
 
@@ -82,14 +82,14 @@ in {
       type = types.package;
       default = pkgs.neovim-unwrapped;
       defaultText = literalExpression "pkgs.neovim-unwrapped";
-      description = "The package to use for the neovim binary.";
+      description = lib.mdDoc "The package to use for the neovim binary.";
     };
 
     finalPackage = mkOption {
       type = types.package;
       visible = false;
       readOnly = true;
-      description = "Resulting customized neovim package.";
+      description = lib.mdDoc "Resulting customized neovim package.";
     };
 
     runtime = mkOption {
@@ -97,8 +97,8 @@ in {
       example = literalExpression ''
         { "ftplugin/c.vim".text = "setlocal omnifunc=v:lua.vim.lsp.omnifunc"; }
       '';
-      description = ''
-        Set of files that have to be linked in <filename>runtime</filename>.
+      description = lib.mdDoc ''
+        Set of files that have to be linked in {file}`runtime`.
       '';
 
       type = with types; attrsOf (submodule (
@@ -108,7 +108,7 @@ in {
             enable = mkOption {
               type = types.bool;
               default = true;
-              description = ''
+              description = lib.mdDoc ''
                 Whether this /etc file should be generated.  This
                 option allows specific /etc files to be disabled.
               '';
@@ -116,7 +116,7 @@ in {
 
             target = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Name of symlink.  Defaults to the attribute
                 name.
               '';
@@ -125,12 +125,12 @@ in {
             text = mkOption {
               default = null;
               type = types.nullOr types.lines;
-              description = "Text of the file.";
+              description = lib.mdDoc "Text of the file.";
             };
 
             source = mkOption {
               type = types.path;
-              description = "Path of the source file.";
+              description = lib.mdDoc "Path of the source file.";
             };
 
           };

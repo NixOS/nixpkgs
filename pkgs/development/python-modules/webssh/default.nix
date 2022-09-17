@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , paramiko
@@ -35,6 +36,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Web based SSH client";
     homepage = "https://github.com/huashengdun/webssh/";
     license = licenses.mit;

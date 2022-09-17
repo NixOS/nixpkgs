@@ -24,6 +24,12 @@ buildPythonPackage rec {
     azure-mgmt-nspkg
   ];
 
+  preBuild = ''
+    rm -f azure_bdist_wheel.py
+    substituteInPlace setup.cfg \
+      --replace "azure-namespace-package = azure-mgmt-nspkg" ""
+  '';
+
   pythonNamespaces = [ "azure.mgmt" ];
 
   # has no tests

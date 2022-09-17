@@ -1,9 +1,8 @@
 { lib
 , fetchurl
-, fetchpatch
 , intltool
 , libtorrent-rasterbar
-, pythonPackages
+, python3Packages
 , gtk3
 , glib
 , gobject-introspection
@@ -11,62 +10,95 @@
 , wrapGAppsHook
 }:
 
-pythonPackages.buildPythonPackage rec {
-  pname = "deluge";
-  version = "2.0.5";
+let
+  inherit (lib) optionals;
 
-  src = fetchurl {
-    url = "http://download.deluge-torrent.org/source/2.0/${pname}-${version}.tar.xz";
-    sha256 = "sha256-xL0Eq/0hG2Uhi+A/PEbSb0QCSITeEOAYWfuFb91vJdg=";
-  };
+  pypkgs = python3Packages;
 
-  propagatedBuildInputs = with pythonPackages; [
-    twisted
-    Mako
-    chardet
-    pyxdg
-    pyopenssl
-    service-identity
-    libtorrent-rasterbar.dev
-    libtorrent-rasterbar.python
-    setuptools
-    setproctitle
-    pillow
-    rencode
-    six
-    zope_interface
-    dbus-python
-    pygobject3
-    pycairo
-    gtk3
-    gobject-introspection
-    librsvg
-  ];
+  generic = { pname, withGUI }:
+    pypkgs.buildPythonPackage rec {
+      inherit pname;
+      version = "2.1.1";
 
-  nativeBuildInputs = [ intltool wrapGAppsHook glib ];
+      src = fetchurl {
+        url = "http://download.deluge-torrent.org/source/${lib.versions.majorMinor version}/deluge-${version}.tar.xz";
+        hash = "sha256-do3TGYAuQkN6s3lOvnW0lxQuCO1bD7JQO61izvRC3/c=";
+      };
 
-  checkInputs = with pythonPackages; [
-    pytestCheckHook
-    pytest-twisted
-    pytest-cov
-    mock
-    mccabe
-    pylint
-  ];
+      propagatedBuildInputs = with pypkgs; [
+        twisted
+        Mako
+        chardet
+        pyxdg
+        pyopenssl
+        service-identity
+        libtorrent-rasterbar.dev
+        libtorrent-rasterbar.python
+        setuptools
+        setproctitle
+        pillow
+        rencode
+        six
+        zope_interface
+        dbus-python
+        pycairo
+        librsvg
+      ] ++ optionals withGUI [
+        gtk3
+        gobject-introspection
+        pygobject3
+      ];
 
-  doCheck = false; # until pytest-twisted is packaged
+      nativeBuildInputs = [
+        intltool
+        glib
+      ] ++ optionals withGUI [
+        gobject-introspection
+        wrapGAppsHook
+      ];
 
-  postInstall = ''
-    mkdir -p $out/share
-    cp -R deluge/ui/data/{icons,pixmaps} $out/share/
-    install -Dm444 -t $out/share/applications deluge/ui/data/share/applications/deluge.desktop
-  '';
+      checkInputs = with pypkgs; [
+        pytestCheckHook
+        pytest-twisted
+        pytest-cov
+        mock
+        mccabe
+        pylint
+      ];
 
-  meta = with lib; {
-    homepage = "https://deluge-torrent.org";
-    description = "Torrent client";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ domenkozar ebzzry ];
-    platforms = platforms.all;
-  };
+      doCheck = false; # tests are not working at all
+
+      postInstall = ''
+        install -Dm444 -t $out/lib/systemd/system packaging/systemd/*.service
+      '' + (if withGUI
+      then ''
+        mkdir -p $out/share
+        cp -R deluge/ui/data/{icons,pixmaps} $out/share/
+        install -Dm444 -t $out/share/applications deluge/ui/data/share/applications/deluge.desktop
+      '' else ''
+        rm -r $out/bin/deluge-gtk
+        rm -r $out/lib/${python3Packages.python.libPrefix}/site-packages/deluge/ui/gtk3
+        rm -r $out/share/{icons,man/man1/deluge-gtk*,pixmaps}
+      '');
+
+      postFixup = ''
+        for f in $out/lib/systemd/system/*; do
+          substituteInPlace $f --replace /usr/bin $out/bin
+        done
+      '';
+
+      meta = with lib; {
+        description = "Torrent client";
+        homepage = "https://deluge-torrent.org";
+        license = licenses.gpl3Plus;
+        maintainers = with maintainers; [ domenkozar ebzzry ];
+        platforms = platforms.all;
+      };
+    };
+
+in
+rec {
+  deluge-gtk = generic { pname = "deluge-gtk"; withGUI = true; };
+  deluged = generic { pname = "deluged"; withGUI = false; };
+  deluge = deluge-gtk;
 }

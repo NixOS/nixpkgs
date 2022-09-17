@@ -1,8 +1,12 @@
-{ lib, buildPythonApplication, fetchFromGitHub
-, gtk3, gobject-introspection
-, wrapGAppsHook, python3Packages }:
+{ lib
+, fetchFromGitHub
+, gobject-introspection
+, gtk3
+, python3
+, wrapGAppsHook
+}:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "gshogi";
   version = "0.5.1";
 
@@ -10,7 +14,7 @@ buildPythonApplication rec {
     owner = "johncheetham";
     repo = "gshogi";
     rev = "v${version}";
-    sha256 = "06vgndfgwyfi50wg3cw92zspc9z0k7xn2pp6qsjih0l5yih8iwqh";
+    hash = "sha256-EPOIYPSFAhilxuZeYfuZ4Cd29ReJs/E4KNF5/lyzbxs=";
   };
 
   doCheck = false;  # no tests available
@@ -22,15 +26,15 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     pygobject3
     pycairo
   ];
 
   meta = with lib; {
-    description = "A graphical implementation of the Shogi board game, also known as Japanese Chess";
     homepage = "http://johncheetham.com/projects/gshogi/";
-    license = licenses.gpl3;
+    description = "A graphical implementation of the Shogi board game, also known as Japanese Chess";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.ciil ];
   };

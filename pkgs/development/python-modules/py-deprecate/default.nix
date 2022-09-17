@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , pytestCheckHook
 , scikit-learn
-, pytorch
 }:
 
 let

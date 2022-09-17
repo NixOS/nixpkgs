@@ -1,25 +1,19 @@
-{ lib, stdenv, kubernetes }:
+{ lib, kubernetes }:
 
-stdenv.mkDerivation rec {
+kubernetes.overrideAttrs (_: rec {
   pname = "kubectl";
 
-  inherit (kubernetes)
-    disallowedReferences
-    GOFLAGS
-    nativeBuildInputs
-    postBuild
-    postPatch
-    src
-    version
-    ;
+  outputs = [ "out" "man" "convert" ];
 
-  outputs = [ "out" "man" ];
-
-  WHAT = "cmd/kubectl";
+  WHAT = lib.concatStringsSep " " [
+    "cmd/kubectl"
+    "cmd/kubectl-convert"
+  ];
 
   installPhase = ''
     runHook preInstall
     install -D _output/local/go/bin/kubectl -t $out/bin
+    install -D _output/local/go/bin/kubectl-convert -t $convert/bin
 
     installManPage docs/man/man1/kubectl*
 
@@ -35,4 +29,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/kubernetes/kubectl";
     platforms = lib.platforms.unix;
   };
-}
+})

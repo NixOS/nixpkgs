@@ -18,6 +18,9 @@ pkgs.stdenv.mkDerivation (
   # fake conftest results with emscripten's python magic
   EMCONFIGURE_JS=2;
 
+  # removes archive indices
+  dontStrip = args.dontStrip or true;
+
   configurePhase = args.configurePhase or ''
     # FIXME: Some tests require writing at $HOME
     HOME=$TMPDIR

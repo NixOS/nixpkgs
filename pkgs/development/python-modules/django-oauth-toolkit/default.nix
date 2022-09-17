@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "django-oauth-toolkit";
-  version = "1.7.0";
+  version = "2.1.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = pname;
-    rev = version;
-    sha256 = "0rp7pjif54yvdxfxn0pnf8ha3fjxspnx1ijyr1f8npwk2x5vnvhb";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-c78QYlU/gB4Lt04TlQFjtsS6pyjDm/fURBMa9hXLpLI=";
   };
 
   postPatch = ''

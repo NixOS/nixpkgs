@@ -6,11 +6,11 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "ablog";
-  version = "0.10.24";
+  version = "0.10.29";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bLpINvEH7B/duSRrfzvq25se0mvbbcxaEcAs8xMw6Kc=";
+    sha256 = "sha256-q2zoXCmnzzjXSBGFKzondOQRz7CjZp0wCiXxbgpXHIA=";
   };
 
   propagatedBuildInputs = [

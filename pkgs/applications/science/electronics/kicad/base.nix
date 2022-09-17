@@ -75,7 +75,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
 
-  cmakeFlags = optionals (withScripting) [
+  cmakeFlags = [
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ]
+  ++ optionals (withScripting) [
     "-DKICAD_SCRIPTING_WXPYTHON=ON"
   ]
   ++ optionals (!withScripting) [
@@ -157,9 +161,8 @@ stdenv.mkDerivation rec {
   ;
 
   # debug builds fail all but the python test
-  #doInstallCheck = !debug;
-  # temporarily disabled until upstream issue 9888 is resolved
-  doInstallCheck = false;
+  # stable release doesn't have the fix for upstream issue 9888 yet
+  doInstallCheck = !debug && !stable;
   installCheckTarget = "test";
 
   dontStrip = debug;

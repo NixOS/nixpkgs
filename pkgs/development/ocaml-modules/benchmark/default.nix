@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     inherit (ocaml.meta) platforms;
     description = "Benchmark running times of code";
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ volth ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

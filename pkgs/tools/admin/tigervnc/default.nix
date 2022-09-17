@@ -1,10 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, xorg, xkeyboard_config, zlib
-, libjpeg_turbo, pixman, fltk
-, cmake, gettext, libtool
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, xorg
+, xkeyboard_config
+, zlib
+, libjpeg_turbo
+, pixman
+, fltk
+, cmake
+, gettext
+, libtool
 , libGLU
-, gnutls, pam, nettle
-, xterm, openssh, perl
+, gnutls
+, gawk
+, pam
+, nettle
+, xterm
+, openssh
+, perl
 , makeWrapper
 , nixosTests
 }:
@@ -31,7 +45,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = ''
+  postPatch = lib.optionalString stdenv.isLinux ''
     sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver/vncserver.in
     fontPath=
     substituteInPlace vncviewer/vncviewer.cxx \
@@ -39,6 +53,10 @@ stdenv.mkDerivation rec {
 
     cp unix/xserver21.1.1.patch unix/xserver211.patch
     source_top="$(pwd)"
+  '' + ''
+    # On Mac, do not build a .dmg, instead copy the .app to the source dir
+    gawk -i inplace 'BEGIN { del=0 } /hdiutil/ { del=2 } del<=0 { print } /$VERSION.dmg/ { del -= 1 }' release/makemacapp.in
+    echo "mv \"\$APPROOT\" \"\$SRCDIR/\"" >> release/makemacapp.in
   '';
 
   dontUseCmakeBuildDir = true;
@@ -49,7 +67,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "out"}/bin"
   ];
 
-  postBuild = ''
+  postBuild = lib.optionalString stdenv.isLinux ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=int-to-pointer-cast -Wno-error=pointer-to-int-cast"
     export CXXFLAGS="$CXXFLAGS -fpermissive"
     # Build Xvnc
@@ -76,9 +94,11 @@ stdenv.mkDerivation rec {
         --with-xkb-output=$out/share/X11/xkb/compiled
     make TIGERVNC_SRC=$src TIGERVNC_BUILDDIR=`pwd`/../.. -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES
     popd
+  '' + lib.optionalString stdenv.isDarwin ''
+    make dmg
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     pushd unix/xserver/hw/vnc
     make TIGERVNC_SRC=$src TIGERVNC_BUILDDIR=`pwd`/../../../.. install
     popd
@@ -86,21 +106,54 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/vncserver \
       --prefix PATH : ${lib.makeBinPath (with xorg; [ xterm twm xsetroot xauth ]) }
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv 'TigerVNC Viewer ${version}.app' $out/Applications/
+    rm $out/bin/vncviewer
+    echo "#!/usr/bin/env bash
+    open $out/Applications/TigerVNC\ Viewer\ ${version}.app --args \$@" >> $out/bin/vncviewer
+    chmod +x $out/bin/vncviewer
   '';
 
-  buildInputs = with xorg; [
-    libjpeg_turbo fltk pixman
-    gnutls pam nettle perl
+  buildInputs = [
+    fltk
+    gnutls
+    libjpeg_turbo
+    pixman
+    gawk
+  ] ++ lib.optionals stdenv.isLinux (with xorg; [
+    nettle
+    pam
+    perl
     xorgproto
-    utilmacros libXtst libXext libX11 libXext libICE libXi libSM libXft
-    libxkbfile libXfont2 libpciaccess
+    utilmacros
+    libXtst
+    libXext
+    libX11
+    libXext
+    libICE
+    libXi
+    libSM
+    libXft
+    libxkbfile
+    libXfont2
+    libpciaccess
     libGLU
-  ] ++ xorg.xorgserver.buildInputs;
+  ] ++ xorg.xorgserver.buildInputs
+  );
 
-  nativeBuildInputs = with xorg; [ cmake zlib gettext libtool utilmacros fontutil makeWrapper ]
-    ++ xorg.xorgserver.nativeBuildInputs;
+  nativeBuildInputs = [
+    cmake
+    gettext
+  ] ++ lib.optionals stdenv.isLinux (with xorg; [
+    fontutil
+    libtool
+    makeWrapper
+    utilmacros
+    zlib
+  ] ++ xorg.xorgserver.nativeBuildInputs);
 
-  propagatedBuildInputs = xorg.xorgserver.propagatedBuildInputs;
+  propagatedBuildInputs = lib.optional stdenv.isLinux xorg.xorgserver.propagatedBuildInputs;
 
   passthru.tests.tigervnc = nixosTests.vnc.testTigerVNC;
 
@@ -109,7 +162,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     description = "Fork of tightVNC, made in cooperation with VirtualGL";
     maintainers = with lib.maintainers; [viric];
-    platforms = with lib.platforms; linux;
+    platforms = lib.platforms.unix;
     # Prevent a store collision.
     priority = 4;
   };

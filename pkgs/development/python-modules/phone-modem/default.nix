@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "phone-modem";
-  version = "0.1.1";
+  version = "0.1.2";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "phone_modem";
     inherit version;
-    sha256 = "0kqa1ky5hjs9zdp3dnd8s9mz5p6z0al3hxxlgqdq9vnnpnv0lafy";
+    sha256 = "sha256-7NahK9l67MdT/dDVXsq+y0Z4cZxZ/WUW2kPpE4Wz6j0=";
   };
 
   propagatedBuildInputs = [

@@ -1,8 +1,8 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, python
+, fetchPypi
 , notebook
+, notebook-shim
 , pythonOlder
 , jupyter_server
 , pytestCheckHook
@@ -11,26 +11,16 @@
 
 buildPythonPackage rec {
   pname = "nbclassic";
-  version = "0.3.5";
+  version = "0.4.3";
   disabled = pythonOlder "3.6";
 
-  # tests only on github
-  src = fetchFromGitHub {
-    owner = "jupyterlab";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1d0x7nwsaw5qjw4iaylc2sxlpiq3hlg9sy3i2nh7sn3wckwl76lc";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-8DERss66ppuINwp7I7GbKzfJu3F2fxgozf16BH6ujt0=";
   };
 
-  propagatedBuildInputs = [ jupyter_server notebook ];
+  propagatedBuildInputs = [ jupyter_server notebook notebook-shim ];
 
-  preCheck = ''
-    cd nbclassic
-    mv conftest.py tests
-    cd tests
-
-    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
-  '';
   checkInputs = [
     pytestCheckHook
     pytest-tornasync

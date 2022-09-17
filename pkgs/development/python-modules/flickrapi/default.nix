@@ -4,6 +4,7 @@
 , requests
 , requests-toolbelt
 , requests-oauthlib
+, six
 , pytestCheckHook
 , responses
 , pythonOlder
@@ -27,6 +28,7 @@ buildPythonPackage rec {
     requests
     requests-toolbelt
     requests-oauthlib
+    six
   ];
 
   checkInputs = [

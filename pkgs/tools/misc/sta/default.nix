@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation {
   pname = "sta";
-  version = "unstable-2020-05-10";
+  version = "unstable-2021-11-30";
 
   src = fetchFromGitHub {
     owner = "simonccarter";
     repo = "sta";
-    rev = "566e3a77b103aa27a5f77ada8e068edf700f26ef";
-    sha256 = "1v20di90ckl405rj5pn6lxlpxh2m2b3y9h2snjvk0k9sihk7w7d5";
+    rev = "94559e3dfa97d415e3f37b1180b57c17c7222b4f";
+    sha256 = "sha256-AiygCfBze7J1Emy6mc27Dim34eLR7VId9wodUZapIL4=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

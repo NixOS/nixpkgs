@@ -6,6 +6,9 @@
 , coreutils
 , findutils
 , gnused
+, jq
+, curl
+, gnugrep
 }:
 
 runCommandLocal "nuget-to-nix" {
@@ -18,6 +21,9 @@ runCommandLocal "nuget-to-nix" {
       coreutils
       findutils
       gnused
+      jq
+      curl
+      gnugrep
     ];
   };
 

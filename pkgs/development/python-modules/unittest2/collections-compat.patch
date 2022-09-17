@@ -1,0 +1,19 @@
+diff --git a/unittest2/compatibility.py b/unittest2/compatibility.py
+index 9e5f1a5..473957c 100644
+--- a/unittest2/compatibility.py
++++ b/unittest2/compatibility.py
+@@ -1,4 +1,5 @@
+ import collections
++import collections.abc
+ import os
+ import sys
+ 
+@@ -140,7 +141,7 @@ except ImportError:
+ ###  ChainMap (helper for configparser and string.Template)
+ ########################################################################
+ 
+-class ChainMap(collections.MutableMapping):
++class ChainMap(collections.abc.MutableMapping):
+     ''' A ChainMap groups multiple dicts (or other mappings) together
+     to create a single, updateable view.
+ 

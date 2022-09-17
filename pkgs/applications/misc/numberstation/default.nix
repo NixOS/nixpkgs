@@ -34,6 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     desktop-file-utils
     glib
     gtk3
+    gobject-introspection
     meson
     ninja
     pkg-config
@@ -41,7 +42,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gobject-introspection
     gtk3
     libhandy
     librsvg

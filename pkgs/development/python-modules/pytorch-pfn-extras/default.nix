@@ -5,23 +5,23 @@
 , onnx
 , packaging
 , pytestCheckHook
-, pytorch
+, torch
 , torchvision
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "pytorch-pfn-extras";
-  version = "0.5.8";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "pfnet";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ApXDO7VMnExYfh5nfiIaxdbvPjR7dWRAkxh3+0KxWnM=";
+    sha256 = "sha256-wxTs/hfgqJn4DCxZj87V/zDKZc+thx3o5bWAvZe7EJU=";
   };
 
-  propagatedBuildInputs = [ numpy packaging pytorch typing-extensions ];
+  propagatedBuildInputs = [ numpy packaging torch typing-extensions ];
 
   checkInputs = [ onnx pytestCheckHook torchvision ];
 

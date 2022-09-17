@@ -147,6 +147,51 @@ in runBuildTests {
     '';
   };
 
+  testKeyValueAtoms = {
+    drv = evalFormat formats.keyValue {} {
+      bool = true;
+      int = 10;
+      float = 3.141;
+      str = "string";
+    };
+    expected = ''
+      bool=true
+      float=3.141000
+      int=10
+      str=string
+    '';
+  };
+
+  testKeyValueDuplicateKeys = {
+    drv = evalFormat formats.keyValue { listsAsDuplicateKeys = true; } {
+      bar = [ null true "test" 1.2 10 ];
+      baz = false;
+      qux = "qux";
+    };
+    expected = ''
+      bar=null
+      bar=true
+      bar=test
+      bar=1.200000
+      bar=10
+      baz=false
+      qux=qux
+    '';
+  };
+
+  testKeyValueListToValue = {
+    drv = evalFormat formats.keyValue { listToValue = concatMapStringsSep ", " (generators.mkValueStringDefault {}); } {
+      bar = [ null true "test" 1.2 10 ];
+      baz = false;
+      qux = "qux";
+    };
+    expected = ''
+      bar=null, true, test, 1.200000, 10
+      baz=false
+      qux=qux
+    '';
+  };
+
   testTomlAtoms = {
     drv = evalFormat formats.toml {} {
       false = false;

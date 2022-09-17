@@ -13,6 +13,10 @@
 , ps
 , bats
 , lsof
+, callPackages
+, symlinkJoin
+, makeWrapper
+, runCommand
 , doInstallCheck ? true
 }:
 
@@ -104,6 +108,52 @@ resholve.mkDerivation rec {
       ];
     };
   };
+
+  passthru.libraries = callPackages ./libraries.nix {};
+
+  passthru.withLibraries = selector:
+    symlinkJoin {
+      name = "bats-with-libraries-${bats.version}";
+
+      paths = [
+        bats
+      ] ++ selector bats.libraries;
+
+      nativeBuildInputs = [
+        makeWrapper
+      ];
+
+      postBuild = ''
+        wrapProgram "$out/bin/bats" \
+          --suffix BATS_LIB_PATH : "$out/share/bats"
+      '';
+    };
+
+  passthru.tests.libraries = runCommand "${bats.name}-with-libraries-test" {
+    testScript = ''
+      setup() {
+        bats_load_library bats-support
+        bats_load_library bats-assert
+
+        bats_require_minimum_version 1.5.0
+      }
+
+      @test echo_hi {
+        run -0 echo hi
+        assert_output "hi"
+      }
+
+      @test cp_failure {
+        run ! cp
+        assert_line --index 0 "cp: missing file operand"
+        assert_line --index 1 "Try 'cp --help' for more information."
+      }
+    '';
+    passAsFile = [ "testScript" ];
+  } ''
+    ${bats.withLibraries (p: [ p.bats-support p.bats-assert ])}/bin/bats "$testScriptPath"
+    touch "$out"
+  '';
 
   passthru.tests.upstream = bats.unresholved.overrideAttrs (old: {
     name = "${bats.name}-tests";

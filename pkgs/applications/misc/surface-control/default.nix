@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "surface-control";
-  version = "0.4.1-2";
+  version = "0.4.2-1";
 
   src = fetchFromGitHub {
     owner = "linux-surface";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ZgtEmjk1HwoKkyuOiMWalK5RPb3ML8HM/wwz8OM9HoI=";
+    sha256 = "sha256-tFGYIIlcJ4qF1t4Ej6WanjHtm8dSWtH38856uSTc7rU=";
   };
 
-  cargoSha256 = "sha256-CsPyY/NA2+Lecemuor2nHd6yzf2PvMK7NZyvY3vewpI=";
+  cargoSha256 = "sha256-WwTM1DMTi5DKnkMERkW8H8T2OXlg+Tk6BupmwnOAK5I=";
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
   buildInputs = [ udev ];

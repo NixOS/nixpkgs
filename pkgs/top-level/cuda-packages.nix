@@ -58,15 +58,16 @@ let
 
   };
 
-  composedExtension = composeManyExtensions [
+  composedExtension = composeManyExtensions ([
     extraPackagesExtension
     (import ../development/compilers/cudatoolkit/extension.nix)
     (import ../development/compilers/cudatoolkit/redist/extension.nix)
     (import ../development/compilers/cudatoolkit/redist/overrides.nix)
     (import ../development/libraries/science/math/cudnn/extension.nix)
+    (import ../development/libraries/science/math/tensorrt/extension.nix)
     (import ../test/cuda/cuda-samples/extension.nix)
     (import ../test/cuda/cuda-library-samples/extension.nix)
     cutensorExtension
-  ];
+  ]);
 
 in (scope.overrideScope' composedExtension)

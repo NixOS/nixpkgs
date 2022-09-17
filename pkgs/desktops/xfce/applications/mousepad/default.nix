@@ -3,10 +3,10 @@
 mkXfceDerivation {
   category = "apps";
   pname = "mousepad";
-  version = "0.5.9";
+  version = "0.5.10";
   odd-unstable = false;
 
-  sha256 = "sha256-xuSv2H1+/NNUAm+D8f+f5fPVR97iJ5vIDzPa3S0HLM0=";
+  sha256 = "sha256-AKyFCzQE6OfMzKh5Lk16W01255vPeco1II80oLqT4oM=";
 
   nativeBuildInputs = [ gobject-introspection ];
 

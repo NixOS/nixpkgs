@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lethe";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "kostassoid";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0UYUzef7ja8nc2zs7eWqqXQfVVbEJEH9/NRRHVkvkYk=";
+    sha256 = "sha256-uMpqN9xgA0S861JChfJebU6azxJN8ScftmX8yJV8NM8=";
   };
 
-  cargoSha256 = "sha256-suE8USKTZECVlTX4Wpz3vapo/Wmn7qaC3eyAJ3gmzqk=";
+  cargoSha256 = "sha256-GeZ/25ZaD/vyQo02SUt1JtNUL2QCg0varOJC1M3Ji9s=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 

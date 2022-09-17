@@ -80,7 +80,7 @@ Right: `"A library for decoding PNG images"`
 
 ### `longDescription` {#var-meta-longDescription}
 
-An arbitrarily long description of the package.
+An arbitrarily long description of the package in [CommonMark](https://commonmark.org) Markdown.
 
 ### `branch` {#var-meta-branch}
 
@@ -249,3 +249,31 @@ Unfree package that cannot be redistributed. You can build it yourself, but you 
 ### `lib.licenses.unfreeRedistributableFirmware`, `"unfree-redistributable-firmware"` {#lib.licenses.unfreeredistributablefirmware-unfree-redistributable-firmware}
 
 This package supplies unfree, redistributable firmware. This is a separate value from `unfree-redistributable` because not everybody cares whether firmware is free.
+
+## Source provenance {#sec-meta-sourceProvenance}
+
+The value of a package's `meta.sourceProvenance` attribute specifies the provenance of the package's derivation outputs.
+
+If a package contains elements that are not built from the original source by a nixpkgs derivation, the `meta.sourceProvenance` attribute should be a list containing one or more value from `lib.sourceTypes` defined in [`nixpkgs/lib/source-types.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/source-types.nix).
+
+Adding this information helps users who have needs related to build transparency and supply-chain security to gain some visibility into their installed software or set policy to allow or disallow installation based on source provenance.
+
+The presence of a particular `sourceType` in a package's `meta.sourceProvenance` list indicates that the package contains some components falling into that category, though the *absence* of that `sourceType` does not *guarantee* the absence of that category of `sourceType` in the package's contents. A package with no `meta.sourceProvenance` set implies it has no *known* `sourceType`s other than `fromSource`.
+
+The meaning of the `meta.sourceProvenance` attribute does not depend on the value of the `meta.license` attribute.
+
+### `lib.sourceTypes.fromSource` {#lib.sourceTypes.fromSource}
+
+Package elements which are produced by a nixpkgs derivation which builds them from source code.
+
+### `lib.sourceTypes.binaryNativeCode` {#lib.sourceTypes.binaryNativeCode}
+
+Native code to be executed on the target system's CPU, built by a third party. This includes packages which wrap a downloaded AppImage or Debian package.
+
+### `lib.sourceTypes.binaryFirmware` {#lib.sourceTypes.binaryFirmware}
+
+Code to be executed on a peripheral device or embedded controller, built by a third party.
+
+### `lib.sourceTypes.binaryBytecode` {#lib.sourceTypes.binaryBytecode}
+
+Code to run on a VM interpreter or JIT compiled into bytecode by a third party. This includes packages which download Java `.jar` files from another source.

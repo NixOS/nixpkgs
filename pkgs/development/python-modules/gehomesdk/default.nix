@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "gehomesdk";
-  version = "0.4.25";
+  version = "0.5.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-TGitDdRvNKaZzbPrYvWx1bdbXAJW3OSnzbPBF2LpJW4=";
+    sha256 = "sha256-EW26TzmD+F2IkzJkcoUdfYIJ3vkBYQhIFiEqnfDSmiw=";
   };
 
   propagatedBuildInputs = [

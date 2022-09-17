@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, stdenv, zlib, qtbase, cmake, fixDarwinDylibNames }:
+{ fetchFromGitHub, lib, stdenv, zlib, qtbase, qt5compat ? null, cmake, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "quazip";
@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zlib qtbase ];
+  propagatedBuildInputs = [ qt5compat ];
   nativeBuildInputs = [ cmake ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 

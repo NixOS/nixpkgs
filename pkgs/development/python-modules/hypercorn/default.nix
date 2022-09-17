@@ -44,6 +44,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.optionals (pythonOlder "3.8") [ mock ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
+
   pythonImportsCheck = [ "hypercorn" ];
 
   meta = with lib; {

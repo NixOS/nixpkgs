@@ -19,7 +19,7 @@
 , elfutils # for DWARF support
 
 , useLLVM ? !(stdenv.targetPlatform.isx86
-              || stdenv.targetPlatform.isPowerPC
+              || stdenv.targetPlatform.isPower
               || stdenv.targetPlatform.isSparc
               || (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin))
 , # LLVM is conceptually a run-time-only depedendency, but for
@@ -205,7 +205,7 @@ stdenv.mkDerivation (rec {
     # GHC is a bit confused on its cross terminology, as these would normally be
     # the *host* tools.
     export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
-    export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
+    export CXX="${targetCC}/bin/${targetCC.targetPrefix}c++"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
     # and more generally have a faster linker.
     export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}"

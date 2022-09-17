@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "unison";
-  version = "2.52.0";
+  version = "2.52.1";
 
   src = fetchFromGitHub {
     owner = "bcpierce00";
     repo = "unison";
     rev = "v${version}";
-    sha256 = "sha256-YCuXkHqY+JHsguvst2UkI/6YlFt3iTvchO8PQuS15nI=";
+    sha256 = "sha256-taA8eZ/wOe9uMccXVYfe34/XzWgqYKA3tLZnIOahOrQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ]

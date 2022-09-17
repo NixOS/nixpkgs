@@ -21,6 +21,7 @@
 { lib
 , pkgs
 , stdenv
+, fetchpatch
 
 # build time
 , autoconf
@@ -87,7 +88,7 @@
 , jackSupport ? stdenv.isLinux, libjack2
 , jemallocSupport ? true, jemalloc
 , ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
-, pgoSupport ? (stdenv.isLinux && stdenv.isx86_64 && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
+, pgoSupport ? (stdenv.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
 , sndioSupport ? stdenv.isLinux, sndio
@@ -103,6 +104,7 @@
 , crashreporterSupport ? !privacySupport
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
+, mlsAPISupport ? geolocationSupport
 , webrtcSupport ? !privacySupport
 
 # digital rights managemewnt
@@ -185,10 +187,22 @@ let
     };
   });
 
+  defaultPrefs = {
+    "geo.provider.network.url" = {
+      value = "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%";
+      reason = "Use MLS by default for geolocation, since our Google API Keys are not working";
+    };
+  };
+
+  defaultPrefsFile = pkgs.writeText "nixos-default-prefs.js" (lib.concatStringsSep "\n" (lib.mapAttrsToList (key: value: ''
+    // ${value.reason}
+    pref("${key}", ${builtins.toJSON value.value});
+  '') defaultPrefs));
+
 in
 
 buildStdenv.mkDerivation ({
-  name = "${pname}-unwrapped-${version}";
+  pname = "${pname}-unwrapped";
   inherit version;
 
   inherit src unpackPhase meta;
@@ -205,7 +219,13 @@ buildStdenv.mkDerivation ({
     "profilingPhase"
   ];
 
-  patches = [
+  patches = lib.optionals (lib.versionOlder version "103") [
+    (fetchpatch {
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1773259
+      name = "rust-cbindgen-0.24.2-compat.patch";
+      url = "https://raw.githubusercontent.com/canonical/firefox-snap/5622734942524846fb0eb7108918c8cd8557fde3/patches/fix-ftbfs-newer-cbindgen.patch";
+      hash = "sha256-+wNZhkDB3HSknPRD4N6cQXY7zMT/DzNXx29jQH0Gb1o=";
+    })
   ]
   ++ lib.optional (lib.versionAtLeast version "86") ./env_var_for_system_dir-ff86.patch
   ++ lib.optional (lib.versionAtLeast version "90" && lib.versionOlder version "95") ./no-buildconfig-ffx90.patch
@@ -304,12 +324,18 @@ buildStdenv.mkDerivation ({
   '' + lib.optionalString googleAPISupport ''
     # Google API key used by Chromium and Firefox.
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
-    # please get your own set of keys.
-    echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" > $TMPDIR/ga
+    # please get your own set of keys at https://www.chromium.org/developers/how-tos/api-keys/.
+    echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" > $TMPDIR/google-api-key
     # 60.5+ & 66+ did split the google API key arguments: https://bugzilla.mozilla.org/show_bug.cgi?id=1531176
-    configureFlagsArray+=("--with-google-location-service-api-keyfile=$TMPDIR/ga")
-    configureFlagsArray+=("--with-google-safebrowsing-api-keyfile=$TMPDIR/ga")
-  '' + lib.optionalString enableOfficialBranding ''
+    configureFlagsArray+=("--with-google-location-service-api-keyfile=$TMPDIR/google-api-key")
+    configureFlagsArray+=("--with-google-safebrowsing-api-keyfile=$TMPDIR/google-api-key")
+  '' + lib.optionalString mlsAPISupport ''
+    # Mozilla Location services API key
+    # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
+    # please get your own set of keys at https://location.services.mozilla.com/api.
+    echo "dfd7836c-d458-4917-98bb-421c82d3c8a0" > $TMPDIR/mls-api-key
+    configureFlagsArray+=("--with-mozilla-api-keyfile=$TMPDIR/mls-api-key")
+  '' + lib.optionalString (enableOfficialBranding && !stdenv.is32bit) ''
     export MOZILLA_OFFICIAL=1
   '';
 
@@ -467,6 +493,7 @@ buildStdenv.mkDerivation ({
   postInstall = ''
     # Install distribution customizations
     install -Dvm644 ${distributionIni} $out/lib/${binaryName}/distribution/distribution.ini
+    install -Dvm644 ${defaultPrefsFile} $out/lib/${binaryName}/browser/defaults/preferences/nixos-default-prefs.js
 
   '' + lib.optionalString buildStdenv.isLinux ''
     # Remove SDK cruft. FIXME: move to a separate output?
@@ -504,7 +531,6 @@ buildStdenv.mkDerivation ({
             header "separating debug info from $i (build ID $id)"
             mkdir -p "$dst/''${id:0:2}"
             $OBJCOPY --only-keep-debug "$i" "$dst/''${id:0:2}/''${id:2}.debug"
-            $STRIP --strip-debug "$i"
 
             # Also a create a symlink <original-name>.debug.
             ln -sfn ".build-id/''${id:0:2}/''${id:2}.debug" "$dst/../$(basename "$i")"

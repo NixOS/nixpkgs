@@ -1,11 +1,11 @@
-{ pname, version, src, meta, binaryName, desktopName, autoPatchelfHook
+{ pname, version, src, openasar, meta, binaryName, desktopName, autoPatchelfHook
 , makeDesktopItem, lib, stdenv, wrapGAppsHook, makeShellWrapper, alsa-lib, at-spi2-atk
 , at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk-pixbuf
 , glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid, libX11
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
 , libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, mesa, nspr, nss
 , pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript
-, common-updater-scripts }:
+, common-updater-scripts, withOpenASAR ? false }:
 
 stdenv.mkDerivation rec {
   inherit pname version src meta;
@@ -72,7 +72,9 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    mkdir -p $out/{bin,opt/${binaryName},share/pixmaps}
+    runHook preInstall
+
+    mkdir -p $out/{bin,opt/${binaryName},share/pixmaps,share/icons/hicolor/256x256/apps}
     mv * $out/opt/${binaryName}
 
     chmod +x $out/opt/${binaryName}/${binaryName}
@@ -90,9 +92,17 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/${
       lib.strings.toLower binaryName
     } || true
+
     ln -s $out/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
+    ln -s $out/opt/${binaryName}/discord.png $out/share/icons/hicolor/256x256/apps/${pname}.png
 
     ln -s "${desktopItem}/share/applications" $out/share/
+
+    runHook postInstall
+  '';
+
+  postInstall = lib.strings.optionalString withOpenASAR ''
+    cp -f ${openasar} $out/opt/${binaryName}/resources/app.asar
   '';
 
   desktopItem = makeDesktopItem {

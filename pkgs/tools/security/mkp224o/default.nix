@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mkp224o";
-  version = "1.5.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "cathugger";
     repo = "mkp224o";
     rev = "v${version}";
-    sha256 = "0b2cn96wg4l8jkkqqp8l2295xlmm2jc8nrw6rdqb5g0zkpfmrxbb";
+    sha256 = "sha256-+TJ137DmgaFZX+/N6VwXJwfVCoTWtC8NqfXfYJC8UHo=";
   };
 
   buildCommand =
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
         { suffix = "donna-sse2";    configureFlags = ["--enable-donna-sse2"]; }
       ] ++ lib.optionals (!stdenv.isDarwin && stdenv.isx86_64) [
         { suffix = "amd64-51-30k";  configureFlags = ["--enable-amd64-51-30k"]; }
-        { suffix = "amd64-64-20k";  configureFlags = ["--enable-amd64-64-24k"]; }
+        { suffix = "amd64-64-24k";  configureFlags = ["--enable-amd64-64-24k"]; }
       ];
     in
       lib.concatMapStrings ({suffix, configureFlags}: ''
@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "http://cathug2kyi4ilneggumrenayhuhsvrgn6qv2y47bgeet42iivkpynqad.onion/";
     license = licenses.cc0;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ volth ];
+    maintainers = with maintainers; [ ];
   };
 }

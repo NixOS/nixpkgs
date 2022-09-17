@@ -22,7 +22,7 @@ in
 {
 
   options.virtualisation.waydroid = {
-    enable = mkEnableOption "Waydroid";
+    enable = mkEnableOption (lib.mdDoc "Waydroid");
   };
 
   config = mkIf cfg.enable {
@@ -34,7 +34,7 @@ in
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isEnabled "ANDROID_BINDER_IPC")
       (isEnabled "ANDROID_BINDERFS")
-      (isEnabled "ASHMEM")
+      (isEnabled "ASHMEM") # FIXME Needs memfd support instead on Linux 5.18 and waydroid 1.2.1
     ];
 
     /* NOTE: we always enable this flag even if CONFIG_PSI_DEFAULT_DISABLED is not on

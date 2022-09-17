@@ -2,12 +2,12 @@
 , fetchpatch, fetchFromGitHub, cmake, ninja, pkg-config, libuuid, utf8cpp, darwin }:
 
 let
-  version = "4.9.2";
+  version = "4.9.3";
   source = fetchFromGitHub {
     owner = "antlr";
     repo = "antlr4";
     rev = version;
-    sha256 = "0rpqgl2y22iiyg42y8jyiy2g7x421yf0q16cf17j76iai6y0bm5p";
+    sha256 = "1af3cfqwk7lq1b5qsh1am0922fyhy7wmlpnrqdnvch3zzza9n1qm";
   };
 
   runtime = {
@@ -17,14 +17,6 @@ let
       src = source;
 
       outputs = [ "out" "dev" "doc" ];
-
-      patches = [
-        (fetchpatch {
-          name = "use-utfcpp-from-system.patch";
-          url = "https://github.com/antlr/antlr4/commit/5a808b470e1314b63b0a921178040ccabb357945.patch";
-          sha256 = "0nq7iajy9inllcspyqpxskfg3k5s1fwm7ph75i8lfc25rl35k1w7";
-        })
-      ];
 
       patchFlags = [ "-p3" ];
 
@@ -52,7 +44,7 @@ let
 
     src = fetchurl {
       url = "https://www.antlr.org/download/antlr-${version}-complete.jar";
-      sha256 = "1k9pw5gv2zhh06n1vys76kchlz4mz0vgv3iiba8w47b9fqa7n4dv";
+      sha256 = "0dnz2x54kigc58bxnynjhmr5iq49f938vj6p50gdir1xdna41kdg";
     };
 
     dontUnpack = true;
@@ -88,6 +80,7 @@ let
         walk parse trees.
       '';
       homepage = "https://www.antlr.org/";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.bsd3;
       platforms = platforms.unix;
     };

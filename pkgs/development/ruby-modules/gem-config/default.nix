@@ -20,7 +20,7 @@
 { lib, fetchurl, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
 , libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick, lasem
 , pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
-, cmake, libssh2, openssl, libmysqlclient, git, perl, pcre, gecode_3, curl
+, cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre, gecode_3, curl
 , msgpack, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
 , cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
@@ -294,6 +294,14 @@ in
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook glib ];
   };
 
+  gollum = attrs: {
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace bin/gollum \
+        --replace "/usr/bin/env -S ruby" "${ruby}/bin/ruby"
+    '';
+  };
+
   grpc = attrs: {
     nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.isDarwin libtool;
     buildInputs = [ openssl ];
@@ -313,8 +321,12 @@ in
       substituteInPlace Makefile \
         --replace '-Wno-invalid-source-encoding' ""
     '' + lib.optionalString stdenv.isDarwin ''
+      # For < v1.48.0
       substituteInPlace src/ruby/ext/grpc/extconf.rb \
         --replace "ENV['AR'] = 'libtool -o' if RUBY_PLATFORM =~ /darwin/" ""
+      # For >= v1.48.0
+      substituteInPlace src/ruby/ext/grpc/extconf.rb \
+        --replace 'apple_toolchain = ' 'apple_toolchain = false && '
     '';
   };
 
@@ -349,6 +361,12 @@ in
     buildInputs = [ which v8 python2 ];
     buildFlags = [ "--with-system-v8=true" ];
     dontBuild = false;
+    # The gem includes broken symlinks which are ignored during unpacking, but
+    # then fail during build. Since the content is missing anyway, touching the
+    # files is enough to unblock the build.
+    preBuild = ''
+      touch vendor/depot_tools/cbuildbot vendor/depot_tools/chrome_set_ver vendor/depot_tools/cros_sdk
+    '';
     postPatch = ''
       substituteInPlace ext/libv8/extconf.rb \
         --replace "location = Libv8::Location::Vendor.new" \
@@ -466,7 +484,8 @@ in
   };
 
   openssl = attrs: {
-    buildInputs = [ openssl ];
+    # https://github.com/ruby/openssl/issues/369
+    buildInputs = [ openssl_1_1 ];
   };
 
   opus-ruby = attrs: {
@@ -621,7 +640,15 @@ in
     buildInputs = [ args.snappy ];
   };
 
-  sqlite3 = attrs: {
+  sqlite3 = attrs: if lib.versionAtLeast attrs.version "1.5.0"
+  then {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ sqlite ];
+    buildFlags = [
+      "--enable-system-libraries"
+    ];
+  }
+  else {
     buildFlags = [
       "--with-sqlite3-include=${sqlite.dev}/include"
       "--with-sqlite3-lib=${sqlite.out}/lib"

@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , pkg-config
 , meson
 , ninja
@@ -29,28 +28,20 @@
 , json-glib
 , itstool
 , wrapGAppsHook
+, desktop-file-utils
 , gst_all_1
 , gst_plugins ? with gst_all_1; [ gst-plugins-good gst-plugins-ugly ]
+, check
 }:
 
 stdenv.mkDerivation rec {
   pname = "rhythmbox";
-  version = "3.4.5";
+  version = "3.4.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "l+u8YPN4sibaRbtEbYmQL26hgx4j8Q76ujZVk7HnTyo=";
+    sha256 = "+VaCEM5V5BHpKcj7leERohHb0ZzEf1ePKRxdMZtesDQ=";
   };
-
-  patches = [
-    # Fix stuff linking against rhythmdb not finding libxml headers
-    # included by rhythmdb.h header.
-    # https://gitlab.gnome.org/GNOME/rhythmbox/-/merge_requests/147
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/rhythmbox/-/commit/7e8c7b803a45b7badf350132f8e78e3d75b99a21.patch";
-      sha256 = "5CE/NVlmx7FItNJCVQxx+x0DCYhUkAi/UuksfAiyWBg=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -60,6 +51,7 @@ stdenv.mkDerivation rec {
     glib
     itstool
     wrapGAppsHook
+    desktop-file-utils
   ];
 
   buildInputs = [
@@ -95,9 +87,16 @@ stdenv.mkDerivation rec {
     libnotify
   ] ++ gst_plugins;
 
-  postInstall = ''
-    glib-compile-schemas "$out/share/glib-2.0/schemas"
-  '';
+  checkInputs = [
+    check
+  ];
+
+  mesonFlags = [
+    "-Dtests=disabled"
+  ];
+
+  # Requires DISPLAY
+  doCheck = false;
 
   preFixup = ''
     gappsWrapperArgs+=(

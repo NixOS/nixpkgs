@@ -6,7 +6,9 @@
 , python3
 , meson
 , ninja
+, eudev
 , systemd
+, enableSystemd ? true
 , pkg-config
 , docutils
 , doxygen
@@ -67,7 +69,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.51";
+    version = "0.3.56";
 
     outputs = [
       "out"
@@ -85,7 +87,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-k5OdKgkQUaelvrGS4KtO0MtSJg6cF2Nf8RrsR8Kf+C8=";
+      sha256 = "sha256-wbHHr7BW8Gdj9D1IjzOuD6VuXApJ5E0Zde2iKWImzxg=";
     };
 
     patches = [
@@ -127,8 +129,8 @@ let
       vulkan-headers
       vulkan-loader
       webrtc-audio-processing
-      systemd
-    ] ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
+    ] ++ (if enableSystemd then [ systemd ] else [ eudev ])
+    ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
     ++ lib.optionals libcameraSupport [ libcamera libdrm ]
     ++ lib.optional ffmpegSupport ffmpeg
     ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt sbc fdk_aac ]
@@ -148,18 +150,22 @@ let
       "-Dinstalled_test_prefix=${placeholder "installedTests"}"
       "-Dpipewire_pulse_prefix=${placeholder "pulse"}"
       "-Dlibjack-path=${placeholder "jack"}/lib"
+      "-Dlibv4l2-path=${placeholder "out"}/lib"
       "-Dlibcamera=${mesonEnableFeature libcameraSupport}"
       "-Droc=${mesonEnableFeature rocSupport}"
       "-Dlibpulse=${mesonEnableFeature pulseTunnelSupport}"
       "-Davahi=${mesonEnableFeature zeroconfSupport}"
       "-Dgstreamer=${mesonEnableFeature gstreamerSupport}"
-      "-Dsystemd-system-service=enabled"
+      "-Dsystemd-system-service=${mesonEnableFeature enableSystemd}"
+      "-Dudev=${mesonEnableFeature (!enableSystemd)}"
+      "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
       "-Dffmpeg=${mesonEnableFeature ffmpegSupport}"
       "-Dbluez5=${mesonEnableFeature bluezSupport}"
       "-Dbluez5-backend-hsp-native=${mesonEnableFeature nativeHspSupport}"
       "-Dbluez5-backend-hfp-native=${mesonEnableFeature nativeHfpSupport}"
       "-Dbluez5-backend-ofono=${mesonEnableFeature ofonoSupport}"
       "-Dbluez5-backend-hsphfpd=${mesonEnableFeature hsphfpdSupport}"
+      "-Dbluez5-codec-lc3plus=disabled"
       "-Dsysconfdir=/etc"
       "-Dpipewire_confdata_dir=${placeholder "lib"}/share/pipewire"
       "-Draop=${mesonEnableFeature raopSupport}"
@@ -193,8 +199,11 @@ let
         cp ${buildPackages.pipewire}/nix-support/*.json "$out/nix-support"
       ''}
 
-      moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
-      moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
+      ${lib.optionalString enableSystemd ''
+        moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
+        moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
+      ''}
+
       moveToOutput "bin/pipewire-pulse" "$pulse"
 
       moveToOutput "bin/pw-jack" "$jack"

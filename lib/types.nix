@@ -55,6 +55,7 @@ let
     concatMapStringsSep
     concatStringsSep
     escapeNixString
+    hasInfix
     isCoercibleToString
     ;
   inherit (lib.trivial)
@@ -226,11 +227,11 @@ rec {
     };
 
     int = mkOptionType {
-        name = "int";
-        description = "signed integer";
-        check = isInt;
-        merge = mergeEqualOption;
-      };
+      name = "int";
+      description = "signed integer";
+      check = isInt;
+      merge = mergeEqualOption;
+    };
 
     # Specialized subdomains of int
     ints =
@@ -291,10 +292,34 @@ rec {
     port = ints.u16;
 
     float = mkOptionType {
-        name = "float";
-        description = "floating point number";
-        check = isFloat;
-        merge = mergeEqualOption;
+      name = "float";
+      description = "floating point number";
+      check = isFloat;
+      merge = mergeEqualOption;
+    };
+
+    number = either int float;
+
+    numbers = let
+      betweenDesc = lowest: highest:
+        "${builtins.toJSON lowest} and ${builtins.toJSON highest} (both inclusive)";
+    in {
+      between = lowest: highest:
+        assert lib.assertMsg (lowest <= highest)
+          "numbers.between: lowest must be smaller than highest";
+        addCheck number (x: x >= lowest && x <= highest) // {
+          name = "numberBetween";
+          description = "integer or floating point number between ${betweenDesc lowest highest}";
+        };
+
+      nonnegative = addCheck number (x: x >= 0) // {
+        name = "numberNonnegative";
+        description = "nonnegative integer or floating point number, meaning >=0";
+      };
+      positive = addCheck number (x: x > 0) // {
+        name = "numberPositive";
+        description = "positive integer or floating point number, meaning >0";
+      };
     };
 
     str = mkOptionType {
@@ -358,6 +383,11 @@ rec {
     string = separatedString "" // {
       name = "string";
       deprecationMessage = "See https://github.com/NixOS/nixpkgs/pull/66346 for better alternative types.";
+    };
+
+    passwdEntry = entryType: addCheck entryType (str: !(hasInfix ":" str || hasInfix "\n" str)) // {
+      name = "passwdEntry ${entryType.name}";
+      description = "${entryType.description}, not containing newlines or colons";
     };
 
     attrs = mkOptionType {
@@ -539,6 +569,36 @@ rec {
       modules = toList modules;
     };
 
+    # A module to be imported in some other part of the configuration.
+    deferredModule = deferredModuleWith { };
+
+    # A module to be imported in some other part of the configuration.
+    # `staticModules`' options will be added to the documentation, unlike
+    # options declared via `config`.
+    deferredModuleWith = attrs@{ staticModules ? [] }: mkOptionType {
+      name = "deferredModule";
+      description = "module";
+      check = x: isAttrs x || isFunction x || path.check x;
+      merge = loc: defs: {
+        imports = staticModules ++ map (def: lib.setDefaultModuleLocation "${def.file}, via option ${showOption loc}" def.value) defs;
+      };
+      inherit (submoduleWith { modules = staticModules; })
+        getSubOptions
+        getSubModules;
+      substSubModules = m: deferredModuleWith (attrs // {
+        staticModules = m;
+      });
+      functor = defaultFunctor "deferredModuleWith" // {
+        type = types.deferredModuleWith;
+        payload = {
+          inherit staticModules;
+        };
+        binOp = lhs: rhs: {
+          staticModules = lhs.staticModules ++ rhs.staticModules;
+        };
+      };
+    };
+
     # The type of a type!
     optionType = mkOptionType {
       name = "optionType";
@@ -570,28 +630,15 @@ rec {
       { modules
       , specialArgs ? {}
       , shorthandOnlyDefinesConfig ? false
-
-        # Internal variable to avoid `_key` collisions regardless
-        # of `extendModules`. Wired through by `evalModules`.
-        # Test case: lib/tests/modules, "168767"
-      , extensionOffset ? 0
+      , description ? null
       }@attrs:
       let
         inherit (lib.modules) evalModules;
 
-        shorthandToModule = if shorthandOnlyDefinesConfig == false
-          then value: value
-          else value: { config = value; };
-
-        allModules = defs: imap1 (n: { value, file }:
-          if isFunction value
-          then setFunctionArgs
-                (args: lib.modules.unifyModuleSyntax file "${toString file}-${toString (n + extensionOffset)}" (value args))
-                (functionArgs value)
-          else if isAttrs value
-          then
-            lib.modules.unifyModuleSyntax file "${toString file}-${toString (n + extensionOffset)}" (shorthandToModule value)
-          else value
+        allModules = defs: map ({ value, file }:
+          if isAttrs value && shorthandOnlyDefinesConfig
+          then { _file = file; config = value; }
+          else { _file = file; imports = [ value ]; }
         ) defs;
 
         base = evalModules {
@@ -618,16 +665,19 @@ rec {
 
         freeformType = base._module.freeformType;
 
-      in
-      mkOptionType rec {
         name = "submodule";
-        description = freeformType.description or name;
+
+      in
+      mkOptionType {
+        inherit name;
+        description =
+          if description != null then description
+          else freeformType.description or name;
         check = x: isAttrs x || isFunction x || path.check x;
         merge = loc: defs:
           (base.extendModules {
             modules = [ { _module.args.name = last loc; } ] ++ allModules defs;
             prefix = loc;
-            extensionOffset = extensionOffset + length defs;
           }).config;
         emptyValue = { value = {}; };
         getSubOptions = prefix: (base.extendModules
@@ -647,9 +697,7 @@ rec {
         functor = defaultFunctor name // {
           type = types.submoduleWith;
           payload = {
-            modules = modules;
-            specialArgs = specialArgs;
-            shorthandOnlyDefinesConfig = shorthandOnlyDefinesConfig;
+            inherit modules specialArgs shorthandOnlyDefinesConfig description;
           };
           binOp = lhs: rhs: {
             modules = lhs.modules ++ rhs.modules;
@@ -666,6 +714,14 @@ rec {
               else if lhs.shorthandOnlyDefinesConfig == rhs.shorthandOnlyDefinesConfig
               then lhs.shorthandOnlyDefinesConfig
               else throw "A submoduleWith option is declared multiple times with conflicting shorthandOnlyDefinesConfig values";
+            description =
+              if lhs.description == null
+              then rhs.description
+              else if rhs.description == null
+              then lhs.description
+              else if lhs.description == rhs.description
+              then lhs.description
+              else throw "A submoduleWith option is declared multiple times with conflicting descriptions";
           };
         };
       };

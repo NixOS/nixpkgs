@@ -30,7 +30,7 @@ in bundlerApp {
     then ./full
     else ./basic;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     wrapProgram $out/bin/jekyll --prefix PATH : ${rubyWrapper}/bin

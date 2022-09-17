@@ -19,7 +19,7 @@ import ../make-test-python.nix ({ package, ... }: {
           enable = true;
           openFirewall = true;
         };
-        yarnSite = options.services.hadoop.yarnSite.default // {
+        yarnSite = {
           "yarn.resourcemanager.hostname" = "resourcemanager";
           "yarn.nodemanager.log-dirs" = "/tmp/userlogs";
         };

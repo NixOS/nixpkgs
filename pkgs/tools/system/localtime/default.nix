@@ -1,29 +1,31 @@
 { buildGoModule
 , fetchFromGitHub
-, geoclue2-with-demo-agent
 , lib
 , m4
 }:
 
 buildGoModule {
   pname = "localtime";
-  version = "unstable-2021-11-23";
+  version = "unstable-2022-02-20";
 
   src = fetchFromGitHub {
     owner = "Stebalien";
     repo = "localtime";
-    rev = "3e5d6cd64444b2164e87cea03448bfb8eefd6ccd";
-    sha256 = "sha256-6uxxPq6abtRqM/R2Fw46ynP9PEkHggTSUymLYlQXQRU=";
+    rev = "c1e10aa4141ed2bb01986b48e0e942e618993c06";
+    hash = "sha256-bPQ1c2KUTkxx2g7IvLmrKgJKfRHTLlTXLR/QQ0O4CrI=";
   };
 
-  vendorSha256 = "sha256-sf3sL6aO5jSytT2NtBkA3lhg77RIzbYkSC4fkH+cwwk=";
-
-  postPatch = ''
-    demoPath="${geoclue2-with-demo-agent}/libexec/geoclue-2.0/demos/agent"
-    sed -i localtimed.go -e "s#/usr/lib/geoclue-2.0/demos/agent#$demoPath#"
-  '';
+  vendorSha256 = "sha256-12JnEU41sp9qRP07p502EYogveE+aNdfmLwlDRbIdxU=";
 
   nativeBuildInputs = [ m4 ];
+
+  buildPhase = ''
+    runHook preBuild
+    make PREFIX="$out"
+    runHook postBuild
+  '';
+
+  doCheck = false; # no tests
 
   installPhase = ''
     runHook preInstall

@@ -3,10 +3,10 @@
 rec {
   firefox = buildMozillaMach rec {
     pname = "firefox";
-    version = "100.0.2";
+    version = "104.0.2";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "6d9922e35e496fa63833ba03d1466e075287e40e50854ddc4f4a2036d9c7ca1f35c03bc6f708a3c469e0ec3b389b3346ac754bb84df0fecb86955fc21c05e00f";
+      sha512 = "bf0d972add11566f5ef6402a22abd82122945de9fa9aab6ed7bb7e41d0843d41948a6d95c0769b0b704c066c8ff6e3f3bf26fcf288c64cd3b3f09a13d4dd467d";
     };
 
     meta = {
@@ -26,13 +26,40 @@ rec {
     };
   };
 
-  firefox-esr-91 = buildMozillaMach rec {
-    pname = "firefox-esr";
-    version = "91.9.1esr";
+  firefox-esr-102 = buildMozillaMach rec {
+    pname = "firefox-esr-102";
+    version = "102.2.0esr";
     applicationName = "Mozilla Firefox ESR";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "d432d559f2c5f4b0bc66a755db7d61585e24a727cd8d18630854b3fb8633d54baf61ed65b580345b13d52b66288aa15ca8ca5cfcde8231e88108241f0b007683";
+      sha512 = "06d753867ccfe1b2c79148cc60bc816b47a2abfa98219808868e9028bef1763d982ef7012698d06b8959cce79163d7926baf5f9d5ca9daa18c51fbf0efc59993";
+    };
+
+    meta = {
+      description = "A web browser built from Firefox Extended Support Release source tree";
+      homepage = "http://www.mozilla.com/en-US/firefox/";
+      maintainers = with lib.maintainers; [ hexa ];
+      platforms = lib.platforms.unix;
+      badPlatforms = lib.platforms.darwin;
+      broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
+                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
+      license = lib.licenses.mpl20;
+    };
+    tests = [ nixosTests.firefox-esr-102 ];
+    updateScript = callPackage ./update.nix {
+      attrPath = "firefox-esr-102-unwrapped";
+      versionPrefix = "102";
+      versionSuffix = "esr";
+    };
+  };
+
+  firefox-esr-91 = buildMozillaMach rec {
+    pname = "firefox-esr-91";
+    version = "91.13.0esr";
+    applicationName = "Mozilla Firefox ESR";
+    src = fetchurl {
+      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
+      sha512 = "38b4cc52de21e76d6061e6ba175e1cbfd888a16070aa951f5a44283f2db9d7e94f2504621f0da78feac6e71491a6d0e7038f63dd0ae112dcad700eb02e9aa516";
     };
 
     meta = {
@@ -48,6 +75,7 @@ rec {
     tests = [ nixosTests.firefox-esr-91 ];
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-91-unwrapped";
+      versionPrefix = "91";
       versionSuffix = "esr";
     };
   };

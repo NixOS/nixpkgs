@@ -73,14 +73,14 @@ in
 
       with subtest("DNSKEY bit record is present"):
           server.wait_for_unit("pdns-recursor")
-          server.wait_for_open_port("53")
+          server.wait_for_open_port(53)
           server.succeed("host -t DNSKEY bit")
     '') +
     ''
       with subtest("can resolve a .bit name"):
           server.wait_for_unit("namecoind")
           server.wait_for_unit("ncdns")
-          server.wait_for_open_port("8332")
+          server.wait_for_open_port(8332)
           assert "1.2.3.4" in server.succeed("dig @localhost -p 5333 test.bit")
 
       with subtest("SOA record has identity information"):

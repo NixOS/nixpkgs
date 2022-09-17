@@ -22,6 +22,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
+    broken = stdenv.isDarwin;
     description = "BitTorrent client written in C++";
     longDescription = ''
       CTorrent, a BitTorrent client implemented in C++, with bugfixes and

@@ -1,4 +1,20 @@
-{ lib, stdenvNoCC, linkFarmFromDrvs, callPackage, nuget-to-nix, writeScript, makeWrapper, fetchurl, xml2, dotnetCorePackages, dotnetPackages, mkNugetSource, mkNugetDeps, cacert }:
+{ lib
+, stdenvNoCC
+, callPackage
+, linkFarmFromDrvs
+, dotnetCorePackages
+, dotnetPackages
+, mkNugetSource
+, mkNugetDeps
+, srcOnly
+, writeShellScript
+, writeText
+, makeWrapper
+, nuget-to-nix
+, cacert
+, symlinkJoin
+, coreutils
+}:
 
 { name ? "${args.pname}-${args.version}"
 , pname ? name
@@ -55,10 +71,12 @@
 
 # The type of build to perform. This is passed to `dotnet` with the `--configuration` flag. Possible values are `Release`, `Debug`, etc.
 , buildType ? "Release"
+# If set to true, builds the application as a self-contained - removing the runtime dependency on dotnet
+, selfContainedBuild ? false
 # The dotnet SDK to use.
-, dotnet-sdk ? dotnetCorePackages.sdk_5_0
+, dotnet-sdk ? dotnetCorePackages.sdk_6_0
 # The dotnet runtime to use.
-, dotnet-runtime ? dotnetCorePackages.runtime_5_0
+, dotnet-runtime ? dotnetCorePackages.runtime_6_0
 # The dotnet SDK to run tests against. This can differentiate from the SDK compiled against.
 , dotnet-test-sdk ? dotnet-sdk
 , ... } @ args:
@@ -78,14 +96,34 @@ let
     then linkFarmFromDrvs "${name}-project-references" projectReferences
     else null;
 
-  _nugetDeps = mkNugetDeps { inherit name; nugetDeps = import nugetDeps; };
+  _nugetDeps = if lib.isDerivation nugetDeps
+    then nugetDeps
+    else mkNugetDeps { inherit name; nugetDeps = import nugetDeps; };
 
-  nuget-source = mkNugetSource {
-    name = "${name}-nuget-source";
+  # contains the actual package dependencies
+  _dependenciesSource = mkNugetSource {
+    name = "${name}-dependencies-source";
     description = "A Nuget source with the dependencies for ${name}";
     deps = [ _nugetDeps ] ++ lib.optional (localDeps != null) localDeps;
   };
 
+  # this contains all the nuget packages that are implictly referenced by the dotnet
+  # build system. having them as separate deps allows us to avoid having to regenerate
+  # a packages dependencies when the dotnet-sdk version changes
+  _sdkDeps = mkNugetDeps {
+    name = "dotnet-sdk-${dotnet-sdk.version}-deps";
+    nugetDeps = dotnet-sdk.passthru.packages;
+  };
+
+  _sdkSource = mkNugetSource {
+    name = "dotnet-sdk-${dotnet-sdk.version}-source";
+    deps = [ _sdkDeps ];
+  };
+
+  nuget-source = symlinkJoin {
+    name = "${name}-nuget-source";
+    paths = [ _dependenciesSource _sdkSource ];
+  };
 in stdenvNoCC.mkDerivation (args // {
   nativeBuildInputs = args.nativeBuildInputs or [] ++ [
     dotnetConfigureHook
@@ -94,9 +132,13 @@ in stdenvNoCC.mkDerivation (args // {
     dotnetInstallHook
     dotnetFixupHook
 
-    dotnet-sdk
     cacert
     makeWrapper
+    dotnet-sdk
+  ];
+
+  makeWrapperArgs = args.makeWrapperArgs or [ ] ++ [
+    "--prefix LD_LIBRARY_PATH : ${dotnet-sdk.icu}/lib"
   ];
 
   # Stripping breaks the executable
@@ -108,39 +150,74 @@ in stdenvNoCC.mkDerivation (args // {
   passthru = {
     inherit nuget-source;
 
-    fetch-deps = writeScript "fetch-${pname}-deps" ''
+    fetch-deps = let
+      # Because this list is rather long its put in its own store path to maintain readability of the generated script
+      exclusions = writeText "nuget-package-exclusions" (lib.concatStringsSep "\n" (dotnet-sdk.passthru.packages { fetchNuGet = attrs: attrs.pname; }));
+
+      runtimeIds = map (system: dotnet-sdk.systemToDotnetRid system) (args.meta.platforms or dotnet-sdk.meta.platforms);
+
+      # Derivations may set flags such as `--runtime <rid>` based on the host platform to avoid restoring/building nuget dependencies they dont have or dont need.
+      # This introduces an issue; In this script we loop over all platforms from `meta` and add the RID flag for it, as to fetch all required dependencies.
+      # The script would inherit the RID flag from the derivation based on the platform building the script, and set the flag for any iteration we do over the RIDs.
+      # That causes conflicts. To circumvent it we remove all occurances of the flag.
+      flags =
+        let
+          hasRid = flag: lib.any (v: v) (map (rid: lib.hasInfix rid flag) (lib.attrValues dotnet-sdk.runtimeIdentifierMap));
+        in
+        builtins.filter (flag: !(hasRid flag)) (dotnetFlags ++ dotnetRestoreFlags);
+
+    in writeShellScript "fetch-${pname}-deps" ''
       set -euo pipefail
-      cd "$(dirname "''${BASH_SOURCE[0]}")"
 
-      export HOME=$(mktemp -d)
-      deps_file="/tmp/${pname}-deps.nix"
+      export PATH="${lib.makeBinPath [ coreutils dotnet-sdk nuget-to-nix ]}"
 
-      store_src="${args.src}"
-      src="$(mktemp -d /tmp/${pname}.XXX)"
+      case "''${1-}" in
+          --help|-h)
+              echo "usage: $0 <output path> [--help]"
+              echo "    <output path>  The path to write the lockfile to"
+              echo "    --help         Show this help message"
+              exit
+              ;;
+      esac
+
+      deps_file="$(realpath "''${1:-$(mktemp -t "${pname}-deps-XXXXXX.nix")}")"
+      export HOME=$(mktemp -td "${pname}-home-XXXXXX")
+      mkdir -p "$HOME/nuget_pkgs"
+
+      store_src="${srcOnly args}"
+      src="$(mktemp -td "${pname}-src-XXXXXX")"
       cp -rT "$store_src" "$src"
       chmod -R +w "$src"
-
       trap "rm -rf $src $HOME" EXIT
-      pushd "$src"
+
+      cd "$src"
+      echo "Restoring project..."
 
       export DOTNET_NOLOGO=1
       export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-      mkdir -p "$HOME/nuget_pkgs"
-
-      for project in "${lib.concatStringsSep "\" \"" ((lib.toList projectFile) ++ lib.optionals (testProjectFile != "") (lib.toList testProjectFile))}"; do
-        ${dotnet-sdk}/bin/dotnet restore "$project" \
-          ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \
-          -p:ContinuousIntegrationBuild=true \
-          -p:Deterministic=true \
-          --packages "$HOME/nuget_pkgs" \
-          ${lib.optionalString (dotnetRestoreFlags != []) (builtins.toString dotnetRestoreFlags)} \
-          ${lib.optionalString (dotnetFlags != []) (builtins.toString dotnetFlags)}
+      for rid in "${lib.concatStringsSep "\" \"" runtimeIds}"; do
+          for project in "${lib.concatStringsSep "\" \"" ((lib.toList projectFile) ++ lib.optionals (testProjectFile != "") (lib.toList testProjectFile))}"; do
+              dotnet restore "$project" \
+                  -p:ContinuousIntegrationBuild=true \
+                  -p:Deterministic=true \
+                  --packages "$HOME/nuget_pkgs" \
+                  --runtime "$rid" \
+                  ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \
+                  ${lib.optionalString (flags != []) (toString flags)}
+          done
       done
 
+      echo "Succesfully restored project"
+
       echo "Writing lockfile..."
-      ${nuget-to-nix}/bin/nuget-to-nix "$HOME/nuget_pkgs" > "$deps_file"
+      echo -e "# This file was automatically generated by passthru.fetch-deps.\n# Please dont edit it manually, your changes might get overwritten!\n" > "$deps_file"
+      nuget-to-nix "$HOME/nuget_pkgs" "${exclusions}" >> "$deps_file"
       echo "Succesfully wrote lockfile to: $deps_file"
     '';
   } // args.passthru or {};
+
+  meta = {
+    platforms = dotnet-sdk.meta.platforms;
+  } // args.meta or {};
 })

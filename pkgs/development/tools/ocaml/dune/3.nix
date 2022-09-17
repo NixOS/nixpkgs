@@ -6,11 +6,11 @@ else
 
 stdenv.mkDerivation rec {
   pname = "dune";
-  version = "3.2.0";
+  version = "3.4.1";
 
   src = fetchurl {
-    url = "https://github.com/ocaml/dune/releases/download/${version}/chrome-trace-${version}.tbz";
-    sha256 = "sha256-vR+85q557R6yb6ibsuLiOXivzrP1P1V4zxvasIoa1bw=";
+    url = "https://github.com/ocaml/dune/releases/download/${version}/dune-${version}.tbz";
+    sha256 = "sha256-KZ+jPP/BCMwm/1nV/J0J9ssKs6woC/I6ARTP3AtAxsU=";
   };
 
   nativeBuildInputs = [ ocaml findlib ];

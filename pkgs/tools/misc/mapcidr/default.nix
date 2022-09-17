@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "mapcidr";
-  version = "0.0.8";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hlMIgSsSqvMx6Y7JnR7L9muTLWPfxDN5raJRezt99G0=";
+    sha256 = "sha256-qfEm+DFnTmGwHV7Sb488qFmjT+7QSCmbT4n5JhtDo5g=";
   };
 
-  vendorSha256 = "sha256-zp+XaSZgSMwJK+EEiTaJKBTPiKYaYpTtArnGBmHUGzE=";
+  vendorSha256 = "sha256-5XkBw/RBNcQyoKuWQuBGGRKawuKJtMOKG06lpIPBf+8=";
 
   modRoot = ".";
   subPackages = [

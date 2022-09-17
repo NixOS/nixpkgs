@@ -24,6 +24,7 @@
 , waylandSupport ? stdenv.isLinux
   , wayland
   , wayland-protocols
+  , wayland-scanner
   , libxkbcommon
 
 , x11Support ? stdenv.isLinux
@@ -32,6 +33,7 @@
   , libXext
   , libXxf86vm
   , libXrandr
+  , libXpresent
 
 , cddaSupport ? false
   , libcdio
@@ -99,6 +101,8 @@ in stdenv.mkDerivation rec {
   NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext "
     + lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
 
+  dontAddWafCrossFlags = true;
+
   wafConfigureFlags = [
     "--enable-libmpv-shared"
     "--enable-manpage-build"
@@ -126,7 +130,8 @@ in stdenv.mkDerivation rec {
     python3
     wafHook
     which
-  ] ++ lib.optionals swiftSupport [ swift ];
+  ] ++ lib.optionals swiftSupport [ swift ]
+    ++ lib.optionals waylandSupport [ wayland-scanner ];
 
   buildInputs = [
     ffmpeg
@@ -160,7 +165,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals vdpauSupport       [ libvdpau ]
     ++ lib.optionals vulkanSupport      [ libplacebo shaderc vulkan-headers vulkan-loader ]
     ++ lib.optionals waylandSupport     [ wayland wayland-protocols libxkbcommon ]
-    ++ lib.optionals x11Support         [ libX11 libXext libGLU libGL libXxf86vm libXrandr ]
+    ++ lib.optionals x11Support         [ libX11 libXext libGLU libGL libXxf86vm libXrandr libXpresent ]
     ++ lib.optionals xineramaSupport    [ libXinerama ]
     ++ lib.optionals xvSupport          [ libXv ]
     ++ lib.optionals zimgSupport        [ zimg ]

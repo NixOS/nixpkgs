@@ -30,7 +30,7 @@ in
     services.xserver.gdk-pixbuf.modulePackages = mkOption {
       type = types.listOf types.package;
       default = [ ];
-      description = "Packages providing GDK-Pixbuf modules, for cache generation.";
+      description = lib.mdDoc "Packages providing GDK-Pixbuf modules, for cache generation.";
     };
   };
 

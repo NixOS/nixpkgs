@@ -6,7 +6,7 @@
 , buildDunePackage
 , yojson
 , csexp
-, result
+, merlin-lib
 , dot-merlin-reader
 , jq
 , menhir
@@ -15,13 +15,12 @@
 }:
 
 let
-  merlinVersion = "4.5";
+  merlinVersion = "4.6";
 
   hashes = {
-    "4.5-411" = "sha256:05nz6y7r91rh0lj8b6xdv3s3yknmvjc7y60v17kszgqnr887bvpn";
-    "4.5-412" = "sha256:0i5c3rfzinmwdjya7gv94zyknsm32qx9dlg472xpfqivwvnnhf1z";
-    "4.5-413" = "sha256:1sphq9anfg1qzrvj7hdcqflj6cmc1qiyfkljhng9fxnnr0i7550s";
-    "4.5-414" = "sha256:13h588kwih05zd9p3p7q528q4zc0d1l983kkvbmkxgay5d17nn1i";
+    "4.6-412" = "sha256-isiurLeWminJQQR4oHpJPCzVk6cEmtQdX4+n3Pdka5c=";
+    "4.6-413" = "sha256-8903H4TE6F/v2Kw1XpcpdXEiLIdb9llYgt42zSR9kO4=";
+    "4.6-414" = "sha256-AuvXCjx32JQBY9vkxAd0pEjtFF6oTgrT1f9TJEEDk84=";
   };
 
   ocamlVersionShorthand = lib.concatStrings
@@ -49,12 +48,7 @@ buildDunePackage {
       dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
       dune = "${dune_2}/bin/dune";
     })
-  ] ++ lib.optional (lib.versionOlder ocaml.version "4.12")
-    # This fixes the test-suite on macOS
-    # See https://github.com/ocaml/merlin/pull/1399
-    # Fixed in 4.4 for OCaml ≥ 4.12
-    ./test.patch
-  ;
+  ];
 
   strictDeps = true;
 
@@ -65,8 +59,9 @@ buildDunePackage {
   buildInputs = [
     dot-merlin-reader
     yojson
-    csexp
-    result
+    (if lib.versionAtLeast version "4.6-414"
+     then merlin-lib
+     else csexp)
     menhirSdk
     menhirLib
   ];

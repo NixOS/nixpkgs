@@ -14,40 +14,40 @@ let
 in {
   options = {
     services.flexget = {
-      enable = mkEnableOption "Run FlexGet Daemon";
+      enable = mkEnableOption (lib.mdDoc "Run FlexGet Daemon");
 
       user = mkOption {
         default = "deluge";
         example = "some_user";
         type = types.str;
-        description = "The user under which to run flexget.";
+        description = lib.mdDoc "The user under which to run flexget.";
       };
 
       homeDir = mkOption {
         default = "/var/lib/deluge";
         example = "/home/flexget";
         type = types.path;
-        description = "Where files live.";
+        description = lib.mdDoc "Where files live.";
       };
 
       interval = mkOption {
         default = "10m";
         example = "1h";
         type = types.str;
-        description = "When to perform a <command>flexget</command> run. See <command>man 7 systemd.time</command> for the format.";
+        description = lib.mdDoc "When to perform a {command}`flexget` run. See {command}`man 7 systemd.time` for the format.";
       };
 
       systemScheduler = mkOption {
         default = true;
         example = false;
         type = types.bool;
-        description = "When true, execute the runs via the flexget-runner.timer. If false, you have to specify the settings yourself in the YML file.";
+        description = lib.mdDoc "When true, execute the runs via the flexget-runner.timer. If false, you have to specify the settings yourself in the YML file.";
       };
 
       config = mkOption {
         default = "";
         type = types.lines;
-        description = "The YAML configuration for FlexGet.";
+        description = lib.mdDoc "The YAML configuration for FlexGet.";
       };
     };
   };

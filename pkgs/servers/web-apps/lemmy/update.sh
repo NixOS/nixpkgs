@@ -1,5 +1,5 @@
-#!/usr/bin/env nix-shell
-#! nix-shell -i oil -p jq sd nix-prefetch-github ripgrep moreutils
+#! /usr/bin/env nix-shell
+#! nix-shell -i oil -p oil jq sd nix-prefetch-github ripgrep moreutils
 
 # TODO set to `verbose` or `extdebug` once implemented in oil
 shopt --set xtrace

@@ -15,8 +15,8 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ bigarray-compat ];
 
-  # alcotest isn't available for OCaml < 4.05 due to fmt
-  doCheck = lib.versionAtLeast ocaml.version "4.05";
+  # alcotest isn't available for OCaml < 4.08 due to fmt
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ alcotest ];
 
   meta = {

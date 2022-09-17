@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tmate-ssh-server";
-  version = "2.3.0";
+  version = "unstable-2021-10-17";
 
   src = fetchFromGitHub {
     owner  = "tmate-io";
     repo   = "tmate-ssh-server";
-    rev    = version;
-    sha256 = "1y77mv1k4c79glj84lzlp0s1lafr1jzf60mywr5vhy6sq47q8hwd";
+    rev    = "1f314123df2bb29cb07427ed8663a81c8d9034fd";
+    sha256 = "sha256-9/xlMvtkNWUBRYYnJx20qEgtEcjagH2NtEKZcDOM1BY=";
   };
 
   dontUseCmakeConfigure = true;
@@ -22,8 +22,7 @@ stdenv.mkDerivation rec {
     description = "tmate SSH Server";
     license     = licenses.mit;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ ];
-    knownVulnerabilities = [ "CVE-2021-44513" "CVE-2021-44512" ];
+    maintainers = with maintainers; [ ck3d ];
   };
 }
 

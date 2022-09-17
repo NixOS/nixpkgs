@@ -10,6 +10,7 @@ let
     # Disable automatically generating desktop icon
     noDesktopIcon=true
     noBackup=${lib.boolToString cfg.noBackup}
+    noAuthentication=${lib.boolToString cfg.noAuthentication}
 
     [Network]
     # host setting is relevant only for web deployments - set the host on which the server will listen
@@ -23,12 +24,12 @@ in
 {
 
   options.services.trilium-server = with lib; {
-    enable = mkEnableOption "trilium-server";
+    enable = mkEnableOption (lib.mdDoc "trilium-server");
 
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/trilium";
-      description = ''
+      description = lib.mdDoc ''
         The directory storing the notes database and the configuration.
       '';
     };
@@ -36,7 +37,7 @@ in
     instanceName = mkOption {
       type = types.str;
       default = "Trilium";
-      description = ''
+      description = lib.mdDoc ''
         Instance name used to distinguish between different instances
       '';
     };
@@ -44,15 +45,23 @@ in
     noBackup = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Disable periodic database backups.
+      '';
+    };
+
+    noAuthentication = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        If set to true, no password is required to access the web frontend.
       '';
     };
 
     host = mkOption {
       type = types.str;
       default = "127.0.0.1";
-      description = ''
+      description = lib.mdDoc ''
         The host address to bind to (defaults to localhost).
       '';
     };
@@ -60,14 +69,14 @@ in
     port = mkOption {
       type = types.int;
       default = 8080;
-      description = ''
+      description = lib.mdDoc ''
         The port number to bind to.
       '';
     };
 
     nginx = mkOption {
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         Configuration for nginx reverse proxy.
       '';
 
@@ -76,14 +85,14 @@ in
           enable = mkOption {
             type = types.bool;
             default = false;
-            description = ''
+            description = lib.mdDoc ''
               Configure the nginx reverse proxy settings.
             '';
           };
 
           hostName = mkOption {
             type = types.str;
-            description = ''
+            description = lib.mdDoc ''
               The hostname use to setup the virtualhost configuration
             '';
           };

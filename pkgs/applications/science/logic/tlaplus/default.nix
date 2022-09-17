@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An algorithm specification language with model checking tools";
     homepage    = "http://lamport.azurewebsites.net/tla/tla.html";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license     = lib.licenses.mit;
     platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ florentc thoughtpolice ];

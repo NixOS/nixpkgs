@@ -14,7 +14,7 @@ purescript_derivation_file="${script_dir}/default.nix"
 old_version="$(sed -En 's/.*\bversion = "(.*?)".*/\1/p' "$purescript_derivation_file")"
 
 # This is the latest release version of PureScript on GitHub.
-new_version=$(curl --silent "https://api.github.com/repos/purescript/purescript/releases" | jq '.[0].tag_name' --raw-output | sed -e 's/v//')
+new_version=$(curl --silent "https://api.github.com/repos/purescript/purescript/releases/latest" | jq '.tag_name' --raw-output | sed -e 's/v//')
 
 echo "Updating purescript from old version v${old_version} to new version v${new_version}."
 echo

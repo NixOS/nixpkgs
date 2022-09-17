@@ -23,7 +23,7 @@ mkDerivation {
     appstream libdbusmenu pam wayland
     kdeclarative kdelibs4support kpeople kconfig krunner kinit kwayland kwin
     plasma-framework telepathy libphonenumber protobuf libqofono modemmanager-qt
-    networkmanager-qt maliit-framework maliit-keyboard
+    networkmanager-qt maliit-framework maliit-keyboard plasma-workspace
   ];
 
   postPatch = ''

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "alembic";
-  version = "1.7.7";
+  version = "1.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-SWEkgXPq186KIe+z3jePE7g5jmYw+rDrJY3HSoryTFg=";
+    sha256 = "sha256-zQteRbFLcGQmuDPwY2m5ptXuA/gm7DI4cjzoyq9uX/o=";
   };
 
   propagatedBuildInputs = [

@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , untokenize
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ untokenize ];
 
-  checkPhase = "${python.interpreter} -m unittest discover";
+  checkInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     description = "Modifies strings to all use the same quote where possible";

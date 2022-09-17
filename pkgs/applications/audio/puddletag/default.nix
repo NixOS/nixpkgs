@@ -25,13 +25,13 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "puddletag";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "puddletag";
     repo = "puddletag";
-    rev = version;
-    hash = "sha256-eilETaFvvPMopIbccV1uLbpD55kHX9KGTCcGVXaHPgM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-KaFfpOWI9u2ZC/3kuCLneWOOKSmAaIuHPFHptkKMH/g=";
   };
 
   postPatch = ''
@@ -39,6 +39,7 @@ python3Packages.buildPythonApplication rec {
       --replace share/pixmaps share/icons
 
     cp requirements.in requirements.txt
+    sed -i requirements.txt -e 's/^chromaprint$//'
   '' + lib.concatMapStringsSep "\n"
     (e: ''
       sed -i requirements.txt -e 's/^${e}.*/${e}/'
@@ -49,7 +50,6 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     pyacoustid
-    chromaprint
     configobj
     levenshtein
     lxml

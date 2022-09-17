@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "open-iscsi";
-  version = "2.1.4";
+  version = "2.1.7";
 
   nativeBuildInputs = [ autoconf automake gettext libtool perl pkgconf ];
   buildInputs = [ kmod open-isns.lib openssl systemd util-linux ];
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "open-iscsi";
     repo = "open-iscsi";
     rev = version;
-    sha256 = "sha256-HnvLLwxOnu7Oiige6A6zk9NmAI2ImcILp9eCfbdGiyI=";
+    sha256 = "sha256-R1ttHHxVSQ5TGtWVy4I9BAmEJfcRhKRD5jThoeddjUw=";
   };
 
   DESTDIR = "$(out)";
@@ -22,12 +22,20 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-DUSE_KMOD";
 
   preConfigure = ''
-    sed -i 's|/usr|/|' Makefile
+    # Remove blanket -Werror. Fails for minor error on gcc-11.
+    substituteInPlace usr/Makefile --replace ' -Werror ' ' '
   '';
+
+  # avoid /usr/bin/install
+  makeFlags = [
+    "INSTALL=install"
+    "SED=sed"
+    "prefix=/"
+    "manprefix=/share"
+  ];
 
   installFlags = [
     "install"
-    "install_systemd"
   ];
 
   postInstall = ''

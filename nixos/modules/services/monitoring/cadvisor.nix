@@ -11,87 +11,87 @@ in {
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = "Whether to enable cadvisor service.";
+        description = lib.mdDoc "Whether to enable cadvisor service.";
       };
 
       listenAddress = mkOption {
         default = "127.0.0.1";
         type = types.str;
-        description = "Cadvisor listening host";
+        description = lib.mdDoc "Cadvisor listening host";
       };
 
       port = mkOption {
         default = 8080;
         type = types.int;
-        description = "Cadvisor listening port";
+        description = lib.mdDoc "Cadvisor listening port";
       };
 
       storageDriver = mkOption {
         default = null;
         type = types.nullOr types.str;
         example = "influxdb";
-        description = "Cadvisor storage driver.";
+        description = lib.mdDoc "Cadvisor storage driver.";
       };
 
       storageDriverHost = mkOption {
         default = "localhost:8086";
         type = types.str;
-        description = "Cadvisor storage driver host.";
+        description = lib.mdDoc "Cadvisor storage driver host.";
       };
 
       storageDriverDb = mkOption {
         default = "root";
         type = types.str;
-        description = "Cadvisord storage driver database name.";
+        description = lib.mdDoc "Cadvisord storage driver database name.";
       };
 
       storageDriverUser = mkOption {
         default = "root";
         type = types.str;
-        description = "Cadvisor storage driver username.";
+        description = lib.mdDoc "Cadvisor storage driver username.";
       };
 
       storageDriverPassword = mkOption {
         default = "root";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Cadvisor storage driver password.
 
           Warning: this password is stored in the world-readable Nix store. It's
-          recommended to use the <option>storageDriverPasswordFile</option> option
+          recommended to use the {option}`storageDriverPasswordFile` option
           since that gives you control over the security of the password.
-          <option>storageDriverPasswordFile</option> also takes precedence over <option>storageDriverPassword</option>.
+          {option}`storageDriverPasswordFile` also takes precedence over {option}`storageDriverPassword`.
         '';
       };
 
       storageDriverPasswordFile = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           File that contains the cadvisor storage driver password.
 
-          <option>storageDriverPasswordFile</option> takes precedence over <option>storageDriverPassword</option>
+          {option}`storageDriverPasswordFile` takes precedence over {option}`storageDriverPassword`
 
-          Warning: when <option>storageDriverPassword</option> is non-empty this defaults to a file in the
-          world-readable Nix store that contains the value of <option>storageDriverPassword</option>.
+          Warning: when {option}`storageDriverPassword` is non-empty this defaults to a file in the
+          world-readable Nix store that contains the value of {option}`storageDriverPassword`.
 
           It's recommended to override this with a path not in the Nix store.
-          Tip: use <link xlink:href='https://nixos.org/nixops/manual/#idm140737318306400'>nixops key management</link>
+          Tip: use [nixops key management](https://nixos.org/nixops/manual/#idm140737318306400)
         '';
       };
 
       storageDriverSecure = mkOption {
         default = false;
         type = types.bool;
-        description = "Cadvisor storage driver, enable secure communication.";
+        description = lib.mdDoc "Cadvisor storage driver, enable secure communication.";
       };
 
       extraOptions = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Additional cadvisor options.
 
-          See <link xlink:href='https://github.com/google/cadvisor/blob/master/docs/runtime_options.md'/> for available options.
+          See <https://github.com/google/cadvisor/blob/master/docs/runtime_options.md> for available options.
         '';
       };
     };

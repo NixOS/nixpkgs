@@ -1,4 +1,5 @@
-{ abseil-cpp
+{ stdenv
+, abseil-cpp
 , absl-py
 , attrs
 , buildPythonPackage
@@ -48,6 +49,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tree" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Tree is a library for working with nested data structures.";
     homepage = "https://github.com/deepmind/tree";
     license = licenses.asl20;

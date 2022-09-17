@@ -3,6 +3,8 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
+, poetry-core
+, pydantic
 , pytestCheckHook
 , pytest-asyncio
 , pythonOlder
@@ -10,8 +12,8 @@
 
 buildPythonPackage rec {
   pname = "pytraccar";
-  version = "0.10.0";
-  format = "setuptools";
+  version = "1.0.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
@@ -19,11 +21,16 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = pname;
     rev = version;
-    sha256 = "08f7rwvbc1h17lvgv9823ssd3p0vw7yzsg40lbkacgqqiv1hxfzs";
+    sha256 = "sha256-ngyLe6sbTTQ7n4WdV06OlQnn/vqkD+JUruyMYS1Ym+Q=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp
+    pydantic
   ];
 
   checkInputs = [
@@ -32,10 +39,14 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
+
   postPatch = ''
     # Upstream doesn't set version in the repo
-    substituteInPlace setup.py \
-      --replace 'version="master",' 'version="${version}",'
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0"' 'version = "${version}"'
   '';
 
   pythonImportsCheck = [

@@ -20,12 +20,12 @@ let
     } cfg.settings);
 in {
   options.services.smartdns = {
-    enable = mkEnableOption "SmartDNS DNS server";
+    enable = mkEnableOption (lib.mdDoc "SmartDNS DNS server");
 
     bindPort = mkOption {
       type = types.port;
       default = 53;
-      description = "DNS listening port number.";
+      description = lib.mdDoc "DNS listening port number.";
     };
 
     settings = mkOption {
@@ -42,9 +42,9 @@ in {
           speed-check-mode = "ping,tcp:80";
         };
       '';
-      description = ''
-        A set that will be generated into configuration file, see the <link xlink:href="https://github.com/pymumu/smartdns/blob/master/ReadMe_en.md#configuration-parameter">SmartDNS README</link> for details of configuration parameters.
-        You could override the options here like <option>services.smartdns.bindPort</option> by writing <literal>settings.bind = ":5353 -no-rule -group example";</literal>.
+      description = lib.mdDoc ''
+        A set that will be generated into configuration file, see the [SmartDNS README](https://github.com/pymumu/smartdns/blob/master/ReadMe_en.md#configuration-parameter) for details of configuration parameters.
+        You could override the options here like {option}`services.smartdns.bindPort` by writing `settings.bind = ":5353 -no-rule -group example";`.
       '';
     };
   };

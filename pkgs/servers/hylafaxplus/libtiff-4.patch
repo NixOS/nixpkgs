@@ -5,7 +5,7 @@ https://bugs.gentoo.org/706154
  				echo '#define TIFFSTRIPBYTECOUNTS uint32_t'
  				echo '#define TIFFVERSION TIFF_VERSION'
  				echo '#define TIFFHEADER TIFFHeader';;
--		4.[0123])	tiff_runlen_t="uint32_t"
+-		4.[01234])	tiff_runlen_t="uint32_t"
 +		4.[0-9])	tiff_runlen_t="uint32_t"
  				tiff_offset_t="uint64_t"
  				echo '#define TIFFSTRIPBYTECOUNTS uint64_t'

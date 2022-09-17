@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , substituteAll
+, dbus-python
 , distro
 , jinja2
 , keyring
@@ -10,22 +11,28 @@
 , pygobject3
 , pyxdg
 , systemd
+, ncurses
 , networkmanager
+, pkgs-systemd
+, python
+, xdg-utils
+, makeWrapper
 }:
 
 buildPythonPackage rec {
   pname = "protonvpn-nm-lib";
-  version = "3.9.0";
+  version = "3.12.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-yV3xeIyPc2DJj5DOa5PA1MHt00bjJ/Y9zZK77s/XRAA=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-pjXixZDjjkCYM4J5sjwX5YtTBXlGccG4S+wYTKbru94=";
   };
 
   propagatedBuildInputs = [
+    dbus-python
     distro
     jinja2
     keyring
@@ -33,6 +40,10 @@ buildPythonPackage rec {
     pygobject3
     pyxdg
     systemd
+    ncurses
+    networkmanager
+    pkgs-systemd
+    xdg-utils
   ];
 
   patches = [
@@ -41,6 +52,17 @@ buildPythonPackage rec {
       networkmanager_path = "${networkmanager}/lib/girepository-1.0";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace protonvpn_nm_lib/core/dbus/dbus_reconnect.py \
+      --replace "exec_start = python_interpreter_path + \" \" + python_service_path" "exec_start = \"$out/bin/protonvpn_reconnector.py\""
+  '';
+
+  postInstall = ''
+    makeWrapper ${python.interpreter} $out/bin/protonvpn_reconnector.py \
+      --add-flags $out/${python.sitePackages}/protonvpn_nm_lib/daemon/dbus_daemon_reconnector.py \
+      --prefix PYTHONPATH : "$PYTHONPATH"
+  '';
 
   # Checks cannot be run in the sandbox
   # "Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory"

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "argo-rollouts";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-rollouts";
     rev = "v${version}";
-    sha256 = "sha256-RgjoRvLsd+WHTpFy1WbJtrVaMnRp6/7A921+abCMGu0=";
+    sha256 = "sha256-l23RVpwT/XYkpVTWkSYdPyvn7Xirs0Sf85U6Wrx5H1k=";
   };
 
   vendorSha256 = "sha256-URuIeF1ejKdMGxziJbujLctYheiIr/Jfo+gTzppZG9E=";

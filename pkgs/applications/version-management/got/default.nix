@@ -1,17 +1,27 @@
-{ lib, stdenv, fetchurl, pkg-config, openssl, libbsd, libuuid, libmd, zlib, ncurses }:
+{ lib, stdenv, fetchurl
+, pkg-config, openssl, libbsd, libevent, libuuid, libossp_uuid, libmd, zlib, ncurses, bison
+}:
 
 stdenv.mkDerivation rec {
   pname = "got";
-  version = "0.69";
+  version = "0.75.1";
 
   src = fetchurl {
     url = "https://gameoftrees.org/releases/portable/got-portable-${version}.tar.gz";
-    sha256 = "1cnl0yk866wzjwgas587kvb08njq7db71b5xqsdrwd1varp010vm";
+    sha256 = "sha256-GlEXB89fZPRZAwvUUHcyKCH3Jj5AOvMSHFodsVKepSQ=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config bison ];
 
-  buildInputs = [ openssl libbsd libuuid libmd zlib ncurses ];
+  buildInputs = [ openssl libbsd libevent libuuid libmd zlib ncurses ]
+  ++ lib.optionals stdenv.isDarwin [ libossp_uuid ];
+
+  preConfigure = lib.optionals stdenv.isDarwin ''
+    # The configure script assumes dependencies on Darwin are install via
+    # Homebrew or MacPorts and hardcodes assumptions about the paths of
+    # dependencies which fails the nixpkgs configurePhase.
+    substituteInPlace configure --replace 'xdarwin' 'xhomebrew'
+  '';
 
   doInstallCheck = true;
 
@@ -34,7 +44,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gameoftrees.org";
     license = licenses.isc;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ abbe ];
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ abbe afh ];
   };
 }

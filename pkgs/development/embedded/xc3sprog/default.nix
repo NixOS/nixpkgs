@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libusb-compat-0_1 libftdi ];
 
+  cmakeFlags = [
+    # file RPATH_CHANGE could not write new RPATH
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ];
+
   meta = with lib; {
     description = "Command-line tools for programming FPGAs, microcontrollers and PROMs via JTAG";
     homepage = "http://xc3sprog.sourceforge.net/";

@@ -9,7 +9,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enables udev rules for keyboards from ZSA like the ErgoDox EZ, Planck EZ and Moonlander Mark I.
         You need it when you want to flash a new configuration on the keyboard
         or use their live training in the browser.

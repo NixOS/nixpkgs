@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # fails on darwin due to case-insensitive file system
+  disabledTests = lib.optional stdenv.isDarwin ["test_application_directory_case"];
+
   meta = with lib; {
     description = "Utilities for refactoring imports in python-like syntax.";
-    homepage = "https://github.com/asottile/reorder_python_imports";
+    homepage = "https://github.com/asottile/aspy.refactor_imports";
     license = licenses.mit;
     maintainers = with maintainers; [ gador ];
   };

@@ -1,25 +1,25 @@
 { lib, stdenv, fetchurl, zstd }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "geolite-legacy";
-  version = "2022-01-25";
+  version = "20220621";
 
   # We use Arch Linux package as a snapshot, because upstream database is updated in-place.
   geoip = fetchurl {
-    url = "https://archive.archlinux.org/packages/g/geoip-database/geoip-database-20220125-1-any.pkg.tar.zst";
-    sha256 = "sha256-ieuLpllJTHYu28UXBGfDWbnr9Ei8pGnos+RPWDsAGcM=";
+    url = "https://archive.archlinux.org/packages/g/geoip-database/geoip-database-${version}-1-any.pkg.tar.zst";
+    sha256 = "sha256-dmj3EtdAYVBcRnmHGNjBVyDQIKtVoubNs07zYVH9HVM=";
   };
 
   extra = fetchurl {
-    url = "https://archive.archlinux.org/packages/g/geoip-database-extra/geoip-database-extra-20220125-1-any.pkg.tar.zst";
-    sha256 = "sha256-xrTnuJvuvtvn+uIARtbuJUlHco3Q+9BXLljt35V3ip0=";
+    url = "https://archive.archlinux.org/packages/g/geoip-database-extra/geoip-database-extra-${version}-1-any.pkg.tar.zst";
+    sha256 = "sha256-jViHQ+w9SEqFCbWf4KtNiTdWXT0RuCTjZ9dus0a3F0k=";
   };
 
   nativeBuildInputs = [ zstd ];
 
   buildCommand = ''
-    tar -xaf "$geoip"
-    tar -xaf "$extra"
+    tar -xaf ${geoip}
+    tar -xaf ${extra}
     mkdir -p $out/share
     mv usr/share/GeoIP $out/share
   '';

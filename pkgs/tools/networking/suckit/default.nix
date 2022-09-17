@@ -9,23 +9,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "suckit";
-  version = "0.1.2";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "skallwar";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0wr03yvrqa9p6m127fl4hcf9057i11zld898qz4kbdyiynpi0166";
+    sha256 = "sha256-M4/vD1sVny7hAf4h56Z2xy7yuCqH/H3qHYod6haZOs0=";
   };
 
-  cargoSha256 = "sha256-6otIWAAf9pI4A8kxK3dyOVpkw+SJ3/YAvTahDSXMWNc=";
+  cargoSha256 = "sha256-JsH7TL9iITawuECm1hzs5oXFtnoUqLT4ug2CafoO2ao=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   # requires internet access
-  checkFlags = [ "--skip=test_download_url" ];
+  checkFlags = [
+    "--skip=test_download_url"
+    "--skip=test_external_download"
+  ];
 
   meta = with lib; {
     description = "Recursively visit and download a website's content to your disk";

@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "man" "doc" ];
+  strictDeps = true;
 
   # Process Requires.private properly, see
   # http://bugs.freedesktop.org/show_bug.cgi?id=4738, migrated to

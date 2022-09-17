@@ -1,6 +1,6 @@
 {
   "name": "matrix-appservice-irc",
-  "version": "0.34.0",
+  "version": "0.35.0",
   "description": "An IRC Bridge for Matrix",
   "main": "app.js",
   "bin": "./bin/matrix-appservice-irc",
@@ -34,7 +34,7 @@
     "he": "^1.2.0",
     "logform": "^2.4.0",
     "matrix-appservice-bridge": "^3.2.0",
-    "matrix-org-irc": "^1.2.1",
+    "matrix-org-irc": "1.3.0",
     "matrix-bot-sdk": "0.5.19",
     "nopt": "^3.0.1",
     "p-queue": "^6.6.2",
@@ -65,6 +65,6 @@
     "proxyquire": "^2.1.3",
     "nyc": "^15.1.0",
     "request-promise-native": "^1.0.9",
-    "typescript": "^4.5.5"
+    "typescript": "^4.8.2"
   }
 }

@@ -8,13 +8,13 @@ let
 in {
   options = {
     services.create_ap = {
-      enable = mkEnableOption "setup wifi hotspots using create_ap";
+      enable = mkEnableOption (lib.mdDoc "setup wifi hotspots using create_ap");
       settings = mkOption {
         type = with types; attrsOf (oneOf [ int bool str ]);
         default = {};
-        description = ''
-          Configuration for <package>create_ap</package>.
-          See <link xlink:href="https://raw.githubusercontent.com/lakinduakash/linux-wifi-hotspot/master/src/scripts/create_ap.conf">upstream example configuration</link>
+        description = lib.mdDoc ''
+          Configuration for `create_ap`.
+          See [upstream example configuration](https://raw.githubusercontent.com/lakinduakash/linux-wifi-hotspot/master/src/scripts/create_ap.conf)
           for supported values.
         '';
         example = {

@@ -53,14 +53,14 @@ import ./make-test-python.nix {
 
           driver.implicitly_wait(20)
           driver.get('http://server/')
-          driver.find_element_by_xpath('//div[@foo="bar"]')
+          driver.find_element('xpath', '//div[@foo="bar"]')
           open('/tmp/passed_stage1', 'w')
 
           while not os.path.exists('/tmp/proceed'):
               time.sleep(0.5)
 
           driver.get('http://server/')
-          driver.find_element_by_xpath('//div[@foo="yay"]')
+          driver.find_element('xpath', '//div[@foo="yay"]')
           open('/tmp/passed', 'w')
         '';
       in [ pkgs.firefox-unwrapped pkgs.geckodriver testRunner ];

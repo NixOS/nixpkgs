@@ -3,6 +3,7 @@
 , haskellPackages
 , haskell
 , runCommand
+, buildPackages
 }:
 
 let
@@ -32,7 +33,7 @@ let
   inherit (haskellPackages) arion-compose;
 
   cabalOverrides = o: {
-    buildTools = (o.buildTools or []) ++ [pkgs.makeWrapper];
+    buildTools = (o.buildTools or []) ++ [buildPackages.makeWrapper];
     passthru = (o.passthru or {}) // {
       inherit eval build;
     };
@@ -53,7 +54,7 @@ let
       mv $out/bin/arion $out/libexec
       makeWrapper $out/libexec/arion $out/bin/arion \
         --unset PYTHONPATH \
-        --prefix PATH : ${lib.makeBinPath [ pkgs.docker-compose ]} \
+        --prefix PATH : ${lib.makeBinPath [ pkgs.docker-compose_1 ]} \
         ;
     '';
   };

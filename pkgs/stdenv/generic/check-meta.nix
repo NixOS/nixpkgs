@@ -20,6 +20,9 @@ let
   allowUnfree = config.allowUnfree
     || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
+  allowNonSource = config.allowNonSource or true
+    && builtins.getEnv "NIXPKGS_ALLOW_NONSOURCE" != "0";
+
   allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [];
   blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [];
 
@@ -86,12 +89,39 @@ let
     allowInsecurePredicate attrs ||
     builtins.getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
 
-  showLicense = license: toString (map (l: l.shortName or "unknown") (lib.lists.toList license));
+
+  isNonSource = sourceTypes: lib.lists.any (t: !t.isSource) sourceTypes;
+
+  hasNonSourceProvenance = attrs:
+    (attrs ? meta.sourceProvenance) &&
+    isNonSource (lib.lists.toList attrs.meta.sourceProvenance);
+
+  # Allow granular checks to allow only some non-source-built packages
+  # Example:
+  # { pkgs, ... }:
+  # {
+  #   allowNonSource = false;
+  #   allowNonSourcePredicate = with pkgs.lib.lists; pkg: !(any (p: !p.isSource && p != lib.sourceTypes.binaryFirmware) (toList pkg.meta.sourceProvenance));
+  # }
+  allowNonSourcePredicate = config.allowNonSourcePredicate or (x: false);
+
+  # Check whether non-source packages are allowed and if not, whether the
+  # package has non-source provenance and is not explicitly allowed by the
+  # `allowNonSourcePredicate` function.
+  hasDeniedNonSourceProvenance = attrs:
+    hasNonSourceProvenance attrs &&
+    !allowNonSource &&
+    !allowNonSourcePredicate attrs;
+
+  showLicenseOrSourceType = value: toString (map (v: v.shortName or "unknown") (lib.lists.toList value));
+  showLicense = showLicenseOrSourceType;
+  showSourceType = showLicenseOrSourceType;
 
   pos_str = meta: meta.position or "«unknown-file»";
 
   remediation = {
-    unfree = remediate_allowlist "Unfree" remediate_unfree_predicate;
+    unfree = remediate_allowlist "Unfree" (remediate_predicate "allowUnfreePredicate");
+    non-source = remediate_allowlist "NonSource" (remediate_predicate "allowNonSourcePredicate");
     broken = remediate_allowlist "Broken" (x: "");
     unsupported = remediate_allowlist "UnsupportedSystem" (x: "");
     blocklisted = x: "";
@@ -104,17 +134,19 @@ let
     Unfree = "NIXPKGS_ALLOW_UNFREE";
     Broken = "NIXPKGS_ALLOW_BROKEN";
     UnsupportedSystem = "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM";
+    NonSource = "NIXPKGS_ALLOW_NONSOURCE";
   }.${allow_attr};
   remediation_phrase = allow_attr: {
     Unfree = "unfree packages";
     Broken = "broken packages";
     UnsupportedSystem = "packages that are unsupported for this system";
+    NonSource = "packages not built from source";
   }.${allow_attr};
-  remediate_unfree_predicate = attrs:
+  remediate_predicate = predicateConfigAttr: attrs:
     ''
 
       Alternatively you can configure a predicate to allow specific packages:
-        { nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+        { nixpkgs.config.${predicateConfigAttr} = pkg: builtins.elem (lib.getName pkg) [
             "${lib.getName attrs}"
           ];
         }
@@ -226,6 +258,7 @@ let
     downloadPage = str;
     changelog = either (listOf str) str;
     license = either (listOf lib.types.attrs) (either lib.types.attrs str);
+    sourceProvenance = either (listOf lib.types.attrs) lib.types.attrs;
     maintainers = listOf (attrsOf str);
     priority = int;
     platforms = listOf str;
@@ -288,6 +321,7 @@ let
   checkValidity = attrs:
     {
       unfree = hasUnfreeLicense attrs;
+      nonSource = hasNonSourceProvenance attrs;
       broken = isMarkedBroken attrs;
       unsupported = hasUnsupportedPlatform attrs;
       insecure = isMarkedInsecure attrs;
@@ -296,6 +330,8 @@ let
       { valid = "no"; reason = "unfree"; errormsg = "has an unfree license (‘${showLicense attrs.meta.license}’)"; }
     else if hasBlocklistedLicense attrs then
       { valid = "no"; reason = "blocklisted"; errormsg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)"; }
+    else if hasDeniedNonSourceProvenance attrs then
+      { valid = "no"; reason = "non-source"; errormsg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)"; }
     else if !allowBroken && attrs.meta.broken or false then
       { valid = "no"; reason = "broken"; errormsg = "is marked as broken"; }
     else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then

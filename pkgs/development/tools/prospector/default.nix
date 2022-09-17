@@ -1,5 +1,5 @@
 { lib
-, pkgs
+, fetchFromGitHub
 , python3
 }:
 
@@ -14,20 +14,14 @@ buildPythonApplication rec {
   version = "1.7.7";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6.1";
+  disabled = pythonOlder "3.7";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
     rev = version;
     hash = "sha256-sbPZmVeJtNphtjuZEfKcUgty9bJ3E/2Ya9RuX3u/XEs=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pep8-naming = ">=0.3.3,<=0.10.0"' 'pep8-naming = "*"' \
-      --replace 'mccabe = "^0.6.0"' 'mccabe = "*"'
-  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -58,6 +52,18 @@ buildPythonApplication rec {
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'requirements-detector = "^0.7"' 'requirements-detector = "*"' \
+      --replace 'pep8-naming = ">=0.3.3,<=0.10.0"' 'pep8-naming = "*"' \
+      --replace 'mccabe = "^0.6.0"' 'mccabe = "*"' \
+      --replace 'pycodestyle = ">=2.6.0,<2.9.0"' 'pycodestyle = "*"'
+  '';
+
+  pythonImportsCheck = [
+    "prospector"
   ];
 
   meta = with lib; {

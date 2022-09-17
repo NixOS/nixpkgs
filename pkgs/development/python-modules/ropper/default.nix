@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , capstone
@@ -35,6 +36,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Show information about files in different file formats";
     homepage = "https://scoding.de/ropper/";
     license = licenses.bsd3;

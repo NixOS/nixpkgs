@@ -6,7 +6,7 @@ let recent = lib.versions.isGe "8.7" coq.coq-version; in
   owner = "QuickChick";
   inherit version;
   defaultVersion = with lib; with versions; lib.switch [ coq.coq-version ssreflect.version ] [
-      { cases = [ (isGe "8.13") pred.true  ]; out = "1.6.2"; }
+      { cases = [ (range "8.13" "8.15") pred.true  ]; out = "1.6.2"; }
       { cases = [ "8.13" pred.true  ]; out = "1.5.0"; }
       { cases = [ "8.12" pred.true  ]; out = "1.4.0"; }
       { cases = [ "8.11" pred.true  ]; out = "1.3.2"; }
@@ -36,8 +36,7 @@ let recent = lib.versions.isGe "8.7" coq.coq-version; in
     "substituteInPlace Makefile --replace quickChickTool.byte quickChickTool.native";
 
   mlPlugin = true;
-  extraNativeBuildInputs = lib.optional recent coq.ocamlPackages.ocamlbuild;
-  extraBuildInputs = lib.optional recent coq.ocamlPackages.num;
+  nativeBuildInputs = lib.optional recent coq.ocamlPackages.ocamlbuild;
   propagatedBuildInputs = [ ssreflect ]
     ++ lib.optionals recent [ coq-ext-lib simple-io ];
   extraInstallFlags = [ "-f Makefile.coq" ];

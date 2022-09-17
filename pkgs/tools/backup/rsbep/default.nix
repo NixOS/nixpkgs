@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     description = "Create resilient backups with Reed-Solomon error correction and byte-spreading";
     homepage = "https://www.thanassis.space/rsbep.html";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.earvstedt ];
+    maintainers = [ maintainers.erikarvstedt ];
   };
 }

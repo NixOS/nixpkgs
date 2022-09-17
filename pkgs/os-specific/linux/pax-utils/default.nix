@@ -1,19 +1,35 @@
-{ stdenv, lib, fetchurl, bash, gitUpdater }:
+{ stdenv
+, lib
+, fetchurl
+, buildPackages
+, docbook_xml_dtd_44
+, docbook_xsl
+, libcap
+, pkg-config
+, meson
+, ninja
+, xmlto
+, python3
+
+, gitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "pax-utils";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchurl {
     url = "mirror://gentoo/distfiles/${pname}-${version}.tar.xz";
-    sha256 = "sha256-i67S+cWujgzaG5x1mQhkEBr8ZPrQpGFuEPP/jviRBAs=";
+    sha256 = "sha256-8KWwPfIwiqLdeq9TuewLK0hFW4YSnkd6FkPeYpBKuHQ=";
   };
 
   strictDeps = true;
 
-  buildInputs = [ bash ];
-
-  makeFlags = [ "PREFIX=$(out)" ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ docbook_xml_dtd_44 docbook_xsl meson ninja pkg-config xmlto ];
+  buildInputs = [ libcap ];
+  # Needed for lddtree
+  propagatedBuildInputs = [ (python3.withPackages (p: with p; [ pyelftools ])) ];
 
   passthru.updateScript = gitUpdater {
     inherit pname version;

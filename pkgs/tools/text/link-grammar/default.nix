@@ -14,13 +14,13 @@ let
 
 link-grammar = stdenv.mkDerivation rec {
   pname = "link-grammar";
-  version = "5.10.4";
+  version = "5.10.5";
 
   outputs = [ "bin" "out" "dev" "man" ];
 
   src = fetchurl {
     url = "http://www.abisource.com/downloads/${pname}/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Pd4tEsre7aGTlEoereSElisCGXXhwgZDTMt4UEZIf4E=";
+    sha256 = "sha256-MkcQzYEyl1/5zLU1CXMvdVhHOxwZ8XiSAAo97bhhiu0=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +54,7 @@ link-grammar = stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A Grammar Checking library";
     homepage = "https://www.abisource.com/projects/link-grammar/";
     changelog = "https://github.com/opencog/link-grammar/blob/link-grammar-${version}/ChangeLog";

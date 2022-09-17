@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "west";
-  version = "0.13.1";
+  version = "0.14.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-B6B7shZ8FM5pyXzXknJv9mwr+ERq4kiEzRf5jLTCicM=";
+    hash = "sha256-mlKnhWX9TWnGS3XFSfYbExiSsbbSbBzBYs3q0aPPS48=";
   };
 
   propagatedBuildInputs = [

@@ -69,7 +69,7 @@ in rec {
     yarnLock,
     yarnNix ? mkYarnNix { inherit yarnLock; },
     offlineCache ? importOfflineCache yarnNix,
-    yarnFlags ? defaultYarnFlags,
+    yarnFlags ? [ ],
     pkgConfig ? {},
     preBuild ? "",
     postBuild ? "",
@@ -141,7 +141,7 @@ in rec {
 
         ${workspaceDependencyLinks}
 
-        yarn install ${lib.escapeShellArgs yarnFlags}
+        yarn install ${lib.escapeShellArgs (defaultYarnFlags ++ yarnFlags)}
 
         ${lib.concatStringsSep "\n" postInstall}
 
@@ -241,7 +241,7 @@ in rec {
     yarnLock ? src + "/yarn.lock",
     yarnNix ? mkYarnNix { inherit yarnLock; },
     offlineCache ? importOfflineCache yarnNix,
-    yarnFlags ? defaultYarnFlags,
+    yarnFlags ? [ ],
     yarnPreBuild ? "",
     yarnPostBuild ? "",
     pkgConfig ? {},
@@ -359,7 +359,7 @@ in rec {
         runHook postInstall
       '';
 
-      doDist = true;
+      doDist = attrs.doDist or true;
 
       distPhase = attrs.distPhase or ''
         # pack command ignores cwd option

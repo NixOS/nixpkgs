@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "trueseeing";
-  version = "2.1.4";
+  version = "2.1.5";
   format = "flit";
 
   src = fetchFromGitHub {
     owner = "alterakey";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-zc0AOv7OFmEPLl//eykbh538rM2j4kXBLHt5bgK1IRY=";
+    hash = "sha256-7iQOQ81k2bPBber4ewyvDy82s26j4P3Vv8MzSs04KAw=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -26,7 +26,13 @@ python3.pkgs.buildPythonApplication rec {
     lxml
     pypubsub
     pyyaml
+    docker
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "attrs~=21.4" "attrs>=21.4"
+  '';
 
   # Project has no tests
   doCheck = false;

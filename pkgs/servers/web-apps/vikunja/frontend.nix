@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "vikunja-frontend";
-  version = "0.18.1";
+  version = "0.19.0";
   src = fetchurl {
     url = "https://dl.vikunja.io/frontend/${pname}-${version}.zip";
-    sha256 = "sha256-u4XA6Jqn+p2J0sB2KabwZY/lFwZakZEvUUh/enrhtN4=";
+    sha256 = "sha256-pdUNPfGgbSMyXcS2HKMekIiIzJ3GutHCs0gFVkHN9yc=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Frontend of the Vikunja to-do list app";
     homepage = "https://vikunja.io/";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ em0lar ];
+    maintainers = with lib.maintainers; [ leona ];
     platforms = lib.platforms.all;
   };
 }

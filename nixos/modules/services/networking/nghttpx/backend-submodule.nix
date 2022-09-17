@@ -13,7 +13,7 @@
         host = "127.0.0.1";
         port = 80;
       };
-      description = ''
+      description = lib.mdDoc ''
         Backend server location specified as either a host:port pair
         or a unix domain docket.
       '';
@@ -27,7 +27,7 @@
         "/somepath"
       ];
       default     = [];
-      description = ''
+      description = lib.mdDoc ''
         List of nghttpx backend patterns.
 
         Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-b
@@ -42,7 +42,7 @@
         tls   = true;
       };
       default     = null;
-      description = ''
+      description = lib.mdDoc ''
         Parameters to configure a backend.
       '';
     };

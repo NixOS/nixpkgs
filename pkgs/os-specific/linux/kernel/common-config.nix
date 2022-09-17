@@ -29,7 +29,7 @@ let
     mkIf (stdenv.hostPlatform.isAarch32 ||
           stdenv.hostPlatform.isAarch64 ||
           stdenv.hostPlatform.isx86_64 ||
-          (stdenv.hostPlatform.isPowerPC && stdenv.hostPlatform.is64bit) ||
+          (stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) ||
           (stdenv.hostPlatform.isMips && stdenv.hostPlatform.is64bit));
 
   options = {
@@ -38,9 +38,17 @@ let
       # Necessary for BTF
       DEBUG_INFO                = mkMerge [
         (whenOlder "5.2" (if (features.debug or false) then yes else no))
-        (whenAtLeast "5.2" yes)
+        (whenBetween "5.2" "5.18" yes)
       ];
+      DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT = whenAtLeast "5.18" yes;
+      # Reduced debug info conflict with BTF and have been enabled in
+      # aarch64 defconfig since 5.13
+      DEBUG_INFO_REDUCED        = whenAtLeast "5.13" (option no);
       DEBUG_INFO_BTF            = whenAtLeast "5.2" (option yes);
+      # Allow loading modules with mismatched BTFs
+      # FIXME: figure out how to actually make BTFs reproducible instead
+      # See https://github.com/NixOS/nixpkgs/pull/181456 for details.
+      MODULE_ALLOW_BTF_MISMATCH = whenAtLeast "5.18" (option yes);
       BPF_LSM                   = whenAtLeast "5.7" (option yes);
       DEBUG_KERNEL              = yes;
       DEBUG_DEVRES              = no;
@@ -262,6 +270,9 @@ let
     };
 
     video = {
+      DRM_LEGACY = no;
+      NOUVEAU_LEGACY_CTX_SUPPORT = whenAtLeast "5.2" no;
+
       # Allow specifying custom EDID on the kernel command line
       DRM_LOAD_EDID_FIRMWARE = yes;
       VGA_SWITCHEROO         = yes; # Hybrid graphics support
@@ -288,6 +299,9 @@ let
       # Intel GVT-g graphics virtualization supports 64-bit only
       DRM_I915_GVT = whenAtLeast "4.16" yes;
       DRM_I915_GVT_KVMGT = whenAtLeast "4.16" module;
+    } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
+      # enable HDMI-CEC on RPi boards
+      DRM_VC4_HDMI_CEC = whenAtLeast "4.14" yes;
     };
 
     sound = {
@@ -383,6 +397,10 @@ let
       EXT4_FS_SECURITY  = yes;
       EXT4_ENCRYPTION   = option yes;
 
+      NTFS_FS            = whenAtLeast "5.15" no;
+      NTFS3_LZX_XPRESS   = whenAtLeast "5.15" yes;
+      NTFS3_FS_POSIX_ACL = whenAtLeast "5.15" yes;
+
       REISERFS_FS_XATTR     = option yes;
       REISERFS_FS_POSIX_ACL = option yes;
       REISERFS_FS_SECURITY  = option yes;
@@ -407,7 +425,7 @@ let
       UDF_FS              = module;
 
       NFSD_V2_ACL            = yes;
-      NFSD_V3                = yes;
+      NFSD_V3                = whenOlder "5.18" yes;
       NFSD_V3_ACL            = yes;
       NFSD_V4                = yes;
       NFSD_V4_SECURITY_LABEL = yes;
@@ -841,6 +859,8 @@ let
       MOUSE_PS2_VMMOUSE  = yes;
       MTRR_SANITIZER     = yes;
       NET_FC             = yes; # Fibre Channel driver support
+      # Needed for touchpads to work on some AMD laptops
+      PINCTRL_AMD        = whenAtLeast "5.19" yes;
       # GPIO on Intel Bay Trail, for some Chromebook internal eMMC disks
       PINCTRL_BAYTRAIL   = yes;
       # GPIO for Braswell and Cherryview devices
@@ -860,6 +880,9 @@ let
 
       SCSI_LOGGING = yes; # SCSI logging facility
       SERIAL_8250  = yes; # 8250/16550 and compatible serial support
+
+      SLAB_FREELIST_HARDENED = whenAtLeast "4.14" yes;
+      SLAB_FREELIST_RANDOM   = whenAtLeast "4.10" yes;
 
       SLIP_COMPRESSED = yes; # CSLIP compressed headers
       SLIP_SMART      = yes;
@@ -906,7 +929,7 @@ let
 
       FSL_MC_UAPI_SUPPORT = mkIf (stdenv.hostPlatform.system == "aarch64-linux") (whenAtLeast "5.12" yes);
 
-      ASHMEM =                 { optional = true; tristate = whenAtLeast "5.0" "y";};
+      ASHMEM =                 { optional = true; tristate = whenBetween "5.0" "5.18" "y";};
       ANDROID =                { optional = true; tristate = whenAtLeast "5.0" "y";};
       ANDROID_BINDER_IPC =     { optional = true; tristate = whenAtLeast "5.0" "y";};
       ANDROID_BINDERFS =       { optional = true; tristate = whenAtLeast "5.0" "y";};
@@ -916,6 +939,9 @@ let
       TASK_DELAY_ACCT = yes;
       TASK_XACCT = yes;
       TASK_IO_ACCOUNTING = yes;
+
+      # Fresh toolchains frequently break -Werror build for minor issues.
+      WERROR = whenAtLeast "5.15" no;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
       # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot

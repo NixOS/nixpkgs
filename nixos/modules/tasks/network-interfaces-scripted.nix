@@ -85,12 +85,14 @@ let
         hasDefaultGatewaySet = (cfg.defaultGateway != null && cfg.defaultGateway.address != "")
                             || (cfg.enableIPv6 && cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "");
 
-        networkLocalCommands = {
+        needNetworkSetup = cfg.resolvconf.enable || cfg.defaultGateway != null || cfg.defaultGateway6 != null;
+
+        networkLocalCommands = lib.mkIf needNetworkSetup {
           after = [ "network-setup.service" ];
           bindsTo = [ "network-setup.service" ];
         };
 
-        networkSetup =
+        networkSetup = lib.mkIf needNetworkSetup
           { description = "Networking Setup";
 
             after = [ "network-pre.target" "systemd-udevd.service" "systemd-sysctl.service" ];
@@ -219,14 +221,15 @@ let
                     cidr = "${route.address}/${toString route.prefixLength}";
                     via = optionalString (route.via != null) ''via "${route.via}"'';
                     options = concatStrings (mapAttrsToList (name: val: "${name} ${val} ") route.options);
+                    type = toString route.type;
                   in
                   ''
                      echo "${cidr}" >> $state
                      echo -n "adding route ${cidr}... "
-                     if out=$(ip route add "${cidr}" ${options} ${via} dev "${i.name}" proto static 2>&1); then
+                     if out=$(ip route add ${type} "${cidr}" ${options} ${via} dev "${i.name}" proto static 2>&1); then
                        echo "done"
                      elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                       echo "'ip route add "${cidr}" ${options} ${via} dev "${i.name}"' failed: $out"
+                       echo "'ip route add ${type} "${cidr}" ${options} ${via} dev "${i.name}"' failed: $out"
                        exit 1
                      fi
                   ''

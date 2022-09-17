@@ -8,14 +8,14 @@ in
     hostName = mkOption {
       type = types.str;
       default = name;
-      description = "Canonical hostname for the server.";
+      description = lib.mdDoc "Canonical hostname for the server.";
     };
 
     serverAliases = mkOption {
       type = types.listOf types.str;
       default = [];
       example = ["www.example.org" "www.example.org:8080" "example.org"];
-      description = ''
+      description = lib.mdDoc ''
         Additional names of virtual hosts served by this virtual host configuration.
       '';
     };
@@ -25,17 +25,17 @@ in
         options = {
           port = mkOption {
             type = types.port;
-            description = "Port to listen on";
+            description = lib.mdDoc "Port to listen on";
           };
           ip = mkOption {
             type = types.str;
             default = "*";
-            description = "IP to listen on. 0.0.0.0 for IPv4 only, * for all.";
+            description = lib.mdDoc "IP to listen on. 0.0.0.0 for IPv4 only, * for all.";
           };
           ssl = mkOption {
             type = types.bool;
             default = false;
-            description = "Whether to enable SSL (https) support.";
+            description = lib.mdDoc "Whether to enable SSL (https) support.";
           };
         };
       }));
@@ -45,25 +45,23 @@ in
         { ip = "192.154.1.1"; port = 80; }
         { ip = "*"; port = 8080; }
       ];
-      description = ''
+      description = lib.mdDoc ''
         Listen addresses and ports for this virtual host.
-        <note>
-        <para>
-          This option overrides <literal>addSSL</literal>, <literal>forceSSL</literal> and <literal>onlySSL</literal>.
-        </para>
-        <para>
-          If you only want to set the addresses manually and not the ports, take a look at <literal>listenAddresses</literal>.
-        </para>
-        </note>
+
+        ::: {.note}
+        This option overrides `addSSL`, `forceSSL` and `onlySSL`.
+
+        If you only want to set the addresses manually and not the ports, take a look at `listenAddresses`.
+        :::
       '';
     };
 
     listenAddresses = mkOption {
       type = with types; nonEmptyListOf str;
 
-      description = ''
+      description = lib.mdDoc ''
         Listen addresses for this virtual host.
-        Compared to <literal>listen</literal> this only sets the addreses
+        Compared to `listen` this only sets the addreses
         and the ports are chosen automatically.
       '';
       default = [ "*" ];
@@ -79,9 +77,9 @@ in
     addSSL = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable HTTPS in addition to plain HTTP. This will set defaults for
-        <literal>listen</literal> to listen on all interfaces on the respective default
+        `listen` to listen on all interfaces on the respective default
         ports (80, 443).
       '';
     };
@@ -89,19 +87,19 @@ in
     onlySSL = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable HTTPS and reject plain HTTP connections. This will set
-        defaults for <literal>listen</literal> to listen on all interfaces on port 443.
+        defaults for `listen` to listen on all interfaces on port 443.
       '';
     };
 
     forceSSL = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to add a separate nginx server block that permanently redirects (301)
         all plain HTTP traffic to HTTPS. This will set defaults for
-        <literal>listen</literal> to listen on all interfaces on the respective default
+        `listen` to listen on all interfaces on the respective default
         ports (80, 443), where the non-SSL listens are used for the redirect vhosts.
       '';
     };
@@ -109,28 +107,28 @@ in
     enableACME = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to ask Let's Encrypt to sign a certificate for this vhost.
-        Alternately, you can use an existing certificate through <option>useACMEHost</option>.
+        Alternately, you can use an existing certificate through {option}`useACMEHost`.
       '';
     };
 
     useACMEHost = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         A host of an existing Let's Encrypt certificate to use.
         This is useful if you have many subdomains and want to avoid hitting the
-        <link xlink:href="https://letsencrypt.org/docs/rate-limits/">rate limit</link>.
-        Alternately, you can generate a certificate through <option>enableACME</option>.
-        <emphasis>Note that this option does not create any certificates, nor it does add subdomains to existing ones – you will need to create them manually using  <xref linkend="opt-security.acme.certs"/>.</emphasis>
+        [rate limit](https://letsencrypt.org/docs/rate-limits).
+        Alternately, you can generate a certificate through {option}`enableACME`.
+        *Note that this option does not create any certificates, nor it does add subdomains to existing ones – you will need to create them manually using [](#opt-security.acme.certs).*
       '';
     };
 
     acmeRoot = mkOption {
       type = types.nullOr types.str;
       default = "/var/lib/acme/acme-challenge";
-      description = ''
+      description = lib.mdDoc ''
         Directory for the acme challenge which is PUBLIC, don't put certs or keys in here.
         Set to null to inherit from config.security.acme.
       '';
@@ -139,28 +137,28 @@ in
     sslServerCert = mkOption {
       type = types.path;
       example = "/var/host.cert";
-      description = "Path to server SSL certificate.";
+      description = lib.mdDoc "Path to server SSL certificate.";
     };
 
     sslServerKey = mkOption {
       type = types.path;
       example = "/var/host.key";
-      description = "Path to server SSL certificate key.";
+      description = lib.mdDoc "Path to server SSL certificate key.";
     };
 
     sslServerChain = mkOption {
       type = types.nullOr types.path;
       default = null;
       example = "/var/ca.pem";
-      description = "Path to server SSL chain file.";
+      description = lib.mdDoc "Path to server SSL chain file.";
     };
 
     http2 = mkOption {
       type = types.bool;
       default = true;
-      description = ''
-        Whether to enable HTTP 2. HTTP/2 is supported in all multi-processing modules that come with httpd. <emphasis>However, if you use the prefork mpm, there will
-        be severe restrictions.</emphasis> Refer to <link xlink:href="https://httpd.apache.org/docs/2.4/howto/http2.html#mpm-config"/> for details.
+      description = lib.mdDoc ''
+        Whether to enable HTTP 2. HTTP/2 is supported in all multi-processing modules that come with httpd. *However, if you use the prefork mpm, there will
+        be severe restrictions.* Refer to <https://httpd.apache.org/docs/2.4/howto/http2.html#mpm-config> for details.
       '';
     };
 
@@ -168,14 +166,14 @@ in
       type = types.nullOr types.str;
       default = null;
       example = "admin@example.org";
-      description = "E-mail address of the server administrator.";
+      description = lib.mdDoc "E-mail address of the server administrator.";
     };
 
     documentRoot = mkOption {
       type = types.nullOr types.path;
       default = null;
       example = "/data/webserver/docs";
-      description = ''
+      description = lib.mdDoc ''
         The path of Apache's document root directory.  If left undefined,
         an empty directory in the Nix store will be used as root.
       '';
@@ -189,7 +187,7 @@ in
           dir = "/home/eelco/Dev/nix-homepage";
         }
       ];
-      description = ''
+      description = lib.mdDoc ''
         This option provides a simple way to serve static directories.
       '';
     };
@@ -202,14 +200,14 @@ in
           file = "/home/eelco/some-file.png";
         }
       ];
-      description = ''
+      description = lib.mdDoc ''
         This option provides a simple way to serve individual, static files.
 
-        <note><para>
-          This option has been deprecated and will be removed in a future
-          version of NixOS. You can achieve the same result by making use of
-          the <literal>locations.&lt;name&gt;.alias</literal> option.
-        </para></note>
+        ::: {.note}
+        This option has been deprecated and will be removed in a future
+        version of NixOS. You can achieve the same result by making use of
+        the `locations.<name>.alias` option.
+        :::
       '';
     };
 
@@ -222,7 +220,7 @@ in
           AllowOverride All
         </Directory>
       '';
-      description = ''
+      description = lib.mdDoc ''
         These lines go to httpd.conf verbatim. They will go after
         directories and directory aliases defined by default.
       '';
@@ -231,9 +229,9 @@ in
     enableUserDir = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Whether to enable serving <filename>~/public_html</filename> as
-        <literal>/~<replaceable>username</replaceable></literal>.
+      description = lib.mdDoc ''
+        Whether to enable serving {file}`~/public_html` as
+        `/~«username»`.
       '';
     };
 
@@ -241,7 +239,7 @@ in
       type = types.nullOr types.str;
       default = null;
       example = "http://newserver.example.org/";
-      description = ''
+      description = lib.mdDoc ''
         If set, all requests for this host are redirected permanently to
         the given URL.
       '';
@@ -251,7 +249,7 @@ in
       type = types.str;
       default = "common";
       example = "combined";
-      description = ''
+      description = lib.mdDoc ''
         Log format for Apache's log files. Possible values are: combined, common, referer, agent.
       '';
     };
@@ -260,9 +258,8 @@ in
       type = types.lines;
       default = "";
       example = "Disallow: /foo/";
-      description = ''
-        Specification of pages to be ignored by web crawlers. See <link
-        xlink:href='http://www.robotstxt.org/'/> for details.
+      description = lib.mdDoc ''
+        Specification of pages to be ignored by web crawlers. See <http://www.robotstxt.org/> for details.
       '';
     };
 
@@ -279,9 +276,8 @@ in
           };
         };
       '';
-      description = ''
-        Declarative location config. See <link
-        xlink:href="https://httpd.apache.org/docs/2.4/mod/core.html#location"/> for details.
+      description = lib.mdDoc ''
+        Declarative location config. See <https://httpd.apache.org/docs/2.4/mod/core.html#location> for details.
       '';
     };
 

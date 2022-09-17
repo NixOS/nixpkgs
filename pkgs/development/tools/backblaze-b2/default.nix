@@ -2,20 +2,24 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "3.2.0";
+  version = "3.5.0";
 
   src = python3Packages.fetchPypi {
     inherit version;
     pname = "b2";
-    sha256 = "sha256-dE4eLTNU6O0DscwN8+m1UaG46dbI0DiWzeJK49GUvKA=";
+    sha256 = "sha256-vyqExulsV0wDijLotPO3RAOk9o4ne0Vq74KJKhSBrvo=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace 'docutils==0.16' 'docutils'
+      --replace 'tabulate==0.8.10' 'tabulate'
     substituteInPlace setup.py \
       --replace 'setuptools_scm<6.0' 'setuptools_scm'
   '';
+
+  nativeBuildInputs = with python3Packages; [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     b2sdk
@@ -23,20 +27,27 @@ python3Packages.buildPythonApplication rec {
     setuptools
     docutils
     rst2ansi
-  ];
-
-  nativeBuildInputs = with python3Packages; [
-    setuptools-scm
+    tabulate
   ];
 
   checkInputs = with python3Packages; [
+    backoff
     pytestCheckHook
   ];
 
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
   disabledTests = [
+    # require network
     "test_files_headers"
     "test_integration"
-    "test_get_account_info"
+  ];
+
+  disabledTestPaths = [
+    # requires network
+    "test/integration/test_b2_command_line.py"
   ];
 
   postInstall = ''
@@ -52,7 +63,6 @@ python3Packages.buildPythonApplication rec {
     description = "Command-line tool for accessing the Backblaze B2 storage service";
     homepage = "https://github.com/Backblaze/B2_Command_Line_Tool";
     license = licenses.mit;
-    maintainers = with maintainers; [ hrdinka kevincox ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ hrdinka kevincox tomhoule ];
   };
 }

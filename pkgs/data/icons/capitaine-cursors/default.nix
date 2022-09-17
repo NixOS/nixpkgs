@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeFontsConf
+{ lib, stdenvNoCC, fetchFromGitHub, fetchpatch, makeFontsConf
 , inkscape, xcursorgen, bc }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "capitaine-cursors";
   version = "4";
 

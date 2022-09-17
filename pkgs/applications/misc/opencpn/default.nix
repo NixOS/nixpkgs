@@ -4,7 +4,6 @@
 , cmake
 , curl
 , dbus
-, epoxy
 , fetchFromGitHub
 , flac
 , gtk3
@@ -13,6 +12,7 @@
 , libarchive
 , libdatrie
 , libelf
+, libepoxy
 , libexif
 , libogg
 , libopus
@@ -21,7 +21,7 @@
 , libsndfile
 , libthai
 , libunarr
-, libusb
+, libusb1
 , libvorbis
 , libxkbcommon
 , lsb-release
@@ -54,7 +54,6 @@ stdenv.mkDerivation rec {
     at-spi2-core
     curl
     dbus
-    epoxy
     flac
     gtk3
     jasper
@@ -62,6 +61,7 @@ stdenv.mkDerivation rec {
     libarchive
     libdatrie
     libelf
+    libepoxy
     libexif
     libogg
     libopus
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     libsndfile
     libthai
     libunarr
-    libusb
+    libusb1
     libvorbis
     libxkbcommon
     lz4

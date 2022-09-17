@@ -25,7 +25,7 @@ let
   };
 
   pythonEnv =
-    python3.withPackages (p: [ p.fonttools p.nototools ]);
+    python3.withPackages (ps: with ps; [ fonttools nototools ]);
 
 in
 stdenv.mkDerivation rec {

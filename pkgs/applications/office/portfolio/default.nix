@@ -2,6 +2,7 @@
 , stdenv
 , autoPatchelfHook
 , fetchurl
+, glib-networking
 , glibc
 , gcc-unwrapped
 , gtk3
@@ -25,11 +26,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "PortfolioPerformance";
-  version = "0.57.2";
+  version = "0.59.1";
 
   src = fetchurl {
     url = "https://github.com/buchen/portfolio/releases/download/${version}/PortfolioPerformance-${version}-linux.gtk.x86_64.tar.gz";
-    sha256 = "sha256-ftLKlNzr46iL/V+P3J1wtoUByGHHl7wrh4xctU4JYkM=";
+    sha256 = "sha256-isa9hVs7bTWP0CDLLKKek7hUe4b5OuEkA5m9UARZZ30=";
   };
 
   nativeBuildInputs = [
@@ -38,8 +39,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glibc
     gcc-unwrapped
+    glib-networking
+    glibc
     libsecret
   ];
 
@@ -61,6 +63,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A simple tool to calculate the overall performance of an investment portfolio";
     homepage = "https://www.portfolio-performance.info/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.epl10;
     maintainers = with maintainers; [ elohmeier oyren shawn8901 ];
     platforms = [ "x86_64-linux" ];

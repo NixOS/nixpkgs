@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, libpng, zlib, nasm }:
 
 stdenv.mkDerivation rec {
-  version = "4.0.3";
+  version = "4.1.1";
   pname = "mozjpeg";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "mozjpeg";
     rev = "v${version}";
-    sha256 = "1wb2ys0yjy6hgpb9qvzjxs7sb2zzs44p6xf7n026mx5nx85hjbyv";
+    sha256 = "sha256-tHiuQeBWjyXxy5F8jadYz5qfF2S3snagnlCPjI1Cj18=";
   };
 
   cmakeFlags = [ "-DENABLE_STATIC=NO" "-DPNG_SUPPORTED=TRUE" ]; # See https://github.com/mozilla/mozjpeg/issues/351

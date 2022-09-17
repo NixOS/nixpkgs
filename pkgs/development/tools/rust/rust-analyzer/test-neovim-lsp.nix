@@ -1,5 +1,5 @@
-{ runCommandNoCC, cargo, neovim, rust-analyzer, rustc }:
-runCommandNoCC "test-neovim-rust-analyzer" {
+{ runCommand, cargo, neovim, rust-analyzer, rustc }:
+runCommand "test-neovim-rust-analyzer" {
   nativeBuildInputs = [ cargo neovim rust-analyzer rustc ];
 
   testRustSrc = /* rust */ ''

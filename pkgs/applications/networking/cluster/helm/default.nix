@@ -2,23 +2,22 @@
 
 buildGoModule rec {
   pname = "kubernetes-helm";
-  version = "3.9.0";
-  gitCommit = "7ceeda6c585217a19a1131663d8cd1f7d641b2a7";
+  version = "3.9.4";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${version}";
-    sha256 = "sha256-pdWFCepVGSJmlYnvcJCaNaGSllbeh/oCdosrab8jA4s=";
+    sha256 = "sha256-KIqbugEzwjlDcQPiQQjN+i05rcMNIbYpGufVYZwQ/uQ=";
   };
-  vendorSha256 = "sha256-r0a38ZB6VlyzKB66+OAllRLXhqwO0qbksZjOrBWdjqM=";
+  vendorSha256 = "sha256-ZOY25wgxCdVQafdhBW4Z3aQxOGTs7N3SvSDJ/Fu5psg=";
 
   subPackages = [ "cmd/helm" ];
   ldflags = [
     "-w"
     "-s"
     "-X helm.sh/helm/v3/internal/version.version=v${version}"
-    "-X helm.sh/helm/v3/internal/version.gitCommit=${gitCommit}"
+    "-X helm.sh/helm/v3/internal/version.gitCommit=${src.rev}"
   ];
 
   preCheck = ''

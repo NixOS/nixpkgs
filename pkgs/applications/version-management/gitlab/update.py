@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=../../../.. -i python3 -p bundix bundler nix-update nix nix-universal-prefetch python3 python3Packages.requests python3Packages.click python3Packages.click-log prefetch-yarn-deps
+#! nix-shell -I nixpkgs=../../../.. -i python3 -p bundix bundler nix-update nix nix-universal-prefetch python3 python3Packages.requests python3Packages.click python3Packages.click-log python3Packages.packaging prefetch-yarn-deps
 
 import click
 import click_log
@@ -10,11 +10,14 @@ import subprocess
 import json
 import pathlib
 import tempfile
-from distutils.version import LooseVersion
+from packaging.version import Version
 from typing import Iterable
 
 import requests
 
+# Always keep this in sync with the GitLaab version you're updating to.
+# If you see any errors about vendored dependencies during an update, check the Gemfile.
+VENDORED_GEMS = ['devise-pbkdf2-encryptable', 'omniauth-cas3', 'omniauth-gitlab', 'omniauth_crowd', 'mail-smtp_pool', 'ipynbdiff', 'error_tracking_open_api']
 logger = logging.getLogger(__name__)
 
 
@@ -37,7 +40,7 @@ class GitLabRepo:
         versions = list(filter(self.version_regex.match, tags))
 
         # sort, but ignore v and -ee for sorting comparisons
-        versions.sort(key=lambda x: LooseVersion(x.replace("v", "").replace("-ee", "")), reverse=True)
+        versions.sort(key=lambda x: Version(x.replace("v", "").replace("-ee", "")), reverse=True)
         return versions
 
     def get_git_hash(self, rev: str):
@@ -85,7 +88,8 @@ class GitLabRepo:
                     owner=self.owner,
                     repo=self.repo,
                     rev=rev,
-                    passthru=passthru)
+                    passthru=passthru,
+                    vendored_gems=VENDORED_GEMS)
 
 
 def _get_data_json():
@@ -139,14 +143,34 @@ def update_rubyenv():
     data = _get_data_json()
     rev = data['rev']
 
-    with open(rubyenv_dir / 'Gemfile.lock', 'w') as f:
-        f.write(repo.get_file('Gemfile.lock', rev))
+    gemfile = repo.get_file('Gemfile', rev)
+    gemfile_lock = repo.get_file('Gemfile.lock', rev)
+
+    if "pg (1.4.1)" in gemfile_lock:
+        gemfile_lock = gemfile_lock.replace("pg (1.4.1)", "pg (1.4.3)")
+    else:
+        logger.info("Looks like pg was updated! Please remove update-pg.patch, as this will cause a build failure")
+
     with open(rubyenv_dir / 'Gemfile', 'w') as f:
-        original = repo.get_file('Gemfile', rev)
-        f.write(re.sub(r".*mail-smtp_pool.*", "", original))
+        f.write(re.sub(f'.*({"|".join(VENDORED_GEMS)}).*', "", gemfile))
+
+    with open(rubyenv_dir / 'Gemfile.lock', 'w') as f:
+        f.write(gemfile_lock)
 
     subprocess.check_output(['bundle', 'lock'], cwd=rubyenv_dir)
     subprocess.check_output(['bundix'], cwd=rubyenv_dir)
+
+    with open(rubyenv_dir / 'Gemfile', 'w') as f:
+        for gem in VENDORED_GEMS:
+            gemfile = gemfile.replace(f'path: \'vendor/gems/{gem}\'', f'path: \'{gem}\'')
+
+        f.write(gemfile)
+
+    with open(rubyenv_dir / 'Gemfile.lock', 'w') as f:
+        for gem in VENDORED_GEMS:
+            gemfile_lock = gemfile_lock.replace(f'remote: vendor/gems/{gem}', f'remote: {gem}')
+
+        f.write(gemfile_lock)
 
 
 @cli.command('update-gitaly')

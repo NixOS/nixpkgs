@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "info" "doc" ];
 
+  strictDeps = true;
   propagatedBuildInputs = lib.optional (!stdenv.isLinux) libiconv;
 
   configureFlags = [

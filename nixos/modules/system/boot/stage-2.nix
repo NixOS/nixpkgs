@@ -37,7 +37,7 @@ in
         default = "";
         example = "rm -f /var/log/messages";
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Shell commands to be executed just before systemd is started.
         '';
       };
@@ -45,7 +45,7 @@ in
       systemdExecutable = mkOption {
         default = "/run/current-system/systemd/lib/systemd/systemd";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The program to execute to start systemd.
         '';
       };
@@ -53,7 +53,7 @@ in
       extraSystemdUnitPaths = mkOption {
         default = [];
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           Additional paths that get appended to the SYSTEMD_UNIT_PATH environment variable
           that can contain mutable unit files.
         '';

@@ -67,12 +67,12 @@ let
     {
       options = {
 
-        enable = mkEnableOption "InvoicePlane web application";
+        enable = mkEnableOption (lib.mdDoc "InvoicePlane web application");
 
         stateDir = mkOption {
           type = types.path;
           default = "/var/lib/invoiceplane/${name}";
-          description = ''
+          description = lib.mdDoc ''
             This directory is used for uploads of attachements and cache.
             The directory passed here is automatically created and permissions
             adjusted as required.
@@ -83,50 +83,53 @@ let
           host = mkOption {
             type = types.str;
             default = "localhost";
-            description = "Database host address.";
+            description = lib.mdDoc "Database host address.";
           };
 
           port = mkOption {
             type = types.port;
             default = 3306;
-            description = "Database host port.";
+            description = lib.mdDoc "Database host port.";
           };
 
           name = mkOption {
             type = types.str;
             default = "invoiceplane";
-            description = "Database name.";
+            description = lib.mdDoc "Database name.";
           };
 
           user = mkOption {
             type = types.str;
             default = "invoiceplane";
-            description = "Database user.";
+            description = lib.mdDoc "Database user.";
           };
 
           passwordFile = mkOption {
             type = types.nullOr types.path;
             default = null;
             example = "/run/keys/invoiceplane-dbpassword";
-            description = ''
+            description = lib.mdDoc ''
               A file containing the password corresponding to
-              <option>database.user</option>.
+              {option}`database.user`.
             '';
           };
 
           createLocally = mkOption {
             type = types.bool;
             default = true;
-            description = "Create the database and database user locally.";
+            description = lib.mdDoc "Create the database and database user locally.";
           };
         };
 
         invoiceTemplates = mkOption {
           type = types.listOf types.path;
           default = [];
-          description = ''
+          description = lib.mdDoc ''
             List of path(s) to respective template(s) which are copied from the 'invoice_templates/pdf' directory.
-            <note><para>These templates need to be packaged before use, see example.</para></note>
+
+            ::: {.note}
+            These templates need to be packaged before use, see example.
+            :::
           '';
           example = literalExpression ''
             let
@@ -160,8 +163,8 @@ let
             "pm.max_spare_servers" = 4;
             "pm.max_requests" = 500;
           };
-          description = ''
-            Options for the InvoicePlane PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+          description = lib.mdDoc ''
+            Options for the InvoicePlane PHP pool. See the documentation on `php-fpm.conf`
             for details on configuration directives.
           '';
         };
@@ -174,9 +177,9 @@ let
             DISABLE_SETUP=true
             IP_URL=https://invoice.example.com
           '';
-          description = ''
+          description = lib.mdDoc ''
             InvoicePlane configuration. Refer to
-            <link xlink:href="https://github.com/InvoicePlane/InvoicePlane/blob/master/ipconfig.php.example"/>
+            <https://github.com/InvoicePlane/InvoicePlane/blob/master/ipconfig.php.example>
             for details on supported values.
           '';
         };
@@ -194,20 +197,20 @@ in
         options.sites = mkOption {
           type = types.attrsOf (types.submodule siteOpts);
           default = {};
-          description = "Specification of one or more WordPress sites to serve";
+          description = lib.mdDoc "Specification of one or more WordPress sites to serve";
         };
 
         options.webserver = mkOption {
           type = types.enum [ "caddy" ];
           default = "caddy";
-          description = ''
+          description = lib.mdDoc ''
             Which webserver to use for virtual host management. Currently only
             caddy is supported.
           '';
         };
       };
       default = {};
-      description = "InvoicePlane configuration.";
+      description = lib.mdDoc "InvoicePlane configuration.";
     };
 
   };
@@ -236,7 +239,7 @@ in
     };
 
     services.phpfpm = {
-      phpPackage = pkgs.php74;
+      phpPackage = pkgs.php81;
       pools = mapAttrs' (hostName: cfg: (
         nameValuePair "invoiceplane-${hostName}" {
           inherit user;
@@ -302,4 +305,3 @@ in
 
   ]);
 }
-

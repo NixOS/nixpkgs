@@ -1,12 +1,6 @@
 { lib, stdenv, fetchurl, openjdk17, makeWrapper, autoPatchelfHook
-, zlib, libzen, libmediainfo, curl, libmms, glib
+, zlib, libzen, libmediainfo, curlWithGnuTls, libmms, glib
 }:
-
-let
-  # FileBot requires libcurl-gnutls.so to build
-  curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
-
-in
 
 stdenv.mkDerivation rec {
   pname = "filebot";
@@ -47,6 +41,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://filebot.net";
     changelog = "https://www.filebot.net/forums/viewforum.php?f=7";
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ gleber felschr ];
     platforms = platforms.linux;

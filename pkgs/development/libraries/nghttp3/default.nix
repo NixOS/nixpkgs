@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nghttp3";
-  version = "0.4.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1+0ln0J8dqHqmE+fsawhbfbbMNlCkDpJx4xomUuoHdE=";
+    sha256 = "sha256-q9rXvMeCXhyytiaGekRlowCYKzvq8aktfN0lk+VPG78=";
   };
 
   outputs = [ "out" "dev" "doc" ];

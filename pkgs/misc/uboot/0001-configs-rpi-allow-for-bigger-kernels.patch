@@ -17,12 +17,12 @@ index 834f1cd..10ab1e7 100644
   * parameter given to the kernel. So reserving memory from low to high
 - * satisfies this constraint again. Reserving 1M at 0x02600000-0x02700000 for
 - * the DTB leaves rest of the free RAM to the initrd starting at 0x02700000.
-+ * satisfies this constraint again. Reserving 1M at 0x03700000-0x03800000 for
-+ * the DTB leaves rest of the free RAM to the initrd starting at 0x03800000.
++ * satisfies this constraint again. Reserving 1M at 0x04700000-0x04800000 for
++ * the DTB leaves rest of the free RAM to the initrd starting at 0x04800000.
   * Even with the smallest possible CPU-GPU memory split of the CPU getting
 - * only 64M, the remaining 25M starting at 0x02700000 should allow quite
 - * large initrds before they start colliding with U-Boot.
-+ * only 64M, the remaining 9M starting at 0x03800000 should allow reasonably
++ * only 64M, the remaining 8M starting at 0x04800000 should allow reasonably
 + * sized initrds before they start colliding with U-Boot.
   */
  #define ENV_MEM_LAYOUT_SETTINGS \
@@ -33,10 +33,10 @@ index 834f1cd..10ab1e7 100644
 -	"pxefile_addr_r=0x02500000\0" \
 -	"fdt_addr_r=0x02600000\0" \
 -	"ramdisk_addr_r=0x02700000\0"
-+	"scriptaddr=0x03500000\0" \
-+	"pxefile_addr_r=0x03600000\0" \
-+	"fdt_addr_r=0x03700000\0" \
-+	"ramdisk_addr_r=0x03800000\0"
++	"scriptaddr=0x04500000\0" \
++	"pxefile_addr_r=0x04600000\0" \
++	"fdt_addr_r=0x04700000\0" \
++	"ramdisk_addr_r=0x04800000\0"
  
  #if CONFIG_IS_ENABLED(CMD_MMC)
  	#define BOOT_TARGET_MMC(func) \

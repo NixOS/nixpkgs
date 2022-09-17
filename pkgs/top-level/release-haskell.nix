@@ -52,7 +52,7 @@ let
     ghc884
     ghc8107
     ghc902
-    ghc922
+    ghc924
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -257,6 +257,7 @@ let
         vaultenv
         wstunnel
         xmobar
+        xmonadctl
         xmonad-with-packages
         yi
         zsh-git-prompt
@@ -325,17 +326,19 @@ let
                 random
                 QuickCheck
                 cabal2nix
+                terminfo # isn't bundled for cross
                 xhtml # isn't bundled for cross
               ;
             };
 
-            haskell.packages.native-bignum.ghc922 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc922)
+            haskell.packages.native-bignum.ghc924 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc924)
                 hello
                 lens
                 random
                 QuickCheck
                 cabal2nix
+                terminfo # isn't bundled for cross
                 xhtml # isn't bundled for cross
               ;
             };
@@ -374,6 +377,17 @@ let
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
       spectacle = [
+        compilerNames.ghc8107
+      ];
+      weeder = [
+        compilerNames.ghc8107
+        compilerNames.ghc902
+        compilerNames.ghc924
+      ];
+      purescript-cst = [
+        compilerNames.ghc8107
+      ];
+      purescript-ast = [
         compilerNames.ghc8107
       ];
     })
@@ -442,11 +456,11 @@ let
           jobs.pkgsMusl.haskell.compiler.ghc884
           jobs.pkgsMusl.haskell.compiler.ghc8107
           jobs.pkgsMusl.haskell.compiler.ghc902
-          jobs.pkgsMusl.haskell.compiler.ghc922
+          jobs.pkgsMusl.haskell.compiler.ghc924
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
           jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc902
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc922
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc924
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
       };
@@ -462,7 +476,7 @@ let
         };
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc922
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc924
         ];
       };
     }

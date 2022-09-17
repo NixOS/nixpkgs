@@ -48,11 +48,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
+    # darwin: never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/myrddin.x86_64-darwin
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Systems language that is both powerful and fun to use";
     homepage = "https://myrlang.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ luc65r ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/myrddin.x86_64-darwin
   };
 }

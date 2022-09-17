@@ -64,6 +64,7 @@ let
       meta = {
         description = "Apache Spark is a fast and general engine for large-scale data processing";
         homepage = "https://spark.apache.org/";
+        sourceProvenance = with sourceTypes; [ binaryBytecode ];
         license = lib.licenses.asl20;
         platforms = lib.platforms.all;
         maintainers = with maintainers; [ thoughtpolice offline kamilchm illustris ];

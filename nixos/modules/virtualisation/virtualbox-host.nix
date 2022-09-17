@@ -18,25 +18,25 @@ in
 
 {
   options.virtualisation.virtualbox.host = {
-    enable = mkEnableOption "VirtualBox" // {
-      description = ''
+    enable = mkEnableOption (lib.mdDoc "VirtualBox") // {
+      description = lib.mdDoc ''
         Whether to enable VirtualBox.
 
-        <note><para>
-          In order to pass USB devices from the host to the guests, the user
-          needs to be in the <literal>vboxusers</literal> group.
-        </para></note>
+        ::: {.note}
+        In order to pass USB devices from the host to the guests, the user
+        needs to be in the `vboxusers` group.
+        :::
       '';
     };
 
-    enableExtensionPack = mkEnableOption "VirtualBox extension pack" // {
-      description = ''
+    enableExtensionPack = mkEnableOption (lib.mdDoc "VirtualBox extension pack") // {
+      description = lib.mdDoc ''
         Whether to install the Oracle Extension Pack for VirtualBox.
 
-        <important><para>
-          You must set <literal>nixpkgs.config.allowUnfree = true</literal> in
-          order to use this.  This requires you accept the VirtualBox PUEL.
-        </para></important>
+        ::: {.important}
+        You must set `nixpkgs.config.allowUnfree = true` in
+        order to use this.  This requires you accept the VirtualBox PUEL.
+        :::
       '';
     };
 
@@ -44,7 +44,7 @@ in
       type = types.package;
       default = pkgs.virtualbox;
       defaultText = literalExpression "pkgs.virtualbox";
-      description = ''
+      description = lib.mdDoc ''
         Which VirtualBox package to use.
       '';
     };
@@ -52,7 +52,7 @@ in
     addNetworkInterface = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Automatically set up a vboxnet0 host-only network interface.
       '';
     };
@@ -60,22 +60,22 @@ in
     enableHardening = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Enable hardened VirtualBox, which ensures that only the binaries in the
         system path get access to the devices exposed by the kernel modules
         instead of all users in the vboxusers group.
 
-        <important><para>
-          Disabling this can put your system's security at risk, as local users
-          in the vboxusers group can tamper with the VirtualBox device files.
-        </para></important>
+        ::: {.important}
+        Disabling this can put your system's security at risk, as local users
+        in the vboxusers group can tamper with the VirtualBox device files.
+        :::
       '';
     };
 
     headless = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Use VirtualBox installation without GUI and Qt dependency. Useful to enable on servers
         and when virtual machines are controlled only via SSH.
       '';
@@ -84,7 +84,7 @@ in
     enableWebService = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Build VirtualBox web service tool (vboxwebsrv) to allow managing VMs via other webpage frontend tools. Useful for headless servers.
       '';
     };

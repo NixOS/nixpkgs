@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "rzpipe";
-  version = "0.1.2";
+  version = "0.4.0";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-va56xSWDIVtZ88QUzPfk8cCr28+5nZCNcSJMiVj3SZU=";
+    sha256 = "sha256-RSgBwmtpI58caRWov+cDWLKhti+7r70VxJbCxJveEiM=";
   };
 
   # No native rz_core library

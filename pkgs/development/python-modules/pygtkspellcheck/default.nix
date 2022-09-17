@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pygtkspellcheck";
-  version = "4.0.6";
+  version = "5.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pc3xmv1q775hn4kc1kspvpdn4gm7ix3aw6hz9iy3brfcw6ddcl4";
+    sha256 = "sha256-kfhoOLnKbA9jH4DUtQw0nATjK21pMNxyAOzYDLQkR4U=";
   };
 
   nativeBuildInputs = [ gobject-introspection gtk3 ];

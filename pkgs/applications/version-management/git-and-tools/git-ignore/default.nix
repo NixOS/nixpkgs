@@ -31,6 +31,6 @@ buildRustPackage rec {
     description = "Quickly and easily fetch .gitignore templates from gitignore.io";
     homepage = "https://github.com/sondr3/git-ignore";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.sondr3 ];
+    maintainers = [ ];
   };
 }

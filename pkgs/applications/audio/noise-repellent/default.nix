@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "noise-repellent";
-  version = "0.2.1";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "lucianodato";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hMNVzhJZFGFeu5aygLkfq495O0zpaIk41ddzejvDITE=";
+    sha256 = "sha256-d8csYC3z3vXdmN/G6mAK+H8ia0vOCsoUpoA3W8/OADc=";
   };
 
   mesonFlags = [

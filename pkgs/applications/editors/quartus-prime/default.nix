@@ -25,7 +25,6 @@ in buildFHSUserEnv rec {
     # qsys requirements
     xorg.libXtst
     xorg.libXi
-    libudev0-shim
   ];
   multiPkgs = pkgs: with pkgs; let
     # This seems ugly - can we override `libpng = libpng12` for all `pkgs`?
@@ -44,6 +43,7 @@ in buildFHSUserEnv rec {
     xorg.libX11
     xorg.libXext
     xorg.libXrender
+    libudev0-shim
   ];
 
   passthru = { inherit unwrapped; };
@@ -71,7 +71,7 @@ in buildFHSUserEnv rec {
     EXECUTABLES="${lib.concatStringsSep " " (quartusExecutables ++ qsysExecutables ++ modelsimExecutables)}"
     for executable in $EXECUTABLES; do
         echo "#!${stdenv.shell}" >> $out/$executable
-        echo "$WRAPPER ${unwrapped}/$executable \$@" >> $out/$executable
+        echo "$WRAPPER ${unwrapped}/$executable \"\$@\"" >> $out/$executable
     done
 
     cd $out
@@ -80,7 +80,12 @@ in buildFHSUserEnv rec {
     ln --symbolic --relative --target-directory ./bin $EXECUTABLES
   '';
 
+  # LD_PRELOAD fixes issues in the licensing system that cause memory corruption and crashes when
+  # starting most operations in many containerized environments, including WSL2, Docker, and LXC
+  # (a similiar fix involving LD_PRELOADing tcmalloc did not solve the issue in my situation)
+  # we use the name so that quartus can load the 64 bit verson and modelsim can load the 32 bit version
+  # https://community.intel.com/t5/Intel-FPGA-Software-Installation/Running-Quartus-Prime-Standard-on-WSL-crashes-in-libudev-so/m-p/1189032
   runScript = writeScript "${name}-wrapper" ''
-    exec $@
+    exec env LD_PRELOAD=libudev.so.0 "$@"
   '';
 }

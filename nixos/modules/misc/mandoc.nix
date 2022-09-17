@@ -10,15 +10,15 @@ in {
 
   options = {
     documentation.man.mandoc = {
-      enable = lib.mkEnableOption "mandoc as the default man page viewer";
+      enable = lib.mkEnableOption (lib.mdDoc "mandoc as the default man page viewer");
 
       manPath = lib.mkOption {
         type = with lib.types; listOf str;
         default = [ "share/man" ];
         example = lib.literalExpression "[ \"share/man\" \"share/man/fr\" ]";
-        description = ''
+        description = lib.mdDoc ''
           Change the manpath, i. e. the directories where
-          <citerefentry><refentrytitle>man</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+          {manpage}`man(1)`
           looks for section-specific directories of man pages.
           You only need to change this setting if you want extra man pages
           (e. g. in non-english languages). All values must be strings that
@@ -31,8 +31,8 @@ in {
         type = lib.types.package;
         default = pkgs.mandoc;
         defaultText = lib.literalExpression "pkgs.mandoc";
-        description = ''
-          The <literal>mandoc</literal> derivation to use. Useful to override
+        description = lib.mdDoc ''
+          The `mandoc` derivation to use. Useful to override
           configuration options used for the package.
         '';
       };

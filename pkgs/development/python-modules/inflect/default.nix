@@ -8,12 +8,13 @@
 
 buildPythonPackage rec {
   pname = "inflect";
-  version = "5.4.0";
+  version = "5.6.2";
   disabled = isPy27;
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tY1YxOc//KmyXgdcHE/Jyt7LtcmdfNnzze3ac+zoPBw=";
+    sha256 = "sha256-qtx+1zko9eAUEpeUu6wDBYzKNdCpc6X8TrRcf6JgBfk=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

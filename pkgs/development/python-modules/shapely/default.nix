@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , substituteAll
 , pythonOlder
 , geos
@@ -42,6 +43,12 @@ buildPythonPackage rec {
       src = ./library-paths.patch;
       libgeos_c = GEOS_LIBRARY_PATH;
       libc = lib.optionalString (!stdenv.isDarwin) "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
+    })
+    (fetchpatch {
+      name = "fix-tests-geos-3.11.patch";
+      url = "https://github.com/shapely/shapely/commit/21c8e8a7909e7fb3cce6daa5c5b8284ac927fcb0.patch";
+      includes = [ "tests/test_parallel_offset.py" ];
+      sha256 = "sha256-85c8NlmAzzfCgepe/411ug5Sq+665dFMb3ySaUt9Kew=";
     })
  ];
 

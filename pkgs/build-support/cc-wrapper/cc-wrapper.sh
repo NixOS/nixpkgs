@@ -38,36 +38,23 @@ nParams=${#params[@]}
 while (( "$n" < "$nParams" )); do
     p=${params[n]}
     p2=${params[n+1]:-} # handle `p` being last one
-    if [ "$p" = -c ]; then
-        dontLink=1
-    elif [ "$p" = -S ]; then
-        dontLink=1
-    elif [ "$p" = -E ]; then
-        dontLink=1
-    elif [ "$p" = -E ]; then
-        dontLink=1
-    elif [ "$p" = -M ]; then
-        dontLink=1
-    elif [ "$p" = -MM ]; then
-        dontLink=1
-    elif [[ "$p" = -x && "$p2" = *-header ]]; then
-        dontLink=1
-    elif [[ "$p" = -x && "$p2" = c++* && "$isCxx" = 0 ]]; then
-        isCxx=1
-    elif [ "$p" = -nostdlib ]; then
-        cxxLibrary=0
-    elif [ "$p" = -nostdinc ]; then
-        cInclude=0
-        cxxInclude=0
-    elif [ "$p" = -nostdinc++ ]; then
-        cxxInclude=0
-    elif [[ "$p" != -?* ]]; then
-        # A dash alone signifies standard input; it is not a flag
-        nonFlagArgs=1
-    elif [ "$p" = -cc1 ]; then
-        cc1=1
-    fi
     n+=1
+
+    case "$p" in
+        -[cSEM] | -MM) dontLink=1 ;;
+        -cc1) cc1=1 ;;
+        -nostdinc) cInclude=0 cxxInclude=0 ;;
+        -nostdinc++) cxxInclude=0 ;;
+        -nostdlib) cxxLibrary=0 ;;
+        -x)
+            case "$p2" in
+                *-header) dontLink=1 ;;
+                c++*) isCxx=1 ;;
+            esac
+            ;;
+        -?*) ;;
+        *) nonFlagArgs=1 ;; # Includes a solitary dash (`-`) which signifies standard input; it is not a flag
+    esac
 done
 
 # If we pass a flag like -Wl, then gcc will call the linker unless it
@@ -81,29 +68,31 @@ fi
 
 # Optionally filter out paths not refering to the store.
 if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "$NIX_STORE" ]]; then
-    rest=()
+    kept=()
     nParams=${#params[@]}
     declare -i n=0
     while (( "$n" < "$nParams" )); do
         p=${params[n]}
         p2=${params[n+1]:-} # handle `p` being last one
-        if [ "${p:0:3}" = -L/ ] && badPath "${p:2}"; then
-            skip "${p:2}"
-        elif [ "$p" = -L ] && badPath "$p2"; then
-            n+=1; skip "$p2"
-        elif [ "${p:0:3}" = -I/ ] && badPath "${p:2}"; then
-            skip "${p:2}"
-        elif [ "$p" = -I ] && badPath "$p2"; then
-            n+=1; skip "$p2"
-        elif [ "$p" = -isystem ] && badPath "$p2"; then
-            n+=1; skip "$p2"
-        else
-            rest+=("$p")
-        fi
         n+=1
+
+        skipNext=false
+        path=""
+        case "$p" in
+            -[IL]/*) path=${p:2} ;;
+            -[IL] | -isystem) path=$p2 skipNext=true ;;
+        esac
+
+        if [[ -n $path ]] && badPath "$path"; then
+            skip "$path"
+            $skipNext && n+=1
+            continue
+        fi
+
+        kept+=("$p")
     done
     # Old bash empty array hack
-    params=(${rest+"${rest[@]}"})
+    params=(${kept+"${kept[@]}"})
 fi
 
 # Flirting with a layer violation here.
@@ -118,17 +107,17 @@ fi
 
 # Clear march/mtune=native -- they bring impurity.
 if [ "$NIX_ENFORCE_NO_NATIVE_@suffixSalt@" = 1 ]; then
-    rest=()
+    kept=()
     # Old bash empty array hack
     for p in ${params+"${params[@]}"}; do
         if [[ "$p" = -m*=native ]]; then
             skip "$p"
         else
-            rest+=("$p")
+            kept+=("$p")
         fi
     done
     # Old bash empty array hack
-    params=(${rest+"${rest[@]}"})
+    params=(${kept+"${kept[@]}"})
 fi
 
 if [[ "$isCxx" = 1 ]]; then
@@ -168,6 +157,10 @@ if [ "$dontLink" != 1 ]; then
         fi
     done
     export NIX_LINK_TYPE_@suffixSalt@=$linkType
+fi
+
+if [[ -e @out@/nix-support/add-local-cc-cflags-before.sh ]]; then
+    source @out@/nix-support/add-local-cc-cflags-before.sh
 fi
 
 # As a very special hack, if the arguments are just `-v', then don't

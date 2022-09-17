@@ -1,27 +1,23 @@
 { lib
-, stdenv
 , buildGoModule
 , fetchFromGitHub
-, CoreFoundation
-, Security
 }:
 
 buildGoModule rec {
   pname = "trivy";
-  version = "0.28.0";
+  version = "0.31.3";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zyTUGAxUAfrigRNiw03ZXFK+UkpuxwuU2xviZmAPuR8=";
+    sha256 = "sha256-e+H5FH9UU2zK4GmxN04T87GdZYRZDVtA0FNw6t4kjgQ=";
   };
-  vendorSha256 = "sha256-dgiKWHSm49/CB4dWrNWIzkkmj6Aw4l+9iLa6xe/umq0=";
+  # hash missmatch on across linux and darwin
+  proxyVendor = true;
+  vendorSha256 = "sha256-QjJHmVqZTw5w1jR+EctS4VzeJMBpkCL3VGjeKeQmyPA=";
 
   excludedPackages = "misc";
-
-  buildInputs = lib.optionals (stdenv.isDarwin && stdenv.isx86_64)
-    [ CoreFoundation Security ];
 
   ldflags = [
     "-s"
@@ -29,7 +25,7 @@ buildGoModule rec {
     "-X main.version=v${version}"
   ];
 
-  # Tests requires network access
+  # Tests require network access
   doCheck = false;
 
   doInstallCheck = true;

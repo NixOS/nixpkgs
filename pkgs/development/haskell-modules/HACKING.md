@@ -249,6 +249,8 @@ opening the next one.  When you want to merge the currently open
     $ ./maintainers/scripts/haskell/merge-and-open-pr.sh PR_NUM_OF_CURRENT_HASKELL_UPDATES_PR
     ```
 
+    Find the PR number easily [here](https://github.com/nixos/nixpkgs/pulls?q=is%3Apr+is%3Aopen+head%3Ahaskell-updates)
+
     This does the following things:
 
     1.  Fetches `origin`, makes sure you currently have the `haskell-updates`

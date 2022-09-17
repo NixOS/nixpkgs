@@ -2,15 +2,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "melody";
-  version = "0.18.0";
+  version = "0.18.1";
 
   src = fetchCrate {
     pname = "melody_cli";
     inherit version;
-    sha256 = "1shd5m9sj9ybjzq26ipggfbc22lyzkdzq2kirgfvdk16m5r3jy2v";
+    sha256 = "sha256-Az1pGRty7wAC5fN7RlO/etaW5w5TrsO6VVXv5M7NUfU=";
   };
 
-  cargoSha256 = "0wz696zz7gm36dy3lxxwsiriqxk0nisdwybvknn9a38rvzd6jjbm";
+  cargoSha256 = "sha256-EhPrARdDnwdxfK1JHuuHVrxSDZhuE+kTBQr45JxluUA=";
 
   meta = with lib; {
     description = "Language that compiles to regular expressions";

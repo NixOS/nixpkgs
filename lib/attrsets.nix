@@ -248,7 +248,7 @@ rec {
   /* Apply fold functions to values grouped by key.
 
      Example:
-       foldAttrs (n: a: [n] ++ a) [] [{ a = 2; } { a = 3; }]
+       foldAttrs (item: acc: [item] ++ acc) [] [{ a = 2; } { a = 3; }]
        => { a = [ 2 3 ]; }
   */
   foldAttrs = op: nul:

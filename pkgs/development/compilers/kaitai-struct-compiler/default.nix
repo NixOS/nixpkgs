@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kaitai-struct-compiler";
-  version = "0.9";
+  version = "0.10";
 
   src = fetchzip {
     url = "https://github.com/kaitai-io/kaitai_struct_compiler/releases/download/${version}/kaitai-struct-compiler-${version}.zip";
-    sha256 = "sha256-2HSasigpJDuWNejNVklnpQwaA4MC030S9taF/7YvzgY=";
+    sha256 = "sha256-oY1OiEq619kLmQPMRQ4sjuBnTXgJ2WfvsEj1JrxUGPA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

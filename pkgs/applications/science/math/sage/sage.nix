@@ -2,6 +2,7 @@
 , makeWrapper
 , sage-tests
 , sage-with-env
+, jupyter-kernel-definition
 , jupyter-kernel-specs
 , sagedoc
 , withDoc
@@ -16,9 +17,8 @@ stdenv.mkDerivation rec {
   pname = "sage";
   src = sage-with-env.env.lib.src;
 
-  buildInputs = [
-    makeWrapper
-  ] ++ lib.optionals requireSageTests [
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = lib.optionals requireSageTests [
     # This is a hack to make sure sage-tests is evaluated. It doesn't acutally
     # produce anything of value, it just decouples the tests from the build.
     sage-tests
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     quicktest = sage-tests.override { longTests = false; timeLimit = 600; }; # as many tests as possible in ~10m
     doc = sagedoc;
     lib = sage-with-env.env.lib;
-    kernelspec = jupyter-kernel-specs.definition.sagemath;
+    kernelspec = jupyter-kernel-definition;
   };
 
   meta = with lib; {

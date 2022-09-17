@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     inherit homepage;
     description = "Editor for the ${brand} ${type} digital mixer";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = [ maintainers.magnetophon ];

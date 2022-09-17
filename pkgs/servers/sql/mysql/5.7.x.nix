@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, bison, pkg-config
+{ lib, stdenv, fetchurl, cmake, bison, pkg-config, nukeReferences
 , boost, libedit, libevent, lz4, ncurses, openssl, protobuf, readline, zlib, perl
 , cctools, CoreServices, developer_cmds
 , libtirpc, rpcsvc-proto, nixosTests
@@ -21,7 +21,7 @@ self = stdenv.mkDerivation rec {
     export PATH=$PATH:$TMPDIR
   '';
 
-  nativeBuildInputs = [ bison cmake pkg-config ]
+  nativeBuildInputs = [ bison cmake pkg-config nukeReferences ]
     ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
 
   buildInputs = [ boost libedit libevent lz4 ncurses openssl protobuf readline zlib ]
@@ -31,7 +31,6 @@ self = stdenv.mkDerivation rec {
   outputs = [ "out" "static" ];
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # To run libmysql/libmysql_api_test during build.
     "-DWITH_SSL=yes"
     "-DWITH_EMBEDDED_SERVER=yes"
     "-DWITH_UNIT_TESTS=no"
@@ -66,6 +65,7 @@ self = stdenv.mkDerivation rec {
     sed -i -e "s|/usr/bin/libtool|libtool|" cmake/merge_archives.cmake.in
   '';
   postInstall = ''
+    nuke-refs "$out/share/mysql/docs/INFO_BIN"
     moveToOutput "lib/*.a" $static
     ln -s libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libmysqlclient_r${stdenv.hostPlatform.extensions.sharedLibrary}
   '';

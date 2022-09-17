@@ -1,0 +1,30 @@
+From 50efb0822aa0e0ab165158dd0a26e65a2290e6d2 Mon Sep 17 00:00:00 2001
+From: Daniel Stenberg <daniel@haxx.se>
+Date: Tue, 28 Jun 2022 09:00:25 +0200
+Subject: [PATCH] easy_lock: switch to using atomic_int instead of bool
+
+To work with more compilers without requiring separate libs to
+link. Like with gcc-12 for RISC-V on Linux.
+
+Reported-by: Adam Sampson
+Fixes #9055
+Closes #9061
+---
+ lib/easy_lock.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/easy_lock.h b/lib/easy_lock.h
+index 07c85c5ffdd19..9c11bc50c5f20 100644
+--- a/lib/easy_lock.h
++++ b/lib/easy_lock.h
+@@ -40,8 +40,8 @@
+ #include <sched.h>
+ #endif
+ 
+-#define curl_simple_lock atomic_bool
+-#define CURL_SIMPLE_LOCK_INIT false
++#define curl_simple_lock atomic_int
++#define CURL_SIMPLE_LOCK_INIT 0
+ 
+ static inline void curl_simple_lock_lock(curl_simple_lock *lock)
+ {

@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "widgetsnbextension";
-  version = "3.6.0";
+  version = "3.6.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6Ep6n8ubrz1XEG4YSnOJqPjrk1v3QaXrnWCqGMwCmoA=";
+    hash = "sha256-nISuZMKJPHy+Lqr8dQUiGnlcJ9aJOEVANKxIcxmnWxA=";
   };
 
   # setup.py claims to require notebook, but the source doesn't have any imports

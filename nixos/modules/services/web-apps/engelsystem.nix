@@ -9,7 +9,7 @@ in {
       enable = mkOption {
         default = false;
         example = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable engelsystem, an online tool for coordinating volunteers
           and shifts on large events.
         '';
@@ -19,12 +19,12 @@ in {
       domain = mkOption {
         type = types.str;
         example = "engelsystem.example.com";
-        description = "Domain to serve on.";
+        description = lib.mdDoc "Domain to serve on.";
       };
 
       package = mkOption {
         type = types.package;
-        description = "Engelsystem package used for the service.";
+        description = lib.mdDoc "Engelsystem package used for the service.";
         default = pkgs.engelsystem;
         defaultText = literalExpression "pkgs.engelsystem";
       };
@@ -32,9 +32,9 @@ in {
       createDatabase = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to create a local database automatically.
-          This will override every database setting in <option>services.engelsystem.config</option>.
+          This will override every database setting in {option}`services.engelsystem.config`.
         '';
       };
     };
@@ -70,7 +70,7 @@ in {
         min_password_length = 6;
         default_locale = "de_DE";
       };
-      description = ''
+      description = lib.mdDoc ''
         Options to be added to config.php, as a nix attribute set. Options containing secret data
         should be set to an attribute set containing the attribute _secret - a string pointing to a
         file containing the value the option should be set to. See the example to get a better

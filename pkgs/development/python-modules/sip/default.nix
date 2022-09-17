@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, packaging, toml }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, packaging, ply, toml, fetchpatch }:
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.5.1";
+  version = "6.6.2";
 
   src = fetchPypi {
     pname = "sip";
     inherit version;
-    sha256 = "sha256-IE8CQNuJmadJ1jiph7NRhhhD5pI5uBHsPRiBQSw3BqY=";
+    sha256 = "sha256-Dj76wcXf2OUlrlcUCSffJpk+E/WLidFXfDFPQQW/2Q0=";
   };
 
   patches = [
@@ -15,9 +15,16 @@ buildPythonPackage rec {
     # and PIP will refuse to install the resulting wheel.
     # remove once upstream fixes this, hopefully in 6.5.2
     ./fix-manylinux-version.patch
+
+    # fix issue triggered by QGIS 3.26.x, already fixed upstream
+    # in SIP, waiting for release past 6.6.2
+    (fetchpatch {
+      url = "https://riverbankcomputing.com/hg/sip/raw-diff/323d39a2d602/sipbuild/generator/parser/instantiations.py";
+      hash = "sha256-QEQuRzXA+wK9Dt22U/LgIwtherY9pJURGJYpKpJkiok=";
+    })
   ];
 
-  propagatedBuildInputs = [ packaging toml ];
+  propagatedBuildInputs = [ packaging ply toml ];
 
   # There aren't tests
   doCheck = false;

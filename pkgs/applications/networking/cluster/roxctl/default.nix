@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testVersion, roxctl }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, roxctl }:
 
 buildGoModule rec {
   pname = "roxctl";
-  version = "3.69.1";
+  version = "3.71.0";
 
   src = fetchFromGitHub {
     owner = "stackrox";
     repo = "stackrox";
     rev = version;
-    sha256 = "sha256-fB43C+gMtUOg/Ah1fOTnOWOUmS0TjXkNCzw/TKfMzj4=";
+    sha256 = "sha256-svoSc9cT12nPYbyYz+Uv2edJAt/dJjcqe3E6cKII0KY=";
   };
 
-  vendorSha256 = "sha256-M+ZueycJEaDVzC2bFwQc5EulCrdz6lvzyD8YCoGyW1g=";
+  vendorSha256 = "sha256-zz8v9HkJPnk4QDRa9eVgI5uvqQLhemq8vOZ0qc9u8es=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -30,7 +30,7 @@ buildGoModule rec {
       --zsh <($out/bin/roxctl completion zsh)
   '';
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = roxctl;
     command = "roxctl version";
   };

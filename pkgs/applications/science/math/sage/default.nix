@@ -113,6 +113,7 @@ let
     tkinter # optional, as a matplotlib backend (use with `%matplotlib tk`)
     scipy
     ipywidgets
+    notebook # for "sage -n"
     rpy2
     sphinx
     pillow
@@ -172,6 +173,6 @@ let
 in
 # A wrapper around sage that makes sure sage finds its docs (if they were build).
 callPackage ./sage.nix {
-  inherit sage-tests sage-with-env sagedoc jupyter-kernel-specs;
+  inherit sage-tests sage-with-env sagedoc jupyter-kernel-definition jupyter-kernel-specs;
   inherit withDoc requireSageTests;
 }

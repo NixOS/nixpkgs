@@ -23,17 +23,10 @@
 }:
 let
   pname = "qFlipper";
-  version = "1.0.2";
-  sha256 = "sha256-CJQOEUwYPNd4x+uBINrxeYVITtYrsEFaYLHQh2l12kA=";
+  version = "1.1.3";
+  sha256 = "sha256-/MYX/WnK3cClIOImb5/awT8lX2Wx8g+r/RVt3RH7d0c=";
   timestamp = "99999999999";
   commit = "nix-${version}";
-
-  udev_rules = ''
-    #Flipper Zero serial port
-    SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", ATTRS{manufacturer}=="Flipper Devices Inc.", TAG+="uaccess"
-    #Flipper Zero DFU
-    SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", ATTRS{manufacturer}=="STMicroelectronics", TAG+="uaccess"
-  '';
 
 in
 mkDerivation {
@@ -92,9 +85,7 @@ mkDerivation {
     cp qFlipper-cli $out/bin
 
     mkdir -p $out/etc/udev/rules.d
-    tee $out/etc/udev/rules.d/42-flipperzero.rules << EOF
-    ${udev_rules}
-    EOF
+    cp installer-assets/udev/42-flipperzero.rules $out/etc/udev/rules.d/
   '';
 
   passthru.updateScript = nix-update-script {
@@ -102,6 +93,7 @@ mkDerivation {
   };
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Cross-platform desktop tool to manage your flipper device";
     homepage = "https://flipperzero.one/";
     license = licenses.gpl3Only;

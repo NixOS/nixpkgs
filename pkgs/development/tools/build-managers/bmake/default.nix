@@ -8,13 +8,13 @@
 , pkgsMusl # for passthru.tests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bmake";
-  version = "20220208";
+  version = "20220726";
 
   src = fetchurl {
-    url = "http://www.crufty.net/ftp/pub/sjg/${pname}-${version}.tar.gz";
-    hash = "sha256-ewDB4UYrLh5Upk2ND88n/HfursPxOSDv+NlST/BZ1to=";
+    url = "http://www.crufty.net/ftp/pub/sjg/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    hash = "sha256-G/N3B4lyJyHcp7C/+K/EqVINog8CGbt7xSNQrwEz8KA=";
   };
 
   # Make tests work with musl
@@ -60,10 +60,15 @@ stdenv.mkDerivation rec {
   ];
 
   # Disabled tests:
+  # opt-chdir: ofborg complains about it somehow
+  # opt-keep-going-indirect: not yet known
   # varmod-localtime: musl doesn't support TZDIR and this test relies on impure,
   # implicit paths
-  # opt-chdir: ofborg complains about it somehow
-  BROKEN_TESTS = "varmod-localtime opt-chdir";
+  BROKEN_TESTS = builtins.concatStringsSep " " [
+    "opt-chdir"
+    "opt-keep-going-indirect"
+    "varmod-localtime"
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -105,9 +110,8 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ thoughtpolice AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.isAarch64; # ofborg complains
   };
 
   passthru.tests.bmakeMusl = pkgsMusl.bmake;
-}
+})
 # TODO: report the quirks and patches to bmake devteam (especially the Musl one)

@@ -9,7 +9,7 @@ in
 
   options = {
     services.wg-netmanager = {
-      enable = mkEnableOption "Wireguard network manager";
+      enable = mkEnableOption (lib.mdDoc "Wireguard network manager");
     };
   };
 

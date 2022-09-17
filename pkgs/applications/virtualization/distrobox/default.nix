@@ -1,26 +1,35 @@
-{ stdenvNoCC, lib, fetchFromGitHub }:
+{ stdenvNoCC, lib, fetchFromGitHub, makeWrapper, wget }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "distrobox";
-  version = "1.2.15";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "89luca89";
     repo = pname;
     rev = version;
-    sha256 = "sha256-9rivXnHyEE1MoGY+CwUeDStLGPVq+4FvwPjV7Nblk60=";
+    sha256 = "sha256-XYqPwBiMbwG0bTiFRywZRWjp1OabTHcwhmbcx11SgPo=";
   };
 
   dontConfigure = true;
   dontBuild = true;
 
+  nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    ./install -p $out/bin
+    # https://github.com/89luca89/distrobox/issues/408
+    substituteInPlace ./distrobox-generate-entry \
+      --replace 'icon_default="''${HOME}/.local' "icon_default=\"$out"
+    ./install -P $out
 
     runHook postInstall
+  '';
+
+  # https://github.com/89luca89/distrobox/issues/407
+  postFixup = ''
+    wrapProgram "$out/bin/distrobox-generate-entry" \
+      --prefix PATH ":" ${lib.makeBinPath [ wget ]}
   '';
 
   meta = with lib; {

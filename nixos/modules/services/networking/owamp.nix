@@ -10,7 +10,7 @@ in
   ###### interface
 
   options = {
-    services.owamp.enable = mkEnableOption "Enable OWAMP server";
+    services.owamp.enable = mkEnableOption (lib.mdDoc "Enable OWAMP server");
   };
 
 

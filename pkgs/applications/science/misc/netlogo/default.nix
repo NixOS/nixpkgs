@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
       many tens of thousands of students, teachers and researchers worldwide.
     '';
     homepage = "https://ccl.northwestern.edu/netlogo/index.shtml";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2;
     maintainers = [ maintainers.dpaetzel ];
     platforms = platforms.linux;

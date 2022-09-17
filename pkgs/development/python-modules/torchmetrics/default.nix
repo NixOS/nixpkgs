@@ -7,7 +7,7 @@
 , packaging
 , psutil
 , py-deprecate
-, pytorch
+, torch
 , pytestCheckHook
 , torchmetrics
 , pytorch-lightning
@@ -15,7 +15,7 @@
 
 let
   pname = "torchmetrics";
-  version = "0.8.2";
+  version = "0.9.3";
 in
 buildPythonPackage {
   inherit pname version;
@@ -24,7 +24,7 @@ buildPythonPackage {
     owner = "PyTorchLightning";
     repo = "metrics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1TO2YgZzjVmrE5jhMwo0Y+bQUQ5jJj34k+kGpdqqPVQ=";
+    hash = "sha256-L2p8UftRkuBuRJX4V5+OYkJeJ5pCK3MvfA1OvSfgglY=";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage {
 
   # Let the user bring their own instance
   buildInputs = [
-    pytorch
+    torch
   ];
 
   checkInputs = [

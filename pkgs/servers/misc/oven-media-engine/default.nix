@@ -5,7 +5,7 @@
 , bc
 , pkg-config
 , perl
-, openssl_3_0
+, openssl
 , zlib
 , ffmpeg
 , libvpx
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ bc pkg-config perl ];
-  buildInputs = [ openssl_3_0 srt zlib ffmpeg libvpx libopus srtp jemalloc pcre2 libuuid ];
+  buildInputs = [ openssl srt zlib ffmpeg libvpx libopus srtp jemalloc pcre2 libuuid ];
 
   preBuild = ''
     patchShebangs core/colorg++

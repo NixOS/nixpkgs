@@ -74,23 +74,23 @@ in
   options = {
     services.btrbk = {
       extraPackages = mkOption {
-        description = "Extra packages for btrbk, like compression utilities for <literal>stream_compress</literal>";
+        description = lib.mdDoc "Extra packages for btrbk, like compression utilities for `stream_compress`";
         type = types.listOf types.package;
         default = [ ];
         example = literalExpression "[ pkgs.xz ]";
       };
       niceness = mkOption {
-        description = "Niceness for local instances of btrbk. Also applies to remote ones connecting via ssh when positive.";
+        description = lib.mdDoc "Niceness for local instances of btrbk. Also applies to remote ones connecting via ssh when positive.";
         type = types.ints.between (-20) 19;
         default = 10;
       };
       ioSchedulingClass = mkOption {
-        description = "IO scheduling class for btrbk (see ionice(1) for a quick description). Applies to local instances, and remote ones connecting by ssh if set to idle.";
+        description = lib.mdDoc "IO scheduling class for btrbk (see ionice(1) for a quick description). Applies to local instances, and remote ones connecting by ssh if set to idle.";
         type = types.enum [ "idle" "best-effort" "realtime" ];
         default = "best-effort";
       };
       instances = mkOption {
-        description = "Set of btrbk instances. The instance named <literal>btrbk</literal> is the default one.";
+        description = lib.mdDoc "Set of btrbk instances. The instance named `btrbk` is the default one.";
         type = with types;
           attrsOf (
             submodule {
@@ -98,7 +98,7 @@ in
                 onCalendar = mkOption {
                   type = types.nullOr types.str;
                   default = "daily";
-                  description = ''
+                  description = lib.mdDoc ''
                     How often this btrbk instance is started. See systemd.time(7) for more information about the format.
                     Setting it to null disables the timer, thus this instance can only be started manually.
                   '';
@@ -119,7 +119,7 @@ in
                       };
                     };
                   };
-                  description = "configuration options for btrbk. Nested attrsets translate to subsections.";
+                  description = lib.mdDoc "configuration options for btrbk. Nested attrsets translate to subsections.";
                 };
               };
             }
@@ -127,18 +127,18 @@ in
         default = { };
       };
       sshAccess = mkOption {
-        description = "SSH keys that should be able to make or push snapshots on this system remotely with btrbk";
+        description = lib.mdDoc "SSH keys that should be able to make or push snapshots on this system remotely with btrbk";
         type = with types; listOf (
           submodule {
             options = {
               key = mkOption {
                 type = str;
-                description = "SSH public key allowed to login as user <literal>btrbk</literal> to run remote backups.";
+                description = lib.mdDoc "SSH public key allowed to login as user `btrbk` to run remote backups.";
               };
               roles = mkOption {
                 type = listOf (enum [ "info" "source" "target" "delete" "snapshot" "send" "receive" ]);
                 example = [ "source" "info" "send" ];
-                description = "What actions can be performed with this SSH key. See ssh_filter_btrbk(1) for details";
+                description = lib.mdDoc "What actions can be performed with this SSH key. See ssh_filter_btrbk(1) for details";
               };
             };
           }

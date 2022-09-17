@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "gotktrix";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "diamondburned";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/UDXqN7FnFvbiXp3pID1WbNfCuKDsMrFQvL1101xxOo=";
+    sha256 = "sha256-ZaE7L43fA9L5WbTAsBiIxlwYgjl1hMrtfrraAROz+7k=";
   };
 
-  vendorSha256 = "sha256-xA2DW4v6aT4fEW2WSa96oRr5Yrb2HoR054V1+BiWSvk=";
+  vendorSha256 = "sha256-k6T44aH1NogyrbUnflfEHkp0zpOOH1YFly/X2kwbMzs=";
 
   buildInputs = [
     gtk4
@@ -31,6 +31,12 @@ buildGoModule rec {
 
   # Checking requires a working display
   doCheck = false;
+
+  postInstall = ''
+    echo 'X-Purism-FormFactor=Workstation;Mobile;' >> .nix/com.github.diamondburned.gotktrix.desktop
+    install -Dm444 .nix/com.github.diamondburned.gotktrix.desktop -t $out/share/applications/
+    install -Dm444 .github/logo-256.png -T $out/share/icons/hicolor/256x256/apps/gotktrix.png
+  '';
 
   meta = with lib; {
     description = "Matrix client written in Go using GTK4";

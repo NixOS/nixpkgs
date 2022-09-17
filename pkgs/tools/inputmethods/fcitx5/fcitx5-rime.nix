@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-rime";
-  version = "5.0.12";
+  version = "5.0.14";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-8ETSRBTznd4AKzYbSW/zIMZXV+yuHXLhfTJV3DJ2ahc=";
+    sha256 = "sha256-EvYNeBmP2c+kDQ4GQU0SyGhxK4jolxMmhAaoVyINmfg=";
   };
 
   cmakeFlags = [

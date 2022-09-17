@@ -1,65 +1,76 @@
 { lib
 , fetchurl
 , vscode-utils
-, unzip
 , patchelf
-, makeWrapper
 , icu
 , stdenv
 , openssl
-, mono
 }:
-
 let
-  # Get as close as possible as the `package.json` required version.
-  # This is what drives omnisharp.
-  rtDepsSrcsFromJson = lib.importJSON ./rt-deps-bin-srcs.json;
+  inherit (stdenv.hostPlatform) system;
 
-  rtDepsBinSrcs = builtins.mapAttrs (k: v:
-      let
-        # E.g: "OmniSharp-x86_64-linux"
-        kSplit = builtins.split "(__)" k;
-        name = builtins.elemAt kSplit 0;
-        system = builtins.elemAt kSplit 2;
-      in
+  version = "1.25.0";
+
+
+  vsixInfo =
+    let
+      linuxDebuggerBins = [
+        ".debugger/vsdbg-ui"
+        ".debugger/vsdbg"
+      ];
+      darwinX86DebuggerBins = [
+        ".debugger/x86_64/vsdbg-ui"
+        ".debugger/x86_64/vsdbg"
+      ];
+      darwinAarch64DebuggerBins = [
+        ".debugger/arm64/vsdbg-ui"
+        ".debugger/arm64/vsdbg"
+      ];
+      omniSharpBins = [
+        ".omnisharp/1.39.0-net6.0/OmniSharp"
+      ];
+      razorBins = [
+        ".razor/createdump"
+        ".razor/rzls"
+      ];
+    in
       {
-        inherit name system;
-        installPath = v.installPath;
-        binaries = v.binaries;
-        bin-src = fetchurl {
-          urls = v.urls;
-          inherit (v) sha256;
+        x86_64-linux = {
+          url = "https://github.com/OmniSharp/omnisharp-vscode/releases/download/v${version}/csharp-${version}-linux-x64.vsix";
+          sha256 = "1cqqjg8q6v56b19aabs9w1kxly457mpm0akbn5mis9nd1mrdmydl";
+          binaries = linuxDebuggerBins ++ omniSharpBins ++ razorBins;
         };
-      }
-    )
-    rtDepsSrcsFromJson;
-
-  rtDepBinSrcByName = bSrcName:
-    rtDepsBinSrcs."${bSrcName}__${stdenv.targetPlatform.system}";
-
-  omnisharp = rtDepBinSrcByName "OmniSharp";
-  vsdbgs = [
-    (rtDepBinSrcByName "Debugger")
-  ] ++ lib.optionals (stdenv.isDarwin) [
-  # Include the aarch64-darwin debugger binaries on x86_64-darwin.  Even though OmniSharp will be
-  # running under Rosetta 2, debugging will fail to start if both sets of binaries are not present.
-    (rtDepsBinSrcs."Debugger__aarch64-darwin")
-  ];
-  razor = rtDepBinSrcByName "Razor";
+        aarch64-linux = {
+          url = "https://github.com/OmniSharp/omnisharp-vscode/releases/download/v${version}/csharp-${version}-linux-arm64.vsix";
+          sha256 = "0nsjgrb7y4w71w1gnrf50ifwbmjidi4vrw2fyfmch7lgjl8ilnhd";
+          binaries = linuxDebuggerBins ++ omniSharpBins; # Linux aarch64 version has no Razor Language Server
+        };
+        x86_64-darwin = {
+          url = "https://github.com/OmniSharp/omnisharp-vscode/releases/download/v${version}/csharp-${version}-darwin-x64.vsix";
+          sha256 = "01qn398vmjfi9imzlmzm0qi7y2h214wx6a8la088lfkhyj3gfjh8";
+          binaries = darwinX86DebuggerBins ++ omniSharpBins ++ razorBins;
+        };
+        aarch64-darwin = {
+          url = "https://github.com/OmniSharp/omnisharp-vscode/releases/download/v${version}/csharp-${version}-darwin-arm64.vsix";
+          sha256 = "020j451innh7jzarbv1ij57rfmqnlngdxaw6wdgp8sjkgbylr634";
+          binaries = darwinAarch64DebuggerBins ++ darwinX86DebuggerBins ++ omniSharpBins ++ razorBins;
+        };
+      }.${system} or (throw "Unsupported system: ${system}");
 in
-
-vscode-utils.buildVscodeMarketplaceExtension {
+vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "csharp";
     publisher = "ms-dotnettools";
-    version = "1.23.16";
-    sha256 = "sha256-fM4vcSMi2tEjIox9Twh2sRiFhXgAeRwAM9to3vtcSqI=";
+    inherit version;
+  };
+
+  vsix = fetchurl {
+    name = "${mktplcRef.publisher}-${mktplcRef.name}.zip";
+    inherit (vsixInfo) url sha256;
   };
 
   nativeBuildInputs = [
-    unzip
     patchelf
-    makeWrapper
   ];
 
   postPatch = ''
@@ -78,23 +89,11 @@ vscode-utils.buildVscodeMarketplaceExtension {
       -E -e 's/(this\._pipePath=[a-zA-Z0-9_]+\.join\()([a-zA-Z0-9_]+\.getExtensionPath\(\)[^,]*,)/\1require("os").tmpdir(), "'"$ext_unique_id"'"\+/g' \
       "$PWD/dist/extension.js"
 
-    unzip_to() {
-      declare src_zip="''${1?}"
-      declare target_dir="''${2?}"
-      mkdir -p "$target_dir"
-      if unzip "$src_zip" -d "$target_dir"; then
-        true
-      elif [[ "1" -eq "$?" ]]; then
-        1>&2 echo "WARNING: unzip('$?' -> skipped files)."
-      else
-        1>&2 echo "ERROR: unzip('$?')."
-      fi
-    }
-
     patchelf_add_icu_as_needed() {
       declare elf="''${1?}"
       declare icu_major_v="${
-        with builtins; head (splitVersion (parseDrvName icu.name).version)}"
+      lib.head (lib.splitVersion (lib.getVersion icu.name))
+    }"
 
       for icu_lib in icui18n icuuc icudata; do
         patchelf --add-needed "lib''${icu_lib}.so.$icu_major_v" "$elf"
@@ -111,42 +110,22 @@ vscode-utils.buildVscodeMarketplaceExtension {
         "$elf"
     }
 
-    declare omnisharp_dir="$PWD/${omnisharp.installPath}"
-    unzip_to "${omnisharp.bin-src}" "$omnisharp_dir"
-    rm "$omnisharp_dir/bin/mono"
-    ln -s -T "${mono}/bin/mono" "$omnisharp_dir/bin/mono"
-    chmod a+x "$omnisharp_dir/run"
-    touch "$omnisharp_dir/install.Lock"
-
-  '' + builtins.concatStringsSep "\n" (map (vsdbg: ''
-    declare vsdbg_dir="$PWD/${vsdbg.installPath}"
-    unzip_to "${vsdbg.bin-src}" "$vsdbg_dir"
-    chmod a+x "$vsdbg_dir/vsdbg-ui"
-    chmod a+x "$vsdbg_dir/vsdbg"
-    touch "$vsdbg_dir/install.complete"
-    touch "$vsdbg_dir/install.Lock"
-
-  '') vsdbgs) + ''
-    declare razor_dir="$PWD/${razor.installPath}"
-    unzip_to "${razor.bin-src}" "$razor_dir"
-    chmod a+x "$razor_dir/rzls"
-    touch "$razor_dir/install.Lock"
-
-  '' + lib.optionalString stdenv.isLinux ''
-    patchelf_common "$vsdbg_dir/vsdbg"
-    patchelf_common "$vsdbg_dir/vsdbg-ui"
-    patchelf_common "$razor_dir/rzls"
-
-  '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace $omnisharp_dir/etc/config \
-      --replace "libmono-native-compat.dylib" "libmono-native.dylib"
-  '';
+  '' + (lib.concatStringsSep "\n" (map
+    (bin: ''
+      chmod +x "${bin}"
+    '')
+    vsixInfo.binaries))
+  + lib.optionalString stdenv.isLinux (lib.concatStringsSep "\n" (map
+    (bin: ''
+      patchelf_common "${bin}"
+    '')
+    vsixInfo.binaries));
 
   meta = with lib; {
     description = "C# for Visual Studio Code (powered by OmniSharp)";
     homepage = "https://github.com/OmniSharp/omnisharp-vscode";
     license = licenses.mit;
     maintainers = [ maintainers.jraygauthier ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

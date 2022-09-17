@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "tesla-wall-connector";
-  version = "1.0.1";
+  version = "1.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "einarhauks";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JBtlGd9aHY8ikhpJ5v7ZcNu3BfLdBmOBZCMa6C0s6gE=";
+    hash = "sha256-GblKXWV9h37E3bxNsx17hEe0uDm8ahzJUx8wiE+Vc38=";
   };
 
   nativeBuildInputs = [
@@ -40,13 +40,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-
   pythonImportsCheck = [
     "tesla_wall_connector"
   ];
 
   meta = with lib; {
-    description = "Python library for communicating with a Tesla Wall Connector";
+    description = "Library for communicating with a Tesla Wall Connector";
     homepage = "https://github.com/einarhauks/tesla-wall-connector";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

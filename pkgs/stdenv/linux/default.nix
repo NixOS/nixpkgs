@@ -16,6 +16,7 @@
       armv7l-linux = import ./bootstrap-files/armv7l.nix;
       aarch64-linux = import ./bootstrap-files/aarch64.nix;
       mipsel-linux = import ./bootstrap-files/loongson2f.nix;
+      mips64el-linux = import ./bootstrap-files/mips64el.nix;
       powerpc64le-linux = import ./bootstrap-files/powerpc64le.nix;
       riscv64-linux = import ./bootstrap-files/riscv64.nix;
     };
@@ -31,7 +32,7 @@
   # compatible with or current architecture.
   getCompatibleTools = lib.foldl (v: system:
     if v != null then v
-    else if localSystem.isCompatible (lib.systems.elaborate { inherit system; }) then archLookupTable.${system}
+    else if localSystem.canExecute (lib.systems.elaborate { inherit system; }) then archLookupTable.${system}
     else null) null (lib.attrNames archLookupTable);
 
   archLookupTable = table.${localSystem.libc}
@@ -162,7 +163,9 @@ in
       # stage1.
       ${localSystem.libc} = self.stdenv.mkDerivation {
         pname = "bootstrap-stage0-${localSystem.libc}";
+        strictDeps = true;
         version = "bootstrap";
+        enableParallelBuilding = true;
         buildCommand = ''
           mkdir -p $out
           ln -s ${bootstrapTools}/lib $out/lib
@@ -267,8 +270,10 @@ in
         # apparently the interpreter needs to match libc, too.
         bintools = self.stdenvNoCC.mkDerivation {
           inherit (prevStage.bintools.bintools) name;
+          enableParallelBuilding = true;
           dontUnpack = true;
           dontBuild = true;
+          strictDeps = true;
           # We wouldn't need to *copy* all, but it's easier and the result is temporary anyway.
           installPhase = ''
             mkdir -p "$out"/bin
@@ -300,15 +305,18 @@ in
         binutils coreutils gnugrep
         perl patchelf linuxHeaders gnum4 bison libidn2 libunistring;
       ${localSystem.libc} = getLibc prevStage;
-      # Link GCC statically against GMP etc.  This makes sense because
-      # these builds of the libraries are only used by GCC, so it
-      # reduces the size of the stdenv closure.
-      gmp = super.gmp.override { stdenv = self.makeStaticLibraries self.stdenv; };
-      mpfr = super.mpfr.override { stdenv = self.makeStaticLibraries self.stdenv; };
-      libmpc = super.libmpc.override { stdenv = self.makeStaticLibraries self.stdenv; };
-      isl_0_20 = super.isl_0_20.override { stdenv = self.makeStaticLibraries self.stdenv; };
-      gcc-unwrapped = super.gcc-unwrapped.override {
-        isl = isl_0_20;
+      gcc-unwrapped =
+        let makeStaticLibrariesAndMark = pkg:
+              lib.makeOverridable (pkg.override { stdenv = self.makeStaticLibraries self.stdenv; })
+                .overrideAttrs (a: { pname = "${a.pname}-stage3"; });
+        in super.gcc-unwrapped.override {
+        # Link GCC statically against GMP etc.  This makes sense because
+        # these builds of the libraries are only used by GCC, so it
+        # reduces the size of the stdenv closure.
+        gmp = makeStaticLibrariesAndMark super.gmp;
+        mpfr = makeStaticLibrariesAndMark super.mpfr;
+        libmpc = makeStaticLibrariesAndMark super.libmpc;
+        isl = makeStaticLibrariesAndMark super.isl_0_20;
         # Use a deterministically built compiler
         # see https://github.com/NixOS/nixpkgs/issues/108475 for context
         reproducibleBuild = true;
@@ -332,7 +340,7 @@ in
       # because gcc (since JAR support) already depends on zlib, and
       # then if we already have a zlib we want to use that for the
       # other purposes (binutils and top-level pkgs) too.
-      inherit (prevStage) gettext gnum4 bison gmp perl texinfo zlib linuxHeaders libidn2 libunistring;
+      inherit (prevStage) gettext gnum4 bison perl texinfo zlib linuxHeaders libidn2 libunistring;
       ${localSystem.libc} = getLibc prevStage;
       binutils = super.binutils.override {
         # Don't use stdenv's shell but our own
@@ -342,6 +350,15 @@ in
           inherit (prevStage) stdenv;
         };
       };
+
+      # force gmp to rebuild so we have the option of dynamically linking
+      # libgmp without creating a reference path from:
+      #   stage5.gcc -> stage4.coreutils -> stage3.glibc -> bootstrap
+      gmp = lib.makeOverridable (super.gmp.override { stdenv = self.stdenv; }).overrideAttrs (a: { pname = "${a.pname}-stage4"; });
+
+      # To allow users' overrides inhibit dependencies too heavy for
+      # bootstrap, like guile: https://github.com/NixOS/nixpkgs/issues/181188
+      gnumake = super.gnumake.override { inBootstrap = true; };
 
       gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         nativeTools = false;
@@ -384,7 +401,7 @@ in
       preHook = commonPreHook;
 
       initialPath =
-        ((import ../common-path.nix) {pkgs = prevStage;});
+        ((import ../generic/common-path.nix) {pkgs = prevStage;});
 
       extraNativeBuildInputs = [ prevStage.patchelf ] ++
         # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
@@ -398,19 +415,24 @@ in
       inherit (prevStage.stdenv) fetchurlBoot;
 
       extraAttrs = {
-        # TODO: remove this!
-        inherit (prevStage) glibc;
+        # remove before 22.11
+        glibc = lib.warn
+          ( "`stdenv.glibc` is deprecated and will be removed in release 22.11."
+           + " Please use `pkgs.glibc` instead.")
+          prevStage.glibc;
 
         inherit bootstrapTools;
         shellPackage = prevStage.bash;
       };
+
+      disallowedRequisites = [ bootstrapTools.out ];
 
       # Mainly avoid reference to bootstrap tools
       allowedRequisites = with prevStage; with lib;
         # Simple executable tools
         concatMap (p: [ (getBin p) (getLib p) ]) [
             gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
-            gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed
+            gawk gmp gnumake gnused gnutar gnugrep gnupatch patchelf ed file
           ]
         # Library dependencies
         ++ map getLib (
@@ -428,9 +450,18 @@ in
       overrides = self: super: {
         inherit (prevStage)
           gzip bzip2 xz bash coreutils diffutils findutils gawk
-          gnumake gnused gnutar gnugrep gnupatch patchelf
-          attr acl zlib pcre libunistring libidn2;
+          gnused gnutar gnugrep gnupatch patchelf
+          attr acl zlib pcre libunistring;
         ${localSystem.libc} = getLibc prevStage;
+
+        # Hack: avoid libidn2.{bin,dev} referencing bootstrap tools.  There's a logical cycle.
+        libidn2 = import ../../development/libraries/libidn2/no-bootstrap-reference.nix {
+          inherit lib;
+          inherit (prevStage) libidn2;
+          inherit (self) stdenv runCommandLocal patchelf libunistring;
+        };
+
+        gnumake = super.gnumake.override { inBootstrap = false; };
       } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
         # Need to get rid of these when cross-compiling.
         inherit (prevStage) binutils binutils-unwrapped;

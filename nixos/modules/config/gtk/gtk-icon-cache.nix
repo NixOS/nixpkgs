@@ -7,7 +7,7 @@ with lib;
       type = types.bool;
       default = config.services.xserver.enable;
       defaultText = literalExpression "config.services.xserver.enable";
-      description = ''
+      description = lib.mdDoc ''
         Whether to build icon theme caches for GTK applications.
       '';
     };

@@ -130,6 +130,7 @@ checkConfigOutput '^true$' "$@" ./define-enable.nix ./define-attrsOfSub-foo-enab
 set -- config.enable ./define-enable.nix ./declare-enable.nix
 checkConfigOutput '^true$' "$@"
 checkConfigOutput '^false$' "$@" ./disable-define-enable.nix
+checkConfigOutput '^false$' "$@" ./disable-define-enable-string-path.nix
 checkConfigError "The option .*enable.* does not exist. Definition values:\n\s*- In .*: true" "$@" ./disable-declare-enable.nix
 checkConfigError "attribute .*enable.* in selection path .*config.enable.* not found" "$@" ./disable-define-enable.nix ./disable-declare-enable.nix
 checkConfigError "attribute .*enable.* in selection path .*config.enable.* not found" "$@" ./disable-enable-modules.nix
@@ -193,6 +194,17 @@ checkConfigOutput '^"submodule"$' options.submodule.type.description ./declare-s
 
 ## Paths should be allowed as values and work as expected
 checkConfigOutput '^true$' config.submodule.enable ./declare-submoduleWith-path.nix
+
+## deferredModule
+# default module is merged into nodes.foo
+checkConfigOutput '"beta"' config.nodes.foo.settingsDict.c ./deferred-module.nix
+# errors from the default module are reported with accurate location
+checkConfigError 'In `the-file-that-contains-the-bad-config.nix, via option default'\'': "bogus"' config.nodes.foo.bottom ./deferred-module.nix
+checkConfigError '.*lib/tests/modules/deferred-module-error.nix, via option deferred [(]:anon-1:anon-1:anon-1[)] does not look like a module.' config.result ./deferred-module-error.nix
+
+# Check the file location information is propagated into submodules
+checkConfigOutput the-file.nix config.submodule.internalFiles.0 ./submoduleFiles.nix
+
 
 # Check that disabledModules works recursively and correctly
 checkConfigOutput '^true$' config.enable ./disable-recursive/main.nix

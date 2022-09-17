@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "prance";
   version = "0.21.8.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "RonnyPfannschmidt";
@@ -22,6 +23,12 @@ buildPythonPackage rec {
     fetchSubmodules = true;
     sha256 = "sha256-kGANMHfWwhW3ZBw2ZVCJZR/bV2EPhcydMKhDeDTVwcQ=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov=prance --cov-report=term-missing --cov-fail-under=90" "" \
+      --replace "chardet>=3.0,<5.0" "chardet"
+  '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
@@ -41,11 +48,6 @@ buildPythonPackage rec {
     pytestCheckHook
     openapi-spec-validator
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=prance --cov-report=term-missing --cov-fail-under=90" ""
-  '';
 
   # Disable tests that require network
   disabledTestPaths = [

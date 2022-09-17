@@ -1,26 +1,32 @@
-{ lib, fetchFromGitHub, buildOasisPackage
+{ lib, fetchurl, stdenv
+, ocaml, findlib, ocamlbuild
 , ctypes, mariadb, libmysqlclient }:
 
-buildOasisPackage rec {
-  pname = "mariadb";
-  version = "1.1.4";
+lib.throwIfNot (lib.versionAtLeast ocaml.version "4.07")
+  "mariadb is not available for OCaml ${ocaml.version}"
 
-  minimumOCamlVersion = "4.07.0";
+stdenv.mkDerivation rec {
+  pname = "ocaml${ocaml.version}-mariadb";
+  version = "1.1.6";
 
-  src = fetchFromGitHub {
-    owner = "andrenth";
-    repo = "ocaml-mariadb";
-    rev = version;
-    sha256 = "1rxqvxr6sv4x2hsi05qm9jz0asaq969m71db4ckl672rcql1kwbr";
+  src = fetchurl {
+    url = "https://github.com/andrenth/ocaml-mariadb/releases/download/${version}/ocaml-mariadb-${version}.tar.gz";
+    sha256 = "sha256-3/C1Gz6luUzS7oaudLlDHMT6JB2v5OdbLVzJhtayHGM=";
   };
 
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
   buildInputs = [ mariadb libmysqlclient ];
   propagatedBuildInputs = [ ctypes ];
+
+  strictDeps = true;
+
+  preInstall = "mkdir -p $OCAMLFIND_DESTDIR/stublibs";
 
   meta = {
     description = "OCaml bindings for MariaDB";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcc32 ];
     homepage = "https://github.com/andrenth/ocaml-mariadb";
+    inherit (ocaml.meta) platforms;
   };
 }

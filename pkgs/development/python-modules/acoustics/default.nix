@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "acoustics";
-  version = "0.2.4.post0";
+  version = "0.2.6";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a162625e5e70ed830fab8fab0ddcfe35333cb390cd24b0a827bcefc5bbcae97d";
+    sha256 = "sha256-0CvMhCUc+i7dPiHH+IXdlj+OjFh/l1wvnU4dmxQrzFI=";
   };
 
   propagatedBuildInputs = [

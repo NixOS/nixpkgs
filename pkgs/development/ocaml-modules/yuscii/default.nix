@@ -1,5 +1,6 @@
 { alcotest
 , buildDunePackage
+, ocaml
 , fetchzip
 , gcc
 , fmt
@@ -10,6 +11,8 @@
 buildDunePackage rec {
   pname = "yuscii";
   version = "0.3.0";
+
+  minimalOCamlVersion = "4.03";
 
   src = fetchzip {
     url = "https://github.com/mirage/yuscii/releases/download/v${version}/yuscii-v${version}.tbz";
@@ -24,7 +27,7 @@ buildDunePackage rec {
     fmt
     uutf
   ];
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     description = "A simple mapper between UTF-7 to Unicode according RFC2152";

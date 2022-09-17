@@ -1,25 +1,32 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   version = "0.11.0";
   pname = "netifaces";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "043a79146eb2907edf439899f262b3dfe41717d34124298ed281139a8b93ca32";
+    hash = "sha256-BDp5FG6ykH7fQ5iZ8mKz3+QXF9NBJCmO0oETmouTyjI=";
   };
 
-  doCheck = false; # no tests implemented
+  # No tests implemented
+  doCheck = false;
 
-  pythonImportsCheck = [ "netifaces" ];
+  pythonImportsCheck = [
+    "netifaces"
+  ];
 
   meta = with lib; {
-    homepage = "https://alastairs-place.net/projects/netifaces/";
     description = "Portable access to network interfaces from Python";
+    homepage = "https://github.com/al45tair/netifaces";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
 }

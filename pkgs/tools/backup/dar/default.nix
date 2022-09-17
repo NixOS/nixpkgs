@@ -9,12 +9,12 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  version = "2.7.5";
+  version = "2.7.7";
   pname = "dar";
 
   src = fetchurl {
     url = "mirror://sourceforge/dar/${pname}-${version}.tar.gz";
-    sha256 = "sha256-lfpJOomadV/oTJsOloH1rYF5Wy3kVr+EBUvqZ+xaCWY=";
+    sha256 = "sha256-wD4vUu/WWi8Ee2C77aJGDLUlFl4b4y8RC2Dgzs4/LMk=";
   };
 
   outputs = [ "out" "dev" ];
@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = {
+    broken = stdenv.isDarwin;
     homepage = "http://dar.linux.free.fr";
     description = "Disk ARchiver, allows backing up files into indexed archives";
     maintainers = with maintainers; [ izorkin ];

@@ -61,6 +61,6 @@ stdenv.mkDerivation rec {
     homepage = "https://collectd.org";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor fpletz ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, appdirs
 , lxml
 , packaging
 , py
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyshark";
-  version = "0.4.5";
+  version = "0.5.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,19 +20,22 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KimiNewt";
     repo = pname;
-    # 0.4.5 was the last release which was tagged
-    # https://github.com/KimiNewt/pyshark/issues/541
-    rev = "8f8f13aba6ae716aa0a48175255063fe542fdc3b";
-    hash = "sha256-v9CC9hgTABAiJ0qiFZ/9/zMmHzJXKq3neGtTq/ucnT4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-byll2GWY2841AAf8Xh+KfaCOtMGVKabTsLCe3gCdZ1o=";
   };
 
   sourceRoot = "${src.name}/src";
 
   propagatedBuildInputs = [
+    appdirs
     py
     lxml
     packaging
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   checkInputs = [
     pytestCheckHook
@@ -50,6 +54,6 @@ buildPythonPackage rec {
     description = "Python wrapper for tshark, allowing Python packet parsing using Wireshark dissectors";
     homepage = "https://github.com/KimiNewt/pyshark/";
     license = licenses.mit;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
   };
 }

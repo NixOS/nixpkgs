@@ -6,6 +6,7 @@
 , gmp ? null
 , libmpc ? null
 , mpfr ? null
+, pahole
 , lib
 , stdenv
 
@@ -124,7 +125,8 @@ let
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     nativeBuildInputs = [ perl gmp libmpc mpfr ]
-      ++ lib.optionals (lib.versionAtLeast version "4.16") [ bison flex ];
+      ++ lib.optionals (lib.versionAtLeast version "4.16") [ bison flex ]
+      ++ lib.optional (lib.versionAtLeast version "5.2") pahole;
 
     platformName = stdenv.hostPlatform.linux-kernel.name;
     # e.g. "defconfig"

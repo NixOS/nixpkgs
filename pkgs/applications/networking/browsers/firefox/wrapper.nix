@@ -2,7 +2,7 @@
 , fetchurl, zip, unzip, jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
-, ffmpeg, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
+, ffmpeg_5, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
 , gnome/*.gnome-shell*/
 , browserpass, chrome-gnome-shell, uget-integrator, plasma5Packages, bukubrow, pipewire
 , tridactyl-native
@@ -73,7 +73,7 @@ let
         );
       libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
             ++ lib.optional pipewireSupport pipewire
-            ++ lib.optional ffmpegSupport ffmpeg
+            ++ lib.optional ffmpegSupport ffmpeg_5
             ++ lib.optional gssSupport libkrb5
             ++ lib.optional useGlvnd libglvnd
             ++ lib.optionals (cfg.enableQuakeLive or false)
@@ -86,6 +86,8 @@ let
             ++ pkcs11Modules;
       gtk_modules = [ libcanberra-gtk3 ];
 
+      launcherName = "${applicationName}${nameSuffix}";
+
       #########################
       #                       #
       #   EXTRA PREF CHANGES  #
@@ -97,12 +99,15 @@ let
 
       nameArray = builtins.map(a: a.name) (if usesNixExtensions then nixExtensions else []);
 
+      requiresSigning = browser ? MOZ_REQUIRE_SIGNING
+                     -> toString browser.MOZ_REQUIRE_SIGNING != "";
+
       # Check that every extension has a unqiue .name attribute
       # and an extid attribute
       extensions = if nameArray != (lib.unique nameArray) then
         throw "Firefox addon name needs to be unique"
-      else if ! (lib.hasSuffix "esr" browser.name) then
-        throw "Nix addons are only supported in Firefox ESR"
+      else if requiresSigning && !lib.hasSuffix "esr" browser.name then
+        throw "Nix addons are only supported without signature enforcement (eg. Firefox ESR)"
       else builtins.map (a:
         if ! (builtins.hasAttr "extid" a) then
         throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchfirefoxaddon"
@@ -118,32 +123,31 @@ let
         lib.optionalAttrs usesNixExtensions {
           ExtensionSettings = {
             "*" = {
-                blocked_install_message = "You can't have manual extension mixed with nix extensions";
-                installation_mode = "blocked";
-              };
-
+              blocked_install_message = "You can't have manual extension mixed with nix extensions";
+              installation_mode = "blocked";
+            };
           } // lib.foldr (e: ret:
-              ret // {
-                "${e.extid}" = {
-                  installation_mode = "allowed";
-                };
-              }
-            ) {} extensions;
-          } // lib.optionalAttrs usesNixExtensions {
-            Extensions = {
-              Install = lib.foldr (e: ret:
-                ret ++ [ "${e.outPath}/${e.extid}.xpi" ]
-                ) [] extensions;
-            };
-          } // lib.optionalAttrs smartcardSupport {
-            SecurityDevices = {
-              "OpenSC PKCS#11 Module" = "onepin-opensc-pkcs11.so";
-            };
-          }
+            ret // {
+              "${e.extid}" = {
+                installation_mode = "allowed";
+              };
+            }
+          ) {} extensions;
+
+          Extensions = {
+            Install = lib.foldr (e: ret:
+              ret ++ [ "${e.outPath}/${e.extid}.xpi" ]
+            ) [] extensions;
+          };
+        } // lib.optionalAttrs smartcardSupport {
+          SecurityDevices = {
+            "OpenSC PKCS#11 Module" = "opensc-pkcs11.so";
+          };
+        }
         // extraPolicies;
       };
 
-      mozillaCfg =  writeText "mozilla.cfg" ''
+      mozillaCfg = ''
         // First line must be a comment
 
         // Disables addon signature checking
@@ -151,7 +155,6 @@ let
         // Security is maintained because only user whitelisted addons
         // with a checksum can be installed
         ${ lib.optionalString usesNixExtensions ''lockPref("xpinstall.signatures.required", false)'' };
-        ${extraPrefs}
       '';
 
       #############################
@@ -165,7 +168,7 @@ let
 
       desktopItem = makeDesktopItem {
         name = applicationName;
-        exec = "${applicationName}${nameSuffix} %U";
+        exec = "${launcherName} %U";
         inherit icon;
         desktopName = "${desktopName}${nameSuffix}${lib.optionalString forceWayland " (Wayland)"}";
         genericName = "Web Browser";
@@ -180,6 +183,20 @@ let
           "x-scheme-handler/ftp"
         ];
         startupWMClass = wmClass;
+        actions = {
+          new-window = {
+            name = "New Window";
+            exec = "${launcherName} --new-window %U";
+          };
+          new-private-window = {
+            name = "New Private Window";
+            exec = "${launcherName} --private-window %U";
+          };
+          profile-manager-window = {
+            name = "Profile Manager";
+            exec = "${launcherName} --ProfileManger";
+          };
+        };
       };
 
       nativeBuildInputs = [ makeWrapper lndir jq ];
@@ -253,13 +270,14 @@ let
           mv "$executablePath" "$oldExe"
         fi
 
+        # make xdg-open overrideable at runtime
         makeWrapper "$oldExe" \
           "''${executablePath}${nameSuffix}" \
             --prefix LD_LIBRARY_PATH ':' "$libs" \
             --suffix-each GTK_PATH ':' "$gtk_modules" \
-            --prefix PATH ':' "${xdg-utils}/bin" \
+            --suffix PATH ':' "${xdg-utils}/bin" \
             --suffix PATH ':' "$out/bin" \
-            --set MOZ_APP_LAUNCHER "${applicationName}${nameSuffix}" \
+            --set MOZ_APP_LAUNCHER "${launcherName}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
             --set MOZ_LEGACY_PROFILES 1 \
             --set MOZ_ALLOW_DOWNGRADE 1 \
@@ -326,12 +344,18 @@ let
         echo 'pref("general.config.filename", "mozilla.cfg");' > "$out/lib/${libName}/defaults/pref/autoconfig.js"
         echo 'pref("general.config.obscure_value", 0);' >> "$out/lib/${libName}/defaults/pref/autoconfig.js"
 
-        cat > "$out/lib/${libName}/mozilla.cfg" < ${mozillaCfg}
+        cat > "$out/lib/${libName}/mozilla.cfg" << EOF
+        ${mozillaCfg}
+        EOF
 
         extraPrefsFiles=(${builtins.toString extraPrefsFiles})
         for extraPrefsFile in "''${extraPrefsFiles[@]}"; do
           cat "$extraPrefsFile" >> "$out/lib/${libName}/mozilla.cfg"
         done
+
+        cat >> "$out/lib/${libName}/mozilla.cfg" << EOF
+        ${extraPrefs}
+        EOF
 
         mkdir -p $out/lib/${libName}/distribution/extensions
 

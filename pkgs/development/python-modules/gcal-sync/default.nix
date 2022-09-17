@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "gcal-sync";
-  version = "0.9.0";
+  version = "0.11.0";
 
   disabled = pythonOlder "3.9";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = "gcal_sync";
     rev = "refs/tags/${version}";
-    hash = "sha256-7XvwN1sShvmg7Co3FyzPYJFCe961Ly4/854A1po22ds=";
+    hash = "sha256-7eaAgGVPzBc2A57VAlLZvz+SYl8G7hv2iCDAOh8Gmoc=";
   };
 
   propagatedBuildInputs = [

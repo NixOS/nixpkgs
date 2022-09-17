@@ -2,18 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "procs";
-  version = "0.12.1";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hJe9JAUZZY2fx4I6+pVg1BYwzZrUWCkqPvQUT2OQXDo=";
+    sha256 = "sha256-O5q+T6GO03Wf26CLyEgS45h7O38HsVZ+EJi8TgFcNaI=";
   };
 
-  cargoSha256 = "sha256-BChYzSnM9jnLioRhRDez6XOjJwGrU+giV4Ld3rp/57M=";
+  cargoSha256 = "sha256-JZsDKeiF/Mg4P6dLaN+8+TLHnCsB97d9TDn4cSdzZZE=";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  LIBCLANG_PATH = lib.optionals stdenv.isDarwin "${stdenv.cc.cc.lib}/lib/";
 
   postInstall = ''
     for shell in bash fish zsh; do
@@ -29,6 +31,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dalance/procs";
     changelog = "https://github.com/dalance/procs/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ dalance Br1ght0ne SuperSandro2000 ];
+    maintainers = with maintainers; [ Br1ght0ne SuperSandro2000 sciencentistguy ];
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

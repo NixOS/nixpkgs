@@ -10,9 +10,9 @@ in {
     systemd.coredump.enable = mkOption {
       default = true;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Whether core dumps should be processed by
-        <command>systemd-coredump</command>. If disabled, core dumps
+        {command}`systemd-coredump`. If disabled, core dumps
         appear in the current directory of the crashing process.
       '';
     };
@@ -21,37 +21,44 @@ in {
       default = "";
       type = types.lines;
       example = "Storage=journal";
-      description = ''
+      description = lib.mdDoc ''
         Extra config options for systemd-coredump. See coredump.conf(5) man page
         for available options.
       '';
     };
   };
 
-  config = {
-    systemd.additionalUpstreamSystemUnits = [
-      "systemd-coredump.socket"
-      "systemd-coredump@.service"
-    ];
+  config = mkMerge [
 
-    environment.etc = {
-      "systemd/coredump.conf".text =
-      ''
-        [Coredump]
-        ${cfg.extraConfig}
-      '';
+    (mkIf cfg.enable {
+      systemd.additionalUpstreamSystemUnits = [
+        "systemd-coredump.socket"
+        "systemd-coredump@.service"
+      ];
 
-      # install provided sysctl snippets
-      "sysctl.d/50-coredump.conf".source = "${systemd}/example/sysctl.d/50-coredump.conf";
-      "sysctl.d/50-default.conf".source = "${systemd}/example/sysctl.d/50-default.conf";
-    };
+      environment.etc = {
+        "systemd/coredump.conf".text =
+        ''
+          [Coredump]
+          ${cfg.extraConfig}
+        '';
 
-    users.users.systemd-coredump = {
-      uid = config.ids.uids.systemd-coredump;
-      group = "systemd-coredump";
-    };
-    users.groups.systemd-coredump = {};
+        # install provided sysctl snippets
+        "sysctl.d/50-coredump.conf".source = "${systemd}/example/sysctl.d/50-coredump.conf";
+        "sysctl.d/50-default.conf".source = "${systemd}/example/sysctl.d/50-default.conf";
+      };
 
-    boot.kernel.sysctl."kernel.core_pattern" = mkIf (!cfg.enable) "core";
-  };
+      users.users.systemd-coredump = {
+        uid = config.ids.uids.systemd-coredump;
+        group = "systemd-coredump";
+      };
+      users.groups.systemd-coredump = {};
+    })
+
+    (mkIf (!cfg.enable) {
+     boot.kernel.sysctl."kernel.core_pattern" = mkDefault "core";
+    })
+
+  ];
+
 }
