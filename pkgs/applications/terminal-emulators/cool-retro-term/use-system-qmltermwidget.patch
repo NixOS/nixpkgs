@@ -1,0 +1,12 @@
+diff --git a/cool-retro-term.pro b/cool-retro-term.pro
+index 851f0b4..b24c473 100644
+--- a/cool-retro-term.pro
++++ b/cool-retro-term.pro
+@@ -2,7 +2,6 @@ TEMPLATE = subdirs
+ 
+ CONFIG += ordered
+ 
+-SUBDIRS += qmltermwidget
+ SUBDIRS += app
+ 
+ desktop.files += cool-retro-term.desktop
