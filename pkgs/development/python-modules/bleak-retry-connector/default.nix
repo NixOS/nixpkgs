@@ -1,6 +1,7 @@
 { lib
 , async-timeout
 , bleak
+, dbus-fast
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "bleak-retry-connector";
-  version = "1.11.0";
+  version = "1.17.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     async-timeout
     bleak
+    dbus-fast
   ];
 
   checkInputs = [
