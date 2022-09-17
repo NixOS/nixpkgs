@@ -11,15 +11,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "latte-integrale";
   version = "1.7.6";
 
-  src =
-    let
-      inherit (finalAttrs) version;
-      tag = "version_${lib.replaceStrings ["."] ["_"] version}";
-    in
-    fetchurl {
-      url = "https://github.com/latte-int/latte/releases/download/${tag}/latte-int-${version}.tar.gz";
-      sha256 = "sha256-AGwQ6+XVv9ybFZy6YmSkQyhh/nY84F/oIWJKt9P8IXA=";
-    };
+  src = fetchurl {
+    url = "https://github.com/latte-int/latte/releases/download/version_${lib.replaceStrings ["."] ["_"] finalAttrs.version}/latte-int-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-AGwQ6+XVv9ybFZy6YmSkQyhh/nY84F/oIWJKt9P8IXA=";
+  };
 
   patches = [
     # C++17 compat
