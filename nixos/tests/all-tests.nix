@@ -611,6 +611,7 @@ in {
   systemd-shutdown = handleTest ./systemd-shutdown.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
   systemd-misc = handleTest ./systemd-misc.nix {};
+  tandoor-recipes = handleTest ./tandoor-recipes.nix {};
   taskserver = handleTest ./taskserver.nix {};
   teeworlds = handleTest ./teeworlds.nix {};
   telegraf = handleTest ./telegraf.nix {};
