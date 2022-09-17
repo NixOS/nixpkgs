@@ -24,6 +24,11 @@ buildPythonPackage rec {
     sha256 = "sha256-ZaNrSkRH9pFhzZncCs37k1M0w5svPfrY0WxePUnUlms=";
   };
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "protobuf>=3.12.2,<4.0" "protobuf>=3.12.2"
+  '';
+
   propagatedBuildInputs = [
     noiseprotocol
     protobuf
