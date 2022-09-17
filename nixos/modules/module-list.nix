@@ -1110,6 +1110,7 @@
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix
   ./services/web-apps/baget.nix
+  ./services/web-apps/birdsitelive.nix
   ./services/web-apps/bookstack.nix
   ./services/web-apps/calibre-web.nix
   ./services/web-apps/changedetection-io.nix
