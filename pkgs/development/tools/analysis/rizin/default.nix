@@ -58,6 +58,9 @@ stdenv.mkDerivation rec {
       fi
     done
     export LIBRARY_PATH
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace binrz/rizin/macos_sign.sh \
+      --replace 'codesign' '# codesign'
   '';
 
   buildInputs = [
@@ -81,6 +84,6 @@ stdenv.mkDerivation rec {
     homepage = "https://rizin.re/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ raskin makefu mic92 ];
-    platforms = with lib.platforms; linux;
+    platforms = with lib.platforms; unix;
   };
 }
