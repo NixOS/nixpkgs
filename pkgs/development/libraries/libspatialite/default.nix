@@ -49,12 +49,14 @@ stdenv.mkDerivation rec {
   '';
 
   # Failed tests (linux & darwin):
-  # - check_extension
-  # - check_sql_stmt_extension
   # - check_virtualtable6
   # - check_drop_rename
-  # - check_get_normal_zoom_extension_load
   doCheck = false;
+
+  preCheck = ''
+    export LD_LIBRARY_PATH=$(pwd)/src/.libs
+    export DYLD_LIBRARY_PATH=$(pwd)/src/.libs
+  '';
 
   meta = with lib; {
     description = "Extensible spatial index library in C++";
