@@ -12674,6 +12674,8 @@ with pkgs;
     mkYarnModules
     fixup_yarn_lock;
 
+  yarr = callPackage ../applications/networking/feedreaders/yarr { };
+
   yascreen = callPackage ../development/libraries/yascreen { };
 
   yasr = callPackage ../applications/audio/yasr { };
