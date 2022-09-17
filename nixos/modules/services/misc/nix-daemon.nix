@@ -232,7 +232,7 @@ in
               type = types.enum [ "ssh" "ssh-ng" ];
               default = "ssh";
               example = "ssh-ng";
-              description = ''
+              description = lib.mdDoc ''
                 The protocol used for communicating with the build machine.
                 Use <literal>ssh-ng</literal> if your remote builder and your
                 local Nix version support that improved protocol.
