@@ -234,7 +234,7 @@ in
               example = "ssh-ng";
               description = lib.mdDoc ''
                 The protocol used for communicating with the build machine.
-                Use <literal>ssh-ng</literal> if your remote builder and your
+                Use `ssh-ng` if your remote builder and your
                 local Nix version support that improved protocol.
               '';
             };
