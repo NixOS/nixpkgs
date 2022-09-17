@@ -20,6 +20,7 @@
 , python-dotenv
 , pythonOlder
 , pytz
+, setuptools
 , termcolor
 , typer
 , ffmpeg
@@ -45,6 +46,10 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg \
       --replace "pydantic!=1.9.1" "pydantic"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiofiles
