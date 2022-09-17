@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nautilus-python";
-  version = "4.0.alpha";
+  version = "4.0";
 
   outputs = [ "out" "dev" "doc" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/nautilus-python/${lib.versions.majorMinor version}/nautilus-python-${version}.tar.xz";
-    sha256 = "cuWLpOIZZ0FqIwNV304EaWsKJZ5JHcsFyyp/BFiUmg4=";
+    sha256 = "FyQ9Yut9fYOalGGrjQcBaIgFxxYaZwXmFBOljsJoKBo=";
   };
 
   patches = [
