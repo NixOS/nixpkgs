@@ -1643,6 +1643,8 @@ with pkgs;
 
   tilix = callPackage ../applications/terminal-emulators/tilix { };
 
+  tym = callPackage ../applications/terminal-emulators/tym { };
+
   wayst = callPackage ../applications/terminal-emulators/wayst { };
 
   wezterm = callPackage ../applications/terminal-emulators/wezterm {
