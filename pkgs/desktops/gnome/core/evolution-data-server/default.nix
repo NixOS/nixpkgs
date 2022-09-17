@@ -121,7 +121,6 @@ stdenv.mkDerivation rec {
     "-DENABLE_INTROSPECTION=ON"
     "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
     "-DWITH_PHONENUMBER=ON"
-    "-DWITH_GWEATHER4=ON"
   ];
 
   passthru = {
