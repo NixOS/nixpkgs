@@ -207,15 +207,22 @@ filterExisting() {
 # Syntax: wrapProgram <PROGRAM> <MAKE-WRAPPER FLAGS...>
 wrapProgram() { wrapProgramShell "$@"; }
 wrapProgramShell() {
-    local prog="$1"
-    local hidden
+    local prog="$1"   # program to wrap
+    local hidden_dir  # directory where the unwrapped program is kept
+    local hidden      # the unwrapped program itself
 
     assertExecutable "$prog"
 
-    hidden="$(dirname "$prog")/.$(basename "$prog")"-wrapped
+    hidden_dir="$(dirname "$prog")/.wrapped"
+    hidden="$hidden_dir/$(basename "$prog")"
+
+    # Append underscores in case the program has already
+    # been wrapped (multiple times) before this call.
     while [ -e "$hidden" ]; do
       hidden="${hidden}_"
     done
+
+    mkdir -p "$hidden_dir"
     mv "$prog" "$hidden"
-    makeWrapper "$hidden" "$prog" --inherit-argv0 "${@:2}"
+    makeWrapper "$hidden" "$prog" "${@:2}"
 }
