@@ -36,6 +36,12 @@ stdenv.mkDerivation rec {
     mkdir $out/include/External
   '';
 
+  # Fix the paths in .pc, even though it's unclear if these .pc are really useful.
+  postFixup = ''
+    substituteInPlace "$out"/lib/pkgconfig/SPIRV-Tools{,-shared}.pc \
+      --replace '=''${prefix}//' '='
+  '';
+
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Khronos reference front-end for GLSL and ESSL";
