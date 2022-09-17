@@ -6,7 +6,6 @@
 , glib
 , meson
 , ninja
-, python3
 , libxslt
 , gtk3
 , webkitgtk_4_1
@@ -32,7 +31,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-online-accounts";
-  version = "3.45.2";
+  version = "3.46.0";
 
   outputs = [ "out" "man" "dev" "devdoc" ];
 
@@ -42,7 +41,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "gnome-online-accounts";
     rev = version;
-    sha256 = "sha256-ST8hHMBCURI78HcT3iGL5D+O/v4gdqxToTanXWI4/Vw=";
+    sha256 = "sha256-qVd55fmhY05zJ871OWc3hd1eWjYbYJuxlE/T2i3VCUA=";
   };
 
   mesonFlags = [
@@ -63,7 +62,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook
   ];
@@ -85,11 +83,6 @@ stdenv.mkDerivation rec {
   ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
-
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {
