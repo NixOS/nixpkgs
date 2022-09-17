@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gssdp";
-  version = "1.5.2";
+  version = "1.6.0";
 
   outputs = [ "out" "dev" ]
     ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "60CscnTY3AbRonW8iBMlfZlg54qKbZrPPgF6oWoXFh4=";
+    sha256 = "FI7UFijI8XM2osj6SxSrD7rpi2Amvi2s/d6nv0OGZok=";
   };
 
   nativeBuildInputs = [
