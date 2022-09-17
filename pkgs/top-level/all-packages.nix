@@ -10312,6 +10312,8 @@ with pkgs;
 
   rig = callPackage ../tools/misc/rig { };
 
+  ripdrag = callPackage ../tools/misc/ripdrag { };
+
   riseup-vpn = libsForQt5.callPackage ../tools/networking/bitmask-vpn {
     provider = "riseup";
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
@@ -12017,6 +12019,8 @@ with pkgs;
   vboot_reference = callPackage ../tools/system/vboot_reference {};
 
   vcftools = callPackage ../applications/science/biology/vcftools { };
+
+  vcmi = libsForQt5.callPackage ../games/vcmi { };
 
   vcsh = callPackage ../applications/version-management/vcsh { };
 
@@ -31815,7 +31819,9 @@ with pkgs;
 
   gnvim = callPackage ../applications/editors/neovim/gnvim/wrapper.nix { };
 
-  neovide = callPackage ../applications/editors/neovim/neovide { };
+  neovide = callPackage ../applications/editors/neovim/neovide {
+    inherit (darwin.apple_sdk.frameworks) Security ApplicationServices Carbon AppKit;
+  };
 
   neovim-remote = callPackage ../applications/editors/neovim/neovim-remote.nix { };
 

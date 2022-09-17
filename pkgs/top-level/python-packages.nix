@@ -1345,7 +1345,9 @@ in {
 
   bitbox02 = callPackage ../development/python-modules/bitbox02 { };
 
-  bitcoinlib = callPackage ../development/python-modules/bitcoinlib { };
+  bitcoinlib = callPackage ../development/python-modules/bitcoinlib {
+    openssl = pkgs.openssl_1_1;
+  };
 
   bitcoin-utils-fork-minimal = callPackage ../development/python-modules/bitcoin-utils-fork-minimal { };
 
