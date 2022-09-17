@@ -213,6 +213,8 @@ wrapProgramShell() {
 
     assertExecutable "$prog"
 
+    # Note: If you change this, remember to update the
+    # definition of `getUnwrapped` in lib/strings.nix.
     hidden_dir="$(dirname "$prog")/.wrapped"
     hidden="$hidden_dir/$(basename "$prog")"
 
