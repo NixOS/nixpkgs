@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , phpPackages
 , pkgs
+, dataDir ? "/var/lib/pixelfed"
 }:
 
 let
@@ -10,7 +11,17 @@ let
     inherit pkgs;
     inherit (stdenv.hostPlatform) system;
     noDev = true; # Disable development dependencies
+  }).overrideAttrs (attrs : {
+    installPhase = attrs.installPhase + ''
+      rm -R $out/bootstrap/cache $out/storage
+      ln -s ${dataDir}/.env $out/.env
+      ln -s ${dataDir}/storage $out/
+      ln -s ${dataDir}/storage/app/public $out/public/storage
+      ln -s ${dataDir}/bootstrap/cache $out/bootstrap/cache
+      chmod +x $out/artisan
+    '';
   });
+
 in package.override rec {
   pname = "pixelfed";
   version = "UNSTABLE-01-09-2022";
