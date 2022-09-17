@@ -11,6 +11,7 @@ let
   inherit (neovimUtils) makeNeovimConfig;
 
   packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
+  packages.myVimPackage.opt = with vimPlugins; [ vim-fugitive ];
 
   plugins = with vimPlugins; [
     {
@@ -221,5 +222,25 @@ rec {
   nvim_with_lua_packages = runTest nvimWithLuaPackages ''
     export HOME=$TMPDIR
     ${nvimWithLuaPackages}/bin/nvim -i NONE --noplugin -es
+  '';
+
+  # nixpkgs should install optional packages in the opt folder
+  nvim_with_opt_plug = neovim.override {
+    extraName = "-with-opt-plug";
+    configure.packages.plugins = with pkgs.vimPlugins; {
+      opt = [
+        (base16-vim.overrideAttrs(old: { pname = old.pname + "-unique-for-tests-please-dont-use"; }))
+      ];
+    };
+    configure.customRC = ''
+      packadd base16-vim
+      color base16-tomorrow-night
+      set background=dark
+    '';
+  };
+
+  run_nvim_with_opt_plug = runTest nvim_with_opt_plug ''
+    export HOME=$TMPDIR
+    ${nvim_with_opt_plug}/bin/nvim -i NONE -c 'color base16-tomorrow-night'  +quit! -e
   '';
 })
