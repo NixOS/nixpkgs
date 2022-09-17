@@ -148,6 +148,7 @@ stdenv.mkDerivation rec {
     # vs what was built) and to make them easier to search for.
     glEnabled = enableGl;
     waylandEnabled = enableWayland;
+    x11Enabled = enableX11;
   };
 
   meta = with lib; {

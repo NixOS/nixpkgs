@@ -7,11 +7,10 @@
 , bzip2
 , libva
 , wayland
+, wayland-protocols
 , libdrm
 , udev
 , xorg
-, libGLU
-, libGL
 , gstreamer
 , gst-plugins-bad
 , nasm
@@ -49,26 +48,25 @@ stdenv.mkDerivation rec {
     gst-plugins-base
     gst-plugins-bad
     libva
-    wayland
     libdrm
     udev
-    xorg.libX11
-    xorg.libXext
-    xorg.libXv
-    xorg.libXrandr
-    xorg.libSM
-    xorg.libICE
-    libGL
-    libGLU
     nasm
     libvpx
     python3
+  ] ++ lib.optionals gst-plugins-base.glEnabled [
+    xorg.libX11 # required by EGL even with X11 support disabled
+  ] ++ lib.optionals gst-plugins-base.waylandEnabled [
+    wayland
+    wayland-protocols
+  ] ++ lib.optionals gst-plugins-base.x11Enabled [
+    xorg.libXrandr
   ];
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-  ];
+  ]
+  ++ lib.optional (!gst-plugins-base.x11Enabled) "-Dwith_x11=no";
 
   postPatch = ''
     patchShebangs \
