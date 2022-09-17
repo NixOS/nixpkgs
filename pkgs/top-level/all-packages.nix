@@ -18291,6 +18291,8 @@ with pkgs;
 
   freetype = callPackage ../development/libraries/freetype { };
 
+  freexl = callPackage ../development/libraries/freexl { };
+
   frei0r = callPackage ../development/libraries/frei0r { };
 
   fribidi = callPackage ../development/libraries/fribidi { };
