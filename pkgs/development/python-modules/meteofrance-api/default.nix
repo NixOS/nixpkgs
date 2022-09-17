@@ -1,7 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, poetry
+, fetchpatch
+, poetry-core
 , pytestCheckHook
 , pythonOlder
 , pytz
@@ -25,9 +26,16 @@ buildPythonPackage rec {
     hash = "sha256-X8f0z9ZPXH7Wc3GqHmPptxpNxbHeezdOzw4gZCprumU=";
   };
 
+  patches = [
+    (fetchpatch {
+      #  Switch to poetry-core
+      url = "https://github.com/hacf-fr/meteofrance-api/commit/7536993fe38dfe3d0833da3fd750be9277aeffa6.patch";
+      hash = "sha256-/4VgzoJxhaXoj1N1GNLJNvkQvv6IW9OcBJV6vg6kthM=";
+    })
+  ];
+
   nativeBuildInputs = [
-    # Doesn't work with poetry-core at the moment
-    poetry
+    poetry-core
   ];
 
   propagatedBuildInputs = [
