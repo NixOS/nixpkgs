@@ -47,8 +47,8 @@ python3.pkgs.buildPythonPackage rec {
     " > $out/bin/mautrix-signal
     chmod +x $out/bin/mautrix-signal
     wrapProgram $out/bin/mautrix-signal \
-      --set PATH ${python3}/bin \
-      --set PYTHONPATH "$PYTHONPATH"
+      --prefix PATH : "${python3}/bin" \
+      --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
   meta = with lib; {
