@@ -240,6 +240,7 @@ in {
     linux_5_10_hardened = hardenedKernelFor kernels.linux_5_10 { };
     linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
     linux_5_18_hardened = throw "linux 5.18 was removed because it has reached its end of life upstream";
+    linux_5_19_hardened = hardenedKernelFor kernels.linux_5_19 { };
 
   }));
   /*  Linux kernel modules are inherently tied to a specific kernel.  So
@@ -546,6 +547,7 @@ in {
     linux_5_10_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_10 { });
     linux_5_15_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_15 { });
     linux_5_18_hardened = throw "linux 5.18 was removed because it has reached its end of life upstream";
+    linux_5_19_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_19 { });
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
