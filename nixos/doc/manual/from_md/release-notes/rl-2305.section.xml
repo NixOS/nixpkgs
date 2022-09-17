@@ -84,6 +84,13 @@
           <link xlink:href="options.html#opt-services.ulogd.enable">services.ulogd</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/NicolasConstant/BirdsiteLive">BirdsiteLIVE</link>,
+          a Twitter to ActivityPub bridge. Available as
+          <link linkend="opt-services.birdsitelive.enable">services.birdsitelive</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-23.05-incompatibilities">
