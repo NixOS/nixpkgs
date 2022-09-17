@@ -17180,6 +17180,8 @@ with pkgs;
 
   adtool = callPackage ../tools/admin/adtool { };
 
+  aeron = callPackage ../servers/aeron { };
+
   inherit (callPackage ../development/tools/alloy { })
     alloy5
     alloy6
