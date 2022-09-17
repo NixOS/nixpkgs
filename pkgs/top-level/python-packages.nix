@@ -6106,6 +6106,8 @@ in {
     enablePython = true; # ... and its Python bindings
   })).python;
 
+  niaarm = callPackage ../development/python-modules/niaarm { };
+
   niapy = callPackage ../development/python-modules/niapy { };
 
   nibabel = callPackage ../development/python-modules/nibabel { };

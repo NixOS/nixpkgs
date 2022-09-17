@@ -18110,7 +18110,6 @@ with pkgs;
     libmfx = if stdenv.isDarwin then null else intel-media-sdk;
     libpulseaudio = if stdenv.isDarwin then null else libpulseaudio;
     samba = if stdenv.isDarwin then null else samba;
-    vid-stab = if stdenv.isDarwin then null else vid-stab;
     inherit (darwin.apple_sdk.frameworks)
       Cocoa CoreServices CoreAudio AVFoundation MediaToolbox
       VideoDecodeAcceleration;
@@ -23401,6 +23400,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
   percona-server = percona-server56;
+
+  immudb = callPackage ../servers/nosql/immudb { };
 
   influxdb = callPackage ../servers/nosql/influxdb {
     # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
@@ -34615,6 +34616,8 @@ with pkgs;
   scalapack = callPackage ../development/libraries/science/math/scalapack { };
 
   rankwidth = callPackage ../development/libraries/science/math/rankwidth { };
+
+  latte-integrale = callPackage ../development/libraries/science/math/latte-integrale { };
 
   lcalc = callPackage ../development/libraries/science/math/lcalc { };
 
