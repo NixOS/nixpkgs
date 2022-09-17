@@ -7,11 +7,17 @@
 , pv
 , squashfsTools
 , buildFHSUserEnv
-, pkgs
+, runCommandNoCC
+, substituteAll
 }:
 
 rec {
-  appimage-exec = pkgs.substituteAll {
+  # for compatibility, deprecated. TODO: find a clean way to add these to top-level/aliases.nix
+  extractType1 = extract;
+  extractType2 = extract;
+  wrapType1 = wrapType2;
+
+  appimage-exec = substituteAll {
     src = ./appimage-exec.sh;
     isExecutable = true;
     dir = "bin";
@@ -26,25 +32,26 @@ rec {
     ];
   };
 
-  extract = args@{ name ? "${args.pname}-${args.version}", src, ... }: pkgs.runCommand "${name}-extracted" {
-      buildInputs = [ appimage-exec ];
-    } ''
+  extract =
+    { name ? "${args.pname}-${args.version}"
+    , src
+    , ...
+    } @ args:
+    runCommandNoCC "${name}-extracted"
+      {
+        buildInputs = [ appimage-exec ];
+      } ''
       appimage-exec.sh -x $out ${src}
     '';
 
-  # for compatibility, deprecated
-  extractType1 = extract;
-  extractType2 = extract;
-  wrapType1 = wrapType2;
-
-  wrapAppImage = args@{
-    name ? "${args.pname}-${args.version}",
-    src,
-    extraPkgs,
-    meta ? {},
-    ...
-  }: buildFHSUserEnv
-    (defaultFhsEnvArgs // {
+  wrapAppImage =
+    { name ? "${args.pname}-${args.version}"
+    , src
+    , extraPkgs
+    , meta ? { }
+    , ...
+    } @ args:
+    buildFHSUserEnv (defaultFhsEnvArgs // {
       inherit name;
 
       targetPkgs = pkgs: [ appimage-exec ]
@@ -55,10 +62,15 @@ rec {
       meta = {
         sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       } // meta;
-    } // (removeAttrs args ([ "pname" "version" ] ++ (builtins.attrNames (builtins.functionArgs wrapAppImage)))));
+    } // (removeAttrs args ([ "pname" "version" ] ++ (lib.attrNames (builtins.functionArgs wrapAppImage)))));
 
-  wrapType2 = args@{ name ? "${args.pname}-${args.version}", src, extraPkgs ? pkgs: [ ], ... }: wrapAppImage
-    (args // {
+  wrapType2 =
+    { name ? "${args.pname}-${args.version}"
+    , src
+    , extraPkgs ? pkgs: [ ]
+    , ...
+    } @ args:
+    wrapAppImage (args // {
       inherit name extraPkgs;
       src = extract { inherit name src; };
     });
