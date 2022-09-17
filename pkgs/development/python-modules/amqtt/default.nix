@@ -11,6 +11,7 @@
 , pytestCheckHook
 , pythonOlder
 , pyyaml
+, setuptools
 , transitions
 , websockets
 }:
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     docopt
     passlib
     pyyaml
+    setuptools
     transitions
     websockets
   ];
