@@ -10,6 +10,10 @@ let
   user = "pixelfed";
   group = "nginx";
 
+  pixelfed = pkgs.pixelfed.override {
+    dataDir = cfg.dataDir;
+  };
+
   configFile = pkgs.writeTextFile {
     name = "env";
     text = cfg.envFile + ''
@@ -23,6 +27,18 @@ let
     '';
   };
 
+  # shell script for local administration
+  artisan = pkgs.writeScriptBin "pixelfed" ''
+    #! ${pkgs.runtimeShell}
+    cd ${pixelfed}
+    sudo=exec
+    if [[ "$USER" != ${user} ]]; then
+      sudo='exec /run/wrappers/bin/sudo -u ${user}'
+    fi
+    $sudo ${pkgs.php}/bin/php artisan $*
+  '';
+
+
 in {
   options.services = {
     pixelfed = {
@@ -32,6 +48,7 @@ in {
         type = types.str;
         description = lib.mdDoc "Pixelfed .env file used to configure the application";
         default = ''
+        ENABLE_CONFIG_CACHE=true
         APP_NAME=Pixelfed
         APP_ENV=production
         APP_DEBUG=true
@@ -50,7 +67,7 @@ in {
         MAX_ALBUM_LENGTH=4
 
         # Instance URL Configuration
-        APP_URL=https://127.0.0.1
+        APP_URL=https://127.0.0.1:8081
         APP_DOMAIN=127.0.0.1
         ADMIN_DOMAIN=127.0.0.1
         SESSION_DOMAIN=127.0.0.1
@@ -226,6 +243,8 @@ in {
       createHome = true;
     };
 
+    environment.systemPackages = [ artisan ];
+
     services.phpfpm.pools.pixelfed = {
       user = "pixelfed";
       group = "nginx";
@@ -244,41 +263,71 @@ in {
         "listen.owner" = "nginx";
         "listen.group" = "nginx";
         "listen.mode" = "0660";
+        "catch_workers_output" = "yes";
       } // cfg.poolConfig;
 
     };
 
-    # this is neccessary as pixelfed cannot be configured to point to an
-    # alternate location for data. Very sketchy method, takes a long time to
-    # run, a better solution might be possible but im not aware of one.
     systemd.services.pixelfed-data-setup = {
-      description = "copy data from the nix store to mutable filesystem and change permissions";
+      description = "Setup dataDir for pixelfed and change permissions";
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [ bash ];
 
       script = ''
-        mkdir -p '${cfg.dataDir}'
-        cp -r '${pkgs.pixelfed}'/* '${cfg.dataDir}/'
         rm '${cfg.dataDir}/.env' -f
         ln -s ${configFile} '${cfg.dataDir}/.env'
+
+        # migrate db
+        ${pkgs.php}/bin/php artisan migrate --force
+
+        ${pkgs.php}/bin/php artisan route:cache
+        ${pkgs.php}/bin/php artisan view:cache
+        ${pkgs.php}/bin/php artisan config:cache
+
+
         chown -R ${user}:${group} '${cfg.dataDir}'/. # change user/group to pixelfed user and nginx group
-        find '${cfg.dataDir}'/. -type d -exec chmod 755 {} \; # set all directories to rwx by user/group
-        find '${cfg.dataDir}'/. -type f -exec chmod 644 {} \; # set all files to rw by user/group
-        cd '${cfg.dataDir}' && /run/current-system/sw/bin/php artisan storage:link
-        cd '${cfg.dataDir}' && /run/current-system/sw/bin/php artisan migrate --force
-        cd '${cfg.dataDir}' && /run/current-system/sw/bin/php artisan config:cache
-        cd '${cfg.dataDir}' && chmod -R 755 storage/
+        chmod -R 755 ${cfg.dataDir}
       '';
     };
 
+    systemd.tmpfiles.rules = [
+      "d ${cfg.dataDir}                            0710 ${user} ${group} - -"
+      "d ${cfg.dataDir}/bootstrap                  0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/bootstrap/cache            0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage                    0755 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/app                0755 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/app/backups        0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/app/public         0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/app/public/avatars 0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/app/public/emoji   0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/app/public/headers 0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/app/public/live-hls 0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/app/public/m       0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/app/public/textimg 0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/app/remcache       0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/debugbar           0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/framework          0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/framework/cache    0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/framework/sessions 0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/framework/views    0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/framework/testing  0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/logs               0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/purify             0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/uploads            0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/private_uploads    0700 ${user} ${group} - -"
+    ];
+
+
+
     services.nginx = {
       enable = true;
+      logError = "/var/log/nginx/error.log info";
       recommendedGzipSettings = true;
       recommendedOptimisation = true;
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
       virtualHosts."${cfg.hostName}" = mkMerge [
-        { root = ''${cfg.dataDir}/public/'';
+        { root = ''${pixelfed}/public/'';
           locations."/".extraConfig = ''
             try_files $uri $uri/ /index.php?$query_string;
           '';
@@ -307,6 +356,8 @@ in {
               error_page 404 /index.php;
           '';
           forceSSL = true; # pixelfed requires ssl
+          sslCertificate = "/etc/nc-selfsigned.crt";
+	        sslCertificateKey = "/etc/nc-selfsigned.key";
         }
         (mkIf cfg.nginx.enableACME {
           enableACME = true;
