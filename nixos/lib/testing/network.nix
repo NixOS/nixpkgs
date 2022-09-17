@@ -112,6 +112,6 @@ let
 in
 {
   config = {
-    defaults = { imports = [ networkModule nodeNumberModule ]; };
+    extraBaseModules = { imports = [ networkModule nodeNumberModule ]; };
   };
 }
