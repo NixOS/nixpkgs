@@ -39,6 +39,7 @@
 , glib
 , gtk3
 , gtk4
+, useGtk4 ? false
 , libphonenumber
 , gnome-online-accounts
 , libgweather
@@ -85,8 +86,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     libsoup_3
-    gtk3
-    gtk4
+    (if useGtk4 then gtk4 else gtk3)
     gnome-online-accounts
     p11-kit
     libgweather
@@ -95,8 +95,7 @@ stdenv.mkDerivation rec {
     sqlite
     libkrb5
     openldap
-    webkitgtk_4_1 # For GTK 3 library
-    webkitgtk_5_0 # For GTK 4 library
+    (if useGtk4 then webkitgtk_5_0 else webkitgtk_4_1)
     glib-networking
     libcanberra-gtk3
     pcre
