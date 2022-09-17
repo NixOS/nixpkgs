@@ -171,7 +171,7 @@ let
         else
           lib.flatten (lib.mapAttrsToList genPlugin (configure.packages or {}));
       genPlugin = packageName: {start ? [], opt?[]}:
-        start ++ opt;
+        start ++ (map (p: { plugin = p; optional = true; }) opt);
 
       res = makeNeovimConfig {
         inherit withPython3;
