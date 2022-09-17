@@ -11,6 +11,7 @@ in
 with haskellLib;
 self: super: let
   doctest_0_20_broken = p: checkAgainAfter self.doctest "0.20.0" "doctest broken on 9.4" (dontCheck p);
+  jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
 in {
   llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
@@ -81,6 +82,17 @@ in {
   http-types = doctest_0_20_broken super.http-types;
   iproute = doctest_0_20_broken super.iproute;
   foldl = doctest_0_20_broken super.foldl;
+  prettyprinter-ansi-terminal = doctest_0_20_broken super.prettyprinter-ansi-terminal;
+  pretty-simple = doctest_0_20_broken super.pretty-simple;
+  co-log-core = doctest_0_20_broken (doJailbreak super.co-log-core);
+
+  double-conversion = markBroken super.double-conversion;
+  blaze-textual = checkAgainAfter super.double-conversion "2.0.4.1" "double-conversion fails to build; required for testsuite" (dontCheck super.blaze-textual);
+  ghc-source-gen = checkAgainAfter super.ghc-source-gen "0.4.3.0" "fails to build" (markBroken super.ghc-source-gen);
+
+  lucid = jailbreakForCurrentVersion super.lucid "2.11.1";
+  invariant = jailbreakForCurrentVersion super.invariant "0.5.6";
+  implicit-hie-cradle = jailbreakForCurrentVersion super.implicit-hie-cradle "0.5.0.0";
 
   haskell-src-meta = doJailbreak super.haskell-src-meta;
 
@@ -92,6 +104,7 @@ in {
   aeson = self.aeson_2_1_0_0;
   # This `doJailbreak` can be removed once we have doctest v0.20
   aeson-diff = assert super.doctest.version == "0.18.2"; doJailbreak super.aeson-diff;
+  lens-aeson = self.lens-aeson_1_2_2;
 
   assoc = doJailbreak super.assoc;
   async = doJailbreak super.async;
@@ -185,6 +198,10 @@ in {
   vector = dontCheck super.vector;
   vector-binary-instances = doJailbreak super.vector-binary-instances;
 
+  # fixed in 1.16.x but it's not in hackage-packages yet.
+  rebase = jailbreakForCurrentVersion super.rebase "1.15.0.3";
+  rerebase = jailbreakForCurrentVersion super.rerebase "1.15.0.3";
+
   hpack = overrideCabal (drv: {
     # Cabal 3.6 seems to preserve comments when reading, which makes this test fail
     # 2021-10-10: 9.2.1 is not yet supported (also no issue)
@@ -228,7 +245,6 @@ in {
   hls-fourmolu-plugin = assert super.hls-fourmolu-plugin.version == "1.0.3.0"; doJailbreak super.hls-fourmolu-plugin;
 
   hls-ormolu-plugin = assert super.hls-ormolu-plugin.version == "1.0.2.1"; doJailbreak super.hls-ormolu-plugin;
-  implicit-hie-cradle = doJailbreak super.implicit-hie-cradle;
   # 1.3 introduced support for GHC 9.2.x, so when this assert fails, the jailbreak can be removed
   hashtables = assert super.hashtables.version == "1.2.4.2"; doJailbreak super.hashtables;
 
