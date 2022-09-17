@@ -39,7 +39,8 @@
 , glib
 , gtk3
 , gtk4
-, useGtk4 ? false
+, withGtk3 ? true
+, withGtk4 ? false
 , libphonenumber
 , gnome-online-accounts
 , libgweather
@@ -86,7 +87,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     libsoup_3
-    (if useGtk4 then gtk4 else gtk3)
     gnome-online-accounts
     p11-kit
     libgweather
@@ -95,13 +95,18 @@ stdenv.mkDerivation rec {
     sqlite
     libkrb5
     openldap
-    (if useGtk4 then webkitgtk_5_0 else webkitgtk_4_1)
     glib-networking
     libcanberra-gtk3
     pcre
     libphonenumber
     boost
     protobuf
+  ] ++ lib.optionals withGtk3 [
+    gtk3
+    webkitgtk_4_1
+  ] ++ lib.optionals withGtk4 [
+    gtk4
+    webkitgtk_5_0
   ];
 
   propagatedBuildInputs = [
@@ -121,6 +126,10 @@ stdenv.mkDerivation rec {
     "-DENABLE_INTROSPECTION=ON"
     "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
     "-DWITH_PHONENUMBER=ON"
+    "-DENABLE_GTK=${lib.boolToString withGtk3}"
+    "-DENABLE_EXAMPLES=${lib.boolToString withGtk3}"
+    "-DENABLE_CANBERRA=${lib.boolToString withGtk3}"
+    "-DENABLE_GTK4=${lib.boolToString withGtk4}"
   ];
 
   passthru = {
