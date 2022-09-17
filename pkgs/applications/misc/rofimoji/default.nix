@@ -15,14 +15,14 @@
 
 buildPythonApplication rec {
   pname = "rofimoji";
-  version = "5.5.0";
+  version = "5.6.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofimoji";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-rYqEeAoHCx0j83R1vmtj+CVuR0QFEd3e1c5O454mANM=";
+    sha256 = "sha256-6W/59DjxrgejHSkNxpruDAws812Vjyf+GePDPbXzVbc=";
   };
 
   # `rofi` and the `waylandSupport` and `x11Support` dependencies
