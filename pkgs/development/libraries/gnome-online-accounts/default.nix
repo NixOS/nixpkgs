@@ -32,7 +32,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-online-accounts";
-  version = "3.45.2";
+  version = "3.46.0";
 
   outputs = [ "out" "man" "dev" "devdoc" ];
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "gnome-online-accounts";
     rev = version;
-    sha256 = "sha256-ST8hHMBCURI78HcT3iGL5D+O/v4gdqxToTanXWI4/Vw=";
+    sha256 = "sha256-qVd55fmhY05zJ871OWc3hd1eWjYbYJuxlE/T2i3VCUA=";
   };
 
   mesonFlags = [
