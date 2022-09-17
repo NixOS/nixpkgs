@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, setuptools
 , isPy27
 , fetchPypi
 , pkg-config
@@ -61,6 +62,7 @@ buildPythonPackage rec {
   nativeBuildInputs = with libsForQt5; [
     pkg-config
     qmake
+    setuptools
     lndir
     sip
     qtbase

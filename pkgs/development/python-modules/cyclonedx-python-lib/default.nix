@@ -6,6 +6,7 @@
 , lxml
 , packageurl-python
 , poetry-core
+, pytestCheckHook
 , python
 , pythonOlder
 , requirements-parser
@@ -14,7 +15,6 @@
 , toml
 , types-setuptools
 , types-toml
-, unittestCheckHook
 , xmldiff
 }:
 
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    unittestCheckHook
+    pytestCheckHook
     jsonschema
     lxml
     xmldiff
@@ -59,8 +59,16 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    rm tests/test_output_json.py
+    export PYTHONPATH=tests''${PYTHONPATH+:$PYTHONPATH}
   '';
+
+  pytestFlagsArray = [ "tests/" ];
+
+  disabledTests = [
+    # These tests require network access.
+    "test_bom_v1_3_with_metadata_component"
+    "test_bom_v1_4_with_metadata_component"
+  ];
 
   meta = with lib; {
     description = "Python library for generating CycloneDX SBOMs";

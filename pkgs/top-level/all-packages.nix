@@ -21496,6 +21496,8 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  scope-lite = callPackage ../development/libraries/scope-lite { };
+
   SDL_classic = callPackage ../development/libraries/SDL ({
     inherit (darwin.apple_sdk.frameworks) OpenGL CoreAudio CoreServices AudioUnit Kernel Cocoa GLUT;
   } // lib.optionalAttrs stdenv.hostPlatform.isAndroid {
@@ -21793,6 +21795,8 @@ with pkgs;
   stargate-libcds = callPackage ../development/libraries/stargate-libcds { };
 
   stb = callPackage ../development/libraries/stb { };
+
+  stduuid = callPackage ../development/libraries/stduuid { };
 
   stegsolve = callPackage ../tools/graphics/stegsolve { };
 
