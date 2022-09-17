@@ -67,7 +67,7 @@ in {
         MAX_ALBUM_LENGTH=4
 
         # Instance URL Configuration
-        APP_URL=https://127.0.0.1:8081
+        APP_URL=https://127.0.0.1
         APP_DOMAIN=127.0.0.1
         ADMIN_DOMAIN=127.0.0.1
         SESSION_DOMAIN=127.0.0.1
@@ -356,8 +356,6 @@ in {
               error_page 404 /index.php;
           '';
           forceSSL = true; # pixelfed requires ssl
-          sslCertificate = "/etc/nc-selfsigned.crt";
-	        sslCertificateKey = "/etc/nc-selfsigned.key";
         }
         (mkIf cfg.nginx.enableACME {
           enableACME = true;
