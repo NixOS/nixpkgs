@@ -40,6 +40,8 @@ buildPythonPackage rec {
     "test_write_ome"
     # Test file is missing
     "test_write_predictor"
+    "test_issue_imagej_hyperstack_arg"
+    "test_issue_description_overwrite"
     # AssertionError
     "test_write_bigtiff"
     "test_write_imagej_raw"
