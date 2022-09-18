@@ -7,7 +7,7 @@
 , pkgs
 }:
 let
-  inherit (vimUtils) buildVimPluginFrom2Nix;
+  inherit (vimUtils) buildVimPluginFrom2Nix packDir;
   inherit (neovimUtils) makeNeovimConfig;
 
   packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
@@ -229,11 +229,11 @@ rec {
     extraName = "-with-opt-plug";
     configure.packages.plugins = with pkgs.vimPlugins; {
       opt = [
-        (base16-vim.overrideAttrs(old: { pname = old.pname + "-unique-for-tests-please-dont-use"; }))
+        (base16-vim.overrideAttrs(old: { pname = old.pname + "-unique-for-tests-please-dont-use-opt"; }))
       ];
     };
     configure.customRC = ''
-      packadd base16-vim
+      packadd base16-vim-unique-for-tests-please-dont-use-opt
       color base16-tomorrow-night
       set background=dark
     '';
