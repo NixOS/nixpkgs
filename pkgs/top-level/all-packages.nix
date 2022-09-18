@@ -36604,6 +36604,8 @@ with pkgs;
 
   wacomtablet = libsForQt5.callPackage ../tools/misc/wacomtablet { };
 
+  wallgen = python3Packages.callPackage ../applications/misc/wallgen { };
+
   wasmer = callPackage ../development/interpreters/wasmer { };
 
   yabasic = callPackage ../development/interpreters/yabasic { };
