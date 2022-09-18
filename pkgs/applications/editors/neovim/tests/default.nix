@@ -227,7 +227,7 @@ rec {
   nvim_with_opt_plugin = neovim.override {
     extraName = "-with-opt-plugin";
     configure.packages.plugins = with pkgs.vimPlugins; {
-      start = [
+      opt = [
         (dashboard-nvim.overrideAttrs(old: { pname = old.pname + "-unique-for-tests-please-dont-use-opt"; }))
       ];
     };
