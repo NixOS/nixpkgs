@@ -47,6 +47,8 @@ buildPythonPackage rec {
     "test_public_key_generation_is_equal"
     "test_signing_is_equal"
     "test_native_to_coincurve_recover"
+    "test_public_key_compression_is_equal"
+    "test_public_key_decompression_is_equal"
   ];
 
   pythonImportsCheck = [ "eth_keys" ];
