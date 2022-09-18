@@ -18391,6 +18391,8 @@ with pkgs;
 
   galer = callPackage ../tools/security/galer { };
 
+  gallia = callPackage ../tools/security/gallia { };
+
   gamenetworkingsockets = callPackage ../development/libraries/gamenetworkingsockets { };
 
   game-music-emu = callPackage ../development/libraries/audio/game-music-emu { };
