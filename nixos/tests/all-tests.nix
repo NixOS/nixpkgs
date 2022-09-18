@@ -231,7 +231,7 @@ in {
   gollum = handleTest ./gollum.nix {};
   google-oslogin = handleTest ./google-oslogin {};
   gotify-server = handleTest ./gotify-server.nix {};
-  grafana = handleTest ./grafana.nix {};
+  grafana = handleTest ./grafana {};
   grafana-agent = handleTest ./grafana-agent.nix {};
   graphite = handleTest ./graphite.nix {};
   graylog = handleTest ./graylog.nix {};

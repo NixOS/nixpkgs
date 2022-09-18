@@ -1,4 +1,6 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+args@{ pkgs, ... }:
+
+(import ../make-test-python.nix ({ lib, pkgs, ... }:
 
 let
   inherit (lib) mkMerge nameValuePair maintainers;
@@ -59,7 +61,7 @@ let
   ])) [ "sqlite" "declarativePlugins" "postgresql" "mysql" ]);
 
 in {
-  name = "grafana";
+  name = "grafana-basic";
 
   meta = with maintainers; {
     maintainers = [ willibutz ];
@@ -109,4 +111,4 @@ in {
         )
         mysql.shutdown()
   '';
-})
+})) args

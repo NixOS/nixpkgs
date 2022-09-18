@@ -5,6 +5,7 @@ with lib;
 let
   cfg = config.services.grafana;
   opt = options.services.grafana;
+  provisioningSettingsFormat = pkgs.formats.yaml {};
   declarativePlugins = pkgs.linkFarm "grafana-plugins" (builtins.map (pkg: { name = pkg.pname; path = pkg; }) cfg.declarativePlugins);
   useMysql = cfg.database.type == "mysql";
   usePostgresql = cfg.database.type == "postgres";
@@ -84,7 +85,8 @@ let
     providers = cfg.provision.dashboards;
   };
 
-  dashboardFile = pkgs.writeText "dashboard.yaml" (builtins.toJSON dashboardConfiguration);
+  dashboardFileNew = if (cfg.provision.dashboards.path == null) then provisioningSettingsFormat.generate "dashboard.yaml" cfg.provision.dashboards.settings else cfg.provision.dashboards.path;
+  dashboardFile = if (builtins.isList cfg.provision.dashboards) then provisioningSettingsFormat.generate "dashboard.yaml" dashboardConfiguration else dashboardFileNew;
 
   notifierConfiguration = {
     apiVersion = 1;
@@ -198,47 +200,22 @@ let
 
   # http://docs.grafana.org/administration/provisioning/#dashboards
   grafanaTypes.dashboardConfig = types.submodule {
+    freeformType = provisioningSettingsFormat.type;
+
     options = {
       name = mkOption {
         type = types.str;
         default = "default";
-        description = lib.mdDoc "Provider name.";
-      };
-      orgId = mkOption {
-        type = types.int;
-        default = 1;
-        description = lib.mdDoc "Organization ID.";
-      };
-      folder = mkOption {
-        type = types.str;
-        default = "";
-        description = lib.mdDoc "Add dashboards to the specified folder.";
+        description = lib.mdDoc "A unique provider name.";
       };
       type = mkOption {
         type = types.str;
         default = "file";
         description = lib.mdDoc "Dashboard provider type.";
       };
-      disableDeletion = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc "Disable deletion when JSON file is removed.";
-      };
-      updateIntervalSeconds = mkOption {
-        type = types.int;
-        default = 10;
-        description = lib.mdDoc "How often Grafana will scan for changed dashboards.";
-      };
-      options = {
-        path = mkOption {
-          type = types.path;
-          description = lib.mdDoc "Path grafana will watch for dashboards.";
-        };
-        foldersFromFilesStructure = mkOption {
-          type = types.bool;
-          default = false;
-          description = lib.mdDoc "Use folder names from filesystem to create folders in Grafana.";
-        };
+      options.path = mkOption {
+        type = types.path;
+        description = lib.mdDoc "Path grafana will watch for dashboards. Required when using the 'file' type.";
       };
     };
   };
@@ -446,18 +423,69 @@ in {
 
     provision = {
       enable = mkEnableOption (lib.mdDoc "provision");
+
       datasources = mkOption {
         description = lib.mdDoc "Grafana datasources configuration.";
         default = [];
         type = types.listOf grafanaTypes.datasourceConfig;
         apply = x: map _filter x;
       };
+
+
       dashboards = mkOption {
-        description = lib.mdDoc "Grafana dashboard configuration.";
+        description = lib.mdDoc ''
+          Deprecated option for Grafana dashboard configuration. Use either
+          `services.grafana.provision.dashboards.settings` or
+          `services.grafana.provision.dashboards.path` instead.
+        '';
         default = [];
-        type = types.listOf grafanaTypes.dashboardConfig;
-        apply = x: map _filter x;
+        apply = x: if (builtins.isList x) then map _filter x else x;
+        type = with types; either (listOf grafanaTypes.dashboardConfig) (submodule {
+          options.settings = mkOption {
+            description = lib.mdDoc ''
+              Grafana dashboard configuration in Nix. Can't be used with
+              `services.grafana.provision.dashboards.path` simultaneously. See
+              <link xlink:href="https://grafana.com/docs/grafana/latest/administration/provisioning/#dashboards"/>
+              for supported options.
+            '';
+            default = null;
+            type = types.nullOr (types.submodule {
+              options.apiVersion = mkOption {
+                description = lib.mdDoc "Config file version.";
+                default = 1;
+                type = types.int;
+              };
+
+              options.providers = mkOption {
+                description = lib.mdDoc "List of dashboards to insert/update.";
+                default = [];
+                type = types.listOf grafanaTypes.dashboardConfig;
+              };
+            });
+            example = literalExpression ''
+              {
+                apiVersion = 1;
+
+                providers = [{
+                    name = "default";
+                    options.path = "/var/lib/grafana/dashboards";
+                }];
+              }
+            '';
+          };
+
+          options.path = mkOption {
+            description = lib.mdDoc ''
+              Path to YAML dashboard configuration. Can't be used with
+              `services.grafana.provision.dashboards.settings` simultaneously.
+            '';
+            default = null;
+            type = types.nullOr types.path;
+          };
+        });
       };
+
+
       notifiers = mkOption {
         description = lib.mdDoc "Grafana notifier configuration.";
         default = [];
@@ -699,6 +727,13 @@ in {
       (optional (
         any (x: x.secure_settings != null) cfg.provision.notifiers
       ) "Notifier secure settings will be stored as plaintext in the Nix store!")
+      (optional (
+        builtins.isList cfg.provision.dashboards
+      ) ''
+          Provisioning Grafana dashboards with options has been deprecated.
+          Use `services.grafana.provision.dashboards.settings` or
+          `services.grafana.provision.dashboards.path` instead.
+        '')
     ];
 
     environment.systemPackages = [ cfg.package ];
@@ -725,6 +760,10 @@ in {
           ({ type, access, ... }: type == "prometheus" -> access != "direct")
           cfg.provision.datasources;
         message = "For datasources of type `prometheus`, the `direct` access mode is not supported anymore (since Grafana 9.2.0)";
+      }
+      {
+        assertion = if (builtins.isList cfg.provision.dashboards) then true else cfg.provision.dashboards.settings == null || cfg.provision.dashboards.path == null;
+        message = "Cannot set both dashboards settings and dashboards path";
       }
     ];
 
