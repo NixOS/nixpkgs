@@ -6864,6 +6864,8 @@ in {
 
   pipdeptree = callPackage ../development/python-modules/pipdeptree { };
 
+  pipenv = callPackage ../development/python-modules/pipenv { };
+
   pipenv-poetry-migrate = callPackage ../development/python-modules/pipenv-poetry-migrate { };
 
   pip-api = callPackage ../development/python-modules/pip-api { };
@@ -8722,6 +8724,8 @@ in {
   pytest-param-files = callPackage ../development/python-modules/pytest-param-files { };
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
+
+  pytest-pypi = callPackage ../development/python-modules/pytest-pypi { };
 
   pytest-qt = callPackage ../development/python-modules/pytest-qt { };
 

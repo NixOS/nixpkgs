@@ -6,6 +6,7 @@
 , pyyaml
 , packaging
 , pytestCheckHook
+, pipenv
 }:
 
 buildPythonPackage rec {
@@ -25,13 +26,11 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    pipenv
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # requires unpackaged dependency pipenv
-    "test_update_pipfile"
-  ];
+  pythonImportsCheck = [ "dparse" ];
 
   meta = with lib; {
     description = "A parser for Python dependency files";
