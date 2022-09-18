@@ -28911,6 +28911,8 @@ with pkgs;
 
   js8call = qt5.callPackage ../applications/radio/js8call { };
 
+  juk = libsForQt5.callPackage ../applications/audio/juk { };
+
   jwm = callPackage ../applications/window-managers/jwm { };
 
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
