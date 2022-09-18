@@ -1,11 +1,11 @@
 { callPackage, fetchFromGitHub, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "1.3.3";
+  version = "1.4.1";
   src = fetchFromGitHub {
     owner = "protobuf-c";
     repo = "protobuf-c";
-    rev = "v${version}";
-    sha256 = "13948amsjj9xpa4yl6amlyk3ksr96bbd4ngshh2yzflwcslhg6gv";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TJCLzxozuZ8ynrBQ2lKyk03N+QA/lbOwywUjDUdTlbM=";
   };
 })
