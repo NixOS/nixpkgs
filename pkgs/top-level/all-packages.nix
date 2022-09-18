@@ -424,6 +424,8 @@ with pkgs;
 
   crackle = callPackage ../tools/networking/crackle { };
 
+  crackql = callPackage ../tools/security/crackql { };
+
   crow-translate = libsForQt5.callPackage ../applications/misc/crow-translate { };
 
   cryptowatch-desktop = callPackage ../applications/finance/cryptowatch { };
