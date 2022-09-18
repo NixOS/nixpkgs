@@ -17442,6 +17442,10 @@ with pkgs;
 
   graphia = libsForQt5.callPackage ../applications/science/misc/graphia { };
 
+  graphinder = callPackage ../tools/security/graphinder {
+    python3 = python310;
+  };
+
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
   libgit2 = callPackage ../development/libraries/libgit2 {
