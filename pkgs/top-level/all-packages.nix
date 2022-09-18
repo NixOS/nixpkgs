@@ -21165,7 +21165,7 @@ with pkgs;
   protobuf3_8 = callPackage ../development/libraries/protobuf/3.8.nix { };
   protobuf3_7 = callPackage ../development/libraries/protobuf/3.7.nix { };
 
-  protobufc = callPackage ../development/libraries/protobufc/1.3.nix { };
+  protobufc = callPackage ../development/libraries/protobufc { };
 
   protolock = callPackage ../development/libraries/protolock { };
 
