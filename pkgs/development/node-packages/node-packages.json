@@ -387,6 +387,7 @@
 , "webpack-dev-server"
 , "copy-webpack-plugin"
 , "webtorrent-cli"
+, "@withgraphite/graphite-cli"
 , "wrangler"
 , "wring"
 , "write-good"
