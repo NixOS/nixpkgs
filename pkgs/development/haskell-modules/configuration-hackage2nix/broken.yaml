@@ -341,6 +341,7 @@ broken-packages:
   - bibdb
   - bidi-icu
   - bidirectional
+  - bidirectional-instances
   - bidirectionalization-combined
   - bidispec
   - bidispec-extras
@@ -662,6 +663,7 @@ broken-packages:
   - church-maybe
   - church-pair
   - churros
+  - cicero-api
   - cielo
   - cil
   - cinvoke
@@ -3046,6 +3048,7 @@ broken-packages:
   - located
   - located-monad-logger
   - loch
+  - loc-test
   - log2json
   - logentries
   - logger
@@ -3244,7 +3247,6 @@ broken-packages:
   - mios
   - MIP
   - mismi-s3-core
-  - miso
   - miso-examples
   - mit-3qvpPyAi6mH
   - mix-arrows
@@ -3688,6 +3690,7 @@ broken-packages:
   - pandoc-unlit
   - pandoc-utils
   - pandora
+  - panfiguration
   - pang-a-lambda
   - pangraph
   - pan-os-syslog
@@ -4299,6 +4302,7 @@ broken-packages:
   - request
   - request-monad
   - req-url-extra
+  - reserve
   - reservoir
   - resolve
   - resolve-trivial-conflicts
@@ -4586,6 +4590,7 @@ broken-packages:
   - signable
   - signable-haskell-protoc
   - signed-multiset
+  - significant-figures
   - simd
   - simfin
   - simple-actors
@@ -5665,6 +5670,7 @@ broken-packages:
   - xsact
   - xsd
   - xslt
+  - xstatic-th
   - xturtle
   - y0l0bot
   - yabi-muno
@@ -5696,6 +5702,7 @@ broken-packages:
   - yandex-translate
   - yaop
   - yapb
+  - yarl
   - yarr
   - yasi
   - yate
