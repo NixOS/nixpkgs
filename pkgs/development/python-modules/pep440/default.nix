@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pep440";
-  version = "0.1.1";
+  version = "0.1.2";
   format = "flit";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-E9F4mHaavQKK8PYnRcnOdfW7mXcBKn1dTInCknLeNO4=";
+    hash = "sha256-WLNyRswrE/7hyio8CSyzcE0h7PYhpb27Fo5E5pf20E0=";
   };
 
   nativeBuildInputs = [
@@ -24,6 +24,11 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # Don't run CLI tests
+    "tests/test_cli.py"
   ];
 
   pythonImportsCheck = [
