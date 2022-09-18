@@ -84,6 +84,8 @@ in {
   foldl = doctest_0_20_broken super.foldl;
   prettyprinter-ansi-terminal = doctest_0_20_broken super.prettyprinter-ansi-terminal;
   pretty-simple = doctest_0_20_broken super.pretty-simple;
+  http-date = doctest_0_20_broken super.http-date;
+  network-byte-order = doctest_0_20_broken super.network-byte-order;
   co-log-core = doctest_0_20_broken (doJailbreak super.co-log-core);
 
   double-conversion = markBroken super.double-conversion;
