@@ -561,6 +561,14 @@
           <link xlink:href="options.html#opt-services.prometheus.exporters.smartctl.enable">services.prometheus.exporters.smartctl</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github/etesync/etesync-web">etesync-web</link>,
+          the official web interface for etesync and the etebase server.
+          Available as
+          <link linkend="opt-services.etesync-web.enable">services.etesync-web</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
