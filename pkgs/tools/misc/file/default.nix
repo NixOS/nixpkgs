@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ]
     ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;
 
-  doCheck = true;
+  # https://bugs.astron.com/view.php?id=382
+  doCheck = !stdenv.hostPlatform.isMusl;
 
   makeFlags = lib.optional stdenv.hostPlatform.isWindows "FILE_COMPILE=file";
 
