@@ -13313,6 +13313,8 @@ with pkgs;
 
   dbmate = callPackage ../development/tools/database/dbmate { };
 
+  dbmonster = callPackage ../tools/security/dbmonster { };
+
   devpi-client = python3Packages.callPackage ../development/tools/devpi-client {};
 
   devpi-server = callPackage ../development/tools/devpi-server {};
