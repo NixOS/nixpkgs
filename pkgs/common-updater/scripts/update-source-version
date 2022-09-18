@@ -177,14 +177,14 @@ elif [[ "$oldHashAlgo" = "null" ]]; then
 fi
 
 case "$oldHashAlgo" in
-    # Lengths of hex-encoded hashes
-    sha256) hashLength=64 ;;
-    sha512) hashLength=128 ;;
+    # Choose a temporary hash for given algorithm.
+    # Not using all-zeroes hash, since that is sometimes
+    # used for clean-up when updating multi-source packages.
+    # Created by hashing “update-source-version” string.
+    sha256) tempHash=AzH1rZFqEH8sovZZfJykvsEmCedEZWigQFHWHl6/PdE= ;;
+    sha512) tempHash=KFj9Fvco4AuCgLJIGRnVzyssRf7VGP2oi5CkH6ADvj75ow3am3h8pxefOgQlO+i33Q/BBnG/ST/F7B/0BvWHxw== ;;
     *) die "Unhandled hash algorithm '$oldHashAlgo' in '$attr'!" ;;
 esac
-
-# Make a temporary all-zeroes hash of $hashLength characters
-tempHash=$(printf '%0*d' "$hashLength" 0)
 
 if [[ -n "$sri" ]]; then
     # SRI hashes only support base64
