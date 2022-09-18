@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
     sha256 = "sha256-keTDSxdo+S05mweOFxRIxq8Yyv2nQ5h+0gZKKJVNbZc=";
   };
-  dontDisableStatic = withStatic;
+  dontDisableStatic = if withStatic then 1 else 0;
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 
