@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     description = "A posix script to find and watch youtube videos from the terminal";
     homepage = "https://github.com/pystardust/ytfzf";
     license = licenses.gpl3Only;
+    platforms = platforms.all;
     maintainers = with maintainers; [ dotlambda ];
   };
 }
