@@ -178,4 +178,8 @@ self: super: {
 
   # doctest-parallel dependency requires newer Cabal
   regex-tdfa = dontCheck super.regex-tdfa;
+
+  # Unnecessarily strict lower bound on base
+  # https://github.com/mrkkrp/megaparsec/pull/485#issuecomment-1250051823
+  megaparsec = doJailbreak super.megaparsec;
 }
