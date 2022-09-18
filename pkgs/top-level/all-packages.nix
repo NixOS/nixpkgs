@@ -20546,7 +20546,7 @@ with pkgs;
 
   lirc = callPackage ../development/libraries/lirc { };
 
-  liquid-dsp = callPackage ../development/libraries/liquid-dsp { };
+  liquid-dsp = callPackage ../development/libraries/liquid-dsp { inherit (darwin) cctools; };
 
   liquidfun = callPackage ../development/libraries/liquidfun { };
 
