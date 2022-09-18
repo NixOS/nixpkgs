@@ -12,6 +12,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
           libvirtd.enable = true;
         };
+        boot.supportedFilesystems = [ "zfs" ];
+        networking.hostId = "deadbeef"; # needed for zfs
         networking.nameservers = [ "192.168.122.1" ];
         security.polkit.enable = true;
         environment.systemPackages = with pkgs; [ virt-manager ];
@@ -36,6 +38,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       virthost.succeed("virsh pool-create-as foo disk --source-dev /dev/loop0 --target /dev")
       virthost.succeed("virsh vol-create-as foo loop0p1 25MB")
       virthost.succeed("virsh vol-create-as foo loop0p2 50MB")
+
+    with subtest("check if virsh zfs pools work"):
+      virthost.succeed("fallocate -l100m /tmp/zfs; losetup /dev/loop1 /tmp/zfs;")
+      virthost.succeed("zpool create zfs_loop /dev/loop1")
+      virthost.succeed("virsh pool-define-as --name zfs_storagepool --source-name zfs_loop --type zfs")
+      virthost.succeed("virsh pool-start zfs_storagepool")
+      virthost.succeed("virsh vol-create-as zfs_storagepool disk1 25MB")
 
     with subtest("check if nixos install iso boots and network works"):
       virthost.succeed(

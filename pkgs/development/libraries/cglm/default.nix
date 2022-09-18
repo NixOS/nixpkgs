@@ -17,17 +17,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  # FIXME: these parts probably need some cleanup.
-  # https://github.com/recp/cglm/issues/249
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace '\$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
       --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
   '';
-  cmakeFlags = [
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-  ];
 
   meta = with lib; {
     homepage = "https://github.com/recp/cglm";
