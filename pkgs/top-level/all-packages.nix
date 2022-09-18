@@ -2554,7 +2554,9 @@ with pkgs;
 
   github-commenter = callPackage ../development/tools/github-commenter { };
 
-  github-desktop = callPackage ../applications/version-management/github-desktop { };
+  github-desktop = callPackage ../applications/version-management/github-desktop {
+    curl = curl.override { openssl = openssl_1_1; };
+  };
 
   github-to-sqlite = with python3Packages; toPythonApplication github-to-sqlite;
 
