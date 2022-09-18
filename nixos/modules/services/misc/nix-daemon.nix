@@ -227,6 +227,16 @@ in
                 The hostname of the build machine.
               '';
             };
+            protocol = mkOption {
+              type = types.enum [ "ssh" "ssh-ng" ];
+              default = "ssh";
+              example = "ssh-ng";
+              description = lib.mdDoc ''
+                The protocol used for communicating with the build machine.
+                Use `ssh-ng` if your remote builder and your
+                local Nix version support that improved protocol.
+              '';
+            };
             system = mkOption {
               type = types.nullOr types.str;
               default = null;
@@ -670,7 +680,7 @@ in
         concatMapStrings
           (machine:
             (concatStringsSep " " ([
-              "${optionalString (machine.sshUser != null) "${machine.sshUser}@"}${machine.hostName}"
+              "${machine.protocol}://${optionalString (machine.sshUser != null) "${machine.sshUser}@"}${machine.hostName}"
               (if machine.system != null then machine.system else if machine.systems != [ ] then concatStringsSep "," machine.systems else "-")
               (if machine.sshKey != null then machine.sshKey else "-")
               (toString machine.maxJobs)
