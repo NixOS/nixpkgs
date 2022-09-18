@@ -20956,8 +20956,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  opencolorio = callPackage ../development/libraries/opencolorio {
-    inherit (darwin.apple_sdk.frameworks) Carbon GLUT Cocoa;
+  opencolorio = darwin.apple_sdk_11_0.callPackage ../development/libraries/opencolorio {
+    inherit (darwin.apple_sdk_11_0.frameworks) Carbon GLUT Cocoa;
   };
   opencolorio_1 = callPackage ../development/libraries/opencolorio/1.x.nix { };
 

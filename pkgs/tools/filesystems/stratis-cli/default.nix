@@ -25,6 +25,18 @@ python3Packages.buildPythonApplication rec {
     packaging
   ];
 
+  checkInputs = with python3Packages; [
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # tests below require dbus daemon
+    "tests/whitebox/integration"
+    "tests/whitebox/monkey_patching"
+  ];
+
+  pythonImportsCheck = [ "stratis_cli" ];
+
   passthru.tests = nixosTests.stratis;
 
   meta = with lib; {

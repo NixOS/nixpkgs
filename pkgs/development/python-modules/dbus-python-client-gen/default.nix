@@ -21,9 +21,12 @@ buildPythonPackage rec {
     into-dbus-python
     dbus-python
   ];
+
   checkInputs = [
     pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "dbus_python_client_gen" ];
 
   meta = with lib; {
     description = "A Python library for generating dbus-python client code";
