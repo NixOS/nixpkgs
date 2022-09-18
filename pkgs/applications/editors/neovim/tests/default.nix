@@ -7,11 +7,10 @@
 , pkgs
 }:
 let
-  inherit (vimUtils) buildVimPluginFrom2Nix packDir;
+  inherit (vimUtils) buildVimPluginFrom2Nix;
   inherit (neovimUtils) makeNeovimConfig;
 
   packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
-  packages.myVimPackage.opt = with vimPlugins; [ vim-fugitive ];
 
   plugins = with vimPlugins; [
     {
@@ -235,7 +234,6 @@ rec {
     configure.customRC = ''
       packadd base16-vim-unique-for-tests-please-dont-use-opt
       color base16-tomorrow-night
-      set background=dark
     '';
   };
 
