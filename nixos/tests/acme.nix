@@ -173,6 +173,17 @@ in {
       services.nginx.logError = "stderr info";
 
       specialisation = {
+        # Tests HTTP-01 verification using Lego's built-in web server
+        http01lego.configuration = { ... }: {
+          security.acme = {
+            certs."http.example.test" = {
+              listenHTTP = ":80";
+            };
+          };
+
+          networking.firewall.allowedTCPPorts = [ 80 ];
+        };
+
         # First derivation used to test general ACME features
         general.configuration = { ... }: let
           caDomain = nodes.acme.test-support.acme.caDomain;
@@ -446,7 +457,15 @@ in {
 
       download_ca_certs(client)
 
-      # Perform general tests first
+      # Perform http-01 w/ lego test first
+      switch_to(webserver, "http01lego")
+
+      with subtest("Can request certificate with Lego's built in web server"):
+          webserver.wait_for_unit("acme-finished-http.example.test.target")
+          check_fullchain(webserver, "http.example.test")
+          check_issuer(webserver, "http.example.test", "pebble")
+
+      # Perform general tests
       switch_to(webserver, "general")
 
       with subtest("Can request certificate with HTTP-01 challenge"):
