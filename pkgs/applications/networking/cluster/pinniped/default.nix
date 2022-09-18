@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
 
 buildGoModule rec{
   pname = "pinniped";
@@ -14,6 +14,17 @@ buildGoModule rec{
   subPackages = "cmd/pinniped";
 
   vendorSha256 = "sha256-8ohyyciL1ORYOxPu64W0jXASTv+vVZR8StutzbF9N4Y=";
+
+  ldflags = [ "-s" "-w" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd pinniped \
+      --bash <($out/bin/pinniped completion bash) \
+      --fish <($out/bin/pinniped completion fish) \
+      --zsh <($out/bin/pinniped completion zsh)
+  '';
 
   meta = with lib; {
     description = "Tool to securely log in to your Kubernetes clusters";

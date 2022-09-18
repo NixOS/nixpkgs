@@ -18175,7 +18175,6 @@ with pkgs;
     libmfx = if stdenv.isDarwin then null else intel-media-sdk;
     libpulseaudio = if stdenv.isDarwin then null else libpulseaudio;
     samba = if stdenv.isDarwin then null else samba;
-    vid-stab = if stdenv.isDarwin then null else vid-stab;
     inherit (darwin.apple_sdk.frameworks)
       Cocoa CoreServices CoreAudio AVFoundation MediaToolbox
       VideoDecodeAcceleration;
@@ -21024,8 +21023,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  opencolorio = callPackage ../development/libraries/opencolorio {
-    inherit (darwin.apple_sdk.frameworks) Carbon GLUT Cocoa;
+  opencolorio = darwin.apple_sdk_11_0.callPackage ../development/libraries/opencolorio {
+    inherit (darwin.apple_sdk_11_0.frameworks) Carbon GLUT Cocoa;
   };
   opencolorio_1 = callPackage ../development/libraries/opencolorio/1.x.nix { };
 
@@ -21563,6 +21562,8 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  scope-lite = callPackage ../development/libraries/scope-lite { };
+
   SDL_classic = callPackage ../development/libraries/SDL ({
     inherit (darwin.apple_sdk.frameworks) OpenGL CoreAudio CoreServices AudioUnit Kernel Cocoa GLUT;
   } // lib.optionalAttrs stdenv.hostPlatform.isAndroid {
@@ -21860,6 +21861,8 @@ with pkgs;
   stargate-libcds = callPackage ../development/libraries/stargate-libcds { };
 
   stb = callPackage ../development/libraries/stb { };
+
+  stduuid = callPackage ../development/libraries/stduuid { };
 
   stegsolve = callPackage ../tools/graphics/stegsolve { };
 
@@ -23464,6 +23467,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
   percona-server = percona-server56;
+
+  immudb = callPackage ../servers/nosql/immudb { };
 
   influxdb = callPackage ../servers/nosql/influxdb {
     # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
@@ -34682,6 +34687,8 @@ with pkgs;
   scalapack = callPackage ../development/libraries/science/math/scalapack { };
 
   rankwidth = callPackage ../development/libraries/science/math/rankwidth { };
+
+  latte-integrale = callPackage ../development/libraries/science/math/latte-integrale { };
 
   lcalc = callPackage ../development/libraries/science/math/lcalc { };
 

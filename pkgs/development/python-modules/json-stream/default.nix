@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "json-stream";
-  version = "1.4.0";
+  version = "1.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ebB8l8H6yPLoCXmVOy60IijdBI61SEzJInC30aMe9Bk=";
+    hash = "sha256-zsjKOqkXy3Je7z8U4M016a4t2cWdUqL2tf27Dc8a/gw=";
   };
 
   propagatedBuildInputs = [

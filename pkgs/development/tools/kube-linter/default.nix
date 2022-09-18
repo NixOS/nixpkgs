@@ -34,6 +34,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "A static analysis tool that checks Kubernetes YAML files and Helm charts";
     homepage = "https://kubelinter.io";
+    changelog   = "https://github.com/stackrox/kube-linter/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ mtesseract stehessel ];
     platforms = platforms.all;
