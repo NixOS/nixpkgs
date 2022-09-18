@@ -215,11 +215,14 @@ class NixStartScript(StartCommand):
     (Admittedly a _very_ implicit contract, evtl. TODO fix)
     """
 
-    def __init__(self, script: str):
+    def __init__(self, name: Optional[str], script: str):
         self._cmd = script
+        self._name = name
 
     @property
     def machine_name(self) -> str:
+        if self._name is not None:
+            return self._name
         match = re.search("run-(.+)-vm$", self._cmd)
         name = "machine"
         if match:

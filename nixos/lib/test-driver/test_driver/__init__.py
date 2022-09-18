@@ -1,5 +1,6 @@
 from pathlib import Path
 import argparse
+import json
 import ptpython.repl
 import os
 import time
@@ -65,11 +66,10 @@ def main() -> None:
     )
     arg_parser.add_argument(
         "--start-scripts",
-        metavar="START-SCRIPT",
+        metavar='{"MACHINE-NAME1": "START-SCRIPT1","MACHINE-NAME2":"START-SCRIPT2"...}',
         action=EnvDefault,
         envvar="startScripts",
-        nargs="*",
-        help="start scripts for participating virtual machines",
+        help="JSON dict from machine names to start scripts for participating virtual machines",
     )
     arg_parser.add_argument(
         "--vlans",
@@ -101,7 +101,7 @@ def main() -> None:
         rootlog.info("Machine state will be reset. To keep it, pass --keep-vm-state")
 
     with Driver(
-        args.start_scripts,
+        json.loads(args.start_scripts),
         args.vlans,
         args.testscript.read_text(),
         args.output_directory.resolve(),
@@ -122,7 +122,7 @@ def generate_driver_symbols() -> None:
     in user's test scripts. That list is then used by pyflakes to lint those
     scripts.
     """
-    d = Driver([], [], "", Path())
+    d = Driver({}, [], "", Path())
     test_symbols = d.test_symbols()
     with open("driver-symbols", "w") as fp:
         fp.write(",".join(test_symbols.keys()))
