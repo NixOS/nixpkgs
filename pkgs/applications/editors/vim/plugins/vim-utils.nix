@@ -421,7 +421,7 @@ rec {
 
   # figures out which python dependencies etc. is needed for one vim package
   requiredPluginsForPackage = { start ? [], opt ? []}:
-    (map (p: { plugin = p; optional = false; }) start) ++ (map (p: { plugin = p; optional = true; }) opt);
+    start ++ opt;
 
   toVimPlugin = drv:
     drv.overrideAttrs(oldAttrs: {
