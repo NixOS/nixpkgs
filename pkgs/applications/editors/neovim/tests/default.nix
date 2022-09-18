@@ -226,7 +226,7 @@ rec {
   # nixpkgs should install optional packages in the opt folder
   nvim_with_opt_plugin = neovim.override {
     extraName = "-with-opt-plugin";
-    configure.packages.plugins = with pkgs.vimPlugins; {
+    configure.packages.opt-plugins = with pkgs.vimPlugins; {
       opt = [
         (dashboard-nvim.overrideAttrs(old: { pname = old.pname + "-unique-for-tests-please-dont-use-opt"; }))
       ];
