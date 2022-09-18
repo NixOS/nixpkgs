@@ -5,6 +5,7 @@
 , cffi
 , charset-normalizer
 , fetchPypi
+, filelock
 , idna
 , oscrypto
 , pycryptodomex
@@ -14,6 +15,7 @@
 , pytz
 , requests
 , setuptools
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -33,6 +35,7 @@ buildPythonPackage rec {
     certifi
     cffi
     charset-normalizer
+    filelock
     idna
     oscrypto
     pycryptodomex
@@ -41,6 +44,7 @@ buildPythonPackage rec {
     pytz
     requests
     setuptools
+    typing-extensions
   ];
 
   postPatch = ''
