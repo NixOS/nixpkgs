@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "liblouis";
-  version = "3.22.0";
+  version = "3.23.0";
 
   outputs = [ "out" "dev" "man" "info" "doc" ];
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "liblouis";
     repo = "liblouis";
     rev = "v${version}";
-    sha256 = "sha256-EI/uaHXe0NlqdEw764q0SjerThYEVLRogUlmrsZwXnY=";
+    sha256 = "sha256-jXNhHzydWaMhFbEKoFHyZ77GCvAqxyT3P0xIAgFlTzY=";
   };
 
   nativeBuildInputs = [
