@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
 
     license = with lib.licenses; [ mit bsd2 ];
     maintainers = with lib.maintainers; [ pierron thoughtpolice ];
-    platforms = lib.platforms.x86;
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
   };
 }
