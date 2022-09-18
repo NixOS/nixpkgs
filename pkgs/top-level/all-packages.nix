@@ -5511,6 +5511,8 @@ with pkgs;
 
   curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
 
+  curl-impersonate-bin = callPackage ../tools/networking/curl-impersonate { };
+
   curlie = callPackage ../tools/networking/curlie { };
 
   cunit = callPackage ../tools/misc/cunit { };
