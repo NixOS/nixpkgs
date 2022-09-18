@@ -5,7 +5,6 @@
 , glibcLocales
 , typing-extensions
 , unittestCheckHook
-, isPy3k
 }:
 
 buildPythonPackage rec {
@@ -24,10 +23,11 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  # Tests broken on Python 3.x
-  #doCheck = !(isPy3k);
-
   checkInputs = [ unittestCheckHook ];
+
+  pythonImportsCheck = [
+    "PyPDF2"
+  ];
 
   meta = with lib; {
     description = "A Pure-Python library built as a PDF toolkit";
