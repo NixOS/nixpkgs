@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "amazon-ion";
-  version = "0.9.2";
+  version = "0.9.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     repo = "ion-python";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-BLlKxm63KsmMFajS4uJne/LPNXboOfy4uVm8HqO9Wfo=";
+    hash = "sha256-FLwzHcge+vLcRY4gOzrxS3kWlprCkRXX5KeGOoTJDSw=";
   };
 
   postPatch = ''
@@ -35,6 +35,11 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # ValueError: Exceeds the limit (4300) for integer string conversion
+    "test_roundtrips"
   ];
 
   pythonImportsCheck = [
