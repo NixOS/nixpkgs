@@ -14688,6 +14688,7 @@ with pkgs;
   cargo-tally = callPackage ../development/tools/rust/cargo-tally {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation IOKit;
   };
+  cargo-temp = callPackage ../development/tools/rust/cargo-temp { };
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
