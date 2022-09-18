@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , glib
 , gnome
+, gobject-introspection
 , gsound
 , gtk3
 , libgda
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    gobject-introspection
     nodePackages.rollup
     nodePackages.yarn
   ];
@@ -61,39 +63,29 @@ stdenv.mkDerivation rec {
       yarnNix = ./yarn.nix;
     };
 
-  patches =
-    let
-      dataDirPaths = lib.concatStringsSep ":" [
-        "${atk.dev}/share/gir-1.0"
-        "${gsound}/share/gir-1.0"
-        "${gnome.gnome-shell}/share/gnome-shell"
-        "${gnome.mutter}/lib/mutter-10"
-        "${gtk3.dev}/share/gir-1.0"
-        "${libgda}/share/gir-1.0"
-        "${pango.dev}/share/gir-1.0"
-      ];
-    in
-    [
-      (substituteAll {
-        src = ./xdg_data_dirs.patch;
-        xdg_data_dirs = "${dataDirPaths}";
-      })
-    ];
-
   postPatch = ''
     substituteInPlace resources/metadata.json \
       --replace '"version": 999' '"version": ${version}'
   '';
 
-  buildPhase = ''
-    runHook preBuild
+  buildPhase =
+    let
+      dataDirPaths = super.lib.concatStringsSep ":" [
+        "${super.gnome.gnome-shell}/share/gnome-shell"
+        "${super.gnome.mutter}/lib/mutter-10"
+        "${super.libgda}/share/gir-1.0"
+      ];
+    in
+    ''
+      runHook preBuild
 
-    ln -sv "${nodeModules}/node_modules" node_modules
-    yarn --offline build
-    patch -d dist -p1 < ${girpathsPatch}
+      ln -sv "${nodeModules}/node_modules" node_modules
+      export XDG_DATA_DIRS="${dataDirPaths}:$XDG_DATA_DIRS"
+      yarn --offline build
+      patch -d dist -p1 < ${girpathsPatch}
 
-    runHook postBuild
-  '';
+      runHook postBuild
+    '';
 
   passthru = {
     extensionUuid = uuid;
