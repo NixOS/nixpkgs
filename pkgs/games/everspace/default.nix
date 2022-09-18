@@ -1,6 +1,6 @@
 {
   # Packaging Dependencies
-  lib, stdenv, requireFile, autoPatchelfHook, unzip,
+  lib, stdenv, requireFile, autoPatchelfHook, unzip, copyDesktopItems, makeDesktopItem,
 
   # Everspace Dependencies
   cairo, gdk-pixbuf, pango, gtk2-x11, libGL, openal,
@@ -11,7 +11,7 @@
 
 # Known issues:
 # - Video playback (upon starting a new game) does not work (screen is black)
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "everspace";
   version = "1.3.5.3655";
 
@@ -23,6 +23,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    copyDesktopItems
     unzip
   ];
 
@@ -89,8 +90,23 @@ stdenv.mkDerivation {
     mkdir -p "$out/bin"
     ln -s "$out/opt/everspace/game/RSG/Binaries/Linux/RSG-Linux-Shipping" "$out/bin/everspace"
 
+    mkdir -p "$out/share/pixmaps"
+    ln -s "$out/opt/everspace/support/icon.png" "$out/share/pixmaps/everspace-gog.png"
+
     runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      type = "Application";
+      name = "everspace-gog";
+      desktopName = "EVERSPACE™";
+      comment = meta.description;
+      exec = "everspace";
+      icon = "everspace-gog";
+      categories = [ "Game" ];
+    })
+  ];
 
   meta = with lib; {
     description = "Action-focused single-player space shooter with roguelike elements";

@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildDunePackage
-, cmdliner_1_1
+, cmdliner
 , menhir
 }:
 
@@ -19,7 +19,7 @@ buildDunePackage rec {
   };
 
   nativeBuildInputs = [ menhir ];
-  buildInputs = [ cmdliner_1_1 ];
+  buildInputs = [ cmdliner ];
 
   doCheck = false;  # requires `tezt`
 

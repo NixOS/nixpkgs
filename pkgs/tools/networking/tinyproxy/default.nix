@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optionals withDebug [ "--enable-debug" ]; # Enable debugging support code and methods.
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     homepage = "https://tinyproxy.github.io/";
     description = "A light-weight HTTP/HTTPS proxy daemon for POSIX operating systems";
     license = licenses.gpl2Only;
