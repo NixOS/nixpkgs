@@ -60,6 +60,7 @@ let
     '';
 
     nativeBuildInputs = [
+      ncurses # tools/kwboot
       bc
       bison
       dtc
