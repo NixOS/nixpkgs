@@ -10480,6 +10480,8 @@ in {
 
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
 
+  sqlglot = callPackage ../development/python-modules/sqlglot { };
+
   sqlitedict = callPackage ../development/python-modules/sqlitedict { };
 
   sqlite-fts4 = callPackage ../development/python-modules/sqlite-fts4 { };
