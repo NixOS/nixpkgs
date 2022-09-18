@@ -8515,6 +8515,8 @@ with pkgs;
 
   ldapmonitor = callPackage ../tools/security/ldapmonitor { };
 
+  ldapnomnom = callPackage ../tools/security/ldapnomnom { };
+
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
   ldeep = python3Packages.callPackage ../tools/security/ldeep { };
