@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pyasn1
 , pyasn1-modules
 , pythonAtLeast
@@ -13,12 +13,14 @@
 
 buildPythonPackage rec {
   pname = "python-ldap";
-  version = "3.4.2";
+  version = "3.4.3";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-sWRwoJg6rwmgD/uPQLaaJEbz0L5jmiKSVrzjgfyyaPc=";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "refs/tags/python-ldap-${version}";
+    hash = "sha256-/ehvSs2qjuTPhaaOP0agPbWyyRugBpUlPq/Ny9t2C58=";
   };
 
   buildInputs = [
