@@ -184,7 +184,17 @@ in {
   hspec-meta = dontCheck super.hspec-meta_2_9_3;
   hspec-expectations = dontCheck super.hspec-expectations;
   hspec-discover = super.hspec-discover_2_10_5;
-  hedgehog = super.hedgehog_1_2;
+  # the dontHaddock is due to a GHC panic. might be this bug, not sure.
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/21619
+  #
+  # We need >= 1.1.2 for ghc-9.4 support, but we don't have 1.1.x in
+  # hackage-packages.nix
+  hedgehog = dontHaddock super.hedgehog_1_2;
+  # does not work with hedgehog 1.2 yet:
+  # https://github.com/qfpl/tasty-hedgehog/pull/63
+  tasty-hedgehog = markBroken super.tasty-hedgehog;
+  # due to tasty-hedgehog
+  retry = checkAgainAfter super.tasty-hedgehog "1.3.0.0" "tasty-hedgehog broken" (dontCheck super.retry);
 
   # https://github.com/dreixel/syb/issues/38
   syb = dontCheck super.syb;
