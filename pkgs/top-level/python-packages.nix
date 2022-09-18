@@ -9611,6 +9611,8 @@ in {
 
   rich = callPackage ../development/python-modules/rich { };
 
+  rich-click = callPackage ../development/python-modules/rich-click { };
+
   rich-rst = callPackage ../development/python-modules/rich-rst { };
 
   rig = callPackage ../development/python-modules/rig { };
