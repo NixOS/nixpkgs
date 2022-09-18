@@ -2,6 +2,8 @@
 , buildGoModule
 , fetchFromGitHub
 , stdenv
+, testers
+, mynewt-newtmgr
 }:
 
 buildGoModule rec {
@@ -16,6 +18,11 @@ buildGoModule rec {
   };
 
   vendorSha256 = "sha256-+vOZoueoMqlGnopLKc6pCgTmcgI34pxaMNbr6Y+JCfQ=";
+
+  passthru.tests.version = testers.testVersion {
+    package = mynewt-newtmgr;
+    command = "newtmgr version";
+  };
 
   meta = with lib; {
     homepage = "https://mynewt.apache.org/";
