@@ -1,8 +1,7 @@
 { lib
-, autoreconfHook
+, bash
 , bash-completion
 , bridge-utils
-, cmake
 , coreutils
 , curl
 , darwin
@@ -10,7 +9,6 @@
 , dnsmasq
 , docutils
 , fetchFromGitLab
-, fetchurl
 , gettext
 , glib
 , gnutls
@@ -140,6 +138,14 @@ stdenv.mkDerivation rec {
     sed -i '/virnetsockettest/d' tests/meson.build
     # delete only the first occurrence of this
     sed -i '0,/qemuxml2argvtest/{/qemuxml2argvtest/d;}' tests/meson.build
+
+    for binary in mount umount mkfs; do
+      substituteInPlace meson.build \
+        --replace "find_program('$binary'" "find_program('${lib.getBin util-linux}/bin/$binary'"
+    done
+
+    substituteInPlace meson.build \
+      --replace "'dbus-daemon'," "'${lib.getBin dbus}/bin/dbus-daemon',"
   '' + optionalString isLinux ''
     sed -i 's,define PARTED "parted",define PARTED "${parted}/bin/parted",' \
       src/storage/storage_backend_disk.c \
@@ -156,35 +162,32 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    meson # needs to be first
-
-    cmake
+    meson
     docutils
     libxml2 # for xmllint
     libxslt # for xsltproc
+    gettext
     makeWrapper
     ninja
-    perl
     pkg-config
-    util-linux # for mount
+    perl
+    perlPackages.XMLXPath
   ]
   ++ optional (!isDarwin) rpcsvc-proto
   # NOTE: needed for rpcgen
   ++ optional isDarwin darwin.developer_cmds;
 
   buildInputs = [
+    bash
     bash-completion
     curl
     dbus
-    gettext
     glib
     gnutls
     libgcrypt
     libpcap
     libtasn1
     libxml2
-    perlPackages.XMLXPath
-    pkg-config
     python3
     readline
     xhtml1

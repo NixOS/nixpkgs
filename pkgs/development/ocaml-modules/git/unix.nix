@@ -39,5 +39,7 @@ buildDunePackage {
   meta = {
     description = "Unix backend for the Git protocol(s)";
     inherit (git.meta) homepage license maintainers;
+    # Not compatible with cmdliner ≥ 1.1
+    broken = true;
   };
 }

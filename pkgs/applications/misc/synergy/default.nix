@@ -1,7 +1,6 @@
 { withGUI ? true
 , stdenv
 , lib
-, fetchpatch
 , fetchFromGitHub
 , wrapQtAppsHook
 
@@ -17,13 +16,16 @@
 , qttools
 , xlibsWrapper
 , libX11
+, libxkbfile
 , libXi
 , libXtst
 , libXrandr
+, libXinerama
+, xkeyboardconfig
 , xinput
 , avahi-compat
 
-# macOS / darwin
+  # MacOS / darwin
 , ApplicationServices
 , Carbon
 , Cocoa
@@ -33,39 +35,41 @@
 
 stdenv.mkDerivation rec {
   pname = "synergy";
-  version = "1.14.1.32";
+  version = "1.14.5.17";
 
   src = fetchFromGitHub {
     owner = "symless";
     repo = "synergy-core";
-    rev = "${version}-stable";
+    rev = version;
+    sha256 = "sha256-9B6KPa1TsS4khCf7ccmwQZJ1KDEuLNw/W0PScYCgtlE=";
     fetchSubmodules = true;
-    sha256 = "123p75rm22vb3prw1igh0yii2y4bvv7r18iykfvmnr41hh4w7z2p";
   };
 
-  patches = [ ./macos_build_fix.patch ];
+  patches = [
+    # Without this OpenSSL from nixpkgs is not detected
+    ./darwin-non-static-openssl.patch
+    # We cannot include UserNotifications because of a build failure in the Apple SDK.
+    # The functions used from it are already implicitly included anyways.
+    ./darwin-no-UserNotifications-includes.patch
+  ];
 
   postPatch = ''
     substituteInPlace src/gui/src/SslCertificate.cpp \
       --replace 'kUnixOpenSslCommand[] = "openssl";' 'kUnixOpenSslCommand[] = "${openssl}/bin/openssl";'
+  '' + lib.optionalString stdenv.isLinux ''
+    substituteInPlace src/lib/synergy/unix/AppUtilUnix.cpp \
+      --replace "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"
   '';
 
-  cmakeFlags = lib.optionals (!withGUI) [
-    "-DSYNERGY_BUILD_LEGACY_GUI=OFF"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.09"
-  ];
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-inconsistent-missing-override";
-
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
-
-  dontWrapQtApps = true;
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ] ++ lib.optional withGUI wrapQtAppsHook;
 
   buildInputs = [
+    qttools # Used for translations even when not building the GUI
     openssl
     pcre
-  ] ++ lib.optionals withGUI [
-    qttools
   ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices
     Carbon
@@ -81,37 +85,57 @@ stdenv.mkDerivation rec {
     libXi
     libXtst
     libXrandr
+    libXinerama
+    libxkbfile
     xinput
     avahi-compat
     gdk-pixbuf
     libnotify
   ];
 
+  # Silences many warnings
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-inconsistent-missing-override";
+
+  cmakeFlags = lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF"
+    ++ lib.optional stdenv.isDarwin "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.targetPlatform.darwinSdkVersion}";
+
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+    bin/unittests
+    runHook postCheck
+  '';
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp bin/{synergyc,synergys,synergyd,syntool} $out/bin/
   '' + lib.optionalString withGUI ''
     cp bin/synergy $out/bin/
-    wrapQtApp $out/bin/synergy
   '' + lib.optionalString stdenv.isLinux ''
-    mkdir -p $out/share/icons/hicolor/scalable/apps
+    mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
     cp ../res/synergy.svg $out/share/icons/hicolor/scalable/apps/
-    mkdir -p $out/share/applications
-    substitute ../res/synergy.desktop $out/share/applications/synergy.desktop --replace /usr/bin $out/bin
+    substitute ../res/synergy.desktop $out/share/applications/synergy.desktop \
+      --replace "/usr/bin" "$out/bin"
   '' + lib.optionalString stdenv.isDarwin ''
-    mkdir -p $out/Applications/
-    mv bundle/Synergy.app $out/Applications/
+    mkdir -p $out/Applications
+    cp -r bundle/Synergy.app $out/Applications
     ln -s $out/bin $out/Applications/Synergy.app/Contents/MacOS
+  '' + ''
+    runHook postInstall
   '';
 
-  doCheck = true;
-  checkPhase = "bin/unittests";
+  dontWrapQtApps = lib.optional (!withGUI) true;
 
   meta = with lib; {
     description = "Share one mouse and keyboard between multiple computers";
     homepage = "https://symless.com/synergy";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ talyz ];
-    platforms = platforms.all;
+    changelog = "https://github.com/symless/synergy-core/blob/${version}/ChangeLog";
+    mainProgram = lib.optionalString (!withGUI) "synergyc";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ talyz ivar ];
+    platforms = platforms.unix;
   };
 }
