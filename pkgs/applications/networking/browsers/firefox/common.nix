@@ -430,7 +430,7 @@ buildStdenv.mkDerivation ({
     zip
     zlib
   ]
-  ++ [ (if (lib.versionAtLeast version "92") then nss_latest else nss_esr) ]
+  ++ [ (if (lib.versionAtLeast version "103") then nss_latest else nss_esr) ]
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  jackSupport libjack2
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
