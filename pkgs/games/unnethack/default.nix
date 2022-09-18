@@ -36,13 +36,13 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-    cp -r /tmp/unnethack $out/share/unnethack/profile
-    mv $out/bin/unnethack $out/bin/.wrapped_unnethack
-    cat <<EOF >$out/bin/unnethack
+    original="${lib.getUnwrapped "$out/bin/unnethack"}"
+    install -Dm755 "$out/bin/unnethack" "$original"
+    cat <<EOF >"$out/bin/unnethack"
       #! ${stdenv.shell} -e
       if [ ! -d ~/.unnethack ]; then
         mkdir -p ~/.unnethack
-        cp -r $out/share/unnethack/profile/* ~/.unnethack
+        cp -r "$out/share/unnethack/profile/"* ~/.unnethack
         chmod -R +w ~/.unnethack
       fi
 
@@ -53,9 +53,9 @@ stdenv.mkDerivation rec {
       }
       trap cleanup EXIT
 
-      $out/bin/.wrapped_unnethack
+      "$original"
     EOF
-    chmod +x $out/bin/unnethack
+    chmod +x "$out/bin/unnethack"
   '';
 
   meta = with lib; {

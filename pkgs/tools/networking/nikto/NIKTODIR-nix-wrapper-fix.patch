@@ -6,7 +6,7 @@ diff --color -ur a/program/nikto.pl b/program/nikto.pl
      my $NIKTODIR = abs_path($0);
      chomp($NIKTODIR);
 -    $NIKTODIR =~ s#[\\/]nikto.pl$##;
-+    $NIKTODIR =~ s#[\\/]bin[\\/]\.nikto-wrapped$##;
++    $NIKTODIR =~ s#[\\/]bin[\\/]\.wrapped[\\/]nikto$##;
 +
  
      # Guess user's home directory -- to support Windows

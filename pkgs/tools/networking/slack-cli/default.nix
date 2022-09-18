@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p "$out/bin"
-    cp src/slack "$out/bin/.slack-wrapped"
+    original="${lib.getUnwrapped "$out/bin/slack"}"
+    install -D src/slack "$original"
 
     cat <<-WRAPPER > "$out/bin/slack"
     #!${runtimeShell}
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     MESSAGE
 
     export PATH=${lib.makeBinPath [ curl jq coreutils gnugrep gnused ]}:"\$PATH"
-    exec "$out/bin/.slack-wrapped" "\$@"
+    exec "$original" "\$@"
     WRAPPER
 
     chmod +x "$out/bin/slack"

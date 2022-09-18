@@ -30,8 +30,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper xsel clipnotify ];
 
   postFixup = ''
-    sed -i "$out/bin/clipctl" -e 's,clipmenud\$,\.clipmenud-wrapped\$,'
-
     wrapProgram "$out/bin/clipmenu" \
       --prefix PATH : "${lib.makeBinPath [ xsel ]}"
 

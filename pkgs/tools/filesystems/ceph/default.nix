@@ -231,17 +231,10 @@ in rec {
   ceph-client = runCommand "ceph-client-${version}" {
       meta = getMeta "Tools needed to mount Ceph's RADOS Block Devices/Cephfs";
     } ''
-      mkdir -p $out/{bin,etc,${sitePackages},share/bash-completion/completions}
-      cp -r ${ceph}/bin/{ceph,.ceph-wrapped,rados,rbd,rbdmap} $out/bin
-      cp -r ${ceph}/bin/ceph-{authtool,conf,dencoder,rbdnamer,syn} $out/bin
-      cp -r ${ceph}/bin/rbd-replay* $out/bin
-      cp -r ${ceph}/sbin/mount.ceph $out/bin
-      cp -r ${ceph}/sbin/mount.fuse.ceph $out/bin
-      ln -s bin $out/sbin
-      cp -r ${ceph}/${sitePackages}/* $out/${sitePackages}
-      cp -r ${ceph}/etc/bash_completion.d $out/share/bash-completion/completions
-      # wrapPythonPrograms modifies .ceph-wrapped, so lets just update its paths
-      substituteInPlace $out/bin/ceph          --replace ${ceph} $out
-      substituteInPlace $out/bin/.ceph-wrapped --replace ${ceph} $out
+      cp -t "$out" -r '${ceph}'/{bin,'${sitePackages}',/etc/bash_completion.d}
+      # wrapPythonPrograms modifies the unwrapped ceph, so lets just update its paths
+      for i in "$out/bin/ceph" "${lib.getUnwrapped "$out/bin/ceph"}"; do
+        substituteInPlace "$i" --replace '${ceph}' "$out"
+      done
    '';
 }

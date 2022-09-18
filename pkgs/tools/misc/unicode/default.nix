@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postFixup = ''
-    substituteInPlace "$out/bin/.unicode-wrapped" \
+    substituteInPlace "${lib.getUnwrapped "$out/bin/unicode"}"\
       --replace "/usr/share/unicode/UnicodeData.txt" "$ucdtxt"
   '';
 

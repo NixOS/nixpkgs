@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
   shell = runtimeShell;
 
   postFixup = ''
-    export wrapped=".ccls-wrapped"
-    mv $out/bin/ccls $out/bin/$wrapped
-    substituteAll ${./wrapper} $out/bin/ccls
-    chmod --reference=$out/bin/$wrapped $out/bin/ccls
+    export original="${lib.getUnwrapped "$out/bin/ccls"}"
+    install -Dm755 "$out/bin/ccls" "$original"
+    substituteAll '${./wrapper}' "$out/bin/ccls"
+    chmod --reference="$original" "$out/bin/ccls"
   '';
 
   meta = with lib; {

@@ -21,9 +21,6 @@ stdenv.mkDerivation {
     sha256 = "0e9YhYcxU9t0SFeT1TjoRGTM3h1xRC528ae69tvz+a0=";
   };
 
-  # Fix ".cht.sh-wrapped" in the help message
-  postPatch = "substituteInPlace share/cht.sh.txt --replace '\${0##*/}' cht.sh";
-
   installPhase = ''
     install -m755 -D share/cht.sh.txt "$out/bin/cht.sh"
 

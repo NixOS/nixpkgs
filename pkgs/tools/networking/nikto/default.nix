@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/nikto \
-      --prefix PERL5LIB : $PERL5LIB
+    wrapProgram "$out/bin/nikto" \
+      --prefix PERL5LIB : "$PERL5LIB"
   '';
 
   meta = with lib; {

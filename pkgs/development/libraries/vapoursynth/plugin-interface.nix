@@ -86,8 +86,8 @@ runCommand "${vapoursynth.name}-with-plugins" {
   done
 
   for binaryFile in \
-      ${python3.sitePackages}/vapoursynth${ext} \
-      bin/.vspipe-wrapped
+      '${python3.sitePackages}/vapoursynth${ext}' \
+      '${lib.getUnwrapped "bin/vspipe"}'
   do
       old_rpath=$(patchelf --print-rpath ${vapoursynth}/$binaryFile)
       new_rpath="''${old_rpath//"${vapoursynth}"/"$out"}"
@@ -109,6 +109,6 @@ runCommand "${vapoursynth.name}-with-plugins" {
       libvapoursynth-script${ext}.0.0.0 \
       $out/lib/libvapoursynth-script${ext}.0
 
-  makeWrapper $out/bin/.vspipe-wrapped $out/bin/vspipe \
-      --prefix PYTHONPATH : $out/${python3.sitePackages}
+  wrapProgram "$out/bin/vspipe" \
+      --prefix PYTHONPATH : "$out/${python3.sitePackages}"
 ''

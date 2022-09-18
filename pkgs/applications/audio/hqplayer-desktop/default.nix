@@ -60,26 +60,27 @@ mkDerivation rec {
     cp ./usr/share/applications/* $out/share/applications
 
     # documentation
-    mkdir -p $out/share/doc/${pname}
-    cp ./usr/share/doc/hqplayer4desktop/* $out/share/doc/${pname}
+    mkdir -p "$out/share/doc/${pname}"
+    cp ./usr/share/doc/hqplayer4desktop/* "$out/share/doc/${pname}"
 
     # pixmaps
-    mkdir -p $out/share/pixmaps
-    cp ./usr/share/pixmaps/* $out/share/pixmaps
+    mkdir -p "$out/share/pixmaps"
+    cp ./usr/share/pixmaps/* "$out/share/pixmaps"
 
     runHook postInstall
   '';
 
   postInstall = ''
-    for desktopFile in $out/share/applications/*; do
+    for desktopFile in "$out/share/applications"/*; do
       substituteInPlace "$desktopFile" \
-        --replace /usr/bin/ $out/bin/ \
-        --replace /usr/share/doc/ $out/share/doc/
+        --replace /usr/bin/ "$out/bin/" \
+        --replace /usr/share/doc/ "$out/share/doc/"
     done
   '';
 
   postFixup = ''
-    patchelf --replace-needed libomp.so.5 libomp.so $out/bin/.hqplayer4desktop-wrapped
+    patchelf --replace-needed libomp.so.5 libomp.so \
+      "${lib.getUnwrapped "$out/bin/hqplayer4desktop"}"
   '';
 
   meta = with lib; {

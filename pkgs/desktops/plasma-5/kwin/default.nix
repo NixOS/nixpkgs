@@ -46,8 +46,6 @@ mkDerivation {
   patches = [
     ./0001-follow-symlinks.patch
     ./0002-xwayland.patch
-    ./0003-plugins-qpa-allow-using-nixos-wrapper.patch
-    ./0001-NixOS-Unwrap-executable-name-for-.desktop-search.patch
     # Pass special environments through arguemnts to `kwin_wayland`, bypassing
     # ld.so(8) environment stripping due to `kwin_wayland`'s capabilities.
     # We need this to have `TZDIR` correctly set for `plasmashell`, or

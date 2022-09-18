@@ -24,15 +24,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ ncurses libX11 libXext ];
 
-  selfWrapper = ./self;
-
   installPhase = ''
-    mkdir -p "$out"/bin
-    cp ./vm/Self "$out"/bin/Self.wrapped
-    mkdir -p "$out"/share/self
-    cp -r ../objects "$out"/share/self/
-    makeWrapper $selfWrapper $out/bin/Self \
-      --set SELF_ROOT "$out"
+    runHook preInstall
+
+    export original="${lib.getUnwrapped "$out/bin/Self"}"
+    install -Dm755 ./vm/Self "$original"
+    find ../objects -type f | xargs install -Dt "$out"/share/self
+    substituteAll '${./self}' "$out/bin/Self"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

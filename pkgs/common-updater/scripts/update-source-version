@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
 set -e
 
-scriptName=update-source-version # do not use the .wrapped name
-
 die() {
-    echo "$scriptName: error: $1" >&2
+    echo "$0: error: $1" >&2
     exit 1
 }
 
 usage() {
-    echo "Usage: $scriptName <attr> <version> [<new-source-hash>] [<new-source-url>]"
+    echo "Usage: $0 <attr> <version> [<new-source-hash>] [<new-source-url>]"
     echo "                              [--version-key=<version-key>] [--source-key=<source-key>]"
     echo "                              [--system=<system>] [--file=<file-to-update>] [--rev=<revision>]"
     echo "                              [--ignore-same-hash] [--print-changes]"
@@ -49,7 +47,7 @@ for arg in "$@"; do
             exit 0
         ;;
         --*)
-            echo "$scriptName: Unknown argument: $arg"
+            echo "$0: Unknown argument: $arg"
             usage
             exit 1
         ;;
@@ -68,13 +66,13 @@ newUrl=${args[3]}
 importTree="(let tree = import ./.; in if builtins.isFunction tree then tree {} else tree)"
 
 if (( "${#args[*]}" < 2 )); then
-    echo "$scriptName: Too few arguments"
+    echo "$0: Too few arguments"
     usage
     exit 1
 fi
 
 if (( "${#args[*]}" > 4 )); then
-    echo "$scriptName: Too many arguments"
+    echo "$0: Too many arguments"
     usage
     exit 1
 fi
@@ -140,7 +138,7 @@ if [[ -z "$oldVersion" ]]; then
 fi
 
 if [[ "$oldVersion" = "$newVersion" ]]; then
-    echo "$scriptName: New version same as old version, nothing to do." >&2
+    echo "$0: New version same as old version, nothing to do." >&2
     if [ -n "$printChanges" ]; then
         printf '[]\n'
     fi

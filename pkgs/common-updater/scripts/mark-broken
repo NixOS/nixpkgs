@@ -18,8 +18,6 @@
 #   - Any attrs which failed for any reason will be written to `failed-marks.txt`.
 #     Those attrs will likely need manual attention as disablement will likely be conditional.
 
-scriptName=mark-broken # do not use the .wrapped name
-
 failMark() {
         local attr=$1
         shift 1
@@ -29,11 +27,11 @@ failMark() {
 }
 
 usage() {
-    echo "Usage: $scriptName <attrs>"
+    echo "Usage: $0 <attrs>"
 }
 
 if (( "${#@}" < 1 )); then
-    echo "$scriptName: Too few arguments"
+    echo "$0: Too few arguments"
     usage
     exit 1
 fi

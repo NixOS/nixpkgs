@@ -20,9 +20,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    install -Dm555 "$src" "$out/bin/.mill-wrapped"
-    # can't use wrapProgram because it sets --argv0
-    makeWrapper "$out/bin/.mill-wrapped" "$out/bin/mill" \
+    install -Dm555 "$src" "$out/bin/mill"
+    wrapProgram "$out/bin/mill" \
       --prefix PATH : "${jre}/bin" \
       --set JAVA_HOME "${jre}"
     runHook postInstall

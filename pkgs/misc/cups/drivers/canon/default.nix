@@ -177,9 +177,9 @@ stdenv.mkDerivation rec {
       patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64:$out/lib" cnpkbidir
       patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64:$out/lib" cnrsdrvufr2
 
-      mv cnsetuputil2 cnsetuputil2.wrapped
+      mv cnsetuputil2 ${lib.getUnwrapped "cnsetuputil2"}
       echo "#!${runtimeShell} -e" > cnsetuputil2
-      echo "exec ${proot}/bin/proot -b $out/usr/share/cnsetuputil2:/usr/share/cnsetuputil2 -b ${coreutils}/bin/ls:/bin/ls -b ${cups}/share:/usr/share/cups $out/bin/cnsetuputil2.wrapped" > cnsetuputil2
+      echo "exec ${proot}/bin/proot -b $out/usr/share/cnsetuputil2:/usr/share/cnsetuputil2 -b ${coreutils}/bin/ls:/bin/ls -b ${cups}/share:/usr/share/cups ${lib.getUnwrapped "$out/bin/cnsetuputil2"}" > cnsetuputil2
       chmod +x cnsetuputil2
     )
 

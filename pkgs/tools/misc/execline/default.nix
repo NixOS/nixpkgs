@@ -1,4 +1,4 @@
-{ fetchFromGitHub, skawarePackages }:
+{ lib, fetchFromGitHub, skawarePackages }:
 
 with skawarePackages;
 let
@@ -39,30 +39,31 @@ in buildPackage {
 
   postInstall = ''
     # remove all execline executables from build directory
-    rm $(find -type f -mindepth 1 -maxdepth 1 -executable)
+    find -type f -mindepth 1 -maxdepth 1 -executable -delete
     rm libexecline.*
 
-    mv doc $doc/share/doc/execline/html
-    mv examples $doc/share/doc/execline/examples
+    mv doc "$doc/share/doc/execline/html"
+    mv examples "$doc/share/doc/execline/examples"
 
-    mv $bin/bin/execlineb $bin/bin/.execlineb-wrapped
+    original="${lib.getUnwrapped "$bin/bin/execlineb"}"
+    install -D "$bin/bin/execlineb" "$original"
 
     # A wrapper around execlineb, which provides all execline
     # tools on `execlineb`’s PATH.
     # It is implemented as a C script, because on non-Linux,
     # nested shebang lines are not supported.
     # The -lskarnet has to come at the end to support static builds.
-    $CC \
+    "$CC" \
       -O \
       -Wall -Wpedantic \
-      -D "EXECLINEB_PATH()=\"$bin/bin/.execlineb-wrapped\"" \
+      -D "EXECLINEB_PATH()=\"$original\"" \
       -D "EXECLINE_BIN_PATH()=\"$bin/bin\"" \
       -I "${skalibs.dev}/include" \
       -L "${skalibs.lib}/lib" \
       -o "$bin/bin/execlineb" \
       ${./execlineb-wrapper.c} \
       -lskarnet
-    mkdir -p $man/share/
-    cp -vr ${manpages}/man* $man/share
+    mkdir -p "$man/share/"
+    cp -vr '${manpages}/man'* "$man/share"
   '';
 }

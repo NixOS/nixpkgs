@@ -88,7 +88,7 @@ python3.pkgs.buildPythonApplication rec {
     pushd $out/bin
     # undo shell wrapper as meson tools are called with python
     for i in *; do
-      mv ".$i-wrapped" "$i"
+      mv "${lib.getUnwrapped "$i"}" "$i"
     done
     popd
 

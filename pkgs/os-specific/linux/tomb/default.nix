@@ -17,12 +17,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  postPatch = ''
-    # if not, it shows .tomb-wrapped when running
-    substituteInPlace tomb \
-      --replace 'TOMBEXEC=$0' 'TOMBEXEC=tomb'
-  '';
-
   doInstallCheck = true;
   installCheckPhase = "$out/bin/tomb -h";
 
@@ -30,8 +24,8 @@ stdenv.mkDerivation rec {
     install -Dm755 tomb       $out/bin/tomb
     install -Dm644 doc/tomb.1 $out/share/man/man1/tomb.1
 
-    wrapProgram $out/bin/tomb \
-      --prefix PATH : $out/bin:${lib.makeBinPath [ cryptsetup gettext gnupg pinentry util-linux e2fsprogs ]}
+    wrapProgram "$out/bin/tomb" \
+      --prefix PATH : "$out/bin:${lib.makeBinPath [ cryptsetup gettext gnupg pinentry util-linux e2fsprogs ]}"
   '';
 
   meta = with lib; {
