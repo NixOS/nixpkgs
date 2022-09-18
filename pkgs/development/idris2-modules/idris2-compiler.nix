@@ -20,6 +20,8 @@ let
   # Taken from Idris2/idris2/flake.nix. Check if the idris2 project does it this
   # way, still, every now and then.
   platformChez = if stdenv.system == "x86_64-linux" then chez else chez-racket;
+
+  vendored-packages = [ "base" "contrib" "network" "prelude" "test" ];
 # Uses scheme to bootstrap the build of idris2
 in stdenv.mkDerivation rec {
   pname = "idris2";
@@ -51,6 +53,8 @@ in stdenv.mkDerivation rec {
   checkInputs = [ gambit nodejs ]; # racket ];
   checkFlags = [ "INTERACTIVE=" ];
 
+  outputs = [ "out" ] ++ vendored-packages;
+
   # TODO: Move this into its own derivation, such that this can be changed
   #       without having to recompile idris2 every time.
   postInstall = let
@@ -61,6 +65,13 @@ in stdenv.mkDerivation rec {
       "$out/${name}"
     ];
     globalLibrariesPath = builtins.concatStringsSep ":" globalLibraries;
+
+    moveVendoredPackage = pkg:
+      ''
+        mkdir -p ''$${pkg}/${name}
+        mv $out/${name}/${pkg}-${version} ''$${pkg}/${name}
+      '';
+    moveAllVendoredPackages = builtins.concatStringsSep "\n" (map moveVendoredPackage vendored-packages);
   in ''
     # Remove existing idris2 wrapper that sets incorrect LD_LIBRARY_PATH
     rm $out/bin/idris2
@@ -68,6 +79,10 @@ in stdenv.mkDerivation rec {
     mv $out/bin/idris2_app/idris2.so $out/bin/idris2
     rm $out/bin/idris2_app/*
     rmdir $out/bin/idris2_app
+
+    # Move packages into their own outputs
+    ${moveAllVendoredPackages}
+
     # idris2 needs to find scheme at runtime to compile
     # idris2 installs packages with --install into the path given by
     #   IDRIS2_PREFIX. We set that to a default of ~/.idris2, to mirror the
@@ -85,7 +100,7 @@ in stdenv.mkDerivation rec {
   '';
 
   # Run package tests
-  passthru.tests = callPackage ./tests.nix { inherit pname; };
+  passthru.tests = callPackage ./idris2-compiler-tests.nix { inherit pname; };
 
   meta = {
     description = "A purely functional programming language with first class types";
@@ -93,5 +108,7 @@ in stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fabianhjr wchresta ];
     inherit (chez.meta) platforms;
+
+    outputsToInstall = outputs;
   };
 }
