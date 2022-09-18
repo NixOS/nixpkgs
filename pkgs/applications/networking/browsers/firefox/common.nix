@@ -228,7 +228,6 @@ buildStdenv.mkDerivation ({
     })
   ]
   ++ lib.optional (lib.versionAtLeast version "86") ./env_var_for_system_dir-ff86.patch
-  ++ lib.optional (lib.versionAtLeast version "90" && lib.versionOlder version "95") ./no-buildconfig-ffx90.patch
   ++ lib.optional (lib.versionAtLeast version "96") ./no-buildconfig-ffx96.patch
   ++ extraPatches;
 
@@ -294,9 +293,6 @@ buildStdenv.mkDerivation ({
   '' + lib.optionalString (lib.versionAtLeast version "100.0") ''
     # Use our own python
     export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
-  '' + lib.optionalString (lib.versionOlder version "100.0") ''
-    # Use our own python
-    export MACH_USE_SYSTEM_PYTHON=1
 
   '' + lib.optionalString (lib.versionAtLeast version "95.0") ''
     # RBox WASM Sandboxing
