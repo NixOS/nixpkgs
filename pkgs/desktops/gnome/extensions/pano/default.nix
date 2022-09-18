@@ -17,7 +17,7 @@
 }:
 
 let
-  version = "9";
+  version = "10";
   uuid = "pano@elhan.io";
   pname = "gnome-shell-extension-pano";
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "oae";
     repo = "gnome-shell-pano";
     rev = "v${version}";
-    hash = "sha256-cn6+A6sAQyUfwKGQIOFTGrimvZ6fsBstcJ4I6AAk31A=";
+    hash = "sha256-1vGiWSXlQ8xheqJsZm3uXCixuLl5NFM2OgPQrzCPhME=";
   };
 
   nativeBuildInputs = [
@@ -70,10 +70,10 @@ stdenv.mkDerivation rec {
 
   buildPhase =
     let
-      dataDirPaths = super.lib.concatStringsSep ":" [
-        "${super.gnome.gnome-shell}/share/gnome-shell"
-        "${super.gnome.mutter}/lib/mutter-10"
-        "${super.libgda}/share/gir-1.0"
+      dataDirPaths = lib.concatStringsSep ":" [
+        "${gnome.gnome-shell}/share/gnome-shell"
+        "${gnome.mutter}/lib/mutter-10"
+        "${libgda}/share/gir-1.0"
       ];
     in
     ''
@@ -82,6 +82,8 @@ stdenv.mkDerivation rec {
       ln -sv "${nodeModules}/node_modules" node_modules
       export XDG_DATA_DIRS="${dataDirPaths}:$XDG_DATA_DIRS"
       yarn --offline build
+      # To avoid additional dependencies, we are patching here a generated file
+      # created by the previous command.
       patch -d dist -p1 < ${girpathsPatch}
 
       runHook postBuild
