@@ -196,6 +196,6 @@ env.mkDerivation rec {
     platforms = platforms.linux;
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ oxalica ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }
