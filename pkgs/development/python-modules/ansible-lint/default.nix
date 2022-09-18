@@ -4,7 +4,9 @@
 , setuptools-scm
 , ansible-compat
 , ansible-core
+, black
 , enrich
+, filelock
 , flaky
 , jsonschema
 , pythonOlder
@@ -42,7 +44,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     ansible-compat
     ansible-core
+    black
     enrich
+    filelock
     jsonschema
     pytest # yes, this is an actual runtime dependency
     pyyaml
