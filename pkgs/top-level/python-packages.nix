@@ -118,6 +118,7 @@ in {
     pytestCheckHook
     pythonCatchConflictsHook
     pythonImportsCheckHook
+    pythonMoveWheelHook
     pythonNamespacesHook
     pythonRecompileBytecodeHook
     pythonRelaxDepsHook
@@ -141,6 +142,8 @@ in {
 
   # Dont take pythonPackages from "global" pkgs scope to avoid mixing python versions
   pythonPackages = self;
+
+  buildVenv = callPackage ../development/interpreters/python/builders/build-venv.nix { };
 
   # specials
 
