@@ -228,17 +228,21 @@ rec {
     extraName = "-with-opt-plug";
     configure.packages.plugins = with pkgs.vimPlugins; {
       opt = [
-        (base16-vim.overrideAttrs(old: { pname = old.pname + "-unique-for-tests-please-dont-use-opt"; }))
+        (dashboard-nvim.overrideAttrs(old: { pname = old.pname + "-unique-for-tests-please-dont-use-opt"; }))
       ];
     };
     configure.customRC = ''
-      packadd base16-vim-unique-for-tests-please-dont-use-opt
-      color base16-tomorrow-night
+      try
+        Dashboard
+      catch /^Vim\%((\a\+)\)\=:E492/
+        echo "Dashboard not found"
+      endtry
+      packadd dashboard-nvim-unique-for-tests-please-dont-use-opt
     '';
   };
 
   run_nvim_with_opt_plug = runTest nvim_with_opt_plug ''
     export HOME=$TMPDIR
-    ${nvim_with_opt_plug}/bin/nvim -i NONE -c 'color base16-tomorrow-night'  +quit! -e
+    ${nvim_with_opt_plug}/bin/nvim -i NONE -c 'Dashboard'  +quit! -e
   '';
 })
