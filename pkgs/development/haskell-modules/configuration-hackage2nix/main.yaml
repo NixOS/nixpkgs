@@ -161,6 +161,8 @@ package-maintainers:
     - hnix
     - hnix-store-core
     - hnix-store-remote
+  arturcygan:
+    - hevm
   berberman:
     - nvfetcher
     - arch-web
