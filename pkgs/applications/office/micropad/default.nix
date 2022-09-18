@@ -25,7 +25,7 @@ in
 
     micropad-core = fetchzip {
       url = "https://github.com/MicroPad/MicroPad-Core/releases/download/v${version}/micropad.tar.xz";
-      hash = "sha256-aqshYbVrQg6tYtTlO91FGiH7DuueOA0OU5KGCVc7XvI=";
+      sha256 = "sha256-aqshYbVrQg6tYtTlO91FGiH7DuueOA0OU5KGCVc7XvI=";
     };
 
     packageJSON = ./package.json;
@@ -83,6 +83,8 @@ in
         categories = ["Office"];
       })
     ];
+
+    passthru.updateScript = ./update.sh;
 
     meta = with lib; {
       description = "A powerful note-taking app that helps you organise + take notes without restrictions";
