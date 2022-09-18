@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Next-gen Clipboard Manager for Gnome Shell";
-    license = licenses.gpl2Only;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.michojel ];
     homepage = "https://github.com/oae/gnome-shell-pano";
