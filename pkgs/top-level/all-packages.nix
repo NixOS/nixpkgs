@@ -23393,7 +23393,9 @@ with pkgs;
 
   rustc-demangle = callPackage ../development/libraries/rustc-demangle { };
 
-  s2geometry = callPackage ../development/libraries/s2geometry { };
+  s2geometry = callPackage ../development/libraries/s2geometry {
+    abseil-cpp = abseil-cpp_202401;
+  };
 
   safefile = callPackage ../development/libraries/safefile { };
 
