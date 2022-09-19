@@ -13,10 +13,20 @@ openjdk17.overrideAttrs (oldAttrs: rec {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
     rev = "jb${version}";
-    hash =
-     # Upstream issue: https://github.com/JetBrains/JetBrainsRuntime/issues/163
-     if stdenv.isDarwin then "sha256-ExRvjs53rIuhUx4oCgAqu1Av3CNAgmE1ZlN0srEh3XM="
-     else "sha256-O+OIDRJcIsb/vhO2+SYuYdUYWYTGkBcQ9cHTExLIFDE=";
+    hash = "sha256-ExRvjs53rIuhUx4oCgAqu1Av3CNAgmE1ZlN0srEh3XM=";
+    # Implement https://github.com/JetBrains/JetBrainsRuntime/pull/172
+    postFetch = ''
+      pushd "$out"/test/jdk/jb/java/awt
+      if [ "$(stat -c %i font)" != "$(stat -c %i Font)" ]; then
+        # case-sensitive filesystem
+        rmdir font
+      else
+        # case-insensitive filesystem
+        mv font _Font
+        mv _Font Font
+      fi
+      popd
+    '';
   };
 
   meta = with lib; {
