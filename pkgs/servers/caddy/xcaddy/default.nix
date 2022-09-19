@@ -13,6 +13,10 @@ buildGoModule rec {
     hash = "sha256-oGTtS5UlEebIqv4SM4q0YclASJNu8DNOLrGLRRAtkd8=";
   };
 
+  patches = [
+    ./use_tmpdir_on_darwin.diff
+  ];
+
   vendorHash = "sha256-RpbnoXyTrqGOI7DpgkO+J47P17T4QCVvM1CfS6kRO9Y=";
 
   meta = with lib; {
