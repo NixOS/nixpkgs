@@ -135,6 +135,27 @@ source @out@/nix-support/add-hardening.sh
 extraAfter=($NIX_CFLAGS_COMPILE_@suffixSalt@)
 extraBefore=(${hardeningCFlags[@]+"${hardeningCFlags[@]}"} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@)
 
+# Move all user-defined -idirafter from params to the extraAfter, so -idirafter with libs include
+# paths will be defined before user-defined -idirafter
+kept=()
+n=0
+N=${#params[@]}
+while (( $n < $N )); do
+    if [[ ${params[n]} =~ ^\-idirafter$ ]]; then
+        extraAfter+=("${params[n]}")
+        if (( $n+1 < $N )); then
+            extraAfter+=("${params[n+1]}")
+        fi
+        n+=1
+    elif [[ ${params[n]} =~ ^\-idirafter.+$ ]]; then
+        extraAfter+=("${params[n]}")
+    else
+        kept+=("${params[n]}")
+    fi
+    n+=1
+done
+params=(${kept+"${kept[@]}"})
+
 if [ "$dontLink" != 1 ]; then
 
     # Add the flags that should only be passed to the compiler when
