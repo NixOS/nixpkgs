@@ -21815,8 +21815,6 @@ with pkgs;
 
   spaceship-prompt = callPackage ../shells/zsh/spaceship-prompt {};
 
-  spatialite_tools = callPackage ../development/libraries/spatialite-tools { };
-
   spdk = callPackage ../development/libraries/spdk { };
 
   speechd = callPackage ../development/libraries/speechd { };
@@ -26451,6 +26449,8 @@ with pkgs;
   saga = libsForQt5.callPackage ../applications/gis/saga {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
+
+  spatialite_tools = callPackage ../applications/gis/spatialite-tools { };
 
   udig = callPackage ../applications/gis/udig { };
 
