@@ -78,7 +78,8 @@ let
     datasources = cfg.provision.datasources;
   };
 
-  datasourceFile = pkgs.writeText "datasource.yaml" (builtins.toJSON datasourceConfiguration);
+  datasourceFileNew = if (cfg.provision.datasources.path == null) then provisioningSettingsFormat.generate "datasource.yaml" cfg.provision.datasources.settings else cfg.provision.datasources.path;
+  datasourceFile = if (builtins.isList cfg.provision.datasources) then provisioningSettingsFormat.generate "datasource.yaml" datasourceConfiguration else datasourceFileNew;
 
   dashboardConfiguration = {
     apiVersion = 1;
@@ -107,6 +108,8 @@ let
 
   # http://docs.grafana.org/administration/provisioning/#datasources
   grafanaTypes.datasourceConfig = types.submodule {
+    freeformType = provisioningSettingsFormat.type;
+
     options = {
       name = mkOption {
         type = types.str;
@@ -121,11 +124,6 @@ let
         default = "proxy";
         description = lib.mdDoc "Access mode. proxy or direct (Server or Browser in the UI). Required.";
       };
-      orgId = mkOption {
-        type = types.int;
-        default = 1;
-        description = lib.mdDoc "Org id. will default to orgId 1 if not specified.";
-      };
       uid = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -133,67 +131,46 @@ let
       };
       url = mkOption {
         type = types.str;
+        default = "localhost";
         description = lib.mdDoc "Url of the datasource.";
-      };
-      password = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = lib.mdDoc "Database password, if used.";
-      };
-      user = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = lib.mdDoc "Database user, if used.";
-      };
-      database = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = lib.mdDoc "Database name, if used.";
-      };
-      basicAuth = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-        description = lib.mdDoc "Enable/disable basic auth.";
-      };
-      basicAuthUser = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = lib.mdDoc "Basic auth username.";
-      };
-      basicAuthPassword = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = lib.mdDoc "Basic auth password.";
-      };
-      withCredentials = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc "Enable/disable with credentials headers.";
-      };
-      isDefault = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc "Mark as default datasource. Max one per org.";
-      };
-      jsonData = mkOption {
-        type = types.nullOr types.attrs;
-        default = null;
-        description = lib.mdDoc "Datasource specific configuration.";
-      };
-      secureJsonData = mkOption {
-        type = types.nullOr types.attrs;
-        default = null;
-        description = lib.mdDoc "Datasource specific secure configuration.";
-      };
-      version = mkOption {
-        type = types.int;
-        default = 1;
-        description = lib.mdDoc "Version.";
       };
       editable = mkOption {
         type = types.bool;
         default = false;
         description = lib.mdDoc "Allow users to edit datasources from the UI.";
+      };
+      password = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = lib.mdDoc ''
+          Database password, if used. Please note that the contents of this option
+          will end up in a world-readable Nix store. Use the file provider
+          pointing at a reasonably secured file in the local filesystem
+          to work around that. Look at the documentation for details:
+          <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
+        '';
+      };
+      basicAuthPassword = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = lib.mdDoc ''
+          Basic auth password. Please note that the contents of this option
+          will end up in a world-readable Nix store. Use the file provider
+          pointing at a reasonably secured file in the local filesystem
+          to work around that. Look at the documentation for details:
+          <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
+        '';
+      };
+      secureJsonData = mkOption {
+        type = types.nullOr types.attrs;
+        default = null;
+        description = lib.mdDoc ''
+          Datasource specific secure configuration. Please note that the contents of this option
+          will end up in a world-readable Nix store. Use the file provider
+          pointing at a reasonably secured file in the local filesystem
+          to work around that. Look at the documentation for details:
+          <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
+        '';
       };
     };
   };
@@ -425,10 +402,79 @@ in {
       enable = mkEnableOption (lib.mdDoc "provision");
 
       datasources = mkOption {
-        description = lib.mdDoc "Grafana datasources configuration.";
+        description = lib.mdDoc ''
+          Deprecated option for Grafana datasource configuration. Use either
+          `services.grafana.provision.datasources.settings` or
+          `services.grafana.provision.datasources.path` instead.
+        '';
         default = [];
-        type = types.listOf grafanaTypes.datasourceConfig;
-        apply = x: map _filter x;
+        apply = x: if (builtins.isList x) then map _filter x else x;
+        type = with types; either (listOf grafanaTypes.datasourceConfig) (submodule {
+          options.settings = mkOption {
+            description = lib.mdDoc ''
+              Grafana datasource configuration in Nix. Can't be used with
+              `services.grafana.provision.datasources.path` simultaneously. See
+              <link xlink:href="https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources"/>
+              for supported options.
+            '';
+            default = null;
+            type = types.nullOr (types.submodule {
+              options = {
+                apiVersion = mkOption {
+                  description = lib.mdDoc "Config file version.";
+                  default = 1;
+                  type = types.int;
+                };
+
+                datasources = mkOption {
+                  description = lib.mdDoc "List of datasources to insert/update.";
+                  default = [];
+                  type = types.listOf grafanaTypes.datasourceConfig;
+                };
+
+                deleteDatasources = mkOption {
+                  description = lib.mdDoc "List of datasources that should be deleted from the database.";
+                  default = [];
+                  type = types.listOf (types.submodule {
+                    options.name = mkOption {
+                      description = lib.mdDoc "Name of the datasource to delete.";
+                      type = types.str;
+                    };
+
+                    options.orgId = mkOption {
+                      description = lib.mdDoc "Organization ID of the datasource to delete.";
+                      type = types.int;
+                    };
+                  });
+                };
+              };
+            });
+            example = literalExpression ''
+              {
+                apiVersion = 1;
+
+                datasources = [{
+                  name = "Graphite";
+                  type = "graphite";
+                }];
+
+                deleteDatasources = [{
+                  name = "Graphite";
+                  orgId = 1;
+                }];
+              }
+            '';
+          };
+
+          options.path = mkOption {
+            description = lib.mdDoc ''
+              Path to YAML datasource configuration. Can't be used with
+              `services.grafana.provision.datasources.settings` simultaneously.
+            '';
+            default = null;
+            type = types.nullOr types.path;
+          };
+        });
       };
 
 
@@ -722,11 +768,21 @@ in {
         cfg.security.adminPassword != opt.security.adminPassword.default
       ) "Grafana passwords will be stored as plaintext in the Nix store!")
       (optional (
-        any (x: x.password != null || x.basicAuthPassword != null || x.secureJsonData != null) cfg.provision.datasources
-      ) "Datasource passwords will be stored as plaintext in the Nix store!")
+        let
+          checkOpts = opt: any (x: x.password != null || x.basicAuthPassword != null || x.secureJsonData != null) opt;
+          datasourcesUsed = if (cfg.provision.datasources.settings == null) then [] else cfg.provision.datasources.settings.datasources;
+        in if (builtins.isList cfg.provision.datasources) then checkOpts cfg.provision.datasources else checkOpts datasourcesUsed
+      ) "Datasource passwords will be stored as plaintext in the Nix store! Use file provider instead.")
       (optional (
         any (x: x.secure_settings != null) cfg.provision.notifiers
       ) "Notifier secure settings will be stored as plaintext in the Nix store!")
+      (optional (
+        builtins.isList cfg.provision.datasources
+      ) ''
+          Provisioning Grafana datasources with options has been deprecated.
+          Use `services.grafana.provision.datasources.settings` or
+          `services.grafana.provision.datasources.path` instead.
+        '')
       (optional (
         builtins.isList cfg.provision.dashboards
       ) ''
@@ -756,9 +812,17 @@ in {
         message = "Cannot set both password and passwordFile";
       }
       {
-        assertion = all
+        assertion = if (builtins.isList cfg.provision.datasources) then true else cfg.provision.datasources.settings == null || cfg.provision.datasources.path == null;
+        message = "Cannot set both datasources settings and datasources path";
+      }
+      {
+        assertion = let
+          prometheusIsNotDirect = opt: all
           ({ type, access, ... }: type == "prometheus" -> access != "direct")
-          cfg.provision.datasources;
+          opt;
+        in
+          if (builtins.isList cfg.provision.datasources) then prometheusIsNotDirect cfg.provision.datasources
+          else cfg.provision.datasources.settings == null || prometheusIsNotDirect cfg.provision.datasources.settings.datasources;
         message = "For datasources of type `prometheus`, the `direct` access mode is not supported anymore (since Grafana 9.2.0)";
       }
       {
