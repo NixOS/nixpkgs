@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   # Fix the paths in .pc, even though it's unclear if these .pc are really useful.
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/SPIRV-Tools{,-shared}.pc \
-      --replace '=''${prefix}//' '='
+      --replace '=''${prefix}//' '=/'
   '';
 
   meta = with lib; {

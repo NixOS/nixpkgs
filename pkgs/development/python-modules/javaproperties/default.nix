@@ -1,4 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub
+, setuptools
 , six
 , pytest
 , python-dateutil
@@ -16,6 +17,7 @@ buildPythonPackage rec {
     sha256 = "16rcdw5gd4a21v2xb1j166lc9z2dqcv68gqvk5mvpnm0x6nwadgp";
   };
 
+  nativeBuildInputs = [ setuptools ];
   propagatedBuildInputs = [ six ];
 
   checkInputs = [ python-dateutil pytest ];
