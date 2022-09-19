@@ -918,7 +918,9 @@ with pkgs;
     { deps = [ dieHook ];
       substitutions = {
         shell = targetPackages.runtimeShell;
-        passthru.tests = tests.makeWrapper;
+      };
+      passthru = {
+        tests = tests.makeWrapper;
       };
     }
     ../build-support/setup-hooks/make-wrapper.sh;
