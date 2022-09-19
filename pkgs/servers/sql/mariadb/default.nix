@@ -267,7 +267,7 @@ in {
   };
   mariadb_109 = mariadbPackage {
     # Supported until 2023-08(?)
-    version = "10.9.2";
-    hash = "sha256-X0X/deBDlmVVqV+9uPCS5gzipsR7pZ0UTbRuE46SL0g=";
+    version = "10.9.3";
+    hash = "sha256-mh4imXL8zMgnDmM/aNP7gk2hUdz09T2h342UesqHa+4=";
   };
 }
