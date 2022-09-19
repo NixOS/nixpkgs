@@ -1,5 +1,5 @@
 { lib, stdenv, pkgsHostHost
-, file, curl, pkg-config, python3, openssl, cmake, zlib
+, fetchpatch, file, curl, pkg-config, python3, openssl, cmake, zlib
 , installShellFiles, makeWrapper, cacert, rustPlatform, rustc
 , CoreFoundation, Security
 }:
@@ -7,6 +7,19 @@
 rustPlatform.buildRustPackage {
   pname = "cargo";
   inherit (rustc) version src;
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-36113.patch";
+      url = "https://raw.githubusercontent.com/rust-lang/wg-security-response/4bbe734e6404ece6f4e85027564f8995d4ab70e0/patches/CVE-2022-36113/0001-CVE-2022-36113-avoid-unpacking-.cargo-ok-from-the-cr.patch";
+      hash = "sha256-ioPwKnzVbvycxZ8kysqZ7D3MH8A3lXpPdYJNbl14u5w=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-36114.patch";
+      url = "https://raw.githubusercontent.com/rust-lang/wg-security-response/4bbe734e6404ece6f4e85027564f8995d4ab70e0/patches/CVE-2022-36114/0001-CVE-2022-36114-limit-the-maximum-unpacked-size-of-a-.patch";
+      hash = "sha256-T85mBRC2guhBiytsYOUpSX9IMUgMymFcGyQurK+Q9Jg=";
+    })
+  ];
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
   cargoVendorDir = "vendor";
