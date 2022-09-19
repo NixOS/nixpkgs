@@ -20,37 +20,209 @@
       "Hide_Activities@shay.shayel.org",
       "hide-activities-button@nmingori.gnome-shell-extensions.org"
     ],
+    "proxy-switcher": [
+      "ProxySwitcher@flannaghan.com",
+      "ProxySwitcher@flannaghan.com"
+    ],
     "shutdowntimer": [
       "ShutdownTimer@neumann",
       "ShutdownTimer@deminder"
+    ],
+    "mailnag": [
+      "mailnag@pulb.github.com",
+      "mailnag@pulb.github.com"
+    ],
+    "ping-indicator": [
+      "ping_indicator@trifonovkv.gmail.com",
+      "ping_indicator@trifonovkv.gmail.com"
+    ],
+    "synaptic-button": [
+      "synaptic-button@fthx",
+      "synaptic-button@fthx",
+      "synaptic-button@fthx"
     ],
     "bottompanel": [
       "bottompanel@tmoer93",
       "bottom-panel@sulincix"
     ],
-    "noannoyance": [
-      "noannoyance@sindex.com",
-      "noannoyance@daase.net"
+    "archlinux-updates-indicator": [
+      "arch-update@RaphaelRochet",
+      "arch-update@RaphaelRochet"
+    ],
+    "hide-clock": [
+      "Hide_Clock@grantmcwilliams.com",
+      "Hide_Clock@grantmcwilliams.com"
+    ],
+    "move-osd-windows": [
+      "move-osd-windows@maestroschan.fr",
+      "move-osd-windows@maestroschan.fr"
     ],
     "somafm-internet-radio": [
       "SomaFm-Radio@alireza6677.gmail.com",
+      "SomaFm-Radio@cajhne.gmail.com",
       "SomaFm-Radio@cajhne.gmail.com"
+    ],
+    "run-or-raise": [
+      "run-or-raise@edvard.cz",
+      "run-or-raise@edvard.cz"
+    ],
+    "unix-timestamp-clock": [
+      "unix-timestamp-clock@se1exin.github.com",
+      "unix-timestamp-clock@se1exin.github.com",
+      "unix-timestamp-clock@se1exin.github.com",
+      "unix-timestamp-clock@se1exin.github.com",
+      "unix-timestamp-clock@se1exin.github.com"
+    ],
+    "mpris-indicator-button": [
+      "mprisindicatorbutton@JasonLG1979.github.io",
+      "mprisindicatorbutton@JasonLG1979.github.io"
     ],
     "transparent-window": [
       "transparent-window@pbxqdown.github.com",
       "transparentwindows.mdirshad07"
     ],
+    "fullscreen-notifications": [
+      "fullscreen-notifications@sorrow.about.alice.pm.me",
+      "fullscreen-notifications@sorrow.about.alice.pm.me",
+      "fullscreen-notifications@sorrow.about.alice.pm.me"
+    ],
+    "taskbar-updated": [
+      "TaskBar@c0ldplasma",
+      "TaskBar@c0ldplasma"
+    ],
     "floating-dock": [
       "floatingDock@sun.wxg@gmail.com",
       "floating-dock@nandoferreira_prof@hotmail.com"
     ],
-    "gnome-trash": [
-      "gnome-trash@gnome-trash.b00f.gitlab.com",
-      "gnome-trash@b00f.github.io"
+    "mounter": [
+      "mounter@heartmire",
+      "mounter@heartmire",
+      "mounter@heartmire"
+    ],
+    "bowser-gnome-extension": [
+      "bowser-gnome@kronosoul.xyz",
+      "bowser-gnome@kronosoul.xyz"
+    ],
+    "duckduckgo-search-provider": [
+      "gnome-shell-duckduckgo-search-provider@keithcirkel.co.uk",
+      "gnome-shell-duckduckgo-search-provider@keithcirkel.co.uk",
+      "gnome-shell-duckduckgo-search-provider@keithcirkel.co.uk"
+    ],
+    "galaxy-buds-battery": [
+      "galaxy-buds-battery@pemmoura",
+      "galaxy-buds-battery@pemmoura"
+    ],
+    "display-switcher": [
+      "display-switcher@iyadk.com",
+      "display-switcher@iyadk.com",
+      "display-switcher@iyadk.com",
+      "display-switcher@iyadk.com"
+    ],
+    "distinct-windows": [
+      "distinct@sireliah.com",
+      "distinct@sireliah.com",
+      "distinct@sireliah.com",
+      "distinct@sireliah.com",
+      "distinct@sireliah.com"
+    ],
+    "podman-as-docker": [
+      "podman-as-docker@alberto.yomerengues.xyz",
+      "podman-as-docker@alberto.yomerengues.xyz"
+    ],
+    "scanlines-effect": [
+      "scanlines-effect@muratcileli.com",
+      "scanlines-effect@muratcileli.com",
+      "scanlines-effect@muratcileli.com",
+      "scanlines-effect@muratcileli.com",
+      "scanlines-effect@muratcileli.com",
+      "scanlines-effect@muratcileli.com",
+      "scanlines-effect@muratcileli.com"
+    ],
+    "eye-and-mouse-extended": [
+      "eye-extended-fix@als.kz",
+      "eye-extended-fix@als.kz",
+      "eye-extended-fix@als.kz",
+      "eye-extended-fix@als.kz",
+      "eye-extended-fix@als.kz"
+    ],
+    "toggle-alacritty": [
+      "toggle-alacritty@itstime.tech",
+      "toggle-alacritty@itstime.tech",
+      "toggle-alacritty@itstime.tech"
+    ],
+    "top-bar-visuals-transparent-and-blur": [
+      "gnome-visuals-top-bar@evendanan.net",
+      "gnome-visuals-top-bar@evendanan.net",
+      "gnome-visuals-top-bar@evendanan.net",
+      "gnome-visuals-top-bar@evendanan.net",
+      "gnome-visuals-top-bar@evendanan.net",
+      "gnome-visuals-top-bar@evendanan.net",
+      "gnome-visuals-top-bar@evendanan.net"
+    ],
+    "shell-restarter": [
+      "shell-restarter@koolskateguy89.github.io",
+      "shell-restarter@koolskateguy89.github.io",
+      "shell-restarter@koolskateguy89.github.io"
+    ],
+    "disable-touch-osk": [
+      "disable-touch-osk@pardus.org.tr",
+      "disable-touch-osk@pardus.org.tr",
+      "disable-touch-osk@pardus.org.tr"
     ],
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
       "volume_scroller@noskoski"
+    ],
+    "gnome-citeurl-search-provider": [
+      "gnome-citeurl-search-provider@raindrum.github.io",
+      "gnome-citeurl-search-provider@raindrum.github.io"
+    ],
+    "arbtt-stats": [
+      "arbttstats@gervasioperez.ar",
+      "arbttstats@gervasioperez.ar"
+    ],
+    "cryptostash": [
+      "cryptostash@filidorwiese.nl",
+      "cryptostash@filidorwiese.nl"
+    ],
+    "kubectl-context": [
+      "kubectl-context@bernot.dev",
+      "kubectl-context@bernot.dev",
+      "kubectl-context@bernot.dev"
+    ],
+    "kill-port": [
+      "kill-port@empios.github.com",
+      "kill-port@empios.github.com"
+    ],
+    "move-ws-switcher-popup": [
+      "move-ws-switcher-popup@G-dH.github.com",
+      "move-ws-switcher-popup@G-dH.github.com"
+    ],
+    "aws-default-profile-switcher": [
+      "aws-default-profile-switcher@kevin-chappell.com",
+      "aws-default-profile-switcher@kevin-chappell.com"
+    ],
+    "panel-calculator": [
+      "pcalc@mgeck64.github.com",
+      "pcalc@mgeck64.github.com"
+    ],
+    "glasa": [
+      "glasa@lyrahgames.github.io",
+      "glasa@lyrahgames.github.io",
+      "glasa@lyrahgames.github.io"
+    ],
+    "areu-status": [
+      "areustatus@carissimi.eu",
+      "areustatus@carissimi.eu",
+      "areustatus@carissimi.eu"
+    ],
+    "dozenal-clock": [
+      "dozenalclock@mble.dk",
+      "dozenalclock@mble.dk"
+    ],
+    "one-thing": [
+      "one-thing@github.com",
+      "one-thing@github.com"
     ]
   },
   "40": {
@@ -70,38 +242,119 @@
       "system-monitor@paradoxxx.zero.gmail.com",
       "System_Monitor@bghome.gmail.com"
     ],
+    "calc": [
+      "calc@danigm.wadobo.com",
+      "calc@danigm.wadobo.com"
+    ],
+    "historymanager-prefix-search": [
+      "historymanager-prefix-search@sustmidown.centrum.cz",
+      "historymanager-prefix-search@sustmidown.centrum.cz",
+      "historymanager-prefix-search@sustmidown.centrum.cz",
+      "historymanager-prefix-search@sustmidown.centrum.cz",
+      "historymanager-prefix-search@sustmidown.centrum.cz",
+      "historymanager-prefix-search@sustmidown.centrum.cz"
+    ],
+    "gnome-hdate": [
+      "hdate@hatul.info",
+      "hdate@hatul.info"
+    ],
     "hide-activities-button": [
       "Hide_Activities@shay.shayel.org",
       "hide-activities-button@nmingori.gnome-shell-extensions.org"
+    ],
+    "proxy-switcher": [
+      "ProxySwitcher@flannaghan.com",
+      "ProxySwitcher@flannaghan.com"
     ],
     "shutdowntimer": [
       "ShutdownTimer@neumann",
       "shutdown-timer-gnome-shell-extension",
       "ShutdownTimer@deminder"
     ],
-    "noannoyance": [
-      "noannoyance@sindex.com",
-      "noannoyance@daase.net"
+    "keyman": [
+      "keyman@dpoetzsch.github.com",
+      "keyman@dpoetzsch.github.com",
+      "keyman@dpoetzsch.github.com"
+    ],
+    "mailnag": [
+      "mailnag@pulb.github.com",
+      "mailnag@pulb.github.com"
+    ],
+    "iss-above": [
+      "ISS_Above@mcepl.cepl.eu",
+      "ISS_Above@mcepl.cepl.eu",
+      "ISS_Above@mcepl.cepl.eu"
+    ],
+    "archlinux-updates-indicator": [
+      "arch-update@RaphaelRochet",
+      "arch-update@RaphaelRochet"
+    ],
+    "hide-clock": [
+      "Hide_Clock@grantmcwilliams.com",
+      "Hide_Clock@grantmcwilliams.com"
+    ],
+    "walkpaper": [
+      "walkpaper@walkpaper.blinkbp.github.com",
+      "walkpaper@walkpaper.blinkbp.github.com"
     ],
     "somafm-internet-radio": [
       "SomaFm-Radio@alireza6677.gmail.com",
+      "SomaFm-Radio@cajhne.gmail.com",
       "SomaFm-Radio@cajhne.gmail.com"
     ],
     "fuzzy-clock": [
       "fuzzy-clock@keepawayfromfire.co.uk",
       "FuzzyClock@johngoetz"
     ],
+    "run-or-raise": [
+      "run-or-raise@edvard.cz",
+      "run-or-raise@edvard.cz"
+    ],
+    "unix-timestamp-clock": [
+      "unix-timestamp-clock@se1exin.github.com",
+      "unix-timestamp-clock@se1exin.github.com",
+      "unix-timestamp-clock@se1exin.github.com",
+      "unix-timestamp-clock@se1exin.github.com",
+      "unix-timestamp-clock@se1exin.github.com"
+    ],
+    "mpris-indicator-button": [
+      "mprisindicatorbutton@JasonLG1979.github.io",
+      "mprisindicatorbutton@JasonLG1979.github.io"
+    ],
     "panel-date-format": [
       "panel-date-format@keiii.github.com",
       "panel-date-format@atareao.es"
     ],
+    "fullscreen-notifications": [
+      "fullscreen-notifications@sorrow.about.alice.pm.me",
+      "fullscreen-notifications@sorrow.about.alice.pm.me",
+      "fullscreen-notifications@sorrow.about.alice.pm.me"
+    ],
+    "focusli": [
+      "focusli@armonge.info",
+      "focusli@armonge.info"
+    ],
     "disable-unredirect-fullscreen-windows": [
       "unredirect@vaina.lt",
+      "unredirect@aunetx",
       "unredirect@aunetx"
+    ],
+    "taskbar-updated": [
+      "TaskBar@c0ldplasma",
+      "TaskBar@c0ldplasma"
     ],
     "floating-dock": [
       "floatingDock@sun.wxg@gmail.com",
       "floating-dock@nandoferreira_prof@hotmail.com"
+    ],
+    "mounter": [
+      "mounter@heartmire",
+      "mounter@heartmire",
+      "mounter@heartmire"
+    ],
+    "bowser-gnome-extension": [
+      "bowser-gnome@kronosoul.xyz",
+      "bowser-gnome@kronosoul.xyz"
     ],
     "extension-list": [
       "extension-list@tu.berry",
@@ -111,9 +364,112 @@
       "wireguard-indicator@gregos.me",
       "wireguard-indicator@atareao.es"
     ],
+    "duckduckgo-search-provider": [
+      "gnome-shell-duckduckgo-search-provider@keithcirkel.co.uk",
+      "gnome-shell-duckduckgo-search-provider@keithcirkel.co.uk",
+      "gnome-shell-duckduckgo-search-provider@keithcirkel.co.uk"
+    ],
+    "toggle-alacritty": [
+      "toggle-alacritty@itstime.tech",
+      "toggle-alacritty@itstime.tech",
+      "toggle-alacritty@itstime.tech"
+    ],
+    "shell-restarter": [
+      "shell-restarter@koolskateguy89.github.io",
+      "shell-restarter@koolskateguy89.github.io",
+      "shell-restarter@koolskateguy89.github.io"
+    ],
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
       "volume_scroller@noskoski"
+    ],
+    "gnome-citeurl-search-provider": [
+      "gnome-citeurl-search-provider@raindrum.github.io",
+      "gnome-citeurl-search-provider@raindrum.github.io"
+    ],
+    "arbtt-stats": [
+      "arbttstats@gervasioperez.ar",
+      "arbttstats@gervasioperez.ar"
+    ],
+    "ripple-remove": [
+      "rippleremove@slippinggitty",
+      "rippleremove@slippinggitty"
+    ],
+    "clean-system-menu": [
+      "clean-system-menu@astrapi.de",
+      "clean-system-menu@astrapi.de"
+    ],
+    "tuned-profile-switcher": [
+      "tuned-profile-switcher@vint21h.pp.ua",
+      "tuned-profile-switcher@vint21h.pp.ua",
+      "tuned-profile-switcher@vint21h.pp.ua"
+    ],
+    "move-ws-switcher-popup": [
+      "move-ws-switcher-popup@G-dH.github.com",
+      "move-ws-switcher-popup@G-dH.github.com"
+    ],
+    "print-website": [
+      "print-website@ermeso.com",
+      "print-website@ermeso.com",
+      "print-website@ermeso.com",
+      "print-website@ermeso.com",
+      "print-website@ermeso.com"
+    ],
+    "aws-default-profile-switcher": [
+      "aws-default-profile-switcher@kevin-chappell.com",
+      "aws-default-profile-switcher@kevin-chappell.com"
+    ],
+    "taildrop-send": [
+      "taildropsendxuwuming2014@outlook.com",
+      "taildropsendxuwuming2014@outlook.com"
+    ],
+    "hotkeys-popup": [
+      "hotkeys-popup@pimsnel.com",
+      "hotkeys-popup@pimsnel.com"
+    ],
+    "panel-calculator": [
+      "pcalc@mgeck64.github.com",
+      "pcalc@mgeck64.github.com"
+    ],
+    "glasa": [
+      "glasa@lyrahgames.github.io",
+      "glasa@lyrahgames.github.io",
+      "glasa@lyrahgames.github.io"
+    ],
+    "default-workspace": [
+      "default-workspace@mateusrodcosta.com",
+      "default-workspace@mateusrodcosta.com"
+    ],
+    "compare-filedir-from-clip": [
+      "compare@eexpss.gmail.com",
+      "compare@eexpss.gmail.com"
+    ],
+    "areu-status": [
+      "areustatus@carissimi.eu",
+      "areustatus@carissimi.eu",
+      "areustatus@carissimi.eu"
+    ],
+    "dozenal-clock": [
+      "dozenalclock@mble.dk",
+      "dozenalclock@mble.dk"
+    ],
+    "wattmeter-forked": [
+      "wattmeter-forked@clementherve.fr",
+      "wattmeter-forked@clementherve.fr",
+      "wattmeter-forked@clementherve.fr"
+    ],
+    "usable-overview": [
+      "usable-overview@mechtifs",
+      "usable-overview@mechtifs",
+      "usable-overview@mechtifs"
+    ],
+    "one-thing": [
+      "one-thing@github.com",
+      "one-thing@github.com"
+    ],
+    "mozilla-vpn-indicator": [
+      "mozillavpn@inytar.github.com",
+      "mozillavpn@inytar.github.com"
     ]
   },
   "41": {
@@ -129,33 +485,162 @@
       "lockkeys@vaina.lt",
       "lockkeys@fawtytoo"
     ],
+    "calc": [
+      "calc@danigm.wadobo.com",
+      "calc@danigm.wadobo.com"
+    ],
+    "gnome-hdate": [
+      "hdate@hatul.info",
+      "hdate@hatul.info"
+    ],
+    "proxy-switcher": [
+      "ProxySwitcher@flannaghan.com",
+      "ProxySwitcher@flannaghan.com"
+    ],
     "shutdowntimer": [
       "ShutdownTimer@neumann",
       "ShutdownTimer@deminder"
+    ],
+    "keyman": [
+      "keyman@dpoetzsch.github.com",
+      "keyman@dpoetzsch.github.com",
+      "keyman@dpoetzsch.github.com"
+    ],
+    "archlinux-updates-indicator": [
+      "arch-update@RaphaelRochet",
+      "arch-update@RaphaelRochet"
+    ],
+    "hide-clock": [
+      "Hide_Clock@grantmcwilliams.com",
+      "Hide_Clock@grantmcwilliams.com"
+    ],
+    "walkpaper": [
+      "walkpaper@walkpaper.blinkbp.github.com",
+      "walkpaper@walkpaper.blinkbp.github.com"
     ],
     "fuzzy-clock": [
       "fuzzy-clock@keepawayfromfire.co.uk",
       "FuzzyClock@johngoetz"
     ],
+    "run-or-raise": [
+      "run-or-raise@edvard.cz",
+      "run-or-raise@edvard.cz"
+    ],
+    "mpris-indicator-button": [
+      "mprisindicatorbutton@JasonLG1979.github.io",
+      "mprisindicatorbutton@JasonLG1979.github.io"
+    ],
     "panel-date-format": [
       "panel-date-format@keiii.github.com",
       "panel-date-format@atareao.es"
     ],
+    "fullscreen-notifications": [
+      "fullscreen-notifications@sorrow.about.alice.pm.me",
+      "fullscreen-notifications@sorrow.about.alice.pm.me",
+      "fullscreen-notifications@sorrow.about.alice.pm.me"
+    ],
     "disable-unredirect-fullscreen-windows": [
       "unredirect@vaina.lt",
+      "unredirect@aunetx",
       "unredirect@aunetx"
     ],
     "floating-dock": [
       "floatingDock@sun.wxg@gmail.com",
       "floating-dock@nandoferreira_prof@hotmail.com"
     ],
+    "mounter": [
+      "mounter@heartmire",
+      "mounter@heartmire",
+      "mounter@heartmire"
+    ],
+    "bowser-gnome-extension": [
+      "bowser-gnome@kronosoul.xyz",
+      "bowser-gnome@kronosoul.xyz"
+    ],
     "wireguard-indicator": [
       "wireguard-indicator@gregos.me",
       "wireguard-indicator@atareao.es"
     ],
+    "duckduckgo-search-provider": [
+      "gnome-shell-duckduckgo-search-provider@keithcirkel.co.uk",
+      "gnome-shell-duckduckgo-search-provider@keithcirkel.co.uk",
+      "gnome-shell-duckduckgo-search-provider@keithcirkel.co.uk"
+    ],
+    "toggle-alacritty": [
+      "toggle-alacritty@itstime.tech",
+      "toggle-alacritty@itstime.tech",
+      "toggle-alacritty@itstime.tech"
+    ],
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
       "volume_scroller@noskoski"
+    ],
+    "tuned-profile-switcher": [
+      "tuned-profile-switcher@vint21h.pp.ua",
+      "tuned-profile-switcher@vint21h.pp.ua",
+      "tuned-profile-switcher@vint21h.pp.ua"
+    ],
+    "aws-default-profile-switcher": [
+      "aws-default-profile-switcher@kevin-chappell.com",
+      "aws-default-profile-switcher@kevin-chappell.com"
+    ],
+    "taildrop-send": [
+      "taildropsendxuwuming2014@outlook.com",
+      "taildropsendxuwuming2014@outlook.com"
+    ],
+    "hotkeys-popup": [
+      "hotkeys-popup@pimsnel.com",
+      "hotkeys-popup@pimsnel.com"
+    ],
+    "glasa": [
+      "glasa@lyrahgames.github.io",
+      "glasa@lyrahgames.github.io",
+      "glasa@lyrahgames.github.io"
+    ],
+    "default-workspace": [
+      "default-workspace@mateusrodcosta.com",
+      "default-workspace@mateusrodcosta.com"
+    ],
+    "compare-filedir-from-clip": [
+      "compare@eexpss.gmail.com",
+      "compare@eexpss.gmail.com"
+    ],
+    "areu-status": [
+      "areustatus@carissimi.eu",
+      "areustatus@carissimi.eu",
+      "areustatus@carissimi.eu"
+    ],
+    "pnx-time-logger": [
+      "tl@l.pnx.me",
+      "tl@l.pnx.me",
+      "tl@l.pnx.me",
+      "tl@l.pnx.me"
+    ],
+    "dozenal-clock": [
+      "dozenalclock@mble.dk",
+      "dozenalclock@mble.dk"
+    ],
+    "usable-overview": [
+      "usable-overview@mechtifs",
+      "usable-overview@mechtifs",
+      "usable-overview@mechtifs"
+    ],
+    "somafm-internet-radio": [
+      "SomaFm-Radio@cajhne.gmail.com",
+      "SomaFm-Radio@cajhne.gmail.com"
+    ],
+    "mozilla-vpn-indicator": [
+      "mozillavpn@inytar.github.com",
+      "mozillavpn@inytar.github.com"
+    ],
+    "dollar": [
+      "dollar-to-brl",
+      "dollar-to-brl",
+      "dollar-to-brl"
+    ],
+    "nauta-connect": [
+      "nauta-connect@jorgeajimenezl.com",
+      "nauta-connect@jorgeajimenezl.com"
     ]
   },
   "42": {
@@ -171,17 +656,104 @@
       "lockkeys@vaina.lt",
       "lockkeys@fawtytoo"
     ],
+    "calc": [
+      "calc@danigm.wadobo.com",
+      "calc@danigm.wadobo.com"
+    ],
+    "gnome-hdate": [
+      "hdate@hatul.info",
+      "hdate@hatul.info"
+    ],
+    "proxy-switcher": [
+      "ProxySwitcher@flannaghan.com",
+      "ProxySwitcher@flannaghan.com"
+    ],
+    "archlinux-updates-indicator": [
+      "arch-update@RaphaelRochet",
+      "arch-update@RaphaelRochet"
+    ],
+    "run-or-raise": [
+      "run-or-raise@edvard.cz",
+      "run-or-raise@edvard.cz"
+    ],
+    "mpris-indicator-button": [
+      "mprisindicatorbutton@JasonLG1979.github.io",
+      "mprisindicatorbutton@JasonLG1979.github.io"
+    ],
     "panel-date-format": [
       "panel-date-format@keiii.github.com",
       "panel-date-format@atareao.es"
+    ],
+    "fullscreen-notifications": [
+      "fullscreen-notifications@sorrow.about.alice.pm.me",
+      "fullscreen-notifications@sorrow.about.alice.pm.me",
+      "fullscreen-notifications@sorrow.about.alice.pm.me"
+    ],
+    "bowser-gnome-extension": [
+      "bowser-gnome@kronosoul.xyz",
+      "bowser-gnome@kronosoul.xyz"
     ],
     "wireguard-indicator": [
       "wireguard-indicator@gregos.me",
       "wireguard-indicator@atareao.es"
     ],
+    "duckduckgo-search-provider": [
+      "gnome-shell-duckduckgo-search-provider@keithcirkel.co.uk",
+      "gnome-shell-duckduckgo-search-provider@keithcirkel.co.uk",
+      "gnome-shell-duckduckgo-search-provider@keithcirkel.co.uk"
+    ],
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
       "volume_scroller@noskoski"
+    ],
+    "arbtt-stats": [
+      "arbttstats@gervasioperez.ar",
+      "arbttstats@gervasioperez.ar"
+    ],
+    "aws-default-profile-switcher": [
+      "aws-default-profile-switcher@kevin-chappell.com",
+      "aws-default-profile-switcher@kevin-chappell.com"
+    ],
+    "glasa": [
+      "glasa@lyrahgames.github.io",
+      "glasa@lyrahgames.github.io",
+      "glasa@lyrahgames.github.io"
+    ],
+    "compare-filedir-from-clip": [
+      "compare@eexpss.gmail.com",
+      "compare@eexpss.gmail.com"
+    ],
+    "usable-overview": [
+      "usable-overview@mechtifs",
+      "usable-overview@mechtifs",
+      "usable-overview@mechtifs"
+    ],
+    "somafm-internet-radio": [
+      "SomaFm-Radio@cajhne.gmail.com",
+      "SomaFm-Radio@cajhne.gmail.com"
+    ],
+    "mozilla-vpn-indicator": [
+      "mozillavpn@inytar.github.com",
+      "mozillavpn@inytar.github.com"
+    ],
+    "reboottouefi": [
+      "reboottouefi@ubaygd.com",
+      "reboottouefi@ubaygd.com"
+    ],
+    "dollar": [
+      "dollar-to-brl",
+      "dollar-to-brl",
+      "dollar-to-brl"
+    ],
+    "no-a11y": [
+      "noa11y@popov895.ukr.net",
+      "noa11y@popov895.ukr.net",
+      "noa11y@popov895.ukr.net",
+      "noa11y@popov895.ukr.net"
+    ],
+    "nauta-connect": [
+      "nauta-connect@jorgeajimenezl.com",
+      "nauta-connect@jorgeajimenezl.com"
     ]
   }
 }
