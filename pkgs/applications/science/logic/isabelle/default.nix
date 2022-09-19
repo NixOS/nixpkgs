@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, coreutils, nettools, java, scala, polyml, z3, veriT, vampire, eprover-ho, naproche, rlwrap, perl, makeDesktopItem, isabelle-components, isabelle, symlinkJoin, fetchhg }:
+{ lib, stdenv, fetchurl, coreutils, nettools, java, scala_3, polyml, z3, veriT, vampire, eprover-ho, naproche, rlwrap, perl, makeDesktopItem, isabelle-components, isabelle, symlinkJoin, fetchhg }:
 # nettools needed for hostname
 
 let
@@ -29,7 +29,7 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "isabelle";
-  version = "2021-1";
+  version = "2022";
 
   dirname = "Isabelle${version}";
 
@@ -39,12 +39,12 @@ in stdenv.mkDerivation rec {
       fetchurl
         {
           url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_macos.tar.gz";
-          sha256 = "0n1ls9vwf0ps1x8zpb7c1xz1wkasgvc34h5bz280hy2z6iqwmwbc";
+          sha256 = "0b84rx9b7b5y8m1sg7xdp17j6yngd2dkx6v5bkd8h7ly102lai18";
         }
     else
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux.tar.gz";
-        sha256 = "0jfaqckhg388jh9b4msrpkv6wrd6xzlw18m0bngbby8k8ywalp9i";
+        sha256 = "1ih4gykkp1an43qdgc5xzyvf30fhs0dah3y0a5ksbmvmjsfnxyp7";
       };
 
   buildInputs = [ polyml z3 veriT vampire eprover-ho nettools ]
@@ -111,7 +111,8 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace src/Tools/Setup/src/Environment.java \
       --replace 'cmd.add("/usr/bin/env");' "" \
-      --replace 'cmd.add("bash");' "cmd.add(\"$SHELL\");"
+      --replace 'cmd.add("bash");' "cmd.add(\"$SHELL\");" \
+      --replace 'private static read_file(path: Path): String =' 'private static String read_file(Path path) throws IOException'
 
     substituteInPlace src/Pure/General/sha1.ML \
       --replace '"$ML_HOME/" ^ (if ML_System.platform_is_windows then "sha1.dll" else "libsha1.so")' '"${sha1}/lib/libsha1.so"'
@@ -123,6 +124,9 @@ in stdenv.mkDerivation rec {
   '' + (if ! stdenv.isLinux then "" else ''
     arch=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux" else "x86-linux"}
     for f in contrib/*/$arch/{bash_process,epclextract,nunchaku,SPASS,zipperposition}; do
+      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"
+    done
+    for f in contrib/*/platform_$arch/{bash_process,epclextract,nunchaku,SPASS,zipperposition}; do
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"
     done
     for d in contrib/kodkodi-*/jni/$arch; do
@@ -145,10 +149,12 @@ in stdenv.mkDerivation rec {
     do
       ARGS["''${#ARGS[@]}"]="src/Tools/Setup/$SRC"
     done
-    ${java}/bin/javac -d "$TARGET_DIR" -classpath ${scala}/lib/scala-compiler.jar "''${ARGS[@]}"
+    echo "Building isabelle setup"
+    ${java}/bin/javac -d "$TARGET_DIR" -classpath "${scala_3.bare}/lib/scala3-interfaces-${scala_3.version}.jar:${scala_3.bare}/lib/scala3-compiler_3-${scala_3.version}.jar" "''${ARGS[@]}"
     ${java}/bin/jar -c -f "$TARGET_DIR/isabelle_setup.jar" -e "isabelle.setup.Setup" -C "$TARGET_DIR" isabelle
     rm -rf "$TARGET_DIR/isabelle"
 
+    echo "Building HOL heap"
     # Prebuild HOL Session
     bin/isabelle build -v -o system_heaps -b HOL
   '';
