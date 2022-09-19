@@ -10,7 +10,6 @@
 , gettext
 , itstool
 , libxml2
-, python3
 , gnome
 , glib
 , gtk4
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     libxml2
-    python3
     wrapGAppsHook4
     gobject-introspection
   ];
@@ -48,11 +46,6 @@ stdenv.mkDerivation rec {
     librsvg
     pango
   ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {
