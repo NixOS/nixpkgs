@@ -5,6 +5,7 @@
 , makeWrapper
 , symlinkJoin
 , CoreFoundation
+, libfido2
 , openssl
 , pkg-config
 , protobuf
@@ -63,12 +64,12 @@ buildGoModule rec {
   vendorHash = "sha256-2Zrd3CbZvxns9lNVtwaaor1mi97IhPc+MRJhj3rU760=";
 
   subPackages = [ "tool/tbot" "tool/tctl" "tool/teleport" "tool/tsh" ];
-  tags = [ "webassets_embed" ]
+  tags = [ "libfido2" "webassets_embed" ]
     ++ lib.optional withRdpClient "desktop_access_rdp";
 
-  buildInputs = [ openssl ]
+  buildInputs = [ openssl libfido2 ]
     ++ lib.optionals (stdenv.isDarwin && withRdpClient) [ CoreFoundation Security ];
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
 
   patches = [
     # https://github.com/NixOS/nixpkgs/issues/120738
