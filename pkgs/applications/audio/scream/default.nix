@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "scream";
-  version = "3.9";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "duncanthrax";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JxDR7UhS4/+oGQ9Fwm4f+yBM9OyX0Srvr9n/vaZVvxQ=";
+    sha256 = "sha256-lP5mdNhZjkEVjgQUEsisPy+KXUqsE6xj6dFWcgD+VGM=";
   };
 
   buildInputs = lib.optional pulseSupport libpulseaudio
