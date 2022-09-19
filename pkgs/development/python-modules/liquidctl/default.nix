@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , installShellFiles
+, setuptools
 , docopt
 , hidapi
 , pyusb
@@ -25,7 +26,10 @@ buildPythonPackage rec {
     sha256 = "sha256-2mXWih3LchJ/YsjuwHwWse7SNJYx1vxtovl8vasKV4w=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     docopt
