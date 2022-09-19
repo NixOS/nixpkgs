@@ -24621,6 +24621,10 @@ with pkgs;
     python = python3;
   };
 
+  librasterlite2 = callPackage ../development/libraries/librasterlite2 {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
+
   libraw = callPackage ../development/libraries/libraw { };
   libraw_unstable = callPackage ../development/libraries/libraw/unstable.nix { };
 
