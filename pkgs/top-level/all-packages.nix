@@ -18315,6 +18315,8 @@ with pkgs;
 
   freetype = callPackage ../development/libraries/freetype { };
 
+  freexl = callPackage ../development/libraries/freexl { };
+
   frei0r = callPackage ../development/libraries/frei0r { };
 
   fribidi = callPackage ../development/libraries/fribidi { };
@@ -21836,8 +21838,6 @@ with pkgs;
   spandsp3 = callPackage ../development/libraries/spandsp/3.nix {};
 
   spaceship-prompt = callPackage ../shells/zsh/spaceship-prompt {};
-
-  spatialite_tools = callPackage ../development/libraries/spatialite-tools { };
 
   spdk = callPackage ../development/libraries/spdk { };
 
@@ -26471,6 +26471,8 @@ with pkgs;
   saga = libsForQt5.callPackage ../applications/gis/saga {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
+
+  spatialite_tools = callPackage ../applications/gis/spatialite-tools { };
 
   udig = callPackage ../applications/gis/udig { };
 
