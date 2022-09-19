@@ -30,6 +30,6 @@ buildGoModule rec {
     homepage = "https://github.com/ledgerwatch/erigon/";
     description = "Ethereum node implementation focused on scalability and modularity";
     license = with licenses; [ lgpl3Plus gpl3Plus ];
-    maintainers = with maintainers; [ d-xo ];
+    maintainers = with maintainers; [ d-xo happysalada ];
   };
 }
