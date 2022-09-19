@@ -17,6 +17,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "waydroid";
   version = "1.3.0";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
