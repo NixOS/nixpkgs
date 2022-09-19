@@ -114,11 +114,6 @@ in rec {
       };
     } ./python-namespaces-hook.sh) {};
 
-  pythonOutputDistHook = callPackage ({ }:
-    makeSetupHook {
-      name = "python-output-dist-hook";
-  } ./python-output-dist-hook.sh ) {};
-
   pythonRecompileBytecodeHook = callPackage ({ }:
     makeSetupHook {
       name = "python-recompile-bytecode-hook";
