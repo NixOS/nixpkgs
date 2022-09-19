@@ -1,6 +1,7 @@
 { lib
 , aiofiles
 , aiohttp
+, backoff
 , botocore
 , buildPythonPackage
 , fetchFromGitHub
@@ -8,6 +9,7 @@
 , mock
 , parse
 , pytest-asyncio
+, pytest-console-scripts
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -34,6 +36,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    backoff
     botocore
     graphql-core
     requests
@@ -48,8 +51,17 @@ buildPythonPackage rec {
     mock
     parse
     pytest-asyncio
+    pytest-console-scripts
     pytestCheckHook
     vcrpy
+  ];
+
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
+
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
   ];
 
   disabledTests = [

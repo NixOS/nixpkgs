@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace pyproject.toml \
       --replace 'python-frontmatter = "^0.5.0"' 'python-frontmatter = "^1.0.0"' \
       --replace 'genanki = "^0.10.1"' 'genanki = "*"' \
-      --replace 'typer = "^0.3.2"' 'typer = "^0.4.0"'
+      --replace 'typer = "^0.3.2"' 'typer = "*"'
   '';
 
   # No tests available on Pypi and there is only a failing version assertion test in the repo.

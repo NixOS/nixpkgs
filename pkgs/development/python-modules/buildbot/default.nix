@@ -11,6 +11,7 @@ let
   withPlugins = plugins: buildPythonPackage {
     pname = "${package.pname}-with-plugins";
     inherit (package) version;
+    format = "other";
 
     dontUnpack = true;
     dontBuild = true;
