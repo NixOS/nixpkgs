@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , gettext
@@ -34,19 +33,6 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-CGjPz7eMOiesW+YM2E0wuz08KMiFqY+qCeN/o6UyNOQ=";
   };
-
-  patches = [
-    # Fix build without GTK 3.
-    # https://gitlab.gnome.org/GNOME/gnome-maps/-/merge_requests/248
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-maps/-/merge_requests/248.patch";
-      sha256 = "koVpvz021b+rvauIc3kvEBdTttRSuYiPvDH/dVbs5pc=";
-      postFetch = ''
-        # Make the patch apply.
-        substituteInPlace "$out" --replace "version: '43.0'," "version: '43.rc',"
-      '';
-    })
-  ];
 
   doCheck = true;
 
