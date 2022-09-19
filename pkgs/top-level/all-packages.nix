@@ -2097,6 +2097,7 @@ with pkgs;
   corsair = with python3Packages; toPythonApplication corsair-scan;
 
   cosign = callPackage ../tools/security/cosign {
+    buildGoModule = buildGo118Module;
     inherit (darwin.apple_sdk.frameworks) PCSC;
   };
 
