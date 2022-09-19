@@ -30,7 +30,7 @@ in
         tokenFile = "/secrets/token2";
       };
     };
-    description = ''
+    description = lib.mdDoc ''
       Multiple GitHub Runners.
     '';
   };

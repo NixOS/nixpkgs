@@ -104,7 +104,7 @@ with lib;
 
   extraEnvironment = mkOption {
     type = types.attrs;
-    description = ''
+    description = lib.mdDoc ''
       Extra environment variables to set for the runner, as an attrset.
     '';
     example = {
@@ -115,7 +115,7 @@ with lib;
 
   serviceOverrides = mkOption {
     type = types.attrs;
-    description = ''
+    description = lib.mdDoc ''
       Overrides for the systemd service. Can be used to adjust the sandboxing options.
     '';
     example = {
@@ -153,7 +153,7 @@ with lib;
 
   user = mkOption {
     type = types.str;
-    description = ''
+    description = lib.mdDoc ''
       User under which to run the service. If null, will use a systemd dynamic user.
     '';
     default = null;
