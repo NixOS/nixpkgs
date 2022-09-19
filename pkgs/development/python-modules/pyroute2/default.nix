@@ -4,6 +4,7 @@
 , importlib-metadata
 , mitogen
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -17,6 +18,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-hahWY7BIO8c6DmCgG+feZdNikbYWycFCl0E6P1uEQ/M=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     mitogen
