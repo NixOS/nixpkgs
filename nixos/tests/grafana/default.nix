@@ -7,4 +7,5 @@
   basic = import ./basic.nix { inherit system pkgs; };
   provision-datasources = import ./provision-datasources { inherit system pkgs; };
   provision-dashboards = import ./provision-dashboards { inherit system pkgs; };
+  provision-notifiers = import ./provision-notifiers.nix { inherit system pkgs; };
 }

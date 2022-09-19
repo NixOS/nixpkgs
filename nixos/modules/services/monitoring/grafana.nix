@@ -250,7 +250,13 @@ let
       secure_settings = mkOption {
         type = types.nullOr types.attrs;
         default = null;
-        description = lib.mdDoc "Secure settings for the notifier type.";
+        description = lib.mdDoc ''
+          Secure settings for the notifier type. Please note that the contents of this option
+          will end up in a world-readable Nix store. Use the file provider
+          pointing at a reasonably secured file in the local filesystem
+          to work around that. Look at the documentation for details:
+          <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
+        '';
       };
     };
   };
@@ -775,7 +781,7 @@ in {
       ) "Datasource passwords will be stored as plaintext in the Nix store! Use file provider instead.")
       (optional (
         any (x: x.secure_settings != null) cfg.provision.notifiers
-      ) "Notifier secure settings will be stored as plaintext in the Nix store!")
+      ) "Notifier secure settings will be stored as plaintext in the Nix store! Use file provider instead.")
       (optional (
         builtins.isList cfg.provision.datasources
       ) ''
@@ -789,6 +795,12 @@ in {
           Provisioning Grafana dashboards with options has been deprecated.
           Use `services.grafana.provision.dashboards.settings` or
           `services.grafana.provision.dashboards.path` instead.
+        '')
+      (optional (
+        cfg.provision.notifiers != []
+        ) ''
+            Notifiers are deprecated upstream and will be removed in Grafana 10.
+            Use `services.grafana.provision.alerting.contactPoints` instead.
         '')
     ];
 
