@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "aioitertools";
-  version = "0.10.0";
+  version = "0.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fR0dSgPUYsWghAeH098JjxJYR+DTi4M7MPj4y8RaFCA=";
+    hash = "sha256-QsaLjdOmnCv38iM7999LtYtVe8pSUqwC7VGHu8Z9aDE=";
   };
 
   nativeBuildInputs = [
