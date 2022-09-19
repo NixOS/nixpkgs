@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  # tests load the library dynamically which for unknown reason failed
-  doCheck = false;
+
+  doCheck = true;
 
   # remove when https://github.com/github/cmark-gfm/pull/248 merged and released
   postInstall = ''
