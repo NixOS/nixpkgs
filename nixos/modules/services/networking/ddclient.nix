@@ -200,6 +200,10 @@ with lib;
         type = lines;
         description = lib.mdDoc ''
           Extra configuration. Contents will be added verbatim to the configuration file.
+
+          ::: {.note}
+          `daemon` should not be added here because it does not work great with the systemd-timer approach the service uses.
+          :::
         '';
       };
     };
