@@ -4,8 +4,8 @@ let
   common = opts: callPackage (import ./common.nix opts);
 in {
   sublime-merge = common {
-    buildVersion = "2074";
-    x64sha256 = "REo59Lpi0fmAOp0XJa4Iln3VKxR5kRiMpz2zfqz1MQs=";
+    buildVersion = "2077";
+    x64sha256 = "6xgh/oSatTYHCnQEXiZAoHs3yI1iimLMtzCosBKBVp8=";
   } {};
 
   sublime-merge-dev = common {

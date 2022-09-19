@@ -170,8 +170,8 @@ let
           throw "The neovim legacy wrapper doesn't support configure.plug anymore, please setup your plugins via 'configure.packages' instead"
         else
           lib.flatten (lib.mapAttrsToList genPlugin (configure.packages or {}));
-      genPlugin = packageName: {start ? [], opt?[]}:
-        start ++ opt;
+      genPlugin = packageName: {start ? [], opt ? []}:
+        start ++ (map (p: { plugin = p; optional = true; }) opt);
 
       res = makeNeovimConfig {
         inherit withPython3;

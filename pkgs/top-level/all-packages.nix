@@ -5511,6 +5511,8 @@ with pkgs;
 
   curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
 
+  curl-impersonate-bin = callPackage ../tools/networking/curl-impersonate { };
+
   curlie = callPackage ../tools/networking/curlie { };
 
   cunit = callPackage ../tools/misc/cunit { };
@@ -12376,6 +12378,10 @@ with pkgs;
 
   xdg-launch = callPackage ../applications/misc/xdg-launch { };
 
+  xdp-tools = callPackage ../tools/networking/xdp-tools {
+    llvmPackages = llvmPackages_14;
+  };
+
   xkbvalidate = callPackage ../tools/X11/xkbvalidate { };
 
   xkeysnail = callPackage ../tools/X11/xkeysnail { };
@@ -12992,6 +12998,16 @@ with pkgs;
 
   semeru-bin = semeru-bin-17;
   semeru-jre-bin = semeru-jre-bin-17;
+
+  adoptopenjdk-bin-17-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk17-linux.nix { inherit lib; };
+  adoptopenjdk-bin-17-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk17-darwin.nix { inherit lib; };
+
+  adoptopenjdk-hotspot-bin-17 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-17-packages-linux.jdk-hotspot {}
+    else callPackage adoptopenjdk-bin-17-packages-darwin.jdk-hotspot {};
+  adoptopenjdk-jre-hotspot-bin-17 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-17-packages-linux.jre-hotspot {}
+    else callPackage adoptopenjdk-bin-17-packages-darwin.jre-hotspot {};
 
   adoptopenjdk-hotspot-bin-16 = javaPackages.compiler.adoptopenjdk-16.jdk-hotspot;
   adoptopenjdk-jre-hotspot-bin-16 = javaPackages.compiler.adoptopenjdk-16.jre-hotspot;
@@ -13975,6 +13991,12 @@ with pkgs;
 
   openjdk16-bootstrap = javaPackages.compiler.openjdk16-bootstrap;
 
+  openjdk18-bootstrap = javaPackages.compiler.openjdk18-bootstrap;
+  openjdk18 = javaPackages.compiler.openjdk18;
+  openjdk18_headless = javaPackages.compiler.openjdk18.headless;
+  jdk18 = openjdk18;
+  jdk18_headless = openjdk18_headless;
+
   /* default JDK */
   jdk = jdk17;
 
@@ -14330,7 +14352,7 @@ with pkgs;
 
   muonlang = callPackage ../development/compilers/muonlang { };
 
-  inherit (callPackages ../development/compilers/nim { })
+  inherit (callPackages ../development/compilers/nim { openssl = openssl_1_1; })
     nim-unwrapped nimble-unwrapped nim;
   nimPackages = recurseIntoAttrs nim.pkgs;
 
@@ -14623,6 +14645,7 @@ with pkgs;
   cargo-tally = callPackage ../development/tools/rust/cargo-tally {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation IOKit;
   };
+  cargo-temp = callPackage ../development/tools/rust/cargo-temp { };
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };

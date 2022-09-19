@@ -245,12 +245,12 @@ final: prev:
 
   Recover-vim = buildVimPluginFrom2Nix {
     pname = "Recover.vim";
-    version = "2015-08-14";
+    version = "2022-09-07";
     src = fetchFromGitHub {
       owner = "chrisbra";
       repo = "Recover.vim";
-      rev = "efa491f6121f65e025f42d79a93081abb8db69d4";
-      sha256 = "17szim82bwnhf9q4n0n4jfmqkmhq6p0lh0j4y77a2x6lkn0pns5s";
+      rev = "e61319bce3cd1004e5b695933296d8f267dd65a3";
+      sha256 = "0hnww4a0vffgpj72qdhhsr28xdh219haldr6jd6my8mqy1rg3yq4";
     };
     meta.homepage = "https://github.com/chrisbra/Recover.vim/";
   };
@@ -4147,6 +4147,18 @@ final: prev:
       sha256 = "1sx09l5c8xi9n4nbnmwn7hx0wzsih3kdavgdygjckknjl1261bm1";
     };
     meta.homepage = "https://github.com/lukas-reineke/lsp-format.nvim/";
+  };
+
+  lsp-overloads-nvim = buildVimPluginFrom2Nix {
+    pname = "lsp-overloads.nvim";
+    version = "2022-08-12";
+    src = fetchFromGitHub {
+      owner = "Issafalcon";
+      repo = "lsp-overloads.nvim";
+      rev = "1258bfa3e21f5665b7a2c6c9b921a2ad8d8d8373";
+      sha256 = "146pykcnpf9b8c4mqvs1q4wnp5jqg8i21as3gvjygwm5b71lxbky";
+    };
+    meta.homepage = "https://github.com/Issafalcon/lsp-overloads.nvim/";
   };
 
   lsp-rooter-nvim = buildVimPluginFrom2Nix {

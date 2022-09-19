@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
+, setuptools
 
 # propagates
 , jsonschema
@@ -36,6 +37,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    setuptools
   ];
 
   propagatedBuildInputs = [

@@ -46,13 +46,13 @@
 , pname ? "gnuradio"
 , versionAttr ? {
   major = "3.9";
-  minor = "7";
+  minor = "8";
   patch = "0";
 }
 }:
 
 let
-  sourceSha256 = "sha256-6HEvQsV2JCkgNvBYsy1jfSTUIwEnrKJTzXNIVcPeWFQ=";
+  sourceSha256 = "sha256-0umGUOjD5l84CBBeDy1uFgUyEDpI9o9/SEQ8BZm22j4=";
   featuresInfo = {
     # Needed always
     basic = {
