@@ -46,7 +46,7 @@ commonOptions = packageSettings: rec { # attributes common to both builds
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl libedit ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) [ jemalloc ]
     ++ (if (lib.versionOlder version "10.5") then [ pcre ] else [ pcre2 ])
-    ++ (if (lib.versionOlder version "10.8")
+    ++ (if (lib.versionOlder version "10.6")
       then [ openssl_1_1 (curl.override { openssl = openssl_1_1; }) ]
       else [ openssl curl ]);
 
