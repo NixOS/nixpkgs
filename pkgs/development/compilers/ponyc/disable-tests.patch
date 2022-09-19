@@ -1,8 +1,6 @@
-diff --git a/packages/net/_test.pony b/packages/net/_test.pony
-index 9044dfb1..f0ea10f7 100644
---- a/packages/net/_test.pony
-+++ b/packages/net/_test.pony
-@@ -26,11 +26,6 @@ actor \nodoc\ Main is TestList
+--- a/packages/net/_test.pony	2022-09-19 13:41:48.821294530 -0400
++++ b/packages/net/_test.pony	2022-09-19 13:42:25.760322375 -0400
+@@ -26,11 +26,6 @@
        test(_TestTCPThrottle)
      end
  

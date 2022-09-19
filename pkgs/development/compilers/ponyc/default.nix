@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation (rec {
   pname = "ponyc";
-  version = "0.50.0";
+  version = "0.51.2";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = pname;
     rev = version;
-    sha256 = "sha256-FnzlFTiJrqoUfnys+q9is6OH9yit5ExDiRszQ679QbY=";
+    sha256 = "sha256-hQvdVXNGEEbr4a0wjp/kEpdDsTXaRCpq+8jXUvTEZEI=";
 
     fetchSubmodules = true;
   };
@@ -17,8 +17,8 @@ stdenv.mkDerivation (rec {
   ponygbenchmark = fetchFromGitHub {
     owner = "google";
     repo = "benchmark";
-    rev = "v1.5.4";
-    sha256 = "1dbjdjzkpbsq3jl9ksyg8mw759vkac8qzq1557m73ldnavbhz48x";
+    rev = "v1.5.6";
+    sha256 = "sha256-DFm5cQh1b2BX6qCDaQZ1/XBNDeIYXKWbIETYu1EjDww=";
   };
 
   nativeBuildInputs = [ cmake makeWrapper which python3 ];
@@ -32,8 +32,8 @@ stdenv.mkDerivation (rec {
       googletest = fetchFromGitHub {
         owner = "google";
         repo = "googletest";
-        rev = "release-1.10.0";
-        sha256 = "1zbmab9295scgg4z2vclgfgjchfjailjnvzc6f5x9jvlsdi3dpwz";
+        rev = "release-1.11.0";
+        sha256 = "sha256-SjlJxushfry13RGA7BCjYC9oZqV4z6x8dOiHfl/wpF0=";
       };
     })
   ];
@@ -49,7 +49,6 @@ stdenv.mkDerivation (rec {
   postPatch = ''
     # Patching Vendor LLVM
     patchShebangs --host build/build_libs/gbenchmark-prefix/src/benchmark/tools/*.py
-    patch -d lib/llvm/src/ -p1 < lib/llvm/patches/2020-07-28-01-c-exports.diff
     substituteInPlace packages/process/_test.pony \
         --replace '"/bin/' '"${coreutils}/bin/' \
         --replace '=/bin' "${coreutils}/bin"
