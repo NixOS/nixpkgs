@@ -92,8 +92,9 @@ in rec {
   pythonCatchConflictsHook = callPackage ({ setuptools }:
     makeSetupHook {
       name = "python-catch-conflicts-hook";
+      deps = [ setuptools ];
       substitutions = {
-        inherit pythonInterpreter pythonSitePackages setuptools;
+        inherit pythonInterpreter;
         catchConflicts=../catch_conflicts/catch_conflicts.py;
       };
     } ./python-catch-conflicts-hook.sh) {};
