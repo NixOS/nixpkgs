@@ -17,7 +17,7 @@
 
 let
   ucd-blocks = fetchurl {
-    url = "https://www.unicode.org/Public/14.0.0/ucd/Blocks.txt";
+    url = "https://www.unicode.org/Public/15.0.0/ucd/Blocks.txt";
     hash = "sha256-WYhw3d73s0talykWUoxFav8nZbec1Plkf7WM63Z+fxc=";
   };
 in
