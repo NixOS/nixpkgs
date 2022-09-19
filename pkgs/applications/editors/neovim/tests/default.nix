@@ -222,4 +222,44 @@ rec {
     export HOME=$TMPDIR
     ${nvimWithLuaPackages}/bin/nvim -i NONE --noplugin -es
   '';
+
+  # nixpkgs should install optional packages in the opt folder
+  nvim_with_opt_plugin = neovim.override {
+    extraName = "-with-opt-plugin";
+    configure.packages.opt-plugins = with pkgs.vimPlugins; {
+      opt = [
+        (dashboard-nvim.overrideAttrs(old: { pname = old.pname + "-unique-for-tests-please-dont-use-opt"; }))
+      ];
+    };
+    configure.customRC = ''
+      " Load all autoloaded plugins
+      packloadall
+
+      " Try to run Dashboard, and throw if it succeeds
+      try
+        Dashboard
+        echo "Dashboard found, throwing error"
+        cquit 1
+      catch /^Vim\%((\a\+)\)\=:E492/
+        echo "Dashboard not found"
+      endtry
+
+      " Load Dashboard as an optional
+      packadd dashboard-nvim-unique-for-tests-please-dont-use-opt
+
+      " Try to run Dashboard again, and throw if it fails
+      try
+        Dashboard
+        echo "Dashboard found"
+      catch /^Vim\%((\a\+)\)\=:E492/
+        echo "Dashboard not found, throwing error"
+        cquit 1
+      endtry
+    '';
+  };
+
+  run_nvim_with_opt_plugin = runTest nvim_with_opt_plugin ''
+    export HOME=$TMPDIR
+    ${nvim_with_opt_plugin}/bin/nvim -i NONE +quit! -e
+  '';
 })
