@@ -22179,6 +22179,8 @@ with pkgs;
 
   vlock = callPackage ../misc/screensavers/vlock { };
 
+  virtualpg = callPackage ../development/libraries/virtualpg { };
+
   vmime = callPackage ../development/libraries/vmime { };
 
   vrb = callPackage ../development/libraries/vrb { };
