@@ -23672,6 +23672,10 @@ with pkgs;
 
   keycloak = callPackage ../servers/keycloak { };
 
+  keydb = callPackage ../servers/nosql/keydb {
+    openssl = openssl_1_1;
+  };
+
   knot-dns = callPackage ../servers/dns/knot-dns { };
   knot-resolver = callPackage ../servers/dns/knot-resolver {
     systemd = systemdMinimal; # in closure already anyway
