@@ -10,14 +10,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "lief";
-  version = "0.12.1";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "lief-project";
     repo = "LIEF";
     rev = version;
-    sha256 = "sha256-IQqPwTNFHLOr8iwg8IhXpuiyg2rIdFuVDzwT39eA6/c=";
+    sha256 = "sha256-/ndScq6qfQt68bWtRs/RTQjLykbjnTu1K56Rlc35WjI=";
   };
+
+  patches = [
+    ./setup-py-complete-copy2-transition.patch
+  ];
 
   outputs = [ "out" "py" ];
 
