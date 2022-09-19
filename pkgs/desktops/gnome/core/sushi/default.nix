@@ -9,7 +9,7 @@
 , gtksourceview4
 , gjs
 , libsoup
-, webkitgtk
+, webkitgtk_4_1
 , icu
 , wrapGAppsHook
 , gst_all_1
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     librsvg
     libsoup
-    webkitgtk
+    webkitgtk_4_1
     libepoxy
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
