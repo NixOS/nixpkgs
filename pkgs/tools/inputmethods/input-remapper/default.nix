@@ -34,9 +34,9 @@
   # https://discourse.nixos.org/t/avoid-rec-expresions-in-nixpkgs/8293/7
   # The names are prefixed with input_remapper to avoid potential
   # collisions with package names
-, input_remapper_version ? "1.4.2"
-, input_remapper_src_rev ? "af20f87a1298153e765b840a2164ba63b9ef937a"
-, input_remapper_src_hash ? "sha256-eG4Fx1z74Bq1HrfmzOuULQLziGdWnHLax8y2dymjWsI="
+, input_remapper_version ? "1.5.0"
+, input_remapper_src_rev ? "e31a1b2bc5d23fe13130afcc242063196335399f"
+, input_remapper_src_hash ? "sha256-KPQLgXSonuOgphagYN2JN+CMIpmjTIPUTCqOPDk0UYU="
 }:
 
 let
