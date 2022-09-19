@@ -486,6 +486,14 @@
       </listitem>
       <listitem>
         <para>
+          lemmy module option
+          <literal>services.lemmy.settings.database.createLocally</literal>
+          moved to
+          <literal>services.lemmy.database.createLocally</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           virtlyst package and <literal>services.virtlyst</literal>
           module removed, due to lack of maintainers.
         </para>

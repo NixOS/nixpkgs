@@ -28,6 +28,8 @@ in
 
     caddy.enable = mkEnableOption (lib.mdDoc "exposing lemmy with the caddy reverse proxy");
 
+    database.createLocally = mkEnableOption (lib.mdDoc "creation of database on the instance");
+
     settings = mkOption {
       default = { };
       description = lib.mdDoc "Lemmy configuration";
@@ -63,9 +65,6 @@ in
             description = lib.mdDoc "The difficultly of the captcha to solve.";
           };
         };
-
-        options.database.createLocally = mkEnableOption (lib.mdDoc "creation of database on the instance");
-
       };
     };
 
@@ -142,7 +141,7 @@ in
       };
 
       assertions = [{
-        assertion = cfg.settings.database.createLocally -> localPostgres;
+        assertion = cfg.database.createLocally -> localPostgres;
         message = "if you want to create the database locally, you need to use a local database";
       }];
 
@@ -163,9 +162,9 @@ in
 
         wantedBy = [ "multi-user.target" ];
 
-        after = [ "pict-rs.service" ] ++ lib.optionals cfg.settings.database.createLocally [ "lemmy-postgresql.service" ];
+        after = [ "pict-rs.service" ] ++ lib.optionals cfg.database.createLocally [ "lemmy-postgresql.service" ];
 
-        requires = lib.optionals cfg.settings.database.createLocally [ "lemmy-postgresql.service" ];
+        requires = lib.optionals cfg.database.createLocally [ "lemmy-postgresql.service" ];
 
         serviceConfig = {
           DynamicUser = true;
@@ -203,7 +202,7 @@ in
         };
       };
 
-      systemd.services.lemmy-postgresql = mkIf cfg.settings.database.createLocally {
+      systemd.services.lemmy-postgresql = mkIf cfg.database.createLocally {
         description = "Lemmy postgresql db";
         after = [ "postgresql.service" ];
         partOf = [ "lemmy.service" ];
