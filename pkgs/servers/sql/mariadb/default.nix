@@ -253,8 +253,8 @@ in {
   };
   mariadb_107 = mariadbPackage {
     # Supported until 2023-02. TODO: remove ahead of 22.11 release.
-    version = "10.7.5";
-    hash = "sha256-f/OkzNoe7S8aZBO4DE7WjMqRFzD1Aaaf1/STo0oJVLo=";
+    version = "10.7.6";
+    hash = "sha256-erX7pDmQV33BdPG5a9NAszN8G9Rv48NmIgsJ0siNLqA=";
   };
   mariadb_108 = mariadbPackage {
     # Supported until 2023-05
