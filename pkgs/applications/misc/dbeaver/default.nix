@@ -32,7 +32,7 @@
     sha256 = "sha256-T2S5qoOqjqJGf7M4h+IFO+bBER3aNcbxC7CY1fJFqpg=";
   };
 
-  mvnSha256 = "KVE+AYYEWN9bjAWop4mpiPq8yU3GdSGqOTmLG4pdflQ=";
+  mvnSha256 = "HdIhENml6W4U+gM7ODxXinbex5o1X4YhWGTct5rpL5c=";
   mvnParameters = "-P desktop,all-platforms";
 
   nativeBuildInputs = [
