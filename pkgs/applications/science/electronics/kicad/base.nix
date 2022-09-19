@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    "-DKICAD_USE_EGL=ON"
   ]
   ++ optionals (withScripting) [
     "-DKICAD_SCRIPTING_WXPYTHON=ON"
