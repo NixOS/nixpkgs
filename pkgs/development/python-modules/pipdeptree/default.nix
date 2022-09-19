@@ -2,31 +2,51 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, tox
+, diff-cover
+, graphviz
+, hatchling
+, hatch-vcs
+, pytest-mock
+, pytestCheckHook
 , pip
+, virtualenv
 }:
 
 buildPythonPackage rec {
   pname = "pipdeptree";
-  version = "2.2.1";
+  version = "2.3.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.4";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "naiquevin";
     repo = "pipdeptree";
-    rev = "${version}";
-    sha256 = "sha256-CL0li/79qptOtOGLwder5s0+6zv7+PUnl+bD6p+XBtA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-X3SVQzBg+QjBSewRsfiyLqIea0duhe1nUf8ancWLvcI=";
   };
 
-  propagatedBuildInputs = [
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    hatchling
+    hatch-vcs
+  ];
+
+  propagatedBuildInput = [
     pip
   ];
 
+  passthru.optional-dependencies = {
+    graphviz = [ graphviz ];
+  };
+
   checkInputs = [
-    tox
-  ];
+    diff-cover
+    pytest-mock
+    pytestCheckHook
+    virtualenv
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "pipdeptree"

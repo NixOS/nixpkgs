@@ -5,7 +5,10 @@
 , setuptools
 
 # propagates
+, importlib-resources
 , jsonschema
+, jsonschema-spec
+, lazy-object-proxy
 , openapi-schema-validator
 , pyyaml
 
@@ -19,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "openapi-spec-validator";
-  version = "0.4.0";
+  version = "0.5.1";
   format = "pyproject";
 
   # no tests via pypi sdist
@@ -27,13 +30,8 @@ buildPythonPackage rec {
     owner = "p1c2u";
     repo = pname;
     rev = version;
-    hash = "sha256-mGgHlDZTUo72RNZ/448gkGdza4EntYU9YoBpSKDUCeA=";
+    hash = "sha256-8VhD57dNG0XrPUdcq39GEfHUAgdDwJ8nv+Lp57OpTLg=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'openapi-schema-validator = "^0.2.0"' 'openapi-schema-validator = "*"'
-  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -41,7 +39,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    importlib-resources
     jsonschema
+    jsonschema-spec
+    lazy-object-proxy
     openapi-schema-validator
     pyyaml
   ];
@@ -71,8 +72,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/p1c2u/openapi-spec-validator";
+    changelog = "https://github.com/p1c2u/openapi-spec-validator/releases/tag/${version}";
     description = "Validates OpenAPI Specs against the OpenAPI 2.0 (aka Swagger) and OpenAPI 3.0.0 specification";
+    homepage = "https://github.com/p1c2u/openapi-spec-validator";
     license = licenses.asl20;
     maintainers = with maintainers; [ rvl ];
   };

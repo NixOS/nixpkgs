@@ -10,6 +10,7 @@
 , python-pam
 , pyyaml
 , requests
+, setuptools
 , webtest
 }:
 
@@ -26,6 +27,10 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-LQdS9d2DB4PXqRSzmtZCSyCQI47ncLCG+RSB+goZYoA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     defusedxml

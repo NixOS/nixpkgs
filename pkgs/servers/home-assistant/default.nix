@@ -177,19 +177,6 @@ let
       });
     })
 
-    # pyunifiprotect excludes pydantic==1.9.1
-    (self: super: {
-      pydantic = super.pydantic.overridePythonAttrs (oldAttrs: rec {
-        version = "1.9.0";
-        src = fetchFromGitHub {
-          owner = "samuelcolvin";
-          repo = "pydantic";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-C4WP8tiMRFmkDkQRrvP3yOSM2zN8pHJmX9cdANIckpM=";
-        };
-      });
-    })
-
     (self: super: {
       pydeconz = super.pydeconz.overridePythonAttrs (oldAttrs: rec {
         doCheck = false; # requires pytest-aiohttp>=1.0.0
@@ -363,6 +350,7 @@ in python.pkgs.buildPythonApplication rec {
       "orjson"
       "PyJWT"
       "requests"
+      "yarl"
     ];
   in ''
     sed -r -i \

@@ -4,7 +4,9 @@
 , setuptools-scm
 , ansible-compat
 , ansible-core
+, black
 , enrich
+, filelock
 , flaky
 , jsonschema
 , pythonOlder
@@ -20,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "6.4.0";
+  version = "6.5.2";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xadjBsrpBqJgz3KGyofE0DukSSsu17/qIa0R/fPH6NE=";
+    sha256 = "sha256-9EMsdMDyiyhwoYi0mZWS9jOAQvMNDG9O4RsyRAyp/+Q=";
   };
 
   postPatch = ''
@@ -42,7 +44,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     ansible-compat
     ansible-core
+    black
     enrich
+    filelock
     jsonschema
     pytest # yes, this is an actual runtime dependency
     pyyaml

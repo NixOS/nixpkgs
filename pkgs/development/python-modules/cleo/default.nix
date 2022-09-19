@@ -1,26 +1,53 @@
-{ lib, buildPythonPackage, fetchPypi
-, clikit }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, crashtest
+, poetry-core
+, pylev
+, pytest-mock
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "cleo";
-  version = "0.8.1";
+  version = "1.0.0a5";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3d0e22d30117851b45970b6c14aca4ab0b18b1b53c8af57bed13208147e4069f";
+  src = fetchFromGitHub {
+    owner = "python-poetry";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-FtGGIRF/tA2OWEjkCFwa1HHg6VY+5E5mAiJC/zjUC1g=";
   };
 
-  propagatedBuildInputs = [
-    clikit
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'crashtest = "^0.3.1"' 'crashtest = "*"'
+  '';
+
+  nativeBuildInputs = [
+    poetry-core
   ];
 
-  # The Pypi tarball doesn't include tests, and the GitHub source isn't
-  # buildable until we bootstrap poetry, see
-  # https://github.com/NixOS/nixpkgs/pull/53599#discussion_r245855665
-  doCheck = false;
+  propagatedBuildInputs = [
+    crashtest
+    pylev
+  ];
+
+  pythonImportsCheck = [
+    "cleo"
+    "cleo.application"
+    "cleo.commands.command"
+    "cleo.helpers"
+  ];
+
+  checkInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/sdispater/cleo";
+    homepage = "https://github.com/python-poetry/cleo";
     description = "Allows you to create beautiful and testable command-line interfaces";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

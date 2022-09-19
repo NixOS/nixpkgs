@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "natsort";
-  version = "8.1.0";
+  version = "8.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-x8Hz8nw3Vxmk38qzU5Cf458mwgMqBiqMgMyETqrKBEU=";
+    hash = "sha256-V/hbcsaIsJ4FPNrDAt1bW1PfX3OuILSHT8v/2L94PRE=";
   };
 
   propagatedBuildInputs = [
