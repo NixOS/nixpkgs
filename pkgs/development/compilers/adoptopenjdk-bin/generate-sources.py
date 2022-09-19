@@ -7,7 +7,7 @@ import requests
 import sys
 
 # openjdk15 is only for bootstrapping openjdk
-releases = ("openjdk8", "openjdk11", "openjdk13", "openjdk14", "openjdk15", "openjdk16")
+releases = ("openjdk8", "openjdk11", "openjdk13", "openjdk14", "openjdk15", "openjdk16", "openjdk17")
 oses = ("mac", "linux")
 types = ("jre", "jdk")
 impls = ("hotspot", "openj9")

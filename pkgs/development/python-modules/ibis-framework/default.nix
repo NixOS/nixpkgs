@@ -36,11 +36,12 @@
 , python
 , pytz
 , regex
+, rich
 , rsync
 , shapely
 , sqlalchemy
+, sqlglot
 , sqlite
-, tabulate
 , toolz
 }:
 let
@@ -62,7 +63,7 @@ in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "3.1.0";
+  version = "3.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -71,17 +72,8 @@ buildPythonPackage rec {
     repo = "ibis";
     owner = "ibis-project";
     rev = version;
-    hash = "sha256-/mQWQLiJa1DRZiyiA6F0/lMyn3wSY1IUwJl2S0IFkvs=";
+    hash = "sha256-YRP1nGJs4btqXQirm0GfEDKNPCVXexVrwQ6sE8JtD2o=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "xfail-datafusion-0.4.0";
-      url = "https://github.com/ibis-project/ibis/compare/c162abba4df24e0d531bd2e6a3be3109c16b43b9...6219d6caee19b6fd3171983c49cd8d6872e3564b.patch";
-      hash = "sha256-pCYPntj+TwzqCtYWRf6JF5/tJC4crSXHp0aepRocHck=";
-      excludes = ["poetry.lock"];
-    })
-  ];
 
   nativeBuildInputs = [ poetry-core ];
 
@@ -96,7 +88,7 @@ buildPythonPackage rec {
     pydantic
     pytz
     regex
-    tabulate
+    rich
     toolz
   ];
 
@@ -131,7 +123,9 @@ buildPythonPackage rec {
     set -eo pipefail
 
     export IBIS_TEST_DATA_DIRECTORY
-    IBIS_TEST_DATA_DIRECTORY="$(mktemp -d)"
+    IBIS_TEST_DATA_DIRECTORY="ci/ibis-testing-data"
+
+    mkdir -p "$IBIS_TEST_DATA_DIRECTORY"
 
     # copy the test data to a directory
     rsync --chmod=Du+rwx,Fu+rw --archive "${ibisTestingData}/" "$IBIS_TEST_DATA_DIRECTORY"
@@ -147,16 +141,16 @@ buildPythonPackage rec {
 
   passthru = {
     optional-dependencies = {
-      clickhouse = [ clickhouse-cityhash clickhouse-driver lz4 ];
+      clickhouse = [ clickhouse-cityhash clickhouse-driver lz4 sqlglot ];
       dask = [ dask pyarrow ];
       datafusion = [ datafusion ];
-      duckdb = [ duckdb duckdb-engine sqlalchemy ];
+      duckdb = [ duckdb duckdb-engine pyarrow sqlalchemy sqlglot ];
       geospatial = [ geoalchemy2 geopandas shapely ];
-      mysql = [ pymysql sqlalchemy ];
+      mysql = [ sqlalchemy pymysql sqlglot ];
       pandas = [ ];
-      postgres = [ psycopg2 sqlalchemy ];
+      postgres = [ psycopg2 sqlalchemy sqlglot ];
       pyspark = [ pyarrow pyspark ];
-      sqlite = [ sqlalchemy sqlite ];
+      sqlite = [ sqlalchemy sqlite sqlglot ];
       visualization = [ graphviz-nox ];
     };
   };

@@ -13420,6 +13420,12 @@
     githubId = 1292007;
     name = "Sébastien Maccagnoni";
   };
+  tirex = {
+    email = "szymon@kliniewski.pl";
+    name = "Szymon Kliniewski";
+    github = "NoneTirex";
+    githubId = 26038207;
+  };
   titanous = {
     email = "jonathan@titanous.com";
     github = "titanous";

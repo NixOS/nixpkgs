@@ -1,13 +1,13 @@
 { lib, buildGoModule, fetchFromGitHub, symlinkJoin }:
 
 let
-  version = "3.5.4";
+  version = "3.5.5";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
     rev = "v${version}";
-    sha256 = "sha256-mTQHxLLfNiihvHg5zaTeVNWKuzvE0KBiJdY3qMJHMCM=";
+    sha256 = "sha256-V10aeYwr1ZS990lYZELJjq8NX7cBs0bzlYYzoYWS3zQ=";
   };
 
   CGO_ENABLED = 0;
@@ -25,7 +25,7 @@ let
 
     inherit CGO_ENABLED meta src version;
 
-    vendorSha256 = "sha256-4djUQvWp9hScua9l1ZTq298zWSeDYRDojEt2AWmarzw=";
+    vendorSha256 = "sha256-BTIrLgUXnV+0d0DTKE3TvvW2JH4oSE+SnJs+yfH26Ms=";
 
     modRoot = "./server";
 
@@ -45,7 +45,7 @@ let
 
     inherit CGO_ENABLED meta src version;
 
-    vendorSha256 = "sha256-nk56XGpNsDwcGrTKithKGnPCX0NhpQmzNSXHk3vmdtg=";
+    vendorSha256 = "sha256-yUgrKIjCtYTLmdZe1p9Rx9MUZzqOAmNF4tUckJgF8Ks=";
 
     modRoot = "./etcdutl";
   };
@@ -55,7 +55,7 @@ let
 
     inherit CGO_ENABLED meta src version;
 
-    vendorSha256 = "sha256-WIMYrXfay6DMz+S/tIc/X4ffMizxub8GS1DDgIR40D4=";
+    vendorSha256 = "sha256-qT8OJg4aTzz0p0s6yhmDYcfJ0p9KNbnlRbOCfOao0vk=";
 
     modRoot = "./etcdctl";
   };
