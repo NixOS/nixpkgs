@@ -207,6 +207,15 @@ stdenv.mkDerivation {
         <ranlib>$RANLIB
       ;
     EOF
+  ''
+  # b2 needs to be explicitly told how to find Python when cross-compiling
+  + optionalString enablePython ''
+    cat << EOF >> user-config.jam
+    using python : : ${python.interpreter}
+      : ${python}/include/python${python.pythonVersion}
+      : ${python}/lib
+      ;
+    EOF
   '';
 
   NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin
@@ -229,8 +238,7 @@ stdenv.mkDerivation {
     "--includedir=$(dev)/include"
     "--libdir=$(out)/lib"
     "--with-bjam=b2" # prevent bootstrapping b2 in configurePhase
-  ] ++ optional enablePython "--with-python=${python.interpreter}"
-    ++ optional (toolset != null) "--with-toolset=${toolset}"
+  ] ++ optional (toolset != null) "--with-toolset=${toolset}"
     ++ [ (if stdenv.hostPlatform == stdenv.buildPlatform then "--with-icu=${icu.dev}" else "--without-icu") ];
 
   buildPhase = ''
