@@ -35,6 +35,8 @@ openjdk17.overrideAttrs (oldAttrs: rec {
     homepage = "https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime";
     inherit (openjdk17.meta) license platforms mainProgram;
     maintainers = with maintainers; [ edwtjo ];
+
+    broken = stdenv.isDarwin;
   };
 
   passthru = oldAttrs.passthru // {
