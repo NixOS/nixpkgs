@@ -10432,6 +10432,8 @@ in {
 
   sphinx-copybutton = callPackage ../development/python-modules/sphinx-copybutton { };
 
+  sphinxemoji = callPackage ../development/python-modules/sphinxemoji { };
+
   sphinx-inline-tabs = callPackage ../development/python-modules/sphinx-inline-tabs { };
 
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
