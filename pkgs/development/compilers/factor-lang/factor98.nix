@@ -72,7 +72,7 @@ let
         passthru.runtimeLibs = runtimeLibs ++ interpreter.runtimeLibs;
       }
       (wrapFactorScript {
-        from = "${interpreter}/lib/factor/.factor.wrapped";
+        from = lib.getUnwrapped "${interpreter}/lib/factor/factor";
         to = "$out/bin/factor";
         runtimeLibs = (runtimeLibs ++ interpreter.runtimeLibs);
       });
@@ -81,7 +81,7 @@ let
   wrapLocalFactor = writeScriptBin "wrapFactor" ''
     #!${runtimeShell}
     ${wrapFactorScript { from = "./factor"; inherit runtimeLibs; }}
-    ln -sf factor.image .factor-wrapped.image
+    ln -sf factor.image ${lib.getUnwrapped "factor.image"}
   '';
   rev = "7999e72aecc3c5bc4019d43dc4697f49678cc3b4";
   version = "0.98";
@@ -178,11 +178,12 @@ stdenv.mkDerivation {
 
     # Create a wrapper in bin/ and lib/factor/
     ${wrapFactorScript { from = "$out/lib/factor/factor"; inherit runtimeLibs; }}
-    mv $out/lib/factor/factor.image $out/lib/factor/.factor-wrapped.image
-    cp $out/lib/factor/factor $out/bin/
+    original="${lib.getUnwrapped "$out/lib/factor/factor.image"}"
+    install -D "$out/lib/factor/factor.image" "$original"
+    cp "$out/lib/factor/factor" "$out/bin/"
 
     # Emacs fuel expects the image being named `factor.image` in the factor base dir
-    ln -s $out/lib/factor/.factor-wrapped.image $out/lib/factor/factor.image
+    ln -sf "$original" "$out/lib/factor/factor.image"
 
     # install fuel mode for emacs
     mkdir -p $out/share/emacs/site-lisp

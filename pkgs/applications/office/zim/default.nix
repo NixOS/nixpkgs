@@ -23,7 +23,6 @@ python3Packages.buildPythonApplication rec {
 
   preFixup = ''
     makeWrapperArgs+=(--prefix XDG_DATA_DIRS : $out/share)
-    makeWrapperArgs+=(--argv0 $out/bin/.zim-wrapped)
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 

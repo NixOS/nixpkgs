@@ -76,7 +76,8 @@ mkDerivation rec {
   ];
 
   postFixup = ''
-    patchelf --add-needed $out/lib/meshlab/libmeshlab-common.so $out/bin/.meshlab-wrapped
+    patchelf --add-needed "$out/lib/meshlab/libmeshlab-common.so" \
+      "${lib.getUnwrapped "$out/bin/meshlab"}"
   '';
 
   meta = {

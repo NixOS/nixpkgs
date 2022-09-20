@@ -32,15 +32,16 @@ stdenv.mkDerivation rec {
   # We don't use makeWrapper here because it uses substitutions our
   # bootstrap shell can't handle.
   postInstall = ''
-    mv $out/bin/help2man $out/bin/.help2man-wrapped
-    cat > $out/bin/help2man <<EOF
+    original="${lib.getUnwrapped "$out/bin/help2man"}"
+    install -Dm755 "$out/bin/help2man" "$original"
+    cat > "$out/bin/help2man" <<EOF
     #! $SHELL -e
     export PERL5LIB=\''${PERL5LIB:+:}${perlPackages.LocaleGettext}/${perlPackages.perl.libPrefix}
     ${lib.optionalString stdenv.hostPlatform.isCygwin
         ''export PATH=\''${PATH:+:}${gettext}/bin''}
-    exec -a \$0 $out/bin/.help2man-wrapped "\$@"
+    exec "$original" "\$@"
     EOF
-    chmod +x $out/bin/help2man
+    chmod +x "$out/bin/help2man"
   '';
 
   meta = with lib; {

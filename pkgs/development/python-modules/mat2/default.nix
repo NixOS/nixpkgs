@@ -44,8 +44,6 @@ buildPythonPackage rec {
     } // lib.optionalAttrs dolphinIntegration {
       kdialog = "${plasma5Packages.kdialog}/bin/kdialog";
     }))
-    # the executable shouldn't be called .mat2-wrapped
-    ./executable-name.patch
     # hardcode path to mat2 executable
     ./tests.patch
     # fix gobject-introspection typelib path for Nautilus extension

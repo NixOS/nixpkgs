@@ -26,8 +26,8 @@ buildLuaPath() {
 }
 
 # with an executable shell script which will set some environment variables
-# and then call into the original binary (which has been given a .wrapped suffix).
-# luaPath is a list of directories
+# and then call into the original binary (which has been moved into a hidden
+# directory). luaPath is a list of directories
 wrapLuaProgramsIn() {
   local dir="$1"
   local luaPath="$2"

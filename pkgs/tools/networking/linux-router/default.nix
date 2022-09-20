@@ -50,9 +50,8 @@ stdenv.mkDerivation rec {
         ++ optional (useWifiDependencies && useQrencode)       qrencode);
     in
     ''
-      mkdir -p $out/bin/ $out/.bin-wrapped
-      mv lnxrouter $out/.bin-wrapped/lnxrouter
-      makeWrapper $out/.bin-wrapped/lnxrouter $out/bin/lnxrouter --prefix PATH : ${binPath}
+      install -D -m 755 lnxrouter "$out/bin/lnxrouter"
+      wrapProgram "$out/bin/lnxrouter" --prefix PATH : "${binPath}"
     '';
 
   meta = with lib; {

@@ -31,11 +31,6 @@ buildPythonPackage rec {
       --replace "py4j==0.10.9" "py4j"
   '';
 
-  preFixup = ''
-    substituteInPlace "$out/bin/find-spark-home" \
-      --replace find_spark_home.py .find_spark_home.py-wrapped
-  '';
-
   pythonImportsCheck = [ "pyspark" "six" "py4j" ];
 
   meta = with lib; {

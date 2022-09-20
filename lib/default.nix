@@ -99,7 +99,7 @@ let
       escapeRegex escapeXML replaceChars lowerChars
       upperChars toLower toUpper addContextFrom splitString
       removePrefix removeSuffix versionOlder versionAtLeast
-      getName getVersion
+      getName getVersion getUnwrapped
       nameFromURL enableFeature enableFeatureAs withFeature
       withFeatureAs fixedWidthString fixedWidthNumber isStorePath
       toInt readPathsFromFile fileContents;

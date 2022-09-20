@@ -14,12 +14,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  extraPath = lib.makeBinPath [ age git xclip ];
-
-  # Using $0 is bad, it causes --help to mention ".passage-wrapped".
   postInstall = ''
-    substituteInPlace $out/bin/passage --replace 'PROGRAM="''${0##*/}"' 'PROGRAM=passage'
-    wrapProgram $out/bin/passage --prefix PATH : $extraPath --argv0 $pname
+    wrapProgram "$out/bin/passage" --prefix PATH : "${lib.makeBinPath [ age git xclip ]}"
   '';
 
   installFlags = [ "PREFIX=$(out)" "WITH_ALLCOMP=yes" ];

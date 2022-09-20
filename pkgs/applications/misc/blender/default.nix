@@ -142,23 +142,20 @@ stdenv.mkDerivation rec {
   blenderExecutable =
     placeholder "out" + (if stdenv.isDarwin then "/Applications/Blender.app/Contents/MacOS/Blender" else "/bin/blender");
   postInstall = lib.optionalString stdenv.isDarwin ''
-    mkdir $out/Applications
-    mv $out/Blender.app $out/Applications
+    mkdir "$out/Applications"
+    mv "$out/Blender.app" "$out/Applications"
   '' + ''
     buildPythonPath "$pythonPath"
-    wrapProgram $blenderExecutable \
+    wrapProgram "$blenderExecutable" \
       --prefix PATH : $program_PATH \
       --prefix PYTHONPATH : "$program_PYTHONPATH" \
       --add-flags '--python-use-system-env'
   '';
 
-  # Set RUNPATH so that libcuda and libnvrtc in /run/opengl-driver(-32)/lib can be
-  # found. See the explanation in libglvnd.
+  # Set RUNPATH so that libcuda and libnvrtc in /run/opengl-driver(-32)/lib
+  # can be found. See the explanation in libglvnd.
   postFixup = optionalString cudaSupport ''
-    for program in $out/bin/blender $out/bin/.blender-wrapped; do
-      isELF "$program" || continue
-      addOpenGLRunpath "$program"
-    done
+    addOpenGLRunpath "${lib.getUnwrapped blenderExecutable}"
   '';
 
   meta = with lib; {

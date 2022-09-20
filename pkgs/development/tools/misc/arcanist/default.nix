@@ -9,10 +9,7 @@
 , python3
 }:
 
-# Make a custom wrapper. If `wrapProgram` is used, arcanist thinks .arc-wrapped is being
-# invoked and complains about it being an unknown toolset. We could use `makeWrapper`, but
-# then we’d need to still craft a script that does the `php libexec/arcanist/bin/...` dance
-# anyway... So just do everything at once.
+# Make a custom wrapper that does `php libexec/arcanist/bin/...`
 let makeArcWrapper = toolset: ''
   cat << WRAPPER > $out/bin/${toolset}
   #!$shell -e

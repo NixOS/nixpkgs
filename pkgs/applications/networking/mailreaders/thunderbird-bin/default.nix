@@ -188,8 +188,6 @@ stdenv.mkDerivation {
       # wrapThunderbird expects "$out/lib" instead of "$out/usr/lib"
       ln -s "$out/usr/lib" "$out/lib"
 
-      gappsWrapperArgs+=(--argv0 "$out/bin/.thunderbird-wrapped")
-
       # See: https://github.com/mozilla/policy-templates/blob/master/README.md
       mkdir -p "$out/lib/thunderbird-bin-${version}/distribution";
       ln -s ${policiesJson} "$out/lib/thunderbird-bin-${version}/distribution/policies.json";

@@ -72,13 +72,9 @@ in stdenv.mkDerivation {
   # Dirty, but apparently ocp-build requires a TERM
   makeFlags = ["TERM=screen"];
 
-  # change argv0 to "opam" as a workaround for
-  # https://github.com/ocaml/opam/issues/2142
   postInstall = ''
-    mv $out/bin/opam $out/bin/.opam-wrapped
-    makeWrapper $out/bin/.opam-wrapped $out/bin/opam \
-      --argv0 "opam" \
-      --suffix PATH : ${aspcud}/bin:${unzip}/bin:${curl}/bin
+    wrapProgram "$out/bin/opam" \
+      --suffix PATH : "${aspcud}/bin:${unzip}/bin:${curl}/bin"
   '';
 
   doCheck = false;

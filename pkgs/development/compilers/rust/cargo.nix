@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage {
     stdenv.hostPlatform.parsed.kernel.execFormat == lib.systems.parse.execFormats.elf;
   installCheckPhase = ''
     runHook preInstallCheck
-    readelf -a $out/bin/.cargo-wrapped | grep -F 'Shared library: [libcurl.so'
+    readelf -a "${lib.getUnwrapped "$out/bin/cargo"}" | grep -F 'Shared library: [libcurl.so'
     runHook postInstallCheck
   '';
 

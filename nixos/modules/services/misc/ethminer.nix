@@ -92,7 +92,7 @@ in
 
       serviceConfig = {
         DynamicUser = true;
-        ExecStartPre = "${pkgs.ethminer}/bin/.ethminer-wrapped --list-devices";
+        ExecStartPre = "${lib.getUnwrapped "${pkgs.ethminer}/bin/ethminer"} --list-devices";
         ExecStartPost = optional (cfg.toolkit == "cuda") "+${getBin config.boot.kernelPackages.nvidia_x11}/bin/nvidia-smi -pl ${toString cfg.maxPower}";
         Restart = "always";
       };
@@ -102,7 +102,7 @@ in
       };
 
       script = ''
-        ${pkgs.ethminer}/bin/.ethminer-wrapped \
+        ${lib.getUnwrapped "${pkgs.ethminer}/bin/ethminer"} \
           --farm-recheck ${toString cfg.recheckInterval} \
           --report-hashrate \
           --${cfg.toolkit} \

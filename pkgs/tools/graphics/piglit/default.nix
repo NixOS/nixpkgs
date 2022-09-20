@@ -54,16 +54,9 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  # Find data dir: piglit searches for the data directory in some places, however as it is wrapped,
-  # it search in ../lib/.piglit-wrapped, we just replace the script name with "piglit" again.
-  prePatch = ''
-    substituteInPlace piglit \
-      --replace 'script_basename_noext = os.path.splitext(os.path.basename(__file__))[0]' 'script_basename_noext = "piglit"'
-  '';
-
   postInstall = ''
-    wrapProgram $out/bin/piglit \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL libglvnd ]} \
+    wrapProgram "$out/bin/piglit" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL libglvnd ]}" \
       --prefix PATH : "${waffle}/bin"
   '';
 

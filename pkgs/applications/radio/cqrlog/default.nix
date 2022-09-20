@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     libmysqlclient=$(find "${mysql57}/lib" -name "libmysqlclient.so.*" | tail -n1)
-    patchelf --add-needed "$libmysqlclient" "$out/bin/.cqrlog-wrapped"
+    patchelf --add-needed "$libmysqlclient" "${lib.getUnwrapped "$out/bin/cqrlog"}"
   '';
 
   meta = with lib; {

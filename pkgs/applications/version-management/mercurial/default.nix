@@ -120,7 +120,6 @@ let
 
       for f in **/*.t; do
         substituteInPlace 2>/dev/null "$f" \
-          --replace '*/hg:' '*/*hg*:' \${/* paths emitted by our wrapped hg look like ..hg-wrapped-wrapped */""}
           --replace '"$PYTHON" "$BINDIR"/hg' '"$BINDIR"/hg' ${/* 'hg' is a wrapper; don't run using python directly */""}
       done
     '';

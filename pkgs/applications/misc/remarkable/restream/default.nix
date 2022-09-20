@@ -1,12 +1,10 @@
 { lib
-, bash
 , stdenv
 , lz4
 , ffmpeg-full
 , fetchFromGitHub
 , openssh
 , netcat
-, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -26,8 +24,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -D ${src}/restream.arm.static $out/libexec/restream.arm.static
-    install -D ${src}/reStream.sh $out/bin/restream
+    install -D '${src}/restream.arm.static' "$out/libexec/restream.arm.static"
+    install -D '${src}/reStream.sh' "$out/bin/restream"
 
     runHook postInstall
   '';
@@ -43,8 +41,7 @@ stdenv.mkDerivation rec {
       netcat
     ];
   in ''
-    # This `sed` command has the same effect as `wrapProgram`, except
-    # without .restream-wrapped store paths appearing everywhere.
+    # This `sed` command has the same effect as `wrapProgram`
     sed -i \
       '2i export PATH=$PATH''${PATH:+':'}${lib.makeBinPath deps}' \
       "$out/bin/restream"

@@ -156,20 +156,13 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
     # https://github.com/NixOS/nixpkgs/issues/28486
     # The main problem is that wine-preloader opens and loads the wine(64) binary, and
     # breakage occurs if it finds a shell script instead of the real binary. We solve this
-    # by setting WINELOADER to point to the original binary. Additionally, the locations
-    # of the 32-bit and 64-bit binaries must differ only by the presence of "64" at the
-    # end, due to the logic Wine uses to find the other binary (see get_alternate_loader
-    # in dlls/kernel32/process.c). Therefore we do not use wrapProgram which would move
-    # the binaries to ".wine-wrapped" and ".wine64-wrapped", but use makeWrapper directly,
-    # and move the binaries to ".wine" and ".wine64".
+    # by setting WINELOADER to point to the original binary.
     for i in wine wine64 ; do
       prog="$out/bin/$i"
       if [ -e "$prog" ]; then
-        hidden="$(dirname "$prog")/.$(basename "$prog")"
-        mv "$prog" "$hidden"
-        makeWrapper "$hidden" "$prog" \
+        wrapProgram "$prog" \
           --argv0 "" \
-          --set WINELOADER "$hidden" \
+          --set WINELOADER "${lib.getUnwrapped "$out/bin/$i"}" \
           --prefix GST_PLUGIN_SYSTEM_PATH_1_0 ":" "$GST_PLUGIN_SYSTEM_PATH_1_0"
       fi
     done

@@ -49,14 +49,13 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -D -m 0755 ${bloop-binary} $out/.bloop-wrapped
-
-    makeWrapper $out/.bloop-wrapped $out/bin/bloop
+    install -D -m 0755 "${bloop-binary}" "$out/bin/bloop"
+    wrapProgram "$out/bin/bloop"
 
     #Install completions
-    installShellCompletion --name bloop --bash ${bloop-bash}
-    installShellCompletion --name _bloop --zsh ${bloop-zsh}
-    installShellCompletion --name bloop.fish --fish ${bloop-fish}
+    installShellCompletion --name bloop --bash "${bloop-bash}"
+    installShellCompletion --name _bloop --zsh "${bloop-zsh}"
+    installShellCompletion --name bloop.fish --fish "${bloop-fish}"
 
     runHook postInstall
   '';

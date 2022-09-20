@@ -607,6 +607,23 @@ rec {
       then parse x
       else x.version or (parse x.name);
 
+  /* Get the actual filepath of a program that has been been wrapped
+     with the standard `wrapProgram` Nixpkgs mechanism.
+
+     Note: If the program hasn't actually been wrapped, the function
+     will return a non-existing file.
+
+     Example:
+       getUnwrapped "${pkgs.dunst}/bin/dunst"
+       => "/nix/store/1kqyr6xblmpiqgwi1005b3fglkqav7s8-dunst-1.9.0/bin/.wrapped/dunst"
+  */
+  getUnwrapped = path:
+    let
+      name = builtins.baseNameOf path;
+      dir  = builtins.dirOf path;
+    in
+      "${dir}/.wrapped/${name}";
+
   /* Extract name with version from URL. Ask for separator which is
      supposed to start extension.
 

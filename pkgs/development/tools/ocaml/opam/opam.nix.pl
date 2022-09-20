@@ -111,12 +111,11 @@ print <<'EOF';
   # change argv0 to "opam" as a workaround for
   # https://github.com/ocaml/opam/issues/2142
   postInstall = ''
-    mv $out/bin/opam $out/bin/.opam-wrapped
-    makeWrapper $out/bin/.opam-wrapped $out/bin/opam \
+    wrapProgram "$out/bin/opam" \
       --argv0 "opam" \
-      --suffix PATH : ${unzip}/bin:${curl}/bin:${lib.optionalString stdenv.isLinux "${bubblewrap}/bin:"}${getconf}/bin \
+      --suffix PATH : "${unzip}/bin:${curl}/bin:${lib.optionalString stdenv.isLinux "${bubblewrap}/bin:"}${getconf}/bin" \
       --set OPAM_USER_PATH_RO /run/current-system/sw/bin:/nix/
-    $out/bin/opam-installer --prefix=$installer opam-installer.install
+    "$out/bin/opam-installer" --prefix=$installer opam-installer.install
   '';
 
   doCheck = false;

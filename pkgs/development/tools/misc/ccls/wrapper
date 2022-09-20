@@ -6,4 +6,4 @@ printf -v extraArgs ',\"%s\"' \
   ${NIX_CFLAGS_COMPILE}
 initString="--init={\"clang\":{\"extraArgs\":[${extraArgs:1}],\"resourceDir\":\"@clang@/resource-root\"}}"
 
-exec -a "$0" "@out@/bin/@wrapped@" "${initString}" "$@"
+exec "@original@" "${initString}" "$@"

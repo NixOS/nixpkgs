@@ -42,7 +42,8 @@ mkDerivation rec {
 
   postFixup = ''
     # guglielmo opens SDR libraries at run time
-    patchelf --add-rpath "${airspy}/lib:${librtlsdr}/lib" $out/bin/.guglielmo-wrapped
+    patchelf --add-rpath "${airspy}/lib:${librtlsdr}/lib" \
+      "${lib.getUnwrapped "$out/bin/guglielmo"}"
   '';
 
   meta = with lib; {

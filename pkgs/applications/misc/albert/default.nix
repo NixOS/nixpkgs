@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    for i in $out/{bin/.albert-wrapped,lib/albert/plugins/*.so}; do
-      patchelf $i --add-rpath $out/lib/albert
+    for i in "$out/"{${lib.getUnwrapped "bin/albert"},lib/albert/plugins/*.so}; do
+      patchelf "$i" --add-rpath "$out/lib/albert"
     done
   '';
 
