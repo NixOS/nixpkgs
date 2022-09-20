@@ -127,7 +127,7 @@ in {
         inherit openjdk15-bootstrap;
       });
 
-    openjdk17-bootstrap = mkBootstrap adoptopenjdk-16
+    openjdk17-bootstrap = mkBootstrap adoptopenjdk-17
       ../development/compilers/openjdk/16.nix
       (bootstrapArgs // {
         inherit openjdk16-bootstrap;
