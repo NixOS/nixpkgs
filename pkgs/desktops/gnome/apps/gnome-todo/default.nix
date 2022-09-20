@@ -6,7 +6,7 @@
 , ninja
 , pkg-config
 , python3
-, wrapGAppsHook
+, wrapGAppsHook4
 , gettext
 , gnome
 , glib
@@ -17,7 +17,7 @@
 , gnome-online-accounts
 , gsettings-desktop-schemas
 , libportal-gtk4
-, evolution-data-server
+, evolution-data-server-gtk4
 , libical
 , librest
 , json-glib
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
     itstool
   ];
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
 
     # Plug-ins
     libportal-gtk4 # background
-    evolution-data-server # eds
+    evolution-data-server-gtk4 # eds
     libical
     librest # todoist
     json-glib # todoist
