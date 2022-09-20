@@ -20,7 +20,6 @@
 , glib-networking
 , libsecret
 , gnome-desktop
-, libnotify
 , libarchive
 , p11-kit
 , sqlite
@@ -90,7 +89,6 @@ stdenv.mkDerivation rec {
     libdazzle
     libhandy
     libportal-gtk3
-    libnotify
     libarchive
     libsecret
     libsoup_3
