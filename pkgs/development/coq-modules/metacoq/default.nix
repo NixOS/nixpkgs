@@ -75,10 +75,13 @@ let
         };
       } // optionalAttrs (package != "single")
         { passthru = genAttrs packages metacoq_; })
-      ).overrideAttrs (o: {
-        propagatedBuildInputs = o.propagatedBuildInputs ++
-          optional (versionAtLeast o.version "1.0-8.16") coq.ocamlPackages.stdlib-shims;
-      });
-    in derivation;
+      ).overrideAttrs (o:
+        let requiresOcamlStdlibShims = versionAtLeast o.version "1.0-8.16" ||
+                                       (o.version == "dev" && (versionAtLeast coq.coq-version "8.16" || coq.coq-version == "dev")) ;
+        in
+          {
+            propagatedBuildInputs = o.propagatedBuildInputs ++ optional requiresOcamlStdlibShims coq.ocamlPackages.stdlib-shims;
+          });
+  in derivation;
 in
 metacoq_ (if single then "single" else "all")
