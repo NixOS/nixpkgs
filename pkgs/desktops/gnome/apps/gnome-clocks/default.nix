@@ -27,11 +27,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-clocks";
-  version = "43.beta";
+  version = "43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-clocks/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "+jVBJK4EaRNcegl8t3OGhU6Uz5UMieLPIM7k0V/jxXA=";
+    sha256 = "sHQ7cNAIgKo7zcx/fzTIwihiV7XIFzfU+YG8jE9PmB0=";
   };
 
   nativeBuildInputs = [
