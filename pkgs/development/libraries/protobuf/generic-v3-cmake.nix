@@ -101,6 +101,7 @@ let
       platforms = lib.platforms.unix;
       homepage = "https://developers.google.com/protocol-buffers/";
       maintainers = with lib.maintainers; [ jonringer ];
+      mainProgram = "protoc";
     };
   };
 in

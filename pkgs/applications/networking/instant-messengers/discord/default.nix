@@ -80,12 +80,12 @@ let
         };
         ptb = rec {
           pname = "discord-ptb";
-          binaryName = "DiscordPTB";
+          binaryName = if stdenv.isLinux then "DiscordPTB" else desktopName;
           desktopName = "Discord PTB";
         };
         canary = rec {
           pname = "discord-canary";
-          binaryName = "DiscordCanary";
+          binaryName = if stdenv.isLinux then "DiscordCanary" else desktopName;
           desktopName = "Discord Canary";
         };
       }

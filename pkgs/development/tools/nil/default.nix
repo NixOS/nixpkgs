@@ -1,7 +1,7 @@
 { lib, rustPlatform, fetchFromGitHub }:
 
 let
-  date = "2022-09-10";
+  date = "2022-09-19";
 in
 
 rustPlatform.buildRustPackage rec {
@@ -12,10 +12,10 @@ rustPlatform.buildRustPackage rec {
     owner = "oxalica";
     repo = pname;
     rev = date;
-    sha256 = "sha256-yqg46An5TPl6wsv5xflK4T90fTho4KXIILoV71jSl28=";
+    sha256 = "sha256-WdBRfp0shz6Xhwx0fEUQwROK52XNDTkmhC2xkdT+INA=";
   };
 
-  cargoSha256 = "sha256-MabVHbNGWpeUztwedXRXHBfgEostxk0aWpGCHlpnhJo=";
+  cargoSha256 = "sha256-J1CRe5xPl428mwOO4kDxLyPBc0mtzl3iU4mUqW5d4+E=";
 
   CFG_DATE = date;
 

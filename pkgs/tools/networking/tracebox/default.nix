@@ -5,6 +5,8 @@
 , libpcap
 , lua5_1
 , json_c
+, testers
+, tracebox
 }:
 stdenv.mkDerivation rec {
   pname = "tracebox";
@@ -25,6 +27,11 @@ stdenv.mkDerivation rec {
     json_c
   ];
 
+  postPatch = ''
+    sed -i configure.ac \
+      -e 's,$(git describe .*),${version},'
+  '';
+
   configureFlags = [
     "--with-lua=yes"
     "--with-libpcap=yes"
@@ -34,6 +41,11 @@ stdenv.mkDerivation rec {
   LUA_LIB="-llua";
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testers.testVersion {
+    package = tracebox;
+    command = "tracebox -V";
+  };
 
   meta = with lib; {
     homepage = "http://www.tracebox.org/";

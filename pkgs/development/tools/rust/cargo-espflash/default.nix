@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-espflash";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espflash";
     rev = "v${version}";
-    sha256 = "sha256-YQ621YbdEy2sS4uEYvgnQU1G9iW5SpWNObPH4BfyeF0=";
+    sha256 = "sha256-AauIneSnacnY4mulD/qUgfN4K9tLzZXFug0oEsDuj18=";
   };
 
   nativeBuildInputs = [
@@ -19,12 +19,12 @@ rustPlatform.buildRustPackage rec {
     udev
   ];
 
-  cargoSha256 = "sha256-mDSNjeaEtYpEGpiIg2F+e8x/XCssNQxUx+6Cj+8XX5Q=";
+  cargoSha256 = "sha256-82o3B6qmBVPpBVAogClmTbxrBRXY8Lmd2sHmonP5/s8=";
 
   meta = with lib; {
     description = "Serial flasher utility for Espressif SoCs and modules based on esptool.py";
     homepage = "https://github.com/esp-rs/cargo-espflash";
-    license = licenses.gpl2Only;
+    license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ matthiasbeyer ];
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dokuwiki";
-  version = "2022-07-31";
+  version = "2022-07-31a";
 
   src = fetchFromGitHub {
     owner = "splitbrain";
     repo = pname;
     rev = "release_stable_${version}";
-    sha256 = "sha256-FreJsajdfoefQHo6rBzkImDUvR3Zb7rBQTYhYvyRJC4=";
+    sha256 = "sha256-gtWEtc3kbMokKycTx71XXblkDF39i926uN2kU3oOeVw=";
   };
 
   preload = writeText "preload.php" ''
