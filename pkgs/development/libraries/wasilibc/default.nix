@@ -1,14 +1,17 @@
 { stdenv, buildPackages, fetchFromGitHub, lib }:
 
-stdenv.mkDerivation {
+let
   pname = "wasilibc";
-  version = "unstable-2022-04-12";
+  version = "16";
+in
+stdenv.mkDerivation {
+  inherit pname version;
 
   src = buildPackages.fetchFromGitHub {
     owner = "WebAssembly";
     repo = "wasi-libc";
-    rev = "a279514a6ef30cd8ee1469345b33172fcbc8d52d";
-    sha256 = "0a9ldas8p7jg7jlkhb9wdiw141z7vfz6p18mnmxnnnna7bp1y3fz";
+    rev = "refs/tags/wasi-sdk-${version}";
+    hash = "sha256-WnkAWA6F+Cl0ygcY5IteDA/HT1v2ykGWJnEm6Q5Q7Jc=";
     fetchSubmodules = true;
   };
 
@@ -42,6 +45,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/WebAssembly/wasi-sdk/releases/tag/wasi-sdk-${version}";
     description = "WASI libc implementation for WebAssembly";
     homepage = "https://wasi.dev";
     platforms = platforms.wasi;
