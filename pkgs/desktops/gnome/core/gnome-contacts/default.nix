@@ -2,7 +2,7 @@
 , stdenv
 , gettext
 , fetchurl
-, evolution-data-server
+, evolution-data-server-gtk4
 , pkg-config
 , libxslt
 , docbook-xsl-nons
@@ -13,7 +13,7 @@
 , libportal-gtk4
 , gnome-desktop
 , gnome-online-accounts
-, wrapGAppsHook
+, wrapGAppsHook4
 , folks
 , libxml2
 , gnome
@@ -33,10 +33,6 @@ stdenv.mkDerivation rec {
     sha256 = "Hoyo2nF429WpIQJVBkokvdwz35WFx1hOExBxTJprjco=";
   };
 
-  propagatedUserEnvPkgs = [
-    evolution-data-server
-  ];
-
   nativeBuildInputs = [
     meson
     ninja
@@ -47,14 +43,14 @@ stdenv.mkDerivation rec {
     docbook-xsl-nons
     docbook_xml_dtd_42
     desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     gtk4
     glib
     libportal-gtk4
-    evolution-data-server
+    evolution-data-server-gtk4
     gsettings-desktop-schemas
     folks
     gnome-desktop
