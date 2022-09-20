@@ -17,6 +17,7 @@
 , pythonCatchConflictsHook
 , pythonImportsCheckHook
 , pythonNamespacesHook
+, pythonOutputDistHook
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
 , setuptoolsBuildHook
@@ -48,6 +49,8 @@
 
 # Enabled to detect some (native)BuildInputs mistakes
 , strictDeps ? true
+
+, outputs ? [ "out" ]
 
 # used to disable derivation, useful for specific python versions
 , disabled ? false
@@ -106,11 +109,13 @@ else
 let
   inherit (python) stdenv;
 
+  withDistOutput = false;
+
   name_ = name;
 
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
     "disabled" "checkPhase" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
-    "disabledTestPaths"
+    "disabledTestPaths" "outputs"
   ]) // {
 
     name = namePrefix + name_;
@@ -144,6 +149,8 @@ let
     ] ++ lib.optionals (python.pythonAtLeast "3.3") [
       # Optionally enforce PEP420 for python3
       pythonNamespacesHook
+    ] ++ lib.optionals withDistOutput [
+      pythonOutputDistHook
     ] ++ nativeBuildInputs;
 
     buildInputs = buildInputs ++ pythonPath;
@@ -171,6 +178,8 @@ let
 
     # Python packages built through cross-compilation are always for the host platform.
     disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonForBuild ];
+
+    outputs = outputs ++ lib.optional withDistOutput "dist";
 
     meta = {
       # default to python's platforms
