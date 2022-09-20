@@ -13,6 +13,13 @@
     <itemizedlist>
       <listitem>
         <para>
+          GNOME has been upgraded to 43. Please take a look at their
+          <link xlink:href="https://release.gnome.org/43/">Release
+          Notes</link> for details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           During cross-compilation, tests are now executed if the test
           suite can be executed by the build platform. This is the case
           when doing “native” cross-compilation where the build and host
