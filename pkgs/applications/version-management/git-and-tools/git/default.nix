@@ -144,6 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
   #          We need many of these files during the installCheckPhase.
 
   installFlags = [ "NO_INSTALL_HARDLINKS=1" ];
+  outputInfo = "doc";
 
   preInstall = (lib.optionalString osxkeychainSupport ''
     mkdir -p $out/bin
@@ -252,8 +253,9 @@ stdenv.mkDerivation (finalAttrs: {
       '')
 
    + lib.optionalString withManual ''# Install man pages
-       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html \
-         -C Documentation ''
+       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES infodir=$doc/share/info PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html install-info \
+         -C Documentation
+       ''
 
    + (if guiSupport then ''
        # Wrap Tcl/Tk programs
