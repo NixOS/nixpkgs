@@ -109,6 +109,7 @@ in rec {
   pythonNamespacesHook = callPackage ({ findutils }:
     makeSetupHook {
       name = "python-namespaces-hook.sh";
+      deps = [ findutils ];
       substitutions = {
         inherit pythonSitePackages findutils;
       };
