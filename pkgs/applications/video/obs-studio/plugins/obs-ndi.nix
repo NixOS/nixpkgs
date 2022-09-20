@@ -40,6 +40,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ jshcmpbll ];
     platforms = platforms.linux;
-    hydraPlatforms = ndi.meta.hydraPlatforms;
   };
 }
