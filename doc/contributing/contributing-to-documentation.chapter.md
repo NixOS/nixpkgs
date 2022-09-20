@@ -123,9 +123,6 @@ For contributing to the legacy parts, please see [DocBook: The Definitive Guide]
 
 ## Diagrams
 
-Diagrams are provided to contextualize the amount of information and processes
-into something more visual.
-
 The diagrams in this manual are generated using [Plantuml].
 Their sources are available in [`/doc/diagrams`][diagrams].
 
