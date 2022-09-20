@@ -21,12 +21,12 @@
 
 stdenv.mkDerivation {
   pname = "libcamera";
-  version = "unstable-2022-09-03";
+  version = "unstable-2022-09-15";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
-    rev = "f1776100f55e70320a8938586bc8bf2f242addd4";
-    hash = "sha256-96AMemH+mSyPE26eiucwqUGYbK5uWNDNDgwAyeIAg6g=";
+    rev = "74ab3f778c848b20cbf8fe299170756ff6ebab1a";
+    hash = "sha256-w0I4L6xXTBUdqj30LpVW/KZW6bdoUeoW9lnMOW0OLJY=";
   };
 
   postPatch = ''
