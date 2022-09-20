@@ -108,6 +108,7 @@ let
         of tools that can be built using the Clang frontend as a library to
         parse C/C++ code.
       '';
+      mainProgram = "clang";
     };
   } // lib.optionalAttrs enableManpages {
     pname = "clang-manpages";
