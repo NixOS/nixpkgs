@@ -30,6 +30,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [
+    "dparse"
+  ];
+
   disabledTests = [
     # requires unpackaged dependency pipenv
     "test_update_pipfile"
