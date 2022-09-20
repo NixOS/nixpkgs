@@ -5,6 +5,7 @@
 , desktop-file-utils
 , editorconfig-core-c
 , fetchurl
+, fetchpatch
 , flatpak
 , gnome
 , libgit2-glib
@@ -40,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "43.alpha1";
+  version = "43.rc";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "gzf93kAfLM5ehYYbby79XWdTyuReAiqH80V5kPp8JDY=";
+    sha256 = "cwz588t4cZxQxnTldzXwf8mHYmctxU211nVfR75VKqI=";
   };
 
   patches = [
@@ -65,7 +66,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    gi-docgen
+    (gi-docgen.overrideAttrs (attrs: {
+      patches = attrs.patches ++ [
+        (fetchpatch {
+          url = "https://gitlab.gnome.org/GNOME/gi-docgen/-/commit/f4ff4787cce962b705fb2588b31f2988c5063c13.patch";
+          sha256 = "11VGFFb2PLVxnX/qUQdLPLfhGQWx4sf4apBP7R2JWjA=";
+        })
+      ];
+    }))
     gobject-introspection
     meson
     ninja
