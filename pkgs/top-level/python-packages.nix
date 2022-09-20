@@ -9248,6 +9248,8 @@ in {
 
   pyvoro = callPackage ../development/python-modules/pyvoro { };
 
+  pyvows = callPackage ../development/python-modules/pyvows { };
+
   pywal = callPackage ../development/python-modules/pywal { };
 
   pywatchman = callPackage ../development/python-modules/pywatchman { };
