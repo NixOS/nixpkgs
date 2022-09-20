@@ -54,6 +54,9 @@ in
 , confDir
 , stateDir
 , storeDir
+
+  # passthru tests
+, pkgsi686Linux
 }: let
 self = stdenv.mkDerivation {
   pname = "nix";
@@ -194,6 +197,16 @@ self = stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  passthru = {
+    inherit aws-sdk-cpp boehmgc;
+
+    perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { nix = self; inherit Security; });
+
+    tests = {
+      nixi686 = pkgsi686Linux.nixVersions.${"nix_${lib.versions.major version}_${lib.versions.minor version}"};
+    };
+  };
+
   meta = with lib; {
     description = "Powerful package manager that makes package management reliable and reproducible";
     longDescription = ''
@@ -208,12 +221,6 @@ self = stdenv.mkDerivation {
     maintainers = with maintainers; [ eelco lovesegfault artturin ];
     platforms = platforms.unix;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
-  };
-
-  passthru = {
-    inherit aws-sdk-cpp boehmgc;
-
-    perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { nix = self; inherit Security; });
   };
 };
 in self
