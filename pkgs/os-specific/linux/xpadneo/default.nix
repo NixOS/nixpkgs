@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bluez }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, kernel
+, bluez
+, nixosTests
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xpadneo";
@@ -28,6 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildFlags = [ "modules" ];
   installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
   installTargets = [ "modules_install" ];
+
+  passthru.tests = {
+    xpadneo = nixosTests.xpadneo;
+  };
 
   meta = with lib; {
     description = "Advanced Linux driver for Xbox One wireless controllers";
