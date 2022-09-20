@@ -11,18 +11,18 @@
   },
   "ATFlatControls": {
     "owner": "Alexey-T",
-    "rev": "2022.09.03",
-    "hash": "sha256-YxGCV6oIWZ0a7rRyCq1YjOfyO17mHcxJXgBJ2esvm1U="
+    "rev": "2022.09.18",
+    "hash": "sha256-4d27eW4gpJHwGlRZ4iPzuKIw/o/J4utxXbEhglk31Bw="
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "2022.09.11",
-    "hash": "sha256-lzGOcYRfaHernLGMTOe8BazpMYa41p42bjjNEmuxU/c="
+    "rev": "2022.09.18",
+    "hash": "sha256-HjW4V7MctQoHbDYIlMv7VS0nS7FFG6Qir0sCju+isI0="
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",
-    "rev": "2022.09.01",
-    "hash": "sha256-Xnh6hWzy4lTDxlNvEOsGl2YalzKgt51bDrUcMVOvtTg="
+    "rev": "2022.09.18",
+    "hash": "sha256-yIbIRo4hpwbCdH+3fIhjnQPtdvuFmfJSqloKjWqKEuY="
   },
   "EControl": {
     "owner": "Alexey-T",
@@ -41,8 +41,8 @@
   },
   "Emmet-Pascal": {
     "owner": "Alexey-T",
-    "rev": "2022.08.28",
-    "hash": "sha256-u8+qUagpy2tKppkjTrEVvXAHQkF8AGDDNtWCNJHnKbs="
+    "rev": "2022.09.18",
+    "hash": "sha256-Kutl4Jh/+KptGbqakzPJnIYlFtytXVlzKWulKt4Z+/g="
   },
   "CudaText-lexers": {
     "owner": "Alexey-T",

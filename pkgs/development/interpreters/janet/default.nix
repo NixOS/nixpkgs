@@ -11,10 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uGbaoWJAWbSQ7QkocU7gFZUiWb0GD8mtuO7V0sUXTv0=";
   };
 
-  # This release fails the test suite on darwin, remove when debugged.
-  # See https://github.com/NixOS/nixpkgs/pull/150618 for discussion.
-  patches = lib.optionals stdenv.isDarwin ./darwin-remove-net-test.patch;
-
   postPatch = ''
     substituteInPlace janet.1 \
       --replace /usr/local/ $out/
@@ -29,7 +25,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
-    $out/bin/janet --help
+    $out/bin/janet -e '(+ 1 2 3)'
   '';
 
   meta = with lib; {
@@ -38,7 +34,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ andrewchambers peterhoeg ];
     platforms = platforms.all;
-    # Marked as broken when patch is applied, see comment above patch.
-    broken = stdenv.isDarwin;
   };
 }

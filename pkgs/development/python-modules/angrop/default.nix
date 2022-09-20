@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "angrop";
-  version = "9.2.6";
+  version = "9.2.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-qaDAicmYZxLPTl17il61ij01prRv2H4xxe07Xg4KWhI=";
+    hash = "sha256-wIPk7Cz7FSPviPFBSLrBjLr9M0o3pyoJM7wiAhHrg9Q=";
   };
 
   nativeBuildInputs = [
