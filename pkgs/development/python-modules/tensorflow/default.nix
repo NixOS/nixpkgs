@@ -283,6 +283,8 @@ let
     # to `/usr/include/...` which results in build failures.
     PROTOBUF_INCLUDE_PATH = "${protobuf-core}/include";
 
+    LIBTOOL = lib.optionalString stdenv.isDarwin "${cctools}/bin/libtool";
+
     PYTHON_BIN_PATH = pythonEnv.interpreter;
 
     TF_NEED_GCP = true;
@@ -367,8 +369,7 @@ let
         "sha256-KtVReqHL3zxE8TPrqIerSOt59Mgke/ftoFZKMzgX/u8="
       else
         if stdenv.isDarwin then
-          # FIXME: this checksum is currently wrong, since the tensorflow dependency fetch is broken on darwin
-          "sha256-j2k9Q+k41nq5nP1VjjkkNjXRov1uAda4RCMDMAthjr0="
+          "sha256-TTy0zj1DUrba7zAkrlEu5NB6fs4HlrczWLP0Norfir8="
         else
           "sha256-zH3xNFEU2JR0Ww8bpD4mCiorGtao0WVPP4vklVMgS4A=";
     };
@@ -378,6 +379,15 @@ let
 
       preBuild = ''
         patchShebangs .
+      ''
+      # Workaround abseil-cpp disabling <optional> and <variant> as a
+      # workaround for broken Apple toolchains. Whereas tensorflow uses c++17
+      # and assumes compilation with ABSL_USES_STD_OPTIONAL and
+      # ABSL_USES_STD_VARIANT.
+         + lib.optionalString stdenv.isDarwin ''
+        substituteInPlace external/com_google_absl/absl/base/config.h \
+          --replace "ABSL_INTERNAL_APPLE_CXX17_TYPES_UNAVAILABLE 1" \
+                    "ABSL_INTERNAL_APPLE_CXX17_TYPES_UNAVAILABLE 0"
       '';
 
       installPhase = ''

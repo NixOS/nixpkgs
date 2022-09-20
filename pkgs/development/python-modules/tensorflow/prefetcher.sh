@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-version="2.9.1"
+version="2.10.0"
 
 bucket="https://storage.googleapis.com/tensorflow"
 
