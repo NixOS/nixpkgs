@@ -13,6 +13,7 @@
 , gtk3
 , openssh
 , gnome
+, evolution-data-server-gtk4
 , gjs
 , nixosTests
 }:
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     gtk3
     gsound
     gjs # for running daemon
-    gnome.evolution-data-server # for libebook-contacts typelib
+    evolution-data-server-gtk4 # for libebook-contacts typelib
   ];
 
   mesonFlags = [
