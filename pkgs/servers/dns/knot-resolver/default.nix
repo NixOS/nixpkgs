@@ -112,6 +112,7 @@ unwrapped = stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.vcunat /* upstream developer */ ];
+    mainProgram = "kresd";
   };
 };
 
@@ -126,6 +127,7 @@ wrapped-full = runCommand unwrapped.name
     ];
     preferLocalBuild = true;
     allowSubstitutes = false;
+    inherit (unwrapped) meta;
   }
   ''
     mkdir -p "$out"/bin
