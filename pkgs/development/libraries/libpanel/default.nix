@@ -6,6 +6,7 @@
 , pkg-config
 , vala
 , gobject-introspection
+, gi-docgen
 , glib
 , libadwaita
 , gtk4
@@ -14,14 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libpanel";
-  version = "1.0.alpha1";
+  version = "1.0.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libpanel/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "YQPbnwqrFTdmCdYUByH21q7yiWSkKVsINyX/Wey5cxk=";
+    sha256 = "sPpz/MOFOYg0YAZAMwM7rHGzFzSwmQIFM45VE7lgXm0=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     gobject-introspection
+    gi-docgen
   ];
 
   buildInputs = [
@@ -41,6 +43,11 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dinstall-examples=true"
   ];
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
