@@ -60,7 +60,10 @@ let
           ln -s ${gdb} bin/gdb/linux
           # bundled lldb does not find libssl
           rm -rf bin/lldb/linux
-          ln -s ${lldb} bin/lldb/linux
+          cp -r ${lldb} bin/lldb/linux
+          chmod +w -R bin/lldb/linux
+          cp ${lldb.lib}/lib/* bin/lldb/linux/lib
+          chmod +w -R bin/lldb/linux/lib
 
           autoPatchelf $PWD/bin
 
