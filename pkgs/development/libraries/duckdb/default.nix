@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "duckdb";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dU8JXb++8OMEokr+4OyxLvcEc0vmdBvKDLxjeaWNkq0=";
+    sha256 = "sha256-qzDQFS2ogQ6hqTCddHnttWF365007Labnn4BmHB219k=";
   };
 
   postPatch = ''
