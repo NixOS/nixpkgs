@@ -15,8 +15,6 @@
 , gnome-online-accounts
 , gnome
 , gobject-introspection
-, grilo
-, grilo-plugins
 , gsettings-desktop-schemas
 , gtk3
 , itstool
@@ -36,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-photos";
-  version = "43.beta";
+  version = "43.0";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "6Qmo0sloFI/XFq9C0ub9neWVElmC9z2MR1xq4lshPt8=";
+    sha256 = "x6x0WNUz8p2VUBHHS3YiTXnqMbzBLp1tDOe2w3BNCOE=";
   };
 
   patches = [
@@ -77,8 +75,6 @@ stdenv.mkDerivation rec {
     gexiv2
     glib
     gnome-online-accounts
-    grilo
-    grilo-plugins
     gsettings-desktop-schemas
     gtk3
     libdazzle
