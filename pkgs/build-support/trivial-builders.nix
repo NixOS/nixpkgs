@@ -726,6 +726,7 @@ rec {
         _EOF_
         exit 1
       '';
+      meta.hydraPlatforms = [];
     };
 
 
