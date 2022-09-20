@@ -2,7 +2,7 @@
 let
   inherit (pkgs) callPackage fetchurl;
   versions = if stdenv.isLinux then {
-    stable = "0.0.19";
+    stable = "0.0.20";
     ptb = "0.0.29";
     canary = "0.0.135";
   } else {
@@ -19,9 +19,8 @@ let
   in {
     x86_64-linux = {
       stable = fetchurl {
-        url =
-          "https://dl.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
-        sha256 = "GfSyddbGF8WA6JmHo4tUM27cyHV5kRAyrEiZe1jbA5A=";
+        url = "https://dl.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
+        sha256 = "3f7yuxigEF3e8qhCetCHKBtV4XUHsx/iYiaCCXjspYw=";
       };
       ptb = fetchurl {
         url =
