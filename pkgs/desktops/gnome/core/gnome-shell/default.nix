@@ -43,7 +43,7 @@
 , glib
 , gjs
 , mutter
-, evolution-data-server
+, evolution-data-server-gtk4
 , gtk3
 , gtk4
 , libadwaita
@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
     gjs
     mutter
     libpulseaudio
-    evolution-data-server
+    evolution-data-server-gtk4
     libical
     gtk3
     gtk4
