@@ -13,10 +13,9 @@
 , ninja
 , pkg-config
 , vala
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , bzip2
 , dbus
-, evolution-data-server
 , exempi
 , giflib
 , glib
@@ -33,7 +32,6 @@
 , libosinfo
 , libpng
 , libseccomp
-, libsoup
 , libtiff
 , libuuid
 , libxml2
@@ -66,7 +64,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsNoGuiHook
   ];
 
   # TODO: add libenca, libosinfo
@@ -95,14 +93,12 @@ stdenv.mkDerivation rec {
     libjpeg
     libosinfo
     libpng
-    libsoup
     libtiff
     libuuid
     libxml2
     poppler
     taglib
   ] ++ lib.optionals stdenv.isLinux [
-    evolution-data-server
     libseccomp
     networkmanager
     systemd
