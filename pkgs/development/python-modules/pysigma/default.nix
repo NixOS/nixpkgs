@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma";
-  version = "0.8.0";
+  version = "0.8.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JFj2L4CmAHtCsH17SyuOIIzhi66qJau5lLuVt/vLOGw=";
+    hash = "sha256-Ebqts5Sqghj0LT32pPOz3FE/rhSmYdnrxkhvDh0eveU=";
   };
 
   nativeBuildInputs = [
