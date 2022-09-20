@@ -96,8 +96,11 @@ self: super: builtins.intersectAttrs super {
 
   # avoid compiling twice by providing executable as a separate output (with small closure size)
   niv = enableSeparateBinOutput (generateOptparseApplicativeCompletion "niv" super.niv);
-  ormolu = enableSeparateBinOutput super.ormolu;
   ghcid = enableSeparateBinOutput super.ghcid;
+  ormolu = generateOptparseApplicativeCompletion "ormolu" (enableSeparateBinOutput super.ormolu);
+
+  # Generate shell completion.
+  cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
 
   arbtt = overrideCabal (drv: {
     # The test suite needs the packages's executables in $PATH to succeed.

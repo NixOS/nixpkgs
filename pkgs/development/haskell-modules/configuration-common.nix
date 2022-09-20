@@ -1010,11 +1010,6 @@ self: super: {
   # https://github.com/haskell-hvr/hgettext/issues/14
   hgettext = doJailbreak super.hgettext;
 
-  # Generate shell completion.
-  cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
-
-  ormolu = generateOptparseApplicativeCompletion "ormolu" super.ormolu;
-
   stack =
     generateOptparseApplicativeCompletion "stack"
       (doJailbreak # for Cabal constraint added on hackage
