@@ -2524,6 +2524,8 @@ in {
 
   django-encrypted-model-fields = callPackage ../development/python-modules/django-encrypted-model-fields { };
 
+  django-elasticsearch-dsl = callPackage ../development/python-modules/django-elasticsearch-dsl { };
+
   django-environ = callPackage ../development/python-modules/django_environ { };
 
   django-extensions = callPackage ../development/python-modules/django-extensions { };
