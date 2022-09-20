@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchurl
 , meson
 , ninja
 , pkg-config
@@ -28,6 +29,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-m1UhyjD5ydSgCTBu6sECLlxFx0rnQxFnBA7frbdUqU8=";
   };
+
+  patches = [
+    # sss: use BN_set_word(x, 0) instead of BN_zero(), fixes build issue with different versions of openssl
+    (fetchurl {
+      url = "https://github.com/latchset/clevis/commit/ee1dfedb9baca107e66a0fec76693c9d479dcfd9.patch";
+      sha256 = "sha256-GeklrWWlAMALDLdnn6+0Bi0l+bXrIbYkgIyI94WEybM=";
+    })
+  ];
 
   postPatch = ''
     for f in $(find src/ -type f); do
