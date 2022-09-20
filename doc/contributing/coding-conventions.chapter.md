@@ -480,7 +480,20 @@ Preferred source hash type is sha256. There are several ways to get it.
 
 4. Extracting hash from local source tarball can be done with `sha256sum`. Use `nix-prefetch-url file:///path/to/tarball` if you want base32 hash.
 
-5. Fake hash: set the hash to `""`, `lib.fakeHash`, `lib.fakeSha256`, or `lib.fakeSha512` in the package expression, perform build and extract correct hash from error Nix prints.  You must use one of these four fake hashes and not some randomly-chosen hash; see below for the reason.
+5. Fake hash: set the hash to one of
+
+   - `""`
+   - `lib.fakeHash`
+   - `lib.fakeSha256`
+   - `lib.fakeSha512`
+   
+   in the package expression, attempt build and extract correct hash from error messages.
+
+   :::{.warning}
+   You must use one of these four fake hashes and not some arbitrarily-chosen hash.
+   
+   See [](#sec-source-hashes-security).
+   :::
 
     This is last resort method when reconstructing source URL is non-trivial and `nix-prefetch-url -A` isn’t applicable (for example, [one of `kodi` dependencies](https://github.com/NixOS/nixpkgs/blob/d2ab091dd308b99e4912b805a5eb088dd536adb9/pkgs/applications/video/kodi/default.nix#L73)). The easiest way then would be replace hash with a fake one and rebuild. Nix build will fail and error message will contain desired hash.
 
