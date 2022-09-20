@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "dnslib";
-  version = "0.9.20";
+  version = "0.9.21";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ApCrXQj6vR74XvFD0cM/3NVJyy5Qd57BpCOZiw0LKUU=";
+    sha256 = "sha256-IXabARWP5wvokSF1Q0nyg13M3yHVwBHOyfoopI+lVdQ=";
   };
 
   checkPhase = "VERSIONS=${python.interpreter} ./run_tests.sh";
