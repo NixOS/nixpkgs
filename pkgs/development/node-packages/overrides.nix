@@ -167,6 +167,10 @@ final: prev: {
     meta = oldAttrs.meta // { broken = since "10"; };
   });
 
+  graphite-cli = prev."@withgraphite/graphite-cli".override {
+    name = "graphite-cli";
+  };
+
   graphql-language-service-cli = prev.graphql-language-service-cli.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
