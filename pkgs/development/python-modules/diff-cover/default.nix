@@ -21,7 +21,7 @@ buildPythonPackage rec {
   version = "7.0.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "diff_cover";
