@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "boost-histogram";
-  version = "1.3.1";
+  version = "1.3.2";
   disabled = !isPy3k;
 
   src = fetchPypi {
     pname = "boost_histogram";
     inherit version;
-    sha256 = "sha256-Mc05Zlbzo3g04H0wTNuE2ZBrwhcmJqPZL+V30IvPQQ8=";
+    sha256 = "sha256-4XXvvBBUonvFP7vpVHLKyeqTmZyR0GEYQNd2uZWI1Ro=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
