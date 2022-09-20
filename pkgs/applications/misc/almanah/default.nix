@@ -5,7 +5,7 @@
 , atk
 , cairo
 , desktop-file-utils
-, evolution-data-server
+, evolution-data-server-gtk4
 , evolution
 , gcr_4
 , gettext
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     atk
     cairo
-    evolution-data-server
+    evolution-data-server-gtk4
     gcr_4
     glib
     evolution
