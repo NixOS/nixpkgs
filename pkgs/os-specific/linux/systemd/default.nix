@@ -113,18 +113,10 @@
 , docbook_xml_dtd_45
 }:
 
-assert withResolved -> (libgcrypt != null && libgpg-error != null);
-assert withImportd ->
-(curl.dev != null && zlib != null && xz != null && libgcrypt != null
-  && gnutar != null && gnupg != null && withCompression);
-
-assert withEfi -> (gnu-efi != null);
-assert withRemote -> lib.getDev curl != null;
+assert withImportd -> withCompression;
 assert withCoredump -> withCompression;
-
 assert withHomed -> withCryptsetup;
 
-assert withCryptsetup -> (cryptsetup != null);
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
