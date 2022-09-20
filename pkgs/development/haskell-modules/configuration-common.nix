@@ -1286,12 +1286,16 @@ self: super: {
   # upstream: https://github.com/obsidiansystems/which/pull/6
   which = doJailbreak super.which;
 
-  # the test suite attempts to run the binaries built in this package
-  # through $PATH but they aren't in $PATH
-  dhall-lsp-server = dontCheck super.dhall-lsp-server;
-
   # https://github.com/ocharles/weeder/issues/15
   weeder = doJailbreak super.weeder;
+
+  # 2022-09-20: We have overridden lsp to not be the stackage version.
+  # dhall-lsp-server needs the older 1.4.0.0 lsp
+  dhall-lsp-server = super.dhall-lsp-server.override {
+    lsp = dontCheck (super.lsp_1_4_0_0.override {
+      lsp-types = super.lsp-types_1_4_0_1;
+    });
+  };
 
   # Requested version bump on upstream https://github.com/obsidiansystems/constraints-extras/issues/32
   constraints-extras = doJailbreak super.constraints-extras;
@@ -1518,20 +1522,22 @@ self: super: {
     })
   ] super.binary-strict;
 
-  # 2020-11-19: Checks nearly fixed, but still disabled because of flaky tests:
-  # https://github.com/haskell/haskell-language-server/issues/610
-  # https://github.com/haskell/haskell-language-server/issues/611
-  haskell-language-server = lib.pipe super.haskell-language-server [
+  haskell-language-server = (lib.pipe super.haskell-language-server [
     dontCheck
-    (appendConfigureFlags ["-ftactics"])
-    (overrideCabal (old: {
-      libraryHaskellDepends = old.libraryHaskellDepends ++ [
-        super.hls-tactics-plugin
-      ];
-    }))
-  ];
+    (disableCabalFlag "stan") # Sorry stan is totally unmaintained and terrible to get to run. It only works on ghc 8.8 or 8.10 anyways …
+  ]).overrideScope (lself: lsuper: {
+    # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
+    hlint = enableCabalFlag "ghc-lib" lself.hlint_3_4_1;
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
+    ormolu = doJailbreak lself.ormolu_0_5_0_1;
+    fourmolu = doJailbreak lself.fourmolu_0_8_2_0;
+    ghc-lib-parser = lself.ghc-lib-parser_9_2_4_20220729;
+  });
 
-  lsp = assert super.lsp.version == "1.4.0.0"; dontCheck super.lsp;
+  # For -f-auto see cabal.project in haskell-language-server.
+  ghc-lib-parser-ex_9_2_0_4 = disableCabalFlag "auto" (super.ghc-lib-parser-ex_9_2_0_4.override {
+    ghc-lib-parser = self.ghc-lib-parser_9_2_4_20220729;
+  });
 
   # 2021-05-08: Tests fail: https://github.com/haskell/haskell-language-server/issues/1809
   hls-eval-plugin = dontCheck super.hls-eval-plugin;
@@ -1551,6 +1557,9 @@ self: super: {
   # 2021-11-20: Testsuite hangs.
   # https://github.com/haskell/haskell-language-server/issues/2375
   hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
+
+  # 2022-09-19: https://github.com/haskell/haskell-language-server/issues/3200
+  hls-refactor-plugin = dontCheck super.hls-refactor-plugin;
 
   # 2021-03-21: Test hangs
   # https://github.com/haskell/haskell-language-server/issues/1562
@@ -2098,19 +2107,7 @@ self: super: {
 
   # 2022-03-21: Newest stylish-haskell needs ghc-lib-parser-9_2
   stylish-haskell = (super.stylish-haskell.override {
-    ghc-lib-parser = super.ghc-lib-parser_9_2_4_20220729;
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_1_1;
-  });
-
-  ghc-lib-parser-ex_9_2_1_1 = super.ghc-lib-parser-ex_9_2_1_1.override {
-    ghc-lib-parser = super.ghc-lib-parser_9_2_4_20220729;
-  };
-
-  ghc-lib-parser-ex_9_2_0_4 = super.ghc-lib-parser-ex_9_2_0_4.override {
-    ghc-lib-parser = super.ghc-lib-parser_9_2_4_20220729;
-  };
-
-  hlint_3_4_1 = doDistribute (super.hlint_3_4_1.override {
+    ghc-lib-parser = self.ghc-lib-parser_9_2_4_20220729;
     ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
   });
 
@@ -2140,10 +2137,6 @@ self: super: {
 
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
-
-  # Not running the "example" test because it requires a binary from lsps test
-  # suite which is not part of the output of lsp.
-  lsp-test = overrideCabal (old: { testTarget = "tests func-test"; }) super.lsp-test;
 
   # 2021-09-14: Tests are flaky.
   hls-splice-plugin = dontCheck super.hls-splice-plugin;
@@ -2492,13 +2485,8 @@ self: super: {
   # has been resolved.
   lucid-htmx = doJailbreak super.lucid-htmx;
 
-  lsp_1_5_0_0 = doDistribute (super.lsp_1_5_0_0.override {
-    lsp-types = self.lsp-types_1_5_0_0;
-  });
-
-  futhark = super.futhark.override {
-    lsp = self.lsp_1_5_0_0;
-  };
+  # 2022-09-20: Restrictive upper bound on lsp
+  futhark = doJailbreak super.futhark;
 
   # Too strict bounds on hspec
   # https://github.com/klapaucius/vector-hashtables/issues/11
