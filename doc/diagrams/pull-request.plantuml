@@ -1,0 +1,71 @@
+@startuml
+title Nixos - Pull request workflow
+header
+https://github.com/NixOS/nixpkgs
+endheader
+
+title NixOS - Pull request workflow
+
+|#d1ecf1|Hydra|
+|#4078c0|Github|
+|#grey|Maintainer|
+|#white|Contributor|
+
+|Contributor|
+start
+  #MediumSeaGreen:<&plus> Submit new pull request;
+
+  |Github|
+  :<&bell> CI: Request review from code owners;
+
+  |Contributor|
+  repeat
+    repeat
+      label Here
+      backward :<&fork> Update commit(s)>
+      |Github|
+      :<&cog> CI: Run CI workflows>
+      |Contributor|
+    repeat while (Build is green?) is (<color:#f85149>no) not (<color:#238636>yes)
+
+    repeat
+    :<&clock> Wait for approvals;
+    backward :<&chat> Ping maintainers>
+    repeat while (Waiting too long?) is (yes) not (no)
+    |Maintainer|
+    :<&pencil> Make review>
+    |Contributor|
+    backward :<&fork> Update commit(s)>
+  repeat while (Changes requested?) is (yes) not (no)
+  |Maintainer|
+  if (pull request) is (is invalid) then
+    stop
+  else (is valid)
+  endif
+  #238636:<&check> Approve pull request;
+
+  |Maintainer|
+  #8957e5:<&fork> Merge pull request;
+
+  fork
+  |Github|
+  if (pull request has backport labels?) is (yes) then
+    :<&plus> CI: Create backport pull request(s)>
+  else (no)
+  endif
+  fork again
+  |Maintainer|
+  :<&heart> Thanks the contributor;
+  end fork
+
+  |Hydra|
+  :<&bolt> Start new jobset build>
+  if (Evaluation is green?) is (no) then
+
+  stop
+  else (yes)
+  endif
+
+  :<&cog> Update channel and git branch>
+end
+@enduml
