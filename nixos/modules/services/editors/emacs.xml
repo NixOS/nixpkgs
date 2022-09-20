@@ -264,7 +264,9 @@ nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.orgPackages
 
    <para>
     If you are on NixOS, you can install this particular Emacs for all users by
-    adding it to the list of system packages (see
+    putting the <literal>emacs.nix</literal> file in
+    <literal>/etc/nixos</literal> and adding it to the list of system packages
+    (see
     <xref linkend="sec-declarative-package-mgmt" />). Simply modify your file
     <filename>configuration.nix</filename> to make it contain:
     <example xml:id="module-services-emacs-configuration-nix">
@@ -273,7 +275,7 @@ nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.orgPackages
 {
  environment.systemPackages = [
    # [...]
-   (import /path/to/emacs.nix { inherit pkgs; })
+   (import ./emacs.nix { inherit pkgs; })
   ];
 }
 ]]></programlisting>
@@ -292,7 +294,8 @@ https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
 
    <para>
     If you are not on NixOS or want to install this particular Emacs only for
-    yourself, you can do so by adding it to your
+    yourself, you can do so by putting <literal>emacs.nix</literal> in
+    <literal>~/.config/nixpkgs</literal> and adding it to your
     <filename>~/.config/nixpkgs/config.nix</filename> (see
     <link xlink:href="https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides">Nixpkgs
     manual</link>):
@@ -301,7 +304,7 @@ https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
 <programlisting><![CDATA[
 {
   packageOverrides = super: let self = super.pkgs; in {
-    myemacs = import /path/to/emacs.nix { pkgs = self; };
+    myemacs = import ./emacs.nix { pkgs = self; };
   };
 }
 ]]></programlisting>
@@ -376,7 +379,6 @@ in [...]
     daemon, add the following to your <filename>configuration.nix</filename>:
 <programlisting>
 <xref linkend="opt-services.emacs.enable"/> = true;
-<xref linkend="opt-services.emacs.package"/> = import /home/cassou/.emacs.d { pkgs = pkgs; };
 </programlisting>
    </para>
 
