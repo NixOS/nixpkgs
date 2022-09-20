@@ -11001,6 +11001,8 @@ with pkgs;
     lua = lua5_3;
   };
 
+  silenthound = callPackage ../tools/security/silenthound { };
+
   silice = callPackage ../development/compilers/silice { };
 
   silver-searcher = callPackage ../tools/text/silver-searcher { };
