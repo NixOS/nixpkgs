@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "cdk-go";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "cdk-team";
     repo = "CDK";
     rev = "v${version}";
-    sha256 = "sha256-Lt9OvjxAOtYM3NJk2w9qY+3COiX9QWErhUrw6nrHYcw=";
+    sha256 = "sha256-OeQlepdHu5+rGEhw3x0uM1wy7/8IkA5Lh5k3yhytXwY=";
   };
 
   vendorSha256 = "sha256-aJN/d/BxmleRXKw6++k6e0Vb0Gs5zg1QfakviABYTog=";
