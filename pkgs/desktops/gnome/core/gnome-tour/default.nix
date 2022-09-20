@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-tour";
-  version = "43.beta";
+  version = "43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-JCrfKeM2U+DycZdzhaBVubrvAxQNHu2rqA2CLbZGY3k=";
+    hash = "sha256-E1HkGWJ/vXx3GTKm7xrYDAvy5oKMSUigYgaJhN2zzIg=";
   };
 
   cargoVendorDir = "vendor";
