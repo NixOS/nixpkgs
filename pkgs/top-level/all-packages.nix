@@ -32789,11 +32789,13 @@ with pkgs;
     miniupnpc = miniupnpc_2;
     withGui = true;
     boost = boost175;
+    inherit (darwin) autoSignDarwinBinariesHook;
   };
   elementsd = callPackage ../applications/blockchains/elements {
     miniupnpc = miniupnpc_2;
     withGui = false;
     boost = boost175;
+    inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   ergo = callPackage ../applications/blockchains/ergo { };
