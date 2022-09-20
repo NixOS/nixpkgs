@@ -28,7 +28,7 @@
 , avx2Support  ? stdenv.hostPlatform.avx2Support
 , fmaSupport   ? stdenv.hostPlatform.fmaSupport
 # Darwin deps
-, Foundation, Security, cctools, llvmPackages_11
+, Foundation, Security, cctools
 }:
 
 let
@@ -177,12 +177,7 @@ let
     '';
   }) else _bazel-build;
 
-  _bazel-build = (buildBazelPackage.override (lib.optionalAttrs stdenv.isDarwin {
-    # clang 7 fails to emit a symbol for
-    # __ZN4llvm11SmallPtrSetIPKNS_10AllocaInstELj8EED1Ev in any of the
-    # translation units, so the build fails at link time
-    stdenv = llvmPackages_11.stdenv;
-  })) {
+  _bazel-build = buildBazelPackage {
     name = "${pname}-${version}";
     bazel = bazel_5;
 
