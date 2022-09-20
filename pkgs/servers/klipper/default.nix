@@ -4,6 +4,7 @@
 , python3
 , unstableGitUpdater
 }:
+
 stdenv.mkDerivation rec {
   pname = "klipper";
   version = "unstable-2022-09-11";
@@ -23,13 +24,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ (python3.withPackages (p: with p; [ cffi pyserial greenlet jinja2 markupsafe ])) ];
 
   # we need to run this to prebuild the chelper.
-  postBuild = "python ./chelper/__init__.py";
+  postBuild = ''
+    python ./chelper/__init__.py
+  '';
 
-  # 2022-06-28: Python 3 is already supported in klipper, alas shebangs remained
-  # the same - we replace them in patchPhase.
-  patchPhase = ''
-    for F in klippy.py console.py parsedump.py; do
-      substituteInPlace $F \
+  # Python 3 is already supported but shebangs aren't updated yet
+  postPatch = ''
+    for file in klippy.py console.py parsedump.py; do
+      substituteInPlace $file \
         --replace '/usr/bin/env python2' '/usr/bin/env python'
     done
   '';
