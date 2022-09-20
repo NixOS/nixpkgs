@@ -1012,20 +1012,12 @@ self: super: {
 
   stack =
     generateOptparseApplicativeCompletion "stack"
-      (doJailbreak # for Cabal constraint added on hackage
-        (appendPatch
-          (fetchpatch {
-            # https://github.com/commercialhaskell/stack/pull/5559
-            # When removing, also remove doJailbreak.
-            name = "stack-pull-5559.patch";
-            url = "https://github.com/hercules-ci/stack/compare/v2.7.5...brandon-leapyear/chinn/cabal-0.patch";
-            sha256 = "sha256-OXmdGgQ2KSKtQKOK6eePLgvUOTlzac544HQYKJpcjnU=";
-          })
+      # stack has a bunch of constraints in its .cabal file that don't seem to be necessary
+      (doJailbreak
           (super.stack.overrideScope (self: super: {
-            # stack 2.7.5 requires aeson <= 1.6.
-            aeson = self.aeson_1_5_6_0;
-          }))
-      ));
+            # Needs Cabal-3.6
+            Cabal = self.Cabal_3_6_3_0;
+          })));
 
   # Too strict version bound on hashable-time.
   # Tests require newer package version.
