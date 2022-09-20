@@ -22,6 +22,7 @@
 , zstd
 , yq-go
 , nixosTests
+, pkgsBuildBuild
 }:
 
 with lib;
@@ -240,7 +241,11 @@ buildGoModule rec {
 
     substituteInPlace scripts/package-cli \
       --replace '"''${GO}" generate' \
-                'GOFLAGS="" "''${GO}" generate'
+                'GOFLAGS="" \
+                 GOOS="${pkgsBuildBuild.go.GOOS}" \
+                 GOARCH="${pkgsBuildBuild.go.GOARCH}" \
+                 CC="${pkgsBuildBuild.stdenv.cc}/bin/cc" \
+                 "''${GO}" generate'
   '';
 
   # Important utilities used by the kubelet, see
