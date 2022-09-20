@@ -120,3 +120,34 @@ Additional syntax extensions are available, though not all extensions can be use
   > :   green fruit with red flesh
 
 For contributing to the legacy parts, please see [DocBook: The Definitive Guide](https://tdg.docbook.org/) or the [DocBook rocks! primer](https://web.archive.org/web/20200816233747/https://docbook.rocks/).
+
+## Diagrams
+
+Diagrams are provided to contextualize the amount of information and processes
+into something more visual.
+
+The diagrams are generated using [Plantuml][plantuml website] and the sources
+are available in this repository, in `doc/diagrams`. Find plethora of examples
+and documentation also on the [Plantuml][plantuml website].
+
+The procedure to submit changes for these diagrams follow the usual process with
+Github pull-requests including the relevant changes except that pull-requests
+must include a link to the updated diagram using the web interface from
+[Plantuml][plantuml web interface website] or [Planttext][planttext website] so
+we can visually review the new changes.
+
+To render diagrams locally use
+
+```shell
+nix-shell '<nixpkgs>' --pure -p plantuml --run "plantuml path/to/diagram.plantuml"
+```
+
+Or if you're using flake
+
+```
+nix run nixpkgs#plantuml path/to/diagram.plantuml
+```
+
+[plantuml website]: https://plantuml.com/
+[plantuml web interface website]: https://www.plantuml.com/plantuml/
+[planttext website]: https://planttext.com/
