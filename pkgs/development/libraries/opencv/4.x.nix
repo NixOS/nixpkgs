@@ -10,7 +10,7 @@
 , hdf5
 , boost
 , gflags
-, protobuf
+, protobuf3_19
 , config
 , ocl-icd
 , buildPackages
@@ -76,6 +76,10 @@
 }:
 
 let
+  # https://github.com/opencv/opencv/issues/22449#issuecomment-1252100475
+  protobuf = protobuf3_19;
+  protoc = lib.getExe buildPackages.protobuf3_19;
+
   version = "4.5.4";
 
   src = fetchFromGitHub {
@@ -295,7 +299,7 @@ stdenv.mkDerivation {
     "-DOPENCV_GENERATE_PKGCONFIG=ON"
     "-DWITH_OPENMP=ON"
     "-DBUILD_PROTOBUF=OFF"
-    "-DProtobuf_PROTOC_EXECUTABLE=${lib.getExe buildPackages.protobuf}"
+    "-DProtobuf_PROTOC_EXECUTABLE=${protoc}"
     "-DPROTOBUF_UPDATE_FILES=ON"
     "-DOPENCV_ENABLE_NONFREE=${printEnabled enableUnfree}"
     "-DBUILD_TESTS=OFF"
