@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
+, pythonOlder
 , toml
 , pyyaml
 , packaging
@@ -11,11 +11,13 @@
 buildPythonPackage rec {
   pname = "dparse";
   version = "0.6.2";
-  disabled = isPy27;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1FJVvaIfmYvH3fKv1eYlBbphNHVrotQqhMVrCCZhTf4=";
+    hash = "sha256-1FJVvaIfmYvH3fKv1eYlBbphNHVrotQqhMVrCCZhTf4=";
   };
 
   propagatedBuildInputs = [
