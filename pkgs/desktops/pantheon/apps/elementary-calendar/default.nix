@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , meson
 , ninja
@@ -12,10 +13,10 @@
 , evolution-data-server
 , folks
 , geoclue2
-, geocode-glib
+, geocode-glib_2
 , granite
 , gtk3
-, libchamplain
+, libchamplain_libsoup3
 , libgee
 , libhandy
 , libical
@@ -32,6 +33,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-c2c8QNifBDzb0CelB72AIL4G694l6KCSXBjWIHrzZJo=";
   };
 
+  patches = [
+    # build: support evolution-data-server 3.46
+    # https://github.com/elementary/calendar/pull/758
+    (fetchpatch {
+      url = "https://github.com/elementary/calendar/commit/62c20e5786accd68b96c423b04e32c043e726cac.patch";
+      sha256 = "sha256-xatxoSwAIHiUA03vvBdM8HSW27vhPLvAxEuGK0gLiio=";
+    })
+
+    # Workaround for showing date numbers (TODO: should try to fix upstream)
+    # https://github.com/elementary/calendar/issues/756#issuecomment-1252400047
+    ./partly-revert-pr-301.patch
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -46,10 +60,10 @@ stdenv.mkDerivation rec {
     evolution-data-server
     folks
     geoclue2
-    geocode-glib
+    geocode-glib_2
     granite
     gtk3
-    libchamplain
+    libchamplain_libsoup3
     libgee
     libhandy
     libical
