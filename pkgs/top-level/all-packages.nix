@@ -1194,6 +1194,8 @@ with pkgs;
 
   adminer = callPackage ../servers/adminer { };
 
+  akkoma = callPackage ../servers/akkoma { };
+
   advancecomp = callPackage ../tools/compression/advancecomp {};
 
   aefs = callPackage ../tools/filesystems/aefs { };
