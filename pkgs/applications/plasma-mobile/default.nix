@@ -73,7 +73,7 @@ let
       krecorder = callPackage ./krecorder.nix {};
       ktrip = callPackage ./ktrip.nix {};
       kweather = callPackage ./kweather.nix {};
-      neochat = callPackage ./neochat.nix {};
+      neochat = callPackage ./neochat.nix { inherit srcs; };
       plasma-dialer = callPackage ./plasma-dialer.nix {};
       plasma-phonebook = callPackage ./plasma-phonebook.nix {};
       plasma-settings = callPackage ./plasma-settings.nix {};
