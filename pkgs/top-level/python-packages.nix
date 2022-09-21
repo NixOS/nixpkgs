@@ -9469,6 +9469,8 @@ in {
 
   readme_renderer = callPackage ../development/python-modules/readme_renderer { };
 
+  readstats = callPackage ../development/python-modules/pyreadstat { };
+
   readthedocs-sphinx-ext = callPackage ../development/python-modules/readthedocs-sphinx-ext { };
 
   rebulk = callPackage ../development/python-modules/rebulk { };
