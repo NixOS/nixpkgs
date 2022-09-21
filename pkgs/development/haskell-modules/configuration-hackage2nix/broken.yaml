@@ -2253,6 +2253,7 @@ broken-packages:
   - hlongurl
   - hlrdb-core
   - hls-exactprint-utils
+  - hls-selection-range-plugin
   - hls-stan-plugin
   - hlwm
   - hmarkup
