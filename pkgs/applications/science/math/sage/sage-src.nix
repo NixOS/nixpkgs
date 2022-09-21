@@ -58,14 +58,14 @@ let
   );
 in
 stdenv.mkDerivation rec {
-  version = "9.6";
+  version = "9.7";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "sha256-QY8Yga3hD1WhSCtA2/PVry8hHlMmC31J8jCBFtWgIU0=";
+    sha256 = "sha256-MYpCp18wqKwCa+tcJ7He14p1FXDlVm1vubQqQS9g3LY=";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -115,21 +115,6 @@ stdenv.mkDerivation rec {
 
     # adapted from https://trac.sagemath.org/ticket/23712#comment:22
     ./patches/tachyon-renamed-focallength.patch
-
-    (fetchSageDiff {
-      name = "eclib-20220621-update.patch";
-      base = "9.7.beta4";
-      rev = "9b65d73399b33043777ba628a4d318638aec6e0e";
-      sha256 = "sha256-pcb9Q9a0ROCZTyfT7TRMtgEqCom8SgrtAaZ8ATgeqVI=";
-    })
-
-    # https://trac.sagemath.org/ticket/34149
-    (fetchSageDiff {
-      name = "sphinx-5-update.patch";
-      base = "9.7.beta6";
-      rev = "6f9ceb7883376a1cacda51d84ec7870121860482";
-      sha256 = "sha256-prTCwBfl/wNXIkdjKLiMSe/B64wCXOjOTr4AVNiFruw=";
-    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

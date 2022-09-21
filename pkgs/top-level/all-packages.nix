@@ -3293,6 +3293,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
+  cf-terraforming = callPackage ../tools/misc/cf-terraforming { };
+
   charliecloud = callPackage ../applications/virtualization/charliecloud { };
 
   chelf = callPackage ../tools/misc/chelf { };
@@ -35857,6 +35859,8 @@ with pkgs;
   musly = callPackage ../applications/audio/musly { };
 
   mynewt-newt = callPackage ../tools/package-management/mynewt-newt { };
+
+  mynewt-newtmgr = callPackage ../tools/misc/mynewt-newtmgr { };
 
   mysides = callPackage ../os-specific/darwin/mysides { };
 
