@@ -33,7 +33,7 @@
 , shared-mime-info
 , desktop-file-utils
 , gtk3
-, fuse
+, fuse3
 , nixosTests
 , xz
 , zstd
@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
     python3
     systemd
     xorg.libXau
-    fuse
+    fuse3
     gsettings-desktop-schemas
     glib-networking
     librsvg # for flatpak-validate-icon
