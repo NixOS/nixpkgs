@@ -153,6 +153,13 @@ self: super: {
     lsp-types = doJailbreak lsuper.lsp-types;
   }));
 
+  hls-hlint-plugin = super.hls-hlint-plugin.overrideScope (lself: lsuper: {
+    # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
+    hlint = lself.hlint_3_2_8;
+    ghc-lib-parser = lself.ghc-lib-parser_8_10_7_20220219;
+    ghc-lib-parser-ex = addBuildDepend lself.ghc-lib-parser lself.ghc-lib-parser-ex_8_10_0_24;
+  });
+
   hls-brittany-plugin = super.hls-brittany-plugin.overrideScope (lself: lsuper: {
     brittany = doJailbreak lself.brittany_0_13_1_2;
     aeson = lself.aeson_1_5_6_0;

@@ -194,9 +194,9 @@ self: super: {
   stylish-haskell = enableCabalFlag "ghc-lib" super.stylish-haskell;
 
   # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
-  hlint = enableCabalFlag "ghc-lib" (super.hlint_3_4_1.override {
+  hlint = doDistribute (enableCabalFlag "ghc-lib" (super.hlint_3_4_1.override {
     ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
-  });
+  }));
 
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
   bsb-http-chunked = dontCheck super.bsb-http-chunked;

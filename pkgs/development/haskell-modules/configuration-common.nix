@@ -1526,11 +1526,17 @@ self: super: {
     dontCheck
     (disableCabalFlag "stan") # Sorry stan is totally unmaintained and terrible to get to run. It only works on ghc 8.8 or 8.10 anyways …
   ]).overrideScope (lself: lsuper: {
+    ormolu = doJailbreak lself.ormolu_0_5_0_1;
+    fourmolu = doJailbreak lself.fourmolu_0_8_2_0;
+    hlint = enableCabalFlag "ghc-lib" lself.hlint_3_4_1;
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
+    ghc-lib-parser = lself.ghc-lib-parser_9_2_4_20220729;
+  });
+
+  hls-hlint-plugin = super.hls-hlint-plugin.overrideScope (lself: lsuper: {
     # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
     hlint = enableCabalFlag "ghc-lib" lself.hlint_3_4_1;
     ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
-    ormolu = doJailbreak lself.ormolu_0_5_0_1;
-    fourmolu = doJailbreak lself.fourmolu_0_8_2_0;
     ghc-lib-parser = lself.ghc-lib-parser_9_2_4_20220729;
   });
 
