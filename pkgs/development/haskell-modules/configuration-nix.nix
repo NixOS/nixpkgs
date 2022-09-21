@@ -498,6 +498,14 @@ self: super: builtins.intersectAttrs super {
     librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
   }) super.LDAP);
 
+  # Not running the "example" test because it requires a binary from lsps test
+  # suite which is not part of the output of lsp.
+  lsp-test = overrideCabal (old: { testTarget = "tests func-test"; }) super.lsp-test;
+
+  # the test suite attempts to run the binaries built in this package
+  # through $PATH but they aren't in $PATH
+  dhall-lsp-server = dontCheck super.dhall-lsp-server;
+
   # Expects z3 to be on path so we replace it with a hard
   #
   # The tests expect additional solvers on the path, replace the
@@ -935,11 +943,11 @@ self: super: builtins.intersectAttrs super {
   }) super.procex;
 
   # Test suite wants to run main executable
-  fourmolu_0_7_0_1 = overrideCabal (drv: {
+  fourmolu_0_8_2_0 = overrideCabal (drv: {
     preCheck = drv.preCheck or "" + ''
       export PATH="$PWD/dist/build/fourmolu:$PATH"
     '';
-  }) super.fourmolu_0_7_0_1;
+  }) super.fourmolu_0_8_2_0;
 
   # Apply a patch which hardcodes the store path of graphviz instead of using
   # whatever graphviz is in PATH.
@@ -1053,9 +1061,13 @@ self: super: builtins.intersectAttrs super {
     hls-fourmolu-plugin
     hls-module-name-plugin
     hls-pragmas-plugin
-    hls-splice-plugin;
+    hls-splice-plugin
+    hls-refactor-plugin
+    hls-code-range-plugin
+    hls-explicit-fixity-plugin;
   # Tests have file permissions expections that don‘t work with the nix store.
   hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
+  hls-gadt-plugin = dontCheck super.hls-gadt-plugin;
 
   # Flaky tests
   hls-hlint-plugin = dontCheck super.hls-hlint-plugin;
