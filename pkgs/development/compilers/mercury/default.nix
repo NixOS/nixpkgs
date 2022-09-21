@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gcc, flex, bison, texinfo, jdk, erlang, makeWrapper
+{ lib, stdenv, fetchurl, gcc, flex, bison, texinfo, jdk_headless, erlang, makeWrapper
 , readline }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ gcc flex bison texinfo jdk erlang readline ];
+  buildInputs = [ gcc flex bison texinfo jdk_headless erlang readline ];
 
   patchPhase = ''
     # Fix calls to programs in /bin
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     for e in $(ls $out/bin) ; do
       wrapProgram $out/bin/$e \
         --prefix PATH ":" "${gcc}/bin" \
-        --prefix PATH ":" "${jdk}/bin" \
+        --prefix PATH ":" "${jdk_headless}/bin" \
         --prefix PATH ":" "${erlang}/bin"
     done
   '';
