@@ -19,7 +19,7 @@
 , setuptools-scm
 , setuptools-scm-git-archive
 , substituteAll
-, tesseract4
+, tesseract
 , tqdm
 , unpaper
 , installShellFiles
@@ -50,7 +50,7 @@ buildPythonPackage rec {
       gs = "${lib.getBin ghostscript}/bin/gs";
       jbig2 = "${lib.getBin jbig2enc}/bin/jbig2";
       pngquant = "${lib.getBin pngquant}/bin/pngquant";
-      tesseract = "${lib.getBin tesseract4}/bin/tesseract";
+      tesseract = "${lib.getBin tesseract}/bin/tesseract";
       unpaper = "${lib.getBin unpaper}/bin/unpaper";
     })
   ];
