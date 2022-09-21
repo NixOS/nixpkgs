@@ -1,0 +1,57 @@
+diff --git a/src/Grid/Grid.vala b/src/Grid/Grid.vala
+index 61706fc8..9b69fc14 100644
+--- a/src/Grid/Grid.vala
++++ b/src/Grid/Grid.vala
+@@ -215,7 +215,7 @@ public class Grid : Gtk.Grid {
+
+         day.in_current_month = new_date.get_month () == month_start.get_month ();
+
+-        day.date = new_date;
++        day.update_date (new_date);
+         return day;
+     }
+
+diff --git a/src/Grid/GridDay.vala b/src/Grid/GridDay.vala
+index 3e59cb7b..df04fe6f 100644
+--- a/src/Grid/GridDay.vala
++++ b/src/Grid/GridDay.vala
+@@ -35,6 +35,7 @@ public class Maya.View.GridDay : Gtk.EventBox {
+     public bool draw_left_border = true;
+     private VAutoHider event_box;
+     private GLib.HashTable<string, EventButton> event_buttons;
++    Gtk.Label label;
+
+     public bool in_current_month {
+         set {
+@@ -79,7 +80,7 @@ public class Maya.View.GridDay : Gtk.EventBox {
+         style_context.add_provider (style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+         style_context.add_class ("cell");
+
+-        var label = new Gtk.Label ("");
++        label = new Gtk.Label ("");
+         label.halign = Gtk.Align.END;
+         label.get_style_context ().add_provider (style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+         label.margin = EVENT_MARGIN;
+@@ -100,10 +101,6 @@ public class Maya.View.GridDay : Gtk.EventBox {
+
+         Gtk.TargetEntry dnd = {"binary/calendar", 0, 0};
+         Gtk.drag_dest_set (this, Gtk.DestDefaults.MOTION, {dnd}, Gdk.DragAction.MOVE);
+-
+-        this.notify["date"].connect (() => {
+-            label.label = date.get_day_of_month ().to_string ();
+-        });
+     }
+
+     public override bool drag_drop (Gdk.DragContext context, int x, int y, uint time_) {
+@@ -174,6 +171,11 @@ public class Maya.View.GridDay : Gtk.EventBox {
+         event_buttons.remove_all ();
+     }
+
++    public void update_date (DateTime date) {
++        this.date = date;
++        label.label = date.get_day_of_month ().to_string ();
++    }
++
+     public void set_selected (bool selected) {
+         if (selected) {
+             set_state_flags (Gtk.StateFlags.SELECTED, true);
