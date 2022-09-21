@@ -2660,6 +2660,10 @@ with pkgs;
 
   image-analyzer = callPackage ../applications/emulators/cdemu/analyzer.nix { };
 
+  keylime = callPackage ../tools/security/keylime {
+    libssl = openssl;
+  };
+
   kega-fusion = pkgsi686Linux.callPackage ../applications/emulators/kega-fusion { };
 
   lambda-delta = callPackage ../applications/emulators/lambda-delta { };
