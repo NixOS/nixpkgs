@@ -78,7 +78,7 @@ let
       plasma-phonebook = callPackage ./plasma-phonebook.nix {};
       plasma-settings = callPackage ./plasma-settings.nix {};
       plasmatube = callPackage ./plasmatube.nix {};
-      spacebar = callPackage ./spacebar.nix {};
+      spacebar = callPackage ./spacebar.nix { inherit srcs; };
     };
 
 in lib.makeScope libsForQt5.newScope packages
