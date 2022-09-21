@@ -18362,6 +18362,8 @@ with pkgs;
 
   gamenetworkingsockets = callPackage ../development/libraries/gamenetworkingsockets { };
 
+  game-music-emu = callPackage ../development/libraries/audio/game-music-emu { };
+
   gamin = callPackage ../development/libraries/gamin { };
   fam = gamin; # added 2018-04-25
 
@@ -28151,8 +28153,6 @@ with pkgs;
   fte = callPackage ../applications/editors/fte { };
 
   g933-utils = callPackage ../tools/misc/g933-utils { };
-
-  game-music-emu = callPackage ../applications/audio/game-music-emu { };
 
   gavrasm = callPackage ../development/compilers/gavrasm { };
 
