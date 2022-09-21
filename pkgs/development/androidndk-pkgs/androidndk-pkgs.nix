@@ -50,6 +50,7 @@ let
   # different from what we use. We make it four parts to conform with the existing
   # standard more properly.
   targetConfig = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (stdenv.targetPlatform.config);
+  prefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (stdenv.targetPlatform.config + "-");
 in
 
 rec {
@@ -60,6 +61,7 @@ rec {
     nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
     propagatedBuildInputs = [ androidndk ];
     passthru = {
+      targetPrefix = prefix;
       isClang = true; # clang based cc, but bintools ld
     };
     dontUnpack = true;
@@ -131,7 +133,7 @@ rec {
       # Android needs executables linked with -pie since version 5.0
       # Use -fPIC for compilation, and link with -pie if no -shared flag used in ldflags
       echo "-target ${targetInfo.triple} -fPIC" >> $out/nix-support/cc-cflags
-      echo "-z,noexecstack -z,relro -z,now" >> $out/nix-support/cc-ldflags
+      echo "-z,noexecstack -z,relro -z,now -z,muldefs" >> $out/nix-support/cc-ldflags
       echo 'if [[ ! " $@ " =~ " -shared " ]]; then NIX_LDFLAGS_${suffixSalt}+=" -pie"; fi' >> $out/nix-support/add-flags.sh
       echo "-Xclang -mnoexecstack" >> $out/nix-support/cc-cxxflags
       if [ ${targetInfo.triple} == arm-linux-androideabi ]; then
