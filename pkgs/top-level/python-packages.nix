@@ -6788,6 +6788,8 @@ in {
 
   overly = callPackage ../development/python-modules/overly { };
 
+  overpy = callPackage ../development/python-modules/overpy { };
+
   pandas-stubs = callPackage ../development/python-modules/pandas-stubs { };
 
   parameterizedtestcase = callPackage ../development/python-modules/parameterizedtestcase { };
