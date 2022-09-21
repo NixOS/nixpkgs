@@ -11,14 +11,15 @@
 , libxslt
 , pkg-config
 , xmlto
-, appstream-glib
 , substituteAll
 , runCommand
 , bison
 , xdg-dbus-proxy
 , p11-kit
+, appstream
 , bubblewrap
 , bzip2
+, curl
 , dbus
 , glib
 , gpgme
@@ -33,9 +34,8 @@
 , shared-mime-info
 , desktop-file-utils
 , gtk3
-, fuse
+, fuse3
 , nixosTests
-, libsoup
 , xz
 , zstd
 , ostree
@@ -54,14 +54,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flatpak";
-  version = "1.12.7";
+  version = "1.14.0";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${finalAttrs.version}/flatpak-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-bbUqUxzieCgqx+v7mfZqC7PsyvROhkhEwslcHuW6kxY="; # Taken from https://github.com/flatpak/flatpak/releases/
+    sha256 = "sha256-jidpc3cOok3fJZetSuzTa5g5PmvekeSOF0OqymfyeBU="; # Taken from https://github.com/flatpak/flatpak/releases/
   };
 
   patches = [
@@ -89,6 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/issues/53441
     ./unset-env-vars.patch
 
+    # Do not clear XDG_DATA_DIRS in fish shell
+    # https://github.com/flatpak/flatpak/pull/5123
+    ./no-breaking-fish.patch
+
     # The icon validator needs to access the gdk-pixbuf loaders in the Nix store
     # and cannot bind FHS paths since those are not available on NixOS.
     finalAttrs.passthru.icon-validator-patch
@@ -106,14 +110,15 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     pkg-config
     xmlto
-    appstream-glib
     bison
     wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
+    appstream
     bubblewrap
     bzip2
+    curl
     dbus
     dconf
     gpgme
@@ -121,14 +126,13 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
     libcap
     libseccomp
-    libsoup
     xz
     zstd
     polkit
     python3
     systemd
     xorg.libXau
-    fuse
+    fuse3
     gsettings-desktop-schemas
     glib-networking
     librsvg # for flatpak-validate-icon
@@ -152,6 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   configureFlags = [
+    "--with-curl"
     "--with-system-bubblewrap=${bubblewrap}/bin/bwrap"
     "--with-system-dbus-proxy=${xdg-dbus-proxy}/bin/xdg-dbus-proxy"
     "--with-dbus-config-dir=${placeholder "out"}/share/dbus-1/system.d"
