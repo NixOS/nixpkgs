@@ -22182,6 +22182,7 @@ with pkgs;
   };
 
   mimalloc = callPackage ../development/libraries/mimalloc { };
+  mimalloc-minimal = callPackage ../development/libraries/mimalloc/minimal.nix { };
 
   miniaudio = callPackage ../development/libraries/miniaudio { };
 
