@@ -25,8 +25,11 @@ let
 
   nativeBignumIncludes = [
     "ghc90"
+    "ghc902"
     "ghc92"
+    "ghc924"
     "ghc94"
+    "ghc942"
     "ghcHEAD"
   ];
 
