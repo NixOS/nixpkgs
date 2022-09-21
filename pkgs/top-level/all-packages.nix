@@ -19615,6 +19615,8 @@ with pkgs;
 
   libchamplain = callPackage ../development/libraries/libchamplain { };
 
+  libchamplain_libsoup3 = libchamplain.override { withLibsoup3 = true; };
+
   libchardet = callPackage ../development/libraries/libchardet { };
 
   libchewing = callPackage ../development/libraries/libchewing { };
