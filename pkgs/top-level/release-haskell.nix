@@ -338,7 +338,7 @@ let
               ;
             };
 
-            haskell.packages.native-bignum.ghc92 = {
+            haskell.packages.native-bignum.ghc924 = {
               inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc92)
                 hello
                 lens
