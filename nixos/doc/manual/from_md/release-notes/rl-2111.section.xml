@@ -1469,6 +1469,16 @@ Superuser created successfully.
           extent.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.haskell-language-server</literal> will now by
+          default be linked dynamically to improve TemplateHaskell
+          compatibility. To mitigate the increased closure size it will
+          now by default only support our current default ghc (at the
+          moment 9.0.2). Add other ghc versions via e.g.
+          <literal>pkgs.haskell-language-server.override { supportedGhcVersions = [ &quot;90&quot; &quot;92&quot; ]; }</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
