@@ -8324,6 +8324,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  mdbook-pagetoc = callPackage ../tools/text/mdbook-pagetoc { };
+
   mdbook-pdf = callPackage ../tools/text/mdbook-pdf {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
