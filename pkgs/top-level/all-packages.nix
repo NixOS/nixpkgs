@@ -4451,6 +4451,8 @@ with pkgs;
 
   nfstrace = callPackage ../tools/networking/nfstrace { };
 
+  nitch = callPackage ../tools/misc/nitch { };
+
   nix-direnv = callPackage ../tools/misc/nix-direnv { };
 
   nixel = callPackage ../tools/nix/nixel { };
