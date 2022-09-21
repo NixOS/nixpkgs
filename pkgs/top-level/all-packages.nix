@@ -18442,6 +18442,10 @@ with pkgs;
     stdenv = gcc10Stdenv;
   };
 
+  graphinder = callPackage ../tools/security/graphinder {
+    python3 = python310;
+  };
+
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
   libgit2 = callPackage ../development/libraries/libgit2 {
