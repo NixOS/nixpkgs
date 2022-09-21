@@ -488,7 +488,9 @@ in
       targetPlatform = localSystem;
       inherit config;
 
-      preHook = commonPreHook;
+      preHook = commonPreHook + lib.optionalString (localSystem.libc == "musl") ''
+        export LD_PRELOAD="${prevStage.mimalloc-minimal}/lib/libmimalloc.so"
+      '';
 
       initialPath =
         ((import ../generic/common-path.nix) {pkgs = prevStage;});
@@ -529,7 +531,8 @@ in
             binutils gcc gcc.cc gcc.cc.lib gcc.expand-response-params
           ]
           ++ lib.optionals (!localSystem.isx86 || localSystem.libc == "musl")
-            [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ];
+            [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ]
+        ++ lib.optional (localSystem.libc == "musl") [ prevStage.mimalloc-minimal ];
 
       overrides = self: super: {
         inherit (prevStage)

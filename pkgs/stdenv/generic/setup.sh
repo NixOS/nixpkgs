@@ -1273,6 +1273,9 @@ buildPhase() {
 
 
 checkPhase() {
+    LD_PRELOAD_OLD="$LD_PRELOAD"
+    unset LD_PRELOAD
+
     runHook preCheck
 
     if [[ -z "${foundMakefile:-}" ]]; then
@@ -1316,6 +1319,8 @@ checkPhase() {
     fi
 
     runHook postCheck
+
+    LD_PRELOAD="$LD_PRELOAD_OLD"
 }
 
 
