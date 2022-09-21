@@ -701,19 +701,18 @@ rec {
 
   # ensure that caCertificates builds
   image-with-certs = buildImage {
-    name = "curl";
+    name = "image-with-certs";
     tag = "latest";
 
     copyToRoot = pkgs.buildEnv {
       name = "image-with-certs-root";
       paths = [
-        pkgs.curl
+        pkgs.coreutils
         pkgs.dockerTools.caCertificates
       ];
     };
 
     config = {
-      Entrypoint = [ "/bin/curl" ];
     };
   };
 }
