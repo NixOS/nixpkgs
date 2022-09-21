@@ -11,13 +11,14 @@
 , libxslt
 , pkg-config
 , xmlto
-, appstream-glib
 , substituteAll
 , bison
 , xdg-dbus-proxy
 , p11-kit
+, appstream
 , bubblewrap
 , bzip2
+, curl
 , dbus
 , glib
 , gpgme
@@ -34,7 +35,6 @@
 , gtk3
 , fuse
 , nixosTests
-, libsoup
 , xz
 , zstd
 , ostree
@@ -53,26 +53,26 @@
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
-  version = "1.12.7";
+  version = "1.14.0";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-bbUqUxzieCgqx+v7mfZqC7PsyvROhkhEwslcHuW6kxY="; # Taken from https://github.com/flatpak/flatpak/releases/
+    sha256 = "sha256-jidpc3cOok3fJZetSuzTa5g5PmvekeSOF0OqymfyeBU="; # Taken from https://github.com/flatpak/flatpak/releases/
   };
 
   patches = [
     # Hardcode paths used by tests and change test runtime generation to use files from Nix store.
     # https://github.com/flatpak/flatpak/issues/1460
-    (substituteAll {
-      src = ./fix-test-paths.patch;
-      inherit coreutils gettext socat gtk3;
-      smi = shared-mime-info;
-      dfu = desktop-file-utils;
-      hicolorIconTheme = hicolor-icon-theme;
-    })
+    # (substituteAll {
+    #   src = ./fix-test-paths.patch;
+    #   inherit coreutils gettext socat gtk3;
+    #   smi = shared-mime-info;
+    #   dfu = desktop-file-utils;
+    #   hicolorIconTheme = hicolor-icon-theme;
+    # })
 
     # Hardcode paths used by Flatpak itself.
     (substituteAll {
@@ -110,14 +110,15 @@ stdenv.mkDerivation rec {
     libxslt
     pkg-config
     xmlto
-    appstream-glib
     bison
     wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
+    appstream
     bubblewrap
     bzip2
+    curl
     dbus
     dconf
     gpgme
@@ -125,7 +126,6 @@ stdenv.mkDerivation rec {
     libarchive
     libcap
     libseccomp
-    libsoup
     xz
     zstd
     polkit
@@ -156,6 +156,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configureFlags = [
+    "--with-curl"
     "--with-system-bubblewrap=${bubblewrap}/bin/bwrap"
     "--with-system-dbus-proxy=${xdg-dbus-proxy}/bin/xdg-dbus-proxy"
     "--with-dbus-config-dir=${placeholder "out"}/share/dbus-1/system.d"
