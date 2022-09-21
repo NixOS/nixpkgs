@@ -5,7 +5,7 @@
 , pkg-config
 , scdoc
 , stdenv
-, systemdSupport ? stdenv.isLinux, systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 }:
 
 stdenv.mkDerivation rec {

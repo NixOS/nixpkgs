@@ -1,4 +1,6 @@
-{ cmake
+{ lib
+, stdenv
+, cmake
 , pkg-config
 , boost
 , curl
@@ -12,13 +14,11 @@
 , libopenmpt
 , mpg123
 , ncurses
-, lib
-, stdenv
 , taglib
 # Linux Dependencies
 , alsa-lib
 , pulseaudio
-, systemdSupport ? stdenv.isLinux
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 # Darwin Dependencies
 , Cocoa

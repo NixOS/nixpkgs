@@ -10,7 +10,7 @@
 , systemd
 , wafHook
 , websocketpp
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , withWebSocket ? true
 }:
 

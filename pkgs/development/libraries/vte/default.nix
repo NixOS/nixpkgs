@@ -24,7 +24,7 @@
 , zlib
 , icu
 , systemd
-, systemdSupport ? stdenv.hostPlatform.isLinux
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 , nixosTests
 }:
 
