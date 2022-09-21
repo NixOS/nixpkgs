@@ -6,6 +6,7 @@
 , pastedeploy
 , paste
 , pydispatcher
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -13,10 +14,12 @@ buildPythonPackage rec {
   version = "3.10.0";
   format = "setuptools";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     pname = "SQLObject";
     inherit version;
-    sha256 = "sha256-i/wBFu8z/DS5Gtj00ZKrbuPsvqDH3O5GmbrknGbvJ7A=";
+    hash = "sha256-i/wBFu8z/DS5Gtj00ZKrbuPsvqDH3O5GmbrknGbvJ7A=";
   };
 
   propagatedBuildInputs = [
@@ -42,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Object Relational Manager for providing an object interface to your database";
     homepage = "http://www.sqlobject.org/";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
     maintainers = with maintainers; [ ];
   };
 }
