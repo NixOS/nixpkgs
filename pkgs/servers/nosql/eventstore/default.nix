@@ -71,6 +71,8 @@ buildDotnetModule rec {
     kill "$PID";
   '';
 
+  passthru.updateScript = ./updater.sh;
+
   meta = with lib; {
     homepage = "https://geteventstore.com/";
     description = "Event sourcing database with processing logic in JavaScript";
