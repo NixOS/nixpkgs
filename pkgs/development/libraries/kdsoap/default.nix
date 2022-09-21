@@ -7,11 +7,11 @@
 
 mkDerivation rec {
   pname = "kdsoap";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchurl {
     url = "https://github.com/KDAB/KDSoap/releases/download/kdsoap-${version}/kdsoap-${version}.tar.gz";
-    sha256 = "sha256-0YljEE+m99ArBEYxzdvnjxj3DgbGB69oDHrOBNbPBO4=";
+    sha256 = "sha256-rtV/ayAN33YvXSiY9+kijdBwCIHESRrv5ABvf6X1xic=";
   };
 
   outputs = [ "out" "dev" ];
