@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "surelog";
-  version = "v1.36";
+  version = "1.37";
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = pname;
-    rev = version;
-    hash = "sha256-gMxpnSsJTXmg2VU7mQcw1J40OuqW6oo9/sGplLgV0ho=";
+    rev = "v${version}";
+    hash = "sha256-QYak0kWiL7C05zQmDd7Jl3a00rp4rMx0DJtd0K6lCII=";
     fetchSubmodules = true;
   };
 
