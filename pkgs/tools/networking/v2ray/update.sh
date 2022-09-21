@@ -3,8 +3,7 @@
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-version_nix=./default.nix
-deps_nix=./deps.nix
+version_nix=./core.nix
 nixpkgs=../../../..
 
 old_core_rev=$(sed -En 's/.*\bversion = "(.*?)".*/\1/p' "$version_nix")
