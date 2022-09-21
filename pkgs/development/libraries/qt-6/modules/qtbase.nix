@@ -130,7 +130,9 @@ stdenv.mkDerivation rec {
     unixODBCDrivers.mariadb
   ] ++ lib.optionals stdenv.isLinux [
     util-linux
+  ] ++ lib.optionals systemdSupport [
     systemd
+  ] ++ [
     mtdev
     lksctp-tools
     libselinux
