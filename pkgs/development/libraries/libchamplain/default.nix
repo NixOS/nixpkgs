@@ -1,5 +1,22 @@
-{ fetchurl, lib, stdenv, meson, ninja, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, pkg-config, glib, gtk3, cairo, sqlite, gnome
-, clutter-gtk, libsoup, gobject-introspection /*, libmemphis */ }:
+{ fetchurl
+, lib
+, stdenv
+, meson
+, ninja
+, vala
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_412
+, pkg-config
+, glib
+, gtk3
+, cairo
+, sqlite
+, gnome
+, clutter-gtk
+, libsoup
+, gobject-introspection /*, libmemphis */
+}:
 
 stdenv.mkDerivation rec {
   pname = "libchamplain";
@@ -12,11 +29,28 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  nativeBuildInputs = [ meson ninja pkg-config gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_412 ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    vala
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_412
+  ];
 
-  buildInputs = [ sqlite libsoup ];
+  buildInputs = [
+    sqlite
+    libsoup
+  ];
 
-  propagatedBuildInputs = [ glib gtk3 cairo clutter-gtk ];
+  propagatedBuildInputs = [
+    glib
+    gtk3
+    cairo
+    clutter-gtk
+  ];
 
   mesonFlags = [
     "-Dgtk_doc=true"
@@ -44,7 +78,7 @@ stdenv.mkDerivation rec {
        OpenCycleMap, OpenAerialMap, and Maps for free.
     '';
 
-     maintainers = teams.gnome.members;
-     platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
+    maintainers = teams.gnome.members;
+    platforms = platforms.gnu ++ platforms.linux; # arbitrary choice
   };
 }
