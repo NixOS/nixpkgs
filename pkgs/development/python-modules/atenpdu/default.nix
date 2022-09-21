@@ -1,5 +1,4 @@
 { lib
-, async-timeout
 , buildPythonPackage
 , fetchPypi
 , async-timeout

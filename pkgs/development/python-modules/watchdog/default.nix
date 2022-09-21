@@ -41,6 +41,11 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg \
       --replace "--cov=watchdog" "" \
       --replace "--cov-report=term-missing" ""
+  '' + lib.optionalString stdenv.hostPlatform.isMusl
+  # https://github.com/gorakhargosh/watchdog/issues/920
+  ''
+    substituteInPlace tests/test_inotify_c.py \
+      --replace "Unknown error -1" "No error information"
   '';
 
   disabledTests = [

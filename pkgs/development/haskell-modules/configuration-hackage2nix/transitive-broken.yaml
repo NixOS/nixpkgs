@@ -940,6 +940,7 @@ dont-distribute-packages:
  - claferwiki
  - clash
  - classify-frog
+ - classy-miso
  - clckwrks
  - clckwrks-cli
  - clckwrks-dot-com
@@ -2068,6 +2069,7 @@ dont-distribute-packages:
  - hipbot
  - hipsql-client
  - hipsql-server
+ - hipsql-tx-simple
  - hirt
  - hist-pl
  - hist-pl-dawg
@@ -2204,6 +2206,7 @@ dont-distribute-packages:
  - hunt-searchengine
  - hunt-server
  - hurdle
+ - hurl-xml
  - huzzy
  - hw-all
  - hw-aws-sqs-conduit
@@ -2680,6 +2683,7 @@ dont-distribute-packages:
  - monad-stlike-stm
  - monad-unlift-ref
  - monadiccp-gecode
+ - monadology
  - monarch
  - monetdb-mapi
  - mongrel2-handler
