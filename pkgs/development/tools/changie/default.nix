@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "changie";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "miniscruff";
     repo = pname;
-    sha256 = "sha256-3i+GInsxGeHXdFYfI664sOshHFsEIVXgXolzPhc9eoM=";
+    sha256 = "sha256-3AGz84z0YmDiLxlbDO0f9ny75hyLB4fnYQSICElJVK4=";
   };
 
-  vendorSha256 = "sha256-/tYhoHk4+gbdfeBNqcBSM0y4V3tVH67Xta3+e+Sctsg=";
+  vendorSha256 = "sha256-9Cpyemq/f62rVMvGwOtgDGd9XllvICXL2dqNwUoFQmg=";
 
   meta = with lib; {
     homepage = "https://changie.dev";
