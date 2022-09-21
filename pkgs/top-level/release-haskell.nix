@@ -49,10 +49,10 @@ let
 
   # list of all compilers to test specific packages on
   released = with compilerNames; [
-    ghc88
-    ghc810
-    ghc90
-    ghc92
+    ghc884
+    ghc8107
+    ghc902
+    ghc924
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
