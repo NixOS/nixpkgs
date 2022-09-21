@@ -1,4 +1,5 @@
 { lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, kapp }:
+
 buildGoModule rec {
   pname = "kapp";
   version = "0.53.0";
@@ -28,6 +29,7 @@ buildGoModule rec {
   '';
 
   passthru.tests.version = testers.testVersion {
+    package = kapp;
   };
 
   meta = with lib; {
