@@ -339,6 +339,8 @@ in
             plasma-workspace
             plasma-workspace-wallpapers
 
+            oxygen-sounds
+
             breeze-icons
             pkgs.hicolor-icon-theme
 

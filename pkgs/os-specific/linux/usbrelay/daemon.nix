@@ -1,4 +1,4 @@
-{ stdenv, usbrelay, python3 }:
+{ stdenv, usbrelay, python3, installShellFiles }:
 let
   python = python3.withPackages (ps: with ps; [ usbrelay-py paho-mqtt ]);
 in
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
       --replace '/usr/sbin/usbrelayd' "$out/bin/usbrelayd"
   '';
 
+  nativeBuildInputs = [ installShellFiles ];
+
   buildInputs = [ python ];
 
   dontBuild = true;
@@ -26,6 +28,7 @@ stdenv.mkDerivation rec {
     install -m 644 -D usbrelayd.service $out/lib/systemd/system/usbrelayd.service
     install -m 644 -D 50-usbrelay.rules $out/lib/udev/rules.d/50-usbrelay.rules
     install -m 644 -D usbrelayd.conf $out/etc/usbrelayd.conf # include this as an example
+    installManPage usbrelayd.8
     runHook postInstall
   '';
 
