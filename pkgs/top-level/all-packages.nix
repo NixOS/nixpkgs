@@ -2858,6 +2858,8 @@ with pkgs;
 
   apprise = with python3Packages; toPythonApplication apprise;
 
+  aptdec = callPackage ../development/libraries/aptdec {};
+
   aria2 = callPackage ../tools/networking/aria2 {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -3554,6 +3556,8 @@ with pkgs;
 
   cutemarked-ng = libsForQt5.callPackage ../applications/office/cutemarked-ng { };
 
+  dab_lib = callPackage ../development/libraries/dab_lib {};
+
   dabet = callPackage ../tools/misc/dabet { };
 
   dabtools = callPackage ../applications/radio/dabtools { };
@@ -3719,6 +3723,8 @@ with pkgs;
   dozenal = callPackage ../applications/misc/dozenal { };
 
   dpic = callPackage ../tools/graphics/dpic { };
+
+  dsdcc = callPackage ../development/libraries/dsdcc {};
 
   dstp = callPackage ../development/tools/dstp { };
 
@@ -4632,6 +4638,8 @@ with pkgs;
   s2png = callPackage ../tools/graphics/s2png { };
 
   sfz = callPackage ../tools/misc/sfz { };
+
+  sgp4 = callPackage ../development/libraries/sgp4 {};
 
   shab = callPackage ../tools/text/shab { };
 
