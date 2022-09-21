@@ -140,7 +140,13 @@ let
         # ghcjs attribute in their bootstrap package set (exposed via passthru) which
         # would otherwise be ignored by Hydra.
         bootGhcjs = (packagePlatforms pkgs.haskell.compiler.${ghcjsName}.passthru).bootGhcjs;
-      }));
+      })) // {
+        ghc88 = {};
+        ghc810 = {};
+        ghc90 = {};
+        ghc92 = {};
+        ghc94 = {};
+      };
 
       tests.haskell = packagePlatforms pkgs.tests.haskell;
 
@@ -366,30 +372,30 @@ let
       nix-paths = released;
       titlecase = released;
       ghc-api-compat = [
-        compilerNames.ghc88
-        compilerNames.ghc810
-        compilerNames.ghc90
+        compilerNames.ghc884
+        compilerNames.ghc8107
+        compilerNames.ghc902
       ];
       ghc-bignum = [
-        compilerNames.ghc88
-        compilerNames.ghc810
+        compilerNames.ghc884
+        compilerNames.ghc8107
       ];
       ghc-lib = released;
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
       spectacle = [
-        compilerNames.ghc810
+        compilerNames.ghc8107
       ];
       weeder = [
-        compilerNames.ghc810
-        compilerNames.ghc90
-        compilerNames.ghc92
+        compilerNames.ghc8107
+        compilerNames.ghc902
+        compilerNames.ghc924
       ];
       purescript-cst = [
-        compilerNames.ghc810
+        compilerNames.ghc8107
       ];
       purescript-ast = [
-        compilerNames.ghc810
+        compilerNames.ghc8107
       ];
     })
     {
@@ -454,14 +460,14 @@ let
         constituents = accumulateDerivations [
           jobs.pkgsMusl.haskell.compiler.ghc8102Binary
           jobs.pkgsMusl.haskell.compiler.ghc8107Binary
-          jobs.pkgsMusl.haskell.compiler.ghc88
-          jobs.pkgsMusl.haskell.compiler.ghc810
-          jobs.pkgsMusl.haskell.compiler.ghc90
-          jobs.pkgsMusl.haskell.compiler.ghc92
+          jobs.pkgsMusl.haskell.compiler.ghc884
+          jobs.pkgsMusl.haskell.compiler.ghc8107
+          jobs.pkgsMusl.haskell.compiler.ghc902
+          jobs.pkgsMusl.haskell.compiler.ghc924
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
-          jobs.pkgsMusl.haskell.compiler.integer-simple.ghc810
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc90
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc92
+          jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc902
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc924
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
       };
@@ -477,7 +483,7 @@ let
         };
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc92
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc924
         ];
       };
     }
