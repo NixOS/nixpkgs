@@ -5725,6 +5725,8 @@ with pkgs;
 
   dismap = callPackage ../tools/security/dismap { };
 
+  dismember = callPackage ../tools/security/dismember { };
+
   dirvish  = callPackage ../tools/backup/dirvish { };
 
   dleyna-connector-dbus = callPackage ../development/libraries/dleyna-connector-dbus { };
