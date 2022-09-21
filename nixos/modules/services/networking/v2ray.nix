@@ -71,7 +71,7 @@ with lib;
         name = "v2ray.json";
         text = builtins.toJSON cfg.config;
         checkPhase = ''
-          ${cfg.package}/bin/v2ray -test -config $out
+          ${cfg.package}/bin/v2ray test -c $out
         '';
       };
 
@@ -88,7 +88,7 @@ with lib;
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/v2ray -config ${configFile}";
+        ExecStart = "${cfg.package}/bin/v2ray run -c ${configFile}";
       };
     };
   };
