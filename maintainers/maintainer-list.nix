@@ -15407,4 +15407,10 @@
     github = "zuzuleinen";
     githubId = 944919;
   };
+  quasigod-io = {
+    email = "quasigod-io@protonmail.com";
+    name = "Michael Belsanti";
+    github = "quasigod-io";
+    githubId = 62124625;
+  };
 }
