@@ -67,7 +67,8 @@ let
       !(stdenv.hostPlatform.useLLVM or false) &&
       stdenv.cc.isGNU;
 
-    nativeBuildInputs = [ perl ];
+    nativeBuildInputs = [ perl ]
+      ++ lib.optionals static [ removeReferencesTo ];
     buildInputs = lib.optional withCryptodev cryptodev
       # perl is included to allow the interpreter path fixup hook to set the
       # correct interpreter in c_rehash.
@@ -155,7 +156,7 @@ let
     postInstall =
     (if static then ''
       # OPENSSLDIR has a reference to self
-      ${removeReferencesTo}/bin/remove-references-to -t $out $out/lib/*.a
+      remove-references-to -t $out $out/lib/*.a
     '' else ''
       # If we're building dynamic libraries, then don't install static
       # libraries.

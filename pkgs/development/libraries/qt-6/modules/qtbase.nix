@@ -201,6 +201,10 @@ stdenv.mkDerivation rec {
     "-DQT_FEATURE_openssl_linked=ON"
   ];
 
+  NIX_CFLAGS_COMPILE = [
+    ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
+  ];
+
   outputs = [ "out" "dev" ];
 
   postInstall = ''

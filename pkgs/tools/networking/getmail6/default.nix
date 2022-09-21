@@ -23,6 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     # getmail spends a lot of effort to build an absolute path for
     # documentation installation; too bad it is counterproductive now
     sed -e '/datadir or prefix,/d' -i setup.py
+    sed -e 's,/usr/bin/getmail,$(dirname $0)/getmail,' -i getmails
   '';
 
   meta = with lib; {
