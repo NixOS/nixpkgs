@@ -1045,6 +1045,9 @@ self: super: builtins.intersectAttrs super {
 
   keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
 
+  # ghcide-bench tests need network
+  ghcide-bench = dontCheck super.ghcide-bench;
+
 # haskell-language-server plugins all use the same test harness so we give them what we want in this loop.
 } // pkgs.lib.mapAttrs
   (_: overrideCabal (drv: {
