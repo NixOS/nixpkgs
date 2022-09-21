@@ -424,6 +424,8 @@ with pkgs;
 
   crackle = callPackage ../tools/networking/crackle { };
 
+  crackql = callPackage ../tools/security/crackql { };
+
   crow-translate = libsForQt5.callPackage ../applications/misc/crow-translate { };
 
   cryptowatch-desktop = callPackage ../applications/finance/cryptowatch { };
@@ -2856,6 +2858,8 @@ with pkgs;
 
   apprise = with python3Packages; toPythonApplication apprise;
 
+  aptdec = callPackage ../development/libraries/aptdec {};
+
   aria2 = callPackage ../tools/networking/aria2 {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -3552,6 +3556,8 @@ with pkgs;
 
   cutemarked-ng = libsForQt5.callPackage ../applications/office/cutemarked-ng { };
 
+  dab_lib = callPackage ../development/libraries/dab_lib {};
+
   dabet = callPackage ../tools/misc/dabet { };
 
   dabtools = callPackage ../applications/radio/dabtools { };
@@ -3717,6 +3723,8 @@ with pkgs;
   dozenal = callPackage ../applications/misc/dozenal { };
 
   dpic = callPackage ../tools/graphics/dpic { };
+
+  dsdcc = callPackage ../development/libraries/dsdcc {};
 
   dstp = callPackage ../development/tools/dstp { };
 
@@ -4630,6 +4638,8 @@ with pkgs;
   s2png = callPackage ../tools/graphics/s2png { };
 
   sfz = callPackage ../tools/misc/sfz { };
+
+  sgp4 = callPackage ../development/libraries/sgp4 {};
 
   shab = callPackage ../tools/text/shab { };
 
@@ -5724,6 +5734,8 @@ with pkgs;
   wgetpaste = callPackage ../tools/text/wgetpaste { };
 
   dismap = callPackage ../tools/security/dismap { };
+
+  dismember = callPackage ../tools/security/dismember { };
 
   dirvish  = callPackage ../tools/backup/dirvish { };
 
@@ -11012,6 +11024,8 @@ with pkgs;
     lua = lua5_3;
   };
 
+  silenthound = callPackage ../tools/security/silenthound { };
+
   silice = callPackage ../development/compilers/silice { };
 
   silver-searcher = callPackage ../tools/text/silver-searcher { };
@@ -14660,6 +14674,10 @@ with pkgs;
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
+  cargo-ui = callPackage ../development/tools/rust/cargo-ui {
+    inherit (xorg) libX11 libXcursor libXi libXrandr libxcb;
+    inherit (darwin.apple_sdk.frameworks);
+  };
 
   cargo-tauri = callPackage ../development/tools/rust/cargo-tauri { };
 
@@ -17853,6 +17871,8 @@ with pkgs;
 
   coeurl = callPackage ../development/libraries/coeurl { };
 
+  coercer = callPackage ../tools/security/coercer { };
+
   cogl = callPackage ../development/libraries/cogl { };
 
   coin3d = callPackage ../development/libraries/coin3d { };
@@ -18375,6 +18395,10 @@ with pkgs;
     # Using gcc 10 because this fails to build with gcc 11
     # Error similar to this https://github.com/RPCS3/rpcs3/issues/10291
     stdenv = gcc10Stdenv;
+  };
+
+  graphinder = callPackage ../tools/security/graphinder {
+    python3 = python310;
   };
 
   icon-lang = callPackage ../development/interpreters/icon-lang { };
@@ -32727,11 +32751,13 @@ with pkgs;
     miniupnpc = miniupnpc_2;
     withGui = true;
     boost = boost175;
+    inherit (darwin) autoSignDarwinBinariesHook;
   };
   elementsd = callPackage ../applications/blockchains/elements {
     miniupnpc = miniupnpc_2;
     withGui = false;
     boost = boost175;
+    inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   ergo = callPackage ../applications/blockchains/ergo { };

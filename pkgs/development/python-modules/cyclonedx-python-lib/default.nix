@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, ddt
 , fetchFromGitHub
 , importlib-metadata
 , jsonschema
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "2.7.1";
+  version = "3.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     owner = "CycloneDX";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-c/KhoJOa121/h0n0GUazjUFChnUo05ThD+fuZXc5/Pk=";
+    hash = "sha256-pbwhjxlEdne426CiUORSM8w6MXpgpjMWoH37TnXxA5s=";
   };
 
   nativeBuildInputs = [
@@ -48,9 +49,10 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytestCheckHook
+    ddt
     jsonschema
     lxml
+    pytestCheckHook
     xmldiff
   ];
 

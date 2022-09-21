@@ -7,13 +7,13 @@
 
 buildPythonApplication rec {
   pname = "mkdocs-redirects";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "mkdocs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-iJmNh81VVqaPWHL3d8u+hESlW3AhlCr/Ax9n5nOTd0o=";
+    sha256 = "sha256-+Ti+Z5gL5vVlQDt+KRw9nNHHKhRtEfguQe1K001DK9E=";
   };
 
   propagatedBuildInputs = [
