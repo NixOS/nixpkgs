@@ -1,4 +1,5 @@
 { fetchurl
+, fetchpatch
 , lib
 , stdenv
 , meson
@@ -15,7 +16,9 @@
 , gnome
 , clutter-gtk
 , libsoup
+, libsoup_3
 , gobject-introspection /*, libmemphis */
+, withLibsoup3 ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -26,6 +29,16 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0rihpb0npqpihqcdz4w03rq6xl7jdckfqskvv9diq2hkrnzv8ch2";
   };
+
+  patches = lib.optionals withLibsoup3 [
+    # Port to libsoup3
+    # https://gitlab.gnome.org/GNOME/libchamplain/-/merge_requests/13
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/libchamplain/-/commit/1cbaf3193c2b38e447fbc383d4c455c3dcac6db8.patch";
+      excludes = [ ".gitlab-ci.yml" ];
+      sha256 = "uk38gExnUgeUKwhDsqRU77hGWhJ+8fG5dSiV2MAWLFk=";
+    })
+  ];
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -42,7 +55,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     sqlite
-    libsoup
+    (if withLibsoup3 then libsoup_3 else libsoup)
   ];
 
   propagatedBuildInputs = [
@@ -78,7 +91,7 @@ stdenv.mkDerivation rec {
        OpenCycleMap, OpenAerialMap, and Maps for free.
     '';
 
-    maintainers = teams.gnome.members;
+    maintainers = teams.gnome.members ++ teams.pantheon.members;
     platforms = platforms.gnu ++ platforms.linux; # arbitrary choice
   };
 }
