@@ -25339,6 +25339,8 @@ with pkgs;
 
   f5_6 = callPackage ../data/fonts/f5_6 { };
 
+  fairfax-hd = callPackage ../data/fonts/fairfax-hd { };
+
   faba-icon-theme = callPackage ../data/icons/faba-icon-theme { };
 
   faba-mono-icons = callPackage ../data/icons/faba-mono-icons { };
