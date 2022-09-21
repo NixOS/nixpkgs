@@ -30561,6 +30561,8 @@ with pkgs;
 
   ponymix = callPackage ../applications/audio/ponymix { };
 
+  popcorntime = callPackage ../applications/video/popcorntime {};
+
   pothos = libsForQt5.callPackage ../applications/radio/pothos { };
 
   potrace = callPackage ../applications/graphics/potrace {};
