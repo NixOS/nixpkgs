@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "metal-cli";
@@ -17,6 +17,15 @@ buildGoModule rec {
     "-s" "-w"
     "-X github.com/equinix/metal-cli/cmd.Version=${version}"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd metal \
+      --bash <($out/bin/metal completion bash) \
+      --fish <($out/bin/metal completion fish) \
+      --zsh <($out/bin/metal completion zsh)
+  '';
 
   doCheck = false;
 
