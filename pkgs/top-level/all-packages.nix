@@ -17857,7 +17857,9 @@ with pkgs;
 
   ccrtp = callPackage ../development/libraries/ccrtp { };
 
-  cctz = callPackage ../development/libraries/cctz { };
+  cctz = callPackage ../development/libraries/cctz {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   celt = callPackage ../development/libraries/celt {};
   celt_0_7 = callPackage ../development/libraries/celt/0.7.nix {};
