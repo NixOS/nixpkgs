@@ -2087,6 +2087,18 @@ Superuser created successfully.
           <literal>java-packages.compiler</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The sets <literal>haskell.packages</literal> and
+          <literal>haskell.compiler</literal> now contain for every ghc
+          version an attribute with the minor version dropped. E.g. for
+          <literal>ghc8107</literal> there also now exists
+          <literal>ghc810</literal>. Those attributes point to the same
+          compilers and packagesets but have the advantage that e.g.
+          <literal>ghc92</literal> stays stable when we update from
+          <literal>ghc924</literal> to <literal>ghc925</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

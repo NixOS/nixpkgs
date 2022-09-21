@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, supportedGhcVersions ? [ "884" "8107" "902" "924" ]
+, supportedGhcVersions ? [ "88" "810" "90" "92" ]
 , dynamic ? false
 , haskellPackages
 , haskell
@@ -8,7 +8,7 @@
 #
 # The recommended way to override this package is
 #
-# pkgs.haskell-language-server.override { supportedGhcVersions = [ "902" ]; }
+# pkgs.haskell-language-server.override { supportedGhcVersions = [ "90" ]; }
 #
 # for example. Read more about this in the haskell-language-server section of the nixpkgs manual.
 #
