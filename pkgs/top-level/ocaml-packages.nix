@@ -319,6 +319,8 @@ let
 
     dns-tsig = callPackage ../development/ocaml-modules/dns/tsig.nix { };
 
+    dnssec = callPackage ../development/ocaml-modules/dns/dnssec.nix { };
+
     dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
