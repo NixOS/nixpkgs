@@ -5,7 +5,7 @@
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau
 , libglvnd, libunwind
-, vulkan-loader
+, vulkan-loader, glslang
 , galliumDrivers ? ["auto"]
 , vulkanDrivers ? ["auto"]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
@@ -34,7 +34,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "22.1.7";
+  version = "22.2.1";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -43,12 +43,13 @@ self = stdenv.mkDerivation {
 
   src = fetchurl {
     urls = [
+      "https://archive.mesa3d.org/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "da838eb2cf11d0e08d0e9944f6bd4d96987fdc59ea2856f8c70a31a82b355d89";
+    sha256 = "0079beac0a33f45e7e0aec59e6913eafbc4268a3f1e2e330017440494f91b13c";
   };
 
   # TODO:
@@ -57,25 +58,9 @@ self = stdenv.mkDerivation {
   patches = [
     # fixes pkgsMusl.mesa build
     ./musl.patch
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/b9f58f303ae23754c95d5d1fe87a98b5a2d8f271/srcpkgs/mesa/patches/musl-endian.patch";
-      hash = "sha256-eRc91qCaFlVzrxFrNUPpAHd1gsqKsLCCN0IW8pBQcqk=";
-    })
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/b9f58f303ae23754c95d5d1fe87a98b5a2d8f271/srcpkgs/mesa/patches/musl-stacksize.patch";
-      hash = "sha256-bEp0AWddsw1Pc3rxdKN8fsrX4x2TQEzMUa5afhLXGsg=";
-    })
 
     ./opencl.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
-  ] ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    # Fix aarch64-darwin build, remove when upstreaam supports it out of the box.
-    # See: https://gitlab.freedesktop.org/mesa/mesa/-/issues/1020
-    ./aarch64-darwin.patch
-  ] ++ optionals stdenv.isDarwin [
-    # 22.1 on darwin won't build: https://gitlab.freedesktop.org/mesa/mesa/-/issues/6519
-    # (already in-tree for 22.2)
-    ./drop-dri2.patch
   ];
 
   postPatch = ''
@@ -153,7 +138,7 @@ self = stdenv.mkDerivation {
     meson pkg-config ninja
     intltool bison flex file
     python3Packages.python python3Packages.Mako
-    jdupes
+    jdupes glslang
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [
     wayland-scanner
   ];
