@@ -2096,11 +2096,6 @@ self: super: {
   # https://github.com/plow-technologies/hspec-golden-aeson/issues/17
   hspec-golden-aeson = dontCheck super.hspec-golden-aeson;
 
-  # 2021-11-05: jailBreak the too tight upper bound on haskus-utils-variant
-  ghcup = doJailbreak (super.ghcup.overrideScope (self: super: {
-    Cabal = self.Cabal_3_6_3_0;
-  }));
-
   # 2022-03-21: Newest stylish-haskell needs ghc-lib-parser-9_2
   stylish-haskell = (super.stylish-haskell.override {
     ghc-lib-parser = super.ghc-lib-parser_9_2_4_20220729;
