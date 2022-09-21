@@ -14747,6 +14747,9 @@ with pkgs;
   cargo-tauri = callPackage ../development/tools/rust/cargo-tauri { };
 
   cargo-valgrind = callPackage ../development/tools/rust/cargo-valgrind { };
+  cargo-vet = callPackage ../development/tools/rust/cargo-vet {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-wasi = callPackage ../development/tools/rust/cargo-wasi {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
