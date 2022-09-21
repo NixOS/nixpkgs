@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "sqlobject";
-  version = "3.9.1";
+  version = "3.10.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "SQLObject";
     inherit version;
-    sha256 = "45064184decf7f42d386704e5f47a70dee517d3e449b610506e174025f84d921";
+    sha256 = "sha256-i/wBFu8z/DS5Gtj00ZKrbuPsvqDH3O5GmbrknGbvJ7A=";
   };
 
   propagatedBuildInputs = [
