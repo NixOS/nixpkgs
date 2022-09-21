@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "UHDM";
-  version = "2022.05.15";
+  version = "0.9.1.37";
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = pname;
-    rev = "18ec4cce8c9414c135dc0e69155f777195dfe328";
-    hash = "sha256-ZWeMHHqgpdYlYzhRdTLXCe07dh0Pe8/ylU5TO3cAOmA=";
+    rev = "v${version}";
+    hash = "sha256-mhbgjdbnjZShfwgdZEZshiNkRMPLT5oGcAnrvfrO7DM=";
     fetchSubmodules = true;
   };
 
