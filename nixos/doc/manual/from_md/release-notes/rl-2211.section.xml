@@ -510,6 +510,14 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>aws</literal> package has been removed due to
+          being abandoned by the upstream. It is recommended to use
+          <literal>awscli</literal> or <literal>awscli2</literal>
+          instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>meta.mainProgram</literal> attribute of packages
           in <literal>wineWowPackages</literal> now defaults to
           <literal>&quot;wine64&quot;</literal>.

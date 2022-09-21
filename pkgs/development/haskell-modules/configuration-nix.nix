@@ -96,8 +96,11 @@ self: super: builtins.intersectAttrs super {
 
   # avoid compiling twice by providing executable as a separate output (with small closure size)
   niv = enableSeparateBinOutput (generateOptparseApplicativeCompletion "niv" super.niv);
-  ormolu = enableSeparateBinOutput super.ormolu;
   ghcid = enableSeparateBinOutput super.ghcid;
+  ormolu = generateOptparseApplicativeCompletion "ormolu" (enableSeparateBinOutput super.ormolu);
+
+  # Generate shell completion.
+  cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
 
   arbtt = overrideCabal (drv: {
     # The test suite needs the packages's executables in $PATH to succeed.
@@ -495,6 +498,14 @@ self: super: builtins.intersectAttrs super {
     librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
   }) super.LDAP);
 
+  # Not running the "example" test because it requires a binary from lsps test
+  # suite which is not part of the output of lsp.
+  lsp-test = overrideCabal (old: { testTarget = "tests func-test"; }) super.lsp-test;
+
+  # the test suite attempts to run the binaries built in this package
+  # through $PATH but they aren't in $PATH
+  dhall-lsp-server = dontCheck super.dhall-lsp-server;
+
   # Expects z3 to be on path so we replace it with a hard
   #
   # The tests expect additional solvers on the path, replace the
@@ -676,7 +687,6 @@ self: super: builtins.intersectAttrs super {
 
   # Tests access homeless-shelter.
   hie-bios = dontCheck super.hie-bios;
-  hie-bios_0_5_0 = dontCheck super.hie-bios_0_5_0;
 
   # Compiling the readme throws errors and has no purpose in nixpkgs
   aeson-gadt-th =
@@ -933,11 +943,11 @@ self: super: builtins.intersectAttrs super {
   }) super.procex;
 
   # Test suite wants to run main executable
-  fourmolu_0_7_0_1 = overrideCabal (drv: {
+  fourmolu_0_8_2_0 = overrideCabal (drv: {
     preCheck = drv.preCheck or "" + ''
       export PATH="$PWD/dist/build/fourmolu:$PATH"
     '';
-  }) super.fourmolu_0_7_0_1;
+  }) super.fourmolu_0_8_2_0;
 
   # Apply a patch which hardcodes the store path of graphviz instead of using
   # whatever graphviz is in PATH.
@@ -1035,6 +1045,9 @@ self: super: builtins.intersectAttrs super {
 
   keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
 
+  # ghcide-bench tests need network
+  ghcide-bench = dontCheck super.ghcide-bench;
+
 # haskell-language-server plugins all use the same test harness so we give them what we want in this loop.
 } // pkgs.lib.mapAttrs
   (_: overrideCabal (drv: {
@@ -1051,9 +1064,13 @@ self: super: builtins.intersectAttrs super {
     hls-fourmolu-plugin
     hls-module-name-plugin
     hls-pragmas-plugin
-    hls-splice-plugin;
+    hls-splice-plugin
+    hls-refactor-plugin
+    hls-code-range-plugin
+    hls-explicit-fixity-plugin;
   # Tests have file permissions expections that don‘t work with the nix store.
   hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
+  hls-gadt-plugin = dontCheck super.hls-gadt-plugin;
 
   # Flaky tests
   hls-hlint-plugin = dontCheck super.hls-hlint-plugin;

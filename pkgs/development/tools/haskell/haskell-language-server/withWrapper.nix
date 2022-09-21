@@ -1,14 +1,14 @@
 { lib
 , stdenv
-, supportedGhcVersions ? [ "884" "8107" "902" "924" ]
-, dynamic ? false
+, supportedGhcVersions ? [ "90" ]
+, dynamic ? true
 , haskellPackages
 , haskell
 }:
 #
 # The recommended way to override this package is
 #
-# pkgs.haskell-language-server.override { supportedGhcVersions = [ "902" ]; }
+# pkgs.haskell-language-server.override { supportedGhcVersions = [ "90" "92"]; }
 #
 # for example. Read more about this in the haskell-language-server section of the nixpkgs manual.
 #
@@ -57,8 +57,7 @@ in stdenv.mkDerivation {
         concatMapStringsSep ", " (x: concatStringsSep ", " (targets x))
         supportedGhcVersions
       }.
-
-      You can override the list supportedGhcVersions.
+      You can choose for which ghc versions to install hls with pkgs.haskell-language-server.override { supportedGhcVersions = [ "90" "92" ]; }.
     '';
   };
 }
