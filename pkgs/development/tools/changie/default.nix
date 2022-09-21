@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-9Cpyemq/f62rVMvGwOtgDGd9XllvICXL2dqNwUoFQmg=";
 
+  patches = [ ./skip-flaky-test.patch ];
+
   ldflags = [ "-s" "-w" "-X=main.version=${version}" ];
 
   meta = with lib; {
