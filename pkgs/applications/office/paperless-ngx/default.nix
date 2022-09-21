@@ -8,7 +8,7 @@
 , optipng
 , pngquant
 , qpdf
-, tesseract4
+, tesseract5
 , unpaper
 , liberation_ttf
 , fetchFromGitHub
@@ -56,7 +56,7 @@ let
     optipng
     pngquant
     qpdf
-    tesseract4
+    tesseract5
     unpaper
   ];
 in
