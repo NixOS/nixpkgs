@@ -4135,6 +4135,8 @@ in {
 
   hatch-fancy-pypi-readme = callPackage ../development/python-modules/hatch-fancy-pypi-readme { };
 
+  hatch-nodejs-version = callPackage ../development/python-modules/hatch-nodejs-version { };
+
   hatch-vcs = callPackage ../development/python-modules/hatch-vcs { };
 
   haversine = callPackage ../development/python-modules/haversine { };
