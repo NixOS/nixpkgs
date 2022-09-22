@@ -72,5 +72,6 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.unfree;
     platforms   = [ "i686-linux" ];
     maintainers = [ lib.maintainers.thoughtpolice ];
+    hydraPlatforms = [];
   };
 }

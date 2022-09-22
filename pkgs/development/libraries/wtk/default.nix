@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     description = "Sun Java Wireless Toolkit 2.5.2_01 for CLDC";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
+    hydraPlatforms = [];
   };
 }

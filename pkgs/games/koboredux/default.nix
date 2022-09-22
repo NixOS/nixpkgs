@@ -82,6 +82,7 @@ stdenv.mkDerivation rec {
     license = with licenses; if useProprietaryAssets then unfree else gpl2;
     platforms = platforms.all;
     maintainers = with maintainers; [ fgaz ];
+    hydraPlatforms = [];
   };
 }
 

@@ -93,5 +93,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = [ ];
     platforms = platforms.linux;
+    hydraPlatforms = [];
   };
 }

@@ -77,6 +77,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
     maintainers = [ ];
+    hydraPlatforms = [];
     # See issue https://github.com/NixOS/nixpkgs/issues/17162
     broken = true;
   };

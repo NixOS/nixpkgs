@@ -50,5 +50,6 @@ callPackage real-drv {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ herberteuler ];
     platforms = [ "x86_64-linux" ];
+    hydraPlatforms = [];
   };
 }

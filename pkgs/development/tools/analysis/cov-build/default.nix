@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.unfreeRedistributable;
     platforms   = lib.platforms.linux;
     maintainers = [ lib.maintainers.thoughtpolice ];
+    hydraPlatforms = [];
   };
 }

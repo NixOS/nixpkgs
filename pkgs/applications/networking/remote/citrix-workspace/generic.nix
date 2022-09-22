@@ -210,5 +210,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ pmenke michaeladler ];
     inherit homepage;
+    hydraPlatforms = [];
   };
 }

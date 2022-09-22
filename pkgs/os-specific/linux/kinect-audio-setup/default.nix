@@ -87,5 +87,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ berbiche ];
     platforms = platforms.linux;
     license = licenses.unfree;
+    hydraPlatforms = [];
   };
 }

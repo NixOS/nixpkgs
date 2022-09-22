@@ -66,5 +66,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.ekleog ];
     platforms = [ "i686-linux" "x86_64-linux" ];
+    hydraPlatforms = [];
   };
 }
