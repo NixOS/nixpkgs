@@ -16,6 +16,9 @@ buildGoModule rec {
 
   vendorHash = "sha256-NT928HSXWbxeyT4uunKKTjIsIAGTQtZUFh26WA/wH8Q=";
 
+  passthru.tests.version = testers.testVersion {
+    package = restish;
+  };
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
