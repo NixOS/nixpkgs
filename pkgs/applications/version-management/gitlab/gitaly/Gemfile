@@ -13,11 +13,11 @@ gem 'faraday', '~> 1.0'
 gem 'rbtrace', require: false
 
 # Labkit provides observability functionality
-gem 'gitlab-labkit', '~> 0.23'
+gem 'gitlab-labkit', '~> 0.24'
 
 # Detects the open source license the repository includes
 # This version needs to be in sync with GitLab CE/EE
-gem 'licensee', '~> 9.14.1'
+gem 'licensee', '~> 9.15'
 
 gem 'google-protobuf', '~> 3.21.0'
 
