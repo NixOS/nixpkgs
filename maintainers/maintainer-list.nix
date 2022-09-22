@@ -6847,12 +6847,6 @@
     github = "k3a";
     githubId = 966992;
   };
-  k4leg = {
-    name = "k4leg";
-    email = "python.bogdan@gmail.com";
-    github = "k4leg";
-    githubId = 39882583;
-  };
   k900 = {
     name = "Ilya K.";
     email = "me@0upti.me";
