@@ -1,34 +1,29 @@
-{ fetchFromGitHub
-, lib
+{ lib
 , rustPlatform
-, lua52Support ? true
-, luauSupport ? false
-, fetchpatch
+, fetchFromGitHub
+  # lua54 implies lua52/lua53
+, features ? [ "lua54" "luau" ]
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "stylua";
-  version = "0.14.3";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "johnnymorganz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-l4q6Qlgdxgm4K5+NkWMZI3Hhtx6m/0DG9PE4gvo/ylo=";
+    sha256 = "sha256-x4/DmFi/6bIQVn8sfSFEOJIv4Zd/3oHKXbrd6yIsSYU=";
   };
 
-  cargoSha256 = "sha256-zlk9KdiSKWknyuJTTqpzCeSJUXJGDK2A0g1ss8AHoYs=";
+  cargoSha256 = "sha256-lY18so+uG3yri18zd29B479nl0l1C0F1mw+sPrccRQs=";
 
-  cargoPatches = [
-    # fixes broken 0.14.3 lockfile
-    (fetchpatch {
-      url = "https://github.com/JohnnyMorganz/StyLua/commit/834f632f67af6425e7773eaade8d23a880946843.patch";
-      sha256 = "sha256-oM2gaILwiNMqTGFRQBw6/fxbjljNWxeIb0lcXcAJR3w=";
-    })
-  ];
+  # remove cargo config so it can find the linker on aarch64-unknown-linux-gnu
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
 
-  buildFeatures = lib.optional lua52Support "lua52"
-    ++ lib.optional luauSupport "luau";
+  buildFeatures = features;
 
   meta = with lib; {
     description = "An opinionated Lua code formatter";
