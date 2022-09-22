@@ -16647,6 +16647,8 @@ with pkgs;
 
   litecli = callPackage ../development/tools/database/litecli {};
 
+  litefs = callPackage ../development/tools/database/litefs {};
+
   litestream = callPackage ../development/tools/database/litestream {};
 
   lsof = callPackage ../development/tools/misc/lsof { };
