@@ -1409,3 +1409,36 @@ If the libraries lack `-fPIE`, you will get the error `recompile with -fPIE`.
 [^footnote-stdenv-sys-lib-search-path]: It clears the `sys_lib_*search_path` variables in the Libtool script to prevent Libtool from using libraries in `/usr/lib` and such.
 [^footnote-stdenv-build-time-guessing-impurity]: Eventually these will be passed building natively as well, to improve determinism: build-time guessing, as is done today, is a risk of impurity.
 [^footnote-stdenv-per-platform-wrapper]: Each wrapper targets a single platform, so if binaries for multiple platforms are needed, the underlying binaries must be wrapped multiple times. As this is a property of the wrapper itself, the multiple wrappings are needed whether or not the same underlying binaries can target multiple platforms.
+
+
+### CC wrapper post-wrapper-hook {#post-wrapper-hook}
+
+In nixpkgs standard environments, [compilers are wrapped](#cc-wrapper).
+Sometimes it is important to be able to extract the exact compiler invocation used.
+This can be done with a `post-wrapper-hook.sh`.
+If the file `${cc}/nix-support/post-wrapper-hook.sh` exists, it will be sourced by the compiler wrapper just before the compiler is run, allowing the variables set in the wrapper to be extracted.
+
+This functionality is used by the package `mini-compile-commands`, which can be used to generate `compile_commands.json` files.
+The most popular method for doing this is using [bear](https://github.com/rizsotto/Bear), but bear can have trouble distinguishing between invocations of the compiler wrapper and invocations of the unwrapped compiler.
+It provides a function `mini-compile-commands.wrap` which takes a standard environment and returns a new standard environment with a compile commands generating `post-wrapper-hook.sh`.
+
+For example, in the environment
+```
+with (import <nixpkgs> {});
+let llvm = llvmPackages_latest;
+in (mkShell.override {stdenv = ( mini-compile-commands.wrap llvm.stdenv );}) {
+   buildInputs = [ cmake gtest ];
+}
+```
+
+A `compile_commands.json` file can be produced as follows:
+
+```
+$ mini_compile_commands_server.py compile_commands.json &
+
+# record the pid of the mini_compile_commands_server
+$ PID_OF_MINI_COMPILE_COMMANDS_SERVER=$!
+
+$ <your-build-commands>
+$ kill $PID_OF_MINI_COMPILE_COMMANDS_SERVER
+```

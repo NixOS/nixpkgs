@@ -8381,6 +8381,8 @@ with pkgs;
 
   minica = callPackage ../tools/security/minica { };
 
+  mini-compile-commands = callPackage ../development/tools/mini-compile-commands { };
+
   minidlna = callPackage ../tools/networking/minidlna { };
 
   miniplayer = callPackage ../applications/audio/miniplayer { };
