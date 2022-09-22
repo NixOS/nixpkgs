@@ -16986,6 +16986,8 @@ with pkgs;
 
   openai = with python3Packages; toPythonApplication openai;
 
+  openai-whisper = with python3.pkgs; toPythonApplication openai-whisper;
+
   opengrok = callPackage ../development/tools/misc/opengrok { };
 
   openocd = callPackage ../development/embedded/openocd { };
