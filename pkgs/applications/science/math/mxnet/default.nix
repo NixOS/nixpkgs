@@ -1,4 +1,4 @@
-{ config, stdenv, lib, fetchurl, bash, cmake
+{ config, stdenv, lib, fetchurl, fetchpatch, bash, cmake
 , opencv3, gtest, blas, gomp, llvmPackages, perl
 , cudaSupport ? config.cudaSupport or false, cudaPackages ? {}, nvidia_x11
 , cudnnSupport ? cudaSupport
@@ -20,6 +20,21 @@ stdenv.mkDerivation rec {
     url = "https://dlcdn.apache.org/incubator/mxnet/${version}/apache-mxnet-src-${version}-incubating.tar.gz";
     hash = "sha256-EephMoF02MKblvNBl34D3rC/Sww3rOZY+T442euMkyI=";
   };
+
+  patches = [
+    # Remove the following two patches when updating mxnet to 2.0.
+    (fetchpatch {
+      name = "1-auto-disable-sse-for-non-x86.patch";
+      url = "https://github.com/apache/incubator-mxnet/commit/55e69871d4cadec51a8bbb6700131065388cb0b9.patch";
+      hash = "sha256-uaMpM0F9HRtEBXz2ewB/dlbuKaY5/RineCPUE2T6CHU=";
+    })
+    (fetchpatch {
+      name = "2-auto-disable-sse-for-non-x86.patch";
+      url = "https://github.com/apache/incubator-mxnet/commit/c1b96f562f55dfa024ac941d7b104f00e239ee0f.patch";
+      excludes = ["ci/docker/runtime_functions.sh"];
+      hash = "sha256-r1LbC8ueRooW5tTNakAlRSJ+9aR4WXXoEKx895DgOs4=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake perl ];
 
