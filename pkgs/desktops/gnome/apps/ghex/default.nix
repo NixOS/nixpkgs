@@ -16,18 +16,19 @@
 , glib
 , atk
 , gobject-introspection
+, vala
 , wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "ghex";
-  version = "43.alpha";
+  version = "43.rc";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/ghex/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "tJttVHJ8Jmo22JQj0r+1OFB/aVU3Q2IoL8UiLMIxC48=";
+    sha256 = "yGQ+fwmzNkEqj39swLZU2NmysL5cA2W+jYkTHBU9M/M=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gi-docgen
     gobject-introspection
+    vala
     wrapGAppsHook4
   ];
 
@@ -56,6 +58,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
+    "-Dvapi=true"
   ] ++ lib.optionals stdenv.isDarwin [
     # mremap does not exist on darwin
     "-Dmmap-buffer-backend=false"
