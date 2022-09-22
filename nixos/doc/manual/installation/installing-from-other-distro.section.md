@@ -21,8 +21,8 @@ The first steps to all these are the same:
     Short version:
 
     ```ShellSession
-    sh <(curl -L https://nixos.org/nix/install) --no-daemon && |  
-    . $HOME/.nix-profile/etc/profile.d/nix.sh # …or open a fresh shell
+    sh <(curl -L https://nixos.org/nix/install) --no-daemon && \
+    . $HOME/.nix-profile/etc/profile.d/nix.sh
     ```
 
     More details in the [ Nix
