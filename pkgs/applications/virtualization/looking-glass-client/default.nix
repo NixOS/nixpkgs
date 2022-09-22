@@ -1,7 +1,8 @@
 { stdenv, lib, fetchFromGitHub, makeDesktopItem, cmake, pkg-config
 , freefont_ttf, spice-protocol, nettle, libbfd, fontconfig, libffi, expat
 , libxkbcommon, libGL, libXext, libXrandr, libXi, libXScrnSaver, libXinerama
-, libXcursor, libXpresent, wayland, wayland-protocols
+, libXcursor, libXpresent, wayland, wayland-protocols, pipewire, libpulseaudio
+, libsamplerate
 }:
 
 let
@@ -16,13 +17,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "looking-glass-client";
-  version = "B5.0.1";
+  version = "B6-rc1";
 
   src = fetchFromGitHub {
     owner = "gnif";
     repo = "LookingGlass";
     rev = version;
-    sha256 = "sha256-UzZQU5SzJ2mo9QBweQB0VJSnKfzgTG5QaKpIQN/6LCE=";
+    sha256 = "sha256-FZjwLY2XtPGhwc/GyAAH2jvFOp61lSqXqXjz0UBr7uw=";
     fetchSubmodules = true;
   };
 
@@ -47,6 +48,9 @@ stdenv.mkDerivation rec {
     libXrandr
     wayland
     wayland-protocols
+    pipewire
+    libpulseaudio
+    libsamplerate
   ];
 
   cmakeFlags = [ "-DOPTIMIZE_FOR_NATIVE=OFF" ];
