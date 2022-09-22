@@ -16,6 +16,7 @@ beamPackages.mixRelease rec {
     rev = "v${version}";
     sha256 = "sha256-x8j/2Eot/EEHsedgZntB5MPxlYMNDlFyZtmiMdhcS7U=";
   };
+  stripDebug = false;
 
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
