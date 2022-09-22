@@ -46,7 +46,7 @@ commonOptions = packageSettings: rec { # attributes common to both builds
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl libedit ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) [ jemalloc ]
     ++ (if (lib.versionOlder version "10.5") then [ pcre ] else [ pcre2 ])
-    ++ (if (lib.versionOlder version "10.8")
+    ++ (if (lib.versionOlder version "10.6")
       then [ openssl_1_1 (curl.override { openssl = openssl_1_1; }) ]
       else [ openssl curl ]);
 
@@ -252,22 +252,22 @@ in {
   };
   mariadb_106 = mariadbPackage {
     # Supported until 2026-07
-    version = "10.6.9";
-    hash = "sha256-N5Wfi1+8ZNlOGA3NiuW9+v1AYgOgf0j3vs1rinYzdEw=";
+    version = "10.6.10";
+    hash = "sha256-atn6hvDIXI7q+tJkNUnV/13ShyAClk51R1LekYY6o7c=";
   };
   mariadb_107 = mariadbPackage {
     # Supported until 2023-02. TODO: remove ahead of 22.11 release.
-    version = "10.7.5";
-    hash = "sha256-f/OkzNoe7S8aZBO4DE7WjMqRFzD1Aaaf1/STo0oJVLo=";
+    version = "10.7.6";
+    hash = "sha256-erX7pDmQV33BdPG5a9NAszN8G9Rv48NmIgsJ0siNLqA=";
   };
   mariadb_108 = mariadbPackage {
     # Supported until 2023-05
-    version = "10.8.4";
-    hash = "sha256-ZexgyjZYjs0RzYw/wM414dYDAp4SN4z4i6qGX9CJEWY=";
+    version = "10.8.5";
+    hash = "sha256-z37TjDYTTNgYP93WTLPlD1ROgmS6dCAlXbEpcJfgjos=";
   };
   mariadb_109 = mariadbPackage {
     # Supported until 2023-08(?)
-    version = "10.9.2";
-    hash = "sha256-X0X/deBDlmVVqV+9uPCS5gzipsR7pZ0UTbRuE46SL0g=";
+    version = "10.9.3";
+    hash = "sha256-mh4imXL8zMgnDmM/aNP7gk2hUdz09T2h342UesqHa+4=";
   };
 }
