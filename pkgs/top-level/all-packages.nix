@@ -27135,6 +27135,8 @@ with pkgs;
 
   upower = callPackage ../os-specific/linux/upower { };
 
+  upscayl = callPackage ../applications/video/upscayl { };
+
   usbguard = callPackage ../os-specific/linux/usbguard { };
 
   usbrelay = callPackage ../os-specific/linux/usbrelay { };

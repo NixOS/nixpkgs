@@ -15105,6 +15105,12 @@
     githubId = 4322055;
     name = "Till Höppner";
   };
+  tim = {
+    name = "Tim Schneider";
+    email = "TimSchneiderMain@hotmail.de";
+    github = "TheZombie1999";
+    githubId = 36491567;
+  };
   timbertson = {
     email = "tim@gfxmonk.net";
     github = "timbertson";
