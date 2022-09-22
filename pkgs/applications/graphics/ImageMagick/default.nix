@@ -18,7 +18,7 @@
 , libpngSupport ? true, libpng
 , liblqr1Support ? true, liblqr1
 , librawSupport ? true, libraw
-, librsvgSupport ? !stdenv.hostPlatform.isMinGW, librsvg
+, librsvgSupport ? !stdenv.hostPlatform.isMinGW, librsvg, pango
 , libtiffSupport ? true, libtiff
 , libxml2Support ? true, libxml2
 , openjpegSupport ? !stdenv.hostPlatform.isMinGW, openjpeg
@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
     "--with-frozenpaths"
     (lib.withFeatureAs (arch != null) "gcc-arch" arch)
     (lib.withFeature librsvgSupport "rsvg")
+    (lib.withFeature librsvgSupport "pango")
     (lib.withFeature liblqr1Support "lqr")
     (lib.withFeature libjxlSupport "jxl")
     (lib.withFeatureAs ghostscriptSupport "gs-font-dir" "${ghostscript}/share/ghostscript/fonts")
@@ -88,7 +89,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional djvulibreSupport djvulibre
     ++ lib.optional libjxlSupport libjxl
     ++ lib.optional openexrSupport openexr
-    ++ lib.optional librsvgSupport librsvg
+    ++ lib.optionals librsvgSupport [
+      librsvg
+      pango
+    ]
     ++ lib.optional openjpegSupport openjpeg
     ++ lib.optionals stdenv.isDarwin [
       ApplicationServices
