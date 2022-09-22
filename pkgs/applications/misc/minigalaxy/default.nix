@@ -16,13 +16,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "minigalaxy";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "sharkwouter";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-BbtwLuG5TH/+06Ez8+mwSAjG1IWg9/3uxzjmgPHczAw=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-KTbur9UhV08Wy3Eg/UboG0fZ/6nzNABAildnhe64FEs=";
   };
 
   checkPhase = ''
