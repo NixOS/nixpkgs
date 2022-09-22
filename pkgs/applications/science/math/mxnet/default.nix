@@ -1,4 +1,4 @@
-{ config, stdenv, lib, fetchurl, fetchpatch, bash, cmake
+{ config, stdenv, lib, fetchurl, bash, cmake
 , opencv3, gtest, blas, gomp, llvmPackages, perl
 , cudaSupport ? config.cudaSupport or false, cudaPackages ? {}, nvidia_x11
 , cudnnSupport ? cudaSupport
@@ -13,27 +13,13 @@ assert cudnnSupport -> cudaSupport;
 
 stdenv.mkDerivation rec {
   pname = "mxnet";
-  version = "1.8.0";
+  version = "1.9.1";
 
   src = fetchurl {
     name = "apache-mxnet-src-${version}-incubating.tar.gz";
     url = "https://dlcdn.apache.org/incubator/mxnet/${version}/apache-mxnet-src-${version}-incubating.tar.gz";
-    hash = "sha256-la/5hYlaukCcCNVRRRCuOLiEkM+2KBqzpf8PWCbI21Q=";
+    hash = "sha256-EephMoF02MKblvNBl34D3rC/Sww3rOZY+T442euMkyI=";
   };
-
-  patches = [
-    # Fix build error https://github.com/apache/incubator-mxnet/issues/19405
-    (fetchpatch {
-      name = "mxnet-fix-gcc-linker-error-1.patch";
-      url = "https://github.com/apache/incubator-mxnet/commit/78e31d66d19e385ca4ef73245ce79a47e375d8d1.diff";
-      sha256 = "sha256-UfmGhh4RbvrEOXe6IJxHm1Aqpy1gS6gHxrX5KQBXjv4=";
-    })
-    (fetchpatch {
-      name = "mxnet-fix-gcc-linker-error-2.patch";
-      url = "https://github.com/apache/incubator-mxnet/commit/9bfe3116aabd01049fdbd90855cb245a30b795df.diff";
-      sha256 = "sha256-BL7Zf7Bgn0qpai9HbQ6LBxZNa3iLjVJSe5nxZgqI/fw=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake perl ];
 
