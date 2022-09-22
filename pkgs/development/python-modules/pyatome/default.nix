@@ -4,21 +4,29 @@
 , requests
 , simplejson
 , fake-useragent
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyatome";
   version = "0.1.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "pyAtome";
     inherit version;
-    sha256 = "sha256-DGkgW6emh/esZa/alUjBbpLXlU4EVIPkysn9a0LgcJ4=";
+    hash = "sha256-DGkgW6emh/esZa/alUjBbpLXlU4EVIPkysn9a0LgcJ4=";
   };
 
-  propagatedBuildInputs = [ requests simplejson fake-useragent ];
+  propagatedBuildInputs = [
+    requests
+    simplejson
+    fake-useragent
+  ];
 
-  # no tests  in PyPI tarballs
+  # No tests in PyPI tarballs
   doCheck = false;
 
   pythonImportsCheck = [
