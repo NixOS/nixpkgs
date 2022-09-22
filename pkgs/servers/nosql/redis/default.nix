@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "redis";
-  version = "7.0.4";
+  version = "7.0.5";
 
   src = fetchurl {
     url = "https://download.redis.io/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-8OZf2nTESj3U+p1RLU1Ngz3Qk5yTTpRqXGIqYw0Ffy8=";
+    hash = "sha256-ZwVMw3tYwSXfk714AAJh7A70Q2omtA84Jix4DlYxXMM=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   # Note: this enables libc malloc as a temporary fix for cross-compiling.
   # Due to hardcoded configure flags in jemalloc, we can't cross-compile vendored jemalloc properly, and so we're forced to use libc allocator.
   # It's weird that the build isn't failing because of failure to compile dependencies, it's from failure to link them!
-  makeFlags = [ "PREFIX=$(out)" ]
+  makeFlags = [ "PREFIX=${placeholder "out"}" ]
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "AR=${stdenv.cc.targetPrefix}ar" "RANLIB=${stdenv.cc.targetPrefix}ranlib" "MALLOC=libc" ]
     ++ lib.optional withSystemd [ "USE_SYSTEMD=yes" ]
     ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
