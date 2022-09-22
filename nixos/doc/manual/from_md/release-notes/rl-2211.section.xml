@@ -323,6 +323,13 @@
           <link xlink:href="options.html#opt-services.writefreely.enable">services.writefreely</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://listmonk.app">Listmonk</link>, a
+          self-hosted newsletter manager. Enable using
+          <link xlink:href="options.html#opt-services.listmonk.enable">services.listmonk</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-incompatibilities">
@@ -506,6 +513,14 @@
           <literal>python3.pkgs.graphite_beacon</literal> and
           <literal>python3.pkgs.influxgraph</literal> packages, have
           been removed due to lack of upstream maintenance.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>aws</literal> package has been removed due to
+          being abandoned by the upstream. It is recommended to use
+          <literal>awscli</literal> or <literal>awscli2</literal>
+          instead.
         </para>
       </listitem>
       <listitem>

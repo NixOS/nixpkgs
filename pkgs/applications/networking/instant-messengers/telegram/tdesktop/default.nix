@@ -32,6 +32,7 @@
 , jemalloc
 , rnnoise
 , abseil-cpp
+, kcoreaddons
   # Transitive dependencies:
 , util-linuxMinimal
 , pcre
@@ -73,7 +74,7 @@ let
 in
 env.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.1.1";
+  version = "4.2.0";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
@@ -82,7 +83,7 @@ env.mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0b8nwimks6hfnb3bqik8d4s9z689hhj4p9ykqgc36pmpr54nyma8";
+    sha256 = "1wpqn79pbarz48kmrh6gciw4a9y5hiki5qczlvj8smvx9is6yrf8";
   };
 
   postPatch = ''
@@ -138,6 +139,7 @@ env.mkDerivation rec {
     jemalloc
     rnnoise
     tg_owt
+    kcoreaddons
     # Transitive dependencies:
     util-linuxMinimal # Required for libmount thus not nativeBuildInputs.
     pcre
@@ -194,6 +196,6 @@ env.mkDerivation rec {
     platforms = platforms.linux;
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ oxalica ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

@@ -2899,8 +2899,6 @@ with pkgs;
 
   avro-cpp = callPackage ../development/libraries/avro-c++ { };
 
-  aws = callPackage ../tools/virtualization/aws { };
-
   aws_mturk_clt = callPackage ../tools/misc/aws-mturk-clt { };
 
   awsls = callPackage ../tools/admin/awsls { };
@@ -8528,6 +8526,8 @@ with pkgs;
   lcdf-typetools = callPackage ../tools/misc/lcdf-typetools { };
 
   ldapmonitor = callPackage ../tools/security/ldapmonitor { };
+
+  ldapnomnom = callPackage ../tools/security/ldapnomnom { };
 
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
@@ -14749,6 +14749,9 @@ with pkgs;
   cargo-tauri = callPackage ../development/tools/rust/cargo-tauri { };
 
   cargo-valgrind = callPackage ../development/tools/rust/cargo-valgrind { };
+  cargo-vet = callPackage ../development/tools/rust/cargo-vet {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-wasi = callPackage ../development/tools/rust/cargo-wasi {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -17856,7 +17859,9 @@ with pkgs;
 
   ccrtp = callPackage ../development/libraries/ccrtp { };
 
-  cctz = callPackage ../development/libraries/cctz { };
+  cctz = callPackage ../development/libraries/cctz {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   celt = callPackage ../development/libraries/celt {};
   celt_0_7 = callPackage ../development/libraries/celt/0.7.nix {};
@@ -33532,6 +33537,8 @@ with pkgs;
   hyperrogue = callPackage ../games/hyperrogue { };
 
   icbm3d = callPackage ../games/icbm3d { };
+
+  infra = callPackage ../tools/admin/infra { };
 
   infra-arcana = callPackage ../games/infra-arcana { };
 
