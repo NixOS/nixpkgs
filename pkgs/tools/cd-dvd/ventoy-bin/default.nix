@@ -203,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://www.ventoy.net/doc_news.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ k4leg AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "mipsel-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "ventoy";
