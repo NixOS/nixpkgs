@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pyatome";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchPypi {
     pname = "pyAtome";
     inherit version;
-    sha256 = "7282e7ec258c69d4ddf2a5754ff07680a1ac92f9bfb478d601fd9e944fccd834";
+    sha256 = "sha256-DGkgW6emh/esZa/alUjBbpLXlU4EVIPkysn9a0LgcJ4=";
   };
 
   propagatedBuildInputs = [ requests simplejson fake-useragent ];
