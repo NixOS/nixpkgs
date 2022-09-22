@@ -1,5 +1,6 @@
 { lib
 , fetchFromSourcehut
+, fetchpatch
 , buildGoModule
 , buildPythonPackage
 , srht
@@ -32,7 +33,16 @@ let
     inherit src version;
     sourceRoot = "source/worker";
     pname = "buildsrht-worker";
-    vendorHash = "sha256-Pf1M9a43eK4jr6QMi6kRHA8DodXQU0pqq9ua5VC3ER0=";
+    vendorHash = "sha256-y5RFPbtaGmgPpiV2Q3njeWORGZF1TJRjAbY6VgC1hek=";
+
+    patches = [
+      (fetchpatch {
+        name = "update-x-sys-for-go-1.18-on-aarch64-darwin.patch";
+        url = "https://git.sr.ht/~sircmpwn/builds.sr.ht/commit/f58bbde6bfed7d2321a3b17e991c91fc83d4c230.patch";
+        stripLen = 1;
+        hash = "sha256-vQR/T5G5Gz5tY+SEZZabsbnFKW44b+Bs+GDdydyeCDs=";
+      })
+    ];
   };
 in
 buildPythonPackage rec {
