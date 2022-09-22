@@ -47,7 +47,7 @@ in stdenv.mkDerivation {
 
   inherit sources;
 
-  patchPhase = ''
+  postPatch = ''
     sed -i '/^PATH=/d' config/_arch-n-opsys base/runtime/config/gen-posix-names.sh
     echo SRCARCHIVEURL="file:/$TMP" > config/srcarchiveurl
     patch --verbose config/_heap2exec ${./heap2exec.diff}
