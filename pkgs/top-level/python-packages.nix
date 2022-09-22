@@ -306,6 +306,8 @@ in {
 
   aioextensions = callPackage ../development/python-modules/aioextensions { };
 
+  aiofile = callPackage ../development/python-modules/aiofile { };
+
   aiofiles = callPackage ../development/python-modules/aiofiles { };
 
   aioflo = callPackage ../development/python-modules/aioflo { };
