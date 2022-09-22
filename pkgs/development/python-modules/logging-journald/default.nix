@@ -1,21 +1,19 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "logging-journald";
-  version = "0.6.1";
+  version = "0.6.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchFromGitHub {
-    owner = "mosquito";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-lR2bRtw9kUY/22ij5Ge79nY4hzEq9zRl+GhFPZHW/0E=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-U6kqAvMSyLDbThc6wAN/ri0vmt/vAxgFFZT65Csbpss=";
   };
 
   # Circular dependency with aiomisc
