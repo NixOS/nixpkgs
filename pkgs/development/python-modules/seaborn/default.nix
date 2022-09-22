@@ -1,7 +1,8 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, flit-core
 , matplotlib
 , pytestCheckHook
 , numpy
@@ -12,15 +13,19 @@
 
 buildPythonPackage rec {
   pname = "seaborn";
-  version = "0.11.2";
-  format = "setuptools";
+  version = "0.12.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "cf45e9286d40826864be0e3c066f98536982baf701a7caa386511792d61ff4f6";
+  src = fetchFromGitHub {
+    repo = "seaborn";
+    owner = "mwaskom";
+    rev = "v${version}";
+    sha256 = "sha256-rJQRsUYFF0LoksE+q+CbxAxdI/Pi9k1qWR2G3PD1MkI=";
   };
+
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     matplotlib
@@ -51,7 +56,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Statisitical data visualization";
+    description = "Statistical data visualization";
     homepage = "https://seaborn.pydata.org/";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fridh ];
