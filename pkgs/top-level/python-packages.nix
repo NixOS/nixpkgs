@@ -5369,6 +5369,8 @@ in {
 
   logfury = callPackage ../development/python-modules/logfury { };
 
+  logging-journald = callPackage ../development/python-modules/logging-journald { };
+
   logi-circle = callPackage ../development/python-modules/logi-circle { };
 
   logical-unification = callPackage ../development/python-modules/logical-unification { };
