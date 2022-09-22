@@ -1,5 +1,4 @@
 { lib, stdenv, fetchurl
-, fetchpatch
 # native deps.
 , runCommand, pkg-config, meson, ninja, makeWrapper
 # build+runtime deps.
@@ -18,27 +17,14 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.5.2";
+  version = "5.5.3";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "3f78aa69c3f28edc42b5900b9788fba39498d8bffda7fb9c772bb470865780cb";
+    sha256 = "a38f57c68b7d237d662784d8406e6098aad66a148f44dcf498d1e9664c5fed2d";
   };
 
   outputs = [ "out" "dev" ];
-
-  patches = [
-    (fetchpatch {
-      name = "fix-config-tests-on-darwin.patch";
-      url = "https://gitlab.nic.cz/knot/knot-resolver/-/commit/48ad9d436cf80f58c107774c313a561d852148a0.diff";
-      sha256 = "CEX1XkeYLUSe31xUhNdMRMl1VUXtKFCs5noNJaqL5x0=";
-    })
-    (fetchpatch {
-      name = "fix-config-tests-on-aarch64-darwin.patch";
-      url = "https://gitlab.nic.cz/knot/knot-resolver/-/commit/adaac913c50a5db2f226a081ddc419b0d56d1757.diff";
-      sha256 = "1LrL74luzPTyJ7VBi7fskDga4lYAh7cSUmDcd1BNO78=";
-    })
-  ];
 
   # Path fixups for the NixOS service.
   postPatch = ''
