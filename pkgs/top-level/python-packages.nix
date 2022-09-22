@@ -374,6 +374,8 @@ in {
 
   aiolyric = callPackage ../development/python-modules/aiolyric { };
 
+  aiomisc = callPackage ../development/python-modules/aiomisc { };
+
   aiomodernforms = callPackage ../development/python-modules/aiomodernforms { };
 
   aiomultiprocess = callPackage ../development/python-modules/aiomultiprocess { };
