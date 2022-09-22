@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, Libsystem }:
 let
   version = "110.99.3";
-  baseurl = "http://smlnj.cs.uchicago.edu/dist/working/${version}";
+  baseurl = "https://smlnj.org/dist/working/${version}";
 
   arch = if stdenv.is64bit
     then "64"
