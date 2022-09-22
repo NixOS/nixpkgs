@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lighttpd";
-  version = "1.4.66";
+  version = "1.4.67";
 
   src = fetchurl {
     url = "https://download.lighttpd.net/lighttpd/releases-${lib.versions.majorMinor version}.x/${pname}-${version}.tar.xz";
-    sha256 = "sha256-R6xuYCcaoBluZUctAtAZVW3HxtCd87Zd8sGraGY0jjs=";
+    sha256 = "sha256-fgTXZ/UajYJLMuJIPvKVCYKSDUJ9EnLvRmf0nW+J81g=";
   };
 
   postPatch = ''

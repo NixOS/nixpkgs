@@ -25,7 +25,6 @@
 
 # build time
 , autoconf
-, cargo
 , dump_syms
 , makeWrapper
 , nodejs
@@ -34,9 +33,8 @@
 , pkgsCross # wasm32 rlbox
 , python3
 , runCommand
-, rustc
+, rustPackages_1_61
 , rust-cbindgen
-, rustPlatform
 , unzip
 , which
 , wrapGAppsHook
@@ -142,6 +140,8 @@ assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "${pname}: 
 
 let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
+
+  inherit (rustPackages_1_61) cargo rustc rustPlatform;
 
   # Target the LLVM version that rustc is built with for LTO.
   llvmPackages0 = rustc.llvmPackages;
