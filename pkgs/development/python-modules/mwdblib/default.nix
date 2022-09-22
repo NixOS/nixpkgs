@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "mwdblib";
-  version = "4.3.0";
+  version = "4.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "CERT-Polska";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ovF5DljtJynIXxmq9kkqjwzAjP/Yc60CTVPXQg4Rnq8=";
+    hash = "sha256-HQzfa5UmPo+Ccs2eRDwQA9EMzDg7+Nd4jIjBt+7qwzE=";
   };
 
   propagatedBuildInputs = [
