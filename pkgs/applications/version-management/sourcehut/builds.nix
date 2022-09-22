@@ -18,21 +18,21 @@ let
     owner = "~sircmpwn";
     repo = "builds.sr.ht";
     rev = version;
-    sha256 = "sha256-M94zkEUJU8EwksN34sd5IkASDCQ0hHb98G5wzZsCrpg=";
+    hash = "sha256-M94zkEUJU8EwksN34sd5IkASDCQ0hHb98G5wzZsCrpg=";
   };
 
   buildsrht-api = buildGoModule ({
     inherit src version;
     pname = "buildsrht-api";
     modRoot = "api";
-    vendorSha256 = "sha256-8z5m4bMwLeYg4i91MMjLMqbciWvqS0icCHFUJTUHBgk=";
+    vendorHash = "sha256-8z5m4bMwLeYg4i91MMjLMqbciWvqS0icCHFUJTUHBgk=";
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   buildsrht-worker = buildGoModule {
     inherit src version;
     sourceRoot = "source/worker";
     pname = "buildsrht-worker";
-    vendorSha256 = "sha256-Pf1M9a43eK4jr6QMi6kRHA8DodXQU0pqq9ua5VC3ER0=";
+    vendorHash = "sha256-Pf1M9a43eK4jr6QMi6kRHA8DodXQU0pqq9ua5VC3ER0=";
   };
 in
 buildPythonPackage rec {
