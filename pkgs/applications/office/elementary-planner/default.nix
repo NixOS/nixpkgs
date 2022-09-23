@@ -99,6 +99,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ dtzWill ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     mainProgram = "com.github.alainm23.planner";
+    broken = true; # https://github.com/alainm23/planner/issues/928
   };
 }
 
