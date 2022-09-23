@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -m500 -D direnvrc $out/share/nix-direnv/direnvrc
+
+    # Allows NixOS to set DIRENV_CONFIG to /run/current-system/sw/share/direnv and have direnv load this
+    install -m500 -D direnvrc $out/share/direnv/lib/nix-direnv.sh
     runHook postInstall
   '';
 
