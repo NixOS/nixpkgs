@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   patches = [
-    # modernise cmake files, also fixes them for mutliple outputs
+    # modernise cmake files, also fixes them for multiple outputs
     (fetchpatch {
       url = "https://github.com/uclouvain/openjpeg/pull/1424.patch";
       sha256 = "sha256-CxVRt1u4HVOMUjWiZ2plmZC29t/zshCpSY+N4Wlrlvg=";
