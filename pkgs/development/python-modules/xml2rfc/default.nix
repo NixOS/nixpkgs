@@ -40,13 +40,9 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace Makefile \
       --replace "SHELL := /bin/bash" "SHELL := bash" \
-      --replace "test flaketest" "test" \
-      --replace "python setup.py --quiet install" ""
+      --replace "test flaketest" "test"
     substituteInPlace setup.py \
       --replace "'tox'," ""
-    substituteInPlace requirements.txt \
-      --replace "jinja2>=2.11,<3.0" "jinja2" \
-      --replace "markupsafe==2.0.1" "markupsafe"
   '';
 
   propagatedBuildInputs = [
