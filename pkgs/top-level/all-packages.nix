@@ -27934,14 +27934,12 @@ with pkgs;
 
   firefox-unwrapped = firefoxPackages.firefox;
   firefox-esr-102-unwrapped = firefoxPackages.firefox-esr-102;
-  firefox-esr-91-unwrapped = firefoxPackages.firefox-esr-91;
   firefox-esr-unwrapped = firefoxPackages.firefox-esr-102;
 
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-wayland = wrapFirefox firefox-unwrapped { forceWayland = true; };
 
   firefox-esr = firefox-esr-102;
-  firefox-esr-91 = wrapFirefox firefox-esr-91-unwrapped { };
   firefox-esr-102 = wrapFirefox firefox-esr-102-unwrapped { };
   firefox-esr-wayland = wrapFirefox firefox-esr-102-unwrapped { forceWayland = true; };
 
@@ -31542,10 +31540,6 @@ with pkgs;
   thunderbird = wrapThunderbird thunderbird-unwrapped { };
   thunderbird-wayland = wrapThunderbird thunderbird-unwrapped { forceWayland = true; };
 
-  thunderbird-91-unwrapped = thunderbirdPackages.thunderbird-91;
-  thunderbird-91 = wrapThunderbird thunderbird-91-unwrapped { };
-  thunderbird-91-wayland = wrapThunderbird thunderbird-91-unwrapped { forceWayland = true; };
-
   thunderbird-bin = wrapThunderbird thunderbird-bin-unwrapped {
     applicationName = "thunderbird";
     pname = "thunderbird-bin";
@@ -31554,16 +31548,6 @@ with pkgs;
   thunderbird-bin-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
     inherit (gnome) adwaita-icon-theme;
     generated = import ../applications/networking/mailreaders/thunderbird-bin/release_sources.nix;
-  };
-
-  thunderbird-bin-91 = wrapThunderbird thunderbird-bin-91-unwrapped {
-    applicationName = "thunderbird";
-    pname = "thunderbird-bin";
-    desktopName = "Thunderbird";
-  };
-  thunderbird-bin-91-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
-    inherit (gnome) adwaita-icon-theme;
-    generated = import ../applications/networking/mailreaders/thunderbird-bin/91_sources.nix;
   };
 
   thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
