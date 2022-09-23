@@ -94,7 +94,7 @@ index 1d1698a7e..5469d00a6 100644
 +  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
  )
 diff --git a/meson.build b/meson.build
-index e7980e965..2c66e2dc4 100644
+index 0ac74a510..8c0da2e19 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -195,6 +195,12 @@ endif
@@ -111,7 +111,7 @@ index e7980e965..2c66e2dc4 100644
  gio = dependency('gio-2.0', version: '>= 2.45.8')
  giounix = dependency('gio-unix-2.0', version: '>= 2.45.8', required: false)
 diff --git a/meson_options.txt b/meson_options.txt
-index 6cf92e72e..2e8568292 100644
+index cfa821d87..024d0da69 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -1,3 +1,4 @@
@@ -145,7 +145,7 @@ index d626c3ad3..5a2f847d5 100644
  shared_module('fu_plugin_msr',
    fu_hash,
 diff --git a/plugins/redfish/meson.build b/plugins/redfish/meson.build
-index 95606e478..e5355e520 100644
+index 491246358..5831e4a6e 100644
 --- a/plugins/redfish/meson.build
 +++ b/plugins/redfish/meson.build
 @@ -43,7 +43,7 @@ shared_module('fu_plugin_redfish',
@@ -154,14 +154,14 @@ index 95606e478..e5355e520 100644
  install_data(['redfish.conf'],
 -  install_dir: join_paths(sysconfdir, 'fwupd'),
 +  install_dir: join_paths(sysconfdir_install, 'fwupd'),
+   install_mode: 'rw-r-----',
  )
  
- if get_option('tests')
 diff --git a/plugins/thunderbolt/meson.build b/plugins/thunderbolt/meson.build
-index 5f8ffbf90..9ba323e75 100644
+index a42a4d31c..1f70834a4 100644
 --- a/plugins/thunderbolt/meson.build
 +++ b/plugins/thunderbolt/meson.build
-@@ -32,7 +32,7 @@ fu_plugin_thunderbolt = shared_module('fu_plugin_thunderbolt',
+@@ -30,7 +30,7 @@ fu_plugin_thunderbolt = shared_module('fu_plugin_thunderbolt',
  )
  
  install_data(['thunderbolt.conf'],

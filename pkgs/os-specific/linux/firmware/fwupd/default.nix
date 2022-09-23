@@ -114,7 +114,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.8.4";
+    version = "1.8.5";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -123,7 +123,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "sha256-rfoHQ0zcKexBxA/vRg6Nlwlj/gx+hJ3sfzkyrbFh+IY=";
+      sha256 = "sha256-M+nXiPZdGCWb5hm7N5cIUZo0kBTLfzRn9CxV+uNSJhI=";
     };
 
     patches = [
@@ -144,6 +144,9 @@ let
 
       # EFI capsule is located in fwupd-efi now.
       ./efi-app-path.patch
+
+      # gi-docgen dependencies are already covered by gi-docgen
+      ./drop-markdown-check.patch
     ];
 
     nativeBuildInputs = [
@@ -254,13 +257,7 @@ let
     postPatch = ''
       patchShebangs \
         contrib/generate-version-script.py \
-        meson_post_install.sh \
         po/test-deps
-
-      # This checks a version of a dependency of gi-docgen but gi-docgen is self-contained in Nixpkgs.
-      echo "Clearing docs/test-deps.py"
-      test -f docs/test-deps.py
-      echo > docs/test-deps.py
 
       substituteInPlace data/installed-tests/fwupdmgr-p2p.sh \
         --replace "gdbus" ${glib.bin}/bin/gdbus

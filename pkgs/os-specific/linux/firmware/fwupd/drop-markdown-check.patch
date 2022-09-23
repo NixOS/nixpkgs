@@ -1,0 +1,34 @@
+diff --git a/docs/meson.build b/docs/meson.build
+index 92b9e6fc7..56bc189d9 100644
+--- a/docs/meson.build
++++ b/docs/meson.build
+@@ -1,4 +1,4 @@
+-if gidocgen_dep.found() and docs_python_deps.allowed() and gidocgen_app.found() and introspection.allowed()
++if gidocgen_dep.found() and gidocgen_app.found() and introspection.allowed()
+   toml_conf = configuration_data()
+   docgen_version = source_version
+   if git.found() and source_version != fwupd_version
+diff --git a/meson.build b/meson.build
+index 0ac74a510..a3b1ad5e8 100644
+--- a/meson.build
++++ b/meson.build
+@@ -539,18 +539,12 @@ fwupd_gir = []
+ gir_dep = dependency('gobject-introspection-1.0', required: get_option('introspection'))
+ introspection = get_option('introspection').disable_auto_if(host_machine.system() != 'linux').disable_auto_if(not gir_dep.found())
+ 
+-markdown_version = run_command(
+-  python3, '-c', 'import markdown; print(markdown.__version__)'
+-).stdout().strip()
+-docs_python_deps = get_option('docs').require(markdown_version.version_compare('>=3.2'),
+-						error_message: 'docs=enabled requires at least markdown >= 3.2')
+ gidocgen_dep = dependency('gi-docgen',
+   version: '>= 2021.1',
+   native: true,
+   fallback: ['gi-docgen', 'dummy_dep'],
+-  required: docs_python_deps,
+ )
+-gidocgen_app = find_program('gi-docgen', required: docs_python_deps)
++gidocgen_app = find_program('gi-docgen')
+ 
+ # using "meson configure -Db_sanitize=address,undefined" is super useful in finding corruption,
+ # but it does not work with our GMainContext-abuse tests...

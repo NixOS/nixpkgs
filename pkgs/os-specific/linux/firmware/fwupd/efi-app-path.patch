@@ -1,8 +1,8 @@
 diff --git a/meson.build b/meson.build
-index b91dd037..01d70a61 100644
+index 0ac74a510..a0be9713b 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -413,7 +413,7 @@ if build_standalone and efiboot.found() and efivar.found()
+@@ -415,7 +415,7 @@ if build_standalone and efiboot.found() and efivar.found()
      conf.set('HAVE_EFI_TIME_T', '1')
    endif
  
