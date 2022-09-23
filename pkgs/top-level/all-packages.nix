@@ -12418,6 +12418,8 @@ with pkgs;
 
   xdummy = callPackage ../tools/misc/xdummy { };
 
+  xdg-ninja = callPackage ../tools/misc/xdg-ninja { };
+
   xdxf2slob = callPackage ../tools/misc/xdxf2slob { };
 
   xe-guest-utilities = callPackage ../tools/virtualization/xe-guest-utilities { };
