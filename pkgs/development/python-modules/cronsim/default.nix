@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "cronsim";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nwlSAbD+y0l9jyVSVShzWeC7nC5RZRD/kAhCi3Nd9xY=";
+    sha256 = "sha256-LMMZni8Cipo10mxAQbRadWpPvum76JQuzlrLvFvTt5o=";
   };
 
   checkInputs = [
