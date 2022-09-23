@@ -3,7 +3,9 @@
 { stdenv, fetchurl, lib }:
 
 stdenv.mkDerivation {
-  name = "python310-docs-text-3.10.7";
+  pname = "python310-docs-text";
+  version = "3.10.7";
+
   src = fetchurl {
     url = http://www.python.org/ftp/python/doc/3.10.7/python-3.10.7-docs-text.tar.bz2;
     sha256 = "1zbmm2fvdjnl214y41yffyqw3ywfai5r5npc00n1wkfxsdp7gcc3";

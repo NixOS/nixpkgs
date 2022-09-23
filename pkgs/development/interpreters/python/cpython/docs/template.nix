@@ -3,7 +3,9 @@
 { stdenv, fetchurl, lib }:
 
 stdenv.mkDerivation {
-  name = "pythonMAJORMINOR-docs-TYPE-VERSION";
+  pname = "pythonMAJORMINOR-docs-TYPE";
+  version = "VERSION";
+
   src = fetchurl {
     url = URL;
     sha256 = "SHA";
