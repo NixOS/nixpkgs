@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "mcstatus";
-  version = "9.3.0";
+  version = "9.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "py-mine";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-kNThVElEDqhbCitktBv5tQkjMaU4IsX0dJk63hvLhb0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FQmVQ7HBpFnVTEBU1ynAVjvmT0Yz7m4ygkkFtKi4Q9A=";
   };
 
   nativeBuildInputs = [
