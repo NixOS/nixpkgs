@@ -2,7 +2,7 @@
 , gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav, libupnp }:
 
 let
-  version = "0.0.9";
+  version = "0.1";
 
   pluginPath = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ];
 in
@@ -14,7 +14,7 @@ in
       owner = "hzeller";
       repo = "gmrender-resurrect";
       rev = "v${version}";
-      sha256 = "0byxd28hnhkhf3lqsad43n6czfajvc1ksg9zikxb95wwk4ljqv1q";
+      sha256 = "sha256-FR5bMjwPnY1/PNdPRiaxoY1keogq40M06YOaoks4zVY=";
     };
 
     buildInputs = [ gstreamer libupnp ];
