@@ -217,6 +217,28 @@ let
     gixy $out
   '';
 
+  /*
+   * Writes a validated, syntax checked sql file /nix/store/<store path>.sql
+   * via checkPhase by loading it into postgresql
+   *
+   * Example:
+   * writePSQLFile {} "foo" "CREATE DATABASE my_api;"
+   * }
+  */
+  writePSQLFile = { postgresql ? pkgs.postgresql }: name: text:
+    pkgs.writeTextFile {
+      name = "${name}.sql";
+      inherit text;
+      checkInputs = with pkgs; [ postgresqlTestHook postgresql ];
+      checkPhase =
+        ''
+          postgresqlTestUserOptions="LOGIN SUPERUSER"
+          runHook preCheck
+          ${postgresql}/bin/psql -v ON_ERROR_STOP=1 -f "$target"
+          runHook postCheck
+        '';
+    };
+
   # writePerl takes a name an attributeset with libraries and some perl sourcecode and
   # returns an executable
   #
