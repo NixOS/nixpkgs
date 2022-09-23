@@ -19941,8 +19941,6 @@ with pkgs;
 
   librevenge = callPackage ../development/libraries/librevenge {};
 
-  librevisa = callPackage ../development/libraries/librevisa { };
-
   librime = callPackage ../development/libraries/librime {
     boost = boost174;
   };
