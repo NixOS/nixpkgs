@@ -429,7 +429,6 @@ stdenv.mkDerivation rec {
     platforms = attrNames srcs;
     maintainers = with maintainers; [ offline matejc thoughtpolice joachifm hax404 KarlJoad ];
     mainProgram = "tor-browser";
-    hydraPlatforms = [];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.

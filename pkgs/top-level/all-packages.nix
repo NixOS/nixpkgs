@@ -3307,7 +3307,9 @@ with pkgs;
 
   cinny = callPackage ../applications/networking/instant-messengers/cinny { stdenv = stdenvNoCC; };
 
-  cinny-desktop = callPackage ../applications/networking/instant-messengers/cinny-desktop { };
+  cinny-desktop = callPackage ../applications/networking/instant-messengers/cinny-desktop {
+    openssl = openssl_1_1;
+  };
 
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
 
@@ -8338,6 +8340,8 @@ with pkgs;
   mdbook-linkcheck = callPackage ../tools/text/mdbook-linkcheck {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  mdbook-open-on-gh = callPackage ../tools/text/mdbook-open-on-gh { };
 
   mdbook-mermaid = callPackage ../tools/text/mdbook-mermaid {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -17178,7 +17182,6 @@ with pkgs;
   rolespec = callPackage ../development/tools/misc/rolespec { };
 
   rr = callPackage ../development/tools/analysis/rr { };
-  rr-unstable = callPackage ../development/tools/analysis/rr/unstable.nix { }; # This is a temporary attribute, please see the corresponding file for details.
 
   rufo = callPackage ../development/tools/rufo { };
 

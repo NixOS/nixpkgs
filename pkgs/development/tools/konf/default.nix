@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "konf";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "SimonTheLeg";
     repo = "konf-go";
     rev = "v${version}";
-    hash = "sha256-UeuR7lsNG2Y0hdpQA5NXBUlSvYeixyKS73N95z5TZ7k=";
+    hash = "sha256-n8WJyihpbtci8Q6zUapwrpTrVZVAS53OpnwAsv6w1FY=";
   };
 
   vendorHash = "sha256-sB3j19HrTtaRqNcooqNy8vBvuzxxyGDa7MOtiGoVgN8=";
