@@ -32,5 +32,7 @@ in
       license = licenses.gpl2Plus;
       platforms = platforms.linux;
       maintainers = with maintainers; [ koral hzeller ];
+      # fatal error: ithread.h: No such file or directory
+      broken = true; # at 2022-09-23
     };
   }
