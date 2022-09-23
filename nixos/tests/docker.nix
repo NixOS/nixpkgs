@@ -11,6 +11,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       { pkgs, ... }:
         {
           virtualisation.docker.enable = true;
+          virtualisation.docker.autoPrune.enable = true;
           virtualisation.docker.package = pkgs.docker;
 
           users.users = {
