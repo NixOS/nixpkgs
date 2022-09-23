@@ -654,6 +654,7 @@ in {
   unit-php = handleTest ./web-servers/unit-php.nix {};
   upnp = handleTest ./upnp.nix {};
   uptermd = handleTest ./uptermd.nix {};
+  uptime-kuma = handleTest ./uptime-kuma.nix {};
   usbguard = handleTest ./usbguard.nix {};
   user-activation-scripts = handleTest ./user-activation-scripts.nix {};
   user-home-mode = handleTest ./user-home-mode.nix {};

@@ -428,6 +428,13 @@
           <link xlink:href="options.html#opt-services.listmonk.enable">services.listmonk</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://uptime.kuma.pet/">Uptime
+          Kuma</link>, a fancy self-hosted monitoring tool. Available as
+          <link linkend="opt-services.uptime-kuma.enable">services.uptime-kuma</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-incompatibilities">
