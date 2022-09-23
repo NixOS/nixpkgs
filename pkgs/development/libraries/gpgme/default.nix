@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Fix compilation on i686, would not be needed after 1.18.1 releases, https://dev.gnupg.org/T5522
+    ./t-addexistingsubkey-i686.patch
     # https://dev.gnupg.org/rMc4cf527ea227edb468a84bf9b8ce996807bd6992
     ./fix_gpg_list_keys.diff
     # https://lists.gnupg.org/pipermail/gnupg-devel/2020-April/034591.html
