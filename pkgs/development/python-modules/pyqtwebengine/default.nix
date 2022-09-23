@@ -32,6 +32,7 @@ in buildPythonPackage rec {
     qtsvg
     qtwebengine
     pyqt-builder
+    pythonPackages.setuptools
   ];
 
   buildInputs = [
