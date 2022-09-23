@@ -1,0 +1,13 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    brakeman (5.3.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  brakeman
+
+BUNDLED WITH
+   2.3.20

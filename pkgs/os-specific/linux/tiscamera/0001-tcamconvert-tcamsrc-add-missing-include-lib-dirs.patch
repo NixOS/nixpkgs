@@ -1,0 +1,70 @@
+From 5e7146e176cb1b01b47d16a66763469dccd87f25 Mon Sep 17 00:00:00 2001
+From: Raymond Gauthier <jraygauthier@gmail.com>
+Date: Thu, 9 Jun 2022 19:45:30 -0400
+Subject: [PATCH] tcamconvert&tcamsrc: add missing include/lib dirs
+
+These were building libraries with dependencies on gstreamer-video
+and gstreamer-base but weren't adding the proper include and
+lib directories which resulted in build failure on systems
+where video and base aren't installed in the same location
+as gstreamer itself (e.g: nix, nixos).
+---
+ src/gstreamer-1.0/tcamconvert/CMakeLists.txt |  2 ++
+ src/gstreamer-1.0/tcamsrc/CMakeLists.txt     | 11 +++++++++++
+ 2 files changed, 13 insertions(+)
+
+diff --git a/src/gstreamer-1.0/tcamconvert/CMakeLists.txt b/src/gstreamer-1.0/tcamconvert/CMakeLists.txt
+index 30563c38..066cb5d7 100644
+--- a/src/gstreamer-1.0/tcamconvert/CMakeLists.txt
++++ b/src/gstreamer-1.0/tcamconvert/CMakeLists.txt
+@@ -28,6 +28,8 @@ add_library(tcamconvert SHARED
+ target_include_directories(tcamconvert
+   PRIVATE
+   ${GSTREAMER_INCLUDE_DIRS}
++  ${GSTREAMER_BASE_INCLUDE_DIRS}
++  ${GSTREAMER_VIDEO_INCLUDE_DIRS}
+   )
+ 
+ set_project_warnings(tcamconvert)
+diff --git a/src/gstreamer-1.0/tcamsrc/CMakeLists.txt b/src/gstreamer-1.0/tcamsrc/CMakeLists.txt
+index 3bc7ed97..ed5be37f 100644
+--- a/src/gstreamer-1.0/tcamsrc/CMakeLists.txt
++++ b/src/gstreamer-1.0/tcamsrc/CMakeLists.txt
+@@ -21,12 +21,15 @@ add_library(gsttcamstatistics SHARED
+ target_include_directories(gsttcamstatistics
+   PRIVATE
+   ${GSTREAMER_INCLUDE_DIRS}
++  ${GSTREAMER_BASE_INCLUDE_DIRS}
++  ${GSTREAMER_VIDEO_INCLUDE_DIRS}
+   )
+ 
+ target_link_libraries( gsttcamstatistics
+   PRIVATE
+   ${GSTREAMER_LIBRARIES}
+   ${GSTREAMER_BASE_LIBRARIES}
++  ${GSTREAMER_VIDEO_LIBRARIES}
+   )
+ 
+ 
+@@ -53,10 +56,18 @@ add_library(gsttcamsrc SHARED
+ 	tcambind.cpp
+     )
+ 
++  target_include_directories(gsttcamsrc
++    PRIVATE
++    ${GSTREAMER_INCLUDE_DIRS}
++    ${GSTREAMER_BASE_INCLUDE_DIRS}
++    ${GSTREAMER_VIDEO_INCLUDE_DIRS}
++    )
++
+   target_link_libraries( gsttcamsrc
+     PRIVATE
+ 	${GSTREAMER_LIBRARIES}
+ 	${GSTREAMER_BASE_LIBRARIES}
++    ${GSTREAMER_VIDEO_LIBRARIES}
+ 
+ 	tcamgstbase
+ 	tcam::gst-helper
+-- 
+2.31.1
+

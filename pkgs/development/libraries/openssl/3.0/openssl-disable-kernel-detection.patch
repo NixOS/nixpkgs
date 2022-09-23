@@ -1,0 +1,22 @@
+diff --git a/Configure b/Configure
+index f0ad787bc4..a48d2008c6 100755
+--- a/Configure
++++ b/Configure
+@@ -1688,17 +1688,6 @@ unless ($disabled{devcryptoeng}) {
+ unless ($disabled{ktls}) {
+     $config{ktls}="";
+     if ($target =~ m/^linux/) {
+-        my $usr = "/usr/$config{cross_compile_prefix}";
+-        chop($usr);
+-        if ($config{cross_compile_prefix} eq "") {
+-            $usr = "/usr";
+-        }
+-        my $minver = (4 << 16) + (13 << 8) + 0;
+-        my @verstr = split(" ",`cat $usr/include/linux/version.h | grep LINUX_VERSION_CODE`);
+-
+-        if ($verstr[2] < $minver) {
+-            disable('too-old-kernel', 'ktls');
+-        }
+     } elsif ($target =~ m/^BSD/) {
+         my $cc = $config{CROSS_COMPILE}.$config{CC};
+         system("printf '#include <sys/types.h>\n#include <sys/ktls.h>' | $cc -E - >/dev/null 2>&1");

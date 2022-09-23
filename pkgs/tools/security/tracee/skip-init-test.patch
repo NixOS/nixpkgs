@@ -1,0 +1,12 @@
+diff --git a/tests/integration/integration_test.go b/tests/integration/integration_test.go
+index 8601eb9..57088d2 100644
+--- a/tests/integration/integration_test.go
++++ b/tests/integration/integration_test.go
+@@ -149,6 +149,7 @@ func checkUidzero(t *testing.T, gotOutput *bytes.Buffer) {
+ 
+ // only capture pids of 1
+ func checkPidOne(t *testing.T, gotOutput *bytes.Buffer) {
++    t.Skip("Not compatible with systemd init")
+ 	_, _ = exec.Command("init", "q").CombinedOutput()
+ 
+ 	waitForTraceeOutput(gotOutput, time.Now())

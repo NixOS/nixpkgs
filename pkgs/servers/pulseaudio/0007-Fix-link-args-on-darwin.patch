@@ -1,0 +1,75 @@
+diff --git a/meson.build b/meson.build
+index c5135330f..1b66a1fc4 100644
+--- a/meson.build
++++ b/meson.build
+@@ -424,7 +424,7 @@ cdata.set('MESON_BUILD', 1)
+ # so we request the nodelete flag to be enabled.
+ # On other systems, we don't really know how to do that, but it's welcome if somebody can tell.
+ # Windows doesn't support this flag.
+-if host_machine.system() != 'windows'
++if host_machine.system() not in ['windows', 'darwin']
+   nodelete_link_args = ['-Wl,-z,nodelete']
+ else
+   nodelete_link_args = []
+diff --git a/src/modules/echo-cancel/meson.build b/src/modules/echo-cancel/meson.build
+index 641cd35e7..523bffac4 100644
+--- a/src/modules/echo-cancel/meson.build
++++ b/src/modules/echo-cancel/meson.build
+@@ -10,12 +10,17 @@ libwebrtc_util_sources = [
+   'webrtc.cc'
+ ]
+ 
++ignore_unresolved_symbols_link_args = ['-Wl,--unresolved-symbols=ignore-in-object-files']
++if meson.get_compiler('c').get_linker_id() == 'ld64'
++  ignore_unresolved_symbols_link_args = [ '-Wl,-undefined,dynamic_lookup' ]
++endif
++
+ libwebrtc_util = shared_library('webrtc-util',
+   libwebrtc_util_sources,
+   cpp_args : [pa_c_args, server_c_args],
+   include_directories : [configinc, topinc],
+   dependencies : [libpulse_dep, libpulsecommon_dep, libpulsecore_dep, libatomic_ops_dep, webrtc_dep, libintl_dep],
+-  link_args : [nodelete_link_args, '-Wl,--unresolved-symbols=ignore-in-object-files'],
++  link_args : [nodelete_link_args, ignore_unresolved_symbols_link_args],
+   install : true,
+   install_rpath : privlibdir,
+   install_dir : modlibexecdir,
+diff --git a/src/modules/meson.build b/src/modules/meson.build
+index 1e12569dc..66f3e46a4 100644
+--- a/src/modules/meson.build
++++ b/src/modules/meson.build
+@@ -298,6 +298,11 @@ all_modules += [
+ # FIXME: meson doesn't support multiple RPATH arguments currently
+ rpath_dirs = join_paths(privlibdir) + ':' + join_paths(modlibexecdir)
+ 
++no_undefined_link_args = ['-Wl,--no-undefined']
++if meson.get_compiler('c').get_linker_id() == 'ld64'
++  no_undefined_link_args = [ '-Wl,-undefined,error' ]
++endif
++
+ foreach m : all_modules
+   name = m[0]
+   sources = m[1]
+@@ -315,7 +320,7 @@ foreach m : all_modules
+     install_rpath : rpath_dirs,
+     install_dir : modlibexecdir,
+     dependencies : [thread_dep, libpulse_dep, libpulsecommon_dep, libpulsecore_dep, libintl_dep, platform_dep, platform_socket_dep] + extra_deps,
+-    link_args : [nodelete_link_args, '-Wl,--no-undefined' ],
++    link_args : [nodelete_link_args, no_undefined_link_args ],
+     link_with : extra_libs,
+     name_prefix : '',
+     implicit_include_directories : false)
+diff --git a/src/pulse/meson.build b/src/pulse/meson.build
+index 1b82c807c..938e4addd 100644
+--- a/src/pulse/meson.build
++++ b/src/pulse/meson.build
+@@ -75,6 +75,9 @@ run_target('update-map-file',
+               [ libpulse_headers, 'simple.h', join_paths(meson.build_root(), 'src', 'pulse', 'version.h') ] ])
+ 
+ versioning_link_args = '-Wl,-version-script=' + join_paths(meson.source_root(), 'src', 'pulse', 'map-file')
++if meson.get_compiler('c').get_linker_id() == 'ld64'
++  versioning_link_args = []
++endif
+ 
+ libpulse = shared_library('pulse',
+   libpulse_sources,

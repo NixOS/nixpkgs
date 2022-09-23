@@ -1,0 +1,8 @@
+--- a/corepkit/CMakeLists.txt	2021-12-25 17:52:20.000000000 +0700
++++ b/corepkit/CMakeLists.txt	2021-12-29 17:58:09.298024297 +0700
+@@ -32,4 +32,4 @@
+ target_link_libraries( corepkit  Qt5::Core )
+ 
+ install( TARGETS corepkit DESTINATION libexec/coreapps/ )
+-install( FILES org.cubocore.coreapps.policy DESTINATION share/polkit-1/actions/ )
++install( FILES org.cubocore.coreapps.policy DESTINATION ${CMAKE_INSTALL_PREFIX}/usr/share/polkit-1/actions/ )

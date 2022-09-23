@@ -1,0 +1,134 @@
+diff --git a/ligo.opam b/ligo.opam
+index d561c74d1..3a8d34feb 100644
+--- a/ligo.opam
++++ b/ligo.opam
+@@ -10,7 +10,9 @@ license: "MIT"
+ # If you change the dependencies, run `opam lock` in the root
+ depends: [
+   # Jane Street Core
+-  "core"
++  "core" { >= "v0.14.0" & < "v0.16.0" }
++  "core_kernel" { >= "v0.14.0" & "v0.16.0" }
++  "core_unix" { >= "v0.14.0" & "v0.16.0" }
+   # Tooling
+   "odoc" { build }
+   "ocamlfind" { build }
+diff --git a/ligo.opam.locked b/ligo.opam.locked
+index b4501cc76..c8ed8a41f 100644
+--- a/ligo.opam.locked
++++ b/ligo.opam.locked
+@@ -50,8 +50,9 @@ depends: [
+   "conf-rust" {= "0.1"}
+   "conf-which" {= "1"}
+   "coq" {= "8.13.2"}
+-  "core" {= "v0.14.1"}
+-  "core_kernel" {= "v0.14.2"}
++  "core" {= "v0.15.0"}
++  "core_kernel" {= "v0.15.0"}
++  "core_unix" {= "v0.15.0"}
+   "cppo" {= "1.6.8"}
+   "csexp" {= "1.5.1"}
+   "cstruct" {= "6.0.1"}
+diff --git a/src/bin/cli.ml b/src/bin/cli.ml
+index a6fc13e0d..ef5177868 100644
+--- a/src/bin/cli.ml
++++ b/src/bin/cli.ml
+@@ -12,7 +12,7 @@ let entry_point =
+ let source_file =
+     let name = "SOURCE_FILE" in
+     let _doc = "the path to the smart contract file." in
+-    Command.Param.(anon (name %: Filename.arg_type))
++    Command.Param.(anon (name %: Filename_unix.arg_type))
+ 
+ let package_name =
+   let name = "PACKAGE_NAME" in
+@@ -662,7 +662,7 @@ let main = Command.group ~preserve_subcommand_order:() ~summary:"the LigoLANG co
+   ]
+ 
+ let run ?argv () =
+-  Command.run ~version:Version.version ?argv main;
++  Command_unix.run ~version:Version.version ?argv main;
+   (* Effect to error code *)
+   match !return with
+     Done -> 0;
+@@ -677,4 +677,3 @@ let run ?argv () =
+     match exn with
+     | Failure msg -> message msg
+     | exn -> message (Exn.to_string exn)
+-  
+diff --git a/src/bin/cli_helpers.ml b/src/bin/cli_helpers.ml
+index b64a17d53..8c4c43dde 100644
+--- a/src/bin/cli_helpers.ml
++++ b/src/bin/cli_helpers.ml
+@@ -66,7 +66,7 @@ let run_command (cmd : command) =
+     (fun p -> Lwt.map  
+       (fun status -> 
+         match status with
+-          Caml.Unix.WEXITED 0 -> Ok ()
++          Caml_unix.WEXITED 0 -> Ok ()
+         | _ -> Error ("unknown error"))
+         p#status) in
+   Lwt_main.run status
+\ No newline at end of file
+diff --git a/src/bin/dune b/src/bin/dune
+index 295c056f3..08d980439 100644
+--- a/src/bin/dune
++++ b/src/bin/dune
+@@ -11,7 +11,9 @@
+   repl
+   install
+   cli_helpers
+-  ligo_api)
++  ligo_api
++  core_unix.command_unix
++  core_unix.filename_unix)
+  (modules cli version))
+ 
+ (library
+diff --git a/src/main/interpreter/dune b/src/main/interpreter/dune
+index c55e24a88..f9762a297 100644
+--- a/src/main/interpreter/dune
++++ b/src/main/interpreter/dune
+@@ -4,4 +4,4 @@
+  (instrumentation
+   (backend bisect_ppx))
+  (libraries tezos-011-PtHangz2-test-helpers ast_aggregated ligo_interpreter
+-   main_errors ligo_compile build fuzz ligo_run self_ast_typed))
++   main_errors ligo_compile build fuzz ligo_run self_ast_typed core_unix.sys_unix))
+diff --git a/src/main/interpreter/interpreter.ml b/src/main/interpreter/interpreter.ml
+index b0379029c..530e08c3a 100644
+--- a/src/main/interpreter/interpreter.ml
++++ b/src/main/interpreter/interpreter.ml
+@@ -2,6 +2,7 @@ open Simple_utils.Trace
+ open Simple_utils
+ open Ligo_interpreter.Types
+ open Ligo_interpreter.Combinators
++module Sys = Sys_unix
+ 
+ module AST = Ast_aggregated
+ 
+diff --git a/vendors/ligo-utils/simple-utils/dune b/vendors/ligo-utils/simple-utils/dune
+index ca9f2bf5c..62c39087b 100644
+--- a/vendors/ligo-utils/simple-utils/dune
++++ b/vendors/ligo-utils/simple-utils/dune
+@@ -6,6 +6,7 @@
+   (libraries
+     ;; Third party
+    core
++   core_kernel.caml_unix
+    yojson
+    result
+    unix
+diff --git a/vendors/ligo-utils/simple-utils/snippet.ml b/vendors/ligo-utils/simple-utils/snippet.ml
+index 658f115f2..f23000590 100644
+--- a/vendors/ligo-utils/simple-utils/snippet.ml
++++ b/vendors/ligo-utils/simple-utils/snippet.ml
+@@ -1,7 +1,7 @@
+ (* used to show code snippets in error messages *)
+ 
+ let print_code ppf (l:Region.t) (input_line: unit -> string) =
+-  let dumb =String.equal (Caml.Unix.getenv "TERM") "dumb" in
++  let dumb =String.equal (Caml_unix.getenv "TERM") "dumb" in
+   let start = l#start#line in
+   let start_column = l#start#offset `Byte in
+   let stop = l#stop#line in
