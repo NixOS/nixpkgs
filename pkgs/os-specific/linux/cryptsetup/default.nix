@@ -1,5 +1,12 @@
 { lib, stdenv, fetchurl, lvm2, json_c, asciidoctor
-, openssl, libuuid, pkg-config, popt }:
+, openssl, libuuid, pkg-config, popt
+
+  # The release tarballs contain precomputed manpage files, so we don't need
+  # to run asciidoctor on the man sources. By avoiding asciidoctor, we make
+  # the bare NixOS build hash independent of changes to the ruby ecosystem,
+  # saving mass-rebuilds.
+, rebuildMan ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "cryptsetup";
@@ -28,6 +35,8 @@ stdenv.mkDerivation rec {
     "--enable-cryptsetup-reencrypt"
     "--with-crypto_backend=openssl"
     "--disable-ssh-token"
+  ] ++ lib.optionals (!rebuildMan) [
+    "--disable-asciidoc"
   ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     "--disable-external-tokens"
     # We have to override this even though we're removing token
@@ -36,7 +45,7 @@ stdenv.mkDerivation rec {
     "--with-luks2-external-tokens-path=/"
   ];
 
-  nativeBuildInputs = [ pkg-config asciidoctor ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals rebuildMan [ asciidoctor ];
   buildInputs = [ lvm2 json_c openssl libuuid popt ];
 
   # The test [7] header backup in compat-test fails with a mysterious
