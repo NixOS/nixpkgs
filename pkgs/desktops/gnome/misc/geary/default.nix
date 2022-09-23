@@ -26,7 +26,7 @@
 , itstool
 , libgee
 , gnome
-, webkitgtk
+, webkitgtk_4_1
 , python3
 , gnutls
 , cacert
@@ -68,6 +68,21 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/geary/-/commit/0f75e7a84a39492d0748cec2ba6028e08cae3644.patch";
       sha256 = "sha256-1ADQqKm3DxtjDGPSThq3c7s5S+q/3u/qr9JQEsLaFMI=";
     })
+
+    # Remove libsoup2 dependency.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/geary/-/commit/1c1912d0061bb59525b870767d08b16c09acc8da.patch";
+      sha256 = "TIL7scp4LGAKJ3kmWEHHwIABQTHpOFSmtPom4MkMKtk=";
+    })
+
+    # Prevent libsoup2 × libsoup3 conflict.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/geary/-/commit/796845aaa7148076132af0ff074e9218d0c3f8b8.patch";
+      sha256 = "6ZLa8A75RpsXEVMb9bNUiXJSnOvBI1EOok4xzt5m9HU=";
+      excludes = [
+        "org.gnome.Geary.json"
+      ];
+    })
   ];
 
   nativeBuildInputs = [
@@ -108,7 +123,7 @@ stdenv.mkDerivation rec {
     libstemmer
     libytnef
     sqlite
-    webkitgtk
+    webkitgtk_4_1
   ];
 
   checkInputs = [
