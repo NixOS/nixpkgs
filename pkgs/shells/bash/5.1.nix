@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
   };
 
   hardeningDisable = [ "format" ]
-  # https://android.googlesource.com/platform/bionic/+/1342527b5791a53bf441322ab9adf41c8e060a1e%5E2..1342527b5791a53bf441322ab9adf41c8e060a1e/
+  # bionic libc is super weird and has issues with fortify outside of its own libc, check this comment:
+  # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
   ++ optional (stdenv.hostPlatform.libc == "bionic") "fortify";
 
   outputs = [ "out" "dev" "man" "doc" "info" ];
