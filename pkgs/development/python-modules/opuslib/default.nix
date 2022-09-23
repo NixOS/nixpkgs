@@ -15,9 +15,9 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "orion-labs";
-    repo = "opuslib";
+    repo = pname;
     rev = "92109c528f9f6c550df5e5325ca0fcd4f86b0909";
-    sha256 = "0kd37wimwd1g6c0w5hq2hiiljgbi1zg3rk5prval086khkzq469p";
+    hash = "sha256-NxmC/4TTIEDVzrfMPN4PcT1JY4QCw8IBMy80XiM/o00=";
   };
 
   patches = [
