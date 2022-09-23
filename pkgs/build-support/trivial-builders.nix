@@ -111,10 +111,12 @@ rec {
     , executable ? false # run chmod +x ?
     , destination ? ""   # relative path appended to $out eg "/bin/foo"
     , checkPhase ? ""    # syntax checks, e.g. for scripts
+    , doCheck ? checkPhase != ""
+    , checkInputs ? []
     , meta ? { }
     }:
     runCommand name
-      { inherit text executable checkPhase meta;
+      { inherit text executable checkPhase checkInputs doCheck meta;
         passAsFile = [ "text" ];
         # Pointless to do this on a remote machine.
         preferLocalBuild = true;
