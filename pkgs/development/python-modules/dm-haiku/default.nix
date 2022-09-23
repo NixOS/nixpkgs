@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "dm-haiku";
-  version = "0.0.7";
+  version = "0.0.8";
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Qa3g3vOPZJt/wBjjuZHAcFUz/gwN/yvirV/8V9CnIko=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-V5pVIEwaT6leV5OFv6AGX1Jcudat/Q4kgEBwK41AOn4=";
   };
 
   outputs = [
