@@ -1,10 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config
 , libdeflate, libpng, libtiff, zlib, lcms2, jpylyzer
 , jpipLibSupport ? false # JPIP library & executables
 , jpipServerSupport ? false, curl, fcgi # JPIP Server
 , opjViewerSupport ? false, wxGTK # OPJViewer executable
 , openjpegJarSupport ? false # Openjpeg jar (Java)
 , jdk
+, poppler
 }:
 
 let
@@ -23,6 +24,19 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" ];
+
+  patches = [
+    # modernise cmake files, also fixes them for mutliple outputs
+    (fetchpatch {
+      url = "https://github.com/uclouvain/openjpeg/pull/1424.patch";
+      sha256 = "sha256-CxVRt1u4HVOMUjWiZ2plmZC29t/zshCpSY+N4Wlrlvg=";
+    })
+    # fix cmake files cross compilation
+    (fetchpatch {
+      url = "https://github.com/uclouvain/openjpeg/commit/c6ceb84c221b5094f1e8a4c0c247dee3fb5074e8.patch";
+      sha256 = "sha256-gBUtmO/7RwSWEl7rc8HGr8gNtvNFdhjEwm0Dd51p5O8=";
+    })
+  ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_NAME_DIR=\${CMAKE_INSTALL_PREFIX}/lib"
