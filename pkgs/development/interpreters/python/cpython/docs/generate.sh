@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
+
 TYPES="html pdf-a4 pdf-letter text texinfo"
 URL=http://www.python.org/ftp/python/doc/VERSION/python-VERSION-docs-TYPE.tar.bz2
 VERSIONS=$(for major in 2 3; do curl https://docs.python.org/$major/archives/ 2>/dev/null | perl -l -n -e'/<a href="python-([23].[0-9]+.[0-9]+)-docs-html.tar.bz2/ && print $1' | tail -n 1; done)
