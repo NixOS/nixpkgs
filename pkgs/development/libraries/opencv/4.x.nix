@@ -76,20 +76,20 @@
 }:
 
 let
-  version = "4.5.4";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv";
     rev = version;
-    sha256 = "sha256-eIESkc/yYiZZ5iY4t/rAPd+jfjuMYR3srCBC4fO3g70=";
+    sha256 = "sha256-zPkMc6xEDZU5TlBH3LAzvB17XgocSPeHVMG/U6kfpxg=";
   };
 
   contribSrc = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv_contrib";
     rev = version;
-    sha256 = "sha256-RkCIGukZ8KJkmVZQAZTWdVcVKD2I3NcfGShcqzKhQD0=";
+    sha256 = "sha256-hjRqT7V4Sz7t4IEy89F5M+b0x2ObBbqF8GWLKhWFXtE=";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -177,7 +177,7 @@ let
     dst = ".cache/ade";
   };
 
-  # See opencv/modules/wechat_qrcode/CMakeLists.txt
+  # See opencv_contrib/modules/wechat_qrcode/CMakeLists.txt
   wechat_qrcode = {
     src = fetchFromGitHub {
       owner = "opencv";
