@@ -33,7 +33,9 @@ stdenv.mkDerivation rec {
     sha256 = "1alv68wplnfdm6mh39hm57060xgssb9vqca4yr1cyva0c342n0fc";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" ]
+  # https://android.googlesource.com/platform/bionic/+/1342527b5791a53bf441322ab9adf41c8e060a1e%5E2..1342527b5791a53bf441322ab9adf41c8e060a1e/
+  ++ optional (stdenv.hostPlatform.useAndroidPrebuilt or false) "fortify";
 
   outputs = [ "out" "dev" "man" "doc" "info" ];
 
