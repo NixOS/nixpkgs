@@ -8343,6 +8343,8 @@ with pkgs;
 
   mdbook-open-on-gh = callPackage ../tools/text/mdbook-open-on-gh { };
 
+  mdbook-man = callPackage ../tools/text/mdbook-man { };
+
   mdbook-mermaid = callPackage ../tools/text/mdbook-mermaid {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
