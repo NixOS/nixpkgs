@@ -12646,6 +12646,8 @@ with pkgs;
 
   unrar-wrapper = python3Packages.callPackage ../tools/archivers/unrar-wrapper { };
 
+  uptime-kuma = callPackage ../servers/monitoring/uptime-kuma { };
+
   vul = callPackage ../applications/misc/vul { };
 
   xar = callPackage ../tools/compression/xar { };
