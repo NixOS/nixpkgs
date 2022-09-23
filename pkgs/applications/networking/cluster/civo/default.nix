@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "civo";
@@ -12,6 +12,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "sha256-gBVSpjoAfbxlJnlrFrsBupJgVQ59sh1ipOry0Mgppig=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   CGO_ENABLED = 0;
 
@@ -29,6 +31,10 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/cli $out/bin/civo
+    installShellCompletion --cmd civo \
+      --bash <($out/bin/civo completion bash) \
+      --fish <($out/bin/civo completion fish) \
+      --zsh <($out/bin/civo completion zsh)
   '';
 
   meta = with lib; {
