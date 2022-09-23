@@ -10,16 +10,16 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
-    repo = "pc-ble-driver";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1609x17sbfi668jfwyvnfk9z29w6cgzvgv67xcpvpx5jv0czpcdj";
+    hash = "sha256-srH7Gdiy9Lsv68fst/9jhifx03R2e+4kMia6pU/oCZg=";
   };
 
   patches = [
      # Fix build with GCC 11
     (fetchpatch {
       url = "https://github.com/NordicSemiconductor/pc-ble-driver/commit/37258e65bdbcd0b4369ae448faf650dd181816ec.patch";
-      sha256 = "sha256-gOdzIW8YJQC+PE4FJd644I1+I7CMcBY8wpF6g02eI5g=";
+      hash = "sha256-gOdzIW8YJQC+PE4FJd644I1+I7CMcBY8wpF6g02eI5g=";
     })
   ];
 
