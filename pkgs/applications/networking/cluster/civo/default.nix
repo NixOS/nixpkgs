@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "civo";
@@ -20,9 +20,9 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-X github.com/civo/cli/cmd.VersionCli=${version}"
-    "-X github.com/civo/cli/cmd.CommitCli=${src.rev}"
-    "-X github.com/civo/cli/cmd.DateCli=unknown"
+    "-X github.com/civo/cli/common.VersionCli=${version}"
+    "-X github.com/civo/cli/common.CommitCli=${src.rev}"
+    "-X github.com/civo/cli/common.DateCli=unknown"
   ];
 
   doInstallCheck = false;
