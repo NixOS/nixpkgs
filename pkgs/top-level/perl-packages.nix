@@ -27094,6 +27094,21 @@ let
     };
   };
 
+  XMLFeed = buildPerlPackage {
+    pname = "XML-Feed";
+    version = "0.63";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAVECROSS/XML-Feed-0.63.tar.gz";
+      sha256 = "9c8a996c82c2915b2fce820ef49f79184a7fef5e3aaadc688a00fb3a23c4d911";
+    };
+    buildInputs = [ URI XMLXPath ];
+    propagatedBuildInputs = [ ClassErrorHandler DateTime DateTimeFormatFlexible DateTimeFormatISO8601 DateTimeFormatMail DateTimeFormatNatural DateTimeFormatW3CDTF FeedFind HTMLParser LWP URIFetch XMLAtom XMLLibXML XMLRSS ];
+    meta = {
+      description = "XML Syndication Feed Support";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   XMLFeedPP = buildPerlPackage {
     pname = "XML-FeedPP";
     version = "0.95";
