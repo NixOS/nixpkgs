@@ -2,12 +2,15 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "phonenumbers";
   version = "8.12.55";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

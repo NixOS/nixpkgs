@@ -343,6 +343,10 @@ let
       orga = "nickel-lang";
       repo = "tree-sitter-nickel";
     };
+    "tree-sitter-smithy" = {
+      orga = "indoorvivants";
+      repo = "tree-sitter-smithy";
+    };
   };
 
   allGrammars =

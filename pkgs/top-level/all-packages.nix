@@ -3309,7 +3309,9 @@ with pkgs;
 
   cinny = callPackage ../applications/networking/instant-messengers/cinny { stdenv = stdenvNoCC; };
 
-  cinny-desktop = callPackage ../applications/networking/instant-messengers/cinny-desktop { };
+  cinny-desktop = callPackage ../applications/networking/instant-messengers/cinny-desktop {
+    openssl = openssl_1_1;
+  };
 
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
 
