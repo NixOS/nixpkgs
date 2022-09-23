@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
       - Text
       - Grids
     '';
-    homepage = "https://pizarra.categulario.tk/en/";
+    homepage = "https://pizarra.categulario.xyz/en/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mglolenstine ];
   };
