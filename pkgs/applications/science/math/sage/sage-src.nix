@@ -130,6 +130,14 @@ stdenv.mkDerivation rec {
       rev = "2816dbacb342398a23bb3099e20c92c8020ab0fa";
       sha256 = "sha256-tCOsMxXwPkRg3FJGVvTqDzlWdra78UfDY6nci0Nr9GI=";
     })
+
+    # https://trac.sagemath.org/ticket/34391
+    (fetchSageDiff {
+      name = "gap-4.12-upgrade.patch";
+      base = "9.8.beta2";
+      rev = "eb8cd42feb58963adba67599bf6e311e03424328";
+      sha256 = "sha256-0dKewOZe2n3PqSdxCJt18FkqwTdrD0VA5MXAMiTW8Tw=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
