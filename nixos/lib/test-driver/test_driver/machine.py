@@ -736,7 +736,7 @@ class Machine:
         )
         return output
 
-    def wait_until_tty_matches(self, tty: str, regexp: str) -> None:
+    def wait_until_tty_matches(self, tty: str, regexp: str, timeout: int = 900) -> None:
         """Wait until the visible output on the chosen TTY matches regular
         expression. Throws an exception on timeout.
         """
@@ -752,7 +752,7 @@ class Machine:
             return len(matcher.findall(text)) > 0
 
         with self.nested(f"waiting for {regexp} to appear on tty {tty}"):
-            retry(tty_matches)
+            retry(tty_matches, timeout)
 
     def send_chars(self, chars: str, delay: Optional[float] = 0.01) -> None:
         """
@@ -764,7 +764,7 @@ class Machine:
             for char in chars:
                 self.send_key(char, delay, log=False)
 
-    def wait_for_file(self, filename: str) -> None:
+    def wait_for_file(self, filename: str, timeout: int = 900) -> None:
         """
         Waits until the file exists in the machine's file system.
         """
@@ -774,9 +774,11 @@ class Machine:
             return status == 0
 
         with self.nested(f"waiting for file '{filename}'"):
-            retry(check_file)
+            retry(check_file, timeout)
 
-    def wait_for_open_port(self, port: int, addr: str = "localhost") -> None:
+    def wait_for_open_port(
+        self, port: int, addr: str = "localhost", timeout: int = 900
+    ) -> None:
         """
         Wait until a process is listening on the given TCP port and IP address
         (default `localhost`).
@@ -787,9 +789,11 @@ class Machine:
             return status == 0
 
         with self.nested(f"waiting for TCP port {port} on {addr}"):
-            retry(port_is_open)
+            retry(port_is_open, timeout)
 
-    def wait_for_closed_port(self, port: int, addr: str = "localhost") -> None:
+    def wait_for_closed_port(
+        self, port: int, addr: str = "localhost", timeout: int = 900
+    ) -> None:
         """
         Wait until nobody is listening on the given TCP port and IP address
         (default `localhost`).
@@ -800,7 +804,7 @@ class Machine:
             return status != 0
 
         with self.nested(f"waiting for TCP port {port} on {addr} to be closed"):
-            retry(port_is_closed)
+            retry(port_is_closed, timeout)
 
     def start_job(self, jobname: str, user: Optional[str] = None) -> Tuple[int, str]:
         return self.systemctl(f"start {jobname}", user)
@@ -974,7 +978,7 @@ class Machine:
         """
         return self._get_screen_text_variants([2])[0]
 
-    def wait_for_text(self, regex: str) -> None:
+    def wait_for_text(self, regex: str, timeout: int = 900) -> None:
         """
         Wait until the supplied regular expressions matches the textual
         contents of the screen by using optical character recognition (see
@@ -997,7 +1001,7 @@ class Machine:
             return False
 
         with self.nested(f"waiting for {regex} to appear on screen"):
-            retry(screen_matches)
+            retry(screen_matches, timeout)
 
     def wait_for_console_text(self, regex: str, timeout: int | None = None) -> None:
         """
@@ -1148,7 +1152,7 @@ class Machine:
         self.send_key("ctrl-alt-delete")
         self.connected = False
 
-    def wait_for_x(self) -> None:
+    def wait_for_x(self, timeout: int = 900) -> None:
         """
         Wait until it is possible to connect to the X server.
         """
@@ -1165,14 +1169,14 @@ class Machine:
             return status == 0
 
         with self.nested("waiting for the X11 server"):
-            retry(check_x)
+            retry(check_x, timeout)
 
     def get_window_names(self) -> List[str]:
         return self.succeed(
             r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
         ).splitlines()
 
-    def wait_for_window(self, regexp: str) -> None:
+    def wait_for_window(self, regexp: str, timeout: int = 900) -> None:
         """
         Wait until an X11 window has appeared whose name matches the given
         regular expression, e.g., `wait_for_window("Terminal")`.
@@ -1190,7 +1194,7 @@ class Machine:
             return any(pattern.search(name) for name in names)
 
         with self.nested("waiting for a window to appear"):
-            retry(window_is_visible)
+            retry(window_is_visible, timeout)
 
     def sleep(self, secs: int) -> None:
         # We want to sleep in *guest* time, not *host* time.
