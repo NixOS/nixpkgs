@@ -13,6 +13,7 @@
 , xmlto
 , appstream-glib
 , substituteAll
+, runCommand
 , bison
 , xdg-dbus-proxy
 , p11-kit
@@ -51,7 +52,7 @@
 , makeWrapper
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flatpak";
   version = "1.12.7";
 
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
   src = fetchurl {
-    url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
+    url = "https://github.com/flatpak/flatpak/releases/download/${finalAttrs.version}/flatpak-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-bbUqUxzieCgqx+v7mfZqC7PsyvROhkhEwslcHuW6kxY="; # Taken from https://github.com/flatpak/flatpak/releases/
   };
 
@@ -80,12 +81,6 @@ stdenv.mkDerivation rec {
       p11kit = "${p11-kit.bin}/bin/p11-kit";
     })
 
-    # Adapt paths exposed to sandbox for NixOS.
-    (substituteAll {
-      src = ./bubblewrap-paths.patch;
-      inherit (builtins) storeDir;
-    })
-
     # Allow gtk-doc to find schemas using XML_CATALOG_FILES environment variable.
     # Patch taken from gtk-doc expression.
     ./respect-xml-catalog-files-var.patch
@@ -94,8 +89,9 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/issues/53441
     ./unset-env-vars.patch
 
-    # But we want the GDK_PIXBUF_MODULE_FILE from the wrapper affect the icon validator.
-    ./validate-icon-pixbuf.patch
+    # The icon validator needs to access the gdk-pixbuf loaders in the Nix store
+    # and cannot bind FHS paths since those are not available on NixOS.
+    finalAttrs.passthru.icon-validator-patch
   ];
 
   nativeBuildInputs = [
@@ -187,8 +183,18 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    icon-validator-patch = substituteAll {
+      src = ./fix-icon-validation.patch;
+      inherit (builtins) storeDir;
+    };
+
     tests = {
       installedTests = nixosTests.installed-tests.flatpak;
+
+      validate-icon = runCommand "test-icon-validation" { } ''
+        ${finalAttrs.finalPackage}/libexec/flatpak-validate-icon --sandbox 512 512 ${../../../applications/audio/zynaddsubfx/ZynLogo.svg} > "$out"
+        grep format=svg "$out"
+      '';
     };
   };
 
@@ -199,4 +205,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };
-}
+})
