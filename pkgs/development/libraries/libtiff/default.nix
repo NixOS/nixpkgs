@@ -103,6 +103,7 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/libtiff/libtiff/-/commit/d46af879bc4e789f95a7828fa566f61700954393.patch";
       sha256 = "sha256-LUzcYU6Tfn+5cJBh0IMaVVCzcuEIF+HJ3ic9Ng7FrK4=";
     })
+    ./4.3.0-CVE-2022-2953.patch
   ];
 
   postPatch = ''
