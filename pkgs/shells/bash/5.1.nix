@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ]
   # https://android.googlesource.com/platform/bionic/+/1342527b5791a53bf441322ab9adf41c8e060a1e%5E2..1342527b5791a53bf441322ab9adf41c8e060a1e/
-  ++ optional (stdenv.hostPlatform.useAndroidPrebuilt or false) "fortify";
+  ++ optional (stdenv.hostPlatform.libc == "bionic") "fortify";
 
   outputs = [ "out" "dev" "man" "doc" "info" ];
 
