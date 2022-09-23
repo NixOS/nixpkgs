@@ -14,27 +14,28 @@
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "23.9.1";
+  version = "23.9.3";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OeT2VyI40mFagvyqSF5gi4S1A88IDckkxDu7rLEcHBg=";
+    hash = "sha256-abAd2DxC9ZAlD+eh9QP8IpsU3oOFcxSxkzo92/WVxKU=";
   };
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ] ++ lib.optionals stdenv.isLinux [
-    dbus-python
+  propagatedBuildInputs = [
     jaraco_classes
+  ] ++ lib.optionals stdenv.isLinux [
     jeepney
     secretstorage
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
+
 
   pythonImportsCheck = [
     "keyring"
