@@ -21231,7 +21231,9 @@ with pkgs;
 
   prospector = callPackage ../development/tools/prospector { };
 
-  protobuf = protobuf3_21;
+  # https://github.com/protocolbuffers/protobuf/issues/10418
+  protobuf = if stdenv.hostPlatform.is32bit then protobuf3_20 else
+    protobuf3_21;
 
   protobuf3_21 = callPackage ../development/libraries/protobuf/3.21.nix { };
   protobuf3_20 = callPackage ../development/libraries/protobuf/3.20.nix { };
