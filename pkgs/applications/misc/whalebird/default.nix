@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${electron}/bin/electron $out/bin/whalebird \
       --add-flags $out/opt/Whalebird/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
     runHook postInstall
   '';
