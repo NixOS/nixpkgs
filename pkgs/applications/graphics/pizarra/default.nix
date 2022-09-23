@@ -14,17 +14,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pizarra";
-  version = "1.7.3";
+  version = "1.7.4";
 
   src = fetchFromGitLab {
     owner = "categulario";
     repo = "pizarra-gtk";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-XP+P2w6s47JQV4spKeMKe/Ktxid7uokGYH4IEJ5VHSc=";
+    sha256 = "sha256-fWwAmzF3ppCvJZ0K4EDrmP8SVPVRayEQTtbhNscZIF0=";
   };
 
-  cargoSha256 = "sha256-JQZ/95tRlmsrb0EJaPlE8G0fMSeEgLnDi3pkLjcJz/o=";
+  cargoSha256 = "sha256-pxRJXUeFGdVj6iCFZ4Y8b9z5hw83g8YywpKztTZ0g+4=";
 
   nativeBuildInputs = [ wrapGAppsHook pkg-config gdk-pixbuf ];
 
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
       - Text
       - Grids
     '';
-    homepage = "https://pizarra.categulario.tk/en/";
+    homepage = "https://pizarra.categulario.xyz/en/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mglolenstine ];
   };
