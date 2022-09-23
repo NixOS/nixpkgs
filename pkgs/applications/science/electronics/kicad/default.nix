@@ -235,5 +235,7 @@ stdenv.mkDerivation rec {
     # as long as the base and libraries (minus 3d) are build,
     # this wrapper does not need to get built
     # the kicad-*small "packages" cause this to happen
+
+    broken = true; # at 2022-11-23
   };
 }
