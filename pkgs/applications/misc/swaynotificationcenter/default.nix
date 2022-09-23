@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "SwayNotificationCenter";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwayNotificationCenter";
     rev = "v${version}";
-    hash = "sha256-s4yacSK5ajuq+BeGcPX+/o9wuDOcTOdZu4p8nPS8wk4=";
+    hash = "sha256-Z8CFSaH4RsZ/Qgj+l+36p7smbiGV5RRQhZBBcA3iyK8=";
   };
 
   nativeBuildInputs = [

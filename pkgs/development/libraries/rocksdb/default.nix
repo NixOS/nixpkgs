@@ -58,6 +58,11 @@ stdenv.mkDerivation rec {
   # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
   hardeningDisable = lib.optional stdenv.hostPlatform.isWindows "format";
 
+  postFixup = ''
+    substituteInPlace "$out"/lib/pkgconfig/rocksdb.pc \
+      --replace '="''${prefix}//' '="/'
+  '';
+
   meta = with lib; {
     homepage = "https://rocksdb.org";
     description = "A library that provides an embeddable, persistent key-value store for fast storage";

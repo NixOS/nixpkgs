@@ -3360,6 +3360,8 @@ in {
 
   flask_mail = callPackage ../development/python-modules/flask-mail { };
 
+  flask-mailman = callPackage ../development/python-modules/flask-mailman { };
+
   flask_marshmallow = callPackage ../development/python-modules/flask-marshmallow { };
 
   flask_migrate = callPackage ../development/python-modules/flask-migrate { };
@@ -4699,6 +4701,7 @@ in {
     # pin to `cudaPackages_11_6` instead.
     cudaPackages = pkgs.cudaPackages_11_6;
     IOKit = pkgs.darwin.apple_sdk_11_0.IOKit;
+    protobuf = pkgs.protobuf3_20; # jaxlib-build 0.3.15 won't build with protobuf 3.21
   };
 
   jaxlib = self.jaxlib-build;
