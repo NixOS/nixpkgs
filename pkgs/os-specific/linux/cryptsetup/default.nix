@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, lvm2, json_c, asciidoctor
-, openssl, libuuid, pkg-config, popt
+, openssl, libuuid, pkg-config, popt, nixosTests
 
   # The release tarballs contain precomputed manpage files, so we don't need
   # to run asciidoctor on the man sources. By avoiding asciidoctor, we make
@@ -52,6 +52,19 @@ stdenv.mkDerivation rec {
   # "out of memory" error, even though tons of memory is available.
   # Issue filed upstream: https://gitlab.com/cryptsetup/cryptsetup/-/issues/763
   doCheck = !stdenv.hostPlatform.isMusl;
+
+  passthru = {
+    tests = {
+      nixos =
+        lib.optionalAttrs stdenv.hostPlatform.isLinux (
+          lib.recurseIntoAttrs (
+            lib.filterAttrs
+              (name: _value: lib.hasPrefix "luks" name)
+              nixosTests.installer
+          )
+        );
+    };
+  };
 
   meta = {
     homepage = "https://gitlab.com/cryptsetup/cryptsetup/";
