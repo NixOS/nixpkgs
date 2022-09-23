@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "crossplane";
-  version = "0.5.7";
+  version = "0.5.8";
 
   src = fetchFromGitHub {
     owner = "nginxinc";
     repo = "crossplane";
-    rev = "v${version}";
-    sha256 = "0lv3frfvnvz5wjxwh3mwy8nbypv4i62v4bvy5fv7vd6kmbxy1q9l";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-DfIF+JvjIREi7zd5ZQ7Co/CIKC5iUeOgR/VLDPmrtTQ=";
   };
 
   checkInputs = [ pytestCheckHook ];
