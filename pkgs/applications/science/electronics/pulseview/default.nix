@@ -1,6 +1,6 @@
 { mkDerivation, lib, fetchurl, fetchpatch, pkg-config, cmake, glib, boost, libsigrok
 , libsigrokdecode, libserialport, libzip, udev, libusb1, libftdi1, glibmm
-, pcre, librevisa, python3, qtbase, qtsvg, qttools
+, pcre, python3, qtbase, qtsvg, qttools
 }:
 
 mkDerivation rec {
@@ -16,7 +16,7 @@ mkDerivation rec {
 
   buildInputs = [
     glib boost libsigrok libsigrokdecode libserialport libzip udev libusb1 libftdi1 glibmm
-    pcre librevisa python3
+    pcre python3
     qtbase qtsvg qttools
   ];
 
