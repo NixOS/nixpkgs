@@ -52,6 +52,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/vala-lang/vala-language-server";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ andreasfelix ];
+    # Likely broken by GLib 2.74 switch to PCRE 2.
+    # https://github.com/vala-lang/vala-language-server/issues/263
+    broken = true;
     platforms = platforms.linux;
   };
 }
