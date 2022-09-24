@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "oh-my-posh";
@@ -15,6 +15,8 @@ buildGoModule rec {
 
   sourceRoot = "source/src";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   ldflags = [ "-s" "-w" "-X" "main.Version=${version}" ];
 
   tags = [ "netgo" "osusergo" "static_build" ];
@@ -22,6 +24,10 @@ buildGoModule rec {
   postInstall = ''
     mkdir -p $out/share/oh-my-posh
     cp -r ${src}/themes $out/share/oh-my-posh/
+    installShellCompletion --cmd oh-my-posh \
+      --bash <($out/bin/oh-my-posh completion bash) \
+      --fish <($out/bin/oh-my-posh completion fish) \
+      --zsh <($out/bin/oh-my-posh completion zsh)
   '';
 
   meta = with lib; {
