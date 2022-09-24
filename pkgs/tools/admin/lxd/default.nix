@@ -11,7 +11,7 @@
 
 buildGoPackage rec {
   pname = "lxd";
-  version = "5.5";
+  version = "5.6";
 
   goPackagePath = "github.com/lxc/lxd";
 
@@ -20,7 +20,7 @@ buildGoPackage rec {
       "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz"
       "https://github.com/lxc/lxd/releases/download/lxd-${version}/lxd-${version}.tar.gz"
     ];
-    sha256 = "sha256-Ri5mwDtesI6vOjtb5L5zBD469jIYx5rxAJib0Bja8ps=";
+    sha256 = "sha256-bLKl9OpvxXozmqjX8hY2xIiVectBiohDxTzd5du5w+4=";
   };
 
   postPatch = ''
