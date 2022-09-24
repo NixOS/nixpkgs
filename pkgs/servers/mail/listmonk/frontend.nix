@@ -29,7 +29,7 @@ yarn2nix-moretea.mkYarnPackage rec {
 
     mv dist $out
 
-    run postInstall
+    runHook postInstall
   '';
 
   doDist = false;
