@@ -65,6 +65,27 @@ let self = stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/285a5a4d54ca83b136b787ce5ebf1d774f9499d5.patch";
       sha256 = "/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
     })
+
+    # color-device: Don't create profiles from obvious garbage data
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2627
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/d21cab4298116df4c6a8508ce4b1b0fb5ac43b8f.patch";
+      sha256 = "sha256-1tQKCHKEhNz2y8EWY5L1kK0/ELrl99xeaktkjJ3N5sA=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/e986bf52ddaec6f07d21aec0cac3e24ba5dd1f96.patch";
+      sha256 = "sha256-Uh0l1crYo4fOYlVA67Ha0nzvzpPmfowy+mk5xtnNqw0=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/91aac852f677701dead6c3eeb23f1ec6c201973c.patch";
+      sha256 = "sha256-+kMGLeocNJDkaW4dlA7nM6yPuKijOg7xwfs85MtG68I=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/a94eb5b60f6577744a67d8b3d0ae7bde801d6957.patch";
+      sha256 = "sha256-+N+yBL3ofgAy8P0UXp9nH6kNKwvV8xlDKKEfqxpI8Ok=";
+    })
+
+
   ];
 
   mesonFlags = [
