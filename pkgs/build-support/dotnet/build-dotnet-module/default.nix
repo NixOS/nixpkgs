@@ -172,7 +172,7 @@ stdenvNoCC.mkDerivation (args // {
       writeShellScript "fetch-${pname}-deps" ''
         set -euo pipefail
 
-        export PATH="${lib.makeBinPath [ coreutils dotnet-sdk nuget-to-nix ]}"
+        export PATH="${lib.makeBinPath [ coreutils dotnet-sdk (nuget-to-nix.override { inherit dotnet-sdk; }) ]}"
 
         for arg in "$@"; do
             case "$arg" in
@@ -218,6 +218,8 @@ stdenvNoCC.mkDerivation (args // {
                 -p:Deterministic=true \
                 --packages "$tmp/nuget_pkgs" \
                 --runtime "$rid" \
+                --no-cache \
+                --force \
                 ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \
                 ${lib.optionalString (flags != []) (toString flags)}
         }
