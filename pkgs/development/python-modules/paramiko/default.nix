@@ -31,6 +31,11 @@ buildPythonPackage rec {
       url = "https://github.com/paramiko/paramiko/commit/18e38b99f515056071fb27b9c1a4f472005c324a.patch";
       hash = "sha256-bPDghPeLo3NiOg+JwD5CJRRLv2VEqmSx1rOF2Tf8ZDA=";
     })
+    (fetchpatch {
+      name = "fix-sftp-tests.patch";
+      url = "https://github.com/paramiko/paramiko/commit/47cfed55575c21ac558e6d00a4ab1814406be651.patch";
+      hash = "sha256-H3nKT8+4CTEDoiqnlhFfuKnc/65GGfwwAm9H2lwrlK8=";
+    })
   ];
 
   propagatedBuildInputs = [
