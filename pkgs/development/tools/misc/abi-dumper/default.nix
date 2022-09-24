@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       --replace '"ctags"' '"${ctags}/bin/ctags"'
   '';
 
-  nativeBuildInputs = [ perl ];
+  buildInputs = [ elfutils ctags perl vtable-dumper ];
 
   preBuild = "mkdir -p $out";
   makeFlags = [ "prefix=$(out)" ];
