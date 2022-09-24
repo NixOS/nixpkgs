@@ -1,9 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, meson, ninja, pkg-config, wayland-scanner, python3
-, wayland, libGL, mesa, libxkbcommon, cairo, libxcb
-, libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput, libevdev
-, colord, lcms2, pipewire ? null
-, pango ? null, libunwind ? null, freerdp ? null, vaapi ? null, libva ? null
-, libwebp ? null, xwayland ? null, wayland-protocols
+{ lib, stdenv, fetchurl, fetchpatch
+, meson, ninja, pkg-config, python3, wayland-scanner
+, cairo, colord, dbus, lcms2, libGL, libXcursor, libdrm, libevdev, libinput
+, libjpeg, libxcb, libxkbcommon, mesa, mtdev, pam, udev, wayland
+, wayland-protocols, xlibsWrapper
+, pipewire ? null, pango ? null, libunwind ? null, freerdp ? null, vaapi ? null
+, libva ? null, libwebp ? null, xwayland ? null
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
 }:
 
@@ -24,12 +25,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner python3 ];
+  nativeBuildInputs = [ meson ninja pkg-config python3 wayland-scanner ];
   buildInputs = [
-    wayland libGL mesa libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
-    mtdev libjpeg pam dbus libinput libevdev pango libunwind freerdp vaapi libva
-    libwebp wayland-protocols
-    colord lcms2 pipewire
+    cairo colord dbus freerdp lcms2 libGL libXcursor libdrm libevdev libinput
+    libjpeg libunwind libva libwebp libxcb libxkbcommon mesa mtdev pam pango
+    pipewire udev vaapi wayland wayland-protocols xlibsWrapper
   ];
 
   mesonFlags= [
