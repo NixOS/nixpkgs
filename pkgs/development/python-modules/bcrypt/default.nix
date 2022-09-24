@@ -8,6 +8,8 @@
 , pythonOlder
 , cffi
 , pytestCheckHook
+, libiconv
+, stdenv
   # for passthru.tests
 , asyncssh
 , django_4
@@ -44,6 +46,9 @@ buildPythonPackage rec {
     rust.cargo
     rust.rustc
   ]);
+
+  # Remove when https://github.com/NixOS/nixpkgs/pull/190093 lands.
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   propagatedBuildInputs = [
     cffi
