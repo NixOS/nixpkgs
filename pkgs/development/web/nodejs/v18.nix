@@ -7,8 +7,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "18.9.0";
-  sha256 = "sha256-x1zImv6tl2eRkArM3gKnsefnYnAvD2+mjqrLAZhNllQ=";
+  version = "18.9.1";
+  sha256 = "sha256-84GWPUNWi6aZkVyIYp3G2koZY4BNzTey5uHRDZI91dk=";
   patches = [
     (fetchpatch {
       # Fixes cross compilation to aarch64-linux by reverting https://github.com/nodejs/node/pull/43200
