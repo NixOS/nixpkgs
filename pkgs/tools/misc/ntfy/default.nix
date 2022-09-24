@@ -70,6 +70,12 @@ in buildPythonApplication rec {
     })
   ];
 
+  postPatch = ''
+    # We disable the Darwin specific things because it relies on pyobjc, which we don't have.
+    substituteInPlace setup.py \
+      --replace "':sys_platform == \"darwin\"'" "'darwin'"
+  '';
+
   checkPhase = ''
     HOME=$(mktemp -d) ${python.interpreter} setup.py test
   '';
