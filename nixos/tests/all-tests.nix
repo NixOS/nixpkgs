@@ -618,6 +618,7 @@ in {
   victoriametrics = handleTest ./victoriametrics.nix {};
   vikunja = handleTest ./vikunja.nix {};
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
+  vosk = handleTest ./vosk.nix { };
   vscodium = discoverTests (import ./vscodium.nix);
   vsftpd = handleTest ./vsftpd.nix {};
   wasabibackend = handleTest ./wasabibackend.nix {};

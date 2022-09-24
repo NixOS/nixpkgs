@@ -11582,6 +11582,10 @@ in {
 
   volvooncall = callPackage ../development/python-modules/volvooncall { };
 
+  vosk = callPackage ../development/python-modules/vosk {
+    inherit (pkgs) vosk;
+  };
+
   vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit { };
 
   vpk = callPackage ../development/python-modules/vpk { };
