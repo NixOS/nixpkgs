@@ -71,6 +71,7 @@
 , buildType ? "Release"
   # If set to true, builds the application as a self-contained - removing the runtime dependency on dotnet
 , selfContainedBuild ? false
+, useAppHost ? true
   # The dotnet SDK to use.
 , dotnet-sdk ? dotnetCorePackages.sdk_6_0
   # The dotnet runtime to use.
@@ -146,6 +147,8 @@ stdenvNoCC.mkDerivation (args // {
 
   # gappsWrapperArgs gets included when wrapping for dotnet, as to avoid double wrapping
   dontWrapGApps = args.dontWrapGApps or true;
+
+  inherit selfContainedBuild useAppHost;
 
   passthru = {
     inherit nuget-source;

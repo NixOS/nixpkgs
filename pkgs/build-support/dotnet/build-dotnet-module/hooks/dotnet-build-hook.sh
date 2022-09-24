@@ -20,6 +20,10 @@ dotnetBuildHook() {
         dotnetBuildFlags+=("-p:SelfContained=false")
     fi
 
+    if [ "${useAppHost-}" ]; then
+        dotnetBuildFlags+=("-p:UseAppHost=true")
+    fi
+
     if [ "${version-}" ]; then
         local -r versionFlag="-p:Version=${version-}"
     fi
@@ -31,7 +35,6 @@ dotnetBuildHook() {
             -p:BuildInParallel=$parallelBuildFlag \
             -p:ContinuousIntegrationBuild=true \
             -p:Deterministic=true \
-            -p:UseAppHost=true \
             --configuration "@buildType@" \
             --no-restore \
             ${versionFlag-} \
