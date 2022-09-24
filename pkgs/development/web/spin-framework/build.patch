@@ -1,0 +1,54 @@
+diff --git a/build.rs b/build.rs
+index b65cdc7..0fe012d 100644
+--- a/build.rs
++++ b/build.rs
+@@ -12,6 +12,15 @@ const RUST_HTTP_INTEGRATION_ENV_TEST: &str = "tests/http/headers-env-routes-test
+ fn main() {
+     println!("cargo:rerun-if-changed=build.rs");
+ 
++    let mut config = vergen::Config::default();
++    *config.git_mut().sha_kind_mut() = vergen::ShaKind::Short;
++    *config.git_mut().commit_timestamp_kind_mut() = vergen::TimestampKind::DateOnly;
++    vergen::vergen(config).expect("failed to extract build information");
++
++    if !has_rustup() {
++        process::exit(0);
++    }
++
+     if !has_wasm32_wasi_target() {
+         // Current toolchain: e.g. "stable-x86_64-pc-windows-msvc", "1.60-x86_64-pc-windows-msvc"
+         let current_toolchain = std::env::var("RUSTUP_TOOLCHAIN").unwrap();
+@@ -52,11 +61,6 @@ error: the `wasm32-wasi` target is not installed
+ 
+     cargo_build(RUST_HTTP_INTEGRATION_TEST);
+     cargo_build(RUST_HTTP_INTEGRATION_ENV_TEST);
+-
+-    let mut config = vergen::Config::default();
+-    *config.git_mut().sha_kind_mut() = vergen::ShaKind::Short;
+-    *config.git_mut().commit_timestamp_kind_mut() = vergen::TimestampKind::DateOnly;
+-    vergen::vergen(config).expect("failed to extract build information");
+ }
+ 
+ fn build_wasm_test_program(name: &'static str, root: &'static str) {
+@@ -66,6 +70,13 @@ fn build_wasm_test_program(name: &'static str, root: &'static str) {
+         .build();
+ }
+ 
++fn has_rustup() -> bool {
++    match Command::new("rustup").spawn() {
++        Ok(_) => true,
++        Err(_e) => false,
++    }
++}
++
+ fn has_wasm32_wasi_target() -> bool {
+     let output = run(vec!["rustup", "target", "list", "--installed"], None, None);
+     let output = std::str::from_utf8(&output.stdout).unwrap();
+@@ -129,6 +140,6 @@ fn get_os_process() -> String {
+     if cfg!(target_os = "windows") {
+         String::from("powershell.exe")
+     } else {
+-        String::from("/bin/bash")
++        String::from("bash")
+     }
+ }
