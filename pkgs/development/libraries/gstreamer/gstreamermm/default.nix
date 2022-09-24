@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
+    broken = true; # at 2022-09-24, logs at: https://termbin.com/n5hb
+      # ../gstreamer/gstreamermm/register.h: In function 'GType Gst::register_mm_type(const gchar*)':
+      # /nix/store/rwr0ly4girpnrq3sqvp3v2k40wb4hh3s-glib-2.72.3-dev/include/glib-2.0/glib/gatomic.h:113:19:
+      #   error: argument 2 of '__atomic_load' must not be a pointer to a 'volatile' type
+      #   113 |     __atomic_load (gapg_temp_atomic, &gapg_temp_newval, __ATOMIC_SEQ_CST);
   };
 
 }
