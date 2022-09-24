@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "afdko";
-  version = "3.9.1";
+  version = "3.9.0";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AtRNaZzn9BoNIjvKhS7rsYVfHw26JKKUFqO/6TcBIkw=";
+    sha256 = "1fjsaz6bp028fbmry6fzfcih78mdzycqmky1wsz5y0bg4kfk4shh";
   };
 
   format = "pyproject";
