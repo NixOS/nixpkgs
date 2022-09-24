@@ -2,22 +2,28 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "cronsim";
-  version = "2.1";
+  version = "2.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nwlSAbD+y0l9jyVSVShzWeC7nC5RZRD/kAhCi3Nd9xY=";
+    hash = "sha256-LMMZni8Cipo10mxAQbRadWpPvum76JQuzlrLvFvTt5o=";
   };
 
   checkInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "cronsim" ];
+  pythonImportsCheck = [
+    "cronsim"
+  ];
 
   meta = with lib; {
     description = "Cron expression parser and evaluator";
