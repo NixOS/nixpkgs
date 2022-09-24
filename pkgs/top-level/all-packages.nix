@@ -6671,6 +6671,8 @@ with pkgs;
 
   edk2-uefi-shell = callPackage ../tools/misc/edk2-uefi-shell { };
 
+  edlib = callPackage ../development/libraries/science/biology/edlib { };
+
   eff = callPackage ../development/interpreters/eff { };
 
   eflite = callPackage ../applications/audio/eflite {};
