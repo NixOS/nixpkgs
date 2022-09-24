@@ -15476,6 +15476,8 @@ with pkgs;
 
   svg2tikz = python27Packages.svg2tikz;
 
+  svg2pdf = callPackage ../tools/graphics/svg2pdf { };
+
   pew = callPackage ../development/tools/pew {};
 
   poetry = callPackage ../development/tools/poetry2nix/poetry2nix/pkgs/poetry {
