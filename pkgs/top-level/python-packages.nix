@@ -7467,6 +7467,8 @@ in {
 
   pybotvac = callPackage ../development/python-modules/pybotvac { };
 
+  pybravia = callPackage ../development/python-modules/pybravia { };
+
   pybrowserid = callPackage ../development/python-modules/pybrowserid { };
 
   pybtex = callPackage ../development/python-modules/pybtex { };
