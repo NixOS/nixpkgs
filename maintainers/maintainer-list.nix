@@ -2137,6 +2137,12 @@
     githubId = 91694;
     name = "Javier Candeira";
   };
+  candyc1oud = {
+    email = "candyc1oud@outlook.com";
+    github = "candyc1oud";
+    githubId = 113157395;
+    name = "Candy Cloud";
+  };
   canndrew = {
     email = "shum@canndrew.org";
     github = "canndrew";

@@ -8784,6 +8784,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  lux = callPackage ../tools/video/lux { };
+
   lv = callPackage ../tools/text/lv { };
 
   lxc = callPackage ../os-specific/linux/lxc {
