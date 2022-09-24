@@ -429,10 +429,7 @@ let
 
   update-all-grammars = writeShellScript "update-all-grammars.sh" ''
     set -euo pipefail
-    echo "fetching list of grammars" 1>&2
-    treeSitterRepos=$(${updateImpl} fetch-orga-latest-repos '{"orga": "tree-sitter"}')
-    echo "checking the tree-sitter repo list against the grammars we know" 1>&2
-    printf '%s' "$treeSitterRepos" | ${updateImpl} check-tree-sitter-repos '{}'
+   ${updateImpl} fetch-and-check-tree-sitter-repos '{}'
     echo "writing files to ${outputDir}" 1>&2
     mkdir -p "${outputDir}"
     ${forEachParallel

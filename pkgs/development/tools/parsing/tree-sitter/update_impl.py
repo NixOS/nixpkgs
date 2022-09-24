@@ -132,40 +132,35 @@ def fetchRepo() -> None:
             sys.exit("input json must have `orga` and `repo` keys")
 
 
-def fetchOrgaLatestRepos() -> None:
+def fetchOrgaLatestRepos(orga: str) -> set[str]:
     """fetch the latest (100) repos from the given github organization"""
-    match jsonArg:
-        case {"orga": orga}:
-            token: str | None = os.environ.get("GITHUB_TOKEN", None)
-            out = run_cmd(
-                curl_github_args(
-                    token,
-                    url=f"https://api.github.com/orgs/{quote(orga)}/repos?per_page=100"
-                )
-            )
-            match curl_result(out):
-                case "not found":
-                    sys.exit(f"github organization {orga} not found")
-                case list(repos):
-                    res: list[str] = []
-                    for repo in repos:
-                        name = repo.get("name")
-                        if name:
-                            res.append(name)
-                    json.dump(res, sys.stdout)
-                case other:
-                    sys.exit(f"github result was not a list of repos, but {other}")
+    token: str | None = os.environ.get("GITHUB_TOKEN", None)
+    out = run_cmd(
+        curl_github_args(
+            token,
+            url=f"https://api.github.com/orgs/{quote(orga)}/repos?per_page=100"
+        )
+    )
+    match curl_result(out):
+        case "not found":
+            sys.exit(f"github organization {orga} not found")
+        case list(repos):
+            res: list[str] = []
+            for repo in repos:
+                name = repo.get("name")
+                if name:
+                    res.append(name)
+            return set(res)
         case _:
-            sys.exit("input json must have `orga` key")
+            sys.exit("github result was not a list of repos, but {other}")
 
 
-def checkTreeSitterRepos() -> None:
+def checkTreeSitterRepos(latest_github_repos: set[str]) -> None:
     """Make sure we know about all tree sitter repos on the tree sitter orga."""
-    github_tree_sitter_repos: set[str] = set(json.load(sys.stdin))
     known: set[str] = set(args["knownTreeSitterOrgGrammarRepos"])
     ignored: set[str] = set(args["ignoredTreeSitterOrgRepos"])
 
-    unknown = github_tree_sitter_repos - (known | ignored)
+    unknown = latest_github_repos - (known | ignored)
 
     if unknown:
         sys.exit(f"These repositories are neither known nor ignored:\n{unknown}")
@@ -204,13 +199,18 @@ def printAllGrammarsNixFile() -> None:
     )
 
 
+def fetchAndCheckTreeSitterRepos() -> None:
+    log("fetching list of grammars")
+    latest_repos = fetchOrgaLatestRepos(orga="tree-sitter")
+    log("checking the tree-sitter repo list against the grammars we know")
+    checkTreeSitterRepos(latest_repos)
+
+
 match mode:
     case "fetch-repo":
         fetchRepo()
-    case "fetch-orga-latest-repos":
-        fetchOrgaLatestRepos()
-    case "check-tree-sitter-repos":
-        checkTreeSitterRepos()
+    case "fetch-and-check-tree-sitter-repos":
+        fetchAndCheckTreeSitterRepos()
     case "print-all-grammars-nix-file":
         printAllGrammarsNixFile()
     case _:
