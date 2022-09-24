@@ -117,7 +117,7 @@ in {
   ceph-single-node = handleTestOn ["x86_64-linux"] ./ceph-single-node.nix {};
   ceph-single-node-bluestore = handleTestOn ["x86_64-linux"] ./ceph-single-node-bluestore.nix {};
   certmgr = handleTest ./certmgr.nix {};
-  cfssl = handleTestOn ["x86_64-linux"] ./cfssl.nix {};
+  cfssl = handleTestOn ["aarch64-linux" "x86_64-linux"] ./cfssl.nix {};
   charliecloud = handleTest ./charliecloud.nix {};
   chromium = (handleTestOn ["aarch64-linux" "x86_64-linux"] ./chromium.nix {}).stable or {};
   cinnamon = handleTest ./cinnamon.nix {};
