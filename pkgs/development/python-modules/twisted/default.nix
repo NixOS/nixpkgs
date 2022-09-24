@@ -53,7 +53,7 @@ buildPythonPackage rec {
     pname = "Twisted";
     inherit version;
     extension = "tar.gz";
-    sha256 = "sha256-5bYN458tHaFT++GHTYhf4/y9sh/MRG+nWaU+j8NRO+0=";
+    hash = "sha256-5bYN458tHaFT++GHTYhf4/y9sh/MRG+nWaU+j8NRO+0=";
   };
 
   __darwinAllowLocalNetworking = true;
