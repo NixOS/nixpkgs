@@ -12,6 +12,10 @@ dotnetInstallHook() {
         dotnetInstallFlags+=("--no-self-contained")
     fi
 
+    if [ "${useAppHost-}" ]; then
+        dotnetInstallFlags+=("-p:UseAppHost=true")
+    fi
+
     dotnetPublish() {
         local -r project="${1-}"
         env dotnet publish ${project-} \
