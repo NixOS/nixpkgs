@@ -641,6 +641,7 @@ with pkgs;
 
   buildDotnetModule = callPackage ../build-support/dotnet/build-dotnet-module { };
   nuget-to-nix = callPackage ../build-support/dotnet/nuget-to-nix { };
+  canonicalize-nupkg = callPackage ../build-support/dotnet/canonicalize-nupkg { };
   mkNugetSource = callPackage ../build-support/dotnet/make-nuget-source { };
   mkNugetDeps = callPackage ../build-support/dotnet/make-nuget-deps { };
 
