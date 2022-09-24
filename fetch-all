@@ -1,0 +1,15 @@
+#!/bin/sh -e
+$(nix-build -A github-runner.createDepsFile --no-out-link)/bin/create-deps-file pkgs/development/tools/continuous-integration/github-runner/deps.nix
+$(nix-build -A ryujinx.fetch-deps --no-out-link) pkgs/applications/emulators/ryujinx/deps.nix
+$(nix-build -A pinta.fetch-deps --no-out-link) pkgs/applications/graphics/pinta/deps.nix
+$(nix-build -A ArchiSteamFarm.fetch-deps --no-out-link) pkgs/applications/misc/ArchiSteamFarm/deps.nix
+$(nix-build -A python-language-server.fetch-deps --no-out-link) pkgs/development/dotnet-modules/python-language-server/deps.nix
+$(nix-build -A omnisharp-roslyn.fetch-deps --no-out-link) pkgs/development/tools/omnisharp-roslyn/deps.nix
+$(nix-build -A osu-lazer.fetch-deps --no-out-link) pkgs/games/osu-lazer/deps.nix
+$(nix-build -A xivlauncher.fetch-deps --no-out-link) pkgs/games/xivlauncher/deps.nix
+$(nix-build -A jellyfin.fetch-deps --no-out-link) pkgs/servers/jellyfin/nuget-deps.nix
+$(nix-build -A eventstore.fetch-deps --no-out-link) pkgs/servers/nosql/eventstore/deps.nix
+$(nix-build -A baget.fetch-deps --no-out-link) pkgs/servers/web-apps/baget/deps.nix
+$(nix-build -A opentabletdriver.fetch-deps --no-out-link) pkgs/tools/X11/opentabletdriver/deps.nix
+$(nix-build -A discordchatexporter-cli.fetch-deps --no-out-link) pkgs/tools/backup/discordchatexporter-cli/deps.nix
+$(nix-build -A depotdownloader.fetch-deps --no-out-link) pkgs/tools/misc/depotdownloader/deps.nix
