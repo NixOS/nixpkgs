@@ -14476,6 +14476,12 @@
     github = "x3rAx";
     githubId = 2268851;
   };
+  xanderio = {
+    name = "Alexander Sieg";
+    email = "alex@xanderio.de";
+    github = "xanderio";
+    githubId = 6298052;
+  };
   xaverdh = {
     email = "hoe.dom@gmx.de";
     github = "xaverdh";
