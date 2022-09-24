@@ -93,6 +93,8 @@ in {
   bees = handleTest ./bees.nix {};
   bind = handleTest ./bind.nix {};
   bird = handleTest ./bird.nix {};
+  birdsitelive = handleTest ./birdsitelive.nix {};
+  birdsitelive-confined = handleTest ./birdsitelive.nix { confined = true; };
   bitcoind = handleTest ./bitcoind.nix {};
   bittorrent = handleTest ./bittorrent.nix {};
   blockbook-frontend = handleTest ./blockbook-frontend.nix {};

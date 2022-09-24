@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , dotnetCorePackages
 , ncurses
+, nixosTests
 }:
 
 buildDotnetModule rec {
@@ -30,6 +31,11 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.aspnetcore_3_1;
 
   doCheck = true;
+
+  passthru = {
+    tests = with nixosTests; { inherit birdsitelive birdsitelive-confined; };
+    inherit buildDotnetModule;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/NicolasConstant/BirdsiteLive";
