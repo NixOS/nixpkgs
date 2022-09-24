@@ -3,6 +3,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, fetchpatch
 , python
 , appdirs
 , attrs
@@ -53,8 +54,16 @@ buildPythonPackage rec {
     pname = "Twisted";
     inherit version;
     extension = "tar.gz";
-    sha256 = "sha256-5bYN458tHaFT++GHTYhf4/y9sh/MRG+nWaU+j8NRO+0=";
+    hash = "sha256-5bYN458tHaFT++GHTYhf4/y9sh/MRG+nWaU+j8NRO+0=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-test_openFileDescriptors.patch";
+      url = "https://github.com/twisted/twisted/commit/47f47634940141466177261b20bb43c300531e38.patch";
+      hash = "sha256-wacnF166PnZHXJEqTlPZUdDILJIVHOcnC2a34SQumvs=";
+    })
+  ];
 
   __darwinAllowLocalNetworking = true;
 
