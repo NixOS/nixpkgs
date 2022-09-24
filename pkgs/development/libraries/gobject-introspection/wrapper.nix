@@ -24,7 +24,9 @@ in
 
     (
       export bash="${buildPackages.bash}"
+    '' + lib.optionalString (stdenv.targetPlatform.emulatorAvailable buildPackages) ''
       export emulator=${lib.escapeShellArg (stdenv.targetPlatform.emulator buildPackages)}
+    '' + ''
       export buildobjdump="${buildPackages.stdenv.cc.bintools}/bin/objdump"
 
       export targetgir="${lib.getDev (targetPackages.gobject-introspection-unwrapped.override argsForTarget)}"
