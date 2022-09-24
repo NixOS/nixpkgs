@@ -18685,7 +18685,7 @@ with pkgs;
   gns3-gui = gns3Packages.guiStable;
   gns3-server = gns3Packages.serverStable;
 
-  gobject-introspection = if (!stdenv.hostPlatform.canExecute stdenv.targetPlatform)
+  gobject-introspection = if (!stdenv.hostPlatform.canExecute stdenv.targetPlatform) && stdenv.targetPlatform.emulatorAvailable buildPackages
     then callPackage ../development/libraries/gobject-introspection/wrapper.nix { } else gobject-introspection-unwrapped;
 
   gobject-introspection-unwrapped = callPackage ../development/libraries/gobject-introspection {
