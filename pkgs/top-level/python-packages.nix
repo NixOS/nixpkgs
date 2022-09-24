@@ -2935,6 +2935,10 @@ self: super: with self; {
 
   editorconfig = callPackage ../development/python-modules/editorconfig { };
 
+  edlib = callPackage ../development/python-modules/edlib {
+    inherit (pkgs) edlib;
+  };
+
   edward = callPackage ../development/python-modules/edward { };
 
   effect = callPackage ../development/python-modules/effect { };
