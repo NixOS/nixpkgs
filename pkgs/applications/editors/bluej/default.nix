@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "bluej";
-  version = "5.0.3";
+  version = "5.1.0";
 
   src = fetchurl {
     # We use the deb here. First instinct might be to go for the "generic" JAR
     # download, but that is actually a graphical installer that is much harder
     # to unpack than the deb.
     url = "https://www.bluej.org/download/files/BlueJ-linux-${builtins.replaceStrings ["."] [""] version}.deb";
-    sha256 = "sha256-OarqmptxZc7xEEYeoCVqHXkAvfzfSYx5nUp/iWPyoqw=";
+    sha256 = "sha256-tOb15wU9OjUt0D8l/JkaGYj84L7HV4FUnQQB5cRAxG0=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
