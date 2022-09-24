@@ -3249,7 +3249,7 @@ with pkgs;
   keystone = callPackage ../development/libraries/keystone { };
 
   casync = callPackage ../applications/networking/sync/casync {
-    sphinx = python3Packages.sphinx;
+    sphinx = buildPackages.python3Packages.sphinx;
   };
 
   cataract          = callPackage ../applications/misc/cataract { };
@@ -8342,6 +8342,8 @@ with pkgs;
   };
 
   mdbook-open-on-gh = callPackage ../tools/text/mdbook-open-on-gh { };
+
+  mdbook-man = callPackage ../tools/text/mdbook-man { };
 
   mdbook-mermaid = callPackage ../tools/text/mdbook-mermaid {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -19939,8 +19941,6 @@ with pkgs;
 
   librevenge = callPackage ../development/libraries/librevenge {};
 
-  librevisa = callPackage ../development/libraries/librevisa { };
-
   librime = callPackage ../development/libraries/librime {
     boost = boost174;
   };
@@ -22873,7 +22873,7 @@ with pkgs;
 
   sabnzbd = callPackage ../servers/sabnzbd { };
 
-  baserow = python3Packages.callPackage ../servers/baserow { };
+  baserow = callPackage ../servers/baserow { };
 
   bftpd = callPackage ../servers/ftp/bftpd {};
 
@@ -30002,7 +30002,6 @@ with pkgs;
   notion = callPackage ../applications/window-managers/notion { };
 
   nootka = qt5.callPackage ../applications/audio/nootka { };
-  nootka-unstable = qt5.callPackage ../applications/audio/nootka/unstable.nix { };
 
   novnc = callPackage ../applications/networking/novnc { };
 
@@ -33587,6 +33586,18 @@ with pkgs;
 
   koules = callPackage ../games/koules { };
 
+  ldmud = callPackage ../games/ldmud { };
+
+  ldmud-full = callPackage ../games/ldmud {
+    ipv6Support = true;
+    mccpSupport = true;
+    mysqlSupport = true;
+    postgresSupport = true;
+    sqliteSupport = true;
+    tlsSupport = true;
+    pythonSupport = true;
+  };
+
   leela-zero = libsForQt5.callPackage ../games/leela-zero { };
 
   legendary-gl = python38Packages.callPackage ../games/legendary-gl { };
@@ -36500,6 +36511,8 @@ with pkgs;
   prow = callPackage ../applications/networking/cluster/prow { };
 
   tagref = callPackage ../tools/misc/tagref { };
+
+  tcat = callPackage ../tools/misc/tcat { };
 
   tellico = libsForQt5.callPackage ../applications/misc/tellico { };
 

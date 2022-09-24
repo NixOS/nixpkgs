@@ -8,7 +8,7 @@
   kdeclarative, kdelibs4support, kpeople, kconfig, krunner, kinit, kwayland, kwin,
   plasma-framework, telepathy, libphonenumber, protobuf, libqofono, modemmanager-qt,
   networkmanager-qt, plasma-workspace,
-  maliit-framework, maliit-keyboard,
+  maliit-framework, maliit-keyboard, qtfeedback,
 
   qtwayland, qttools
 }:
@@ -23,7 +23,7 @@ mkDerivation {
     appstream libdbusmenu pam wayland
     kdeclarative kdelibs4support kpeople kconfig krunner kinit kwayland kwin
     plasma-framework telepathy libphonenumber protobuf libqofono modemmanager-qt
-    networkmanager-qt maliit-framework maliit-keyboard plasma-workspace
+    networkmanager-qt maliit-framework maliit-keyboard plasma-workspace qtfeedback
   ];
 
   postPatch = ''

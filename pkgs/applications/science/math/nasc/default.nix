@@ -83,5 +83,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     mainProgram = "com.github.parnold_x.nasc";
+    broken = true; # at 2022-09-23
   };
 }

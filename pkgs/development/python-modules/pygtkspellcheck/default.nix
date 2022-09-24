@@ -9,8 +9,8 @@ buildPythonPackage rec {
     sha256 = "sha256-kfhoOLnKbA9jH4DUtQw0nATjK21pMNxyAOzYDLQkR4U=";
   };
 
-  nativeBuildInputs = [ gobject-introspection gtk3 ];
-  propagatedBuildInputs = [ pyenchant pygobject3 ];
+  nativeBuildInputs = [ gobject-introspection ];
+  propagatedBuildInputs = [ pyenchant pygobject3 gtk3 ];
 
   doCheck = false; # there are no tests
   pythonImportsCheck = [ "gtkspellcheck" ];
