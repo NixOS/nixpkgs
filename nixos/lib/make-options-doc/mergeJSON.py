@@ -259,20 +259,24 @@ def is_docbook(o, key):
 # check that every option has a description
 hasWarnings = False
 hasErrors = False
+hasDocBookErrors = False
 for (k, v) in options.items():
     if errorOnDocbook:
         if isinstance(v.value.get('description', {}), str):
             hasErrors = True
+            hasDocBookErrors = True
             print(
                 f"\x1b[1;31merror: option {v.name} description uses DocBook\x1b[0m",
                 file=sys.stderr)
         elif is_docbook(v.value, 'defaultText'):
             hasErrors = True
+            hasDocBookErrors = True
             print(
                 f"\x1b[1;31merror: option {v.name} default uses DocBook\x1b[0m",
                 file=sys.stderr)
         elif is_docbook(v.value, 'example'):
             hasErrors = True
+            hasDocBookErrors = True
             print(
                 f"\x1b[1;31merror: option {v.name} example uses DocBook\x1b[0m",
                 file=sys.stderr)
@@ -286,6 +290,20 @@ for (k, v) in options.items():
         print(
             f"\x1b[1;31m{severity}: option {v.name} has no type. Please specify a valid type, see " +
             "https://nixos.org/manual/nixos/stable/index.html#sec-option-types\x1b[0m", file=sys.stderr)
+
+if hasDocBookErrors:
+    print("Explanation: The documentation contains descriptions, examples, or defaults written in DocBook. " +
+        "NixOS is in the process of migrating from DocBook to Markdown, and " +
+        "DocBook is disallowed for in-tree modules. To change your contribution to "+
+        "use Markdown, apply mdDoc and literalMD. For example:\n" +
+        "\n" +
+        "  example.foo = mkOption {\n" +
+        "    description = lib.mdDoc ''your description'';\n" +
+        "    defaultText = lib.literalMD ''your description of default'';\n" +
+        "  }\n" +
+        "\n" +
+        "  example.enable = mkEnableOption (lib.mdDoc ''your thing'');",
+        file = sys.stderr)
 
 if hasErrors:
     sys.exit(1)
