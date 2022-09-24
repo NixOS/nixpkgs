@@ -27,6 +27,7 @@
 , util-linux
 , kbd
 , kmod
+, libxcrypt
 
   # Optional dependencies
 , pam
@@ -360,6 +361,7 @@ stdenv.mkDerivation {
       acl
       audit
       kmod
+      libxcrypt
       libcap
       libidn2
       libuuid
