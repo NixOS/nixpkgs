@@ -30,21 +30,65 @@ let
   # file provided by services.xserver.displayManager.sessionData.wrapper
   xsessionWrapper = pkgs.writeScript "xsession-wrapper"
     ''
-      #! ${pkgs.bash}/bin/bash
+      #!/bin/sh
+      # Parts of this file are extracted from:
+      #   - kde-workspace (kdm/kfrontend/genkdmconf.c)
+      #     Copyright (C) 2001-2005 Oswald Buddenhagen <ossi@kde.org>
+      #   - sddm (data/scripts/Xsession)
+      #     Copyright (C) 2016 Pier Luigi Fiorini <pierluigi.fiorini@gmail.com>
 
-      # Shared environment setup for graphical sessions.
+      # Here we source the different dot files of each shell
+      # We try to have the same environment in the TTY and graphical session
+      # Note that the respective logout scripts are not sourced.
+      case $SHELL in
+        */bash)
+          [ -z "$BASH" ] && exec $SHELL $0 "$@"
+          set +o posix
+          [ -f /etc/profile ] && . /etc/profile
+          if [ -f $HOME/.bash_profile ]; then
+            . $HOME/.bash_profile
+          elif [ -f $HOME/.bash_login ]; then
+            . $HOME/.bash_login
+          elif [ -f $HOME/.profile ]; then
+            . $HOME/.profile
+          fi
+          ;;
+      */zsh)
+          [ -z "$ZSH_NAME" ] && exec $SHELL $0 "$@"
+          [ -d /etc/zsh ] && zdir=/etc/zsh || zdir=/etc
+          zhome=${ZDOTDIR:-$HOME}
+          # zshenv is always sourced automatically.
+          [ -f $zdir/zprofile ] && . $zdir/zprofile
+          [ -f $zhome/.zprofile ] && . $zhome/.zprofile
+          [ -f $zdir/zlogin ] && . $zdir/zlogin
+          [ -f $zhome/.zlogin ] && . $zhome/.zlogin
+          emulate -R sh
+          ;;
+        */csh|*/tcsh)
+          # [t]cshrc is always sourced automatically.
+          # Note that sourcing csh.login after .cshrc is non-standard.
+          xsess_tmp=$(mktemp /tmp/xsess-env-XXXXXX)
+          $SHELL -c "if (-f /etc/csh.login) source /etc/csh.login; if (-f ~/.login) source ~/.login; /bin/sh -c 'export -p' >! $xsess_tmp"
+          . $xsess_tmp
+          rm -f $xsess_tmp
+          ;;
+        */fish)
+          xsess_tmp=$(mktemp /tmp/xsess-env-XXXXXX)
+          $SHELL --login -c "/bin/sh -c 'export -p' > $xsess_tmp"
+          . $xsess_tmp
+          rm -f $xsess_tmp
+          ;;
+        *) # Plain sh, ksh, and anything we do not know.
+          [ -f /etc/profile ] && . /etc/profile
+          [ -f $HOME/.profile ] && . $HOME/.profile
+          ;;
+      esac
 
-      . /etc/profile
-      if test -f ~/.profile; then
-          source ~/.profile
-      fi
+      # X also allows initialising an environment for graphical sessions only
+      [ -f /etc/xprofile ] && . /etc/xprofile
+      [ -f $HOME/.xprofile ] && . $HOME/.xprofile
 
       cd "$HOME"
-
-      # Allow the user to execute commands at the beginning of the X session.
-      if test -f ~/.xprofile; then
-          source ~/.xprofile
-      fi
 
       ${optionalString cfg.displayManager.job.logToJournal ''
         if [ -z "$_DID_SYSTEMD_CAT" ]; then
@@ -59,9 +103,9 @@ let
 
       # Load X defaults. This should probably be safe on wayland too.
       ${xorg.xrdb}/bin/xrdb -merge ${xresourcesXft}
-      if test -e ~/.Xresources; then
+      if [ -e ~/.Xresources ]; then
           ${xorg.xrdb}/bin/xrdb -merge ~/.Xresources
-      elif test -e ~/.Xdefaults; then
+      elif [ -e ~/.Xdefaults ]; then
           ${xorg.xrdb}/bin/xrdb -merge ~/.Xdefaults
       fi
 
@@ -94,7 +138,7 @@ let
       /run/current-system/systemd/bin/systemctl --user start graphical-session.target
 
       # Allow the user to setup a custom session type.
-      if test -x ~/.xsession; then
+      if [ -x ~/.xsession]; then
           eval exec ~/.xsession "$@"
       fi
 
