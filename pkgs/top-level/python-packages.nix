@@ -6245,6 +6245,8 @@ in {
 
   ntc-templates = callPackage ../development/python-modules/ntc-templates { };
 
+  ntfy = callPackage ../tools/misc/ntfy { };
+
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
 
   ntplib = callPackage ../development/python-modules/ntplib { };

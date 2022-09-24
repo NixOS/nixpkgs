@@ -9447,7 +9447,7 @@ with pkgs;
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
 
-  ntfy = callPackage ../tools/misc/ntfy {};
+  ntfy = python39.pkgs.ntfy;
 
   ntfy-sh = callPackage ../tools/misc/ntfy-sh { };
 
