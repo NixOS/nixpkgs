@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   version = "VERSION";
 
   src = fetchurl {
-    url = URL;
+    url = "URL";
     sha256 = "SHA";
   };
   installPhase = ''
