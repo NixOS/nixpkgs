@@ -8,6 +8,7 @@
 , gettext
 , python
 , ncurses
+, libxcrypt
 , libgcrypt
 , cryptoSupport ? false
 , pythonSupport ? true
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libxml2.dev
+    libxml2.dev libxcrypt
   ] ++ lib.optional stdenv.isDarwin [
     gettext
   ] ++ lib.optionals pythonSupport [
