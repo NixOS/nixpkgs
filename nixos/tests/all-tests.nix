@@ -631,8 +631,7 @@ in {
   tmate-ssh-server = handleTest ./tmate-ssh-server.nix { };
   tomcat = handleTest ./tomcat.nix {};
   tor = handleTest ./tor.nix {};
-  # traefik test relies on docker-containers
-  traefik = handleTestOn ["x86_64-linux"] ./traefik.nix {};
+  traefik = handleTestOn ["aarch64-linux" "x86_64-linux"] ./traefik.nix {};
   trafficserver = handleTest ./trafficserver.nix {};
   transmission = handleTest ./transmission.nix {};
   # tracee requires bpf
