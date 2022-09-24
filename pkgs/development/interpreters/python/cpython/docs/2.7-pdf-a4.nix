@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   version = "2.7.18";
 
   src = fetchurl {
-    url = http://www.python.org/ftp/python/doc/2.7.18/python-2.7.18-docs-pdf-a4.tar.bz2;
+    url = "http://www.python.org/ftp/python/doc/2.7.18/python-2.7.18-docs-pdf-a4.tar.bz2";
     sha256 = "0rxb2fpxwivjpk5wi2pl1fqibr4khf9s0yq6a49k9b4awi9nkb6v";
   };
   installPhase = ''
