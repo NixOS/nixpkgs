@@ -1,15 +1,18 @@
 { lib
-, python39
+, stdenv
+, python
 , fetchFromGitHub
 , fetchpatch
+, withXmpp ? !stdenv.isDarwin
+, withMatrix ? true
+, withSlack ? true
+, withEmoji ? true
+, withPid ? true
+, withDbus ? stdenv.isLinux
 }:
 
 let
-  python = python39.override {
-    packageOverrides = self: super: {
-      ntfy-webpush = self.callPackage ./webpush.nix { };
-    };
-  };
+  ntfy-webpush = python.pkgs.callPackage ./webpush.nix { };
 in python.pkgs.buildPythonApplication rec {
   pname = "ntfy";
   version = "2.7.0";
@@ -27,16 +30,22 @@ in python.pkgs.buildPythonApplication rec {
     mock
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python.pkgs; ([
     requests ruamel-yaml appdirs
-    sleekxmpp dnspython
-    emoji
-    psutil
-    matrix-client
-    dbus-python
     ntfy-webpush
+  ] ++ (lib.optionals withXmpp [
+    sleekxmpp dnspython
+  ]) ++ (lib.optionals withMatrix [
+    matrix-client
+  ]) ++ (lib.optionals withSlack [
     slack-sdk
-  ];
+  ]) ++ (lib.optionals withEmoji [
+    emoji
+  ]) ++ (lib.optionals withPid [
+    psutil
+  ]) ++ (lib.optionals withDbus [
+    dbus-python
+  ]));
 
   patches = [
     # Fix Slack integration no longer working.
