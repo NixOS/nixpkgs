@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   buildPhase = lib.optionalString libOnly ''
     runHook preBuild
 
-    MAKE="make -j $NIX_BUILD_CORES"
+    MAKE="make -j $NIX_BUILD_CORES -l $NIX_LOAD_LIMIT"
     for folder in $libFolders; do
       $MAKE -C $folder
     done
