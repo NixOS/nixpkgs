@@ -70,20 +70,9 @@ nix-build -A nixosTests.hostname
 Outside the `nixpkgs` repository, you can instantiate the test by first importing the NixOS library,
 
 ```nix
-# regular nix
 let nixos-lib = import (nixpkgs + "/nixos/lib") { };
 in
-```
 
-```nix
-# flake
-let nixos-lib = nixpkgs.lib.nixos;
-in
-```
-
-... and then invoking `runTest`, for example:
-
-```nix
 nixos-lib.runTest {
   imports = [ ./test.nix ];
   hostPkgs = pkgs;  # the Nixpkgs package set used outside the VMs
