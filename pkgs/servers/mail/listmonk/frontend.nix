@@ -22,7 +22,7 @@ yarn2nix-moretea.mkYarnPackage rec {
   NODE_OPTIONS = "--openssl-legacy-provider";
 
   installPhase = ''
-    run preInstall
+    runHook preInstall
 
     cd deps/listmonk-frontend/frontend
     npm run build
