@@ -5,6 +5,7 @@
 , ninja
 , pkg-config
 , libxml2
+, json-glib
 , glib
 , gettext
 , libsoup_3
@@ -19,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgweather";
-  version = "4.1.0";
+  version = "4.2.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "ALuJmOO5qQXzqNMpX8wVZS1rCc2l76Ik5nRN7Xq9plo=";
+    sha256 = "r4qBLaDYl2oADh1iVywlYIaoFzI/vzWwZtv92NLKYgM=";
   };
 
   patches = [
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
     glib
     libsoup_3
     libxml2
+    json-glib
     geocode-glib_2
   ];
 
@@ -61,7 +63,6 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs build-aux/meson/meson_post_install.py
     patchShebangs build-aux/meson/gen_locations_variant.py
   '';
 
@@ -74,6 +75,8 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
+      # Version 40.alpha preceded version 4.0.
+      freeze = "40.alpha";
     };
   };
 
