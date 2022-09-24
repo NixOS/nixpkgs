@@ -11647,6 +11647,8 @@ in {
 
   wasabi = callPackage ../development/python-modules/wasabi { };
 
+  wasserstein = callPackage ../development/python-modules/wasserstein { };
+
   wasm = callPackage ../development/python-modules/wasm { };
 
   wasmerPackages = pkgs.recurseIntoAttrs (callPackage ../development/python-modules/wasmer { });
