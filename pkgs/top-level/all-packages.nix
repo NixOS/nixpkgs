@@ -2580,6 +2580,8 @@ with pkgs;
 
   glasgow = with python3Packages; toPythonApplication glasgow;
 
+  glasstty-ttf = callPackage ../data/fonts/glasstty-ttf { };
+
   gmid = callPackage ../servers/gemini/gmid { };
 
   gmni = callPackage ../applications/networking/browsers/gmni { };
