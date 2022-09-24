@@ -147,7 +147,7 @@ in {
   corerad = handleTest ./corerad.nix {};
   coturn = handleTest ./coturn.nix {};
   couchdb = handleTest ./couchdb.nix {};
-  cri-o = handleTestOn ["x86_64-linux"] ./cri-o.nix {};
+  cri-o = handleTestOn ["aarch64-linux" "x86_64-linux"] ./cri-o.nix {};
   custom-ca = handleTest ./custom-ca.nix {};
   croc = handleTest ./croc.nix {};
   deluge = handleTest ./deluge.nix {};
