@@ -16593,6 +16593,8 @@ with pkgs;
 
   git-aggregator = callPackage ../development/tools/git-aggregator { };
 
+  git-credential-manager = callPackage ../development/tools/misc/git-credential-manager { };
+
   github-release = callPackage ../development/tools/github/github-release { };
 
   global = callPackage ../development/tools/misc/global { };
