@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , python3
 }:
@@ -56,5 +57,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Fraunhofer-AISEC/gallia";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    broken = stdenv.isDarwin;
   };
 }
