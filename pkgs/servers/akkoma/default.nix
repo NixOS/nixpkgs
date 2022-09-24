@@ -3,6 +3,7 @@
 , fetchFromGitea, fetchFromGitHub, fetchFromGitLab
 , cmake, file, libxcrypt
 , writeText
+, nixosTests
 , ...
 }:
 
@@ -198,6 +199,11 @@ beamPackages.mixRelease rec {
         '';
       };
     });
+  };
+
+  passthru = {
+    tests = with nixosTests; { inherit akkoma akkoma-confined; };
+    inherit mixNixDeps;
   };
 
   meta = with lib; {
