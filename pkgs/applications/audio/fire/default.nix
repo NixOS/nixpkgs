@@ -43,19 +43,15 @@ stdenv.mkDerivation rec {
     ./0001-Remove-FetchContent-usage.patch
   ];
 
-  postPatch = let
-    vst3Dir = "${placeholder "out"}/${if stdenv.hostPlatform.isDarwin then "Library/Audio/Plug-Ins/VST3" else "lib/vst3"}";
-    auDir = "${placeholder "out"}/Library/Audio/Plug-Ins/Components";
-  in ''
+  postPatch = ''
     # 1. Remove hardcoded LTO flags: needs extra setup on Linux,
     #    possibly broken on Darwin
     #    https://github.com/NixOS/nixpkgs/issues/19098
-    # 2. Set copy locations for built plugins, defaults are into user home.
-    #    Setting this stuff here is easier than disabling & manually moving
-    #    stuff around in the proper install phase.
+    # 2. Disable automatic copying of built plugins during buildPhase, it defaults
+    #    into user home and we want to have building & installing separated.
     sed -i \
       -e '/juce::juce_recommended_lto_flags/d' \
-      -e '/COPY_PLUGIN_AFTER_BUILD/a VST3_COPY_DIR "${vst3Dir}"\nAU_COPY_DIR "${auDir}"' \
+      -e 's/COPY_PLUGIN_AFTER_BUILD TRUE/COPY_PLUGIN_AFTER_BUILD FALSE/g' \
       CMakeLists.txt
   '';
 
@@ -85,21 +81,33 @@ stdenv.mkDerivation rec {
     CoreAudioKit
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
-    # Fails to find fp.h on its own
-    "-isystem ${CoreServices}/Library/Frameworks/CoreServices.framework/Versions/Current/Frameworks/CarbonCore.framework/Versions/Current/Headers/"
-  ]);
+  installPhase = let
+    vst3Dir = "${placeholder "out"}/${if stdenv.hostPlatform.isDarwin then "Library/Audio/Plug-Ins/VST3" else "lib/vst3"}";
+    auDir = "${placeholder "out"}/Library/Audio/Plug-Ins/Components";
+  in ''
+    runHook preInstall
+
+    mkdir -p ${vst3Dir}
+    # Exact path of the build artefact depends on used CMAKE_BUILD_TYPE
+    cp -R Fire_artefacts/*/VST3/* ${vst3Dir}/
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p ${auDir}
+    cp -R Fire_artefacts/*/AU/* ${auDir}/
+  '' + ''
+
+    runHook postInstall
+  '';
+
+  # Fails to find fp.h on its own
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-isystem ${CoreServices}/Library/Frameworks/CoreServices.framework/Versions/Current/Frameworks/CarbonCore.framework/Versions/Current/Headers/";
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-
-  # JUCE handles installation during buildPhase
-  dontInstall = true;
 
   meta = with lib; {
     description = "Multi-band distortion plugin by Wings";
     homepage = "https://github.com/jerryuhoo/Fire";
     license = licenses.agpl3Only; # Not clarified if Only or Plus
-    platforms = platforms.all;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ OPNA2608 ];
   };
 }
