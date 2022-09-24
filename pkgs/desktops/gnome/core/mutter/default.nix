@@ -65,6 +65,15 @@ let self = stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/285a5a4d54ca83b136b787ce5ebf1d774f9499d5.patch";
       sha256 = "/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
     })
+
+    # color-device: Don't create profiles from obvious garbage data
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2627
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2627.patch";
+      sha256 = "SafC29+gjcj6JswHY6yuwcOS16LPYvFwYW1TEpNNSHc=";
+    })
+
+
   ];
 
   mesonFlags = [
