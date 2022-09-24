@@ -29,14 +29,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fire";
-  version = "0.9.9";
+  version = "1.0.0.3";
 
   src = fetchFromGitHub {
     owner = "jerryuhoo";
     repo = "Fire";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-HOXkoX5CjWFdWGP8ngzPgAJ3KKSZ10aKF3CIh4rGRpw=";
+    sha256 = "sha256-X3pzTrNd0G6BouCDkr3dukQTFDzZ7qblIYxFQActKGE=";
   };
 
   patches = [
