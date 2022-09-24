@@ -2948,6 +2948,8 @@ in {
 
   enamlx = callPackage ../development/python-modules/enamlx { };
 
+  energyflow = callPackage ../development/python-modules/energyflow { };
+
   enhancements = callPackage ../development/python-modules/enhancements { };
 
   enlighten = callPackage ../development/python-modules/enlighten { };
