@@ -18,6 +18,7 @@
 , writeShellScript
 , closureInfo
 , runCommand
+, libxcrypt
 }:
 
 let
@@ -93,7 +94,8 @@ let
       perl
     ] ++ lib.optional withPython python;
 
-    buildInputs = lib.optional withPerl perl
+    buildInputs = [ libxcrypt ]
+      ++ lib.optional withPerl perl
       ++ lib.optional withPython python;
 
     # required to build apparmor-parser
