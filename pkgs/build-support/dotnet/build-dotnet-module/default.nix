@@ -83,6 +83,11 @@
 } @ args:
 
 let
+  platforms =
+    if args ? meta.platforms
+    then lib.intersectLists args.meta.platforms dotnet-sdk.meta.platforms
+    else dotnet-sdk.meta.platforms;
+
   inherit (callPackage ./hooks {
     inherit dotnet-sdk dotnet-test-sdk disabledTests nuget-source dotnet-runtime runtimeDeps buildType;
   }) dotnetConfigureHook dotnetBuildHook dotnetCheckHook dotnetInstallHook dotnetFixupHook;
@@ -165,7 +170,7 @@ stdenvNoCC.mkDerivation (args // {
           in
           builtins.filter (flag: !(hasRid flag)) (dotnetFlags ++ dotnetRestoreFlags);
 
-        runtimeIds = map (system: dotnet-sdk.systemToDotnetRid system) (args.meta.platforms or dotnet-sdk.meta.platforms);
+        runtimeIds = map (system: dotnet-sdk.systemToDotnetRid system) platforms;
       in
       writeShellScript "fetch-${pname}-deps" ''
         set -euo pipefail
@@ -254,7 +259,5 @@ stdenvNoCC.mkDerivation (args // {
       '';
   } // args.passthru or { };
 
-  meta = {
-    platforms = dotnet-sdk.meta.platforms;
-  } // args.meta or { };
+  meta = (args.meta or { }) // { inherit platforms; };
 })
