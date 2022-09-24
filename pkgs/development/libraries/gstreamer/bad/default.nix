@@ -19,6 +19,7 @@
 , libkate
 , lrdf
 , ladspaH
+, lcms2
 , libnice
 , webrtc-audio-processing
 , webrtc-audio-processing_1
@@ -126,6 +127,7 @@ stdenv.mkDerivation rec {
     gst-plugins-base
     orc
     json-glib
+    lcms2
     ldacbt
     libass
     libkate
