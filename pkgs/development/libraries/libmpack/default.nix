@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ libtool ];
 
-  makeFlags = [ "LIBTOOL=libtool" "PREFIX=$(out)" ];
+  makeFlags = [ "LIBTOOL=libtool" "PREFIX=$(out)" "config=release" ];
 
   meta = with lib; {
     description = "Simple implementation of msgpack in C";
