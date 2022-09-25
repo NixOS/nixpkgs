@@ -5,6 +5,7 @@
 , ncurses
 , coreutils
 , xclip
+, fetchFromGitHub
 }:
 
 stdenv.mkDerivation rec {
