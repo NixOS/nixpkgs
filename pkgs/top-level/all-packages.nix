@@ -24303,6 +24303,10 @@ with pkgs;
   # `.override` clobbered. C.F. `llvmPackages` which does the same.
   darwin = callPackage ./darwin-packages.nix { };
 
+  defaultbrowser = callPackage ../os-specific/darwin/defaultbrowser {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
+
   disk_indicator = callPackage ../os-specific/linux/disk-indicator { };
 
   displaylink = callPackage ../os-specific/linux/displaylink {
