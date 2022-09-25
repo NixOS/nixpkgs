@@ -51,5 +51,5 @@ runCommand "gnome-gsettings-overrides" { preferLocalBuild = true; } ''
   ${gsettingsOverrides}
   EOF
 
-  ${glib.dev}/bin/glib-compile-schemas "$schema_dir"
+  ${glib.dev}/bin/glib-compile-schemas --strict "$schema_dir"
 ''
