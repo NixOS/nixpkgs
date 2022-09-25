@@ -2192,7 +2192,10 @@ with pkgs;
 
   brewtarget = libsForQt514.callPackage ../applications/misc/brewtarget { } ;
 
-  stdenvBootstrapTools = if stdenv.hostPlatform.isDarwin then
+  # Derivation's result is not used by nixpkgs. Useful for validation for
+  # regressions of bootstrapTools on hydra and on ofborg. Example:
+  #     pkgsCross.aarch64-multiplatform.freshBootstrapTools.build
+  freshBootstrapTools = if stdenv.hostPlatform.isDarwin then
     callPackage ../stdenv/darwin/make-bootstrap-tools.nix {
       localSystem = stdenv.buildPlatform;
       crossSystem =
@@ -2200,7 +2203,7 @@ with pkgs;
     }
   else if stdenv.hostPlatform.isLinux then
     callPackage ../stdenv/linux/make-bootstrap-tools.nix {}
-  else throw "stdenvBootstrapTools: unknown hostPlatform ${stdenv.hostPlatform.config}";
+  else throw "freshBootstrapTools: unknown hostPlatform ${stdenv.hostPlatform.config}";
 
   boxes = callPackage ../tools/text/boxes { };
 
