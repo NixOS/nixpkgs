@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "xsdata";
-  version = "22.8";
+  version = "22.9";
 
   disabled = pythonOlder "3.7";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MWHMRPY35Fs4n9O0z3QRW4IylfSltH3XUNdrCBK2iW4=";
+    hash = "sha256-xi1QArTeWbrKTE6p7f3Aj7d1lxPsIROaruv/IMw+fPw=";
   };
 
   postPatch = ''
