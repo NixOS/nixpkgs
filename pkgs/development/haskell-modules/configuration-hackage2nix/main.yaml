@@ -159,6 +159,7 @@ extra-packages:
   - fourmolu == 0.3.0.0                 # 2022-09-21: needed for hls on ghc 8.8
   - ormolu == 0.1.4.1                   # 2022-09-21: needed for hls on ghc 8.8
   - hlint == 3.2.8                      # 2022-09-21: needed for hls on ghc 8.8
+  - hlint == 3.4.1                      # 2022-09-21: needed for hls with ghc-lib-parser 9.2
 
 package-maintainers:
   abbradar:

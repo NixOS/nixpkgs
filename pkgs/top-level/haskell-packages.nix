@@ -192,18 +192,20 @@ in {
     ghc94 = ghc942;
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
       bootPkgs =
-        if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
-          packages.ghc8107
+        if stdenv.isAarch64 || stdenv.isAarch32 then
+          packages.ghc922BinaryMinimal
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc924
         else
-          packages.ghc8107Binary;
+          packages.ghc922Binary;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
       inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+      # 2022-08-04: Support range >= 10 && < 14
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
-      libffi = pkgs.libffi;
     };
 
     ghcjs = compiler.ghcjs810;
