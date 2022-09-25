@@ -10655,6 +10655,8 @@ with pkgs;
 
   rnp = callPackage ../tools/security/rnp { };
 
+  rnr = callPackage ../tools/text/rnr { };
+
   rnv = callPackage ../tools/text/xml/rnv { };
 
   rosie = callPackage ../tools/text/rosie { };
