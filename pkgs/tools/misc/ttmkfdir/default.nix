@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, freetype, fontconfig, libunwind, libtool, flex, bison }:
+{ lib, stdenv, fetchurl, freetype, libtool, flex, bison, pkg-config }:
 
 stdenv.mkDerivation {
   pname = "ttf-mkfontdir";
@@ -20,11 +20,19 @@ stdenv.mkDerivation {
       ./cstring.patch # also fixes some other compilation issues (freetype includes)
     ];
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "libtool " "libtool --tag=CXX " \
+      --replace "CXX=" "#CXX=" \
+      --replace "freetype-config" "${stdenv.cc.targetPrefix}pkg-config freetype2"
+  '';
+
   preInstall = ''
     mkdir -p $out; makeFlags="DESTDIR=$out BINDIR=/bin"
   '';
 
-  buildInputs = [freetype fontconfig libunwind libtool flex bison];
+  nativeBuildInputs = [ libtool flex bison pkg-config ];
+  buildInputs = [ freetype ];
 
   meta = {
     description = "Create fonts.dir for TTF font directory";
