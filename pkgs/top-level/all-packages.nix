@@ -3736,6 +3736,8 @@ with pkgs;
 
   duf = callPackage ../tools/misc/duf { };
 
+  dum = callPackage ../development/tools/dum { };
+
   inherit (ocaml-ng.ocamlPackages_4_10) dune_1;
   inherit (ocamlPackages) dune_2 dune_3 dune-release;
 
