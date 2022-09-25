@@ -54,6 +54,8 @@ stdenv.mkDerivation rec {
     "-DSQLITE_SECURE_DELETE"
     "-DSQLITE_MAX_VARIABLE_NUMBER=250000"
     "-DSQLITE_MAX_EXPR_DEPTH=10000"
+    "-DSQLITE_OMIT_DEPRECATED"
+    "-DSQLITE_OMIT_SHARED_CACHE"
   ] ++ lib.optionals enableDeserialize [
     # Can be removed in v3.36+, as this will become the default
     "-DSQLITE_ENABLE_DESERIALIZE"
