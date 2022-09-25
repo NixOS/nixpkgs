@@ -7,16 +7,16 @@
   makeDesktopItem,
   gtk3,
   openssl,
-  xdg-user-dirs
+  xdg-user-dirs,
 }:
 
 stdenv.mkDerivation rec {
   pname = "appflowy";
-  version = "0.0.4";
+  version = "0.0.5.3";
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${version}/AppFlowy-linux-x86.tar.gz";
-    sha256 = "sha256-ke3cuRi+ZlBSWawg66cGrV928dOBp0EniNakitmgUso=";
+    sha256 = "sha256-0dhJkgu6MojhrPjeq8ABgV5kUXMKi1CXJs8o8g6QSMw=";
   };
 
   nativeBuildInputs = [
