@@ -8107,6 +8107,12 @@
     githubId = 42545625;
     name = "Maas Lalani";
   };
+  maddiethecafebabe = {
+    email = "maddie@cafebabe.date";
+    github = "maddiethecafebabe";
+    githubId = 75337286;
+    name = "Madeline S.";
+  };
   madjar = {
     email = "georges.dubus@compiletoi.net";
     github = "madjar";
