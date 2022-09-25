@@ -14312,6 +14312,12 @@
       fingerprint = "2145 955E 3F5E 0C95 3458  41B5 11F7 BAEA 8567 43FF";
     }];
   };
+  wentam = {
+    name = "Matt Egeler";
+    email = "wentam42@gmail.com";
+    github = "wentam";
+    githubId = 901583;
+  };
   wentasah = {
     name = "Michal Sojka";
     email = "wsh@2x.cz";
