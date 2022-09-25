@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "aesara";
-  version = "2.7.9";
+  version = "2.8.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "aesara-devs";
     repo = "aesara";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-s7qqFSY4teL2uiGg6CkpPtr7lNNAj61nCn83Zr7/JaQ=";
+    hash = "sha256-ue3WRSe5Y6svTdDE37juewOZF+ImPRpSPFVKubSfZYI=";
   };
 
   nativeBuildInputs = [
@@ -77,11 +77,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
     homepage = "https://github.com/aesara-devs/aesara";
     changelog = "https://github.com/aesara-devs/aesara/releases";
     license = licenses.bsd3;
     maintainers = with maintainers; [ Etjean ];
+    broken = (stdenv.isLinux && stdenv.isAarch64);
   };
 }
