@@ -612,6 +612,7 @@ mapAliases ({
   libseat = throw "'libseat' has been renamed to/replaced by 'seatd'"; # Converted to throw 2022-09-24
   libspotify = throw "libspotify has been removed because Spotify stopped supporting it"; # added 2022-05-29
   libsysfs = throw "'libsysfs' has been renamed to/replaced by 'sysfsutils'"; # Converted to throw 2022-02-22
+  libtensorflow-bin = libtensorflow; # Added 2022-09-25
   libtidy = throw "'libtidy' has been renamed to/replaced by 'html-tidy'"; # Converted to throw 2022-02-22
   libtorrentRasterbar = throw "'libtorrentRasterbar' has been renamed to/replaced by 'libtorrent-rasterbar'"; # Converted to throw 2022-09-24
   libtorrentRasterbar-1_1_x = throw "'libtorrentRasterbar-1_1_x' has been renamed to/replaced by 'libtorrent-rasterbar-1_1_x'"; # Converted to throw 2022-09-24
