@@ -11514,6 +11514,8 @@ in {
 
   vdirsyncer = callPackage ../development/python-modules/vdirsyncer { };
 
+  vector = callPackage ../development/python-modules/vector { };
+
   vehicle = callPackage ../development/python-modules/vehicle { };
 
   vega = callPackage ../development/python-modules/vega { };
