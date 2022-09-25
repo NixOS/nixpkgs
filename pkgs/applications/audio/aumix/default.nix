@@ -28,8 +28,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gettext ncurses ]
-    ++ lib.optionals gtkGUI [ pkg-config gtk2 ];
+    ++ lib.optionals gtkGUI [ gtk2 ];
 
   meta = with lib; {
     description = "Audio mixer for X and the console";
