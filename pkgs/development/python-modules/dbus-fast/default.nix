@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "dbus-fast";
-  version = "1.4.0";
+  version = "1.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vbsigiUSGeetY+1MEeQ/cO3Oj8Ah0Yg9BUPo2Gc06KU=";
+    hash = "sha256-j0bD8JtcMRX+G0QaxbSUqmGUw/ubrmz1ngGyzaR9UHA=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=dbus_fast --cov-report=term-missing:skip-covered" ""
+      --replace " --cov=dbus_fast --cov-report=term-missing:skip-covered" "" \
+      --replace "[tool.poetry.group.dev.dependencies]" ""
   '';
 
   pythonImportsCheck = [
