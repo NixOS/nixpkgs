@@ -20790,6 +20790,8 @@ with pkgs;
 
   qolibri = libsForQt5.callPackage ../applications/misc/qolibri { };
 
+  quarto = callPackage ../development/libraries/quarto { };
+
   qt4 = qt48;
 
   qt48 = callPackage ../development/libraries/qt-4.x/4.8 {
