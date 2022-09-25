@@ -29,6 +29,15 @@ with prev;
     '';
   });
 
+  fennel = prev.fennel.overrideAttrs(oa: {
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
+      pkgs.installShellFiles
+    ];
+    postInstall = ''
+      installManPage fennel.1
+    '';
+  });
+
   cqueues = (prev.lib.overrideLuarocks prev.cqueues (drv: {
     externalDeps = [
       { name = "CRYPTO"; dep = pkgs.openssl_1_1; }

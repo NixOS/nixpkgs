@@ -339,6 +339,7 @@ mapAliases ({
   fastnlo = throw "'fastnlo' has been renamed to/replaced by 'fastnlo_toolkit'"; # Converted to throw 2022-09-24
   fbreader = throw "fbreader has been removed, as the upstream project has been archived"; # Added 2022-05-26
   feedreader = throw "feedreader is no longer activily maintained since 2019. The developer is working on a spiritual successor called NewsFlash."; # Added 2022-05-03
+  inherit (luaPackages) fennel; # Added 2022-09-24
   fetchFromGithub = throw "You meant fetchFromGitHub, with a capital H"; # preserve
   ffadoFull = throw "'ffadoFull' has been renamed to/replaced by 'ffado'"; # Converted to throw 2022-02-22
   ffmpeg-sixel = throw "ffmpeg-sixel has been removed, because it was an outdated/unmaintained fork of ffmpeg"; # Added 2022-03-23";
