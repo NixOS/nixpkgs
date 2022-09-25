@@ -13283,6 +13283,12 @@
     githubId = 57180880;
     name = "Ansh Tyagi";
   };
+  therishidesai = {
+    email = "desai.rishi1@gmail.com";
+    github = "therishidesai";
+    githubId = 5409166;
+    name = "Rishi Desai";
+  };
   thesola10 = {
     email = "me@thesola.io";
     github = "Thesola10";
