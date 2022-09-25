@@ -15579,6 +15579,8 @@ with pkgs;
 
   mruby = callPackage ../development/compilers/mruby { };
 
+  samplebrain = libsForQt5.callPackage ../applications/audio/samplebrain { };
+
   scsh = callPackage ../development/interpreters/scsh { };
 
   scheme48 = callPackage ../development/interpreters/scheme48 { };
