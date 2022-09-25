@@ -16830,6 +16830,8 @@ with pkgs;
 
   kubespy = callPackage ../applications/networking/cluster/kubespy { };
 
+  kubeswitch = callPackage ../development/tools/kubeswitch { };
+
   kubie = callPackage ../development/tools/kubie {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
