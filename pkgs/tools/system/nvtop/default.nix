@@ -63,5 +63,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ willibutz gbtb ];
+    mainProgram = "nvtop";
   };
 }
