@@ -453,6 +453,32 @@ buildLuarocksPackage {
   };
 }) {};
 
+fennel = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchurl, lua
+}:
+buildLuarocksPackage {
+  pname = "fennel";
+  version = "1.2.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/fennel-1.2.0-1.rockspec";
+    sha256 = "14qr0gldqgvzx3yzfjvy48inqn46xf0d92pcxp3hr1a17sf7xqmf";
+  }).outPath;
+  src = fetchurl {
+    url    = "https://fennel-lang.org/downloads/fennel-1.2.0.tar.gz";
+    sha256 = "0ymnsri27pj98jbwx7hxsn1w39rxns0i8ds1fl421spc13gx88gx";
+  };
+
+  disabled = with lua; (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://fennel-lang.org/";
+    description = "A lisp that compiles to Lua";
+    maintainers = with lib.maintainers; [ misterio77 ];
+    license.fullName = "MIT";
+  };
+}) {};
+
 fifo = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 , fetchzip, lua
 }:

@@ -112,6 +112,15 @@ with prev;
     ];
   });
 
+  fennel = prev.fennel.overrideAttrs(oa: {
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
+      pkgs.installShellFiles
+    ];
+    postInstall = ''
+      installManPage fennel.1
+    '';
+  });
+
   http = prev.http.overrideAttrs (oa: {
     patches = [
       (fetchpatch {

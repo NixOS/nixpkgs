@@ -19,7 +19,10 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     sha256 = "1wdla4ryif1ss37aqi61lcvzddvf568wyh5s3xv1lrryh4al9vpd";
   };
 
+  pythonRelaxDeps = [ "attrs" ];
+
   nativeBuildInputs = [
+    python3Packages.pythonRelaxDepsHook
     wrapQtAppsHook
   ] ++ (with python3Packages; [
     poetry-core

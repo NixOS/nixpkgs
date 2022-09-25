@@ -2212,6 +2212,7 @@ broken-packages:
   - himg
   - hindley-milner
   - hindley-milner-type-check
+  - hinotify-conduit
   - hinquire
   - hinstaller
   - hinter
@@ -2604,7 +2605,11 @@ broken-packages:
   - ige
   - ignore
   - igraph
+  - ihaskell-charts
+  - ihaskell-diagrams
+  - ihaskell-gnuplot
   - ihaskell-parsec
+  - ihaskell-plot
   - ihaskell-widgets
   - ihp-hsx
   - illuminate
@@ -5187,6 +5192,7 @@ broken-packages:
   - to-haskell
   - token-bucket
   - tokenify
+  - tokenizer
   - tokenizer-streaming
   - token-limiter
   - token-search

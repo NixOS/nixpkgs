@@ -5882,6 +5882,8 @@ in {
 
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy { };
 
+  msgspec = callPackage ../development/python-modules/msgspec { };
+
   msldap = callPackage ../development/python-modules/msldap { };
 
   msoffcrypto-tool = callPackage ../development/python-modules/msoffcrypto-tool { };
@@ -6386,6 +6388,8 @@ in {
   open-garage = callPackage ../development/python-modules/open-garage { };
 
   open-meteo = callPackage ../development/python-modules/open-meteo { };
+
+  openai-whisper = callPackage ../development/python-modules/openai-whisper { };
 
   openant = callPackage ../development/python-modules/openant { };
 
@@ -7477,6 +7481,8 @@ in {
   };
 
   pybotvac = callPackage ../development/python-modules/pybotvac { };
+
+  pybravia = callPackage ../development/python-modules/pybravia { };
 
   pybrowserid = callPackage ../development/python-modules/pybrowserid { };
 
@@ -11532,6 +11538,8 @@ in {
   vdf = callPackage ../development/python-modules/vdf { };
 
   vdirsyncer = callPackage ../development/python-modules/vdirsyncer { };
+
+  vector = callPackage ../development/python-modules/vector { };
 
   vehicle = callPackage ../development/python-modules/vehicle { };
 

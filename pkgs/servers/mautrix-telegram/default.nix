@@ -11,10 +11,11 @@ let
       tulir-telethon = self.telethon.overridePythonAttrs (oldAttrs: rec {
         version = "1.25.0a20";
         pname = "tulir-telethon";
-        src = oldAttrs.src.override {
+        src = super.fetchPypi {
           inherit pname version;
           sha256 = "sha256-X9oo+YCNMqQrJvQa/PIi9dFgaeQxbrlnwUJnwjRb6Jc=";
         };
+        doCheck = false;
       });
     };
   };

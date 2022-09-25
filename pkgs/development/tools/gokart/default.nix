@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "gokart";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oxYlwc3FatYyaICQFZJtkH9/7zYfT2gI+R5BU7CQVkg=";
+    sha256 = "sha256-G1IjlJ/rmviFWy6RFfLtP+bhfYcDuB97leimU39YCoQ=";
   };
 
   vendorSha256 = "sha256-lgKYVgJlmUJ/msdIqG7EKAZuISie1lG7+VeCF/rcSlE=";
