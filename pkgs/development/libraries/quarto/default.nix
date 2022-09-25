@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-      ./fix-deno-path.patch
+    ./fix-deno-path.patch
   ];
 
   dontStrip = true;
