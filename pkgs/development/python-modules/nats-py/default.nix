@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , ed25519
 , fetchFromGitHub
@@ -42,6 +43,9 @@ buildPythonPackage rec {
     "test_pull_subscribe_limits"
     "test_fetch_n"
     "test_subscribe_no_echo"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_subscribe_iterate_next_msg"
+    "test_buf_size_force_flush_timeout"
   ];
 
   pythonImportsCheck = [
