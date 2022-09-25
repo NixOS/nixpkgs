@@ -56,5 +56,5 @@ runCommand "cinnamon-gsettings-overrides" { preferLocalBuild = true; }
     ${extraGSettingsOverrides}
     EOF
 
-    ${glib.dev}/bin/glib-compile-schemas "$schema_dir"
+    ${glib.dev}/bin/glib-compile-schemas --strict "$schema_dir"
   ''
