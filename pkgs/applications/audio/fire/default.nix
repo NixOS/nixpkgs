@@ -16,6 +16,8 @@
 , CoreServices
 , DiscRecording
 , CoreAudioKit
+, MetalKit
+, simd
 }:
 
 let
@@ -79,6 +81,8 @@ stdenv.mkDerivation rec {
     CoreServices
     DiscRecording
     CoreAudioKit
+    MetalKit
+    simd
   ];
 
   installPhase = let
