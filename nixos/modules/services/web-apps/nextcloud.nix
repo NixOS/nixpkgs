@@ -821,9 +821,9 @@ in {
               ${if c.dbhost != null then "--database-host" else null} = ''"${c.dbhost}"'';
               ${if c.dbport != null then "--database-port" else null} = ''"${toString c.dbport}"'';
               ${if c.dbuser != null then "--database-user" else null} = ''"${c.dbuser}"'';
-              "--database-pass" = "\$${dbpass.arg}";
+              "--database-pass" = "\"\$${dbpass.arg}\"";
               "--admin-user" = ''"${c.adminuser}"'';
-              "--admin-pass" = "\$${adminpass.arg}";
+              "--admin-pass" = "\"\$${adminpass.arg}\"";
               "--data-dir" = ''"${datadir}/data"'';
             });
           in ''
