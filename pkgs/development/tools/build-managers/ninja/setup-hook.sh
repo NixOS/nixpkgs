@@ -19,29 +19,6 @@ ninjaBuildPhase() {
     runHook postBuild
 }
 
-if [ -z "${dontUseNinjaBuild-}" -a -z "${buildPhase-}" ]; then
-    buildPhase=ninjaBuildPhase
-fi
-
-ninjaInstallPhase() {
-    runHook preInstall
-
-    # shellcheck disable=SC2086
-    local flagsArray=(
-        $ninjaFlags "${ninjaFlagsArray[@]}"
-        ${installTargets:-install}
-    )
-
-    echoCmd 'install flags' "${flagsArray[@]}"
-    TERM=dumb ninja "${flagsArray[@]}"
-
-    runHook postInstall
-}
-
-if [ -z "${dontUseNinjaInstall-}" -a -z "${installPhase-}" ]; then
-    installPhase=ninjaInstallPhase
-fi
-
 ninjaCheckPhase() {
     runHook preCheck
 
@@ -73,6 +50,29 @@ ninjaCheckPhase() {
     runHook postCheck
 }
 
+ninjaInstallPhase() {
+    runHook preInstall
+
+    # shellcheck disable=SC2086
+    local flagsArray=(
+        $ninjaFlags "${ninjaFlagsArray[@]}"
+        ${installTargets:-install}
+    )
+
+    echoCmd 'install flags' "${flagsArray[@]}"
+    TERM=dumb ninja "${flagsArray[@]}"
+
+    runHook postInstall
+}
+
+if [ -z "${dontUseNinjaBuild-}" -a -z "${buildPhase-}" ]; then
+    buildPhase=ninjaBuildPhase
+fi
+
 if [ -z "${dontUseNinjaCheck-}" -a -z "${checkPhase-}" ]; then
     checkPhase=ninjaCheckPhase
+fi
+
+if [ -z "${dontUseNinjaInstall-}" -a -z "${installPhase-}" ]; then
+    installPhase=ninjaInstallPhase
 fi
