@@ -7858,6 +7858,10 @@ with pkgs;
     usePulseaudio = true;
   };
 
+  jaq = callPackage ../development/tools/jaq {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   jasmin-compiler = callPackage ../development/compilers/jasmin-compiler { };
 
   jazzy = callPackage ../development/tools/jazzy { };
