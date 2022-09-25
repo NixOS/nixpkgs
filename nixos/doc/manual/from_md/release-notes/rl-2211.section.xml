@@ -212,6 +212,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/prymitive/kthxbye">kthxbye</link>,
+          an alert acknowledgement management daemon for Prometheus
+          Alertmanager. Available as
+          <link xlink:href="options.html#opt-services.kthxbye.enable">services.kthxbye</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/jtroo/kanata">kanata</link>,
           a tool to improve keyboard comfort and usability with advanced
           customization. Available as

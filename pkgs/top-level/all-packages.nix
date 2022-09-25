@@ -29277,6 +29277,10 @@ with pkgs;
 
   pinniped = callPackage ../applications/networking/cluster/pinniped { };
 
+  kthxbye = callPackage ../servers/monitoring/prometheus/kthxbye.nix {
+    buildGoModule = buildGo119Module;
+  };
+
   pgo-client = callPackage ../applications/networking/cluster/pgo-client { };
 
   popeye = callPackage ../applications/networking/cluster/popeye { };
