@@ -208,9 +208,7 @@ with pkgs;
       }
     '');
 
-  chkservice = callPackage ../tools/admin/chkservice {
-    stdenv = gcc10StdenvCompat;
-  };
+  chkservice = callPackage ../tools/admin/chkservice { };
 
   addOpenGLRunpath = callPackage ../build-support/add-opengl-runpath { };
 
