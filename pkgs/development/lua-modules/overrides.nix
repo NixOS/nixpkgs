@@ -114,7 +114,7 @@ with prev;
 
   fennel = prev.fennel.overrideAttrs(oa: {
     nativeBuildInputs = oa.nativeBuildInputs ++ [
-      pkgs.installShellFiles
+      installShellFiles
     ];
     postInstall = ''
       installManPage fennel.1
