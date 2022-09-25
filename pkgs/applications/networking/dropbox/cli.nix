@@ -66,5 +66,7 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Plus;
     # NOTE: Dropbox itself only works on linux, so this is ok.
     platforms = lib.platforms.linux;
+    # Download 404 error + make: No targets specified and no makefile found.
+    broken = true; # at 2022-09-25
   };
 }
