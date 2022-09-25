@@ -144,6 +144,9 @@ rec {
     pname = "docker";
     inherit version;
 
+    # below inherits allow overriding of docker components
+    inherit moby;
+
     src = fetchFromGitHub {
       owner = "docker";
       repo = "cli";
