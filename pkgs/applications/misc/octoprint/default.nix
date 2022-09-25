@@ -171,6 +171,7 @@ let
                     "zeroconf"
                     "Flask-Login"
                     "werkzeug"
+                    "Flask-Limiter"
                   ];
                 in
                 ''
