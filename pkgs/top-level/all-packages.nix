@@ -24438,6 +24438,8 @@ with pkgs;
 
   htop-vim = callPackage ../tools/system/htop/htop-vim.nix { };
 
+  humility = callPackage ../development/tools/rust/humility {};
+
   btop = callPackage ../tools/system/btop {
     stdenv = gcc11Stdenv;
   };
