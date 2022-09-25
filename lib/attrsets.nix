@@ -627,11 +627,14 @@ rec {
      `y`, and all values `assert` with an error message.  This
       operator is commutative, unlike (//). */
   unionOfDisjoint = x: y:
-    x // (mapAttrs
-      (name: val:
-        if hasAttr name x
-        then builtins.throw "attribute collision: ${name}"
-        else val) y);
+    let
+      intersection = builtins.intersectAttrs x y;
+      collisions = lib.concatStringsSep " " (builtins.attrNames intersection);
+      mask = builtins.mapAttrs (name: value: builtins.throw
+        "unionOfDisjoint: collision on ${name}; complete list: ${collisions}")
+        intersection;
+    in
+      (x // y) // mask;
 
   /*** deprecated stuff ***/
 
