@@ -1279,7 +1279,7 @@ in
         mr ${pkgs.pam_mount}/lib/security/pam_mount.so,
       '' +
       optionalString (isEnabled (cfg: cfg.enableGnomeKeyring)) ''
-        mr ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so,
+        mr ${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so,
       '' +
       optionalString (isEnabled (cfg: cfg.startSession)) ''
         mr ${config.systemd.package}/lib/security/pam_systemd.so,
