@@ -28038,6 +28038,11 @@ with pkgs;
 
   filezilla = callPackage ../applications/networking/ftp/filezilla { };
 
+  fire = darwin.apple_sdk_11_0.callPackage ../applications/audio/fire {
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa WebKit CoreServices DiscRecording CoreAudioKit MetalKit;
+    inherit (darwin.apple_sdk_11_0.libs) simd;
+  };
+
   buildMozillaMach = opts: callPackage (import ../applications/networking/browsers/firefox/common.nix opts) {};
 
   firefoxPackages = recurseIntoAttrs (callPackage ../applications/networking/browsers/firefox/packages.nix {});
