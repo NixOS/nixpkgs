@@ -8254,6 +8254,8 @@ with pkgs;
 
   lottieconverter = callPackage ../tools/misc/lottieconverter { };
 
+  loudgain = callPackage ../tools/audio/loudgain/default.nix { };
+
   lpcnetfreedv = callPackage ../development/libraries/lpcnetfreedv { };
 
   lsd = callPackage ../tools/misc/lsd { };
