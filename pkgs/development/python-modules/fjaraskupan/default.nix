@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "fjaraskupan";
-  version = "2.0.0";
+  version = "2.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "elupus";
     repo = pname;
-    rev = version;
-    hash = "sha256-ohadGQxtW8YcSDIF7xZhy84xu0Vi5yj/QEVi8WRRBSI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-i7816KJraHkrXKYA+vhKMs5xhXksnYc2uYiE0pPEicw=";
   };
 
   propagatedBuildInputs = [
