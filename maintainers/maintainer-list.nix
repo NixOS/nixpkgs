@@ -9174,6 +9174,12 @@
     githubId = 15896005;
     name = "Vladyslav Burzakovskyy";
   };
+  mrtarantoga = {
+    email = "goetz-dev@web.de";
+    name = "Götz Grimmer";
+    github = "MrTarantoga";
+    githubId = 53876219;
+  };
   mrVanDalo = {
     email = "contact@ingolf-wagner.de";
     github = "mrVanDalo";
