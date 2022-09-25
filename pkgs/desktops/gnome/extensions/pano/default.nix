@@ -73,7 +73,6 @@ stdenv.mkDerivation rec {
       dataDirPaths = lib.concatStringsSep ":" [
         "${gnome.gnome-shell}/share/gnome-shell"
         "${gnome.mutter}/lib/mutter-10"
-        "${libgda}/share/gir-1.0"
       ];
     in
     ''
