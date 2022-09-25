@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, autoconf, automake, m4, perl, help2man
 , runtimeShell
+, pkgsHostTarget
 , file
 }:
 
@@ -8,7 +9,13 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+# Using pkgsHostTarget.targetPackages.stdenv.mkDerivation here, because
+# libtool does not support build/host/target as we know it. We have to
+# configure libtool with --host=$target and make sure only the target C
+# compiler is available during the configure, because otherwise libtool will
+# attempt to call the x86 compiler when it is used to cross-compile something.
+
+pkgsHostTarget.targetPackages.stdenv.mkDerivation rec {
   pname = "libtool";
   version = "2.4.7";
 
@@ -74,5 +81,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = [ ];
     platforms = platforms.unix;
+    # Actually cross-compiling libtool is broken
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }
