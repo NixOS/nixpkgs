@@ -23788,6 +23788,8 @@ with pkgs;
 
   prometheus-cpp = callPackage ../development/libraries/prometheus-cpp { };
 
+  proximity-sort = callPackage ../tools/misc/proximity-sort { };
+
   psqlodbc = callPackage ../development/libraries/psqlodbc { };
 
   public-inbox = perlPackages.callPackage ../servers/mail/public-inbox { };
