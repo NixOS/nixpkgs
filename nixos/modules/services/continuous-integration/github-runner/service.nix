@@ -238,7 +238,11 @@ with lib;
     # You may want to set this to `true` if not using coverage tooling on
     # compiled code
     LockPersonality = false;
+
+    # Note that this has some interactions with the User setting; so you may
+    # want to consult the systemd docs if using both.
+    DynamicUser = true;
   } // (
-    if cfg.user == null then { DynamicUser = true; } else { User = cfg.user; }
+    lib.optionalAttrs (cfg.user != null) { User = cfg.user; }
   ) // cfg.serviceOverrides;
 }
