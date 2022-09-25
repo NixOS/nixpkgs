@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, colorama
 , docutils
 , fetchFromGitHub
 , importlib-metadata
@@ -9,7 +8,6 @@
 , pytestCheckHook
 , pythonOlder
 , rstcheck-core
-, shellingham
 , typer
 , types-docutils
 , typing-extensions
@@ -17,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "rstcheck";
-  version = "6.0.0.post1";
+  version = "6.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +24,7 @@ buildPythonPackage rec {
     owner = "rstcheck";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Ljg1cciT9qKL9xtBxQ8OLygDpV/1yR5XiJOzHrLr6xw=";
+    hash = "sha256-dw/KggiZpKaFZMcTIaSBUhR4oQsZI3iSmEj9Sy80wTs=";
   };
 
   nativeBuildInputs = [
@@ -34,10 +32,8 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    colorama
     docutils
     rstcheck-core
-    shellingham
     types-docutils
     typing-extensions
     pydantic
@@ -45,7 +41,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
     importlib-metadata
-  ];
+  ] ++ typer.optional-dependencies.all;
 
   checkInputs = [
     pytestCheckHook
@@ -53,6 +49,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'docutils = ">=0.7, <0.19"' 'docutils = ">=0.7"' \
       --replace 'types-docutils = ">=0.18, <0.19"' 'types-docutils = ">=0.18"'
   '';
 
