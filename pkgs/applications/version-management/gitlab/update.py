@@ -17,7 +17,20 @@ import requests
 
 # Always keep this in sync with the GitLaab version you're updating to.
 # If you see any errors about vendored dependencies during an update, check the Gemfile.
-VENDORED_GEMS = ['devise-pbkdf2-encryptable', 'omniauth-cas3', 'omniauth-gitlab', 'omniauth_crowd', 'mail-smtp_pool', 'ipynbdiff', 'error_tracking_open_api']
+VENDORED_GEMS = [
+    "bundler-checksum",
+    "devise-pbkdf2-encryptable",
+    "omniauth-azure-oauth2",
+    "omniauth-cas3",
+    "omniauth-gitlab",
+    "omniauth-google-oauth2",
+    "omniauth_crowd",
+    "omniauth-salesforce",
+    "mail-smtp_pool",
+    "microsoft_graph_mailer",
+    "ipynbdiff",
+    "error_tracking_open_api",
+]
 logger = logging.getLogger(__name__)
 
 

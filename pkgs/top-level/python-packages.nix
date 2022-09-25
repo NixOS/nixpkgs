@@ -6378,6 +6378,8 @@ in {
 
   open-meteo = callPackage ../development/python-modules/open-meteo { };
 
+  openai-whisper = callPackage ../development/python-modules/openai-whisper { };
+
   openant = callPackage ../development/python-modules/openant { };
 
   openapi-schema-validator = callPackage ../development/python-modules/openapi-schema-validator { };
@@ -7466,6 +7468,8 @@ in {
   };
 
   pybotvac = callPackage ../development/python-modules/pybotvac { };
+
+  pybravia = callPackage ../development/python-modules/pybravia { };
 
   pybrowserid = callPackage ../development/python-modules/pybrowserid { };
 
