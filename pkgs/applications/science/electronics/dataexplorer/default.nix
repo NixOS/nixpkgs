@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dataexplorer";
-  version = "3.6.2";
+  version = "3.7.1";
 
   src = fetchurl {
     url = "mirror://savannah/dataexplorer/dataexplorer-${version}-src.tar.gz";
-    sha256 = "sha256-2e8qeoJh7z/RIowMtAd8PGcMPck5H8iHqel6bW7EQ0E=";
+    sha256 = "sha256-K1cxPWdVIC3Ae61H+iWzlaNWk3IBV6u9kypPTEeDeyU=";
   };
 
   nativeBuildInputs = [ ant makeWrapper ];
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     # So we create our own wrapper, using similar cmdline args as upstream.
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/DataExplorer \
-      --add-flags "-Dfile.encoding=UTF-8 -Xms64m -Xmx3092m -jar $out/share/DataExplorer/DataExplorer.jar" \
+      --add-flags "-Xms64m -Xmx3092m -jar $out/share/DataExplorer/DataExplorer.jar" \
       --set SWT_GTK3 0
 
     makeWrapper ${jre}/bin/java $out/bin/DevicePropertiesEditor \
-      --add-flags "-Dfile.encoding=UTF-8 -Xms32m -Xmx512m -classpath $out/share/DataExplorer/DataExplorer.jar gde.ui.dialog.edit.DevicePropertiesEditor" \
+      --add-flags "-Xms32m -Xmx512m -classpath $out/share/DataExplorer/DataExplorer.jar gde.ui.dialog.edit.DevicePropertiesEditor" \
       --set SWT_GTK3 0 \
       --set LIBOVERLAY_SCROLLBAR 0
 
