@@ -1,19 +1,20 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
 , async-timeout
-, dbus-next
+, bleak
+, buildPythonPackage
+, dbus-fast
+, fetchFromGitHub
 , myst-parser
+, poetry-core
 , pytestCheckHook
-, sphinxHook
+, pythonOlder
 , sphinx-rtd-theme
+, sphinxHook
 }:
 
 buildPythonPackage rec {
   pname = "bluetooth-adapters";
-  version = "0.3.6";
+  version = "0.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-mekruNzoix61idaGv/BIgb1fwKcA/+UGOnjX85jQWDQ=";
+    hash = "sha256-VjrKw1ljwOKdEqxX0iCIKUX9YB8cMlAuJzOarlxgfnQ=";
   };
 
   postPatch = ''
@@ -44,7 +45,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     async-timeout
-    dbus-next
+    bleak
+    dbus-fast
   ];
 
   pythonImportsCheck = [
