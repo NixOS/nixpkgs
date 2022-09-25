@@ -28147,13 +28147,13 @@ with pkgs;
   fractal-next = callPackage ../applications/networking/instant-messengers/fractal-next {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad;
     libadwaita = libadwaita.overrideAttrs (finalAtts: rec {
-      version = "1.2.alpha";
+      version = "1.2.0";
       src = fetchFromGitLab {
         domain = "gitlab.gnome.org";
         owner = "GNOME";
         repo = "libadwaita";
         rev = version;
-        hash = "sha256-JMxUeIOUPp9k5pImQqWLVkQ2GHaKvopvg6ol9pvA+Bk=";
+        hash = "sha256-3lH7Vi9M8k+GSrCpvruRpLrIpMoOakKbcJlaAc/FK+U=";
       };
     });
   };
