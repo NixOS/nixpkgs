@@ -1661,7 +1661,8 @@ with pkgs;
   dolphin-emu = callPackage ../applications/emulators/dolphin-emu { };
 
   dolphin-emu-beta = qt5.callPackage ../applications/emulators/dolphin-emu/master.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
+    inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL VideoToolbox;
+    inherit (darwin) moltenvk;
   };
 
   dolphin-emu-primehack = qt5.callPackage ../applications/emulators/dolphin-emu/primehack.nix {
