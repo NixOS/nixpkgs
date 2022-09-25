@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Pw4iNJs0bKALVPFBYUJe5/WjHxdffungCKfJFJEpDas=";
   };
 
+  patches = [
+    ./CVE-2022-3008.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   passthru.updateScript = nix-update-script {
