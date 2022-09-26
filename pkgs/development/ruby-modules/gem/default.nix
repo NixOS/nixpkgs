@@ -18,7 +18,7 @@
 # Normal gem packages can be used outside of bundler; a binstub is created in
 # $out/bin.
 
-{ lib, fetchurl, fetchgit, makeWrapper, gitMinimal, darwin
+{ lib, fetchurl, fetchgit, makeWrapper, gitMinimal, libobjc
 , ruby, bundler
 } @ defs:
 
@@ -35,6 +35,7 @@ lib.makeOverridable (
 , namePrefix ? (let
     rubyName = builtins.parseDrvName ruby.name;
   in "${rubyName.name}${rubyName.version}-")
+, nativeBuildInputs ? []
 , buildInputs ? []
 , meta ? {}
 , patches ? []
@@ -87,11 +88,15 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
   inherit dontStrip;
   inherit type;
 
-  buildInputs = [
+  nativeBuildInputs = [
     ruby makeWrapper
   ] ++ lib.optionals (type == "git") [ gitMinimal ]
     ++ lib.optionals (type != "gem") [ bundler ]
-    ++ lib.optional stdenv.isDarwin darwin.libobjc
+    ++ nativeBuildInputs;
+
+  buildInputs = [
+    ruby
+  ] ++ lib.optionals stdenv.isDarwin [ libobjc ]
     ++ buildInputs;
 
   #name = builtins.trace (attrs.name or "no attr.name" ) "${namePrefix}${gemName}-${version}";

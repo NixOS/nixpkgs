@@ -58,6 +58,8 @@ buildPythonPackage rec {
     "test_revocation_mode_hard_aiohttp_autofetch"
     # The path could not be validated because no revocation information could be found for intermediate certificate 1
     "test_revocation_mode_hard"
+    # certificate expired 2022-09-17
+    "test_revocation_mode_soft"
   ];
 
   pythonImportsCheck = [

@@ -116,6 +116,8 @@ stdenv.mkDerivation rec {
       hash = "sha256-tLHkQoAbtYqLr3ASYfYX6pGtjD2TWT4B5NUubT4EN90=";
       excludes = [ "doc/Changelog" ];
     })
+    # Fix CVE-2022-3204
+    ./CVE-2022-3204.patch
   ];
 
   postPatch = lib.optionalString withPythonModule ''
