@@ -159,26 +159,24 @@ in
 
     adapter = mkOption {
       default = null;
-      example = "nginx";
+      example = literalExpression "nginx";
       type = with types; nullOr str;
-      description = ''
+      description = lib.mdDoc ''
         Name of the config adapter to use.
         See <https://caddyserver.com/docs/config-adapters>
         for the full list.
 
-        If <literal>null</literal> is specified, the <literal>--adapter</literal>
-        argument is omitted when starting or restarting Caddy. Notably, this
-        allows specification of a configuration file in Caddy's native JSON
-        format, as long as the filename does not start with
-        <literal>Caddyfile</literal> (in which case the
-        <literal>caddyfile</literal> adapter is implicitly enabled). See
-        <link xlink:href="https://caddyserver.com/docs/command-line#caddy-run"/>
-        for details.
+        If `null` is specified, the `--adapter` argument is omitted when
+        starting or restarting Caddy. Notably, this allows specification of a
+        configuration file in Caddy's native JSON format, as long as the
+        filename does not start with `Caddyfile` (in which case the `caddyfile`
+        adapter is implicitly enabled). See
+        <https://caddyserver.com/docs/command-line#caddy-run> for details.
 
-        <note><para>
-          Any value other than <literal>null</literal> or <literal>caddyfile</literal>
-          is only valid when providing your own <option>configFile</option>.
-        </para></note>
+        ::: {.note}
+        Any value other than `null` or `caddyfile` is only valid when providing
+        your own `configFile`.
+        :::
       '';
     };
 
