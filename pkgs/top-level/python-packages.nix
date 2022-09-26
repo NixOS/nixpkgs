@@ -424,6 +424,8 @@ in {
 
   aiorun = callPackage ../development/python-modules/aiorun { };
 
+  aiorwlock = callPackage ../development/python-modules/aiorwlock { };
+
   aiosenseme = callPackage ../development/python-modules/aiosenseme { };
 
   aiosenz = callPackage ../development/python-modules/aiosenz { };
@@ -6392,6 +6394,10 @@ in {
       openbabel = callPackage ../development/libraries/openbabel { inherit (self) python; };
   };
 
+  opencensus = callPackage ../development/python-modules/opencensus { };
+
+  opencensus-context = callPackage ../development/python-modules/opencensus-context { };
+
   opencv3 = toPythonModule (pkgs.opencv3.override {
     enablePython = true;
     pythonPackages = self;
@@ -9454,6 +9460,10 @@ in {
   raven = callPackage ../development/python-modules/raven { };
 
   rawkit = callPackage ../development/python-modules/rawkit { };
+
+  ray = callPackage ../development/python-modules/ray { };
+
+  ray-bin = callPackage ../development/python-modules/ray/bin.nix { };
 
   rbtools = callPackage ../development/python-modules/rbtools { };
 
