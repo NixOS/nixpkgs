@@ -24,13 +24,13 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.1.2";
+  version = "2.1.4";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-U8aXskq3PdIVXNhUTZ7TVRza4dexZoheHO1GO0aGneo=";
+    hash = "sha256-nKCdthPgheBR4bySQww0I5eI8K5IzLhxiTCCYnQRknI=";
   };
 
   propagatedBuildInputs = [
