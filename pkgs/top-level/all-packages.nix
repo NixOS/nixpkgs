@@ -14043,6 +14043,10 @@ with pkgs;
 
   gwt240 = callPackage ../development/compilers/gwt/2.4.0.nix { };
 
+  hvm = callPackage ../development/compilers/hvm {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   idrisPackages = dontRecurseIntoAttrs (callPackage ../development/idris-modules {
     idris-no-deps = haskellPackages.idris;
   });
