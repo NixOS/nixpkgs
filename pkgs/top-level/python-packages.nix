@@ -5873,6 +5873,8 @@ in {
 
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy { };
 
+  msgspec = callPackage ../development/python-modules/msgspec { };
+
   msldap = callPackage ../development/python-modules/msldap { };
 
   msoffcrypto-tool = callPackage ../development/python-modules/msoffcrypto-tool { };
@@ -11511,6 +11513,8 @@ in {
   vdf = callPackage ../development/python-modules/vdf { };
 
   vdirsyncer = callPackage ../development/python-modules/vdirsyncer { };
+
+  vector = callPackage ../development/python-modules/vector { };
 
   vehicle = callPackage ../development/python-modules/vehicle { };
 

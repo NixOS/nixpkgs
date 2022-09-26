@@ -119,8 +119,22 @@ rec {
       #  - "composite": a phrase with an "of" connective
       # See the `optionDescriptionPhrase` function.
     , descriptionClass ? null
-    , # Function applied to each definition that should return true if
-      # its type-correct, false otherwise.
+    , # DO NOT USE WITHOUT KNOWING WHAT YOU ARE DOING!
+      # Function applied to each definition that must return false when a definition
+      # does not match the type. It should not check more than the root of the value,
+      # because checking nested values reduces laziness, leading to unnecessary
+      # infinite recursions in the module system.
+      # Further checks of nested values should be performed by throwing in
+      # the merge function.
+      # Strict and deep type checking can be performed by calling lib.deepSeq on
+      # the merged value.
+      #
+      # See https://github.com/NixOS/nixpkgs/pull/6794 that introduced this change,
+      # https://github.com/NixOS/nixpkgs/pull/173568 and
+      # https://github.com/NixOS/nixpkgs/pull/168295 that attempted to revert this,
+      # https://github.com/NixOS/nixpkgs/issues/191124 and
+      # https://github.com/NixOS/nixos-search/issues/391 for what happens if you ignore
+      # this disclaimer.
       check ? (x: true)
     , # Merge a list of definitions together into a single value.
       # This function is called with two arguments: the location of

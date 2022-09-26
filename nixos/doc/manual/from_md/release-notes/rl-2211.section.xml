@@ -212,6 +212,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/prymitive/kthxbye">kthxbye</link>,
+          an alert acknowledgement management daemon for Prometheus
+          Alertmanager. Available as
+          <link xlink:href="options.html#opt-services.kthxbye.enable">services.kthxbye</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/jtroo/kanata">kanata</link>,
           a tool to improve keyboard comfort and usability with advanced
           customization. Available as
@@ -472,6 +480,14 @@
           riak package removed along with
           <literal>services.riak</literal> module, due to lack of
           maintainer to update the package.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The (previously undocumented) Nixpkgs configuration option
+          <literal>checkMeta</literal> now defaults to
+          <literal>true</literal>. This may cause evaluation failures
+          for packages with incorrect <literal>meta</literal> attribute.
         </para>
       </listitem>
       <listitem>

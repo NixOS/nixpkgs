@@ -12,6 +12,6 @@ let
   };
 in
 import ./node-packages.nix {
-  inherit (pkgs) fetchurl nix-gitignore stdenv lib fetchgit;
+  inherit (pkgs) fetchurl nix-gitignore stdenv lib fetchgit runCommand fetchpatch;
   inherit nodeEnv;
 }
