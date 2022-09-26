@@ -32,14 +32,10 @@ stdenv.mkDerivation rec {
     substituteInPlace oam/CMakeLists.txt \
       --replace "DESTINATION oam/" "DESTINATION " \
       --replace 'DESTINATION ''${OAM_NAME}/' "DESTINATION "
-
-    # Update relative path to librocm_smi64 in the Python binding.
-    substituteInPlace python_smi_tools/rsmiBindings.py \
-      --replace "/../lib/librocm_smi64.so" "/../../librocm_smi64.so"
   '';
 
   postInstall = ''
-    wrapPythonProgramsIn $out/bin
+    wrapPythonProgramsIn $out
   '';
 
   passthru.updateScript = writeScript "update.sh" ''

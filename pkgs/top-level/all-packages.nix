@@ -3744,6 +3744,8 @@ with pkgs;
 
   duf = callPackage ../tools/misc/duf { };
 
+  dum = callPackage ../development/tools/dum { };
+
   inherit (ocaml-ng.ocamlPackages_4_10) dune_1;
   inherit (ocamlPackages) dune_2 dune_3 dune-release;
 
@@ -13983,6 +13985,10 @@ with pkgs;
 
   gwt240 = callPackage ../development/compilers/gwt/2.4.0.nix { };
 
+  hvm = callPackage ../development/compilers/hvm {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   idrisPackages = dontRecurseIntoAttrs (callPackage ../development/idris-modules {
     idris-no-deps = haskellPackages.idris;
   });
@@ -23748,6 +23754,8 @@ with pkgs;
   prometheus-xmpp-alerts = callPackage ../servers/monitoring/prometheus/xmpp-alerts.nix { };
 
   prometheus-cpp = callPackage ../development/libraries/prometheus-cpp { };
+
+  proximity-sort = callPackage ../tools/misc/proximity-sort { };
 
   psqlodbc = callPackage ../development/libraries/psqlodbc { };
 
