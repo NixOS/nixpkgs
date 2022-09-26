@@ -2948,6 +2948,8 @@ in {
 
   enamlx = callPackage ../development/python-modules/enamlx { };
 
+  energyflow = callPackage ../development/python-modules/energyflow { };
+
   enhancements = callPackage ../development/python-modules/enhancements { };
 
   enlighten = callPackage ../development/python-modules/enlighten { };
@@ -11646,6 +11648,8 @@ in {
   waqiasync = callPackage ../development/python-modules/waqiasync { };
 
   wasabi = callPackage ../development/python-modules/wasabi { };
+
+  wasserstein = callPackage ../development/python-modules/wasserstein { };
 
   wasm = callPackage ../development/python-modules/wasm { };
 
