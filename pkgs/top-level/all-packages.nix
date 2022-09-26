@@ -27693,6 +27693,8 @@ with pkgs;
 
   kerbrute = callPackage ../tools/security/kerbrute { };
 
+  keyoxide-web = callPackage ../servers/web-apps/keyoxide-web { };
+
   kvmtool = callPackage ../applications/virtualization/kvmtool { };
 
   exrdisplay = callPackage ../applications/graphics/exrdisplay { };
