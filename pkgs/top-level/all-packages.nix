@@ -4132,6 +4132,8 @@ with pkgs;
 
   humioctl = callPackage ../applications/logging/humioctl {};
 
+  huniq = callPackage ../tools/text/huniq { };
+
   hyprland = callPackage ../applications/window-managers/hyprland {
     wlroots = wlroots.overrideAttrs (_: {
       version = "unstable-2022-06-07";
