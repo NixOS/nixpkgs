@@ -3509,6 +3509,8 @@ with pkgs;
 
   compsize = callPackage ../os-specific/linux/compsize { };
 
+  comrak = callPackage ../tools/text/comrak { };
+
   cot = with python3Packages; toPythonApplication cot;
 
   coturn = callPackage ../servers/coturn {
