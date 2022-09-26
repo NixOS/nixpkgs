@@ -52,6 +52,9 @@ stdenv.mkDerivation rec {
 
     buildPhase = ''
       export HOME=$PWD
+      # This option is needed for openssl-3 compatibility
+      # Otherwise we encounter this upstream issue: https://github.com/mastodon/mastodon/issues/17924
+      export NODE_OPTIONS=--openssl-legacy-provider
       fixup_yarn_lock ~/yarn.lock
       yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
       yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress

@@ -111,6 +111,6 @@ final: prev: let
     "11.4" = "8.3.2";
     "11.5" = "8.3.2";
     "11.6" = "8.3.2";
-  }.${cudaVersion};
+  }.${cudaVersion} or "8.3.2";
 
 in cuDnnPackages

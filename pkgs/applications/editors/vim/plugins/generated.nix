@@ -5625,6 +5625,18 @@ final: prev:
     meta.homepage = "https://github.com/scalameta/nvim-metals/";
   };
 
+  nvim-moonwalk = buildVimPluginFrom2Nix {
+    pname = "nvim-moonwalk";
+    version = "2022-04-12";
+    src = fetchFromGitHub {
+      owner = "gpanders";
+      repo = "nvim-moonwalk";
+      rev = "86a59f16ae01606824cef3d0f3f87c9886b312d0";
+      sha256 = "0cwfsm5wb4qn04930km9p4i6xbhaw4023dfzw3s6cr6a428rpc5j";
+    };
+    meta.homepage = "https://github.com/gpanders/nvim-moonwalk/";
+  };
+
   nvim-neoclip-lua = buildVimPluginFrom2Nix {
     pname = "nvim-neoclip.lua";
     version = "2022-09-23";

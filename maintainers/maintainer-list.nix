@@ -2038,6 +2038,12 @@
     githubId = 157330;
     name = "Ben Burdette";
   };
+  bwlang = {
+    email = "brad@langhorst.com";
+    github = "bwlang";
+    githubId = 61636;
+    name = "Brad Langhorst";
+  };
   bzizou = {
     email = "Bruno@bzizou.net";
     github = "bzizou";
@@ -8107,6 +8113,12 @@
     githubId = 42545625;
     name = "Maas Lalani";
   };
+  maddiethecafebabe = {
+    email = "maddie@cafebabe.date";
+    github = "maddiethecafebabe";
+    githubId = 75337286;
+    name = "Madeline S.";
+  };
   madjar = {
     email = "georges.dubus@compiletoi.net";
     github = "madjar";
@@ -9173,6 +9185,12 @@
     github = "MrMebelMan";
     githubId = 15896005;
     name = "Vladyslav Burzakovskyy";
+  };
+  mrtarantoga = {
+    email = "goetz-dev@web.de";
+    name = "Götz Grimmer";
+    github = "MrTarantoga";
+    githubId = 53876219;
   };
   mrVanDalo = {
     email = "contact@ingolf-wagner.de";
@@ -13282,6 +13300,12 @@
     github = "therealansh";
     githubId = 57180880;
     name = "Ansh Tyagi";
+  };
+  therishidesai = {
+    email = "desai.rishi1@gmail.com";
+    github = "therishidesai";
+    githubId = 5409166;
+    name = "Rishi Desai";
   };
   thesola10 = {
     email = "me@thesola.io";

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "rq";
-  version = "1.11";
+  version = "1.11.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "rq";
     repo = "rq";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fv+b5WmODaQkd8T+O8MuJ+XVC3dQ5hZwxMHtBBuqQ7Y=";
+    hash = "sha256-7l/ckkDchs+iRDZLHrm4TYwA9wAJAnw9kYSaAbSo0jY=";
   };
 
   propagatedBuildInputs = [
