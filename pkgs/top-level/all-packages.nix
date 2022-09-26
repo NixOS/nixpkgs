@@ -36313,6 +36313,10 @@ with pkgs;
 
   rucksack = callPackage ../development/tools/rucksack { };
 
+  ruff = callPackage ../development/tools/ruff {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
+
   sam-ba = callPackage ../tools/misc/sam-ba { };
 
   sndio = callPackage ../misc/sndio { };
