@@ -152,7 +152,7 @@ with lib;
   };
 
   user = mkOption {
-    type = types.str;
+    type = types.nullOr types.str;
     description = lib.mdDoc ''
       User under which to run the service. If null, will use a systemd dynamic user.
     '';
