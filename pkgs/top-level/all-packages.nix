@@ -28059,7 +28059,9 @@ with pkgs;
 
   fdupes = callPackage ../tools/misc/fdupes { };
 
-  feh = callPackage ../applications/graphics/feh { };
+  feh = callPackage ../applications/graphics/feh {
+    imlib2 = imlib2Full;
+  };
 
   feishu = callPackage ../applications/networking/instant-messengers/feishu {};
 
