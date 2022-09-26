@@ -976,6 +976,18 @@ final: prev:
     meta.homepage = "https://github.com/tyru/caw.vim/";
   };
 
+  ccc-nvim = buildVimPluginFrom2Nix {
+    pname = "ccc.nvim";
+    version = "2022-09-25";
+    src = fetchFromGitHub {
+      owner = "uga-rosa";
+      repo = "ccc.nvim";
+      rev = "5c1156d231919ad9d2373b92e095e65b36a36e85";
+      sha256 = "1r04yvmhzw95zf261z85bfryxmhjd3ni1kdpbqay34ynjb27248p";
+    };
+    meta.homepage = "https://github.com/uga-rosa/ccc.nvim/";
+  };
+
   changeColorScheme-vim = buildVimPluginFrom2Nix {
     pname = "changeColorScheme.vim";
     version = "2010-10-18";
