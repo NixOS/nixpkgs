@@ -846,6 +846,15 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>services.grafana.provision.alerting</literal>
+          option was added. It includes suboptions for every
+          alerting-related objects (with the exception of
+          <literal>notifiers</literal>), which means it’s now possible
+          to configure modern Grafana alerting declaratively.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Matrix Synapse now requires entries in the
           <literal>state_group_edges</literal> table to be unique, in
           order to prevent accidentally introducing duplicate

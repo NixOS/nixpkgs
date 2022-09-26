@@ -96,11 +96,25 @@ let
 
   notifierFile = pkgs.writeText "notifier.yaml" (builtins.toJSON notifierConfiguration);
 
+  generateAlertingProvisioningYaml = x: if (cfg.provision.alerting."${x}".path == null)
+                                        then provisioningSettingsFormat.generate "${x}.yaml" cfg.provision.alerting."${x}".settings
+                                        else cfg.provision.alerting."${x}".path;
+  rulesFile = generateAlertingProvisioningYaml "rules";
+  contactPointsFile = generateAlertingProvisioningYaml "contactPoints";
+  policiesFile = generateAlertingProvisioningYaml "policies";
+  templatesFile = generateAlertingProvisioningYaml "templates";
+  muteTimingsFile = generateAlertingProvisioningYaml "muteTimings";
+
   provisionConfDir =  pkgs.runCommand "grafana-provisioning" { } ''
-    mkdir -p $out/{datasources,dashboards,notifiers}
+    mkdir -p $out/{datasources,dashboards,notifiers,alerting}
     ln -sf ${datasourceFile} $out/datasources/datasource.yaml
     ln -sf ${dashboardFile} $out/dashboards/dashboard.yaml
     ln -sf ${notifierFile} $out/notifiers/notifier.yaml
+    ln -sf ${rulesFile} $out/alerting/rules.yaml
+    ln -sf ${contactPointsFile} $out/alerting/contactPoints.yaml
+    ln -sf ${policiesFile} $out/alerting/policies.yaml
+    ln -sf ${templatesFile} $out/alerting/templates.yaml
+    ln -sf ${muteTimingsFile} $out/alerting/muteTimings.yaml
   '';
 
   # Get a submodule without any embedded metadata:
@@ -544,6 +558,461 @@ in {
         type = types.listOf grafanaTypes.notifierConfig;
         apply = x: map _filter x;
       };
+
+
+      alerting = {
+        rules = {
+          path = mkOption {
+            description = lib.mdDoc ''
+              Path to YAML rules configuration. Can't be used with
+              `services.grafana.provision.alerting.rules.settings` simultaneously.
+            '';
+            default = null;
+            type = types.nullOr types.path;
+          };
+
+          settings = mkOption {
+            description = lib.mdDoc ''
+              Grafana rules configuration in Nix. Can't be used with
+              `services.grafana.provision.alerting.rules.path` simultaneously. See
+              <link xlink:href="https://grafana.com/docs/grafana/latest/administration/provisioning/#rules"/>
+              for supported options.
+            '';
+            default = null;
+            type = types.nullOr (types.submodule {
+              options = {
+                apiVersion = mkOption {
+                  description = lib.mdDoc "Config file version.";
+                  default = 1;
+                  type = types.int;
+                };
+
+                groups = mkOption {
+                  description = lib.mdDoc "List of rule groups to import or update.";
+                  default = [];
+                  type = types.listOf (types.submodule {
+                    freeformType = provisioningSettingsFormat.type;
+
+                    options.name = mkOption {
+                      description = lib.mdDoc "Name of the rule group. Required.";
+                      type = types.str;
+                    };
+
+                    options.folder = mkOption {
+                      description = lib.mdDoc "Name of the folder the rule group will be stored in. Required.";
+                      type = types.str;
+                    };
+
+                    options.interval = mkOption {
+                      description = lib.mdDoc "Interval that the rule group should be evaluated at. Required.";
+                      type = types.str;
+                    };
+                  });
+                };
+
+                deleteRules = mkOption {
+                  description = lib.mdDoc "List of alert rule UIDs that should be deleted.";
+                  default = [];
+                  type = types.listOf (types.submodule {
+                    options.orgId = mkOption {
+                      description = lib.mdDoc "Organization ID, default = 1";
+                      default = 1;
+                      type = types.int;
+                    };
+
+                    options.uid = mkOption {
+                      description = lib.mdDoc "Unique identifier for the rule. Required.";
+                      type = types.str;
+                    };
+                  });
+                };
+              };
+            });
+            example = literalExpression ''
+              {
+                apiVersion = 1;
+
+                groups = [{
+                  orgId = 1;
+                  name = "my_rule_group";
+                  folder = "my_first_folder";
+                  interval = "60s";
+                  rules = [{
+                    uid = "my_id_1";
+                    title = "my_first_rule";
+                    condition = "A";
+                    data = [{
+                      refId = "A";
+                      datasourceUid = "-100";
+                      model = {
+                        conditions = [{
+                          evaluator = {
+                            params = [ 3 ];
+                            type = "git";
+                          };
+                          operator.type = "and";
+                          query.params = [ "A" ];
+                          reducer.type = "last";
+                          type = "query";
+                        }];
+                        datasource = {
+                          type = "__expr__";
+                          uid = "-100";
+                        };
+                        expression = "1==0";
+                        intervalMs = 1000;
+                        maxDataPoints = 43200;
+                        refId = "A";
+                        type = "math";
+                      };
+                    }];
+                    dashboardUid = "my_dashboard";
+                    panelId = 123;
+                    noDataState = "Alerting";
+                    for = "60s";
+                    annotations.some_key = "some_value";
+                    labels.team = "sre_team1";
+                  }];
+                }];
+
+                deleteRules = [{
+                  orgId = 1;
+                  uid = "my_id_1";
+                }];
+              }
+            '';
+          };
+        };
+
+        contactPoints = {
+          path = mkOption {
+            description = lib.mdDoc ''
+              Path to YAML contact points configuration. Can't be used with
+              `services.grafana.provision.alerting.contactPoints.settings` simultaneously.
+            '';
+            default = null;
+            type = types.nullOr types.path;
+          };
+
+          settings = mkOption {
+            description = lib.mdDoc ''
+              Grafana contact points configuration in Nix. Can't be used with
+              `services.grafana.provision.alerting.contactPoints.path` simultaneously. See
+              <link xlink:href="https://grafana.com/docs/grafana/latest/administration/provisioning/#contact-points"/>
+              for supported options.
+            '';
+            default = null;
+            type = types.nullOr (types.submodule {
+              options = {
+                apiVersion = mkOption {
+                  description = lib.mdDoc "Config file version.";
+                  default = 1;
+                  type = types.int;
+                };
+
+                contactPoints = mkOption {
+                  description = lib.mdDoc "List of contact points to import or update.";
+                  default = [];
+                  type = types.listOf (types.submodule {
+                    freeformType = provisioningSettingsFormat.type;
+
+                    options.name = mkOption {
+                      description = lib.mdDoc "Name of the contact point. Required.";
+                      type = types.str;
+                    };
+                  });
+                };
+
+                deleteContactPoints = mkOption {
+                  description = lib.mdDoc "List of receivers that should be deleted.";
+                  default = [];
+                  type = types.listOf (types.submodule {
+                    options.orgId = mkOption {
+                      description = lib.mdDoc "Organization ID, default = 1.";
+                      default = 1;
+                      type = types.int;
+                    };
+
+                    options.uid = mkOption {
+                      description = lib.mdDoc "Unique identifier for the receiver. Required.";
+                      type = types.str;
+                    };
+                  });
+                };
+              };
+            });
+            example = literalExpression ''
+              {
+                apiVersion = 1;
+
+                contactPoints = [{
+                  orgId = 1;
+                  name = "cp_1";
+                  receivers = [{
+                    uid = "first_uid";
+                    type = "prometheus-alertmanager";
+                    settings.url = "http://test:9000";
+                  }];
+                }];
+
+                deleteContactPoints = [{
+                  orgId = 1;
+                  uid = "first_uid";
+                }];
+              }
+            '';
+          };
+        };
+
+        policies = {
+          path = mkOption {
+            description = lib.mdDoc ''
+              Path to YAML notification policies configuration. Can't be used with
+              `services.grafana.provision.alerting.policies.settings` simultaneously.
+            '';
+            default = null;
+            type = types.nullOr types.path;
+          };
+
+          settings = mkOption {
+            description = lib.mdDoc ''
+              Grafana notification policies configuration in Nix. Can't be used with
+              `services.grafana.provision.alerting.policies.path` simultaneously. See
+              <link xlink:href="https://grafana.com/docs/grafana/latest/administration/provisioning/#notification-policies"/>
+              for supported options.
+            '';
+            default = null;
+            type = types.nullOr (types.submodule {
+              options = {
+                apiVersion = mkOption {
+                  description = lib.mdDoc "Config file version.";
+                  default = 1;
+                  type = types.int;
+                };
+
+                policies = mkOption {
+                  description = lib.mdDoc "List of contact points to import or update.";
+                  default = [];
+                  type = types.listOf (types.submodule {
+                    freeformType = provisioningSettingsFormat.type;
+                  });
+                };
+
+                resetPolicies = mkOption {
+                  description = lib.mdDoc "List of orgIds that should be reset to the default policy.";
+                  default = [];
+                  type = types.listOf types.int;
+                };
+              };
+            });
+            example = literalExpression ''
+              {
+                apiVersion = 1;
+
+                policies = [{
+                  orgId = 1;
+                  receiver = "grafana-default-email";
+                  group_by = [ "..." ];
+                  matchers = [
+                    "alertname = Watchdog"
+                    "severity =~ \"warning|critical\""
+                  ];
+                  mute_time_intervals = [
+                    "abc"
+                  ];
+                  group_wait = "30s";
+                  group_interval = "5m";
+                  repeat_interval = "4h";
+                }];
+
+                resetPolicies = [
+                  1
+                ];
+              }
+            '';
+          };
+        };
+
+        templates = {
+          path = mkOption {
+            description = lib.mdDoc ''
+              Path to YAML templates configuration. Can't be used with
+              `services.grafana.provision.alerting.templates.settings` simultaneously.
+            '';
+            default = null;
+            type = types.nullOr types.path;
+          };
+
+          settings = mkOption {
+            description = lib.mdDoc ''
+              Grafana templates configuration in Nix. Can't be used with
+              `services.grafana.provision.alerting.templates.path` simultaneously. See
+              <link xlink:href="https://grafana.com/docs/grafana/latest/administration/provisioning/#templates"/>
+              for supported options.
+            '';
+            default = null;
+            type = types.nullOr (types.submodule {
+              options = {
+                apiVersion = mkOption {
+                  description = lib.mdDoc "Config file version.";
+                  default = 1;
+                  type = types.int;
+                };
+
+                templates = mkOption {
+                  description = lib.mdDoc "List of templates to import or update.";
+                  default = [];
+                  type = types.listOf (types.submodule {
+                    freeformType = provisioningSettingsFormat.type;
+
+                    options.name = mkOption {
+                      description = lib.mdDoc "Name of the template, must be unique. Required.";
+                      type = types.str;
+                    };
+
+                    options.template = mkOption {
+                      description = lib.mdDoc "Alerting with a custom text template";
+                      type = types.str;
+                    };
+                  });
+                };
+
+                deleteTemplates = mkOption {
+                  description = lib.mdDoc "List of alert rule UIDs that should be deleted.";
+                  default = [];
+                  type = types.listOf (types.submodule {
+                    options.orgId = mkOption {
+                      description = lib.mdDoc "Organization ID, default = 1.";
+                      default = 1;
+                      type = types.int;
+                    };
+
+                    options.name = mkOption {
+                      description = lib.mdDoc "Name of the template, must be unique. Required.";
+                      type = types.str;
+                    };
+                  });
+                };
+              };
+            });
+            example = literalExpression ''
+              {
+                apiVersion = 1;
+
+                templates = [{
+                  orgId = 1;
+                  name = "my_first_template";
+                  template = "Alerting with a custom text template";
+                }];
+
+                deleteTemplates = [{
+                  orgId = 1;
+                  name = "my_first_template";
+                }];
+              }
+            '';
+          };
+        };
+
+        muteTimings = {
+          path = mkOption {
+            description = lib.mdDoc ''
+              Path to YAML mute timings configuration. Can't be used with
+              `services.grafana.provision.alerting.muteTimings.settings` simultaneously.
+            '';
+            default = null;
+            type = types.nullOr types.path;
+          };
+
+          settings = mkOption {
+            description = lib.mdDoc ''
+              Grafana mute timings configuration in Nix. Can't be used with
+              `services.grafana.provision.alerting.muteTimings.path` simultaneously. See
+              <link xlink:href="https://grafana.com/docs/grafana/latest/administration/provisioning/#mute-timings"/>
+              for supported options.
+            '';
+            default = null;
+            type = types.nullOr (types.submodule {
+              options = {
+                apiVersion = mkOption {
+                  description = lib.mdDoc "Config file version.";
+                  default = 1;
+                  type = types.int;
+                };
+
+                muteTimes = mkOption {
+                  description = lib.mdDoc "List of mute time intervals to import or update.";
+                  default = [];
+                  type = types.listOf (types.submodule {
+                    freeformType = provisioningSettingsFormat.type;
+
+                    options.name = mkOption {
+                      description = lib.mdDoc "Name of the mute time interval, must be unique. Required.";
+                      type = types.str;
+                    };
+                  });
+                };
+
+                deleteMuteTimes = mkOption {
+                  description = lib.mdDoc "List of mute time intervals that should be deleted.";
+                  default = [];
+                  type = types.listOf (types.submodule {
+                    options.orgId = mkOption {
+                      description = lib.mdDoc "Organization ID, default = 1.";
+                      default = 1;
+                      type = types.int;
+                    };
+
+                    options.name = mkOption {
+                      description = lib.mdDoc "Name of the mute time interval, must be unique. Required.";
+                      type = types.str;
+                    };
+                  });
+                };
+              };
+            });
+            example = literalExpression ''
+              {
+                apiVersion = 1;
+
+                muteTimes = [{
+                  orgId = 1;
+                  name = "mti_1";
+                  time_intervals = [{
+                    times = [{
+                      start_time = "06:00";
+                      end_time = "23:59";
+                    }];
+                    weekdays = [
+                      "monday:wednesday"
+                      "saturday"
+                      "sunday"
+                    ];
+                    months = [
+                      "1:3"
+                      "may:august"
+                      "december"
+                    ];
+                    years = [
+                      "2020:2022"
+                      "2030"
+                    ];
+                    days_of_month = [
+                      "1:5"
+                      "-3:-1"
+                    ];
+                  }];
+                }];
+
+                deleteMuteTimes = [{
+                  orgId = 1;
+                  name = "mti_1";
+                }];
+              }
+            '';
+          };
+        };
+      };
     };
 
     security = {
@@ -840,6 +1309,26 @@ in {
       {
         assertion = if (builtins.isList cfg.provision.dashboards) then true else cfg.provision.dashboards.settings == null || cfg.provision.dashboards.path == null;
         message = "Cannot set both dashboards settings and dashboards path";
+      }
+      {
+        assertion = cfg.provision.alerting.rules.settings == null || cfg.provision.alerting.rules.path == null;
+        message = "Cannot set both rules settings and rules path";
+      }
+      {
+        assertion = cfg.provision.alerting.contactPoints.settings == null || cfg.provision.alerting.contactPoints.path == null;
+        message = "Cannot set both contact points settings and contact points path";
+      }
+      {
+        assertion = cfg.provision.alerting.policies.settings == null || cfg.provision.alerting.policies.path == null;
+        message = "Cannot set both policies settings and policies path";
+      }
+      {
+        assertion = cfg.provision.alerting.templates.settings == null || cfg.provision.alerting.templates.path == null;
+        message = "Cannot set both templates settings and templates path";
+      }
+      {
+        assertion = cfg.provision.alerting.muteTimings.settings == null || cfg.provision.alerting.muteTimings.path == null;
+        message = "Cannot set both mute timings settings and mute timings path";
       }
     ];
 
