@@ -14193,6 +14193,8 @@ with pkgs;
   julia_16-bin = callPackage ../development/compilers/julia/1.6-bin.nix { };
   julia_18-bin = callPackage ../development/compilers/julia/1.8-bin.nix { };
 
+  julia_18 = callPackage ../development/compilers/julia/1.8.nix { };
+
   julia-lts-bin = julia_16-bin;
   julia-stable-bin = julia_18-bin;
   julia-bin = julia-stable-bin;
