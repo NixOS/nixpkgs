@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     "--enable-hashes=all"
     "--enable-obsolete-api=glibc"
     "--disable-failure-tokens"
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    "--disable-werror"
   ];
 
   nativeBuildInputs = [
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isMusl;
 
   meta = with lib; {
     description = "Extended crypt library for descrypt, md5crypt, bcrypt, and others";
