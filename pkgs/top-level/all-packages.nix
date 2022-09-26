@@ -10879,6 +10879,8 @@ with pkgs;
 
   scfbuild = python3.pkgs.callPackage ../tools/misc/scfbuild { };
 
+  scraper = callPackage ../tools/text/scraper { };
+
   scriptaculous = callPackage ../development/libraries/scriptaculous { };
 
   scrot = callPackage ../tools/graphics/scrot { };
