@@ -22,7 +22,7 @@ buildGoModule rec {
 
   preBuild = lib.optionalString (!stdenv.isx86_64) ''
     # The test assumex amd64 assembly
-    rm testdata/scripts/asm.txt
+    rm testdata/script/asm.txtar
   '';
 
   meta = {
