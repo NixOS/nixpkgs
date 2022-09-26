@@ -31460,6 +31460,7 @@ with pkgs;
   }) subversion;
 
   subversionClient = subversion.override {
+    openssl = openssl_1_1;
     bdbSupport = false;
     perlBindings = true;
     pythonBindings = true;
