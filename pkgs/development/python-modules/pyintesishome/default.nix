@@ -7,12 +7,15 @@
 buildPythonPackage rec {
   pname = "pyintesishome";
   version = "1.8.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jnimmo";
     repo = "pyIntesisHome";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-+pXGB7mQszbBp4KhOYzDKoGFoUHATWLbOU6QwMIpGWU=";
+    hash = "sha256-+pXGB7mQszbBp4KhOYzDKoGFoUHATWLbOU6QwMIpGWU=";
   };
 
   propagatedBuildInputs = [
@@ -21,7 +24,10 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "pyintesishome" ];
+
+  pythonImportsCheck = [
+    "pyintesishome"
+  ];
 
   meta = with lib; {
     description = "Python interface for IntesisHome devices";
