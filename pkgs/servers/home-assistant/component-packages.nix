@@ -2875,7 +2875,8 @@
     "telnet" = ps: with ps; [
     ];
     "temper" = ps: with ps; [
-    ]; # missing inputs: temperusb
+      temperusb
+    ];
     "template" = ps: with ps; [
     ];
     "tensorflow" = ps: with ps; [
