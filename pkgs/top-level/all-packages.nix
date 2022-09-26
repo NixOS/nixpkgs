@@ -34079,6 +34079,8 @@ with pkgs;
 
   protonup = with python3Packages; toPythonApplication protonup;
 
+  protonup-ng = with python3Packages; toPythonApplication protonup-ng;
+
   steam-rom-manager = callPackage ../tools/games/steam-rom-manager {};
 
   sdlpop = callPackage ../games/sdlpop { };
