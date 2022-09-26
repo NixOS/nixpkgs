@@ -10774,6 +10774,8 @@ in {
 
   temescal = callPackage ../development/python-modules/temescal { };
 
+  temperusb = callPackage ../development/python-modules/temperusb { };
+
   tempest = callPackage ../development/python-modules/tempest { };
 
   tempita = callPackage ../development/python-modules/tempita { };
