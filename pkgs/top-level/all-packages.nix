@@ -30754,7 +30754,9 @@ with pkgs;
 
   pqiv = callPackage ../applications/graphics/pqiv { };
 
-  qiv = callPackage ../applications/graphics/qiv { };
+  qiv = callPackage ../applications/graphics/qiv {
+    imlib2 = imlib2Full;
+  };
 
   premid = callPackage ../applications/misc/premid { };
 
