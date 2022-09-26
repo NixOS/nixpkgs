@@ -1,6 +1,5 @@
-# Preliminary GHC 9.4.2 expression using the make build system.
-# TODO(@sternenseemann): port to hadrian, so we are prepared for 9.6
-# where make support will be dropped.
+# DO NOT port this expression to hadrian. It is not possible to build a GHC
+# cross compiler with 9.4.* and hadrian.
 { lib, stdenv, pkgsBuildTarget, pkgsHostTarget, targetPackages
 
 # build-tools

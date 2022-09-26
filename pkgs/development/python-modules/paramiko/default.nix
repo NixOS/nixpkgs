@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AD5r7nwDTCH7sFG/g9wKnuQQYgTdPFMFTHFFLMTsOTg=";
+    hash = "sha256-AD5r7nwDTCH7sFG/g9wKnuQQYgTdPFMFTHFFLMTsOTg=";
   };
 
   patches = [
@@ -29,7 +29,12 @@ buildPythonPackage rec {
     # https://github.com/paramiko/paramiko/pull/1606/
     (fetchpatch {
       url = "https://github.com/paramiko/paramiko/commit/18e38b99f515056071fb27b9c1a4f472005c324a.patch";
-      sha256 = "sha256-bPDghPeLo3NiOg+JwD5CJRRLv2VEqmSx1rOF2Tf8ZDA=";
+      hash = "sha256-bPDghPeLo3NiOg+JwD5CJRRLv2VEqmSx1rOF2Tf8ZDA=";
+    })
+    (fetchpatch {
+      name = "fix-sftp-tests.patch";
+      url = "https://github.com/paramiko/paramiko/commit/47cfed55575c21ac558e6d00a4ab1814406be651.patch";
+      hash = "sha256-H3nKT8+4CTEDoiqnlhFfuKnc/65GGfwwAm9H2lwrlK8=";
     })
   ];
 

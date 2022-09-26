@@ -3,10 +3,11 @@
 , fetchurl
 , gmp
 , libX11
+, libpthreadstubs
 , perl
 , readline
 , tex
-, withThread ? true, libpthreadstubs
+, withThread ? true
 }:
 
 assert withThread -> libpthreadstubs != null;
@@ -80,7 +81,7 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ertes AndersonTorres ] ++ teams.sage.members;
+    maintainers = with maintainers; [ ertes ] ++ teams.sage.members;
     platforms = platforms.linux ++ platforms.darwin;
     broken = stdenv.isDarwin && stdenv.isAarch64;
     mainProgram = "gp";

@@ -7,7 +7,7 @@
 , paramiko
 , pytestCheckHook
 , requests
-, setuptools_scm
+, setuptools-scm
 , urllib3
 , websocket-client
 }:
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [

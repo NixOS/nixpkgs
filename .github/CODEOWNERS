@@ -37,6 +37,7 @@
 /pkgs/top-level/splice.nix                       @Ericson2314 @matthewbauer
 /pkgs/top-level/release-cross.nix                @Ericson2314 @matthewbauer
 /pkgs/stdenv/generic                             @Ericson2314 @matthewbauer
+/pkgs/stdenv/generic/check-meta.nix              @Ericson2314 @matthewbauer @piegamesde
 /pkgs/stdenv/cross                               @Ericson2314 @matthewbauer
 /pkgs/build-support/cc-wrapper                   @Ericson2314
 /pkgs/build-support/bintools-wrapper             @Ericson2314

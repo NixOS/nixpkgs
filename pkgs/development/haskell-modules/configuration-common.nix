@@ -2388,14 +2388,10 @@ self: super: {
   # The shipped Setup.hs file is broken.
   csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
 
-  # 2022-02-25: Upstream fixes are not released. Remove this override on update.
-  cabal-fmt = assert super.cabal-fmt.version == "0.1.5.1"; lib.pipe super.cabal-fmt [
-    doJailbreak
-    (appendPatch (fetchpatch {
-      url = "https://github.com/phadej/cabal-fmt/commit/842630f70adb5397245109f77dba07662836e964.patch";
-      sha256 = "sha256-s0W/TI3wHA73MFyKKcNBJFHgFAmBDLGbLaIvWbe/Bsg=";
-    }))
-  ];
+  cabal-fmt = doJailbreak (super.cabal-fmt.override {
+    # Needs newer Cabal-syntex version.
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+  });
 
   # Tests require ghc-9.2.
   ema = dontCheck super.ema;
