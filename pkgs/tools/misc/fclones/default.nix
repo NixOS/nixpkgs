@@ -27,6 +27,11 @@ rustPlatform.buildRustPackage rec {
   # device::test_physical_device_name test fails on Darwin
   doCheck = !stdenv.isDarwin;
 
+  checkFlags = [
+    # ofborg sometimes fails with "Resource temporarily unavailable"
+    "--skip=cache::test::return_none_if_different_transform_was_used"
+  ];
+
   meta = with lib; {
     description = "Efficient Duplicate File Finder and Remover";
     homepage = "https://github.com/pkolaczk/fclones";
