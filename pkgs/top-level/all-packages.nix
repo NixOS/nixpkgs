@@ -14213,6 +14213,8 @@ with pkgs;
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
+  kind2 = callPackage ../development/compilers/kind2 { };
+
   knightos-genkfs = callPackage ../development/tools/knightos/genkfs { };
 
   regenkfs = callPackage ../development/tools/knightos/regenkfs { };
