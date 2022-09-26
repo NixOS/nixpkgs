@@ -31297,9 +31297,13 @@ with pkgs;
 
   swingsane = callPackage ../applications/graphics/swingsane { };
 
-  sxiv = callPackage ../applications/graphics/sxiv { };
+  sxiv = callPackage ../applications/graphics/sxiv {
+    imlib2 = imlib2Full;
+  };
 
-  nsxiv = callPackage ../applications/graphics/nsxiv { };
+  nsxiv = callPackage ../applications/graphics/nsxiv {
+    imlib2 = imlib2Full;
+  };
 
   resilio-sync = callPackage ../applications/networking/resilio-sync { };
 
