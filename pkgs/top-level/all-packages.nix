@@ -20710,7 +20710,11 @@ with pkgs;
   libx86 = callPackage ../development/libraries/libx86 {};
 
   libxcrypt = callPackage ../development/libraries/libxcrypt {
-    perl = perl.override { enableCrypt = false; };
+    fetchurl = stdenv.fetchurlBoot;
+    perl = perl.override {
+      enableCrypt = false;
+      fetchurl = stdenv.fetchurlBoot;
+    };
   };
 
   libxdg_basedir = callPackage ../development/libraries/libxdg-basedir { };
