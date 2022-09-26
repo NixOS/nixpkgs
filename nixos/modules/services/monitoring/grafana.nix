@@ -410,7 +410,7 @@ in {
       connMaxLifetime = mkOption {
         description = lib.mdDoc ''
           Sets the maximum amount of time (in seconds) a connection may be reused.
-          For MySQL this setting should be shorter than the `wait_timeout' variable.
+          For MySQL this setting should be shorter than the `wait_timeout` variable.
         '';
         default = "unlimited";
         example = 14400;
@@ -434,7 +434,7 @@ in {
             description = lib.mdDoc ''
               Grafana datasource configuration in Nix. Can't be used with
               `services.grafana.provision.datasources.path` simultaneously. See
-              <link xlink:href="https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources"/>
+              <https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources>
               for supported options.
             '';
             default = null;
@@ -511,7 +511,7 @@ in {
             description = lib.mdDoc ''
               Grafana dashboard configuration in Nix. Can't be used with
               `services.grafana.provision.dashboards.path` simultaneously. See
-              <link xlink:href="https://grafana.com/docs/grafana/latest/administration/provisioning/#dashboards"/>
+              <https://grafana.com/docs/grafana/latest/administration/provisioning/#dashboards>
               for supported options.
             '';
             default = null;
@@ -575,7 +575,7 @@ in {
             description = lib.mdDoc ''
               Grafana rules configuration in Nix. Can't be used with
               `services.grafana.provision.alerting.rules.path` simultaneously. See
-              <link xlink:href="https://grafana.com/docs/grafana/latest/administration/provisioning/#rules"/>
+              <https://grafana.com/docs/grafana/latest/administration/provisioning/#rules>
               for supported options.
             '';
             default = null;
@@ -698,7 +698,7 @@ in {
             description = lib.mdDoc ''
               Grafana contact points configuration in Nix. Can't be used with
               `services.grafana.provision.alerting.contactPoints.path` simultaneously. See
-              <link xlink:href="https://grafana.com/docs/grafana/latest/administration/provisioning/#contact-points"/>
+              <https://grafana.com/docs/grafana/latest/administration/provisioning/#contact-points>
               for supported options.
             '';
             default = null;
@@ -778,7 +778,7 @@ in {
             description = lib.mdDoc ''
               Grafana notification policies configuration in Nix. Can't be used with
               `services.grafana.provision.alerting.policies.path` simultaneously. See
-              <link xlink:href="https://grafana.com/docs/grafana/latest/administration/provisioning/#notification-policies"/>
+              <https://grafana.com/docs/grafana/latest/administration/provisioning/#notification-policies>
               for supported options.
             '';
             default = null;
@@ -847,7 +847,7 @@ in {
             description = lib.mdDoc ''
               Grafana templates configuration in Nix. Can't be used with
               `services.grafana.provision.alerting.templates.path` simultaneously. See
-              <link xlink:href="https://grafana.com/docs/grafana/latest/administration/provisioning/#templates"/>
+              <https://grafana.com/docs/grafana/latest/administration/provisioning/#templates>
               for supported options.
             '';
             default = null;
@@ -928,7 +928,7 @@ in {
             description = lib.mdDoc ''
               Grafana mute timings configuration in Nix. Can't be used with
               `services.grafana.provision.alerting.muteTimings.path` simultaneously. See
-              <link xlink:href="https://grafana.com/docs/grafana/latest/administration/provisioning/#mute-timings"/>
+              <https://grafana.com/docs/grafana/latest/administration/provisioning/#mute-timings>
               for supported options.
             '';
             default = null;
