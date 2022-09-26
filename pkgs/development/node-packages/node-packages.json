@@ -191,6 +191,7 @@
 , "json-server"
 , "jsonlint"
 , "jsonplaceholder"
+, "junit-report-merger"
 , "kaput-cli"
 , "katex"
 , "karma"
