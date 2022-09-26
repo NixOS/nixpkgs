@@ -31,13 +31,16 @@ in
     '';
 
     # Perform custom build phases in package.json
-    #yarn --offline add jsdom --cache-folder ${offlineCache} --modules-folder node_modules
+    # jsdom needs to be installed from the yarn cache
     buildPhase = ''
       export HOME=$(mktemp -d)
       yarn --offline run build
     '';
 
     # Manual install similar to Dockerfile method
+    # Must copy across node_modules in order to make jsdom available.
+    # Can remove this once ncc can handle jsdom appropriately.
+    # https://github.com/jsdom/jsdom/issues/2508
     installPhase = ''
       mkdir $out
       cp -r package.json $out
@@ -45,9 +48,8 @@ in
       cp -r content $out
       cp -r views $out
       cp -r static $out
+      cp -r node_modules $out
     '';
-
-    # Need to install jsdom somehow
 
     doDist = false;
 
