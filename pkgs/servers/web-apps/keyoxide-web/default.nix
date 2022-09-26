@@ -1,9 +1,9 @@
 { stdenv
 , lib
 , nodejs-16_x
-, fetchgitLocal
 , fetchYarnDeps
 , mkYarnPackage
+, makeWrapper
 }:
 let
   nodejs = nodejs-16_x;
@@ -41,6 +41,7 @@ in
     # Must copy across node_modules in order to make jsdom available.
     # Can remove this once ncc can handle jsdom appropriately.
     # https://github.com/jsdom/jsdom/issues/2508
+    nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
       mkdir $out
       cp -r package.json $out
@@ -49,6 +50,7 @@ in
       cp -r views $out
       cp -r static $out
       cp -r node_modules $out
+      makeWrapper $nodejs/bin/node $out/bin/keyoxide-web --chdir $out --add-flags "--experimental-fetch ./dist"
     '';
 
     doDist = false;
