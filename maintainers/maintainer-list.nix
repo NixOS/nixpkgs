@@ -11466,6 +11466,17 @@
     githubId = 3598650;
     name = "Fritz Otlinghaus";
   };
+  Scrumplex = {
+    name = "Sefa Eyeoglu";
+    email = "contact@scrumplex.net";
+    matrix = "@Scrumplex:duckhub.io";
+    github = "Scrumplex";
+    githubId = 11587657;
+    keys = [{
+      longkeyid = "rsa2048/0xC10411294912A422";
+      fingerprint = "AF1F B107 E188 CB97 9A94  FD7F C104 1129 4912 A422";
+    }];
+  };
   scubed2 = {
     email = "scubed2@gmail.com";
     github = "scubed2";
