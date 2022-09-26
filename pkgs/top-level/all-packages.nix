@@ -1508,6 +1508,10 @@ with pkgs;
 
   fuse-emulator = callPackage ../applications/emulators/fuse-emulator {};
 
+  fw = callPackage ../tools/misc/fw {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   gcdemu = callPackage ../applications/emulators/cdemu/gui.nix { };
 
   gensgs = pkgsi686Linux.callPackage ../applications/emulators/gens-gs { };
