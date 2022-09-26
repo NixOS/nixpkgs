@@ -25,9 +25,6 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.nix;
 
-  # Without this dotnet attempts to restore for Windows targets, which it cannot find the dependencies for
-  dotnetRestoreFlags = [ "--runtime ${dotnetCorePackages.systemToDotnetRid stdenvNoCC.targetPlatform.system}" ];
-
   projectFile = "ArchiSteamFarm.sln";
   executables = [ "ArchiSteamFarm" ];
 

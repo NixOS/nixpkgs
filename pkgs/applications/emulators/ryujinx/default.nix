@@ -91,8 +91,6 @@ buildDotnetModule rec {
     "/p:ExtraDefineConstants=DISABLE_UPDATER"
   ];
 
-  dotnetRestoreFlags = [ "--runtime ${dotnetCorePackages.systemToDotnetRid stdenvNoCC.targetPlatform.system}" ];
-
   executables = [
     "Ryujinx.Headless.SDL2"
     "Ryujinx.Ava"

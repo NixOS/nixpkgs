@@ -15,7 +15,7 @@ dotnetBuildHook() {
     fi
 
     if [ "${selfContainedBuild-}" ]; then
-        dotnetBuildFlags+=("-p:SelfContained=true")
+        dotnetBuildFlags+=(--runtime "@runtimeId@" "-p:SelfContained=true")
     else
         dotnetBuildFlags+=("-p:SelfContained=false")
     fi

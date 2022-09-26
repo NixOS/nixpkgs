@@ -29,7 +29,6 @@ let finalPackage = buildDotnetModule rec {
     patchelf
   ];
 
-  dotnetRestoreFlags = [ "--runtime ${dotnetCorePackages.systemToDotnetRid stdenv.targetPlatform.system}" ];
   dotnetInstallFlags = [ "--framework net6.0" ];
   dotnetBuildFlags = [ "--framework net6.0" "--no-self-contained" ];
   dotnetFlags = [
