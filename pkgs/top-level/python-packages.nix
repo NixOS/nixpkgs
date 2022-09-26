@@ -1647,6 +1647,8 @@ in {
 
   catboost = callPackage ../development/python-modules/catboost { };
 
+  catkin_pkg = callPackage ../development/python-modules/catkin_pkg { };
+
   cattrs = callPackage ../development/python-modules/cattrs { };
 
   cbeams = callPackage ../misc/cbeams { };
@@ -1962,6 +1964,50 @@ in {
   ColanderAlchemy = callPackage ../development/python-modules/colanderalchemy { };
 
   colander = callPackage ../development/python-modules/colander { };
+
+  colcon-argcomplete = callPackage ../development/python-modules/colcon-argcomplete { };
+
+  colcon-bash = callPackage ../development/python-modules/colcon-bash { };
+
+  colcon-cd = callPackage ../development/python-modules/colcon-cd { };
+
+  colcon-cmake = callPackage ../development/python-modules/colcon-cmake { };
+
+  colcon-common-extensions = callPackage ../development/python-modules/colcon-common-extensions { };
+
+  colcon-core = callPackage ../development/python-modules/colcon-core { };
+
+  colcon-defaults = callPackage ../development/python-modules/colcon-defaults { };
+
+  colcon-devtools = callPackage ../development/python-modules/colcon-devtools { };
+
+  colcon-library-path = callPackage ../development/python-modules/colcon-library-path { };
+
+  colcon-metadata = callPackage ../development/python-modules/colcon-metadata { };
+
+  colcon-notification = callPackage ../development/python-modules/colcon-notification { };
+
+  colcon-output = callPackage ../development/python-modules/colcon-output { };
+
+  colcon-package-information = callPackage ../development/python-modules/colcon-package-information { };
+
+  colcon-package-selection = callPackage ../development/python-modules/colcon-package-selection { };
+
+  colcon-parallel-executor = callPackage ../development/python-modules/colcon-parallel-executor { };
+
+  colcon-pkg-config = callPackage ../development/python-modules/colcon-pkg-config { };
+
+  colcon-powershell = callPackage ../development/python-modules/colcon-powershell { };
+
+  colcon-python-setup-py = callPackage ../development/python-modules/colcon-python-setup-py { };
+
+  colcon-recursive-crawl = callPackage ../development/python-modules/colcon-recursive-crawl { };
+
+  colcon-ros = callPackage ../development/python-modules/colcon-ros { };
+
+  colcon-test-result = callPackage ../development/python-modules/colcon-test-result { };
+
+  colcon-zsh = callPackage ../development/python-modules/colcon-zsh { };
 
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
