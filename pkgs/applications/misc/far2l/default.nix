@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "far2l";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
     rev = "v_${version}";
-    sha256 = "sha256-nfoAElPLQ97lj65MBX4JMEdgTFbkdEbR1BazYZgV/lg=";
+    sha256 = "sha256-0t1ND6LmDcivfrZ8RaEr1vjeS5JtaeWkoHkl2e7Xr5s=";
   };
 
   patches = [ ./python_prebuild.patch ];
