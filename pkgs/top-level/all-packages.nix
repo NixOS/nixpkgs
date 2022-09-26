@@ -17072,6 +17072,8 @@ with pkgs;
     };
   }));
 
+  portableService = callPackage ../build-support/portable-service { };
+
   polar = callPackage ../tools/misc/polar { };
 
   inherit (nodePackages) postcss-cli;
