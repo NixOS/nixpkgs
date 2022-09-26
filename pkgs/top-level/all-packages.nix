@@ -12240,9 +12240,7 @@ with pkgs;
 
   wstunnel = haskell.lib.compose.justStaticExecutables haskellPackages.wstunnel;
 
-  wolfebin = callPackage ../tools/networking/wolfebin {
-    python = python2;
-  };
+  wolfebin = callPackage ../tools/networking/wolfebin { };
 
   xautoclick = callPackage ../applications/misc/xautoclick {};
 
