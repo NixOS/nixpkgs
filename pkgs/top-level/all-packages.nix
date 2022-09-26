@@ -33414,8 +33414,7 @@ with pkgs;
 
   dwarf-therapist = dwarf-fortress-packages.dwarf-therapist;
 
-  dxx-rebirth = callPackage ../games/dxx-rebirth
-    { stdenv = gcc10StdenvCompat; physfs = physfs_2; };
+  dxx-rebirth = callPackage ../games/dxx-rebirth { };
 
   inherit (callPackages ../games/dxx-rebirth/assets.nix { })
     descent1-assets
