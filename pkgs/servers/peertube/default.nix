@@ -6,30 +6,6 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then "linux-x64"
     else throw "Unsupported architecture: ${stdenv.hostPlatform.system}";
 
-  version = "4.2.2";
-
-  source = fetchFromGitHub {
-    owner = "Chocobozzz";
-    repo = "PeerTube";
-    rev = "v${version}";
-    sha256 = "sha256-q6wSk5AO91Z6dw5MgpO7QTAlA8Q5Xx1CboBr7SElVUA=";
-  };
-
-  yarnOfflineCacheServer = fetchYarnDeps {
-    yarnLock = "${source}/yarn.lock";
-    sha256 = "sha256-MMsxh20jcbW4YYsJyoupKbT9+Xa1BWZAmYHoj2/t+LM=";
-  };
-
-  yarnOfflineCacheTools = fetchYarnDeps {
-    yarnLock = "${source}/server/tools/yarn.lock";
-    sha256 = "sha256-maPR8OCiuNlle0JQIkZSgAqW+BrSxPwVm6CkxIrIg5k=";
-  };
-
-  yarnOfflineCacheClient = fetchYarnDeps {
-    yarnLock = "${source}/client/yarn.lock";
-    sha256 = "sha256-6Snx1OwEndGrkMZbAEsoNRUQnZcwH+pwSDZW8igCzXA=";
-  };
-
   bcrypt_version = "5.0.1";
   bcrypt_lib = fetchurl {
     url = "https://github.com/kelektiv/node.bcrypt.js/releases/download/v${bcrypt_version}/bcrypt_lib-v${bcrypt_version}-napi-v3-${arch}-glibc.tar.gz";
@@ -37,9 +13,30 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  inherit version;
   pname = "peertube";
-  src = source;
+  version = "4.2.2";
+
+  src = fetchFromGitHub {
+    owner = "Chocobozzz";
+    repo = "PeerTube";
+    rev = "v${version}";
+    sha256 = "sha256-q6wSk5AO91Z6dw5MgpO7QTAlA8Q5Xx1CboBr7SElVUA=";
+  };
+
+  yarnOfflineCacheServer = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    sha256 = "sha256-MMsxh20jcbW4YYsJyoupKbT9+Xa1BWZAmYHoj2/t+LM=";
+  };
+
+  yarnOfflineCacheTools = fetchYarnDeps {
+    yarnLock = "${src}/server/tools/yarn.lock";
+    sha256 = "sha256-maPR8OCiuNlle0JQIkZSgAqW+BrSxPwVm6CkxIrIg5k=";
+  };
+
+  yarnOfflineCacheClient = fetchYarnDeps {
+    yarnLock = "${src}/client/yarn.lock";
+    sha256 = "sha256-6Snx1OwEndGrkMZbAEsoNRUQnZcwH+pwSDZW8igCzXA=";
+  };
 
   nativeBuildInputs = [ fixup_yarn_lock jq nodejs yarn ];
 
@@ -49,13 +46,13 @@ in stdenv.mkDerivation rec {
     fixup_yarn_lock ~/yarn.lock
     fixup_yarn_lock ~/server/tools/yarn.lock
     fixup_yarn_lock ~/client/yarn.lock
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCacheServer}
+    yarn config --offline set yarn-offline-mirror $yarnOfflineCacheServer
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
     cd ~/server/tools
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCacheTools}
+    yarn config --offline set yarn-offline-mirror $yarnOfflineCacheTools
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
     cd ~/client
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCacheClient}
+    yarn config --offline set yarn-offline-mirror $yarnOfflineCacheClient
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
 
     patchShebangs ~/node_modules
