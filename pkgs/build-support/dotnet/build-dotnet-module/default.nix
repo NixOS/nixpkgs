@@ -184,7 +184,7 @@ stdenvNoCC.mkDerivation (args // {
                     shift
                     ;;
                 --help|-h)
-                    echo "usage: $0 <output path> [--keep-sources] [--help]"
+                    echo "usage: $0 [--keep-sources] [--help] <output path>"
                     echo "    <output path>   The path to write the lockfile to. A temporary file is used if this is not set"
                     echo "    --keep-sources  Dont remove temporary directories upon exit, useful for debugging"
                     echo "    --help          Show this help message"
