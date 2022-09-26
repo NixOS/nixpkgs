@@ -50,14 +50,14 @@ let
     extraConfigPaths = lib.forEach data.vendored_gems (gem: "${src}/vendor/gems/${gem}");
   };
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    sha256 = data.yarn_hash;
-  };
-
   assets = stdenv.mkDerivation {
     pname = "gitlab-assets";
     inherit version src;
+
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = src + "/yarn.lock";
+      sha256 = data.yarn_hash;
+    };
 
     nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert ];
 
@@ -91,7 +91,7 @@ let
       export HOME=$NIX_BUILD_TOP/fake_home
 
       # Make yarn install packages from our offline cache, not the registry
-      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
       ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
