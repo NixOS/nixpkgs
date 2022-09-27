@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, pcre, pcre2, jemalloc, libxslt, groff, ncurses, pkg-config, readline, libedit
-, coreutils, python3, makeWrapper }:
+, coreutils, python3, makeWrapper, nixosTests }:
 
 let
   common = { version, hash, extraNativeBuildInputs ? [] }:
@@ -11,8 +11,6 @@ let
         url = "https://varnish-cache.org/_downloads/${pname}-${version}.tgz";
         inherit hash;
       };
-
-      passthru.python = python3;
 
       nativeBuildInputs = with python3.pkgs; [ pkg-config docutils sphinx makeWrapper];
       buildInputs = [
@@ -36,6 +34,11 @@ let
       NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-fexcess-precision=standard";
 
       outputs = [ "out" "dev" "man" ];
+
+      passthru = {
+        python = python3;
+        tests = nixosTests."varnish${builtins.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor version)}";
+      };
 
       meta = with lib; {
         broken = stdenv.isDarwin;
