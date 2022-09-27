@@ -74,6 +74,8 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
+      # Version 40.alpha preceded version 4.0.
+      freeze = "40.alpha";
     };
   };
 
