@@ -303,6 +303,30 @@ in
     inputs = [ pkgs.opentracing-cpp ];
   };
 
+  opentelemetry = {
+    src = fetchFromGitHub {
+      owner = "open-telemetry";
+      repo = "opentelemetry-cpp-contrib";
+      rev = "webserver/v1.0.1";
+      hash = "sha256-mf823DYhGLqP7lBtF6vH0JyGiykCi10pEzRvVj+qBLA=";
+      # Adds a missing header and moves the module to the root of the store path
+      postFetch = ''
+        mv $out/instrumentation/nginx .
+        sed -i '1s/^/#include <grpcpp\/grpcpp.h>\n/' nginx/src/otel_ngx_module.cpp
+
+        rm -rf $out
+        mv nginx $out
+      '';
+    };
+
+    inputs = with pkgs; [ opentelemetry-cpp protobuf grpc curl ];
+
+    meta = {
+      description = "Adds OpenTelemetry distributed tracing support to nginx";
+      license = lib.licenses.asl20;
+    };
+  };
+
   pagespeed =
     let
       version = pkgs.psol.version;
