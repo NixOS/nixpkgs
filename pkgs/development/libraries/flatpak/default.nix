@@ -89,6 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/issues/53441
     ./unset-env-vars.patch
 
+    # Do not clear XDG_DATA_DIRS in fish shell
+    # https://github.com/flatpak/flatpak/pull/5123
+    ./no-breaking-fish.patch
+
     # The icon validator needs to access the gdk-pixbuf loaders in the Nix store
     # and cannot bind FHS paths since those are not available on NixOS.
     finalAttrs.passthru.icon-validator-patch
