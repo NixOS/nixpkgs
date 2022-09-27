@@ -2908,6 +2908,8 @@ in {
 
   eiswarnung = callPackage ../development/python-modules/eiswarnung { };
 
+  ehtim = callPackage ../development/python-modules/ehtim { };
+
   elgato = callPackage ../development/python-modules/elgato { };
 
   elkm1-lib = callPackage ../development/python-modules/elkm1-lib { };
