@@ -19338,9 +19338,7 @@ with pkgs;
   # this is still the new version of the old API
   libtoxcore-new = callPackage ../development/libraries/libtoxcore/new-api.nix { };
 
-  inherit (callPackages ../development/libraries/libtoxcore {})
-    libtoxcore_0_1 libtoxcore_0_2;
-  libtoxcore = libtoxcore_0_2;
+  libtoxcore = callPackage ../development/libraries/libtoxcore {};
 
   libtpms = callPackage ../tools/security/libtpms { };
 
