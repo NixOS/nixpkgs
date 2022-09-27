@@ -20506,9 +20506,7 @@ with pkgs;
 
   libtorrent-rasterbar = libtorrent-rasterbar-2_0_x;
 
-  inherit (callPackages ../development/libraries/libtoxcore {})
-    libtoxcore_0_1 libtoxcore_0_2;
-  libtoxcore = libtoxcore_0_2;
+  libtoxcore = callPackage ../development/libraries/libtoxcore {};
 
   libtpms = callPackage ../tools/security/libtpms { };
 
