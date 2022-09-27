@@ -169,7 +169,7 @@ stdenv.mkDerivation rec {
   preInstallCheck = optionals (withNgspice) [ "export LD_LIBRARY_PATH=${libngspice}/lib" ];
 
   # debug builds fail all but the python test
-  doInstallCheck = !debug;
+  doInstallCheck = !(!stable || debug);
   installCheckTarget = "test";
 
   dontStrip = debug;
