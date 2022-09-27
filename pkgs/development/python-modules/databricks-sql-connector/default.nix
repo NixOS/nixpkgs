@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Databricks SQL Connector for Python";
-    homepage = https://docs.databricks.com/dev-tools/python-sql-connector.html;
+    homepage = "https://docs.databricks.com/dev-tools/python-sql-connector.html";
     license = licenses.asl20;
     maintainers = with maintainers; [ harvidsen ];
   };
