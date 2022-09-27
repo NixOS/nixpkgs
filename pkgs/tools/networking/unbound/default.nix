@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
-  nativeBuildInputs = [ makeWrapper ]
+  nativeBuildInputs = [ makeWrapper pkg-config ]
     ++ lib.optionals withPythonModule [ swig ];
 
   buildInputs = [ openssl nettle expat libevent ]
-    ++ lib.optionals withSystemd [ pkg-config systemd ]
+    ++ lib.optionals withSystemd [ systemd ]
     ++ lib.optionals withDoH [ libnghttp2 ]
     ++ lib.optionals withPythonModule [ python ];
 
