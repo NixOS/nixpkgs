@@ -459,7 +459,7 @@ final: prev: {
   };
 
   tedicross = prev."tedicross-git+https://github.com/TediCross/TediCross.git#v0.8.7".override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
+    nativeBuildInputs = with pkgs; [ makeWrapper libtool autoconf ];
     postInstall = ''
       makeWrapper '${nodejs}/bin/node' "$out/bin/tedicross" \
         --add-flags "$out/lib/node_modules/tedicross/main.js"
