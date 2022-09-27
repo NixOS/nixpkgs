@@ -4132,6 +4132,8 @@ with pkgs;
 
   humioctl = callPackage ../applications/logging/humioctl {};
 
+  huniq = callPackage ../tools/text/huniq { };
+
   hyprland = callPackage ../applications/window-managers/hyprland {
     wlroots = wlroots.overrideAttrs (_: {
       version = "unstable-2022-06-07";
@@ -10666,6 +10668,8 @@ with pkgs;
 
   rnp = callPackage ../tools/security/rnp { };
 
+  rnr = callPackage ../tools/text/rnr { };
+
   rnv = callPackage ../tools/text/xml/rnv { };
 
   rosie = callPackage ../tools/text/rosie { };
@@ -14146,6 +14150,8 @@ with pkgs;
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
+  kind2 = callPackage ../development/compilers/kind2 { };
+
   knightos-genkfs = callPackage ../development/tools/knightos/genkfs { };
 
   regenkfs = callPackage ../development/tools/knightos/regenkfs { };
@@ -17044,6 +17050,10 @@ with pkgs;
   premake = premake4;
 
   privacyidea = callPackage ../applications/misc/privacyidea { };
+
+  process-viewer = callPackage ../applications/misc/process-viewer {
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation IOKit;
+  };
 
   procodile = callPackage ../tools/system/procodile { };
 
@@ -33325,8 +33335,7 @@ with pkgs;
 
   dwarf-therapist = dwarf-fortress-packages.dwarf-therapist;
 
-  dxx-rebirth = callPackage ../games/dxx-rebirth
-    { stdenv = gcc10StdenvCompat; physfs = physfs_2; };
+  dxx-rebirth = callPackage ../games/dxx-rebirth { };
 
   inherit (callPackages ../games/dxx-rebirth/assets.nix { })
     descent1-assets
