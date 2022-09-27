@@ -16453,6 +16453,8 @@ with pkgs;
 
   dive = callPackage ../development/tools/dive { };
 
+  dioxus-cli = callPackage ../development/tools/rust/dioxus-cli { };
+
   doclifter = callPackage ../development/tools/misc/doclifter { };
 
   docutils = with python3Packages; toPythonApplication docutils;
