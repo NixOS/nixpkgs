@@ -159,6 +159,13 @@ final: prev: {
     '';
   };
 
+  fauna-shell = prev.fauna-shell.override {
+    # printReleaseNotes just pulls them from GitHub which is not allowed in sandbox
+    preRebuild = ''
+      sed -i 's|"node ./tools/printReleaseNotes"|"true"|' node_modules/faunadb/package.json
+    '';
+  };
+
   flood = prev.flood.override {
     buildInputs = [ final.node-pre-gyp ];
   };
