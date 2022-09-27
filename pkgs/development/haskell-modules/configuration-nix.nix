@@ -154,11 +154,6 @@ self: super: builtins.intersectAttrs super {
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend pkgs.gtk3 super.gi-dbusmenugtk3;
 
-  hs-mesos = overrideCabal (drv: {
-    # Pass _only_ mesos; the correct protobuf is propagated.
-    extraLibraries = [ pkgs.mesos ];
-    preConfigure = "sed -i -e /extra-lib-dirs/d -e 's|, /usr/include, /usr/local/include/mesos||' hs-mesos.cabal";
-  }) super.hs-mesos;
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
