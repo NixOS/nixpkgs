@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , substituteAll
 , libpcap
+, libxcrypt
 , openssl
 , bash
 }:
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libpcap
+    libxcrypt
     openssl
     bash
   ];
@@ -47,6 +49,8 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
+
+  NIX_LDFLAGS = "-lcrypt";
 
   installPhase = ''
     runHook preInstall
