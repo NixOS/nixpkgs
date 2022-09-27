@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "emcee";
-  version = "3.1.2";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "dfm";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-MguhnLLo1zeNuMca8vWpxwysh9YJDD+IzvGQDbScK2M=";
+    sha256 = "sha256-HAuwWFNL63BlvHomQx+hWw4et7kRYd3zhH2FAj632Lg=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
