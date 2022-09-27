@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "virglrenderer";
-  version = "0.10.0";
+  version = "0.10.3";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/virgl/virglrenderer/-/archive/virglrenderer-${version}/virglrenderer-virglrenderer-${version}.tar.bz2";
-    sha256 = "tMLD6lu1NnKeoQQIzwhMypKdrW5alULod2cdb8+76iM=";
+    sha256 = "uKHxPhKAMwg3E1GeTJNryd8K/nYQnx8r1eB3uME6LUQ=";
   };
 
   buildInputs = [ libGLU libepoxy libX11 libdrm mesa ];
