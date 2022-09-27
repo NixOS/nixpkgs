@@ -61,4 +61,6 @@ in
       inherit config lib pkgs;
     };
   };
+
+  meta.maintainers = with maintainers; [ houstdav000 ];
 }
