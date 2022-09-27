@@ -18,9 +18,8 @@ let
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
 
-  generic = { version, sha256 }: let
-    ver = version;
-    atLeast30 = lib.versionAtLeast ver.majMin "3.0";
+  generic = { version, sha256 } @ genericArgs: let
+    allArgs = args // genericArgs;
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
@@ -54,13 +53,23 @@ let
           rubygemsSupport = false;
         }
       , useBaseRuby ? stdenv.hostPlatform != stdenv.buildPlatform || useRailsExpress
+      , version
+      , sha256
+      , patchsetsVersion ? version
       }:
+      let
+        atLeast30 = lib.versionAtLeast version.majMin "3.0";
+        patchsets = (import ./patchsets.nix {
+          inherit patchSet useRailsExpress ops fetchpatch;
+          patchLevel = patchsetsVersion.patchLevel;
+        }).${patchsetsVersion.majMinTiny};
+      in
       stdenv.mkDerivation rec {
         pname = "ruby";
         inherit version;
 
         src = fetchurl {
-          url = "https://cache.ruby-lang.org/pub/ruby/${ver.majMin}/ruby-${ver}.tar.gz";
+          url = "https://cache.ruby-lang.org/pub/ruby/${version.majMin}/ruby-${version}.tar.gz";
           inherit sha256;
         };
 
@@ -76,7 +85,7 @@ let
           ++ (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
           ++ (op zlibSupport zlib)
-          ++ (op (lib.versionOlder ver.majMin "3.0" && opensslSupport) openssl_1_1)
+          ++ (op (lib.versionOlder version.majMin "3.0" && opensslSupport) openssl_1_1)
           ++ (op (atLeast30 && opensslSupport) openssl_1_1)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
@@ -91,11 +100,8 @@ let
         enableParallelBuilding = true;
 
         patches =
-          (import ./patchsets.nix {
-            inherit patchSet useRailsExpress ops fetchpatch;
-            patchLevel = ver.patchLevel;
-          }).${ver.majMinTiny}
-          ++ op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
+          (if !builtins.isNull patchsetsVersion then patchsets else [ ])
+          ++ op (lib.versionOlder version.majMin "3.1") ./do-not-regenerate-revision.h.patch
           ++ op (atLeast30 && useBaseRuby) ./do-not-update-gems-baseruby.patch
           ++ ops (!atLeast30 && rubygemsSupport) [
             # We upgrade rubygems to a version that isn't compatible with the
@@ -200,8 +206,8 @@ let
           }
           addRubyLibPath() {
             addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby
-            addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}
-            addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}/${stdenv.hostPlatform.system}
+            addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${version.libDir}
+            addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${version.libDir}/${stdenv.hostPlatform.system}
           }
 
           addEnvHooks "$hostOffset" addGemPath
@@ -234,10 +240,10 @@ let
         };
 
         passthru = rec {
-          version = ver;
+          inherit version;
           rubyEngine = "ruby";
-          libPath = "lib/${rubyEngine}/${ver.libDir}";
-          gemPath = "lib/${rubyEngine}/gems/${ver.libDir}";
+          libPath = "lib/${rubyEngine}/${version.libDir}";
+          gemPath = "lib/${rubyEngine}/gems/${version.libDir}";
           devEnv = import ./dev.nix {
             inherit buildEnv bundler bundix;
             ruby = self;
@@ -253,12 +259,10 @@ let
           inherit baseRuby;
         };
       }
-    ) args; in self;
+    ) allArgs;
+  in self;
 
 in {
-  mkRubyVersion = rubyVersion;
-  mkRuby = generic;
-
   ruby_2_7 = generic {
     version = rubyVersion "2" "7" "6" "";
     sha256 = "042xrdk7hsv4072bayz3f8ffqh61i8zlhvck10nfshllq063n877";
