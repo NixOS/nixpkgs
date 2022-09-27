@@ -6388,6 +6388,8 @@ in {
 
   onnx = callPackage ../development/python-modules/onnx { };
 
+  onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common { };
+
   onnxruntime = (toPythonModule (pkgs.onnxruntime.override {
     python3Packages = self;
     pythonSupport = true;
