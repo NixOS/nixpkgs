@@ -26,13 +26,6 @@ let
 in stdenv.mkDerivation {
   inherit pname version src;
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    src = "${src}/zeroidc";
-    name = "${pname}-${version}";
-    sha256 = "sha256-8K4zAXo85MT4pfIsg7DZAO+snfwzdo2TozVw17KhX4Q=";
-  };
-  postPatch = "cp ${src}/zeroidc/Cargo.lock Cargo.lock";
-
   preConfigure = ''
     patchShebangs ./doc/build.sh
     substituteInPlace ./doc/build.sh \
@@ -41,12 +34,17 @@ in stdenv.mkDerivation {
     substituteInPlace ./make-linux.mk \
       --replace '-march=armv6zk' "" \
       --replace '-mcpu=arm1176jzf-s' ""
+
+    # Upstream does not define the cargo settings necessary to use the vendorized rust-jwt version, so it has to be added manually.
+    # Can be removed once ZeroTierOne's zeroidc no longer uses a git url in Cargo.toml for jwt
+    echo '[source."https://github.com/glimberg/rust-jwt"]
+git = "https://github.com/glimberg/rust-jwt"
+replace-with = "vendored-sources"' >> ./zeroidc/.cargo/config.toml
   '';
 
   nativeBuildInputs = [
     pkg-config
     ronn
-    rustPlatform.cargoSetupHook
     rustPlatform.rust.cargo
     rustPlatform.rust.rustc
   ];
