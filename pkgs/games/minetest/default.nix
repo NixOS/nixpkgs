@@ -123,7 +123,7 @@ let
       description = "Infinite-world block sandbox game";
       license = licenses.lgpl21Plus;
       platforms = platforms.linux ++ platforms.darwin;
-      maintainers = with maintainers; [ pyrolagus fpletz ];
+      maintainers = with maintainers; [ pyrolagus fpletz fgaz ];
       # never built on Hydra
       # https://hydra.nixos.org/job/nixpkgs/trunk/minetestclient_4.x86_64-darwin
       # https://hydra.nixos.org/job/nixpkgs/trunk/minetestserver_4.x86_64-darwin
