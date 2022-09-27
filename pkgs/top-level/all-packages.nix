@@ -9535,7 +9535,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  onetun = callPackage ../tools/networking/onetun { };
+  onetun = callPackage ../tools/networking/onetun {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   opencorsairlink = callPackage ../tools/misc/opencorsairlink { };
 
