@@ -162,6 +162,7 @@ let
         krohnkite = callPackage ./3rdparty/kwin/scripts/krohnkite.nix { };
         krunner-ssh = callPackage ./3rdparty/addons/krunner-ssh.nix { };
         krunner-symbols = callPackage ./3rdparty/addons/krunner-symbols.nix { };
+        kzones = callPackage ./3rdparty/kwin/scripts/kzones.nix { };
         lightly = callPackage ./3rdparty/lightly { };
         parachute = callPackage ./3rdparty/kwin/scripts/parachute.nix { };
       };
