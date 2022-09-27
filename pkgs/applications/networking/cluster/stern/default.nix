@@ -4,16 +4,16 @@ let isCrossBuild = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 buildGoModule rec {
   pname = "stern";
-  version = "1.21.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "stern";
     repo = "stern";
     rev = "v${version}";
-    sha256 = "sha256-+V0mRSjAwhZoiIS/OpZyqa5rvlqU9pGJwmW0QZ3H2g4=";
+    sha256 = "sha256-xO4I4fNf14ltiSnFnAhM8VYBw4JKB0RSQziSshZOFBo=";
   };
 
-  vendorSha256 = "sha256-IPHu23/2e6406FELB1Mwegp0C16cFD65mbW5Ah32D4Q=";
+  vendorSha256 = "sha256-tNx1BvZBblyLavFslhqj9DCyfcgbl6HxlZ7zceK1a0w=";
 
   subPackages = [ "." ];
 
