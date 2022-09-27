@@ -3509,6 +3509,8 @@ with pkgs;
 
   compsize = callPackage ../os-specific/linux/compsize { };
 
+  comrak = callPackage ../tools/text/comrak { };
+
   cot = with python3Packages; toPythonApplication cot;
 
   coturn = callPackage ../servers/coturn {
@@ -31608,6 +31610,8 @@ with pkgs;
   themechanger = callPackage ../applications/misc/themechanger { };
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
+
+  thokr = callPackage ../applications/misc/thokr { };
 
   thonny = callPackage ../applications/editors/thonny { };
 
