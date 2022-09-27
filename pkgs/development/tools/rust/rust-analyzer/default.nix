@@ -12,14 +12,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
-  version = "2022-09-19";
-  cargoSha256 = "sha256-GoGnhO1WaDpNrxyOj2xJPirwmsZ2IESDmA7orryupfo=";
+  version = "2022-09-26";
+  cargoSha256 = "sha256-Wq5fI/ohoTHEjx0wa8De2uh8cG5+92H+vAfDa25JilY=";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = version;
-    sha256 = "sha256-aG6JOn3BG/2U1zuusB4bwLnPMXNoAeDSL8MWUCDLvl8=";
+    sha256 = "sha256-aCHudrXd8DKocehX6aWzlbZv4bq2l7MFXhM/wc2NdmI=";
   };
 
   cargoBuildFlags = [ "--bin" "rust-analyzer" "--bin" "rust-analyzer-proc-macro-srv" ];
