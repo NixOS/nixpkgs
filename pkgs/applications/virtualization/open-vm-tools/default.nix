@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, autoreconfHook
 , bash, fuse3, libmspack, openssl, pam, xercesc, icu, libdnet, procps, libtirpc, rpcsvc-proto
-, libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst
+, libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst, libxcrypt
 , pkg-config, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute2, dbus, systemd, which
 , libdrm, udev, util-linux
 , withX ? true
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
-  buildInputs = [ fuse3 glib icu libdnet libdrm libmspack libtirpc openssl pam procps rpcsvc-proto udev xercesc ]
+  buildInputs = [ fuse3 glib icu libdnet libdrm libmspack libtirpc libxcrypt openssl pam procps rpcsvc-proto udev xercesc ]
       ++ lib.optionals withX [ gdk-pixbuf-xlib gtk3 gtkmm3 libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
 
   postPatch = ''
