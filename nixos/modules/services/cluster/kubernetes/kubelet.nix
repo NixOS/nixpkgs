@@ -357,9 +357,6 @@ in
 
       boot.kernelModules = ["br_netfilter" "overlay"];
 
-      services.kubernetes.kubelet.hostname = with config.networking;
-        mkDefault (hostName + optionalString (domain != null) ".${domain}");
-
       services.kubernetes.pki.certs = with top.lib; {
         kubelet = mkCert {
           name = "kubelet";
