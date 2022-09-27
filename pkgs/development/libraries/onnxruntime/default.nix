@@ -86,6 +86,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace cmake/external/abseil-cpp.cmake \
       --replace "${abseil.url}" "${abseil}"
+
+    substituteInPlace cmake/libonnxruntime.pc.cmake.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
   '';
 
   postInstall = ''
