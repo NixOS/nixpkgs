@@ -20506,9 +20506,6 @@ with pkgs;
 
   libtorrent-rasterbar = libtorrent-rasterbar-2_0_x;
 
-  # this is still the new version of the old API
-  libtoxcore-new = callPackage ../development/libraries/libtoxcore/new-api.nix { };
-
   inherit (callPackages ../development/libraries/libtoxcore {})
     libtoxcore_0_1 libtoxcore_0_2;
   libtoxcore = libtoxcore_0_2;
@@ -30810,10 +30807,6 @@ with pkgs;
   purple-xmpp-http-upload = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-xmpp-http-upload { };
 
   tdlib-purple = callPackage ../applications/networking/instant-messengers/pidgin-plugins/tdlib-purple { };
-
-  toxprpl = callPackage ../applications/networking/instant-messengers/pidgin-plugins/tox-prpl {
-    libtoxcore = libtoxcore-new;
-  };
 
   pidgin-opensteamworks = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-opensteamworks { };
 
