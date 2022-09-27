@@ -21176,6 +21176,8 @@ with pkgs;
 
   openstackclient = with python3Packages; toPythonApplication python-openstackclient;
 
+  opentelemetry-cpp = callPackage ../development/libraries/opentelemetry-cpp { };
+
   openvdb = callPackage ../development/libraries/openvdb {};
 
   inherit (callPackages ../development/libraries/libressl { })
