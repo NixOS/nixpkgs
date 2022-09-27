@@ -1,0 +1,14 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 517c440..3131f3a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -37,8 +37,7 @@ include(FetchContent)
+ 
+ FetchContent_Declare(
+   bls
+-  GIT_REPOSITORY https://github.com/Chia-Network/bls-signatures.git
+-  GIT_TAG        1.0.6
++  SOURCE_DIR @blspy_src@
+ )
+ 
+ set(BUILD_BLS_PYTHON_BINDINGS "0" CACHE STRING "0")
