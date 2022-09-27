@@ -13,19 +13,7 @@ let
     packageOverrides = self: super: {
       # The bravado-core dependency is incompatible with jschonschema 4.0:
       # https://github.com/Yelp/bravado-core/pull/385
-      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
-        version = "3.2.0";
-
-        src = oldAttrs.src.override {
-          inherit version;
-          hash = "sha256-yKhbKNN3zHc35G4tnytPRO48Dh3qxr9G3e/HGH0weXo=";
-          sha256 = "";
-        };
-
-        SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-        doCheck = false;
-      });
+      jsonschema = super.jsonschema_3;
     };
   };
 

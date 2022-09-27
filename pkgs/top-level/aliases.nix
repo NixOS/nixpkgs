@@ -615,7 +615,6 @@ mapAliases ({
   libtensorflow-bin = libtensorflow; # Added 2022-09-25
   libtidy = throw "'libtidy' has been renamed to/replaced by 'html-tidy'"; # Converted to throw 2022-02-22
   libtorrentRasterbar = throw "'libtorrentRasterbar' has been renamed to/replaced by 'libtorrent-rasterbar'"; # Converted to throw 2022-09-24
-  libtorrentRasterbar-1_1_x = throw "'libtorrentRasterbar-1_1_x' has been renamed to/replaced by 'libtorrent-rasterbar-1_1_x'"; # Converted to throw 2022-09-24
   libtorrentRasterbar-1_2_x = throw "'libtorrentRasterbar-1_2_x' has been renamed to/replaced by 'libtorrent-rasterbar-1_2_x'"; # Converted to throw 2022-09-24
   libtorrentRasterbar-2_0_x = throw "'libtorrentRasterbar-2_0_x' has been renamed to/replaced by 'libtorrent-rasterbar-2_0_x'"; # Converted to throw 2022-09-24
   libudev = throw "'libudev' has been renamed to/replaced by 'udev'"; # Converted to throw 2022-02-22

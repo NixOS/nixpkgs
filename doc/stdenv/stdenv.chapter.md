@@ -309,7 +309,7 @@ The attribute can also contain a list, a script followed by arguments to be pass
 passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
 ```
 
-The script will be run with `UPDATE_NIX_ATTR_PATH` environment variable set to the attribute path it is supposed to update.
+The script will be run with the `UPDATE_NIX_NAME`, `UPDATE_NIX_PNAME`, `UPDATE_NIX_OLD_VERSION` and `UPDATE_NIX_ATTR_PATH` environment variables set respectively to the name, pname, old version and attribute path of the package it is supposed to update.
 
 ::: {.note}
 The script will be usually run from the root of the Nixpkgs repository but you should not rely on that. Also note that the update scripts will be run in parallel by default; you should avoid running `git commit` or any other commands that cannot handle that.
