@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchFromSourcehut
 , meson
 , ninja
 , pkg-config
@@ -11,9 +11,9 @@
 
 stdenv.mkDerivation rec {
   pname = "kanshi";
-  version = "1.2.0";
+  version = "1.3.0";
 
-  src = fetchFromGitHub {
+  src = fetchFromSourcehut {
     owner = "emersion";
     repo = "kanshi";
     rev = "v${version}";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       wlr-output-management protocol.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ balsoft ];
+    maintainers = with maintainers; [ balsoft danielbarter ];
     platforms = platforms.linux;
   };
 }
