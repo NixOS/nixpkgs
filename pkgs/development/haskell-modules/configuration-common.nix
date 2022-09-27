@@ -2562,15 +2562,30 @@ self: super: {
   shower = doJailbreak (dontCheck super.shower);
 
   cachix = overrideCabal (drv: {
-    version = "0.8.1";
+    version = "1.0.1";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v0.8.1";
-      sha256 = "sha256-s9JoWsDUVGWhPWLNsvrYK7OlcPZhLO63fo4gN/r4uwU=";
+      rev = "v1.0.1";
+      sha256 = "sha256-ImI1EOZCJ9f6avS+0MY+ITYwrIzvy2B0hPfeKCdCZxo=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix";
-  }) super.cachix;
+    postPatch = ''
+      sed -i 's/1.0.0/1.0.1/' cachix.cabal
+      sed -i '/import Protolude/a import Data.List (isSuffixOf)' src/Cachix/Client/WatchStore.hs
+      sed -ir 's/[(]toS)/(option, toS)/' src/Cachix/Client/OptionsParser.hs
+    '';
+  }) (addBuildDepends [super.extra super.lukko] super.cachix);
+  cachix-api = overrideCabal (drv: {
+    version = "1.0.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "cachix";
+      repo = "cachix";
+      rev = "v1.0.1";
+      sha256 = "sha256-ImI1EOZCJ9f6avS+0MY+ITYwrIzvy2B0hPfeKCdCZxo=";
+    };
+    postUnpack = "sourceRoot=$sourceRoot/cachix-api";
+  }) (addBuildDepend super.deriving-aeson super.cachix-api);
 
   # The shipped Setup.hs file is broken.
   csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
