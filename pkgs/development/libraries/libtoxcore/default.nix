@@ -1,39 +1,41 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libsodium, ncurses, libopus, msgpack
+{ lib, stdenv, fetchurl, cmake, libsodium, ncurses, libopus, msgpack
 , libvpx, check, libconfig, pkg-config }:
 
-stdenv.mkDerivation rec {
+let buildToxAV = !stdenv.isAarch32;
+in stdenv.mkDerivation rec {
   pname = "libtoxcore";
-  version = "0.2.17";
+  version = "0.2.18";
 
-  src = fetchFromGitHub {
-    owner  = "TokTok";
-    repo   = "c-toxcore";
-    rev    = "v${version}";
-    sha256 = "sha256-SOI6QKOSt/EK9JDrSaV6CrD5sx8aYb5ZL3StYq8u/Dg=";
-  };
+  src =
+    # We need the prepared sources tarball.
+    fetchurl {
+      url =
+        "https://github.com/TokTok/c-toxcore/releases/download/v${version}/c-toxcore-${version}.tar.gz";
+      sha256 = "sha256-8pQFN5mIY1k+KLxqa19W8JZ19s2KKDJre8MbSDbAiUI=";
+    };
 
-  cmakeFlags = [
-    "-DBUILD_NTOX=ON"
-    "-DDHT_BOOTSTRAP=ON"
-    "-DBOOTSTRAP_DAEMON=ON"
-  ];
+  cmakeFlags =
+    [ "-DBUILD_NTOX=ON" "-DDHT_BOOTSTRAP=ON" "-DBOOTSTRAP_DAEMON=ON" ]
+    ++ lib.optional buildToxAV "-DMUST_BUILD_TOXAV=ON";
 
   buildInputs = [
     libsodium msgpack ncurses libconfig
-  ] ++ lib.optionals (!stdenv.isAarch32) [
+  ] ++ lib.optionals buildToxAV [
     libopus libvpx
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  doCheck = false; # hangs, tries to access the net?
+  doCheck = true;
   checkInputs = [ check ];
 
-  postFixup =''
-    sed -i $out/lib/pkgconfig/*.pc \
-      -e "s|^libdir=.*|libdir=$out/lib|" \
-      -e "s|^includedir=.*|includedir=$out/include|"
+  postInstall = ''
+    substituteInPlace $out/lib/pkgconfig/toxcore.pc \
+      --replace '=''${prefix}/' '=' \
+
   '';
+  # We might be getting the wrong pkg-config file anyway:
+  # https://github.com/TokTok/c-toxcore/issues/2334
 
   meta = with lib; {
     broken = stdenv.isDarwin;
