@@ -6,7 +6,6 @@ let
   inherit (lib)
     elem
     flip
-    functionArgs
     isAttrs
     isBool
     isDerivation
@@ -16,7 +15,6 @@ let
     isList
     isString
     isStorePath
-    setFunctionArgs
     toDerivation
     toList
     ;
