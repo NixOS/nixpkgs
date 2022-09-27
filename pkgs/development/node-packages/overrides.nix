@@ -193,7 +193,7 @@ final: prev: {
 
   ijavascript = prev.ijavascript.override (oldAttrs: {
     preRebuild = ''
-      export NPM_CONFIG_ZMQ_EXTERNAL=true
+      export npm_config_zmq_external=true
     '';
     buildInputs = oldAttrs.buildInputs ++ [ final.node-gyp-build pkgs.zeromq ];
   });
