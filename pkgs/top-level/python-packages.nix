@@ -6372,6 +6372,11 @@ in {
 
   onnx = callPackage ../development/python-modules/onnx { };
 
+  onnxruntime = (toPythonModule (pkgs.onnxruntime.override {
+    python3Packages = self;
+    pythonSupport = true;
+  })).python;
+
   onvif-zeep-async = callPackage ../development/python-modules/onvif-zeep-async { };
 
   oocsi = callPackage ../development/python-modules/oocsi { };

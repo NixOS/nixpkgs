@@ -5,7 +5,7 @@
 , fetchurl
 , pkg-config
 , cmake
-, python3
+, python3Packages
 , libpng
 , zlib
 , eigen
@@ -15,6 +15,9 @@
 , boost
 , oneDNN
 , gtest
+, pythonSupport ? true
+, nsync
+, flatbuffers
 }:
 
 let
@@ -49,9 +52,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    python3
+    python3Packages.python
     gtest
-  ];
+  ] ++ lib.optionals pythonSupport (with python3Packages; [
+    setuptools
+    wheel
+    pip
+  ]);
 
   buildInputs = [
     libpng
@@ -61,10 +68,16 @@ stdenv.mkDerivation rec {
     nlohmann_json
     boost
     oneDNN
-  ];
+  ] ++ lib.optionals pythonSupport ([
+    flatbuffers
+    nsync
+  ] ++ (with python3Packages; [
+    numpy
+    pybind11
+  ]));
 
   # TODO: build server, and move .so's to lib output
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" ] ++ lib.optionals pythonSupport [ "python" ];
 
   enableParallelBuilding = true;
 
@@ -79,6 +92,8 @@ stdenv.mkDerivation rec {
     "-Donnxruntime_USE_MPI=ON"
     "-Deigen_SOURCE_PATH=${eigen.src}"
     "-Donnxruntime_USE_DNNL=YES"
+  ] ++ lib.optionals pythonSupport [
+    "-Donnxruntime_ENABLE_PYTHON=ON"
   ];
 
   doCheck = true;
@@ -88,12 +103,18 @@ stdenv.mkDerivation rec {
       --replace "${abseil.url}" "${abseil}"
   '';
 
+  postBuild = lib.optionalString pythonSupport ''
+    ${python3Packages.python.interpreter} ../setup.py bdist_wheel
+  '';
+
   postInstall = ''
     # perform parts of `tools/ci_build/github/linux/copy_strip_binary.sh`
     install -m644 -Dt $out/include \
       ../include/onnxruntime/core/framework/provider_options.h \
       ../include/onnxruntime/core/providers/cpu/cpu_provider_factory.h \
       ../include/onnxruntime/core/session/onnxruntime_*.h
+  '' + lib.optionalString pythonSupport ''
+    pip install dist/*.whl --no-index --no-warn-script-location --prefix="$python" --no-cache --no-deps
   '';
 
   meta = with lib; {
