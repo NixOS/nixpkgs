@@ -103,7 +103,7 @@ in {
 
   # Jailbreaks & Version Updates
 
-  aeson = self.aeson_2_1_0_0;
+  aeson = self.aeson_2_1_1_0;
   # This `doJailbreak` can be removed once we have doctest v0.20
   aeson-diff = assert super.doctest.version == "0.18.2"; doJailbreak super.aeson-diff;
   lens-aeson = self.lens-aeson_1_2_2;
@@ -178,12 +178,12 @@ in {
 
   # FIXME(lf-): some of these are pointlessly dontChecked; they are kinda
   # shotgun-dontChecked just to make them not infinite-recurse
-  hspec = dontCheck super.hspec_2_10_5;
+  hspec = dontCheck super.hspec_2_10_6;
   base-orphans = dontCheck super.base-orphans;
-  hspec-core = dontCheck super.hspec-core_2_10_5;
-  hspec-meta = dontCheck super.hspec-meta_2_9_3;
+  hspec-core = dontCheck super.hspec-core_2_10_6;
+  hspec-meta = dontCheck super.hspec-meta_2_10_5;
   hspec-expectations = dontCheck super.hspec-expectations;
-  hspec-discover = super.hspec-discover_2_10_5;
+  hspec-discover = super.hspec-discover_2_10_6;
   # the dontHaddock is due to a GHC panic. might be this bug, not sure.
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21619
   #
@@ -250,13 +250,11 @@ in {
   jacinda = doDistribute super.jacinda;
   some = doJailbreak super.some;
 
-  # 2022-06-05: this is not the latest version of fourmolu because
-  # hls-fourmolu-plugin 1.0.3.0 doesn‘t support a newer one.
-  fourmolu = super.fourmolu_0_6_0_0;
+  fourmolu = super.fourmolu_0_8_2_0;
   # hls-fourmolu-plugin in this version has a to strict upper bound of fourmolu <= 0.5.0.0
-  hls-fourmolu-plugin = assert super.hls-fourmolu-plugin.version == "1.0.3.0"; doJailbreak super.hls-fourmolu-plugin;
+  # hls-fourmolu-plugin = assert super.hls-fourmolu-plugin.version == "1.0.3.0"; doJailbreak super.hls-fourmolu-plugin;
 
-  hls-ormolu-plugin = assert super.hls-ormolu-plugin.version == "1.0.2.1"; doJailbreak super.hls-ormolu-plugin;
+  # hls-ormolu-plugin = assert super.hls-ormolu-plugin.version == "1.0.2.1"; doJailbreak super.hls-ormolu-plugin;
   # 1.3 introduced support for GHC 9.2.x, so when this assert fails, the jailbreak can be removed
   hashtables = assert super.hashtables.version == "1.2.4.2"; doJailbreak super.hashtables;
 
