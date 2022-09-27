@@ -23,7 +23,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd fly \
       --bash <($out/bin/fly completion --shell bash) \
       --fish <($out/bin/fly completion --shell fish) \
