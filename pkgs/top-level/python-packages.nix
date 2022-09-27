@@ -307,6 +307,8 @@ in {
 
   aioextensions = callPackage ../development/python-modules/aioextensions { };
 
+  aiofile = callPackage ../development/python-modules/aiofile { };
+
   aiofiles = callPackage ../development/python-modules/aiofiles { };
 
   aioflo = callPackage ../development/python-modules/aioflo { };
@@ -374,6 +376,8 @@ in {
   aiolip = callPackage ../development/python-modules/aiolip { };
 
   aiolyric = callPackage ../development/python-modules/aiolyric { };
+
+  aiomisc = callPackage ../development/python-modules/aiomisc { };
 
   aiomodernforms = callPackage ../development/python-modules/aiomodernforms { };
 
@@ -1601,6 +1605,8 @@ in {
     pythonSupport = true;
     inherit (self) python numpy boost;
   });
+
+  caio = callPackage ../development/python-modules/caio { };
 
   cairo-lang = callPackage ../development/python-modules/cairo-lang { };
 
@@ -5377,6 +5383,8 @@ in {
   Logbook = callPackage ../development/python-modules/Logbook { };
 
   logfury = callPackage ../development/python-modules/logfury { };
+
+  logging-journald = callPackage ../development/python-modules/logging-journald { };
 
   logi-circle = callPackage ../development/python-modules/logi-circle { };
 
@@ -10804,6 +10812,8 @@ in {
   telfhash = callPackage ../development/python-modules/telfhash { };
 
   temescal = callPackage ../development/python-modules/temescal { };
+
+  temperusb = callPackage ../development/python-modules/temperusb { };
 
   tempest = callPackage ../development/python-modules/tempest { };
 
