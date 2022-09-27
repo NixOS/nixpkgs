@@ -121,6 +121,7 @@ in {
           PrivateDevices = true;
           PrivateTmp = true;
           PrivateUsers = true;
+          PrivateIPC = true;
           ProcSubset = "pid";
           ProtectClock = true;
           ProtectControlGroups = true;
@@ -137,7 +138,7 @@ in {
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
-          SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+          SystemCallFilter = [ "@system-service" "~@privileged" ];
           UMask = "0077";
         }
       ];
