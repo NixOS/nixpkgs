@@ -29414,6 +29414,8 @@ with pkgs;
   linkerd_edge = callPackage ../applications/networking/cluster/linkerd/edge.nix { };
   linkerd_stable = linkerd;
 
+  kaiteki = callPackage ../applications/misc/kaiteki { };
+
   kuma = callPackage ../applications/networking/cluster/kuma { isFull = true; };
   kuma-experimental = callPackage ../applications/networking/cluster/kuma {
     isFull = true;
