@@ -167,11 +167,11 @@
     "phpstorm": {
       "update-channel": "PhpStorm RELEASE",
       "url-template": "https://download.jetbrains.com/webide/PhpStorm-{version}.dmg",
-      "version": "2022.2.1",
-      "sha256": "ba9cc863c2247e6404b015fac085e8b3427b29aba3d7cb07940840f7c5e3b647",
-      "url": "https://download.jetbrains.com/webide/PhpStorm-2022.2.1.dmg",
-      "version-major-minor": "2022.1",
-      "build_number": "222.3739.61"
+      "version": "2022.2.2",
+      "sha256": "e41cf055ec7be941f2d9b6d8244a300872af346f81053f5b18c4d6d3a9ad3c69",
+      "url": "https://download.jetbrains.com/webide/PhpStorm-2022.2.2.dmg",
+      "version-major-minor": "2022.2",
+      "build_number": "222.4167.33"
     },
     "pycharm-community": {
       "update-channel": "PyCharm RELEASE",
