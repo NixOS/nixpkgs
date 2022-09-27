@@ -5235,6 +5235,12 @@
       fingerprint = "3F35 E4CA CBF4 2DE1 2E90  53E5 03A6 E6F7 8693 6619";
     }];
   };
+  harvidsen = {
+    email = "harvidsen@gmail.com";
+    github = "harvidsen";
+    githubId = 62279738;
+    name = "Håkon Arvidsen";
+  };
   haslersn = {
     email = "haslersn@fius.informatik.uni-stuttgart.de";
     github = "haslersn";
