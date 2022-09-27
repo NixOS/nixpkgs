@@ -10151,6 +10151,8 @@ in {
 
   skidl = callPackage ../development/python-modules/skidl { };
 
+  skl2onnx = callPackage ../development/python-modules/skl2onnx { };
+
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
 
   skodaconnect = callPackage ../development/python-modules/skodaconnect { };
