@@ -20418,10 +20418,6 @@ with pkgs;
     python = python2;
   };
 
-  libtorrent-rasterbar-1_1_x = callPackage ../development/libraries/libtorrent-rasterbar/1.1.nix {
-    python = python2;
-  };
-
   libtorrent-rasterbar = libtorrent-rasterbar-2_0_x;
 
   # this is still the new version of the old API
