@@ -79,7 +79,6 @@ stdenv.mkDerivation rec {
   doInstallCheck = !stdenv.hostPlatform.isMusl;
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     url = "https://sourceware.org/git/elfutils.git";
     rev-prefix = "elfutils-";
   };

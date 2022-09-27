@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-mpers=check" ];
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     # No nicer place to find latest release.
     url = "https://github.com/strace/strace.git";
     rev-prefix = "v";

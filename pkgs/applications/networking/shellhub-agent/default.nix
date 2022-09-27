@@ -25,7 +25,6 @@ buildGoModule rec {
 
   passthru = {
     updateScript = gitUpdater {
-      inherit pname version;
       rev-prefix = "v";
       ignoredVersions = ".(rc|beta).*";
     };
