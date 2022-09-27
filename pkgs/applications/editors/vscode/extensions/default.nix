@@ -1199,6 +1199,16 @@ let
       };
 
       github = {
+        codespaces = buildVscodeMarketplaceExtension {
+          mktplcRef = {
+            publisher = "github";
+            name = "codespaces";
+            version = "1.10.6";
+            sha256 = "04d6lx8s6rwc6ry6flyw59hg9c4814s5wvi8ycxlwq4pl8n0imd7";
+          };
+          meta = { license = lib.licenses.unfree; };
+        };
+
         copilot = buildVscodeMarketplaceExtension {
           mktplcRef = {
             publisher = "github";
