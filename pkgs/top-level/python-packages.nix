@@ -4846,6 +4846,8 @@ in {
 
   jsonschema = callPackage ../development/python-modules/jsonschema { };
 
+  jsonschema_3 = callPackage ../development/python-modules/jsonschema/3_x.nix { };
+
   jsonschema-spec = callPackage ../development/python-modules/jsonschema-spec { };
 
   jsonstreams = callPackage ../development/python-modules/jsonstreams { };
