@@ -1,4 +1,5 @@
 { lib
+, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "dbus-fast";
-  version = "1.13.0";
+  version = "1.15.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,11 +19,15 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-SADUeLD4quPxKChf1A4ph1iI8zu7oCDg4nJNFl77f+k=";
+    hash = "sha256-Uq+f0l9/W6PjP9MczF3VJNJicDgOnMrfXpOkHp7frVY=";
   };
 
   nativeBuildInputs = [
     poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    async-timeout
   ];
 
   checkInputs = [

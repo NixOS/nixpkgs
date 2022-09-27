@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyupgrade";
-  version = "2.38.0";
+  version = "2.38.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "asottile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dSCo6qB7ON0V2BZoVVaV3X2VMgrjBwZ18wiiDj/+U94=";
+    sha256 = "sha256-OWV8SdxvAYxkBj/3pPXgnEZ5RS3R+wBWJVMkqcQirEU=";
   };
 
   checkInputs = [

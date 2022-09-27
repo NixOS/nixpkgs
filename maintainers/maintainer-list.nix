@@ -2038,6 +2038,12 @@
     githubId = 157330;
     name = "Ben Burdette";
   };
+  bwlang = {
+    email = "brad@langhorst.com";
+    github = "bwlang";
+    githubId = 61636;
+    name = "Brad Langhorst";
+  };
   bzizou = {
     email = "Bruno@bzizou.net";
     github = "bzizou";

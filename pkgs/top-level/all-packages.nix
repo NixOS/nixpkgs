@@ -723,6 +723,8 @@ with pkgs;
 
   graph-easy = callPackage ../tools/graphics/graph-easy { };
 
+  mangal = callPackage ../applications/misc/mangal { };
+
   graphw00f = callPackage ../tools/security/graphw00f { };
 
   opendrop = python3Packages.callPackage ../tools/networking/opendrop { };
@@ -3737,6 +3739,8 @@ with pkgs;
 
   duf = callPackage ../tools/misc/duf { };
 
+  dum = callPackage ../development/tools/dum { };
+
   inherit (ocaml-ng.ocamlPackages_4_10) dune_1;
   inherit (ocamlPackages) dune_2 dune_3 dune-release;
 
@@ -4127,6 +4131,8 @@ with pkgs;
   hr = callPackage ../applications/misc/hr { };
 
   humioctl = callPackage ../applications/logging/humioctl {};
+
+  huniq = callPackage ../tools/text/huniq { };
 
   hyprland = callPackage ../applications/window-managers/hyprland {
     wlroots = wlroots.overrideAttrs (_: {
@@ -10660,6 +10666,8 @@ with pkgs;
 
   rnp = callPackage ../tools/security/rnp { };
 
+  rnr = callPackage ../tools/text/rnr { };
+
   rnv = callPackage ../tools/text/xml/rnv { };
 
   rosie = callPackage ../tools/text/rosie { };
@@ -10876,6 +10884,8 @@ with pkgs;
   scrub = callPackage ../tools/misc/scrub { };
 
   scfbuild = python3.pkgs.callPackage ../tools/misc/scfbuild { };
+
+  scraper = callPackage ../tools/text/scraper { };
 
   scriptaculous = callPackage ../development/libraries/scriptaculous { };
 
@@ -14037,6 +14047,10 @@ with pkgs;
 
   gwt240 = callPackage ../development/compilers/gwt/2.4.0.nix { };
 
+  hvm = callPackage ../development/compilers/hvm {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   idrisPackages = dontRecurseIntoAttrs (callPackage ../development/idris-modules {
     idris-no-deps = haskellPackages.idris;
   });
@@ -14191,11 +14205,15 @@ with pkgs;
   julia_16-bin = callPackage ../development/compilers/julia/1.6-bin.nix { };
   julia_18-bin = callPackage ../development/compilers/julia/1.8-bin.nix { };
 
+  julia_18 = callPackage ../development/compilers/julia/1.8.nix { };
+
   julia-lts-bin = julia_16-bin;
   julia-stable-bin = julia_18-bin;
   julia-bin = julia-stable-bin;
 
   jwasm =  callPackage ../development/compilers/jwasm { };
+
+  kind2 = callPackage ../development/compilers/kind2 { };
 
   knightos-genkfs = callPackage ../development/tools/knightos/genkfs { };
 
@@ -17066,6 +17084,8 @@ with pkgs;
     };
   }));
 
+  portableService = callPackage ../build-support/portable-service { };
+
   polar = callPackage ../tools/misc/polar { };
 
   inherit (nodePackages) postcss-cli;
@@ -17093,6 +17113,10 @@ with pkgs;
   premake = premake4;
 
   privacyidea = callPackage ../applications/misc/privacyidea { };
+
+  process-viewer = callPackage ../applications/misc/process-viewer {
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation IOKit;
+  };
 
   procodile = callPackage ../tools/system/procodile { };
 
@@ -23798,6 +23822,8 @@ with pkgs;
   prometheus-xmpp-alerts = callPackage ../servers/monitoring/prometheus/xmpp-alerts.nix { };
 
   prometheus-cpp = callPackage ../development/libraries/prometheus-cpp { };
+
+  proximity-sort = callPackage ../tools/misc/proximity-sort { };
 
   psqlodbc = callPackage ../development/libraries/psqlodbc { };
 
@@ -33392,8 +33418,7 @@ with pkgs;
 
   dwarf-therapist = dwarf-fortress-packages.dwarf-therapist;
 
-  dxx-rebirth = callPackage ../games/dxx-rebirth
-    { stdenv = gcc10StdenvCompat; physfs = physfs_2; };
+  dxx-rebirth = callPackage ../games/dxx-rebirth { };
 
   inherit (callPackages ../games/dxx-rebirth/assets.nix { })
     descent1-assets
@@ -34705,6 +34730,8 @@ with pkgs;
   samtools_0_1_19 = callPackage ../applications/science/biology/samtools/samtools_0_1_19.nix {
     stdenv = gccStdenv;
   };
+
+  seqtk = callPackage ../applications/science/biology/seqtk { };
 
   snpeff = callPackage ../applications/science/biology/snpeff { };
 
@@ -36304,6 +36331,10 @@ with pkgs;
   robo3t = callPackage ../applications/misc/robo3t { };
 
   rucksack = callPackage ../development/tools/rucksack { };
+
+  ruff = callPackage ../development/tools/ruff {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
 
   sam-ba = callPackage ../tools/misc/sam-ba { };
 
