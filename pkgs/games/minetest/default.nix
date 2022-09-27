@@ -124,10 +124,8 @@ let
       license = licenses.lgpl21Plus;
       platforms = platforms.linux ++ platforms.darwin;
       maintainers = with maintainers; [ pyrolagus fpletz fgaz ];
-      # never built on Hydra
-      # https://hydra.nixos.org/job/nixpkgs/trunk/minetestclient_4.x86_64-darwin
-      # https://hydra.nixos.org/job/nixpkgs/trunk/minetestserver_4.x86_64-darwin
-      broken = (lib.versionOlder version "5.0.0") && stdenv.isDarwin;
+      # https://github.com/NixOS/nixpkgs/pull/186160#issuecomment-1212635918
+      broken = stdenv.isDarwin;
     };
   };
 
