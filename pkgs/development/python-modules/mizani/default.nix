@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "mizani";
-  version = "0.7.4";
+  version = "0.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-oqbo/aQ5L1nQO8BvXH6/8PBPiWcv2m/LUjwow8+J90w=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MgF+w4guxx9wBNDjMXMYFWfKr7Mwjadcpg5JzSbgm1Y=";
   };
 
   propagatedBuildInputs = [
