@@ -5,8 +5,6 @@ with lib;
 let
   fileSystems = config.system.build.fileSystems ++ config.swapDevices;
   encDevs = filter (dev: dev.encrypted.enable) fileSystems;
-  keyedEncDevs = filter (dev: dev.encrypted.keyFile != null) encDevs;
-  keylessEncDevs = filter (dev: dev.encrypted.keyFile == null) encDevs;
   anyEncrypted =
     foldr (j: v: v || j.encrypted.enable) false encDevs;
 
@@ -74,14 +72,10 @@ in
         devices =
           builtins.listToAttrs (map (dev: {
             name = dev.encrypted.label;
-            value = { device = dev.encrypted.blkDev; };
-          }) keylessEncDevs);
+            value = { inherit (dev.encrypted) keyFile; device = dev.encrypted.blkDev; };
+          }) encDevs);
         forceLuksSupportInInitrd = true;
       };
-      postMountCommands =
-        concatMapStrings (dev:
-          "cryptsetup luksOpen --key-file ${dev.encrypted.keyFile} ${dev.encrypted.blkDev} ${dev.encrypted.label};\n"
-        ) keyedEncDevs;
     };
   };
 }
