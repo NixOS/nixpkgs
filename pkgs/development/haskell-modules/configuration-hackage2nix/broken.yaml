@@ -454,6 +454,7 @@ broken-packages:
   - BPS
   - braid
   - brain-bleep
+  - brassica
   - Bravo
   - brians-brain
   - brick-dropdownmenu
@@ -3958,6 +3959,8 @@ broken-packages:
   - portager
   - porte
   - PortFusion
+  - portray-pretty
+  - portray-prettyprinter
   - positron
   - posix-acl
   - posix-api
@@ -4215,6 +4218,7 @@ broken-packages:
   - reanimate-svg
   - reasonable-lens
   - reason-export
+  - rec-def
   - record
   - record-encode
   - record-impl
@@ -4356,6 +4360,7 @@ broken-packages:
   - rivet-simple-deploy
   - RJson
   - Rlang-QQ
+  - rle
   - rlglue
   - RLP
   - rl-satton
@@ -4648,6 +4653,7 @@ broken-packages:
   - singnal
   - singular-factory
   - sink
+  - sint
   - sitepipe
   - sixfiguregroup
   - sized-grid
@@ -5054,6 +5060,7 @@ broken-packages:
   - tempodb
   - temporal-csound
   - tempus
+  - ten
   - tensor
   - tensorflow
   - tensorflow-opgen
@@ -5201,6 +5208,7 @@ broken-packages:
   - tomato-rubato-openal
   - toml
   - toml-parser
+  - toml-reader-parse
   - tonalude
   - tonaparser
   - toodles
