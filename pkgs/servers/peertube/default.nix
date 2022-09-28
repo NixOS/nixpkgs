@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, fetchurl, fetchFromGitHub, buildGoModule, fetchYarnDeps, nixosTests
+{ lib, stdenv, callPackage, applyPatches, fetchurl, fetchFromGitHub, fetchYarnDeps, nixosTests
 , fixup_yarn_lock, jq, nodejs, yarn
 }:
 let
@@ -8,16 +8,23 @@ let
 
   version = "4.2.2";
 
-  source = fetchFromGitHub {
-    owner = "Chocobozzz";
-    repo = "PeerTube";
-    rev = "v${version}";
-    sha256 = "sha256-q6wSk5AO91Z6dw5MgpO7QTAlA8Q5Xx1CboBr7SElVUA=";
+  source = applyPatches {
+    src = fetchFromGitHub {
+      owner = "Chocobozzz";
+      repo = "PeerTube";
+      rev = "v${version}";
+      sha256 = "sha256-q6wSk5AO91Z6dw5MgpO7QTAlA8Q5Xx1CboBr7SElVUA=";
+    };
+
+    patches = [
+      # https://github.com/Chocobozzz/PeerTube/commit/5d7cb63ede7c4bba93954c0586f589ad9748d5ea
+      ./0001-Add-compat-with-openssl-3.patch
+    ];
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {
     yarnLock = "${source}/yarn.lock";
-    sha256 = "sha256-MMsxh20jcbW4YYsJyoupKbT9+Xa1BWZAmYHoj2/t+LM=";
+    sha256 = "sha256-sJ7UCsjb2qZOYa/PVqqBV0eOopDyVLyM8DVsBUBM/lQ=";
   };
 
   yarnOfflineCacheTools = fetchYarnDeps {
@@ -46,6 +53,7 @@ in stdenv.mkDerivation rec {
   buildPhase = ''
     # Build node modules
     export HOME=$PWD
+    export NODE_OPTIONS=--openssl-legacy-provider # required for webpack compatibility with OpenSSL 3 (https://github.com/webpack/webpack/issues/14532)
     fixup_yarn_lock ~/yarn.lock
     fixup_yarn_lock ~/server/tools/yarn.lock
     fixup_yarn_lock ~/client/yarn.lock
@@ -99,7 +107,10 @@ in stdenv.mkDerivation rec {
     mv ~/{config,scripts,support,CREDITS.md,FAQ.md,LICENSE,README.md,package.json,tsconfig.json,yarn.lock} $out
   '';
 
-  passthru.tests.peertube = nixosTests.peertube;
+  passthru = {
+    plugins = callPackage ./plugins { };
+    tests = nixosTests.peertube;
+  };
 
   meta = with lib; {
     description = "A free software to take back control of your videos";

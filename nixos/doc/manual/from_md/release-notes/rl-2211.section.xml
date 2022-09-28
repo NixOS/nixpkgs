@@ -287,6 +287,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://alphacephei.com/vosk/">vosk</link>,
+          an offline speech recognition service. Available as
+          <link linkend="opt-services.vosk.enable">services.vosk</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.expressvpn.com">expressvpn</link>,
           the CLI client for ExpressVPN. Available as
           <link linkend="opt-services.expressvpn.enable">services.expressvpn</link>.
