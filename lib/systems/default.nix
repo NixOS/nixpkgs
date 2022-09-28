@@ -204,7 +204,7 @@ rec {
         emulator = pkgs:
           if (final.emulatorAvailable pkgs)
           then selectEmulator pkgs
-          else throw "Don't know how to run ${final.config} executables.";
+          else throw "Don't know how to run ${final.config} executables on ${pkgs.stdenv.hostPlatform.system}.";
 
     }) // mapAttrs (n: v: v final.parsed) inspect.predicates
       // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
