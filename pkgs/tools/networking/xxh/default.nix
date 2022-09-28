@@ -10,7 +10,7 @@
 
 buildPythonApplication rec{
   pname = "xxh";
-  version = "0.8.10";
+  version = "0.8.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,8 +18,8 @@ buildPythonApplication rec{
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    hash = "sha256-2RMzgIAhM//XReCFBGlTlXn9j4WQiM/k2pLxP2iPUy8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-xZVQamTEQpwxKZxOOhQyaDP4fX2dAI1CTNL94tHuGIw=";
   };
 
   propagatedBuildInputs = [

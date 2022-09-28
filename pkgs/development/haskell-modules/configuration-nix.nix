@@ -154,11 +154,18 @@ self: super: builtins.intersectAttrs super {
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend pkgs.gtk3 super.gi-dbusmenugtk3;
 
-  hs-mesos = overrideCabal (drv: {
-    # Pass _only_ mesos; the correct protobuf is propagated.
-    extraLibraries = [ pkgs.mesos ];
-    preConfigure = "sed -i -e /extra-lib-dirs/d -e 's|, /usr/include, /usr/local/include/mesos||' hs-mesos.cabal";
-  }) super.hs-mesos;
+  # Doesn't declare boost dependency
+  nix-serve-ng = overrideSrc {
+    src = assert super.nix-serve-ng.version == "1.0.0";
+      # Workaround missing files in sdist
+      # https://github.com/aristanetworks/nix-serve-ng/issues/10
+      pkgs.fetchFromGitHub {
+        repo = "nix-serve-ng";
+        owner = "aristanetworks";
+        rev = "433f70f4daae156b84853f5aaa11987aa5ce7277";
+        sha256 = "0mqp67z5mi8rsjahdh395n7ppf0b65k8rd3pvnl281g02rbr69y2";
+      };
+  } (addPkgconfigDepend pkgs.boost.dev super.nix-serve-ng);
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
@@ -948,6 +955,19 @@ self: super: builtins.intersectAttrs super {
       export PATH="$PWD/dist/build/fourmolu:$PATH"
     '';
   }) super.fourmolu_0_8_2_0;
+
+  # Test suite needs to execute 'disco' binary
+  disco = overrideCabal (drv: {
+    preCheck = drv.preCheck or "" + ''
+      export PATH="$PWD/dist/build/disco:$PATH"
+    '';
+    testFlags = drv.testFlags or [] ++ [
+      # Needs network access
+      "-p" "!/oeis/"
+    ];
+    # disco-examples needs network access
+    testTarget = "disco-tests";
+  }) super.disco;
 
   # Apply a patch which hardcodes the store path of graphviz instead of using
   # whatever graphviz is in PATH.

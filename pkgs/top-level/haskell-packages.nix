@@ -8,8 +8,8 @@ let
     "ghc8102BinaryMinimal"
     "ghc8107Binary"
     "ghc8107BinaryMinimal"
-    "ghc922Binary"
-    "ghc922BinaryMinimal"
+    "ghc924Binary"
+    "ghc924BinaryMinimal"
     "ghcjs"
     "ghcjs810"
     "integer-simple"
@@ -86,10 +86,10 @@ in {
       minimal = true;
     };
 
-    ghc922Binary = callPackage ../development/compilers/ghc/9.2.2-binary.nix {
+    ghc924Binary = callPackage ../development/compilers/ghc/9.2.4-binary.nix {
       llvmPackages = pkgs.llvmPackages_12;
     };
-    ghc922BinaryMinimal = callPackage ../development/compilers/ghc/9.2.2-binary.nix {
+    ghc924BinaryMinimal = callPackage ../development/compilers/ghc/9.2.4-binary.nix {
       llvmPackages = pkgs.llvmPackages_12;
       minimal = true;
     };
@@ -192,12 +192,15 @@ in {
     ghc94 = ghc942;
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
       bootPkgs =
-        if stdenv.isAarch64 || stdenv.isAarch32 then
-          packages.ghc922BinaryMinimal
+        # For GHC 9.2.3 and 9.2.4 no armv7l bindists are available.
+        if stdenv.hostPlatform.isAarch32 then
+          packages.ghc924
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc924
+        else if stdenv.isAarch64 then
+          packages.ghc924BinaryMinimal
         else
-          packages.ghc922Binary;
+          packages.ghc924Binary;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
@@ -272,15 +275,15 @@ in {
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
-    ghc922Binary = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc922Binary;
-      ghc = bh.compiler.ghc922Binary;
+    ghc924Binary = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc924Binary;
+      ghc = bh.compiler.ghc924Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
-    ghc922BinaryMinimal = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc922BinaryMinimal;
-      ghc = bh.compiler.ghc922BinaryMinimal;
+    ghc924BinaryMinimal = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc924BinaryMinimal;
+      ghc = bh.compiler.ghc924BinaryMinimal;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };

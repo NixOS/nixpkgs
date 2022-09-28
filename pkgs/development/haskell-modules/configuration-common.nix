@@ -121,6 +121,9 @@ self: super: {
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";
   }) super.shell-conduit;
 
+  # https://github.com/cachix/cachix/pull/451
+  cachix = appendPatch ./patches/cachix.patch super.cachix;
+
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
 

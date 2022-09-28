@@ -140,14 +140,14 @@ with pkgs;
   nixosTests = import ../../nixos/tests/all-tests.nix {
     inherit pkgs;
     system = stdenv.hostPlatform.system;
-    callTest = t: t.test;
+    callTest = config: config.test;
   } // {
     # for typechecking of the scripts and evaluation of
     # the nodes, without running VMs.
     allDrivers = import ../../nixos/tests/all-tests.nix {
       inherit pkgs;
       system = stdenv.hostPlatform.system;
-      callTest = t: t.test.driver;
+      callTest = config: config.test.driver;
     };
   };
 
@@ -2094,6 +2094,10 @@ with pkgs;
 
   asciinema = callPackage ../tools/misc/asciinema {};
 
+  asciinema-agg = callPackage ../tools/misc/asciinema-agg {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   asciinema-scenario = callPackage ../tools/misc/asciinema-scenario {};
 
   asciiquarium = callPackage ../applications/misc/asciiquarium {};
@@ -2370,6 +2374,8 @@ with pkgs;
   clair = callPackage ../tools/admin/clair { };
 
   cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
+
+  cloudfox = callPackage ../tools/security/cloudfox { };
 
   cloudsmith-cli = callPackage ../development/tools/cloudsmith-cli { };
 
@@ -6068,7 +6074,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  inherit (nodePackages_latest) wrangler;
+  inherit (nodePackages) wrangler;
 
   wrangler_1 = callPackage ../development/tools/wrangler_1 {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security;
@@ -7805,7 +7811,9 @@ with pkgs;
   ipfs = callPackage ../applications/networking/ipfs {
     openssl = openssl_1_1;
   };
-  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
+  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {
+    buildGoModule = buildGo119Module;
+  };
 
   ipfs-migrator-all-fs-repo-migrations = callPackage ../applications/networking/ipfs-migrator/all-migrations.nix { };
   ipfs-migrator-unwrapped = callPackage ../applications/networking/ipfs-migrator/unwrapped.nix { };
@@ -8520,10 +8528,7 @@ with pkgs;
 
   nodePackages_latest = dontRecurseIntoAttrs nodejs_latest.pkgs;
 
-  nodePackages = (dontRecurseIntoAttrs nodejs.pkgs).override {
-    # It does not work on 16.x: https://github.com/NixOS/nixpkgs/issues/132456
-    nodejs = nodejs-14_x;
-  };
+  nodePackages = dontRecurseIntoAttrs nodejs.pkgs;
 
   node2nix = nodePackages.node2nix;
 
@@ -10184,6 +10189,20 @@ with pkgs;
   podman-compose = python3Packages.callPackage ../applications/virtualization/podman-compose {};
 
   podman-tui = callPackage ../applications/virtualization/podman-tui { };
+
+  pods = callPackage ../applications/virtualization/pods {
+    # taken from #182618, remove when merged
+    libadwaita = libadwaita.overrideAttrs (_: rec {
+      version = "1.2.0";
+      src = fetchFromGitLab {
+        domain = "gitlab.gnome.org";
+        owner = "GNOME";
+        repo = "libadwaita";
+        rev = version;
+        hash = "sha256-3lH7Vi9M8k+GSrCpvruRpLrIpMoOakKbcJlaAc/FK+U=";
+      };
+    });
+  };
 
   pod2mdoc = callPackage ../tools/misc/pod2mdoc { };
 
@@ -17335,6 +17354,8 @@ with pkgs;
 
   stm32flash = callPackage ../development/embedded/stm32/stm32flash { };
 
+  stm8flash = callPackage ../development/embedded/stm8/stm8flash { };
+
   strace = callPackage ../development/tools/misc/strace { };
 
   stylua = callPackage ../development/tools/stylua { };
@@ -20205,6 +20226,8 @@ with pkgs;
 
   libpam-wrapper = callPackage ../development/libraries/libpam-wrapper { };
 
+  libpanel = callPackage ../development/libraries/libpanel { };
+
   libpar2 = callPackage ../development/libraries/libpar2 { };
 
   libpcap = callPackage ../development/libraries/libpcap { };
@@ -21304,7 +21327,6 @@ with pkgs;
   protobuf3_20 = callPackage ../development/libraries/protobuf/3.20.nix { };
   protobuf3_19 = callPackage ../development/libraries/protobuf/3.19.nix { };
   protobuf3_17 = callPackage ../development/libraries/protobuf/3.17.nix { };
-  protobuf3_11 = callPackage ../development/libraries/protobuf/3.11.nix { };
   protobuf3_8 = callPackage ../development/libraries/protobuf/3.8.nix { };
   protobuf3_7 = callPackage ../development/libraries/protobuf/3.7.nix { };
 
@@ -23798,6 +23820,7 @@ with pkgs;
   rabbitmq-server = callPackage ../servers/amqp/rabbitmq-server {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
     elixir = elixir_1_12;
+    erlang = erlang.override { opensslPackage = openssl_1_1; };
   };
 
   radicale2 = callPackage ../servers/radicale/2.x.nix { };
@@ -27555,7 +27578,9 @@ with pkgs;
 
   epeg = callPackage ../applications/graphics/epeg { };
 
-  epgstation = callPackage ../applications/video/epgstation { };
+  epgstation = callPackage ../applications/video/epgstation {
+    nodejs = nodejs-16_x;
+  };
 
   inherit (gnome) epiphany;
 
@@ -28123,16 +28148,6 @@ with pkgs;
 
   fractal-next = callPackage ../applications/networking/instant-messengers/fractal-next {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad;
-    libadwaita = libadwaita.overrideAttrs (finalAtts: rec {
-      version = "1.2.0";
-      src = fetchFromGitLab {
-        domain = "gitlab.gnome.org";
-        owner = "GNOME";
-        repo = "libadwaita";
-        rev = version;
-        hash = "sha256-3lH7Vi9M8k+GSrCpvruRpLrIpMoOakKbcJlaAc/FK+U=";
-      };
-    });
   };
 
   fragments = callPackage ../applications/networking/p2p/fragments { };
@@ -33388,7 +33403,7 @@ with pkgs;
 
   endless-sky = callPackage ../games/endless-sky { };
 
-  enyo-doom = libsForQt5.callPackage ../games/enyo-doom { };
+  enyo-launcher = libsForQt5.callPackage ../games/enyo-launcher { };
 
   eternity = callPackage ../games/eternity-engine { };
 

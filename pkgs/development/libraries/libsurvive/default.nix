@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   # https://github.com/cntools/libsurvive/issues/272
   postPatch = ''
     substituteInPlace survive.pc.in \
+      libs/cnkalman/cnkalman.pc.in libs/cnkalman/libs/cnmatrix/cnmatrix.pc.in \
       --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
