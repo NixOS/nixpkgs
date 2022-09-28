@@ -24682,6 +24682,8 @@ with pkgs;
 
   webmetro = callPackage ../servers/webmetro { };
 
+  wesher = callPackage ../servers/wesher { };
+
   wishlist = callPackage ../servers/wishlist { };
 
   wsdd = callPackage ../servers/wsdd { };
