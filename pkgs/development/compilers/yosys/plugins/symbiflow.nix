@@ -4,7 +4,6 @@
 , python3
 , readline
 , stdenv
-, which
 , yosys
 , zlib
 , yosys-symbiflow
@@ -15,11 +14,11 @@
   src = fetchFromGitHub {
     owner  = "chipsalliance";
     repo   = "yosys-f4pga-plugins";
-    rev    = "aadd1735b2b7af0472e56dc23f1035d6e1904712";
-    hash   = "sha256-gmpEx+8XDN7f+6e/YG25VKgdadwqApPqU3S6OB4AryA=";
+    rev    = "27208ce08200a5e89e3bd4f466bc68824df38c32";
+    hash   = "sha256-S7txjzlIp+idWIfp/DDOznluA3aMFfosMUt5dvi+g44=";
   };
 
-  version = "2022.05.13";
+  version = "2022.09.27";
 
   # Supported symbiflow plugins.
   #
@@ -49,7 +48,7 @@ in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
   inherit src version plugin;
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ which python3 ];
+  nativeBuildInputs = [ python3 ];
   buildInputs = [ yosys readline zlib uhdm surelog ];
 
   # xdc has an incorrect path to a test which has yet to be patched
