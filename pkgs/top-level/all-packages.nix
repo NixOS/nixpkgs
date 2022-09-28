@@ -17399,6 +17399,8 @@ with pkgs;
 
   stm32flash = callPackage ../development/embedded/stm32/stm32flash { };
 
+  stm8flash = callPackage ../development/embedded/stm8/stm8flash { };
+
   strace = callPackage ../development/tools/misc/strace { };
 
   stylua = callPackage ../development/tools/stylua { };
