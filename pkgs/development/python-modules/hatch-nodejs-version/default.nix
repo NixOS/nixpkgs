@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Plugins for dealing with NodeJS versions.";
+    description = "Plugins for dealing with NodeJS versions";
     homepage = "https://github.com/agoose77/hatch-nodejs-version";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
