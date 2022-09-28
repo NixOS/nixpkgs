@@ -7041,6 +7041,11 @@ with pkgs;
 
   gnome-desktop = callPackage ../development/libraries/gnome-desktop { };
 
+  gnome-decoder = callPackage ../applications/graphics/gnome-decoder {
+     inherit (gst_all_1) gstreamer gst-plugins-base;
+     gst-plugins-bad = gst_all_1.gst-plugins-bad.override { enableZbar = true; };
+  };
+
   gnome-feeds = callPackage ../applications/networking/feedreaders/gnome-feeds {};
 
   gnome-frog = callPackage ../applications/misc/gnome-frog { };
