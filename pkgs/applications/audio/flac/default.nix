@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "flac";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "http://downloads.xiph.org/releases/flac/${pname}-${version}.tar.xz";
-    # Official checksum is published at https://github.com/xiph/flac/releases/tag/1.4.0.
-    sha256 = "af41c0733c93c237c3e52f64dd87e3b0d9af38259f1c7d11e8cbf583c48c2506";
+    # Official checksum is published at https://github.com/xiph/flac/releases/tag/${version}
+    sha256 = "91303c3e5dfde52c3e94e75976c0ab3ee14ced278ab8f60033a3a12db9209ae6";
   };
 
   buildInputs = [ libogg ];
