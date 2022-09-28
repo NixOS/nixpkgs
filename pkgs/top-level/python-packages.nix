@@ -4147,6 +4147,8 @@ in {
 
   hatch-vcs = callPackage ../development/python-modules/hatch-vcs { };
 
+  hatch-nodejs-version = callPackage ../development/python-modules/hatch-nodejs-version { };
+
   haversine = callPackage ../development/python-modules/haversine { };
 
   hawkauthlib = callPackage ../development/python-modules/hawkauthlib { };
