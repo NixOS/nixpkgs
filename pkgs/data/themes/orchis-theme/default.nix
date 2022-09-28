@@ -21,13 +21,13 @@ assert lib.assertMsg (unknownTweaks == [ ]) ''
 stdenvNoCC.mkDerivation
 rec {
   pname = "orchis-theme";
-  version = "2022-07-20";
+  version = "2022-09-28";
 
   src = fetchFromGitHub {
     repo = "Orchis-theme";
     owner = "vinceliuice";
     rev = version;
-    sha256 = "sha256-0T9D42XwyvIb5XeXdqXbyahVHNcSeT469lSgWSisNvA=";
+    sha256 = "sha256-gabOn5ErJjDgqZCyIboMgFb1FqmDw8dljIskBENKTBg=";
   };
 
   nativeBuildInputs = [ gtk3 sassc ];
