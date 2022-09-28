@@ -446,6 +446,10 @@ with pkgs;
 
   dsq = callPackage ../tools/misc/dsq { };
 
+  dufs = callPackage ../servers/http/dufs {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   each = callPackage ../tools/text/each { };
 
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
