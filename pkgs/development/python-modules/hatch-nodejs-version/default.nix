@@ -20,10 +20,6 @@ buildPythonPackage rec {
     sha256 = "sha256-TBvqXjka8poQ8xxQ/H1hFYRLqnP1024uan1d9b95ags=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
-
   propagatedBuildInputs = [
     hatchling
   ];
