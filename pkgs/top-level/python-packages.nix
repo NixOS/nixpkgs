@@ -7565,6 +7565,8 @@ in {
 
   pycosat = callPackage ../development/python-modules/pycosat { };
 
+  pycotap = callPackage ../development/python-modules/pycotap { };
+
   pycountry = callPackage ../development/python-modules/pycountry { };
 
   pycparser = callPackage ../development/python-modules/pycparser { };
