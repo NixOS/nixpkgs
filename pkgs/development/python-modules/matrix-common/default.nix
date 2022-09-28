@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "matrix_common";
-  version = "1.2.1";
+  version = "1.3.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-qZ3PAqa9lbJKWmGzVIiKKskr8rS4OccnuN2dos36OFM=";
+    sha256 = "sha256-YuEhzM2fJDQXtX7DenbcRK6xmKelxnr9a4J1mS/yq9E=";
   };
 
   propagatedBuildInputs = [ attrs ];
