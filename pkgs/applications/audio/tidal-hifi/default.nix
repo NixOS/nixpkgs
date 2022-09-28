@@ -108,8 +108,8 @@ stdenv.mkDerivation rec {
     makeWrapper $out/opt/tidal-hifi/tidal-hifi $out/bin/tidal-hifi \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
       "''${gappsWrapperArgs[@]}"
-    substituteInPlace $out/share/applications/tidal-hifi.desktop --replace \
-      "/opt/tidal-hifi/tidal-hifi" "tidal-hifi" \
+    substituteInPlace $out/share/applications/tidal-hifi.desktop \
+      --replace \ "/opt/tidal-hifi/tidal-hifi" "tidal-hifi" \
       --replace "/usr/share/icons/hicolor/0x0/apps/tidal-hifi.png" "tidal-hifi.png"
 
     for size in 48 64 128 256 512; do
