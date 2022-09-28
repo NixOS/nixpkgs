@@ -5,7 +5,6 @@
 , bzip2
 , cmake
 , fetchFromGitHub
-, fetchpatch
 , gnupg
 , gtest
 , json_c
@@ -24,15 +23,6 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-KHItrpuKXaLGF1mcpju/RJFnm2yPZyYq4eIoRGqf5Y8=";
   };
-
-  # in master post 0.16.0, see https://github.com/rnpgp/rnp/issues/1835
-  patches = [
-    (fetchpatch {
-      name = "fix-pkg-config.patch";
-      url = "https://github.com/rnpgp/rnp/commit/de9856c94ea829cad277800ee03ec52e30993d8e.patch";
-      sha256 = "1vd83fva7lhmvqnvsrifqb2zdhfrbx84lf3l9i0hcph0k8h3ddx9";
-    })
-  ];
 
   buildInputs = [ zlib bzip2 json_c botan2 ];
 
