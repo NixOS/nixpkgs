@@ -23,6 +23,12 @@ stdenv.mkDerivation rec {
     libsamplerate
   ];
 
+  postFixup = ''
+    substituteInPlace "$out"/lib/pkgconfig/csdr.pc \
+      --replace '=''${prefix}//' '=/' \
+      --replace '=''${exec_prefix}//' '=/'
+  '';
+
   meta = with lib; {
     broken = stdenv.isDarwin;
     homepage = "https://github.com/jketterl/csdr";
