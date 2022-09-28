@@ -1,5 +1,9 @@
 { lib }:
 
+let
+  inherit (lib) mapAttrs functionArgs setFunctionArgs;
+in
+
 rec {
 
   ## Simple (higher order) functions
@@ -466,6 +470,41 @@ rec {
     if isFunction v
     then v
     else k: v;
+
+  /*
+    Make a function lazy in its arguments.
+
+    Normally when you call a function like `{ a, b }: { r = foo a b; }`,
+    the attribute names of the argument must be evaluated before the evaluator
+    can return a the (partially evaluated) function body (`{ r = ...; }`).
+
+    `lazyFunction` uses reflection on the passed in function and it only works
+    for functions defined with a "set pattern".
+
+    It makes a function like `{ a, b }: { r = foo a b; }` behave like
+    `args: { r = foo args.a args.b; }`.
+
+    It is not compatible with ellipsis patterns, `{ ... }:`, because only the
+    explicitly declared parameters are passed through. For example, the
+    following will not work: `lazyFunction(args@{ a, ... }: args.b)`;
+    even if the caller provides `b`.
+
+    It also removes the checks against unexpected arguments.
+
+    Example:
+
+        lib.fix (lib.lazyFunction ({ a, b }: { a = b; b = 1; }))
+  */
+  lazyFunction = f:
+    setFunctionArgs
+      (args:
+        f
+          (mapAttrs
+            (k: _: args.${k})
+            (functionArgs f)
+          )
+      )
+      (functionArgs f) ;
 
   /* Convert the given positive integer to a string of its hexadecimal
      representation. For example:

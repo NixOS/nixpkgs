@@ -141,6 +141,19 @@ runTests {
     expected = { x = false; };
   };
 
+  testLazyFunction1 = {
+    expr = fix (lazyFunction ({ a, b, d }: { a = b; b = 1; c = 2; }));
+    expected = { a = 1; b = 1; c = 2; };
+  };
+
+  testLazyFunctionNeedsDocumentationUpdate = {
+    expr = fix (lazyFunction (args@{ a, ... }: { a = "a"; b = args?b; }));
+    # if b is true, change this test case, but also update the documentation
+    # to say that it is now supported, and which Nix implementations support it
+    # (if relevant).
+    expected = { a = "a"; b = false; };
+  };
+
 # STRINGS
 
   testConcatMapStrings = {
