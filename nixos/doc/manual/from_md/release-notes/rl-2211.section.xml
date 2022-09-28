@@ -772,6 +772,18 @@
           which no longer has a downgrade path to releases 1.2 or older.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>nodePackages</literal> package set now defaults
+          to the LTS release in the <literal>nodejs</literal> package
+          again, instead of being pinned to
+          <literal>nodejs-14_x</literal>. Several updates to node2nix
+          have been made for compatibility with newer Node.js and npm
+          versions and a new <literal>postRebuild</literal> hook has
+          been added for packages to perform extra build steps before
+          the npm install step prunes dev dependencies.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
