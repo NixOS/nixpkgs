@@ -33,12 +33,12 @@ buildPythonPackage rec {
   version = "2.6.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
     pname = "Scrapy";
-    sha256 = "sha256-vf8arzVHwuVAQ206uGgLIQOTJ71dOi74nDQWWZLT5fM=";
+    hash = "sha256-vf8arzVHwuVAQ206uGgLIQOTJ71dOi74nDQWWZLT5fM=";
   };
 
   nativeBuildInputs = [
