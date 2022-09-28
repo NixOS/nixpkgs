@@ -70,6 +70,7 @@
   tree-sitter-ql-dbscheme = lib.importJSON ./tree-sitter-ql-dbscheme.json;
   tree-sitter-query = lib.importJSON ./tree-sitter-query.json;
   tree-sitter-r = lib.importJSON ./tree-sitter-r.json;
+  tree-sitter-racket = lib.importJSON ./tree-sitter-racket.json;
   tree-sitter-regex = lib.importJSON ./tree-sitter-regex.json;
   tree-sitter-rego = lib.importJSON ./tree-sitter-rego.json;
   tree-sitter-rst = lib.importJSON ./tree-sitter-rst.json;

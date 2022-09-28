@@ -347,6 +347,10 @@ let
       orga = "indoorvivants";
       repo = "tree-sitter-smithy";
     };
+    "tree-sitter-racket" = {
+      orga = "6cdh";
+      repo = "tree-sitter-racket";
+    };
   };
 
   allGrammars =
