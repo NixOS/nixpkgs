@@ -38,7 +38,7 @@ final: prev: {
     ];
   };
 
-  "@medable/mdctl-cli" = prev."@medable/mdctl-cli".override {
+  "@medable/mdctl-cli" = prev."@medable/mdctl-cli".override (oldAttrs: {
     nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
       glib
       libsecret
@@ -52,7 +52,9 @@ final: prev: {
       final.node-pre-gyp
       nodejs
     ];
-  };
+
+    meta = oldAttrs.meta // { broken = since "16"; };
+  });
   mdctl-cli = final."@medable/mdctl-cli";
 
   autoprefixer = prev.autoprefixer.override {
