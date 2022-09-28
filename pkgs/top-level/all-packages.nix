@@ -26669,6 +26669,8 @@ with pkgs;
 
   masterpdfeditor4 = libsForQt5.callPackage ../applications/misc/masterpdfeditor4 { };
 
+  master_me = callPackage ../applications/audio/master_me { };
+
   foxitreader = libsForQt512.callPackage ../applications/misc/foxitreader { };
 
   pdfstudio = import ../applications/misc/pdfstudio {
