@@ -240,7 +240,7 @@ rec {
     * to implicit typing rules, so it should work with older
     * parsers as well.
     */
-  toYAML = {}@args: toJSON args;
+  toYAML = toJSON;
 
   withRecursion =
     {
