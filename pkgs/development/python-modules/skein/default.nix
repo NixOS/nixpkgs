@@ -17,10 +17,11 @@ buildPythonPackage rec {
   version = "0.8.2";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nXTqsJNX/LwAglPcPZkmdYPfF+vDLN+nNdZaDFTrHzE=";
+    hash = "sha256-nXTqsJNX/LwAglPcPZkmdYPfF+vDLN+nNdZaDFTrHzE=";
   };
+
   # Update this hash if bumping versions
-  jarHash = "sha256-UGiEoTZ17IhLG72FZ18Zb+Ej4T8z9rMIMDUxzSZGZyY=";
+  jarHash = "sha256-x2KH6tnoG7sogtjrJvUaxy0PCEA8q/zneuI969oBOKo=";
   skeinJar = callPackage ./skeinjar.nix { inherit pname version jarHash; };
 
   propagatedBuildInputs = [ cryptography grpcio pyyaml ];

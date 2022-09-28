@@ -7,6 +7,8 @@ with pkgs.lib;
 let
   matomoTest = package:
   makeTest {
+    name = "matomo";
+
     nodes.machine = { config, pkgs, ... }: {
       services.matomo = {
         package = package;

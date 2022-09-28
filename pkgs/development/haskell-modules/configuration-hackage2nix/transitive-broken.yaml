@@ -1168,6 +1168,7 @@ dont-distribute-packages:
  - dep-t-advice
  - dep-t-dynamic
  - dep-t-value
+ - dependent-literals
  - dependent-literals-plugin
  - dependent-state
  - depends
@@ -1201,7 +1202,6 @@ dont-distribute-packages:
  - direct-rocksdb
  - directory-contents
  - dirfiles
- - disco
  - discogs-haskell
  - discord-gateway
  - discord-hs
@@ -1283,6 +1283,7 @@ dont-distribute-packages:
  - edge
  - edges
  - editable
+ - edits
  - effective-aspects-mzv
  - eflint
  - egison
@@ -1413,6 +1414,7 @@ dont-distribute-packages:
  - filepath-io-access
  - filesystem-abstractions
  - filesystem-enumerator
+ - fin-int
  - find-clumpiness
  - findhttp
  - finitary-derive
@@ -2024,6 +2026,7 @@ dont-distribute-packages:
  - hedgehog-gen-json
  - hedis-pile
  - heist-aeson
+ - heist-extra
  - helic
  - helics
  - helics-wai
@@ -2564,6 +2567,7 @@ dont-distribute-packages:
  - ltext
  - luachunk
  - lucid-colonnade
+ - lucid2-htmx
  - lucienne
  - luhn
  - lui
@@ -2992,9 +2996,7 @@ dont-distribute-packages:
  - poke
  - polh-lexicon
  - polydata
- - polysemy-RandomFu
  - polysemy-http
- - polysemy-optics
  - polyseq
  - polytypeable-utils
  - pomodoro
@@ -3003,6 +3005,8 @@ dont-distribute-packages:
  - porcupine-core
  - porcupine-http
  - porcupine-s3
+ - portray-diff-hunit
+ - portray-diff-quickcheck
  - ports
  - poseidon
  - poseidon-postgis
@@ -3390,7 +3394,6 @@ dont-distribute-packages:
  - servant-matrix-param
  - servant-oauth2
  - servant-oauth2-examples
- - servant-polysemy
  - servant-postgresql
  - servant-pushbullet-client
  - servant-rate-limit
@@ -3675,10 +3678,11 @@ dont-distribute-packages:
  - tdlib
  - tdlib-gen
  - tdlib-types
- - techlab
  - telega
  - telegram-bot
  - telegram-raw-api
+ - ten-lens
+ - ten-unordered-containers
  - tensorflow-core-ops
  - tensorflow-logging
  - tensorflow-ops

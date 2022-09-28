@@ -25,6 +25,17 @@
 , nixosTests
 }:
 
+let
+  runtimePath = lib.makeBinPath ([
+    erlang
+    getconf # for getting memory limits
+    socat
+    procps
+    gnused
+    coreutils # used by helper scripts
+  ] ++ lib.optionals stdenv.isLinux [ systemd ]); # for systemd unit activation check
+in
+
 stdenv.mkDerivation rec {
   pname = "rabbitmq-server";
   version = "3.10.8";
@@ -47,15 +58,6 @@ stdenv.mkDerivation rec {
   preBuild = ''
     export LANG=C.UTF-8 # fix elixir locale warning
   '';
-
-  runtimePath = lib.makeBinPath ([
-    erlang
-    getconf # for getting memory limits
-    socat
-    procps
-    gnused
-    coreutils # used by helper scripts
-  ] ++ lib.optionals stdenv.isLinux [ systemd ]); # for systemd unit activation check
 
   postInstall = ''
     # rabbitmq-env calls to sed/coreutils, so provide everything early

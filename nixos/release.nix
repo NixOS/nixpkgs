@@ -22,8 +22,8 @@ let
     import ./tests/all-tests.nix {
       inherit system;
       pkgs = import ./.. { inherit system; };
-      callTest = t: {
-        ${system} = hydraJob t.test;
+      callTest = config: {
+        ${system} = hydraJob config.test;
       };
     } // {
       # for typechecking of the scripts and evaluation of
@@ -32,8 +32,8 @@ let
         import ./tests/all-tests.nix {
         inherit system;
         pkgs = import ./.. { inherit system; };
-        callTest = t: {
-          ${system} = hydraJob t.test.driver;
+        callTest = config: {
+          ${system} = hydraJob config.driver;
         };
       };
     };
