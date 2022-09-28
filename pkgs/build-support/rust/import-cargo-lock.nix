@@ -10,6 +10,10 @@
   # Allow `builtins.fetchGit` to be used to not require hashes for git dependencies
 , allowBuiltinFetchGit ? false
 
+  # Additional registries to pull sources from
+  #   { "https://<registry index URL>" = "https://<registry download URL>"; }
+, extraRegistries ? {}
+
   # Hashes for git dependencies.
 , outputHashes ? {}
 } @ args:
@@ -80,7 +84,7 @@ let
 
   # We can't use the existing fetchCrate function, since it uses a
   # recursive hash of the unpacked crate.
-  fetchCrate = pkg:
+  fetchCrate = pkg: downloadUrl:
     let
       checksum = pkg.checksum or parsedLockFile.metadata."checksum ${pkg.name} ${pkg.version} (${pkg.source})";
     in
@@ -89,18 +93,23 @@ let
     '';
     fetchurl {
       name = "crate-${pkg.name}-${pkg.version}.tar.gz";
-      url = "https://crates.io/api/v1/crates/${pkg.name}/${pkg.version}/download";
+      url = "${downloadUrl}/v1/crates/${pkg.name}/${pkg.version}/download";
       sha256 = checksum;
     };
+
+  registries = {
+    "https://github.com/rust-lang/crates.io-index" = "https://crates.io/api";
+  } // extraRegistries;
 
   # Fetch and unpack a crate.
   mkCrate = pkg:
     let
       gitParts = parseGit pkg.source;
+      registryIndexUrl = lib.removePrefix "registry+" pkg.source;
     in
-      if pkg.source == "registry+https://github.com/rust-lang/crates.io-index" then
+      if lib.hasPrefix "registry+" pkg.source && builtins.hasAttr registryIndexUrl registries then
       let
-        crateTarball = fetchCrate pkg;
+        crateTarball = fetchCrate pkg registries.${registryIndexUrl};
       in runCommand "${pkg.name}-${pkg.version}" {} ''
         mkdir $out
         tar xf "${crateTarball}" -C $out --strip-components=1
@@ -202,14 +211,23 @@ let
     }
 
     cat > $out/.cargo/config <<EOF
-    [source.crates-io]
-    replace-with = "vendored-sources"
+[source.crates-io]
+replace-with = "vendored-sources"
 
-    [source.vendored-sources]
-    directory = "cargo-vendor-dir"
-    EOF
+[source.vendored-sources]
+directory = "cargo-vendor-dir"
+EOF
 
     declare -A keysSeen
+
+    for registry in ${toString (builtins.attrNames extraRegistries)}; do
+      cat >> $out/.cargo/config <<EOF
+
+[source."$registry"]
+registry = "$registry"
+replace-with = "vendored-sources"
+EOF
+    done
 
     for crate in ${toString depCrates}; do
       # Link the crate directory, removing the output path hash from the destination.
