@@ -60,13 +60,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hw-probe";
-  version = "1.6.4";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "linuxhw";
     repo = pname;
     rev = version;
-    sha256 = "sha256:028wnhrbn10lfxwmcpzdbz67ygldimv7z1k1bm64ggclykvg5aim";
+    sha256 = "sha256-WlLSgjVLqGGtwCyyUn9X3XbE2Yhz6LD245+U2JgGd+k=";
   };
 
   makeFlags = [ "prefix=$(out)" ];
