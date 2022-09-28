@@ -17247,6 +17247,8 @@ with pkgs;
 
   rr = callPackage ../development/tools/analysis/rr { };
 
+  rsass = callPackage ../development/tools/misc/rsass { };
+
   rufo = callPackage ../development/tools/rufo { };
 
   samurai = callPackage ../development/tools/build-managers/samurai { };
