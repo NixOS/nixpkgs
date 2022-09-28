@@ -20275,6 +20275,8 @@ with pkgs;
 
   libpam-wrapper = callPackage ../development/libraries/libpam-wrapper { };
 
+  libpanel = callPackage ../development/libraries/libpanel { };
+
   libpar2 = callPackage ../development/libraries/libpar2 { };
 
   libpcap = callPackage ../development/libraries/libpcap { };
@@ -28198,16 +28200,6 @@ with pkgs;
 
   fractal-next = callPackage ../applications/networking/instant-messengers/fractal-next {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad;
-    libadwaita = libadwaita.overrideAttrs (finalAtts: rec {
-      version = "1.2.0";
-      src = fetchFromGitLab {
-        domain = "gitlab.gnome.org";
-        owner = "GNOME";
-        repo = "libadwaita";
-        rev = version;
-        hash = "sha256-3lH7Vi9M8k+GSrCpvruRpLrIpMoOakKbcJlaAc/FK+U=";
-      };
-    });
   };
 
   fragments = callPackage ../applications/networking/p2p/fragments { };
