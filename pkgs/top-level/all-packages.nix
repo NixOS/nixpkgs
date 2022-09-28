@@ -2282,6 +2282,8 @@ with pkgs;
 
   barman = callPackage ../tools/misc/barman { };
 
+  bartib = callPackage ../tools/misc/bartib { };
+
   base16-universal-manager = callPackage ../applications/misc/base16-universal-manager { };
 
   bashate = python3Packages.callPackage ../development/tools/bashate { };
