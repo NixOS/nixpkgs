@@ -8544,6 +8544,8 @@ in {
 
   pysocks = callPackage ../development/python-modules/pysocks { };
 
+  pysol-cards = callPackage ../development/python-modules/pysol-cards { };
+
   pysolr = callPackage ../development/python-modules/pysolr { };
 
   pysoma = callPackage ../development/python-modules/pysoma { };
