@@ -4529,6 +4529,7 @@ broken-packages:
   - servant-namedargs
   - servant-nix
   - servant-pandoc
+  - servant-polysemy
   - servant-pool
   - servant-proto-lens
   - servant-purescript
