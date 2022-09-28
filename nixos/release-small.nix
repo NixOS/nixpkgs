@@ -69,7 +69,7 @@ in rec {
       imagemagick
       jdk
       linux
-      mysql
+      mariadb
       nginx
       nodejs
       openssh

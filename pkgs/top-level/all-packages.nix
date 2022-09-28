@@ -1508,6 +1508,10 @@ with pkgs;
 
   fuse-emulator = callPackage ../applications/emulators/fuse-emulator {};
 
+  fw = callPackage ../tools/misc/fw {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   gcdemu = callPackage ../applications/emulators/cdemu/gui.nix { };
 
   gensgs = pkgsi686Linux.callPackage ../applications/emulators/gens-gs { };
@@ -2865,6 +2869,8 @@ with pkgs;
 
   aptdec = callPackage ../development/libraries/aptdec {};
 
+  argc = callPackage ../development/tools/argc { };
+
   aria2 = callPackage ../tools/networking/aria2 {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -3508,6 +3514,8 @@ with pkgs;
   };
 
   compsize = callPackage ../os-specific/linux/compsize { };
+
+  comrak = callPackage ../tools/text/comrak { };
 
   cot = with python3Packages; toPythonApplication cot;
 
@@ -5767,6 +5775,10 @@ with pkgs;
   docear = callPackage ../applications/office/docear { };
 
   dockbarx = callPackage ../applications/misc/dockbarx { };
+
+  doctave = callPackage ../applications/misc/doctave {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   dog = callPackage ../tools/system/dog { };
 
@@ -11569,6 +11581,8 @@ with pkgs;
 
   teamviewer = libsForQt515.callPackage ../applications/networking/remote/teamviewer { };
 
+  teip = callPackage ../tools/text/teip { };
+
   telegraf = callPackage ../servers/monitoring/telegraf { };
 
   teleport = callPackage ../servers/teleport {
@@ -16438,6 +16452,8 @@ with pkgs;
     };
 
   dive = callPackage ../development/tools/dive { };
+
+  dioxus-cli = callPackage ../development/tools/rust/dioxus-cli { };
 
   doclifter = callPackage ../development/tools/misc/doclifter { };
 
@@ -31677,6 +31693,8 @@ with pkgs;
   themechanger = callPackage ../applications/misc/themechanger { };
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
+
+  thokr = callPackage ../applications/misc/thokr { };
 
   thonny = callPackage ../applications/editors/thonny { };
 

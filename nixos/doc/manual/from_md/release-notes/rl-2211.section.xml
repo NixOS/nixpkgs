@@ -235,6 +235,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://gitlab.com/CalcProgrammer1/OpenRGB/-/tree/master">OpenRGB</link>,
+          a FOSS tool for controlling RGB lighting. Available as
+          <link xlink:href="options.html#opt-services-hardware-openrgb-enable">services.hardware.openrgb.enable</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.getoutline.com/">Outline</link>,
           a wiki and knowledge base similar to Notion. Available as
           <link linkend="opt-services.outline.enable">services.outline</link>.
