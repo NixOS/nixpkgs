@@ -29119,7 +29119,9 @@ with pkgs;
     subproject = "reader";
   };
 
-  jabref = callPackage ../applications/office/jabref { };
+  jabref = callPackage ../applications/office/jabref {
+    jdk = jdk18;
+  };
 
   jack_capture = callPackage ../applications/audio/jack-capture { };
 
