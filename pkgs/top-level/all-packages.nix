@@ -7413,6 +7413,8 @@ with pkgs;
 
   lucky-cli = callPackage ../development/web/lucky-cli { };
 
+  mac-fdisk = callPackage ../tools/system/mac-fdisk { };
+
   partclone = callPackage ../tools/backup/partclone { };
 
   partimage = callPackage ../tools/backup/partimage { };
