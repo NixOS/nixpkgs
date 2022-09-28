@@ -16219,6 +16219,8 @@ with pkgs;
     llvmPackages = llvmPackages_latest;
   };
 
+  refurb = callPackage ../development/tools/refurb { };
+
   srandrd = callPackage ../tools/X11/srandrd { };
 
   srecord = callPackage ../development/tools/misc/srecord { };
