@@ -1,5 +1,6 @@
 { system,
   pkgs,
+  hostPkgs ? pkgs,
 
   # Projects the test configuration into a the desired value; usually
   # the test runner: `config: config.test`.
@@ -28,10 +29,10 @@ let
         # in that file, which are then forwarded to the test definition
         # following the `import make-test-python.nix` expression
         # (if it is a function).
-        discoverTests (val { inherit system pkgs; })
+        discoverTests (val { inherit system pkgs hostPkgs; })
       else val;
   handleTest = path: args:
-    discoverTests (import path ({ inherit system pkgs; } // args));
+    discoverTests (lazyFunction (import path) ({ inherit system pkgs hostPkgs; } // args));
   handleTestOn = systems: path: args:
     if elem system systems then handleTest path args
     else {};
@@ -45,7 +46,7 @@ let
 
   inherit
     (rec {
-      doRunTest = arg: ((import ../lib/testing-python.nix { inherit system pkgs; }).evalTest {
+      doRunTest = arg: ((import ../lib/testing-python.nix { inherit system pkgs hostPkgs; }).evalTest {
         imports = [ arg ];
       }).config.result;
       findTests = tree:

@@ -139,16 +139,35 @@ with pkgs;
   ### Push NixOS tests inside the fixed point
 
   # See also allTestsForSystem in nixos/release.nix
-  nixosTests = import ../../nixos/tests/all-tests.nix {
-    inherit pkgs;
-    system = stdenv.hostPlatform.system;
+  nixosTests = let
+    systemArgs =
+      if stdenv.hostPlatform.isLinux && (stdenv.buildPlatform.isLinux || stdenv.buildPlatform.isDarwin)
+      then {
+        hostPkgs = pkgs.buildPackages;
+        pkgs = pkgs;
+        system = stdenv.hostPlatform.system;
+      }
+      else if stdenv.hostPlatform.isDarwin && stdenv.buildPlatform.isDarwin
+      then
+        # In the context of a normal darwin compile, repurpose nixosTests as a
+        # non-cross build. This requires a "remote" builder such as a local
+        # Linux VM, but all VM hosting happens on darwin.
+        let linuxSystem = "${stdenv.buildPlatform.parsed.cpu.name}-linux";
+        in {
+          hostPkgs = pkgs;
+          pkgs = import ../.. { inherit config overlays; system = linuxSystem; };
+          system = linuxSystem;
+        }
+      else throw "Don't know how to configure NixOS for VM host ${stdenv.buildPlatform.system} and/or VM guest ${stdenv.hostPlatform.system} built on ${stdenv.buildPlatform.system}";
+  in
+  import ../../nixos/tests/all-tests.nix {
+    inherit (systemArgs) hostPkgs pkgs system;
     callTest = config: config.test;
   } // {
     # for typechecking of the scripts and evaluation of
     # the nodes, without running VMs.
     allDrivers = import ../../nixos/tests/all-tests.nix {
-      inherit pkgs;
-      system = stdenv.hostPlatform.system;
+      inherit (systemArgs) hostPkgs pkgs system;
       callTest = config: config.test.driver;
     };
   };

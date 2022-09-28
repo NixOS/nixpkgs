@@ -1,13 +1,10 @@
-testModuleArgs@{ config, lib, hostPkgs, nodes, ... }:
+testModuleArgs@{ config, lib, hostPkgs, pkgs, nodes, ... }:
 
 let
   inherit (lib) mkOption mkForce optional types mapAttrs mkDefault mdDoc;
 
-  system = hostPkgs.stdenv.hostPlatform.system;
-
   baseOS =
     import ../eval-config.nix {
-      inherit system;
       inherit (config.node) specialArgs;
       modules = [ config.defaults ];
       baseModules = (import ../../modules/module-list.nix) ++
@@ -17,10 +14,14 @@ let
           ({ config, ... }:
             {
               virtualisation.qemu.package = testModuleArgs.config.qemu.package;
+              virtualisation.host.pkgs = hostPkgs;
 
               # Ensure we do not use aliases. Ideally this is only set
               # when the test framework is used by Nixpkgs NixOS tests.
               nixpkgs.config.allowAliases = false;
+              nixpkgs = {
+                inherit (pkgs.stdenv) hostPlatform buildPlatform;
+              };
             })
           testModuleArgs.config.extraBaseModules
         ] ++ optional config.minimal ../../modules/testing/minimal-kernel.nix;
