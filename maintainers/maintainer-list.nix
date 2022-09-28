@@ -14027,6 +14027,13 @@
     github = "twitchyliquid64";
     githubId = 6328589;
   };
+  tylerjl = {
+    email = "tyler+nixpkgs@langlois.to";
+    github = "tylerjl";
+    githubId = 1733846;
+    matrix = "@ty:tjll.net";
+    name = "Tyler Langlois";
+  };
   typetetris = {
     email = "ericwolf42@mail.com";
     github = "typetetris";
