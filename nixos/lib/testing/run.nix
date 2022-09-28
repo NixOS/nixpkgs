@@ -1,6 +1,13 @@
 { config, hostPkgs, lib, ... }:
 let
   inherit (lib) types mkOption mdDoc;
+
+  vmHostPlatform = hostPkgs.stdenv.buildPlatform;
+
+  virtualisationFeature =
+    if vmHostPlatform.isLinux then [ "kvm" ]
+    else if vmHostPlatform.isDarwin then [ "hvf" ]
+    else throw "Don't know how to require virtualisation on platform ${vmHostPlatform.system}";
 in
 {
   options = {
@@ -33,7 +40,7 @@ in
       derivation = hostPkgs.stdenv.mkDerivation {
         name = "vm-test-run-${config.name}";
 
-        requiredSystemFeatures = [ "kvm" "nixos-test" ];
+        requiredSystemFeatures = virtualisationFeature ++ [ "nixos-test" ];
 
         buildCommand = ''
           mkdir -p $out
