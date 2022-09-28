@@ -20873,6 +20873,8 @@ with pkgs;
 
   mimalloc = callPackage ../development/libraries/mimalloc { };
 
+  miniaudio = callPackage ../development/libraries/miniaudio { };
+
   miniz = callPackage ../development/libraries/miniz { };
 
   minizip = callPackage ../development/libraries/minizip { };
