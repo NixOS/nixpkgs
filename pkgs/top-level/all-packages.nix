@@ -140,14 +140,14 @@ with pkgs;
   nixosTests = import ../../nixos/tests/all-tests.nix {
     inherit pkgs;
     system = stdenv.hostPlatform.system;
-    callTest = t: t.test;
+    callTest = config: config.test;
   } // {
     # for typechecking of the scripts and evaluation of
     # the nodes, without running VMs.
     allDrivers = import ../../nixos/tests/all-tests.nix {
       inherit pkgs;
       system = stdenv.hostPlatform.system;
-      callTest = t: t.test.driver;
+      callTest = config: config.test.driver;
     };
   };
 
@@ -2092,6 +2092,10 @@ with pkgs;
 
   asciinema = callPackage ../tools/misc/asciinema {};
 
+  asciinema-agg = callPackage ../tools/misc/asciinema-agg {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   asciinema-scenario = callPackage ../tools/misc/asciinema-scenario {};
 
   asciiquarium = callPackage ../applications/misc/asciiquarium {};
@@ -2365,6 +2369,8 @@ with pkgs;
   clair = callPackage ../tools/admin/clair { };
 
   cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
+
+  cloudfox = callPackage ../tools/security/cloudfox { };
 
   cloudsmith-cli = callPackage ../development/tools/cloudsmith-cli { };
 
@@ -17392,6 +17398,8 @@ with pkgs;
   stm32cubemx = callPackage ../development/embedded/stm32/stm32cubemx { };
 
   stm32flash = callPackage ../development/embedded/stm32/stm32flash { };
+
+  stm8flash = callPackage ../development/embedded/stm8/stm8flash { };
 
   strace = callPackage ../development/tools/misc/strace { };
 

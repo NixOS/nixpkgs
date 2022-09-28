@@ -1207,6 +1207,59 @@ runTests {
     expected = true;
   };
 
+  # lazyDerivation
+
+  testLazyDerivationIsLazyInDerivationForAttrNames = {
+    expr = attrNames (lazyDerivation {
+      derivation = throw "not lazy enough";
+    });
+    # It's ok to add attribute names here when lazyDerivation is improved
+    # in accordance with its inline comments.
+    expected = [ "drvPath" "meta" "name" "out" "outPath" "outputName" "outputs" "system" "type" ];
+  };
+
+  testLazyDerivationIsLazyInDerivationForPassthruAttr = {
+    expr = (lazyDerivation {
+      derivation = throw "not lazy enough";
+      passthru.tests = "whatever is in tests";
+    }).tests;
+    expected = "whatever is in tests";
+  };
+
+  testLazyDerivationIsLazyInDerivationForPassthruAttr2 = {
+    # passthru.tests is not a special case. It works for any attr.
+    expr = (lazyDerivation {
+      derivation = throw "not lazy enough";
+      passthru.foo = "whatever is in foo";
+    }).foo;
+    expected = "whatever is in foo";
+  };
+
+  testLazyDerivationIsLazyInDerivationForMeta = {
+    expr = (lazyDerivation {
+      derivation = throw "not lazy enough";
+      meta = "whatever is in meta";
+    }).meta;
+    expected = "whatever is in meta";
+  };
+
+  testLazyDerivationReturnsDerivationAttrs = let
+    derivation = {
+      type = "derivation";
+      outputs = ["out"];
+      out = "test out";
+      outPath = "test outPath";
+      outputName = "out";
+      drvPath = "test drvPath";
+      name = "test name";
+      system = "test system";
+      meta = "test meta";
+    };
+  in {
+    expr = lazyDerivation { inherit derivation; };
+    expected = derivation;
+  };
+
   testTypeDescriptionInt = {
     expr = (with types; int).description;
     expected = "signed integer";
