@@ -10389,6 +10389,9 @@ with pkgs;
 
   smart-wallpaper = callPackage ../tools/X11/smart-wallpaper { };
 
+  nwaku = callPackage ../tools/security/nwaku { };
+  nim-waku = nwaku;
+
   nms = callPackage ../tools/misc/nms { };
 
   nomachine-client = callPackage ../tools/admin/nomachine-client { };
