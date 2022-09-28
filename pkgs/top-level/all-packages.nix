@@ -10186,6 +10186,20 @@ with pkgs;
 
   podman-tui = callPackage ../applications/virtualization/podman-tui { };
 
+  pods = callPackage ../applications/virtualization/pods {
+    # taken from #182618, remove when merged
+    libadwaita = libadwaita.overrideAttrs (_: rec {
+      version = "1.2.0";
+      src = fetchFromGitLab {
+        domain = "gitlab.gnome.org";
+        owner = "GNOME";
+        repo = "libadwaita";
+        rev = version;
+        hash = "sha256-3lH7Vi9M8k+GSrCpvruRpLrIpMoOakKbcJlaAc/FK+U=";
+      };
+    });
+  };
+
   pod2mdoc = callPackage ../tools/misc/pod2mdoc { };
 
   poedit = callPackage ../tools/text/poedit {
