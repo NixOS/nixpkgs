@@ -13,7 +13,6 @@
 , howard-hinnant-date
 , nlohmann_json
 , boost
-, oneDNN
 , gtest
 , pythonSupport ? true
 , nsync
@@ -67,7 +66,6 @@ stdenv.mkDerivation rec {
     howard-hinnant-date
     nlohmann_json
     boost
-    oneDNN
   ] ++ lib.optionals pythonSupport ([
     flatbuffers
     nsync
@@ -91,7 +89,7 @@ stdenv.mkDerivation rec {
     "-Donnxruntime_USE_PREINSTALLED_EIGEN=ON"
     "-Donnxruntime_USE_MPI=ON"
     "-Deigen_SOURCE_PATH=${eigen.src}"
-    "-Donnxruntime_USE_DNNL=YES"
+    "-Donnxruntime_USE_DNNL=NO"
   ] ++ lib.optionals pythonSupport [
     "-Donnxruntime_ENABLE_PYTHON=ON"
   ];
@@ -133,6 +131,6 @@ stdenv.mkDerivation rec {
     # https://github.com/microsoft/onnxruntime/blob/master/BUILD.md#architectures
     platforms = platforms.unix;
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer puffnfresh ck3d ];
+    maintainers = with maintainers; [ fridh ];
   };
 }
