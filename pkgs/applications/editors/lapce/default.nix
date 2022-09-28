@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , rustPlatform
 , cmake
 , pkg-config
@@ -21,6 +20,7 @@
 , wrapGAppsHook
 , gobject-introspection
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "lapce";
   version = "unstable-2022-09-21";
