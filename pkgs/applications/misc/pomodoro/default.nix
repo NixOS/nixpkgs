@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, Foundation }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Foundation }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pomodoro";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-6ZhWStZebXSwrej36DXifrsrmR1SWW3PwGUX0hqPwE4=";
+  
+  buildInputs = lib.optionals stdenv.isDarwin [ Foundation ];
 
   meta = with lib; {
     description = "A simple CLI pomodoro timer using desktop notifications written in Rust";
