@@ -35521,6 +35521,8 @@ with pkgs;
 
   bcal = callPackage ../applications/science/math/bcal { };
 
+  pagsuite = callPackage ../applications/science/math/pagsuite { };
+
   pspp = callPackage ../applications/science/math/pspp { };
 
   ssw = callPackage ../applications/misc/ssw { };
