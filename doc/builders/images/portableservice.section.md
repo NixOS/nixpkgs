@@ -1,6 +1,6 @@
 # pkgs.portableService {#sec-pkgs-portableService}
 
-`pkgs.portableService` is a function to create _"portable service images"_,
+`pkgs.portableService` is a function to create _portable service images_,
 as read-only, immutable, `squashfs` archives.
 
 systemd supports a concept of [Portable Services](https://systemd.io/PORTABLE_SERVICES/).
