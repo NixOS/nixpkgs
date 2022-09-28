@@ -24513,7 +24513,9 @@ with pkgs;
 
   iwd = callPackage ../os-specific/linux/iwd { };
 
-  jfbview = callPackage ../os-specific/linux/jfbview { };
+  jfbview = callPackage ../os-specific/linux/jfbview {
+    imlib2 = imlib2Full;
+  };
   jfbpdf = jfbview.override {
     imageSupport = false;
   };
@@ -28040,7 +28042,9 @@ with pkgs;
 
   fdupes = callPackage ../tools/misc/fdupes { };
 
-  feh = callPackage ../applications/graphics/feh { };
+  feh = callPackage ../applications/graphics/feh {
+    imlib2 = imlib2Full;
+  };
 
   feishu = callPackage ../applications/networking/instant-messengers/feishu {};
 
@@ -30721,7 +30725,9 @@ with pkgs;
 
   pqiv = callPackage ../applications/graphics/pqiv { };
 
-  qiv = callPackage ../applications/graphics/qiv { };
+  qiv = callPackage ../applications/graphics/qiv {
+    imlib2 = imlib2Full;
+  };
 
   premid = callPackage ../applications/misc/premid { };
 
@@ -31264,9 +31270,13 @@ with pkgs;
 
   swingsane = callPackage ../applications/graphics/swingsane { };
 
-  sxiv = callPackage ../applications/graphics/sxiv { };
+  sxiv = callPackage ../applications/graphics/sxiv {
+    imlib2 = imlib2Full;
+  };
 
-  nsxiv = callPackage ../applications/graphics/nsxiv { };
+  nsxiv = callPackage ../applications/graphics/nsxiv {
+    imlib2 = imlib2Full;
+  };
 
   resilio-sync = callPackage ../applications/networking/resilio-sync { };
 
