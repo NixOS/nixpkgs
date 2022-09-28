@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "499";
+  version = "500";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-G3aWg06sUD9uHSLPTnUk0CvFqrRe5nvIAKBoQqlWwYA=";
+    sha256 = "sha256-gsOto37++++ucpDC0ri3HhROp7v6qlHENjFvsbuyM6k=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,6 @@ python3Packages.buildPythonPackage rec {
     html5lib
     lxml
     lz4
-    nose
     numpy
     opencv4
     pillow
