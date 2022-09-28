@@ -10,7 +10,7 @@ in
     };
     result = mkOption {
       internal = true;
-      default = config;
+      default = config.test;
     };
   };
 }
