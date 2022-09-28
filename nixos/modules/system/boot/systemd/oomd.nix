@@ -4,20 +4,20 @@
 
 in {
   options.systemd.oomd = {
-    enable = lib.mkEnableOption "the systemd-oomd OOM killer" // { default = true; };
+    enable = lib.mkEnableOption (lib.mdDoc "the `systemd-oomd` OOM killer") // { default = true; };
 
     # Fedora enables the first and third option by default. See the 10-oomd-* files here:
     # https://src.fedoraproject.org/rpms/systemd/tree/acb90c49c42276b06375a66c73673ac351025597
-    enableRootSlice = lib.mkEnableOption "oomd on the root slice (-.slice)";
-    enableSystemSlice = lib.mkEnableOption "oomd on the system slice (system.slice)";
-    enableUserServices = lib.mkEnableOption "oomd on all user services (user@.service)";
+    enableRootSlice = lib.mkEnableOption (lib.mdDoc "oomd on the root slice (`-.slice`)");
+    enableSystemSlice = lib.mkEnableOption (lib.mdDoc "oomd on the system slice (`system.slice`)");
+    enableUserServices = lib.mkEnableOption (lib.mdDoc "oomd on all user services (`user@.service`)");
 
     extraConfig = lib.mkOption {
       type = with lib.types; attrsOf (oneOf [ str int bool ]);
       default = {};
       example = lib.literalExpression ''{ DefaultMemoryPressureDurationSec = "20s"; }'';
-      description = ''
-        Extra config options for systemd-oomd. See man oomd.conf
+      description = lib.mdDoc ''
+        Extra config options for `systemd-oomd`. See {command}`man oomd.conf`
         for available options.
       '';
     };
