@@ -1,5 +1,9 @@
 { lib }:
 
+let
+  inherit (lib) mapAttrs functionArgs setFunctionArgs;
+in
+
 rec {
 
   ## Simple (higher order) functions
@@ -466,6 +470,29 @@ rec {
     if isFunction v
     then v
     else k: v;
+
+  /*
+    Make an attribute-set matching function such as `{ a, b }: b` delay
+    its evaluation of the attribute set in the argument.
+
+    This is not compatible with ellipsis patterns, `{ ... }:`. It removes the
+    ability to do `args@{ a, ... }: args.b`, although this limitation should
+    not be relied on.
+
+    Example:
+
+        lib.fix (lib.lazyFunction ({ a, b }: { a = b; b = 1; }))
+  */
+  lazyFunction = f:
+    setFunctionArgs
+      (args:
+        f
+          (mapAttrs
+            (k: _: args.${k})
+            (functionArgs f)
+          )
+      )
+      (functionArgs f) ;
 
   /* Convert the given positive integer to a string of its hexadecimal
      representation. For example:
