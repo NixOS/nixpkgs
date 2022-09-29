@@ -27,5 +27,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/azdavis/millet/raw/v${version}/docs/changelog.md";
     license = [ licenses.mit /* or */ licenses.asl20 ];
     maintainers = with maintainers; [ marsam ];
+    mainProgram = "lang-srv";
   };
 }
