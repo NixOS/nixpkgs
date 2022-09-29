@@ -27807,9 +27807,7 @@ with pkgs;
 
   fritzprofiles = with python3.pkgs; toPythonApplication fritzprofiles;
 
-  fsv = callPackage ../applications/misc/fsv {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  fsv = callPackage ../applications/misc/fsv { };
 
   ft2-clone = callPackage ../applications/audio/ft2-clone {
     inherit (darwin.apple_sdk.frameworks) CoreAudio CoreMIDI CoreServices Cocoa;
