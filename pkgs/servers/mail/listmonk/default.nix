@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, callPackage, stuffbin }:
+{ lib, buildGoModule, fetchFromGitHub, callPackage, stuffbin, nixosTests }:
 
 buildGoModule rec {
   pname = "listmonk";
@@ -43,6 +43,7 @@ buildGoModule rec {
 
   passthru = {
     frontend = callPackage ./frontend.nix { inherit meta; };
+    tests = { inherit (nixosTests) listmonk; };
   };
 
   meta = with lib; {

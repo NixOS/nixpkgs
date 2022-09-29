@@ -76,7 +76,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.10.0-rc0";
+  version = "2.10.0";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -190,7 +190,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      hash = "sha256-zN8I0wxKrxWcI0RuOqDz6srdW0Q+kgaZhJdXM46N1e8=";
+      hash = "sha256-Y6cujiMoQXKQlsLBr7d0T278ltdd00IfsTRycJbRVN4=";
     };
 
     # On update, it can be useful to steal the changes from gentoo
@@ -445,7 +445,8 @@ in buildPythonPackage {
       -e "s/'gast[^']*',/'gast',/" \
       -e "/'libclang[^']*',/d" \
       -e "/'keras[^']*')\?,/d" \
-      -e "/'tensorflow-io-gcs-filesystem[^']*',/d"
+      -e "/'tensorflow-io-gcs-filesystem[^']*',/d" \
+      -e "s/'protobuf[^']*',/'protobuf',/" \
   '';
 
   # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow

@@ -4,6 +4,7 @@
 , pythonOlder
 , stdenv
 , packaging
+, setuptools
 , importlib-resources
 , dbus-next
 }:
@@ -20,6 +21,10 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "sha256-lOXoiWY6gyWBL4RLrvslqcMmwtjMTOaHJZzsDO+C/F4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     packaging

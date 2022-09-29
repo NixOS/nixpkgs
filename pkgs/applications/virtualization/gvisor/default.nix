@@ -9,18 +9,24 @@
 
 buildGoModule rec {
   pname = "gvisor";
-  version = "20220905.0";
+  version = "20220919.0";
+
+  # gvisor provides a synthetic go branch (https://github.com/google/gvisor/tree/go)
+  # that can be used to build gvisor without bazel.
+  # For updates, you should stick to the commits labeled "Merge release-** (automated)"
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "gvisor";
-    rev = "442a3cd44a0858ac2a8e773b6fbba67cf3bd3767";
-    sha256 = "sha256-LKY7AKAHX29eGuXRrkCVCFl/bdHAVOC0QNZfzlpXqwc=";
+    rev = "4e7fd140e8d0056f8f031950fcace8ff4d48a526";
+    sha256 = "sha256-II0lnthabkyCgPum7EBdyOYwB0rWjA2Jd9DVGLJQy6Q=";
   };
 
-  vendorSha256 = "sha256-Fn8A8iwTv0lNI9ZBJkq3SlRelnAGIQY0GInTxaCzSAU=";
+  vendorSha256 = "sha256-iGLWxx/Kn1QaJTNOZcc+mwoF3ecEDOkaqmA0DH4pdgU=";
 
   nativeBuildInputs = [ makeWrapper ];
+
+  CGO_ENABLED = 0;
 
   ldflags = [ "-s" "-w" ];
 

@@ -1,36 +1,48 @@
-{ lib, buildDunePackage, happy-eyeballs, duration, dns-client, domain-name
-, ipaddr, fmt, logs, lwt, mirage-clock, tcpip, mirage-random, mirage-time}:
+{ buildDunePackage
+, happy-eyeballs
+, duration
+, dns-client
+, domain-name
+, ipaddr
+, fmt
+, logs
+, lwt
+, mirage-clock
+, mirage-random
+, mirage-time
+, tcpip
+}:
 
-
-buildDunePackage rec {
+buildDunePackage {
   pname = "happy-eyeballs-mirage";
 
+  inherit (happy-eyeballs) src version;
+
   minimalOCamlVersion = "4.08";
-  inherit (happy-eyeballs) version src ;
 
-  useDune2 = true;
+  strictDeps = true;
 
-  propagatedBuildInputs = [
-    happy-eyeballs
-    domain-name
+  buildInputs = [
     duration
-    fmt
     ipaddr
-    logs
-    dns-client
+    domain-name
+    fmt
     mirage-clock
     mirage-random
     mirage-time
-    tcpip
-    lwt
   ];
 
+  propagatedBuildInputs = [
+    dns-client
+    happy-eyeballs
+    logs
+    lwt
+    tcpip
+  ];
 
-  meta = {
+  doCheck = true;
+
+  meta = happy-eyeballs.meta // {
     description = "Connecting to a remote host via IP version 4 or 6 using Mirage";
-    homepage = "https://github.com/roburio/happy-eyeballs";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
   };
-
 }

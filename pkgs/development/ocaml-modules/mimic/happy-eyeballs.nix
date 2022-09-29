@@ -1,21 +1,23 @@
 { lib, buildDunePackage, mimic, happy-eyeballs-mirage }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "mimic-happy-eyeballs";
+
+  inherit (mimic) src version;
+
   minimalOCamlVersion = "4.08";
 
-  inherit (mimic) version src;
+  strictDeps = true;
 
-
-  propagatedBuildInputs = [
+  buildInputs = [
     mimic
     happy-eyeballs-mirage
   ];
+  doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "A happy-eyeballs integration into mimic";
-    license = licenses.isc;
-    homepage = "https://github.com/mirage/ocaml-git";
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [ lib.maintainers.ulrikstrid ];
+    inherit (mimic.meta) license homepage;
   };
 }

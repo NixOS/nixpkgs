@@ -40,14 +40,14 @@ in {
 
           If the {option}`persistentKeys` is enabled then the
           keys that are generated during activation will override
-          those in {option}`config` or
+          those in {option}`settings` or
           {option}`configFile`.
 
           If no keys are specified then ephemeral keys are generated
           and the Yggdrasil interface will have a random IPv6 address
           each time the service is started, this is the default.
 
-          If both {option}`configFile` and {option}`config`
+          If both {option}`configFile` and {option}`settings`
           are supplied, they will be combined, with values from
           {option}`configFile` taking precedence.
 
@@ -62,7 +62,7 @@ in {
         example = "/run/keys/yggdrasil.conf";
         description = lib.mdDoc ''
           A file which contains JSON configuration for yggdrasil.
-          See the {option}`config` option for more information.
+          See the {option}`settings` option for more information.
         '';
       };
 
@@ -81,7 +81,7 @@ in {
           discovery. The NixOS firewall blocks link-local
           communication, so in order to make local peering work you
           will also need to set `LinkLocalTCPPort` in your
-          yggdrasil configuration ({option}`config` or
+          yggdrasil configuration ({option}`settings` or
           {option}`configFile`) to a port number other than 0,
           and then add that port to
           {option}`networking.firewall.allowedTCPPorts`.

@@ -1,21 +1,35 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder, blessings, mock, nose, pyte, cwcwidth, typing ? null}:
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, blessed
+, backports-cached-property
+, pyte
+, pytestCheckHook
+, cwcwidth
+}:
 
 buildPythonPackage rec {
   pname = "curtsies";
-  version = "0.3.10";
+  version = "0.4.0";
+  format = "pyproject";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11efbb153d9cb22223dd9a44041ea0c313b8411e246e7f684aa843f6aa9c1600";
+    hash = "sha256-yynvzjP+85WinvpWjyf1kTF4Rp+zqrEUCA1spiZBQv4=";
   };
 
-  propagatedBuildInputs = [ blessings cwcwidth ]
-    ++ lib.optionals (pythonOlder "3.5") [ typing ];
+  propagatedBuildInputs = [
+    backports-cached-property
+    blessed
+    cwcwidth
+  ];
 
-  checkInputs = [ mock pyte nose ];
-
-  checkPhase = ''
-    nosetests tests
-  '';
+  checkInputs = [
+    pyte
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;

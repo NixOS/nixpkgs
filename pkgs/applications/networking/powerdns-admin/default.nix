@@ -13,26 +13,14 @@ let
     packageOverrides = self: super: {
       # The bravado-core dependency is incompatible with jschonschema 4.0:
       # https://github.com/Yelp/bravado-core/pull/385
-      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
-        version = "3.2.0";
-
-        src = oldAttrs.src.override {
-          inherit version;
-          hash = "sha256-yKhbKNN3zHc35G4tnytPRO48Dh3qxr9G3e/HGH0weXo=";
-          sha256 = "";
-        };
-
-        SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-        doCheck = false;
-      });
+      jsonschema = super.jsonschema_3;
     };
   };
 
   pythonDeps = with python.pkgs; [
     flask flask_assets flask_login flask-sqlalchemy flask_migrate flask-seasurf flask_mail flask-session flask-sslify
     mysqlclient psycopg2 sqlalchemy
-    cffi configobj cryptography bcrypt requests ldap pyotp qrcode dnspython
+    cffi configobj cryptography bcrypt requests python-ldap pyotp qrcode dnspython
     gunicorn python3-saml pytz cssmin rjsmin authlib bravado-core
     lima pytimeparse pyyaml jinja2 itsdangerous werkzeug
   ];

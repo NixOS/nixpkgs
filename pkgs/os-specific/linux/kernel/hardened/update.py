@@ -138,7 +138,7 @@ def fetch_patch(*, name: str, release_info: ReleaseInfo) -> Optional[Patch]:
     if not sig_ok:
         return None
 
-    kernel_ver = release_info.release.tag_name.replace("-hardened1", "")
+    kernel_ver = re.sub(r"(.*)(-hardened[\d]+)$", r'\1', release_info.release.tag_name)
     major = kernel_ver.split('.')[0]
     sha256_kernel, _ = nix_prefetch_url(f"mirror://kernel/linux/kernel/v{major}.x/linux-{kernel_ver}.tar.xz")
 

@@ -22,6 +22,11 @@
 , enableWayland ? stdenv.isLinux
 , wayland
 , xorg
+, xcbuild
+, Security
+, ApplicationServices
+, AppKit
+, Carbon
 }:
 rustPlatform.buildRustPackage rec {
   pname = "neovide";
@@ -75,7 +80,7 @@ rustPlatform.buildRustPackage rec {
     python2 # skia-bindings
     python3 # rust-xcb
     llvmPackages.clang # skia
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
   # All tests passes but at the end cargo prints for unknown reason:
   #   error: test failed, to rerun pass '--bin neovide'
@@ -98,7 +103,7 @@ rustPlatform.buildRustPackage rec {
         }))
       ];
     }))
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ Security ApplicationServices Carbon AppKit ];
 
   postFixup = let
     libPath = lib.makeLibraryPath ([
@@ -128,7 +133,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Kethku/neovide";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ck3d ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
     mainProgram = "neovide";
   };
 }

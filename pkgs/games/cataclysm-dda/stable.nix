@@ -1,5 +1,13 @@
-{ lib, callPackage, CoreFoundation, fetchFromGitHub, pkgs, wrapCDDA, attachPkgs
-, tiles ? true, Cocoa
+{ lib
+, callPackage
+, CoreFoundation
+, fetchFromGitHub
+, fetchpatch
+, pkgs
+, wrapCDDA
+, attachPkgs
+, tiles ? true
+, Cocoa
 , debug ? false
 , useXdgDir ? false
 }:
@@ -22,6 +30,13 @@ let
     patches = [
       # Unconditionally look for translation files in $out/share/locale
       ./locale-path-stable.patch
+
+      # Fixes compiler errors when compiling against SDL2_ttf >= 1.20.0, https://github.com/CleverRaven/Cataclysm-DDA/pull/59083
+      # Remove with next version update.
+      (fetchpatch {
+        url = "https://github.com/CleverRaven/Cataclysm-DDA/commit/625fadf3d493c1712d9ade2b849ff6a79765c7a7.patch";
+        hash = "sha256-c0NXkd6jSGSruKrwuYUmLbgiL97YQDkUm313fnMJ7GA=";
+      })
     ];
 
     makeFlags = common.makeFlags ++ [
@@ -31,7 +46,7 @@ let
 
     meta = common.meta // {
       maintainers = with lib.maintainers;
-      common.meta.maintainers ++ [ skeidel ];
+        common.meta.maintainers ++ [ skeidel ];
     };
   });
 in

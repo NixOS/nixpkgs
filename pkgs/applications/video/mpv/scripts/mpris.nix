@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mpv-mpris";
-  version = "0.8.1";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "hoyon";
     repo = "mpv-mpris";
     rev = version;
-    sha256 = "ugEiQZA1vQCVwyv3ViM84Qz8lhRvy17vcxjayYevTAs=";
+    sha256 = "sha256-leW7oCWTnJuprVnJJ+iXd3nuB2VXl3fw8FmPxv7d6rA=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -20,7 +20,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/mirage/ca-certs-nss/releases/download/v${version}/ca-certs-nss-${version}.tbz";
-    sha256 = "1hdjsfk1hky43l0bxahj81l5dg8bzqdz1fw5n0jsmgm4dj09qqk5";
+    sha256 = "sha256-Ezos9A2AQOo43R9akVbJ5l+euTDtguzMfH63YXo9hvc=";
   };
 
   useDune2 = true;

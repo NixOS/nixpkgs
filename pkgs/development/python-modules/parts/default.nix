@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -15,6 +16,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-gOPDqXF05bQcG0Kv0+akBrikRr/CfHB9/tM/TJDPHdM=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # Project has no tests
   doCheck = false;

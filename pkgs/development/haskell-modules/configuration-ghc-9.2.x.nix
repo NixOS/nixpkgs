@@ -190,8 +190,13 @@ self: super: {
     revision = null;
   } super.memory);
 
-  # Use hlint from git for GHC 9.2.1 support
-  hlint = self.hlint_3_4_1;
+  # For -fghc-lib see cabal.project in haskell-language-server.
+  stylish-haskell = enableCabalFlag "ghc-lib" super.stylish-haskell;
+
+  # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
+  hlint = doDistribute (enableCabalFlag "ghc-lib" (super.hlint_3_4_1.override {
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
+  }));
 
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
@@ -201,13 +206,8 @@ self: super: {
   jacinda = doDistribute super.jacinda;
   some = doJailbreak super.some;
 
-  # 2022-06-05: this is not the latest version of fourmolu because
-  # hls-fourmolu-plugin 1.0.3.0 doesn‘t support a newer one.
-  fourmolu = super.fourmolu_0_6_0_0;
-  # hls-fourmolu-plugin in this version has a to strict upper bound of fourmolu <= 0.5.0.0
-  hls-fourmolu-plugin = assert super.hls-fourmolu-plugin.version == "1.0.3.0"; doJailbreak super.hls-fourmolu-plugin;
+  fourmolu = super.fourmolu_0_8_2_0;
 
-  hls-ormolu-plugin = assert super.hls-ormolu-plugin.version == "1.0.2.1"; doJailbreak super.hls-ormolu-plugin;
   implicit-hie-cradle = doJailbreak super.implicit-hie-cradle;
   # 1.3 introduced support for GHC 9.2.x, so when this assert fails, the jailbreak can be removed
   hashtables = assert super.hashtables.version == "1.2.4.2"; doJailbreak super.hashtables;
@@ -215,20 +215,15 @@ self: super: {
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = doJailbreak (dontCheck super.hiedb);
 
+  apply-refact = doDistribute super.apply-refact_0_10_0_0;
+
   # 2022-02-05: The following plugins don‘t work yet on ghc9.2.
   # Compare: https://haskell-language-server.readthedocs.io/en/latest/supported-versions.html
-  haskell-language-server = overrideCabal (old: {libraryHaskellDepends = builtins.filter (x: x != super.hls-tactics-plugin) old.libraryHaskellDepends;})
-    (appendConfigureFlags [
-    "-f-haddockComments"
-    "-f-retrie"
-    "-f-splice"
-    "-f-tactics"
-  ] (super.haskell-language-server.override {
+  haskell-language-server = super.haskell-language-server.override {
     hls-haddock-comments-plugin = null;
-    hls-hlint-plugin = null;
-    hls-retrie-plugin = null;
     hls-splice-plugin = null;
-  }));
+    hls-tactics-plugin = null;
+  };
 
   # https://github.com/fpco/inline-c/pull/131
   inline-c-cpp =

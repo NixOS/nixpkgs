@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-TsJr2Riygz/DZrn6UZMPvq1tTfvl3dFEZZNq2wVj1Nw=";
   };
 
-  nativeBuildInputs = [ installShellFiles asciidoc xmlto docbook_xsl docbook_xml_dtd_45 ];
+  nativeBuildInputs = [ installShellFiles asciidoc xmlto docbook_xsl docbook_xml_dtd_45 python3Packages.setuptools ];
 
   format = "other";
 

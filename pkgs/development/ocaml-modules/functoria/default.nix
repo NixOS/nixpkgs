@@ -1,24 +1,21 @@
-{ lib, fetchurl, buildDunePackage, alcotest, cmdliner_1_1
-, rresult, astring, fmt, ocamlgraph, logs, bos, fpath, ptime
+{ lib, fetchurl, buildDunePackage, cmdliner_1_1
+, rresult, astring, fmt, logs, bos, fpath, emile, uri
 }:
 
 buildDunePackage rec {
   pname   = "functoria";
-  version = "3.1.2";
+  version = "4.2.0";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.04";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    sha256 = "1yh0gkf6f2g960mcnrpilhj3xrszr98hy4zkav078f6amxcmwyl4";
+    url = "https://github.com/mirage/mirage/releases/download/v${version}/mirage-${version}.tbz";
+    sha256 = "sha256-rZ9y8+wbDjqjY1sx+TmSoR42hUKRMGpehCCR2cEgbv8=";
   };
 
-  propagatedBuildInputs = [ cmdliner_1_1 rresult astring fmt ocamlgraph logs bos fpath ptime ];
-  checkInputs = [ alcotest ];
+  propagatedBuildInputs = [ cmdliner_1_1 rresult astring fmt logs bos fpath emile uri ];
 
-  doCheck = true;
+  doCheck = false;
 
   meta = with lib; {
     description = "A DSL to organize functor applications";

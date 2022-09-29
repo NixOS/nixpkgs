@@ -4,6 +4,7 @@
 , requests
 , requests-oauthlib
 , pythonOlder
+, setuptools
 , six
 }:
 
@@ -18,6 +19,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-wCx8Jh3NBTnYI+essH9toacjUaT4fS61SaAAZDCYZ4g=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests

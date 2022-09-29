@@ -16,6 +16,13 @@ stdenv.mkDerivation rec {
 
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
+  # while cross
+  # /build/source/tmp-introspect3xf43lf3/.libs/Uhm-0.0: error while loading shared libraries: libuhttpmock-0.0.so.0: cannot open shared object file: No such file or directory
+  preBuild = ''
+    mkdir -p ${placeholder "out"}/lib
+    ln -s $PWD/libuhttpmock/.libs/libuhttpmock-0.0.so.0 ${placeholder "out"}/lib/libuhttpmock-0.0.so.0
+  '';
+
   meta = with lib; {
     description = "Project for mocking web service APIs which use HTTP or HTTPS";
     homepage = "https://gitlab.com/groups/uhttpmock/";

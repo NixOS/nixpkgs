@@ -5,6 +5,7 @@ buildPythonPackage rec {
   pname = "pygtk";
   outputs = [ "out" "dev" ];
   version = "2.24.0";
+  format = "other";
 
   disabled = isPy3k;
 

@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
       url = "https://julialang-s3.julialang.org/bin/linux/x64/${lib.versions.majorMinor version}/julia-${version}-linux-x86_64.tar.gz";
       sha256 = "sha256-MwVO5kfuik+1T8BREOB+C1PgRZH+U9Cky0x+16BekfE=";
     };
+    aarch64-linux = fetchurl {
+      url = "https://julialang-s3.julialang.org/bin/linux/aarch64/${lib.versions.majorMinor version}/julia-${version}-linux-aarch64.tar.gz";
+      sha256 = "sha256-ugaDesKJlUe7t5mYnxFGT+zWeCImhxw7ekhhlIEEJnk=";
+    };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   postPatch = ''
@@ -53,8 +57,8 @@ stdenv.mkDerivation rec {
     homepage = "https://julialang.org";
     # Bundled and linked with various GPL code, although Julia itself is MIT.
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ninjin raskin ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ ninjin raskin nickcao ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "julia";
   };
 }

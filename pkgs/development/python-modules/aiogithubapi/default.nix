@@ -25,6 +25,14 @@ buildPythonPackage rec {
     hash = "sha256-5gKANZtDhIoyfyLdS15JDWTxHBFkaHDUlbVVhRs7MSE=";
   };
 
+  postPatch = ''
+    # Upstream is releasing with the help of a CI to PyPI, GitHub releases
+    # are not in their focus
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0"' 'version = "${version}"' \
+      --replace 'backoff = "^1.10.0"' 'backoff = "*"'
+  '';
+
   nativeBuildInputs = [
     poetry-core
   ];
@@ -41,12 +49,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # Upstream is releasing with the help of a CI to PyPI, GitHub releases
-    # are not in their focus
-    substituteInPlace pyproject.toml \
-      --replace 'version = "0"' 'version = "${version}"'
-  '';
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
 
   pythonImportsCheck = [
     "aiogithubapi"

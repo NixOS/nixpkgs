@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "kanboard";
     repo = "kanboard";
     rev = "v${version}";
-    sha256 = "sha256-RO8yxXn0kRXNIP6+OUdXMH1tRDX55e34r3CGPU5EHU0=";
+    sha256 = "sha256-Sr20WAJLKy/vaCw76abq8qoKWZbuVgqjlCTZom/puPU=";
   };
 
   dontBuild = true;

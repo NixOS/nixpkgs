@@ -131,11 +131,14 @@ let
         # the buildFlags, but that would require also patching the kernel's
         # toplevel Makefile to add a variable export. This would be likely to
         # cause future patch conflicts.
-        if [ -f scripts/gcc-plugins/gen-random-seed.sh ]; then
-          substituteInPlace scripts/gcc-plugins/gen-random-seed.sh \
-            --replace NIXOS_RANDSTRUCT_SEED \
-            $(echo ${randstructSeed}${src} ${configfile} | sha256sum | cut -d ' ' -f 1 | tr -d '\n')
-        fi
+        for file in scripts/gen-randstruct-seed.sh scripts/gcc-plugins/gen-random-seed.sh; do
+          if [ -f "$file" ]; then
+            substituteInPlace "$file" \
+              --replace NIXOS_RANDSTRUCT_SEED \
+              $(echo ${randstructSeed}${src} ${configfile} | sha256sum | cut -d ' ' -f 1 | tr -d '\n')
+            break
+          fi
+        done
 
         patchShebangs scripts
 

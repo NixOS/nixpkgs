@@ -85,6 +85,7 @@
 , srt
 , vo-aacenc
 , libfreeaptx
+, zxing-cpp
 , VideoToolbox
 , AudioToolbox
 , AVFoundation
@@ -171,6 +172,7 @@ stdenv.mkDerivation rec {
     srt
     vo-aacenc
     libfreeaptx
+    zxing-cpp
   ] ++ lib.optionals enableZbar [
     zbar
   ] ++ lib.optionals faacSupport [
@@ -259,7 +261,6 @@ stdenv.mkDerivation rec {
     "-Dwasapi=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwasapi2=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
-    "-Dzxing=disabled" # required `zxing-cpp` library not packaged in nixpkgs as of writing
     "-Disac=disabled" # depends on `webrtc-audio-coding-1` not compatible with 0.3
     "-Dgs=disabled" # depends on `google-cloud-cpp`
     "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing

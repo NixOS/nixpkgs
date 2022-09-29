@@ -58,14 +58,14 @@ let
   );
 in
 stdenv.mkDerivation rec {
-  version = "9.6";
+  version = "9.7";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "sha256-QY8Yga3hD1WhSCtA2/PVry8hHlMmC31J8jCBFtWgIU0=";
+    sha256 = "sha256-MYpCp18wqKwCa+tcJ7He14p1FXDlVm1vubQqQS9g3LY=";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -116,19 +116,20 @@ stdenv.mkDerivation rec {
     # adapted from https://trac.sagemath.org/ticket/23712#comment:22
     ./patches/tachyon-renamed-focallength.patch
 
+    # https://trac.sagemath.org/ticket/34118
     (fetchSageDiff {
-      name = "eclib-20220621-update.patch";
-      base = "9.7.beta4";
-      rev = "9b65d73399b33043777ba628a4d318638aec6e0e";
-      sha256 = "sha256-pcb9Q9a0ROCZTyfT7TRMtgEqCom8SgrtAaZ8ATgeqVI=";
+      name = "sympy-1.11-upgrade.patch";
+      base = "9.7";
+      rev = "52815744bde2b682245b6f985a112f7cb8666056";
+      sha256 = "sha256-gv6z6JkQ6S6oCJQNkVgcPVvzlplyvR1nC7pWmcUiSc0=";
     })
 
-    # https://trac.sagemath.org/ticket/34149
+    # https://trac.sagemath.org/ticket/34460
     (fetchSageDiff {
-      name = "sphinx-5-update.patch";
-      base = "9.7.beta6";
-      rev = "6f9ceb7883376a1cacda51d84ec7870121860482";
-      sha256 = "sha256-prTCwBfl/wNXIkdjKLiMSe/B64wCXOjOTr4AVNiFruw=";
+      name = "ipywidgets-8-upgrade.patch";
+      base = "9.7";
+      rev = "2816dbacb342398a23bb3099e20c92c8020ab0fa";
+      sha256 = "sha256-tCOsMxXwPkRg3FJGVvTqDzlWdra78UfDY6nci0Nr9GI=";
     })
   ];
 

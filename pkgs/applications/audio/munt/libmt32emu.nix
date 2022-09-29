@@ -28,6 +28,12 @@ stdenv.mkDerivation rec {
     "-Dmunt_WITH_MT32EMU_QT=OFF"
   ];
 
+  postFixup = ''
+    substituteInPlace "$dev"/lib/pkgconfig/mt32emu.pc \
+      --replace '=''${exec_prefix}//' '=/' \
+      --replace "$dev/$dev/" "$dev/"
+  '';
+
   meta = with lib; {
     homepage = "http://munt.sourceforge.net/";
     description = "A library to emulate Roland MT-32, CM-32L, CM-64 and LAPC-I devices";

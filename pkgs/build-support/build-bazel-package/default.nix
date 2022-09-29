@@ -90,6 +90,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
       BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
       USER=homeless-shelter \
       bazel \
+        --batch \
         --output_base="$bazelOut" \
         --output_user_root="$bazelUserRoot" \
         ${if fetchConfigured then "build --nobuild" else "fetch"} \
@@ -211,6 +212,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
     BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
     USER=homeless-shelter \
     bazel \
+      --batch \
       --output_base="$bazelOut" \
       --output_user_root="$bazelUserRoot" \
       build \

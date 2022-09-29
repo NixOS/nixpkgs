@@ -1,32 +1,39 @@
-{ lib, stdenv, fetchgit, fetchpatch, ocamlPackages, autoreconfHook }:
+{ lib, stdenv, fetchgit, ocamlPackages, autoreconfHook, libxml2, pkg-config, getopt }:
 
 stdenv.mkDerivation rec {
   pname = "virt-top";
-  version = "1.0.9";
+  version = "1.1.1";
 
   src = fetchgit {
     url = "git://git.annexia.org/virt-top.git";
     rev = "v${version}";
-    sha256 = "0m7pm8lzlpngsj0vjv0hg8l9ck3gvwpva7r472f8f03xpjffwiga";
+    hash = "sha256-IKIkqzx7YWki0L6D5WbwQiVWJfDFGdI2nsGgg212CcE=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "ocaml-libvirt-0.6.1.5-fix.patch";
-      url = "http://git.annexia.org/?p=virt-top.git;a=patch;h=24a461715d5bce47f63cb0097606fc336230589f";
-      sha256 = "15w7w9iggvlw8m9w8g4h08251wzb3m3zkb58glr7ifsgi3flbn61";
-    })
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    getopt
   ];
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = with ocamlPackages; [ ocaml findlib ocaml_extlib ocaml_libvirt gettext-stub curses csv xml-light ];
+  buildInputs = with ocamlPackages; [
+    calendar
+    curses
+    findlib
+    gettext-stub
+    ocaml
+    ocaml_libvirt
+  ] ++ [ libxml2 ];
 
-  buildPhase = "make opt";
+  prePatch = ''
+    substituteInPlace ocaml-dep.sh.in --replace '#!/bin/bash' '#!${stdenv.shell}'
+    substituteInPlace ocaml-link.sh.in --replace '#!/bin/bash' '#!${stdenv.shell}'
+  '';
 
   meta = with lib; {
     description = "A top-like utility for showing stats of virtualized domains";
     homepage = "https://people.redhat.com/~rjones/virt-top/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ ];
     platforms = platforms.linux;
   };

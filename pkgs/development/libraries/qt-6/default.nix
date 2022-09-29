@@ -49,6 +49,7 @@ let
         withGtk3 = true;
         inherit (srcs.qtbase) src version;
         inherit bison cups harfbuzz libGL dconf gtk3 developerBuild cmake;
+        patches = [ ./patches/0007-qtbase-xcursor.patch ];
       };
 
       qt3d = callPackage ./modules/qt3d.nix { };

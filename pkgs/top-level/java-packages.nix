@@ -90,6 +90,10 @@ in {
       ../development/compilers/adoptopenjdk-bin/jdk16-linux.nix
       ../development/compilers/adoptopenjdk-bin/jdk16-darwin.nix;
 
+    adoptopenjdk-17 = mkAdoptopenjdk
+      ../development/compilers/adoptopenjdk-bin/jdk17-linux.nix
+      ../development/compilers/adoptopenjdk-bin/jdk17-darwin.nix;
+
     openjdk8-bootstrap = mkBootstrap adoptopenjdk-8
       ../development/compilers/openjdk/bootstrap.nix
       { version = "8"; };
@@ -123,10 +127,16 @@ in {
         inherit openjdk15-bootstrap;
       });
 
-    openjdk17-bootstrap = mkBootstrap adoptopenjdk-16
+    openjdk17-bootstrap = mkBootstrap adoptopenjdk-17
       ../development/compilers/openjdk/16.nix
       (bootstrapArgs // {
         inherit openjdk16-bootstrap;
+      });
+
+    openjdk18-bootstrap = mkBootstrap adoptopenjdk-17
+      ../development/compilers/openjdk/17.nix
+      (bootstrapArgs // {
+        inherit openjdk17-bootstrap;
       });
 
     openjdk8 = mkOpenjdk
@@ -175,6 +185,26 @@ in {
         inherit openjdk17-bootstrap;
         openjfx = openjfx17;
       };
+
+    openjdk18 = mkOpenjdk
+      ../development/compilers/openjdk/18.nix
+      ../development/compilers/openjdk/darwin/18.nix
+      {
+        inherit openjdk18-bootstrap;
+        openjfx = openjfx17;
+      };
+
+    temurin-bin = recurseIntoAttrs (callPackage (
+      if stdenv.isLinux
+      then ../development/compilers/temurin-bin/jdk-linux.nix
+      else ../development/compilers/temurin-bin/jdk-darwin.nix
+    ) {});
+
+    semeru-bin = recurseIntoAttrs (callPackage (
+      if stdenv.isLinux
+      then ../development/compilers/semeru-bin/jdk-linux.nix
+      else ../development/compilers/semeru-bin/jdk-darwin.nix
+    ) {});
   };
 
   mavenPlugins = recurseIntoAttrs (callPackage ../development/java-modules/mavenPlugins.nix { });

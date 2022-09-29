@@ -9,6 +9,7 @@ let
     callPackage
     fetchFromGitHub
     fetchurl
+    fetchpatch
     nixosTests;
 
   since = version: lib.versionAtLeast nodejs.version version;
@@ -38,7 +39,7 @@ final: prev: {
     ];
   };
 
-  "@medable/mdctl-cli" = prev."@medable/mdctl-cli".override {
+  "@medable/mdctl-cli" = prev."@medable/mdctl-cli".override (oldAttrs: {
     nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
       glib
       libsecret
@@ -52,7 +53,9 @@ final: prev: {
       final.node-pre-gyp
       nodejs
     ];
-  };
+
+    meta = oldAttrs.meta // { broken = since "16"; };
+  });
   mdctl-cli = final."@medable/mdctl-cli";
 
   autoprefixer = prev.autoprefixer.override {
@@ -90,6 +93,8 @@ final: prev: {
 
   bitwarden-cli = prev."@bitwarden/cli".override {
     name = "bitwarden-cli";
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = with pkgs; [ pixman cairo pango ];
   };
 
   bower2nix = prev.bower2nix.override {
@@ -132,7 +137,8 @@ final: prev: {
   # NOTE: this is a stub package to fetch npm dependencies for
   # ../../applications/video/epgstation
   epgstation = prev."epgstation-../../applications/video/epgstation".override (oldAttrs: {
-    buildInputs = [ final.node-pre-gyp final.node-gyp-build ];
+    buildInputs = [ pkgs.postgresql ];
+    nativeBuildInputs = [ final.node-pre-gyp final.node-gyp-build pkgs.which ];
     meta = oldAttrs.meta // { platforms = lib.platforms.none; };
   });
 
@@ -158,6 +164,13 @@ final: prev: {
     '';
   };
 
+  fauna-shell = prev.fauna-shell.override {
+    # printReleaseNotes just pulls them from GitHub which is not allowed in sandbox
+    preRebuild = ''
+      sed -i 's|"node ./tools/printReleaseNotes"|"true"|' node_modules/faunadb/package.json
+    '';
+  };
+
   flood = prev.flood.override {
     buildInputs = [ final.node-pre-gyp ];
   };
@@ -166,6 +179,10 @@ final: prev: {
     buildInputs = [ final.node-gyp-build ];
     meta = oldAttrs.meta // { broken = since "10"; };
   });
+
+  graphite-cli = prev."@withgraphite/graphite-cli".override {
+    name = "graphite-cli";
+  };
 
   graphql-language-service-cli = prev.graphql-language-service-cli.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
@@ -181,7 +198,7 @@ final: prev: {
 
   ijavascript = prev.ijavascript.override (oldAttrs: {
     preRebuild = ''
-      export NPM_CONFIG_ZMQ_EXTERNAL=true
+      export npm_config_zmq_external=true
     '';
     buildInputs = oldAttrs.buildInputs ++ [ final.node-gyp-build pkgs.zeromq ];
   });
@@ -204,6 +221,10 @@ final: prev: {
       libsecret
       final.node-gyp-build
       final.node-pre-gyp
+
+      pixman
+      cairo
+      pango
     ] ++ lib.optionals stdenv.isDarwin [
       darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.Security
@@ -221,6 +242,15 @@ final: prev: {
       EOF
       chmod a+x $exe
     '';
+  };
+
+  keyoxide = prev.keyoxide.override {
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = with pkgs; [
+      pixman
+      cairo
+      pango
+    ];
   };
 
   makam =  prev.makam.override {
@@ -291,16 +321,23 @@ final: prev: {
   };
 
   node2nix = prev.node2nix.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    # We need to use master because of a fix that replaces git:// url to https://.
+    # Get latest commit for misc fixes
     src = fetchFromGitHub {
       owner = "svanderburg";
       repo = "node2nix";
-      rev = "68f5735f9a56737e3fedceb182705985e3ab8799";
-      sha256 = "sha256-NK6gDTkGx0GG7yPTwgtFC4ttQZPfcLaLp8W8OOMO6bg=";
+      rev = "026360084db8a27095aafdac7125d7f1a93046c8";
+      sha256 = "sha256-zO/xGG10v7HGv58RLX5SFd7QOXAL2vRxCRM8IfRZ8JA=";
     };
-
-    postInstall = ''
+    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
+    postInstall = let
+      # Needed to fix Node.js 16+ - PR svanderburg/node2nix#302
+      npmPatch = fetchpatch {
+        name = "emit-lockfile-v2-and-fix-bin-links-with-npmv7.patch";
+        url = "https://github.com/svanderburg/node2nix/commit/375a055041b5ee49ca5fb3f74a58ca197c90c7d5.patch";
+        hash = "sha256-uVYrXptJILojeur9s2O+J/f2vyPNCaZMn1GM/NoC5n8=";
+      };
+    in ''
+      patch -d $out/lib/node_modules/node2nix -p1 < ${npmPatch}
       wrapProgram "$out/bin/node2nix" --prefix PATH : ${lib.makeBinPath [ pkgs.nix ]}
     '';
   };
@@ -357,7 +394,7 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      sha512 = "sha512-HuYqnTDgH8atjPGtYmY0Ql9XrrJnfW7daG1PtAJRW0E6gJxc50lY3vrIDn0yjMR3TvRlypjTcspQX8DT+xD4Sg==";
+      sha512 = "sha512-l/QKLmLcKJQFuc+X02LyICo0NWTUVaNNZ00jKJBqwDyhwMAhboD1FWwYV50rkH4Wls0RviAJSFzkC2ZrfawpfA==";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \
@@ -436,7 +473,7 @@ final: prev: {
   };
 
   tedicross = prev."tedicross-git+https://github.com/TediCross/TediCross.git#v0.8.7".override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
+    nativeBuildInputs = with pkgs; [ makeWrapper libtool autoconf ];
     postInstall = ''
       makeWrapper '${nodejs}/bin/node' "$out/bin/tedicross" \
         --add-flags "$out/lib/node_modules/tedicross/main.js"
@@ -463,10 +500,18 @@ final: prev: {
 
   thelounge-theme-flat-blue = prev.thelounge-theme-flat-blue.override {
     nativeBuildInputs = [ final.node-pre-gyp ];
+    # TODO: needed until upstream pins thelounge version 4.3.1+ (which fixes dependency on old sqlite3 and transitively very old node-gyp 3.x)
+    preRebuild = ''
+      rm -r node_modules/node-gyp
+    '';
   };
 
   thelounge-theme-flat-dark = prev.thelounge-theme-flat-dark.override {
     nativeBuildInputs = [ final.node-pre-gyp ];
+    # TODO: needed until upstream pins thelounge version 4.3.1+ (which fixes dependency on old sqlite3 and transitively very old node-gyp 3.x)
+    preRebuild = ''
+      rm -r node_modules/node-gyp
+    '';
   };
 
   triton = prev.triton.override {
@@ -549,6 +594,10 @@ final: prev: {
   webtorrent-cli = prev.webtorrent-cli.override {
     buildInputs = [ final.node-gyp-build ];
   };
+
+  wrangler = prev.wrangler.override (oldAttrs: {
+    meta = oldAttrs.meta // { broken = before "16.13"; };
+  });
 
   yaml-language-server = prev.yaml-language-server.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];

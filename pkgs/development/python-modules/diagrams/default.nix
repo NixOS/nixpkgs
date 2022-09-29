@@ -13,15 +13,15 @@
 
 buildPythonPackage rec {
   pname = "diagrams";
-  version = "0.21.1";
+  version = "0.22.0";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "mingrammer";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-YoXV5ikkBCSVyGmzEqp+7JLy82d7z9sbwS+U/EN3BFk=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-LUuClvBJeOxtrg+S+lYLpP7T1RXCy5dNjFYQO3H54QE=";
   };
 
   postPatch = ''

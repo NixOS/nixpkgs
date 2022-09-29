@@ -8,7 +8,7 @@
 , optipng
 , pngquant
 , qpdf
-, tesseract4
+, tesseract5
 , unpaper
 , liberation_ttf
 , fetchFromGitHub
@@ -26,17 +26,12 @@ let
         src = fetchFromGitHub {
           owner = "paperless-ngx";
           repo = "django-q";
-          sha256 = "sha256-aoDuPig8Nf8fLzn7GjBn69aF2zH2l8gxascAu9lIG3U=";
-          rev = "71abc78fdaec029cf71e9849a3b0fa084a1678f7";
+          hash = "sha256-alu7tZwUn77xhUF9c/aGmwRwO//mR/FucXjvXUl/6ek=";
+          rev = "8b5289d8caf36f67fb99448e76ead20d5b498c1b";
         };
         # due to paperless-ngx modification of the pyproject.toml file
         # the patch is not needed any more
-        patches = [];
-      });
-
-      # django-extensions 3.1.5 is required, but its tests are incompatible with Django 4
-      django-extensions = super.django-extensions.overridePythonAttrs (_: {
-        doCheck = false;
+        patches = [ ];
       });
 
       aioredis = super.aioredis.overridePythonAttrs (oldAttrs: rec {
@@ -45,6 +40,10 @@ let
           inherit version;
           sha256 = "0fi7jd5hlx8cnv1m97kv9hc4ih4l8v15wzkqwsp73is4n0qazy0m";
         };
+      });
+
+      eth-keys = super.eth-keys.overridePythonAttrs (_: {
+        doCheck = false;
       });
     };
   };
@@ -56,18 +55,18 @@ let
     optipng
     pngquant
     qpdf
-    tesseract4
+    tesseract5
     unpaper
   ];
 in
 python.pkgs.pythonPackages.buildPythonApplication rec {
   pname = "paperless-ngx";
-  version = "1.8.0";
+  version = "1.9.1";
 
   # Fetch the release tarball instead of a git ref because it contains the prebuilt fontend
   src = fetchurl {
     url = "https://github.com/paperless-ngx/paperless-ngx/releases/download/v${version}/${pname}-v${version}.tar.xz";
-    hash = "sha256-BLfhh04RvBJFRQiPXkMl8XlWqZOWKmjjl+6lZ326stU=";
+    hash = "sha256-KWq3zUES8klXexNO9krlqZKZEajOhkTHF13t/3rxrPc=";
   };
 
   format = "other";
@@ -116,6 +115,7 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
     inotifyrecursive
     joblib
     langdetect
+    pkgs.libmysqlclient
     lxml
     msgpack
     numpy

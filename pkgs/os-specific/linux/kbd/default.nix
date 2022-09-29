@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kbd";
-  version = "2.4.0";
+  version = "2.5.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kbd/${pname}-${version}.tar.xz";
-    sha256 = "17wvrqz2kk0w87idinhyvd31ih1dp7ldfl2yfx7ailygb0279w2m";
+    sha256 = "sha256-zN9FI4emOAlz0pJzY+nLuTn6IGiRWm+Tf/nSRSICRoM=";
   };
 
   configureFlags = [

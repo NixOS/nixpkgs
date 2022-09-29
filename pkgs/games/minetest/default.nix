@@ -118,18 +118,16 @@ let
       description = "Infinite-world block sandbox game";
       license = licenses.lgpl21Plus;
       platforms = platforms.linux ++ platforms.darwin;
-      maintainers = with maintainers; [ pyrolagus fpletz ];
-      # never built on Hydra
-      # https://hydra.nixos.org/job/nixpkgs/trunk/minetestclient_4.x86_64-darwin
-      # https://hydra.nixos.org/job/nixpkgs/trunk/minetestserver_4.x86_64-darwin
-      broken = (lib.versionOlder version "5.0.0") && stdenv.isDarwin;
+      maintainers = with maintainers; [ pyrolagus fpletz fgaz ];
+      # https://github.com/NixOS/nixpkgs/pull/186160#issuecomment-1212635918
+      broken = stdenv.isDarwin;
     };
   };
 
   v5 = {
-    version = "5.6.0";
-    sha256 = "sha256-wcbYcVHs4L0etOwUBjKvzsmZtnpOxpFgLV8nx3UfJQI=";
-    dataSha256 = "sha256-TVaDHYstFEuT0nBExwLE1PtM1CZh71t9CRxC9rEYTd4=";
+    version = "5.6.1";
+    sha256 = "sha256-1mUmtM09jqJhD2RcLCAjaI+JkqP52QYH3KLkY5MZ860=";
+    dataSha256 = "sha256-Ye8MihrOqjSoy+vNr/CM/C/sNXdexe08dxrmoMxsG/A=";
   };
 
   mkClient = version: generic (version // { buildClient = true; buildServer = false; });

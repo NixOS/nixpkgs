@@ -1,26 +1,31 @@
-{ lib, rustPlatform, fetchFromGitHub }:
-
-let
-  date = "2022-09-10";
-in
+{ lib, rustPlatform, fetchFromGitHub, nix, nix-update-script }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nil";
-  version = "unstable-${date}";
+  version = "2022-09-26";
 
   src = fetchFromGitHub {
     owner = "oxalica";
     repo = pname;
-    rev = date;
-    sha256 = "sha256-yqg46An5TPl6wsv5xflK4T90fTho4KXIILoV71jSl28=";
+    rev = version;
+    hash = "sha256-2bcAXcJiFV+xKSIy3oD2/TkijV4302jAtTF3xtHiOhU=";
   };
 
-  cargoSha256 = "sha256-MabVHbNGWpeUztwedXRXHBfgEostxk0aWpGCHlpnhJo=";
+  cargoHash = "sha256-RL9n2kfWPpu17qudqSx5DkZbgxqVCf2IRBu/koCAqFA=";
 
-  CFG_DATE = date;
+  CFG_DATE = version;
+  CFG_REV = "release";
+
+  nativeBuildInputs = [
+    (lib.getBin nix)
+  ];
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
-    description = "A language server for Nix Expression Language";
+    description = "Yet another language server for Nix";
     homepage = "https://github.com/oxalica/nil";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ figsoda oxalica ];

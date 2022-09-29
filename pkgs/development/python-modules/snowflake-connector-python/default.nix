@@ -5,6 +5,7 @@
 , cffi
 , charset-normalizer
 , fetchPypi
+, filelock
 , idna
 , oscrypto
 , pycryptodomex
@@ -14,18 +15,19 @@
 , pytz
 , requests
 , setuptools
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "2.7.9";
+  version = "2.7.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HQ/d7luqdG1BriuP8QXzZk5JZwwLJH1JQIN3BtEDpM4=";
+    hash = "sha256-M50YI6aB7fSVRLeAqxLKtsxJIC1oWLcb9Mvah9/C/zU=";
   };
 
   propagatedBuildInputs = [
@@ -33,6 +35,7 @@ buildPythonPackage rec {
     certifi
     cffi
     charset-normalizer
+    filelock
     idna
     oscrypto
     pycryptodomex
@@ -41,6 +44,7 @@ buildPythonPackage rec {
     pytz
     requests
     setuptools
+    typing-extensions
   ];
 
   postPatch = ''

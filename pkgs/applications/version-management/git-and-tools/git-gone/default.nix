@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-gone";
-  version = "0.3.8";
+  version = "0.4.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "flausch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hKbq2rJwEZI3391RsZXsQSjjp7rSqglUckRDYAu42KE=";
+    sha256 = "sha256-S9rNVWq1dbencp9Oy3eNPlJtBMdiFsiJnp5XvHi8hIw=";
   };
 
-  cargoSha256 = "sha256-gBQ4V8Bwx6Di8aVnOYwx0UZZIIOFxZAXT7Tl1Yli0Fk=";
+  cargoSha256 = "sha256-ZytIBdhyBp0p68ERlXNU8CnK9zYVZaBt/wn8F2bXlII=";
 
   nativeBuildInputs = [ installShellFiles ];
 

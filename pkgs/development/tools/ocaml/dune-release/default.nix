@@ -12,11 +12,11 @@ in buildDunePackage rec {
   pname = "dune-release";
   version = "1.6.2";
 
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
 
   src = fetchurl {
     url = "https://github.com/ocamllabs/${pname}/releases/download/${version}/${pname}-${version}.tbz";
-    sha256 = "03i01my7nv13h782x8s8cfd9hgvdwdsglssal2rrhcwdp8pm57m0";
+    sha256 = "sha256-oJ5SL7qNM5izoEpr+nTjbT+YmmNIoy7QgSNse3wNIA4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -25,7 +25,11 @@ in buildDunePackage rec {
   checkInputs = [ alcotest ] ++ runtimeInputs;
   doCheck = true;
 
-  useDune2 = true;
+  postPatch = ''
+    # remove check for curl in PATH, since curly is patched
+    # to have a fixed path to the binary in nix store
+    sed -i '/must_exist (Cmd\.v "curl"/d' lib/github.ml
+  '';
 
   preCheck = ''
     # it fails when it tries to reference "./make_check_deterministic.exe"

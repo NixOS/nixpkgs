@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
     ./fix-pkgconfig.patch
   ];
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -43,8 +47,7 @@ stdenv.mkDerivation rec {
     vala
     gi-docgen
     gobject-introspection
-    python3
-    python3.pkgs.pygobject3
+    (python3.pythonForBuild.withPackages (ps: [ ps.pygobject3 ]))
   ];
 
   buildInputs = [
@@ -63,6 +66,18 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs build-aux/meson/meson_post_install.py
     patchShebangs build-aux/meson/gen_locations_variant.py
+
+    # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
+    # it should be a build-time dep for build
+    # TODO: send upstream
+    substituteInPlace doc/meson.build \
+      --replace "'gi-docgen', ver" "'gi-docgen', native:true, ver" \
+      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
+
+    # gir works for us even when cross-compiling
+    # TODO: send upstream because downstream users can use the option to disable gir if they don't have it working
+    substituteInPlace libgweather/meson.build \
+      --replace "g_ir_scanner.found() and not meson.is_cross_build()" "g_ir_scanner.found()"
   '';
 
   postFixup = ''
@@ -74,6 +89,8 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
+      # Version 40.alpha preceded version 4.0.
+      freeze = "40.alpha";
     };
   };
 

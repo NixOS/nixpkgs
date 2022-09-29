@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-loader";
-  version = "1.3.224.0";
+  version = "1.3.224.1";
 
   src = (assert version == vulkan-headers.version;
     fetchFromGitHub {

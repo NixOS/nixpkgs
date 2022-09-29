@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, texinfo }:
+{ lib, stdenv, fetchurl, fetchpatch, perl, texinfo }:
 
 stdenv.mkDerivation rec {
   pname = "libtasn1";
@@ -8,6 +8,14 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/libtasn1/libtasn1-${version}.tar.gz";
     sha256 = "sha256-FhPwrBz0hNbsDOO4wG1WJjzHJC8cI7MNgtI940WmP3o=";
   };
+
+  # Patch borrowed from alpine to work around a specific test failure with musl libc
+  # Upstream is patching this test in their own CI because that CI is using alpine and thus musl
+  # https://github.com/gnutls/libtasn1/commit/06e7433c4e587e2ba6df521264138585a63d07c7#diff-037ea159eb0a7cb0ac23b851e66bee30fb838ee8d0d99fa331a1ba65283d37f7R293
+  patches = lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
+    url = "https://git.alpinelinux.org/aports/plain/main/libtasn1/failed-test.patch?id=aaed9995acc1511d54d5d93e1ea3776caf4aa488";
+    sha256 = "sha256-GTfwqEelEsGtLEcBwGRfBZZz1vKXRfWXtMx/409YqX8=";
+  });
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";

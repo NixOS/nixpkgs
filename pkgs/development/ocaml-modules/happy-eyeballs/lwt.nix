@@ -1,35 +1,45 @@
-{ lib, buildDunePackage, fetchurl
-, domain-name, duration, fmt, ipaddr, logs, mtime, cmdliner_1_1, dns-client
+{ buildDunePackage
 , happy-eyeballs
+, cmdliner_1_1
+, dns-client
+, duration
+, domain-name
+, ipaddr
+, fmt
+, logs
+, lwt
+, mtime
 }:
 
-
-buildDunePackage rec {
+buildDunePackage {
   pname = "happy-eyeballs-lwt";
 
+  inherit (happy-eyeballs) src version;
+
   minimalOCamlVersion = "4.08";
-  inherit (happy-eyeballs) version src ;
 
-  useDune2 = true;
+  strictDeps = true;
 
-  propagatedBuildInputs = [
-    happy-eyeballs
+  buildInputs = [
     cmdliner_1_1
-    domain-name
     duration
-    fmt
+    domain-name
     ipaddr
-    logs
-    dns-client
+    fmt
     mtime
   ];
 
+  propagatedBuildInputs = [
+    dns-client
+    happy-eyeballs
+    logs
+    lwt
+  ];
 
-  meta = {
+  doCheck = true;
+
+  meta = happy-eyeballs.meta // {
+    mainProgram = "happy_eyeballs_client";
     description = "Connecting to a remote host via IP version 4 or 6 using Lwt_unix";
-    homepage = "https://github.com/roburio/happy-eyeballs";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
   };
-
 }

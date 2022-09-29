@@ -44,6 +44,12 @@ import ./make-test-python.nix ({ pkgs, ... }:
         enableClient = true;
         clientSettings = {
           uri = "https://${serverDomain}";
+          verify_ca = true;
+          verify_hostnames = true;
+        };
+        enablePam = true;
+        unixSettings = {
+          pam_allowed_login_groups = [ "shell" ];
         };
       };
 
@@ -67,9 +73,11 @@ import ./make-test-python.nix ({ pkgs, ... }:
         start_all()
         server.wait_for_unit("kanidm.service")
         server.wait_until_succeeds("curl -sf https://${serverDomain} | grep Kanidm")
-        server.wait_until_succeeds("ldapsearch -H ldap://[::1]:636 -b '${ldapBaseDN}' -x '(name=test)'")
-        client.wait_until_succeeds("kanidm login -D anonymous && kanidm self whoami | grep anonymous@${serverDomain}")
+        server.succeed("ldapsearch -H ldap://[::1]:636 -b '${ldapBaseDN}' -x '(name=test)'")
+        client.succeed("kanidm login -D anonymous && kanidm self whoami | grep anonymous@${serverDomain}")
         rv, result = server.execute("kanidmd recover_account -c ${serverConfigFile} idm_admin 2>&1 | rg -o '[A-Za-z0-9]{48}'")
         assert rv == 0
+        client.wait_for_unit("kanidm-unixd.service")
+        client.succeed("kanidm_unixd_status | grep working!")
       '';
   })

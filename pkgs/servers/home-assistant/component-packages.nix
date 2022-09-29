@@ -329,7 +329,8 @@
       zeroconf
     ];
     "braviatv" = ps: with ps; [
-    ]; # missing inputs: pybravia
+      pybravia
+    ];
     "broadlink" = ps: with ps; [
       broadlink
     ];
@@ -2875,7 +2876,8 @@
     "telnet" = ps: with ps; [
     ];
     "temper" = ps: with ps; [
-    ]; # missing inputs: temperusb
+      temperusb
+    ];
     "template" = ps: with ps; [
     ];
     "tensorflow" = ps: with ps; [
@@ -3474,6 +3476,7 @@
     "bmw_connected_drive"
     "bond"
     "bosch_shc"
+    "braviatv"
     "broadlink"
     "brother"
     "brunt"

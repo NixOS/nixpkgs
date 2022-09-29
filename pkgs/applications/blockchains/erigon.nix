@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "erigon";
-  version = "2022.08.03";
+  version = "2022.09.03";
 
   src = fetchFromGitHub {
     owner = "ledgerwatch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Z+YghJjJfeGO/LuwcLb5A9ghZUcL1OoppMZPsa38ahQ=";
+    sha256 = "sha256-dilsoJw7VPA7SerpAOhYUviE2zt2qMBmSLWaPm0ux2Y=";
     fetchSubmodules = true;
   };
 
-  vendorSha256 = "sha256-2+9oXLIDYZfWzQfnjwJet4QT01tGzLlQJFjN4ZbG6uw=";
+  vendorSha256 = "sha256-W8hEMfn2qW/3+V6x/RH1azj49V26fyQ+1y2re3tXsTk=";
   proxyVendor = true;
 
   # Build errors in mdbx when format hardening is enabled:
@@ -30,6 +30,6 @@ buildGoModule rec {
     homepage = "https://github.com/ledgerwatch/erigon/";
     description = "Ethereum node implementation focused on scalability and modularity";
     license = with licenses; [ lgpl3Plus gpl3Plus ];
-    maintainers = with maintainers; [ d-xo ];
+    maintainers = with maintainers; [ d-xo happysalada ];
   };
 }

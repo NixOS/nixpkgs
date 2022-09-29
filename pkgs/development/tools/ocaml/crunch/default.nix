@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, fetchurl, ocaml, cmdliner_1_1, ptime }:
+{ lib, buildDunePackage, fetchurl, ocaml, cmdliner, ptime }:
 
 buildDunePackage rec {
 
@@ -6,12 +6,14 @@ buildDunePackage rec {
 
   version = "3.3.1";
 
+  minimalOCamlVersion = "4.08";
+
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-crunch/releases/download/v${version}/crunch-${version}.tbz";
     sha256 = "sha256-LFug1BELy7dzHLpOr7bESnSHw/iMGtR0AScbaf+o7Wo=";
   };
 
-  buildInputs = [ cmdliner_1_1 ];
+  buildInputs = [ cmdliner ];
 
   propagatedBuildInputs = [ ptime ];
 

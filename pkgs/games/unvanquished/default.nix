@@ -33,7 +33,7 @@
 }:
 
 let
-  version = "0.53.1";
+  version = "0.53.2";
   binary-deps-version = "6";
 
   src = fetchFromGitHub {
@@ -41,7 +41,7 @@ let
     repo = "Unvanquished";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-AWXuPXOhhPfdDrcyZF5o7uBnieSCGhwCzOYN8MjgTl8=";
+    sha256 = "sha256-VqMhA6GEYh/m+dzOgXS+5Jqo4x7RrQf4qIwstdTTU+E=";
   };
 
   unvanquished-binary-deps = stdenv.mkDerivation rec {
@@ -119,7 +119,7 @@ let
     pname = "unvanquished-assets";
     inherit version src;
 
-    outputHash = "sha256-+mO4HQwFfy7SeGrN4R52KOr/uNQXkHMvYir3k0l5rDo=";
+    outputHash = "sha256-MPqyqcZGc5KlkftGCspWhISBJ/h+Os29g7ZK6yWz0cQ=";
     outputHashMode = "recursive";
 
     nativeBuildInputs = [ aria2 cacert ];

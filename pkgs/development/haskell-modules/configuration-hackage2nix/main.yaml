@@ -113,7 +113,6 @@ extra-packages:
   - dhall == 1.29.0                     # required for ats-pkg
   - dhall == 1.38.1                     # required for spago
   - doctest == 0.18.*                   # 2021-11-19: closest to stackage version for GHC 9.*
-  - fourmolu == 0.6.0.0                 # 2022-06-05: Last fourmolu version compatible with hls 1.7/ hls-fourmolu-plugin 1.0.3.0
   - ghc-api-compat == 8.10.7            # 2022-02-17: preserve for GHC 8.10.7
   - ghc-api-compat == 8.6               # 2021-09-07: preserve for GHC 8.8.4
   - ghc-lib == 8.10.7.*                 # 2022-02-17: preserve for GHC 8.10.7
@@ -121,7 +120,7 @@ extra-packages:
   - ghc-lib-parser == 8.10.7.*          # 2022-02-17: preserve for GHC 8.10.7
   - ghc-lib-parser == 9.2.*             # 2022-02-17: preserve for GHC 9.2
   - ghc-lib-parser-ex == 8.10.*         # 2022-02-17: preserve for GHC 8.10.7
-  - ghc-lib-parser-ex == 9.2.*           # 2022-07-13: preserve for GHC 9.2
+  - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 9.2
   - ghc-lib-parser-ex >= 9.2.0.3 && < 9.2.1 # 2022-07-13: needed by hlint 3.4.1
   - haddock == 2.23.*                   # required on GHC < 8.10.x
   - haddock-api == 2.23.*               # required on GHC < 8.10.x
@@ -153,6 +152,14 @@ extra-packages:
   - basement < 0.0.15                   # 2022-08-30: last version to support GHC < 8.10
   - foundation < 0.0.29                 # 2022-08-30: last version to support GHC < 8.10
   - cabal-install-parsers < 0.5         # 2022-08-31: required by haskell-ci 0.14.3
+  - lsp == 1.4.0.0                      # 2022-09-18: need for dhall-lsp-server 1.1.2
+  - lsp-types == 1.4.0.1                # 2022-09-18: need for dhall-lsp-server 1.1.2
+  - stylish-haskell == 0.13.0.0         # 2022-09-19: needed for hls on ghc 8.8
+  - brittany == 0.13.1.2                # 2022-09-20: needed for hls on ghc 8.8
+  - fourmolu == 0.3.0.0                 # 2022-09-21: needed for hls on ghc 8.8
+  - ormolu == 0.1.4.1                   # 2022-09-21: needed for hls on ghc 8.8
+  - hlint == 3.2.8                      # 2022-09-21: needed for hls on ghc 8.8
+  - hlint == 3.4.1                      # 2022-09-21: needed for hls with ghc-lib-parser 9.2
 
 package-maintainers:
   abbradar:
@@ -161,6 +168,8 @@ package-maintainers:
     - hnix
     - hnix-store-core
     - hnix-store-remote
+  arturcygan:
+    - hevm
   berberman:
     - nvfetcher
     - arch-web

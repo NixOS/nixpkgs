@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pivy";
-  version = "0.6.7";
+  version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "coin3d";
     repo = "pivy";
     rev = "refs/tags/${version}";
-    hash = "sha256-mU3QRDJd56gGDWqwcxAN3yUCkAkABP/I9gIBMH2MOXA=";
+    hash = "sha256-y72nzZAelyRDR2JS73/0jo2x/XiDZpsERPZV3gzIhAI=";
   };
 
   dontUseCmakeConfigure = true;

@@ -1,4 +1,11 @@
-{ system, pkgs, callTest }:
+{ system,
+  pkgs,
+
+  # Projects the test configuration into a the desired value; usually
+  # the test runner: `config: config.test`.
+  callTest,
+
+}:
 # The return value of this function will be an attrset with arbitrary depth and
 # the `anything` returned by callTest at its test leafs.
 # The tests not supported by `system` will be replaced with `{}`, so that
@@ -11,9 +18,18 @@ with pkgs.lib;
 
 let
   discoverTests = val:
-    if !isAttrs val then val
-    else if hasAttr "test" val then callTest val
-    else mapAttrs (n: s: discoverTests s) val;
+    if isAttrs val
+    then
+      if hasAttr "test" val then callTest val
+      else mapAttrs (n: s: discoverTests s) val
+    else if isFunction val
+      then
+        # Tests based on make-test-python.nix will return the second lambda
+        # in that file, which are then forwarded to the test definition
+        # following the `import make-test-python.nix` expression
+        # (if it is a function).
+        discoverTests (val { inherit system pkgs; })
+      else val;
   handleTest = path: args:
     discoverTests (import path ({ inherit system pkgs; } // args));
   handleTestOn = systems: path: args:
@@ -27,12 +43,34 @@ let
   };
   evalMinimalConfig = module: nixosLib.evalModules { modules = [ module ]; };
 
+  inherit
+    (rec {
+      doRunTest = arg: ((import ../lib/testing-python.nix { inherit system pkgs; }).evalTest {
+        imports = [ arg ];
+      }).config.result;
+      findTests = tree:
+        if tree?recurseForDerivations && tree.recurseForDerivations
+        then
+          mapAttrs
+            (k: findTests)
+            (builtins.removeAttrs tree ["recurseForDerivations"])
+        else callTest tree;
+
+      runTest = arg: let r = doRunTest arg; in findTests r;
+      runTestOn = systems: arg:
+        if elem system systems then runTest arg
+        else {};
+    })
+    runTest
+    runTestOn
+    ;
+
 in {
-  _3proxy = handleTest ./3proxy.nix {};
-  acme = handleTest ./acme.nix {};
-  adguardhome = handleTest ./adguardhome.nix {};
-  aesmd = handleTest ./aesmd.nix {};
-  agate = handleTest ./web-servers/agate.nix {};
+  _3proxy = runTest ./3proxy.nix;
+  acme = runTest ./acme.nix;
+  adguardhome = runTest ./adguardhome.nix;
+  aesmd = runTest ./aesmd.nix;
+  agate = runTest ./web-servers/agate.nix;
   agda = handleTest ./agda.nix {};
   airsonic = handleTest ./airsonic.nix {};
   allTerminfo = handleTest ./all-terminfo.nix {};
@@ -86,7 +124,7 @@ in {
   cjdns = handleTest ./cjdns.nix {};
   clickhouse = handleTest ./clickhouse.nix {};
   cloud-init = handleTest ./cloud-init.nix {};
-  cntr = handleTest ./cntr.nix {};
+  cntr = handleTestOn ["aarch64-linux" "x86_64-linux"] ./cntr.nix {};
   cockroachdb = handleTestOn ["x86_64-linux"] ./cockroachdb.nix {};
   collectd = handleTest ./collectd.nix {};
   consul = handleTest ./consul.nix {};
@@ -160,7 +198,6 @@ in {
   ferm = handleTest ./ferm.nix {};
   firefox = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox; };
   firefox-esr    = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr; }; # used in `tested` job
-  firefox-esr-91 = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr-91; };
   firefox-esr-102 = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr-102; };
   firejail = handleTest ./firejail.nix {};
   firewall = handleTest ./firewall.nix {};
@@ -170,6 +207,7 @@ in {
   fluidd = handleTest ./fluidd.nix {};
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
   freeswitch = handleTest ./freeswitch.nix {};
+  freshrss = handleTest ./freshrss.nix {};
   frr = handleTest ./frr.nix {};
   fsck = handleTest ./fsck.nix {};
   ft2-clone = handleTest ./ft2-clone.nix {};
@@ -277,6 +315,7 @@ in {
   komga = handleTest ./komga.nix {};
   krb5 = discoverTests (import ./krb5 {});
   ksm = handleTest ./ksm.nix {};
+  kthxbye = handleTest ./kthxbye.nix {};
   kubernetes = handleTestOn ["x86_64-linux"] ./kubernetes {};
   languagetool = handleTest ./languagetool.nix {};
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
@@ -293,6 +332,7 @@ in {
   lightdm = handleTest ./lightdm.nix {};
   lighttpd = handleTest ./lighttpd.nix {};
   limesurvey = handleTest ./limesurvey.nix {};
+  listmonk = handleTest ./listmonk.nix {};
   litestream = handleTest ./litestream.nix {};
   locate = handleTest ./locate.nix {};
   login = handleTest ./login.nix {};
@@ -533,6 +573,7 @@ in {
   sssd-ldap = handleTestOn ["x86_64-linux"] ./sssd-ldap.nix {};
   starship = handleTest ./starship.nix {};
   step-ca = handleTestOn ["x86_64-linux"] ./step-ca.nix {};
+  stratis = handleTest ./stratis {};
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
   stunnel = handleTest ./stunnel.nix {};
   sudo = handleTest ./sudo.nix {};
@@ -566,6 +607,7 @@ in {
   systemd-networkd-ipv6-prefix-delegation = handleTest ./systemd-networkd-ipv6-prefix-delegation.nix {};
   systemd-networkd-vrf = handleTest ./systemd-networkd-vrf.nix {};
   systemd-nspawn = handleTest ./systemd-nspawn.nix {};
+  systemd-oomd = handleTest ./systemd-oomd.nix {};
   systemd-shutdown = handleTest ./systemd-shutdown.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
   systemd-misc = handleTest ./systemd-misc.nix {};
@@ -607,6 +649,9 @@ in {
   user-home-mode = handleTest ./user-home-mode.nix {};
   uwsgi = handleTest ./uwsgi.nix {};
   v2ray = handleTest ./v2ray.nix {};
+  varnish60 = handleTest ./varnish.nix { package = pkgs.varnish60; };
+  varnish71 = handleTest ./varnish.nix { package = pkgs.varnish71; };
+  varnish72 = handleTest ./varnish.nix { package = pkgs.varnish72; };
   vault = handleTest ./vault.nix {};
   vault-dev = handleTest ./vault-dev.nix {};
   vault-postgresql = handleTest ./vault-postgresql.nix {};

@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -19,19 +20,24 @@ buildPythonPackage rec {
     sha256 = "sha256-RDd0KR7NjBTlgeQ/E4mnLnB2n4NCPoAt2a62NGdzCZE=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
-
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "'marcelblijleven@gmail.com" "marcelblijleven@gmail.com" \
       --replace "version: file: VERSION" "version = ${version}"
   '';
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   pythonImportsCheck = [
     "goodwe"
   ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
 
   meta = with lib; {
     description = "Python library for connecting to GoodWe inverter";

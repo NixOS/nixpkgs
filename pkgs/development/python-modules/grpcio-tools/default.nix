@@ -9,6 +9,11 @@ buildPythonPackage rec {
     sha256 = "1178f2ea531f80cc2027ec64728df6ffc8e98cf1df61652a496eafd612127183";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+    --replace 'protobuf>=3.12.0, < 4.0dev' 'protobuf'
+  '';
+
   outputs = [ "out" "dev" ];
 
   enableParallelBuilding = true;

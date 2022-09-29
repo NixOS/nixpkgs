@@ -7,7 +7,6 @@
 , pkgs
 }:
 let
-  inherit (vimUtils) buildVimPluginFrom2Nix;
   inherit (neovimUtils) makeNeovimConfig;
 
   packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
@@ -69,12 +68,12 @@ let
 
   # this plugin checks that it's ftplugin/vim.tex is loaded before $VIMRUNTIME/ftplugin/vim.tex
   # the answer is store in `plugin_was_loaded_too_late` in the cwd
-  texFtplugin = pkgs.runCommandLocal "tex-ftplugin" {} ''
+  texFtplugin = (pkgs.runCommandLocal "tex-ftplugin" {} ''
     mkdir -p $out/ftplugin
     echo 'call system("echo ". exists("b:did_ftplugin") . " > plugin_was_loaded_too_late")' > $out/ftplugin/tex.vim
     echo ':q!' >> $out/ftplugin/tex.vim
     echo '\documentclass{article}' > $out/main.tex
-  '';
+  '') // { pname = "test-ftplugin"; };
 
   # neovim-drv must be a wrapped neovim
   runTest = neovim-drv: buildCommand:
@@ -140,7 +139,7 @@ rec {
 
   nvim_with_ftplugin = neovim.override {
     extraName = "-with-ftplugin";
-    configure.packages.plugins = with pkgs.vimPlugins; {
+    configure.packages.plugins = {
       start = [
         texFtplugin
       ];
@@ -221,5 +220,45 @@ rec {
   nvim_with_lua_packages = runTest nvimWithLuaPackages ''
     export HOME=$TMPDIR
     ${nvimWithLuaPackages}/bin/nvim -i NONE --noplugin -es
+  '';
+
+  # nixpkgs should install optional packages in the opt folder
+  nvim_with_opt_plugin = neovim.override {
+    extraName = "-with-opt-plugin";
+    configure.packages.opt-plugins = with pkgs.vimPlugins; {
+      opt = [
+        (dashboard-nvim.overrideAttrs(old: { pname = old.pname + "-unique-for-tests-please-dont-use-opt"; }))
+      ];
+    };
+    configure.customRC = ''
+      " Load all autoloaded plugins
+      packloadall
+
+      " Try to run Dashboard, and throw if it succeeds
+      try
+        Dashboard
+        echo "Dashboard found, throwing error"
+        cquit 1
+      catch /^Vim\%((\a\+)\)\=:E492/
+        echo "Dashboard not found"
+      endtry
+
+      " Load Dashboard as an optional
+      packadd dashboard-nvim-unique-for-tests-please-dont-use-opt
+
+      " Try to run Dashboard again, and throw if it fails
+      try
+        Dashboard
+        echo "Dashboard found"
+      catch /^Vim\%((\a\+)\)\=:E492/
+        echo "Dashboard not found, throwing error"
+        cquit 1
+      endtry
+    '';
+  };
+
+  run_nvim_with_opt_plugin = runTest nvim_with_opt_plugin ''
+    export HOME=$TMPDIR
+    ${nvim_with_opt_plugin}/bin/nvim -i NONE +quit! -e
   '';
 })

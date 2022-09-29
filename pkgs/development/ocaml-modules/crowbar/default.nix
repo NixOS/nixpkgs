@@ -11,13 +11,10 @@ buildDunePackage rec {
     owner  = "stedolan";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "11f3kiw58g8njx15akx16xcplzvzdw9y6c4jpyfxylkxws4g0f6j";
+    sha256 = "sha256-0jjwiOZ9Ut+dv5Iw4xNvf396WTehT1VClxY9VHicw4U=";
   };
 
   minimalOCamlVersion = "4.08";
-
-  # Fix tests with pprint ≥ 20220103
-  # patches = [ ./pprint.patch ];
 
   # disable xmldiff tests, so we don't need to package unmaintained and legacy pkgs
   postPatch = "rm -rf examples/xmldiff";

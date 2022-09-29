@@ -143,6 +143,9 @@
   - nixos/modules/programs/neovim.nix
   - pkgs/applications/editors/neovim/**/*
 
+"6.topic: vscode":
+  - pkgs/applications/editors/vscode/**/*
+
 "6.topic: xfce":
   - nixos/doc/manual/configuration/xfce.xml
   - nixos/modules/services/x11/desktop-managers/xfce.nix

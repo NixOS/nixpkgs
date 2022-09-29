@@ -1,5 +1,5 @@
 { buildDunePackage, dns, dns-tsig, dns-client, dns-server, dns-certify, dnssec
-, cmdliner_1_1, cmdliner, fpath, x509, mirage-crypto, mirage-crypto-pk
+, cmdliner_1_1, fpath, x509, mirage-crypto, mirage-crypto-pk
 , mirage-crypto-rng, hex, ptime, mtime, ipaddr, lwt, bos, logs, fmt
 , randomconv, alcotest, lib
 }:
@@ -19,6 +19,7 @@ buildDunePackage {
     dns-client
     dns-server
     dns-certify
+    dnssec
     bos
     cmdliner_1_1
     fpath
