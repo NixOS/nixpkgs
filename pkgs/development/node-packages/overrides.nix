@@ -93,8 +93,17 @@ final: prev: {
 
   bitwarden-cli = prev."@bitwarden/cli".override {
     name = "bitwarden-cli";
-    nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = with pkgs; [ pixman cairo pango ];
+    nativeBuildInputs = with pkgs; [
+      pkg-config
+    ] ++ lib.optionals stdenv.isDarwin [
+      xcbuild
+      darwin.apple_sdk.frameworks.CoreText
+    ];
+    buildInputs = with pkgs; [
+      pixman
+      cairo
+      pango
+    ];
   };
 
   bower2nix = prev.bower2nix.override {
@@ -138,13 +147,14 @@ final: prev: {
   # ../../applications/video/epgstation
   epgstation = prev."epgstation-../../applications/video/epgstation".override (oldAttrs: {
     buildInputs = [ pkgs.postgresql ];
-    nativeBuildInputs = [ final.node-pre-gyp final.node-gyp-build pkgs.which ];
+    nativeBuildInputs = [ final.node-pre-gyp final.node-gyp-build pkgs.which ] ++ lib.optionals stdenv.isDarwin [ pkgs.xcbuild ];
     meta = oldAttrs.meta // { platforms = lib.platforms.none; };
   });
 
   # NOTE: this is a stub package to fetch npm dependencies for
   # ../../applications/video/epgstation/client
   epgstation-client = prev."epgstation-client-../../applications/video/epgstation/client".override (oldAttrs: {
+    nativeBuildInputs = lib.optionals stdenv.isDarwin [ pkgs.xcbuild ];
     meta = oldAttrs.meta // { platforms = lib.platforms.none; };
   });
 
@@ -212,7 +222,11 @@ final: prev: {
   });
 
   joplin = prev.joplin.override {
-    nativeBuildInputs = [ pkgs.pkg-config ];
+    nativeBuildInputs = with pkgs; [
+      pkg-config
+    ] ++ lib.optionals stdenv.isDarwin [
+      xcbuild
+    ];
     buildInputs = with pkgs; [
       # required by sharp
       # https://sharp.pixelplumbing.com/install
@@ -276,6 +290,10 @@ final: prev: {
         installShellCompletion --cmd $cmd --bash <(./bin/$cmd --completion)
       done
     '';
+  };
+
+  mastodon-bot = prev.mastodon-bot.override {
+    nativeBuildInputs = lib.optionals stdenv.isDarwin [ pkgs.xcbuild ];
   };
 
   mermaid-cli = prev."@mermaid-js/mermaid-cli".override (
@@ -495,7 +513,11 @@ final: prev: {
   };
 
   thelounge-plugin-giphy = prev.thelounge-plugin-giphy.override {
-    nativeBuildInputs = [ final.node-pre-gyp ];
+    nativeBuildInputs = [
+      final.node-pre-gyp
+    ] ++ lib.optionals stdenv.isDarwin [
+      pkgs.xcbuild
+    ];
   };
 
   thelounge-theme-flat-blue = prev.thelounge-theme-flat-blue.override {
