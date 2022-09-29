@@ -47,7 +47,6 @@
 , icu
 , libX11
 , libXcomposite
-, libXcursor
 , libXext
 , libXi
 , libXrender
@@ -183,10 +182,6 @@ stdenv.mkDerivation rec {
     substituteInPlace src/corelib/CMakeLists.txt --replace /bin/ls ${coreutils}/bin/ls
   '';
 
-  preConfigure = ''
-    export LD_LIBRARY_PATH="$PWD/build/lib:$PWD/build/plugins/platforms''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-  '';
-
   qtPluginPrefix = "lib/qt-6/plugins";
   qtQmlPrefix = "lib/qt-6/qml";
 
@@ -199,10 +194,6 @@ stdenv.mkDerivation rec {
     "-DQT_FEATURE_system_sqlite=ON"
     "-DQT_FEATURE_vulkan=ON"
     "-DQT_FEATURE_openssl_linked=ON"
-  ];
-
-  NIX_CFLAGS_COMPILE = [
-    ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
   ];
 
   outputs = [ "out" "dev" ];
