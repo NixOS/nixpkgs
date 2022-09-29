@@ -3891,6 +3891,8 @@ with pkgs;
 
   facter = callPackage ../tools/system/facter { };
 
+  faketty = callPackage ../tools/misc/faketty { };
+
   fasd = callPackage ../tools/misc/fasd { };
 
   fastJson = callPackage ../development/libraries/fastjson { };
