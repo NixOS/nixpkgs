@@ -11,7 +11,7 @@ let
   arches = {
     x86 = "i686";
     x86_64 = "x86_64";
-    # TODO arm
+    arm = "aarch64";
   };
 
   # Mapping from GCS component operating systems to Nix operating systems
@@ -30,8 +30,8 @@ let
     in
     "${arch'}-${os'}";
 
-  # All architectures that are supported
-  allArches = builtins.attrValues arches;
+  # All architectures that are supported by GCS
+  allArches = builtins.attrNames arches;
 
   # A description of all available google-cloud-sdk components.
   # It's a JSON file with a list of components, along with some metadata
