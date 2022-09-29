@@ -96,30 +96,19 @@ self: super: {
       executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];
     }) super.hnix);
 
+  haskell-language-server = addBuildDepend self.hls-brittany-plugin (super.haskell-language-server.overrideScope (lself: lsuper: {
+    Cabal = lself.Cabal_3_6_3_0;
+    aeson = lself.aeson_1_5_6_0;
+    lsp-types = doJailbreak lsuper.lsp-types; # Checks require aeson >= 2.0
+  }));
+
+  hls-brittany-plugin = super.hls-brittany-plugin.overrideScope (lself: lsuper: {
+    brittany = doJailbreak lself.brittany_0_13_1_2;
+    aeson = lself.aeson_1_5_6_0;
+    lsp-types = doJailbreak lsuper.lsp-types; # Checks require aeson >= 2.0
+  });
+
   mime-string = disableOptimization super.mime-string;
-
-  # Older compilers need the latest ghc-lib to build this package.
-  # Fix build with ghc-lib >= 9.0 and ghc <= 8.10.7
-  # https://github.com/haskell/haskell-language-server/issues/2728
-  hls-hlint-plugin = addBuildDepend self.ghc-lib (appendPatch (pkgs.fetchpatch {
-    name = "hls-hlint-plugin-workaround.patch";
-    url = "https://github.com/haskell/haskell-language-server/pull/2854.patch";
-    hash = "sha256-bLGu0OQtXsmMF3rZM+R6k7bsZm4Vgf2r0ert5Wunong=";
-    stripLen = 2;
-    includes = ["src/Ide/Plugin/Hlint.hs"];
-  }) super.hls-hlint-plugin);
-
-  haskell-language-server = appendConfigureFlags [
-      "-f-stylishhaskell"
-      "-f-brittany"
-    ]
-  super.haskell-language-server;
-
-  # has a restrictive lower bound on Cabal
-  fourmolu = doJailbreak super.fourmolu;
-
-  # ormolu 0.3 requires Cabal == 3.4
-  ormolu = super.ormolu_0_2_0_0;
 
   # weeder 2.3.0 no longer supports GHC 8.10
   weeder = doDistribute (doJailbreak self.weeder_2_2_0);
@@ -152,4 +141,8 @@ self: super: {
 
   # doctest-parallel dependency requires newer Cabal
   regex-tdfa = dontCheck super.regex-tdfa;
+
+  # Unnecessarily strict lower bound on base
+  # https://github.com/mrkkrp/megaparsec/pull/485#issuecomment-1250051823
+  megaparsec = doJailbreak super.megaparsec;
 }

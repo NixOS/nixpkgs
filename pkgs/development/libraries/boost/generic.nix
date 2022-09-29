@@ -28,8 +28,6 @@
 # We must build at least one type of libraries
 assert enableShared || enableStatic;
 
-# Python isn't supported when cross-compiling
-assert enablePython -> stdenv.hostPlatform == stdenv.buildPlatform;
 assert enableNumpy -> enablePython;
 
 # Boost <1.69 can't be built on linux with clang >8, because pth was removed

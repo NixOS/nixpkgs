@@ -22,6 +22,7 @@
 , zstd
 , yq-go
 , nixosTests
+, pkgsBuildBuild
 }:
 
 with lib;
@@ -46,10 +47,10 @@ with lib;
 # Those pieces of software we entirely ignore upstream's handling of, and just
 # make sure they're in the path if desired.
 let
-  k3sVersion = "1.24.4+k3s1";     # k3s git tag
-  k3sCommit = "c3f830e9b9ed8a4d9d0e2aa663b4591b923a296e"; # k3s git commit at the above version
-  k3sRepoSha256 = "00ns6n7jxnacah8ahndhgdb160prgsqhswbb5809kkgvig7k8b27";
-  k3sVendorSha256 = "sha256-ReZvJCgxqffG2H39JlynGPUBSV5ngPkRtAoZ++OQZZI=";
+  k3sVersion = "1.25.0+k3s1";     # k3s git tag
+  k3sCommit = "26e9405767263a2915723cb72b1ffd7f50687a8f"; # k3s git commit at the above version
+  k3sRepoSha256 = "0rk0svqx26rn6qlvvyj5rsqb87195h1qcf84qmmvf874qwszwpgh";
+  k3sVendorSha256 = "sha256-YX/yLOLtDxGhRB4tic6oTli/qeeSnpP+f+S+sVXXDSs=";
 
   # taken from ./manifests/traefik.yaml, extracted from '.spec.chart' https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/download#L9
   # The 'patch' and 'minor' versions are currently hardcoded as single digits only, so ignore the trailing two digits. Weird, I know.
@@ -66,11 +67,11 @@ let
 
   # taken from go.mod, the 'github.com/containerd/containerd' line
   # run `grep github.com/containerd/containerd go.mod | head -n1 | awk '{print $4}'`
-  containerdVersion = "1.5.13-k3s1";
-  containerdSha256 = "09bj4ghwbsj9whkv1d5icqs52k64m449j8b73dmak2wz62fbzbvp";
+  containerdVersion = "1.5.13-k3s2";
+  containerdSha256 = "1pfr2ji4aij9js90gf4a3hqnhyw5hshcjdccm62l700j68gs5z97";
 
   # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
-  criCtlVersion = "1.24.0-k3s1";
+  criCtlVersion = "1.25.0-k3s1";
 
   baseMeta = {
     description = "A lightweight Kubernetes distribution";
@@ -240,7 +241,11 @@ buildGoModule rec {
 
     substituteInPlace scripts/package-cli \
       --replace '"''${GO}" generate' \
-                'GOFLAGS="" "''${GO}" generate'
+                'GOFLAGS="" \
+                 GOOS="${pkgsBuildBuild.go.GOOS}" \
+                 GOARCH="${pkgsBuildBuild.go.GOARCH}" \
+                 CC="${pkgsBuildBuild.stdenv.cc}/bin/cc" \
+                 "''${GO}" generate'
   '';
 
   # Important utilities used by the kubelet, see

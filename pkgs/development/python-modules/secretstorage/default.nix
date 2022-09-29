@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "secretstorage";
-  version = "3.3.2";
+  version = "3.3.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "SecretStorage";
     inherit version;
-    hash = "sha256-Co65ZFsyCIHCIugnwm9M/PVTY+izdKAhmB74hmV6kS8=";
+    hash = "sha256-JANTPvNp7KbSuoFxhXbF4PVk1cyhtY9zqLI+fU7uvXc=";
   };
 
   propagatedBuildInputs = [

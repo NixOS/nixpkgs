@@ -42,6 +42,7 @@
 , vulkan-headers
 , wayland
 , wayland-protocols
+, wayland-scanner
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
 , cups
@@ -62,7 +63,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk4";
-  version = "4.8.0";
+  version = "4.8.1";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -74,8 +75,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "yNYgNDfR41nYMSTcWRVG1AP2fjsAVE5T3VCpuqzcvX8=";
+    sha256 = "XOjY3piiO9DI7KGmEJThwAm18AncvWC0XpkKjbG3Qv0=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     gettext
@@ -88,6 +93,7 @@ stdenv.mkDerivation rec {
     sassc
     gi-docgen
     libxml2 # for xmllint
+    wayland-scanner
   ] ++ setupHooks;
 
   buildInputs = [
@@ -183,6 +189,14 @@ stdenv.mkDerivation rec {
 
     chmod +x ''${files[@]}
     patchShebangs ''${files[@]}
+
+  '' +
+  # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
+  # it should be a build-time dep for build
+  # TODO: send upstream
+  ''
+    substituteInPlace meson.build \
+      --replace "'gi-docgen', ver" "'gi-docgen', native:true, ver"
   '';
 
   preInstall = ''

@@ -42,6 +42,7 @@ runCommand "${vapoursynth.name}-with-plugins" {
   nativeBuildInputs = [ makeWrapper ];
   passthru = {
     inherit python3;
+    inherit (vapoursynth) src version;
     withPlugins = plugins': withPlugins (plugins ++ plugins');
   };
 } ''

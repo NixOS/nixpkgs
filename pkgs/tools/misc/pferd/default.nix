@@ -15,6 +15,10 @@ python3Packages.buildPythonApplication rec {
     sha256 = "05f9b7wzld0jcalc7n5h2a6nqjr1w0fxwkd4cih6gkjc9117skii";
   };
 
+  nativeBuildInputs = with python3Packages; [
+    setuptools
+  ];
+
   propagatedBuildInputs = with python3Packages; [
     aiohttp
     beautifulsoup4

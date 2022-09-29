@@ -553,8 +553,7 @@ self: super: {
       })
     ];
     postInstall = ''
-      # The node package name is `*-vim` not `*-nvim`.
-      ln -s ${nodeDep}/lib/node_modules/markdown-preview-vim/node_modules $out/app
+      ln -s ${nodeDep}/lib/node_modules/markdown-preview/node_modules $out/app
     '';
 
     nativeBuildInputs = [ nodejs ];
@@ -984,7 +983,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-QAfHhpXABuOPaHCfQQZYhBERGXMaJPFipWHt/MeSc3c=";
+          cargoSha256 = "sha256-g5yNqDCN1O9x7/HcM8NsZlMwLudDTuPLE5gSpScNQnY=";
         };
       in
       ''

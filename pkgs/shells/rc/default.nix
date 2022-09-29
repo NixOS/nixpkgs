@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, byacc
-, ncurses, readline
+, ncurses, readline, pkgsStatic
 , historySupport ? false, readlineSupport ? true }:
 
 stdenv.mkDerivation rec {
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ]
     ++ lib.optionals readlineSupport [ readline ];
 
+  CPPFLAGS = ["-DSIGCLD=SIGCHLD"];
+
   configureFlags = [
     "--enable-def-interp=${stdenv.shell}" #183
     ] ++ lib.optionals historySupport [ "--with-history" ]
@@ -31,7 +33,10 @@ stdenv.mkDerivation rec {
       --replace "$(git describe || echo '(git description unavailable)')" "${builtins.substring 0 7 src.rev}"
   '';
 
-  passthru.shellPath = "/bin/rc";
+  passthru = {
+    shellPath = "/bin/rc";
+    tests.static = pkgsStatic.rc;
+  };
 
   meta = with lib; {
     description = "The Plan 9 shell";

@@ -3,6 +3,7 @@
 , aiohttp
 , aioshutil
 , buildPythonPackage
+, dateparser
 , fetchFromGitHub
 , ipython
 , orjson
@@ -20,6 +21,7 @@
 , python-dotenv
 , pythonOlder
 , pytz
+, setuptools
 , termcolor
 , typer
 , ffmpeg
@@ -27,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "pyunifiprotect";
-  version = "4.2.0";
+  version = "4.3.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -36,20 +38,24 @@ buildPythonPackage rec {
     owner = "briis";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-DBOPHeSEdM6cev2BZs1AwXmzNPVsekNklu9c+KhECiI=";
+    hash = "sha256-77vBKca4S0XEa5O4ntuBW8uEwVig7IBH6BX3QEmvHWc=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=pyunifiprotect --cov-append" ""
-    substituteInPlace setup.cfg \
+      --replace "--cov=pyunifiprotect --cov-append" "" \
       --replace "pydantic!=1.9.1" "pydantic"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiofiles
     aiohttp
     aioshutil
+    dateparser
     orjson
     packaging
     pillow
@@ -57,7 +63,7 @@ buildPythonPackage rec {
     pyjwt
     pytz
     typer
-  ];
+  ] ++ typer.optional-dependencies.all;
 
   passthru.optional-dependencies = {
     shell = [

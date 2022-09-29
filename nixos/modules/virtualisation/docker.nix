@@ -221,6 +221,8 @@ in
         '';
 
         startAt = optional cfg.autoPrune.enable cfg.autoPrune.dates;
+        after = [ "docker.service" ];
+        requires = [ "docker.service" ];
       };
 
       assertions = [

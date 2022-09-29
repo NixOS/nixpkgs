@@ -10,11 +10,11 @@
 let isFullPackage = mediaSupport;
 in stdenv.mkDerivation rec {
   pname = if isFullPackage then "vifm-full" else "vifm";
-  version = "0.12";
+  version = "0.12.1";
 
   src = fetchurl {
     url = "https://github.com/vifm/vifm/releases/download/v${version}/vifm-${version}.tar.bz2";
-    sha256 = "1h5j4y704nciyzg3aaav8sl3r5h9mpwq8f28cj65nnxk6a7n3a9k";
+    sha256 = "sha256-j+KBPr3Mz+ma7OArBdYqIJkVJdRrDM+67Dr2FMZlVog=";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper ];

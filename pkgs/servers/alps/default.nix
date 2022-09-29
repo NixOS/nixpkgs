@@ -14,6 +14,8 @@ buildGoModule rec {
   vendorSha256 = "sha256-cpY+lYM/nAX3nUaFknrRAavxDk8UDzJkoqFjJ1/KWeg=";
 
   ldflags = [
+    "-s"
+    "-w"
     "-X main.themesPath=${placeholder "out"}/share/alps/themes"
     "-X git.sr.ht/~migadu/alps.PluginDir=${placeholder "out"}/share/alps/plugins"
   ];
@@ -33,6 +35,6 @@ buildGoModule rec {
     description = "A simple and extensible webmail.";
     homepage = "https://git.sr.ht/~migadu/alps";
     license = licenses.mit;
-    maintainers = with maintainers; [ gordias booklearner ];
+    maintainers = with maintainers; [ gordias booklearner madonius ];
   };
 }

@@ -141,20 +141,30 @@ self: super: {
 
   mime-string = disableOptimization super.mime-string;
 
-  # Older compilers need the latest ghc-lib to build this package.
-  hls-hlint-plugin = addBuildDepend self.ghc-lib (overrideCabal (drv: {
-      # Workaround for https://github.com/haskell/haskell-language-server/issues/2728
-      postPatch = ''
-        sed -i 's/(GHC.RealSrcSpan x,/(GHC.RealSrcSpan x Nothing,/' src/Ide/Plugin/Hlint.hs
-      '';
-    })
-     super.hls-hlint-plugin);
+  haskell-language-server = addBuildDepend self.hls-brittany-plugin (super.haskell-language-server.overrideScope (lself: lsuper: {
+    ghc-lib-parser = lself.ghc-lib-parser_8_10_7_20220219;
+    ghc-lib-parser-ex = addBuildDepend lself.ghc-lib-parser lself.ghc-lib-parser-ex_8_10_0_24;
+    # Pick old ormolu and fourmolu because ghc-lib-parser is not compatible
+    ormolu = doJailbreak lself.ormolu_0_1_4_1;
+    fourmolu = doJailbreak lself.fourmolu_0_3_0_0;
+    hlint = lself.hlint_3_2_8;
+    aeson = lself.aeson_1_5_6_0;
+    stylish-haskell = lself.stylish-haskell_0_13_0_0;
+    lsp-types = doJailbreak lsuper.lsp-types;
+  }));
 
-  haskell-language-server = appendConfigureFlags [
-      "-f-stylishhaskell"
-      "-f-brittany"
-    ]
-  super.haskell-language-server;
+  hls-hlint-plugin = super.hls-hlint-plugin.overrideScope (lself: lsuper: {
+    # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
+    hlint = lself.hlint_3_2_8;
+    ghc-lib-parser = lself.ghc-lib-parser_8_10_7_20220219;
+    ghc-lib-parser-ex = addBuildDepend lself.ghc-lib-parser lself.ghc-lib-parser-ex_8_10_0_24;
+  });
+
+  hls-brittany-plugin = super.hls-brittany-plugin.overrideScope (lself: lsuper: {
+    brittany = doJailbreak lself.brittany_0_13_1_2;
+    aeson = lself.aeson_1_5_6_0;
+    lsp-types = doJailbreak lsuper.lsp-types;
+  });
 
   # has a restrictive lower bound on Cabal
   fourmolu = doJailbreak super.fourmolu;
@@ -178,4 +188,8 @@ self: super: {
 
   # doctest-parallel dependency requires newer Cabal
   regex-tdfa = dontCheck super.regex-tdfa;
+
+  # Unnecessarily strict lower bound on base
+  # https://github.com/mrkkrp/megaparsec/pull/485#issuecomment-1250051823
+  megaparsec = doJailbreak super.megaparsec;
 }

@@ -17,9 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MVM0qCZDWcO7/Hnco+0dBqzBLcWD279xjx0slxxlc4w=";
   };
 
-  # this will make it find its own data files (e.g. HRTF profiles)
-  # without any other configuration
-  patches = [ ./search-out.patch ];
+  patches = [
+    # this will make it find its own data files (e.g. HRTF profiles)
+    # without any other configuration
+    ./search-out.patch
+  ];
   postPatch = ''
     substituteInPlace core/helpers.cpp \
       --replace "@OUT@" $out
@@ -46,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "OpenAL alternative";
-    homepage = "https://kcat.strangesoft.net/openal.html";
+    homepage = "https://openal-soft.org/";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ftrvxmtrx];
     platforms = platforms.unix;

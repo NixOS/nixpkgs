@@ -121,7 +121,7 @@ let
       "final.target"
       "kexec.target"
       "systemd-kexec.service"
-    ] ++ lib.optional (cfg.package.withUtmp or true) "systemd-update-utmp.service" ++ [
+    ] ++ lib.optional cfg.package.withUtmp "systemd-update-utmp.service" ++ [
 
       # Password entry.
       "systemd-ask-password-console.path"

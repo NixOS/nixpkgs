@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "velero";
-  version = "1.9.1";
+  version = "1.9.2";
 
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "velero";
     rev = "v${version}";
-    sha256 = "sha256-zGk5Bo1n2VV33wzozgYWbrwd/D3lcSWsqb+s3U3kmus=";
+    sha256 = "sha256-xhsHFb3X1oM68xnYiVEa0eZr7VFdUCkNzeyvci6wb9g=";
   };
 
   ldflags = [

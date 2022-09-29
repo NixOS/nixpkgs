@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , SDL2
@@ -19,24 +18,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "SDL_compat";
-  version = "1.2.52";
+  version = "1.2.56";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl12-compat";
     rev = "release-" + version;
-    hash = "sha256-PDGlMI8q74JaqMQ5oX9Zt5CEr7frFQWECbuwq5g25eg=";
+    hash = "sha256-qd+hdJygJ+D2Ult6kmhUJmoPjasOFnBziTI8QtNiclI=";
   };
-
-  patches = optionals stdenv.hostPlatform.isDarwin [
-    # Fix broken install name in dylib, https://github.com/libsdl-org/sdl12-compat/issues/194
-    # Remove when bump > 1.2.52
-    (fetchpatch {
-      name = "SDL_compat-fix-install-name.patch";
-      url = "https://github.com/libsdl-org/sdl12-compat/commit/5642d47ae489f2eb362cece2464ecc466a700ed5.patch";
-      sha256 = "sha256-kQ5H8gXjTZVHHRF6UpgXKl3NIy87iULcc2iCsYt5Hqo=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 

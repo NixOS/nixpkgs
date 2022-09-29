@@ -47,12 +47,12 @@ in
 lib.warnIf (enableQT != false) "geant4: enableQT is deprecated, please use enableQt"
 
 stdenv.mkDerivation rec {
-  version = "11.0.2";
+  version = "11.0.3";
   pname = "geant4";
 
   src = fetchurl{
     url = "https://cern.ch/geant4-data/releases/geant4-v${version}.tar.gz";
-    hash = "sha256-/AONuDcxL3Tj+O/RC108qHqZnUg9TYlZxguKdJIh7GE=";
+    hash = "sha256-cvi2h1EtbmMNxsZMXEG6cRIgRoVAEymZ0A5PzhkIrkg=";
   };
 
   cmakeFlags = [

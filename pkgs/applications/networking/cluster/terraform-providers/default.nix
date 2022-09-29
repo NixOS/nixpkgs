@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , callPackage
 , config
+, writeShellScript
 
 , cdrtools # libvirt
 }:
@@ -16,17 +17,18 @@ let
      , repo
      , rev
      , version
-     , sha256
-     , vendorSha256
+     , hash ? throw "use hash instead of sha256" # added 2202/09
+     , vendorHash ? throw "use vendorHash instead of vendorSha256" # added 2202/09
      , deleteVendor ? false
      , proxyVendor ? false
      , mkProviderGoModule ? buildGoModule
-     , # Looks like "registry.terraform.io/vancluever/acme"
-       provider-source-address
+       # Looks like "registry.terraform.io/vancluever/acme"
+     , provider-source-address
+     , ...
      }@attrs:
       mkProviderGoModule {
         pname = repo;
-        inherit vendorSha256 version deleteVendor proxyVendor;
+        inherit vendorHash version deleteVendor proxyVendor;
         subPackages = [ "." ];
         doCheck = false;
         # https://github.com/hashicorp/terraform-provider-scaffolding/blob/a8ac8375a7082befe55b71c8cbb048493dd220c2/.goreleaser.yml
@@ -35,7 +37,7 @@ let
         ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${rev}" ];
         src = fetchFromGitHub {
           name = "source-${rev}";
-          inherit owner repo rev sha256;
+          inherit owner repo rev hash;
         };
 
         # Move the provider to libexec
@@ -47,7 +49,12 @@ let
         '';
 
         # Keep the attributes around for later consumption
-        passthru = attrs;
+        passthru = attrs // {
+          updateScript = writeShellScript "update" ''
+            provider="$(basename ${provider-source-address})"
+            ./pkgs/applications/networking/cluster/terraform-providers/update-provider --no-build "$provider"
+          '';
+        };
       });
 
   list = lib.importJSON ./providers.json;

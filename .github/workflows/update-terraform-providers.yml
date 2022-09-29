@@ -1,8 +1,8 @@
 name: "Update terraform-providers"
 
 on:
-  schedule:
-    - cron: "14 3 * * 0"
+  #schedule:
+  #  - cron: "14 3 * * 0"
   workflow_dispatch:
 
 permissions:
@@ -18,6 +18,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: cachix/install-nix-action@v17
+        with:
+          nix_path: nixpkgs=channel:nixpkgs-unstable
       - name: setup
         id: setup
         run: |

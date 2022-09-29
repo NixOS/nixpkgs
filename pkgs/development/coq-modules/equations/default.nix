@@ -63,5 +63,5 @@ with lib; (mkCoqDerivation {
     maintainers = with maintainers; [ jwiegley ];
   };
 }).overrideAttrs (o: {
-  preBuild = "coq_makefile -f _CoqProject -o Makefile${optionalString (versionAtLeast o.version "1.2.1") ".coq"}";
+  preBuild = "coq_makefile -f _CoqProject -o Makefile${optionalString (versionAtLeast o.version "1.2.1" || o.version == "dev") ".coq"}";
 })

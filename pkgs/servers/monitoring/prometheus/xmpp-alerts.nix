@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , python3Packages
 , prometheus-alertmanager
-, unittestCheckHook
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -39,7 +39,7 @@
 , zstd
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableFlight ? true
-, enableJemalloc ? !(stdenv.isAarch64 && stdenv.isDarwin)
+, enableJemalloc ? !stdenv.isDarwin
   # boost/process is broken in 1.69 on darwin, but fixed in 1.70 and
   # non-existent in older versions
   # see https://github.com/boostorg/process/issues/55

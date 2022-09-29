@@ -29,7 +29,7 @@ mkDerivation rec {
     homepage = "https://github.com/psifidotos/Latte-Dock";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.benley maintainers.ysndr ];
+    maintainers = [ maintainers.ysndr ];
   };
 
 

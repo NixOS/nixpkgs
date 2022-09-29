@@ -99,6 +99,12 @@ self: super: {
     sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
   }) (doJailbreak super.language-haskell-extract);
 
+  haskell-language-server = super.haskell-language-server.overrideScope (lself: lsuper: {
+    # Needed for modern ormolu and fourmolu.
+    # Apply this here and not in common, because other ghc versions offer different Cabal versions.
+    Cabal = lself.Cabal_3_6_3_0;
+  });
+
   # The test suite depends on ChasingBottoms, which is broken with ghc-9.0.x.
   unordered-containers = dontCheck super.unordered-containers;
 

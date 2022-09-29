@@ -1,23 +1,35 @@
-{ lib, buildPythonPackage, pytestCheckHook, fetchFromGitHub }:
+{ lib
+, buildPythonPackage
+, pytestCheckHook
+, fetchFromGitHub
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "crossplane";
-  version = "0.5.7";
+  version = "0.5.8";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nginxinc";
     repo = "crossplane";
-    rev = "v${version}";
-    sha256 = "0lv3frfvnvz5wjxwh3mwy8nbypv4i62v4bvy5fv7vd6kmbxy1q9l";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DfIF+JvjIREi7zd5ZQ7Co/CIKC5iUeOgR/VLDPmrtTQ=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "crossplane" ];
+  pythonImportsCheck = [
+    "crossplane"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/nginxinc/crossplane";
     description = "NGINX configuration file parser and builder";
+    homepage = "https://github.com/nginxinc/crossplane";
     license = licenses.asl20;
     maintainers = with maintainers; [ kaction ];
   };

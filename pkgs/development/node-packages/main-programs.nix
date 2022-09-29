@@ -9,6 +9,7 @@
   coffee-script = "coffee";
   typescript = "tsc";
   vue-cli = "vue";
+  "@withgraphite/graphite-cli" = "gt";
 
   # Packages that provide a single executable whose name differs from the package's `name`.
   "@angular/cli" = "ng";

@@ -33,7 +33,7 @@
 
 mkDerivation rec {
   pname = "linphone-desktop";
-  version = "4.4.8";
+  version = "4.4.9";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -41,7 +41,7 @@ mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-o/IyUvIthCrka6oTa0xMKg0sDj4zdon3kBr2gJ2Id8w=";
+    sha256 = "sha256-xvKkFMZ7rUyEjnQK7rBkrzO8fhfHjpQ1DHQBUlizZ+o=";
   };
 
   patches = [

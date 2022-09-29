@@ -1780,6 +1780,10 @@ The following rules are desired to be respected:
   that characters should be converted to lowercase and `.` and `_` should be
   replaced by a single `-` (foo-bar-baz instead of Foo__Bar.baz).
   If necessary, `pname` has to be given a different value within `fetchPypi`.
+* Packages from sources such as GitHub and GitLab that do not exist on PyPI
+  should not use a name that is already used on PyPI. When possible, they should
+  use the package repository name prefixed with the owner (e.g. organization) name
+  and using a `-` as delimiter.
 * Attribute names in `python-packages.nix` should be sorted alphanumerically to
   avoid merge conflicts and ease locating attributes.
 

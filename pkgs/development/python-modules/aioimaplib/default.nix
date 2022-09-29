@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aioimaplib";
-  version = "1.0.0";
+  version = "1.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -43,9 +43,13 @@ buildPythonPackage rec {
   disabledTests = [
     # https://github.com/bamthomas/aioimaplib/issues/77
     "test_get_quotaroot"
+    # asyncio.exceptions.TimeoutError
+    "test_idle"
   ];
 
-  pythonImportsCheck = [ "aioimaplib" ];
+  pythonImportsCheck = [
+    "aioimaplib"
+  ];
 
   meta = with lib; {
     description = "Python asyncio IMAP4rev1 client library";

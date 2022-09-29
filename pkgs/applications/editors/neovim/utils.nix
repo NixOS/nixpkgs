@@ -116,8 +116,8 @@ let
         ] ++ lib.optionals (binPath != "") [
           "--suffix" "PATH" ":" binPath
         ] ++ lib.optionals (luaEnv != null) [
-          "--prefix" "LUA_PATH" ";" (neovim-unwrapped.lua.pkgs.lib.genLuaPathAbsStr luaEnv)
-          "--prefix" "LUA_CPATH" ";" (neovim-unwrapped.lua.pkgs.lib.genLuaCPathAbsStr luaEnv)
+          "--prefix" "LUA_PATH" ";" (neovim-unwrapped.lua.pkgs.luaLib.genLuaPathAbsStr luaEnv)
+          "--prefix" "LUA_CPATH" ";" (neovim-unwrapped.lua.pkgs.luaLib.genLuaCPathAbsStr luaEnv)
         ];
 
       manifestRc = vimUtils.vimrcContent ({ customRC = ""; }) ;
@@ -170,8 +170,8 @@ let
           throw "The neovim legacy wrapper doesn't support configure.plug anymore, please setup your plugins via 'configure.packages' instead"
         else
           lib.flatten (lib.mapAttrsToList genPlugin (configure.packages or {}));
-      genPlugin = packageName: {start ? [], opt?[]}:
-        start ++ opt;
+      genPlugin = packageName: {start ? [], opt ? []}:
+        start ++ (map (p: { plugin = p; optional = true; }) opt);
 
       res = makeNeovimConfig {
         inherit withPython3;

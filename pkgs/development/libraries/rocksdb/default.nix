@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocksdb";
-  version = "7.5.3";
+  version = "7.6.0";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/6xwvnLnSihnEWhnLIZ9zvUuR20ToOhub5AmXhSQLb0=";
+    sha256 = "sha256-35GpPSL5r2LnpooMVux+a7oH8b+mkKVLiinzRKJaUJQ=";
   };
 
   nativeBuildInputs = [ cmake ninja ];
@@ -57,6 +57,14 @@ stdenv.mkDerivation rec {
 
   # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
   hardeningDisable = lib.optional stdenv.hostPlatform.isWindows "format";
+
+  # Old version doesn't ship the .pc file, new version puts wrong paths in there.
+  postFixup = ''
+    if [ -f "$out"/lib/pkgconfig/rocksdb.pc ]; then
+      substituteInPlace "$out"/lib/pkgconfig/rocksdb.pc \
+        --replace '="''${prefix}//' '="/'
+    fi
+  '';
 
   meta = with lib; {
     homepage = "https://rocksdb.org";

@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , sage-src
+, cython
+, jinja2
 , pkgconfig # the python module, not the pkg-config alias
 }:
 
@@ -9,9 +11,9 @@ buildPythonPackage rec {
   pname = "sage-setup";
   src = sage-src;
 
-  buildInputs = [
-    pkgconfig
-  ];
+  nativeBuildInputs = [ cython ];
+  buildInputs = [ pkgconfig ];
+  propagatedBuildInputs = [ jinja2 ];
 
   preBuild = ''
     cd pkgs/sage-setup

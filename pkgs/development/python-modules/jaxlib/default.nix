@@ -35,6 +35,7 @@
 , giflib
 , grpc
 , libjpeg_turbo
+, protobuf
 , python
 , snappy
 , zlib
@@ -49,7 +50,6 @@
 }:
 
 let
-
   inherit (cudaPackages) cudatoolkit cudnn nccl;
 
   pname = "jaxlib";
@@ -120,7 +120,7 @@ let
       numpy
       openssl
       pkgs.flatbuffers
-      pkgs.protobuf
+      protobuf
       pybind11
       scipy
       six
@@ -158,7 +158,7 @@ let
       build --action_env=PYENV_ROOT
       build --python_path="${python}/bin/python"
       build --distinct_host_configuration=false
-      build --define PROTOBUF_INCLUDE_PATH="${pkgs.protobuf}/include"
+      build --define PROTOBUF_INCLUDE_PATH="${protobuf}/include"
     '' + lib.optionalString cudaSupport ''
       build --action_env CUDA_TOOLKIT_PATH="${cudatoolkit_joined}"
       build --action_env CUDNN_INSTALL_PATH="${cudnn}"
@@ -268,8 +268,8 @@ let
         sed -i 's@-lprotobuf@-l:libprotobuf.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
         sed -i 's@-lprotoc@-l:libprotoc.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
       '' else if stdenv.cc.isClang then ''
-        sed -i 's@-lprotobuf@${pkgs.protobuf}/lib/libprotobuf.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
-        sed -i 's@-lprotoc@${pkgs.protobuf}/lib/libprotoc.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
+        sed -i 's@-lprotobuf@${protobuf}/lib/libprotobuf.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
+        sed -i 's@-lprotoc@${protobuf}/lib/libprotoc.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
       '' else throw "Unsupported stdenv.cc: ${stdenv.cc}");
 
       installPhase = ''

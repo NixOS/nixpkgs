@@ -51,11 +51,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ventoy-bin";
-  version = "1.0.79";
+  version = "1.0.80";
 
   src = fetchurl {
     url = "https://github.com/ventoy/Ventoy/releases/download/v${finalAttrs.version}/ventoy-${finalAttrs.version}-linux.tar.gz";
-    hash = "sha256-azkoDquN/i01QHsd1wJG79kdhHhBvXzPXIRnjKHAHNE=";
+    hash = "sha256-FmMpMUy8VqwbOiRWZdoY76ToSoWWbBGM5h/9VS8rYRY=";
   };
 
   patches = [
@@ -203,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://www.ventoy.net/doc_news.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ k4leg AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "mipsel-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "ventoy";

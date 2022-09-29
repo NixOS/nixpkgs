@@ -1,14 +1,19 @@
-{ lib, stdenv
+{ lib, stdenv, fetchurl
 , libopcodes, libopcodes_2_38
 , libbfd, libbfd_2_38
 , elfutils, readline
-, linuxPackages_latest, zlib
+, zlib
 , python3, bison, flex
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpftools";
-  inherit (linuxPackages_latest.kernel) version src;
+  version = "5.19.8";
+
+  src = fetchurl {
+    url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
+    sha256 = "1kl7fifsa6vsm34xg3kd2svhx18n771hfj67nhwnlalmb9whhqv1";
+  };
 
   nativeBuildInputs = [ python3 bison flex ];
   buildInputs = (if (lib.versionAtLeast version "5.20")

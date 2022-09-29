@@ -6,34 +6,23 @@
 , jdupes
 , roundedIcons ? false
 , blackPanelIcons ? false
-, colorVariants ? []
+, colorVariants ? [ ]
 ,
 }:
 let
   pname = "Fluent-icon-theme";
 in
-lib.checkListOfEnum "${pname}: available color variants" [
-  "standard"
-  "green"
-  "grey"
-  "orange"
-  "pink"
-  "purple"
-  "red"
-  "yellow"
-  "teal"
-  "all"
-] colorVariants
+lib.checkListOfEnum "${pname}: available color variants" [ "standard" "green" "grey" "orange" "pink" "purple" "red" "yellow" "teal" "all" ] colorVariants
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-02-28";
+  version = "2022-09-20";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "UMj3qF9lhd9kM7J/3RtG3AiWlBontrowfsFOb3yr0tQ=";
+    sha256 = "Ce8LTIxKabeqV9QVK68DqUVwtwG5lyxDPDQx0mLIr5o=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];

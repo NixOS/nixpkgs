@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.15";
+  version = "0.16";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vfRsiuLvGO9bOoDgoY+OLVxDw0dW6siTDGKNxI1R3g4=";
+    hash = "sha256-HX9P1rGYApj7uzMWsNV/pvFbUxMHTNrMEqOrk788pc0=";
   };
 
   propagatedBuildInputs = [

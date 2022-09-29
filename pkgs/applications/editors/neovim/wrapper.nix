@@ -100,7 +100,7 @@ let
         if ! $out/bin/nvim-wrapper \
           -u ${writeText "manifest.vim" manifestRc} \
           -i NONE -n \
-          -E -V1rplugins.log -s \
+          -V1rplugins.log \
           +UpdateRemotePlugins +quit! > outfile 2>&1; then
           cat outfile
           echo -e "\nGenerating rplugin.vim failed!"

@@ -20,7 +20,9 @@ let
         });
       };
     commonOverrides = [
-      (mkOverride "jsonschema" "3.2.0" "0ykr61yiiizgvm3bzipa3l73rvj49wmrybbfwhvpgk3pscl5pa68")
+      (self: super: {
+        jsonschema = super.jsonschema_3;
+      })
     ];
   };
   mkGui = args: libsForQt5.callPackage (import ./gui.nix (addVersion args // extraArgs)) { };

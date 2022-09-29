@@ -1,18 +1,18 @@
 { lib, stdenv, fetchFromGitHub
 , autoreconfHook, pkg-config
 , gnutls
-, cunit, ncurses
+, cunit, ncurses, knot-dns
 }:
 
 stdenv.mkDerivation rec {
   pname = "ngtcp2";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = "ngtcp2";
     rev = "v${version}";
-    sha256 = "sha256-Sn03nY80UmL5oeoK6ScPye1oSUmEKxgoz2VLHcvor3U=";
+    sha256 = "sha256-nfXEX1GxtmOcb0reRyO0OyQkSHeUWtQW+SZ8thxor+s=";
   };
 
   outputs = [ "out" "dev" ];
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkInputs = [ cunit ]
     ++ lib.optional stdenv.isDarwin ncurses;
+
+  passthru.tests = knot-dns.passthru.tests; # the only consumer so far
 
   meta = with lib; {
     homepage = "https://github.com/ngtcp2/ngtcp2";

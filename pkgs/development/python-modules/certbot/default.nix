@@ -49,6 +49,7 @@ buildPythonPackage rec {
     "-o cache_dir=$(mktemp -d)"
     # See https://github.com/certbot/certbot/issues/8746
     "-W ignore::ResourceWarning"
+    "-W ignore::DeprecationWarning"
   ];
 
   doCheck = true;

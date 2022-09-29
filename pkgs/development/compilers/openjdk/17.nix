@@ -40,7 +40,7 @@ let
       ./read-truststore-from-env-jdk10.patch
       ./currency-date-range-jdk10.patch
       ./increase-javadoc-heap-jdk13.patch
-      ./ignore-LegalNoticeFilePlugin.patch
+      ./ignore-LegalNoticeFilePlugin-jdk17.patch
       ./fix-library-path-jdk17.patch
 
       # -Wformat etc. are stricter in newer gccs, per

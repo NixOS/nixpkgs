@@ -185,6 +185,8 @@ rec {
       # retain a reference to the base
       passthru = unresholved.passthru // {
         unresholved = unresholved;
+        # fallback attr for update bot to query our src
+        originalSrc = unresholved.src;
       };
 
       # do these imply that we should use NoCC or something?

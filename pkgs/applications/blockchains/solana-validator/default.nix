@@ -13,7 +13,6 @@
 , protobuf
 , clang
 , llvm
-, pkgconfig
 , openssl
 , libclang
 , rustfmt
@@ -74,7 +73,7 @@ rustPlatform.buildRustPackage rec {
     "-isystem ${libclang.lib}/lib/clang/${lib.getVersion clang}/include";
   LLVM_CONFIG_PATH = "${llvm}/bin/llvm-config";
 
-  nativeBuildInputs = [ clang llvm pkgconfig protobuf rustfmt perl ];
+  nativeBuildInputs = [ clang llvm pkg-config protobuf rustfmt perl ];
   buildInputs =
     [ openssl zlib libclang hidapi ] ++ (lib.optionals stdenv.isLinux [ udev ]);
   strictDeps = true;

@@ -18,6 +18,7 @@
 , tpm2-tools
 , coreutils
 , clevisSupport ? false
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -94,6 +95,8 @@ stdenv.mkDerivation rec {
     rm -r "$out/lib/dracut"
     rm -r "$out/lib/systemd/system-generators"
   '';
+
+  passthru.tests = nixosTests.stratis;
 
   meta = with lib; {
     description = "Easy to use local storage management for Linux";

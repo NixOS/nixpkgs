@@ -27,11 +27,11 @@ rec {
   stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else latest;
 
   production = generic {
-    version = "515.65.01";
-    sha256_64bit = "sha256-BJLdxbXmWqAMvHYujWaAIFyNCOEDtxMQh6FRJq7klek=";
-    openSha256 = "sha256-GCCDnaDsbXTmbCYZBCM3fpHmOSWti/DkBJwYrRGAMPI=";
-    settingsSha256 = "sha256-kBELMJCIWD9peZba14wfCoxsi3UXO3ehFYcVh4nvzVg=";
-    persistencedSha256 = "sha256-P8oT7g944HvNk2Ot/0T0sJM7dZs+e0d+KwbwRrmsuDY=";
+    version = "515.76";
+    sha256_64bit = "sha256-xqKhjOuWX0mAvOTlzqNv1iLNwaXzGg6xu9NZqen2v0Q=";
+    openSha256 = "sha256-843l42atzaTm4pX5UC/JZjXAvhwmBpE8k3SQFEFdcdY=";
+    settingsSha256 = "sha256-2GdqmuvROLa8xFfyFY/F4YzEBq+SlVIYM4CVEARh9MI=";
+    persistencedSha256 = "sha256-nIfP7xBIVy+BUa9VBCNQ9v5RT4l4S9X0GHLpNiN/WRg=";
 
     brokenOpen = kernelModVersion == "5.4" && kernel.isHardened;
   };

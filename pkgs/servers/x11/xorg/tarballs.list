@@ -174,7 +174,7 @@ mirror://xorg/individual/lib/libICE-1.0.10.tar.bz2
 mirror://xorg/individual/lib/libpciaccess-0.16.tar.bz2
 mirror://xorg/individual/lib/libSM-1.2.3.tar.bz2
 mirror://xorg/individual/lib/libWindowsWM-1.0.1.tar.bz2
-mirror://xorg/individual/lib/libX11-1.7.2.tar.bz2
+mirror://xorg/individual/lib/libX11-1.8.1.tar.xz
 mirror://xorg/individual/lib/libXau-1.0.9.tar.bz2
 mirror://xorg/individual/lib/libXaw-1.0.14.tar.bz2
 mirror://xorg/individual/lib/libXaw3d-1.6.3.tar.bz2

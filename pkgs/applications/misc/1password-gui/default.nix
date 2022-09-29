@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , makeWrapper
+, wrapGAppsHook
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -44,25 +45,27 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.8.0";
+  version = "8.9.4";
 
   src =
     if stdenv.hostPlatform.isAarch64 then
       fetchurl {
         url = "https://downloads.1password.com/linux/tar/stable/aarch64/1password-${version}.arm64.tar.gz";
-        sha256 = "01swx12nqqh9i3191ibc8gv92k4dzsk1qpikg053qhn1zh2ag1dd";
+        sha256 = "0y456ssfsx4cy6pcnihiwi64y90s91399qhgs4abn4pp9wr0h08g";
       }
     else
       fetchurl {
         url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
-        sha256 = "1rcvxxcz2q7kgf6qbcjnjhysnx9z81hvl0jfv0nkp0p1w8bf1h66";
+        sha256 = "sha256-Smq0gOGfBTjIOMwF1AI+TJwXaIiTi/YP9mGIqcjsCNQ=";
       };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  buildInputs = [ glib ];
 
   dontConfigure = true;
   dontBuild = true;
   dontPatchELF = true;
+  dontWrapGApps = true;
 
   installPhase =
     let rpath = lib.makeLibraryPath [
@@ -123,16 +126,19 @@ in stdenv.mkDerivation rec {
         patchelf --set-rpath ${rpath}:$out/share/1password $file
       done
 
-      # Electron is trying to open udev via dlopen()
-      # and for some reason that doesn't seem to be impacted from the rpath.
-      # Adding udev to LD_LIBRARY_PATH fixes that.
-      # Make xdg-open overrideable at runtime.
-      makeWrapper $out/share/1password/1password $out/bin/1password \
-        --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
-
       runHook postInstall
     '';
+
+  preFixup = ''
+    # Electron is trying to open udev via dlopen()
+    # and for some reason that doesn't seem to be impacted from the rpath.
+    # Adding udev to LD_LIBRARY_PATH fixes that.
+    # Make xdg-open overrideable at runtime.
+    makeWrapper $out/share/1password/1password $out/bin/1password \
+      ''${gappsWrapperArgs[@]} \
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
+  '';
 
   meta = with lib; {
     description = "Multi-platform password manager";

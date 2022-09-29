@@ -14,16 +14,16 @@ let
 in
 buildGoModule rec {
   pname = "netbird";
-  version = "0.9.1";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ECQ9W4YJdqjFP/Fs2P/JlPLJntewi1kowzYyid7IQGc=";
+    sha256 = "sha256-VNKVl1C14iZROl3JFHY7+8EYbgZTuoz5rVOOBqkmmo0=";
   };
 
-  vendorSha256 = "sha256-qBglJ9PYUApyOrZhZRvyK3WMcZQglDHmsy3Qv5K1PqA=";
+  vendorSha256 = "sha256-VyYw8Hp2qWoRBeOFsgtxmvFN2cYzuDeYmWAwC/+vjI0=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
 

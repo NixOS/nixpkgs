@@ -106,15 +106,15 @@ import ./make-test-python.nix ({ pkgs, lib, buildDeps ? [ ], pythonEnv ? [ ], ..
            && sed -i 's|driver_local.maximize_window()||' web/regression/runtests.py"
       )
 
-      # don't bother to test LDAP authentification
-      # exclude resql test due to recent postgres 14.4 update
-      # see bugreport here https://redmine.postgresql.org/issues/7527
+      # Don't bother to test LDAP or kerberos authentification
+      # For now deactivate change_password API test. Current bug report at https://redmine.postgresql.org/issues/7648
+      # Password change works from the UI, if email SMTP is configured.
       with subtest("run browser test"):
           machine.succeed(
                'cd ${pgadmin4SrcDir}/pgadmin4-${pkgs.pgadmin4.version}/web \
                && python regression/runtests.py \
                --pkg browser \
-               --exclude browser.tests.test_ldap_login.LDAPLoginTestCase,browser.tests.test_ldap_login,resql'
+               --exclude browser.tests.test_ldap_login.LDAPLoginTestCase,browser.tests.test_ldap_login,browser.tests.test_kerberos_with_mocking,browser.tests.test_change_password'
           )
 
       # fontconfig is necessary for chromium to run
@@ -126,11 +126,10 @@ import ./make-test-python.nix ({ pkgs, lib, buildDeps ? [ ], pythonEnv ? [ ], ..
                && python regression/runtests.py --pkg feature_tests'
           )
 
-      # reactivate this test again, when the postgres 14.4 test has been fixed
-      # with subtest("run resql test"):
-      #    machine.succeed(
-      #         'cd ${pgadmin4SrcDir}/pgadmin4-${pkgs.pgadmin4.version}/web \
-      #         && python regression/runtests.py --pkg resql'
-      #    )
+      with subtest("run resql test"):
+         machine.succeed(
+              'cd ${pgadmin4SrcDir}/pgadmin4-${pkgs.pgadmin4.version}/web \
+              && python regression/runtests.py --pkg resql'
+         )
     '';
   })

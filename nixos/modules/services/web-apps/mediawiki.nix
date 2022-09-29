@@ -449,6 +449,7 @@ in
           --dbuser ${cfg.database.user} \
           ${optionalString (cfg.database.passwordFile != null) "--dbpassfile ${cfg.database.passwordFile}"} \
           --passfile ${cfg.passwordFile} \
+          --dbtype ${cfg.database.type} \
           ${cfg.name} \
           admin
 

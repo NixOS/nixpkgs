@@ -54,6 +54,7 @@
   tree-sitter-lua = lib.importJSON ./tree-sitter-lua.json;
   tree-sitter-make = lib.importJSON ./tree-sitter-make.json;
   tree-sitter-markdown = lib.importJSON ./tree-sitter-markdown.json;
+  tree-sitter-nickel = lib.importJSON ./tree-sitter-nickel.json;
   tree-sitter-nix = lib.importJSON ./tree-sitter-nix.json;
   tree-sitter-norg = lib.importJSON ./tree-sitter-norg.json;
   tree-sitter-ocaml = lib.importJSON ./tree-sitter-ocaml.json;
@@ -77,6 +78,7 @@
   tree-sitter-scala = lib.importJSON ./tree-sitter-scala.json;
   tree-sitter-scheme = lib.importJSON ./tree-sitter-scheme.json;
   tree-sitter-scss = lib.importJSON ./tree-sitter-scss.json;
+  tree-sitter-smithy = lib.importJSON ./tree-sitter-smithy.json;
   tree-sitter-sparql = lib.importJSON ./tree-sitter-sparql.json;
   tree-sitter-sql = lib.importJSON ./tree-sitter-sql.json;
   tree-sitter-supercollider = lib.importJSON ./tree-sitter-supercollider.json;

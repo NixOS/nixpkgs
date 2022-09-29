@@ -131,6 +131,7 @@ let
       libksysguard = callPackage ./libksysguard {};
       milou = callPackage ./milou.nix {};
       oxygen = callPackage ./oxygen.nix {};
+      oxygen-sounds = callPackage ./oxygen-sounds.nix {};
       plasma-browser-integration = callPackage ./plasma-browser-integration.nix {};
       plasma-desktop = callPackage ./plasma-desktop {};
       plasma-disks = callPackage ./plasma-disks.nix {};
@@ -161,6 +162,7 @@ let
         krohnkite = callPackage ./3rdparty/kwin/scripts/krohnkite.nix { };
         krunner-ssh = callPackage ./3rdparty/addons/krunner-ssh.nix { };
         krunner-symbols = callPackage ./3rdparty/addons/krunner-symbols.nix { };
+        kzones = callPackage ./3rdparty/kwin/scripts/kzones.nix { };
         lightly = callPackage ./3rdparty/lightly { };
         parachute = callPackage ./3rdparty/kwin/scripts/parachute.nix { };
       };
