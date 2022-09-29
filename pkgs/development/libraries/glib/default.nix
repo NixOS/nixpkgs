@@ -96,6 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.gnome.org/qyliss/glib/-/commit/339a06d66685107280ca6bdca5da5d96b8222fb5.patch";
       sha256 = "sha256-/NdFkuiJvyass3jTDEJPeciA2Lwe53IUd3kAnKAvTaw=";
     })
+    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/2867
+    ./tests-skip-shared-libs-if-default_library-static.patch
 
     ./skip-timer-test.patch
   ];

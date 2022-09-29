@@ -922,7 +922,9 @@ with pkgs;
     { deps = [ dieHook ];
       substitutions = {
         shell = targetPackages.runtimeShell;
-        passthru.tests = tests.makeWrapper;
+      };
+      passthru = {
+        tests = tests.makeWrapper;
       };
     }
     ../build-support/setup-hooks/make-wrapper.sh;
@@ -2201,7 +2203,10 @@ with pkgs;
 
   brewtarget = libsForQt514.callPackage ../applications/misc/brewtarget { } ;
 
-  stdenvBootstrapTools = if stdenv.hostPlatform.isDarwin then
+  # Derivation's result is not used by nixpkgs. Useful for validation for
+  # regressions of bootstrapTools on hydra and on ofborg. Example:
+  #     pkgsCross.aarch64-multiplatform.freshBootstrapTools.build
+  freshBootstrapTools = if stdenv.hostPlatform.isDarwin then
     callPackage ../stdenv/darwin/make-bootstrap-tools.nix {
       localSystem = stdenv.buildPlatform;
       crossSystem =
@@ -2209,7 +2214,7 @@ with pkgs;
     }
   else if stdenv.hostPlatform.isLinux then
     callPackage ../stdenv/linux/make-bootstrap-tools.nix {}
-  else throw "stdenvBootstrapTools: unknown hostPlatform ${stdenv.hostPlatform.config}";
+  else throw "freshBootstrapTools: unknown hostPlatform ${stdenv.hostPlatform.config}";
 
   boxes = callPackage ../tools/text/boxes { };
 
@@ -14571,11 +14576,11 @@ with pkgs;
     inherit (darwin) apple_sdk;
   };
 
-  rust_1_63 = callPackage ../development/compilers/rust/1_63.nix {
+  rust_1_64 = callPackage ../development/compilers/rust/1_64.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_14 = llvmPackages_14.libllvm;
   };
-  rust = rust_1_63;
+  rust = rust_1_64;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
@@ -14584,8 +14589,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  rustPackages_1_63 = rust_1_63.packages.stable;
-  rustPackages = rustPackages_1_63;
+  rustPackages_1_64 = rust_1_64.packages.stable;
+  rustPackages = rustPackages_1_64;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
 
@@ -24508,7 +24513,9 @@ with pkgs;
 
   iwd = callPackage ../os-specific/linux/iwd { };
 
-  jfbview = callPackage ../os-specific/linux/jfbview { };
+  jfbview = callPackage ../os-specific/linux/jfbview {
+    imlib2 = imlib2Full;
+  };
   jfbpdf = jfbview.override {
     imageSupport = false;
   };
@@ -28035,7 +28042,9 @@ with pkgs;
 
   fdupes = callPackage ../tools/misc/fdupes { };
 
-  feh = callPackage ../applications/graphics/feh { };
+  feh = callPackage ../applications/graphics/feh {
+    imlib2 = imlib2Full;
+  };
 
   feishu = callPackage ../applications/networking/instant-messengers/feishu {};
 
@@ -30716,7 +30725,9 @@ with pkgs;
 
   pqiv = callPackage ../applications/graphics/pqiv { };
 
-  qiv = callPackage ../applications/graphics/qiv { };
+  qiv = callPackage ../applications/graphics/qiv {
+    imlib2 = imlib2Full;
+  };
 
   premid = callPackage ../applications/misc/premid { };
 
@@ -31259,9 +31270,13 @@ with pkgs;
 
   swingsane = callPackage ../applications/graphics/swingsane { };
 
-  sxiv = callPackage ../applications/graphics/sxiv { };
+  sxiv = callPackage ../applications/graphics/sxiv {
+    imlib2 = imlib2Full;
+  };
 
-  nsxiv = callPackage ../applications/graphics/nsxiv { };
+  nsxiv = callPackage ../applications/graphics/nsxiv {
+    imlib2 = imlib2Full;
+  };
 
   resilio-sync = callPackage ../applications/networking/resilio-sync { };
 

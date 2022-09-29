@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [
-    autoreconfHook libsodium ncurses check libconfig
+    libsodium ncurses check libconfig
   ] ++ lib.optionals (!stdenv.isAarch32) [
     libopus
   ];

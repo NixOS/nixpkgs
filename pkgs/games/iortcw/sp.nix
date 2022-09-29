@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [
     "-I${SDL2.dev}/include/SDL2"
-    "-I${opusfile}/include/opus"
+    "-I${opusfile.dev}/include/opus"
   ];
   NIX_CFLAGS_LINK = [ "-lSDL2" ];
 

@@ -145,8 +145,10 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl ]
-    ++ optionals stdenv.isDarwin [ libiconv Security ]
+    ++ optionals stdenv.isDarwin [ Security ]
     ++ optional (!withBundledLLVM) llvmShared;
+
+  depsTargetTargetPropagated = optionals stdenv.isDarwin [ libiconv ];
 
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;

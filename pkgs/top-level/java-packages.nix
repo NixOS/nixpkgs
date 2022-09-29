@@ -45,7 +45,7 @@ in {
     mkBootstrap = adoptopenjdk: path: args:
       /* adoptopenjdk not available for i686, so fall back to our old builds for bootstrapping */
       if   adoptopenjdk.jdk-hotspot.meta.available
-      then adoptopenjdk.jdk-hotspot
+      then adoptopenjdk.jdk-hotspot.override { gtkSupport = false; }
       else callPackage path args;
 
     mkOpenjdk = path-linux: path-darwin: args:
