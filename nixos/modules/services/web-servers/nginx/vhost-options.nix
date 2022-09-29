@@ -180,6 +180,33 @@ with lib;
       description = lib.mdDoc "Path to root SSL certificate for stapling and client certificates.";
     };
 
+    sslCiphers = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384";
+      description = lib.mdDoc "Ciphers to choose from when negotiating TLS handshakes.";
+    };
+
+    sslProtocols = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "TLSv1 TLSv1.1 TLSv1.2 TLSv1.3";
+      description = lib.mdDoc "Allowed TLS protocol versions.";
+    };
+
+    sslDhparam = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/path/to/dhparams.pem";
+      description = lib.mdDoc "Path to DH parameters file.";
+    };
+
+    recommendedTlsSettings = mkOption {
+      default = false;
+      type = types.bool;
+      description = lib.mdDoc "Enable recommended TLS settings.";
+    };
+
     http2 = mkOption {
       type = types.bool;
       default = true;
