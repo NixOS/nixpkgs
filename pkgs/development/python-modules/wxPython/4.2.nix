@@ -6,7 +6,6 @@
 , pkg-config
 , python
 , isPy27
-, isPy310
 , doxygen
 , cairo
 , ncurses
@@ -14,6 +13,8 @@
 , wxGTK
 , pillow
 , numpy
+, attrdict
+, sip
 , libXinerama
 , libSM
 , libXxf86vm
@@ -32,14 +33,12 @@ let
 in
 buildPythonPackage rec {
   pname = "wxPython";
-  version = "4.1.1";
-  # wxPython v4.1 doesn't work with Python v3.10
-  # https://github.com/wxWidgets/Phoenix/issues/2016
-  disabled = isPy27 || isPy310;
+  version = "4.2.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0a1mdhdkda64lnwm1dg0dlrf9rs4gkal3lra6hpqbwn718cf7r80";
+    sha256 = "663cebc4509d7e5d113518865fe274f77f95434c5d57bc386ed58d65ceed86c7";
   };
 
   # https://github.com/NixOS/nixpkgs/issues/75759
@@ -53,6 +52,7 @@ buildPythonPackage rec {
     pkg-config
   ] ++ lib.optionals stdenv.isLinux [
     autoPatchelfHook
+    sip
   ];
 
   buildInputs = [
@@ -73,7 +73,7 @@ buildPythonPackage rec {
     webkitgtk
   ];
 
-  propagatedBuildInputs = [ pillow numpy ];
+  propagatedBuildInputs = [ pillow numpy attrdict ];
 
   DOXYGEN = "${doxygen}/bin/doxygen";
 
