@@ -73,6 +73,7 @@ let
       qtshadertools = callPackage ./modules/qtshadertools.nix { };
       qtspeech = callPackage ./modules/qtspeech.nix { };
       qtquick3d = callPackage ./modules/qtquick3d.nix { };
+      qtquick3dphysics = callPackage ./modules/qtquick3dphysics.nix { };
       qtquicktimeline = callPackage ./modules/qtquicktimeline.nix { };
       qtremoteobjects = callPackage ./modules/qtremoteobjects.nix { };
       qtsvg = callPackage ./modules/qtsvg.nix { };
