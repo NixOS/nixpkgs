@@ -18,7 +18,10 @@ stdenv.mkDerivation rec {
     ./inetutils-1_9-PATH_PROCNET_DEV.patch
     (fetchpatch {
       name = "CVE-2022-39028.patch";
-      url = "https://sources.debian.org/data/main/i/inetutils/2%3A2.3-5/debian/patches/inetutils-telnetd-EC_EL_null_deref.patch";
+      urls = [
+        "https://sources.debian.org/data/main/i/inetutils/2%3A2.3-5/debian/patches/inetutils-telnetd-EC_EL_null_deref.patch"
+        "https://sources.debian.org/data/main/i/inetutils/2%3A2.3-6/debian/patches/inetutils-telnetd-EC_EL_null_deref.patch"
+      ];
       sha256 = "sha256-NYNDbEk3q3EhQdJaR12JBbnjJIRRpOcKLBF/EJJPiGU=";
     })
   ];
