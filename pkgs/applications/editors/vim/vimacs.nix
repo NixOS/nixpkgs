@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       --replace '-gvim}' '-@bin@/bin/vim -g}' \
       --replace '--cmd "let g:VM_Enabled = 1"' \
                 '--cmd "let g:VM_Enabled = 1" --cmd "set rtp^=@rtp@" ${vimacsExtraArgs}' \
-      --replace @rtp@ ${vimPlugins.vimacs.rtp} \
+      --replace @rtp@ ${vimPlugins.vimacs} \
       --replace @bin@ ${vimPackage}
     for prog in vm gvm gvimacs vmdiff vimacsdiff
     do
