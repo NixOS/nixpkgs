@@ -1,4 +1,4 @@
-{ stdenv, nixosTests, lib, fetchurl, pkg-config, jansson, pcre
+{ stdenv, nixosTests, lib, fetchurl, pkg-config, jansson, pcre, libxcrypt
 # plugins: list of strings, eg. [ "python2" "python3" ]
 , plugins ? []
 , pam, withPAM ? stdenv.isLinux
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python3 pkg-config ];
 
-  buildInputs =  [ jansson pcre ]
+  buildInputs =  [ jansson pcre libxcrypt ]
               ++ lib.optional withPAM pam
               ++ lib.optional withSystemd systemd
               ++ lib.optional withCap libcap
