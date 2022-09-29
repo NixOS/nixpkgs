@@ -18,7 +18,6 @@
 stdenv.mkDerivation rec {
   pname = "hashlink";
   version = "1.12";
-  
   src = fetchFromGitHub {
     owner = "HaxeFoundation";
     repo = "hashlink";
@@ -49,7 +48,6 @@ stdenv.mkDerivation rec {
   postFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libhl.dylib $out/lib/libhl.dylib $out/bin/hl
   '';
-  
   meta = with lib; {
     description = "A virtual machine for Haxe";
     homepage = "https://hashlink.haxe.org/";
