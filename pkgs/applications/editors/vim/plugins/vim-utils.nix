@@ -5,6 +5,7 @@
 , fetchFromGitHub, runtimeShell
 , python3
 , callPackage, makeSetupHook
+, linkFarm
 }:
 
 /*
@@ -165,6 +166,10 @@ let
 
   rtpPath = ".";
 
+  vimFarm = prefix: name: drvs:
+    let mkEntryFromDrv = drv: { name = "${prefix}/${drv.pname}"; path = drv; };
+    in linkFarm name (map mkEntryFromDrv drvs);
+
   /* Generates a packpath folder as expected by vim
        Example:
        packDir (myVimPackage.{ start = [ vimPlugins.vim-fugitive ]; opt = [] })
@@ -172,16 +177,6 @@ let
   */
   packDir = packages:
   let
-    linkVimlPlugin = plugin: packageName: dir: ''
-      mkdir -p $out/pack/${packageName}/${dir}
-      if test -e "$out/pack/${packageName}/${dir}/${lib.getName plugin}"; then
-        printf "\nERROR - Duplicated vim plugin: ${lib.getName plugin}\n\n"
-        exit 1
-      fi
-      ln -sf ${plugin}/${rtpPath} $out/pack/${packageName}/${dir}/${lib.getName plugin}
-    '';
-
-
     packageLinks = packageName: {start ? [], opt ? []}:
     let
       # `nativeImpl` expects packages to be derivations, not strings (as
@@ -194,26 +189,23 @@ let
       python3Env = python3.withPackages (ps:
         lib.flatten (builtins.map (plugin: (plugin.python3Dependencies or (_: [])) ps) allPlugins)
       );
-    in
-      [ "mkdir -p $out/pack/${packageName}/start" ]
-      # To avoid confusion, even dependencies of optional plugins are added
-      # to `start` (except if they are explicitly listed as optional plugins).
-      ++ (builtins.map (x: linkVimlPlugin x packageName "start") allPlugins)
-      ++ ["mkdir -p $out/pack/${packageName}/opt"]
-      ++ (builtins.map (x: linkVimlPlugin x packageName "opt") opt)
+
+      packdirStart = vimFarm "pack/${packageName}/start" "packdir-start" allPlugins;
+      packdirOpt = vimFarm "pack/${packageName}/opt" "packdir-opt" opt;
       # Assemble all python3 dependencies into a single `site-packages` to avoid doing recursive dependency collection
       # for each plugin.
       # This directory is only for python import search path, and will not slow down the startup time.
-      ++ [
-        "mkdir -p $out/pack/${packageName}/start/__python3_dependencies"
-        "ln -s ${python3Env}/${python3Env.sitePackages} $out/pack/${packageName}/start/__python3_dependencies/python3"
-      ];
+      # see :help python3-directory for more details
+      python3link = runCommand "vim-python3-deps" {} ''
+        mkdir -p $out/pack/${packageName}/start/__python3_dependencies
+        ln -s ${python3Env}/${python3Env.sitePackages} $out/pack/${packageName}/start/__python3_dependencies/python3
+      '';
+    in
+      [ packdirStart packdirOpt python3link ];
   in
-      stdenv.mkDerivation {
-        name = "vim-pack-dir";
-        src = ./.;
-        installPhase = lib.concatStringsSep "\n" (lib.flatten (lib.mapAttrsToList packageLinks packages));
-        preferLocalBuild = true;
+    buildEnv {
+      name = "vim-pack-dir";
+      paths = (lib.flatten (lib.mapAttrsToList packageLinks packages));
     };
 
   nativeImpl = packages:
