@@ -685,8 +685,10 @@ in
               (if machine.sshKey != null then machine.sshKey else "-")
               (toString machine.maxJobs)
               (toString machine.speedFactor)
-              (concatStringsSep "," (machine.supportedFeatures ++ machine.mandatoryFeatures))
-              (concatStringsSep "," machine.mandatoryFeatures)
+              (let res = (machine.supportedFeatures ++ machine.mandatoryFeatures);
+               in if (res == []) then "-" else (concatStringsSep "," res))
+              (let res = machine.mandatoryFeatures;
+               in if (res == []) then "-" else (concatStringsSep "," machine.mandatoryFeatures))
             ]
             ++ optional (isNixAtLeast "2.4pre") (if machine.publicHostKey != null then machine.publicHostKey else "-")))
             + "\n"
