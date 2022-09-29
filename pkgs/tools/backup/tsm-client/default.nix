@@ -52,17 +52,17 @@
 # going to the `downloadPage` (see `meta` below).
 # Find the "Backup-archive client" table on that page.
 # Look for "Download Documents" of the latest release.
-# Here, two links must be checked:
+# Here, two links must be checked if existing:
 # * "IBM Spectrum Protect Client ... Downloads and READMEs":
 #   In the table at the page's bottom,
 #   check the date of the "Linux x86_64 client"
 # * "IBM Spectrum Protect BA client ... interim fix downloads"
-# Look for the "Linux x86_64 client" rows
+# Look for the "Linux x86_64 client ..." rows
 # in the table at the bottom of each page.
 # Follow the "HTTPS" link of the row with the latest date stamp.
 # In the directory listing to show up, pick the big `.tar` file.
 #
-# (as of 2022-08-13)
+# (as of 2022-09-29)
 
 
 let
@@ -107,10 +107,10 @@ let
 
   unwrapped = stdenv.mkDerivation rec {
     name = "tsm-client-${version}-unwrapped";
-    version = "8.1.15.1";
+    version = "8.1.15.2";
     src = fetchurl {
       url = mkSrcUrl version;
-      hash = "sha512-DURIMlWlmu+l2UT3bAMaFPlwO+UlrfgaYCsm/JonvvC0K0WallhNKFd7sp0amPkU+4QHE2fkFrTGE3/lY+fghQ==";
+      hash = "sha512-ljygVoW7zR+LVHf4LSoBn3qEHISobsxheLxs9NyKWQiwPWpfhSgJO+bX4QRzAmrpSTNrETxHkuXqzGSHaaBlzg==";
     };
     inherit meta passthru;
 
