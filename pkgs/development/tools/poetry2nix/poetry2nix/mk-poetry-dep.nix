@@ -172,10 +172,7 @@ pythonPackages.callPackage
               rev = source.resolved_reference or source.reference;
               ref = sourceSpec.branch or (if sourceSpec ? tag then "refs/tags/${sourceSpec.tag}" else "HEAD");
             } // (
-              let
-                nixVersion = builtins.substring 0 3 builtins.nixVersion;
-              in
-              lib.optionalAttrs ((sourceSpec ? rev) && (lib.versionAtLeast nixVersion "2.4")) {
+              lib.optionalAttrs ((sourceSpec ? rev) && (lib.versionAtLeast builtins.nixVersion "2.4")) {
                 allRefs = true;
               }
             ))
