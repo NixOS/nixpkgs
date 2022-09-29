@@ -49,7 +49,7 @@ rec {
     , extraPythonPackages ? (_ : [])
     , interactive ? {}
     } @ t:
-      runTest {
+      (evalTest {
         imports = [
           { _file = "makeTest parameters"; config = t; }
           {
@@ -59,7 +59,7 @@ rec {
             };
           }
         ];
-      };
+      }).config;
 
   simpleTest = as: (makeTest as).test;
 

@@ -45,9 +45,9 @@ let
 
   inherit
     (rec {
-      doRunTest = arg: (import ../lib/testing-python.nix { inherit system pkgs; }).runTest {
-        imports = [ arg { inherit callTest; } ];
-      };
+      doRunTest = arg: ((import ../lib/testing-python.nix { inherit system pkgs; }).evalTest {
+        imports = [ arg ];
+      }).config.result;
       findTests = tree:
         if tree?recurseForDerivations && tree.recurseForDerivations
         then
