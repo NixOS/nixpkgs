@@ -285,6 +285,7 @@
 , "smartdc"
 , "snyk"
 , "socket.io"
+, "solidity-language-server"
 , "speed-test"
 , "sql-formatter"
 , "ssb-server"
