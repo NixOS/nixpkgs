@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, i3 }:
+{ fetchFromGitHub, lib, i3, pcre }:
 
 i3.overrideAttrs (oldAttrs: rec {
   pname = "i3-rounded";
@@ -10,6 +10,8 @@ i3.overrideAttrs (oldAttrs: rec {
     rev = "524c9f7b50f8c540b2ae3480b242c30d8775f98e";
     sha256 = "0y7m1s1y8f9vgkp7byi33js8n4rigiykd71s936i5d4rwlzrxiwm";
   };
+
+  buildInputs = oldAttrs.buildInputs ++ [ pcre ];
 
   meta = with lib; {
     description = "A fork of i3-gaps that adds rounding to window corners";

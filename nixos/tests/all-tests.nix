@@ -45,9 +45,9 @@ let
 
   inherit
     (rec {
-      doRunTest = arg: (import ../lib/testing-python.nix { inherit system pkgs; }).runTest {
-        imports = [ arg { inherit callTest; } ];
-      };
+      doRunTest = arg: ((import ../lib/testing-python.nix { inherit system pkgs; }).evalTest {
+        imports = [ arg ];
+      }).config.result;
       findTests = tree:
         if tree?recurseForDerivations && tree.recurseForDerivations
         then
@@ -207,6 +207,7 @@ in {
   fluidd = handleTest ./fluidd.nix {};
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
   freeswitch = handleTest ./freeswitch.nix {};
+  freshrss = handleTest ./freshrss.nix {};
   frr = handleTest ./frr.nix {};
   fsck = handleTest ./fsck.nix {};
   ft2-clone = handleTest ./ft2-clone.nix {};
@@ -648,6 +649,9 @@ in {
   user-home-mode = handleTest ./user-home-mode.nix {};
   uwsgi = handleTest ./uwsgi.nix {};
   v2ray = handleTest ./v2ray.nix {};
+  varnish60 = handleTest ./varnish.nix { package = pkgs.varnish60; };
+  varnish71 = handleTest ./varnish.nix { package = pkgs.varnish71; };
+  varnish72 = handleTest ./varnish.nix { package = pkgs.varnish72; };
   vault = handleTest ./vault.nix {};
   vault-dev = handleTest ./vault-dev.nix {};
   vault-postgresql = handleTest ./vault-postgresql.nix {};

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, pcre, pcre2, jemalloc, libxslt, groff, ncurses, pkg-config, readline, libedit
-, coreutils, python3, makeWrapper }:
+, coreutils, python3, makeWrapper, nixosTests }:
 
 let
   common = { version, hash, extraNativeBuildInputs ? [] }:
@@ -11,8 +11,6 @@ let
         url = "https://varnish-cache.org/_downloads/${pname}-${version}.tgz";
         inherit hash;
       };
-
-      passthru.python = python3;
 
       nativeBuildInputs = with python3.pkgs; [ pkg-config docutils sphinx makeWrapper];
       buildInputs = [
@@ -37,6 +35,11 @@ let
 
       outputs = [ "out" "dev" "man" ];
 
+      passthru = {
+        python = python3;
+        tests = nixosTests."varnish${builtins.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor version)}";
+      };
+
       meta = with lib; {
         broken = stdenv.isDarwin;
         description = "Web application accelerator also known as a caching HTTP reverse proxy";
@@ -48,12 +51,19 @@ let
     };
 in
 {
+  # EOL TBA
   varnish60 = common {
     version = "6.0.10";
     hash = "sha256-a4W/dI7jeaoI43UE+G6tS6fgzEDqsXI8CUv+Wh4HJus=";
   };
+  # EOL 2023-03-15. TODO: remove ahead of 22.11 release? if not, remove for 23.05
   varnish71 = common {
     version = "7.1.1";
     hash = "sha256-LK++JZDn1Yp7rIrZm+kuRA/k04raaBbdiDbyL6UToZA=";
+  };
+  # EOL 2023-09-15
+  varnish72 = common {
+    version = "7.2.0";
+    hash = "sha256-HaipftX3t9TV4E/FyW/JqFyzog0HbrorGJUfSzBsloY=";
   };
 }
