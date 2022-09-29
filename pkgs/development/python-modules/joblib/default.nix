@@ -22,6 +22,10 @@ buildPythonPackage rec {
     sha256 = "4158fcecd13733f8be669be0683b96ebdbbd38d23559f54dca7205aea1bf1e35";
   };
 
+  patches = [
+    ./1.1.0-CVE-2022-21797.patch
+  ];
+
   checkInputs = [ sphinx numpydoc pytestCheckHook ];
   propagatedBuildInputs = [ lz4 setuptools ];
 
