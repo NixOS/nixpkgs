@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, fetchFromGitHub, autoreconfHook, coreutils, pkg-config, perl, python3Packages, libiconv, jansson }:
+{ lib, stdenv, buildPackages, fetchFromGitHub, autoreconfHook, coreutils, pkg-config, perl, python3Packages, libiconv, jansson, libxml2, libyaml, pcre2 }:
 
 stdenv.mkDerivation rec {
   pname = "universal-ctags";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ autoreconfHook pkg-config python3Packages.docutils ];
-  buildInputs = [ jansson ] ++ lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ jansson libxml2 libyaml pcre2 ] ++ lib.optional stdenv.isDarwin libiconv;
 
   # to generate makefile.in
   autoreconfPhase = ''
