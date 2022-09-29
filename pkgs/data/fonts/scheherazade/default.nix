@@ -1,3 +1,4 @@
+# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
 { lib, fetchzip, version ? "3.300" }:
 
 let
@@ -6,20 +7,12 @@ let
     "2.100" = "1g5f5f9gzamkq3kqyf7vbzvl4rdj3wmjf6chdrbxksrm3rnb926z";
     "3.300" = "1bja1ma1mnna0qlk3dis31cvq5z1kgcqj7wjp8ml03zc5mpa2wb2";
   }."${version}";
-
-in fetchzip rec {
   name = "scheherazade${lib.optionalString new "-new"}-${version}";
 
-  url = "http://software.sil.org/downloads/r/scheherazade/Scheherazade${lib.optionalString new "New"}-${version}.zip";
+in (fetchzip rec {
+  inherit name;
 
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -l $downloadedFile
-    unzip -j $downloadedFile \*.ttf                        -d $out/share/fonts/truetype
-    unzip    $downloadedFile \*/documentation/\*           -d $out/share/doc/
-    mv $out/share/doc/* $out/share/doc/${name}
-    unzip -j $downloadedFile \*/FONTLOG.txt  \*/README.txt -d $out/share/doc/${name}
-  '';
+  url = "http://software.sil.org/downloads/r/scheherazade/Scheherazade${lib.optionalString new "New"}-${version}.zip";
 
   inherit sha256;
 
@@ -47,4 +40,13 @@ in fetchzip rec {
     license = licenses.ofl;
     platforms = platforms.all;
   };
-}
+}).overrideAttrs (_: {
+  postFetch = ''
+    mkdir -p $out/share/{doc,fonts}
+    unzip -l $downloadedFile
+    unzip -j $downloadedFile \*.ttf                        -d $out/share/fonts/truetype
+    unzip    $downloadedFile \*/documentation/\*           -d $out/share/doc/
+    mv $out/share/doc/* $out/share/doc/${name}
+    unzip -j $downloadedFile \*/FONTLOG.txt  \*/README.txt -d $out/share/doc/${name}
+  '';
+})

@@ -1,27 +1,13 @@
+# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
 { lib, fetchzip }:
 
 let
   version = "6.101";
-in fetchzip rec {
   name = "gentium-${version}";
+in (fetchzip rec {
+  inherit name;
 
   url = "http://software.sil.org/downloads/r/gentium/GentiumPlus-${version}.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -l $downloadedFile
-    unzip -j $downloadedFile \*.ttf \
-      -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \
-      \*/FONTLOG.txt \
-      \*/README.txt \
-      -d $out/share/doc/${name}
-    unzip -j $downloadedFile \
-      \*/documentation/\*.html \
-      \*/documentation/\*.txt \
-      -x \*/documentation/source/\* \
-      -d $out/share/doc/${name}/documentation
-  '';
 
   sha256 = "sha256-+T5aUlqQYDWRp4/4AZzsREHgjAnOeUB6qn1GAI0A5hE=";
 
@@ -48,4 +34,20 @@ in fetchzip rec {
     license = licenses.ofl;
     platforms = platforms.all;
   };
-}
+}).overrideAttrs (_: {
+  postFetch = ''
+    mkdir -p $out/share/{doc,fonts}
+    unzip -l $downloadedFile
+    unzip -j $downloadedFile \*.ttf \
+      -d $out/share/fonts/truetype
+    unzip -j $downloadedFile \
+      \*/FONTLOG.txt \
+      \*/README.txt \
+      -d $out/share/doc/${name}
+    unzip -j $downloadedFile \
+      \*/documentation/\*.html \
+      \*/documentation/\*.txt \
+      -x \*/documentation/source/\* \
+      -d $out/share/doc/${name}/documentation
+  '';
+})

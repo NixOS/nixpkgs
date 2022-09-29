@@ -1,14 +1,10 @@
+# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
 { lib, fetchzip }:
 
-fetchzip {
+(fetchzip {
   name = "lato-2.0";
 
   url = "https://www.latofonts.com/download/Lato2OFL.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/lato
-  '';
 
   sha256 = "1amwn6vcaggxrd2s4zw21s2pr47zmzdf2xfy4x9lxa2cd9bkhvg5";
 
@@ -36,4 +32,9 @@ fetchzip {
     platforms = platforms.all;
     maintainers = with maintainers; [ chris-martin ];
   };
-}
+}).overrideAttrs (_: {
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/lato
+  '';
+})
