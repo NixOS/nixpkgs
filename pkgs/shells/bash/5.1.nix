@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ]
   # bionic libc is super weird and has issues with fortify outside of its own libc, check this comment:
   # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
+  # or you can check libc/include/sys/cdefs.h in bionic source code
   ++ optional (stdenv.hostPlatform.libc == "bionic") "fortify";
 
   outputs = [ "out" "dev" "man" "doc" "info" ];
