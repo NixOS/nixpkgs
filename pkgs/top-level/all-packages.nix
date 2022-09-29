@@ -32091,6 +32091,8 @@ with pkgs;
     imlib2 = imlib2-nox;
   };
 
+  watchmate = callPackage ../applications/misc/watchmate { };
+
   watson = callPackage ../applications/office/watson { };
 
   wapiti = callPackage ../tools/security/wapiti { };
