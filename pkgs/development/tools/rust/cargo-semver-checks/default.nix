@@ -37,6 +37,6 @@ rustPlatform.buildRustPackage rec {
     description = "A tool to scan your Rust crate for semver violations";
     homepage = "https://github.com/obi1kenobi/cargo-semver-check";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }
