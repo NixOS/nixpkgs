@@ -247,9 +247,6 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     rm -r pkg/obj
-    # Contains the wrong perl shebang when cross compiling,
-    # since it is not used for anything we can deleted as well.
-    rm src/regexp/syntax/make_perl_groups.pl
   '' + (if (stdenv.buildPlatform != stdenv.hostPlatform) then ''
     mv bin/*_*/* bin
     rmdir bin/*_*
