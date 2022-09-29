@@ -71,6 +71,7 @@ let
       qtserialbus = callPackage ./modules/qtserialbus.nix { };
       qtserialport = callPackage ./modules/qtserialport.nix { };
       qtshadertools = callPackage ./modules/qtshadertools.nix { };
+      qtspeech = callPackage ./modules/qtspeech.nix { };
       qtquick3d = callPackage ./modules/qtquick3d.nix { };
       qtquicktimeline = callPackage ./modules/qtquicktimeline.nix { };
       qtremoteobjects = callPackage ./modules/qtremoteobjects.nix { };
