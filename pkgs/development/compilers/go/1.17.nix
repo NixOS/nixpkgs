@@ -229,7 +229,12 @@ stdenv.mkDerivation rec {
   '';
 
   postBuild = ''
-    (cd src && ./make.bash)
+    # Invoke the bash interpreter directly on make.bash script to allow using overrideAttrs with
+    # dontPatch set to true (disables postPatch that runs patchShebangs) and doCheck set to false
+    # (since Go test suite assumes that the environment is not sandboxed) as a workaround for
+    # https://github.com/NixOS/nixpkgs/issues/125198 until necessary changes are implemented in
+    # upstream Go source tree.
+    (cd src && bash make.bash)
   '';
 
   doCheck = stdenv.hostPlatform == stdenv.targetPlatform && !stdenv.isDarwin;

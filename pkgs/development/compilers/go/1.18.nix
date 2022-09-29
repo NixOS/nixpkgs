@@ -130,9 +130,14 @@ stdenv.mkDerivation rec {
     ''}
     ulimit -a
 
+    # Invoke the bash interpreter directly on make.bash script to allow using overrideAttrs with
+    # dontPatch set to true (disables postPatch that runs patchShebangs) as a workaround for
+    # https://github.com/NixOS/nixpkgs/issues/125198 until necessary changes are implemented in
+    # upstream Go source tree.
     pushd src
-    ./make.bash
+    bash make.bash
     popd
+
     runHook postBuild
   '';
 
