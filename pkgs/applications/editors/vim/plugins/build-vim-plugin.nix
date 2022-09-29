@@ -36,9 +36,7 @@ rec {
         runHook postInstall
       '';
     });
-    in toVimPlugin(drv.overrideAttrs(oa: {
-      rtp = "${drv}";
-    }));
+    in toVimPlugin drv;
 
   buildVimPluginFrom2Nix = attrs: buildVimPlugin ({
     # vim plugins may override this
