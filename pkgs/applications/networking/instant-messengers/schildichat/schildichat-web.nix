@@ -79,8 +79,10 @@ in stdenv.mkDerivation rec {
     runHook preBuild
 
     pushd element-web
-    node scripts/copy-res.js
-    node_modules/.bin/webpack --progress --mode production
+    export VERSION=${version}
+    yarn build:res --offline
+    yarn build:module_system --offline
+    yarn build:bundle --offline
     popd
 
     runHook postBuild
