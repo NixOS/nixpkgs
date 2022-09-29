@@ -7,14 +7,14 @@
 
 let
   pname = "liquidsoap";
-  version = "2.0.6";
+  version = "2.1.2";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/savonet/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-1wD9BApbDA/ovzZoniay+jciP/V2C8EoGQehd5N8PPQ=";
+    sha256 = "sha256-e7iCBY9xKQZrkQ+IlahE1KEbDW89tTIlpGvHZubh3bM=";
   };
 
   postFixup = ''
@@ -35,11 +35,13 @@ stdenv.mkDerivation {
       ocamlPackages.mm
       ocamlPackages.ocaml_pcre
       ocamlPackages.menhir ocamlPackages.menhirLib
+      ocamlPackages.camomile
+      ocamlPackages.ocurl
+      ocamlPackages.uri
       ocamlPackages.sedlex
 
       # Recommended dependencies
-      ocamlPackages.camomile
-      ocamlPackages.samplerate
+      ocamlPackages.ffmpeg
 
       # Optional dependencies
       ocamlPackages.camlimages
@@ -51,8 +53,6 @@ stdenv.mkDerivation {
       ocamlPackages.dssi
       ocamlPackages.faad
       ocamlPackages.fdkaac
-      ocamlPackages.srt
-      ocamlPackages.ffmpeg
       ocamlPackages.flac
       ocamlPackages.frei0r
       ocamlPackages.gstreamer
@@ -60,6 +60,7 @@ stdenv.mkDerivation {
       ocamlPackages.ladspa
       ocamlPackages.lame
       ocamlPackages.lastfm
+      ocamlPackages.lilv
       ocamlPackages.lo
       ocamlPackages.mad
       ocamlPackages.magic
@@ -68,6 +69,7 @@ stdenv.mkDerivation {
       ocamlPackages.portaudio
       ocamlPackages.pulseaudio
       ocamlPackages.shine
+      ocamlPackages.samplerate
       ocamlPackages.soundtouch
       ocamlPackages.speex
       ocamlPackages.srt
@@ -82,10 +84,7 @@ stdenv.mkDerivation {
       ocamlPackages.tsdl-ttf
 
       # Undocumented dependencies
-      ocamlPackages.ocurl
-      ocamlPackages.lilv
       ocamlPackages.graphics
-      ocamlPackages.yojson
       ocamlPackages.cohttp-lwt-unix
     ];
 
