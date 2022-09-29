@@ -33,7 +33,7 @@
 
     meta = with lib; {
       description = "This is an extension for creating living hinges in Inkscape.";
-      homepage = "https://github.com/lifelike/hexmapextension";
+      homepage = "https://github.com/stogo/Inkscape_LivingHinge"
       license = licenses.gpl2Plus;
       maintainers = [ maintainers.raboof ];
       platforms = platforms.all;
