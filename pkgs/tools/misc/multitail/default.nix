@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  makeFlags = lib.optionals stdenv.isDarwin [ "-f" "makefile.macosx" ];
-
   installPhase = ''
     mkdir -p $out/bin
     cp bin/multitail $out/bin
