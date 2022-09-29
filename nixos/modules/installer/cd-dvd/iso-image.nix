@@ -53,6 +53,13 @@ let
       image = "/boot/${config.system.boot.loader.kernelFile}";
       initrd = "/boot/initrd";
     };
+
+  targetArch =
+    if config.boot.loader.grub.forcei686 then
+      "ia32"
+    else
+      stdenv.hostPlatform.efiArch;
+
   in
     menuBuilderGrub2
     finalCfg
@@ -430,19 +437,6 @@ let
       # Verify the FAT partition.
       fsck.vfat -vn "$out"
     ''; # */
-
-  # Name used by UEFI for architectures.
-  targetArch =
-    if pkgs.stdenv.isi686 || config.boot.loader.grub.forcei686 then
-      "ia32"
-    else if pkgs.stdenv.isx86_64 then
-      "x64"
-    else if pkgs.stdenv.isAarch32 then
-      "arm"
-    else if pkgs.stdenv.isAarch64 then
-      "aa64"
-    else
-      throw "Unsupported architecture";
 
   # Syslinux (and isolinux) only supports x86-based architectures.
   canx86BiosBoot = pkgs.stdenv.hostPlatform.isx86;
