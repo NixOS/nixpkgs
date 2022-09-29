@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , makeWrapper
+, wrapGAppsHook
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -58,11 +59,13 @@ in stdenv.mkDerivation rec {
         sha256 = "sha256-xBfpBkYff1X26Iu0Ee03lIiR6UdJOiaG+kZMVotG0Hc=";
       };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  buildInputs = [ glib ];
 
   dontConfigure = true;
   dontBuild = true;
   dontPatchELF = true;
+  dontWrapGApps = true;
 
   installPhase =
     let rpath = lib.makeLibraryPath [
@@ -123,16 +126,20 @@ in stdenv.mkDerivation rec {
         patchelf --set-rpath ${rpath}:$out/share/1password $file
       done
 
-      # Electron is trying to open udev via dlopen()
-      # and for some reason that doesn't seem to be impacted from the rpath.
-      # Adding udev to LD_LIBRARY_PATH fixes that.
-      # Make xdg-open overrideable at runtime.
-      makeWrapper $out/share/1password/1password $out/bin/1password \
-        --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
-
       runHook postInstall
     '';
+
+  preFixup = ''
+    # Electron is trying to open udev via dlopen()
+    # and for some reason that doesn't seem to be impacted from the rpath.
+    # Adding udev to LD_LIBRARY_PATH fixes that.
+    # Make xdg-open overrideable at runtime.
+    makeWrapper $out/share/1password/1password $out/bin/1password \
+      ''${gappsWrapperArgs[@]} \
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
+  '';
+
 
   meta = with lib; {
     description = "Multi-platform password manager";

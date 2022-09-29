@@ -4147,6 +4147,8 @@ in {
 
   hatch-vcs = callPackage ../development/python-modules/hatch-vcs { };
 
+  hatch-nodejs-version = callPackage ../development/python-modules/hatch-nodejs-version { };
+
   haversine = callPackage ../development/python-modules/haversine { };
 
   hawkauthlib = callPackage ../development/python-modules/hawkauthlib { };
@@ -10426,6 +10428,10 @@ in {
   sphinxcontrib-jsmath = callPackage ../development/python-modules/sphinxcontrib-jsmath { };
 
   sphinxcontrib-katex = callPackage ../development/python-modules/sphinxcontrib-katex { };
+
+  sphinxcontrib-mscgen = callPackage ../development/python-modules/sphinxcontrib-mscgen {
+    inherit (pkgs) mscgen;
+  };
 
   sphinxcontrib-nwdiag = callPackage ../development/python-modules/sphinxcontrib-nwdiag { };
 

@@ -103,6 +103,11 @@ in mkLicense lset) ({
     fullName = "Apache License 2.0";
   };
 
+  bola11 = {
+    url = "https://blitiri.com.ar/p/bola/";
+    fullName = "Buena Onda License Agreement 1.1";
+  };
+
   boost = {
     spdxId = "BSL-1.0";
     fullName = "Boost Software License 1.0";

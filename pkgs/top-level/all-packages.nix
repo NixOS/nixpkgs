@@ -446,6 +446,10 @@ with pkgs;
 
   dsq = callPackage ../tools/misc/dsq { };
 
+  dufs = callPackage ../servers/http/dufs {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   each = callPackage ../tools/text/each { };
 
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
@@ -2277,6 +2281,8 @@ with pkgs;
   automirror = callPackage ../tools/misc/automirror { };
 
   barman = callPackage ../tools/misc/barman { };
+
+  bartib = callPackage ../tools/misc/bartib { };
 
   base16-universal-manager = callPackage ../applications/misc/base16-universal-manager { };
 
@@ -5454,6 +5460,8 @@ with pkgs;
 
   conda = callPackage ../tools/package-management/conda { };
 
+  conduktor = callPackage ../applications/misc/conduktor { };
+
   console-bridge = callPackage ../development/libraries/console-bridge { };
 
   convbin = callPackage ../tools/misc/convbin { };
@@ -6067,7 +6075,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  inherit (nodePackages_latest) wrangler;
+  inherit (nodePackages) wrangler;
 
   wrangler_1 = callPackage ../development/tools/wrangler_1 {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security;
@@ -7041,6 +7049,11 @@ with pkgs;
 
   gnome-desktop = callPackage ../development/libraries/gnome-desktop { };
 
+  gnome-decoder = callPackage ../applications/graphics/gnome-decoder {
+     inherit (gst_all_1) gstreamer gst-plugins-base;
+     gst-plugins-bad = gst_all_1.gst-plugins-bad.override { enableZbar = true; };
+  };
+
   gnome-feeds = callPackage ../applications/networking/feedreaders/gnome-feeds {};
 
   gnome-frog = callPackage ../applications/misc/gnome-frog { };
@@ -7804,7 +7817,9 @@ with pkgs;
   ipfs = callPackage ../applications/networking/ipfs {
     openssl = openssl_1_1;
   };
-  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
+  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {
+    buildGoModule = buildGo119Module;
+  };
 
   ipfs-migrator-all-fs-repo-migrations = callPackage ../applications/networking/ipfs-migrator/all-migrations.nix { };
   ipfs-migrator-unwrapped = callPackage ../applications/networking/ipfs-migrator/unwrapped.nix { };
@@ -8519,10 +8534,7 @@ with pkgs;
 
   nodePackages_latest = dontRecurseIntoAttrs nodejs_latest.pkgs;
 
-  nodePackages = (dontRecurseIntoAttrs nodejs.pkgs).override {
-    # It does not work on 16.x: https://github.com/NixOS/nixpkgs/issues/132456
-    nodejs = nodejs-14_x;
-  };
+  nodePackages = dontRecurseIntoAttrs nodejs.pkgs;
 
   node2nix = nodePackages.node2nix;
 
@@ -10183,6 +10195,20 @@ with pkgs;
   podman-compose = python3Packages.callPackage ../applications/virtualization/podman-compose {};
 
   podman-tui = callPackage ../applications/virtualization/podman-tui { };
+
+  pods = callPackage ../applications/virtualization/pods {
+    # taken from #182618, remove when merged
+    libadwaita = libadwaita.overrideAttrs (_: rec {
+      version = "1.2.0";
+      src = fetchFromGitLab {
+        domain = "gitlab.gnome.org";
+        owner = "GNOME";
+        repo = "libadwaita";
+        rev = version;
+        hash = "sha256-3lH7Vi9M8k+GSrCpvruRpLrIpMoOakKbcJlaAc/FK+U=";
+      };
+    });
+  };
 
   pod2mdoc = callPackage ../tools/misc/pod2mdoc { };
 
@@ -12510,9 +12536,9 @@ with pkgs;
   valum = callPackage ../development/web/valum { };
 
   inherit (callPackages ../servers/varnish { })
-    varnish60 varnish71;
+    varnish60 varnish71 varnish72;
   inherit (callPackages ../servers/varnish/packages.nix { })
-    varnish60Packages varnish71Packages;
+    varnish60Packages varnish71Packages varnish72Packages;
 
   varnishPackages = varnish71Packages;
   varnish = varnishPackages.varnish;
@@ -17245,6 +17271,8 @@ with pkgs;
 
   rr = callPackage ../development/tools/analysis/rr { };
 
+  rsass = callPackage ../development/tools/misc/rsass { };
+
   rufo = callPackage ../development/tools/rufo { };
 
   samurai = callPackage ../development/tools/build-managers/samurai { };
@@ -20273,6 +20301,8 @@ with pkgs;
 
   libpam-wrapper = callPackage ../development/libraries/libpam-wrapper { };
 
+  libpanel = callPackage ../development/libraries/libpanel { };
+
   libpar2 = callPackage ../development/libraries/libpar2 { };
 
   libpcap = callPackage ../development/libraries/libpcap { };
@@ -20842,6 +20872,8 @@ with pkgs;
   MIDIVisualizer = callPackage ../applications/audio/midi-visualizer { };
 
   mimalloc = callPackage ../development/libraries/mimalloc { };
+
+  miniaudio = callPackage ../development/libraries/miniaudio { };
 
   miniz = callPackage ../development/libraries/miniz { };
 
@@ -22972,9 +23004,9 @@ with pkgs;
 
   clickhouse = callPackage ../servers/clickhouse {
     # upstream requires llvm12 as of v22.3.2.2
-    inherit (llvmPackages_12) clang-unwrapped lld llvm;
-    llvm-bintools = llvmPackages_12.bintools;
-    stdenv = llvmPackages_12.stdenv;
+    inherit (llvmPackages_13) clang-unwrapped lld llvm;
+    llvm-bintools = llvmPackages_13.bintools;
+    stdenv = llvmPackages_13.stdenv;
   };
 
   clickhouse-cli = with python3Packages; toPythonApplication clickhouse-cli;
@@ -23094,6 +23126,8 @@ with pkgs;
   freeradius = callPackage ../servers/freeradius {
     openssl = openssl_1_1;
   };
+
+  freshrss = callPackage ../servers/web-apps/freshrss { };
 
   freeswitch = callPackage ../servers/sip/freeswitch {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
@@ -23864,6 +23898,7 @@ with pkgs;
   rabbitmq-server = callPackage ../servers/amqp/rabbitmq-server {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
     elixir = elixir_1_12;
+    erlang = erlang.override { opensslPackage = openssl_1_1; };
   };
 
   radicale2 = callPackage ../servers/radicale/2.x.nix { };
@@ -27625,7 +27660,9 @@ with pkgs;
 
   epeg = callPackage ../applications/graphics/epeg { };
 
-  epgstation = callPackage ../applications/video/epgstation { };
+  epgstation = callPackage ../applications/video/epgstation {
+    nodejs = nodejs-16_x;
+  };
 
   inherit (gnome) epiphany;
 
@@ -28195,16 +28232,6 @@ with pkgs;
 
   fractal-next = callPackage ../applications/networking/instant-messengers/fractal-next {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad;
-    libadwaita = libadwaita.overrideAttrs (finalAtts: rec {
-      version = "1.2.0";
-      src = fetchFromGitLab {
-        domain = "gitlab.gnome.org";
-        owner = "GNOME";
-        repo = "libadwaita";
-        rev = version;
-        hash = "sha256-3lH7Vi9M8k+GSrCpvruRpLrIpMoOakKbcJlaAc/FK+U=";
-      };
-    });
   };
 
   fragments = callPackage ../applications/networking/p2p/fragments { };
@@ -29094,7 +29121,9 @@ with pkgs;
     subproject = "reader";
   };
 
-  jabref = callPackage ../applications/office/jabref { };
+  jabref = callPackage ../applications/office/jabref {
+    jdk = jdk18;
+  };
 
   jack_capture = callPackage ../applications/audio/jack-capture { };
 
@@ -33474,7 +33503,7 @@ with pkgs;
 
   endless-sky = callPackage ../games/endless-sky { };
 
-  enyo-doom = libsForQt5.callPackage ../games/enyo-doom { };
+  enyo-launcher = libsForQt5.callPackage ../games/enyo-launcher { };
 
   eternity = callPackage ../games/eternity-engine { };
 
@@ -35495,6 +35524,8 @@ with pkgs;
   programmer-calculator = callPackage ../applications/science/math/programmer-calculator { };
 
   bcal = callPackage ../applications/science/math/bcal { };
+
+  pagsuite = callPackage ../applications/science/math/pagsuite { };
 
   pspp = callPackage ../applications/science/math/pspp { };
 
