@@ -446,6 +446,10 @@ with pkgs;
 
   dsq = callPackage ../tools/misc/dsq { };
 
+  dufs = callPackage ../servers/http/dufs {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   each = callPackage ../tools/text/each { };
 
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
@@ -2283,6 +2287,8 @@ with pkgs;
 
   barman = callPackage ../tools/misc/barman { };
 
+  bartib = callPackage ../tools/misc/bartib { };
+
   base16-universal-manager = callPackage ../applications/misc/base16-universal-manager { };
 
   bashate = python3Packages.callPackage ../development/tools/bashate { };
@@ -3890,6 +3896,8 @@ with pkgs;
 
   facter = callPackage ../tools/system/facter { };
 
+  faketty = callPackage ../tools/misc/faketty { };
+
   fasd = callPackage ../tools/misc/fasd { };
 
   fastJson = callPackage ../development/libraries/fastjson { };
@@ -5460,6 +5468,8 @@ with pkgs;
   };
 
   conda = callPackage ../tools/package-management/conda { };
+
+  conduktor = callPackage ../applications/misc/conduktor { };
 
   console-bridge = callPackage ../development/libraries/console-bridge { };
 
@@ -7047,6 +7057,11 @@ with pkgs;
   gnome-builder = callPackage ../applications/editors/gnome-builder { };
 
   gnome-desktop = callPackage ../development/libraries/gnome-desktop { };
+
+  gnome-decoder = callPackage ../applications/graphics/gnome-decoder {
+     inherit (gst_all_1) gstreamer gst-plugins-base;
+     gst-plugins-bad = gst_all_1.gst-plugins-bad.override { enableZbar = true; };
+  };
 
   gnome-feeds = callPackage ../applications/networking/feedreaders/gnome-feeds {};
 
@@ -10190,19 +10205,7 @@ with pkgs;
 
   podman-tui = callPackage ../applications/virtualization/podman-tui { };
 
-  pods = callPackage ../applications/virtualization/pods {
-    # taken from #182618, remove when merged
-    libadwaita = libadwaita.overrideAttrs (_: rec {
-      version = "1.2.0";
-      src = fetchFromGitLab {
-        domain = "gitlab.gnome.org";
-        owner = "GNOME";
-        repo = "libadwaita";
-        rev = version;
-        hash = "sha256-3lH7Vi9M8k+GSrCpvruRpLrIpMoOakKbcJlaAc/FK+U=";
-      };
-    });
-  };
+  pods = callPackage ../applications/virtualization/pods { };
 
   pod2mdoc = callPackage ../tools/misc/pod2mdoc { };
 
@@ -12530,9 +12533,9 @@ with pkgs;
   valum = callPackage ../development/web/valum { };
 
   inherit (callPackages ../servers/varnish { })
-    varnish60 varnish71;
+    varnish60 varnish71 varnish72;
   inherit (callPackages ../servers/varnish/packages.nix { })
-    varnish60Packages varnish71Packages;
+    varnish60Packages varnish71Packages varnish72Packages;
 
   varnishPackages = varnish71Packages;
   varnish = varnishPackages.varnish;
@@ -17200,6 +17203,8 @@ with pkgs;
 
   rr = callPackage ../development/tools/analysis/rr { };
 
+  rsass = callPackage ../development/tools/misc/rsass { };
+
   rufo = callPackage ../development/tools/rufo { };
 
   samurai = callPackage ../development/tools/build-managers/samurai { };
@@ -20798,6 +20803,8 @@ with pkgs;
 
   mimalloc = callPackage ../development/libraries/mimalloc { };
 
+  miniaudio = callPackage ../development/libraries/miniaudio { };
+
   miniz = callPackage ../development/libraries/miniz { };
 
   minizip = callPackage ../development/libraries/minizip { };
@@ -22928,9 +22935,9 @@ with pkgs;
 
   clickhouse = callPackage ../servers/clickhouse {
     # upstream requires llvm12 as of v22.3.2.2
-    inherit (llvmPackages_12) clang-unwrapped lld llvm;
-    llvm-bintools = llvmPackages_12.bintools;
-    stdenv = llvmPackages_12.stdenv;
+    inherit (llvmPackages_13) clang-unwrapped lld llvm;
+    llvm-bintools = llvmPackages_13.bintools;
+    stdenv = llvmPackages_13.stdenv;
   };
 
   clickhouse-cli = with python3Packages; toPythonApplication clickhouse-cli;
@@ -23050,6 +23057,8 @@ with pkgs;
   freeradius = callPackage ../servers/freeradius {
     openssl = openssl_1_1;
   };
+
+  freshrss = callPackage ../servers/web-apps/freshrss { };
 
   freeswitch = callPackage ../servers/sip/freeswitch {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
@@ -24867,6 +24876,8 @@ with pkgs;
 
   open-vm-tools = callPackage ../applications/virtualization/open-vm-tools { };
   open-vm-tools-headless = open-vm-tools.override { withX = false; };
+
+  oxtools = callPackage ../os-specific/linux/oxtools { };
 
   air = callPackage ../development/tools/air { };
 
@@ -29041,7 +29052,9 @@ with pkgs;
     subproject = "reader";
   };
 
-  jabref = callPackage ../applications/office/jabref { };
+  jabref = callPackage ../applications/office/jabref {
+    jdk = jdk18;
+  };
 
   jack_capture = callPackage ../applications/audio/jack-capture { };
 
@@ -32282,7 +32295,9 @@ with pkgs;
 
   weston = callPackage ../applications/window-managers/weston { };
 
-  whalebird = callPackage ../applications/misc/whalebird { };
+  whalebird = callPackage ../applications/misc/whalebird {
+    electron = electron_19;
+  };
 
   wio = callPackage ../applications/window-managers/wio {
     wlroots = wlroots_0_14;
@@ -32995,6 +33010,8 @@ with pkgs;
   snarkos = callPackage ../applications/blockchains/snarkos {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  taro = callPackage ../applications/blockchains/taro { };
 
   terra-station = callPackage ../applications/blockchains/terra-station { };
 
@@ -35434,6 +35451,8 @@ with pkgs;
   programmer-calculator = callPackage ../applications/science/math/programmer-calculator { };
 
   bcal = callPackage ../applications/science/math/bcal { };
+
+  pagsuite = callPackage ../applications/science/math/pagsuite { };
 
   pspp = callPackage ../applications/science/math/pspp { };
 

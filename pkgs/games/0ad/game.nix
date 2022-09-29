@@ -2,7 +2,7 @@
 , pkg-config, spidermonkey_78, boost, icu, libxml2, libpng, libsodium
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
 , openal, libGLU, libGL, xorgproto, libX11, libXcursor, nspr, SDL2
-, gloox, nvidia-texture-tools
+, gloox, nvidia-texture-tools, freetype
 , withEditor ? true, wxGTK
 }:
 
@@ -26,11 +26,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "0ad";
-  version = "0.0.25b";
+  version = "0.0.26";
 
   src = fetchurl {
     url = "http://releases.wildfiregames.com/0ad-${version}-alpha-unix-build.tar.xz";
-    sha256 = "1p9fa8f7sjb9c5wl3mawzyfqvgr614kdkhrj2k4db9vkyisws3fp";
+    sha256 = "Lhxt9+MxLnfF+CeIZkz/w6eNO/YGBsAAOSdeHRPA7ks=";
   };
 
   nativeBuildInputs = [ python3 perl pkg-config ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     spidermonkey_78_6 boost icu libxml2 libpng libjpeg
     zlib curl libogg libvorbis enet miniupnpc openal libidn
     libGLU libGL xorgproto libX11 libXcursor nspr SDL2 gloox
-    nvidia-texture-tools libsodium fmt
+    nvidia-texture-tools libsodium fmt freetype
   ] ++ lib.optional withEditor wxGTK;
 
   NIX_CFLAGS_COMPILE = toString [
@@ -50,14 +50,7 @@ stdenv.mkDerivation rec {
     "-I${fmt.dev}/include"
   ];
 
-  patches = [
-    ./rootdir_env.patch
-    (fetchpatch {
-      # fix build with gcc11 and glibc 2.35
-      url = "https://github.com/0ad/0ad/commit/7df614338cbd41f5e254ce75f649490b2637e1d0.patch";
-      hash = "sha256-QZvcNm8Zni3aJnMPueft0OITf8zeMDXWBjOLYoirJs0=";
-    })
-  ];
+  patches = [ ./rootdir_env.patch ];
 
   configurePhase = ''
     # Delete shipped libraries which we don't need.

@@ -144,6 +144,13 @@
       </listitem>
       <listitem>
         <para>
+          An image configuration and generator has been added for Linode
+          images, largely based on the present GCE configuration and
+          image.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>hardware.nvidia</literal> has a new option
           <literal>open</literal> that can be used to opt in the
           opensource version of NVIDIA kernel driver. Note that the
@@ -283,6 +290,13 @@
           an enterprise resource planning and customer relationship
           manager. Enable using
           <link linkend="opt-services.dolibarr.enable">services.dolibarr</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://freshrss.org/">FreshRSS</link>, a
+          free, self-hostable RSS feed aggregator. Available as
+          <link linkend="opt-services.freshrss.enable">services.freshrss</link>.
         </para>
       </listitem>
       <listitem>
@@ -638,6 +652,12 @@
           Neo4j was updated from version 3 to version 4. See this
           <link xlink:href="https://neo4j.com/docs/upgrade-migration-guide/current/">migration
           guide</link> on how to migrate your Neo4j instance.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>networking.wireguard</literal> module now can set
+          the mtu on interfaces and tag its packets with an fwmark.
         </para>
       </listitem>
       <listitem>

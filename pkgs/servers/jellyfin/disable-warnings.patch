@@ -1,8 +1,8 @@
 diff --git a/jellyfin.ruleset b/jellyfin.ruleset
-index 1c834de82..e8f091f71 100644
+index 5ac5f4923..88621857b 100644
 --- a/jellyfin.ruleset
 +++ b/jellyfin.ruleset
-@@ -54,6 +54,29 @@
+@@ -54,6 +54,31 @@
      <Rule Id="SA1602" Action="None" />
      <!-- disable warning SA1633: The file header is missing or not located at the top of the file -->
      <Rule Id="SA1633" Action="None" />
@@ -29,6 +29,8 @@ index 1c834de82..e8f091f71 100644
 +    <Rule Id="SA1005" Action="None" />
 +    <!-- disable warning SA1208: Using directive for 'System.Text' should appear before directive for '...' -->
 +    <Rule Id="SA1208" Action="None" />
++    <!-- disable warning SA1208: The property's documentation summary text should begin with: 'Gets a value indicating whether' -->
++    <Rule Id="SA1623" Action="None" />
    </Rules>
  
    <Rules AnalyzerId="Microsoft.CodeAnalysis.NetAnalyzers" RuleNamespace="Microsoft.Design">

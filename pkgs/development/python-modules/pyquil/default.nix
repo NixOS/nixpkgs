@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "3.3.0";
+  version = "3.3.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lifenGICnllPe/W9xmyp1Jkh7dRfph6u2+2uNvlARMw=";
+    sha256 = "sha256-eBEv0rpM0IOaMHWjXDgF0yFK+NNr49cI8fxVi0sfbXs=";
   };
 
   nativeBuildInputs = [
@@ -79,6 +79,8 @@ buildPythonPackage rec {
     "test/unit/test_quantum_computer.py"
     "test/unit/test_qvm.py"
     "test/unit/test_reference_wavefunction.py"
+    # Out-dated
+    "test/unit/test_qpu_client.py"
   ];
 
   disabledTests = [

@@ -2,7 +2,7 @@
 let
 
   evalTest = module: lib.evalModules { modules = testModules ++ [ module ]; };
-  runTest = module: (evalTest module).config.result;
+  runTest = module: (evalTest ({ config, ... }: { imports = [ module ]; result = config.test; })).config.result;
 
   testModules = [
     ./call-test.nix

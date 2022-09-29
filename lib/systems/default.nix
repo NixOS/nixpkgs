@@ -141,6 +141,14 @@ rec {
           powerpc64le = "ppc64le";
         }.${final.parsed.cpu.name} or final.parsed.cpu.name;
 
+      # Name used by UEFI for architectures.
+      efiArch =
+        if final.isx86_32 then "ia32"
+        else if final.isx86_64 then "x64"
+        else if final.isAarch32 then "arm"
+        else if final.isAarch64 then "aa64"
+        else final.parsed.cpu.name;
+
       darwinArch = {
         armv7a  = "armv7";
         aarch64 = "arm64";

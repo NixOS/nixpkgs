@@ -35,17 +35,21 @@ let
   ;
 
   /**
-   * Given a `config`, builds the default options.
+   * Builds the default options.
    */
-  buildMenuGrub2 = config:
-    buildMenuAdditionalParamsGrub2 config ""
-  ;
+  buildMenuGrub2 = buildMenuAdditionalParamsGrub2 "";
+
+  targetArch =
+    if config.boot.loader.grub.forcei686 then
+      "ia32"
+    else
+      pkgs.stdenv.hostPlatform.efiArch;
 
   /**
-   * Given a `config` and params to add to `params`, build a set of default options.
+   * Given params to add to `params`, build a set of default options.
    * Use this one when creating a variant (e.g. hidpi)
    */
-  buildMenuAdditionalParamsGrub2 = config: additional:
+  buildMenuAdditionalParamsGrub2 = additional:
   let
     finalCfg = {
       name = "NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}";
@@ -53,6 +57,7 @@ let
       image = "/boot/${config.system.boot.loader.kernelFile}";
       initrd = "/boot/initrd";
     };
+
   in
     menuBuilderGrub2
     finalCfg
@@ -314,16 +319,16 @@ let
     # Menu entries
     #
 
-    ${buildMenuGrub2 config}
+    ${buildMenuGrub2}
     submenu "HiDPI, Quirks and Accessibility" --class hidpi --class submenu {
       ${grubMenuCfg}
       submenu "Suggests resolution @720p" --class hidpi-720p {
         ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 config "video=1280x720@60"}
+        ${buildMenuAdditionalParamsGrub2 "video=1280x720@60"}
       }
       submenu "Suggests resolution @1080p" --class hidpi-1080p {
         ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 config "video=1920x1080@60"}
+        ${buildMenuAdditionalParamsGrub2 "video=1920x1080@60"}
       }
 
       # If we boot into a graphical environment where X is autoran
@@ -331,7 +336,7 @@ let
       # to disable this.
       submenu "Disable display-manager" --class quirk-disable-displaymanager {
         ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 config "systemd.mask=display-manager.service"}
+        ${buildMenuAdditionalParamsGrub2 "systemd.mask=display-manager.service"}
       }
 
       # Some laptop and convertibles have the panel installed in an
@@ -340,29 +345,29 @@ let
       submenu "" {return}
       submenu "Rotate framebuffer Clockwise" --class rotate-90cw {
         ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 config "fbcon=rotate:1"}
+        ${buildMenuAdditionalParamsGrub2 "fbcon=rotate:1"}
       }
       submenu "Rotate framebuffer Upside-Down" --class rotate-180 {
         ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 config "fbcon=rotate:2"}
+        ${buildMenuAdditionalParamsGrub2 "fbcon=rotate:2"}
       }
       submenu "Rotate framebuffer Counter-Clockwise" --class rotate-90ccw {
         ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 config "fbcon=rotate:3"}
+        ${buildMenuAdditionalParamsGrub2 "fbcon=rotate:3"}
       }
 
       # As a proof of concept, mainly. (Not sure it has accessibility merits.)
       submenu "" {return}
       submenu "Use black on white" --class accessibility-blakconwhite {
         ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 config "vt.default_red=0xFF,0xBC,0x4F,0xB4,0x56,0xBC,0x4F,0x00,0xA1,0xCF,0x84,0xCA,0x8D,0xB4,0x84,0x68 vt.default_grn=0xFF,0x55,0xBA,0xBA,0x4D,0x4D,0xB3,0x00,0xA0,0x8F,0xB3,0xCA,0x88,0x93,0xA4,0x68 vt.default_blu=0xFF,0x58,0x5F,0x58,0xC5,0xBD,0xC5,0x00,0xA8,0xBB,0xAB,0x97,0xBD,0xC7,0xC5,0x68"}
+        ${buildMenuAdditionalParamsGrub2 "vt.default_red=0xFF,0xBC,0x4F,0xB4,0x56,0xBC,0x4F,0x00,0xA1,0xCF,0x84,0xCA,0x8D,0xB4,0x84,0x68 vt.default_grn=0xFF,0x55,0xBA,0xBA,0x4D,0x4D,0xB3,0x00,0xA0,0x8F,0xB3,0xCA,0x88,0x93,0xA4,0x68 vt.default_blu=0xFF,0x58,0x5F,0x58,0xC5,0xBD,0xC5,0x00,0xA8,0xBB,0xAB,0x97,0xBD,0xC7,0xC5,0x68"}
       }
 
       # Serial access is a must!
       submenu "" {return}
       submenu "Serial console=ttyS0,115200n8" --class serial {
         ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 config "console=ttyS0,115200n8"}
+        ${buildMenuAdditionalParamsGrub2 "console=ttyS0,115200n8"}
       }
     }
 
@@ -430,19 +435,6 @@ let
       # Verify the FAT partition.
       fsck.vfat -vn "$out"
     ''; # */
-
-  # Name used by UEFI for architectures.
-  targetArch =
-    if pkgs.stdenv.isi686 || config.boot.loader.grub.forcei686 then
-      "ia32"
-    else if pkgs.stdenv.isx86_64 then
-      "x64"
-    else if pkgs.stdenv.isAarch32 then
-      "arm"
-    else if pkgs.stdenv.isAarch64 then
-      "aa64"
-    else
-      throw "Unsupported architecture";
 
   # Syslinux (and isolinux) only supports x86-based architectures.
   canx86BiosBoot = pkgs.stdenv.hostPlatform.isx86;

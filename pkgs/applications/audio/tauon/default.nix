@@ -9,9 +9,11 @@
 , librsvg
 , gobject-introspection
 , gtk3
+, kissfft
 , libnotify
 , libsamplerate
 , libvorbis
+, miniaudio
 , mpg123
 , libopenmpt
 , opusfile
@@ -23,14 +25,22 @@
 
 stdenv.mkDerivation rec {
   pname = "tauon";
-  version = "7.3.1";
+  version = "7.4.1";
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "TauonMusicBox";
     rev = "v${version}";
-    sha256 = "sha256-g3mRVPOXU3N+MApLaHAAIIsVuVv2GeB1Nj//8tuS0oI=";
+    sha256 = "sha256-cHuEmRQG40p04MXcwmYMm7Jih+mYre9IBnOPMx1/k7k=";
   };
+
+  postUnpack = ''
+    rmdir source/src/phazor/kissfft
+    ln -s ${kissfft.src} source/src/phazor/kissfft
+
+    rmdir source/src/phazor/miniaudio
+    ln -s ${miniaudio.src} source/src/phazor/miniaudio
+  '';
 
   postPatch = ''
     substituteInPlace tauon.py \
