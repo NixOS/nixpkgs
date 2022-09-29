@@ -14443,6 +14443,7 @@ with pkgs;
       /**/ if platform.isDarwin then 11
       else if platform.isFreeBSD then 7
       else if platform.isAndroid then 12
+      else if platform.system == "armv6l-linux" then 7  # This fixes armv6 cross-compilation
       else if platform.isLinux then 11
       else if platform.isWasm then 12
       else latest_version;
