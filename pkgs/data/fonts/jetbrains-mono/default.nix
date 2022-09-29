@@ -3,17 +3,12 @@
 let
   version = "2.242";
 in
-fetchzip {
+(fetchzip {
   name = "JetBrainsMono-${version}";
 
   url = "https://github.com/JetBrains/JetBrainsMono/releases/download/v${version}/JetBrainsMono-${version}.zip";
 
   sha256 = "sha256-flaUqpHmgebUzwPq0d+I3p9yqPmsV0kap04eApOQxdI=";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
-  '';
 
   meta = with lib; {
     description = "A typeface made for developers";
@@ -23,4 +18,9 @@ fetchzip {
     maintainers = [ maintainers.marsam ];
     platforms = platforms.all;
   };
-}
+}).overrideAttrs (_: {
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
+  '';
+})

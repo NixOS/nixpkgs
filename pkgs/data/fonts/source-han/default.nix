@@ -18,11 +18,11 @@ let
       lib.toUpper (lib.substring 0 1 family) +
       lib.substring 1 (lib.stringLength family) family;
     in
-    fetchzip {
+    (fetchzip {
       name = "source-han-${family}-${lib.removeSuffix "R" rev}";
 
       url = "https://github.com/adobe-fonts/source-han-${family}/releases/download/${rev}/SourceHan${Family}.ttc${zip}";
-      inherit sha256 postFetch;
+      inherit sha256;
 
       meta = {
         description = "An open source Pan-CJK ${description} typeface";
@@ -30,7 +30,7 @@ let
         license = lib.licenses.ofl;
         maintainers = with lib.maintainers; [ taku0 emily ];
       };
-    };
+    }).overrideAttrs (_: { inherit postFetch; });
 in
 {
   sans = makePackage {

@@ -1,14 +1,9 @@
 { lib, fetchzip }:
-
-fetchzip rec {
-  name = "undefined-medium-1.0";
+let name = "undefined-medium-1.0";
+in (fetchzip rec {
+  inherit name;
 
   url = "https://github.com/andirueckel/undefined-medium/archive/v1.0.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile ${name}/fonts/otf/\*.otf -d $out/share/fonts/opentype
-  '';
 
   sha256 = "1wa04jzbffshwcxm705yb5wja8wakn8j7fvim1mlih2z1sqw0njk";
 
@@ -23,4 +18,9 @@ fetchzip rec {
     license = licenses.ofl;
     platforms = platforms.all;
   };
-}
+}).overrideAttrs (_: {
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile ${name}/fonts/otf/\*.otf -d $out/share/fonts/opentype
+  '';
+})

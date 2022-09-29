@@ -2,16 +2,11 @@
 
 let
   version = "2.2";
-in fetchzip rec {
   name = "oldstandard-${version}";
+in (fetchzip rec {
+  inherit name;
 
   url = "https://github.com/akryukov/oldstand/releases/download/v${version}/${name}.otf.zip";
-
-  postFetch = ''
-    unzip $downloadedFile
-    install -m444 -Dt $out/share/fonts/opentype *.otf
-    install -m444 -Dt $out/share/doc/${name}    FONTLOG.txt
-  '';
 
   sha256 = "1qwfsyp51grr56jcnkkmnrnl3r20pmhp9zh9g88kp64m026cah6n";
 
@@ -22,4 +17,10 @@ in fetchzip rec {
     license = licenses.ofl;
     platforms = platforms.all;
   };
-}
+}).overrideAttrs (_: {
+  postFetch = ''
+    unzip $downloadedFile
+    install -m444 -Dt $out/share/fonts/opentype *.otf
+    install -m444 -Dt $out/share/doc/${name}    FONTLOG.txt
+  '';
+})

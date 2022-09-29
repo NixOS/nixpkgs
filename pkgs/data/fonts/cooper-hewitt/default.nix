@@ -1,14 +1,9 @@
 { lib, fetchzip }:
 
-fetchzip {
+(fetchzip {
   name = "cooper-hewitt-2014-06-09";
 
   url = "https://www.cooperhewitt.org/wp-content/uploads/fonts/CooperHewitt-OTF-public.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype/
-  '';
 
   sha256 = "01iwqmjvqkc6fmc2r0486vk06s6f51n9wxzl1pf9z48n0igj4gqd";
 
@@ -19,4 +14,9 @@ fetchzip {
     platforms = platforms.all;
     maintainers = [ maintainers.marsam ];
   };
-}
+}).overrideAttrs (_: {
+  postFetch = ''
+    mkdir -p $out/share/fonts/opentype
+    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype/
+  '';
+})
