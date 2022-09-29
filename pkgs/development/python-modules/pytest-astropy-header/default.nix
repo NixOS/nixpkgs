@@ -6,11 +6,7 @@
 , pytest-cov
 , pytestCheckHook
 , numpy
-, astropy
-, scipy
 , setuptools-scm
-, h5py
-, scikitimage
 }:
 
 buildPythonPackage rec {
