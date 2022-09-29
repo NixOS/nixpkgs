@@ -1020,6 +1020,15 @@ self: super: {
           (super.stack.overrideScope (self: super: {
             # Needs Cabal-3.6
             Cabal = self.Cabal_3_6_3_0;
+            # Official stack ships with hpack-0.35.0.  Nixpkgs uses the same
+            # version of hpack so that users who get stack from Nixpkgs
+            # generate the same .cabal files as users who download official binaries
+            # of stack.
+            #
+            # dontCheck is used because one of the hpack tests appears to be
+            # incorrectly(?) failing:
+            # https://github.com/sol/hpack/issues/528
+            hpack = dontCheck self.hpack_0_35_0;
           })));
 
   # Too strict version bound on hashable-time.
