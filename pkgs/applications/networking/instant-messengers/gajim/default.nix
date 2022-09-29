@@ -22,11 +22,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "1.4.7";
+  version = "1.5.1";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    sha256 = "sha256-GkgHvzo0sxBIgk5P/3Yr0eFiL0ZOc6QmwJaE3Ck2hPM=";
+    sha256 = "sha256-FjRrAswoE1yuDoR42U3ppzvEvFN6K/VBdQ0w99wXPtM=";
   };
 
   buildInputs = [
@@ -50,7 +50,17 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python3.pkgs; [
-    nbxmpp pygobject3 dbus-python pillow css-parser precis-i18n keyring setuptools packaging gssapi
+    (nbxmpp.overrideAttrs (_: {
+      version = "3.2.2";
+      src = fetchFromGitLab {
+        domain = "dev.gajim.org";
+        owner = "gajim";
+        repo = "python-nbxmpp";
+        rev = "3.2.2";
+        sha256 = "sha256-WVE8evbfWdQNsuDEQF7WfEYDQEKGKXElKQBkUn7bJ1I=";
+      };
+    }))
+    pygobject3 dbus-python pillow css-parser precis-i18n keyring setuptools packaging gssapi
   ] ++ lib.optionals enableE2E [ pycrypto python-gnupg ]
     ++ lib.optional enableRST docutils
     ++ lib.optionals enableOmemoPluginDependencies [ python-axolotl qrcode ]
