@@ -83,7 +83,7 @@
 , withHostnamed ? true
 , withHwdb ? true
 , withImportd ? !stdenv.hostPlatform.isMusl
-, withLibBPF ? true
+, withLibBPF ? lib.versionAtLeast llvmPackages.clang.version "10.0"
 , withLocaled ? true
 , withLogind ? true
 , withMachined ? true
