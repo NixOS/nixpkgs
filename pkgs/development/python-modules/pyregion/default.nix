@@ -13,15 +13,15 @@
 
 buildPythonPackage rec {
   pname = "pyregion";
-  version = "2.0";
+  version = "2.1.1";
 
   # pypi src contains cython-produced .c files which don't compile
   # with python3.9
   src = fetchFromGitHub {
     owner = "astropy";
     repo = pname;
-    rev = version;
-    sha256 = "1izar7z606czcyws9s8bjbpb1xhqshpv5009rlpc92hciw7jv4kg";
+    rev = "v${version}";
+    sha256 = "sha256-xo+XbBJ2HKql9rd7Ma84JofRg8M4u6vmz44Qo8JhEBc=";
   };
 
   propagatedBuildInputs = [
@@ -33,9 +33,8 @@ buildPythonPackage rec {
   # Upstream patch needed for the test to pass
   patches = [
     (fetchpatch {
-      name = "conftest-astropy-3-fix.patch";
-      url = "https://github.com/astropy/pyregion/pull/136.patch";
-      sha256 = "13yxjxiqnhjy9gh24hvv6pnwx7qic2mcx3ccr1igjrc3f881d59m";
+      url = "https://github.com/astropy/pyregion/pull/157.patch";
+      sha256 = "sha256-FMPpwwbtCR8FDZWbD3Cmat7vu6AhyUezu2TOpUfujJE=";
     })
   ];
 
