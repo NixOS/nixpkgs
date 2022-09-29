@@ -9,8 +9,8 @@ let
   };
 
   edgeVariant = {
-    version = "5.19.1";
-    hash = "sha256-Fw+XW2YDAGKEzZ4AO88Y8GcypfOb6AjKp3XOlkT8ZTQ=";
+    version = "5.19.12";
+    hash = "sha256-oN9+xcHjAHt5vGg3jx9bk/VMTyPMAzw5nIqUGtybKow=";
     variant = "edge";
   };
 
