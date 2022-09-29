@@ -58,6 +58,7 @@ let
       qtdatavis3d = callPackage ./modules/qtdatavis3d.nix { };
       qtdeclarative = callPackage ./modules/qtdeclarative.nix { };
       qtdoc = callPackage ./modules/qtdoc.nix { };
+      qthttpserver = callPackage ./modules/qthttpserver.nix { };
       qtimageformats = callPackage ./modules/qtimageformats.nix { };
       qtlanguageserver = callPackage ./modules/qtlanguageserver.nix { };
       qtlottie = callPackage ./modules/qtlottie.nix { };
