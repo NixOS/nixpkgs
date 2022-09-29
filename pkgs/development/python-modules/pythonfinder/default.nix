@@ -9,6 +9,7 @@
 , packaging
 , pytest-cov
 , pytest-timeout
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -22,6 +23,10 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     sha256 = "sha256-N/q9zi2SX38ivSpnjrx+bEzdR9cS2ivSgy42SR8cl+Q=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     attrs

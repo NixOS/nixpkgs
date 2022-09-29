@@ -10,6 +10,7 @@
 , pythonOlder
 , pyvex
 , pyxbe
+, setuptools
 , sortedcontainers
 }:
 
@@ -39,6 +40,10 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-ORNlmdkAlMj1CaWj5pDve0yJe3TEv9IfKOwqRd+gVH4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     cffi

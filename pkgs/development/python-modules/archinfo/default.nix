@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -18,6 +19,10 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-JitAp536AM0EnE+LWlKceoYIk/gYxnbOUPtX7CK5SiM=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   checkInputs = [
     pytestCheckHook

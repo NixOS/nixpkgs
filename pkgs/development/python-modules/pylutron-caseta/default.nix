@@ -7,6 +7,7 @@
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -22,6 +23,10 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-dw/uCEY4+kpgNjbjgvw+kSfluziIK6NvIKo5QIjt+GQ=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     cryptography

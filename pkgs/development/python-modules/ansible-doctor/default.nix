@@ -52,9 +52,13 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace 'Jinja2 = "3.1.2"' 'Jinja2 = "*"' \
+      --replace 'anyconfig = "0.13.0"' 'anyconfig = "*"' \
+      --replace 'environs = "9.5.0"' 'environs = "*"' \
       --replace 'jsonschema = "4.15.0"' 'jsonschema = "*"' \
-      --replace 'nested-lookup = "0.2.25"' 'nested-lookup = "*"' \
-      --replace 'pathspec = "0.10.1"' 'pathspec = "*"'
+      --replace '"ruamel.yaml" = "0.17.21"' '"ruamel.yaml" = "*"' \
+      --replace 'python-json-logger = "2.0.4"' 'python-json-logger = "*"'
   '';
 
   # Module has no tests

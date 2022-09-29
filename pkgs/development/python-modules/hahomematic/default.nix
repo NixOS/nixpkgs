@@ -7,6 +7,7 @@
 , pytestCheckHook
 , python-slugify
 , pythonOlder
+, setuptools
 , voluptuous
 , websocket-client
 , xmltodict
@@ -25,6 +26,10 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     sha256 = "sha256-OWEF1CJ4ZW64P4w3M+uur/NKCmjhS1c19izA041cC8A=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp

@@ -42,6 +42,13 @@ stdenv.mkDerivation rec {
     itstool
     wrapGAppsHook
     python3
+    openssh
+    gnupg
+    gcr
+    # error: Package `...' not found in specified Vala API directories or GObject-Introspection GIR directories
+    # TODO: the vala setuphook should look for vala filess in targetOffset instead of hostOffset
+    libhandy
+    libsecret
   ];
 
   buildInputs = [
@@ -50,13 +57,11 @@ stdenv.mkDerivation rec {
     glib-networking
     gcr
     gsettings-desktop-schemas
-    gnupg
     gpgme
     libsecret
     avahi
     libsoup
     p11-kit
-    openssh
     openldap
     libpwquality
     libhandy

@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "setproctitle";
-  version = "1.2.3";
+  version = "1.3.2";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7PKLHAenmddvQyblCBV7ca7aB7hLkDaOpFHAcQ29MsA=";
+    sha256 = "sha256-ufuXkHyDDSYPoGWO1Yr9SKhrK4iqxSETXDUv9/00d/0=";
   };
 
   checkInputs = [ pytestCheckHook ];

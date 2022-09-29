@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, gtk3, glibmm, cairomm, pangomm, atkmm, libepoxy, gnome }:
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, gtk3, glibmm, cairomm, pangomm, atkmm, libepoxy, gnome, glib, gdk-pixbuf }:
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
@@ -11,7 +11,14 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkg-config meson ninja python3 ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    python3
+    glib
+    gdk-pixbuf # for gdk-pixbuf-pixdata
+  ];
   buildInputs = [ libepoxy ];
 
   propagatedBuildInputs = [ glibmm gtk3 atkmm cairomm pangomm ];

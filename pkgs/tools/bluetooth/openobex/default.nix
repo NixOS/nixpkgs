@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     sed -i "s!/lib/udev!$out/lib/udev!" udev/CMakeLists.txt
     sed -i "/if ( PKGCONFIG_UDEV_FOUND )/,/endif ( PKGCONFIG_UDEV_FOUND )/d" udev/CMakeLists.txt
+    # https://sourceforge.net/p/openobex/bugs/66/
+    substituteInPlace CMakeLists.txt \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
     '';
 
   meta = with lib; {

@@ -11,6 +11,7 @@
 , pytestCheckHook
 , pythonOlder
 , pyyaml
+, setuptools
 , transitions
 , websockets
 }:
@@ -29,6 +30,11 @@ buildPythonPackage rec {
     hash = "sha256-8T1XhBSOiArlUQbQ41LsUogDgOurLhf+M8mjIrrAC4s=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'transitions = "^0.8.0"' 'transitions = "*"'
+  '';
+
   nativeBuildInputs = [
     poetry-core
   ];
@@ -37,6 +43,7 @@ buildPythonPackage rec {
     docopt
     passlib
     pyyaml
+    setuptools
     transitions
     websockets
   ];

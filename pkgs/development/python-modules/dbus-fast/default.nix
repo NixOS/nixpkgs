@@ -43,6 +43,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "dbus_fast"
+    "dbus_fast.aio"
+    "dbus_fast.service"
+    "dbus_fast.message"
   ];
 
   disabledTests = [
@@ -77,6 +80,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/v${version}";
     description = "Faster version of dbus-next";
     homepage = "https://github.com/bluetooth-devices/dbus-fast";
     license = licenses.mit;

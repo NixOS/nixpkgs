@@ -75,7 +75,8 @@ buildPythonApplication rec {
     substituteInPlace pyproject.toml \
       --replace '"hurry.filesize" = "^0.9"' "" \
       --replace 'vt-py = ">=0.6.1,<0.8.0"' 'vt-py = ">=0.6.1"' \
-      --replace 'backoff = "^1.10.0"' 'backoff = ">=1.10.0"'
+      --replace 'backoff = "^1.10.0"' 'backoff = ">=1.10.0"' \
+      --replace 'termcolor = "^1.1.0"' 'termcolor = "*"'
   '';
 
   pythonImportsCheck = [

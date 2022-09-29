@@ -29,6 +29,13 @@ in rec {
 
     buildInputs = [ libidn2 openssl unbound ];
 
+    # https://github.com/getdnsapi/getdns/issues/517
+    postPatch = ''
+      substituteInPlace getdns.pc.in \
+        --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+        --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+    '';
+
     postInstall = "rm -r $out/share/doc";
 
     meta = with lib;

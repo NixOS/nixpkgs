@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "hatch-fancy-pypi-readme";
-  version = "22.3.0";
+  version = "22.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "hatch_fancy_pypi_readme";
     inherit version;
-    hash = "sha256-fUZR+PB4JZMckoc8tRE3IUqTi623p1m4XB2Vv3T4bvo=";
+    hash = "sha256-3t8roLgaKXWrsd7ukxCy64XSI4D9oNUoaedgtUNapZY=";
   };
 
   nativeBuildInputs = [

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "selenium";
-  version = "4.3.0";
+  version = "4.4.2";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SeleniumHQ";
     repo = "selenium";
-    rev = "refs/tags/selenium-${version}"; # check if there is a newer tag with -python suffix
-    sha256 = "sha256-tD2sJGVBwqB0uOM3zwdNn71+ILYEHPAvWHvoJN24w6E=";
+    rev = "refs/tags/selenium-${version}-python"; # check if there is a newer tag with -python suffix
+    hash = "sha256-sJJ3i4mnGp5fDgo64p6B2vRCqp/Wm99VoyRLyy4nBH8=";
   };
 
   postPatch = ''

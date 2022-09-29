@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "doxygen";
-  version = "1.9.4";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "doxygen";
     repo = "doxygen";
     rev = "Release_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-Dnr8d+ngSBkgL/BITvsvoERAHQyEXCoQDltbnQ2nXKM=";
+    sha256 = "sha256-968LGj2b8qLs/YQ1DxC1s/xf5qUwnrd8xu5iKrqNN+Y=";
   };
 
   nativeBuildInputs = [

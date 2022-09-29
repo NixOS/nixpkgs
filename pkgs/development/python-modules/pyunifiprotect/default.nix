@@ -21,6 +21,7 @@
 , python-dotenv
 , pythonOlder
 , pytz
+, setuptools
 , termcolor
 , typer
 , ffmpeg
@@ -45,6 +46,10 @@ buildPythonPackage rec {
       --replace "--cov=pyunifiprotect --cov-append" "" \
       --replace "pydantic!=1.9.1" "pydantic"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiofiles
