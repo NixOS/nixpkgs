@@ -28999,6 +28999,12 @@ with pkgs;
 
   inkscape-extensions = recurseIntoAttrs (callPackages ../applications/graphics/inkscape/extensions.nix {});
 
+  inlyne = callPackage ../applications/misc/inlyne {
+    inherit (xorg) libX11 libXcursor libXi libXrandr libxcb;
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) AppKit ApplicationServices CoreFoundation CoreGraphics CoreServices CoreText CoreVideo Foundation Metal QuartzCore Security;
+  };
+
   inspectrum = callPackage ../applications/radio/inspectrum { };
 
   inputplug = callPackage ../tools/X11/inputplug { };
