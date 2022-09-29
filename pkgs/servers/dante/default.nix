@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch, pam, libkrb5, cyrus_sasl, miniupnpc, autoreconfHook }:
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook
+, pam, libkrb5, cyrus_sasl, miniupnpc, libxcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "dante";
@@ -10,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isMips64 autoreconfHook;
-  buildInputs = [ pam libkrb5 cyrus_sasl miniupnpc ];
+  buildInputs = [ pam libkrb5 cyrus_sasl miniupnpc libxcrypt ];
 
   configureFlags = if !stdenv.isDarwin
     then [ "--with-libc=libc.so.6" ]
