@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-tally";
-  version = "1.0.14";
+  version = "1.0.15";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-hsKrkLkHD5NM3sSVHKIa/dxiW5TszryX8bksGqpZ9fI=";
+    sha256 = "sha256-vrDPFJB0/kRSZot8LdYO6lPI8oR5G4CZv6Z31gF7XII=";
   };
 
-  cargoSha256 = "sha256-9ozabY3tsgQa6nsSsF07juOM+oFJSXGcYOz3uju/tLg=";
+  cargoSha256 = "sha256-dkCfOTZCu9MgqvKJRWwyVfCu1Ul0wDCJznM+N2hPpwo=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     DiskArbitration
