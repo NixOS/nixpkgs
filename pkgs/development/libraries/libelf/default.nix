@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  preConfigure = lib.optionalString (stdenv.hostPlatform.useAndroidPrebuilt) ''
+  preConfigure = if !stdenv.hostPlatform.useAndroidPrebuilt then null else ''
     sed -i 's|DISTSUBDIRS = lib po|DISTSUBDIRS = lib|g' Makefile.in
     sed -i 's|SUBDIRS = lib @POSUB@|SUBDIRS = lib|g' Makefile.in
   '';
