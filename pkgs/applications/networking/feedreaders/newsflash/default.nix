@@ -5,10 +5,12 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , gdk-pixbuf
 , glib
-, gtk3
+, gtk4
+, libadwaita
+, libxml2
 , libhandy
 , openssl
 , sqlite
@@ -21,19 +23,19 @@
 
 stdenv.mkDerivation rec {
   pname = "newsflash";
-  version = "1.5.1";
+  version = "2.0.1";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
-    rev = version;
-    hash = "sha256-fLG7oYt+gdl3Lwnu6c7VLJWSHCFY5LyNeDKoUNGg3Yw=";
+    rev = "v.${version}";
+    hash = "sha256-bqS9jq1rUOkYilWzp0e2tlEcgmoc+DUV7+LJ82Bid98=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-dQlbK3SfY6p1xinroXz5wcaBbq2LuDM9sMlfJ6ueTTg=";
+    hash = "sha256-vD880Ccp+U4kz7/JbJ850M/XxCb1ypycd2Xm9NHDVRY=";
   };
 
   patches = [
@@ -53,7 +55,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
 
     # Provides setup hook to fix "Unrecognized image file format"
     gdk-pixbuf
@@ -67,7 +69,9 @@ stdenv.mkDerivation rec {
   ]);
 
   buildInputs = [
-    gtk3
+    gtk4
+    libadwaita
+    libxml2
     libhandy
     openssl
     sqlite
@@ -99,5 +103,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau stunkymonkey ];
     platforms = platforms.unix;
+    mainProgram = "com.gitlab.newsflash";
   };
 }
