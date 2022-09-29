@@ -29,6 +29,8 @@ rustPlatform.buildRustPackage rec {
     installManPage man/*
   '';
 
+  passthru.tests = { inherit (nixosTests) please; };
+
   meta = with lib; {
     description = "A polite regex-first sudo alternative";
     longDescription = ''
