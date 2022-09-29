@@ -41,6 +41,12 @@ let
     buildMenuAdditionalParamsGrub2 config ""
   ;
 
+  targetArch =
+    if config.boot.loader.grub.forcei686 then
+      "ia32"
+    else
+      pkgs.stdenv.hostPlatform.efiArch;
+
   /**
    * Given a `config` and params to add to `params`, build a set of default options.
    * Use this one when creating a variant (e.g. hidpi)
@@ -53,12 +59,6 @@ let
       image = "/boot/${config.system.boot.loader.kernelFile}";
       initrd = "/boot/initrd";
     };
-
-  targetArch =
-    if config.boot.loader.grub.forcei686 then
-      "ia32"
-    else
-      stdenv.hostPlatform.efiArch;
 
   in
     menuBuilderGrub2
