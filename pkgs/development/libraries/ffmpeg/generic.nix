@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     ++ [
       "--disable-os2threads" # We don't support OS/2
       "--enable-network"
-      (ifMinVer "2.4" "--enable-pixelutils")
+      "--enable-pixelutils"
     # Executables
       "--enable-ffmpeg"
       "--disable-ffplay"
@@ -118,26 +118,26 @@ stdenv.mkDerivation rec {
       "--enable-libmp3lame"
       "--enable-iconv"
       "--enable-libtheora"
-      (ifMinVer "2.1" "--enable-libssh")
+      "--enable-libssh"
       (enableFeature vaapiSupport "vaapi")
-      (ifMinVer "3.4" (enableFeature vaapiSupport "libdrm"))
+      (enableFeature vaapiSupport "libdrm")
       (enableFeature vdpauSupport "vdpau")
       "--enable-libvorbis"
       (enableFeature vpxSupport "libvpx")
-      (ifMinVer "2.4" "--enable-lzma")
-      (ifMinVer "2.2" (enableFeature openglSupport "opengl"))
+      "--enable-lzma"
+      (enableFeature openglSupport "opengl")
       (ifMinVer "4.2" (enableFeature libmfxSupport "libmfx"))
       (ifMinVer "4.2" (enableFeature libaomSupport "libaom"))
       (lib.optionalString pulseaudioSupport "--enable-libpulse")
-      (ifMinVer "2.5" (if sdlSupport && reqMin "3.2" then "--enable-sdl2" else null))
+      (enableFeature sdlSupport "sdl2")
       "--enable-libsoxr"
       "--enable-libx264"
       "--enable-libxvid"
       "--enable-libzimg"
       "--enable-zlib"
-      (ifMinVer "2.8" "--enable-libopus")
+      "--enable-libopus"
       "--enable-libspeex"
-      (ifMinVer "2.8" "--enable-libx265")
+      "--enable-libx265"
       (ifMinVer "4.2" (enableFeature (reqMin "4.2") "libdav1d"))
     # Developer flags
       (enableFeature debugDeveloper "debug")
