@@ -1453,6 +1453,8 @@ let
         };
       };
 
+      jebbs.plantuml = callPackage ./jebbs.plantuml {};
+
       jnoortheen.nix-ide = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "nix-ide";

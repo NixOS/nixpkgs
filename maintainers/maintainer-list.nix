@@ -14050,7 +14050,7 @@
     name = "Dmitry Kalinkin";
   };
   victormignot = {
-    email = "victor.mignot@protonmail.com";
+    email = "root@victormignot.fr";
     github = "victormignot";
     githubId = 58660971;
     name = "Victor Mignot";
