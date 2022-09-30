@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "godot";
-  version = "3.5";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "godotengine";
     repo = "godot";
     rev = "${version}-stable";
-    sha256 = "sha256-aU5cTiz7OaM0fsv0EzJDUA1Es+Ei63CKLE6GVspJexc=";
+    sha256 = "sha256-uHwTthyhfeQN0R1XjqZ+kGRa5WcpeQzA/DO9hZk4lvU=";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper ];

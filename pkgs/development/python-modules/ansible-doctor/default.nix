@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "ansible-doctor";
-  version = "1.4.4";
+  version = "1.4.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "thegeeklab";
     repo = "ansible-doctor";
     rev = "refs/tags/v${version}";
-    hash = "sha256-blCBlSCp7W6tlCa5381ex7yq37iY9v6u7ITHmJEUxl0=";
+    hash = "sha256-Bqe5dqD9VEgkkIGtpkLnCf3KTziCYb5HQdMJaskALWE=";
   };
 
   nativeBuildInputs = [

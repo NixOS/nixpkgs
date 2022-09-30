@@ -244,6 +244,8 @@ with pkgs;
 
   asn = callPackage ../applications/networking/asn { };
 
+  asnmap = callPackage ../tools/security/asnmap { };
+
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
   atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
@@ -2857,6 +2859,8 @@ with pkgs;
   adb-sync = callPackage ../development/mobile/adb-sync {
     inherit (androidenv.androidPkgs_9_0) platform-tools;
   };
+
+  amoco = callPackage ../tools/security/amoco {};
 
   anbox = callPackage ../os-specific/linux/anbox { };
 
