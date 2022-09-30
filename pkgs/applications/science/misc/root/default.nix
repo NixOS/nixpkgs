@@ -195,5 +195,9 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = [ maintainers.veprbl ];
     license = licenses.lgpl21;
+
+    # See https://github.com/NixOS/nixpkgs/pull/192581#issuecomment-1256860426
+    # for some context on issues on aarch64.
+    broken = stdenv.isAarch64;
   };
 }
