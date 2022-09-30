@@ -1,0 +1,6 @@
+use ExtUtils::MakeMaker;
+
+WriteMakefile(
+    NAME              => "CrystFEL::StreamGrep",
+    EXE_FILES      => ["scripts/stream_grep"],
+);

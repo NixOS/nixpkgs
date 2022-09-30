@@ -36,6 +36,8 @@
 }:
 
 let
+  attributes = import ./attributes.nix { inherit fetchurl; };
+
   libccp4 = stdenv.mkDerivation rec {
     pname = "libccp4";
     version = "6.5.1";
@@ -160,12 +162,9 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  pname = "crystfel";
-  version = "0.10.1";
-  src = fetchurl {
-    url = "https://www.desy.de/~twhite/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0i9d5ggalic7alj97dxjdys7010kxhm2cb4lwakvigl023j8ms79";
-  };
+  pname = attributes.crystfel-pname;
+  version = attributes.crystfel-version;
+  src = attributes.crystfel-src;
   nativeBuildInputs = [ meson pkg-config ninja flex bison doxygen opencl-headers ]
     ++ lib.optionals withGui [ wrapGAppsHook ];
   buildInputs = [
@@ -181,6 +180,7 @@ stdenv.mkDerivation rec {
     mosflm
     pinkIndexer
     xgandalf
+    makeWrapper
   ] ++ lib.optionals withGui [ gtk3 gdk-pixbuf ]
   ++ lib.optionals stdenv.isDarwin [
     argp-standalone
