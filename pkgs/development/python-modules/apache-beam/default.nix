@@ -28,44 +28,50 @@
 , pytestCheckHook
 , python
 , pythonAtLeast
+, pythonRelaxDepsHook
 , python-dateutil
 , pytz
 , pyyaml
+, regex
 , requests
 , requests-mock
+, scikit-learn
 , setuptools
 , sqlalchemy
 , tenacity
 , typing-extensions
 , testcontainers
-, scikit-learn }:
+, zstandard
+}:
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.40.0";
+  version = "2.41.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     rev = "v${version}";
-    sha256 = "sha256-0S7Dj6PMSbZkEAY6ZLUpKVfe/tFxsq60TTAFj0Qhtv0=";
+    sha256 = "sha256-eI3ob5Ymyv0HmvaAaU/L0kfsKrX3B2a5ISHw3ovh/WI=";
   };
 
-  # See https://github.com/NixOS/nixpkgs/issues/156957.
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "dill>=0.3.1.1,<0.3.2" "dill" \
-      --replace "pyarrow>=0.15.1,<8.0.0" "pyarrow" \
-      --replace "numpy>=1.14.3,<1.23.0" "numpy" \
-      --replace "pymongo>=3.8.0,<4.0.0" "pymongo"
-  '';
-
   sourceRoot = "source/sdks/python";
+
+  pythonRelaxDeps = [
+    "dill"
+    "numpy"
+    "protobuf"
+    "pyarrow"
+    "pymongo"
+  ];
+
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [
     cython
     grpcio-tools
     mypy-protobuf
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -87,15 +93,11 @@ buildPythonPackage rec {
     pymongo
     python-dateutil
     pytz
+    regex
     requests
     setuptools
     typing-extensions
-  ];
-
-  enableParallelBuilding = true;
-
-  pythonImportsCheck = [
-    "apache_beam"
+    zstandard
   ];
 
   checkInputs = [
@@ -159,6 +161,8 @@ buildPythonPackage rec {
     "test_pformat_namedtuple_with_unnamed_fields"
     "test_row_coder_fail_early_bad_schema"
   ];
+
+  pythonImportsCheck = [ "apache_beam" ];
 
   meta = with lib; {
     description = "Unified model for defining both batch and streaming data-parallel processing pipelines";
