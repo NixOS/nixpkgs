@@ -2853,6 +2853,8 @@ with pkgs;
     inherit (androidenv.androidPkgs_9_0) platform-tools;
   };
 
+  amoco = callPackage ../tools/security/amoco {};
+
   anbox = callPackage ../os-specific/linux/anbox { };
 
   androidenv = callPackage ../development/mobile/androidenv {
