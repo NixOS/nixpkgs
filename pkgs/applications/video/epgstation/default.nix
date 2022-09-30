@@ -54,6 +54,9 @@ let
       # Workaround for https://github.com/svanderburg/node2nix/issues/275
       sed -i -e "s|#!/usr/bin/env node|#! ${nodejs}/bin/node|" node_modules/node-gyp-build/bin.js
 
+      # Optional typeorm dependency that does not build on aarch64-linux
+      rm -r node_modules/oracledb
+
       find . -name package-lock.json -delete
     '';
 

@@ -34,8 +34,6 @@ stdenv.mkDerivation rec {
     extensionPortalSlug = "dash-to-dock";
 
     updateScript = gitUpdater {
-      pname = "gnomeExtensions.dash-to-dock";
-      inherit version;
       rev-prefix = "extensions.gnome.org-v";
     };
   };

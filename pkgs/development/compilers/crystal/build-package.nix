@@ -48,7 +48,8 @@ let
     })
     (import shardsFile));
 
-  defaultOptions = [ "--release" "--progress" "--verbose" "--no-debug" ];
+  # We no longer use --no-debug in accordance with upstream's recommendation
+  defaultOptions = [ "--release" "--progress" "--verbose" ];
 
   buildDirectly = shardsFile == null || crystalBinaries != { };
 

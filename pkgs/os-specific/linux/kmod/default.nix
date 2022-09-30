@@ -58,7 +58,6 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     # No nicer place to find latest release.
     url = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git";
     rev-prefix = "v";

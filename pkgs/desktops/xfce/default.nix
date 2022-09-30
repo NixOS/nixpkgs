@@ -5,13 +5,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   genericUpdater = pkgs.genericUpdater;
 
-  archiveUpdater = { category, pname, version }:
-    pkgs.httpTwoLevelsUpdater {
-      inherit pname version;
-      attrPath = "xfce.${pname}";
-      url = "https://archive.xfce.org/src/${category}/${pname}";
-    };
-
   mkXfceDerivation = callPackage ./mkXfceDerivation.nix { };
 
   automakeAddFlags = pkgs.makeSetupHook { } ./automakeAddFlags.sh;

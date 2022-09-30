@@ -56,9 +56,7 @@ stdenv.mkDerivation rec {
   passthru.tests.btrbk = nixosTests.btrbk;
 
   passthru.updateScript = genericUpdater {
-    inherit pname version;
     versionLister = writeShellScript "btrbk-versionLister" ''
-      echo "# Versions for $1:" >> "$2"
       ${curl}/bin/curl -s https://digint.ch/download/btrbk/releases/ | ${perl}/bin/perl -lne 'print $1 if /btrbk-([0-9.]*)\.tar/'
     '';
   };

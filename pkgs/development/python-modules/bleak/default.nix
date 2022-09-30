@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "0.17.0";
+  version = "0.18.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "hbldh";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-AnH23AWrLw2jq6gSbx9VoGD8QXeCH5dN7FSVVdj4b3w=";
+    hash = "sha256-2/jJ2C2TudwCAshDBLUQjNMbYa2j4XfW8bXmeWrAyrA=";
   };
 
   nativeBuildInputs = [

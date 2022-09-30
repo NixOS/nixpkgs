@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.9.1";
+  version = "2022.9.7";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -192,9 +192,11 @@
     ];
     "august" = ps: with ps; [
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       pyserial
       pyudev
       yalexs-ble
@@ -284,10 +286,12 @@
     ];
     "bluemaestro" = ps: with ps; [
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluemaestro-ble
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       pyserial
       pyudev
     ];
@@ -298,17 +302,21 @@
     ];
     "bluetooth" = ps: with ps; [
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       pyserial
       pyudev
     ];
     "bluetooth_le_tracker" = ps: with ps; [
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       pyserial
       pyudev
     ];
@@ -354,10 +362,12 @@
     ]; # missing inputs: btsmarthub_devicelist
     "bthome" = ps: with ps; [
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
       bthome-ble
+      dbus-fast
       pyserial
       pyudev
     ];
@@ -525,9 +535,11 @@
       aiodiscover
       aiohttp-cors
       async-upnp-client
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       fnvhash
       hass-nabucasa
       home-assistant-frontend
@@ -691,6 +703,7 @@
     ]; # missing inputs: py-sucks
     "ecowitt" = ps: with ps; [
       aioecowitt
+      aiohttp-cors
     ];
     "eddystone_temperature" = ps: with ps; [
       construct
@@ -782,10 +795,12 @@
     ]; # missing inputs: epsonprinter
     "eq3btsmart" = ps: with ps; [
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
       construct
+      dbus-fast
       pyserial
       pyudev
     ]; # missing inputs: python-eq3bt
@@ -795,9 +810,11 @@
     "esphome" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       ifaddr
       pyserial
       pyudev
@@ -887,9 +904,11 @@
     ];
     "fjaraskupan" = ps: with ps; [
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       fjaraskupan
       pyserial
       pyudev
@@ -1088,9 +1107,11 @@
     ];
     "govee_ble" = ps: with ps; [
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       govee-ble
       pyserial
       pyudev
@@ -1236,9 +1257,11 @@
     "homekit_controller" = ps: with ps; [
       aiohomekit
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       ifaddr
       pyserial
       pyudev
@@ -1343,9 +1366,11 @@
     ];
     "inkbird" = ps: with ps; [
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       inkbird-ble
       pyserial
       pyudev
@@ -1516,9 +1541,11 @@
     ];
     "led_ble" = ps: with ps; [
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       led-ble
       pyserial
       pyudev
@@ -1681,9 +1708,11 @@
     ]; # missing inputs: py-melissa-climate
     "melnor" = ps: with ps; [
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       pyserial
       pyudev
     ]; # missing inputs: melnor-bluetooth
@@ -1752,9 +1781,11 @@
     ];
     "moat" = ps: with ps; [
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       moat-ble
       pyserial
       pyudev
@@ -2255,9 +2286,11 @@
     ]; # missing inputs: python-qbittorrent
     "qingping" = ps: with ps; [
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       pyserial
       pyudev
       qingping-ble
@@ -2503,18 +2536,22 @@
     ];
     "sensorpro" = ps: with ps; [
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       pyserial
       pyudev
       sensorpro-ble
     ];
     "sensorpush" = ps: with ps; [
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       pyserial
       pyudev
       sensorpush-ble
@@ -2789,9 +2826,11 @@
     "switchbot" = ps: with ps; [
       pyswitchbot
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       pyserial
       pyudev
     ];
@@ -2893,18 +2932,22 @@
     ]; # missing inputs: pytfiac
     "thermobeacon" = ps: with ps; [
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       pyserial
       pyudev
       thermobeacon-ble
     ];
     "thermopro" = ps: with ps; [
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       pyserial
       pyudev
       thermopro-ble
@@ -3281,9 +3324,11 @@
     ];
     "xiaomi_ble" = ps: with ps; [
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       pyserial
       pyudev
       xiaomi-ble
@@ -3306,9 +3351,11 @@
     ];
     "yalexs_ble" = ps: with ps; [
       aiohttp-cors
+      bleak-retry-connector
       bleak
       bluetooth-adapters
       bluetooth-auto-recovery
+      dbus-fast
       pyserial
       pyudev
       yalexs-ble

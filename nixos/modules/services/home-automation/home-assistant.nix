@@ -415,7 +415,7 @@ in {
           # Empty string first, so we will never accidentally have an empty capability bounding set
           # https://github.com/NixOS/nixpkgs/issues/120617#issuecomment-830685115
           ""
-        ] ++ lib.optionals (builtins.any useComponent [ "bluetooth" "bluetooth_le_tracker" "bluetooth_tracker" "eq3btsmart" "fjaraskupan" "govee_ble" "homekit_controller" "inkbird" "moat" "sensorpush" "switchbot" "xiaomi_ble" ]) [
+        ] ++ lib.optionals (builtins.any useComponent componentsUsingBluetooth) [
           # Required for interaction with hci devices and bluetooth sockets, identified by bluetooth-adapters dependency
           # https://www.home-assistant.io/integrations/bluetooth_le_tracker/#rootless-setup-on-core-installs
           "CAP_NET_ADMIN"
@@ -432,8 +432,30 @@ in {
         ]);
         componentsUsingBluetooth = [
           # Components that require the AF_BLUETOOTH address family
-          "bluetooth_tracker"
+          "august"
+          "bluemaestro"
+          "bluetooth"
           "bluetooth_le_tracker"
+          "bluetooth_tracker"
+          "bthome"
+          "default_config"
+          "eq3btsmart"
+          "esphome"
+          "fjaraskupan"
+          "govee_ble"
+          "homekit_controller"
+          "inkbird"
+          "led_ble"
+          "melnor"
+          "moat"
+          "qingping"
+          "sensorpro"
+          "sensorpush"
+          "switchbot"
+          "thermobeacon"
+          "thermopro"
+          "xiaomi_ble"
+          "yalexs_ble"
         ];
         componentsUsingPing = [
           # Components that require the capset syscall for the ping wrapper
@@ -450,7 +472,6 @@ in {
           # mostly the ones using config flows already.
           "acer_projector"
           "alarmdecoder"
-          "arduino"
           "blackbird"
           "deconz"
           "dsmr"
@@ -464,7 +485,6 @@ in {
           "insteon"
           "kwb"
           "lacrosse"
-          "mhz19"
           "modbus"
           "modem_callerid"
           "mysensors"
@@ -480,7 +500,6 @@ in {
           "usb"
           "velbus"
           "w800rf32"
-          "xbee"
           "zha"
           "zwave"
           "zwave_js"

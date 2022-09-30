@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "led-ble";
-  version = "0.7.1";
+  version = "0.10.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-WjSMyuxxScJMtrQAvCHX98IXzbO2dWAsAaOwXf6TEDg=";
+    hash = "sha256-GyVj9g4tqPaR5Gd8N76TtkldaAATnEBsSs/F+2iQqGM=";
   };
 
   postPatch = ''
