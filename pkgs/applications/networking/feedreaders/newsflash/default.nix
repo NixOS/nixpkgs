@@ -10,7 +10,6 @@
 , glib
 , gtk4
 , libadwaita
-, libhandy
 , libxml2
 , openssl
 , sqlite
@@ -71,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk4
     libadwaita
-    libhandy
     libxml2
     openssl
     sqlite
