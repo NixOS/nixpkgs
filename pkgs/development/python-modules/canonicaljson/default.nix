@@ -4,6 +4,7 @@
 , frozendict
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , simplejson
 }:
 
@@ -18,6 +19,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-yll2C8J0qJmg2nWAnWkJrkPlEjOB/W7wQKRNGVLAtEg=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     simplejson
