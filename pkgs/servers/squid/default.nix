@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
     perl openldap db cyrus_sasl expat libxml2 openssl
   ] ++ lib.optionals stdenv.isLinux [ libcap pam systemd ];
 
+  enableParallelBuilding = true;
+
   configureFlags = [
     "--enable-ipv6"
     "--disable-strict-error-checking"
