@@ -10088,6 +10088,8 @@ with pkgs;
 
   phosh = callPackage ../applications/window-managers/phosh { };
 
+  phosh-mobile-settings = callPackage ../applications/window-managers/phosh/phosh-mobile-settings.nix { };
+
   pinentry = libsForQt5.callPackage ../tools/security/pinentry { };
 
   pinentry-curses = (lib.getOutput "curses" pinentry);
