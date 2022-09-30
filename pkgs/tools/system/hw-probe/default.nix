@@ -100,7 +100,6 @@ stdenv.mkDerivation rec {
         mesa-demos
         memtester
         sysstat # (iostat)
-        cpuid
         util-linuxMinimal # (rfkill)
         xinput
         libva-utils # (vainfo)
@@ -108,7 +107,9 @@ stdenv.mkDerivation rec {
         vulkan-utils
         i2c-tools
         opensc
-      ];
+      ]
+      # cpuid is only compatible with i686 and x86_64
+      ++ lib.optional (lib.elem stdenv.hostPlatform.system cpuid.meta.platforms) cpuid;
       conditionallyRecommendedPrograms = lib.optional systemdSupport systemd; # (systemd-analyze)
       suggestedPrograms = [
         hplip # (hp-probe)
