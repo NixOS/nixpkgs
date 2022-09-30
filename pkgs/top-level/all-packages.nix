@@ -244,6 +244,8 @@ with pkgs;
 
   asn = callPackage ../applications/networking/asn { };
 
+  asnmap = callPackage ../tools/security/asnmap { };
+
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
   atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
