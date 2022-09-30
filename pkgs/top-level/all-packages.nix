@@ -4160,6 +4160,8 @@ with pkgs;
 
   huniq = callPackage ../tools/text/huniq { };
 
+  hunt = callPackage ../tools/misc/hunt { };
+
   hyprland = callPackage ../applications/window-managers/hyprland {
     wlroots = wlroots.overrideAttrs (_: {
       version = "unstable-2022-06-07";
