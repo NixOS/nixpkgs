@@ -84,6 +84,6 @@ buildPythonApplication rec {
     description = "Tool to create committing rules for projects, auto bump versions, and generate changelogs";
     homepage = "https://github.com/commitizen-tools/commitizen";
     license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [ lovesegfault anthonyroussel ];
   };
 }
