@@ -6,6 +6,7 @@
 , nettle
 , pkg-config
 , libiconv
+, libxcrypt
 , ApplicationServices
 }:
 
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [ gettext gnutls nettle ]
+  buildInputs = [ gettext gnutls nettle libxcrypt ]
     ++ lib.optionals stdenv.isDarwin [ libiconv ApplicationServices ];
 
   enableParallelBuilding = true;
