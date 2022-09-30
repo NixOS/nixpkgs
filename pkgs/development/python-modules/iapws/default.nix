@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "iapws";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "781285acaedff49d72c074aa308aabf7ca17f486cca490e5ed3f35526bbe4153";
+    sha256 = "sha256-QVxbf9EF9YwAVPewAqhc1WZD6jVr/rFXQUw/jJ7kkDU=";
   };
 
   propagatedBuildInputs = [ scipy ];
