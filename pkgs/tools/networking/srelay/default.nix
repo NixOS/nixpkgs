@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, libxcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "srelay";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./arm.patch ];
+
+  buildInputs = [ libxcrypt ];
 
   installPhase = "install -D srelay $out/bin/srelay";
 
