@@ -31,17 +31,6 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
-      advantage-air = super.advantage-air.overridePythonAttrs (oldAttrs: rec {
-        version = "0.3.1";
-        src = super.fetchPypi {
-          pname = "advantage_air";
-          inherit version;
-          hash = "sha256-C+cB6oHmbr9mHZKnbls42yenQy3+L8huLk9wKazIWfU=";
-        };
-      });
-    })
-
-    (self: super: {
       backoff = super.backoff.overridePythonAttrs (oldAttrs: rec {
         version = "1.11.1";
         src = fetchFromGitHub {
@@ -63,6 +52,53 @@ let
           repo = "python-bsblan";
           rev = "v.${version}";
           hash = "sha256-yzlHcIb5QlG+jAgEtKlAcY7rESiUY7nD1YwqK63wgcg=";
+        };
+      });
+    })
+
+    (self: super: {
+      bleak = super.bleak.overridePythonAttrs (oldAttrs: rec {
+        version = "0.17.0";
+        src = fetchFromGitHub {
+          owner = "hbldh";
+          repo = "bleak";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-AnH23AWrLw2jq6gSbx9VoGD8QXeCH5dN7FSVVdj4b3w=";
+        };
+      });
+
+      bleak-retry-connector = super.bleak-retry-connector.overridePythonAttrs (oldAttrs: rec {
+        version = "1.17.1";
+        src = fetchFromGitHub {
+          owner = "Bluetooth-Devices";
+          repo = "bleak-retry-connector";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-FoQ1cDORQaJcr6y9JaO4MigqV6jiBbwKNIIdYDgFNxQ=";
+        };
+      });
+    })
+
+    (self: super: {
+      blebox-uniapi = super.blebox-uniapi.overridePythonAttrs (oldAttrs: rec {
+        version = "2.0.2";
+        src = fetchFromGitHub {
+          owner = "blebox";
+          repo = "blebox_uniapi";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-0Yiooy7YSUFjqqcyH2fPQ6AWuR0EJxfRRZTw/6JGcMA=";
+        };
+      });
+    })
+
+    (self: super: {
+      bluetooth-adapters = super.bluetooth-adapters.overridePythonAttrs (oldAttrs: rec {
+        version = "0.4.1";
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ super.dbus-fast ];
+        src = fetchFromGitHub {
+          owner = "Bluetooth-Devices";
+          repo = "bluetooth-adapters";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-LAT4r6RHJWTkrZvuL1aSQDiztvXiOJwGmNQKGFnvFB8=";
         };
       });
     })
@@ -268,18 +304,6 @@ let
       });
     })
 
-    (self: super: {
-      xiaomi-ble = super.xiaomi-ble.overridePythonAttrs (oldAttrs: rec {
-        version = "0.9.0";
-        src = fetchFromGitHub {
-          owner = "Bluetooth-Devices";
-          repo = "xiaomi-ble";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-xdh8WHrSkbuOGqSiIiufjiVaO719DMDYzbprE3s2kmQ=";
-        };
-      });
-    })
-
     # home-assistant-frontend does not exist in python3.pkgs
     (self: super: {
       home-assistant-frontend = self.callPackage ./frontend.nix { };
@@ -309,7 +333,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.9.1";
+  hassVersion = "2022.9.7";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -327,7 +351,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-JXMLIMiwM1givdV6HcSGHI9v3zh8gMiF9khaGWR5e9I=";
+    hash = "sha256-V6/y5HnJh8AVwkSg3uanYQRNvDcD1P0L+wBu98NpDek=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
