@@ -1,5 +1,5 @@
 { kernelPackages ? null }:
-import ../make-test-python.nix ({ pkgs, lib, ...} :
+import ../make-test-python.nix ({ pkgs, lib, ... }:
   let
     wg-snakeoil-keys = import ./snakeoil-keys.nix;
     peer = (import ./make-peer.nix) { inherit lib; };
@@ -49,13 +49,18 @@ import ../make-test-python.nix ({ pkgs, lib, ...} :
               endpoint = "192.168.0.1:23542";
               persistentKeepalive = 25;
 
-              inherit (wg-snakeoil-keys.peer0) publicKey;
+              publicKeyFile = "/tmp/peer0.key";
             };
 
-            postSetup = let inherit (pkgs) iproute2; in ''
-              ${iproute2}/bin/ip route replace 10.23.42.1/32 dev wg0
-              ${iproute2}/bin/ip route replace fc00::1/128 dev wg0
+            preSetup = ''
+              echo ${wg-snakeoil-keys.peer0.publicKey} > /tmp/peer0.key
             '';
+
+            postSetup = let inherit (pkgs) iproute2; in
+              ''
+                ${iproute2}/bin/ip route replace 10.23.42.1/32 dev wg0
+                ${iproute2}/bin/ip route replace fc00::1/128 dev wg0
+              '';
           };
         };
       };
