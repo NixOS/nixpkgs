@@ -12,6 +12,7 @@
 , libpcap
 , libssh
 , libuuid
+, libxcrypt
 , libxml2
 , pkg-config
 , zlib
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     libpcap
     libssh
     libuuid
+    libxcrypt
     libxml2
     zlib
   ];
