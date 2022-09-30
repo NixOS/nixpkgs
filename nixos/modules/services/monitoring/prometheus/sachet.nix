@@ -14,7 +14,7 @@ in
       configuration = mkOption {
         type = types.nullOr types.attrs;
         default = null;
-        example = literalExample ''
+        example = literalExpression ''
           {
             providers = {
               twilio = {

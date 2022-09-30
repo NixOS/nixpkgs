@@ -60,13 +60,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hw-probe";
-  version = "1.6.4";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "linuxhw";
     repo = pname;
     rev = version;
-    sha256 = "sha256:028wnhrbn10lfxwmcpzdbz67ygldimv7z1k1bm64ggclykvg5aim";
+    sha256 = "sha256-WlLSgjVLqGGtwCyyUn9X3XbE2Yhz6LD245+U2JgGd+k=";
   };
 
   makeFlags = [ "prefix=$(out)" ];
@@ -100,7 +100,6 @@ stdenv.mkDerivation rec {
         mesa-demos
         memtester
         sysstat # (iostat)
-        cpuid
         util-linuxMinimal # (rfkill)
         xinput
         libva-utils # (vainfo)
@@ -108,7 +107,9 @@ stdenv.mkDerivation rec {
         vulkan-utils
         i2c-tools
         opensc
-      ];
+      ]
+      # cpuid is only compatible with i686 and x86_64
+      ++ lib.optional (lib.elem stdenv.hostPlatform.system cpuid.meta.platforms) cpuid;
       conditionallyRecommendedPrograms = lib.optional systemdSupport systemd; # (systemd-analyze)
       suggestedPrograms = [
         hplip # (hp-probe)
