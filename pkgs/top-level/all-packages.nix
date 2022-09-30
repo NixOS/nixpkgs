@@ -8995,6 +8995,8 @@ with pkgs;
 
   mfoc = callPackage ../tools/security/mfoc { };
 
+  microbin = callPackage ../servers/microbin { };
+
   microdnf = callPackage ../tools/package-management/microdnf { };
 
   microplane = callPackage ../tools/misc/microplane { };
