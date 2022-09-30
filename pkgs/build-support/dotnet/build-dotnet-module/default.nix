@@ -112,10 +112,7 @@ let
   # this contains all the nuget packages that are implicitly referenced by the dotnet
   # build system. having them as separate deps allows us to avoid having to regenerate
   # a packages dependencies when the dotnet-sdk version changes
-  sdkDeps = mkNugetDeps {
-    name = "dotnet-sdk-${dotnet-sdk.version}-deps";
-    nugetDeps = dotnet-sdk.passthru.packages;
-  };
+  sdkDeps = dotnet-sdk.packages;
 
   sdkSource = mkNugetSource {
     name = "dotnet-sdk-${dotnet-sdk.version}-source";

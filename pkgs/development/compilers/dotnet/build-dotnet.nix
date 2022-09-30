@@ -24,6 +24,7 @@ assert if type == "sdk" then packages != null else true;
 , testers
 , runCommand
 , writeShellScript
+, mkNugetDeps
 }:
 
 let
@@ -40,6 +41,12 @@ let
     runtime = ".NET Runtime ${version}";
     sdk = ".NET SDK ${version}";
   };
+
+  packageDeps = mkNugetDeps {
+    name = "${pname}-${version}-deps";
+    nugetDeps = packages;
+  };
+
 in
 stdenv.mkDerivation (finalAttrs: rec {
   inherit pname version;
@@ -120,7 +127,8 @@ stdenv.mkDerivation (finalAttrs: rec {
   '';
 
   passthru = rec {
-    inherit icu packages;
+    inherit icu;
+    packages = packageDeps;
 
     updateScript =
       if type == "sdk" then
