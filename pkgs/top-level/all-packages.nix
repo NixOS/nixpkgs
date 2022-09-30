@@ -5441,7 +5441,7 @@ with pkgs;
 
   schildichat-desktop = callPackage ../applications/networking/instant-messengers/schildichat/schildichat-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_17;
+    electron = electron_20;
   };
   schildichat-desktop-wayland = writeScriptBin "schildichat-desktop" ''
     #!/bin/sh
@@ -14969,7 +14969,8 @@ with pkgs;
     electron_16
     electron_17
     electron_18
-    electron_19;
+    electron_19
+    electron_20;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
