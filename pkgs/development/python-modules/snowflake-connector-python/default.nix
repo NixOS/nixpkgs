@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "2.7.12";
+  version = "2.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M50YI6aB7fSVRLeAqxLKtsxJIC1oWLcb9Mvah9/C/zU=";
+    hash = "sha256-gvZ+Nuf+Ns1XIYpsBHdegzA9sjFxT9+Qm6kbsJR8JLY=";
   };
 
   propagatedBuildInputs = [
