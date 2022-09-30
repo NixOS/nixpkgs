@@ -9,6 +9,7 @@
 , fetchPypi
 , joblib
 , six
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -28,7 +29,8 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ cython ];
+  pythonRemoveDeps = [ "cython" ];
+  nativeBuildInputs = [ pythonRelaxDepsHook cython ];
   propagatedBuildInputs = [ numpy scipy scikit-learn joblib six ];
   preCheck = ''
     cd hdbscan/tests
