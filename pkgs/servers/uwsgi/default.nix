@@ -1,4 +1,4 @@
-{ stdenv, nixosTests, lib, fetchurl, pkg-config, jansson, pcre
+{ stdenv, nixosTests, lib, fetchurl, pkg-config, jansson, pcre, fetchFromGitHub
 # plugins: list of strings, eg. [ "python2" "python3" ]
 , plugins ? []
 , pam, withPAM ? stdenv.isLinux
@@ -60,6 +60,7 @@ in
 stdenv.mkDerivation rec {
   pname = "uwsgi";
   version = "2.0.20";
+  outputs = ["out" "doc"];
 
   src = fetchurl {
     url = "https://projects.unbit.it/downloads/${pname}-${version}.tar.gz";
@@ -72,7 +73,7 @@ stdenv.mkDerivation rec {
         ./missing-arginfo-php8.patch # https://github.com/unbit/uwsgi/issues/2356
   ];
 
-  nativeBuildInputs = [ python3 pkg-config ];
+  nativeBuildInputs = [ python3 pkg-config python3.pkgs.sphinxHook ];
 
   buildInputs =  [ jansson pcre ]
               ++ lib.optional withPAM pam
@@ -90,6 +91,14 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit python2 python3;
+  };
+
+  # Documentation is maintained separately, without any releases.
+  sphinxRoot = fetchFromGitHub {
+    owner = "unbit";
+    repo = "uwsgi-docs";
+    rev = "d278af14178fab1297c284b52265e37e519c40bc";
+    sha256 = "0v9yazd45kp0g77if0fqmqz0253asz1p6vr16zrmmn7wmj3szi9g";
   };
 
   postPatch = ''
