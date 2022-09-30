@@ -24610,6 +24610,7 @@ with pkgs;
   tgt = callPackage ../tools/networking/tgt { };
 
   lkl = callPackage ../applications/virtualization/lkl { };
+  lklWithFirewall = callPackage ../applications/virtualization/lkl { firewallSupport = true; };
 
   inherit (callPackages ../os-specific/linux/kernel-headers { })
     linuxHeaders makeLinuxHeaders;
