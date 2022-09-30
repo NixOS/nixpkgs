@@ -532,7 +532,7 @@
           for any combinations of parameters, see
           <link xlink:href="https://nixos.org/guides/cross-compilation.html">the
           official nix guide about cross compilation</link>.
-         </para>
+        </para>
       </listitem>
       <listitem>
         <para>
