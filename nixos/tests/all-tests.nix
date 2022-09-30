@@ -45,9 +45,9 @@ let
 
   inherit
     (rec {
-      doRunTest = arg: (import ../lib/testing-python.nix { inherit system pkgs; }).runTest {
-        imports = [ arg { inherit callTest; } ];
-      };
+      doRunTest = arg: ((import ../lib/testing-python.nix { inherit system pkgs; }).evalTest {
+        imports = [ arg ];
+      }).config.result;
       findTests = tree:
         if tree?recurseForDerivations && tree.recurseForDerivations
         then
@@ -198,7 +198,6 @@ in {
   ferm = handleTest ./ferm.nix {};
   firefox = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox; };
   firefox-esr    = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr; }; # used in `tested` job
-  firefox-esr-91 = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr-91; };
   firefox-esr-102 = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr-102; };
   firejail = handleTest ./firejail.nix {};
   firewall = handleTest ./firewall.nix {};

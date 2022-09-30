@@ -193,6 +193,18 @@ in {
         inherit openjdk18-bootstrap;
         openjfx = openjfx17;
       };
+
+    temurin-bin = recurseIntoAttrs (callPackage (
+      if stdenv.isLinux
+      then ../development/compilers/temurin-bin/jdk-linux.nix
+      else ../development/compilers/temurin-bin/jdk-darwin.nix
+    ) {});
+
+    semeru-bin = recurseIntoAttrs (callPackage (
+      if stdenv.isLinux
+      then ../development/compilers/semeru-bin/jdk-linux.nix
+      else ../development/compilers/semeru-bin/jdk-darwin.nix
+    ) {});
   };
 
   mavenPlugins = recurseIntoAttrs (callPackage ../development/java-modules/mavenPlugins.nix { });

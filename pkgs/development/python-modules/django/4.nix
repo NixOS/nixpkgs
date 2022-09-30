@@ -5,6 +5,9 @@
 , pythonOlder
 , substituteAll
 
+# build
+, setuptools
+
 # patched in
 , fetchpatch
 , geos
@@ -62,6 +65,10 @@ buildPythonPackage rec {
       gdal = gdal;
       extension = stdenv.hostPlatform.extensions.sharedLibrary;
     })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
   ];
 
   propagatedBuildInputs = [

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkg-config libintl automake autoconf ];
+  nativeBuildInputs = [ pkg-config libintl automake autoconf gobject-introspection ];
 
   configureFlags = [
     "--enable-introspection"
@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional gstreamerSupport "--enable-cogl-gst"
   ++ lib.optionals (!stdenv.isDarwin) [ "--enable-gles1" "--enable-gles2" ];
 
+  # TODO: this shouldn't propagate so many things
+  # especially not gobject-introspection
   propagatedBuildInputs = with xorg; [
       glib gdk-pixbuf gobject-introspection wayland mesa
       libGL libXrandr libXfixes libXcomposite libXdamage

@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , asgineer
+, bcrypt
 , itemdb
 , jinja2
 , markdown
@@ -26,6 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     asgineer
+    bcrypt
     itemdb
     jinja2
     markdown

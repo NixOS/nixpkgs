@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , pyvex
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -18,6 +19,10 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-dfogVQZ6RP1GyuoiTEC/VLancb+ZmdM1xPSngLbcmYs=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pyvex

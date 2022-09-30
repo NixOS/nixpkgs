@@ -3,7 +3,6 @@
 , c-aresSupport ? false, c-ares
 , gnutlsSupport ? false, gnutls
 , gsaslSupport ? false, gsasl
-, patchNetrcRegression ? false
 , gssSupport ? with stdenv.hostPlatform; (
     !isWindows &&
     # disable gss becuase of: undefined reference to `k5_bcmp'
@@ -48,21 +47,19 @@ assert !(opensslSupport && wolfsslSupport);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "7.84.0";
+  version = "7.85.0";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/curl-${finalAttrs.version}/curl-${finalAttrs.version}.tar.bz2"
     ];
-    sha256 = "sha256-cC+ybnMZCjvXcHGqFG9Qe5gXzE384hjSq4fwDNO8BZ0=";
+    sha256 = "sha256-IafoNijulhZKwrNv9r+Z1GfHsLYhwffjF9jw2WARU5w=";
   };
 
   patches = [
     ./7.79.1-darwin-no-systemconfiguration.patch
-    ./sched.patch
-    ./atomic.patch
-  ] ++ lib.optional patchNetrcRegression ./netrc-regression.patch;
+  ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   separateDebugInfo = stdenv.isLinux;

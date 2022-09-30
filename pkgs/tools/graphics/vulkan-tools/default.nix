@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.3.224.0";
+  version = "1.3.224.1";
 
   # It's not strictly necessary to have matching versions here, however
   # since we're using the SDK version we may as well be consistent with

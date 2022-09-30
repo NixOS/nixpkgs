@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchFromGitHub, configargparse }:
+{ lib, buildPythonApplication, fetchFromGitHub, configargparse, setuptools }:
 
 buildPythonApplication rec {
   pname = "rofi-rbw";
@@ -11,6 +11,10 @@ buildPythonApplication rec {
     rev = "refs/tags/${version}";
     hash = "sha256-YDL0pMl3BX59kzjuykn0lQHu2RMvPhsBrlSiqdcZAXs=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [ configargparse ];
 

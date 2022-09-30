@@ -46,10 +46,11 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     vala
     shared-mime-info
+    gnupg
+    openssh
   ];
 
   buildInputs = [
-    gnupg
     libgcrypt
     libtasn1
     pango

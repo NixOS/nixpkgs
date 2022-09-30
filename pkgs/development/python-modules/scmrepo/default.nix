@@ -10,6 +10,7 @@
 , pygit2
 , pygtrie
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -26,6 +27,16 @@ buildPythonPackage rec {
     hash = "sha256-lFeYo7OVT0az+mYgERcVuuT9rX29+E2+WwfdDlMRm+I=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "asyncssh>=2.7.1,<2.9" "asyncssh>=2.7.1" \
+      --replace "pathspec>=0.9.0,<0.10.0" "pathspec"
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     asyncssh
     dulwich
@@ -36,11 +47,6 @@ buildPythonPackage rec {
     pygit2
     pygtrie
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "asyncssh>=2.7.1,<2.9" "asyncssh>=2.7.1"
-  '';
 
   # Requires a running Docker instance
   doCheck = false;

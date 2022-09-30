@@ -21,7 +21,8 @@ with python3.pkgs; buildPythonApplication rec {
       --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data.json}'
 
     substituteInPlace setup.py \
-      --replace 'uvicorn==%s" % ("0.17.*"' 'uvicorn==%s" % ("0.18.*"'
+      --replace 'uvicorn==%s" % ("0.17.*"' 'uvicorn==%s" % ("0.18.*"' \
+      --replace 'wsproto==' 'wsproto>='
   '';
 
   propagatedBuildInputs = [

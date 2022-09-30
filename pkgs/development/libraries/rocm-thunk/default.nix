@@ -26,6 +26,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libdrm numactl ];
 
+  # https://github.com/RadeonOpenCompute/ROCT-Thunk-Interface/issues/75
+  postPatch = ''
+    substituteInPlace libhsakmt.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
+
   postInstall = ''
     cp -r $src/include $out
   '';

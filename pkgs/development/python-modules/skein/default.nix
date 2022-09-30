@@ -19,6 +19,7 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-nXTqsJNX/LwAglPcPZkmdYPfF+vDLN+nNdZaDFTrHzE=";
   };
+
   # Update this hash if bumping versions
   jarHash = "sha256-x2KH6tnoG7sogtjrJvUaxy0PCEA8q/zneuI969oBOKo=";
   skeinJar = callPackage ./skeinjar.nix { inherit pname version jarHash; };

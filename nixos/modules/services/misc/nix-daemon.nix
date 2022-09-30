@@ -228,13 +228,16 @@ in
               '';
             };
             protocol = mkOption {
-              type = types.enum [ "ssh" "ssh-ng" ];
+              type = types.enum [ null "ssh" "ssh-ng" ];
               default = "ssh";
               example = "ssh-ng";
               description = lib.mdDoc ''
                 The protocol used for communicating with the build machine.
                 Use `ssh-ng` if your remote builder and your
                 local Nix version support that improved protocol.
+
+                Use `null` when trying to change the special localhost builder
+                without a protocol which is for example used by hydra.
               '';
             };
             system = mkOption {
@@ -680,13 +683,15 @@ in
         concatMapStrings
           (machine:
             (concatStringsSep " " ([
-              "${machine.protocol}://${optionalString (machine.sshUser != null) "${machine.sshUser}@"}${machine.hostName}"
+              "${optionalString (machine.protocol != null) "${machine.protocol}://"}${optionalString (machine.sshUser != null) "${machine.sshUser}@"}${machine.hostName}"
               (if machine.system != null then machine.system else if machine.systems != [ ] then concatStringsSep "," machine.systems else "-")
               (if machine.sshKey != null then machine.sshKey else "-")
               (toString machine.maxJobs)
               (toString machine.speedFactor)
-              (concatStringsSep "," (machine.supportedFeatures ++ machine.mandatoryFeatures))
-              (concatStringsSep "," machine.mandatoryFeatures)
+              (let res = (machine.supportedFeatures ++ machine.mandatoryFeatures);
+               in if (res == []) then "-" else (concatStringsSep "," res))
+              (let res = machine.mandatoryFeatures;
+               in if (res == []) then "-" else (concatStringsSep "," machine.mandatoryFeatures))
             ]
             ++ optional (isNixAtLeast "2.4pre") (if machine.publicHostKey != null then machine.publicHostKey else "-")))
             + "\n"

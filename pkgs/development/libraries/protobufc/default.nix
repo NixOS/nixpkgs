@@ -1,15 +1,20 @@
-{ lib, stdenv, src, version
+{ lib, stdenv, fetchFromGitHub
 , autoreconfHook, pkg-config, protobuf, zlib
-, ...
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "protobuf-c";
-  inherit version;
+  version = "1.4.1";
 
-  inherit src;
+  src = fetchFromGitHub {
+    owner = "protobuf-c";
+    repo = "protobuf-c";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TJCLzxozuZ8ynrBQ2lKyk03N+QA/lbOwywUjDUdTlbM=";
+  };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
+
   buildInputs = [ protobuf zlib ];
 
   meta = with lib; {
@@ -17,5 +22,6 @@ stdenv.mkDerivation {
     description = "C bindings for Google's Protocol Buffers";
     license = licenses.bsd2;
     platforms = platforms.all;
+    maintainers = with maintainers; [ ];
   };
 }

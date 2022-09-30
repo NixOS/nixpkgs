@@ -5,6 +5,7 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , typing-extensions
 , zeroconf
 }:
@@ -22,6 +23,10 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-CGr7NvnGRNTiKq5BpB/zmfgyd/2ggTbO0nj+Q+MavTs=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     cryptography

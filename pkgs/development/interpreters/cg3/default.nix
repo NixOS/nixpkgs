@@ -30,6 +30,11 @@ let cg3 = stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  postFixup = ''
+    substituteInPlace "$out"/lib/pkgconfig/cg3.pc \
+      --replace '=''${prefix}//' '=/'
+  '';
+
   passthru.tests.minimal = runCommand "${pname}-test" {
       buildInputs = [
         cg3

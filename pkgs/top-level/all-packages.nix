@@ -3891,6 +3891,8 @@ with pkgs;
 
   facter = callPackage ../tools/system/facter { };
 
+  faketty = callPackage ../tools/misc/faketty { };
+
   fasd = callPackage ../tools/misc/fasd { };
 
   fastJson = callPackage ../development/libraries/fastjson { };
@@ -4526,7 +4528,9 @@ with pkgs;
 
   online-judge-tools = with python3.pkgs; toPythonApplication online-judge-tools;
 
-  onnxruntime = callPackage ../development/libraries/onnxruntime { };
+  onnxruntime = callPackage ../development/libraries/onnxruntime {
+    protobuf = protobuf3_19;
+  };
 
   xkbd = callPackage ../applications/misc/xkbd { };
 
@@ -10196,19 +10200,7 @@ with pkgs;
 
   podman-tui = callPackage ../applications/virtualization/podman-tui { };
 
-  pods = callPackage ../applications/virtualization/pods {
-    # taken from #182618, remove when merged
-    libadwaita = libadwaita.overrideAttrs (_: rec {
-      version = "1.2.0";
-      src = fetchFromGitLab {
-        domain = "gitlab.gnome.org";
-        owner = "GNOME";
-        repo = "libadwaita";
-        rev = version;
-        hash = "sha256-3lH7Vi9M8k+GSrCpvruRpLrIpMoOakKbcJlaAc/FK+U=";
-      };
-    });
-  };
+  pods = callPackage ../applications/virtualization/pods { };
 
   pod2mdoc = callPackage ../tools/misc/pod2mdoc { };
 
@@ -13068,6 +13060,29 @@ with pkgs;
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
+  temurin-bin-17 = javaPackages.compiler.temurin-bin.jdk-17;
+  temurin-jre-bin-17 = javaPackages.compiler.temurin-bin.jre-17;
+  temurin-bin-16 = javaPackages.compiler.temurin-bin.jdk-16;
+  temurin-bin-11 = javaPackages.compiler.temurin-bin.jdk-11;
+  temurin-jre-bin-11 = javaPackages.compiler.temurin-bin.jre-11;
+  temurin-bin-8 = javaPackages.compiler.temurin-bin.jdk-8;
+  temurin-jre-bin-8 = javaPackages.compiler.temurin-bin.jre-8;
+
+  temurin-bin = temurin-bin-17;
+  temurin-jre-bin = temurin-jre-bin-17;
+
+  semeru-bin-17 = javaPackages.compiler.semeru-bin.jdk-17;
+  semeru-jre-bin-17 = javaPackages.compiler.semeru-bin.jre-17;
+  semeru-bin-16 = javaPackages.compiler.semeru-bin.jdk-16;
+  semeru-jre-bin-16 = javaPackages.compiler.semeru-bin.jre-16;
+  semeru-bin-11 = javaPackages.compiler.semeru-bin.jdk-11;
+  semeru-jre-bin-11 = javaPackages.compiler.semeru-bin.jre-11;
+  semeru-bin-8 = javaPackages.compiler.semeru-bin.jdk-8;
+  semeru-jre-bin-8 = javaPackages.compiler.semeru-bin.jre-8;
+
+  semeru-bin = semeru-bin-17;
+  semeru-jre-bin = semeru-jre-bin-17;
+
   adoptopenjdk-bin-17-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk17-linux.nix { inherit lib; };
   adoptopenjdk-bin-17-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk17-darwin.nix { inherit lib; };
 
@@ -13078,113 +13093,25 @@ with pkgs;
     then callPackage adoptopenjdk-bin-17-packages-linux.jre-hotspot {}
     else callPackage adoptopenjdk-bin-17-packages-darwin.jre-hotspot {};
 
-  adoptopenjdk-bin-16-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk16-linux.nix { inherit lib; };
-  adoptopenjdk-bin-16-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk16-darwin.nix { inherit lib; };
+  adoptopenjdk-hotspot-bin-16 = javaPackages.compiler.adoptopenjdk-16.jdk-hotspot;
+  adoptopenjdk-jre-hotspot-bin-16 = javaPackages.compiler.adoptopenjdk-16.jre-hotspot;
+  adoptopenjdk-openj9-bin-16 = javaPackages.compiler.adoptopenjdk-16.jdk-openj9;
+  adoptopenjdk-jre-openj9-bin-16 = javaPackages.compiler.adoptopenjdk-16.jre-openj9;
 
-  adoptopenjdk-hotspot-bin-16 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-16-packages-linux.jdk-hotspot {}
-    else callPackage adoptopenjdk-bin-16-packages-darwin.jdk-hotspot {};
-  adoptopenjdk-jre-hotspot-bin-16 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-16-packages-linux.jre-hotspot {}
-    else callPackage adoptopenjdk-bin-16-packages-darwin.jre-hotspot {};
+  adoptopenjdk-hotspot-bin-15 = javaPackages.compiler.adoptopenjdk-15.jdk-hotspot;
+  adoptopenjdk-jre-hotspot-bin-15 = javaPackages.compiler.adoptopenjdk-15.jre-hotspot;
+  adoptopenjdk-openj9-bin-15 = javaPackages.compiler.adoptopenjdk-15.jdk-openj9;
+  adoptopenjdk-jre-openj9-bin-15 = javaPackages.compiler.adoptopenjdk-15.jre-openj9;
 
-  adoptopenjdk-openj9-bin-16 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-16-packages-linux.jdk-openj9 {}
-    else callPackage adoptopenjdk-bin-16-packages-darwin.jdk-openj9 {};
+  adoptopenjdk-hotspot-bin-11 = javaPackages.compiler.adoptopenjdk-11.jdk-hotspot;
+  adoptopenjdk-jre-hotspot-bin-11 = javaPackages.compiler.adoptopenjdk-11.jre-hotspot;
+  adoptopenjdk-openj9-bin-11 = javaPackages.compiler.adoptopenjdk-11.jdk-openj9;
+  adoptopenjdk-jre-openj9-bin-11 = javaPackages.compiler.adoptopenjdk-11.jre-openj9;
 
-  adoptopenjdk-jre-openj9-bin-16 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-16-packages-linux.jre-openj9 {}
-    else callPackage adoptopenjdk-bin-16-packages-darwin.jre-openj9 {};
-
-  adoptopenjdk-bin-15-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk15-linux.nix { inherit lib; };
-  adoptopenjdk-bin-15-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk15-darwin.nix { inherit lib; };
-
-  adoptopenjdk-hotspot-bin-15 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-15-packages-linux.jdk-hotspot {}
-    else callPackage adoptopenjdk-bin-15-packages-darwin.jdk-hotspot {};
-  adoptopenjdk-jre-hotspot-bin-15 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-15-packages-linux.jre-hotspot {}
-    else callPackage adoptopenjdk-bin-15-packages-darwin.jre-hotspot {};
-
-  adoptopenjdk-openj9-bin-15 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-15-packages-linux.jdk-openj9 {}
-    else callPackage adoptopenjdk-bin-15-packages-darwin.jdk-openj9 {};
-
-  adoptopenjdk-jre-openj9-bin-15 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-15-packages-linux.jre-openj9 {}
-    else callPackage adoptopenjdk-bin-15-packages-darwin.jre-openj9 {};
-
-  adoptopenjdk-bin-14-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk14-linux.nix { inherit lib; };
-  adoptopenjdk-bin-14-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk14-darwin.nix { inherit lib; };
-
-  adoptopenjdk-hotspot-bin-14 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-14-packages-linux.jdk-hotspot {}
-    else callPackage adoptopenjdk-bin-14-packages-darwin.jdk-hotspot {};
-  adoptopenjdk-jre-hotspot-bin-14 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-14-packages-linux.jre-hotspot {}
-    else callPackage adoptopenjdk-bin-14-packages-darwin.jre-hotspot {};
-
-  adoptopenjdk-openj9-bin-14 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-14-packages-linux.jdk-openj9 {}
-    else callPackage adoptopenjdk-bin-14-packages-darwin.jdk-openj9 {};
-
-  adoptopenjdk-jre-openj9-bin-14 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-14-packages-linux.jre-openj9 {}
-    else callPackage adoptopenjdk-bin-14-packages-darwin.jre-openj9 {};
-
-  adoptopenjdk-bin-13-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk13-linux.nix { inherit lib; };
-  adoptopenjdk-bin-13-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk13-darwin.nix { inherit lib; };
-
-  adoptopenjdk-hotspot-bin-13 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-13-packages-linux.jdk-hotspot {}
-    else callPackage adoptopenjdk-bin-13-packages-darwin.jdk-hotspot {};
-  adoptopenjdk-jre-hotspot-bin-13 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-13-packages-linux.jre-hotspot {}
-    else callPackage adoptopenjdk-bin-13-packages-darwin.jre-hotspot {};
-
-  adoptopenjdk-openj9-bin-13 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-13-packages-linux.jdk-openj9 {}
-    else callPackage adoptopenjdk-bin-13-packages-darwin.jdk-openj9 {};
-
-  adoptopenjdk-jre-openj9-bin-13 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-13-packages-linux.jre-openj9 {}
-    else callPackage adoptopenjdk-bin-13-packages-darwin.jre-openj9 {};
-
-  adoptopenjdk-bin-11-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk11-linux.nix { inherit lib; };
-  adoptopenjdk-bin-11-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk11-darwin.nix { inherit lib; };
-
-  adoptopenjdk-hotspot-bin-11 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-11-packages-linux.jdk-hotspot {}
-    else callPackage adoptopenjdk-bin-11-packages-darwin.jdk-hotspot {};
-  adoptopenjdk-jre-hotspot-bin-11 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-11-packages-linux.jre-hotspot {}
-    else callPackage adoptopenjdk-bin-11-packages-darwin.jre-hotspot {};
-
-  adoptopenjdk-openj9-bin-11 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-11-packages-linux.jdk-openj9 {}
-    else callPackage adoptopenjdk-bin-11-packages-darwin.jdk-openj9 {};
-
-  adoptopenjdk-jre-openj9-bin-11 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-11-packages-linux.jre-openj9 {}
-    else callPackage adoptopenjdk-bin-11-packages-darwin.jre-openj9 {};
-
-  adoptopenjdk-bin-8-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk8-linux.nix { inherit lib; };
-  adoptopenjdk-bin-8-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk8-darwin.nix { inherit lib; };
-
-  adoptopenjdk-hotspot-bin-8 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-8-packages-linux.jdk-hotspot {}
-    else callPackage adoptopenjdk-bin-8-packages-darwin.jdk-hotspot {};
-  adoptopenjdk-jre-hotspot-bin-8 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-8-packages-linux.jre-hotspot {}
-    else callPackage adoptopenjdk-bin-8-packages-darwin.jre-hotspot {};
-
-  adoptopenjdk-openj9-bin-8 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-8-packages-linux.jdk-openj9 {}
-    else callPackage adoptopenjdk-bin-8-packages-darwin.jdk-openj9 {};
-
-  adoptopenjdk-jre-openj9-bin-8 = if stdenv.isLinux
-    then callPackage adoptopenjdk-bin-8-packages-linux.jre-openj9 {}
-    else callPackage adoptopenjdk-bin-8-packages-darwin.jre-openj9 {};
+  adoptopenjdk-hotspot-bin-8 = javaPackages.compiler.adoptopenjdk-8.jdk-hotspot;
+  adoptopenjdk-jre-hotspot-bin-8 = javaPackages.compiler.adoptopenjdk-8.jre-hotspot;
+  adoptopenjdk-openj9-bin-8 = javaPackages.compiler.adoptopenjdk-8.jdk-openj9;
+  adoptopenjdk-jre-openj9-bin-8 = javaPackages.compiler.adoptopenjdk-8.jre-openj9;
 
   adoptopenjdk-bin = adoptopenjdk-hotspot-bin-11;
   adoptopenjdk-jre-bin = adoptopenjdk-jre-hotspot-bin-11;
@@ -18861,7 +18788,7 @@ with pkgs;
   gtkimageview = callPackage ../development/libraries/gtkimageview { };
 
   glib = callPackage ../development/libraries/glib (let
-    glib-untested = glib.override { doCheck = false; };
+    glib-untested = glib.overrideAttrs (_: { doCheck = false; });
   in {
     # break dependency cycles
     # these things are only used for tests, they don't get into the closure
@@ -20096,9 +20023,7 @@ with pkgs;
   # On non-GNU systems we need GNU Gettext for libintl.
   libintl = if stdenv.hostPlatform.libc != "glibc" then gettext else null;
 
-  libid3tag = callPackage ../development/libraries/libid3tag {
-    gperf = gperf_3_0;
-  };
+  libid3tag = callPackage ../development/libraries/libid3tag { };
 
   libidn = callPackage ../development/libraries/libidn { };
 
@@ -21396,17 +21321,18 @@ with pkgs;
 
   prospector = callPackage ../development/tools/prospector { };
 
-  protobuf = protobuf3_19;
+  # https://github.com/protocolbuffers/protobuf/issues/10418
+  protobuf = if stdenv.hostPlatform.is32bit then protobuf3_20 else
+    protobuf3_21;
 
   protobuf3_21 = callPackage ../development/libraries/protobuf/3.21.nix { };
   protobuf3_20 = callPackage ../development/libraries/protobuf/3.20.nix { };
   protobuf3_19 = callPackage ../development/libraries/protobuf/3.19.nix { };
   protobuf3_17 = callPackage ../development/libraries/protobuf/3.17.nix { };
-  protobuf3_11 = callPackage ../development/libraries/protobuf/3.11.nix { };
   protobuf3_8 = callPackage ../development/libraries/protobuf/3.8.nix { };
   protobuf3_7 = callPackage ../development/libraries/protobuf/3.7.nix { };
 
-  protobufc = callPackage ../development/libraries/protobufc/1.3.nix { };
+  protobufc = callPackage ../development/libraries/protobufc { };
 
   protolock = callPackage ../development/libraries/protolock { };
 
@@ -24841,11 +24767,7 @@ with pkgs;
 
   libcap = callPackage ../os-specific/linux/libcap { };
 
-  libcap_ng = callPackage ../os-specific/linux/libcap-ng {
-    swig = null; # Currently not using the python2/3 bindings
-    python2 = null; # Currently not using the python2 bindings
-    python3 = null; # Currently not using the python3 bindings
-  };
+  libcap_ng = callPackage ../os-specific/linux/libcap-ng { };
 
   libnotify = callPackage ../development/libraries/libnotify { };
 
@@ -24947,6 +24869,8 @@ with pkgs;
 
   open-vm-tools = callPackage ../applications/virtualization/open-vm-tools { };
   open-vm-tools-headless = open-vm-tools.override { withX = false; };
+
+  oxtools = callPackage ../os-specific/linux/oxtools { };
 
   air = callPackage ../development/tools/air { };
 
@@ -28139,14 +28063,12 @@ with pkgs;
 
   firefox-unwrapped = firefoxPackages.firefox;
   firefox-esr-102-unwrapped = firefoxPackages.firefox-esr-102;
-  firefox-esr-91-unwrapped = firefoxPackages.firefox-esr-91;
   firefox-esr-unwrapped = firefoxPackages.firefox-esr-102;
 
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-wayland = wrapFirefox firefox-unwrapped { forceWayland = true; };
 
   firefox-esr = firefox-esr-102;
-  firefox-esr-91 = wrapFirefox firefox-esr-91-unwrapped { };
   firefox-esr-102 = wrapFirefox firefox-esr-102-unwrapped { };
   firefox-esr-wayland = wrapFirefox firefox-esr-102-unwrapped { forceWayland = true; };
 
@@ -29076,6 +28998,12 @@ with pkgs;
   inkscape-with-extensions = callPackage ../applications/graphics/inkscape/with-extensions.nix { };
 
   inkscape-extensions = recurseIntoAttrs (callPackages ../applications/graphics/inkscape/extensions.nix {});
+
+  inlyne = callPackage ../applications/misc/inlyne {
+    inherit (xorg) libX11 libXcursor libXi libXrandr libxcb;
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) AppKit ApplicationServices CoreFoundation CoreGraphics CoreServices CoreText CoreVideo Foundation Metal QuartzCore Security;
+  };
 
   inspectrum = callPackage ../applications/radio/inspectrum { };
 
@@ -31745,10 +31673,6 @@ with pkgs;
   thunderbird = wrapThunderbird thunderbird-unwrapped { };
   thunderbird-wayland = wrapThunderbird thunderbird-unwrapped { forceWayland = true; };
 
-  thunderbird-91-unwrapped = thunderbirdPackages.thunderbird-91;
-  thunderbird-91 = wrapThunderbird thunderbird-91-unwrapped { };
-  thunderbird-91-wayland = wrapThunderbird thunderbird-91-unwrapped { forceWayland = true; };
-
   thunderbird-bin = wrapThunderbird thunderbird-bin-unwrapped {
     applicationName = "thunderbird";
     pname = "thunderbird-bin";
@@ -31757,16 +31681,6 @@ with pkgs;
   thunderbird-bin-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
     inherit (gnome) adwaita-icon-theme;
     generated = import ../applications/networking/mailreaders/thunderbird-bin/release_sources.nix;
-  };
-
-  thunderbird-bin-91 = wrapThunderbird thunderbird-bin-91-unwrapped {
-    applicationName = "thunderbird";
-    pname = "thunderbird-bin";
-    desktopName = "Thunderbird";
-  };
-  thunderbird-bin-91-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
-    inherit (gnome) adwaita-icon-theme;
-    generated = import ../applications/networking/mailreaders/thunderbird-bin/91_sources.nix;
   };
 
   thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
@@ -32372,7 +32286,9 @@ with pkgs;
 
   weston = callPackage ../applications/window-managers/weston { };
 
-  whalebird = callPackage ../applications/misc/whalebird { };
+  whalebird = callPackage ../applications/misc/whalebird {
+    electron = electron_19;
+  };
 
   wio = callPackage ../applications/window-managers/wio {
     wlroots = wlroots_0_14;
@@ -33085,6 +33001,8 @@ with pkgs;
   snarkos = callPackage ../applications/blockchains/snarkos {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  taro = callPackage ../applications/blockchains/taro { };
 
   terra-station = callPackage ../applications/blockchains/terra-station { };
 
@@ -36134,7 +36052,6 @@ with pkgs;
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
     inherit (darwin.apple_sdk.frameworks) Security;
-    curl = curl.override { patchNetrcRegression = true; };
   });
 
   nix = nixVersions.stable;
