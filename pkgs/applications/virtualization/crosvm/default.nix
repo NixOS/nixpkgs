@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
   version = "104.0";
 
   src = fetchgit {
-    url = "https://chromium.googlesource.com/crosvm/crosvm";
+    url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
     rev = "265aab613b1eb31598ea0826f04810d9f010a2c6";
     sha256 = "OzbtPHs6BWK83RZ/6eCQHA61X6SY8FoBkaN70a37pvc=";
     fetchSubmodules = true;
