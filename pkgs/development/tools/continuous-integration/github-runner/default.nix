@@ -11,6 +11,7 @@
 , libkrb5
 , lib
 , linkFarmFromDrvs
+, symlinkJoin
 , lttng-ust
 , makeWrapper
 , nodejs-16_x
@@ -319,13 +320,15 @@ stdenv.mkDerivation rec {
 
       mkdir nuget_pkgs
 
+      dotnet nuget add source -n sdk "${dotnetSdk.packages}"
+
       ${lib.concatMapStrings (rid: ''
       printf "\n* Restore ${pname} (${rid}) dotnet project\n"
       dotnet restore src/ActionsRunner.sln --packages nuget_pkgs --no-cache --force --runtime "${rid}"
       '') (lib.attrValues runtimeIds)}
 
       printf "\n* Make %s file\n" "$(basename "$deps_file")"
-      nuget-to-nix "$workdir/nuget_pkgs" "${dotnetSdk.packages}" > "$deps_file"
+      nuget-to-nix "$workdir/nuget_pkgs" > "$deps_file"
       printf "\n* Dependency file writen to %s" "$deps_file"
     '';
   };

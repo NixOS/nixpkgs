@@ -1,5 +1,7 @@
 { buildDotnetModule
 , dotnetCorePackages
+, dotnet-sdk
+, dotnet-runtime
 , fetchFromGitHub
 , icu
 , lib
@@ -8,9 +10,6 @@
 , runCommand
 , expect
 }:
-let
-  inherit (dotnetCorePackages) sdk_6_0 runtime_6_0;
-in
 let finalPackage = buildDotnetModule rec {
   pname = "omnisharp-roslyn";
   version = "1.39.1";
@@ -29,16 +28,24 @@ let finalPackage = buildDotnetModule rec {
     patchelf
   ];
 
+  buildInputs = with dotnetCorePackages; [
+    newtonsoft-json_11
+    newtonsoft-json_13
+  ];
+
   dotnetInstallFlags = [ "--framework net6.0" ];
   dotnetBuildFlags = [ "--framework net6.0" "--no-self-contained" ];
   dotnetFlags = [
+    "-nr:false"
     # These flags are set by the cake build.
     "-property:PackageVersion=${version}"
     "-property:AssemblyVersion=${version}.0"
     "-property:FileVersion=${version}.0"
     "-property:InformationalVersion=${version}"
-    "-property:RuntimeFrameworkVersion=${runtime_6_0.version}"
+    "-property:RuntimeFrameworkVersion=${dotnet-runtime.version}"
     "-property:RollForward=LatestMajor"
+    # allow unsigned dependencies
+    "-property:DisabledWarnings=S8002"
     "--runtime" (dotnet-sdk.systemToDotnetRid stdenv.hostPlatform.system)
   ];
 
@@ -46,29 +53,19 @@ let finalPackage = buildDotnetModule rec {
     # Relax the version requirement
     substituteInPlace global.json \
       --replace '7.0.100-preview.4.22252.9' '${dotnet-sdk.version}'
-    # Patch the project files so we can compile them properly
-    for project in src/OmniSharp.Http.Driver/OmniSharp.Http.Driver.csproj src/OmniSharp.LanguageServerProtocol/OmniSharp.LanguageServerProtocol.csproj src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj; do
-      substituteInPlace $project \
-        --replace '<RuntimeIdentifiers>win7-x64;win7-x86;win10-arm64</RuntimeIdentifiers>' '<RuntimeIdentifiers>linux-x64;linux-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>'
-    done
+    substituteInPlace build/Settings.props \
+      --replace '</NoWarn>' ';CS8002</NoWarn>'
   '';
 
   dontDotnetFixup = true; # we'll fix it ourselves
-  postFixup = lib.optionalString stdenv.isLinux ''
-    # Emulate what .NET 7 does to its binaries while a fix doesn't land in buildDotnetModule
-    patchelf --set-interpreter $(patchelf --print-interpreter ${sdk_6_0}/dotnet) \
-      --set-rpath $(patchelf --print-rpath ${sdk_6_0}/dotnet) \
-      $out/lib/omnisharp-roslyn/OmniSharp
-
-  '' + ''
+  postFixup = ''
     # Now create a wrapper without DOTNET_ROOT
     # we explicitly don't set DOTNET_ROOT as it should get the one from PATH
     # as you can use any .NET SDK higher than 6 to run OmniSharp and you most
     # likely will NOT want the .NET 6 runtime running it (as it'll use that to
     # detect the SDKs for its own use, so it's better to let it find it in PATH).
     makeWrapper $out/lib/omnisharp-roslyn/OmniSharp $out/bin/OmniSharp \
-      --prefix LD_LIBRARY_PATH : ${sdk_6_0.icu}/lib \
-      --set-default DOTNET_ROOT ${sdk_6_0}
+      --set-default DOTNET_ROOT ${dotnet-sdk}
 
     # Delete files to mimick hacks in https://github.com/OmniSharp/omnisharp-roslyn/blob/bdc14ca/build.cake#L594
     rm $out/lib/omnisharp-roslyn/NuGet.*.dll
@@ -94,7 +91,7 @@ let finalPackage = buildDotnetModule rec {
       touch $out
     '';
 
-    with-sdk = runCommand "with-sdk" { nativeBuildInputs = [ finalPackage sdk_6_0 expect ]; meta.timeout = 60; } ''
+    with-sdk = runCommand "with-sdk" { nativeBuildInputs = [ finalPackage dotnet-sdk expect ]; meta.timeout = 60; } ''
       HOME=$TMPDIR
       expect <<"EOF"
         spawn OmniSharp

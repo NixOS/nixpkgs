@@ -25,6 +25,8 @@ assert if type == "sdk" then packages != null else true;
 , runCommand
 , writeShellScript
 , mkNugetDeps
+, unzip
+, zip
 }:
 
 let
@@ -41,6 +43,7 @@ let
     runtime = ".NET Runtime ${version}";
     sdk = ".NET SDK ${version}";
   };
+
 in
 stdenv.mkDerivation (finalAttrs: rec {
   inherit pname version;

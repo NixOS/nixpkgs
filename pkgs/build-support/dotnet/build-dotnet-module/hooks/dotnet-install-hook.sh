@@ -34,7 +34,7 @@ dotnetInstallHook() {
          env dotnet pack ${project-} \
              -p:ContinuousIntegrationBuild=true \
              -p:Deterministic=true \
-             --output "$out/share" \
+             --output "$out/share/nuget/source" \
              --configuration "@buildType@" \
              --no-build \
              ${dotnetPackFlags[@]}  \
@@ -58,6 +58,10 @@ dotnetInstallHook() {
             done
         fi
     fi
+
+    for package in "$out"/share/nuget/source/*.nupkg; do
+        nuget add "$package" -source "$out"/share/nuget/packages -expand
+    done
 
     runHook postInstall
 
