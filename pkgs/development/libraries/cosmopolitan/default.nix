@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cosmopolitan";
-  version = "2.0.1";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "jart";
     repo = pname;
     rev = version;
-    sha256 = "sha256-EPye7IRMmYHF7XYdDaJdA8alCLiF7MOkU/fVAzZA794=";
+    sha256 = "sha256-qi82iGw0Sj2pgV9O4rr/q7jyd1XG3MpTr69dXdAUH0Q=";
   };
 
   patches = [
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
   preCheck = ''
     # some syscall tests fail because we're in a sandbox
     rm test/libc/calls/sched_setscheduler_test.c
+    rm test/libc/thread/pthread_create_test.c
+    rm test/libc/calls/getgroups_test.c
   '';
 
   installPhase = ''
