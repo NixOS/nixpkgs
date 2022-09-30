@@ -21,20 +21,20 @@
 , xdg-utils
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "newsflash";
   version = "2.0.1";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
-    rev = "v.${version}";
+    rev = "refs/tags/v.${finalAttrs.version}";
     hash = "sha256-bqS9jq1rUOkYilWzp0e2tlEcgmoc+DUV7+LJ82Bid98=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
+    name = "${finalAttrs.pname}-${finalAttrs.version}";
+    src = finalAttrs.src;
     hash = "sha256-vD880Ccp+U4kz7/JbJ850M/XxCb1ypycd2Xm9NHDVRY=";
   };
 
@@ -105,4 +105,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     mainProgram = "com.gitlab.newsflash";
   };
-}
+})
