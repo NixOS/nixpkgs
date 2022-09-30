@@ -32683,6 +32683,8 @@ with pkgs;
 
   ytarchive = callPackage ../tools/misc/ytarchive { };
 
+  ytcast = callPackage ../tools/misc/ytcast { };
+
   ytcc = callPackage ../tools/networking/ytcc { };
 
   ytmdesktop = callPackage ../applications/audio/ytmdesktop { };
