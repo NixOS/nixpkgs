@@ -27,10 +27,6 @@ let
     inherit sha256;
   };
 
-  sdkSource = linkFarmFromDrvs "nuget-sdk-packages" (
-    dotnetSdk.passthru.packages { inherit fetchNuGet; }
-  );
-
   nugetSource = linkFarmFromDrvs "nuget-packages" (
     import ./deps.nix { inherit fetchNuGet; }
   );
@@ -47,8 +43,6 @@ in
 stdenv.mkDerivation rec {
   pname = "github-runner";
   version = "2.297.0";
-
-  inherit sdkSource;
 
   src = fetchFromGitHub {
     owner = "actions";
@@ -115,7 +109,7 @@ stdenv.mkDerivation rec {
     # Restore the dependencies
     dotnet restore src/ActionsRunner.sln \
       --runtime "${runtimeId}" \
-      --source "${sdkSource}" \
+      --source "${dotnetSdk.packages}" \
       --source "${nugetSource}"
 
     runHook postConfigure
@@ -331,7 +325,7 @@ stdenv.mkDerivation rec {
       '') (lib.attrValues runtimeIds)}
 
       printf "\n* Make %s file\n" "$(basename "$deps_file")"
-      nuget-to-nix "$workdir/nuget_pkgs" "${sdkSource}" > "$deps_file"
+      nuget-to-nix "$workdir/nuget_pkgs" "${dotnetSdk.packages}" > "$deps_file"
       printf "\n* Dependency file writen to %s" "$deps_file"
     '';
   };
