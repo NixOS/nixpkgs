@@ -7975,6 +7975,8 @@ with pkgs;
 
   joplin-desktop = callPackage ../applications/misc/joplin-desktop { };
 
+  jot = callPackage ../applications/misc/jot { };
+
   journaldriver = callPackage ../tools/misc/journaldriver {
     openssl = openssl_1_1;
   };
