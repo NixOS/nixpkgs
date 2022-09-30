@@ -8,6 +8,7 @@
 , vulkan-loader, glslang
 , galliumDrivers ? ["auto"]
 , vulkanDrivers ? ["auto"]
+, videoCodecs ? [ "h264dec" "h264enc" "h265dec" "h265enc" "vc1dec" ]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
 , OpenGL, Xplugin
 , withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !valgrind-light.meta.broken, valgrind-light
@@ -97,6 +98,7 @@ self = stdenv.mkDerivation {
     "-Dplatforms=${concatStringsSep "," eglPlatforms}"
     "-Dgallium-drivers=${concatStringsSep "," galliumDrivers}"
     "-Dvulkan-drivers=${concatStringsSep "," vulkanDrivers}"
+    "-Dvideo-codecs=${concatStringsSep "," videoCodecs}"
 
     "-Ddri-drivers-path=${placeholder "drivers"}/lib/dri"
     "-Dvdpau-libs-path=${placeholder "drivers"}/lib/vdpau"
