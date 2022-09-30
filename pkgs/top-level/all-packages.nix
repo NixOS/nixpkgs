@@ -25403,8 +25403,7 @@ with pkgs;
   go-migrate = callPackage ../development/tools/go-migrate { };
 
   go-mockery = callPackage ../development/tools/go-mockery {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
+    buildGoModule = buildGo118Module; # tests fail with 1.19
   };
 
   gomacro = callPackage ../development/tools/gomacro { };
