@@ -31,10 +31,7 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  passthru.updateScript = gitUpdater {
-    inherit pname version;
-    attrPath = "xfce.thunar-dropbox-plugin";
-  };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/Jeinzi/thunar-dropbox";

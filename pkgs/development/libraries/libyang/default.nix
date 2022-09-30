@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     rev-prefix = "v";
   };
 

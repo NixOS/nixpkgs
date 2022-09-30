@@ -52,6 +52,10 @@ let
       # Sandbox network limitations, fails with unexpected error
       "--deselect tests/components/asuswrt/test_config_flow.py::test_on_connect_failed"
     ];
+    dnsip = [
+      # AssertionError: assert <FlowResultType.FORM: 'form'> == <FlowResultTy...create_entry'>
+      "--deselect tests/components/dnsip/test_config_flow.py::test_options_flow"
+    ];
     history_stats = [
       # Flaky: AssertionError: assert '0.0' == '12.0'
       "--deselect tests/components/history_stats/test_sensor.py::test_end_time_with_microseconds_zeroed"
@@ -65,6 +69,10 @@ let
       "--deselect tests/components/stream/test_recorder.py::test_record_lookback"
       "--deselect tests/components/stream/test_recorder.py::test_recorder_log"
       "--deselect tests/components/stream/test_worker.py::test_get_image"
+    ];
+    zha = [
+      # AssertionError: assert 'manual_pick_radio_type' == 'choose_serial_port'
+      "--deselect tests/components/zha/test_config_flow.py::test_options_flow_restarts_running_zha_if_cancelled"
     ];
   };
 in lib.listToAttrs (map (component: lib.nameValuePair component (
@@ -96,9 +104,7 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
 
     meta = old.meta // {
       broken = lib.elem component [
-        "blebox" # all tests fail with: AttributeError: Mock object has no attribute 'async_from_host'
-        "dnsip"
-        "ssdp"
+        "modem_callerid"
         "subaru"
       ];
       # upstream only tests on Linux, so do we.

@@ -15,8 +15,8 @@ let
     attrPath = lib.toLower pname;
     rev-prefix = "v";
   };
-  updateScript = builtins.elemAt updater 0;
-  updateArgs = map (lib.escapeShellArg) (builtins.tail updater);
+  updateScript = builtins.elemAt updater.command 0;
+  updateArgs = map (lib.escapeShellArg) (builtins.tail updater.command);
 in writers.writeBash "update-epgstation" ''
   set -euxo pipefail
 

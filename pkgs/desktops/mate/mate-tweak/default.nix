@@ -73,10 +73,7 @@ python3Packages.buildPythonApplication rec {
     done
   '';
 
-  passthru.updateScript = gitUpdater {
-    inherit pname version;
-    attrPath = "mate.${pname}";
-  };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Tweak tool for the MATE Desktop";
