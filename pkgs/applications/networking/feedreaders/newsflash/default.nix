@@ -11,31 +11,29 @@
 , gtk4
 , libadwaita
 , libxml2
-, libhandy
 , openssl
 , sqlite
 , webkitgtk
 , glib-networking
 , librsvg
 , gst_all_1
-, xdg-utils
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "newsflash";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
-    rev = "v.${version}";
-    hash = "sha256-bqS9jq1rUOkYilWzp0e2tlEcgmoc+DUV7+LJ82Bid98=";
+    rev = "refs/tags/v.${finalAttrs.version}";
+    sha256 = "sha256-QDGoA22olhafL2geLf1Jxriqc4++3yxGN/ZnNyEAqjA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-vD880Ccp+U4kz7/JbJ850M/XxCb1ypycd2Xm9NHDVRY=";
+    name = "${finalAttrs.pname}-${finalAttrs.version}";
+    src = finalAttrs.src;
+    sha256 = "sha256-21v/4VAgolk/12mj7CTu8d5CKMCovE1FQuGyMar8idY=";
   };
 
   patches = [
@@ -48,7 +46,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs build-aux/cargo.sh
   '';
 
   nativeBuildInputs = [
@@ -72,7 +70,6 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
     libxml2
-    libhandy
     openssl
     sqlite
     webkitgtk
@@ -90,13 +87,6 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
   ]);
 
-  preFixup = ''
-    gappsWrapperArgs+=(--suffix PATH : "${lib.makeBinPath [
-      # Open links in browser
-      xdg-utils
-    ]}")
-  '';
-
   meta = with lib; {
     description = "A modern feed reader designed for the GNOME desktop";
     homepage = "https://gitlab.com/news-flash/news_flash_gtk";
@@ -105,4 +95,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     mainProgram = "com.gitlab.newsflash";
   };
-}
+})
