@@ -11,7 +11,7 @@ let
 
   extras = {
     "cl+ssl" = pkg: {
-      nativeLibs = [ openssl ];
+      nativeLibs = [ openssl_1_1 ];
     };
     cl-cffi-gtk-glib = pkg: {
       nativeLibs = [ glib ];
@@ -72,6 +72,16 @@ let
       # weird...
       nativeLibs = [ allegro5 ];
     };
+    cl-ode = pkg: {
+      nativeLibs = let
+        ode' = ode.overrideAttrs (o: {
+          configureFlags = [
+            "--enable-shared"
+            "--enable-double-precision"
+          ];
+        });
+      in [ ode' ];
+    };
     classimp = pkg: {
       nativeLibs = [ assimp ];
     };
@@ -107,7 +117,7 @@ let
       nativeLibs = [ rdkafka ];
     };
     cl-async-ssl = pkg: {
-      nativeLibs = [ openssl ];
+      nativeLibs = [ openssl_1_1 ];
     };
     osicat = pkg: {
       LD_LIBRARY_PATH = "${pkg}/posix/";
@@ -121,7 +131,6 @@ let
 
   qlpkgs =
     if builtins.pathExists ./imported.nix
-    # then filterAttrs (n: v: all (check: !(check n v)) broken) (import ./imported.nix { inherit pkgs; })
     then import ./imported.nix { inherit (pkgs) runCommand fetchzip; pkgs = builtQlpkgs; }
     else {};
 
