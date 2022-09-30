@@ -8003,6 +8003,8 @@ with pkgs;
 
   jql = callPackage ../development/tools/jql { };
 
+  jqp = callPackage ../development/tools/jqp { };
+
   jo = callPackage ../development/tools/jo { };
 
   jrnl = callPackage ../applications/misc/jrnl { };
