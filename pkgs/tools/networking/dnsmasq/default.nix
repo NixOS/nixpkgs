@@ -2,6 +2,7 @@
 , libidn, libnetfilter_conntrack, buildPackages
 , dbusSupport ? stdenv.isLinux
 , dbus
+, nixosTests
 }:
 
 with lib;
@@ -76,6 +77,15 @@ stdenv.mkDerivation rec {
   buildInputs = [ nettle libidn ]
     ++ optionals dbusSupport [ dbus ]
     ++ optionals stdenv.isLinux [ libnetfilter_conntrack ];
+
+  passthru.tests = {
+    prometheus-exporter = nixosTests.prometheus-exporters.dnsmasq;
+
+    # these tests use dnsmasq incidentally
+    inherit (nixosTests) dnscrypt-proxy2;
+    kubernetes-dns-single = nixosTests.kubernetes.dns-single-node;
+    kubernetes-dns-multi = nixosTests.kubernetes.dns-multi-node;
+  };
 
   meta = {
     description = "An integrated DNS, DHCP and TFTP server for small networks";
