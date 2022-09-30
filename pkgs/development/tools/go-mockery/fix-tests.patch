@@ -1,0 +1,84 @@
+diff --git a/pkg/generator_test.go b/pkg/generator_test.go
+index d480bef..6812a68 100644
+--- a/pkg/generator_test.go
++++ b/pkg/generator_test.go
+@@ -211,7 +211,7 @@ type Requester_Get_Call struct {
+ }
+ 
+ // Get is a helper method to define mock.On call
+-//  - path string
++//   - path string
+ func (_e *Requester_Expecter) Get(path interface{}) *Requester_Get_Call {
+ 	return &Requester_Get_Call{Call: _e.mock.On("Get", path)}
+ }
+@@ -294,8 +294,8 @@ type Expecter_ManyArgsReturns_Call struct {
+ }
+ 
+ // ManyArgsReturns is a helper method to define mock.On call
+-//  - str string
+-//  - i int
++//   - str string
++//   - i int
+ func (_e *Expecter_Expecter) ManyArgsReturns(str interface{}, i interface{}) *Expecter_ManyArgsReturns_Call {
+ 	return &Expecter_ManyArgsReturns_Call{Call: _e.mock.On("ManyArgsReturns", str, i)}
+ }
+@@ -359,7 +359,7 @@ type Expecter_NoReturn_Call struct {
+ }
+ 
+ // NoReturn is a helper method to define mock.On call
+-//  - str string
++//   - str string
+ func (_e *Expecter_Expecter) NoReturn(str interface{}) *Expecter_NoReturn_Call {
+ 	return &Expecter_NoReturn_Call{Call: _e.mock.On("NoReturn", str)}
+ }
+@@ -402,7 +402,7 @@ type Expecter_Variadic_Call struct {
+ }
+ 
+ // Variadic is a helper method to define mock.On call
+-//  - ints ...int
++//   - ints ...int
+ func (_e *Expecter_Expecter) Variadic(ints ...interface{}) *Expecter_Variadic_Call {
+ 	return &Expecter_Variadic_Call{Call: _e.mock.On("Variadic",
+ 		append([]interface{}{}, ints...)...)}
+@@ -449,9 +449,9 @@ type Expecter_VariadicMany_Call struct {
+ }
+ 
+ // VariadicMany is a helper method to define mock.On call
+-//  - i int
+-//  - a string
+-//  - intfs ...interface{}
++//   - i int
++//   - a string
++//   - intfs ...interface{}
+ func (_e *Expecter_Expecter) VariadicMany(i interface{}, a interface{}, intfs ...interface{}) *Expecter_VariadicMany_Call {
+ 	return &Expecter_VariadicMany_Call{Call: _e.mock.On("VariadicMany",
+ 		append([]interface{}{i, a}, intfs...)...)}
+@@ -2397,7 +2397,7 @@ type RequesterGenerics_GenericAnonymousStructs_Call[TAny interface{}, TComparabl
+ }
+ 
+ // GenericAnonymousStructs is a helper method to define mock.On call
+-//  - _a0 struct{Type1 TExternalIntf}
++//   - _a0 struct{Type1 TExternalIntf}
+ func (_e *RequesterGenerics_Expecter[TAny, TComparable, TSigned, TIntf, TExternalIntf, TGenIntf, TInlineType, TInlineTypeGeneric]) GenericAnonymousStructs(_a0 interface{}) *RequesterGenerics_GenericAnonymousStructs_Call[TAny, TComparable, TSigned, TIntf, TExternalIntf, TGenIntf, TInlineType, TInlineTypeGeneric] {
+ 	return &RequesterGenerics_GenericAnonymousStructs_Call[TAny, TComparable, TSigned, TIntf, TExternalIntf, TGenIntf, TInlineType, TInlineTypeGeneric]{Call: _e.mock.On("GenericAnonymousStructs", _a0)}
+ }
+@@ -2446,8 +2446,8 @@ type RequesterGenerics_GenericArguments_Call[TAny interface{}, TComparable compa
+ }
+ 
+ // GenericArguments is a helper method to define mock.On call
+-//  - _a0 TAny
+-//  - _a1 TComparable
++//   - _a0 TAny
++//   - _a1 TComparable
+ func (_e *RequesterGenerics_Expecter[TAny, TComparable, TSigned, TIntf, TExternalIntf, TGenIntf, TInlineType, TInlineTypeGeneric]) GenericArguments(_a0 interface{}, _a1 interface{}) *RequesterGenerics_GenericArguments_Call[TAny, TComparable, TSigned, TIntf, TExternalIntf, TGenIntf, TInlineType, TInlineTypeGeneric] {
+ 	return &RequesterGenerics_GenericArguments_Call[TAny, TComparable, TSigned, TIntf, TExternalIntf, TGenIntf, TInlineType, TInlineTypeGeneric]{Call: _e.mock.On("GenericArguments", _a0, _a1)}
+ }
+@@ -2487,7 +2487,7 @@ type RequesterGenerics_GenericStructs_Call[TAny interface{}, TComparable compara
+ }
+ 
+ // GenericStructs is a helper method to define mock.On call
+-//  - _a0 test.GenericType[TAny,TIntf]
++//   - _a0 test.GenericType[TAny,TIntf]
+ func (_e *RequesterGenerics_Expecter[TAny, TComparable, TSigned, TIntf, TExternalIntf, TGenIntf, TInlineType, TInlineTypeGeneric]) GenericStructs(_a0 interface{}) *RequesterGenerics_GenericStructs_Call[TAny, TComparable, TSigned, TIntf, TExternalIntf, TGenIntf, TInlineType, TInlineTypeGeneric] {
+ 	return &RequesterGenerics_GenericStructs_Call[TAny, TComparable, TSigned, TIntf, TExternalIntf, TGenIntf, TInlineType, TInlineTypeGeneric]{Call: _e.mock.On("GenericStructs", _a0)}
+ }
