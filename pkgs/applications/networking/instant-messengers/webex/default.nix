@@ -54,11 +54,11 @@
 
 stdenv.mkDerivation rec {
   pname = "webex";
-  version = "42.10.0.23251";
+  version = "42.7.0.22904";
 
   src = fetchurl {
-    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Blue/20220815132636/Webex_ubuntu.7z";
-    sha256 = "a30002585194a7cb01985184031ca6250f4f648590715376aa6f164bce8ed898";
+    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Gold/20220907184519/Webex_ubuntu.7z";
+    sha256 = "731ec24d95243171649213b19a1709bef98846fd631f54a27d11fe16ebcc7d33";
   };
 
   buildInputs = [
@@ -154,7 +154,7 @@ stdenv.mkDerivation rec {
     #!nix-shell -i bash -p curl jq common-updater-scripts
     set -eou pipefail;
 
-    channel=blue
+    channel=gold # blue, green, gold
     manifest=$(curl -s "https://client-upgrade-a.wbx2.com/client-upgrade/api/v1/webexteamsdesktop/upgrade/@me?channel=$channel&model=ubuntu" | jq '.manifest')
 
     url=$(jq -r '.packageLocation' <<< "$manifest")
