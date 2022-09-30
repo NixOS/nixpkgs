@@ -44,6 +44,9 @@ buildPythonPackage rec {
     "test_approx_predict_diff_clusters"
     # another flaky test https://github.com/scikit-learn-contrib/hdbscan/issues/421
     "test_hdbscan_boruvka_balltree_matches"
+    # more flaky tests https://github.com/scikit-learn-contrib/hdbscan/issues/570
+    "test_hdbscan_boruvka_balltree"
+    "test_hdbscan_best_balltree_metric"
   ];
 
   pythonImportsCheck = [ "hdbscan" ];
