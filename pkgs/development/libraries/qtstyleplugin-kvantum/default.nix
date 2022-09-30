@@ -58,8 +58,6 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
-    attrPath = "libsForQt5.${pname}";
     rev-prefix = "V";
   };
 

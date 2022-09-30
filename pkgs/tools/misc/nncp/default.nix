@@ -30,9 +30,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.updateScript = genericUpdater {
-    inherit pname version;
     versionLister = writeShellScript "nncp-versionLister" ''
-      echo "# Versions for $1:" >> "$2"
       ${curl}/bin/curl -s ${meta.downloadPage} | ${perl}/bin/perl -lne 'print $1 if /Release.*>([0-9.]+)</'
     '';
   };

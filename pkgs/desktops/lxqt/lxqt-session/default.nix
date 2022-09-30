@@ -15,7 +15,7 @@
 , procps
 , xorg
 , xdg-user-dirs
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
@@ -50,7 +50,7 @@ mkDerivation rec {
     xdg-user-dirs
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-session";

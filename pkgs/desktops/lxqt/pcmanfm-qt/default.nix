@@ -12,7 +12,7 @@
 , libfm-qt
 , menu-cache
 , lxmenu-data
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
@@ -44,7 +44,7 @@ mkDerivation rec {
     lxmenu-data
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   postPatch = ''
     substituteInPlace config/pcmanfm-qt/lxqt/settings.conf.in --replace @LXQT_SHARE_DIR@ /run/current-system/sw/share/lxqt

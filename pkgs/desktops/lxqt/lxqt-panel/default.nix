@@ -17,7 +17,7 @@
 , lxmenu-data
 , lxqt-build-tools
 , lxqt-globalkeys
-, lxqtUpdateScript
+, gitUpdater
 , menu-cache
 , pcre
 , qtbase
@@ -71,7 +71,7 @@ mkDerivation rec {
     xorg.libpthreadstubs
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-panel";

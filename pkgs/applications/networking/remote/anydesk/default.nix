@@ -30,9 +30,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = genericUpdater {
-      inherit pname version;
       versionLister = writeShellScript "anydesk-versionLister" ''
-        echo "# Versions for $1:" >> "$2"
         curl -s https://anydesk.com/en/downloads/linux \
           | grep "https://[a-z0-9._/-]*-amd64.tar.gz" -o \
           | uniq \

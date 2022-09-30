@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { inherit pname version; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "GTK theme supporting Budgie, Pantheon, Mate, Xfce4 and GNOME desktops";

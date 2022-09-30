@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ (python3.withPackages (p: with p; [ pyelftools ])) ];
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     url = "https://anongit.gentoo.org/git/proj/pax-utils.git";
     rev-prefix = "v";
   };
