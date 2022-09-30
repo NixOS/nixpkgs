@@ -128,8 +128,8 @@ in
   hadoop_3_2 = common rec {
     pname = "hadoop";
     platformAttrs.x86_64-linux = {
-      version = "3.2.3";
-      hash = "sha256-Q2/a1LcKutpJoGySB0qlCcYE2bvC/HoG/dp9nBikuNU=";
+      version = "3.2.4";
+      hash = "sha256-qt2gpMr+NHuiVR+/zFRzRyRKG725/ZNBIM69z9J9wNw=";
     };
     jdk = jdk8_headless;
     # not using native libs because of broken openssl_1_0_2 dependency
