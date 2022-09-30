@@ -899,7 +899,9 @@ with pkgs;
   ld-is-cc-hook = makeSetupHook { name = "ld-is-cc-hook"; }
     ../build-support/setup-hooks/ld-is-cc-hook.sh;
 
-  libgtkflow = callPackage ../development/libraries/libgtkflow { };
+  libgflow = callPackage ../development/libraries/libgflow { };
+  libgtkflow3 = callPackage ../development/libraries/libgtkflow3 { };
+  libgtkflow4 = callPackage ../development/libraries/libgtkflow4 { };
 
   libredirect = callPackage ../build-support/libredirect { };
 
