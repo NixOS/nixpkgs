@@ -12,6 +12,7 @@ in
     sha256 = "sha256-ZyH+tBUtVtLGs1jOOXq9Wn8drwnuLiXFAhubTT+GozA=";
     patches = [
       ./disable-darwin-v8-system-instrumentation.patch
+      ./bypass-darwin-xcrun-node16.patch
       # Fix npm silently fail without a HOME directory https://github.com/npm/cli/issues/4996
       (fetchpatch {
         url = "https://github.com/npm/cli/commit/9905d0e24c162c3f6cc006fa86b4c9d0205a4c6f.patch";
