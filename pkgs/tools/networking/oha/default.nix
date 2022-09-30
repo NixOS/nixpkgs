@@ -2,21 +2,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oha";
-  version = "0.5.3";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "hatoo";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-P21rANxgreXu8vA1vsFCSkh1Irs67r3s33XT1dMFD7I=";
+    sha256 = "sha256-NSre4OHzREVM8y9njMkS/whQ0+Ed+R+cLYfRWKmhA98=";
   };
 
-  cargoSha256 = "sha256-l6xQbZVrWF8Uw27datqvv9B3LoPtoaCnumo0gIjKdaA=";
+  cargoSha256 = "sha256-GPP2eespnxDQoKZkqoPXEthRKk84szFl0LNTeqJQLNs=";
 
   nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
 
   buildInputs = lib.optional stdenv.isLinux openssl
     ++ lib.optional stdenv.isDarwin Security;
+
+  # remove cargo config so it can find the linker
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
 
   # tests don't work inside the sandbox
   doCheck = false;

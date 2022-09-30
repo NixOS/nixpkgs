@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "keyrings.google-artifactregistry-auth";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-gvoX5SP0A39Ke0VRlplETJF8gIP+QzK6xNReRxM8UnA=";
+    sha256 = "sha256-vrA3+/awws4R2BAxn9wYDKuIZdqioWsQnDr3MYL/5E0=";
   };
 
   buildInputs = [

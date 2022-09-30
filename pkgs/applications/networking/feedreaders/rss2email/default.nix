@@ -4,14 +4,14 @@ with pythonPackages;
 
 buildPythonApplication rec {
   pname = "rss2email";
-  version = "3.13.1";
+  version = "3.14";
 
   propagatedBuildInputs = [ feedparser html2text ];
   checkInputs = [ beautifulsoup4 ];
 
   src = fetchurl {
     url = "mirror://pypi/r/rss2email/${pname}-${version}.tar.gz";
-    sha256 = "3994444766874bb35c9f886da76f3b24be1cb7bbaf40fad12b16f2af80ac1296";
+    sha256 = "sha256-RwORS2PHquxBZLNKqCJtR5XX4SHqPCb/Fn+Y68dfI/g=";
   };
 
   outputs = [ "out" "man" "doc" ];

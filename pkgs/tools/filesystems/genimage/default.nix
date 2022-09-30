@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "genimage";
-  version = "15";
+  version = "16";
 
   src = fetchurl {
     url = "https://public.pengutronix.de/software/genimage/genimage-${version}.tar.xz";
-    sha256 = "0gh05pkmqn9ck79mwvl2812ssh0fb0xbq72iwh7b641ki2zj9jlv";
+    sha256 = "sha256-hp+WYtO3eMabHR/nDfZY4cnpCu2iart1P2/lXosMbnM=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
       "--disable-thp"
       "je_cv_thp=no"
     ]
+    # AArch64 has configurable page size up to 64k. The default configuration
+    # for jemalloc only supports 4k page sizes.
+    ++ lib.optional stdenv.isAarch64 "--with-lg-page=16"
   ;
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-error=array-bounds";

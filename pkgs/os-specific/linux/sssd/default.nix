@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sssd";
-  version = "2.7.3";
+  version = "2.7.4";
 
   src = fetchFromGitHub {
     owner = "SSSD";
     repo = pname;
     rev = version;
-    sha256 = "sha256-mdgBRFqIT5SvDTeNiv1IbTyd9tcu8YJVfbw49gR6bKI=";
+    sha256 = "sha256-tPrximWUeG3wcuZZNo8l4QqC9ZwcZupIBZGF7bm7hqQ=";
   };
 
   postPatch = ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export SGML_CATALOG_FILES="${docbookFiles}"
-    export PYTHONPATH=$(find ${python3.pkgs.ldap} -type d -name site-packages)
+    export PYTHONPATH=$(find ${python3.pkgs.python-ldap} -type d -name site-packages)
     export PATH=$PATH:${openldap}/libexec
 
     configureFlagsArray=(
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
                   samba nfs-utils p11-kit python3 popt
                   talloc tdb tevent ldb pam openldap pcre2 libkrb5
                   cifs-utils glib keyutils dbus fakeroot libxslt libxml2
-                  libuuid python3.pkgs.ldap systemd nspr check cmocka uid_wrapper
+                  libuuid python3.pkgs.python-ldap systemd nspr check cmocka uid_wrapper
                   nss_wrapper ncurses Po4a http-parser jansson jose ];
 
   makeFlags = [

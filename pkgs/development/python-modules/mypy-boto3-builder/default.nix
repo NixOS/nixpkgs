@@ -58,7 +58,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Type annotations builder for boto3";
-    homepage = "https://vemel.github.io/mypy_boto3_builder/";
+    homepage = "https://github.com/youtype/mypy_boto3_builder";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

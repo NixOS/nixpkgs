@@ -128,6 +128,7 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.sheepforce ];
+    hydraPlatforms = [];
     mainProgram = "PixInsight";
   };
 }

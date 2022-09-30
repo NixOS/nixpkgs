@@ -14,7 +14,7 @@ let
 in {
   options = {
     services.flexget = {
-      enable = mkEnableOption "Run FlexGet Daemon";
+      enable = mkEnableOption (lib.mdDoc "Run FlexGet Daemon");
 
       user = mkOption {
         default = "deluge";

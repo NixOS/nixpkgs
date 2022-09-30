@@ -27,7 +27,7 @@ in
   ###### interface
 
   options.services.soju = {
-    enable = mkEnableOption "soju";
+    enable = mkEnableOption (lib.mdDoc "soju");
 
     listen = mkOption {
       type = types.listOf types.str;
@@ -79,7 +79,7 @@ in
     acceptProxyIP = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Allow the specified IPs to act as a proxy. Proxys have the ability to
         overwrite the remote and local connection addresses (via the X-Forwarded-\*
         HTTP header fields). The special name "localhost" accepts the loopback

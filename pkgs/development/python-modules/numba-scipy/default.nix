@@ -28,7 +28,7 @@ buildPythonPackage rec {
   postPatch = ''
     # https://github.com/numba/numba-scipy/pull/76
     substituteInPlace setup.py \
-      --replace "scipy>=0.16,<=1.6.2" "scipy>=0.16"
+      --replace "scipy>=0.16,<=1.7.3" "scipy>=0.16"
   '';
 
   checkInputs = [

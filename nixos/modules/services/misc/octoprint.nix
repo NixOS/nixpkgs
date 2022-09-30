@@ -29,7 +29,7 @@ in
 
     services.octoprint = {
 
-      enable = mkEnableOption "OctoPrint, web interface for 3D printers";
+      enable = mkEnableOption (lib.mdDoc "OctoPrint, web interface for 3D printers");
 
       host = mkOption {
         type = types.str;

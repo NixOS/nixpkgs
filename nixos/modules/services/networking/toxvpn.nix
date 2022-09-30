@@ -5,7 +5,7 @@ with lib;
 {
   options = {
     services.toxvpn = {
-      enable = mkEnableOption "toxvpn running on startup";
+      enable = mkEnableOption (lib.mdDoc "toxvpn running on startup");
 
       localip = mkOption {
         type        = types.str;

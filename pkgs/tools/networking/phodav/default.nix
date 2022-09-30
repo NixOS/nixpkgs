@@ -44,6 +44,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "lib" ];
 
+  # We need to do this in pre-configure before the data/ folder disappears.
+  preConfigure = ''
+    install -vDt $out/lib/udev/rules.d/ data/*-spice-webdavd.rules
+  '';
+
   meta = with lib; {
     description = "WebDav server implementation and library using libsoup";
     homepage = "https://wiki.gnome.org/phodav";

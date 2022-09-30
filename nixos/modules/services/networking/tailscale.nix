@@ -12,7 +12,7 @@ in {
   meta.maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 ];
 
   options.services.tailscale = {
-    enable = mkEnableOption "Tailscale client daemon";
+    enable = mkEnableOption (lib.mdDoc "Tailscale client daemon");
 
     port = mkOption {
       type = types.port;

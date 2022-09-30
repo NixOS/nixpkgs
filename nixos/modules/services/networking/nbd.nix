@@ -43,7 +43,7 @@ in
   options = {
     services.nbd = {
       server = {
-        enable = mkEnableOption "the Network Block Device (nbd) server";
+        enable = mkEnableOption (lib.mdDoc "the Network Block Device (nbd) server");
 
         listenPort = mkOption {
           type = types.port;

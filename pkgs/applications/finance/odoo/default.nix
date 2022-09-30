@@ -120,7 +120,7 @@ in python.pkgs.buildPythonApplication rec {
     pypdf2
     pyserial
     python-dateutil
-    ldap
+    python-ldap
     python-stdnum
     pytz
     pyusb

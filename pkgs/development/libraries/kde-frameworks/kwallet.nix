@@ -3,7 +3,7 @@
   extra-cmake-modules, kdoctools,
   kconfig, kconfigwidgets, kcoreaddons , kdbusaddons, ki18n,
   kiconthemes, knotifications, kservice, kwidgetsaddons, kwindowsystem,
-  libgcrypt, qgpgme, qtbase,
+  libgcrypt, qgpgme, qtbase, qca-qt5
 }:
 
 mkDerivation {
@@ -11,7 +11,8 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kconfig kconfigwidgets kcoreaddons kdbusaddons ki18n kiconthemes
-    knotifications kservice kwidgetsaddons kwindowsystem libgcrypt qgpgme
+    knotifications kservice kwidgetsaddons kwindowsystem
+    libgcrypt qgpgme qca-qt5
   ];
   propagatedBuildInputs = [ qtbase ];
 }

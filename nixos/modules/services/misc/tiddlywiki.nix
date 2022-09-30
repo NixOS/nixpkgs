@@ -14,7 +14,7 @@ in {
 
   options.services.tiddlywiki = {
 
-    enable = mkEnableOption "TiddlyWiki nodejs server";
+    enable = mkEnableOption (lib.mdDoc "TiddlyWiki nodejs server");
 
     listenOptions = mkOption {
       type = types.attrs;

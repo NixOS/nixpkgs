@@ -78,6 +78,8 @@ let
           gnueabihf = lib.systems.parse.abis.musleabihf;
           gnuabin32 = lib.systems.parse.abis.muslabin32;
           gnuabi64 = lib.systems.parse.abis.muslabi64;
+          gnuabielfv2 = lib.systems.parse.abis.musl;
+          gnuabielfv1 = lib.systems.parse.abis.musl;
           # The following two entries ensure that this function is idempotent.
           musleabi = lib.systems.parse.abis.musleabi;
           musleabihf = lib.systems.parse.abis.musleabihf;

@@ -84,6 +84,11 @@ stdenv.mkDerivation rec {
   postPatch =
   ''
     patchShebangs .
+
+    # Disable tests that rely on objdump whitespace until fixed upstream:
+    #   https://issues.dlang.org/show_bug.cgi?id=23317
+    rm dmd/test/runnable/cdvecfill.sh
+    rm dmd/test/compilable/cdcmp.d
   ''
 
   # This one has tested against a hardcoded year, then against a current year on

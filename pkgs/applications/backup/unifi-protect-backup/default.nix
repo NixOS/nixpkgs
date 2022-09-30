@@ -2,15 +2,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "unifi-protect-backup";
-  version = "0.7.1";
+  version = "0.7.4";
 
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "ep1cman";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-HAiyNFWLs1McrlAB48me/iI15LssO8ec7BiWuJbRlbs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4Kpz89yqKmxHmnaPYpvJ2hx46yfcaCYjOioyya+38vE=";
   };
 
   preBuild = ''

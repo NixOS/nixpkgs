@@ -104,29 +104,15 @@ in {
 
       type = types.enum [ "0" "1" "2" "auto" "max" "keep" ];
 
-      description = ''
+      description = lib.mdDoc ''
         The resolution of the console. The following values are valid:
 
-        <itemizedlist>
-          <listitem><para>
-            <literal>"0"</literal>: Standard UEFI 80x25 mode
-          </para></listitem>
-          <listitem><para>
-            <literal>"1"</literal>: 80x50 mode, not supported by all devices
-          </para></listitem>
-          <listitem><para>
-            <literal>"2"</literal>: The first non-standard mode provided by the device firmware, if any
-          </para></listitem>
-          <listitem><para>
-            <literal>"auto"</literal>: Pick a suitable mode automatically using heuristics
-          </para></listitem>
-          <listitem><para>
-            <literal>"max"</literal>: Pick the highest-numbered available mode
-          </para></listitem>
-          <listitem><para>
-            <literal>"keep"</literal>: Keep the mode selected by firmware (the default)
-          </para></listitem>
-        </itemizedlist>
+        - `"0"`: Standard UEFI 80x25 mode
+        - `"1"`: 80x50 mode, not supported by all devices
+        - `"2"`: The first non-standard mode provided by the device firmware, if any
+        - `"auto"`: Pick a suitable mode automatically using heuristics
+        - `"max"`: Pick the highest-numbered available mode
+        - `"keep"`: Keep the mode selected by firmware (the default)
       '';
     };
 

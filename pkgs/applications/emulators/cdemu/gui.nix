@@ -8,10 +8,9 @@ let
   };
   inherit (python3Packages) python pygobject3;
 in callPackage pkg {
-  buildInputs = [ python pygobject3 gtk3 glib libnotify intltool makeWrapper
-                  gnome.adwaita-icon-theme gdk-pixbuf librsvg ];
+  buildInputs = [ python pygobject3 gtk3 glib libnotify gnome.adwaita-icon-theme gdk-pixbuf librsvg ];
   drvParams = {
-    nativeBuildInputs = [ gobject-introspection cmake ];
+    nativeBuildInputs = [ gobject-introspection cmake makeWrapper intltool ];
     postFixup = ''
       wrapProgram $out/bin/gcdemu \
         --set PYTHONPATH "$PYTHONPATH" \

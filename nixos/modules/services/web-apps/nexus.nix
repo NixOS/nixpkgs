@@ -11,7 +11,7 @@ in
 {
   options = {
     services.nexus = {
-      enable = mkEnableOption "Sonatype Nexus3 OSS service";
+      enable = mkEnableOption (lib.mdDoc "Sonatype Nexus3 OSS service");
 
       package = mkOption {
         type = types.package;
@@ -93,7 +93,7 @@ in
           '''
         '';
 
-        description = ''
+        description = lib.mdDoc ''
           Options for the JVM written to `nexus.jvmopts`.
           Please refer to the docs (https://help.sonatype.com/repomanager3/installation/configuring-the-runtime-environment)
           for further information.

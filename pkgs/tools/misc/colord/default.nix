@@ -26,7 +26,7 @@
 , docbook_xml_dtd_412
 , gtk-doc
 , libxslt
-, enableDaemon ? !stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isStatic
+, enableDaemon ? true
 }:
 
 stdenv.mkDerivation rec {

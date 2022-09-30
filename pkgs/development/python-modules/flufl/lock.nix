@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "flufl.lock";
-  version = "7.0";
+  version = "7.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-FBX30Z2N2WpYJC4O+5DOPLGHf7VFB0rYwcrky3GR/gE=";
+    sha256 = "sha256-Qxt/6PZhKZIA/2elOLrJNxchgcHtOm76bSiTS0i4oSw=";
   };
 
   nativeBuildInputs = [ pdm-pep517 ];

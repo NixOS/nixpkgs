@@ -82,8 +82,10 @@ in
       config = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = "Full smokeping config supplied by the user. Overrides " +
-          "and replaces any other configuration supplied.";
+        description = lib.mdDoc ''
+          Full smokeping config supplied by the user. Overrides
+          and replaces any other configuration supplied.
+        '';
       };
       databaseConfig = mkOption {
         type = types.lines;

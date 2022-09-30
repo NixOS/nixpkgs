@@ -87,6 +87,14 @@ in
       description = lib.mdDoc "Specifies the path of the repository directory. If it does not exist, Gollum will create it on startup.";
     };
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.gollum;
+      defaultText = literalExpression "pkgs.gollum";
+      description = lib.mdDoc ''
+        The package used in the service
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -120,7 +128,7 @@ in
         Group = config.users.groups.gollum.name;
         WorkingDirectory = cfg.stateDir;
         ExecStart = ''
-          ${pkgs.gollum}/bin/gollum \
+          ${cfg.package}/bin/gollum \
             --port ${toString cfg.port} \
             --host ${cfg.address} \
             --config ${pkgs.writeText "gollum-config.rb" cfg.extraConfig} \

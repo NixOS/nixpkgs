@@ -9,10 +9,12 @@ let
     , getopt
     , git
     , gnat11
+    , gcc
     , lib
     , perl
     , stdenvNoCC
     , zlib
+    , withAda ? true
     }:
 
     stdenvNoCC.mkDerivation rec {
@@ -33,14 +35,14 @@ let
       };
 
       nativeBuildInputs = [ bison curl git perl ];
-      buildInputs = [ flex gnat11 zlib ];
+      buildInputs = [ flex zlib (if withAda then gnat11 else gcc) ];
 
       enableParallelBuilding = true;
       dontConfigure = true;
       dontInstall = true;
 
       postPatch = ''
-        patchShebangs $out/util/crossgcc/buildgcc
+        patchShebangs util/crossgcc/buildgcc
 
         mkdir -p util/crossgcc/tarballs
 

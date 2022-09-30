@@ -74,7 +74,7 @@ in {
 
   options = {
     services.orangefs.server = {
-      enable = mkEnableOption "OrangeFS server";
+      enable = mkEnableOption (lib.mdDoc "OrangeFS server");
 
       logType = mkOption {
         type = with types; enum [ "file" "syslog" ];

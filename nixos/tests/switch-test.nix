@@ -214,6 +214,25 @@ in {
           systemd.services."escaped\\x2ddash".serviceConfig.X-Test = "test";
         };
 
+        unitStartingWithDash.configuration = {
+          systemd.services."-" = {
+            wantedBy = [ "multi-user.target" ];
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+              ExecStart = "${pkgs.coreutils}/bin/true";
+            };
+          };
+        };
+
+        unitStartingWithDashModified.configuration = {
+          imports = [ unitStartingWithDash.configuration ];
+          systemd.services."-" = {
+            reloadIfChanged = true;
+            serviceConfig.ExecReload = "${pkgs.coreutils}/bin/true";
+          };
+        };
+
         unitWithRequirement.configuration = {
           systemd.services.required-service = {
             wantedBy = [ "multi-user.target" ];
@@ -637,9 +656,27 @@ in {
         assert_contains(out, "\nstarting the following units: escaped\\x2ddash.service\n")
         assert_lacks(out, "the following new units were started:")
 
+        # Ensure units can start with a dash
+        out = switch_to_specialisation("${machine}", "unitStartingWithDash")
+        assert_contains(out, "stopping the following units: escaped\\x2ddash.service\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_contains(out, "the following new units were started: -.service\n")
+
+        # The regression only occurs when reloading units
+        out = switch_to_specialisation("${machine}", "unitStartingWithDashModified")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_contains(out, "reloading the following units: -.service")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+
         # Ensure units that require changed units are properly reloaded
         out = switch_to_specialisation("${machine}", "unitWithRequirement")
-        assert_contains(out, "stopping the following units: escaped\\x2ddash.service\n")
+        assert_contains(out, "stopping the following units: -.service\n")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "\nrestarting the following units:")

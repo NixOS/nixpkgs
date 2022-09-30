@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "deadnix";
-  version = "0.1.6";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "astro";
     repo = "deadnix";
     rev = "v${version}";
-    sha256 = "sha256-a3zEPblkvj9cjGEQB6LKqB+h8C2df7p+IgkwqsUptmY=";
+    sha256 = "sha256-4IK+vv3R3UzF5anH1swypPIzXXZmTCJ2kS2eGUcYvLk=";
   };
 
-  cargoSha256 = "sha256-zMVXl7kJEavv5zfSm0bTYtd8J3j/LtY3ikPUK2hod+E=";
+  cargoSha256 = "sha256-GmvSrU7wDOKc22GU43oFJoYCYiVKQ5Oe6qrLQXLtcyM=";
 
   meta = with lib; {
     description = "Find and remove unused code in .nix source files";

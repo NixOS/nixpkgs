@@ -5,7 +5,7 @@
 , pkg-config
 , expat
 , enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
-, systemd
+, systemdMinimal
 , audit
 , libapparmor
 , dbus
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       libX11
       libICE
       libSM
-    ]) ++ lib.optional enableSystemd systemd
+    ]) ++ lib.optional enableSystemd systemdMinimal
     ++ lib.optionals stdenv.isLinux [ audit libapparmor ];
   # ToDo: optional selinux?
 
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
     "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
   ] ++ lib.optional (!x11Support) "--without-x"
   ++ lib.optionals stdenv.isLinux [ "--enable-apparmor" "--enable-libaudit" ]
-  ++ lib.optionals enableSystemd [ "SYSTEMCTL=${systemd}/bin/systemctl" ];
+  ++ lib.optionals enableSystemd [ "SYSTEMCTL=${systemdMinimal}/bin/systemctl" ];
 
   NIX_CFLAGS_LINK = lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed";
 

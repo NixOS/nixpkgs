@@ -28,7 +28,7 @@ let
   );
 in {
   options.networking.ucarp = {
-    enable = mkEnableOption "ucarp, userspace implementation of CARP";
+    enable = mkEnableOption (lib.mdDoc "ucarp, userspace implementation of CARP");
 
     interface = mkOption {
       type = types.str;

@@ -3,10 +3,38 @@
 rec {
   gen =
 
-    { version, nativeVersion, sha256, defaultJava ? jdk8, supportedPlatforms ? null }:
+    { version, nativeVersion, sha256,
 
-    { lib, stdenv, fetchurl, makeWrapper, unzip, java ? defaultJava
-    , javaToolchains ? [ ], ncurses5, ncurses6 }:
+      # The default JDK/JRE that will be used for derived Gradle packages.
+      # A current LTS version of a JDK is a good choice.
+      defaultJava ? jdk8,
+
+      # The platforms supported by this Gradle package.
+      # Gradle Native-Platform ships some binaries that
+      # are compatible only with specific platforms.
+      # As of 2022-04 this affects platform compatibility
+      # of multiple Gradle releases, so this is used as default.
+      # See https://github.com/gradle/native-platform#supported-platforms
+      platforms ? [
+        "aarch64-darwin"
+        "aarch64-linux"
+        "i686-windows"
+        "x86_64-cygwin"
+        "x86_64-darwin"
+        "x86_64-linux"
+        "x86_64-windows"
+      ]
+    }:
+
+    { lib, stdenv, fetchurl, makeWrapper, unzip, ncurses5, ncurses6,
+
+      # The JDK/JRE used for running Gradle.
+      java ? defaultJava,
+
+      # Additional JDK/JREs to be registered as toolchains.
+      # See https://docs.gradle.org/current/userguide/toolchains.html
+      javaToolchains ? [ ]
+    }:
 
     stdenv.mkDerivation rec {
       pname = "gradle";
@@ -23,20 +51,18 @@ rec {
       nativeBuildInputs = [ makeWrapper unzip ];
       buildInputs = [ java ];
 
-      # NOTE: For more information on toolchains,
-      # see https://docs.gradle.org/current/userguide/toolchains.html
       installPhase = with builtins;
         let
           toolchain = rec {
-            var = x: "JAVA_TOOLCHAIN_NIX_${toString x}";
-            vars = (lib.imap0 (i: x: ("${var i} ${x}")) javaToolchains);
-            varNames = lib.imap0 (i: x: var i) javaToolchains;
+            prefix = x: "JAVA_TOOLCHAIN_NIX_${toString x}";
+            varDefs  = (lib.imap0 (i: x: "${prefix i} ${x}") javaToolchains);
+            varNames = lib.imap0 (i: x: prefix i) javaToolchains;
             property = " -Porg.gradle.java.installations.fromEnv='${
                  concatStringsSep "," varNames
                }'";
           };
-          vars = concatStringsSep "\n" (map (x: "  --set ${x} \\")
-            ([ "JAVA_HOME ${java}" ] ++ toolchain.vars));
+          varDefs = concatStringsSep "\n" (map (x: "  --set ${x} \\")
+            ([ "JAVA_HOME ${java}" ] ++ toolchain.varDefs));
         in ''
           mkdir -pv $out/lib/gradle/
           cp -rv lib/ $out/lib/gradle/
@@ -44,7 +70,7 @@ rec {
           gradle_launcher_jar=$(echo $out/lib/gradle/lib/gradle-launcher-*.jar)
           test -f $gradle_launcher_jar
           makeWrapper ${java}/bin/java $out/bin/gradle \
-            ${vars}
+            ${varDefs}
             --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain${toolchain.property}"
         '';
 
@@ -74,6 +100,7 @@ rec {
       '';
 
       meta = with lib; {
+        inherit platforms;
         description = "Enterprise-grade build system";
         longDescription = ''
           Gradle is a build system which offers you ease, power and freedom.
@@ -91,12 +118,12 @@ rec {
           binaryNativeCode
         ];
         license = licenses.asl20;
-        platforms = if (supportedPlatforms != null) then supportedPlatforms else platforms.unix;
         maintainers = with maintainers; [ lorenzleutgeb liff ];
       };
     };
 
-  # NOTE: Default JDKs are LTS versions and according to
+  # NOTE: Default JDKs that are hardcoded below must be LTS versions
+  # and respect the compatibility matrix at
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_7 = gen {
@@ -104,9 +131,6 @@ rec {
     nativeVersion = "0.22-milestone-23";
     sha256 = "1hjifd98dif0qy6vkqp56v9z7id5cf2bfkdd71ld8nsqqlig51yb";
     defaultJava = jdk17;
-    # Gradle 7 ships some binaries that are only available for some platforms
-    # See https://github.com/gradle/native-platform#supported-platforms
-    supportedPlatforms =  [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" "x86_64-cygwin" "x86_64-windows" "i686-windows"  ];
   };
 
   gradle_6 = gen {
@@ -114,12 +138,10 @@ rec {
     nativeVersion = "0.22-milestone-20";
     sha256 = "13qyk3f6namw27ynh6nxljxpk9r3l12vxl3f0qpglprdf3c6ydcb";
     defaultJava = jdk11;
-    # Gradle 6 ships some binaries that are only available for some platforms
-    # See https://github.com/gradle/native-platform#supported-platforms
-    supportedPlatforms =  [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" "x86_64-cygwin" "x86_64-windows" "i686-windows"  ];
   };
 
   # NOTE: No GitHub Release for the following versions. `update.sh` will not work.
+
   gradle_5 = gen {
     version = "5.6.4";
     nativeVersion = "0.18";

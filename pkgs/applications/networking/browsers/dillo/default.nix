@@ -1,37 +1,63 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchhg
+, autoreconfHook
 , fltk
+, libXcursor
+, libXi
+, libXinerama
+, libjpeg
+, libpng
+, mbedtls
 , openssl
-, libjpeg, libpng
 , perl
-, libXcursor, libXi, libXinerama }:
+, pkg-config
+, which
+}:
 
-stdenv.mkDerivation rec {
-  version = "3.0.5";
+stdenv.mkDerivation {
   pname = "dillo";
+  version = "unstable-2021-02-09";
 
-  src = fetchurl {
-    url = "https://www.dillo.org/download/${pname}-${version}.tar.bz2";
-    sha256 = "12ql8n1lypv3k5zqgwjxlw1md90ixz3ag6j1gghfnhjq3inf26yv";
+  src = fetchhg {
+    url = "https://hg.sr.ht/~seirdy/dillo-mirror";
+    rev = "67b70f024568b505633524be61fcfbde5337849f";
+    sha256 = "sha256-lbn5u9oEL0zt9yBhznBS9Dz9/6kSwRDJeNXKEojty1g=";
   };
 
-  buildInputs = with lib;
-  [ perl fltk openssl libjpeg libpng libXcursor libXi libXinerama ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    which
+  ];
+
+  buildInputs = [
+    fltk
+    libXcursor
+    libXi
+    libXinerama
+    libjpeg
+    libpng
+    mbedtls
+    openssl
+    perl
+  ];
 
   # Workaround build failure on -fno-common toolchains:
   #   ld: main.o:/build/dillo-3.0.5/dpid/dpid.h:64: multiple definition of `sock_set';
   #     dpid.o:/build/dillo-3.0.5/dpid/dpid.h:64: first defined here
   NIX_CFLAGS_COMPILE = "-fcommon";
 
-  configureFlags = [ "--enable-ssl" ];
+  configureFlags = [ "--enable-ssl=yes" ];
 
   meta = with lib; {
-    homepage = "https://www.dillo.org/";
+    homepage = "https://hg.sr.ht/~seirdy/dillo-mirror";
     description = "A fast graphical web browser with a small footprint";
     longDescription = ''
       Dillo is a small, fast web browser, tailored for older machines.
     '';
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
   };
 }

@@ -14,7 +14,7 @@ let
   };
 in {
   options.services.flannel = {
-    enable = mkEnableOption "flannel";
+    enable = mkEnableOption (lib.mdDoc "flannel");
 
     package = mkOption {
       description = lib.mdDoc "Package to use for flannel";
@@ -83,7 +83,7 @@ in {
     };
 
     network = mkOption {
-      description = " IPv4 network in CIDR format to use for the entire flannel network.";
+      description = lib.mdDoc " IPv4 network in CIDR format to use for the entire flannel network.";
       type = types.str;
     };
 

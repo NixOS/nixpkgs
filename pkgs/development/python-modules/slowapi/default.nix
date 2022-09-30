@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "slowapi";
-  version = "0.1.5";
+  version = "0.1.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "laurentS";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1wjnlhjfgil86h6i5yij723ncg18rqdprs1q6i68w4msaspwpxg9";
+    sha256 = "sha256-3ZkQnroHMCHuTPH/cvi/iWndvdyQ/ZJQ2Qtu1CZyeGg=";
   };
 
   nativeBuildInputs = [

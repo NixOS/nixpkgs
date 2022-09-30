@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "memray";
-  version = "1.2.0";
+  version = "1.3.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bloomberg";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-MZOKo0VaCJM/YyvCByM5Yg7H/8onDKNSufBzr+GsFlo=";
+    hash = "sha256-zHdgVpe92OiwLC4jHVtT3oC+WnB30e5U3ZOHnmuo+Ao=";
   };
 
   buildInputs = [
@@ -33,6 +33,8 @@ python3.pkgs.buildPythonApplication rec {
 
   checkInputs = with python3.pkgs; [
     pytestCheckHook
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    greenlet
   ];
 
   pythonImportsCheck = [

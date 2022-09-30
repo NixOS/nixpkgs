@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-tasks";
-  version = "2.10.1";
+  version = "2.10.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Us6K8gf8zzdbek9CDgitkhb40IA9MkqFNblLw/KmfSc=";
+    hash = "sha256-9vAUmK1GG06fNK+d3WMRht2/7Ftaz56ec9xwP5eXxDU=";
   };
 
   propagatedBuildInputs = [

@@ -17,6 +17,11 @@ in rec {
       cp linux-recordreplay.so $out
       runHook postInstall
     '';
+    postFixup = ''
+      patchelf --set-rpath "$(patchelf --print-rpath $out):${
+        lib.makeLibraryPath [ openssl ]
+      }" $out
+    '';
     meta = with lib; {
       description = "RecordReplay internal recording library";
       homepage = "https://www.replay.io/";

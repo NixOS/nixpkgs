@@ -66,25 +66,25 @@ in
 {
   options = {
     services.privacyidea = {
-      enable = mkEnableOption "PrivacyIDEA";
+      enable = mkEnableOption (lib.mdDoc "PrivacyIDEA");
 
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/root/privacyidea.env";
-        description = ''
+        description = lib.mdDoc ''
           File to load as environment file. Environment variables
           from this file will be interpolated into the config file
-          using <package>envsubst</package> which is helpful for specifying
+          using `envsubst` which is helpful for specifying
           secrets:
-          <programlisting>
-          { <xref linkend="opt-services.privacyidea.secretKey"/> = "$SECRET"; }
-          </programlisting>
+          ```
+          { services.privacyidea.secretKey = "$SECRET"; }
+          ```
 
           The environment-file can now specify the actual secret key:
-          <programlisting>
+          ```
           SECRET=veryverytopsecret
-          </programlisting>
+          ```
         '';
       };
 
@@ -179,7 +179,7 @@ in
       };
 
       ldap-proxy = {
-        enable = mkEnableOption "PrivacyIDEA LDAP Proxy";
+        enable = mkEnableOption (lib.mdDoc "PrivacyIDEA LDAP Proxy");
 
         configFile = mkOption {
           type = types.nullOr types.path;
@@ -204,11 +204,11 @@ in
         settings = mkOption {
           type = with types; attrsOf (attrsOf (oneOf [ str bool int (listOf str) ]));
           default = {};
-          description = ''
-            Attribute-set containing the settings for <package>privacyidea-ldap-proxy</package>.
+          description = lib.mdDoc ''
+            Attribute-set containing the settings for `privacyidea-ldap-proxy`.
             It's possible to pass secrets using env-vars as substitutes and
-            use the option <xref linkend="opt-services.privacyidea.ldap-proxy.environmentFile"/>
-            to inject them via <package>envsubst</package>.
+            use the option [](#opt-services.privacyidea.ldap-proxy.environmentFile)
+            to inject them via `envsubst`.
           '';
         };
 

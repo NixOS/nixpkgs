@@ -22,6 +22,7 @@
   ./config/ldap.nix
   ./config/locale.nix
   ./config/malloc.nix
+  ./config/mysql.nix
   ./config/networking.nix
   ./config/no-x-libs.nix
   ./config/nsswitch.nix
@@ -127,6 +128,7 @@
   ./programs/adb.nix
   ./programs/appgate-sdp.nix
   ./programs/atop.nix
+  ./programs/ausweisapp.nix
   ./programs/autojump.nix
   ./programs/bandwhich.nix
   ./programs/bash/bash.nix
@@ -203,6 +205,7 @@
   ./programs/plotinus.nix
   ./programs/proxychains.nix
   ./programs/qt5ct.nix
+  ./programs/rust-motd.nix
   ./programs/screen.nix
   ./programs/sedutil.nix
   ./programs/seahorse.nix
@@ -329,6 +332,7 @@
   ./services/cluster/kubernetes/proxy.nix
   ./services/cluster/kubernetes/scheduler.nix
   ./services/cluster/pacemaker/default.nix
+  ./services/cluster/patroni/default.nix
   ./services/cluster/spark/default.nix
   ./services/computing/boinc/client.nix
   ./services/computing/foldingathome/client.nix
@@ -451,6 +455,7 @@
   ./services/hardware/lcd.nix
   ./services/hardware/lirc.nix
   ./services/hardware/nvidia-optimus.nix
+  ./services/hardware/openrgb.nix
   ./services/hardware/pcscd.nix
   ./services/hardware/pommed.nix
   ./services/hardware/power-profiles-daemon.nix
@@ -501,6 +506,7 @@
   ./services/mail/dovecot.nix
   ./services/mail/dspam.nix
   ./services/mail/exim.nix
+  ./services/mail/listmonk.nix
   ./services/mail/maddy.nix
   ./services/mail/mail.nix
   ./services/mail/mailcatcher.nix
@@ -586,6 +592,7 @@
   ./services/misc/jackett.nix
   ./services/misc/jellyfin.nix
   ./services/misc/klipper.nix
+  ./services/misc/languagetool.nix
   ./services/misc/logkeys.nix
   ./services/misc/leaps.nix
   ./services/misc/lidarr.nix
@@ -618,6 +625,7 @@
   ./services/misc/plikd.nix
   ./services/misc/podgrab.nix
   ./services/misc/polaris.nix
+  ./services/misc/portunus.nix
   ./services/misc/prowlarr.nix
   ./services/misc/tautulli.nix
   ./services/misc/pinnwand.nix
@@ -637,6 +645,7 @@
   ./services/misc/sonarr.nix
   ./services/misc/sourcehut
   ./services/misc/spice-vdagentd.nix
+  ./services/misc/spice-webdavd.nix
   ./services/misc/ssm-agent.nix
   ./services/misc/sssd.nix
   ./services/misc/subsonic.nix
@@ -662,7 +671,6 @@
   ./services/monitoring/collectd.nix
   ./services/monitoring/das_watchdog.nix
   ./services/monitoring/datadog-agent.nix
-  ./services/monitoring/dd-agent/dd-agent.nix
   ./services/monitoring/do-agent.nix
   ./services/monitoring/fusion-inventory.nix
   ./services/monitoring/grafana.nix
@@ -674,6 +682,7 @@
   ./services/monitoring/heapster.nix
   ./services/monitoring/incron.nix
   ./services/monitoring/kapacitor.nix
+  ./services/monitoring/kthxbye.nix
   ./services/monitoring/loki.nix
   ./services/monitoring/longview.nix
   ./services/monitoring/mackerel-agent.nix
@@ -688,6 +697,7 @@
   ./services/monitoring/prometheus/alertmanager.nix
   ./services/monitoring/prometheus/exporters.nix
   ./services/monitoring/prometheus/pushgateway.nix
+  ./services/monitoring/prometheus/sachet.nix
   ./services/monitoring/prometheus/xmpp-alerts.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
@@ -796,6 +806,7 @@
   ./services/networking/git-daemon.nix
   ./services/networking/globalprotect-vpn.nix
   ./services/networking/gnunet.nix
+  ./services/networking/go-autoconfig.nix
   ./services/networking/go-neb.nix
   ./services/networking/go-shadowsocks2.nix
   ./services/networking/gobgpd.nix
@@ -857,6 +868,7 @@
   ./services/networking/nbd.nix
   ./services/networking/ndppd.nix
   ./services/networking/nebula.nix
+  ./services/networking/netbird.nix
   ./services/networking/networkmanager.nix
   ./services/networking/nextdns.nix
   ./services/networking/nftables.nix
@@ -1023,7 +1035,7 @@
   ./services/system/cloud-init.nix
   ./services/system/dbus.nix
   ./services/system/earlyoom.nix
-  ./services/system/localtime.nix
+  ./services/system/localtimed.nix
   ./services/system/kerberos/default.nix
   ./services/system/nscd.nix
   ./services/system/saslauthd.nix
@@ -1045,6 +1057,7 @@
   ./services/video/epgstation/default.nix
   ./services/video/mirakurun.nix
   ./services/video/replay-sorcery.nix
+  ./services/web-apps/alps.nix
   ./services/web-apps/atlassian/confluence.nix
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix
@@ -1057,9 +1070,11 @@
   ./services/web-apps/discourse.nix
   ./services/web-apps/documize.nix
   ./services/web-apps/dokuwiki.nix
+  ./services/web-apps/dolibarr.nix
   ./services/web-apps/engelsystem.nix
   ./services/web-apps/ethercalc.nix
   ./services/web-apps/fluidd.nix
+  ./services/web-apps/freshrss.nix
   ./services/web-apps/galene.nix
   ./services/web-apps/gerrit.nix
   ./services/web-apps/gotify-server.nix
@@ -1074,6 +1089,7 @@
   ./services/web-apps/jirafeau.nix
   ./services/web-apps/jitsi-meet.nix
   ./services/web-apps/keycloak.nix
+  ./services/web-apps/komga.nix
   ./services/web-apps/lemmy.nix
   ./services/web-apps/invidious.nix
   ./services/web-apps/invoiceplane.nix
@@ -1099,6 +1115,7 @@
   ./services/web-apps/prosody-filer.nix
   ./services/web-apps/matomo.nix
   ./services/web-apps/openwebrx.nix
+  ./services/web-apps/outline.nix
   ./services/web-apps/restya-board.nix
   ./services/web-apps/sogo.nix
   ./services/web-apps/rss-bridge.nix
@@ -1111,6 +1128,7 @@
   ./services/web-apps/wiki-js.nix
   ./services/web-apps/whitebophir.nix
   ./services/web-apps/wordpress.nix
+  ./services/web-apps/writefreely.nix
   ./services/web-apps/youtrack.nix
   ./services/web-apps/zabbix.nix
   ./services/web-servers/agate.nix
@@ -1134,6 +1152,7 @@
   ./services/web-servers/pomerium.nix
   ./services/web-servers/unit/default.nix
   ./services/web-servers/tomcat.nix
+  ./services/web-servers/keter
   ./services/web-servers/traefik.nix
   ./services/web-servers/trafficserver/default.nix
   ./services/web-servers/ttyd.nix
@@ -1218,6 +1237,7 @@
   ./system/boot/systemd/journald.nix
   ./system/boot/systemd/logind.nix
   ./system/boot/systemd/nspawn.nix
+  ./system/boot/systemd/oomd.nix
   ./system/boot/systemd/shutdown.nix
   ./system/boot/systemd/tmpfiles.nix
   ./system/boot/systemd/user.nix
@@ -1252,6 +1272,7 @@
   ./tasks/network-interfaces-scripted.nix
   ./tasks/scsi-link-power-management.nix
   ./tasks/snapraid.nix
+  ./tasks/stratis.nix
   ./tasks/swraid.nix
   ./tasks/trackpoint.nix
   ./tasks/powertop.nix

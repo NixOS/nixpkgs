@@ -5,7 +5,6 @@
 
 let
   pythonPackages = python3Packages;
-  binPath = lib.makeBinPath [ xdg-utils dnsmasq dhcp iproute2 ];
 
 in stdenv.mkDerivation rec {
   pname = "blueman";
@@ -41,8 +40,12 @@ in stdenv.mkDerivation rec {
     (lib.enableFeature withPulseAudio "pulseaudio")
   ];
 
+  makeWrapperArgs = [
+    "--prefix PATH ':' ${lib.makeBinPath [ dnsmasq dhcp iproute2 ]}"
+    "--suffix PATH ':' ${lib.makeBinPath [ xdg-utils ]}"
+  ];
+
   postFixup = ''
-    makeWrapperArgs="--prefix PATH ':' ${binPath}"
     # This mimics ../../../development/interpreters/python/wrap.sh
     wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
     wrapPythonProgramsIn "$out/libexec" "$out $pythonPath"

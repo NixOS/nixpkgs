@@ -106,30 +106,14 @@ let
     type = types.either types.str (types.enum ["permanent" "preserve" "random" "stable"]);
     default = "preserve";
     example = "00:11:22:33:44:55";
-    description = ''
+    description = lib.mdDoc ''
       Set the MAC address of the interface.
-      <variablelist>
-        <varlistentry>
-          <term>"XX:XX:XX:XX:XX:XX"</term>
-          <listitem><para>MAC address of the interface</para></listitem>
-        </varlistentry>
-        <varlistentry>
-          <term><literal>"permanent"</literal></term>
-          <listitem><para>Use the permanent MAC address of the device</para></listitem>
-        </varlistentry>
-        <varlistentry>
-          <term><literal>"preserve"</literal></term>
-          <listitem><para>Don’t change the MAC address of the device upon activation</para></listitem>
-        </varlistentry>
-        <varlistentry>
-          <term><literal>"random"</literal></term>
-          <listitem><para>Generate a randomized value upon each connect</para></listitem>
-        </varlistentry>
-        <varlistentry>
-          <term><literal>"stable"</literal></term>
-          <listitem><para>Generate a stable, hashed MAC address</para></listitem>
-        </varlistentry>
-      </variablelist>
+
+      - `"XX:XX:XX:XX:XX:XX"`: MAC address of the interface
+      - `"permanent"`: Use the permanent MAC address of the device
+      - `"preserve"`: Don’t change the MAC address of the device upon activation
+      - `"random"`: Generate a randomized value upon each connect
+      - `"stable"`: Generate a stable, hashed MAC address
     '';
   };
 
@@ -343,9 +327,9 @@ in {
             type = mkOption {
               type = types.enum (attrNames dispatcherTypesSubdirMap);
               default = "basic";
-              description = ''
+              description = lib.mdDoc ''
                 Dispatcher hook type. Look up the hooks described at
-                <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.html">https://developer.gnome.org/NetworkManager/stable/NetworkManager.html</link>
+                [https://developer.gnome.org/NetworkManager/stable/NetworkManager.html](https://developer.gnome.org/NetworkManager/stable/NetworkManager.html)
                 and choose the type depending on the output folder.
                 You should then filter the event type (e.g., "up"/"down") from within your script.
               '';

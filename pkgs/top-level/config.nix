@@ -35,6 +35,7 @@ let
 
     warnUndeclaredOptions = mkOption {
       description = "Whether to warn when <literal>config</literal> contains an unrecognized attribute.";
+      type = types.bool;
       default = false;
     };
 
@@ -127,6 +128,13 @@ let
       '';
     };
 
+    checkMeta = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to check that the `meta` attribute of derivations are correct during evaluation time.
+      '';
+    };
   };
 
 in {

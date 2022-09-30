@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubectl-evict-pod";
-  version = "0.0.10";
+  version = "0.0.12";
 
   src = fetchFromGitHub {
     owner = "rajatjindal";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Z4fJzU317p7K+klcDQAukXAfZOpHd3PlH5fKO0PgKHA=";
+    sha256 = "sha256-alU1c1ppn4cQi582kcA/PIAJJt73i3uG02cQvSYij1A=";
   };
 
-  vendorSha256 = "sha256-8VTrywlzrzoBEi/xOqkwhGW/R2B2oGqgh01Gv9FcW80=";
+  vendorSha256 = null;
 
   meta = with lib; {
     description = "This plugin evicts the given pod and is useful for testing pod disruption budget rules";

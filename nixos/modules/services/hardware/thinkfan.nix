@@ -43,24 +43,26 @@ let
       };
       query = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The query string used to match one or more ${name}s: can be
           a fullpath to the temperature file (single ${name}) or a fullpath
           to a driver directory (multiple ${name}s).
 
-          <note><para>
-            When multiple ${name}s match, the query can be restricted using the
-            <option>name</option> or <option>indices</option> options.
-          </para></note>
+          ::: {.note}
+          When multiple ${name}s match, the query can be restricted using the
+          {option}`name` or {option}`indices` options.
+          :::
         '';
       };
       indices = mkOption {
         type = with types; nullOr (listOf ints.unsigned);
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           A list of ${name}s to pick in case multiple ${name}s match the query.
 
-          <note><para>Indices start from 0.</para></note>
+          ::: {.note}
+          Indices start from 0.
+          :::
         '';
       };
     } // optionalAttrs (name == "sensor") {
@@ -81,18 +83,18 @@ let
     // { "${type}" = query; };
 
   syntaxNote = name: ''
-    <note><para>
-      This section slightly departs from the thinkfan.conf syntax.
-      The type and path must be specified like this:
-      <literal>
-        type = "tpacpi";
-        query = "/proc/acpi/ibm/${name}";
-      </literal>
-      instead of a single declaration like:
-      <literal>
-        - tpacpi: /proc/acpi/ibm/${name}
-      </literal>
-    </para></note>
+    ::: {.note}
+    This section slightly departs from the thinkfan.conf syntax.
+    The type and path must be specified like this:
+    ```
+      type = "tpacpi";
+      query = "/proc/acpi/ibm/${name}";
+    ```
+    instead of a single declaration like:
+    ```
+      - tpacpi: /proc/acpi/ibm/${name}
+    ```
+    :::
   '';
 
 in {
@@ -104,13 +106,13 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable thinkfan, a fan control program.
 
-          <note><para>
-            This module targets IBM/Lenovo thinkpads by default, for
-            other hardware you will have configure it more carefully.
-          </para></note>
+          ::: {.note}
+          This module targets IBM/Lenovo thinkpads by default, for
+          other hardware you will have configure it more carefully.
+          :::
         '';
         relatedPackages = [ "thinkfan" ];
       };
@@ -131,9 +133,11 @@ in {
             query = "/proc/acpi/ibm/thermal";
           }
         ];
-        description = ''
+        description = lib.mdDoc ''
           List of temperature sensors thinkfan will monitor.
-        '' + syntaxNote "thermal";
+
+          ${syntaxNote "thermal"}
+        '';
       };
 
       fans = mkOption {
@@ -143,9 +147,11 @@ in {
             query = "/proc/acpi/ibm/fan";
           }
         ];
-        description = ''
+        description = lib.mdDoc ''
           List of fans thinkfan will control.
-        '' + syntaxNote "fan";
+
+          ${syntaxNote "fan"}
+        '';
       };
 
       levels = mkOption {

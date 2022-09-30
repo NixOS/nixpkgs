@@ -10,7 +10,7 @@ in
 
   options = {
     services.ratbagd = {
-      enable = mkEnableOption "ratbagd for configuring gaming mice";
+      enable = mkEnableOption (lib.mdDoc "ratbagd for configuring gaming mice");
     };
   };
 

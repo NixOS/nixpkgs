@@ -32,8 +32,8 @@ with python3.pkgs; buildPythonApplication rec {
     # shell completions
     installShellCompletion --cmd khal \
       --bash <(_KHAL_COMPLETE=bash_source $out/bin/khal) \
-      --fish <(_KHAL_COMPLETE=zsh_source $out/bin/khal) \
-      --zsh <(_KHAL_COMPLETE=fish_source $out/bin/khal)
+      --zsh <(_KHAL_COMPLETE=zsh_source $out/bin/khal) \
+      --fish <(_KHAL_COMPLETE=fish_source $out/bin/khal)
 
     # man page
     PATH="${python3.withPackages (ps: with ps; [ sphinx sphinxcontrib_newsfeed ])}/bin:$PATH" \

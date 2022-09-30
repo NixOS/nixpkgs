@@ -14,15 +14,15 @@
 
 buildPythonPackage rec {
   pname = "xsdata";
-  version = "22.7";
+  version = "22.9";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-2EpbTNYdjcHOQQqe+bEpMzGxD2Jh34P+eI+uK4SJPdo=";
+    hash = "sha256-xi1QArTeWbrKTE6p7f3Aj7d1lxPsIROaruv/IMw+fPw=";
   };
 
   postPatch = ''

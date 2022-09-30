@@ -1,5 +1,5 @@
 { lib, fetchurl, fetchzip, ocaml-ng
-, version ? "0.24.0"
+, version ? "0.24.1"
 , tarballName ? "ocamlformat-${version}.tbz",
 }:
 
@@ -14,6 +14,7 @@ let src =
       "0.22.4" = "sha256-61TeK4GsfMLmjYGn3ICzkagbc3/Po++Wnqkb2tbJwGA=";
       "0.23.0" = "sha256-m9Pjz7DaGy917M1GjyfqG5Lm5ne7YSlJF2SVcDHe3+0=";
       "0.24.0" = "sha256-Zil0wceeXmq2xy0OVLxa/Ujl4Dtsmc4COyv6Jo7rVaM=";
+      "0.24.1" = "sha256-AjQl6YGPgOpQU3sjcaSnZsFJqZV9BYB+iKAE0tX0Qc4=";
     }."${version}";
   };
   ocamlPackages = ocaml-ng.ocamlPackages;

@@ -19,7 +19,7 @@ in {
       type = types.attrsOf (types.submodule {
         options = {
 
-          enable = mkEnableOption "hub instance" // { default = true; };
+          enable = mkEnableOption (lib.mdDoc "hub instance") // { default = true; };
 
           enableTLS = mkOption {
             type = types.bool;

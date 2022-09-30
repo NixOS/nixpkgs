@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "python-benedict";
-  version = "0.25.2";
+  version = "0.25.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,13 +29,8 @@ buildPythonPackage rec {
     owner = "fabiocaccamo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-WSsT+p23VctVt9A+WFKNHcgUHFijfT775eMF3RzaXDA=";
+    hash = "sha256-q7aQW4XRlKp+X1iItHVEsHEjkl2DU9QG0eMrcuq+rc4=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "mailchecker >= 4.1.0, < 5.0.0" "mailchecker >= 4.1.0"
-  '';
 
   propagatedBuildInputs = [
     mailchecker
@@ -47,13 +42,13 @@ buildPythonPackage rec {
     ftfy
     orjson
     requests
-    six
     toml
     xmltodict
   ];
 
   checkInputs = [
     pytestCheckHook
+    six
   ];
 
   disabledTests = [

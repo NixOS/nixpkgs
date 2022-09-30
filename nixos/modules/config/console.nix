@@ -64,8 +64,8 @@ in
     };
 
     colors = mkOption {
-      type = types.listOf types.str;
-      default = [];
+      type = with types; listOf (strMatching "[[:xdigit:]]{6}");
+      default = [ ];
       example = [
         "002b36" "dc322f" "859900" "b58900"
         "268bd2" "d33682" "2aa198" "eee8d5"

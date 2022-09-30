@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "purpur";
-  version = "1.18.1r1522";
+  version = "1.19.2r1763";
 
   src = fetchurl {
     url = "https://api.purpurmc.org/v2/purpur/${builtins.replaceStrings [ "r" ] [ "/" ] version}/download";
-    sha256 = "1060fsfcw6m30d47wla1vsnmc4czyla6m8wf91ws095hbvc22qsm";
+    sha256 = "sha256-6wcCwVIGV32YQlgB57qthy6uWtuXGN4G8S7uAAgVyDE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

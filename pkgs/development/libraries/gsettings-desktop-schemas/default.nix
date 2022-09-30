@@ -30,10 +30,6 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  mesonFlags = [
-    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
-  ];
-
   postPatch = ''
     chmod +x build-aux/meson/post-install.py
     patchShebangs build-aux/meson/post-install.py

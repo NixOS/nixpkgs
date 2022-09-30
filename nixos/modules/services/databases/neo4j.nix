@@ -333,9 +333,9 @@ in {
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Enable the HTTP connector for Neo4j. Setting this option to
-          <literal>false</literal> will stop Neo4j from listening for incoming
+          `false` will stop Neo4j from listening for incoming
           connections on the HTTPS port (7474 by default).
         '';
       };
@@ -538,7 +538,7 @@ in {
             type = types.listOf types.path;
             internal = true;
             readOnly = true;
-            description = ''
+            description = lib.mdDoc ''
               Directories of this policy that will be created automatically
               when the certificates directory is left at its default value.
               This includes all options of type path that are left at their

@@ -10,31 +10,31 @@ in {
     ldapCredentialFile = mkOption {
       type = types.path;
       example = "/run/keys/ldap_pass";
-      description = ''
+      description = lib.mdDoc ''
         Environment file to contain the credentials to authenticate against
-        <package>openldap</package>.
+        `openldap`.
 
         The file should look like this:
-        <programlisting>
+        ```
         ---
         ldapUser: "cn=monitoring,cn=Monitor"
         ldapPass: "secret"
-        </programlisting>
+        ```
       '';
     };
     protocol = mkOption {
       default = "tcp";
       example = "udp";
       type = types.str;
-      description = ''
-        Which protocol to use to connect against <package>openldap</package>.
+      description = lib.mdDoc ''
+        Which protocol to use to connect against `openldap`.
       '';
     };
     ldapAddr = mkOption {
       default = "localhost:389";
       type = types.str;
-      description = ''
-        Address of the <package>openldap</package>-instance.
+      description = lib.mdDoc ''
+        Address of the `openldap`-instance.
       '';
     };
     metricsPath = mkOption {

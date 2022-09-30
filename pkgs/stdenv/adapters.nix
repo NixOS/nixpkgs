@@ -149,21 +149,6 @@ rec {
   });
 
 
-  # remove after 22.05 and before 22.11
-  addCoverageInstrumentation = stdenv:
-    builtins.trace "'addCoverageInstrumentation' adapter is deprecated and will be removed before 22.11"
-    overrideInStdenv stdenv [ pkgs.enableGCOVInstrumentation pkgs.keepBuildTree ];
-
-
-  # remove after 22.05 and before 22.11
-  replaceMaintainersField = stdenv: pkgs: maintainers:
-    builtins.trace "'replaceMaintainersField' adapter is deprecated and will be removed before 22.11"
-    stdenv.override (old: {
-      mkDerivationFromStdenv = overrideMkDerivationResult (pkg:
-        lib.recursiveUpdate pkg { meta.maintainers = maintainers; });
-    });
-
-
   /* Use the trace output to report all processed derivations with their
      license name.
   */
@@ -179,35 +164,6 @@ rec {
         in pkg // {
           outPath = printDrvPath pkg.outPath;
           drvPath = printDrvPath pkg.drvPath;
-        });
-    });
-
-
-  # remove after 22.05 and before 22.11
-  validateLicenses = licensePred: stdenv:
-    builtins.trace "'validateLicenses' adapter is deprecated and will be removed before 22.11"
-    stdenv.override (old: {
-      mkDerivationFromStdenv = overrideMkDerivationResult (pkg:
-        let
-          drv = builtins.unsafeDiscardStringContext pkg.drvPath;
-          license =
-            pkg.meta.license or
-              # Fixed-output derivations such as source tarballs usually
-              # don't have licensing information, but that's OK.
-              (pkg.outputHash or
-                (builtins.trace
-                  "warning: ${drv} lacks licensing information" null));
-
-          validate = arg:
-            if licensePred license then arg
-            else abort ''
-              while building ${drv}:
-              license `${builtins.toString license}' does not pass the predicate.
-            '';
-
-        in pkg // {
-          outPath = validate pkg.outPath;
-          drvPath = validate pkg.drvPath;
         });
     });
 

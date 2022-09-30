@@ -233,11 +233,8 @@ in
       }
 
       {
-        assertion = cfg.powerManagement.enable -> (
-          builtins.pathExists (cfg.package.out + "/bin/nvidia-sleep.sh") &&
-          builtins.pathExists (cfg.package.out + "/lib/systemd/system-sleep/nvidia")
-        );
-        message = "Required files for driver based power management don't exist.";
+        assertion = cfg.powerManagement.enable -> versionAtLeast nvidia_x11.version "430.09";
+        message = "Required files for driver based power management only exist on versions >= 430.09.";
       }
 
       {
@@ -259,8 +256,6 @@ in
     #   device.
     # - Configure the display manager to run specific `xrandr` commands which will
     #   configure/enable displays connected to the Intel iGPU / AMD APU.
-
-    services.xserver.useGlamor = mkDefault offloadCfg.enable;
 
     services.xserver.drivers = let
     in optional primeEnabled {

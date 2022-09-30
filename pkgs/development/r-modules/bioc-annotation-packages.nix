@@ -7,7 +7,7 @@
 let derive2 = derive { biocVersion = "3.15"; };
 in with self; {
   AHCytoBands = derive2 { name="AHCytoBands"; version="0.99.1"; sha256="0svxxhj3mh5gqik45ikcxnlhnma8n1c0rv8pycj2034cb9ms1dbv"; depends=[]; };
-  AHEnsDbs = derive2 { name="AHEnsDbs"; version="1.1.6"; sha256="0yn1ijlbfk2v0fnr124lh7ak1qsb8m6ipy2xwkpvbrk1v94zcaph"; depends=[AnnotationHubData ensembldb]; };
+  AHEnsDbs = derive2 { name="AHEnsDbs"; version="1.1.7"; sha256="1ckrdqlbk0vmpw1b7y4zlrx8gslhxh62q343k2a3b45r8lg78lp0"; depends=[AnnotationHubData ensembldb]; };
   AHLRBaseDbs = derive2 { name="AHLRBaseDbs"; version="1.4.0"; sha256="15wlnzwa1zqxlzqk90fid7g2631q91n3y117wsk2h1prmgb64j7l"; depends=[AnnotationHub]; };
   AHMeSHDbs = derive2 { name="AHMeSHDbs"; version="1.4.0"; sha256="1nx9qx0kqqkblgcl03p5zdjlzkwpwgzrw9zaywz2nb2318219n3d"; depends=[AnnotationHub]; };
   AHPathbankDbs = derive2 { name="AHPathbankDbs"; version="0.99.5"; sha256="10wcrglm521xcrfbzc39dkbjvg1pkz0zq70vgnh68akiwmdirp89"; depends=[AnnotationHub]; };
@@ -125,7 +125,7 @@ in with self; {
   BSgenome_Vvinifera_URGI_IGGP12Xv0 = derive2 { name="BSgenome.Vvinifera.URGI.IGGP12Xv0"; version="0.1"; sha256="1m8mqkiqs7291hccb8pfyf2yxpky45qr6j3d9wkvp9x3ra3h0yxf"; depends=[BSgenome]; };
   BSgenome_Vvinifera_URGI_IGGP12Xv2 = derive2 { name="BSgenome.Vvinifera.URGI.IGGP12Xv2"; version="0.1"; sha256="1saavsi75gw33jphhm3qb5psyfrv850ss4cmqr4i7aw1kc0fvs1j"; depends=[BSgenome]; };
   BSgenome_Vvinifera_URGI_IGGP8X = derive2 { name="BSgenome.Vvinifera.URGI.IGGP8X"; version="0.1"; sha256="0v0hi2pbbi5ynd92bvbv4bzr7bgv48kvyz62hdv7k9gh7s5pg0id"; depends=[BSgenome]; };
-  CTCF = derive2 { name="CTCF"; version="0.99.4"; sha256="1xp10ra53s59nznnxlgw115j46yg5sy13z6wmhqzv6y789s3p49k"; depends=[]; };
+  CTCF = derive2 { name="CTCF"; version="0.99.5"; sha256="0rrks0zmknfj04gzvbj6206n4v78cjwxrwr4216xwsp6bsbqaj65"; depends=[]; };
   ChemmineDrugs = derive2 { name="ChemmineDrugs"; version="1.0.2"; sha256="0l47ac6lkycmghra2cbcdcxcv47ari8xg6lxpzilvkf4n6ld6064"; depends=[BiocGenerics ChemmineR RSQLite]; };
   DO_db = derive2 { name="DO.db"; version="2.9"; sha256="10bqqa124l61ivzy4mdd3z3ar9a6537qbxw23pc4y9w8a6dwnavn"; depends=[AnnotationDbi]; };
   ENCODExplorerData = derive2 { name="ENCODExplorerData"; version="0.99.5"; sha256="00gfm5l8pxrfs4cw4jlw6n0cz5s31isg69k833n89800v26w3kvh"; depends=[data_table jsonlite RCurl]; };
@@ -837,7 +837,7 @@ in with self; {
   ratCHRLOC = derive2 { name="ratCHRLOC"; version="2.1.6"; sha256="0mgk6lwvvdwjzjh4r1q1q6nfnx4vqx9iy6gmbrb9f31jf30hqnsb"; depends=[]; };
   rattoxfxcdf = derive2 { name="rattoxfxcdf"; version="2.18.0"; sha256="0q84lfaxnnj2zbm5q8xswa1md15fjj4i0djnqr835ixzn7px4yqn"; depends=[AnnotationDbi]; };
   rattoxfxprobe = derive2 { name="rattoxfxprobe"; version="2.18.0"; sha256="1kp159553rkcn9yh6x3yph3yjz2ja21wi9j5ax03qnhwlsl1x8ik"; depends=[AnnotationDbi]; };
-  reactome_db = derive2 { name="reactome.db"; version="1.79.0"; sha256="1fxyn9bmj2xa0cg3g4bm9hv8l1ji62dfwvlh1y19p5z505x5m8n5"; depends=[AnnotationDbi]; };
+  reactome_db = derive2 { name="reactome.db"; version="1.81.0"; sha256="0rfrk0akjngha6zs6dnh4wa9jl0l9dknrmwhbag9gbc9h5pl7i4g"; depends=[AnnotationDbi]; };
   rgu34a_db = derive2 { name="rgu34a.db"; version="3.13.0"; sha256="1nl28gia0zh8xkfv8llxiysxk1k1gm6cs2wvl0n1xqhnr0rhla76"; depends=[AnnotationDbi org_Rn_eg_db]; };
   rgu34acdf = derive2 { name="rgu34acdf"; version="2.18.0"; sha256="08z9f16xp1m2mwl9vlmbffxl4zyyl8cgzf6wp66rrm32lvl0nbwq"; depends=[AnnotationDbi]; };
   rgu34aprobe = derive2 { name="rgu34aprobe"; version="2.18.0"; sha256="1gjxyq9128jgv3ic386f84rajgf3wz7yi2dja80y0ff4m0a48dlh"; depends=[AnnotationDbi]; };

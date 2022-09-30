@@ -14,6 +14,9 @@
 , rich
 , tensorflow
 , treeo
+, torchmetrics
+, pythonRelaxDepsHook
+, torch
 }:
 
 buildPythonPackage rec {
@@ -31,15 +34,16 @@ buildPythonPackage rec {
   # At the time of writing (2022-03-29), rich is currently at version 11.0.0.
   # The treeo dependency is compatible with a patch, but not marked as such in
   # treex. See https://github.com/cgarciae/treex/issues/68.
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'rich = "^11.2.0"' 'rich = "*"' \
-      --replace 'treeo = "^0.0.10"' 'treeo = "*"' \
-      --replace 'certifi = "^2021.10.8"' 'certifi = "*"'
-  '';
+  pythonRelaxDeps = [
+    "certifi"
+    "flax"
+    "rich"
+    "treeo"
+  ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   buildInputs = [ jaxlib ];
@@ -50,6 +54,7 @@ buildPythonPackage rec {
     pyyaml
     rich
     treeo
+    torch
   ];
 
   checkInputs = [
@@ -59,17 +64,10 @@ buildPythonPackage rec {
     keras
     pytestCheckHook
     tensorflow
+    torchmetrics
   ];
 
-  pythonImportsCheck = [
-    "treex"
-  ];
-
-  disabledTestPaths = [
-    # Require `torchmetrics` which is not packaged in `nixpkgs`.
-    "tests/metrics/test_mean_absolute_error.py"
-    "tests/metrics/test_mean_square_error.py"
-  ];
+  pythonImportsCheck = [ "treex" ];
 
   meta = with lib; {
     description = "Pytree Module system for Deep Learning in JAX";

@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "ipinfo";
-  version = "2.8.1";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "cli";
     rev = "${pname}-${version}";
-    hash = "sha256-j+ASyNWfYh4/u7OX3iZx8DZZg1XAwuy6fpC9TJKI+18=";
+    hash = "sha256-kv8krhmqwE4IfEYPpN+cRAnku/Vm0ctQskCiYAb5YQ0=";
   };
 
   vendorSha256 = null;

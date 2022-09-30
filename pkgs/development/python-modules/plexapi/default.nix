@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "plexapi";
-  version = "4.12.1";
+  version = "4.13.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "pkkid";
     repo = "python-plexapi";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-OzHykLpcy+ZA3jfzrDwmCoNb4JhvdHYJErzfWn+zjqo=";
+    sha256 = "sha256-lFVXWkT6cg0JlFWz5AquEXC6icwTU3bNHMDfKEy/3rQ=";
   };
 
   propagatedBuildInputs = [

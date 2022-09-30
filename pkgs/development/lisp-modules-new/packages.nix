@@ -309,9 +309,8 @@ let
       sha256 = "12l7ir3q29v06jx0zng5cvlbmap7p709ka3ik6x29lw334qshm9b";
     };
 
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     buildInputs = [
-      pkgs.makeWrapper
-
       # needed for GSETTINGS_SCHEMAS_PATH
       pkgs.gsettings-desktop-schemas pkgs.glib pkgs.gtk3
 

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "warpd";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "rvaiya";
     repo = "warpd";
     rev = "v${version}";
-    sha256 = "AR/uLgNX1VLPEcfUd8cnplMiaoEJlUxQ55Fst62RnbI=";
+    sha256 = "sha256-QzMtPzuFVN8b4O250G38HAxerZewEu8MV/MDib7gh5A=";
     leaveDotGit = true;
   };
 

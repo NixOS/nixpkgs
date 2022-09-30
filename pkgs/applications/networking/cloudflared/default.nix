@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "cloudflared";
-  version = "2022.7.1";
+  version = "2022.8.2";
 
   src = fetchFromGitHub {
     owner  = "cloudflare";
     repo   = "cloudflared";
     rev    = version;
-    hash   = "sha256-kc6+jn4eTCw37u+kPJdx/kxiaj8MnIddDbUFpPfWdlw=";
+    hash   = "sha256-Kyt5d3KmLefTVVUmUUU23UV0lghzhLFCKLlmwTjN68I=";
   };
 
   vendorSha256 = null;
 
-  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.Version=${version}" "-X github.com/cloudflare/cloudflared/cmd/cloudflared/updater.BuiltForPackageManager=nixpkgs" ];
 
   preCheck = ''
     # Workaround for: sshgen_test.go:74: mkdir /homeless-shelter/.cloudflared: no such file or directory
@@ -33,6 +33,6 @@ buildGoModule rec {
     homepage    = "https://www.cloudflare.com/products/tunnel";
     license     = licenses.asl20;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ bbigras enorris thoughtpolice techknowlogick ];
+    maintainers = with maintainers; [ bbigras enorris thoughtpolice ];
   };
 }

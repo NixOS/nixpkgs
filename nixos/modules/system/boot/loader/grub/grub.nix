@@ -417,23 +417,23 @@ in
       splashImage = mkOption {
         type = types.nullOr types.path;
         example = literalExpression "./my-background.png";
-        description = ''
+        description = lib.mdDoc ''
           Background image used for GRUB.
-          Set to <literal>null</literal> to run GRUB in text mode.
+          Set to `null` to run GRUB in text mode.
 
-          <note><para>
+          ::: {.note}
           For grub 1:
           It must be a 640x480,
           14-colour image in XPM format, optionally compressed with
-          <command>gzip</command> or <command>bzip2</command>.
-          </para></note>
+          {command}`gzip` or {command}`bzip2`.
+          :::
 
-          <note><para>
+          ::: {.note}
           For grub 2:
           File must be one of .png, .tga, .jpg, or .jpeg. JPEG images must
           not be progressive.
           The image will be scaled if necessary to fit the screen.
-          </para></note>
+          :::
         '';
       };
 
@@ -441,36 +441,36 @@ in
         type = types.nullOr types.str;
         example = "#7EBAE4";
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Background color to be used for GRUB to fill the areas the image isn't filling.
 
-          <note><para>
+          ::: {.note}
           This options has no effect for GRUB 1.
-          </para></note>
+          :::
         '';
       };
 
       entryOptions = mkOption {
         default = "--class nixos --unrestricted";
         type = types.nullOr types.str;
-        description = ''
+        description = lib.mdDoc ''
           Options applied to the primary NixOS menu entry.
 
-          <note><para>
+          ::: {.note}
           This options has no effect for GRUB 1.
-          </para></note>
+          :::
         '';
       };
 
       subEntryOptions = mkOption {
         default = "--class nixos";
         type = types.nullOr types.str;
-        description = ''
+        description = lib.mdDoc ''
           Options applied to the secondary NixOS submenu entry.
 
-          <note><para>
+          ::: {.note}
           This options has no effect for GRUB 1.
-          </para></note>
+          :::
         '';
       };
 
@@ -478,24 +478,24 @@ in
         type = types.nullOr types.path;
         example = literalExpression "pkgs.nixos-grub2-theme";
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Grub theme to be used.
 
-          <note><para>
+          ::: {.note}
           This options has no effect for GRUB 1.
-          </para></note>
+          :::
         '';
       };
 
       splashMode = mkOption {
         type = types.enum [ "normal" "stretch" ];
         default = "stretch";
-        description = ''
+        description = lib.mdDoc ''
           Whether to stretch the image or show the image in the top-left corner unstretched.
 
-          <note><para>
+          ::: {.note}
           This options has no effect for GRUB 1.
-          </para></note>
+          :::
         '';
       };
 
@@ -622,37 +622,35 @@ in
       efiInstallAsRemovable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
-          Whether to invoke <literal>grub-install</literal> with
-          <literal>--removable</literal>.
+        description = lib.mdDoc ''
+          Whether to invoke `grub-install` with
+          `--removable`.
 
           Unless you turn this on, GRUB will install itself somewhere in
-          <literal>boot.loader.efi.efiSysMountPoint</literal> (exactly where
+          `boot.loader.efi.efiSysMountPoint` (exactly where
           depends on other config variables). If you've set
-          <literal>boot.loader.efi.canTouchEfiVariables</literal> *AND* you
+          `boot.loader.efi.canTouchEfiVariables` *AND* you
           are currently booted in UEFI mode, then GRUB will use
-          <literal>efibootmgr</literal> to modify the boot order in the
+          `efibootmgr` to modify the boot order in the
           EFI variables of your firmware to include this location. If you are
           *not* booted in UEFI mode at the time GRUB is being installed, the
           NVRAM will not be modified, and your system will not find GRUB at
           boot time. However, GRUB will still return success so you may miss
-          the warning that gets printed ("<literal>efibootmgr: EFI variables
-          are not supported on this system.</literal>").
+          the warning that gets printed ("`efibootmgr: EFI variables
+          are not supported on this system.`").
 
           If you turn this feature on, GRUB will install itself in a
-          special location within <literal>efiSysMountPoint</literal> (namely
-          <literal>EFI/boot/boot$arch.efi</literal>) which the firmwares
+          special location within `efiSysMountPoint` (namely
+          `EFI/boot/boot$arch.efi`) which the firmwares
           are hardcoded to try first, regardless of NVRAM EFI variables.
 
           To summarize, turn this on if:
-          <itemizedlist>
-            <listitem><para>You are installing NixOS and want it to boot in UEFI mode,
-            but you are currently booted in legacy mode</para></listitem>
-            <listitem><para>You want to make a drive that will boot regardless of
-            the NVRAM state of the computer (like a USB "removable" drive)</para></listitem>
-            <listitem><para>You simply dislike the idea of depending on NVRAM
-            state to make your drive bootable</para></listitem>
-          </itemizedlist>
+          - You are installing NixOS and want it to boot in UEFI mode,
+            but you are currently booted in legacy mode
+          - You want to make a drive that will boot regardless of
+            the NVRAM state of the computer (like a USB "removable" drive)
+          - You simply dislike the idea of depending on NVRAM
+            state to make your drive bootable
         '';
       };
 

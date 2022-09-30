@@ -101,7 +101,7 @@ in
 {
   options = {
     services.mattermost = {
-      enable = mkEnableOption "Mattermost chat server";
+      enable = mkEnableOption (lib.mdDoc "Mattermost chat server");
 
       package = mkOption {
         type = types.package;
@@ -234,7 +234,7 @@ in
       };
 
       matterircd = {
-        enable = mkEnableOption "Mattermost IRC bridge";
+        enable = mkEnableOption (lib.mdDoc "Mattermost IRC bridge");
         package = mkOption {
           type = types.package;
           default = pkgs.matterircd;

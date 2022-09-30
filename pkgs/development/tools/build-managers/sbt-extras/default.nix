@@ -3,14 +3,14 @@
 
 stdenv.mkDerivation rec {
   pname = "sbt-extras";
-  rev = "ef403f4ce126441f126dfc61ca6357a7b42539af";
-  version = "2022-02-01";
+  rev = "ddc1c0a9e9df598ad60edbd004e5abb51b32e42c";
+  version = "2022-09-23";
 
   src = fetchFromGitHub {
     owner = "paulp";
     repo = "sbt-extras";
     inherit rev;
-    sha256 = "G7nR2wV0Wv019bCA+ecfYhmFh/DDHFjihKGFKNQ5dgM=";
+    sha256 = "SsqxDipM6B2w1kT1yuNc+PXYDE8qpUSwaXqItYuCgRU=";
   };
 
   dontBuild = true;
@@ -67,7 +67,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A more featureful runner for sbt, the simple/scala/standard build tool";
+    description =
+      "A more featureful runner for sbt, the simple/scala/standard build tool";
     homepage = "https://github.com/paulp/sbt-extras";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nequissimus puffnfresh ];

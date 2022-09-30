@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fclones";
-  version = "0.27.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "pkolaczk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SmYRhOxyptY/DVc+JRT9Yn52WRHOS0B5tfmrqp05hxE=";
+    sha256 = "sha256-0R9UB4xW5LYSA3rJIhJkYCEIN3Fn3eQaqZS1OP4kXNg=";
   };
 
-  cargoSha256 = "sha256-chiKNVZg6sUN9s1fhWCk64UOsw0nXkrjopfkAFbZbwI=";
+  cargoSha256 = "sha256-elpMupN5Ah40+kWzXYDg+PUs0taOxdVhiPMO749H9fA=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     AppKit
@@ -26,6 +26,11 @@ rustPlatform.buildRustPackage rec {
 
   # device::test_physical_device_name test fails on Darwin
   doCheck = !stdenv.isDarwin;
+
+  checkFlags = [
+    # ofborg sometimes fails with "Resource temporarily unavailable"
+    "--skip=cache::test::return_none_if_different_transform_was_used"
+  ];
 
   meta = with lib; {
     description = "Efficient Duplicate File Finder and Remover";

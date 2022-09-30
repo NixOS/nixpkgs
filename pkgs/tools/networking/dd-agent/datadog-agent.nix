@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, cmake
 , buildGoModule
 , makeWrapper
 , fetchFromGitHub
@@ -18,18 +19,29 @@ let
   owner   = "DataDog";
   repo    = "datadog-agent";
   goPackagePath = "github.com/${owner}/${repo}";
-
-in buildGoModule rec {
-  pname = "datadog-agent";
-  version = "7.36.0";
+  version = "7.38.1";
 
   src = fetchFromGitHub {
     inherit owner repo;
     rev = version;
-    sha256 = "sha256-pkbgYE58T9QzV7nCzvfBoTt6Ue8cCMUBSuCBeDtdkzo=";
+    sha256 = "sha256-bG8wsSQvZcG4/Th6mWVdVX9vpeYBZx8FxwdYXpIdXnU=";
+  };
+  rtloader = stdenv.mkDerivation {
+    pname = "datadog-agent-rtloader";
+    src = "${src}/rtloader";
+    inherit version;
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ python ];
+    cmakeFlags = ["-DBUILD_DEMO=OFF" "-DDISABLE_PYTHON2=ON"];
   };
 
-  vendorSha256 = "sha256-SxdSoZtRAdl3evCpb+3BHWf/uPYJJKgw0CL9scwNfGA=";
+in buildGoModule rec {
+  pname = "datadog-agent";
+  inherit src version;
+
+  doCheck = false;
+
+  vendorSha256 = "sha256-bGDf48wFa32hURZfGN5pCMmslC3PeLNayKcl5cfjq9M=";
 
   subPackages = [
     "cmd/agent"
@@ -41,12 +53,12 @@ in buildGoModule rec {
 
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = lib.optionals withSystemd [ systemd ];
+  buildInputs = [rtloader] ++ lib.optionals withSystemd [ systemd ];
   PKG_CONFIG_PATH = "${python}/lib/pkgconfig";
 
   tags = [
     "ec2"
-    "cpython"
+    "python"
     "process"
     "log"
     "secrets"
@@ -58,7 +70,8 @@ in buildGoModule rec {
     "-X ${goPackagePath}/pkg/version.Commit=${src.rev}"
     "-X ${goPackagePath}/pkg/version.AgentVersion=${version}"
     "-X ${goPackagePath}/pkg/serializer.AgentPayloadVersion=${payloadVersion}"
-    "-X ${goPackagePath}/pkg/collector/py.pythonHome=${python}"
+    "-X ${goPackagePath}/pkg/collector/python.pythonHome3=${python}"
+    "-X ${goPackagePath}/pkg/config.DefaultPython=3"
     "-r ${python}/lib"
   ];
 

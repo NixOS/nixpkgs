@@ -2,6 +2,7 @@
 , asynctest
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pyserial
 , pyserial-asyncio
 , pytest-asyncio
@@ -38,9 +39,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # assertion failure
-    # E       assert ff:ff:ff:ff:ff:ff:ff:ff is None
-    "test_startup_api_mode_config_fails"
+    # https://github.com/zigpy/zigpy-xbee/issues/126
+    "test_form_network"
   ];
 
   meta = with lib; {

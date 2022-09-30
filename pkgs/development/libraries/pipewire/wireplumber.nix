@@ -20,7 +20,7 @@
 , pipewire
 , # options
   enableDocs ? true
-, enableGI ? stdenv.hostPlatform == stdenv.buildPlatform
+, enableGI ? true
 }:
 let
   mesonEnableFeature = b: if b then "enabled" else "disabled";
@@ -46,6 +46,12 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.freedesktop.org/pipewire/wireplumber/-/commit/c16e637c329bc9dda8544b18f5bd47a8d63ee253.patch";
       sha256 = "sha256-xhhAlhOovwIjwAxXxvHRTG4GzpIPYvKQE2F4ZP1Udq8=";
     })
+    # fix bluetooth rescan loops
+    # FIXME: drop in next release
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/pipewire/wireplumber/-/merge_requests/398.patch";
+      sha256 = "sha256-rEp/3fjBRbkFuw4rBW6h8O5hcy/oBP3DW7bPu5rVfNY=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -58,7 +64,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ] ++ lib.optionals (enableDocs || enableGI) [
     doxygen
-    (python3.withPackages (ps: with ps;
+    (python3.pythonForBuild.withPackages (ps: with ps;
     lib.optionals enableDocs [ sphinx sphinx-rtd-theme breathe ] ++
       lib.optionals enableGI [ lxml ]
     ))

@@ -5,7 +5,7 @@
 , poetry-core
 , netaddr
 , six
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -43,11 +43,9 @@ buildPythonPackage rec {
       --replace "def testBindv6(self):" "def dontTestBindv6(self):"
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest discover
-    runHook postCheck
-  '';
+  checkInputs = [
+    unittestCheckHook
+  ];
 
   pythonImportsCheck = [
     "pyrad"

@@ -14,7 +14,7 @@ let
   mkCombyPackage = { pname, extraBuildInputs ? [ ], extraNativeInputs ? [ ], preBuild ? "" }:
     ocamlPackages.buildDunePackage rec {
       inherit pname preBuild;
-      version = "1.7.1";
+      version = "1.8.1";
       useDune2 = true;
       minimumOcamlVersion = "4.08.1";
       doCheck = true;
@@ -23,7 +23,7 @@ let
         owner = "comby-tools";
         repo = "comby";
         rev = version;
-        sha256 = "0k60hj8wcrvrk0isr210vnalylkd63ria1kgz5n49inl7w1hfwpv";
+        sha256 = "sha256-yQrfSzJgJm0OWJxhxst2XjZULIVHeEfPMvMIwH7BYDc=";
       };
 
       patches = [ ./comby.patch ];

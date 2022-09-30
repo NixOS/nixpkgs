@@ -18,6 +18,10 @@ self: super: ({
     __darwinAllowLocalNetworking = true;
   });
 
+  streaming-commons = super.streaming-commons.overrideAttrs (_: {
+    __darwinAllowLocalNetworking = true;
+  });
+
   halive = addBuildDepend darwin.apple_sdk.frameworks.AppKit super.halive;
 
   # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux

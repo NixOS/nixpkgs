@@ -13,7 +13,7 @@ let
 in {
   options = {
     services.mautrix-telegram = {
-      enable = mkEnableOption "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge";
+      enable = mkEnableOption (lib.mdDoc "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge");
 
       settings = mkOption rec {
         apply = recursiveUpdate default;

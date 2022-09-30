@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "ooniprobe-cli";
-  version = "3.15.3";
+  version = "3.16.3";
 
   src = fetchFromGitHub {
     owner = "ooni";
     repo = "probe-cli";
     rev = "v${version}";
-    hash = "sha256-21D/1ImKOr9+GeSrIRCUGCcALU0WPohrnz1qqUXLy1A=";
+    hash = "sha256-LCihFw0WprVmL6t0TLHRY35Uek7catA4fIfp+yox87E=";
   };
 
-  vendorSha256 = "sha256-tZHBcVTCll3dSfQnQDfo9z3ALAykRmFvH7vjLLtQHDc=";
+  vendorSha256 = "sha256-eH+PfclxqgffM/pzIkdl7x+6Ie6UPyUpWkJ7+G5eN/E=";
 
   subPackages = [ "cmd/ooniprobe" ];
 

@@ -2,7 +2,7 @@
 # Native buildInputs components
 , bison, boost, cmake, fixDarwinDylibNames, flex, makeWrapper, pkg-config
 # Common components
-, curl, libiconv, ncurses, openssl, pcre, pcre2
+, curl, libiconv, ncurses, openssl, openssl_1_1, pcre, pcre2
 , libkrb5, libaio, liburing, systemd
 , CoreServices, cctools, perl
 , jemalloc, less, libedit
@@ -31,7 +31,7 @@ commonOptions = packageSettings: rec { # attributes common to both builds
 
   src = fetchurl {
     url = "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    inherit (packageSettings) sha256;
+    inherit (packageSettings) hash;
   };
 
   nativeBuildInputs = [ cmake pkg-config ]
@@ -39,13 +39,16 @@ commonOptions = packageSettings: rec { # attributes common to both builds
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) makeWrapper;
 
   buildInputs = [
-    curl libiconv ncurses openssl zlib
+    libiconv ncurses zlib
   ] ++ (packageSettings.extraBuildInputs or [])
     ++ lib.optionals stdenv.hostPlatform.isLinux ([ libkrb5 systemd ]
     ++ (if (lib.versionOlder version "10.6") then [ libaio ] else [ liburing ]))
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl libedit ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) [ jemalloc ]
-    ++ (if (lib.versionOlder version "10.5") then [ pcre ] else [ pcre2 ]);
+    ++ (if (lib.versionOlder version "10.5") then [ pcre ] else [ pcre2 ])
+    ++ (if (lib.versionOlder version "10.6")
+      then [ openssl_1_1 (curl.override { openssl = openssl_1_1; }) ]
+      else [ openssl curl ]);
 
   prePatch = ''
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
@@ -94,6 +97,10 @@ commonOptions = packageSettings: rec { # attributes common to both builds
     # to pass in java explicitly.
     "-DCONNECT_WITH_JDBC=OFF"
     "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # revisit this if nixpkgs supports any architecture whose stack grows upwards
+    "-DSTACK_DIRECTION=-1"
+    "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   postInstall = ''
@@ -211,10 +218,6 @@ in stdenv.mkDerivation (common // {
     "-DPLUGIN_AUTH_PAM_V1=NO"
     "-DWITHOUT_OQGRAPH=1"
     "-DWITHOUT_PLUGIN_S3=1"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    # revisit this if nixpkgs supports any architecture whose stack grows upwards
-    "-DSTACK_DIRECTION=-1"
-    "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   preConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
@@ -234,31 +237,37 @@ in stdenv.mkDerivation (common // {
   '';
 
   CXXFLAGS = lib.optionalString stdenv.hostPlatform.isi686 "-fpermissive";
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 });
 in {
   mariadb_104 = mariadbPackage {
     # Supported until 2024-06-18
-    version = "10.4.25";
-    sha256 = "1y3ym8pb0pyra3dwy8sbzc4656c4y7g1savgyrsvf1mw2573r5pz";
+    version = "10.4.26";
+    hash = "sha256-cVrH4jr8O4pVnGzJmM2xlz2Q9iGyvddgPixuU4YLLd8=";
   };
   mariadb_105 = mariadbPackage {
     # Supported until 2025-06-24
-    version = "10.5.16";
-    sha256 = "19nj7ilk1aqs9zvvzhx4619pgfqjp7ac90ffr3fdaw4viljqfgn1";
+    version = "10.5.17";
+    hash = "sha256-hJyEC3b0hWUDtD7zqEH8lx6LUYjI3zaQkTv1aZaRt2E=";
   };
   mariadb_106 = mariadbPackage {
     # Supported until 2026-07
-    version = "10.6.8";
-    sha256 = "0f6lkvv0dbq64y7zpks7nvhy1n08gad0i0dp0s2zpgfcb62liaap";
+    version = "10.6.10";
+    hash = "sha256-atn6hvDIXI7q+tJkNUnV/13ShyAClk51R1LekYY6o7c=";
   };
   mariadb_107 = mariadbPackage {
-    # Supported until 2023-02
-    version = "10.7.4";
-    sha256 = "0ws17azsw3f26pkphjkyxmmi9qbv9gwidvz0ll6g482m6afrrpbk";
+    # Supported until 2023-02. TODO: remove ahead of 22.11 release.
+    version = "10.7.6";
+    hash = "sha256-erX7pDmQV33BdPG5a9NAszN8G9Rv48NmIgsJ0siNLqA=";
   };
   mariadb_108 = mariadbPackage {
     # Supported until 2023-05
-    version = "10.8.3";
-    sha256 = "14h80lfb9b3rv3fd8nkljbqhx6dmwjnqkz6c3ynixb3na72sszl8";
+    version = "10.8.5";
+    hash = "sha256-z37TjDYTTNgYP93WTLPlD1ROgmS6dCAlXbEpcJfgjos=";
+  };
+  mariadb_109 = mariadbPackage {
+    # Supported until 2023-08(?)
+    version = "10.9.3";
+    hash = "sha256-mh4imXL8zMgnDmM/aNP7gk2hUdz09T2h342UesqHa+4=";
   };
 }

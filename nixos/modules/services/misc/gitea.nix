@@ -183,7 +183,7 @@ in
         file = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = "Filename to be used for the dump. If `null` a default name is choosen by gitea.";
+          description = lib.mdDoc "Filename to be used for the dump. If `null` a default name is choosen by gitea.";
           example = "gitea-dump";
         };
       };
@@ -293,12 +293,12 @@ in
                 default = "${cfg.stateDir}/log";
                 defaultText = literalExpression ''"''${config.${opt.stateDir}}/log"'';
                 type = types.str;
-                description = "Root path for log files.";
+                description = lib.mdDoc "Root path for log files.";
               };
               LEVEL = mkOption {
                 default = "Info";
                 type = types.enum [ "Trace" "Debug" "Info" "Warn" "Error" "Critical" ];
-                description = "General log level.";
+                description = lib.mdDoc "General log level.";
               };
             };
 
@@ -306,14 +306,14 @@ in
               DISABLE_SSH = mkOption {
                 type = types.bool;
                 default = false;
-                description = "Disable external SSH feature.";
+                description = lib.mdDoc "Disable external SSH feature.";
               };
 
               SSH_PORT = mkOption {
                 type = types.int;
                 default = 22;
                 example = 2222;
-                description = ''
+                description = lib.mdDoc ''
                   SSH port displayed in clone URL.
                   The option is required to configure a service when the external visible port
                   differs from the local listening port i.e. if port forwarding is used.
@@ -322,14 +322,14 @@ in
             };
 
             service = {
-              DISABLE_REGISTRATION = mkEnableOption "the registration lock" // {
-                description = ''
-                  By default any user can create an account on this <literal>gitea</literal> instance.
+              DISABLE_REGISTRATION = mkEnableOption (lib.mdDoc "the registration lock") // {
+                description = lib.mdDoc ''
+                  By default any user can create an account on this `gitea` instance.
                   This can be disabled by using this option.
 
-                  <emphasis>Note:</emphasis> please keep in mind that this should be added after the initial
-                  deploy unless <link linkend="opt-services.gitea.useWizard">services.gitea.useWizard</link>
-                  is <literal>true</literal> as the first registered user will be the administrator if
+                  *Note:* please keep in mind that this should be added after the initial
+                  deploy unless [](#opt-services.gitea.useWizard)
+                  is `true` as the first registered user will be the administrator if
                   no install wizard is used.
                 '';
               };
@@ -339,7 +339,7 @@ in
               COOKIE_SECURE = mkOption {
                 type = types.bool;
                 default = false;
-                description = ''
+                description = lib.mdDoc ''
                   Marks session cookies as "secure" as a hint for browsers to only send
                   them via HTTPS. This option is recommend, if gitea is being served over HTTPS.
                 '';

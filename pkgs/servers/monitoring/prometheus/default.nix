@@ -19,6 +19,7 @@
 , enableLinode ? true
 , enableMarathon ? true
 , enableMoby ? true
+, enableNomad ? true
 , enableOpenstack ? true
 , enablePuppetDB ? true
 , enableScaleway ? true
@@ -30,10 +31,10 @@
 }:
 
 let
-  version = "2.36.0";
+  version = "2.38.0";
   webUiStatic = fetchurl {
     url = "https://github.com/prometheus/prometheus/releases/download/v${version}/prometheus-web-ui-${version}.tar.gz";
-    sha256 = "sha256-C+Np2mqAYQ1RUqYmql0eudPD/SpWmxdMQLe85SenIA4=";
+    sha256 = "sha256-0CcWHJYso9iI1isCa2ZKYtNpfqcUt5sj23xkufxv6rw=";
   };
 in
 buildGoModule rec {
@@ -44,10 +45,10 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "sha256-FJXNCGIVj1OVWXwbXY6k65lXJCe1MqiqK7tw8nGWrEg=";
+    sha256 = "sha256-5s2Q3xjublHAQSB6MaxZTMOPS0T6/Bn5Ki8NCkBYM2E=";
   };
 
-  vendorSha256 = "sha256-kmAQGRFmGRJ3LuGLMcSc0bJuwMsKhYVUIqQ9vDSH0Cc=";
+  vendorSha256 = "sha256-wfHdfW4D4ESbglUUjAl5a93aJqLuQkqKHMChHGnCmCg=";
 
   excludedPackages = [ "documentation/prometheus-mixin" ];
 
@@ -85,6 +86,8 @@ buildGoModule rec {
       "echo - github.com/prometheus/prometheus/discovery/marathon"}
     ${lib.optionalString (enableMoby)
       "echo - github.com/prometheus/prometheus/discovery/moby"}
+    ${lib.optionalString (enableNomad)
+      "echo - github.com/prometheus/prometheus/discovery/nomad"}
     ${lib.optionalString (enableOpenstack)
       "echo - github.com/prometheus/prometheus/discovery/openstack"}
     ${lib.optionalString (enablePuppetDB)
@@ -105,7 +108,7 @@ buildGoModule rec {
   '';
 
   preBuild = ''
-    if [[ -d vendor ]]; then make -o assets assets-compress plugins; fi
+    if [[ -d vendor ]]; then GOARCH= make -o assets assets-compress plugins; fi
   '';
 
   tags = [ "builtinassets" ];

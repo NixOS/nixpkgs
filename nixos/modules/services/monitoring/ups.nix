@@ -116,7 +116,7 @@ in
       mode = mkOption {
         default = "standalone";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The MODE determines which part of the NUT is to be started, and
           which configuration files must be modified.
 

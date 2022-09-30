@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "pynobo";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "echoromeo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-tcDSI5GODV53o4m35B4CXscVCnwt7gqRu7qohEnvyz8=";
+    sha256 = "sha256-7OWCp09XxCZJMz0BJWKfGkkl8z4XpRS2sjowp/bnl0A=";
   };
 
   # Project has no tests

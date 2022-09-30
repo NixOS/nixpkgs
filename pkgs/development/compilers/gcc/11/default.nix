@@ -14,7 +14,6 @@
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
 , gmp, mpfr, libmpc, gettext, which, patchelf
-, libelf                      # optional, for link-time optimizations (LTO)
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
 , gnatboot ? null
@@ -29,11 +28,8 @@
 , buildPackages
 }:
 
-# LTO needs libelf and zlib.
-assert libelf != null -> zlib != null;
-
 # Make sure we get GNU sed.
-assert stdenv.hostPlatform.isDarwin -> gnused != null;
+assert stdenv.buildPlatform.isDarwin -> gnused != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
@@ -74,8 +70,8 @@ let majorVersion = "11";
       ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch
 
       ++ optional (stdenv.isDarwin && stdenv.isAarch64) (fetchpatch {
-        url = "https://github.com/fxcoudert/gcc/compare/releases/gcc-11.1.0...gcc-11.1.0-arm-20210504.diff";
-        sha256 = "sha256-JqCGJAfbOxSmkNyq49aFHteK/RFsCSLQrL9mzUCnaD0=";
+        url = "https://github.com/fxcoudert/gcc/compare/releases/gcc-11.2.0...gcc-11.2.0-arm-20211201.diff";
+        sha256 = "sha256-z62s/cXuH9Kgq/oD/OiiZ8LWnX1xl1D43sONnwaEW1w=";
       })
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
@@ -167,6 +163,9 @@ stdenv.mkDerivation ({
   nativeBuildInputs = [ texinfo which gettext ]
     ++ (optional (perl != null) perl)
     ++ (optional langAda gnatboot)
+    # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
+    # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
+    ++ (optional buildPlatform.isDarwin gnused)
     ;
 
   # For building runtime libs
@@ -181,13 +180,10 @@ stdenv.mkDerivation ({
     ++ optional targetPlatform.isLinux patchelf;
 
   buildInputs = [
-    gmp mpfr libmpc libelf
+    gmp mpfr libmpc
     targetPackages.stdenv.cc.bintools # For linking code at run-time
   ] ++ (optional (isl != null) isl)
     ++ (optional (zlib != null) zlib)
-    # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
-    # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
-    ++ (optional hostPlatform.isDarwin gnused)
     ;
 
   depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
@@ -196,7 +192,7 @@ stdenv.mkDerivation ({
 
   preConfigure = import ../common/pre-configure.nix {
     inherit lib;
-    inherit version targetPlatform hostPlatform gnatboot langAda langGo langJit crossStageStatic;
+    inherit version targetPlatform hostPlatform gnatboot langAda langGo langJit crossStageStatic enableMultilib;
   };
 
   dontDisableStatic = true;
@@ -211,7 +207,7 @@ stdenv.mkDerivation ({
       crossStageStatic libcCross
       version
 
-      gmp mpfr libmpc libelf isl
+      gmp mpfr libmpc isl
 
       enableLTO
       enableMultilib
@@ -237,7 +233,7 @@ stdenv.mkDerivation ({
     (if profiledCompiler then "profiledbootstrap" else "bootstrap");
 
   inherit
-    (import ../common/strip-attributes.nix { inherit stdenv; })
+    (import ../common/strip-attributes.nix { inherit lib stdenv langJit; })
     stripDebugList
     stripDebugListTarget
     preFixup;
@@ -275,8 +271,6 @@ stdenv.mkDerivation ({
 
   enableParallelBuilding = true;
   inherit enableShared enableMultilib;
-
-  inherit (stdenv) is64bit;
 
   meta = {
     homepage = "https://gcc.gnu.org/";

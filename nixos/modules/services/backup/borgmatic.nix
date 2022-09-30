@@ -8,7 +8,7 @@ let
   cfgfile = settingsFormat.generate "config.yaml" cfg.settings;
 in {
   options.services.borgmatic = {
-    enable = mkEnableOption "borgmatic";
+    enable = mkEnableOption (lib.mdDoc "borgmatic");
 
     settings = mkOption {
       description = lib.mdDoc ''

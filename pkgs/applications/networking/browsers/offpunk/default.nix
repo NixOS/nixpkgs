@@ -6,7 +6,7 @@
   offpunk,
   python3,
   stdenv,
-  testVersion,
+  testers,
   timg,
   xdg-utils,
   xsel,
@@ -41,7 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "1zg13wajsfrl3hli6sihn47db08w037jjq9vgr6m5sjh8r1jb9iy";
   };
 
-  buildInputs = [ makeWrapper ] ++ otherDependencies ++ pythonDependencies;
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = otherDependencies ++ pythonDependencies;
 
   installPhase = ''
     runHook preInstall
@@ -55,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
    runHook postInstall
   '';
 
-  passthru.tests.version = testVersion { package = offpunk; };
+  passthru.tests.version = testers.testVersion { package = offpunk; };
 
   meta = with lib; {
     description = "An Offline-First browser for the smolnet ";

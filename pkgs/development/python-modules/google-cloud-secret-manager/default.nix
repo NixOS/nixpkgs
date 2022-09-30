@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-secret-manager";
-  version = "2.12.2";
+  version = "2.12.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FSJFryLFttU/HWIFl4buRYOQoSd5cGmUS+FlHO8YzNE=";
+    hash = "sha256-nbM+uZr7a3RXvtLI7n5XZZD9r9ZVoh5iCSoZAnDIuQQ=";
   };
 
   propagatedBuildInputs = [

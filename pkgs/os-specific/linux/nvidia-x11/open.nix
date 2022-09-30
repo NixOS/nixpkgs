@@ -1,8 +1,10 @@
-nvidia_x11: hash:
 { stdenv
 , lib
 , fetchFromGitHub
 , kernel
+, nvidia_x11
+, hash
+, broken ? false
 }:
 
 stdenv.mkDerivation {
@@ -32,7 +34,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/NVIDIA/open-gpu-kernel-modules";
     license = with licenses; [ gpl2Plus mit ];
     platforms = platforms.linux;
-    broken = kernel.kernelAtLeast "5.19";
     maintainers = with maintainers; [ nickcao ];
+    inherit broken;
   };
 }

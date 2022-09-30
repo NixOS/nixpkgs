@@ -56,7 +56,7 @@ let
     in lib.appendToName "with-plugins" ( symlinkJoin {
       inherit (yosys) name;
       paths = paths ++ [ yosys ] ;
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
       postBuild = ''
         wrapProgram $out/bin/yosys \
           --set NIX_YOSYS_PLUGIN_DIRS $out/share/yosys/plugins \

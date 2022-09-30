@@ -12,7 +12,7 @@ in {
 
     services.mjpg-streamer = {
 
-      enable = mkEnableOption "mjpg-streamer webcam streamer";
+      enable = mkEnableOption (lib.mdDoc "mjpg-streamer webcam streamer");
 
       inputPlugin = mkOption {
         type = types.str;

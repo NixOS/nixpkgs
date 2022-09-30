@@ -28,8 +28,6 @@
 # We must build at least one type of libraries
 assert enableShared || enableStatic;
 
-# Python isn't supported when cross-compiling
-assert enablePython -> stdenv.hostPlatform == stdenv.buildPlatform;
 assert enableNumpy -> enablePython;
 
 # Boost <1.69 can't be built on linux with clang >8, because pth was removed
@@ -118,10 +116,7 @@ stdenv.mkDerivation {
   patchFlags = [];
 
   patches = patches
-  ++ optional stdenv.isDarwin (
-    if version == "1.55.0"
-    then ./darwin-1.55-no-system-python.patch
-    else ./darwin-no-system-python.patch)
+  ++ optional stdenv.isDarwin ./darwin-no-system-python.patch
   # Fix boost-context segmentation faults on ppc64 due to ABI violation
   ++ optional (versionAtLeast version "1.61" &&
                versionOlder version "1.71") (fetchpatch {

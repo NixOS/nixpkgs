@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-thunk";
-  version = "5.1.0";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCT-Thunk-Interface";
     rev = "rocm-${version}";
-    hash = "sha256-Qvbvfe1fhoLTkDnzG0WzfAxbyDoEJwkzVvlBGTBkq0w=";
+    hash = "sha256-iXhlEofPAQNxeZzDgdF1DdflIKfSI7rHGTqOybHnnHM=";
   };
 
   preConfigure = ''
@@ -25,6 +25,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ libdrm numactl ];
+
+  # https://github.com/RadeonOpenCompute/ROCT-Thunk-Interface/issues/75
+  postPatch = ''
+    substituteInPlace libhsakmt.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
 
   postInstall = ''
     cp -r $src/include $out

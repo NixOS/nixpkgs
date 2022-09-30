@@ -75,6 +75,8 @@ with pkgs;
 
   dhall = callPackage ./dhall { };
 
+  coq = callPackage ./coq {};
+
   makeWrapper = callPackage ./make-wrapper { };
   makeBinaryWrapper = callPackage ./make-binary-wrapper {
     makeBinaryWrapper = pkgs.makeBinaryWrapper.override {

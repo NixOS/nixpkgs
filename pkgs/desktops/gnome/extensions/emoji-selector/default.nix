@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-emoji-selector";
-  version = "20";
+  version = "22";
 
   src = fetchFromGitHub {
     owner = "maoschanz";
     repo = "emoji-selector-for-gnome";
     rev = version;
-    sha256 = "sha256-I5aEHDC5GaGkAoH+1l4eyhBmJ+lmyZZoDw2Fq2SSlmo=";
+    sha256 = "sha256-sD/xlNrs2ntI7KaPMopT5CnFyuXd9ZKuKPNQYgiho0U=";
   };
 
   passthru = {

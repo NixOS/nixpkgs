@@ -231,6 +231,7 @@ rec {
     , fromImageName ? null
     , fromImageTag ? null
     , diskSize ? 1024
+    , buildVMMemorySize ? 512
     , preMount ? ""
     , postMount ? ""
     , postUmount ? ""
@@ -244,6 +245,7 @@ rec {
               destination = "./image";
             };
             inherit fromImage fromImageName fromImageTag;
+            memSize = buildVMMemorySize;
 
             nativeBuildInputs = [ util-linux e2fsprogs jshon rsync jq ];
           } ''
@@ -433,6 +435,8 @@ rec {
       fromImageTag ? null
     , # How much disk to allocate for the temporary virtual machine.
       diskSize ? 1024
+    , # How much memory to allocate for the temporary virtual machine.
+      buildVMMemorySize ? 512
     , # Commands (bash) to run on the layer; these do not require sudo.
       extraCommands ? ""
     }:
@@ -444,7 +448,7 @@ rec {
     runWithOverlay {
       name = "docker-layer-${name}";
 
-      inherit fromImage fromImageName fromImageTag diskSize;
+      inherit fromImage fromImageName fromImageTag diskSize buildVMMemorySize;
 
       preMount = lib.optionalString (copyToRoot != null && copyToRoot != [ ]) ''
         echo "Adding contents..."
@@ -543,6 +547,8 @@ rec {
       runAsRoot ? null
     , # Size of the virtual machine disk to provision when building the image.
       diskSize ? 1024
+    , # Size of the virtual machine memory to provision when building the image.
+      buildVMMemorySize ? 512
     , # Time of creation of the image.
       created ? "1970-01-01T00:00:01Z"
     , # Deprecated.
@@ -590,7 +596,7 @@ rec {
           mkRootLayer {
             name = baseName;
             inherit baseJson fromImage fromImageName fromImageTag
-              keepContentsDirlinks runAsRoot diskSize
+              keepContentsDirlinks runAsRoot diskSize buildVMMemorySize
               extraCommands;
             copyToRoot = rootContents;
           };
@@ -811,6 +817,17 @@ rec {
   binSh = runCommand "bin-sh" { } ''
     mkdir -p $out/bin
     ln -s ${bashInteractive}/bin/bash $out/bin/sh
+  '';
+
+  # This provides the ca bundle in common locations
+  caCertificates = runCommand "ca-certificates" { } ''
+    mkdir -p $out/etc/ssl/certs $out/etc/pki/tls/certs
+    # Old NixOS compatibility.
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/etc/ssl/certs/ca-bundle.crt
+    # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/etc/ssl/certs/ca-certificates.crt
+    # CentOS/Fedora compatibility.
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/etc/pki/tls/certs/ca-bundle.crt
   '';
 
   # Build an image and populate its nix database with the provided

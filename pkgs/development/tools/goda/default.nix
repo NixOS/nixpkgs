@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "goda";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "loov";
     repo = "goda";
     rev = "v${version}";
-    sha256 = "sha256-tXXUDeqGjv6T2eI/VJ+kwPKJLT7D1nO9BaKN5FHS34I=";
+    sha256 = "sha256-gXpO0DvxghyJIIxjE/KGjF/uRQ5W3p5QhqtmzeDmAfA=";
   };
 
   vendorSha256 = "sha256-OyQEw6mRrRneo3T8wns0doU4lxJYEoilTd30xctLBJ4=";

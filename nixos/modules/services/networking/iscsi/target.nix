@@ -9,7 +9,7 @@ in
   ###### interface
   options = {
     services.target = with types; {
-      enable = mkEnableOption "the kernel's LIO iscsi target";
+      enable = mkEnableOption (lib.mdDoc "the kernel's LIO iscsi target");
 
       config = mkOption {
         type = attrs;

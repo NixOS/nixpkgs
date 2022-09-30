@@ -9,7 +9,7 @@ let
     inherit name;
     value = mkOption {
       default = null;
-      inherit description;
+      description = lib.mdDoc description;
       type = types.nullOr types.lines;
     } // (if example == null then {} else { inherit example; });
   };
@@ -168,7 +168,7 @@ let
       hooksPath = mkOption {
         type = types.path;
         default = hooksDir config;
-        defaultText = literalDocBook "generated from <option>services.buildkite-agents.&lt;name&gt;.hooks</option>";
+        defaultText = literalMD "generated from {option}`services.buildkite-agents.<name>.hooks`";
         description = lib.mdDoc ''
           Path to the directory storing the hooks.
           Consider using {option}`services.buildkite-agents.<name>.hooks.<name>`
@@ -193,7 +193,7 @@ in
   options.services.buildkite-agents = mkOption {
     type = types.attrsOf (types.submodule buildkiteOptions);
     default = {};
-    description = ''
+    description = lib.mdDoc ''
       Attribute set of buildkite agents.
       The attribute key is combined with the hostname and a unique integer to
       create the final agent name. This can be overridden by setting the `name`

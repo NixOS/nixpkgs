@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     dotnet-sdk
     mono
     unzip
+    makeWrapper
   ];
 
   buildInputs = [
     dotnetPackages.Nuget
     glibcLocales
-    makeWrapper
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/38991

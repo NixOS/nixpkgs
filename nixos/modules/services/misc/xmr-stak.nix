@@ -15,9 +15,9 @@ in
 {
   options = {
     services.xmr-stak = {
-      enable = mkEnableOption "xmr-stak miner";
-      openclSupport = mkEnableOption "support for OpenCL (AMD/ATI graphics cards)";
-      cudaSupport = mkEnableOption "support for CUDA (NVidia graphics cards)";
+      enable = mkEnableOption (lib.mdDoc "xmr-stak miner");
+      openclSupport = mkEnableOption (lib.mdDoc "support for OpenCL (AMD/ATI graphics cards)");
+      cudaSupport = mkEnableOption (lib.mdDoc "support for CUDA (NVidia graphics cards)");
 
       extraArgs = mkOption {
         type = types.listOf types.str;

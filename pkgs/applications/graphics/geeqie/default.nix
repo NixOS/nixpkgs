@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "geeqie";
-  version = "1.7.3";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "BestImageViewer";

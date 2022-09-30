@@ -20,8 +20,7 @@ stdenv.mkDerivation rec {
 
   PKG_CONFIG_PURPLE_PLUGINDIR = "${placeholder "out"}/lib/purple-2";
   PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
-
-  installFlags = [ "DESTDIR=$(out)" ];
+  PKG_CONFIG_PIDGIN_DATADIR = "${placeholder "out"}/share";
 
   meta = with lib; {
     homepage = "https://github.com/hoehermann/libpurple-signald";

@@ -70,8 +70,16 @@ in stdenv.mkDerivation rec {
     # fix environment variable reading
     substituteInPlace SConstruct \
         --replace "env = Environment(" "env = Environment(ENV = os.environ,"
+   '' + lib.optionalString (versionAtLeast version "4.4" && versionOlder version "4.6") ''
+    # Fix debug gcc 11 and clang 12 builds on Fedora
+    # https://github.com/mongodb/mongo/commit/e78b2bf6eaa0c43bd76dbb841add167b443d2bb0.patch
+    substituteInPlace src/mongo/db/query/plan_summary_stats.h --replace '#include <string>' '#include <optional>
+    #include <string>'
+    substituteInPlace src/mongo/db/exec/plan_stats.h --replace '#include <string>' '#include <optional>
+    #include <string>'
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/third_party/mozjs-${variants.mozjsVersion}/extract/js/src/jsmath.cpp --replace '${variants.mozjsReplace}' 0
+  '' + lib.optionalString (stdenv.isDarwin && versionOlder version "3.6") ''
     substituteInPlace src/third_party/s2/s1angle.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s1interval.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s2cap.cc --replace drem remainder

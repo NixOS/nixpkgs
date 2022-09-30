@@ -27,7 +27,7 @@ in
   options = {
     qt5 = {
 
-      enable = mkEnableOption "Qt5 theming configuration";
+      enable = mkEnableOption (lib.mdDoc "Qt5 theming configuration");
 
       platformTheme = mkOption {
         type = types.enum [

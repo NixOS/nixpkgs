@@ -458,7 +458,7 @@ you of the correct hash.
   `maturinBuildFlags`.
 * `cargoCheckHook`: run tests using Cargo. The build type for checks
   can be set using `cargoCheckType`. Features can be specified with
-  `cargoCheckNoDefaultFeaatures` and `cargoCheckFeatures`. Additional
+  `cargoCheckNoDefaultFeatures` and `cargoCheckFeatures`. Additional
   flags can be passed to the tests using `checkFlags` and
   `checkFlagsArray`. By default, tests are run in parallel. This can
   be disabled by setting `dontUseCargoParallelTests`.

@@ -40,7 +40,7 @@ ${cfg.extraConfig}
 in {
   options = {
     services.coturn = {
-      enable = mkEnableOption "coturn TURN server";
+      enable = mkEnableOption (lib.mdDoc "coturn TURN server");
       listening-port = mkOption {
         type = types.int;
         default = 3478;

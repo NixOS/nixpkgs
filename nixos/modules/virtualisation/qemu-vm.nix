@@ -17,6 +17,8 @@ let
 
   cfg = config.virtualisation;
 
+  opt = options.virtualisation;
+
   qemu = cfg.qemu.package;
 
   consoles = lib.concatMapStringsSep " " (c: "console=${c}") cfg.qemu.consoles;
@@ -96,17 +98,13 @@ let
   addDeviceNames =
     imap1 (idx: drive: drive // { device = driveDeviceName idx; });
 
-  efiPrefix =
-    if pkgs.stdenv.hostPlatform.isx86 then "${pkgs.OVMF.fd}/FV/OVMF"
-    else if pkgs.stdenv.isAarch64 then "${pkgs.OVMF.fd}/FV/AAVMF"
-    else throw "No EFI firmware available for platform";
-  efiFirmware = "${efiPrefix}_CODE.fd";
-  efiVarsDefault = "${efiPrefix}_VARS.fd";
 
   # Shell script to start the VM.
   startVM =
     ''
-      #! ${pkgs.runtimeShell}
+      #! ${cfg.host.pkgs.runtimeShell}
+
+      export PATH=${makeBinPath [ cfg.host.pkgs.coreutils ]}''${PATH:+:}$PATH
 
       set -e
 
@@ -122,11 +120,32 @@ let
           TMPDIR=$(mktemp -d nix-vm.XXXXXXXXXX --tmpdir)
       fi
 
-      ${lib.optionalString cfg.useNixStoreImage
-      ''
-        # Create a writable copy/snapshot of the store image.
-        ${qemu}/bin/qemu-img create -f qcow2 -F qcow2 -b ${storeImage}/nixos.qcow2 "$TMPDIR"/store.img
-      ''}
+      ${lib.optionalString (cfg.useNixStoreImage)
+        (if cfg.writableStore
+          then ''
+            # Create a writable copy/snapshot of the store image.
+            ${qemu}/bin/qemu-img create -f qcow2 -F qcow2 -b ${storeImage}/nixos.qcow2 "$TMPDIR"/store.img
+          ''
+          else ''
+            (
+              cd ${builtins.storeDir}
+              ${pkgs.erofs-utils}/bin/mkfs.erofs \
+                --force-uid=0 \
+                --force-gid=0 \
+                -U eb176051-bd15-49b7-9e6b-462e0b467019 \
+                -T 0 \
+                --exclude-regex="$(
+                  <${pkgs.closureInfo { rootPaths = [ config.system.build.toplevel regInfo ]; }}/store-paths \
+                    sed -e 's^.*/^^g' \
+                  | cut -c -10 \
+                  | ${pkgs.python3}/bin/python ${./includes-to-excludes.py} )" \
+                "$TMPDIR"/store.img \
+                . \
+                </dev/null >/dev/null
+            )
+          ''
+        )
+      }
 
       # Create a directory for exchanging data with the VM.
       mkdir -p "$TMPDIR/xchg"
@@ -195,14 +214,14 @@ let
               ${qemu}/bin/qemu-img create -f qcow2 $diskImage "60M"
               ${if cfg.useEFIBoot then ''
                 efiVars=$out/efi-vars.fd
-                cp ${efiVarsDefault} $efiVars
+                cp ${cfg.efi.variables} $efiVars
                 chmod 0644 $efiVars
               '' else ""}
             '';
           buildInputs = [ pkgs.util-linux ];
           QEMU_OPTS = "-nographic -serial stdio -monitor none"
                       + lib.optionalString cfg.useEFIBoot (
-                        " -drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
+                        " -drive if=pflash,format=raw,unit=0,readonly=on,file=${cfg.efi.firmware}"
                       + " -drive if=pflash,format=raw,unit=1,file=$efiVars");
         }
         ''
@@ -446,14 +465,13 @@ in
             type = types.enum [ "host" "guest" ];
             default = "host";
             description =
-              ''
+              lib.mdDoc ''
                 Controls the direction in which the ports are mapped:
 
-                - <literal>"host"</literal> means traffic from the host ports
-                is forwarded to the given guest port.
-
-                - <literal>"guest"</literal> means traffic from the guest ports
-                is forwarded to the given host port.
+                - `"host"` means traffic from the host ports
+                  is forwarded to the given guest port.
+                - `"guest"` means traffic from the guest ports
+                  is forwarded to the given host port.
               '';
           };
           options.proto = mkOption {
@@ -494,17 +512,19 @@ in
         ]
         '';
       description =
-        ''
+        lib.mdDoc ''
           When using the SLiRP user networking (default), this option allows to
           forward ports to/from the host/guest.
 
-          <warning><para>
-            If the NixOS firewall on the virtual machine is enabled, you also
-            have to open the guest ports to enable the traffic between host and
-            guest.
-          </para></warning>
+          ::: {.warning}
+          If the NixOS firewall on the virtual machine is enabled, you also
+          have to open the guest ports to enable the traffic between host and
+          guest.
+          :::
 
-          <note><para>Currently QEMU supports only IPv4 forwarding.</para></note>
+          ::: {.note}
+          Currently QEMU supports only IPv4 forwarding.
+          :::
         '';
     };
 
@@ -554,14 +574,27 @@ in
         type = types.str;
         default = "";
         internal = true;
-        description = "Primary IP address used in /etc/hosts.";
+        description = lib.mdDoc "Primary IP address used in /etc/hosts.";
       };
+
+    virtualisation.host.pkgs = mkOption {
+      type = options.nixpkgs.pkgs.type;
+      default = pkgs;
+      defaultText = "pkgs";
+      example = literalExpression ''
+        import pkgs.path { system = "x86_64-darwin"; }
+      '';
+      description = lib.mdDoc ''
+        pkgs set to use for the host-specific packages of the vm runner.
+        Changing this to e.g. a Darwin package set allows running NixOS VMs on Darwin.
+      '';
+    };
 
     virtualisation.qemu = {
       package =
         mkOption {
           type = types.package;
-          default = pkgs.qemu_kvm;
+          default = cfg.host.pkgs.qemu_kvm;
           example = "pkgs.qemu_test";
           description = lib.mdDoc "QEMU package to use.";
         };
@@ -682,7 +715,30 @@ in
             manager.
             useEFIBoot is ignored if useBootLoader == false.
           '';
+        };
+
+    virtualisation.efi = {
+      firmware = mkOption {
+        type = types.path;
+        default = pkgs.OVMF.firmware;
+        defaultText = "pkgs.OVMF.firmware";
+        description =
+          lib.mdDoc ''
+            Firmware binary for EFI implementation, defaults to OVMF.
+          '';
       };
+
+      variables = mkOption {
+        type = types.path;
+        default = pkgs.OVMF.variables;
+        defaultText = "pkgs.OVMF.variables";
+        description =
+          lib.mdDoc ''
+            Platform-specific flash binary for EFI variables, implementation-dependent to the EFI firmware.
+            Defaults to OVMF.
+          '';
+      };
+    };
 
     virtualisation.useDefaultFilesystems =
       mkOption {
@@ -716,10 +772,10 @@ in
         type = types.nullOr types.package;
         default = null;
         description =
-          ''
-            An alternate BIOS (such as <package>qboot</package>) with which to start the VM.
-            Should contain a file named <literal>bios.bin</literal>.
-            If <literal>null</literal>, QEMU's builtin SeaBIOS will be used.
+          lib.mdDoc ''
+            An alternate BIOS (such as `qboot`) with which to start the VM.
+            Should contain a file named `bios.bin`.
+            If `null`, QEMU's builtin SeaBIOS will be used.
           '';
       };
 
@@ -746,6 +802,26 @@ in
           }
         ]));
 
+    warnings =
+      optional (
+        cfg.writableStore &&
+        cfg.useNixStoreImage &&
+        opt.writableStore.highestPrio > lib.modules.defaultPriority)
+        ''
+          You have enabled ${opt.useNixStoreImage} = true,
+          without setting ${opt.writableStore} = false.
+
+          This causes a store image to be written to the store, which is
+          costly, especially for the binary cache, and because of the need
+          for more frequent garbage collection.
+
+          If you really need this combination, you can set ${opt.writableStore}
+          explicitly to true, incur the cost and make this warning go away.
+          Otherwise, we recommend
+
+            ${opt.writableStore} = false;
+        '';
+
     # Note [Disk layout with `useBootLoader`]
     #
     # If `useBootLoader = true`, we configure 2 drives:
@@ -768,6 +844,8 @@ in
         else cfg.bootDevice
     );
     boot.loader.grub.gfxmodeBios = with cfg.resolution; "${toString x}x${toString y}";
+
+    boot.initrd.kernelModules = optionals (cfg.useNixStoreImage && !cfg.writableStore) [ "erofs" ];
 
     boot.initrd.extraUtilsCommands = lib.mkIf (cfg.useDefaultFilesystems && !config.boot.initrd.systemd.enable)
       ''
@@ -883,7 +961,7 @@ in
         ''-append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${consoles} $QEMU_KERNEL_PARAMS"''
       ])
       (mkIf cfg.useEFIBoot [
-        "-drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
+        "-drive if=pflash,format=raw,unit=0,readonly=on,file=${cfg.efi.firmware}"
         "-drive if=pflash,format=raw,unit=1,file=$NIX_EFI_VARS"
       ])
       (mkIf (cfg.bios != null) [
@@ -905,6 +983,7 @@ in
         name = "nix-store";
         file = ''"$TMPDIR"/store.img'';
         deviceExtraOpts.bootindex = if cfg.useBootLoader then "3" else "2";
+        driveExtraOpts.format = if cfg.writableStore then "qcow2" else "raw";
       }])
       (mkIf cfg.useBootLoader [
         # The order of this list determines the device names, see
@@ -1012,14 +1091,14 @@ in
 
     services.qemuGuest.enable = cfg.qemu.guestAgent.enable;
 
-    system.build.vm = pkgs.runCommand "nixos-vm" {
+    system.build.vm = cfg.host.pkgs.runCommand "nixos-vm" {
       preferLocalBuild = true;
       meta.mainProgram = "run-${config.system.name}-vm";
     }
       ''
         mkdir -p $out/bin
         ln -s ${config.system.build.toplevel} $out/system
-        ln -s ${pkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${config.system.name}-vm
+        ln -s ${cfg.host.pkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${config.system.name}-vm
       '';
 
     # When building a regular system configuration, override whatever

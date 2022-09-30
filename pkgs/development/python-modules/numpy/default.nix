@@ -11,7 +11,6 @@
 , lapack
 , writeTextFile
 , cython
-, setuptoolsBuildHook
 , pythonOlder
 }:
 
@@ -41,19 +40,14 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-
-  # Attention! v1.22.0 breaks scipy and by extension scikit-learn, so
-  # build both to verify they don't break.
-  # https://github.com/scipy/scipy/issues/15414
-  version = "1.23.1";
-
-  format = "pyproject.toml";
+  version = "1.23.3";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-10jvNJv+8uEZS1naN+1aKcGeqNfmNCAZkhuiuk/YtiQ=";
+    hash = "sha256-Ub9JwM0dUr4KJAqmbzRYr8S5XYmT0tBPDZH6YMEK9s0=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -63,7 +57,7 @@ in buildPythonPackage rec {
     ./numpy-distutils-C++.patch
   ];
 
-  nativeBuildInputs = [ gfortran cython setuptoolsBuildHook ];
+  nativeBuildInputs = [ gfortran cython ];
   buildInputs = [ blas lapack ];
 
   # we default openblas to build with 64 threads
@@ -89,7 +83,7 @@ in buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    pushd dist
+    pushd "$out"
     ${python.interpreter} -c 'import numpy; numpy.test("fast", verbose=10)'
     popd
     runHook postCheck

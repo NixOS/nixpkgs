@@ -68,7 +68,7 @@ in
   options = {
 
     hardware.sane.brscan5.enable =
-      mkEnableOption "the Brother brscan5 sane backend";
+      mkEnableOption (lib.mdDoc "the Brother brscan5 sane backend");
 
     hardware.sane.brscan5.netDevices = mkOption {
       default = {};

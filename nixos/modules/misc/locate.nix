@@ -183,8 +183,8 @@ in
     pruneNames = mkOption {
       type = listOf str;
       default = lib.optionals (!isFindutils) [ ".bzr" ".cache" ".git" ".hg" ".svn" ];
-      defaultText = literalDocBook ''
-        <literal>[ ".bzr" ".cache" ".git" ".hg" ".svn" ]</literal>, if
+      defaultText = literalMD ''
+        `[ ".bzr" ".cache" ".git" ".hg" ".svn" ]`, if
         supported by the locate implementation (i.e. mlocate or plocate).
       '';
       description = lib.mdDoc ''

@@ -8,13 +8,13 @@ in {
         enable = lib.mkOption {
           default = false;
           internal = true;
-          description = ''
+          description = lib.mdDoc ''
             Whether the EC2 instance uses a ZFS root.
           '';
         };
 
         datasets = lib.mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Datasets to create under the `tank` and `boot` zpools.
 
             **NOTE:** This option is used only at image creation time, and
@@ -44,7 +44,7 @@ in {
       hvm = lib.mkOption {
         default = lib.versionAtLeast config.system.stateVersion "17.03";
         internal = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether the EC2 instance is a HVM instance.
         '';
       };
@@ -52,7 +52,7 @@ in {
         default = pkgs.stdenv.hostPlatform.isAarch64;
         defaultText = literalExpression "pkgs.stdenv.hostPlatform.isAarch64";
         internal = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether the EC2 instance is using EFI.
         '';
       };

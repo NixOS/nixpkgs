@@ -6,6 +6,7 @@
 , zlib, zstd, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
+, hipSupport ? false, hip # comes with a significantly larger closure size
 , colladaSupport ? true, opencollada
 , spaceNavSupport ? stdenv.isLinux, libspnav
 , makeWrapper
@@ -27,11 +28,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    hash = "sha256-k78LL1urcQWxnF1lSoSi3CH3Ylhzo2Bk2Yvq5zbTYEo=";
+    hash = "sha256-IsUaTmY4XLFIGKpNdtz3+m1uEDr7DTaRbhLqFZiNIfA=";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
@@ -86,7 +87,11 @@ stdenv.mkDerivation rec {
                   '${python310Packages.numpy}/${python.sitePackages}/numpy'
     '' else ''
       substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
-    '');
+    '') +
+    (if hipSupport then ''
+      substituteInPlace extern/hipew/src/hipew.c --replace '"/opt/rocm/hip/lib/libamdhip64.so"' '"${hip}/lib/libamdhip64.so"'
+      substituteInPlace extern/hipew/src/hipew.c --replace '"opt/rocm/hip/bin"' '"${hip}/bin"'
+    '' else "");
 
   cmakeFlags =
     [

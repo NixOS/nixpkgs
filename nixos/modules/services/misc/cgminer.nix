@@ -31,7 +31,7 @@ in
 
     services.cgminer = {
 
-      enable = mkEnableOption "cgminer, an ASIC/FPGA/GPU miner for bitcoin and litecoin";
+      enable = mkEnableOption (lib.mdDoc "cgminer, an ASIC/FPGA/GPU miner for bitcoin and litecoin");
 
       package = mkOption {
         default = pkgs.cgminer;

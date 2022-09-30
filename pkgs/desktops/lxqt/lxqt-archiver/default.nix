@@ -5,11 +5,13 @@
 , pkg-config
 , lxqt-build-tools
 , json-glib
+, libexif
 , libfm-qt
+, menu-cache
 , qtbase
 , qttools
 , qtx11extras
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
@@ -31,7 +33,9 @@ mkDerivation rec {
 
   buildInputs = [
     json-glib
+    libexif
     libfm-qt
+    menu-cache
     qtbase
     qttools
     qtx11extras
@@ -39,7 +43,7 @@ mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-archiver/";

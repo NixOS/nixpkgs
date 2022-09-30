@@ -3,7 +3,7 @@
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
 , kio, kcrash, breeze-icons
 , boost, libraw, fftw, eigen, exiv2, libheif, lcms2, gsl, openexr, giflib
-, openjpeg, opencolorio_1, vc, poppler, curl, ilmbase, libmypaint, libwebp
+, openjpeg, opencolorio_1, xsimd, poppler, curl, ilmbase, libmypaint, libwebp
 , qtmultimedia, qtx11extras, quazip
 , python3Packages
 
@@ -32,7 +32,8 @@ mkDerivation rec {
     openjpeg opencolorio_1 poppler curl ilmbase libmypaint libwebp
     qtmultimedia qtx11extras quazip
     python3Packages.pyqt5
-  ] ++ lib.optional stdenv.hostPlatform.isx86 vc;
+    xsimd
+  ];
 
   NIX_CFLAGS_COMPILE = [ "-I${ilmbase.dev}/include/OpenEXR" ]
     ++ lib.optional stdenv.cc.isGNU "-Wno-deprecated-copy";

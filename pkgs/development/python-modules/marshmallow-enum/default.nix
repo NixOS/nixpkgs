@@ -5,7 +5,6 @@
 , pytestCheckHook
 , isPy27
 , enum34
-, pytest-flake8
 }:
 
 buildPythonPackage rec {
@@ -19,13 +18,16 @@ buildPythonPackage rec {
     sha256 = "1ihrcmyfjabivg6hc44i59hnw5ijlg1byv3zs1rqxfynp8xr7398";
   };
 
+  postPatch = ''
+    sed -i '/addopts/d' tox.ini
+  '';
+
   propagatedBuildInputs = [
     marshmallow
   ] ++ lib.optionals isPy27 [ enum34 ];
 
   checkInputs = [
     pytestCheckHook
-    pytest-flake8
   ];
 
   disabledTests = [

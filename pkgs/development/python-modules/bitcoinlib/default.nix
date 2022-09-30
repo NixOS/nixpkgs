@@ -1,29 +1,31 @@
 { stdenv, lib, buildPythonPackage, isPy3k, fetchFromGitHub, openssl }:
 
-let ext = if stdenv.isDarwin then "dylib" else "so";
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "bitcoinlib";
-  version = "0.11.0";
+  version = "0.11.2";
 
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
-    owner  = "petertodd";
-    repo   = "python-bitcoinlib";
-    rev    = "python-${pname}-v${version}";
-    sha256 = "0pwypd966zzivb37fvg4l6yr7ihplqnr1jwz9zm3biip7x89bdzm";
+    owner = "petertodd";
+    repo = "python-bitcoinlib";
+    rev = "refs/tags/python-bitcoinlib-v${version}";
+    sha256 = "sha256-/VgCTN010W/Svdrs0mGA8W1YZnyTHhcaWJKgP/c8CN8=";
   };
 
   postPatch = ''
     substituteInPlace bitcoin/core/key.py --replace \
-      "ctypes.util.find_library('ssl') or 'libeay32'" \
-      "'${lib.getLib openssl}/lib/libssl.${ext}'"
+      "ctypes.util.find_library('ssl.35') or ctypes.util.find_library('ssl') or 'libeay32'" \
+      "'${lib.getLib openssl}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  meta = {
-    homepage = src.meta.homepage;
+  pythonImportsCheck = [ "bitcoin" "bitcoin.core.key" ];
+
+  meta = with lib; {
+    homepage = "https://github.com/petertodd/python-bitcoinlib";
     description = "Easy interface to the Bitcoin data structures and protocol";
-    license = with lib.licenses; [ lgpl3 ];
-    maintainers = with lib.maintainers; [ jb55 ];
+    changelog = "https://github.com/petertodd/python-bitcoinlib/raw/${src.rev}/release-notes.md";
+    license = with licenses; [ lgpl3Plus ];
+    maintainers = with maintainers; [ jb55 ];
   };
 }

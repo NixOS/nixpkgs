@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage
+{ lib, fetchurl, buildDunePackage, ocaml
 , decompress, stdlib-shims, alcotest
 }:
 
@@ -16,7 +16,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ decompress stdlib-shims ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ alcotest ];
 
   meta = {

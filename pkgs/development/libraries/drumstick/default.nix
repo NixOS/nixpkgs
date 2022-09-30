@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace library/rt/backendmanager.cpp --subst-var out
+
+    # https://sourceforge.net/p/drumstick/bugs/39/
+    substituteInPlace drumstick-alsa.pc.in drumstick-file.pc.in drumstick-rt.pc.in drumstick-widgets.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
 
   outputs = [ "out" "dev" "man" ];

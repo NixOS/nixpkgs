@@ -151,8 +151,10 @@ in
       (mkRemovedOptionModule
         [ "services" "xserver" "startDbusSession" ]
         "The user D-Bus session is now always socket activated and this option can safely be removed.")
-      (mkRemovedOptionModule ["services" "xserver" "useXFS" ]
+      (mkRemovedOptionModule [ "services" "xserver" "useXFS" ]
         "Use services.xserver.fontPath instead of useXFS")
+      (mkRemovedOptionModule [ "services" "xserver" "useGlamor" ]
+        "Option services.xserver.useGlamor was removed because it is unnecessary. Drivers that uses Glamor will use it automatically.")
     ];
 
 
@@ -292,7 +294,7 @@ in
       drivers = mkOption {
         type = types.listOf types.attrs;
         internal = true;
-        description = ''
+        description = lib.mdDoc ''
           A list of attribute sets specifying drivers to be loaded by
           the X11 server.
         '';
@@ -429,23 +431,25 @@ in
           firstPrimary = head heads // { primary = true; };
           newHeads = singleton firstPrimary ++ tail heads;
         in if heads != [] && !hasPrimary then newHeads else heads;
-        description = ''
+        description = lib.mdDoc ''
           Multiple monitor configuration, just specify a list of XRandR
           outputs. The individual elements should be either simple strings or
           an attribute set of output options.
 
           If the element is a string, it is denoting the physical output for a
           monitor, if it's an attribute set, you must at least provide the
-          <option>output</option> option.
+          {option}`output` option.
 
           The monitors will be mapped from left to right in the order of the
           list.
 
           By default, the first monitor will be set as the primary monitor if
           none of the elements contain an option that has set
-          <option>primary</option> to <literal>true</literal>.
+          {option}`primary` to `true`.
 
-          <note><para>Only one monitor is allowed to be primary.</para></note>
+          ::: {.note}
+          Only one monitor is allowed to be primary.
+          :::
 
           Be careful using this option with multiple graphic adapters or with
           drivers that have poor support for XRandR, unexpected things might
@@ -552,15 +556,6 @@ in
         example = 7;
         description = lib.mdDoc ''
           Controls verbosity of X logging.
-        '';
-      };
-
-      useGlamor = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Whether to use the Glamor module for 2D acceleration,
-          if possible.
         '';
       };
 
@@ -794,13 +789,6 @@ in
           '')}
         EndSection
 
-        ${if cfg.useGlamor then ''
-          Section "Module"
-            Load "dri2"
-            Load "glamoregl"
-          EndSection
-        '' else ""}
-
         # For each supported driver, add a "Device" and "Screen"
         # section.
         ${flip concatMapStrings cfg.drivers (driver: ''
@@ -808,7 +796,6 @@ in
           Section "Device"
             Identifier "Device-${driver.name}[0]"
             Driver "${driver.driverName or driver.name}"
-            ${if cfg.useGlamor then ''Option "AccelMethod" "glamor"'' else ""}
           ${indent cfg.deviceSection}
           ${indent (driver.deviceSection or "")}
           ${indent xrandrDeviceSection}

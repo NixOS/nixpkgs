@@ -35,20 +35,20 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
       with subtest("create index"):
           machine.succeed(
-              "curl -XPOST --header 'Content-Type: application/json' ${apiUrl}/indexes --data @${indexJSON}"
+              "curl -X POST -H 'Content-Type: application/json' ${apiUrl}/indexes --data @${indexJSON}"
           )
           indexes = json.loads(machine.succeed("curl ${apiUrl}/indexes"))
-          assert len(indexes) == 1, "index wasn't created"
+          assert indexes["total"] == 1, "index wasn't created"
 
       with subtest("add documents"):
           response = json.loads(
               machine.succeed(
-                  "curl -XPOST --header 'Content-Type: application/json' ${apiUrl}/indexes/${uid}/documents --data @${moviesJSON}"
+                  "curl -X POST -H 'Content-Type: application/json' ${apiUrl}/indexes/${uid}/documents --data-binary @${moviesJSON}"
               )
           )
-          update_id = response["updateId"]
+          task_uid = response["taskUid"]
           machine.wait_until_succeeds(
-              f"curl ${apiUrl}/indexes/${uid}/updates/{update_id} | jq -e '.status == \"processed\"'"
+              f"curl ${apiUrl}/tasks/{task_uid} | jq -e '.status == \"succeeded\"'"
           )
 
       with subtest("search"):

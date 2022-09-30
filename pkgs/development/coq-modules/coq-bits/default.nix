@@ -5,7 +5,7 @@ with lib; mkCoqDerivation {
   repo = "bits";
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.10" "8.15"; out = "1.1.0"; }
+    { case = range "8.10" "8.16"; out = "1.1.0"; }
     { case = range "8.7"  "8.15"; out = "1.0.0"; }
   ] null;
 

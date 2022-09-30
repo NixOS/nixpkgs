@@ -59,7 +59,7 @@ in
 {
   options = {
     services.gerrit = {
-      enable = mkEnableOption "Gerrit service";
+      enable = mkEnableOption (lib.mdDoc "Gerrit service");
 
       package = mkOption {
         type = types.package;

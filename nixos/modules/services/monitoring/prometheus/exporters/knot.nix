@@ -11,8 +11,8 @@ in {
       type = types.str;
       default = "${pkgs.knot-dns.out}/lib/libknot.so";
       defaultText = literalExpression ''"''${pkgs.knot-dns.out}/lib/libknot.so"'';
-      description = ''
-        Path to the library of <package>knot-dns</package>.
+      description = lib.mdDoc ''
+        Path to the library of `knot-dns`.
       '';
     };
 

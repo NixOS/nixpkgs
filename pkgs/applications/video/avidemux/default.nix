@@ -25,11 +25,11 @@ assert !withQT -> default != "qt5";
 
 stdenv.mkDerivation rec {
   pname = "avidemux";
-  version = "2.8.0";
+  version = "2.8.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/avidemux/avidemux/${version}/avidemux_${version}.tar.gz";
-    sha256 = "sha256-0exvUnflEijs8O4cqJ+uJMWR9SD4fOlvq+yIGNBN4zs=";
+    sha256 = "sha256-d9m9yoaDzlfBkradIHz6t8+Sp3Wc4PY/o3tcjkKtPaI=";
   };
 
   patches = [
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs =
-    [ yasm cmake pkg-config ]
+    [ yasm cmake pkg-config makeWrapper ]
     ++ lib.optional withQT wrapQtAppsHook;
   buildInputs = [
     zlib gettext libvdpau libva libXv sqlite fribidi fontconfig
-    freetype alsa-lib libXext libGLU makeWrapper
+    freetype alsa-lib libXext libGLU
   ] ++ lib.optional withX264 x264
     ++ lib.optional withX265 x265
     ++ lib.optional withXvid xvidcore

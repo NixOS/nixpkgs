@@ -7,7 +7,7 @@ let
 in
 {
   options = {
-    programs.bash.enableCompletion = mkEnableOption "Bash completion for all interactive bash shells" // {
+    programs.bash.enableCompletion = mkEnableOption (lib.mdDoc "Bash completion for all interactive bash shells") // {
       default = true;
     };
   };

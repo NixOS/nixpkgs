@@ -2,7 +2,7 @@
 , boto3
 , buildPythonPackage
 , fetchFromGitHub
-, python
+, unittestCheckHook
 , redis
 }:
 
@@ -22,11 +22,7 @@ buildPythonPackage rec {
     redis
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest discover
-    runHook postCheck
-  '';
+  checkInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [
     "karton.core"

@@ -20,11 +20,12 @@ let
     mkDefault
     literalExpression
     isAttrs
-    literalDocBook
+    literalMD
     maintainers
     catAttrs
     collect
     splitString
+    hasPrefix
     ;
 
   inherit (builtins)
@@ -165,7 +166,7 @@ in
           mkOption {
             type = port;
             default = dbPorts.${cfg.database.type};
-            defaultText = literalDocBook "default port of selected database";
+            defaultText = literalMD "default port of selected database";
             description = lib.mdDoc ''
               Port of the database to connect to.
             '';
@@ -312,25 +313,24 @@ in
 
             http-relative-path = mkOption {
               type = str;
-              default = "";
+              default = "/";
               example = "/auth";
-              description = ''
-                The path relative to <literal>/</literal> for serving
+              apply = x: if !(hasPrefix "/") x then "/" + x else x;
+              description = lib.mdDoc ''
+                The path relative to `/` for serving
                 resources.
 
-                <note>
-                  <para>
-                    In versions of Keycloak using Wildfly (&lt;17),
-                    this defaulted to <literal>/auth</literal>. If
-                    upgrading from the Wildfly version of Keycloak,
-                    i.e. a NixOS version before 22.05, you'll likely
-                    want to set this to <literal>/auth</literal> to
-                    keep compatibility with your clients.
+                ::: {.note}
+                In versions of Keycloak using Wildfly (&lt;17),
+                this defaulted to `/auth`. If
+                upgrading from the Wildfly version of Keycloak,
+                i.e. a NixOS version before 22.05, you'll likely
+                want to set this to `/auth` to
+                keep compatibility with your clients.
 
-                    See <link xlink:href="https://www.keycloak.org/migration/migrating-to-quarkus"/>
-                    for more information on migrating from Wildfly to Quarkus.
-                  </para>
-                </note>
+                See <https://www.keycloak.org/migration/migrating-to-quarkus>
+                for more information on migrating from Wildfly to Quarkus.
+                :::
               '';
             };
 
@@ -366,41 +366,21 @@ in
               type = enum [ "edge" "reencrypt" "passthrough" "none" ];
               default = "none";
               example = "edge";
-              description = ''
+              description = lib.mdDoc ''
                 The proxy address forwarding mode if the server is
                 behind a reverse proxy.
 
-                <variablelist>
-                  <varlistentry>
-                    <term>edge</term>
-                    <listitem>
-                      <para>
-                        Enables communication through HTTP between the
-                        proxy and Keycloak.
-                      </para>
-                    </listitem>
-                  </varlistentry>
-                  <varlistentry>
-                    <term>reencrypt</term>
-                    <listitem>
-                      <para>
-                        Requires communication through HTTPS between the
-                        proxy and Keycloak.
-                      </para>
-                    </listitem>
-                  </varlistentry>
-                  <varlistentry>
-                    <term>passthrough</term>
-                    <listitem>
-                      <para>
-                        Enables communication through HTTP or HTTPS between
-                        the proxy and Keycloak.
-                      </para>
-                    </listitem>
-                  </varlistentry>
-                </variablelist>
+                - `edge`:
+                  Enables communication through HTTP between the
+                  proxy and Keycloak.
+                - `reencrypt`:
+                  Requires communication through HTTPS between the
+                  proxy and Keycloak.
+                - `passthrough`:
+                  Enables communication through HTTP or HTTPS between
+                  the proxy and Keycloak.
 
-                See <link xlink:href="https://www.keycloak.org/server/reverseproxy"/> for more information.
+                See <https://www.keycloak.org/server/reverseproxy> for more information.
               '';
             };
           };
@@ -562,7 +542,7 @@ in
             shopt -s inherit_errexit
 
             create_role="$(mktemp)"
-            trap 'rm -f "$create_role"' ERR EXIT
+            trap 'rm -f "$create_role"' EXIT
 
             db_password="$(<"$CREDENTIALS_DIRECTORY/db_password")"
             echo "CREATE ROLE keycloak WITH LOGIN PASSWORD '$db_password' CREATEDB" > "$create_role"
@@ -658,7 +638,7 @@ in
             '' + ''
               export KEYCLOAK_ADMIN=admin
               export KEYCLOAK_ADMIN_PASSWORD=${cfg.initialAdminPassword}
-              kc.sh start
+              kc.sh start --optimized
             '';
           };
 

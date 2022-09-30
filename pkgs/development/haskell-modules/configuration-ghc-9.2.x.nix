@@ -55,9 +55,16 @@ self: super: {
   # 0.30 introduced support for GHC 9.2.
   cryptonite = doDistribute self.cryptonite_0_30;
 
-  # cabal-install needs more recent versions of Cabal
-  cabal-install = (doJailbreak super.cabal-install).overrideScope (self: super: {
-    Cabal = self.Cabal_3_6_3_0;
+  # cabal-install needs most recent versions of Cabal and Cabal-syntax
+  cabal-install = super.cabal-install.overrideScope (self: super: {
+    Cabal = self.Cabal_3_8_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+    process = self.process_1_6_15_0;
+  });
+  cabal-install-solver = super.cabal-install-solver.overrideScope (self: super: {
+    Cabal = self.Cabal_3_8_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+    process = self.process_1_6_15_0;
   });
 
   doctest = dontCheck (doJailbreak super.doctest);
@@ -73,14 +80,14 @@ self: super: {
   assoc = doJailbreak super.assoc;
   async = doJailbreak super.async;
   base64-bytestring = doJailbreak super.base64-bytestring;
-  base-compat = self.base-compat_0_12_1;
-  base-compat-batteries = self.base-compat-batteries_0_12_1;
+  base-compat = self.base-compat_0_12_2;
+  base-compat-batteries = self.base-compat-batteries_0_12_2;
   binary-instances = doJailbreak super.binary-instances;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   constraints = doJailbreak super.constraints;
   cpphs = overrideCabal (drv: { postPatch = "sed -i -e 's,time >=1.5 && <1.11,time >=1.5 \\&\\& <1.12,' cpphs.cabal";}) super.cpphs;
   data-fix = doJailbreak super.data-fix;
-  dbus = self.dbus_1_2_25;
+  dbus = self.dbus_1_2_26;
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
@@ -102,7 +109,7 @@ self: super: {
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_2_4_20220729;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_2_1_1;
   hackage-security = doJailbreak super.hackage-security;
-  hashable = super.hashable_1_4_0_2;
+  hashable = super.hashable_1_4_1_0;
   hashable-time = doJailbreak super.hashable-time;
   # 1.1.1 introduced support for GHC 9.2.x, so when this assert fails, the jailbreak can be removed
   hedgehog = assert super.hedgehog.version == "1.0.5"; doJailbreak super.hedgehog;
@@ -123,13 +130,27 @@ self: super: {
   retrie = doDistribute (dontCheck self.retrie_1_2_0_1);
   singleton-bool = doJailbreak super.singleton-bool;
   servant = doJailbreak super.servant;
-  servant-auth = doJailbreak super.servant-auth;
   servant-swagger = doJailbreak super.servant-swagger;
+
+  # 2022-09-02: Too strict bounds on lens
+  # https://github.com/haskell-servant/servant/pull/1607/files
+  servant-docs = doJailbreak super.servant-docs;
+  servant-foreign = doJailbreak super.servant-foreign;
+  servant-auth = doJailbreak super.servant-auth;
+  servant-auth-docs = doJailbreak super.servant-auth-docs;
+  servant-auth-server = doJailbreak super.servant-auth-server;
   servant-auth-swagger = doJailbreak super.servant-auth-swagger;
+  # 2022-09-02: Too strict bounds on lens
+  # https://github.com/haskell-servant/servant-multipart/pull/64
+  servant-multipart = doJailbreak super.servant-multipart;
+  # 2022-09-02: Too strict bounds on lens
+  # https://github.com/GetShopTV/swagger2/pull/242
+  swagger2 = doJailbreak super.swagger2;
+
   shelly = doJailbreak super.shelly;
   splitmix = doJailbreak super.splitmix;
   tasty-hspec = doJailbreak super.tasty-hspec;
-  th-desugar = self.th-desugar_1_13_1;
+  th-desugar = self.th-desugar_1_14;
   time-compat = doJailbreak super.time-compat;
   tomland = doJailbreak super.tomland;
   type-equality = doJailbreak super.type-equality;
@@ -146,7 +167,7 @@ self: super: {
   }) (doJailbreak super.hpack);
 
   # lens >= 5.1 supports 9.2.1
-  lens = doDistribute self.lens_5_1_1;
+  lens = doDistribute self.lens_5_2;
 
   # Syntax error in tests fixed in https://github.com/simonmar/alex/commit/84b29475e057ef744f32a94bc0d3954b84160760
   alex = dontCheck super.alex;
@@ -169,8 +190,13 @@ self: super: {
     revision = null;
   } super.memory);
 
-  # Use hlint from git for GHC 9.2.1 support
-  hlint = self.hlint_3_4_1;
+  # For -fghc-lib see cabal.project in haskell-language-server.
+  stylish-haskell = enableCabalFlag "ghc-lib" super.stylish-haskell;
+
+  # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
+  hlint = doDistribute (enableCabalFlag "ghc-lib" (super.hlint_3_4_1.override {
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
+  }));
 
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
@@ -180,13 +206,8 @@ self: super: {
   jacinda = doDistribute super.jacinda;
   some = doJailbreak super.some;
 
-  # 2022-06-05: this is not the latest version of fourmolu because
-  # hls-fourmolu-plugin 1.0.3.0 doesn‘t support a newer one.
-  fourmolu = super.fourmolu_0_6_0_0;
-  # hls-fourmolu-plugin in this version has a to strict upper bound of fourmolu <= 0.5.0.0
-  hls-fourmolu-plugin = assert super.hls-fourmolu-plugin.version == "1.0.3.0"; doJailbreak super.hls-fourmolu-plugin;
+  fourmolu = super.fourmolu_0_8_2_0;
 
-  hls-ormolu-plugin = assert super.hls-ormolu-plugin.version == "1.0.2.1"; doJailbreak super.hls-ormolu-plugin;
   implicit-hie-cradle = doJailbreak super.implicit-hie-cradle;
   # 1.3 introduced support for GHC 9.2.x, so when this assert fails, the jailbreak can be removed
   hashtables = assert super.hashtables.version == "1.2.4.2"; doJailbreak super.hashtables;
@@ -194,20 +215,15 @@ self: super: {
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = doJailbreak (dontCheck super.hiedb);
 
+  apply-refact = doDistribute super.apply-refact_0_10_0_0;
+
   # 2022-02-05: The following plugins don‘t work yet on ghc9.2.
   # Compare: https://haskell-language-server.readthedocs.io/en/latest/supported-versions.html
-  haskell-language-server = overrideCabal (old: {libraryHaskellDepends = builtins.filter (x: x != super.hls-tactics-plugin) old.libraryHaskellDepends;})
-    (appendConfigureFlags [
-    "-f-haddockComments"
-    "-f-retrie"
-    "-f-splice"
-    "-f-tactics"
-  ] (super.haskell-language-server.override {
+  haskell-language-server = super.haskell-language-server.override {
     hls-haddock-comments-plugin = null;
-    hls-hlint-plugin = null;
-    hls-retrie-plugin = null;
     hls-splice-plugin = null;
-  }));
+    hls-tactics-plugin = null;
+  };
 
   # https://github.com/fpco/inline-c/pull/131
   inline-c-cpp =

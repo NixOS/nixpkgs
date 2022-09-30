@@ -31,8 +31,8 @@
   })
   (fetchNuGet {
     pname = "BTCPayServer.Lightning.All";
-    version = "1.3.12";
-    sha256 = "005nl3sl3awdpwnvdsww8kg4ysj804459a5yip283fy7a29xagyh";
+    version = "1.3.13";
+    sha256 = "103isdymijx4bdpjs968dmfc26kdxjzvqlca2p7vxxzp8ww7yjcz";
   })
   (fetchNuGet {
     pname = "BTCPayServer.Lightning.Charge";
@@ -71,8 +71,8 @@
   })
   (fetchNuGet {
     pname = "BTCPayServer.Lightning.LNDhub";
-    version = "1.0.2";
-    sha256 = "1jyn0r9qm9r8szmzx0g0ja2k93r8adi1vn100c8d9wpnr83xwj03";
+    version = "1.0.3";
+    sha256 = "185b9b7h00w92mg5cgwfr94b8lz2xbg8wyhjbzkmb0588crv3y8k";
   })
   (fetchNuGet {
     pname = "BuildBundlerMinifier";
@@ -1091,8 +1091,8 @@
   })
   (fetchNuGet {
     pname = "Selenium.WebDriver.ChromeDriver";
-    version = "103.0.5060.5300";
-    sha256 = "1dr1d4nx2qb6is29p3rsmp254v1v6c24pdsx7kyj1yamh89sqd5k";
+    version = "104.0.5112.7900";
+    sha256 = "0mq6m5qmlxaq37nh1pzm13s1s4abdgamwwazdc53gf5ll0qwcyxb";
   })
   (fetchNuGet {
     pname = "Selenium.WebDriver";

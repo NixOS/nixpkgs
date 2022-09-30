@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "cariddi";
-  version = "1.1.7";
+  version = "1.1.8";
 
   src = fetchFromGitHub {
     owner = "edoardottt";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OiGVdRgTaoMinwYh5vTPgOUAffX6RlawAaVtBvpWN8I=";
+    sha256 = "sha256-e6mB1Z/PqxD3TbcfoPpWUrgDebcD+nadiTtx3reGqvk=";
   };
 
-  vendorSha256 = "sha256-zJ39tAq+ooROMHG1vC2m2rbq+wttxqYxAd2hLg5GtJM=";
+  vendorSha256 = "sha256-mXzI3NF1afMvQ4STPpbehoarfOT35P01IotXPVYNnio=";
 
   meta = with lib; {
     description = "Crawler for URLs and endpoints";

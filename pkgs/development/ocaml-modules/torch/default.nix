@@ -12,7 +12,7 @@
 , ppx_sexp_conv
 , sexplib
 , stdio
-, pytorch
+, torch
 }:
 
 buildDunePackage rec {
@@ -37,16 +37,16 @@ buildDunePackage rec {
     ctypes
     npy
     ocaml-compiler-libs
-    pytorch
-    pytorch.dev
     ppx_custom_printf
     ppx_expect
     ppx_sexp_conv
     sexplib
     stdio
+    torch
+    torch.dev
   ];
 
-  preBuild = "export LIBTORCH=${pytorch.dev}/";
+  preBuild = "export LIBTORCH=${torch.dev}/";
 
   doCheck = !stdenv.isAarch64;
   checkPhase = "dune runtest";
@@ -56,6 +56,6 @@ buildDunePackage rec {
     description = "Ocaml bindings to Pytorch";
     maintainers = [ maintainers.bcdarwin ];
     license = licenses.asl20;
-    broken = lib.versionAtLeast pytorch.version "1.11";
+    broken = lib.versionAtLeast torch.version "1.11";
   };
 }

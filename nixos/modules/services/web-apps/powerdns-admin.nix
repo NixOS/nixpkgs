@@ -19,7 +19,7 @@ let
 in
 {
   options.services.powerdns-admin = {
-    enable = mkEnableOption "the PowerDNS web interface";
+    enable = mkEnableOption (lib.mdDoc "the PowerDNS web interface");
 
     extraArgs = mkOption {
       type = types.listOf types.str;

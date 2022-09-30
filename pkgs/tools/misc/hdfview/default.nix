@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "hdfview";
-  version = "3.1.4";
+  version = "3.2.0";
 
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF5/releases/HDF-JAVA/${pname}-${version}/src/${pname}-${version}.tar.gz";
-    sha256 = "sha256-iY/NUifU57aX795eWpaUBflrclF/nfvb3OKZEpD9VqA=";
+    sha256 = "sha256-08De/yy9lZUIxNqccS2nL7IE/2gYo0NPAKcHH46M8rg=";
   };
 
   patches = [

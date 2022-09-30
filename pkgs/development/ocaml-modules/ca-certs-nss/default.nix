@@ -14,13 +14,13 @@
 
 buildDunePackage rec {
   pname = "ca-certs-nss";
-  version = "3.74";
+  version = "3.77";
 
   minimumOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/ca-certs-nss/releases/download/v${version}/ca-certs-nss-${version}.tbz";
-    sha256 = "c95f5b2e36a0564e6f65421e0e197d7cfe600d19eb492f8f27c4841cbe68b231";
+    sha256 = "sha256-Ezos9A2AQOo43R9akVbJ5l+euTDtguzMfH63YXo9hvc=";
   };
 
   useDune2 = true;

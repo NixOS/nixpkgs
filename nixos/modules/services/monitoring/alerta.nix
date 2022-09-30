@@ -21,7 +21,7 @@ let
 in
 {
   options.services.alerta = {
-    enable = mkEnableOption "alerta";
+    enable = mkEnableOption (lib.mdDoc "alerta");
 
     port = mkOption {
       type = types.int;

@@ -27,12 +27,12 @@ let
     (assertOnlyFields [
       "ReadOnly" "Volatile" "Bind" "BindReadOnly" "TemporaryFileSystem"
       "Overlay" "OverlayReadOnly" "PrivateUsersChown" "BindUser"
-      "Inaccessible" "PrivateUserOwnership"
+      "Inaccessible" "PrivateUsersOwnership"
     ])
     (assertValueOneOf "ReadOnly" boolValues)
     (assertValueOneOf "Volatile" (boolValues ++ [ "state" ]))
     (assertValueOneOf "PrivateUsersChown" boolValues)
-    (assertValueOneOf "PrivateUserOwnership" [ "off" "chown" "map" "auto" ])
+    (assertValueOneOf "PrivateUsersOwnership" [ "off" "chown" "map" "auto" ])
   ];
 
   checkNetwork = checkUnitConfig "Network" [

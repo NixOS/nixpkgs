@@ -7,7 +7,7 @@ let
 in {
   options = {
     services.gotify = {
-      enable = mkEnableOption "Gotify webserver";
+      enable = mkEnableOption (lib.mdDoc "Gotify webserver");
 
       port = mkOption {
         type = types.port;

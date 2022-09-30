@@ -1,7 +1,5 @@
 { lib, stdenv
 , substituteAll
-, fetchurl
-, fetchpatch
 , fetchFromGitHub
 , autoreconfHook
 , gettext
@@ -29,14 +27,12 @@
 , libnotify ? null
 , enableUI ? true
 , withWayland ? false
-, libxkbcommon ? null
-, wayland ? null
+, libxkbcommon
+, wayland
 , buildPackages
 , runtimeShell
 , nixosTests
 }:
-
-assert withWayland -> wayland != null && libxkbcommon != null;
 
 with lib;
 
@@ -62,22 +58,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ibus";
-  version = "1.5.26";
+  version = "1.5.27";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
     rev = version;
-    sha256 = "7Vuj4Gyd+dLUoCkR4SPkfGPwVQPRo2pHk0pRAsmtjxc=";
+    sha256 = "sha256-DwX7SYRb18C0Lz2ySPS3yV99Q1xQezs0Ls2P7Rbtk5Q=";
   };
 
   patches = [
-    # Fixes systemd unit installation path https://github.com/ibus/ibus/pull/2388
-    (fetchpatch {
-      url = "https://github.com/ibus/ibus/commit/33b4b3932bfea476a841f8df99e20049b83f4b0e.patch";
-      sha256 = "kh8SBR+cqsov/B0A2YXLJVq1F171qoSRUKbBPHjPRHI=";
-    })
-
     (substituteAll {
       src = ./fix-paths.patch;
       pythonInterpreter = python3Runtime.interpreter;

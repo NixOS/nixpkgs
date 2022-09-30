@@ -1,5 +1,6 @@
 { lib
 , bleak-retry-connector
+, bluetooth-data-tools
 , bluetooth-sensor-state-data
 , buildPythonPackage
 , fetchFromGitHub
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "xiaomi-ble";
-  version = "0.8.0";
+  version = "0.10.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-HwA2NKsrqXBsC5/rUZUNfHDk8QA7I+zQmwqt0SVhw38=";
+    hash = "sha256-qpGw9c7O8MC6AEutRIqCEdZncJSQKesaHFRQjOxpa2U=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     bleak-retry-connector
+    bluetooth-data-tools
     bluetooth-sensor-state-data
     home-assistant-bluetooth
     pycryptodomex

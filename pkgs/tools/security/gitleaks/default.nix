@@ -1,29 +1,46 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, gitleaks
+, installShellFiles
+, testers
 }:
 
 buildGoModule rec {
   pname = "gitleaks";
-  version = "8.10.2";
+  version = "8.13.0";
 
   src = fetchFromGitHub {
     owner = "zricethezav";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FiR1zJ9aOdysp5807vZ9aX3O7l8GhDXlFDWuyk5zJQw=";
+    sha256 = "sha256-Pdl26PoTcI0LiC3O8EN/vW9LjVfI54TsspRnmhpFaVo=";
   };
 
-  vendorSha256 = "sha256-X8z9iKRR3PptNHwy1clZG8QsClsjbW45nZb2fHGfSYk=";
+  vendorSha256 = "sha256-Ev0/CSpwJDmc+Dvu/bFDzsgsq80rWImJWXNAUqYHgoE=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/zricethezav/gitleaks/v${lib.versions.major version}/version.Version=${version}"
+    "-X github.com/zricethezav/gitleaks/v${lib.versions.major version}/cmd.Version=${version}"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   # With v8 the config tests are are blocking
   doCheck = false;
+
+  postInstall = ''
+    installShellCompletion --cmd ${pname} \
+      --bash <($out/bin/${pname} completion bash) \
+      --fish <($out/bin/${pname} completion fish) \
+      --zsh <($out/bin/${pname} completion zsh)
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = gitleaks;
+    command = "${pname} version";
+  };
 
   meta = with lib; {
     description = "Scan git repos (or files) for secrets";

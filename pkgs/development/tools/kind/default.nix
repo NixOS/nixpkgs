@@ -4,13 +4,13 @@ with lib;
 
 buildGoModule rec {
   pname = "kind";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     rev    = "v${version}";
     owner  = "kubernetes-sigs";
     repo   = "kind";
-    sha256 = "sha256-yCzznSVWuVEkaoj9bo0WOp3Dvl3t1UJ/DwtXv5dp+dQ=";
+    sha256 = "sha256-IDSWmNWHnTKOl6/N1Mz+OKOkZSBarpuN39CBsSjYhKY=";
   };
 
   patches = [
@@ -18,7 +18,7 @@ buildGoModule rec {
     ./kernel-module-path.patch
   ];
 
-  vendorSha256 = "sha256-/UDmTyngydoso9F/iPp5JYlsfi0VNfHfTsxdGDaTK+w=";
+  vendorSha256 = "sha256-FE1GvNgXkBt2cH4YB3jTsPXp91DSiYlniQLtMwvi384=";
 
   CGO_ENABLED = 0;
   GOFLAGS = [ "-trimpath" ];

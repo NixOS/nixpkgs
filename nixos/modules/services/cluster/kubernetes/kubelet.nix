@@ -40,7 +40,7 @@ let
       key = mkOption {
         description = lib.mdDoc "Key of taint.";
         default = name;
-        defaultText = literalDocBook "Name of this submodule.";
+        defaultText = literalMD "Name of this submodule.";
         type = str;
       };
       value = mkOption {
@@ -145,7 +145,7 @@ in
       default = "unix:///run/containerd/containerd.sock";
     };
 
-    enable = mkEnableOption "Kubernetes kubelet.";
+    enable = mkEnableOption (lib.mdDoc "Kubernetes kubelet.");
 
     extraOpts = mkOption {
       description = lib.mdDoc "Kubernetes kubelet extra command line options.";

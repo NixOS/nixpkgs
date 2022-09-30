@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "basemap";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "matplotlib";
     repo = "basemap";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ObRQ5GsYx3k7fLaaK5Z4Td54rW/Nnx5+2zm8KLCIZl8=";
+    sha256 = "sha256-F/6xPmdXSJAuASyFaKOP+6Jz8U2JRZdqErEH7PFkr/w=";
   };
 
   sourceRoot = "source/packages/basemap";

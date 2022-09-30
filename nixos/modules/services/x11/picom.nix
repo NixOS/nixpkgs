@@ -11,15 +11,6 @@ let
     addCheck (listOf x) (y: length y == 2)
     // { description = "pair of ${x.description}"; };
 
-  floatBetween = a: b: with types;
-    let
-      # toString prints floats with hardcoded high precision
-      floatToString = f: builtins.toJSON f;
-    in
-      addCheck float (x: x <= b && x >= a)
-      // { description = "a floating point number in " +
-                         "range [${floatToString a}, ${floatToString b}]"; };
-
   mkDefaultAttrs = mapAttrs (n: v: mkDefault v);
 
   # Basically a tinkered lib.generators.mkKeyValueDefault
@@ -93,7 +84,7 @@ in {
     };
 
     fadeSteps = mkOption {
-      type = pairOf (floatBetween 0.01 1);
+      type = pairOf (types.numbers.between 0.01 1);
       default = [ 0.028 0.03 ];
       example = [ 0.04 0.04 ];
       description = lib.mdDoc ''
@@ -133,7 +124,7 @@ in {
     };
 
     shadowOpacity = mkOption {
-      type = floatBetween 0 1;
+      type = types.numbers.between 0 1;
       default = 0.75;
       example = 0.8;
       description = lib.mdDoc ''
@@ -156,7 +147,7 @@ in {
     };
 
     activeOpacity = mkOption {
-      type = floatBetween 0 1;
+      type = types.numbers.between 0 1;
       default = 1.0;
       example = 0.8;
       description = lib.mdDoc ''
@@ -165,7 +156,7 @@ in {
     };
 
     inactiveOpacity = mkOption {
-      type = floatBetween 0.1 1;
+      type = types.numbers.between 0.1 1;
       default = 1.0;
       example = 0.8;
       description = lib.mdDoc ''
@@ -174,7 +165,7 @@ in {
     };
 
     menuOpacity = mkOption {
-      type = floatBetween 0 1;
+      type = types.numbers.between 0 1;
       default = 1.0;
       example = 0.8;
       description = lib.mdDoc ''

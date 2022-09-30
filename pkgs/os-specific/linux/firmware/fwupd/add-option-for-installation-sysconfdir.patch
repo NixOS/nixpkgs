@@ -1,5 +1,16 @@
+diff --git a/data/bios-settings.d/meson.build b/data/bios-settings.d/meson.build
+index b0ff5b106..13ac380d0 100644
+--- a/data/bios-settings.d/meson.build
++++ b/data/bios-settings.d/meson.build
+@@ -1,5 +1,5 @@
+ if build_standalone and host_machine.system() == 'linux'
+ install_data('README.md',
+-  install_dir: join_paths(sysconfdir, 'fwupd', 'bios-settings.d')
++  install_dir: join_paths(sysconfdir_install, 'fwupd', 'bios-settings.d')
+ )
+ endif
 diff --git a/data/meson.build b/data/meson.build
-index d8494020d..7c896fa0d 100644
+index 3a77a7bfc..747bd1988 100644
 --- a/data/meson.build
 +++ b/data/meson.build
 @@ -26,7 +26,7 @@ endif
@@ -83,7 +94,7 @@ index 1d1698a7e..5469d00a6 100644
 +  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
  )
 diff --git a/meson.build b/meson.build
-index e6b717078..f8a7a7455 100644
+index e7980e965..2c66e2dc4 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -195,6 +195,12 @@ endif
@@ -100,7 +111,7 @@ index e6b717078..f8a7a7455 100644
  gio = dependency('gio-2.0', version: '>= 2.45.8')
  giounix = dependency('gio-unix-2.0', version: '>= 2.45.8', required: false)
 diff --git a/meson_options.txt b/meson_options.txt
-index 06d242371..d9e517fc0 100644
+index 6cf92e72e..2e8568292 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -1,3 +1,4 @@
@@ -121,7 +132,7 @@ index 67bd3b9d9..ad04a91b6 100644
  )
  endif
 diff --git a/plugins/msr/meson.build b/plugins/msr/meson.build
-index 13f03ccd4..9235ebe33 100644
+index d626c3ad3..5a2f847d5 100644
 --- a/plugins/msr/meson.build
 +++ b/plugins/msr/meson.build
 @@ -10,7 +10,7 @@ install_data(['fwupd-msr.conf'],

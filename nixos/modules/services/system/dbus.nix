@@ -29,7 +29,7 @@ in
         type = types.bool;
         default = false;
         internal = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to start the D-Bus message bus daemon, which is
           required by many other system services and applications.
         '';
@@ -70,7 +70,7 @@ in
         type = types.nullOr types.bool;
         default = null;
         visible = false;
-        description = ''
+        description = lib.mdDoc ''
           Removed option, do not use.
         '';
       };

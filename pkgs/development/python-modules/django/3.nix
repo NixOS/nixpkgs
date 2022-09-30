@@ -8,23 +8,29 @@
 , asgiref
 , pytz
 , sqlparse
+, tzdata
 , pythonOlder
 , withGdal ? false
 }:
 
 buildPythonPackage rec {
   pname = "django";
-  version = "3.2.14";
+  version = "3.2.15";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Django";
     inherit version;
-    sha256 = "sha256-Z3GCuotbKFpOBy86wXzu5q/xtc53/Rc8xbai09wCL88=";
+    hash = "sha256-9xk0sagi8UqGyayWNAU2iSec0ErmnLat5KWUcbiGWCs=";
   };
 
-  patches = lib.optional withGdal
+  patches = [
+    (substituteAll {
+      src = ./django_3_set_zoneinfo_dir.patch;
+      zoneinfo = tzdata + "/share/zoneinfo";
+    })
+  ] ++ lib.optional withGdal
     (substituteAll {
       src = ./django_3_set_geos_gdal_lib.patch;
       inherit geos39;

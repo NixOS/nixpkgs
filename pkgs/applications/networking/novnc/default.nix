@@ -11,6 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Z+bks7kcwj+Z3uf/t0u25DnGOM60QhSH6uuoIi59jqU=";
   };
 
+  patches = [ ./fix-paths.patch ];
+
+  postPatch = ''
+    substituteAllInPlace utils/novnc_proxy
+  '';
+
   installPhase = ''
     runHook preInstall
 

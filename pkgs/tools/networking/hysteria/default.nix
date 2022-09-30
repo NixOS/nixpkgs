@@ -4,16 +4,16 @@
 }:
 buildGoModule rec {
   pname = "hysteria";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "HyNetwork";
-    repo = "hysteria";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-V+umf7+qRANSNsMrU1Vij3ni6ayq/d41xSy3o+7sEHQ=";
+    sha256 = "sha256-aHIb79P1a+91hIcK1toHZqqXIZ0rwfGXDQc42rQQmX4=";
   };
 
-  vendorSha256 = "sha256-oxCZ4+E3kffHr8ca9BKCSYcSWQ8jwpzrFs0fvCvZyJE=";
+  vendorSha256 = "sha256-yAQpyz4pDXOfGF4hho/2Pt9yD3VdWYAmIvaXJjDMjis=";
   proxyVendor = true;
 
   # Network required

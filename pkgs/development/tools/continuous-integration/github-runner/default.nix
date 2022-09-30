@@ -21,14 +21,15 @@
 , nuget-to-nix
 }:
 let
+  fetchNuGet = { pname, version, sha256 }: fetchurl {
+    name = "${pname}.${version}.nupkg";
+    url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
+    inherit sha256;
+  };
+
   nugetSource = linkFarmFromDrvs "nuget-packages" (
-    import ./deps.nix {
-      fetchNuGet = { pname, version, sha256 }: fetchurl {
-        name = "${pname}.${version}.nupkg";
-        url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
-        inherit sha256;
-      };
-    }
+    import ./deps.nix { inherit fetchNuGet; } ++
+    dotnetSdk.passthru.packages { inherit fetchNuGet; }
   );
 
   dotnetSdk = dotnetCorePackages.sdk_6_0;
@@ -42,13 +43,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.295.0";
+  version = "2.297.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-C5tINoFkd2PRbpnlSkPL/o59B7+J+so07oVvJu1m3dk=";
+    hash = "sha256-Bp8uNBnjhP3AR29N7C4cPmOp6FeJ+zny4+5Gmn/PGTA=";
   };
 
   nativeBuildInputs = [
@@ -224,15 +225,21 @@ stdenv.mkDerivation rec {
 
     # Install the helper scripts to bin/ to resemble the upstream package
     mkdir -p $out/bin
-    install -m755 src/Misc/layoutbin/runsvc.sh        $out/bin/
-    install -m755 src/Misc/layoutbin/RunnerService.js $out/lib/
-    install -m755 src/Misc/layoutroot/run.sh          $out/lib/
-    install -m755 src/Misc/layoutroot/config.sh       $out/lib/
-    install -m755 src/Misc/layoutroot/env.sh          $out/lib/
+    install -m755 src/Misc/layoutbin/runsvc.sh                 $out/bin/
+    install -m755 src/Misc/layoutbin/RunnerService.js          $out/lib/
+    install -m755 src/Misc/layoutroot/run.sh                   $out/lib/
+    install -m755 src/Misc/layoutroot/run-helper.sh.template   $out/lib/run-helper.sh
+    install -m755 src/Misc/layoutroot/config.sh                $out/lib/
+    install -m755 src/Misc/layoutroot/env.sh                   $out/lib/
 
     # Rewrite reference in helper scripts from bin/ to lib/
-    substituteInPlace $out/lib/run.sh    --replace '"$DIR"/bin' "$out/lib"
-    substituteInPlace $out/lib/config.sh --replace './bin' "$out/lib"
+    substituteInPlace $out/lib/run.sh    --replace '"$DIR"/bin' '"$DIR"/lib'
+    substituteInPlace $out/lib/config.sh --replace './bin' $out'/lib' \
+      --replace 'source ./env.sh' $out/bin/env.sh
+
+    # Remove uneeded copy for run-helper template
+    substituteInPlace $out/lib/run.sh --replace 'cp -f "$DIR"/run-helper.sh.template "$DIR"/run-helper.sh' ' '
+    substituteInPlace $out/lib/run-helper.sh --replace '"$DIR"/bin/' '"$DIR"/'
 
     # Make paths absolute
     substituteInPlace $out/bin/runsvc.sh \
@@ -268,7 +275,7 @@ stdenv.mkDerivation rec {
     wrap() {
       makeWrapper $out/lib/$1 $out/bin/$1 \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath (buildInputs ++ [ openssl ])} \
-        ''${@:2}
+        "''${@:2}"
     }
 
     fix_rpath Runner.Listener
@@ -278,10 +285,13 @@ stdenv.mkDerivation rec {
     wrap Runner.Listener
     wrap Runner.PluginHost
     wrap Runner.Worker
-    wrap run.sh
-    wrap env.sh
+    wrap run.sh --run 'export RUNNER_ROOT=''${RUNNER_ROOT:-$HOME/.github-runner}'
+    wrap env.sh --run 'cd $RUNNER_ROOT'
 
-    wrap config.sh --prefix PATH : ${lib.makeBinPath [ glibc.bin ]}
+    wrap config.sh --run 'export RUNNER_ROOT=''${RUNNER_ROOT:-$HOME/.github-runner}' \
+      --run 'mkdir -p $RUNNER_ROOT' \
+      --prefix PATH : ${lib.makeBinPath [ glibc.bin ]} \
+      --chdir $out
   '';
 
   # Script to create deps.nix file for dotnet dependencies. Run it with
@@ -326,7 +336,7 @@ stdenv.mkDerivation rec {
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
     license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch newam kfollesdal ];
+    maintainers = with maintainers; [ veehaitch newam kfollesdal aanderse ];
     platforms = attrNames runtimeIds;
   };
 }

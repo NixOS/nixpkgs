@@ -75,12 +75,12 @@ with lib;
     useACMEHost = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         A host of an existing Let's Encrypt certificate to use.
         This is useful if you have many subdomains and want to avoid hitting the
-        <link xlink:href="https://letsencrypt.org/docs/rate-limits/">rate limit</link>.
-        Alternately, you can generate a certificate through <option>enableACME</option>.
-        <emphasis>Note that this option does not create any certificates, nor it does add subdomains to existing ones – you will need to create them manually using  <xref linkend="opt-security.acme.certs"/>.</emphasis>
+        [rate limit](https://letsencrypt.org/docs/rate-limits).
+        Alternately, you can generate a certificate through {option}`enableACME`.
+        *Note that this option does not create any certificates, nor it does add subdomains to existing ones – you will need to create them manually using [](#opt-security.acme.certs).*
       '';
     };
 
@@ -197,10 +197,10 @@ with lib;
     http3 = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable HTTP 3.
-        This requires using <literal>pkgs.nginxQuic</literal> package
-        which can be achieved by setting <literal>services.nginx.package = pkgs.nginxQuic;</literal>.
+        This requires using `pkgs.nginxQuic` package
+        which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`.
         Note that HTTP 3 support is experimental and
         *not* yet recommended for production.
         Read more at https://quic.nginx.org/

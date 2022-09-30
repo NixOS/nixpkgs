@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "profanity";
-  version = "0.12.1";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
     rev = version;
-    hash = "sha256-yUiiww8yhymdqR6CITRnItxZhfpZiEbu1WyD8bDW+vc=";
+    hash = "sha256-cTkNtj1mN5EuCyniFibKNzY2fxe3NKpRXt8acO/p6WY=";
   };
 
   patches = [

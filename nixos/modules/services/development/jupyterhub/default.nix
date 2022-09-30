@@ -30,7 +30,7 @@ in {
   meta.maintainers = with maintainers; [ costrouc ];
 
   options.services.jupyterhub = {
-    enable = mkEnableOption "Jupyterhub development server";
+    enable = mkEnableOption (lib.mdDoc "Jupyterhub development server");
 
     authentication = mkOption {
       type = types.str;

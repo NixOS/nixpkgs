@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "netplan";
-  version = "0.103";
+  version = "0.105";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "netplan";
     rev = version;
-    hash = "sha256-d8Ze8S/w2nyJkATzLfizMqmr7ad2wrK1mjADClee6WE=";
+    hash = "sha256-77vUZU9JG9Dz/5n4DpcAUS77UqfIILXhZHgBogIb400=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace netplan/cli/utils.py \
+    substituteInPlace netplan/libnetplan.py \
       --replace "/lib/netplan/generate" "$out/lib/netplan/generate" \
       --replace "ctypes.util.find_library('netplan')" "\"$out/lib/libnetplan.so\""
 

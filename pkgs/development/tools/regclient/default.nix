@@ -4,16 +4,16 @@ let bins = [ "regbot" "regctl" "regsync" ]; in
 
 buildGoModule rec {
   pname = "regclient";
-  version = "0.4.0";
+  version = "0.4.5";
   tag = "v${version}";
 
   src = fetchFromGitHub {
     owner = "regclient";
     repo = "regclient";
     rev = tag;
-    sha256 = "sha256-AaSl++/i00YAvmvaUSEwLLpItYACtmWEFTuUngl7rkI=";
+    sha256 = "sha256-WyjVJp0JVwLitz46YjPGpR/+AjLhjgqTRqabCB9VhHw=";
   };
-  vendorSha256 = "sha256-qpZ3RsBOkWqLCDK11vBGkAZJBC7T8hmpmm4ccGeWBus=";
+  vendorSha256 = "sha256-QTeVgvjRw2wBd8QGoVpRVTTh+Wwu2NEZYR1Z9R52/p0=";
 
   outputs = [ "out" ] ++ bins;
 

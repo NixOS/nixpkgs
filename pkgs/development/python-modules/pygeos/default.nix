@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pygeos";
-  version = "0.12.0";
+  version = "0.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PEFULvZ8ZgFfRDrj5uaDUDqKIh+cJPsjgPauQq7RYAo=";
+    sha256 = "sha256-HDcweKrVou/tHDnNcceXqiAzvzCH8191FrrIm+ULmGE=";
   };
 
   patches = [

@@ -11,7 +11,7 @@
 , menu-cache
 , qtx11extras
 , qttools
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
@@ -43,7 +43,7 @@ mkDerivation rec {
     menu-cache
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/libfm-qt";

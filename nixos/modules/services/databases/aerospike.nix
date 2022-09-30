@@ -39,7 +39,7 @@ in
   options = {
 
     services.aerospike = {
-      enable = mkEnableOption "Aerospike server";
+      enable = mkEnableOption (lib.mdDoc "Aerospike server");
 
       package = mkOption {
         default = pkgs.aerospike;

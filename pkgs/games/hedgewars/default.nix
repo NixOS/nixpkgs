@@ -7,20 +7,18 @@
 }:
 
 let
-  # gameServer/hedgewars-server.cabal depends on network < 3
   ghc = ghcWithPackages (pkgs: with pkgs; [
-          SHA bytestring entropy hslogger network_2_6_3_1 pkgs.zlib random
+          SHA bytestring entropy hslogger network pkgs.zlib random
           regex-tdfa sandi utf8-string vector
         ]);
-
 in
 stdenv.mkDerivation rec {
   pname = "hedgewars";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchurl {
     url = "https://www.hedgewars.org/download/releases/hedgewars-src-${version}.tar.bz2";
-    sha256 = "0nqm9w02m0xkndlsj6ys3wr0ik8zc14zgilq7k6fwjrf3zk385i1";
+    sha256 = "sha256-IB/l5FvYyls9gbGOwGvWu8n6fCxjvwGQBeL4C+W88hI=";
   };
 
   nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
@@ -33,28 +31,10 @@ stdenv.mkDerivation rec {
     qtbase
   ] ++ lib.optional withServer ghc;
 
-  postPatch = ''
-    substituteInPlace gameServer/CMakeLists.txt \
-      --replace mask evaluate
-
-    # compile with fpc >= 3.2.0
-    # https://github.com/archlinux/svntogit-community/blob/75a1b3900fb3dd553d5114bbc8474d85fd6abb02/trunk/PKGBUILD#L26
-    sed -i 's/procedure ShiftWorld(Dir: LongInt); inline;/procedure ShiftWorld(Dir: LongInt);/' hedgewars/uWorld.pas
-  '';
-
   cmakeFlags = [
     "-DNOVERSIONINFOUPDATE=ON"
     "-DNOSERVER=${if withServer then "OFF" else "ON"}"
   ];
-
-
-  # hslogger brings network-3 and network-bsd which conflict with
-  # network-2.6.3.1
-  preConfigure = ''
-    substituteInPlace gameServer/CMakeLists.txt \
-      --replace "haskell_flags}" \
-        "haskell_flags} -package network-2.6.3.1 -hide-package network-bsd"
-  '';
 
   NIX_LDFLAGS = lib.concatMapStringsSep " " (e: "-rpath ${e}/lib") [
     SDL2.out
@@ -102,6 +82,7 @@ stdenv.mkDerivation rec {
        hedgehog or hedgehogs after a player's or CPU turn is shown only when
        all movement on the battlefield has ceased).'';
     maintainers = with maintainers; [ kragniz fpletz ];
-    inherit (fpc.meta) platforms;
+    broken = stdenv.isDarwin;
+    platforms = platforms.linux;
   };
 }

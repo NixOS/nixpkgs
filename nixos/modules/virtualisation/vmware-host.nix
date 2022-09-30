@@ -20,21 +20,21 @@ in
 {
   options = with lib; {
     virtualisation.vmware.host = {
-      enable = mkEnableOption "VMware" // {
-        description = ''
+      enable = mkEnableOption (lib.mdDoc "VMware") // {
+        description = lib.mdDoc ''
           This enables VMware host virtualisation for running VMs.
 
-          <important><para>
-          <literal>vmware-vmx</literal> will cause kcompactd0 due to
-          <literal>Transparent Hugepages</literal> feature in kernel.
-          Apply <literal>[ "transparent_hugepage=never" ]</literal> in
-          option <option>boot.kernelParams</option> to disable them.
-          </para></important>
+          ::: {.important}
+          `vmware-vmx` will cause kcompactd0 due to
+          `Transparent Hugepages` feature in kernel.
+          Apply `[ "transparent_hugepage=never" ]` in
+          option {option}`boot.kernelParams` to disable them.
+          :::
 
-          <note><para>
-          If that didn't work disable <literal>TRANSPARENT_HUGEPAGE</literal>,
-          <literal>COMPACTION</literal> configs and recompile kernel.
-          </para></note>
+          ::: {.note}
+          If that didn't work disable `TRANSPARENT_HUGEPAGE`,
+          `COMPACTION` configs and recompile kernel.
+          :::
         '';
       };
       package = mkOption {

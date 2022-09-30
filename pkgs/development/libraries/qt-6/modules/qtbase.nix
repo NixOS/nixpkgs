@@ -47,7 +47,6 @@
 , icu
 , libX11
 , libXcomposite
-, libXcursor
 , libXext
 , libXi
 , libXrender
@@ -181,10 +180,6 @@ stdenv.mkDerivation rec {
   # https://bugreports.qt.io/browse/QTBUG-97568
   postPatch = ''
     substituteInPlace src/corelib/CMakeLists.txt --replace /bin/ls ${coreutils}/bin/ls
-  '';
-
-  preConfigure = ''
-    export LD_LIBRARY_PATH="$PWD/build/lib:$PWD/build/plugins/platforms''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
   '';
 
   qtPluginPrefix = "lib/qt-6/plugins";

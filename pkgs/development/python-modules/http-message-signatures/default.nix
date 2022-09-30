@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "http-message-signatures";
-  version = "0.4.3";
+  version = "0.4.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pyauth";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-CMF9p913P04Hx/221ck1e0AoAsP7aXkX2UKp4S1nnU0=";
+    hash = "sha256-acTziJM5H5Td+eG/LNrlNwgpVvFDyl/tf6//YuE1XZk=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

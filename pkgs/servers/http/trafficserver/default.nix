@@ -50,11 +50,11 @@
 
 stdenv.mkDerivation rec {
   pname = "trafficserver";
-  version = "9.1.2";
+  version = "9.1.3";
 
   src = fetchzip {
     url = "mirror://apache/trafficserver/trafficserver-${version}.tar.bz2";
-    sha256 = "sha256-eRpyTdwwO5EzrVpt9fF6VEYGZjHb905nQJd065wY5RU=";
+    sha256 = "sha256-Ihhsbn4PvIjWskmbWKajThIwtuiEyldBpmtuQ8RdyHA=";
   };
 
   patches = [
@@ -64,8 +64,6 @@ stdenv.mkDerivation rec {
       url = "https://github.com/apache/trafficserver/commit/19d3af481cf74c91fbf713fc9d2f8b138ed5fbaf.diff";
       sha256 = "0z1ikgpp00rzrrcqh97931586yn9wbksgai9xlkcjd5cg8gq0150";
     })
-
-    ./fix-catch2-version-incompatibility.patch
   ];
 
   # NOTE: The upstream README indicates that flex is needed for some features,

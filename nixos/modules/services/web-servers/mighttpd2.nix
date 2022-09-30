@@ -8,7 +8,7 @@ let
   routingFile = pkgs.writeText "mighty-routing" cfg.routing;
 in {
   options.services.mighttpd2 = {
-    enable = mkEnableOption "Mighttpd2 web server";
+    enable = mkEnableOption (lib.mdDoc "Mighttpd2 web server");
 
     config = mkOption {
       default = "";

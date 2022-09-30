@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wvkbd";
-  version = "0.7";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner = "jjsullivan5196";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5UV2PMrLXtF3AxjfPxxwFRkgVef+Ap8nG1v795o0bWE=";
+    sha256 = "sha256-h/hXHQfLiDkVKYZFsjyq2+w1Pnn3lR6H+r+fXYkP5ZY=";
   };
 
   nativeBuildInputs = [ pkg-config ];

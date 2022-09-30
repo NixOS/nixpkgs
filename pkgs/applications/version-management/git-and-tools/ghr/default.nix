@@ -1,25 +1,31 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, ghr
+}:
 
 buildGoModule rec {
   pname = "ghr";
-  version = "0.14.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "tcnksm";
     repo = "ghr";
     rev = "v${version}";
-    sha256 = "sha256-pF1TPvQLPa5BbXZ9rRCq7xWofXCBRa9CDgNxX/kaTMo=";
+    sha256 = "sha256-aD1HEdoAPFFpJL++fLZIk+pIs+qDNYbTGDMlcRjV6M4=";
   };
 
-  vendorSha256 = "sha256-+e9Q4Pw9pJyOXVz85KhOSuybj1PBcJi51fGR3a2Gixk=";
+  vendorSha256 = "sha256-pqwJPo3ZhsXU1RF4BKPOWQS71+9EitSSTE1+sKlc9+s=";
 
   # Tests require a Github API token, and networking
   doCheck = false;
   doInstallCheck = true;
 
-  installCheckPhase = ''
-    $out/bin/ghr --version
-  '';
+  passthru.tests.version = testers.testVersion {
+    package = ghr;
+    version = "v${version}";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/tcnksm/ghr";

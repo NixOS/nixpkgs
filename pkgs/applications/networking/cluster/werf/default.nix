@@ -4,37 +4,40 @@
 , fetchFromGitHub
 , installShellFiles
 , btrfs-progs
-, glibc
 , testers
 , werf
 }:
 
 buildGoModule rec {
   pname = "werf";
-  version = "1.2.153";
+  version = "1.2.175";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     rev = "v${version}";
-    sha256 = "sha256-BdGeafZvMgH6qRyYrFPQp0r2470me755J6gUK9XkIJQ=";
+    hash = "sha256-p60+IBy9f31BfmKdYlaHPO93mpIpWeOrDa6vFYrL1eQ=";
   };
 
-  vendorSha256 = "sha256-XpSAFiweD2oUKleD6ztDp1+3PpfUWXfGaaE/9mzRrUQ=";
+  vendorHash = "sha256-NHRPl38/R7yS8Hht118mBc+OBPwfYiHOaGIwryNK8Mo=";
 
   proxyVendor = true;
 
   subPackages = [ "cmd/werf" ];
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optionals stdenv.isLinux [ btrfs-progs glibc.static ];
+
+  buildInputs = lib.optionals stdenv.isLinux [ btrfs-progs ]
+    ++ lib.optionals stdenv.hostPlatform.isGnu [ stdenv.cc.libc.static ];
+
+  CGO_ENABLED = if stdenv.isLinux then 1 else 0;
 
   ldflags = [
     "-s"
     "-w"
     "-X github.com/werf/werf/pkg/werf.Version=${src.rev}"
   ] ++ lib.optionals stdenv.isLinux [
-    "-extldflags=-static"
+    "-extldflags '-static'"
     "-linkmode external"
   ];
 
@@ -50,8 +53,19 @@ buildGoModule rec {
     "static_build"
   ];
 
-  # There are no tests for cmd/werf.
-  doCheck = false;
+  preCheck = ''
+    # Test all targets.
+    unset subPackages
+
+    # Remove tests that require external services.
+    rm -rf \
+      integration/suites \
+      pkg/true_git/*test.go \
+      test/e2e
+  '' + lib.optionalString (CGO_ENABLED == 0) ''
+    # A workaround for osusergo.
+    export USER=nixbld
+  '';
 
   postInstall = ''
     installShellCompletion --cmd werf \
@@ -62,7 +76,7 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = werf;
     command = "werf version";
-    version = "v${version}";
+    version = src.rev;
   };
 
   meta = with lib; {

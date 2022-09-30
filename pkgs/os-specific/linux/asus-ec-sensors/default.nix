@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "asus-ec-sensors-${version}-${kernel.version}";
-  version = "unstable-2021-12-16";
+  version = "unstable-2022-07-10";
 
   src = fetchFromGitHub {
     owner = "zeule";
     repo = "asus-ec-sensors";
-    rev = "3621741c4ecb93216d546942707a9c413e971787";
-    sha256 = "0akdga2854q3w0pyi0jywa6cxr32541ifz0ka1hgn6j4czk39kyn";
+    rev = "5fbdd1461dc88fc952e02717b8120438ce5558b3";
+    sha256 = "sha256-kBGl8i7HzdItMoM7L91OfX6y+bqDfd22WICRg0n25pI=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ nickhu ];
+    broken = kernel.kernelOlder "5.11";
   };
 }

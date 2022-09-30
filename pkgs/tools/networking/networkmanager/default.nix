@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , substituteAll
-, intltool
+, gettext
 , pkg-config
 , fetchpatch
 , dbus
@@ -24,6 +24,7 @@
 , libselinux
 , audit
 , gobject-introspection
+, perl
 , modemmanager
 , openresolv
 , libndp
@@ -57,11 +58,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "networkmanager";
-  version = "1.38.4";
+  version = "1.40.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "sha256-hB9k1Bd2qt2SsVH0flD2K+igYRqQVv5r+BiBAk5qlsU=";
+    sha256 = "sha256-rufgV7wsyl2rhOQfFfHai3lespB0ewTL7ugiutnp/AM=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -153,10 +154,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    intltool
+    gettext
     pkg-config
     vala
     gobject-introspection
+    perl
     elfutils # used to find jansson soname
     # Docs
     gtk-doc

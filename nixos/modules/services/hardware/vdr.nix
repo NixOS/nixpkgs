@@ -12,7 +12,7 @@ in {
   options = {
 
     services.vdr = {
-      enable = mkEnableOption "VDR. Please put config into ${libDir}";
+      enable = mkEnableOption (lib.mdDoc "VDR. Please put config into ${libDir}");
 
       package = mkOption {
         type = types.package;
@@ -34,7 +34,7 @@ in {
         description = lib.mdDoc "Additional command line arguments to pass to VDR.";
       };
 
-      enableLirc = mkEnableOption "LIRC";
+      enableLirc = mkEnableOption (lib.mdDoc "LIRC");
     };
   };
 

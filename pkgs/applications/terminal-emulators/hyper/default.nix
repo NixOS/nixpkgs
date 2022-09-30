@@ -15,11 +15,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hyper";
-  version = "3.2.3";
+  version = "3.3.0";
 
   src = fetchurl {
     url = "https://github.com/vercel/hyper/releases/download/v${version}/hyper_${version}_amd64.deb";
-    sha256 = "sha256-CHLkHH9u5YWlmRDa4H3ymqg1YMBYjo+kuxpu0OVv4E8=";
+    sha256 = "sha256-VJAFa4I5nHuS/aXhiiXztUh2MjCq5zdwCtK0oSsOrGQ=";
   };
 
   nativeBuildInputs = [ dpkg ];

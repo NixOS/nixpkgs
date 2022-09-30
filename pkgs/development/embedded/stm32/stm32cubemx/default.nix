@@ -9,11 +9,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "stm32cubemx";
-  version = "6.5.0";
+  version = "6.6.1";
 
   src = fetchzip {
     url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${builtins.replaceStrings ["."] [""] version}-lin.zip";
-    sha256 = "sha256-19RG+bJCmkaytMtDpDLbDvfKo27Z+Mo/sOrs8lOVV44=";
+    sha256 = "sha256-NfJMXHQ7JXzRSdOAYfx2t0xsi/w2S5FK3NovcsDOi+E=";
     stripRoot = false;
   };
 

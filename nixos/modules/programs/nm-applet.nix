@@ -6,7 +6,7 @@
   };
 
   options.programs.nm-applet = {
-    enable = lib.mkEnableOption "nm-applet";
+    enable = lib.mkEnableOption (lib.mdDoc "nm-applet");
 
     indicator = lib.mkOption {
       type = lib.types.bool;

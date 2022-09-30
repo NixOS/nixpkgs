@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "geventhttpclient";
-  version = "2.0";
+  version = "2.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SegzLaon80HeCNk4h4KJs7dzaVzblvIpZRjC1uPr7JI=";
+    hash = "sha256-gTWoUgCxcN73KT0B3RVXkx/NG+wax4xSrXzt0iNoubo=";
   };
 
   propagatedBuildInputs = [
@@ -35,6 +35,8 @@ buildPythonPackage rec {
     pytestCheckHook
     urllib3
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   disabledTests = [
     # socket.gaierror: [Errno -3] Temporary failure in name resolution

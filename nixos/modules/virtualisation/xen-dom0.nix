@@ -139,7 +139,7 @@ in
           };
       };
 
-    virtualisation.xen.trace = mkEnableOption "Xen tracing";
+    virtualisation.xen.trace = mkEnableOption (lib.mdDoc "Xen tracing");
 
   };
 

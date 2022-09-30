@@ -566,8 +566,8 @@ in
       name = "vts";
       owner = "vozlt";
       repo = "nginx-module-vts";
-      rev = "v0.1.18";
-      sha256 = "1jq2s9k7hah3b317hfn9y3g1q4g4x58k209psrfsqs718a9sw8c7";
+      rev = "v0.2.1";
+      sha256 = "sha256-x4ry5ljPeJQY+7Mp04/xYIGf22d6Nee7CSqHezdK4gQ=";
     };
   };
 }

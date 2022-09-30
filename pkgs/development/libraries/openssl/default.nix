@@ -30,7 +30,7 @@ let
 
     postPatch = ''
       patchShebangs Configure
-    '' + lib.optionalString (lib.versionOlder version "1.1.0") ''
+    '' + lib.optionalString (lib.versionOlder version "1.1.1") ''
       patchShebangs test/*
       for a in test/t* ; do
         substituteInPlace "$a" \
@@ -40,7 +40,7 @@ let
     # config is a configure script which is not installed.
     + lib.optionalString (lib.versionAtLeast version "1.1.1") ''
       substituteInPlace config --replace '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
-    '' + lib.optionalString (lib.versionAtLeast version "1.1.0" && stdenv.hostPlatform.isMusl) ''
+    '' + lib.optionalString (lib.versionAtLeast version "1.1.1" && stdenv.hostPlatform.isMusl) ''
       substituteInPlace crypto/async/arch/async_posix.h \
         --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
                   '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
@@ -67,7 +67,8 @@ let
       !(stdenv.hostPlatform.useLLVM or false) &&
       stdenv.cc.isGNU;
 
-    nativeBuildInputs = [ perl ];
+    nativeBuildInputs = [ perl ]
+      ++ lib.optionals static [ removeReferencesTo ];
     buildInputs = lib.optional withCryptodev cryptodev
       # perl is included to allow the interpreter path fixup hook to set the
       # correct interpreter in c_rehash.
@@ -130,11 +131,12 @@ let
     ] ++ lib.optional enableSSL2 "enable-ssl2"
       ++ lib.optional enableSSL3 "enable-ssl3"
       ++ lib.optional (lib.versionAtLeast version "3.0.0") "enable-ktls"
-      ++ lib.optional (lib.versionAtLeast version "1.1.0" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
+      ++ lib.optional (lib.versionAtLeast version "1.1.1" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
       # OpenSSL needs a specific `no-shared` configure flag.
       # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
       # for a comprehensive list of configuration options.
-      ++ lib.optional (lib.versionAtLeast version "1.1.0" && static) "no-shared"
+      ++ lib.optional (lib.versionAtLeast version "1.1.1" && static) "no-shared"
+      ++ lib.optional (lib.versionAtLeast version "3.0.0" && static) "no-module"
       # This introduces a reference to the CTLOG_FILE which is undesired when
       # trying to build binaries statically.
       ++ lib.optional static "no-ct"
@@ -154,7 +156,7 @@ let
     postInstall =
     (if static then ''
       # OPENSSLDIR has a reference to self
-      ${removeReferencesTo}/bin/remove-references-to -t $out $out/lib/*.a
+      remove-references-to -t $out $out/lib/*.a
     '' else ''
       # If we're building dynamic libraries, then don't install static
       # libraries.

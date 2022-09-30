@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       arch =
         if stdenv.isx86_64 then "x86_64"
         else if stdenv.isAarch64 then "aarch64"
-        else if stdenv.isRiscV64 then "riscv64"
+        else if stdenv.hostPlatform.isRiscV && stdenv.is64bit then "riscv64"
         else "unsupported";
       platform =
         if stdenv.isLinux then "linux"

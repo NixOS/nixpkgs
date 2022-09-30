@@ -14,6 +14,8 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-4Zsb/OBtU/jV0gThEYe8bcrb+6hW+hnzQS19q1H409Q=";
   };
 
+  patches = [ ./copytree-permissions.patch ];
+
   propagatedBuildInputs = with python3.pkgs; [
     # install_requires
     jinja2

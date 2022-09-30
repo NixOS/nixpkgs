@@ -140,9 +140,9 @@ in
       example = literalExpression ''"''${pkgs.dash}/bin/dash"'';
       type = types.path;
       visible = false;
-      description = ''
+      description = lib.mdDoc ''
         The shell executable that is linked system-wide to
-        <literal>/bin/sh</literal>. Please note that NixOS assumes all
+        `/bin/sh`. Please note that NixOS assumes all
         over the place that shell to be Bash, so override the default
         setting only if you know exactly what you're doing.
       '';

@@ -15,7 +15,7 @@
 , udev
 , pixman
 , libinput
-, libseat
+, seatd
 , xwayland
 , glslang
 , stb
@@ -26,7 +26,7 @@
 }:
 let
   pname = "gamescope";
-  version = "3.11.33-jupiter-3.3-2";
+  version = "3.11.45-2";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     owner = "Plagman";
     repo = "gamescope";
     rev = "refs/tags/${version}";
-    hash = "sha256-6/gTsQGZDQPCdmXe5EI9QcT/MkdTf6odsI2/+g/W7Qc=";
+    hash = "sha256-OLPwUELahqzmOBPvJg8pm556RH+H6TzRD9PHLnM2Ruc=";
   };
 
   patches = [ ./use-pkgconfig.patch ];
@@ -65,7 +65,7 @@ stdenv.mkDerivation {
     wayland-protocols
     wlroots
     xwayland
-    libseat
+    seatd
     libinput
     libxkbcommon
     udev

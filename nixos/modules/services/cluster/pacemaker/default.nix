@@ -7,7 +7,7 @@ in
 {
   # interface
   options.services.pacemaker = {
-    enable = mkEnableOption "pacemaker";
+    enable = mkEnableOption (lib.mdDoc "pacemaker");
 
     package = mkOption {
       type = types.package;

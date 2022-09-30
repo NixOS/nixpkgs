@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "whirlpool-sixth-sense";
-  version = "unstable-2021-08-22";
+  version = "0.17.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "abmantis";
     repo = pname;
-    rev = "ca336173d3b5d9a13e7e4b0fa7ca998a9b71d729";
-    sha256 = "0b7bqg4h9q9rk3hv2im903xn7jgfyf36kcv31v96ap75yrvip6wa";
+    rev = "refs/tags/${version}";
+    hash = "sha256-M7V+JgbaFxrijaP8znZv8tOoHGVlQmTJIdiBXK6g8LM=";
   };
 
   propagatedBuildInputs = [
@@ -35,6 +35,9 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ];
+
+  # https://github.com/abmantis/whirlpool-sixth-sense/issues/15
+  doCheck = false;
 
   pythonImportsCheck = [ "whirlpool" ];
 

@@ -12,7 +12,7 @@ in
 
 {
 
-  options.hardware.mwProCapture.enable = mkEnableOption "Magewell Pro Capture family kernel module";
+  options.hardware.mwProCapture.enable = mkEnableOption (lib.mdDoc "Magewell Pro Capture family kernel module");
 
   config = mkIf cfg.enable {
 

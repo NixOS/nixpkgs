@@ -1,11 +1,12 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , cli-helpers
 , click
 , configobj
 , prompt-toolkit
-, psycopg2
+, psycopg
 , pygments
 , sqlparse
 , pgspecial
@@ -21,24 +22,19 @@
 # integrating with ipython-sql
 buildPythonPackage rec {
   pname = "pgcli";
-  version = "3.4.1";
+  version = "3.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8DkwGH4n1g32WMqKBPtgHsXXR2xzXysVQsat7Fysj+I=";
+    sha256 = "sha256-zESNlRWfwJA9NhgpkneKCW7aV1LWYNR2cTg8jiv2M/E=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pgspecial>=1.13.1,<2.0.0" "pgspecial>=1.13.1"
-  '';
 
   propagatedBuildInputs = [
     cli-helpers
     click
     configobj
     prompt-toolkit
-    psycopg2
+    psycopg
     pygments
     sqlparse
     pgspecial

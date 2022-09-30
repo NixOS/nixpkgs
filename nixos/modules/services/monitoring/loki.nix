@@ -12,7 +12,7 @@ let
 
 in {
   options.services.loki = {
-    enable = mkEnableOption "loki";
+    enable = mkEnableOption (lib.mdDoc "loki");
 
     user = mkOption {
       type = types.str;

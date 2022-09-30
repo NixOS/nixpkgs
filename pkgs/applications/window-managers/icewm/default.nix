@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
-, asciidoc
 , cmake
 , expat
 , fontconfig
@@ -40,17 +39,16 @@
 
 stdenv.mkDerivation rec {
   pname = "icewm";
-  version = "2.9.8";
+  version = "2.9.9";
 
   src = fetchFromGitHub {
     owner = "ice-wm";
     repo = pname;
     rev = version;
-    hash = "sha256-SjLXPlwL3tMBD7RCJkL60lqcld/ZXIxgjeNrAn8A6KU=";
+    hash = "sha256-55xi4GsP41FXJ/B/zEnjru72FhZQhXnpEdHcN0WF9Kk=";
   };
 
   nativeBuildInputs = [
-    asciidoc
     cmake
     perl
     pkg-config

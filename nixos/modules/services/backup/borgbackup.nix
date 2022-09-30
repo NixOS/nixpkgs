@@ -23,12 +23,10 @@ let
     on_exit()
     {
       exitStatus=$?
-      # Reset the EXIT handler, or else we're called again on 'exit' below
-      trap - EXIT
       ${cfg.postHook}
       exit $exitStatus
     }
-    trap 'on_exit' INT TERM QUIT EXIT
+    trap on_exit EXIT
 
     archiveName="${if cfg.archiveBaseName == null then "" else cfg.archiveBaseName + "-"}$(date ${cfg.dateFormat})"
     archiveSuffix="${optionalString cfg.appendFailedSuffix ".failed"}"

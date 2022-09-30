@@ -21,7 +21,7 @@ in
   meta.maintainers = with maintainers; [ jbedo cfhammill ];
 
   options.services.rstudio-server = {
-    enable = mkEnableOption "RStudio server";
+    enable = mkEnableOption (lib.mdDoc "RStudio server");
 
     serverWorkingDir = mkOption {
       type = types.str;

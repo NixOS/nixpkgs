@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "graphia";
-  version = "3.0";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "graphia-app";
     repo = "graphia";
     rev = version;
-    sha256 = "sha256-9JIVMtu8wlux7vIapOQQIemE7ehIol2XZuIvwLfB8fY=";
+    sha256 = "sha256-mqoK5y2h0JSiE9VtwawCgc1+qETzuefLVUpgFPcNFnk=";
   };
 
   patches = [

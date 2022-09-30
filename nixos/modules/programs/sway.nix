@@ -35,12 +35,12 @@ let
   };
 in {
   options.programs.sway = {
-    enable = mkEnableOption ''
+    enable = mkEnableOption (lib.mdDoc ''
       Sway, the i3-compatible tiling Wayland compositor. You can manually launch
       Sway by executing "exec sway" on a TTY. Copy /etc/sway/config to
       ~/.config/sway/config to modify the default configuration. See
-      <link xlink:href="https://github.com/swaywm/sway/wiki"/> and
-      "man 5 sway" for more information'';
+      <https://github.com/swaywm/sway/wiki> and
+      "man 5 sway" for more information'');
 
     wrapperFeatures = mkOption {
       type = wrapperOptions;
@@ -79,7 +79,6 @@ in {
         "--verbose"
         "--debug"
         "--unsupported-gpu"
-        "--my-next-gpu-wont-be-nvidia"
       ];
       description = lib.mdDoc ''
         Command line arguments passed to launch Sway. Please DO NOT report

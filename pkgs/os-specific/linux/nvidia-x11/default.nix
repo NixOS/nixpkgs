@@ -12,42 +12,58 @@ let
 
   kernel = callPackage # a hacky way of extracting parameters from callPackage
     ({ kernel, libsOnly ? false }: if libsOnly then { } else kernel) { };
+
+  kernelModVersion = lib.versions.majorMinor kernel.modDirVersion;
+
+  selectHighestVersion = a: b: if lib.versionOlder a.version b.version
+    then b
+    else a;
 in
 rec {
+  # Official Unix Drivers - https://www.nvidia.com/en-us/drivers/unix/
+  # Branch/Maturity data - http://people.freedesktop.org/~aplattner/nvidia-versions.txt
+
   # Policy: use the highest stable version as the default (on our master).
-  stable = if stdenv.hostPlatform.system == "x86_64-linux"
-    then generic {
-      version = "515.65.01";
-      sha256_64bit = "sha256-BJLdxbXmWqAMvHYujWaAIFyNCOEDtxMQh6FRJq7klek=";
-      openSha256 = "sha256-GCCDnaDsbXTmbCYZBCM3fpHmOSWti/DkBJwYrRGAMPI=";
-      settingsSha256 = "sha256-kBELMJCIWD9peZba14wfCoxsi3UXO3ehFYcVh4nvzVg=";
-      persistencedSha256 = "sha256-P8oT7g944HvNk2Ot/0T0sJM7dZs+e0d+KwbwRrmsuDY=";
-    }
-    else legacy_390;
+  stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else latest;
 
-  # see https://www.nvidia.com/en-us/drivers/unix/ "Production branch"
-  production = stable;
+  production = generic {
+    version = "515.76";
+    sha256_64bit = "sha256-xqKhjOuWX0mAvOTlzqNv1iLNwaXzGg6xu9NZqen2v0Q=";
+    openSha256 = "sha256-843l42atzaTm4pX5UC/JZjXAvhwmBpE8k3SQFEFdcdY=";
+    settingsSha256 = "sha256-2GdqmuvROLa8xFfyFY/F4YzEBq+SlVIYM4CVEARh9MI=";
+    persistencedSha256 = "sha256-nIfP7xBIVy+BUa9VBCNQ9v5RT4l4S9X0GHLpNiN/WRg=";
 
-  beta = generic {
+    brokenOpen = kernelModVersion == "5.4" && kernel.isHardened;
+  };
+
+  latest = selectHighestVersion production (generic {
+    version = "495.46";
+    sha256_64bit = "2Dt30X2gxUZnqlsT1uqVpcUTBCV7Hs8vjUo7WuMcYvU=";
+    settingsSha256 = "vbcZYn+UBBGwjfrJ6SyXt3+JLBeNcXK4h8mjj7qxZPk=";
+    persistencedSha256 = "ieYqkVxe26cLw1LUgBsFSSowAyfZkTcItIzQCestCXI=";
+  });
+
+  beta = selectHighestVersion latest (generic {
     version = "515.43.04";
     sha256_64bit = "sha256-PodaTTUOSyMW8rtdtabIkSLskgzAymQyfToNlwxPPcc=";
     openSha256 = "sha256-1bAr5dWZ4jnY3Uo2JaEz/rhw2HuW9LZ5bACmA1VG068=";
     settingsSha256 = "sha256-j47LtP6FNTPfiXFh9KwXX8vZOQzlytA30ZfW9N5F2PY=";
     persistencedSha256 = "sha256-hULBy0wnVpLH8I0L6O9/HfgvJURtE2whpXOgN/vb3Wo=";
-    broken = kernel.kernelAtLeast "5.19"; # Added at 2022-08-12
-  };
+  });
 
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "470.62.13";
-    persistencedVersion = "470.86";
-    settingsVersion = "470.86";
-    sha256_64bit = "sha256-itBFNPMy+Nn0g8V8qdkRb+ELHj57GRso1lXhPHUxKVI=";
-    settingsSha256 = "sha256-fq6RlD6g3uylvvTjE4MmaQwxPJYU0u6IMfpPVzks0tI=";
-    persistencedSha256 = "sha256-eHvauvh8Wd+b8DK6B3ZWNjoWGztupWrR8iog9ok58io=";
+    version = "515.49.15";
+    persistencedVersion = "515.48.07";
+    settingsVersion = "515.48.07";
+    sha256_64bit = "sha256-yQbNE+YsbHUc4scXvMZFGuuBRrFTa42g1XoMVZEO/zo=";
+    openSha256 = "sha256-2RvogIdTA7Rg4oq14TG7Kh31HWuj860xsK7/MYFitpQ=";
+    settingsSha256 = "sha256-XwdMsAAu5132x2ZHqjtFvcBJk6Dao7I86UksxrOkknU=";
+    persistencedSha256 = "sha256-BTfYNDJKe4tOvV71/1JJSPltJua0Mx/RvDcWT5ccRRY=";
     url = "https://developer.nvidia.com/vulkan-beta-${lib.concatStrings (lib.splitString "." version)}-linux";
-    broken = kernel.kernelAtLeast "5.17";
+
+    broken = kernelModVersion == "5.4" && kernel.isHardened;
   };
 
   # Update note:
@@ -74,7 +90,7 @@ rec {
 
     patches =
       let patch390 = o:
-        (lib.optional ((lib.versions.majorMinor kernel.modDirVersion) == o.version) (fetchpatch {
+        (lib.optional (kernelModVersion == o.version) (fetchpatch {
           inherit (o) sha256;
           url = "https://gitlab.com/herecura/packages/nvidia-390xx-dkms/-/raw/herecura/kernel-${o.version}.patch";
         }));

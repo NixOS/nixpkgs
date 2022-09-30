@@ -36,7 +36,7 @@ let
       modDirVersion' = builtins.replaceStrings [ kernel.version ] [ version ] kernel.modDirVersion;
     in kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
-        inherit lib version;
+        inherit stdenv lib version;
       };
       argsOverride = {
         inherit version;
@@ -168,12 +168,7 @@ in {
 
     linux_5_17 = throw "linux 5.17 was removed because it has reached its end of life upstream";
 
-    linux_5_18 = callPackage ../os-specific/linux/kernel/linux-5.18.nix {
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-      ];
-    };
+    linux_5_18 = throw "linux 5.18 was removed because it has reached its end of life upstream";
 
     linux_5_19 = callPackage ../os-specific/linux/kernel/linux-5.19.nix {
       kernelPatches = [
@@ -195,7 +190,7 @@ in {
        else testing;
 
     linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix rec {
-      kernel = linux_5_18;
+      kernel = linux_5_19;
       kernelPatches = kernel.kernelPatches;
    };
 
@@ -248,7 +243,8 @@ in {
     linux_5_4_hardened = hardenedKernelFor kernels.linux_5_4 { };
     linux_5_10_hardened = hardenedKernelFor kernels.linux_5_10 { };
     linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
-    linux_5_18_hardened = hardenedKernelFor kernels.linux_5_18 { };
+    linux_5_18_hardened = throw "linux 5.18 was removed because it has reached its end of life upstream";
+    linux_5_19_hardened = hardenedKernelFor kernels.linux_5_19 { };
 
   }));
   /*  Linux kernel modules are inherently tied to a specific kernel.  So
@@ -356,16 +352,20 @@ in {
 
     nvidiaPackages = dontRecurseIntoAttrs (lib.makeExtensible (_: callPackage ../os-specific/linux/nvidia-x11 { }));
 
+    nvidia_x11             = nvidiaPackages.stable;
+    nvidia_x11_beta        = nvidiaPackages.beta;
     nvidia_x11_legacy340   = nvidiaPackages.legacy_340;
     nvidia_x11_legacy390   = nvidiaPackages.legacy_390;
     nvidia_x11_legacy470   = nvidiaPackages.legacy_470;
-    nvidia_x11_beta        = nvidiaPackages.beta;
+    nvidia_x11_production  = nvidiaPackages.production;
     nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
-    nvidia_x11             = nvidiaPackages.stable;
 
-    # this is not a replacement for nvidia_x11
+    # this is not a replacement for nvidia_x11*
     # only the opensource kernel driver exposed for hydra to build
-    nvidia_x11_beta_open   = nvidiaPackages.beta.open;
+    nvidia_x11_beta_open         = nvidiaPackages.beta.open;
+    nvidia_x11_production_open   = nvidiaPackages.production.open;
+    nvidia_x11_stable_open       = nvidiaPackages.stable.open;
+    nvidia_x11_vulkan_beta_open  = nvidiaPackages.vulkan_beta.open;
 
     openrazer = callPackage ../os-specific/linux/openrazer/driver.nix { };
 
@@ -430,7 +430,7 @@ in {
 
     oci-seccomp-bpf-hook = if lib.versionAtLeast kernel.version "5.4" then callPackage ../os-specific/linux/oci-seccomp-bpf-hook { } else null;
 
-    perf = callPackage ../os-specific/linux/kernel/perf.nix { };
+    perf = callPackage ../os-specific/linux/kernel/perf { };
 
     phc-intel = if lib.versionAtLeast kernel.version "4.10" then callPackage ../os-specific/linux/phc-intel { } else null;
 
@@ -442,7 +442,9 @@ in {
 
     rr-zen_workaround = callPackage ../development/tools/analysis/rr/zen_workaround.nix { };
 
-    sysdig = callPackage ../os-specific/linux/sysdig {};
+    sysdig = callPackage ../os-specific/linux/sysdig {
+      openssl = pkgs.openssl_1_1;
+    };
 
     systemtap = callPackage ../development/tools/profiling/systemtap { };
 
@@ -527,7 +529,7 @@ in {
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
     linux_5_16 = throw "linux 5.16 was removed because it reached its end of life upstream"; # Added 2022-04-23
     linux_5_17 = throw "linux 5.17 was removed because it reached its end of life upstream"; # Added 2022-06-23
-    linux_5_18 = recurseIntoAttrs (packagesFor kernels.linux_5_18);
+    linux_5_18 = throw "linux 5.18 was removed because it reached its end of life upstream"; # Added 2022-09-17
     linux_5_19 = recurseIntoAttrs (packagesFor kernels.linux_5_19);
   };
 
@@ -567,7 +569,8 @@ in {
     });
     linux_5_10_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_10 { });
     linux_5_15_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_15 { });
-    linux_5_18_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_18 { });
+    linux_5_18_hardened = throw "linux 5.18 was removed because it has reached its end of life upstream";
+    linux_5_19_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_19 { });
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);

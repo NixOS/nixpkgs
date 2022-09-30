@@ -55,6 +55,14 @@ stdenv.mkDerivation rec {
     patchShebangs ./tests/
   '';
 
+  # checking pkg-config is at least version 0.9.0... ./configure: line 15213: no: command not found
+  # configure: error: in `/build/libgsf-1.14.50':
+  # configure: error: The pkg-config script could not be found or is too old.  Make sure it
+  # is in your PATH or set the PKG_CONFIG environment variable to the full
+  preConfigure = ''
+    export PKG_CONFIG="$(command -v "$PKG_CONFIG")"
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;

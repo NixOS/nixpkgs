@@ -17,22 +17,20 @@
 , psutil
 , pyarrow
 , pytest-xdist
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "3.2.0";
+  version = "3.3.3";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-l/tDBuMky4aQnOMqmUToHSH7yyingMXN8BtuTUfUwyI=";
+    hash = "sha256-r7tZyBb8t9T6y6EDPGOfTC1J7xSL/q/0L13gz05Qa/k=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'pyarrow >= 3.0.0, < 9.0dev' 'pyarrow >= 3.0.0, < 10.0dev'
-  '';
 
   propagatedBuildInputs = [
     google-cloud-core

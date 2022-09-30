@@ -36,6 +36,10 @@ buildPythonPackage rec {
     hash = "sha256-4zdPp3X22dfZ5YlW3G5/OqeUxrt+NiFO9dk2XjEKXEg=";
   };
 
+  patches = [
+    ./22.3.2-CVE-2022-35920.patch
+  ];
+
   postPatch = ''
     # Loosen dependency requirements.
     substituteInPlace setup.py \

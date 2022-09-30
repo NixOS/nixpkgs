@@ -6,11 +6,11 @@
 let
 self = stdenv.mkDerivation rec {
   pname = "mysql";
-  version = "8.0.29";
+  version = "8.0.30";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-USFw+m94ppTW8Y0ZfpmdJxbuaNxUHXZE3ZIqNmNAcmY=";
+    sha256 = "sha256-yYjVxrqaVmkqbNbpgTRltfyTaO1LRh35cFmi/BYMi4Q=";
   };
 
   nativeBuildInputs = [ bison cmake pkg-config ]
@@ -23,7 +23,7 @@ self = stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    boost curl icu libedit libevent lz4 ncurses openssl protobuf re2 readline zlib
+    boost (curl.override { inherit openssl; }) icu libedit libevent lz4 ncurses openssl protobuf re2 readline zlib
     zstd libfido2
   ] ++ lib.optionals stdenv.isLinux [
     numactl libtirpc

@@ -6,7 +6,7 @@
 , flask
 , flask_script
 , flask-sqlalchemy
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -33,14 +33,9 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    unittestCheckHook
     flask_script
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest discover
-    runHook postCheck
-  '';
 
   meta = with lib; {
     description = "SQLAlchemy database migrations for Flask applications using Alembic";

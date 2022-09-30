@@ -6,8 +6,8 @@
   },
   "libjpeg-turbo": {
     "url": "https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git",
-    "rev": "02959c3ee17abacfd1339ec22ea93301292ffd56",
-    "sha256": "sha256-cuSBVhHCX2Fh2SmmRpjinYtge8yaxcM06jlSXfvCywk="
+    "rev": "22f1a22c99e9dde8cd3c72ead333f425c5a7aa77",
+    "sha256": "sha256-5MaYvyrhADFGKBxcS3kbKcn9tj0FNXAN/rAXXYW6ljs="
   },
   "icu": {
     "url": "https://chromium.googlesource.com/chromium/deps/icu.git",
@@ -21,8 +21,8 @@
   },
   "harfbuzz": {
     "url": "https://chromium.googlesource.com/external/github.com/harfbuzz/harfbuzz.git",
-    "rev": "a8b7f1880412c7f0c9ecdada0a4935011816c7dc",
-    "sha256": "sha256-QyVkeBVl45gygOylhnojcQuDIBp2DT2d7pD+OcX29VU="
+    "rev": "8d1b000a3edc90c12267b836b4ef3f81c0e53edc",
+    "sha256": "sha256-nFAT7HnYkIWZcV6kjDQiRltbPcmbtuRM4m5ecY4/s6E="
   },
   "libpng": {
     "url": "https://skia.googlesource.com/third_party/libpng.git",

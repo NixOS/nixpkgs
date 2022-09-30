@@ -80,5 +80,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/xou816/spot";
     license = licenses.mit;
     maintainers = with maintainers; [ jtojnar tomfitzhenry ];
+    platforms = platforms.linux;
   };
 }

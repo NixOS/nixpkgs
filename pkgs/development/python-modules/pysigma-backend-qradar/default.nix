@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma-backend-qradar";
-  version = "0.1.9";
+  version = "0.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nNipsx-Sec";
     repo = "pySigma-backend-qradar";
-    rev = "v${version}";
-    hash = "sha256-b3e8cVrVFZgihhEk6QlUnRZigglczHUa/XeMvMzNYLk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-kd/KWO3xxIHPgXqvcOrSvdozLG34+DwZedfSVoZ+dDA=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +35,11 @@ buildPythonPackage rec {
     pysigma-pipeline-sysmon
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'pysigma = "^0.7.2"' 'pysigma = "*"'
+  '';
 
   pythonImportsCheck = [
     "sigma.backends.qradar"

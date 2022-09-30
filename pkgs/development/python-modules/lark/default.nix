@@ -4,6 +4,7 @@
 , python
 , regex
 , pytestCheckHook
+, js2py
 }:
 
 buildPythonPackage rec {
@@ -27,10 +28,9 @@ buildPythonPackage rec {
     "lark.grammars"
   ];
 
-  checkInputs = [ pytestCheckHook ];
-
-  disabledTestPaths = [
-    "tests/test_nearley/test_nearley.py"  # requires unpackaged Js2Py library
+  checkInputs = [
+    js2py
+    pytestCheckHook
   ];
 
   meta = with lib; {

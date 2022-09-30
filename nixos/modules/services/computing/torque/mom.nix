@@ -17,7 +17,7 @@ in
   options = {
 
     services.torque.mom = {
-      enable = mkEnableOption "torque computing node";
+      enable = mkEnableOption (lib.mdDoc "torque computing node");
 
       serverNode = mkOption {
         type = types.str;

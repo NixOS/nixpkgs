@@ -36,13 +36,6 @@ stdenv.mkDerivation rec {
     sha256 = "1b0ixya9bfw5c9jx8mzlr7yqnlyvd3jv5z8wln9scdv8q5zlvikd";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./add-placeholder-for-nm.patch;
-      nm = "${stdenv.cc.targetPrefix}nm";
-    })
-  ];
-
   postPatch = lib.optionalString withDocumentation ''
     patchShebangs doc/doxygen/gen-doxygen.py
   '' + lib.optionalString stdenv.hostPlatform.isStatic ''

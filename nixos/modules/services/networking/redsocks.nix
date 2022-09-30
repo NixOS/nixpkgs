@@ -30,7 +30,7 @@ in
         type = types.str;
         default = "stderr";
         description =
-          ''
+          lib.mdDoc ''
             Where to send logs.
 
             Possible values are:
@@ -122,7 +122,7 @@ in
                                 "Forwarded_ipport" ];
             default = "false";
             description =
-              ''
+              lib.mdDoc ''
                 Way to disclose client IP to the proxy.
                   - "false": do not disclose
                 http-connect supports the following ways:

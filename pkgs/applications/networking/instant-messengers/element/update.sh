@@ -21,21 +21,18 @@ version="${version#v}"
 # Element Web
 web_src="https://raw.githubusercontent.com/vector-im/element-web/v$version"
 web_src_hash=$(nix-prefetch-github vector-im element-web --rev v${version} | jq -r .sha256)
-wget "$web_src/package.json" -O element-web-package.json
 
 web_tmpdir=$(mktemp -d)
 trap 'rm -rf "$web_tmpdir"' EXIT
 
 pushd $web_tmpdir
 wget "$web_src/yarn.lock"
-sed -i '/matrix-analytics-events "github/d' yarn.lock
 web_yarn_hash=$(prefetch-yarn-deps yarn.lock)
 popd
 
 # Element Desktop
 desktop_src="https://raw.githubusercontent.com/vector-im/element-desktop/v$version"
 desktop_src_hash=$(nix-prefetch-github vector-im element-desktop --rev v${version} | jq -r .sha256)
-wget "$desktop_src/package.json" -O element-desktop-package.json
 
 desktop_tmpdir=$(mktemp -d)
 trap 'rm -rf "$desktop_tmpdir"' EXIT

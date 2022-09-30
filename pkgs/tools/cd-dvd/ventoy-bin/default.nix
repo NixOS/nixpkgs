@@ -4,8 +4,8 @@
 , fetchpatch
 , autoPatchelfHook
 , bash
-, coreutils
 , copyDesktopItems
+, coreutils
 , cryptsetup
 , dosfstools
 , e2fsprogs
@@ -15,14 +15,15 @@
 , gnused
 , gtk3
 , hexdump
-, makeWrapper
 , makeDesktopItem
+, makeWrapper
 , ntfs3g
 , parted
 , procps
-, qt5
+, qtbase
 , util-linux
 , which
+, wrapQtAppsHook
 , xfsprogs
 , xz
 , defaultGuiType ? ""
@@ -47,29 +48,23 @@ let
   }.${stdenv.hostPlatform.system}
     or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "ventoy-bin";
-  version = "1.0.78";
+  version = "1.0.80";
 
   src = fetchurl {
-    url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
-    hash = "sha256-vlSnnExtuh85yGFYUBeE7BRsVwl+kn7nSaIx2d3WICk=";
+    url = "https://github.com/ventoy/Ventoy/releases/download/v${finalAttrs.version}/ventoy-${finalAttrs.version}-linux.tar.gz";
+    hash = "sha256-FmMpMUy8VqwbOiRWZdoY76ToSoWWbBGM5h/9VS8rYRY=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "sanitize.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/sanitize.patch?h=057f2d1eb496c7a3aaa8229e99a7f709428fa4c5";
-      sha256 = "sha256-iAtLtM+Q4OsXDK83eCnPNomeNSEqdRLFfK2x7ybPSpk=";
-    })
+    ./000-sanitize.patch
     ./001-add-mips64.diff
     ./002-fix-for-read-only-file-system.diff
   ];
 
   patchFlags = [ "-p0" ];
-
-  dontConfigure = true;
-  dontBuild = true;
 
   postPatch = ''
     # Fix permissions.
@@ -85,7 +80,7 @@ in stdenv.mkDerivation rec {
     makeWrapper
   ]
   ++ lib.optional (withQt5 || withGtk3) copyDesktopItems
-  ++ lib.optional withQt5 qt5.wrapQtAppsHook;
+  ++ lib.optional withQt5 wrapQtAppsHook;
 
   buildInputs = [
     bash
@@ -107,7 +102,7 @@ in stdenv.mkDerivation rec {
   ++ lib.optional withGtk3 gtk3
   ++ lib.optional withNtfs ntfs3g
   ++ lib.optional withXfs xfsprogs
-  ++ lib.optional withQt5 qt5.qtbase;
+  ++ lib.optional withQt5 qtbase;
 
   desktopItems = [
     (makeDesktopItem {
@@ -120,6 +115,9 @@ in stdenv.mkDerivation rec {
       categories = [ "Utility" ];
       startupNotify = true;
     })];
+
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
@@ -159,7 +157,7 @@ in stdenv.mkDerivation rec {
              VentoyPlugson.sh_ventoy-plugson; do
         local bin="''${f%_*}" wrapper="''${f#*_}"
         makeWrapper "$VENTOY_PATH/$bin" "$out/bin/$wrapper" \
-                    --prefix PATH : "${lib.makeBinPath buildInputs}" \
+                    --prefix PATH : "${lib.makeBinPath finalAttrs.buildInputs}" \
                     --chdir "$VENTOY_PATH"
     done
   ''
@@ -168,7 +166,7 @@ in stdenv.mkDerivation rec {
   + lib.optionalString (withGtk3 || withQt5) ''
     echo "${defaultGuiType}" > "$VENTOY_PATH/ventoy_gui_type"
     makeWrapper "$VENTOY_PATH/VentoyGUI.$ARCH" "$out/bin/ventoy-gui" \
-                --prefix PATH : "${lib.makeBinPath buildInputs}" \
+                --prefix PATH : "${lib.makeBinPath finalAttrs.buildInputs}" \
                 --chdir "$VENTOY_PATH"
     mkdir "$out"/share/{applications,pixmaps}
     ln -s "$VENTOY_PATH"/WebUI/static/img/VentoyLogo.png "$out"/share/pixmaps/
@@ -205,9 +203,9 @@ in stdenv.mkDerivation rec {
     '';
     changelog = "https://www.ventoy.net/doc_news.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ k4leg AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "mipsel-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "ventoy";
   };
-}
+})

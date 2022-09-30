@@ -2,6 +2,7 @@
 , lib
 , stdenv
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , gnome
@@ -31,13 +32,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "gjs";
-  version = "1.72.1";
+  version = "1.72.2";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-F8Cx7D8JZnH/i/q6bku/FBmMcBPGBL/Wd6mFjaB5wKs=";
+    sha256 = "sha256-3e43m9xafTA6XYlL4rKBvrisVFCGBOfT8geBqGnaOXc=";
   };
 
   patches = [
@@ -55,15 +56,17 @@ in stdenv.mkDerivation rec {
     makeWrapper
     which # for locale detection
     libxml2 # for xml-stripblanks
+    dbus # for dbus-run-session
+    gobject-introspection
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
-    gobject-introspection
     cairo
     readline
     libsysprof-capture
     spidermonkey_91
-    dbus # for dbus-run-session
   ];
 
   checkInputs = [

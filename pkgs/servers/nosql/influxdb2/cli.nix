@@ -5,13 +5,13 @@
 }:
 
 let
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influx-cli";
     rev = "v${version}";
-    sha256 = "sha256-9FUchI93xLpQwtpbr5S3GfVrApHaemwbnRPIfAWmG6Y=";
+    sha256 = "sha256-i3PN0mvSzPX/hu6fF2oizfioHZ2qU2V+mRwuxT1AYWo=";
   };
 
 in buildGoModule {

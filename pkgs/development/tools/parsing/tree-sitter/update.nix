@@ -39,6 +39,7 @@ let
     "tree-sitter-verilog"
     "tree-sitter-jsdoc"
     "tree-sitter-ql"
+    "tree-sitter-ql-dbscheme"
     "tree-sitter-embedded-template"
     "tree-sitter-tsq"
     "tree-sitter-toml"
@@ -337,6 +338,14 @@ let
     "tree-sitter-tiger" = {
       orga = "ambroisie";
       repo = "tree-sitter-tiger";
+    };
+    "tree-sitter-nickel" = {
+      orga = "nickel-lang";
+      repo = "tree-sitter-nickel";
+    };
+    "tree-sitter-smithy" = {
+      orga = "indoorvivants";
+      repo = "tree-sitter-smithy";
     };
   };
 

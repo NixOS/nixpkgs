@@ -59,9 +59,9 @@ in {
     };
     package = mkOption {
       type = types.package;
-      description = "
+      description = lib.mdDoc ''
         knot-resolver package to use.
-      ";
+      '';
       default = pkgs.knot-resolver;
       defaultText = literalExpression "pkgs.knot-resolver";
       example = literalExpression "pkgs.knot-resolver.override { extraFeatures = true; }";

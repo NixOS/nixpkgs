@@ -67,7 +67,7 @@ let
     {
       options = {
 
-        enable = mkEnableOption "InvoicePlane web application";
+        enable = mkEnableOption (lib.mdDoc "InvoicePlane web application");
 
         stateDir = mkOption {
           type = types.path;
@@ -124,9 +124,12 @@ let
         invoiceTemplates = mkOption {
           type = types.listOf types.path;
           default = [];
-          description = ''
+          description = lib.mdDoc ''
             List of path(s) to respective template(s) which are copied from the 'invoice_templates/pdf' directory.
-            <note><para>These templates need to be packaged before use, see example.</para></note>
+
+            ::: {.note}
+            These templates need to be packaged before use, see example.
+            :::
           '';
           example = literalExpression ''
             let

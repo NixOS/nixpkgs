@@ -17,7 +17,7 @@ in {
 
   options = with types; {
     services.yggdrasil = {
-      enable = mkEnableOption "the yggdrasil system service";
+      enable = mkEnableOption (lib.mdDoc "the yggdrasil system service");
 
       settings = mkOption {
         type = format.type;
@@ -31,29 +31,28 @@ in {
             "tcp://0.0.0.0:xxxxx"
           ];
         };
-        description = ''
+        description = lib.mdDoc ''
           Configuration for yggdrasil, as a Nix attribute set.
 
           Warning: this is stored in the WORLD-READABLE Nix store!
           Therefore, it is not appropriate for private keys. If you
-          wish to specify the keys, use <option>configFile</option>.
+          wish to specify the keys, use {option}`configFile`.
 
-          If the <option>persistentKeys</option> is enabled then the
+          If the {option}`persistentKeys` is enabled then the
           keys that are generated during activation will override
-          those in <option>config</option> or
-          <option>configFile</option>.
+          those in {option}`settings` or
+          {option}`configFile`.
 
           If no keys are specified then ephemeral keys are generated
           and the Yggdrasil interface will have a random IPv6 address
           each time the service is started, this is the default.
 
-          If both <option>configFile</option> and <option>config</option>
+          If both {option}`configFile` and {option}`settings`
           are supplied, they will be combined, with values from
-          <option>configFile</option> taking precedence.
+          {option}`configFile` taking precedence.
 
-          You can use the command <literal>nix-shell -p yggdrasil --run
-          "yggdrasil -genconf"</literal> to generate default
-          configuration values with documentation.
+          You can use the command `nix-shell -p yggdrasil --run "yggdrasil -genconf"`
+          to generate default configuration values with documentation.
         '';
       };
 
@@ -63,7 +62,7 @@ in {
         example = "/run/keys/yggdrasil.conf";
         description = lib.mdDoc ''
           A file which contains JSON configuration for yggdrasil.
-          See the {option}`config` option for more information.
+          See the {option}`settings` option for more information.
         '';
       };
 
@@ -82,7 +81,7 @@ in {
           discovery. The NixOS firewall blocks link-local
           communication, so in order to make local peering work you
           will also need to set `LinkLocalTCPPort` in your
-          yggdrasil configuration ({option}`config` or
+          yggdrasil configuration ({option}`settings` or
           {option}`configFile`) to a port number other than 0,
           and then add that port to
           {option}`networking.firewall.allowedTCPPorts`.
@@ -110,11 +109,11 @@ in {
         description = lib.mdDoc "Yggdrasil package to use.";
       };
 
-      persistentKeys = mkEnableOption ''
+      persistentKeys = mkEnableOption (lib.mdDoc ''
         If enabled then keys will be generated once and Yggdrasil
         will retain the same IPv6 address when the service is
         restarted. Keys are stored at ${keysPath}.
-      '';
+      '');
 
     };
   };

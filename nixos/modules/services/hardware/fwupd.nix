@@ -15,9 +15,9 @@ let
         DisabledPlugins=${lib.concatStringsSep ";" cfg.disabledPlugins}
       '';
     };
-    "fwupd/uefi.conf" = {
-      source = pkgs.writeText "uefi.conf" ''
-        [uefi]
+    "fwupd/uefi_capsule.conf" = {
+      source = pkgs.writeText "uefi_capsule.conf" ''
+        [uefi_capsule]
         OverrideESPMountPoint=${config.boot.loader.efi.efiSysMountPoint}
       '';
     };
@@ -126,6 +126,8 @@ in {
     services.udev.packages = [ cfg.package ];
 
     systemd.packages = [ cfg.package ];
+
+    security.polkit.enable = true;
   };
 
   meta = {

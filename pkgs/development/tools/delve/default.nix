@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "delve";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "go-delve";
     repo = "delve";
     rev = "v${version}";
-    sha256 = "sha256-paNr9aiRG6NP6DIGUojl7VPPPMTeJRpDW8ThDNOQhWM=";
+    sha256 = "sha256-Ga+1xz7gsLoHA0G4UOiJf331hrBVoeB93Pjd0PyATB4=";
   };
 
   vendorSha256 = null;

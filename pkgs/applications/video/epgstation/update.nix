@@ -6,6 +6,7 @@
 , writers
 , jq
 , yq
+, gnused
 }:
 
 let
@@ -14,8 +15,8 @@ let
     attrPath = lib.toLower pname;
     rev-prefix = "v";
   };
-  updateScript = builtins.elemAt updater 0;
-  updateArgs = map (lib.escapeShellArg) (builtins.tail updater);
+  updateScript = builtins.elemAt updater.command 0;
+  updateArgs = map (lib.escapeShellArg) (builtins.tail updater.command);
 in writers.writeBash "update-epgstation" ''
   set -euxo pipefail
 
@@ -44,6 +45,9 @@ in writers.writeBash "update-epgstation" ''
     } | del(.devDependencies, .main, .scripts)' \
     "$SRC/client/package.json" \
     > client/package.json
+
+  # Fix issue with old sqlite3 version pinned that depends on very old node-gyp 3.x
+  ${gnused}/bin/sed -i -e 's/"sqlite3":\s*"5.0.[0-9]\+"/"sqlite3": "5.0.11"/' package.json
 
   # Regenerate node packages to update the pre-overriden epgstation derivation.
   # This must come *after* package.json has been regenerated.

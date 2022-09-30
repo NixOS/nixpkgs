@@ -15,8 +15,8 @@ let
         "{connection_file}"
       ];
       language = "python";
-      logo32 = "${env.sitePackages}/ipykernel/resources/logo-32x32.png";
-      logo64 = "${env.sitePackages}/ipykernel/resources/logo-64x64.png";
+      logo32 = "${env}/${env.sitePackages}/ipykernel/resources/logo-32x32.png";
+      logo64 = "${env}/${env.sitePackages}/ipykernel/resources/logo-64x64.png";
     };
   };
 

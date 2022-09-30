@@ -30,6 +30,7 @@ import ./make-test-python.nix (
         virtualisation.memorySize = 2048;
         virtualisation.cores = 4;
         virtualisation.useNixStoreImage = true;
+        virtualisation.writableStore = false;
 
         imports = [ common/user-account.nix ];
 

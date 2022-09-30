@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zola";
-  version = "0.16.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "getzola";
     repo = "zola";
     rev = "v${version}";
-    sha256 = "sha256-FrCpHavlHf4/g96G7cY0Rymxqi73XUCIAYp4cm//2Ic=";
+    sha256 = "sha256-VkR7fM2WeI1itGq5kl54CVLnNW+NxIodkVKeGv8HoaU=";
   };
 
-  cargoSha256 = "sha256-c6SbQasgpOyqVninAo104oYo1CXpiECZvsB1gxrD7wM=";
+  cargoSha256 = "sha256-74QVFjDlT3ewx4sCK4/r5In0muqboBFEpMFBv2L5YaM=";
 
   nativeBuildInputs = [
     cmake

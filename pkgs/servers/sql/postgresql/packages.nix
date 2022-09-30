@@ -16,6 +16,8 @@ self: super: {
 
     pg_hint_plan = super.callPackage ./ext/pg_hint_plan.nix { };
 
+    pg_ivm = super.callPackage ./ext/pg_ivm.nix { };
+
     pg_rational = super.callPackage ./ext/pg_rational.nix { };
 
     pg_repack = super.callPackage ./ext/pg_repack.nix { };

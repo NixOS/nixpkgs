@@ -10,7 +10,7 @@ in
 {
   options.hardware.rasdaemon = {
 
-    enable = mkEnableOption "RAS logging daemon";
+    enable = mkEnableOption (lib.mdDoc "RAS logging daemon");
 
     record = mkOption {
       type = types.bool;
@@ -76,7 +76,7 @@ in
       example = [ "i7core_edac" ];
     };
 
-    testing = mkEnableOption "error injection infrastructure";
+    testing = mkEnableOption (lib.mdDoc "error injection infrastructure");
   };
 
   config = mkIf cfg.enable {

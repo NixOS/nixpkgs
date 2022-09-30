@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pydeconz";
-  version = "103";
+  version = "104";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Kane610";
     repo = "deconz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nxM9airO1/CF4g9CeyV2WMxh22fBtu0fjz1R3X1zm+o=";
+    hash = "sha256-bG2dhWa+KnSsigmOHE4wShaS56M9z6vqrFNek3PLbic=";
   };
 
   propagatedBuildInputs = [

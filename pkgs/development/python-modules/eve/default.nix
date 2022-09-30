@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "Eve";
-  version = "2.0";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KVKUSPGGLXOusflL4OjzXdJDGi66q+895qvtaBrSFG8=";
+    sha256 = "sha256-34dfYd1DSMAHSB0w6T8YPSQA3GUCgcNEFOD5sM+SapQ=";
   };
 
   disabled = pythonOlder "3.7";

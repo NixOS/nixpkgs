@@ -6,20 +6,20 @@ let
   cfg = config.services.cfssl;
 in {
   options.services.cfssl = {
-    enable = mkEnableOption "the CFSSL CA api-server";
+    enable = mkEnableOption (lib.mdDoc "the CFSSL CA api-server");
 
     dataDir = mkOption {
       default = "/var/lib/cfssl";
       type = types.path;
-      description = ''
+      description = lib.mdDoc ''
         The work directory for CFSSL.
 
-        <note><para>
-          If left as the default value this directory will automatically be
-          created before the CFSSL server starts, otherwise you are
-          responsible for ensuring the directory exists with appropriate
-          ownership and permissions.
-        </para></note>
+        ::: {.note}
+        If left as the default value this directory will automatically be
+        created before the CFSSL server starts, otherwise you are
+        responsible for ensuring the directory exists with appropriate
+        ownership and permissions.
+        :::
       '';
     };
 

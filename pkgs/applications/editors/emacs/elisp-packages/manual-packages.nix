@@ -162,8 +162,6 @@
 
   # Packages made the classical callPackage way
 
-  apheleia = callPackage ./apheleia { };
-
   ebuild-mode = callPackage ./ebuild-mode { };
 
   evil-markdown = callPackage ./evil-markdown { };
@@ -233,6 +231,8 @@
 
   tree-sitter-langs = callPackage ./tree-sitter-langs { final = self; };
   tsc = callPackage ./tsc { };
+
+  yes-no = callPackage ./yes-no { };
 
   youtube-dl = callPackage ./youtube-dl { };
 

@@ -17,9 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MVM0qCZDWcO7/Hnco+0dBqzBLcWD279xjx0slxxlc4w=";
   };
 
-  # this will make it find its own data files (e.g. HRTF profiles)
-  # without any other configuration
-  patches = [ ./search-out.patch ];
+  patches = [
+    # this will make it find its own data files (e.g. HRTF profiles)
+    # without any other configuration
+    ./search-out.patch
+  ];
   postPatch = ''
     substituteInPlace core/helpers.cpp \
       --replace "@OUT@" $out
@@ -29,8 +31,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) stdenv.cc.libc
-    ++ lib.optional alsaSupport alsa-lib
+  buildInputs = lib.optional alsaSupport alsa-lib
     ++ lib.optional dbusSupport dbus
     ++ lib.optional pipewireSupport pipewire
     ++ lib.optional pulseSupport libpulseaudio
@@ -40,11 +41,14 @@ stdenv.mkDerivation rec {
     # Automatically links dependencies without having to rely on dlopen, thus
     # removes the need for NIX_LDFLAGS.
     "-DALSOFT_DLOPEN=OFF"
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # https://github.com/NixOS/nixpkgs/issues/183774
+    "-DOSS_INCLUDE_DIR=${stdenv.cc.libc}/include"
   ];
 
   meta = with lib; {
     description = "OpenAL alternative";
-    homepage = "https://kcat.strangesoft.net/openal.html";
+    homepage = "https://openal-soft.org/";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ftrvxmtrx];
     platforms = platforms.unix;

@@ -1,16 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, cython, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchPypi, cython, pytestCheckHook, setuptools }:
 
 buildPythonPackage rec {
   pname = "cwcwidth";
-  version = "0.1.6";
+  version = "0.1.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b31da599c9f0cf41f39ed10c1ceaa01d6024e31c6cd9aea2885b1f2a6d15fba";
+    sha256 = "sha256-wNZH4S46SxWogeHYT3lpN1FmSEieARJXI33CF51rGVE=";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [ cython setuptools ];
 
   checkInputs = [ pytestCheckHook ];
   preCheck = ''

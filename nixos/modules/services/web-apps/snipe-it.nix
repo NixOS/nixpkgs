@@ -28,7 +28,7 @@ let
 in {
   options.services.snipe-it = {
 
-    enable = mkEnableOption "A free open source IT asset/license management system";
+    enable = mkEnableOption (lib.mdDoc "A free open source IT asset/license management system");
 
     user = mkOption {
       default = "snipeit";
@@ -250,7 +250,7 @@ in {
                 options = {
                   _secret = mkOption {
                     type = nullOr (oneOf [ str path ]);
-                    description = ''
+                    description = lib.mdDoc ''
                       The path to a file containing the value the
                       option should be set to in the final
                       configuration file.

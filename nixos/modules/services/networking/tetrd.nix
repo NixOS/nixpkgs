@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  options.services.tetrd.enable = lib.mkEnableOption "tetrd";
+  options.services.tetrd.enable = lib.mkEnableOption (lib.mdDoc "tetrd");
 
   config = lib.mkIf config.services.tetrd.enable {
     environment = {

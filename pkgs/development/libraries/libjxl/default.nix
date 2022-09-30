@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   pname = "libjxl";
   version = "0.6.1";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "libjxl";
     repo = "libjxl";
@@ -33,6 +35,13 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # present in master, see https://github.com/libjxl/libjxl/pull/1403
+    (fetchpatch {
+      name = "prefixless-pkg-config.patch";
+      url = "https://github.com/libjxl/libjxl/commit/0b906564bfbfd8507d61c5d6a447f545f893227c.patch";
+      sha256 = "1g5c6lrsmgxb9j64pjy8lbdgbvw834m5jyfivy9ppmd8iiv0kkq4";
+    })
+
     # present in master, remove after 0.7?
     (fetchpatch {
       name = "fix-link-lld-macho.patch";
@@ -67,9 +76,12 @@ stdenv.mkDerivation rec {
     pkg-config
   ] ++ lib.optionals buildDocs [
     asciidoc
-    graphviz
     doxygen
     python3
+  ];
+
+  depsBuildBuild = lib.optionals buildDocs [
+    graphviz
   ];
 
   # Functionality not currently provided by this package
@@ -123,6 +135,8 @@ stdenv.mkDerivation rec {
     # * the `gdk-pixbuf` one, which allows applications like `eog` to load jpeg-xl files
     # * the `gimp` one, which allows GIMP to load jpeg-xl files
     # "-DJPEGXL_ENABLE_PLUGINS=ON"
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+   "-DJPEGXL_STATIC=ON"
   ];
 
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";

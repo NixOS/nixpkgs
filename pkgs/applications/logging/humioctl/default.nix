@@ -1,9 +1,9 @@
 { buildGoModule, fetchFromGitHub, installShellFiles, lib }:
 
 let
-  humioCtlVersion = "0.29.1";
-  sha256 = "sha256-89rVUzxUf9lM1KE55m1EQidwc26q/QadY0kgu/afj9I=";
-  vendorSha256 = "sha256-n9gfY6oNxOjU6sGm8Bd8asFlHxm+dzHdVWj4CmfvFpA=";
+  humioCtlVersion = "0.30.1";
+  sha256 = "sha256-w+mZi3KdBnBRII/Mi+1SN/u4dhz2vfqn3nzU6AKk4yM=";
+  vendorSha256 = "sha256-70QxW2nn6PS6HZWllmQ8O39fbUcbe4c/nKAygLnD4n0=";
 in buildGoModule {
     name = "humioctl-${humioCtlVersion}";
     pname = "humioctl";

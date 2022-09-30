@@ -20,6 +20,7 @@
 , meta ? {}
 , groups ? null
 , ignoreCollisions ? false
+, nativeBuildInputs ? []
 , buildInputs ? []
 , extraConfigPaths ? []
 , ...
@@ -102,7 +103,7 @@ let
 
 
   basicEnvArgs = {
-    inherit buildInputs ignoreCollisions;
+    inherit nativeBuildInputs buildInputs ignoreCollisions;
 
     name = name';
 

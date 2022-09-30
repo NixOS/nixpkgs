@@ -6,14 +6,14 @@
 
 let chia = python3Packages.buildPythonApplication rec {
   pname = "chia";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "chia-blockchain";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-OlaAnUy16QBff81XMoYQaZA0wKnsr+/3XEQLBP8IMug=";
+    hash = "sha256-FzKdb6Z/ykKYjpjCr7QR5fxXPNnQbW3bBY97t7DxS90=";
   };
 
   patches = [
@@ -55,7 +55,7 @@ let chia = python3Packages.buildPythonApplication rec {
     concurrent-log-handler
     cryptography
     dnslib
-    dnspythonchia
+    dnspython
     fasteners
     filelock
     keyrings-cryptfile

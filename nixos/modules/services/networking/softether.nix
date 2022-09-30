@@ -16,7 +16,7 @@ in
 
     services.softether = {
 
-      enable = mkEnableOption "SoftEther VPN services";
+      enable = mkEnableOption (lib.mdDoc "SoftEther VPN services");
 
       package = mkOption {
         type = types.package;
@@ -27,12 +27,12 @@ in
         '';
       };
 
-      vpnserver.enable = mkEnableOption "SoftEther VPN Server";
+      vpnserver.enable = mkEnableOption (lib.mdDoc "SoftEther VPN Server");
 
-      vpnbridge.enable = mkEnableOption "SoftEther VPN Bridge";
+      vpnbridge.enable = mkEnableOption (lib.mdDoc "SoftEther VPN Bridge");
 
       vpnclient = {
-        enable = mkEnableOption "SoftEther VPN Client";
+        enable = mkEnableOption (lib.mdDoc "SoftEther VPN Client");
         up = mkOption {
           type = types.lines;
           default = "";

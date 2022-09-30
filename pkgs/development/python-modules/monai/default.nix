@@ -6,20 +6,20 @@
 , ignite
 , numpy
 , pybind11
-, pytorch
+, torch
 , which
 }:
 
 buildPythonPackage rec {
   pname = "monai";
-  version = "0.9.0";
+  version = "1.0.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "MONAI";
-    rev = version;
-    sha256 = "sha256-HxW9WYxt2a7fS9/1E9DtiH+SCTTJoxYBfgZqskYdcvI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BnsgZpkXsY2l6inuzOkuvK4zJqYs2dj7jF5gKKiLnZM=";
   };
 
   # Ninja is not detected by setuptools for some reason even though it's present:
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ ninja which ];
   buildInputs = [ pybind11 ];
-  propagatedBuildInputs = [ numpy pytorch ignite ];
+  propagatedBuildInputs = [ numpy torch ignite ];
 
   BUILD_MONAI = 1;
 

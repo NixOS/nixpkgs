@@ -73,10 +73,10 @@ in
         default = 50;
         type = types.int;
         description = lib.mdDoc ''
-          Maximum amount of memory that can be used by the zram swap devices
+          Maximum total amount of memory that can be stored in the zram swap devices
           (as a percentage of your total memory). Defaults to 1/2 of your total
-          RAM. Run `zramctl` to check how good memory is
-          compressed.
+          RAM. Run `zramctl` to check how good memory is compressed.
+          This doesn't define how much memory will be used by the zram swap devices.
         '';
       };
 
@@ -84,8 +84,9 @@ in
         default = null;
         type = with types; nullOr int;
         description = lib.mdDoc ''
-          Maximum total amount of memory (in bytes) that can be used by the zram
+          Maximum total amount of memory (in bytes) that can be stored in the zram
           swap devices.
+          This doesn't define how much memory will be used by the zram swap devices.
         '';
       };
 
@@ -103,12 +104,12 @@ in
         default = "zstd";
         example = "lz4";
         type = with types; either (enum [ "lzo" "lz4" "zstd" ]) str;
-        description = ''
-          Compression algorithm. <literal>lzo</literal> has good compression,
-          but is slow. <literal>lz4</literal> has bad compression, but is fast.
-          <literal>zstd</literal> is both good compression and fast, but requires newer kernel.
+        description = lib.mdDoc ''
+          Compression algorithm. `lzo` has good compression,
+          but is slow. `lz4` has bad compression, but is fast.
+          `zstd` is both good compression and fast, but requires newer kernel.
           You can check what other algorithms are supported by your zram device with
-          <programlisting>cat /sys/class/block/zram*/comp_algorithm</programlisting>
+          {command}`cat /sys/class/block/zram*/comp_algorithm`
         '';
       };
     };

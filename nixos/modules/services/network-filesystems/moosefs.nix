@@ -85,7 +85,7 @@ in {
         description = lib.mdDoc "Run daemons as user moosefs instead of root.";
       };
 
-      client.enable = mkEnableOption "Moosefs client.";
+      client.enable = mkEnableOption (lib.mdDoc "Moosefs client.");
 
       master = {
         enable = mkOption {
@@ -131,7 +131,7 @@ in {
       };
 
       metalogger = {
-        enable = mkEnableOption "Moosefs metalogger daemon.";
+        enable = mkEnableOption (lib.mdDoc "Moosefs metalogger daemon.");
 
         settings = mkOption {
           type = types.submodule {
@@ -149,7 +149,7 @@ in {
       };
 
       chunkserver = {
-        enable = mkEnableOption "Moosefs chunkserver daemon.";
+        enable = mkEnableOption (lib.mdDoc "Moosefs chunkserver daemon.");
 
         openFirewall = mkOption {
           type = types.bool;

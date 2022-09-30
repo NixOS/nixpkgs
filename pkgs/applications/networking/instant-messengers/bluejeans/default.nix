@@ -44,11 +44,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "bluejeans";
-  version = "2.29.1.3";
+  version = "2.30.1.18";
 
   src = fetchurl {
     url = "https://swdl.bluejeans.com/desktop-app/linux/${getFirst 3 version}/BlueJeans_${version}.rpm";
-    sha256 = "sha256-vWViSJXRPZ4B40LNnoKRZNbxB1YKnaW2ay6GCjnFLGY=";
+    sha256 = "sha256-V/3nmindkuTmUsuAuc0UxldAQe7jfeXWSZWPTXTyLq8=";
   };
 
   nativeBuildInputs = [ rpmextract makeWrapper ];
@@ -111,10 +111,11 @@ stdenv.mkDerivation rec {
 
     cc $localtime64_stub -shared -o "${placeholder "out"}"/opt/BlueJeans/liblocaltime64_stub.so
 
+    # make xdg-open overrideable at runtime
     makeWrapper $out/opt/BlueJeans/bluejeans-v2 $out/bin/bluejeans \
       --set LD_LIBRARY_PATH "${libPath}":"${placeholder "out"}"/opt/BlueJeans \
       --set LD_PRELOAD "$out"/opt/BlueJeans/liblocaltime64_stub.so \
-      --prefix PATH : ${lib.makeBinPath [ xdg-utils ]}
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
 
     substituteInPlace "$out"/share/applications/bluejeans-v2.desktop \
       --replace "/opt/BlueJeans/bluejeans-v2" "$out/bin/bluejeans"

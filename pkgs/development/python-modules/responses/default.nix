@@ -15,6 +15,8 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
+  __darwinAllowLocalNetworking = true;
+
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = pname;

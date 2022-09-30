@@ -38,26 +38,27 @@ _doStrip() {
 stripDirs() {
     local cmd="$1"
     local ranlibCmd="$2"
-    local dirs="$3"
+    local paths="$3"
     local stripFlags="$4"
-    local dirsNew=
+    local pathsNew=
 
-    local d
-    for d in ${dirs}; do
-        if [ -d "$prefix/$d" ]; then
-            dirsNew="${dirsNew} $prefix/$d "
+    local p
+    for p in ${paths}; do
+        if [ -e "$prefix/$p" ]; then
+            pathsNew="${pathsNew} $prefix/$p"
         fi
     done
-    dirs=${dirsNew}
+    paths=${pathsNew}
 
-    if [ -n "${dirs}" ]; then
-        echo "stripping (with command $cmd and flags $stripFlags) in$dirs"
-        find $dirs -type f -exec $cmd $stripFlags '{}' \; 2>/dev/null
+    if [ -n "${paths}" ]; then
+        echo "stripping (with command $cmd and flags $stripFlags) in $paths"
+        # Do not strip lib/debug. This is a directory used by setup-hooks/separate-debug-info.sh.
+        find $paths -type f -a '!' -wholename "$prefix/lib/debug/*" -exec $cmd $stripFlags '{}' \; 2>/dev/null
         # 'strip' does not normally preserve archive index in .a files.
         # This usually causes linking failures against static libs like:
         #   ld: ...-i686-w64-mingw32-stage-final-gcc-13.0.0-lib/i686-w64-mingw32/lib/libstdc++.dll.a:
         #     error adding symbols: archive has no index; run ranlib to add one
         # Restore the index by running 'ranlib'.
-        find $dirs -name '*.a' -type f -exec $ranlibCmd '{}' \; 2>/dev/null
+        find $paths -name '*.a' -type f -exec $ranlibCmd '{}' \; 2>/dev/null
     fi
 }

@@ -10,7 +10,7 @@ in
 
   options = {
     services.pixiecore = {
-      enable = mkEnableOption "Pixiecore";
+      enable = mkEnableOption (lib.mdDoc "Pixiecore");
 
       openFirewall = mkOption {
         type = types.bool;

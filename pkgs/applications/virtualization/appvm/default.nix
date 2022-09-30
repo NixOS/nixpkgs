@@ -32,7 +32,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-8eU+Mf5dxL/bAMMShXvj8I1Kdd4ysBTWvgYIXwLStPI=";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postFixup = ''
     wrapProgram $out/bin/appvm \

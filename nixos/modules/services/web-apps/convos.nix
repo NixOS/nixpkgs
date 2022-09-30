@@ -7,7 +7,7 @@ let
 in
 {
   options.services.convos = {
-    enable = mkEnableOption "Convos";
+    enable = mkEnableOption (lib.mdDoc "Convos");
     listenPort = mkOption {
       type = types.port;
       default = 3000;

@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "aardvark-dns";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-HxikpGeQlwulSedFCwWLADHKMlFrsgC7bMoZ1OxGCUE=";
+    sha256 = "sha256-pIbhrYiZOZ0GoynnHvp+h5E4O4syiwVhQeczAv1zjTo=";
   };
 
-  cargoHash = "sha256-uP9caaOdFWs73T8icHE9uXNo63NdZrQ5afXFb4Iy1+I=";
+  cargoHash = "sha256-2aFvFP64vy0FK0k0Uq6sPVi42E5easxOUlkcZjrjoMs=";
 
   meta = with lib; {
     description = "Authoritative dns server for A/AAAA container records";

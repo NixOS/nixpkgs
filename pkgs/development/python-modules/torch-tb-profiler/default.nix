@@ -3,7 +3,7 @@
 , lib
 , pandas
 , pytestCheckHook
-, pytorch
+, torch
 , tensorboard
 , torchvision
 }:
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pandas tensorboard ];
 
-  checkInputs = [ pytestCheckHook pytorch torchvision ];
+  checkInputs = [ pytestCheckHook torch torchvision ];
 
   disabledTests = [
     # Tests that attempt to access the filesystem in naughty ways.

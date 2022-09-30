@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wslu";
-  version = "3.2.4";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "wslutilities";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-bZFccqFZF6Xt0yAw6JSONNhosBliHQc7KJQ8Or7UvMA=";
+    hash = "sha256-bW/otr1kqmH2N5sD3R9kYCZyn+BbBZ2fCVGlP1pFnK8=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

@@ -28,7 +28,7 @@ let
 in
   {
     options.services.ankisyncd = {
-      enable = mkEnableOption "ankisyncd";
+      enable = mkEnableOption (lib.mdDoc "ankisyncd");
 
       package = mkOption {
         type = types.package;

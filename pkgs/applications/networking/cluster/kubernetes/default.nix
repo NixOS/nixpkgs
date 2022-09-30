@@ -21,13 +21,13 @@
 
 buildGoModule rec {
   pname = "kubernetes";
-  version = "1.23.9";
+  version = "1.23.12";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "sha256-uuadINLKZ/hxewE9Qx5wBoGMWrpmTJPDgZh0djadAhc=";
+    sha256 = "sha256-PuSjMyve7YxxuVr3ztM6nM86gl3GpcIa+LHajzfXODU=";
   };
 
   vendorSha256 = null;
@@ -91,5 +91,5 @@ buildGoModule rec {
     platforms = platforms.linux;
   };
 
-  passthru.tests = nixosTests.kubernetes;
+  passthru.tests = nixosTests.kubernetes // { inherit kubectl; };
 }

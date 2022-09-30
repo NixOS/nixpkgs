@@ -49,12 +49,17 @@ let
       };
 
       # transform all plugins into an attrset
-      # { optional = bool; plugin = package; dest = filename; }
-      pluginsNormalized = map (x: if x ? plugin then { dest = "init.vim"; optional = false; } // x else { plugin = x; optional = false;}) plugins;
+      # { optional = bool; plugin = package; }
+      pluginsNormalized = let
+        defaultPlugin = {
+          plugin = null;
+          config = null;
+          optional = false;
+        };
+      in
+        map (x: defaultPlugin // (if (x ? plugin) then x else { plugin = x; })) plugins;
 
-
-
-      pluginRC = lib.concatMapStrings (p: p.config or "") pluginsNormalized;
+      pluginRC = lib.foldl (acc: p: if p.config != null then acc ++ [p.config] else acc) []  pluginsNormalized;
 
       pluginsPartitioned = lib.partition (x: x.optional == true) pluginsNormalized;
       requiredPlugins = vimUtils.requiredPluginsForPackage myVimPackage;
@@ -101,6 +106,7 @@ let
           flags = [
             "--cmd" (lib.intersperse "|" hostProviderViml)
             "--cmd" "set packpath^=${vimUtils.packDir packDirArgs}"
+            "--cmd" "set rtp^=${vimUtils.packDir packDirArgs}"
             ];
         in
         [
@@ -110,13 +116,17 @@ let
         ] ++ lib.optionals (binPath != "") [
           "--suffix" "PATH" ":" binPath
         ] ++ lib.optionals (luaEnv != null) [
-          "--prefix" "LUA_PATH" ";" (neovim-unwrapped.lua.pkgs.lib.genLuaPathAbsStr luaEnv)
-          "--prefix" "LUA_CPATH" ";" (neovim-unwrapped.lua.pkgs.lib.genLuaCPathAbsStr luaEnv)
+          "--prefix" "LUA_PATH" ";" (neovim-unwrapped.lua.pkgs.luaLib.genLuaPathAbsStr luaEnv)
+          "--prefix" "LUA_CPATH" ";" (neovim-unwrapped.lua.pkgs.luaLib.genLuaCPathAbsStr luaEnv)
         ];
 
       manifestRc = vimUtils.vimrcContent ({ customRC = ""; }) ;
       # we call vimrcContent without 'packages' to avoid the init.vim generation
-      neovimRcContent = vimUtils.vimrcContent ({ beforePlugins = ""; customRC = pluginRC + customRC; packages = null; });
+      neovimRcContent = vimUtils.vimrcContent ({
+        beforePlugins = "";
+        customRC = lib.concatStringsSep "\n" (pluginRC ++ [customRC]);
+        packages = null;
+      });
     in
 
     builtins.removeAttrs args ["plugins"] // {
@@ -160,8 +170,8 @@ let
           throw "The neovim legacy wrapper doesn't support configure.plug anymore, please setup your plugins via 'configure.packages' instead"
         else
           lib.flatten (lib.mapAttrsToList genPlugin (configure.packages or {}));
-      genPlugin = packageName: {start ? [], opt?[]}:
-        start ++ opt;
+      genPlugin = packageName: {start ? [], opt ? []}:
+        start ++ (map (p: { plugin = p; optional = true; }) opt);
 
       res = makeNeovimConfig {
         inherit withPython3;

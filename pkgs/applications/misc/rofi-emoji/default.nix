@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rofi-emoji";
-  version = "3.0.1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "Mange";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pYNeAz8MKBM3VSkQfP4hgTbEy9haGmBmPf/nu9tvKts=";
+    sha256 = "sha256-YMQG0XO6zVei6GfBdgI7jtB7px12e+xvOMxZ1QHf5kQ=";
   };
 
   patches = [
@@ -46,13 +46,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    makeWrapper
   ];
 
   buildInputs = [
     cairo
     glib
     libnotify
-    makeWrapper
     rofi-unwrapped
     wl-clipboard
     xclip

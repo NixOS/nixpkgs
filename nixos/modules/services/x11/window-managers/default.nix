@@ -59,10 +59,10 @@ in
           name = "wmii";
           start = "...";
         }];
-        description = ''
+        description = lib.mdDoc ''
           Internal option used to add some common line to window manager
           scripts before forwarding the value to the
-          <varname>displayManager</varname>.
+          `displayManager`.
         '';
         apply = map (d: d // {
           manage = "window";
@@ -73,8 +73,8 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "wmii";
-        description = ''
-          <emphasis role="strong">Deprecated</emphasis>, please use <xref linkend="opt-services.xserver.displayManager.defaultSession"/> instead.
+        description = lib.mdDoc ''
+          **Deprecated**, please use [](#opt-services.xserver.displayManager.defaultSession) instead.
 
           Default window manager loaded if none have been chosen.
         '';

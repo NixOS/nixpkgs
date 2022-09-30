@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "10zxih7gmyhq0az1mnsw2x563l4bbwcns794s4png8rf4d6hjszm";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ perl libX11 libXinerama libjpeg libpng libtiff
-    librsvg glib gtk2 libXxf86vm libXext poppler xine-lib ghostscript makeWrapper ];
+    librsvg glib gtk2 libXxf86vm libXext poppler xine-lib ghostscript ];
 
   # The program tries to dlopen Xxf86vm, Xext and Xinerama, so we use the
   # trick on NIX_LDFLAGS and dontPatchELF to make it find them.

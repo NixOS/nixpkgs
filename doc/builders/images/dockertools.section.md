@@ -36,6 +36,9 @@ buildImage {
     WorkingDir = "/data";
     Volumes = { "/data" = { }; };
   };
+
+  diskSize = 1024;
+  buildVMMemorySize = 512;
 }
 ```
 
@@ -58,6 +61,10 @@ The above example will build a Docker image `redis/latest` from the given base i
 > **_NOTE:_** Using this parameter requires the `kvm` device to be available.
 
 - `config` is used to specify the configuration of the containers that will be started off the built image in Docker. The available options are listed in the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
+
+- `diskSize` is used to specify the disk size of the VM used to build the image in megabytes. By default it's 1024 MiB.
+
+- `buildVMMemorySize` is used to specify the memory size of the VM to build the image in megabytes. By default it's 512 MiB.
 
 After the new layer has been created, its closure (to which `contents`, `config` and `runAsRoot` contribute) will be copied in the layer itself. Only new dependencies that are not already in the existing layers will be copied.
 
@@ -301,7 +308,44 @@ The parameters relative to the base image have the same synopsis as described in
 
 The `name` argument is the name of the derivation output, which defaults to `fromImage.name`.
 
-## shadowSetup {#ssec-pkgs-dockerTools-shadowSetup}
+## Environment Helpers {#ssec-pkgs-dockerTools-helpers}
+
+Some packages expect certain files to be available globally.
+When building an image from scratch (i.e. without `fromImage`), these files are missing.
+`pkgs.dockerTools` provides some helpers to set up an environment with the necessary files.
+You can include them in `copyToRoot` like this:
+
+```nix
+buildImage {
+  name = "environment-example";
+  copyToRoot = with pkgs.dockerTools; [
+    usrBinEnv
+    binSh
+    caCertificates
+    fakeNss
+  ];
+}
+```
+
+### usrBinEnv {#sssec-pkgs-dockerTools-helpers-usrBinEnv}
+
+This provides the `env` utility at `/usr/bin/env`.
+
+### binSh {#sssec-pkgs-dockerTools-helpers-binSh}
+
+This provides `bashInteractive` at `/bin/sh`.
+
+### caCertificates {#sssec-pkgs-dockerTools-helpers-caCertificates}
+
+This sets up `/etc/ssl/certs/ca-certificates.crt`.
+
+### fakeNss {#sssec-pkgs-dockerTools-helpers-fakeNss}
+
+Provides `/etc/passwd` and `/etc/group` that contain root and nobody.
+Useful when packaging binaries that insist on using nss to look up
+username/groups (like nginx).
+
+### shadowSetup {#ssec-pkgs-dockerTools-shadowSetup}
 
 This constant string is a helper for setting up the base files for managing users and groups, only if such files don't exist already. It is suitable for being used in a [`buildImage` `runAsRoot`](#ex-dockerTools-buildImage-runAsRoot) script for cases like in the example below:
 

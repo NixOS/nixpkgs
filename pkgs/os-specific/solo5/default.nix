@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
     sha256 = "sha256-8LftT22XzmmWxgYez+BAHDX4HOyl5DrwrpuO2+bqqcY=";
   };
 
-  patches = [ ./test_sleep.patch ];
+  patches = [ ./fix_paths.patch ./test_sleep.patch ];
 
   hardeningEnable = [ "pie" ];
 

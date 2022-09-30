@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, erlang, icu, openssl, spidermonkey_91
-, coreutils, bash, makeWrapper, python3, nixosTests }:
+, coreutils, bash, python3, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "couchdb";
@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-acn9b4ATNVf2igLpLdpypP1kbWRvQp9Fu4Mpow+C8g4=";
   };
 
-  buildInputs = [ erlang icu openssl spidermonkey_91 (python3.withPackages(ps: with ps; [ requests ]))];
+  nativeBuildInputs = [
+    erlang
+  ];
+  buildInputs = [ icu openssl spidermonkey_91 (python3.withPackages(ps: with ps; [ requests ]))];
   postPatch = ''
     substituteInPlace src/couch/rebar.config.script --replace '/usr/include/mozjs-91' "${spidermonkey_91.dev}/include/mozjs-91"
     patchShebangs bin/rebar

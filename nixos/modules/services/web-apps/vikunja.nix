@@ -10,7 +10,7 @@ let
   usePostgresql = cfg.database.type == "postgres";
 in {
   options.services.vikunja = with lib; {
-    enable = mkEnableOption "vikunja service";
+    enable = mkEnableOption (lib.mdDoc "vikunja service");
     package-api = mkOption {
       default = pkgs.vikunja-api;
       type = types.package;

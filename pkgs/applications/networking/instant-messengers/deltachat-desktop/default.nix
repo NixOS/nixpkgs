@@ -73,16 +73,13 @@ in nodePackages.deltachat-desktop.override rec {
   USE_SYSTEM_LIBDELTACHAT = "true";
   VERSION_INFO_GIT_REF = src.rev;
 
-  preRebuild = ''
-    substituteInPlace package.json \
-      --replace "node ./bin/check-nodejs-version.js" true
-  '';
-
-  postInstall = ''
+  postRebuild = ''
     rm -r node_modules/deltachat-node/node/prebuilds
 
     npm run build4production
+  '';
 
+  postInstall = ''
     npm prune --production
 
     install -D $out/lib/node_modules/deltachat-desktop/build/icon.png \

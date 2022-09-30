@@ -9,11 +9,11 @@
 
 let unwrapped = stdenv.mkDerivation rec {
   pname = "pidgin";
-  version = "2.14.8";
+  version = "2.14.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/pidgin/pidgin-${version}.tar.bz2";
-    sha256 = "1jjc15pfyw3012q5ffv7q4r88wv07ndqh0wakyxa2k0w4708b01z";
+    sha256 = "sha256-RUsbkovGvLsYM1OvMPv95VlfIkWjQjoaRubJei3yKBA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

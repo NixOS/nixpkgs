@@ -35,7 +35,7 @@ bundlerApp {
 
   exes = [ "image_optim" ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     wrapProgram $out/bin/image_optim \

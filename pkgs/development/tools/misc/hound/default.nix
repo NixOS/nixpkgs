@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "hound";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "hound-search";
     repo = "hound";
     rev = "v${version}";
-    sha256 = "sha256-1URhb+ZrtP5eGS2o7lBxvAxQJR/J6oE+pCbJ7sQb0X4=";
+    sha256 = "sha256-M1c4lsD7DQo5+RCCDdyn9FeGuGngMsg1qSrxM2wCzpg=";
   };
 
   vendorSha256 = "sha256-ZgF/PB3VTPx367JUkhOkSEK1uvqENNG0xuNXvCGENnQ=";

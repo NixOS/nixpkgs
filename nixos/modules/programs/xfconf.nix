@@ -11,7 +11,7 @@ in {
 
   options = {
     programs.xfconf = {
-      enable = mkEnableOption "Xfconf, the Xfce configuration storage system";
+      enable = mkEnableOption (lib.mdDoc "Xfconf, the Xfce configuration storage system");
     };
   };
 
