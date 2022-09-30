@@ -34,7 +34,7 @@ with urlopen('https://chromiumdash.appspot.com/cros/download_serving_builds_csv?
 
 chrome_major_version = chrome_version[0]
 chromeos_tip_build = platform_version[0]
-release_branch = f'release-R{chrome_major_version}-{chromeos_tip_build}.B-chromeos'
+release_branch = f'release-R{chrome_major_version}-{chromeos_tip_build}.B'
 
 # Determine the git revision.
 with urlopen(f'https://chromium.googlesource.com/chromiumos/platform/crosvm/+/refs/heads/{release_branch}?format=JSON') as resp:
