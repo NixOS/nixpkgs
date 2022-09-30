@@ -18,8 +18,10 @@ let
           # passwordless ssh server
           services.openssh = {
             enable = true;
-            permitRootLogin = "yes";
-            extraConfig = "PermitEmptyPasswords yes";
+            settings = {
+              PermitRootLogin = "yes";
+              PermitEmptyPasswords = true;
+            };
           };
 
           users = {

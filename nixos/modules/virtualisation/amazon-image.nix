@@ -85,7 +85,7 @@ in
     # Allow root logins only using the SSH key that the user specified
     # at instance creation time.
     services.openssh.enable = true;
-    services.openssh.permitRootLogin = "prohibit-password";
+    services.openssh.settings.PermitRootLogin = "prohibit-password";
 
     # Enable the serial console on ttyS0
     systemd.services."serial-getty@ttyS0".enable = true;
