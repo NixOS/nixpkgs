@@ -23229,6 +23229,8 @@ with pkgs;
 
   listmonk = callPackage ../servers/mail/listmonk { };
 
+  livekit = callPackage ../servers/livekit { };
+
   livepeer = callPackage ../servers/livepeer { };
 
   lwan = callPackage ../servers/http/lwan { };
