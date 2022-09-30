@@ -22330,10 +22330,7 @@ with pkgs;
 
   umockdev = callPackage ../development/libraries/umockdev { };
 
-  unconvert = callPackage ../development/tools/unconvert {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
-  };
+  unconvert = callPackage ../development/tools/unconvert { };
 
   uncover = callPackage ../tools/security/uncover { };
 
