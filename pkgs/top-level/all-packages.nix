@@ -23231,6 +23231,8 @@ with pkgs;
 
   livekit = callPackage ../servers/livekit { };
 
+  livekit-cli = callPackage ../servers/livekit/cli.nix { };
+
   livepeer = callPackage ../servers/livepeer { };
 
   lwan = callPackage ../servers/http/lwan { };
