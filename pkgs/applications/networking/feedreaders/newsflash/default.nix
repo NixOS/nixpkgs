@@ -17,7 +17,6 @@
 , glib-networking
 , librsvg
 , gst_all_1
-, xdg-utils
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -87,13 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-good
     gst-plugins-bad
   ]);
-
-  preFixup = ''
-    gappsWrapperArgs+=(--suffix PATH : "${lib.makeBinPath [
-      # Open links in browser
-      xdg-utils
-    ]}")
-  '';
 
   meta = with lib; {
     description = "A modern feed reader designed for the GNOME desktop";
