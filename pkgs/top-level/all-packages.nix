@@ -22740,7 +22740,8 @@ with pkgs;
   quicklispPackages = quicklispPackagesSBCL;
 
   # Alternative lisp-modules implementation
-  lispPackages_new = callPackage ../development/lisp-modules-new/lisp-packages.nix {};
+  lispPackages_new = recurseIntoAttrs (callPackage ../development/lisp-modules-new/lisp-packages.nix {});
+
 
   ### DEVELOPMENT / PERL MODULES
 
