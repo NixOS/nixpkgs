@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Indexer and CGI search front-end built on Xapian library";
     homepage = "https://xapian.org/";
+    changelog = "https://xapian.org/docs/xapian-omega-${version}/NEWS";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
