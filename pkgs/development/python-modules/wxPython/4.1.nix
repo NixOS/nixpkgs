@@ -94,10 +94,11 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Cross platform GUI toolkit for Python, Phoenix version";
     homepage = "http://wxpython.org/";
     license = licenses.wxWindows;
     maintainers = with maintainers; [ tfmoraes ];
+    # mv: cannot stat 'dist': No such file or directory
+    broken = true; # at 2022-09-30
   };
 }

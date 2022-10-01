@@ -74,6 +74,8 @@ buildPythonPackage rec {
     description = "Cross platform GUI toolkit for Python, Phoenix version";
     homepage = "http://wxpython.org/";
     license = lib.licenses.wxWindows;
+    # mv: cannot stat 'dist': No such file or directory
+    broken = true; # at 2022-09-30
   };
 
 }
