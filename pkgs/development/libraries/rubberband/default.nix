@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rubberband";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchurl {
     url = "https://breakfastquay.com/files/releases/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-32UwtAPIMAojlz3yLzbzwmPwENU3kgY+QR9jPOu57YU=";
+    sha256 = "sha256-uVp22lzbOWZ3DGARXs2Dj4QGESD4hMO/3JBPdZMeyao=";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja ];
