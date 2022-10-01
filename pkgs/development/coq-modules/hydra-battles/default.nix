@@ -16,7 +16,7 @@ with lib;
     { case = range "8.11" "8.12"; out = "0.4"; }
   ] null;
 
-  useDune2 = true;
+  useDune = true;
 
   meta = {
     description = "Exploration of some properties of Kirby and Paris' hydra battles, with the help of Coq";
