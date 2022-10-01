@@ -30,14 +30,14 @@ let
   php81-unit = php81.override phpConfig;
 
 in stdenv.mkDerivation rec {
-  version = "1.27.0";
+  version = "1.28.0";
   pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-H/WIrCyocEO/HZfVMyI9IwD565JsUIzC8n1qUYmCvWc=";
+    sha256 = "sha256-nsalloOghC8tOMRP/N/L2raOmWwA4cz6Yr6H3IHHbR4=";
   };
 
   nativeBuildInputs = [ which ];
