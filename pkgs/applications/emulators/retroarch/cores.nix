@@ -31,7 +31,6 @@
 , portaudio
 , python3
 , retroarch
-, SDL
 , sfml
 , snappy
 , udev
@@ -56,7 +55,7 @@ let
     , stdenvOverride ? stdenv
     , src ? (getCoreSrc core)
     , broken ? false
-    , version ? "unstable-2022-04-21"
+    , version ? "unstable-2022-10-01"
     , platforms ? retroarch.meta.platforms
       # The resulting core file is based on core name
       # Setting `normalizeCore` to `true` will convert `-` to `_` on the core filename
@@ -331,7 +330,6 @@ in
     core = "dolphin";
     description = "Port of Dolphin to libretro";
     license = lib.licenses.gpl2Plus;
-
     extraNativeBuildInputs = [ cmake curl pkg-config ];
     extraBuildInputs = [
       libGLU
@@ -452,7 +450,7 @@ in
     core = "hatari";
     description = "Port of Hatari to libretro";
     license = lib.licenses.gpl2Only;
-    extraBuildInputs = [ SDL zlib ];
+    extraBuildInputs = [ zlib ];
     extraNativeBuildInputs = [ which ];
     dontConfigure = true;
     makeFlags = [ "EXTERNAL_ZLIB=1" ];
@@ -629,10 +627,6 @@ in
     license = lib.licenses.gpl3Only;
     extraBuildInputs = [ libGLU libGL libpng ];
     makefile = "Makefile";
-    postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
-      sed -i -e '1 i\CPUFLAGS += -DARM_FIX -DNO_ASM -DARM_ASM -DDONT_WANT_ARM_OPTIMIZATIONS -DARM64' Makefile \
-      && sed -i -e 's,CPUFLAGS  :=,,g' Makefile
-    '';
   };
 
   pcsx2 = mkLibRetroCore {
@@ -666,7 +660,7 @@ in
     platforms = lib.platforms.x86;
   };
 
-  pcsx_rearmed = mkLibRetroCore {
+  pcsx-rearmed = mkLibRetroCore {
     core = "pcsx_rearmed";
     description = "Port of PCSX ReARMed with GNU lightning to libretro";
     license = lib.licenses.gpl2Only;
@@ -677,11 +671,7 @@ in
     core = "picodrive";
     description = "Fast MegaDrive/MegaCD/32X emulator";
     license = "MAME";
-
-    extraBuildInputs = [ libpng SDL ];
-    SDL_CONFIG = "${lib.getDev SDL}/bin/sdl-config";
-    dontAddPrefix = true;
-    configurePlatforms = [ ];
+    dontConfigure = true;
     makeFlags = lib.optional stdenv.hostPlatform.isAarch64 [ "platform=aarch64" ];
   };
 
@@ -747,7 +737,7 @@ in
     core = "scummvm";
     description = "Libretro port of ScummVM";
     license = lib.licenses.gpl2Only;
-    extraBuildInputs = [ fluidsynth libjpeg libvorbis libGLU libGL SDL ];
+    extraBuildInputs = [ fluidsynth libjpeg libvorbis libGLU libGL ];
     makefile = "Makefile";
     preConfigure = "cd backends/platform/libretro/build";
   };
@@ -800,9 +790,8 @@ in
     core = "stella";
     description = "Port of Stella to libretro";
     license = lib.licenses.gpl2Only;
-    extraBuildInputs = [ libpng pkg-config SDL ];
     makefile = "Makefile";
-    preBuild = "cd src/libretro";
+    preBuild = "cd src/os/libretro";
     dontConfigure = true;
   };
 
@@ -844,7 +833,7 @@ in
     core = "tic80";
     description = "Port of TIC-80 to libretro";
     license = lib.licenses.mit;
-    extraNativeBuildInputs = [ cmake pkg-config libGL libGLU ];
+    extraNativeBuildInputs = [ cmake pkg-config ];
     makefile = "Makefile";
     cmakeFlags = [
       "-DBUILD_LIBRETRO=ON"
