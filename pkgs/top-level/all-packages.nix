@@ -892,6 +892,8 @@ with pkgs;
 
   dotfiles = callPackage ../applications/misc/dotfiles { };
 
+  dotherside = libsForQt5.callPackage ../development/libraries/dotherside { };
+
   # Dotnet
 
   csharp-ls = callPackage ../development/tools/language-servers/csharp-ls { };
