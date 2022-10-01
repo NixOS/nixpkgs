@@ -5492,6 +5492,8 @@ self: super: with self; {
 
   life360 = callPackage ../development/python-modules/life360 { };
 
+  lifelines = callPackage ../development/python-modules/lifelines { };
+
   lightgbm = callPackage ../development/python-modules/lightgbm { };
 
   lightning-utilities  = callPackage ../development/python-modules/lightning-utilities { };
