@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, autoreconfHook
-, libuuid, zlib }:
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, libuuid
+, zlib
+
+# tests
+, mu
+}:
 
 let
   generic = version: hash: stdenv.mkDerivation {
@@ -28,6 +36,10 @@ let
       substituteInPlace config.h \
         --replace "#define HAVE___EXP10 1" "#undef HAVE___EXP10"
     '';
+
+    passthru.tests = {
+      inherit mu;
+    };
 
     meta = with lib; {
       description = "Search engine library";
