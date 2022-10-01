@@ -1,22 +1,17 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, libpcap
-}:
+{ lib, buildGoModule, fetchFromGitHub, libpcap }:
 
 buildGoModule rec {
   pname = "httpdump";
-  version = "20210126-${lib.strings.substring 0 7 rev}";
-  rev = "d2e0deadca5f9ec2544cb252da3c450966d1860e";
+  version = "unstable-2022-07-27";
 
   src = fetchFromGitHub {
     owner = "hsiafan";
     repo = pname;
-    inherit rev;
-    sha256 = "0yh8kxy1k23lln09b614limwk9y59r7cn5qhbnzc06ga4mxfczv2";
+    rev = "49c42ed00eb34bec5e1c7926bbf6272f47b7dafb";
+    sha256 = "sha256-Teyg4EjFP2wq8yCV+jGpvUyzpsnJ55oqrOedko1IIcQ=";
   };
 
-  vendorSha256 = "0lb1p63lzn1ngj54bar9add7w0azvgcq3azhv9c5glk3ykv9c3iy";
+  vendorSha256 = "sha256-i18RkxuTyoz6+td1dYi2bGJP6SsZuBd/uRDDqqY04Go=";
 
   propagatedBuildInputs = [ libpcap ];
 
