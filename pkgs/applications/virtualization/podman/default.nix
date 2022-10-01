@@ -85,6 +85,7 @@ buildGoModule rec {
     inherit (nixosTests) podman;
     # related modules
     inherit (nixosTests)
+      podman-apparmor
       podman-tls-ghostunnel
       podman-dnsname
       ;

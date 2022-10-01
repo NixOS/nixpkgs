@@ -98,7 +98,8 @@ in
 
     extraPackages = mkOption {
       type = with types; listOf package;
-      default = [ ];
+      default = [ ]
+        ++ lib.optional config.security.apparmor.enable pkgs.apparmor-parser;
       example = lib.literalExpression ''
         [
           pkgs.gvisor
@@ -144,6 +145,10 @@ in
           };
         };
       };
+
+      security.apparmor.includes."tunables/global" = ''
+        include "${pkgs.apparmor-profiles}/etc/apparmor.d/tunables/global"
+      '';
 
       systemd.packages = [ cfg.package ];
 
