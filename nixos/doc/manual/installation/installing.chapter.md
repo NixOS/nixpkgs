@@ -157,6 +157,14 @@ update /etc/fstab.
     # parted /dev/sda -- set 3 esp on
     ```
 
+::: {.note}
+It can be recommended to run a `wipefs -a` on the boot ESP partition, in order to
+remove any left signatures, if any previous mkfs was run on the ESP. Failling to
+do so will lead to a failure in any bootloader installation during `nixos-install`.
+GRUB will fail when calling `blkid` with the error `Unknown filesystem`, `systemd-boot`
+also fails with another kind of error.
+:::
+
 Once complete, you can follow with
 [](#sec-installation-partitioning-formatting).
 

@@ -209,6 +209,19 @@ OK
 </programlisting>
         </listitem>
       </orderedlist>
+      <note>
+        <para>
+          It can be recommended to run a <literal>wipefs -a</literal> on
+          the boot ESP partition, in order to remove any left
+          signatures, if any previous mkfs was run on the ESP. Failling
+          to do so will lead to a failure in any bootloader installation
+          during <literal>nixos-install</literal>. GRUB will fail when
+          calling <literal>blkid</literal> with the error
+          <literal>Unknown filesystem</literal>,
+          <literal>systemd-boot</literal> also fails with another kind
+          of error.
+        </para>
+      </note>
       <para>
         Once complete, you can follow with
         <xref linkend="sec-installation-partitioning-formatting" />.
