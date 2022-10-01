@@ -7487,6 +7487,8 @@ with pkgs;
 
   hdfview = callPackage ../tools/misc/hdfview { };
 
+  hdoc = callPackage ../development/tools/documentation/hdoc { llvmPackages = llvmPackages_14; };
+
   hecate = callPackage ../applications/editors/hecate { };
 
   heaptrack = libsForQt5.callPackage ../development/tools/profiling/heaptrack {};
