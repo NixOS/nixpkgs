@@ -10,6 +10,11 @@ buildGoModule rec {
   pname = "gotop";
   version = "4.2.0";
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   src = fetchFromGitHub {
     owner = "xxxserxxx";
     repo = pname;
