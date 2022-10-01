@@ -465,7 +465,13 @@ in
     networking.wireguard = {
 
       enable = mkOption {
-        description = lib.mdDoc "Whether to enable WireGuard.";
+        description = lib.mdDoc ''
+          Whether to enable WireGuard.
+
+          Please note that {option}`systemd.network.netdevs` has more features
+          and is better maintained. When building new things, it is advised to
+          use that instead.
+        '';
         type = types.bool;
         # 2019-05-25: Backwards compatibility.
         default = cfg.interfaces != {};
@@ -474,7 +480,13 @@ in
       };
 
       interfaces = mkOption {
-        description = lib.mdDoc "WireGuard interfaces.";
+        description = lib.mdDoc ''
+          WireGuard interfaces.
+
+          Please note that {option}`systemd.network.netdevs` has more features
+          and is better maintained. When building new things, it is advised to
+          use that instead.
+        '';
         default = {};
         example = {
           wg0 = {

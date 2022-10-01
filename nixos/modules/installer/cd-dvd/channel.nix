@@ -31,6 +31,7 @@ let
 in
 
 {
+  nix.registry.nixpkgs.flake.outPath = builtins.path { name = "source"; path = pkgs.path; };
   # Provide the NixOS/Nixpkgs sources in /etc/nixos.  This is required
   # for nixos-install.
   boot.postBootCommands = mkAfter
