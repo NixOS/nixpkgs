@@ -36,5 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/marcusva/py-sdl2";
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ pmiddend ];
+    broken = true; # at 2022-09-30, patch fail to apply.
   };
 }
