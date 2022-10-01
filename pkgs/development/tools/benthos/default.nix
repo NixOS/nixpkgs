@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "benthos";
-  version = "4.3.0";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "benthosdev";
     repo = "benthos";
     rev = "v${version}";
-    sha256 = "sha256-tRB9eTeyEyPkiR/sph76CMbPjJUNoDzfYuHmtFAzY7E=";
+    sha256 = "sha256-aj4MkVj1+9IcyiPWOilrk/x5Rwtoq9wwP4oCtgeb+vU=";
   };
 
-  vendorSha256 = "sha256-nnaBQ7ADdAdo/+RQzXJHBBpXgTmxny0O/ij+eWsS5YM=";
+  vendorSha256 = "sha256-aQ3z8KBTLHNs5y+8I02AIZc7p5fr10GA99YdizwSJko=";
 
   doCheck = false;
 
