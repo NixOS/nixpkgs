@@ -37214,10 +37214,7 @@ with pkgs;
 
   zfs-replicate = python3Packages.callPackage ../tools/backup/zfs-replicate { };
 
-  zrepl = callPackage ../tools/backup/zrepl {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
-  };
+  zrepl = callPackage ../tools/backup/zrepl { };
 
   uhubctl = callPackage ../tools/misc/uhubctl {};
 
