@@ -12,20 +12,23 @@
 }:
 
 let
-  version = "2.1.1";
-  ui_version = "2.1.2";
-  libflux_version = "0.139.0";
+  version = "2.4.0";
+  # Despite the name, this is not a rolling release. This is the
+  # version of the UI assets for 2.4.0, as specified in
+  # scripts/fetch-ui-assets.sh in the 2.4.0 tag of influxdb.
+  ui_version = "Master";
+  libflux_version = "0.179.0";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb";
     rev = "v${version}";
-    sha256 = "sha256-wf01DhB1ampZuWPkHUEOf3KJK4GjeOAPL3LG2+g4NGY=";
+    sha256 = "sha256-ufJnrVWVfia2/xLRmFkauCw8ktdSJUybJkv42Gd0npg=";
   };
 
   ui = fetchurl {
     url = "https://github.com/influxdata/ui/releases/download/OSS-${ui_version}/build.tar.gz";
-    sha256 = "sha256-fXjShNJfKN/ZQNQHoX9/Ou4XBrXavCN+rcO+8AMc5Ug=";
+    sha256 = "sha256-YKDp1jLyo4n+YTeMaWl8dhN4Lr3H8FXV7stJ3p3zFe8=";
   };
 
   flux = rustPlatform.buildRustPackage {
@@ -35,10 +38,10 @@ let
       owner = "influxdata";
       repo = "flux";
       rev = "v${libflux_version}";
-      sha256 = "sha256-cELeWZXGVLFoPYfBoBP8NeLBVFIb5o+lWyto42BLyXY=";
+      sha256 = "sha256-xcsmvT8Ve1WbfwrdVPnJcj7RAvrk795N3C95ubbGig0=";
     };
     sourceRoot = "source/libflux";
-    cargoSha256 = "sha256-wFgawxgqZqoPnOXJD3r5t2n7Y2bTAkBbBxeBtFEF7N4=";
+    cargoSha256 = "sha256-+hJQFV0tWeTQDN560DzROUNpdkcZ5h2sc13akHCgqPc=";
     nativeBuildInputs = [ llvmPackages.libclang ];
     buildInputs = lib.optional stdenv.isDarwin libiconv;
     LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
@@ -67,7 +70,7 @@ in buildGoModule {
 
   nativeBuildInputs = [ go-bindata pkg-config ];
 
-  vendorSha256 = "sha256-GVLAzVJzSsC10ZWDZPP8upydwZG21E+zQ6sMKm1lCY0=";
+  vendorSha256 = "sha256-DZsd6qPKfRbnvz0UAww+ubaeTEqQxLeil1S3SZAmmJk=";
   subPackages = [ "cmd/influxd" "cmd/telemetryd" ];
 
   PKG_CONFIG_PATH = "${flux}/pkgconfig";
@@ -81,7 +84,7 @@ in buildGoModule {
         exit 1
       fi
 
-      ui_ver=$(grep influxdata/ui/releases scripts/fetch-ui-assets.sh | ${perl}/bin/perl -pe 's#.*/OSS-([^/]+)/.*#$1#')
+      ui_ver=$(egrep 'influxdata/ui/releases/.*/sha256.txt' scripts/fetch-ui-assets.sh | ${perl}/bin/perl -pe 's#.*/OSS-([^/]+)/.*#$1#')
       if [ "$ui_ver" != "${ui_version}" ]; then
         echo "scripts/fetch-ui-assets.sh wants UI $ui_ver, but nix derivation provides ${ui_version}"
         exit 1
