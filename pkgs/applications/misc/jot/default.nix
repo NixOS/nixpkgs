@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/araekiel/jot";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "jt";
   };
 }
