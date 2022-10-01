@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, darwin
 , alsa-lib, asio, avahi, boost17x, flac, libogg, libvorbis, soxr
 , aixlog, popl
 , pulseaudioSupport ? false, libpulseaudio
@@ -22,9 +22,13 @@ stdenv.mkDerivation rec {
   # not needed
   buildInputs = [
     boost17x
-    alsa-lib asio avahi flac libogg libvorbis
+    asio avahi flac libogg libvorbis
     aixlog popl soxr
-  ] ++ lib.optional pulseaudioSupport libpulseaudio;
+  ] ++ lib.optional pulseaudioSupport libpulseaudio
+  ++ lib.optional stdenv.isLinux alsa-lib
+  ++ lib.optional stdenv.isDarwin [darwin.apple_sdk.frameworks.IOKit darwin.apple_sdk.frameworks.AudioToolbox];
+
+  TARGET=lib.optionalString stdenv.isDarwin "MACOS";
 
   # Upstream systemd unit files are pretty awful, so we provide our own in a
   # NixOS module. It might make sense to get that upstreamed...
@@ -39,6 +43,7 @@ stdenv.mkDerivation rec {
     description = "Synchronous multi-room audio player";
     homepage = "https://github.com/badaix/snapcast";
     maintainers = with maintainers; [ fpletz ];
+    platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl3Plus;
   };
 }
