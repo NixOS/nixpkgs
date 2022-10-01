@@ -22415,6 +22415,11 @@ with pkgs;
   wxGTK31-gtk2 = wxGTK31.override { withGtk2 = true; };
   wxGTK31-gtk3 = wxGTK31.override { withGtk2 = false; };
 
+  wxGTK32 = callPackage ../development/libraries/wxwidgets/wxGTK32.nix {
+    inherit (darwin.stubs) setfile;
+    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit AVFoundation AVKit WebKit;
+  };
+
   wxSVG = callPackage ../development/libraries/wxSVG {
     wxGTK = wxGTK30-gtk3;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
