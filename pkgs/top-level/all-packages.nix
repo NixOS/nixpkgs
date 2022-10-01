@@ -3911,6 +3911,8 @@ with pkgs;
 
   faudio = callPackage ../development/libraries/faudio { };
 
+  fblog = callPackage ../development/tools/fblog { };
+
   fd = callPackage ../tools/misc/fd { };
 
   fdroidserver = python3Packages.callPackage ../development/tools/fdroidserver { };
