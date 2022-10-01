@@ -8,7 +8,6 @@ let
     concatLists
     concatMap
     concatMapStringsSep
-    elemAt
     filter
     foldl'
     head
