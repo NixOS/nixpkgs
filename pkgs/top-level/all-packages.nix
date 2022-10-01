@@ -8408,6 +8408,10 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
+  mdbook-toc = callPackage ../tools/text/mdbook-toc {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   mdbook-admonish = callPackage ../tools/text/mdbook-admonish {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
