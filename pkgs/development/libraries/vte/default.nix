@@ -83,6 +83,9 @@ stdenv.mkDerivation rec {
     "-D_b_symbolic_functions=false"
   ];
 
+  # error: argument unused during compilation: '-pie' [-Werror,-Wunused-command-line-argument]
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-Wno-unused-command-line-argument";
+
   postPatch = ''
     patchShebangs perf/*
     patchShebangs src/box_drawing_generate.sh
