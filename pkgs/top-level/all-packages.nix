@@ -4165,6 +4165,8 @@ with pkgs;
 
   huniq = callPackage ../tools/text/huniq { };
 
+  hunt = callPackage ../tools/misc/hunt { };
+
   hyprland = callPackage ../applications/window-managers/hyprland {
     wlroots = wlroots.overrideAttrs (_: {
       version = "unstable-2022-06-07";
@@ -8006,6 +8008,8 @@ with pkgs;
 
   jql = callPackage ../development/tools/jql { };
 
+  jqp = callPackage ../development/tools/jqp { };
+
   jo = callPackage ../development/tools/jo { };
 
   jrnl = callPackage ../applications/misc/jrnl { };
@@ -8999,6 +9003,8 @@ with pkgs;
   mfcuk = callPackage ../tools/security/mfcuk { };
 
   mfoc = callPackage ../tools/security/mfoc { };
+
+  microbin = callPackage ../servers/microbin { };
 
   microdnf = callPackage ../tools/package-management/microdnf { };
 
@@ -22741,7 +22747,8 @@ with pkgs;
   quicklispPackages = quicklispPackagesSBCL;
 
   # Alternative lisp-modules implementation
-  lispPackages_new = callPackage ../development/lisp-modules-new/lisp-packages.nix {};
+  lispPackages_new = recurseIntoAttrs (callPackage ../development/lisp-modules-new/lisp-packages.nix {});
+
 
   ### DEVELOPMENT / PERL MODULES
 
@@ -30055,7 +30062,9 @@ with pkgs;
 
   nerd-font-patcher = callPackage ../applications/misc/nerd-font-patcher { };
 
-  newsflash = callPackage ../applications/networking/feedreaders/newsflash { };
+  newsflash = callPackage ../applications/networking/feedreaders/newsflash {
+    webkitgtk = webkitgtk_5_0;
+  };
 
   nicotine-plus = callPackage ../applications/networking/soulseek/nicotine-plus { };
 

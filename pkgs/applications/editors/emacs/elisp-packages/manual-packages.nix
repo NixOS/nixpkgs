@@ -160,6 +160,8 @@
 
   urweb-mode = callPackage ./urweb-mode { };
 
+  voicemacs = callPackage ./voicemacs { };
+
   # Packages made the classical callPackage way
 
   ebuild-mode = callPackage ./ebuild-mode { };

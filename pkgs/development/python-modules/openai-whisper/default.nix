@@ -1,6 +1,10 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
+, substituteAll
+
+# runtime
+, ffmpeg
 
 # propagates
 , numpy
@@ -16,21 +20,22 @@
 
 buildPythonPackage rec {
   pname = "whisper";
-  version = "unstable-2022-09-23";
+  version = "unstable-2022-09-30";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = pname;
-    rev = "8cf36f3508c9acd341a45eb2364239a3d81458b9";
-    hash = "sha256-2RH8eM/SezqFJltelv5AjQEGpqXm980u57vrlkTEUvQ=";
+    rev = "60132ade70e00b843d93542fcb37b58c0d8bf9e7";
+    hash = "sha256-4mhlCvewA0bVo5bq2sbSEKHq99TQ6jUauiCUkdRSdas=";
   };
 
-  postPatch = ''
-    # Rely on the ffmpeg path already patched into the ffmpeg-python library
-    substituteInPlace whisper/audio.py \
-      --replace 'run(cmd="ffmpeg",' 'run('
-  '';
+  patches = [
+    (substituteAll {
+      src = ./ffmpeg-path.patch;
+      inherit ffmpeg;
+    })
+  ];
 
   propagatedBuildInputs = [
     numpy

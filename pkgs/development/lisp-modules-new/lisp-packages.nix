@@ -42,6 +42,8 @@ let
     optionalString
     makeLibraryPath
     makeSearchPath
+    recurseIntoAttrs
+    dontRecurseIntoAttrs
   ;
 
   inherit (builtins)
@@ -55,11 +57,13 @@ let
   # This is probably causing performance problems...
   flattenedDeps = lispLibs:
     let
+      toSet = list: builtins.listToAttrs (map (d: { name = d.pname; value = d; }) list);
+      toList = attrValues;
       walk = acc: node:
         if length node.lispLibs == 0
         then acc
-        else foldl walk (acc ++ node.lispLibs) node.lispLibs;
-    in unique (walk [] { inherit lispLibs; });
+        else builtins.foldl' walk (acc // toSet node.lispLibs) node.lispLibs;
+    in toList (walk {} { inherit lispLibs; });
 
   # Stolen from python-packages.nix
   # Actually no idea how this works
@@ -207,11 +211,12 @@ let
         # from storeDir. Otherwise it could try to recompile lisp deps.
         export ASDF_OUTPUT_TRANSLATIONS="${src}:$(pwd):${storeDir}:${storeDir}"
 
-        # Make Nix track the dependencies so that graphs can be generated with
-        # nix-store -q --graph
-        echo "$lispLibs" >> nix-drvs
-        echo "$nativeLibs" >> nix-drvs
-        echo "$javaLibs" >> nix-drvs
+        # track lisp dependencies for graph generation
+        # TODO: Do the propagation like for lisp, native and java like this:
+        # https://github.com/teu5us/nix-lisp-overlay/blob/e30dafafa5c1b9a5b0ccc9aaaef9d285d9f0c46b/pkgs/development/lisp-modules/setup-hook.sh
+        # Then remove the "echo >> nix-drvs" from buildScript
+        echo $lispLibs >> __nix-drvs
+
 
         # Finally, compile the systems
         ${lisp} $buildScript
@@ -389,19 +394,6 @@ let
       lispPackagesFor
       lispWithPackages;
 
-    # Uncomment for debugging/development
-    # inherit
-    #   flattenedDeps
-    #   concatMap
-    #   attrNames
-    #   getAttr
-    #   filterAttrs
-    #   filter
-    #   elem
-    #   unique
-    #   makeAttrName
-    #   length;
-
     # TODO: uncomment clasp when clasp 1.0.0 is packaged
 
     # There's got to be a better way than this...
@@ -416,10 +408,10 @@ let
 
     # Manually defined packages shadow the ones imported from quicklisp
 
-    sbclPackages  = lispPackagesFor sbcl;
-    eclPackages   = lispPackagesFor ecl;
-    abclPackages  = lispPackagesFor abcl;
-    cclPackages   = lispPackagesFor ccl;
+    sbclPackages  = recurseIntoAttrs (lispPackagesFor sbcl);
+    eclPackages   = dontRecurseIntoAttrs (lispPackagesFor ecl);
+    abclPackages  = dontRecurseIntoAttrs (lispPackagesFor abcl);
+    cclPackages   = dontRecurseIntoAttrs (lispPackagesFor ccl);
     # claspPackages = lispPackagesFor clasp;
 
     sbclWithPackages  = lispWithPackages sbcl;
