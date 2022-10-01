@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/google/nsync";
     description = "C library that exports various synchronization primitives";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ puffnfresh ];
+    maintainers = with lib.maintainers; [ puffnfresh Luflosi ];
     # On macOS we get an error for some reason:
     # > mkdir: cannot create directory 'build': File exists
     platforms = lib.platforms.linux;
