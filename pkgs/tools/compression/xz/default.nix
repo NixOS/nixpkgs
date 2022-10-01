@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xz";
-  version = "5.2.6";
+  version = "5.2.7";
 
   src = fetchurl {
     url = "https://tukaani.org/xz/xz-${version}.tar.bz2";
-    sha256 = "E+NALjAbYBj2px7w5Jf3FMbRHiFK6C2rFWuBwqZKyyU=";
+    sha256 = "tl8dDCcI5XcW9N0iFpiac4R6xv20Fo/86xVXZ+Irg0s=";
   };
 
   strictDeps = true;
