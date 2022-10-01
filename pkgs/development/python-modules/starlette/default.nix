@@ -1,65 +1,51 @@
 { lib
 , stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, aiofiles
+, aiosqlite
 , anyio
-, contextlib2
+, ApplicationServices
+, buildPythonPackage
+, databases
+, fetchFromGitHub
+, hatchling
+, httpx
 , itsdangerous
 , jinja2
-, python-multipart
-, pyyaml
-, requests
-, aiosqlite
-, databases
 , pytestCheckHook
+, python-multipart
 , pythonOlder
+, pyyaml
 , trio
 , typing-extensions
-, ApplicationServices
 }:
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.20.4";
-  format = "setuptools";
+  version = "0.21.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-vP2TJPn9lRGnLGkO8lUmnsoT6rSnhuWDD3WqNk76SM0=";
+    hash = "sha256-wZtlKCD7eE4sCKfhFgWXywACAes8uo4HXkicJAMcgqk=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/encode/starlette/commit/ab70211f0e1fb7390668bf4891eeceda8d9723a0.diff";
-      excludes = [ "requirements.txt" ]; # conflicts
-      hash = "sha256-UHf4c4YUWp/1I1vD8J0hMewdlfkmluA+FyGf9ZsSv3Y=";
-    })
+  nativeBuildInputs = [
+    hatchling
   ];
 
-  postPatch = ''
-    # remove coverage arguments to pytest
-    sed -i '/--cov/d' setup.cfg
-  '';
-
   propagatedBuildInputs = [
-    aiofiles
     anyio
+    httpx
     itsdangerous
     jinja2
     python-multipart
     pyyaml
-    requests
-  ] ++ lib.optionals (pythonOlder "3.8") [
+  ] ++ lib.optionals (pythonOlder "3.10") [
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    contextlib2
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optional stdenv.isDarwin [
     ApplicationServices
   ];
 
@@ -72,7 +58,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # asserts fail due to inclusion of br in Accept-Encoding
+    # Asserts fail due to inclusion of br in Accept-Encoding
     "test_websocket_headers"
     "test_request_headers"
   ];
@@ -81,9 +67,15 @@ buildPythonPackage rec {
     "starlette"
   ];
 
+  pytestFlagsArray = [
+    # DeprecationWarning: Please use rfc3986.validators.Validator instead. This method will be eventually removed.
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   meta = with lib; {
-    homepage = "https://www.starlette.io/";
     description = "The little ASGI framework that shines";
+    homepage = "https://www.starlette.io/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];
   };
