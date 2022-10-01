@@ -738,12 +738,33 @@ self: super: builtins.intersectAttrs super {
     testToolDepends = [ pkgs.git pkgs.mercurial ] ++ drv.testToolDepends or [];
   }) super.retrie_1_2_0_0;
 
-  haskell-language-server = overrideCabal (drv: {
+  haskell-language-server = let
+    # This wrapper will be included in the sdist in the next release, then we can remove this custom fetch.
+    abi-compat-check-wrapper = assert super.haskell-language-server.version == "1.8.0.0"; pkgs.fetchurl {
+      url = "https://raw.githubusercontent.com/haskell/haskell-language-server/c12379c57ab8f0abd606e9f397de54e508d024a0/bindist/wrapper.in";
+      sha256 = "sha256-vHi6+s8/V4WJSCxIqjP+thumEpttokpCc+a823WEPPk=";
+    }; in
+      overrideCabal (drv: {
     # starting with 1.6.1.1 haskell-language-server wants to be linked dynamically
     # by default. Unless we reflect this in the generic builder, GHC is going to
     # produce some illegal references to /build/.
     enableSharedExecutables = true;
-    postInstall = "ln -s $out/bin/haskell-language-server $out/bin/haskell-language-server-${self.ghc.version}";
+    # The shell script wrapper checks that the runtime ghc and its boot packages match the ghc hls was compiled with.
+    # This prevents linking issues when running TH splices.
+    postInstall = ''
+      mv "$out/bin/haskell-language-server" "$out/bin/.haskell-language-server-${self.ghc.version}-unwrapped"
+      BOOT_PKGS=`ghc-pkg-${self.ghc.version} --global list --simple-output`
+      ${pkgs.buildPackages.gnused}/bin/sed \
+        -e "s!@@EXE_DIR@@!$out/bin!" \
+        -e "s/@@EXE_NAME@@/.haskell-language-server-${self.ghc.version}-unwrapped/" \
+        -e "s/@@GHC_VERSION@@/${self.ghc.version}/" \
+        -e "s/@@BOOT_PKGS@@/$BOOT_PKGS/" \
+        -e "s/@@ABI_HASHES@@/$(for dep in $BOOT_PKGS; do printf "%s:" "$dep" && ghc-pkg-${self.ghc.version} field $dep abi --simple-output ; done | tr '\n' ' ' | xargs)/" \
+        -e "s!Consider installing ghc.* via ghcup or build HLS from source.!Visit https://haskell4nix.readthedocs.io/nixpkgs-users-guide.html#how-to-install-haskell-language-server to learn how to correctly install a matching hls for your ghc with nix.!" \
+        ${abi-compat-check-wrapper} > "$out/bin/haskell-language-server"
+      ln -s "$out/bin/haskell-language-server" "$out/bin/haskell-language-server-${self.ghc.version}"
+      chmod +x "$out/bin/haskell-language-server"
+      '';
     testToolDepends = [ self.cabal-install pkgs.git ];
     testTarget = "func-test"; # wrapper test accesses internet
     preCheck = ''

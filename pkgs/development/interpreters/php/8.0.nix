@@ -42,6 +42,7 @@ base.withExtensions ({ all, ... }: with all; ([
   sockets
   soap
   sodium
+  sysvsem
   sqlite3
   tokenizer
   xmlreader
