@@ -1,14 +1,20 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
-fetchFromGitHub {
-  name = "powerline-fonts-2018-11-11";
+stdenv.mkDerivation {
+  pname = "powerline-fonts";
+  version = "unstable-2018-11-11";
 
-  owner = "powerline";
-  repo = "fonts";
-  rev = "e80e3eba9091dac0655a0a77472e10f53e754bb0";
+  src = fetchFromGitHub {
+    owner = "powerline";
+    repo = "fonts";
+    rev = "e80e3eba9091dac0655a0a77472e10f53e754bb0";
+    hash = "sha256-GGfON6Z/0czCUAGxnqtndgDnaZGONFTU9/Hu4BGDHlk=";
+  };
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  dontConfigure = true;
+  dontBuild = true;
+
+  installPhase = ''
     find . -name '*.otf'    -exec install -Dt $out/share/fonts/opentype {} \;
     find . -name '*.ttf'    -exec install -Dt $out/share/fonts/truetype {} \;
     find . -name '*.bdf'    -exec install -Dt $out/share/fonts/bdf      {} \;
@@ -16,7 +22,8 @@ fetchFromGitHub {
     find . -name '*.psf.gz' -exec install -Dt $out/share/consolefonts   {} \;
   '';
 
-  sha256 = "0r8p4z3db17f5p8jr7sv80nglmjxhg83ncfvwg1dszldswr0dhvr";
+  outputHashMode = "recursive";
+  outputHash = "sha256-ecMGMteNft3C49sxO9CDXVb6LEBbnyzRLe6E1cYnF2U=";
 
   meta = with lib; {
     homepage = "https://github.com/powerline/fonts";
