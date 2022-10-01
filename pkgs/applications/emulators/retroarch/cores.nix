@@ -299,7 +299,6 @@ in
   citra = mkLibRetroCore {
     core = "citra";
     description = "Port of Citra to libretro";
-    stdenvOverride = gcc10Stdenv;
     license = lib.licenses.gpl2Plus;
     extraBuildInputs = [ libGLU libGL boost ffmpeg nasm ];
     makefile = "Makefile";
