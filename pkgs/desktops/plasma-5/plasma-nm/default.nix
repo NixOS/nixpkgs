@@ -23,6 +23,11 @@ mkDerivation {
     modemmanager-qt networkmanager-qt qca-qt5
     mobile-broadband-provider-info openconnect
   ];
+
+  cmakeFlags = [
+    "-DBUILD_MOBILE=ON"
+  ];
+
   patches = [
     (substituteAll {
       src = ./0002-openvpn-binary-path.patch;
