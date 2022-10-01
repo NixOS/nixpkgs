@@ -29268,10 +29268,7 @@ with pkgs;
 
   kubebuilder = callPackage ../applications/networking/cluster/kubebuilder { };
 
-  kuttl = callPackage ../applications/networking/cluster/kuttl {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
-  };
+  kuttl = callPackage ../applications/networking/cluster/kuttl { };
 
   kubectl-doctor = callPackage ../applications/networking/cluster/kubectl-doctor {
     # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
