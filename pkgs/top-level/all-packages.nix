@@ -35955,8 +35955,7 @@ with pkgs;
   gotestwaf = callPackage ../tools/security/gotestwaf { };
 
   gowitness = callPackage ../tools/security/gowitness {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
+    buildGoModule = buildGo119Module;
   };
 
   guetzli = callPackage ../applications/graphics/guetzli { };
