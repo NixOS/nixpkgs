@@ -223,6 +223,9 @@ in {
        else ./use-etc-ssl-certs.patch)
     ] ++ lib.optionals (stdenv.isDarwin && (builtins.substring 5 5 version) < "m") [
       ./1.1/macos-yosemite-compat.patch
+    ] ++ lib.optionals (stdenv.hostPlatform.isMips64n32) [
+      # submitted upstream: https://github.com/openssl/openssl/pull/19320
+      ./1.1/mips64n32-add-SIXTY_FOUR_BIT-to-bn_ops.patch
     ];
     withDocs = true;
   };

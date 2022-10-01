@@ -1,0 +1,55 @@
+From 935f70ce1a5f9e5f8f4d8cccee0f7d8e92d79f94 Mon Sep 17 00:00:00 2001
+From: Adam Joseph <adam@westernsemico.com>
+Date: Fri, 30 Sep 2022 20:55:29 -0700
+Subject: [PATCH] Configurations: mips64*-linux-*abin32 needs bn_ops
+ SIXTY_FOUR_BIT
+
+The IRIX mips64-cpu, n32-abi configurations include SIXTY_FOUR_BIT in bn_ops,
+but it is missing from mips64*-linux-*abin32 (which OpenSSL calls
+"linux-mips64").  This causes heap corruption when verifying TLS certificates
+(which tend to be RSA-signed) with openssl 1.1.1q:
+
+```
+nix@oak:~$ /nix/store/4k04dh6a1zs6hxiacwcg4a4nvxvgli2j-openssl-mips64el-unknown-linux-gnuabin32-1.1.1q-bin/bin/openssl s_client -host www.google.com -port 443free(): invalid pointer
+Aborted
+```
+
+and a slightly different failure with current HEAD:
+
+```
+nix@oak:~$ /nix/store/9bqxharxajsl9fid0c8ls6fb9wxp8kdc-openssl-mips64el-unknown-linux-gnuabin32-1.1.1q-bin/bin/openssl s_client -host www.google.com -port 443
+Connecting to 142.250.180.4
+CONNECTED(00000003)
+Fatal glibc error: malloc assertion failure in sysmalloc: (old_top == initial_top (av) && old_size == 0) || ((unsigned long) (old_size) >= MINSIZE && prev_inuse (old_top) && ((unsigned long) old_end & (pagesize - 1)) == 0)
+Aborted
+```
+
+Applying this patch and recompiling produces the expected output instead of a
+crash.
+
+Note that Gentoo (and to my knowledge all other other distributions which
+support mips64n32) use the `linux-generic32` configuration, which uses only
+32-bit arithmetic (rather than full 64-bit arithmetic) and lacks assembler
+implementations for the SHA hash functions:
+
+  https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/openssl/files/gentoo.config-1.0.2#n102
+
+For support in nixpkgs we would like to use the full 64-bit integer registers
+and perlasm routines, so I'm submitting this upstream as well.
+
+Fixes #19319
+---
+ Configurations/10-main.conf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Configurations/10-main.conf b/Configurations/10-main.conf
+index 50756cb4255..483bb50c408 100644
+--- a/Configurations/10-main.conf
++++ b/Configurations/10-main.conf
+@@ -797,5 +797,5 @@ my %targets = (
+         cflags           => add("-mabi=n32"),
+         cxxflags         => add("-mabi=n32"),
+-        bn_ops           => "RC4_CHAR",
++        bn_ops           => "RC4_CHAR SIXTY_FOUR_BIT",
+         asm_arch         => 'mips64',
+         perlasm_scheme   => "n32",
