@@ -812,6 +812,8 @@ self: super: with self; {
 
   autograd = callPackage ../development/python-modules/autograd { };
 
+  autograd-gamma = callPackage ../development/python-modules/autograd-gamma { };
+
   autoit-ripper = callPackage ../development/python-modules/autoit-ripper { };
 
   autologging = callPackage ../development/python-modules/autologging { };
