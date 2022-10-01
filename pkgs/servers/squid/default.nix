@@ -4,17 +4,19 @@
 
 stdenv.mkDerivation rec {
   pname = "squid";
-  version = "5.6";
+  version = "5.7";
 
   src = fetchurl {
     url = "http://www.squid-cache.org/Versions/v5/${pname}-${version}.tar.xz";
-    sha256 = "sha256-ONJzOKNHWXzg6T0MO+bl9mtnUEF8R0yofuDWG7bRSNs=";
+    hash = "sha256-awdTqrpMnE79Mz5nEkyuz3rWzC04WB8Z0vAyH1t+zYE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     perl openldap db cyrus_sasl expat libxml2 openssl
   ] ++ lib.optionals stdenv.isLinux [ libcap pam systemd ];
+
+  enableParallelBuilding = true;
 
   configureFlags = [
     "--enable-ipv6"
