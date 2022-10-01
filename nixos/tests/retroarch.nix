@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
   {
     name = "retroarch";
-    meta = with pkgs.lib.maintainers; { maintainers = [ j0hax ]; };
+    meta = with pkgs.lib; { maintainers = teams.libretro.members ++ [ maintainers.j0hax ]; };
 
     nodes.machine = { ... }:
 

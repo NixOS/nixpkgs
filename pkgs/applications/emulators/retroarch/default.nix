@@ -144,6 +144,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     changelog = "https://github.com/libretro/RetroArch/blob/v${version}/CHANGES.md";
-    maintainers = with maintainers; [ MP2E edwtjo matthewbauer kolbycrouch thiagokokada ];
+    maintainers = with maintainers; teams.libretro.members ++ [ matthewbauer kolbycrouch ];
   };
 }
