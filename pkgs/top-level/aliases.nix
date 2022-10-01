@@ -743,7 +743,7 @@ mapAliases ({
   mumble_git = throw "'mumble_git' has been renamed to/replaced by 'pkgs.mumble'"; # Converted to throw 2022-09-24
   murmur_git = throw "'murmur_git' has been renamed to/replaced by 'pkgs.murmur'"; # Converted to throw 2022-09-24
   mutt-with-sidebar = mutt; # Added 2022-09-17
-  mysql-client = throw "'mysql-client' has been renamed to/replaced by 'hiPrio'"; # Converted to throw 2022-09-24
+  mysql-client = throw "'mysql-client' has been renamed to/replaced by 'mariadb.client'"; # Converted to throw 2022-09-24
   mysql = throw "'mysql' has been renamed to/replaced by 'mariadb'"; # Converted to throw 2022-09-24
 
   mesa_drivers = throw "'mesa_drivers' has been renamed to/replaced by 'mesa.drivers'"; # Converted to throw 2022-09-24

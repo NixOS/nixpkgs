@@ -32,7 +32,7 @@ let
       nativeLibs = [ glib gobject-introspection ];
     };
     cl-mysql = pkg: {
-      nativeLibs = [ mysql-client ];
+      nativeLibs = [ mariadb.client ];
     };
     clsql-postgresql = pkg: {
       nativeLibs = [ postgresql.lib ];
@@ -44,7 +44,7 @@ let
       nativeLibs = [ webkitgtk ];
     };
     dbd-mysql = pkg: {
-      nativeLibs = [ mysql-client ];
+      nativeLibs = [ mariadb.client ];
     };
     lla = pkg: {
       nativeLibs = [ openblas ];
