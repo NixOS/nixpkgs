@@ -5,13 +5,13 @@
 
 buildGoPackage rec {
   pname = "wallutils";
-  version = "5.11.1";
+  version = "5.12.2";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "wallutils";
     rev = version;
-    sha256 = "sha256-FL66HALXsf7shoUKIZp6HORyuxhOfgTrY+PQAe92yk8=";
+    sha256 = "sha256-MZgUQUJmYlfIRoIZvUDhTwSURrCNM0QfRDH2nJzhzEg=";
   };
 
   goPackagePath = "github.com/xyproto/wallutils";
