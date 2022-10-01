@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchgit, vdr, fetchFromGitHub
-, graphicsmagick, libav, pcre, xorgserver, ffmpeg
+, graphicsmagick, pcre, xorgserver, ffmpeg
 , libiconv, boost, libgcrypt, perl, util-linux, groff, libva, xorg, ncurses
 , callPackage
 }: let
@@ -53,16 +53,16 @@ in {
 
   markad = stdenv.mkDerivation rec {
     pname = "vdr-markad";
-    version = "2.0.4";
+    version = "3.0.25";
 
     src = fetchFromGitHub {
       repo = "vdr-plugin-markad";
-      owner = "jbrundiers";
-      sha256 = "sha256-Y4KsEtUq+KoUooXiw9O9RokBxNwWBkiGB31GncmHkYM=";
-      rev = "288e3dae93421b0176f4f62b68ea4b39d98e8793";
+      owner = "kfb77";
+      sha256 = "sha256-m7cUAxwXj62spelHYH6uTIoViSavSR0d4psr7+KLJg8=";
+      rev = "v${version}";
     };
 
-    buildInputs = [ vdr libav ];
+    buildInputs = [ vdr ffmpeg ];
 
     postPatch = ''
       substituteInPlace command/Makefile --replace '/usr' ""
@@ -78,6 +78,8 @@ in {
     buildFlags = [
       "DESTDIR=$(out)"
       "LIBDIR=/lib/vdr"
+      "BINDIR=/bin"
+      "MANDIR=/share/man"
       "APIVERSION=${vdr.version}"
       "VDRDIR=${vdr.dev}/include/vdr"
       "LOCDIR=/share/locale"
@@ -86,7 +88,7 @@ in {
     installFlags = buildFlags;
 
     meta = with lib; {
-      homepage = "https://github.com/jbrundiers/vdr-plugin-markad";
+      homepage = "https://github.com/kfb77/vdr-plugin-markad";
       description = "MarkAd marks advertisements in VDR recordings.";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
