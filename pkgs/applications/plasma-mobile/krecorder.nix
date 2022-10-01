@@ -8,6 +8,7 @@
 , kcoreaddons
 , ki18n
 , kirigami2
+, kirigami-addons
 , qtmultimedia
 , qtquickcontrols2
 }:
@@ -25,6 +26,7 @@ mkDerivation rec {
     kcoreaddons
     ki18n
     kirigami2
+    kirigami-addons
     qtmultimedia
     qtquickcontrols2
   ];
