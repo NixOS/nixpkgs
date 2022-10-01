@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rq";
@@ -18,12 +18,18 @@ rustPlatform.buildRustPackage rec {
     # Prevents build failures when upgrading rustc, which may give more warnings.
     substituteInPlace src/lib.rs \
       --replace "#![deny(warnings)]" ""
+
+    # build script tries to get version information from git
+    # this fixes the --version output
+    rm build.rs
   '';
+
+  VERGEN_SEMVER = version;
 
   meta = with lib; {
     description = "A tool for doing record analysis and transformation";
     homepage = "https://github.com/dflemstr/rq";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ aristid Br1ght0ne ];
+    maintainers = with maintainers; [ aristid Br1ght0ne figsoda ];
   };
 }
