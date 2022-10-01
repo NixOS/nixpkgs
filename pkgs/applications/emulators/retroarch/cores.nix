@@ -8,7 +8,6 @@
 , fetchFromGitHub
 , ffmpeg
 , fluidsynth
-, gcc10Stdenv
 , gettext
 , hexdump
 , hidapi
@@ -356,7 +355,7 @@ in
     core = "dosbox";
     description = "Port of DOSBox to libretro";
     license = lib.licenses.gpl2Only;
-    stdenvOverride = gcc10Stdenv;
+    CXXFLAGS = "-std=gnu++11";
   };
 
   eightyone = mkLibRetroCore {
