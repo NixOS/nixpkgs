@@ -3975,7 +3975,9 @@ with pkgs;
 
   fx_cast_bridge = callPackage ../tools/misc/fx_cast { };
 
-  fzf = callPackage ../tools/misc/fzf { };
+  fzf = callPackage ../tools/misc/fzf {
+    buildGoModule = buildGo119Module;
+  };
 
   fzf-obc = callPackage ../shells/bash/fzf-obc { };
 
