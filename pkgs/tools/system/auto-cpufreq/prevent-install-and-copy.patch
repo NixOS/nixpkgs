@@ -1,8 +1,8 @@
 diff --git a/auto_cpufreq/core.py b/auto_cpufreq/core.py
-index e0e0f42..51ba6f6 100644
+index 815fc88..ba0b4e8 100644
 --- a/auto_cpufreq/core.py
 +++ b/auto_cpufreq/core.py
-@@ -269,31 +269,13 @@ def get_current_gov():
+@@ -278,29 +278,13 @@ def get_current_gov():
  
  
  def cpufreqctl():
@@ -15,9 +15,7 @@ index e0e0f42..51ba6f6 100644
 -        pass
 -    else:
 -        # deploy cpufreqctl.auto-cpufreq script
--        if os.path.isfile("/usr/bin/cpufreqctl"):
--            shutil.copy(SCRIPTS_DIR / "cpufreqctl.sh", "/usr/bin/cpufreqctl.auto-cpufreq")
--        else:
+-        if not os.path.isfile("/usr/bin/cpufreqctl.auto-cpufreq"):
 -            shutil.copy(SCRIPTS_DIR / "cpufreqctl.sh", "/usr/bin/cpufreqctl.auto-cpufreq")
 +    # scripts are already in the correct place
 +    pass
@@ -38,7 +36,7 @@ index e0e0f42..51ba6f6 100644
  
  
  def footer(l=79):
-@@ -329,99 +311,13 @@ def remove_complete_msg():
+@@ -336,99 +320,13 @@ def remove_complete_msg():
  
  
  def deploy_daemon():

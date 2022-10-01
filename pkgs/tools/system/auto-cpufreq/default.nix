@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
-  version = "1.9.5";
+  version = "1.9.6";
 
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+8M7PJiJvfFAKYgN93R4NML9GQR989DRnJnv+j0sjUI=";
+    sha256 = "sha256-rT6OFM9hc9cx62xDV5aPebYgrZdWRkofL27l2HRSqTU=";
   };
 
   propagatedBuildInputs = with python3Packages; [
