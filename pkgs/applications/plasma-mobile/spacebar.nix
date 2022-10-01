@@ -4,6 +4,8 @@
 , cmake
 , extra-cmake-modules
 
+, c-ares
+, curl
 , kcontacts
 , ki18n
 , kio
@@ -27,6 +29,8 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+    c-ares
+    curl
     kcontacts
     ki18n
     kio
