@@ -2,7 +2,6 @@
 , astropy
 , astropy-extension-helpers
 , astropy-healpix
-, astropy-helpers
 , buildPythonPackage
 , cython
 , fetchPypi
@@ -28,7 +27,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     astropy-extension-helpers
-    astropy-helpers
     cython
     setuptools-scm
   ];
@@ -36,7 +34,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     astropy
     astropy-healpix
-    astropy-helpers
     numpy
     scipy
   ];
@@ -46,9 +43,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    cd build/lib*
-  '';
+  pytestFlagsArray = [
+    "build/lib*"
+    # Avoid failure due to user warning: Distutils was imported before Setuptools
+    "-p no:warnings"
+  ];
 
   pythonImportsCheck = [
     "reproject"
