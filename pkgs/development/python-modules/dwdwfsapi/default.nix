@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "dwdwfsapi";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8541eb93a6323bec6a2281aa06667e72b02c8e5fac40f899c402089b1c774472";
+    sha256 = "sha256-zeSV2acjtSWUYnrMjEBtrSPlXRvrNQRX5SYPYHnaOy0=";
   };
 
   propagatedBuildInputs = [
