@@ -3045,6 +3045,7 @@ dont-distribute-packages:
  - product
  - prof2dot
  - progressbar
+ - project-forge
  - project-m36
  - prolog-graph
  - prolog-graph-lib
@@ -3054,7 +3055,6 @@ dont-distribute-packages:
  - propane
  - proplang
  - prosidyc
- - proteome
  - proto-lens-descriptors
  - proto3-suite
  - proto3-wire
@@ -3295,6 +3295,7 @@ dont-distribute-packages:
  - ruler
  - ruler-core
  - runtime-arbitrary
+ - runtime-instances
  - rv
  - s-expression
  - safe-coloured-text-gen

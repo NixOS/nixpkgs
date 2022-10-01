@@ -1138,6 +1138,7 @@ broken-packages:
   - disjoint-containers
   - disjoint-set
   - disjoint-set-stateful
+  - disk-bytes
   - Dist
   - distance
   - distributed-closure
@@ -2103,6 +2104,7 @@ broken-packages:
   - HDBC-postgresql-hstore
   - hdevtools
   - hdf
+  - hdf5
   - hDFA
   - hdigest
   - hdis86
@@ -5294,6 +5296,7 @@ broken-packages:
   - twine
   - twirp
   - twisty
+  - twitchapi
   - twitter
   - twitter-feed
   - twitter-types
@@ -5325,6 +5328,7 @@ broken-packages:
   - type-of-html-static
   - typeparams
   - type-prelude
+  - type-reflection
   - type-rig
   - types-compat
   - type-settheory

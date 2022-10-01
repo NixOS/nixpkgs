@@ -99,7 +99,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "19n60rx4mpr52551mvm0i5kgy32099rvgnihvmh5np09n2f81c2r";
+      sha256 = "0dw89528kzbisbilyx6ggrh25vslivyylr8xk4dc4cikhd6dkm7p";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -1020,6 +1020,15 @@ self: super: {
           (super.stack.overrideScope (self: super: {
             # Needs Cabal-3.6
             Cabal = self.Cabal_3_6_3_0;
+            # Official stack ships with hpack-0.35.0.  Nixpkgs uses the same
+            # version of hpack so that users who get stack from Nixpkgs
+            # generate the same .cabal files as users who download official binaries
+            # of stack.
+            #
+            # dontCheck is used because one of the hpack tests appears to be
+            # incorrectly(?) failing:
+            # https://github.com/sol/hpack/issues/528
+            hpack = dontCheck self.hpack_0_35_0;
           })));
 
   # Too strict version bound on hashable-time.
