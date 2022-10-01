@@ -71,7 +71,6 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     url = "https://github.com/lwindolf/${pname}";
     rev-prefix = "v";
   };

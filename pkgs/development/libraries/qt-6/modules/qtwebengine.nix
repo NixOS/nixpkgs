@@ -64,6 +64,7 @@
 , lcms2
 , re2
 , libkrb5
+, mesa
 , xkeyboard_config
 , enableProprietaryCodecs ? true
 }:
@@ -101,7 +102,7 @@ qtModule rec {
       # Manually fix unsupported shebangs
       substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
         --replace "/usr/bin/env -S make -f" "/usr/bin/make -f" || true
-      substituteInPlace third_party/webgpu-cts/src/tools/deno \
+      substituteInPlace third_party/webgpu-cts/src/tools/run_deno \
         --replace "/usr/bin/env -S deno" "/usr/bin/deno" || true
       patchShebangs .
     )
@@ -212,6 +213,7 @@ qtModule rec {
     pipewire
 
     libkrb5
+    mesa
   ];
 
   buildInputs = [

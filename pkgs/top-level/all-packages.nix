@@ -244,6 +244,8 @@ with pkgs;
 
   asn = callPackage ../applications/networking/asn { };
 
+  asnmap = callPackage ../tools/security/asnmap { };
+
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
   atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
@@ -2853,6 +2855,8 @@ with pkgs;
     inherit (androidenv.androidPkgs_9_0) platform-tools;
   };
 
+  amoco = callPackage ../tools/security/amoco {};
+
   anbox = callPackage ../os-specific/linux/anbox { };
 
   androidenv = callPackage ../development/mobile/androidenv {
@@ -4155,6 +4159,8 @@ with pkgs;
   humioctl = callPackage ../applications/logging/humioctl {};
 
   huniq = callPackage ../tools/text/huniq { };
+
+  hunt = callPackage ../tools/misc/hunt { };
 
   hyprland = callPackage ../applications/window-managers/hyprland {
     wlroots = wlroots.overrideAttrs (_: {
@@ -7997,6 +8003,8 @@ with pkgs;
 
   jql = callPackage ../development/tools/jql { };
 
+  jqp = callPackage ../development/tools/jqp { };
+
   jo = callPackage ../development/tools/jo { };
 
   jrnl = callPackage ../applications/misc/jrnl { };
@@ -8990,6 +8998,8 @@ with pkgs;
   mfcuk = callPackage ../tools/security/mfcuk { };
 
   mfoc = callPackage ../tools/security/mfoc { };
+
+  microbin = callPackage ../servers/microbin { };
 
   microdnf = callPackage ../tools/package-management/microdnf { };
 
@@ -22732,7 +22742,8 @@ with pkgs;
   quicklispPackages = quicklispPackagesSBCL;
 
   # Alternative lisp-modules implementation
-  lispPackages_new = callPackage ../development/lisp-modules-new/lisp-packages.nix {};
+  lispPackages_new = recurseIntoAttrs (callPackage ../development/lisp-modules-new/lisp-packages.nix {});
+
 
   ### DEVELOPMENT / PERL MODULES
 
@@ -24606,6 +24617,7 @@ with pkgs;
   tgt = callPackage ../tools/networking/tgt { };
 
   lkl = callPackage ../applications/virtualization/lkl { };
+  lklWithFirewall = callPackage ../applications/virtualization/lkl { firewallSupport = true; };
 
   inherit (callPackages ../os-specific/linux/kernel-headers { })
     linuxHeaders makeLinuxHeaders;
@@ -30041,7 +30053,9 @@ with pkgs;
 
   nerd-font-patcher = callPackage ../applications/misc/nerd-font-patcher { };
 
-  newsflash = callPackage ../applications/networking/feedreaders/newsflash { };
+  newsflash = callPackage ../applications/networking/feedreaders/newsflash {
+    webkitgtk = webkitgtk_5_0;
+  };
 
   nicotine-plus = callPackage ../applications/networking/soulseek/nicotine-plus { };
 

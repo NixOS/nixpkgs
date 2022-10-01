@@ -49,7 +49,6 @@ let
         withGtk3 = true;
         inherit (srcs.qtbase) src version;
         inherit bison cups harfbuzz libGL dconf gtk3 developerBuild cmake;
-        patches = [ ./patches/0007-qtbase-xcursor.patch ];
       };
 
       qt3d = callPackage ./modules/qt3d.nix { };
@@ -59,6 +58,7 @@ let
       qtdatavis3d = callPackage ./modules/qtdatavis3d.nix { };
       qtdeclarative = callPackage ./modules/qtdeclarative.nix { };
       qtdoc = callPackage ./modules/qtdoc.nix { };
+      qthttpserver = callPackage ./modules/qthttpserver.nix { };
       qtimageformats = callPackage ./modules/qtimageformats.nix { };
       qtlanguageserver = callPackage ./modules/qtlanguageserver.nix { };
       qtlottie = callPackage ./modules/qtlottie.nix { };
@@ -71,7 +71,9 @@ let
       qtserialbus = callPackage ./modules/qtserialbus.nix { };
       qtserialport = callPackage ./modules/qtserialport.nix { };
       qtshadertools = callPackage ./modules/qtshadertools.nix { };
+      qtspeech = callPackage ./modules/qtspeech.nix { };
       qtquick3d = callPackage ./modules/qtquick3d.nix { };
+      qtquick3dphysics = callPackage ./modules/qtquick3dphysics.nix { };
       qtquicktimeline = callPackage ./modules/qtquicktimeline.nix { };
       qtremoteobjects = callPackage ./modules/qtremoteobjects.nix { };
       qtsvg = callPackage ./modules/qtsvg.nix { };

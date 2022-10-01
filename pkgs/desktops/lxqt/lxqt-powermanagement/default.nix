@@ -13,7 +13,7 @@
 , liblxqt
 , libqtxdg
 , lxqt-globalkeys
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
@@ -45,7 +45,7 @@ mkDerivation rec {
     lxqt-globalkeys
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-powermanagement";

@@ -769,6 +769,13 @@
       </listitem>
       <listitem>
         <para>
+          The Wordpress module got support for installing language packs
+          through
+          <literal>services.wordpress.sites.&lt;site&gt;.languages</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           There is a new module for the <literal>thunar</literal>
           program (the Xfce file manager), which depends on the
           <literal>xfconf</literal> dbus service, and also has a dbus

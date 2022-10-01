@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "shellhub-agent";
-  version = "0.10.2";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "shellhub-io";
     repo = "shellhub";
     rev = "v${version}";
-    sha256 = "F0kDrucPjjzlSiYDuZBO7xT0hTT0BNpHDCKbzWFQCzo=";
+    sha256 = "XYDS9g118jv7BoI0QSncZMPspSwcnAIFKdjUgttlTgU=";
   };
 
   modRoot = "./agent";
@@ -25,7 +25,6 @@ buildGoModule rec {
 
   passthru = {
     updateScript = gitUpdater {
-      inherit pname version;
       rev-prefix = "v";
       ignoredVersions = ".(rc|beta).*";
     };

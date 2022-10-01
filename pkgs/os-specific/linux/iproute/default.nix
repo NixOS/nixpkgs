@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     # No nicer place to find latest release.
     url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2.git";
     rev-prefix = "v";
