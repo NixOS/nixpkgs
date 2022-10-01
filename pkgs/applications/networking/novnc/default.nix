@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, python3, stdenv, substituteAll, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "novnc";
@@ -11,7 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Z+bks7kcwj+Z3uf/t0u25DnGOM60QhSH6uuoIi59jqU=";
   };
 
-  patches = [ ./fix-paths.patch ];
+  patches = with python3.pkgs; [
+    (substituteAll {
+      src = ./websockify.patch;
+      inherit websockify;
+    })
+  ] ++ [ ./fix-paths.patch ];
 
   postPatch = ''
     substituteAllInPlace utils/novnc_proxy
