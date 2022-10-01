@@ -69,7 +69,7 @@ in {
         ProtectKernelTunables = true;
         ProtectSystem = "full";
         StateDirectory = "rust-motd";
-        RestrictAddressFamilies = "none";
+        RestrictAddressFamilies = [ "AF_UNIX" ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
