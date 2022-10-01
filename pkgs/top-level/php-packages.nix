@@ -22,6 +22,7 @@
 , libffi
 , libiconv
 , libjpeg
+, libkrb5
 , libpng
 , libsodium
 , libwebp
@@ -342,10 +343,8 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "imap";
-          buildInputs = [ uwimap openssl pam pcre2 ];
-          configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" ];
-          # uwimap doesn't build on darwin.
-          enable = (!stdenv.isDarwin);
+          buildInputs = [ uwimap openssl pam pcre2 libkrb5 ];
+          configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" "--with-kerberos" ];
         }
         {
           name = "intl";
