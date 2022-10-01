@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, nixosTests
 , enableNvidiaCgToolkit ? false
 , withGamemode ? stdenv.isLinux
 , withVulkan ? stdenv.isLinux
@@ -134,6 +135,8 @@ stdenv.mkDerivation rec {
     # TODO: drop when upstream gets a fix for it:
     #   https://github.com/libretro/RetroArch/issues/14025
     ++ lib.optionals stdenv.isDarwin [ "-fcommon" ];
+
+  passthru.tests = nixosTests.retroarch;
 
   meta = with lib; {
     homepage = "https://libretro.com";
