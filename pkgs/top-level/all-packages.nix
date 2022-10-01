@@ -22988,6 +22988,9 @@ with pkgs;
   dovecot = callPackage ../servers/mail/dovecot {
     openssl = openssl_1_1;
   };
+
+  dodo = callPackage ../applications/networking/mailreaders/dodo {};
+
   dovecot_pigeonhole = callPackage ../servers/mail/dovecot/plugins/pigeonhole { };
   dovecot_fts_xapian = callPackage ../servers/mail/dovecot/plugins/fts_xapian { };
 
