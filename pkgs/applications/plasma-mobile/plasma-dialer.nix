@@ -9,15 +9,24 @@
 , kcoreaddons
 , kdbusaddons
 , ki18n
+, kio
 , kirigami2
 , knotifications
 , kpeople
 , libphonenumber
+, libselinux
+, libsepol
 , modemmanager-qt
+, pcre
+, plasma-wayland-protocols
 , protobuf
+, pulseaudio-qt
 , qtfeedback
 , qtmpris
 , qtquickcontrols2
+, util-linux
+, wayland
+, wayland-protocols
 }:
 
 mkDerivation rec {
@@ -34,16 +43,30 @@ mkDerivation rec {
     kcoreaddons
     kdbusaddons
     ki18n
+    kio
     kirigami2
     knotifications
     kpeople
     libphonenumber
+    libselinux
+    libsepol
     modemmanager-qt
+    pcre
+    plasma-wayland-protocols
     protobuf # Needed by libphonenumber
+    pulseaudio-qt
     qtfeedback
     qtmpris
     qtquickcontrols2
+    util-linux
+    wayland
+    wayland-protocols
   ];
+
+  postPatch = ''
+    substituteInPlace plasma-dialer/org.kde.phone.dialer.desktop \
+      --replace "/usr/bin/" "$out/bin/"
+  '';
 
   meta = with lib; {
     description = "Dialer for Plasma Mobile";
