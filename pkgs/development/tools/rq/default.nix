@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rq";
-  version = "1.0.2";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "dflemstr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0km9d751jr6c5qy4af6ks7nv3xfn13iqi03wq59a1c73rnf0zinp";
+    sha256 = "sha256-QyYTbMXikLSe3eYJRUALQJxUJjA6VlvaLMwGrxIKfZI=";
   };
 
-  cargoSha256 = "0071q08f75qrxdkbx1b9phqpbj15r79jbh391y32acifi7hr35hj";
+  cargoSha256 = "sha256-WAgWc9rAQBjrsaHP6s3Djpg3iYmfRVC9J9yq0T/zMqA=";
 
   postPatch = ''
     # Remove #[deny(warnings)] which is equivalent to -Werror in C.
