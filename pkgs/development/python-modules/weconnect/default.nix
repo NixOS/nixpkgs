@@ -25,11 +25,16 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    ascii-magic
     oauthlib
-    pillow
     requests
   ];
+
+  passthru.optional-dependencies = {
+    Images = [
+      ascii-magic
+      pillow
+    ];
+  };
 
   checkInputs = [
     pytest-httpserver
