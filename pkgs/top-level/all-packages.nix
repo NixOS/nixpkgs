@@ -33933,6 +33933,8 @@ with pkgs;
 
   chia = callPackage ../applications/blockchains/chia { };
 
+  chia-dev-tools = callPackage ../applications/blockchains/chia-dev-tools { };
+
   chia-plotter = callPackage ../applications/blockchains/chia-plotter { };
 
   clboss = callPackage ../applications/blockchains/clboss { };
