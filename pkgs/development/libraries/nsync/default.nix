@@ -17,13 +17,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  # Needed for case-insensitive filesystems like on macOS
+  # because a file named BUILD exists already.
+  cmakeBuildDir = "build_dir";
+
   meta = {
     homepage = "https://github.com/google/nsync";
     description = "C library that exports various synchronization primitives";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ puffnfresh Luflosi ];
-    # On macOS we get an error for some reason:
-    # > mkdir: cannot create directory 'build': File exists
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }
