@@ -450,9 +450,9 @@ in
     core = "hatari";
     description = "Port of Hatari to libretro";
     license = lib.licenses.gpl2Only;
-    extraBuildInputs = [ zlib ];
     extraNativeBuildInputs = [ which ];
     dontConfigure = true;
+    # zlib is already included in mkLibRetroCore as buildInputs
     makeFlags = [ "EXTERNAL_ZLIB=1" ];
   };
 
@@ -515,11 +515,6 @@ in
     extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib ];
     makeFlags = [ "PYTHON_EXECUTABLE=python3" ];
-    postPatch = ''
-      # Prevent the failure during the parallel building of:
-      # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
-      mkdir -p 3rdparty/genie/build/gmake.linux/obj/Release/src/host/lua-5.3.0/src
-    '';
     enableParallelBuilding = false;
   };
 
