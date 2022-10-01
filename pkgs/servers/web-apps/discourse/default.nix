@@ -11,13 +11,13 @@
 }@args:
 
 let
-  version = "2.9.0.beta9";
+  version = "2.9.0.beta10";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-pavNdAbk9yuWRg++p1MCmpBMuYKDs63QbJpHrPS9oAY=";
+    sha256 = "sha256-7uMcJZolLUoJILRYbmcSDArcMP3o89ubh6XttZ7TsLg=";
   };
 
   runtimeDeps = [
@@ -161,7 +161,7 @@ let
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = src + "/app/assets/javascripts/yarn.lock";
-    sha256 = "14d7y29460ggqcjnc9vk1q2lnxfl6ycyp8rc103g3gs2bl5sb6r0";
+    sha256 = "0s8cmy76xh4z9y932bjshmpyr04zn3yn62ld9174lks2j965qkbl";
   };
 
   assets = stdenv.mkDerivation {

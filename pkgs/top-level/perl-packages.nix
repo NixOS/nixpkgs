@@ -19421,6 +19421,12 @@ let
       url = "mirror://cpan/authors/id/M/MA/MARSCHAP/perl-ldap-0.66.tar.gz";
       hash = "sha256-CSY85hZugMmNaJ1B0JmVuBM4n9Bpt4RgH23Ff44rQQI=";
     };
+    # ldapi socket location should match the one compiled into the openldap package
+    postPatch = ''
+      for f in lib/Net/LDAPI.pm lib/Net/LDAP/Util.pm lib/Net/LDAP.pod lib/Net/LDAP.pm; do
+        sed -i 's:/var/run/ldapi:/run/openldap/ldapi:g' "$f"
+      done
+    '';
     buildInputs = [ TextSoundex ];
     propagatedBuildInputs = [ ConvertASN1 ];
     meta = {

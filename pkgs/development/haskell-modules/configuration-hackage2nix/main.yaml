@@ -105,7 +105,11 @@ extra-packages:
   - aeson < 2                           # required by pantry-0.5.2
   - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
   - base16-bytestring < 1               # required for cabal-install etc.
+  - basement < 0.0.15                   # 2022-08-30: last version to support GHC < 8.10
   - bower-json == 1.0.0.1               # 2022-05-21: Needed for spago 0.20.9
+  - brick == 0.70.*                     # 2022-08-13: needed by matterhorn-50200.17.0
+  - brittany == 0.13.1.2                # 2022-09-20: needed for hls on ghc 8.8
+  - cabal-install-parsers < 0.5         # 2022-08-31: required by haskell-ci 0.14.3
   - clay < 0.14                         # 2022-03-20: Needed for neuron 1.0.0.0
   - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
   - dependent-map == 0.2.4.0            # required by Hasura 1.3.1, 2020-08-20
@@ -113,6 +117,8 @@ extra-packages:
   - dhall == 1.29.0                     # required for ats-pkg
   - dhall == 1.38.1                     # required for spago
   - doctest == 0.18.*                   # 2021-11-19: closest to stackage version for GHC 9.*
+  - foundation < 0.0.29                 # 2022-08-30: last version to support GHC < 8.10
+  - fourmolu == 0.3.0.0                 # 2022-09-21: needed for hls on ghc 8.8
   - ghc-api-compat == 8.10.7            # 2022-02-17: preserve for GHC 8.10.7
   - ghc-api-compat == 8.6               # 2021-09-07: preserve for GHC 8.8.4
   - ghc-lib == 8.10.7.*                 # 2022-02-17: preserve for GHC 8.10.7
@@ -127,39 +133,34 @@ extra-packages:
   - haddock-library ==1.7.*             # required by stylish-cabal-0.5.0.0
   - happy == 1.19.12                    # for ghcjs
   - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
+  - hlint == 3.2.8                      # 2022-09-21: needed for hls on ghc 8.8
+  - hlint == 3.4.1                      # 2022-09-21: needed for hls with ghc-lib-parser 9.2
   - hnix-store-core == 0.5.0.0          # 2022-06-17: Until hnix 0.17
   - hnix-store-remote == 0.5.0.0        # 2022-06-17: Until hnix 0.17
+  - hpack == 0.35.0                     # 2022-09-29: Needed for stack-2.9.1
   - hspec < 2.8                         # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-core < 2.8                    # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-golden == 0.1.*               # 2022-04-07: Needed for elm-format
   - immortal == 0.2.2.1                 # required by Hasura 1.3.1, 2020-08-20
   - language-javascript == 0.7.0.0      # required by purescript
+  - lsp == 1.4.0.0                      # 2022-09-18: need for dhall-lsp-server 1.1.2
+  - lsp-types == 1.4.0.1                # 2022-09-18: need for dhall-lsp-server 1.1.2
   - mmorph == 1.1.3                     # Newest working version of mmorph on ghc 8.6.5. needed for hls
   - network == 2.6.3.1                  # required by pkgs/games/hedgewars/default.nix, 2020-11-15
   - optparse-applicative < 0.16         # needed for niv-0.2.19
+  - ormolu == 0.1.4.1                   # 2022-09-21: needed for hls on ghc 8.8
   - ormolu == 0.2.*                     # 2022-02-21: For ghc 8.8 and 8.10
   - pantry == 0.5.2.1                   # needed for stack-2.7.3
   - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
   - relude == 0.7.0.0                   # 2022-02-25: Needed for ema 0.6
   - resolv == 0.1.1.2                   # required to build cabal-install-3.0.0.0 with pre ghc-8.8.x
   - sbv == 7.13                         # required for pkgs.petrinizer
+  - stylish-haskell == 0.13.0.0         # 2022-09-19: needed for hls on ghc 8.8
   - tasty-hspec == 1.1.6                # 2022-04-07: Needed for elm-format
   - vty == 5.35.1                       # 2022-07-08: needed for glirc-2.39.0.1
   - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
   - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
-  - brick == 0.70.*                     # 2022-08-13: needed by matterhorn-50200.17.0
-  - basement < 0.0.15                   # 2022-08-30: last version to support GHC < 8.10
-  - foundation < 0.0.29                 # 2022-08-30: last version to support GHC < 8.10
-  - cabal-install-parsers < 0.5         # 2022-08-31: required by haskell-ci 0.14.3
-  - lsp == 1.4.0.0                      # 2022-09-18: need for dhall-lsp-server 1.1.2
-  - lsp-types == 1.4.0.1                # 2022-09-18: need for dhall-lsp-server 1.1.2
-  - stylish-haskell == 0.13.0.0         # 2022-09-19: needed for hls on ghc 8.8
-  - brittany == 0.13.1.2                # 2022-09-20: needed for hls on ghc 8.8
-  - fourmolu == 0.3.0.0                 # 2022-09-21: needed for hls on ghc 8.8
-  - ormolu == 0.1.4.1                   # 2022-09-21: needed for hls on ghc 8.8
-  - hlint == 3.2.8                      # 2022-09-21: needed for hls on ghc 8.8
-  - hlint == 3.4.1                      # 2022-09-21: needed for hls with ghc-lib-parser 9.2
 
 package-maintainers:
   abbradar:
