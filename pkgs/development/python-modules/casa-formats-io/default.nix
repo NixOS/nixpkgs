@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "casa-formats-io";
-  version = "0.2";
+  version = "0.2.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-omDPTR/RRHosOF+ejZzuGUBO1LAN/SefNQsvnXxezOQ=";
+    sha256 = "sha256-8iZ+wcSfh5ACTb3/iQAf2qQpwZ6wExWwcdJoLmCEjB0=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -33,4 +33,3 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ smaret ];
   };
 }
-
