@@ -18,6 +18,7 @@
 , gdk-pixbuf
 , glib
 , gtk3
+, imagemagick
 , libappindicator-gtk3
 , libdbusmenu
 , libdrm
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     glib
     gtk3
+    imagemagick
     pango
     systemd
     mesa # for libgbm
@@ -106,8 +108,15 @@ stdenv.mkDerivation rec {
     makeWrapper $out/opt/tidal-hifi/tidal-hifi $out/bin/tidal-hifi \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
       "''${gappsWrapperArgs[@]}"
-    substituteInPlace $out/share/applications/tidal-hifi.desktop --replace \
-      "/opt/tidal-hifi/tidal-hifi" "tidal-hifi"
+    substituteInPlace $out/share/applications/tidal-hifi.desktop \
+      --replace \ "/opt/tidal-hifi/tidal-hifi" "tidal-hifi" \
+      --replace "/usr/share/icons/hicolor/0x0/apps/tidal-hifi.png" "tidal-hifi.png"
+
+    for size in 48 64 128 256 512; do
+      mkdir -p $out/share/icons/hicolor/''${size}x''${size}/apps/
+      convert $out/share/icons/hicolor/0x0/apps/tidal-hifi.png \
+        -resize ''${size}x''${size} $out/share/icons/hicolor/''${size}x''${size}/apps/tidal-hifi.png
+    done
   '';
 
   meta = with lib; {
