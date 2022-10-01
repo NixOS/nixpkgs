@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles, buildPackages }:
 
 buildGoModule rec {
   pname = "hugo";
@@ -25,13 +25,13 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X github.com/gohugoio/hugo/common/hugo.vendorInfo=nixpkgs" ];
 
-  postInstall = ''
-    $out/bin/hugo gen man
+  postInstall = let emulator = stdenv.hostPlatform.emulator buildPackages; in ''
+    ${emulator} $out/bin/hugo gen man
     installManPage man/*
     installShellCompletion --cmd hugo \
-      --bash <($out/bin/hugo completion bash) \
-      --fish <($out/bin/hugo completion fish) \
-      --zsh <($out/bin/hugo completion zsh)
+      --bash <(${emulator} $out/bin/hugo completion bash) \
+      --fish <(${emulator} $out/bin/hugo completion fish) \
+      --zsh  <(${emulator} $out/bin/hugo completion zsh)
   '';
 
   meta = with lib; {

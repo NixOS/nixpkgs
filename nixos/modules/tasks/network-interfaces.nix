@@ -604,6 +604,10 @@ in
         The configuration for each network interface.  If
         {option}`networking.useDHCP` is true, then every
         interface not listed here will be configured using DHCP.
+
+        Please note that {option}`systemd.network.netdevs` has more features
+        and is better maintained. When building new things, it is advised to
+        use that instead.
       '';
       type = with types; attrsOf (submodule interfaceOpts);
     };
