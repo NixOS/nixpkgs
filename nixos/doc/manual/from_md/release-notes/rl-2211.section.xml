@@ -212,6 +212,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/alacritty/alacritty">alacritty</link>,
+          a cross-platform, OpenGL terminal emulator. Available as
+          <link linkend="opt-programs.alacritty.enable">programs.alacritty</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/leetronics/infnoise">infnoise</link>,
           a hardware True Random Number Generator dongle. Available as
           <link xlink:href="options.html#opt-services.infnoise.enable">services.infnoise</link>.
