@@ -21178,6 +21178,7 @@ with pkgs;
   openslp = callPackage ../development/libraries/openslp {};
 
   openstackclient = with python3Packages; toPythonApplication python-openstackclient;
+  heatclient = with python3Packages; toPythonApplication python-heatclient;
 
   openvdb = callPackage ../development/libraries/openvdb {};
 
