@@ -6,6 +6,7 @@
 , gnumake
 , highlight
 , libgit2
+, libxcrypt
 , man
 , openssl
 , pkg-config
@@ -137,12 +138,14 @@ buildPerlPackage rec {
   installTargets = [ "install" ];
   postInstall = ''
     for prog in $out/bin/*; do
-        wrapProgram $prog --prefix PATH : ${lib.makeBinPath [
-          git
-          /* for InlineC */
-          gnumake
-          stdenv.cc.cc
-        ]}
+        wrapProgram $prog \
+            --set NIX_CFLAGS_COMPILE_${stdenv.cc.suffixSalt} -I${lib.getDev libxcrypt}/include \
+            --prefix PATH : ${lib.makeBinPath [
+              git
+              /* for InlineC */
+              gnumake
+              stdenv.cc
+            ]}
     done
 
     mv sa_config $sa_config
