@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
     install -D pgroonga.so -t $out/lib/
     install -D pgroonga.control -t $out/share/postgresql/extension
     install -D data/pgroonga-*.sql -t $out/share/postgresql/extension
+
+    install -D pgroonga_database.so -t $out/lib/
+    install -D pgroonga_database.control -t $out/share/postgresql/extension
+    install -D data/pgroonga_database-*.sql -t $out/share/postgresql/extension
   '';
 
   meta = with lib; {
@@ -31,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://pgroonga.github.io/";
     license = licenses.postgresql;
     platforms = postgresql.meta.platforms;
-    maintainers = with maintainers; [ DerTim1 ];
+    maintainers = with maintainers; [ DerTim1 ivan ];
   };
 }
