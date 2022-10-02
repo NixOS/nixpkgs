@@ -505,14 +505,6 @@
       </listitem>
       <listitem>
         <para>
-          The (previously undocumented) Nixpkgs configuration option
-          <literal>checkMeta</literal> now defaults to
-          <literal>true</literal>. This may cause evaluation failures
-          for packages with incorrect <literal>meta</literal> attribute.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           xow package removed along with the
           <literal>hardware.xow</literal> module, due to the project
           being deprecated in favor of <literal>xone</literal>, which is

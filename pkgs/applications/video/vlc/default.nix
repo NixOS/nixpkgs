@@ -64,6 +64,7 @@
 , systemd
 , taglib
 , unzip
+, xlibsWrapper
 , xorg
 , zlib
 , chromecastSupport ? true, libmicrodns, protobuf
@@ -149,6 +150,7 @@ stdenv.mkDerivation rec {
     srt
     systemd
     taglib
+    xlibsWrapper
     zlib
   ]
   ++ (with xorg; [
@@ -156,7 +158,6 @@ stdenv.mkDerivation rec {
     libXv
     libXvMC
     xcbutilkeysyms
-    xlibsWrapper
   ])
   ++ optional (!stdenv.hostPlatform.isAarch && !onlyLibVLC) live555
   ++ optional jackSupport libjack2

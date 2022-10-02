@@ -14,14 +14,14 @@
 
 buildPythonApplication rec {
   pname = "yutto";
-  version = "2.0.0b13";
+  version = "2.0.0b15";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XqfbvlaJoRPpwnaUA52KloOsEOIt3YM0cq36DZN6lR8=";
+    hash = "sha256-TOFApMwY2WRYg2H2N0PIjylYFKnTHdszdU+AFgLYYwc=";
   };
 
   nativeBuildInputs = [
