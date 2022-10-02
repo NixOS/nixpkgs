@@ -1,13 +1,13 @@
 { stdenv, lib, fetchFromGitHub, autoconf, automake, pkg-config, SDL2, gtk2 }:
 stdenv.mkDerivation {
   pname = "basiliskii";
-  version = "unstable-2022-04-05";
+  version = "unstable-2022-09-30";
 
   src = fetchFromGitHub {
     owner = "kanjitalk755";
     repo = "macemu";
-    rev = "d4baa318e49a29d7ea5fc71a637191d6c470546f";
-    sha256 = "jBKTC2fIPJ6mSkMABNxcd2ujXJ+duCXw291iz5ZmiVg=";
+    rev = "2fa17a0783cf36ae60b77b5ed930cda4dc1824af";
+    sha256 = "+jkns6H2YjlewbUzgoteGSQYWJL+OWVu178aM+BtABM=";
   };
   sourceRoot = "source/BasiliskII/src/Unix";
   patches = [ ./remove-redhat-6-workaround-for-scsi-sg.h.patch ];
