@@ -33114,6 +33114,8 @@ with pkgs;
 
   nux = callPackage ../tools/misc/nux { };
 
+  phonemizer = with python3Packages; toPythonApplication phonemizer;
+
   tts = callPackage ../tools/audio/tts { };
 
   ### GAMES
