@@ -15732,16 +15732,11 @@ let
 
   mod_perl2 = buildPerlPackage {
     pname = "mod_perl";
-    version = "2.0.11";
+    version = "2.0.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHAY/mod_perl-2.0.11.tar.gz";
-      hash = "sha256-yiqeGM35D5xgI+eGNp1bp16NrCkuv+qZAMKb9C3Bb3Q=";
+      url = "mirror://cpan/authors/id/S/SH/SHAY/mod_perl-2.0.12.tar.gz";
+      hash = "sha256-9bghtZsP3JZw5G7Q/PMtiRHyUSYYmotowWUvkiHu4mk=";
     };
-
-    patches = [
-      # Fix build on perl-5.34.0, https://github.com/Perl/perl5/issues/18617
-      ../development/perl-modules/mod_perl2-PL_hash_seed.patch
-    ];
 
     makeMakerFlags = "MP_AP_DESTDIR=$out";
     buildInputs = [ pkgs.apacheHttpd ];
