@@ -20097,6 +20097,8 @@ with pkgs;
 
   libmkv = callPackage ../development/libraries/libmkv { };
 
+  libnut = callPackage ../development/libraries/libnut { };
+
   libmms = callPackage ../development/libraries/libmms { };
 
   libmowgli = callPackage ../development/libraries/libmowgli { };
