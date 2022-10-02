@@ -57,6 +57,8 @@ in buildPythonPackage {
   dontBuild = true;
   doCheck = false;
 
+  format = "other";
+
   installPhase = ''
     mkdir -p $out/share $out/bin
     cp main.py $out/share/matrix.py
