@@ -4988,6 +4988,8 @@ in {
 
   keepkey = callPackage ../development/python-modules/keepkey { };
 
+  kegtron-ble = callPackage ../development/python-modules/kegtron-ble { };
+
   keras-applications = callPackage ../development/python-modules/keras-applications { };
 
   keras = callPackage ../development/python-modules/keras { };
