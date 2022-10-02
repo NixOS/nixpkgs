@@ -101,6 +101,7 @@ mapAliases ({
   mailman-web = throw "Please use pkgs.mailman-web"; # added 2022-04-29
   mistune_0_8 = throw "mistune_0_8 was removed because it was outdated and insecure"; # added 2022-08-12
   mistune_2_0 = mistune; # added 2022-08-12
+  mutmut = throw "mutmut has been promoted to a top-level attribute"; # added 2022-10-02
   net2grid = gridnet; # add 2022-04-22
   nose-cover3 = throw "nose-cover3 has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-02-16
   ordereddict = throw "ordereddict has been removed because it is only useful on unsupported python versions."; # added 2022-05-28

@@ -737,6 +737,8 @@ with pkgs;
 
   owl = callPackage ../tools/networking/owl { };
 
+  mutmut = callPackage ../development/tools/mutmut { };
+
   packcc = callPackage ../development/tools/packcc { };
 
   packer = callPackage ../development/tools/packer { };
