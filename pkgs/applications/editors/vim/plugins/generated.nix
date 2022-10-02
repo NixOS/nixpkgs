@@ -7588,6 +7588,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-telescope/telescope.nvim/";
   };
 
+  template-string-nvim = buildVimPluginFrom2Nix {
+    pname = "template-string.nvim";
+    version = "2022-08-18";
+    src = fetchFromGitHub {
+      owner = "axelvc";
+      repo = "template-string.nvim";
+      rev = "84e50b878caa92100c65deec12ccb41aa4ef3fae";
+      sha256 = "1ibz9vpqy0lck8pxzr3bikrw3zcrrw0nx5kz53a5n38qrb4l95gg";
+    };
+    meta.homepage = "https://github.com/axelvc/template-string.nvim/";
+  };
+
   tender-vim = buildVimPluginFrom2Nix {
     pname = "tender.vim";
     version = "2021-05-24";
