@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , substituteAll
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , joblib
 , segments
@@ -13,17 +13,18 @@
 , pytest-cov
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "phonemizer";
   version = "3.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Bo+F+FqKmtxjijeHrqyvcaU+R1eLEtdzwJdDNQDNiSs=";
+    hash = "sha256-Bo+F+FqKmtxjijeHrqyvcaU+R1eLEtdzwJdDNQDNiSs=";
   };
 
   postPatch = ''
-    sed -i -e '/\'pytest-runner\'/d setup.py
+    sed -i '/pytest-runner/d setup.py
   '';
 
   patches = [

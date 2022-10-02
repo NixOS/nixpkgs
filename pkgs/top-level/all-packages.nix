@@ -737,6 +737,8 @@ with pkgs;
 
   owl = callPackage ../tools/networking/owl { };
 
+  mutmut = callPackage ../development/tools/mutmut { };
+
   packcc = callPackage ../development/tools/packcc { };
 
   packer = callPackage ../development/tools/packer { };
@@ -2411,7 +2413,7 @@ with pkgs;
 
   cod = callPackage ../tools/misc/cod { };
 
-  codespell = with python3Packages; toPythonApplication codespell;
+  codespell = callPackage ../development/tools/codespell { };
 
   coolreader = libsForQt5.callPackage ../applications/misc/coolreader {};
 
@@ -3087,6 +3089,8 @@ with pkgs;
   tensorflow-lite = callPackage ../development/libraries/science/math/tensorflow-lite { };
 
   tezos-rust-libs = callPackage ../development/libraries/tezos-rust-libs { };
+
+  behave = with python3Packages; toPythonApplication behave;
 
   behdad-fonts = callPackage ../data/fonts/behdad-fonts { };
 
@@ -4518,6 +4522,8 @@ with pkgs;
   };
 
   notify = callPackage ../tools/misc/notify { };
+
+  notifymuch = callPackage ../applications/misc/notifymuch { };
 
   npins = callPackage ../tools/nix/npins { };
 
@@ -7250,6 +7256,8 @@ with pkgs;
     hamlib = hamlib_4;
   };
 
+  gprof2dot = with python3Packages; toPythonApplication gprof2dot;
+
   gprojector = callPackage ../applications/science/astronomy/gprojector { };
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
@@ -8027,6 +8035,8 @@ with pkgs;
   jrnl = callPackage ../applications/misc/jrnl { };
 
   jsawk = callPackage ../tools/text/jsawk { };
+
+  jsbeautifier = with python3Packages; toPythonApplication jsbeautifier;
 
   jscoverage = callPackage ../development/tools/misc/jscoverage { };
 
@@ -10390,6 +10400,8 @@ with pkgs;
   pympress = callPackage ../applications/office/pympress { };
 
   pyocd = python3Packages.callPackage ../development/embedded/pyocd { };
+
+  pypass = with python3Packages; toPythonApplication pypass;
 
   pyspread = libsForQt5.callPackage ../applications/office/pyspread { };
 
@@ -13409,6 +13421,8 @@ with pkgs;
 
   fasmg = callPackage ../development/compilers/fasmg { };
 
+  filecheck = with python3Packages; toPythonApplication filecheck;
+
   firrtl = callPackage ../development/compilers/firrtl { };
 
   flasm = callPackage ../development/compilers/flasm { };
@@ -15509,7 +15523,7 @@ with pkgs;
     inherit pkgs lib;
   };
 
-  poetry2conda = python3Packages.callPackage ../development/python-modules/poetry2conda { };
+  poetry2conda = callPackage ../tools/package-management/poetry2conda { };
 
   pip-audit = callPackage ../development/tools/pip-audit {};
 
@@ -16698,6 +16712,8 @@ with pkgs;
 
   graphene = callPackage ../development/libraries/graphene { };
 
+  griffe = with python3Packages; toPythonApplication griffe;
+
   gtk-doc = callPackage ../development/tools/documentation/gtk-doc { };
 
   gtkdialog = callPackage ../development/tools/misc/gtkdialog { };
@@ -17624,6 +17640,8 @@ with pkgs;
   grabserial = callPackage ../development/tools/grabserial { };
 
   mypy = with python3Packages; toPythonApplication mypy;
+
+  mypy-protobuf = with python3Packages; toPythonApplication mypy-protobuf;
 
   nsis = callPackage ../development/tools/nsis { };
 
@@ -21187,6 +21205,10 @@ with pkgs;
   openslp = callPackage ../development/libraries/openslp {};
 
   openstackclient = with python3Packages; toPythonApplication python-openstackclient;
+  glanceclient = with python3Packages; toPythonApplication python-glanceclient;
+  heatclient = with python3Packages; toPythonApplication python-heatclient;
+  ironicclient = with python3Packages; toPythonApplication python-ironicclient;
+  manilaclient = with python3Packages; toPythonApplication python-manilaclient;
 
   openvdb = callPackage ../development/libraries/openvdb {};
 
@@ -27683,7 +27705,7 @@ with pkgs;
 
   gg-scm = callPackage ../applications/version-management/git-and-tools/gg { };
 
-  gigalixir = with python3Packages; toPythonApplication gigalixir;
+  gigalixir = callPackage ../tools/misc/gigalixir { };
 
   go-libp2p-daemon = callPackage ../servers/go-libp2p-daemon { };
 
@@ -33116,6 +33138,8 @@ with pkgs;
 
   nux = callPackage ../tools/misc/nux { };
 
+  phonemizer = with python3Packages; toPythonApplication phonemizer;
+
   tts = callPackage ../tools/audio/tts { };
 
   ### GAMES
@@ -36429,7 +36453,7 @@ with pkgs;
 
   renderizer = callPackage ../development/tools/renderizer {};
 
-  rfc-bibtex = python3Packages.callPackage ../development/python-modules/rfc-bibtex { };
+  rfc-bibtex = callPackage ../tools/typesetting/rfc-bibtex { };
 
   pick-colour-picker = python3Packages.callPackage ../applications/graphics/pick-colour-picker {
     inherit glib gtk3 gobject-introspection wrapGAppsHook;

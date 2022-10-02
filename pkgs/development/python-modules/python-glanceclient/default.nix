@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , coreutils
 , pbr
@@ -18,7 +18,7 @@
 , requests-mock
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "python-glanceclient";
   version = "4.1.0";
   format = "setuptools";
