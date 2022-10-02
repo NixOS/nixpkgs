@@ -5697,6 +5697,18 @@ final: prev:
     meta.homepage = "https://github.com/gennaro-tedesco/nvim-peekup/";
   };
 
+  nvim-rename-state = buildVimPluginFrom2Nix {
+    pname = "nvim-rename-state";
+    version = "2022-09-29";
+    src = fetchFromGitHub {
+      owner = "olrtg";
+      repo = "nvim-rename-state";
+      rev = "d8a2ad1d3e9269d673007dbd0e76871bb10da878";
+      sha256 = "1aj9pz1y3yn63z4nyifs3f47j3zcbwl4v42l64rjz7m9pzdsa34b";
+    };
+    meta.homepage = "https://github.com/olrtg/nvim-rename-state/";
+  };
+
   nvim-scrollview = buildVimPluginFrom2Nix {
     pname = "nvim-scrollview";
     version = "2022-09-26";
