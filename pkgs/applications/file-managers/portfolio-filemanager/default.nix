@@ -47,6 +47,7 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     glib
+    gtk3
     gobject-introspection
     libhandy
     librsvg
