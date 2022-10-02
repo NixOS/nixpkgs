@@ -43,6 +43,7 @@ mapAliases ({
   bt_proximity = throw "'bt_proximity' has been renamed to/replaced by 'bt-proximity'"; # Converted to throw 2022-09-24
   carrot = throw "carrot has been removed, as its development was discontinued in 2012"; # added 2022-01-18
   class-registry = phx-class-registry; # added 2021-10-05
+  codespell = throw "codespell has been promoted to a top-level attribute"; # Added 2022-10-02
   ConfigArgParse = throw "'ConfigArgParse' has been renamed to/replaced by 'configargparse'"; # Converted to throw 2022-09-24
   cozy = throw "cozy was removed because it was not actually https://pypi.org/project/Cozy/."; # added 2022-01-14
   cryptography_vectors = "cryptography_vectors is no longer exposed in python*Packages because it is used for testing cryptography only."; # Added 2022-03-23

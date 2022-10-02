@@ -1962,8 +1962,6 @@ in {
 
   codepy = callPackage ../development/python-modules/codepy { };
 
-  codespell = callPackage ../development/python-modules/codespell { };
-
   cogapp = callPackage ../development/python-modules/cogapp { };
 
   coinmetrics-api-client = callPackage ../development/python-modules/coinmetrics-api-client { };

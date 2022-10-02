@@ -2406,7 +2406,7 @@ with pkgs;
 
   cod = callPackage ../tools/misc/cod { };
 
-  codespell = with python3Packages; toPythonApplication codespell;
+  codespell = callPackage ../development/tools/codespell { };
 
   coolreader = libsForQt5.callPackage ../applications/misc/coolreader {};
 

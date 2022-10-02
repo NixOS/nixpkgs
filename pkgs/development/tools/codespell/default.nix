@@ -1,8 +1,13 @@
-{ lib, buildPythonApplication, fetchFromGitHub, pytestCheckHook, pytest-dependency, aspell-python, aspellDicts, chardet }:
+{ lib
+, fetchFromGitHub
+, aspellDicts
+, python3
+}:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "codespell";
   version = "2.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "codespell-project";
@@ -17,7 +22,12 @@ buildPythonApplication rec {
       --replace "--cov-report=" ""
   '';
 
-  checkInputs = [ aspell-python chardet pytestCheckHook pytest-dependency ];
+  checkInputs = with python3.pkgs; [
+    aspell-python
+    chardet
+    pytestCheckHook
+    pytest-dependency
+  ];
 
   preCheck = ''
     export ASPELL_CONF="dict-dir ${aspellDicts.en}/lib/aspell"
