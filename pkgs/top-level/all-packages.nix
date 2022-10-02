@@ -1747,6 +1747,8 @@ with pkgs;
     inherit (qt5) wrapQtAppsHook;
   };
 
+  felix-fm = callPackage ../applications/file-managers/felix-fm { };
+
   joshuto = callPackage ../applications/file-managers/joshuto {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration Foundation;
   };
