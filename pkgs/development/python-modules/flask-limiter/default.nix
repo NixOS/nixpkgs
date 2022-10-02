@@ -24,7 +24,10 @@ buildPythonPackage rec {
     owner = "alisaifee";
     repo = "flask-limiter";
     rev = version;
-    sha256 = "sha256-JjksKwSMWzcslXCs977/Wlq1wDMaACxm8e6Ub+r3wPg=";
+    sha256 = "sha256-M5JKpTTARNSp8jBv/ObqF08YTWcpgHzJMmBq5xDti5E=";
+    # unreproducible git_refnames in flask_limiter/_version.py
+    # https://github.com/NixOS/nixpkgs/issues/84312
+    forceFetchGit = true;
   };
 
   propagatedBuildInputs = [
