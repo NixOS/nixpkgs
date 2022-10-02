@@ -115,6 +115,7 @@ let
       };
       persistenced = mapNullable (hash: callPackage (import ./persistenced.nix self hash) { }) persistencedSha256;
       inherit persistencedVersion settingsVersion;
+      compressFirmware = false;
     } // optionalAttrs (!i686bundled) {
       inherit lib32;
     };
