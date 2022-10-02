@@ -24,6 +24,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-KNUs/J4gBKxPhSdPUrMuFke028l2G4Ln3h5BxJkH6wg=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-0934.patch";
+      url = "https://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=patch;h=03345ecefeb0d82e3c3a4c28f27c3554f0611b39";
+      excludes = [ "CHANGELOG" ];
+      sha256 = "sha256-cordOsHQB3g3kEIUYaGastZ2fGKJsJSl+6+AErVdHr0=";
+    })
+  ];
+
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     sed '1i#include <linux/sockios.h>' -i src/dhcp.c
   '';
