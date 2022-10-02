@@ -21,7 +21,6 @@
 , libarchive
 , libnotify
 , nautilus
-, unzip
 }:
 
 stdenv.mkDerivation rec {
@@ -67,13 +66,6 @@ stdenv.mkDerivation rec {
     chmod +x postinstall.py # patchShebangs requires executable file
     patchShebangs postinstall.py
     patchShebangs data/set-mime-type-entry.py
-  '';
-
-  preFixup = ''
-    # Workaround because of https://gitlab.gnome.org/GNOME/file-roller/issues/40
-    gappsWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ unzip ]}
-    )
   '';
 
   passthru = {
