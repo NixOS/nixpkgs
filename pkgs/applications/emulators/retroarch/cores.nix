@@ -619,6 +619,10 @@ in
     license = lib.licenses.gpl3Only;
     extraBuildInputs = [ libGLU libGL libpng ];
     makefile = "Makefile";
+    postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
+      sed -i -e '1 i\CPUFLAGS += -DARM_FIX -DNO_ASM -DARM_ASM -DDONT_WANT_ARM_OPTIMIZATIONS -DARM64' Makefile \
+      && sed -i -e 's,CPUFLAGS  :=,,g' Makefile
+    '';
   };
 
   pcsx2 = mkLibRetroCore {
