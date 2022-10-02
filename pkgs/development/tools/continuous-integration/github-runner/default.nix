@@ -27,9 +27,12 @@ let
     inherit sha256;
   };
 
-  nugetSource = linkFarmFromDrvs "nuget-packages" (
-    import ./deps.nix { inherit fetchNuGet; } ++
+  sdkSource = linkFarmFromDrvs "nuget-sdk-packages" (
     dotnetSdk.passthru.packages { inherit fetchNuGet; }
+  );
+
+  nugetSource = linkFarmFromDrvs "nuget-packages" (
+    import ./deps.nix { inherit fetchNuGet; }
   );
 
   dotnetSdk = dotnetCorePackages.sdk_6_0;
@@ -44,6 +47,8 @@ in
 stdenv.mkDerivation rec {
   pname = "github-runner";
   version = "2.297.0";
+
+  inherit sdkSource;
 
   src = fetchFromGitHub {
     owner = "actions";
@@ -110,6 +115,7 @@ stdenv.mkDerivation rec {
     # Restore the dependencies
     dotnet restore src/ActionsRunner.sln \
       --runtime "${runtimeId}" \
+      --source "${sdkSource}" \
       --source "${nugetSource}"
 
     runHook postConfigure
@@ -302,12 +308,12 @@ stdenv.mkDerivation rec {
   # Inspired by passthru.fetch-deps in pkgs/build-support/build-dotnet-module/default.nix
   passthru.createDepsFile = writeShellApplication {
     name = "create-deps-file";
-    runtimeInputs = [ dotnetSdk nuget-to-nix ];
+    runtimeInputs = [ dotnetSdk (nuget-to-nix.override { dotnet-sdk = dotnetSdk; }) ];
     text = ''
       # Disable telemetry data
       export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-      rundir=$(pwd)
+      deps_file="$(realpath "''${1:-$(mktemp -t "${pname}-deps-XXXXXX.nix")}")"
 
       printf "\n* Setup workdir\n"
       workdir="$(mktemp -d /tmp/${pname}.XXX)"
@@ -324,10 +330,8 @@ stdenv.mkDerivation rec {
       dotnet restore src/ActionsRunner.sln --packages nuget_pkgs --no-cache --force --runtime "${rid}"
       '') (lib.attrValues runtimeIds)}
 
-      cd "$rundir"
-      deps_file=''${1-"/tmp/${pname}-deps.nix"}
       printf "\n* Make %s file\n" "$(basename "$deps_file")"
-      nuget-to-nix "$workdir/nuget_pkgs" > "$deps_file"
+      nuget-to-nix "$workdir/nuget_pkgs" "${sdkSource}" > "$deps_file"
       printf "\n* Dependency file writen to %s" "$deps_file"
     '';
   };
