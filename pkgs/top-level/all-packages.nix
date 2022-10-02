@@ -17614,6 +17614,8 @@ with pkgs;
 
   mypy = with python3Packages; toPythonApplication mypy;
 
+  mypy-protobuf = with python3Packages; toPythonApplication mypy-protobuf;
+
   nsis = callPackage ../development/tools/nsis { };
 
   tockloader = callPackage ../development/tools/misc/tockloader { };
