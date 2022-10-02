@@ -2928,6 +2928,12 @@
       fingerprint = "D68C 8469 5C08 7E0F 733A  28D0 EEB8 D1CE 62C4 DFEA";
     }];
   };
+  dag-h = {
+    email = "dagharju@protonmail.com";
+    github = "dag-h";
+    githubId = 16627772;
+    name = "Dag Harju";
+  };
   dalance = {
     email = "dalance@gmail.com";
     github = "dalance";
