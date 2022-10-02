@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pylutron-caseta";
-  version = "0.15.2";
+  version = "0.16.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "gurumitts";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dw/uCEY4+kpgNjbjgvw+kSfluziIK6NvIKo5QIjt+GQ=";
+    hash = "sha256-QASVifbDh9nsgKi0cT4VaUX0d6inVS8rddr/rsbJ7/I=";
   };
 
   nativeBuildInputs = [

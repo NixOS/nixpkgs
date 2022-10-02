@@ -240,10 +240,10 @@ rec {
     * to implicit typing rules, so it should work with older
     * parsers as well.
     */
-  toYAML = {}@args: toJSON args;
+  toYAML = toJSON;
 
   withRecursion =
-    args@{
+    {
       /* If this option is not null, the given value will stop evaluating at a certain depth */
       depthLimit
       /* If this option is true, an error will be thrown, if a certain given depth is exceeded */
@@ -287,7 +287,7 @@ rec {
     allowPrettyValues ? false,
     /* If this option is true, the output is indented with newlines for attribute sets and lists */
     multiline ? true
-  }@args:
+  }:
     let
     go = indent: v: with builtins;
     let     isPath   = v: typeOf v == "path";
