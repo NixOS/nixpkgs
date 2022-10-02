@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tealdeer";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "dbrgn";
     repo = "tealdeer";
     rev = "v${version}";
-    sha256 = "sha256-yF46jCdC4UDswKa/83ZrM9VkZXQqzua2/S7y2bqYa+c=";
+    sha256 = "sha256-c7HYQtNT3e/GRyhS6sVGBw91cIusWmOqQ3i+Gglc/Ks=";
   };
 
-  cargoSha256 = "sha256-BIMaVeNSdKl2A9613S+wgmb6YmiF5YJU8pTMVQfjDwI=";
+  cargoSha256 = "sha256-CLCY4rKdYX3QZvk18Ty9B3kcC6hXsDTpAFG0S5xusEQ=";
 
   buildInputs = if stdenv.isDarwin then [ Security ] else [ openssl ];
 
@@ -27,9 +27,9 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installShellCompletion --cmd tldr \
-      --bash bash_tealdeer \
-      --fish fish_tealdeer \
-      --zsh zsh_tealdeer
+      --bash completion/bash_tealdeer \
+      --fish completion/fish_tealdeer \
+      --zsh completion/zsh_tealdeer
   '';
 
   # disable tests for now since one needs network
