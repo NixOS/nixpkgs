@@ -4,8 +4,8 @@ let
   getPatches = dir:
     let files = builtins.attrNames (builtins.readDir dir);
     in map (f: dir + ("/" + f)) files;
-  flutterDrv = { version, pname, dartVersion, hash, dartHash }: mkFlutter {
-    inherit version pname;
+  flutterDrv = { version, pname, dartVersion, hash, dartHash, patches }: mkFlutter {
+    inherit version pname patches;
     dart = dart.override {
       version = dartVersion;
       sources = {
@@ -17,9 +17,8 @@ let
     };
     src = fetchurl {
       url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${version}-stable.tar.xz";
-      sha256 = "sha256-MTZeWQUp4/TcPzYIT6eqIKSPUPvn2Mp/thOQzNgpTXg=";
+      sha256 = hash;
     };
-    patches = getPatches ./patches;
   };
 in
 {
@@ -30,5 +29,15 @@ in
     dartVersion = "2.18.2";
     hash = "sha256-MTZeWQUp4/TcPzYIT6eqIKSPUPvn2Mp/thOQzNgpTXg=";
     dartHash = "sha256-C3+YjecXLvSmJrLwi9H7TgD9Np0AArRWx3EdBrfQpTU";
+    patches = getPatches ./patches/flutter3;
+  };
+
+  v2 = flutterDrv {
+    pname = "flutter";
+    version = "2.10.5";
+    dartVersion = "2.16.2";
+    hash = "sha256-DTZwxlMUYk8NS1SaWUJolXjD+JnRW73Ps5CdRHDGnt0=";
+    dartHash = "sha256-egrYd7B4XhkBiHPIFE2zopxKtQ58GqlogAKA/UeiXnI=";
+    patches = getPatches ./patches/flutter2;
   };
 }
