@@ -25,17 +25,14 @@
 , libvpx
 }:
 stdenv.mkDerivation rec {
-  version = "2.7.0";
+  version = "2.8.1";
   pname = "baresip";
   src = fetchFromGitHub {
     owner = "baresip";
     repo = "baresip";
     rev = "v${version}";
-    sha256 = "sha256-ouevompKkWn5CXuDcPuKiTE9GrIXBs/NFsNu6GHgReE=";
+    sha256 = "sha256-qtdwFAJLsHqhYVmD1YRUw0NMqX+Vq5BHR5mMvZISnuY=";
   };
-  postPatch = ''
-    patchShebangs modules/ctrl_dbus/gen.sh
-  '';
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     zlib
