@@ -21192,6 +21192,7 @@ with pkgs;
   openstackclient = with python3Packages; toPythonApplication python-openstackclient;
   glanceclient = with python3Packages; toPythonApplication python-glanceclient;
   heatclient = with python3Packages; toPythonApplication python-heatclient;
+  ironicclient = with python3Packages; toPythonApplication python-ironicclient;
 
   openvdb = callPackage ../development/libraries/openvdb {};
 
