@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-adapters";
-  version = "0.5.2";
+  version = "0.5.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-SyEe/auJaagRl3wg7JjBkLAgHyAeCeesEXvWXE733M4=";
+    hash = "sha256-fQ+E83C0kf2L0jvxh6JJLHZBgQOqXsKD5D5EwizaLUg=";
   };
 
   postPatch = ''
