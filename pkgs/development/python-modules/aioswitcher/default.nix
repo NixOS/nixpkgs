@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "aioswitcher";
-  version = "3.0.0";
+  version = "3.0.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "TomerFi";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-zJS09YQRMv3B0daW0cgBRPoLQkPyGuBgMohf6E2yqaM=";
+    hash = "sha256-CHyJuIqJpO7wUmOyeDXa4oBvxMthC96OCECtg13gqe0=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,9 @@ buildPythonPackage rec {
     "test_hexadecimale_timestamp_to_localtime_with_the_current_timestamp_should_return_a_time_string"
   ];
 
-  pythonImportsCheck = [ "aioswitcher" ];
+  pythonImportsCheck = [
+    "aioswitcher"
+  ];
 
   meta = with lib; {
     description = "Python module to interact with Switcher water heater";
