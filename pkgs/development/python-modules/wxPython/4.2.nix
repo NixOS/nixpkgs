@@ -28,9 +28,6 @@
 , webkitgtk
 , autoPatchelfHook
 }:
-let
-  dynamic-linker = stdenv.cc.bintools.dynamicLinker;
-in
 buildPythonPackage rec {
   pname = "wxPython";
   version = "4.2.0";
@@ -40,10 +37,6 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "663cebc4509d7e5d113518865fe274f77f95434c5d57bc386ed58d65ceed86c7";
   };
-
-  # https://github.com/NixOS/nixpkgs/issues/75759
-  # https://github.com/wxWidgets/Phoenix/issues/1316
-  doCheck = false;
 
   nativeBuildInputs = [
     which
@@ -80,9 +73,9 @@ buildPythonPackage rec {
   preConfigure = lib.optionalString (!stdenv.isDarwin) ''
     substituteInPlace wx/lib/wxcairo/wx_pycairo.py \
       --replace '_dlls = dict()' '_dlls = {k: ctypes.CDLL(v) for k, v in [
-        ("gdk",        "${wxGTK.gtk}/lib/libgtk-x11-3.0.so"),
-        ("pangocairo", "${pango.out}/lib/libpangocairo-1.0.so"),
-        ("cairoLib = None", "cairoLib = ctypes.CDLL('${cairo}/lib/libcairo.so')"),
+        ("gdk",        "${lib.getLib wxGTK.gtk}/lib/libgtk-x11-3.0.so"),
+        ("pangocairo", "${lib.getLib pango}/lib/libpangocairo-1.0.so"),
+        ("cairoLib = None", "cairoLib = ctypes.CDLL('${lib.getLib cairo}/lib/libcairo.so')"),
         ("appsvc",     None)
       ]}'
   '';
@@ -96,10 +89,14 @@ buildPythonPackage rec {
     wrapPythonPrograms
   '';
 
+  # https://github.com/NixOS/nixpkgs/issues/75759
+  # https://github.com/wxWidgets/Phoenix/issues/1316
+  doCheck = false;
+
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Cross platform GUI toolkit for Python, Phoenix version";
-    homepage = "http://wxpython.org/";
+    homepage = "https://wxpython.org/";
     license = licenses.wxWindows;
     maintainers = with maintainers; [ tfmoraes ];
   };
