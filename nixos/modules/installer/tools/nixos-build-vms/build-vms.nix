@@ -15,7 +15,7 @@ let
     inherit system pkgs;
   };
 
-  interactiveDriver = (testing.makeTest { inherit nodes; name = "network"; testScript = "start_all(); join_all();"; }).driverInteractive;
+  interactiveDriver = (testing.makeTest { inherit nodes; name = "network"; testScript = "start_all(); join_all();"; }).test.driverInteractive;
 in
 
 

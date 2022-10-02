@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     # executable wrapper
     makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
       --add-flags "$out/share/element/electron" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
     runHook postInstall
   '';

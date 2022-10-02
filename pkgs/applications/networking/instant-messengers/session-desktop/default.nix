@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation {
     cp -r bin $out/bin
 
     wrapProgram $out/bin/session-desktop \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
     runHook postInstall
   '';

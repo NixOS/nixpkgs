@@ -3817,7 +3817,7 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_19;
+    electron = electron_20;
   };
   element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
@@ -4722,7 +4722,9 @@ with pkgs;
 
   statserial = callPackage ../tools/misc/statserial { };
 
-  steampipe = callPackage ../tools/misc/steampipe { };
+  steampipe = callPackage ../tools/misc/steampipe {
+    buildGoModule = buildGo119Module;
+  };
 
   step-ca = callPackage ../tools/security/step-ca {
     inherit (darwin.apple_sdk.frameworks) PCSC;
@@ -7978,6 +7980,8 @@ with pkgs;
   joplin = nodePackages.joplin;
 
   joplin-desktop = callPackage ../applications/misc/joplin-desktop { };
+
+  jot = callPackage ../applications/misc/jot { };
 
   journaldriver = callPackage ../tools/misc/journaldriver {
     openssl = openssl_1_1;
@@ -22411,6 +22415,11 @@ with pkgs;
   wxGTK31-gtk2 = wxGTK31.override { withGtk2 = true; };
   wxGTK31-gtk3 = wxGTK31.override { withGtk2 = false; };
 
+  wxGTK32 = callPackage ../development/libraries/wxwidgets/wxGTK32.nix {
+    inherit (darwin.stubs) setfile;
+    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit AVFoundation AVKit WebKit;
+  };
+
   wxSVG = callPackage ../development/libraries/wxSVG {
     wxGTK = wxGTK30-gtk3;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -26643,14 +26652,16 @@ with pkgs;
 
   foxitreader = libsForQt512.callPackage ../applications/misc/foxitreader { };
 
-  pdfstudio = import ../applications/misc/pdfstudio {
-    program = "pdfstudio";
-    inherit callPackage fetchurl libgccjit;
+  pdfstudio2021 = callPackage ../applications/misc/pdfstudio {
+    year = "2021";
   };
 
-  pdfstudioviewer = import ../applications/misc/pdfstudio {
+  pdfstudio2022 = callPackage ../applications/misc/pdfstudio {
+    year = "2022";
+  };
+
+  pdfstudioviewer = callPackage ../applications/misc/pdfstudio {
     program = "pdfstudioviewer";
-    inherit callPackage fetchurl libgccjit;
   };
 
   aeolus = callPackage ../applications/audio/aeolus { };
@@ -35880,8 +35891,7 @@ with pkgs;
   gotestwaf = callPackage ../tools/security/gotestwaf { };
 
   gowitness = callPackage ../tools/security/gowitness {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
+    buildGoModule = buildGo119Module;
   };
 
   guetzli = callPackage ../applications/graphics/guetzli { };

@@ -67,8 +67,8 @@ stdenv.mkDerivation rec {
       sha256 = "wnG2MjY0DtAhVcEdcxu77tDa4T9Xm2pMYZU2wXLx2OA=";
     })
     (fetchpatch {
-      name = "setuptools-gte-62.1.0.patch";
-      url = "https://github.com/apache/thrift/pull/2635/commits/c41ad9d5119e9bdae1746167e77e224f390f2c42.patch";
+      name = "setuptools-gte-62.1.0.patch"; # https://github.com/apache/thrift/pull/2635
+      url = "https://github.com/apache/thrift/commit/c41ad9d5119e9bdae1746167e77e224f390f2c42.diff";
       hash = "sha256-FkErrg/6vXTomS4AsCsld7t+Iccc55ZiDaNjJ3W1km0=";
     })
   ];

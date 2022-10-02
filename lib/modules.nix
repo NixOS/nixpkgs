@@ -12,7 +12,6 @@ let
     concatStringsSep
     elem
     filter
-    findFirst
     foldl'
     getAttrFromPath
     head
@@ -34,7 +33,6 @@ let
     recursiveUpdate
     reverseList sort
     setAttrByPath
-    toList
     types
     warnIf
     zipAttrsWith
@@ -46,7 +44,6 @@ let
     showFiles
     showOption
     unknownModule
-    literalExpression
     ;
 
   showDeclPrefix = loc: decl: prefix:
@@ -604,7 +601,6 @@ rec {
                 }
               else
                 let
-                  firstNonOption = findFirst (m: !isOption m.options) "" decls;
                   nonOptions = filter (m: !isOption m.options) decls;
                 in
                 throw "The option `${showOption loc}' in module `${(lib.head optionDecls)._file}' would be a parent of the following options, but its type `${(lib.head optionDecls).options.type.description or "<no description>"}' does not support nested options.\n${
@@ -652,11 +648,7 @@ rec {
      'opts' is a list of modules.  Each module has an options attribute which
      correspond to the definition of 'loc' in 'opt.file'. */
   mergeOptionDecls =
-   let
-    coerceOption = file: opt:
-      if isFunction opt then setDefaultModuleLocation file opt
-      else setDefaultModuleLocation file { options = opt; };
-   in loc: opts:
+   loc: opts:
     foldl' (res: opt:
       let t  = res.type;
           t' = opt.options.type;

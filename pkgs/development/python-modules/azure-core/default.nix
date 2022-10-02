@@ -7,7 +7,6 @@
 , aiohttp
 , flask
 , mock
-, msrest
 , pytest
 , pytest-asyncio
 , pytest-trio
@@ -39,7 +38,6 @@ buildPythonPackage rec {
     aiohttp
     flask
     mock
-    msrest
     pytest
     pytest-trio
     pytest-asyncio
@@ -78,6 +76,11 @@ buildPythonPackage rec {
     "tests/testserver_tests/"
     # requires missing pytest plugin
     "tests/async_tests/test_rest_asyncio_transport.py"
+    # needs msrest, which cannot be included in checkInputs due to circular dependency new in msrest 0.7.1
+    # azure-core needs msrest which needs azure-core
+    "tests/test_polling.py"
+    "tests/async_tests/test_base_polling_async.py"
+    "tests/async_tests/test_polling_async.py"
   ];
 
   meta = with lib; {
