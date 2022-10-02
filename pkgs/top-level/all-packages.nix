@@ -13372,7 +13372,7 @@ with pkgs;
 
   devpi-client = python3Packages.callPackage ../development/tools/devpi-client {};
 
-  devpi-server = callPackage ../development/tools/devpi-server {};
+  devpi-server = python3Packages.callPackage ../development/tools/devpi-server {};
 
   dictu = callPackage ../development/compilers/dictu { };
 
