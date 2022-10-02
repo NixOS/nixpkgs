@@ -27689,7 +27689,7 @@ with pkgs;
 
   gg-scm = callPackage ../applications/version-management/git-and-tools/gg { };
 
-  gigalixir = with python3Packages; toPythonApplication gigalixir;
+  gigalixir = callPackage ../tools/misc/gigalixir { };
 
   go-libp2p-daemon = callPackage ../servers/go-libp2p-daemon { };
 

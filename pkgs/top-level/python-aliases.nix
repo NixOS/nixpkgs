@@ -73,6 +73,7 @@ mapAliases ({
   flask_testing = flask-testing; # added 2022-04-25
   flask_wtf = flask-wtf; # added 2022-05-24
   garminconnect-ha = garminconnect; # added 2022-02-05
+  gigalixir = throw "gigalixir has been promoted to a top-level attribute"; # Added 2022-10-02
   glances = throw "glances has moved to pkgs.glances"; # added 2020-20-28
   google_api_python_client = throw "'google_api_python_client' has been renamed to/replaced by 'google-api-python-client'"; # Converted to throw 2022-09-24
   googleapis_common_protos = throw "'googleapis_common_protos' has been renamed to/replaced by 'googleapis-common-protos'"; # Converted to throw 2022-09-24
