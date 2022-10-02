@@ -3083,6 +3083,8 @@ with pkgs;
 
   tezos-rust-libs = callPackage ../development/libraries/tezos-rust-libs { };
 
+  behave = with python3Packages; toPythonApplication behave;
+
   behdad-fonts = callPackage ../data/fonts/behdad-fonts { };
 
   bfetch = callPackage ../tools/misc/bfetch { };
