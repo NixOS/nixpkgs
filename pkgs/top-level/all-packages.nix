@@ -16695,6 +16695,8 @@ with pkgs;
 
   graphene = callPackage ../development/libraries/graphene { };
 
+  griffe = with python3Packages; toPythonApplication griffe;
+
   gtk-doc = callPackage ../development/tools/documentation/gtk-doc { };
 
   gtkdialog = callPackage ../development/tools/misc/gtkdialog { };
