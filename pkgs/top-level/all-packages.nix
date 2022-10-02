@@ -7241,6 +7241,8 @@ with pkgs;
     hamlib = hamlib_4;
   };
 
+  gprof2dot = with python3Packages; toPythonApplication gprof2dot;
+
   gprojector = callPackage ../applications/science/astronomy/gprojector { };
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };

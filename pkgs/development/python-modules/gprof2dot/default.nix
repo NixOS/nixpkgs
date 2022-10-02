@@ -1,13 +1,14 @@
 { lib
 , fetchFromGitHub
-, buildPythonApplication
+, buildPythonPackage
 , python
 , graphviz
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "gprof2dot";
   version = "2021.02.21";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jrfonseca";
@@ -36,6 +37,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/jrfonseca/gprof2dot";
     description = "Python script to convert the output from many profilers into a dot graph";
     license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.pmiddend ];
+    maintainers = with maintainers; [ pmiddend ];
   };
 }
