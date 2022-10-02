@@ -33,6 +33,10 @@ buildPythonPackage rec {
     substituteInPlace tensorboardX/pytorch_graph.py --replace \
       "torch.onnx.set_training(model, False)" \
       "torch.onnx.select_model_mode_for_export(model, torch.onnx.TrainingMode.EVAL)"
+
+    # Version detection seems broken here, the version reported by python is
+    # newer than the protobuf package itself.
+    sed -i -e "s/'protobuf[^']*'/'protobuf'/" setup.py
   '';
 
   # Wanted protobuf version is mentioned here:
