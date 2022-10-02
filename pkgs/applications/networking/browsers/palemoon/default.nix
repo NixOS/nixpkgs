@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
 
     # Too many cores can lead to build flakiness
     # https://forum.palemoon.org/viewtopic.php?f=5&t=28480
-    export jobs=$(($NIX_BUILD_CORES<=20 ? $NIX_BUILD_CORES : 20))
+    export jobs=$(($NIX_BUILD_CORES<=16 ? $NIX_BUILD_CORES : 16))
     if [ -z "$enableParallelBuilding" ]; then
       jobs=1
     fi
