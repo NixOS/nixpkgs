@@ -1,15 +1,9 @@
 { lib
-, buildPythonApplication
 , fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, toml
-, poetry
-, poetry-semver
-, pyyaml
+, python3
 }:
 
-buildPythonApplication rec {
+with python3.pkgs; buildPythonApplication rec {
   pname = "poetry2conda";
   version = "0.3.0";
 

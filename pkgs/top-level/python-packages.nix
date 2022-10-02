@@ -7157,8 +7157,6 @@ in {
 
   poetry-semver = callPackage ../development/python-modules/poetry-semver { };
 
-  poetry2conda = callPackage ../development/python-modules/poetry2conda { };
-
   poezio = callPackage ../applications/networking/instant-messengers/poezio { };
 
   polars = callPackage ../development/python-modules/polars { };
