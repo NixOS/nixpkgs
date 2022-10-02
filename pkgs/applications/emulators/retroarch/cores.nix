@@ -394,7 +394,8 @@ in
     license = lib.licenses.gpl2Only;
     extraBuildInputs = [ libGL libGLU ];
     makefile = "Makefile";
-    makeFlags = lib.optional stdenv.hostPlatform.isAarch64 [ "platform=arm64" ];
+    makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "platform=arm64" ];
+    patches = [ ./fix-flycast-makefile.patch ];
     platforms = [ "aarch64-linux" "x86_64-linux" ];
   };
 
