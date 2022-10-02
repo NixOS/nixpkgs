@@ -501,6 +501,7 @@ in
     extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib ];
     makefile = "Makefile";
+    enableParallelBuilding = false;
   };
 
   mame2016 = mkLibRetroCore {
@@ -510,11 +511,7 @@ in
     extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib ];
     makeFlags = [ "PYTHON_EXECUTABLE=python3" ];
-    preBuild = ''
-      # Prevent the failure during the parallel building of:
-      # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
-      mkdir -p 3rdparty/genie/build/gmake.linux/obj/Release/src/host/lua-5.3.0/src
-    '';
+    enableParallelBuilding = false;
   };
 
   melonds = mkLibRetroCore {
