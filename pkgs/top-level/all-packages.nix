@@ -3338,6 +3338,8 @@ with pkgs;
 
   clash = callPackage ../tools/networking/clash { };
 
+  clash-geoip = callPackage ../data/misc/clash-geoip { };
+
   clasp = callPackage ../tools/misc/clasp { };
 
   clevercsv = with python3Packages; toPythonApplication clevercsv;
