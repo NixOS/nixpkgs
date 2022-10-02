@@ -4,24 +4,25 @@
 , fetchYarnDeps
 , mkYarnPackage
 , makeWrapper
+, callPackage
 }:
 let
   nodejs = nodejs-16_x;
 
   pname = "keyoxide-web";
-  version = "3.4.6";
+  version = lib.fileContents ./version;
 
   src = fetchTarball {
     url = "https://codeberg.org/keyoxide/${pname}/archive/${version}.tar.gz";
-    sha256 = "1jl93rqc0c1d5kw7yas7kabzwxdzba700gniaqyclbi8gxz5rq85";
+    sha256 = lib.fileContents ./package-hash;
   };
 in
-  mkYarnPackage rec {
-    inherit pname version src nodejs;
+  mkYarnPackage {
+    inherit pname version nodejs src;
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
-      sha256 = "ePKgLwpJas6krl8i5V5lH0zBM+0CYtTo5k5pduWa93s=";
+      sha256 = lib.fileContents ./deps-hash;
     };
 
     # Make node_modules writable
@@ -54,6 +55,13 @@ in
     '';
 
     doDist = false;
+
+    passthru = {
+      tests = {
+        inherit (nixosTests);
+      };
+      updateScript = callPackage ./update.nix {};
+    };
 
     meta = with lib; {
       homepage = "https://keyoxide.org";
