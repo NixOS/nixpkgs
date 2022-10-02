@@ -736,6 +736,18 @@ final: prev:
     meta.homepage = "https://github.com/jiangmiao/auto-pairs/";
   };
 
+  auto-save-nvim = buildVimPluginFrom2Nix {
+    pname = "auto-save.nvim";
+    version = "2022-08-06";
+    src = fetchFromGitHub {
+      owner = "pocco81";
+      repo = "auto-save.nvim";
+      rev = "2c7a2943340ee2a36c6a61db812418fca1f57866";
+      sha256 = "0zfy1pw39c0zf4mfd8kgl1hj9h1hcbsql32rp0wk0kf714hbxqli";
+    };
+    meta.homepage = "https://github.com/pocco81/auto-save.nvim/";
+  };
+
   auto-session = buildVimPluginFrom2Nix {
     pname = "auto-session";
     version = "2022-09-19";
