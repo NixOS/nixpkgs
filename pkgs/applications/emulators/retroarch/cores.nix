@@ -231,6 +231,7 @@ in
     core = "blastem";
     description = "Port of BlastEm to libretro";
     license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.x86;
   };
 
   bluemsx = mkLibRetroCore {
