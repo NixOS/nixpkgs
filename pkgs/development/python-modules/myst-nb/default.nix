@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "myst-nb";
-  version = "0.17.0";
+  version = "0.17.1";
 
   format = "flit";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-eEYtfUm9GtE2h+ogeF+7EaoACeZeMutYpX3M6+WxYX8=";
+    sha256 = "sha256-FN9yXz4Ay17+9PhjvwwnNJDIxmLf7jntins3S/JWGTM=";
   };
 
   nativeBuildInputs = [ flit-core ];
