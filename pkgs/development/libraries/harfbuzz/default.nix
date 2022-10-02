@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchurl
 , pkg-config
 , glib
 , freetype
@@ -40,11 +40,9 @@ stdenv.mkDerivation {
   pname = "harfbuzz${optionalString withIcu "-icu"}";
   inherit version;
 
-  src = fetchFromGitHub {
-    owner = "harfbuzz";
-    repo = "harfbuzz";
-    rev = version;
-    sha256 = "1pry5w6anwi0qykpj1q3232r7cmfrw9yv4wwwrh028z0361fyxrv";
+  src = fetchurl {
+    url = "https://github.com/harfbuzz/harfbuzz/releases/download/${version}/harfbuzz-${version}.tar.xz";
+    sha256 = "0b4lpkidwx0lf8slczjji652yll6g5zgmm5lmisnb4s7gf8r8nkk";
   };
 
   postPatch = ''
