@@ -4512,6 +4512,8 @@ with pkgs;
 
   notify = callPackage ../tools/misc/notify { };
 
+  notifymuch = callPackage ../applications/misc/notifymuch { };
+
   npins = callPackage ../tools/nix/npins { };
 
   nrsc5 = callPackage ../applications/misc/nrsc5 { };
