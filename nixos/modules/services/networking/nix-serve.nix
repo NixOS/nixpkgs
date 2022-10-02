@@ -26,6 +26,15 @@ in
         '';
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.nix-serve;
+        defaultText = literalExpression "pkgs.nix-serve";
+        description = lib.mdDoc ''
+          nix-serve package to use.
+        '';
+      };
+
       openFirewall = mkOption {
         type = types.bool;
         default = false;
@@ -70,7 +79,7 @@ in
         ${lib.optionalString (cfg.secretKeyFile != null) ''
           export NIX_SECRET_KEY_FILE="$CREDENTIALS_DIRECTORY/NIX_SECRET_KEY_FILE"
         ''}
-        exec ${pkgs.nix-serve}/bin/nix-serve --listen ${cfg.bindAddress}:${toString cfg.port} ${cfg.extraParams}
+        exec ${cfg.package}/bin/nix-serve --listen ${cfg.bindAddress}:${toString cfg.port} ${cfg.extraParams}
       '';
 
       serviceConfig = {
