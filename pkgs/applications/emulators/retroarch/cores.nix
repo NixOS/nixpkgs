@@ -463,57 +463,56 @@ in
 
   mame2000 = mkLibRetroCore {
     core = "mame2000";
-    description = "Port of MAME ~2000 to libretro";
+    description = "Port of MAME ~2000 to libretro, compatible with MAME 0.37b5 sets";
     license = "MAME";
     makefile = "Makefile";
     makeFlags = lib.optional (!stdenv.hostPlatform.isx86) "IS_X86=0";
-    enableParallelBuilding = false;
   };
 
   mame2003 = mkLibRetroCore {
     core = "mame2003";
-    description = "Port of MAME ~2003 to libretro";
+    description = "Port of MAME ~2003 to libretro, compatible with MAME 0.78 sets";
     license = "MAME";
     makefile = "Makefile";
-    enableParallelBuilding = false;
   };
 
   mame2003-plus = mkLibRetroCore {
     core = "mame2003-plus";
-    description = "Port of MAME ~2003+ to libretro";
+    description = "Port of MAME ~2003+ to libretro, compatible with MAME 0.78 sets";
     license = "MAME";
     makefile = "Makefile";
-    enableParallelBuilding = false;
   };
 
   mame2010 = mkLibRetroCore {
     core = "mame2010";
-    description = "Port of MAME ~2010 to libretro";
+    description = "Port of MAME ~2010 to libretro, compatible with MAME 0.139 sets";
     license = "MAME";
     makefile = "Makefile";
     makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "PTR64=1" "ARM_ENABLED=1" "X86_SH2DRC=0" "FORCE_DRC_C_BACKEND=1" ];
-    enableParallelBuilding = false;
   };
 
   mame2015 = mkLibRetroCore {
     core = "mame2015";
-    description = "Port of MAME ~2015 to libretro";
+    description = "Port of MAME ~2015 to libretro, compatible with MAME 0.160 sets";
     license = "MAME";
     makeFlags = [ "PYTHON=python3" ];
     extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib ];
     makefile = "Makefile";
-    enableParallelBuilding = false;
   };
 
   mame2016 = mkLibRetroCore {
     core = "mame2016";
-    description = "Port of MAME ~2016 to libretro";
+    description = "Port of MAME ~2016 to libretro, compatible with MAME 0.174 sets";
     license = with lib.licenses; [ bsd3 gpl2Plus ];
     extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib ];
     makeFlags = [ "PYTHON_EXECUTABLE=python3" ];
-    enableParallelBuilding = false;
+    preBuild = ''
+      # Prevent the failure during the parallel building of:
+      # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
+      mkdir -p 3rdparty/genie/build/gmake.linux/obj/Release/src/host/lua-5.3.0/src
+    '';
   };
 
   melonds = mkLibRetroCore {
