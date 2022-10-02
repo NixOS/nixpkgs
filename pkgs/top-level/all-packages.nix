@@ -21195,6 +21195,7 @@ with pkgs;
   glanceclient = with python3Packages; toPythonApplication python-glanceclient;
   heatclient = with python3Packages; toPythonApplication python-heatclient;
   ironicclient = with python3Packages; toPythonApplication python-ironicclient;
+  manilaclient = with python3Packages; toPythonApplication python-manilaclient;
 
   openvdb = callPackage ../development/libraries/openvdb {};
 
