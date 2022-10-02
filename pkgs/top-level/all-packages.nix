@@ -8586,6 +8586,8 @@ with pkgs;
 
   latexrun = callPackage ../tools/typesetting/tex/latexrun { };
 
+  lazycli = callPackage ../tools/misc/lazycli { };
+
   lcdf-typetools = callPackage ../tools/misc/lcdf-typetools { };
 
   ldapmonitor = callPackage ../tools/security/ldapmonitor { };
