@@ -25324,6 +25324,8 @@ with pkgs;
 
   thanos = callPackage ../servers/monitoring/thanos { };
 
+  tigerbeetle = callPackage ../servers/tigerbeetle { };
+
   trafficserver = callPackage ../servers/http/trafficserver { };
 
   inherit (callPackages ../servers/http/tomcat { })
