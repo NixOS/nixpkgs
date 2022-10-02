@@ -36416,7 +36416,7 @@ with pkgs;
 
   renderizer = callPackage ../development/tools/renderizer {};
 
-  rfc-bibtex = python3Packages.callPackage ../development/python-modules/rfc-bibtex { };
+  rfc-bibtex = callPackage ../tools/typesetting/rfc-bibtex { };
 
   pick-colour-picker = python3Packages.callPackage ../applications/graphics/pick-colour-picker {
     inherit glib gtk3 gobject-introspection wrapGAppsHook;
