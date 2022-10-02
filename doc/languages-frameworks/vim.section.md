@@ -126,7 +126,7 @@ If one of your favourite plugins isn't packaged, you can package it yourself:
 
 let
   easygrep = pkgs.vimUtils.buildVimPlugin {
-    name = "vim-easygrep";
+    pname = "vim-easygrep";
     src = pkgs.fetchFromGitHub {
       owner = "dkprice";
       repo = "vim-easygrep";
