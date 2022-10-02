@@ -112,6 +112,8 @@ in stdenv.mkDerivation {
     libXrender
     libXtst
     libxcb
+    xcbutilkeysyms
+    xcbutilimage
   ]) ++ lib.optional cudaSupport cudaEnv;
 
   wrapProgramFlags = [
