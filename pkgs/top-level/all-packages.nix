@@ -13398,6 +13398,8 @@ with pkgs;
 
   fasmg = callPackage ../development/compilers/fasmg { };
 
+  filecheck = with python3Packages; toPythonApplication filecheck;
+
   firrtl = callPackage ../development/compilers/firrtl { };
 
   flasm = callPackage ../development/compilers/flasm { };
