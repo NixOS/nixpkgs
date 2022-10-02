@@ -11,6 +11,7 @@
 , cattrs
 , clickclick
 , colorlog
+, configupdater
 , connexion
 , cron-descriptor
 , croniter
@@ -77,7 +78,7 @@
 , enabledProviders ? []
 }:
 let
-  version = "2.3.4";
+  version = "2.4.1";
 
   airflow-src = fetchFromGitHub rec {
     owner = "apache";
@@ -85,7 +86,7 @@ let
     rev = "refs/tags/${version}";
     # Required because the GitHub archive tarballs don't appear to include tests
     leaveDotGit = true;
-    sha256 = "sha256-rxvLyz/hvZ6U8QKy9MiVofU0qeeo7OHctAj2PkxLh2c=";
+    sha256 = "sha256-HpPL/ocV7hRhYXsjfXMYvlP83Vh15kXyjBgubsaqaE8=";
   };
 
   # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
@@ -146,6 +147,7 @@ buildPythonPackage rec {
     cattrs
     clickclick
     colorlog
+    configupdater
     connexion
     cron-descriptor
     croniter
@@ -223,7 +225,6 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "colorlog>=4.0.2, <5.0" "colorlog" \
-      --replace "flask-login>=0.6.2" "flask-login" \
       --replace "pathspec~=0.9.0" "pathspec"
   '' + lib.optionalString stdenv.isDarwin ''
     # Fix failing test on Hydra
