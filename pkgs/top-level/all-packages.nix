@@ -8025,6 +8025,8 @@ with pkgs;
 
   jsawk = callPackage ../tools/text/jsawk { };
 
+  jsbeautifier = with python3Packages; toPythonApplication jsbeautifier;
+
   jscoverage = callPackage ../development/tools/misc/jscoverage { };
 
   jsduck = callPackage ../development/tools/jsduck { };
