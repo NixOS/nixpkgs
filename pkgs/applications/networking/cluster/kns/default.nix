@@ -2,7 +2,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "kns";
-  version = "50b6370c88136a580599c913f0fae2cb24981dc1";
+  version = "unstable-2022-03-03";
 
   src = fetchFromGitHub {
     owner = "blendle";
