@@ -174,6 +174,9 @@
   "boltztrap2": [
     "cython"
   ],
+  "botocore-stubs": [
+    "poetry-core"
+  ],
   "bracex": [
     "hatchling"
   ],
@@ -196,6 +199,9 @@
     "poetry-core"
   ],
   "censys": [
+    "poetry-core"
+  ],
+  "cfel-pylint-checkers": [
     "poetry-core"
   ],
   "cftime": [
@@ -235,6 +241,9 @@
     "flit-core",
     "flitBuildHook"
   ],
+  "contourpy": [
+    "pybind11"
+  ],
   "copier": [
     "poetry-core"
   ],
@@ -272,6 +281,12 @@
   ],
   "cysignals": [
     "cython"
+  ],
+  "cysimdjson": [
+    "cython"
+  ],
+  "darglint": [
+    "poetry"
   ],
   "datadog": [
     "hatchling"
@@ -311,6 +326,9 @@
   ],
   "docstring-parser": [
     "poetry-core"
+  ],
+  "dotty-dict": [
+    { "buildSystem": "poetry-core", "from": "1.3.1" }
   ],
   "dtlssocket": [
     "cython"
@@ -373,7 +391,8 @@
     "cython"
   ],
   "fastapi": [
-    "flitBuildHook"
+    { "buildSystem": "flitBuildHook", "until": "0.84.0" },
+    { "buildSystem": "hatchling", "from": "0.84.0" }
   ],
   "fastapi-restful": [
     "poetry"
@@ -423,6 +442,9 @@
   "frozenlist": [
     "cython"
   ],
+  "ftfy": [
+    "poetry"
+  ],
   "funcparserlib": [
     "poetry-core"
   ],
@@ -470,6 +492,9 @@
   ],
   "gridnet": [
     "poetry-core"
+  ],
+  "griffe": [
+    "pdm-pep517"
   ],
   "grpcio": [
     "cython"
@@ -546,6 +571,9 @@
   "idasen": [
     "poetry-core"
   ],
+  "idna": [
+    "flit-core"
+  ],
   "imagecodecs-lite": [
     "cython"
   ],
@@ -599,12 +627,19 @@
   ],
   "jsonschema": [
     { "buildSystem": "hatchling", "from": "4.6.0" },
-    { "buildSystem": "hatch-vcs", "from": "4.6.0" }
+    { "buildSystem": "hatch-vcs", "from": "4.6.0" },
+    { "buildSystem": "hatch-fancy-pypi-readme", "from": "4.11.0" }
   ],
   "jupyter-client": [
     "hatchling"
   ],
+  "jupyter-core": [
+    "hatchling"
+  ],
   "jupyter-server": [
+    "jupyter-packaging"
+  ],
+  "jupyter-server-mathjax": [
     "jupyter-packaging"
   ],
   "jupyterlab": [
@@ -613,8 +648,14 @@
   "jupyterlab-code-formatter": [
     "jupyter-packaging"
   ],
+  "jupyterlab-git": [
+    "jupyter-packaging"
+  ],
   "jupyterlab-pygments": [
     "jupyter-packaging"
+  ],
+  "jupyterlab-server": [
+    "hatchling"
   ],
   "keystoneauth1": [
     "pbr"
@@ -706,6 +747,9 @@
   "mdformat": [
     "poetry-core"
   ],
+  "mdit-py-plugins": [
+    "flit-core"
+  ],
   "mdurl": [
     "flit-core"
   ],
@@ -720,6 +764,9 @@
     "poetry"
   ],
   "metprint": [
+    "poetry-core"
+  ],
+  "minimal-dydb": [
     "poetry-core"
   ],
   "mkdocs-autorefs": [
@@ -786,6 +833,9 @@
   ],
   "nbclassic": [
     "jupyter-packaging"
+  ],
+  "nbformat": [
+    "flit-core"
   ],
   "net2grid": [
     "poetry-core"
@@ -913,6 +963,9 @@
   "pandas": [
     "cython"
   ],
+  "parsita": [
+    "poetry"
+  ],
   "pastel": [
     "poetry-core"
   ],
@@ -944,6 +997,9 @@
   "pkgconfig": [
     "poetry-core"
   ],
+  "pkgutil-resolve-name": [
+    "flit-core"
+  ],
   "plux": [
     "pytest-runner"
   ],
@@ -952,6 +1008,9 @@
   ],
   "poetry-dynamic-versioning": [
     "poetry-core"
+  ],
+  "poetry-plugin-export": [
+    "poetry"
   ],
   "poetry2conda": [
     "poetry"
@@ -1039,6 +1098,9 @@
   ],
   "pydantic": [
     "cython"
+  ],
+  "pydantic-dydb": [
+    "poetry-core"
   ],
   "pydy": [
     "cython"
@@ -1503,6 +1565,9 @@
   "shexjsg": [
     "pbr"
   ],
+  "shortuuid": [
+    "poetry"
+  ],
   "simplisafe-python": [
     "poetry-core"
   ],
@@ -1632,6 +1697,10 @@
   "terminaltables": [
     "poetry"
   ],
+  "termcolor": [
+    "hatchling",
+    "hatch-vcs"
+  ],
   "terminado": [
     "hatchling"
   ],
@@ -1736,6 +1805,12 @@
   "typical": [
     "poetry-core"
   ],
+  "types-awscrt": [
+    "poetry-core"
+  ],
+  "types-s3transfer": [
+    "poetry-core"
+  ],
   "typing-extensions": [
     "flit-core"
   ],
@@ -1747,6 +1822,9 @@
   ],
   "url-normalize": [
     "poetry-core"
+  ],
+  "uvicorn": [
+    "hatchling"
   ],
   "vehicle": [
     "poetry-core"
@@ -1768,6 +1846,9 @@
   ],
   "weasyprint": [
     "flit-core"
+  ],
+  "widgetsnbextension": [
+    "jupyter-packaging"
   ],
   "wled": [
     "poetry-core"

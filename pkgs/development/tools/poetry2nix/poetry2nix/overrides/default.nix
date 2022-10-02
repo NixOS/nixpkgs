@@ -37,6 +37,7 @@ let
     (
       # Flit only works on Python3
       if (attr == "flit-core" || attr == "flit" || attr == "hatchling") && !self.isPy3k then drv
+      else if drv == null then null
       else
         drv.overridePythonAttrs (
           old:
@@ -276,6 +277,12 @@ lib.composeManyExtensions [
           )
         );
 
+      contourpy = super.contourpy.overridePythonAttrs (
+        old: {
+          buildInputs = (old.buildInputs or [ ]) ++ [ self.pybind11 ];
+        }
+      );
+
       cloudflare = super.cloudflare.overridePythonAttrs (
         old: {
           postPatch = ''
@@ -326,6 +333,7 @@ lib.composeManyExtensions [
             "36.0.2" = "1a0ni1a3dbv2dvh6gx2i54z8v5j9m6asqg97kkv7gqb1ivihsbp8";
             "37.0.2" = "sha256-qvrxvneoBXjP96AnUPyrtfmCnZo+IriHR5HbtWQ5Gk8=";
             "37.0.4" = "sha256-f8r6QclTwkgK20CNe9i65ZOqvSUeDc4Emv6BFBhh1hI";
+            "38.0.1" = "sha256-o8l13fnfEUvUdDasq3LxSPArozRHKVsZfQg9DNR6M6Q=";
           }.${version} or (
             lib.warn "Unknown cryptography version: '${version}'. Please update getCargoHash." lib.fakeHash
           );
@@ -834,6 +842,15 @@ lib.composeManyExtensions [
         buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.yajl ];
       });
 
+      jsonschema =
+        if lib.versionAtLeast super.jsonschema.version "4.0.0"
+        then
+          super.jsonschema.overridePythonAttrs
+            (old: {
+              propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.importlib-resources ];
+            })
+        else super.jsonschema;
+
       jupyter = super.jupyter.overridePythonAttrs (
         old: rec {
           # jupyter is a meta-package. Everything relevant comes from the
@@ -1153,7 +1170,7 @@ lib.composeManyExtensions [
               url = "https://github.com/python/mypy/commit/e7869f05751561958b946b562093397027f6d5fa.patch";
               sha256 = "sha256-waIZ+m3tfvYE4HJ8kL6rN/C4fMjvLEe9UoPbt9mHWIM=";
             })
-          ] ++ lib.optionals (lib.strings.versionAtLeast old.version "0.960") [
+          ] ++ lib.optionals ((lib.strings.versionAtLeast old.version "0.960") && (lib.strings.versionOlder old.version "0.971")) [
             (pkgs.fetchpatch {
               url = "https://github.com/python/mypy/commit/2004ae023b9d3628d9f09886cbbc20868aee8554.patch";
               sha256 = "sha256-y+tXvgyiECO5+66YLvaje8Bz5iPvfWNIBJcsnZ2nOdI=";
@@ -1224,6 +1241,12 @@ lib.composeManyExtensions [
         }
       );
 
+      omegaconf = super.omegaconf.overridePythonAttrs (
+        old: {
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.jdk ];
+        }
+      );
+
       open3d = super.open3d.overridePythonAttrs (old: {
         buildInputs = (old.buildInputs or [ ]) ++ (with pkgs; [
           udev
@@ -1232,13 +1255,16 @@ lib.composeManyExtensions [
         autoPatchelfIgnoreMissingDeps = true;
       });
 
-      opencv-python = super.opencv-python.overridePythonAttrs (
+      _opencv-python-override =
         old: {
           nativeBuildInputs = [ pkgs.cmake ] ++ old.nativeBuildInputs;
           buildInputs = [ self.scikit-build ] ++ (old.buildInputs or [ ]);
           dontUseCmakeConfigure = true;
-        }
-      );
+        };
+
+      opencv-python = super.opencv-python.overridePythonAttrs self._opencv-python-override;
+
+      opencv-python-headless = super.opencv-python.overridePythonAttrs self._opencv-python-override;
 
       opencv-contrib-python = super.opencv-contrib-python.overridePythonAttrs (
         old: {
@@ -1255,13 +1281,29 @@ lib.composeManyExtensions [
         }
       );
 
+      openvino = super.openvino.overridePythonAttrs (
+        old: {
+          buildInputs = [
+            pkgs.ocl-icd
+            pkgs.hwloc
+            pkgs.tbb
+            pkgs.numactl
+            pkgs.libxml2
+          ] ++ (old.buildInputs or [ ]);
+        }
+      );
+
       orjson =
         let
           getCargoHash = version: {
             "3.6.7" = "sha256-sz2k9podPB6QSptkyOu7+BoVTrKhefizRtYU+MICPt4=";
             "3.6.8" = "sha256-vpfceVtYkU09xszNIihY1xbqGWieqDquxwsAmDH8jd4=";
             "3.7.2" = "sha256-2U37IhftNYjH7sV7Nh51YpR/WjmPmmzX/aGuHsFgwf4=";
-          }.${version} or null;
+            "3.7.9" = "sha256-QHzAhjHgm4XLxY2zUdnIsd/WWMI7dJLQQAvTXC+2asQ=";
+            "3.8.0" = "sha256-8k0DetamwLqkdcg8V/D2J5ja6IJSLi50CE+ZjFa7Hdc=";
+          }.${version} or (
+            lib.warn "Unknown orjson version: '${version}'. Please update getCargoHash." lib.fakeHash
+          );
         in
         super.orjson.overridePythonAttrs (old: {
           cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
@@ -1351,30 +1393,52 @@ lib.composeManyExtensions [
       );
 
       pillow = super.pillow.overridePythonAttrs (
-        old: {
+        old:
+        let
+          preConfigure = (old.preConfigure or "") + pkgs.python3.pkgs.pillow.preConfigure;
+        in
+        {
           nativeBuildInputs = (old.nativeBuildInputs or [ ])
             ++ [ pkg-config self.pytest-runner ];
           buildInputs = with pkgs; (old.buildInputs or [ ])
             ++ [ freetype libjpeg zlib libtiff libwebp tcl lcms2 ]
             ++ lib.optionals (lib.versionAtLeast old.version "7.1.0") [ xorg.libxcb ]
             ++ lib.optionals (self.isPyPy) [ tk xorg.libX11 ];
+          preConfigure = lib.optional (old.format != "wheel") preConfigure;
         }
       );
 
-      poetry-core = super.poetry-core.overridePythonAttrs (old: {
-        # "Vendor" dependencies (for build-system support)
-        postPatch = ''
-          echo "import sys" >> poetry/__init__.py
-          for path in $propagatedBuildInputs; do
-              echo "sys.path.insert(0, \"$path\")" >> poetry/__init__.py
-          done
-        '';
+      poetry-core = super.poetry-core.overridePythonAttrs (old:
+        let
+          initFile =
+            if lib.versionOlder super.poetry-core.version "1.1"
+            then "poetry/__init__.py"
+            else "./src/poetry/core/__init__.py";
+        in
+        {
+          # "Vendor" dependencies (for build-system support)
+          postPatch = ''
+            find .
 
-        # Propagating dependencies leads to issues downstream
-        # We've already patched poetry to prefer "vendored" dependencies
-        postFixup = ''
-          rm $out/nix-support/propagated-build-inputs
-        '';
+            echo "import sys" >> ${initFile}
+            for path in $propagatedBuildInputs; do
+              echo "sys.path.insert(0, \"$path\")" >> ${initFile}
+            done
+          '';
+
+          # Propagating dependencies leads to issues downstream
+          # We've already patched poetry to prefer "vendored" dependencies
+          postFixup = ''
+            rm $out/nix-support/propagated-build-inputs
+          '';
+        });
+
+      # Requires poetry which isn't available during bootstrap
+      poetry-plugin-export = super.poetry-plugin-export.overridePythonAttrs (old: {
+        dontUsePythonImportsCheck = true;
+        pipInstallFlags = [
+          "--no-deps"
+        ];
       });
 
       portend = super.portend.overridePythonAttrs (
@@ -1666,6 +1730,11 @@ lib.composeManyExtensions [
         in
         super.pyqt5.overridePythonAttrs (
           old: {
+            postPatch = ''
+              # Confirm license
+              sed -i s/"if tool == 'pep517':"/"if True:"/ project.py
+            '';
+
             dontConfigure = true;
             dontWrapQtApps = true;
             nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
@@ -1994,6 +2063,12 @@ lib.composeManyExtensions [
         '';
       });
 
+      suds = super.suds.overridePythonAttrs (old: {
+        # Fix naming convention shenanigans.
+        # https://github.com/suds-community/suds/blob/a616d96b070ca119a532ff395d4a2a2ba42b257c/setup.py#L648
+        SUDS_PACKAGE = "suds";
+      });
+
       systemd-python = super.systemd-python.overridePythonAttrs (old: {
         buildInputs = old.buildInputs ++ [ pkgs.systemd ];
         nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkg-config ];
@@ -2287,7 +2362,7 @@ lib.composeManyExtensions [
       # For some reason the toml dependency of tqdm declared here:
       # https://github.com/tqdm/tqdm/blob/67130a23646ae672836b971e1086b6ae4c77d930/pyproject.toml#L2
       # is not translated correctly to a nix dependency.
-      tqdm = super.tqdm.overrideAttrs (
+      tqdm = super.tqdm.overridePythonAttrs (
         old: {
           buildInputs = [ super.toml ] ++ (old.buildInputs or [ ]);
         }

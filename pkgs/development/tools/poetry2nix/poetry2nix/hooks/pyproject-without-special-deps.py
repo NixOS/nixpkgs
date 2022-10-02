@@ -22,6 +22,7 @@ def main(input, output, fields_to_remove):
                     any_removed |= dep.pop(field, None) is not None
                 if any_removed:
                     dep["version"] = "*"
+                    dep.pop("develop", None)
 
     output.write(tomlkit.dumps(data))
 

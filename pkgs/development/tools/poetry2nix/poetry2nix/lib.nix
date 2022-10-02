@@ -11,6 +11,10 @@ let
   # Do some canonicalisation of module names
   moduleName = name: lib.toLower (lib.replaceStrings [ "_" "." ] [ "-" "-" ] name);
 
+  # For some reason, poetry replaces underscores with dashes in module
+  # names, this has to be reversed sometimes
+  underscorify = name: (lib.replaceStrings [ "-" ] [ "_" ] name);
+
   # Get a full semver pythonVersion from a python derivation
   getPythonVersion = python:
     let
@@ -234,6 +238,7 @@ in
     satisfiesSemver
     cleanPythonSources
     moduleName
+    underscorify
     getPythonVersion
     getTargetMachine
     ;
