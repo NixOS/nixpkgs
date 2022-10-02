@@ -12766,6 +12766,18 @@ final: prev:
     meta.homepage = "https://github.com/gcmt/wildfire.vim/";
   };
 
+  windows-nvim = buildVimPluginFrom2Nix {
+    pname = "windows.nvim";
+    version = "2022-09-28";
+    src = fetchFromGitHub {
+      owner = "anuvyklack";
+      repo = "windows.nvim";
+      rev = "e3a1217976d4ec8d2515cb634dbf5d26cabd46d5";
+      sha256 = "1wpbspyjxcdvvbdysk0982wg24fy0p47df6c8d9rs2dmzb9zghv3";
+    };
+    meta.homepage = "https://github.com/anuvyklack/windows.nvim/";
+  };
+
   winshift-nvim = buildVimPluginFrom2Nix {
     pname = "winshift.nvim";
     version = "2022-09-06";
@@ -12957,18 +12969,6 @@ final: prev:
       sha256 = "1csr4k4f9nybwa0h6fnd7wgr5cgqzqqqamr0xvrv4z1j4h24i5hr";
     };
     meta.homepage = "https://github.com/nanotee/zoxide.vim/";
-  };
-
-  windows-nvim = buildVimPluginFrom2Nix {
-    pname = "windows.nvim";
-    version = "2022-09-28";
-    src = fetchFromGitHub {
-      owner = "anuvyklack";
-      repo = "windows.nvim";
-      rev = "e3a1217976d4ec8d2515cb634dbf5d26cabd46d5";
-      sha256 = "1wpbspyjxcdvvbdysk0982wg24fy0p47df6c8d9rs2dmzb9zghv3";
-    };
-    meta.homepage = "https://github.com/anuvyklack/windows.nvim/";
   };
 
   catppuccin-nvim = buildVimPluginFrom2Nix {
