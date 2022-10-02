@@ -1749,6 +1749,8 @@ with pkgs;
     inherit (qt5) wrapQtAppsHook;
   };
 
+  felix-fm = callPackage ../applications/file-managers/felix-fm { };
+
   joshuto = callPackage ../applications/file-managers/joshuto {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration Foundation;
   };
@@ -3917,6 +3919,8 @@ with pkgs;
   };
 
   faudio = callPackage ../development/libraries/faudio { };
+
+  fblog = callPackage ../development/tools/fblog { };
 
   fd = callPackage ../tools/misc/fd { };
 
@@ -8588,6 +8592,8 @@ with pkgs;
   latex2html = callPackage ../tools/misc/latex2html { };
 
   latexrun = callPackage ../tools/typesetting/tex/latexrun { };
+
+  lazycli = callPackage ../tools/misc/lazycli { };
 
   lcdf-typetools = callPackage ../tools/misc/lcdf-typetools { };
 
@@ -13379,7 +13385,7 @@ with pkgs;
 
   devpi-client = python3Packages.callPackage ../development/tools/devpi-client {};
 
-  devpi-server = callPackage ../development/tools/devpi-server {};
+  devpi-server = python3Packages.callPackage ../development/tools/devpi-server {};
 
   dictu = callPackage ../development/compilers/dictu { };
 
@@ -23112,10 +23118,7 @@ with pkgs;
   grafana = callPackage ../servers/monitoring/grafana { };
   grafanaPlugins = callPackages ../servers/monitoring/grafana/plugins { };
 
-  grafana-agent = callPackage ../servers/monitoring/grafana-agent {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
-  };
+  grafana-agent = callPackage ../servers/monitoring/grafana-agent { };
 
   grafana-loki = callPackage ../servers/monitoring/loki { };
 
@@ -24118,7 +24121,7 @@ with pkgs;
     libdrm = if stdenv.isLinux then libdrm else null;
     abiCompat = config.xorg.abiCompat # `config` because we have no `xorg.override`
       or (if stdenv.isDarwin then "1.18" else null); # 1.19 needs fixing on Darwin
-  }) // { inherit xlibsWrapper; } );
+  }));
 
   xorg-autoconf = callPackage ../development/tools/misc/xorg-autoconf { };
 
