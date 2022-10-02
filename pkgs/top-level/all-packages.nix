@@ -10384,6 +10384,8 @@ with pkgs;
 
   pyocd = python3Packages.callPackage ../development/embedded/pyocd { };
 
+  pypass = with python3Packages; toPythonApplication pypass;
+
   pyspread = libsForQt5.callPackage ../applications/office/pyspread { };
 
   teapot = callPackage ../applications/office/teapot { };
