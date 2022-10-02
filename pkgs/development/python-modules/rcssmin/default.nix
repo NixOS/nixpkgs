@@ -1,11 +1,11 @@
 { lib, buildPythonPackage, fetchPypi }:
 buildPythonPackage rec {
   pname = "rcssmin";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "27fc400627fd3d328b7fe95af2a01f5d0af6b5af39731af5d071826a1f08e362";
+    sha256 = "sha256-T5QAtDZtKfX1RG9Y54VJr6gzjmpZdAxzEV6fasQT3GQ=";
   };
 
   # The package does not ship tests, and the setup machinary confuses

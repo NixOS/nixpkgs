@@ -1,11 +1,14 @@
-{ stdenv, lib
-, buildPythonPackage, fetchPypi, pythonOlder, setuptools-scm, pytestCheckHook
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools-scm
+, pytestCheckHook
 , aiohttp
 , aiohttp-cors
-, attrs
 , click
 , colorama
-, dataclasses
 , mypy-extensions
 , pathspec
 , parameterized
@@ -16,16 +19,15 @@
 , uvloop
 }:
 
-
 buildPythonPackage rec {
   pname = "black";
-  version = "21.12b0";
+  version = "22.8.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d7gPaTpWni5SeVhFljTxjfmwuiYluk4MLV2lvkLm8rM=";
+    hash = "sha256-eS9+tUC6mhfoZWU4cB0+sa/LE047RbcfILJcd6jbfm4=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -34,7 +36,7 @@ buildPythonPackage rec {
   # Black starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
 
-  checkInputs = [ pytestCheckHook parameterized ];
+  checkInputs = [ pytestCheckHook parameterized aiohttp ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin"
@@ -57,21 +59,23 @@ buildPythonPackage rec {
     "test_bpo_2142_workaround"
     "test_skip_magic_trailing_comma"
   ];
+  # multiple tests exceed max open files on hydra builders
+  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
 
   propagatedBuildInputs = [
-    aiohttp
-    aiohttp-cors
-    attrs
     click
-    colorama
     mypy-extensions
     pathspec
     platformdirs
     tomli
-    typed-ast # required for tests and python2 extra
-    uvloop
-  ] ++ lib.optional (pythonOlder "3.7") dataclasses
-    ++ lib.optional (pythonOlder "3.8") typing-extensions;
+  ] ++ lib.optional (pythonOlder "3.8") typed-ast
+  ++ lib.optional (pythonOlder "3.10") typing-extensions;
+
+  passthru.optional-dependencies = {
+    d = [ aiohttp aiohttp-cors ];
+    colorama = [ colorama ];
+    uvloop = [ uvloop ];
+  };
 
   meta = with lib; {
     description = "The uncompromising Python code formatter";

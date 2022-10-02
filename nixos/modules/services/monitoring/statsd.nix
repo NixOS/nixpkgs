@@ -56,34 +56,34 @@ in
 
   options.services.statsd = {
 
-    enable = mkEnableOption "statsd";
+    enable = mkEnableOption (lib.mdDoc "statsd");
 
     listenAddress = mkOption {
-      description = "Address that statsd listens on over UDP";
+      description = lib.mdDoc "Address that statsd listens on over UDP";
       default = "127.0.0.1";
       type = types.str;
     };
 
     port = mkOption {
-      description = "Port that stats listens for messages on over UDP";
+      description = lib.mdDoc "Port that stats listens for messages on over UDP";
       default = 8125;
       type = types.int;
     };
 
     mgmt_address = mkOption {
-      description = "Address to run management TCP interface on";
+      description = lib.mdDoc "Address to run management TCP interface on";
       default = "127.0.0.1";
       type = types.str;
     };
 
     mgmt_port = mkOption {
-      description = "Port to run the management TCP interface on";
+      description = lib.mdDoc "Port to run the management TCP interface on";
       default = 8126;
       type = types.int;
     };
 
     backends = mkOption {
-      description = "List of backends statsd will use for data persistence";
+      description = lib.mdDoc "List of backends statsd will use for data persistence";
       default = [];
       example = [
         "graphite"
@@ -97,19 +97,19 @@ in
     };
 
     graphiteHost = mkOption {
-      description = "Hostname or IP of Graphite server";
+      description = lib.mdDoc "Hostname or IP of Graphite server";
       default = null;
       type = types.nullOr types.str;
     };
 
     graphitePort = mkOption {
-      description = "Port of Graphite server (i.e. carbon-cache).";
+      description = lib.mdDoc "Port of Graphite server (i.e. carbon-cache).";
       default = null;
       type = types.nullOr types.int;
     };
 
     extraConfig = mkOption {
-      description = "Extra configuration options for statsd";
+      description = lib.mdDoc "Extra configuration options for statsd";
       default = "";
       type = types.nullOr types.str;
     };

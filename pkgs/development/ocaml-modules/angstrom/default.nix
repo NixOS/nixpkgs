@@ -17,7 +17,7 @@ buildDunePackage rec {
   checkInputs = [ alcotest ppx_let ];
   buildInputs = [ ocaml-syntax-shims ];
   propagatedBuildInputs = [ bigstringaf result ];
-  doCheck = lib.versionAtLeast ocaml.version "4.05";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     homepage = "https://github.com/inhabitedtype/angstrom";

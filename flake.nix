@@ -11,9 +11,7 @@
 
       lib = import ./lib;
 
-      systems = lib.systems.supported.hydra;
-
-      forAllSystems = f: lib.genAttrs systems (system: f system);
+      forAllSystems = f: lib.genAttrs lib.systems.flakeExposed (system: f system);
 
     in
     {
@@ -21,36 +19,21 @@
 
         nixos = import ./nixos/lib { lib = final; };
 
-        nixosSystem = { modules, ... } @ args:
-          import ./nixos/lib/eval-config.nix (args // {
-            modules =
-              let
-                moduleDeclarationFile =
-                  let
-                    # Even though `modules` is a mandatory argument for `nixosSystem`, it doesn't
-                    # mean that the evaluator always keeps track of its position. If there
-                    # are too many levels of indirection, the position gets lost at some point.
-                    intermediatePos = builtins.unsafeGetAttrPos "modules" args;
-                  in
-                    if intermediatePos == null then null else intermediatePos.file;
-
-                # Add the invoking file as error message location for modules
-                # that don't have their own locations; presumably inline modules.
-                addModuleDeclarationFile =
-                  m: if moduleDeclarationFile == null then m else {
-                    _file = moduleDeclarationFile;
-                    imports = [ m ];
-                  };
-
-              in
-              map addModuleDeclarationFile modules ++ [
-                {
-                  system.nixos.versionSuffix =
-                    ".${final.substring 0 8 (self.lastModifiedDate or self.lastModified or "19700101")}.${self.shortRev or "dirty"}";
-                  system.nixos.revision = final.mkIf (self ? rev) self.rev;
-                }
-              ];
-          });
+        nixosSystem = args:
+          import ./nixos/lib/eval-config.nix (
+            args // {
+              modules = args.modules ++ [{
+                system.nixos.versionSuffix =
+                  ".${final.substring 0 8 (self.lastModifiedDate or self.lastModified or "19700101")}.${self.shortRev or "dirty"}";
+                system.nixos.revision = final.mkIf (self ? rev) self.rev;
+              }];
+            } // lib.optionalAttrs (! args?system) {
+              # Allow system to be set modularly in nixpkgs.system.
+              # We set it to null, to remove the "legacy" entrypoint's
+              # non-hermetic default.
+              system = null;
+            }
+          );
       });
 
       checks.x86_64-linux.tarball = jobs.tarball;

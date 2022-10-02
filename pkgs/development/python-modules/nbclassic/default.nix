@@ -1,7 +1,8 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , notebook
+, notebook-shim
 , pythonOlder
 , jupyter_server
 , pytestCheckHook
@@ -10,18 +11,15 @@
 
 buildPythonPackage rec {
   pname = "nbclassic";
-  version = "0.3.1";
+  version = "0.4.3";
   disabled = pythonOlder "3.6";
 
-  # tests only on github
-  src = fetchFromGitHub {
-    owner = "jupyterlab";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-gx086w/qYB02UFEDly+0mUsV5BvAVAuhqih4wev2p/w=";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-8DERss66ppuINwp7I7GbKzfJu3F2fxgozf16BH6ujt0=";
   };
 
-  propagatedBuildInputs = [ jupyter_server notebook ];
+  propagatedBuildInputs = [ jupyter_server notebook notebook-shim ];
 
   checkInputs = [
     pytestCheckHook

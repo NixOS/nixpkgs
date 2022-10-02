@@ -1,29 +1,44 @@
-{ lib, python3, fetchFromGitHub, wrapQtAppsHook, buildEnv, aspellDicts
-# Use `lib.collect lib.isDerivation aspellDicts;` to make all dictionaries
-# available.
+{ lib
+, python3
+, fetchFromGitHub
+, wrapQtAppsHook
+, buildEnv
+, aspellDicts
+  # Use `lib.collect lib.isDerivation aspellDicts;` to make all dictionaries
+  # available.
 , enchantAspellDicts ? with aspellDicts; [ en en-computers en-science ]
 }:
 
-let
-  version = "7.0.4";
-  pythonEnv = python3.withPackages (ps: with ps; [
-    pyqt5 docutils pyenchant Markups markdown pygments chardet
-  ]);
-in python3.pkgs.buildPythonApplication {
-  inherit version;
+python3.pkgs.buildPythonApplication rec {
   pname = "retext";
+  version = "7.2.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "retext-project";
     repo = "retext";
     rev = version;
-    sha256 = "1zcapywspc9v5zf5cxqkcy019np9n41gmryqixj66zsvd544c6si";
+    hash = "sha256-EwaJFODnkZGbqVw1oQrTrx2ME4vRttVW4CMPkWvMtHA=";
   };
 
-  doCheck = false;
+  nativeBuildInputs = [
+    wrapQtAppsHook
+  ];
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
-  propagatedBuildInputs = [ pythonEnv ];
+  propagatedBuildInputs = with python3.pkgs; [
+    chardet
+    docutils
+    markdown
+    markups
+    pyenchant
+    pygments
+    pyqt5
+  ];
+
+  postPatch = ''
+    # Remove wheel check
+    sed -i -e '31,36d' setup.py
+  '';
 
   postInstall = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
@@ -39,10 +54,16 @@ in python3.pkgs.buildPythonApplication {
       --replace "Icon=ReText-${version}.data/data/share/retext/icons/retext.svg" "Icon=$out/share/retext/icons/retext.svg"
   '';
 
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "ReText"
+  ];
+
   meta = with lib; {
+    description = "Editor for Markdown and reStructuredText";
     homepage = "https://github.com/retext-project/retext/";
-    description = "Simple but powerful editor for Markdown and reStructuredText";
-    license = licenses.gpl3;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ klntsky ];
     platforms = platforms.unix;
   };

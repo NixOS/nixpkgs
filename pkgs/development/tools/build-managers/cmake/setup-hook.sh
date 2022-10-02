@@ -15,6 +15,9 @@ fixCmakeFiles() {
 cmakeConfigurePhase() {
     runHook preConfigure
 
+    # default to CMake defaults if unset
+    : ${cmakeBuildDir:=build}
+
     export CTEST_OUTPUT_ON_FAILURE=1
     if [ -n "${enableParallelChecking-1}" ]; then
         export CTEST_PARALLEL_LEVEL=$NIX_BUILD_CORES
@@ -25,9 +28,11 @@ cmakeConfigurePhase() {
     fi
 
     if [ -z "${dontUseCmakeBuildDir-}" ]; then
-        mkdir -p build
-        cd build
-        cmakeDir=${cmakeDir:-..}
+        mkdir -p "$cmakeBuildDir"
+        cd "$cmakeBuildDir"
+        : ${cmakeDir:=..}
+    else
+        : ${cmakeDir:=.}
     fi
 
     if [ -z "${dontAddPrefix-}" ]; then
@@ -102,9 +107,8 @@ cmakeConfigurePhase() {
         cmakeFlags="-DBUILD_TESTING=OFF $cmakeFlags"
     fi
 
-    # Avoid cmake resetting the rpath of binaries, on make install
-    # And build always Release, to ensure optimisation flags
-    cmakeFlags="-DCMAKE_BUILD_TYPE=${cmakeBuildType:-Release} -DCMAKE_SKIP_BUILD_RPATH=ON $cmakeFlags"
+    # Always build Release, to ensure optimisation flags
+    cmakeFlags="-DCMAKE_BUILD_TYPE=${cmakeBuildType:-Release} $cmakeFlags"
 
     # Disable user package registry to avoid potential side effects
     # and unecessary attempts to access non-existent home folder
@@ -119,7 +123,7 @@ cmakeConfigurePhase() {
 
     echo "cmake flags: $cmakeFlags ${cmakeFlagsArray[@]}"
 
-    cmake ${cmakeDir:-.} $cmakeFlags "${cmakeFlagsArray[@]}"
+    cmake "$cmakeDir" $cmakeFlags "${cmakeFlagsArray[@]}"
 
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1

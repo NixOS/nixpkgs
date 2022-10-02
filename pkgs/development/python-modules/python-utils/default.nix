@@ -1,19 +1,21 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, loguru
 , pytestCheckHook
 , six
+, pytest-mypy
 }:
 
 buildPythonPackage rec {
   pname = "python-utils";
-  version = "2.7.0";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner = "WoLpH";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gns9v5144cj03p7qbb3822scb6pwrlgr6niixpkynwqkcwjfg4c";
+    hash = "sha256-U6yamXbG8CUrNnFmGTBpHUelZSgoaNyB2CdUSH9WdMA=";
   };
 
   # disable coverage and linting
@@ -23,10 +25,12 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    loguru
     six
   ];
 
   checkInputs = [
+    pytest-mypy
     pytestCheckHook
   ];
 

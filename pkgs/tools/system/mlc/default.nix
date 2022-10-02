@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, patchelf }:
 stdenv.mkDerivation rec {
   pname = "mlc";
-  version = "3.9";
+  version = "3.9a";
 
   src = fetchurl {
-    url = "https://software.intel.com/content/dam/develop/external/us/en/protected/mlc_v${version}.tgz";
-    sha256 = "1x7abm9hbv9hkqa3cgxz6l04m3ycyl40i4zgx1w819pc10n6dhdb";
+    url = "https://downloadmirror.intel.com/736634/mlc_v${version}.tgz";
+    sha256 = "3vNI/CQwyY4KMFest1wkVYecsxigjXyGIUIKai979W4=";
   };
 
   sourceRoot = "Linux";
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://software.intel.com/content/www/us/en/develop/articles/intelr-memory-latency-checker.html";
     description = "Intel Memory Latency Checker";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ basvandijk ];
     platforms = with platforms; linux;

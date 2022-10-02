@@ -7,8 +7,9 @@ let
         version = "1.3.24";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "ebbb777cbf9312359b897bf81ba00dae0f5cb69fba2a18265dcc18a6f5ef7519";
+          hash = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";
         };
+        doCheck = false;
       });
       tornado = super.tornado_4;
     };
@@ -17,13 +18,13 @@ let
 in
 with python.pkgs; buildPythonApplication rec {
   pname = "grab-site";
-  version = "2.2.2";
+  version = "2.2.7";
 
   src = fetchFromGitHub {
     rev = version;
     owner = "ArchiveTeam";
     repo = "grab-site";
-    sha256 = "0af53g703kqpxa6bn72mb2l5l0qrjknq5wqwl4wryyscdp4xabx4";
+    sha256 = "sha256-tf8GyFjya3+TVc2VjlY6ztfjCJgof6tg4an18pz+Ig8=";
   };
 
   postPatch = ''

@@ -6,23 +6,29 @@
 , commoncode
 , pytestCheckHook
 , setuptools-scm
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "debian-inspector";
-  version = "30.0.0";
+  version = "31.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "debian_inspector";
     inherit version;
-    sha256 = "sha256-0PT5sT6adaqgYQtWjks12ys0z1C3n116aeJaEKR/Wxg=";
+    hash = "sha256-RglPlTRksmm7CYVere7jySy2tIegv6JuulN7Usw9a0c=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  dontConfigure = true;
 
   nativeBuildInputs = [
     setuptools-scm
   ];
-
-  dontConfigure = true;
 
   propagatedBuildInputs = [
     chardet

@@ -1,6 +1,6 @@
-{ callPackage, openssl_3_0, ... }@args:
+{ callPackage, ... }@args:
 
-callPackage ./generic.nix (args // { openssl = openssl_3_0; }) {
-  version = "1.21.5";
-  sha256 = "sha256-sg879TOlGKbw86eWff7thy0mjTHkzBIaAAEylgLdz7s=";
+callPackage ./generic.nix args {
+  version = "1.23.1";
+  sha256 = "sha256-Xu4b0cI+O5R3pFUy8fNq5heLQ9VxqWB+aVPO8m1d8eI=";
 }

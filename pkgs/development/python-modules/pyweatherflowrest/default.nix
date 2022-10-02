@@ -3,11 +3,12 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyweatherflowrest";
-  version = "1.0.7";
+  version = "1.0.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -16,8 +17,13 @@ buildPythonPackage rec {
     owner = "briis";
     repo = pname;
     rev = "v${version}";
-    sha256 = "17zas565jqvp0qrs8l589rm4f9xpyynhqk8lrqcx089w3rv0hh2p";
+    sha256 = "1swyqdnvhwaigqhjn5a22gi8if4bl8alfrigln4qa0jl9z03kg09";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
 
   propagatedBuildInputs = [
     aiohttp

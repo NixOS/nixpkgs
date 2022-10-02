@@ -1,0 +1,59 @@
+diff --git a/generator/src/codegen.js b/generator/src/codegen.js
+index a0ef8806e..fe00ac904 100644
+--- a/generator/src/codegen.js
++++ b/generator/src/codegen.js
+@@ -20,33 +20,33 @@ async function generate(basePath) {
+ 
+   const uiFileContent = elmPagesUiFile();
+   await Promise.all([
+-    fs.promises.copyFile(
+-      path.join(__dirname, `./Page.elm`),
+-      `./.elm-pages/Page.elm`
++    fs.promises.writeFile(
++      `./.elm-pages/Page.elm`,
++      fs.readFileSync(path.join(__dirname, `./Page.elm`))
+     ),
+-    fs.promises.copyFile(
+-      path.join(__dirname, `./elm-application.json`),
+-      `./elm-stuff/elm-pages/elm-application.json`
++    fs.promises.writeFile(
++      `./elm-stuff/elm-pages/elm-application.json`,
++      fs.readFileSync(path.join(__dirname, `./elm-application.json`))
+     ),
+-    fs.promises.copyFile(
+-      path.join(__dirname, `./Page.elm`),
+-      `./elm-stuff/elm-pages/.elm-pages/Page.elm`
++    fs.promises.writeFile(
++      `./elm-stuff/elm-pages/.elm-pages/Page.elm`,
++      fs.readFileSync(path.join(__dirname, `./Page.elm`))
+     ),
+-    fs.promises.copyFile(
+-      path.join(__dirname, `./SharedTemplate.elm`),
+-      `./.elm-pages/SharedTemplate.elm`
++    fs.promises.writeFile(
++      `./.elm-pages/SharedTemplate.elm`,
++      fs.readFileSync(path.join(__dirname, `./SharedTemplate.elm`))
+     ),
+-    fs.promises.copyFile(
+-      path.join(__dirname, `./SharedTemplate.elm`),
+-      `./elm-stuff/elm-pages/.elm-pages/SharedTemplate.elm`
++    fs.promises.writeFile(
++      `./elm-stuff/elm-pages/.elm-pages/SharedTemplate.elm`,
++      fs.readFileSync(path.join(__dirname, `./SharedTemplate.elm`))
+     ),
+-    fs.promises.copyFile(
+-      path.join(__dirname, `./SiteConfig.elm`),
+-      `./.elm-pages/SiteConfig.elm`
++    fs.promises.writeFile(
++      `./.elm-pages/SiteConfig.elm`,
++      fs.readFileSync(path.join(__dirname, `./SiteConfig.elm`))
+     ),
+-    fs.promises.copyFile(
+-      path.join(__dirname, `./SiteConfig.elm`),
+-      `./elm-stuff/elm-pages/.elm-pages/SiteConfig.elm`
++    fs.promises.writeFile(
++      `./elm-stuff/elm-pages/.elm-pages/SiteConfig.elm`,
++      fs.readFileSync(path.join(__dirname, `./SiteConfig.elm`))
+     ),
+     fs.promises.writeFile("./.elm-pages/Pages.elm", uiFileContent),
+     // write `Pages.elm` with cli interface

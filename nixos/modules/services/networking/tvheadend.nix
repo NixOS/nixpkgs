@@ -9,17 +9,17 @@ in
 {
   options = {
     services.tvheadend = {
-      enable = mkEnableOption "Tvheadend";
+      enable = mkEnableOption (lib.mdDoc "Tvheadend");
       httpPort = mkOption {
         type        = types.int;
         default     = 9981;
-        description = "Port to bind HTTP to.";
+        description = lib.mdDoc "Port to bind HTTP to.";
       };
 
       htspPort = mkOption {
         type        = types.int;
         default     = 9982;
-        description = "Port to bind HTSP to.";
+        description = lib.mdDoc "Port to bind HTSP to.";
       };
     };
   };

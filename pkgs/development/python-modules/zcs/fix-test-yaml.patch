@@ -1,0 +1,13 @@
+diff --git a/test/test_zcs.py b/test/test_zcs.py
+index e4981d3..893999f 100644
+--- a/test/test_zcs.py
++++ b/test/test_zcs.py
+@@ -65,7 +65,7 @@ class TestCfgNode(unittest.TestCase):
+         cfg = self.cfg.clone()
+         yamlp = pathjoin(tmpboxx(), "test.yaml")
+         cfg.dump(yamlp)
+-        cfg_dict = yaml.load(open(yamlp))
++        cfg_dict = yaml.load(open(yamlp), yaml.Loader)
+         cfgd = CfgNode(cfg_dict)
+         self.assertTrue(str(cfg.dump()) == str(cfgd.dump()))
+ 

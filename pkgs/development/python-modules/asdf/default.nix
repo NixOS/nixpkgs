@@ -1,10 +1,13 @@
 { lib
+, asdf-standard
+, asdf-transform-schemas
 , astropy
 , buildPythonPackage
 , fetchPypi
 , importlib-resources
 , jmespath
 , jsonschema
+, lz4
 , numpy
 , packaging
 , pytest-astropy
@@ -17,18 +20,23 @@
 
 buildPythonPackage rec {
   pname = "asdf";
-  version = "2.8.1";
-  disabled = pythonOlder "3.6";
+  version = "2.13.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bp3fME3FTa5vcj7qUoUEGqvuI2uwSpI13zDcFgWvbJw=";
+    hash = "sha256-MuKmmlPRcB/EYW6AD7Pa/4G7rYAYMqe/Vj47Ycn+Pf4=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
+    asdf-standard
+    asdf-transform-schemas
     jmespath
     jsonschema
     numpy
@@ -40,8 +48,9 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest-astropy
     astropy
+    lz4
+    pytest-astropy
     pytestCheckHook
   ];
 
@@ -49,11 +58,13 @@ buildPythonPackage rec {
     export PY_IGNORE_IMPORTMISMATCH=1
   '';
 
-  pythonImportsCheck = [ "asdf" ];
+  pythonImportsCheck = [
+    "asdf"
+  ];
 
   meta = with lib; {
     description = "Python tools to handle ASDF files";
-    homepage = "https://github.com/spacetelescope/asdf";
+    homepage = "https://github.com/asdf-format/asdf";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];
   };

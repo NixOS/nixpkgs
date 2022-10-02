@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-wipe";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "mihai-dinculescu";
     repo = "cargo-wipe";
     rev = "v${version}";
-    sha256 = "sha256-AlmXq2jbU8mQ23Q64a8QiKXwiWkIfr98vAoq7FLImhA=";
+    sha256 = "sha256-xMYpZ6a8HdULblkfEqnqLjX8OVFJWx8MHDGNhuFzdTc=";
   };
 
-  cargoSha256 = "sha256-vsN4cM4Q9LX1ZgAA5x7PupOTh0IcjI65xzuCPjy8YOs=";
+  cargoSha256 = "sha256-/cne7uTGyxgTRONWMEE5dPbPDnCxf+ZnYzYXRAeHJyQ=";
 
   passthru = {
     updateScript = nix-update-script {

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "gitpython";
-  version = "3.1.25";
+  version = "3.1.27";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "gitpython-developers";
     repo = "GitPython";
     rev = version;
-    sha256 = "sha256-ienc7zvLe6t8rkMtC6wVIewUqQBFdFbLc8iPT6aPVrE=";
+    sha256 = "sha256-RA+6JFXHUQoXGErV8+aYuJPsfXzNSZK3kTm6eMbQIss=";
   };
 
   patches = [

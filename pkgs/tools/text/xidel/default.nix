@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchsvn, fetchFromGitHub, fpc }:
+{ lib, stdenv, fetchsvn, fetchFromGitHub, fpc, openssl }:
 
 let
   flreSrc = fetchFromGitHub {
@@ -36,6 +36,9 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ fpc ];
+  buildInputs = [ openssl ];
+
+  NIX_LDFLAGS = [ "-lcrypto" ];
 
   patchPhase = ''
     patchShebangs \

@@ -1,31 +1,42 @@
-{ lib, stdenv, fetchFromGitHub, xz }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, testers
+, pxz
+, xz
+}:
 
 stdenv.mkDerivation rec {
   pname = "pxz";
-  version = "4.999.9beta+git";
+  version = "4.999.9beta";
 
   src = fetchFromGitHub {
     owner = "jnovy";
     repo = "pxz";
     rev = "124382a6d0832b13b7c091f72264f8f3f463070a";
-    sha256 = "15mmv832iqsqwigidvwnf0nyivxf0y8m22j2szy4h0xr76x4z21m";
+    hash = "sha256-NYhPujm5A0j810IKUZEHru/oLXCW7xZf5FjjKAbatZY=";
   };
+
+  patches = [ ./flush-stdout-help-version.patch ];
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace '`date +%Y%m%d`' '19700101'
+
+    substituteInPlace pxz.c \
+      --replace 'XZ_BINARY "xz"' 'XZ_BINARY "${lib.getBin xz}/bin/xz"'
+  '';
 
   buildInputs = [ xz ];
 
-  buildPhase = ''
-    gcc -o pxz pxz.c -llzma \
-        -fopenmp -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -O2 \
-        -DPXZ_BUILD_DATE=\"nixpkgs\" \
-        -DXZ_BINARY=\"${xz.bin}/bin/xz\" \
-        -DPXZ_VERSION=\"${version}\"
-  '';
+  makeFlags = [
+    "BINDIR=${placeholder "out"}/bin"
+    "MANDIR=${placeholder "out"}/share/man"
+  ];
 
-  installPhase = ''
-    mkdir -p $out/bin $out/share/man/man1
-    cp pxz $out/bin
-    cp pxz.1 $out/share/man/man1
-  '';
+  passthru.tests.version = testers.testVersion {
+    package = pxz;
+  };
 
   meta = with lib; {
     homepage = "https://jnovy.fedorapeople.org/pxz/";
@@ -39,6 +50,7 @@ stdenv.mkDerivation rec {
       resources to speed up compression time with minimal possible influence
       on compression ratio
     '';
+    mainProgram = "pxz";
     platforms = with platforms; linux;
   };
 }

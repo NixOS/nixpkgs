@@ -2,25 +2,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wiki-tui";
-  version = "0.4.4";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "Builditluc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-IkPv6oPdwfuIQrqQGqZAJ0b9OPRiA3GWDQuPXM/+fY4=";
+    sha256 = "sha256-kcVfqj5vRfPcF6lO1Ley3ctZajNA02jUqQRlpi3MkXc=";
   };
 
   buildInputs = [ ncurses openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   nativeBuildInputs = [ pkg-config ];
 
-  cargoSha256 = "sha256-/56KsEg6deeROERWLd9lX+7v6n5Dx1VCzdr/GtPFuGo=";
+  cargoSha256 = "sha256-OW2kutjvQC9neiguixTdJx2hUFsnmQhR9DbniBr6V8w=";
+
+  # Tests fail with this error: `found argument --test-threads which was not expected`
+  doCheck = false;
 
   meta = with lib; {
     description = "A simple and easy to use Wikipedia Text User Interface";
     homepage = "https://github.com/builditluc/wiki-tui";
     license = licenses.mit;
-    maintainers = with maintainers; [ lom ];
+    maintainers = with maintainers; [ lom builditluc ];
   };
 }

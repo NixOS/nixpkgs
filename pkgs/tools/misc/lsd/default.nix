@@ -2,32 +2,36 @@
 , fetchFromGitHub
 , rustPlatform
 , installShellFiles
-, testVersion
+, pandoc
+, testers
 , lsd
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lsd";
-  version = "0.21.0";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "Peltoche";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4pa8yJjUTO5MUDuljfU9Vo2ZjbsIwWJsJj6VVNfN25A=";
+    sha256 = "sha256-FY1odcKBl7zJ+MxfohkmC1e45fPQK3MKB3orQdCRpA4=";
   };
 
-  cargoSha256 = "sha256-P0HJVp2ReJuLSZrArw/EAfLFDOZqswI0nD1SCHwegoE=";
+  cargoSha256 = "sha256-t7J7hIbLlRq99Yd2/3Zn+PbHhJtaJRdDluDXN0Hp/Jc=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles pandoc ];
   postInstall = ''
+    pandoc --standalone --to man doc/lsd.md -o lsd.1
+    installManPage lsd.1
+
     installShellCompletion $releaseDir/build/lsd-*/out/{_lsd,lsd.{bash,fish}}
   '';
 
   # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = lsd;
   };
 

@@ -3,7 +3,7 @@
 , fetchPypi
 , robotframework
 , moretools
-, pathpy
+, path
 , six
 , zetup
 , modeled
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     robotframework
     moretools
-    pathpy
+    path
     six
     modeled
   ];

@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "hangups";
-  version = "0.4.17";
+  version = "0.4.18";
 
   disabled = pythonOlder "3.6";
 
@@ -26,12 +26,12 @@ buildPythonPackage rec {
     owner = "tdryer";
     repo = "hangups";
     rev = "v${version}";
-    hash = "sha256-8kNWcRAip9LkmazDUVeDjGWhy/TWzT01c959LA5hb1Q=";
+    hash = "sha256-vq1OrOUPMQtezBFlisP2f/bvvYprDjhOuwUcT8rmIvw=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "protobuf>=3.1.0,<3.20" "protobuf" \
+      --replace "protobuf>=3.1.0,<4" "protobuf" \
       --replace "MechanicalSoup>=0.6.0,<0.13" "MechanicalSoup"
   '';
 

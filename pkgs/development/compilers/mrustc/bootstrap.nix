@@ -71,7 +71,8 @@ stdenv.mkDerivation rec {
     # for rustc
     llvm_7 libffi zlib libxml2
     # for cargo
-    openssl curl
+    openssl
+    (curl.override { inherit openssl; })
   ];
 
   makeFlags = [

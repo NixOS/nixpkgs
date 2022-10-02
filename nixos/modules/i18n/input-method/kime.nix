@@ -27,8 +27,8 @@ in
             };
           }
           '';
-        description = ''
-          kime configuration. Refer to <link xlink:href="https://github.com/Riey/kime/blob/v${pkgs.kime.version}/docs/CONFIGURATION.md"/> for details on supported values.
+        description = lib.mdDoc ''
+          kime configuration. Refer to <https://github.com/Riey/kime/blob/v${pkgs.kime.version}/docs/CONFIGURATION.md> for details on supported values.
         '';
       };
     };

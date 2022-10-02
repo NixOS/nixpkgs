@@ -1,20 +1,32 @@
-{ lib, stdenv, fetchFromGitHub
-, pkg-config, libxkbcommon, wayland, wayland-protocols }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, libxkbcommon
+, pkg-config
+, wayland
+, wayland-protocols
+}:
 
 stdenv.mkDerivation rec {
-
   pname = "havoc";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "ii8";
     repo = pname;
     rev = version;
-    sha256 = "1g05r9j6srwz1krqvzckx80jn8fm48rkb4xp68953gy9yp2skg3k";
+    hash = "sha256-zNKDQqkDeNj5fB5EdMVfAs2H4uBgLh6Fp3uSjiJ1VhQ=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libxkbcommon wayland wayland-protocols ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    libxkbcommon
+    wayland
+    wayland-protocols
+  ];
 
   dontConfigure = true;
 
@@ -26,8 +38,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A minimal terminal emulator for Wayland";
     homepage = "https://github.com/ii8/havoc";
+    description = "A minimal terminal emulator for Wayland";
     license = with licenses; [ mit publicDomain ];
     platforms = with platforms; unix;
     maintainers = with maintainers; [ AndersonTorres ];

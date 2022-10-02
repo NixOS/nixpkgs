@@ -7,13 +7,13 @@ let
   apps = lib.makeBinPath [ openssh python' cron rsync sshfs-fuse encfs ];
 in stdenv.mkDerivation rec {
   pname = "backintime-common";
-  version = "1.2.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "bit-team";
     repo = "backintime";
     rev = "v${version}";
-    sha256 = "mBjheLY7DHs995heZmxVnDdvABkAROCjRJ4a/uJmJcg=";
+    sha256 = "sha256-7iTQZ7SiESsKK8F8BpLrRNkj8JhHo64kliaOvMvYGvw=";
   };
 
   nativeBuildInputs = [ makeWrapper gettext ];

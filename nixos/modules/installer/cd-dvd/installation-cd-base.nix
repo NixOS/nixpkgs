@@ -46,5 +46,5 @@ with lib;
     done
   '';
 
-  system.stateVersion = mkDefault "18.03";
+  system.stateVersion = lib.mkDefault lib.trivial.release;
 }

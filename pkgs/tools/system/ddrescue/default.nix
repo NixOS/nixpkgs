@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ddrescue";
-  version = "1.25";
+  version = "1.26";
 
   src = fetchurl {
     url = "mirror://gnu/ddrescue/ddrescue-${version}.tar.lz";
-    sha256 = "0qqh38izl5ppap9a5izf3hijh94k65s3zbfkczd4b7x04syqwlyf";
+    sha256 = "sha256-5RPNOpDZgQ392RGX1AqkD23wFZe/tez9+yBd4RJ8VR8=";
   };
 
   nativeBuildInputs = [ lzip ];

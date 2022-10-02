@@ -8,18 +8,18 @@
 
 buildPythonPackage rec {
   pname = "mypy-boto3-s3";
-  version = "1.20.28";
+  version = "1.24.76";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "85ac23d06f9d0d794f60041b4c4f271d2bb8f5a83375c963e4a9e73e51ba9ca5";
+    hash = "sha256-ciU2L9bw2JS1IWFf4SSVWFb/jx7NrlN1rCCzNL60rZw=";
   };
 
   propagatedBuildInputs = [
     boto3
-  ] ++ lib.optionals (pythonOlder "3.9") [
     typing-extensions
   ];
 

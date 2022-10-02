@@ -4,17 +4,20 @@
 , astropy
 , dask
 , numpy
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "casa-formats-io";
-  version = "0.1";
+  version = "0.2.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16rypj65wdfxxrilxfhbk563lxv86if4vvs9zfq3f8bkzdr8xl9s";
+    sha256 = "sha256-8iZ+wcSfh5ACTb3/iQAf2qQpwZ6wExWwcdJoLmCEjB0=";
   };
+
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ astropy dask numpy ];
 
@@ -25,9 +28,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Dask-based reader for CASA data";
-    homepage = "http://radio-astro-tools.github.io";
+    homepage = "https://casa-formats-io.readthedocs.io/";
     license = lib.licenses.lgpl2Only;
     maintainers = with lib.maintainers; [ smaret ];
   };
 }
-

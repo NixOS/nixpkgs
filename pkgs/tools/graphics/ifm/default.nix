@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl tk ]; # perl and wish are not run but written as shebangs.
 
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: libvars.a(vars-freeze-lex.o):src/libvars/vars-freeze-lex.l:23:
+  #     multiple definition of `line_number'; ifm-main.o:src/ifm-main.c:46: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   enableParallelBuilding = false; # ifm-scan.l:16:10: fatal error: ifm-parse.h: No such file or directory
 
   meta = with lib; {

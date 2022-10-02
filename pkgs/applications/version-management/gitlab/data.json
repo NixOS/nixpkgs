@@ -1,14 +1,28 @@
 {
-  "version": "14.6.2",
-  "repo_hash": "0n7l1f1w70nqb9ackcmi1yhx69a32zlkxa962v67782nn2vdcbiz",
-  "yarn_hash": "1kcjbf8xn3bwac2s9i2i7dpgbkwcjh09wvgbgysm5yffpdswg6nl",
+  "version": "15.4.1",
+  "repo_hash": "sha256-z4J0ia9WxL+tJnoYNBtb6ZMuqGHiyhQ0tc0L8kzj26w=",
+  "yarn_hash": "1r33qrvwf2wmq5c1d2awk9qhk9nzvafqn3drdvnczfv43sda4lg8",
   "owner": "gitlab-org",
   "repo": "gitlab",
-  "rev": "v14.6.2-ee",
+  "rev": "v15.4.1-ee",
   "passthru": {
-    "GITALY_SERVER_VERSION": "14.6.2",
-    "GITLAB_PAGES_VERSION": "1.49.0",
-    "GITLAB_SHELL_VERSION": "13.22.1",
-    "GITLAB_WORKHORSE_VERSION": "14.6.2"
-  }
+    "GITALY_SERVER_VERSION": "15.4.1",
+    "GITLAB_PAGES_VERSION": "1.62.0",
+    "GITLAB_SHELL_VERSION": "14.10.0",
+    "GITLAB_WORKHORSE_VERSION": "15.4.1"
+  },
+  "vendored_gems": [
+    "bundler-checksum",
+    "devise-pbkdf2-encryptable",
+    "omniauth-azure-oauth2",
+    "omniauth-cas3",
+    "omniauth-gitlab",
+    "omniauth-google-oauth2",
+    "omniauth_crowd",
+    "omniauth-salesforce",
+    "mail-smtp_pool",
+    "microsoft_graph_mailer",
+    "ipynbdiff",
+    "error_tracking_open_api"
+  ]
 }

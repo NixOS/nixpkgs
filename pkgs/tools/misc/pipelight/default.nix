@@ -24,6 +24,9 @@ in stdenv.mkDerivation rec {
   patches = [
     ./pipelight.patch
     ./wine-6.13-new-args.patch
+    # https://source.winehq.org/git/wine.git/commit/cf4a781e987a98a8d48610362a20a320c4a1016d
+    # adds ControlMask as a static variable.
+    ./wine-7.10-ControlMask.patch
   ];
 
   configurePhase = ''

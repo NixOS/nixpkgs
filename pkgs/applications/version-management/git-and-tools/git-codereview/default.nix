@@ -1,16 +1,21 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, git }:
 
-buildGoPackage {
+buildGoModule rec {
   pname = "git-codereview";
-  version = "2020-01-15";
-  goPackagePath = "golang.org/x/review";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "review";
-    rev = "f51a73253c4da005cfdf18a036e11185c04c8ce3";
-    sha256 = "0c4vsyy5zp7pngqn4q87xipndghxyw2x57dkv1kxnrffckx1s3pc";
+    rev = "v${version}";
+    sha256 = "sha256-Hyo2UWGlxxeSz3E73DeA0VoOnBJ1VedvpshnATJGbFo=";
   };
+
+  vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+
+  ldflags = [ "-s" "-w" ];
+
+  checkInputs = [ git ];
 
   meta = with lib; {
     description = "Manage the code review process for Git changes using a Gerrit server";

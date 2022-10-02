@@ -8,20 +8,25 @@
 , pytestCheckHook
 , pythonOlder
 , restructuredtext_lint
+, setuptools-scm
 , stevedore
 }:
 
 buildPythonPackage rec {
   pname = "doc8";
-  version = "0.10.1";
+  version = "1.0.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "376e50f4e70a1ae935416ddfcf93db35dd5d4cc0e557f2ec72f0667d0ace4548";
+    sha256 = "sha256-HpmaFP5BXqltidUFPHkNAQYfGbZzdwa4F9FXnCoHzBY=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   buildInputs = [
     pbr
@@ -47,6 +52,6 @@ buildPythonPackage rec {
     description = "Style checker for Sphinx (or other) RST documentation";
     homepage = "https://github.com/pycqa/doc8";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ onny ];
   };
 }

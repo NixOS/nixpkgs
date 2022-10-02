@@ -6,17 +6,19 @@
 , libftdi1
 , libusb1
 , udev
+, hidapi
+, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "openfpgaloader";
-  version = "0.6.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "trabucayre";
     repo = "openFPGALoader";
     rev = "v${version}";
-    sha256 = "sha256-gPRBHy7WVra4IlGvzrhNqbEbOQtYtUC+zQ+SnJTMvRA=";
+    sha256 = "sha256-CnJBmbvJ4FfKqdyoD8K94Eeoqly2Q6UV5wQ6EWv2isI=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -25,6 +27,8 @@ stdenv.mkDerivation rec {
     libftdi1
     libusb1
     udev
+    hidapi
+    zlib
   ];
 
   meta = with lib; {

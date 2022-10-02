@@ -4,7 +4,7 @@ Option types are a way to put constraints on the values a module option
 can take. Types are also responsible of how values are merged in case of
 multiple value definitions.
 
-## Basic Types {#sec-option-types-basic}
+## Basic types {#sec-option-types-basic}
 
 Basic types are the simplest available types in the module system. Basic
 types include multiple string types that mainly differ in how definition
@@ -16,13 +16,19 @@ merging is handled.
 
 `types.path`
 
-:   A filesystem path, defined as anything that when coerced to a string
-    starts with a slash. Even if derivations can be considered as path,
-    the more specific `types.package` should be preferred.
+:   A filesystem path is anything that starts with a slash when
+    coerced to a string. Even if derivations can be considered as
+    paths, the more specific `types.package` should be preferred.
 
 `types.package`
 
-:   A derivation or a store path.
+:   A top-level store path. This can be an attribute set pointing
+    to a store path, like a derivation or a flake input.
+
+`types.enum` *`l`*
+
+:   One element of the list *`l`*, e.g. `types.enum [ "left" "right" ]`.
+    Multiple definitions cannot be merged.
 
 `types.anything`
 
@@ -63,6 +69,24 @@ merging is handled.
     ```
     :::
 
+`types.raw`
+
+:   A type which doesn't do any checking, merging or nested evaluation. It
+    accepts a single arbitrary value that is not recursed into, making it
+    useful for values coming from outside the module system, such as package
+    sets or arbitrary data. Options of this type are still evaluated according
+    to priorities and conditionals, so `mkForce`, `mkIf` and co. still work on
+    the option value itself, but not for any value nested within it. This type
+    should only be used when checking, merging and nested evaluation are not
+    desirable.
+
+`types.optionType`
+
+:   The type of an option's type. Its merging operation ensures that nested
+    options have the correct file location annotated, and that if possible,
+    multiple option definitions are correctly merged together. The main use
+    case is as the type of the `_module.freeformType` option.
+
 `types.attrs`
 
 :   A free-form attribute set.
@@ -76,7 +100,7 @@ merging is handled.
     problems.
     :::
 
-Integer-related types:
+### Numeric types {#sec-option-types-numeric}
 
 `types.int`
 
@@ -99,6 +123,10 @@ Integer-related types:
     from 0 to 2^n−1 respectively (e.g. `0`
     to `255` for 8 bits).
 
+`types.ints.between` *`lowest highest`*
+
+:   An integer between *`lowest`* and *`highest`* (both inclusive).
+
 `types.ints.positive`
 
 :   A positive integer (that is > 0).
@@ -108,11 +136,43 @@ Integer-related types:
 :   A port number. This type is an alias to
     `types.ints.u16`.
 
-String-related types:
+`types.float`
+
+:   A floating point number.
+
+    ::: {.warning}
+    Converting a floating point number to a string with `toString` or `toJSON`
+    may result in [precision loss](https://github.com/NixOS/nix/issues/5733).
+    :::
+
+`types.number`
+
+:   Either a signed integer or a floating point number. No implicit conversion
+    is done between the two types, and multiple equal definitions will only be
+    merged if they have the same type.
+
+`types.numbers.between` *`lowest highest`*
+
+:   An integer or floating point number between *`lowest`* and *`highest`* (both inclusive).
+
+`types.numbers.nonnegative`
+
+:   A nonnegative integer or floating point number (that is >= 0).
+
+`types.numbers.positive`
+
+:   A positive integer or floating point number (that is > 0).
+
+### String types {#sec-option-types-string}
 
 `types.str`
 
 :   A string. Multiple definitions cannot be merged.
+
+`types.separatedString` *`sep`*
+
+:   A string. Multiple definitions are concatenated with *`sep`*, e.g.
+    `types.separatedString "|"`.
 
 `types.lines`
 
@@ -125,7 +185,7 @@ String-related types:
 
 `types.envVar`
 
-:   A string. Multiple definitions are concatenated with a collon `":"`.
+:   A string. Multiple definitions are concatenated with a colon `":"`.
 
 `types.strMatching`
 
@@ -133,24 +193,9 @@ String-related types:
     definitions cannot be merged. The regular expression is processed
     using `builtins.match`.
 
-## Value Types {#sec-option-types-value}
+## Submodule types {#sec-option-types-submodule}
 
-Value types are types that take a value parameter.
-
-`types.enum` *`l`*
-
-:   One element of the list *`l`*, e.g. `types.enum [ "left" "right" ]`.
-    Multiple definitions cannot be merged.
-
-`types.separatedString` *`sep`*
-
-:   A string with a custom separator *`sep`*, e.g.
-    `types.separatedString "|"`.
-
-`types.ints.between` *`lowest highest`*
-
-:   An integer between *`lowest`* and *`highest`* (both inclusive). Useful
-    for creating types like `types.port`.
+Submodules are detailed in [Submodule](#section-option-types-submodule).
 
 `types.submodule` *`o`*
 
@@ -159,7 +204,6 @@ Value types are types that take a value parameter.
     value. Submodules are used in composed types to create modular
     options. This is equivalent to
     `types.submoduleWith { modules = toList o; shorthandOnlyDefinesConfig = true; }`.
-    Submodules are detailed in [Submodule](#section-option-types-submodule).
 
 `types.submoduleWith` { *`modules`*, *`specialArgs`* ? {}, *`shorthandOnlyDefinesConfig`* ? false }
 
@@ -201,7 +245,26 @@ Value types are types that take a value parameter.
         requires using a function:
         `the-submodule = { ... }: { options = { ... }; }`.
 
-## Composed Types {#sec-option-types-composed}
+`types.deferredModule`
+
+:   Whereas `submodule` represents an option tree, `deferredModule` represents
+    a module value, such as a module file or a configuration.
+
+    It can be set multiple times.
+
+    Module authors can use its value in `imports`, in `submoduleWith`'s `modules`
+    or in `evalModules`' `modules` parameter, among other places.
+
+    Note that `imports` must be evaluated before the module fixpoint. Because
+    of this, deferred modules can only be imported into "other" fixpoints, such
+    as submodules.
+
+    One use case for this type is the type of a "default" module that allow the
+    user to affect all submodules in an `attrsOf submodule` at once. This is
+    more convenient and discoverable than expecting the module user to
+    type-merge with the `attrsOf submodule` option.
+
+## Composed types {#sec-option-types-composed}
 
 Composed types are types that take a type as parameter. `listOf
    int` and `either int str` are examples of composed types.
@@ -250,6 +313,12 @@ Composed types are types that take a type as parameter. `listOf
 :   Ensures that type *`t`* cannot be merged. It is used to ensure option
     definitions are declared only once.
 
+`types.unique` `{ message = m }` *`t`*
+
+:   Ensures that type *`t`* cannot be merged. Prints the message *`m`*, after
+    the line `The option <option path> is defined multiple times.` and before
+    a list of definition locations.
+
 `types.either` *`t1 t2`*
 
 :   Type *`t1`* or type *`t2`*, e.g. `with types; either int str`.
@@ -282,6 +351,10 @@ modularity.
 The option set can be defined directly
 ([Example: Directly defined submodule](#ex-submodule-direct)) or as reference
 ([Example: Submodule defined as a reference](#ex-submodule-reference)).
+
+Note that even if your submodule’s options all have a default value,
+you will still need to provide a default value (e.g. an empty attribute set)
+if you want to allow users to leave it undefined.
 
 ::: {#ex-submodule-direct .example}
 ::: {.title}
@@ -448,7 +521,7 @@ Types are mainly characterized by their `check` and `merge` functions.
     of strings, and `defs` the list of defined values as a list. It is
     possible to override a type merge function for custom needs.
 
-## Custom Types {#sec-option-types-custom}
+## Custom types {#sec-option-types-custom}
 
 Custom types can be created with the `mkOptionType` function. As type
 creation includes some more complex topics such as submodule handling,

@@ -3,30 +3,22 @@
 , sage-tests
 , sage-with-env
 , jupyter-kernel-definition
-, jupyter-kernel
+, jupyter-kernel-specs
 , sagedoc
 , withDoc
+, requireSageTests
 }:
 
 # A wrapper that makes sure sage finds its docs (if they were build) and the
 # jupyter kernel spec.
 
-let
-  # generate kernel spec + default kernels
-  kernel-specs = jupyter-kernel.create {
-    definitions = jupyter-kernel.default // {
-      sagemath = jupyter-kernel-definition;
-    };
-  };
-in
 stdenv.mkDerivation rec {
   version = src.version;
   pname = "sage";
   src = sage-with-env.env.lib.src;
 
-  buildInputs = [
-    makeWrapper
-
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = lib.optionals requireSageTests [
     # This is a hack to make sure sage-tests is evaluated. It doesn't acutally
     # produce anything of value, it just decouples the tests from the build.
     sage-tests
@@ -42,7 +34,7 @@ stdenv.mkDerivation rec {
       --set SAGE_DOC_SRC_OVERRIDE "${src}/src/doc" ${
         lib.optionalString withDoc "--set SAGE_DOC_OVERRIDE ${sagedoc}/share/doc/sage"
       } \
-      --prefix JUPYTER_PATH : "${kernel-specs}"
+      --prefix JUPYTER_PATH : "${jupyter-kernel-specs}"
   '';
 
   doInstallCheck = withDoc;
@@ -62,7 +54,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open Source Mathematics Software, free alternative to Magma, Maple, Mathematica, and Matlab";
-    license = licenses.gpl2;
+    homepage = "https://www.sagemath.org";
+    license = licenses.gpl2Plus;
     maintainers = teams.sage.members;
   };
 }

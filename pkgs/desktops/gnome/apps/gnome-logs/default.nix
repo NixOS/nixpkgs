@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , fetchpatch
 , meson
@@ -10,6 +11,7 @@
 , wrapGAppsHook
 , gettext
 , itstool
+, libhandy
 , libxml2
 , libxslt
 , docbook_xsl
@@ -21,18 +23,23 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-logs";
-  version = "3.36.0";
+  version = "42.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-logs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0w1nfdxbv3f0wnhmdy21ydvr4swfc108hypda561p7l9lrhnnxj4";
+    url = "mirror://gnome/sources/gnome-logs/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "TV5FFp1r9DkC16npoHk8kW65LaumuoWzXI629nLNq9c=";
   };
 
   patches = [
-    # https://gitlab.gnome.org/GNOME/gnome-logs/-/issues/52
+    # meson: Remove redundant check for glib-mkenums
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-logs/-/commit/b42defceefc775220b525f665a3b662ab9593b81.patch";
-      sha256 = "1s0zscmhwy7r0xff17wh8ik8x9xw1vrkipw5vl5i770bxnljps8n";
+      url = "https://gitlab.gnome.org/GNOME/gnome-logs/-/commit/01386ce9a69652a00bdb163e569b51150ca8903e.diff";
+      sha256 = "sha256-tJJEai4Jw8aVcyhsFTYILiUV1xhsysX/rleeLP13DVM=";
+    })
+    # meson: remove redundant check for pkg-config
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-logs/-/commit/ad350729a8b81f2c8eb2122de0956bb2199b48da.patch";
+      sha256 = "sha256-5qGYyKM+B9XNZKytWH8K4QfSuBf7wpaPCWT6YIO5FGY=";
     })
   ];
 
@@ -48,14 +55,15 @@ stdenv.mkDerivation rec {
     libxslt
     docbook_xsl
     docbook_xml_dtd_43
+    glib
   ];
 
   buildInputs = [
     glib
     gtk3
+    libhandy
     systemd
     gsettings-desktop-schemas
-    gnome.adwaita-icon-theme
   ];
 
   mesonFlags = [
@@ -80,7 +88,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/Logs";
     description = "A log viewer for the systemd journal";
     maintainers = teams.gnome.members;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   name = "chrootenv";
-  src = ./.;
+  src = ./src;
 
   nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [ glib ];

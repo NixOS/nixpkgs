@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
+
   buildInputs = [
     libGL
     libpng
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://repo.or.cz/glpng.git/blob_plain/HEAD:/glpng.htm";
-    description = "PNG loader for OpenGL";
+    description = "PNG loader library for OpenGL";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;

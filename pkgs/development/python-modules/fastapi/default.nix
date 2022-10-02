@@ -9,6 +9,8 @@
 , databases
 , flask
 , httpx
+, hatchling
+, orjson
 , passlib
 , peewee
 , python-jose
@@ -19,17 +21,26 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.71.0";
-  format = "flit";
+  version = "0.85.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-J4j7lQm22pbwfMkQGF1s2xyFU4MCwXrAqDmRJmLmKGg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-mgrw5MQMqFcXExtsu/jW01dMlygfE1GzSqXHI6BG7j4=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "starlette==" "starlette>="
+  '';
 
   propagatedBuildInputs = [
     starlette
@@ -41,6 +52,7 @@ buildPythonPackage rec {
     databases
     flask
     httpx
+    orjson
     passlib
     peewee
     python-jose
@@ -48,12 +60,7 @@ buildPythonPackage rec {
     pytest-asyncio
     sqlalchemy
     trio
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "starlette ==" "starlette >="
-  '';
+  ] ++ passlib.optional-dependencies.bcrypt;
 
   pytestFlagsArray = [
     # ignoring deprecation warnings to avoid test failure from
@@ -70,10 +77,13 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_get_custom_response"
-
     # Failed: DID NOT RAISE <class 'starlette.websockets.WebSocketDisconnect'>
     "test_websocket_invalid_data"
     "test_websocket_no_credentials"
+    # TypeError: __init__() missing 1...starlette-releated
+    "test_head"
+    "test_options"
+    "test_trace"
   ];
 
   pythonImportsCheck = [

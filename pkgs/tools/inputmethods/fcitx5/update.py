@@ -6,8 +6,24 @@ import json
 import requests
 import subprocess
 
-REPOS = [ "libime", "xcb-imdkit", "fcitx5", "fcitx5-gtk", "fcitx5-qt", "fcitx5-configtool", "fcitx5-lua",
-          "fcitx5-rime", "fcitx5-chinese-addons", "fcitx5-table-extra", "fcitx5-table-other" ]
+REPOS = [
+        "libime",
+        "xcb-imdkit",
+
+        "fcitx5",
+        "fcitx5-chewing",
+        "fcitx5-chinese-addons",
+        "fcitx5-configtool",
+        "fcitx5-gtk",
+        "fcitx5-hangul",
+        "fcitx5-lua",
+        "fcitx5-m17n",
+        "fcitx5-qt",
+        "fcitx5-rime",
+        "fcitx5-table-extra",
+        "fcitx5-table-other",
+        "fcitx5-unikey"
+        ]
 
 OWNER = "fcitx"
 

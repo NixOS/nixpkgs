@@ -52,6 +52,8 @@ mkDerivation rec {
   meta = with lib; {
     description = "Official Qt SoulSeek client";
     homepage = "https://www.slsknet.org";
+    mainProgram = "SoulseekQt";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];

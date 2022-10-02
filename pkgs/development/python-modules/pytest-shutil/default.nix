@@ -1,6 +1,6 @@
 { lib, isPyPy, buildPythonPackage, fetchPypi
-, pytest, cmdline, pytest-cov, coverage, setuptools-git, mock, pathpy, execnet
-, contextlib2, termcolor }:
+, pytest, cmdline, pytest-cov, coverage, setuptools-git, mock, path, execnet
+, contextlib2, termcolor, six }:
 
 buildPythonPackage rec {
   pname = "pytest-shutil";
@@ -11,9 +11,14 @@ buildPythonPackage rec {
     sha256 = "0q8j0ayzmnvlraml6i977ybdq4xi096djhf30n2m1rvnvrhm45nq";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "path.py" "path"
+  '';
+
   buildInputs = [ pytest ];
   checkInputs = [ cmdline pytest ];
-  propagatedBuildInputs = [ pytest-cov coverage setuptools-git mock pathpy execnet contextlib2 termcolor ];
+  propagatedBuildInputs = [ pytest-cov coverage setuptools-git mock path execnet contextlib2 termcolor six ];
 
   checkPhase = ''
     py.test ${lib.optionalString isPyPy "-k'not (test_run or test_run_integration)'"}

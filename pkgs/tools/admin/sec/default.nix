@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sec";
-  version = "2.9.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "simple-evcorr";
     repo = "sec";
     rev = version;
-    sha256 = "sha256-WYSlIRhDBIDaza92VqCQcdMNicuRUX2IKY5CJyhswdI=";
+    sha256 = "sha256-DKbh6q0opf749tbGsDMVuI5G2UV7faCHUfddH3SGOpo=";
   };
 
   buildInputs = [ perl ];

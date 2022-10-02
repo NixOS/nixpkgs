@@ -1,20 +1,39 @@
-{ stdenv, lib, fetchurl, fetchpatch
-, zlib, xz, libintl, python, gettext, ncurses, findXMLCatalogs
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, zlib
+, pkg-config
+, autoreconfHook
+, xz
+, libintl
+, python
+, gettext
+, ncurses
+, findXMLCatalogs
 , libiconv
 , pythonSupport ? enableShared && stdenv.buildPlatform == stdenv.hostPlatform
-, icuSupport ? false, icu ? null
+, icuSupport ? false
+, icu
 , enableShared ? stdenv.hostPlatform.libc != "msvcrt" && !stdenv.hostPlatform.isStatic
 , enableStatic ? !enableShared
+, gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "libxml2";
-  version = "2.9.12";
+  version = "2.10.0";
+
+  outputs = [ "bin" "dev" "out" "doc" ]
+    ++ lib.optional pythonSupport "py"
+    ++ lib.optional (enableStatic && enableShared) "static";
+  outputMan = "bin";
 
   src = fetchurl {
-    url = "http://xmlsoft.org/sources/${pname}-${version}.tar.gz";
-    sha256 = "14hxwzmf5xqppx77z7i0ni9lpzg1a84dqpf8j8l1fvy570g6imn8";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "LdMxEOp3hnbeFL6kmZ7hFzxMpV1f8UUryiJOBvAVJZU=";
   };
+
   patches = [
     # Upstream bugs:
     #   https://bugzilla.gnome.org/show_bug.cgi?id=789714
@@ -29,77 +48,99 @@ stdenv.mkDerivation rec {
     #   https://github.com/NixOS/nixpkgs/pull/72342
     ./utf8-xmlErrorFuncHandler.patch
 
-    # Work around lxml API misuse.
-    # https://gitlab.gnome.org/GNOME/libxml2/issues/255
+    # Fix PostgreSQL tests
+    # https://gitlab.gnome.org/GNOME/libxml2/-/issues/397
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/libxml2/commit/85b1792e37b131e7a51af98a37f92472e8de5f3f.patch";
-      sha256 = "epqlNs2S0Zczox3KyCB6R2aJKh87lXydlZ0x6tLHweE=";
+      url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/4ad71c2d72beef0d10cf75aa417db10d77846f75.patch";
+      sha256 = "gubGDhBhHNYdEty+sFQFd3pSWB9isN5AjD//ksujGQk=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/5b2d07a72670513e41b481a9d922c983a64027ca.patch";
+      sha256 = "7jYvMW6bgImXubbaWpQhrIw3xBBnaNn+iJt3EQiW3yU=";
     })
   ];
 
-  outputs = [ "bin" "dev" "out" "man" "doc" ]
-    ++ lib.optional pythonSupport "py"
-    ++ lib.optional (enableStatic && enableShared) "static";
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
 
-  strictDeps = true;
-
-  buildInputs = lib.optional pythonSupport python
-    ++ lib.optional (pythonSupport && python?isPy2 && python.isPy2) gettext
-    ++ lib.optional (pythonSupport && python?isPy3 && python.isPy3) ncurses
-    ++ lib.optional (stdenv.isDarwin &&
-                     pythonSupport && python?isPy2 && python.isPy2) libintl
+  buildInputs = lib.optionals pythonSupport [
+    python
+  ] ++ lib.optionals (pythonSupport && python?isPy2 && python.isPy2) [
+    gettext
+  ] ++ lib.optionals (pythonSupport && python?isPy3 && python.isPy3) [
+    ncurses
+  ] ++ lib.optionals (stdenv.isDarwin && pythonSupport && python?isPy2 && python.isPy2) [
+    libintl
+  ] ++ lib.optionals stdenv.isFreeBSD [
     # Libxml2 has an optional dependency on liblzma.  However, on impure
     # platforms, it may end up using that from /usr/lib, and thus lack a
     # RUNPATH for that, leading to undefined references for its users.
-    ++ lib.optional stdenv.isFreeBSD xz;
+    xz
+  ];
 
-  propagatedBuildInputs = [ zlib findXMLCatalogs ]
-    ++ lib.optional stdenv.isDarwin libiconv
-    ++ lib.optional icuSupport icu;
+  propagatedBuildInputs = [
+    zlib
+    findXMLCatalogs
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+  ] ++ lib.optionals icuSupport [
+    icu
+  ];
 
   configureFlags = [
-    "--exec_prefix=$dev"
+    "--exec-prefix=${placeholder "dev"}"
     (lib.enableFeature enableStatic "static")
     (lib.enableFeature enableShared "shared")
     (lib.withFeature icuSupport "icu")
     (lib.withFeatureAs pythonSupport "python" python)
   ];
 
+  installFlags = lib.optionals pythonSupport [
+    "pythondir=\"${placeholder "py"}/${python.sitePackages}\""
+    "pyexecdir=\"${placeholder "py"}/${python.sitePackages}\""
+  ];
+
+  enableParallelBuilding = true;
+
+  doCheck =
+    (stdenv.hostPlatform == stdenv.buildPlatform) &&
+    stdenv.hostPlatform.libc != "musl";
+  preCheck = lib.optional stdenv.isDarwin ''
+    export DYLD_LIBRARY_PATH="$PWD/.libs:$DYLD_LIBRARY_PATH"
+  '';
+
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';
 
-  enableParallelBuilding = true;
-
-  # disable test that's problematic with newer pythons: see
-  # https://mail.gnome.org/archives/xml/2017-August/msg00014.html
-  preCheck = lib.optionalString (pythonSupport && !(python?pythonOlder && python.pythonOlder "3.5")) ''
-    echo "" > python/tests/tstLastError.py
+  preInstall = lib.optionalString pythonSupport ''
+    substituteInPlace python/libxml2mod.la --replace "$dev/${python.sitePackages}" "$py/${python.sitePackages}"
   '';
-
-  doCheck = (stdenv.hostPlatform == stdenv.buildPlatform) && !stdenv.isDarwin &&
-    stdenv.hostPlatform.libc != "musl";
-
-  preInstall = lib.optionalString pythonSupport
-    ''substituteInPlace python/libxml2mod.la --replace "${python}" "$py"'';
-  installFlags = lib.optional pythonSupport
-    "pythondir=\"${placeholder "py"}/lib/${python.libPrefix}/site-packages\"";
 
   postFixup = ''
     moveToOutput bin/xml2-config "$dev"
     moveToOutput lib/xml2Conf.sh "$dev"
-    moveToOutput share/man/man1 "$bin"
   '' + lib.optionalString (enableStatic && enableShared) ''
     moveToOutput lib/libxml2.a "$static"
   '';
 
-  passthru = { inherit version; pythonSupport = pythonSupport; };
+  passthru = {
+    inherit version;
+    pythonSupport = pythonSupport;
 
-  meta = {
-    homepage = "http://xmlsoft.org/";
-    description = "An XML parsing library for C";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.eelco ];
+    updateScript = gnome.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
+  };
+
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/libxml2";
+    description = "XML parsing library for C";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ eelco jtojnar ];
   };
 }

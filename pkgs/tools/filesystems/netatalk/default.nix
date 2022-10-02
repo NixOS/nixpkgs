@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "netatalk";
-  version = "3.1.12";
+  version = "3.1.13";
 
   src = fetchurl {
     url = "mirror://sourceforge/netatalk/netatalk/netatalk-${version}.tar.bz2";
-    sha256 = "1ld5mnz88ixic21m6f0xcgf8v6qm08j6xabh1dzfj6x47lxghq0m";
+    sha256 = "0pg0slvvvq3l6f5yjz9ybijg4i6rs5a6c8wcynaasf8vzsyadbc9";
   };
 
   patches = [

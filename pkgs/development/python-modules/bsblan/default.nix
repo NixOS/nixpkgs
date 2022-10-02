@@ -1,48 +1,64 @@
 { lib
+, aiohttp
+, aresponses
 , buildPythonPackage
 , fetchFromGitHub
-, pytestCheckHook
-, aresponses
-, coverage
 , mypy
+, packaging
+, poetry-core
+, pydantic
 , pytest-asyncio
-, pytest-cov
 , pytest-mock
-, aiohttp
-, attrs
-, cattrs
+, pytestCheckHook
+, pythonOlder
+, setuptools
 , yarl
 }:
 
 buildPythonPackage rec {
   pname = "bsblan";
-  version = "0.4.1";
+  version = "0.5.5";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "liudger";
     repo = "python-bsblan";
-    rev = "v.${version}";
-    sha256 = "0vyg9vsrs34jahlav83qp2djv81p3ks31qz4qh46zdij2nx7l1fv";
+    rev = "v${version}";
+    hash = "sha256-kq4cML7D9XC/QRPjGfaWcs0H78OOc2IXGua7qJpWYOQ=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
-    attrs
-    cattrs
+    packaging
+    pydantic
     yarl
   ];
 
   checkInputs = [
     aresponses
-    coverage
     mypy
     pytest-asyncio
-    pytest-cov
     pytest-mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "bsblan" ];
+  postPatch = ''
+    # Upstream doesn't set a version for the pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace "--cov" ""
+  '';
+
+  pythonImportsCheck = [
+    "bsblan"
+  ];
 
   meta = with lib; {
     description = "Python client for BSB-Lan";

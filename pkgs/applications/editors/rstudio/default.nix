@@ -34,20 +34,22 @@
 , server ? false # build server version
 , sqlite
 , pam
+, nixosTests
 }:
 
 let
   pname = "RStudio";
-  version = "1.4.1717";
-  RSTUDIO_VERSION_MAJOR = lib.versions.major version;
-  RSTUDIO_VERSION_MINOR = lib.versions.minor version;
-  RSTUDIO_VERSION_PATCH = lib.versions.patch version;
+  version = "2022.07.1+554";
+  RSTUDIO_VERSION_MAJOR  = "2022";
+  RSTUDIO_VERSION_MINOR  = "07";
+  RSTUDIO_VERSION_PATCH  = "1";
+  RSTUDIO_VERSION_SUFFIX = "+554";
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
     rev = "v${version}";
-    sha256 = "sha256-9c1bNsf8kJjpcZ2cMV/pPNtXQkFOntX29a1cdnXpllE=";
+    sha256 = "0rmdqxizxqg2vgr3lv066cjmlpjrxjlgi0m97wbh6iyhkfm2rrj1";
   };
 
   mathJaxSrc = fetchurl {
@@ -58,7 +60,7 @@ let
   rsconnectSrc = fetchFromGitHub {
     owner = "rstudio";
     repo = "rsconnect";
-    rev = "f5854bb71464f6e3017da9855f058fe3d5b32efd";
+    rev = "e287b586e7da03105de3faa8774c63f08984eb3c";
     sha256 = "sha256-ULyWdSgGPSAwMt0t4QPuzeUE6Bo6IJh+5BMgW1bFN+Y=";
   };
 
@@ -73,7 +75,7 @@ let
 in
 (if server then stdenv.mkDerivation else mkDerivation)
   (rec {
-    inherit pname version src RSTUDIO_VERSION_MAJOR RSTUDIO_VERSION_MINOR RSTUDIO_VERSION_PATCH;
+    inherit pname version src RSTUDIO_VERSION_MAJOR RSTUDIO_VERSION_MINOR RSTUDIO_VERSION_PATCH RSTUDIO_VERSION_SUFFIX;
 
     nativeBuildInputs = [
       cmake
@@ -113,6 +115,7 @@ in
       "-DRSTUDIO_USE_SYSTEM_SOCI=ON"
       "-DRSTUDIO_USE_SYSTEM_BOOST=ON"
       "-DRSTUDIO_USE_SYSTEM_YAML_CPP=ON"
+      "-DQUARTO_ENABLED=FALSE"
       "-DPANDOC_VERSION=${pandoc.version}"
       "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/lib/rstudio"
     ] ++ lib.optional (!server) [
@@ -123,14 +126,11 @@ in
     patches = [
       ./r-location.patch
       ./clang-location.patch
-      # postFetch doesn't work with this | error: unexpected end-of-file
-      # replacing /usr/bin/node is done in postPatch
-      # https://src.fedoraproject.org/rpms/rstudio/tree/rawhide
-      (fetchpatch {
-        name = "system-node.patch";
-        url = "https://src.fedoraproject.org/rpms/rstudio/raw/5bda2e290c9e72305582f2011040938d3e356906/f/0004-use-system-node.patch";
-        sha256 = "sha256-P1Y07RB/ceFNa749nyBUWSE41eiiZgt43zVcmahvfZM=";
-      })
+      ./use-system-node.patch
+      ./fix-resources-path.patch
+      ./pandoc-nix-path.patch
+      ./remove-quarto-from-generator.patch
+      ./do-not-install-pandoc.patch
     ];
 
     postPatch = ''
@@ -140,20 +140,20 @@ in
         --replace 'SOCI_LIBRARY_DIR "/usr/lib"' 'SOCI_LIBRARY_DIR "${soci}/lib"'
 
       substituteInPlace src/gwt/build.xml \
-        --replace '/usr/bin/node' '${nodejs}/bin/node'
+        --replace '@node@' ${nodejs}
 
       substituteInPlace src/cpp/core/libclang/LibClang.cpp \
         --replace '@libclang@' ${llvmPackages.libclang.lib} \
         --replace '@libclang.so@' ${llvmPackages.libclang.lib}/lib/libclang.so
 
-        substituteInPlace src/cpp/session/include/session/SessionConstants.hpp \
-          --replace "bin/pandoc" "${pandoc}/bin/pandoc"
+      substituteInPlace src/cpp/session/include/session/SessionConstants.hpp \
+        --replace '@pandoc@' ${pandoc}/bin/pandoc
     '';
 
     hunspellDictionaries = with lib; filter isDerivation (unique (attrValues hunspellDicts));
     # These dicts contain identically-named dict files, so we only keep the
     # -large versions in case of clashes
-    largeDicts = with lib; filter (d: hasInfix "-large-wordlist" d) hunspellDictionaries;
+    largeDicts = with lib; filter (d: hasInfix "-large-wordlist" d.name) hunspellDictionaries;
     otherDicts = with lib; filter
       (d: !(hasAttr "dictFileName" d &&
         elem d.dictFileName (map (d: d.dictFileName) largeDicts)))
@@ -196,11 +196,12 @@ in
       for f in .gitignore .Rbuildignore LICENSE README; do
         find . -name $f -delete
       done
+
       rm -r $out/lib/rstudio/{INSTALL,COPYING,NOTICE,README.md,SOURCE,VERSION}
-      rm -r $out/lib/rstudio/bin/{pandoc/pandoc,pandoc}
     '';
 
     meta = with lib; {
+      broken = (stdenv.isLinux && stdenv.isAarch64);
       inherit description;
       homepage = "https://www.rstudio.com/";
       license = licenses.agpl3Only;
@@ -209,7 +210,10 @@ in
       platforms = platforms.linux;
     };
 
-    passthru = { inherit server; };
+    passthru = {
+      inherit server;
+      tests = { inherit (nixosTests) rstudio-server; };
+    };
   } // lib.optionalAttrs (!server) {
     qtWrapperArgs = [
       "--suffix PATH : ${lib.makeBinPath [ gnumake ]}"
@@ -223,8 +227,13 @@ in
         desktopName = "RStudio";
         genericName = "IDE";
         comment = description;
-        categories = "Development;";
-        mimeType = "text/x-r-source;text/x-r;text/x-R;text/x-r-doc;text/x-r-sweave;text/x-r-markdown;text/x-r-html;text/x-r-presentation;application/x-r-data;application/x-r-project;text/x-r-history;text/x-r-profile;text/x-tex;text/x-markdown;text/html;text/css;text/javascript;text/x-chdr;text/x-csrc;text/x-c++hdr;text/x-c++src;";
+        categories = [ "Development" ];
+        mimeTypes = [
+          "text/x-r-source" "text/x-r" "text/x-R" "text/x-r-doc" "text/x-r-sweave" "text/x-r-markdown"
+          "text/x-r-html" "text/x-r-presentation" "application/x-r-data" "application/x-r-project"
+          "text/x-r-history" "text/x-r-profile" "text/x-tex" "text/x-markdown" "text/html"
+          "text/css" "text/javascript" "text/x-chdr" "text/x-csrc" "text/x-c++hdr" "text/x-c++src"
+        ];
       })
     ];
   })

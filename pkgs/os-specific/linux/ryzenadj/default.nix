@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, pciutils, cmake }:
 stdenv.mkDerivation rec {
   pname = "ryzenadj";
-  version = "0.8.3";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "FlyGoat";
     repo = "RyzenAdj";
     rev = "v${version}";
-    sha256 = "sha256-eb8DskF0SJtc0tDKJ1vU7dtuQmHO7RX8vm4DQki2ZEg=";
+    sha256 = "sha256-tfki+7W2RbqzEHG/Ibton/V5koT89emdQ7aX8WDUzdI=";
   };
 
   nativeBuildInputs = [ pciutils cmake ];

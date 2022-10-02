@@ -1,0 +1,33 @@
+diff --git a/tools/jdk/BUILD.tools b/tools/jdk/BUILD.tools
+--- a/tools/jdk/BUILD.tools
++++ b/tools/jdk/BUILD.tools
+@@ -3,6 +3,7 @@ load(
+     "DEFAULT_TOOLCHAIN_CONFIGURATION",
+     "PREBUILT_TOOLCHAIN_CONFIGURATION",
+     "VANILLA_TOOLCHAIN_CONFIGURATION",
++    "NONPREBUILT_TOOLCHAIN_CONFIGURATION",
+     "bootclasspath",
+     "default_java_toolchain",
+     "java_runtime_files",
+@@ -321,6 +322,21 @@ alias(
+     actual = ":toolchain",
+ )
+ 
++default_java_toolchain(
++  name = "nonprebuilt_toolchain",
++  configuration = NONPREBUILT_TOOLCHAIN_CONFIGURATION,
++  java_runtime = "@local_jdk//:jdk",
++)
++
++default_java_toolchain(
++  name = "nonprebuilt_toolchain_java11",
++  configuration = NONPREBUILT_TOOLCHAIN_CONFIGURATION,
++  java_runtime = "@local_jdk//:jdk",
++  source_version = "11",
++  target_version = "11",
++)
++
++
+ RELEASES = (8, 9, 10, 11)
+ 
+ [

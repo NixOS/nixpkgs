@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubectl-doctor";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "emirozer";
     repo = pname;
     rev = version;
-    sha256 = "0x784jbcwd34vzdnhg2yldh5ivkxvs2qlbsvaammbxkn04ch1ijz";
+    sha256 = "sha256-yp5OfSDxIASiCgISUVNxfe3dsLukgIoHARVPALIaQfY=";
   };
 
-  vendorSha256 = "04xq5kp1m7c98gb4fd0dni258vpfnhv535gl2qllfcp2mvk3mn55";
+  vendorSha256 = "sha256-pdg65q7iMkcpFvSVUTa07m5URLQNNEfWQ4mdGu4suBM=";
 
   postInstall = ''
     mv $out/bin/{cmd,kubectl-doctor}

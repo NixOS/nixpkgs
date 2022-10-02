@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-lynx" ];
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "PulseAudio Volume Control";
 

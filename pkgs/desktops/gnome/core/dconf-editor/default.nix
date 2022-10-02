@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , vala
@@ -26,6 +27,18 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-Vxr0x9rU8Em1PmzXKLea3fCMJ92ra8V7OW0hGGbueeM=";
   };
+
+  patches = [
+    # Look for compiled schemas in NIX_GSETTINGS_OVERRIDES_DIR
+    # environment variable, to match what we patched GLib to do.
+    ./schema-override-variable.patch
+
+    # Fix build with Meson 0.61.0
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/dconf-editor/-/commit/56474378568e6ff4af8aa912810323e808c1d977.patch";
+      sha256 = "iFyJcskqcmvz7tp1Z9jM9f8WvAhD0L9Vx1hu2c402MA=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

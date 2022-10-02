@@ -1,0 +1,29 @@
+diff --git a/toolchain/cc.in b/toolchain/cc.in
+index 337562a..0ec9315 100644
+--- a/toolchain/cc.in
++++ b/toolchain/cc.in
+@@ -30,9 +30,9 @@
+ # symbols.
+ 
+ prog="$(basename $0)"
+-I="$(dirname $0)/../include"
++I="$(realpath $0 | xargs dirname)/../include"
+ [ ! -d "${I}" ] && echo "$prog: Could not determine include path" 1>&2 && exit 1
+-L="$(dirname $0)/../lib/@@CONFIG_TARGET_TRIPLE@@"
++L="$(realpath $0 | xargs dirname)/../lib/@@CONFIG_TARGET_TRIPLE@@"
+ [ ! -d "${L}" ] && echo "$prog: Could not determine library path" 1>&2 && exit 1
+ # we can't really tell if 'cc' is called with no input, but work around the
+ # most obvious cases and stop them from "succeeding" and producing an "a.out"
+diff --git a/toolchain/ld.in b/toolchain/ld.in
+index 01dffa8..13dca2c 100644
+--- a/toolchain/ld.in
++++ b/toolchain/ld.in
+@@ -28,7 +28,7 @@
+ # linking a unikernel. No default for ABI is provided, as it is expected that a
+ # caller directly using 'ld' knows what they are doing.
+ 
+-L="$(dirname $0)/../lib/@@CONFIG_TARGET_TRIPLE@@"
++L="$(realpath $0 | xargs dirname)/../lib/@@CONFIG_TARGET_TRIPLE@@"
+ [ ! -d "${L}" ] && echo "$0: Could not determine library path" 1>&2 && exit 1
+ # ld accepts -z solo5-abi=ABI, but does not provide a default ABI
+ # this is intentional

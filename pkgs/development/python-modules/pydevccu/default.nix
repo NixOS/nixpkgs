@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "pydevccu";
-  version = "0.1.0";
+  version = "0.1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bLXACJPiHZlJzoDm7N9RWskN+qQddSkGFX9d4YcTaLo=";
+    sha256 = "sha256-rbxYTpB6ieZBYbbE1AKVEc/lapWlOUMOrSHCkuwkzLg=";
   };
 
   # Module has no tests

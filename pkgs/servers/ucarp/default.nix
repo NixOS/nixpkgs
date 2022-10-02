@@ -11,6 +11,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpcap ];
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: daemonize.o:/build/ucarp-1.5.2/src/ip_carp.h:73: multiple definition of
+  #     `__packed'; ucarp.o:/build/ucarp-1.5.2/src/ip_carp.h:73: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   meta = with lib; {
     description = "Userspace implementation of CARP";
     longDescription = ''

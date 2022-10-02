@@ -11,13 +11,14 @@
 , pytestCheckHook
 , pythonOlder
 , pyyaml
+, setuptools
 , transitions
 , websockets
 }:
 
 buildPythonPackage rec {
   pname = "amqtt";
-  version = "unstable-2022-01-11";
+  version = "unstable-2022-05-29";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,9 +26,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Yakifo";
     repo = pname;
-    rev = "8961b8fff57007a5d9907b98bc555f0519974ce9";
-    hash = "sha256-3uwz4RSoa6KRC8mlVfeIMLPH6F2kOJjQjjXCrnVX0Jo=";
+    rev = "09ac98d39a711dcff0d8f22686916e1c2495144b";
+    hash = "sha256-8T1XhBSOiArlUQbQ41LsUogDgOurLhf+M8mjIrrAC4s=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'transitions = "^0.8.0"' 'transitions = "*"'
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -37,6 +43,7 @@ buildPythonPackage rec {
     docopt
     passlib
     pyyaml
+    setuptools
     transitions
     websockets
   ];
@@ -48,14 +55,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'PyYAML = "^5.4.0"' 'PyYAML = "*"'
-  '';
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
 
   disabledTestPaths = [
     # Test are not ported from hbmqtt yet
-    "tests/test_cli.py"
     "tests/test_client.py"
   ];
 

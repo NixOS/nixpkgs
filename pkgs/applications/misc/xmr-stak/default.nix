@@ -1,17 +1,12 @@
 { stdenv, stdenvGcc6, lib
 , fetchFromGitHub, cmake, libmicrohttpd_0_9_70, openssl
-, opencl-headers, ocl-icd, hwloc, cudatoolkit
+, opencl-headers, ocl-icd, hwloc
 , devDonationLevel ? "0.0"
-, cudaSupport ? false
 , openclSupport ? true
 }:
 
-let
-  stdenv' = if cudaSupport then stdenvGcc6 else stdenv;
-in
-
-stdenv'.mkDerivation rec {
-  name = "xmr-stak-${version}";
+stdenv.mkDerivation rec {
+  pname = "xmr-stak";
   version = "2.10.8";
 
   src = fetchFromGitHub {
@@ -23,12 +18,11 @@ stdenv'.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-O3";
 
-  cmakeFlags = lib.optional (!cudaSupport) "-DCUDA_ENABLE=OFF"
+  cmakeFlags = [ "-DCUDA_ENABLE=OFF" ]
     ++ lib.optional (!openclSupport) "-DOpenCL_ENABLE=OFF";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libmicrohttpd_0_9_70 openssl hwloc ]
-    ++ lib.optional cudaSupport cudatoolkit
     ++ lib.optionals openclSupport [ opencl-headers ocl-icd ];
 
   postPatch = ''
@@ -41,6 +35,6 @@ stdenv'.mkDerivation rec {
     homepage = "https://github.com/fireice-uk/xmr-stak";
     license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ fpletz bfortz ];
+    maintainers = with maintainers; [ bfortz ];
   };
 }

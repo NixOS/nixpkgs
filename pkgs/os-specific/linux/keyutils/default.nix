@@ -15,18 +15,24 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchurl {
-      # improve reproducibility
-      url = "https://salsa.debian.org/debian/keyutils/raw/4cecffcb8e2a2aa4ef41777ed40e4e4bcfb2e5bf/debian/patches/Make-build-reproducible.patch";
-      sha256 = "0wnvbjfrbk7rghd032z684l7vk7mhy3bd41zvhkrhgp3cd5id0bm";
-    })
     ./conf-symlink.patch
+    # This patch solves a duplicate symbol error when building with a clang stdenv
+    # Before removing this patch, please ensure the package still builds by running eg.
+    # nix-build -E 'with import ./. {}; pkgs.keyutils.override { stdenv = pkgs.llvmPackages_latest.stdenv; }'
+    ./0001-Remove-unused-function-after_eq.patch
   ];
 
   makeFlags = lib.optionals stdenv.hostPlatform.isStatic "NO_SOLIB=1";
 
-  BUILDDATE = "1970-01-01";
   outputs = [ "out" "lib" "dev" ];
+
+  postPatch = ''
+    # https://github.com/archlinux/svntogit-packages/blob/packages/keyutils/trunk/reproducible.patch
+    substituteInPlace Makefile \
+      --replace \
+        'VCPPFLAGS	:= -DPKGBUILD="\"$(shell date -u +%F)\""' \
+        'VCPPFLAGS	:= -DPKGBUILD="\"$(date -ud "@$SOURCE_DATE_EPOCH" +%F)\""'
+  '';
 
   enableParallelBuilding = true;
 

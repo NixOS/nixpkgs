@@ -11,19 +11,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-deny";
-  version = "0.11.0";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "EmbarkStudios";
     repo = pname;
     rev = version;
-    sha256 = "sha256-LYXwdOopQkgq7i4l8dqQFkNLB3r+CVRor4BVeoj0DPs=";
+    sha256 = "sha256-2NfM1Gd+I9+XGuTyKXxoxH63mqR/G4YcvAjMU2Evhb0=";
   };
 
   # enable pkg-config feature of zstd
   cargoPatches = [ ./zstd-pkg-config.patch ];
 
-  cargoSha256 = "sha256-SdbDWw4GOvCTKN7vBjhLU5rhdVIpyO+AWaFbo06HXfU=";
+  cargoSha256 = "sha256-6k35fv0HwHuu2k7V2GBjvdAajLVuXuFzVSpVSFF8y+s=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -40,6 +40,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/EmbarkStudios/cargo-deny";
     changelog = "https://github.com/EmbarkStudios/cargo-deny/blob/${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ figsoda matthiasbeyer ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer jk ];
   };
 }

@@ -10,28 +10,29 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "470b";
+  version = "500";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
-    rev = "v${version}";
-    sha256 = "0v52krjcqykrm3zqj6idzvbpjv4fhbgvq2jr8k0g63f7db7p08h9";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-gsOto37++++ucpDC0ri3HhROp7v6qlHENjFvsbuyM6k=";
   };
 
   nativeBuildInputs = [
     wrapQtAppsHook
+    python3Packages.mkdocs-material
   ];
 
   propagatedBuildInputs = with python3Packages; [
     beautifulsoup4
+    cbor2
     chardet
     cloudscraper
     html5lib
     lxml
     lz4
-    nose
     numpy
     opencv4
     pillow
@@ -40,7 +41,7 @@ python3Packages.buildPythonPackage rec {
     pyopenssl
     pyside2
     pysocks
-    pythonPackages.mpv
+    python3Packages.mpv
     pyyaml
     qtpy
     requests
@@ -85,6 +86,7 @@ python3Packages.buildPythonPackage rec {
     # Move the hydrus module and related directories
     mkdir -p $out/${python3Packages.python.sitePackages}
     mv {hydrus,static} $out/${python3Packages.python.sitePackages}
+    mkdocs build -d help
     mv help $out/doc/
 
     # install the hydrus binaries

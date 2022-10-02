@@ -3,17 +3,18 @@
 , fetchurl
 , gmp
 , libX11
+, libpthreadstubs
 , perl
 , readline
 , tex
-, withThread ? true, libpthreadstubs
+, withThread ? true
 }:
 
 assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
   pname = "pari";
-  version = "2.13.3";
+  version = "2.13.4";
 
   src = fetchurl {
     urls = [
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
       # old versions are at the url below
       "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-zLp/FgbGhU8UQ2N7tXrQlY1Bx/R1P4roRZ8dZMJnoco=";
+    hash = "sha256-vN6ezq4VkoFDgcFpfNtwY1Z7ZQQgGxvke7WJIPO84YU=";
   };
 
   buildInputs = [
@@ -80,8 +81,9 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ertes AndersonTorres ] ++ teams.sage.members;
+    maintainers = with maintainers; [ ertes ] ++ teams.sage.members;
     platforms = platforms.linux ++ platforms.darwin;
-    updateWalker = true;
+    broken = stdenv.isDarwin && stdenv.isAarch64;
+    mainProgram = "gp";
   };
 }

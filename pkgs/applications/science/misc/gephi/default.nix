@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, jdk, maven, javaPackages }:
 
 let
-  version = "0.9.2";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "gephi";
     repo = "gephi";
     rev = "v${version}";
-    sha256 = "0kqp2nvnsb55j1axb6hk0mlw5alyaiyb70z0mdybhpqqxyw2da2r";
+    sha256 = "sha256-3+tOwcE7TUeexJCugFsx9SgsKeb7ApNqbMEIi9QaKPE=";
   };
 
   # perform fake build to make a fixed-output derivation out of the files downloaded from maven central (120MB)
@@ -24,7 +24,7 @@ let
     installPhase = ''find $out/.m2 -type f -regex '.+\(\.lastUpdated\|resolver-status\.properties\|_remote\.repositories\)' -delete'';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "1p7yf97dn0nvr005cbs6vdk3i341s8fya4kfccj8qqad2qgxflif";
+    outputHash = "sha256-kIPsZN0alRAgiMbckQnMWKOKtCZ37D/6MgT17VYcr+s=";
   };
 in
 stdenv.mkDerivation {
@@ -58,6 +58,10 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "A platform for visualizing and manipulating large graphs";
     homepage = "https://gephi.org";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl3;
     maintainers = [ maintainers.taeer ];
     platforms = [ "x86_64-linux" ];

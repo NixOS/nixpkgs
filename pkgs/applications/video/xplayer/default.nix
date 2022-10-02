@@ -22,7 +22,7 @@
 , pkg-config
 , python3
 , wrapGAppsHook
-, xapps
+, xapp
 , yelp-tools }:
 
 let
@@ -34,20 +34,20 @@ in
 
 stdenv.mkDerivation rec {
   pname = "xplayer";
-  version = "2.4.2";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qoBJKY0CZyhp9foUehq5hInEENRGZuy1D6jAMjbjYhA=";
+    sha256 = "sha256-o2vLNIELd1EYWG26t5gOpnamJrBJeg4P6fcLirkcmfM=";
   };
 
   # configure wants to find gst-inspect-1.0 via pkgconfig but
   # the gstreamer toolsdir points to the wrong derivation output
   postPatch = ''
     substituteInPlace configure.ac \
-                      --replace '$gst10_toolsdir/gst-inspect-1.0' '${gstreamer.dev}/bin/gst-inspect-1.0' \
+                      --replace '$gst10_toolsdir/gst-inspect-1.0' '${gstreamer}/bin/gst-inspect-1.0' \
   '';
 
   preBuild = ''
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     libxml2
     libxplayer-plparser
     pythonenv
-    xapps
+    xapp
     # to satisfy configure script
     pythonenv.pkgs.pygobject3
   ];

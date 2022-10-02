@@ -25,25 +25,25 @@ in {
 
   options.services.zookeeper = {
     enable = mkOption {
-      description = "Whether to enable Zookeeper.";
+      description = lib.mdDoc "Whether to enable Zookeeper.";
       default = false;
       type = types.bool;
     };
 
     port = mkOption {
-      description = "Zookeeper Client port.";
+      description = lib.mdDoc "Zookeeper Client port.";
       default = 2181;
       type = types.int;
     };
 
     id = mkOption {
-      description = "Zookeeper ID.";
+      description = lib.mdDoc "Zookeeper ID.";
       default = 0;
       type = types.int;
     };
 
     purgeInterval = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         The time interval in hours for which the purge task has to be triggered. Set to a positive integer (1 and above) to enable the auto purging.
       '';
       default = 1;
@@ -51,7 +51,7 @@ in {
     };
 
     extraConf = mkOption {
-      description = "Extra configuration for Zookeeper.";
+      description = lib.mdDoc "Extra configuration for Zookeeper.";
       type = types.lines;
       default = ''
         initLimit=5
@@ -61,7 +61,7 @@ in {
     };
 
     servers = mkOption {
-      description = "All Zookeeper Servers.";
+      description = lib.mdDoc "All Zookeeper Servers.";
       default = "";
       type = types.lines;
       example = ''
@@ -72,7 +72,7 @@ in {
     };
 
     logging = mkOption {
-      description = "Zookeeper logging configuration.";
+      description = lib.mdDoc "Zookeeper logging configuration.";
       default = ''
         zookeeper.root.logger=INFO, CONSOLE
         log4j.rootLogger=INFO, CONSOLE
@@ -87,13 +87,13 @@ in {
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/zookeeper";
-      description = ''
+      description = lib.mdDoc ''
         Data directory for Zookeeper
       '';
     };
 
     extraCmdLineOptions = mkOption {
-      description = "Extra command line options for the Zookeeper launcher.";
+      description = lib.mdDoc "Extra command line options for the Zookeeper launcher.";
       default = [ "-Dcom.sun.management.jmxremote" "-Dcom.sun.management.jmxremote.local.only=true" ];
       type = types.listOf types.str;
       example = [ "-Djava.net.preferIPv4Stack=true" "-Dcom.sun.management.jmxremote" "-Dcom.sun.management.jmxremote.local.only=true" ];
@@ -102,18 +102,25 @@ in {
     preferIPv4 = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Add the -Djava.net.preferIPv4Stack=true flag to the Zookeeper server.
       '';
     };
 
     package = mkOption {
-      description = "The zookeeper package to use";
+      description = lib.mdDoc "The zookeeper package to use";
       default = pkgs.zookeeper;
       defaultText = literalExpression "pkgs.zookeeper";
       type = types.package;
     };
 
+    jre = mkOption {
+      description = lib.mdDoc "The JRE with which to run Zookeeper";
+      default = cfg.package.jre;
+      defaultText = literalExpression "pkgs.zookeeper.jre";
+      example = literalExpression "pkgs.jre";
+      type = types.package;
+    };
   };
 
 
@@ -131,7 +138,7 @@ in {
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.jre}/bin/java \
+          ${cfg.jre}/bin/java \
             -cp "${cfg.package}/lib/*:${configDir}" \
             ${escapeShellArgs cfg.extraCmdLineOptions} \
             -Dzookeeper.datadir.autocreate=false \

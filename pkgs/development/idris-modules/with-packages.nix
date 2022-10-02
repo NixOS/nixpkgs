@@ -10,7 +10,7 @@ lib.appendToName "with-packages" (symlinkJoin {
 
   paths = paths ++ [idris] ;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     wrapProgram $out/bin/idris \

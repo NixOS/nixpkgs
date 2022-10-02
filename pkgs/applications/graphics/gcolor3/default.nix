@@ -6,7 +6,7 @@
 , pkg-config
 , libxml2
 , gtk3
-, libportal
+, libportal-gtk3
 , wrapGAppsHook
 }:
 
@@ -33,12 +33,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    libportal
+    libportal-gtk3
   ];
 
   postPatch = ''
     chmod +x meson_install.sh # patchShebangs requires executable file
     patchShebangs meson_install.sh
+
+    # https://gitlab.gnome.org/World/gcolor3/merge_requests/151
+    substituteInPlace meson.build --replace "dependency(${"\n"}  'libportal'" "dependency(${"\n"}  'libportal-gtk3'"
+    substituteInPlace src/gcolor3-color-selection.c --replace "libportal/portal-gtk3.h" "libportal-gtk3/portal-gtk3.h"
   '';
 
   meta = with lib; {

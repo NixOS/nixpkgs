@@ -15,7 +15,7 @@ in
     maintainers = [ alexarice turion ];
   };
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     environment.systemPackages = [
       (pkgs.agda.withPackages {
         pkgs = p: [ p.standard-library ];

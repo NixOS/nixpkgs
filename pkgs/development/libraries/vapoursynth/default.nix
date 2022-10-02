@@ -1,20 +1,18 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, makeWrapper
 , runCommandCC, runCommand, vapoursynth, writeText, patchelf, buildEnv
-, zimg, libass, python3, libiconv
+, zimg, libass, python3, libiconv, testers
 , ApplicationServices
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "vapoursynth";
-  version = "R57";
+  version = "60";
 
   src = fetchFromGitHub {
     owner  = "vapoursynth";
     repo   = "vapoursynth";
-    rev    = version;
-    sha256 = "sha256-tPQ1SOIpFevOYzL9a8Lc5+dv2egVX1CY3km8yWVv+Sk=";
+    rev    = "R${version}";
+    sha256 = "sha256-E1uHNcGxBrwg00tNnY3qH6BpvXtBEGkX7QFy0aMLSnA=";
   };
 
   patches = [
@@ -25,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zimg libass
     (python3.withPackages (ps: with ps; [ sphinx cython ]))
-  ] ++ optionals stdenv.isDarwin [ libiconv ApplicationServices ];
+  ] ++ lib.optionals stdenv.isDarwin [ libiconv ApplicationServices ];
 
   enableParallelBuilding = true;
 
@@ -40,6 +38,12 @@ stdenv.mkDerivation rec {
       inherit lib python3 buildEnv writeText runCommandCC stdenv runCommand
         vapoursynth makeWrapper withPlugins;
     };
+
+    tests.version = testers.testVersion {
+      package = vapoursynth;
+      # Check Core version to prevent false positive with API version
+      version = "Core R${version}";
+    };
   };
 
   postInstall = ''
@@ -52,11 +56,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin; # see https://github.com/NixOS/nixpkgs/pull/189446 for partial fix
     description = "A video processing framework with the future in mind";
     homepage    = "http://www.vapoursynth.com/";
     license     = licenses.lgpl21;
     platforms   = platforms.x86_64;
     maintainers = with maintainers; [ rnhmjoj sbruder tadeokondrak ];
+    mainProgram = "vspipe";
   };
-
 }

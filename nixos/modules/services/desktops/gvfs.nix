@@ -29,14 +29,14 @@ in
 
     services.gvfs = {
 
-      enable = mkEnableOption "GVfs, a userspace virtual filesystem";
+      enable = mkEnableOption (lib.mdDoc "GVfs, a userspace virtual filesystem");
 
       # gvfs can be built with multiple configurations
       package = mkOption {
         type = types.package;
         default = pkgs.gnome.gvfs;
         defaultText = literalExpression "pkgs.gnome.gvfs";
-        description = "Which GVfs package to use.";
+        description = lib.mdDoc "Which GVfs package to use.";
       };
 
     };
@@ -56,8 +56,10 @@ in
 
     services.udev.packages = [ pkgs.libmtp.out ];
 
+    services.udisks2.enable = true;
+
     # Needed for unwrapped applications
-    environment.variables.GIO_EXTRA_MODULES = [ "${cfg.package}/lib/gio/modules" ];
+    environment.sessionVariables.GIO_EXTRA_MODULES = [ "${cfg.package}/lib/gio/modules" ];
 
   };
 

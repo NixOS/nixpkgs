@@ -17,8 +17,8 @@
 
 let
   ucd-blocks = fetchurl {
-    url = "https://www.unicode.org/Public/14.0.0/ucd/Blocks.txt";
-    hash = "sha256-WYhw3d73s0talykWUoxFav8nZbec1Plkf7WM63Z+fxc=";
+    url = "https://www.unicode.org/Public/15.0.0/ucd/Blocks.txt";
+    hash = "sha256-Up3F0PY4bVLy9W4AS7+rSM4tWH7qnTi6VGxAUkkb2CA=";
   };
 in
 stdenv.mkDerivation rec {

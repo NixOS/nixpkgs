@@ -17,7 +17,7 @@ buildDotnetModule rec {
     sha256 = "00lagmwsbxap5mgnw4gndpavmv3xsgincdaq1zvw7fkc3vn3pxqc";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
   buildInputs = [ stdenv.cc.cc.lib ];
 
   projectFile = "inklecate/inklecate.csproj";
@@ -25,7 +25,7 @@ buildDotnetModule rec {
   executables = [ "inklecate" ];
 
   dotnet-runtime = dotnetCorePackages.runtime_3_1;
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_3_1;
 
   meta = with lib; {
     description = "Compiler for ink, inkle's scripting language";

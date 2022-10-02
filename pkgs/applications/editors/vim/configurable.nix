@@ -25,7 +25,6 @@
 , ximSupport        ? config.vim.xim or true        # less than 15KB, needed for deadkeys
 , darwinSupport     ? config.vim.darwin or false    # Enable Darwin support
 , ftNixSupport      ? config.vim.ftNix or true      # Add .nix filetype detection and minimal syntax highlighting support
-, ...
 }:
 
 
@@ -174,40 +173,12 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     ln -s $out/bin/vim $out/bin/vi
   '' + lib.optionalString stdenv.isLinux ''
-    patchelf --set-rpath \
-      "$(patchelf --print-rpath $out/bin/vim):${lib.makeLibraryPath buildInputs}" \
-      "$out"/bin/vim
-    if [[ -e "$out"/bin/gvim ]]; then
-      patchelf --set-rpath \
-        "$(patchelf --print-rpath $out/bin/vim):${lib.makeLibraryPath buildInputs}" \
-        "$out"/bin/gvim
-    fi
-
     ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
-  '' + lib.optionalString wrapPythonDrv ''
+  '';
+
+  postFixup = lib.optionalString wrapPythonDrv ''
     wrapProgram "$out/bin/vim" --prefix PATH : "${python3}/bin" \
       --set NIX_PYTHONPATH "${python3}/${python3.sitePackages}"
-  '' + lib.optionalString (guiSupport == "gtk3") ''
-
-    rewrap () {
-      rm -f "$out/bin/$1"
-      echo -e '#!${runtimeShell}\n"'"$out/bin/vim"'" '"$2"' "$@"' > "$out/bin/$1"
-      chmod a+x "$out/bin/$1"
-    }
-
-    rewrap ex -e
-    rewrap view -R
-    rewrap gvim -g
-    rewrap gex -eg
-    rewrap gview -Rg
-    rewrap rvim -Z
-    rewrap rview -RZ
-    rewrap rgvim -gZ
-    rewrap rgview -RgZ
-    rewrap evim    -y
-    rewrap eview   -yR
-    rewrap vimdiff -d
-    rewrap gvimdiff -gd
   '';
 
   dontStrip = true;

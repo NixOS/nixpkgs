@@ -14,6 +14,7 @@
 , curl
 , nspr
 , bash
+, runtimeShell
 , iproute2
 , iptables
 , procps
@@ -42,11 +43,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libreswan";
-  version = "4.6";
+  version = "4.7";
 
   src = fetchurl {
     url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
-    sha256 = "1zsnsfx18pf5dy1p4jva2sfl0bdfx5y9ls54f9bp70m64r46yf96";
+    sha256 = "0i7wyfgkaq6kcfhh1yshb1v7q42n3zvdkhq10f3ks1h075xk7mnx";
   };
 
   strictDeps = true;
@@ -71,8 +72,9 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     # Correct iproute2 and iptables path
-    sed -e 's|/sbin/ip|${iproute2}/bin/ip|' \
+    sed -e 's|/sbin/ip|${iproute2}/bin/ip|g' \
         -e 's|/sbin/\(ip6\?tables\)|${iptables}/bin/\1|' \
+        -e 's|/bin/bash|${runtimeShell}|g' \
         -i initsystems/systemd/ipsec.service.in \
            programs/barf/barf.in \
            programs/verify/verify.in
@@ -110,6 +112,7 @@ stdenv.mkDerivation rec {
     "INITSYSTEM=systemd"
     "UNITDIR=$(out)/etc/systemd/system/"
     "TMPFILESDIR=$(out)/lib/tmpfiles.d/"
+    "LINUX_VARIANT=nixos"
   ];
 
   # Hack to make install work

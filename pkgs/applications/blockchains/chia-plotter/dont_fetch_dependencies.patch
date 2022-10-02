@@ -11,30 +11,43 @@ index 255e3bb..5f99c3a 100644
 +  SOURCE_DIR @pybind11_src@
  )
  FetchContent_MakeAvailable(pybind11 relic)
- 
-diff --git a/lib/bls-signatures/src/CMakeLists.txt b/lib/bls-signatures/src/CMakeLists.txt
-index b762b5d..e06073b 100644
---- a/lib/bls-signatures/src/CMakeLists.txt
-+++ b/lib/bls-signatures/src/CMakeLists.txt
-@@ -4,18 +4,11 @@ set (CMAKE_CXX_STANDARD 17)
- # CMake 3.14+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6922167..23d8da6 100644
+--- a/lib/bls-signatures/CMakeLists.txt
++++ b/lib/bls-signatures/CMakeLists.txt
+@@ -31,29 +31,18 @@ set(CMAKE_MODULE_PATH
  include(FetchContent)
+ 
+ FetchContent_Declare(Sodium
+-  GIT_REPOSITORY https://github.com/AmineKhaldi/libsodium-cmake.git
+-  # Latest commit at the moment this was added here
+-  # Anchored to libsodium v1.0.18
+-  GIT_TAG f73a3fe1afdc4e37ac5fe0ddd401bf521f6bba65
++  URL @sodium_src@
+ )
+ set(SODIUM_PCH "on" CACHE STRING "")
+ set(SODIUM_DISABLE_TESTS "on" CACHE STRING "")
+ set(SODIUM_CHIA_MINIMAL "on" CACHE STRING "")
+ FetchContent_MakeAvailable(Sodium)
  
 -if (DEFINED ENV{RELIC_MAIN})
 -  set(RELIC_GIT_TAG "origin/main")
 -else ()
--  set(RELIC_GIT_TAG "1885ae3b681c423c72b65ce1fe70910142cf941c")
+-  # This is currently anchored to upstream aecdcae7956f542fbee2392c1f0feb0a8ac41dc5
+-  set(RELIC_GIT_TAG "1d98e5abf3ca5b14fd729bd5bcced88ea70ecfd7")
 -endif ()
 -
  message(STATUS "Relic will be built from: ${RELIC_GIT_TAG}")
  
  FetchContent_Declare(
    relic
--  GIT_REPOSITORY https://github.com/relic-toolkit/relic.git
--  GIT_TAG        ${RELIC_GIT_TAG}
+-  GIT_REPOSITORY https://github.com/Chia-Network/relic.git
+-  GIT_TAG ${RELIC_GIT_TAG}
 +  SOURCE_DIR @relic_src@
  )
- FetchContent_MakeAvailable(relic)
+ 
+ # Relic related options
  
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 970ec74..948441a 100644

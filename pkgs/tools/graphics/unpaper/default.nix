@@ -1,16 +1,52 @@
-{ lib, stdenv, fetchurl, pkg-config, ffmpeg, libxslt }:
+{ lib
+, stdenv
+, fetchurl
+
+# build
+, meson
+, ninja
+, pkg-config
+
+# docs
+, sphinx
+
+# runtime
+, buildPackages
+, ffmpeg_5
+
+# tests
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "unpaper";
-  version = "6.1";
+  version = "7.0.0";
 
   src = fetchurl {
     url = "https://www.flameeyes.eu/files/${pname}-${version}.tar.xz";
-    sha256 = "0c5rbkxbmy9k8vxjh4cv0bgnqd3wqc99yzw215vkyjslvbsq8z13";
+    hash = "sha256-JXX7vybCJxnRy4grWWAsmQDH90cRisEwiD9jQZvkaoA=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ffmpeg libxslt ];
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  nativeBuildInputs = [
+    buildPackages.libxslt.bin
+    meson
+    ninja
+    pkg-config
+    sphinx
+  ];
+
+  buildInputs = [
+    ffmpeg_5
+  ];
+
+  passthru.tests = {
+    inherit (nixosTests) paperless;
+  };
 
   meta = with lib; {
     homepage = "https://www.flameeyes.eu/projects/unpaper";

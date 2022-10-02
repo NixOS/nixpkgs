@@ -1,17 +1,21 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    addressable (2.8.0)
+      public_suffix (>= 2.0.2, < 5.0)
     clocale (0.0.4)
-    colorls (1.4.3)
+    colorls (1.4.6)
+      addressable (~> 2.7)
       clocale (~> 0)
       filesize (~> 0)
       manpages (~> 0)
       rainbow (>= 2.2, < 4.0)
-      unicode-display_width (~> 1.7)
+      unicode-display_width (>= 1.7, < 3.0)
     filesize (0.2.0)
     manpages (0.6.1)
-    rainbow (3.0.0)
-    unicode-display_width (1.7.0)
+    public_suffix (4.0.7)
+    rainbow (3.1.1)
+    unicode-display_width (2.1.0)
 
 PLATFORMS
   ruby
@@ -20,4 +24,4 @@ DEPENDENCIES
   colorls
 
 BUNDLED WITH
-   2.1.4
+   2.3.9

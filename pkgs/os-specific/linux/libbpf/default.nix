@@ -1,6 +1,5 @@
 { fetchFromGitHub
-, fetchpatch
-, libelf
+, elfutils
 , pkg-config
 , stdenv
 , zlib
@@ -8,25 +7,22 @@
 , nixosTests
 }:
 
-with builtins;
-
 stdenv.mkDerivation rec {
   pname = "libbpf";
-  version = "0.6.1";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "libbpf";
     repo = "libbpf";
     rev = "v${version}";
-    sha256 = "sha256-/MLPflnfooe7Wjy8M3CTowAi5oYpscruSkDsaVzhmYQ=";
+    sha256 = "sha256-daVS+TErmDU8ksThOvcepg1A61iD8N8GIkC40cmc9/8=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libelf zlib ];
+  buildInputs = [ elfutils zlib ];
 
-  sourceRoot = "source/src";
   enableParallelBuilding = true;
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" "-C src" ];
 
   passthru.tests = {
     bpf = nixosTests.bpf;
@@ -34,7 +30,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # install linux's libbpf-compatible linux/btf.h
-    install -Dm444 ../include/uapi/linux/btf.h -t $out/include/linux
+    install -Dm444 include/uapi/linux/*.h -t $out/include/linux
   '';
 
   # FIXME: Multi-output requires some fixes to the way the pkg-config file is

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aiopvapi";
-  version = "1.6.19";
+  version = "2.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
     owner = "sander76";
     repo = "aio-powerview-api";
     # no tags on git, no sdist on pypi: https://github.com/sander76/aio-powerview-api/issues/12
-    rev = "89711e2a0cb4640eb458767d289dcfa3acafb10f";
-    sha256 = "18gbz9rcf183syvxvvhhl62af3b7463rlqxxs49w4m805hkvirdp";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-OengPrUBaYzpLSWEU9Jc6GLx863YJfqRe64676oQ81Y=";
   };
 
   propagatedBuildInputs = [

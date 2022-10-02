@@ -17,8 +17,8 @@ let
         then value
         else { executable = value; profile = null; extraArgs = []; };
         args = lib.escapeShellArgs (
-          (optional (opts.profile != null) "--profile=${toString opts.profile}")
-          ++ opts.extraArgs
+          opts.extraArgs
+          ++ (optional (opts.profile != null) "--profile=${toString opts.profile}")
           );
       in
       ''
@@ -32,26 +32,26 @@ let
 
 in {
   options.programs.firejail = {
-    enable = mkEnableOption "firejail";
+    enable = mkEnableOption (lib.mdDoc "firejail");
 
     wrappedBinaries = mkOption {
       type = types.attrsOf (types.either types.path (types.submodule {
         options = {
           executable = mkOption {
             type = types.path;
-            description = "Executable to run sandboxed";
+            description = lib.mdDoc "Executable to run sandboxed";
             example = literalExpression ''"''${lib.getBin pkgs.firefox}/bin/firefox"'';
           };
           profile = mkOption {
             type = types.nullOr types.path;
             default = null;
-            description = "Profile to use";
+            description = lib.mdDoc "Profile to use";
             example = literalExpression ''"''${pkgs.firejail}/etc/firejail/firefox.profile"'';
           };
           extraArgs = mkOption {
             type = types.listOf types.str;
             default = [];
-            description = "Extra arguments to pass to firejail";
+            description = lib.mdDoc "Extra arguments to pass to firejail";
             example = [ "--private=~/.firejail_home" ];
           };
         };
@@ -69,13 +69,12 @@ in {
           };
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Wrap the binaries in firejail and place them in the global path.
-        </para>
-        <para>
+
         You will get file collisions if you put the actual application binary in
         the global environment (such as by adding the application package to
-        <code>environment.systemPackages</code>), and applications started via
+        `environment.systemPackages`), and applications started via
         .desktop files are not wrapped if they specify the absolute path to the
         binary.
       '';

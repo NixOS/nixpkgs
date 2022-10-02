@@ -1,6 +1,6 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+{ lib, pkgs, ... }: {
   name = "3proxy";
-  meta = with pkgs.lib.maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [ misuzu ];
   };
 
@@ -92,7 +92,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       networking.firewall.allowedTCPPorts = [ 3128 9999 ];
     };
 
-    peer3 = { lib, ... }: {
+    peer3 = { lib, pkgs, ... }: {
       networking.useDHCP = false;
       networking.interfaces.eth1 = {
         ipv4.addresses = [
@@ -139,7 +139,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     peer0.wait_for_unit("network-online.target")
 
     peer1.wait_for_unit("3proxy.service")
-    peer1.wait_for_open_port("9999")
+    peer1.wait_for_open_port(9999)
 
     # test none auth
     peer0.succeed(
@@ -153,7 +153,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     )
 
     peer2.wait_for_unit("3proxy.service")
-    peer2.wait_for_open_port("9999")
+    peer2.wait_for_open_port(9999)
 
     # test iponly auth
     peer0.succeed(
@@ -167,7 +167,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     )
 
     peer3.wait_for_unit("3proxy.service")
-    peer3.wait_for_open_port("9999")
+    peer3.wait_for_open_port(9999)
 
     # test strong auth
     peer0.succeed(
@@ -186,4 +186,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         "${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.4:3128 -S -O /dev/null http://127.0.0.1:9999"
     )
   '';
-})
+}

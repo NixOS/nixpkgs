@@ -23,7 +23,6 @@ buildDotnetModule rec {
     description = "A lightweight NuGet and symbol server";
     license = licenses.mit;
     homepage = "https://loic-sharma.github.io/BaGet/";
-    platforms = platforms.all;
     maintainers = [ maintainers.abbradar ];
   };
 }

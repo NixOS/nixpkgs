@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "goss";
-  version = "0.3.16";
+  version = "0.3.18";
 
   src = fetchFromGitHub {
     owner = "aelsabbahy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1m5w5vwmc9knvaihk61848rlq7qgdyylzpcwi64z84rkw8qdnj6p";
+    sha256 = "01ssc7rnnwpyhjv96qy8drsskghbfpyxpsahk8s62lh8pxygynhv";
   };
 
-  vendorSha256 = "1lyqjkwj8hybj5swyrv6357hs8sxmf4wim0c8yhfb9mv7fsxhrv7";
+  vendorSha256 = "sha256-zlQMVn4w6syYmntxpeiIc1UTbFrIJzOMg0RVDCICTM8=";
 
   CGO_ENABLED = 0;
   ldflags = [

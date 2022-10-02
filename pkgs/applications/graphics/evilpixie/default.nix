@@ -16,8 +16,8 @@ let
     exec = "evilpixie %F";
     icon = "evilpixie";
     genericName = "Image Editor";
-    categories = "Graphics;2DGraphics;RasterGraphics;";
-    mimeType = "image/bmp;image/gif;image/jpeg;image/jpg;image/png;image/x-pcx;image/x-targa;image/x-tga;";
+    categories = [ "Graphics" "2DGraphics" "RasterGraphics" ];
+    mimeTypes = [ "image/bmp" "image/gif" "image/jpeg" "image/jpg" "image/png" "image/x-pcx" "image/x-targa" "image/x-tga" ];
   };
 
 in mkDerivation rec {
@@ -49,9 +49,9 @@ in mkDerivation rec {
 
   meta = with lib; {
     description = "Pixel-oriented paint program, modelled on Deluxe Paint";
-    homepage = "http://evilpixie.scumways.com/";
+    homepage = "https://github.com/bcampbell/evilpixie"; # http://evilpixie.scumways.com/ is gone
     downloadPage = "https://github.com/bcampbell/evilpixie/releases";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };

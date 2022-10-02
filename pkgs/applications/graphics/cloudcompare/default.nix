@@ -1,13 +1,16 @@
 { lib
+, stdenv
 , mkDerivation
 , fetchFromGitHub
 , cmake
-, dxflib
+, boost
+, cgal_5
 , eigen
 , flann
 , gdal
+, gmp
 , LASzip
-, libLAS
+, mpfr
 , pdal
 , pcl
 , qtbase
@@ -15,36 +18,35 @@
 , qttools
 , tbb
 , xercesc
+, wrapGAppsHook
 }:
 
 mkDerivation rec {
   pname = "cloudcompare";
-  # Released version(v2.11.3) doesn't work with packaged PCL.
-  version = "unstable-2021-10-14";
+  version = "2.12.4";
 
   src = fetchFromGitHub {
     owner = "CloudCompare";
     repo = "CloudCompare";
-    rev = "1f65ba63756e23291ae91ff52d04da468ade8249";
-    sha256 = "x1bDjFjXIl3r+yo1soWvRB+4KGP50/WBoGlrH013JQo=";
-    # As of writing includes (https://github.com/CloudCompare/CloudCompare/blob/a1c589c006fc325e8b560c77340809b9c7e7247a/.gitmodules):
-    # * libE57Format
-    # * PoissonRecon
-    # * CCCoreLib
+    rev = "v${version}";
+    sha256 = "sha256-rQ9/vS/fyRWGBL4UGPNSeeNsDtnRHEp9NCViBtu/QEs=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
     eigen # header-only
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    dxflib
+    boost
+    cgal_5
     flann
     gdal
+    gmp
     LASzip
-    libLAS
+    mpfr
     pdal
     pcl
     qtbase
@@ -72,8 +74,31 @@ mkDerivation rec {
     "-DPLUGIN_IO_QPHOTOSCAN=ON"
     "-DPLUGIN_IO_QRDB=OFF" # Riegl rdblib is proprietary; not packaged in nixpkgs
 
+    "-DCCCORELIB_USE_CGAL=ON" # enables Delauney triangulation support
     "-DPLUGIN_STANDARD_QPCL=ON" # Adds PCD import and export support
+    "-DPLUGIN_STANDARD_QANIMATION=ON"
+    "-DPLUGIN_STANDARD_QBROOM=ON"
+    "-DPLUGIN_STANDARD_QCANUPO=ON"
+    "-DPLUGIN_STANDARD_QCOMPASS=ON"
+    "-DPLUGIN_STANDARD_QCSF=ON"
+    "-DPLUGIN_STANDARD_QFACETS=ON"
+    "-DPLUGIN_STANDARD_QHOUGH_NORMALS=ON"
+    "-DEIGEN_ROOT_DIR=${eigen}/include/eigen3" # needed for hough normals
+    "-DPLUGIN_STANDARD_QHPR=ON"
+    "-DPLUGIN_STANDARD_QM3C2=ON"
+    "-DPLUGIN_STANDARD_QMPLANE=ON"
+    "-DPLUGIN_STANDARD_QPOISSON_RECON=ON"
+    "-DPLUGIN_STANDARD_QRANSAC_SD=ON"
+    "-DPLUGIN_STANDARD_QSRA=ON"
+    "-DPLUGIN_STANDARD_QCLOUDLAYERS=ON"
   ];
+
+  dontWrapGApps = true;
+
+  # fix file dialogs crashing on non-NixOS (and avoid double wrapping)
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   meta = with lib; {
     description = "3D point cloud and mesh processing software";

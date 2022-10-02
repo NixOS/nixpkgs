@@ -13,10 +13,14 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  buildInputs =
+  strictDeps = true;
+
+  nativeBuildInputs =
     [
       ocaml findlib ocamlbuild ocamlmod ocamlify
     ];
+
+  buildInputs = [ ocamlbuild ];
 
   configurePhase = ''
     runHook preConfigure
@@ -35,12 +39,11 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage = "http://oasis.forge.ocamlcore.org/";
     description = "Configure, build and install system for OCaml projects";
+    homepage = "http://oasis.forge.ocamlcore.org/";
     license = licenses.lgpl21;
+    maintainers = with maintainers; [ vbgl maggesi ];
+    mainProgram = "oasis";
     platforms = ocaml.meta.platforms or [];
-    maintainers = with maintainers; [
-      vbgl maggesi
-    ];
   };
 }

@@ -1,4 +1,4 @@
-{stdenv, lib, fetchFromGitHub, fetchpatch, cmake, zlib, libxml2, eigen, python2, cairo, pcre, pkg-config }:
+{stdenv, lib, fetchFromGitHub, fetchpatch, cmake, zlib, libxml2, eigen, python3, cairo, pcre, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "openbabel";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ zlib libxml2 eigen python2 cairo pcre ];
+  buildInputs = [ zlib libxml2 eigen python3 cairo pcre ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 

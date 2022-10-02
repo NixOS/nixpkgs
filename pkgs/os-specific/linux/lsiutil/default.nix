@@ -14,12 +14,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aTi+EogY1aDWYq3anjRkjz1mzINVfUPQbOPHthxrvS4=";
   };
 
-  buildPhase = ''
-    runHook preBuild
-
+  postPatch = ''
     substituteInPlace lsiutil.c \
       --replace /sbin/modprobe "${kmod}/bin/modprobe" \
       --replace /bin/mknod "${coreutils}/bin/mknod"
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
     gcc -Wall -O lsiutil.c -o lsiutil
 
     runHook postBuild

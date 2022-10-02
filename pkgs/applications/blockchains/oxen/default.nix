@@ -59,9 +59,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Private cryptocurrency based on Monero";
-    homepage    = "https://oxen.io/";
-    license     = licenses.bsd3;
-    platforms   = platforms.all;
+    homepage = "https://oxen.io/";
+    license = licenses.bsd3;
+    platforms = platforms.all;
     maintainers = [ maintainers.viric ];
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/oxen.x86_64-darwin
   };
 }

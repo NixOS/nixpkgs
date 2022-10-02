@@ -9,7 +9,7 @@
 , poco
 , qtbase
 , qtsvg
-, libsForQt5
+, qwt6_1
 , nlohmann_json
 , soapysdr-with-plugins
 , portaudio
@@ -38,7 +38,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config doxygen wrapQtAppsHook ];
 
   buildInputs = [
-    pcre poco qtbase qtsvg libsForQt5.qwt nlohmann_json
+    pcre poco qtbase qtsvg qwt6_1 nlohmann_json
     soapysdr-with-plugins portaudio alsa-lib muparserx python3
   ];
 

@@ -42,19 +42,20 @@
 , swig
 , vtk
 , wrapQtAppsHook
+, wrapGAppsHook
 , xercesc
 , zlib
 }:
 
 mkDerivation rec {
   pname = "freecad";
-  version = "0.19.2";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
     rev = version;
-    hash = "sha256-XZ+fRl3CPCIFu3nHeMTLibwwFBlG/cWpKJlI58hTAuU=";
+    hash = "sha256-r2lhFv4ReASteoVxwwiW9TdSckpaju6QE8UegxeY4rE=";
   };
 
   nativeBuildInputs = [
@@ -64,6 +65,7 @@ mkDerivation rec {
     pyside2-tools
     gfortran
     wrapQtAppsHook
+    wrapGAppsHook
   ];
 
   buildInputs = [

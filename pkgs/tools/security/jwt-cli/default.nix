@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jwt-cli";
-  version = "5.0.1";
+  version = "5.0.3";
 
   src = fetchFromGitHub {
     owner = "mike-engel";
     repo = pname;
     rev = version;
-    sha256 = "08yynwmn1kzanabiqzysyk9jbn0zyjjlilj4b4j5m29hfykq1jvf";
+    sha256 = "01aqqjynfcrn3m36hfjwcfh870imcd0hj5gifxzpnjiqjwpvys59";
   };
 
-  cargoSha256 = "19rbmiy71hgybzfwpz4msqqgl98qv9c3x06mjcpmixq4qhgxz616";
+  cargoSha256 = "1n4gmqmi975cd2zyrf0yi4gbxjjg9f99xa191mgmrdyyij7id3cf";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
@@ -27,5 +27,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mike-engel/jwt-cli";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ rycee ];
+    mainProgram = "jwt";
   };
 }

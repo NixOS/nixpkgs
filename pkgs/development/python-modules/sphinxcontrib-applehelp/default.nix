@@ -14,14 +14,13 @@ buildPythonPackage rec {
     sha256 = "a072735ec80e7675e3f432fcae8610ecf509c5f1869d17e2eecff44389cdbc58";
   };
 
-
   # Check is disabled due to circular dependency of sphinx
   doCheck = false;
 
   meta = with lib; {
     description = "sphinxcontrib-applehelp is a sphinx extension which outputs Apple help books";
-    homepage = "http://sphinx-doc.org/";
+    homepage = "https://github.com/sphinx-doc/sphinxcontrib-applehelp";
     license = licenses.bsd0;
+    maintainers = teams.sphinx.members;
   };
-
 }

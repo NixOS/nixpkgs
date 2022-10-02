@@ -1,34 +1,51 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nix-update-script
 , cmake
 , python3
+, gtest
 , withAnimation ? true
 , withTranscoder ? true
+, eigen
+, ghc_filesystem
+, tinygltf
 }:
 
 let
   cmakeBool = b: if b then "ON" else "OFF";
 in
 stdenv.mkDerivation rec {
-  version = "1.5.0";
+  version = "1.5.3";
   pname = "draco";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "draco";
     rev = version;
-    hash = "sha256-BoJg2lZBPVVm6Nc0XK8QSISpe+B8tpgRg9PFncN4+fY=";
+    sha256 = "sha256-LbWtZtgvZQdgwAGHVsouH6cAIVXP+9Q5n8KjzaBRrBQ=";
     fetchSubmodules = true;
   };
+
+  buildInputs = [ gtest ]
+    ++ lib.optionals withTranscoder [ eigen ghc_filesystem tinygltf ];
 
   nativeBuildInputs = [ cmake python3 ];
 
   cmakeFlags = [
     "-DDRACO_ANIMATION_ENCODING=${cmakeBool withAnimation}"
-    "-DDRACO_TRANSCODER_SUPPORTED=${cmakeBool withTranscoder}"
+    "-DDRACO_GOOGLETEST_PATH=${gtest}"
     "-DBUILD_SHARED_LIBS=${cmakeBool true}"
+    "-DDRACO_TRANSCODER_SUPPORTED=${cmakeBool withTranscoder}"
+  ] ++ lib.optionals withTranscoder [
+    "-DDRACO_EIGEN_PATH=${eigen}/include/eigen3"
+    "-DDRACO_FILESYSTEM_PATH=${ghc_filesystem}"
+    "-DDRACO_TINYGLTF_PATH=${tinygltf}"
   ];
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
     description = "Library for compressing and decompressing 3D geometric meshes and point clouds";

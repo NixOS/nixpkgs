@@ -10,7 +10,7 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         If enabled, the Crossfire game server will be started at boot.
       '';
     };
@@ -19,7 +19,7 @@ in {
       type = types.package;
       default = pkgs.crossfire-server;
       defaultText = literalExpression "pkgs.crossfire-server";
-      description = ''
+      description = lib.mdDoc ''
         The package to use for the Crossfire server (and map/arch data, if you
         don't change dataDir).
       '';
@@ -29,7 +29,7 @@ in {
       type = types.str;
       default = "${cfg.package}/share/crossfire";
       defaultText = literalExpression ''"''${config.services.crossfire.package}/share/crossfire"'';
-      description = ''
+      description = lib.mdDoc ''
         Where to load readonly data from -- maps, archetypes, treasure tables,
         and the like. If you plan to edit the data on the live server (rather
         than overlaying the crossfire-maps and crossfire-arch packages and
@@ -41,7 +41,7 @@ in {
     stateDir = mkOption {
       type = types.str;
       default = "/var/lib/crossfire";
-      description = ''
+      description = lib.mdDoc ''
         Where to store runtime data (save files, persistent items, etc).
 
         If left at the default, this will be automatically created on server
@@ -54,14 +54,14 @@ in {
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to open ports in the firewall for the server.
       '';
     };
 
     configFiles = mkOption {
       type = types.attrsOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         Text to append to the corresponding configuration files. Note that the
         files given in the example are *not* the complete set of files available
         to customize; look in /etc/crossfire after enabling the server to see
@@ -76,7 +76,7 @@ in {
         {
           dm_file = '''
             admin:secret_password:localhost
-            jane:xyzzy:*
+            alice:xyzzy:*
           ''';
           ban_file = '''
             # Bob is a jerk

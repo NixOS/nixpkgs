@@ -1,23 +1,38 @@
 { lib, stdenv, fetchurl, fetchpatch
 , autoreconfHook, perl
 , gdb, cctools, xnu, bootstrap_cmds
+, writeScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "valgrind";
-  version = "3.18.1";
+  version = "3.19.0";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-AIWaoTp3Lt33giIl9LRu4NOa++Bx0yd42k2ZmECB9/U=";
+    sha256 = "sha256-3V40SG8aSD/3vnMAzBa01rJGkJh4d8MnjXl1NNZzjwI=";
   };
 
   patches = [
-    # Fix tests on Musl.
-    # https://bugs.kde.org/show_bug.cgi?id=445300
+    # Fix checks on Musl.
+    # https://bugs.kde.org/show_bug.cgi?id=453929
     (fetchpatch {
-      url = "https://bugsfiles.kde.org/attachment.cgi?id=143535";
-      sha256 = "036zyk30rixjvpylw3c7n171n4gpn6zcp7h6ya2dz4h5r478l9i6";
+      url = "https://bugsfiles.kde.org/attachment.cgi?id=148912";
+      sha256 = "Za+7K93pgnuEUQ+jDItEzWlN0izhbynX2crSOXBBY/I=";
+    })
+    # Fix build on armv7l.
+    # https://bugs.kde.org/show_bug.cgi?id=454346
+    (fetchpatch {
+      url = "https://bugsfiles.kde.org/attachment.cgi?id=149172";
+      sha256 = "sha256-4MASLsEK8wcshboR4YOc6mIt7AvAgDPvqIZyHqlvTEs=";
+    })
+    (fetchpatch {
+      url = "https://bugsfiles.kde.org/attachment.cgi?id=149173";
+      sha256 = "sha256-jX9hD4utWRebbXMJYZ5mu9jecvdrNP05E5J+PnKRTyQ=";
+    })
+    (fetchpatch {
+      url = "https://bugsfiles.kde.org/attachment.cgi?id=149174";
+      sha256 = "sha256-f1YIFIhWhXYVw3/UNEWewDak2mvbAd3aGzK4B+wTlys=";
     })
   ];
 
@@ -59,9 +74,6 @@ stdenv.mkDerivation rec {
         --replace /usr/bin/ld ${cctools}/bin/ld
     '');
 
-  # To prevent rebuild on linux when moving darwin's postPatch fixes to preConfigure
-  postPatch = "";
-
   configureFlags =
     lib.optional (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin") "--enable-only64bit"
     ++ lib.optional stdenv.hostPlatform.isDarwin "--with-xcodedir=${xnu}/include";
@@ -76,6 +88,21 @@ stdenv.mkDerivation rec {
         --replace 'obj:/usr/lib' 'obj:*/lib'
     done
   '';
+
+  passthru = {
+    updateScript = writeScript "update-valgrind" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of:
+      #  'Current release: <a href="/downloads/current.html#current">valgrind-3.19.0</a>'
+      new_version="$(curl -s https://valgrind.org/ |
+          pcregrep -o1 'Current release: .*>valgrind-([0-9.]+)</a>')"
+      update-source-version ${pname} "$new_version"
+    '';
+  };
 
   meta = {
     homepage = "http://www.valgrind.org/";

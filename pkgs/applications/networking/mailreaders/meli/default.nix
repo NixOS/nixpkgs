@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchgit
 , rustPlatform
 , pkg-config
@@ -6,7 +7,6 @@
 , dbus
 , sqlite
 , file
-, gzip
 , makeWrapper
 , notmuch
   # Build with support for notmuch backend
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-ZE653OtXyZ9454bKPApmuL2kVko/hGBWEAya1L1KIoc=";
 
-  nativeBuildInputs = [ pkg-config gzip makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs = [ openssl dbus sqlite ] ++ lib.optional withNotmuch notmuch;
 
@@ -49,6 +49,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Experimental terminal mail client aiming for configurability and extensibility with sane defaults";
     homepage = "https://meli.delivery";
     license = licenses.gpl3;

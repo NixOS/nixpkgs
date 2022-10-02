@@ -1,157 +1,68 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , mkDerivation
 , fetchurl
 , dpkg
 , wrapGAppsHook
 , wrapQtAppsHook
+, autoPatchelfHook
 , alsa-lib
-, atk
-, bzip2
-, cairo
-, cups
-, dbus
-, expat
-, ffmpeg
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gperftools
-, gtk2-x11
-, libpng12
 , libtool
-, libuuid
-, libxml2
-, xz
 , nspr
-, nss
-, openssl
-, pango
-, qt4
-, qtbase
-, sqlite
-, unixODBC
+, mesa
+, libtiff
+, cups
 , xorg
-, zlib
-, steam
+, steam-run
 , makeWrapper
+, useChineseVersion ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "wpsoffice";
-  version = "11.1.0.9615";
+  version = "11.1.0.11664";
 
-  src = fetchurl {
-    url = "http://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/9615/wps-office_11.1.0.9615.XA_amd64.deb";
-    sha256 = "0dpd4njpizclllps3qagipycfws935rhj9k5gmdhjfgsk0ns188w";
+  src = if useChineseVersion then fetchurl {
+    url = "https://wps-linux-personal.wpscdn.cn/wps/download/ep/Linux2019/${lib.last (lib.splitString "." version)}/wps-office_${version}_amd64.deb";
+    sha256 = "sha256-D2LhxBMHmQjVExa/63DHdws0V+EmOSlJzGq91jbuJHs=";
+  } else fetchurl {
+    url = "http://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/${lib.last (lib.splitString "." version)}/wps-office_${version}.XA_amd64.deb";
+    sha256 = "sha256-9qZGqs4nsB9mWCJTi2x+vWmMF0sEoUYgEzLI//hijfU=";
   };
+
   unpackCmd = "dpkg -x $src .";
   sourceRoot = ".";
 
-  postUnpack = lib.optionalString (version == "11.1.0.9505") ''
-    # distribution is missing libjsapiservice.so, so we should not let
+  postUnpack = ''
+    # distribution is missing libkappessframework.so, so we should not let
     # autoPatchelfHook fail on the following dead libraries
-    rm opt/kingsoft/wps-office/office6/{libjsetapi.so,libjswppapi.so,libjswpsapi.so}
+    rm -r opt/kingsoft/wps-office/office6/addons/pdfbatchcompression
+
+    # Remove the following libraries because they depend on qt4
+    rm -r opt/kingsoft/wps-office/office6/{librpcetapi.so,librpcwpsapi.so,librpcwppapi.so,libavdevice.so.58.10.100,libmediacoder.so}
+    rm -r opt/kingsoft/wps-office/office6/addons/wppcapturer/libwppcapturer.so
+    rm -r opt/kingsoft/wps-office/office6/addons/wppencoder/libwppencoder.so
   '';
 
-  nativeBuildInputs = [ dpkg wrapGAppsHook wrapQtAppsHook makeWrapper ];
+  nativeBuildInputs = [ dpkg wrapGAppsHook wrapQtAppsHook makeWrapper autoPatchelfHook ];
 
-  meta = with lib; {
-    description = "Office suite, formerly Kingsoft Office";
-    homepage = "https://www.wps.com/";
-    platforms = [ "x86_64-linux" ];
-    hydraPlatforms = [];
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ mlatus th0rgal ];
-  };
-
-  buildInputs = with xorg; [
+  buildInputs = [
     alsa-lib
-    atk
-    bzip2
-    cairo
-    dbus.lib
-    expat
-    ffmpeg
-    fontconfig
-    freetype
-    gdk-pixbuf
-    glib
-    gperftools
-    gtk2-x11
-    libICE
-    libSM
-    libX11
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
-    libpng12
+    xorg.libXdamage
+    xorg.libXtst
     libtool
-    libuuid
-    libxcb
-    libxml2
-    xz
     nspr
-    nss
-    openssl
-    pango
-    qt4
-    qtbase
-    sqlite
-    unixODBC
-    zlib
+    mesa
+    libtiff
     cups.lib
   ];
 
-  dontPatchELF = true;
-
-  # wpsoffice uses `/build` in its own build system making nix things there
-  # references to nix own build directory
-  noAuditTmpdir = true;
-
-  unvendoredLibraries = [
-    # Have to use parts of the vendored qt4
-    #"Qt"
-    "SDL2"
-    "bz2"
-    "avcodec"
-    "avdevice"
-    "avformat"
-    "avutil"
-    "swresample"
-    "swscale"
-    "jpeg"
-    "png"
-    # File saving breaks unless we are using vendored llvmPackages_8.libcxx
-    #"c++"
-    "ssl" "crypto"
-    "nspr"
-    "nss"
-    "odbc"
-    "tcmalloc" # gperftools
-  ];
-
-  installPhase = let
-    steam-run = (steam.override {
-      extraPkgs = p: buildInputs;
-      nativeOnly = true;
-    }).run;
-  in ''
+  installPhase = ''
+    runHook preInstall
     prefix=$out/opt/kingsoft/wps-office
     mkdir -p $out
     cp -r opt $out
     cp -r usr/* $out
-    for lib in $unvendoredLibraries; do
-      rm -v "$prefix/office6/lib$lib"*.so{,.*}
-    done
     for i in wps wpp et wpspdf; do
       substituteInPlace $out/bin/$i \
         --replace /opt/kingsoft/wps-office $prefix
@@ -160,17 +71,18 @@ stdenv.mkDerivation rec {
       substituteInPlace $i \
         --replace /usr/bin $out/bin
     done
-
     for i in wps wpp et wpspdf; do
       mv $out/bin/$i $out/bin/.$i-orig
       makeWrapper ${steam-run}/bin/steam-run $out/bin/$i \
         --add-flags $out/bin/.$i-orig \
         --argv0 $i
     done
+    runHook postInstall
   '';
 
   dontWrapQtApps = true;
   dontWrapGApps = true;
+
   postFixup = ''
     for f in "$out"/bin/*; do
       echo "Wrapping $f"
@@ -179,4 +91,13 @@ stdenv.mkDerivation rec {
         "''${qtWrapperArgs[@]}"
     done
   '';
+
+  meta = with lib; {
+    description = "Office suite, formerly Kingsoft Office";
+    homepage = "https://www.wps.com";
+    platforms = [ "x86_64-linux" ];
+    hydraPlatforms = [ ];
+    license = licenses.unfreeRedistributable;
+    maintainers = with maintainers; [ mlatus th0rgal rewine ];
+  };
 }

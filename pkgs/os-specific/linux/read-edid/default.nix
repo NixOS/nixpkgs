@@ -9,14 +9,17 @@ stdenv.mkDerivation rec {
     sha256 = "0vqqmwsgh2gchw7qmpqk6idgzcm5rqf2fab84y7gk42v1x2diin7";
   };
 
+  patches = [ ./fno-common.patch ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace 'COPYING' 'LICENSE'
+  '';
+
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optional stdenv.hostPlatform.isx86 libx86;
 
   cmakeFlags = [ "-DCLASSICBUILD=${if stdenv.hostPlatform.isx86 then "ON" else "OFF"}" ];
 
-  patchPhase = ''
-    substituteInPlace CMakeLists.txt --replace 'COPYING' 'LICENSE'
-  '';
 
   meta = with lib; {
     description = "Tool for reading and parsing EDID data from monitors";

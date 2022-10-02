@@ -1,7 +1,7 @@
 { fetchurl, lib, stdenv }:
 
 let
-  version = "0.24.5";
+  version = "1.1.1";
 
   suffix = {
     x86_64-linux = "x86_64";
@@ -22,15 +22,15 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
   src = dlbin {
-    x86_64-linux = "sha256-drcm2kz2csuJqr8Oqs0r1BrxgPHOyuwC2S+99MhbMjA=";
-    aarch64-linux = "sha256-x8RoBmgY3HRUOLw8YzEwQfQuT83zGfBHHWu88b4i05o=";
+    x86_64-linux = "sha256-KRlOE4iDWMYzKZUZnuKIwIGooj5o8ARpROS7f2VIr1c=";
+    aarch64-linux = "sha256-AqVFqUbMtjPmOsSgAaJ2AFNc0McC708fAD36qLz0VAc=";
   };
 
   dontConfigure = true;
 
   buildPhase = ''
-    mv release-v${version}/firecracker-v${version}-${suffix} firecracker
-    mv release-v${version}/jailer-v${version}-${suffix} jailer
+    mv release-v${version}-${suffix}/firecracker-v${version}-${suffix} firecracker
+    mv release-v${version}-${suffix}/jailer-v${version}-${suffix} jailer
     chmod +x firecracker jailer
   '';
 

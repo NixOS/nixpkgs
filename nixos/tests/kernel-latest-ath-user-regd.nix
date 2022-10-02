@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     maintainers = [ veehaitch ];
   };
 
-  machine = { pkgs, ... }:
+  nodes.machine = { pkgs, ... }:
     {
       boot.kernelPackages = pkgs.linuxPackages_latest;
       networking.wireless.athUserRegulatoryDomain = true;

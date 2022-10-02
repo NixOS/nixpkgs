@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [
-    autoreconfHook libsodium ncurses check libconfig
+    libsodium ncurses check libconfig
   ] ++ lib.optionals (!stdenv.isAarch32) [
     libopus
   ];
@@ -49,6 +49,7 @@ stdenv.mkDerivation {
   doCheck = false;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "P2P FOSS instant messaging application aimed to replace Skype with crypto";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];

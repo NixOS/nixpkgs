@@ -1,16 +1,23 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-buildGoPackage rec {
-  pname = "goreman";
-  version = "0.2.1";
+{ lib, buildGoModule, fetchFromGitHub, testers, goreman }:
 
-  goPackagePath = "github.com/mattn/goreman";
-  subPackages = ["."];
+buildGoModule rec {
+  pname = "goreman";
+  version = "0.3.13";
 
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "goreman";
     rev = "v${version}";
-    sha256 = "1h7ip788j7bkygahpp7ylgnrx9jrbhwjzqpjhd1pflmlaxcbflcy";
+    sha256 = "sha256-BQMRkXHac2Is3VvqrBFA+/NrR3sw/gA1k3fPi3EzONQ=";
+  };
+
+  vendorSha256 = "sha256-BWfhvJ6kPz3X3TpHNvRIBgfUAQJB2f/lngRvHq91uyw=";
+
+  ldflags = [ "-s" "-w" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = goreman;
+    command = "goreman version";
   };
 
   meta = with lib; {
@@ -20,4 +27,3 @@ buildGoPackage rec {
     maintainers = with maintainers; [ zimbatm ];
   };
 }
-

@@ -23,7 +23,5 @@ in {
   security.googleOsLogin.enable = true;
 
   # Mock google service
-  networking.extraHosts = ''
-    127.0.0.1 metadata.google.internal
-  '';
+  networking.interfaces.lo.ipv4.addresses = [ { address = "169.254.169.254"; prefixLength = 32; } ];
 }

@@ -5,7 +5,7 @@
 , bc
 , pkg-config
 , perl
-, openssl_3_0
+, openssl
 , zlib
 , ffmpeg
 , libvpx
@@ -14,17 +14,18 @@
 , srtp
 , jemalloc
 , pcre2
+, hiredis
 }:
 
 stdenv.mkDerivation rec {
   pname = "oven-media-engine";
-  version = "0.12.9";
+  version = "0.14.10";
 
   src = fetchFromGitHub {
     owner = "AirenSoft";
     repo = "OvenMediaEngine";
     rev = "v${version}";
-    sha256 = "0d3ymw747frl40w5d6r33lf1s72v7fiv742yjr1m6la2phb9h834";
+    sha256 = "09diqgv5pbv8igb4x9lzrmaf5ic1fd3m8y7rlpwh4w145qwjxc8y";
   };
 
   sourceRoot = "source/src";
@@ -32,13 +33,17 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ bc pkg-config perl ];
-  buildInputs = [ openssl_3_0 srt zlib ffmpeg libvpx libopus srtp jemalloc pcre2 libuuid ];
+  buildInputs = [ openssl srt zlib ffmpeg libvpx libopus srtp jemalloc pcre2 libuuid hiredis ];
 
   preBuild = ''
     patchShebangs core/colorg++
     patchShebangs core/colorgcc
     patchShebangs projects/main/update_git_info.sh
 
+    sed -i -e 's/const AVOutputFormat /AVOutputFormat /g' \
+      projects/modules/mpegts/mpegts_writer.cpp \
+      projects/modules/file/file_writer.cpp \
+      projects/modules/rtmp/rtmp_writer.cpp
     sed -i -e '/^CC =/d' -e '/^CXX =/d' -e '/^AR =/d' projects/third_party/pugixml-1.9/scripts/pugixml.make
   '';
 
@@ -53,7 +58,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open-source streaming video service with sub-second latency";
     homepage    = "https://ovenmediaengine.com";
-    license     = licenses.gpl2Only;
+    license     = licenses.agpl3Only;
     maintainers = with maintainers; [ lukegb ];
     platforms   = [ "x86_64-linux" ];
   };

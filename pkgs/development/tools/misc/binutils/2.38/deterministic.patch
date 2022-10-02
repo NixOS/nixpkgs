@@ -1,0 +1,12 @@
+diff -ur orig/binutils-2.23.1/ld/ldlang.c binutils-2.23.1/ld/ldlang.c
+--- orig/ld/ldlang.c
++++ new/ld/ldlang.c
+@@ -3095,6 +3095,8 @@
+                           ldfile_output_machine))
+     einfo (_("%P%F:%s: can not set architecture: %E\n"), name);
+ 
++  link_info.output_bfd->flags |= BFD_DETERMINISTIC_OUTPUT;
++
+   link_info.hash = bfd_link_hash_table_create (link_info.output_bfd);
+   if (link_info.hash == NULL)
+     einfo (_("%P%F: can not create hash table: %E\n"));

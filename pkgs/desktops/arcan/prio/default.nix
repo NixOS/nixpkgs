@@ -3,16 +3,20 @@
 , fetchFromGitHub
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalPackages: {
   pname = "prio";
-  version = "0.pre+unstable=2018-09-13";
+  version = "unstable-2018-09-13";
 
   src = fetchFromGitHub {
     owner = "letoram";
-    repo = pname;
+    repo = finalPackages.pname;
     rev = "c3f97491339d15f063d6937d5f89bcfaea774dd1";
     hash = "sha256-Idv/duEYmDk/rO+TI8n+FY3VFDtUEh8C292jh12BJuM=";
   };
+
+  dontConfigure = true;
+
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
@@ -30,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.all;
   };
-}
+})

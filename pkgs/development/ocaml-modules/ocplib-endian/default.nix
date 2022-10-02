@@ -1,17 +1,17 @@
 { lib, buildDunePackage, fetchFromGitHub, cppo }:
 
 buildDunePackage rec {
-  version = "1.1";
+  version = "1.2";
   pname = "ocplib-endian";
 
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = "ocplib-endian";
     rev = version;
-    sha256 = "sha256-zKsSkhlZBXSqPtw+/WN3pwo9plM9rDZfMbGVfosqb10=";
+    sha256 = "sha256-THTlhOfXAPaqTt1qBkht+D67bw6M175QLvXoUMgjks4=";
   };
 
-  useDune2 = true;
+  minimalOCamlVersion = "4.03";
 
   nativeBuildInputs = [ cppo ];
 

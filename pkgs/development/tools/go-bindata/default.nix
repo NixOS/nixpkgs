@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "go-bindata";
-  version = "3.22.0";
+  version = "3.24.0";
 
   goPackagePath = "github.com/kevinburke/go-bindata";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "kevinburke";
     repo = pname;
     rev = "v${version}";
-    sha256 = "10dq77dml5jvvq2jkdq81a9yjg7rncq8iw8r84cc3dz6l9hxzj0x";
+    sha256 = "sha256-dEfD5oV2nXLVg+a7PlB6LqhEBosG7eTptqKKDWcQAss=";
   };
 
   subPackages = [ "go-bindata" ];

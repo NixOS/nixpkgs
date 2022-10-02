@@ -3,20 +3,21 @@
 , fetchFromGitHub
 , pythonOlder
 , clvm
+, clvm-tools-rs
 , setuptools-scm
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "clvm_tools";
-  version = "0.4.3";
+  version = "0.4.5";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "clvm_tools";
     rev = version;
-    sha256 = "sha256-bWz3YCrakob/kROq+LOA+yD1wtIbInVrmDqtg4/cV4g=";
+    sha256 = "sha256-7FUZh9w6AM+7l7Br9V/ovS/1H62BLoas5gCrbeMvBAc=";
   };
 
   nativeBuildInputs = [
@@ -25,6 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     clvm
+    clvm-tools-rs
   ];
 
   checkInputs = [

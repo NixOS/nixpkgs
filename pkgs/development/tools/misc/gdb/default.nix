@@ -1,7 +1,7 @@
 { lib, stdenv, targetPackages
 
 # Build time
-, fetchurl, fetchpatch, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
+, fetchurl, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
 , ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu, sourceHighlight
@@ -15,6 +15,7 @@
    # targetPackages so we get the right libc when cross-compiling and using buildPackages.gdb
    targetPackages.stdenv.cc.cc.lib
   ]
+, writeScript
 }:
 
 let
@@ -27,29 +28,31 @@ assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = targetPrefix + basename;
-  version = "11.1";
+  version = "12.1";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
-    sha256 = "151z6d0265hv9cgx9zqqa4bd6vbp20hrljhd6bxl7lr0gd0crkyc";
+    hash = "sha256-DheTv48rVNU/Rt6oTM/URvSPgbKXsoxPf8AXuBjWn+0=";
   };
 
-  postPatch = if stdenv.isDarwin then ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace gdb/darwin-nat.c \
       --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
-  '' else null;
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace sim/erc32/erc32.c  --replace sys/fcntl.h fcntl.h
+    substituteInPlace sim/erc32/interf.c  --replace sys/fcntl.h fcntl.h
+    substituteInPlace sim/erc32/sis.c  --replace sys/fcntl.h fcntl.h
+    substituteInPlace sim/ppc/emul_unix.c --replace sys/termios.h termios.h
+  '';
 
   patches = [
     ./debug-info-from-env.patch
-
-    # Pull upstream fix for gcc-12. Will be included in gdb-12.
-    (fetchpatch {
-      name = "gcc-12.patch";
-      url = "https://sourceware.org/git/?p=binutils-gdb.git;a=patch;h=e97436b1b789dcdb6ffb502263f4c86f8bc22996";
-      sha256 = "1mpgw6s9qgnwhwyg3hagc6vhqhvia0l1s8nr22bcahwqxi3wvzcw";
-    })
   ] ++ lib.optionals stdenv.isDarwin [
     ./darwin-target-match.patch
+  # Does not nave to be conditional. We apply it conditionally
+  # to speed up inclusion to nearby nixos release.
+  ] ++ lib.optionals stdenv.is32bit [
+    ./32-bit-BFD_VMA-format.patch
   ];
 
   nativeBuildInputs = [ pkg-config texinfo perl setupDebugInfoDirs ];
@@ -99,6 +102,7 @@ stdenv.mkDerivation rec {
     "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
   ] ++ lib.optional (!pythonSupport) "--without-python"
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls"
+    ++ lib.optional stdenv.hostPlatform.isStatic "--disable-inprocess-agent"
     ++ lib.optional enableDebuginfod "--with-debuginfod=yes";
 
   postInstall =
@@ -108,6 +112,20 @@ stdenv.mkDerivation rec {
 
   # TODO: Investigate & fix the test failures.
   doCheck = false;
+
+  passthru = {
+    updateScript = writeScript "update-gdb" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of '<h3>GDB version 12.1</h3>'
+      new_version="$(curl -s https://www.sourceware.org/gdb/ |
+          pcregrep -o1 '<h3>GDB version ([0-9.]+)</h3>')"
+      update-source-version ${pname} "$new_version"
+    '';
+  };
 
   meta = with lib; {
     description = "The GNU Project debugger";

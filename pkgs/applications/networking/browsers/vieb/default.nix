@@ -2,19 +2,19 @@
 
 mkYarnPackage rec {
   pname = "vieb";
-  version = "6.1.0";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "Jelmerro";
     repo = pname;
     rev = version;
-    sha256 = "sha256-MJJeHnwfXouBygRT/wFWFMRHxQVf/3k2c7vp/tkD5co=";
+    sha256 = "sha256-4iokmUzs72aVHb95D98ZITRygn4gGAc/K+M5uMnF2NM=";
   };
 
   packageJSON = ./package.json;
   yarnLock = ./yarn.lock;
   yarnNix = ./yarn.nix;
-  yarnFlags = [ "--production" "--offline" ];
+  yarnFlags = [ "--production" ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -24,8 +24,8 @@ mkYarnPackage rec {
     icon = "vieb";
     desktopName = "Web Browser";
     genericName = "Web Browser";
-    categories = "Network;WebBrowser;";
-    mimeType = lib.concatStringsSep ";" [
+    categories = [ "Network" "WebBrowser" ];
+    mimeTypes = [
       "text/html"
       "application/xhtml+xml"
       "x-scheme-handler/http"

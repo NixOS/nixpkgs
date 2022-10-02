@@ -1,19 +1,21 @@
-{ lib, stdenv, fetchurl, texinfo }:
+{ lib, stdenv, fetchurl, texinfo, lzip }:
 
 stdenv.mkDerivation rec {
   pname = "lzlib";
-  version = "1.12";
+  version = "1.13";
   outputs = [ "out" "info" ];
 
-  nativeBuildInputs = [ texinfo ];
+  nativeBuildInputs = [ texinfo lzip ];
 
   src = fetchurl {
-    url = "mirror://savannah/lzip/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-jl2EJC61LPHcyY5YvZuo7xrvpQFDGr3QJzoiv0zjN7E=";
+    url = "mirror://savannah/lzip/${pname}/${pname}-${version}.tar.lz";
+    sha256 = "sha256-3ea9WzJTXxeyjJrCS2ZgfgJQUGrBQypBEso8c/XWYsM=";
   };
 
-  makeFlags = [ "AR:=$(AR)" "CC:=$(CC)" ];
+  makeFlags = [ "CC:=$(CC)" ];
   doCheck = true;
+
+  configureFlags = [ "--enable-shared" ];
 
   meta = with lib; {
     homepage = "https://www.nongnu.org/lzip/${pname}.html";

@@ -1,53 +1,75 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
-, fetchPypi
-, rustPlatform
-, rustc
 , cargo
-, setuptools-rust
-# build inputs
 , cffi
+, fetchPypi
 , glean-parser
+, iso8601
+, pytest-localserver
+, pytestCheckHook
+, pythonOlder
+, rustc
+, rustPlatform
+, semver
+, setuptools-rust
 }:
 
 buildPythonPackage rec {
   pname = "glean-sdk";
-  version = "42.2.0";
+  version = "51.2.0";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-X2p6KQnEB6ZHdCHGFVEoEMiI+0R2vfGqel+jFKTcx74=";
+    hash = "sha256-4EXCYthMabdmxWYltcnO0UTNeAYXwXQeRfwxt1WD3Ug=";
   };
-
-  patches = [
-    # Fix the environment for spawned process
-    # https://github.com/mozilla/glean/pull/1542
-    ./fix-spawned-process-environment.patch
-  ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-/+rKGPYTLovgjTGL2F/pWzlUy1tY207yuJz3Xdhm1hg=";
+    hash = "sha256-qOGoonutuIY+0UVaVSVVt0NbqEICdNs3qHWG0Epmkl0=";
   };
 
   nativeBuildInputs = [
-    rustc
     cargo
-    setuptools-rust
+    rustc
     rustPlatform.cargoSetupHook
+    setuptools-rust
   ];
+
   propagatedBuildInputs = [
     cffi
     glean-parser
+    iso8601
+    semver
   ];
 
-  pythonImportsCheck = [ "glean" ];
+  checkInputs = [
+    pytest-localserver
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # RuntimeError: No ping received.
+    "test_client_activity_api"
+  ];
+
+  postPatch = ''
+    substituteInPlace glean-core/python/setup.py \
+      --replace "glean_parser==5.0.1" "glean_parser>=5.0.1"
+  '';
+
+  pythonImportsCheck = [
+    "glean"
+  ];
 
   meta = with lib; {
-    description = "Modern cross-platform telemetry client libraries and are a part of the Glean project";
+    broken = stdenv.isDarwin;
+    description = "Telemetry client libraries and are a part of the Glean project";
     homepage = "https://mozilla.github.io/glean/book/index.html";
     license = licenses.mpl20;
-    maintainers = [ maintainers.kvark ];
+    maintainers = [];
   };
 }

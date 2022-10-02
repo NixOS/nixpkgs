@@ -4,12 +4,15 @@ with lib; mkCoqDerivation {
   pname = "metalib";
   owner = "plclub";
   inherit version;
-  defaultVersion = if versions.range "8.10" "8.13" coq.coq-version then "20200527" else null;
-  release."20200527".rev    = "597fd7d0c93eb159274e84a39d554f10f1efccf8";
-  release."20200527".sha256 = "0wbypc05d2lqfm9qaw98ynr5yc1p0ipsvyc3bh1rk9nz7zwirmjs";
+  defaultVersion = with versions; switch coq.coq-version [
+    { case = range "8.14" "8.16"; out = "8.15"; }
+    { case = range "8.10" "8.13"; out = "8.10"; }
+  ] null;
+  releaseRev = v: "coq${v}";
+  release."8.15".sha256 = "0wbp058zwa4bkdjj38aysy2g1avf9nrh8q23a3dil0q00qczi616";
+  release."8.10".sha256 = "0wbypc05d2lqfm9qaw98ynr5yc1p0ipsvyc3bh1rk9nz7zwirmjs";
 
   sourceRoot = "source/Metalib";
-  installFlags = "COQMF_COQLIB=$(out)/lib/coq/${coq.coq-version}";
 
   meta = {
     license = licenses.mit;

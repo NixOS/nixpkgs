@@ -1,14 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub, go-rice }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "cfssl";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cfssl";
     rev = "v${version}";
-    sha256 = "sha256-QY04MecjQTmrkPkWcLkXJWErtaw7esb6GnPIKGTJL34=";
+    sha256 = "sha256-cyriV6z904QlkDlP80CSpakISJn7S81/2fcspAf5uk4=";
   };
 
   subPackages = [
@@ -26,18 +26,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ go-rice ];
-
-  preBuild = ''
-    pushd cli/serve
-    rice embed-go
-    popd
-  '';
-
   ldflags = [
     "-s" "-w"
     "-X github.com/cloudflare/cfssl/cli/version.version=v${version}"
   ];
+
+  passthru.tests = { inherit (nixosTests) cfssl; };
 
   meta = with lib; {
     homepage = "https://cfssl.org/";

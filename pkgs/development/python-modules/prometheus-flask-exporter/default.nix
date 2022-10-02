@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "prometheus-flask-exporter";
-  version = "0.18.1";
+  version = "0.20.3";
 
   src = fetchFromGitHub {
     owner = "rycus86";
     repo = "prometheus_flask_exporter";
     rev = version;
-    sha256 = "1dwisp681w0f6zf0000rxd3ksdb48zb9mr38qfdqk2ir24y8w370";
+    sha256 = "sha256-l9Iw9fvXQMXzq1y/4Dml8uLPJWyqX6SDIXptJVw3cVQ=";
   };
 
   propagatedBuildInputs = [ flask prometheus-client ];

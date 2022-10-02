@@ -1,19 +1,23 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, packaging
 , pbr
-, sentinels
-, six
 , pytestCheckHook
+, pythonOlder
+, sentinels
 }:
 
 buildPythonPackage rec {
   pname = "mongomock";
-  version = "3.23.0";
+  version = "4.1.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pdh4pj5n6dsaqy98q40wig5y6imfs1p043cgkaaw8f2hxy5x56r";
+    hash = "sha256-8GzWKvuK4+9jujE0mr0iCmV+8N1PAkOilYfFIT+TG30=";
   };
 
   nativeBuildInputs = [
@@ -21,15 +25,17 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    packaging
     sentinels
-    six
   ];
 
   checkInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "mongomock" ];
+  pythonImportsCheck = [
+    "mongomock"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/mongomock/mongomock";

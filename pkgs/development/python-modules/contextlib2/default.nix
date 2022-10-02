@@ -3,6 +3,7 @@
 , fetchPypi
 , python
 , pythonOlder
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -17,11 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-qx4r/h0B2Wjht+jZAjvFHvNQm7ohe7cwzuOCfh7oKGk=";
   };
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest discover
-    runHook postCheck
-  '';
+  checkInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [
     "contextlib2"

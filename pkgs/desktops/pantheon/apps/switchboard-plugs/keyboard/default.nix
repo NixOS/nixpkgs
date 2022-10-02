@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-keyboard";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Bl0T+8upTdBnLs03UIimcAg0LO40KwuMZRNSM+y/3Hc=";
+    sha256 = "sha256-ge87rctbd7iR9x9Xq4sMIC09DiPHbpbWBgMZUuJNWbw=";
   };
 
   patches = [
@@ -39,12 +39,6 @@ stdenv.mkDerivation rec {
       inherit ibus onboard;
     })
   ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
 
   nativeBuildInputs = [
     libxml2
@@ -66,6 +60,12 @@ stdenv.mkDerivation rec {
     libxklavier
     switchboard
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Switchboard Keyboard Plug";

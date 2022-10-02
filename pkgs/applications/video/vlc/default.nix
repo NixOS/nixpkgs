@@ -10,7 +10,7 @@
 , avahi
 , dbus
 , faad2
-, ffmpeg
+, ffmpeg_4
 , flac
 , fluidsynth
 , freefont_ttf
@@ -31,9 +31,11 @@
 , libkate
 , libmad
 , libmatroska
+, libmodplug
 , libmtp
 , liboggz
 , libopus
+, libplacebo
 , libpulseaudio
 , libraw1394
 , librsvg
@@ -62,16 +64,15 @@
 , systemd
 , taglib
 , unzip
-, wayland
-, wayland-protocols
+, xlibsWrapper
 , xorg
 , zlib
-
 , chromecastSupport ? true, libmicrodns, protobuf
 , jackSupport ? false
 , onlyLibVLC ? false
 , skins2Support ? !onlyLibVLC, freetype
-, withQt5 ? true, qtbase, qtsvg, qtx11extras, wrapQtAppsHook
+, waylandSupport ? true, wayland, wayland-protocols
+, withQt5 ? true, qtbase, qtsvg, qtwayland, qtx11extras, wrapQtAppsHook
 }:
 
 # chromecastSupport requires TCP port 8010 to be open for it to work.
@@ -80,15 +81,14 @@
 
 let
   inherit (lib) optionalString optional optionals;
-  hostIsAarch = stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64;
 in
 stdenv.mkDerivation rec {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
-  version = "3.0.16";
+  version = "3.0.17.3";
 
   src = fetchurl {
     url = "http://get.videolan.org/vlc/${version}/vlc-${version}.tar.xz";
-    sha256 = "sha256-/641/GT2JcF1Vx0jRrxfYge+mXYlF/FUI+dPGDmUEPY=";
+    sha256 = "sha256-b36Q74lz0x2W3mTbgXFz40UVCClxepQISxu4MhzeIBQ=";
   };
 
   # VLC uses a *ton* of libraries for various pieces of functionality, many of
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     avahi
     dbus
     faad2
-    ffmpeg
+    ffmpeg_4
     flac
     fluidsynth
     fribidi
@@ -123,8 +123,10 @@ stdenv.mkDerivation rec {
     libmad
     libmatroska
     libmtp
+    libmodplug
     liboggz
     libopus
+    libplacebo
     libpulseaudio
     libraw1394
     librsvg
@@ -148,8 +150,7 @@ stdenv.mkDerivation rec {
     srt
     systemd
     taglib
-    wayland
-    wayland-protocols
+    xlibsWrapper
     zlib
   ]
   ++ (with xorg; [
@@ -157,13 +158,19 @@ stdenv.mkDerivation rec {
     libXv
     libXvMC
     xcbutilkeysyms
-    xlibsWrapper
   ])
-  ++ optional (!hostIsAarch) live555
+  ++ optional (!stdenv.hostPlatform.isAarch && !onlyLibVLC) live555
   ++ optional jackSupport libjack2
   ++ optionals chromecastSupport [ libmicrodns protobuf ]
-  ++ optionals skins2Support (with xorg; [ freetype libXext libXinerama libXpm ])
-  ++ optionals withQt5 [ qtbase qtsvg qtx11extras ];
+  ++ optionals skins2Support (with xorg; [
+    freetype
+    libXext
+    libXinerama
+    libXpm
+  ])
+  ++ optionals waylandSupport [ wayland wayland-protocols ]
+  ++ optionals withQt5 [ qtbase qtsvg qtx11extras ]
+  ++ optional (waylandSupport && withQt5) qtwayland;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -172,21 +179,27 @@ stdenv.mkDerivation rec {
     removeReferencesTo
     unzip
   ]
-  ++ optionals withQt5 [ wrapQtAppsHook ];
+  ++ optionals withQt5 [ wrapQtAppsHook ]
+  ++ optionals waylandSupport [ wayland wayland-protocols ];
 
   enableParallelBuilding = true;
 
-  LIVE555_PREFIX = if hostIsAarch then null else live555;
+  LIVE555_PREFIX = if stdenv.hostPlatform.isAarch then null else live555;
 
   # vlc depends on a c11-gcc wrapper script which we don't have so we need to
   # set the path to the compiler
   BUILDCC = "${stdenv.cc}/bin/gcc";
 
   patches = [
-    # Required in order to run newer srt plugin. Remove it when next release arrives
+    # patches to build with recent live555
+    # upstream issue: https://code.videolan.org/videolan/vlc/-/issues/25473
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/4250fe8f28c220d883db454cec2b2c76a07473eb/trunk/vlc-3.0.11.1-srt_1.4.2.patch";
-      sha256 = "53poWjZfwq/6l316sqiCp0AtcGweyXBntcLDFPSokHQ=";
+      url = "https://code.videolan.org/videolan/vlc/uploads/3c84ea58d7b94d7a8d354eaffe4b7d55/0001-Get-addr-by-ref.-from-getConnectionEndpointAddress.patch";
+      sha256 = "171d3qjl9a4dm13sqig3ra8s2zcr76wfnqz4ba4asg139cyc1axd";
+    })
+    (fetchpatch {
+      url = "https://code.videolan.org/videolan/vlc/uploads/eb1c313d2d499b8a777314f789794f9d/0001-Add-lssl-and-lcrypto-to-liblive555_plugin_la_LIBADD.patch";
+      sha256 = "0kyi8q2zn2ww148ngbia9c7qjgdrijf4jlvxyxgrj29cb5iy1kda";
     })
   ];
 
@@ -210,9 +223,11 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-srt" # Explicit enable srt to ensure the patch is applied.
     "--with-kde-solid=$out/share/apps/solid/actions"
-  ] ++ optional onlyLibVLC "--disable-vlc"
-    ++ optional skins2Support "--enable-skins2"
-    ++ optionals chromecastSupport [
+  ]
+  ++ optional onlyLibVLC "--disable-vlc"
+  ++ optional skins2Support "--enable-skins2"
+  ++ optional waylandSupport "--enable-wayland"
+  ++ optionals chromecastSupport [
     "--enable-sout"
     "--enable-chromecast"
     "--enable-microdns"

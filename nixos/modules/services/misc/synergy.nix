@@ -19,19 +19,19 @@ in
       # !!! All these option descriptions needs to be cleaned up.
 
       client = {
-        enable = mkEnableOption "the Synergy client (receive keyboard and mouse events from a Synergy server)";
+        enable = mkEnableOption (lib.mdDoc "the Synergy client (receive keyboard and mouse events from a Synergy server)");
 
         screenName = mkOption {
           default = "";
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             Use the given name instead of the hostname to identify
             ourselves to the server.
           '';
         };
         serverAddress = mkOption {
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             The server address is of the form: [hostname][:port].  The
             hostname must be the address or hostname of the server.  The
             port overrides the default port, 24800.
@@ -40,22 +40,22 @@ in
         autoStart = mkOption {
           default = true;
           type = types.bool;
-          description = "Whether the Synergy client should be started automatically.";
+          description = lib.mdDoc "Whether the Synergy client should be started automatically.";
         };
       };
 
       server = {
-        enable = mkEnableOption "the Synergy server (send keyboard and mouse events)";
+        enable = mkEnableOption (lib.mdDoc "the Synergy server (send keyboard and mouse events)");
 
         configFile = mkOption {
           type = types.path;
           default = "/etc/synergy-server.conf";
-          description = "The Synergy server configuration file.";
+          description = lib.mdDoc "The Synergy server configuration file.";
         };
         screenName = mkOption {
           type = types.str;
           default = "";
-          description = ''
+          description = lib.mdDoc ''
             Use the given name instead of the hostname to identify
             this screen in the configuration.
           '';
@@ -63,18 +63,18 @@ in
         address = mkOption {
           type = types.str;
           default = "";
-          description = "Address on which to listen for clients.";
+          description = lib.mdDoc "Address on which to listen for clients.";
         };
         autoStart = mkOption {
           default = true;
           type = types.bool;
-          description = "Whether the Synergy server should be started automatically.";
+          description = lib.mdDoc "Whether the Synergy server should be started automatically.";
         };
         tls = {
           enable = mkOption {
             type = types.bool;
             default = false;
-            description = ''
+            description = lib.mdDoc ''
               Whether TLS encryption should be used.
 
               Using this requires a TLS certificate that can be
@@ -87,7 +87,7 @@ in
             type = types.nullOr types.str;
             default = null;
             example = "~/.synergy/SSL/Synergy.pem";
-            description = "The TLS certificate to use for encryption.";
+            description = lib.mdDoc "The TLS certificate to use for encryption.";
           };
         };
       };

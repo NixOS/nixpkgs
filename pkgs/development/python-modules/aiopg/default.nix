@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "aiopg";
-  version = "1.3.3";
+  version = "1.3.5";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GHKsI6JATiwUg+YlGhWPBqtYl+GyXWNiDi/hzPDl2hE=";
+    sha256 = "sha256-ZHfwuDtQm7SlLX3sAoYONgCIWnafOj/L8bXjAdwYDKI=";
   };
 
   propagatedBuildInputs = [

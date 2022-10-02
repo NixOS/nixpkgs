@@ -20,7 +20,7 @@
 }:
 
 mkDerivation {
-  name = "plasma-sdk";
+  pname = "plasma-sdk";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     karchive

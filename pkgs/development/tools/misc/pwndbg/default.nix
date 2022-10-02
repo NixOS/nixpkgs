@@ -22,14 +22,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "pwndbg";
-  version = "2021.06.22";
+  version = "2022.08.30";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "pwndbg";
     repo = "pwndbg";
     rev = version;
-    sha256 = "sha256-8jaWhpn7Q3X7FBHURX6nyOAhu+C113DnC4KBSE3FBuE=";
+    sha256 = "sha256-rMdpNJonzbHyTXbnr6MtlVUmfAfLiCHaVSzuQRhtVpE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

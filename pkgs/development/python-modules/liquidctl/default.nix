@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , installShellFiles
+, setuptools
 , docopt
 , hidapi
 , pyusb
@@ -14,17 +15,21 @@
 
 buildPythonPackage rec {
   pname = "liquidctl";
-  version = "1.8.0";
+  version = "1.10.0";
   disabled = pythonOlder "3.6";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-N0Ebd0zIHFmuiIozkAy4SV3o8rFA1wmrGd+dJo8jdk0=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-2mXWih3LchJ/YsjuwHwWse7SNJYx1vxtovl8vasKV4w=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     docopt

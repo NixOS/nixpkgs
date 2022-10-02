@@ -12,11 +12,7 @@ in
 
   options = {
 
-    security.polkit.enable = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Whether to enable PolKit.";
-    };
+    security.polkit.enable = mkEnableOption (lib.mdDoc "polkit");
 
     security.polkit.extraConfig = mkOption {
       type = types.lines;
@@ -33,7 +29,7 @@ in
             if (subject.local) return "yes";
           });
         '';
-      description =
+      description = lib.mdDoc
         ''
           Any polkit rules to be added to config (in JavaScript ;-). See:
           http://www.freedesktop.org/software/polkit/docs/latest/polkit.8.html#polkit-rules
@@ -44,12 +40,12 @@ in
       type = types.listOf types.str;
       default = [ "unix-group:wheel" ];
       example = [ "unix-user:alice" "unix-group:admin" ];
-      description =
+      description = lib.mdDoc
         ''
           Specifies which users are considered “administrators”, for those
           actions that require the user to authenticate as an
-          administrator (i.e. have an <literal>auth_admin</literal>
-          value).  By default, this is all users in the <literal>wheel</literal> group.
+          administrator (i.e. have an `auth_admin`
+          value).  By default, this is all users in the `wheel` group.
         '';
     };
 

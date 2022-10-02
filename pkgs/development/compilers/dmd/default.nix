@@ -60,24 +60,51 @@ stdenv.mkDerivation rec {
   # Not using patches option to make it easy to patch, for example, dmd and
   # Phobos at same time if that's required
   patchPhase =
-  lib.optionalString (builtins.compareVersions version "2.092.1" <= 0) ''
+
+  # Migrates D1-style operator overloads in DMD source, to allow building with
+  # a newer DMD
+  lib.optionalString (lib.versionOlder version "2.088.0") ''
+    patch -p1 -F3 --directory=dmd -i ${(fetchpatch {
+      url = "https://github.com/dlang/dmd/commit/c4d33e5eb46c123761ac501e8c52f33850483a8a.patch";
+      sha256 = "0rhl9h3hsi6d0qrz24f4zx960cirad1h8mm383q6n21jzcw71cp5";
+    })}
+  ''
+
+  # Fixes C++ tests that compiled on older C++ but not on the current one
+  + lib.optionalString (lib.versionOlder version "2.092.2") ''
     patch -p1 -F3 --directory=druntime -i ${(fetchpatch {
       url = "https://github.com/dlang/druntime/commit/438990def7e377ca1f87b6d28246673bb38022ab.patch";
       sha256 = "0nxzkrd1rzj44l83j7jj90yz2cv01na8vn9d116ijnm85jl007b4";
     })}
+  ''
 
-  '' + postPatch;
+  + postPatch;
+
 
   postPatch =
   ''
     patchShebangs .
 
-  '' + lib.optionalString (version == "2.092.1") ''
-    rm dmd/test/dshell/test6952.d
-  '' + lib.optionalString (builtins.compareVersions "2.092.1" version < 0) ''
-    substituteInPlace dmd/test/dshell/test6952.d --replace "/usr/bin/env bash" "${bash}/bin/bash"
+    # Disable tests that rely on objdump whitespace until fixed upstream:
+    #   https://issues.dlang.org/show_bug.cgi?id=23317
+    rm dmd/test/runnable/cdvecfill.sh
+    rm dmd/test/compilable/cdcmp.d
+  ''
 
-  '' + ''
+  # This one has tested against a hardcoded year, then against a current year on
+  # and off again. It just isn't worth it to patch all the historical versions
+  # of it, so just remove it until the most recent change.
+  + lib.optionalString (lib.versionOlder version "2.091.0") ''
+    rm dmd/test/compilable/ddocYear.d
+  ''
+
+  + lib.optionalString (version == "2.092.1") ''
+    rm dmd/test/dshell/test6952.d
+  '' + lib.optionalString (lib.versionAtLeast version "2.092.2") ''
+    substituteInPlace dmd/test/dshell/test6952.d --replace "/usr/bin/env bash" "${bash}/bin/bash"
+  ''
+
+  + ''
     rm dmd/test/runnable/gdb1.d
     rm dmd/test/runnable/gdb10311.d
     rm dmd/test/runnable/gdb14225.d
@@ -88,7 +115,12 @@ stdenv.mkDerivation rec {
     rm dmd/test/runnable/gdb4149.d
     rm dmd/test/runnable/gdb4181.d
 
-  '' + lib.optionalString stdenv.isLinux ''
+    # Grep'd string changed with gdb 12
+    substituteInPlace druntime/test/exceptions/Makefile \
+      --replace 'in D main (' 'in _Dmain ('
+  ''
+
+  + lib.optionalString stdenv.isLinux ''
     substituteInPlace phobos/std/socket.d --replace "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace phobos/std/socket.d --replace "foreach (name; names)" "names = []; foreach (name; names)"
@@ -173,12 +205,13 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Official reference compiler for the D language";
     homepage = "https://dlang.org/";
     # Everything is now Boost licensed, even the backend.
     # https://github.com/dlang/dmd/pull/6680
     license = licenses.boost;
-    maintainers = with maintainers; [ ThomasMader lionello ];
+    maintainers = with maintainers; [ ThomasMader lionello dukc ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
   };
 }

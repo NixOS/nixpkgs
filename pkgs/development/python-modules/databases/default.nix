@@ -14,7 +14,8 @@
 
 buildPythonPackage rec {
   pname = "databases";
-  version = "0.5.3";
+  version = "0.6.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "sha256-67ykx7HKGgRvJ+GRVEI/e2+x51kfHHFjh/iI4tY+6aE=";
+    hash = "sha256-kHsA9XpolGmtuAGzRTj61igooLG9/LBQyv7TtuqiJ/A=";
   };
 
   propagatedBuildInputs = [

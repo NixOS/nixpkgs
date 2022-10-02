@@ -4,11 +4,8 @@
 , substituteAll
 , accountsservice
 , adwaita-icon-theme
-, cheese
-, clutter
-, clutter-gtk
 , colord
-, colord-gtk
+, colord-gtk4
 , cups
 , docbook-xsl-nons
 , fontconfig
@@ -26,19 +23,17 @@
 , gnome
 , gsettings-desktop-schemas
 , gsound
-, gtk3
+, gtk4
 , ibus
-, libcanberra-gtk3
 , libgnomekbd
 , libgtop
 , libgudev
-, libhandy
+, libadwaita
 , libkrb5
 , libpulseaudio
 , libpwquality
 , librsvg
 , libsecret
-, libsoup
 , libwacom
 , libxml2
 , libxslt
@@ -47,7 +42,7 @@
 , mutter
 , networkmanager
 , networkmanagerapplet
-, libnma
+, libnma-gtk4
 , ninja
 , pkg-config
 , polkit
@@ -68,11 +63,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "41.2";
+  version = "42.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-gnH8azPsJBileDBN0+V9Zl8NfMcGqZqXvkGYSGGP4kg=";
+    sha256 = "sha256-zgrjZQ3ir368sKfh/JkS7dtu/40lfz/lD/iynBk0HH4=";
   };
 
   patches = [
@@ -100,11 +95,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     accountsservice
     adwaita-icon-theme
-    cheese
-    clutter
-    clutter-gtk
     colord
-    colord-gtk
+    colord-gtk4
     libepoxy
     fontconfig
     gdk-pixbuf
@@ -119,19 +111,17 @@ stdenv.mkDerivation rec {
     gnome-user-share # optional, sharing panel
     gsettings-desktop-schemas
     gsound
-    gtk3
+    gtk4
     ibus
-    libcanberra-gtk3
     libgtop
     libgudev
-    libhandy
+    libadwaita
     libkrb5
-    libnma
+    libnma-gtk4
     libpulseaudio
     libpwquality
     librsvg
     libsecret
-    libsoup
     libwacom
     libxml2
     modemmanager
@@ -145,9 +135,19 @@ stdenv.mkDerivation rec {
     upower
   ];
 
-  postPatch = ''
-    chmod +x build-aux/meson/meson_post_install.py # patchShebangs requires executable file
-    patchShebangs build-aux/meson/meson_post_install.py
+  # postPatch = ''
+  #   scriptsToPatch=(
+  #     build-aux/meson/meson_post_install.py
+  #     build-aux/meson/find_xdg_file.py
+  #   )
+  #   # # patchShebangs requires executable file
+  #   # chmod +x "''${scriptsToPatch[@]}"
+  #   # patchShebangs "''${scriptsToPatch[@]}"
+  # '';
+
+  preConfigure = ''
+    # For ITS rules
+    addToSearchPath "XDG_DATA_DIRS" "${polkit.out}/share"
   '';
 
   preFixup = ''

@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hci1pbs3k5icwfyfw5pzcgigbh9vavprxxvakg1xm19n8zb61b3";
   };
 
+  strictDeps = true;
   dontConfigure = true;
   dontBuild = true;
   dontPatch = true;
@@ -24,7 +25,8 @@ stdenv.mkDerivation rec {
     description = "A next-generation plugin manager for zsh";
     homepage = "https://github.com/zplug/zplug";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = [ maintainers.s1341 ];
+    mainProgram = "zplug-env";
+    platforms = platforms.all;
   };
 }

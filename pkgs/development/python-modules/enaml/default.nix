@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools-scm
 , atom
 , ply
 , kiwisolver
@@ -12,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "enaml";
-  version = "0.14.0";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "nucleic";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-u+T3jD/rulfWunWkCa02XKXYvDaB9oAnohgqrJXgtJw=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-FNp/8Fs+06m4kiczkN5lx5Qly0ALLtSmxD4LkkJiqho=";
   };
 
   # qt bindings cannot be found during tests
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     "enaml.workbench"
   ];
 
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [
     atom
     ply
@@ -48,6 +50,7 @@ buildPythonPackage rec {
     cppy
     bytecode
   ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   meta = with lib; {
     homepage = "https://github.com/nucleic/enaml";

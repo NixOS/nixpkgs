@@ -23,12 +23,12 @@
 
 buildPythonPackage rec {
   pname = "gradient";
-  version = "1.9.1";
+  version = "2.0.6";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zimOh4bc9EQGpqMky/etwnAF04onJ2m/KAl29IaAeAY=";
+    hash = "sha256-pqyyNzx2YPP3qmWQbzGd3q2HzCkrWlIVSJZeFrGm9dk=";
   };
 
   postPatch = ''

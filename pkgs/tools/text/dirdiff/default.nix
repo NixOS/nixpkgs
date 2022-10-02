@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       desktopName = "Dirdiff";
       genericName = "Directory Diff Viewer";
       comment = "Diff and merge directory trees";
-      categories = "Development;";
+      categories = [ "Development" ];
     })
   ];
 

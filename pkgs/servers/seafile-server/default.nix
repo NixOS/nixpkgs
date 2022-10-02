@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, pkg-config, python3, autoreconfHook
 , libuuid, sqlite, glib, libevent, libsearpc, openssl, fuse, libarchive, which
-, vala, cmake, oniguruma }:
+, vala, cmake, oniguruma, nixosTests }:
 
 let
   # seafile-server relies on a specific version of libevhtp.
@@ -10,13 +10,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "seafile-server";
-  version = "8.0.7";
+  version = "9.0.6";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-server";
-    rev = "27dac89bb3a81c5acc3f764ce92134eb357ea64b";
-    sha256 = "1h2hxvv0l5m9nbkdyjpznb7ddk8hb8hhwj8b2lx6aqbvp8gll9q7";
+    rev = "881c270aa8d99ca6648e7aa1458fc283f38e6f31"; # using a fixed revision because upstream may re-tag releases :/
+    sha256 = "sha256-M1jIysirtl1KKyEvScOIshLvSa5vjxTdFEARgy8bLTc=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -41,6 +41,10 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/seafile/sql
     cp -r scripts/sql $out/share/seafile
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) seafile;
+  };
 
   meta = with lib; {
     description = "File syncing and sharing software with file encryption and group sharing, emphasis on reliability and high performance";

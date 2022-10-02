@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "new-session-manager";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxaudio";
     repo = "new-session-manager";
     rev = "v${version}";
-    sha256 = "sha256-hcw+Fn5s1S786eqmR95RmkFcIaRzWaH38YE9DXVQJU0=";
+    sha256 = "sha256-QVykRYXToeVXr7pYQy2afgEAlXrQnm68+xEUZhd+FkY=";
   };
 
   nativeBuildInputs = [ meson pkg-config ninja ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = with lib; {
-    homepage = "https://linuxaudio.github.io/new-session-manager/";
+    homepage = "https://new-session-manager.jackaudio.org/";
     description = "A session manager designed for audio applications.";
     maintainers = [ maintainers._6AA4FD ];
     license = licenses.gpl3Plus;

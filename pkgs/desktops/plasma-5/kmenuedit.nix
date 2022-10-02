@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "kmenuedit";
+  pname = "kmenuedit";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kdbusaddons khotkeys ki18n kiconthemes kio kxmlgui sonnet

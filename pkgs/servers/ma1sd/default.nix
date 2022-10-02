@@ -64,6 +64,10 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "a federated matrix identity server; fork of mxisd";
     homepage = "https://github.com/ma1uta/ma1sd";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ mguentner ];
     platforms = platforms.all;

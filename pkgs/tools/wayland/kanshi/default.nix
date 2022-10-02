@@ -1,29 +1,35 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchFromSourcehut
 , meson
 , ninja
 , pkg-config
 , scdoc
 , wayland
+, wayland-scanner
+, libvarlink
 }:
 
 stdenv.mkDerivation rec {
   pname = "kanshi";
-  version = "1.2.0";
+  version = "1.3.0";
 
-  src = fetchFromGitHub {
-    owner = "emersion";
+  src = fetchFromSourcehut {
+    owner = "~emersion";
     repo = "kanshi";
     rev = "v${version}";
-    sha256 = "sha256-RVMeS2qEjTYK6r7IwMeFSqfRpKR8di2eQXhewfhTnYI=";
+    sha256 = "kqTRJhLd9vLGAPO5U5cWeZgzWzne+0Cr4TIS0ciZSGk=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config scdoc ];
-  buildInputs = [ wayland ];
+  strictDeps = true;
+  depsBuildBuild = [
+    pkg-config
+  ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
+  buildInputs = [ wayland libvarlink ];
 
   meta = with lib; {
-    homepage = "https://github.com/emersion/kanshi";
+    homepage = "https://sr.ht/~emersion/kanshi";
     description = "Dynamic display configuration tool";
     longDescription = ''
       kanshi allows you to define output profiles that are automatically enabled
@@ -34,7 +40,7 @@ stdenv.mkDerivation rec {
       wlr-output-management protocol.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ balsoft ];
+    maintainers = with maintainers; [ balsoft danielbarter ];
     platforms = platforms.linux;
   };
 }

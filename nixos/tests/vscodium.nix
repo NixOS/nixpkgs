@@ -3,11 +3,10 @@ let
     wayland = { pkgs, ... }: {
       imports = [ ./common/wayland-cage.nix ];
 
-      services.cage.program = ''
-        ${pkgs.vscodium}/bin/codium \
-          --enable-features=UseOzonePlatform \
-          --ozone-platform=wayland
-      '';
+      services.cage.program = "${pkgs.vscodium}/bin/codium";
+
+      environment.variables.NIXOS_OZONE_WL = "1";
+      environment.variables.DISPLAY = "do not use";
 
       fonts.fonts = with pkgs; [ dejavu_fonts ];
     };
@@ -33,6 +32,14 @@ let
         maintainers = [ synthetica turion ];
       };
       enableOCR = true;
+
+      # testScriptWithTypes:55: error: Item "function" of
+      # "Union[Callable[[Callable[..., Any]], ContextManager[Any]], ContextManager[Any]]"
+      # has no attribute "__enter__"
+      #     with codium_running:
+      #          ^
+      skipTypeCheck = true;
+
       testScript = ''
         @polling_condition
         def codium_running():

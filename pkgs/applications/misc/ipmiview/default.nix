@@ -13,12 +13,12 @@
 
 stdenv.mkDerivation rec {
   pname = "IPMIView";
-  version = "2.19.0";
-  buildVersion = "210401";
+  version = "2.20.0";
+  buildVersion = "220309";
 
   src = fetchurl {
     url = "https://www.supermicro.com/wftp/utility/IPMIView/Linux/IPMIView_${version}_build.${buildVersion}_bundleJRE_Linux_x64.tar.gz";
-    sha256 = "sha256-6hxOu/Wkcrp9MaMYlxOR2DZW21Wi3BIFZp3Vm8NRBWs=";
+    hash = "sha256-qtklBMuK0jb9Ye0IkYM2WYFRMAfZg9tk08a1JQ64cjA=";
   };
 
   nativeBuildInputs = [ patchelf makeWrapper ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     exec = "IPMIView";
     desktopName = name;
     genericName = "Supermicro BMC manager";
-    categories = "Network";
+    categories = [ "Network" ];
   };
 
   installPhase = ''
@@ -72,6 +72,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.unfree;
     maintainers = with maintainers; [ vlaci ];
     platforms = [ "x86_64-linux" "i686-linux" ];

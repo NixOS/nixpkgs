@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
 , ninja
@@ -29,11 +30,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-maps";
-  version = "41.2";
+  version = "42.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-gYIbTK/GQc1QDXOzMMY85aBahPBDBxbWPoizyuqs/Qw=";
+    sha256 = "sha256-5FZGf6zzyP0QyThrXnTEPZWVrZ+3Ulf32gFK+YPWnNE=";
   };
 
   doCheck = true;
@@ -55,7 +56,6 @@ stdenv.mkDerivation rec {
     geocode-glib
     gjs
     gnome-online-accounts
-    gnome.adwaita-icon-theme
     gobject-introspection
     gsettings-desktop-schemas
     gtk3
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     # entry point to the wrapped binary we get back to a wrapped
     # binary.
     substituteInPlace "data/org.gnome.Maps.service.in" \
-        --replace "Exec=@pkgdatadir@/org.gnome.Maps" \
+        --replace "Exec=@pkgdatadir@/@app-id@" \
                   "Exec=$out/bin/gnome-maps"
   '';
 

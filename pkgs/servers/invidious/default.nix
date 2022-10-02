@@ -1,24 +1,28 @@
-{ lib, crystal, fetchFromGitHub, librsvg, pkg-config, libxml2, openssl, sqlite, lsquic, nixosTests }:
+{ lib, stdenv, crystal, fetchFromGitHub, librsvg, pkg-config, libxml2, openssl, shards, sqlite, lsquic, videojs, nixosTests }:
 let
-  # When updating, always update the following:
-  #  * the git revision
-  #  * the version attribute
-  #  * the source hash (sha256)
-  # If the shards.lock file changed, also the following:
-  #  * shards.nix (by running `crystal2nix` in invidious’ source tree)
-  #  * If the lsquic.cr dependency changed: lsquic in lsquic.nix (version, sha256)
-  #  * If the lsquic version changed: boringssl' in lsquic.nix (version, sha256)
-  rev = "21879da80d2dfa97e789a13b90e82e466c4854e3";
+  # All versions, revisions, and checksums are stored in ./versions.json.
+  # The update process is the following:
+  #   * pick the latest commit
+  #   * update .invidious.rev, .invidious.version, and .invidious.sha256
+  #   * prefetch the videojs dependencies with scripts/fetch-player-dependencies.cr
+  #     and update .videojs.sha256 (they are normally fetched during build
+  #     but nix's sandboxing does not allow that)
+  #   * if shard.lock changed
+  #     * recreate shards.nix by running crystal2nix
+  #     * update lsquic and boringssl if necessarry, lsquic.cr depends on
+  #       the same version of lsquic and lsquic requires the boringssl
+  #       commit mentioned in its README
+  versions = builtins.fromJSON (builtins.readFile ./versions.json);
 in
 crystal.buildCrystalPackage rec {
   pname = "invidious";
-  version = "unstable-2021-11-08";
+  inherit (versions.invidious) version;
 
   src = fetchFromGitHub {
     owner = "iv-org";
     repo = pname;
-    inherit rev;
-    sha256 = "0jvnwjdh2l0hxfvzim00r3zbs528bb93y1nk0bjrbbrcfv5cn5ss";
+    fetchSubmodules = true;
+    inherit (versions.invidious) rev sha256;
   };
 
   postPatch =
@@ -33,13 +37,15 @@ crystal.buildCrystalPackage rec {
       assetCommitTemplate = ''{{ "#{`git rev-list HEAD --max-count=1 --abbrev-commit -- assets`.strip}" }}'';
     in
     ''
+      for d in ${videojs}/*; do ln -s "$d" assets/videojs; done
+
       # Use the version metadata from the derivation instead of using git at
       # build-time
       substituteInPlace src/invidious.cr \
           --replace ${lib.escapeShellArg branchTemplate} '"master"' \
-          --replace ${lib.escapeShellArg commitTemplate} '"${lib.substring 0 7 rev}"' \
+          --replace ${lib.escapeShellArg commitTemplate} '"${lib.substring 0 7 versions.invidious.rev}"' \
           --replace ${lib.escapeShellArg versionTemplate} '"${lib.replaceChars ["-"] ["."] (lib.substring 9 10 version)}"' \
-          --replace ${lib.escapeShellArg assetCommitTemplate} '"${lib.substring 0 7 rev}"'
+          --replace ${lib.escapeShellArg assetCommitTemplate} '"${lib.substring 0 7 versions.invidious.rev}"'
 
       # Patch the assets and locales paths to be absolute
       substituteInPlace src/invidious.cr \
@@ -48,19 +54,22 @@ crystal.buildCrystalPackage rec {
           --replace 'File.read("locales/' 'File.read("${placeholder "out"}/share/invidious/locales/'
 
       # Reference sql initialisation/migration scripts by absolute path
-      substituteInPlace src/invidious/helpers/helpers.cr \
+      substituteInPlace src/invidious/database/base.cr \
             --replace 'config/sql' '${placeholder "out"}/share/invidious/config/sql'
 
-      substituteInPlace src/invidious/users.cr \
+      substituteInPlace src/invidious/user/captcha.cr \
           --replace 'Process.run(%(rsvg-convert' 'Process.run(%(${lib.getBin librsvg}/bin/rsvg-convert'
     '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config shards ];
   buildInputs = [ libxml2 openssl sqlite ];
 
   format = "crystal";
   shardsFile = ./shards.nix;
-  crystalBinaries.invidious.src = "src/invidious.cr";
+  crystalBinaries.invidious = {
+    src = "src/invidious.cr";
+    options = [ "--release" "--progress" "--verbose" "--no-debug" "-Dskip_videojs_download" ];
+  };
 
   postConfigure = ''
     # lib includes nix store paths which can’t be patched, so the links have to
@@ -88,12 +97,17 @@ crystal.buildCrystalPackage rec {
     INVIDIOUS_CONFIG="database_url: sqlite3:///dev/null" $out/bin/invidious --help
   '';
 
-  passthru.tests = { inherit (nixosTests) invidious; };
+  passthru = {
+    inherit lsquic;
+    tests = { inherit (nixosTests) invidious; };
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "An open source alternative front-end to YouTube";
     homepage = "https://invidious.io/";
     license = licenses.agpl3;
     maintainers = with maintainers; [ infinisil sbruder ];
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

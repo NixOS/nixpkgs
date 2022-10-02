@@ -59,6 +59,34 @@ let
         } // attrs.meta;
       });
 
+    format = buildHaxeLib {
+      libname = "format";
+      version = "3.5.0";
+      sha256 = "sha256-5vZ7b+P74uGx0Gb7X/+jbsx5048dO/jv5nqCDtw5y/A=";
+      meta.description = "A Haxe Library for supporting different file formats";
+    };
+
+    heaps = buildHaxeLib {
+      libname = "heaps";
+      version = "1.9.1";
+      sha256 = "sha256-i5EIKnph80eEEHvGXDXhIL4t4+RW7OcUV5zb2f3ItlI=";
+      meta.description = "The GPU Game Framework";
+    };
+
+    hlopenal = buildHaxeLib {
+      libname = "hlopenal";
+      version = "1.5.0";
+      sha256 = "sha256-mJWFGBJPPAhVwsB2HzMfk4szSyjMT4aw543YhVqIan4=";
+      meta.description = "OpenAL support for Haxe/HL";
+    };
+
+    hlsdl = buildHaxeLib {
+      libname = "hlsdl";
+      version = "1.10.0";
+      sha256 = "sha256-kmC2EMDy1mv0jFjwDj+m0CUvKal3V7uIGnMxJBRYGms=";
+      meta.description = "SDL/GL support for Haxe/HL";
+    };
+
     hxcpp = buildHaxeLib rec {
       libname = "hxcpp";
       version = "4.1.15";

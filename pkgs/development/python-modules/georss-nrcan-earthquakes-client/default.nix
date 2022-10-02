@@ -8,14 +8,16 @@
 
 buildPythonPackage rec {
   pname = "georss-nrcan-earthquakes-client";
-  version = "0.3";
+  version = "0.4";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-nrcan-earthquakes-client";
     rev = "v${version}";
-    sha256 = "1brn6ycsw3d3znbqi2w2cxjw8hyfb44p2lra18rx2gyvgnkxg19l";
+    hash = "sha256-FFm37+dCkdoZXgvAjYhcHOYFf0oQ37bxJb7vzbWDTro=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +28,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "georss_nrcan_earthquakes_client" ];
+  pythonImportsCheck = [
+    "georss_nrcan_earthquakes_client"
+  ];
 
   meta = with lib; {
     description = "Python library for accessing Natural Resources Canada Earthquakes feed";

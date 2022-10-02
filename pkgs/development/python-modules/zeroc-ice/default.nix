@@ -1,12 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, openssl, bzip2 }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, openssl, bzip2 }:
 
 buildPythonPackage rec {
   pname = "zeroc-ice";
-  version = "3.7.6";
+  version = "3.7.8";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "e8d8a7828e4994545bf57059bd0a0d431d387d31cc4af2eb5eeb93ef28c2d827";
+    sha256 = "sha256-kodRHIkMXdFUBGNVRtSyjbVqGQRxPaHqgp6ddFT5ZIY=";
   };
 
   buildInputs = [ openssl bzip2 ];
@@ -14,6 +14,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "Ice" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://zeroc.com/";
     license = licenses.gpl2;
     description = "Comprehensive RPC framework with support for Python, C++, .NET, Java, JavaScript and more.";

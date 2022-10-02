@@ -1,23 +1,47 @@
-{ lib, stdenv, fetchurl, libusb-compat-0_1, readline }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, libusb-compat-0_1
+, readline
+, cmake
+, pkg-config
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libnfc";
-  version = "1.7.1";
+  version = "1.8.0";
 
-  src = fetchurl {
-    url = "http://dl.bintray.com/nfc-tools/sources/libnfc-1.7.1.tar.bz2";
-    sha256 = "0wj0iwwcpmpalyk61aa7yc6i4p9hgdajkrgnlswgk0vnwbc78pll";
+  src = fetchFromGitHub {
+    owner = "nfc-tools";
+    repo = pname;
+    rev = "libnfc-${version}";
+    sha256 = "5gMv/HajPrUL/vkegEqHgN2d6Yzf01dTMrx4l34KMrQ=";
   };
 
-  buildInputs = [ libusb-compat-0_1 readline ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  configureFlags = [ "sysconfdir=/etc" ];
+  buildInputs = [
+    libusb-compat-0_1
+    readline
+  ];
+
+  configureFlags = [
+    "sysconfdir=/etc"
+  ];
+
+  cmakeFlags = lib.optionals stdenv.isDarwin [
+    "-DLIBNFC_DRIVER_PN532_I2C=OFF"
+    "-DLIBNFC_DRIVER_PN532_SPI=OFF"
+  ];
 
   meta = with lib; {
-    description = "Open source library libnfc for Near Field Communication";
-    license = licenses.gpl3;
+    description = "Library for Near Field Communication (NFC)";
     homepage = "https://github.com/nfc-tools/libnfc";
-    maintainers = with maintainers; [offline];
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ offline ];
     platforms = platforms.unix;
   };
 }

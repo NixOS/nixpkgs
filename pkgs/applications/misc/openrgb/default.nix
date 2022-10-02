@@ -26,6 +26,9 @@ mkDerivation rec {
     mkdir -p $out/etc/udev/rules.d
     cp 60-openrgb.rules $out/etc/udev/rules.d
 
+    install -Dm444 -t "$out/share/applications" qt/OpenRGB.desktop
+    install -Dm444 -t "$out/share/icons/hicolor/128x128/apps" qt/OpenRGB.png
+
     runHook postInstall
   '';
 

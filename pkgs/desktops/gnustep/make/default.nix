@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
     "GNUSTEP_INSTALLATION_DOMAIN=SYSTEM"
   ];
 
-  buildInputs = [ clang which libobjc ];
+  nativeBuildInputs = [ clang which ];
+  buildInputs = [ libobjc ];
+
   patches = [ ./fixup-paths.patch ];
   setupHook = ./setup-hook.sh;
   meta = {

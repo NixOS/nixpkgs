@@ -21,6 +21,7 @@ let
     homepage    = "https://tamarin-prover.github.io";
     description = "Security protocol verification in the symbolic model";
     maintainers = [ lib.maintainers.thoughtpolice ];
+    hydraPlatforms = lib.platforms.linux; # maude is broken on darwin
   };
 
   # tamarin use symlinks to the LICENSE and Setup.hs files, so for these sublibraries
@@ -79,6 +80,8 @@ mkDerivation (common "tamarin-prover" src // {
     # so that the package can be used as a vim plugin to install syntax coloration
     install -Dt $out/share/vim-plugins/tamarin-prover/syntax/ etc/syntax/spthy.vim
     install etc/filetype.vim -D $out/share/vim-plugins/tamarin-prover/ftdetect/tamarin.vim
+    # Emacs SPTHY major mode
+    install -Dt $out/share/emacs/site-lisp etc/spthy-mode.el
   '';
 
   checkPhase = "./dist/build/tamarin-prover/tamarin-prover test";

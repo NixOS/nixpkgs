@@ -1,54 +1,34 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
-, pkg-config
 , meson
 , ninja
-, vala
-, desktop-file-utils
+, pkg-config
 , python3
-, gettext
-, libxml2
-, gtk3
+, vala
+, wrapGAppsHook
+, glib
 , granite
+, gst_all_1
+, gtk3
+, libcanberra
 , libgee
 , libhandy
-, gst_all_1
-, libcanberra
-, clutter-gtk
-, clutter-gst
-, elementary-icon-theme
-, appstream
-, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-camera";
-  version = "6.0.3";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "camera";
     rev = version;
-    sha256 = "sha256-xIv+mOlZV58XD0Z6Vc2wA1EQUxT5BaQ0zhYc9v+ne1w=";
+    sha256 = "sha256-866Iky0GKQv2yUJVNY1McgXGeup5WqONN3gvoOlilGU=";
   };
 
-  patches = [
-    # Fix build with meson 0.61
-    # https://github.com/elementary/camera/pull/216
-    (fetchpatch {
-      url = "https://github.com/elementary/camera/commit/ead143b7e3246c5fa9bb37c95d491fb07cea9e04.patch";
-      sha256 = "sha256-2zGigUi6DpjJx8SEvAE3Q3jrm7MggOvLc72lAPMPvs4=";
-    })
-  ];
-
   nativeBuildInputs = [
-    appstream
-    desktop-file-utils
-    gettext
-    libxml2
     meson
     ninja
     pkg-config
@@ -58,19 +38,21 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    clutter-gst
-    clutter-gtk
-    elementary-icon-theme
+    glib
     granite
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
-    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
-    gst_all_1.gstreamer
     gtk3
     libcanberra
     libgee
     libhandy
-  ];
+  ] ++ (with gst_all_1; [
+    gst-plugins-bad
+    gst-plugins-base
+    # gtkSupport needed for gtksink
+    # https://github.com/elementary/camera/issues/181
+    (gst-plugins-good.override { gtkSupport = true; })
+    gst-plugins-ugly
+    gstreamer
+  ]);
 
   postPatch = ''
     chmod +x meson/post_install.py

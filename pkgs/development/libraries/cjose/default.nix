@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cjose";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
-    owner = "cisco";
+    owner = "zmartzone";
     repo = "cjose";
-    rev = version;
-    sha256 = "1msyjwmylb5c7jc16ryx3xb9cdwx682ihsm0ni766y6dfwx8bkhp";
+    rev = "v${version}";
+    sha256 = "sha256-FHKuaf4Gg3On7d3UBbGD8k1gA8kGsCOaWtLMohr5woA=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/cisco/cjose";
-    changelog = "https://github.com/cisco/cjose/blob/${version}/CHANGELOG.md";
-    description = "C library for Javascript Object Signing and Encryption";
+    homepage = "https://github.com/zmartzone/cjose";
+    changelog = "https://github.com/zmartzone/cjose/blob/${version}/CHANGELOG.md";
+    description = "C library for Javascript Object Signing and Encryption. This is a maintained fork of the original project";
     license = licenses.mit;
     maintainers = with maintainers; [ midchildan ];
     platforms = platforms.all;

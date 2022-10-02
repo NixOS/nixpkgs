@@ -3,7 +3,7 @@
          xml:id="chap-pantheon">
  <title>Pantheon Desktop</title>
  <para>
-  Pantheon is the desktop environment created for the elementary OS distribution. It is written from scratch in Vala, utilizing GNOME technologies with GTK 3 and Granite.
+  Pantheon is the desktop environment created for the elementary OS distribution. It is written from scratch in Vala, utilizing GNOME technologies with GTK and Granite.
  </para>
  <section xml:id="sec-pantheon-enable">
   <title>Enabling Pantheon</title>
@@ -89,9 +89,9 @@ switchboard-with-plugs.override {
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry xml:id="sec-pantheon-faq-gnome3-and-pantheon">
+   <varlistentry xml:id="sec-pantheon-faq-gnome-and-pantheon">
     <term>
-     I cannot enable both GNOME 3 and Pantheon.
+     I cannot enable both GNOME and Pantheon.
     </term>
     <listitem>
      <para>
@@ -105,10 +105,10 @@ switchboard-with-plugs.override {
     </term>
     <listitem>
      <para>
-      AppCenter has been available since 20.03, but it is of little use. This is because there is no functioning PackageKit backend for Nix 2.0. Starting from 21.11, the Flatpak backend should work so you can install some Flatpak applications using it. See this <link xlink:href="https://github.com/NixOS/nixpkgs/issues/70214">issue</link>.
+      AppCenter has been available since 20.03. Starting from 21.11, the Flatpak backend should work so you can install some Flatpak applications using it. However, due to missing appstream metadata, the Packagekit backend does not function currently. See this <link xlink:href="https://github.com/NixOS/nixpkgs/issues/15932">issue</link>.
      </para>
      <para>
-      To use AppCenter on NixOS, add <literal>pantheon.appcenter</literal> to <xref linkend="opt-environment.systemPackages" />, <link linkend="module-services-flatpak">enable Flatpak support</link> and optionally add the <literal>appcenter</literal> Flatpak remote:
+      If you are using Pantheon, AppCenter should be installed by default if you have <link linkend="module-services-flatpak">Flatpak support</link> enabled. If you also wish to add the <literal>appcenter</literal> Flatpak remote:
      </para>
 <screen>
 <prompt>$ </prompt>flatpak remote-add --if-not-exists appcenter https://flatpak.elementary.io/repo.flatpakrepo

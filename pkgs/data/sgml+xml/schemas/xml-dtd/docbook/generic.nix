@@ -1,9 +1,10 @@
-{ lib, stdenv, unzip, src, name, postInstall ? "true", meta ? {}, findXMLCatalogs }:
+{ lib, stdenv, unzip, src, version, postInstall ? "true", findXMLCatalogs }:
 
 stdenv.mkDerivation {
-  inherit src name postInstall;
+  inherit version src postInstall;
+  pname = "docbook-xml";
 
-  nativeBuildInputs = [unzip];
+  nativeBuildInputs = [ unzip ];
   propagatedNativeBuildInputs = [ findXMLCatalogs ];
 
   unpackPhase = ''
@@ -17,7 +18,8 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = meta // {
+  meta = {
+    branch = version;
     platforms = lib.platforms.unix;
   };
 }

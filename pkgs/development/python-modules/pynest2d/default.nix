@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python3, cmake
+{ lib, buildPythonPackage, fetchFromGitHub, python, cmake
 , libnest2d, sip_4, clipper }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   CLIPPER_PATH = "${clipper.out}";
 
   postPatch = ''
-     sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python3.sitePackages}#' cmake/SIPMacros.cmake
+     sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
    '';
 
   meta = with lib; {

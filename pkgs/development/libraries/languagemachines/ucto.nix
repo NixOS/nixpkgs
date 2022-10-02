@@ -9,12 +9,12 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "ucto-${release.version}";
+  pname = "ucto";
   version = release.version;
   src = fetchurl { inherit (release) url sha256;
                    name = "ucto-${release.version}.tar.gz"; };
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ automake autoconf bzip2 libtool autoconf-archive
+  nativeBuildInputs = [ pkg-config automake autoconf ];
+  buildInputs = [ bzip2 libtool autoconf-archive
                   icu libtar libxml2
                   languageMachines.ticcutils
                   languageMachines.libfolia

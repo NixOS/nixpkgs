@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , aiohttp
 , dask
 , distributed
@@ -9,12 +9,17 @@
 buildPythonPackage rec {
   pname = "dask-gateway";
   # update dask-gateway lock step with dask-gateway-server
-  version = "0.9.0";
+  version = "2022.6.1";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "743f3b88dabe7d1503ac08aadf399eb9205df786b12c5175ea2e10c6ded7df22";
+  src = fetchFromGitHub {
+    owner = "dask";
+    repo = "dask-gateway";
+    rev = "refs/tags/${version}";
+    hash = "sha256-PsagZdEPpeuZH9hFL98xB5z6zOdd4Cx/skGQ0eOYkCA=";
   };
+
+  sourceRoot = "source/dask-gateway";
 
   propagatedBuildInputs = [
     aiohttp
@@ -31,6 +36,6 @@ buildPythonPackage rec {
     description = "A client library for interacting with a dask-gateway server";
     homepage = "https://gateway.dask.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

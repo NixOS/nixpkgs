@@ -5,7 +5,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
   meta = with pkgs.lib.maintainers; {
     maintainers = [ bbigras ];
   };
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     services.sssd.enable = true;
   };
 

@@ -8,6 +8,7 @@
 , libdrm # Not documented
 , pkg-config
 , enableFb ? false
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -42,6 +43,8 @@ stdenv.mkDerivation rec {
   installFlags = [
     "PREFIX=${placeholder "out"}"
   ];
+
+  passthru.tests.test = nixosTests.terminal-emulators.ctx;
 
   meta = with lib; {
     homepage = "https://ctx.graphics/";

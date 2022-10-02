@@ -1,12 +1,13 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, ncurses, importlib-metadata }:
+{ stdenv, lib, buildPythonPackage, pythonOlder, fetchPypi, ncurses, importlib-metadata }:
 
 buildPythonPackage rec {
-  pname = "cx_Freeze";
-  version = "6.9";
+  pname = "cx-freeze";
+  version = "6.11.1";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "673aa3199af2ef87fc03a43a30e5d78b27ced2cedde925da89c55b5657da267b";
+    pname = "cx_Freeze";
+    inherit version;
+    sha256 = "sha256-jzowyeM5TykGVeNG07RgkQZWswrGNHqHSZu1rTZcbnw=";
   };
 
   disabled = pythonOlder "3.5";
@@ -17,14 +18,18 @@ buildPythonPackage rec {
   ];
 
   # timestamp need to come after 1980 for zipfiles and nix store is set to epoch
-  prePatch = ''
+  postPatch = ''
     substituteInPlace cx_Freeze/freezer.py --replace "os.stat(module.file).st_mtime" "time.time()"
+
+    substituteInPlace setup.cfg \
+      --replace "setuptools>=59.0.1,<=60.10.0" "setuptools>=59.0.1"
   '';
 
   # fails to find Console even though it exists on python 3.x
   doCheck = false;
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A set of scripts and modules for freezing Python scripts into executables";
     homepage = "https://marcelotduarte.github.io/cx_Freeze/";
     license = licenses.psfl;

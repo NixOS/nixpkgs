@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "hid";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9hsDgvN6M0vIuoYEvIS5SHXuT1lPu6+CssOz6CeIP8E=";
+    sha256 = "sha256-HpVOf3q5t8nfx421lQRpLBfbO3EklJK5drFSW5fbsOg=";
   };
 
   propagatedBuildInputs = [ hidapi ];

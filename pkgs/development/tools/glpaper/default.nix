@@ -3,14 +3,14 @@
 
 stdenv.mkDerivation rec {
   pname = "glpaper";
-  version = "unstable-2020-10-11";
+  version = "unstable-2022-05-15";
 
   src = fetchFromSourcehut {
     owner = "~scoopta";
     repo = pname;
     vc = "hg";
-    rev = "9e7ec7cd270af330039c395345c7d23c04682267";
-    sha256 = "sha256-yBHRg6eg+PK/ixuM0MBty3RJY9qcemr3Dt+8SAitqnk=";
+    rev = "f89e60b7941fb60f1069ed51af9c5bb4917aab35";
+    sha256 = "sha256-E7FKjt3NL0aAEibfaq+YS2IVvpjNjInA+Rs8SU63/3M=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];

@@ -1,15 +1,18 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib
+, python3Packages
+, fetchFromGitHub
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.2.8";
+  version = "3.3.30";
 
   # Fetch from GitHub in order to use `requirements.in`
   src = fetchFromGitHub {
     owner = "flexget";
     repo = "flexget";
-    rev = "v${version}";
-    sha256 = "0hr19f678pyd7mnzclfv7imh9s2m01k92dza1csyfacclvri8m07";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LwMbqweRtH0l+89pRns6VbQgWOy3j34i76IwYdOUW0M=";
   };
 
   postPatch = ''
@@ -18,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     ln -sf requirements.in requirements.txt
 
     # remove dependency constraints
-    sed 's/==\([0-9]\.\?\)\+//' -i requirements.txt
+    sed 's/[~<>=].*//' -i requirements.txt
 
     # "zxcvbn-python" was renamed to "zxcvbn", and we don't have the former in
     # nixpkgs. See: https://github.com/NixOS/nixpkgs/issues/62110
@@ -32,6 +35,8 @@ python3Packages.buildPythonApplication rec {
     # See https://github.com/Flexget/Flexget/blob/master/requirements.in
     APScheduler
     beautifulsoup4
+    click
+    colorama
     feedparser
     guessit
     html5lib
@@ -39,6 +44,7 @@ python3Packages.buildPythonApplication rec {
     jsonschema
     loguru
     more-itertools
+    packaging
     psutil
     pynzb
     PyRSS2Gen
@@ -59,6 +65,7 @@ python3Packages.buildPythonApplication rec {
     flask-restx
     flask
     pyparsing
+    werkzeug
     zxcvbn
 
     # Plugins requirements

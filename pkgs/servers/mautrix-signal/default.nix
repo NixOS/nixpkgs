@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-signal";
-  version = "unstable-2022-01-13";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
-    rev = "e015852a9969ac169e215c80872199ba3f3d838f";
-    sha256 = "sha256-7+0JubSGmQDMr7n1PK6i7homR1WknMz9ikC4164XmMo=";
+    rev = "v${version}";
+    sha256 = "sha256-khtvfZbqBRQyHteil+H/b3EktjRet6DRcKMHmCClNq0=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonPackage rec {
     prometheus-client
     pycryptodome
     python-olm
-    python_magic
+    python-magic
     qrcode
     ruamel-yaml
     unpaddedbase64
@@ -30,6 +30,12 @@ python3.pkgs.buildPythonPackage rec {
   ];
 
   doCheck = false;
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "asyncpg>=0.20,<0.26" "asyncpg>=0.20" \
+      --replace "mautrix>=0.16.0,<0.17" "mautrix>=0.16.0"
+  '';
 
   postInstall = ''
     mkdir -p $out/bin
@@ -41,8 +47,8 @@ python3.pkgs.buildPythonPackage rec {
     " > $out/bin/mautrix-signal
     chmod +x $out/bin/mautrix-signal
     wrapProgram $out/bin/mautrix-signal \
-      --set PATH ${python3}/bin \
-      --set PYTHONPATH "$PYTHONPATH"
+      --prefix PATH : "${python3}/bin" \
+      --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
   meta = with lib; {

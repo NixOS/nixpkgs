@@ -48,13 +48,9 @@ in
         genericName = "CAD Application";
         exec = "antimony %f";
         icon = "antimony";
-        terminal = "false";
-        categories = "Graphics;Science;Engineering";
-        mimeType = "application/x-extension-sb;application/x-antimony;";
-        extraEntries = ''
-          StartupWMClass=antimony
-          Version=1.0
-        '';
+        categories = [ "Graphics" "Science" "Engineering" ];
+        mimeTypes = [ "application/x-extension-sb" "application/x-antimony" ];
+        startupWMClass = "antimony";
       })
     ];
 

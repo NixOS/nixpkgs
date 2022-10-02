@@ -67,6 +67,9 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     re-assert
+  ] ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
+    # Optional test dependency. Depends indirectly on pyopenssl, which is
+    # broken on aarch64-darwin.
     trustme
   ];
 
@@ -75,6 +78,10 @@ buildPythonPackage rec {
     "test_client_session_timeout_zero"
     "test_mark_formdata_as_processed"
     "test_requote_redirect_url_default"
+    # Disable tests that trigger deprecation warnings in pytest
+    "test_async_with_session"
+    "test_session_close_awaitable"
+    "test_close_run_until_complete_not_deprecated"
   ] ++ lib.optionals stdenv.is32bit [
     "test_cookiejar"
   ] ++ lib.optionals stdenv.isDarwin [
@@ -92,7 +99,10 @@ buildPythonPackage rec {
   # Probably because we run `python -m pytest` instead of `pytest` in the hook.
   preCheck = ''
     cd tests
-  '';
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Work around "OSError: AF_UNIX path too long"
+    export TMPDIR="/tmp"
+   '';
 
   meta = with lib; {
     description = "Asynchronous HTTP Client/Server for Python and asyncio";

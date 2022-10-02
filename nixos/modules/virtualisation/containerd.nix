@@ -19,11 +19,11 @@ in
 {
 
   options.virtualisation.containerd = with lib.types; {
-    enable = lib.mkEnableOption "containerd container runtime";
+    enable = lib.mkEnableOption (lib.mdDoc "containerd container runtime");
 
     configFile = lib.mkOption {
       default = null;
-      description = ''
+      description = lib.mdDoc ''
        Path to containerd config file.
        Setting this option will override any configuration applied by the settings option.
       '';
@@ -33,14 +33,14 @@ in
     settings = lib.mkOption {
       type = settingsFormat.type;
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         Verbatim lines to add to containerd.toml
       '';
     };
 
     args = lib.mkOption {
       default = {};
-      description = "extra args to append to the containerd cmdline";
+      description = lib.mdDoc "extra args to append to the containerd cmdline";
       type = attrsOf str;
     };
   };
@@ -53,6 +53,7 @@ in
     virtualisation.containerd = {
       args.config = toString containerdConfigChecked;
       settings = {
+        version = 2;
         plugins."io.containerd.grpc.v1.cri" = {
          containerd.snapshotter =
            lib.mkIf config.boot.zfs.enabled (lib.mkOptionDefault "zfs");

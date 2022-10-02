@@ -1,23 +1,26 @@
 { lib
 , stdenv
 , fetchurl
+, withJitSealloc ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "pcre2";
-  version = "10.37";
+  version = "10.40";
+
   src = fetchurl {
     url = "https://github.com/PhilipHazel/pcre2/releases/download/pcre2-${version}/pcre2-${version}.tar.bz2";
-    hash = "sha256-TZWpbouAUpiTtFYr4SZI15i5V7G6Gq45YGu8KrlW0nA=";
+    hash = "sha256-FOS4PEeDkz3BfpZDGOYyT3yuG8ddjzx5vGlp8AwVnWg=";
   };
 
-  # Disable jit on Apple Silicon, https://github.com/zherczeg/sljit/issues/51
   configureFlags = [
     "--enable-pcre2-16"
     "--enable-pcre2-32"
-  ] ++ lib.optional (!stdenv.hostPlatform.isRiscV &&
-                     !(stdenv.hostPlatform.isDarwin &&
-                       stdenv.hostPlatform.isAarch64)) "--enable-jit";
+    # only enable jit on supported platforms which excludes Apple Silicon, see https://github.com/zherczeg/sljit/issues/51
+    "--enable-jit=auto"
+  ]
+  # fix pcre jit in systemd units that set MemoryDenyWriteExecute=true like gitea
+  ++ lib.optional withJitSealloc "--enable-jit-sealloc";
 
   outputs = [ "bin" "dev" "out" "doc" "man" "devdoc" ];
 
@@ -26,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://www.pcre.org/";
+    homepage = "https://www.pcre.org/";
     description = "Perl Compatible Regular Expressions";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ttuegel ];

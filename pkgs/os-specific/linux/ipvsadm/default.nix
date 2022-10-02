@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libnl popt ];
 
+  # Disable parallel build, errors:
+  #  *** No rule to make target 'libipvs/libipvs.a', needed by 'ipvsadm'.  Stop.
+  enableParallelBuilding = false;
+
   preBuild = ''
     makeFlagsArray+=(
       INCLUDE=$(pkg-config --cflags libnl-genl-3.0)

@@ -19,7 +19,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the fakeroute service.
         '';
       };
@@ -33,7 +33,7 @@ in
           "198.116.142.34"
           "63.199.8.242"
         ];
-        description = ''
+        description = lib.mdDoc ''
          Fake route that will appear after the real
          one to any host running a traceroute.
         '';

@@ -2,30 +2,26 @@
 , buildPythonPackage
 , fetchPypi
 , cryptography
-, ecdsa
-, pytest-cov
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyjwt";
-  version = "2.3.0";
-  disabled = pythonOlder "3.6";
+  version = "2.5.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "PyJWT";
     inherit version;
-    sha256 = "sha256-uIi01W8G9tzXdyEMM05pxze+dHVdPl6e4/5n3Big7kE=";
+    sha256 = "sha256-53q4lICQXYaZhEKsV4jzUzP6hfZQR6U0rcOO3zyI/Ds=";
   };
 
   propagatedBuildInputs = [
     cryptography
-    ecdsa
   ];
 
   checkInputs = [
-    pytest-cov
     pytestCheckHook
   ];
 

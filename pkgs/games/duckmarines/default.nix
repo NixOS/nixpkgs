@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     comment = "Duck-themed action puzzle video game";
     desktopName = "Duck Marines";
     genericName = "duckmarines";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 
   src = fetchurl {

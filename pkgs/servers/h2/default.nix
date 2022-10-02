@@ -1,13 +1,14 @@
 { lib, stdenv, fetchzip, jre, makeWrapper }:
 stdenv.mkDerivation rec {
   pname = "h2";
-
-  version = "1.4.199";
+  version = "2.1.210";
 
   src = fetchzip {
-    url = "https://h2database.com/h2-2019-03-13.zip";
-    sha256 = "0pdvbnx7nqfqs7x1zkwz2q34331l55jknpk6arf6dksvnd71hinj";
+    url = "https://github.com/h2database/h2database/releases/download/version-${version}/h2-2022-01-17.zip";
+    sha256 = "0zcjblhjj98dsj954ia3by9vx5w7mix1dzi85jnvp18kxmbldmf4";
   };
+
+  outputs = [ "out" "doc" ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -24,8 +25,9 @@ stdenv.mkDerivation rec {
         fi
       '';
     in ''
-      mkdir -p $out
-      cp -R * $out
+      mkdir -p $out $doc/share/doc/
+      cp -R bin $out/
+      cp -R docs $doc/share/doc/h2
 
       echo '${h2ToolScript}' > $out/bin/h2tool.sh
 
@@ -37,6 +39,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The Java SQL database";
     homepage = "http://www.h2database.com/html/main.html";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mpl20;
     platforms = lib.platforms.linux;
     maintainers = with maintainers; [ mahe ];

@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, libiconv }:
 
 stdenv.mkDerivation rec {
-  version = "3.14";
+  version = "3.16";
   pname = "aescrypt";
 
   src = fetchurl {
     url = "https://www.aescrypt.com/download/v3/linux/${pname}-${version}.tgz";
-    sha256 = "1iziymcbpc64d44djgqfifpblsly4sr5bxsp5g29jgxz552kjlah";
+    sha256 = "sha256-4uGS0LReq5dI7+Wel7ZWzFXx+utZWi93q4TUSw7AhNI=";
   };
 
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-liconv";

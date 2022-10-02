@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre, libiconv, lynx
+{ lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre2, libiconv, lynx, which
 , nixosTests
 , proxySupport ? true
 , sslSupport ? true, openssl
@@ -11,16 +11,18 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-httpd";
-  version = "2.4.52";
+  version = "2.4.54";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "sha256-ASf33El+mYPpxRR0vtdeRWB/L4cKdnWobckK9tVy9ck=";
+    sha256 = "sha256-6zl/7u/MryVPjUXeN2jZ1o6Oc4UcSa/VtxdtHs+Aw0A=";
   };
 
   # FIXME: -dev depends on -doc
   outputs = [ "out" "dev" "man" "doc" ];
   setOutputFlags = false; # it would move $out/modules, etc.
+
+  nativeBuildInputs = [ which ];
 
   buildInputs = [ perl ] ++
     lib.optional brotliSupport brotli ++
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
     "--with-apr=${apr.dev}"
     "--with-apr-util=${aprutil.dev}"
     "--with-z=${zlib.dev}"
-    "--with-pcre=${pcre.dev}"
+    "--with-pcre=${pcre2.dev}/bin/pcre2-config"
     "--disable-maintainer-mode"
     "--disable-debugger-mode"
     "--enable-mods-shared=all"

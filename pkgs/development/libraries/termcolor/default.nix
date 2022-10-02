@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "termcolor";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "ikalnytskyi";
     repo = "termcolor";
     rev = "v${version}";
-    sha256 = "sha256-W0hB+lFJ2sm7DsbOzITOtjJuntSM55BfwUunOOS4RcA=";
+    sha256 = "sha256-2RXQ8sn2VNhQ2WZfwCCeQuM6x6C+sLA6ulAaFtaDMZw=";
   };
 
   nativeBuildInputs = [ cmake ];

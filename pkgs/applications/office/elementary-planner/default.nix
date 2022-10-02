@@ -64,14 +64,27 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    # The GTK theme has been renamed in elementary OS 6
+    # https://github.com/elementary/flatpak-platform/blob/6.1.0/io.elementary.Sdk.json#L182
+    # Remove this in https://github.com/NixOS/nixpkgs/pull/159249
+    substituteInPlace src/Application.vala \
+      --replace '"gtk-theme-name", "elementary"' '"gtk-theme-name", "io.elementary.stylesheet.blueberry"'
+
+    # Fix build with vala 0.56
+    # https://github.com/alainm23/planner/pull/884
+    substituteInPlace src/Application.vala \
+      --replace "public const OptionEntry[] PLANNER_OPTIONS" "private const OptionEntry[] PLANNER_OPTIONS"
+
     chmod +x build-aux/meson/post_install.py
     patchShebangs build-aux/meson/post_install.py
   '';
 
   preFixup = ''
     gappsWrapperArgs+=(
-      # the theme is hardcoded
+      # The GTK theme is hardcoded.
       --prefix XDG_DATA_DIRS : "${pantheon.elementary-gtk-theme}/share"
+      # The icon theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
     )
   '';
 

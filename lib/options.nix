@@ -7,7 +7,7 @@ let
     collect
     concatLists
     concatMap
-    elemAt
+    concatMapStringsSep
     filter
     foldl'
     head
@@ -26,6 +26,7 @@ let
     take
     ;
   inherit (lib.attrsets)
+    attrByPath
     optionalAttrs
     ;
   inherit (lib.strings)
@@ -78,8 +79,6 @@ rec {
     visible ? null,
     # Whether the option can be set only once
     readOnly ? null,
-    # Deprecated, used by types.optionSet.
-    options ? null
     } @ attrs:
     attrs // { _type = "option"; };
 
@@ -95,9 +94,55 @@ rec {
     name: mkOption {
     default = false;
     example = true;
-    description = "Whether to enable ${name}.";
+    description =
+      if name ? _type && name._type == "mdDoc"
+      then lib.mdDoc "Whether to enable ${name.text}."
+      else "Whether to enable ${name}.";
     type = lib.types.bool;
   };
+
+  /* Creates an Option attribute set for an option that specifies the
+     package a module should use for some purpose.
+
+     Type: mkPackageOption :: pkgs -> string -> { default :: [string], example :: null | string | [string] } -> option
+
+     The package is specified as a list of strings representing its attribute path in nixpkgs.
+
+     Because of this, you need to pass nixpkgs itself as the first argument.
+
+     The second argument is the name of the option, used in the description "The <name> package to use.".
+
+     You can also pass an example value, either a literal string or a package's attribute path.
+
+     You can omit the default path if the name of the option is also attribute path in nixpkgs.
+
+     Example:
+       mkPackageOption pkgs "hello" { }
+       => { _type = "option"; default = «derivation /nix/store/3r2vg51hlxj3cx5vscp0vkv60bqxkaq0-hello-2.10.drv»; defaultText = { ... }; description = "The hello package to use."; type = { ... }; }
+
+     Example:
+       mkPackageOption pkgs "GHC" {
+         default = [ "ghc" ];
+         example = "pkgs.haskell.packages.ghc924.ghc.withPackages (hkgs: [ hkgs.primes ])";
+       }
+       => { _type = "option"; default = «derivation /nix/store/jxx55cxsjrf8kyh3fp2ya17q99w7541r-ghc-8.10.7.drv»; defaultText = { ... }; description = "The GHC package to use."; example = { ... }; type = { ... }; }
+  */
+  mkPackageOption =
+    # Package set (a specific version of nixpkgs)
+    pkgs:
+      # Name for the package, shown in option description
+      name:
+      { default ? [ name ], example ? null }:
+      let default' = if !isList default then [ default ] else default;
+      in mkOption {
+        type = lib.types.package;
+        description = lib.mdDoc "The ${name} package to use.";
+        default = attrByPath default'
+          (throw "${concatStringsSep "." default'} cannot be found in pkgs") pkgs;
+        defaultText = literalExpression ("pkgs." + concatStringsSep "." default');
+        ${if example != null then "example" else null} = literalExpression
+          (if isList example then "pkgs." + concatStringsSep "." example else example);
+      };
 
   /* This option accepts anything, but it does not produce any result.
 
@@ -128,11 +173,13 @@ rec {
     else if all isInt list && all (x: x == head list) list then head list
     else throw "Cannot merge definitions of `${showOption loc}'. Definition values:${showDefs defs}";
 
-  mergeOneOption = loc: defs:
-    if defs == [] then abort "This case should never happen."
-    else if length defs != 1 then
-      throw "The unique option `${showOption loc}' is defined multiple times. Definition values:${showDefs defs}"
-    else (head defs).value;
+  mergeOneOption = mergeUniqueOption { message = ""; };
+
+  mergeUniqueOption = { message }: loc: defs:
+    if length defs == 1
+    then (head defs).value
+    else assert length defs > 1;
+      throw "The option `${showOption loc}' is defined multiple times.\n${message}\nDefinition values:${showDefs defs}";
 
   /* "Merge" option definitions by checking that they all have the same value. */
   mergeEqualOption = loc: defs:
@@ -185,7 +232,7 @@ rec {
             then true
             else opt.visible or true;
           readOnly = opt.readOnly or false;
-          type = opt.type.description or null;
+          type = opt.type.description or "unspecified";
         }
         // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
         // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }
@@ -197,6 +244,8 @@ rec {
           in if ss != {} then optionAttrSetToDocList' opt.loc ss else [];
         subOptionsVisible = docOption.visible && opt.visible or null != "shallow";
       in
+        # To find infinite recursion in NixOS option docs:
+        # builtins.trace opt.loc
         [ docOption ] ++ optionals subOptionsVisible subOptions) (collect isOption options);
 
 
@@ -234,7 +283,25 @@ rec {
   */
   literalDocBook = text:
     if ! isString text then throw "literalDocBook expects a string."
-    else { _type = "literalDocBook"; inherit text; };
+    else
+      lib.warnIf (lib.isInOldestRelease 2211)
+        "literalDocBook is deprecated, use literalMD instead"
+        { _type = "literalDocBook"; inherit text; };
+
+  /* Transition marker for documentation that's already migrated to markdown
+     syntax.
+  */
+  mdDoc = text:
+    if ! isString text then throw "mdDoc expects a string."
+    else { _type = "mdDoc"; inherit text; };
+
+  /* For use in the `defaultText` and `example` option attributes. Causes the
+     given MD text to be inserted verbatim in the documentation, for when
+     a `literalExpression` would be too hard to read.
+  */
+  literalMD = text:
+    if ! isString text then throw "literalMD expects a string."
+    else { _type = "literalMD"; inherit text; };
 
   # Helper functions.
 
@@ -280,6 +347,11 @@ rec {
         else ": " + value;
     in "\n- In `${def.file}'${result}"
   ) defs;
+
+  showOptionWithDefLocs = opt: ''
+      ${showOption opt.loc}, with values defined in:
+      ${concatMapStringsSep "\n" (defFile: "  - ${defFile}") opt.files}
+    '';
 
   unknownModule = "<unknown-file>";
 

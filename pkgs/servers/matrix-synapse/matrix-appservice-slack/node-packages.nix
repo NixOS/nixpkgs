@@ -762,13 +762,13 @@ let
         sha512 = "ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==";
       };
     };
-    "axios-0.24.0" = {
+    "axios-0.26.0" = {
       name = "axios";
       packageName = "axios";
-      version = "0.24.0";
+      version = "0.26.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/axios/-/axios-0.24.0.tgz";
-        sha512 = "Q6cWsys88HoPgAaFAVUb0WpPk0O8iTeisR9IMqy9G8AbO4NlpVknrnQS03zzF9PGAWgO3cgletO3VjV/P7VztA==";
+        url = "https://registry.npmjs.org/axios/-/axios-0.26.0.tgz";
+        sha512 = "lKoGLMYtHvFrPVt3r+RBMp9nh34N0M8zEfCWqdWZx6phynIEhQqAdydpyBAAG211zlhX9Rgu08cOamy6XjE5Og==";
       };
     };
     "balanced-match-1.0.2" = {
@@ -1959,13 +1959,13 @@ let
         sha512 = "GRnmB5gPyJpAhTQdSZTSp9uaPSvl09KoYcMQtsB9rQoOmzs9dH6ffeccH+Z+cv6P68Hu5bC6JjRh4Ah/mHSNRw==";
       };
     };
-    "follow-redirects-1.14.4" = {
+    "follow-redirects-1.14.8" = {
       name = "follow-redirects";
       packageName = "follow-redirects";
-      version = "1.14.4";
+      version = "1.14.8";
       src = fetchurl {
-        url = "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.14.4.tgz";
-        sha512 = "zwGkiSXC1MUJG/qmeIFH2HBJx9u0V46QGUe3YR1fXG8bXQxq7fLj0RjLZQ5nubr9qNJUZrH+xUcwXEoXNpfS+g==";
+        url = "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.14.8.tgz";
+        sha512 = "1x0S9UVJHsQprFcEC/qnNzBLcIxsjAV905f/UkQxbclCsoTWlacCNOpQa/anodLl2uaEKFhfWOvM2Qg77+15zA==";
       };
     };
     "forever-agent-0.6.1" = {
@@ -4771,7 +4771,7 @@ let
   args = {
     name = "matrix-appservice-slack";
     packageName = "matrix-appservice-slack";
-    version = "1.10.0";
+    version = "1.11.0";
     src = ./.;
     dependencies = [
       sources."@alloc/quick-lru-5.2.0"
@@ -4895,7 +4895,7 @@ let
       sources."asynckit-0.4.0"
       sources."aws-sign2-0.7.0"
       sources."aws4-1.11.0"
-      sources."axios-0.24.0"
+      sources."axios-0.26.0"
       sources."balanced-match-1.0.2"
       sources."base-x-3.0.9"
       sources."base64-js-1.5.1"
@@ -5059,7 +5059,7 @@ let
       sources."flat-cache-3.0.4"
       sources."flatted-3.1.1"
       sources."fn.name-1.1.0"
-      sources."follow-redirects-1.14.4"
+      sources."follow-redirects-1.14.8"
       sources."forever-agent-0.6.1"
       sources."form-data-2.5.1"
       sources."forwarded-0.1.2"

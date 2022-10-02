@@ -12,19 +12,18 @@
 , pythonOlder
 , setuptools-scm
 , typing-extensions
-, vim
 , wcwidth
 }:
 
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "2.3.3";
+  version = "2.4.2";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "750d7eb04d55c3bc2a413e191bc177856f388102de47d11f2210a35266543640";
+    sha256 = "sha256-Bz5VXAWFOw9pZfPQMym6vfnjil8s6gKOYaZM1+63StU=";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -47,7 +46,12 @@ buildPythonPackage rec {
     pytestCheckHook
     glibcLocales
     pytest-mock
-    vim
+  ];
+
+  disabledTests = [
+    # don't require vim for tests, it causes lots of rebuilds
+    "test_find_editor_not_specified"
+    "test_transcript"
   ];
 
   postPatch = ''

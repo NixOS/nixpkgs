@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     icon = icon;
     desktopName = "Stretchly";
     genericName = "Stretchly";
-    categories = "Utility;";
+    categories = [ "Utility" ];
   };
 
   meta = with lib; {

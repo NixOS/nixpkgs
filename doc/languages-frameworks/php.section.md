@@ -9,7 +9,7 @@ wide variety of extensions and libraries available.
 
 The different versions of PHP that nixpkgs provides are located under
 attributes named based on major and minor version number; e.g.,
-`php74` is PHP 7.4.
+`php81` is PHP 8.1.
 
 Only versions of PHP that are supported by upstream for the entirety
 of a given NixOS release will be included in that release of
@@ -23,7 +23,7 @@ NixOS - not necessarily the latest major release from upstream.
 All available PHP attributes are wrappers around their respective
 binary PHP package and provide commonly used extensions this way. The
 real PHP 7.4 package, i.e. the unwrapped one, is available as
-`php74.unwrapped`; see the next section for more details.
+`php81.unwrapped`; see the next section for more details.
 
 Interactive tools built on PHP are put in `php.packages`; composer is
 for example available at `php.packages.composer`.

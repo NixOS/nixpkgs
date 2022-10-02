@@ -8,18 +8,18 @@
 , libxfce4ui
 , xfconf
 , gtk3
-, xfce
+, gitUpdater
 }:
 
 let
   category = "panel-plugins";
 in stdenv.mkDerivation rec {
   pname  = "xfce4-eyes-plugin";
-  version = "4.5.1";
+  version = "4.6.0";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-TbeAF45Sk5HVPaGA5JOGkE5ppaM7O9UYWDXQp+b/WsU=";
+    sha256 = "sha256-rQ/wXYi6OTt8iSL4Iz7dM/wKTosAC2HeH486EMWuUyQ=";
   };
 
   nativeBuildInputs = [
@@ -35,10 +35,9 @@ in stdenv.mkDerivation rec {
     gtk3
   ];
 
-  passthru.updateScript = xfce.updateScript {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
-    versionLister = xfce.archiveLister category pname;
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.xfce.org/panel-plugins/${pname}";
+    rev-prefix = "${pname}-";
   };
 
   meta = with lib; {

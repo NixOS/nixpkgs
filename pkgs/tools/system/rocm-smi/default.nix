@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-smi";
-  version = "4.5.2";
+  version = "5.2.3";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "rocm_smi_lib";
     rev = "rocm-${version}";
-    hash = "sha256-zfsNGDAwBD91w0loWxd8AwuZ3kZSPCXMxxQnX6ktOiE=";
+    hash = "sha256-D3ZH6xJe2C9rUCsJPOf9QlStecU90/iYi4wrXVvPff0=";
   };
 
   nativeBuildInputs = [ cmake wrapPython ];
@@ -32,14 +32,10 @@ stdenv.mkDerivation rec {
     substituteInPlace oam/CMakeLists.txt \
       --replace "DESTINATION oam/" "DESTINATION " \
       --replace 'DESTINATION ''${OAM_NAME}/' "DESTINATION "
-
-    # Update relative path to librocm_smi64 in the Python binding.
-    substituteInPlace python_smi_tools/rsmiBindings.py \
-      --replace "/../lib/librocm_smi64.so" "/../../librocm_smi64.so"
   '';
 
   postInstall = ''
-    wrapPythonProgramsIn $out/bin
+    wrapPythonProgramsIn $out
   '';
 
   passthru.updateScript = writeScript "update.sh" ''

@@ -5,7 +5,7 @@ callPackage ./generic.nix (args // {
   sha256 = "0cj0fnjimv22ykfl0yk6w29wcjvqp8y8j2g1c6gcml65qazrswyr";
 
   extraPatches = [
-    ./../../../servers/sql/mysql/abi-check.patch
+    ./abi-check.patch
   ];
 
   extraPostInstall = ''

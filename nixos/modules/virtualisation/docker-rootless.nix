@@ -18,18 +18,18 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         This option enables docker in a rootless mode, a daemon that manages
         linux containers. To interact with the daemon, one needs to set
-        <command>DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock</command>.
+        {command}`DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock`.
       '';
     };
 
     setSocketVariable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Point <command>DOCKER_HOST</command> to rootless Docker instance for
+      description = lib.mdDoc ''
+        Point {command}`DOCKER_HOST` to rootless Docker instance for
         normal users by default.
       '';
     };
@@ -41,7 +41,7 @@ in
         ipv6 = true;
         "fixed-cidr-v6" = "fd00::/80";
       };
-      description = ''
+      description = lib.mdDoc ''
         Configuration for docker daemon. The attributes are serialized to JSON used as daemon.conf.
         See https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file
       '';
@@ -51,8 +51,7 @@ in
       default = pkgs.docker;
       defaultText = literalExpression "pkgs.docker";
       type = types.package;
-      example = literalExpression "pkgs.docker-edge";
-      description = ''
+      description = lib.mdDoc ''
         Docker package to be used in the module.
       '';
     };
@@ -76,7 +75,11 @@ in
       # needs newuidmap from pkgs.shadow
       path = [ "/run/wrappers" ];
       environment = proxy_env;
-      unitConfig.StartLimitInterval = "60s";
+      unitConfig = {
+        # docker-rootless doesn't support running as root.
+        ConditionUser = "!root";
+        StartLimitInterval = "60s";
+      };
       serviceConfig = {
         Type = "notify";
         ExecStart = "${cfg.package}/bin/dockerd-rootless --config-file=${daemonSettingsFile}";

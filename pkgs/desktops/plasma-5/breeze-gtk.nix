@@ -3,7 +3,7 @@
 let inherit (lib) getLib; in
 
 mkDerivation {
-  name = "breeze-gtk";
+  pname = "breeze-gtk";
   nativeBuildInputs = [ extra-cmake-modules sassc python3 python3.pkgs.pycairo breeze-qt5 ];
   buildInputs = [ qtbase ];
   patches = [

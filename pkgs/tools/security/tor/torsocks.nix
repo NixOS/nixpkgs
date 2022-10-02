@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.3.0";
 
   src = fetchgit {
-    url    = meta.repositories.git;
+    url    = "https://git.torproject.org/torsocks.git";
     rev    = "refs/tags/v${version}";
     sha256 = "0x0wpcigf22sjxg7bm0xzqihmsrz51hl4v8xf91qi4qnmr4ny1hb";
   };
@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
   meta = {
     description      = "Wrapper to safely torify applications";
     homepage         = "https://github.com/dgoulet/torsocks";
-    repositories.git = "https://git.torproject.org/torsocks.git";
     license          = lib.licenses.gpl2;
     platforms        = lib.platforms.unix;
     maintainers      = with lib.maintainers; [ thoughtpolice ];

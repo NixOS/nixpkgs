@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   pname   = "pass-git-helper";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner  = "languitar";
     repo   = "pass-git-helper";
     rev    = "v${version}";
-    sha256 = "sha256-HEdOR6jS16c4UIatlgB6HeBtyyxePSab+6e2hu85dsI=";
+    sha256 = "sha256-An9JKnS/Uor7iZ+lbBGR3eOkxOgV+SjnCWN/QmqFI/I=";
   };
 
   propagatedBuildInputs = [ pyxdg ];

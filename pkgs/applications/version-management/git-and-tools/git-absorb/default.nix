@@ -1,28 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, libiconv, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-absorb";
-  version = "0.6.6";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
-    owner  = "tummychow";
-    repo   = pname;
-    rev    = "refs/tags/${version}";
-    sha256 = "04v10bn24acify34vh5ayymsr1flcyb05f3az9k1s2m6nlxy5gb9";
+    owner = "tummychow";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-qhUw1wjXn1tyiH175+BadcoKoZ0wHxpMTKDIKOcJjQ0=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoSha256 = "0dax6wkbyk5p8p0mm406vfgmqfmfxzyzqps6yk8fachi61x12ja6";
+  cargoSha256 = "sha256-Wh2kA12CggbgdofWJwPAy+587qfMUPSy9nQmO11+keY=";
 
   postInstall = ''
     installManPage Documentation/git-absorb.1
-    for shell in bash zsh fish; do
-      $out/bin/git-absorb --gen-completions $shell > git-absorb.$shell
-      installShellCompletion git-absorb.$shell
-    done
+    installShellCompletion --cmd git-absorb \
+      --bash <($out/bin/git-absorb --gen-completions bash) \
+      --fish <($out/bin/git-absorb --gen-completions fish) \
+      --zsh <($out/bin/git-absorb --gen-completions zsh)
   '';
 
   meta = with lib; {

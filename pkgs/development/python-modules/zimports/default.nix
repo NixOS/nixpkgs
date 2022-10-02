@@ -4,38 +4,40 @@
 , buildPythonPackage
 , flake8-import-order
 , pyflakes
-, mock
+, tomli
 , setuptools
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "zimports";
-  version = "0.2.0";
+  version = "0.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sqlalchemyorg";
     repo = "zimports";
-    rev = version;
-    sha256 = "0a5axflkk0wv0rdnrh8l2rgj8gh2pfkg5lrvr8x4yxxiifawrafc";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-qm5mA8pCSLbkupGBo+ppHSW6uy1j/FfV3idvGQGhjqU=";
   };
 
-  disabled = !isPy3k;
-
   propagatedBuildInputs = [
-    pyflakes
     flake8-import-order
+    pyflakes
     setuptools
+    tomli
   ];
 
   checkInputs = [
-    mock
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    runHook preInstallCheck
-    PYTHONPATH= $out/bin/zimports --help >/dev/null
-    runHook postInstallCheck
-  '';
+  pythonImportsCheck = [
+    "zimports"
+  ];
 
   meta = with lib; {
     description = "Python import rewriter";

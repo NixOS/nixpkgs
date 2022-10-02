@@ -44,6 +44,6 @@ in
     { nodes, ... }:
     ''
       start_all()
-      node1.succeed("${fenicsScript}")
+      fenicsnode.succeed("${fenicsScript}")
     '';
 })

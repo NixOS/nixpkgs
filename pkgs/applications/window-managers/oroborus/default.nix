@@ -1,27 +1,59 @@
-{ lib, stdenv, fetchurl, pkg-config
-, freetype, fribidi
-, libSM, libICE, libXt, libXaw, libXmu
-, libXext, libXft, libXpm, libXrandr
-, libXrender, xorgproto, libXinerama }:
+{ lib
+, stdenv
+, fetchurl
+, freetype
+, fribidi
+, libICE
+, libSM
+, libXaw
+, libXext
+, libXft
+, libXinerama
+, libXmu
+, libXpm
+, libXrandr
+, libXrender
+, libXt
+, pkg-config
+, xorgproto
+}:
 
-with lib;
 stdenv.mkDerivation rec {
-
   pname = "oroborus";
   version = "2.0.20";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ freetype fribidi libSM libICE libXt libXaw libXmu libXext
-                  libXft libXpm libXrandr libXrender xorgproto libXinerama ];
-
   src = fetchurl {
     url = "mirror://debian/pool/main/o/oroborus/oroborus_${version}.tar.gz";
-    sha256 = "12bvk8x8rfnymbfbwmdcrd9g8m1zxbcq7rgvfdkjr0gnpi0aa82j";
+    hash = "sha256-UiClQLz2gSxnc/vlg9nqP1T0UsusVb7cqt66jDqae4k=a";
   };
 
-  meta = {
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    freetype
+    fribidi
+    libICE
+    libSM
+    libXaw
+    libXext
+    libXft
+    libXinerama
+    libXmu
+    libXpm
+    libXrandr
+    libXrender
+    libXt
+    xorgproto
+  ];
+
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: workspaces.o:src/keyboard.h:93: multiple definition of
+  #     `NumLockMask'; client.o:src/keyboard.h:93: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
+  meta = with lib; {
+    homepage = "https://web.archive.org/web/20191129172107/https://www.oroborus.org/";
     description = "A really minimalistic X window manager";
-    homepage = "https://www.oroborus.org/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

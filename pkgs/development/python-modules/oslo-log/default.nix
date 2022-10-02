@@ -10,17 +10,21 @@
 , pbr
 , pyinotify
 , python-dateutil
-, stestr
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "oslo-log";
-  version = "4.6.1";
+  version = "5.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "oslo.log";
     inherit version;
-    sha256 = "0dlnxjci9mpwhgfv19fy1z7xrdp8m95skrj5dr60all3pr7n22f6";
+    hash = "sha256-c6tyNKii1QvfUmyHTfocsrEIO6+a2VvC64r1YkidTQE=";
   };
 
   propagatedBuildInputs = [
@@ -36,16 +40,20 @@ buildPythonPackage rec {
 
   checkInputs = [
     oslotest
-    stestr
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    stestr run
-  '';
+  disabledTests = [
+    # not compatible with sandbox
+    "test_logging_handle_error"
+  ];
 
-  pythonImportsCheck = [ "oslo_log" ];
+  pythonImportsCheck = [
+    "oslo_log"
+  ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "oslo.log library";
     homepage = "https://github.com/openstack/oslo.log";
     license = licenses.asl20;

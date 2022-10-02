@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "r2mod_cli";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "Foldex";
     repo = "r2mod_cli";
     rev = "v${version}";
-    sha256 = "sha256-VNqdVDBR6+eNOeUthPXLfz+0VoaNfSj4f04HLvjg6/0=";
+    sha256 = "sha256-FS9P/uTZU4d6zpM3TlEW6i6PLGHxqqO2fc8D7VsPCig=";
   };
 
   buildInputs = [ bashInteractive ];
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/foldex/r2mod_cli";
     license = licenses.gpl3Only;
     maintainers = [ maintainers.reedrw ];
+    mainProgram = "r2mod";
     platforms = platforms.unix;
   };
 }

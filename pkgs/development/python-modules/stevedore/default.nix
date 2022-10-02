@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "stevedore";
-  version = "3.5.0";
+  version = "4.0.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9AJTiH2HEuqiuw6jgwN0QWc23I7A4i9aZQksEXTEQzU=";
+    sha256 = "sha256-+CzJmh/1UjENGcN5gnwsZN2fhaOLzVVZ2yRwFhhnt4Y=";
   };
 
   propagatedBuildInputs = [

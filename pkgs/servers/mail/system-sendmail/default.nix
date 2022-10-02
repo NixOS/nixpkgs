@@ -35,5 +35,6 @@ stdenv.mkDerivation {
     '';
     platforms = platforms.unix;
     maintainers = with maintainers; [ ekleog ];
+    mainProgram = "sendmail";
   };
 }

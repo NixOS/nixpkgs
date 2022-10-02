@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gImageReader";
-  version = "3.3.1";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner= "manisandro";
     repo = "gImageReader";
     rev = "v${version}";
-    sha256 = "17hz2dgxx2j7hsk0lx3riidqvlsg0ylnicjd2gphsi3yp7w20zdj";
+    sha256 = "sha256-lJ4wPLxVN3NERnru8vLreiWMEUip6xeCXAfoT8DcfiQ=";
   };
 
   nativeBuildInputs = [

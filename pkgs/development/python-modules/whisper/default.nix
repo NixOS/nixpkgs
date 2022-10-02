@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "whisper";
-  version = "1.1.8";
+  version = "1.1.10";
 
   src = fetchFromGitHub {
     owner = "graphite-project";
     repo = pname;
-    rev = version;
-    sha256 = "11f7sarj62zgpw3ak4a2q55lj7ap4039l9ybc3a6yvs1ppvrcn7x";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-CnCbRmI2jc67mTtfupoE1uHtobrAiWoUXbfX8YeEV6A=";
   };
 
   propagatedBuildInputs = [

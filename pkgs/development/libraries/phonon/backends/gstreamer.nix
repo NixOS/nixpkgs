@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, gst_all_1, phonon, pkg-config
+{ stdenv, lib, fetchurl, fetchpatch, cmake, gst_all_1, phonon, pkg-config
 , extra-cmake-modules, qttools, qtbase, qtx11extras
 , debug ? false
 }:
@@ -22,9 +22,17 @@ stdenv.mkDerivation rec {
     sha256 = "1wk1ip2w7fkh65zk6rilj314dna0hgsv2xhjmpr5w08xa8sii1y5";
   };
 
-  # Hardcode paths to useful plugins so the backend doesn't depend
-  # on system paths being set.
-  patches = [ ./gst-plugin-paths.patch ];
+  patches = [
+    # Hardcode paths to useful plugins so the backend doesn't depend
+    # on system paths being set.
+    ./gst-plugin-paths.patch
+
+    # Work around https://bugs.kde.org/show_bug.cgi?id=445196 until a new release.
+    (fetchpatch {
+      url = "https://invent.kde.org/libraries/phonon-gstreamer/-/commit/bbbb160f30a394655cff9398d17961142388b0f2.patch";
+      sha256 = "sha256-tNBqVt67LNb9SQogS9ol8/xYIZvVSoVUgXQahMfkFh8=";
+    })
+  ];
 
   dontWrapQtApps = true;
 

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "go-audit";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "slackhq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02iwjzaz2ks0zmwijaijwzc3gn9mhn7xpx369ylgaz68arlapfjg";
+    sha256 = "sha256-iJm33IZ3kGWnGVDVbQCTvoo+dXBU5092YYXZG+Z7vi0=";
   };
 
-  vendorSha256 = "11kb7xm82s0d8d06b2jknwn3dfh4i0a1dv0740y47vk62sf6f05i";
+  vendorSha256 = "sha256-sQBnnBZm7kM8IAfsFhSIBLo2LLdTimVAQw1ogWo/a4Y=";
 
   # Tests need network access
   doCheck = false;

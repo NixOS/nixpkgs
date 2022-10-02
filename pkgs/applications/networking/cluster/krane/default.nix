@@ -1,7 +1,5 @@
 { lib
 , bundlerApp
-, makeWrapper
-, kubectl
 , bundlerUpdateScript
 }:
 
@@ -9,13 +7,6 @@ bundlerApp {
   pname = "krane";
   gemdir = ./.;
   exes = [ "krane" ];
-
-  buildInputs = [ makeWrapper ];
-
-  postBuild = ''
-    wrapProgram "$out/bin/krane" \
-      --prefix PATH : ${lib.makeBinPath [ kubectl ]}
-  '';
 
   passthru.updateScript = bundlerUpdateScript "krane";
 

@@ -8,25 +8,25 @@ let
 in {
   options = {
     services.roon-bridge = {
-      enable = mkEnableOption "Roon Bridge";
+      enable = mkEnableOption (lib.mdDoc "Roon Bridge");
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Open ports in the firewall for the bridge.
         '';
       };
       user = mkOption {
         type = types.str;
         default = "roon-bridge";
-        description = ''
+        description = lib.mdDoc ''
           User to run the Roon bridge as.
         '';
       };
       group = mkOption {
         type = types.str;
         default = "roon-bridge";
-        description = ''
+        description = lib.mdDoc ''
           Group to run the Roon Bridge as.
         '';
       };

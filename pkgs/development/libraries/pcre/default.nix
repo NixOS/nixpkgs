@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "doc" "man" ];
 
   # Disable jit on Apple Silicon, https://github.com/zherczeg/sljit/issues/51
-  configureFlags = optional (!stdenv.hostPlatform.isRiscV && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--enable-jit" ++ [
+  configureFlags = optional (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--enable-jit=auto" ++ [
     "--enable-unicode-properties"
     "--disable-cpp"
   ]
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     moveToOutput bin/pcre-config "$dev"
   '' + optionalString (variant != null) ''
-    ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib}
+    ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib,*a}
   '';
 
   meta = {

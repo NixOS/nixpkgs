@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, perl, gmp, mpfr, ppl, ocaml, findlib, camlidl, mlgmpidl }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-apron-${version}";
+  pname = "ocaml${ocaml.version}-apron";
   version = "0.9.13";
   src = fetchFromGitHub {
     owner = "antoinemine";
@@ -10,8 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "14ymjahqdxj26da8wik9d5dzlxn81b3z1iggdl7rn2nn06jy7lvy";
   };
 
-  buildInputs = [ perl gmp mpfr ppl ocaml findlib camlidl ];
+  nativeBuildInputs = [ ocaml findlib perl ];
+  buildInputs = [ gmp mpfr ppl camlidl ];
   propagatedBuildInputs = [ mlgmpidl ];
+
+  strictDeps = false;
 
   outputs = [ "out" "bin" "dev" ];
 

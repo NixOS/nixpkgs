@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "0xf7gkpy8ll1h59wyaljf0hr8prg7p4ixz80mxqwcnm9cglpgn63";
   };
 
-  patches = [ ./cmakepaths.patch ];
+  patches = [
+    ./cmakepaths.patch
+    ./fix_link_date_time.patch
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ ogre cegui boost sfml openal ois ];

@@ -56,10 +56,10 @@ let inherit (lib) optionals; in
 
 stdenv.mkDerivation rec {
   pname = "connman";
-  version = "1.40";
+  version = "1.41";
   src = fetchurl {
     url = "mirror://kernel/linux/network/connman/${pname}-${version}.tar.xz";
-    sha256 = "sha256-GleufOI0qjoXRKrDvlwhIdmNzpmUQO+KucxO39XtyxI=";
+    sha256 = "sha256-eftA9P3VUwxFqo5ZL7Froj02dPOpjPELiaZXbxmN5Yk=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isMusl [
@@ -172,9 +172,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A daemon for managing internet connections";
-    homepage = "https://01.org/connman";
+    homepage = "https://git.kernel.org/pub/scm/network/connman/connman.git/";
     maintainers = [ maintainers.matejc ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

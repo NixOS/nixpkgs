@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 # Python bits:
 , buildPythonPackage
 , pytest
@@ -16,22 +15,14 @@
 
 buildPythonPackage rec {
   pname = "grip";
-  version = "4.5.2";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "joeyespo";
     repo = "grip";
     rev = "v${version}";
-    sha256 = "0hphplnyi903jx7ghfxplg1qlj2kpcav1frr2js7p45pbh5ib9rm";
+    sha256 = "sha256-CHL2dy0H/i0pLo653F7aUHFvZHTeZA6jC/rwn1KrEW4=";
   };
-
-  patches = [
-    # Render "front matter", used in our RFC template and elsewhere
-    (fetchpatch {
-      url = "https://github.com/joeyespo/grip/pull/249.patch";
-      sha256 = "07za5iymfv647dfrvi6hhj54a96hgjyarys51zbi08c51shqyzpg";
-    })
-  ];
 
   checkInputs = [ pytest responses ];
 

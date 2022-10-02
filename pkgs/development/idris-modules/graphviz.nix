@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "graphviz";
+  pname = "graphviz";
   version = "2017-01-16";
 
   idrisDeps = [ lightyear ];

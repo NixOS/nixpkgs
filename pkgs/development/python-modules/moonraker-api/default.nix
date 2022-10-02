@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "moonraker-api";
-  version = "2.0.4";
+  version = "2.0.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,14 @@ buildPythonPackage rec {
     owner = "cmroche";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1hhm3jnl9qm44y4k927fzw1n32c3551kgsk7i57qw25nca9x3k61";
+    sha256 = "sha256-PgFsXmdAmHXK0wZ6xLTu94RdME1L2H1Mb6V+qFlGXSk=";
   };
+
+  postPatch = ''
+    # see comment on https://github.com/cmroche/moonraker-api/commit/e5ca8ab60d2839e150a81182fbe65255d84b4e4e
+    substituteInPlace setup.py \
+      --replace 'name="moonraker-api",' 'name="moonraker-api",version="${version}",'
+  '';
 
   propagatedBuildInputs = [
     aiohttp

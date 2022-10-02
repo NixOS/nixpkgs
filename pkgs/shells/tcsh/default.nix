@@ -7,27 +7,20 @@
 
 stdenv.mkDerivation rec {
   pname = "tcsh";
-  version = "6.23.02";
+  version = "6.24.00";
 
   src = fetchurl {
-    urls = [
-      "https://astron.com/pub/tcsh/old/${pname}-${version}.tar.gz"
-      "https://astron.com/pub/tcsh/${pname}-${version}.tar.gz"
-      "http://ftp.funet.fi/pub/mirrors/ftp.astron.com/pub/tcsh/old/${pname}-${version}.tar.gz"
-      "http://ftp.funet.fi/pub/mirrors/ftp.astron.com/pub/tcsh/${pname}-${version}.tar.gz"
-      "ftp://ftp.funet.fi/pub/unix/shells/tcsh/old/${pname}-${version}.tar.gz"
-      "ftp://ftp.funet.fi/pub/unix/shells/tcsh/${pname}-${version}.tar.gz"
-      "ftp://ftp.astron.com/pub/tcsh/old/${pname}-${version}.tar.gz"
-      "ftp://ftp.astron.com/pub/tcsh/${pname}-${version}.tar.gz"
-    ];
-    hash = "sha256-wD+AQFE2cxswkdpzWoHN2EgAhRAySrMl8jWv9wnkRus=";
+    url = "mirror://tcsh/${pname}-${version}.tar.gz";
+    hash = "sha256-YL4sUEvY8fpuQksZVkldfnztUqKslNtf0n9La/yPdPA=";
   };
 
+  strictDeps = true;
   buildInputs = [
     ncurses
   ];
 
   patches = lib.optional stdenv.hostPlatform.isMusl
+    # Use system malloc
     (fetchpatch {
       name = "sysmalloc.patch";
       url = "https://git.alpinelinux.org/aports/plain/community/tcsh/001-sysmalloc.patch?id=184585c046cdd56512f1a76e426dd799b368f8cf";

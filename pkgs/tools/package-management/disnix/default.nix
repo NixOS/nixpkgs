@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "disnix";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchurl {
-    url = "https://github.com/svanderburg/disnix/releases/download/disnix-${version}/disnix-${version}.tar.gz";
-    sha256 = "13rjw1va7l8w7ir73xqxq4zb3ig2iwhiwxhp5dbfv0z3gnqizghq";
+    url = "https://github.com/svanderburg/disnix/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
+    sha256 = "0mc0wy8fca60w0d56cljq2cw1xigbp2dklb43fxa5xph94j3i49a";
   };
 
   nativeBuildInputs = [ pkg-config ];

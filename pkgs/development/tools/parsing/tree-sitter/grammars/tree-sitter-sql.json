@@ -1,0 +1,11 @@
+{
+  "url": "https://github.com/m-novikov/tree-sitter-sql",
+  "rev": "218b672499729ef71e4d66a949e4a1614488aeaa",
+  "date": "2022-06-30T19:50:55+02:00",
+  "path": "/nix/store/rcdcgwb28jblgb65k5zjw5zgmigiqjfl-tree-sitter-sql",
+  "sha256": "1j68h5jzc0d3a44v5mw005lh3zsrh0salfzydl9br1n8byl1awms",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

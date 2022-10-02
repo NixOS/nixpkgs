@@ -3,8 +3,18 @@ name: "set pending status"
 on:
   pull_request_target:
 
+# WARNING:
+# When extending this action, be aware that $GITHUB_TOKEN allows write access to
+# the GitHub repository. This means that it should not evaluate user input in a
+# way that allows code injection.
+
+permissions:
+  contents: read
+
 jobs:
   action:
+    permissions:
+      statuses: write
     runs-on: ubuntu-latest
     steps:
     - name: set pending status

@@ -5,11 +5,10 @@
 , ninja
 , pkg-config
 , makeFontsConf
-, boost
-, gnutls
 , openssl
 , libdrm
 , libevent
+, libyaml
 , lttng-ust
 , gst_all_1
 , gtest
@@ -22,12 +21,12 @@
 
 stdenv.mkDerivation {
   pname = "libcamera";
-  version = "unstable-2022-01-03";
+  version = "unstable-2022-09-15";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
-    rev = "1db1e31e664c1f613dc964d8519fe75d67b154b6";
-    hash = "sha256-pXYPIU9xDWA870Gp1Jgizi5xnUHRvTqEq/ofFXdVZdg=";
+    rev = "74ab3f778c848b20cbf8fe299170756ff6ebab1a";
+    hash = "sha256-w0I4L6xXTBUdqj30LpVW/KZW6bdoUeoW9lnMOW0OLJY=";
   };
 
   postPatch = ''
@@ -38,8 +37,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     # IPA and signing
-    gnutls
-    boost
+    openssl
 
     # gstreamer integration
     gst_all_1.gstreamer
@@ -54,6 +52,9 @@ stdenv.mkDerivation {
 
     # lttng tracing
     lttng-ust
+
+    # yamlparser
+    libyaml
 
     gtest
   ];

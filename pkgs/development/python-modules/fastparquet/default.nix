@@ -8,19 +8,43 @@
 , cramjam
 , fsspec
 , thrift
+, python-lzo
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "0.7.1";
+  version = "0.8.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    hash = "sha256-xV0AXNZSy4LSrHf11OP/+KDbeDQu8yF1ugX+W4mie1E=";
+    hash = "sha256-rWrbHHcJMahaUV8+YuKkZUhdboNFUK9btjvdg74lCxc=";
   };
+
+  propagatedBuildInputs = [
+    cramjam
+    fsspec
+    numba
+    numpy
+    pandas
+    thrift
+  ];
+
+  passthru.optional-dependencies = {
+    lzo = [
+      python-lzo
+    ];
+  };
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -28,8 +52,6 @@ buildPythonPackage rec {
       --replace "oldest-supported-numpy" "numpy"
   '';
 
-  propagatedBuildInputs = [ cramjam fsspec numba numpy pandas thrift ];
-  checkInputs = [ pytestCheckHook ];
 
   # Workaround https://github.com/NixOS/nixpkgs/issues/123561
   preCheck = ''
@@ -43,7 +65,9 @@ buildPythonPackage rec {
     rm "$fastparquet_test"
   '';
 
-  pythonImportsCheck = [ "fastparquet" ];
+  pythonImportsCheck = [
+    "fastparquet"
+  ];
 
   meta = with lib; {
     description = "A python implementation of the parquet format";

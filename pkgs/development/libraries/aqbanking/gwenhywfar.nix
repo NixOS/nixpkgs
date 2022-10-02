@@ -11,19 +11,19 @@
 }:
 
 let
-  inherit ((import ./sources.nix).gwenhywfar) sha256 releaseId version;
+  inherit ((import ./sources.nix).gwenhywfar) hash releaseId version;
 in stdenv.mkDerivation rec {
   pname = "gwenhywfar";
   inherit version;
 
   src = fetchurl {
     url = "https://www.aquamaniac.de/rdm/attachments/download/${releaseId}/${pname}-${version}.tar.gz";
-    inherit sha256;
+    inherit hash;
   };
 
   configureFlags = [
     "--with-openssl-includes=${openssl.dev}/include"
-    "--with-openssl-libs=${openssl.out}/lib"
+    "--with-openssl-libs=${lib.getLib openssl}/lib"
   ];
 
   preConfigure = ''
@@ -61,8 +61,8 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "OS abstraction functions used by aqbanking and related tools";
-    homepage = "http://www2.aquamaniac.de/sites/download/packages.php?package=01&showall=1";
-    license = licenses.lgpl21;
+    homepage = "https://www.aquamaniac.de/rdm/projects/gwenhywfar";
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.linux;
   };

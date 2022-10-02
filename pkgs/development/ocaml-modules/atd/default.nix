@@ -1,31 +1,25 @@
-{ lib, menhir, easy-format, fetchurl, buildDunePackage, which, re, nixosTests }:
+{ lib, atdgen-codec-runtime, menhir, easy-format, buildDunePackage, re, yojson, nixosTests }:
 
 buildDunePackage rec {
   pname = "atd";
-  version = "2.2.1";
+  inherit (atdgen-codec-runtime) version src;
 
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
 
-  minimumOCamlVersion = "4.02";
+  nativeBuildInputs = [ menhir ];
+  propagatedBuildInputs = [ easy-format re yojson ];
 
-  src = fetchurl {
-    url = "https://github.com/ahrefs/atd/releases/download/2.2.1/atd-2.2.1.tbz";
-    sha256 = "17jm79np69ixp53a4njxnlb1pg8sd1g47nm3nyki9clkc8d4qsyv";
-  };
-
-  buildInputs = [ which menhir ];
-  propagatedBuildInputs = [ easy-format re ];
-
-  doCheck = true;
+  strictDeps = true;
 
   passthru.tests = {
     smoke-test = nixosTests.atd;
   };
 
   meta = with lib; {
-    homepage = "https://github.com/mjambon/atd";
     description = "Syntax for cross-language type definitions";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ aij jwilberding ];
+    homepage = "https://github.com/mjambon/atd";
+    license = licenses.mit;
+    maintainers = with maintainers; [ aij ];
+    mainProgram = "atdcat";
   };
 }

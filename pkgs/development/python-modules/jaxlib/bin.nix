@@ -13,39 +13,88 @@
 #   * https://github.com/google/jax/issues/971#issuecomment-508216439
 #   * https://github.com/google/jax/issues/5723#issuecomment-913038780
 
-{ addOpenGLRunpath, autoPatchelfHook, buildPythonPackage, config
-, fetchurl, isPy39, lib, stdenv
-# propagatedBuildInputs
-, absl-py, flatbuffers, scipy, cudatoolkit_11
-# Options:
+{ absl-py
+, addOpenGLRunpath
+, autoPatchelfHook
+, buildPythonPackage
+, config
+, cudnn ? cudaPackages.cudnn
+, fetchurl
+, flatbuffers
+, isPy39
+, lib
+, python
+, scipy
+, stdenv
+  # Options:
 , cudaSupport ? config.cudaSupport or false
+, cudaPackages ? {}
 }:
 
-assert cudaSupport -> lib.versionAtLeast cudatoolkit_11.version "11.1";
+let
+  inherit (cudaPackages) cudatoolkit cudnn;
+in
+
+# There are no jaxlib wheels targeting cudnn <8.0.5, and although there are
+# wheels for cudatoolkit <11.1, we don't support them.
+assert cudaSupport -> lib.versionAtLeast cudatoolkit.version "11.1";
+assert cudaSupport -> lib.versionAtLeast cudnn.version "8.0.5";
 
 let
-  device = if cudaSupport then "gpu" else "cpu";
+  version = "0.3.0";
+
+  pythonVersion = python.pythonVersion;
+
+  # Find new releases at https://storage.googleapis.com/jax-releases. When
+  # upgrading, you can get these hashes from prefetch.sh.
+  cpuSrcs = {
+    "3.9" = fetchurl {
+      url = "https://storage.googleapis.com/jax-releases/nocuda/jaxlib-${version}-cp39-none-manylinux2010_x86_64.whl";
+      hash = "sha256-AfBVqoqChEXlEC5PgbtQ5rQzcbwo558fjqCjSPEmN5Q=";
+    };
+    "3.10" = fetchurl {
+      url = "https://storage.googleapis.com/jax-releases/nocuda/jaxlib-${version}-cp310-none-manylinux2010_x86_64.whl";
+      hash = "sha256-9uBkFOO8LlRpO6AP+S8XK9/d2yRdyHxQGlbAjShqHRQ=";
+    };
+  };
+
+  gpuSrcs = {
+    "3.9-805" = fetchurl {
+      url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn805-cp39-none-manylinux2010_x86_64.whl";
+      hash = "sha256-CArIhzM5FrQi3TkdqpUqCeDQYyDMVXlzKFgjNXjLJXw=";
+    };
+    "3.9-82" = fetchurl {
+      url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn82-cp39-none-manylinux2010_x86_64.whl";
+      hash = "sha256-Q0plVnA9pUNQ+gCHSXiLNs4i24xCg8gBGfgfYe3bot4=";
+    };
+    "3.10-805" = fetchurl {
+      url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn805-cp310-none-manylinux2010_x86_64.whl";
+      hash = "sha256-JopevCEAs0hgDngIId6NqbLam5YfcS8Lr9cEffBKp1U=";
+    };
+    "3.10-82" = fetchurl {
+      url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn82-cp310-none-manylinux2010_x86_64.whl";
+      hash = "sha256-2f5TwbdP7EfQNRM3ZcJXCAkS2VXBwNYH6gwT9pdu3Go=";
+    };
+  };
 in
 buildPythonPackage rec {
   pname = "jaxlib";
-  version = "0.1.71";
+  inherit version;
   format = "wheel";
 
-  # At the time of writing (8/19/21), there are releases for 3.7-3.9. Supporting
-  # all of them is a pain, so we focus on 3.9, the current nixpkgs python3
-  # version.
-  disabled = !isPy39;
+  # At the time of writing (2022-03-03), there are releases for <=3.10.
+  # Supporting all of them is a pain, so we focus on 3.9, the current nixpkgs
+  # python3 version, and 3.10.
+  disabled = !(pythonVersion == "3.9" || pythonVersion == "3.10");
 
-  src = {
-    cpu = fetchurl {
-      url = "https://storage.googleapis.com/jax-releases/nocuda/jaxlib-${version}-cp39-none-manylinux2010_x86_64.whl";
-      sha256 = "sha256:0rqhs6qabydizlv5d3rb20dbv6612rr7dqfniy9r6h4kazdinsn6";
-    };
-    gpu = fetchurl {
-      url = "https://storage.googleapis.com/jax-releases/cuda111/jaxlib-${version}+cuda111-cp39-none-manylinux2010_x86_64.whl";
-      sha256 = "sha256:065kyzjsk9m84d138p99iymdiiicm1qz8a3iwxz8rspl43rwrw89";
-    };
-  }.${device};
+  src =
+    if !cudaSupport then cpuSrcs."${pythonVersion}" else
+    let
+      # jaxlib wheels are currently provided for cudnn versions at least 8.0.5 and
+      # 8.2. Try to use 8.2 whenever possible.
+      cudnnVersion = if (lib.versionAtLeast cudnn.version "8.2") then "82" else "805";
+    in
+    gpuSrcs."${pythonVersion}-${cudnnVersion}";
 
   # Prebuilt wheels are dynamically linked against things that nix can't find.
   # Run `autoPatchelfHook` to automagically fix them.
@@ -71,19 +120,27 @@ buildPythonPackage rec {
       rpath=$(patchelf --print-rpath $file)
       # For some reason `makeLibraryPath` on `cudatoolkit_11` maps to
       # <cudatoolkit_11.lib>/lib which is different from <cudatoolkit_11>/lib.
-      patchelf --set-rpath "$rpath:${cudatoolkit_11}/lib:${lib.makeLibraryPath [ cudatoolkit_11.lib ]}" $file
+      patchelf --set-rpath "$rpath:${cudatoolkit}/lib:${lib.makeLibraryPath [ cudatoolkit.lib cudnn ]}" $file
     done
   '';
 
-  # pip dependencies and optionally cudatoolkit.
-  propagatedBuildInputs = [ absl-py flatbuffers scipy ] ++ lib.optional cudaSupport cudatoolkit_11;
+  propagatedBuildInputs = [ absl-py flatbuffers scipy ];
+
+  # Note that cudatoolkit is snecessary since jaxlib looks for "ptxas" in $PATH.
+  # See https://github.com/NixOS/nixpkgs/pull/164176#discussion_r828801621 for
+  # more info.
+  postInstall = lib.optional cudaSupport ''
+    mkdir -p $out/bin
+    ln -s ${cudatoolkit}/bin/ptxas $out/bin/ptxas
+  '';
 
   pythonImportsCheck = [ "jaxlib" ];
 
   meta = with lib; {
     description = "XLA library for JAX";
-    homepage    = "https://github.com/google/jax";
-    license     = licenses.asl20;
+    homepage = "https://github.com/google/jax";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ samuela ];
     platforms = [ "x86_64-linux" ];
   };

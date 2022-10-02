@@ -6,14 +6,14 @@
 
 stdenv.mkDerivation rec {
   pname = "dxa";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchurl {
     urls = [
       "https://www.floodgap.com/retrotech/xa/dists/${pname}-${version}.tar.gz"
       "https://www.floodgap.com/retrotech/xa/dists/unsupported/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-C0rgwK51Ij9EZCm9GeiVnWIkEkse0d60ok8G9hm2a5U=";
+    hash = "sha256-jkDtd4FlgfmtlaysLtaaL7KseFDkM9Gc1oQZOkWCZ5k=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

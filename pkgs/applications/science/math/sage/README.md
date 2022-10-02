@@ -17,7 +17,7 @@ If the build broke as a result of a package update, try those solutions in order
 - fix the problem yourself. First clone the sagemath source and then check out the sage version you want to patch:
 
 ```
-[user@localhost ~]$ git clone git://github.com/sagemath/sage.git
+[user@localhost ~]$ git clone https://github.com/sagemath/sage.git
 [user@localhost ~]$ cd sage
 [user@localhost sage]$ git checkout 8.2 # substitute the relevant version here
 ```
@@ -41,7 +41,7 @@ You can [login the sage trac using GitHub](https://trac.sagemath.org/login). You
 Here's the gist, assuming you want to use ssh key authentication. First, [add your public ssh key](https://trac.sagemath.org/prefs/sshkeys). Then:
 
 ```
-[user@localhost ~]$ git clone git://github.com/sagemath/sage.git
+[user@localhost ~]$ git clone https://github.com/sagemath/sage.git
 [user@localhost ~]$ cd sage
 [user@localhost sage]$ git remote add trac git@trac.sagemath.org:sage.git -t master
 [user@localhost sage]$ git checkout -b u/gh-<your-github-username>/<your-branch-name> develop

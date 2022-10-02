@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
   buildPhase = "${stdenv.cc.targetPrefix}cc -o nmon ${src} -g -O2 -D JFS -D GETUSER -Wall -D LARGEMEM -lncurses -lm -g -D ${
     with stdenv.targetPlatform;
-    if isx86_32 || isx86_64 then "X86"
-    else if isAarch32 || isAarch64 then "ARM"
+    if isx86 then "X86"
+    else if isAarch then "ARM"
     else if isPower then "POWER"
     else "UNKNOWN"
   }";

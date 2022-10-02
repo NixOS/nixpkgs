@@ -56,11 +56,11 @@
 
 stdenv.mkDerivation rec {
   pname = "efl";
-  version = "1.26.1";
+  version = "1.26.3";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0hm6i1f2g4mwj726rc6na38xhys1plbv9swrlc9hrpa87mz6gac6";
+    sha256 = "sha256-2fg6oP2TNPRN7rTklS3A5RRGg6+seG/uvOYDCVFhfRU=";
   };
 
   nativeBuildInputs = [
@@ -208,6 +208,6 @@ stdenv.mkDerivation rec {
     homepage = "https://enlightenment.org/";
     license = with licenses; [ bsd2 lgpl2Only licenses.zlib ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
+    maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
   };
 }

@@ -10,19 +10,19 @@ with lib;
       type = bool;
       default = false;
       example = true;
-      description = "Whether to set the root password from the Digital Ocean metadata";
+      description = lib.mdDoc "Whether to set the root password from the Digital Ocean metadata";
     };
     setSshKeys = mkOption {
       type = bool;
       default = true;
       example = true;
-      description = "Whether to fetch ssh keys from Digital Ocean";
+      description = lib.mdDoc "Whether to fetch ssh keys from Digital Ocean";
     };
     seedEntropy = mkOption {
       type = bool;
       default = true;
       example = true;
-      description = "Whether to run the kernel RNG entropy seeding script from the Digital Ocean vendor data";
+      description = lib.mdDoc "Whether to run the kernel RNG entropy seeding script from the Digital Ocean vendor data";
     };
   };
   config =

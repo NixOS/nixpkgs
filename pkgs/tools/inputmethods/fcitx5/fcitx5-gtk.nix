@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-gtk";
-  version = "5.0.11";
+  version = "5.0.19";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-x2sOPybbAUM0/es9JM/F7A1+01HQPVwb9SCBpJ+ueRk=";
+    sha256 = "sha256-sD6FN8Ql+OhaQuHLCYreoiqSDC+Xf6OlFWUxg7k9SIk=";
   };
 
   cmakeFlags = [
@@ -60,11 +60,6 @@ stdenv.mkDerivation rec {
     at-spi2-core
     libXtst
   ] ++ lib.optional withGTK2 gtk2;
-
-  NIX_CFLAGS_COMPILE = lib.concatMapStringsSep " " (s: "-isystem ${s}") [
-    "${glib.dev}/include/gio-unix-2.0"
-    "${glib.dev}/include/glib-2.0"
-  ];
 
   nativeBuildInputs = [
     cmake

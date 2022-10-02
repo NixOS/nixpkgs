@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "gocd-server-${version}-${rev}";
+  pname = "gocd-server";
   version = "19.3.0";
   rev = "8959";
 

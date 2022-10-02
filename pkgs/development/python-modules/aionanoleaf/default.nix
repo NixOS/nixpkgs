@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "aionanoleaf";
-  version = "0.1.1";
+  version = "0.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "milanmeu";
     repo = pname;
     rev = "v${version}";
-    sha256 = "10gi8fpv3xkdjaqig84723m3j0kxgxvqwqvjxmysq2sw4cjmsvz6";
+    sha256 = "sha256-bz568DlodWtSu2WTTd/QMhdiX9IkllW7UYVXuNlKFaY=";
   };
 
   propagatedBuildInputs = [

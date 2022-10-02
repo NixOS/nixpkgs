@@ -27,11 +27,11 @@
 
 stdenv.mkDerivation rec {
   pname = "seahorse";
-  version = "41.0";
+  version = "42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-5u7AnoEESClfVH8YwdV3K2XD7cHZ5aJZXxC13eaJKfU=";
+    hash = "sha256-xQys6/jeen4uXx2uC5gjIRR0Epar6NVD45I9YqFT1jA=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,13 @@ stdenv.mkDerivation rec {
     itstool
     wrapGAppsHook
     python3
+    openssh
+    gnupg
+    gcr
+    # error: Package `...' not found in specified Vala API directories or GObject-Introspection GIR directories
+    # TODO: the vala setuphook should look for vala filess in targetOffset instead of hostOffset
+    libhandy
+    libsecret
   ];
 
   buildInputs = [
@@ -50,14 +57,11 @@ stdenv.mkDerivation rec {
     glib-networking
     gcr
     gsettings-desktop-schemas
-    gnupg
-    gnome.adwaita-icon-theme
     gpgme
     libsecret
     avahi
     libsoup
     p11-kit
-    openssh
     openldap
     libpwquality
     libhandy
@@ -76,6 +80,13 @@ stdenv.mkDerivation rec {
     addToSearchPath XDG_DATA_DIRS "${glib.getSchemaDataDirPath gcr}"
     # The same test also requires home directory so that it can store settings.
     export HOME=$TMPDIR
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Pick up icons from Gcr
+      --prefix XDG_DATA_DIRS : "${gcr}/share"
+    )
   '';
 
   passthru = {

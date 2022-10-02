@@ -1,4 +1,5 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
 , freetype
 , pillow
@@ -11,18 +12,25 @@ let
   ft = freetype.overrideAttrs (oldArgs: { dontDisableStatic = true; });
 in buildPythonPackage rec {
   pname = "reportlab";
-  version = "3.6.3";
+  version = "3.6.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "be4f05230eb17b9c9c61a180ab0c89c30112da2823c77807a2a5ddba19365865";
+    sha256 = "sha256-BPxEIPBUiBXQYj4DHIah9/PzAD5pnZr3FIdC4tcrAko=";
   };
+
+  patches = [
+    ./darwin-m1-compat.patch
+  ];
 
   checkInputs = [ glibcLocales ];
 
   buildInputs = [ ft pillow ];
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace "mif = findFile(d,'ft2build.h')" "mif = findFile('${lib.getDev ft}','ft2build.h')"
+
     # Remove all the test files that require access to the internet to pass.
     rm tests/test_lib_utils.py
     rm tests/test_platypus_general.py

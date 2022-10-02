@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, ddt
 , fetchFromGitHub
 , importlib-metadata
 , jsonschema
@@ -7,26 +8,29 @@
 , packageurl-python
 , poetry-core
 , pytestCheckHook
+, python
 , pythonOlder
 , requirements-parser
+, sortedcontainers
 , setuptools
 , toml
 , types-setuptools
 , types-toml
+, xmldiff
 }:
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "1.1.0";
+  version = "3.1.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-U8CTSz+weh2IJr9Mc1kAtTa3edydQjMvHVpTVXJ7mYU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pbwhjxlEdne426CiUORSM8w6MXpgpjMWoH37TnXxA5s=";
   };
 
   nativeBuildInputs = [
@@ -38,19 +42,34 @@ buildPythonPackage rec {
     packageurl-python
     requirements-parser
     setuptools
+    sortedcontainers
     toml
     types-setuptools
     types-toml
   ];
 
   checkInputs = [
+    ddt
     jsonschema
     lxml
     pytestCheckHook
+    xmldiff
   ];
 
   pythonImportsCheck = [
     "cyclonedx"
+  ];
+
+  preCheck = ''
+    export PYTHONPATH=tests''${PYTHONPATH+:$PYTHONPATH}
+  '';
+
+  pytestFlagsArray = [ "tests/" ];
+
+  disabledTests = [
+    # These tests require network access.
+    "test_bom_v1_3_with_metadata_component"
+    "test_bom_v1_4_with_metadata_component"
   ];
 
   meta = with lib; {

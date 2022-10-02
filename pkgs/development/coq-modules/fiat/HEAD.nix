@@ -8,10 +8,10 @@ with lib; mkCoqDerivation rec {
   inherit version;
   defaultVersion = if coq.coq-version == "8.5" then "2016-10-24" else null;
   release."2016-10-24".rev    = "7feb6c64be9ebcc05924ec58fe1463e73ec8206a";
-  release."2016-10-24".sha256 = "0griqc675yylf9rvadlfsabz41qy5f5idya30p5rv6ysiakxya64";
+  release."2016-10-24".sha256 = "16y57vibq3f5i5avgj80f4i3aw46wdwzx36k5d3pf3qk17qrlrdi";
 
   mlPlugin = true;
-  extraBuildInputs = [ python27 ];
+  buildInputs = [ python27 ];
 
   prePatch = "patchShebangs etc/coq-scripts";
 

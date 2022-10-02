@@ -2,15 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "althttpd";
-  version = "unstable-2022-01-10";
+  version = "unstable-2022-08-12";
 
   src = fetchfossil {
     url = "https://sqlite.org/althttpd/";
-    rev = "83196564d05f33c3";
-    sha256 = "sha256-z/XMVnDihcO56kJaXIJGUUdnz8mR5jlySrLZX1tkV5c=";
+    rev = "823a1d985d4bacaa";
+    sha256 = "sha256-yfVsOfqtHw9ftnK5B4RWeRR/ygfsTEDm7fFSaVxsCas=";
   };
 
   buildInputs = [ openssl ];
+
+  makeFlags = [ "CC:=$(CC)" ];
 
   installPhase = ''
     install -Dm755 -t $out/bin althttpd

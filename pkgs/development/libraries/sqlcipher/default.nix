@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sqlcipher";
-  version = "4.5.0";
+  version = "4.5.2";
 
   src = fetchFromGitHub {
     owner = "sqlcipher";
     repo = "sqlcipher";
     rev = "v${version}";
-    sha256 = "sha256-MFuFyKvOOrDrq9cDPQlNK6/YHSkaRX4qbw/44m5CRh4=";
+    sha256 = "sha256-EUm4akVWUiK8U6Je1uWMo8KLQLsk57kOFCCU5Uajjt8=";
   };
 
   nativeBuildInputs = [ installShellFiles tcl ];

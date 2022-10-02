@@ -1,4 +1,4 @@
-{ stdenv }@orig:
+{ stdenv }:
 # srcOnly is a utility builder that only fetches and unpacks the given `src`,
 # maybe pathings it in the process with the optional `patches` and
 # `buildInputs` attributes.
@@ -7,25 +7,15 @@
 #
 # > srcOnly pkgs.hello
 #
-{ name
-, src
-, stdenv ? orig.stdenv
-, patches ? []
-, # deprecated, use the nativeBuildInputs
-  buildInputs ? []
-, # used to pass extra unpackers
-  nativeBuildInputs ? []
-, # needed when passing an existing derivation
-  ...
-}:
-stdenv.mkDerivation {
-  inherit
-    buildInputs
-    name
-    nativeBuildInputs
-    patches
-    src
-    ;
+attrs:
+let
+  args = if builtins.hasAttr "drvAttrs" attrs then attrs.drvAttrs else attrs;
+  name = if builtins.hasAttr "name" args then args.name else "${args.pname}-${args.version}";
+in
+stdenv.mkDerivation (args // {
+  name = "${name}-source";
   installPhase = "cp -r . $out";
+  outputs = [ "out" ];
+  separateDebugInfo = false;
   phases = ["unpackPhase" "patchPhase" "installPhase"];
-}
+})

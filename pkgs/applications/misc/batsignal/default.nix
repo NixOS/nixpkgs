@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "batsignal";
-  version = "1.3.2";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "electrickite";
     repo = "batsignal";
     rev = version;
-    sha256 = "sha256-+5yAwBUyhqmoV8l8VwIQMxnSgjNZNbGfGajPhA+IFwA=";
+    sha256 = "sha256-3T0vpyAw21u2+csqaz3Yf10G8IQRDyjReedIo+I4fvw=";
   };
 
   buildInputs = [ libnotify glib ];

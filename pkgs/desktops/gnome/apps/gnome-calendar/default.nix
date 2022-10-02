@@ -1,40 +1,54 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
-, libdazzle
+, wrapGAppsHook4
 , libgweather
 , geoclue2
 , geocode-glib
-, python3
 , gettext
 , libxml2
 , gnome
-, gtk3
+, gtk4
 , evolution-data-server
+, libical
 , libsoup
 , glib
-, gnome-online-accounts
 , gsettings-desktop-schemas
-, libhandy
-, adwaita-icon-theme
+, libadwaita
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-calendar";
-  version = "41.2";
+  version = "42.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "lWsvGQMiZRxn/mZyI4lviqWs8ztwraWjsFpTYb2mYRo=";
+    sha256 = "rnzGOq6WoCqlmbbWo0hYX0529ylTbznvt0QwKwW1+70=";
   };
 
-  patches = [
-    # https://gitlab.gnome.org/GNOME/gnome-calendar/-/merge_requests/84
-    # A refactor has caused the PR patch to drift enough to need rebasing
-    ./gtk_image_reset_crash.patch
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    libxml2
+    wrapGAppsHook4
+  ];
+
+  buildInputs = [
+    gtk4
+    evolution-data-server # waiting for GTK4 port
+    libical
+    libsoup
+    glib
+    libgweather
+    geoclue2
+    geocode-glib
+    gsettings-desktop-schemas
+    libadwaita
   ];
 
   passthru = {
@@ -44,41 +58,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gettext
-    libxml2
-    wrapGAppsHook
-    python3
-  ];
-
-  buildInputs = [
-    gtk3
-    evolution-data-server
-    libsoup
-    glib
-    gnome-online-accounts
-    libdazzle
-    libgweather
-    geoclue2
-    geocode-glib
-    gsettings-desktop-schemas
-    adwaita-icon-theme
-    libhandy
-  ];
-
-  postPatch = ''
-    chmod +x build-aux/meson/meson_post_install.py # patchShebangs requires executable file
-    patchShebangs build-aux/meson/meson_post_install.py
-  '';
-
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Calendar";
     description = "Simple and beautiful calendar application for GNOME";
     maintainers = teams.gnome.members;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }

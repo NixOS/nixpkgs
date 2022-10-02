@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "apscheduler";
-  version = "3.8.1";
+  version = "3.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "APScheduler";
     inherit version;
-    hash = "sha256-XPNE68+9qkiuF4wCnAVc7HvHpKR8IeMV5NHwi9NfI1U=";
+    hash = "sha256-ZeZXS2OVSY03HQRfKop+T31Qxq0h73MT0VscfPIN8eM=";
   };
 
   buildInputs = [

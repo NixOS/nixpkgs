@@ -2,11 +2,11 @@
 
 buildPythonApplication rec {
   pname = "i3-resurrect";
-  version = "1.4.3";
+  version = "1.4.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0h181frdwpqfj9agw43qgicdvzv1i7xwky0vs0ksd8h18qxqp4hr";
+    sha256 = "sha256-13FKRvEE4vHq5G51G1UyBnfNiWeS9Q/SYCG16E1Sn4c=";
   };
 
   propagatedBuildInputs = [ click psutil xprop natsort i3ipc xdotool importlib-metadata ];

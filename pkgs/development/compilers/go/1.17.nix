@@ -3,11 +3,9 @@
 , fetchurl
 , tzdata
 , iana-etc
-, runCommand
 , perl
 , which
 , pkg-config
-, patch
 , procps
 , pcre
 , cacert
@@ -18,51 +16,46 @@
 , runtimeShell
 , buildPackages
 , pkgsBuildTarget
-, callPackage
+, threadsCross
 }:
 
 let
-  go_bootstrap = buildPackages.callPackage ./bootstrap.nix { };
-
-  goBootstrap = runCommand "go-bootstrap" { } ''
-    mkdir $out
-    cp -rf ${go_bootstrap}/* $out/
-    chmod -R u+w $out
-    find $out -name "*.c" -delete
-    cp -rf $out/bin/* $out/share/go/bin/
-  '';
+  goBootstrap = buildPackages.callPackage ./bootstrap116.nix { };
 
   goarch = platform: {
-    "i686" = "386";
-    "x86_64" = "amd64";
     "aarch64" = "arm64";
     "arm" = "arm";
     "armv5tel" = "arm";
     "armv6l" = "arm";
     "armv7l" = "arm";
+    "i686" = "386";
     "mips" = "mips";
+    "mips64el" = "mips64le";
     "mipsel" = "mipsle";
+    "powerpc64le" = "ppc64le";
     "riscv64" = "riscv64";
     "s390x" = "s390x";
-    "powerpc64le" = "ppc64le";
-  }.${platform.parsed.cpu.name} or (throw "Unsupported system");
+    "x86_64" = "amd64";
+  }.${platform.parsed.cpu.name} or (throw "Unsupported system: ${platform.parsed.cpu.name}");
 
   # We need a target compiler which is still runnable at build time,
   # to handle the cross-building case where build != host == target
   targetCC = pkgsBuildTarget.targetPackages.stdenv.cc;
-in
 
+  isCross = stdenv.buildPlatform != stdenv.targetPlatform;
+in
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.17.6";
+  version = "1.17.13";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "sha256-TcG78/9h8MH/Kxk1Xm2IFRpwEmJopHx2FHdobvlHSMg=";
+    sha256 = "sha256-oaSLI6+yBvlee7qpuJjZZfkIJvbx0fwMHXhK2gzTAP0=";
   };
 
+  strictDeps = true;
   # perl is used for testing go vet
-  nativeBuildInputs = [ perl which pkg-config patch procps ];
+  nativeBuildInputs = [ perl which pkg-config procps ];
   buildInputs = [ cacert pcre ]
     ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
@@ -70,6 +63,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ xcbuild ];
 
   depsTargetTargetPropagated = lib.optionals stdenv.isDarwin [ Security Foundation ];
+
+  depsBuildTarget = lib.optional isCross targetCC;
+
+  depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows threadsCross;
 
   hardeningDisable = [ "all" ];
 
@@ -167,7 +164,7 @@ stdenv.mkDerivation rec {
     ./remove-test-pie-1.15.patch
     ./creds-test.patch
     ./go-1.9-skip-flaky-19608.patch
-    ./go-1.9-skip-flaky-20072.patch
+    ./skip-chown-tests-1.16.patch
     ./skip-external-network-tests-1.16.patch
     ./skip-nohup-tests.patch
     ./skip-cgo-tests-1.15.patch
@@ -194,12 +191,12 @@ stdenv.mkDerivation rec {
   # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
   # to be different from CC/CXX
   CC_FOR_TARGET =
-    if (stdenv.buildPlatform != stdenv.targetPlatform) then
+    if isCross then
       "${targetCC}/bin/${targetCC.targetPrefix}cc"
     else
       null;
   CXX_FOR_TARGET =
-    if (stdenv.buildPlatform != stdenv.targetPlatform) then
+    if isCross then
       "${targetCC}/bin/${targetCC.targetPrefix}c++"
     else
       null;
@@ -223,7 +220,7 @@ stdenv.mkDerivation rec {
 
     export PATH=$(pwd)/bin:$PATH
 
-    ${lib.optionalString (stdenv.buildPlatform != stdenv.targetPlatform) ''
+    ${lib.optionalString isCross ''
     # Independent from host/target, CC should produce code for the building system.
     # We only set it when cross-compiling.
     export CC=${buildPackages.stdenv.cc}/bin/cc
@@ -271,11 +268,15 @@ stdenv.mkDerivation rec {
 
   disallowedReferences = [ goBootstrap ];
 
+  passthru = {
+    inherit goBootstrap;
+  };
+
   meta = with lib; {
-    homepage = "https://go.dev/";
     description = "The Go Programming language";
+    homepage = "https://go.dev/";
     license = licenses.bsd3;
     maintainers = teams.golang.members;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.darwin ++ platforms.linux;
   };
 }

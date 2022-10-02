@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zenmonitor";
-  version = "1.5.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "Ta180m";
     repo = "zenmonitor3";
     rev = "v${version}";
-    sha256 = "sha256-dbjLpfflIsEU+wTApghJYBPxBXqS/7MJqcMBcj50o6I=";
+    sha256 = "sha256-2EsuSMXnnMg0e0JD1TXJplsi7sOg9em0qqge2WlC6ro=";
   };
 
   buildInputs = [ gtk3 ];

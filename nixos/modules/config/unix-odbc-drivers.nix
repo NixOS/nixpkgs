@@ -20,10 +20,10 @@ in {
       type = types.listOf types.package;
       default = [];
       example = literalExpression "with pkgs.unixODBCDrivers; [ sqlite psql ]";
-      description = ''
+      description = lib.mdDoc ''
         Specifies Unix ODBC drivers to be registered in
-        <filename>/etc/odbcinst.ini</filename>.  You may also want to
-        add <literal>pkgs.unixODBC</literal> to the system path to get
+        {file}`/etc/odbcinst.ini`.  You may also want to
+        add `pkgs.unixODBC` to the system path to get
         a command line client to connect to ODBC databases.
       '';
     };

@@ -4,6 +4,7 @@
 
   libepoxy, lcms2, libICE, libSM, libcap, libdrm, libinput, libxkbcommon, mesa,
   pipewire, udev, wayland, xcb-util-cursor, xwayland,
+  plasma-wayland-protocols, wayland-protocols, libxcvt,
 
   qtdeclarative, qtmultimedia, qtquickcontrols2, qtscript, qtsensors,
   qtvirtualkeyboard, qtx11extras,
@@ -11,18 +12,20 @@
   breeze-qt5, kactivities, kcompletion, kcmutils, kconfig, kconfigwidgets,
   kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel, ki18n,
   kiconthemes, kidletime, kinit, kio, knewstuff, knotifications, kpackage,
-  krunner, kscreenlocker, kservice, kwayland, kwayland-server, kwidgetsaddons,
+  krunner, kscreenlocker, kservice, kwayland, kwidgetsaddons,
   kwindowsystem, kxmlgui, plasma-framework, libqaccessibilityclient,
+  python3
 }:
 
 # TODO (ttuegel): investigate qmlplugindump failure
 
 mkDerivation {
-  name = "kwin";
+  pname = "kwin";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     libepoxy lcms2 libICE libSM libcap libdrm libinput libxkbcommon mesa pipewire
     udev wayland xcb-util-cursor xwayland
+    libxcvt plasma-wayland-protocols wayland-protocols
 
     qtdeclarative qtmultimedia qtquickcontrols2 qtscript qtsensors
     qtvirtualkeyboard qtx11extras
@@ -30,16 +33,22 @@ mkDerivation {
     breeze-qt5 kactivities kcmutils kcompletion kconfig kconfigwidgets
     kcoreaddons kcrash kdeclarative kdecoration kglobalaccel ki18n kiconthemes
     kidletime kinit kio knewstuff knotifications kpackage krunner kscreenlocker
-    kservice kwayland kwayland-server kwidgetsaddons kwindowsystem kxmlgui
+    kservice kwayland kwidgetsaddons kwindowsystem kxmlgui
     plasma-framework libqaccessibilityclient
 
   ];
   outputs = [ "out" "dev" ];
+
+  postPatch = ''
+    patchShebangs src/effects/strip-effect-metadata.py
+  '';
+
   patches = [
     ./0001-follow-symlinks.patch
     ./0002-xwayland.patch
     ./0003-plugins-qpa-allow-using-nixos-wrapper.patch
     ./0001-NixOS-Unwrap-executable-name-for-.desktop-search.patch
+    ./0001-Lower-CAP_SYS_NICE-from-the-ambient-set.patch
     # Pass special environments through arguemnts to `kwin_wayland`, bypassing
     # ld.so(8) environment stripping due to `kwin_wayland`'s capabilities.
     # We need this to have `TZDIR` correctly set for `plasmashell`, or
@@ -53,7 +62,6 @@ mkDerivation {
   CXXFLAGS = [
     ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''
   ];
-  cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" ];
   postInstall = ''
     # Some package(s) refer to these service types by the wrong name.
     # I would prefer to patch those packages, but I cannot find them!

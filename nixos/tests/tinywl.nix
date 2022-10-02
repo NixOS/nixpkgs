@@ -6,10 +6,11 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       maintainers = with lib.maintainers; [ primeos ];
     };
 
-    machine = { config, ... }: {
+    nodes.machine = { config, ... }: {
       # Automatically login on tty1 as a normal user:
       imports = [ ./common/user-account.nix ];
       services.getty.autologinUser = "alice";
+      security.polkit.enable = true;
 
       environment = {
         systemPackages = with pkgs; [ tinywl foot wayland-utils ];

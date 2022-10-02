@@ -15,9 +15,10 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-regexp" ];
 
   meta = with lib; {
-    homepage = "https://www.liblognorm.com/";
     description = "Help to make sense out of syslog data, or, actually, any event data that is present in text form";
+    homepage = "https://www.liblognorm.com/";
     license = licenses.lgpl21;
+    mainProgram = "lognormalizer";
     platforms = platforms.all;
   };
 }

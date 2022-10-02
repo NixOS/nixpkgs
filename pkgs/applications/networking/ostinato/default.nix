@@ -1,6 +1,7 @@
 { lib, mkDerivation, fetchFromGitHub, fetchurl, qmake, makeDesktopItem
 , qtbase, qtscript, protobuf, libpcap, wireshark, gzip, diffutils, gawk
 , libnl
+, copyDesktopItems
 }:
 
 mkDerivation rec {
@@ -21,34 +22,34 @@ mkDerivation rec {
 
   buildInputs = [ qtbase protobuf libpcap qtscript libnl ];
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    qmake
+  ];
 
   patches = [ ./drone_ini.patch ];
   prePatch = ''
     sed -i 's|/usr/include/libnl3|${libnl.dev}/include/libnl3|' server/drone.pro
   '';
 
-  desktopItem = makeDesktopItem {
-    type          = "Application";
+  desktopItems = lib.singleton (makeDesktopItem {
     name          = "ostinato";
     desktopName   = "Ostinato";
     genericName   = "Packet/Traffic Generator and Analyzer";
     comment       = "Network packet and traffic generator and analyzer with a friendly GUI";
-    categories    = "Network";
-    terminal      = "false";
-    startupNotify = "true";
-    exec          = "$out/bin/ostinato";
+    categories    = [ "Network" ];
+    startupNotify = true;
+    exec          = "@out@/bin/ostinato";
     icon          =  ostinatoIcon;
-    extraEntries  = ''
-      GenericName[it]=Generatore ed Analizzatore di pacchetti di rete
-      Comment[it]=Generatore ed Analizzatore di pacchetti di rete con interfaccia amichevole
-    '';
-    fileValidation = false;
-  };
+    extraConfig   = {
+      "GenericName[it]" = "Generatore ed Analizzatore di pacchetti di rete";
+      "Comment[it]"     = "Generatore ed Analizzatore di pacchetti di rete con interfaccia amichevole";
+    };
+  });
 
-  postInstall = ''
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
+  preFixup = ''
+    substituteInPlace $out/share/applications/ostinato.desktop \
+      --subst-var out
 
     cat > $out/bin/ostinato.ini <<EOF
     WiresharkPath=${wireshark}/bin/wireshark
@@ -65,8 +66,8 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A packet traffic generator and analyzer";
-    homepage    = "https://ostinato.org";
-    license     = licenses.gpl3;
+    homepage    = "https://ostinato.org/";
+    license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ rick68 ];
     platforms   = with platforms; linux ++ darwin ++ cygwin;
   };

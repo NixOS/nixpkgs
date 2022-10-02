@@ -1,29 +1,39 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, gucci }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gucci";
-  version = "0.1.0";
-
-  goPackagePath = "github.com/noqcks/gucci";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "noqcks";
     repo = "gucci";
-    rev = version;
-    sha256 = "0ksrmzb3iggc7gm51fl0jbb15d0gmpclslpkq2sl2xjzk29pkllq";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-HJPNpLRJPnziSMvxLCiNDeCWO439ELSZs/4Cq1a7Amo=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-rAZCj5xtwTgd9/KDYnQTU1jbabtWJF5MCFgcmixDN/Q=";
 
-  ldflags = [
-    "-X main.AppVersion=${version}"
-  ];
+  ldflags = [ "-s" "-w" "-X main.AppVersion=${version}" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = gucci;
+  };
+
+  checkFlags = [ "-short" ];
+
+  # Integration tests rely on Ginkgo but fail.
+  # Related: https://github.com/onsi/ginkgo/issues/602
+  #
+  # Disable integration tests.
+  preCheck = ''
+    buildFlagsArray+=("-run" "[^(TestIntegration)]")
+  '';
 
   meta = with lib; {
     description = "A simple CLI templating tool written in golang";
     homepage = "https://github.com/noqcks/gucci";
     license = licenses.mit;
-    maintainers = [ maintainers.braydenjw ];
+    maintainers = with maintainers; [ braydenjw ];
     platforms = platforms.unix;
   };
 }

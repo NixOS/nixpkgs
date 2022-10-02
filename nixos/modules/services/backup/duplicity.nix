@@ -13,12 +13,12 @@ let
 in
 {
   options.services.duplicity = {
-    enable = mkEnableOption "backups with duplicity";
+    enable = mkEnableOption (lib.mdDoc "backups with duplicity");
 
     root = mkOption {
       type = types.path;
       default = "/";
-      description = ''
+      description = lib.mdDoc ''
         Root directory to backup.
       '';
     };
@@ -27,56 +27,51 @@ in
       type = types.listOf types.str;
       default = [ ];
       example = [ "/home" ];
-      description = ''
+      description = lib.mdDoc ''
         List of paths to include into the backups. See the FILE SELECTION
-        section in <citerefentry><refentrytitle>duplicity</refentrytitle>
-        <manvolnum>1</manvolnum></citerefentry> for details on the syntax.
+        section in {manpage}`duplicity(1)` for details on the syntax.
       '';
     };
 
     exclude = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         List of paths to exclude from backups. See the FILE SELECTION section in
-        <citerefentry><refentrytitle>duplicity</refentrytitle>
-        <manvolnum>1</manvolnum></citerefentry> for details on the syntax.
+        {manpage}`duplicity(1)` for details on the syntax.
       '';
     };
 
     targetUrl = mkOption {
       type = types.str;
       example = "s3://host:port/prefix";
-      description = ''
+      description = lib.mdDoc ''
         Target url to backup to. See the URL FORMAT section in
-        <citerefentry><refentrytitle>duplicity</refentrytitle>
-        <manvolnum>1</manvolnum></citerefentry> for supported urls.
+        {manpage}`duplicity(1)` for supported urls.
       '';
     };
 
     secretFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Path of a file containing secrets (gpg passphrase, access key...) in
         the format of EnvironmentFile as described by
-        <citerefentry><refentrytitle>systemd.exec</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry>. For example:
-        <programlisting>
-        PASSPHRASE=<replaceable>...</replaceable>
-        AWS_ACCESS_KEY_ID=<replaceable>...</replaceable>
-        AWS_SECRET_ACCESS_KEY=<replaceable>...</replaceable>
-        </programlisting>
+        {manpage}`systemd.exec(5)`. For example:
+        ```
+        PASSPHRASE=«...»
+        AWS_ACCESS_KEY_ID=«...»
+        AWS_SECRET_ACCESS_KEY=«...»
+        ```
       '';
     };
 
     frequency = mkOption {
       type = types.nullOr types.str;
       default = "daily";
-      description = ''
+      description = lib.mdDoc ''
         Run duplicity with the given frequency (see
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry> for the format).
+        {manpage}`systemd.time(7)` for the format).
         If null, do not run automatically.
       '';
     };
@@ -85,10 +80,9 @@ in
       type = types.listOf types.str;
       default = [ ];
       example = [ "--backend-retry-delay" "100" ];
-      description = ''
+      description = lib.mdDoc ''
         Extra command-line flags passed to duplicity. See
-        <citerefentry><refentrytitle>duplicity</refentrytitle>
-        <manvolnum>1</manvolnum></citerefentry>.
+        {manpage}`duplicity(1)`.
       '';
     };
 
@@ -96,10 +90,10 @@ in
       type = types.str;
       default = "never";
       example = "1M";
-      description = ''
-        If <literal>"never"</literal> (the default) always do incremental
+      description = lib.mdDoc ''
+        If `"never"` (the default) always do incremental
         backups (the first backup will be a full backup, of course).  If
-        <literal>"always"</literal> always do full backups.  Otherwise, this
+        `"always"` always do full backups.  Otherwise, this
         must be a string representing a duration. Full backups will be made
         when the latest full backup is older than this duration. If this is not
         the case, an incremental backup is performed.
@@ -111,7 +105,7 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "6M";
-        description = ''
+        description = lib.mdDoc ''
           If non-null, delete all backup sets older than the given time.  Old backup sets
           will not be deleted if backup sets newer than time depend on them.
         '';
@@ -120,7 +114,7 @@ in
         type = types.nullOr types.int;
         default = null;
         example = 2;
-        description = ''
+        description = lib.mdDoc ''
           If non-null, delete all backups sets that are older than the count:th last full
           backup (in other words, keep the last count full backups and
           associated incremental sets).
@@ -130,7 +124,7 @@ in
         type = types.nullOr types.int;
         default = null;
         example = 1;
-        description = ''
+        description = lib.mdDoc ''
           If non-null, delete incremental sets of all backups sets that are
           older than the count:th last full backup (in other words, keep only
           old full backups and not their increments).

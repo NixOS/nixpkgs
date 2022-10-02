@@ -35,7 +35,7 @@ let
             read ref_path
             if [ "$ref_path" != "$path" ]
             then
-                echo "    (builtins.storePath $ref_path)"
+                echo "    (builtins.storePath (/. + \"$ref_path\"))"
             fi
             count=$(($count - 1))
         done

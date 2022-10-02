@@ -8,13 +8,16 @@
 }:
 
 buildPythonPackage rec {
-  pname = "simple_di";
-  version = "0.1.4";
+  pname = "simple-di";
+  version = "0.1.5";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "2667f2b9095e86c7726b3853c30b37f527f7d247282c7dd0b3428a7fb5d1a8a9";
+    pname = "simple_di";
+    inherit version;
+    hash = "sha256-GSuZne5M1PsRpdhhFlyq0C2PBhfA+Ab8Wwn5BfGgPKA=";
   };
 
   propagatedBuildInputs = [
@@ -31,10 +34,10 @@ buildPythonPackage rec {
   # pypi distribution contains no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Simple dependency injection library";
     homepage = "https://github.com/bentoml/simple_di";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ sauyon ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ sauyon ];
   };
 }

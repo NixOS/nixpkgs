@@ -23,10 +23,15 @@ perlPackages.buildPerlPackage {
     sed -i '/p2_mp4h\/doc/d' Makefile.in
   '';
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = with perlPackages;
-    [ perl TermReadKey GD BitVector ncurses lynx makeWrapper ImageSize ];
+    [ perl TermReadKey GD BitVector ncurses lynx ImageSize ];
 
   patches = [ ./redhat-with-thr.patch ./dynaloader.patch ./no_bitvector.patch ];
+
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: iselect_browse.o:(.bss+0x2020): multiple definition of `Line'; iselect_main.o:(.bss+0x100000): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   hardeningDisable = [ "format" ];
 

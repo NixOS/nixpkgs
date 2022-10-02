@@ -1,11 +1,10 @@
 { config, lib, stdenv, fetchurl, gettext, meson, ninja, pkg-config, perl, python3
-, libiconv, zlib, libffi, pcre, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
+, libiconv, zlib, libffi, pcre, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
 , util-linuxMinimal ? null
 , buildPackages
 
 # this is just for tests (not in the closure of any regular package)
-, doCheck ? config.doCheckByDefault or false
 , coreutils, dbus, libxml2, tzdata
 , desktop-file-utils, shared-mime-info
 , darwin, fetchpatch
@@ -43,24 +42,29 @@ let
   '';
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.70.2";
+  version = "2.72.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glib/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "BVFFnIXNPaPVjdyQFv0ovlr1A/XhYVpxultRKslFgG8=";
+    url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
+    sha256 = "Sjmi9iS4US1QDVhAFz7af6hfUcEJBS6ugGrOzoXTRfA=";
   };
 
   patches = optionals stdenv.isDarwin [
     ./darwin-compilation.patch
-    ./link-with-coreservices.patch
   ] ++ optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
   ] ++ [
     ./glib-appinfo-watch.patch
     ./schema-override-variable.patch
+
+    # Add support for the GNOME’s default terminal emulator.
+    # https://gitlab.gnome.org/GNOME/glib/-/issues/2618
+    ./gnome-console-support.patch
+    # Do the same for Pantheon’s terminal emulator.
+    ./elementary-terminal-support.patch
 
     # GLib contains many binaries used for different purposes;
     # we will install them to different outputs:
@@ -85,14 +89,26 @@ stdenv.mkDerivation rec {
     # 3. Tools for desktop environment that cannot go to $bin due to $out depending on them ($out)
     #    * gio-launch-desktop
     ./split-dev-programs.patch
-  ] ++ optional doCheck ./skip-timer-test.patch;
+
+    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/2866
+    (fetchpatch {
+      name = "tests-skip-g-file-info-test-if-atime-unsupported.patch";
+      url = "https://gitlab.gnome.org/qyliss/glib/-/commit/339a06d66685107280ca6bdca5da5d96b8222fb5.patch";
+      sha256 = "sha256-/NdFkuiJvyass3jTDEJPeciA2Lwe53IUd3kAnKAvTaw=";
+    })
+    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/2867
+    ./tests-skip-shared-libs-if-default_library-static.patch
+
+    ./skip-timer-test.patch
+  ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
   setupHook = ./setup-hook.sh;
 
   buildInputs = [
-    libelf setupHook pcre
+    libelf finalAttrs.setupHook pcre
+  ] ++ optionals (!stdenv.hostPlatform.isWindows) [
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
   ] ++ optionals stdenv.isLinux [
     libselinux
@@ -115,7 +131,10 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    meson ninja pkg-config perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 libxml2
+    (buildPackages.meson.override {
+      withDarwinFrameworksGtkDocPatch = stdenv.isDarwin;
+    })
+    ninja pkg-config perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 libxml2 libxslt
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
@@ -126,6 +145,8 @@ stdenv.mkDerivation rec {
     "-Dgtk_doc=${boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
     "-Dnls=enabled"
     "-Ddevbindir=${placeholder "dev"}/bin"
+  ] ++ optionals (!stdenv.isDarwin) [
+    "-Dman=true"                # broken on Darwin
   ];
 
   NIX_CFLAGS_COMPILE = toString [
@@ -141,8 +162,25 @@ stdenv.mkDerivation rec {
     chmod +x docs/reference/gio/concat-files-helper.py
     patchShebangs docs/reference/gio/concat-files-helper.py
     patchShebangs glib/gen-unicode-tables.pl
-    patchShebangs tests/gen-casefold-txt.py
-    patchShebangs tests/gen-casemap-txt.py
+    patchShebangs glib/tests/gen-casefold-txt.py
+    patchShebangs glib/tests/gen-casemap-txt.py
+
+    # Needs machine-id, comment the test
+    sed -e '/\/gdbus\/codegen-peer-to-peer/ s/^\/*/\/\//' -i gio/tests/gdbus-peer.c
+    sed -e '/g_test_add_func/ s/^\/*/\/\//' -i gio/tests/gdbus-address-get-session.c
+    # All gschemas fail to pass the test, upstream bug?
+    sed -e '/g_test_add_data_func/ s/^\/*/\/\//' -i gio/tests/gschema-compile.c
+    # Cannot reproduce the failing test_associations on hydra
+    sed -e '/\/appinfo\/associations/d' -i gio/tests/appinfo.c
+    # Needed because of libtool wrappers
+    sed -e '/g_subprocess_launcher_set_environ (launcher, envp);/a g_subprocess_launcher_setenv (launcher, "PATH", g_getenv("PATH"), TRUE);' -i gio/tests/gsubprocess.c
+  '' + lib.optionalString stdenv.hostPlatform.isWindows ''
+    substituteInPlace gio/win32/meson.build \
+      --replace "libintl, " ""
+  '';
+
+  postConfigure = ''
+    patchShebangs gio/gdbus-2.0/codegen/gdbus-codegen gobject/glib-{genmarshal,mkenums}
   '';
 
   DETERMINISTIC_BUILD = 1;
@@ -153,16 +191,31 @@ stdenv.mkDerivation rec {
     sed -i "$dev/bin/glib-gettextize" -e "s|^gettext_dir=.*|gettext_dir=$dev/share/glib-2.0/gettext|"
 
     # This file is *included* in gtk3 and would introduce runtime reference via __FILE__.
-    sed '1i#line 1 "${pname}-${version}/include/glib-2.0/gobject/gobjectnotifyqueue.c"' \
+    sed '1i#line 1 "glib-${finalAttrs.version}/include/glib-2.0/gobject/gobjectnotifyqueue.c"' \
       -i "$dev"/include/glib-2.0/gobject/gobjectnotifyqueue.c
+    for i in $bin/bin/*; do
+      moveToOutput "share/bash-completion/completions/''${i##*/}" "$bin"
+    done
+    for i in $dev/bin/*; do
+      moveToOutput "share/bash-completion/completions/''${i##*/}" "$dev"
+    done
   '' + optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     cp -r ${buildPackages.glib.devdoc} $devdoc
   '';
 
+  # Move man pages to the same output as their binaries (needs to be
+  # done after preFixupHooks which moves man pages too - in
+  # _multioutDocs)
+  postFixup = ''
+    for i in $dev/bin/*; do
+      moveToOutput "share/man/man1/''${i##*/}.1.*" "$dev"
+    done
+  '';
+
   checkInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
-  preCheck = optionalString doCheck ''
-    export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${pname}-${version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+  preCheck = optionalString finalAttrs.doCheck or config.doCheckByDefault or false ''
+    export LD_LIBRARY_PATH="$NIX_BUILD_TOP/glib-${finalAttrs.version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export TZDIR="${tzdata}/share/zoneinfo"
     export XDG_CACHE_HOME="$TMP"
     export XDG_RUNTIME_HOME="$TMP"
@@ -171,21 +224,7 @@ stdenv.mkDerivation rec {
     export G_TEST_DBUS_DAEMON="${dbus.daemon}/bin/dbus-daemon"
     export PATH="$PATH:$(pwd)/gobject"
     echo "PATH=$PATH"
-
-    substituteInPlace gio/tests/desktop-files/home/applications/epiphany-weather-for-toronto-island-9c6a4e022b17686306243dada811d550d25eb1fb.desktop \
-      --replace "Exec=/bin/true" "Exec=${coreutils}/bin/true"
-    # Needs machine-id, comment the test
-    sed -e '/\/gdbus\/codegen-peer-to-peer/ s/^\/*/\/\//' -i gio/tests/gdbus-peer.c
-    sed -e '/g_test_add_func/ s/^\/*/\/\//' -i gio/tests/gdbus-unix-addresses.c
-    # All gschemas fail to pass the test, upstream bug?
-    sed -e '/g_test_add_data_func/ s/^\/*/\/\//' -i gio/tests/gschema-compile.c
-    # Cannot reproduce the failing test_associations on hydra
-    sed -e '/\/appinfo\/associations/d' -i gio/tests/appinfo.c
-    # Needed because of libtool wrappers
-    sed -e '/g_subprocess_launcher_set_environ (launcher, envp);/a g_subprocess_launcher_setenv (launcher, "PATH", g_getenv("PATH"), TRUE);' -i gio/tests/gsubprocess.c
   '';
-
-  inherit doCheck;
 
   separateDebugInfo = stdenv.isLinux;
 
@@ -197,8 +236,13 @@ stdenv.mkDerivation rec {
     getSchemaPath = pkg: makeSchemaPath pkg pkg.name;
     getSchemaDataDirPath = pkg: makeSchemaDataDirPath pkg pkg.name;
 
+    tests.withChecks = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
+
     inherit flattenInclude;
-    updateScript = gnome.updateScript { packageName = "glib"; };
+    updateScript = gnome.updateScript {
+      packageName = "glib";
+      versionPolicy = "odd-unstable";
+    };
   };
 
   meta = with lib; {
@@ -215,4 +259,4 @@ stdenv.mkDerivation rec {
       set of utility functions for strings and common data structures.
     '';
   };
-}
+})

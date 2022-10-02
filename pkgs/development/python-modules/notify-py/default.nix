@@ -9,7 +9,8 @@
 , which
 , jeepney
 , loguru
-, pytestCheckHook
+, pytest
+, dbus
 , coreutils
 }:
 
@@ -41,16 +42,29 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ loguru ]
-    ++ lib.optionals stdenv.isLinux [ jeepney ];
+  propagatedBuildInputs = [
+    loguru
+  ] ++ lib.optionals stdenv.isLinux [
+    jeepney
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytest
+  ] ++ lib.optionals stdenv.isLinux [
+    dbus
+  ];
 
-  # Tests search for "afplay" binary which is built in to MacOS and not available in nixpkgs
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  checkPhase = if stdenv.isDarwin then ''
+    # Tests search for "afplay" binary which is built in to macOS and not available in nixpkgs
     mkdir $TMP/bin
     ln -s ${coreutils}/bin/true $TMP/bin/afplay
-    export PATH="$TMP/bin:$PATH"
+    PATH="$TMP/bin:$PATH" pytest
+  '' else if stdenv.isLinux then ''
+    dbus-run-session \
+      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      pytest
+  '' else ''
+    pytest
   '';
 
   pythonImportsCheck = [ "notifypy" ];

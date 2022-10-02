@@ -41,24 +41,24 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Whether to enable a user service for the Emacs daemon. Use <literal>emacsclient</literal> to connect to the
-        daemon. If <literal>true</literal>, <varname>services.emacs.install</varname> is
-        considered <literal>true</literal>, whatever its value.
+      description = lib.mdDoc ''
+        Whether to enable a user service for the Emacs daemon. Use `emacsclient` to connect to the
+        daemon. If `true`, {var}`services.emacs.install` is
+        considered `true`, whatever its value.
       '';
     };
 
     install = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to install a user service for the Emacs daemon. Once
         the service is started, use emacsclient to connect to the
         daemon.
 
         The service must be manually started for each user with
         "systemctl --user start emacs" or globally through
-        <varname>services.emacs.enable</varname>.
+        {var}`services.emacs.enable`.
       '';
     };
 
@@ -67,7 +67,7 @@ in
       type = types.package;
       default = pkgs.emacs;
       defaultText = literalExpression "pkgs.emacs";
-      description = ''
+      description = lib.mdDoc ''
         emacs derivation to use.
       '';
     };
@@ -75,7 +75,7 @@ in
     defaultEditor = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         When enabled, configures emacsclient to be the default editor
         using the EDITOR environment variable.
       '';

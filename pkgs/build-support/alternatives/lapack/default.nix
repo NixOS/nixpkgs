@@ -1,7 +1,7 @@
 { lib, stdenv
-, lapack-reference, openblasCompat, openblas
+, lapack-reference, openblas
 , isILP64 ? false
-, lapackProvider ? if isILP64 then openblas else openblasCompat }:
+, lapackProvider ? openblas }:
 
 let
 
@@ -11,10 +11,13 @@ let
                        else stdenv.hostPlatform.extensions.sharedLibrary;
 
   lapackImplementation = lib.getName lapackProvider;
+  lapackProvider' = if lapackImplementation == "mkl"
+                  then lapackProvider
+                  else lapackProvider.override { blas64 = isILP64; };
 
 in
 
-assert isILP64 -> (lapackImplementation == "openblas" && lapackProvider.blas64) || lapackImplementation == "mkl";
+assert isILP64 -> lapackImplementation == "mkl" || lapackProvider'.blas64;
 
 stdenv.mkDerivation {
   pname = "lapack";
@@ -22,13 +25,13 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  meta = (lapackProvider.meta or {}) // {
-    description = "${lib.getName lapackProvider} with just the LAPACK C and FORTRAN ABI";
+  meta = (lapackProvider'.meta or {}) // {
+    description = "${lib.getName lapackProvider'} with just the LAPACK C and FORTRAN ABI";
   };
 
   passthru = {
     inherit isILP64;
-    provider = lapackProvider;
+    provider = lapackProvider';
     implementation = lapackImplementation;
   };
 
@@ -41,10 +44,10 @@ stdenv.mkDerivation {
   installPhase = (''
   mkdir -p $out/lib $dev/include $dev/lib/pkgconfig
 
-  liblapack="${lib.getLib lapackProvider}/lib/liblapack${canonicalExtension}"
+  liblapack="${lib.getLib lapackProvider'}/lib/liblapack${canonicalExtension}"
 
   if ! [ -e "$liblapack" ]; then
-    echo "$liblapack does not exist, ${lapackProvider.name} does not provide liblapack."
+    echo "$liblapack does not exist, ${lapackProvider'.name} does not provide liblapack."
     exit 1
   fi
 
@@ -53,7 +56,7 @@ stdenv.mkDerivation {
 
 '' + (if stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf" then ''
   patchelf --set-soname liblapack${canonicalExtension} $out/lib/liblapack${canonicalExtension}
-  patchelf --set-rpath "$(patchelf --print-rpath $out/lib/liblapack${canonicalExtension}):${lapackProvider}/lib" $out/lib/liblapack${canonicalExtension}
+  patchelf --set-rpath "$(patchelf --print-rpath $out/lib/liblapack${canonicalExtension}):${lapackProvider'}/lib" $out/lib/liblapack${canonicalExtension}
 '' else "") + ''
 
   if [ "$out/lib/liblapack${canonicalExtension}" != "$out/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary}" ]; then
@@ -70,10 +73,10 @@ Cflags: -I$dev/include
 Libs: -L$out/lib -llapack
 EOF
 
-  liblapacke="${lib.getLib lapackProvider}/lib/liblapacke${canonicalExtension}"
+  liblapacke="${lib.getLib lapackProvider'}/lib/liblapacke${canonicalExtension}"
 
   if ! [ -e "$liblapacke" ]; then
-    echo "$liblapacke does not exist, ${lapackProvider.name} does not provide liblapacke."
+    echo "$liblapacke does not exist, ${lapackProvider'.name} does not provide liblapacke."
     exit 1
   fi
 
@@ -82,7 +85,7 @@ EOF
 
 '' + (if stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf" then ''
   patchelf --set-soname liblapacke${canonicalExtension} $out/lib/liblapacke${canonicalExtension}
-  patchelf --set-rpath "$(patchelf --print-rpath $out/lib/liblapacke${canonicalExtension}):${lib.getLib lapackProvider}/lib" $out/lib/liblapacke${canonicalExtension}
+  patchelf --set-rpath "$(patchelf --print-rpath $out/lib/liblapacke${canonicalExtension}):${lib.getLib lapackProvider'}/lib" $out/lib/liblapacke${canonicalExtension}
 '' else "") + ''
 
   if [ -f "$out/lib/liblapacke.so.3" ]; then
@@ -102,6 +105,6 @@ EOF
   mkdir -p $out/nix-support
   echo 'export MKL_INTERFACE_LAYER=${lib.optionalString isILP64 "I"}LP64,GNU' > $out/nix-support/setup-hook
   ln -s $out/lib/liblapack${canonicalExtension} $out/lib/libmkl_rt${stdenv.hostPlatform.extensions.sharedLibrary}
-  ln -sf ${lapackProvider}/include/* $dev/include
+  ln -sf ${lapackProvider'}/include/* $dev/include
 '');
 }

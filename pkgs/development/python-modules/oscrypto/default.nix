@@ -1,43 +1,59 @@
 { lib
-, buildPythonPackage
+, stdenv
 , asn1crypto
-, fetchPypi
+, buildPythonPackage
+, fetchFromGitHub
 , openssl
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "oscrypto";
-  version = "1.2.1";
+  version = "1.3.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1546si2bdgkqnbvv4mw1hr4mhh6bq39d9z4wxgv1m7fq6miclb3x";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "wbond";
+    repo = pname;
+    rev = version;
+    hash = "sha256-CmDypmlc/kb6ONCUggjT1Iqd29xNSLRaGh5Hz36dvOw=";
   };
 
-  testSources = fetchPypi {
-    inherit version;
-    pname = "oscrypto_tests";
-    sha256 = "1ha68dsrbx6mlra44x0n81vscn17pajbl4yg7cqkk7mq1zfmjwks";
-  };
+  postPatch = ''
+    for file in oscrypto/_openssl/_lib{crypto,ssl}_c{ffi,types}.py; do
+      substituteInPlace $file \
+        --replace "get_library('crypto', 'libcrypto.dylib', '42')" "'${openssl.out}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}'" \
+        --replace "get_library('ssl', 'libssl', '44')" "'${openssl.out}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}'"
+    done
+  '';
 
   propagatedBuildInputs = [
     asn1crypto
-    openssl
   ];
 
-  preCheck = ''
-    tar -xf ${testSources}
-    mv oscrypto_tests-${version} tests
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-    # remove tests that require network
-    sed -e '/TLSTests/d' -e '/TrustListTests/d' -i tests/__init__.py
-  '';
+  pythonImportsCheck = [
+    "oscrypto"
+  ];
 
-  pythonImportsCheck = [ "oscrypto" ];
+  doCheck = !stdenv.isDarwin;
+
+  disabledTests = [
+    # Tests require network access
+    "TLSTests"
+    "TrustListTests"
+  ];
 
   meta = with lib; {
     description = "Encryption library for Python";
     homepage = "https://github.com/wbond/oscrypto";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

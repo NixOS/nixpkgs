@@ -40,6 +40,9 @@ in
       # SD cards.
       "sdhci_pci"
 
+      # NVMe drives
+      "nvme"
+
       # Firewire support.  Not tested.
       "ohci1394" "sbp2"
 
@@ -54,7 +57,7 @@ in
 
       # Hyper-V support.
       "hv_storvsc"
-    ] ++ lib.optionals (pkgs.stdenv.isAarch32 || pkgs.stdenv.isAarch64) [
+    ] ++ lib.optionals pkgs.stdenv.hostPlatform.isAarch [
       # Most of the following falls into two categories:
       #  - early KMS / early display
       #  - early storage (e.g. USB) support
@@ -105,6 +108,9 @@ in
 
       # USB drivers
       "xhci-pci-renesas"
+
+      # Reset controllers
+      "reset-raspberrypi" # Triggers USB chip firmware load.
 
       # Misc "weak" dependencies
       "analogix-dp"

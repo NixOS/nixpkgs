@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , colorama
@@ -24,7 +25,15 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "vmprof" ];
 
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: src/vmprof_unix.o:src/vmprof_common.h:92: multiple definition of
+  #     `_PyThreadState_Current'; src/_vmprof.o:src/vmprof_common.h:92: first defined here
+  # TODO: can be removed once next release contains:
+  #   https://github.com/vmprof/vmprof-python/pull/203
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "A vmprof client";
     license = licenses.mit;
     homepage = "https://vmprof.readthedocs.org/";

@@ -6,7 +6,7 @@
 , decorator
 , http-ece
 , python-dateutil
-, python_magic
+, python-magic
 , pytz
 , requests
 , six
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     decorator
     http-ece
     python-dateutil
-    python_magic
+    python-magic
     pytz
     requests
     six

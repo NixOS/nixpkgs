@@ -7,7 +7,6 @@
 , ninja
 , vala
 , python3
-, desktop-file-utils
 , gtk3
 , granite
 , libgee
@@ -15,23 +14,21 @@
 , clutter-gst
 , clutter-gtk
 , gst_all_1
-, elementary-icon-theme
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-videos";
-  version = "2.8.3";
+  version = "2.8.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "videos";
     rev = version;
-    sha256 = "sha256-3V8iDy68ngdFTJxAGimuGi4vPru32pHYevThA0RwNpE=";
+    sha256 = "sha256-IUIY/WgGPVRYk9O+ZocopoBF7TlLnTtScNwO6gDCALw=";
   };
 
   nativeBuildInputs = [
-    desktop-file-utils
     meson
     ninja
     pkg-config
@@ -40,21 +37,21 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = with gst_all_1; [
+  buildInputs = [
     clutter-gst
     clutter-gtk
-    elementary-icon-theme
     granite
+    gtk3
+    libgee
+    libhandy
+  ] ++ (with gst_all_1; [
     gst-libav
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
     gstreamer
-    gtk3
-    libgee
-    libhandy
-  ];
+  ]);
 
   postPatch = ''
     chmod +x meson/post_install.py

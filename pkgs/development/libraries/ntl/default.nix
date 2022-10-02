@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
 
   dontAddPrefix = true; # DEF_PREFIX instead
 
+  # Written in perl, does not support autoconf-style
+  # --build=/--host= options:
+  #   Error: unrecognized option: --build=x86_64-unknown-linux-gnu
+  configurePlatforms = [ ];
+
   # reference: http://shoup.net/ntl/doc/tour-unix.html
   configureFlags = [
     "DEF_PREFIX=$(out)"

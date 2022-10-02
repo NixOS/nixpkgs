@@ -46,7 +46,7 @@ in mkDerivation {
 
     # AwesomeBump expects to find Core and Configs in its current directory.
     makeQtWrapper $d/AwesomeBump $out/bin/AwesomeBump \
-        --run "cd $d"
+        --chdir "$d"
   '';
 
   # $ cd Sources; qmake; make ../workdir/linux-g++-dgb-gl4/obj/glwidget.o

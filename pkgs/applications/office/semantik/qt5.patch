@@ -40,14 +40,14 @@ diff --color -ur a/wscript b/wscript
  	if not os.path.exists(specpath):
  		raise ValueError('No spec path, cannot build')
  
-@@ -196,17 +220,28 @@
+@@ -196,17 +220,29 @@
  
  	conf.env.append_value('INCLUDES_KDECORE', specpath)
  
 -	libs = ['KF5KIOCore', 'KF5Auth', 'KF5KIOWidgets',
 -		'KF5IconThemes', 'KF5ConfigWidgets', 'KF5XmlGui',
 -		'KF5CoreAddons', 'KF5ConfigGui', 'KF5ConfigCore',
--		'KF5WidgetsAddons', 'KF5I18n', 'KF5SonnetUi']
+-		'KF5WidgetsAddons', 'KF5I18n', 'KF5SonnetUi', 'KF5AuthCore']
 +	libs = {
 +            'KF5KIOCore': '@KF5KIOCore_dev@',
 +            'KF5Auth': '@KF5Auth_dev@',
@@ -61,6 +61,7 @@ diff --color -ur a/wscript b/wscript
 +            'KF5WidgetsAddons': '@KF5WidgetsAddons_dev@',
 +            'KF5I18n': '@KF5I18n_dev@',
 +            'KF5SonnetUi': '@KF5SonnetUi_dev@',
++            'KF5AuthCore': '@KF5Auth_dev@',
 +        }
  
 -	for lib in libs:
@@ -73,6 +74,6 @@ diff --color -ur a/wscript b/wscript
 -		p = '%s/qt_%s.pri' % (path, name)
 +		p = '%s/qt_%s.pri' % (mkspec_path+"/mkspecs/modules", name)
 +		print("[log] path :",path,", name : ",name)
- 		for line in Utils.readf(p).splitlines():
- 			lst = line.strip().split(' = ')
- 			if lst[0].endswith('.name'):
+ 		try:
+ 			code = Utils.readf(p)
+ 		except EnvironmentError:

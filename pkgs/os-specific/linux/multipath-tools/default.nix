@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, perl, lvm2, libaio, gzip, readline, systemd, liburcu, json_c, kmod }:
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, perl, lvm2, libaio, readline, systemd, liburcu, json_c, kmod, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "multipath-tools";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       $(find * -name Makefile\*)
   '';
 
-  nativeBuildInputs = [ gzip pkg-config perl ];
+  nativeBuildInputs = [ pkg-config perl ];
   buildInputs = [ systemd lvm2 libaio readline liburcu json_c ];
 
   makeFlags = [
@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
     "man3dir=$(out)/share/man/man3"
     "SYSTEMDPATH=lib"
   ];
+
+  passthru.tests = { inherit (nixosTests) iscsi-multipath-root; };
 
   meta = with lib; {
     description = "Tools for the Linux multipathing driver";

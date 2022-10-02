@@ -9,26 +9,32 @@
 , fetchPypi
 , joblib
 , six
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "hdbscan";
-  version = "0.8.27";
+  version = "0.8.28";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e3a418d0d36874f7b6a1bf0b7461f3857fc13a525fd48ba34caed2fe8973aa26";
+    sha256 = "sha256-7tr3Hy87vt/Ew42hrUiXRUzl69R5LhponJecKFPtwFo=";
   };
   patches = [
-    # This patch fixes compatibility with numpy 1.20. It will be in the next release
-    # after 0.8.27
+    # should be included in next release
     (fetchpatch {
-      url = "https://github.com/scikit-learn-contrib/hdbscan/commit/5b67a4fba39c5aebe8187a6a418da677f89a63e0.patch";
-      sha256 = "07d7jdwk0b8kgaqkifd529sarji01j1jiih7cfccc5kxmlb5py9h";
+      name = "joblib-1.2.0-compat.patch";
+      url = "https://github.com/scikit-learn-contrib/hdbscan/commit/d829c639923f6866e1917e46ddbde45b513913f3.patch";
+      excludes = [
+        "docs/basic_hdbscan.rst"
+        "docs/how_hdbscan_works.rst"
+      ];
+      sha256 = "sha256-t0D4OsHEcMwmBZM8Mk1N0uAKi6ra+TOzEks9/efsvWI=";
     })
   ];
 
-  nativeBuildInputs = [ cython ];
+  pythonRemoveDeps = [ "cython" ];
+  nativeBuildInputs = [ pythonRelaxDepsHook cython ];
   propagatedBuildInputs = [ numpy scipy scikit-learn joblib six ];
   preCheck = ''
     cd hdbscan/tests
@@ -42,6 +48,9 @@ buildPythonPackage rec {
     "test_approx_predict_diff_clusters"
     # another flaky test https://github.com/scikit-learn-contrib/hdbscan/issues/421
     "test_hdbscan_boruvka_balltree_matches"
+    # more flaky tests https://github.com/scikit-learn-contrib/hdbscan/issues/570
+    "test_hdbscan_boruvka_balltree"
+    "test_hdbscan_best_balltree_metric"
   ];
 
   pythonImportsCheck = [ "hdbscan" ];

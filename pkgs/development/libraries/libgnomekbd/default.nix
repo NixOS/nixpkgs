@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, file, intltool, glib, gtk3, libxklavier, wrapGAppsHook, gnome }:
+{ lib, stdenv, fetchurl, pkg-config, file, intltool, glib, gtk3, libxklavier, wrapGAppsHook, gnome, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "libgnomekbd";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     intltool
     pkg-config
     wrapGAppsHook
+    glib
+    gobject-introspection
   ];
 
   # Requires in libgnomekbd.pc
@@ -24,6 +26,11 @@ stdenv.mkDerivation rec {
     libxklavier
     glib
   ];
+
+  postPatch = ''
+    substituteInPlace libgnomekbd/Makefile.in \
+      --replace "shell pkg-config" 'shell $(PKG_CONFIG)'
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {

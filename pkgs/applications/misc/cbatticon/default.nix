@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cbatticon";
-  version = "1.6.10";
+  version = "1.6.13";
 
   src = fetchFromGitHub {
     owner = "valr";
     repo = pname;
     rev = version;
-    sha256 = "0ivm2dzhsa9ir25ry418r2qg2llby9j7a6m3arbvq5c3kaj8m9jr";
+    sha256 = "sha256-VQjJujF9lnVvQxV+0YqodLgnI9F90JKDAGBu5nM/Q/c=";
   };
 
   nativeBuildInputs = [ pkg-config gettext wrapGAppsHook ];

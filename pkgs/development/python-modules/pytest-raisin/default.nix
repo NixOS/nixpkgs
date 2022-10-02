@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-raisin";
-  version = "0.3";
+  version = "0.4";
   format = "flit";
 
   src = fetchFromGitHub {
     owner = "wimglenn";
     repo = "pytest-raisin";
     rev = "v${version}";
-    sha256 = "73cOrsqlE04m6X3a6VwtRzfi24oqkdO3HjKQH61bU88=";
+    sha256 = "sha256-BI0SWy671DYDTPH4iO811ku6SzpH4ho7eQFUA8PmxW8=";
   };
 
   nativeBuildInputs = [

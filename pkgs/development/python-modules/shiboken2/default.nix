@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   CLANG_INSTALL_DIR = llvmPackages.libclang.out;
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ llvmPackages.libclang python qt5.qtbase qt5.qtxmlpatterns ];
+  buildInputs = [ llvmPackages.libclang python python.pkgs.setuptools qt5.qtbase qt5.qtxmlpatterns ];
 
   cmakeFlags = [
     "-DBUILD_TESTS=OFF"
@@ -26,6 +26,9 @@ stdenv.mkDerivation {
   dontWrapQtApps = true;
 
   postInstall = ''
+    cd ../../..
+    ${python.interpreter} setup.py egg_info --build-type=shiboken2
+    cp -r shiboken2.egg-info $out/${python.sitePackages}/
     rm $out/bin/shiboken_tool.py
   '';
 

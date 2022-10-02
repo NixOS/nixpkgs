@@ -1,8 +1,8 @@
 diff --git a/collectors/Makefile.am b/collectors/Makefile.am
-index 021e2ff23..115b88277 100644
+index a0a972e8f..b4a2a5f53 100644
 --- a/collectors/Makefile.am
 +++ b/collectors/Makefile.am
-@@ -33,7 +33,7 @@ usercustompluginsconfigdir=$(configdir)/custom-plugins.d
+@@ -32,7 +32,7 @@ usercustompluginsconfigdir=$(configdir)/custom-plugins.d
  usergoconfigdir=$(configdir)/go.d
  
  # Explicitly install directories to avoid permission issues due to umask
@@ -37,21 +37,8 @@ index 2d5f92a6b..8b11c7502 100644
  	$(INSTALL) -d $(DESTDIR)$(userebpfconfigdir)
  
  dist_noinst_DATA = \
-diff --git a/collectors/node.d.plugin/Makefile.am b/collectors/node.d.plugin/Makefile.am
-index c3142d433..95e324455 100644
---- a/collectors/node.d.plugin/Makefile.am
-+++ b/collectors/node.d.plugin/Makefile.am
-@@ -26,7 +26,7 @@ dist_usernodeconfig_DATA = \
-     $(NULL)
- 
- # Explicitly install directories to avoid permission issues due to umask
--install-exec-local:
-+no-install-exec-local:
- 	$(INSTALL) -d $(DESTDIR)$(usernodeconfigdir)
- 
- nodeconfigdir=$(libconfigdir)/node.d
 diff --git a/collectors/python.d.plugin/Makefile.am b/collectors/python.d.plugin/Makefile.am
-index 38eb90f79..ce7079441 100644
+index 667f1627c..eb6810057 100644
 --- a/collectors/python.d.plugin/Makefile.am
 +++ b/collectors/python.d.plugin/Makefile.am
 @@ -32,7 +32,7 @@ dist_userpythonconfig_DATA = \
@@ -64,10 +51,10 @@ index 38eb90f79..ce7079441 100644
  
  pythonconfigdir=$(libconfigdir)/python.d
 diff --git a/collectors/statsd.plugin/Makefile.am b/collectors/statsd.plugin/Makefile.am
-index 71f2d468d..2c9ced2bf 100644
+index c8144c137..f8aaa89b6 100644
 --- a/collectors/statsd.plugin/Makefile.am
 +++ b/collectors/statsd.plugin/Makefile.am
-@@ -18,5 +18,5 @@ dist_userstatsdconfig_DATA = \
+@@ -19,5 +19,5 @@ dist_userstatsdconfig_DATA = \
      $(NULL)
  
  # Explicitly install directories to avoid permission issues due to umask
@@ -75,7 +62,7 @@ index 71f2d468d..2c9ced2bf 100644
 +no-install-exec-local:
  	$(INSTALL) -d $(DESTDIR)$(userstatsdconfigdir)
 diff --git a/health/Makefile.am b/health/Makefile.am
-index 349b86d61..514f1874f 100644
+index d5eb88468..ab246e77a 100644
 --- a/health/Makefile.am
 +++ b/health/Makefile.am
 @@ -19,7 +19,7 @@ dist_userhealthconfig_DATA = \

@@ -1,0 +1,13 @@
+Use os-stdlib in tests.
+
+--- a/utils/build-presets.ini
++++ b/utils/build-presets.ini
+@@ -872,7 +872,7 @@
+ indexstore-db
+ sourcekit-lsp
+ swiftdocc
+-lit-args=-v --time-tests
++lit-args=-v --time-tests --param use_os_stdlib
+ 
+ # rdar://problem/31454823
+ lldb-test-swift-only

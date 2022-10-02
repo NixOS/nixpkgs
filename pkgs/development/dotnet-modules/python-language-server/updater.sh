@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p gnused jq common-updater-scripts nuget-to-nix dotnet-sdk_3 nix-prefetch-git
+#!nix-shell -I nixpkgs=./. -i bash -p gnused jq common-updater-scripts nix-prefetch-git
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
@@ -19,23 +19,5 @@ if [[ $new_rev == $old_rev ]]; then
 fi
 
 pushd ../../../..
-
 update-source-version python-language-server "$new_version" "$new_hash" --rev="$new_rev"
-store_src="$(nix-build -A python-language-server.src --no-out-link)"
-src="$(mktemp -d /tmp/pylang-server-src.XXX)"
-cp -rT "$store_src" "$src"
-chmod -R +w "$src"
-
-pushd "$src"
-
-export DOTNET_NOLOGO=1
-export DOTNET_CLI_TELEMETRY_OPTOUT=1
-
-mkdir ./nuget_pkgs
-dotnet restore src/LanguageServer/Impl/Microsoft.Python.LanguageServer.csproj --packages ./nuget_pkgs
-
-nuget-to-nix ./nuget_pkgs > "$deps_file"
-
-trap ''
-  rm -r "$src"
-'' EXIT
+$(nix-build -A python-language-server.fetch-deps --no-out-link) "$deps_file"

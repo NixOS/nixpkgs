@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "w3lib";
-  version = "1.22.0";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pv02lvvmgz2qb61vz1jkjc04fgm4hpfvaj5zm4i3mjp64hd1mha";
+    sha256 = "sha256-E98V+MF7Fj3g/V+qiSwa0UPhkN/L25hTS7l16zfGx9Y=";
   };
 
   propagatedBuildInputs = [ six ];
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "A library of web-related functions";
     homepage = "https://github.com/scrapy/w3lib";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ drewkett ];
+    maintainers = with maintainers; [ ];
   };
 }

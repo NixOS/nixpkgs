@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ninja, cmake, python3, llvmPackages }:
+{ lib, stdenv, fetchFromGitHub, ninja, cmake, python3, llvmPackages, spirv-llvm-translator }:
 
 let
   llvm = llvmPackages.llvm;
@@ -7,13 +7,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libclc";
-  version = "11.0.1";
+  version = "12.0.1";
 
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "llvm-project";
     rev = "llvmorg-${version}";
-    sha256 = "0bxh43hp1vl4axl3s9n2nb2ii8x1cbq98xz9c996f8rl5jy84ags";
+    sha256 = "08s5w2db9imb2yaqsvxs6pg21csi1cf6wa35rf8x6q07mam7j8qv";
   };
   sourceRoot = "source/libclc";
 
@@ -21,14 +21,20 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace 'find_program( LLVM_CLANG clang PATHS ''${LLVM_BINDIR} NO_DEFAULT_PATH )' \
-                'find_program( LLVM_CLANG clang PATHS "${clang-unwrapped}/bin" NO_DEFAULT_PATH )'
+                'find_program( LLVM_CLANG clang PATHS "${clang-unwrapped}/bin" NO_DEFAULT_PATH )' \
+      --replace 'find_program( LLVM_SPIRV llvm-spirv PATHS ''${LLVM_BINDIR} NO_DEFAULT_PATH )' \
+                'find_program( LLVM_SPIRV llvm-spirv PATHS "${spirv-llvm-translator}/bin" NO_DEFAULT_PATH )'
   '';
 
-  nativeBuildInputs = [ cmake ninja python3 ];
+  nativeBuildInputs = [ cmake ninja python3 spirv-llvm-translator ];
   buildInputs = [ llvm clang-unwrapped ];
   strictDeps = true;
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "http://libclc.llvm.org/";
     description = "Implementation of the library requirements of the OpenCL C programming language";
     license = licenses.mit;

@@ -1,5 +1,7 @@
 { pkgspath ? ../../.., test-pkgspath ? pkgspath
-, system ? builtins.currentSystem, crossSystem ? null, bootstrapFiles ? null
+, localSystem ? { system = builtins.currentSystem; }
+, crossSystem ? null
+, bootstrapFiles ? null
 }:
 
 let cross = if crossSystem != null
@@ -11,7 +13,7 @@ let cross = if crossSystem != null
               in (import "${pkgspath}/pkgs/stdenv/darwin" args').stagesDarwin;
            }
       else {};
-in with import pkgspath ({ inherit system; } // cross // custom-bootstrap);
+in with import pkgspath ({ inherit localSystem; } // cross // custom-bootstrap);
 
 let
   llvmPackages = llvmPackages_11;
@@ -80,7 +82,7 @@ in rec {
       cp ${curl_.bin}/bin/curl $out/bin
       cp -d ${curl_.out}/lib/libcurl*.dylib $out/lib
       cp -d ${libssh2.out}/lib/libssh*.dylib $out/lib
-      cp -d ${openssl.out}/lib/*.dylib $out/lib
+      cp -d ${lib.getLib openssl}/lib/*.dylib $out/lib
 
       cp -d ${gnugrep.pcre.out}/lib/libpcre*.dylib $out/lib
       cp -d ${lib.getLib libiconv}/lib/lib*.dylib $out/lib
@@ -103,16 +105,16 @@ in rec {
       mkdir $out/include
       cp -rd ${llvmPackages.libcxx.dev}/include/c++     $out/include
 
+      # copy .tbd assembly utils
+      cp -d ${pkgs.darwin.rewrite-tbd}/bin/rewrite-tbd $out/bin
+      cp -d ${lib.getLib pkgs.libyaml}/lib/libyaml*.dylib $out/lib
+
+      # copy package extraction tools
+      cp -d ${pkgs.pbzx}/bin/pbzx $out/bin
+      cp -d ${lib.getLib pkgs.xar}/lib/libxar*.dylib $out/lib
+      cp -d ${pkgs.bzip2.out}/lib/libbz2*.dylib $out/lib
+
       ${lib.optionalString targetPlatform.isAarch64 ''
-        # copy .tbd assembly utils
-        cp -d ${pkgs.darwin.rewrite-tbd}/bin/rewrite-tbd $out/bin
-        cp -d ${lib.getLib pkgs.libyaml}/lib/libyaml*.dylib $out/lib
-
-        # copy package extraction tools
-        cp -d ${pkgs.pbzx}/bin/pbzx $out/bin
-        cp -d ${lib.getLib pkgs.xar}/lib/libxar*.dylib $out/lib
-        cp -d ${pkgs.bzip2.out}/lib/libbz2*.dylib $out/lib
-
         # copy sigtool
         cp -d ${pkgs.darwin.sigtool}/bin/sigtool $out/bin
         cp -d ${pkgs.darwin.sigtool}/bin/codesign $out/bin
@@ -351,7 +353,8 @@ in rec {
 
       tar xvf ${hello.src}
       cd hello-*
-      ./configure --prefix=$out
+      # stdenv bootstrap tools ship a broken libiconv.dylib https://github.com/NixOS/nixpkgs/issues/158331
+      am_cv_func_iconv=no ./configure --prefix=$out
       make
       make install
 
@@ -363,7 +366,7 @@ in rec {
   test-pkgs = import test-pkgspath {
     # if the bootstrap tools are for another platform, we should be testing
     # that platform.
-    system = if crossSystem != null then crossSystem else system;
+    localSystem = if crossSystem != null then crossSystem else localSystem;
 
     stdenvStages = args: let
         args' = args // { inherit bootstrapLlvmVersion bootstrapFiles; };

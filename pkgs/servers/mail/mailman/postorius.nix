@@ -1,6 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi, beautifulsoup4, vcrpy, mock
-, django-mailman3, mailmanclient, readme_renderer
-}:
+{ lib, python3 }:
+
+with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "postorius";

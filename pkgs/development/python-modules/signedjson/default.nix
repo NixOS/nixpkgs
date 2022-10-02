@@ -1,40 +1,53 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, fetchpatch
 , canonicaljson
-, unpaddedbase64
-, pynacl
-, typing-extensions
-, setuptools-scm
+, fetchPypi
 , importlib-metadata
+, pynacl
+, pytestCheckHook
 , pythonOlder
+, setuptools-scm
+, typing-extensions
+, unpaddedbase64
 }:
 
 buildPythonPackage rec {
   pname = "signedjson";
-  version = "1.1.1";
+  version = "1.1.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0280f8zyycsmd7iy65bs438flm7m8ffs1kcxfbvhi8hbazkqc19m";
+    hash = "sha256-zZHFavU/Fp7wMsYunEoyktwViGaTMxjQWS40Yts9ZJI=";
   };
 
-  patches = [
-    # Do not require importlib_metadata on python 3.8
-    (fetchpatch {
-      url = "https://github.com/matrix-org/python-signedjson/commit/c40c83f844fee3c1c7b0c5d1508f87052334b4e5.patch";
-      sha256 = "109f135zn9azg5h1ljw3v94kpvnzmlqz1aiknpl5hsqfa3imjca1";
-    })
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ canonicaljson unpaddedbase64 pynacl typing-extensions ]
-    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  propagatedBuildInputs = [
+    canonicaljson
+    unpaddedbase64
+    pynacl
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+    typing-extensions
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "signedjson"
+  ];
 
   meta = with lib; {
-    homepage = "https://pypi.org/project/signedjson/";
     description = "Sign JSON with Ed25519 signatures";
+    homepage = "https://github.com/matrix-org/python-signedjson";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
 }

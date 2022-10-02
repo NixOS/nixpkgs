@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "google-i18n-address";
-  version = "2.5.0";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "mirumee";
     repo = "google-i18n-address";
-    rev = version;
-    sha256 = "0fn5sph6fq68zrjssgvnnvrkavs8arshjwgxng5dr5fsn6qii3mq";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-7t5sNpEVajdwcW8+xTNZQKZVgxhUzfbVbEVgn7JJ2MY=";
   };
 
   propagatedBuildInputs = [ requests ];

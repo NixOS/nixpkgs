@@ -9,6 +9,8 @@
 , lld_11
 , opencl-clang
 , python3
+, spirv-tools
+, spirv-headers
 , spirv-llvm-translator
 
 , buildWithPatches ? true
@@ -18,8 +20,8 @@ let
   vc_intrinsics_src = fetchFromGitHub {
     owner = "intel";
     repo = "vc-intrinsics";
-    rev = "e5ad7e02aa4aa21a3cd7b3e5d1f3ec9b95f58872";
-    sha256 = "Vg1mngwpIQ3Tik0GgRXPG22lE4sLEAEFch492G2aIXs=";
+    rev = "v0.3.0";
+    sha256 = "sha256-1Rm4TCERTOcPGWJF+yNoKeB9x3jfqnh7Vlv+0Xpmjbk=";
   };
   llvmPkgs = llvmPackages_11 // {
     inherit spirv-llvm-translator;
@@ -31,18 +33,18 @@ in
 
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "1.0.8744";
+  version = "1.0.11061";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-graphics-compiler";
     rev = "igc-${version}";
-    sha256 = "G5+dYD8uZDPkRyn1sgXsRngdq4NJndiCJCYTRXyUgTA=";
+    sha256 = "sha256-qS/+GTqHtp3T6ggPKrCDsrTb7XvVOUaNbMzGU51jTu4=";
   };
 
   nativeBuildInputs = [ clang cmake bison flex python3 ];
 
-  buildInputs = [ clang opencl-clang spirv-llvm-translator llvm lld_11 ];
+  buildInputs = [ spirv-headers spirv-tools clang opencl-clang spirv-llvm-translator llvm lld_11 ];
 
   strictDeps = true;
 
@@ -51,6 +53,21 @@ stdenv.mkDerivation rec {
   # FIXME: How do we run the test suite?
   # https://github.com/intel/intel-graphics-compiler/issues/98
   doCheck = false;
+
+  postPatch = ''
+    substituteInPlace ./external/SPIRV-Tools/CMakeLists.txt \
+      --replace '$'''{SPIRV-Tools_DIR}../../..' \
+                '${spirv-tools}' \
+      --replace 'SPIRV-Headers_INCLUDE_DIR "/usr/include"' \
+                'SPIRV-Headers_INCLUDE_DIR "${spirv-headers}/include"' \
+      --replace 'set_target_properties(SPIRV-Tools' \
+                'set_target_properties(SPIRV-Tools-shared' \
+      --replace 'IGC_BUILD__PROJ__SPIRV-Tools SPIRV-Tools' \
+                'IGC_BUILD__PROJ__SPIRV-Tools SPIRV-Tools-shared'
+    substituteInPlace ./IGC/AdaptorOCL/igc-opencl.pc.in \
+      --replace '/@CMAKE_INSTALL_INCLUDEDIR@' "/include" \
+      --replace '/@CMAKE_INSTALL_LIBDIR@' "/lib"
+  '';
 
   # Handholding the braindead build script
   # cmake requires an absolute path
@@ -64,8 +81,9 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
+    "-Wno-dev"
     "-DVC_INTRINSICS_SRC=${vc_intrinsics_src}"
-    "-DINSTALL_SPIRVDLL=0"
+    "-DIGC_OPTION__SPIRV_TOOLS_MODE=Prebuilds"
     "-DCCLANG_BUILD_PREBUILDS=ON"
     "-DCCLANG_BUILD_PREBUILDS_DIR=${prebuilds}"
     "-DIGC_PREFERRED_LLVM_VERSION=${getVersion llvm}"

@@ -6,7 +6,7 @@ let
   cfg = config.services.privacyidea;
   opt = options.services.privacyidea;
 
-  uwsgi = pkgs.uwsgi.override { plugins = [ "python3" ]; };
+  uwsgi = pkgs.uwsgi.override { plugins = [ "python3" ]; python3 = pkgs.python39; };
   python = uwsgi.python3;
   penv = python.withPackages (const [ pkgs.privacyidea ]);
   logCfg = pkgs.writeText "privacyidea-log.cfg" ''
@@ -51,37 +51,47 @@ let
     ${cfg.extraConfig}
   '';
 
+  renderValue = x:
+    if isList x then concatMapStringsSep "," (x: ''"${x}"'') x
+    else if isString x && hasInfix "," x then ''"${x}"''
+    else x;
+
+  ldapProxyConfig = pkgs.writeText "ldap-proxy.ini"
+    (generators.toINI {}
+      (flip mapAttrs cfg.ldap-proxy.settings
+        (const (mapAttrs (const renderValue)))));
+
 in
 
 {
   options = {
     services.privacyidea = {
-      enable = mkEnableOption "PrivacyIDEA";
+      enable = mkEnableOption (lib.mdDoc "PrivacyIDEA");
 
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/root/privacyidea.env";
-        description = ''
+        description = lib.mdDoc ''
           File to load as environment file. Environment variables
           from this file will be interpolated into the config file
-          using <package>envsubst</package> which is helpful for specifying
+          using `envsubst` which is helpful for specifying
           secrets:
-          <programlisting>
-          { <xref linkend="opt-services.privacyidea.secretKey" /> = "$SECRET"; }
-          </programlisting>
+          ```
+          { services.privacyidea.secretKey = "$SECRET"; }
+          ```
 
           The environment-file can now specify the actual secret key:
-          <programlisting>
+          ```
           SECRET=veryverytopsecret
-          </programlisting>
+          ```
         '';
       };
 
       stateDir = mkOption {
         type = types.str;
         default = "/var/lib/privacyidea";
-        description = ''
+        description = lib.mdDoc ''
           Directory where all PrivacyIDEA files will be placed by default.
         '';
       };
@@ -89,7 +99,7 @@ in
       superuserRealm = mkOption {
         type = types.listOf types.str;
         default = [ "super" "administrators" ];
-        description = ''
+        description = lib.mdDoc ''
           The realm where users are allowed to login as administrators.
         '';
       };
@@ -97,7 +107,7 @@ in
       secretKey = mkOption {
         type = types.str;
         example = "t0p s3cr3t";
-        description = ''
+        description = lib.mdDoc ''
           This is used to encrypt the auth_token.
         '';
       };
@@ -105,7 +115,7 @@ in
       pepper = mkOption {
         type = types.str;
         example = "Never know...";
-        description = ''
+        description = lib.mdDoc ''
           This is used to encrypt the admin passwords.
         '';
       };
@@ -114,7 +124,7 @@ in
         type = types.str;
         default = "${cfg.stateDir}/enckey";
         defaultText = literalExpression ''"''${config.${opt.stateDir}}/enckey"'';
-        description = ''
+        description = lib.mdDoc ''
           This is used to encrypt the token data and token passwords
         '';
       };
@@ -123,7 +133,7 @@ in
         type = types.str;
         default = "${cfg.stateDir}/private.pem";
         defaultText = literalExpression ''"''${config.${opt.stateDir}}/private.pem"'';
-        description = ''
+        description = lib.mdDoc ''
           Private Key for signing the audit log.
         '';
       };
@@ -132,26 +142,26 @@ in
         type = types.str;
         default = "${cfg.stateDir}/public.pem";
         defaultText = literalExpression ''"''${config.${opt.stateDir}}/public.pem"'';
-        description = ''
+        description = lib.mdDoc ''
           Public key for checking signatures of the audit log.
         '';
       };
 
       adminPasswordFile = mkOption {
         type = types.path;
-        description = "File containing password for the admin user";
+        description = lib.mdDoc "File containing password for the admin user";
       };
 
       adminEmail = mkOption {
         type = types.str;
         example = "admin@example.com";
-        description = "Mail address for the admin user";
+        description = lib.mdDoc "Mail address for the admin user";
       };
 
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration options for pi.cfg.
         '';
       };
@@ -159,21 +169,22 @@ in
       user = mkOption {
         type = types.str;
         default = "privacyidea";
-        description = "User account under which PrivacyIDEA runs.";
+        description = lib.mdDoc "User account under which PrivacyIDEA runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "privacyidea";
-        description = "Group account under which PrivacyIDEA runs.";
+        description = lib.mdDoc "Group account under which PrivacyIDEA runs.";
       };
 
       ldap-proxy = {
-        enable = mkEnableOption "PrivacyIDEA LDAP Proxy";
+        enable = mkEnableOption (lib.mdDoc "PrivacyIDEA LDAP Proxy");
 
         configFile = mkOption {
-          type = types.path;
-          description = ''
+          type = types.nullOr types.path;
+          default = null;
+          description = lib.mdDoc ''
             Path to PrivacyIDEA LDAP Proxy configuration (proxy.ini).
           '';
         };
@@ -181,13 +192,33 @@ in
         user = mkOption {
           type = types.str;
           default = "pi-ldap-proxy";
-          description = "User account under which PrivacyIDEA LDAP proxy runs.";
+          description = lib.mdDoc "User account under which PrivacyIDEA LDAP proxy runs.";
         };
 
         group = mkOption {
           type = types.str;
           default = "pi-ldap-proxy";
-          description = "Group account under which PrivacyIDEA LDAP proxy runs.";
+          description = lib.mdDoc "Group account under which PrivacyIDEA LDAP proxy runs.";
+        };
+
+        settings = mkOption {
+          type = with types; attrsOf (attrsOf (oneOf [ str bool int (listOf str) ]));
+          default = {};
+          description = lib.mdDoc ''
+            Attribute-set containing the settings for `privacyidea-ldap-proxy`.
+            It's possible to pass secrets using env-vars as substitutes and
+            use the option [](#opt-services.privacyidea.ldap-proxy.environmentFile)
+            to inject them via `envsubst`.
+          '';
+        };
+
+        environmentFile = mkOption {
+          default = null;
+          type = types.nullOr types.str;
+          description = lib.mdDoc ''
+            Environment file containing secrets to be substituted into
+            [](#opt-services.privacyidea.ldap-proxy.settings).
+          '';
         };
       };
     };
@@ -276,6 +307,18 @@ in
 
     (mkIf cfg.ldap-proxy.enable {
 
+      assertions = [
+        { assertion = let
+            xor = a: b: a && !b || !a && b;
+          in xor (cfg.ldap-proxy.settings == {}) (cfg.ldap-proxy.configFile == null);
+          message = "configFile & settings are mutually exclusive for services.privacyidea.ldap-proxy!";
+        }
+      ];
+
+      warnings = mkIf (cfg.ldap-proxy.configFile != null) [
+        "Using services.privacyidea.ldap-proxy.configFile is deprecated! Use the RFC42-style settings option instead!"
+      ];
+
       systemd.services.privacyidea-ldap-proxy = let
         ldap-proxy-env = pkgs.python3.withPackages (ps: [ ps.privacyidea-ldap-proxy ]);
       in {
@@ -284,14 +327,28 @@ in
         serviceConfig = {
           User = cfg.ldap-proxy.user;
           Group = cfg.ldap-proxy.group;
-          ExecStart = ''
+          StateDirectory = "privacyidea-ldap-proxy";
+          EnvironmentFile = mkIf (cfg.ldap-proxy.environmentFile != null)
+            [ cfg.ldap-proxy.environmentFile ];
+          ExecStartPre =
+            "${pkgs.writeShellScript "substitute-secrets-ldap-proxy" ''
+              umask 0077
+              ${pkgs.envsubst}/bin/envsubst \
+                -i ${ldapProxyConfig} \
+                -o $STATE_DIRECTORY/ldap-proxy.ini
+            ''}";
+          ExecStart = let
+            configPath = if cfg.ldap-proxy.settings != {}
+              then "%S/privacyidea-ldap-proxy/ldap-proxy.ini"
+              else cfg.ldap-proxy.configFile;
+          in ''
             ${ldap-proxy-env}/bin/twistd \
               --nodaemon \
               --pidfile= \
               -u ${cfg.ldap-proxy.user} \
               -g ${cfg.ldap-proxy.group} \
               ldap-proxy \
-              -c ${cfg.ldap-proxy.configFile}
+              -c ${configPath}
           '';
           Restart = "always";
         };

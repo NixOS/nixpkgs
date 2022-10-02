@@ -19,13 +19,13 @@
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "10.1.1";
+  version = "10.1.2";
 
   src = fetchFromGitHub {
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    sha256 = "sha256-0hj9IVvTxgStCbfnTzqeKD+Q5GnGowDsIkMvk2GqJqY=";
+    sha256 = "sha256-gnSIXje0hUpAculNXAyiS7Twc5XWitMgYp7svyZQxzE=";
   };
 
   desktopItem = makeDesktopItem {
@@ -34,7 +34,7 @@ let
     icon = "ghidra";
     desktopName = "Ghidra";
     genericName = "Ghidra Software Reverse Engineering Suite";
-    categories = "Development;";
+    categories = [ "Development" ];
   };
 
   # postPatch scripts.
@@ -101,7 +101,7 @@ HERE
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-Yxf6g908+fRRUh40PrwNUCTvxzlvSmwzE8R+3ZkRIvs=";
+    outputHash = "sha256-UHV7Z2HaVTOCY5U0zjUtkchJicrXMBfYBHvL8AA7NTg=";
   };
 
 in stdenv.mkDerivation rec {
@@ -171,7 +171,12 @@ in stdenv.mkDerivation rec {
     description = "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
     homepage = "https://ghidra-sre.org/";
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.asl20;
+    maintainers = with maintainers; [ roblabla ];
   };
 
 }

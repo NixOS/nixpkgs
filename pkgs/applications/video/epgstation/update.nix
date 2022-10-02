@@ -2,21 +2,21 @@
 , version
 , homepage
 , lib
-, common-updater-scripts
-, genericUpdater
+, gitUpdater
 , writers
 , jq
+, yq
+, gnused
 }:
 
 let
-  updater = genericUpdater {
+  updater = gitUpdater {
     inherit pname version;
     attrPath = lib.toLower pname;
     rev-prefix = "v";
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${homepage}";
   };
-  updateScript = builtins.elemAt updater 0;
-  updateArgs = map (lib.escapeShellArg) (builtins.tail updater);
+  updateScript = builtins.elemAt updater.command 0;
+  updateArgs = map (lib.escapeShellArg) (builtins.tail updater.command);
 in writers.writeBash "update-epgstation" ''
   set -euxo pipefail
 
@@ -40,6 +40,14 @@ in writers.writeBash "update-epgstation" ''
     } | del(.devDependencies, .main, .scripts)' \
     "$SRC/package.json" \
     > package.json
+  ${jq}/bin/jq '. + {
+      dependencies: (.dependencies + .devDependencies),
+    } | del(.devDependencies, .main, .scripts)' \
+    "$SRC/client/package.json" \
+    > client/package.json
+
+  # Fix issue with old sqlite3 version pinned that depends on very old node-gyp 3.x
+  ${gnused}/bin/sed -i -e 's/"sqlite3":\s*"5.0.[0-9]\+"/"sqlite3": "5.0.11"/' package.json
 
   # Regenerate node packages to update the pre-overriden epgstation derivation.
   # This must come *after* package.json has been regenerated.
@@ -49,18 +57,11 @@ in writers.writeBash "update-epgstation" ''
 
   # Generate default streaming settings for the nixos module.
   pushd ../../../../nixos/modules/services/video/epgstation
-  ${jq}/bin/jq '
-    { liveHLS
-    , liveMP4
-    , liveWebM
-    , mpegTsStreaming
-    , mpegTsViewer
-    , recordedDownloader
-    , recordedStreaming
-    , recordedHLS
-    , recordedViewer
-    }' \
-    "$SRC/config/config.sample.json" \
+  ${yq}/bin/yq -j '{ urlscheme , stream }' \
+    "$SRC/config/config.yml.template" \
     > streaming.json
+
+  # Fix generated output for EditorConfig compliance
+  printf '\n' >> streaming.json  # rule: insert_final_newline
   popd
 ''

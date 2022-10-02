@@ -1,13 +1,17 @@
-{ stdenv, fetchFromGitHub, pkgs, lib, nodejs, nodePackages, pkg-config, libjpeg
-, pixman, cairo, pango }:
+{ stdenv, fetchFromGitLab, pkgs, lib, nodejs-14_x, pkg-config
+, libjpeg, pixman, cairo, pango, which, postgresql }:
 
 let
-  # No official version ever released
-  src = fetchFromGitHub {
-    owner = "matrix-discord";
+  nodejs = nodejs-14_x;
+
+  version = "0.1.1";
+
+  src = fetchFromGitLab {
+    group = "mx-puppet";
+    owner = "discord";
     repo = "mx-puppet-discord";
-    rev = "c17384a6a12a42a528e0b1259f8073e8db89b8f4";
-    sha256 = "1yczhfpa4qzvijcpgc2pr10s009qb6jwlfwpcbb17g2wsx6zj0c2";
+    rev = "v${version}";
+    hash = "sha256-ZhyjUt6Bz/0R4+Lq/IoY9rNjdwVE2qp4ZQLc684+T/0=";
   };
 
   myNodePackages = import ./node-composition.nix {
@@ -16,24 +20,22 @@ let
   };
 
 in myNodePackages.package.override {
-  pname = "mx-puppet-discord";
+  inherit version src;
 
-  inherit src;
+  nativeBuildInputs = [ nodejs.pkgs.node-pre-gyp nodejs.pkgs.node-gyp-build pkg-config which ];
+  buildInputs = [ libjpeg pixman cairo pango postgresql ];
 
-  nativeBuildInputs = [ nodePackages.node-pre-gyp pkg-config ];
-  buildInputs = [ libjpeg pixman cairo pango ];
+  postRebuild = ''
+    # Build typescript stuff
+    npm run build
+  '';
 
   postInstall = ''
-    # Patch shebangs in node_modules, otherwise the webpack build fails with interpreter problems
-    patchShebangs --build "$out/lib/node_modules/mx-puppet-discord/node_modules/"
-    # compile Typescript sources
-    npm run build
-
     # Make an executable to run the server
     mkdir -p $out/bin
     cat <<EOF > $out/bin/mx-puppet-discord
     #!/bin/sh
-    exec ${nodejs}/bin/node $out/lib/node_modules/mx-puppet-discord/build/index.js "\$@"
+    exec ${nodejs}/bin/node $out/lib/node_modules/@mx-puppet/discord/build/index.js "\$@"
     EOF
     chmod +x $out/bin/mx-puppet-discord
   '';
@@ -41,7 +43,7 @@ in myNodePackages.package.override {
   meta = with lib; {
     description = "A discord puppeting bridge for matrix";
     license = licenses.asl20;
-    homepage = "https://github.com/matrix-discord/mx-puppet-discord";
+    homepage = "https://gitlab.com/mx-puppet/discord/mx-puppet-discord";
     maintainers = with maintainers; [ expipiplus1 ];
     platforms = platforms.unix;
   };

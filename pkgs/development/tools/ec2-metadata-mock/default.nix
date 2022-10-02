@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ec2-metadata-mock";
-  version = "1.9.2";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ec2-metadata-mock";
     rev = "v${version}";
-    sha256 = "sha256-k4YzG4M+r6BHc4DdAMXoUvVDTJqmzr8vIL1J6kbJBeY=";
+    sha256 = "sha256-hYyJtkwAzweH8boUY3vrvy6Ug+Ier5f6fvR52R+Di8o=";
   };
 
-  vendorSha256 = "sha256-uq0gcpFzAcz1HMwI1ZjHykWU93bV2U5kxC/G+J4ob7Q=";
+  vendorSha256 = "sha256-T45abGVoiwxAEO60aPH3hUqiH6ON3aRhkrOFcOi+Bm8=";
 
   postInstall = ''
     mv $out/bin/{cmd,ec2-metadata-mock}

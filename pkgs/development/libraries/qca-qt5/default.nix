@@ -2,20 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "qca-qt5";
-  version = "2.3.1";
+  version = "2.3.4";
 
   src = fetchurl {
     url = "http://download.kde.org/stable/qca/${version}/qca-${version}.tar.xz";
-    sha256 = "sha256-wThREJq+/EYjNwmJ+uOnRb9rGss8KhOolYU5gj6XTks=";
+    sha256 = "sha256-a2lYgafj/ZX3Oq7m6uq5b2rRflFenCs9SzJy14Yv9cQ=";
   };
-
-  patches = [
-    # Pull upstream fix for gcc-11
-    (fetchurl {
-      url = "https://github.com/KDE/qca/commit/32275f1a74c161d2fed8c056b2dd9555687a22f2.patch";
-      sha256 = "sha256-SUH2eyzP2vH/ZjYcX8ybwiqhoTm/QjuEpTKjb2iH1No=";
-    })
-  ];
 
   buildInputs = [ openssl qtbase ];
   nativeBuildInputs = [ cmake pkg-config ];
@@ -34,5 +26,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ttuegel ];
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
+    # until macOS SDK supports Qt 5.15, 2.3.2 is the highest version of qca-qt5
+    # that works on darwin
+    broken = stdenv.isDarwin;
   };
 }

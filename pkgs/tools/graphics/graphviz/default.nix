@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , autoreconfHook
 , pkg-config
 , cairo
@@ -16,35 +17,33 @@
 , pango
 , bash
 , bison
-, fetchpatch
 , xorg
 , ApplicationServices
 , python3
+, fltk
+, exiv2
 , withXorg ? true
 }:
 
 let
   inherit (lib) optional optionals optionalString;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "graphviz";
-  version = "2.49.3";
+  version = "5.0.1";
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
-    # use rev as tags have disappeared before
-    rev = "3425dae078262591d04fec107ec71ab010651852";
-    sha256 = "1qvyjly7r1ihacdvxq0r59l4csr09sc05palpshzqsiz2wb1izk0";
+    rev = version;
+    sha256 = "sha256-lcU6Pb45kg7AxXQ9lmqwAazT2JpGjBz4PzK+S5lpYa0=";
   };
 
   patches = [
-    # Fix cross.
-    # https://gitlab.com/graphviz/graphviz/-/merge_requests/2281
-    # Remove when version > 2.49.3.
     (fetchpatch {
-      url = "https://gitlab.com/graphviz/graphviz/-/commit/0cdb89acbb0caf5baf3d04a8821c9d0dfe065ea8.patch";
-      sha256 = "130mqlxzhzaz3vp4ccaq7z7fd9q6vjxmimz70g8y818igsbb13rf";
+      url = "https://gitlab.com/graphviz/graphviz/-/commit/8d662734b6a34709d9475b120e7ce3de872339e2.diff";
+      includes = [ "lib/*" ];
+      sha256 = "sha256-cqzUpK//2TnzWb7oSa/g8LJ61yr3O+Wiq5LsZzw34NE=";
     })
   ];
 
@@ -97,12 +96,16 @@ stdenv.mkDerivation {
   preAutoreconf = "./autogen.sh";
 
   postFixup = optionalString withXorg ''
-    substituteInPlace $out/bin/dotty --replace '`which lefty`' $out/bin/lefty
     substituteInPlace $out/bin/vimdot \
-      --replace /usr/bin/vi '$(command -v vi)' \
-      --replace /usr/bin/vim '$(command -v vim)' \
+      --replace '"/usr/bin/vi"' '"$(command -v vi)"' \
+      --replace '"/usr/bin/vim"' '"$(command -v vim)"' \
       --replace /usr/bin/vimdot $out/bin/vimdot \
   '';
+
+  passthru.tests = {
+    inherit (python3.pkgs) pygraphviz;
+    inherit fltk exiv2;
+  };
 
   meta = with lib; {
     homepage = "https://graphviz.org";

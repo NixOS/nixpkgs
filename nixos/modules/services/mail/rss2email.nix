@@ -15,57 +15,57 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable rss2email.";
+        description = lib.mdDoc "Whether to enable rss2email.";
       };
 
       to = mkOption {
         type = types.str;
-        description = "Mail address to which to send emails";
+        description = lib.mdDoc "Mail address to which to send emails";
       };
 
       interval = mkOption {
         type = types.str;
         default = "12h";
-        description = "How often to check the feeds, in systemd interval format";
+        description = lib.mdDoc "How often to check the feeds, in systemd interval format";
       };
 
       config = mkOption {
         type = with types; attrsOf (oneOf [ str int bool ]);
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           The configuration to give rss2email.
 
-          Default will use system-wide <literal>sendmail</literal> to send the
+          Default will use system-wide `sendmail` to send the
           email. This is rss2email's default when running
-          <literal>r2e new</literal>.
+          `r2e new`.
 
           This set contains key-value associations that will be set in the
-          <literal>[DEFAULT]</literal> block along with the
-          <literal>to</literal> parameter.
+          `[DEFAULT]` block along with the
+          `to` parameter.
 
-          See <literal>man r2e</literal> for more information on which
+          See `man r2e` for more information on which
           parameters are accepted.
         '';
       };
 
       feeds = mkOption {
-        description = "The feeds to watch.";
+        description = lib.mdDoc "The feeds to watch.";
         type = types.attrsOf (types.submodule {
           options = {
             url = mkOption {
               type = types.str;
-              description = "The URL at which to fetch the feed.";
+              description = lib.mdDoc "The URL at which to fetch the feed.";
             };
 
             to = mkOption {
               type = with types; nullOr str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 Email address to which to send feed items.
 
-                If <literal>null</literal>, this will not be set in the
+                If `null`, this will not be set in the
                 configuration file, and rss2email will make it default to
-                <literal>rss2email.to</literal>.
+                `rss2email.to`.
               '';
             };
           };

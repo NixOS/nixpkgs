@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, writeText, jdk, makeWrapper }:
+{ fetchurl, lib, stdenv, writeText, jdk, makeWrapper, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "soapui";
@@ -46,9 +46,12 @@ stdenv.mkDerivation rec {
     '')
   ];
 
+  passthru.tests = { inherit (nixosTests) soapui; };
+
   meta = with lib; {
     description = "The Most Advanced REST & SOAP Testing Tool in the World";
     homepage = "https://www.soapui.org/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = "SoapUI End User License Agreement";
     maintainers = with maintainers; [ gerschtli ];
     platforms = platforms.all;

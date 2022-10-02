@@ -1,6 +1,8 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
+, autoreconfHook
 , curl
 , libjpeg
 , libpng
@@ -10,6 +12,7 @@
 , readline
 , shared-mime-info
 , xine-lib
+, xlibsWrapper
 , xorg
 }:
 
@@ -22,7 +25,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-sjgtB1xysbEAOeDpAxDMhsjZEDWMU1We2C09WEIB9cU=";
   };
 
+  patches = [
+    (fetchpatch {
+      # Fix build on aarch64
+      name = "xine-ui_FTBS_aarch64.patch";
+      url = "https://salsa.debian.org/debian/xine-ui/-/raw/b2f04f64947a8975a805950e7e67b15cb44007ef/debian/patches/backport/0003-Fix-build.patch";
+      sha256 = "03f8nkm7q11v5vssl1bj500ja4ljz4y752mfk22k2g4djkwimx62";
+    })
+  ];
+
   nativeBuildInputs = [
+    autoreconfHook
     pkg-config
     shared-mime-info
   ];
@@ -34,6 +47,7 @@ stdenv.mkDerivation rec {
     ncurses
     readline
     xine-lib
+    xlibsWrapper
   ] ++ (with xorg; [
     libXext
     libXft
@@ -42,7 +56,6 @@ stdenv.mkDerivation rec {
     libXtst
     libXv
     libXxf86vm
-    xlibsWrapper
     xorgproto
   ]);
 
@@ -57,7 +70,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://xinehq.de/";
+    homepage = "http://xine.sourceforge.net/";
     description = "Xlib-based frontend for Xine video player";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];

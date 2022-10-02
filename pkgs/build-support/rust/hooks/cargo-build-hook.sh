@@ -6,6 +6,9 @@ cargoBuildHook() {
     runHook preBuild
 
     if [ ! -z "${buildAndTestSubdir-}" ]; then
+        # ensure the output doesn't end up in the subdirectory
+        export CARGO_TARGET_DIR="$(pwd)/target"
+
         pushd "${buildAndTestSubdir}"
     fi
 

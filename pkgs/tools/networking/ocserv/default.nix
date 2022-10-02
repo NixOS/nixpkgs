@@ -5,22 +5,22 @@
 
 stdenv.mkDerivation rec {
   pname = "ocserv";
-  version = "1.1.2";
+  version = "1.1.6";
 
   src = fetchFromGitLab {
     owner = "openconnect";
     repo = "ocserv";
     rev = version;
-    sha256 = "gXolG4zTnJpgI32SuudhvlP9snI0k4Oa1mqE7eGbdE0=";
+    sha256 = "sha256-1grRt0F/myVzK+DMSeK5K0Ui8bJANEtE6/6IY+ZbPAw=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ nettle gnutls libev protobufc guile geoip libseccomp gperf readline lz4 libgssglue ronn pam ];
+  nativeBuildInputs = [ autoreconfHook gperf pkg-config ronn ];
+  buildInputs = [ nettle gnutls libev protobufc guile geoip libseccomp readline lz4 libgssglue pam ];
 
   meta = with lib; {
     homepage = "https://gitlab.com/openconnect/ocserv";
-    license = licenses.gpl2;
-    description = "This program is openconnect VPN server (ocserv), a server for the openconnect VPN client";
+    license = licenses.gpl2Plus;
+    description = "OpenConnect VPN server (ocserv), a server for the OpenConnect VPN client";
     maintainers = with maintainers; [ neverbehave ];
   };
 }

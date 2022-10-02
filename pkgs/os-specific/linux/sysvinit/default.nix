@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = if withoutInitTools then "sysvtools" else "sysvinit";
-  version = "3.01";
+  version = "3.04";
 
   src = fetchurl {
     url = "mirror://savannah/sysvinit/sysvinit-${version}.tar.xz";
-    sha256 = "sha256-aLEaR3LNrM5ftlpMvq0ySizjmZ0Ti0/2HcLVnlfvV5M=";
+    sha256 = "sha256-KmIf5uRSi8kTCLdIZ92q6733dT8COVwMW66Be9K346U=";
   };
 
   prePatch = ''

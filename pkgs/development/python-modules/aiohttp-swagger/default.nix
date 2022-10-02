@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "aiohttp-swagger";
   version = "1.0.15";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "cr0hn";
     repo = pname;
     rev = version;
-    sha256 = "sha256-M43sNpbXWXFRTd549cZhvhO35nBB6OH+ki36BzSk87Q=";
+    hash = "sha256-M43sNpbXWXFRTd549cZhvhO35nBB6OH+ki36BzSk87Q=";
   };
 
   propagatedBuildInputs = [
@@ -41,7 +42,14 @@ buildPythonPackage rec {
       --replace "jinja2~=2.11.2" "jinja2>=2.11.2"
   '';
 
-  pythonImportsCheck = [ "aiohttp_swagger" ];
+  preCheck = ''
+    # The custom client is obsolete
+    rm tests/conftest.py
+  '';
+
+  pythonImportsCheck = [
+    "aiohttp_swagger"
+  ];
 
   meta = with lib; {
     description = "Swagger API Documentation builder for aiohttp";

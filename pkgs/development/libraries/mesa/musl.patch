@@ -1,0 +1,59 @@
+diff --git a/src/amd/vulkan/winsys/amdgpu/radv_amdgpu_winsys.h b/src/amd/vulkan/winsys/amdgpu/radv_amdgpu_winsys.h
+index 06ca90564f0..bb244f8f358 100644
+--- a/src/amd/vulkan/winsys/amdgpu/radv_amdgpu_winsys.h
++++ b/src/amd/vulkan/winsys/amdgpu/radv_amdgpu_winsys.h
+@@ -30,6 +30,7 @@
+ 
+ #include <amdgpu.h>
+ #include <pthread.h>
++#include <sys/types.h>
+ #include "util/list.h"
+ #include "util/rwlock.h"
+ #include "ac_gpu_info.h"
+diff --git a/src/gallium/drivers/freedreno/freedreno_util.h b/src/gallium/drivers/freedreno/freedreno_util.h
+index 22f99c41909..2f3195926be 100644
+--- a/src/gallium/drivers/freedreno/freedreno_util.h
++++ b/src/gallium/drivers/freedreno/freedreno_util.h
+@@ -108,6 +108,8 @@ extern bool fd_binning_enabled;
+ #include <sys/types.h>
+ #include <sys/syscall.h>
+ 
++#define gettid() ((pid_t)syscall(SYS_gettid))
++
+ #define DBG(fmt, ...)                                                          \
+    do {                                                                        \
+       if (FD_DBG(MSGS))                                                        \
+diff --git a/src/gallium/frontends/nine/nine_debug.c b/src/gallium/frontends/nine/nine_debug.c
+index f3a6a945025..f4a6c41a612 100644
+--- a/src/gallium/frontends/nine/nine_debug.c
++++ b/src/gallium/frontends/nine/nine_debug.c
+@@ -65,7 +65,7 @@ _nine_debug_printf( unsigned long flag,
+ {
+     static boolean first = TRUE;
+     static unsigned long dbg_flags = DBG_ERROR | DBG_WARN;
+-    unsigned long tid = 0;
++    pthread_t tid = 0;
+ 
+     if (first) {
+         first = FALSE;
+@@ -74,7 +74,7 @@ _nine_debug_printf( unsigned long flag,
+ 
+ #if defined(HAVE_PTHREAD)
+     if (dbg_flags & DBG_TID)
+-        tid = (unsigned long)pthread_self();
++        tid = pthread_self();
+ #endif
+ 
+     if (dbg_flags & flag) {
+diff --git a/src/util/rand_xor.c b/src/util/rand_xor.c
+index 81b64f1ea71..56ebd2eccdf 100644
+--- a/src/util/rand_xor.c
++++ b/src/util/rand_xor.c
+@@ -28,6 +28,7 @@
+ #if defined(HAVE_GETRANDOM)
+ #include <sys/random.h>
+ #endif
++#include <sys/types.h>         /* size_t, ssize_t */
+ #include <unistd.h>
+ #include <fcntl.h>
+ #endif

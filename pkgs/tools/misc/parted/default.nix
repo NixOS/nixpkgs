@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "parted";
-  version = "3.4";
+  version = "3.5";
 
   src = fetchurl {
     url = "mirror://gnu/parted/parted-${version}.tar.xz";
-    sha256 = "sha256-4SmAIkctpVibfyvh1e48G2bsPZbfutA9xkKv0AnaU0I=";
+    sha256 = "sha256-STjdXBwSX2x4sfSz4pdSbxjudKpD1FwkhXix0kcMBaI=";
   };
 
   outputs = [ "out" "dev" "man" "info" ];

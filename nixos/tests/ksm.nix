@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ lib, ...} :
     maintainers = [ rnhmjoj ];
   };
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     imports = [ ../modules/profiles/minimal.nix ];
 
     hardware.ksm.enable = true;

@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage
+{ lib, fetchurl, buildDunePackage, ocaml
 , decompress, stdlib-shims, alcotest
 }:
 
@@ -16,13 +16,14 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ decompress stdlib-shims ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ alcotest ];
 
   meta = {
     description = "Image formats such as PNG and PPM in OCaml";
+    homepage = "https://github.com/rlepigre/ocaml-imagelib";
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.vbgl ];
-    homepage = "https://github.com/rlepigre/ocaml-imagelib";
+    mainProgram = "imagetool";
   };
 }

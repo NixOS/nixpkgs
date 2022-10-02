@@ -1,69 +1,107 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, flask
-, blinker
-, setuptools
-, itsdangerous
-, flask_principal
-, passlib
-, email_validator
-, flask_wtf
-, flask_login
-, pytestCheckHook
-, flask_mail
+
+# extras: babel
+, babel
+, flask-babel
+
+# extras: common
+, bcrypt
+, bleach
+, flask-mailman
+, qrcode
+
+# extras: fsqla
+, flask-sqlalchemy
 , sqlalchemy
-, flask_sqlalchemy
+, sqlalchemy-utils
+
+# extras: mfa
+, cryptography
+, phonenumbers
+
+# propagates
+, blinker
+, email-validator
+, flask
+, flask_login
+, flask_principal
+, flask-wtf
+, itsdangerous
+, passlib
+
+# tests
+, argon2-cffi
 , flask-mongoengine
+, mongoengine
+, mongomock
 , peewee
 , pony
+, pytestCheckHook
+, python-dateutil
 , zxcvbn
-, mongoengine
-, cryptography
-, pyqrcode
-, phonenumbers
-, bleach
-, mongomock
 }:
 
 buildPythonPackage rec {
   pname = "flask-security-too";
-  version = "4.1.2";
+  version = "5.0.2";
 
   src = fetchPypi {
     pname = "Flask-Security-Too";
     inherit version;
-    sha256 = "16ws5n08vm7wsa2f7lrkxvc7jl3ah1xfylhhyzb4vvqmlk7x9hw8";
+    sha256 = "sha256-Nv7g2l0bPSEcrydFU7d1NHjCCJl8Ykq7hOu6QmHeZcI=";
   };
 
   propagatedBuildInputs = [
+    blinker
+    email-validator
     flask
     flask_login
     flask_principal
-    flask_wtf
-    email_validator
+    flask-wtf
     itsdangerous
     passlib
-    blinker
-    setuptools
   ];
 
+  passthru.optional-dependencies = {
+    babel = [
+      babel
+      flask-babel
+    ];
+    common = [
+      bcrypt
+      bleach
+      flask-mailman
+      qrcode
+    ];
+    fsqla = [
+      flask-sqlalchemy
+      sqlalchemy
+      sqlalchemy-utils
+    ];
+    mfa = [
+      cryptography
+      phonenumbers
+    ];
+  };
+
   checkInputs = [
-    pytestCheckHook
-    flask_mail
-    sqlalchemy
-    flask_sqlalchemy
+    argon2-cffi
     flask-mongoengine
+    mongoengine
+    mongomock
     peewee
     pony
+    pytestCheckHook
+    python-dateutil
     zxcvbn
-    mongoengine
-    cryptography
-    pyqrcode
-    phonenumbers
-    bleach
-    mongomock
-  ];
+  ]
+  ++ passthru.optional-dependencies.babel
+  ++ passthru.optional-dependencies.common
+  ++ passthru.optional-dependencies.fsqla
+  ++ passthru.optional-dependencies.mfa;
+
 
   pythonImportsCheck = [ "flask_security" ];
 

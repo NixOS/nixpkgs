@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname   = "libminc";
-  version = "unstable-2020-07-17";
+  version = "2.4.05";
 
   owner = "BIC-MNI";
 
   src = fetchFromGitHub {
     inherit owner;
     repo   = pname;
-    rev    = "ffb5fb234a852ea7e8da8bb2b3b49f67acbe56ca";
-    sha256 = "0yr4ksghpvxh9zg0a4p7hvln3qirsi08plvjp5kxx2qiyj96zsdm";
+    rev    = "aa08255f0856e70fb001c5f9ee1f4e5a8c12d47d";  # new release, but no git tag
+    sha256 = "XMTO6/HkyrrQ0s5DzJLCmmWheye2DGMnpDbcGdP6J+A=";
   };
 
   postPatch = ''
@@ -24,15 +24,14 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DLIBMINC_MINC1_SUPPORT=ON"
     "-DLIBMINC_BUILD_SHARED_LIBS=ON"
+    "-DLIBMINC_USE_NIFTI=ON"
     "-DLIBMINC_USE_SYSTEM_NIFTI=ON"
   ];
 
   doCheck = !stdenv.isDarwin;
-  checkPhase = ''
-    export LD_LIBRARY_PATH="$(pwd)"  # see #22060
-    ctest -j1 -E 'ezminc_rw_test' --output-on-failure
     # -j1: see https://github.com/BIC-MNI/libminc/issues/110
-    # ezminc_rw_test: can't find libminc_io.so.5.2.0
+  checkPhase = ''
+    ctest -j1 --output-on-failure
   '';
 
   meta = with lib; {

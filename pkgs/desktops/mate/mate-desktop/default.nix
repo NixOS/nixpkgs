@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, isocodes, gnome, gtk3, dconf, wrapGAppsHook, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, isocodes
+, gnome
+, gtk3
+, dconf
+, wrapGAppsHook
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-desktop";
@@ -23,7 +34,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "Library with common API for various MATE modules";

@@ -8,12 +8,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "cxxopts";
+  pname = "cxxopts";
   version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "jarro2783";
-    repo = name;
+    repo = "cxxopts";
     rev = "v${version}";
     sha256 = "08x7j168l1xwj0r3rv89cgghmfhsx98lpq35r3vkh504m1pd55a6";
   };
@@ -30,6 +30,12 @@ stdenv.mkDerivation rec {
 
   # Conflict on case-insensitive filesystems.
   dontUseCmakeBuildDir = true;
+
+  # https://github.com/jarro2783/cxxopts/issues/332
+  postPatch = ''
+    substituteInPlace packaging/pkgconfig.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/jarro2783/cxxopts";

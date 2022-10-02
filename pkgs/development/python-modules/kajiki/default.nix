@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, Babel
+, fetchFromGitHub
+, babel
 , pytz
 , nine
 , pytestCheckHook
@@ -9,20 +9,24 @@
 
 buildPythonPackage rec {
   pname = "kajiki";
-  version = "0.9.0";
+  version = "0.9.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f0d6dfa27eb2b6c0d2a28ae21d69dceb5363cc0432f4045bcc98aac42a662ccb";
+  src = fetchFromGitHub {
+    owner = "jackrosenthal";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-bdQBVFHRB408/7X9y+3+fpllhymFRsdv/MEPTVjJh2E=";
   };
 
-  propagatedBuildInputs = [ Babel pytz nine ];
+  propagatedBuildInputs = [ babel pytz nine ];
+
   checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Kajiki provides fast well-formed XML templates";
     homepage = "https://github.com/nandoflorestan/kajiki";
     license = licenses.mit;
+    maintainers = with maintainers; [ onny ];
   };
 
 }

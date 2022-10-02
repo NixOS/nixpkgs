@@ -6,17 +6,33 @@
 , requests
 , yarl
 , pythonOlder
+, fetchFromGitHub
+, poetry-core
 }:
 
 buildPythonPackage rec {
   pname = "transmission-rpc";
-  version = "3.3.0";
+  version = "3.3.2";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ef3a931fc1f1db74edf8660e475b9295e0904ee922030ef0e45b0c73f4be65ae";
+  format = "pyproject";
+
+  src = fetchFromGitHub {
+    owner = "Trim21";
+    repo = "transmission-rpc";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-GkhNOKatT/hJFw1l1xrf43jtgxvJ+WVvhz83Oe0MZ6w=";
   };
+
+  # remove once upstream has tagged version with dumped typing-extensions
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'typing_extensions = ">=3.7.4.2,<4.0.0.0"' 'typing_extensions = "*"'
+  '';
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     six

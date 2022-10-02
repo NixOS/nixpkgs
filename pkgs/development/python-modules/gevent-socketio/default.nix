@@ -1,29 +1,48 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, versiontools
+, gevent
 , gevent-websocket
 , mock
-, pytest
-, gevent
+, versiontools
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "gevent-socketio";
   version = "0.3.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zra86hg2l1jcpl9nsnqagy3nl3akws8bvrbpgdxk15x7ywllfak";
+    hash = "sha256-UzlKuT+9hNnbuyvvhTSfalA7/FPYapvoZTJQ8aBBKv8=";
   };
 
-  buildInputs = [ versiontools gevent-websocket mock pytest ];
-  propagatedBuildInputs = [ gevent ];
+  nativeBuildInputs = [
+    versiontools
+  ];
+
+  buildInputs = [
+    gevent-websocket
+  ];
+
+  propagatedBuildInputs = [
+    gevent
+  ];
+
+  # Tests are not ported to Python 3
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "socketio"
+  ];
 
   meta = with lib; {
+    description = "SocketIO server based on the Gevent pywsgi server";
     homepage = "https://github.com/abourget/gevent-socketio";
-    description = "SocketIO server based on the Gevent pywsgi server, a Python network library";
     license = licenses.bsd0;
+    maintainers = with maintainers; [ ];
   };
-
 }

@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/cpcsdk/idsk" ;
     license = licenses.mit;
     maintainers = [ ];
+    mainProgram = "iDSK";
     platforms = platforms.all;
   };
 }

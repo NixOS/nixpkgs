@@ -2,8 +2,8 @@
 
 let
   base = callPackage ./generic.nix (_args // {
-    version = "8.0.14";
-    sha256 = "0jydl388mpysrrxa7h9sxf3fpp38mmygg9ryq8j7rb8p93giyf5v";
+    version = "8.0.24";
+    hash = "sha256-kI4XzqMx1au4UGtKicY5K5YuEnw5Eyd3fHSF60tBXUM=";
   });
 
 in
@@ -42,6 +42,7 @@ base.withExtensions ({ all, ... }: with all; ([
   sockets
   soap
   sodium
+  sysvsem
   sqlite3
   tokenizer
   xmlreader

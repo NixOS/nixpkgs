@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
+, unittestCheckHook
 , mock
 , sphinx-testing
 , sphinx
@@ -22,9 +22,10 @@ buildPythonPackage rec {
 
   # Seems to look for files in the wrong dir
   doCheck = false;
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests
-  '';
+
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "tests" ];
 
   meta = with lib; {
     description = "Sphinx blockdiag extension";

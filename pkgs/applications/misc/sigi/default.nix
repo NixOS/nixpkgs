@@ -1,26 +1,28 @@
-{ lib, rustPlatform, fetchCrate, installShellFiles, testVersion, sigi }:
+{ lib, rustPlatform, fetchCrate, installShellFiles, testers, sigi }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sigi";
-  version = "3.0.0";
+  version = "3.4.3";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-1xZMj6NjwA9pVOEL4CDv4XHC3usu3WdjsLJuW3vgxc8=";
+    sha256 = "sha256-CDu/tllCwmt+UO4ae1uFkR4KKCWdxM4aW1O7oY59qHE=";
   };
 
+  cargoSha256 = "sha256-pMOaw7Ra78aRisYF9ttbpjB/cbylpzZXw8DtBqn5Tjo=";
   nativeBuildInputs = [ installShellFiles ];
+
+  # In case anything goes wrong.
+  checkFlags = [ "RUST_BACKTRACE=1" ];
 
   postInstall = ''
     installManPage sigi.1
   '';
 
-  cargoSha256 = "sha256-NUWm2GkK7bASo6bAOgQgHate45iDG5l3G/KhtLrjzQ8=";
-
-  passthru.tests.version = testVersion { package = sigi; };
+  passthru.tests.version = testers.testVersion { package = sigi; };
 
   meta = with lib; {
-    description = "CLI tool for organization and planning";
+    description = "Organizing CLI for people who don't love organizing.";
     homepage = "https://github.com/hiljusti/sigi";
     license = licenses.gpl2;
     maintainers = with maintainers; [ hiljusti ];

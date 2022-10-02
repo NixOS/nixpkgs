@@ -3,7 +3,7 @@
 #!nix-shell -i bash
 
 node2nix \
-  --nodejs-12 \
+  --nodejs-16 \
   --input $src/package.json \
   --lock $src/package-lock.json \
   --composition cypress-example-kitchensink.nix \

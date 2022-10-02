@@ -1,32 +1,33 @@
 diff --git a/platform/x11/detect.py b/platform/x11/detect.py
-index 91652aad55..d12389f9f2 100644
+index 98c9ddb..0cc2bff 100644
 --- a/platform/x11/detect.py
 +++ b/platform/x11/detect.py
-@@ -218,6 +218,11 @@ def configure(env):
+@@ -255,6 +255,10 @@ def configure(env):
      env.ParseConfig("pkg-config xrender --cflags --libs")
      env.ParseConfig("pkg-config xi --cflags --libs")
-
-+    env.ParseConfig("pkg-config xext --cflags --libs")
+ 
 +    env.ParseConfig("pkg-config xfixes --cflags --libs")
 +    env.ParseConfig("pkg-config glu --cflags --libs")
 +    env.ParseConfig("pkg-config zlib --cflags --libs")
 +
      if env["touch"]:
          env.Append(CPPDEFINES=["TOUCH_ENABLED"])
-
-@@ -323,6 +328,7 @@ def configure(env):
-         print("Enabling ALSA")
+ 
+@@ -359,7 +363,7 @@ def configure(env):
+     if os.system("pkg-config --exists alsa") == 0:  # 0 means found
          env["alsa"] = True
          env.Append(CPPDEFINES=["ALSA_ENABLED", "ALSAMIDI_ENABLED"])
+-        env.ParseConfig("pkg-config alsa --cflags")  # Only cflags, we dlopen the library.
 +        env.ParseConfig("pkg-config alsa --cflags --libs")
      else:
-         print("ALSA libraries not found, disabling driver")
-
-@@ -340,6 +346,7 @@ def configure(env):
+         print("Warning: ALSA libraries not found. Disabling the ALSA audio driver.")
+ 
+@@ -375,7 +379,7 @@ def configure(env):
+         if env["udev"]:
              if os.system("pkg-config --exists libudev") == 0:  # 0 means found
-                 print("Enabling udev support")
                  env.Append(CPPDEFINES=["UDEV_ENABLED"])
+-                env.ParseConfig("pkg-config libudev --cflags")  # Only cflags, we dlopen the library.
 +                env.ParseConfig("pkg-config libudev --cflags --libs")
              else:
-                 print("libudev development libraries not found, disabling udev support")
+                 print("Warning: libudev development libraries not found. Disabling controller hotplugging support.")
      else:

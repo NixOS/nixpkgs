@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "clickhouse";
-  version = "21.8.12.29";
+  version = "22.8.5.29";
 
   broken = stdenv.buildPlatform.is32bit; # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     repo   = "ClickHouse";
     rev    = "v${version}-lts";
     fetchSubmodules = true;
-    sha256 = "1qqacb7v7mhr9k162yll8mcbh0cxa347f5hypz0a8l54v1dz5fyl";
+    sha256 = "sha256-JRdZb5YgaumTnjJEYIXh9o3NSv67DAdl9gizVKvGTJI=";
   };
 
   nativeBuildInputs = [ cmake libtool llvm-bintools ninja ];
@@ -37,8 +37,6 @@ stdenv.mkDerivation rec {
       --replace 'git rev-parse --show-toplevel' '$src'
     substituteInPlace utils/check-style/check-ungrouped-includes.sh \
       --replace 'git rev-parse --show-toplevel' '$src'
-    substituteInPlace utils/generate-ya-make/generate-ya-make.sh \
-      --replace 'git rev-parse --show-toplevel' '$src'
     substituteInPlace utils/list-licenses/list-licenses.sh \
       --replace 'git rev-parse --show-toplevel' '$src'
     substituteInPlace utils/check-style/check-style \
@@ -47,6 +45,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_TESTS=OFF"
+    "-DENABLE_CCACHE=0"
     "-DENABLE_EMBEDDED_COMPILER=ON"
     "-USE_INTERNAL_LLVM_LIBRARY=OFF"
   ];
@@ -68,7 +67,7 @@ stdenv.mkDerivation rec {
   passthru.tests.clickhouse = nixosTests.clickhouse;
 
   meta = with lib; {
-    homepage = "https://clickhouse.tech/";
+    homepage = "https://clickhouse.com";
     description = "Column-oriented database management system";
     license = licenses.asl20;
     maintainers = with maintainers; [ orivej ];

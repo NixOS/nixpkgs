@@ -1,6 +1,7 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
-, substituteAll
+, fetchpatch
 , asciidoc
 , docbook-xsl-nons
 , docbook_xml_dtd_45
@@ -43,16 +44,29 @@
 , taglib
 , upower
 , totem-pl-parser
+, e2fsprogs
 }:
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "3.2.1";
+  version = "3.3.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "RDafU+Lt70FDdAbb7s1Hepf4qa/dkTSDLqRdG6KqLEc=";
+    sha256 = "Pt3G0nLAKWn6TCwV360MSddtAh8aJ+xwi2m+gCU1PJQ=";
   };
+
+  # TODO: remove me on 3.4.0
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/tracker-miners/-/commit/cc655ba0f95022cf35bc6d44cb5155788fee2e24.patch";
+      sha256 = "sha256-a85ygtabpkruiDgKbseQxYbFIAQlVDhs3eWkbStJjKs=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/tracker-miners/-/commit/9e613ceb37ec41fd1cd88c3d539e3ee03e8f6ba6.patch";
+      sha256 = "sha256-ht7EfZztyl0st0Sv7H92Q37vwXY4T61GQm9WJ8IxTTg=";
+    })
+  ];
 
   nativeBuildInputs = [
     asciidoc
@@ -72,7 +86,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bzip2
     dbus
-    evolution-data-server
     exempi
     giflib
     glib
@@ -80,7 +93,11 @@ stdenv.mkDerivation rec {
     totem-pl-parser
     tracker
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
     gst_all_1.gstreamer
+    gst_all_1.gst-libav
     icu
     json-glib
     libcue
@@ -91,16 +108,20 @@ stdenv.mkDerivation rec {
     libjpeg
     libosinfo
     libpng
-    libseccomp
     libsoup
     libtiff
     libuuid
     libxml2
-    networkmanager
     poppler
-    systemd
     taglib
+  ] ++ lib.optionals stdenv.isLinux [
+    evolution-data-server
+    libseccomp
+    networkmanager
+    systemd
     upower
+  ] ++ lib.optionals stdenv.isDarwin [
+    e2fsprogs
   ];
 
   mesonFlags = [
@@ -111,13 +132,9 @@ stdenv.mkDerivation rec {
     # security issue since then. Despite a patch now being availab, we're opting
     # to be safe due to the general state of the project
     "-Dminer_rss=false"
-  ];
-
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit asciidoc;
-    })
+  ] ++ lib.optionals (!stdenv.isLinux) [
+    "-Dnetwork_manager=disabled"
+    "-Dsystemd_user_services=false"
   ];
 
   postInstall = ''
@@ -127,7 +144,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "none";
     };
   };
 
@@ -136,6 +152,6 @@ stdenv.mkDerivation rec {
     description = "Desktop-neutral user information store, search tool and indexer";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

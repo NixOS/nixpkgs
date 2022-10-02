@@ -7,7 +7,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   nodes = {
     webserver = { pkgs, lib, ... }: {
       services.caddy.enable = true;
-      services.caddy.config = ''
+      services.caddy.extraConfig = ''
         http://localhost {
           encode gzip
 
@@ -22,7 +22,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       '';
 
       specialisation.etag.configuration = {
-        services.caddy.config = lib.mkForce ''
+        services.caddy.extraConfig = lib.mkForce ''
           http://localhost {
             encode gzip
 
@@ -38,7 +38,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       };
 
       specialisation.config-reload.configuration = {
-        services.caddy.config = ''
+        services.caddy.extraConfig = ''
           http://localhost:8080 {
           }
         '';
@@ -61,7 +61,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     ''
       url = "http://localhost/example.html"
       webserver.wait_for_unit("caddy")
-      webserver.wait_for_open_port("80")
+      webserver.wait_for_open_port(80)
 
 
       def check_etag(url):
@@ -95,13 +95,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           webserver.succeed(
               "${justReloadSystem}/bin/switch-to-configuration test >&2"
           )
-          webserver.wait_for_open_port("8080")
+          webserver.wait_for_open_port(8080)
 
       with subtest("multiple configs are correctly merged"):
           webserver.succeed(
               "${multipleConfigs}/bin/switch-to-configuration test >&2"
           )
-          webserver.wait_for_open_port("8080")
-          webserver.wait_for_open_port("8081")
+          webserver.wait_for_open_port(8080)
+          webserver.wait_for_open_port(8081)
     '';
 })

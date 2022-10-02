@@ -6,8 +6,13 @@ on:
       - 'nixos-**'
       - 'nixpkgs-**'
 
+permissions:
+  contents: read
+
 jobs:
   fail:
+    permissions:
+      contents: none
     name: "This PR is is targeting a channel branch"
     runs-on: ubuntu-latest
     steps:

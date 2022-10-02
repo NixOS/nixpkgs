@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dnstwist";
-  version = "20211204";
+  version = "20220815";
 
   src = fetchFromGitHub {
     owner = "elceef";
     repo = pname;
     rev = version;
-    sha256 = "sha256-D7qesxkJMx/N0oyaw3ev007SLCm4RKhZSNW22CNgKPw=";
+    sha256 = "sha256-cmwgnjhfTqehMCu6mN0840NIaTN8gf4r098ULVj0yPI=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

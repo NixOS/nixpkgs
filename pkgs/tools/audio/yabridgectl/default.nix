@@ -11,13 +11,14 @@ rustPlatform.buildRustPackage rec {
 
   src = yabridge.src;
   sourceRoot = "source/tools/yabridgectl";
-  cargoSha256 = "sha256-/VREh/f4bAt2DXCqK0noEjn+4hcK5VZUn+gdbYbeAmk=";
+  cargoSha256 = "sha256-09GsrQAI08Qih/TpbEAh4hn7IfvwyFdEoyzsSjcjGXY=";
 
   patches = [
-    # By default, yabridgectl locates libyabridge.so by using
-    # hard coded distro specific lib paths. This patch replaces those
-    # hard coded paths with lib paths from NIX_PROFILES.
-    ./libyabridge-from-nix-profiles.patch
+    # Patch yabridgectl to search for the chainloader through NIX_PROFILES
+    ./chainloader-from-nix-profiles.patch
+
+    # Dependencies are hardcoded in yabridge, so the check is unnecessary and likely incorrect
+    ./remove-dependency-verification.patch
   ];
 
   patchFlags = [ "-p3" ];
@@ -26,12 +27,14 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
     wrapProgram "$out/bin/yabridgectl" \
-      --prefix PATH : ${lib.makeBinPath [ wine ]}
+      --prefix PATH : ${lib.makeBinPath [
+        wine # winedump
+      ]}
   '';
 
   meta = with lib; {
     description = "A small, optional utility to help set up and update yabridge for several directories at once";
-    homepage = "https://github.com/robbert-vdh/yabridge/tree/master/tools/yabridgectl";
+    homepage = "${src.meta.homepage}/tree/${version}/tools/yabridgectl";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = yabridge.meta.platforms;

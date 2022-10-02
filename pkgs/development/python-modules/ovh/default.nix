@@ -1,19 +1,44 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, mock
+, nose
+, requests
+, yanc
 }:
 
 buildPythonPackage rec {
   pname = "ovh";
-  version = "0.5.0";
-
-  # Needs yanc
-  doCheck = false;
+  version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f74d190c4bff0953d76124cb8ed319a8a999138720e42957f0db481ef4746ae8";
+    sha256 = "sha256-IQzwu0gwfPNPOLQLCO99KL5Hu2094Y+acQBFXVGzHhU=";
   };
+
+  propagatedBuildInputs = [
+    requests
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  checkInputs = [
+    mock
+    nose
+    yanc
+  ];
+
+  # requires network
+  checkPhase = ''
+    nosetests . \
+      -e test_config_get_conf \
+      -e test_config_get_custom_conf \
+      -e test_endpoints \
+      -e test_init_from_custom_config
+  '';
 
   meta = {
     description = "Thin wrapper around OVH's APIs";

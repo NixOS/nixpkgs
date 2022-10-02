@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "freepats-20060219";
+  pname = "freepats";
+  version = "20060219";
 
   src = fetchurl {
-    url = "https://freepats.zenvoid.org/${name}.tar.bz2";
+    url = "https://freepats.zenvoid.org/freepats-${version}.tar.bz2";
     sha256 = "12iw36rd94zirll96cd5k0va7p5hxmf2shvjlhzihcmjaw8flq82";
   };
 

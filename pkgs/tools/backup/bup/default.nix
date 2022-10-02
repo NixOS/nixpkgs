@@ -60,6 +60,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ muflax ];
+    maintainers = with maintainers; [ ];
   };
 }

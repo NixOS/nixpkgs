@@ -17,21 +17,18 @@
 , polkit
 , protobuf
 , audit
-, libgcrypt
 , libsodium
 }:
 
-assert libgcrypt != null -> libsodium == null;
-
 stdenv.mkDerivation rec {
-  version = "1.0.0";
+  version = "1.1.2";
   pname = "usbguard";
 
   src = fetchFromGitHub {
     owner = "USBGuard";
     repo = pname;
     rev = "usbguard-${version}";
-    sha256 = "sha256-CPuBQmDOpXWn0jPo4HRyDCZUpDy5NmbvUHxXoVbMd/I=";
+    sha256 = "sha256-uwNoKczmVOMpkU4KcKTOtbcTHiYVGXjk/rVbqMl5pGk=";
     fetchSubmodules = true;
   };
 
@@ -44,6 +41,8 @@ stdenv.mkDerivation rec {
     libxml2 # xmllint
     docbook_xml_dtd_45
     docbook_xsl
+    dbus-glib # gdbus-codegen
+    protobuf # protoc
   ];
 
   buildInputs = [
@@ -51,21 +50,19 @@ stdenv.mkDerivation rec {
     libcap_ng
     libqb
     libseccomp
+    libsodium
     polkit
     protobuf
     audit
-  ]
-  ++ (lib.optional (libgcrypt != null) libgcrypt)
-  ++ (lib.optional (libsodium != null) libsodium);
+  ];
 
   configureFlags = [
     "--with-bundled-catch"
     "--with-bundled-pegtl"
     "--with-dbus"
+    "--with-crypto-library=sodium"
     "--with-polkit"
-  ]
-  ++ (lib.optional (libgcrypt != null) "--with-crypto-library=gcrypt")
-  ++ (lib.optional (libsodium != null) "--with-crypto-library=sodium");
+  ];
 
   enableParallelBuilding = true;
 

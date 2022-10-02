@@ -2,17 +2,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-insta";
-  version = "1.7.1";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "insta";
     rev = version;
-    sha256 = "1qzzkhailxjqwp3rmdcpp112wn3x0gfi788vwj77pfdyclhpj0a7";
+    sha256 = "sha256-yTzLEV4yP6It4KrUPdTgIJrocW+VToOeyaSvOSQRVMU=";
   };
 
   sourceRoot = "source/cargo-insta";
-  cargoSha256 = "01fj2j7ibrk5dyrfkmc610lh1p6f6bgzbgivq3dsd64vslhqmabw";
+  cargoSha256 = "sha256-y9o2sNiDIYKzrsgG+tA17PswR6DZn7ms8n5EG/J9oOU=";
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   meta = with lib; {

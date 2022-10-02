@@ -27,6 +27,7 @@ buildDunePackage rec {
     description = "OCaml Bindings to gettext";
     homepage = "https://github.com/gildor478/ocaml-gettext";
     license = licenses.lgpl21;
-    maintainers = [ maintainers.volth ];
+    maintainers = [ ];
+    mainProgram = "ocaml-gettext";
   };
 }

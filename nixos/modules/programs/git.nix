@@ -9,14 +9,14 @@ in
 {
   options = {
     programs.git = {
-      enable = mkEnableOption "git";
+      enable = mkEnableOption (lib.mdDoc "git");
 
       package = mkOption {
         type = types.package;
         default = pkgs.git;
         defaultText = literalExpression "pkgs.git";
         example = literalExpression "pkgs.gitFull";
-        description = "The git package to use";
+        description = lib.mdDoc "The git package to use";
       };
 
       config = mkOption {
@@ -26,20 +26,20 @@ in
           init.defaultBranch = "main";
           url."https://github.com/".insteadOf = [ "gh:" "github:" ];
         };
-        description = ''
+        description = lib.mdDoc ''
           Configuration to write to /etc/gitconfig. See the CONFIGURATION FILE
           section of git-config(1) for more information.
         '';
       };
 
       lfs = {
-        enable = mkEnableOption "git-lfs";
+        enable = mkEnableOption (lib.mdDoc "git-lfs");
 
         package = mkOption {
           type = types.package;
           default = pkgs.git-lfs;
           defaultText = literalExpression "pkgs.git-lfs";
-          description = "The git-lfs package to use";
+          description = lib.mdDoc "The git-lfs package to use";
         };
       };
     };

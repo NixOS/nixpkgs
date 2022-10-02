@@ -8,19 +8,16 @@ The various tools available will be listed in the [tools-overview](#javascript-t
 
 ## Getting unstuck / finding code examples
 
-If you find you are lacking inspiration for packing javascript applications, the links below might prove useful.
-Searching online for prior art can be helpful if you are running into solved problems.
+If you find you are lacking inspiration for packing javascript applications, the links below might prove useful. Searching online for prior art can be helpful if you are running into solved problems.
 
 ### Github
 
 - Searching Nix files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+language%3ANix&type=code>
-
 - Searching just `flake.nix` files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+filename%3Aflake.nix&type=code>
 
 ### Gitlab
 
 - Searching Nix files for `mkYarnPackage`: <https://gitlab.com/search?scope=blobs&search=mkYarnPackage+extension%3Anix>
-
 - Searching just `flake.nix` files for `mkYarnPackage`: <https://gitlab.com/search?scope=blobs&search=mkYarnPackage+filename%3Aflake.nix>
 
 ## Tools overview {#javascript-tools-overview}
@@ -35,107 +32,128 @@ It is often not documented which node version is used upstream, but if it is, tr
 
 This can be a problem if upstream is using the latest and greatest and you are trying to use an earlier version of node. Some cryptic errors regarding V8 may appear.
 
-An exception to this:
-
 ### Try to respect the package manager originally used by upstream (and use the upstream lock file) {#javascript-upstream-package-manager}
 
 A lock file (package-lock.json, yarn.lock...) is supposed to make reproducible installations of node_modules for each tool.
 
 Guidelines of package managers, recommend to commit those lock files to the repos. If a particular lock file is present, it is a strong indication of which package manager is used upstream.
 
-It's better to try to use a nix tool that understand the lock file. Using a different tool might give you hard to understand error because different packages have been installed. An example of problems that could arise can be found [here](https://github.com/NixOS/nixpkgs/pull/126629). Upstream uses npm, but this is an attempt to package it with yarn2nix (that uses yarn.lock)
+It's better to try to use a Nix tool that understand the lock file. Using a different tool might give you hard to understand error because different packages have been installed. An example of problems that could arise can be found [here](https://github.com/NixOS/nixpkgs/pull/126629). Upstream use NPM, but this is an attempt to package it with `yarn2nix` (that uses yarn.lock).
 
 Using a different tool forces to commit a lock file to the repository. Those files are fairly large, so when packaging for nixpkgs, this approach does not scale well.
 
 Exceptions to this rule are:
 
-- when you encounter one of the bugs from a nix tool. In each of the tool specific instructions, known problems will be detailed. If you have a problem with a particular tool, then it's best to try another tool, even if this means you will have to recreate a lock file and commit it to nixpkgs. In general yarn2nix has less known problems and so a simple search in nixpkgs will reveal many yarn.lock files committed
-- Some lock files contain particular version of a package that has been pulled off npm for some reason. In that case, you can recreate upstream lock (by removing the original and `npm install`, `yarn`, ...) and commit this to nixpkgs.
-- The only tool that supports workspaces (a feature of npm that helps manage sub-directories with different package.json from a single top level package.json) is yarn2nix. If upstream has workspaces you should try yarn2nix.
+- When you encounter one of the bugs from a Nix tool. In each of the tool specific instructions, known problems will be detailed. If you have a problem with a particular tool, then it's best to try another tool, even if this means you will have to recreate a lock file and commit it to nixpkgs. In general `yarn2nix` has less known problems and so a simple search in nixpkgs will reveal many yarn.lock files committed.
+- Some lock files contain particular version of a package that has been pulled off NPM for some reason. In that case, you can recreate upstream lock (by removing the original and `npm install`, `yarn`, ...) and commit this to nixpkgs.
+- The only tool that supports workspaces (a feature of NPM that helps manage sub-directories with different package.json from a single top level package.json) is `yarn2nix`. If upstream has workspaces you should try `yarn2nix`.
 
 ### Try to use upstream package.json {#javascript-upstream-package-json}
 
-Exceptions to this rule are
+Exceptions to this rule are:
 
-- Sometimes the upstream repo assumes some dependencies be installed globally. In that case you can add them manually to the upstream package.json (`yarn add xxx` or `npm install xxx`, ...). Dependencies that are installed locally can be executed with `npx` for cli tools. (e.g. `npx postcss ...`, this is how you can call those dependencies in the phases).
-- Sometimes there is a version conflict between some dependency requirements. In that case you can fix a version (by removing the `^`).
-- Sometimes the script defined in the package.json does not work as is. Some scripts for example use cli tools that might not be available, or cd in directory with a different package.json (for workspaces notably). In that case, it's perfectly fine to look at what the particular script is doing and break this down in the phases. In the build script you can see `build:*` calling in turns several other build scripts like `build:ui` or `build:server`. If one of those fails, you can try to separate those into:
+- Sometimes the upstream repo assumes some dependencies be installed globally. In that case you can add them manually to the upstream package.json (`yarn add xxx` or `npm install xxx`, ...). Dependencies that are installed locally can be executed with `npx` for CLI tools. (e.g. `npx postcss ...`, this is how you can call those dependencies in the phases).
+- Sometimes there is a version conflict between some dependency requirements. In that case you can fix a version by removing the `^`.
+- Sometimes the script defined in the package.json does not work as is. Some scripts for example use CLI tools that might not be available, or cd in directory with a different package.json (for workspaces notably). In that case, it's perfectly fine to look at what the particular script is doing and break this down in the phases. In the build script you can see `build:*` calling in turns several other build scripts like `build:ui` or `build:server`. If one of those fails, you can try to separate those into,
 
-```Shell
-yarn build:ui
-yarn build:server
-# OR
-npm run build:ui
-npm run build:server
-```
+  ```sh
+  yarn build:ui
+  yarn build:server
+  # OR
+  npm run build:ui
+  npm run build:server
+  ```
 
-when you need to override a package.json. It's nice to use the one from the upstream src and do some explicit override. Here is an example.
+  when you need to override a package.json. It's nice to use the one from the upstream source and do some explicit override. Here is an example:
 
-```nix
-patchedPackageJSON = final.runCommand "package.json" { } ''
-  ${jq}/bin/jq '.version = "0.4.0" |
-    .devDependencies."@jsdoc/cli" = "^0.2.5"
-    ${sonar-src}/package.json > $out
-'';
-```
+  ```nix
+  patchedPackageJSON = final.runCommand "package.json" { } ''
+    ${jq}/bin/jq '.version = "0.4.0" |
+      .devDependencies."@jsdoc/cli" = "^0.2.5"
+      ${sonar-src}/package.json > $out
+  '';
+  ```
 
-you will still need to commit the modified version of the lock files, but at least the overrides are explicit for everyone to see.
+  You will still need to commit the modified version of the lock files, but at least the overrides are explicit for everyone to see.
 
 ### Using node_modules directly {#javascript-using-node_modules}
 
-each tool has an abstraction to just build the node_modules (dependencies) directory. you can always use the stdenv.mkDerivation with the node_modules to build the package (symlink the node_modules directory and then use the package build command). the node_modules abstraction can be also used to build some web framework frontends. For an example of this see how [plausible](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix) is built. mkYarnModules to make the derivation containing node_modules. Then when building the frontend you can just symlink the node_modules directory
+Each tool has an abstraction to just build the node_modules (dependencies) directory. You can always use the `stdenv.mkDerivation` with the node_modules to build the package (symlink the node_modules directory and then use the package build command). The node_modules abstraction can be also used to build some web framework frontends. For an example of this see how [plausible](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix) is built. `mkYarnModules` to make the derivation containing node_modules. Then when building the frontend you can just symlink the node_modules directory.
 
-## javascript packages inside nixpkgs {#javascript-packages-nixpkgs}
+## Javascript packages inside nixpkgs {#javascript-packages-nixpkgs}
 
-The `pkgs/development/node-packages` folder contains a generated collection of
-[NPM packages](https://npmjs.com/) that can be installed with the Nix package
-manager.
+The [pkgs/development/node-packages](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages) folder contains a generated collection of [NPM packages](https://npmjs.com/) that can be installed with the Nix package manager.
 
-As a rule of thumb, the package set should only provide _end user_ software
-packages, such as command-line utilities. Libraries should only be added to the
-package set if there is a non-NPM package that requires it.
+As a rule of thumb, the package set should only provide _end user_ software packages, such as command-line utilities. Libraries should only be added to the package set if there is a non-NPM package that requires it.
 
-When it is desired to use NPM libraries in a development project, use the
-`node2nix` generator directly on the `package.json` configuration file of the
-project.
+When it is desired to use NPM libraries in a development project, use the `node2nix` generator directly on the `package.json` configuration file of the project.
 
-The package set provides support for the official stable Node.js versions.
-The latest stable LTS release in `nodePackages`, as well as the latest stable
-Current release in `nodePackages_latest`.
+The package set provides support for the official stable Node.js versions. The latest stable LTS release in `nodePackages`, as well as the latest stable current release in `nodePackages_latest`.
 
-If your package uses native addons, you need to examine what kind of native
-build system it uses. Here are some examples:
+If your package uses native addons, you need to examine what kind of native build system it uses. Here are some examples:
 
 - `node-gyp`
 - `node-gyp-builder`
 - `node-pre-gyp`
 
-After you have identified the correct system, you need to override your package
-expression while adding in build system as a build input. For example, `dat`
-requires `node-gyp-build`, so [we override](https://github.com/NixOS/nixpkgs/blob/32f5e5da4a1b3f0595527f5195ac3a91451e9b56/pkgs/development/node-packages/default.nix#L37-L40) its expression in [`default.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/default.nix):
+After you have identified the correct system, you need to override your package expression while adding in build system as a build input. For example, `dat` requires `node-gyp-build`, so we override its expression in [pkgs/development/node-packages/overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/overrides.nix):
 
 ```nix
-    dat = super.dat.override {
-      buildInputs = [ self.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
-      meta.broken = since "12";
-    };
+    dat = prev.dat.override (oldAttrs: {
+      buildInputs = [ final.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
+      meta = oldAttrs.meta // { broken = since "12"; };
+    });
 ```
+
+### Adding and Updating Javascript packages in nixpkgs
 
 To add a package from NPM to nixpkgs:
 
-1. Modify `pkgs/development/node-packages/node-packages.json` to add, update
-    or remove package entries to have it included in `nodePackages` and
-    `nodePackages_latest`.
-2. Run the script: `cd pkgs/development/node-packages && ./generate.sh`.
-3. Build your new package to test your changes:
-    `cd /path/to/nixpkgs && nix-build -A nodePackages.<new-or-updated-package>`.
-    To build against the latest stable Current Node.js version (e.g. 14.x):
-    `nix-build -A nodePackages_latest.<new-or-updated-package>`
-4. Add and commit all modified and generated files.
+1. Modify [pkgs/development/node-packages/node-packages.json](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/node-packages.json) to add, update or remove package entries to have it included in `nodePackages` and `nodePackages_latest`.
+2. Run the script:
 
-For more information about the generation process, consult the
-[README.md](https://github.com/svanderburg/node2nix) file of the `node2nix`
-tool.
+   ```sh
+   ./pkgs/development/node-packages/generate.sh
+   ```
+
+3. Build your new package to test your changes:
+
+   ```sh
+   nix-build -A nodePackages.<new-or-updated-package>
+   ```
+
+    To build against the latest stable Current Node.js version (e.g. 18.x):
+
+    ```sh
+    nix-build -A nodePackages_latest.<new-or-updated-package>
+    ```
+
+    If the package doesn't build, you may need to add an override as explained above.
+4. If the package's name doesn't match any of the executables it provides, add an entry in [pkgs/development/node-packages/main-programs.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/main-programs.nix). This will be the case for all scoped packages, e.g., `@angular/cli`.
+5. Add and commit all modified and generated files.
+
+For more information about the generation process, consult the [README.md](https://github.com/svanderburg/node2nix) file of the `node2nix` tool.
+
+To update NPM packages in nixpkgs, run the same `generate.sh` script:
+
+```sh
+./pkgs/development/node-packages/generate.sh
+```
+
+#### Git protocol error
+
+Some packages may have Git dependencies from GitHub specified with `git://`.
+GitHub has [disabled unecrypted Git connections](https://github.blog/2021-09-01-improving-git-protocol-security-github/#no-more-unauthenticated-git), so you may see the following error when running the generate script:
+
+```
+The unauthenticated git protocol on port 9418 is no longer supported
+```
+
+Use the following Git configuration to resolve the issue:
+
+```sh
+git config --global url."https://github.com/".insteadOf git://github.com/
+```
 
 ## Tool specific instructions {#javascript-tool-specific}
 
@@ -143,63 +161,86 @@ tool.
 
 #### Preparation {#javascript-node2nix-preparation}
 
-you will need to generate a nix expression for the dependencies
+You will need to generate a Nix expression for the dependencies. Don't forget the `-l package-lock.json` if there is a lock file. Most probably you will need the `--development` to include the `devDependencies`
 
-- don't forget the `-l package-lock.json` if there is a lock file
-- Most probably you will need the `--development` to include the `devDependencies`
+So the command will most likely be:
+```sh
+node2nix --development -l package-lock.json
+```
 
-so the command will most likely be
-`node2nix --development -l package-lock.json`
-
-[link to the doc in the repo](https://github.com/svanderburg/node2nix)
+See `node2nix` [docs](https://github.com/svanderburg/node2nix) for more info.
 
 #### Pitfalls {#javascript-node2nix-pitfalls}
 
-- if upstream package.json does not have a "version" attribute, node2nix will crash. You will need to add it like shown in [the package.json section](#javascript-upstream-package-json)
-- node2nix has some [bugs](https://github.com/svanderburg/node2nix/issues/238). related to working with lock files from npm distributed with nodejs-16_x
-- node2nix does not like missing packages from npm. If you see something like `Cannot resolve version: vue-loader-v16@undefined` then you might want to try another tool. The package might have been pulled off of npm.
+- If upstream package.json does not have a "version" attribute, `node2nix` will crash. You will need to add it like shown in [the package.json section](#javascript-upstream-package-json).
+- `node2nix` has some [bugs](https://github.com/svanderburg/node2nix/issues/238) related to working with lock files from NPM distributed with `nodejs-16_x`.
+- `node2nix` does not like missing packages from NPM. If you see something like `Cannot resolve version: vue-loader-v16@undefined` then you might want to try another tool. The package might have been pulled off of NPM.
 
 ### yarn2nix {#javascript-yarn2nix}
 
 #### Preparation {#javascript-yarn2nix-preparation}
 
-you will need at least a yarn.lock and yarn.nix file
+You will need at least a `yarn.lock` file. If upstream does not have one you need to generate it and reference it in your package definition.
 
-- generate a yarn.lock in upstream if it is not already there
-- `yarn2nix > yarn.nix` will generate the dependencies in a nix format
+If the downloaded files contain the `package.json` and `yarn.lock` files they can be used like this:
+
+```nix
+offlineCache = fetchYarnDeps {
+  yarnLock = src + "/yarn.lock";
+  sha256 = "....";
+};
+```
 
 #### mkYarnPackage {#javascript-yarn2nix-mkYarnPackage}
 
-this will by default try to generate a binary. For package only generating static assets (Svelte, Vue, React...), you will need to explicitly override the build step with your instructions. It's important to use the `--offline` flag. For example if you script is `"build": "something"` in package.json use
+`mkYarnPackage` will by default try to generate a binary. For package only generating static assets (Svelte, Vue, React, WebPack, ...), you will need to explicitly override the build step with your instructions.
+
+It's important to use the `--offline` flag. For example if you script is `"build": "something"` in `package.json` use:
 
 ```nix
 buildPhase = ''
-  yarn build --offline
+  export HOME=$(mktemp -d)
+  yarn --offline build
 '';
 ```
 
-The dist phase is also trying to build a binary, the only way to override it is with
+The dist phase is also trying to build a binary, the only way to override it is with:
 
 ```nix
 distPhase = "true";
 ```
 
-the configure phase can sometimes fail because it tries to be too clever.
-One common override is
+The configure phase can sometimes fail because it makes many assumptions which may not always apply. One common override is:
 
 ```nix
-configurePhase = "ln -s $node_modules node_modules";
+configurePhase = ''
+  ln -s $node_modules node_modules
+'';
+```
+
+or if you need a writeable node_modules directory:
+
+```nix
+configurePhase = ''
+  cp -r $node_modules node_modules
+  chmod +w node_modules
+'';
 ```
 
 #### mkYarnModules {#javascript-yarn2nix-mkYarnModules}
 
-this will generate a derivation including the node_modules. If you have to build a derivation for an integrated web framework (rails, phoenix..), this is probably the easiest way. [Plausible](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix#L39) offers a good example of how to do this.
+This will generate a derivation including the `node_modules` directory.
+If you have to build a derivation for an integrated web framework (rails, phoenix..), this is probably the easiest way.
 
 #### Overriding dependency behavior
 
 In the `mkYarnPackage` record the property `pkgConfig` can be used to override packages when you encounter problems building.
 
-For instance, say your package is throwing errors when trying to invoke node-sass: `ENOENT: no such file or directory, scandir '/build/source/node_modules/node-sass/vendor'`
+For instance, say your package is throwing errors when trying to invoke node-sass:
+
+```
+ENOENT: no such file or directory, scandir '/build/source/node_modules/node-sass/vendor'
+```
 
 To fix this we will specify different versions of build inputs to use, as well as some post install steps to get the software built the way we want:
 
@@ -219,9 +260,8 @@ mkYarnPackage rec {
 
 #### Pitfalls {#javascript-yarn2nix-pitfalls}
 
-- if version is missing from upstream package.json, yarn will silently install nothing. In that case, you will need to override package.json as shown in the [package.json section](#javascript-upstream-package-json)
-
-- having trouble with node-gyp? Try adding these lines to the `yarnPreBuild` steps:
+- If version is missing from upstream package.json, yarn will silently install nothing. In that case, you will need to override package.json as shown in the [package.json section](#javascript-upstream-package-json)
+- Having trouble with `node-gyp`? Try adding these lines to the `yarnPreBuild` steps:
 
   ```nix
   yarnPreBuild = ''
@@ -237,20 +277,20 @@ mkYarnPackage rec {
 
 ## Outside of nixpkgs {#javascript-outside-nixpkgs}
 
-There are some other options available that can't be used inside nixpkgs. Those other options are written in nix. Importing them in nixpkgs will require moving the source code into nixpkgs. Using [Import From Derivation](https://nixos.wiki/wiki/Import_From_Derivation) is not allowed in hydra at present. If you are packaging something outside nixpkgs, those can be considered
+There are some other options available that can't be used inside nixpkgs. Those other options are written in Nix. Importing them in nixpkgs will require moving the source code into nixpkgs. Using [Import From Derivation](https://nixos.wiki/wiki/Import_From_Derivation) is not allowed in Hydra at present. If you are packaging something outside nixpkgs, those can be considered
 
 ### npmlock2nix {#javascript-npmlock2nix}
 
-[npmlock2nix](https://github.com/nix-community/npmlock2nix) aims at building node_modules without code generation. It hasn't reached v1 yet, the api might be subject to change.
+[npmlock2nix](https://github.com/nix-community/npmlock2nix) aims at building node_modules without code generation. It hasn't reached v1 yet, the API might be subject to change.
 
 #### Pitfalls {#javascript-npmlock2nix-pitfalls}
 
-- there are some [problems with npm v7](https://github.com/tweag/npmlock2nix/issues/45).
+There are some [problems with npm v7](https://github.com/tweag/npmlock2nix/issues/45).
 
 ### nix-npm-buildpackage {#javascript-nix-npm-buildpackage}
 
-[nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage) aims at building node_modules without code generation. It hasn't reached v1 yet, the api might change. It supports both package-lock.json and yarn.lock.
+[nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage) aims at building node_modules without code generation. It hasn't reached v1 yet, the API might change. It supports both package-lock.json and yarn.lock.
 
 #### Pitfalls {#javascript-nix-npm-buildpackage-pitfalls}
 
-- there are some [problems with npm v7](https://github.com/serokell/nix-npm-buildpackage/issues/33).
+There are some [problems with npm v7](https://github.com/serokell/nix-npm-buildpackage/issues/33).

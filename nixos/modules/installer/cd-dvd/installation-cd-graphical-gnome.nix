@@ -1,8 +1,6 @@
 # This module defines a NixOS installation CD that contains GNOME.
 
-{ lib, ... }:
-
-with lib;
+{ ... }:
 
 {
   imports = [ ./installation-cd-graphical-base.nix ];
@@ -10,10 +8,10 @@ with lib;
   isoImage.edition = "gnome";
 
   services.xserver.desktopManager.gnome = {
-    # Add firefox to favorite-apps
+    # Add Firefox and other tools useful for installation to the launcher
     favoriteAppsOverride = ''
       [org.gnome.shell]
-      favorite-apps=[ 'firefox.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop' ]
+      favorite-apps=[ 'firefox.desktop', 'nixos-manual.desktop', 'org.gnome.Terminal.desktop', 'org.gnome.Nautilus.desktop', 'gparted.desktop' ]
     '';
     enable = true;
   };

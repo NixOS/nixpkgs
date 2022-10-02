@@ -9,13 +9,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "t-rec";
-  version = "0.6.0";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "sassman";
     repo = "t-rec-rs";
     rev = "v${version}";
-    sha256 = "InArrBqfhDrsonjmCIPTBVOA/s2vYml9Ay6cdrKLd7c=";
+    sha256 = "sha256-PvC1UaHt0ppGqVgouud/WKsP2CIGg+mbFN9VTiVy1RU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     wrapProgram "$out/bin/t-rec" --prefix PATH : "${binPath}"
   '';
 
-  cargoSha256 = "4gwfrC65YlXV6Wu2ninK1TvMNUkY1GstVYPr0FK+xLU=";
+  cargoSha256 = "sha256-2EMxa39mIRN37U/v9+MMIGFRLOdkFeD+pVqoXU4f0kU=";
 
   meta = with lib; {
     description = "Blazingly fast terminal recorder that generates animated gif images for the web written in rust";

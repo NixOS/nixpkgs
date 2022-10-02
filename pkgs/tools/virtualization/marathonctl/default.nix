@@ -1,19 +1,19 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage {
-  pname = "marathonctl-unstable";
-  version = "2017-03-06";
-
-  goPackagePath = "github.com/shoenig/marathonctl";
-  subPackages = [ "." ];
-  goDeps = ./deps.nix;
+buildGoModule rec {
+  pname = "marathonctl";
+  version = "0.0.7";
 
   src = fetchFromGitHub {
     owner = "shoenig";
     repo = "marathonctl";
-    rev = "0867e66551fff5d81f25959baf914a8ee11a3a8b";
-    sha256 = "1fcc54hwpa8s3kz4gn26mc6nrv6zjrw869331nvm47khi23gpmxw";
+    rev = "v${version}";
+    sha256 = "sha256-MigmvOwYa0uYPexchS4MP74I1Tp6QHYuQVSOh1+FrMg=";
   };
+
+  vendorSha256 = "sha256-Oiol4KuPOyJq2Bfc5div+enX4kQqYn20itmwWBecuIg=";
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     homepage = "https://github.com/shoenig/marathonctl";

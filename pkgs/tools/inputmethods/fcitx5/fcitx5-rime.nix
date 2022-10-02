@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-rime";
-  version = "5.0.10";
+  version = "5.0.14";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-cossoo/S1AzB5sHA+b2C49a6Uv8iVMYJAd32i9Y1is4=";
+    sha256 = "sha256-EvYNeBmP2c+kDQ4GQU0SyGhxK4jolxMmhAaoVyINmfg=";
   };
 
   cmakeFlags = [
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     fcitx5
     librime
   ];
+
+  patches = [ ./fcitx5-rime-with-nix-env-variable.patch ];
 
   meta = with lib; {
     description = "RIME support for Fcitx5";

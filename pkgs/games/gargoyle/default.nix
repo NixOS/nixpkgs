@@ -6,7 +6,7 @@ let
   jamenv = ''
     unset AR
   '' + (if stdenv.isDarwin then ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${SDL.dev}/include/SDL"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${lib.getDev SDL}/include/SDL"
     export GARGLKINI="$out/Applications/Gargoyle.app/Contents/Resources/garglk.ini"
   '' else ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/libexec/gargoyle"
@@ -35,6 +35,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ SDL SDL_mixer SDL_sound gtk2 ]
     ++ lib.optionals stdenv.isDarwin [ smpeg libvorbis ];
 
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: build/linux.release/alan3/Location.o:(.bss+0x0): multiple definition of
+  #     `logFile'; build/linux.release/alan3/act.o:(.bss+0x0): first defined here
+  # TODO: drop once updated to 2022.1 or later.
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   buildPhase = jamenv + "jam -j$NIX_BUILD_CORES";
 
   installPhase =
@@ -59,6 +65,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "http://ccxvii.net/gargoyle/";
     license = licenses.gpl2Plus;
     description = "Interactive fiction interpreter GUI";

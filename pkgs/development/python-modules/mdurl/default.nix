@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "mdurl";
-  version = "0.1.0";
+  version = "0.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "hukkin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-AVklWFc4o5R9OzS9BYauuOaxm89P/Ih5l3Vrb2P0El4=";
+    sha256 = "sha256-SBJSs+i+I0jF90i3o6BUgLCDR6Et34fXEmQ7fbDoAbA=";
   };
 
   nativeBuildInputs = [

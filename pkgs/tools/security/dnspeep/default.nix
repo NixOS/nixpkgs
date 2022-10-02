@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dnspeep";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "jvns";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0lz22vlgi1alsq676q4nlzfzwnsrvziyqdnmdbn00rwqsvlb81q6";
+    sha256 = "sha256-QpUbHiMDQFRCTVyjrO9lfQQ62Z3qanv0j+8eEXjE3n4=";
   };
 
-  cargoSha256 = "sha256-I1m+6M2tmmTZuXlZaecSslj6q2iCsMBq7k9vHiMd3WE=";
+  cargoSha256 = "sha256-w81FewtyweuSNYNPNr2uxB0uB1JoN5t252CAG1pm4Z8=";
 
   LIBPCAP_LIBDIR = lib.makeLibraryPath [ libpcap ];
   LIBPCAP_VER = libpcap.version;

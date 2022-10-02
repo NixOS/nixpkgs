@@ -3,13 +3,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
-  version = "4.2.5";
+  version = "4.2.10";
 
   src = fetchFromGitHub {
     owner = "Electron-Cash";
     repo = "Electron-Cash";
-    rev = version;
-    sha256 = "sha256-ALIrNnhpX46xdQdfJdx/9e/QtdyBEgi5xLrbuOBJR7o=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-m13wJlNBG3BxOdKUyd3qmIhFBM7263FzMKr5lfD1tys=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -40,6 +40,7 @@ python3Packages.buildPythonApplication rec {
     keepkey
     btchip
     hidapi
+    pyopenssl
     pyscard
     pysatochip
   ];

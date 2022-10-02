@@ -13,12 +13,12 @@ let
   };
 in {
   options.programs.steam = {
-    enable = mkEnableOption "steam";
+    enable = mkEnableOption (lib.mdDoc "steam");
 
     remotePlay.openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Open ports in the firewall for Steam Remote Play.
       '';
     };
@@ -26,7 +26,7 @@ in {
     dedicatedServer.openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Open ports in the firewall for Source Dedicated Server.
       '';
     };

@@ -1,14 +1,14 @@
-{ lib, fetchFromGitHub, python2Packages, openssh, rsync }:
+{ lib, fetchFromGitHub, python3Packages, openssh, rsync }:
 
-python2Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pssh";
-  version = "2.3.1";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = "pssh";
     rev = "v${version}";
-    sha256 = "0nawarxczfwajclnlsimhqkpzyqb1byvz9nsl54mi1bp80z5i4jq";
+    hash = "sha256-B1dIa6hNeq4iE8GKVhTp3Gzq7vp+v5Yyzj8uF8X71yg=";
   };
 
   postPatch = ''
@@ -19,6 +19,9 @@ python2Packages.buildPythonApplication rec {
         --replace "'rsync'" "'${rsync}/bin/rsync'"
     done
   '';
+
+  # Tests do not run with python3: https://github.com/lilydjwg/pssh/issues/126
+  doCheck = false;
 
   meta = with lib; {
     description = "Parallel SSH Tools";

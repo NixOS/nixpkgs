@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "git-hound";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "tillson";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1l2bif7qpc1yl93ih01g9jci7ba47rsnpq9js88rz216q93dzmsf";
+    sha256 = "sha256-HD5OK8HjnLDbyC/TmVI2HfBRIUCyyHTbA3JvKoeXV5E=";
   };
 
-  vendorSha256 = "055hpfjbqng513c9rscb8jhnlxj7p82sr8cbsvwnzk569n71qwma";
+  vendorSha256 = "sha256-qnIcjk2mzG/51ouhrAW6R3ZqoUSL6ZzYCOVZvKS7sBQ=";
 
   meta = with lib; {
     description = "Reconnaissance tool for GitHub code search";

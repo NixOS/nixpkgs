@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, zlib, cmake, jemalloc }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, zlib, cmake, enableJemalloc ? !stdenv.hostPlatform.isMusl, jemalloc }:
 
 stdenv.mkDerivation rec {
   pname = "lwan";
@@ -13,7 +13,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ jemalloc zlib ];
+  buildInputs = [ zlib ] ++ lib.optional enableJemalloc jemalloc;
+
+  # Note: tcmalloc and mimalloc are also supported (and normal malloc)
+  cmakeFlags = lib.optional enableJemalloc "-DUSE_ALTERNATIVE_MALLOC=jemalloc";
+
+  hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "pie";
 
   meta = with lib; {
     description = "Lightweight high-performance multi-threaded web server";

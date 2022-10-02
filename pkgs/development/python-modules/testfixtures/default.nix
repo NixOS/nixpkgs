@@ -12,14 +12,20 @@
 
 buildPythonPackage rec {
   pname = "testfixtures";
-  version = "6.18.3";
+  version = "7.0.0";
   format = "setuptools";
+  # DO NOT CONTACT upstream.
+  # https://github.com/simplistix/ is only concerned with internal CI process.
+  # Any attempt by non-standard pip workflows to comment on issues will
+  # be met with hostility.
+  # https://github.com/simplistix/testfixtures/issues/169
+  # https://github.com/simplistix/testfixtures/issues/168
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JgAQCulv/QgjNLN441VVD++LSlKab6TDT0cTCQXHQm0=";
+    hash = "sha256-jsrFowh5NFFkBZTZykLOibmHcR4eTJMShVMh7CH2zLQ=";
   };
 
   checkInputs = [
@@ -33,19 +39,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Django is too much hasle to setup at the moment
     "testfixtures/tests/test_django"
-  ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [
-    # https://github.com/simplistix/testfixtures/issues/168
-    "test_invalid_communicate_call"
-    "test_invalid_kill"
-    "test_invalid_parameters"
-    "test_invalid_poll"
-    "test_invalid_send_signal"
-    "test_invalid_terminate"
-    "test_invalid_wait_call"
-    "test_replace_delattr_cant_remove"
-    "test_replace_delattr_cant_remove_not_strict"
   ];
 
   pytestFlagsArray = [

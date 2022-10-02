@@ -1,44 +1,65 @@
 { lib
 , buildPythonPackage
+, isPy27
 , fetchFromGitHub
 , selenium
-, six
+, cssselect
+, django
 , flask
+, lxml
 , pytestCheckHook
+, zope-testbrowser
 }:
 
 buildPythonPackage rec {
   pname = "splinter";
-  version = "0.17.0";
+  version = "0.18.1";
+
+  disabled = isPy27;
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "cobrateam";
     repo = "splinter";
-    rev = version;
-    hash = "sha256-7QhFz/qBh2ECyeyvjCyqOYy/YrUK7KVX13VC/gem5BQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-5d39e9omc223ugBfVMIsMZh8+NPVxc6q7p2gwZ0fF0o=";
   };
 
   propagatedBuildInputs = [
     selenium
-    six
   ];
 
   checkInputs = [
+    cssselect
+    django
     flask
+    lxml
     pytestCheckHook
+    zope-testbrowser
+  ];
+
+  disabledTests = [
+    # driver is present and fails with a different error during loading
+    "test_browser_local_driver_not_present"
+    "test_local_driver_not_present"
   ];
 
   disabledTestPaths = [
     "samples"
-    "tests/test_djangoclient.py"
-    "tests/test_flaskclient.py"
+    # We run neither Chromium nor Firefox nor ...
+    "tests/test_async_finder.py"
+    "tests/test_html_snapshot.py"
+    "tests/test_iframes.py"
+    "tests/test_mouse_interaction.py"
     "tests/test_popups.py"
+    "tests/test_screenshot.py"
+    "tests/test_shadow_root.py"
     "tests/test_webdriver.py"
     "tests/test_webdriver_chrome.py"
     "tests/test_webdriver_edge_chromium.py"
     "tests/test_webdriver_firefox.py"
     "tests/test_webdriver_remote.py"
-    "tests/test_zopetestbrowser.py"
   ];
 
   pythonImportsCheck = [ "splinter" ];

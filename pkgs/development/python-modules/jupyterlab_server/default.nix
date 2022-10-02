@@ -1,48 +1,71 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, hatchling
 , jsonschema
 , pythonOlder
 , requests
 , pytestCheckHook
-, pyjson5
-, Babel
+, json5
+, babel
 , jupyter_server
 , openapi-core
+, pytest-timeout
 , pytest-tornasync
 , ruamel-yaml
-, strict-rfc3339
+, importlib-metadata
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab_server";
-  version = "2.10.3";
+  version = "2.15.2";
+  format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3fb84a5813d6d836ceda773fb2d4e9ef3c7944dbc1b45a8d59d98641a80de80a";
+    sha256 = "sha256-wLzdRgbmQObxbSNs6sVTNtyL+Yy7zgZ68nUkzML7JkA=";
   };
 
-  postPatch = ''
-    sed -i "/^addopts/d" pyproject.toml
-  '';
+  nativeBuildInputs = [
+    hatchling
+  ];
 
-  propagatedBuildInputs = [ requests jsonschema pyjson5 Babel jupyter_server ];
+  propagatedBuildInputs = [
+    requests
+    jsonschema
+    json5
+    babel
+    jupyter_server
+  ] ++ lib.optional (pythonOlder "3.10") importlib-metadata;
 
   checkInputs = [
     openapi-core
     pytestCheckHook
+    pytest-timeout
     pytest-tornasync
     ruamel-yaml
   ];
 
-  pytestFlagsArray = [ "--pyargs" "jupyterlab_server" ];
+  postPatch = ''
+    # translation tests try to install additional packages into read only paths
+    rm -r tests/translations/
+  '';
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  pytestFlagsArray = [
+    # DeprecationWarning: The distutils package is deprecated and slated for removal in Python 3.12.
+    # Use setuptools or check PEP 632 for potential alternatives.
+    "-W ignore::DeprecationWarning"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "JupyterLab Server";
+    description = "A set of server components for JupyterLab and JupyterLab like applications";
     homepage = "https://jupyter.org";
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.costrouc ];

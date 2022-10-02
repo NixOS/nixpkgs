@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "param";
-  version = "1.12.0";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "holoviz";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "02zmd4bwyn8b4q1l9jgddc70ii1i7bmynacanl1cvbr6la4v9b2c";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-NrMsIDcpZc/R2j8VuXitbnIlhP3NtLxU/OkygXqYok8=";
   };
 
   checkInputs = [

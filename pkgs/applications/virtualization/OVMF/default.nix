@@ -1,4 +1,4 @@
-{ stdenv, lib, edk2, util-linux, nasm, acpica-tools
+{ stdenv, nixosTests, lib, edk2, util-linux, nasm, acpica-tools
 , csmSupport ? false, seabios ? null
 , secureBoot ? false
 , httpSupport ? false
@@ -19,14 +19,22 @@ let
     throw "Unsupported architecture";
 
   version = lib.getVersion edk2;
+
+  suffixes = {
+    x86_64 = "FV/OVMF";
+    aarch64 = "FV/AAVMF";
+  };
+
 in
 
-edk2.mkDerivation projectDscPath {
-  name = "OVMF-${version}";
+edk2.mkDerivation projectDscPath (finalAttrs: {
+  pname = "OVMF";
+  inherit version;
 
   outputs = [ "out" "fd" ];
 
-  buildInputs = [ util-linux nasm acpica-tools ];
+  nativeBuildInputs = [ util-linux nasm acpica-tools ];
+  strictDeps = true;
 
   hardeningDisable = [ "format" "stackprotector" "pic" "fortify" ];
 
@@ -60,10 +68,23 @@ edk2.mkDerivation projectDscPath {
 
   dontPatchELF = true;
 
+  passthru =
+  let
+    cpuName = stdenv.hostPlatform.parsed.cpu.name;
+    suffix = suffixes."${cpuName}" or (throw "Host cpu name `${cpuName}` is not supported in this OVMF derivation!");
+    prefix = "${finalAttrs.finalPackage.fd}/${suffix}";
+  in {
+    firmware  = "${prefix}_CODE.fd";
+    variables = "${prefix}_VARS.fd";
+    # This will test the EFI firmware for the host platform as part of the NixOS Tests setup.
+    tests.basic-systemd-boot = nixosTests.systemd-boot.basic;
+  };
+
   meta = {
     description = "Sample UEFI firmware for QEMU and KVM";
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/OVMF";
     license = lib.licenses.bsd2;
     platforms = ["x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin"];
+    maintainers = [ lib.maintainers.raitobezarius ];
   };
-}
+})

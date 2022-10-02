@@ -9,7 +9,7 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable the tzupdate timezone updating service. This provides
         a one-shot service which can be activated with systemctl to
         update the timezone.

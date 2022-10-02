@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
   # build support
 , autoreconfHook
 , flex
@@ -27,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wget2";
-  version = "2.0.0";
+  version = "2.0.1";
 
   outputs = [ "out" "lib" "dev" ];
 
@@ -35,21 +34,8 @@ stdenv.mkDerivation rec {
     owner = "gnuwget";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07zs2x2k62836l0arzc333j96yjpwal1v4mr8j99x6qxgmmssrbj";
+    sha256 = "sha256-9IOM8IA8Kezk3SP3YVenxQkm8UMZgD8/ztWoDNqM0vc=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-bashism-in-configure-ac.patch";
-      url = "https://gitlab.com/gnuwget/wget2/-/commit/da9788f5d62b89ba796393d9bc496b1d8d7a7b30.patch";
-      sha256 = "0bn3vkgyknks7jzs5722s2c4qlx7k5lwfiyz204bi42v1m28s1a5";
-    })
-    (fetchpatch {
-      name = "fix-double-quotes-in-configure-ac.patch";
-      url = "https://gitlab.com/gnuwget/wget2/-/commit/574c8ae08dfd8949da039879d85899123d31ab1d.patch";
-      sha256 = "14rfmij5w3bvj0fnkkkrxg0lfw3vgwiyvbkal3nqhgb0mlhlmd47";
-    })
-  ];
 
   # wget2_noinstall contains forbidden reference to /build/
   postPatch = ''

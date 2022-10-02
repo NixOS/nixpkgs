@@ -33,7 +33,11 @@ stdenv.mkDerivation rec {
     description = "Open source enterprise search platform from the Apache Lucene project";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ aanderse ];
+    maintainers = with maintainers; [ ];
+    knownVulnerabilities = [
+      "Multiple security issues throughout 2021, see https://solr.apache.org/security.html"
+      "Package is outdated and has no maintainer"
+    ];
   };
 
 }

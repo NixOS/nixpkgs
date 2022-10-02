@@ -1,25 +1,27 @@
 { lib, stdenv, fetchFromGitLab, cmake, ninja, pkg-config, wrapGAppsHook
-, glib, gtk3, gettext, libxkbfile, libX11
-, freerdp, libssh, libgcrypt, gnutls
+, glib, gtk3, gettext, libxkbfile, libX11, python3
+, freerdp, libssh, libgcrypt, gnutls, vte
 , pcre2, libdbusmenu-gtk3, libappindicator-gtk3
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
 , libsecret, libsoup, spice-protocol, spice-gtk, libepoxy, at-spi2-core
 , openssl, gsettings-desktop-schemas, json-glib, libsodium, webkitgtk, harfbuzz
 # The themes here are soft dependencies; only icons are missing without them.
 , gnome
+, withLibsecret ? true
+, withVte ? true
 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   pname = "remmina";
-  version = "1.4.20";
+  version = "1.4.27";
 
   src = fetchFromGitLab {
     owner  = "Remmina";
     repo   = "Remmina";
     rev    = "v${version}";
-    sha256 = "sha256-m3DUaoOD8COxMwCVBTipzCAz3mqIdunEbVPjyjAl9So=";
+    sha256 = "sha256-WIppHK4ucvKqgXB8VPy9ldbw22ZuDaEn1gNaLpyb4jA=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config wrapGAppsHook ];
@@ -29,15 +31,17 @@ stdenv.mkDerivation rec {
     freerdp libssh libgcrypt gnutls
     pcre2 libdbusmenu-gtk3 libappindicator-gtk3
     libvncserver libpthreadstubs libXdmcp libxkbcommon
-    libsecret libsoup spice-protocol spice-gtk libepoxy at-spi2-core
+    libsoup spice-protocol spice-gtk libepoxy at-spi2-core
     openssl gnome.adwaita-icon-theme json-glib libsodium webkitgtk
-    harfbuzz
-  ];
+    harfbuzz python3
+  ] ++ optionals withLibsecret [ libsecret ]
+    ++ optionals withVte [ vte ];
 
   cmakeFlags = [
-    "-DWITH_VTE=OFF"
+    "-DWITH_VTE=${if withVte then "ON" else "OFF"}"
     "-DWITH_TELEPATHY=OFF"
     "-DWITH_AVAHI=OFF"
+    "-DWITH_LIBSECRET=${if withLibsecret then "ON" else "OFF"}"
     "-DFREERDP_LIBRARY=${freerdp}/lib/libfreerdp2.so"
     "-DFREERDP_CLIENT_LIBRARY=${freerdp}/lib/libfreerdp-client2.so"
     "-DFREERDP_WINPR_LIBRARY=${freerdp}/lib/libwinpr2.so"

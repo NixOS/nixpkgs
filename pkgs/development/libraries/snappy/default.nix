@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DSNAPPY_BUILD_TESTS=OFF"
     "-DSNAPPY_BUILD_BENCHMARKS=OFF"
   ];

@@ -11,14 +11,20 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       environment.systemPackages = [ pkgs.curl ];
     };
     traefik = { config, pkgs, ... }: {
-      virtualisation.oci-containers.containers.nginx = {
-        extraOptions = [
-          "-l" "traefik.enable=true"
-          "-l" "traefik.http.routers.nginx.entrypoints=web"
-          "-l" "traefik.http.routers.nginx.rule=Host(`nginx.traefik.test`)"
-        ];
-        image = "nginx-container";
-        imageFile = pkgs.dockerTools.examples.nginx;
+      virtualisation.oci-containers = {
+        backend = "docker";
+        containers.nginx = {
+          extraOptions = [
+            "-l"
+            "traefik.enable=true"
+            "-l"
+            "traefik.http.routers.nginx.entrypoints=web"
+            "-l"
+            "traefik.http.routers.nginx.rule=Host(`nginx.traefik.test`)"
+          ];
+          image = "nginx-container";
+          imageFile = pkgs.dockerTools.examples.nginx;
+        };
       };
 
       networking.firewall.allowedTCPPorts = [ 80 ];

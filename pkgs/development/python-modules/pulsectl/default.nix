@@ -1,12 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, libpulseaudio, glibc, substituteAll, stdenv, pulseaudio, python }:
+{ lib, buildPythonPackage, fetchPypi, libpulseaudio, glibc, substituteAll, stdenv, pulseaudio, unittestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pulsectl";
-  version = "21.10.5";
+  version = "22.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b347983fb78baab168f4dc4804ab2c59ca5b813bf62f8146dfb5fcb6ab6c8ba2";
+    sha256 = "sha256-zBdOHO69TmIixbePT0FfEugHU8mrdas1QVm0y1lQsIQ=";
   };
 
   patches = [
@@ -22,11 +22,10 @@ buildPythonPackage rec {
     "pulsectl"
   ];
 
-  checkInputs = [ pulseaudio ];
+  checkInputs = [ unittestCheckHook pulseaudio ];
 
-  checkPhase = ''
+  preCheck = ''
     export HOME=$TMPDIR
-    ${python.interpreter} -m unittest discover
   '';
 
   meta = with lib; {

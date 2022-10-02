@@ -1,24 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, flex, libtool }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
-stdenv.mkDerivation rec {
+buildGoModule rec {
   pname = "miller";
-
-  version = "5.10.3";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "johnkerl";
     repo = "miller";
     rev = "v${version}";
-    sha256 = "sha256-Mag7bIfZNdp+sM54yKp8HdH3kWjwWRfyPBGthej2jd8=";
+    sha256 = "sha256-nxkJfbZ5zdAKtmhZiWhTV0cU+qvqimOADC9T0r+1iS0=";
   };
 
-  nativeBuildInputs = [ autoreconfHook flex libtool ];
+  vendorSha256 = "sha256-EF5hTtTGGOYg9TGIsR3UL2Sxc3FHGV2q5VNXlBNma/M=";
+
+  subPackages = [ "cmd/mlr" ];
 
   meta = with lib; {
-    description = "Like awk, sed, cut, join, and sort for name-indexed data such as CSV, TSV, and tabular JSON";
-    homepage    = "http://johnkerl.org/miller/";
+    description = "Like awk, sed, cut, join, and sort for data formats such as CSV, TSV, JSON, JSON Lines, and positionally-indexed";
+    homepage    = "https://github.com/johnkerl/miller";
     license     = licenses.bsd2;
     maintainers = with maintainers; [ mstarzyk ];
+    mainProgram = "mlr";
     platforms   = platforms.all;
   };
 }

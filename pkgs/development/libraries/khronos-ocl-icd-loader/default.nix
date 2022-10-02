@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, opencl-headers, cmake, withTracing ? false }:
 
 stdenv.mkDerivation rec {
-  name = "khronos-ocl-icd-loader-${version}";
+  pname = "khronos-ocl-icd-loader";
   version = "2022.01.04";
 
   src = fetchFromGitHub {

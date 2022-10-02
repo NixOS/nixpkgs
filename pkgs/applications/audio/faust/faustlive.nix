@@ -1,36 +1,33 @@
 { lib, stdenv, fetchFromGitHub
 , llvm_10, qt5, qrencode, libmicrohttpd, libjack2, alsa-lib, faust, curl
-, bc, coreutils, which, libsndfile, pkg-config, libxcb
+, bc, coreutils, which, libsndfile, flac, libogg, libvorbis, libopus, pkg-config, libxcb, cmake, gnutls, libtasn1, p11-kit
 }:
 
 stdenv.mkDerivation rec {
   pname = "faustlive";
-  version = "2.5.5";
+  version = "2.5.11";
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faustlive";
     rev = version;
-    sha256 = "0qbn05nq170ckycwalkk5fppklc4g457mapr7p7ryrhc1hwzffm9";
+    sha256 = "sha256-ldn6st3/iIABjEfAwodOnPrI97DygWbnYmvMktlOgrk=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [ pkg-config qt5.wrapQtAppsHook cmake ];
 
   buildInputs = [
     llvm_10 qt5.qtbase qrencode libmicrohttpd libjack2 alsa-lib faust curl
-    bc coreutils which libsndfile libxcb
+    bc coreutils which libsndfile flac libogg libvorbis libopus libxcb gnutls libtasn1 p11-kit
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  postPatch = "cd Build";
-
-  installPhase = ''
-    install -d "$out/bin"
-    install -d "$out/share/applications"
-    install FaustLive/FaustLive "$out/bin"
-    install rsrc/FaustLive.desktop "$out/share/applications"
+  postInstall = ''
+    wrapProgram $out/bin/FaustLive --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libmicrohttpd libsndfile faust llvm_10 ]}"
   '';
+
+  postPatch = "cd Build";
 
   meta = with lib; {
     description = "A standalone just-in-time Faust compiler";

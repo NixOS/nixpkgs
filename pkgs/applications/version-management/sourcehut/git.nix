@@ -1,52 +1,67 @@
 { lib
 , fetchFromSourcehut
-, buildPythonPackage
 , buildGoModule
+, buildPythonPackage
 , python
 , srht
 , pygit2
 , scmsrht
+, unzip
 }:
 let
-  version = "0.76.4";
+  version = "0.78.20";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "git.sr.ht";
     rev = version;
-    sha256 = "sha256-diUkQpB/ivg8JTaoTcSyKr9Q9LZiMo6qVInBDPceklc=";
+    sha256 = "sha256-rZsTtHobsgRVmMOjPa1fiKrPsNyFu/gOsmO0cTl5MqQ=";
   };
 
-  buildShell = src: buildGoModule {
+  gitApi = buildGoModule ({
     inherit src version;
-    pname = "gitsrht-shell";
-    vendorSha256 = "sha256-aqUFICp0C2reqb2p6JCPAUIRsxzSv0t9BHoNWrTYfqk=";
-  };
+    pname = "gitsrht-api";
+    modRoot = "api";
+    vendorSha256 = "sha256-cCs9FUBusaAou9w4TDOg8GKxhRcsPbSNcQpxvFH/+so=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
-  buildDispatcher = src: buildGoModule {
+  gitDispatch = buildGoModule {
     inherit src version;
-    pname = "gitsrht-dispatcher";
+    pname = "gitsrht-dispatch";
+    modRoot = "gitsrht-dispatch";
     vendorSha256 = "sha256-qWXPHo86s6iuRBhRMtmD5jxnAWKdrWHtA/iSUkdw89M=";
   };
 
-  buildKeys = src: buildGoModule {
+  gitKeys = buildGoModule {
     inherit src version;
     pname = "gitsrht-keys";
+    modRoot = "gitsrht-keys";
     vendorSha256 = "sha256-9pojS69HCKVHUceyOpGtv9ewcxFD4WsOVsEzkmWJkF4=";
   };
 
-  buildUpdateHook = src: buildGoModule {
+  gitShell = buildGoModule {
     inherit src version;
-    pname = "gitsrht-update-hook";
-    vendorSha256 = "sha256-sBlG7EFqdDm7CkAHVX50Mf4N3sl1rPNmWExG/bfbfGA=";
+    pname = "gitsrht-shell";
+    modRoot = "gitsrht-shell";
+    vendorSha256 = "sha256-WqfvSPuVsOHA//86u33atMfeA11+DJhjLmWy8Ivq0NI=";
   };
 
-  updateHook = buildUpdateHook "${src}/gitsrht-update-hook";
+  gitUpdateHook = buildGoModule {
+    inherit src version;
+    pname = "gitsrht-update-hook";
+    modRoot = "gitsrht-update-hook";
+    vendorSha256 = "sha256-Bc3yPabS2S+qiroHFKrtkII/CfzBDYQ6xWxKHAME+Tc=";
+  };
 
 in
 buildPythonPackage rec {
   inherit src version;
   pname = "gitsrht";
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "all: api gitsrht-dispatch gitsrht-keys gitsrht-shell gitsrht-update-hook" ""
+  '';
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -63,14 +78,12 @@ buildPythonPackage rec {
 
   postInstall = ''
     mkdir -p $out/bin
-    cp ${buildShell "${src}/gitsrht-shell"}/bin/gitsrht-shell $out/bin/gitsrht-shell
-    cp ${buildDispatcher "${src}/gitsrht-dispatch"}/bin/gitsrht-dispatch $out/bin/gitsrht-dispatch
-    cp ${buildKeys "${src}/gitsrht-keys"}/bin/gitsrht-keys $out/bin/gitsrht-keys
-    cp ${updateHook}/bin/gitsrht-update-hook $out/bin/gitsrht-update-hook
+    ln -s ${gitApi}/bin/api $out/bin/gitsrht-api
+    ln -s ${gitDispatch}/bin/gitsrht-dispatch $out/bin/gitsrht-dispatch
+    ln -s ${gitKeys}/bin/gitsrht-keys $out/bin/gitsrht-keys
+    ln -s ${gitShell}/bin/gitsrht-shell $out/bin/gitsrht-shell
+    ln -s ${gitUpdateHook}/bin/gitsrht-update-hook $out/bin/gitsrht-update-hook
   '';
-  passthru = {
-    inherit updateHook;
-  };
 
   pythonImportsCheck = [ "gitsrht" ];
 

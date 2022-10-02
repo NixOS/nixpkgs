@@ -10,15 +10,19 @@
 , pytestCheckHook
 , pytest-asyncio
 , sqlparse
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "3.12.1";
+  version = "3.22.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "98e53298a7c79f0af351c80e6fc0b57bc735afdec764424e459179ef04f5a40f";
+    hash = "sha256-3EZMUyF9Se+DD3EK0/srYODRJo8OQkAr5RilTbMTHIo=";
   };
 
   propagatedBuildInputs = [

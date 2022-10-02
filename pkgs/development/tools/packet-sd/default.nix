@@ -20,5 +20,6 @@ buildGoModule rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = [ ];
+    mainProgram = "prometheus-packet-sd";
   };
 }

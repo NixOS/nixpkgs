@@ -17,6 +17,8 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse pcre ];
 
+  patches = [ ./fusermount-setuid.patch ];
+
   configurePhase = ''
     substituteInPlace  src/tup/link.sh --replace '`git describe' '`echo ${version}'
     substituteInPlace Tuprules.tup --replace 'pcre-config' 'pkg-config libpcre'

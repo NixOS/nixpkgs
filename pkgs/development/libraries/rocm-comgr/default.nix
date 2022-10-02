@@ -1,40 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, writeScript, cmake, clang, rocm-device-libs, lld, llvm }:
+{ lib, stdenv, fetchFromGitHub, writeScript, cmake, clang, rocm-device-libs, llvm }:
 
 stdenv.mkDerivation rec {
   pname = "rocm-comgr";
-  version = "4.5.2";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-CompilerSupport";
     rev = "rocm-${version}";
-    hash = "sha256-enGzu1EOo87/S5oH1eEqPy0AtsBhCcroG3DYemeNgR0=";
+    hash = "sha256-5C5bRdrt3xZAlRgtiIRTMAuwsFvVM4Win96P5+Pf5ZM=";
   };
 
   sourceRoot = "source/lib/comgr";
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ clang rocm-device-libs lld llvm ];
+  buildInputs = [ clang rocm-device-libs llvm ];
 
   cmakeFlags = [
-    "-DCLANG=${clang}/bin/clang"
     "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_C_COMPILER=${clang}/bin/clang"
     "-DCMAKE_CXX_COMPILER=${clang}/bin/clang++"
     "-DCMAKE_PREFIX_PATH=${llvm}/lib/cmake/llvm"
-    "-DLLD_INCLUDE_DIRS=${lld.src}/include"
+    "-DLLD_INCLUDE_DIRS=${llvm}/include"
     "-DLLVM_TARGETS_TO_BUILD=\"AMDGPU;X86\""
   ];
 
-  # The comgr build tends to link against the static LLVM libraries
-  # *and* the dynamic library. Linking against both causes errors
-  # about command line options being registered twice. This patch
-  # removes the static library linking.
-  patchPhase = ''
-    sed -e '/^llvm_map_components_to_libnames/,/[[:space:]]*Symbolize)/d' \
-        -i CMakeLists.txt
-  '';
+  patches = [ ./cmake.patch ];
 
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell

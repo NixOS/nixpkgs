@@ -6,14 +6,6 @@
 , glib
 , pango
 , gtk2
-, GConf ? null
-, libglade ? null
-, libgtkhtml ? null
-, gtkhtml ? null
-, libgnomecanvas ? null
-, libgnomeui ? null
-, libgnomeprint ? null
-, libgnomeprintui ? null
 , libxml2
 , monoDLLFixer
 , autoconf
@@ -54,8 +46,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoconf automake libtool which ];
 
   buildInputs = [
-    mono glib pango gtk2 GConf libglade libgnomecanvas
-    libgtkhtml libgnomeui libgnomeprint libgnomeprintui gtkhtml libxml2
+    mono glib pango gtk2
+    libxml2
   ];
 
   preConfigure = ''

@@ -18,30 +18,26 @@
 
 stdenv.mkDerivation rec {
   pname = "stunt-rally";
-  version = "2.6.1";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "stuntrally";
     repo = "stuntrally";
     rev = version;
-    hash = "sha256-1+Cc9I6TTa3b++/7Z2V+vAXcmFb2+wX7TnXEH6CRDWU=";
+    hash = "sha256-9I6hXsosqx+yYiEOEnPXQJHZkGtSU+JqThorwjemlc0=";
   };
   tracks = fetchFromGitHub {
     owner = "stuntrally";
     repo = "tracks";
     rev = version;
-    hash = "sha256-FbZc87j/9cp4LxNaEO2wNTvwk1Aq/IWcKD3rTGkzqj0=";
+    hash = "sha256-eZJAvkKe3PrXDzxTa5WFBHfltB3jhQh8puzOFDO9lso=";
   };
-
-  # include/OGRE/OgreException.h:265:126: error: invalid conversion from
-  # 'int' to 'Ogre::Exception::ExceptionCodes' [-fpermissive]
-  NIX_CFLAGS_COMPILE = "-fpermissive";
 
   preConfigure = ''
     ln -s ${tracks} data/tracks
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
   buildInputs = [
     boost
     ogre
@@ -49,7 +45,6 @@ stdenv.mkDerivation rec {
     ois
     SDL2
     libvorbis
-    makeWrapper
     enet
     libXcursor
     bullet

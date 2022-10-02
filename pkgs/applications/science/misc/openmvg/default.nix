@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "all" ];
 
   meta = {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A library for computer-vision scientists and targeted for the Multiple View Geometry community";
     homepage = "https://openmvg.readthedocs.io/en/latest/";
     license = lib.licenses.mpl20;

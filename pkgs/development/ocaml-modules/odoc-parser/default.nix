@@ -1,11 +1,21 @@
-{ lib, fetchurl, buildDunePackage, astring, result , version ? "1.0.0" }:
+{ lib, fetchurl, buildDunePackage, astring, result, camlp-streams, version ? "2.0.0" }:
 
 let param = {
+  "2.0.0" = {
+    sha256 = "sha256-QHkZ+7DrlXYdb8bsZ3dijZSqGQc0O9ymeLGIC6+zOSI=";
+    extraBuildInputs = [ camlp-streams ];
+  };
+  "1.0.1" = {
+    sha256 = "sha256-orvo5CAbYOmAurAeluQfK6CwW6P1C0T3WDfoovuQfSw=";
+    extraBuildInputs = [ camlp-streams ];
+  };
   "1.0.0" = {
     sha256 = "sha256-tqoI6nGp662bK+vE2h7aDXE882dObVfRBFnZNChueqE=";
+    extraBuildInputs = [];
   };
   "0.9.0" = {
     sha256 = "sha256-3w2tG605v03mvmZsS2O5c71y66O3W+n3JjFxIbXwvXk=";
+    extraBuildInputs = [];
   };
 }."${version}"; in
 
@@ -23,7 +33,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  buildInputs = [ astring result ];
+  propagatedBuildInputs = [ astring result ] ++ param.extraBuildInputs;
 
   meta = {
     description = "Parser for Ocaml documentation comments";

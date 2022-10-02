@@ -1,25 +1,27 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
-, isPy3k
 , cssselect2
 , lxml
 , pillow
-, pytest
+, pytestCheckHook
 , reportlab
 , tinycss2
 }:
 
 buildPythonPackage rec {
   pname = "svglib";
-  version = "1.1.0";
+  version = "1.4.1";
+
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "520ee5290ee2ebeebd20ca0d7d995c08c903b364fcf515826bab43a1288d422e";
+    sha256 = "sha256-SMJHBsI7tCYhc7b6Seq7EK+hW4QS8UKDEgVJUXzPoxQ=";
   };
-
-  disabled = !isPy3k;
 
   propagatedBuildInputs = [
     cssselect2
@@ -30,14 +32,16 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
 
   # Ignore tests that require network access (TestWikipediaFlags and TestW3CSVG), and tests that
   # require files missing in the 1.0.0 PyPI release (TestOtherFiles).
-  checkPhase = ''
-    py.test svglib tests -k 'not TestWikipediaFlags and not TestW3CSVG and not TestOtherFiles'
-  '';
+  pytestFlagsArray = [
+    "-k 'not TestWikipediaFlags and not TestW3CSVG and not TestOtherFiles'"
+  ];
+
+  pythonImportsCheck = [ "svglib.svglib" ];
 
   meta = with lib; {
     homepage = "https://github.com/deeplook/svglib";

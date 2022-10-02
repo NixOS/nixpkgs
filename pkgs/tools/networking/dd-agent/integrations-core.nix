@@ -42,20 +42,15 @@ let
     owner = "DataDog";
     repo = "integrations-core";
     rev = version;
-    sha256 = "0424zsnf747s10kfzv5y0m0ac9sgczip78yvghhrc2i089i5z2h4";
+    sha256 = "sha256-CIzuJ97KwsG1k65Y+8IUSka/3JX1pmQKN3hPHzZnGhQ=";
   };
-  version = "7.30.1";
+  version = "7.38.0";
 
   # Build helper to build a single datadog integration package.
   buildIntegration = { pname, ... }@args: python.pkgs.buildPythonPackage (args // {
     inherit src version;
     name = "datadog-integration-${pname}-${version}";
 
-    postPatch = ''
-      # jailbreak install_requires
-      sed -i 's/==.*//' requirements.in
-      cp requirements.in requirements.txt
-    '';
     sourceRoot = "source/${args.sourceRoot or pname}";
     doCheck = false;
   });
@@ -65,7 +60,21 @@ let
     pname = "checks-base";
     sourceRoot = "datadog_checks_base";
     propagatedBuildInputs = with python.pkgs; [
-      requests protobuf prometheus-client simplejson uptime
+      cachetools
+      cryptography
+      immutables
+      jellyfish
+      prometheus-client
+      protobuf
+      pydantic
+      python-dateutil
+      pyyaml
+      requests
+      requests-toolbelt
+      requests-unixsocket
+      simplejson
+      uptime
+      wrapt
     ];
   };
 
@@ -75,8 +84,8 @@ let
     mongo    = (ps: [ ps.pymongo ]);
     network  = (ps: [ ps.psutil ]);
     nginx    = (ps: []);
-    postgres = (ps: with ps; [ pg8000 psycopg2 ]);
-    process  = (ps: []);
+    postgres = (ps: with ps; [ pg8000 psycopg2 semver ]);
+    process  = (ps: [ ps.psutil]);
   };
 
   # All integrations (default + extra):

@@ -11,30 +11,30 @@ let
     repo = "ASF-ui";
     # updated by the update script
     # this is always the commit that should be used with asf-ui from the latest asf version
-    rev = "e292b5e3c37b0540d398fb4a04b10dd730976a5a";
-    sha256 = "1sxv2xkps2fln7di0i406nnhdqg4wd2yzgvwm5nfhawsq941g19z";
+    rev = "60a692f2e0d6b7c2bcd2cf363042d4647f246b4b";
+    sha256 = "1g49zwghdfgzd5canrrw1c2r4780xyvcaz72p14w036h93fw01z2";
   };
 
 in
-  nodePackages.package.override {
-    inherit src;
+nodePackages.package.override {
+  inherit src;
 
-    # upstream isn't tagged, but we are using the latest official commit for that specific asf version (assuming both get updated at the same time)
-    version = ArchiSteamFarm.version;
+  # upstream isn't tagged, but we are using the latest official commit for that specific asf version (assuming both get updated at the same time)
+  version = ArchiSteamFarm.version;
 
-    nativeBuildInputs = [ pkgs.nodePackages.node-gyp-build ];
+  nativeBuildInputs = [ pkgs.nodePackages.node-gyp-build ];
 
-    postInstall = ''
-      patchShebangs node_modules/
-      npm run build
-      ln -s $out/lib/node_modules/asf-ui/dist $out/lib/dist
-    '';
+  postInstall = ''
+    patchShebangs node_modules/
+    npm run build
+    cp -r $out/lib/node_modules/asf-ui/dist $out/lib/dist
+    rm -rf $out/lib/node_modules/
+  '';
 
-    meta = with lib; {
-      description = "The official web interface for ASF";
-      license = licenses.apsl20;
-      homepage = "https://github.com/JustArchiNET/ASF-ui";
-      platforms = ArchiSteamFarm.meta.platforms;
-      maintainers = with maintainers; [ lom ];
-    };
-  }
+  meta = with lib; {
+    description = "The official web interface for ASF";
+    license = licenses.apsl20;
+    homepage = "https://github.com/JustArchiNET/ASF-ui";
+    inherit (ArchiSteamFarm.meta) maintainers platforms;
+  };
+}

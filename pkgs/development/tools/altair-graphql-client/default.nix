@@ -1,26 +1,21 @@
-{ lib, appimageTools, fetchurl, gsettings-desktop-schemas, gtk3 }:
+{ lib, appimageTools, fetchurl }:
 
 let
   pname = "altair";
-  version = "4.1.0";
-  name = "${pname}-v${version}";
+  version = "4.6.2";
 
   src = fetchurl {
     url = "https://github.com/imolorhe/altair/releases/download/v${version}/altair_${version}_x86_64_linux.AppImage";
-    sha256 = "sha256-YuG7H+7FXYGbNNhM5vxps72dqltcj3bA325e7ZbW8aI=";
+    sha256 = "sha256-D2Ivem7xg4KrAHYxs4Cx7Ekgyc5u2KrjX4miYz11wuI=";
   };
 
-  appimageContents = appimageTools.extract { inherit name src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 {
-  inherit src name;
-
-  profile = ''
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-  '';
+  inherit src pname version;
 
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
+    mv $out/bin/${pname}-${version} $out/bin/${pname}
 
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/${pname}.desktop \

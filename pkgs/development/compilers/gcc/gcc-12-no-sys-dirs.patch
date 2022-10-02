@@ -1,0 +1,26 @@
+--- a/gcc/cppdefault.cc	2013-01-10 21:38:27.000000000 +0100
++++ b/gcc/cppdefault.cc	2014-08-18 16:20:32.893944536 +0200
+@@ -35,6 +35,8 @@
+ # undef CROSS_INCLUDE_DIR
+ #endif
+ 
++#undef LOCAL_INCLUDE_DIR
++
+ const struct default_include cpp_include_defaults[]
+ #ifdef INCLUDE_DEFAULTS
+ = INCLUDE_DEFAULTS;
+--- a/gcc/gcc.cc	2014-03-23 12:30:57.000000000 +0100
++++ b/gcc/gcc.cc	2014-08-18 13:19:32.689201690 +0200
+@@ -1162,10 +1162,10 @@
+ /* Default prefixes to attach to command names.  */
+ 
+ #ifndef STANDARD_STARTFILE_PREFIX_1
+-#define STANDARD_STARTFILE_PREFIX_1 "/lib/"
++#define STANDARD_STARTFILE_PREFIX_1 ""
+ #endif
+ #ifndef STANDARD_STARTFILE_PREFIX_2
+-#define STANDARD_STARTFILE_PREFIX_2 "/usr/lib/"
++#define STANDARD_STARTFILE_PREFIX_2 ""
+ #endif
+ 
+ #ifdef CROSS_DIRECTORY_STRUCTURE  /* Don't use these prefixes for a cross compiler.  */

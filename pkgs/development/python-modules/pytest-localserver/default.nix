@@ -1,20 +1,25 @@
 { lib
+, aiosmtpd
 , buildPythonPackage
 , fetchPypi
 , werkzeug
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pytest-localserver";
-  version = "0.5.1";
+  version = "0.7.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ef6f04193dc0f7e8df5b27b3a8834318fa12eaf025436d2a99afff1b73cde761";
+    sha256 = "sha256-8ZtJDHyh7QW/5LxrSQgRgFph5ycfBCTTwPpNQ4k6Xc0=";
   };
 
   propagatedBuildInputs = [
+    aiosmtpd
     werkzeug
   ];
 

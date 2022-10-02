@@ -9,7 +9,7 @@ index 22837c5..6f6fff5 100644
 -CFLAGS	+= -DUSE_SRP -DOPENSSL -I/usr/local/ssl/include
 -LIBS	+= -lsrp -L/usr/local/ssl/lib
 +CFLAGS	+= -DUSE_SRP -DOPENSSL -I@openssl_dev@/include/openssl
-+LIBS	+= -lsrp -L@openssl_out@/lib
++LIBS	+= -lsrp -L@openssl_lib@/lib
  NEEDCRYPTOLIB = y
  TARGETS	+= srp-entry
  EXTRAINSTALL = $(INSTALL) -c -m 555 srp-entry $(BINDIR)/srp-entry

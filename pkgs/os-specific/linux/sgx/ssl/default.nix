@@ -14,12 +14,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sgx-ssl" + lib.optionalString debug "-debug";
-  version = "lin_${sgxVersion}_${opensslVersion}";
+  version = "${sgxVersion}_${opensslVersion}";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-sgx-ssl";
-    rev = version;
+    rev = "lin_${sgxVersion}_${opensslVersion}";
     hash = "sha256-ibPXs90ni2fkxJ09fNO6wWVpfCFdko6MjBFkEsyIih8=";
   };
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl
     sgx-sdk
-    stdenv.glibc
+    stdenv.cc.libc
     which
   ];
 

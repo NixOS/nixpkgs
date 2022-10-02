@@ -25,14 +25,14 @@
 
 stdenv.mkDerivation rec {
   pname = "foxotron";
-  version = "2021-08-13";
+  version = "2022-08-06";
 
   src = fetchFromGitHub {
     owner = "Gargaj";
     repo = "Foxotron";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-0cnLHTZMeh8ilP0iXaMpFgKQAkizy/FimxXFDbH0b2w=";
+    sha256 = "sha256-IGLoiUeHcTlQ+WJTot3o5/Q+jRJcY52I3xHDAT0zuIU=";
   };
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     cp -R ${lib.optionalString stdenv.hostPlatform.isDarwin "Foxotron.app/Contents/MacOS/"}Foxotron \
       ../{config.json,Shaders,Skyboxes} $out/lib/foxotron/
     wrapProgram $out/lib/foxotron/Foxotron \
-      --run "cd $out/lib/foxotron"
+      --chdir "$out/lib/foxotron"
     ln -s $out/{lib/foxotron,bin}/Foxotron
 
     runHook postInstall

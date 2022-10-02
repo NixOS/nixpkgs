@@ -1,0 +1,10 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="chap-hooks">
+ <title>Hooks reference</title>
+ <para>
+  Nixpkgs has several hook packages that augment the stdenv phases.
+ </para>
+ <xi:include href="./postgresql-test-hook.section.xml" />
+</chapter>

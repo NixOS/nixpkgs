@@ -1,11 +1,11 @@
 --- a/src/fbuilder/build_profile.c
 +++ b/src/fbuilder/build_profile.c
-@@ -67,7 +67,7 @@
- 		errExit("asprintf");
- 
- 	char *cmdlist[] = {
--	  BINDIR "/firejail",
-+	  "firejail",
- 	  "--quiet",
- 	  "--noprofile",
- 	  "--caps.drop=all",
+@@ -48,7 +48,7 @@
+ 	// build command
+ 	char *cmd[len];
+ 	unsigned curr_len = 0;
+-	cmd[curr_len++] = BINDIR "/firejail";
++	cmd[curr_len++] = "firejail";
+ 	cmd[curr_len++] = "--quiet";
+ 	cmd[curr_len++] = "--noprofile";
+ 	cmd[curr_len++] = "--caps.drop=all";

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, intltool, xfce4-panel, libxfce4ui,
-  exo, gnutls, libgcrypt, xfce }:
+  exo, gnutls, libgcrypt, gitUpdater }:
 
 let
   category = "panel-plugins";
@@ -27,10 +27,9 @@ stdenv.mkDerivation rec {
     libgcrypt
   ];
 
-  passthru.updateScript = xfce.updateScript {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
-    versionLister = xfce.archiveLister category pname;
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.xfce.org/panel-plugins/${pname}";
+    rev-prefix = "${pname}-";
   };
 
   meta = with lib; {

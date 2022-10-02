@@ -1,17 +1,23 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, flit
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pyphen";
-  version = "0.11.0";
+  version = "0.13.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e2c3ed82c3a04317df5102addafe89652b0876bc6c6265f5dd4c3efaf02315e8";
+    sha256 = "sha256-Boc86//WWo/KfCDA49wDJlXH7o3g9VIgXK07V0JlwpM=";
   };
+
+  nativeBuildInputs = [
+    flit
+  ];
 
   preCheck = ''
     sed -i '/addopts/d' pyproject.toml

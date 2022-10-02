@@ -31,8 +31,8 @@ let
   arm64 = fetchFromGitHub {
     owner = "radareorg";
     repo = "vector35-arch-arm64";
-    rev = "3c5eaba46dab72ecb7d5f5b865a13fdeee95b464";
-    sha256 = "sha256-alcGEi+D8CptXzfznnuxQKCvU2mbzn2sQge5jSqLVpg=";
+    rev = "9ab2b0bedde459dc86e079718333de4a63bbbacb";
+    sha256 = "sha256-2KLtjgCqHzBBlo9ImZ8WJ1bsWy/kdJCjCFxlLE+HxoI=";
   };
   armv7 = fetchFromGitHub {
     owner = "radareorg";
@@ -44,13 +44,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "radare2";
-  version = "5.5.4";
+  version = "5.7.2";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    sha256 = "sha256-zELmNpbT1JCt0UAzHwzcTDN9QZTLQY0+rG9zVRWxiFg=";
+    sha256 = "sha256-TZeW+9buJvCOudHsLTMITFpRUlmNpo71efc3xswJoPw=";
   };
 
   preBuild = ''
@@ -62,13 +62,9 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''
-    for file in $out/bin/rasm2 $out/bin/ragg2 $out/bin/rabin2 $out/lib/libr_asm.${version}.dylib; do
+    for file in $out/bin/rasm2 $out/bin/ragg2 $out/bin/rabin2 $out/lib/libr_asm.${version}.dylib $out/lib/libr_anal.${version}.dylib; do
       install_name_tool -change libcapstone.4.dylib ${capstone}/lib/libcapstone.4.dylib $file
     done
-  '';
-
-  postInstall = ''
-    install -D -m755 $src/binr/r2pm/r2pm $out/bin/r2pm
   '';
 
   WITHOUT_PULL = "1";

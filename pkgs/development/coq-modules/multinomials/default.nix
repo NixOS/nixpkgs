@@ -1,5 +1,5 @@
 { coq, mkCoqDerivation, mathcomp, mathcomp-finmap, mathcomp-bigenough,
-  lib, version ? null, useDune2 ? false }@args:
+  lib, version ? null, useDune ? false }@args:
 with lib; mkCoqDerivation {
 
   namePrefix = [ "coq" "mathcomp" ];
@@ -9,7 +9,7 @@ with lib; mkCoqDerivation {
 
   inherit version;
   defaultVersion =  with versions; switch [ coq.version mathcomp.version ] [
-      { cases = [ (range "8.10" "8.14") (isGe "1.12.0") ];      out = "1.5.4"; }
+      { cases = [ (isGe "8.10") (isGe "1.12.0") ];      out = "1.5.5"; }
       { cases = [ (range "8.10" "8.12") "1.12.0" ];             out = "1.5.3"; }
       { cases = [ (range "8.7" "8.12")  "1.11.0" ];             out = "1.5.2"; }
       { cases = [ (range "8.7" "8.11")  (range "1.8" "1.10") ]; out = "1.5.0"; }
@@ -17,6 +17,7 @@ with lib; mkCoqDerivation {
       { cases = [ "8.6"                 (range "1.6" "1.7") ];  out = "1.1"; }
     ] null;
   release = {
+    "1.5.5".sha256 = "sha256-VdXA51vr7DZl/wT/15YYMywdD7Gh91dMP9t7ij47qNQ=";
     "1.5.4".sha256 = "0s4sbh4y88l125hdxahr56325hdhxxdmqmrz7vv8524llyv3fciq";
     "1.5.3".sha256 = "1462x40y2qydjd2wcg8r6qr8cx3xv4ixzh2h8vp9h7arylkja1qd";
     "1.5.2".sha256 = "15aspf3jfykp1xgsxf8knqkxv8aav2p39c2fyirw7pwsfbsv2c4s";
@@ -30,18 +31,18 @@ with lib; mkCoqDerivation {
     "1.0".sha256   = "1qmbxp1h81cy3imh627pznmng0kvv37k4hrwi2faa101s6bcx55m";
   };
 
-  useDune2ifVersion = v: versions.isGe "1.5.3" v || v == "dev";
+  useDuneifVersion = v: versions.isGe "1.5.3" v || v == "dev";
 
   preConfigure = ''
     patchShebangs configure || true
   '';
 
   propagatedBuildInputs =
-    [ mathcomp.ssreflect mathcomp.algebra mathcomp-finmap mathcomp-bigenough ];
+    [ mathcomp.ssreflect mathcomp.algebra mathcomp-finmap mathcomp.fingroup mathcomp-bigenough ];
 
   meta = {
     description = "A Coq/SSReflect Library for Monoidal Rings and Multinomials";
     license = licenses.cecill-c;
   };
 }
-// optionalAttrs (args?useDune2) { inherit useDune2; }
+// optionalAttrs (args?useDune) { inherit useDune; }

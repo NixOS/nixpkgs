@@ -6,7 +6,7 @@
 , buildDunePackage
 , yojson
 , csexp
-, result
+, merlin-lib
 , dot-merlin-reader
 , jq
 , menhir
@@ -15,12 +15,12 @@
 }:
 
 let
-  merlinVersion = "4.4";
+  merlinVersion = "4.6";
 
   hashes = {
-    "4.4-411" = "sha256:0chx28098mmnjbnaz5wgzsn82rh1w9dhzqmsykb412cq13msl1q4";
-    "4.4-412" = "sha256:18xjpsiz7xbgjdnsxfc52l7yfh22harj0birlph4xm42d14pkn0n";
-    "4.4-413" = "sha256:1ilmh2gqpwgr51w2ba8r0s5zkj75h00wkw4az61ssvivn9jxr7k0";
+    "4.6-412" = "sha256-isiurLeWminJQQR4oHpJPCzVk6cEmtQdX4+n3Pdka5c=";
+    "4.6-413" = "sha256-8903H4TE6F/v2Kw1XpcpdXEiLIdb9llYgt42zSR9kO4=";
+    "4.6-414" = "sha256-AuvXCjx32JQBY9vkxAd0pEjtFF6oTgrT1f9TJEEDk84=";
   };
 
   ocamlVersionShorthand = lib.concatStrings
@@ -48,20 +48,22 @@ buildDunePackage {
       dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
       dune = "${dune_2}/bin/dune";
     })
-  ] ++ lib.optional (!lib.versionAtLeast ocaml.version "4.12")
-    # This fixes the test-suite on macOS
-    # See https://github.com/ocaml/merlin/pull/1399
-    # Fixed in 4.4 for OCaml ≥ 4.12
-    ./test.patch
-  ;
+  ];
 
-  useDune2 = true;
+  strictDeps = true;
 
+  nativeBuildInputs = [
+    menhir
+    jq
+  ];
   buildInputs = [
     dot-merlin-reader
     yojson
-    csexp
-    result
+    (if lib.versionAtLeast version "4.6-414"
+     then merlin-lib
+     else csexp)
+    menhirSdk
+    menhirLib
   ];
 
   doCheck = true;
@@ -71,12 +73,6 @@ buildDunePackage {
     dune runtest # filtering with -p disables tests
     runHook postCheck
   '';
-  checkInputs = [
-    jq
-    menhir
-    menhirLib
-    menhirSdk
-  ];
 
   meta = with lib; {
     description = "An editor-independent tool to ease the development of programs in OCaml";

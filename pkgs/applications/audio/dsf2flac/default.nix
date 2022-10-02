@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dsf2flac";
-  version = "unstable-2018-01-02";
+  version = "unstable-2021-07-31";
 
   src = fetchFromGitHub {
     owner = "hank";
     repo = pname;
-    rev = "b0cf5aa6ddc60df9bbfeed25548e443c99f5cb16";
-    sha256 = "15j5f82v7lgs0fkgyyynl82cb1rsxyr9vw3bpzra63nacbi9g8lc";
+    rev = "6b109cd276ec7c7901f96455c77cf2d2ebfbb181";
+    sha256 = "sha256-VlXfywgYhI2QuGQvpD33BspTTgT0jOKUV3gENq4HiBU=";
   };
 
   buildInputs = [ boost flac id3lib taglib zlib ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "A DSD to FLAC transcoding tool";
     homepage = "https://github.com/hank/dsf2flac";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ dmrauh ];
-    platforms = with platforms; linux;
+    maintainers = with maintainers; [ artemist ];
+    platforms = [ "x86_64-linux" ];
   };
 }

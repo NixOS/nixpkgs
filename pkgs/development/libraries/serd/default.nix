@@ -14,10 +14,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config python3 wafHook ];
 
   meta = with lib; {
-    homepage = "http://drobilla.net/software/serd";
     description = "A lightweight C library for RDF syntax which supports reading and writing Turtle and NTriples";
+    homepage = "http://drobilla.net/software/serd";
     license = licenses.mit;
     maintainers = [ maintainers.goibhniu ];
+    mainProgram = "serdi";
     platforms = platforms.unix;
   };
 }

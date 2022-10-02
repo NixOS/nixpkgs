@@ -1,33 +1,54 @@
-{ lib, fetchFromGitHub, gobject-introspection, imagemagick,
-wrapGAppsHook, python3Packages, gtk3, networkmanager, webkitgtk }:
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, wrapGAppsHook
+, gdk-pixbuf
+, glib-networking
+, gobject-introspection
+, imagemagick
+, librsvg
+, pango
+, webkitgtk
+# Python libs
+, protonvpn-nm-lib
+, psutil
+# Optionals
+, withIndicator ? true
+, libappindicator-gtk3 }:
 
-python3Packages.buildPythonApplication rec {
-  pname = "protonvpn-linux-gui";
-  version = "1.4.1";
+buildPythonApplication rec {
+  pname = "protonvpn-gui";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "linux-app";
-    rev = version;
-    sha256 = "sha256-08gXEKm8udgNltRdqvAMFL0pDCWZu/kfl1xGQtZPBCc=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-6IRkJKtdQQ9Yixb9CkT3tGNY0MYFZyvz1/6buZo5eYU=";
   };
 
-  strictDeps = false;
-
   nativeBuildInputs = [
-    gobject-introspection imagemagick wrapGAppsHook
+    gdk-pixbuf
+    gobject-introspection
+    imagemagick
+    wrapGAppsHook
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
+    glib-networking # needed for the login captcha
     protonvpn-nm-lib
     psutil
   ];
 
   buildInputs = [
-    gtk3 networkmanager webkitgtk
-  ];
+    # To avoid enabling strictDeps = false (#56943)
+    gobject-introspection
+    librsvg
+    pango
+    webkitgtk
+  ] ++ lib.optionals withIndicator [ libappindicator-gtk3 ];
 
-  postFixup = ''
+  postInstall = ''
     # Setting icons
     for size in 16 32 48 64 72 96 128 192 512 1024; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
@@ -45,9 +66,9 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Linux GUI for ProtonVPN, written in Python";
+    description = "Official ProtonVPN Linux app";
     homepage = "https://github.com/ProtonVPN/linux-app";
-    maintainers = with maintainers; [ offline wolfangaukang ];
+    maintainers = with maintainers; [ wolfangaukang ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

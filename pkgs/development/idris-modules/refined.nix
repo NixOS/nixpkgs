@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "refined";
+  pname = "refined";
   version = "2017-12-28";
 
   ipkgName = "idris-refined";

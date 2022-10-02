@@ -4,6 +4,7 @@
 , makeWrapper
 , qemu
 , gnugrep
+, gnused
 , lsb-release
 , jq
 , procps
@@ -11,20 +12,24 @@
 , cdrtools
 , usbutils
 , util-linux
-, spicy
+, socat
+, spice-gtk
 , swtpm
+, unzip
 , wget
 , xdg-user-dirs
 , xrandr
 , zsync
 , OVMF
+, OVMFFull
 , quickemu
-, testVersion
+, testers
 }:
 let
   runtimePaths = [
     qemu
     gnugrep
+    gnused
     jq
     lsb-release
     procps
@@ -32,7 +37,9 @@ let
     cdrtools
     usbutils
     util-linux
-    spicy
+    unzip
+    socat
+    spice-gtk
     swtpm
     wget
     xdg-user-dirs
@@ -43,38 +50,39 @@ in
 
 stdenv.mkDerivation rec {
   pname = "quickemu";
-  version = "3.11";
+  version = "4.3";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
     rev = version;
-    sha256 = "1xwf9vwbr57wmyxfcqzl1jnmfx3ffh7sfqf0zcdq41wqkm8s106n";
+    hash = "sha256-+ksv1DBNby3bJx2ylnDkqlQfsFIDRS/hZvsJn2+bcz8=";
   };
 
-  patches = [
-    ./efi_vars_ensure_writable.patch
-    ./input_overrides.patch
-  ];
+  postPatch = ''
+    sed -i \
+      -e '/OVMF_CODE_4M.secboot.fd/s|ovmfs=(|ovmfs=("${OVMFFull.fd}/FV/OVMF_CODE.fd","${OVMFFull.fd}/FV/OVMF_VARS.fd" |' \
+      -e '/OVMF_CODE_4M.fd/s|ovmfs=(|ovmfs=("${OVMF.fd}/FV/OVMF_CODE.fd","${OVMF.fd}/FV/OVMF_VARS.fd" |' \
+      -e '/cp "''${VARS_IN}" "''${VARS_OUT}"/a chmod +w "''${VARS_OUT}"' \
+      -e 's/Icon=.*qemu.svg/Icon=qemu/' \
+      quickemu
+  '';
 
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 -t "$out/bin" quickemu quickget macrecovery
+    install -Dm755 -t "$out/bin" macrecovery quickemu quickget windowskey
 
-    for f in quickget macrecovery quickemu; do
-      wrapProgram $out/bin/$f \
-        --prefix PATH : "${lib.makeBinPath runtimePaths}" \
-        --set ENV_EFI_CODE "${OVMF.fd}/FV/OVMF_CODE.fd" \
-        --set ENV_EFI_VARS "${OVMF.fd}/FV/OVMF_VARS.fd"
+    for f in macrecovery quickget quickemu windowskey; do
+      wrapProgram $out/bin/$f --prefix PATH : "${lib.makeBinPath runtimePaths}"
     done
 
     runHook postInstall
   '';
 
-  passthru.tests = testVersion { package = quickemu; };
+  passthru.tests = testers.testVersion { package = quickemu; };
 
   meta = with lib; {
     description = "Quickly create and run optimised Windows, macOS and Linux desktop virtual machines";

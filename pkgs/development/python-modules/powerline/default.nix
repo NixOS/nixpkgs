@@ -13,14 +13,14 @@
 # TODO: bzr support is missing because nixpkgs switched to `breezy`
 
 buildPythonPackage rec {
-  version  = "2.8.2";
+  version  = "2.8.3";
   pname = "powerline";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "sha256-6V8ozl5KJQvytfflBmKJlIZQ5m3hkpCzMBtWZ2SzcQ0=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-UIx9/IZg6Wv596wHzQb0CO6zwmQXUaFEPKBojo2LXmA=";
   };
 
   propagatedBuildInputs = [

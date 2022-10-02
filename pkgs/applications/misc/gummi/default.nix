@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.2";
+  version = "0.8.3";
   pname = "gummi";
 
   src = pkgs.fetchFromGitHub {
     owner = "alexandervdm";
     repo = "gummi";
     rev = version;
-    sha256 = "sha256-7txAyzJrEoGPjchXstMWIF1Vy+aoba6aa6+JNUYnKQs=";
+    sha256 = "sha256-71n71KjLmICp4gznd27NlbyA3kayje3hYk/cwkOXEO0=";
   };
 
   nativeBuildInputs = [

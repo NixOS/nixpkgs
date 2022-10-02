@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     homepage = "http://thewalter.net/stef/software/clamsmtp/";
     license = licenses.bsd3;
     maintainers = [ maintainers.ekleog ];
+    mainProgram = "clamsmtpd";
     platforms = platforms.all;
   };
 }

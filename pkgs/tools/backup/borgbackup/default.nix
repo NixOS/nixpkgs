@@ -8,16 +8,18 @@
 , openssl
 , python3
 , zstd
+, installShellFiles
 , nixosTests
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.1.17";
+  version = "1.2.2";
+  format = "pyproject";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0x0ncy0b0bmf586hbdgrif3gjmkdw760vfnfxndr493v07y29fbs";
+    sha256 = "sha256-1zBodEPxvrYCsdcrrjYxj2+WVIGPzcUEWFQOxXnlcmA=";
   };
 
   postPatch = ''
@@ -27,11 +29,18 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   nativeBuildInputs = with python3.pkgs; [
+    cython
     setuptools-scm
-    # For building documentation:
-    sphinx
+
+    # docs
+    sphinxHook
     guzzle_sphinx_theme
+
+    # shell completions
+    installShellFiles
   ];
+
+  sphinxBuilders = [ "singlehtml" "man" ];
 
   buildInputs = [
     libb2
@@ -43,11 +52,9 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    cython
-    llfuse
+    msgpack
     packaging
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    pyfuse3
+    (if stdenv.isLinux then pyfuse3 else llfuse)
   ];
 
   preConfigure = ''
@@ -62,33 +69,21 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    make -C docs singlehtml
-    mkdir -p $out/share/doc/borg
-    cp -R docs/_build/singlehtml $out/share/doc/borg/html
-
-    make -C docs man
-    mkdir -p $out/share/man
-    cp -R docs/_build/man $out/share/man/man1
-
-    mkdir -p $out/share/bash-completion/completions
-    cp scripts/shell_completions/bash/borg $out/share/bash-completion/completions/
-
-    mkdir -p $out/share/fish/vendor_completions.d
-    cp scripts/shell_completions/fish/borg.fish $out/share/fish/vendor_completions.d/
-
-    mkdir -p $out/share/zsh/site-functions
-    cp scripts/shell_completions/zsh/_borg $out/share/zsh/site-functions/
+    installShellCompletion --cmd borg \
+      --bash scripts/shell_completions/bash/borg \
+      --fish scripts/shell_completions/fish/borg.fish \
+      --zsh scripts/shell_completions/zsh/_borg
   '';
 
   checkInputs = with python3.pkgs; [
     e2fsprogs
+    python-dateutil
     pytest-benchmark
     pytest-xdist
     pytestCheckHook
   ];
 
   pytestFlagsArray = [
-    "--numprocesses" "auto"
     "--benchmark-skip"
     "--pyargs" "borg.testsuite"
   ];
@@ -100,12 +95,15 @@ python3.pkgs.buildPythonApplication rec {
     "test_fuse_mount_hardlinks"
     "test_fuse_mount_options"
     "test_fuse_versions_view"
+    "test_migrate_lock_alive"
     "test_readonly_mount"
     # Error: Permission denied while trying to write to /var/{,tmp}
     "test_get_cache_dir"
     "test_get_keys_dir"
     "test_get_security_dir"
     "test_get_config_dir"
+    # https://github.com/borgbackup/borg/issues/6573
+    "test_basic_functionality"
   ];
 
   preCheck = ''
@@ -116,13 +114,14 @@ python3.pkgs.buildPythonApplication rec {
     inherit (nixosTests) borgbackup;
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "doc" "man" ];
 
   meta = with lib; {
     description = "Deduplicating archiver with compression and encryption";
     homepage = "https://www.borgbackup.org";
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
+    mainProgram = "borg";
     maintainers = with maintainers; [ flokli dotlambda globin ];
   };
 }

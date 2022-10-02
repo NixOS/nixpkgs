@@ -20,9 +20,6 @@ buildDotnetModule rec {
   runtimeDeps = [ gtk3 ];
   buildInputs = runtimeDeps;
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
-
   # How-to update deps:
   # $ nix-build -A pinta.fetch-deps
   # $ ./result
@@ -62,6 +59,10 @@ buildDotnetModule rec {
   postFixup = ''
     # Rename the binary
     mv "$out/bin/Pinta" "$out/bin/pinta"
+
+    # Copy runtime icons
+    mkdir -p $out/share/icons/hicolor/16x16/
+    cp -r Pinta.Resources/icons/hicolor/16x16/* $out/share/icons/hicolor/16x16/
 
     # Install
     dotnet build installer/linux/install.proj \

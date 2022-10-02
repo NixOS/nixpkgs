@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "nccl-${version}-cuda-${cudatoolkit.majorVersion}";
-  version = "2.7.8-1";
+  version = "2.12.10-1";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nccl";
     rev = "v${version}";
-    sha256 = "0xxiwaw239dc9g015fka3k1nvm5zyl00dzgxnwzkang61dys9wln";
+    sha256 = "sha256-QqORzm0gD+QG+P8rId8bQn2oZsxL5YyxCIobUVs85wE=";
   };
 
   outputs = [ "out" "dev" ];
@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-Wno-unused-function" ];
 
   enableParallelBuilding = true;
+
+  passthru = {
+    inherit cudatoolkit;
+  };
 
   meta = with lib; {
     description = "Multi-GPU and multi-node collective communication primitives for NVIDIA GPUs";

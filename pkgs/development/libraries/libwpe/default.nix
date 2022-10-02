@@ -6,15 +6,17 @@
 , libxkbcommon
 , libGL
 , ninja
-, libX11 }:
+, libX11
+, webkitgtk
+}:
 
 stdenv.mkDerivation rec {
   pname = "libwpe";
-  version = "1.12.0";
+  version = "1.12.3";
 
   src = fetchurl {
     url = "https://wpewebkit.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-6O7KIoprTDYpTPtj99O6mtpHpDCQSlqXOzyZyWpEwYw=";
+    sha256 = "sha256-uE/b+8hJzk/fCEuyi1jlRjsbS2zI8gDcd7QfhUXVMp0=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "General-purpose library for WPE WebKit";
     license = licenses.bsd2;
     homepage = "https://wpewebkit.org";
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = webkitgtk.meta.maintainers ++ (with maintainers; [ matthewbauer ]);
     platforms = platforms.linux;
   };
 }

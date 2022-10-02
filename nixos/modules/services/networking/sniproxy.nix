@@ -18,24 +18,24 @@ in
 
   options = {
     services.sniproxy = {
-      enable = mkEnableOption "sniproxy server";
+      enable = mkEnableOption (lib.mdDoc "sniproxy server");
 
       user = mkOption {
         type = types.str;
         default = "sniproxy";
-        description = "User account under which sniproxy runs.";
+        description = lib.mdDoc "User account under which sniproxy runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "sniproxy";
-        description = "Group under which sniproxy runs.";
+        description = lib.mdDoc "Group under which sniproxy runs.";
       };
 
       config = mkOption {
         type = types.lines;
         default = "";
-        description = "sniproxy.conf configuration excluding the daemon username and pid file.";
+        description = lib.mdDoc "sniproxy.conf configuration excluding the daemon username and pid file.";
         example = ''
           error_log {
             filename /var/log/sniproxy/error.log

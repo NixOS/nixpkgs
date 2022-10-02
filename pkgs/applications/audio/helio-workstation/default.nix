@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "helio-workstation";
-  version = "3.8";
+  version = "3.10";
 
   src = fetchFromGitHub {
     owner = "helio-fm";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-uwRSOJ5WvDH4mfL9pCTCGzuSRT8SIBrI+Wsbumzejv0=";
+    sha256 = "sha256-TqwebaFZXUto+azVJQlggqAc7WKDxAaXxyXcG8x5S/w=";
   };
 
   buildInputs = [

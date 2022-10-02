@@ -9,14 +9,14 @@
 
 let unwrapped = stdenv.mkDerivation rec {
   pname = "pidgin";
-  version = "2.14.8";
+  version = "2.14.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/pidgin/pidgin-${version}.tar.bz2";
-    sha256 = "1jjc15pfyw3012q5ffv7q4r88wv07ndqh0wakyxa2k0w4708b01z";
+    sha256 = "sha256-RUsbkovGvLsYM1OvMPv95VlfIkWjQjoaRubJei3yKBA=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper intltool ];
 
   NIX_CFLAGS_COMPILE = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
 
@@ -27,7 +27,7 @@ let unwrapped = stdenv.mkDerivation rec {
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     libxml2 nss nspr
     libXScrnSaver python-with-dbus
-    avahi dbus dbus-glib intltool libidn
+    avahi dbus dbus-glib libidn
     libICE libXext libSM cyrus_sasl
     libgnt ncurses # optional: build finch - the console UI
   ]
@@ -88,7 +88,7 @@ let unwrapped = stdenv.mkDerivation rec {
     homepage = "https://pidgin.im/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.vcunat ];
+    maintainers = [ ];
   };
 };
 

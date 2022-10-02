@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, ocaml, findlib, libGLU, libGL, freeglut } :
 
-if !lib.versionAtLeast ocaml.version "4.03"
+if lib.versionOlder ocaml.version "4.03"
 then throw "lablgl is not available for OCaml ${ocaml.version}"
 else
 
@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:141kc816iv59z96738i3vn9m9iw9g2zhi45hk4cchpwd99ar5l6k";
   };
 
-  buildInputs = [ ocaml findlib freeglut ];
+  nativeBuildInputs = [ ocaml findlib ];
+  buildInputs = [ freeglut ];
   propagatedBuildInputs = [ libGLU libGL ];
 
   patches = [ ./Makefile.config.patch ./META.patch ];
@@ -38,10 +39,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html";
     description = "OpenGL bindings for ocaml";
+    homepage = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub vbgl ];
+    mainProgram = "lablglut";
     broken = stdenv.isDarwin;
   };
 }

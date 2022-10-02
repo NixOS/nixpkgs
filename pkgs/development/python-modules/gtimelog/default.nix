@@ -15,8 +15,8 @@ buildPythonPackage rec {
     sha256 = "0qv2kv7vc3qqlzxsisgg31cmrkkqgnmxspbj10c5fhdmwzzwi0i9";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
-    makeWrapper
     glibcLocales gobject-introspection gtk3 libsoup libsecret
   ];
 
@@ -55,6 +55,5 @@ buildPythonPackage rec {
     homepage = "https://gtimelog.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ oxzi ];
-    platforms = platforms.unix;
   };
 }

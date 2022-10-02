@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "autorestic";
-  version = "1.5.1";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "cupcakearmy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-T34+oHEe+BWFJwWfYnC71+mP4+uhTMYr9r426I4fXcY=";
+    sha256 = "sha256-/TTnviFfL56l5WJwNLTcVXccUss8uhvR9ZSkHZcisc8=";
   };
 
-  vendorSha256 = "sha256-eKsPdmPJXiCwvb2A28tNxF4xStry3iA6aLb+XYFJYSg=";
+  vendorSha256 = "sha256-eB24vCElnnk3EMKniCblmeRsFk0BQ0wFeBf0B8OPanE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,6 +27,6 @@ buildGoModule rec {
     homepage = "https://github.com/cupcakearmy/autorestic";
     license = licenses.asl20;
     maintainers = with maintainers; [ renesat ];
-    platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "autorestic";
   };
 }

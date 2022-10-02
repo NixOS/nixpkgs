@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   format = "other"; # no setup.py
 
   pname = "cozy";
-  version = "1.1.2";
+  version = "1.2.1";
 
   # Temporary fix
   # See https://github.com/NixOS/nixpkgs/issues/57029
@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
     owner = "geigi";
     repo = pname;
     rev = version;
-    sha256 = "sha256-QENn8mFMk06/Uj8QJo0mJQ7frJNcv5RVNJwDB+H/LkI=";
+    hash = "sha256-cRqfLFLvje8lxUZ4S83UAFyYUX0vj1ZgLG0Y6gpCfmI=";
   };
 
   nativeBuildInputs = [

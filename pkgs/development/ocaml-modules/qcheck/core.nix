@@ -2,9 +2,7 @@
 
 buildDunePackage rec {
   pname = "qcheck-core";
-  version = "0.18";
-
-  useDune2 = true;
+  version = "0.19.1";
 
   minimalOCamlVersion = "4.08";
 
@@ -12,7 +10,7 @@ buildDunePackage rec {
     owner = "c-cube";
     repo = "qcheck";
     rev = "v${version}";
-    sha256 = "1s652hrj2sxqj30dfl300zjvvqk3r62a1bnzqw1hqyf6pi88qn8x";
+    sha256 = "sha256-AZ1Ww6CWt3X1bXXcofMe14rTlMTC9hmohcKdZLUKEvE=";
   };
 
   meta = {

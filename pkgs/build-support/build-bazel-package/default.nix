@@ -58,7 +58,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
     name = "${name}-deps.tar.gz";
     inherit bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
 
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ fFetchAttrs.impureEnvVars or [];
 
     nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [] ++ [ bazel ];
 
@@ -90,6 +90,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
       BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
       USER=homeless-shelter \
       bazel \
+        --batch \
         --output_base="$bazelOut" \
         --output_user_root="$bazelUserRoot" \
         ${if fetchConfigured then "build --nobuild" else "fetch"} \
@@ -211,6 +212,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
     BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
     USER=homeless-shelter \
     bazel \
+      --batch \
       --output_base="$bazelOut" \
       --output_user_root="$bazelUserRoot" \
       build \

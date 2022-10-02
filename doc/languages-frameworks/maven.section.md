@@ -233,7 +233,8 @@ in stdenv.mkDerivation rec {
 
   src = builtins.fetchTarball
     "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
-  buildInputs = [ maven makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ maven ];
 
   buildPhase = ''
     echo "Using repository ${repository}"
@@ -310,7 +311,8 @@ in stdenv.mkDerivation rec {
 
   src = builtins.fetchTarball
     "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
-  buildInputs = [ maven makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ maven ];
 
   buildPhase = ''
     echo "Using repository ${repository}"

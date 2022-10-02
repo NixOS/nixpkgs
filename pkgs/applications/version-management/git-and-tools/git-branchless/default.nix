@@ -15,16 +15,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-branchless";
-  version = "0.3.8";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "arxanas";
     repo = "git-branchless";
     rev = "v${version}";
-    sha256 = "sha256-eDVC1tvAkCioV0Mi5f/Qkc0MMTNaoFXuvWXpllZ7PgE=";
+    sha256 = "sha256-jAc17poNTld3eptN1Vd1MOKS5iloMWkq3oZgpWBkGTY=";
   };
 
-  cargoSha256 = "sha256-wtG/WTmZ13jxIawI9j9QKQm7jPx5TUs7MjqX+lq/Vf0=";
+  cargoPatches = [
+    (fetchpatch {
+      name = "build-run-cargo-update";
+      url = "https://github.com/arxanas/git-branchless/commit/0ac3f325520f79d15368aa9d14893ebc17313ab6.patch";
+      sha256 = "sha256-S1kazUzvz3FzFpphSRhWiv/l2b/+zC9HtAl7ndq5aJA=";
+    })
+  ];
+
+  cargoSha256 = "sha256-Lo/Q6OSIzWrRNiTGsOWRX+6FEcj4fk1kn7V9tw67UVo=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -39,8 +47,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   preCheck = ''
-    export PATH_TO_GIT=${git}/bin/git
-    export GIT_EXEC_PATH=$(${git}/bin/git --exec-path)
+    export TEST_GIT=${git}/bin/git
+    export TEST_GIT_EXEC_PATH=$(${git}/bin/git --exec-path)
   '';
   # FIXME: these tests deadlock when run in the Nix sandbox
   checkFlags = [

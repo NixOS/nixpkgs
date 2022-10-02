@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "ps3netsrv";
@@ -6,11 +6,12 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  src = fetchgit {
-    url = "https://github.com/dirkvdb/ps3netsrv--";
-    fetchSubmodules = true;
+  src = fetchFromGitHub {
+    owner = "dirkvdb";
+    repo = "ps3netsrv--";
     rev = "e54a66cbf142b86e2cffc1701984b95adb921e81";
-    sha256 = "09hvmfzqy2jckpsml0z1gkcnar8sigmgs1q66k718fph2d3g54sa";
+    sha256 = "sha256-SpPyRhPwOhTONAYH/eqLGmVl2XzhA1r1nUwKj7+rGyY=";
+    fetchSubmodules = true;
   };
 
   buildPhase = "make CXX=$CXX";
@@ -25,5 +26,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ makefu ];
+    mainProgram = "ps3netsrv++";
   };
 }

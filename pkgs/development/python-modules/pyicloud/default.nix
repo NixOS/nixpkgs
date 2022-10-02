@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "pyicloud";
-  version = "0.10.2";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "picklepete";
     repo = pname;
     rev = version;
-    sha256 = "0bxbhvimwbj2jm8dg7sil8yvln17xgjhvpwr4m783vwfcf76kdmy";
+    sha256 = "sha256-2E1pdHHt8o7CGpdG+u4xy5OyNCueUGVw5CY8oicYd5w=";
   };
 
   propagatedBuildInputs = [

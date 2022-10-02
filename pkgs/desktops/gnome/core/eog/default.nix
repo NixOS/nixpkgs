@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , meson
 , ninja
@@ -8,12 +9,12 @@
 , libxml2
 , libjpeg
 , libpeas
-, libportal
+, libportal-gtk3
 , gnome
 , gtk3
+, libhandy
 , glib
 , gsettings-desktop-schemas
-, adwaita-icon-theme
 , gnome-desktop
 , lcms2
 , gdk-pixbuf
@@ -23,17 +24,26 @@
 , librsvg
 , libexif
 , gobject-introspection
-, python3
+, gi-docgen
 }:
 
 stdenv.mkDerivation rec {
   pname = "eog";
-  version = "41.1";
+  version = "42.3";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-huG5ujnaz3QiavpFermDtBJTuJ9he/VBOcrQiS0C2Kk=";
+    sha256 = "sha256-MMGzwovG3ChU2Hjr0xoi6qFb+VnBNCBqKhkEGT5H9Do=";
   };
+
+  patches = [
+    # Fix path to libeog.so in the gir file.
+    # We patch gobject-introspection to hardcode absolute paths but
+    # our Meson patch will only pass the info when install_dir is absolute as well.
+    ./fix-gir-lib-path.patch
+  ];
 
   nativeBuildInputs = [
     meson
@@ -42,15 +52,16 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     wrapGAppsHook
-    libxml2
+    libxml2 # for xmllint for xml-stripblanks
     gobject-introspection
-    python3
+    gi-docgen
   ];
 
   buildInputs = [
     libjpeg
-    libportal
+    libportal-gtk3
     gtk3
+    libhandy
     gdk-pixbuf
     glib
     libpeas
@@ -61,13 +72,11 @@ stdenv.mkDerivation rec {
     exempi
     gsettings-desktop-schemas
     shared-mime-info
-    adwaita-icon-theme
   ];
 
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
+  mesonFlags = [
+    "-Dgtk_doc=true"
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -76,6 +85,11 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {

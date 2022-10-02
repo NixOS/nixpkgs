@@ -61,7 +61,8 @@ stdenv.mkDerivation rec {
     patchExecutable() {
       patchInterpreter "$1"
       wrapProgram "$out/libexec/genymotion/$1" \
-        --set "LD_LIBRARY_PATH" "${libPath}"
+        --set "LD_LIBRARY_PATH" "${libPath}" \
+        --unset "QML2_IMPORT_PATH"
     }
 
     patchTool() {
@@ -88,6 +89,7 @@ stdenv.mkDerivation rec {
       suitable for application testing.
      '';
     homepage = "https://www.genymotion.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = ["x86_64-linux"];
     maintainers = [ maintainers.puffnfresh ];

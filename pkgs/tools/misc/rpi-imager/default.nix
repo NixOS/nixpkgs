@@ -16,13 +16,13 @@
 
 mkDerivation rec {
   pname = "rpi-imager";
-  version = "1.6.2";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ITn31ENEf2bysgJgV3u+NNPXk1pfIkUyJWIvS2DOrzY=";
+    sha256 = "sha256-D2FNg8SEUDQA466jfxBFhK0t8/5WJHx1fBTaCH0N+UQ=";
   };
 
   nativeBuildInputs = [ cmake util-linux ];
@@ -37,6 +37,8 @@ mkDerivation rec {
     qtquickcontrols2
     qtgraphicaleffects
   ];
+
+  sourceRoot = "${src.name}/src";
 
   /* By default, the builder checks for JSON support in lsblk by running "lsblk --json",
     but that throws an error, as /sys/dev doesn't exist in the sandbox.

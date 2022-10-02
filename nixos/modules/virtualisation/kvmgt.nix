@@ -10,30 +10,30 @@ let
   vgpuOptions = {
     uuid = mkOption {
       type = with types; listOf str;
-      description = "UUID(s) of VGPU device. You can generate one with <package>libossp_uuid</package>.";
+      description = lib.mdDoc "UUID(s) of VGPU device. You can generate one with `libossp_uuid`.";
     };
   };
 
 in {
   options = {
     virtualisation.kvmgt = {
-      enable = mkEnableOption ''
+      enable = mkEnableOption (lib.mdDoc ''
         KVMGT (iGVT-g) VGPU support. Allows Qemu/KVM guests to share host's Intel integrated graphics card.
         Currently only one graphical device can be shared. To allow users to access the device without root add them
-        to the kvm group: <literal>users.extraUsers.&lt;yourusername&gt;.extraGroups = [ "kvm" ];</literal>
-      '';
+        to the kvm group: `users.extraUsers.<yourusername>.extraGroups = [ "kvm" ];`
+      '');
       # multi GPU support is under the question
       device = mkOption {
         type = types.str;
         default = "0000:00:02.0";
-        description = "PCI ID of graphics card. You can figure it with <command>ls /sys/class/mdev_bus</command>.";
+        description = lib.mdDoc "PCI ID of graphics card. You can figure it with {command}`ls /sys/class/mdev_bus`.";
       };
       vgpus = mkOption {
         default = {};
         type = with types; attrsOf (submodule [ { options = vgpuOptions; } ]);
-        description = ''
-          Virtual GPUs to be used in Qemu. You can find devices via <command>ls /sys/bus/pci/devices/*/mdev_supported_types</command>
-          and find info about device via <command>cat /sys/bus/pci/devices/*/mdev_supported_types/i915-GVTg_V5_4/description</command>
+        description = lib.mdDoc ''
+          Virtual GPUs to be used in Qemu. You can find devices via {command}`ls /sys/bus/pci/devices/*/mdev_supported_types`
+          and find info about device via {command}`cat /sys/bus/pci/devices/*/mdev_supported_types/i915-GVTg_V5_4/description`
         '';
         example = {
           i915-GVTg_V5_8.uuid = [ "a297db4a-f4c2-11e6-90f6-d3b88d6c9525" ];
@@ -82,5 +82,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ ];
+  meta.maintainers = with maintainers; [ patryk27 ];
 }

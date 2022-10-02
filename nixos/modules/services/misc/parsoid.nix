@@ -39,7 +39,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable Parsoid -- bidirectional
           wikitext parser.
         '';
@@ -48,7 +48,7 @@ in
       wikis = mkOption {
         type = types.listOf (types.either types.str types.attrs);
         example = [ "http://localhost/api.php" ];
-        description = ''
+        description = lib.mdDoc ''
           Used MediaWiki API endpoints.
         '';
       };
@@ -56,7 +56,7 @@ in
       workers = mkOption {
         type = types.int;
         default = 2;
-        description = ''
+        description = lib.mdDoc ''
           Number of Parsoid workers.
         '';
       };
@@ -64,7 +64,7 @@ in
       interface = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = ''
+        description = lib.mdDoc ''
           Interface to listen on.
         '';
       };
@@ -72,7 +72,7 @@ in
       port = mkOption {
         type = types.int;
         default = 8000;
-        description = ''
+        description = lib.mdDoc ''
           Port to listen on.
         '';
       };
@@ -80,7 +80,7 @@ in
       extraConfig = mkOption {
         type = types.attrs;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration to add to parsoid configuration.
         '';
       };

@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/periklis/lguf-brightness";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ periklis ];
+    mainProgram = "lguf_brightness";
     platforms = with platforms; linux ++ darwin;
   };
 }

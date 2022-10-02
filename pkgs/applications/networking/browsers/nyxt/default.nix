@@ -1,7 +1,7 @@
 { stdenv, lib, lispPackages
 , makeWrapper, wrapGAppsHook, gst_all_1
 , glib, gdk-pixbuf, cairo
-, mime-types, pango, gtk3
+, mailcap, pango, gtk3
 , glib-networking, gsettings-desktop-schemas
 , xclip, notify-osd, enchant
 }:
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     glib gdk-pixbuf cairo
-    mime-types pango gtk3
+    mailcap pango gtk3
     glib-networking gsettings-desktop-schemas
     xclip notify-osd enchant
   ] ++ gstBuildInputs;
 
-  GST_PLUGIN_SYSTEM_PATH_1_0 = lib.concatMapStringsSep ":" (p: "${p}/lib/gstreamer-1.0") gstBuildInputs;
+  GST_PLUGIN_SYSTEM_PATH_1_0 = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" gstBuildInputs;
 
   dontWrapGApps = true;
   installPhase = ''

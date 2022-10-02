@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
       --replace /sbin/ifconfig ifconfig
   '';
 
+  configureFlags = lib.optionals stdenv.hostPlatform.isMusl [
+    # musl doesn't have getprotobynumber_r
+    "sc_cv_getprotobynumber_r=2"
+  ];
+
   buildInputs = [ openssl readline ];
 
   hardeningEnable = [ "pie" ];
@@ -33,7 +38,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Utility for bidirectional data transfer between two independent data channels";
     homepage = "http://www.dest-unreach.org/socat/";
-    repositories.git = "git://repo.or.cz/socat.git";
     platforms = platforms.unix;
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ eelco ];

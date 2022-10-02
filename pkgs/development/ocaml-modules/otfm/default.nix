@@ -17,9 +17,12 @@ stdenv.mkDerivation {
     sha256 = "054s82539k3kc9na6s47g3scsl04icjahpas7pv5351jmsgqcq3k";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  buildInputs = [ topkg ];
 
   propagatedBuildInputs = [ uutf result ];
+
+  strictDeps = true;
 
   inherit (topkg) buildPhase installPhase;
 
@@ -31,8 +34,9 @@ stdenv.mkDerivation {
       of them.
     '';
     homepage = webpage;
-    platforms = ocaml.meta.platforms or [];
     license = licenses.bsd3;
     maintainers = [ maintainers.jirkamarsik ];
+    mainProgram = "otftrip";
+    inherit (ocaml.meta) platforms;
   };
 }

@@ -13,7 +13,6 @@
 , freetype
 , fontconfig
 , gtk3
-, gnome2
 , dbus
 , nss
 , nspr
@@ -61,7 +60,6 @@ stdenv.mkDerivation rec {
     freetype
     fontconfig
     dbus
-    gnome2.GConf
     nss
     nspr
     alsa-lib
@@ -87,9 +85,10 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   postFixup = ''
+    # make xdg-open overrideable at runtime
     wrapProgram $out/opt/${name}/${pname} \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDependencies}" \
-      --prefix PATH : ${xdg-utils}/bin \
+      --suffix PATH : ${xdg-utils}/bin \
       "''${gappsWrapperArgs[@]}"
   '';
 }

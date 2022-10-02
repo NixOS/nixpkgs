@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, git, gfortran, mpi, blas, liblapack, qt4, qwt6_qt4, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, cmake, git, gfortran, mpi, blas, liblapack, pkg-config, libGL, libGLU, opencascade, libsForQt5, vtkWithQt5}:
 
 stdenv.mkDerivation rec {
   pname = "elmerfem";
@@ -13,12 +13,34 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ cmake gfortran pkg-config git ];
-  buildInputs = [ mpi blas liblapack qt4 qwt6_qt4 ];
+  nativeBuildInputs = [
+    cmake
+    gfortran
+    pkg-config
+    libsForQt5.wrapQtAppsHook
+  ];
+  buildInputs = [
+    mpi
+    blas
+    liblapack
+    libsForQt5.qtbase
+    libsForQt5.qtscript
+    libsForQt5.qwt
+    libGL
+    libGLU
+    opencascade
+    vtkWithQt5
+  ];
 
   preConfigure = ''
     patchShebangs ./
   '';
+
+  patches = [
+    ./patches/0001-fix-import-of-QPainterPath.patch
+    ./patches/0002-fem-rename-loopvars-to-avoid-redefinition.patch
+    ./patches/0003-ignore-qwt_compat.patch
+  ];
 
   storepath = placeholder "out";
 
@@ -26,6 +48,9 @@ stdenv.mkDerivation rec {
   "-DELMER_INSTALL_LIB_DIR=${storepath}/lib"
   "-DWITH_OpenMP:BOOLEAN=TRUE"
   "-DWITH_MPI:BOOLEAN=TRUE"
+  "-DWITH_QT5:BOOLEAN=TRUE"
+  "-DWITH_OCC:BOOLEAN=TRUE"
+  "-DWITH_VTK:BOOLEAN=TRUE"
   "-DWITH_ELMERGUI:BOOLEAN=TRUE"
   "-DCMAKE_INSTALL_LIBDIR=lib"
   "-DCMAKE_INSTALL_INCLUDEDIR=include"

@@ -3,18 +3,16 @@
 
 buildDunePackage rec {
   pname = "crowbar";
-  version = "0.2";
-
-  useDune2 = true;
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner  = "stedolan";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0wjfc9irvirfkic32ivvj6qb7r838w08b0d3vmngigbjpjyc9b14";
+    sha256 = "sha256-0jjwiOZ9Ut+dv5Iw4xNvf396WTehT1VClxY9VHicw4U=";
   };
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   # disable xmldiff tests, so we don't need to package unmaintained and legacy pkgs
   postPatch = "rm -rf examples/xmldiff";

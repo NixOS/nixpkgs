@@ -23,27 +23,27 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the cpuminer cryptonight miner.
         '';
       };
       url = mkOption {
         type = types.str;
-        description = "URL of mining server";
+        description = lib.mdDoc "URL of mining server";
       };
       user = mkOption {
         type = types.str;
-        description = "Username for mining server";
+        description = lib.mdDoc "Username for mining server";
       };
       pass = mkOption {
         type = types.str;
         default = "x";
-        description = "Password for mining server";
+        description = lib.mdDoc "Password for mining server";
       };
       threads = mkOption {
         type = types.int;
         default = 0;
-        description = "Number of miner threads, defaults to available processors";
+        description = lib.mdDoc "Number of miner threads, defaults to available processors";
       };
     };
 

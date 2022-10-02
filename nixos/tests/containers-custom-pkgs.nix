@@ -9,10 +9,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
 in {
   name = "containers-custom-pkgs";
   meta = {
-    maintainers = with lib.maintainers; [ adisbladis earvstedt ];
+    maintainers = with lib.maintainers; [ adisbladis erikarvstedt ];
   };
 
-  machine = { config, ... }: {
+  nodes.machine = { config, ... }: {
     assertions = let
       helloName = (builtins.head config.containers.test.config.system.extraDependencies).name;
     in [ {

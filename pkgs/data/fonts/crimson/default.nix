@@ -16,7 +16,7 @@ in fetchzip rec {
   sha256 = "0mg65f0ydyfmb43jqr1f34njpd10w8npw15cbb7z0nxmy4nkl842";
 
   meta = with lib; {
-    homepage = "https://aldusleaf.org/crimson.html";
+    homepage = "https://github.com/skosch/Crimson";
     description = "A font family inspired by beautiful oldstyle typefaces";
     license = licenses.ofl;
     platforms = platforms.all;

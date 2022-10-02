@@ -5,10 +5,10 @@
 , cmake
 , alsa-lib
 , ffmpeg
+, game-music-emu
 , libass
 , libcddb
 , libcdio
-, libgme
 , libpulseaudio
 , libsidplayfp
 , libva
@@ -22,13 +22,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "qmplay2";
-  version = "21.12.24";
+  version = "22.08.21";
 
   src = fetchFromGitHub {
     owner = "zaps166";
     repo = "QMPlay2";
     rev = version;
-    sha256 = "sha256-SHReKh+M1rgSIiweYFgVvwMeKWeQD52S4KxEiTsyHrI=";
+    sha256 = "sha256-UQf1aJGoUlXBo2lejw8A3lF6rFOKK6LUGDxRY9207Dw=";
     fetchSubmodules = true;
   };
 
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     ffmpeg
+    game-music-emu
     libXv
     libass
     libcddb
     libcdio
-    libgme
     libpulseaudio
     libsidplayfp
     libva

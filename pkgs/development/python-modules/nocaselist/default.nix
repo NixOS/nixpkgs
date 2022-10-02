@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "nocaselist";
-  version = "1.0.4";
+  version = "1.0.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "73a9c0659e7135c66e46a6ab06e2cb637ce9248d73c690ebd31afb72a4e03ac0";
+    sha256 = "sha256-SPBn+MuEEkXzTQMSC8G6mQDxOxnLUbzGx77gF/fIdNo=";
   };
 
   checkInputs = [

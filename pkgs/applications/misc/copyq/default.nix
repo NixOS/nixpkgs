@@ -17,13 +17,13 @@
 
 mkDerivation rec {
   pname = "CopyQ";
-  version = "6.0.1";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "hluk";
     repo = "CopyQ";
     rev = "v${version}";
-    sha256 = "sha256-edrRgnjbszqJLbGLE4anCJSGApymvK0O+2ks5jWe8aw=";
+    hash = "sha256-0XCqSF1oc2B3FD5OmOxqgt9sqCIrzK0KjkntVFXlRWI=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ mkDerivation rec {
     homepage = "https://hluk.github.io/CopyQ";
     description = "Clipboard Manager with Advanced Features";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ willtim artturin ];
+    maintainers = with maintainers; [ artturin ];
     # NOTE: CopyQ supports windows and osx, but I cannot test these.
     # OSX build requires QT5.
     platforms = platforms.linux;

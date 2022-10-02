@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "mariadb";
-  version = "1.0.9";
+  version = "1.1.4";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Aqmz0KB26aDQ6hxItF7Qm2R14rak6Mge2fHoLK87/Ck=";
+    hash = "sha256-c6CsvSrOOB7BvPxhztenmlGeZsAsJOEq5tJ7qgNxeHY=";
     extension = "zip";
   };
 

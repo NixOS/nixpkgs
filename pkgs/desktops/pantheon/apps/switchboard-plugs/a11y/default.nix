@@ -40,12 +40,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
-
   nativeBuildInputs = [
     meson
     ninja
@@ -60,6 +54,12 @@ stdenv.mkDerivation rec {
     switchboard
     wingpanel-indicator-a11y
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Switchboard Universal Access Plug";

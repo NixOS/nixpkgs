@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
     maintainers = [ turion ];
   };
 
-  machine = { ... }:
+  nodes.machine = { ... }:
 
   {
     imports = [
@@ -15,20 +15,54 @@ import ./make-test-python.nix ({ pkgs, ...} :
     ];
 
     services.xserver.enable = true;
+
+    # Regression test for https://github.com/NixOS/nixpkgs/issues/163482
+    qt5 = {
+      enable = true;
+      platformTheme = "gnome";
+      style = "adwaita-dark";
+    };
+
     test-support.displayManager.auto.user = "alice";
-    environment.systemPackages = [ pkgs.keepassxc ];
+    environment.systemPackages = with pkgs; [
+      keepassxc
+      xdotool
+    ];
   };
 
   enableOCR = true;
 
-  testScript = { nodes, ... }: ''
-    start_all()
-    machine.wait_for_x()
+  testScript = { nodes, ... }: let
+    aliceDo = cmd: ''machine.succeed("su - alice -c '${cmd}' >&2 &");'';
+    in ''
+    with subtest("Ensure X starts"):
+        start_all()
+        machine.wait_for_x()
 
-    # start KeePassXC window
-    machine.execute("su - alice -c keepassxc >&2 &")
+    with subtest("Can create database and entry with CLI"):
+        ${aliceDo "keepassxc-cli db-create -k foo.keyfile foo.kdbx"}
+        ${aliceDo "keepassxc-cli add --no-password -k foo.keyfile foo.kdbx bar"}
 
-    machine.wait_for_text("KeePassXC ${pkgs.keepassxc.version}")
-    machine.screenshot("KeePassXC")
+    with subtest("Ensure KeePassXC starts"):
+        # start KeePassXC window
+        ${aliceDo "keepassxc >&2 &"}
+
+        machine.wait_for_text("KeePassXC ${pkgs.keepassxc.version}")
+        machine.screenshot("KeePassXC")
+
+    with subtest("Can open existing database"):
+        machine.send_key("ctrl-o")
+        machine.sleep(5)
+        # Regression #163482: keepassxc did not crash
+        machine.succeed("ps -e | grep keepassxc")
+        machine.wait_for_text("foo.kdbx")
+        machine.send_key("ret")
+        machine.sleep(1)
+        # Click on "Browse" button to select keyfile
+        machine.send_key("tab")
+        machine.send_chars("/home/alice/foo.keyfile")
+        machine.send_key("ret")
+        # Database is unlocked (doesn't have "[Locked]" in the title anymore)
+        machine.wait_for_text("foo.kdbx - KeePassXC")
   '';
 })

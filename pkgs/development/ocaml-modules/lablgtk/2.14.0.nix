@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, pkg-config, gtk2, libgnomecanvas, libglade, gtksourceview, camlp4 }:
+{ stdenv, lib, fetchurl, ocaml, findlib, pkg-config, gtk2, libgnomecanvas, gtksourceview, camlp4 }:
 
 if lib.versionAtLeast ocaml.version "4.04"
 then throw "lablgtk-2.14 is not available for OCaml ${ocaml.version}" else
@@ -16,8 +16,8 @@ stdenv.mkDerivation (rec {
     sha256 = "1fnh0amm7lwgyjdhmlqgsp62gwlar1140425yc1j6inwmgnsp0a9";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ocaml findlib gtk2 libgnomecanvas libglade gtksourceview camlp4 ];
+  nativeBuildInputs = [ pkg-config ocaml findlib camlp4 ];
+  buildInputs = [ gtk2 libgnomecanvas gtksourceview ];
 
   configureFlags = [ "--with-libdir=$(out)/lib/ocaml/${ocaml.version}/site-lib" ];
   buildFlags = [ "world" ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation (rec {
 
   meta = {
     branch = "2.14";
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = [
       lib.maintainers.maggesi
       lib.maintainers.roconnor

@@ -21,17 +21,19 @@
 , zlib
 , icu
 , systemd
+, systemdSupport ? stdenv.hostPlatform.isLinux
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "vte";
-  version = "0.64.2";
+  version = "0.68.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-KzyCC2WmZ8HYhZuiBHi+Ym0VGcwxWdrCX3AzMMbQfhg=";
+    sha256 = "sha256-E+fUeJyiFqM3gAMNJGybE92/0ECUxjFu6n/5IoTdF0k=";
   };
 
   patches = [
@@ -63,6 +65,7 @@ stdenv.mkDerivation rec {
     pcre2
     zlib
     icu
+  ] ++ lib.optionals systemdSupport [
     systemd
   ];
 
@@ -71,6 +74,13 @@ stdenv.mkDerivation rec {
     gtk3
     glib
     pango
+  ];
+
+  mesonFlags = lib.optionals (!systemdSupport) [
+    "-D_systemd=false"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # -Bsymbolic-functions is not supported on darwin
+    "-D_b_symbolic_functions=false"
   ];
 
   postPatch = ''
@@ -84,6 +94,9 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
+    };
+    tests = {
+      inherit (nixosTests.terminal-emulators) gnome-terminal lxterminal mlterm roxterm sakura stupidterm terminator termite xfce4-terminal;
     };
   };
 

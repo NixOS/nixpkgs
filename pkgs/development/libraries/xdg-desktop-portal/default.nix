@@ -1,28 +1,33 @@
-{ stdenv
-, lib
+{ lib
+, acl
+, autoreconfHook
+, dbus
 , fetchFromGitHub
 , fetchpatch
-, nixosTests
-, substituteAll
-, autoreconfHook
-, pkg-config
-, libxml2
-, glib
-, pipewire
 , flatpak
-, gsettings-desktop-schemas
-, acl
-, dbus
-, fuse
-, libportal
+, fuse3
+, systemdMinimal
 , geoclue2
+, glib
+, gsettings-desktop-schemas
 , json-glib
+, libportal
+, libxml2
+, nixosTests
+, pipewire
+, gdk-pixbuf
+, librsvg
+, python3
+, pkg-config
+, stdenv
+, substituteAll
 , wrapGAppsHook
+, enableGeoLocation ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal";
-  version = "1.10.1";
+  version = "1.15.0";
 
   outputs = [ "out" "installedTests" ];
 
@@ -30,45 +35,44 @@ stdenv.mkDerivation rec {
     owner = "flatpak";
     repo = pname;
     rev = version;
-    sha256 = "Q1ZP/ljdIxJHg+3JaTL/LIZV+3cK2+dognsTC95udVA=";
+    sha256 = "sha256-Kw3zJeGwPfw1fDo8HsgYmrpgCk/PUvWZPRloKJNAJVc=";
   };
-
-  patches = [
-    # Hardcode paths used by x-d-p itself.
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit flatpak;
-    })
-    # Fixes the issue in https://github.com/flatpak/xdg-desktop-portal/issues/636
-    # Remove it when the next stable release arrives
-    (fetchpatch {
-      url = "https://github.com/flatpak/xdg-desktop-portal/commit/d7622e15ff8fef114a6759dde564826d04215a9f.patch";
-      sha256 = "sha256-vmfxK4ddG6Xon//rpiz6OiBsDLtT0VG5XyBJG3E4PPs=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
-    pkg-config
     libxml2
+    pkg-config
     wrapGAppsHook
   ];
 
   buildInputs = [
-    glib
-    pipewire
-    flatpak
     acl
     dbus
-    geoclue2
-    fuse
-    libportal
+    flatpak
+    fuse3
+    systemdMinimal # libsystemd
+    glib
     gsettings-desktop-schemas
     json-glib
+    libportal
+    pipewire
+
+    # For icon validator
+    gdk-pixbuf
+    librsvg
+
+    # For document-fuse installed test.
+    (python3.withPackages (pp: with pp; [
+      pygobject3
+    ]))
+  ] ++ lib.optionals enableGeoLocation [
+    geoclue2
   ];
 
   configureFlags = [
     "--enable-installed-tests"
+  ] ++ lib.optionals (!enableGeoLocation) [
+    "--disable-geoclue"
   ];
 
   makeFlags = [
@@ -84,7 +88,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Desktop integration portals for sandboxed apps";
-    license = licenses.lgpl21;
+    license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };

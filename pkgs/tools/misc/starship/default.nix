@@ -2,40 +2,43 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
-, pkg-config
-, openssl
 , installShellFiles
 , libiconv
+, cmake
+, fetchpatch
 , nixosTests
 , Security
+, Foundation
+, Cocoa
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "1.2.1";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5MJA8eHo1enOHlLpAOF1iDvOHCS/Nw0sc84VWu9nApE=";
+    sha256 = "sha256-6YpC6JDBYwP+RHQUYXmgOWUWa7DgvjowhGCpr2bNl4Q=";
   };
 
-  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = [ installShellFiles cmake ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security Foundation Cocoa ];
 
-  buildFeatures = lib.optional (!stdenv.isDarwin) "notify-rust";
+  buildNoDefaultFeatures = true;
+  # the "notify" feature is currently broken on darwin
+  buildFeatures = if stdenv.isDarwin then [ "battery" ] else [ "default" ];
 
   postInstall = ''
-    for shell in bash fish zsh; do
-      STARSHIP_CACHE=$TMPDIR $out/bin/starship completions $shell > starship.$shell
-      installShellCompletion starship.$shell
-    done
+    installShellCompletion --cmd starship \
+      --bash <($out/bin/starship completions bash) \
+      --fish <($out/bin/starship completions fish) \
+      --zsh <($out/bin/starship completions zsh)
   '';
 
-  cargoSha256 = "sha256-DTQQFxj6stzlVzSdmv4J4Nsf8X/VMlwvfIumnuK0YDo=";
+  cargoSha256 = "sha256-skNvlifjRHTrJPMjpRv2E+M9/XA+3m6dHbb+gczaYoo=";
 
   preCheck = ''
     HOME=$TMPDIR

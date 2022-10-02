@@ -43,6 +43,11 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    # Fix build with vala 0.56
+    # https://github.com/donadigo/appeditor/pull/122
+    substituteInPlace src/Application.vala \
+      --replace "private static string? create_exec_filename;" "public static string? create_exec_filename;"
+
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';

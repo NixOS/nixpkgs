@@ -2,16 +2,20 @@
 
 buildGoModule rec {
   pname = "kconf";
-  version = "1.10.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "particledecay";
     repo = "kconf";
     rev = "v${version}";
-    sha256 = "NlTpHQFOJJcIt/xMT3fvdrlxANyg//wtYMmXzEtaFXo=";
+    sha256 = "sha256-aEZTwXccKZDXRNWr4XS2ZpqtEnNGbsIVau8zPvaHTkk=";
   };
 
-  vendorSha256 = "2d4o87wE9QZltk2YOHc20XVYF8n0EOrDf5mJ6i6EB0c=";
+  vendorSha256 = "sha256-7mzk2OP1p8FfRsbs4B6XP/szBeckm7Q7hf8AkbZUG2Q=";
+
+  ldflags = [
+      "-s" "-w" "-X github.com/particledecay/kconf/build.Version=${version}"
+  ];
 
   meta = with lib; {
     description = "An opinionated command line tool for managing multiple kubeconfigs";

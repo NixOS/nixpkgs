@@ -1,7 +1,7 @@
-{ pkgs, config, buildPackages, lib, stdenv, libiconv, gawk, gnused, gixy }:
+{ pkgs, config, buildPackages, lib, stdenv, libiconv, mkNugetDeps, mkNugetSource, gixy }:
 
 let
-  aliases = if (config.allowAliases or true) then (import ./aliases.nix lib) else prev: {};
+  aliases = if config.allowAliases then (import ./aliases.nix lib) else prev: {};
 
   writers = with lib; rec {
   # Base implementation for non-compiled executables.
@@ -132,12 +132,17 @@ let
     libraries ? [],
     ghc ? pkgs.ghc,
     ghcArgs ? [],
+    threadedRuntime ? true,
     strip ? true
   }:
-    makeBinWriter {
+    let
+      appendIfNotSet = el: list: if elem el list then list else list ++ [ el ];
+      ghcArgs' = if threadedRuntime then appendIfNotSet "-threaded" ghcArgs else ghcArgs;
+
+    in makeBinWriter {
       compileScript = ''
         cp $contentPath tmp.hs
-        ${ghc.withPackages (_: libraries )}/bin/ghc ${lib.escapeShellArgs ghcArgs} tmp.hs
+        ${ghc.withPackages (_: libraries )}/bin/ghc ${lib.escapeShellArgs ghcArgs'} tmp.hs
         mv tmp $out
       '';
       inherit strip;
@@ -205,7 +210,7 @@ let
   writeNginxConfig = name: text: pkgs.runCommandLocal name {
     inherit text;
     passAsFile = [ "text" ];
-    nativeBuildInputs = [ gawk gnused gixy ];
+    nativeBuildInputs = [ gixy ];
   } /* sh */ ''
     # nginx-config-formatter has an error - https://github.com/1connect/nginx-config-formatter/issues/16
     awk -f ${awkFormatNginx} "$textPath" | sed '/^\s*$/d' > $out
@@ -232,7 +237,7 @@ let
   # makePythonWriter takes python and compatible pythonPackages and produces python script writer,
   # which validates the script with flake8 at build time. If any libraries are specified,
   # python.withPackages is used as interpreter, otherwise the "bare" python is used.
-  makePythonWriter = python: pythonPackages: name: { libraries ? [], flakeIgnore ? [] }:
+  makePythonWriter = python: pythonPackages: buildPythonPackages: name: { libraries ? [], flakeIgnore ? [] }:
   let
     ignoreAttribute = optionalString (flakeIgnore != []) "--ignore ${concatMapStringsSep "," escapeShellArg flakeIgnore}";
   in
@@ -243,7 +248,7 @@ let
       else "${python.withPackages (ps: libraries)}/bin/python"
     ;
     check = optionalString python.isPy3k (writeDash "pythoncheck.sh" ''
-      exec ${pythonPackages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
+      exec ${buildPythonPackages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
     '');
   } name;
 
@@ -259,7 +264,7 @@ let
   #
   #   print Test.a
   # ''
-  writePyPy2 = makePythonWriter pkgs.pypy2 pkgs.pypy2Packages;
+  writePyPy2 = makePythonWriter pkgs.pypy2 pkgs.pypy2Packages buildPackages.pypy2Packages;
 
   # writePyPy2Bin takes the same arguments as writePyPy2 but outputs a directory (like writeScriptBin)
   writePyPy2Bin = name:
@@ -277,7 +282,7 @@ let
   #   """)
   #   print(y[0]['test'])
   # ''
-  writePython3 = makePythonWriter pkgs.python3 pkgs.python3Packages;
+  writePython3 = makePythonWriter pkgs.python3 pkgs.python3Packages buildPackages.python3Packages;
 
   # writePython3Bin takes the same arguments as writePython3 but outputs a directory (like writeScriptBin)
   writePython3Bin = name:
@@ -295,11 +300,47 @@ let
   #   """)
   #   print(y[0]['test'])
   # ''
-  writePyPy3 = makePythonWriter pkgs.pypy3 pkgs.pypy3Packages;
+  writePyPy3 = makePythonWriter pkgs.pypy3 pkgs.pypy3Packages buildPackages.pypy3Packages;
 
   # writePyPy3Bin takes the same arguments as writePyPy3 but outputs a directory (like writeScriptBin)
   writePyPy3Bin = name:
     writePyPy3 "/bin/${name}";
+
+
+  makeFSharpWriter = { dotnet-sdk ? pkgs.dotnet-sdk, fsi-flags ? "", libraries ? _: [] }: nameOrPath:
+  let
+    fname = last (builtins.split "/" nameOrPath);
+    path = if strings.hasSuffix ".fsx" nameOrPath then nameOrPath else "${nameOrPath}.fsx";
+    _nugetDeps = mkNugetDeps { name = "${fname}-nuget-deps"; nugetDeps = libraries; };
+
+    nuget-source = mkNugetSource {
+      name = "${fname}-nuget-source";
+      description = "A Nuget source with the dependencies for ${fname}";
+      deps = [ _nugetDeps ];
+    };
+
+    fsi = writeBash "fsi" ''
+      export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+      export DOTNET_CLI_TELEMETRY_OPTOUT=1
+      export DOTNET_NOLOGO=1
+      script="$1"; shift
+      ${dotnet-sdk}/bin/dotnet fsi --quiet --nologo --readline- ${fsi-flags} "$@" < "$script"
+    '';
+
+  in content: writers.makeScriptWriter {
+    interpreter = fsi;
+  } path
+  ''
+    #i "nuget: ${nuget-source}/lib"
+    ${ content }
+    exit 0
+  '';
+
+  writeFSharp =
+    makeFSharpWriter {};
+
+  writeFSharpBin = name:
+    writeFSharp "/bin/${name}";
 
 };
 in

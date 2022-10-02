@@ -78,7 +78,7 @@ rec {
 
        2. (modern) a pattern for the platform `parsed` field.
 
-     We can inject these into a patten for the whole of a structured platform,
+     We can inject these into a pattern for the whole of a structured platform,
      and then match that.
   */
   platformMatch = platform: elem: let
@@ -126,4 +126,18 @@ rec {
         lib.warn "getLicenseFromSpdxId: No license matches the given SPDX ID: ${licstr}"
         { shortName = licstr; }
       );
+
+  /* Get the path to the main program of a derivation with either
+     meta.mainProgram or pname or name
+
+     Type: getExe :: derivation -> string
+
+     Example:
+       getExe pkgs.hello
+       => "/nix/store/g124820p9hlv4lj8qplzxw1c44dxaw1k-hello-2.12/bin/hello"
+       getExe pkgs.mustache-go
+       => "/nix/store/am9ml4f4ywvivxnkiaqwr0hyxka1xjsf-mustache-go-1.3.0/bin/mustache"
+  */
+  getExe = x:
+    "${lib.getBin x}/bin/${x.meta.mainProgram or (lib.getName x)}";
 }

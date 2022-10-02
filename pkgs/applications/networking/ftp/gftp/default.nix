@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gftp";
-  version = "2.8.0b";
+  version = "2.9.1b";
 
   src = fetchFromGitHub {
     owner = "masneyb";
     repo = pname;
     rev = version;
-    hash = "sha256-syeRFpqbd1VhKhhs/fIByDSVpcY+SAlmikDo3J1ZHlo=";
+    hash = "sha256-0zdv2oYl24BXh61IGCWby/2CCkzNjLpDrAFc0J89Pw4=";
   };
 
   nativeBuildInputs = [

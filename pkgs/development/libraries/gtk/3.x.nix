@@ -2,7 +2,6 @@
 , stdenv
 , substituteAll
 , fetchurl
-, fetchpatch
 , pkg-config
 , gettext
 , docbook-xsl-nons
@@ -31,7 +30,7 @@
 , gnome
 , gsettings-desktop-schemas
 , sassc
-, trackerSupport ? stdenv.isLinux
+, trackerSupport ? stdenv.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
 , tracker
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux
@@ -40,11 +39,13 @@
 , wayland-protocols
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
-, withGtkDoc ? stdenv.isLinux
+, withGtkDoc ? stdenv.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
 , cups
 , AppKit
 , Cocoa
+, QuartzCore
 , broadwaySupport ? true
+, wayland-scanner
 }:
 
 let
@@ -59,7 +60,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk+3";
-  version = "3.24.30";
+  version = "3.24.34";
 
   outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
   outputBin = "dev";
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "sha256-unW//zIK0fTPvukrqBPsM2MizDxmDUBqrQFLBwh6O6k=";
+    sha256 = "sha256-28afkN3IIbjRRB8AN03B2kMjour6kHjmHtvl7u+oUuw=";
   };
 
   patches = [
@@ -85,6 +86,9 @@ stdenv.mkDerivation rec {
     ./patches/3.0-darwin-x11.patch
   ];
 
+  depsBuildBuild = [
+    pkg-config
+  ];
   nativeBuildInputs = [
     gettext
     gobject-introspection
@@ -94,17 +98,21 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     sassc
+    gdk-pixbuf
   ] ++ setupHooks ++ lib.optionals withGtkDoc [
     docbook_xml_dtd_43
     docbook-xsl-nons
     gtk-doc
     # For xmllint
     libxml2
+  ] ++ lib.optionals waylandSupport [
+    wayland-scanner
   ];
 
   buildInputs = [
+    gobject-introspection
     libxkbcommon
-    libepoxy
+    (libepoxy.override { inherit x11Support; })
     isocodes
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
@@ -133,6 +141,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     # explicitly propagated, always needed
     Cocoa
+    QuartzCore
   ] ++ lib.optionals waylandSupport [
     libGL
     wayland
@@ -192,6 +201,8 @@ stdenv.mkDerivation rec {
     for f in $dev/bin/gtk-encode-symbolic-svg; do
       wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     done
+  '' + lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
+    GTK_PATH="''${out:?}/lib/gtk-3.0/3.0.0/immodules/" ''${dev:?}/bin/gtk-query-immodules-3.0 > "''${out:?}/lib/gtk-3.0/3.0.0/immodules.cache"
   '';
 
   # Wrap demos
@@ -202,6 +213,9 @@ stdenv.mkDerivation rec {
       wrapProgram $dev/bin/$program \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}"
     done
+  '' + lib.optionalString stdenv.isDarwin ''
+    # a comment created a cycle between outputs
+    sed '/^# ModulesPath =/d' -i "$out"/lib/gtk-*/*/immodules.cache
   '';
 
   passthru = {

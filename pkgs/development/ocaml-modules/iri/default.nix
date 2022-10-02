@@ -1,5 +1,5 @@
 { lib, buildDunePackage, fetchFromGitLab
-, sedlex_2, uunf, uutf
+, sedlex, uunf, uutf
 }:
 
 buildDunePackage rec {
@@ -15,7 +15,7 @@ buildDunePackage rec {
     sha256 = "sha256:0zk8nnwcyljkc1a556byncv6cn1vqhk4267z1lm15flh1k7chyax";
   };
 
-  propagatedBuildInputs = [ sedlex_2 uunf uutf ];
+  propagatedBuildInputs = [ sedlex uunf uutf ];
 
   meta = {
     description = "IRI (RFC3987) native OCaml implementation";

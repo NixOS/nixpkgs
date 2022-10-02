@@ -35,17 +35,17 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli";
-  version = "1.22.21"; # N.B: if you change this, change botocore and boto3 to a matching version too
+  version = "1.25.76"; # N.B: if you change this, change botocore and boto3 to a matching version too
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yzfy6MjXC6LeydLNVXQvcK4UmpVQP/jJ+W2jMgpNMgw=";
+    hash = "sha256-PSr0zZEGXFxcFSN7QQ5Ux0Z4aCwwm9na+2hIv/gR6+s=";
   };
 
   # https://github.com/aws/aws-cli/issues/4837
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "docutils>=0.10,<0.16" "docutils>=0.10" \
+      --replace "docutils>=0.10,<0.17" "docutils>=0.10" \
       --replace "rsa>=3.1.2,<4.8" "rsa<5,>=3.1.2"
   '';
 
@@ -90,6 +90,7 @@ with py.pkgs; buildPythonApplication rec {
     homepage = "https://aws.amazon.com/cli/";
     description = "Unified tool to manage your AWS services";
     license = licenses.asl20;
-    maintainers = with maintainers; [ muflax ];
+    mainProgram = "aws";
+    maintainers = with maintainers; [ ];
   };
 }

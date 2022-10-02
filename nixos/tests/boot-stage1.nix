@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "boot-stage1";
 
-  machine = { config, pkgs, lib, ... }: {
+  nodes.machine = { config, pkgs, lib, ... }: {
     boot.extraModulePackages = let
       compileKernelModule = name: source: pkgs.runCommandCC name rec {
         inherit source;
@@ -32,6 +32,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 10, 0)
         #include <linux/sched/signal.h>
         #endif
+
+        MODULE_LICENSE("GPL");
 
         struct task_struct *canaryTask;
 

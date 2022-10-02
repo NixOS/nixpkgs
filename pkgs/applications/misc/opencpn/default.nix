@@ -1,31 +1,100 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, gtk2, wxGTK30, libpulseaudio, curl,
-  gettext, glib, portaudio }:
+{ stdenv, lib
+, alsa-utils
+, at-spi2-core
+, cmake
+, curl
+, dbus
+, fetchFromGitHub
+, flac
+, gtk3
+, jasper
+, libGLU
+, libarchive
+, libdatrie
+, libelf
+, libepoxy
+, libexif
+, libogg
+, libopus
+, libselinux
+, libsepol
+, libsndfile
+, libthai
+, libunarr
+, libusb1
+, libvorbis
+, libxkbcommon
+, lsb-release
+, lz4
+, pcre
+, pkg-config
+, portaudio
+, sqlite
+, tinyxml
+, udev
+, util-linux
+, wxGTK31-gtk3
+, xorg
+}:
 
 stdenv.mkDerivation rec {
-  pname = "opencpn-unstable";
-  version = "2019-11-21";
+  pname = "opencpn";
+  version = "5.6.2";
 
   src = fetchFromGitHub {
     owner = "OpenCPN";
     repo = "OpenCPN";
-    rev = "e73dc935545b2bbcf193cc61d987a0178c52d7a7";
-    sha256 = "0yiqahkzwcbzgabc5xgxmwlngapkfiaqyva3mwz29xj0c5lg2bdk";
+    rev = "Release_${version}";
+    hash = "sha256-sNZYf/2gtjRrrGPuazVnKTgcuIQpKPazhexqlK21T4g=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ gtk2 wxGTK30 libpulseaudio curl gettext
-                  glib portaudio ];
-
-  cmakeFlags = [
-    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
-    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
+  nativeBuildInputs = [ cmake lsb-release pkg-config ];
+  buildInputs = [
+    alsa-utils
+    at-spi2-core
+    curl
+    dbus
+    flac
+    gtk3
+    jasper
+    libGLU
+    libarchive
+    libdatrie
+    libelf
+    libepoxy
+    libexif
+    libogg
+    libopus
+    libselinux
+    libsepol
+    libsndfile
+    libthai
+    libunarr
+    libusb1
+    libvorbis
+    libxkbcommon
+    lz4
+    pcre
+    portaudio
+    sqlite
+    tinyxml
+    udev
+    util-linux
+    wxGTK31-gtk3
+    xorg.libXdmcp
+    xorg.libXtst
   ];
 
-  meta = {
+
+  cmakeFlags = [ "-DOCPN_BUNDLE_DOCS=true" ];
+
+  doCheck = true;
+
+  meta = with lib; {
     description = "A concise ChartPlotter/Navigator";
-    maintainers = [ lib.maintainers.kragniz ];
+    maintainers = with maintainers; [ kragniz lovesegfault ];
     platforms = [ "x86_64-linux" ];
-    license = lib.licenses.gpl2;
+    license = licenses.gpl2;
     homepage = "https://opencpn.org/";
   };
 }

@@ -6,7 +6,7 @@
 , xfce4-panel
 , libxfce4ui
 , xfconf
-, xfce
+, gitUpdater
 }:
 
 let
@@ -31,10 +31,9 @@ in stdenv.mkDerivation rec {
     xfconf
   ];
 
-  passthru.updateScript = xfce.updateScript {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
-    versionLister = xfce.archiveLister category pname;
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.xfce.org/panel-plugins/${pname}";
+    rev-prefix = "${pname}-";
   };
 
   meta = with lib; {

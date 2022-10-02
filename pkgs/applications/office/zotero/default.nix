@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl, wrapGAppsHook, makeDesktopItem
+{ lib
+, stdenv
+, fetchurl
+, wrapGAppsHook
+, makeDesktopItem
 , atk
 , cairo
 , coreutils
@@ -27,7 +31,8 @@
 , libXt
 , libnotify
 , gnome
-, libGLU, libGL
+, libGLU
+, libGL
 , nspr
 , nss
 , pango
@@ -36,55 +41,56 @@
 
 stdenv.mkDerivation rec {
   pname = "zotero";
-  version = "5.0.96.3";
+  version = "6.0.12";
 
   src = fetchurl {
-    url = "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
-    sha256 = "sha256-eqSNzmkGNopGJ7VByvUffFEPJz3WHS7b5+jgUAW/hU4=";
+    url =
+      "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
+    sha256 = "sha256-RIPFn0fLk2CbOoiZ4a5ungnbvfRWFQQUypCYVvVIQms=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
-  buildInputs= [ gsettings-desktop-schemas glib gtk3 gnome.adwaita-icon-theme dconf ];
+  buildInputs =
+    [ gsettings-desktop-schemas glib gtk3 gnome.adwaita-icon-theme dconf ];
 
   dontConfigure = true;
   dontBuild = true;
   dontStrip = true;
   dontPatchELF = true;
 
-  libPath = lib.makeLibraryPath
-    [ stdenv.cc.cc
-      atk
-      cairo
-      curl
-      cups
-      dbus-glib
-      dbus
-      fontconfig
-      freetype
-      gdk-pixbuf
-      glib
-      glibc
-      gtk3
-      libX11
-      libXScrnSaver
-      libXcomposite
-      libXcursor
-      libxcb
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libXinerama
-      libXrender
-      libXt
-      libnotify
-      libGLU libGL
-      nspr
-      nss
-      pango
-    ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [
-      stdenv.cc.cc
-    ];
+  libPath = lib.makeLibraryPath [
+    stdenv.cc.cc
+    atk
+    cairo
+    curl
+    cups
+    dbus-glib
+    dbus
+    fontconfig
+    freetype
+    gdk-pixbuf
+    glib
+    glibc
+    gtk3
+    libX11
+    libXScrnSaver
+    libXcomposite
+    libXcursor
+    libxcb
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXinerama
+    libXrender
+    libXt
+    libnotify
+    libGLU
+    libGL
+    nspr
+    nss
+    pango
+  ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [ stdenv.cc.cc ];
 
   postPatch = ''
     sed -i '/pref("app.update.enabled", true);/c\pref("app.update.enabled", false);' defaults/preferences/prefs.js
@@ -94,13 +100,12 @@ stdenv.mkDerivation rec {
     name = "zotero-${version}";
     exec = "zotero -url %U";
     icon = "zotero";
-    type = "Application";
     comment = meta.description;
     desktopName = "Zotero";
     genericName = "Reference Management";
-    categories = "Office;Database;";
-    startupNotify = "true";
-    mimeType = "text/plain";
+    categories = [ "Office" "Database" ];
+    startupNotify = true;
+    mimeTypes = [ "x-scheme-handler/zotero" "text/plain" ];
   };
 
   installPhase = ''
@@ -144,6 +149,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.zotero.org";
     description = "Collect, organize, cite, and share your research sources";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.agpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ i077 ];

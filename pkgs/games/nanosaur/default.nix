@@ -12,10 +12,9 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [
     SDL2
-    cmake
-    makeWrapper
   ];
 
   configurePhase = ''
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mv build $out
-    makeWrapper $out/Nanosaur $out/bin/Nanosaur --run "cd $out"
+    makeWrapper $out/Nanosaur $out/bin/Nanosaur --chdir "$out"
   '';
 
   meta = with lib; {

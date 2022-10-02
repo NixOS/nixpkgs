@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mutt-wizard";
-  version = "3.2.1";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "LukeSmithxyz";
     repo = "mutt-wizard";
     rev = "v${version}";
-    sha256 = "1m4s0vj57hh38rdgdc28p10vnsq80dh708imvdgxbj1i96nq41r8";
+    sha256 = "sha256-1/+awwoAqD8Xm3hULcbpeTaLOHVuYRA4PPr3cq5Gy20=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

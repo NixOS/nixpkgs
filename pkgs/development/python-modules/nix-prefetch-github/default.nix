@@ -2,12 +2,14 @@
 , lib
 , buildPythonPackage
 , git
+, which
 , pythonOlder
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "nix-prefetch-github";
-  version = "5.0.1";
+  version = "5.2.1";
 
   disabled = pythonOlder "3.7";
 
@@ -15,14 +17,11 @@ buildPythonPackage rec {
     owner = "seppeljordan";
     repo = "nix-prefetch-github";
     rev = "v${version}";
-    sha256 = "DOmFfUCLJ+rnS4PznQaQrDrqjUU4DXmOrC9BspqKZVM=";
+    sha256 = "etmlRavPzJKLmyw3PYMgeMveFj4aVi38crHjdtDuaLg=";
   };
 
-  checkInputs = [ git ];
+  checkInputs = [ unittestCheckHook git which ];
 
-  checkPhase = ''
-    python -m unittest discover
-  '';
   # ignore tests which are impure
   DISABLED_TESTS = "network requires_nix_build";
 

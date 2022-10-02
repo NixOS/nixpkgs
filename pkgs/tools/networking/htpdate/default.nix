@@ -1,14 +1,14 @@
 { stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.1";
+  version = "1.3.6";
   pname = "htpdate";
 
   src = fetchFromGitHub {
     owner = "twekkel";
     repo = pname;
     rev = "v${version}";
-    sha256 = "JPaxbu7LlGV+Bh5qxVxeNSPnMQNqLaLYWBRbpETSpQs=";
+    sha256 = "sha256-0NLlBNYTJ+hmQLH/UYwIOIbq3G1sDo/A03xFHsXdzig=";
   };
 
   makeFlags = [

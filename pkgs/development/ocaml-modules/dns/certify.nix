@@ -1,12 +1,13 @@
 { buildDunePackage, dns, dns-tsig, dns-mirage, randomconv, x509
-, mirage-random, mirage-time, mirage-clock, mirage-stack
+, mirage-random, mirage-time, mirage-clock
 , logs, mirage-crypto-pk, mirage-crypto-rng, mirage-crypto-ec, lwt
+, tcpip
 }:
 
 buildDunePackage {
   pname = "dns-certify";
 
-  inherit (dns) version src useDune2 minimumOCamlVersion;
+  inherit (dns) version src;
 
   propagatedBuildInputs = [
     dns
@@ -17,12 +18,12 @@ buildDunePackage {
     mirage-random
     mirage-time
     mirage-clock
-    mirage-stack
     logs
     mirage-crypto-pk
     mirage-crypto-rng
     mirage-crypto-ec
     lwt
+    tcpip
   ];
 
   doCheck = true;

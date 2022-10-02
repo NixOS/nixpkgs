@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pymsteams";
-  version = "0.2.0";
+  version = "0.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "rveachkc";
     repo = pname;
     rev = version;
-    sha256 = "1q4fm9dwnx5cy8r6gfzbn2f05hacpjfqlsgcyf2cv56wzb9rrg8v";
+    sha256 = "03lna3p8qkmsmaz2nzl76dnz6rci08wsybvr151zl8wwpjdj1sam";
   };
 
   propagatedBuildInputs = [

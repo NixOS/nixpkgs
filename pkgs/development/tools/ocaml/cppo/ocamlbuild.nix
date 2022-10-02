@@ -1,6 +1,6 @@
 { lib, buildDunePackage, cppo, ocamlbuild }:
 
-if !lib.versionAtLeast (lib.getVersion cppo) "1.6"
+if lib.versionOlder (lib.getVersion cppo) "1.6"
 then cppo
 else
 

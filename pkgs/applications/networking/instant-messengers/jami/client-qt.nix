@@ -1,27 +1,30 @@
 { version
 , src
 , jami-meta
-, mkDerivation
 , lib
+, stdenv
 , pkg-config
 , cmake
 , networkmanager # for libnm
 , python3
 , qttools # for translations
 , wrapQtAppsHook
+, ffmpeg-jami
+, jami-daemon
 , libnotify
-, qrencode
-, qtwebengine
+, qt5compat
+, qtbase
 , qtdeclarative
-, qtquickcontrols2
+, qrencode
 , qtmultimedia
+, qtnetworkauth
 , qtsvg
+, qtwebengine
 , qtwebchannel
-, qtgraphicaleffects # no gui without this
-, jami-libclient
+, withWebengine ? false
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "jami-client-qt";
   inherit version src;
 
@@ -33,6 +36,7 @@ mkDerivation {
   '';
 
   nativeBuildInputs = [
+    wrapQtAppsHook
     pkg-config
     cmake
     python3
@@ -40,17 +44,32 @@ mkDerivation {
   ];
 
   buildInputs = [
-    jami-libclient
-    networkmanager
+    ffmpeg-jami
+    jami-daemon
     libnotify
+    networkmanager
+    qtbase
+    qt5compat
     qrencode
-    qtwebengine
+    qtnetworkauth
     qtdeclarative
-    qtquickcontrols2
     qtmultimedia
     qtsvg
     qtwebchannel
-    qtgraphicaleffects
+  ] ++ lib.optionals withWebengine [
+    qtwebengine
+  ];
+
+  cmakeFlags = [
+    "-DRING_BUILD_DIR=${jami-daemon}/include"
+    "-DRING_XML_INTERFACES_DIR=${jami-daemon}/share/dbus-1/interfaces"
+  ] ++ lib.optionals (!withWebengine) [
+    "-DWITH_WEBENGINE=false"
+  ];
+
+  qtWrapperArgs = [
+    # With wayland the titlebar is not themed and the wmclass is wrong.
+    "--set-default QT_QPA_PLATFORM xcb"
   ];
 
   meta = jami-meta // {

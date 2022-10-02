@@ -2,21 +2,23 @@
 
 stdenv.mkDerivation rec {
   pname = "flow";
-  version = "0.169.0";
+  version = "0.188.1";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
     rev = "v${version}";
-    sha256 = "sha256-QyY0Tb6FalPkWvVGegY6VBqX0pBP15GQgIKLNLPUMYk=";
+    sha256 = "sha256-6VHqjLG11JB1WmXZ6+i5H3ovSGd7hA/oZ+AN5Sw++4I=";
   };
+
+  makeFlags = [ "FLOW_RELEASE=1" ];
 
   installPhase = ''
     install -Dm755 bin/flow $out/bin/flow
     install -Dm644 resources/shell/bash-completion $out/share/bash-completion/completions/flow
   '';
 
-  buildInputs = (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml-migrate-parsetree-2 dtoa core_kernel sedlex_2 ocaml_lwt lwt_log lwt_ppx ppx_deriving ppx_gen_rec visitors wtf8 ])
+  buildInputs = (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml-migrate-parsetree-2 dtoa fileutils core_kernel sedlex ocaml_lwt lwt_log lwt_ppx ppx_deriving ppx_gen_rec visitors wtf8 ])
     ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
   meta = with lib; {

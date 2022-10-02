@@ -1,12 +1,21 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python-dateutil
+
+# build
+, setuptools
+
+# propagtes
 , sigtools
 , six
 , attrs
 , od
 , docutils
+
+# extras: datetime
+, python-dateutil
+
+# tests
 , pygments
 , unittest2
 , pytestCheckHook
@@ -15,10 +24,35 @@
 buildPythonPackage rec {
   pname = "clize";
   version = "4.2.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "3177a028e4169d8865c79af82bdd441b24311d4bd9c0ae8803641882d340a51d";
+  };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "docutils ~= 0.17.0" "docutils" \
+      --replace "attrs>=19.1.0,<22" "attrs>=19.1.0"
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    attrs
+    docutils
+    od
+    sigtools
+    six
+  ];
+
+  passthru.optional-dependencies = {
+    datetime = [
+      python-dateutil
+    ];
   };
 
   # repeated_test no longer exists in nixpkgs
@@ -29,14 +63,6 @@ buildPythonPackage rec {
     python-dateutil
     pygments
     unittest2
-  ];
-
-  propagatedBuildInputs = [
-    attrs
-    docutils
-    od
-    sigtools
-    six
   ];
 
   pythonImportsCheck = [ "clize" ];

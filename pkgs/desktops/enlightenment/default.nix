@@ -1,5 +1,7 @@
-{ callPackage, pkgs }:
-{
+{ lib, pkgs }:
+
+lib.makeScope pkgs.newScope (self: with self; {
+
   #### CORE EFL
   efl = callPackage ./efl { };
 
@@ -13,4 +15,5 @@
   evisum = callPackage ./evisum { };
   rage = callPackage ./rage { };
   terminology = callPackage ./terminology { };
-}
+
+})

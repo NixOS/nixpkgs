@@ -18,33 +18,33 @@ in
 
     services.filebeat = {
 
-      enable = mkEnableOption "filebeat";
+      enable = mkEnableOption (lib.mdDoc "filebeat");
 
       package = mkOption {
         type = types.package;
         default = pkgs.filebeat;
         defaultText = literalExpression "pkgs.filebeat";
         example = literalExpression "pkgs.filebeat7";
-        description = ''
+        description = lib.mdDoc ''
           The filebeat package to use.
         '';
       };
 
       inputs = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Inputs specify how Filebeat locates and processes input data.
 
-          This is like <literal>services.filebeat.settings.filebeat.inputs</literal>,
+          This is like `services.filebeat.settings.filebeat.inputs`,
           but structured as an attribute set. This has the benefit
           that multiple NixOS modules can contribute settings to a
           single filebeat input.
 
           An input type can be specified multiple times by choosing a
-          different <literal>&lt;name></literal> for each, but setting
-          <xref linkend="opt-services.filebeat.inputs._name_.type"/>
+          different `<name>` for each, but setting
+          [](#opt-services.filebeat.inputs._name_.type)
           to the same value.
 
-          See <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html"/>.
+          See <https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html>.
         '';
         default = {};
         type = types.attrsOf (types.submodule ({ name, ... }: {
@@ -53,12 +53,12 @@ in
             type = mkOption {
               type = types.str;
               default = name;
-              description = ''
+              description = lib.mdDoc ''
                 The input type.
 
-                Look for the value after <literal>type:</literal> on
+                Look for the value after `type:` on
                 the individual input pages linked from
-                <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html"/>.
+                <https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html>.
               '';
             };
           };
@@ -77,24 +77,24 @@ in
       };
 
       modules = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Filebeat modules provide a quick way to get started
           processing common log formats. They contain default
           configurations, Elasticsearch ingest pipeline definitions,
           and Kibana dashboards to help you implement and deploy a log
           monitoring solution.
 
-          This is like <literal>services.filebeat.settings.filebeat.modules</literal>,
+          This is like `services.filebeat.settings.filebeat.modules`,
           but structured as an attribute set. This has the benefit
           that multiple NixOS modules can contribute settings to a
           single filebeat module.
 
           A module can be specified multiple times by choosing a
-          different <literal>&lt;name></literal> for each, but setting
-          <xref linkend="opt-services.filebeat.modules._name_.module"/>
+          different `<name>` for each, but setting
+          [](#opt-services.filebeat.modules._name_.module)
           to the same value.
 
-          See <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html"/>.
+          See <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html>.
         '';
         default = {};
         type = types.attrsOf (types.submodule ({ name, ... }: {
@@ -103,12 +103,12 @@ in
             module = mkOption {
               type = types.str;
               default = name;
-              description = ''
+              description = lib.mdDoc ''
                 The name of the module.
 
-                Look for the value after <literal>module:</literal> on
+                Look for the value after `module:` on
                 the individual input pages linked from
-                <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html"/>.
+                <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html>.
               '';
             };
           };
@@ -139,7 +139,7 @@ in
               type = with types; listOf str;
               default = [ "127.0.0.1:9200" ];
               example = [ "myEShost:9200" ];
-              description = ''
+              description = lib.mdDoc ''
                 The list of Elasticsearch nodes to connect to.
 
                 The events are distributed to these nodes in round
@@ -147,10 +147,10 @@ in
                 event is automatically sent to another node. Each
                 Elasticsearch node can be defined as a URL or
                 IP:PORT. For example:
-                <literal>http://192.15.3.2</literal>,
-                <literal>https://es.found.io:9230</literal> or
-                <literal>192.24.3.2:9300</literal>. If no port is
-                specified, <literal>9200</literal> is used.
+                `http://192.15.3.2`,
+                `https://es.found.io:9230` or
+                `192.24.3.2:9300`. If no port is
+                specified, `9200` is used.
               '';
             };
 
@@ -159,28 +159,27 @@ in
                 type = types.listOf json.type;
                 default = [];
                 internal = true;
-                description = ''
+                description = lib.mdDoc ''
                   Inputs specify how Filebeat locates and processes
-                  input data. Use <xref
-                  linkend="opt-services.filebeat.inputs"/> instead.
+                  input data. Use [](#opt-services.filebeat.inputs) instead.
 
-                  See <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html"/>.
+                  See <https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html>.
                 '';
               };
               modules = mkOption {
                 type = types.listOf json.type;
                 default = [];
                 internal = true;
-                description = ''
+                description = lib.mdDoc ''
                   Filebeat modules provide a quick way to get started
                   processing common log formats. They contain default
                   configurations, Elasticsearch ingest pipeline
                   definitions, and Kibana dashboards to help you
                   implement and deploy a log monitoring solution.
 
-                  Use <xref linkend="opt-services.filebeat.modules"/> instead.
+                  Use [](#opt-services.filebeat.modules) instead.
 
-                  See <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html"/>.
+                  See <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html>.
                 '';
               };
             };
@@ -200,20 +199,20 @@ in
           };
         '';
 
-        description = ''
+        description = lib.mdDoc ''
           Configuration for filebeat. See
-          <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-reference-yml.html"/>
+          <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-reference-yml.html>
           for supported values.
 
           Options containing secret data should be set to an attribute
-          set containing the attribute <literal>_secret</literal> - a
+          set containing the attribute `_secret` - a
           string pointing to a file containing the value the option
           should be set to. See the example to get a better picture of
           this: in the resulting
-          <filename>filebeat.yml</filename> file, the
-          <literal>output.elasticsearch.password</literal>
+          {file}`filebeat.yml` file, the
+          `output.elasticsearch.password`
           key will be set to the contents of the
-          <filename>/var/keys/elasticsearch_password</filename> file.
+          {file}`/var/keys/elasticsearch_password` file.
         '';
       };
     };

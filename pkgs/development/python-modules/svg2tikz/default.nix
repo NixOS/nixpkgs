@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchgit
+, fetchFromGitHub
 , lxml
 , isPy27
 }:
@@ -12,10 +12,12 @@ buildPythonPackage {
 
   propagatedBuildInputs = [ lxml ];
 
-  src = fetchgit {
-    url = "https://github.com/kjellmf/svg2tikz";
-    sha256 = "429428ec435e53672b85cdfbb89bb8af0ff9f8238f5d05970729e5177d252d5f";
+  src = fetchFromGitHub {
+    owner = "kjellmf";
+    repo = "svg2tikz";
     rev = "ad36f2c3818da13c4136d70a0fd8153acf8daef4";
+    sha256 = "sha256-QpQo7ENeU2crhc37uJu4rw/5+COPXQWXBynlF30lLV8=";
+    fetchSubmodules = true;
   };
 
   meta = with lib; {

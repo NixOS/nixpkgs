@@ -37,5 +37,9 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://zeronet.io/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ fgaz ];
+    knownVulnerabilities = [ ''
+      Unmaintained. Probable XSS/code injection vulnerability.
+      Switching to the maintained zeronet-conservancy package is recommended
+    '' ];
   };
 }

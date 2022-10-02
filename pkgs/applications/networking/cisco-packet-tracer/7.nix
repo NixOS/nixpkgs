@@ -38,7 +38,7 @@ let
     desktopName = "Cisco Packet Tracer 7";
     icon = "${ptFiles}/opt/pt/art/app.png";
     exec = "packettracer7 %f";
-    mimeType = "application/x-pkt;application/x-pka;application/x-pkz;";
+    mimeTypes = [ "application/x-pkt" "application/x-pka" "application/x-pkz" ];
   };
 
   fhs = buildFHSUserEnvBubblewrap {
@@ -83,6 +83,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "Network simulation tool from Cisco";
     homepage = "https://www.netacad.com/courses/packet-tracer";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ lucasew ];
     platforms = [ "x86_64-linux" ];

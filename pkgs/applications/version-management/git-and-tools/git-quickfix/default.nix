@@ -10,14 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-quickfix";
-  version = "0.0.5";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "siedentop";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LDA94pH5Oodf80mEENoURh+MJSg122SVWFVo9i1TEQg=";
+    sha256 = "sha256-IAjet/bDG/Hf/whS+yrEQSquj8s5DEmFis+5ysLLuxs=";
   };
+
+  doCheck = false;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
@@ -26,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  cargoSha256 = "sha256-QTPy0w45AawEU4fHf2FMGpL3YM+iTNnyiI4+mDJzWaE=";
+  cargoSha256 = "sha256-eTAEf2nRrJ7i2Dw5BBZlLLu8mK2G/wUk40ivtfxk1pI=";
 
   meta = with lib; {
     description = "Quickfix allows you to commit changes in your git repository to a new branch without leaving the current branch";

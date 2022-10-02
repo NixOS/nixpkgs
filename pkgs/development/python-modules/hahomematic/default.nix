@@ -5,7 +5,9 @@
 , pydevccu
 , pytest-aiohttp
 , pytestCheckHook
+, python-slugify
 , pythonOlder
+, setuptools
 , voluptuous
 , websocket-client
 , xmltodict
@@ -13,20 +15,25 @@
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "0.21.2";
-  format = "setuptools";
+  version = "2022.9.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "danielperna84";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-oD4HXdzlQJZ/+ceF9zfmGs6S8DEVoxzLv5h/IURJnOY=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-OWEF1CJ4ZW64P4w3M+uur/NKCmjhS1c19izA041cC8A=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
+    python-slugify
     voluptuous
   ];
 
@@ -35,6 +42,9 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytestCheckHook
   ];
+
+  # Starting with 0.30 the tests are broken, check with the next major release
+  doCheck = false;
 
   pythonImportsCheck = [
     "hahomematic"

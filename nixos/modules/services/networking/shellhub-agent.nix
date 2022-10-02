@@ -1,38 +1,44 @@
 { config, lib, pkgs, ... }:
 
 with lib;
+
 let
   cfg = config.services.shellhub-agent;
-in {
-
+in
+{
   ###### interface
 
   options = {
 
     services.shellhub-agent = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable the ShellHub Agent daemon, which allows
-          secure remote logins.
+      enable = mkEnableOption (lib.mdDoc "ShellHub Agent daemon");
+
+      package = mkPackageOption pkgs "shellhub-agent" { };
+
+      preferredHostname = mkOption {
+        type = types.str;
+        default = "";
+        description = lib.mdDoc ''
+          Set the device preferred hostname. This provides a hint to
+          the server to use this as hostname if it is available.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.shellhub-agent;
-        defaultText = literalExpression "pkgs.shellhub-agent";
-        description = ''
-          Which ShellHub Agent package to use.
+      keepAliveInterval = mkOption {
+        type = types.int;
+        default = 30;
+        description = lib.mdDoc ''
+          Determine the interval to send the keep alive message to
+          the server. This has a direct impact of the bandwidth
+          used by the device.
         '';
       };
 
       tenantId = mkOption {
         type = types.str;
         example = "ba0a880c-2ada-11eb-a35e-17266ef329d6";
-        description = ''
+        description = lib.mdDoc ''
           The tenant ID to use when connecting to the ShellHub
           Gateway.
         '';
@@ -41,7 +47,7 @@ in {
       server = mkOption {
         type = types.str;
         default = "https://cloud.shellhub.io";
-        description = ''
+        description = lib.mdDoc ''
           Server address of ShellHub Gateway to connect.
         '';
       };
@@ -49,7 +55,7 @@ in {
       privateKey = mkOption {
         type = types.path;
         default = "/var/lib/shellhub-agent/private.key";
-        description = ''
+        description = lib.mdDoc ''
           Location where to store the ShellHub Agent private
           key.
         '';
@@ -74,9 +80,13 @@ in {
         "time-sync.target"
       ];
 
-      environment.SERVER_ADDRESS = cfg.server;
-      environment.PRIVATE_KEY = cfg.privateKey;
-      environment.TENANT_ID = cfg.tenantId;
+      environment = {
+        SHELLHUB_SERVER_ADDRESS = cfg.server;
+        SHELLHUB_PRIVATE_KEY = cfg.privateKey;
+        SHELLHUB_TENANT_ID = cfg.tenantId;
+        SHELLHUB_KEEPALIVE_INTERVAL = toString cfg.keepAliveInterval;
+        SHELLHUB_PREFERRED_HOSTNAME = cfg.preferredHostname;
+      };
 
       serviceConfig = {
         # The service starts sessions for different users.
@@ -85,7 +95,6 @@ in {
         ExecStart = "${cfg.package}/bin/agent";
       };
     };
-
-    environment.systemPackages = [ cfg.package ];
   };
 }
+

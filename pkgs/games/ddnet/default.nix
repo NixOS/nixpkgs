@@ -16,17 +16,27 @@
 , SDL2
 , sqlite
 , wavpack
+, ffmpeg
+, x264
+, vulkan-headers
+, vulkan-loader
+, glslang
+, spirv-tools
+, Carbon
+, Cocoa
+, OpenGL
+, Security
 }:
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "15.8.1";
+  version = "16.4";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ZxLaGAKBACR65CRCjt3NPSjMNm7GQkESxF6sLv3q4lQ=";
+    sha256 = "sha256-8t4UKytYmkELEMQ06jIj7C9cdOc5L22AnigwkGBzx20=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config ];
@@ -44,7 +54,13 @@ stdenv.mkDerivation rec {
     SDL2
     sqlite
     wavpack
-  ];
+    ffmpeg
+    x264
+    vulkan-loader
+    vulkan-headers
+    glslang
+    spirv-tools
+  ] ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa OpenGL Security ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
@@ -70,5 +86,7 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ sirseruju lom ];
     mainProgram = "DDNet";
+    # error: use of undeclared identifier 'pthread_attr_set_qos_class_np'
+    broken = stdenv.isDarwin;
   };
 }

@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     for binaryfile in $binaryFiles; do
       patchelf \
-        --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 \
-        --set-rpath ${stdenv.glibc}/lib \
+        --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 \
+        --set-rpath ${stdenv.cc.libc}/lib \
         $binaryfile
     done
   '';
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "hMETIS is a set of programs for partitioning hypergraphs";
     homepage = "http://glaros.dtc.umn.edu/gkhome/metis/hmetis/overview";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" ];
   };

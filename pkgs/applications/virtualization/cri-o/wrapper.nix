@@ -8,7 +8,6 @@
 , crun # Container runtime (default with cgroups v2 for podman/buildah)
 , conmon # Container runtime monitor
 , util-linux # nsenter
-, cni-plugins # not added to path
 , iptables
 }:
 

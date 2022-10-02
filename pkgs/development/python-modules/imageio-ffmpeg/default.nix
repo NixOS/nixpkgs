@@ -3,25 +3,25 @@
 , isPy3k
 , fetchPypi
 , substituteAll
-, ffmpeg
+, ffmpeg_4
 , python
 }:
 
 buildPythonPackage rec {
   pname = "imageio-ffmpeg";
-  version = "0.4.5";
+  version = "0.4.7";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f2ea4245a2adad25dedf98d343159579167e549ac8c4691cef5eff980e20c139";
+    sha256 = "sha256-egiDj5fzY+N8pBghuGT9P9yZqx/iQhBAx4619Wqecj4=";
   };
 
   patches = [
     (substituteAll {
       src = ./ffmpeg-path.patch;
-      ffmpeg = "${ffmpeg}/bin/ffmpeg";
+      ffmpeg = "${ffmpeg_4}/bin/ffmpeg";
     })
   ];
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
     ${python.interpreter} << EOF
     from imageio_ffmpeg import get_ffmpeg_version
-    assert get_ffmpeg_version() == '${ffmpeg.version}'
+    assert get_ffmpeg_version() == '${ffmpeg_4.version}'
     EOF
 
     runHook postCheck

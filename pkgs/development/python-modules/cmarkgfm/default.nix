@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "cmarkgfm";
-  version = "0.7.0";
+  version = "0.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-plwVL52ov4JxTxnCh/4JaO6Of4mejZRQPXPQ/lcinBk=";
+    sha256 = "sha256-/oWbDpjSIrS0WAIgB9qsJ1fpcPBnHUXlXQGTHBtLs8s=";
   };
 
   propagatedNativeBuildInputs = [

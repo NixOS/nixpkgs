@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Enterprise Implementation of Quorum's transaction manager";
     homepage = "https://github.com/jpmorganchase/tessera";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     maintainers = with maintainers; [ mmahut ];
   };

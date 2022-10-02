@@ -16,19 +16,19 @@ let
     options = {
       desktopID = mkOption {
         type = types.str;
-        description = "Desktop ID of the application.";
+        description = lib.mdDoc "Desktop ID of the application.";
       };
 
       isAllowed = mkOption {
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether the application will be allowed access to location information.
         '';
       };
 
       isSystem = mkOption {
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether the application is a system component or not.
         '';
       };
@@ -36,7 +36,7 @@ let
       users = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           List of UIDs of all users for which this application is allowed location
           info access, Defaults to an empty string to allow it for all users.
         '';
@@ -67,7 +67,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable GeoClue 2 daemon, a DBus service
           that provides location information for accessing.
         '';
@@ -76,7 +76,7 @@ in
       enableDemoAgent = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to use the GeoClue demo agent. This should be
           overridden by desktop environments that provide their own
           agent.
@@ -86,7 +86,7 @@ in
       enableNmea = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to fetch location from NMEA sources on local network.
         '';
       };
@@ -94,7 +94,7 @@ in
       enable3G = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable 3G source.
         '';
       };
@@ -102,7 +102,7 @@ in
       enableCDMA = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable CDMA source.
         '';
       };
@@ -110,7 +110,7 @@ in
       enableModemGPS = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable Modem-GPS source.
         '';
       };
@@ -118,7 +118,7 @@ in
       enableWifi = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable WiFi source.
         '';
       };
@@ -127,7 +127,7 @@ in
         type = types.str;
         default = "https://location.services.mozilla.com/v1/geolocate?key=geoclue";
         example = "https://www.googleapis.com/geolocation/v1/geolocate?key=YOUR_KEY";
-        description = ''
+        description = lib.mdDoc ''
           The url to the wifi GeoLocation Service.
         '';
       };
@@ -135,7 +135,7 @@ in
       submitData = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to submit data to a GeoLocation Service.
         '';
       };
@@ -143,7 +143,7 @@ in
       submissionUrl = mkOption {
         type = types.str;
         default = "https://location.services.mozilla.com/v1/submit?key=geoclue";
-        description = ''
+        description = lib.mdDoc ''
           The url to submit data to a GeoLocation Service.
         '';
       };
@@ -151,7 +151,7 @@ in
       submissionNick = mkOption {
         type = types.str;
         default = "geoclue";
-        description = ''
+        description = lib.mdDoc ''
           A nickname to submit network data with.
           Must be 2-32 characters long.
         '';
@@ -167,7 +167,7 @@ in
             users = [ "300" ];
           };
         '';
-        description = ''
+        description = lib.mdDoc ''
           Specify extra settings per application.
         '';
       };
@@ -216,6 +216,7 @@ in
         # we can't be part of a system service, and the agent should
         # be okay with the main service coming and going
         wantedBy = [ "default.target" ];
+        after = lib.optionals cfg.enableWifi [ "network-online.target" ];
         unitConfig.ConditionUser = "!@system";
         serviceConfig = {
           Type = "exec";

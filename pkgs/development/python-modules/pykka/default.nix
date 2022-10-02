@@ -9,15 +9,15 @@
 
 buildPythonPackage rec {
   pname = "pykka";
-  version = "3.0.2";
+  version = "3.1.1";
   format = "pyproject";
   disabled = pythonOlder "3.6.1";
 
   src = fetchFromGitHub {
     owner = "jodal";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1cy4pr05xlsny9g573q7njsv7jaaysi1qzafm6f82y57jqnmziks";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-bvRjFpXufGygTgPfEOJOCXFbMy3dNlrTHlGoaIG/Fbs=";
   };
 
   nativeBuildInputs = [

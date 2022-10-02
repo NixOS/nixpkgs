@@ -35,6 +35,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # Fixes for Python 3.10 can't be applied easily, https://github.com/aio-libs/aiosmtpd/pull/294
+  doCheck = pythonOlder "3.10";
+
   disabledTests = [
     # Requires git
     "test_ge_master"

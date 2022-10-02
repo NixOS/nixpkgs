@@ -3,8 +3,8 @@
 
   extra-cmake-modules, kdoctools,
 
-  coreutils, dbus, gnugrep, gnused, isocodes, libdbusmenu, libSM, libXcursor,
-  libXtst, libXft, pam, wayland, xmessage, xprop, xrdb, xsetroot,
+  coreutils, gnugrep, gnused, isocodes, libdbusmenu, libSM, libXcursor,
+  libXtst, libXft, pam, wayland, xmessage, xsetroot,
 
   baloo, breeze-qt5, kactivities, kactivities-stats, kcmutils, kconfig, kcrash,
   kdbusaddons, kdeclarative, kdelibs4support, kdesu, kglobalaccel, kidletime,
@@ -23,7 +23,7 @@
 let inherit (lib) getBin getLib; in
 
 mkDerivation {
-  name = "plasma-workspace";
+  pname = "plasma-workspace";
   passthru.providedSessions = [ "plasma" "plasmawayland" ];
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
@@ -57,15 +57,12 @@ mkDerivation {
   # QT_INSTALL_BINS refers to qtbase, and qdbus is in qttools
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace 'query_qmake(QtBinariesDir QT_INSTALL_BINS)' 'set(QtBinariesDir "${lib.getBin qttools}/bin")'
+      --replace 'ecm_query_qt(QtBinariesDir QT_INSTALL_BINS)' 'set(QtBinariesDir "${lib.getBin qttools}/bin")'
   '';
 
   NIX_CFLAGS_COMPILE = [
     ''-DNIXPKGS_XMESSAGE="${getBin xmessage}/bin/xmessage"''
-    ''-DNIXPKGS_XRDB="${getBin xrdb}/bin/xrdb"''
     ''-DNIXPKGS_XSETROOT="${getBin xsetroot}/bin/xsetroot"''
-    ''-DNIXPKGS_XPROP="${getBin xprop}/bin/xprop"''
-    ''-DNIXPKGS_DBUS_UPDATE_ACTIVATION_ENVIRONMENT="${getBin dbus}/bin/dbus-update-activation-environment"''
     ''-DNIXPKGS_START_KDEINIT_WRAPPER="${getLib kinit}/libexec/kf5/start_kdeinit_wrapper"''
     ''-DNIXPKGS_KDEINIT5_SHUTDOWN="${getBin kinit}/bin/kdeinit5_shutdown"''
   ];

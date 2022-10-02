@@ -2,18 +2,24 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "wakeonlan";
-  version = "0.41";
+  version = "0.42";
 
   src = fetchFromGitHub {
     owner = "jpoliv";
     repo = pname;
-    rev = "wakeonlan-${version}";
-    sha256 = "0m48b39lz0yc5ckx2jx8y2p4c8npjngxl9wy86k43xgsd8mq1g3c";
+    rev = "v${version}";
+    sha256 = "sha256-zCOpp5iNrWwh2knBGWhiEyG9IPAnFRwH5jJLEVLBISM=";
   };
 
   outputs = [ "out" ];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  checkInputs = [ perlPackages.TestPerlCritic perlPackages.TestPod perlPackages.TestPodCoverage ];
+  # Linting and formatting checks are of no interest for us.
+  preCheck = ''
+    rm -f t/93_pod_spell.t
+  '';
 
   installPhase = ''
     install -Dt $out/bin wakeonlan

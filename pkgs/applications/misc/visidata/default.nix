@@ -14,7 +14,7 @@
 , pyshp
 , fonttools
 , pyyaml
-, pdfminer
+, pdfminer-six
 , vobject
 , tabulate
 , wcwidth
@@ -22,16 +22,17 @@
 , setuptools
 , git
 , withPcap ? true, dpkt, dnslib
+, withXclip ? stdenv.isLinux, xclip
 }:
 buildPythonApplication rec {
   pname = "visidata";
-  version = "2.8";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     rev = "v${version}";
-    sha256 = "1lcx444yrzmcvix977cgaf18lfrf9yrn2r14ln7knx8ghc15vkqb";
+    hash = "sha256-PKj+imTSAGMpF1tkN0WmE3l/4FmWkm/ktIDzF2ku48s=";
   };
 
   propagatedBuildInputs = [
@@ -55,7 +56,7 @@ buildPythonApplication rec {
     pyyaml
     #namestand
     #datapackage
-    pdfminer
+    pdfminer-six
     #tabula
     vobject
     tabulate
@@ -63,7 +64,8 @@ buildPythonApplication rec {
     zstandard
     odfpy
     setuptools
-  ] ++ lib.optionals withPcap [ dpkt dnslib ];
+  ] ++ lib.optionals withPcap [ dpkt dnslib ]
+  ++ lib.optional withXclip xclip;
 
   checkInputs = [
     git

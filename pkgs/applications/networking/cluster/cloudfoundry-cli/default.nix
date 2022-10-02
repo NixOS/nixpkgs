@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "cloudfoundry-cli";
-  version = "8.0.0";
+  version = "8.5.0";
 
   src = fetchFromGitHub {
     owner = "cloudfoundry";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "00cwnfylra0msbb423ad21if98s6smzccsyidqsl4r2mrlkhahwm";
+    sha256 = "sha256-+fQnit2J3WQpir4HldkWKCex6byfp2IqEWCi4oJ5HgU=";
   };
-  vendorSha256 = "0fcgyyd11xfhn8i11bqnaw3h51bj1y8s37b4d8wzv31dr8zswqsc";
+  vendorSha256 = "sha256-Wz5OoCrIY/xEXk+eqXtqtgVGD8oGUPmhzT5mOcZRD8w=";
 
   subPackages = [ "." ];
 
@@ -39,6 +39,7 @@ buildGoModule rec {
     description = "The official command line client for Cloud Foundry";
     homepage = "https://github.com/cloudfoundry/cli";
     maintainers = with maintainers; [ ris ];
+    mainProgram = "cf";
     license = licenses.asl20;
   };
 }

@@ -20,6 +20,8 @@ in stdenv.mkDerivation {
     mkdir -p $out
     cp ${configGuess} $out/config.guess
     cp ${configSub} $out/config.sub
+
+    chmod +x $out/config.*
   '';
 
   meta = with lib; {

@@ -6,6 +6,7 @@ makeInstalledTest {
 
   testConfig = {
     xdg.portal.enable = true;
+    xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
     services.flatpak.enable = true;
     environment.systemPackages = with pkgs; [ gnupg ostree python3 ];
     virtualisation.memorySize = 2047;

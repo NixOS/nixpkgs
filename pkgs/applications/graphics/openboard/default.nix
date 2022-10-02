@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, copyDesktopItems, makeDesktopItem, qmake
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch, copyDesktopItems, makeDesktopItem, qmake
 , qtbase, qtxmlpatterns, qttools, qtwebkit, libGL, fontconfig, openssl, poppler
 , ffmpeg, libva, alsa-lib, SDL, x264, libvpx, libvorbis, libtheora, libogg
 , libopus, lame, fdk_aac, libass, quazip, libXext, libXfixes }:
@@ -31,6 +31,14 @@ in mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-OlGXGIMghil/GG6eso20+CWo/hCjarXGs6edXX9pc/M=";
   };
+
+  patches = [
+    # Fix build with poppler >= 22.01
+    (fetchpatch {
+      url = "https://github.com/OpenBoard-org/OpenBoard/commit/3a9b043e0fafec08e4123f362dcb7750f7476b59.patch";
+      sha256 = "sha256-yD163FK79HBU1W7m6sLxhfsRo4r/38zYTFWgeyqwU1o=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace OpenBoard.pro \
@@ -79,8 +87,8 @@ in mkDerivation rec {
       icon = "OpenBoard";
       comment = "OpenBoard, an interactive white board application";
       desktopName = "OpenBoard";
-      mimeType = "application/ubz";
-      categories = "Education;";
+      mimeTypes = [ "application/ubz" ];
+      categories = [ "Education" ];
       startupNotify = true;
     })
   ];

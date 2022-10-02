@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kbd";
-  version = "2.4.0";
+  version = "2.5.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kbd/${pname}-${version}.tar.xz";
-    sha256 = "17wvrqz2kk0w87idinhyvd31ih1dp7ldfl2yfx7ailygb0279w2m";
+    sha256 = "sha256-zN9FI4emOAlz0pJzY+nLuTn6IGiRWm+Tf/nSRSICRoM=";
   };
 
   configureFlags = [
@@ -63,11 +63,13 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ check pam ];
+  NIX_LDFLAGS = lib.optional stdenv.hostPlatform.isStatic "-laudit";
   nativeBuildInputs = [ autoreconfHook pkg-config flex ];
 
   passthru.tests = {
     inherit (nixosTests) keymap kbd-setfont-decompress kbd-update-search-paths-patch;
   };
+  passthru.gzip = gzip;
 
   meta = with lib; {
     homepage = "https://kbd-project.org/";

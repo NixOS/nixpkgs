@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xh";
-  version = "0.14.1";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "ducaale";
     repo = "xh";
     rev = "v${version}";
-    sha256 = "sha256-zq1jpkMcq7WHc6weht2iEFMlxIJSoDreWqJCi8F+Lxs=";
+    sha256 = "sha256-y+Bixr+WRoTGjenkHSLbVmb9IHr9nicrAWyvkg5ey8E=";
   };
 
-  cargoSha256 = "sha256-NcznWWMcgK4RixqvumPEQUlvIFRyYkbeTTGvjQ91ggE=";
+  cargoSha256 = "sha256-wyK10D9MMyNF+JSacWW6GQcaMYMbDf1PHhuZ5LwZo+I=";
 
   buildFeatures = lib.optional withNativeTls "native-tls";
 
@@ -37,6 +37,11 @@ rustPlatform.buildRustPackage rec {
       --bash completions/xh.bash \
       --fish completions/xh.fish \
       --zsh completions/_xh
+
+    installManPage doc/xh.1
+    ln -s $out/share/man/man1/xh.1 $out/share/man/man1/xhs.1
+
+    install -m444 -Dt $out/share/doc/xh README.md CHANGELOG.md
 
     # https://github.com/ducaale/xh#xh-and-xhs
     ln -s $out/bin/xh $out/bin/xhs

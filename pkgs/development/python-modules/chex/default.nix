@@ -12,16 +12,14 @@
 
 buildPythonPackage rec {
   pname = "chex";
-  # As of 2021-12-29, the latest official version has broken tests with jax 0.2.26:
-  # `AttributeError: module 'jax.interpreters.xla' has no attribute 'xb'`
-  version = "unstable-2021-12-16";
+  version = "0.1.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = pname;
-    rev = "5adc10e0b4218f8ec775567fca38b68bbad42a3a";
-    sha256 = "00xib6zv9pwid2q7wcr109qj3fa3g3b852skz8444kw7r0qxy7z3";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FiZElESyOVu1VJxUDNiN6HVADiaubDrGdQHYp2CN8f4=";
   };
 
   propagatedBuildInputs = [

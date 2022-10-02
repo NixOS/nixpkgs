@@ -1,14 +1,14 @@
-{ buildGo117Module, fetchFromGitHub, lib, nixosTests }:
+{ buildGoModule, fetchFromGitHub, lib, nixosTests }:
 
-buildGo117Module rec {
+buildGoModule rec {
   pname = "ergo";
-  version = "2.9.1";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "ergochat";
     repo = "ergo";
     rev = "v${version}";
-    sha256 = "sha256-RxsmkTfHymferS/FRW0sLnstKfvGXkW6cEb/JbeS4lc=";
+    sha256 = "sha256-SydseZSEuFhbaU4OMnT8zFLbRfmeKwXsZZeDh8mbZco=";
   };
 
   vendorSha256 = null;

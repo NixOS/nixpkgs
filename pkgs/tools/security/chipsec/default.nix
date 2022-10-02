@@ -10,14 +10,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "chipsec";
-  version = "1.6.1";
+  version = "1.8.1";
+
   disabled = !stdenv.isLinux;
 
   src = fetchFromGitHub {
     owner = "chipsec";
     repo = "chipsec";
     rev = version;
-    sha256 = "01sp24z63r3nqxx57zc4873b8i5dqipy7yrxzrwjns531vznhiy2";
+    hash = "sha256-bK8wlwhP0pi8rOs8ysbSZ+0aZOaX4mckfH/p4OLGnes=";
   };
 
   patches = lib.optionals withDriver [ ./ko-path.diff ./compile-ko.diff ];
@@ -29,9 +30,9 @@ python3.pkgs.buildPythonApplication rec {
     nasm
   ];
 
-  checkInputs = [
-    python3.pkgs.distro
-    python3.pkgs.pytestCheckHook
+  checkInputs = with python3.pkgs; [
+    distro
+    pytestCheckHook
   ];
 
   preBuild = lib.optionalString withDriver ''
@@ -45,10 +46,15 @@ python3.pkgs.buildPythonApplication rec {
       $out/${python3.pkgs.python.sitePackages}/drivers/linux/chipsec.ko
   '';
 
-  setupPyBuildFlags = [ "--build-lib=$CHIPSEC_BUILD_LIB" ]
-                   ++ lib.optional (!withDriver) "--skip-driver";
+  setupPyBuildFlags = [
+    "--build-lib=$CHIPSEC_BUILD_LIB"
+  ] ++ lib.optional (!withDriver) [
+    "--skip-driver"
+  ];
 
-  pythonImportsCheck = [ "chipsec" ];
+  pythonImportsCheck = [
+    "chipsec"
+  ];
 
   meta = with lib; {
     description = "Platform Security Assessment Framework";
@@ -62,6 +68,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl2Only;
     homepage = "https://github.com/chipsec/chipsec";
     maintainers = with maintainers; [ johnazoidberg ];
-    platforms = if withDriver then [ "x86_64-linux" ] else platforms.all;
+    platforms = [ "x86_64-linux" ] ++ lib.optional (!withDriver) "x86_64-darwin";
   };
 }

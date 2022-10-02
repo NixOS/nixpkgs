@@ -1,5 +1,22 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, libxml2, libcanberra-gtk3, libgtop
-, libXdamage, libXpresent, libstartup_notification, gnome, glib, gtk3, mate-settings-daemon, wrapGAppsHook, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, itstool
+, libxml2
+, libcanberra-gtk3
+, libgtop
+, libXdamage
+, libXpresent
+, libstartup_notification
+, gnome
+, glib
+, gtk3
+, mate-settings-daemon
+, wrapGAppsHook
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "marco";
@@ -33,7 +50,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "MATE default window manager";

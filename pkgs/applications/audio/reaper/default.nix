@@ -11,19 +11,21 @@
 , xdg-utils
 , which
 
-, jackSupport ? true, libjack2
-, pulseaudioSupport ? config.pulseaudio or true, libpulseaudio
+, jackSupport ? true
+, jackLibrary
+, pulseaudioSupport ? config.pulseaudio or true
+, libpulseaudio
 }:
 
 stdenv.mkDerivation rec {
   pname = "reaper";
-  version = "6.43";
+  version = "6.66";
 
   src = fetchurl {
     url = "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_${stdenv.hostPlatform.qemuArch}.tar.xz";
     hash = {
-      x86_64-linux = "sha256-VQ91px9YZWbrw31fFQxS+H/6fsjkLDrYU6FtI8eSq6E=";
-      aarch64-linux = "sha256-x6z5+H7ASWiuNL0maNGK05VmJptHdFGRiFf6DgwlZDw=";
+      x86_64-linux = "sha256-kMXHHd+uIc5tKlDlxKjphZsfNMYvvV/4Zx84eRwPGcs=";
+      aarch64-linux = "sha256-pB3qj9CJbI5iWBNKNX2niIfHrpSz9+qotX/zKGYDwYo=";
     }.${stdenv.hostPlatform.system};
   };
 
@@ -43,7 +45,7 @@ stdenv.mkDerivation rec {
   runtimeDependencies = [
     gtk3 # libSwell needs libgdk-3.so.0
   ]
-  ++ lib.optional jackSupport libjack2
+  ++ lib.optional jackSupport jackLibrary
   ++ lib.optional pulseaudioSupport libpulseaudio;
 
   dontBuild = true;
@@ -76,8 +78,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Digital audio workstation";
     homepage = "https://www.reaper.fm/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ jfrankenau ilian orivej uniquepointer ];
+    maintainers = with maintainers; [ jfrankenau ilian orivej uniquepointer viraptor ];
   };
 }

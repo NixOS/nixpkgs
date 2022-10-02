@@ -1,0 +1,36 @@
+diff --git a/src/Model.h b/src/Model.h
+index 5c21eae..74b8078 100644
+--- a/src/Model.h
++++ b/src/Model.h
+@@ -1,13 +1,8 @@
+ #ifndef MODEL_H
+ #define MODEL_H
+ 
+-#if defined(__APPLE__)
+ #include <onnxruntime/core/session/onnxruntime_cxx_api.h>
+ #include <onnxruntime/core/providers/cpu/cpu_provider_factory.h>
+-#else
+-#include <onnxruntime_cxx_api.h>
+-#include <cpu_provider_factory.h>
+-#endif
+ #ifdef _WIN32
+ #ifdef WITH_CUDA
+ #include <cuda_provider_factory.h>
+diff --git a/src/background-filter.cpp b/src/background-filter.cpp
+index 9fa5794..5d66aee 100644
+--- a/src/background-filter.cpp
++++ b/src/background-filter.cpp
+@@ -1,13 +1,8 @@
+ #include <obs-module.h>
+ #include <media-io/video-scaler.h>
+ 
+-#if defined(__APPLE__)
+ #include <onnxruntime/core/session/onnxruntime_cxx_api.h>
+ #include <onnxruntime/core/providers/cpu/cpu_provider_factory.h>
+-#else
+-#include <onnxruntime_cxx_api.h>
+-#include <cpu_provider_factory.h>
+-#endif
+ #ifdef _WIN32
+ #ifdef WITH_CUDA
+ #include <cuda_provider_factory.h>

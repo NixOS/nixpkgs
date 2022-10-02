@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "025fj34gq2kmkpwcswcyx7wdxb89vm944dh685zi4bxx0hz16vvk";
   };
 
+  postPatch = ''
+    # https://github.com/milkytracker/MilkyTracker/issues/262
+    substituteInPlace CMakeLists.txt \
+      --replace 'CMAKE_CXX_STANDARD 98' 'CMAKE_CXX_STANDARD 11'
+  '';
+
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
   buildInputs = [ SDL2 alsa-lib libjack2 lhasa perl rtmidi zlib zziplib ];

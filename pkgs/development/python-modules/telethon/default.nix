@@ -1,29 +1,50 @@
-{ lib, buildPythonPackage, fetchPypi, openssl, rsa, pyaes, pythonOlder }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, openssl
+, rsa
+, pyaes
+, pythonOlder
+, setuptools
+, pytest-asyncio
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "telethon";
-  version = "1.24.0";
+  version = "1.25.1";
+  format = "pyproject";
+  disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "Telethon";
-    sha256 = "818cb61281ed3f75ba4da9b68cb69486bed9474d2db4e0aa16e482053117452c";
+  src = fetchFromGitHub {
+    owner = "LonamiWebs";
+    repo = "Telethon";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-xmFoCUqYo600RH72KWG/aM7hKGiTYdCBsbPOFipxIzA=";
   };
 
   patchPhase = ''
     substituteInPlace telethon/crypto/libssl.py --replace \
-      "ctypes.util.find_library('ssl')" "'${openssl.out}/lib/libssl.so'"
+      "ctypes.util.find_library('ssl')" "'${lib.getLib openssl}/lib/libssl.so'"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     rsa
     pyaes
   ];
 
-  # No tests available
-  doCheck = false;
+  checkInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
-  disabled = pythonOlder "3.5";
+  pytestFlagsArray = [
+    "tests/telethon"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/LonamiWebs/Telethon";

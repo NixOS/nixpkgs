@@ -9,31 +9,27 @@
 
 let
   binaryName = "AetherP2P";
+  aether-app-git = fetchFromGitHub {
+    owner = "aethereans";
+    repo = "aether-app";
+    rev = "53b6c8b2a9253cbf056ea3ebb077e0e08cbc5b1d";
+    sha256 = "1kgkzh7ih2q9dsckdkinh5dbzvr7gdykf8yz6h8pyhvzyjhk1v0r";
+  };
 in
 stdenv.mkDerivation rec {
   pname = "aether";
   version = "2.0.0-dev.15";
 
-  srcs = [
-    (fetchurl {
-      url = "https://static.getaether.net/Releases/Aether-${version}/2011262249.19338c93/linux/Aether-${version}%2B2011262249.19338c93.tar.gz";
-      sha256 = "1hi8w83zal3ciyzg2m62shkbyh6hj7gwsidg3dn88mhfy68himf7";
-      # % in the url / canonical filename causes an error
-      name = "aether-tarball.tar.gz";
-    })
-    (fetchFromGitHub {
-      owner = "aethereans";
-      repo = "aether-app";
-      rev = "53b6c8b2a9253cbf056ea3ebb077e0e08cbc5b1d";
-      sha256 = "1kgkzh7ih2q9dsckdkinh5dbzvr7gdykf8yz6h8pyhvzyjhk1v0r";
-    })
-  ];
-
-  sourceRoot = "Aether-${version}+2011262249.19338c93";
+  src = fetchurl {
+    url = "https://static.getaether.net/Releases/Aether-${version}/2011262249.19338c93/linux/Aether-${version}%2B2011262249.19338c93.tar.gz";
+    sha256 = "1hi8w83zal3ciyzg2m62shkbyh6hj7gwsidg3dn88mhfy68himf7";
+    # % in the url / canonical filename causes an error
+    name = "aether-tarball.tar.gz";
+  };
 
   # there is no logo in the tarball so we grab it from github and convert it in the build phase
   buildPhase = ''
-    convert ../source/aether-core/aether/client/src/app/ext_dep/images/Linux-Windows-App-Icon.png -resize 512x512 aether.png
+    convert ${aether-app-git}/aether-core/aether/client/src/app/ext_dep/images/Linux-Windows-App-Icon.png -resize 512x512 aether.png
   '';
 
   dontWrapGApps = true;
@@ -67,8 +63,8 @@ stdenv.mkDerivation rec {
       icon = pname;
       desktopName = "Aether";
       genericName = meta.description;
-      categories = "Network;";
-      mimeType = "x-scheme-handler/aether";
+      categories = [ "Network" ];
+      mimeTypes = [ "x-scheme-handler/aether" ];
     })
   ];
 
@@ -107,6 +103,7 @@ stdenv.mkDerivation rec {
     description = "Peer-to-peer ephemeral public communities";
     homepage = "https://getaether.net/";
     downloadPage = "https://getaether.net/download/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ maxhille ];
     # other platforms could be supported by building from source

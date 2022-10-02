@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "12p69i3g1fwlw0bds9jqsdmzkid3k5a41w31d227i7vm12wcvjf6";
     rev = "6f2436185372b3f945a4989406c4b6a934fe8a95";
     repo = "rsstail";
-    owner = "flok99";
+    owner = "folkertvanheusden";
   };
 
   buildInputs = [ libmrss ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
@@ -31,6 +31,7 @@ stdenv.mkDerivation {
     '';
     homepage = "http://www.vanheusden.com/rsstail/";
     license = licenses.gpl2Plus;
+    maintainers = [ maintainers.Necior ];
     platforms = platforms.unix;
   };
 }

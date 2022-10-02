@@ -1,22 +1,24 @@
 { lib
 , fetchFromGitLab
+, fetchpatch
 , meson
 , gobject-introspection
 , pkg-config
 , ninja
 , python3
-, wrapGAppsHook
-, gtk3
+, wrapGAppsHook4
+, gtk4
 , gdk-pixbuf
 , webkitgtk
-, gtksourceview4
-, libhandy
+, gtksourceview5
 , glib-networking
+, libadwaita
+, appstream
+, blueprint-compiler
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "giara";
-  version = "0.3";
+  version = "1.0.1";
 
   format = "other";
 
@@ -25,24 +27,26 @@ python3.pkgs.buildPythonApplication rec {
     owner = "World";
     repo = pname;
     rev = version;
-    sha256 = "004qmkfrgd37axv0b6hfh6v7nx4pvy987k5yv4bmlmkj9sbqm6f9";
+    hash = "sha256-hKaniW+bbuKUrETMQGWwvC2kyudK9tCE/R69dOFzdQM=";
   };
 
   nativeBuildInputs = [
+    appstream
     meson
     gobject-introspection
     pkg-config
     ninja
-    wrapGAppsHook
+    wrapGAppsHook4
+    blueprint-compiler
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     gdk-pixbuf
     webkitgtk
-    gtksourceview4
-    libhandy
+    gtksourceview5
     glib-networking
+    libadwaita
   ];
 
   pythonPath = with python3.pkgs; [
@@ -54,6 +58,11 @@ python3.pkgs.buildPythonApplication rec {
     mistune
     beautifulsoup4
   ];
+
+  postPatch = ''
+    substituteInPlace meson_post_install.py \
+      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
+  '';
 
   # Fix setup-hooks https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;

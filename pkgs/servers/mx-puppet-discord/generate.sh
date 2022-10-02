@@ -1,21 +1,24 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p nodePackages.node2nix
 
-# No official release
-rev=c17384a6a12a42a528e0b1259f8073e8db89b8f4
-u=https://raw.githubusercontent.com/matrix-discord/mx-puppet-discord/$rev
-# Download package.json and package-lock.json
-curl -O $u/package.json
-curl -O $u/package-lock.json
+tag="v0.1.1"
+u="https://gitlab.com/mx-puppet/discord/mx-puppet-discord/-/raw/$tag"
+# Download package.json and patch in @discordjs/opus optional dependency
+curl $u/package.json |
+    sed 's|"typescript": *"\^\?3\.[^"]*"|"typescript": "^4.8.3"|' |  # TODO: remove when newer typescript version pinned
+    sed 's|\("dependencies": *{\)|\1\n"@discordjs/opus": "^0.8.0",|' >package.json
 
 node2nix \
-  --nodejs-12 \
+  --nodejs-14 \
   --node-env ../../development/node-packages/node-env.nix \
   --input package.json \
-  --lock package-lock.json \
+  --strip-optional-dependencies \
   --output node-packages.nix \
-  --composition node-composition.nix
+  --composition node-composition.nix \
+  --registry https://registry.npmjs.org \
+  --registry https://gitlab.com/api/v4/packages/npm \
+  --registry-scope '@mx-puppet'
 
 sed -i 's|<nixpkgs>|../../..|' node-composition.nix
 
-rm -f package.json package-lock.json
+rm -f package.json

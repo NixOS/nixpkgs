@@ -9,7 +9,7 @@ let
   common = { scalaVersion, sha256 }:
     stdenv.mkDerivation rec {
       pname = "ammonite";
-      version = "2.5.1";
+      version = "2.5.3";
 
       src = fetchurl {
         url =
@@ -76,17 +76,18 @@ let
         '';
         homepage = "https://github.com/com-lihaoyi/Ammonite";
         license = licenses.mit;
-        platforms = platforms.all;
         maintainers = [ maintainers.nequissimus ];
+        mainProgram = "amm";
+        platforms = platforms.all;
       };
     };
 in {
   ammonite_2_12 = common {
     scalaVersion = "2.12";
-    sha256 = "sha256-XV+SPZD7IirLJDqwn/eV8/Wf8m3dSSW0DF3IcBPcixA=";
+    sha256 = "sha256-Iov55ohFjcGhur5UEng7aAZJPVua1H/JaKKW6OKS6Zg=";
   };
   ammonite_2_13 = common {
     scalaVersion = "2.13";
-    sha256 = "sha256-rq8SLtj0rb35vcvPsCzhDGR93EjHoU6KAhEjs2WIA6o=";
+    sha256 = "sha256-dzUhKUQDHrYZ4WyCk4z4CTxb6vK05qfApR/WPOwhA5s=";
   };
 }

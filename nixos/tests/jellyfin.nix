@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     name = "jellyfin";
     meta.maintainers = with lib.maintainers; [ minijackson ];
 
-    machine =
+    nodes.machine =
       { ... }:
       {
         services.jellyfin.enable = true;
@@ -52,18 +52,18 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
             machine.succeed(api_post("/Startup/Complete"))
 
         with machine.nested("Can login"):
-            auth_result = machine.succeed(
+            auth_result_str = machine.succeed(
                 api_post(
                     "/Users/AuthenticateByName",
                     "${payloads.auth}",
                 )
             )
-            auth_result = json.loads(auth_result)
+            auth_result = json.loads(auth_result_str)
             auth_token = auth_result["AccessToken"]
             auth_header += f", Token={auth_token}"
 
-            sessions_result = machine.succeed(api_get("/Sessions"))
-            sessions_result = json.loads(sessions_result)
+            sessions_result_str = machine.succeed(api_get("/Sessions"))
+            sessions_result = json.loads(sessions_result_str)
 
             this_session = [
                 session for session in sessions_result if session["DeviceId"] == "1337"
@@ -71,8 +71,8 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
             if len(this_session) != 1:
                 raise Exception("Session not created")
 
-            me = machine.succeed(api_get("/Users/Me"))
-            me = json.loads(me)["Id"]
+            me_str = machine.succeed(api_get("/Users/Me"))
+            me = json.loads(me_str)["Id"]
 
         with machine.nested("Can add library"):
             tempdir = machine.succeed("mktemp -d -p /var/lib/jellyfin").strip()
@@ -100,8 +100,8 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
 
 
         def is_refreshed(_):
-            folders = machine.succeed(api_get("/Library/VirtualFolders"))
-            folders = json.loads(folders)
+            folders_str = machine.succeed(api_get("/Library/VirtualFolders"))
+            folders = json.loads(folders_str)
             print(folders)
             return all(folder["RefreshStatus"] == "Idle" for folder in folders)
 
@@ -116,10 +116,10 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
             def has_movie(_):
                 global items
 
-                items = machine.succeed(
+                items_str = machine.succeed(
                     api_get(f"/Users/{me}/Items?IncludeItemTypes=Movie&Recursive=true")
                 )
-                items = json.loads(items)["Items"]
+                items = json.loads(items_str)["Items"]
 
                 return len(items) == 1
 
@@ -127,8 +127,8 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
 
             video = items[0]["Id"]
 
-            item_info = machine.succeed(api_get(f"/Users/{me}/Items/{video}"))
-            item_info = json.loads(item_info)
+            item_info_str = machine.succeed(api_get(f"/Users/{me}/Items/{video}"))
+            item_info = json.loads(item_info_str)
 
             if item_info["Name"] != "Big Buck Bunny":
                 raise Exception("Jellyfin failed to properly identify file")

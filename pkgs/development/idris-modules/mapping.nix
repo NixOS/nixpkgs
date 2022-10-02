@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "mapping";
+  pname = "mapping";
   version = "2018-02-27";
 
   src = fetchFromGitHub {

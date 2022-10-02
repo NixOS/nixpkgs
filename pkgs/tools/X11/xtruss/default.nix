@@ -1,13 +1,15 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, cmake, halibut }:
 
 stdenv.mkDerivation rec {
   pname = "xtruss";
-  version = "20181001.82973f5";
+  version = "20211025.c25bf48";
 
   src = fetchurl {
     url = "https://www.chiark.greenend.org.uk/~sgtatham/xtruss/${pname}-${version}.tar.gz";
-    sha256 = "1mm8k92zc318jk71wlf2r4rb723nd9lalhjl0pf48raiajb5ifgd";
+    sha256 = "sha256-ikuKHtXEn2UVLE62l7qD9qc9ZUk6jiAqj5ru36vgdHk=";
   };
+
+  nativeBuildInputs = [ cmake halibut ];
 
   meta = with lib; {
     description = "easy-to-use X protocol tracing program";

@@ -1,7 +1,7 @@
 diff --git a/js/dbusServices/dbus-service.in b/js/dbusServices/dbus-service.in
 old mode 100644
 new mode 100755
-index 524166102..100b81a63
+index 524166102..6d0722a1c
 --- a/js/dbusServices/dbus-service.in
 +++ b/js/dbusServices/dbus-service.in
 @@ -1,3 +1,9 @@
@@ -24,18 +24,18 @@ index 3b0d09abe..4fd4bb66d 100644
 -Exec=@gjs@ @pkgdatadir@/@service@
 +Exec=@pkgdatadir@/@service@
 diff --git a/js/dbusServices/meson.build b/js/dbusServices/meson.build
-index c749f45dc..11bcb0c9e 100644
+index eb941ed90..552051e5a 100644
 --- a/js/dbusServices/meson.build
 +++ b/js/dbusServices/meson.build
 @@ -2,6 +2,7 @@ launcherconf = configuration_data()
  launcherconf.set('PACKAGE_NAME', meson.project_name())
  launcherconf.set('prefix', prefix)
  launcherconf.set('libdir', libdir)
-+launcherconf.set('gjs', gjs.path())
++launcherconf.set('gjs', gjs.full_path())
  
  dbus_services = {
    'org.gnome.Shell.Extensions': 'extensions',
-@@ -11,16 +12,17 @@ dbus_services = {
+@@ -18,16 +19,17 @@ endif
  config_dir = '@0@/..'.format(meson.current_build_dir())
  
  foreach service, dir : dbus_services
@@ -51,7 +51,7 @@ index c749f45dc..11bcb0c9e 100644
  
    serviceconf = configuration_data()
    serviceconf.set('service', service)
--  serviceconf.set('gjs', gjs.path())
+-  serviceconf.set('gjs', gjs.full_path())
    serviceconf.set('pkgdatadir', pkgdatadir)
  
    configure_file(

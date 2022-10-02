@@ -1,32 +1,28 @@
 { lib
-, fetchFromGitHub
 , buildPythonPackage
 , cryptography
-, requests
+, fetchFromGitHub
 , pykerberos
 , pyspnego
-, pytestCheckHook
 , pytest-mock
-, mock
+, pytestCheckHook
+, pythonOlder
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "requests-kerberos";
   version = "0.14.0";
+  format = "setuptools";
 
-  # tests are not present in the PyPI version
+  disabled = pythonOlder "3.6";
+
   src = fetchFromGitHub {
     owner = "requests";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0s30pcnlir3j2jmf7yh065f294cf3x0x5i3ldskn8mm0a3657mv3";
+    hash = "sha256-Y9dTzFCgVmSnbnTE0kEfjpEkXDEA+uOqFHLkSC27YGg=";
   };
-
-  # avoid needing to package krb5
-  postPatch = ''
-    substituteInPlace setup.py \
-    --replace "pyspnego[kerberos]" "pyspnego"
-  '';
 
   propagatedBuildInputs = [
     cryptography
@@ -36,12 +32,19 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    mock
     pytestCheckHook
     pytest-mock
   ];
 
-  pythonImportsCheck = [ "requests_kerberos" ];
+  # avoid needing to package krb5
+  postPatch = ''
+    substituteInPlace setup.py \
+    --replace "pyspnego[kerberos]" "pyspnego"
+  '';
+
+  pythonImportsCheck = [
+    "requests_kerberos"
+  ];
 
   meta = with lib; {
     description = "An authentication handler for using Kerberos with Python Requests";

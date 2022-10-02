@@ -11,7 +11,7 @@ with lib;
     hardware.cpu.intel.updateMicrocode = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Update the CPU microcode for Intel processors.
       '';
     };
