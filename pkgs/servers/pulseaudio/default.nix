@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, pkg-config
 , libsndfile, libtool, makeWrapper, perlPackages
-, xorg, libcap, alsa-lib, glib, dconf
+, xlibsWrapper, xorg, libcap, alsa-lib, glib, dconf
 , avahi, libjack2, libasyncns, lirc, dbus
 , sbc, bluez5, udev, openssl, fftwFloat
 , soxr, speexdsp, systemd, webrtc-audio-processing
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!libOnly) (
       [ libasyncns webrtc-audio-processing ]
       ++ lib.optional jackaudioSupport libjack2
-      ++ lib.optionals x11Support [ xorg.xlibsWrapper xorg.libXtst xorg.libXi ]
+      ++ lib.optionals x11Support [ xlibsWrapper xorg.libXtst xorg.libXi ]
       ++ lib.optional useSystemd systemd
       ++ lib.optionals stdenv.isLinux [ alsa-lib udev ]
       ++ lib.optional airtunesSupport openssl

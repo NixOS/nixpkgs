@@ -1,35 +1,27 @@
-{ lib, stdenv, fetchurl, fetchpatch, meson, ninja, pkg-config, wayland-scanner, python3
-, wayland, libGL, mesa, libxkbcommon, cairo, libxcb
-, libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput, libevdev
-, colord, lcms2, pipewire ? null
-, pango ? null, libunwind ? null, freerdp ? null, vaapi ? null, libva ? null
-, libwebp ? null, xwayland ? null, wayland-protocols
+{ lib, stdenv, fetchurl
+, meson, ninja, pkg-config, python3, wayland-scanner
+, cairo, colord, dbus, lcms2, libGL, libXcursor, libdrm, libevdev, libinput
+, libjpeg, libseat, libxcb, libxkbcommon, mesa, mtdev, pam, udev, wayland
+, wayland-protocols, xlibsWrapper
+, pipewire ? null, pango ? null, libunwind ? null, freerdp ? null, vaapi ? null
+, libva ? null, libwebp ? null, xwayland ? null
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
 }:
 
 stdenv.mkDerivation rec {
   pname = "weston";
-  version = "10.0.1";
+  version = "11.0.0";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/weston/-/releases/${version}/downloads/weston-${version}.tar.xz";
-    sha256 = "05a10gfbadyxkwgsncc5vc343f493csgh10vk0878nl6d98557la";
+    sha256 = "078y14ff9wmmbzq314f7bq1bxx0rc12xy4j362n60iamr56qs4x6";
   };
 
-  patches = [
-    # Fix race condition in build system
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/wayland/weston/-/commit/0d3e438d080433ed5d203c876e7de6c7f8a14f98.patch";
-      sha256 = "sha256-d9NG1vUIuL4jpXqCo0myz/97JuFYesH+8kJnegQXeMU=";
-    })
-  ];
-
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner python3 ];
+  nativeBuildInputs = [ meson ninja pkg-config python3 wayland-scanner ];
   buildInputs = [
-    wayland libGL mesa libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
-    mtdev libjpeg pam dbus libinput libevdev pango libunwind freerdp vaapi libva
-    libwebp wayland-protocols
-    colord lcms2 pipewire
+    cairo colord dbus freerdp lcms2 libGL libXcursor libdrm libevdev libinput
+    libjpeg libseat libunwind libva libwebp libxcb libxkbcommon mesa mtdev pam
+    pango pipewire udev vaapi wayland wayland-protocols xlibsWrapper
   ];
 
   mesonFlags= [
@@ -44,7 +36,6 @@ stdenv.mkDerivation rec {
     "-Dtest-junit-xml=false"
     # TODO:
     #"--enable-clients"
-    #"--disable-setuid-install" # prevent install target to chown root weston-launch, which fails
   ] ++ lib.optionals (xwayland != null) [
     "-Dxwayland-path=${xwayland.out}/bin/Xwayland"
   ];

@@ -1747,6 +1747,8 @@ with pkgs;
     inherit (qt5) wrapQtAppsHook;
   };
 
+  felix-fm = callPackage ../applications/file-managers/felix-fm { };
+
   joshuto = callPackage ../applications/file-managers/joshuto {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration Foundation;
   };
@@ -3338,6 +3340,8 @@ with pkgs;
 
   clash = callPackage ../tools/networking/clash { };
 
+  clash-geoip = callPackage ../data/misc/clash-geoip { };
+
   clasp = callPackage ../tools/misc/clasp { };
 
   clevercsv = with python3Packages; toPythonApplication clevercsv;
@@ -3910,6 +3914,8 @@ with pkgs;
   };
 
   faudio = callPackage ../development/libraries/faudio { };
+
+  fblog = callPackage ../development/tools/fblog { };
 
   fd = callPackage ../tools/misc/fd { };
 
@@ -8582,6 +8588,8 @@ with pkgs;
 
   latexrun = callPackage ../tools/typesetting/tex/latexrun { };
 
+  lazycli = callPackage ../tools/misc/lazycli { };
+
   lcdf-typetools = callPackage ../tools/misc/lcdf-typetools { };
 
   ldapmonitor = callPackage ../tools/security/ldapmonitor { };
@@ -9508,7 +9516,7 @@ with pkgs;
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
 
-  ntfy = callPackage ../tools/misc/ntfy {};
+  ntfy = callPackage ../tools/misc/ntfy { python = python39; };
 
   ntfy-sh = callPackage ../tools/misc/ntfy-sh { };
 
@@ -13372,7 +13380,7 @@ with pkgs;
 
   devpi-client = python3Packages.callPackage ../development/tools/devpi-client {};
 
-  devpi-server = callPackage ../development/tools/devpi-server {};
+  devpi-server = python3Packages.callPackage ../development/tools/devpi-server {};
 
   dictu = callPackage ../development/compilers/dictu { };
 
@@ -23105,10 +23113,7 @@ with pkgs;
   grafana = callPackage ../servers/monitoring/grafana { };
   grafanaPlugins = callPackages ../servers/monitoring/grafana/plugins { };
 
-  grafana-agent = callPackage ../servers/monitoring/grafana-agent {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
-  };
+  grafana-agent = callPackage ../servers/monitoring/grafana-agent { };
 
   grafana-loki = callPackage ../servers/monitoring/loki { };
 
@@ -24111,7 +24116,7 @@ with pkgs;
     libdrm = if stdenv.isLinux then libdrm else null;
     abiCompat = config.xorg.abiCompat # `config` because we have no `xorg.override`
       or (if stdenv.isDarwin then "1.18" else null); # 1.19 needs fixing on Darwin
-  }) // { inherit xlibsWrapper; } );
+  }));
 
   xorg-autoconf = callPackage ../development/tools/misc/xorg-autoconf { };
 

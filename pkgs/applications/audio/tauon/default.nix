@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
     description = "The Linux desktop music player from the future";
     homepage = "https://tauonmusicbox.rocks/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ jansol ];
     platforms = platforms.linux;
   };
 }
