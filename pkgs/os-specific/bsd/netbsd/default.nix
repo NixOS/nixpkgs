@@ -907,7 +907,7 @@ in lib.makeScopeWithSplicing
       byacc genassym gencat lorder tsort statHook rsync rpcgen
     ];
     buildInputs = with self; [ headers csu ];
-    NIX_CFLAGS_COMPILE = "-B${self.csu}/lib";
+    NIX_CFLAGS_COMPILE = "-B${self.csu}/lib -fcommon";
     meta.platforms = lib.platforms.netbsd;
     SHLIBINSTALLDIR = "$(out)/lib";
     MKPICINSTALL = "yes";
