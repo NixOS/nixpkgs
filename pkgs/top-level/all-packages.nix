@@ -19466,9 +19466,7 @@ with pkgs;
 
   libccd = callPackage ../development/libraries/libccd { };
 
-  libcec = callPackage ../development/libraries/libcec {
-    libraspberrypi = null;
-  };
+  libcec = callPackage ../development/libraries/libcec { };
 
   libcec_platform = callPackage ../development/libraries/libcec/platform.nix { };
 
