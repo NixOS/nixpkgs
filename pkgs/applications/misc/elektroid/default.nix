@@ -30,16 +30,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-T7jxtmxlFe5WPC2KYDN6jDHwuVkmA6Y/h9qizZFH5rk=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     wrapGAppsHook
     autoreconfHook
-    gtk3
     pkg-config
-    gettext
-    json-glib
     automake
     autoconf
     libtool
+  ];
+
+  buildInputs = [
+    gtk3
+    gettext
+    json-glib
     alsa-lib
     libpulseaudio
     libsndfile
