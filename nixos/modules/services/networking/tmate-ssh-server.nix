@@ -42,6 +42,14 @@ in
       default = 2222;
     };
 
+    openFirewall = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to automatically open the specified ports in the firewall.
+      '';
+    };
+
     advertisedPort = mkOption {
       type = types.port;
       description = mdDoc "External port advertised to clients";
@@ -55,7 +63,8 @@ in
   };
 
   config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = [ cfg.port ];
+
+    networking.firewall.allowedTCPPorts = if cfg.openFirewall then [ cfg.port ] else [ ];
 
     services.tmate-ssh-server = {
       advertisedPort = mkDefault cfg.port;
@@ -107,4 +116,9 @@ in
       '';
     };
   };
+
+  meta = {
+    maintainers = with maintainers; [ jlesquembre ];
+  };
+
 }
