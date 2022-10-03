@@ -94,6 +94,7 @@
 , withHwdb ? true
 , withImportd ? !stdenv.hostPlatform.isMusl
 , withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
+    && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
 , withLocaled ? true
 , withLogind ? true
 , withMachined ? true
