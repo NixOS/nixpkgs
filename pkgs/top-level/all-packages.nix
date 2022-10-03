@@ -29026,6 +29026,8 @@ with pkgs;
 
   inkcut = libsForQt5.callPackage ../applications/misc/inkcut { };
 
+  inklingreader = callPackage ../tools/misc/inklingreader { };
+
   inkscape = callPackage ../applications/graphics/inkscape {
     lcms = lcms2;
   };
