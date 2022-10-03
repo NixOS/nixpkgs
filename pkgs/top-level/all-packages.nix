@@ -24605,8 +24605,6 @@ with pkgs;
 
   iproute2 = callPackage ../os-specific/linux/iproute { };
 
-  iproute_mptcp = callPackage ../os-specific/linux/iproute/mptcp.nix { };
-
   iputils = hiPrio (callPackage ../os-specific/linux/iputils { });
   # hiPrio for collisions with inetutils (ping)
 
@@ -24762,10 +24760,6 @@ with pkgs;
 
   linuxPackages_testing_bcachefs = linuxKernel.packages.linux_testing_bcachefs;
   linux_testing_bcachefs = linuxKernel.kernels.linux_testing_bcachefs;
-
-  # kernel with mtcp support
-  linuxPackages_mptcp = linuxKernel.packageAliases.linux_mptcp;
-  linux_mptcp = linuxPackages_mptcp.kernel;
 
   # Realtime kernel
   linuxPackages-rt = linuxKernel.packageAliases.linux_rt_default;
@@ -24954,8 +24948,6 @@ with pkgs;
   nettools = if stdenv.isLinux
     then callPackage ../os-specific/linux/net-tools { }
     else unixtools.nettools;
-
-  nettools_mptcp = callPackage ../os-specific/linux/net-tools/mptcp.nix { };
 
   nftables = callPackage ../os-specific/linux/nftables { };
 
