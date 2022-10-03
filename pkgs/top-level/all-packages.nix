@@ -4879,8 +4879,6 @@ with pkgs;
 
   appleseed = callPackage ../tools/graphics/appleseed { };
 
-  apple-music-electron = callPackage ../applications/audio/apple-music-electron { };
-
   apc-temp-fetch = with python3.pkgs; callPackage ../tools/networking/apc-temp-fetch { };
 
   arping = callPackage ../tools/networking/arping { };
