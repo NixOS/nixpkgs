@@ -80,6 +80,9 @@ pythonRelaxDepsHook() {
         @pythonInterpreter@ -m wheel pack "$unpack_dir/$pkg_name"
     done
 
+    # Remove the folder since it will otherwise be in the dist output.
+    rm -rf "$unpack_dir"
+
     popd
 }
 
