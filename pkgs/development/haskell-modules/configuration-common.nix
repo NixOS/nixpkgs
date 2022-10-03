@@ -2541,6 +2541,13 @@ self: super: {
     doCheck = false;
   }) super.crypt-sha512;
 
+  Unixutils = overrideCabal (drv: {
+    librarySystemDepends = [
+      pkgs.libxcrypt
+    ];
+  }) super.Unixutils;
+
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super // (let
   # We need to build purescript with these dependencies and thus also its reverse
   # dependencies to avoid version mismatches in their dependency closure.
