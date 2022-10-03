@@ -31,7 +31,7 @@ sub github_team_members {
             push @ret, $_->{'login'};
         }
     } else {
-        print {*STDERR} "!! Requesting members of GitHub Team '$team_name' failed: $response->status_line";
+        print {*STDERR} "!! Requesting members of GitHub Team '$team_name' failed: " . $response->status_line;
     }
 
     return \@ret;
