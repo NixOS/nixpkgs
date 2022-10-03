@@ -33,6 +33,12 @@ stdenv.mkDerivation rec {
     rm -rf $out/lib/uhdm
   '';
 
+  prePatch = ''
+    substituteInPlace CMakeLists.txt --replace \
+    'capnp compile' \
+    'capnp compile --src-prefix=''${GENDIR}/..'
+  '';
+
   meta = {
     description = "Universal Hardware Data Model";
     homepage = "https://github.com/chipsalliance/UHDM";
