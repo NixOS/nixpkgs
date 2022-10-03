@@ -7838,16 +7838,9 @@ with pkgs;
 
   ipfetch = callPackage ../tools/networking/ipfetch { };
 
-  ipfs = callPackage ../applications/networking/ipfs {
-    openssl = openssl_1_1;
-  };
   ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {
     buildGoModule = buildGo119Module;
   };
-
-  ipfs-migrator-all-fs-repo-migrations = callPackage ../applications/networking/ipfs-migrator/all-migrations.nix { };
-  ipfs-migrator-unwrapped = callPackage ../applications/networking/ipfs-migrator/unwrapped.nix { };
-  ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
 
   ipfs-upload-client = callPackage ../applications/networking/ipfs-upload-client { };
 
@@ -8192,6 +8185,14 @@ with pkgs;
   kubepug = callPackage ../development/tools/kubepug { };
 
   kubergrunt = callPackage ../applications/networking/cluster/kubergrunt { };
+
+  kubo = callPackage ../applications/networking/kubo {
+    openssl = openssl_1_1;
+  };
+
+  kubo-migrator-all-fs-repo-migrations = callPackage ../applications/networking/kubo-migrator/all-migrations.nix { };
+  kubo-migrator-unwrapped = callPackage ../applications/networking/kubo-migrator/unwrapped.nix { };
+  kubo-migrator = callPackage ../applications/networking/kubo-migrator { };
 
   kwalletcli = libsForQt5.callPackage ../tools/security/kwalletcli { };
 
