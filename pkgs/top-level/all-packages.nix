@@ -5125,8 +5125,9 @@ with pkgs;
 
   cilium-cli = callPackage ../applications/networking/cluster/cilium { };
 
-  cjdns = callPackage ../tools/networking/cjdns { };
-  cjdns-tools = callPackage ../tools/admin/cjdns-tools { };
+  # TODO: remove the python3 override
+  # 2022-09-30: cjdns fails to build after the python3=python310 bump
+  cjdns = callPackage ../tools/networking/cjdns { python3 = python39; };
 
   cjson = callPackage ../development/libraries/cjson { };
 
