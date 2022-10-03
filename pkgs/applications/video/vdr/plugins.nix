@@ -225,7 +225,7 @@ in {
     installFlags = [ "DESTDIR=$(out)" ];
 
     meta = with lib; {
-      homepage = "https://github.com/jowi24/vdr-fritz";
+      inherit (src.meta) homepage;
       description = "A plugin for VDR to access AVMs Fritz Box routers";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
