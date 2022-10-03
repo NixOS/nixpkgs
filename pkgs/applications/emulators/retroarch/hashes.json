@@ -376,6 +376,12 @@
         "rev": "fbf62c3dacaac694f7ec26cf9be10a51b27271e7",
         "sha256": "Opb6CUeT/bnaTg4MJo7DNsVyaPa73PLbIor25HHWzZ0="
     },
+    "puae": {
+        "owner": "libretro",
+        "repo": "libretro-uae",
+        "rev": "1b7dd443ff89d667d99f8c44454a91ed59bcabd9",
+        "sha256": "YJiZEtB0rBFffEZj/hB7zEFBUp02kCzblq4CtCmygKo="
+    },
     "quicknes": {
         "owner": "libretro",
         "repo": "QuickNES_Core",
