@@ -2553,6 +2553,11 @@ self: super: {
     ];
   }) super.Unixutils;
 
+  xmonad-utils = overrideCabal (drv: {
+    librarySystemDepends = [
+      pkgs.libxcrypt
+    ];
+  }) super.xmonad-utils;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super // (let
   # We need to build purescript with these dependencies and thus also its reverse
