@@ -46,7 +46,7 @@ in {
       description = "DVB Frontend Status Monitor plugin for VDR";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
-      platforms = [ "i686-linux" "x86_64-linux" ];
+      inherit (vdr.meta) platforms;
     };
 
   };
@@ -92,7 +92,7 @@ in {
       description = "MarkAd marks advertisements in VDR recordings.";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
-      platforms = [ "i686-linux" "x86_64-linux" ];
+      inherit (vdr.meta) platforms;
     };
 
   };
@@ -140,7 +140,7 @@ in {
       description = "Searchtimer and replacement of the VDR program menu";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
-      platforms = [ "i686-linux" "x86_64-linux" ];
+      inherit (vdr.meta) platforms;
     };
 
   };
@@ -165,7 +165,7 @@ in {
       description = "VDR plugin to handle KODI clients.";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
-      platforms = [ "i686-linux" "x86_64-linux" ];
+      inherit (vdr.meta) platforms;
     };
 
   };
@@ -201,7 +201,7 @@ in {
       description = "VDR Text2Skin Plugin";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
-      platforms = [ "i686-linux" "x86_64-linux" ];
+      inherit (vdr.meta) platforms;
     };
   };
 
@@ -226,7 +226,7 @@ in {
       description = "A plugin for VDR to access AVMs Fritz Box routers";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
-      platforms = [ "i686-linux" "x86_64-linux" ];
+      inherit (vdr.meta) platforms;
     };
   };
 }

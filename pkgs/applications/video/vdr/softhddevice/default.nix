@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "VDR SoftHDDevice Plug-in";
     maintainers = [ maintainers.ck3d ];
     license = licenses.gpl2;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    inherit (vdr.meta) platforms;
   };
 
 }
