@@ -161,10 +161,9 @@ stdenvNoCC.mkDerivation (args // {
         # That causes conflicts. To circumvent it we remove all occurances of the flag.
         flags =
           let
-            hasRid = flag: lib.any (v: v) (map (rid: lib.hasInfix rid flag) (lib.attrValues dotnet-sdk.runtimeIdentifierMap));
+            isRuntime = flag: lib.hasPrefix "--runtime" flag;
           in
-          builtins.filter (flag: !(hasRid flag)) (dotnetFlags ++ dotnetRestoreFlags);
-
+            builtins.filter (flag: !(isRuntime flag)) (dotnetFlags ++ dotnetRestoreFlags);
         runtimeIds = map (system: dotnetCorePackages.systemToDotnetRid system) platforms;
       in
       writeShellScript "fetch-${pname}-deps" ''
