@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     cp betterlockscreen $out/bin/betterlockscreen
-    wrapProgram "$out/bin/betterlockscreen" --prefix PATH : "$out/bin:${lib.makeBinPath [ bc coreutils dbus dunst i3lock-color gawk gnugrep gnused imagemagick procps xdpyinfo xrandr xset ]}"
+    wrapProgram "$out/bin/betterlockscreen" \
+      --prefix PATH : "$out/bin:${lib.makeBinPath [ bc coreutils dbus dunst i3lock-color gawk gnugrep gnused imagemagick procps xdpyinfo xrandr xset ]}"
 
     runHook postInstall
   '';
