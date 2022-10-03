@@ -99,7 +99,7 @@ let
 
     GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
 
-    configurePhase = args.configurePhase or ''
+    configurePhase = args.configurePhase or (''
       runHook preConfigure
 
       # Extract the source
@@ -141,7 +141,7 @@ let
       fi
 
       runHook postConfigure
-    '';
+    '');
 
     renameImports = args.renameImports or (
       let
@@ -151,7 +151,7 @@ let
         renames = p: lib.concatMapStringsSep "\n" (rename p.goPackagePath) p.goPackageAliases;
       in lib.concatMapStringsSep "\n" renames inputsWithAliases);
 
-    buildPhase = args.buildPhase or ''
+    buildPhase = args.buildPhase or (''
       runHook preBuild
 
       runHook renameImports
@@ -235,7 +235,7 @@ let
       )
     '' + ''
       runHook postBuild
-    '';
+    '');
 
     doCheck = args.doCheck or false;
     checkPhase = args.checkPhase or ''
