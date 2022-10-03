@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     tar xfv $hiresSrc --strip 1 -C $sourceRoot
   '';
 
-  postPatch = ''
+  prePatch = ''
     patch -p1 < patch-mac
     substituteInPlace lisp/international/mule-cmds.el \
       --replace /usr/share/locale ${gettext}/share/locale
