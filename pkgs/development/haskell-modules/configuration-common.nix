@@ -2541,6 +2541,12 @@ self: super: {
     doCheck = false;
   }) super.crypt-sha512;
 
+  nano-cryptr = overrideCabal (drv: {
+    librarySystemDepends = [
+      pkgs.libxcrypt
+    ];
+  }) super.nano-cryptr;
+
   Unixutils = overrideCabal (drv: {
     librarySystemDepends = [
       pkgs.libxcrypt
