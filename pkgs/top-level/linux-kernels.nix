@@ -61,10 +61,6 @@ in {
     # New vendor kernels should go to nixos-hardware instead.
     # e.g. https://github.com/NixOS/nixos-hardware/tree/master/microsoft/surface/kernel
 
-    linux_mptcp_95 = callPackage ../os-specific/linux/kernel/linux-mptcp-95.nix {
-      kernelPatches = linux_4_19.kernelPatches;
-    };
-
     linux_rpi1 = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
       kernelPatches = with kernelPatches; [
         bridge_stp_helper
@@ -555,7 +551,6 @@ in {
   };
 
   packages = recurseIntoAttrs (vanillaPackages // rtPackages // rpiPackages // {
-    linux_mptcp_95 = packagesFor kernels.linux_mptcp_95;
 
     # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
     linux_testing = packagesFor kernels.linux_testing;
