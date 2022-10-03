@@ -28,6 +28,7 @@ with lib;
       {
         services.miniflux = {
           enable = true;
+          database.createLocally = true;
           inherit adminCredentialsFile;
         };
       };
@@ -37,6 +38,8 @@ with lib;
       {
         services.miniflux = {
           enable = true;
+          listenAddress = "localhost:${toString defaultPort}";
+          database.createLocally = true;
           inherit adminCredentialsFile;
         };
         security.sudo.enable = false;
@@ -47,14 +50,16 @@ with lib;
       {
         services.miniflux = {
           enable = true;
-          config = {
-            CLEANUP_FREQUENCY = "48";
-            LISTEN_ADDR = "localhost:${toString port}";
+          listenAddress = "localhost:${toString port}";
+          database.createLocally = true;
+          settings = {
+            CLEANUP_FREQUENCY_HOURS = "48";
           };
           adminCredentialsFile = customAdminCredentialsFile;
         };
       };
   };
+
   testScript = ''
     start_all()
 
