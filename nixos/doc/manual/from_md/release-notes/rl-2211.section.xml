@@ -196,6 +196,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://tandoor.dev">Tandoor Recipes</link>,
+          a self-hosted multi-tenant recipe collection. Available as
+          <link xlink:href="options.html#opt-services.tandoor-recipes.enable">services.tandoor-recipes</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://hbase.apache.org/">HBase
           cluster</link>, a distributed, scalable, big data store.
           Available as
