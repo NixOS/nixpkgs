@@ -32,9 +32,11 @@ in {
 
     buildInputs = [ vdr ];
 
-    src = fetchurl {
-      url = "http://www.saunalahti.fi/~rahrenbe/vdr/femon/files/${pname}-${version}.tgz";
-      sha256 = "1hra1xslj8s68zbyr8zdqp8yap0aj1p6rxyc6cwy1j122kwcnapp";
+    src = fetchFromGitHub {
+      repo = "vdr-plugin-femon";
+      owner = "rofafor";
+      sha256 = "sha256-0qBMYgNKk7N9Bj8fAoOokUo+G9gfj16N5e7dhoKRBqs=";
+      rev = "v${version}";
     };
 
     postPatch = "substituteInPlace Makefile --replace /bin/true true";
@@ -42,7 +44,7 @@ in {
     makeFlags = [ "DESTDIR=$(out)" ];
 
     meta = with lib; {
-      homepage = "http://www.saunalahti.fi/~rahrenbe/vdr/femon/";
+      inherit (src.meta) homepage;
       description = "DVB Frontend Status Monitor plugin for VDR";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
