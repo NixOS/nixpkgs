@@ -21959,6 +21959,8 @@ with pkgs;
 
   sratom = callPackage ../development/libraries/audio/sratom { };
 
+  src-cli = callPackage ../development/tools/misc/src-cli { };
+
   srm = callPackage ../tools/security/srm { };
 
   srt = callPackage ../development/libraries/srt { };
