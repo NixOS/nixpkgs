@@ -5957,10 +5957,12 @@ in {
 
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common { };
 
-  onnxruntime = (toPythonModule (pkgs.onnxruntime.override {
-    python3Packages = self;
-    pythonSupport = true;
-  })).python;
+  onnxruntime = callPackage ../development/python-modules/onnxruntime {
+    onnxruntime = pkgs.onnxruntime.override {
+      python3Packages = self;
+      pythonSupport = true;
+    };
+  };
 
   onvif-zeep-async = callPackage ../development/python-modules/onvif-zeep-async { };
 
