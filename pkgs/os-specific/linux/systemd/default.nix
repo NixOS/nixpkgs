@@ -571,21 +571,22 @@ stdenv.mkDerivation {
       ];
 
       # { replacement, search, where } -> List[str]
-      mkSubstitute = { replacement, search, where, ignore ? [] }:
+      mkSubstitute = { replacement, search, where, ignore ? [ ] }:
         map (path: "substituteInPlace ${path} --replace '${search}' \"${replacement}\"") where;
-      mkEnsureSubstituted = { replacement, search, where, ignore ? [] }:
-      let
-        ignore' = lib.concatStringsSep "|" (ignore ++ ["^test" "NEWS"]);
-      in ''
-        set +e
-        search=$(grep '${search}' -r | grep -v "${replacement}" | grep -Ev "${ignore'}")
-        set -e
-        if [[ -n "$search" ]]; then
-          echo "Not all references to '${search}' have been replaced. Found the following matches:"
-          echo "$search"
-          exit 1
-        fi
-      '';
+      mkEnsureSubstituted = { replacement, search, where, ignore ? [ ] }:
+        let
+          ignore' = lib.concatStringsSep "|" (ignore ++ [ "^test" "NEWS" ]);
+        in
+        ''
+          set +e
+          search=$(grep '${search}' -r | grep -v "${replacement}" | grep -Ev "${ignore'}")
+          set -e
+          if [[ -n "$search" ]]; then
+            echo "Not all references to '${search}' have been replaced. Found the following matches:"
+            echo "$search"
+            exit 1
+          fi
+        '';
     in
     ''
       mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
