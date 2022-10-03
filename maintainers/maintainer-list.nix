@@ -15411,6 +15411,12 @@
     github = "jali-clarke";
     githubId = 17733984;
   };
+  wesleyjrz = {
+    email = "wesleyjr2002@gmail.com";
+    name = "Wesley V. Santos Jr.";
+    github = "wesleyjrz";
+    githubId = 60184588;
+  };
   npatsakula = {
     email = "nikita.patsakula@gmail.com";
     name = "Patsakula Nikita";
