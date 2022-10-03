@@ -45,9 +45,7 @@ in
     openFirewall = mkOption {
       type = types.bool;
       default = true;
-      description = ''
-        Whether to automatically open the specified ports in the firewall.
-      '';
+      description = mdDoc "Whether to automatically open the specified ports in the firewall.";
     };
 
     advertisedPort = mkOption {

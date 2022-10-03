@@ -1,4 +1,21 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }:
+let
+  inherit (import ./ssh-keys.nix pkgs)
+    snakeOilPrivateKey snakeOilPublicKey;
+
+  setUpPrivateKey = name: ''
+    ${name}.succeed(
+        "mkdir -p /root/.ssh",
+        "chown 700 /root/.ssh",
+        "cat '${snakeOilPrivateKey}' > /root/.ssh/id_snakeoil",
+        "chown 600 /root/.ssh/id_snakeoil",
+    )
+    ${name}.wait_for_file("/root/.ssh/id_snakeoil")
+  '';
+
+  sshOpts = "-oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -oIdentityFile=/root/.ssh/id_snakeoil";
+
+in
 {
   name = "tmate-ssh-server";
   nodes =
@@ -11,9 +28,11 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       };
       client = { ... }: {
         environment.systemPackages = [ pkgs.tmate ];
+        services.openssh.enable = true;
+        users.users.root.openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
       };
       client2 = { ... }: {
-        environment.systemPackages = [ pkgs.tmate pkgs.openssh ];
+        environment.systemPackages = [ pkgs.openssh ];
       };
     };
   testScript = ''
@@ -25,9 +44,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     server.wait_for_file("/etc/tmate-ssh-server-keys/ssh_host_rsa_key.pub")
     server.succeed("tmate-client-config > /tmp/tmate.conf")
     server.wait_for_file("/tmp/tmate.conf")
-    server.copy_from_vm("/tmp/tmate.conf")
 
-    client.copy_from_host("tmate.conf", "/tmp/tmate.conf")
+    ${setUpPrivateKey "server"}
+    client.wait_for_unit("sshd.service")
+    client.wait_for_open_port(22)
+    server.succeed("scp ${sshOpts} /tmp/tmate.conf client:/tmp/tmate.conf")
+
     client.wait_for_file("/tmp/tmate.conf")
     client.send_chars("root\n")
     client.sleep(2)
