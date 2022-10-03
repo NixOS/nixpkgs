@@ -16,6 +16,10 @@ let
 
     nativeBuildInputs = [ cmake pkg-config ];
 
+    buildInputs = [ fluidsynth ];
+
+    cmakeFlags = [ "-DDYN_FLUIDSYNTH=OFF" ];
+
     preConfigure = ''
       sed -i \
         -e "s@/usr/share/sounds/sf2/@${soundfont-fluid}/share/soundfonts/@g" \
