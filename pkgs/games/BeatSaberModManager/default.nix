@@ -34,7 +34,7 @@ buildDotnetModule rec {
   patches = [
     (substituteAll {
       src = ./add-runtime-identifier.patch;
-      runtimeIdentifier = dotnet-sdk.passthru.systemToDotnetRid targetPlatform.system;
+      runtimeIdentifier = dotnetCorePackages.systemToDotnetRid targetPlatform.system;
     })
   ];
 

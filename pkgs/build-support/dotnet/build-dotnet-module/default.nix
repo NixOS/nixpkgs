@@ -2,13 +2,11 @@
 , stdenvNoCC
 , callPackage
 , writeShellScript
-, writeText
 , srcOnly
 , linkFarmFromDrvs
 , symlinkJoin
 , makeWrapper
 , dotnetCorePackages
-, dotnetPackages
 , mkNugetSource
 , mkNugetDeps
 , nuget-to-nix
@@ -167,7 +165,7 @@ stdenvNoCC.mkDerivation (args // {
           in
           builtins.filter (flag: !(hasRid flag)) (dotnetFlags ++ dotnetRestoreFlags);
 
-        runtimeIds = map (system: dotnet-sdk.systemToDotnetRid system) platforms;
+        runtimeIds = map (system: dotnetCorePackages.systemToDotnetRid system) platforms;
       in
       writeShellScript "fetch-${pname}-deps" ''
         set -euo pipefail
