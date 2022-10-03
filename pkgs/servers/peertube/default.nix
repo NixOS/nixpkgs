@@ -1,5 +1,16 @@
-{ lib, stdenv, callPackage, fetchurl, fetchFromGitHub, buildGoModule, fetchYarnDeps, nixosTests
-, fixup_yarn_lock, jq, nodejs, yarn
+{ lib
+, stdenv
+, callPackage
+, fetchurl
+, fetchFromGitHub
+, buildGoModule
+, fetchYarnDeps
+, nixosTests
+, fixup_yarn_lock
+, jq
+, nodejs
+, which
+, yarn
 }:
 let
   arch =
@@ -9,36 +20,36 @@ let
   bcrypt_version = "5.0.1";
   bcrypt_lib = fetchurl {
     url = "https://github.com/kelektiv/node.bcrypt.js/releases/download/v${bcrypt_version}/bcrypt_lib-v${bcrypt_version}-napi-v3-${arch}-glibc.tar.gz";
-    sha256 = "3R3dBZyPansTuM77Nmm3f7BbTDkDdiT2HQIrti2Ottc=";
+    hash = "sha256-3R3dBZyPansTuM77Nmm3f7BbTDkDdiT2HQIrti2Ottc=";
   };
 
 in stdenv.mkDerivation rec {
   pname = "peertube";
-  version = "4.2.2";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     rev = "v${version}";
-    sha256 = "sha256-q6wSk5AO91Z6dw5MgpO7QTAlA8Q5Xx1CboBr7SElVUA=";
+    hash = "sha256-1QpJtonn/mWGcTv2mSeGKAHwPAqOV6VBAYFZH1/jAH8=";
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    sha256 = "sha256-MMsxh20jcbW4YYsJyoupKbT9+Xa1BWZAmYHoj2/t+LM=";
+    hash = "sha256-BimtZpU3aZepvlMfhJ/u0trk1rUsGlzjYk2G90fstII=";
   };
 
   yarnOfflineCacheTools = fetchYarnDeps {
     yarnLock = "${src}/server/tools/yarn.lock";
-    sha256 = "sha256-maPR8OCiuNlle0JQIkZSgAqW+BrSxPwVm6CkxIrIg5k=";
+    hash = "sha256-maPR8OCiuNlle0JQIkZSgAqW+BrSxPwVm6CkxIrIg5k=";
   };
 
   yarnOfflineCacheClient = fetchYarnDeps {
     yarnLock = "${src}/client/yarn.lock";
-    sha256 = "sha256-6Snx1OwEndGrkMZbAEsoNRUQnZcwH+pwSDZW8igCzXA=";
+    hash = "sha256-IKMu+gQa+d30+yXjHCu/oQOQXL6kTN9WxDI/Y5IL1E8=";
   };
 
-  nativeBuildInputs = [ fixup_yarn_lock jq nodejs yarn ];
+  nativeBuildInputs = [ fixup_yarn_lock jq nodejs which yarn ];
 
   buildPhase = ''
     # Build node modules
@@ -80,7 +91,7 @@ in stdenv.mkDerivation rec {
     # Build PeerTube tools
     cp -r "./server/tools/node_modules" "./dist/server/tools"
     npm run tsc -- --build ./server/tools/tsconfig.json
-    npm run resolve-tspaths:cli
+    npm run resolve-tspaths:server
 
     # Build PeerTube client
     npm run build:client
