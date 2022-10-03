@@ -6,6 +6,8 @@ let
   cfg = config.services.gitlab;
   opt = options.services.gitlab;
 
+  toml = pkgs.formats.toml {};
+
   ruby = cfg.packages.gitlab.ruby;
 
   postgresqlPackage = if config.services.postgresql.enable then
@@ -867,6 +869,39 @@ in {
         };
       };
 
+      workhorse.config = mkOption {
+        type = toml.type;
+        default = {};
+        example = literalExpression ''
+          {
+            object_storage.provider = "AWS";
+            object_storage.s3 = {
+              aws_access_key_id = "AKIAXXXXXXXXXXXXXXXX";
+              aws_secret_access_key = { _secret = "/var/keys/aws_secret_access_key"; };
+            };
+          };
+        '';
+        description = lib.mdDoc ''
+          Configuration options to add to Workhorse's configuration
+          file.
+
+          See
+          <https://gitlab.com/gitlab-org/gitlab/-/blob/master/workhorse/config.toml.example>
+          and
+          <https://docs.gitlab.com/ee/development/workhorse/configuration.html>
+          for examples and option documentation.
+
+          Options containing secret data should be set to an attribute
+          set containing the attribute `_secret` - a string pointing
+          to a file containing the value the option should be set
+          to. See the example to get a better picture of this: in the
+          resulting configuration file, the
+          `object_storage.s3.aws_secret_access_key` key will be set to
+          the contents of the {file}`/var/keys/aws_secret_access_key`
+          file.
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.attrs;
         default = {};
@@ -1357,6 +1392,7 @@ in {
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       path = with pkgs; [
+        remarshal
         exiftool
         gitPackage
         gnutar
@@ -1371,6 +1407,17 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = gitlabEnv.HOME;
+        ExecStartPre = pkgs.writeShellScript "gitlab-workhorse-pre-start" ''
+          set -o errexit -o pipefail -o nounset
+          shopt -s dotglob nullglob inherit_errexit
+
+          ${utils.genJqSecretsReplacementSnippet
+              cfg.workhorse.config
+              "${cfg.statePath}/config/gitlab-workhorse.json"}
+
+          json2toml "${cfg.statePath}/config/gitlab-workhorse.json" "${cfg.statePath}/config/gitlab-workhorse.toml"
+          rm "${cfg.statePath}/config/gitlab-workhorse.json"
+        '';
         ExecStart =
           "${cfg.packages.gitlab-workhorse}/bin/workhorse "
           + "-listenUmask 0 "
@@ -1378,6 +1425,7 @@ in {
           + "-listenAddr /run/gitlab/gitlab-workhorse.socket "
           + "-authSocket ${gitlabSocket} "
           + "-documentRoot ${cfg.packages.gitlab}/share/gitlab/public "
+          + "-config ${cfg.statePath}/config/gitlab-workhorse.toml "
           + "-secretPath ${cfg.statePath}/.gitlab_workhorse_secret";
       };
     };
