@@ -55,12 +55,12 @@ in {
 
   markad = stdenv.mkDerivation rec {
     pname = "vdr-markad";
-    version = "3.0.25";
+    version = "3.0.26";
 
     src = fetchFromGitHub {
       repo = "vdr-plugin-markad";
       owner = "kfb77";
-      sha256 = "sha256-m7cUAxwXj62spelHYH6uTIoViSavSR0d4psr7+KLJg8=";
+      sha256 = "sha256-0J6XeLgr9IZSWsheQZWVNRLIxp8iyCvR9Y0z/yrbTnI=";
       rev = "v${version}";
     };
 
@@ -90,7 +90,7 @@ in {
     installFlags = buildFlags;
 
     meta = with lib; {
-      homepage = "https://github.com/kfb77/vdr-plugin-markad";
+      inherit (src.meta) homepage;
       description = "MarkAd marks advertisements in VDR recordings.";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
