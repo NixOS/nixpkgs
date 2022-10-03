@@ -103,8 +103,9 @@ in {
     pname = "vdr-epgsearch";
     version = "2.4.1";
 
-    src = fetchgit {
-      url = "git://projects.vdr-developer.org/vdr-plugin-epgsearch.git";
+    src = fetchFromGitHub {
+      repo = "vdr-plugin-epgsearch";
+      owner = "vdr-projects";
       sha256 = "sha256-UlbPCkUFN0Gyxjw9xq2STFTDZRVcPPNjadSQd4o2o9U=";
       rev = "v${version}";
     };
@@ -138,7 +139,7 @@ in {
     outputs = [ "out" "man" ];
 
     meta = with lib; {
-      homepage = "http://winni.vdr-developer.org/epgsearch";
+      inherit (src.meta) homepage;
       description = "Searchtimer and replacement of the VDR program menu";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
