@@ -150,7 +150,7 @@ in {
 
   vnsiserver = stdenv.mkDerivation rec {
     pname = "vdr-vnsiserver";
-    version = "1.8.0";
+    version = "1.8.1";
 
     buildInputs = [ vdr ];
 
@@ -158,13 +158,13 @@ in {
 
     src = fetchFromGitHub {
       repo = "vdr-plugin-vnsiserver";
-      owner = "FernetMenta";
-      rev = "v${version}";
-      sha256 = "0n7idpxqx7ayd63scl6xwdx828ik4kb2mwz0c30cfjnmnxxd45lw";
+      owner = "vdr-projects";
+      rev = version;
+      sha256 = "sha256-1C0Z7NoU+FNch4BhrAcbJdzVvGuH1YDaxJ+9PflR78E=";
     };
 
     meta = with lib; {
-      homepage = "https://github.com/FernetMenta/vdr-plugin-vnsiserver";
+      inherit (src.meta) homepage;
       description = "VDR plugin to handle KODI clients.";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
