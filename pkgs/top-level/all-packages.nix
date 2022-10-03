@@ -27987,10 +27987,7 @@ with pkgs;
 
   gopher = callPackage ../applications/networking/gopher/gopher { };
 
-  gophernotes = callPackage ../applications/editors/gophernotes {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
-  };
+  gophernotes = callPackage ../applications/editors/gophernotes { };
 
   goxel = callPackage ../applications/graphics/goxel { };
 
