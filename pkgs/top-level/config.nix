@@ -131,8 +131,24 @@ let
     checkMeta = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to check that the `meta` attribute of derivations are correct during evaluation time.
+      '';
+    };
+
+    packageOverrides = mkOption {
+      default = const {};
+      type = types.overrideFnType;
+      description = lib.mdDoc ''
+        **Not recommended.** Use `overlays` instead!
+      '';
+    };
+
+    perlPackageOverrides = mkOption {
+      default = const {};
+      type = types.overrideFnType;
+      description = lib.mdDoc ''
+        A function that takes the final set of Perl packages and returns an attribute set of packages to add or change.
       '';
     };
   };

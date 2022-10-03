@@ -4,6 +4,7 @@
 
 let
   inherit (lib)
+    const
     elem
     flip
     isAttrs
@@ -884,6 +885,28 @@ rec {
     # Augment the given type with an additional type check function.
     addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 
+    # EXPERIMENTAL
+    # Known issue:
+    # Overrides composition does not compose symmetrically, exposing the arbitrary
+    # nature of module `imports` ordering in a potentially harmful manner.
+    # TODO
+    #  - Restrict override composition by `throw`-ing when any two layers contain the
+    #    same attribute name, which may create an `imports` ordering dependency.
+    #    (a layer is the result of applying one or more override functions)
+    #  - Apply this restriction only to unordered layers, which means layers that
+    #    have the same `mkOrder` number.
+    #  - Document this type in the NixOS manual
+    overrideFnType = mkOptionType {
+      name = "overrides";
+      check = builtins.isFunction;
+      merge = const
+        (foldl'
+          (final: override: pkgs:
+            let
+              final' = final pkgs;
+            in final' // (override.value (pkgs // final')))
+          (const {}));
+    };
   };
 };
 
