@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , glib
 , meson
 , ninja
@@ -30,6 +31,14 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-KDI3BpjKj5+/F0w0W3PYm2BWEQOmJsLfcHJrBwf3m9M=";
   };
+
+  # https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/310
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/libsoup/-/commit/0fae143dc8b0e668b7a35a9c1364009e7cf06d0f.patch";
+      sha256 = "sha256-yAKC7WGk0aQxMkT4At6Qfx1QO2InNotITrl/Lim41Jk=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
