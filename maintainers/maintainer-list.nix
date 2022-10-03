@@ -15175,7 +15175,6 @@
     name = "Zoey de Souza Pessanha";
     email = "zoey.spessanha@outlook.com";
     keys = [{
-      longkeyid = "rsa4096/0x1E1E889CDBD6A315";
       fingerprint = "EAA1 51DB 472B 0122 109A  CB17 1E1E 889C DBD6 A315";
     }];
   };
