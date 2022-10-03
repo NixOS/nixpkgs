@@ -1,0 +1,20 @@
+--- a/bin/awslocal
++++ b/bin/awslocal
+@@ -79,7 +79,7 @@ def awscli_is_v1():
+             return True
+         return False
+     except Exception:
+-        version = subprocess.check_output(['aws', '--version'])
++        version = subprocess.check_output(['@aws@', '--version'])
+         version = version.decode('UTF-8') if isinstance(version, bytes) else version
+         return 'aws-cli/1' in version
+
+@@ -159,7 +159,7 @@ def run_as_separate_process():
+     env_dict = {k: v for k, v in env_dict.items() if k.startswith('AWS_') or k in ENV_VARS_TO_PASS}
+
+     cmd_args = prepare_cmd_args()
+-    cmd_args[0] = 'aws'
++    cmd_args[0] = '@aws@'
+
+     # run the command
+     run(cmd_args, env_dict)

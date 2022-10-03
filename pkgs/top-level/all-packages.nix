@@ -2153,6 +2153,8 @@ with pkgs;
 
   awscli2 = callPackage ../tools/admin/awscli2 { };
 
+  awscli-local = python3Packages.callPackage ../tools/admin/awscli-local { };
+
   awsebcli = callPackage ../tools/virtualization/awsebcli {};
 
   awslimitchecker = callPackage ../tools/admin/awslimitchecker { };
