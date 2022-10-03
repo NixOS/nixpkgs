@@ -16,6 +16,10 @@ self = stdenv.mkDerivation rec {
     sha256 = "sha256-ERw6ypGJfkUwOds5GkdSZeAg/ZIcuXMHwACEqI5NYQQ=";
   };
 
+  patches = [
+    ./mysql-5.7-add-protobuf-3.8+-support.patch
+  ];
+
   preConfigure = lib.optionalString stdenv.isDarwin ''
     ln -s /bin/ps $TMPDIR/ps
     export PATH=$PATH:$TMPDIR

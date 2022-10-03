@@ -23621,7 +23621,6 @@ with pkgs;
     inherit (darwin) cctools developer_cmds;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     boost = boost159;
-    protobuf = protobuf3_7;
     openssl = openssl_1_1;
   };
 
