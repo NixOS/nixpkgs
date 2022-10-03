@@ -132,6 +132,15 @@
       </listitem>
       <listitem>
         <para>
+          PHP is now built <literal>NTS</literal> (Non-Thread Safe)
+          style by default, for Apache and <literal>mod_php</literal>
+          usage we still enable <literal>ZTS</literal> (Zend Thread
+          Safe). This has been a common practice for a long time in
+          other distributions.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>protonup</literal> has been aliased to and replaced
           by <literal>protonup-ng</literal> due to upstream not
           maintaining it.
