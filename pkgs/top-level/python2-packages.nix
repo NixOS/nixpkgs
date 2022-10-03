@@ -7,7 +7,7 @@ self: super:
 with self; with super; {
   attrs = callPackage ../development/python2-modules/attrs { };
 
-  bootstrapped-pip = callPackage ../development/python2-modules/bootstrapped-pip { };
+  bootstrapped-pip = toPythonModule (callPackage ../development/python2-modules/bootstrapped-pip { });
 
   boto3 = callPackage ../development/python2-modules/boto3 {};
 
