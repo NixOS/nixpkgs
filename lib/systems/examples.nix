@@ -106,6 +106,8 @@ rec {
   mips64-linux-gnuabi64    = { config = "mips64-unknown-linux-gnuabi64";    } // platforms.gcc_mips64r2_64;
   mips64el-linux-gnuabi64  = { config = "mips64el-unknown-linux-gnuabi64";  } // platforms.gcc_mips64r2_64;
 
+  octeon = { config = "mips64el-unknown-linux-gnuabi64"; } // platforms.gcc_mips64r2_64 // platforms.octeon;
+
   muslpi = raspberryPi // {
     config = "armv6l-unknown-linux-musleabihf";
   };

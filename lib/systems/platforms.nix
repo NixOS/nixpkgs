@@ -526,6 +526,46 @@ rec {
     };
   };
 
+  # Cavium Octeon series chips, which represent nearly all mips64
+  # chips in production as of 2023
+  octeon = {
+
+    # Note: qemu will segfault if you try to run a binary that uses
+    # the -march=octeon instructions.  Much of nixpkgs'
+    # cross-compilation requires qemu.
+
+    # gcc = { arch = "octeon"; };
+
+    linux-kernel = {
+      name = "mips64el";
+      baseConfig = "cavium_octeon_defconfig";
+      target = "vmlinux";
+      DTB = true;
+      autoModules = true;
+      extraConfig =
+        lib.concatStringsSep "\n"
+          (lib.mapAttrsToList (k: v: "${k} ${v}") {
+            CPU_CAVIUM_OCTEON = "y";
+            CPU_LITTLE_ENDIAN = "y";
+            KBUILD_SYM32 = "n";
+            MODULES = "y";
+
+            # MIPS kernels are ELF images, with ELF structure, so you
+            # can stick things into them (and patchelf them!).  We can
+            # also attach the desired DTB directly to the kernel image,
+            # and even use the DTB as a "grub.conf".
+            MIPS_ELF_APPENDED_DTB = "y";
+
+            # Take boot command line from the DTB, but allow the
+            # bootloader to supersede those choices.
+            MIPS_CMDLINE_DTB_EXTEND = "y";
+
+            # > ERROR: modpost: "__tracepoint_ata_bmdma_stop" [drivers/ata/pata_octeon_cf.ko] undefined!
+            PATA_OCTEON_CF = "n";
+          });
+    };
+  };
+
   ##
   ## Other
   ##
