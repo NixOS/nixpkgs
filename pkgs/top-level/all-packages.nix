@@ -3420,6 +3420,8 @@ with pkgs;
     acpidump-all
     coreboot-utils;
 
+  coreboot-configurator = libsForQt5.callPackage ../tools/misc/coreboot-configurator { };
+
   corosync = callPackage ../servers/corosync { };
 
   cowsay = callPackage ../tools/misc/cowsay { };
