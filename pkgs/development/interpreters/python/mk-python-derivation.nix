@@ -109,7 +109,7 @@ else
 let
   inherit (python) stdenv;
 
-  withDistOutput = lib.elem format ["pyproject" "setuptools" "flit"];
+  withDistOutput = lib.elem format ["pyproject" "setuptools" "flit" "wheel"];
 
   name_ = name;
 
