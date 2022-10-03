@@ -8612,6 +8612,8 @@ with pkgs;
 
   leela = callPackage ../tools/graphics/leela { };
 
+  lemmeknow = callPackage ../tools/misc/lemmeknow { };
+
   lethe = callPackage ../tools/security/lethe {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
