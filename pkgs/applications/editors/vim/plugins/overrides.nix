@@ -53,6 +53,7 @@
 , zsh
 
   # command-t dependencies
+, getconf
 , ruby
 
   # cpsm dependencies
@@ -239,10 +240,11 @@ self: super: {
   };
 
   command-t = super.command-t.overrideAttrs (old: {
-    buildInputs = [ ruby ];
+    nativeBuildInputs = [ getconf ruby ];
     buildPhase = ''
       substituteInPlace lua/wincent/commandt/lib/Makefile \
-        --replace '/bin/bash' 'bash'
+        --replace '/bin/bash' 'bash' \
+        --replace xcrun ""
       make build
       rm ruby/command-t/ext/command-t/*.o
     '';
