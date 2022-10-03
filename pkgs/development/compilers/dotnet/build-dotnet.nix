@@ -115,13 +115,6 @@ stdenv.mkDerivation (finalAttrs: rec {
   passthru = rec {
     inherit icu packages;
 
-    runtimeIdentifierMap = {
-      "x86_64-linux" = "linux-x64";
-      "aarch64-linux" = "linux-arm64";
-      "x86_64-darwin" = "osx-x64";
-      "aarch64-darwin" = "osx-arm64";
-    };
-
     updateScript =
       if type != "sdk" then
         lib.warn "${pname}-${version}: only the SDK package can be updated - this script will do nothing!"
@@ -139,9 +132,6 @@ stdenv.mkDerivation (finalAttrs: rec {
         pushd pkgs/development/compilers/dotnet
         exec ${./update.sh} "${majorVersion}"
       '';
-
-    # Convert a "stdenv.hostPlatform.system" to a dotnet RID
-    systemToDotnetRid = system: runtimeIdentifierMap.${system} or (throw "unsupported platform ${system}");
 
     tests = {
       version = testers.testVersion {
