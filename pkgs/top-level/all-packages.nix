@@ -9521,7 +9521,7 @@ with pkgs;
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
 
-  ntfy = callPackage ../tools/misc/ntfy {};
+  ntfy = callPackage ../tools/misc/ntfy { python = python39; };
 
   ntfy-sh = callPackage ../tools/misc/ntfy-sh { };
 
