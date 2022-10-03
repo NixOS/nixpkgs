@@ -39,6 +39,18 @@ buildPythonPackage rec {
       hash = "sha256-kdOmE7BnkRy2lsNQ2OVrEXXZntJUPJ//b139kSsfKmI=";
       excludes = [ "pyproject.toml" ];
     })
+
+    # patch nbconvert/filters/markdown_mistune.py
+    (fetchpatch {
+      name = "clean-up-markdown-parsing.patch";
+      url = "https://github.com/jupyter/nbconvert/commit/4df1f5451c9c3e8121036dfbc7e07f0095f4d524.patch";
+      hash = "sha256-O+VWUaQi8UMCpE9/h/IsrenmEuJ2ac/kBkUBq7GFJTY";
+    })
+    (fetchpatch {
+      name = "fix-markdown-table.patch";
+      url = "https://github.com/jupyter/nbconvert/commit/d3900ed4527f024138dc3a8658c6a1b1dfc43c09.patch";
+      hash = "sha256-AFE1Zhw29JMLB0Sj17zHcOfy7VEFqLekO8NYbyMLrdI=";
+    })
   ];
 
   postPatch = ''
@@ -47,6 +59,10 @@ buildPythonPackage rec {
     # Use mistune 2.x
     substituteInPlace setup.py \
         --replace "mistune>=0.8.1,<2" "mistune>=2.0.3,<3"
+
+    # Equivalent of the upstream patch https://github.com/jupyter/nbconvert/commit/aec39288c9a6c614d659bcaf9f5cb36634d6b37b.patch
+    substituteInPlace share/jupyter/nbconvert/templates/lab/base.html.j2 \
+        --replace "{{ output.data['image/svg+xml'] | clean_html }}" "{{ output.data['image/svg+xml'].encode(\"utf-8\") | clean_html }}"
   '';
 
   propagatedBuildInputs = [
