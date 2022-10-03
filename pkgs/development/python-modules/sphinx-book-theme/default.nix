@@ -23,9 +23,6 @@ buildPythonPackage rec {
     sha256 = "9685959dbbb492af005165ef1b9229fdd5d5431580ac181578beae3b4d012d91";
   };
 
-  postPatch = ''
-  '';
-
   propagatedBuildInputs = [
     sphinx
     pydata-sphinx-theme
