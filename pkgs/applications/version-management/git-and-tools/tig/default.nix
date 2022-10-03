@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper autoreconfHook asciidoc xmlto docbook_xsl docbook_xml_dtd_45 findXMLCatalogs pkg-config ];
 
-  autoreconfFlags = "-I tools -v";
+  autoreconfFlags = [ "-I" "tools" "-v" ];
 
   buildInputs = [ ncurses readline git ]
     ++ lib.optionals stdenv.isDarwin [ libiconv ];

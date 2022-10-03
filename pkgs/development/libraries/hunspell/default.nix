@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     patchShebangs tests
   '';
 
-  autoreconfFlags = "-vfi";
+  autoreconfFlags = [ "-vfi" ];
 
   configureFlags = [ "--with-ui" "--with-readline" ];
 

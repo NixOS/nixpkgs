@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-T85kiPG80oZ4mwpb8Ag40wDHKx2Aens+gM7NGXan5lM=";
 
   # freeze the stdlib into the rustpython binary
-  cargoBuildFlags = "--features=freeze-stdlib";
+  cargoBuildFlags = [ "--features=freeze-stdlib" ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 

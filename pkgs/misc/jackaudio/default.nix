@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
         --replace /bin/bash ${bash}/bin/bash
   '';
 
-  dontAddWafCrossFlags = "true";
+  dontAddWafCrossFlags = true;
   wafConfigureFlags = [
     "--classic"
     "--autostart=${if (optDbus != null) then "dbus" else "classic"}"

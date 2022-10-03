@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     rocksdb
   ];
 
-  cargoBuildFlags = "--bin conduit";
+  cargoBuildFlags = [ "--bin" "conduit" ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;

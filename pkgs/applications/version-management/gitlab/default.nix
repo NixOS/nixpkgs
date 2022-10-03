@@ -37,7 +37,7 @@ let
         railties = x.railties // {
           dontBuild = false;
           patches = [ ./railties-remove-yarn-install-enhancement.patch ];
-          patchFlags = "-p2";
+          patchFlags = [ "-p2" ];
         };
       };
     groups = [
