@@ -221,11 +221,10 @@ in {
       (if stdenv.hostPlatform.isDarwin
        then ./use-etc-ssl-certs-darwin.patch
        else ./use-etc-ssl-certs.patch)
+
+      ./1.1/mips64n32-add-SIXTY_FOUR_BIT-to-bn_ops.patch  # merged upstream
     ] ++ lib.optionals (stdenv.isDarwin && (builtins.substring 5 5 version) < "m") [
       ./1.1/macos-yosemite-compat.patch
-    ] ++ lib.optionals (stdenv.hostPlatform.isMips64n32) [
-      # submitted upstream: https://github.com/openssl/openssl/pull/19320
-      ./1.1/mips64n32-add-SIXTY_FOUR_BIT-to-bn_ops.patch
     ];
     withDocs = true;
   };
@@ -240,6 +239,7 @@ in {
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
 
+      ./3.0/mips64n32-add-SIXTY_FOUR_BIT-to-bn_ops.patch  # merged upstream
       (if stdenv.hostPlatform.isDarwin
        then ./use-etc-ssl-certs-darwin.patch
        else ./use-etc-ssl-certs.patch)
