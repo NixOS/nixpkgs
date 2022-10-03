@@ -1,21 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, Foundation, readline }:
+{ lib, stdenv, fetchFromGitHub, libuuid, cacert, Foundation, readline }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   pname = "premake5";
-  version = "5.0.0-alpha12";
+  version = "5.0.0-beta2";
 
   src = fetchFromGitHub {
     owner = "premake";
     repo = "premake-core";
     rev = "v${version}";
-    sha256 = "1h3hr96pdz94njn4bg02ldcz0k5j1x017d8svc7fdyvl2b77nqzf";
+    sha256 = "sha256-2R5gq4jaQsp8Ny1oGuIYkef0kn2UG9jMf20vq0714oY=";
   };
 
-  buildInputs = optionals stdenv.isDarwin [ Foundation readline ];
+  buildInputs = [ libuuid ] ++ optionals stdenv.isDarwin [ Foundation readline ];
 
-  patchPhase = optional stdenv.isDarwin ''
+  patches = [ ./no-curl-ca.patch ];
+  patchPhase = ''
+    substituteInPlace contrib/curl/premake5.lua \
+      --replace "ca = nil" "ca = '${cacert}/etc/ssl/certs/ca-bundle.crt'"
+  '' + optionalString stdenv.isDarwin ''
     substituteInPlace premake5.lua \
       --replace -mmacosx-version-min=10.4 -mmacosx-version-min=10.5
   '';
