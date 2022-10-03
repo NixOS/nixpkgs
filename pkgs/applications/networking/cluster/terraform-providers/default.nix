@@ -52,7 +52,7 @@ let
         passthru = attrs // {
           updateScript = writeShellScript "update" ''
             provider="$(basename ${provider-source-address})"
-            ./pkgs/applications/networking/cluster/terraform-providers/update-provider --no-build "$provider"
+            ./pkgs/applications/networking/cluster/terraform-providers/update-provider "$provider"
           '';
         };
       });
