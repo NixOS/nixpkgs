@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dagargo";
     repo = pname;
-    rev = "${version}";
+    rev = version;
     sha256 = "sha256-T7jxtmxlFe5WPC2KYDN6jDHwuVkmA6Y/h9qizZFH5rk=";
   };
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     description = "Transfer application for Elektron devices";
     homepage = "https://github.com/dagargo/elektroid";
     maintainers = with maintainers; [ dag-h ];
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };
 }
