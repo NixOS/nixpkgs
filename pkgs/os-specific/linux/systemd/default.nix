@@ -120,7 +120,7 @@ assert withHomed -> withCryptsetup;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "251.4";
+  version = "251.5";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -137,7 +137,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "sha256-lfG6flT1k8LZBAdDK+cF9RjmJMkHMJquMjQK3MINFd8=";
+    sha256 = "sha256-2MEmvFT1D+9v8OazBwjnKc7i/x7i196Eoi8bODk1cM4=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -571,21 +571,22 @@ stdenv.mkDerivation {
       ];
 
       # { replacement, search, where } -> List[str]
-      mkSubstitute = { replacement, search, where, ignore ? [] }:
+      mkSubstitute = { replacement, search, where, ignore ? [ ] }:
         map (path: "substituteInPlace ${path} --replace '${search}' \"${replacement}\"") where;
-      mkEnsureSubstituted = { replacement, search, where, ignore ? [] }:
-      let
-        ignore' = lib.concatStringsSep "|" (ignore ++ ["^test" "NEWS"]);
-      in ''
-        set +e
-        search=$(grep '${search}' -r | grep -v "${replacement}" | grep -Ev "${ignore'}")
-        set -e
-        if [[ -n "$search" ]]; then
-          echo "Not all references to '${search}' have been replaced. Found the following matches:"
-          echo "$search"
-          exit 1
-        fi
-      '';
+      mkEnsureSubstituted = { replacement, search, where, ignore ? [ ] }:
+        let
+          ignore' = lib.concatStringsSep "|" (ignore ++ [ "^test" "NEWS" ]);
+        in
+        ''
+          set +e
+          search=$(grep '${search}' -r | grep -v "${replacement}" | grep -Ev "${ignore'}")
+          set -e
+          if [[ -n "$search" ]]; then
+            echo "Not all references to '${search}' have been replaced. Found the following matches:"
+            echo "$search"
+            exit 1
+          fi
+        '';
     in
     ''
       mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
