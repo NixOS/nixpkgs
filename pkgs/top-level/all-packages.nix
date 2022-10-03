@@ -34895,11 +34895,11 @@ with pkgs;
 
   or-tools = callPackage ../development/libraries/science/math/or-tools {
     python = python3;
-    # or-tools builds with -std=c++17, so abseil-cpp must
+    # or-tools builds with -std=c++20, so abseil-cpp must
     # also be built that way
-    abseil-cpp = abseil-cpp.override {
+    abseil-cpp = abseil-cpp_202111.override {
       static = true;
-      cxxStandard = "17";
+      cxxStandard = "20";
     };
   };
 
