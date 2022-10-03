@@ -107,6 +107,12 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/2867
     ./tests-skip-shared-libs-if-default_library-static.patch
 
+    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/2921
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/f0dd96c28751f15d0703b384bfc7c314af01caa8.patch";
+      sha256 = "sha256-8ucHS6ZnJuP6ajGb4/L8QfhC49FTQG1kAGHVdww/YYE=";
+    })
+
     ./skip-timer-test.patch
   ];
 
