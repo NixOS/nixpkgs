@@ -10025,6 +10025,8 @@ with pkgs;
 
   pagmo2 = callPackage ../development/libraries/pagmo2 { };
 
+  paho-mqtt-c = callPackage ../development/libraries/paho-mqtt-c { };
+
   pakcs = callPackage ../development/compilers/pakcs {
     # Doesn't compile with GHC 9.0 due to whitespace syntax changes
     # see also https://github.com/NixOS/nixpkgs/issues/166108
