@@ -198,6 +198,7 @@ let
     postgresqlPackage
     coreutils
     procps
+    findutils # Needed for gitlab:cleanup:orphan_job_artifact_files
   ];
 
   gitlab-rake = pkgs.stdenv.mkDerivation {
