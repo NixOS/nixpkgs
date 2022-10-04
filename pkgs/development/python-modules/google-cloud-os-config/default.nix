@@ -1,19 +1,42 @@
-{ lib, buildPythonPackage, fetchPypi, google-api-core, libcst, mock, proto-plus, pytestCheckHook, pytest-asyncio }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, google-api-core
+, libcst
+, mock
+, proto-plus
+, pytestCheckHook
+, pytest-asyncio
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "google-cloud-os-config";
-  version = "1.12.2";
+  version = "1.12.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-pr/JPao4GS5XrmeRLk3f1bCaDqlqXodWsn+cTEoR+NM=";
+    hash = "sha256-zSVAVh0WiI5I0P5Jy1wAld4IftWm2hurICYK+Hy5fK0=";
   };
 
-  propagatedBuildInputs = [ google-api-core libcst proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    libcst
+    proto-plus
+  ];
 
-  checkInputs = [ mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
-  pythonImportsCheck = [ "google.cloud.osconfig" ];
+  pythonImportsCheck = [
+    "google.cloud.osconfig"
+  ];
 
   disabledTests = [
     "test_patch_deployment"
