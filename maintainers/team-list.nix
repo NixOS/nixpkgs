@@ -459,6 +459,15 @@ with lib.maintainers; {
     shortName = "Mobile";
   };
 
+  neovim = {
+    githubTeams = [
+      "neovim"
+    ];
+    scope = "Maintain the neovim ecosystem.";
+    shortName = "Neovim ecosystem";
+    enableFeatureFreezePing = true;
+  };
+
   nix = {
     members = [
       Profpatsch
