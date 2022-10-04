@@ -19,11 +19,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp cfdg $out/bin/
 
     mkdir -p $out/share/doc/${pname}-${version}
     cp *.txt $out/share/doc/${pname}-${version}
+
+    runHook postInstall
   '';
 
   meta = with lib; {
