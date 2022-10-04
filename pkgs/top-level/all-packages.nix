@@ -30868,6 +30868,8 @@ with pkgs;
 
   qemu-utils = callPackage ../applications/virtualization/qemu/utils.nix {};
 
+  canokey-qemu = callPackage ../applications/virtualization/qemu/canokey-qemu.nix { };
+
   wrapQemuBinfmtP = callPackage ../applications/virtualization/qemu/binfmt-p-wrapper.nix { };
 
   qgroundcontrol = libsForQt5.callPackage ../applications/science/robotics/qgroundcontrol { };
