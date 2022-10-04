@@ -24,7 +24,7 @@ flip (
         ] ++ mods;
         postBuild = ''
           wrapProgram $out/bin/minetest \
-            --set MINETEST_MOD_PATH ${modPaths}
+            --prefix MINETEST_MOD_PATH : ${modPaths}
         '';
       }
     )
