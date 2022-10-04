@@ -1,0 +1,12 @@
+diff --git a/setup.py b/setup.py
+index 83282dd..0b99506 100755
+--- a/setup.py
++++ b/setup.py
+@@ -67,7 +67,6 @@ setup(
+         'absl-py>=0.1.0',
+         'deepdiff',
+         'dm_env',
+-        'enum34',
+         'mock',
+         'mpyq',
+         'numpy>=1.10',

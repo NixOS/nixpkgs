@@ -1,8 +1,9 @@
 { buildPythonPackage
 , lib
-, fetchFromGitHub
 , absl-py
-, enum34
+, deepdiff
+, dm_env
+, fetchFromGitHub
 , future
 , mock
 , mpyq
@@ -10,26 +11,29 @@
 , portpicker
 , protobuf
 , pygame
+, pythonRelaxDepsHook
+, requests
 , s2clientprotocol
-, six
-, websocket-client
+, s2protocol
 , sc2-headless
+, sk-video
+, websocket-client
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "PySC2";
-  version = "1.2";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "pysc2";
-    rev = "39f84b01d662eb58b3d95791f59208c210afd4e7";
-    sha256 = "0dfbc2krd2rys1ji75ng2nl0ki8nhnylxljcp287bfb8qyz2m25p";
+    rev = "v${version}";
+    hash = "sha256-70Uqs30Dyq1u+e1CTR8mO/rzZangBvgY0ah2l7VJLhQ=";
   };
 
   patches = [
-    ./fix-setup-for-py3.patch
     ./parameterize-runconfig-sc2path.patch
+    ./remove_enum32.patch
   ];
 
   postPatch = ''
@@ -39,18 +43,19 @@ buildPythonPackage {
 
   propagatedBuildInputs = [
     absl-py
-    enum34
-    future
+    deepdiff
+    dm_env # https://github.com/deepmind/dm_env
     mock
     mpyq
     numpy
     portpicker
     protobuf
     pygame
+    requests
     s2clientprotocol
-    six
+    s2protocol # https://github.com/Blizzard/s2protocol
+    sk-video # https://www.scikit-video.org/stable/
     websocket-client
-    sc2-headless
   ];
 
   meta = {
