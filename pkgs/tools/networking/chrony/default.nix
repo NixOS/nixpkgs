@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs test
+    substituteInPlace main.c --replace 'LOG_FATAL("Not superuser")' '((void)0)'
   '';
 
   buildInputs = [ readline texinfo nss nspr gnutls ]
