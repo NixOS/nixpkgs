@@ -223,7 +223,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "colorlog>=4.0.2, <5.0" "colorlog" \
-      --replace "flask-login>=0.6.2" "flask-login"
+      --replace "flask-login>=0.6.2" "flask-login" \
+      --replace "pathspec~=0.9.0" "pathspec"
   '' + lib.optionalString stdenv.isDarwin ''
     # Fix failing test on Hydra
     substituteInPlace airflow/utils/db.py \
