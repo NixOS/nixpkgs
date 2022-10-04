@@ -25981,6 +25981,8 @@ with pkgs;
 
   libratbag = callPackage ../os-specific/linux/libratbag { };
 
+  librist = callPackage ../development/libraries/librist { };
+
   libre-baskerville = callPackage ../data/fonts/libre-baskerville { };
 
   libre-bodoni = callPackage ../data/fonts/libre-bodoni { };
