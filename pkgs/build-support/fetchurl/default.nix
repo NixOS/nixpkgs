@@ -57,6 +57,11 @@ in
   # first element of `urls').
   name ? ""
 
+  # for versioned downloads optionally take pname + version.
+  # if name is set that is preferred
+, pname ? ""
+, version ? ""
+
 , # SRI hash.
   hash ? ""
 
@@ -130,12 +135,16 @@ let
     else throw "fetchurl requires a hash for fixed-output derivation: ${lib.concatStringsSep ", " urls_}";
 in
 
-stdenvNoCC.mkDerivation {
-  name =
-    if showURLs then "urls"
-    else if name != "" then name
-    else baseNameOf (toString (builtins.head urls_));
-
+stdenvNoCC.mkDerivation ((
+  if (pname != "" && version != "") then
+    { inherit pname version; }
+  else
+    { name =
+      if showURLs then "urls"
+      else if name != "" then name
+      else baseNameOf (toString (builtins.head urls_));
+    }
+) // {
   builder = ./builder.sh;
 
   nativeBuildInputs = [ curl ] ++ nativeBuildInputs;
@@ -177,4 +186,4 @@ stdenvNoCC.mkDerivation {
 
   inherit meta;
   passthru = { inherit url; } // passthru;
-}
+})
