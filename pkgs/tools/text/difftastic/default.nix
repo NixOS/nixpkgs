@@ -3,7 +3,6 @@
 , rustPlatform
 , fetchFromGitHub
 , testers
-, difftastic
 }:
 
 let
@@ -14,14 +13,14 @@ let
   };
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "difftastic";
   version = "0.46.0";
 
   src = fetchFromGitHub {
     owner = "wilfred";
-    repo = pname;
-    rev = version;
+    repo = "difftastic";
+    rev = finalAttrs.version;
     sha256 = "sha256-uXSmEJUpcw/PQ5I9nR1b6N1fcOdCSCM4KF0XnGNJkME=";
   };
 
@@ -37,14 +36,14 @@ rustPlatform.buildRustPackage rec {
       -p1 < ${mimallocPatch}
   '';
 
-  passthru.tests.version = testers.testVersion { package = difftastic; };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = with lib; {
     description = "A syntax-aware diff";
     homepage = "https://github.com/Wilfred/difftastic";
-    changelog = "https://github.com/Wilfred/difftastic/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/Wilfred/difftastic/blob/${finalAttrs.version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ ethancedwards8 figsoda ];
     mainProgram = "difft";
   };
-}
+})
