@@ -4,7 +4,7 @@
 }:
 
 buildPythonPackage {
-  inherit (dlib) name src nativeBuildInputs buildInputs meta;
+  inherit (dlib) pname version src nativeBuildInputs buildInputs meta;
 
   # although AVX can be enabled, we never test with it. Some Hydra machines
   # fail because of this, however their build results are probably used on hardware
