@@ -16,6 +16,7 @@ stdenv.mkDerivation {
   dontConfigure = true;
 
   buildPhase = ''
+    runHook preBuild
     for i in *.sfd; do
       fontforge -lang=ff -c \
         'Open($1);
@@ -31,14 +32,17 @@ stdenv.mkDerivation {
         Generate($1:r + ".enc");
         ' $i;
     done
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -m444 -Dt $out/share/fonts/opentype/public *.otf
     install -m444 -Dt $out/share/fonts/truetype/public *.ttf
     install -m444 -Dt $out/share/fonts/type1/public    *.pfb
     install -m444 -Dt $out/share/texmf/fonts/enc       *.enc
     install -m444 -Dt $out/share/texmf/fonts/map       *.map
+    runHook postInstall
   '';
 
   meta = with lib; {
