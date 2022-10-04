@@ -1,13 +1,13 @@
 { lib, buildGoModule, fetchurl, nixosTests, openssl, pkg-config }:
 
 buildGoModule rec {
-  pname = "ipfs";
+  pname = "kubo";
   version = "0.15.0"; # When updating, also check if the repo version changed and adjust repoVersion below
   rev = "v${version}";
 
-  passthru.repoVersion = "12"; # Also update ipfs-migrator when changing the repo version
+  passthru.repoVersion = "12"; # Also update kubo-migrator when changing the repo version
 
-  # go-ipfs makes changes to it's source tarball that don't match the git source.
+  # Kubo makes changes to it's source tarball that don't match the git source.
   src = fetchurl {
     url = "https://github.com/ipfs/kubo/releases/download/${rev}/kubo-source.tar.gz";
     hash = "sha256-GkOY1G2CKXbMbHXkw5v27HmfkJIl2nZOmjjZbzuaRWs=";
@@ -15,10 +15,10 @@ buildGoModule rec {
 
   # tarball contains multiple files/directories
   postUnpack = ''
-    mkdir ipfs-src
+    mkdir kubo-src
     shopt -s extglob
-    mv !(ipfs-src) ipfs-src || true
-    cd ipfs-src
+    mv !(kubo-src) kubo-src || true
+    cd kubo-src
   '';
 
   sourceRoot = ".";
@@ -29,7 +29,7 @@ buildGoModule rec {
   nativeBuildInputs = [ pkg-config ];
   tags = [ "openssl" ];
 
-  passthru.tests.ipfs = nixosTests.ipfs;
+  passthru.tests.kubo = nixosTests.kubo;
 
   vendorSha256 = null;
 
@@ -57,6 +57,7 @@ buildGoModule rec {
     homepage = "https://ipfs.io/";
     license = licenses.mit;
     platforms = platforms.unix;
+    mainProgram = "ipfs";
     maintainers = with maintainers; [ fpletz ];
   };
 }

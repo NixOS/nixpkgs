@@ -1,11 +1,11 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
-  name = "ipfs";
+  name = "kubo";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ mguentner ];
   };
 
   nodes.machine = { ... }: {
-    services.ipfs = {
+    services.kubo = {
       enable = true;
       # Also will add a unix domain socket socket API address, see module.
       startWhenNeeded = true;
@@ -15,7 +15,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   };
 
   nodes.fuse = { ... }: {
-    services.ipfs = {
+    services.kubo = {
       enable = true;
       apiAddress = "/ip4/127.0.0.1/tcp/2324";
       autoMount = true;

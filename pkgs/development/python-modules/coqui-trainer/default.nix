@@ -30,6 +30,10 @@ buildPythonPackage {
     hash = "sha256-WBFsQuGnpqOiQW7VFfsk0t7qEBs1ScOChfQFpLmqTz4=";
   };
 
+  postPatch = ''
+    sed -i 's/^protobuf.*/protobuf/' requirements.txt
+  '';
+
   propagatedBuildInputs = [
     coqpit
     fsspec

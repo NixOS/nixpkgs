@@ -1901,6 +1901,8 @@ with pkgs;
 
   tilix = callPackage ../applications/terminal-emulators/tilix { };
 
+  tym = callPackage ../applications/terminal-emulators/tym { };
+
   wayst = callPackage ../applications/terminal-emulators/wayst { };
 
   wezterm = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/wezterm {
@@ -3420,6 +3422,8 @@ with pkgs;
     acpidump-all
     coreboot-utils;
 
+  coreboot-configurator = libsForQt5.callPackage ../tools/misc/coreboot-configurator { };
+
   corosync = callPackage ../servers/corosync { };
 
   cowsay = callPackage ../tools/misc/cowsay { };
@@ -4306,7 +4310,13 @@ with pkgs;
 
   libnss-mysql = callPackage ../os-specific/linux/libnss-mysql { };
 
+  libnvme = callPackage ../os-specific/linux/libnvme { };
+
   libxnd = callPackage ../development/libraries/libxnd { };
+
+  libzbc = callPackage ../os-specific/linux/libzbc { };
+
+  libzbd = callPackage ../os-specific/linux/libzbd { };
 
   lifeograph = callPackage ../applications/editors/lifeograph { };
 
@@ -4874,8 +4884,6 @@ with pkgs;
 
   appleseed = callPackage ../tools/graphics/appleseed { };
 
-  apple-music-electron = callPackage ../applications/audio/apple-music-electron { };
-
   apc-temp-fetch = with python3.pkgs; callPackage ../tools/networking/apc-temp-fetch { };
 
   arping = callPackage ../tools/networking/arping { };
@@ -5342,7 +5350,7 @@ with pkgs;
 
     mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
       stdenv = clangStdenv;
-      protobuf = pkgs.protobuf3_8.overrideDerivation (_: { stdenv = clangStdenv; });
+      protobuf = pkgs.protobuf.overrideDerivation (_: { stdenv = clangStdenv; });
     };
 
     rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
@@ -5820,6 +5828,8 @@ with pkgs;
     openssl = openssl_1_1;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  doggo = callPackage ../tools/networking/doggo { };
 
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
 
@@ -7397,6 +7407,8 @@ with pkgs;
 
   gtkperf = callPackage ../development/tools/misc/gtkperf { };
 
+  gtkradiant = callPackage ../applications/misc/gtkradiant { };
+
   gtk-frdp = callPackage ../development/libraries/gtk-frdp {};
 
   gtk-vnc = callPackage ../tools/admin/gtk-vnc {};
@@ -7593,6 +7605,8 @@ with pkgs;
   hockeypuck = callPackage ../servers/hockeypuck/server.nix { };
 
   hockeypuck-web = callPackage ../servers/hockeypuck/web.nix { };
+
+  holochain-launcher = callPackage ../applications/misc/holochain-launcher { };
 
   homesick = callPackage ../tools/misc/homesick { };
 
@@ -7834,16 +7848,9 @@ with pkgs;
 
   ipfetch = callPackage ../tools/networking/ipfetch { };
 
-  ipfs = callPackage ../applications/networking/ipfs {
-    openssl = openssl_1_1;
-  };
   ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {
     buildGoModule = buildGo119Module;
   };
-
-  ipfs-migrator-all-fs-repo-migrations = callPackage ../applications/networking/ipfs-migrator/all-migrations.nix { };
-  ipfs-migrator-unwrapped = callPackage ../applications/networking/ipfs-migrator/unwrapped.nix { };
-  ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
 
   ipfs-upload-client = callPackage ../applications/networking/ipfs-upload-client { };
 
@@ -8188,6 +8195,14 @@ with pkgs;
   kubepug = callPackage ../development/tools/kubepug { };
 
   kubergrunt = callPackage ../applications/networking/cluster/kubergrunt { };
+
+  kubo = callPackage ../applications/networking/kubo {
+    openssl = openssl_1_1;
+  };
+
+  kubo-migrator-all-fs-repo-migrations = callPackage ../applications/networking/kubo-migrator/all-migrations.nix { };
+  kubo-migrator-unwrapped = callPackage ../applications/networking/kubo-migrator/unwrapped.nix { };
+  kubo-migrator = callPackage ../applications/networking/kubo-migrator { };
 
   kwalletcli = libsForQt5.callPackage ../tools/security/kwalletcli { };
 
@@ -10244,6 +10259,8 @@ with pkgs;
 
   poly2tri-c = callPackage ../development/libraries/poly2tri-c { };
 
+  polypane = callPackage ../applications/networking/browsers/polypane { };
+
   ponysay = callPackage ../tools/misc/ponysay { };
 
   popfile = callPackage ../tools/text/popfile { };
@@ -10589,6 +10606,8 @@ with pkgs;
 
   read-edid = callPackage ../os-specific/linux/read-edid { };
 
+  readstat = callPackage ../applications/science/math/readstat { };
+
   redir = callPackage ../tools/networking/redir { };
 
   redmine = callPackage ../applications/version-management/redmine { };
@@ -10882,10 +10901,7 @@ with pkgs;
 
   sacd = callPackage ../tools/cd-dvd/sacd { };
 
-  safe = callPackage ../tools/security/safe {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
-  };
+  safe = callPackage ../tools/security/safe { };
 
   safety-cli = with python3.pkgs; toPythonApplication safety;
 
@@ -11570,6 +11586,8 @@ with pkgs;
 
   inherit (callPackages ../applications/networking/taler { })
     taler-exchange taler-merchant;
+
+  tandoor-recipes = callPackage ../applications/misc/tandoor-recipes { };
 
   tangram = callPackage ../applications/networking/instant-messengers/tangram { };
 
@@ -14560,6 +14578,10 @@ with pkgs;
 
   rasm = callPackage ../development/compilers/rasm { };
 
+  replibyte = callPackage ../development/tools/database/replibyte {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   rgbds = callPackage ../development/compilers/rgbds { };
 
   rgxg = callPackage ../tools/text/rgxg { };
@@ -15898,7 +15920,8 @@ with pkgs;
     electron_17
     electron_18
     electron_19
-    electron_20;
+    electron_20
+    electron_21;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -19469,9 +19492,7 @@ with pkgs;
 
   libccd = callPackage ../development/libraries/libccd { };
 
-  libcec = callPackage ../development/libraries/libcec {
-    libraspberrypi = null;
-  };
+  libcec = callPackage ../development/libraries/libcec { };
 
   libcec_platform = callPackage ../development/libraries/libcec/platform.nix { };
 
@@ -23145,6 +23166,8 @@ with pkgs;
   haka = callPackage ../tools/security/haka { };
 
   hashi-ui = callPackage ../servers/hashi-ui {};
+
+  hashi-up = callPackage ../applications/networking/cluster/hashi-up { };
 
   hasura-graphql-engine = haskell.lib.compose.justStaticExecutables haskell.packages.ghc810.graphql-engine;
 
@@ -27987,10 +28010,7 @@ with pkgs;
 
   gopher = callPackage ../applications/networking/gopher/gopher { };
 
-  gophernotes = callPackage ../applications/editors/gophernotes {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
-  };
+  gophernotes = callPackage ../applications/editors/gophernotes { };
 
   goxel = callPackage ../applications/graphics/goxel { };
 
@@ -29020,6 +29040,8 @@ with pkgs;
   imgp = python3Packages.callPackage ../applications/graphics/imgp { };
 
   inkcut = libsForQt5.callPackage ../applications/misc/inkcut { };
+
+  inklingreader = callPackage ../tools/misc/inklingreader { };
 
   inkscape = callPackage ../applications/graphics/inkscape {
     lcms = lcms2;
@@ -31407,7 +31429,10 @@ with pkgs;
 
   socialscan = with python3.pkgs; toPythonApplication socialscan;
 
-  sonic-lineup = libsForQt5.callPackage ../applications/audio/sonic-lineup { stdenv = gcc10StdenvCompat; };
+  sonic-lineup = libsForQt5.callPackage ../applications/audio/sonic-lineup {
+    bzip2 = bzip2_1_1;
+    stdenv = gcc10StdenvCompat;
+  };
 
   sonic-visualiser = libsForQt5.callPackage ../applications/audio/sonic-visualiser { };
 
