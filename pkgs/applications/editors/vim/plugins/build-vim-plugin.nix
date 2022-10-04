@@ -23,7 +23,8 @@ rec {
     ...
   }:
     let drv = stdenv.mkDerivation (attrs // {
-      name = "${namePrefix}${pname}-${version}";
+      pname = "${namePrefix}${pname};
+      inherit version;
       inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
 
       installPhase = ''
