@@ -4527,6 +4527,8 @@ in {
 
   infinity = callPackage ../development/python-modules/infinity { };
 
+  inflate64 = callPackage ../development/python-modules/inflate64 { };
+
   inflect = callPackage ../development/python-modules/inflect { };
 
   inflection = callPackage ../development/python-modules/inflection { };
@@ -5965,6 +5967,8 @@ in {
 
   multitasking = callPackage ../development/python-modules/multitasking { };
 
+  multivolumefile = callPackage ../development/python-modules/multivolumefile { };
+
   munch = callPackage ../development/python-modules/munch { };
 
   munkres = callPackage ../development/python-modules/munkres { };
@@ -6350,6 +6354,8 @@ in {
   nvchecker = callPackage ../development/python-modules/nvchecker { };
 
   nxt-python = callPackage ../development/python-modules/nxt-python { };
+
+  py7zr = callPackage ../development/python-modules/py7zr { };
 
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
 
@@ -7114,6 +7120,8 @@ in {
 
   pyzbar = callPackage ../development/python-modules/pyzbar { };
 
+  pyzstd = callPackage ../development/python-modules/pyzstd { };
+
   pkutils = callPackage ../development/python-modules/pkutils { };
 
   plac = callPackage ../development/python-modules/plac { };
@@ -7525,6 +7533,8 @@ in {
   pybalboa = callPackage ../development/python-modules/pybalboa { };
 
   pybase64 = callPackage ../development/python-modules/pybase64 { };
+
+  pybcj = callPackage ../development/python-modules/pybcj { };
 
   pybids = callPackage ../development/python-modules/pybids { };
 
@@ -8319,6 +8329,10 @@ in {
   pyplatec = callPackage ../development/python-modules/pyplatec { };
 
   pyppeteer = callPackage ../development/python-modules/pyppeteer { };
+
+  pyppmd = callPackage ../development/python-modules/pyppmd { };
+
+  pyppmd-018 = callPackage ../development/python-modules/pyppmd/018.nix { };
 
   pypresence = callPackage ../development/python-modules/pypresence { };
 
@@ -11020,6 +11034,8 @@ in {
     cudnnSupport = false;
   };
 
+  thefuzz = callPackage ../development/python-modules/thefuzz { };
+
   thermobeacon-ble = callPackage ../development/python-modules/thermobeacon-ble { };
 
   thermopro-ble = callPackage ../development/python-modules/thermopro-ble { };
@@ -11505,6 +11521,8 @@ in {
 
   unrardll = callPackage ../development/python-modules/unrardll { };
 
+  unrar-cffi = callPackage ../development/python-modules/unrar-cffi { };
+
   unrpa = callPackage ../development/python-modules/unrpa { };
 
   untangle = callPackage ../development/python-modules/untangle { };
@@ -11894,6 +11912,8 @@ in {
   wordcloud = callPackage ../development/python-modules/wordcloud { };
 
   wordfreq = callPackage ../development/python-modules/wordfreq { };
+
+  wordninja = callPackage ../development/python-modules/wordninja { };
 
   worldengine = callPackage ../development/python-modules/worldengine { };
 

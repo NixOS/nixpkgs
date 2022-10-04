@@ -25644,6 +25644,8 @@ with pkgs;
 
   comic-relief = callPackage ../data/fonts/comic-relief {};
 
+  comicTagger = python3Packages.callPackage ../applications/misc/comic-tagger { };
+
   comixcursors = callPackage ../data/icons/comixcursors {};
 
   corefonts = callPackage ../data/fonts/corefonts { };
