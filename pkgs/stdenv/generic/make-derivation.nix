@@ -296,8 +296,10 @@ else let
        "nativeCheckInputs" "nativeInstallCheckInputs"
        "__darwinAllowLocalNetworking"
        "__impureHostDeps" "__propagatedImpureHostDeps"
-       "sandboxProfile" "propagatedSandboxProfile"]
-       ++ lib.optional (__structuredAttrs || envIsExportable) "env"))
+       "sandboxProfile" "propagatedSandboxProfile"
+       "removeFromBuilderEnv"]
+       ++ lib.optional (__structuredAttrs || envIsExportable) "env"
+       ++ (attrs.removeFromBuilderEnv or [])))
     // (lib.optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
       name =
         let
