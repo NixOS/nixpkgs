@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     # compress pcf fonts
     mkdir -p $out/share/fonts/misc
     rm Speedy.pcf # duplicated as Speedy11.pcf
@@ -28,6 +30,8 @@ stdenv.mkDerivation rec {
 
     mkfontscale "$out/share/fonts/truetype"
     mkfontdir   "$out/share/fonts/misc"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
