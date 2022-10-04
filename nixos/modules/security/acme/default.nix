@@ -190,7 +190,7 @@ let
     );
     renewOpts = escapeShellArgs (
       commonOpts
-      ++ [ "renew" ]
+      ++ [ "renew" "--no-random-sleep" ]
       ++ optionals data.ocspMustStaple [ "--must-staple" ]
       ++ data.extraLegoRenewFlags
     );
@@ -223,9 +223,9 @@ let
         # have many certificates, the renewals are distributed over
         # the course of the day to avoid rate limits.
         AccuracySec = "${toString (_24hSecs / numCerts)}s";
-
         # Skew randomly within the day, per https://letsencrypt.org/docs/integration-guide/.
         RandomizedDelaySec = "24h";
+        FixedRandomDelay = true;
       };
     };
 
