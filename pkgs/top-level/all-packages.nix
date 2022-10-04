@@ -1347,6 +1347,8 @@ with pkgs;
 
   midi-trigger = callPackage ../applications/audio/midi-trigger { };
 
+  mkosi = callPackage ../tools/virtualization/mkosi {};
+
   mprocs = callPackage ../tools/misc/mprocs { };
 
   nominatim = callPackage ../servers/nominatim { };
