@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "vault";
-  version = "1.10.5";
+  version = "1.10.6";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "sha256-c9E+5WviguvZFPryWuXjcocgZdZsithZPmZ1iIC3Gck=";
+    sha256 = "sha256-YCLhQxT1yIScYulJectv5bNkGOB8I7cKMAneay6iWcc=";
   };
 
-  vendorSha256 = "sha256-AKh7MICGhzZsyeJ8uj/F2lx/G1nh8e3Q6ZXzHtZ+P38=";
+  vendorSha256 = "sha256-7IdzOEJsT3tD/4L5bg1CQGVCHkXgzvlxLVnSOACkRzQ=";
 
   subPackages = [ "." ];
 

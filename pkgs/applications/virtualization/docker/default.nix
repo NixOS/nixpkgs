@@ -10,9 +10,9 @@ rec {
       , containerdRev, containerdSha256
       , tiniRev, tiniSha256, buildxSupport ? true, composeSupport ? true
       # package dependencies
-      , stdenv, fetchFromGitHub, fetchpatch, buildGoPackage
+      , stdenv, fetchFromGitHub, fetchpatch, buildGo118Package
       , makeWrapper, installShellFiles, pkg-config, glibc
-      , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
+      , go-md2man, go_1_18, containerd, runc, docker-proxy, tini, libtool
       , sqlite, iproute2, lvm2, systemd, docker-buildx, docker-compose_2
       , btrfs-progs, iptables, e2fsprogs, xz, util-linux, xfsprogs, git
       , procps, libseccomp, rootlesskit, slirp4netns, fuse-overlayfs
@@ -20,6 +20,9 @@ rec {
       , clientOnly ? !stdenv.isLinux, symlinkJoin
     }:
   let
+    go = go_1_18;
+    buildGoPackage = buildGo118Package;
+
     docker-runc = runc.overrideAttrs (oldAttrs: {
       name = "docker-runc-${version}";
       inherit version;
