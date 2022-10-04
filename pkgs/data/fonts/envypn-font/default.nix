@@ -18,16 +18,24 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     # convert pcf fonts to otb
     for i in *e.pcf.gz; do
       faketime -f "1970-01-01 00:00:01" \
       fonttosfnt -v -o "$(basename "$i" .pcf.gz)".otb "$i"
     done
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m 644 -t "$out/share/fonts/misc" *.otb *.pcf.gz
     mkfontdir "$out/share/fonts/misc"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
