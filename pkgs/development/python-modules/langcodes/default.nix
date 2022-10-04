@@ -6,6 +6,7 @@
 , poetry-core
 , pytestCheckHook
 , language-data
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     language-data
     marisa-trie
+    setuptools # pkg_resources import in language_data/util.py
   ];
 
   checkInputs = [
