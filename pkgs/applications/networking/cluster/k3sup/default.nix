@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "k3sup";
-  version = "0.12.3";
+  version = "0.12.7";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "k3sup";
     rev = version;
-    sha256 = "sha256-2S/VnxVb056aPxFd5LxtUdaNlosHLlu7Tl/RQbY/zpA=";
+    sha256 = "sha256-EOGYOxRhpPHOSo9ccCSvat9kq2SlujPqno8v7/zmuto=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
