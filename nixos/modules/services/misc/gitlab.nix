@@ -96,6 +96,14 @@ let
 
   redisConfig.production.url = cfg.redisUrl;
 
+  cableYml = yaml.generate "cable.yml" {
+    production = {
+      adapter = "redis";
+      url = cfg.redisUrl;
+      channel_prefix = "gitlab_production";
+    };
+  };
+
   pagesArgs = [
     "-pages-domain" gitlabConfig.production.pages.host
     "-pages-root" "${gitlabConfig.production.shared.path}/pages"
@@ -1211,6 +1219,7 @@ in {
           cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
           cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
           ln -sf ${extraGitlabRb} ${cfg.statePath}/config/initializers/extra-gitlab.rb
+          ln -sf ${cableYml} ${cfg.statePath}/config/cable.yml
 
           ${cfg.packages.gitlab-shell}/bin/install
 
