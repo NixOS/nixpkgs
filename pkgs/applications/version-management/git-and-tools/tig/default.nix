@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://jonas.github.io/tig/";
     description = "Text-mode interface for git";
-    maintainers = with maintainers; [ bjornfor domenkozar qknight globin ma27 ];
+    maintainers = with maintainers; [ bjornfor domenkozar qknight globin ma27 srapenne ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
