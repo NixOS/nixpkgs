@@ -7153,12 +7153,9 @@ with pkgs;
     jre_headless = jdk11_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   elasticsearch = elasticsearch7;
-  elasticsearch-oss = elasticsearch7-oss;
 
   elasticsearchPlugins = recurseIntoAttrs (
-    callPackage ../servers/search/elasticsearch/plugins.nix {
-      elasticsearch = elasticsearch-oss;
-    }
+    callPackage ../servers/search/elasticsearch/plugins.nix {}
   );
 
   elasticsearch-curator = callPackage ../tools/admin/elasticsearch-curator { };
