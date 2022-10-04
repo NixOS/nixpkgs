@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     homepage = "https://contextfreeart.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }
