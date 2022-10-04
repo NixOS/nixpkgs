@@ -89,7 +89,13 @@ python3.pkgs.buildPythonApplication {
     qdarkstyle
   ];
 
-  preBuild = ''
+  postPatch = ''
+    # make compatible with protobuf4 by easing dependencies ...
+    substituteInPlace ./contrib/requirements/requirements.txt \
+      --replace "protobuf>=3.12,<4" "protobuf>=3.12"
+    # ... and regenerating the paymentrequest_pb2.py file
+    protoc --python_out=. electrum/paymentrequest.proto
+
     substituteInPlace ./electrum/ecc_fast.py \
       --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
   '' + (if enableQt then ''

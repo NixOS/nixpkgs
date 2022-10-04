@@ -120,7 +120,7 @@ in
     };
 
     qemu.package = mkOption {
-      description = mdDoc "Which qemu package to use for the virtualisation of [{option}`nodes`](#opt-nodes).";
+      description = mdDoc "Which qemu package to use for the virtualisation of [{option}`nodes`](#test-opt-nodes).";
       type = types.package;
       default = hostPkgs.qemu_test;
       defaultText = "hostPkgs.qemu_test";
@@ -152,7 +152,7 @@ in
       description = mdDoc ''
         Extra arguments to pass to the test driver.
 
-        They become part of [{option}`driver`](#opt-driver) via `wrapProgram`.
+        They become part of [{option}`driver`](#test-opt-driver) via `wrapProgram`.
       '';
       type = types.listOf types.str;
       default = [];
@@ -172,7 +172,7 @@ in
       description = mdDoc ''
         Disable type checking. This must not be enabled for new NixOS tests.
 
-        This may speed up your iteration cycle, unless you're working on the [{option}`testScript`](#opt-testScript).
+        This may speed up your iteration cycle, unless you're working on the [{option}`testScript`](#test-opt-testScript).
       '';
     };
   };

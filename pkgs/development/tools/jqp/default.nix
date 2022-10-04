@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "jqp";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "noahgorstein";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dVarasXLJrB/akMUvjZn313+bqM39Ji4l91PAxwmfG0=";
+    sha256 = "sha256-f1HSwo0TwNpw02bNT1dzfovXcRQuP/IxAmomBgKuQxQ=";
   };
 
-  vendorSha256 = "sha256-KlnKWeLbmLH6M5+oD/BYuqkTyrV9Xo7ibrNjukFe7ss=";
+  vendorSha256 = "sha256-cx5esdxAJInxXHXx0xeKQNGTDBjKD3GhnY0Fu/Tzy9U=";
 
   subPackages = [ "." ];
 
