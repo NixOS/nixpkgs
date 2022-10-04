@@ -9,7 +9,7 @@
 , gtk3
 , glib
 , gjs
-, webkitgtk
+, webkitgtk_4_1
 , gobject-introspection
 , wrapGAppsHook
 , itstool
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     gtk3
     glib
     gjs
-    webkitgtk
+    webkitgtk_4_1
     libxml2
     python3
     python3.pkgs.pygobject3
@@ -57,6 +57,11 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     gnome.adwaita-icon-theme
   ];
+
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace 'webkit2gtk-4.0' 'webkit2gtk-4.1'
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
