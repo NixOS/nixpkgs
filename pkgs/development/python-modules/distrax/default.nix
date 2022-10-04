@@ -53,5 +53,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/deepmind/distrax";
     license = licenses.asl20;
     maintainers = with maintainers; [ onny ];
+    # 443 unit tests failing, sample:
+    # AttributeError: module 'jax.core' has no attribute 'unitvar'
+    broken = true; # at 2022-10-04
   };
 }
