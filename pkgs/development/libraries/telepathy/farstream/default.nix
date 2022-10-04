@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "02ky12bb92prr5f6xmvmfq4yz2lj33li6nj4829a98hk5pr9k83g";
   };
 
-  propagatedBuildInputs = [ dbus-glib telepathy-glib farstream ];
   nativeBuildInputs = [ pkg-config ];
+  propagatedBuildInputs = [ dbus-glib telepathy-glib farstream ];
 
   meta = with lib; {
     description = "GObject-based C library that uses Telepathy GLib, Farstream and GStreamer to handle the media streaming part of channels of type Call";
