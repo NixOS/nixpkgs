@@ -6586,6 +6586,8 @@ with pkgs;
 
   fortune = callPackage ../tools/misc/fortune { };
 
+  fortuneExtensions = recurseIntoAttrs fortune.extensions;
+
   fox = callPackage ../development/libraries/fox {
     libpng = libpng12;
     inherit (darwin.apple_sdk.frameworks) CoreServices;

@@ -1,4 +1,29 @@
-{ lib, stdenv, fetchurl, cmake, recode, perl, withOffensive ? false }:
+{ lib, stdenv, fetchurl, pkgs, buildEnv, cmake, recode, perl, fortune, withOffensive ? false }:
+
+with lib;
+
+let
+  fortuneExtensions = import ./extensions { inherit pkgs; };
+
+  env = extensions:
+    let
+      selected = [ fortune ] ++ extensions fortuneExtensions;
+    in buildEnv {
+      name = "fortune";
+      paths = selected;
+      buildInputs = concatMap (x: x.buildInputs) selected;
+
+      postBuild = ''
+      files=$(find $out/share/fortunes -type f -exec readlink -f {} \;)
+
+      for i in $files; do
+        if ! [ "$(readlink -f "$out/share/fortunes/$(basename $i)")" = "$i" ]; then
+          ln -sf $i $out/share/fortunes/$(basename $i)
+        fi
+      done
+      '';
+    };
+in
 
 stdenv.mkDerivation rec {
   pname = "fortune-mod";
@@ -40,11 +65,16 @@ stdenv.mkDerivation rec {
     rm -f $out/share/fortunes/men-women*
   '';
 
+  passthru = {
+    extensions = fortuneExtensions;
+    withExtensions = env;
+  };
+
   meta = with lib; {
     mainProgram = "fortune";
     description = "A program that displays a pseudorandom message from a database of quotations";
     license = licenses.bsdOriginal;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ vonfry ];
+    maintainers = with maintainers; [ vonfry cafkafk ];
   };
 }
