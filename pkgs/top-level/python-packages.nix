@@ -11635,6 +11635,8 @@ in {
 
   versionfinder = callPackage ../development/python-modules/versionfinder { };
 
+  versioningit = callPackage ../development/python-modules/versioningit { };
+
   versiontag = callPackage ../development/python-modules/versiontag { };
 
   versiontools = callPackage ../development/python-modules/versiontools { };
