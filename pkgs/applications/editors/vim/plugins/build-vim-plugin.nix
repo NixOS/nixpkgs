@@ -10,7 +10,7 @@
 rec {
   buildVimPlugin = attrs@{
     pname,
-    version ? "«version-missing»",
+    version ? "unknown",
     namePrefix ? "vimplugin-",
     src,
     unpackPhase ? "",
