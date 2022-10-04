@@ -91,13 +91,6 @@ let
     repos_path = "${cfg.statePath}/repositories";
     secret_file = "${cfg.statePath}/gitlab_shell_secret";
     log_file = "${cfg.statePath}/log/gitlab-shell.log";
-    redis = {
-      bin = "${pkgs.redis}/bin/redis-cli";
-      host = "127.0.0.1";
-      port = config.services.redis.servers.gitlab.port;
-      database = 0;
-      namespace = "resque:gitlab";
-    };
   };
 
   redisConfig.production.url = cfg.redisUrl;
@@ -481,9 +474,9 @@ in {
 
       redisUrl = mkOption {
         type = types.str;
-        default = "redis://localhost:${toString config.services.redis.servers.gitlab.port}/";
-        defaultText = literalExpression ''redis://localhost:''${toString config.services.redis.servers.gitlab.port}/'';
-        description = lib.mdDoc "Redis URL for all GitLab services except gitlab-shell";
+        default = "unix:/run/gitlab/redis.sock";
+        example = "redis://localhost:6379/";
+        description = lib.mdDoc "Redis URL for all GitLab services.";
       };
 
       extraGitlabRb = mkOption {
@@ -1018,8 +1011,9 @@ in {
     # Redis is required for the sidekiq queue runner.
     services.redis.servers.gitlab = {
       enable = mkDefault true;
-      port = mkDefault 31636;
-      bind = mkDefault "127.0.0.1";
+      user = mkDefault cfg.user;
+      unixSocket = mkDefault "/run/gitlab/redis.sock";
+      unixSocketPerm = mkDefault 770;
     };
 
     # We use postgres as the main data store.
