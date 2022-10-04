@@ -20,6 +20,7 @@ nodePackages.package.override {
   nativeBuildInputs = [ pkgs.makeWrapper ];
 
   postInstall = ''
+    npm run build
     makeWrapper '${nodejs}/bin/node' "$out/bin/matrix-appservice-slack" \
     --add-flags "$out/lib/node_modules/matrix-appservice-slack/lib/app.js"
   '';
