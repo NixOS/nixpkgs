@@ -328,9 +328,6 @@ in {
   config = mkIf (cfg.interfaces != {}) {
     boot.extraModulePackages = optional (versionOlder kernel.kernel.version "5.6") kernel.wireguard;
     environment.systemPackages = [ pkgs.wireguard-tools ];
-    # This is forced to false for now because the default "--validmark" rpfilter we apply on reverse path filtering
-    # breaks the wg-quick routing because wireguard packets leave with a fwmark from wireguard.
-    networking.firewall.checkReversePath = false;
     systemd.services = mapAttrs' generateUnit cfg.interfaces;
 
     # Prevent networkd from clearing the rules set by wg-quick when restarted (e.g. when waking up from suspend).
