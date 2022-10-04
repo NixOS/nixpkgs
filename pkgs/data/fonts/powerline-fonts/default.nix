@@ -15,11 +15,15 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     find . -name '*.otf'    -exec install -Dt $out/share/fonts/opentype {} \;
     find . -name '*.ttf'    -exec install -Dt $out/share/fonts/truetype {} \;
     find . -name '*.bdf'    -exec install -Dt $out/share/fonts/bdf      {} \;
     find . -name '*.pcf.gz' -exec install -Dt $out/share/fonts/pcf      {} \;
     find . -name '*.psf.gz' -exec install -Dt $out/share/consolefonts   {} \;
+
+    runHook postInstall
   '';
 
   outputHashMode = "recursive";
