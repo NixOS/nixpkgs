@@ -21,6 +21,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "seahub";
   version = "9.0.6";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "haiwen";
