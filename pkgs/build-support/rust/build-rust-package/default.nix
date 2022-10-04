@@ -17,66 +17,56 @@
 , windows
 }:
 
-{ name ? "${args.pname}-${args.version}"
+let rustOverride =
 
-  # Name for the vendored dependencies tarball
-, cargoDepsName ? name
-
-, src ? null
-, srcs ? null
-, preUnpack ? null
-, unpackPhase ? null
-, postUnpack ? null
-, cargoPatches ? []
-, patches ? []
-, sourceRoot ? null
-, logLevel ? ""
-, buildInputs ? []
-, nativeBuildInputs ? []
-, cargoUpdateHook ? ""
-, cargoDepsHook ? ""
-, buildType ? "release"
-, meta ? {}
-, cargoLock ? null
-, cargoVendorDir ? null
-, checkType ? buildType
-, buildNoDefaultFeatures ? false
-, checkNoDefaultFeatures ? buildNoDefaultFeatures
-, buildFeatures ? [ ]
-, checkFeatures ? buildFeatures
-, useNextest ? false
-, auditable ? true
-
-, depsExtraArgs ? {}
-
-# Toggles whether a custom sysroot is created when the target is a .json file.
-, __internal_dontAddSysroot ? false
-
-# Needed to `pushd`/`popd` into a subdir of a tarball if this subdir
-# contains a Cargo.toml, but isn't part of a workspace (which is e.g. the
-# case for `rustfmt`/etc from the `rust-sources).
-# Otherwise, everything from the tarball would've been built/tested.
-, buildAndTestSubdir ? null
-, ... } @ args:
-
-assert cargoVendorDir == null && cargoLock == null
-    -> !(args ? cargoSha256 && args.cargoSha256 != null) && !(args ? cargoHash && args.cargoHash != null)
-    -> throw "cargoSha256, cargoHash, cargoVendorDir, or cargoLock must be set";
-assert buildType == "release" || buildType == "debug";
+finalAttrs: previousAttrs:
 
 let
+  cargoPatches = finalAttrs.cargoPatches or [];
+  buildType = finalAttrs.buildType or "release";
+  checkType = finalAttrs.checkType or buildType;
+  cargoLock = finalAttrs.cargoLock or null;
+  cargoVendorDir = finalAttrs.cargoVendorDir or null;
+  buildNoDefaultFeatures = finalAttrs.buildNoDefaultFeatures or false;
+  checkNoDefaultFeatures = finalAttrs.checkNoDefaultFeatures or buildNoDefaultFeatures;
+  buildFeatures = finalAttrs.buildFeatures or [ ];
+  checkFeatures = finalAttrs.checkFeatures or buildFeatures;
+  useNextest = finalAttrs.useNextest or false;
+  auditable = finalAttrs.auditable or true;
+  depsExtraArgs = finalAttrs.depsExtraArgs or { };
+
+  # Toggles whether a custom sysroot is created when the target is a .json file.
+  __internal_dontAddSysroot = finalAttrs.__internal_dontAddSysroot or false;
+
+  # Needed to `pushd`/`popd` into a subdir of a tarball if this subdir
+  # contains a Cargo.toml, but isn't part of a workspace (which is e.g. the
+  # case for `rustfmt`/etc from the `rust-sources).
+  # Otherwise, everything from the tarball would've been built/tested.
+  buildAndTestSubdir = finalAttrs.buildAndTestSubdir or null;
 
   cargoDeps =
+    assert cargoVendorDir == null && cargoLock == null
+        -> !(finalAttrs.cargoSha256 or null != null) && !(finalAttrs.cargoHash or null != null)
+        -> throw "One of cargoSha256, cargoHash, cargoVendorDir or cargoLock must be set";
     if cargoVendorDir != null then null
     else if cargoLock != null then importCargoLock cargoLock
     else fetchCargoTarball ({
-      inherit src srcs sourceRoot preUnpack unpackPhase postUnpack cargoUpdateHook;
-      name = cargoDepsName;
+      src = finalAttrs.src or "";
+      srcs = finalAttrs.srcs or null;
+      sourceRoot = finalAttrs.sourceRoot or null;
+      preUnpack = finalAttrs.preUnpack or null;
+      unpackPhase = finalAttrs.unpackPhase or null;
+      # TODO using previousAttrs here as we otherwise trigger rebuilds for all
+      # FOD fetcher users as finalAttrs.postUnpack is prefixed below.
+      postUnpack = previousAttrs.postUnpack or null;
+      cargoUpdateHook = finalAttrs.cargoUpdateHook or "";
+      # Name for the vendored dependencies tarball
+      name = finalAttrs.cargoDepsName or finalAttrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
       patches = cargoPatches;
-    } // lib.optionalAttrs (args ? cargoHash) {
-      hash = args.cargoHash;
-    } // lib.optionalAttrs (args ? cargoSha256) {
-      sha256 = args.cargoSha256;
+    } // lib.optionalAttrs (finalAttrs ? cargoHash) {
+      hash = finalAttrs.cargoHash;
+    } // lib.optionalAttrs (finalAttrs ? cargoSha256) {
+      sha256 = finalAttrs.cargoSha256;
     } // depsExtraArgs);
 
   target = rust.toRustTargetSpec stdenv.hostPlatform;
@@ -89,24 +79,35 @@ let
       (lib.removeSuffix ".json" (builtins.baseNameOf "${target}"))
     else target;
 
-  sysroot = callPackage ./sysroot { } {
+  sysroot = lib.throwIf (finalAttrs.doCheck or false) ''
+    Tests don't currently work for `no_std`, and all custom sysroots are
+    currently built without `std`. See https://os.phil-opp.com/testing/ for more
+    information.
+  '' (callPackage ./sysroot { } {
     inherit target shortTarget;
-    RUSTFLAGS = args.RUSTFLAGS or "";
-    originalCargoToml = src + /Cargo.toml; # profile info is later extracted
-  };
+    RUSTFLAGS = previousAttrs.RUSTFLAGS or "";
+    originalCargoToml = finalAttrs.src + /Cargo.toml; # profile info is later extracted
+  });
 
 in
 
-# Tests don't currently work for `no_std`, and all custom sysroots are currently built without `std`.
-# See https://os.phil-opp.com/testing/ for more information.
-assert useSysroot -> !(args.doCheck or true);
+{
+  removeFromBuilderEnv = [ "depsExtraArgs" "cargoUpdateHook" "cargoLock" ];
 
-stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "cargoLock" ]) // lib.optionalAttrs useSysroot {
-  RUSTFLAGS = "--sysroot ${sysroot} " + (args.RUSTFLAGS or "");
-} // {
-  inherit buildAndTestSubdir cargoDeps;
+  RUSTFLAGS =
+    if useSysroot then
+      lib.optionalString useSysroot "--sysroot ${sysroot} "
+        + (previousAttrs.RUSTFLAGS or "")
+    else
+      previousAttrs.RUSTFLAGS or null;
 
-  cargoBuildType = buildType;
+  inherit cargoDeps;
+
+  buildAndTestSubdir = previousAttrs.buildAndTestSubdir or null;
+
+  cargoBuildType =
+    assert buildType == "release" || buildType == "debug";
+    buildType;
 
   cargoCheckType = checkType;
 
@@ -120,7 +121,7 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  nativeBuildInputs = nativeBuildInputs ++ lib.optionals auditable [
+  nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ lib.optionals auditable [
     (cargo-auditable-cargo-wrapper.override {
       inherit cargo cargo-auditable;
     })
@@ -132,11 +133,11 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
     rustc
   ];
 
-  buildInputs = buildInputs
+  buildInputs = (previousAttrs.buildInputs or [ ])
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
 
-  patches = cargoPatches ++ patches;
+  patches = cargoPatches ++ (previousAttrs.patches or [ ]);
 
   PKG_CONFIG_ALLOW_CROSS =
     if stdenv.buildPlatform != stdenv.hostPlatform then 1 else 0;
@@ -144,20 +145,22 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
   postUnpack = ''
     eval "$cargoDepsHook"
 
-    export RUST_LOG=${logLevel}
-  '' + (args.postUnpack or "");
+    export RUST_LOG=${finalAttrs.logLevel or ""}
+  '' + (previousAttrs.postUnpack or "");
 
-  configurePhase = args.configurePhase or ''
+  configurePhase = previousAttrs.configurePhase or ''
     runHook preConfigure
     runHook postConfigure
   '';
 
-  doCheck = args.doCheck or true;
+  doCheck = previousAttrs.doCheck or true;
 
   strictDeps = true;
 
   meta = {
     # default to Rust's platforms
     platforms = rustc.meta.platforms;
-  } // meta;
-})
+  } // (previousAttrs.meta or {});
+};
+
+in args: (stdenv.mkDerivation args).overrideAttrs rustOverride
