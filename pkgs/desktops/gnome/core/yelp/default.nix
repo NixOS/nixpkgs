@@ -2,7 +2,7 @@
 , stdenv
 , gettext
 , fetchurl
-, webkitgtk
+, webkitgtk_4_1
 , pkg-config
 , gtk3
 , libhandy
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     gtk3
     libhandy
     glib
-    webkitgtk
+    webkitgtk_4_1
     sqlite
     libxml2
     libxslt
@@ -45,10 +45,6 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
   ];
-
-  # To reduce the GNOME ISO closure size.  Remove when other packages
-  # are using webkit2gtk_4_1.
-  configureFlags = ["--with-webkit2gtk-4-0"];
 
   passthru = {
     updateScript = gnome.updateScript {
