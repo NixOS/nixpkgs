@@ -2,13 +2,19 @@
 , buildPythonPackage
 , fetchPypi
 , cryptography
+, types-cryptography
 , pytestCheckHook
 , pythonOlder
+, sphinxHook
+, sphinx-rtd-theme
+, zope_interface
 }:
 
 buildPythonPackage rec {
   pname = "pyjwt";
   version = "2.5.0";
+  format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
@@ -17,13 +23,28 @@ buildPythonPackage rec {
     sha256 = "sha256-53q4lICQXYaZhEKsV4jzUzP6hfZQR6U0rcOO3zyI/Ds=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    sed -i '/types-cryptography/d' setup.cfg
+  '';
+
+  outputs = [
+    "out"
+    "doc"
+  ];
+
+  nativeBuildInputs = [
+    sphinxHook
+    sphinx-rtd-theme
+    zope_interface
+  ];
+
+  passthru.optional-dependencies.crypto = [
     cryptography
   ];
 
   checkInputs = [
     pytestCheckHook
-  ];
+  ] ++ (lib.flatten (lib.attrValues passthru.optional-dependencies));
 
   pythonImportsCheck = [ "jwt" ];
 
