@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python, buildPythonPackage, pkg-config, glib, isPy3k, pythonAtLeast }:
+{ lib, stdenv, fetchurl, fetchpatch, python, buildPythonPackage, pkg-config, glib, isPy3k, pythonAtLeast }:
 
 buildPythonPackage rec {
   pname = "pygobject";
@@ -15,6 +15,11 @@ buildPythonPackage rec {
 
   patches = lib.optionals stdenv.isDarwin [
     ./pygobject-2.0-fix-darwin.patch
+    (fetchpatch {
+      url = "https://github.com/macports/macports-ports/raw/f2975d5bbbc2459c661905c5a850cc661fa32f55/python/py-gobject/files/py-gobject-dynamic_lookup-11.patch";
+      sha256 = "sha256-mtlyu+La3+iC5iQAmVJzDA5E35XGaRQy/EKXzvrWRCg=";
+      extraPrefix = "";
+    })
   ];
 
   configureFlags = [ "--disable-introspection" ];
