@@ -53,6 +53,7 @@ buildPythonPackage rec {
   };
 
   patches = [
+    # Replace git paths
     (substituteAll {
       src = ./hardcode-git-path.patch;
       git = "${lib.getBin git}/bin/git";
@@ -81,10 +82,6 @@ buildPythonPackage rec {
     shortuuid
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   checkInputs = [
     azure-core
     bokeh
@@ -103,6 +100,10 @@ buildPythonPackage rec {
     scikit-learn
     tqdm
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   pythonRelaxDeps = [ "protobuf" ];
 
