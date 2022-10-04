@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://blzdistsc2-a.akamaihd.net/Linux/SC2.${version}.zip";
-    sha256 = "0q1ry9bd3dm8y4hvh57yfq7s05hl2k2sxi2wsl6h0r3w690v1kdd";
+    hash = "sha256-YITktcED94PEnVrJFp3Hvm+Q48y2RRK5lGBOCSI3gXc=";
   };
 
   unpackCmd = ''
