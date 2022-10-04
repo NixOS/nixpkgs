@@ -82,5 +82,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/poets-ai/elegy";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
+    # ERROR: Package 'elegy' requires a different Python: 3.10.7 not in '<3.10,>=3.7'
+    # See: https://github.com/poets-ai/elegy/blob/master/pyproject.toml#L20
+    # On unlocking Python version, several units tests fail. Such as:
+    # AttributeError: module 'jax' has no attribute 'tree_multimap'
+    broken = true; # at 2022-10-04
   };
 }
