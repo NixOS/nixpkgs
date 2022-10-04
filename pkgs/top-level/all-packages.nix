@@ -3444,6 +3444,8 @@ with pkgs;
 
   oguri = callPackage  ../tools/wayland/oguri { };
 
+  shotman = callPackage ../tools/wayland/shotman { };
+
   slurp = callPackage ../tools/wayland/slurp { };
 
   sov = callPackage ../tools/wayland/sov { };
