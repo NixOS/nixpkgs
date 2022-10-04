@@ -165,5 +165,7 @@ buildPythonPackage rec {
     homepage = "https://beam.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
+    # ERROR: No matching distribution found for protobuf<4,>=3.12.2
+    broken = true; # at 2022-10-04
   };
 }
