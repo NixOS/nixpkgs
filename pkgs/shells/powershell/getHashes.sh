@@ -13,7 +13,7 @@ allOutput=""
 dlDest=$(mktemp)
 exDest=$(mktemp -d)
 
-trap 'rm $dlDest; rm -r $exDest' EXIT
+#trap 'rm $dlDest; rm -r $exDest' EXIT
 
 for plat in osx linux; do
     for arch in x64 arm64; do
@@ -29,6 +29,8 @@ for plat in osx linux; do
 variant: $plat $arch
 hash: $hash
 "
+
+        rm $exDest/*
 
     done
 done
