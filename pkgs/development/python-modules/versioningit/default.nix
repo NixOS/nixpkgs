@@ -25,6 +25,13 @@ buildPythonPackage rec {
     hash = "sha256-gJfiYNm99nZYW9gTO/e1//rDeox2KWJVtC2Gy1EqsuM=";
   };
 
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace "--cov=versioningit" "" \
+      --replace "--cov-config=tox.ini" "" \
+      --replace "--no-cov-on-fail" ""
+  '';
+
   propagatedBuildInputs = [
     packaging
     setuptools
@@ -46,13 +53,6 @@ buildPythonPackage rec {
     # wants to write to the Nix store
     "test_editable_mode"
   ];
-
-  preCheck = ''
-    substituteInPlace tox.ini \
-      --replace "--cov=versioningit" "" \
-      --replace "--cov-config=tox.ini" "" \
-      --replace "--no-cov-on-fail" ""
-  '';
 
   pythonImportsCheck = [
     "versioningit"
