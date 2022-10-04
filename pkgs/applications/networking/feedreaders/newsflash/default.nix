@@ -17,6 +17,7 @@
 , glib-networking
 , librsvg
 , gst_all_1
+, gitUpdater
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -86,6 +87,11 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-good
     gst-plugins-bad
   ]);
+
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v.";
+  };
 
   meta = with lib; {
     description = "A modern feed reader designed for the GNOME desktop";
