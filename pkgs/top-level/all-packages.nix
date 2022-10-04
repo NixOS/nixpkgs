@@ -2382,6 +2382,8 @@ with pkgs;
 
   clair = callPackage ../tools/admin/clair { };
 
+  clairvoyance = callPackage ../tools/security/clairvoyance { };
+
   cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
 
   cloudfox = callPackage ../tools/security/cloudfox { };
