@@ -4220,7 +4220,6 @@ broken-packages:
   - reanimate-svg
   - reasonable-lens
   - reason-export
-  - rec-def
   - record
   - record-encode
   - record-impl
