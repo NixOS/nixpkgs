@@ -326,7 +326,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=attilabuti.brainfuck-syntax";
           homepage = "https://github.com/attilabuti/brainfuck-syntax";
           license = licenses.mit;
-          maintainers = with maintainers; [ superherointj ];
+          maintainers = with maintainers; [  ];
         };
       };
 
@@ -410,7 +410,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=badochov.ocaml-formatter";
           homepage = "https://github.com/badochov/ocamlformatter-vscode";
           license = licenses.mit;
-          maintainers = with maintainers; [ superherointj ];
+          maintainers = with maintainers; [  ];
         };
       };
 
@@ -585,7 +585,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense";
           homepage = "https://github.com/ChristianKohler/PathIntellisense";
           license = licenses.mit;
-          maintainers = with maintainers; [ imgabe superherointj ];
+          maintainers = with maintainers; [ imgabe  ];
         };
       };
 
@@ -943,7 +943,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode";
           homepage = "https://github.com/prettier/prettier-vscode";
           license = licenses.mit;
-          maintainers = with maintainers; [ datafoo superherointj ];
+          maintainers = with maintainers; [ datafoo  ];
         };
       };
 
@@ -1134,7 +1134,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=gencer.html-slim-scss-css-class-completion";
           homepage = "https://github.com/gencer/SCSS-Everywhere";
           license = licenses.mit;
-          maintainers = with maintainers; [ superherointj ];
+          maintainers = with maintainers; [  ];
         };
       };
 
@@ -1150,7 +1150,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=gitlab.gitlab-workflow";
           homepage = "https://gitlab.com/gitlab-org/gitlab-vscode-extension#readme";
           license = licenses.mit;
-          maintainers = with maintainers; [ superherointj ];
+          maintainers = with maintainers; [  ];
         };
       };
 
@@ -1400,7 +1400,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=IronGeek.vscode-env";
           homepage = "https://github.com/IronGeek/vscode-env.git";
           license = licenses.mit;
-          maintainers = with maintainers; [ superherointj ];
+          maintainers = with maintainers; [  ];
         };
       };
 
@@ -1468,7 +1468,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jnoortheen.nix-ide";
           homepage = "https://github.com/jnoortheen/vscode-nix-ide";
           license = licenses.mit;
-          maintainers = with maintainers; [ superherointj SuperSandro2000 ];
+          maintainers = with maintainers; [  SuperSandro2000 ];
         };
       };
 
@@ -1963,7 +1963,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=phoenixframework.phoenix";
           homepage = "https://github.com/phoenixframework/vscode-phoenix";
           license = licenses.mit;
-          maintainers = with maintainers; [ superherointj ];
+          maintainers = with maintainers; [  ];
         };
       };
 
@@ -2027,7 +2027,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ocamllabs.ocaml-platform";
           homepage = "https://github.com/ocamllabs/vscode-ocaml-platform";
           license = licenses.isc;
-          maintainers = with maintainers; [ ratsclub superherointj ];
+          maintainers = with maintainers; [ ratsclub  ];
         };
         mktplcRef = {
           name = "ocaml-platform";
@@ -2090,7 +2090,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=Prisma.prisma";
           homepage = "https://github.com/prisma/language-tools";
           license = licenses.asl20;
-          maintainers = with maintainers; [ superherointj ];
+          maintainers = with maintainers; [  ];
         };
       };
 
@@ -2332,7 +2332,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=stefanjarina.vscode-eex-snippets";
           homepage = "https://github.com/stefanjarina/vscode-eex-snippets";
           license = licenses.mit;
-          maintainers = with maintainers; [ superherointj ];
+          maintainers = with maintainers; [  ];
         };
       };
 
@@ -2469,7 +2469,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=theangryepicbanana.language-pascal";
           homepage = "https://github.com/ALANVF/vscode-pascal-magic";
           license = licenses.mit;
-          maintainers = with maintainers; [ superherointj ];
+          maintainers = with maintainers; [  ];
         };
       };
 

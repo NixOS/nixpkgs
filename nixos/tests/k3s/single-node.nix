@@ -26,7 +26,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
   {
     name = "k3s";
     meta = with pkgs.lib.maintainers; {
-      maintainers = [ euank superherointj ];
+      maintainers = [ euank ];
     };
 
     nodes.machine = { pkgs, ... }: {
