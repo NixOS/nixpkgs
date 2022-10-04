@@ -36465,6 +36465,8 @@ with pkgs;
 
   qdl = callPackage ../tools/misc/qdl { };
 
+  qperf = callPackage ../os-specific/linux/qperf { };
+
   rates = callPackage ../tools/misc/rates {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
