@@ -126,7 +126,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
     };
 
     meta = with pkgs.lib.maintainers; {
-      maintainers = [ euank superherointj ];
+      maintainers = [ euank ];
     };
 
     testScript = ''
