@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A fully functional terminal-based music player, library, and streaming audio server";
     homepage = "https://musikcube.com/";
-    maintainers = [ maintainers.aanderse ];
+    maintainers = [ maintainers.aanderse maintainers.srapenne ];
     license = licenses.bsd3;
     platforms = platforms.all;
   };
