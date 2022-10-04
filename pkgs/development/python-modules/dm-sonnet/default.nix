@@ -50,5 +50,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/deepmind/sonnet";
     license = licenses.asl20;
     maintainers = with maintainers; [ onny ];
+    # ERROR: No matching distribution found for etils[epath]
+    broken = true; # at 2022-10-04
   };
 }
