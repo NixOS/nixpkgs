@@ -13,7 +13,11 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m 644 -t "$out/share/fonts/truetype" *.ttf
+
+    runHook postInstall
   '';
 
   outputHashMode = "recursive";
