@@ -7,6 +7,7 @@ let
   opt = options.services.gitlab;
 
   toml = pkgs.formats.toml {};
+  yaml = pkgs.formats.yaml {};
 
   ruby = cfg.packages.gitlab.ruby;
 
@@ -907,7 +908,7 @@ in {
       };
 
       extraConfig = mkOption {
-        type = types.attrs;
+        type = yaml.type;
         default = {};
         example = literalExpression ''
           {
