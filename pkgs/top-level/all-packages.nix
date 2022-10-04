@@ -3696,6 +3696,8 @@ with pkgs;
 
   direnv = callPackage ../tools/misc/direnv { };
 
+  dirstalk = callPackage ../tools/security/dirstalk { };
+
   h = callPackage ../tools/misc/h { };
 
   discount = callPackage ../tools/text/discount { };
