@@ -14,5 +14,6 @@ tcl.mkTclDerivation rec {
     description = "Tcl-only library of standard routines for Tcl";
     license = lib.licenses.tcltk;
     platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }
