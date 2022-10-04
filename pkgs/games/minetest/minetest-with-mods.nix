@@ -1,7 +1,5 @@
 pkgs:
-let flip = f: a: b: (f b a);
-in
-flip (
+pkgs.lib.flip (
   modSelect:
 
   pkgs.makeOverridable
