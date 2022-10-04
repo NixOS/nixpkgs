@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "http://ywstd.fr/p/pj/#envypn";
     license = licenses.miros;
     platforms = platforms.all;
+    maintainers = with maintainers; [ erdnaxe ];
   };
 }
