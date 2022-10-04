@@ -58,6 +58,7 @@ if stdenv.isLinux then buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
   targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile krb5 ]);
 
   runScript = writeShellScript "anki-wrapper.sh" ''
+    export SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt
     exec ${unpacked}/bin/anki
   '';
 
