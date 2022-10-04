@@ -5109,6 +5109,18 @@ final: prev:
     meta.homepage = "https://github.com/mcchrish/nnn.vim/";
   };
 
+  noice-nvim = buildVimPluginFrom2Nix {
+    pname = "noice.nvim";
+    version = "2022-10-04";
+    src = fetchFromGitHub {
+      owner = "folke";
+      repo = "noice.nvim";
+      rev = "15f3bbd607feee3dd4ea255ea2344c3d7d647406";
+      sha256 = "0kps8h4wrlidkjlklmhwdxabgfkb57qr5qmmn3b0bzlqamph21f7";
+    };
+    meta.homepage = "https://github.com/folke/noice.nvim/";
+  };
+
   nord-vim = buildVimPluginFrom2Nix {
     pname = "nord-vim";
     version = "2022-05-31";
