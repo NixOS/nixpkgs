@@ -563,6 +563,17 @@
       </listitem>
       <listitem>
         <para>
+          The ipfs package and module were renamed to kubo. The kubo
+          module now uses an RFC42-style <literal>settings</literal>
+          option instead of <literal>extraConfig</literal> and the
+          <literal>gatewayAddress</literal>,
+          <literal>apiAddress</literal> and
+          <literal>swarmAddress</literal> options were renamed. Using
+          the old names will print a warning but still work.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.cosign</literal> does not provide the
           <literal>cosigned</literal> binary anymore. The
           <literal>sget</literal> binary has been moved into its own
