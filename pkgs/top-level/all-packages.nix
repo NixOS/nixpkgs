@@ -25305,6 +25305,7 @@ with pkgs;
     withOomd = false;
     withPCRE2 = false;
     withPolkit = false;
+    withPortabled = false;
     withRemote = false;
     withResolved = false;
     withShellCompletions = false;
