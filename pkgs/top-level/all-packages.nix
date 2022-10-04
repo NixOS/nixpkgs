@@ -26803,6 +26803,8 @@ with pkgs;
 
   arkade = callPackage ../applications/networking/cluster/arkade { };
 
+  artem = callPackage ../applications/graphics/artem { };
+
   asuka = callPackage ../applications/networking/browsers/asuka {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
