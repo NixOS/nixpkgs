@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "tokenize-rt";
-  version = "4.2.1";
+  version = "5.0.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "asottile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-YNt4YwkuA3DVq4EjJaIES9V3A6ENa3k6/qVKisjA5Pc=";
+    sha256 = "sha256-AIHTnj0Mx6BcM14Rbp7h0n6drvjXiQi39EcyFrYzTOI=";
   };
 
   checkInputs = [ pytestCheckHook ];
