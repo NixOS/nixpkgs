@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, cryptography
 , flask
 , pyjwt
 , pytestCheckHook
@@ -29,9 +30,14 @@ buildPythonPackage rec {
     werkzeug
   ];
 
+  passthru.optional-dependencies.asymmetric_crypto = [
+    cryptography
+  ];
+
   checkInputs = [
     pytestCheckHook
-  ];
+  ]
+  ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "flask_jwt_extended"
