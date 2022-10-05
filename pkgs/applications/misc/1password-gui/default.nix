@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
     if stdenv.hostPlatform.isAarch64 then
       fetchurl {
         url = "https://downloads.1password.com/linux/tar/stable/aarch64/1password-${version}.arm64.tar.gz";
-        sha256 = "0y456ssfsx4cy6pcnihiwi64y90s91399qhgs4abn4pp9wr0h08g";
+        sha256 = "sha256-SJDUfAFEwYnOR+y/6Dg2S/CkA84QogoRpMXOPP5PyrM=";
       }
     else
       fetchurl {
