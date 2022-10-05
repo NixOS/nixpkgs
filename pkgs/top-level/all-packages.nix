@@ -24774,6 +24774,8 @@ with pkgs;
 
   libsmbios = callPackage ../os-specific/linux/libsmbios { };
 
+  libsrt = callPackage ../os-specific/linux/libsrt { };
+
   libsurvive = callPackage ../development/libraries/libsurvive { };
 
   lm_sensors = callPackage ../os-specific/linux/lm-sensors { };
