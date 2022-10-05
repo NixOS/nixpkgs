@@ -12,8 +12,8 @@ with lib;
     boot.loader.systemd-boot.consoleMode = mkDefault "1";
 
 
-    # Grayscale anti-aliasing for fonts
-    fonts.fontconfig.antialias = mkDefault true;
+    # Disable font anti-aliasing & sub-pixel rendering by default
+    fonts.fontconfig.antialias = mkDefault false;
     fonts.fontconfig.subpixel = {
       rgba = mkDefault "none";
       lcdfilter = mkDefault "none";
