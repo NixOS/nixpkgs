@@ -28,7 +28,9 @@ final: prev: let
     # Add all supported builds as attributes
     allBuilds = mapAttrs' (version: file: nameValuePair (computeName version) (buildCuDnnPackage (removeAttrs file ["fileVersion"]))) supportedVersions;
     # Set the default attributes, e.g. cudnn = cudnn_8_3_1;
-    defaultBuild = { "cudnn" = allBuilds.${computeName cuDnnDefaultVersion}; };
+    defaultBuild = { "cudnn" = if allBuilds ? ${computeName cuDnnDefaultVersion}
+      then allBuilds.${computeName cuDnnDefaultVersion}
+      else throw "cudnn-${cuDnnDefaultVersion} does not support your cuda version ${cudaVersion}"; };
   in allBuilds // defaultBuild;
 
   cuDnnVersions = let
