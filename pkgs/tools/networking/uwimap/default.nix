@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pam, openssl }:
+{ lib, stdenv, fetchurl, fetchpatch, openssl, libkrb5, pam }:
 
 stdenv.mkDerivation rec {
   pname = "uw-imap";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   buildInputs = [ openssl ]
-    ++ lib.optional (!stdenv.isDarwin) pam;
+    ++ lib.optionals (!stdenv.isDarwin) [ libkrb5 pam ];
 
   patches = [ (fetchpatch {
     url = "https://salsa.debian.org/holmgren/uw-imap/raw/dcb42981201ea14c2d71c01ebb4a61691b6f68b3/debian/patches/1006_openssl1.1_autoverify.patch";
@@ -32,8 +32,11 @@ stdenv.mkDerivation rec {
     sed -i src/osdep/unix/Makefile -e 's,^SSLLIB=.*,SSLLIB=${lib.getLib openssl}/lib,'
   '';
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
-    "-I${openssl.dev}/include/openssl";
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
+    "-I${openssl.dev}/include/openssl"
+    "-I${libkrb5.dev}/include"
+    "-L${libkrb5}/lib"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin $out/lib $out/include/c-client
@@ -47,7 +50,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.washington.edu/imap/";
     description = "UW IMAP toolkit - IMAP-supporting software developed by the UW";
     license = lib.licenses.asl20;
-    platforms = with lib.platforms; linux;
+    platforms = with lib.platforms; unix;
   };
 
   passthru = {
