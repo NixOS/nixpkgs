@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "digimend";
-  version = "10";
+  version = "11";
 
   src = fetchFromGitHub {
     owner = "digimend";
     repo = "digimend-kernel-drivers";
     rev = "v${version}";
-    sha256 = "0lifd6cx6aa6hcms4zn4hlla3alra08r0svj5x1l8nlsv0ydnl6i";
+    sha256 = "sha256-64Sqvr/bCeg2yQQvQWR4lMwZf6WZsuICpRAvYrqkPY8=";
   };
 
   postPatch = ''
