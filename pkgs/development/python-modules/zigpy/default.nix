@@ -9,7 +9,7 @@
 , fetchFromGitHub
 , pycryptodome
 , pyserial-asyncio
-, pytest-aiohttp
+, pytest-asyncio
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
@@ -41,12 +41,11 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    asynctest
     freezegun
-    pytest-aiohttp
+    pytest-asyncio
     pytest-timeout
     pytestCheckHook
-  ]  ++ lib.optionals (pythonOlder "3.8") [
-    asynctest
   ];
 
   pythonImportsCheck = [
