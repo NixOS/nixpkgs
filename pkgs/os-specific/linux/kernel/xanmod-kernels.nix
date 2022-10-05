@@ -8,10 +8,10 @@ let
     variant = "lts";
   };
 
-  edgeVariant = {
-    version = "5.19.12";
-    hash = "sha256-oN9+xcHjAHt5vGg3jx9bk/VMTyPMAzw5nIqUGtybKow=";
-    variant = "edge";
+  nextVariant = {
+    version = "6.0.0";
+    hash = "sha256-E7T8eHwMKYShv4KWdCbHQmpn+54edJoKdimZY3GFbPU=";
+    variant = "next";
   };
 
   ttVariant = {
@@ -71,6 +71,6 @@ let
 in
 {
   lts = xanmodKernelFor ltsVariant;
-  edge = xanmodKernelFor edgeVariant;
+  next = xanmodKernelFor nextVariant;
   tt = xanmodKernelFor ttVariant;
 }

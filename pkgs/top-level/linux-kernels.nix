@@ -236,7 +236,7 @@ in {
     };
 
     linux_xanmod = xanmodKernels.lts;
-    linux_xanmod_latest = xanmodKernels.edge;
+    linux_xanmod_latest = xanmodKernels.next;
     linux_xanmod_tt = xanmodKernels.tt;
 
     linux_libre = deblobKernel packageAliases.linux_default.kernel;
