@@ -1,4 +1,4 @@
-{ stdenv
+{ gcc10Stdenv
 , lib
 , fetchFromGitHub
 , openssl
@@ -11,7 +11,7 @@
 , which
 }:
 
-stdenv.mkDerivation rec {
+gcc10Stdenv.mkDerivation rec {
   pname = "arangodb";
   version = "3.9.3";
 
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     # avoid using builder's /proc/cpuinfo
-    "-DHAVE_SSE42=${if stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
-    "-DASM_OPTIMIZATIONS=${if stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
+    "-DHAVE_SSE42=${if gcc10Stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
+    "-DASM_OPTIMIZATIONS=${if gcc10Stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
   ];
 
   enableParallelBuilding = true;
