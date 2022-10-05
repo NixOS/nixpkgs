@@ -626,6 +626,7 @@ in {
   tinc = handleTest ./tinc {};
   tinydns = handleTest ./tinydns.nix {};
   tinywl = handleTest ./tinywl.nix {};
+  tmate-ssh-server = handleTest ./tmate-ssh-server.nix { };
   tomcat = handleTest ./tomcat.nix {};
   tor = handleTest ./tor.nix {};
   # traefik test relies on docker-containers
