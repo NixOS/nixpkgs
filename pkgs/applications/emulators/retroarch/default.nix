@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, nixosTests
 , enableNvidiaCgToolkit ? false
 , withGamemode ? stdenv.isLinux
 , withVulkan ? stdenv.isLinux
@@ -36,11 +37,11 @@
 }:
 
 let
-  version = "1.10.3";
+  version = "1.11.0";
   libretroCoreInfo = fetchFromGitHub {
     owner = "libretro";
     repo = "libretro-core-info";
-    sha256 = "sha256-wIIMEWrria8bZe/rcoJwDA9aCMWwbkDQFyEU80TZXFQ=";
+    sha256 = "sha256-46T87BpzWUQHD7CsCF2sZo065Sl8Y4Sj1zwzBWmCiiU=";
     rev = "v${version}";
   };
   runtimeLibs = lib.optional withVulkan vulkan-loader
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "sha256-nAv1yv0laqlOmB8UUkK5wSYy/ySqXloEErm+yV30bbA=";
+    sha256 = "sha256-/rOf85TQTXbY9kIETaO5E58f2ZvKPqEFLsbNne/+/lw=";
     rev = "v${version}";
   };
 
@@ -135,12 +136,14 @@ stdenv.mkDerivation rec {
     #   https://github.com/libretro/RetroArch/issues/14025
     ++ lib.optionals stdenv.isDarwin [ "-fcommon" ];
 
+  passthru.tests = nixosTests.retroarch;
+
   meta = with lib; {
     homepage = "https://libretro.com";
     description = "Multi-platform emulator frontend for libretro cores";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     changelog = "https://github.com/libretro/RetroArch/blob/v${version}/CHANGES.md";
-    maintainers = with maintainers; [ MP2E edwtjo matthewbauer kolbycrouch thiagokokada ];
+    maintainers = with maintainers; teams.libretro.members ++ [ matthewbauer kolbycrouch ];
   };
 }

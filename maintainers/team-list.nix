@@ -363,6 +363,17 @@ with lib.maintainers; {
     shortName = "Kodi";
   };
 
+  libretro = {
+    members = [
+      aanderse
+      edwtjo
+      MP2E
+      thiagokokada
+    ];
+    scope = "Maintain Libretro, RetroArch and related packages.";
+    shortName = "Libretro";
+  };
+
   linux-kernel = {
     members = [
       TredwellGit
