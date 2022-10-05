@@ -8,6 +8,7 @@
 , freezegun
 , fetchFromGitHub
 , pycryptodome
+, pyserial-asyncio
 , pytest-aiohttp
 , pytest-timeout
 , pytestCheckHook
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.50.3";
+  version = "0.51.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zigpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-Od5BEi5Cu1Gzd4ZkPc2lfmsEZoqsxqiUKqZ2vkW/8sE=";
+    hash = "sha256-6JHj75ntbW3Pu4P6/nw0/xhZ+fZCfpNCzB1ZB7WJ0jY=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +35,7 @@ buildPythonPackage rec {
     aiosqlite
     crccheck
     cryptography
+    pyserial-asyncio
     pycryptodome
     voluptuous
   ];
