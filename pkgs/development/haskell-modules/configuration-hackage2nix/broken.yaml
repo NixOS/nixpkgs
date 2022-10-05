@@ -450,6 +450,7 @@ broken-packages:
   - bottom
   - boundingboxes
   - bowntz
+  - box
   - bpath
   - BPS
   - braid
@@ -3906,6 +3907,7 @@ broken-packages:
   - platinum-parsing
   - PlayingCards
   - playlists
+  - plex
   - plist
   - plist-buddy
   - plivo
@@ -4220,7 +4222,6 @@ broken-packages:
   - reanimate-svg
   - reasonable-lens
   - reason-export
-  - rec-def
   - record
   - record-encode
   - record-impl
@@ -4429,7 +4430,6 @@ broken-packages:
   - sandman
   - sarasvati
   - sat
-  - satchmo
   - Saturnin
   - satyros
   - savage
@@ -4656,7 +4656,6 @@ broken-packages:
   - singnal
   - singular-factory
   - sink
-  - sint
   - sitepipe
   - sixfiguregroup
   - sized-grid
@@ -5033,6 +5032,7 @@ broken-packages:
   - tasty-mgolden
   - tasty-stats
   - tasty-test-vector
+  - TastyTLT
   - TBC
   - TBit
   - tcache-AWS
@@ -5180,6 +5180,7 @@ broken-packages:
   - time-w3c
   - timezone-detect
   - tintin
+  - tinyid
   - TinyLaunchbury
   - tiny-scheduler
   - tinytemplate
@@ -5567,7 +5568,6 @@ broken-packages:
   - web3-ipfs
   - webapi
   - webapp
-  - webauthn
   - WebBits
   - webcloud
   - webcrank
