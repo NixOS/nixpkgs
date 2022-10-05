@@ -103,7 +103,7 @@ in stdenv.mkDerivation (rec {
   preConfigure = ''
     # Workaround for configure flags that need to have spaces
     cmakeFlagsArray+=(
-      -DLLVM_LIT_ARGS='-svj''${NIX_BUILD_CORES} --no-progress-bar'
+      -DLLVM_LIT_ARGS="-svj''${NIX_BUILD_CORES} --no-progress-bar"
     )
   '';
 
