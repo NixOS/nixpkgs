@@ -60,6 +60,10 @@ stdenv.mkDerivation rec {
     "-DUSE_STATIC_DEPS:BOOL=FALSE"
   ] ++ lib.optionals pulseSupport [ "-DUSE_PULSEAUDIO:BOOL=TRUE" ];
 
+  NIX_CFLAGS_COMPILE = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    "-DAPPLE_OLD_XCODE"
+  ];
+
   meta = with lib; {
     homepage = "https://freedv.org/";
     description = "Digital voice for HF radio";
