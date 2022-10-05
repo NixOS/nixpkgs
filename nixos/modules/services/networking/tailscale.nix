@@ -8,7 +8,8 @@ let
   rpfMode = config.networking.firewall.checkReversePath;
   isNetworkd = config.networking.useNetworkd;
   rpfIsStrict = rpfMode == true || rpfMode == "strict";
-in {
+in
+{
   meta.maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 ];
 
   options.services.tailscale = {
@@ -32,6 +33,12 @@ in {
       description = lib.mdDoc "Username or user ID of the user allowed to to fetch Tailscale TLS certificates for the node.";
     };
 
+    ignoreReversePathFilter = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc "Do not warn about strict reverse path filtering.";
+    };
+
     package = mkOption {
       type = types.package;
       default = pkgs.tailscale;
@@ -41,15 +48,15 @@ in {
   };
 
   config = mkIf cfg.enable {
-    warnings = optional (firewallOn && rpfIsStrict) "Strict reverse path filtering breaks Tailscale exit node use and some subnet routing setups. Consider setting `networking.firewall.checkReversePath` = 'loose'";
+    warnings = optional (firewallOn && rpfIsStrict && !cfg.ignoreReversePathFilter) "Strict reverse path filtering breaks Tailscale exit node use and some subnet routing setups. Consider setting `networking.firewall.checkReversePath` = 'loose', or silence this warning with `services.tailscale.ignoreReversePathFilter = true;`";
     environment.systemPackages = [ cfg.package ]; # for the CLI
     systemd.packages = [ cfg.package ];
     systemd.services.tailscaled = {
       wantedBy = [ "multi-user.target" ];
       path = [
         config.networking.resolvconf.package # for configuring DNS in some configs
-        pkgs.procps     # for collecting running services (opt-in feature)
-        pkgs.glibc      # for `getent` to look up user shells
+        pkgs.procps # for collecting running services (opt-in feature)
+        pkgs.glibc # for `getent` to look up user shells
       ];
       serviceConfig.Environment = [
         "PORT=${toString cfg.port}"
