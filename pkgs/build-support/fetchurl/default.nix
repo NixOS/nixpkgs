@@ -58,7 +58,6 @@ in
   name ? ""
 
   # for versioned downloads optionally take pname + version.
-  # if name is set that is preferred
 , pname ? ""
 , version ? ""
 
