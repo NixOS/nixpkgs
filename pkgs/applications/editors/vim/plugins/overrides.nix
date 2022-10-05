@@ -612,6 +612,10 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  noice-nvim = super.noice-nvim.overrideAttrs(old: {
+    dependencies = with self; [ nui-nvim nvim-notify ];
+  });
+
   null-ls-nvim = super.null-ls-nvim.overrideAttrs (old: {
     dependencies = with self; [ plenary-nvim ];
   });
