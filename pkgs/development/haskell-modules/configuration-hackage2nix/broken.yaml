@@ -450,6 +450,7 @@ broken-packages:
   - bottom
   - boundingboxes
   - bowntz
+  - box
   - bpath
   - BPS
   - braid
@@ -3906,6 +3907,7 @@ broken-packages:
   - platinum-parsing
   - PlayingCards
   - playlists
+  - plex
   - plist
   - plist-buddy
   - plivo
@@ -5030,6 +5032,7 @@ broken-packages:
   - tasty-mgolden
   - tasty-stats
   - tasty-test-vector
+  - TastyTLT
   - TBC
   - TBit
   - tcache-AWS
@@ -5177,6 +5180,7 @@ broken-packages:
   - time-w3c
   - timezone-detect
   - tintin
+  - tinyid
   - TinyLaunchbury
   - tiny-scheduler
   - tinytemplate
