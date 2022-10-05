@@ -52,12 +52,23 @@ stdenv.mkDerivation rec {
   installPhase = if stdenv.isDarwin
     then ''
       for file in lib/*.dylib; do
+        # Fix up the install name. Preserve the basename, just replace the path.
+        installName="$out/lib/$(basename $(otool -D $file | tail -n 1))"
+
         # this should be done in CMake, but having trouble figuring out
         # the magic combination of necessary CMake variables
         # if you fancy a try, take a look at
         # https://gitlab.kitware.com/cmake/community/-/wikis/doc/cmake/RPATH-handling
-        install_name_tool -id $out/$file $file
+        ${stdenv.cc.targetPrefix}install_name_tool -id $installName $file
+
+        # cc-wrapper passes '-lc++abi' to all c++ link steps, but that causes
+        # libcxxabi to sometimes link against a different version of itself.
+        # Here we simply make that second reference point to ourselves.
+        for other in $(otool -L $file | awk '$1 ~ "/libc\\+\\+abi" { print $1 }'); do
+          ${stdenv.cc.targetPrefix}install_name_tool -change $other $installName $file
+        done
       done
+
       make install
       install -d 755 $out/include
       install -m 644 ../include/*.h $out/include
