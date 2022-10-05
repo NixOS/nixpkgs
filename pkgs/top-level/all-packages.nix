@@ -20704,6 +20704,8 @@ with pkgs;
 
   libzip = callPackage ../development/libraries/libzip { };
 
+  libcoro = callPackage ../development/libraries/libcoro { };
+
   libzdb = callPackage ../development/libraries/libzdb { };
 
   libwacom = callPackage ../development/libraries/libwacom { };
