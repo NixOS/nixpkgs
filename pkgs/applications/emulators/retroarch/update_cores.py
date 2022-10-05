@@ -71,6 +71,7 @@ CORES = {
     "ppsspp": {"repo": "ppsspp", "owner": "hrydgard", "fetch_submodules": True},
     "prboom": {"repo": "libretro-prboom"},
     "prosystem": {"repo": "prosystem-libretro"},
+    "puae": {"repo": "libretro-uae"},
     "quicknes": {"repo": "QuickNES_Core"},
     "sameboy": {"repo": "sameboy"},
     "scummvm": {"repo": "scummvm"},

@@ -38,6 +38,7 @@
 , xxd
 , xz
 , zlib
+, fetchpatch
 }:
 
 let
@@ -710,6 +711,17 @@ in
     description = "Port of ProSystem to libretro";
     license = lib.licenses.gpl2Only;
     makefile = "Makefile";
+  };
+
+  puae = mkLibRetroCore {
+    core = "puae";
+    description = "Amiga emulator based on WinUAE";
+    license = lib.licenses.gpl2Only;
+    makefile = "Makefile";
+    patches = fetchpatch {
+        url = "https://github.com/libretro/libretro-uae/commit/90ba4c9bb940e566781c3590553270ad69cf212e.patch";
+        sha256 = "sha256-9xkRravvyFZc0xsIj0OSm2ux5BqYogfQ1TDnH9l6jKw=";
+    };
   };
 
   quicknes = mkLibRetroCore {
