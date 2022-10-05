@@ -62,7 +62,7 @@ in
 
   config = mkIf cfg.enable {
 
-    networking.firewall.allowedTCPPorts = if cfg.openFirewall then [ cfg.port ] else [ ];
+    networking.firewall.allowedTCPPorts = optionals cfg.openFirewall [ cfg.port ];
 
     services.tmate-ssh-server = {
       advertisedPort = mkDefault cfg.port;
