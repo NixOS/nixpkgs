@@ -1,23 +1,23 @@
-{ lib, fetchFromGitHub, buildGoModule, testers, temporal-cli }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "temporal-cli";
-  version = "1.16.2";
+  version = "1.16.3";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "tctl";
     rev = "v${version}";
-    sha256 = "sha256-KLcCFQJlFeioIhqrbkhgoNPcbAYvy1ESG8x9Y/I7+nw=";
+    sha256 = "sha256-GZTCxHs2/HeQIYRkhGzNYYyCd/vcGRey2lsFU7fV4gM=";
   };
 
-  vendorSha256 = "sha256-kczmoP32/V0HHeC3Mr+giuMB+McVTNeC2F+t1ohY4/U=";
+  vendorSha256 = "sha256-9bgovXVj+qddfDSI4DTaNYH4H8Uc4DZqeVYG5TWXTNw=";
 
   ldflags = [ "-s" "-w" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = temporal-cli;
-  };
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = with lib; {
     description = "Temporal CLI";
