@@ -167,7 +167,7 @@ let
   rtpPath = ".";
 
   vimFarm = prefix: name: drvs:
-    let mkEntryFromDrv = drv: { name = "${prefix}/${drv.pname}"; path = drv; };
+    let mkEntryFromDrv = drv: { name = "${prefix}/${lib.getName drv}"; path = drv; };
     in linkFarm name (map mkEntryFromDrv drvs);
 
   /* Generates a packpath folder as expected by vim
