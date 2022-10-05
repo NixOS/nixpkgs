@@ -11,7 +11,7 @@
 , portaudio
 , speexdsp
 , hamlib
-, wxGTK31-gtk3
+, wxGTK32
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , AppKit
 , AVFoundation
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     lpcnetfreedv
     speexdsp
     hamlib
-    wxGTK31-gtk3
+    wxGTK32
   ] ++ (if pulseSupport then [ libpulseaudio ] else [ portaudio ])
   ++ lib.optionals stdenv.isDarwin [
     AppKit
