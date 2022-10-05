@@ -13,9 +13,11 @@ with lib;
 
 
     # Disable font anti-aliasing, hinting, and sub-pixel rendering by default
-    fonts.fontconfig.antialias = mkDefault false;
-    fonts.fontconfig.hinting.enable = mkDefault false;
-    fonts.fontconfig.subpixel.lcdfilter = mkDefault "none";
+    fonts.fontconfig = {
+      antialias = mkDefault false;
+      hinting.enable = mkDefault false;
+      subpixel.lcdfilter = mkDefault "none";
+    };
 
     # TODO Find reasonable defaults X11 & wayland
   };
