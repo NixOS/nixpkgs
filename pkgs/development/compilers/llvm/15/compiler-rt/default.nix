@@ -1,6 +1,6 @@
 { lib, stdenv, llvm_meta, version
 , monorepoSrc, runCommand
-, cmake, python3, xcbuild, libllvm, libcxxabi, libxcrypt
+, cmake, ninja, python3, xcbuild, libllvm, libcxxabi, libxcrypt
 , doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   inherit src;
   sourceRoot = "${src.name}/${baseName}";
 
-  nativeBuildInputs = [ cmake python3 libllvm.dev ]
+  nativeBuildInputs = [ cmake ninja python3 libllvm.dev ]
     ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 

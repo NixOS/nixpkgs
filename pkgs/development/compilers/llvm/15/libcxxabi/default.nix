@@ -1,4 +1,4 @@
-{ lib, stdenv, llvm_meta, cmake, python3
+{ lib, stdenv, llvm_meta, cmake, ninja, python3
 , monorepoSrc, runCommand, fetchpatch
 , cxx-headers, libunwind, version
 , enableShared ? !stdenv.hostPlatform.isStatic
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     cd ../runtimes
   '';
 
-  nativeBuildInputs = [ cmake python3 ];
+  nativeBuildInputs = [ cmake ninja python3 ];
   buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.hostPlatform.isWasm) libunwind;
 
   cmakeFlags = [

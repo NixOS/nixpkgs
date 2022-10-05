@@ -2,6 +2,7 @@
 , buildLlvmTools
 , monorepoSrc, runCommand
 , cmake
+, ninja
 , libxml2
 , libllvm
 , version
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
     ./gnu-install-dirs.patch
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ninja ];
   buildInputs = [ libllvm libxml2 ];
 
   cmakeFlags = [
