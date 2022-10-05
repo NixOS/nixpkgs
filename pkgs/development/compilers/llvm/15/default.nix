@@ -19,7 +19,7 @@
 }:
 
 let
-  release_version = "14.0.6";
+  release_version = "15.0.7";
   candidate = ""; # empty or "rcN"
   dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
   rev = ""; # When using a Git commit
@@ -31,7 +31,7 @@ let
     owner = "llvm";
     repo = "llvm-project";
     rev = if rev != "" then rev else "llvmorg-${version}";
-    sha256 = "sha256-vffu4HilvYwtzwgq+NlS26m65DGbp6OSSne2aje1yJE=";
+    sha256 = "sha256-wjuZQyXQ/jsmvy6y1aksCcEDXGBjuhpgngF3XQJ/T4s=";
   };
 
   llvm_meta = {
@@ -88,7 +88,7 @@ let
       python3 = pkgs.python3;  # don't use python-boot
     });
 
-    # TODO: lldb/docs/index.rst:155:toctree contains reference to nonexisting document 'design/structureddataplugins'
+    # Needs package for spinhx-automodapi: https://github.com/astropy/sphinx-automodapi
     # lldb-manpages = lowPrio (tools.lldb.override {
     #   enableManpages = true;
     #   python3 = pkgs.python3;  # don't use python-boot
