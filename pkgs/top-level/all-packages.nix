@@ -16172,7 +16172,10 @@ with pkgs;
 
   bump = callPackage ../development/tools/github/bump { };
 
-  libbpf = callPackage ../os-specific/linux/libbpf { };
+  libbpf_1 = callPackage ../os-specific/linux/libbpf { };
+  libbpf_0 = callPackage ../os-specific/linux/libbpf/0.x.nix { };
+  # until more issues are fixed default to libbpf 0.x
+  libbpf = libbpf_0;
 
   bpftools = callPackage ../os-specific/linux/bpftools { };
 
@@ -30154,6 +30157,8 @@ with pkgs;
   okteto = callPackage ../development/tools/okteto { };
 
   onlyoffice-bin = callPackage ../applications/office/onlyoffice-bin { };
+
+  opcr-policy = callPackage ../development/tools/opcr-policy { };
 
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
 
