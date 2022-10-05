@@ -7,20 +7,32 @@
 , mock
 , proto-plus
 , pytest-asyncio
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-texttospeech";
-  version = "2.12.1";
+  version = "2.12.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JWwYnz12E56GrUSDoatB8pbS+S9C3ZSPsxDW25GfDhA=";
+    hash = "sha256-z/rOMqQ+UkJl8zw55JP54+s+Qk+gHxmuBDjZaz3Qacs=";
   };
 
-  propagatedBuildInputs = [ libcst google-api-core proto-plus ];
+  propagatedBuildInputs = [
+    libcst
+    google-api-core
+    proto-plus
+  ];
 
-  checkInputs = [ mock pytest-asyncio pytestCheckHook ];
+  checkInputs = [
+    mock
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # Disable tests that require credentials

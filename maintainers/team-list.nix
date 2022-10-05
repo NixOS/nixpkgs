@@ -384,6 +384,15 @@ with lib.maintainers; {
     shortName = "Lumiguide employees";
   };
 
+  lua = {
+    githubTeams = [
+      "lua"
+    ];
+    scope = "Maintain the lua ecosystem.";
+    shortName = "lua";
+    enableFeatureFreezePing = true;
+  };
+
   lumina = {
     members = [
       romildo

@@ -25,22 +25,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nvtop" + pname-suffix;
-  version = "2.0.3";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "Syllo";
     repo = "nvtop";
     rev = version;
-    sha256 = "sha256-LhVgNU2OSM7fOUUQHYJhKhjE0fkFvYC3FIJFgu6T68Q=";
+    sha256 = "sha256-WOXVmKnVNRjWqShbOUZ0Z4hd0m9njLmCGLnV9FBS3Us=";
   };
-
-  #this patch should be fine to remove with next version update
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/Syllo/nvtop/commit/663a69f1c9038eabdfc3155112fb9b8d662578aa.diff";
-      sha256 = "sha256-/EJlr5b+kZnHm9UxythYreJvO+Ma+1sUI3KLBQFCCmc=";
-    })
-  ];
 
   cmakeFlags = with lib; [
     "-DCMAKE_BUILD_TYPE=Release"

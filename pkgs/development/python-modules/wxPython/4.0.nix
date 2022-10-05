@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , pkg-config
 , which
 , cairo
@@ -25,6 +26,7 @@
 buildPythonPackage rec {
   pname = "wxPython";
   version = "4.0.7.post2";
+  format = "other";
 
   src = fetchPypi {
     inherit pname version;
@@ -33,7 +35,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ pkg-config which doxygen ]
+  nativeBuildInputs = [ pkg-config which doxygen setuptools ]
   ++ (if stdenv.isDarwin then [ wxmac ] else [ wxGTK ]);
 
   buildInputs = [ ncurses libintl ]
