@@ -236,6 +236,7 @@ in {
     };
 
     linux_xanmod = xanmodKernels.lts;
+    linux_xanmod_stable = xanmodKernels.current;
     linux_xanmod_latest = xanmodKernels.next;
     linux_xanmod_tt = xanmodKernels.tt;
 
@@ -583,6 +584,7 @@ in {
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
     linux_xanmod = recurseIntoAttrs (packagesFor kernels.linux_xanmod);
+    linux_xanmod_stable = recurseIntoAttrs (packagesFor kernels.linux_xanmod_stable);
     linux_xanmod_latest = recurseIntoAttrs (packagesFor kernels.linux_xanmod_latest);
     linux_xanmod_tt = recurseIntoAttrs (packagesFor kernels.linux_xanmod_tt);
 
