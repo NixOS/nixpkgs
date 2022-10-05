@@ -29723,7 +29723,7 @@ with pkgs;
 
   mediainfo-gui = callPackage ../applications/misc/mediainfo-gui { };
 
-  mediathekview = callPackage ../applications/video/mediathekview { jre = adoptopenjdk-hotspot-bin-16; };
+  mediathekview = callPackage ../applications/video/mediathekview { jre = temurin-bin-17; };
 
   megapixels = callPackage ../applications/graphics/megapixels { };
 
