@@ -25446,6 +25446,8 @@ with pkgs;
   usbrelay = callPackage ../os-specific/linux/usbrelay { };
   usbrelayd = callPackage ../os-specific/linux/usbrelay/daemon.nix { };
 
+  usbreset = callPackage ../os-specific/linux/usbreset { };
+
   usbtop = callPackage ../os-specific/linux/usbtop { };
 
   usbutils = callPackage ../os-specific/linux/usbutils { };
