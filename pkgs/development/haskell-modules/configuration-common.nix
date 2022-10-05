@@ -2586,4 +2586,7 @@ in {
     url = "https://github.com/hackage-trustees/text-format/pull/4/commits/949383aa053497b8c251219c10506136c29b4d32.patch";
     sha256 = "QzpZ7lDedsz1mZcq6DL4x7LBnn58rx70+ZVvPh9shRo=";
   }) super.text-format;
+
+  # 2022-10-04: Needs newer tasty-dejafu than (currently) in stackage
+  rec-def = super.rec-def.override { tasty-dejafu = self.tasty-dejafu_2_1_0_0; };
 })

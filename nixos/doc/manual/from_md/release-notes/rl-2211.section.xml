@@ -322,6 +322,15 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/tmate-io/tmate-ssh-server">tmate-ssh-server</link>,
+          server side part of
+          <link xlink:href="https://tmate.io/">tmate</link>. Available
+          as
+          <link linkend="opt-services.tmate-ssh-server.enable">services.tmate-ssh-server</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.grafana.com/oss/tempo/">Grafana
           Tempo</link>, a distributed tracing store. Available as
           <link linkend="opt-services.tempo.enable">services.tempo</link>.
