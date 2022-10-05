@@ -36,6 +36,7 @@
 , "auto-changelog"
 , "aws-azure-login"
 , "aws-cdk"
+, "aws-cdk-local"
 , "awesome-lint"
 , "balanceofsatoshis"
 , "bash-language-server"

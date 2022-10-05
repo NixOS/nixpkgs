@@ -18019,6 +18019,8 @@ with pkgs;
 
   aws-c-sdkutils = callPackage ../development/libraries/aws-c-sdkutils { };
 
+  aws-cdk-local = nodePackages.aws-cdk-local;
+
   aws-checksums = callPackage ../development/libraries/aws-checksums { };
 
   aws-crt-cpp = callPackage ../development/libraries/aws-crt-cpp { };

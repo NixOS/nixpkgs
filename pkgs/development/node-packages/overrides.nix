@@ -81,6 +81,14 @@ final: prev: {
     meta = oldAttrs.meta // { platforms = lib.platforms.linux; };
   });
 
+  aws-cdk-local = prev.aws-cdk-local.override {
+    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
+    postInstall = ''
+      wrapProgram "$out/bin/cdklocal" \
+        --prefix NODE_PATH : ${final.aws-cdk}/lib/node_modules
+    '';
+  };
+
   balanceofsatoshis = prev.balanceofsatoshis.override {
     nativeBuildInputs = [ pkgs.installShellFiles ];
     postInstall = ''

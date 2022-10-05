@@ -33,6 +33,7 @@
   "@webassemblyjs/wasm-text-gen-1.11.1" = "wasmgen";
   "@webassemblyjs/wast-refmt-1.11.1" = "wast-refmt";
   aws-cdk = "cdk";
+  aws-cdk-local = "cdklocal";
   balanceofsatoshis = "bos";
   carbon-now-cli = "carbon-now";
   cdk8s-cli = "cdk8s";
