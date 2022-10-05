@@ -55,7 +55,7 @@ start
   endif
   fork again
   |Maintainer|
-  :<&heart> Thanks the contributor;
+  :<&heart> Thank the contributor;
   end fork
 
   |Hydra|
