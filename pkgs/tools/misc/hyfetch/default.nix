@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "HyFetch";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     repo = "hyfetch";
     owner = "hykilpikonna";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-aVALjuFXg3ielDfxEDMTOtaPghsBg9+vKRbR3aDTalQ=";
+    sha256 = "sha256-5TzIhbyrhQmuxR/Vs3XpOj/8FnykmBiDj6sXfFZK0uM=";
   };
 
   propagatedBuildInputs = [
