@@ -2,6 +2,7 @@ final: prev: let
 
   inherit (final) callPackage;
   inherit (prev) cudatoolkit cudaVersion lib pkgs;
+  inherit (prev.lib.versions) major;
 
   ### CuDNN
 
@@ -113,6 +114,22 @@ final: prev: let
         supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" "11.7" ];
       }
     ];
+    "8.5.0" = [
+      rec {
+        fileVersion = "10.2";
+        fullVersion = "8.5.0.96";
+        hash = "sha256-1mzhbbzR40WKkHnQLtJHhg0vYgf7G8a0OBcCwIOkJjM=";
+        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${major fileVersion}-archive.tar.xz";
+        supportedCudaVersions = [ "10.2" ];
+      }
+      rec {
+        fileVersion = "11.7";
+        fullVersion = "8.5.0.96";
+        hash = "sha256-VFSm/ZTwCHKMqumtrZk8ToXvNjAuJrzkO+p9RYpee20=";
+        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${major fileVersion}-archive.tar.xz";
+        supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" "11.7" "11.8" ];
+      }
+    ];
   };
 
   # Default attributes
@@ -128,6 +145,7 @@ final: prev: let
     "11.5" = "8.3.2";
     "11.6" = "8.3.2";
     "11.7" = "8.4.0";
+    "11.8" = "8.5.0";
   }.${cudaVersion} or "8.3.2";
 
 in cuDnnPackages
