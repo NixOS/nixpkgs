@@ -1,6 +1,6 @@
 { lib, stdenv, llvm_meta
 , monorepoSrc, runCommand
-, substituteAll, cmake, libxml2, libllvm, version, python3
+, substituteAll, cmake, ninja, libxml2, libllvm, version, python3
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
@@ -20,7 +20,7 @@ let
 
     sourceRoot = "${src.name}/${pname}";
 
-    nativeBuildInputs = [ cmake python3 ]
+    nativeBuildInputs = [ cmake ninja python3 ]
       ++ lib.optional enableManpages python3.pkgs.sphinx
       ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
@@ -114,9 +114,7 @@ let
   } // lib.optionalAttrs enableManpages {
     pname = "clang-manpages";
 
-    buildPhase = ''
-      make docs-clang-man
-    '';
+    ninjaFlags = [ "docs-clang-man" ];
 
     installPhase = ''
       mkdir -p $out/share/man/man1
