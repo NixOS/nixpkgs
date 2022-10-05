@@ -622,6 +622,7 @@ let
     ncdfFlow = [ pkgs.zlib.dev ];
     proj4 = [ pkgs.proj.dev ];
     rtmpt = [ pkgs.gsl ];
+    rmarkdown = [ pkgs.pandoc ];
     mixcat = [ pkgs.gsl ];
     libstableR = [ pkgs.gsl ];
     landsepi = [ pkgs.gsl ];

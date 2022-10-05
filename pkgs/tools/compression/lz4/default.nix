@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, valgrind, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch, valgrind
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:

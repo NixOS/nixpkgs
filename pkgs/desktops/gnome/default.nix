@@ -123,6 +123,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     withGnome = true;
   };
 
+  nixos-gsettings-overrides = callPackage ./nixos/gsettings-overrides { };
+
   rygel = callPackage ./core/rygel { };
 
   simple-scan = callPackage ./core/simple-scan { };

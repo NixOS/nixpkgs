@@ -53,6 +53,7 @@
 , zsh
 
   # command-t dependencies
+, getconf
 , ruby
 
   # cpsm dependencies
@@ -239,10 +240,11 @@ self: super: {
   };
 
   command-t = super.command-t.overrideAttrs (old: {
-    buildInputs = [ ruby ];
+    nativeBuildInputs = [ getconf ruby ];
     buildPhase = ''
       substituteInPlace lua/wincent/commandt/lib/Makefile \
-        --replace '/bin/bash' 'bash'
+        --replace '/bin/bash' 'bash' \
+        --replace xcrun ""
       make build
       rm ruby/command-t/ext/command-t/*.o
     '';
@@ -983,7 +985,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-g5yNqDCN1O9x7/HcM8NsZlMwLudDTuPLE5gSpScNQnY=";
+          cargoSha256 = "sha256-AY14YEdMpHXmiHwEA9hwSwwwJ8hYIomAuIuCJv1OUDw=";
         };
       in
       ''

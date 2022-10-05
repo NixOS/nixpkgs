@@ -36,5 +36,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/executablebooks/sphinx-book-theme";
     license = licenses.bsd3;
     maintainers = with maintainers; [ marsam ];
+    # Missing sphinx 5.X support
+    # https://github.com/executablebooks/sphinx-book-theme/issues/592
+    broken = true;
   };
 }

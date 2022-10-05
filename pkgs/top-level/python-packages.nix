@@ -1385,6 +1385,8 @@ in {
 
   bleach = callPackage ../development/python-modules/bleach { };
 
+  bleach-allowlist = callPackage ../development/python-modules/bleach-allowlist { };
+
   bleak = callPackage ../development/python-modules/bleak { };
 
   bleak-retry-connector = callPackage ../development/python-modules/bleak-retry-connector { };
@@ -2497,9 +2499,13 @@ in {
 
   django-anymail = callPackage ../development/python-modules/django-anymail { };
 
+  django-annoying = callPackage ../development/python-modules/django-annoying { };
+
   django-appconf = callPackage ../development/python-modules/django-appconf { };
 
   django-auth-ldap = callPackage ../development/python-modules/django-auth-ldap { };
+
+  django-autocomplete-light = callPackage ../development/python-modules/django-autocomplete-light { };
 
   django-cache-url = callPackage ../development/python-modules/django-cache-url { };
 
@@ -2524,6 +2530,8 @@ in {
   django_contrib_comments = callPackage ../development/python-modules/django_contrib_comments { };
 
   django-cors-headers = callPackage ../development/python-modules/django-cors-headers { };
+
+  django-crispy-forms = callPackage ../development/python-modules/django-crispy-forms { };
 
   django-cryptography = callPackage ../development/python-modules/django-cryptography { };
 
@@ -2553,6 +2561,8 @@ in {
 
   django-haystack = callPackage ../development/python-modules/django-haystack { };
 
+  django-hcaptcha = callPackage ../development/python-modules/django-hcaptcha { };
+
   django-health-check = callPackage ../development/python-modules/django-health-check { };
 
   django_hijack_admin = callPackage ../development/python-modules/django-hijack-admin { };
@@ -2565,6 +2575,8 @@ in {
   django-jinja = callPackage ../development/python-modules/django-jinja2 { };
 
   django-js-asset = callPackage ../development/python-modules/django-js-asset { };
+
+  django-js-reverse = callPackage ../development/python-modules/django-js-reverse { };
 
   django-logentry-admin = callPackage ../development/python-modules/django-logentry-admin { };
 
@@ -2599,6 +2611,8 @@ in {
   django-prometheus = callPackage ../development/python-modules/django-prometheus { };
 
   django-q = callPackage ../development/python-modules/django-q { };
+
+  django-scopes = callPackage ../development/python-modules/django-scopes { };
 
   djangoql = callPackage ../development/python-modules/djangoql { };
 
@@ -2793,6 +2807,8 @@ in {
   drf-spectacular = callPackage ../development/python-modules/drf-spectacular { };
 
   drf-spectacular-sidecar = callPackage ../development/python-modules/drf-spectacular-sidecar { };
+
+  drf-writable-nested = callPackage ../development/python-modules/drf-writable-nested { };
 
   drf-yasg = callPackage ../development/python-modules/drf-yasg { };
 
@@ -3123,6 +3139,8 @@ in {
   };
 
   extras = callPackage ../development/python-modules/extras { };
+
+  extruct = callPackage ../development/python-modules/extruct { };
 
   eyeD3 = callPackage ../development/python-modules/eyed3 { };
 
@@ -4285,6 +4303,8 @@ in {
 
   html-sanitizer = callPackage ../development/python-modules/html-sanitizer { };
 
+  html-text = callPackage ../development/python-modules/html-text { };
+
   HTSeq = callPackage ../development/python-modules/HTSeq { };
 
   httmock = callPackage ../development/python-modules/httmock { };
@@ -4858,6 +4878,8 @@ in {
 
   json-tricks = callPackage ../development/python-modules/json-tricks { };
 
+  jstyleson = callPackage ../development/python-modules/jstyleson { };
+
   jug = callPackage ../development/python-modules/jug { };
 
   junitparser = callPackage ../development/python-modules/junitparser { };
@@ -5066,6 +5088,8 @@ in {
   langdetect = callPackage ../development/python-modules/langdetect { };
 
   language-data = callPackage ../development/python-modules/language-data { };
+
+  language-tags = callPackage ../development/python-modules/language-tags { };
 
   lark = callPackage ../development/python-modules/lark { };
 
@@ -5696,7 +5720,11 @@ in {
 
   mezzanine = callPackage ../development/python-modules/mezzanine { };
 
+  mf2py = callPackage ../development/python-modules/mf2py { };
+
   micawber = callPackage ../development/python-modules/micawber { };
+
+  microdata = callPackage ../development/python-modules/microdata { };
 
   midiutil = callPackage ../development/python-modules/midiutil { };
 
@@ -5756,6 +5784,7 @@ in {
   mkdocs-autorefs = callPackage ../development/python-modules/mkdocs-autorefs { };
   mkdocs-drawio-exporter = callPackage ../development/python-modules/mkdocs-drawio-exporter { };
   mkdocs-exclude = callPackage ../development/python-modules/mkdocs-exclude { };
+  mkdocs-jupyter = callPackage ../development/python-modules/mkdocs-jupyter { };
   mkdocs-gitlab = callPackage ../development/python-modules/mkdocs-gitlab-plugin { };
   mkdocs-macros = callPackage ../development/python-modules/mkdocs-macros { };
   mkdocs-material = callPackage ../development/python-modules/mkdocs-material { };
@@ -6399,10 +6428,12 @@ in {
 
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common { };
 
-  onnxruntime = (toPythonModule (pkgs.onnxruntime.override {
-    python3Packages = self;
-    pythonSupport = true;
-  })).python;
+  onnxruntime = callPackage ../development/python-modules/onnxruntime {
+    onnxruntime = pkgs.onnxruntime.override {
+      python3Packages = self;
+      pythonSupport = true;
+    };
+  };
 
   onvif-zeep-async = callPackage ../development/python-modules/onvif-zeep-async { };
 
@@ -6992,6 +7023,8 @@ in {
   pypoint = callPackage ../development/python-modules/pypoint { };
 
   pypoolstation = callPackage ../development/python-modules/pypoolstation { };
+
+  pyrdfa3 = callPackage ../development/python-modules/pyrdfa3 { };
 
   pyrevolve = callPackage ../development/python-modules/pyrevolve { };
 
@@ -9515,11 +9548,15 @@ in {
 
   readme_renderer = callPackage ../development/python-modules/readme_renderer { };
 
+  readstats = callPackage ../development/python-modules/pyreadstat { };
+
   readthedocs-sphinx-ext = callPackage ../development/python-modules/readthedocs-sphinx-ext { };
 
   rebulk = callPackage ../development/python-modules/rebulk { };
 
   recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
+
+  recipe-scrapers = callPackage ../development/python-modules/recipe-scrapers { };
 
   recoll = toPythonModule (pkgs.recoll.override {
     python3Packages = self;
@@ -11587,6 +11624,8 @@ in {
   versioneer = callPackage ../development/python-modules/versioneer { };
 
   versionfinder = callPackage ../development/python-modules/versionfinder { };
+
+  versioningit = callPackage ../development/python-modules/versioningit { };
 
   versiontag = callPackage ../development/python-modules/versiontag { };
 

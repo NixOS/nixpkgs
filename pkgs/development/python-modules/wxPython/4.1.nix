@@ -2,6 +2,7 @@
 , stdenv
 , fetchPypi
 , buildPythonPackage
+, setuptools
 , which
 , pkg-config
 , python
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   pname = "wxPython";
   version = "4.1.1";
   disabled = isPy27;
+  format = "other";
 
   src = fetchPypi {
     inherit pname version;
@@ -48,6 +50,7 @@ buildPythonPackage rec {
     doxygen
     wxGTK.gtk
     pkg-config
+    setuptools
   ] ++ lib.optionals stdenv.isLinux [
     autoPatchelfHook
   ];

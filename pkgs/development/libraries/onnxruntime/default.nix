@@ -15,10 +15,17 @@
 , boost
 , oneDNN
 , gtest
-, pythonSupport ? true
+, pythonSupport ? false
 , nsync
 , flatbuffers
 }:
+
+# Python Support
+#
+# When enabling Python support a wheel is made and stored in a `dist` output.
+# This wheel is then installed in a separate derivation.
+
+assert pythonSupport -> lib.versionOlder protobuf.version "3.20";
 
 let
   # prefetch abseil
@@ -58,26 +65,26 @@ stdenv.mkDerivation rec {
     setuptools
     wheel
     pip
+    pythonOutputDistHook
   ]);
 
   buildInputs = [
     libpng
     zlib
-    protobuf
     howard-hinnant-date
     nlohmann_json
     boost
     oneDNN
-  ] ++ lib.optionals pythonSupport ([
-    flatbuffers
+    protobuf
+  ] ++ lib.optionals pythonSupport [
     nsync
-  ] ++ (with python3Packages; [
-    numpy
-    pybind11
-  ]));
+    python3Packages.numpy
+    python3Packages.pybind11
+  ];
 
   # TODO: build server, and move .so's to lib output
-  outputs = [ "out" "dev" ] ++ lib.optionals pythonSupport [ "python" ];
+  # Python's wheel is stored in a separate dist output
+  outputs = [ "out" "dev" ] ++ lib.optionals pythonSupport [ "dist" ];
 
   enableParallelBuilding = true;
 
@@ -116,9 +123,14 @@ stdenv.mkDerivation rec {
       ../include/onnxruntime/core/framework/provider_options.h \
       ../include/onnxruntime/core/providers/cpu/cpu_provider_factory.h \
       ../include/onnxruntime/core/session/onnxruntime_*.h
-  '' + lib.optionalString pythonSupport ''
-    pip install dist/*.whl --no-index --no-warn-script-location --prefix="$python" --no-cache --no-deps
   '';
+
+  passthru = {
+    inherit protobuf;
+    tests = lib.optionalAttrs pythonSupport {
+      python = python3Packages.onnxruntime;
+    };
+  };
 
   meta = with lib; {
     description = "Cross-platform, high performance scoring engine for ML models";
