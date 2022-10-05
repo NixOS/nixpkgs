@@ -13,7 +13,7 @@ let
           inherit version;
           sha256 = "ff177185f891302dc253437fe63081e7a46a4e99aca61dfe086fb23e54fff2dc";
         };
-        checkPhase = ":";
+        doCheck = false;
         disabledTests = [
           "test_outside_request"
         ];
