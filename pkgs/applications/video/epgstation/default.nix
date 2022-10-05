@@ -1,14 +1,11 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, gitUpdater
-, writers
 , makeWrapper
 , bash
 , nodejs
 , gzip
-, jq
-, yq
+, callPackage
 }:
 
 let
@@ -33,7 +30,8 @@ let
   });
 
   server = nodejs.pkgs.epgstation.override (drv: {
-    inherit src;
+    # NOTE: updateScript relies on version matching the src.
+    inherit version src;
 
     # This is set to false to keep devDependencies at build time. Build time
     # dependencies are pruned afterwards.
@@ -108,17 +106,7 @@ let
 
     # NOTE: this may take a while since it has to update all packages in
     # nixpkgs.nodePackages
-    passthru.updateScript = import ./update.nix {
-      inherit lib;
-      inherit (src.meta) homepage;
-      inherit
-        pname
-        version
-        gitUpdater
-        writers
-        jq
-        yq;
-    };
+    passthru.updateScript = callPackage ./update.nix { };
 
     # nodePackages.epgstation is a stub package to fetch npm dependencies and
     # its meta.platforms is made empty to prevent users from installing it
