@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dogdns";
-  version = "unstable-2021-10-07";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "ogham";
     repo = "dog";
-    rev = "721440b12ef01a812abe5dc6ced69af6e221fad5";
-    sha256 = "sha256-y3T0vXg7631FZ4bzcbQjz3Buui/DFxh9LG8BZWwynp0=";
+    rev = "v${version}";
+    sha256 = "sha256-/qefunr1mozOIPdVJlq39+x02C+ub4ftzhtsZjVYESE=";
   };
 
   nativeBuildInputs = [ installShellFiles just pandoc ]
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     just man
   '';
 
-  cargoSha256 = "sha256-agepQVJbqbjzFbEBKbM7BNxc8FlklOrCsTgCAOcuptc=";
+  cargoSha256 = "sha256-KwP1Un1VNr3zKvwLAq+IXXNY6m2mNgqrp8j/AQZW/30=";
 
   postInstall = ''
     installShellCompletion completions/dog.{bash,fish,zsh}
