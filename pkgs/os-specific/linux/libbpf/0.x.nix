@@ -7,6 +7,11 @@
 , nixosTests
 }:
 
+# update bot does not seem to limit updates here to 0.8.x despite
+# the all-packages derivation being libbpf_0 as the libbpf base alias
+# is still present: just disable it for 0.x:
+# nixpkgs-update: no auto update
+
 stdenv.mkDerivation rec {
   pname = "libbpf";
   version = "0.8.1";
