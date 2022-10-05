@@ -50,9 +50,6 @@ let
       NET_SCH_DEFAULT = yes;
       DEFAULT_FQ_PIE = yes;
 
-      # Graysky's additional CPU optimizations
-      CC_OPTIMIZE_FOR_PERFORMANCE_O3 = yes;
-
       # Futex WAIT_MULTIPLE implementation for Wine / Proton Fsync.
       FUTEX = yes;
       FUTEX_PI = yes;
