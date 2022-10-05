@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    broken = true ;
     platforms = ["x86_64-linux"];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
@@ -40,5 +39,6 @@ stdenv.mkDerivation rec {
 
      There is a 15-day free trial, and it is a paid application after that.
     '';
+    broken = true;
   };
 }
