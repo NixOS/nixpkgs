@@ -6,7 +6,6 @@
 , alsa-lib
 , openssl
 , withTTS ? false
-, llvmPackages
 , speechd
 }:
 
