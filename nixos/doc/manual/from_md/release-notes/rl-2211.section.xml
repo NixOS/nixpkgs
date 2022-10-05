@@ -132,6 +132,15 @@
       </listitem>
       <listitem>
         <para>
+          Improved performances of
+          <literal>lib.closePropagation</literal> which was previously
+          quadratic. This is used in e.g.
+          <literal>ghcWithPackages</literal>. Please see backward
+          incompatibilities notes below.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Cinnamon has been updated to 5.4. While at it, the cinnamon
           module now defaults to blueman as bluetooth manager and
           slick-greeter as lightdm greeter to match upstream.
@@ -544,6 +553,12 @@
           instructions</link> and
           <link xlink:href="https://goteleport.com/docs/ver/10.0/changelog/#1000">release
           notes</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>lib.closePropagation</literal> now needs that all
+          gathered sets have an <literal>outPath</literal> attribute.
         </para>
       </listitem>
       <listitem>
