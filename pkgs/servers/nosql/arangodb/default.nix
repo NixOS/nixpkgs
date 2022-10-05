@@ -1,4 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, openssl, zlib, cmake, python2, python3, perl, snappy, lzo, which, catch2, catch }:
+{ stdenv
+, gcc8Stdenv
+, lib
+, fetchFromGitHub
+, openssl
+, zlib
+, cmake
+, python2
+, python3
+, perl
+, snappy
+, lzo
+, which
+, catch
+, catch2
+}:
 
 let
   common = { stdenv, version, sha256 }: stdenv.mkDerivation {
@@ -22,9 +37,9 @@ let
     buildInputs = [ openssl zlib snappy lzo ];
 
     # prevent failing with "cmake-3.13.4/nix-support/setup-hook: line 10: ./3rdParty/rocksdb/RocksDBConfig.cmake.in: No such file or directory"
-    dontFixCmake       =                     lib.versionAtLeast version "3.5";
+    dontFixCmake = lib.versionAtLeast version "3.5";
     NIX_CFLAGS_COMPILE = lib.optionalString (lib.versionAtLeast version "3.5") "-Wno-error";
-    preConfigure       = lib.optionalString (lib.versionAtLeast version "3.5") "patchShebangs utils";
+    preConfigure = lib.optionalString (lib.versionAtLeast version "3.5") "patchShebangs utils";
 
     postPatch = ''
       ${if lib.versionAtLeast version "3.9"
@@ -61,7 +76,8 @@ let
       maintainers = [ maintainers.flosse maintainers.jsoo1 ];
     };
   };
-in {
+in
+{
   arangodb_3_3 = common {
     stdenv = gcc8Stdenv;
     version = "3.3.24";
