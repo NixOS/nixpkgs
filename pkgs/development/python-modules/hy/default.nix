@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "hy";
-  version = "1.0a4";
+  version = "0.24.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "hylang";
     repo = pname;
     rev = version;
-    sha256 = "sha256-MBzp3jqBg/kH233wcgYYHc+Yg9GuOaBsXIfjFDihD1E=";
+    sha256 = "sha256-PmnYOniYqNHGTxpWuAc+zBhOsgRgMMbERHq81KpHheg=";
   };
 
   # https://github.com/hylang/hy/blob/1.0a4/get_version.py#L9-L10
@@ -34,24 +34,26 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     colorama
     funcparserlib
-    rply # TODO: remove on the next release
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [
+  ] ++
+  lib.optionals (pythonOlder "3.9") [
     astor
-  ]
+  ] ++
   # for backwards compatibility with removed pkgs/development/interpreters/hy
   # See: https://github.com/NixOS/nixpkgs/issues/171428
-  ++ (hyDefinedPythonPackages python.pkgs);
+  (hyDefinedPythonPackages python.pkgs);
 
   checkInputs = [
     pytestCheckHook
   ];
 
+  preCheck = ''
+    # For test_bin_hy
+    export PATH="$out/bin:$PATH"
+  '';
+
   disabledTests = [
-    # Don't test the binary
-    "test_bin_hy"
-    "test_hystartup"
-    "est_hy2py_import"
+    "test_circular_macro_require"
+    "test_macro_require"
   ];
 
   pythonImportsCheck = [ "hy" ];
