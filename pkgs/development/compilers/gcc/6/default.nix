@@ -62,7 +62,8 @@ let majorVersion = "6";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-    patches = optionals (!stdenv.targetPlatform.isRedox) [
+    patches = [ ../9/fix-struct-redefinition-on-glibc-2.36.patch ]
+    ++ optionals (!stdenv.targetPlatform.isRedox) [
       ../use-source-date-epoch.patch ./0001-Fix-build-for-glibc-2.31.patch
 
       # Fix https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80431
