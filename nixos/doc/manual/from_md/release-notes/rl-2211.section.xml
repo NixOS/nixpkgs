@@ -1694,6 +1694,22 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
           <literal>picom</literal> to quit instead.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>haskellPackage.callHackage</literal> is not always
+          invalidated if <literal>all-cabal-hashes</literal> changes,
+          leading to less rebuilds of haskell dependencies.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>haskellPackages.callHackage</literal> and
+          <literal>haskellPackages.callCabal2nix</literal> (and related
+          functions) no longer keep a reference to the
+          <literal>cabal2nix</literal> call used to generate them. As a
+          result, they will be garbage collected more often.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
