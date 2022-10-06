@@ -1189,23 +1189,6 @@ let
         };
       };
 
-      jakebecker.elixir-ls = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "elixir-ls";
-          publisher = "JakeBecker";
-          version = "0.11.0";
-          sha256 = "sha256-okvwyD0m2r8ar85VtuBUNMUZGGrCfJ4DB9v7aSX5PjM=";
-        };
-        meta = with lib; {
-          changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
-          description = "Elixir support with debugger, autocomplete, and more. Powered by ElixirLS.";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=JakeBecker.elixir-ls";
-          homepage = "https://github.com/elixir-lsp/elixir-ls";
-          license = licenses.mit;
-          maintainers = with maintainers; [ datafoo ];
-        };
-      };
-
       james-yu.latex-workshop = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "latex-workshop";
@@ -2356,6 +2339,7 @@ let
 
   aliases = self: super: {
     # aliases
+    jakebecker.elixir-ls = super.elixir-lsp.vscode-elixir-ls;
     ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) go; };
   };
 
