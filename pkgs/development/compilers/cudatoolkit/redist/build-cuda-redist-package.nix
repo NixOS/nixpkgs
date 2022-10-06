@@ -9,8 +9,21 @@ pname:
 attrs:
 
 let
-  arch = "linux-x86_64";
-in stdenv.mkDerivation {
+  # (concatStringsSep "-") after reverseList after (split "-")
+  nixToNvidia = {
+    "x86_64-linux" = "linux-x86_64";
+    "aarch64-linux" = "linux-aarch64";
+  };
+
+  # Intersection of nixToNvidia and the manifest
+  distributedPlatforms = lib.filterAttrs
+    (nixArch: nvArch: builtins.hasAttr nvArch attrs)
+    nixToNvidia;
+
+  # Not evaluated unless hostPlatform is in the meta.platforms list
+  arch = nixToNvidia.${stdenv.hostPlatform.system};
+in
+stdenv.mkDerivation {
   inherit pname;
   inherit (attrs) version;
 
@@ -46,6 +59,6 @@ in stdenv.mkDerivation {
   meta = {
     description = attrs.name;
     license = lib.licenses.unfree;
-    platforms = lib.optionals (lib.hasAttr arch attrs) [ "x86_64-linux" ];
+    platforms = lib.attrNames distributedPlatforms;
   };
 }
