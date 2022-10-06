@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "youtube-search";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-veu7PUPAbTz3B7tRYMGptIMbmmaGLCdL6azv0kCEd08=";
+    sha256 = "sha256-V0mm2Adv2mVVfJE2fw+rCTYpDs3qRXyDHJ8/BZGKOqI=";
   };
 
   propagatedBuildInputs = [ requests ];
