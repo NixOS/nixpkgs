@@ -1364,18 +1364,6 @@ let
         };
       };
 
-      elixir-lsp.vscode-elixir-ls = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "elixir-ls";
-          publisher = "JakeBecker";
-          version = "0.8.0";
-          sha256 = "sha256-VD1g4DJfA0vDJ0cyHFDEtCEqQo0nXfPC5vknEU91cPk=";
-        };
-        meta = with lib; {
-          license = licenses.mit;
-        };
-      };
-
       influxdata.flux = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "influxdata";
