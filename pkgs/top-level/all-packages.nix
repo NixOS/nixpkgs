@@ -4243,6 +4243,8 @@ with pkgs;
 
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
+  karma = callPackage ../servers/monitoring/karma { };
+
   kaldi = callPackage ../tools/audio/kaldi { };
 
   kalker = callPackage ../tools/misc/kalker { };
