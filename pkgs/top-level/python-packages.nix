@@ -2032,6 +2032,8 @@ in {
 
   configshell = callPackage ../development/python-modules/configshell { };
 
+  configupdater = callPackage ../development/python-modules/configupdater { };
+
   confluent-kafka = callPackage ../development/python-modules/confluent-kafka { };
 
   confuse = callPackage ../development/python-modules/confuse { };
