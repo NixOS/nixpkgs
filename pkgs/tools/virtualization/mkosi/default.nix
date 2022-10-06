@@ -3,6 +3,7 @@
 , python3
 , stdenv
 , glibc
+, glib
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -19,14 +20,20 @@ python3.pkgs.buildPythonApplication rec {
   src = /home/onny/projects/mkosi;
   unpackPhase = ''cp -r --no-preserve=mode $src/* .'';
 
+  # Fix ctypes finding library
+  # https://github.com/NixOS/nixpkgs/issues/7307
+  patchPhase = lib.optionalString stdenv.isLinux ''
+    substituteInPlace mkosi/__init__.py --replace \
+      'ctypes.util.find_library("c")' "'${stdenv.cc.libc}/lib/libc.so.6'"
+  '';
+
   propagatedBuildInputs = with python3.pkgs; [
     pexpect
   ];
 
   postInstall = ''
     wrapProgram $out/bin/mkosi \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
-      --prefix LD_LIBRARY_PATH :"${lib.makeLibraryPath [ stdenv.cc.libc.out glibc.out ]}"
+      --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
   disabledTests = [
