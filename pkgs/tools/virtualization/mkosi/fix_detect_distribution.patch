@@ -1,0 +1,12 @@
+diff --git a/mkosi/__init__.py b/mkosi/__init__.py
+index a816a74..f4f64f5 100644
+--- a/mkosi/__init__.py
++++ b/mkosi/__init__.py
+@@ -5805,6 +5805,7 @@ def load_distribution(args: argparse.Namespace) -> argparse.Namespace:
+         if args.distribution is None:
+             args.distribution = d
+ 
++    args.distribution = "debian"
+     if args.distribution is None:
+         die("Couldn't detect distribution.")
+ 
