@@ -1950,7 +1950,7 @@ in
       systemd.services.systemd-networkd = {
         wantedBy = [ "multi-user.target" ];
         aliases = [ "dbus-org.freedesktop.network1.service" ];
-        restartTriggers = map (x: x.source) (attrValues unitFiles) ++ [
+        reloadTriggers = map (x: x.source) (attrValues unitFiles) ++ [
           config.environment.etc."systemd/networkd.conf".source
         ];
       };
