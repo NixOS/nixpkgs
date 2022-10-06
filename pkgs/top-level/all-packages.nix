@@ -9400,6 +9400,9 @@ with pkgs;
   nomad_1_3 = callPackage ../applications/networking/cluster/nomad/1.3.nix {
     buildGoModule = buildGo119Module;
   };
+  nomad_1_4 = callPackage ../applications/networking/cluster/nomad/1.4.nix {
+    buildGoModule = buildGo119Module;
+  };
 
   nomad-autoscaler = callPackage ../applications/networking/cluster/nomad-autoscaler { };
 
