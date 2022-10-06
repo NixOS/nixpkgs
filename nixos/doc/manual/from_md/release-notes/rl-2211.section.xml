@@ -748,6 +748,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>arangodb</literal> versions 3.3, 3.4, and 3.5 have
+          been removed because they are at EOL upstream. The default is
+          now 3.10.0.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>meta.mainProgram</literal> attribute of packages
           in <literal>wineWowPackages</literal> now defaults to
           <literal>&quot;wine64&quot;</literal>.
