@@ -14468,6 +14468,8 @@ with pkgs;
 
   nimlsp = callPackage ../development/tools/misc/nimlsp { };
 
+  nimraylib-now = callPackage ../development/nim-packages/nimraylib-now { };
+
   neko = callPackage ../development/compilers/neko { };
 
   nextpnr = callPackage ../development/compilers/nextpnr { };
