@@ -34,6 +34,7 @@ let
       "static"
       "nix" # mainly for nixUnstable users, but also for access to nix/netrc
       # Shells
+      "shells"
       "bashrc"
       "zshenv"
       "zshrc"
