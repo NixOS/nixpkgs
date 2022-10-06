@@ -30,6 +30,11 @@ in mkLicense lset) ({
     fullName = "Abstyles License";
   };
 
+  afl11 = {
+    spdxId = "AFL-1.1";
+    fullName = "Academic Free License v1.1";
+  };
+
   afl20 = {
     spdxId = "AFL-2.0";
     fullName = "Academic Free License v2.0";
@@ -43,6 +48,11 @@ in mkLicense lset) ({
   afl3 = {
     spdxId = "AFL-3.0";
     fullName = "Academic Free License v3.0";
+  };
+
+  agpl2Only = {
+    spdxId = "AGPL-2.0-only";
+    fullName = "GNU Affero General Public License v2.0 only";
   };
 
   agpl3Only = {
@@ -141,6 +151,11 @@ in mkLicense lset) ({
   bsd2Patent = {
     spdxId = "BSD-2-Clause-Patent";
     fullName = "BSD-2-Clause Plus Patent License";
+  };
+
+  bsd2FreeBSD = {
+    spdxId = "BSD-2-Clause-FreeBSD";
+    fullName = "BSD-2-Clause FreeBSD License";
   };
 
   bsd3 = {
