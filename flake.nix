@@ -48,7 +48,7 @@
       legacyPackages = forAllSystems (system: import ./. { inherit system; });
 
       nixosModules = {
-        notDetected = import ./nixos/modules/installer/scan/not-detected.nix;
+        notDetected = ./nixos/modules/installer/scan/not-detected.nix;
       };
     };
 }
