@@ -42,6 +42,9 @@ gcc10Stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
+    # disable "maintainer mode"
+    "-DUSE_MAINTAINER_MODE=OFF"
+
     # avoid using builder's /proc/cpuinfo
     "-DHAVE_SSE42=${if gcc10Stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
     "-DASM_OPTIMIZATIONS=${if gcc10Stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
