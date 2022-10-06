@@ -58,6 +58,7 @@ let majorVersion = "10";
         url = "https://gcc.gnu.org/git/?p=gcc.git;a=patch;h=de31f5445b12fd9ab9969dc536d821fe6f0edad0";
         sha256 = "0sd52c898msqg7m316zp0ryyj7l326cjcn2y19dcxqp15r74qj0g";
       })
+      ../11/fix-struct-redefinition-on-glibc-2.36.patch
     ] ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional (noSysDirs && hostPlatform.isRiscV) ../no-sys-dirs-riscv.patch
