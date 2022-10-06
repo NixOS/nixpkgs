@@ -29,7 +29,7 @@ infoFile: let
         inherit (metadata) url sha1;
       };
     in ''
-      dir=$out/$(echo ${groupId} | sed 's|\.|/|g')/${artifactId}/${versionDir}
+      dir="$out/$(echo ${groupId} | sed 's|\.|/|g')/${artifactId}/${versionDir}"
       mkdir -p $dir
 
       ${lib.optionalString (fetch != "") ''
