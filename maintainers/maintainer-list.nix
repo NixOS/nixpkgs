@@ -15508,7 +15508,7 @@
   jstranik = {
     email = "jan@stranik.org";
     name = "Jan Stranik";
-    github = 1367895;
+    githubId = 1367895;
   };
 
 }
