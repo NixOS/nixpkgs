@@ -13,12 +13,14 @@ let
     config = [ pydispatcher ];
     generic = [ av ];
     google_translate = [ mutagen ];
+    google_sheets = [ oauth2client ];
     homeassistant_sky_connect = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
     homeassistant_yellow = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
     lovelace = [ PyChromecast ];
     nest = [ av ];
     onboarding = [ pymetno radios rpi-bad-power ];
     raspberry_pi = [ rpi-bad-power ];
+    tilt_ble = [ govee-ble ibeacon-ble ];
     tomorrowio = [ pyclimacell ];
     version = [ aioaseko ];
     xiaomi_miio = [ arrow ];
