@@ -37,8 +37,6 @@ gcc10Stdenv.mkDerivation rec {
     # with nixpkgs, it has no sense to check for a version update
     substituteInPlace js/client/client.js --replace "require('@arangodb').checkAvailableVersions();" ""
     substituteInPlace js/server/server.js --replace "require('@arangodb').checkAvailableVersions();" ""
-
-    (cd 3rdParty/boost/1.69.0 && patch -p1 < ${../../../development/libraries/boost/pthread-stack-min-fix.patch})
   '';
 
   cmakeFlags = [
