@@ -1256,6 +1256,7 @@
   ./tasks/filesystems/f2fs.nix
   ./tasks/filesystems/jfs.nix
   ./tasks/filesystems/nfs.nix
+  ./tasks/filesystems/nilfs2.nix
   ./tasks/filesystems/ntfs.nix
   ./tasks/filesystems/reiserfs.nix
   ./tasks/filesystems/unionfs-fuse.nix
