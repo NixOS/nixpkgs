@@ -66,9 +66,9 @@ setBSDSourceDir() {
 }
 
 cdBSDPath() {
-  if [ -d "$BSD_PATH" ]
-    then sourceRoot=$sourceRoot/$BSD_PATH
-    cd $BSD_PATH
+  if [ -d "$COMPONENT_PATH" ]
+    then sourceRoot=$sourceRoot/$COMPONENT_PATH
+    cd $COMPONENT_PATH
   fi
 }
 
