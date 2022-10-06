@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "crytic-compile";
-  version = "0.2.3";
+  version = "0.2.4";
 
   disabled = pythonOlder "3.6";
 
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "crytic";
     repo = "crytic-compile";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-l8a9QXERpkVrx7zHluMlb3zBvJSODsviNtJPzvL3hDo=";
+    sha256 = "sha256-phb4Y8CUxuHsNt43oKsgDAZTraNauPkcYQtzcsiWyy8=";
   };
 
   propagatedBuildInputs = [ pysha3 setuptools ];
