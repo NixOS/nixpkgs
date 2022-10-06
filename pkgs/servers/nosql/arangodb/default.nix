@@ -47,8 +47,6 @@ gcc10Stdenv.mkDerivation rec {
     "-DASM_OPTIMIZATIONS=${if gcc10Stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
   ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     homepage = "https://www.arangodb.com";
     description = "A native multi-model database with flexible data models for documents, graphs, and key-values";
