@@ -37,6 +37,7 @@
 , Carbon
 , Cocoa
 , withTouchSupport ? false
+, nixosTests
 }:
 
 with lib;
@@ -114,6 +115,10 @@ let
       cp -rv ${sources.data}/* $out/share/minetest/games/minetest_game/
       patchShebangs $out
     '';
+
+    passthru.tests = {
+      minetest-with-packages = nixosTests.minetest-with-packages;
+    };
 
     meta = with lib; {
       homepage = "http://minetest.net/";
