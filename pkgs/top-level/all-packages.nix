@@ -27405,7 +27405,7 @@ with pkgs;
   bonzomatic = callPackage ../applications/editors/bonzomatic { };
 
   bottles = callPackage ../applications/misc/bottles {
-    wine = wineWowPackages.minimal;
+    wine = null;
   };
 
   brave = callPackage ../applications/networking/browsers/brave { };
