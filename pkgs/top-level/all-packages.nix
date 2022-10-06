@@ -11216,6 +11216,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  boost-sml = callPackage ../development/libraries/boost-ext/boost-sml {};
+
   smu = callPackage ../tools/text/smu { };
 
   smug = callPackage ../tools/misc/smug { };
