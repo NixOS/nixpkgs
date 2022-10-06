@@ -1,4 +1,5 @@
-final: prev: let
+final: prev:
+let
 
   inherit (final) callPackage;
   inherit (prev) cudatoolkit cudaVersion lib pkgs;
@@ -8,7 +9,7 @@ final: prev: let
   buildTensorRTPackage = args:
     callPackage ./generic.nix { } args;
 
-  toUnderscore = str: lib.replaceStrings ["."] ["_"] str;
+  toUnderscore = str: lib.replaceStrings [ "." ] [ "_" ] str;
 
   majorMinorPatch = str: lib.concatStringsSep "." (lib.take 3 (lib.splitVersion str));
 
@@ -18,14 +19,20 @@ final: prev: let
     # Return the first file that is supported. In practice there should only ever be one anyway.
     supportedFile = files: findFirst isSupported null files;
     # Supported versions with versions as keys and file as value
-    supportedVersions = filterAttrs (version: file: file !=null ) (mapAttrs (version: files: supportedFile files) tensorRTVersions);
+    supportedVersions = filterAttrs (version: file: file != null) (mapAttrs (version: files: supportedFile files) tensorRTVersions);
     # Compute versioned attribute name to be used in this package set
     computeName = version: "tensorrt_${toUnderscore version}";
     # Add all supported builds as attributes
-    allBuilds = mapAttrs' (version: file: nameValuePair (computeName version) (buildTensorRTPackage (removeAttrs file ["fileVersionCuda"]))) supportedVersions;
+    allBuilds = mapAttrs' (version: file: nameValuePair (computeName version) (buildTensorRTPackage (removeAttrs file [ "fileVersionCuda" ]))) supportedVersions;
     # Set the default attributes, e.g. tensorrt = tensorrt_8_4;
-    defaultBuild = { "tensorrt" = allBuilds.${computeName tensorRTDefaultVersion}; };
-  in allBuilds // defaultBuild;
+    defaultBuildName = computeName tensorRTDefaultVersion;
+    defaultBuild =
+      if
+        builtins.hasAttr defaultBuildName allBuilds then
+        { "tensorrt" = allBuilds.${defaultBuildName}; }
+      else { };
+  in
+  allBuilds // defaultBuild;
 
   tensorRTVersions = {
     "8.4.0" = [
@@ -61,4 +68,5 @@ final: prev: let
     "11.7" = "8.4.0";
   }.${cudaVersion} or "8.4.0";
 
-in tensorRTPackages
+in
+tensorRTPackages
