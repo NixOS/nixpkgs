@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake
-, sqlite, wxGTK30-gtk3, libusb1, soapysdr
+, sqlite, wxGTK32, libusb1, soapysdr
 , mesa_glu, libX11, gnuplot, fltk
+, GLUT
 } :
 
 stdenv.mkDerivation rec {
@@ -23,13 +24,15 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libusb1
     sqlite
-    wxGTK30-gtk3
+    wxGTK32
     fltk
     gnuplot
     libusb1
     soapysdr
     mesa_glu
     libX11
+  ] ++ lib.optionals stdenv.isDarwin [
+    GLUT
   ];
 
   postInstall = ''
@@ -42,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/myriadrf/LimeSuite";
     license = licenses.asl20;
     maintainers = with maintainers; [ markuskowa ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
 
