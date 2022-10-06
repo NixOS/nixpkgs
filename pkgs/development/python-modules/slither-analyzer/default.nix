@@ -16,13 +16,13 @@ buildPythonPackage rec {
   version = "0.9.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "slither";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-Td7WBPpc+ZYlFroZNzvUqQZJag0lbkCgj8TVOPrAAPY=";
+    hash = "sha256-Td7WBPpc+ZYlFroZNzvUqQZJag0lbkCgj8TVOPrAAPY=";
   };
 
   nativeBuildInputs = [
