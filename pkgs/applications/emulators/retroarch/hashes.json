@@ -53,6 +53,12 @@
         "rev": "d770563fc3c4bd9abb522952cefb4aa923ba0b91",
         "sha256": "zHPtfgp9hc8Q4gXJ5VgfJLWLeYjCsQhkfU1T5RM7AL0="
     },
+    "beetle-supafaust": {
+        "owner": "libretro",
+        "repo": "supafaust",
+        "rev": "85b5527231a6ad6f9475c15c8ff1b9d16884cd30",
+        "sha256": "6ynxRfGYlp7Fuq3XT2uHsR9Uwu7WMIYjclLc0Pf/qNM="
+    },
     "beetle-supergrafx": {
         "owner": "libretro",
         "repo": "beetle-supergrafx-libretro",
