@@ -1,4 +1,5 @@
 { gcc10Stdenv
+, git
 , lib
 , fetchFromGitHub
 , openssl
@@ -13,16 +14,17 @@
 
 gcc10Stdenv.mkDerivation rec {
   pname = "arangodb";
-  version = "3.9.3";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     repo = "arangodb";
     owner = "arangodb";
     rev = "v${version}";
-    sha256 = "078bs8m045ym0ka0n3n1wvzr8gri09bcs574kdzy8z3rrngvp82m";
+    sha256 = "0vjdiarfnvpfl4hnqgr7jigxgq3b3zhx88n8liv1zqa1nlvykfrb";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake perl python3 which ];
+  nativeBuildInputs = [ cmake git perl python3 which ];
 
   buildInputs = [ openssl zlib snappy lzo ];
 
