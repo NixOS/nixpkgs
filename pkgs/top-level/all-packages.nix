@@ -4657,8 +4657,9 @@ with pkgs;
 
   pyznap = python3Packages.callPackage ../tools/backup/pyznap {};
 
-  procs = callPackage ../tools/admin/procs {
-    inherit (darwin.apple_sdk.frameworks) Security;
+  procs = darwin.apple_sdk_11_0.callPackage ../tools/admin/procs {
+    inherit (darwin.apple_sdk_11_0.frameworks) Security;
+    inherit (darwin.apple_sdk_11_0) Libsystem;
     inherit (darwin) libiconv;
   };
 
