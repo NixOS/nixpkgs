@@ -538,6 +538,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>teleport</literal> has been upgraded to major version
+          10. Please see upstream
+          <link xlink:href="https://goteleport.com/docs/ver/10.0/management/operations/upgrading/">upgrade
+          instructions</link> and
+          <link xlink:href="https://goteleport.com/docs/ver/10.0/changelog/#1000">release
+          notes</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           lemmy module option
           <literal>services.lemmy.settings.database.createLocally</literal>
           moved to
