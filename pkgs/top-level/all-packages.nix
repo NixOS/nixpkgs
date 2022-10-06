@@ -34027,14 +34027,10 @@ with pkgs;
   minetestclient = minetestclient_5;
   minetestserver = minetestserver_5;
 
-  minetest-mods = callPackage ../games/minetest/mods { };
-
-  minetestWithMods = import ../games/minetest/minetest-with-mods.nix
-                                pkgs
-                                {
-                                    inherit minetest-mods;
-                                    inherit minetest;
-                                  };
+  minetestPackages = dontRecurseIntoAttrs (import ../games/minetest/packages {
+    callPackage = newScope minetestPackages;
+  });
+  minetestWithPackages = callPackage ../games/minetest/minetest-with-packages.nix { };
 
   mnemosyne = callPackage ../games/mnemosyne {
     python = python3;

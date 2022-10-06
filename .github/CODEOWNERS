@@ -288,3 +288,7 @@
 # Dotnet
 /pkgs/build-support/dotnet          @IvarWithoutBones
 /pkgs/development/compilers/dotnet  @IvarWithoutBones
+
+# Minetest
+/pkgs/games/minetest                                       @fgaz
+/maintainers/scripts/update-minetest-packages.tcl          @fgaz
