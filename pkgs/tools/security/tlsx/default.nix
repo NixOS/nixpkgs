@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "tlsx";
-  version = "0.0.7";
+  version = "0.0.8";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-tyZDmtqQLTV06mLo1lg/qWRjvxvgVvGpoRXWX9HtXeo=";
+    hash = "sha256-TqYBLNnh4wjinoduFrmyNe+FgnGSCckwMy5zX0XhnlM=";
   };
 
-  vendorSha256 = "sha256-ERZ4mWmtOsW1nYUshSbCzhy+KcujviPtL4LS/soPrFQ=";
+  vendorSha256 = "sha256-BppRtzTjiMcuc7xIz37bDcjnQHhOlstncES1vILTKYM=";
 
   meta = with lib; {
     description = "TLS grabber focused on TLS based data collection";

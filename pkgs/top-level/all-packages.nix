@@ -2506,6 +2506,8 @@ with pkgs;
 
   droidmote = callPackage ../tools/inputmethods/droidmote { };
 
+  eartag = callPackage ../applications/audio/eartag { };
+
   ecdsautils = callPackage ../tools/security/ecdsautils { };
 
   echidna = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage (../tools/security/echidna) { });
@@ -4660,8 +4662,9 @@ with pkgs;
 
   pyznap = python3Packages.callPackage ../tools/backup/pyznap {};
 
-  procs = callPackage ../tools/admin/procs {
-    inherit (darwin.apple_sdk.frameworks) Security;
+  procs = darwin.apple_sdk_11_0.callPackage ../tools/admin/procs {
+    inherit (darwin.apple_sdk_11_0.frameworks) Security;
+    inherit (darwin.apple_sdk_11_0) Libsystem;
     inherit (darwin) libiconv;
   };
 
@@ -12321,6 +12324,8 @@ with pkgs;
 
   wf-recorder = callPackage ../applications/video/wf-recorder { };
 
+  whatip = callPackage ../tools/networking/whatip {};
+
   whatweb = callPackage ../tools/security/whatweb { };
 
   whipper = callPackage ../applications/audio/whipper { };
@@ -14105,6 +14110,8 @@ with pkgs;
     # than peek into its version).
     inherit (emacs.pkgs.melpaStablePackages) irony;
   };
+
+  heptagon = callPackage ../development/compilers/heptagon { };
 
   holo-build = callPackage ../tools/package-management/holo-build { };
 
@@ -22409,6 +22416,8 @@ with pkgs;
     gtk3 = gtk4;
   };
 
+  webp-pixbuf-loader = callPackage ../development/libraries/webp-pixbuf-loader {};
+
   websocketpp = callPackage ../development/libraries/websocket++ { };
 
   webrtc-audio-processing_1 = callPackage ../development/libraries/webrtc-audio-processing { stdenv = gcc10StdenvCompat; };
@@ -25193,6 +25202,8 @@ with pkgs;
   raspberrypi-armstubs = callPackage ../os-specific/linux/firmware/raspberrypi/armstubs.nix {};
 
   reap = callPackage ../os-specific/linux/reap { };
+
+  rectangle = callPackage ../os-specific/darwin/rectangle { };
 
   regionset = callPackage ../os-specific/linux/regionset { };
 
@@ -28022,7 +28033,7 @@ with pkgs;
 
   gomuks = callPackage ../applications/networking/instant-messengers/gomuks { };
 
-  inherit (ocaml-ng.ocamlPackages_4_10) google-drive-ocamlfuse;
+  inherit (ocaml-ng.ocamlPackages_4_12) google-drive-ocamlfuse;
 
   googler = callPackage ../applications/misc/googler {
     python = python3;
