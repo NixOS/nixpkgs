@@ -1609,8 +1609,8 @@ let
         mktplcRef = {
           name = "color-highlight";
           publisher = "naumovs";
-          version = "2.5.0";
-          sha256 = "sha256-dYMDV84LEGXUjt/fbsSy3BVM5SsBHcPaDDll8KjPIWY=";
+          version = "2.6.0";
+          sha256 = "sha256-TcPQOAHCYeFHPdR85GIXsy3fx70p8cLdO2UNO0krUOs=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/naumovs.color-highlight/changelog";
