@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     dbus
     libssh
     openssl
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     AppKit
     Cocoa
     Foundation

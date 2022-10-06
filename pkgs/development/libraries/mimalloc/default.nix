@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ninja ];
-  cmakeFlags = [ "-DMI_INSTALL_TOPLEVEL=ON" ] ++ lib.optional secureBuild [ "-DMI_SECURE=ON" ];
+  cmakeFlags = [ "-DMI_INSTALL_TOPLEVEL=ON" ] ++ lib.optionals secureBuild [ "-DMI_SECURE=ON" ];
 
   postInstall = let
     rel = lib.versions.majorMinor version;

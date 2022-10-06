@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
     "--with-iologdir=/var/log/sudo-io"
     "--with-sendmail=${sendmailPath}"
     "--enable-tmpfiles.d=no"
-  ] ++ lib.optional withInsults [
+  ] ++ lib.optionals withInsults [
     "--with-insults"
     "--with-all-insults"
-  ] ++ lib.optional withSssd [
+  ] ++ lib.optionals withSssd [
     "--with-sssd"
     "--with-sssd-lib=${sssd}/lib"
   ];

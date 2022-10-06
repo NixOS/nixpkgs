@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytz
-  ] ++ lib.optional (isPy27) [
+  ] ++ lib.optionals (isPy27) [
     unittest2
   ];
 

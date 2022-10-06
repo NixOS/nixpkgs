@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
     # Clang doesn't support "-export-dynamic"
     ++ optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS="
     ++ optional jackaudioSupport "-DWITH_JACK=ON"
-    ++ optional cudaSupport [
+    ++ optionals cudaSupport [
       "-DWITH_CYCLES_CUDA_BINARIES=ON"
       "-DWITH_CYCLES_DEVICE_OPTIX=ON"
       "-DOPTIX_ROOT_DIR=${optix}"

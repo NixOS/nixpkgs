@@ -36,7 +36,7 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'> is not...
     "test_init"
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     # https://github.com/Rockhopper-Technologies/enlighten/issues/44
     "test_autorefresh"
   ];

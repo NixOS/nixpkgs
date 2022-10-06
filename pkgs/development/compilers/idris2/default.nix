@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ makeWrapper clang platformChez ]
-    ++ lib.optional stdenv.isDarwin [ zsh ];
+    ++ lib.optionals stdenv.isDarwin [ zsh ];
   buildInputs = [ platformChez gmp ];
 
   prePatch = ''

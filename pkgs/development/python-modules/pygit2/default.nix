@@ -35,11 +35,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cached-property
     pycparser
-  ] ++ lib.optional (!isPyPy) [
+  ] ++ lib.optionals (!isPyPy) [
     cffi
   ];
 
-  propagatedNativeBuildInputs = lib.optional (!isPyPy) [
+  propagatedNativeBuildInputs = lib.optionals (!isPyPy) [
     cffi
   ];
 

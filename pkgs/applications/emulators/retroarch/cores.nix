@@ -676,7 +676,7 @@ in
     description = "Fast MegaDrive/MegaCD/32X emulator";
     license = "MAME";
     dontConfigure = true;
-    makeFlags = lib.optional stdenv.hostPlatform.isAarch64 [ "platform=aarch64" ];
+    makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "platform=aarch64" ];
   };
 
   play = mkLibRetroCore {

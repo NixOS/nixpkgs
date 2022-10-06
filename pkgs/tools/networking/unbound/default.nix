@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     "--with-rootkey-file=${dns-root-data}/root.key"
     "--enable-pie"
     "--enable-relro-now"
-  ] ++ lib.optional stdenv.hostPlatform.isStatic [
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     "--disable-flto"
   ] ++ lib.optionals withSystemd [
     "--enable-systemd"

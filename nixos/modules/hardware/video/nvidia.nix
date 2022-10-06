@@ -261,7 +261,7 @@ in
     in optional primeEnabled {
       name = igpuDriver;
       display = offloadCfg.enable;
-      modules = optional (igpuDriver == "amdgpu") [ pkgs.xorg.xf86videoamdgpu ];
+      modules = optionals (igpuDriver == "amdgpu") [ pkgs.xorg.xf86videoamdgpu ];
       deviceSection = ''
         BusID "${igpuBusId}"
         ${optionalString (syncCfg.enable && igpuDriver != "amdgpu") ''Option "AccelMethod" "none"''}

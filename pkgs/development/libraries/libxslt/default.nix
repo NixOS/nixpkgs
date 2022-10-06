@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxml2.dev libxcrypt
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     gettext
   ] ++ lib.optionals pythonSupport [
     libxml2.py

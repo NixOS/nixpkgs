@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ alsa-lib openssl ] ++ lib.optional withTTS [ speechd ];
+  buildInputs = [ alsa-lib openssl ] ++ lib.optionals withTTS [ speechd ];
 
   # Building the speech-dispatcher-sys crate for TTS support requires setting
   # LIBCLANG_PATH.

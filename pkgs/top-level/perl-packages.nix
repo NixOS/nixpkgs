@@ -849,7 +849,7 @@ let
     };
     buildInputs = [ PodParser ];
     propagatedBuildInputs = [ AppPackager FileLoadLines IOString ImageInfo PDFAPI2 StringInterpolateNamed TextLayout ]
-      ++ lib.optional (!stdenv.isDarwin) [ Wx ];
+      ++ lib.optionals (!stdenv.isDarwin) [ Wx ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
     postInstall = lib.optionalString stdenv.isDarwin ''
       shortenPerlShebang $out/bin/chordpro

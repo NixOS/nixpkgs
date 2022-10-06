@@ -12,7 +12,7 @@ deployAndroidPackage {
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
   autoPatchelfIgnoreMissingDeps = true;
-  buildInputs = lib.optional (os == "linux") [ pkgs.zlib ];
+  buildInputs = lib.optionals (os == "linux") [ pkgs.zlib ];
   patchInstructions = lib.optionalString (os == "linux") (''
     patchShebangs .
 
