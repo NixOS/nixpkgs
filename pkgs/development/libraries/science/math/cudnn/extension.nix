@@ -113,6 +113,22 @@ final: prev: let
         supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" "11.7" ];
       }
     ];
+    "8.6.0" = [
+      rec {
+        fileVersion = "10.2";
+        fullVersion = "8.6.0.163";
+        hash = "sha256-t4sr/GrFqqdxu2VhaJQk5K1Xm/0lU4chXG8hVL09R9k=";
+        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${lib.versions.major fileVersion}-archive.tar.xz";
+        supportedCudaVersions = [ "10.2" ];
+      }
+      rec {
+        fileVersion = "11.8";
+        fullVersion = "8.6.0.163";
+        hash = "sha256-u8OW30cpTGV+3AnGAGdNYIyxv8gLgtz0VHBgwhcRFZ4=";
+        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${lib.versions.major fileVersion}-archive.tar.xz";
+        supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" "11.7" "11.8" ];
+      }
+    ];
   };
 
   # Default attributes
@@ -128,6 +144,7 @@ final: prev: let
     "11.5" = "8.3.2";
     "11.6" = "8.3.2";
     "11.7" = "8.4.0";
+    "11.8" = "8.6.0";
   }.${cudaVersion} or "8.3.2";
 
 in cuDnnPackages

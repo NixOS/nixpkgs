@@ -14,6 +14,7 @@ final: prev: let
     # the tag 11.7 does not exists: see https://github.com/NVIDIA/cuda-samples/issues/128
     # maybe fixed by https://github.com/NVIDIA/cuda-samples/pull/133
     "11.7" = throw "The tag 11.7 of cuda-samples does not exists (see see https://github.com/NVIDIA/cuda-samples/issues/128)";
+    "11.8" = throw "The tag 11.8 of cuda-samples does not exists (see see https://github.com/NVIDIA/cuda-samples/issues/128)";
   }.${prev.cudaVersion};
 
 in {
