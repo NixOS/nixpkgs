@@ -80,6 +80,7 @@ let
         type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
         description = lib.mdDoc ''
           Commands called at the start of the interface setup.
+          The interface name is available in the shell variable `i`.
         '';
       };
 
@@ -88,7 +89,8 @@ let
         default = "";
         type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
         description = lib.mdDoc ''
-          Command called before the interface is taken down.
+          Commands called before the interface is taken down.
+          The interface name is available in the shell variable `i`.
         '';
       };
 
@@ -98,6 +100,7 @@ let
         type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
         description = lib.mdDoc ''
           Commands called after the interface setup.
+          The interface name is available in the shell variable `i`.
         '';
       };
 
@@ -106,7 +109,8 @@ let
         default = "";
         type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
         description = lib.mdDoc ''
-          Command called after the interface is taken down.
+          Commands called after the interface is taken down.
+          The interface name is available in the shell variable `i`.
         '';
       };
 
@@ -214,19 +218,23 @@ let
     };
   };
 
-  writeScriptFile = name: text: ((pkgs.writeShellScriptBin name text) + "/bin/${name}");
+  hookFile = name: text: if text == "" then null else
+    pkgs.writeShellScript name ''
+      i=$1
+      ${text}
+    '';
 
   generateUnit = name: values:
     assert assertMsg (values.configFile != null || ((values.privateKey != null) != (values.privateKeyFile != null))) "Only one of privateKey, configFile or privateKeyFile may be set";
     let
-      preUpFile = if values.preUp != "" then writeScriptFile "preUp.sh" values.preUp else null;
+      preUpFile = hookFile "preUp" values.preUp;
       postUp =
             optional (values.privateKeyFile != null) "wg set ${name} private-key <(cat ${values.privateKeyFile})" ++
             (concatMap (peer: optional (peer.presharedKeyFile != null) "wg set ${name} peer ${peer.publicKey} preshared-key <(cat ${peer.presharedKeyFile})") values.peers) ++
             optional (values.postUp != "") values.postUp;
-      postUpFile = if postUp != [] then writeScriptFile "postUp.sh" (concatMapStringsSep "\n" (line: line) postUp) else null;
-      preDownFile = if values.preDown != "" then writeScriptFile "preDown.sh" values.preDown else null;
-      postDownFile = if values.postDown != "" then writeScriptFile "postDown.sh" values.postDown else null;
+      postUpFile = hookFile "postUp" (concatStringsSep "\n" postUp);
+      preDownFile = hookFile "preDown" values.preDown;
+      postDownFile = hookFile "postDown" values.postDown;
       configDir = pkgs.writeTextFile {
         name = "config-${name}";
         executable = false;
@@ -245,10 +253,10 @@ let
         optionalString (values.mtu != null) "MTU = ${toString values.mtu}\n" +
         optionalString (values.privateKey != null) "PrivateKey = ${values.privateKey}\n" +
         optionalString (values.listenPort != null) "ListenPort = ${toString values.listenPort}\n" +
-        optionalString (preUpFile != null) "PreUp = ${preUpFile}\n" +
-        optionalString (postUpFile != null) "PostUp = ${postUpFile}\n" +
-        optionalString (preDownFile != null) "PreDown = ${preDownFile}\n" +
-        optionalString (postDownFile != null) "PostDown = ${postDownFile}\n" +
+        optionalString (preUpFile != null) "PreUp = ${preUpFile} %i\n" +
+        optionalString (postUpFile != null) "PostUp = ${postUpFile} %i\n" +
+        optionalString (preDownFile != null) "PreDown = ${preDownFile} %i\n" +
+        optionalString (postDownFile != null) "PostDown = ${postDownFile} %i\n" +
         concatMapStringsSep "\n" (peer:
           assert assertMsg (!((peer.presharedKeyFile != null) && (peer.presharedKey != null))) "Only one of presharedKey or presharedKeyFile may be set";
           "[Peer]\n" +
