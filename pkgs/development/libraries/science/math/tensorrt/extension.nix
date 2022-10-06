@@ -35,7 +35,7 @@ final: prev: let
         fullVersion = "8.4.0.6";
         sha256 = "sha256-DNgHHXF/G4cK2nnOWImrPXAkOcNW6Wy+8j0LRpAH/LQ=";
         tarball = "TensorRT-${fullVersion}.Linux.x86_64-gnu.cuda-${fileVersionCuda}.cudnn${fileVersionCudnn}.tar.gz";
-        supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" ];
+        supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" "11.7" ];
       }
       rec {
         fileVersionCuda = "10.2";
@@ -58,6 +58,7 @@ final: prev: let
     "11.4" = "8.4.0";
     "11.5" = "8.4.0";
     "11.6" = "8.4.0";
+    "11.7" = "8.4.0";
   }.${cudaVersion} or "8.4.0";
 
 in tensorRTPackages

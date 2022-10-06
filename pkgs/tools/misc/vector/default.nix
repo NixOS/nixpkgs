@@ -108,6 +108,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/timberio/vector";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ thoughtpolice happysalada ];
-    platforms = [ "aarch64-linux" "x86_64-linux" "aarch64-darwin" ];
+    platforms = with platforms; all;
   };
 }
