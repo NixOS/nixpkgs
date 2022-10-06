@@ -3,7 +3,7 @@
 , buildPackages, splicePackages, newScope
 , bsdSetupHook, makeSetupHook, fetchcvs, groff, mandoc, byacc, flex
 , zlib
-, writeScript, writeText, runtimeShell, symlinkJoin
+, writeShellScript, writeText, runtimeShell, symlinkJoin
 }:
 
 let
@@ -281,8 +281,7 @@ in lib.makeScopeWithSplicing
 
   # HACK: to ensure parent directories exist. This emulates GNU
   # install’s -D option. No alternative seems to exist in BSD install.
-  install = let binstall = writeScript "binstall" ''
-    #!${runtimeShell}
+  install = let binstall = writeShellScript "binstall" ''
     set -eu
     for last in "$@"; do true; done
     mkdir -p $(dirname $last)
