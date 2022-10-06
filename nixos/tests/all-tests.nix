@@ -88,6 +88,7 @@ in {
   beanstalkd = handleTest ./beanstalkd.nix {};
   bees = handleTest ./bees.nix {};
   bind = handleTest ./bind.nix {};
+  bind-test-module-test = runTest ./common/bind-dns-test.nix;
   bird = handleTest ./bird.nix {};
   bitcoind = handleTest ./bitcoind.nix {};
   bittorrent = handleTest ./bittorrent.nix {};
