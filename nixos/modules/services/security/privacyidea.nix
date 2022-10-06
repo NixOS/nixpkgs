@@ -185,7 +185,7 @@ in
       };
 
       tokenjanitor = {
-        enable = mkEnableOption "automatic runs of the token janitor";
+        enable = mkEnableOption (lib.mdDoc "automatic runs of the token janitor");
         interval = mkOption {
           default = "quarterly";
           type = types.str;
