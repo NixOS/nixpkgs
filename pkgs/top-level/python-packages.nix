@@ -8060,6 +8060,8 @@ self: super: with self; {
 
   pylsp-mypy = callPackage ../development/python-modules/pylsp-mypy { };
 
+  pylpsd = callPackage ../development/python-modules/pylpsd { };
+
   PyLTI = callPackage ../development/python-modules/pylti { };
 
   pylutron = callPackage ../development/python-modules/pylutron { };
