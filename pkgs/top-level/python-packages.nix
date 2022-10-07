@@ -2497,6 +2497,8 @@ in {
 
   dissect-extfs = callPackage ../development/python-modules/dissect-extfs { };
 
+  dissect-hypervisor = callPackage ../development/python-modules/dissect-hypervisor { };
+
   dissect-ntfs = callPackage ../development/python-modules/dissect-ntfs { };
 
   dissect-util = callPackage ../development/python-modules/dissect-util { };
