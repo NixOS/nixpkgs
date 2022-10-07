@@ -32,7 +32,9 @@ jobs:
             maintainers/scripts/update.nix \
             --argstr commit true \
             --argstr keep-going true \
+            --argstr max-workers 2 \
             --argstr path terraform-providers
+          git clean -f
       - name: create PR
         uses: peter-evans/create-pull-request@v4
         with:
