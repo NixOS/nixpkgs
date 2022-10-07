@@ -2485,6 +2485,8 @@ in {
 
   dissect-etl = callPackage ../development/python-modules/dissect-etl { };
 
+  dissect-evidence = callPackage ../development/python-modules/dissect-evidence { };
+
   dissect-util = callPackage ../development/python-modules/dissect-util { };
 
   dissect-volume = callPackage ../development/python-modules/dissect-volume { };
