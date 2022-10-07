@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, lib, buildFHSUserEnv, appimageTools, writeShellScript, anki, undmg, zstd }:
+{ fetchurl, stdenv, lib, buildFHSUserEnv, appimageTools, writeShellScript, anki, undmg, zstd, cacert }:
 
 let
   pname = "anki-bin";
@@ -57,8 +57,14 @@ if stdenv.isLinux then buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
   # Dependencies of anki
   targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile krb5 ]);
 
+  # The run script tests several well-known paths for CA bundles and sets
+  # SSL_CERT_FILE accordingly to the first one it finds. This is done to work
+  # around a bug in certain Anki addons that arises due to an interaction Nix.
+  # See #194335.
   runScript = writeShellScript "anki-wrapper.sh" ''
-    export SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt
+    if [ ! -v SSL_CERT_FILE ]; then
+      export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+    fi
     exec ${unpacked}/bin/anki
   '';
 
