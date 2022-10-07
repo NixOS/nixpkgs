@@ -2505,6 +2505,8 @@ in {
 
   dissect-regf = callPackage ../development/python-modules/dissect-regf { };
 
+  dissect-shellitem = callPackage ../development/python-modules/dissect-shellitem { };
+
   dissect-util = callPackage ../development/python-modules/dissect-util { };
 
   dissect-vmfs = callPackage ../development/python-modules/dissect-vmfs { };
