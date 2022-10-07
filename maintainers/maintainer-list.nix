@@ -9555,6 +9555,13 @@
     githubId = 23743547;
     name = "Akshay Oppiliappan";
   };
+  ners = {
+    name = "ners";
+    email = "ners@gmx.ch";
+    matrix = "@ners:ners.ch";
+    github = "ners";
+    githubId = 50560955;
+  };
   nessdoor = {
     name = "Tomas Antonio Lopez";
     email = "entropy.overseer@protonmail.com";
