@@ -9,19 +9,19 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.27";
+  version = "1.29";
   pname = "fakeroot";
 
   src = fetchurl {
     url = "http://http.debian.net/debian/pool/main/f/fakeroot/fakeroot_${version}.orig.tar.gz";
-    sha256 = "1p5d3jq6l1pzk96agkf05dck7dbgvldx5sg2d4h7d8h230nyni9w";
+    sha256 = "sha256-j7uvt4DJFz46zkoEr7wdkA8zfzIWiDk59cfbNDG+fCA=";
   };
 
   patches = lib.optionals stdenv.isLinux [
     ./einval.patch
     (fetchpatch {
       name = "also-wrap-stat-library-call.patch";
-      url = "https://sources.debian.org/data/main/f/fakeroot/1.27-1/debian/patches/also-wrap-stat-library-call.patch";
+      url = "https://sources.debian.org/data/main/f/fakeroot/1.29-1/debian/patches/also-wrap-stat-library-call.patch";
       sha256 = "0p7lq6m31k3rqsnjbi06a8ykdqa3cp4y5ngsjyk3q1269gx59x8b";
     })
   ];
