@@ -17373,6 +17373,11 @@ with pkgs;
 
   slimerjs = callPackage ../development/tools/slimerjs {};
 
+  slint-lsp = callPackage ../development/tools/misc/slint-lsp {
+    inherit (xorg) libXcursor libXi;
+    inherit (darwin.apple_sdk.frameworks) AppKit CoreGraphics CoreServices CoreText Foundation OpenGL;
+  };
+
   sloccount = callPackage ../development/tools/misc/sloccount { };
 
   sloc = nodePackages.sloc;
