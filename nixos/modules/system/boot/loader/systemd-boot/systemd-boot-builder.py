@@ -185,9 +185,9 @@ def remove_old_entries(gens: List[SystemIdentifier]) -> None:
             if rex_profile.match(path):
                 prof = rex_profile.sub(r"\1", path)
             else:
-                prof = "system"
+                prof = None
             gen_number = int(rex_generation.sub(r"\1", path))
-            if not (prof, gen_number) in gens:
+            if not (prof, gen_number, None) in gens:
                 os.unlink(path)
         except ValueError:
             pass
