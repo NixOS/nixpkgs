@@ -2032,6 +2032,8 @@ in {
 
   configshell = callPackage ../development/python-modules/configshell { };
 
+  configupdater = callPackage ../development/python-modules/configupdater { };
+
   confluent-kafka = callPackage ../development/python-modules/confluent-kafka { };
 
   confuse = callPackage ../development/python-modules/confuse { };
@@ -8366,6 +8368,10 @@ in {
   pyqt5_with_qtwebkit = self.pyqt5.override {
     withWebKit = true;
   };
+
+  pyqt6 = callPackage ../development/python-modules/pyqt/6.x.nix { };
+
+  pyqt6-sip = callPackage ../development/python-modules/pyqt/pyqt6-sip.nix { };
 
   pyqtgraph = callPackage ../development/python-modules/pyqtgraph { };
 

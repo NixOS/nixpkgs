@@ -62,6 +62,9 @@ in buildFHSUserEnv {
     # Osmose
     qt4
 
+    # Overwatch 2
+    libunwind
+
     # PPSSPP
     glew snappy
 
