@@ -171,6 +171,8 @@ in {
 
   acoustics = callPackage ../development/python-modules/acoustics { };
 
+  acquire = callPackage ../development/python-modules/acquire { };
+
   actdiag = callPackage ../development/python-modules/actdiag { };
 
   adafruit-io = callPackage ../development/python-modules/adafruit-io { };
