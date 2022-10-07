@@ -2495,6 +2495,8 @@ in {
 
   dissect-volume = callPackage ../development/python-modules/dissect-volume { };
 
+  dissect-xfs = callPackage ../development/python-modules/dissect-xfs { };
+
   dissononce = callPackage ../development/python-modules/dissononce { };
 
   distlib = callPackage ../development/python-modules/distlib { };
