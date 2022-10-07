@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "geckodriver";
-    rev = "9b5f85c4b61b8add460f56eff9b26071fb7f6c4f";
+    rev = "refs/tags/v${version}";
     sha256 = "sha256-sUu1D3HAxUTQFas4ylQ9LYC0dcKPyljoU+keENg17os=";
   };
 
