@@ -1,5 +1,13 @@
-{ lib, stdenv, rustPlatform, fetchCrate, pkg-config, libusb1
-, libiconv, AppKit, IOKit }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchCrate
+, pkg-config
+, libusb1
+, libiconv
+, AppKit
+, IOKit
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "probe-run";
@@ -12,9 +20,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-kmdRwAq6EOniGHC7JhB6Iov1E4hbQbxHlOcc6gUDOhY=";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libusb1 ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv AppKit IOKit ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    libusb1
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+    AppKit
+    IOKit
+  ];
 
   meta = with lib; {
     description = "Run embedded programs just like native ones";
