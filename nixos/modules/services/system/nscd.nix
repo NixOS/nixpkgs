@@ -51,7 +51,8 @@ in
 
       package = mkOption {
         type = types.package;
-        default = if pkgs.stdenv.hostPlatform.libc == "glibc"
+        default =
+          if pkgs.stdenv.hostPlatform.libc == "glibc"
           then pkgs.stdenv.cc.libc.bin
           else pkgs.glibc.bin;
         defaultText = lib.literalExpression ''
@@ -77,10 +78,11 @@ in
       group = cfg.group;
     };
 
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
 
     systemd.services.nscd =
-      { description = "Name Service Cache Daemon";
+      {
+        description = "Name Service Cache Daemon";
 
         before = [ "nss-lookup.target" "nss-user-lookup.target" ];
         wants = [ "nss-lookup.target" "nss-user-lookup.target" ];
@@ -106,7 +108,8 @@ in
         # sill want to read their configuration files after the privilege drop
         # and so users can set the owner of those files to the nscd user.
         serviceConfig =
-          { ExecStart = "!@${cfg.package}/bin/nscd nscd";
+          {
+            ExecStart = "!@${cfg.package}/bin/nscd nscd";
             Type = "forking";
             User = cfg.user;
             Group = cfg.group;
@@ -120,7 +123,8 @@ in
             PIDFile = "/run/nscd/nscd.pid";
             Restart = "always";
             ExecReload =
-              [ "${cfg.package}/bin/nscd --invalidate passwd"
+              [
+                "${cfg.package}/bin/nscd --invalidate passwd"
                 "${cfg.package}/bin/nscd --invalidate group"
                 "${cfg.package}/bin/nscd --invalidate hosts"
               ];
