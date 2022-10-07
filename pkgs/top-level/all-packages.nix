@@ -8941,6 +8941,8 @@ with pkgs;
     sasl = gsasl;
   };
 
+  matrix-sdk-crypto-nodejs = callPackage ../development/libraries/matrix-sdk-crypto-nodejs { };
+
   email = callPackage ../tools/networking/email { };
 
   maim = callPackage ../tools/graphics/maim {};
