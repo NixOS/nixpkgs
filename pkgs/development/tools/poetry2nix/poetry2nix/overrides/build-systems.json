@@ -2052,6 +2052,9 @@
   "boschshcpy": [
     "setuptools"
   ],
+  "boto": [
+    "setuptools"
+  ],
   "boto3": [
     "setuptools"
   ],
@@ -7646,6 +7649,9 @@
     "setuptools"
   ],
   "libvirt": [
+    "setuptools"
+  ],
+  "libvirt-python": [
     "setuptools"
   ],
   "license-expression": [
@@ -16721,7 +16727,8 @@
     "setuptools"
   ],
   "typing-extensions": [
-    "flit-core"
+    "flit-core",
+    "setuptools"
   ],
   "typing-inspect": [
     "setuptools"
