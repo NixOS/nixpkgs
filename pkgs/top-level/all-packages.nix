@@ -9485,6 +9485,8 @@ with pkgs;
 
   pwsafe = callPackage ../applications/misc/pwsafe { };
 
+  napi-rs-cli = callPackage ../development/tools/napi-rs-cli { };
+
   neil = callPackage ../development/tools/neil { };
 
   niff = callPackage ../tools/package-management/niff { };
