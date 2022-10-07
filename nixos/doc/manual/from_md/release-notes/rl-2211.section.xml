@@ -454,6 +454,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>openssh</literal> was updated to version 9.1,
+          disabling the generation of DSA keys when using
+          <literal>ssh-keygen -A</literal> as they are insecure. Also,
+          <literal>SetEnv</literal> directives in
+          <literal>ssh_config</literal> and
+          <literal>sshd_config</literal> are now first-match-wins
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>bsp-layout</literal> no longer uses the command
           <literal>cycle</literal> to switch to other window layouts, as
           it got replaced by the commands <literal>previous</literal>
