@@ -66,6 +66,10 @@ stdenv.mkDerivation {
     "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=ON"
     "-DDARWIN_osx_ARCHS=${stdenv.hostPlatform.darwinArch}"
     "-DDARWIN_osx_BUILTIN_ARCHS=${stdenv.hostPlatform.darwinArch}"
+
+    # `COMPILER_RT_DEFAULT_TARGET_ONLY` does not apply to Darwin:
+    # https://github.com/llvm/llvm-project/blob/27ef42bec80b6c010b7b3729ed0528619521a690/compiler-rt/cmake/base-config-ix.cmake#L153
+    "-DCOMPILER_RT_ENABLE_IOS=OFF"
   ];
 
   outputs = [ "out" "dev" ];
@@ -78,7 +82,26 @@ stdenv.mkDerivation {
     ./normalize-var.patch
   ] # Prevent a compilation error on darwin
     ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin-targetconditionals.patch
-    ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
+    ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch
+
+    # The `compiler-rt` build inspects `ld` to figure out whether it needs to
+    # explicitly call `codesign`:
+    # https://github.com/llvm/llvm-project/blob/27ef42bec80b6c010b7b3729ed0528619521a690/compiler-rt/cmake/Modules/AddCompilerRT.cmake#L409-L422
+    #
+    # In our case, despite (currently) having an `ld` version than 609, we don't
+    # need an explicit codesigning step because `postLinkSignHook` handles this
+    # for us.
+    #
+    # Unfortunately there isn't an easy way to override
+    # `NEED_EXPLICIT_ADHOC_CODESIGN`.
+    #
+    # Adding `codesign` as a build input also doesn't currently work because, as
+    # of this writing, `codesign` in nixpkgs doesn't support the `--sign` alias
+    # which the `compiler-rt` build uses. See here for context:
+    # https://github.com/NixOS/nixpkgs/pull/194634#issuecomment-1272116014
+    #
+    # So, for now, we patch `compiler-rt` to skip the explicit codesigning step.
+    ++ lib.optional stdenv.hostPlatform.isDarwin ./skip-explicit-codesign.patch;
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
   # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra
