@@ -32,7 +32,7 @@ in writeScript "update-${pname}" ''
   tmpfile=`mktemp`
   url=${baseUrl}
 
-  # retriving latest released version
+  # retrieving latest released version
   #  - extracts all links from the $url
   #  - removes . and ..
   #  - this line remove everything not starting with a number
@@ -56,29 +56,36 @@ in writeScript "update-${pname}" ''
 
   # this is a list of sha256 and tarballs for both arches
   # Upstream files contains python repr strings like b'somehash', hence the sed dance
-  shasums=`cat $HOME/shasums | sed -E s/"b'([a-f0-9]{64})'?(.*)"/'\1\2'/ | grep tar.bz2`
+  shasums=`cat $HOME/shasums | sed -E s/"b'([a-f0-9]{64})'?(.*)"/'\1\2'/ | grep "\(tar.bz2\|dmg\)" | grep -v mac-EME-free`
 
   cat > $tmpfile <<EOF
   {
     version = "$version";
     sources = [
   EOF
-  for arch in linux-x86_64 linux-i686; do
-    # retriving a list of all tarballs for each arch
+  for arch in linux-x86_64 linux-i686 mac; do
+    if [ $arch = "mac" ]; then
+      suffix=" $version.dmg"
+    else
+      suffix="-$version.tar.bz2"
+    fi
+
+    # retrieving a list of all tarballs for each arch
     #  - only select tarballs for current arch
     #  - only select tarballs for current version
     #  - rename space with colon so that for loop doesnt
     #  - inteprets sha and path as 2 lines
     for line in `echo "$shasums" | \
                  grep $arch | \
-                 grep "${baseName}-$version.tar.bz2$" | \
+                 grep -i "${baseName}$suffix$" | \
+                 sed "s/Firefox /Firefox%20/" | \
                  tr " " ":"`; do
       # create an entry for every locale
       cat >> $tmpfile <<EOF
-      { url = "$url$version/`echo $line | cut -d":" -f3`";
-        locale = "`echo $line | cut -d":" -f3 | sed "s/$arch\///" | sed "s/\/.*//"`";
+      { url = "$url$version/`echo "$line" | cut -d":" -f3`";
+        locale = "`echo "$line" | cut -d":" -f3 | sed "s/$arch\///" | sed "s/\/.*//"`";
         arch = "$arch";
-        sha256 = "`echo $line | cut -d":" -f1`";
+        sha256 = "`echo "$line" | cut -d":" -f1`";
       }
   EOF
     done
