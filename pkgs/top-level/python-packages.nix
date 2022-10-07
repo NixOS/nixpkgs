@@ -5722,6 +5722,8 @@ self: super: with self; {
 
   misaka = callPackage ../development/python-modules/misaka { };
 
+  misoc = callPackage ../development/python-modules/misoc { };
+
   mistletoe = callPackage ../development/python-modules/mistletoe { };
 
   mistune = callPackage ../development/python-modules/mistune { };
