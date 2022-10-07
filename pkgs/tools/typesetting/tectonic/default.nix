@@ -7,7 +7,7 @@
 , harfbuzz
 , openssl
 , pkg-config
-, makeWrapper
+, makeBinaryWrapper
 , biber
 , icu
 }:
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "awDVjJLwgpSMbwptmLhczaxB5HqvsdvEOUsLYb/zTUc=";
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeBinaryWrapper ];
 
   buildInputs = [ icu fontconfig harfbuzz openssl ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/tectonic-typesetting/tectonic/releases/tag/tectonic%400.7.0
   postInstall = ''
     wrapProgram $out/bin/tectonic \
-      --prefix PATH "${lib.getBin biber}/bin"
+      --prefix PATH : "${lib.getBin biber}/bin"
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace dist/appimage/tectonic.desktop \
       --replace Exec=tectonic Exec=$out/bin/tectonic
