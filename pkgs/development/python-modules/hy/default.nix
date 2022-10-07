@@ -10,8 +10,6 @@
 , pythonOlder
 , rply
 , testers
-, toPythonApplication
-, hyDefinedPythonPackages ? python-packages: [ ] /* Packages like with python.withPackages */
 }:
 
 buildPythonPackage rec {
@@ -37,10 +35,7 @@ buildPythonPackage rec {
   ] ++
   lib.optionals (pythonOlder "3.9") [
     astor
-  ] ++
-  # for backwards compatibility with removed pkgs/development/interpreters/hy
-  # See: https://github.com/NixOS/nixpkgs/issues/171428
-  (hyDefinedPythonPackages python.pkgs);
+  ];
 
   checkInputs = [
     pytestCheckHook
@@ -63,10 +58,10 @@ buildPythonPackage rec {
       package = hy;
       command = "hy -v";
     };
-    # also for backwards compatibility with removed pkgs/development/interpreters/hy
-    withPackages = python-packages: (toPythonApplication hy).override {
-      hyDefinedPythonPackages = python-packages;
-    };
+    # For backwards compatibility with removed pkgs/development/interpreters/hy
+    # Example usage:
+    #   hy.withPackages (ps: with ps; [ hyrule requests ])
+    withPackages = python-packages: python.withPackages (ps: (python-packages ps) ++ [ ps.hy ]);
   };
 
   meta = with lib; {
