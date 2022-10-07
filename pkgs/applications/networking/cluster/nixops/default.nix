@@ -10,7 +10,7 @@ let
   interpreter = (
     poetry2nix.mkPoetryPackages {
       projectDir = ./.;
-      python = pkgs.python39;
+      python = pkgs.python310;
       overrides = [
         poetry2nix.defaultPoetryOverrides
         (import ./poetry-git-overlay.nix { inherit pkgs; })
