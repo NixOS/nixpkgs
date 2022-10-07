@@ -2501,6 +2501,8 @@ in {
 
   dissect-ntfs = callPackage ../development/python-modules/dissect-ntfs { };
 
+  dissect-ole = callPackage ../development/python-modules/dissect-ole { };
+
   dissect-util = callPackage ../development/python-modules/dissect-util { };
 
   dissect-vmfs = callPackage ../development/python-modules/dissect-vmfs { };
