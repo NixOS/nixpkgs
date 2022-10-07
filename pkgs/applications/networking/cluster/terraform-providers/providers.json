@@ -861,13 +861,13 @@
     "version": "1.0.1"
   },
   "opennebula": {
-    "hash": "sha256-ChqOX6pEvFMUyDAKA6VnD1L9UD2vplVH7dgpMTeiUeA=",
+    "hash": "sha256-QD/JU1sk1uEdgyOxvU+vDDqlYe5uoRxHx6nB0fCi6ds=",
     "owner": "OpenNebula",
     "provider-source-address": "registry.terraform.io/OpenNebula/opennebula",
     "repo": "terraform-provider-opennebula",
-    "rev": "v1.0.0",
+    "rev": "v1.0.1",
     "vendorHash": "sha256-iT3c0CBSP+FKM4CFsTopY4W41ZCaC8E3Iz1o+THI/fQ=",
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
   "openstack": {
     "hash": "sha256-I2Rl/Z6KHEkhaoslqMD+ZQ8vOnIwLDDJIP3P/3sTWcw=",
