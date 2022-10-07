@@ -1,20 +1,18 @@
-{ lib, stdenv, fetchzip }:
+{ lib, fetchzip }:
 
-stdenv.mkDerivation rec {
+fetchzip rec {
   pname = "ubuntu-font-family";
   version = "0.83";
 
-  src = fetchzip {
-    url = "https://assets.ubuntu.com/v1/fad7939b-${pname}-${version}.zip";
-    hash = "sha256-FAg1xn8Gcbwmuvqtg9SquSet4oTT9nqE+Izeq7ZMVcA=";
-  };
+  url = "https://assets.ubuntu.com/v1/fad7939b-ubuntu-font-family-${version}.zip";
 
-  installPhase = ''
-    install -D -m 644 -t "$out/share/fonts/truetype" *.ttf
+  postFetch = ''
+    mkdir -p $out/share/fonts/ubuntu
+    mv $out/*.ttf $out/share/fonts/ubuntu
+    find $out -maxdepth 1 ! -type d -exec rm {} +
   '';
 
-  outputHashMode = "recursive";
-  outputHash = "sha256-EEcYtOeOd2DKyRLo1kG7lk8euaFilCFMXMJNAosxHiQ=";
+  sha256 = "090y665h4kf2bi623532l6wiwkwnpd0xds0jr7560xwfwys1hiqh";
 
   meta = with lib; {
     description = "Ubuntu Font Family";
@@ -25,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "http://font.ubuntu.com/";
     license = licenses.free;
     platforms = platforms.all;
-    maintainers = with maintainers; [ antono ];
+    maintainers = [ maintainers.antono ];
   };
 }
