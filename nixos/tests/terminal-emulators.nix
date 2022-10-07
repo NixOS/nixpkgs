@@ -103,7 +103,8 @@ let tests = {
       wayst.pkg = p: p.wayst;
       wayst.pinkValue = "#FF0066";
 
-      wezterm.pkg = p: p.wezterm;
+      # times out after spending many hours
+      #wezterm.pkg = p: p.wezterm;
 
       xfce4-terminal.pkg = p: p.xfce.xfce4-terminal;
 
