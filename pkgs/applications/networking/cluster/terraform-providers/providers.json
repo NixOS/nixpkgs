@@ -897,13 +897,13 @@
     "version": "0.6.15"
   },
   "ovh": {
-    "hash": "sha256-DHk1AUxHuXLrPiRhfAtJDDNT4TYH1XsUzBqjKGvPK7c=",
+    "hash": "sha256-QaJZQU6bnjXoTCxfP1NcsPqegFyZ6JwP2QgN7zrE0z0=",
     "owner": "ovh",
     "provider-source-address": "registry.terraform.io/ovh/ovh",
     "repo": "terraform-provider-ovh",
-    "rev": "v0.21.0",
+    "rev": "v0.22.0",
     "vendorHash": null,
-    "version": "0.21.0"
+    "version": "0.22.0"
   },
   "pagerduty": {
     "hash": "sha256-Kdm6WizssVdMwsTUyV4wUAW6QelUxDE9GZDGvnehFCw=",
