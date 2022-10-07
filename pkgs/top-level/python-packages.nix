@@ -2477,6 +2477,8 @@ in {
 
   diskcache = callPackage ../development/python-modules/diskcache { };
 
+  dissect-cim = callPackage ../development/python-modules/dissect-cim { };
+
   dissect-clfs = callPackage ../development/python-modules/dissect-clfs { };
 
   dissect-cstruct = callPackage ../development/python-modules/dissect-cstruct { };
