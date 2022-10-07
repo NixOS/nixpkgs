@@ -2487,6 +2487,8 @@ in {
 
   dissect-ffs = callPackage ../development/python-modules/dissect-ffs { };
 
+  dissect-esedb = callPackage ../development/python-modules/dissect-esedb { };
+
   dissect-etl = callPackage ../development/python-modules/dissect-etl { };
 
   dissect-eventlog = callPackage ../development/python-modules/dissect-eventlog { };
