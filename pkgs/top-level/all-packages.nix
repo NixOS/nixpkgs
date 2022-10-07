@@ -18995,6 +18995,8 @@ with pkgs;
 
   gts = callPackage ../development/libraries/gts { };
 
+  guestfs-tools = callPackage ../development/tools/guestfs-tools { };
+
   gumbo = callPackage ../development/libraries/gumbo { };
 
   gvfs = callPackage ../development/libraries/gvfs { };
