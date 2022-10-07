@@ -1429,6 +1429,8 @@ with pkgs;
 
   asleap = callPackage ../tools/networking/asleap { };
 
+  balena-cli = callPackage ../tools/admin/balena-cli { };
+
   butler = callPackage ../games/itch/butler.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
