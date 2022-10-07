@@ -843,13 +843,13 @@
     "version": "4.95.0"
   },
   "okta": {
-    "hash": "sha256-rgDBZsbXBzBcDgVoaFkPD27Ezef9J23oqtBJAHqJrrE=",
+    "hash": "sha256-yUWz6JiejI36QXSzGj36Pzu8/exK4U/DXCdbToSeCrE=",
     "owner": "okta",
     "provider-source-address": "registry.terraform.io/okta/okta",
     "repo": "terraform-provider-okta",
-    "rev": "v3.36.0",
-    "vendorHash": "sha256-hjX5kVOM8idWK4F5ahuh6BgK/h5QdkJOn4dizneOkB4=",
-    "version": "3.36.0"
+    "rev": "v3.37.0",
+    "vendorHash": "sha256-qAnMwxTvvds3pOarRTWWVQqOCJKd0wSH2LZoPl4n2uA=",
+    "version": "3.37.0"
   },
   "oktaasa": {
     "hash": "sha256-2LhxgowqKvDDDOwdznusL52p2DKP+UiXALHcs9ZQd0U=",
