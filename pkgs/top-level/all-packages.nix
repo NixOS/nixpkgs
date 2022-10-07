@@ -12274,6 +12274,8 @@ with pkgs;
 
   wakatime = python2Packages.callPackage ../tools/misc/wakatime { };
 
+  watt-toolkit = callPackage ../applications/misc/watt-toolkit { };
+
   weather = callPackage ../applications/misc/weather { };
 
   wego = callPackage ../applications/misc/wego { };
