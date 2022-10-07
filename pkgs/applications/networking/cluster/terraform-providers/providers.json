@@ -1104,13 +1104,13 @@
     "version": "2.0.4"
   },
   "sumologic": {
-    "hash": "sha256-1wV+9RHgrqL6LvRE21KM1wBSpyOcoOt07tZcx2s5pGM=",
+    "hash": "sha256-DvEd1OdLmUEEmk0zl7jiTjdk/3Fp1Z/3KCpYRpxHTn4=",
     "owner": "SumoLogic",
     "provider-source-address": "registry.terraform.io/SumoLogic/sumologic",
     "repo": "terraform-provider-sumologic",
-    "rev": "v2.19.0",
+    "rev": "v2.19.1",
     "vendorHash": "sha256-W+dV6rmyOqCeQboYvpxYoNZixv2+uBd2+sc9BvTE+Ag=",
-    "version": "2.19.0"
+    "version": "2.19.1"
   },
   "tencentcloud": {
     "hash": "sha256-SoCXh0pRqEkto2K+ZfN7ncVGDVC32zDElS+rBdOfa0g=",
