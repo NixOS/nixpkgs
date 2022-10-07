@@ -2493,6 +2493,8 @@ in {
 
   dissect-util = callPackage ../development/python-modules/dissect-util { };
 
+  dissect-vmfs = callPackage ../development/python-modules/dissect-vmfs { };
+
   dissect-volume = callPackage ../development/python-modules/dissect-volume { };
 
   dissect-xfs = callPackage ../development/python-modules/dissect-xfs { };
