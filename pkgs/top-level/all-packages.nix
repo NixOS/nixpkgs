@@ -1317,6 +1317,8 @@ with pkgs;
 
   godspeed = callPackage ../tools/networking/godspeed { };
 
+  guestfs-tools = callPackage ../tools/virtualization/guestfs-tools { };
+
   fwbuilder = libsForQt5.callPackage ../tools/security/fwbuilder { };
 
   headsetcontrol = callPackage ../tools/audio/headsetcontrol { };
