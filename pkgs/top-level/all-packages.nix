@@ -6637,6 +6637,8 @@ with pkgs;
 
   freetube = callPackage ../applications/video/freetube { };
 
+  freeze = callPackage ../tools/security/freeze { };
+
   freqtweak = callPackage ../applications/audio/freqtweak {
     wxGTK = wxGTK31-gtk2;
   };
