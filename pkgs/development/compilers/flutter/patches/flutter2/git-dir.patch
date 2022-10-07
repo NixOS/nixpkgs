@@ -11,28 +11,6 @@ index 468a91a954..5def6897ce 100644
        workingDirectory: workingDirectory ?? flutterRoot,
      );
    }
-diff --git a/packages/flutter_tools/lib/src/commands/downgrade.dart b/packages/flutter_tools/lib/src/commands/downgrade.dart
-index bb0eb428a9..4a2a48bb5e 100644
---- a/packages/flutter_tools/lib/src/commands/downgrade.dart
-+++ b/packages/flutter_tools/lib/src/commands/downgrade.dart
-@@ -118,7 +118,7 @@ class DowngradeCommand extends FlutterCommand {
-     // Detect unknown versions.
-     final ProcessUtils processUtils = _processUtils!;
-     final RunResult parseResult = await processUtils.run(<String>[
--      'git', 'describe', '--tags', lastFlutterVersion,
-+      'git', '--git-dir', '.git', 'describe', '--tags', lastFlutterVersion,
-     ], workingDirectory: workingDirectory);
-     if (parseResult.exitCode != 0) {
-       throwToolExit('Failed to parse version for downgrade:\n${parseResult.stderr}');
-@@ -191,7 +191,7 @@ class DowngradeCommand extends FlutterCommand {
-         continue;
-       }
-       final RunResult parseResult = await _processUtils!.run(<String>[
--        'git', 'describe', '--tags', sha,
-+        'git', '--git-dir', '.git', 'describe', '--tags', sha,
-       ], workingDirectory: workingDirectory);
-       if (parseResult.exitCode == 0) {
-         buffer.writeln('Channel "${getNameForChannel(channel)}" was previously on: ${parseResult.stdout}.');
 diff --git a/packages/flutter_tools/lib/src/version.dart b/packages/flutter_tools/lib/src/version.dart
 index f2068a6ca2..99b161689e 100644
 --- a/packages/flutter_tools/lib/src/version.dart

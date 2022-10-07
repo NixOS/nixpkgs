@@ -1,13 +1,9 @@
+diff --git a/packages/flutter_tools/lib/src/artifacts.dart b/packages/flutter_tools/lib/src/artifacts.dart
 diff --git a/packages/flutter_tools/lib/src/asset.dart b/packages/flutter_tools/lib/src/asset.dart
-index ed42baea29..12941f733a 100644
+index 9dd7272fbe..642c8e48e4 100644
 --- a/packages/flutter_tools/lib/src/asset.dart
 +++ b/packages/flutter_tools/lib/src/asset.dart
-@@ -11,11 +11,11 @@ import 'base/file_system.dart';
- import 'base/logger.dart';
- import 'base/platform.dart';
- import 'build_info.dart';
--import 'cache.dart';
- import 'convert.dart';
+@@ -16,6 +16,7 @@ import 'convert.dart';
  import 'dart/package_map.dart';
  import 'devfs.dart';
  import 'flutter_manifest.dart';
@@ -15,17 +11,18 @@ index ed42baea29..12941f733a 100644
  import 'license_collector.dart';
  import 'project.dart';
  
-@@ -504,7 +504,7 @@ class ManifestAssetBundle implements AssetBundle {
-         }
+@@ -530,8 +531,7 @@ class ManifestAssetBundle implements AssetBundle {
          final Uri entryUri = _fileSystem.path.toUri(asset);
          result.add(_Asset(
--          baseDir: _fileSystem.path.join(Cache.flutterRoot!, 'bin', 'cache', 'artifacts', 'material_fonts'),
-+          baseDir: _fileSystem.path.join(globals.fsUtils.homeDirPath!, '.cache', 'flutter', 'artifacts', 'material_fonts'),
+           baseDir: _fileSystem.path.join(
+-            Cache.flutterRoot!,
+-            'bin', 'cache', 'artifacts', 'material_fonts',
++            globals.fsUtils.homeDirPath!, '.cache', 'flutter', 'artifacts', 'material_fonts',
+           ),
            relativeUri: Uri(path: entryUri.pathSegments.last),
            entryUri: entryUri,
-           package: null,
 diff --git a/packages/flutter_tools/lib/src/cache.dart b/packages/flutter_tools/lib/src/cache.dart
-index defc86cc20..7fdf14d112 100644
+index dd80b1e46e..8e54517765 100644
 --- a/packages/flutter_tools/lib/src/cache.dart
 +++ b/packages/flutter_tools/lib/src/cache.dart
 @@ -22,6 +22,7 @@ import 'base/user_messages.dart';
@@ -36,7 +33,7 @@ index defc86cc20..7fdf14d112 100644
  
  const String kFlutterRootEnvironmentVariableName = 'FLUTTER_ROOT'; // should point to //flutter/ (root of flutter/flutter repo)
  const String kFlutterEngineEnvironmentVariableName = 'FLUTTER_ENGINE'; // should point to //engine/src/ (root of flutter/engine repo)
-@@ -322,8 +323,13 @@ class Cache {
+@@ -318,8 +319,13 @@ class Cache {
        return;
      }
      assert(_lock == null);
@@ -51,7 +48,7 @@ index defc86cc20..7fdf14d112 100644
      try {
        _lock = lockFile.openSync(mode: FileMode.write);
      } on FileSystemException catch (e) {
-@@ -382,8 +388,7 @@ class Cache {
+@@ -378,8 +384,7 @@ class Cache {
  
    String get devToolsVersion {
      if (_devToolsVersion == null) {
@@ -61,7 +58,7 @@ index defc86cc20..7fdf14d112 100644
        if (!devToolsDir.existsSync()) {
          throw Exception('Could not find directory at ${devToolsDir.path}');
        }
-@@ -536,7 +541,7 @@ class Cache {
+@@ -532,7 +537,7 @@ class Cache {
      if (_rootOverride != null) {
        return _fileSystem.directory(_fileSystem.path.join(_rootOverride!.path, 'bin', 'cache'));
      } else {
@@ -70,8 +67,7 @@ index defc86cc20..7fdf14d112 100644
      }
    }
  
-diff --git a/packages/flutter_tools/lib/src/artifacts.dart b/packages/flutter_tools/lib/src/artifacts.dart
-index 2aac9686e8..32c4b98b88 100644
+index c539d67156..4e0a64f7a9 100644
 --- a/packages/flutter_tools/lib/src/artifacts.dart
 +++ b/packages/flutter_tools/lib/src/artifacts.dart
 @@ -346,10 +346,10 @@ class CachedArtifacts implements Artifacts {
@@ -82,8 +78,8 @@ index 2aac9686e8..32c4b98b88 100644
 +        final String path = _dartSdkPath(_fileSystem);
          return _fileSystem.directory(path);
        case HostArtifact.engineDartBinary:
--        final String path = _fileSystem.path.join(_dartSdkPath(_cache), 'bin', _hostArtifactToFileName(artifact, _platform.isWindows));
-+        final String path = _fileSystem.path.join(_dartSdkPath(_fileSystem), 'bin', _hostArtifactToFileName(artifact, _platform.isWindows));
+-        final String path = _fileSystem.path.join(_dartSdkPath(_cache), 'bin', _hostArtifactToFileName(artifact, _platform));
++        final String path = _fileSystem.path.join(_dartSdkPath(_fileSystem), 'bin', _hostArtifactToFileName(artifact, _platform));
          return _fileSystem.file(path);
        case HostArtifact.flutterWebSdk:
          final String path = _getFlutterWebSdkPath();
@@ -91,12 +87,12 @@ index 2aac9686e8..32c4b98b88 100644
        case HostArtifact.dart2jsSnapshot:
        case HostArtifact.dartdevcSnapshot:
        case HostArtifact.kernelWorkerSnapshot:
--        final String path = _fileSystem.path.join(_dartSdkPath(_cache), 'bin', 'snapshots', _hostArtifactToFileName(artifact, _platform.isWindows));
-+        final String path = _fileSystem.path.join(_dartSdkPath(_fileSystem), 'bin', 'snapshots', _hostArtifactToFileName(artifact, _platform.isWindows));
+-        final String path = _fileSystem.path.join(_dartSdkPath(_cache), 'bin', 'snapshots', _hostArtifactToFileName(artifact, _platform));
++        final String path = _fileSystem.path.join(_dartSdkPath(_fileSystem), 'bin', 'snapshots', _hostArtifactToFileName(artifact, _platform));
          return _fileSystem.file(path);
        case HostArtifact.iosDeploy:
-         final String artifactFileName = _hostArtifactToFileName(artifact, _platform.isWindows);
-@@ -461,11 +461,13 @@ class CachedArtifacts implements Artifacts {
+         final String artifactFileName = _hostArtifactToFileName(artifact, _platform);
+@@ -465,11 +465,13 @@ class CachedArtifacts implements Artifacts {
    String _getAndroidArtifactPath(Artifact artifact, TargetPlatform platform, BuildMode mode) {
      final String engineDir = _getEngineArtifactsPath(platform, mode)!;
      switch (artifact) {
@@ -125,8 +121,8 @@ index 2aac9686e8..32c4b98b88 100644
 -      case Artifact.frontendServerSnapshotForEngineDartSdk:
        case Artifact.constFinder:
        case Artifact.flutterMacOSFramework:
-       case Artifact.flutterMacOSPodspec:
-@@ -594,14 +596,10 @@ class CachedArtifacts implements Artifacts {
+       case Artifact.flutterPatchedSdkPath:
+@@ -586,14 +588,10 @@ class CachedArtifacts implements Artifacts {
          // For script snapshots any gen_snapshot binary will do. Returning gen_snapshot for
          // android_arm in profile mode because it is available on all supported host platforms.
          return _getAndroidArtifactPath(artifact, TargetPlatform.android_arm, BuildMode.profile);
@@ -142,27 +138,27 @@ index 2aac9686e8..32c4b98b88 100644
        case Artifact.icuData:
          final String engineArtifactsPath = _cache.getArtifactDirectory('engine').path;
          final String platformDirName = _enginePlatformDirectoryName(platform);
-@@ -797,7 +795,7 @@ class CachedLocalEngineArtifacts implements LocalEngineArtifacts {
-         final String path = _fileSystem.path.join(_hostEngineOutPath, 'dart-sdk', 'bin', 'snapshots', _hostArtifactToFileName(artifact, _platform.isWindows));
+@@ -776,7 +774,7 @@ class CachedLocalEngineArtifacts implements LocalEngineArtifacts {
+         final String path = _fileSystem.path.join(_hostEngineOutPath, 'dart-sdk', 'bin', 'snapshots', _hostArtifactToFileName(artifact, _platform));
          return _fileSystem.file(path);
        case HostArtifact.dartdevcSnapshot:
--        final String path = _fileSystem.path.join(_dartSdkPath(_cache), 'bin', 'snapshots', _hostArtifactToFileName(artifact, _platform.isWindows));
-+        final String path = _fileSystem.path.join(_dartSdkPath(_fileSystem), 'bin', 'snapshots', _hostArtifactToFileName(artifact, _platform.isWindows));
+-        final String path = _fileSystem.path.join(_dartSdkPath(_cache), 'bin', 'snapshots', _hostArtifactToFileName(artifact, _platform));
++        final String path = _fileSystem.path.join(_dartSdkPath(_fileSystem), 'bin', 'snapshots', _hostArtifactToFileName(artifact, _platform));
          return _fileSystem.file(path);
        case HostArtifact.kernelWorkerSnapshot:
-         final String path = _fileSystem.path.join(_hostEngineOutPath, 'dart-sdk', 'bin', 'snapshots', _hostArtifactToFileName(artifact, _platform.isWindows));
-@@ -922,9 +920,7 @@ class CachedLocalEngineArtifacts implements LocalEngineArtifacts {
-       case Artifact.windowsUwpCppClientWrapper:
+         final String path = _fileSystem.path.join(_hostEngineOutPath, 'dart-sdk', 'bin', 'snapshots', _hostArtifactToFileName(artifact, _platform));
+@@ -901,9 +899,7 @@ class CachedLocalEngineArtifacts implements LocalEngineArtifacts {
+       case Artifact.windowsCppClientWrapper:
          return _fileSystem.path.join(_hostEngineOutPath, artifactFileName);
        case Artifact.frontendServerSnapshotForEngineDartSdk:
 -        return _fileSystem.path.join(
 -          _hostEngineOutPath, 'dart-sdk', 'bin', 'snapshots', artifactFileName,
 -        );
 +        return _fileSystem.path.join(_hostEngineOutPath, 'gen', artifactFileName);
-       case Artifact.uwptool:
-         return _fileSystem.path.join(_hostEngineOutPath, artifactFileName);
      }
-@@ -1034,8 +1030,8 @@ class OverrideArtifacts implements Artifacts {
+   }
+ 
+@@ -1011,8 +1007,8 @@ class OverrideArtifacts implements Artifacts {
  }
  
  /// Locate the Dart SDK.
@@ -174,12 +170,12 @@ index 2aac9686e8..32c4b98b88 100644
  
  class _TestArtifacts implements Artifacts {
 diff --git a/packages/flutter_tools/test/general.shard/artifacts_test.dart b/packages/flutter_tools/test/general.shard/artifacts_test.dart
-index d906511a15..adfdd4bb42 100644
+index aed3eb9285..81b8362648 100644
 --- a/packages/flutter_tools/test/general.shard/artifacts_test.dart
 +++ b/packages/flutter_tools/test/general.shard/artifacts_test.dart
-@@ -153,10 +153,6 @@ void main() {
-         artifacts.getArtifactPath(Artifact.windowsUwpDesktopPath, platform: TargetPlatform.windows_uwp_x64, mode: BuildMode.release),
-         fileSystem.path.join('root', 'bin', 'cache', 'artifacts', 'engine', 'windows-uwp-x64-release'),
+@@ -141,10 +141,6 @@ void main() {
+         artifacts.getArtifactPath(Artifact.flutterTester, platform: TargetPlatform.linux_arm64),
+         fileSystem.path.join('root', 'bin', 'cache', 'artifacts', 'engine', 'linux-arm64', 'flutter_tester'),
        );
 -      expect(
 -        artifacts.getArtifactPath(Artifact.frontendServerSnapshotForEngineDartSdk),
@@ -188,7 +184,7 @@ index d906511a15..adfdd4bb42 100644
      });
  
      testWithoutContext('precompiled web artifact paths are correct', () {
-@@ -322,11 +318,6 @@ void main() {
+@@ -310,11 +306,6 @@ void main() {
          artifacts.getHostArtifact(HostArtifact.engineDartSdkPath).path,
          fileSystem.path.join('/out', 'host_debug_unopt', 'dart-sdk'),
        );
@@ -197,6 +193,6 @@ index d906511a15..adfdd4bb42 100644
 -        fileSystem.path.join('/out', 'host_debug_unopt', 'dart-sdk', 'bin',
 -          'snapshots', 'frontend_server.dart.snapshot')
 -      );
-     });
- 
-     testWithoutContext('getEngineType', () {
+       expect(
+         artifacts.getHostArtifact(HostArtifact.impellerc).path,
+         fileSystem.path.join('/out', 'host_debug_unopt', 'impellerc'),

@@ -65,7 +65,7 @@ let
       popd
 
       local revision="$(cd "$FLUTTER_ROOT"; git rev-parse HEAD)"
-      ${dart}/bin/dart --snapshot="$SNAPSHOT_PATH" --packages="$FLUTTER_TOOLS_DIR/.packages" "$SCRIPT_PATH"
+      ${dart}/bin/dart --snapshot="$SNAPSHOT_PATH" --packages="$FLUTTER_TOOLS_DIR/.dart_tool/package_config.json" "$SCRIPT_PATH"
       echo "$revision" > "$STAMP_PATH"
       echo -n "${version}" > version
 
