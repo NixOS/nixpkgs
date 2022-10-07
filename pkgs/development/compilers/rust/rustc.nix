@@ -107,6 +107,8 @@ in stdenv.mkDerivation rec {
     "${setHost}.musl-root=${pkgsBuildHost.targetPackages.stdenv.cc.libc}"
   ] ++ optionals stdenv.targetPlatform.isMusl [
     "${setTarget}.musl-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
+  ] ++ optionals (rust.IsNoStdTarget stdenv.targetPlatform) [
+    "--disable-docs"
   ];
 
   # The bootstrap.py will generated a Makefile that then executes the build.
