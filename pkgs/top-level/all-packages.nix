@@ -4926,7 +4926,13 @@ with pkgs;
     enableExtraPlugins = true;
   };
 
-  asciidoctor = callPackage ../tools/typesetting/asciidoctor { };
+  asciidoctor = callPackage ../tools/typesetting/asciidoctor {
+    bundlerApp = bundlerApp.override {
+      # asciidoc supports both ruby 2 and 3,
+      # but we don't want to be stuck on it:
+      ruby = ruby_3_1;
+    };
+  };
 
   asciidoctor-with-extensions = callPackage ../tools/typesetting/asciidoctor-with-extensions { };
 
