@@ -36,7 +36,6 @@ let
       This index includes documentation for many Haskell modules.
     '';
 
-  # TODO: closePropagation is deprecated; replace
   docPackages = lib.closePropagation
     # we grab the doc outputs
     (map (lib.getOutput "doc") packages);
