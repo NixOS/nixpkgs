@@ -2483,6 +2483,8 @@ in {
 
   dissect-cstruct = callPackage ../development/python-modules/dissect-cstruct { };
 
+  dissect-etl = callPackage ../development/python-modules/dissect-etl { };
+
   dissect-util = callPackage ../development/python-modules/dissect-util { };
 
   dissect-volume = callPackage ../development/python-modules/dissect-volume { };
