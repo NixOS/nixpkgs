@@ -10,11 +10,12 @@
 , pymongo
 , pytestCheckHook
 , pythonOlder
+, tqdm
 }:
 
 buildPythonPackage rec {
   pname = "yabadaba";
-  version = "0.1.2";
+  version = "0.1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "usnistgov";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Svw15epiSMEGMuFuMLqX2C9YFGtRtdg7DW2OVLPRmNI=";
+    hash = "sha256-0Rwo2d3vEfXmeZvZA1udbGKxUERymeVhvyu+okqQDJk=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +35,7 @@ buildPythonPackage rec {
     numpy
     pandas
     pymongo
+    tqdm
   ];
 
   checkInputs = [
