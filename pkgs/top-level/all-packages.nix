@@ -13176,7 +13176,7 @@ with pkgs;
 
   algol68g = callPackage ../development/compilers/algol68g { };
 
-  ante = callPackage ../development/compilers/ante { };
+  ante = callPackage ../development/compilers/ante { llvmPackages = llvmPackages_13; };
 
   armips = callPackage ../development/compilers/armips {
     stdenv = gcc10Stdenv;
