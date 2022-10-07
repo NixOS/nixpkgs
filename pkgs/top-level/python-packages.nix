@@ -8413,6 +8413,8 @@ in {
 
   pyramid_multiauth = callPackage ../development/python-modules/pyramid_multiauth { };
 
+  pyreadstat = callPackage ../development/python-modules/pyreadstat { };
+
   pyrealsense2 = toPythonModule (pkgs.librealsense.override {
     enablePython = true;
     pythonPackages = self;
@@ -9563,8 +9565,6 @@ in {
   readme = callPackage ../development/python-modules/readme { };
 
   readme_renderer = callPackage ../development/python-modules/readme_renderer { };
-
-  readstats = callPackage ../development/python-modules/pyreadstat { };
 
   readthedocs-sphinx-ext = callPackage ../development/python-modules/readthedocs-sphinx-ext { };
 
