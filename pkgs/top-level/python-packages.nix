@@ -2491,6 +2491,8 @@ in {
 
   dissect-evidence = callPackage ../development/python-modules/dissect-evidence { };
 
+  dissect-extfs = callPackage ../development/python-modules/dissect-extfs { };
+
   dissect-util = callPackage ../development/python-modules/dissect-util { };
 
   dissect-vmfs = callPackage ../development/python-modules/dissect-vmfs { };
