@@ -38,13 +38,13 @@
     "version": "3.7.0"
   },
   "akamai": {
-    "hash": "sha256-XlL8UcfZI1oxGti2Hr4mgmu34qbyPG5yJJ+h8ndgo/k=",
+    "hash": "sha256-+EHXB2VH1UWYQ1y6Ou+5VhjH7elhfgLYW/imhN2t15Q=",
     "owner": "akamai",
     "provider-source-address": "registry.terraform.io/akamai/akamai",
     "repo": "terraform-provider-akamai",
-    "rev": "v2.4.1",
+    "rev": "v2.4.2",
     "vendorHash": "sha256-BRPDsb0h9YINJ4dwGM5FEuUto3UFVImRUn/i6gHAkAc=",
-    "version": "2.4.1"
+    "version": "2.4.2"
   },
   "alicloud": {
     "deleteVendor": true,
