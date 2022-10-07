@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libical";
-  version = "3.0.14";
+  version = "3.0.15";
 
   outputs = [ "out" "dev" ]; # "devdoc" ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "libical";
     repo = "libical";
     rev = "v${version}";
-    sha256 = "sha256-gZ6IBjG5pNKJ+hWcTzXMP7yxL4he4LTklZGoC9vXra8=";
+    sha256 = "sha256-7M5GBteFKmKCB6556XXV4s6iIC/+3c3Ck17s/QX3Jus=";
   };
 
   strictDeps = true;
