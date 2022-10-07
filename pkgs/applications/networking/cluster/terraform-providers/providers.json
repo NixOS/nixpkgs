@@ -834,13 +834,13 @@
     "version": "1.7.1"
   },
   "oci": {
-    "hash": "sha256-x1yrAYq8UXs69QkXMUq7mZ6in8o2+GPaS0EsAjn/pXg=",
+    "hash": "sha256-PSkD2HXGmSimJYQPZKuVCGvEa0sSNc4XMRRrM5O+/QE=",
     "owner": "oracle",
     "provider-source-address": "registry.terraform.io/oracle/oci",
     "repo": "terraform-provider-oci",
-    "rev": "v4.95.0",
+    "rev": "v4.96.0",
     "vendorHash": null,
-    "version": "4.95.0"
+    "version": "4.96.0"
   },
   "okta": {
     "hash": "sha256-yUWz6JiejI36QXSzGj36Pzu8/exK4U/DXCdbToSeCrE=",
