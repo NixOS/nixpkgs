@@ -6501,6 +6501,12 @@
     githubId = 297653;
     name = "Joe Salisbury";
   };
+  john-shaffer = {
+    email = "jdsha@proton.me";
+    github = "john-shaffer";
+    githubId = 53870456;
+    name = "John Shaffer";
+  };
   johanot = {
     email = "write@ownrisk.dk";
     github = "johanot";
