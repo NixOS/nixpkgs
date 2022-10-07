@@ -2481,6 +2481,8 @@ in {
 
   dissect-cstruct = callPackage ../development/python-modules/dissect-cstruct { };
 
+  dissect-util = callPackage ../development/python-modules/dissect-util { };
+
   dissononce = callPackage ../development/python-modules/dissononce { };
 
   distlib = callPackage ../development/python-modules/distlib { };
