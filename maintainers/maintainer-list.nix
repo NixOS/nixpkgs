@@ -15505,4 +15505,9 @@
     github = "quasigod-io";
     githubId = 62124625;
   };
+  jstranik = {
+    email = "jan@stranik.org";
+    name = "Jan Stranik";
+    githubId = 1367895;
+  };
 }
