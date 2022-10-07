@@ -2509,6 +2509,8 @@ in {
 
   dissect-sql = callPackage ../development/python-modules/dissect-sql { };
 
+  dissect-target = callPackage ../development/python-modules/dissect-target { };
+
   dissect-util = callPackage ../development/python-modules/dissect-util { };
 
   dissect-vmfs = callPackage ../development/python-modules/dissect-vmfs { };
