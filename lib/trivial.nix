@@ -442,6 +442,67 @@ rec {
     then f.__functionArgs or (lib.functionArgs (f.__functor f))
     else builtins.functionArgs f;
 
+  getFunction = f:
+    if builtins.isFunction f then f
+    else if f ? __functor
+    then getFunction (f.__functor f)
+    else throw "getFunction: Not a function";
+
+  /*
+    functionInfo builtins.add ->
+      {
+        type = "builtin";
+      }
+
+    functionInfo (arg: arg + 1) ->
+      {
+        type = "argument";
+        argumentName = "arg";
+      }
+
+    functionInfo (arg@{ a }: a + 1) ->
+      {
+        type = "attributes";
+        argumentName = "arg";
+        attributes = { a = false; };
+        ellipsis = false;
+      }
+    functionInfo ({ a ? 0, ...}: a + 1) ->
+      {
+        type = "attributes";
+        argumentName = null;
+        attributes = { a = true; };
+        ellipsis = true;
+      }
+  */
+  functionInfo = f:
+    let
+      function = getFunction f;
+      xmlString = builtins.toXML function;
+      builtinString = "<?xml version='1.0' encoding='utf-8'?>\n<expr>\n  <unevaluated />\n</expr>\n";
+      argumentRegex = "<\\?xml version='1.0' encoding='utf-8'\\?>\n<expr>\n  <function>\n    <varpat name=\"(.*)\" />\n  </function>\n</expr>\n";
+      argumentMatch = builtins.match argumentRegex xmlString;
+      attributesRegex = "<\\?xml version='1.0' encoding='utf-8'\\?>\n<expr>\n  <function>\n    <attrspat( ellipsis=\"1\")?( name=\"(.*)\")?>.*\n    </attrspat>\n  </function>\n</expr>\n";
+      attributesMatch = builtins.match attributesRegex xmlString;
+    in
+    if builtinString == xmlString then {
+      type = "builtin";
+    }
+    else if argumentMatch != null then {
+      type = "argument";
+      argumentName = builtins.elemAt argumentMatch 0;
+    }
+    else if attributesMatch != null then {
+      type = "attributes";
+      argumentName =
+        if builtins.elemAt attributesMatch 1 != null
+        then builtins.elemAt attributesMatch 2
+        else null;
+      ellipsis = builtins.elemAt attributesMatch 0 != null;
+      attributes = builtins.functionArgs function;
+    }
+    else throw "functionInfo: Cannot parse builtins.toXML output (this is a bug): ${xmlString}";
+
   /* Check whether something is a function or something
      annotated with function args.
   */
