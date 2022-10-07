@@ -5111,6 +5111,12 @@
     githubId = 15957973;
     name = "Jeffry Molanus";
   };
+  gilice = {
+    email = "gilice@proton.me";
+    github = "gilice";
+    githubId = 104317939;
+    name = "gilice";
+  };
   gilligan = {
     email = "tobias.pflug@gmail.com";
     github = "gilligan";
