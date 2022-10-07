@@ -3510,6 +3510,8 @@ in {
 
   flit-core = callPackage ../development/python-modules/flit-core { };
 
+  flow-record = callPackage ../development/python-modules/flow-record { };
+
   flower = callPackage ../development/python-modules/flower { };
 
   flowlogs_reader = callPackage ../development/python-modules/flowlogs_reader { };
