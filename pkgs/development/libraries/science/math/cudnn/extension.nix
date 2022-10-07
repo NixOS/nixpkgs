@@ -129,6 +129,22 @@ final: prev: let
         fullVersion = "8.5.0.96";
         hash = "sha256-VFSm/ZTwCHKMqumtrZk8ToXvNjAuJrzkO+p9RYpee20=";
         url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${major fileVersion}-archive.tar.xz";
+        supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" "11.7" ];
+      }
+    ];
+    "8.6.0" = [
+      rec {
+        fileVersion = "10.2";
+        fullVersion = "8.6.0.163";
+        hash = "sha256-t4sr/GrFqqdxu2VhaJQk5K1Xm/0lU4chXG8hVL09R9k=";
+        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${major fileVersion}-archive.tar.xz";
+        supportedCudaVersions = [ "10.2" ];
+      }
+      rec {
+        fileVersion = "11.7";
+        fullVersion = "8.6.0.163";
+        hash = "sha256-u8OW30cpTGV+3AnGAGdNYIyxv8gLgtz0VHBgwhcRFZ4=";
+        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${major fileVersion}-archive.tar.xz";
         supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" "11.7" "11.8" ];
       }
     ];
@@ -138,16 +154,16 @@ final: prev: let
   cuDnnDefaultVersion = {
     "10.0" = "7.4.2";
     "10.1" = "7.6.5";
-    "10.2" = "8.3.2";
-    "11.0" = "8.3.2";
-    "11.1" = "8.3.2";
-    "11.2" = "8.3.2";
-    "11.3" = "8.3.2";
-    "11.4" = "8.3.2";
-    "11.5" = "8.3.2";
-    "11.6" = "8.3.2";
-    "11.7" = "8.4.0";
-    "11.8" = "8.5.0";
-  }.${cudaVersion} or "8.3.2";
+    "10.2" = "8.6.0";
+    "11.0" = "8.6.0";
+    "11.1" = "8.6.0";
+    "11.2" = "8.6.0";
+    "11.3" = "8.6.0";
+    "11.4" = "8.6.0";
+    "11.5" = "8.6.0";
+    "11.6" = "8.6.0";
+    "11.7" = "8.6.0";
+    "11.8" = "8.6.0";
+  }.${cudaVersion} or "8.6.0";
 
 in cuDnnPackages
