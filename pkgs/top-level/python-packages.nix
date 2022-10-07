@@ -10447,6 +10447,8 @@ in {
 
   spinners = callPackage ../development/python-modules/spinners { };
 
+  sphinx-automodapi = callPackage ../development/python-modules/sphinx-automodapi { };
+
   sphinx-better-theme = callPackage ../development/python-modules/sphinx-better-theme { };
 
   sphinx-book-theme = callPackage ../development/python-modules/sphinx-book-theme { };
