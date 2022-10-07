@@ -1195,13 +1195,14 @@
     "version": "1.2.0"
   },
   "vault": {
-    "hash": "sha256-fEITfA3XXyUiILPse7fOmBW8M6dzEIUMg+7b3l4z2vo=",
+    "hash": "sha256-v+WhEJ9HsTdOqSVpbV/qVCEICsgY3nEqcIutYHi3aQ8=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/vault",
+    "proxyVendor": true,
     "repo": "terraform-provider-vault",
-    "rev": "v3.8.2",
-    "vendorHash": "sha256-x7uz6VFotS+/eLEeMfaTloKQe/zp47d8e5I63BsGvhM=",
-    "version": "3.8.2"
+    "rev": "v3.9.1",
+    "vendorHash": "sha256-l0uKS8ZIXq0LgSLtYBwtiWuPLeYA62rCt6eDxrnTZfA=",
+    "version": "3.9.1"
   },
   "vcd": {
     "hash": "sha256-qEElcMl6tCBfOTTTpTFjVYg6E6K9iTXfgmDDozrgNVg=",
