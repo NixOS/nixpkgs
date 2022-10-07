@@ -314,13 +314,13 @@
     "version": "2.22.3"
   },
   "dme": {
-    "hash": "sha256-Fz35J15S0JxxVy86xYuwHM1obOYpJVfzEhN1NqoAXbo=",
+    "hash": "sha256-QNkr+6lKlKY+os0Pf6dqlmIn9u2LtMOo6ONahDeA9mE=",
     "owner": "DNSMadeEasy",
     "provider-source-address": "registry.terraform.io/DNSMadeEasy/dme",
     "repo": "terraform-provider-dme",
-    "rev": "v1.0.5",
+    "rev": "v1.0.6",
     "vendorHash": null,
-    "version": "1.0.5"
+    "version": "1.0.6"
   },
   "dns": {
     "hash": "sha256-aH9sDqlXSq2dJi0kzGreJZ5V8A0WU0UqTpxWPKn23rM=",
