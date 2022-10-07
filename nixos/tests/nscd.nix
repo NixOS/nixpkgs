@@ -43,6 +43,9 @@ in
       withUnscd.configuration = { ... }: {
         services.nscd.package = pkgs.unscd;
       };
+      withNsncd.configuration = { ... }: {
+        services.nscd.enableNsncd = true;
+      };
     };
   };
 
@@ -126,5 +129,13 @@ in
 
           # known to fail, unscd doesn't load external NSS modules
           # test_nss_myhostname()
+
+      with subtest("nsncd"):
+          machine.succeed('${specialisations}/withNsncd/bin/switch-to-configuration test')
+          machine.wait_for_unit("default.target")
+
+          test_dynamic_user()
+          test_host_lookups()
+          test_nss_myhostname()
     '';
 })
