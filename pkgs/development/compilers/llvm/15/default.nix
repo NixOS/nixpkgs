@@ -247,25 +247,37 @@ let
 
     libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
-    libcxx = callPackage ./libcxx {
-      inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else stdenv;
-    };
-
     libcxxabi = let
-      stdenv_ = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else stdenv;
+      # CMake will "require" a compiler capable of compiling C++ programs
+      # cxx-header's build does not actually use one so it doesn't really matter
+      # what stdenv we use here, as long as CMake is happy.
       cxx-headers = callPackage ./libcxx {
         inherit llvm_meta;
-        stdenv = stdenv_;
         headersOnly = true;
       };
+
+      # `libcxxabi` *doesn't* need a compiler with a working C++ stdlib but it
+      # *does* need a relatively modern C++ compiler (see:
+      # https://releases.llvm.org/15.0.0/projects/libcxx/docs/index.html#platform-and-compiler-support).
+      #
+      # So, we use the clang from this LLVM package set, like libc++
+      # "boostrapping builds" do:
+      # https://releases.llvm.org/15.0.0/projects/libcxx/docs/BuildingLibcxx.html#bootstrapping-build
+      #
+      # We cannot use `clangNoLibcxx` because that contains `compiler-rt` which,
+      # on macOS, depends on `libcxxabi`, thus forming a cycle.
+      stdenv_ = overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc;
     in callPackage ./libcxxabi {
       stdenv = stdenv_;
       inherit llvm_meta cxx-headers;
+    };
+
+    # Like `libcxxabi` above, `libcxx` requires a fairly modern C++ compiler,
+    # so: we use the clang from this LLVM package set instead of the regular
+    # stdenv's compiler.
+    libcxx = callPackage ./libcxx {
+      inherit llvm_meta;
+      stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
     libunwind = callPackage ./libunwind {
