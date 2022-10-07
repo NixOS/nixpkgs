@@ -10,7 +10,7 @@
 , ncurses
 , libgcrypt
 , cryptoSupport ? false
-, pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
+, pythonSupport ? true
 , gnome
 }:
 
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "EoSPCkQI9ltTDTlizZ/2cLaueWGRz+/zdSK1dy3o3I4=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     pkg-config
@@ -51,7 +53,8 @@ stdenv.mkDerivation rec {
     "--without-debug"
     "--without-mem-debug"
     "--without-debugger"
-    (lib.withFeatureAs pythonSupport "python" python)
+    (lib.withFeature pythonSupport "python")
+    (lib.optionalString pythonSupport "PYTHON=${python.pythonForBuild.interpreter}")
   ] ++ lib.optionals (!cryptoSupport) [
     "--without-crypto"
   ];
