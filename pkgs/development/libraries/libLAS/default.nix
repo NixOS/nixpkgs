@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, boost, cmake, gdal, libgeotiff, libtiff, LASzip2, fixDarwinDylibNames }:
+{ lib, stdenv, fetchFromGitHub, boost, cmake, gdal, libgeotiff, libtiff, LASzip2, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "libLAS";
-  version = "1.8.1";
+  version = "unstable-2022-07-13";
 
-  src = fetchurl {
-    url = "https://download.osgeo.org/liblas/libLAS-${version}.tar.bz2";
-    sha256 = "0xjfxb3ydvr2258ji3spzyf81g9caap19ql2pk91wiivqsc4mnws";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "7a326b14780f9f28b4eb1228978f654d2e3f0079";
+    sha256 = "sha256-xwD7O1/7lR4i4hNEGBA1nVsb1V/n38zd4KT2zp9V+Zk=";
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
