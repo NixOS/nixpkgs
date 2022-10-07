@@ -28,6 +28,28 @@
 , AppKit
 , Carbon
 }:
+let
+  skia_source_dir =
+    runCommand "source" { } (
+      ''
+        cp -R ${repo} $out
+        chmod -R +w $out
+
+        mkdir -p $out/third_party/externals
+        cd $out/third_party/externals
+      '' + (builtins.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "cp -ra ${value} ${name}") externals))
+    );
+  repo = fetchFromGitHub {
+    owner = "rust-skia";
+    repo = "skia";
+    # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
+    rev = "m103-0.51.1";
+    sha256 = "sha256-w5dw/lGm40gKkHPR1ji/L82Oa808Kuh8qaCeiqBLkLw=";
+  };
+  # The externals for skia are taken from skia/DEPS
+  externals = lib.mapAttrs (n: fetchgit) (lib.importJSON ./skia-externals.json);
+
+in
 rustPlatform.buildRustPackage rec {
   pname = "neovide";
   version = "0.10.1";
@@ -41,27 +63,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-GvueDUY4Hzfih/MyEfhdz/QNVd9atTC8SCF+PyuJJic=";
 
-  SKIA_SOURCE_DIR =
-    let
-      repo = fetchFromGitHub {
-        owner = "rust-skia";
-        repo = "skia";
-        # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-        rev = "m103-0.51.1";
-        sha256 = "sha256-w5dw/lGm40gKkHPR1ji/L82Oa808Kuh8qaCeiqBLkLw=";
-      };
-      # The externals for skia are taken from skia/DEPS
-      externals = lib.mapAttrs (n: fetchgit) (lib.importJSON ./skia-externals.json);
-    in
-      runCommand "source" {} (
-        ''
-          cp -R ${repo} $out
-          chmod -R +w $out
+  buildPhase = ''
+    # this copy of skia_source_dir allows it to be GC'ed
+    cp -a ${skia_source_dir} skia_src
+    export SKIA_SOURCE_DIR=$(pwd)/skia_src
+    cargo build --release
+  '';
 
-          mkdir -p $out/third_party/externals
-          cd $out/third_party/externals
-        '' + (builtins.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "cp -ra ${value} ${name}") externals))
-      );
+  installPhase = ''
+    mkdir -p $out/bin
+    cp target/release/neovide $out/bin
+    runHook postInstall
+    runHook postFixup
+  '';
 
   SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
   SKIA_GN_COMMAND = "${gn}/bin/gn";
@@ -105,16 +119,18 @@ rustPlatform.buildRustPackage rec {
     }))
   ] ++ lib.optionals stdenv.isDarwin [ Security ApplicationServices Carbon AppKit ];
 
-  postFixup = let
-    libPath = lib.makeLibraryPath ([
-      libglvnd
-      libxkbcommon
-      xorg.libXcursor
-      xorg.libXext
-      xorg.libXrandr
-      xorg.libXi
-    ] ++ lib.optionals enableWayland [ wayland ]);
-  in ''
+  postFixup =
+    let
+      libPath = lib.makeLibraryPath ([
+        libglvnd
+        libxkbcommon
+        xorg.libXcursor
+        xorg.libXext
+        xorg.libXrandr
+        xorg.libXi
+      ] ++ lib.optionals enableWayland [ wayland ]);
+    in
+    ''
       wrapProgram $out/bin/neovide \
         --prefix LD_LIBRARY_PATH : ${libPath}
     '';
