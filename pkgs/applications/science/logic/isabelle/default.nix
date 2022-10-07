@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, coreutils, nettools, java, scala_3, polyml, z3, veriT, vampire, eprover-ho, naproche, rlwrap, perl, makeDesktopItem, isabelle-components, isabelle, symlinkJoin, fetchhg }:
+{ lib, stdenv, fetchurl, coreutils, nettools, java, scala_3, polyml, z3, veriT, vampire, eprover-ho, naproche, rlwrap, perl, makeDesktopItem, isabelle-components, isabelle, symlinkJoin, fetchhg, srcRev ? null, srcSha256 ? null, srcUrl ? "https://isabelle.sketis.net/repos/isabelle" }:
 # nettools needed for hostname
 
 let
@@ -27,6 +27,12 @@ let
       cp libsha1.so $out/lib/
     '';
   };
+  hgSrc = if srcRev != null then
+    fetchhg {
+      url = srcUrl;
+      rev = srcRev;
+      sha256 = srcSha256;
+    } else null;
 in stdenv.mkDerivation rec {
   pname = "isabelle";
   version = "2022";
@@ -56,6 +62,12 @@ in stdenv.mkDerivation rec {
     mv $sourceRoot ${dirname}
     sourceRoot=${dirname}
   '' else null;
+
+  prePatch = if hgSrc == null then null else ''
+    rm -r src
+    cp -r ${hgSrc}/src ./
+    chmod -R +w ./src
+  '';
 
   postPatch = ''
     patchShebangs .
