@@ -6,7 +6,7 @@
 , libiconv
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   version = "0.31.0";
   pname = "geckodriver";
 
