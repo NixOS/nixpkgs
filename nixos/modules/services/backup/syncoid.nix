@@ -52,8 +52,11 @@ in
       type = with types; nullOr (coercedTo path toString str);
       default = null;
       description = lib.mdDoc ''
-        SSH private key file to use to login to the remote system. Can be
-        overridden in individual commands.
+        SSH private key file to use to login to the remote system.
+        It can be overridden in individual commands.
+        It is loaded using `LoadCredentialEncrypted=`
+        when its path is prefixed by a credential name and colon,
+        otherwise `LoadCredential=` is used.
         For more SSH tuning, you may use syncoid's `--sshoption`
         in {option}`services.syncoid.commonArgs`
         and/or in the `extraArgs` of a specific command.
@@ -230,7 +233,9 @@ in
     ];
 
     systemd.services = mapAttrs'
-      (name: c:
+      (name: c: let
+          sshKeyCred = builtins.split ":" c.sshKey;
+        in
         nameValuePair "syncoid-${escapeUnitName name}" (mkMerge [
           {
             description = "Syncoid ZFS synchronization from ${c.source} to ${c.target}";
@@ -282,7 +287,7 @@ in
               ExecStart = lib.escapeShellArgs ([ "${cfg.package}/bin/syncoid" ]
                 ++ optionals c.useCommonArgs cfg.commonArgs
                 ++ optional c.recursive "--recursive"
-                ++ optionals (c.sshKey != null) [ "--sshkey" "\${CREDENTIALS_DIRECTORY}/ssh-key" ]
+                ++ optionals (c.sshKey != null) [ "--sshkey" "\${CREDENTIALS_DIRECTORY}/${if length sshKeyCred > 1 then head sshKeyCred else "sshKey"}" ]
                 ++ c.extraArgs
                 ++ [
                 "--sendoptions"
@@ -294,7 +299,6 @@ in
                 c.target
               ]);
               DynamicUser = true;
-              LoadCredential = [ "ssh-key:${c.sshKey}" ];
               # Prevent SSH control sockets of different syncoid services from interfering
               PrivateTmp = true;
               # Permissive access to /proc because syncoid
@@ -355,7 +359,11 @@ in
               # This is for BindPaths= and BindReadOnlyPaths=
               # to allow traversal of directories they create in RootDirectory=.
               UMask = "0066";
-            };
+            } //
+            (
+            if length sshKeyCred > 1
+            then { LoadCredentialEncrypted = [ c.sshKey ]; }
+            else { LoadCredential = [ "sshKey:${c.sshKey}" ]; });
           }
           cfg.service
           c.service
