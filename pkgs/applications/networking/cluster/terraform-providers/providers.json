@@ -386,13 +386,13 @@
     "version": "2.2.2"
   },
   "fastly": {
-    "hash": "sha256-Ej7E/xbB8V6Pge/sAkgtQXJac1nuQ3liQDM531zOnu8=",
+    "hash": "sha256-CafrOJiDkIrRph8X+EvvBkI1T7j0qUlOnyhrylToJ7s=",
     "owner": "fastly",
     "provider-source-address": "registry.terraform.io/fastly/fastly",
     "repo": "terraform-provider-fastly",
-    "rev": "v2.3.2",
+    "rev": "v2.3.3",
     "vendorHash": null,
-    "version": "2.3.2"
+    "version": "2.3.3"
   },
   "flexibleengine": {
     "hash": "sha256-2eXNumT1Hkc33bW635qYr5jxlByX+yZ8zSKRpgKWQJo=",
