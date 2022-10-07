@@ -350,13 +350,13 @@
     "version": "2.22.0"
   },
   "elasticsearch": {
-    "hash": "sha256-ir3bPtsghZkfJbRyh5nlK9cGPA49WGxZDb3jMtfWzms=",
+    "hash": "sha256-7sMF7LBM5tnOtERufh7LaJlfcJ5WHIynpzlTg/05u3I=",
     "owner": "phillbaker",
     "provider-source-address": "registry.terraform.io/phillbaker/elasticsearch",
     "repo": "terraform-provider-elasticsearch",
-    "rev": "v2.0.4",
+    "rev": "v2.0.5",
     "vendorHash": "sha256-oVTanZpCWs05HwyIKW2ajiBPz1HXOFzBAt5Us+EtTRw=",
-    "version": "2.0.4"
+    "version": "2.0.5"
   },
   "equinix": {
     "hash": "sha256-gvI9awkKiWWnw6O/KvskFTHZfvajGfgYu8DGsT34Siw=",
