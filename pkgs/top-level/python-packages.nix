@@ -5963,6 +5963,10 @@ self: super: with self; {
 
   mygpoclient = callPackage ../development/python-modules/mygpoclient { };
 
+  myhdl = callPackage ../development/python-modules/myhdl {
+    inherit (pkgs) ghdl verilog;
+  };
+
   myhome = callPackage ../development/python-modules/myhome { };
 
   myjwt = callPackage ../development/python-modules/myjwt { };
