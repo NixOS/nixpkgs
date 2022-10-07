@@ -2483,6 +2483,8 @@ in {
 
   dissect-cstruct = callPackage ../development/python-modules/dissect-cstruct { };
 
+  dissect-ffs = callPackage ../development/python-modules/dissect-ffs { };
+
   dissect-etl = callPackage ../development/python-modules/dissect-etl { };
 
   dissect-eventlog = callPackage ../development/python-modules/dissect-eventlog { };
