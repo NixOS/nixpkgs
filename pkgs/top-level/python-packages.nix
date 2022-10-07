@@ -5299,6 +5299,10 @@ self: super: with self; {
 
   lingua = callPackage ../development/python-modules/lingua { };
 
+  linien-server = callPackage ../development/python-modules/linien/server.nix { };
+  linien-client = callPackage ../development/python-modules/linien/client.nix { };
+  linien-gui = callPackage ../development/python-modules/linien/gui.nix { };
+
   linkify-it-py = callPackage ../development/python-modules/linkify-it-py { };
 
   linode-api = callPackage ../development/python-modules/linode-api { };

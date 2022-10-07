@@ -1,0 +1,13 @@
+diff --git i/setup_gui.py w/setup_gui.py
+index b47f0fb..2b95efb 100644
+--- i/setup_gui.py
++++ w/setup_gui.py
+@@ -38,7 +38,7 @@ setuptools.setup(
+     url="https://github.com/linien-org/linien",
+     # IMPORTANT: any changes have to be made in setup_client_and_gui.py
+     # of flathub repo as well
+-    packages=["linien", "linien.gui", "linien.gui.ui"],
++    packages=["linien", "linien.client", "linien.gui", "linien.gui.ui"],
+     classifiers=[
+         "Programming Language :: Python :: 3",
+         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
