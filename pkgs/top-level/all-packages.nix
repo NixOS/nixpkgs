@@ -30564,6 +30564,10 @@ with pkgs;
 
   owamp = callPackage ../applications/networking/owamp { };
 
+  owofetch = callPackage ../tools/misc/owofetch {
+    inherit (darwin.apple_sdk.frameworks) Foundation DiskArbitration;
+  };
+
   vgmplay-libvgm = callPackage ../applications/audio/vgmplay-libvgm { };
 
   vgmtools = callPackage ../tools/audio/vgmtools { };

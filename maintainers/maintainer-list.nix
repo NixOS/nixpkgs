@@ -9902,6 +9902,12 @@
     githubId = 1809198;
     name = "Victor Roest";
   };
+  nullishamy = {
+    email = "amy.codes@null.net";
+    name = "nullishamy";
+    github = "nullishamy";
+    githubId = 99221043;
+  };
   numinit = {
     email = "me@numin.it";
     github = "numinit";
