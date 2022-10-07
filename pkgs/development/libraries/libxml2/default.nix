@@ -12,7 +12,7 @@
 , ncurses
 , findXMLCatalogs
 , libiconv
-, pythonSupport ? enableShared && stdenv.buildPlatform == stdenv.hostPlatform
+, pythonSupport ? enableShared
 , icuSupport ? false
 , icu
 , enableShared ? stdenv.hostPlatform.libc != "msvcrt" && !stdenv.hostPlatform.isStatic
@@ -60,6 +60,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
@@ -94,7 +96,8 @@ stdenv.mkDerivation rec {
     (lib.enableFeature enableStatic "static")
     (lib.enableFeature enableShared "shared")
     (lib.withFeature icuSupport "icu")
-    (lib.withFeatureAs pythonSupport "python" python)
+    (lib.withFeature pythonSupport "python")
+    (lib.optionalString pythonSupport "PYTHON=${python.pythonForBuild.interpreter}")
   ];
 
   installFlags = lib.optionals pythonSupport [
