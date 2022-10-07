@@ -1,10 +1,9 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  qtwebengine,
-  qtquickcontrols2,
-  kirigami2,
-  ki18n,
+{ mkDerivation
+, extra-cmake-modules
+, qtwebengine
+, qtquickcontrols2
+, kirigami2
+, ki18n
 }:
 mkDerivation {
   pname = "aura-browser";

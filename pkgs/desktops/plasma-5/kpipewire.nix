@@ -1,15 +1,28 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  kwayland, ki18n, kcoreaddons, plasma-wayland-protocols,
-  libepoxy, ffmpeg, mesa, pipewire, wayland
+{ mkDerivation
+, extra-cmake-modules
+, kwayland
+, ki18n
+, kcoreaddons
+, plasma-wayland-protocols
+, libepoxy
+, ffmpeg
+, mesa
+, pipewire
+, wayland
 }:
 
 mkDerivation {
   pname = "kpipewire";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
-    kwayland ki18n kcoreaddons plasma-wayland-protocols
-    libepoxy ffmpeg mesa pipewire wayland
+    kwayland
+    ki18n
+    kcoreaddons
+    plasma-wayland-protocols
+    libepoxy
+    ffmpeg
+    mesa
+    pipewire
+    wayland
   ];
 }

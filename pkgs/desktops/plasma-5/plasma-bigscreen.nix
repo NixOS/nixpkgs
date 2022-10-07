@@ -1,19 +1,18 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  kactivities,
-  kactivities-stats,
-  plasma-framework,
-  ki18n,
-  kirigami2,
-  kdeclarative,
-  kcmutils,
-  knotifications,
-  kio,
-  kwayland,
-  kwindowsystem,
-  plasma-workspace,
-  qtmultimedia,
+{ mkDerivation
+, extra-cmake-modules
+, kactivities
+, kactivities-stats
+, plasma-framework
+, ki18n
+, kirigami2
+, kdeclarative
+, kcmutils
+, knotifications
+, kio
+, kwayland
+, kwindowsystem
+, plasma-workspace
+, qtmultimedia
 }:
 mkDerivation {
   pname = "plasma-bigscreen";
