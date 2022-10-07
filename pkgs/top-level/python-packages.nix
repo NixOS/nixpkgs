@@ -2477,6 +2477,8 @@ in {
 
   diskcache = callPackage ../development/python-modules/diskcache { };
 
+  dissect-cstruct = callPackage ../development/python-modules/dissect-cstruct { };
+
   dissononce = callPackage ../development/python-modules/dissononce { };
 
   distlib = callPackage ../development/python-modules/distlib { };
