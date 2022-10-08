@@ -11,13 +11,13 @@ assert x11Support -> xorg != null;
 
 stdenv.mkDerivation rec {
   pname = "bemenu";
-  version = "0.6.10";
+  version = "0.6.11";
 
   src = fetchFromGitHub {
     owner = "Cloudef";
     repo = pname;
     rev = version;
-    sha256 = "sha256-pv/GxTGmpGc8RHjKO8F03jybS0uO+SS3z4KCZfHYV0Q=";
+    sha256 = "sha256-M8ezaXu62GYzP8xt5ke1I1IIdUcyTk6vtVbJszU7/6g=";
   };
 
   nativeBuildInputs = [ pkg-config pcre ];

@@ -171,6 +171,8 @@ in {
 
   acoustics = callPackage ../development/python-modules/acoustics { };
 
+  acquire = callPackage ../development/python-modules/acquire { };
+
   actdiag = callPackage ../development/python-modules/actdiag { };
 
   adafruit-io = callPackage ../development/python-modules/adafruit-io { };
@@ -2030,6 +2032,8 @@ in {
 
   configshell = callPackage ../development/python-modules/configshell { };
 
+  configupdater = callPackage ../development/python-modules/configupdater { };
+
   confluent-kafka = callPackage ../development/python-modules/confluent-kafka { };
 
   confuse = callPackage ../development/python-modules/confuse { };
@@ -2472,6 +2476,50 @@ in {
   discovery30303 = callPackage ../development/python-modules/discovery30303 { };
 
   diskcache = callPackage ../development/python-modules/diskcache { };
+
+  dissect = callPackage ../development/python-modules/dissect { };
+
+  dissect-cim = callPackage ../development/python-modules/dissect-cim { };
+
+  dissect-clfs = callPackage ../development/python-modules/dissect-clfs { };
+
+  dissect-cstruct = callPackage ../development/python-modules/dissect-cstruct { };
+
+  dissect-fat = callPackage ../development/python-modules/dissect-fat { };
+
+  dissect-ffs = callPackage ../development/python-modules/dissect-ffs { };
+
+  dissect-esedb = callPackage ../development/python-modules/dissect-esedb { };
+
+  dissect-etl = callPackage ../development/python-modules/dissect-etl { };
+
+  dissect-eventlog = callPackage ../development/python-modules/dissect-eventlog { };
+
+  dissect-evidence = callPackage ../development/python-modules/dissect-evidence { };
+
+  dissect-extfs = callPackage ../development/python-modules/dissect-extfs { };
+
+  dissect-hypervisor = callPackage ../development/python-modules/dissect-hypervisor { };
+
+  dissect-ntfs = callPackage ../development/python-modules/dissect-ntfs { };
+
+  dissect-ole = callPackage ../development/python-modules/dissect-ole { };
+
+  dissect-regf = callPackage ../development/python-modules/dissect-regf { };
+
+  dissect-shellitem = callPackage ../development/python-modules/dissect-shellitem { };
+
+  dissect-sql = callPackage ../development/python-modules/dissect-sql { };
+
+  dissect-target = callPackage ../development/python-modules/dissect-target { };
+
+  dissect-util = callPackage ../development/python-modules/dissect-util { };
+
+  dissect-vmfs = callPackage ../development/python-modules/dissect-vmfs { };
+
+  dissect-volume = callPackage ../development/python-modules/dissect-volume { };
+
+  dissect-xfs = callPackage ../development/python-modules/dissect-xfs { };
 
   dissononce = callPackage ../development/python-modules/dissononce { };
 
@@ -3465,6 +3513,8 @@ in {
   flit = callPackage ../development/python-modules/flit { };
 
   flit-core = callPackage ../development/python-modules/flit-core { };
+
+  flow-record = callPackage ../development/python-modules/flow-record { };
 
   flower = callPackage ../development/python-modules/flower { };
 
@@ -8357,6 +8407,10 @@ in {
     withWebKit = true;
   };
 
+  pyqt6 = callPackage ../development/python-modules/pyqt/6.x.nix { };
+
+  pyqt6-sip = callPackage ../development/python-modules/pyqt/pyqt6-sip.nix { };
+
   pyqtgraph = callPackage ../development/python-modules/pyqtgraph { };
 
   pyqtwebengine = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtwebengine {
@@ -8396,6 +8450,8 @@ in {
   pyramid_mako = callPackage ../development/python-modules/pyramid_mako { };
 
   pyramid_multiauth = callPackage ../development/python-modules/pyramid_multiauth { };
+
+  pyreadstat = callPackage ../development/python-modules/pyreadstat { };
 
   pyrealsense2 = toPythonModule (pkgs.librealsense.override {
     enablePython = true;
@@ -9548,8 +9604,6 @@ in {
 
   readme_renderer = callPackage ../development/python-modules/readme_renderer { };
 
-  readstats = callPackage ../development/python-modules/pyreadstat { };
-
   readthedocs-sphinx-ext = callPackage ../development/python-modules/readthedocs-sphinx-ext { };
 
   rebulk = callPackage ../development/python-modules/rebulk { };
@@ -10430,6 +10484,8 @@ in {
   spiderpy = callPackage ../development/python-modules/spiderpy { };
 
   spinners = callPackage ../development/python-modules/spinners { };
+
+  sphinx-automodapi = callPackage ../development/python-modules/sphinx-automodapi { };
 
   sphinx-better-theme = callPackage ../development/python-modules/sphinx-better-theme { };
 
@@ -11358,11 +11414,15 @@ in {
 
   types-protobuf = callPackage ../development/python-modules/types-protobuf { };
 
+  types-python-dateutil = callPackage ../development/python-modules/types-python-dateutil { };
+
   types-pytz = callPackage ../development/python-modules/types-pytz { };
 
   types-pyyaml = callPackage ../development/python-modules/types-pyyaml { };
 
   types-redis = callPackage ../development/python-modules/types-redis { };
+
+  types-retry = callPackage ../development/python-modules/types-retry { };
 
   types-requests = callPackage ../development/python-modules/types-requests { };
 

@@ -163,6 +163,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.claws-mail.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin orivej oxzi ajs124 ];
+    maintainers = with maintainers; [ fpletz globin orivej oxzi ajs124 srapenne ];
   };
 }

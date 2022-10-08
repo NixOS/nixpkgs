@@ -39,5 +39,7 @@ stdenv.mkDerivation rec {
 
      There is a 15-day free trial, and it is a paid application after that.
     '';
+    # download URL removed
+    broken = true;
   };
 }

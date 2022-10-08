@@ -9,6 +9,7 @@
 , json5
 , babel
 , jupyter_server
+, tomli
 , openapi-core
 , pytest-timeout
 , pytest-tornasync
@@ -37,6 +38,7 @@ buildPythonPackage rec {
     json5
     babel
     jupyter_server
+    tomli
   ] ++ lib.optional (pythonOlder "3.10") importlib-metadata;
 
   checkInputs = [
@@ -51,6 +53,9 @@ buildPythonPackage rec {
     # translation tests try to install additional packages into read only paths
     rm -r tests/translations/
   '';
+
+  # https://github.com/jupyterlab/jupyterlab_server/blob/v2.15.2/pyproject.toml#L61
+  doCheck = false;
 
   preCheck = ''
     export HOME=$(mktemp -d)

@@ -1922,6 +1922,12 @@
     githubId = 2506621;
     name = "Brayden Willenborg";
   };
+  brendanreis = {
+    email = "brendanreis@gmail.com";
+    name = "Brendan Reis";
+    github = "brendanreis";
+    githubId = 10686906;
+  };
   brian-dawn = {
     email = "brian.t.dawn@gmail.com";
     github = "brian-dawn";
@@ -9902,6 +9908,12 @@
     githubId = 1809198;
     name = "Victor Roest";
   };
+  nullishamy = {
+    email = "amy.codes@null.net";
+    name = "nullishamy";
+    github = "nullishamy";
+    githubId = 99221043;
+  };
   numinit = {
     email = "me@numin.it";
     github = "numinit";
@@ -10173,6 +10185,15 @@
     name = "oxalica";
     keys = [{
       fingerprint = "F90F FD6D 585C 2BA1 F13D  E8A9 7571 654C F88E 31C2";
+    }];
+  };
+  oxapentane = {
+    email = "blame@oxapentane.com";
+    github = "oxapentane";
+    githubId = 1297357;
+    name = "Grigory Shipunov";
+    keys = [{
+      fingerprint = "DD09 98E6 CDF2 9453 7FC6  04F9 91FA 5E5B F9AA 901C";
     }];
   };
   oxij = {
@@ -10693,6 +10714,16 @@
     githubId = 178496;
     name = "Philipp Middendorf";
   };
+  pmw = {
+    email = "philip@mailworks.org";
+    matrix = "@philip4g:matrix.org";
+    name = "Philip White";
+    github = "philipmw";
+    githubId = 1379645;
+    keys = [{
+      fingerprint = "9AB0 6C94 C3D1 F9D0 B9D9  A832 BC54 6FB3 B16C 8B0B";
+    }];
+  };
   pmy = {
     email = "pmy@xqzp.net";
     github = "pmeiyu";
@@ -10862,6 +10893,12 @@
         fingerprint = "AF85 991C C950 49A2 4205  1933 BCA9 943D D1DF 4C04";
       }
     ];
+  };
+  prtzl = {
+    email = "matej.blagsic@protonmail.com";
+    github = "prtzl";
+    githubId = 32430344;
+    name = "Matej Blagsic";
   };
   ProducerMatt = {
     name = "Matthew Pherigo";
