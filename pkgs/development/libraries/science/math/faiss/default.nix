@@ -42,11 +42,14 @@ let
       cuda_cudart # cuda_runtime.h
       libcublas
       libcurand
-      cuda_nvprof # cuda_profiler_api.h
     ] ++ lib.optionals useThrustSourceBuild [
       nvidia-thrust
     ] ++ lib.optionals (!useThrustSourceBuild) [
       cuda_cccl
+    ] ++ lib.optionals (cudaPackages ? cuda_profiler_api) [
+      cuda_profiler_api # cuda_profiler_api.h
+    ] ++ lib.optionals (!(cudaPackages ? cuda_profiler_api)) [
+      cuda_nvprof # cuda_profiler_api.h
     ];
   };
 in
