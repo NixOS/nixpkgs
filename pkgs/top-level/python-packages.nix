@@ -11424,11 +11424,15 @@ in {
 
   types-protobuf = callPackage ../development/python-modules/types-protobuf { };
 
+  types-python-dateutil = callPackage ../development/python-modules/types-python-dateutil { };
+
   types-pytz = callPackage ../development/python-modules/types-pytz { };
 
   types-pyyaml = callPackage ../development/python-modules/types-pyyaml { };
 
   types-redis = callPackage ../development/python-modules/types-redis { };
+
+  types-retry = callPackage ../development/python-modules/types-retry { };
 
   types-requests = callPackage ../development/python-modules/types-requests { };
 

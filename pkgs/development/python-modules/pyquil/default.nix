@@ -14,15 +14,17 @@
 , pytestCheckHook
 , pythonOlder
 , qcs-api-client
-, retry
 , respx
+, retry
 , rpcq
 , scipy
+, types-python-dateutil
+, types-retry
 }:
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "3.3.1";
+  version = "3.3.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -31,7 +33,7 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-eBEv0rpM0IOaMHWjXDgF0yFK+NNr49cI8fxVi0sfbXs=";
+    hash = "sha256-Ur7dRxmnaAWXHk7c6NC3lBw59RRgh9vwAHFW00fViD4=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +48,8 @@ buildPythonPackage rec {
     retry
     rpcq
     scipy
+    types-python-dateutil
+    types-retry
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
