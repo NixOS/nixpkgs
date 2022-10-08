@@ -71,9 +71,7 @@ let
   };
 in
 symlinkJoin {
-  inherit pname;
-  name = pname;
-  inherit version;
+  name = "${pname}-${version}";
 
   paths = [ wrapper desktopItem ];
 
