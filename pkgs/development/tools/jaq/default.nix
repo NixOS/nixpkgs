@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jaq";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "01mf02";
     repo = "jaq";
     rev = "v${version}";
-    sha256 = "sha256-lTfpN+BnWMENRlSjR1+iGlGMTp4BBiMDvzFjvwRpuLQ=";
+    sha256 = "sha256-a2LJUWRQsUnwU0DZnO5T+geeVOBXPfsBptEMnO+jnFA=";
   };
 
-  cargoSha256 = "sha256-z12ecgJJYKYc5kOLyjZU/MfBuBp7aJuEmDAGleiecz0=";
+  cargoSha256 = "sha256-IJqM9XuJSEZadYc38TnyVrszuL5noYktnlyVu7IBE5k=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
