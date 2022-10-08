@@ -20711,7 +20711,7 @@ with pkgs;
 
   libxcrypt = callPackage ../development/libraries/libxcrypt {
     fetchurl = stdenv.fetchurlBoot;
-    perl = perl.override {
+    perl = buildPackages.perl.override {
       enableCrypt = false;
       fetchurl = stdenv.fetchurlBoot;
     };
