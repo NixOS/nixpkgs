@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
       "--disable-thp"
       "je_cv_thp=no"
     ]
+    # See https://github.com/jemalloc/jemalloc/issues/1997
+    # Using a value of 48 should work on both emulated and native x86_64-darwin.
+    ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) "--with-lg-vaddr=48"
   ;
 
   doCheck = true;
