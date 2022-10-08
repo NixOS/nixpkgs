@@ -53,7 +53,8 @@ in rec {
       };
       boot = {
         inherit (nixos'.tests.boot)
-          biosCdrom;
+          biosCdrom
+          uefiCdrom;
       };
     };
   };
@@ -109,6 +110,7 @@ in rec {
         "nixos.iso_minimal"
         "nixos.amazonImage"
         "nixos.manual"
+        "nixos.tests.boot.uefiCdrom"
         "nixos.tests.containers-imperative"
         "nixos.tests.containers-ip"
         "nixos.tests.firewall"
