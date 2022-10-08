@@ -116,6 +116,13 @@ stdenv.mkDerivation (rec {
     "-DLLVM_ENABLE_SPHINX=ON"
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
+
+    # docs reference `automodapi` but it's not added to the extensions list when
+    # only building the manpages:
+    # https://github.com/llvm/llvm-project/blob/af6ec9200b09039573d85e349496c4f5b17c3d7f/lldb/docs/conf.py#L54
+    #
+    # so, we just ignore the resulting errors
+    "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
   ] ++ lib.optionals doCheck [
     "-DLLDB_TEST_C_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     "-DLLDB_TEST_CXX_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++"

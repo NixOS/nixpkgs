@@ -88,11 +88,10 @@ let
       python3 = pkgs.python3;  # don't use python-boot
     });
 
-    # Needs package for spinhx-automodapi: https://github.com/astropy/sphinx-automodapi
-    # lldb-manpages = lowPrio (tools.lldb.override {
-    #   enableManpages = true;
-    #   python3 = pkgs.python3;  # don't use python-boot
-    # });
+    lldb-manpages = lowPrio (tools.lldb.override {
+      enableManpages = true;
+      python3 = pkgs.python3;  # don't use python-boot
+    });
 
     # pick clang appropriate for package set we are targeting
     clang =
