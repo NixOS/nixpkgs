@@ -26821,6 +26821,8 @@ with pkgs;
 
   ao = libfive;
 
+  apache-directory-server = callPackage ../servers/apache-directory-server {};
+
   apache-directory-studio = callPackage ../applications/networking/apache-directory-studio {};
 
   apkeep = callPackage ../tools/misc/apkeep {
