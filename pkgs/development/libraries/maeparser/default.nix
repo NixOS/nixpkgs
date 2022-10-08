@@ -21,8 +21,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost zlib ];
 
   meta = with lib; {
-    description = "maestro file parser";
+    homepage = "https://github.com/schrodinger/maeparser";
+    description = "Maestro file parser";
     maintainers = [ maintainers.rmcgibbo ];
     license = licenses.mit;
+    platforms = platforms.unix;
   };
 }
