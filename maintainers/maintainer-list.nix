@@ -7330,6 +7330,12 @@
     githubId = 2037002;
     name = "Konstantinos";
   };
+  kouyk = {
+    email = "skykinetic@stevenkou.xyz";
+    github = "kouyk";
+    githubId = 1729497;
+    name = "Steven Kou";
+  };
   kovirobi = {
     email = "kovirobi@gmail.com";
     github = "KoviRobi";
