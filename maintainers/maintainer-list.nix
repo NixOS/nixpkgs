@@ -8686,6 +8686,15 @@
       fingerprint = "1DE4 424D BF77 1192 5DC4  CF5E 9AED 8814 81D8 444E";
     }];
   };
+   maxbrunet = {
+    email = "max@brnt.mx";
+    github = "maxbrunet";
+    githubId = 32458727;
+    name = "Maxime Brunet";
+    keys = [{
+      fingerprint = "E9A2 EE26 EAC6 B3ED 6C10  61F3 4379 62FF 87EC FE2B";
+    }];
+  };
   maxdamantus = {
     email = "maxdamantus@gmail.com";
     github = "Maxdamantus";
