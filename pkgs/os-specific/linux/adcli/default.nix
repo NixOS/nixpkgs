@@ -25,6 +25,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dipNKlIdc1DpXLg/YJjUxZlNoMFy+rt8Y/+AfWFA4dE=";
   };
 
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    docbook_xsl
+    util-linux
+    xmlto
+  ];
+
+  buildInputs = [
+    openldap
+    libkrb5
+    libxslt
+    cyrus_sasl
+  ];
+
+  configureFlags = [ "--disable-debug" ];
+
   postPatch = ''
     substituteInPlace tools/Makefile.am \
       --replace 'sbin_PROGRAMS' 'bin_PROGRAMS'
@@ -33,7 +50,7 @@ stdenv.mkDerivation rec {
         --replace 'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl' \
                   '${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl'
 
-    function patch_docbook(){
+    function patch_docbook() {
       substituteInPlace $1 \
         --replace "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" \
                   "${docbook_xml_dtd_43}/xml/dtd/docbook/docbookx.dtd"
@@ -42,12 +59,6 @@ stdenv.mkDerivation rec {
     patch_docbook doc/adcli-devel.xml
     patch_docbook doc/adcli-docs.xml
   '';
-
-  nativeBuildInputs = [ autoreconfHook pkg-config docbook_xsl ];
-
-  buildInputs = [ openldap libkrb5 libxslt cyrus_sasl util-linux xmlto docbook_xsl ];
-
-  configureFlags = [ "--disable-debug" ];
 
   meta = with lib; {
     homepage = "https://www.freedesktop.org/software/realmd/adcli/adcli.html";
