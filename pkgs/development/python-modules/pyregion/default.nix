@@ -30,11 +30,16 @@ buildPythonPackage rec {
     astropy
   ];
 
-  # Upstream patch needed for the test to pass
+  # Upstream patches needed for the tests to pass
+  # See https://github.com/astropy/pyregion/pull/157/
   patches = [
     (fetchpatch {
-      url = "https://github.com/astropy/pyregion/pull/157.patch";
-      sha256 = "sha256-FMPpwwbtCR8FDZWbD3Cmat7vu6AhyUezu2TOpUfujJE=";
+      url = "https://github.com/astropy/pyregion/pull/157/commits/082649730d353a0d0c0ee9619be1aa501aabba62.patch";
+      sha256 = "sha256-4mHZt3S29ZfK+QKavm6DLBwVxGl/ga7W7GEcQ5ewxuo=";
+    })
+    (fetchpatch {
+      url = "https://github.com/astropy/pyregion/pull/157/commits/c448a465dd56887979da62aec6138fc89bb37b19.patch";
+      sha256 = "sha256-GEtvScmVbAdE4E5Xx0hNOPommvzcnJ3jNZpBmY3PbyE=";
     })
   ];
 
