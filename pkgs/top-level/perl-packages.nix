@@ -12531,7 +12531,7 @@ let
       homepage = "https://exiftool.org/";
 
       license = with lib.licenses; [ gpl1Plus /* or */ artistic2 ];
-      maintainers = [ maintainers.kiloreux ];
+      maintainers = with maintainers; [ kiloreux anthonyroussel ];
       mainProgram = "exiftool";
     };
   };
