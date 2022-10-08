@@ -31892,7 +31892,8 @@ with pkgs;
   tree = callPackage ../tools/system/tree {};
 
   treesheets = callPackage ../applications/office/treesheets {
-    wxGTK = wxGTK31-gtk3;
+    wxGTK = wxGTK32;
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
   tremc = callPackage ../applications/networking/p2p/tremc { };
