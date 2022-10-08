@@ -573,7 +573,6 @@ let
         (assertValueOneOf "ActiveSlave" boolValues)
         (assertValueOneOf "PrimarySlave" boolValues)
         (assertValueOneOf "ConfigureWithoutCarrier" boolValues)
-        (assertValueOneOf "IgnoreCarrierLoss" boolValues)
         (assertValueOneOf "KeepConfiguration" (boolValues ++ ["static" "dhcp-on-stop" "dhcp"]))
       ];
 
@@ -618,6 +617,7 @@ let
           "User"
           "SuppressPrefixLength"
           "Type"
+          "SuppressInterfaceGroup"
         ])
         (assertInt "TypeOfService")
         (assertRange "TypeOfService" 0 255)
@@ -631,6 +631,7 @@ let
         (assertInt "SuppressPrefixLength")
         (assertRange "SuppressPrefixLength" 0 128)
         (assertValueOneOf "Type" ["blackhole" "unreachable" "prohibit"])
+        (assertRange "SuppressInterfaceGroup" 0 2147483647)
       ];
 
       sectionRoute = checkUnitConfig "Route" [
@@ -710,6 +711,9 @@ let
           "BlackList"
           "RequestOptions"
           "SendOption"
+          "FallbackLeaseLifetimeSec"
+          "Label"
+          "Use6RD"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "RoutesToDNS" boolValues)
@@ -732,6 +736,8 @@ let
         (assertPort "ListenPort")
         (assertValueOneOf "SendRelease" boolValues)
         (assertValueOneOf "SendDecline" boolValues)
+        (assertValueOneOf "FallbackLeaseLifetimeSec" ["forever" "infinity"])
+        (assertValueOneOf "Use6RD" boolValues)
       ];
 
       sectionDHCPv6 = checkUnitConfig "DHCPv6" [
@@ -752,6 +758,7 @@ let
           "DUIDType"
           "DUIDRawData"
           "IAID"
+          "UseDelegatedPrefix"
         ])
         (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
@@ -761,6 +768,7 @@ let
         (assertValueOneOf "WithoutRA" ["no" "solicit" "information-request"])
         (assertRange "SendOption" 1 65536)
         (assertInt "IAID")
+        (assertValueOneOf "UseDelegatedPrefix" boolValues)
       ];
 
       sectionDHCPPrefixDelegation = checkUnitConfig "DHCPPrefixDelegation" [
@@ -805,6 +813,9 @@ let
         (assertValueOneOf "UseAutonomousPrefix" boolValues)
         (assertValueOneOf "UseOnLinkPrefix" boolValues)
         (assertValueOneOf "DHCPv6Client" (boolValues ++ ["always"]))
+        (assertValueOneOf "UseMTU" boolValues)
+        (assertValueOneOf "UseGateway" boolValues)
+        (assertValueOneOf "UseRoutePrefix" boolValues)
       ];
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
