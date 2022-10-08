@@ -80,6 +80,6 @@ in python.pkgs.buildPythonApplication {
     changelog = "https://github.com/GNS3/gns3-server/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ anthonyroussel ];
   };
 }
