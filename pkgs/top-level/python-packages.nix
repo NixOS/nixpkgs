@@ -8384,6 +8384,8 @@ self: super: with self; {
 
   pyradios = callPackage ../development/python-modules/pyradios { };
 
+  pyrp3 = callPackage ../development/python-modules/pyrp3 { };
+
   py-radix = callPackage ../development/python-modules/py-radix { };
 
   pyrainbird = callPackage ../development/python-modules/pyrainbird { };
