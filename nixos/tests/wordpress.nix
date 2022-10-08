@@ -54,7 +54,14 @@ import ./make-test-python.nix ({ pkgs, ... }:
         };
       };
 
-      networking.firewall.allowedTCPPorts = [ 80 ];
+      services.caddy.virtualHosts."site1.local".extraConfig = ''
+        tls internal
+      '';
+      services.caddy.virtualHosts."site2.local".extraConfig = ''
+        tls internal
+      '';
+
+      networking.firewall.allowedTCPPorts = [ 80 443 ];
       networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
     };
   };
