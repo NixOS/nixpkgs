@@ -2,7 +2,6 @@
 , stdenv
 , pkg-config
 , fetchFromGitHub
-, fetchpatch
 , buildGoModule
 , btrfs-progs
 , gpgme
@@ -13,22 +12,14 @@
 }:
 buildGoModule rec {
   pname = "podman-tui";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
     rev = "v${version}";
-    sha256 = "sha256-XLC1DqOME9xMF4z+cOPe5H60JnxU9gGaSOQQIofdtj8=";
+    sha256 = "sha256-9ZFyrRf4yMik4+TQYN+75fWuKHuI8hkaKJ6o5qWYb7E=";
   };
-
-  patches = [
-    # Fix flaky tests. See https://github.com/containers/podman-tui/pull/129.
-    (fetchpatch {
-      url = "https://github.com/containers/podman-tui/commit/7fff27e95a3891163da79d86bbc796f29b523f80.patch";
-      sha256 = "sha256-mETDXoMLq7vb8Qhpz/CmNG1LmY2DTaogI10Qav/qN9Q=";
-    })
-  ];
 
   vendorSha256 = null;
 
@@ -39,9 +30,16 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  preCheck = ''
-    export HOME=/home/$(whoami)
-  '';
+  preCheck =
+    let skippedTests = [
+      "TestNetdialogs"
+    ]; in
+    ''
+      export HOME=/home/$(whoami)
+
+      # Disable flaky tests
+      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
+    '';
 
   passthru.tests.version = testers.testVersion {
     package = podman-tui;
