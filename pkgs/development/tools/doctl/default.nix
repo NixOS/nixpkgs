@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "doctl";
-  version = "1.82.2";
+  version = "1.83.0";
 
   vendorSha256 = null;
 
@@ -31,7 +31,7 @@ buildGoModule rec {
     owner = "digitalocean";
     repo = "doctl";
     rev = "v${version}";
-    sha256 = "sha256-o8Wp9zrpIkeigQhbsaMURIiL6coOX8OwUDQmRfO8VoY=";
+    sha256 = "sha256-dh22Pawrcq+f9Mm014KhOjMwfSQ0IatFuY7C6RcvGXs=";
   };
 
   meta = with lib; {
