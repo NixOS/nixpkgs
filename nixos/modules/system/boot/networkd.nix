@@ -745,7 +745,6 @@ let
           "MUDURL"
           "RequestOptions"
           "SendVendorOption"
-          "ForceDHCPv6PDOtherInformation"
           "PrefixDelegationHint"
           "WithoutRA"
           "SendOption"
@@ -760,8 +759,7 @@ let
         (assertValueOneOf "UseNTP" boolValues)
         (assertInt "RouteMetric")
         (assertValueOneOf "RapidCommit" boolValues)
-        (assertValueOneOf "ForceDHCPv6PDOtherInformation" boolValues)
-        (assertValueOneOf "WithoutRA" ["solicit" "information-request"])
+        (assertValueOneOf "WithoutRA" ["no" "solicit" "information-request"])
         (assertRange "SendOption" 1 65536)
         (assertInt "IAID")
       ];
