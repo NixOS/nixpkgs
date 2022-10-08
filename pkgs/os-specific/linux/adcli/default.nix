@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , openldap
 , libkrb5
 , libxslt
@@ -16,24 +15,15 @@
 
 stdenv.mkDerivation rec {
   pname = "adcli";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "realmd";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Zzt4qgLiJNuSrbtDWuxJEfGL7sWSbqN301q3qXZpn9c=";
+    sha256 = "sha256-dipNKlIdc1DpXLg/YJjUxZlNoMFy+rt8Y/+AfWFA4dE=";
   };
-
-  # https://bugs.gentoo.org/820224
-  # Without this it produces some weird missing symbol error in glibc
-  patches = [
-    (fetchpatch {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-crypt/adcli/files/adcli-0.9.1-glibc-2.34-resolv.patch?id=01db544de893262e857685e11b33c2a74210181f";
-      sha256 = "sha256-dZ6dkzxd+0XjY/X9/2IWMan3syvCDGFHiMbxFxMHGFA=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace tools/Makefile.am \
@@ -52,6 +42,7 @@ stdenv.mkDerivation rec {
     patch_docbook doc/adcli-devel.xml
     patch_docbook doc/adcli-docs.xml
   '';
+
   nativeBuildInputs = [ autoreconfHook pkg-config docbook_xsl ];
 
   buildInputs = [ openldap libkrb5 libxslt cyrus_sasl util-linux xmlto docbook_xsl ];
