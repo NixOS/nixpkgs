@@ -21819,6 +21819,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
+  sigdigger = libsForQt5.callPackage ../applications/radio/sigdigger { };
+
+  sigutils = callPackage ../applications/radio/sigutils { };
+
   sblim-sfcc = callPackage ../development/libraries/sblim-sfcc {};
 
   selinux-sandbox = callPackage ../os-specific/linux/selinux-sandbox { };
@@ -22050,6 +22054,10 @@ with pkgs;
   spirv-cross = callPackage ../tools/graphics/spirv-cross { };
 
   splat = callPackage ../applications/radio/splat { };
+
+  suscan = callPackage ../applications/radio/suscan { };
+
+  suwidgets = libsForQt5.callPackage ../applications/radio/suwidgets { };
 
   sratom = callPackage ../development/libraries/audio/sratom { };
 
