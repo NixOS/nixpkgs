@@ -23297,6 +23297,8 @@ with pkgs;
 
   janus-gateway = callPackage ../servers/janus-gateway { };
 
+  janusgraph = callPackage ../servers/nosql/janusgraph { };
+
   jboss = callPackage ../servers/http/jboss { };
 
   jboss_mysql_jdbc = callPackage ../servers/http/jboss/jdbc/mysql { };
