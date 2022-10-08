@@ -19726,7 +19726,7 @@ with pkgs;
 
   libdwarf = callPackage ../development/libraries/libdwarf { };
   dwarfdump = libdwarf.bin;
-  libdwarf_0_4 = callPackage ../development/libraries/libdwarf/0.4.nix { };
+  libdwarf_20210528 = callPackage ../development/libraries/libdwarf/20210528.nix { };
 
   libe57format = callPackage ../development/libraries/libe57format { };
 
@@ -24704,6 +24704,8 @@ with pkgs;
 
   libaio = callPackage ../os-specific/linux/libaio { };
 
+  libajantv2 = callPackage ../development/libraries/libajantv2 {};
+
   libargon2 = callPackage ../development/libraries/libargon2 { };
 
   libatasmart = callPackage ../os-specific/linux/libatasmart { };
@@ -27672,7 +27674,9 @@ with pkgs;
 
   elementary-planner = callPackage ../applications/office/elementary-planner { };
 
-  elf-dissector = libsForQt5.callPackage ../applications/misc/elf-dissector { };
+  elf-dissector = libsForQt5.callPackage ../applications/misc/elf-dissector {
+    libdwarf = libdwarf_20210528;
+  };
 
   elfx86exts = callPackage ../applications/misc/elfx86exts { };
 
@@ -36930,7 +36934,7 @@ with pkgs;
 
   wasm-pack = callPackage ../development/tools/wasm-pack {
     inherit (darwin.apple_sdk.frameworks) Security;
-    libressl = libressl_3_4;
+    libressl = libressl_3_5;
   };
 
   wasynth = callPackage ../development/tools/wasynth { };
