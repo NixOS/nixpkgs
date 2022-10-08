@@ -36882,7 +36882,7 @@ with pkgs;
 
   wasm-pack = callPackage ../development/tools/wasm-pack {
     inherit (darwin.apple_sdk.frameworks) Security;
-    libressl = libressl_3_4;
+    libressl = libressl_3_5;
   };
 
   wasynth = callPackage ../development/tools/wasynth { };
