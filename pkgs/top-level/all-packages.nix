@@ -6293,6 +6293,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  exactaudiocopy = callPackage ../applications/audio/exact-audio-copy { };
+
   exempi = callPackage ../development/libraries/exempi {
     stdenv = if stdenv.isDarwin then stdenv
              else if stdenv.isi686 then gcc6Stdenv
