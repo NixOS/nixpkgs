@@ -501,7 +501,6 @@ let
           "LinkLocalAddressing"
           "IPv4LLRoute"
           "DefaultRouteOnDevice"
-          "IPv6Token"
           "LLMNR"
           "MulticastDNS"
           "DNSOverTLS"
@@ -795,6 +794,10 @@ let
           "RouteAllowList"
           "DHCPv6Client"
           "RouteMetric"
+          "UseMTU"
+          "UseGateway"
+          "UseRoutePrefix"
+          "Token"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
@@ -877,6 +880,7 @@ let
           "Prefix"
           "PreferredLifetimeSec"
           "ValidLifetimeSec"
+          "Token"
         ])
         (assertValueOneOf "AddressAutoconfiguration" boolValues)
         (assertValueOneOf "OnLink" boolValues)
