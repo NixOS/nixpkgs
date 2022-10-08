@@ -13,7 +13,7 @@ let
     homepage = "https://www.prevanders.net/dwarf.html";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21Plus;
-    knownVulnerabilities = [ "CVE-2022-32200" ];
+    knownVulnerabilities = [ "CVE-2022-32200" "CVE-2022-39170" ];
   };
 
 in rec {
