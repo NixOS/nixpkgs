@@ -1110,6 +1110,8 @@ with pkgs;
 
   acpica-tools = callPackage ../tools/system/acpica-tools { };
 
+  acquire = with python3Packages; toPythonApplication acquire;
+
   act = callPackage ../development/tools/misc/act { };
 
   actdiag = with python3.pkgs; toPythonApplication actdiag;
@@ -6297,6 +6299,8 @@ with pkgs;
   exa = callPackage ../tools/misc/exa {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  exactaudiocopy = callPackage ../applications/audio/exact-audio-copy { };
 
   exempi = callPackage ../development/libraries/exempi {
     stdenv = if stdenv.isDarwin then stdenv
@@ -21826,6 +21830,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
+  sigdigger = libsForQt5.callPackage ../applications/radio/sigdigger { };
+
+  sigutils = callPackage ../applications/radio/sigutils { };
+
   sblim-sfcc = callPackage ../development/libraries/sblim-sfcc {};
 
   selinux-sandbox = callPackage ../os-specific/linux/selinux-sandbox { };
@@ -22057,6 +22065,10 @@ with pkgs;
   spirv-cross = callPackage ../tools/graphics/spirv-cross { };
 
   splat = callPackage ../applications/radio/splat { };
+
+  suscan = callPackage ../applications/radio/suscan { };
+
+  suwidgets = libsForQt5.callPackage ../applications/radio/suwidgets { };
 
   sratom = callPackage ../development/libraries/audio/sratom { };
 
@@ -37176,7 +37188,7 @@ with pkgs;
 
   simplenote = callPackage ../applications/misc/simplenote { };
 
-  hy = python3Packages.hy.withPackages (python-packages: [ ]);
+  hy = with python3Packages; toPythonApplication hy;
 
   wmic-bin = callPackage ../servers/monitoring/plugins/wmic-bin.nix { };
 
