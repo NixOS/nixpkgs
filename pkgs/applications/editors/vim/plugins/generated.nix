@@ -4161,6 +4161,18 @@ final: prev:
     meta.homepage = "https://github.com/ldelossa/litee.nvim/";
   };
 
+  live-command-nvim = buildVimPluginFrom2Nix {
+    pname = "live-command.nvim";
+    version = "2022-10-06";
+    src = fetchFromGitHub {
+      owner = "smjonas";
+      repo = "live-command.nvim";
+      rev = "76abef7bcf40afd8db381c8d95a0f3143aa28e68";
+      sha256 = "0swz1pvzl5fr57y7vzxzb9gqfmw5d3zh0751hgj7jqdy4hn00a6z";
+    };
+    meta.homepage = "https://github.com/smjonas/live-command.nvim/";
+  };
+
   lsp-colors-nvim = buildVimPluginFrom2Nix {
     pname = "lsp-colors.nvim";
     version = "2022-09-05";
