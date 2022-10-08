@@ -9,24 +9,26 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.27";
   pname = "fakeroot";
+  version = "1.29";
 
   src = fetchurl {
     url = "http://http.debian.net/debian/pool/main/f/fakeroot/fakeroot_${version}.orig.tar.gz";
-    sha256 = "1p5d3jq6l1pzk96agkf05dck7dbgvldx5sg2d4h7d8h230nyni9w";
+    hash = "sha256-j7uvt4DJFz46zkoEr7wdkA8zfzIWiDk59cfbNDG+fCA=";
   };
 
   patches = lib.optionals stdenv.isLinux [
     ./einval.patch
     (fetchpatch {
       name = "also-wrap-stat-library-call.patch";
-      url = "https://sources.debian.org/data/main/f/fakeroot/1.27-1/debian/patches/also-wrap-stat-library-call.patch";
-      sha256 = "0p7lq6m31k3rqsnjbi06a8ykdqa3cp4y5ngsjyk3q1269gx59x8b";
+      url = "https://sources.debian.org/data/main/f/fakeroot/1.29-1/debian/patches/also-wrap-stat-library-call.patch";
+      hash = "sha256-C/VU+ktGBDyml/rZ4sllQ+E2PVIGxCWtxnnMMKrB9Fw=";
     })
   ];
 
-  buildInputs = [ getopt gnused ]
+  nativeBuildInputs = [ getopt ];
+
+  buildInputs = [ gnused ]
     ++ lib.optional (!stdenv.isDarwin) libcap
     ;
 
@@ -41,11 +43,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://salsa.debian.org/clint/fakeroot";
     description = "Give a fake root environment through LD_PRELOAD";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [viric];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ viric ];
+    platforms = platforms.unix;
   };
 }
