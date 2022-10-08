@@ -22,5 +22,6 @@ mkDerivation rec {
     description = "A comic reader for cross-platform reading and managing your digital comic collection";
     homepage = "http://www.yacreader.com";
     license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ srapenne ];
   };
 }
