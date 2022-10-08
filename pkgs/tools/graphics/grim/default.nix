@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lwJn1Lysv1qLauqmrduUlzdoKUrUM5uBjv+dWSsrM6w=";
   };
 
+  mesonFlags = [
+    "-Dwerror=false"
+  ];
+
   patches = [
     # Fixes build on 32bit platforms. Patch is upstream, but unreleased
     (fetchpatch {
