@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "portmidi";
-  version = "2.0.3";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bLGqi3b9FHBA43baNDT8jkPBQSXAUDfurQSJHLcy3AE=";
+    sha256 = "sha256-uqBeh9vBP6+V+FN4lfeGxePQcpZMDYUuAo/d9a5rQxU=";
   };
 
   cmakeFlags = [
