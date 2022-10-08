@@ -2789,6 +2789,8 @@ with pkgs;
 
   lsix = callPackage ../tools/graphics/lsix { };
 
+  mdio-tool = callPackage ../os-specific/linux/mdio-tool { };
+
   mdr = callPackage ../tools/misc/mdr { };
 
   mobilecoin-wallet = callPackage ../applications/misc/mobilecoin-wallet { };
