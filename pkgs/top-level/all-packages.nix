@@ -37169,7 +37169,7 @@ with pkgs;
 
   simplenote = callPackage ../applications/misc/simplenote { };
 
-  hy = python3Packages.hy.withPackages (python-packages: [ ]);
+  hy = with python3Packages; toPythonApplication hy;
 
   wmic-bin = callPackage ../servers/monitoring/plugins/wmic-bin.nix { };
 
