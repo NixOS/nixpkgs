@@ -21819,6 +21819,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
+  sigdigger = libsForQt5.callPackage ../applications/radio/sigdigger { };
+
   sigutils = callPackage ../applications/radio/sigutils { };
 
   sblim-sfcc = callPackage ../development/libraries/sblim-sfcc {};
