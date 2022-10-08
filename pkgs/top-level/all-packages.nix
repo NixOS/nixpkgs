@@ -19690,7 +19690,7 @@ with pkgs;
 
   libdwarf = callPackage ../development/libraries/libdwarf { };
   dwarfdump = libdwarf.bin;
-  libdwarf_0_4 = callPackage ../development/libraries/libdwarf/0.4.nix { };
+  libdwarf_20210528 = callPackage ../development/libraries/libdwarf/20210528.nix { };
 
   libe57format = callPackage ../development/libraries/libe57format { };
 
@@ -27622,7 +27622,9 @@ with pkgs;
 
   elementary-planner = callPackage ../applications/office/elementary-planner { };
 
-  elf-dissector = libsForQt5.callPackage ../applications/misc/elf-dissector { };
+  elf-dissector = libsForQt5.callPackage ../applications/misc/elf-dissector {
+    libdwarf = libdwarf_20210528;
+  };
 
   elfx86exts = callPackage ../applications/misc/elfx86exts { };
 
