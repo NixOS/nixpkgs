@@ -26,6 +26,9 @@
 , lua5_3
 }:
 
+# TODO: we build the python bindings but don't expose them as a python package
+# TODO: expose the vscode extension?
+
 stdenv.mkDerivation (rec {
   pname = "lldb";
   inherit version;
