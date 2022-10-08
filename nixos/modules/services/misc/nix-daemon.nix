@@ -395,7 +395,7 @@ in
         type = types.bool;
         default = true;
         description = lib.mdDoc ''
-          If enabled (the default), checks that Nix can parse the generated nix.conf.
+          If enabled, checks that Nix can parse the generated nix.conf.
         '';
       };
 
@@ -403,7 +403,7 @@ in
         type = types.bool;
         default = true;
         description = lib.mdDoc ''
-          If enabled (the default), checks the nix.conf parsing for any kind of error. When disabled, checks only for unknown settings.
+          If enabled, checks the nix.conf parsing for any kind of error. When disabled, checks only for unknown settings.
         '';
       };
 
