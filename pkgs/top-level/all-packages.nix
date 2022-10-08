@@ -22051,6 +22051,8 @@ with pkgs;
 
   splat = callPackage ../applications/radio/splat { };
 
+  suwidgets = libsForQt5.callPackage ../applications/radio/suwidgets { };
+
   sratom = callPackage ../development/libraries/audio/sratom { };
 
   srm = callPackage ../tools/security/srm { };
