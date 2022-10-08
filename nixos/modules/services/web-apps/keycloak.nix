@@ -242,6 +242,7 @@ in
           apply = assertStringPath "passwordFile";
           description = lib.mdDoc ''
             The path to a file containing the database password.
+            The password must not contain single quotes.
           '';
         };
       };
@@ -259,8 +260,9 @@ in
         type = str;
         default = "changeme";
         description = lib.mdDoc ''
-          Initial password set for the `admin`
-          user. The password is not stored safely and should be changed
+          Initial password set for the `admin` user.
+          The password must not contain single quotes.
+          The password is not stored safely and should be changed
           immediately in the admin panel.
         '';
       };
@@ -637,7 +639,7 @@ in
               cp $CREDENTIALS_DIRECTORY/ssl_{cert,key} /run/keycloak/ssl/
             '' + ''
               export KEYCLOAK_ADMIN=admin
-              export KEYCLOAK_ADMIN_PASSWORD=${cfg.initialAdminPassword}
+              export KEYCLOAK_ADMIN_PASSWORD='${cfg.initialAdminPassword}'
               kc.sh start --optimized
             '';
           };

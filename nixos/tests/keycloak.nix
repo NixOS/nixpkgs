@@ -5,7 +5,7 @@
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   frontendUrl = "https://${certs.domain}";
-  initialAdminPassword = "h4IhoJFnt2iQIR9";
+  initialAdminPassword = "h4IhoJFnt2>iQIR9";
 
   keycloakTest = import ./make-test-python.nix (
     { pkgs, databaseType, ... }:
@@ -37,7 +37,7 @@ let
               type = databaseType;
               username = "bogus";
               name = "also bogus";
-              passwordFile = "${pkgs.writeText "dbPassword" "wzf6vOCbPp6cqTH"}";
+              passwordFile = "${pkgs.writeText "dbPassword" "wzf6vOC>bPp6cqTH"}";
             };
             plugins = with config.services.keycloak.package.plugins; [
               keycloak-discord
