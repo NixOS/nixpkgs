@@ -11380,6 +11380,8 @@ in {
 
   types-redis = callPackage ../development/python-modules/types-redis { };
 
+  types-retry = callPackage ../development/python-modules/types-retry { };
+
   types-requests = callPackage ../development/python-modules/types-requests { };
 
   types-setuptools = callPackage ../development/python-modules/types-setuptools { };
