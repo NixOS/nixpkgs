@@ -20,6 +20,7 @@
 , Cocoa
 , lit
 , makeWrapper
+, darwin
 , enableManpages ? false
 , lua5_3
 }:
@@ -44,7 +45,21 @@ stdenv.mkDerivation (rec {
       substitute '${./resource-dir.patch}' "$out" --subst-var clangLibDir
     '')
     ./gnu-install-dirs.patch
-  ];
+  ]
+  # This is a stopgap solution if/until the macOS SDK used for x86_64 is
+  # updated.
+  #
+  # The older 10.12 SDK used on x86_64 as of this writing has a `mach/machine.h`
+  # header that does not define `CPU_SUBTYPE_ARM64E` so we replace the one use
+  # of this preprocessor symbol in `lldb` with its expansion.
+  #
+  # See here for some context:
+  # https://github.com/NixOS/nixpkgs/pull/194634#issuecomment-1272129132
+  ++ lib.optional (
+    stdenv.targetPlatform.isDarwin
+      && !stdenv.targetPlatform.isAarch64
+      && (lib.versionOlder darwin.apple_sdk.sdk.version "11.0")
+  ) ./cpu_subtype_arm64e_replacement.patch;
 
   outputs = [ "out" "lib" "dev" ];
 
@@ -116,7 +131,6 @@ stdenv.mkDerivation (rec {
       larger LLVM Project, such as the Clang expression parser and LLVM
       disassembler.
     '';
-    broken = stdenv.isDarwin; # error: use of undeclared identifier 'CPU_SUBTYPE_ARM64E'
   };
 } // lib.optionalAttrs enableManpages {
   pname = "lldb-manpages";
