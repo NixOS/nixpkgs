@@ -2032,6 +2032,8 @@ in {
 
   configshell = callPackage ../development/python-modules/configshell { };
 
+  configupdater = callPackage ../development/python-modules/configupdater { };
+
   confluent-kafka = callPackage ../development/python-modules/confluent-kafka { };
 
   confuse = callPackage ../development/python-modules/confuse { };
@@ -8367,6 +8369,10 @@ in {
     withWebKit = true;
   };
 
+  pyqt6 = callPackage ../development/python-modules/pyqt/6.x.nix { };
+
+  pyqt6-sip = callPackage ../development/python-modules/pyqt/pyqt6-sip.nix { };
+
   pyqtgraph = callPackage ../development/python-modules/pyqtgraph { };
 
   pyqtwebengine = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtwebengine {
@@ -10440,6 +10446,8 @@ in {
   spiderpy = callPackage ../development/python-modules/spiderpy { };
 
   spinners = callPackage ../development/python-modules/spinners { };
+
+  sphinx-automodapi = callPackage ../development/python-modules/sphinx-automodapi { };
 
   sphinx-better-theme = callPackage ../development/python-modules/sphinx-better-theme { };
 

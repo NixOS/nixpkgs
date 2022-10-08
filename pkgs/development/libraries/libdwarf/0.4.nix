@@ -1,8 +1,8 @@
 { callPackage, zlib }:
 callPackage ./common.nix rec {
-  version = "0.4.1";
+  version = "0.4.2";
   url = "https://www.prevanders.net/libdwarf-${version}.tar.xz";
-  sha512 = "793fe487de80fe6878f022b90f49ec334a0d7db071ff22a11902db5e3457cc7f3f853945a9ac74de2c40f7f388277f21c5b2e62745bca92d2bb55c51e9577693";
+  sha512 = "6d2a3ebf0104362dd9cecec272935684f977db119810eea0eec88c9f56a042f260a4f6ed3bbabde8592fe16f98cbd81b4ab2878005140e05c8f475df6380d1c2";
   buildInputs = [ zlib ];
   knownVulnerabilities = [];
 }

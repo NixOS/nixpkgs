@@ -107,6 +107,8 @@ in stdenv.mkDerivation rec {
     "${setHost}.musl-root=${pkgsBuildHost.targetPackages.stdenv.cc.libc}"
   ] ++ optionals stdenv.targetPlatform.isMusl [
     "${setTarget}.musl-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
+  ] ++ optionals (rust.IsNoStdTarget stdenv.targetPlatform) [
+    "--disable-docs"
   ] ++ optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # https://github.com/rust-lang/rust/issues/92173
     "--set rust.jemalloc"

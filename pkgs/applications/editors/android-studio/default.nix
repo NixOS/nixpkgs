@@ -14,8 +14,8 @@ let
     sha256Hash = "GnJbWFeG9DuUQzbK9wM2BEbj9LXm4jQFf/Eh5Q75HZo=";
   };
   betaVersion = {
-    version = "2022.1.1.11"; # "Android Studio Electic Eel (2022.1.1) Beta 1"
-    sha256Hash = "YQ20VQME9bQ2vOI7RWfA00npewOL3D6y1dGgNnJXnHc=";
+    version = "2022.1.1.12"; # "Android Studio Electric Eel (2022.1.1) Beta 2"
+    sha256Hash = "8iSFPH0PTQkzV1t8bEq7CBtOU8pzdnD/PrpVcgPnO6Q=";
   };
   latestVersion = { # canary & dev
     version = "2022.2.1.2"; # "Android Studio Flamingo (2022.2.1) Canary 2"

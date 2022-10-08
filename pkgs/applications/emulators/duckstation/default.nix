@@ -1,38 +1,40 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , SDL2
 , cmake
+, copyDesktopItems
+, makeDesktopItem
 , curl
 , extra-cmake-modules
-, gtk3
-, libevdev
 , libpulseaudio
-, mesa
+, libXrandr
+, mesa # for libgbm
 , ninja
 , pkg-config
 , qtbase
+, qtsvg
 , qttools
-, sndio
 , vulkan-loader
 , wayland
 , wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "duckstation";
-  version = "0.pre+date=2022-01-18";
+  version = "unstable-2022-08-22";
 
   src = fetchFromGitHub {
     owner = "stenzek";
     repo = pname;
-    rev = "51041e47f70123eda41d999701f5651830a0a95e";
-    sha256 = "sha256-nlF6ctDU8KCK7MN2pniPLLqUbPUygX9rl0hjzVQ+mPo=";
+    rev = "4f2da4213d1d2c69417392d15b27bb123ee9d297";
+    sha256 = "sha256-VJeKbJ40ZErlu/6RETvk0KDSc9T7ssBrLDecNczQlXU=";
   };
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    copyDesktopItems
     ninja
     pkg-config
     qttools
@@ -42,12 +44,11 @@ mkDerivation rec {
   buildInputs = [
     SDL2
     curl
-    gtk3
-    libevdev
     libpulseaudio
+    libXrandr
     mesa
     qtbase
-    sndio
+    qtsvg
     vulkan-loader
     wayland
   ];
@@ -57,28 +58,28 @@ mkDerivation rec {
     "-DUSE_WAYLAND=ON"
   ];
 
-  postPatch = ''
-    substituteInPlace extras/linux-desktop-files/duckstation-qt.desktop \
-      --replace "duckstation-qt" "duckstation" \
-      --replace "TryExec=duckstation" "tryExec=duckstation-qt" \
-      --replace "Exec=duckstation" "Exec=duckstation-qt"
-    substituteInPlace extras/linux-desktop-files/duckstation-nogui.desktop \
-      --replace "duckstation-nogui" "duckstation" \
-      --replace "TryExec=duckstation" "tryExec=duckstation-nogui" \
-      --replace "Exec=duckstation" "Exec=duckstation-nogui"
-  '';
+  desktopItems = [
+    (makeDesktopItem {
+      name = "DuckStation";
+      desktopName = "JamesDSP";
+      genericName = "PlayStation 1 Emulator";
+      icon = "duckstation";
+      tryExec = "duckstation-qt";
+      exec = "duckstation-qt %f";
+      comment = "Fast PlayStation 1 emulator";
+      categories = [ "Game" "Emulator" "Qt" ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share $out/share/pixmaps $out/share/applications
-    rm bin/common-tests
+    mkdir -p $out/bin $out/share
 
     cp -r bin $out/share/duckstation
-    ln -s $out/share/duckstation/duckstation-{qt,nogui} $out/bin/
+    ln -s $out/share/duckstation/duckstation-qt $out/bin/
 
-    cp ../extras/icons/icon-256px.png $out/share/pixmaps/duckstation.png
-    cp ../extras/linux-desktop-files/* $out/share/applications/
+    install -Dm644 bin/resources/images/duck.png $out/share/pixmaps/duckstation.png
 
     runHook postInstall
   '';
@@ -86,7 +87,7 @@ mkDerivation rec {
   doCheck = true;
   checkPhase = ''
     runHook preCheck
-    ./bin/common-tests
+    bin/common-tests
     runHook postCheck
   '';
 

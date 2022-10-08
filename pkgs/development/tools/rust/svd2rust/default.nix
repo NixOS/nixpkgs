@@ -1,17 +1,15 @@
-{ lib, rustPlatform, fetchCrate, stdenv, libiconv }:
+{ lib, rustPlatform, fetchCrate }:
 
 rustPlatform.buildRustPackage rec {
   pname = "svd2rust";
-  version = "0.25.1";
+  version = "0.26.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-mPkcefB9oTLYhtokhUVwoWfsvLtZWWb+LwElmJeZsiA=";
+    sha256 = "sha256-XoiAnJDTwO93cMH8Z8mJbPfVMhq7c/Xc38gUNYmSX6Y=";
   };
 
-  cargoSha256 = "sha256-sjjmsrgKfrvXynVsZuYkmGKmh0cTAlSNT4h2fVHATrU=";
-
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  cargoSha256 = "sha256-5mu+8tmO70PZq13VuFeovgAmhPmL5G4ju5AvjsC7Idc=";
 
   meta = with lib; {
     description = "Generate Rust register maps (`struct`s) from SVD files";
