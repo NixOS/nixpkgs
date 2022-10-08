@@ -299,6 +299,7 @@ in
       wantedBy = [ "multi-user.target" ];
       startLimitIntervalSec = 14400;
       startLimitBurst = 10;
+      path = [ pkgs.nssTools ];
 
       serviceConfig = {
         # https://www.freedesktop.org/software/systemd/man/systemd.service.html#ExecStart=
