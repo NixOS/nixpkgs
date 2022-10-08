@@ -2,7 +2,7 @@
 , libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
 , libiconv, ijs, lcms2, callPackage, bash, buildPackages, openjpeg
 , cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups
-, x11Support ? cupsSupport, xlibsWrapper # with CUPS, X11 only adds very little
+, x11Support ? cupsSupport, xorg # with CUPS, X11 only adds very little
 }:
 
 let
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
     libiconv ijs lcms2 bash openjpeg
   ]
-  ++ lib.optional x11Support xlibsWrapper
+  ++ lib.optionals x11Support [ xorg.libICE xorg.libX11 xorg.libXext xorg.libXt ]
   ++ lib.optional cupsSupport cups
   ;
 
