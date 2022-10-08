@@ -20,6 +20,7 @@ let
   python = python3.override {
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
   };
+
 in python.pkgs.buildPythonPackage rec {
   pname = "gns3-gui";
   inherit version;
