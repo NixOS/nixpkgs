@@ -27000,8 +27000,8 @@ let
       url = "mirror://cpan/authors/id/C/CT/CTRONDLP/X11-GUITest-0.28.tar.gz";
       hash = "sha256-3O7eU3AGEP/xQtydXE5M0DcMiKTysTcfnL9NjYzm9ks=";
     };
-    buildInputs = [ pkgs.xlibsWrapper pkgs.xorg.libXtst pkgs.xorg.libXi ];
-    NIX_CFLAGS_LINK = "-lX11 -lXext -lXtst";
+    buildInputs = [ pkgs.xorg.libX11 pkgs.xorg.libXi pkgs.xorg.libXt pkgs.xorg.libXtst ];
+    NIX_CFLAGS_LINK = "-lX11";
     doCheck = false; # requires an X server
     meta = {
       description = "Provides GUI testing/interaction routines";
