@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitLab, rustPlatform, pkgs }:
+{ stdenv, lib, fetchFromGitLab, rustPlatform, pkg-config, rocksdb }:
 
 rustPlatform.buildRustPackage rec {
   pname = "matrix-conduit";
@@ -13,11 +13,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-vE44I8lQ5VAfZB4WKLRv/xudoZJaFJGTT/UuumTePBU=";
 
-  nativeBuildInputs = with pkgs; [
+  nativeBuildInputs = [
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = with pkgs; [
+  buildInputs = [
     pkg-config
     rocksdb
   ];
