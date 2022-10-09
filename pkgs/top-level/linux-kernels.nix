@@ -173,6 +173,13 @@ in {
       ];
     };
 
+    linux_6_0 = callPackage ../os-specific/linux/kernel/linux-6.0.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+
     linux_testing = let
       testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
         kernelPatches = [
@@ -508,6 +515,7 @@ in {
     linux_5_17 = throw "linux 5.17 was removed because it reached its end of life upstream"; # Added 2022-06-23
     linux_5_18 = throw "linux 5.18 was removed because it reached its end of life upstream"; # Added 2022-09-17
     linux_5_19 = recurseIntoAttrs (packagesFor kernels.linux_5_19);
+    linux_6_0 = recurseIntoAttrs (packagesFor kernels.linux_6_0);
   };
 
   rtPackages = {
@@ -565,7 +573,7 @@ in {
   packageAliases = {
     linux_default = if stdenv.hostPlatform.isi686 then packages.linux_5_10 else packages.linux_5_15;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_5_19;
+    linux_latest = packages.linux_6_0;
     linux_mptcp = packages.linux_mptcp_95;
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_5_10;
