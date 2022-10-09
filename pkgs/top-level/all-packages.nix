@@ -11688,7 +11688,9 @@ with pkgs;
 
   teip = callPackage ../tools/text/teip { };
 
-  telegraf = callPackage ../servers/monitoring/telegraf { };
+  telegraf = callPackage ../servers/monitoring/telegraf {
+    buildGoModule = buildGo119Module;
+  };
 
   teleport = callPackage ../servers/teleport {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
