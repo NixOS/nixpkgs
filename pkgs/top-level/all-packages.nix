@@ -1146,7 +1146,7 @@ with pkgs;
   aefs = callPackage ../tools/filesystems/aefs { };
 
   aegisub = callPackage ../applications/video/aegisub ({
-    wxGTK = wxGTK31;
+    wxGTK = wxGTK32;
     inherit (darwin.apple_sdk.frameworks) CoreText CoreFoundation AppKit Carbon IOKit Cocoa;
   } // (config.aegisub or {}));
 
@@ -21256,9 +21256,10 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/libressl { })
     libressl_3_4
-    libressl_3_5;
+    libressl_3_5
+    libressl_3_6;
 
-  libressl = libressl_3_5;
+  libressl = libressl_3_6;
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
@@ -31970,7 +31971,8 @@ with pkgs;
   tree = callPackage ../tools/system/tree {};
 
   treesheets = callPackage ../applications/office/treesheets {
-    wxGTK = wxGTK31-gtk3;
+    wxGTK = wxGTK32;
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
   tremc = callPackage ../applications/networking/p2p/tremc { };
@@ -32501,7 +32503,9 @@ with pkgs;
   wsjtx = qt5.callPackage ../applications/radio/wsjtx { };
 
   wxhexeditor = callPackage ../applications/editors/wxhexeditor {
-    wxGTK = wxGTK31;
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+    inherit (llvmPackages) openmp;
+    wxGTK = wxGTK32;
   };
 
   xa = callPackage ../development/compilers/xa/xa.nix { };
