@@ -98,9 +98,7 @@ rec {
        2. None of `meta.badPlatforms` pattern matches the given platform.
   */
   availableOn = platform: pkg:
-    if !(pkg?meta) then true else
-    (!(pkg.meta ? platforms) ||
-      lib.any (platformMatch platform) pkg.meta.platforms) &&
+    ((!pkg?meta.platforms) || lib.any (platformMatch platform) pkg.meta.platforms) &&
     lib.all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
 
   /* Get the corresponding attribute in lib.licenses
