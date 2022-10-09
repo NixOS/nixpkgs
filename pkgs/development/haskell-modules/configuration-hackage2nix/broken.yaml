@@ -1341,7 +1341,6 @@ broken-packages:
   - ert
   - escape-artist
   - escoger
-  - espial
   - esqueleto-pgcrypto
   - ess
   - essence-of-live-coding-gloss-example
