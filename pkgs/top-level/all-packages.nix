@@ -26423,6 +26423,10 @@ with pkgs;
 
   stdmanpages = callPackage ../data/documentation/std-man-pages { };
 
+  star-history = callPackage ../tools/misc/star-history {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   starfetch = callPackage ../tools/misc/starfetch { };
 
   starship = callPackage ../tools/misc/starship {
