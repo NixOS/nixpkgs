@@ -9,7 +9,7 @@ ninjaBuildPhase() {
     fi
 
     local flagsArray=(
-        -j$buildCores
+        -j$buildCores -l$NIX_LOAD_LIMIT
         $ninjaFlags "${ninjaFlagsArray[@]}"
     )
 
@@ -38,7 +38,7 @@ ninjaCheckPhase() {
         fi
 
         local flagsArray=(
-            -j$buildCores
+            -j$buildCores -l$NIX_LOAD_LIMIT
             $ninjaFlags "${ninjaFlagsArray[@]}"
             $checkTarget
         )

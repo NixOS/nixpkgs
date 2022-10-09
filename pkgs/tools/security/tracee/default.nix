@@ -63,7 +63,7 @@ buildGoModule rec {
 
   buildPhase = ''
     runHook preBuild
-    make $makeFlags ''${enableParallelBuilding:+-j$NIX_BUILD_CORES
+    make $makeFlags ''${enableParallelBuilding:+-j$NIX_BUILD_CORES -l$NIX_LOAD_LIMIT}
     runHook postBuild
   '';
 

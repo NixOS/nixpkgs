@@ -673,6 +673,16 @@ if ((NIX_BUILD_CORES <= 0)); then
 fi
 export NIX_BUILD_CORES
 
+# Determine limit for make's `-l` parameter and equivalents.
+# Limiting by load allows to mix serial and very parallel builds
+# on a single machine with many cores - without overloading too much.
+
+if [[ -z "${NIX_LOAD_LIMIT:-}" ]]; then
+  guess=$(nproc 2>/dev/null || true)
+  ((NIX_LOAD_LIMIT = guess <= 0 ? 1 : guess * 2))
+fi
+export NIX_LOAD_LIMIT
+
 
 # Prevent SSL libraries from using certificates in /etc/ssl, unless set explicitly.
 # Leave it in impure shells for convenience.
@@ -1100,7 +1110,7 @@ buildPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelBuilding:+-j${NIX_BUILD_CORES}}
+            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_LOAD_LIMIT}}
             SHELL=$SHELL
             $makeFlags "${makeFlagsArray[@]}"
             $buildFlags "${buildFlagsArray[@]}"
@@ -1139,7 +1149,7 @@ checkPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
+            ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_LOAD_LIMIT}}
             SHELL=$SHELL
             $makeFlags "${makeFlagsArray[@]}"
             ${checkFlags:-VERBOSE=y} "${checkFlagsArray[@]}"
@@ -1273,7 +1283,7 @@ installCheckPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
+            ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_LOAD_LIMIT}}
             SHELL=$SHELL
             $makeFlags "${makeFlagsArray[@]}"
             $installCheckFlags "${installCheckFlagsArray[@]}"
