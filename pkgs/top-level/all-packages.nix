@@ -25650,6 +25650,8 @@ with pkgs;
 
   arc-theme = callPackage ../data/themes/arc { };
 
+  arkenfox-userjs = callPackage ../data/misc/arkenfox-userjs { };
+
   arkpandora_ttf = callPackage ../data/fonts/arkpandora { };
 
   aurulent-sans = callPackage ../data/fonts/aurulent-sans { };
