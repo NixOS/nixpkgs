@@ -83,6 +83,12 @@
     "sha256": "1wy9cbibbngjarc8c9qn4bil3qc8i0h2kz0k364zcsnfpwi8jk3c",
     "version": "1.3.3"
   },
+  "static-mail-sender-configurator": {
+    "path": "static-mail-sender-configurator/tags/0.9.3",
+    "rev": "2574393",
+    "sha256": "0dirfpm71av0a6qhfsczn94ry9gam4zsyin0czzy8bjzbwd6m649",
+    "version": "0.9.3"
+  },
   "webp-converter-for-media": {
     "path": "webp-converter-for-media/tags/5.2.4",
     "rev": "2791011",
