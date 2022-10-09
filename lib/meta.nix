@@ -92,12 +92,15 @@ rec {
 
      A package is available on a platform if both
 
-       1. One of `meta.platforms` pattern matches the given platform.
+       1. One of `meta.platforms` pattern matches the given
+          platform, or `meta.platforms` is not present.
 
        2. None of `meta.badPlatforms` pattern matches the given platform.
   */
   availableOn = platform: pkg:
-    lib.any (platformMatch platform) pkg.meta.platforms &&
+    if !(pkg?meta) then true else
+    (!(pkg.meta ? platforms) ||
+      lib.any (platformMatch platform) pkg.meta.platforms) &&
     lib.all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
 
   /* Get the corresponding attribute in lib.licenses
