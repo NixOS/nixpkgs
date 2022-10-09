@@ -3921,6 +3921,18 @@ final: prev:
     meta.homepage = "https://github.com/leanprover/lean.vim/";
   };
 
+  leap-ast-nvim = buildVimPluginFrom2Nix {
+    pname = "leap-ast.nvim";
+    version = "2022-08-02";
+    src = fetchFromGitHub {
+      owner = "ggandor";
+      repo = "leap-ast.nvim";
+      rev = "38d05c808fc8cecb4c380912649d87c7abfa9e95";
+      sha256 = "0d52ndk9r8g6mp09rjryz9hp7mdyfqqcjf94j0f83qdkdmv3i9gp";
+    };
+    meta.homepage = "https://github.com/ggandor/leap-ast.nvim/";
+  };
+
   leap-nvim = buildVimPluginFrom2Nix {
     pname = "leap.nvim";
     version = "2022-10-01";
