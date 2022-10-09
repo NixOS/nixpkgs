@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "libxcrypt";
@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = !stdenv.hostPlatform.isMusl;
+
+  passthru.tests = {
+    inherit (nixosTests) login shadow;
+  };
 
   meta = with lib; {
     description = "Extended crypt library for descrypt, md5crypt, bcrypt, and others";
