@@ -16,7 +16,7 @@ buildGoModule rec {
   };
   # proxy vendor to avoid hash missmatches between linux and macOS
   proxyVendor = true;
-  vendorSha256 = "sha256-Fl2/rPrtbL3/gcM5hm4MgQwcS0PValuxa+nThYAE4l0=";
+  vendorSha256 = "sha256-aEhNq/e3erW2e5tHMtoePiVFpIY6Mb25k+SVRhIWTr0=";
 
   subPackages = [ "cmd/otelcontribcol" ];
 

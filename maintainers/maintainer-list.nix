@@ -12000,6 +12000,12 @@
     github = "sioodmy";
     githubId = 81568712;
   };
+  siph = {
+    name = "Chris Dawkins";
+    email = "dawkins.chris.dev@gmail.com";
+    github = "siph";
+    githubId = 6619112;
+  };
   schmitthenner = {
     email = "development@schmitthenner.eu";
     github = "fkz";
