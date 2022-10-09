@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "sumo";
-  version = "2.3.4";
+  version = "2.3.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "SMTG-UCL";
     repo = "sumo";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-kgTTYCTq8jTNOmc92TRskbsOcnk6wTZgf0UfoctJ4M4=";
+    sha256 = "sha256-eGQOFTo/tg1aM/P1la3stE7RLxpACUdcJ7g1z3zSasc=";
   };
 
   nativeBuildInputs = [
