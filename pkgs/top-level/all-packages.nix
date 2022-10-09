@@ -30055,6 +30055,8 @@ with pkgs;
 
   rofi-top = callPackage ../applications/misc/rofi-top { };
 
+  rofi-ttv = callPackage ../applications/misc/rofi-ttv { };
+
   rofi-vpn = callPackage ../applications/networking/rofi-vpn { };
 
   ympd = callPackage ../applications/audio/ympd { };
