@@ -8421,6 +8421,8 @@ in {
 
   pyqt6-sip = callPackage ../development/python-modules/pyqt/pyqt6-sip.nix { };
 
+  pyqt6-webengine = callPackage ../development/python-modules/pyqt6-webengine.nix { };
+
   pyqtgraph = callPackage ../development/python-modules/pyqtgraph { };
 
   pyqtwebengine = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtwebengine {
