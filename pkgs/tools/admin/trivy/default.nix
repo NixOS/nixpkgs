@@ -15,7 +15,7 @@ buildGoModule rec {
   };
   # hash missmatch on across linux and darwin
   proxyVendor = true;
-  vendorSha256 = "sha256-iXc70QOZZjnFuvRDm9e1uWqjkJNqV/1uAu1EdZNjL70=";
+  vendorSha256 = "sha256-h9GydAVW2mIFNMlz9aEW6hUioD9noQwnueatkoQDkpY=";
 
   excludedPackages = "misc";
 
