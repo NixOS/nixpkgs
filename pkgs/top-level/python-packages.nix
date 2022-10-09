@@ -9632,6 +9632,8 @@ in {
 
   recordlinkage = callPackage ../development/python-modules/recordlinkage { };
 
+  rectangle-packer = callPackage ../development/python-modules/rectangle-packer { };
+
   redbaron = callPackage ../development/python-modules/redbaron { };
 
   redis = callPackage ../development/python-modules/redis { };
