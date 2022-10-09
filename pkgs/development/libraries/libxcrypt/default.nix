@@ -9,6 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-npNoEfn60R28ozyhm9l8VcUus8oVkB8nreBGzHnmnoc=";
   };
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   configureFlags = [
     "--enable-hashes=all"
     "--enable-obsolete-api=glibc"
