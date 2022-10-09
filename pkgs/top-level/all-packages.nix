@@ -9844,7 +9844,9 @@ with pkgs;
   opae = callPackage ../development/libraries/opae { };
 
   opentelemetry-collector = callPackage ../tools/misc/opentelemetry-collector { };
-  opentelemetry-collector-contrib = callPackage ../tools/misc/opentelemetry-collector/contrib.nix { };
+  opentelemetry-collector-contrib = callPackage ../tools/misc/opentelemetry-collector/contrib.nix {
+    buildGoModule = buildGo119Module;
+  };
 
   opentracing-cpp = callPackage ../development/libraries/opentracing-cpp { };
 
