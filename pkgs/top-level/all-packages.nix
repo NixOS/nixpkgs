@@ -3581,6 +3581,8 @@ with pkgs;
 
   csv2odf = callPackage ../applications/office/csv2odf { };
 
+  csv2parquet = callPackage ../tools/misc/csv2parquet { };
+
   csvdiff = callPackage ../tools/text/csvdiff { };
 
   csview = callPackage ../tools/text/csview { };
