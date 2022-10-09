@@ -23219,14 +23219,9 @@ with pkgs;
   grafana-agent = callPackage ../servers/monitoring/grafana-agent { };
 
   grafana-loki = callPackage ../servers/monitoring/loki { };
+  promtail = callPackage ../servers/monitoring/loki/promtail.nix { };
 
   mimir = callPackage ../servers/monitoring/mimir { };
-
-  promtail = grafana-loki.overrideAttrs (o: {
-    pname = "promtail";
-    subPackages = ["clients/cmd/promtail"];
-    CGO_ENABLED = 1;
-  });
 
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
