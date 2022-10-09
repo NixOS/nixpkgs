@@ -5,6 +5,7 @@
 , ninja
 , unzip
 , wrapQtAppsHook
+, libxcrypt
 , qtbase
 , qttools
 , nixosTests
@@ -37,6 +38,7 @@ in gcc11Stdenv.mkDerivation {
   ];
 
   buildInputs = [
+    libxcrypt
     qtbase
   ];
 

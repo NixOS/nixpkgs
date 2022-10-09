@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, bzip2, expat, libedit, lmdb, openssl
+, bzip2, expat, libedit, lmdb, openssl, libxcrypt
 , python3 # for tests only
 , cpp11 ? false
 }:
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-h455isEmnRyoasXhh1UaA5PICcEEM8/C3IJf5yHRl5g=";
   };
 
-  buildInputs = [ zeroc_mcpp bzip2 expat libedit lmdb openssl ];
+  buildInputs = [ zeroc_mcpp bzip2 expat libedit lmdb openssl libxcrypt ];
 
   preBuild = ''
     makeFlagsArray+=(

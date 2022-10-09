@@ -1,7 +1,7 @@
 { fetchFromGitHub, stdenv, lib, pkg-config, autoreconfHook
 , ncurses, gnutls, readline
 , openssl, perl, sqlite, libjpeg, speex, pcre, libuuid
-, ldns, libedit, yasm, which, libsndfile, libtiff
+, ldns, libedit, yasm, which, libsndfile, libtiff, libxcrypt
 
 , callPackage
 
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     openssl ncurses gnutls readline libjpeg
     sqlite pcre speex ldns libedit
     libsndfile libtiff
-    libuuid
+    libuuid libxcrypt
   ]
   ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules)
   ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];

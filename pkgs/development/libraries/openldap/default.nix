@@ -11,6 +11,7 @@
 , libtool
 , openssl
 , systemdMinimal
+, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     libsodium
     libtool
     openssl
+    libxcrypt
   ] ++ lib.optionals (stdenv.isLinux) [
     systemdMinimal
   ];

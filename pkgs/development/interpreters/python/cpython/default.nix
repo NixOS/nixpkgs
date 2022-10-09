@@ -14,6 +14,7 @@
 , bluez ? null, bluezSupport ? false
 , zlib
 , tzdata ? null
+, libxcrypt
 , self
 , configd
 , autoreconfHook
@@ -353,6 +354,9 @@ in with passthru; stdenv.mkDerivation {
     # Never even try to use lchmod on linux,
     # don't rely on detecting glibc-isms.
     "ac_cv_func_lchmod=no"
+  ] ++ optionals (libxcrypt != null) [
+    "CFLAGS=-I${libxcrypt}/include"
+    "LIBS=-L${libxcrypt}/lib"
   ] ++ optionals tzdataSupport [
     "--with-tzpath=${tzdata}/share/zoneinfo"
   ] ++ optional static "LDFLAGS=-static";
@@ -388,7 +392,7 @@ in with passthru; stdenv.mkDerivation {
   postInstall = let
     # References *not* to nuke from (sys)config files
     keep-references = concatMapStringsSep " " (val: "-e ${val}") ([
-      (placeholder "out")
+      (placeholder "out") libxcrypt
     ] ++ optionals tzdataSupport [
       tzdata
     ]);

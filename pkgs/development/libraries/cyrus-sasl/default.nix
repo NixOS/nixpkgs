@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, openssl, openldap, libkrb5, db, gettext
-, pam, fixDarwinDylibNames, autoreconfHook, enableLdap ? false
+, pam, libxcrypt, fixDarwinDylibNames, autoreconfHook, enableLdap ? false
 , buildPackages, pruneLibtoolFiles, nixosTests }:
 
 with lib;
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pruneLibtoolFiles ]
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs =
-    [ openssl db gettext libkrb5 ]
+    [ openssl db gettext libkrb5 libxcrypt ]
     ++ lib.optional enableLdap openldap
     ++ lib.optional stdenv.isLinux pam;
 

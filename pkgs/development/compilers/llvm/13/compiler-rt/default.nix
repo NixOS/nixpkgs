@@ -1,4 +1,4 @@
-{ lib, stdenv, llvm_meta, version, src, cmake, python3, xcbuild, libllvm, libcxxabi }:
+{ lib, stdenv, llvm_meta, version, src, cmake, python3, xcbuild, libllvm, libcxxabi, libxcrypt }:
 
 let
 
@@ -28,6 +28,8 @@ stdenv.mkDerivation {
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
     "-DCMAKE_C_COMPILER_TARGET=${stdenv.hostPlatform.config}"
     "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
+  ] ++ lib.optionals (haveLibc && !isMusl) [
+    "-DSANITIZER_COMMON_CFLAGS=-I${libxcrypt}/include"
   ] ++ lib.optionals (useLLVM || bareMetal || isMusl || isAarch64) [
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
   ] ++ lib.optionals (useLLVM || bareMetal || isMusl) [

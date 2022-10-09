@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, python3, check }:
+{ lib, stdenv, fetchurl, pkg-config, glib, python3, check, libxcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "libsigrokdecode";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib python3 ];
+  buildInputs = [ glib python3 libxcrypt ];
   checkInputs = [ check ];
   doCheck = true;
 

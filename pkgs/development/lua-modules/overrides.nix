@@ -22,6 +22,7 @@
 , libmysqlclient
 , libuuid
 , libuv
+, libxcrypt
 , libyaml
 , mariadb
 , mpfr
@@ -333,6 +334,12 @@ with prev;
       # https://github.com/wahern/luaossl/pull/199
       { name = "CRYPTO"; dep = openssl_1_1; }
       { name = "OPENSSL"; dep = openssl_1_1; }
+    ];
+  });
+
+  luaposix = prev.luaLib.overrideLuarocks prev.luaposix (drv: {
+    externalDeps = [
+      { name = "CRYPT"; dep = libxcrypt; }
     ];
   });
 

@@ -16,6 +16,7 @@
 , libXext
 , libGLU
 , libGL
+, libxcrypt
 , libxml2
 , llvm_9
 , lz4
@@ -72,6 +73,7 @@ stdenv.mkDerivation rec {
     zlib
     zstd
     lapack
+    libxcrypt
     libxml2
     _llvm_9
     lz4
