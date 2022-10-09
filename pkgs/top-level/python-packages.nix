@@ -9900,6 +9900,8 @@ in {
 
   rst2ansi = callPackage ../development/python-modules/rst2ansi { };
 
+  rst2pdf = callPackage ../development/python-modules/rst2pdf { };
+
   rstcheck = callPackage ../development/python-modules/rstcheck { };
 
   rstcheck-core = callPackage ../development/python-modules/rstcheck-core { };
