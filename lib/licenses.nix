@@ -593,6 +593,11 @@ in mkLicense lset) ({
     fullName = "PNG Reference Library version 2";
   };
 
+  libssh2 = {
+    fullName = "libssh2 License";
+    url = "https://www.libssh2.org/license.html";
+  };
+
   libtiff = {
     spdxId = "libtiff";
     fullName = "libtiff License";
