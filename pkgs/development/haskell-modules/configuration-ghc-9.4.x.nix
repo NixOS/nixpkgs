@@ -74,7 +74,12 @@ in {
   # removed after https://github.com/NixOS/cabal2nix/pull/571 is merged.
   # TODO(@sternenseemann): merge and release a fixed version
   distribution-nixpkgs = dontCheck super.distribution-nixpkgs;
-  cabal2nix = dontCheck super.cabal2nix;
+  cabal2nix =
+    # cabal2nix depends on foundation, which is broken on aarch64-linux.
+    # https://github.com/haskell-foundation/foundation/issues/571
+    overrideCabal
+      (drv: { badPlatforms = [ "aarch64-linux" ]; })
+      (dontCheck super.cabal2nix);
   cabal2nix-unstable = dontCheck super.cabal2nix-unstable;
 
   # build fails on due to ghc api changes
