@@ -4868,6 +4868,8 @@ with pkgs;
 
   smokegen = callPackage ../development/libraries/smokegen {};
 
+  smokeqt = callPackage ../development/libraries/smokeqt {};
+
   snazy = callPackage ../development/tools/snazy { };
 
   snippetpixie = callPackage ../tools/text/snippetpixie { };
