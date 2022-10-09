@@ -752,10 +752,9 @@
     "hash": "sha256-NVbUKSG5rGUtRlaJVND3nW+0Svc2d8R8uvxGKcQktco=",
     "owner": "mongodb",
     "provider-source-address": "registry.terraform.io/mongodb/mongodbatlas",
-    "proxyVendor": true,
     "repo": "terraform-provider-mongodbatlas",
     "rev": "v1.4.6",
-    "vendorHash": "sha256-g6y5Dw/muAPpP1J6iCbGd+mupbqW8N6AtKjTllCknKk=",
+    "vendorHash": "sha256-OwyzkTgOcn9brsQS1bfOEaXYk9nNLyHsEwli+5PAIPE=",
     "version": "1.4.6"
   },
   "namecheap": {
