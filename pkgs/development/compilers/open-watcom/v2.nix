@@ -12,6 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "${passthru.prettyName}-unwrapped";
+  # nixpkgs-update: no auto update
   version = "unstable-2022-10-03";
 
   src = fetchFromGitHub {
