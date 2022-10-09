@@ -47,7 +47,8 @@
 , libxkbcommon
 , util-linux
 , wavpack
-, wxGTK31
+, wxGTK32
+, gtk3
 , libpng
 , libjpeg
 , AppKit
@@ -60,25 +61,12 @@
 }:
 
 # TODO
-# 1. as of 3.0.2, GTK2 is still the recommended version ref https://www.audacityteam.org/download/source/ check if that changes in future versions
-# 2. detach sbsms
+# 1. detach sbsms
 
 let
   inherit (lib) optionals;
   pname = "audacity";
   version = "3.2.1";
-
-  wxGTK' = if stdenv.isDarwin then wxGTK31 else
-  wxGTK31.overrideAttrs (oldAttrs: rec {
-    version = "3.1.3.1-${pname}";
-    src = fetchFromGitHub {
-      owner = pname;
-      repo = "wxWidgets";
-      rev = "v${version}";
-      sha256 = "sha256-1gO86/uIoo97v2KzJ7iz/hou6Fji3RkL9fM23DWyg/w=";
-      fetchSubmodules = true;
-    };
-  });
 in
 stdenv.mkDerivation rec {
   inherit pname version;
@@ -112,6 +100,7 @@ stdenv.mkDerivation rec {
     ffmpeg_4
     file
     flac
+    gtk3
     lame
     libid3tag
     libjack2
@@ -135,8 +124,7 @@ stdenv.mkDerivation rec {
     twolame
     portaudio
     wavpack
-    wxGTK'
-    wxGTK'.gtk
+    wxGTK32
   ] ++ optionals stdenv.isLinux [
     alsa-lib # for portaudio
     at-spi2-core
