@@ -4201,7 +4201,9 @@ with pkgs;
     });
   };
 
-  hysteria = callPackage ../tools/networking/hysteria { };
+  hysteria = callPackage ../tools/networking/hysteria {
+    buildGoModule = buildGo119Module;
+  };
 
   hyx = callPackage ../tools/text/hyx { };
 
