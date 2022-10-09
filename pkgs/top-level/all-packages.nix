@@ -22841,9 +22841,7 @@ with pkgs;
 
   xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
 
-  yaws = callPackage ../servers/http/yaws {
-    erlang = erlangR21;
-  };
+  yaws = callPackage ../servers/http/yaws { };
 
   youtrack = callPackage ../servers/jetbrains/youtrack.nix { };
 
