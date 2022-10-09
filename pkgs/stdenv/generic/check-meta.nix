@@ -57,9 +57,8 @@ let
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
-  hasUnsupportedPlatform = attrs:
-    (!lib.lists.elem hostPlatform.system (attrs.meta.platforms or lib.platforms.all) ||
-      lib.lists.elem hostPlatform.system (attrs.meta.badPlatforms or []));
+  hasUnsupportedPlatform =
+    pkg: !(lib.meta.availableOn hostPlatform pkg);
 
   isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or []) != [];
 
@@ -272,7 +271,7 @@ let
     sourceProvenance = listOf lib.types.attrs;
     maintainers = listOf (attrsOf anything); # TODO use the maintainer type from lib/tests/maintainer-module.nix
     priority = int;
-    platforms = listOf str;
+    platforms = listOf (either str (attrsOf anything));   # see lib.meta.platformMatch
     hydraPlatforms = listOf str;
     broken = bool;
     unfree = bool;
