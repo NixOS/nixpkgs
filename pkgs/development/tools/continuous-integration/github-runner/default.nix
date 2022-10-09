@@ -333,6 +333,7 @@ stdenv.mkDerivation rec {
 
       printf "\n* Setup workdir\n"
       workdir="$(mktemp -d /tmp/${pname}.XXX)"
+      HOME="$workdir"/.fake-home
       cp -rT "${src}" "$workdir"
       chmod -R +w "$workdir"
       trap 'rm -rf "$workdir"' EXIT
