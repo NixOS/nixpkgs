@@ -26861,7 +26861,9 @@ with pkgs;
 
   argocd = callPackage ../applications/networking/cluster/argocd { };
 
-  argocd-autopilot = callPackage ../applications/networking/cluster/argocd-autopilot { };
+  argocd-autopilot = callPackage ../applications/networking/cluster/argocd-autopilot {
+    buildGoModule = buildGo119Module;
+  };
 
   argo-rollouts = callPackage ../applications/networking/cluster/argo-rollouts { };
 
