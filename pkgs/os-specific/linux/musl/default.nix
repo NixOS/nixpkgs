@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     "--syslibdir=${placeholder "out"}/lib"
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "bin" "dev" ];
 
   dontDisableStatic = true;
   dontAddStaticConfigureFlags = true;
@@ -108,15 +108,12 @@ stdenv.mkDerivation rec {
     # Apparently glibc provides scsi itself?
     (cd $dev/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
 
-    mkdir -p $out/bin
-
-
     ${lib.optionalString (stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32)
       "install -D libssp_nonshared.a $out/lib/libssp_nonshared.a"
     }
 
     # Create 'ldd' symlink, builtin
-    ln -rs $out/lib/libc.so $out/bin/ldd
+    ln -s $out/lib/libc.so $bin/bin/ldd
 
     # (impure) cc wrapper around musl for interactive usuage
     for i in musl-gcc musl-clang ld.musl-clang; do
@@ -127,7 +124,7 @@ stdenv.mkDerivation rec {
       --replace $out/lib/musl-gcc.specs $dev/lib/musl-gcc.specs
 
     # provide 'iconv' utility, using just-built headers, libc/ldso
-    $CC ${iconv_c} -o $out/bin/iconv \
+    $CC ${iconv_c} -o $bin/bin/iconv \
       -I$dev/include \
       -L$out/lib -Wl,-rpath=$out/lib \
       -lc \
