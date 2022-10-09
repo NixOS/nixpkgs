@@ -733,7 +733,9 @@ with pkgs;
 
   graph-easy = callPackage ../tools/graphics/graph-easy { };
 
-  mangal = callPackage ../applications/misc/mangal { };
+  mangal = callPackage ../applications/misc/mangal {
+    buildGoModule = buildGo119Module;
+  };
 
   graphw00f = callPackage ../tools/security/graphw00f { };
 
@@ -4206,7 +4208,9 @@ with pkgs;
     });
   };
 
-  hysteria = callPackage ../tools/networking/hysteria { };
+  hysteria = callPackage ../tools/networking/hysteria {
+    buildGoModule = buildGo119Module;
+  };
 
   hyx = callPackage ../tools/text/hyx { };
 
@@ -6091,7 +6095,9 @@ with pkgs;
 
   tridactyl-native = callPackage ../tools/networking/tridactyl-native { };
 
-  trivy = callPackage ../tools/admin/trivy { };
+  trivy = callPackage ../tools/admin/trivy {
+    buildGoModule = buildGo119Module;
+  };
 
   trompeloeil = callPackage ../development/libraries/trompeloeil { };
 
@@ -7456,7 +7462,9 @@ with pkgs;
 
   gvolicon = callPackage ../tools/audio/gvolicon {};
 
-  gvproxy = callPackage ../tools/networking/gvproxy { };
+  gvproxy = callPackage ../tools/networking/gvproxy {
+    buildGoModule = buildGo118Module; # fails to build with 1.19
+  };
 
   gzip = callPackage ../tools/compression/gzip { };
 
@@ -9845,7 +9853,9 @@ with pkgs;
   opae = callPackage ../development/libraries/opae { };
 
   opentelemetry-collector = callPackage ../tools/misc/opentelemetry-collector { };
-  opentelemetry-collector-contrib = callPackage ../tools/misc/opentelemetry-collector/contrib.nix { };
+  opentelemetry-collector-contrib = callPackage ../tools/misc/opentelemetry-collector/contrib.nix {
+    buildGoModule = buildGo119Module;
+  };
 
   opentracing-cpp = callPackage ../development/libraries/opentracing-cpp { };
 
@@ -9901,6 +9911,8 @@ with pkgs;
   overcommit = callPackage ../development/tools/overcommit { };
 
   overmind = callPackage ../applications/misc/overmind { };
+
+  oxker = callPackage ../applications/misc/oxker { };
 
   ovh-ttyrec = callPackage ../tools/misc/ovh-ttyrec { };
 
@@ -11685,7 +11697,9 @@ with pkgs;
 
   teip = callPackage ../tools/text/teip { };
 
-  telegraf = callPackage ../servers/monitoring/telegraf { };
+  telegraf = callPackage ../servers/monitoring/telegraf {
+    buildGoModule = buildGo119Module;
+  };
 
   teleport = callPackage ../servers/teleport {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
@@ -17619,7 +17633,9 @@ with pkgs;
 
   vtable-dumper = callPackage ../development/tools/misc/vtable-dumper { };
 
-  wails = callPackage ../development/tools/wails { };
+  wails = callPackage ../development/tools/wails {
+    buildGoModule = buildGo119Module;
+  };
 
   whatsapp-for-linux = callPackage ../applications/networking/instant-messengers/whatsapp-for-linux { };
 
@@ -25070,6 +25086,7 @@ with pkgs;
 
   gotop = callPackage ../tools/system/gotop {
     inherit (darwin.apple_sdk.frameworks) IOKit;
+    buildGoModule = buildGo119Module;
   };
 
   go-migrate = callPackage ../development/tools/go-migrate { };
@@ -26861,7 +26878,9 @@ with pkgs;
 
   argocd = callPackage ../applications/networking/cluster/argocd { };
 
-  argocd-autopilot = callPackage ../applications/networking/cluster/argocd-autopilot { };
+  argocd-autopilot = callPackage ../applications/networking/cluster/argocd-autopilot {
+    buildGoModule = buildGo119Module;
+  };
 
   argo-rollouts = callPackage ../applications/networking/cluster/argo-rollouts { };
 
@@ -28757,7 +28776,9 @@ with pkgs;
 
   haunt = callPackage ../applications/misc/haunt { };
 
-  hugo = callPackage ../applications/misc/hugo { };
+  hugo = callPackage ../applications/misc/hugo {
+    buildGoModule = buildGo119Module;
+  };
 
   gatekeeper = callPackage ../applications/networking/cluster/gatekeeper { };
 
@@ -33042,7 +33063,9 @@ with pkgs;
 
   ergo = callPackage ../applications/blockchains/ergo { };
 
-  erigon = callPackage ../applications/blockchains/erigon.nix { };
+  erigon = callPackage ../applications/blockchains/erigon.nix {
+    buildGoModule = buildGo119Module;
+  };
 
   exodus = callPackage ../applications/blockchains/exodus { };
 
@@ -37381,7 +37404,9 @@ with pkgs;
 
   webwormhole = callPackage ../tools/networking/webwormhole { };
 
-  werf = callPackage ../applications/networking/cluster/werf { };
+  werf = callPackage ../applications/networking/cluster/werf {
+    buildGoModule = buildGo119Module;
+  };
 
   wifi-password = callPackage ../os-specific/darwin/wifi-password {};
 

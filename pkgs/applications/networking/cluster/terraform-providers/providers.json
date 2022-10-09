@@ -47,13 +47,12 @@
     "version": "2.4.2"
   },
   "alicloud": {
-    "deleteVendor": true,
     "hash": "sha256-lJsCXLSIbb/jLjNsvU0GFljlrKBR2TDDOGXDhBTaIKI=",
     "owner": "aliyun",
     "provider-source-address": "registry.terraform.io/aliyun/alicloud",
     "repo": "terraform-provider-alicloud",
     "rev": "v1.187.0",
-    "vendorHash": "sha256-aiybvpps/TyrMRP8vbfhBAUO+9kR7WWrgo1kOWKTj24=",
+    "vendorHash": null,
     "version": "1.187.0"
   },
   "ansible": {
@@ -138,13 +137,12 @@
     "version": "1.0.0"
   },
   "baiducloud": {
-    "deleteVendor": true,
     "hash": "sha256-LaehOof8T2LGgn6Q/oo+SPcld9QRVk+MjaEJnYvNNnQ=",
     "owner": "baidubce",
     "provider-source-address": "registry.terraform.io/baidubce/baiducloud",
     "repo": "terraform-provider-baiducloud",
     "rev": "v1.15.10",
-    "vendorHash": "sha256-v07NMx8caXvY97FefNnRV7gMQbUq4k2ZmE5huqqe354=",
+    "vendorHash": null,
     "version": "1.15.10"
   },
   "bigip": {
@@ -411,7 +409,7 @@
     "proxyVendor": true,
     "repo": "terraform-provider-fortios",
     "rev": "v1.15.0",
-    "vendorHash": "sha256-WkF2mVDrDlCefM4pjADoXsVwpa7E02c6kUyOgHxNFpo=",
+    "vendorHash": "sha256-QsUJ9BqoCtMC9PpGzwlKvBn+BDlcjUR2rU9zx8FvLCk=",
     "version": "1.15.0"
   },
   "gandi": {
@@ -448,7 +446,7 @@
     "proxyVendor": true,
     "repo": "terraform-provider-google",
     "rev": "v4.39.0",
-    "vendorHash": "sha256-U5J9X51PAq3Cq/XH5ggThzsPaEy+AveHqD4D6NbK/AU=",
+    "vendorHash": "sha256-PWSok1sTU/57Xeri4Un5B9Fbwg8gBP6Quy5oIZrjxUI=",
     "version": "4.39.0"
   },
   "google-beta": {
@@ -458,7 +456,7 @@
     "proxyVendor": true,
     "repo": "terraform-provider-google-beta",
     "rev": "v4.39.0",
-    "vendorHash": "sha256-U5J9X51PAq3Cq/XH5ggThzsPaEy+AveHqD4D6NbK/AU=",
+    "vendorHash": "sha256-PWSok1sTU/57Xeri4Un5B9Fbwg8gBP6Quy5oIZrjxUI=",
     "version": "4.39.0"
   },
   "googleworkspace": {
@@ -531,7 +529,7 @@
     "proxyVendor": true,
     "repo": "terraform-provider-htpasswd",
     "rev": "v1.0.4",
-    "vendorHash": "sha256-VlJO11t7uqAl0U26T/UY2u//+Vfq97+h4gABWt7iQwk=",
+    "vendorHash": "sha256-+D8HxLRUSh7bCN6j+NSkPZTabvqknY7uJ9F5JxefomA=",
     "version": "1.0.4"
   },
   "http": {
@@ -754,10 +752,9 @@
     "hash": "sha256-NVbUKSG5rGUtRlaJVND3nW+0Svc2d8R8uvxGKcQktco=",
     "owner": "mongodb",
     "provider-source-address": "registry.terraform.io/mongodb/mongodbatlas",
-    "proxyVendor": true,
     "repo": "terraform-provider-mongodbatlas",
     "rev": "v1.4.6",
-    "vendorHash": "sha256-jmT5SoJA4iQDmP9cRedQ4wTPoOXB4NL8hHClsp37ykU=",
+    "vendorHash": "sha256-OwyzkTgOcn9brsQS1bfOEaXYk9nNLyHsEwli+5PAIPE=",
     "version": "1.4.6"
   },
   "namecheap": {
@@ -1201,7 +1198,7 @@
     "proxyVendor": true,
     "repo": "terraform-provider-vault",
     "rev": "v3.9.1",
-    "vendorHash": "sha256-l0uKS8ZIXq0LgSLtYBwtiWuPLeYA62rCt6eDxrnTZfA=",
+    "vendorHash": "sha256-/ZIGfLHkHq1Yv+AsSO7KueK5ANxnUWFKwLKyZ02q1cY=",
     "version": "3.9.1"
   },
   "vcd": {
