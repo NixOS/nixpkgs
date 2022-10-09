@@ -9895,6 +9895,8 @@ with pkgs;
 
   overmind = callPackage ../applications/misc/overmind { };
 
+  oxker = callPackage ../applications/misc/oxker { };
+
   ovh-ttyrec = callPackage ../tools/misc/ovh-ttyrec { };
 
   ovito = libsForQt5.callPackage ../applications/graphics/ovito {
