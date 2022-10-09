@@ -2865,6 +2865,18 @@ final: prev:
     meta.homepage = "https://github.com/andviro/flake8-vim/";
   };
 
+  flit-nvim = buildVimPluginFrom2Nix {
+    pname = "flit.nvim";
+    version = "2022-09-23";
+    src = fetchFromGitHub {
+      owner = "ggandor";
+      repo = "flit.nvim";
+      rev = "dd43846edca345075a60d2f749bcca71cd47a17f";
+      sha256 = "1da1pfkm0jg9570smg0l2hc059jjaxpzvz8jbkx6i2m56gq9lmnh";
+    };
+    meta.homepage = "https://github.com/ggandor/flit.nvim/";
+  };
+
   float-preview-nvim = buildVimPluginFrom2Nix {
     pname = "float-preview.nvim";
     version = "2020-11-03";
