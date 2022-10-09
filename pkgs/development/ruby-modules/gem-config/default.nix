@@ -545,6 +545,10 @@ in
     buildInputs = [ openssl ];
   };
 
+  "pygments.rb" = attrs: {
+    buildInputs = [ python3 ];
+  };
+
   rack = attrs: {
     meta.mainProgram = "rackup";
   };
