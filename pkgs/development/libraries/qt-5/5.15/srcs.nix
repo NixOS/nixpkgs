@@ -2,9 +2,7 @@
 
 let
   version = "5.15.6";
-  overrides = {
-    qtscript.version = "5.15.4";
-  };
+  overrides = {};
 
   mk = name: args:
     let

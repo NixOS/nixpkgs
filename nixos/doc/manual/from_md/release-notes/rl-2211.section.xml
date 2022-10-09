@@ -520,7 +520,9 @@
       <listitem>
         <para>
           <literal>pkgs.cosign</literal> does not provide the
-          <literal>cosigned</literal> binary anymore.
+          <literal>cosigned</literal> binary anymore. The
+          <literal>sget</literal> binary has been moved into its own
+          package.
         </para>
       </listitem>
       <listitem>
