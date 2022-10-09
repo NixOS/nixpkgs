@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cosmopolitan";
-  version = "2.1";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "jart";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qi82iGw0Sj2pgV9O4rr/q7jyd1XG3MpTr69dXdAUH0Q=";
+    sha256 = "sha256-2Q4lutSIQ6tBwTy01lPSMepNAww9Kb7BwNyEcsSdWZ0=";
   };
 
   patches = [

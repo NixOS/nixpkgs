@@ -110,6 +110,7 @@ with lib.maintainers; {
       astro
       SuperSandro2000
       revol-xut
+      oxapentane
     ];
     scope = "Maintain packages used in the C3D2 hackspace";
     shortName = "c3d2";

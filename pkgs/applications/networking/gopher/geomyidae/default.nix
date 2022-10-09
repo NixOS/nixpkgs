@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libressl ];
 
+  patches = lib.optionals stdenv.isDarwin [ ./modification-time.patch ];
+
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {

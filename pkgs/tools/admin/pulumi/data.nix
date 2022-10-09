@@ -1,12 +1,12 @@
 # DO NOT EDIT! This file is generated automatically by update.sh
 { }:
 {
-  version = "3.41.1";
+  version = "3.42.0";
   pulumiPkgs = {
     x86_64-linux = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.41.1-linux-x64.tar.gz";
-        sha256 = "17a3g7wfpxm0l37pyj9hgmh9pf78ydbg3pz26aghqfz0l753n03b";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.42.0-linux-x64.tar.gz";
+        sha256 = "1lrfswqw5xd0pxmkfaf77bny94f225rbcjxf7py4s2kbhvc580fv";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v5.4.0-linux-amd64.tar.gz";
@@ -85,8 +85,8 @@
         sha256 = "08kal2cwbaaxif0hxzxylrqkg0msz1jw1l65dzp3r903jclwc1zx";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-google-native-v0.26.0-linux-amd64.tar.gz";
-        sha256 = "196pgs43l6n98hf7068a9684jvhmaszs8pql7p9gwcf0539fdsx6";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-google-native-v0.26.1-linux-amd64.tar.gz";
+        sha256 = "05p0c088h70js6r1pphv3yaiiz9pkjm2yrang1vl1m5011j2q044";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-hcloud-v1.10.1-linux-amd64.tar.gz";
@@ -163,8 +163,8 @@
     ];
     x86_64-darwin = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.41.1-darwin-x64.tar.gz";
-        sha256 = "0p6sk0hkadihc41pk0fblyg6pnb4qpx1gbcry0b0k65njli03aja";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.42.0-darwin-x64.tar.gz";
+        sha256 = "1n036l138nz8w8ciidfhvqpyd1qpfyrv4nqy87z9kygx9pivhj20";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v5.4.0-darwin-amd64.tar.gz";
@@ -243,8 +243,8 @@
         sha256 = "1z9kg9h1gw4s9k1qypir62hv4flx4njrxbxfkknawx29dps3wkff";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-google-native-v0.26.0-darwin-amd64.tar.gz";
-        sha256 = "01d2vc6fqzp7zg30pmyp3i3jm0004k2jk8xxqp4hy03p6v7xvyc1";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-google-native-v0.26.1-darwin-amd64.tar.gz";
+        sha256 = "03l7q39241krq60dgzlzic49jdjpymxpln2kkgwy9yki9h0ipc5s";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-hcloud-v1.10.1-darwin-amd64.tar.gz";
@@ -321,8 +321,8 @@
     ];
     aarch64-linux = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.41.1-linux-arm64.tar.gz";
-        sha256 = "0h1zyv31ln9q4g3qzkhkak8x2wvvvd32w19di3h4k7s0k12p5n52";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.42.0-linux-arm64.tar.gz";
+        sha256 = "11dz7i0nnsanj8xams0pr9nxbq9rwfzrjyg4m8wi5nv6q3frnml9";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v5.4.0-linux-arm64.tar.gz";
@@ -401,8 +401,8 @@
         sha256 = "1w0azz06rhj04gs0bvfxn0a37z16jywhsyiyhimimynwpawh2amn";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-google-native-v0.26.0-linux-arm64.tar.gz";
-        sha256 = "0ra0ai2hfrdr9xpk83dykaddxknyngk2j6a71i4xwk3kmy4yy692";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-google-native-v0.26.1-linux-arm64.tar.gz";
+        sha256 = "0d41jxz2rkssalw0l5vhgbxqda3wqw1m1r80nsc1yf9q6n5q0vd4";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-hcloud-v1.10.1-linux-arm64.tar.gz";
@@ -479,8 +479,8 @@
     ];
     aarch64-darwin = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.41.1-darwin-arm64.tar.gz";
-        sha256 = "06f0bd2snpbb5rhdggdml0zz03bx51qyc2i0fni8nq2zsk4w0lm5";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.42.0-darwin-arm64.tar.gz";
+        sha256 = "10lrxkbb8m7pcpqwfi8klpn26k0pbm5lg7yg3y55kc8dqwl220d7";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v5.4.0-darwin-arm64.tar.gz";
@@ -559,8 +559,8 @@
         sha256 = "02jkpzz7kyb9i8mqis4ckqz5mwpwcgas1br7vmiipk8mw1pzwhyw";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-google-native-v0.26.0-darwin-arm64.tar.gz";
-        sha256 = "1k5a68pxis0hfk4lkfbz7s3jcj39pip035snl5p4kix6rn6k6n3n";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-google-native-v0.26.1-darwin-arm64.tar.gz";
+        sha256 = "0b7i3g2zpcid8v5clcjrn0qhblwcacgqvypmcp4vlcxdp3x5lmsk";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-hcloud-v1.10.1-darwin-arm64.tar.gz";

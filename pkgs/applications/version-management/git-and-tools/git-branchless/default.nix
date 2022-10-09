@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , git
 , libiconv
 , ncurses
@@ -15,24 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-branchless";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "arxanas";
     repo = "git-branchless";
     rev = "v${version}";
-    sha256 = "sha256-jAc17poNTld3eptN1Vd1MOKS5iloMWkq3oZgpWBkGTY=";
+    sha256 = "sha256-xh+G9bKEL2ho1YrNVTLbCTxSWZtjEuEWutvYEFr2G/g=";
   };
 
-  cargoPatches = [
-    (fetchpatch {
-      name = "build-run-cargo-update";
-      url = "https://github.com/arxanas/git-branchless/commit/0ac3f325520f79d15368aa9d14893ebc17313ab6.patch";
-      sha256 = "sha256-S1kazUzvz3FzFpphSRhWiv/l2b/+zC9HtAl7ndq5aJA=";
-    })
-  ];
-
-  cargoSha256 = "sha256-Lo/Q6OSIzWrRNiTGsOWRX+6FEcj4fk1kn7V9tw67UVo=";
+  cargoSha256 = "sha256-Zz1RQ/mhdIbPiw2StGtTiORXiJ2nVLyZakt1072ha6U=";
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -1922,6 +1922,12 @@
     githubId = 2506621;
     name = "Brayden Willenborg";
   };
+  brendanreis = {
+    email = "brendanreis@gmail.com";
+    name = "Brendan Reis";
+    github = "brendanreis";
+    githubId = 10686906;
+  };
   brian-dawn = {
     email = "brian.t.dawn@gmail.com";
     github = "brian-dawn";
@@ -10179,6 +10185,15 @@
     name = "oxalica";
     keys = [{
       fingerprint = "F90F FD6D 585C 2BA1 F13D  E8A9 7571 654C F88E 31C2";
+    }];
+  };
+  oxapentane = {
+    email = "blame@oxapentane.com";
+    github = "oxapentane";
+    githubId = 1297357;
+    name = "Grigory Shipunov";
+    keys = [{
+      fingerprint = "DD09 98E6 CDF2 9453 7FC6  04F9 91FA 5E5B F9AA 901C";
     }];
   };
   oxij = {

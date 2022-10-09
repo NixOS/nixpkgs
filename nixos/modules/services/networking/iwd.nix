@@ -67,5 +67,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ mic92 dtzWill ];
+  meta.maintainers = with lib.maintainers; [ dtzWill ];
 }
