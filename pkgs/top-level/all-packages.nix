@@ -731,7 +731,9 @@ with pkgs;
 
   graph-easy = callPackage ../tools/graphics/graph-easy { };
 
-  mangal = callPackage ../applications/misc/mangal { };
+  mangal = callPackage ../applications/misc/mangal {
+    buildGoModule = buildGo119Module;
+  };
 
   graphw00f = callPackage ../tools/security/graphw00f { };
 
