@@ -102,7 +102,11 @@ rec {
         if item ? ${attr} then
           nameValuePair prefix item.${attr}
         else if isAttrs item then
-          map (name: recurse (prefix + "." + name) item.${name}) (attrNames item)
+          map (name:
+            let
+              escapedName = ''"${replaceChars [''"'' "\\"] [''\"'' "\\\\"] name}"'';
+            in
+              recurse (prefix + "." + escapedName) item.${name}) (attrNames item)
         else if isList item then
           imap0 (index: item: recurse (prefix + "[${toString index}]") item) item
         else
@@ -182,13 +186,13 @@ rec {
                 '')
                (attrNames secrets))
     + "\n"
-    + "${pkgs.jq}/bin/jq >'${output}' '"
-    + concatStringsSep
+    + "${pkgs.jq}/bin/jq >'${output}' "
+    + lib.escapeShellArg (concatStringsSep
       " | "
       (imap1 (index: name: ''${name} = $ENV.secret${toString index}'')
-             (attrNames secrets))
+             (attrNames secrets)))
     + ''
-      ' <<'EOF'
+       <<'EOF'
       ${builtins.toJSON set}
       EOF
       (( ! $inherit_errexit_enabled )) && shopt -u inherit_errexit
