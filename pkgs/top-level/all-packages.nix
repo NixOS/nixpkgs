@@ -16832,6 +16832,8 @@ with pkgs;
 
   insomnia = callPackage ../development/web/insomnia { };
 
+  ihp-new = callPackage ../development/web/ihp-new { };
+
   iozone = callPackage ../development/tools/misc/iozone { };
 
   itstool = callPackage ../development/tools/misc/itstool { };
