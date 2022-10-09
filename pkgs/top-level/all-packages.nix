@@ -7449,7 +7449,9 @@ with pkgs;
 
   gvolicon = callPackage ../tools/audio/gvolicon {};
 
-  gvproxy = callPackage ../tools/networking/gvproxy { };
+  gvproxy = callPackage ../tools/networking/gvproxy {
+    buildGoModule = buildGo118Module; # fails to build with 1.19
+  };
 
   gzip = callPackage ../tools/compression/gzip { };
 
