@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "snazy";
@@ -10,7 +10,17 @@ rustPlatform.buildRustPackage rec {
     rev = version;
     sha256 = "sha256-wSRIJF2XPJvzmxuGbuPYPFgn9Eap3vqHT1CM/oQy8vM=";
   };
+
   cargoSha256 = "sha256-IGZZEyy9IGqkpsbnOzLdBSFbinZ7jhH2LWub/+gP89E=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd snazy \
+      --bash <($out/bin/snazy --shell-completion bash) \
+      --fish <($out/bin/snazy --shell-completion fish) \
+      --zsh <($out/bin/snazy --shell-completion zsh)
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -29,6 +39,6 @@ rustPlatform.buildRustPackage rec {
       with nice colors.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [ figsoda jk ];
   };
 }
