@@ -129,12 +129,7 @@ stdenv.mkDerivation rec {
 
   # Workaround for the following error affecting newer versions of Clang:
   # ./config.def.h:xxx:x: error: 'TARGET_OS_TV' is not defined, evaluates to 0 [-Werror,-Wundef-prefix=TARGET_OS_]
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [ "-Wno-undef-prefix" ]
-    # Workaround build failure on -fno-common toolchains:
-    #   duplicate symbol '_apple_platform' in:ui_cocoa.o cocoa_common.o
-    # TODO: drop when upstream gets a fix for it:
-    #   https://github.com/libretro/RetroArch/issues/14025
-    ++ lib.optionals stdenv.isDarwin [ "-fcommon" ];
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [ "-Wno-undef-prefix" ];
 
   passthru.tests = nixosTests.retroarch;
 
@@ -145,5 +140,9 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     changelog = "https://github.com/libretro/RetroArch/blob/v${version}/CHANGES.md";
     maintainers = with maintainers; teams.libretro.members ++ [ matthewbauer kolbycrouch ];
+    # FIXME: error while building in macOS:
+    # "Undefined symbols for architecture <arch>"
+    # See also retroarch/wrapper.nix that is also broken in macOS
+    broken = stdenv.isDarwin;
   };
 }
