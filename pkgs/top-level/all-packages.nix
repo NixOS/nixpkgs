@@ -26914,16 +26914,12 @@ with pkgs;
   };
   audaciousQt5 = audacious;
 
-  audacity-gtk2 = callPackage ../applications/audio/audacity { wxGTK = wxGTK31-gtk2; };
-  audacity-gtk3 = callPackage ../applications/audio/audacity { wxGTK = wxGTK31-gtk3; };
-  audacity =
-    if stdenv.isDarwin then
-      callPackage ../applications/audio/audacity {
-        inherit (darwin.apple_sdk.frameworks) AppKit AudioToolbox AudioUnit Carbon Cocoa CoreAudio CoreAudioKit CoreServices;
-        suil = suil-qt5;
-      }
-    else
-      audacity-gtk2;
+  audacity-gtk2 = callPackage ../applications/audio/audacity { wxGTK31 = wxGTK31-gtk2; };
+  audacity-gtk3 = callPackage ../applications/audio/audacity { wxGTK31 = wxGTK31-gtk3; };
+  audacity = callPackage ../applications/audio/audacity {
+    inherit (darwin.apple_sdk.frameworks) AppKit AudioToolbox AudioUnit Carbon CoreAudio CoreAudioKit CoreServices;
+    suil = suil-qt5;
+  };
 
   audio-recorder = callPackage ../applications/audio/audio-recorder { };
 

@@ -13,6 +13,7 @@
 , libjack2
 , lv2
 , lilv
+, mpg123
 , serd
 , sord
 , sqlite
@@ -45,18 +46,17 @@
 , libsepol
 , libxkbcommon
 , util-linux
-, wxGTK
+, wavpack
+, wxGTK31
 , libpng
 , libjpeg
-, AppKit ? null
-, AudioToolbox ? null
-, AudioUnit ? null
-, Carbon ? null
-, Cocoa ? null
-, CoreAudio ? null
-, CoreAudioKit ? null
-, CoreServices ? null
-, wxmac
+, AppKit
+, AudioToolbox
+, AudioUnit
+, Carbon
+, CoreAudio
+, CoreAudioKit
+, CoreServices
 }:
 
 # TODO
@@ -66,31 +66,28 @@
 let
   inherit (lib) optionals;
   pname = "audacity";
-  version = "3.1.3";
+  version = "3.2.1";
 
-  wxWidgets_src = fetchFromGitHub {
-    owner = pname;
-    repo = "wxWidgets";
-    rev = "v${version}-${pname}";
-    sha256 = "sha256-KrmYYv23DHBYKIuxMYBioCQ2e4KWdgmuREnimtm0XNU=";
-    fetchSubmodules = true;
-  };
-
-  wxGTK' = wxGTK.overrideAttrs (oldAttrs: rec {
-    src = wxWidgets_src;
+  wxGTK' = if stdenv.isDarwin then wxGTK31 else
+  wxGTK31.overrideAttrs (oldAttrs: rec {
+    version = "3.1.3.1-${pname}";
+    src = fetchFromGitHub {
+      owner = pname;
+      repo = "wxWidgets";
+      rev = "v${version}";
+      sha256 = "sha256-1gO86/uIoo97v2KzJ7iz/hou6Fji3RkL9fM23DWyg/w=";
+      fetchSubmodules = true;
+    };
   });
-
-  wxmac' = wxmac.overrideAttrs (oldAttrs: rec {
-    src = wxWidgets_src;
-  });
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "Audacity-${version}";
-    sha256 = "sha256-sdI4paxIHDZgoWTCekjrkFR4JFpQC6OatcnJdVXCCZk=";
+    sha256 = "sha256-7rfttp9LnfM2LBT5seupPyDckS7LEzWDZoqtLsGgqgI=";
   };
 
   postPatch = ''
@@ -105,9 +102,9 @@ in stdenv.mkDerivation rec {
     gettext
     pkg-config
     python3
+    makeWrapper
   ] ++ optionals stdenv.isLinux [
     linuxHeaders
-    makeWrapper
   ];
 
   buildInputs = [
@@ -125,6 +122,7 @@ in stdenv.mkDerivation rec {
     libvorbis
     lilv
     lv2
+    mpg123
     pcre
     portmidi
     serd
@@ -136,6 +134,9 @@ in stdenv.mkDerivation rec {
     suil
     twolame
     portaudio
+    wavpack
+    wxGTK'
+    wxGTK'.gtk
   ] ++ optionals stdenv.isLinux [
     alsa-lib # for portaudio
     at-spi2-core
@@ -149,12 +150,8 @@ in stdenv.mkDerivation rec {
     libsepol
     libuuid
     util-linux
-    wxGTK'
-    wxGTK'.gtk
   ] ++ optionals stdenv.isDarwin [
-    wxmac'
     AppKit
-    Cocoa
     CoreAudioKit
     AudioUnit AudioToolbox CoreAudio CoreServices Carbon # for portaudio
     libpng
@@ -167,10 +164,18 @@ in stdenv.mkDerivation rec {
     "-DDISABLE_DYNAMIC_LOADING_FFMPEG=ON"
     "-Daudacity_conan_enabled=Off"
     "-Daudacity_use_ffmpeg=loaded"
+    "-Daudacity_has_vst3=Off"
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
+
+  # [ 57%] Generating LightThemeAsCeeCode.h...
+  # ../../utils/image-compiler: error while loading shared libraries:
+  # lib-theme.so: cannot open shared object file: No such file or directory
+  preBuild = ''
+    export LD_LIBRARY_PATH=$PWD/utils
+  '';
 
   doCheck = false; # Test fails
 
@@ -178,11 +183,14 @@ in stdenv.mkDerivation rec {
   # - put it in the right place, it shouldn't be in "$out/audacity"
   # - Add the ffmpeg dynamic dependency
   postInstall = lib.optionalString stdenv.isLinux ''
-    rm "$out/audacity"
     wrapProgram "$out/bin/audacity" \
       --prefix LD_LIBRARY_PATH : "$out/lib/audacity":${lib.makeLibraryPath [ ffmpeg_4 ]} \
       --suffix AUDACITY_MODULES_PATH : "$out/lib/audacity/modules" \
       --suffix AUDACITY_PATH : "$out/share/audacity"
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv $out/Audacity.app $out/Applications/
+    makeWrapper $out/Applications/Audacity.app/Contents/MacOS/Audacity $out/bin/audacity
   '';
 
   meta = with lib; {
@@ -198,11 +206,9 @@ in stdenv.mkDerivation rec {
       # Documentation.
       cc-by-30
     ];
-    maintainers = with maintainers; [ lheckemann veprbl ];
+    maintainers = with maintainers; [ lheckemann veprbl wegank ];
     platforms = platforms.unix;
-    # darwin-aarch due to qtbase broken for it.
-    # darwin-x86_64 due to
-    # https://logs.nix.ci/?attempt_id=5cbc4581-09b4-4148-82fe-0326411a56b3&key=nixos%2Fnixpkgs.152273.
-    broken = stdenv.isDarwin;
+    # error: unknown type name 'NSAppearanceName'
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
