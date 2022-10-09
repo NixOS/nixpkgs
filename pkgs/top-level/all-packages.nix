@@ -1078,7 +1078,7 @@ with pkgs;
 
   _1password-gui = callPackage ../applications/misc/1password-gui { };
 
-  _1password-gui-beta = callPackage ../applications/misc/1password-gui/beta.nix { };
+  _1password-gui-beta = callPackage ../applications/misc/1password-gui { channel = "beta"; };
 
   _6tunnel = callPackage ../tools/networking/6tunnel { };
 
@@ -18590,8 +18590,6 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  gdal_2 = callPackage ../development/libraries/gdal/2.4.nix { };
-
   gdcm = callPackage ../development/libraries/gdcm {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Cocoa;
   };
@@ -24239,9 +24237,7 @@ with pkgs;
 
   xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
 
-  yaws = callPackage ../servers/http/yaws {
-    erlang = erlangR21;
-  };
+  yaws = callPackage ../servers/http/yaws { };
 
   youtrack = callPackage ../servers/jetbrains/youtrack.nix { };
 
@@ -26070,6 +26066,8 @@ with pkgs;
 
   libratbag = callPackage ../os-specific/linux/libratbag { };
 
+  librist = callPackage ../development/libraries/librist { };
+
   libre-baskerville = callPackage ../data/fonts/libre-baskerville { };
 
   libre-bodoni = callPackage ../data/fonts/libre-bodoni { };
@@ -26931,16 +26929,10 @@ with pkgs;
   };
   audaciousQt5 = audacious;
 
-  audacity-gtk2 = callPackage ../applications/audio/audacity { wxGTK = wxGTK31-gtk2; };
-  audacity-gtk3 = callPackage ../applications/audio/audacity { wxGTK = wxGTK31-gtk3; };
-  audacity =
-    if stdenv.isDarwin then
-      callPackage ../applications/audio/audacity {
-        inherit (darwin.apple_sdk.frameworks) AppKit AudioToolbox AudioUnit Carbon Cocoa CoreAudio CoreAudioKit CoreServices;
-        suil = suil-qt5;
-      }
-    else
-      audacity-gtk2;
+  audacity = callPackage ../applications/audio/audacity {
+    inherit (darwin.apple_sdk.frameworks) AppKit AudioToolbox AudioUnit Carbon CoreAudio CoreAudioKit CoreServices;
+    suil = suil-qt5;
+  };
 
   audio-recorder = callPackage ../applications/audio/audio-recorder { };
 
@@ -31125,6 +31117,9 @@ with pkgs;
   };
 
   qutebrowser = libsForQt5.callPackage ../applications/networking/browsers/qutebrowser { };
+  qutebrowser-qt6 = callPackage ../applications/networking/browsers/qutebrowser {
+    inherit (qt6Packages) qtbase qtwebengine wrapQtAppsHook qtwayland;
+  };
 
   qxw = callPackage ../applications/editors/qxw {};
 

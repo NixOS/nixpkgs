@@ -1,0 +1,28 @@
+From 81bf140583f7b7bf13cc8dd522e1ca2aba873fc4 Mon Sep 17 00:00:00 2001
+From: Martin Negyokru <negyokru@inf.u-szeged.hu>
+Date: Mon, 03 Oct 2022 12:20:00 +0200
+Subject: [PATCH] Do not intercept websocket connection when there is no associated frame
+
+This fix is based on chrome's implementation.
+
+Fixes: QTBUG-107144
+Change-Id: If042e4156b8a4bdb27a210c4db94e3a6198aed7d
+Reviewed-by: Allan Sandfeld Jensen <allan.jensen@qt.io>
+(cherry picked from commit 64b7da9dab82713fdcb2e03d8a2715421eae5685)
+Reviewed-by: Qt Cherry-pick Bot <cherrypick_bot@qt-project.org>
+---
+
+diff --git a/src/core/content_browser_client_qt.cpp b/src/core/content_browser_client_qt.cpp
+index 020ae91..99a3aa3 100644
+--- a/src/core/content_browser_client_qt.cpp
++++ b/src/core/content_browser_client_qt.cpp
+@@ -1237,8 +1237,7 @@
+ 
+ bool ContentBrowserClientQt::WillInterceptWebSocket(content::RenderFrameHost *frame)
+ {
+-    Q_UNUSED(frame);
+-    return true; // It is probably not worth it to only intercept when interceptors are installed
++    return frame != nullptr;
+ }
+ 
+ QWebEngineUrlRequestInterceptor *getProfileInterceptorFromFrame(content::RenderFrameHost *frame)

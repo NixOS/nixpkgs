@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "timetagger";
-  version = "22.6.6";
+  version = "22.9.3";
 
   src = fetchFromGitHub {
     owner = "almarklein";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-2qPtC8gsRw9ZOkl+H8euTwTrPVAB0cdfFflhbLqXz/I=";
+    sha256 = "sha256-9YmO0nD6QSFMSXsWlfbRxNWW1nwe7WXinC9pLe7rDEY=";
   };
 
   propagatedBuildInputs = [
