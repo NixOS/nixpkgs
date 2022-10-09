@@ -4724,7 +4724,6 @@ broken-packages:
   - snaplet-mandrill
   - snaplet-mongodb-minimalistic
   - snaplet-postgresql-simple
-  - snaplet-purescript
   - snaplet-redis
   - snaplet-sass
   - snaplet-scoped-session

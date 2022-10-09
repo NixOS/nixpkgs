@@ -60,6 +60,13 @@ self: super: {
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
   ghc-vis = disableLibraryProfiling super.ghc-vis;
 
+  # Patch providing GHC9 compat, can be removed once the following gets released:
+  # > https://github.com/adinapoli/snaplet-purescript/pull/25
+  snaplet-purescript = appendPatch (fetchpatch {
+    url = "https://github.com/adinapoli/snaplet-purescript/commit/4c7457d9357558524d4d19ff7c7f13f85b442539.patch";
+    sha256 = "sha256-wpNvCO6txEvSv8LjQaaEIbBBPJnFaMpFx5ER8BT9lXo=";
+  }) super.snaplet-purescript;
+
   # The latest release on hackage has an upper bound on containers which
   # breaks the build, though it works with the version of containers present
   # and the upper bound doesn't exist in code anymore:
