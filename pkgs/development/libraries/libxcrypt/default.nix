@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "Extended crypt library for descrypt, md5crypt, bcrypt, and others";
     homepage = "https://github.com/besser82/libxcrypt/";
     platforms = platforms.all;
-    maintainers = with maintainers; [ dottedmag ];
+    maintainers = with maintainers; [ dottedmag hexa ];
     license = licenses.lgpl21Plus;
   };
 }
