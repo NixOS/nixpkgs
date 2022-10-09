@@ -12935,10 +12935,7 @@ with pkgs;
 
   zfs-autobackup = callPackage ../tools/backup/zfs-autobackup { };
 
-  zfsbackup = callPackage ../tools/backup/zfsbackup {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
-  };
+  zfsbackup = callPackage ../tools/backup/zfsbackup { };
 
   zfstools = callPackage ../tools/filesystems/zfstools { };
 
