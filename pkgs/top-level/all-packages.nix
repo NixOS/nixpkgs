@@ -1951,8 +1951,6 @@ with pkgs;
 
   termsyn = callPackage ../data/fonts/termsyn { };
 
-  timedoctor = callPackage ../applications/office/timedoctor { };
-
   tvnamer = callPackage ../tools/misc/tvnamer { };
 
   twine = with python3Packages; toPythonApplication twine;
