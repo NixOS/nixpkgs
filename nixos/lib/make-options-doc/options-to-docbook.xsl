@@ -39,8 +39,8 @@
             concat('opt-',
               translate(
                 attr[@name = 'name']/string/@value,
-                '*&lt; >[]:',
-                '_______'
+                '*&lt; >[]:&quot;',
+                '________'
             ))" />
           <varlistentry>
             <term xlink:href="#{$id}">
