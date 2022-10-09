@@ -1074,7 +1074,7 @@ with pkgs;
 
   _1password-gui = callPackage ../applications/misc/1password-gui { };
 
-  _1password-gui-beta = callPackage ../applications/misc/1password-gui/beta.nix { };
+  _1password-gui-beta = callPackage ../applications/misc/1password-gui { channel = "beta"; };
 
   _6tunnel = callPackage ../tools/networking/6tunnel { };
 
