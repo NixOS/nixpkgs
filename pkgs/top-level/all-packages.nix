@@ -1998,6 +1998,8 @@ with pkgs;
 
   collapseos-cvm = callPackage ../applications/emulators/collapseos-cvm { };
 
+  collision = callPackage ../tools/security/collision { };
+
   craftos-pc = callPackage ../applications/emulators/craftos-pc { };
 
   darcnes = callPackage ../applications/emulators/darcnes { };
