@@ -1430,7 +1430,7 @@ Whenever the wrapper is executed, it sends the unwrapped compile command to a ru
 The client server architecture is required to handle parallel builds.
 
 
-The `mini-compile-commands.wrap` function takes a nixpkgs standard environment, and returns a new standard environment with the `mini_compile_commands_client.py` insert into the compiler wrapper as a post wrapper hook.
+The `mini-compile-commands.wrap` function takes a nixpkgs standard environment, and returns a new standard environment with the `mini_compile_commands_client.py` insert into the compiler wrapper as a post wrapper hook and `mini_compile_commands_server.py` in scope.
 
 For example, in the environment
 
