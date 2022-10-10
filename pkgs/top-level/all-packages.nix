@@ -9370,7 +9370,7 @@ with pkgs;
 
   noip = callPackage ../tools/networking/noip { };
 
-  nomad = nomad_1_3;
+  nomad = nomad_1_4;
 
   # Nomad never updates major go versions within a release series and is unsupported
   # on Go versions that it did not ship with. Due to historic bugs when compiled
@@ -9381,6 +9381,9 @@ with pkgs;
     buildGoModule = buildGo119Module;
   };
   nomad_1_3 = callPackage ../applications/networking/cluster/nomad/1.3.nix {
+    buildGoModule = buildGo119Module;
+  };
+  nomad_1_4 = callPackage ../applications/networking/cluster/nomad/1.4.nix {
     buildGoModule = buildGo119Module;
   };
 
