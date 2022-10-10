@@ -13431,6 +13431,8 @@ with pkgs;
 
   crystal2nix = callPackage ../development/compilers/crystal2nix { };
 
+  crystalline = callPackage ../development/tools/crystalline/default.nix { };
+
   icr = callPackage ../development/tools/icr { };
 
   scry = callPackage ../development/tools/scry { };
