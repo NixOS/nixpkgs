@@ -40,9 +40,10 @@ in
                   "systemd-run --pty --property=Type=oneshot --property=DynamicUser=yes --property=User=iamatest whoami"
               )
 
-      # Test resolution of somehost.test with getent', to make sure we go via nscd
+      # Test resolution of somehost.test with getent', to make sure we go via
+      # nscd protocol
       def test_host_lookups():
-          with subtest("host lookups via nscd"):
+          with subtest("host lookups via nscd protocol"):
               # ahosts
               output = machine.succeed("${getent'} ahosts somehost.test")
               assert "192.0.2.1" in output
