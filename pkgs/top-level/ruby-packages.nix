@@ -3038,10 +3038,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1knw2xa3pkfql4np9qazz2mdi1vz21vdsa0wkx648c4ym1p2h8yh";
+      sha256 = "sha256-AM0pP5ZafGRLF4/+BUsuA6DuNNc4wX2/OsTZeL4p6Io=";
       type = "gem";
     };
-    version = "0.16.0";
+    version = "0.17.0";
   };
   tilt = {
     groups = ["default"];
