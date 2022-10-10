@@ -7888,7 +7888,9 @@ with pkgs;
 
   ipfs-upload-client = callPackage ../applications/networking/ipfs-upload-client { };
 
-  ipget = callPackage ../applications/networking/ipget { };
+  ipget = callPackage ../applications/networking/ipget {
+    buildGoModule = buildGo118Module; # build fails with 1.19
+  };
 
   i-pi = with python3Packages; toPythonApplication i-pi;
 
