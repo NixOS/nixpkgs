@@ -1,7 +1,6 @@
 { buildPythonPackage
 , fetchFromGitHub
 , unittestCheckHook
-, pybind11
 , lib
 , numpy
 , lz4
@@ -11,10 +10,10 @@
   pname = "pymagnitude-lite";
   version = "0.1.143";
   src = fetchFromGitHub {
-    owner = "neumi";
+    owner = "neuml";
     repo = "magnitude";
     rev = "${version}";
-    hash = "";
+    hash = "sha256-R1xIwNWACZS1/4Ze+iwm+F+ysgSxc9cp+MbpMHe4bpM=";
   };
 
   propagatedBuildInputs = [ numpy lz4 xxhash fasteners ];
