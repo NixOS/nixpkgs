@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "smartgithg";
-  version = "21.2.2";
+  version = "21.2.4";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${builtins.replaceStrings [ "." ] [ "_" ] version}.tar.gz";
-    sha256 = "10v6sg0lmjby3v8g3sk2rzzvdx5p69ia4zz2c0hbf30rk0p6gqn3";
+    sha256 = "sha256-lDCtQCVXEBQFIpBBo1lmb7tBu4OGBZDn31mLq0vYxTM=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -43,8 +43,11 @@ stdenv.mkDerivation rec {
     sed -i '/ --login/d' bin/smartgit.sh
     mkdir -pv $out/{bin,share/applications,share/icons/hicolor/scalable/apps/}
     cp -av ./{dictionaries,lib} $out/
-    cp -av bin/smartgit.sh $out/bin/smartgit
     ln -sfv $out/bin/smartgit $out/bin/smartgithg
+
+    echo "#!/usr/bin/env bash" > $out/bin/smartgithg
+    cat bin/smartgit.sh >> $out/bin/smartgit
+    chmod +x $out/bin/smartgit
 
     cp -av $desktopItem/share/applications/* $out/share/applications/
     for icon_size in 32 48 64 128 256; do
