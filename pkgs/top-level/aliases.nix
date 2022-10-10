@@ -1154,6 +1154,7 @@ mapAliases ({
   tex-gyre-termes-math = throw "'tex-gyre-termes-math' has been renamed to/replaced by 'tex-gyre-math.termes'"; # Converted to throw 2022-02-22
   textadept11 = textadept; # Added 2022-06-07
   tftp_hpa = throw "'tftp_hpa' has been renamed to/replaced by 'tftp-hpa'"; # Converted to throw 2022-02-22
+  timedoctor = throw "'timedoctor' has been removed from nixpkgs"; # Added 2022-10-09
   timescale-prometheus = throw "'timescale-prometheus' has been renamed to/replaced by 'promscale'"; # Converted to throw 2022-09-24
   timetable = throw "timetable has been removed, as the upstream project has been abandoned"; # Added 2021-09-05
   tkcvs = tkrev; # Added 2022-03-07

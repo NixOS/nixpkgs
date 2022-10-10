@@ -790,6 +790,7 @@
     "setuptools"
   ],
   "apipkg": [
+    "hatch-vcs",
     "hatchling",
     "setuptools"
   ],
@@ -1918,8 +1919,12 @@
   ],
   "black": [
     {
-      "buildSystem": "hatch-fancy-pypi-readme",
-      "from": "22.10.0"
+      "buildSystem": "setuptools",
+      "until": "22.10.0"
+    },
+    {
+      "buildSystem": "setuptools-scm",
+      "until": "22.10.0"
     },
     {
       "buildSystem": "hatchling",
@@ -1929,10 +1934,15 @@
       "buildSystem": "hatch-vcs",
       "from": "22.10.0"
     },
-    "setuptools",
-    "setuptools-scm"
+    {
+      "buildSystem": "hatch-fancy-pypi-readme",
+      "from": "22.10.0"
+    }
   ],
   "black-macchiato": [
+    "setuptools"
+  ],
+  "blacken-docs": [
     "setuptools"
   ],
   "bleach": [
@@ -3367,7 +3377,8 @@
     "setuptools"
   ],
   "dbus-fast": [
-    "poetry-core"
+    "poetry-core",
+    "setuptools"
   ],
   "dbus-next": [
     "setuptools"
@@ -3977,6 +3988,10 @@
     "setuptools-scm"
   ],
   "docformatter": [
+    {
+      "buildSystem": "poetry-core",
+      "from": "1.5.0"
+    },
     "setuptools"
   ],
   "docker": [
@@ -4452,6 +4467,9 @@
   "eradicate": [
     "setuptools"
   ],
+  "erppeek": [
+    "setuptools"
+  ],
   "escapism": [
     "setuptools"
   ],
@@ -4664,7 +4682,8 @@
   ],
   "fastapi-mail": [
     "poetry-core",
-    "setuptools"
+    "setuptools",
+    "hatchling"
   ],
   "fastapi-restful": [
     "poetry"
@@ -6861,6 +6880,9 @@
   "itemloaders": [
     "setuptools"
   ],
+  "iteration-utilities": [
+    "setuptools"
+  ],
   "itsdangerous": [
     "setuptools"
   ],
@@ -6987,6 +7009,9 @@
     "setuptools"
   ],
   "jinja2": [
+    "setuptools"
+  ],
+  "jinja2-ansible-filters": [
     "setuptools"
   ],
   "jinja2-git": [
@@ -7198,7 +7223,14 @@
     "setuptools"
   ],
   "jupyter-core": [
-    "setuptools"
+    {
+      "buildSystem": "hatchling",
+      "from": "4.11.0"
+    },
+    {
+      "buildSystem": "setuptools",
+      "until": "4.11.0"
+    }
   ],
   "jupyter-lsp": [
     "setuptools"
@@ -7958,6 +7990,9 @@
   "manhole": [
     "setuptools"
   ],
+  "manage-fastapi": [
+    "poetry"
+  ],
   "manimpango": [
     "cython",
     "setuptools"
@@ -8243,6 +8278,9 @@
   "migen": [
     "setuptools"
   ],
+  "mike": [
+    "setuptools"
+  ],
   "milc": [
     "setuptools"
   ],
@@ -8326,6 +8364,9 @@
   "mkdocs-gen-files": [
     "poetry"
   ],
+  "mkdocs-git-revision-date-localized-plugin": [
+    "setuptools"
+  ],
   "mkdocs-gitlab": [
     "setuptools"
   ],
@@ -8337,6 +8378,9 @@
     "poetry"
   ],
   "mkdocs-macros": [
+    "setuptools"
+  ],
+  "mkdocs-macros-plugin": [
     "setuptools"
   ],
   "mkdocs-material": [
@@ -8352,6 +8396,9 @@
     "setuptools"
   ],
   "mkdocs-swagger-ui-tag": [
+    "setuptools"
+  ],
+  "mkdocs-table-reader-plugin": [
     "setuptools"
   ],
   "mkdocstrings": [
@@ -8661,6 +8708,9 @@
     "poetry-core",
     "setuptools"
   ],
+  "mypy-boto3-cognito": [
+    "setuptools"
+  ],
   "mypy-boto3-cognito-idp": [
     "setuptools"
   ],
@@ -8774,15 +8824,37 @@
     "setuptools"
   ],
   "nbconvert": [
-    "setuptools"
+    {
+      "buildSystem": "setuptools",
+      "until": "7.0.0"
+    },
+    {
+      "buildSystem": "hatchling",
+      "from": "7.0.0"
+    }
   ],
   "nbdime": [
     "setuptools",
     "setuptools-scm"
   ],
   "nbformat": [
-    "flit-core",
-    "setuptools"
+    {
+      "buildSystem": "setuptools",
+      "until": "5.4.0"
+    },
+    {
+      "buildSystem": "flit-core",
+      "from": "5.4.0",
+      "until": "5.6.0"
+    },
+    {
+      "buildSystem": "hatchling",
+      "from": "5.6.0"
+    },
+    {
+      "buildSystem": "hatch-nodejs-version",
+      "from": "5.6.0"
+    }
   ],
   "nbmerge": [
     "setuptools"
@@ -10084,6 +10156,7 @@
     "setuptools"
   ],
   "pipdeptree": [
+    "hatch-vcs",
     "hatchling",
     "setuptools"
   ],
@@ -10363,7 +10436,13 @@
   "prayer-times-calculator": [
     "setuptools"
   ],
+  "pre-commit": [
+    "setuptools"
+  ],
   "pre-commit-hooks": [
+    "setuptools"
+  ],
+  "pre-commit-po-hooks": [
     "setuptools"
   ],
   "precis-i18n": [
@@ -11058,6 +11137,9 @@
   "pydeps": [
     "setuptools"
   ],
+  "pydeprecate": [
+    "setuptools"
+  ],
   "pydes": [
     "setuptools"
   ],
@@ -11389,6 +11471,7 @@
     "setuptools"
   ],
   "pyhamcrest": [
+    "hatch-vcs",
     "hatchling",
     "setuptools"
   ],
@@ -13718,6 +13801,9 @@
     "flit-core",
     "setuptools"
   ],
+  "pyyaml-include": [
+    "setuptools"
+  ],
   "pyzbar": [
     "setuptools"
   ],
@@ -13725,6 +13811,7 @@
     "setuptools"
   ],
   "pyzmq": [
+    "packaging",
     "setuptools"
   ],
   "pyzufall": [
@@ -14676,8 +14763,14 @@
     "setuptools"
   ],
   "seaborn": [
-    "flit-core",
-    "setuptools"
+    {
+      "buildSystem": "setuptools",
+      "until": "0.12.0"
+    },
+    {
+      "buildSystem": "flit-core",
+      "from": "0.12.0"
+    }
   ],
   "seabreeze": [
     "cython",
@@ -16653,6 +16746,9 @@
   "types-colorama": [
     "setuptools"
   ],
+  "types-cryptography": [
+    "setuptools"
+  ],
   "types-dateutil": [
     "setuptools"
   ],
@@ -17048,6 +17144,7 @@
     "setuptools-scm"
   ],
   "vector": [
+    "hatch-vcs",
     "hatchling"
   ],
   "vega": [
@@ -17085,6 +17182,9 @@
     "setuptools"
   ],
   "versiontools": [
+    "setuptools"
+  ],
+  "verspec": [
     "setuptools"
   ],
   "vertica-python": [
