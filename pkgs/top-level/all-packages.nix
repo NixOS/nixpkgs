@@ -2063,6 +2063,8 @@ with pkgs;
   arduino-core = callPackage ../development/embedded/arduino/arduino-core/chrootenv.nix { };
   arduino-core-unwrapped = callPackage ../development/embedded/arduino/arduino-core { };
 
+  arduino-language-server = callPackage ../development/embedded/arduino/arduino-language-server { };
+
   arduino-mk = callPackage ../development/embedded/arduino/arduino-mk {};
 
   apio = python3Packages.callPackage ../development/embedded/fpga/apio { };
