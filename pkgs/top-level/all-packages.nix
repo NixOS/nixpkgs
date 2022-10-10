@@ -37380,7 +37380,9 @@ with pkgs;
 
   dapper = callPackage ../development/tools/dapper { };
 
-  kube3d =  callPackage ../applications/networking/cluster/kube3d {};
+  kube3d =  callPackage ../applications/networking/cluster/kube3d {
+    buildGoModule = buildGo118Module; # tests fail with 1.19
+  };
 
   zfs-prune-snapshots = callPackage ../tools/backup/zfs-prune-snapshots {};
 
