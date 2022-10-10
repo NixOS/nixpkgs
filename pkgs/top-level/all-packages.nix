@@ -2448,7 +2448,9 @@ with pkgs;
 
   cudd = callPackage ../development/libraries/cudd { };
 
-  cue = callPackage ../development/tools/cue { };
+  cue = callPackage ../development/tools/cue {
+    buildGoModule = buildGo118Module; # tests fail with 1.19
+  };
 
   cuelsp = callPackage ../development/tools/cuelsp {};
 
