@@ -21,6 +21,13 @@ buildPythonPackage rec {
     hash = "sha256-XzUva5uFX/rGMFpwfwLH1Db0Nok47pBJCSqVo1ZcJz0=";
   };
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "scikit-learn>=0.19" ""
+    substituteInPlace requirements.txt \
+      --replace "scikit-learn<=1.1.1" "scikit-learn"
+  '';
+
   propagatedBuildInputs = [
     numpy
     scipy
