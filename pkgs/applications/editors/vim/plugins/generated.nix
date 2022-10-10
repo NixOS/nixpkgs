@@ -3536,6 +3536,18 @@ final: prev:
     meta.homepage = "https://github.com/rktjmp/hotpot.nvim/";
   };
 
+  hydra-nvim = buildVimPluginFrom2Nix {
+    pname = "hydra.nvim";
+    version = "2022-10-02";
+    src = fetchFromGitHub {
+      owner = "anuvyklack";
+      repo = "hydra.nvim";
+      rev = "fa41a971765d4cce9c39185289f5a10894f66dbd";
+      sha256 = "198bkw3y3253wjamvxxkdjr54nv1bkin148v554b47yv5w156zz1";
+    };
+    meta.homepage = "https://github.com/anuvyklack/hydra.nvim/";
+  };
+
   i3config-vim = buildVimPluginFrom2Nix {
     pname = "i3config.vim";
     version = "2021-06-23";
