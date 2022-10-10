@@ -30662,6 +30662,8 @@ with pkgs;
     enableDbusUi = false;
   };
 
+  parsec-bin = callPackage ../applications/misc/parsec/bin.nix { };
+
   pavucontrol = callPackage ../applications/audio/pavucontrol { };
 
   paraview = libsForQt5.callPackage ../applications/graphics/paraview { };
