@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, jq }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "genact";
@@ -11,22 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-POOXawhxrPT2UgbSZE3r0br7cqJ0ao7MpycrPYa/oCc=";
   };
 
-  cargoSha256 = "sha256-wpCzWJglX3FnNySnBRJjFWST5FIG5wAO7u+D4VIevtU=";
-
-  depsExtraArgs = {
-    nativeBuildInputs = [ jq ];
-    postBuild = ''
-      pushd $name/humansize
-
-      [ -d feature-tests ] && rm -r feature-tests
-
-      jq '.files |= with_entries(select(.key | startswith("feature-tests") | not))' \
-        -c .cargo-checksum.json > .cargo-checksum.json.new
-      mv .cargo-checksum.json{.new,}
-
-      popd
-    '';
-  };
+  cargoSha256 = "sha256-2c34YarMFw2CK+7zn41GL5tXfXfnw3NvGtgSlPH5d64=";
 
   meta = with lib; {
     description = "A nonsense activity generator";
