@@ -4521,6 +4521,8 @@ in {
 
   imagecorruptions = callPackage ../development/python-modules/imagecorruptions { };
 
+  imagehash = callPackage ../development/python-modules/imagehash { };
+
   imageio = callPackage ../development/python-modules/imageio { };
 
   imageio-ffmpeg = callPackage ../development/python-modules/imageio-ffmpeg { };
