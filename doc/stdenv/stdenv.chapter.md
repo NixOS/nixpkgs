@@ -1410,19 +1410,29 @@ If the libraries lack `-fPIE`, you will get the error `recompile with -fPIE`.
 [^footnote-stdenv-build-time-guessing-impurity]: Eventually these will be passed building natively as well, to improve determinism: build-time guessing, as is done today, is a risk of impurity.
 [^footnote-stdenv-per-platform-wrapper]: Each wrapper targets a single platform, so if binaries for multiple platforms are needed, the underlying binaries must be wrapped multiple times. As this is a property of the wrapper itself, the multiple wrappings are needed whether or not the same underlying binaries can target multiple platforms.
 
-
 ### CC wrapper post-wrapper-hook {#post-wrapper-hook}
 
-In nixpkgs standard environments, [compilers are wrapped](#cc-wrapper).
-Sometimes it is important to be able to extract the exact compiler invocation used.
-This can be done with a `post-wrapper-hook.sh`.
-If the file `${cc}/nix-support/post-wrapper-hook.sh` exists, it will be sourced by the compiler wrapper just before the compiler is run, allowing the variables set in the wrapper to be extracted.
+The post wrapper hook can be used to inject code into the [compiler wrapper](#cc-wrapper).
+If the file `${cc}/nix-support/post-wrapper-hook.sh` exists, it will be sourced by the compiler wrapper just before the unwrapped compiler is invoked.
+The post wrapper hook executes in the same environment as the compiler wrapper, so it has access to all the environment variables used by the wrapper, for example `extraBefore`, `params` and `extraAfter` which store all the command line arguments passed to the compiler.
 
-This functionality is used by the package `mini-compile-commands`, which can be used to generate `compile_commands.json` files.
-The most popular method for doing this is using [bear](https://github.com/rizsotto/Bear), but bear can have trouble distinguishing between invocations of the compiler wrapper and invocations of the unwrapped compiler.
-It provides a function `mini-compile-commands.wrap` which takes a standard environment and returns a new standard environment with a compile commands generating `post-wrapper-hook.sh`.
+### Generating compile_commands.json files {#compile-commands-json}
+
+A `compile_commands.json` file is a record of all the compiler invocations which occoured when building a C or C++ project.
+The specification can be found [here](https://clang.llvm.org/docs/JSONCompilationDatabase.html).
+A `compile_commands.json` file is used by lsp servers like `clangd` to provide IDE features to editors for C and C++.
+The most popular tool for generating a `compile_commands.json` is [bear](https://github.com/rizsotto/Bear).
+In nixpkgs standard environments, [compilers are wrapped](#cc-wrapper), and bear can have trouble distinguishing between invocations of the compiler wrapper and invocations of the unwrapped compiler.
+
+The mini-compile-commands package is a nixpkgs specific tool for generating a `compile_commands.json`. The package provides `mini_compile_commands_server.py` and `mini_compile_commands_client.py`.
+The basic idea is that we inject the `mini_compile_commands_client.py` into the compiler wrapper using a [post-wrapper-hook](#post-wrapper-hook).
+Whenever the wrapper is executed, it sends the unwrapped compile command to a running `mini_compile_commands_client.py`, which collects them and when shut down, writes a `compile_commands.json`.
+
+
+The `mini-compile-commands.wrap` function takes a nixpkgs standard environment, and returns a new standard environment with the `mini_compile_commands_client.py` insert into the compiler wrapper as a post wrapper hook.
 
 For example, in the environment
+
 ```
 with (import <nixpkgs> {});
 let llvm = llvmPackages_latest;
