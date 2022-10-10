@@ -403,6 +403,35 @@ in {
         };
       };
 
+      cleanupMediaCache = {
+        enable = lib.mkEnableOption (lib.mdDoc ''
+        Periodically use `tootctl media remove` to remove locally cached copies of media attachments from other servers.
+        '');
+
+        days = lib.mkOption {
+          description = lib.mdDoc "How old media attachments have to be before they are removed.";
+          type = lib.types.int;
+          default = 7;
+        };
+
+        concurrency = lib.mkOption {
+          description = lib.mdDoc "The number of workers to use for this task.";
+          type = lib.types.int;
+          default = 5;
+        };
+        interval = lib.mkOption {
+          type = lib.types.str;
+          default = "daily";
+          example = "00:00";
+          description = lib.mdDoc ''
+            Run at this interval. Runs by default at midnight every day.
+
+            The format is described in
+            {manpage}`systemd.time(7)`.
+          '';
+        };
+      };
+
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.mastodon;
@@ -573,6 +602,25 @@ in {
         SystemCallFilter = [ ("~" + lib.concatStringsSep " " systemCallsList) "@chown" "pipe" "pipe2" ];
       } // cfgService;
       path = with pkgs; [ file imagemagick ffmpeg ];
+    };
+
+    systemd.services.mastodon-media-remove = lib.mkIf cfg.cleanupMediaCache.enable {
+      description = "tootctl media remove";
+      after = ["mastodon-web.target"];
+      wantedBy = ["network.target"];
+
+      serviceConfig = {
+        Type = "oneshot";
+        User = cfg.user;
+        ExecStart = "${mastodonEnv} ${cfg.package}/bin/tootctl media remove --days=${cfg.cleanupMediaCache.days} --concurrency=${cfg.cleanupMediaCache.concurrency}";
+      };
+    };
+
+    systemd.timers.mastodon-media-remove = lib.mkIf cfg.cleanupMediaCache.enable {
+      description = "Timer for mastodon-media-remove";
+      partOf = [ "mastodon-media-remove.service" ];
+      wantedBy = [ "timers.target" ];
+      timerConfig.OnCalendar = cfg.cleanupMediaCache.interval;
     };
 
     services.nginx = lib.mkIf cfg.configureNginx {

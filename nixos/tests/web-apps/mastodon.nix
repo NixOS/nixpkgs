@@ -103,6 +103,9 @@ in
         extraConfig = {
           EMAIL_DOMAIN_ALLOWLIST = "example.com";
         };
+        cleanupMediaCache = {
+          enable = true;
+        };
       };
     };
 
@@ -135,6 +138,8 @@ in
     server.wait_for_unit("mastodon-sidekiq.service")
     server.wait_for_unit("mastodon-streaming.service")
     server.wait_for_unit("mastodon-web.service")
+    # Make sure media remove command is set up correctly
+    server.wait_for_unit("mastodon-media-remove")
     server.wait_for_open_port(55000)
     server.wait_for_open_port(55001)
 
