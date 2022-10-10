@@ -1435,6 +1435,8 @@ self: super: with self; {
 
   botocore = callPackage ../development/python-modules/botocore { };
 
+  botorch = callPackage ../development/python-modules/botorch { };
+
   bottle = callPackage ../development/python-modules/bottle { };
 
   bottleneck = callPackage ../development/python-modules/bottleneck { };
