@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, cryptography
 , django
 , fetchFromGitHub
 , mock
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    cryptography
     django
     mock
     multidict

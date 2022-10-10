@@ -11,7 +11,8 @@ stdenv.mkDerivation {
     sha256 = "1brcvl2fx0yzxj9mc8hzfl32zdka1f1bxpzsclcsjplyakyinr1a";
   };
 
-  buildInputs = [ dbus pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ dbus ];
 
   installPhase = ''
     mkdir -p $out/bin

@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ intltool ];
-  buildInputs = [ intltool gtk3 gobject-introspection ];
+  buildInputs = [ gtk3 gobject-introspection ];
   propagatedBuildInputs =  with python3.pkgs; [ stem distutils_extra pygobject3 ];
 
   postFixup = ''

@@ -205,7 +205,7 @@ let
 
   gitlab-rake = pkgs.stdenv.mkDerivation {
     name = "gitlab-rake";
-    buildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     dontBuild = true;
     dontUnpack = true;
     installPhase = ''
@@ -220,7 +220,7 @@ let
 
   gitlab-rails = pkgs.stdenv.mkDerivation {
     name = "gitlab-rails";
-    buildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     dontBuild = true;
     dontUnpack = true;
     installPhase = ''
