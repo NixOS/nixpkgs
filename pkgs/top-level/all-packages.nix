@@ -15324,7 +15324,9 @@ with pkgs;
 
   io = callPackage ../development/interpreters/io { };
 
-  ivy = callPackage ../development/interpreters/ivy { };
+  ivy = callPackage ../development/interpreters/ivy {
+    buildGoModule = buildGo118Module; # tests fail with 1.19
+  };
 
   j = callPackage ../development/interpreters/j {
     stdenv = clangStdenv;
