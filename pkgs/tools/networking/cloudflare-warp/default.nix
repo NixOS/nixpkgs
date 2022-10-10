@@ -4,6 +4,8 @@
 , dpkg
 , autoPatchelfHook
 , makeWrapper
+, makeDesktopItem
+, copyDesktopItems
 , dbus
 , nftables
 }:
@@ -21,6 +23,7 @@ stdenv.mkDerivation rec {
     dpkg
     autoPatchelfHook
     makeWrapper
+    copyDesktopItems
   ];
 
   buildInputs = [ dbus ];
@@ -47,6 +50,19 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/warp-svc --prefix PATH : ${lib.makeBinPath [ nftables ]}
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "com.cloudflare.WarpCli";
+      desktopName = "Cloudflare Zero Trust Team Enrollment";
+      categories = [ "Utility" "Security" "ConsoleOnly" ];
+      noDisplay = true;
+      mimeTypes = [ "x-scheme-handler/com.cloudflare.warp" ];
+      exec = "warp-cli teams-enroll-token %u";
+      startupNotify = false;
+      terminal = true;
+    })
+  ];
 
   meta = with lib; {
     description = "Replaces the connection between your device and the Internet with a modern, optimized, protocol";
