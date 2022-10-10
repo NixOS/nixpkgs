@@ -21,6 +21,24 @@ in
       192.0.2.1 somehost.test
     '';
 
+    systemd.services.sockdump = {
+      wantedBy = [ "multi-user.target" ];
+      path = [
+        # necessary for bcc to unpack kernel headers and invoke modprobe
+        pkgs.gnutar
+        pkgs.xz.bin
+        pkgs.kmod
+      ];
+      environment.PYTHONUNBUFFERED = "1";
+
+      serviceConfig = {
+        ExecStart = "${pkgs.sockdump}/bin/sockdump /var/run/nscd/socket";
+        Restart = "on-failure";
+        RestartSec = "1";
+        Type = "simple";
+      };
+    };
+
     specialisation = {
       withUnscd.configuration = { ... }: {
         services.nscd.package = pkgs.unscd;
@@ -63,6 +81,7 @@ in
               assert "somehost.test" in machine.succeed("${getent'} hosts 2001:db8::1")
               assert "somehost.test" in machine.succeed("${getent'} hosts 192.0.2.1")
 
+
       # Test host resolution via nss modules works
       # We rely on nss-myhostname in this case, which resolves *.localhost and
       # _gateway.
@@ -87,6 +106,9 @@ in
 
       start_all()
       machine.wait_for_unit("default.target")
+
+      # give sockdump some time to finish attaching.
+      machine.sleep(5)
 
       # Test all tests with glibc-nscd.
       test_dynamic_user()
