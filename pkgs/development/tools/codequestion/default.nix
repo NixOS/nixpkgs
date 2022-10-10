@@ -24,7 +24,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/neuml/codequestion";
-    description = "Semantic search for developers ";
+    description = "Semantic search for developers";
     license = licenses.asl20;
     maintainers = with maintainers; [ ehllie ];
   };
