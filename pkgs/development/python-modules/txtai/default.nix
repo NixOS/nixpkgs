@@ -32,6 +32,15 @@
 , soundfile
 , tika
 , timm
+, annoy
+, hnswlib
+, pymagnitute-lite
+, scikit-learn
+, sentence-transformers
+, croniter
+, openpyxl
+, requests
+, xmltodict
 }:
 let
   extras = {
@@ -56,7 +65,24 @@ let
       tika
       timm
     ];
+    similarity = [
+      annoy
+      fasttext
+      hnswlib
+      pymagnitute-lite
+      scikit-learn
+      sentence-transformers
+    ];
+    workflow = [
+      libcloud
+      croniter
+      openpyxl
+      pandas
+      pillow
+      requests
+      xmltodict
 
+    ];
   };
 in
 buildPythonPackage rec {
