@@ -30082,7 +30082,9 @@ with pkgs;
 
   normalize = callPackage ../applications/audio/normalize { };
 
-  norouter = callPackage ../tools/networking/norouter { };
+  norouter = callPackage ../tools/networking/norouter {
+    buildGoModule = buildGo118Module; # tests fail with 1.19
+  };
 
   mailspring = callPackage ../applications/networking/mailreaders/mailspring {};
 
