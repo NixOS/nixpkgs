@@ -592,6 +592,26 @@ in {
       '';
     };
 
+    # Warn about user accounts with deprecated password hashing schemes
+    system.activationScripts.hashes = {
+      deps = [ "users" ];
+      text = ''
+        users=()
+        while IFS=: read -r user hash tail; do
+          if [[ "$hash" = "$"* && ! "$hash" =~ ^\$(y|gy|7|2b|2y|2a|6)\$ ]]; then
+            users+=("$user")
+          fi
+        done </etc/shadow
+
+        if (( "''${#users[@]}" )); then
+          echo "
+        WARNING: The following user accounts rely on password hashes that will
+        be removed in NixOS 23.05. They should be renewed as soon as possible."
+          printf ' - %s\n' "''${users[@]}"
+        fi
+      '';
+    };
+
     # for backwards compatibility
     system.activationScripts.groups = stringAfter [ "users" ] "";
 
