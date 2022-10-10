@@ -8,7 +8,7 @@
 , getopt
 , hivex
 , jansson
-, libguestfs
+, libguestfs-with-appliance
 , libvirt
 , libxml2
 , makeWrapper
@@ -58,12 +58,16 @@ stdenv.mkDerivation rec {
   buildInputs = [
     hivex
     jansson
-    libguestfs
+    libguestfs-with-appliance
     libvirt
     libxml2
     ncurses
     pcre2
     xz
+  ];
+
+  makeFlags = [
+    "LIBGUESTFS_PATH=${libguestfs-with-appliance}/lib/guestfs"
   ];
 
   enableParallelBuilding = true;
@@ -74,7 +78,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/virt-win-reg \
-      --prefix PERL5LIB : ${with perlPackages; makeFullPerlPath [ hivex libintl-perl libguestfs ]}
+      --prefix PERL5LIB : ${with perlPackages; makeFullPerlPath [ hivex libintl-perl libguestfs-with-appliance ]}
   '';
 
   meta = with lib; {
