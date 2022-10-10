@@ -8137,6 +8137,8 @@ in {
 
   pymaging_png = callPackage ../development/python-modules/pymaging_png { };
 
+  pymagnitude-lite = callPackage ../development/python-modules/pymagnitude-lite { };
+
   pymailgunner = callPackage ../development/python-modules/pymailgunner { };
 
   pymanopt = callPackage ../development/python-modules/pymanopt { };
