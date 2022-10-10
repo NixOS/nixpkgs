@@ -102,7 +102,7 @@ buildPythonPackage rec {
     extras // { all = concatLists (attrValues extras); };
 
   meta = with lib; {
-    description = "Build AI-powered semantic search applications ";
+    description = "Build AI-powered semantic search applications";
     homepage = "https://github.com/neuml/txtai";
     license = licenses.asl20;
     maintainers = with maintainers; [ ehllie ];
