@@ -20031,6 +20031,8 @@ with pkgs;
 
   liblcf = callPackage ../development/libraries/liblcf { };
 
+  liblc3 = callPackage ../development/libraries/liblc3 { };
+
   libliftoff = callPackage ../development/libraries/libliftoff { };
 
   liblqr1 = callPackage ../development/libraries/liblqr-1 {
