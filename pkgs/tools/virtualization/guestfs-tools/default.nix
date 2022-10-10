@@ -66,15 +66,15 @@ stdenv.mkDerivation rec {
     xz
   ];
 
+  preConfigure = ''
+    patchShebangs ocaml-dep.sh.in ocaml-link.sh.in run.in
+  '';
+
   makeFlags = [
     "LIBGUESTFS_PATH=${libguestfs-with-appliance}/lib/guestfs"
   ];
 
   enableParallelBuilding = true;
-
-  preBuild = ''
-    patchShebangs .
-  '';
 
   postInstall = ''
     wrapProgram $out/bin/virt-win-reg \
