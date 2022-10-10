@@ -19293,8 +19293,6 @@ with pkgs;
 
   cog = callPackage ../development/web/cog { };
 
-  cosmoc = callPackage ../development/tools/cosmoc { };
-
   cosmopolitan = callPackage ../development/libraries/cosmopolitan { };
 
   python-cosmopolitan = callPackage ../development/interpreters/python-cosmopolitan { };
