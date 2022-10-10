@@ -23,7 +23,7 @@ in
 
   config = mkIf cfg.enable {
     assertions = [ {
-      assertion = pkgs.stdenv.hostPlatform.isx86 || pkgs.stdenv.hostPlatform.isAarch64;;
+      assertion = pkgs.stdenv.hostPlatform.isx86 || pkgs.stdenv.hostPlatform.isAarch64;
       message = "VMWare guest is not currently supported on ${pkgs.stdenv.hostPlatform.system}";
     } ];
 
