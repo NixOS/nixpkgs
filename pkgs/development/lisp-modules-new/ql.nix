@@ -127,6 +127,15 @@ let
       nativeLibs = [ libfixposix ];
       systems = [ "iolib" "iolib/os" "iolib/pathnames" ];
     };
+    cl-freetype2 = pkg: {
+      nativeBuildInputs = [ pkg-config freetype.dev ];
+      nativeLibs = [ freetype ];
+      patches = [
+        (fetchurl {
+          url = https://github.com/nuddyco/cl-freetype2/commit/a07e6ed4ebcc4d5bd53af0384d8805958d2ff537.patch;
+          sha256 = "19w0gb2zgmrpx069nfm7xzbysvmkyg5ml8a0jja3iksj4zr9l7k1";
+        }) ];
+    };
   };
 
   qlpkgs =
