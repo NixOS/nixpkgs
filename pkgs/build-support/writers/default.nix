@@ -119,6 +119,21 @@ let
   writeDashBin = name:
     writeDash "/bin/${name}";
 
+  # Like writeScript but the first line is a shebang to fish
+  #
+  # Example:
+  #   writeFish "example" ''
+  #     echo hello world
+  #   ''
+  writeFish = makeScriptWriter {
+    interpreter = "${pkgs.fish}/bin/fish";
+    check = "${pkgs.fish}/bin/fish --no-execute";  # syntax check only
+  };
+
+  # Like writeScriptBin but the first line is a shebang to fish
+  writeFishBin = name:
+    writeFish "/bin/${name}";
+
   # writeHaskell takes a name, an attrset with libraries and haskell version (both optional)
   # and some haskell source code and returns an executable.
   #
