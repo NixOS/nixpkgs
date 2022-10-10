@@ -64,11 +64,6 @@ let
 
               html=$(mktemp -d)
               sphinx-build -b html -d $doc_cache doc/ $out/share/nixops/doc
-
-              # Override buggy nixpkgs function
-              pythonOutputDistPhase() {
-                echo "no-op output dist phase"
-              }
             '';
 
           };
