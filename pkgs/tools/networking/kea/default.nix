@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.tests = {
-    inherit (nixosTests) kea;
+    inherit (nixosTests) kea systemd-networkd-ipv6-prefix-delegation;
   };
 
   meta = with lib; {
