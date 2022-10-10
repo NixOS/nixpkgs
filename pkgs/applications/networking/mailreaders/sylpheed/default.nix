@@ -19,12 +19,16 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       # patch upstream bug https://sylpheed.sraoss.jp/redmine/issues/306
       name = "patch-libsylph_ssl_c.patch";
+      extraPrefix = "";
       url = "https://cvsweb.openbsd.org/cgi-bin/cvsweb/~checkout~/ports/mail/sylpheed/patches/patch-libsylph_ssl_c?rev=1.4&content-type=text/plain";
-      sha256 = "sha256-k9OwPtHrEjaxXdH0trNqXgJMhR8kjgtei9pi6OFvILk=";
+      sha256 = "sha256-+FetU5vrfvE78nYAjKK/QFZnFw+Zr2PvoUGRWCuZczs=";
+    })
+    (fetchpatch {
+      name = "CVE-2021-37746.patch";
+      url = "https://git.claws-mail.org/?p=claws.git;a=patch;h=ac286a71ed78429e16c612161251b9ea90ccd431";
+      sha256 = "sha256-oLmUShtvO6io3jibKT67eO0O58vEDZEeaB51QTd3UkU=";
     })
   ];
-
-  patchFlags = [ "-p0" ];
 
   nativeBuildInputs = [ pkg-config ];
 
