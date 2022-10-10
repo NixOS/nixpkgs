@@ -11,7 +11,7 @@
 , pyyaml
 , torch
 , transformers
-, unittestCheckHook
+, unittest2
 , aiohttp
 , fastapi
 , uvicorn
@@ -77,20 +77,26 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ faiss numpy pyyaml torch transformers ];
 
-  checkInputs = [ unittestCheckHook ] ++ passthru.optional-dependencies.all;
+  checkInputs = [ unittest2 ] ++ passthru.optional-dependencies.all;
 
   testData = fetchzip {
     url = "https://github.com/neuml/txtai/releases/download/v3.5.0/tests.tar.gz";
     hash = "sha256-+JFCh+LFlhiIpjPKQrObW/nAPYNPqs7KXhG8bzdY7vw=";
   };
 
-  preCheck = ''
+  checkPhase = ''
+    runHook preCheck
+
     substituteInPlace test/python/utils.py \
       --replace '/tmp/txtai' '${testData}'
     export TOKENIZERS_PARALLELISM=false
+
+    python -m unittest discover -v -s test/python
+
+     runHook postCheck
   '';
 
-  unittestFlags = [ "-v" "-s" "./test/python" ];
+  # unittestFlags = [ "-v" "-sfsdafasd" "test/python" ];
 
   passthru.optional-dependencies = with builtins;
     extras // { all = concatLists (attrValues extras); };
