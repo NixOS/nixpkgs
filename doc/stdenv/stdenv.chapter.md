@@ -1426,7 +1426,7 @@ In nixpkgs standard environments, [compilers are wrapped](#cc-wrapper), and bear
 
 The mini-compile-commands package is a nixpkgs specific tool for generating a `compile_commands.json`. The package consists of two files: `mini_compile_commands_server.py` and `mini_compile_commands_client.py`.
 The basic idea is that we inject the `mini_compile_commands_client.py` into the compiler wrapper using a [post-wrapper-hook](#post-wrapper-hook).
-Whenever the wrapper is executed, it sends the unwrapped compile command to a running `mini_compile_commands_client.py`, which collects them and when shut down, writes a `compile_commands.json`.
+Whenever the wrapper is executed, it sends the unwrapped compile command to a running `mini_compile_commands_server.py`, which collects them and when shut down, writes a `compile_commands.json`.
 The client server architecture is required to handle parallel builds.
 
 
