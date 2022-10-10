@@ -1418,15 +1418,16 @@ The post wrapper hook executes in the same environment as the compiler wrapper, 
 
 ### Generating compile_commands.json files {#compile-commands-json}
 
-A `compile_commands.json` file is a record of all the compiler invocations which occoured when building a C or C++ project.
+A `compile_commands.json` is a record of all the compiler invocations which occoured when building a C or C++ project.
 The specification can be found [here](https://clang.llvm.org/docs/JSONCompilationDatabase.html).
-A `compile_commands.json` file is used by lsp servers like `clangd` to provide IDE features to editors for C and C++.
+A `compile_commands.json` is used by lsp servers like `clangd` to provide IDE features to editors for C and C++.
 The most popular tool for generating a `compile_commands.json` is [bear](https://github.com/rizsotto/Bear).
 In nixpkgs standard environments, [compilers are wrapped](#cc-wrapper), and bear can have trouble distinguishing between invocations of the compiler wrapper and invocations of the unwrapped compiler.
 
-The mini-compile-commands package is a nixpkgs specific tool for generating a `compile_commands.json`. The package provides `mini_compile_commands_server.py` and `mini_compile_commands_client.py`.
+The mini-compile-commands package is a nixpkgs specific tool for generating a `compile_commands.json`. The package consists of two files: `mini_compile_commands_server.py` and `mini_compile_commands_client.py`.
 The basic idea is that we inject the `mini_compile_commands_client.py` into the compiler wrapper using a [post-wrapper-hook](#post-wrapper-hook).
 Whenever the wrapper is executed, it sends the unwrapped compile command to a running `mini_compile_commands_client.py`, which collects them and when shut down, writes a `compile_commands.json`.
+The client server architecture is required to handle parallel builds.
 
 
 The `mini-compile-commands.wrap` function takes a nixpkgs standard environment, and returns a new standard environment with the `mini_compile_commands_client.py` insert into the compiler wrapper as a post wrapper hook.
