@@ -1745,6 +1745,12 @@
     githubId = 28444296;
     name = "Benjamin Hougland";
   };
+  bigzilla = {
+    email = "m.billyzaelani@gmail.com";
+    github = "bigzilla";
+    githubId = 20436235;
+    name = "Billy Zaelani Malik";
+  };
   billewanick = {
     email = "bill@ewanick.com";
     github = "billewanick";
