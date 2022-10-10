@@ -1,6 +1,7 @@
 { buildPythonPackage
 , fetchFromGitHub
 , unittestCheckHook
+, pybind11
 , lib
 , numpy
 }: buildPythonPackage rec {
@@ -10,14 +11,16 @@
     owner = "nmslib";
     repo = pname;
     rev = "v${version}";
-    hash = "";
+    hash = "sha256-j6olj6I5rzLvUCaMU5UCjJlSzHOZipIISKM+NsJcQM0=";
   };
 
   propagatedBuildInputs = [ numpy ];
 
+  nativeBuildInputs = [ pybind11 ];
+
   checkInputs = [ unittestCheckHook ];
 
-  unittestFlags = [ "--start-directory" "python_bindings/tests" "--pattern" "*_test*.py" ];
+  unittestFlags = [ "-v" "-s" "python_bindings/tests" ];
 
   meta = with lib; {
     description = "Header-only C++/python library for fast approximate nearest neighbors";
