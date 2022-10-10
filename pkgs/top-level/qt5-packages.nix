@@ -203,6 +203,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   qtforkawesome = callPackage ../development/libraries/qtforkawesome { };
 
+  qtgreet = callPackage ../applications/display-managers/greetd/qtgreet/default.nix { };
+
   qtutilities = callPackage ../development/libraries/qtutilities { };
 
   qtinstaller = callPackage ../development/libraries/qtinstaller { };
