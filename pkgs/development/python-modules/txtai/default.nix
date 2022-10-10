@@ -1,0 +1,105 @@
+{ lib
+, buildPythonPackage
+, fetchzip
+, fetchFromGitHub
+, black
+, coverage
+, pre-commit
+, pylint
+, faiss
+, numpy
+, pyyaml
+, torch
+, transformers
+, unittestCheckHook
+, aiohttp
+, fastapi
+, uvicorn
+, libcloud
+, rich
+, networkx
+, python-louvain
+, beautifulsoup4
+, fasttext
+, imagehash
+, nltk
+, onnx
+, onnxmltools
+, onnxruntime
+, pandas
+, pillow
+, sentencepiece
+, soundfile
+, tika
+, timm
+}:
+let
+  extras = {
+    dev = [ black coverage pre-commit pylint ];
+    api = [ aiohttp fastapi uvicorn ];
+    cloud = [ libcloud ];
+    console = [ rich ];
+    graph = [ networkx python-louvain ];
+    model = [ onnxruntime ];
+    pipeline = [
+      beautifulsoup4
+      fasttext
+      imagehash
+      nltk
+      onnx
+      onnxmltools
+      onnxruntime
+      pandas
+      pillow
+      sentencepiece
+      soundfile
+      tika
+      timm
+    ];
+
+  };
+in
+buildPythonPackage rec {
+  pname = "txtai";
+  version = "5.0.0";
+  src = fetchFromGitHub {
+    owner = "neuml";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-h1SXh4eJGuVZ90mLERzJ1dWaXBaMfkZOwnm5vNb+2Tc=";
+  };
+
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace '"faiss-cpu>=1.7.1.post2"' '"faiss>=*"'
+  '';
+
+  propagatedBuildInputs = [ faiss numpy pyyaml torch transformers ];
+
+  checkInputs = [ unittestCheckHook ] ++ passthru.optional-dependencies.all;
+
+  testData = fetchzip {
+    url = "https://github.com/neuml/txtai/releases/download/v3.5.0/tests.tar.gz";
+    hash = "sha256-+JFCh+LFlhiIpjPKQrObW/nAPYNPqs7KXhG8bzdY7vw=";
+  };
+
+  preCheck = ''
+    substituteInPlace test/python/utils.py \
+      --replace '/tmp/txtai' '${testData}'
+    export TOKENIZERS_PARALLELISM=false
+  '';
+
+  unittestFlags = [ "-v" "-s" "./test/python" ];
+
+  passthru.optional-dependencies = with builtins;
+    extras // { all = concatLists (attrValues extras); };
+
+  meta = with lib; {
+    description = "Build AI-powered semantic search applications ";
+    homepage = "https://github.com/neuml/txtai";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ehllie ];
+  };
+
+}
