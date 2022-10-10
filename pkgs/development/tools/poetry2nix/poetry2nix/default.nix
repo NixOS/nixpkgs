@@ -5,7 +5,7 @@
 }:
 let
   # Poetry2nix version
-  version = "1.33.0";
+  version = "1.34.1";
 
   inherit (poetryLib) isCompatible readTOML normalizePackageName normalizePackageSet;
 
@@ -27,6 +27,7 @@ let
     , attrs
     , includeBuildSystem ? true
     , groups ? [ ]
+    , checkGroups ? [ "dev" ]
     }:
     let
       getInputs = attr: attrs.${attr} or [ ];
@@ -73,7 +74,8 @@ let
       nativeBuildInputs = mkInput "nativeBuildInputs" [ ];
       checkInputs = mkInput "checkInputs" (
         getDeps (pyProject.tool.poetry."dev-dependencies" or { })  # <poetry-1.2.0
-        ++ getDeps (pyProject.tool.poetry.group."dev".dependencies or { })  # >=poetry-1.2.0
+        # >=poetry-1.2.0 dependency groups
+        ++ lib.flatten (map (g: getDeps (pyProject.tool.poetry.group.${g}.dependencies or { })) checkGroups)
       );
     };
 
@@ -131,6 +133,7 @@ lib.makeScope pkgs.newScope (self: {
     , editablePackageSources ? { }
     , pyProject ? readTOML pyproject
     , groups ? [ ]
+    , checkGroups ? [ "dev" ]
     }:
     let
       /* The default list of poetry2nix override overlays */
@@ -182,36 +185,31 @@ lib.makeScope pkgs.newScope (self: {
             builtins.map
               (
                 pkgMeta:
-                if builtins.elem pkgMeta.name nixpkgsBuildSystems then {
-                  name = pkgMeta.name;
-                  value = super."${pkgMeta.name}";
-                } else rec {
-                  name = normalizePackageName pkgMeta.name;
+                let normalizedName = normalizePackageName pkgMeta.name; in
+                {
+                  name = normalizedName;
                   value = self.mkPoetryDep (
                     pkgMeta // {
                       inherit pwd preferWheels;
                       source = pkgMeta.source or null;
-                      files = lockFiles.${name};
+                      files = lockFiles.${normalizedName};
                       pythonPackages = self;
 
-                      sourceSpec =
-                        let
-                          normalizedName = normalizePackageName pkgMeta.name;
-                        in
-                        (
-                          (normalizePackageSet pyProject.tool.poetry.dependencies or { }).${normalizedName}
-                            or (normalizePackageSet pyProject.tool.poetry.dev-dependencies or { }).${normalizedName}
-                            or (normalizePackageSet pyProject.tool.poetry.group.dev.dependencies { }).${normalizedName} # Poetry 1.2.0+
-                            or { }
-                        );
+                      sourceSpec = (
+                        (normalizePackageSet pyProject.tool.poetry.dependencies or { }).${normalizedName}
+                          or (normalizePackageSet pyProject.tool.poetry.dev-dependencies or { }).${normalizedName}
+                          or (normalizePackageSet pyProject.tool.poetry.group.dev.dependencies { }).${normalizedName} # Poetry 1.2.0+
+                          or { }
+                      );
                     }
                   );
                 }
               )
               (lib.reverseList compatible)
           );
+          buildSystems = builtins.listToAttrs (builtins.map (x: { name = x; value = super.${x}; }) nixpkgsBuildSystems);
         in
-        lockPkgs // {
+        lockPkgs // buildSystems // {
           # Create a dummy null package for the current project in case any dependencies depend on the root project (issue #307)
           ${pyProject.tool.poetry.name} = null;
         };
@@ -262,7 +260,7 @@ lib.makeScope pkgs.newScope (self: {
       packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) overlays;
       py = python.override { inherit packageOverrides; self = py; };
 
-      inputAttrs = mkInputAttrs { inherit py pyProject groups; attrs = { }; includeBuildSystem = false; };
+      inputAttrs = mkInputAttrs { inherit py pyProject groups checkGroups; attrs = { }; includeBuildSystem = false; };
 
       requiredPythonModules = python.pkgs.requiredPythonModules;
       /* Include all the nested dependencies which are required for each package.
@@ -364,11 +362,12 @@ lib.makeScope pkgs.newScope (self: {
     , pwd ? projectDir
     , preferWheels ? false
     , groups ? [ ]
+    , checkGroups ? [ "dev" ]
     , ...
     }@attrs:
     let
       poetryPython = self.mkPoetryPackages {
-        inherit pyproject poetrylock overrides python pwd preferWheels groups;
+        inherit pyproject poetrylock overrides python pwd preferWheels groups checkGroups;
       };
       py = poetryPython.python;
 
@@ -383,7 +382,7 @@ lib.makeScope pkgs.newScope (self: {
       ];
       passedAttrs = builtins.removeAttrs attrs specialAttrs;
 
-      inputAttrs = mkInputAttrs { inherit py pyProject attrs groups; };
+      inputAttrs = mkInputAttrs { inherit py pyProject attrs groups checkGroups; };
 
       app = py.pkgs.buildPythonPackage (
         passedAttrs // inputAttrs // {
