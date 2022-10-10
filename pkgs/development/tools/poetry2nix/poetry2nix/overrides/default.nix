@@ -130,9 +130,21 @@ lib.composeManyExtensions [
             self.dopy
             self.ncclient
           ];
-        } // lib.optionalAttrs (lib.versionOlder old.version "5.0") {
-          prePatch = pkgs.python.pkgs.ansible.prePatch or "";
-          postInstall = pkgs.python.pkgs.ansible.postInstall or "";
+        }
+      );
+
+      ansible-base = super.ansible-base.overridePythonAttrs (
+        old:
+        {
+          prePatch = ''sed -i "s/\[python, /[/" lib/ansible/executor/task_executor.py'';
+          postInstall = ''
+            for m in docs/man/man1/*; do
+                install -vD $m -t $out/share/man/man1
+            done
+          '';
+        }
+        // lib.optionalAttrs (lib.versionOlder old.version "2.4") {
+          prePatch = ''sed -i "s,/usr/,$out," lib/ansible/constants.py'';
         }
       );
 
@@ -194,7 +206,6 @@ lib.composeManyExtensions [
           }.${version} or (
             lib.warn "Unknown bcrypt version: '${version}'. Please update getCargoHash." lib.fakeHash
           );
-          sha256 = getCargoHash super.bcrypt.version;
         in
         super.bcrypt.overridePythonAttrs (
           old: {
@@ -206,7 +217,7 @@ lib.composeManyExtensions [
               (old.nativeBuildInputs or [ ])
                 ++ lib.optionals (lib.versionAtLeast old.version "4")
                 (with pkgs.rustPlatform; [ rust.rustc rust.cargo cargoSetupHook self.setuptools-rust ]);
-          } // lib.optionalAttrs (lib.versionAtLeast old.version "4") rec {
+          } // lib.optionalAttrs (lib.versionAtLeast old.version "4") {
             cargoDeps =
               pkgs.rustPlatform.fetchCargoTarball
                 {
@@ -266,6 +277,10 @@ lib.composeManyExtensions [
       });
 
       celery = super.celery.overridePythonAttrs (old: {
+        propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.setuptools ];
+      });
+
+      cerberus = super.cerberus.overridePythonAttrs (old: {
         propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.setuptools ];
       });
 
@@ -341,6 +356,10 @@ lib.composeManyExtensions [
         }
       );
 
+      copier = super.copier.overrideAttrs (old: {
+        propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ pkgs.git ];
+      });
+
       cryptography =
         let
           getCargoHash = version: {
@@ -355,8 +374,9 @@ lib.composeManyExtensions [
             lib.warn "Unknown cryptography version: '${version}'. Please update getCargoHash." lib.fakeHash
           );
           sha256 = getCargoHash super.cryptography.version;
+          isWheel = lib.hasSuffix ".whl" super.cryptography.src;
           scrypto =
-            if lib.versionAtLeast super.cryptography.version "35" && sha256 == null then
+            if isWheel then
               (
                 super.cryptography.override { preferWheel = true; }
               ) else super.cryptography;
@@ -367,7 +387,7 @@ lib.composeManyExtensions [
               nativeBuildInputs = (old.nativeBuildInputs or [ ])
                 ++ lib.optional (lib.versionAtLeast old.version "3.4") [ self.setuptools-rust ]
                 ++ lib.optional (!self.isPyPy) pyBuildPackages.cffi
-                ++ lib.optional (lib.versionAtLeast old.version "3.5")
+                ++ lib.optional (lib.versionAtLeast old.version "3.5" && !isWheel)
                 (with pkgs.rustPlatform; [ cargoSetupHook rust.cargo rust.rustc ]);
               buildInputs = (old.buildInputs or [ ])
                 ++ [ (if lib.versionAtLeast old.version "37" then pkgs.openssl_3 else pkgs.openssl_1_1) ]
@@ -375,7 +395,7 @@ lib.composeManyExtensions [
               propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [ self.cffi ];
             } // lib.optionalAttrs (lib.versionAtLeast old.version "3.4" && lib.versionOlder old.version "3.5") {
               CRYPTOGRAPHY_DONT_BUILD_RUST = "1";
-            } // lib.optionalAttrs (lib.versionAtLeast old.version "35" && sha256 != null) rec {
+            } // lib.optionalAttrs (lib.versionAtLeast old.version "3.5" && !isWheel) rec {
               cargoDeps =
                 pkgs.rustPlatform.fetchCargoTarball {
                   src = old.src;
@@ -806,6 +826,12 @@ lib.composeManyExtensions [
         }
       );
 
+      ipython = super.ipython.overridePythonAttrs (
+        old: {
+          propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.setuptools ];
+        }
+      );
+
       isort = super.isort.overridePythonAttrs (
         old: {
           propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.setuptools ];
@@ -884,7 +910,7 @@ lib.composeManyExtensions [
       );
 
       jupyter-packaging = super.jupyter-packaging.overridePythonAttrs (old: {
-        propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.wheel ];
+        propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.setuptools self.wheel ];
       });
 
       jupyterlab-widgets = super.jupyterlab-widgets.overridePythonAttrs (
@@ -1058,6 +1084,9 @@ lib.composeManyExtensions [
             self.setuptools-scm
             self.setuptools-scm-git-archive
           ];
+
+          # Clang doesn't understand -fno-strict-overflow, and matplotlib builds with -Werror
+          hardeningDisable = if stdenv.isDarwin then [ "strictoverflow" ] else [ ];
 
           passthru = old.passthru or { } // passthru;
 
@@ -1251,6 +1280,8 @@ lib.composeManyExtensions [
           };
         in
         {
+          # fails to build with format=pyproject and setuptools >= 65
+          format = if (old.format == "poetry2nix") then "setuptools" else old.format;
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.gfortran ];
           buildInputs = (old.buildInputs or [ ]) ++ [ blas ];
           enableParallelBuilding = true;
@@ -1271,9 +1302,10 @@ lib.composeManyExtensions [
       );
 
       open3d = super.open3d.overridePythonAttrs (old: {
-        buildInputs = (old.buildInputs or [ ]) ++ (with pkgs; [
-          udev
-        ]);
+        buildInputs = (old.buildInputs or [ ]) ++ [
+          pkgs.udev
+          pkgs.libusb1
+        ];
         # TODO(Sem Mulder): Add overridable flags for CUDA/PyTorch/Tensorflow support.
         autoPatchelfIgnoreMissingDeps = true;
       });
@@ -1441,8 +1473,6 @@ lib.composeManyExtensions [
         {
           # "Vendor" dependencies (for build-system support)
           postPatch = ''
-            find .
-
             echo "import sys" >> ${initFile}
             for path in $propagatedBuildInputs; do
               echo "sys.path.insert(0, \"$path\")" >> ${initFile}
@@ -1714,6 +1744,10 @@ lib.composeManyExtensions [
           PROJ_INCDIR = "${pkgs.proj.dev}/include";
         }
       );
+
+      pyrealsense2 = super.pyrealsense2.overridePythonAttrs (old: {
+        buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.libusb1.out ];
+      });
 
       pyrfr = super.pyrfr.overridePythonAttrs (old: {
         nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.swig ];
@@ -2271,6 +2305,43 @@ lib.composeManyExtensions [
         }).wheel;
       };
 
+      watchfiles =
+        let
+          # Watchfiles does not include Cargo.lock in tarball released on PyPi for versions up to 0.17.0
+          getRepoHash = version: {
+            "0.17.0" = "1swpf265h9qq30cx55iy6jjirba3wml16wzb68k527ynrxr7hvqx";
+            "0.16.1" = "1ss6gzcr6js2d2sddgz1p52gyiwpqmgrxm8r6wim7gnm4wvhav8a";
+            "0.15.0" = "14k3avrj7v794kk4mk2xggn40a4s0zg8iq8wmyyyrf7va6hz29hf";
+            "0.14.1" = "1pgfbhxrvr3dw46x9piqj3ydxgn4lkrfp931q0cajinrpv4acfay";
+            "0.14" = "0lml67ilyly0i632pffdy1gd07404vx90xnkw8q6wf6xp5afmkka";
+            "0.13" = "0rkz8yr01mmxm2lcmbnr9i5c7n371mksij7v3ws0aqlrh3kgww02";
+            "0.12" = "16788a0d8n1bb705f0k3dvav2fmbbl6pcikwpgarl1l3fcfff8kl";
+            "0.11" = "0vx56h9wfxj7x3aq7jign4rnlfm7x9nhjwmsv8p22acbzbs10dgv";
+            "0.10" = "0ypdy9sq4211djqh4ni5ap9l7whq9hw0vhsxjfl3a0a4czlldxqp";
+          }.${version};
+          sha256 = getRepoHash super.watchfiles.version;
+        in
+        super.watchfiles.overridePythonAttrs (old: rec {
+          src = pkgs.fetchFromGitHub {
+            owner = "samuelcolvin";
+            repo = "watchfiles";
+            rev = "v${old.version}";
+            inherit sha256;
+          };
+          cargoDeps = pkgs.rustPlatform.importCargoLock {
+            lockFile = "${src.out}/Cargo.lock";
+          };
+          buildInputs = (old.buildInputs or [ ]) ++ lib.optionals stdenv.isDarwin [
+            pkgs.darwin.apple_sdk.frameworks.Security
+            pkgs.darwin.apple_sdk.frameworks.CoreServices
+            pkgs.libiconv
+          ];
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+            pkgs.rustPlatform.cargoSetupHook
+            pkgs.rustPlatform.maturinBuildHook
+          ];
+        });
+
       weasyprint = super.weasyprint.overridePythonAttrs (
         old: {
           inherit (pkgs.python3.pkgs.weasyprint) patches;
@@ -2528,6 +2599,12 @@ lib.composeManyExtensions [
             'root_dirs.extend(jupyter_path())' \
             'root_dirs.extend(jupyter_path() + [os.path.join("@out@", "share", "jupyter")])' \
             --subst-var out
+        '' + lib.optionalString (lib.versionAtLeast self.nbconvert.version "7.0") ''
+          substituteInPlace \
+            ./hatch_build.py \
+            --replace \
+            'if self.target_name not in ["wheel", "sdist"]:' \
+            'if True:'
         '';
       });
     }
