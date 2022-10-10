@@ -11146,6 +11146,8 @@ in {
 
   timezonefinder = callPackage ../development/python-modules/timezonefinder { };
 
+  timm = callPackage ../development/python-modules/timm { };
+
   tinycss2 = callPackage ../development/python-modules/tinycss2 { };
 
   tinycss = callPackage ../development/python-modules/tinycss { };
