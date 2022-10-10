@@ -1,17 +1,29 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "genact";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-POOXawhxrPT2UgbSZE3r0br7cqJ0ao7MpycrPYa/oCc=";
+    sha256 = "sha256-MB/i1jCxoGE8cPF+NE8aS7kF7ZsGb4+OyLcPcGp1hwI=";
   };
 
-  cargoSha256 = "sha256-2c34YarMFw2CK+7zn41GL5tXfXfnw3NvGtgSlPH5d64=";
+  cargoSha256 = "sha256-OBGJIR3REeMxHQu3ovEKSZZ8QNlhl/5jvWbR5OdsRTQ=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    $out/bin/genact --print-manpage > genact.1
+    installManPage genact.1
+
+    installShellCompletion --cmd genact \
+      --bash <($out/bin/genact --print-completions bash) \
+      --fish <($out/bin/genact --print-completions fish) \
+      --zsh <($out/bin/genact --print-completions zsh)
+  '';
 
   meta = with lib; {
     description = "A nonsense activity generator";

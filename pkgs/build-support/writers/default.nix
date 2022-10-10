@@ -126,8 +126,8 @@ let
   #     echo hello world
   #   ''
   writeFish = makeScriptWriter {
-    interpreter = "${pkgs.fish}/bin/fish";
-    check = "${pkgs.fish}/bin/fish --no-execute";  # syntax check only
+    interpreter = "${pkgs.fish}/bin/fish --no-config";
+    check = "${pkgs.fish}/bin/fish --no-config --no-execute";  # syntax check only
   };
 
   # Like writeScriptBin but the first line is a shebang to fish
