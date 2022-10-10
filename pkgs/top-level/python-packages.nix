@@ -4197,6 +4197,8 @@ self: super: with self; {
 
   gpy = callPackage ../development/python-modules/gpy { };
 
+  gpytorch = callPackage ../development/python-modules/gpytorch { };
+
   gpt-2-simple = callPackage ../development/python-modules/gpt-2-simple { };
 
   gpyopt = callPackage ../development/python-modules/gpyopt { };
