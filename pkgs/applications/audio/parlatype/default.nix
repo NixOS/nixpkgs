@@ -33,8 +33,6 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
-    sphinxbase
-    pocketsphinx
     glib
     gsettings-desktop-schemas
     hicolor-icon-theme
@@ -46,6 +44,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = false;
+
+  mesonFlags = [ "-Dasr=false" ];
 
   buildPhase = ''
     export GST_PLUGIN_SYSTEM_PATH_1_0="$out/lib/gstreamer-1.0/:$GST_PLUGIN_SYSTEM_PATH_1_0"
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gkarsay.github.io/parlatype/";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.melchips ];
+    maintainers = with maintainers; [ alexshpilkin melchips ];
     platforms = platforms.linux;
   };
 }
