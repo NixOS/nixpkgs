@@ -15,6 +15,7 @@
 , makeWrapper
 , ncurses
 , ocamlPackages
+, openssl
 , pcre2
 , perlPackages
 , pkg-config
@@ -64,6 +65,7 @@ stdenv.mkDerivation rec {
     libvirt
     libxml2
     ncurses
+    openssl
     pcre2
     xz
   ];
