@@ -403,14 +403,14 @@
   },
   "fortios": {
     "deleteVendor": true,
-    "hash": "sha256-jXaEGWt/O0Cv15ksFax571f6aoDhVpNZSbvbOFj6TZ4=",
+    "hash": "sha256-nvK5mbQdCB6lmdyhJbMS15eOER8eIAYv26mc1FCifXs=",
     "owner": "fortinetdev",
     "provider-source-address": "registry.terraform.io/fortinetdev/fortios",
     "proxyVendor": true,
     "repo": "terraform-provider-fortios",
-    "rev": "v1.15.0",
-    "vendorHash": "sha256-QsUJ9BqoCtMC9PpGzwlKvBn+BDlcjUR2rU9zx8FvLCk=",
-    "version": "1.15.0"
+    "rev": "v1.16.0",
+    "vendorHash": "sha256-ZgVA2+2tu17dnAc51Aw3k6v8k7QosNTmFjFhmeknxa8=",
+    "version": "1.16.0"
   },
   "gandi": {
     "hash": "sha256-uXZcYiNsBf5XsMjOjjQeNtGwLhTgYES1E9t63fBEI6Q=",
