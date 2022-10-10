@@ -96,7 +96,7 @@ gcc12Stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open Source File Synchronization & Backup Software";
     homepage = "https://freefilesync.org";
-    license = licenses.gpl3Only;
+    license = [ licenses.gpl3Only licenses.openssl licenses.curl licenses.libssh2 ];
     maintainers = with maintainers; [ wegank ];
     platforms = platforms.linux;
   };

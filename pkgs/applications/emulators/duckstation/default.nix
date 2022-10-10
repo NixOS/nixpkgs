@@ -7,28 +7,28 @@
 , makeDesktopItem
 , curl
 , extra-cmake-modules
+, libevdev
 , libpulseaudio
 , libXrandr
 , mesa # for libgbm
 , ninja
 , pkg-config
 , qtbase
-, qtsvg
 , qttools
 , vulkan-loader
-, wayland
+#, wayland # Wayland doesn't work correctly this version
 , wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "duckstation";
-  version = "unstable-2022-08-22";
+  version = "unstable-2022-07-08";
 
   src = fetchFromGitHub {
     owner = "stenzek";
     repo = pname;
-    rev = "4f2da4213d1d2c69417392d15b27bb123ee9d297";
-    sha256 = "sha256-VJeKbJ40ZErlu/6RETvk0KDSc9T7ssBrLDecNczQlXU=";
+    rev = "82965f741e81e4d2f7e1b2abdc011e1f266bfe7f";
+    sha256 = "sha256-D8Ps/EQRcHLsps/KEUs56koeioOdE/GPA0QJSrbSdYs=";
   };
 
   nativeBuildInputs = [
@@ -44,30 +44,31 @@ stdenv.mkDerivation rec {
   buildInputs = [
     SDL2
     curl
+    libevdev
     libpulseaudio
     libXrandr
     mesa
     qtbase
-    qtsvg
     vulkan-loader
-    wayland
+    #wayland
   ];
 
   cmakeFlags = [
     "-DUSE_DRMKMS=ON"
-    "-DUSE_WAYLAND=ON"
+    #"-DUSE_WAYLAND=ON"
   ];
 
   desktopItems = [
     (makeDesktopItem {
-      name = "DuckStation";
-      desktopName = "JamesDSP";
+      name = "duckstation-qt";
+      desktopName = "DuckStation";
       genericName = "PlayStation 1 Emulator";
       icon = "duckstation";
       tryExec = "duckstation-qt";
       exec = "duckstation-qt %f";
       comment = "Fast PlayStation 1 emulator";
       categories = [ "Game" "Emulator" "Qt" ];
+      type = "Application";
     })
   ];
 
@@ -79,7 +80,7 @@ stdenv.mkDerivation rec {
     cp -r bin $out/share/duckstation
     ln -s $out/share/duckstation/duckstation-qt $out/bin/
 
-    install -Dm644 bin/resources/images/duck.png $out/share/pixmaps/duckstation.png
+    install -Dm644 ../extras/icons/icon-256px.png $out/share/pixmaps/duckstation.png
 
     runHook postInstall
   '';
@@ -93,6 +94,7 @@ stdenv.mkDerivation rec {
 
   # Libpulseaudio fixes https://github.com/NixOS/nixpkgs/issues/171173
   qtWrapperArgs = [
+    "--set QT_QPA_PLATFORM xcb"
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio vulkan-loader ]}"
   ];
 

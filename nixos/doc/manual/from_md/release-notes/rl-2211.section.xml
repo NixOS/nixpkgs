@@ -270,6 +270,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/shizunge/endlessh-go">endlessh-go</link>,
+          an SSH tarpit that exposes Prometheus metrics. Available as
+          <link linkend="opt-services.endlessh-go.enable">services.endlessh-go</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://netbird.io">netbird</link>, a zero
           configuration VPN. Available as
           <link xlink:href="options.html#opt-services.netbird.enable">services.netbird</link>.
@@ -501,7 +508,9 @@
       <listitem>
         <para>
           <literal>pkgs.cosign</literal> does not provide the
-          <literal>cosigned</literal> binary anymore.
+          <literal>cosigned</literal> binary anymore. The
+          <literal>sget</literal> binary has been moved into its own
+          package.
         </para>
       </listitem>
       <listitem>

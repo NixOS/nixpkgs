@@ -1,6 +1,9 @@
 { lib
 , stdenv
-, fetchurl
+, pname
+, version
+, src
+, meta
 , makeWrapper
 , wrapGAppsHook
 , alsa-lib
@@ -43,21 +46,8 @@ let
   # Convert the polkitPolicyOwners variable to a polkit-compatible string for the polkit file.
   policyOwners = lib.concatStringsSep " " (map (user: "unix-user:${user}") polkitPolicyOwners);
 
-in stdenv.mkDerivation rec {
-  pname = "1password";
-  version = "8.9.6-30.BETA";
-
-  src =
-    if stdenv.hostPlatform.isAarch64 then
-      fetchurl {
-        url = "https://downloads.1password.com/linux/tar/beta/aarch64/1password-${version}.arm64.tar.gz";
-        sha256 = "0j0v90i78y1m77gpn65iyjdy1xslv1mar1ihxj9jzcmva0nmdmra";
-      }
-    else
-      fetchurl {
-        url = "https://downloads.1password.com/linux/tar/beta/x86_64/1password-${version}.x64.tar.gz";
-        sha256 = "sha256-xBfpBkYff1X26Iu0Ee03lIiR6UdJOiaG+kZMVotG0Hc=";
-      };
+in stdenv.mkDerivation {
+  inherit pname version src meta;
 
   nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
   buildInputs = [ glib ];
@@ -139,14 +129,4 @@ in stdenv.mkDerivation rec {
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
   '';
-
-
-  meta = with lib; {
-    description = "Multi-platform password manager";
-    homepage = "https://1password.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ timstott savannidgerinel maxeaubrey sebtm ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
-  };
 }

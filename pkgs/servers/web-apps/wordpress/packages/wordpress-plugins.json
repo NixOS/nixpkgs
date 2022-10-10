@@ -13,6 +13,7 @@
 , "mailpoet"
 , "opengraph"
 , "simple-login-captcha"
+, "static-mail-sender-configurator"
 , "webp-converter-for-media"
 , "wp-mail-smtp"
 , "wp-gdpr-compliance"

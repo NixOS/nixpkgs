@@ -12,7 +12,7 @@ buildGoModule rec {
     fetchSubmodules = true;
   };
 
-  vendorSha256 = "sha256-zdm11bGkCcwnz+8dve2pdcpg6pDgLe4UG3Ob/mbqhko=";
+  vendorSha256 = "sha256-B9brjWvYw65ti2Ac3D4nQUEax/q+Uf5DTPBHXeWQybw=";
   proxyVendor = true;
 
   # Build errors in mdbx when format hardening is enabled:

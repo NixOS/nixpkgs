@@ -29,6 +29,8 @@ python.pkgs.buildPythonApplication rec {
     sha256 = "sha256-GHvJlm5DVt3IVJnqJu8YobNNqbjdPd08s4DCdQQRQds=";
   };
 
+  format = "other";
+
   dontBuild = true;
 
   doCheck = false; # disabled because it requires a ccnet environment

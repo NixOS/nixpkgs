@@ -359,6 +359,10 @@ self: super: {
     };
   });
 
+  flit-nvim = super.flit-nvim.overrideAttrs (old: {
+    dependencies = with self; [ leap-nvim ];
+  });
+
   forms = super.forms.overrideAttrs (old: {
     dependencies = with self; [ self.self ];
   });
@@ -520,6 +524,10 @@ self: super: {
 
   lean-nvim = super.lean-nvim.overrideAttrs (old: {
     dependencies = with self; [ nvim-lspconfig plenary-nvim ];
+  });
+
+  leap-ast-nvim = super.leap-ast-nvim.overrideAttrs (old: {
+    dependencies = with self; [ leap-nvim nvim-treesitter ];
   });
 
   lens-vim = super.lens-vim.overrideAttrs (old: {

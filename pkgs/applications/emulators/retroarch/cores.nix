@@ -204,6 +204,14 @@ in
     makefile = "Makefile";
   };
 
+  beetle-supafaust = mkLibRetroCore {
+    core = "mednafen-supafaust";
+    src = getCoreSrc "beetle-supafaust";
+    description = "Port of Mednafen's experimental snes_faust core to libretro";
+    license = lib.licenses.gpl2Plus;
+    makefile = "Makefile";
+  };
+
   beetle-supergrafx = mkLibRetroCore {
     core = "mednafen-supergrafx";
     src = getCoreSrc "beetle-supergrafx";
