@@ -514,6 +514,13 @@ with prev;
     '';
   });
 
+  vusted = prev.vusted.overrideAttrs (_: {
+    # make sure vusted_entry.vim doesn't get wrapped
+    postInstall = ''
+      chmod -x $out/bin/vusted_entry.vim
+    '';
+  });
+
   # TODO just while testing, remove afterwards
   # toVimPlugin should do it instead
   gitsigns-nvim = prev.gitsigns-nvim.overrideAttrs (oa: {
