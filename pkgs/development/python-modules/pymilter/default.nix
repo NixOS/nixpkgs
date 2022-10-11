@@ -1,4 +1,4 @@
-{ lib, python, buildPythonPackage, fetchFromGitHub, libmilter, bsddb3, pydns }:
+{ lib, python, buildPythonPackage, fetchFromGitHub, libmilter, bsddb3, pydns, iana-etc, libredirect }:
 
 buildPythonPackage rec {
   pname = "pymilter";
@@ -19,7 +19,15 @@ buildPythonPackage rec {
   '';
 
   # requires /etc/resolv.conf
-  doCheck = false;
+  # testpolicy: requires makemap (#100419)
+  #   using exec -a makemap smtpctl results in "unknown group smtpq"
+  preCheck = ''
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
+    export LD_PRELOAD=${libredirect}/lib/libredirect.so
+    sed -i '/testpolicy/d' test.py
+    rm testpolicy.py
+  '';
 
   meta = with lib; {
     homepage = "http://bmsi.com/python/milter.html";
