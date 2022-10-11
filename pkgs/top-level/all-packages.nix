@@ -10489,8 +10489,8 @@ with pkgs;
 
   remarshal = with python3Packages; toPythonApplication remarshal;
 
-  rehex = callPackage ../applications/editors/rehex {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa IOKit;
+  rehex = darwin.apple_sdk_11_0.callPackage ../applications/editors/rehex {
+    inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa IOKit;
   };
 
   rig = callPackage ../tools/misc/rig { };
