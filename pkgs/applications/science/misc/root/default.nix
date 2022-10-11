@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, callPackage
 , fetchFromGitHub
 , fetchpatch
 , makeWrapper
@@ -70,6 +71,10 @@ in
 stdenv.mkDerivation rec {
   pname = "root";
   version = "6.26.08";
+
+  passthru = {
+    tests = import ./tests { inherit callPackage; };
+  };
 
   src = fetchFromGitHub {
     owner = "root-project";
