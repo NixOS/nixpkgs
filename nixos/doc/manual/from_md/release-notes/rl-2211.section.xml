@@ -1104,6 +1104,18 @@
       </listitem>
       <listitem>
         <para>
+          The default package for
+          <literal>services.mullvad-vpn.package</literal> was changed to
+          <literal>pkgs.mullvad</literal>, allowing cross-platform usage
+          of Mullvad. <literal>pkgs.mullvad</literal> only contains the
+          Mullvad CLI tool, so users who rely on the Mullvad GUI will
+          want to change it back to <literal>pkgs.mullvad-vpn</literal>,
+          or add <literal>pkgs.mullvad-vpn</literal> to their
+          environment.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           There is a new module for the <literal>thunar</literal>
           program (the Xfce file manager), which depends on the
           <literal>xfconf</literal> dbus service, and also has a dbus
