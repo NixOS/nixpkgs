@@ -13,6 +13,7 @@
 , fmt_8
 , withStorageMroonga ? true, kytea, libsodium, msgpack, zeromq
 , withStorageRocks ? true
+, withEmbedded ? false
 }:
 
 let
@@ -103,7 +104,7 @@ commonOptions = packageSettings: rec { # attributes common to both builds
     "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (!withEmbedded) ''
     # Remove Development components. Need to use libmysqlclient.
     rm "$out"/lib/mysql/plugin/daemon_example.ini
     rm "$out"/lib/{libmariadb.a,libmariadbclient.a,libmysqlclient.a,libmysqlclient_r.a,libmysqlservices.a}
@@ -184,6 +185,10 @@ in stdenv.mkDerivation (common // {
     ++ lib.optionals withStorageMroonga [ kytea libsodium msgpack zeromq ]
     ++ lib.optionals (lib.versionAtLeast common.version "10.7") [ fmt_8 ];
 
+  propagatedBuildInputs = lib.optionals withEmbedded
+    (lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) pmdk.lib
+      ++ lib.optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32) numactl);
+
   patches = common.patches;
 
   postPatch = ''
@@ -196,7 +201,7 @@ in stdenv.mkDerivation (common // {
     "-DENABLED_LOCAL_INFILE=OFF"
     "-DWITH_READLINE=ON"
     "-DWITH_EXTRA_CHARSETS=all"
-    "-DWITH_EMBEDDED_SERVER=OFF"
+    "-DWITH_EMBEDDED_SERVER=${if withEmbedded then "ON" else "OFF"}"
     "-DWITH_UNIT_TESTS=OFF"
     "-DWITH_WSREP=ON"
     "-DWITH_INNODB_DISALLOW_WRITES=ON"

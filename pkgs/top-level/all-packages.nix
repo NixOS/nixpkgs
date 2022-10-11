@@ -23693,6 +23693,11 @@ with pkgs;
     mariadb_109
   ;
   mariadb = mariadb_106;
+  mariadb-embedded = (callPackage ../servers/sql/mariadb {
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    withEmbedded = true;
+  }).mariadb_106;
 
   mongodb = hiPrio mongodb-3_4;
 
