@@ -39,6 +39,7 @@
 , dbus
 , bash
 , coreutils
+, zstd
 }:
 
 let
@@ -129,6 +130,7 @@ in stdenv.mkDerivation rec {
     libepoxy
     at-spi2-core
     dbus
+    zstd
   ];
 
   postPatch = ''
