@@ -2,7 +2,6 @@
 , callPackage
 , fetchFromGitHub
 , fetchurl
-, fetchpatch
 , lib
   # Dependencies
 , boehmgc
@@ -10,11 +9,11 @@
 , git
 , gmp
 , hostname
-, libatomic_ops
 , libevent
 , libiconv
 , libxml2
 , libyaml
+, libffi
 , llvmPackages
 , makeWrapper
 , openssl
@@ -31,21 +30,21 @@
 let
   archs = {
     x86_64-linux = "linux-x86_64";
-    i686-linux = "linux-i686";
-    x86_64-darwin = "darwin-x86_64";
+    #i686-linux = "linux-i686";
+    #x86_64-darwin = "darwin-x86_64";
+    x86_64-darwin = "darwin-universal";
     aarch64-darwin = "darwin-universal";
-    aarch64-linux = "linux-aarch64";
+    #aarch64-linux = "linux-aarch64";
   };
 
   arch = archs.${stdenv.system} or (throw "system ${stdenv.system} not supported");
-  isAarch64Darwin = stdenv.system == "aarch64-darwin";
 
-  checkInputs = [ git gmp openssl readline libxml2 libyaml ];
+  checkInputs = [ git gmp openssl readline libxml2 libyaml libffi ];
 
   binaryUrl = version: rel:
-    if arch == archs.aarch64-linux then
-      "https://dev.alpinelinux.org/archive/crystal/crystal-${version}-aarch64-alpine-linux-musl.tar.gz"
-    else
+    # if arch == archs.aarch64-linux then
+    #   "https://dev.alpinelinux.org/archive/crystal/crystal-${version}-aarch64-alpine-linux-musl.tar.gz"
+    # else
       "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-${arch}.tar.gz";
 
   genericBinary = { version, sha256s, rel ? 1 }:
@@ -63,13 +62,10 @@ let
         tar --strip-components=1 -C $out -xf ${src}
         patchShebangs $out/bin/crystal
       '';
-
-      meta.broken = lib.versionOlder version "1.2.0" && isAarch64Darwin;
     };
 
   commonBuildInputs = extraBuildInputs: [
     boehmgc
-    libatomic_ops
     pcre
     libevent
     libyaml
@@ -98,21 +94,12 @@ let
         inherit sha256;
       };
 
-      patches = lib.optionals (lib.versionOlder version "1.2.0") [
-        # add support for DWARF5 debuginfo, fixes builds on recent compilers
-        # the PR is 8 commits from 2019, so just fetch the whole thing
-        # and hope it doesn't change
-        (fetchpatch {
-          url = "https://github.com/crystal-lang/crystal/pull/11399.patch";
-          sha256 = "sha256-CjNpkQQ2UREADmlyLUt7zbhjXf0rTjFhNbFYLwJKkc8=";
-        })
-      ];
-
       outputs = [ "out" "lib" "bin" ];
 
       postPatch = ''
         export TMP=$(mktemp -d)
         export HOME=$TMP
+        export TMPDIR=$TMP
         mkdir -p $HOME/test
 
         # Add dependency of crystal to docs to avoid issue on flag changes between releases
@@ -122,8 +109,6 @@ let
 
         substituteInPlace src/crystal/system/unix/time.cr \
           --replace /usr/share/zoneinfo ${tzdata}/share/zoneinfo
-
-        ln -sf spec/compiler spec/std
 
         mkdir -p $TMP/crystal
 
@@ -163,12 +148,12 @@ let
 
       makeFlags = [
         "CRYSTAL_CONFIG_VERSION=${version}"
+        "progress=1"
       ];
 
       LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
 
       FLAGS = [
-        "--release"
         "--single-module" # needed for deterministic builds
       ];
 
@@ -220,6 +205,7 @@ let
         export PATH=${lib.makeBinPath checkInputs}:$PATH
       '';
 
+      passthru.buildBinary = binary;
       passthru.buildCrystalPackage = callPackage ./build-package.nix {
         crystal = compiler;
       };
@@ -230,48 +216,52 @@ let
         homepage = "https://crystal-lang.org/";
         license = licenses.asl20;
         maintainers = with maintainers; [ david50407 manveru peterhoeg ];
-        platforms = let archNames = builtins.attrNames archs; in
-          if (lib.versionOlder version "1.2.0") then remove "aarch64-darwin" archNames else archNames;
+        platforms = let archNames = builtins.attrNames archs; in archNames;
       };
     })
   );
 
 in
 rec {
-  binaryCrystal_1_0 = genericBinary {
-    version = "1.0.0";
+  #binaryCrystal_1_0 = genericBinary {
+  #  version = "1.0.0";
+  #  sha256s = {
+  #    x86_64-linux = "1949argajiyqyq09824yj3wjyv88gd8wbf20xh895saqfykiq880";
+  #    i686-linux = "0w0f4fwr2ijhx59i7ppicbh05hfmq7vffmgl7lal6im945m29vch";
+  #    x86_64-darwin = "01n0rf8zh551vv8wq3h0ifnsai0fz9a77yq87xx81y9dscl9h099";
+  #    aarch64-linux = "0sns7l4q3z82qi3dc2r4p63f4s8hvifqzgq56ykwyrvawynjhd53";
+  #  };
+  #};
+
+  #binaryCrystal_1_2 = genericBinary {
+  #  version = "1.2.0";
+  #  sha256s = {
+  #    aarch64-darwin = "1hrs8cpjxdkcf8mr9qgzilwbg6bakq87sd4yydfsk2f4pqd6g7nf";
+  #  };
+  #};
+
+  binaryCrystal_1_5 = genericBinary {
+    version = "1.5.0";
     sha256s = {
-      x86_64-linux = "1949argajiyqyq09824yj3wjyv88gd8wbf20xh895saqfykiq880";
-      i686-linux = "0w0f4fwr2ijhx59i7ppicbh05hfmq7vffmgl7lal6im945m29vch";
-      x86_64-darwin = "01n0rf8zh551vv8wq3h0ifnsai0fz9a77yq87xx81y9dscl9h099";
-      aarch64-linux = "0sns7l4q3z82qi3dc2r4p63f4s8hvifqzgq56ykwyrvawynjhd53";
+      x86_64-linux = "sha256-YnNg8PyAUgLYAxAAfVA8ei/AdFsdsiEVN9f1TpqZQ0c=";
+      #i686-linux = ""; no prebuilt binaries since 1.2.0
+      x86_64-darwin = "sha256-KU6+HLFlpYJSJS4F1zlHBeBt/rzxb7U57GmqRQnLm0Y==";
+      #aarch64-linux = ""; not available yet
+      aarch64-darwin = "sha256-KU6+HLFlpYJSJS4F1zlHBeBt/rzxb7U57GmqRQnLm0Y==";
     };
   };
 
-  binaryCrystal_1_2 = genericBinary {
-    version = "1.2.0";
-    sha256s = {
-      aarch64-darwin = "1hrs8cpjxdkcf8mr9qgzilwbg6bakq87sd4yydfsk2f4pqd6g7nf";
-    };
+  crystal_1_5 = generic {
+    version = "1.5.0";
+    sha256 = "sha256-twDWnJBLc5tvkg3HvbxXJsCPTMJr9vGvvHvfukMXGyA=";
+    binary = binaryCrystal_1_5;
   };
 
-  crystal_1_0 = generic {
-    version = "1.0.0";
-    sha256 = "sha256-RI+a3w6Rr+uc5jRf7xw0tOenR+q6qii/ewWfID6dbQ8=";
-    binary = binaryCrystal_1_0;
+  crystal_1_6 = generic {
+    version = "1.6.0";
+    sha256 = "sha256-B6Pq2J1r+PbYT1C+2u9rNzRR5zOnbmN1/RG7mVpVHQk=";
+    binary = binaryCrystal_1_5;
   };
 
-  crystal_1_1 = generic {
-    version = "1.1.1";
-    sha256 = "sha256-hhhT3reia8acZiPsflwfuD638Ll2JiXwMfES1TyGyNQ=";
-    binary = crystal_1_0;
-  };
-
-  crystal_1_2 = generic {
-    version = "1.2.2";
-    sha256 = "sha256-nyOXhsutVBRdtJlJHe2dALl//BUXD1JeeQPgHU4SwiU=";
-    binary = if isAarch64Darwin then binaryCrystal_1_2 else crystal_1_1;
-  };
-
-  crystal = crystal_1_2;
+  crystal = crystal_1_6;
 }
