@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , cryptography
-, types-cryptography
 , pytestCheckHook
 , pythonOlder
 , sphinxHook
