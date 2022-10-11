@@ -2,23 +2,26 @@
 , fetchFromGitLab
 , git
 , coq
+, ocamlPackages
 , cacert
 , ocaml-crunch
 }:
 
-coq.ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "0.47.0";
+  version = "0.53.0";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "sha256-VJs0pKA99mZXhipK1bSAZmgAHvYbGbjxdI2XyJYjSm0=";
+    sha256 = "sha256-WNiN9UrwXCwfxWnR5oPm9sGWelQCpooCXh43T2QaOnI=";
     fetchSubmodules = true;
   };
 
   # The build picks this up for ligo --version
   LIGO_VERSION = version;
+
+  duneVersion = "3";
 
   strictDeps = true;
 
@@ -26,17 +29,19 @@ coq.ocamlPackages.buildDunePackage rec {
     ocaml-crunch
     git
     coq
-    coq.ocamlPackages.menhir
-    coq.ocamlPackages.ocaml-recovery-parser
+    ocamlPackages.crunch
+    ocamlPackages.menhir
+    ocamlPackages.ocaml-recovery-parser
   ];
 
-  buildInputs = with coq.ocamlPackages; [
+  buildInputs = with ocamlPackages; [
     coq
     menhir
     menhirLib
     qcheck
     ocamlgraph
     bisect_ppx
+    decompress
     ppx_deriving
     ppx_deriving_yojson
     ppx_expect
@@ -49,11 +54,11 @@ coq.ocamlPackages.buildDunePackage rec {
     core_unix
     pprint
     linenoise
-    dune-configurator
-    ctypes_stubs_js
     crunch
-    zarith_stubs_js
-    pure-splitmix
+    semver
+    lambda-term
+    tar-unix
+    parse-argv
 
     # Test helpers deps
     qcheck
@@ -61,7 +66,12 @@ coq.ocamlPackages.buildDunePackage rec {
     alcotest-lwt
 
     # vendored tezos' deps
+    tezos-plonk
+    tezos-bls12-381-polynomial
     ctypes
+    ctypes_stubs_js
+    class_group_vdf
+    dune-configurator
     hacl-star
     hacl-star-raw
     lwt-canceler
@@ -80,23 +90,23 @@ coq.ocamlPackages.buildDunePackage rec {
     irmin-pack
     ezjsonm
     data-encoding
+    pure-splitmix
+    zarith_stubs_js
   ];
 
   checkInputs = [
     cacert
-    coq.ocamlPackages.ca-certs
+    ocamlPackages.ca-certs
   ];
 
   doCheck = false; # Tests fail, but could not determine the reason
-
-  patches = [ ./ligo.patch ]; # fix for core >= 0.15.0
 
   meta = with lib; {
     homepage = "https://ligolang.org/";
     downloadPage = "https://ligolang.org/docs/intro/installation";
     description = "A friendly Smart Contract Language for Tezos";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    platforms = ocamlPackages.ocaml.meta.platforms;
     maintainers = with maintainers; [ ulrikstrid ];
   };
 }
