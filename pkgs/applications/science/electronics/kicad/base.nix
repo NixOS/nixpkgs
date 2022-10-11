@@ -168,8 +168,7 @@ stdenv.mkDerivation rec {
   preInstallCheck = optionals (withNgspice) [ "export LD_LIBRARY_PATH=${libngspice}/lib" ];
 
   # debug builds fail all but the python test
-  # stable release doesn't have the fix for upstream issue 9888 yet
-  doInstallCheck = !debug && !stable;
+  doInstallCheck = !debug;
   installCheckTarget = "test";
 
   dontStrip = debug;
