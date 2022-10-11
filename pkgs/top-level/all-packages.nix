@@ -17491,6 +17491,8 @@ with pkgs;
 
   swarm = callPackage ../development/tools/analysis/swarm { };
 
+  swift-format = callPackage ../development/tools/swift-format { };
+
   swiftformat = callPackage ../development/tools/swiftformat { };
 
   symfony-cli = callPackage ../development/tools/symfony-cli { };

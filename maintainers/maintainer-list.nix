@@ -15566,4 +15566,10 @@
     github = "quasigod-io";
     githubId = 62124625;
   };
+  scoates = {
+    email = "sean@seancoates.com";
+    name = "Sean Coates";
+    github = "scoates";
+    githubId = 71983;
+  };
 }
