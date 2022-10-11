@@ -5,13 +5,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "thicket";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "taylorthurlow";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7X1RKj/FWgJdgA7P746hU0ndUM49fH79ZNRSkvNZYFg=";
+    sha256 = "sha256-sF+fNKEZEfjpW3buh6kFUpL1P0yO9g4SrTb0rhx1uNc=";
   };
 
   format = "shards";
