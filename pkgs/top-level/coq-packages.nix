@@ -1,6 +1,7 @@
 { lib, stdenv, fetchzip
 , callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05, ocamlPackages_4_09
-, ocamlPackages_4_10, ocamlPackages_4_12, fetchpatch, makeWrapper, coq2html
+, ocamlPackages_4_10, ocamlPackages_4_12, ocamlPackages_4_14
+, fetchpatch, makeWrapper, coq2html
 }@args:
 let lib = import ../build-support/coq/extra-lib.nix {inherit (args) lib;}; in
 let
@@ -130,6 +131,7 @@ let
       ocamlPackages_4_09
       ocamlPackages_4_10
       ocamlPackages_4_12
+      ocamlPackages_4_14
     ;
   };
 in rec {
