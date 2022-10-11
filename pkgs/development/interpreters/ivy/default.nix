@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "ivy";
-  version = "0.1.13";
+  version = "0.2.8";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "robpike";
     repo = "ivy";
-    sha256 = "sha256-IiQrmmHitKUItm/ZSTQ3jGO3ls8vPPexyOtUvfq3yeU=";
+    sha256 = "sha256-pb/dJfEXz13myT6XadCg0kKd+n9bcHNBc84ES+hDw2Y=";
   };
 
   vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";

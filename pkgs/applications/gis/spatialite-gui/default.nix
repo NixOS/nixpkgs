@@ -21,6 +21,7 @@
 , virtualpg
 , wxGTK
 , wxmac
+, xz
 , zstd
 , Carbon
 , Cocoa
@@ -56,6 +57,7 @@ stdenv.mkDerivation rec {
     proj
     sqlite
     virtualpg
+    xz
     zstd
   ] ++ lib.optional stdenv.isLinux wxGTK
     ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa IOKit wxmac ];
