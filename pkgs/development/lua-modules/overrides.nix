@@ -427,7 +427,8 @@ with prev;
 
   luv = prev.luaLib.overrideLuarocks prev.luv (drv: {
 
-    buildInputs = [ pkg-config libuv ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ libuv ];
 
     # Use system libuv instead of building local and statically linking
     extraVariables = {

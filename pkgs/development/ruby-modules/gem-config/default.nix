@@ -604,7 +604,8 @@ in
   };
 
   ruby-libvirt = attrs: {
-    buildInputs = [ libvirt pkg-config ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ libvirt ];
     buildFlags = [
       "--with-libvirt-include=${libvirt}/include"
       "--with-libvirt-lib=${libvirt}/lib"

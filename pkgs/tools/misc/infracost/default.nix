@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, stdenv }:
 
 buildGoModule rec {
   pname = "infracost";
@@ -63,5 +63,6 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ davegallant jk ];
+    broken = stdenv.isx86_64; # https://hydra.nixos.org/build/193087915
   };
 }

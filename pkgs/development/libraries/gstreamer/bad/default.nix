@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, substituteAll
 , meson
 , ninja
 , gettext
@@ -19,6 +20,7 @@
 , libkate
 , lrdf
 , ladspaH
+, lcms2
 , libnice
 , webrtc-audio-processing
 , webrtc-audio-processing_1
@@ -77,6 +79,7 @@
 , mjpegtools
 , libGLU
 , libGL
+, addOpenGLRunpath
 , libintl
 , game-music-emu
 , openssl
@@ -108,6 +111,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ehHBO1XdHSOG3ZAiGeQcv83ajh4Ko+c4GGyVB0s12k8=";
   };
 
+  patches = [
+    # Add fallback paths for nvidia userspace libraries
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit (addOpenGLRunpath) driverLink;
+    })
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -126,6 +137,7 @@ stdenv.mkDerivation rec {
     gst-plugins-base
     orc
     json-glib
+    lcms2
     ldacbt
     libass
     libkate

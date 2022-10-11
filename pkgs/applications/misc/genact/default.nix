@@ -1,32 +1,29 @@
-{ lib, rustPlatform, fetchFromGitHub, jq }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "genact";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-POOXawhxrPT2UgbSZE3r0br7cqJ0ao7MpycrPYa/oCc=";
+    sha256 = "sha256-MB/i1jCxoGE8cPF+NE8aS7kF7ZsGb4+OyLcPcGp1hwI=";
   };
 
-  cargoSha256 = "sha256-wpCzWJglX3FnNySnBRJjFWST5FIG5wAO7u+D4VIevtU=";
+  cargoSha256 = "sha256-OBGJIR3REeMxHQu3ovEKSZZ8QNlhl/5jvWbR5OdsRTQ=";
 
-  depsExtraArgs = {
-    nativeBuildInputs = [ jq ];
-    postBuild = ''
-      pushd $name/humansize
+  nativeBuildInputs = [ installShellFiles ];
 
-      [ -d feature-tests ] && rm -r feature-tests
+  postInstall = ''
+    $out/bin/genact --print-manpage > genact.1
+    installManPage genact.1
 
-      jq '.files |= with_entries(select(.key | startswith("feature-tests") | not))' \
-        -c .cargo-checksum.json > .cargo-checksum.json.new
-      mv .cargo-checksum.json{.new,}
-
-      popd
-    '';
-  };
+    installShellCompletion --cmd genact \
+      --bash <($out/bin/genact --print-completions bash) \
+      --fish <($out/bin/genact --print-completions fish) \
+      --zsh <($out/bin/genact --print-completions zsh)
+  '';
 
   meta = with lib; {
     description = "A nonsense activity generator";
