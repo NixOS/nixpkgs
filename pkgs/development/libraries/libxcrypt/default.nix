@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "libxcrypt";
@@ -8,6 +8,11 @@ stdenv.mkDerivation rec {
     url = "https://github.com/besser82/libxcrypt/releases/download/v${version}/libxcrypt-${version}.tar.xz";
     sha256 = "sha256-npNoEfn60R28ozyhm9l8VcUus8oVkB8nreBGzHnmnoc=";
   };
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   configureFlags = [
     "--enable-hashes=all"
@@ -25,11 +30,15 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isMusl;
 
+  passthru.tests = {
+    inherit (nixosTests) login shadow;
+  };
+
   meta = with lib; {
     description = "Extended crypt library for descrypt, md5crypt, bcrypt, and others";
     homepage = "https://github.com/besser82/libxcrypt/";
     platforms = platforms.all;
-    maintainers = with maintainers; [ dottedmag ];
+    maintainers = with maintainers; [ dottedmag hexa ];
     license = licenses.lgpl21Plus;
   };
 }
