@@ -70,48 +70,59 @@ with lib;
 
           ${lines}
         '';
-        currentConfigPath = "$STATE_DIRECTORY/.nixos-current-config.json";
         runnerRegistrationConfig = getAttrs [ "name" "tokenFile" "url" "runnerGroup" "extraLabels" "ephemeral" ] cfg;
         newConfigPath = builtins.toFile "${svcName}-config.json" (builtins.toJSON runnerRegistrationConfig);
-        newConfigTokenFilename = ".new-token";
+        currentConfigPath = "$STATE_DIRECTORY/.nixos-current-config.json";
+        newConfigTokenPath= "$STATE_DIRECTORY/.new-token";
+        currentConfigTokenPath = "$STATE_DIRECTORY/${currentConfigTokenFilename}";
+
         runnerCredFiles = [
           ".credentials"
           ".credentials_rsaparams"
           ".runner"
         ];
         unconfigureRunner = writeScript "unconfigure" ''
-          differs=
-
-          if [[ "$(ls -A "$STATE_DIRECTORY")" ]]; then
-            # State directory is not empty
-            # Set `differs = 1` if current and new runner config differ or if `currentConfigPath` does not exist
-            ${pkgs.diffutils}/bin/diff -q '${newConfigPath}' "${currentConfigPath}" >/dev/null 2>&1 || differs=1
-            # Also trigger a registration if the token content changed
-            ${pkgs.diffutils}/bin/diff -q \
-              "$STATE_DIRECTORY"/${currentConfigTokenFilename} \
-              ${escapeShellArg cfg.tokenFile} \
-              >/dev/null 2>&1 || differs=1
-            # If .credentials does not exist, assume a previous run de-registered the runner on stop (ephemeral mode)
-            [[ ! -f "$STATE_DIRECTORY/.credentials" ]] && differs=1
-          fi
-
-          if [[ -n "$differs" ]]; then
-            echo "Config has changed, removing old runner state."
-            # In ephemeral mode, the runner deletes the `.credentials` file after de-registering it with GitHub
-            [[ -f "$STATE_DIRECTORY/.credentials" ]] && echo "The old runner will still appear in the GitHub Actions UI." \
-              "You have to remove it manually."
-            find "$STATE_DIRECTORY/" -mindepth 1 -delete
-
+          copy_tokens() {
             # Copy the configured token file to the state dir and allow the service user to read the file
-            install --mode=666 ${escapeShellArg cfg.tokenFile} "$STATE_DIRECTORY/${newConfigTokenFilename}"
+            install --mode=666 ${escapeShellArg cfg.tokenFile} "${newConfigTokenPath}"
             # Also copy current file to allow for a diff on the next start
-            install --mode=600 ${escapeShellArg cfg.tokenFile} "$STATE_DIRECTORY/${currentConfigTokenFilename}"
-          fi
-        '';
+            install --mode=600 ${escapeShellArg cfg.tokenFile} "${currentConfigTokenPath}"
+          }
+          clean_state() {
+            find "$STATE_DIRECTORY/" -mindepth 1 -delete
+            copy_tokens
+          }
+          diff_config() {
+            changed=0
+            # Check for module config changes
+            [[ -f "${currentConfigPath}" ]] \
+              && ${pkgs.diffutils}/bin/diff -q '${newConfigPath}' "${currentConfigPath}" >/dev/null 2>&1 \
+              || changed=1
+            # Also check the content of the token file
+            [[ -f "${currentConfigTokenPath}" ]] \
+              && ${pkgs.diffutils}/bin/diff -q "${currentConfigTokenPath}" ${escapeShellArg cfg.tokenFile} >/dev/null 2>&1 \
+              || changed=1
+            # If the config has changed, remove old state and copy tokens
+            if [[ "$changed" -eq 1 ]]; then
+              echo "Config has changed, removing old runner state."
+              echo "The old runner will still appear in the GitHub Actions UI." \
+                   "You have to remove it manually."
+              clean_state
+            fi
+          }
+          if [[ "${optionalString cfg.ephemeral "1"}" ]]; then
+            # In ephemeral mode, we always want to start with a clean state
+            clean_state
+          elif [[ "$(ls -A "$STATE_DIRECTORY")" ]]; then
+            # There are state files from a previous run; diff them to decide if we need a new registration
+            diff_config
+          else
+            # The state directory is entirely empty which indicates a first start
+            copy_tokens
+          fi        '';
         configureRunner = writeScript "configure" ''
-          if [[ -e "$STATE_DIRECTORY/${newConfigTokenFilename}" ]]; then
+          if [[ -e "${newConfigTokenPath}" ]]; then
             echo "Configuring GitHub Actions Runner"
-
             args=(
               --unattended
               --disableupdate
@@ -123,26 +134,21 @@ with lib;
               ${optionalString (cfg.runnerGroup != null) "--runnergroup ${escapeShellArg cfg.runnerGroup}"}
               ${optionalString cfg.ephemeral "--ephemeral"}
             )
-
             # If the token file contains a PAT (i.e., it starts with "ghp_"), we have to use the --pat option,
             # if it is not a PAT, we assume it contains a registration token and use the --token option
-            token=$(<"$STATE_DIRECTORY/${newConfigTokenFilename}")
+            token=$(<"${newConfigTokenPath}")
             if [[ "$token" =~ ^ghp_* ]]; then
               args+=(--pat "$token")
             else
               args+=(--token "$token")
             fi
-
             ${cfg.package}/bin/config.sh "''${args[@]}"
-
             # Move the automatically created _diag dir to the logs dir
             mkdir -p  "$STATE_DIRECTORY/_diag"
             cp    -r  "$STATE_DIRECTORY/_diag/." "$LOGS_DIRECTORY/"
             rm    -rf "$STATE_DIRECTORY/_diag/"
-
             # Cleanup token from config
-            rm "$STATE_DIRECTORY/${newConfigTokenFilename}"
-
+            rm "${newConfigTokenPath}"
             # Symlink to new config
             ln -s '${newConfigPath}' "${currentConfigPath}"
           fi
@@ -175,8 +181,8 @@ with lib;
     WorkingDirectory = runtimeDir;
 
     InaccessiblePaths = [
-      # Token file path given in the configuration
-      cfg.tokenFile
+      # Token file path given in the configuration, if visible to the service
+      "-${cfg.tokenFile}"
       # Token file in the state directory
       "${stateDir}/${currentConfigTokenFilename}"
     ];
