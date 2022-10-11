@@ -194,10 +194,6 @@ let
       runHook preInstall
       mkdir -p $out/Applications/Slack.app
       cp -R . $out/Applications/Slack.app
-    '' + lib.optionalString (!stdenv.isAarch64) ''
-      # on aarch64-darwin we get: Could not write domain com.tinyspeck.slackmacgap; exiting
-      /usr/bin/defaults write com.tinyspeck.slackmacgap SlackNoAutoUpdates -Bool YES
-    '' + ''
       runHook postInstall
     '';
   };

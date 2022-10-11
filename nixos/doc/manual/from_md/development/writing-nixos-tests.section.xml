@@ -24,16 +24,16 @@
   <para>
     We refer to the whole test above as a test module, whereas the
     values in
-    <link linkend="opt-nodes"><literal>nodes.&lt;name&gt;</literal></link>
+    <link linkend="test-opt-nodes"><literal>nodes.&lt;name&gt;</literal></link>
     are NixOS modules themselves.
   </para>
   <para>
     The option
-    <link linkend="opt-testScript"><literal>testScript</literal></link>
+    <link linkend="test-opt-testScript"><literal>testScript</literal></link>
     is a piece of Python code that executes the test (described below).
     During the test, it will start one or more virtual machines, the
     configuration of which is described by the option
-    <link linkend="opt-nodes"><literal>nodes</literal></link>.
+    <link linkend="test-opt-nodes"><literal>nodes</literal></link>.
   </para>
   <para>
     An example of a single-node test is
@@ -263,7 +263,7 @@ start_all()
           <note>
             <para>
               This requires
-              <link linkend="opt-enableOCR"><literal>enableOCR</literal></link>
+              <link linkend="test-opt-enableOCR"><literal>enableOCR</literal></link>
               to be set to <literal>true</literal>.
             </para>
           </note>
@@ -281,7 +281,7 @@ start_all()
           <note>
             <para>
               This requires
-              <link linkend="opt-enableOCR"><literal>enableOCR</literal></link>
+              <link linkend="test-opt-enableOCR"><literal>enableOCR</literal></link>
               to be set to <literal>true</literal>.
             </para>
           </note>
@@ -522,7 +522,7 @@ start_all()
           <note>
             <para>
               This requires
-              <link linkend="opt-enableOCR"><literal>enableOCR</literal></link>
+              <link linkend="test-opt-enableOCR"><literal>enableOCR</literal></link>
               to be set to <literal>true</literal>.
             </para>
           </note>

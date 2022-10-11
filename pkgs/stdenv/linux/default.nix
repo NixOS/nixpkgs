@@ -415,12 +415,6 @@ in
       inherit (prevStage.stdenv) fetchurlBoot;
 
       extraAttrs = {
-        # remove before 22.11
-        glibc = lib.warn
-          ( "`stdenv.glibc` is deprecated and will be removed in release 22.11."
-           + " Please use `pkgs.glibc` instead.")
-          prevStage.glibc;
-
         inherit bootstrapTools;
         shellPackage = prevStage.bash;
       };

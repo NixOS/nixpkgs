@@ -4,7 +4,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 if [ "$#" -gt 1 ] || [[ "$1" == -* ]]; then
-  echo "Regenerates packaging data for the element packages."
+  echo "Regenerates packaging data for the hedgedoc packages."
   echo "Usage: $0 [git release tag]"
   exit 1
 fi

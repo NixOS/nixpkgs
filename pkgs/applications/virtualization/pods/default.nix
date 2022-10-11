@@ -8,26 +8,26 @@
 , ninja
 , pkg-config
 , rustPlatform
-, wrapGAppsHook
+, wrapGAppsHook4
 , gtksourceview5
 , libadwaita
 }:
 
 stdenv.mkDerivation rec {
   pname = "pods";
-  version = "1.0.0-beta.4";
+  version = "1.0.0-beta.5";
 
   src = fetchFromGitHub {
     owner = "marhkb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1j5rz43860n17qcxmc5dj8sll3y593jj9zz1sfvnx4g0694sp0cl";
+    sha256 = "sha256-Bp/ILQY5Xa8wrq7v9O9QohWzlevdN3MwMjjnlimt6HM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-tj0ROO8HmFWyQLYDrdywOneHz6X43dRZJFTB+aw+m7o=";
+    sha256 = "sha256-iToznqaNXArVrSdDXGPJol3OeFdM3J8VgYSs+mjM0SE=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     rustPlatform.cargoSetupHook
     rustPlatform.rust.cargo
     rustPlatform.rust.rustc
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [

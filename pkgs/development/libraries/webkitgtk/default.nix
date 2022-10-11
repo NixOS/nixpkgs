@@ -214,7 +214,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
     "-DUSE_GTK4=ON"
   ] ++ lib.optionals (!systemdSupport) [
-    "-DUSE_SYSTEMD=OFF"
+    "-DENABLE_JOURNALD_LOG=OFF"
   ] ++ lib.optionals (stdenv.isLinux && enableGLES) [
     "-DENABLE_GLES2=ON"
   ];

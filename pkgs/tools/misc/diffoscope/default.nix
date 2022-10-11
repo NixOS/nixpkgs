@@ -67,25 +67,12 @@ python3Packages.buildPythonApplication rec {
   '';
 
   disabledTests = [
-    # Disable flaky test and a failing one
-    "test_android_manifest"
     "test_sbin_added_to_path"
     "test_diff_meta"
     "test_diff_meta2"
-    "test_obj_no_differences"
 
     # fails because it fails to determine llvm version
     "test_item3_deflate_llvm_bitcode"
-
-    # OSError: [Errno 84] Invalid or incomplete multibyte or wide character: b'/build/pytest-of-nixbld/pytest-0/\xf0(\x8c('
-    "test_non_unicode_filename"
-
-    # disable formatting tests because they can break on black updates
-    "test_code_is_black_clean"
-
-    # fails at 2022-09-30
-    "test_identification"
-    "test_diff"
   ] ++ lib.optionals stdenv.isDarwin [
     # Disable flaky tests on Darwin
     "test_non_unicode_filename"

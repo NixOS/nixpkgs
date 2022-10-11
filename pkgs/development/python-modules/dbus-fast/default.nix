@@ -6,11 +6,12 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "dbus-fast";
-  version = "1.17.0";
+  version = "1.29.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,11 +20,12 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-HbjeO+imWocc5bL62gdWHf8kBR6HNWwEu+KqO4ldHe4=";
+    hash = "sha256-GqL6PZlqFi5Es8VYeqeTsXX6j5fol2JzcosFtVCQn60=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -37,8 +39,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=dbus_fast --cov-report=term-missing:skip-covered" "" \
-      --replace "[tool.poetry.group.dev.dependencies]" ""
+      --replace " --cov=dbus_fast --cov-report=term-missing:skip-covered" ""
   '';
 
   pythonImportsCheck = [

@@ -8,7 +8,8 @@
 , freezegun
 , fetchFromGitHub
 , pycryptodome
-, pytest-aiohttp
+, pyserial-asyncio
+, pytest-asyncio
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.50.3";
+  version = "0.51.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zigpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-Od5BEi5Cu1Gzd4ZkPc2lfmsEZoqsxqiUKqZ2vkW/8sE=";
+    hash = "sha256-IfYWuJfmQtJnVANyiBE3AurhucqZ8qzYXBV3jprS5qw=";
   };
 
   propagatedBuildInputs = [
@@ -34,17 +35,17 @@ buildPythonPackage rec {
     aiosqlite
     crccheck
     cryptography
+    pyserial-asyncio
     pycryptodome
     voluptuous
   ];
 
   checkInputs = [
+    asynctest
     freezegun
-    pytest-aiohttp
+    pytest-asyncio
     pytest-timeout
     pytestCheckHook
-  ]  ++ lib.optionals (pythonOlder "3.8") [
-    asynctest
   ];
 
   pythonImportsCheck = [

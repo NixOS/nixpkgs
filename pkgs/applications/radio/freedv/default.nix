@@ -11,7 +11,7 @@
 , portaudio
 , speexdsp
 , hamlib
-, wxGTK31-gtk3
+, wxGTK32
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , AppKit
 , AVFoundation
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     lpcnetfreedv
     speexdsp
     hamlib
-    wxGTK31-gtk3
+    wxGTK32
   ] ++ (if pulseSupport then [ libpulseaudio ] else [ portaudio ])
   ++ lib.optionals stdenv.isDarwin [
     AppKit
@@ -59,6 +59,10 @@ stdenv.mkDerivation rec {
     "-DUSE_INTERNAL_CODEC2:BOOL=FALSE"
     "-DUSE_STATIC_DEPS:BOOL=FALSE"
   ] ++ lib.optionals pulseSupport [ "-DUSE_PULSEAUDIO:BOOL=TRUE" ];
+
+  NIX_CFLAGS_COMPILE = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    "-DAPPLE_OLD_XCODE"
+  ];
 
   meta = with lib; {
     homepage = "https://freedv.org/";

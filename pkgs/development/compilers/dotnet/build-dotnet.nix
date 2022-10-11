@@ -72,9 +72,16 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/bin
     cp -r ./ $out
+
+    mkdir -p $out/share/doc/$pname/$version
+    mv $out/LICENSE.txt $out/share/doc/$pname/$version/
+    mv $out/ThirdPartyNotices.txt $out/share/doc/$pname/$version/
+
     ln -s $out/dotnet $out/bin/dotnet
+
     runHook postInstall
   '';
 

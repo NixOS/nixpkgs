@@ -17,7 +17,7 @@ let
 
     patches = [ ./azure-agent-entropy.patch ];
 
-    buildInputs = [ makeWrapper python pythonPackages.wrapPython ];
+    nativeBuildInputs = [ makeWrapper python pythonPackages.wrapPython ];
     runtimeDeps = [ findutils gnugrep gawk coreutils openssl openssh
                     nettools # for hostname
                     procps # for pidof

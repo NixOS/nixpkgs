@@ -57,28 +57,6 @@ let
     })
 
     (self: super: {
-      bleak = super.bleak.overridePythonAttrs (oldAttrs: rec {
-        version = "0.17.0";
-        src = fetchFromGitHub {
-          owner = "hbldh";
-          repo = "bleak";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-AnH23AWrLw2jq6gSbx9VoGD8QXeCH5dN7FSVVdj4b3w=";
-        };
-      });
-
-      bleak-retry-connector = super.bleak-retry-connector.overridePythonAttrs (oldAttrs: rec {
-        version = "1.17.1";
-        src = fetchFromGitHub {
-          owner = "Bluetooth-Devices";
-          repo = "bleak-retry-connector";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-FoQ1cDORQaJcr6y9JaO4MigqV6jiBbwKNIIdYDgFNxQ=";
-        };
-      });
-    })
-
-    (self: super: {
       blebox-uniapi = super.blebox-uniapi.overridePythonAttrs (oldAttrs: rec {
         version = "2.0.2";
         src = fetchFromGitHub {
@@ -86,19 +64,6 @@ let
           repo = "blebox_uniapi";
           rev = "refs/tags/v${version}";
           hash = "sha256-0Yiooy7YSUFjqqcyH2fPQ6AWuR0EJxfRRZTw/6JGcMA=";
-        };
-      });
-    })
-
-    (self: super: {
-      bluetooth-adapters = super.bluetooth-adapters.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.1";
-        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ super.dbus-fast ];
-        src = fetchFromGitHub {
-          owner = "Bluetooth-Devices";
-          repo = "bluetooth-adapters";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-LAT4r6RHJWTkrZvuL1aSQDiztvXiOJwGmNQKGFnvFB8=";
         };
       });
     })
@@ -163,18 +128,6 @@ let
       });
     })
 
-    (self: super: {
-      plugwise = super.plugwise.overridePythonAttrs (oldAttrs: rec {
-        version = "0.20.1";
-        src = fetchFromGitHub {
-          owner = "plugwise";
-          repo = "python-plugwise";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-Sk7L0JPwn7IXVl5GeERxrG/vrHXeNwUjW1mgm4g40Ng=";
-        };
-      });
-    })
-
     # Pinned due to API changes in 0.1.0
     (self: super: {
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
@@ -201,24 +154,10 @@ let
     })
 
     (self: super: {
-      pyatmo = super.pyatmo.overridePythonAttrs (oldAttrs: rec {
-        version = "6.2.4";
-        src = fetchFromGitHub {
-          owner = "jabesq";
-          repo = "pyatmo";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-VXkQByaNA02fwBO2yuf7w1ZF/oJwd/h21de1EQlCu2U=";
-        };
-        checkInputs = [ super.freezegun ];
-      });
-    })
-
-    (self: super: {
       pydeconz = super.pydeconz.overridePythonAttrs (oldAttrs: rec {
         doCheck = false; # requires pytest-aiohttp>=1.0.0
       });
     })
-
 
     (self: super: {
       python-slugify = super.python-slugify.overridePythonAttrs (oldAttrs: rec {
@@ -239,17 +178,6 @@ let
           repo = "pytradfri";
           rev = "refs/tags/${version}";
           hash = "sha256-12ol+2CnoPfkxmDGJJAkoafHGpQuWC4lh0N7lSvx2DE=";
-        };
-      });
-    })
-
-    (self: super: {
-      solax = super.solax.overridePythonAttrs (oldAttrs: rec {
-        version = "0.2.9";
-        src = super.fetchPypi {
-          pname = "solax";
-          inherit version;
-          hash = "sha256-5m2wxdTshAsEfldPAyXqAYYtH1VjqERRBUGzX6pV85I=";
         };
       });
     })
@@ -333,7 +261,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.9.7";
+  hassVersion = "2022.10.3";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -351,7 +279,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-V6/y5HnJh8AVwkSg3uanYQRNvDcD1P0L+wBu98NpDek=";
+    hash = "sha256-5ffMs6gXOyg0hhB0Wx4bRmSqkr0uRhNcLhLo1PI2UqE=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -374,6 +302,7 @@ in python.pkgs.buildPythonApplication rec {
       "orjson"
       "PyJWT"
       "requests"
+      "typing-extensions"
       "yarl"
     ];
   in ''

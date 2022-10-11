@@ -16,13 +16,13 @@
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "2022.09.18",
-    "hash": "sha256-HjW4V7MctQoHbDYIlMv7VS0nS7FFG6Qir0sCju+isI0="
+    "rev": "2022.10.09",
+    "hash": "sha256-FUqkKcX0UbknvhntIo782ZGIteEE1SvPsfXo4yv6310="
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",
-    "rev": "2022.09.18",
-    "hash": "sha256-yIbIRo4hpwbCdH+3fIhjnQPtdvuFmfJSqloKjWqKEuY="
+    "rev": "2022.10.03",
+    "hash": "sha256-2XP3LyB18ZHLQOxzP4lBuhlUA8u1+wHl97cxmRYa7Xg="
   },
   "EControl": {
     "owner": "Alexey-T",

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "A vim inspired text editor";
     license = licenses.publicDomain;
     mainProgram = "kak";
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [ vrthra srapenne ];
     platforms = platforms.unix;
   };
 }

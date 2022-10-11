@@ -19,6 +19,9 @@ let
       fxa_email_domain = "api.accounts.firefox.com";
       fxa_oauth_server_url = "https://oauth.accounts.firefox.com/v1";
       run_migrations = true;
+      # if JWK caching is not enabled the token server must verify tokens
+      # using the fxa api, on a thread pool with a static size.
+      additional_blocking_threads_for_fxa_requests = 10;
     } // lib.optionalAttrs cfg.singleNode.enable {
       # Single-node mode is likely to be used on small instances with little
       # capacity. The default value (0.1) can only ever release capacity when
@@ -309,11 +312,7 @@ in
         enableACME = cfg.singleNode.enableTLS;
         forceSSL = cfg.singleNode.enableTLS;
         locations."/" = {
-          proxyPass = "http://localhost:${toString cfg.settings.port}";
-          # source mentions that this header should be set
-          extraConfig = ''
-            add_header X-Content-Type-Options nosniff;
-          '';
+          proxyPass = "http://127.0.0.1:${toString cfg.settings.port}";
         };
       };
     };

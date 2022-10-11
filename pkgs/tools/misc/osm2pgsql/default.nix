@@ -14,17 +14,18 @@
 , libosmium
 , protozero
 , rapidjson
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osm2pgsql";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
-    repo = pname;
-    rev = version;
-    hash = "sha256-MWJzCZdqvy/nH1Doj0fmGuzTubaHDnPOED7qgzvJ3ZU=";
+    repo = "osm2pgsql";
+    rev = finalAttrs.version;
+    hash = "sha256-+//cAoN8m66SboEYP5Dhtm0q0+oyvEr5o584e4JQ9xM=";
   };
 
   postPatch = ''
@@ -45,6 +46,10 @@ stdenv.mkDerivation rec {
     "-DEXTERNAL_FMT=ON"
   ] ++ lib.optional withLuaJIT "-DWITH_LUAJIT:BOOL=ON";
 
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+  };
+
   meta = with lib; {
     description = "OpenStreetMap data to PostgreSQL converter";
     homepage = "https://osm2pgsql.org";
@@ -52,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ jglukasik das-g ];
   };
-}
+})

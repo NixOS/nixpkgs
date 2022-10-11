@@ -19,7 +19,7 @@ let
     };
 
     aarch64-darwin = {
-      system = "mac64_m1";
+      system = "mac_arm64";
       sha256 = upstream-info.sha256_darwin_aarch64;
     };
   };

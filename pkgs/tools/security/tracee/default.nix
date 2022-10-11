@@ -54,7 +54,7 @@ buildGoModule rec {
   '';
   buildPhase = ''
     runHook preBuild
-    make $makeFlags ''${enableParallelBuilding:+-j$NIX_BUILD_CORES -l$NIX_BUILD_CORES} bpf-core all
+    make $makeFlags ''${enableParallelBuilding:+-j$NIX_BUILD_CORES} bpf-core all
     runHook postBuild
   '';
 

@@ -1,5 +1,7 @@
 { lib
 , buildDotnetModule
+, dotnetCorePackages
+, stdenvNoCC
 , fetchFromGitHub
 , wrapGAppsHook
 , libX11
@@ -85,6 +87,8 @@ buildDotnetModule rec {
   dotnetFlags = [
     "/p:ExtraDefineConstants=DISABLE_UPDATER"
   ];
+
+  dotnetRestoreFlags = [ "--runtime ${dotnetCorePackages.sdk_6_0.systemToDotnetRid stdenvNoCC.targetPlatform.system}" ];
 
   executables = [
     "Ryujinx.Headless.SDL2"

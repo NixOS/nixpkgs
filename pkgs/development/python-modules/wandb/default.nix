@@ -25,6 +25,7 @@
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
+, pythonRelaxDepsHook
 , torch
 , pyyaml
 , requests
@@ -52,10 +53,15 @@ buildPythonPackage rec {
   };
 
   patches = [
+    # Replace git paths
     (substituteAll {
       src = ./hardcode-git-path.patch;
       git = "${lib.getBin git}/bin/git";
     })
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
   ];
 
   # setuptools is necessary since pkg_resources is required at runtime.
@@ -76,10 +82,6 @@ buildPythonPackage rec {
     shortuuid
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   checkInputs = [
     azure-core
     bokeh
@@ -98,6 +100,12 @@ buildPythonPackage rec {
     scikit-learn
     tqdm
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  pythonRelaxDeps = [ "protobuf" ];
 
   disabledTestPaths = [
     # Tests that try to get chatty over sockets or spin up servers, not possible in the nix build environment.

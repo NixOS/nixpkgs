@@ -196,6 +196,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://tandoor.dev">Tandoor Recipes</link>,
+          a self-hosted multi-tenant recipe collection. Available as
+          <link xlink:href="options.html#opt-services.tandoor-recipes.enable">services.tandoor-recipes</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://hbase.apache.org/">HBase
           cluster</link>, a distributed, scalable, big data store.
           Available as
@@ -263,6 +270,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/shizunge/endlessh-go">endlessh-go</link>,
+          an SSH tarpit that exposes Prometheus metrics. Available as
+          <link linkend="opt-services.endlessh-go.enable">services.endlessh-go</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://netbird.io">netbird</link>, a zero
           configuration VPN. Available as
           <link xlink:href="options.html#opt-services.netbird.enable">services.netbird</link>.
@@ -311,6 +325,15 @@
           <link xlink:href="https://github.com/L11R/go-autoconfig">go-autoconfig</link>,
           IMAP/SMTP autodiscover server. Available as
           <link linkend="opt-services.go-autoconfig.enable">services.go-autoconfig</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/tmate-io/tmate-ssh-server">tmate-ssh-server</link>,
+          server side part of
+          <link xlink:href="https://tmate.io/">tmate</link>. Available
+          as
+          <link linkend="opt-services.tmate-ssh-server.enable">services.tmate-ssh-server</link>.
         </para>
       </listitem>
       <listitem>
@@ -467,6 +490,16 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>p4</literal> package now only includes the
+          open-source Perforce Helix Core command-line client and APIs.
+          It no longer installs the unfree Helix Core Server binaries
+          <literal>p4d</literal>, <literal>p4broker</literal>, and
+          <literal>p4p</literal>. To install the Helix Core Server
+          binaries, use the <literal>p4d</literal> package instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>coq</literal> package and versioned variants
           starting at <literal>coq_8_14</literal> no longer include
           CoqIDE, which is now available through
@@ -485,7 +518,9 @@
       <listitem>
         <para>
           <literal>pkgs.cosign</literal> does not provide the
-          <literal>cosigned</literal> binary anymore.
+          <literal>cosigned</literal> binary anymore. The
+          <literal>sget</literal> binary has been moved into its own
+          package.
         </para>
       </listitem>
       <listitem>
@@ -505,14 +540,6 @@
       </listitem>
       <listitem>
         <para>
-          The (previously undocumented) Nixpkgs configuration option
-          <literal>checkMeta</literal> now defaults to
-          <literal>true</literal>. This may cause evaluation failures
-          for packages with incorrect <literal>meta</literal> attribute.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           xow package removed along with the
           <literal>hardware.xow</literal> module, due to the project
           being deprecated in favor of <literal>xone</literal>, which is
@@ -526,6 +553,16 @@
           project being deprecated in favor of
           <literal>datadog-agent</literal>, which is available via the
           <literal>services.datadog-agent</literal> module.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>teleport</literal> has been upgraded to major version
+          10. Please see upstream
+          <link xlink:href="https://goteleport.com/docs/ver/10.0/management/operations/upgrading/">upgrade
+          instructions</link> and
+          <link xlink:href="https://goteleport.com/docs/ver/10.0/changelog/#1000">release
+          notes</link>.
         </para>
       </listitem>
       <listitem>

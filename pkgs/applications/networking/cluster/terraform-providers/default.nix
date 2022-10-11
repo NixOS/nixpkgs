@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, buildGoModule
+, buildGo119Module
 , fetchFromGitHub
 , callPackage
 , config
@@ -21,7 +21,7 @@ let
      , vendorHash ? throw "use vendorHash instead of vendorSha256" # added 2202/09
      , deleteVendor ? false
      , proxyVendor ? false
-     , mkProviderGoModule ? buildGoModule
+     , mkProviderGoModule ? buildGo119Module
        # Looks like "registry.terraform.io/vancluever/acme"
      , provider-source-address
      , ...
@@ -52,7 +52,7 @@ let
         passthru = attrs // {
           updateScript = writeShellScript "update" ''
             provider="$(basename ${provider-source-address})"
-            ./pkgs/applications/networking/cluster/terraform-providers/update-provider --no-build "$provider"
+            ./pkgs/applications/networking/cluster/terraform-providers/update-provider "$provider"
           '';
         };
       });

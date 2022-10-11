@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, cryptography
 , django
 , fetchFromGitHub
 , mock
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "twilio";
-  version = "7.14.1";
+  version = "7.14.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "twilio";
     repo = "twilio-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-VKAeM1a1TMXrewJ+j+Outyp7vxh9xovqjJ+GneYa6eg=";
+    hash = "sha256-lamP7ltKLizwPGX1063bZ90M89oPmXVSogi3HNksvHE=";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    cryptography
     django
     mock
     multidict

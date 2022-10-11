@@ -174,6 +174,11 @@ in mkLicense lset) ({
     free = false;
   };
 
+  cal10 = {
+    fullName = "Cryptographic Autonomy License version 1.0 (CAL-1.0)";
+    url = "https://opensource.org/licenses/CAL-1.0";
+  };
+
   capec = {
     fullName = "Common Attack Pattern Enumeration and Classification";
     url = "https://capec.mitre.org/about/termsofuse.html";
@@ -586,6 +591,11 @@ in mkLicense lset) ({
   libpng2 = {
     spdxId = "libpng-2.0"; # Used since libpng 1.6.36.
     fullName = "PNG Reference Library version 2";
+  };
+
+  libssh2 = {
+    fullName = "libssh2 License";
+    url = "https://www.libssh2.org/license.html";
   };
 
   libtiff = {

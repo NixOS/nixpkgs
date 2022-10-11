@@ -22,42 +22,14 @@ let
     favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop' ]
   '';
 
-  nixos-background-ligtht = pkgs.nixos-artwork.wallpapers.simple-blue;
+  nixos-background-light = pkgs.nixos-artwork.wallpapers.simple-blue;
   nixos-background-dark = pkgs.nixos-artwork.wallpapers.simple-dark-gray;
 
-  nixos-gsettings-desktop-schemas = let
-    defaultPackages = with pkgs; [ gsettings-desktop-schemas gnome.gnome-shell ];
-  in
-  pkgs.runCommand "nixos-gsettings-desktop-schemas" { preferLocalBuild = true; }
-    ''
-     mkdir -p $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
-
-     ${concatMapStrings
-        (pkg: "cp -rf ${pkg}/share/gsettings-schemas/*/glib-2.0/schemas/*.xml $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas\n")
-        (defaultPackages ++ cfg.extraGSettingsOverridePackages)}
-
-     cp -f ${pkgs.gnome.gnome-shell}/share/gsettings-schemas/*/glib-2.0/schemas/*.gschema.override $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
-
-     ${optionalString flashbackEnabled ''
-       cp -f ${pkgs.gnome.gnome-flashback}/share/gsettings-schemas/*/glib-2.0/schemas/*.gschema.override $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
-     ''}
-
-     chmod -R a+w $out/share/gsettings-schemas/nixos-gsettings-overrides
-     cat - > $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
-       [org.gnome.desktop.background]
-       picture-uri='file://${nixos-background-ligtht.gnomeFilePath}'
-       picture-uri-dark='file://${nixos-background-dark.gnomeFilePath}'
-
-       [org.gnome.desktop.screensaver]
-       picture-uri='file://${nixos-background-dark.gnomeFilePath}'
-
-       ${cfg.favoriteAppsOverride}
-
-       ${cfg.extraGSettingsOverrides}
-     EOF
-
-     ${pkgs.glib.dev}/bin/glib-compile-schemas $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/
-    '';
+  # TODO: Having https://github.com/NixOS/nixpkgs/issues/54150 would supersede this
+  nixos-gsettings-desktop-schemas = pkgs.gnome.nixos-gsettings-overrides.override {
+    inherit (cfg) extraGSettingsOverrides extraGSettingsOverridePackages favoriteAppsOverride;
+    inherit flashbackEnabled nixos-background-dark nixos-background-light;
+  };
 
   nixos-background-info = pkgs.writeTextFile rec {
     name = "nixos-background-info";
@@ -67,7 +39,7 @@ let
       <wallpapers>
         <wallpaper deleted="false">
           <name>Blobs</name>
-          <filename>${nixos-background-ligtht.gnomeFilePath}</filename>
+          <filename>${nixos-background-light.gnomeFilePath}</filename>
           <filename-dark>${nixos-background-dark.gnomeFilePath}</filename-dark>
           <options>zoom</options>
           <shade_type>solid</shade_type>

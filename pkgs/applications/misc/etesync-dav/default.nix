@@ -62,7 +62,7 @@ in python.pkgs.buildPythonApplication rec {
     homepage = "https://www.etesync.com/";
     description = "Secure, end-to-end encrypted, and privacy respecting sync for contacts, calendars and tasks";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ valodim ];
+    maintainers = with maintainers; [ thyol valodim ];
     broken = stdenv.isDarwin; # pyobjc-framework-Cocoa is missing
   };
 }

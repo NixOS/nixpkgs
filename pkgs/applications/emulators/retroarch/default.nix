@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, nixosTests
 , enableNvidiaCgToolkit ? false
 , withGamemode ? stdenv.isLinux
 , withVulkan ? stdenv.isLinux
@@ -36,11 +37,11 @@
 }:
 
 let
-  version = "1.10.3";
+  version = "1.11.0";
   libretroCoreInfo = fetchFromGitHub {
     owner = "libretro";
     repo = "libretro-core-info";
-    sha256 = "sha256-wIIMEWrria8bZe/rcoJwDA9aCMWwbkDQFyEU80TZXFQ=";
+    sha256 = "sha256-46T87BpzWUQHD7CsCF2sZo065Sl8Y4Sj1zwzBWmCiiU=";
     rev = "v${version}";
   };
   runtimeLibs = lib.optional withVulkan vulkan-loader
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "sha256-nAv1yv0laqlOmB8UUkK5wSYy/ySqXloEErm+yV30bbA=";
+    sha256 = "sha256-/rOf85TQTXbY9kIETaO5E58f2ZvKPqEFLsbNne/+/lw=";
     rev = "v${version}";
   };
 
@@ -128,12 +129,9 @@ stdenv.mkDerivation rec {
 
   # Workaround for the following error affecting newer versions of Clang:
   # ./config.def.h:xxx:x: error: 'TARGET_OS_TV' is not defined, evaluates to 0 [-Werror,-Wundef-prefix=TARGET_OS_]
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [ "-Wno-undef-prefix" ]
-    # Workaround build failure on -fno-common toolchains:
-    #   duplicate symbol '_apple_platform' in:ui_cocoa.o cocoa_common.o
-    # TODO: drop when upstream gets a fix for it:
-    #   https://github.com/libretro/RetroArch/issues/14025
-    ++ lib.optionals stdenv.isDarwin [ "-fcommon" ];
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [ "-Wno-undef-prefix" ];
+
+  passthru.tests = nixosTests.retroarch;
 
   meta = with lib; {
     homepage = "https://libretro.com";
@@ -141,6 +139,10 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     changelog = "https://github.com/libretro/RetroArch/blob/v${version}/CHANGES.md";
-    maintainers = with maintainers; [ MP2E edwtjo matthewbauer kolbycrouch thiagokokada ];
+    maintainers = with maintainers; teams.libretro.members ++ [ matthewbauer kolbycrouch ];
+    # FIXME: error while building in macOS:
+    # "Undefined symbols for architecture <arch>"
+    # See also retroarch/wrapper.nix that is also broken in macOS
+    broken = stdenv.isDarwin;
   };
 }

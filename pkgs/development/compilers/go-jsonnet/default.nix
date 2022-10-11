@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, testers }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, fetchpatch
+, testers
+}:
 
 let self = buildGoModule rec {
   pname = "go-jsonnet";
@@ -6,12 +11,20 @@ let self = buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = "go-jsonnet";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-o/IjXskGaMhvQmTsAS745anGBMI2bwHf/EOEp57H8LU=";
+    hash = "sha256-o/IjXskGaMhvQmTsAS745anGBMI2bwHf/EOEp57H8LU=";
   };
 
-  vendorSha256 = "sha256-fZBhlZrLcC4xj5uvb862lBOczGnJa9CceS3D8lUhBQo=";
+  patches = [
+    (fetchpatch {
+      name = "update-x-sys-for-go-1.18-on-aarch64-darwin.patch";
+      url = "https://github.com/google/go-jsonnet/commit/7032dd729f7e684dcfb2574f4fe99499165ef9cb.patch";
+      hash = "sha256-emUcuE9Q4qkXFXLyLvLHjzrKAaQhjcSWLNafABvHxhM=";
+    })
+  ];
+
+  vendorHash = "sha256-H4vLVXpuPkECB15LHoS9N9IwUD7Fzccshwbo5hjeXXc=";
 
   doCheck = false;
 

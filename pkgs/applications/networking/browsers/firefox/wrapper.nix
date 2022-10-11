@@ -1,5 +1,5 @@
 { stdenv, lib, makeDesktopItem, makeWrapper, makeBinaryWrapper, lndir, config
-, fetchurl, zip, unzip, jq, xdg-utils, writeText
+, jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
 , ffmpeg_5, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc

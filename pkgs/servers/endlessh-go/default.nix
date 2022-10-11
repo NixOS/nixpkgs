@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -17,6 +18,8 @@ buildGoModule rec {
   vendorSha256 = "sha256-YGVLntDnOX55IoIHIn0z1K7V/PhRLruEASfAGQsTUkk=";
 
   ldflags = [ "-s" "-w" ];
+
+  passthru.tests = nixosTests.endlessh-go;
 
   meta = with lib; {
     description = "An implementation of endlessh exporting Prometheus metrics";

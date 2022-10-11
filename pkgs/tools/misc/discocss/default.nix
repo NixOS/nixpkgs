@@ -1,4 +1,10 @@
-{ stdenvNoCC, lib, fetchFromGitHub }:
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, discordAlias ? false
+, discord
+, makeWrapper
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "discocss";
@@ -13,8 +19,16 @@ stdenvNoCC.mkDerivation rec {
 
   dontBuild = true;
 
+  nativeBuildInputs = [ makeWrapper ];
+
   installPhase = ''
-    install -Dm755 ./discocss $out/bin/discocss
+    install -Dm755 discocss $out/bin/discocss
+  '' + lib.optionalString discordAlias ''
+    wrapProgram $out/bin/discocss --set DISCOCSS_DISCORD_BIN ${discord}/bin/Discord
+    ln -s $out/bin/discocss $out/bin/Discord
+    ln -s $out/bin/discocss $out/bin/discord
+    mkdir -p $out/share
+    ln -s ${discord}/share/* $out/share
   '';
 
   meta = with lib; {

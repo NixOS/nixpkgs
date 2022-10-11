@@ -324,6 +324,7 @@ package-maintainers:
     - leb128-cereal
     - tasty-expected-failure
     - lhs2tex
+    - rec-def
   pacien:
     - ldgallery-compiler
   peti:

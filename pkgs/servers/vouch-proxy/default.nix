@@ -18,9 +18,6 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  # broken with go>1.16
-  doCheck = false;
-
   preCheck = ''
     export VOUCH_ROOT=$PWD
   '';

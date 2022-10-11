@@ -4,6 +4,7 @@
 , libxkbcommon, libXi, libXext, wayland-protocols, wayland
 , lcms2
 , librsync
+, openssl
 , installShellFiles
 , dbus
 , darwin
@@ -27,14 +28,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.25.2";
+  version = "0.26.2";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "sha256-o/vVz1lPfsgkzbYjYhIrScCAROmVdiPsNwjW/m5n7Us=";
+    sha256 = "sha256-IqXRkKzOfqWolH/534nmM2R/69olhFOk6wbbF4ifRd0=";
   };
 
   buildInputs = [
@@ -42,6 +43,7 @@ buildPythonApplication rec {
     ncurses
     lcms2
     librsync
+    openssl.dev
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
     CoreGraphics
@@ -77,6 +79,9 @@ buildPythonApplication rec {
   outputs = [ "out" "terminfo" "shell_integration" ];
 
   patches = [
+    # Gets `test_ssh_env_vars` to pass when `bzip2` is in the output of `env`.
+    ./fix-test_ssh_env_vars.patch
+
     # Needed on darwin
 
     # Gets `test_ssh_shell_integration` to pass for `zsh` when `compinit` complains about
@@ -98,14 +103,18 @@ buildPythonApplication rec {
       --update-check-interval=0 \
       --shell-integration=enabled\ no-rc
     '';
+    darwinOptions = ''
+      --disable-link-time-optimization \
+      ${commonOptions}
+    '';
   in ''
     runHook preBuild
     ${if stdenv.isDarwin then ''
-      ${python.interpreter} setup.py kitty.app \
-      --disable-link-time-optimization \
-      ${commonOptions}
-      make man
+      ${python.interpreter} setup.py build ${darwinOptions}
+      make docs
+      ${python.interpreter} setup.py kitty.app ${darwinOptions}
     '' else ''
+      ${python.interpreter} setup.py build-launcher
       ${python.interpreter} setup.py linux-package \
       --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
       --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
@@ -126,7 +135,7 @@ buildPythonApplication rec {
   ];
 
   # skip failing tests due to darwin sandbox
-  preCheck = if stdenv.isDarwin then ''
+  preCheck = lib.optionalString stdenv.isDarwin ''
     substituteInPlace kitty_tests/file_transmission.py \
       --replace test_file_get dont_test_file_get \
       --replace test_path_mapping_receive dont_test_path_mapping_receive
@@ -138,15 +147,9 @@ buildPythonApplication rec {
       --replace test_ssh_connection_data dont_test_ssh_connection_data
     substituteInPlace kitty_tests/fonts.py \
       --replace 'class Rendering(BaseTest)' 'class Rendering'
-  '' else "";
+  '';
 
-  checkPhase =
-    let buildBinPath =
-      if stdenv.isDarwin
-        then "kitty.app/Contents/MacOS"
-        else "linux-package/bin";
-    in
-    ''
+  checkPhase = ''
       runHook preCheck
 
       # Fontconfig error: Cannot load default config file: No such file: (null)
@@ -155,7 +158,8 @@ buildPythonApplication rec {
       # Required for `test_ssh_shell_integration` to pass.
       export TERM=kitty
 
-      env PATH="${buildBinPath}:$PATH" ${python.interpreter} test.py
+      make test
+      runHook postCheck
     '';
 
   installPhase = ''
