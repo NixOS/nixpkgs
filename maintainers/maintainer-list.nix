@@ -7466,6 +7466,10 @@
     githubId = 72546287;
     name = "L3af";
   };
+  laalsaas = {
+    email = "laalsaas@systemli.org";
+    name = "laalsaas";
+  };
   lach = {
     email = "iam@lach.pw";
     github = "CertainLach";
