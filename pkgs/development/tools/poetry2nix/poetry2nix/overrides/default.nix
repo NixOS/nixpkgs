@@ -1200,6 +1200,7 @@ lib.composeManyExtensions [
         old: {
           buildInputs = (old.buildInputs or [ ]) ++ [
             self.types-typed-ast
+            self.types-setuptools
           ];
           # Compile mypy with mypyc, which makes mypy about 4 times faster. The compiled
           # version is also the default in the wheels on Pypi that include binaries.

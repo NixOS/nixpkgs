@@ -634,6 +634,8 @@ in {
   traefik = handleTestOn ["x86_64-linux"] ./traefik.nix {};
   trafficserver = handleTest ./trafficserver.nix {};
   transmission = handleTest ./transmission.nix {};
+  # tracee requires bpf
+  tracee = handleTestOn ["x86_64-linux"] ./tracee.nix {};
   trezord = handleTest ./trezord.nix {};
   trickster = handleTest ./trickster.nix {};
   trilium-server = handleTestOn ["x86_64-linux"] ./trilium-server.nix {};
