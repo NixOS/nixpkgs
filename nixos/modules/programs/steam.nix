@@ -6,7 +6,7 @@ let
   cfg = config.programs.steam;
 
   steam = pkgs.steam.override {
-    extraPackages = pkgs: [
+    extraPkgs = pkgs: [
       (pkgs.runCommand "share-fonts" { preferLocalBuild = true; } ''
         mkdir -p "$out/share/fonts"
         font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
