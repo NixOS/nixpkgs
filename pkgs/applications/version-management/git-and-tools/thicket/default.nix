@@ -1,6 +1,6 @@
 { lib
-, fetchFromGitHub
 , crystal
+, fetchFromGitHub
 }:
 
 crystal.buildCrystalPackage rec {
@@ -16,7 +16,6 @@ crystal.buildCrystalPackage rec {
 
   format = "shards";
 
-  shardsFile = ./shards.nix;
   crystalBinaries.thicket.src = "src/thicket.cr";
 
   # there is one test that tries to clone a repo
