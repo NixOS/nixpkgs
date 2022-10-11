@@ -51,15 +51,12 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     dbus-python
-    pbr
     pycairo
     pygobject3
-    setuptools
     setuptools-scm
     pyyaml
   ];
 
-  PBR_VERSION = version; # pbr needs either .git directory, sdist, or env var
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   makeFlags = [
