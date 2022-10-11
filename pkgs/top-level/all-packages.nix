@@ -28613,7 +28613,9 @@ with pkgs;
 
   qrcodegen = callPackage ../development/libraries/qrcodegen { };
 
-  qrencode = callPackage ../development/libraries/qrencode { };
+  qrencode = callPackage ../development/libraries/qrencode {
+    inherit (darwin) libobjc;
+  };
 
   geeqie = callPackage ../applications/graphics/geeqie { };
 
