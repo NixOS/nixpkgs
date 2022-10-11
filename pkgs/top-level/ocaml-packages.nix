@@ -144,6 +144,8 @@ let
 
     camlimages = callPackage ../development/ocaml-modules/camlimages { };
 
+    class_group_vdf = callPackage ../development/ocaml-modules/class_group_vdf { };
+
     benchmark = callPackage ../development/ocaml-modules/benchmark { };
 
     biniou = callPackage ../development/ocaml-modules/biniou { };
