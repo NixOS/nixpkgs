@@ -7,6 +7,7 @@
 , fetchpatch
 , fetchzip
 , buildPackages
+, makeBinaryWrapper
 , ninja
 , meson
 , m4
@@ -333,6 +334,7 @@ stdenv.mkDerivation {
   nativeBuildInputs =
     [
       pkg-config
+      makeBinaryWrapper
       gperf
       ninja
       meson
@@ -668,7 +670,14 @@ stdenv.mkDerivation {
   preFixup = lib.optionalString withEfi ''
     mv $out/lib/systemd/boot/efi $out/dont-strip-me
   '';
-  postFixup = lib.optionalString withEfi ''
+
+  # Wrap in the correct path for LUKS2 tokens.
+  postFixup = lib.optionalString withCryptsetup ''
+    for f in lib/systemd/systemd-cryptsetup bin/systemd-cryptenroll; do
+      # This needs to be in LD_LIBRARY_PATH because rpath on a binary is not propagated to libraries using dlopen, in this case `libcryptsetup.so`
+      wrapProgram $out/$f --prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib/cryptsetup
+    done
+  '' + lib.optionalString withEfi ''
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
   '';
 

@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kYSm672c5+shEVLn90GmyC8tHMDiSoTsnFKTnu4PBUI=";
   };
 
+  patches = [
+    # Allow reading tokens from a relative path, see #167994
+    ./relative-token-path.patch
+  ];
+
   postPatch = ''
     patchShebangs tests
 

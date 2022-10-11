@@ -596,8 +596,10 @@ in {
   systemd-cryptenroll = handleTest ./systemd-cryptenroll.nix {};
   systemd-escaping = handleTest ./systemd-escaping.nix {};
   systemd-initrd-btrfs-raid = handleTest ./systemd-initrd-btrfs-raid.nix {};
+  systemd-initrd-luks-fido2 = handleTest ./systemd-initrd-luks-fido2.nix {};
   systemd-initrd-luks-keyfile = handleTest ./systemd-initrd-luks-keyfile.nix {};
   systemd-initrd-luks-password = handleTest ./systemd-initrd-luks-password.nix {};
+  systemd-initrd-luks-tpm2 = handleTest ./systemd-initrd-luks-tpm2.nix {};
   systemd-initrd-modprobe = handleTest ./systemd-initrd-modprobe.nix {};
   systemd-initrd-shutdown = handleTest ./systemd-shutdown.nix { systemdStage1 = true; };
   systemd-initrd-simple = handleTest ./systemd-initrd-simple.nix {};
