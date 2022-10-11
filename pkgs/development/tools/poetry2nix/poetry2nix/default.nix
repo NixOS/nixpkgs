@@ -5,7 +5,7 @@
 }:
 let
   # Poetry2nix version
-  version = "1.34.1";
+  version = "1.35.0";
 
   inherit (poetryLib) isCompatible readTOML normalizePackageName normalizePackageSet;
 
@@ -159,11 +159,14 @@ lib.makeScope pkgs.newScope (self: {
       };
 
       poetryLock = readTOML poetrylock;
+
+      # Lock file version 1.1 files
       lockFiles =
         let
           lockfiles = lib.getAttrFromPath [ "metadata" "files" ] poetryLock;
         in
         lib.listToAttrs (lib.mapAttrsToList (n: v: { name = normalizePackageName n; value = v; }) lockfiles);
+
       evalPep508 = mkEvalPep508 python;
 
       # Filter packages by their PEP508 markers & pyproject interpreter version
@@ -192,7 +195,8 @@ lib.makeScope pkgs.newScope (self: {
                     pkgMeta // {
                       inherit pwd preferWheels;
                       source = pkgMeta.source or null;
-                      files = lockFiles.${normalizedName};
+                      # Default to files from lock file version 2.0 and fall back to 1.1
+                      files = pkgMeta.files or lockFiles.${normalizedName};
                       pythonPackages = self;
 
                       sourceSpec = (
