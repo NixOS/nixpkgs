@@ -14752,7 +14752,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-deps = callPackage ../development/tools/rust/cargo-deps { };
-  cargo-download = callPackage ../development/tools/rust/cargo-download { };
   cargo-edit = callPackage ../development/tools/rust/cargo-edit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
