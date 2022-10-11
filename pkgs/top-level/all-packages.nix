@@ -11718,7 +11718,7 @@ with pkgs;
   };
 
   teleport = callPackage ../servers/teleport {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
   };
 
   telepresence = callPackage ../tools/networking/telepresence {
