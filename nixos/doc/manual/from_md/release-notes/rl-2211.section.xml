@@ -490,6 +490,16 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>p4</literal> package now only includes the
+          open-source Perforce Helix Core command-line client and APIs.
+          It no longer installs the unfree Helix Core Server binaries
+          <literal>p4d</literal>, <literal>p4broker</literal>, and
+          <literal>p4p</literal>. To install the Helix Core Server
+          binaries, use the <literal>p4d</literal> package instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>coq</literal> package and versioned variants
           starting at <literal>coq_8_14</literal> no longer include
           CoqIDE, which is now available through
