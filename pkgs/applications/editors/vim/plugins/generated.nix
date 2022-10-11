@@ -3381,6 +3381,18 @@ final: prev:
     meta.homepage = "https://github.com/ellisonleao/gruvbox.nvim/";
   };
 
+  guess-indent-nvim = buildVimPluginFrom2Nix {
+    pname = "guess-indent.nvim";
+    version = "2022-07-17";
+    src = fetchFromGitHub {
+      owner = "nmac427";
+      repo = "guess-indent.nvim";
+      rev = "c37467baa1a51b74ed767cbe0540fce44e03d828";
+      sha256 = "11fb9xsaq9ygl7sd7k1xg4ccbynmjdvnrbs44snp4q48fidn1vrb";
+    };
+    meta.homepage = "https://github.com/nmac427/guess-indent.nvim/";
+  };
+
   gundo-vim = buildVimPluginFrom2Nix {
     pname = "gundo.vim";
     version = "2021-02-21";
