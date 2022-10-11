@@ -6669,7 +6669,7 @@ with pkgs;
   freeze = callPackage ../tools/security/freeze { };
 
   freqtweak = callPackage ../applications/audio/freqtweak {
-    wxGTK = wxGTK31-gtk2;
+    wxGTK = wxGTK32;
   };
 
   frescobaldi = python3Packages.callPackage ../misc/frescobaldi {};
