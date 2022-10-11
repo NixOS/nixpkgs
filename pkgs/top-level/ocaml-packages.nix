@@ -1396,6 +1396,8 @@ let
 
     semaphore-compat = callPackage ../development/ocaml-modules/semaphore-compat { };
 
+    semver = callPackage ../development/ocaml-modules/semver { };
+
     sha = callPackage ../development/ocaml-modules/sha { };
 
     shared-memory-ring = callPackage ../development/ocaml-modules/shared-memory-ring { };
