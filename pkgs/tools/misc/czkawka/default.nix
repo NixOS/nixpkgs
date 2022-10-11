@@ -8,7 +8,7 @@
 , gdk-pixbuf
 , atk
 , gtk4
-, wrapGAppsHook
+, wrapGAppsHook4
 , gobject-introspection
 , xvfb-run
 , testers
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
     gobject-introspection
   ];
 

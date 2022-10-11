@@ -10507,8 +10507,8 @@ with pkgs;
 
   remarshal = with python3Packages; toPythonApplication remarshal;
 
-  rehex = callPackage ../applications/editors/rehex {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa IOKit;
+  rehex = darwin.apple_sdk_11_0.callPackage ../applications/editors/rehex {
+    inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa IOKit;
   };
 
   rig = callPackage ../tools/misc/rig { };
@@ -15218,22 +15218,35 @@ with pkgs;
 
   # Below, the classic self-bootstrapping process
   cbqn-bootstrap = lib.dontRecurseIntoAttrs {
+    # Use clang to compile CBQN if we aren't already.
+    # CBQN's upstream primarily targets and tests clang which means using gcc
+    # will result in slower binaries and on some platforms failing/broken builds.
+    # See https://github.com/dzaima/CBQN/issues/12.
+    #
+    # Known issues:
+    #
+    # * CBQN using gcc is broken at runtime on i686 due to
+    #   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58416,
+    # * CBQN uses some CPP macros gcc doesn't like for aarch64.
+    stdenv = if !stdenv.cc.isClang then clangStdenv else stdenv;
+
     mbqn-source = buildPackages.mbqn.src;
 
     phase0 = callPackage ../development/interpreters/bqn/cbqn {
+      inherit (cbqn-bootstrap) stdenv;
       genBytecode = false;
       bqn-path = null;
       mbqn-source = null;
     };
 
     phase1 = callPackage ../development/interpreters/bqn/cbqn {
-      inherit (cbqn-bootstrap) mbqn-source;
+      inherit (cbqn-bootstrap) mbqn-source stdenv;
       genBytecode = true;
       bqn-path = "${buildPackages.cbqn-bootstrap.phase0}/bin/cbqn";
     };
 
     phase2 = callPackage ../development/interpreters/bqn/cbqn {
-      inherit (cbqn-bootstrap) mbqn-source;
+      inherit (cbqn-bootstrap) mbqn-source stdenv;
       genBytecode = true;
       bqn-path = "${buildPackages.cbqn-bootstrap.phase1}/bin/cbqn";
     };
@@ -22367,10 +22380,7 @@ with pkgs;
 
   umockdev = callPackage ../development/libraries/umockdev { };
 
-  unconvert = callPackage ../development/tools/unconvert {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
-  };
+  unconvert = callPackage ../development/tools/unconvert { };
 
   uncover = callPackage ../tools/security/uncover { };
 
@@ -23765,6 +23775,13 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
+  mongodb-6_0 = callPackage ../servers/nosql/mongodb/6.0.nix {
+    sasl = cyrus_sasl;
+    boost = boost178.override { enableShared = false; };
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+
   nginx-sso = callPackage ../servers/nginx-sso { };
 
   percona-server56 = callPackage ../servers/sql/percona/5.6.x.nix {
@@ -23775,10 +23792,7 @@ with pkgs;
 
   immudb = callPackage ../servers/nosql/immudb { };
 
-  influxdb = callPackage ../servers/nosql/influxdb {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
-  };
+  influxdb = callPackage ../servers/nosql/influxdb { };
   influxdb2-server = callPackage ../servers/nosql/influxdb2 { };
   influxdb2-cli = callPackage ../servers/nosql/influxdb2/cli.nix { };
   # For backwards compatibility with older versions of influxdb2,
@@ -23952,10 +23966,7 @@ with pkgs;
   prometheus-minio-exporter = callPackage ../servers/monitoring/prometheus/minio-exporter { };
   prometheus-modemmanager-exporter = callPackage ../servers/monitoring/prometheus/modemmanager-exporter.nix { };
   prometheus-mysqld-exporter = callPackage ../servers/monitoring/prometheus/mysqld-exporter.nix { };
-  prometheus-nats-exporter = callPackage ../servers/monitoring/prometheus/nats-exporter.nix {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
-  };
+  prometheus-nats-exporter = callPackage ../servers/monitoring/prometheus/nats-exporter.nix { };
   prometheus-nextcloud-exporter = callPackage ../servers/monitoring/prometheus/nextcloud-exporter.nix { };
   prometheus-nginx-exporter = callPackage ../servers/monitoring/prometheus/nginx-exporter.nix { };
   prometheus-nginxlog-exporter = callPackage ../servers/monitoring/prometheus/nginxlog-exporter.nix { };
@@ -30308,7 +30319,10 @@ with pkgs;
 
   ostinato = libsForQt5.callPackage ../applications/networking/ostinato { };
 
-  p4 = callPackage ../applications/version-management/p4 { };
+  p4 = callPackage ../applications/version-management/p4 {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Foundation Security;
+    openssl = openssl_1_1;
+  };
   p4d = callPackage ../applications/version-management/p4d { };
   p4v = libsForQt515.callPackage ../applications/version-management/p4v { };
 
@@ -30478,7 +30492,10 @@ with pkgs;
 
   diffpdf = libsForQt5.callPackage ../applications/misc/diffpdf { };
 
-  diff-pdf = callPackage ../applications/misc/diff-pdf { wxGTK = wxGTK31; };
+  diff-pdf = callPackage ../applications/misc/diff-pdf {
+    wxGTK = wxGTK32;
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   diffuse = callPackage ../applications/misc/diffuse { };
 
@@ -37071,7 +37088,7 @@ with pkgs;
   };
 
   wxsqlite3 = callPackage ../development/libraries/wxsqlite3 {
-    wxGTK = wxGTK30;
+    wxGTK = wxGTK32;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
     inherit (darwin.stubs) setfile rez derez;
   };
