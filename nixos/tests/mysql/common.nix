@@ -4,7 +4,7 @@
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
   });
   mysqlPackages = {
-    inherit (pkgs) mysql57 mysql80;
+    inherit (pkgs) mysql80;
   };
   mkTestName = pkg: "mariadb_${builtins.replaceStrings ["."] [""] (lib.versions.majorMinor pkg.version)}";
 }
