@@ -704,8 +704,9 @@ with self;
 
   ppx_sexp_conv = janePackage {
     pname = "ppx_sexp_conv";
-    minimumOCamlVersion = "4.04.2";
-    hash = "1fyf7hgxprn7pj58rmmrfpv938a0avpzvvk6wzihpmfm6whgbdm8";
+    version = "0.15.1";
+    minimalOCamlVersion = "4.08.0";
+    hash = "sha256-NYknZHyDklr71hihM2pPFQ7uAKkuKO2DJkjtsF+xc5g=";
     meta.description = "[@@deriving] plugin to generate S-expression conversion functions";
     propagatedBuildInputs = [ ppxlib sexplib0 base ];
   };
