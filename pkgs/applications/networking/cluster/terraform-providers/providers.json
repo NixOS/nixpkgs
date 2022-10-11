@@ -1188,9 +1188,9 @@
     "owner": "cloudposse",
     "provider-source-address": "registry.terraform.io/cloudposse/utils",
     "repo": "terraform-provider-utils",
-    "rev": "1.3.0",
+    "rev": "1.4.1",
     "vendorHash": "sha256-00kcosPSk/Ll7UQhnrEGRo0USvFM2V5MLKnndfhQEQA=",
-    "version": "1.3.0"
+    "version": "1.4.1"
   },
   "vault": {
     "hash": "sha256-v+WhEJ9HsTdOqSVpbV/qVCEICsgY3nEqcIutYHi3aQ8=",
