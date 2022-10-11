@@ -615,13 +615,13 @@
     "version": "0.3.0"
   },
   "keycloak": {
-    "hash": "sha256-JDMPr2uFi+9CcHdyigmP1DM3uRx2+eFnzSaHp+es2Tg=",
+    "hash": "sha256-5IMSUSaSoe+zqwtcL6aQ7PTtLpNiWxYp/J38Zm+Hniw=",
     "owner": "mrparkers",
     "provider-source-address": "registry.terraform.io/mrparkers/keycloak",
     "repo": "terraform-provider-keycloak",
-    "rev": "v3.10.0",
-    "vendorHash": "sha256-8x0MlwAzeA2O6wXXHSk++K0ePmzE9/2lfo2ID83LzRM=",
-    "version": "3.10.0"
+    "rev": "v4.0.0",
+    "vendorHash": "sha256-nDvnLEOtXkUJFY22pKogOzkWrj4qjyQbdlJ5pa/xnK8=",
+    "version": "4.0.0"
   },
   "ksyun": {
     "hash": "sha256-sfvmDByxAQbbdPHb9l5tIT5dyu8eA3r63i5FZJYEYTI=",
