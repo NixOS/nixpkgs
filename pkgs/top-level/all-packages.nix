@@ -7485,6 +7485,7 @@ with pkgs;
 
   plplot = callPackage ../development/libraries/plplot {
     inherit (xorg) libX11;
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
   pxattr = callPackage ../tools/archivers/pxattr { };
@@ -15288,6 +15289,7 @@ with pkgs;
 
   gnudatalanguage = callPackage ../development/interpreters/gnudatalanguage {
     inherit (llvmPackages) openmp;
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
     # MPICH currently build on Darwin
     mpi = mpich;
   };
