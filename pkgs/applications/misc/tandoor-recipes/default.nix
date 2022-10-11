@@ -112,6 +112,9 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     makeWrapper $out/lib/tandoor-recipes/manage.py $out/bin/tandoor-recipes \
       --prefix PYTHONPATH : "$PYTHONPATH"
 
+    # usually copied during frontend build (see vue.config.js)
+    cp vue/src/sw.js $out/lib/tandoor-recipes/cookbook/templates/
+
     runHook postInstall
   '';
 
