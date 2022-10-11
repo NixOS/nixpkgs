@@ -7,71 +7,11 @@ let
   opt = options.services.grafana;
   provisioningSettingsFormat = pkgs.formats.yaml {};
   declarativePlugins = pkgs.linkFarm "grafana-plugins" (builtins.map (pkg: { name = pkg.pname; path = pkg; }) cfg.declarativePlugins);
-  useMysql = cfg.database.type == "mysql";
-  usePostgresql = cfg.database.type == "postgres";
+  useMysql = cfg.settings.database.type == "mysql";
+  usePostgresql = cfg.settings.database.type == "postgres";
 
-  envOptions = {
-    PATHS_DATA = cfg.dataDir;
-    PATHS_PLUGINS = if builtins.isNull cfg.declarativePlugins then "${cfg.dataDir}/plugins" else declarativePlugins;
-    PATHS_LOGS = "${cfg.dataDir}/log";
-
-    SERVER_SERVE_FROM_SUBPATH = boolToString cfg.server.serveFromSubPath;
-    SERVER_PROTOCOL = cfg.protocol;
-    SERVER_HTTP_ADDR = cfg.addr;
-    SERVER_HTTP_PORT = cfg.port;
-    SERVER_SOCKET = cfg.socket;
-    SERVER_DOMAIN = cfg.domain;
-    SERVER_ROOT_URL = cfg.rootUrl;
-    SERVER_STATIC_ROOT_PATH = cfg.staticRootPath;
-    SERVER_CERT_FILE = cfg.certFile;
-    SERVER_CERT_KEY = cfg.certKey;
-
-    DATABASE_TYPE = cfg.database.type;
-    DATABASE_HOST = cfg.database.host;
-    DATABASE_NAME = cfg.database.name;
-    DATABASE_USER = cfg.database.user;
-    DATABASE_PASSWORD = cfg.database.password;
-    DATABASE_PATH = cfg.database.path;
-    DATABASE_CONN_MAX_LIFETIME = cfg.database.connMaxLifetime;
-
-    SECURITY_ADMIN_USER = cfg.security.adminUser;
-    SECURITY_ADMIN_PASSWORD = cfg.security.adminPassword;
-    SECURITY_SECRET_KEY = cfg.security.secretKey;
-
-    USERS_ALLOW_SIGN_UP = boolToString cfg.users.allowSignUp;
-    USERS_ALLOW_ORG_CREATE = boolToString cfg.users.allowOrgCreate;
-    USERS_AUTO_ASSIGN_ORG = boolToString cfg.users.autoAssignOrg;
-    USERS_AUTO_ASSIGN_ORG_ROLE = cfg.users.autoAssignOrgRole;
-
-    AUTH_DISABLE_LOGIN_FORM = boolToString cfg.auth.disableLoginForm;
-
-    AUTH_ANONYMOUS_ENABLED = boolToString cfg.auth.anonymous.enable;
-    AUTH_ANONYMOUS_ORG_NAME = cfg.auth.anonymous.org_name;
-    AUTH_ANONYMOUS_ORG_ROLE = cfg.auth.anonymous.org_role;
-
-    AUTH_AZUREAD_NAME = "Azure AD";
-    AUTH_AZUREAD_ENABLED = boolToString cfg.auth.azuread.enable;
-    AUTH_AZUREAD_ALLOW_SIGN_UP = boolToString cfg.auth.azuread.allowSignUp;
-    AUTH_AZUREAD_CLIENT_ID = cfg.auth.azuread.clientId;
-    AUTH_AZUREAD_SCOPES = "openid email profile";
-    AUTH_AZUREAD_AUTH_URL = "https://login.microsoftonline.com/${cfg.auth.azuread.tenantId}/oauth2/v2.0/authorize";
-    AUTH_AZUREAD_TOKEN_URL = "https://login.microsoftonline.com/${cfg.auth.azuread.tenantId}/oauth2/v2.0/token";
-    AUTH_AZUREAD_ALLOWED_DOMAINS = cfg.auth.azuread.allowedDomains;
-    AUTH_AZUREAD_ALLOWED_GROUPS = cfg.auth.azuread.allowedGroups;
-    AUTH_AZUREAD_ROLE_ATTRIBUTE_STRICT = false;
-
-    AUTH_GOOGLE_ENABLED = boolToString cfg.auth.google.enable;
-    AUTH_GOOGLE_ALLOW_SIGN_UP = boolToString cfg.auth.google.allowSignUp;
-    AUTH_GOOGLE_CLIENT_ID = cfg.auth.google.clientId;
-
-    ANALYTICS_REPORTING_ENABLED = boolToString cfg.analytics.reporting.enable;
-
-    SMTP_ENABLED = boolToString cfg.smtp.enable;
-    SMTP_HOST = cfg.smtp.host;
-    SMTP_USER = cfg.smtp.user;
-    SMTP_PASSWORD = cfg.smtp.password;
-    SMTP_FROM_ADDRESS = cfg.smtp.fromAddress;
-  } // cfg.extraOptions;
+  settingsFormatIni = pkgs.formats.ini {};
+  configFile = settingsFormatIni.generate "config.ini" cfg.settings;
 
   datasourceConfiguration = {
     apiVersion = 1;
@@ -275,70 +215,73 @@ let
     };
   };
 in {
+  imports = [
+    (mkRenamedOptionModule [ "services" "grafana" "protocol" ] [ "services" "grafana" "settings" "server" "protocol" ])
+    (mkRenamedOptionModule [ "services" "grafana" "addr" ] [ "services" "grafana" "settings" "server" "http_addr" ])
+    (mkRenamedOptionModule [ "services" "grafana" "port" ] [ "services" "grafana" "settings" "server" "http_port" ])
+    (mkRenamedOptionModule [ "services" "grafana" "domain" ] [ "services" "grafana" "settings" "server" "domain" ])
+    (mkRenamedOptionModule [ "services" "grafana" "rootUrl" ] [ "services" "grafana" "settings" "server" "root_url" ])
+    (mkRenamedOptionModule [ "services" "grafana" "staticRootPath" ] [ "services" "grafana" "settings" "server" "static_root_path" ])
+    (mkRenamedOptionModule [ "services" "grafana" "certFile" ] [ "services" "grafana" "settings" "server" "cert_file" ])
+    (mkRenamedOptionModule [ "services" "grafana" "certKey" ] [ "services" "grafana" "settings" "server" "cert_key" ])
+    (mkRenamedOptionModule [ "services" "grafana" "socket" ] [ "services" "grafana" "settings" "server" "socket" ])
+    (mkRenamedOptionModule [ "services" "grafana" "database" "type" ] [ "services" "grafana" "settings" "database" "type" ])
+    (mkRenamedOptionModule [ "services" "grafana" "database" "host" ] [ "services" "grafana" "settings" "database" "host" ])
+    (mkRenamedOptionModule [ "services" "grafana" "database" "name" ] [ "services" "grafana" "settings" "database" "name" ])
+    (mkRenamedOptionModule [ "services" "grafana" "database" "user" ] [ "services" "grafana" "settings" "database" "user" ])
+    (mkRenamedOptionModule [ "services" "grafana" "database" "password" ] [ "services" "grafana" "settings" "database" "password" ])
+    (mkRenamedOptionModule [ "services" "grafana" "database" "path" ] [ "services" "grafana" "settings" "database" "path" ])
+    (mkRenamedOptionModule [ "services" "grafana" "database" "connMaxLifetime" ] [ "services" "grafana" "settings" "database" "conn_max_lifetime" ])
+    (mkRenamedOptionModule [ "services" "grafana" "security" "adminUser" ] [ "services" "grafana" "settings" "security" "admin_user" ])
+    (mkRenamedOptionModule [ "services" "grafana" "security" "adminPassword" ] [ "services" "grafana" "settings" "security" "admin_password" ])
+    (mkRenamedOptionModule [ "services" "grafana" "security" "secretKey" ] [ "services" "grafana" "settings" "security" "secret_key" ])
+    (mkRenamedOptionModule [ "services" "grafana" "server" "serveFromSubPath" ] [ "services" "grafana" "settings" "server" "serve_from_sub_path" ])
+    (mkRenamedOptionModule [ "services" "grafana" "smtp" "enable" ] [ "services" "grafana" "settings" "smtp" "enabled" ])
+    (mkRenamedOptionModule [ "services" "grafana" "smtp" "user" ] [ "services" "grafana" "settings" "smtp" "user" ])
+    (mkRenamedOptionModule [ "services" "grafana" "smtp" "password" ] [ "services" "grafana" "settings" "smtp" "password" ])
+    (mkRenamedOptionModule [ "services" "grafana" "smtp" "fromAddress" ] [ "services" "grafana" "settings" "smtp" "from_address" ])
+    (mkRenamedOptionModule [ "services" "grafana" "users" "allowSignUp" ] [ "services" "grafana" "settings" "users" "allow_sign_up" ])
+    (mkRenamedOptionModule [ "services" "grafana" "users" "allowOrgCreate" ] [ "services" "grafana" "settings" "users" "allow_org_create" ])
+    (mkRenamedOptionModule [ "services" "grafana" "users" "autoAssignOrg" ] [ "services" "grafana" "settings" "users" "auto_assign_org" ])
+    (mkRenamedOptionModule [ "services" "grafana" "users" "autoAssignOrgRole" ] [ "services" "grafana" "settings" "users" "auto_assign_org_role" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "disableLoginForm" ] [ "services" "grafana" "settings" "auth" "disable_login_form" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "anonymous" "enable" ] [ "services" "grafana" "settings" "auth" "anonymous" "enable" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "anonymous" "org_name" ] [ "services" "grafana" "settings" "auth" "anonymous" "org_name" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "anonymous" "org_role" ] [ "services" "grafana" "settings" "auth" "anonymous" "org_role" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "azuread" "enable" ] [ "services" "grafana" "settings" "auth" "azuread" "enable" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "azuread" "allowSignUp" ] [ "services" "grafana" "settings" "auth" "azuread" "allow_sign_up" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "azuread" "clientId" ] [ "services" "grafana" "settings" "auth" "azuread" "client_id" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "azuread" "allowedDomains" ] [ "services" "grafana" "settings" "auth" "azuread" "allowed_domains" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "azuread" "allowedGroups" ] [ "services" "grafana" "settings" "auth" "azuread" "allowed_groups" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "google" "enable" ] [ "services" "grafana" "settings" "auth" "google" "enable" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "google" "allowSignUp" ] [ "services" "grafana" "settings" "auth" "google" "allow_sign_up" ])
+    (mkRenamedOptionModule [ "services" "grafana" "auth" "google" "clientId" ] [ "services" "grafana" "settings" "auth" "google" "client_id" ])
+    (mkRenamedOptionModule [ "services" "grafana" "analytics" "reporting" "enable" ] [ "services" "grafana" "settings" "analytics" "reporting_enabled" ])
+
+    (mkRemovedOptionModule [ "services" "grafana" "database" "passwordFile" ] ''
+      This option has been removed. Use 'services.grafana.settings.database.password' with file provider instead.
+    '')
+    (mkRemovedOptionModule [ "services" "grafana" "security" "adminPasswordFile" ] ''
+      This option has been removed. Use 'services.grafana.settings.security.admin_password' with file provider instead.
+    '')
+    (mkRemovedOptionModule [ "services" "grafana" "security" "secretKeyFile" ] ''
+      This option has been removed. Use 'services.grafana.settings.security.secret_key' with file provider instead.
+    '')
+    (mkRemovedOptionModule [ "services" "grafana" "smtp" "passwordFile" ] ''
+      This option has been removed. Use 'services.grafana.settings.smtp.password' with file provider instead.
+    '')
+    (mkRemovedOptionModule [ "services" "grafana" "auth" "azuread" "clientSecretFile" ] ''
+      This option has been removed. Use 'services.grafana.settings.azuread.client_secret' with file provider instead.
+    '')
+    (mkRemovedOptionModule [ "services" "grafana" "auth" "google" "clientSecretFile" ] ''
+      This option has been removed. Use 'services.grafana.settings.google.client_secret' with file provider instead.
+    '')
+
+    (mkRemovedOptionModule [ "services" "grafana" "auth" "azuread" "tenantId" ] "This option has been deprecated upstream.")
+  ];
+
   options.services.grafana = {
     enable = mkEnableOption (lib.mdDoc "grafana");
-
-    protocol = mkOption {
-      description = lib.mdDoc "Which protocol to listen.";
-      default = "http";
-      type = types.enum ["http" "https" "socket"];
-    };
-
-    addr = mkOption {
-      description = lib.mdDoc "Listening address.";
-      default = "127.0.0.1";
-      type = types.str;
-    };
-
-    port = mkOption {
-      description = lib.mdDoc "Listening port.";
-      default = 3000;
-      type = types.port;
-    };
-
-    socket = mkOption {
-      description = lib.mdDoc "Listening socket.";
-      default = "/run/grafana/grafana.sock";
-      type = types.str;
-    };
-
-    domain = mkOption {
-      description = lib.mdDoc "The public facing domain name used to access grafana from a browser.";
-      default = "localhost";
-      type = types.str;
-    };
-
-    rootUrl = mkOption {
-      description = lib.mdDoc "Full public facing url.";
-      default = "%(protocol)s://%(domain)s:%(http_port)s/";
-      type = types.str;
-    };
-
-    certFile = mkOption {
-      description = lib.mdDoc "Cert file for ssl.";
-      default = "";
-      type = types.str;
-    };
-
-    certKey = mkOption {
-      description = lib.mdDoc "Cert key for ssl.";
-      default = "";
-      type = types.str;
-    };
-
-    staticRootPath = mkOption {
-      description = lib.mdDoc "Root path for static assets.";
-      default = "${cfg.package}/share/grafana/public";
-      defaultText = literalExpression ''"''${package}/share/grafana/public"'';
-      type = types.str;
-    };
-
-    package = mkOption {
-      description = lib.mdDoc "Package to use.";
-      default = pkgs.grafana;
-      defaultText = literalExpression "pkgs.grafana";
-      type = types.package;
-    };
 
     declarativePlugins = mkOption {
       type = with types; nullOr (listOf path);
@@ -351,70 +294,268 @@ in {
       apply = x: if isList x then lib.unique x else x;
     };
 
+    package = mkOption {
+      description = lib.mdDoc "Package to use.";
+      default = pkgs.grafana;
+      defaultText = literalExpression "pkgs.grafana";
+      type = types.package;
+    };
+
     dataDir = mkOption {
       description = lib.mdDoc "Data directory.";
       default = "/var/lib/grafana";
       type = types.path;
     };
 
-    database = {
-      type = mkOption {
-        description = lib.mdDoc "Database type.";
-        default = "sqlite3";
-        type = types.enum ["mysql" "sqlite3" "postgres"];
-      };
+    settings = mkOption {
+      description = lib.mdDoc ''
+        Grafana settings. See <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/>
+        for available options. INI format is used.
+      '';
+      type = types.submodule {
+        freeformType = settingsFormatIni.type;
 
-      host = mkOption {
-        description = lib.mdDoc "Database host.";
-        default = "127.0.0.1:3306";
-        type = types.str;
-      };
+        options = {
+          paths = {
+            plugins = mkOption {
+              description = lib.mdDoc "Directory where grafana will automatically scan and look for plugins";
+              default = if (cfg.declarativePlugins == null) then "${cfg.dataDir}/plugins" else declarativePlugins;
+              defaultText = literalExpression "if (cfg.declarativePlugins == null) then \"\${cfg.dataDir}/plugins\" else declarativePlugins";
+              type = types.path;
+            };
 
-      name = mkOption {
-        description = lib.mdDoc "Database name.";
-        default = "grafana";
-        type = types.str;
-      };
+            provisioning = mkOption {
+              description = lib.mdDoc ''
+                Folder that contains provisioning config files that grafana will apply on startup and while running.
+                Don't change the value of this option if you are planning to use `services.grafana.provision` options.
+              '';
+              default = provisionConfDir;
+              defaultText = literalExpression ''
+                pkgs.runCommand "grafana-provisioning" { } \'\'
+                  mkdir -p $out/{datasources,dashboards,notifiers,alerting}
+                  ln -sf ''${datasourceFile} $out/datasources/datasource.yaml
+                  ln -sf ''${dashboardFile} $out/dashboards/dashboard.yaml
+                  ln -sf ''${notifierFile} $out/notifiers/notifier.yaml
+                  ln -sf ''${rulesFile} $out/alerting/rules.yaml
+                  ln -sf ''${contactPointsFile} $out/alerting/contactPoints.yaml
+                  ln -sf ''${policiesFile} $out/alerting/policies.yaml
+                  ln -sf ''${templatesFile} $out/alerting/templates.yaml
+                  ln -sf ''${muteTimingsFile} $out/alerting/muteTimings.yaml
+                  \'\'
+              '';
+              type = types.path;
+            };
+          };
 
-      user = mkOption {
-        description = lib.mdDoc "Database user.";
-        default = "root";
-        type = types.str;
-      };
+          server = {
+            protocol = mkOption {
+              description = lib.mdDoc "Which protocol to listen.";
+              default = "http";
+              type = types.enum ["http" "https" "socket"];
+            };
 
-      password = mkOption {
-        description = lib.mdDoc ''
-          Database password.
-          This option is mutual exclusive with the passwordFile option.
-        '';
-        default = "";
-        type = types.str;
-      };
+            http_addr = mkOption {
+              description = lib.mdDoc "Listening address.";
+              default = "";
+              type = types.str;
+            };
 
-      passwordFile = mkOption {
-        description = lib.mdDoc ''
-          File that containts the database password.
-          This option is mutual exclusive with the password option.
-        '';
-        default = null;
-        type = types.nullOr types.path;
-      };
+            http_port = mkOption {
+              description = lib.mdDoc "Listening port.";
+              default = 3000;
+              type = types.port;
+            };
 
-      path = mkOption {
-        description = lib.mdDoc "Database path.";
-        default = "${cfg.dataDir}/data/grafana.db";
-        defaultText = literalExpression ''"''${config.${opt.dataDir}}/data/grafana.db"'';
-        type = types.path;
-      };
+            domain = mkOption {
+              description = lib.mdDoc "The public facing domain name used to access grafana from a browser.";
+              default = "localhost";
+              type = types.str;
+            };
 
-      connMaxLifetime = mkOption {
-        description = lib.mdDoc ''
-          Sets the maximum amount of time (in seconds) a connection may be reused.
-          For MySQL this setting should be shorter than the `wait_timeout` variable.
-        '';
-        default = "unlimited";
-        example = 14400;
-        type = types.either types.int (types.enum [ "unlimited" ]);
+            root_url = mkOption {
+              description = lib.mdDoc "Full public facing url.";
+              default = "%(protocol)s://%(domain)s:%(http_port)s/";
+              type = types.str;
+            };
+
+            static_root_path = mkOption {
+              description = lib.mdDoc "Root path for static assets.";
+              default = "${cfg.package}/share/grafana/public";
+              defaultText = literalExpression ''"''${package}/share/grafana/public"'';
+              type = types.str;
+            };
+
+            enable_gzip = mkOption {
+              description = lib.mdDoc ''
+                Set this option to true to enable HTTP compression, this can improve transfer speed and bandwidth utilization.
+                It is recommended that most users set it to true. By default it is set to false for compatibility reasons.
+              '';
+              default = false;
+              type = types.bool;
+            };
+
+            cert_file = mkOption {
+              description = lib.mdDoc "Cert file for ssl.";
+              default = "";
+              type = types.str;
+            };
+
+            cert_key = mkOption {
+              description = lib.mdDoc "Cert key for ssl.";
+              default = "";
+              type = types.str;
+            };
+
+            socket = mkOption {
+              description = lib.mdDoc "Path where the socket should be created when protocol=socket. Make sure that Grafana has appropriate permissions before you change this setting.";
+              default = "";
+              type = types.str;
+            };
+          };
+
+          database = {
+            type = mkOption {
+              description = lib.mdDoc "Database type.";
+              default = "sqlite3";
+              type = types.enum ["mysql" "sqlite3" "postgres"];
+            };
+
+            host = mkOption {
+              description = lib.mdDoc "Database host.";
+              default = "127.0.0.1:3306";
+              type = types.str;
+            };
+
+            name = mkOption {
+              description = lib.mdDoc "Database name.";
+              default = "grafana";
+              type = types.str;
+            };
+
+            user = mkOption {
+              description = lib.mdDoc "Database user.";
+              default = "root";
+              type = types.str;
+            };
+
+            password = mkOption {
+              description = lib.mdDoc ''
+                Database password. Please note that the contents of this option
+                will end up in a world-readable Nix store. Use the file provider
+                pointing at a reasonably secured file in the local filesystem
+                to work around that. Look at the documentation for details:
+                <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
+              '';
+              default = "";
+              type = types.str;
+            };
+
+            path = mkOption {
+              description = lib.mdDoc "Only applicable to sqlite3 database. The file path where the database will be stored.";
+              default = "${cfg.dataDir}/data/grafana.db";
+              defaultText = literalExpression ''"''${config.${opt.dataDir}}/data/grafana.db"'';
+              type = types.path;
+            };
+          };
+
+          security = {
+            admin_user = mkOption {
+              description = lib.mdDoc "Default admin username.";
+              default = "admin";
+              type = types.str;
+            };
+
+            admin_password = mkOption {
+              description = lib.mdDoc ''
+                Default admin password. Please note that the contents of this option
+                will end up in a world-readable Nix store. Use the file provider
+                pointing at a reasonably secured file in the local filesystem
+                to work around that. Look at the documentation for details:
+                <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
+              '';
+              default = "admin";
+              type = types.str;
+            };
+
+            secret_key = mkOption {
+              description = lib.mdDoc ''
+                Secret key used for signing. Please note that the contents of this option
+                will end up in a world-readable Nix store. Use the file provider
+                pointing at a reasonably secured file in the local filesystem
+                to work around that. Look at the documentation for details:
+                <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
+              '';
+              default = "SW2YcwTIb9zpOOhoPsMm";
+              type = types.str;
+            };
+          };
+
+          smtp = {
+            enabled = mkOption {
+              description = lib.mdDoc "Whether to enable SMTP.";
+              default = false;
+              type = types.bool;
+            };
+            host = mkOption {
+              description = lib.mdDoc "Host to connect to.";
+              default = "localhost:25";
+              type = types.str;
+            };
+            user = mkOption {
+              description = lib.mdDoc "User used for authentication.";
+              default = "";
+              type = types.str;
+            };
+            password = mkOption {
+              description = lib.mdDoc ''
+                Password used for authentication. Please note that the contents of this option
+                will end up in a world-readable Nix store. Use the file provider
+                pointing at a reasonably secured file in the local filesystem
+                to work around that. Look at the documentation for details:
+                <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
+              '';
+              default = "";
+              type = types.str;
+            };
+            from_address = mkOption {
+              description = lib.mdDoc "Email address used for sending.";
+              default = "admin@grafana.localhost";
+              type = types.str;
+            };
+          };
+
+          users = {
+            allow_sign_up = mkOption {
+              description = lib.mdDoc "Disable user signup / registration.";
+              default = false;
+              type = types.bool;
+            };
+
+            allow_org_create = mkOption {
+              description = lib.mdDoc "Whether user is allowed to create organizations.";
+              default = false;
+              type = types.bool;
+            };
+
+            auto_assign_org = mkOption {
+              description = lib.mdDoc "Whether to automatically assign new users to default org.";
+              default = true;
+              type = types.bool;
+            };
+
+            auto_assign_org_role = mkOption {
+              description = lib.mdDoc "Default role new users will be auto assigned.";
+              default = "Viewer";
+              type = types.enum ["Viewer" "Editor"];
+            };
+          };
+
+          analytics.reporting_enabled = mkOption {
+            description = lib.mdDoc "Whether to allow anonymous usage reporting to stats.grafana.net.";
+            default = true;
+            type = types.bool;
+          };
+        };
       };
     };
 
@@ -1014,234 +1155,14 @@ in {
         };
       };
     };
-
-    security = {
-      adminUser = mkOption {
-        description = lib.mdDoc "Default admin username.";
-        default = "admin";
-        type = types.str;
-      };
-
-      adminPassword = mkOption {
-        description = lib.mdDoc ''
-          Default admin password.
-          This option is mutual exclusive with the adminPasswordFile option.
-        '';
-        default = "admin";
-        type = types.str;
-      };
-
-      adminPasswordFile = mkOption {
-        description = lib.mdDoc ''
-          Default admin password.
-          This option is mutual exclusive with the `adminPassword` option.
-        '';
-        default = null;
-        type = types.nullOr types.path;
-      };
-
-      secretKey = mkOption {
-        description = lib.mdDoc "Secret key used for signing.";
-        default = "SW2YcwTIb9zpOOhoPsMm";
-        type = types.str;
-      };
-
-      secretKeyFile = mkOption {
-        description = lib.mdDoc "Secret key used for signing.";
-        default = null;
-        type = types.nullOr types.path;
-      };
-    };
-
-    server = {
-      serveFromSubPath = mkOption {
-        description = lib.mdDoc "Serve Grafana from subpath specified in rootUrl setting";
-        default = false;
-        type = types.bool;
-      };
-    };
-
-    smtp = {
-      enable = mkEnableOption (lib.mdDoc "smtp");
-      host = mkOption {
-        description = lib.mdDoc "Host to connect to.";
-        default = "localhost:25";
-        type = types.str;
-      };
-      user = mkOption {
-        description = lib.mdDoc "User used for authentication.";
-        default = "";
-        type = types.str;
-      };
-      password = mkOption {
-        description = lib.mdDoc ''
-          Password used for authentication.
-          This option is mutual exclusive with the passwordFile option.
-        '';
-        default = "";
-        type = types.str;
-      };
-      passwordFile = mkOption {
-        description = lib.mdDoc ''
-          Password used for authentication.
-          This option is mutual exclusive with the password option.
-        '';
-        default = null;
-        type = types.nullOr types.path;
-      };
-      fromAddress = mkOption {
-        description = lib.mdDoc "Email address used for sending.";
-        default = "admin@grafana.localhost";
-        type = types.str;
-      };
-    };
-
-    users = {
-      allowSignUp = mkOption {
-        description = lib.mdDoc "Disable user signup / registration.";
-        default = false;
-        type = types.bool;
-      };
-
-      allowOrgCreate = mkOption {
-        description = lib.mdDoc "Whether user is allowed to create organizations.";
-        default = false;
-        type = types.bool;
-      };
-
-      autoAssignOrg = mkOption {
-        description = lib.mdDoc "Whether to automatically assign new users to default org.";
-        default = true;
-        type = types.bool;
-      };
-
-      autoAssignOrgRole = mkOption {
-        description = lib.mdDoc "Default role new users will be auto assigned.";
-        default = "Viewer";
-        type = types.enum ["Viewer" "Editor"];
-      };
-    };
-
-    auth = {
-      disableLoginForm = mkOption {
-        description = lib.mdDoc "Set to true to disable (hide) the login form, useful if you use OAuth";
-        default = false;
-        type = types.bool;
-      };
-
-      anonymous = {
-        enable = mkOption {
-          description = lib.mdDoc "Whether to allow anonymous access.";
-          default = false;
-          type = types.bool;
-        };
-        org_name = mkOption {
-          description = lib.mdDoc "Which organization to allow anonymous access to.";
-          default = "Main Org.";
-          type = types.str;
-        };
-        org_role = mkOption {
-          description = lib.mdDoc "Which role anonymous users have in the organization.";
-          default = "Viewer";
-          type = types.str;
-        };
-      };
-      azuread = {
-        enable = mkOption {
-          description = lib.mdDoc "Whether to allow Azure AD OAuth.";
-          default = false;
-          type = types.bool;
-        };
-        allowSignUp = mkOption {
-          description = lib.mdDoc "Whether to allow sign up with Azure AD OAuth.";
-          default = false;
-          type = types.bool;
-        };
-        clientId = mkOption {
-          description = lib.mdDoc "Azure AD OAuth client ID.";
-          default = "";
-          type = types.str;
-        };
-        clientSecretFile = mkOption {
-          description = lib.mdDoc "Azure AD OAuth client secret.";
-          default = null;
-          type = types.nullOr types.path;
-        };
-        tenantId = mkOption {
-          description = lib.mdDoc ''
-            Tenant id used to create auth and token url. Default to "common"
-            , let user sign in with any tenant.
-            '';
-          default = "common";
-          type = types.str;
-        };
-        allowedDomains = mkOption {
-          description = lib.mdDoc ''
-            Limits access to users who belong to specific domains.
-            Separate domains with space or comma.
-          '';
-          default = "";
-          type = types.str;
-        };
-        allowedGroups = mkOption {
-          description = lib.mdDoc ''
-            To limit access to authenticated users who are members of one or more groups,
-            set allowedGroups to a comma- or space-separated list of group object IDs.
-            You can find object IDs for a specific group on the Azure portal.
-            '';
-          default = "";
-          type = types.str;
-        };
-      };
-      google = {
-        enable = mkOption {
-          description = lib.mdDoc "Whether to allow Google OAuth2.";
-          default = false;
-          type = types.bool;
-        };
-        allowSignUp = mkOption {
-          description = lib.mdDoc "Whether to allow sign up with Google OAuth2.";
-          default = false;
-          type = types.bool;
-        };
-        clientId = mkOption {
-          description = lib.mdDoc "Google OAuth2 client ID.";
-          default = "";
-          type = types.str;
-        };
-        clientSecretFile = mkOption {
-          description = lib.mdDoc "Google OAuth2 client secret.";
-          default = null;
-          type = types.nullOr types.path;
-        };
-      };
-    };
-
-    analytics.reporting = {
-      enable = mkOption {
-        description = lib.mdDoc "Whether to allow anonymous usage reporting to stats.grafana.net.";
-        default = true;
-        type = types.bool;
-      };
-    };
-
-    extraOptions = mkOption {
-      description = lib.mdDoc ''
-        Extra configuration options passed as env variables as specified in
-        [documentation](http://docs.grafana.org/installation/configuration/),
-        but without GF_ prefix
-      '';
-      default = {};
-      type = with types; attrsOf (either str path);
-    };
   };
 
   config = mkIf cfg.enable {
     warnings = flatten [
       (optional (
-        cfg.database.password != opt.database.password.default ||
-        cfg.security.adminPassword != opt.security.adminPassword.default
-      ) "Grafana passwords will be stored as plaintext in the Nix store!")
+        cfg.settings.database.password != "" ||
+        cfg.settings.security.admin_password != "admin"
+      ) "Grafana passwords will be stored as plaintext in the Nix store! Use file provider instead.")
       (optional (
         let
           checkOpts = opt: any (x: x.password != null || x.basicAuthPassword != null || x.secureJsonData != null) opt;
@@ -1276,22 +1197,6 @@ in {
     environment.systemPackages = [ cfg.package ];
 
     assertions = [
-      {
-        assertion = cfg.database.password != opt.database.password.default -> cfg.database.passwordFile == null;
-        message = "Cannot set both password and passwordFile";
-      }
-      {
-        assertion = cfg.security.adminPassword != opt.security.adminPassword.default -> cfg.security.adminPasswordFile == null;
-        message = "Cannot set both adminPassword and adminPasswordFile";
-      }
-      {
-        assertion = cfg.security.secretKey != opt.security.secretKey.default -> cfg.security.secretKeyFile == null;
-        message = "Cannot set both secretKey and secretKeyFile";
-      }
-      {
-        assertion = cfg.smtp.password != opt.smtp.password.default -> cfg.smtp.passwordFile == null;
-        message = "Cannot set both password and passwordFile";
-      }
       {
         assertion = if (builtins.isList cfg.provision.datasources) then true else cfg.provision.datasources.settings == null || cfg.provision.datasources.path == null;
         message = "Cannot set both datasources settings and datasources path";
@@ -1336,41 +1241,11 @@ in {
       description = "Grafana Service Daemon";
       wantedBy = ["multi-user.target"];
       after = ["networking.target"] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
-      environment = {
-        QT_QPA_PLATFORM = "offscreen";
-      } // mapAttrs' (n: v: nameValuePair "GF_${n}" (toString v)) envOptions;
       script = ''
         set -o errexit -o pipefail -o nounset -o errtrace
         shopt -s inherit_errexit
 
-        ${optionalString (cfg.auth.azuread.clientSecretFile != null) ''
-          GF_AUTH_AZUREAD_CLIENT_SECRET="$(<${escapeShellArg cfg.auth.azuread.clientSecretFile})"
-          export GF_AUTH_AZUREAD_CLIENT_SECRET
-        ''}
-        ${optionalString (cfg.auth.google.clientSecretFile != null) ''
-          GF_AUTH_GOOGLE_CLIENT_SECRET="$(<${escapeShellArg cfg.auth.google.clientSecretFile})"
-          export GF_AUTH_GOOGLE_CLIENT_SECRET
-        ''}
-        ${optionalString (cfg.database.passwordFile != null) ''
-          GF_DATABASE_PASSWORD="$(<${escapeShellArg cfg.database.passwordFile})"
-          export GF_DATABASE_PASSWORD
-        ''}
-        ${optionalString (cfg.security.adminPasswordFile != null) ''
-          GF_SECURITY_ADMIN_PASSWORD="$(<${escapeShellArg cfg.security.adminPasswordFile})"
-          export GF_SECURITY_ADMIN_PASSWORD
-        ''}
-        ${optionalString (cfg.security.secretKeyFile != null) ''
-          GF_SECURITY_SECRET_KEY="$(<${escapeShellArg cfg.security.secretKeyFile})"
-          export GF_SECURITY_SECRET_KEY
-        ''}
-        ${optionalString (cfg.smtp.passwordFile != null) ''
-          GF_SMTP_PASSWORD="$(<${escapeShellArg cfg.smtp.passwordFile})"
-          export GF_SMTP_PASSWORD
-        ''}
-        ${optionalString cfg.provision.enable ''
-          export GF_PATHS_PROVISIONING=${provisionConfDir};
-        ''}
-        exec ${cfg.package}/bin/grafana-server -homepath ${cfg.dataDir}
+        exec ${cfg.package}/bin/grafana-server -homepath ${cfg.dataDir} -config ${configFile}
       '';
       serviceConfig = {
         WorkingDirectory = cfg.dataDir;
