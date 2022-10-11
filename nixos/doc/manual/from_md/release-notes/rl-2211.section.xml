@@ -627,6 +627,12 @@
       </listitem>
       <listitem>
         <para>
+          The default <literal>kops</literal> version is now 1.25.1 and
+          support for 1.22 and older has been dropped.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>k3s</literal> no longer supports docker as runtime
           due to upstream dropping support.
         </para>
