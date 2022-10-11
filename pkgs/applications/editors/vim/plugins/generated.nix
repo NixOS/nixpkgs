@@ -12826,6 +12826,18 @@ final: prev:
     meta.homepage = "https://github.com/vimwiki/vimwiki/";
   };
 
+  virtual-types-nvim = buildVimPluginFrom2Nix {
+    pname = "virtual-types.nvim";
+    version = "2022-03-17";
+    src = fetchFromGitHub {
+      owner = "jubnzv";
+      repo = "virtual-types.nvim";
+      rev = "31da847fa54b801f309a08123935626adda4aaad";
+      sha256 = "0kqg29xld064fz1xly1kc7wcyck62q5hjkb5fc5vrj0zdnrdzz22";
+    };
+    meta.homepage = "https://github.com/jubnzv/virtual-types.nvim/";
+  };
+
   vis = buildVimPluginFrom2Nix {
     pname = "vis";
     version = "2013-04-26";
