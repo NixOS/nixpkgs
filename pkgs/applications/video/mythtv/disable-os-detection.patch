@@ -1,31 +1,15 @@
---- a/configure	2020-07-21 20:50:58.653989766 +0200
-+++ b/configure	2020-07-21 20:52:21.236610586 +0200
-@@ -6537,17 +6537,17 @@
-                 }
+--- a/configure
++++ b/configure
+@@ -5894,9 +5894,9 @@ else
+     die "ERROR: cannot find soundtouch 1.8.0 or later."
+ fi
  
- enable enforce_wshadow
--case $target_os in
--    android)
--        disable enforce_wshadow
--        ;;
--    linux)
--        . /etc/os-release
--        if test $ID = "centos"; then
--            disable enforce_wshadow
--        fi
--        ;;
--esac
-+#case $target_os in
-+#    android)
-+#        disable enforce_wshadow
-+#        ;;
-+#    linux)
-+#        . /etc/os-release
-+#        if test $ID = "centos"; then
-+#            disable enforce_wshadow
-+#        fi
-+#        ;;
-+#esac
+-if [ $target_os = "linux" ] ; then
+-    . /etc/os-release
+-fi
++# if [ $target_os = "linux" ] ; then
++#     . /etc/os-release
++# fi
  
- if $(pkg-config --exists Qt5WebKit) || $(pkg-config --exists QtWebKit) ; then
-     enable qtwebkit
+ # libudfread
+ if enabled system_libudfread ; then
