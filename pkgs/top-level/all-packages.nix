@@ -27083,6 +27083,8 @@ with pkgs;
 
   bevelbar = callPackage ../applications/window-managers/bevelbar { };
 
+  bfcal = libsForQt5.callPackage ../applications/misc/bfcal { };
+
   bibletime = libsForQt5.callPackage ../applications/misc/bibletime { };
 
   bino3d = libsForQt5.callPackage ../applications/video/bino3d {
