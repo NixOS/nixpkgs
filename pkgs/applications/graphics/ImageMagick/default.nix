@@ -60,6 +60,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  patches = [ ./0001-Silence-flood-of-deprecation-warnings.patch ];
+
   configureFlags = [
     "--with-frozenpaths"
     (lib.withFeatureAs (arch != null) "gcc-arch" arch)
