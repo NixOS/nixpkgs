@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   doCheck = true;
 
   preInstall = "mkdir -p $OCAMLFIND_DESTDIR";
-  installFlags = "BINDIR=$(out)/bin";
+  installFlags = [ "BINDIR=$(out)/bin" ];
 
   meta = with lib; {
     description = "A library for CUDF format";

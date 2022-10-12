@@ -34,9 +34,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     apsw
-  ] ++ lib.optional withPostgres [
+  ] ++ lib.optionals withPostgres [
     psycopg2
-  ] ++ lib.optional withMysql [
+  ] ++ lib.optionals withMysql [
     mysql-connector
   ];
 

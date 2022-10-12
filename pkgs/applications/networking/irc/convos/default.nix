@@ -16,7 +16,7 @@ perlPackages.buildPerlPackage rec {
   };
 
   nativeBuildInputs = [ makeWrapper ]
-    ++ optional stdenv.isDarwin [ shortenPerlShebang ];
+    ++ optionals stdenv.isDarwin [ shortenPerlShebang ];
 
   buildInputs = with perlPackages; [
     CryptPassphrase CryptPassphraseArgon2 CryptPassphraseBcrypt

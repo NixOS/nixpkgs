@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ elfutils zlib libbpf ]
-    ++ lib.optional stdenv.hostPlatform.isMusl [
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
     argp-standalone
     musl-obstack
   ];

@@ -65,7 +65,7 @@ buildPythonPackage rec {
     "test_large_stdout_blob"
     # Failed: DID NOT RAISE <class 'RuntimeError'>
     "test_validate_pattern"
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     # test_process_isolation_settings is currently broken on Darwin Catalina
     # https://github.com/ansible/ansible-runner/issues/413
     "process_isolation_settings"

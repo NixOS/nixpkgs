@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optional withPython [ swig python3.pkgs.setuptools ];
+  ] ++ lib.optionals withPython [ swig python3.pkgs.setuptools ];
 
   buildInputs = [
     cairo

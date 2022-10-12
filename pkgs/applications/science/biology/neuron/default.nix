@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     sha256 = "0f26v3qvzblcdjg7isq0m9j2q8q7x3vhmkfllv8lsr3gyj44lljf";
   };
 
-  patches = (lib.optional (stdenv.isDarwin) [ ./neuron-carbon-disable.patch ]);
+  patches = (lib.optionals (stdenv.isDarwin) [ ./neuron-carbon-disable.patch ]);
 
   # With LLVM 3.8 and above, clang (really libc++) gets upset if you attempt to redefine these...
   postPatch = lib.optionalString stdenv.cc.isClang ''

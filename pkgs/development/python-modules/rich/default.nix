@@ -35,9 +35,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     CommonMark
     pygments
-  ] ++ lib.optional (pythonOlder "3.7") [
+  ] ++ lib.optionals (pythonOlder "3.7") [
     dataclasses
-  ] ++ lib.optional (pythonOlder "3.9") [
+  ] ++ lib.optionals (pythonOlder "3.9") [
     typing-extensions
   ];
 

@@ -87,7 +87,7 @@ stdenv.mkDerivation {
     "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib"
   ];
 
-  ninjaFlags = "dragonfly";
+  ninjaFlags = [ "dragonfly" ];
 
   doCheck = false;
   dontUseNinjaInstall = true;

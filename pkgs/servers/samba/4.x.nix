@@ -141,7 +141,7 @@ stdenv.mkDerivation rec {
     ++ optional (!enablePam) "--without-pam"
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--bundled-libraries=!asn1_compile,!compile_et"
-  ] ++ optional stdenv.isAarch32 [
+  ] ++ optionals stdenv.isAarch32 [
     # https://bugs.gentoo.org/683148
     "--jobs 1"
   ];

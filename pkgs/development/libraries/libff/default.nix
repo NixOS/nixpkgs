@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [ "-DWITH_PROCPS=Off" ]
-    ++ lib.optional stdenv.isAarch64 [ "-DCURVE=ALT_BN128" "-DUSE_ASM=OFF" ];
+    ++ lib.optionals stdenv.isAarch64 [ "-DCURVE=ALT_BN128" "-DUSE_ASM=OFF" ];
 
   # CMake is hardcoded to always build static library which causes linker
   # failure for Haskell applications depending on haskellPackages.hevm on macOS.

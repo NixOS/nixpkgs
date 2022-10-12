@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin [ CoreServices ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
   __darwinAllowLocalNetworking = true;
 

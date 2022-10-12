@@ -35,7 +35,7 @@ buildPythonPackage rec {
     attrs
     linkify-it-py
     mdurl
-  ] ++ lib.optional (pythonOlder "3.8") [
+  ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
   ];
 

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     SDL2
   ];
 
-  buildFlags = "release";
+  buildFlags = [ "release" ];
 
   installPhase = ''
     runHook preInstall

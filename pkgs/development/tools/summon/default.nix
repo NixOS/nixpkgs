@@ -19,7 +19,7 @@ buildGoModule rec {
 
   # Patches provider resolver to support resolving unqualified names
   # from $PATH, e.g. `summon -p gopass` instead of `summon -p $(which gopass)`
-  patches = optional patchResolver [ ./resolve-paths.patch ];
+  patches = optionals patchResolver [ ./resolve-paths.patch ];
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/summon

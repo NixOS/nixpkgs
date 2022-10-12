@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
   outputBin = "dev"; # compilation tools
 
   mesonFlags =
-    optional (!buildDevDoc) [ "-Dgtk_doc=disabled" ]
+    optionals (!buildDevDoc) [ "-Dgtk_doc=disabled" ]
   ;
 
   nativeBuildInputs = [ meson ninja ]

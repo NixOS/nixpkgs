@@ -109,7 +109,7 @@ in stdenv.mkDerivation rec {
   ++ lib.optionals luaSupport [
     "--with-lua-prefix=${lua}"
     "--enable-luainterp"
-  ] ++ lib.optional lua.pkgs.isLuaJIT [
+  ] ++ lib.optionals lua.pkgs.isLuaJIT [
     "--with-luajit"
   ]
   ++ lib.optionals pythonSupport [

@@ -13,7 +13,7 @@ let
         inherit sha256;
       };
 
-      buildInputs = lib.optional build-manual [ fig2dev ghostscript tex ];
+      buildInputs = lib.optionals build-manual [ fig2dev ghostscript tex ];
 
       preConfigure = lib.optionalString build-manual ''
         sed -i "s/build_manual=no/build_manual=yes/g" DIST

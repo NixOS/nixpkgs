@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0km24rgll0s4ji6iz8lvy5ra76ds162s95y33w5px6697cwqkp9j";
   };
 
-  buildFlags = "unix";
+  buildFlags = [ "unix" ];
 
   postConfigure = ''
     pushd c3270 ; ./configure ; popd

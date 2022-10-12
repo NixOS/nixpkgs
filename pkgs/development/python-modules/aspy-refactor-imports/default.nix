@@ -27,7 +27,7 @@ buildPythonPackage rec {
   ];
 
   # fails on darwin due to case-insensitive file system
-  disabledTests = lib.optional stdenv.isDarwin ["test_application_directory_case"];
+  disabledTests = lib.optionals stdenv.isDarwin ["test_application_directory_case"];
 
   meta = with lib; {
     description = "Utilities for refactoring imports in python-like syntax.";

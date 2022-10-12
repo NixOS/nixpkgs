@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     importlib-metadata
-  ] ++ lib.optional (pythonOlder "3.5") [
+  ] ++ lib.optionals (pythonOlder "3.5") [
     typing
   ];
 

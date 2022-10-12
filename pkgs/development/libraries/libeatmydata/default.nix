@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./find-shell-lib.patch ];
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
   postPatch = ''
     substituteInPlace eatmydata.in \
