@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "blebox-uniapi";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "blebox";
     repo = "blebox_uniapi";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-mJaUB4kEm+eRh3Kc+SiTCSSmCmBEJBVZ5uah95MJX64=";
+    sha256 = "sha256-F0zvfqbcQCgpr9//TfhUHVT5KofFSyzRKWkLw4I4gxk=";
   };
 
   postPatch = ''
