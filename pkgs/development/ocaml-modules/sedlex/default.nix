@@ -27,7 +27,7 @@ let
 in
 buildDunePackage rec {
   pname = "sedlex";
-  version = "2.5";
+  version = "2.6";
 
   minimalOCamlVersion = "4.08";
 
@@ -35,7 +35,7 @@ buildDunePackage rec {
     owner = "ocaml-community";
     repo = "sedlex";
     rev = "v${version}";
-    sha256 = "sha256:062a5dvrzvb81l3a9phljrhxfw9nlb61q341q0a6xn65hll3z2wy";
+    sha256 = "sha256-AU+dV+jTG9v3BXzip2Bnv04Ewyo3pyUglDDBFsOsFf0=";
   };
 
   propagatedBuildInputs = [
