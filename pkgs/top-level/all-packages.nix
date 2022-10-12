@@ -10527,6 +10527,8 @@ with pkgs;
 
   mpi = openmpi; # this attribute should used to build MPI applications
 
+  ucc = callPackage ../development/libraries/ucc {};
+
   ucx = callPackage ../development/libraries/ucx {};
 
   openmodelica = recurseIntoAttrs (callPackage ../applications/science/misc/openmodelica {});
