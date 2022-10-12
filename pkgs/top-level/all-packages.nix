@@ -18487,6 +18487,7 @@ with pkgs;
   fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix {};
 
   freeimage = callPackage ../development/libraries/freeimage {
+    inherit (darwin) autoSignDarwinBinariesHook;
     libraw = libraw_unstable;
   };
 
