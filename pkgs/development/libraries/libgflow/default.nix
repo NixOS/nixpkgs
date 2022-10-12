@@ -1,15 +1,18 @@
 {stdenv, lib, vala, meson, ninja, pkg-config, fetchFromGitea, gobject-introspection, glib, gtk3}:
 
 stdenv.mkDerivation rec {
-  pname = "libgtkflow";
-  version = "0.10.0";
+  pname = "libgflow";
+  version = "1.0.4";
+
+  outputs = [ "out" "dev" "devdoc" ];
+  outputBin = "devdoc"; # demo app
 
   src = fetchFromGitea {
     domain = "notabug.org";
     owner = "grindhold";
-    repo = pname;
-    rev = version;
-    hash = "sha256-iTOoga94yjGTowQOM/EvHEDOO9Z3UutPGRgEoI1UWkI=";
+    repo = "libgtkflow";
+    rev = "gflow_${version}";
+    hash = "sha256-JoVq7U5JQ3pRxptR7igWFw7lcBTsgr3aVXxayLqhyFo=";
   };
 
   nativeBuildInputs = [
@@ -25,8 +28,15 @@ stdenv.mkDerivation rec {
     glib
   ];
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
+
   mesonFlags = [
     "-Denable_valadoc=true"
+    "-Denable_gtk3=false"
+    "-Denable_gtk4=false"
   ];
 
   meta = with lib; {
