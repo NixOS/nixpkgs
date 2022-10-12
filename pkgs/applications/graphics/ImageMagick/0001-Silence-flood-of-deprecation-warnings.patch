@@ -1,0 +1,28 @@
+From 9fc749739371e4b61f38ec628fc2949814c6814f Mon Sep 17 00:00:00 2001
+From: YoshiRulz <OSSYoshiRulz@gmail.com>
+Date: Wed, 12 Oct 2022 18:15:34 +1000
+Subject: [PATCH] Silence flood of deprecation warnings
+
+message is:
+cc1: warning: '-mtune=x86-64' is deprecated; use '-mtune=k8' or '-mtune=generic'
+instead as appropriate
+[8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-Wdeprecated8;;]
+---
+ configure | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configure b/configure
+index c8ca87bea..ee42666bf 100755
+--- a/configure
++++ b/configure
+@@ -9336,6 +9336,7 @@ fi
+ for flag_prefix in $flag_prefixes; do
+   for arch in $ax_gcc_arch; do
+     flag="$flag_prefix$arch"
++    if test "x$flag" = "x-mtune=x86-64"; then flag="-mtune=generic"; fi # deprecated
+     as_CACHEVAR=`printf "%s\n" "ax_cv_check_cflags__$flag" | $as_tr_sh`
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether C compiler accepts $flag" >&5
+ printf %s "checking whether C compiler accepts $flag... " >&6; }
+-- 
+2.36.2
+
