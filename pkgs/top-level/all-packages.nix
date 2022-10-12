@@ -26763,7 +26763,7 @@ with pkgs;
 
   spatialite_gui = callPackage ../applications/gis/spatialite-gui {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa IOKit;
-    wxGTK = wxGTK30-gtk3;
+    wxGTK = wxGTK32;
   };
 
   spatialite_tools = callPackage ../applications/gis/spatialite-tools { };
