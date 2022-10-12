@@ -1184,13 +1184,13 @@
     "version": "1.32.4"
   },
   "utils": {
-    "hash": "sha256-Mh1yj1VZ620xSs1a5j86K4uCUyjzdeCphKLANQvgTNA=",
+    "hash": "sha256-6o55uGTaqf3rbqoIGiYi5F4zOkK7D0YP+LdaMmBtw24=",
     "owner": "cloudposse",
     "provider-source-address": "registry.terraform.io/cloudposse/utils",
     "repo": "terraform-provider-utils",
-    "rev": "1.4.1",
-    "vendorHash": "sha256-00kcosPSk/Ll7UQhnrEGRo0USvFM2V5MLKnndfhQEQA=",
-    "version": "1.4.1"
+    "rev": "1.5.0",
+    "vendorHash": "sha256-D1QpZTh/4BgAbsoo4RRpJoIFwkHYBkN5JWfCOe5N/A0=",
+    "version": "1.5.0"
   },
   "vault": {
     "hash": "sha256-v+WhEJ9HsTdOqSVpbV/qVCEICsgY3nEqcIutYHi3aQ8=",
