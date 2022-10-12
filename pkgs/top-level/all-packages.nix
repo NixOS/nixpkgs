@@ -21611,10 +21611,10 @@ with pkgs;
       };
     };
   });
-  libsForQt5_openssl_1_1 = recurseIntoAttrs (import ./qt5-packages.nix {
+  libsForQt5_openssl_1_1 = import ./qt5-packages.nix {
     inherit lib pkgs;
     qt5 = qt5_openssl_1_1;
-  });
+  };
 
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
   plasma5Packages = libsForQt515;
