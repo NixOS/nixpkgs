@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     # whoever controls the old URL approves of the "unfs3" github
     # account.
     homepage = "https://unfs3.github.io/";
+    changelog = "https://raw.githubusercontent.com/unfs3/unfs3/unfs3-${version}/NEWS";
+    mainProgram = "unfsd";
 
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
