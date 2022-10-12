@@ -116,15 +116,15 @@ buildPythonApplication {
 
     # Install icons
     for i in 16 24 32 48 64 128 256 512; do
-        install -Dm644 "qutebrowser/icons/qutebrowser-''${i}x''${i}.png" \
+        install -Dm644 "${lib.optionalString isQt6 "qutebrowser/"}icons/qutebrowser-''${i}x''${i}.png" \
             "$out/share/icons/hicolor/''${i}x''${i}/apps/qutebrowser.png"
     done
-    install -Dm644 ${if isQt6 then "qutebrowser/" else ""}icons/qutebrowser.svg \
+    install -Dm644 ${lib.optionalString isQt6 "qutebrowser/"}icons/qutebrowser.svg \
         "$out/share/icons/hicolor/scalable/apps/qutebrowser.svg"
 
     # Install scripts
     sed -i "s,/usr/bin/,$out/bin/,g" scripts/open_url_in_instance.sh
-    ${if isQt6 then "rm -rf scripts/{testbrowser,dev}" else ""}
+    ${lib.optionalString isQt6 "rm -rf scripts/{testbrowser,dev}"}
     install -Dm755 -t "$out/share/qutebrowser/scripts/" $(find scripts -type f)
     install -Dm755 -t "$out/share/qutebrowser/userscripts/" misc/userscripts/*
 
