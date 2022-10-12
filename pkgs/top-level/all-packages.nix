@@ -34528,7 +34528,7 @@ with pkgs;
   keen4 = callPackage ../games/keen4 { };
 
   zeroadPackages = recurseIntoAttrs (callPackage ../games/0ad {
-    wxGTK = wxGTK31;
+    wxGTK = wxGTK32;
   });
 
   zeroad = zeroadPackages.zeroad;
