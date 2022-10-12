@@ -4,17 +4,15 @@
 
 buildDunePackage rec {
   pname = "ppx_deriving_yojson";
-  version = "3.6.1";
+  version = "3.7.0";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
 
   src = fetchFromGitHub {
     owner = "ocaml-ppx";
     repo = "ppx_deriving_yojson";
     rev = "v${version}";
-    sha256 = "1icz5h6p3pfj7my5gi7wxpflrb8c902dqa17f9w424njilnpyrbk";
+    sha256 = "sha256-niKxn1fX0mL1MhlZvbN1wgRed9AHh+z9s6l++k1VX9k=";
   };
 
   propagatedBuildInputs = [ ppxlib ppx_deriving yojson ];
