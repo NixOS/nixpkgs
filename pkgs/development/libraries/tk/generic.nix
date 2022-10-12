@@ -1,4 +1,4 @@
-{ stdenv, lib, src, pkg-config, tcl, libXft, patches ? []
+{ stdenv, lib, src, pkg-config, tcl, xorg, patches ? []
 , enableAqua ? stdenv.isDarwin, darwin
 , ... }:
 
@@ -40,7 +40,7 @@ tcl.mkTclDerivation {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optional enableAqua (with darwin.apple_sdk.frameworks; [ Cocoa ]);
 
-  propagatedBuildInputs = [ libXft ];
+  propagatedBuildInputs = [ xorg.libXft ];
 
   enableParallelBuilding = true;
 
