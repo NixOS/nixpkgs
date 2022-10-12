@@ -10527,6 +10527,8 @@ with pkgs;
 
   mpi = openmpi; # this attribute should used to build MPI applications
 
+  ucc = callPackage ../development/libraries/ucc {};
+
   ucx = callPackage ../development/libraries/ucx {};
 
   openmodelica = recurseIntoAttrs (callPackage ../applications/science/misc/openmodelica {});
@@ -14818,6 +14820,10 @@ with pkgs;
   cargo-geiger = callPackage ../development/tools/rust/cargo-geiger {
     inherit (darwin) libiconv;
     inherit (darwin.apple_sdk.frameworks) Security CoreFoundation;
+  };
+
+  cargo-hf2 = callPackage ../development/tools/rust/cargo-hf2 {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
   };
   cargo-inspect = callPackage ../development/tools/rust/cargo-inspect {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -31552,9 +31558,19 @@ with pkgs;
 
   prusa-slicer = callPackage ../applications/misc/prusa-slicer { };
 
-  super-slicer = callPackage ../applications/misc/prusa-slicer/super-slicer.nix { };
+  super-slicer = callPackage ../applications/misc/prusa-slicer/super-slicer.nix {
+    wxGTK31-gtk3 = wxGTK31-gtk3.override {
+      # https://github.com/supermerill/SuperSlicer/issues/1093
+      withEGL = false;
+    };
+  };
 
-  super-slicer-latest = (callPackage ../applications/misc/prusa-slicer/super-slicer.nix { }).latest;
+  super-slicer-latest = (callPackage ../applications/misc/prusa-slicer/super-slicer.nix {
+    wxGTK31-gtk3 = wxGTK31-gtk3.override {
+      # https://github.com/supermerill/SuperSlicer/issues/1093
+      withEGL = false;
+    };
+  }).latest;
 
   snapmaker-luban = callPackage ../applications/misc/snapmaker-luban { };
 
