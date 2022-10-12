@@ -113,23 +113,19 @@ let
     inherit (pkgs.stdenv) buildPlatform targetPlatform hostPlatform;
   };
 
-  splicedPackagesWithXorg = splicedPackages // builtins.removeAttrs splicedPackages.xorg [
-    "callPackage" "newScope" "overrideScope" "packages"
-  ];
-
 in
 
 {
   inherit splicePackages;
 
   # We use `callPackage' to be able to omit function arguments that can be
-  # obtained `pkgs` or `buildPackages` and their `xorg` package sets. Use
+  # obtained `pkgs` or `buildPackages`. Use
   # `newScope' for sets of packages in `pkgs' (see e.g. `gnome' below).
   callPackage = pkgs.newScope {};
 
-  callPackages = lib.callPackagesWith splicedPackagesWithXorg;
+  callPackages = lib.callPackagesWith splicedPackages;
 
-  newScope = extra: lib.callPackageWith (splicedPackagesWithXorg // extra);
+  newScope = extra: lib.callPackageWith (splicedPackages // extra);
 
   # Haskell package sets need this because they reimplement their own
   # `newScope`.
