@@ -1,0 +1,369 @@
+From c977424a1d39751fc5055131ad3f7819d421dcc8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ingo=20Kl=C3=B6cker?= <dev@ingo-kloecker.de>
+Date: Wed, 17 Aug 2022 14:51:19 +0200
+Subject: [PATCH 1/5] qt: Make sure expiration time is interpreted as unsigned
+ number
+
+* lang/qt/src/qgpgmeaddexistingsubkeyjob.cpp (add_subkey): Convert
+expiration time to uint_least32_t.
+--
+
+This fixes the corresponding test on 32-bit systems where time_t (the
+return type of expirationTime()) is a signed 32-bit integer type.
+
+GnuPG-bug-id: 6137
+---
+ lang/qt/src/qgpgmeaddexistingsubkeyjob.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/lang/qt/src/qgpgmeaddexistingsubkeyjob.cpp b/lang/qt/src/qgpgmeaddexistingsubkeyjob.cpp
+index 32e2c292..b74e7a06 100644
+--- a/lang/qt/src/qgpgmeaddexistingsubkeyjob.cpp
++++ b/lang/qt/src/qgpgmeaddexistingsubkeyjob.cpp
+@@ -64,7 +64,8 @@ static QGpgMEAddExistingSubkeyJob::result_type add_subkey(Context *ctx, const Ke
+     std::unique_ptr<GpgAddExistingSubkeyEditInteractor> interactor{new GpgAddExistingSubkeyEditInteractor{subkey.keyGrip()}};
+ 
+     if (!subkey.neverExpires()) {
+-        const auto expiry = QDateTime::fromSecsSinceEpoch(subkey.expirationTime(), Qt::UTC).toString(u"yyyyMMdd'T'hhmmss").toStdString();
++        const auto expiry = QDateTime::fromSecsSinceEpoch(uint_least32_t(subkey.expirationTime()),
++                                                          Qt::UTC).toString(u"yyyyMMdd'T'hhmmss").toStdString();
+         interactor->setExpiry(expiry);
+     }
+ 
+-- 
+2.36.0.windows.1
+
+
+From 81d4b7f2d7077297d76af5728949d8f2bdff8cd5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ingo=20Kl=C3=B6cker?= <dev@ingo-kloecker.de>
+Date: Wed, 17 Aug 2022 14:56:13 +0200
+Subject: [PATCH 2/5] qt,tests: Log the actual error code if the assertion
+ fails
+
+* lang/qt/tests/t-addexistingsubkey.cpp (
+AddExistingSubkeyJobTest::testAddExistingSubkeyAsync,
+AddExistingSubkeyJobTest::testAddExistingSubkeySync,
+AddExistingSubkeyJobTest::testAddExistingSubkeyWithExpiration): Use
+QCOMPARE instead of QVERIFY for asserting equality.
+--
+
+GnuPG-bug-id: 6137
+---
+ lang/qt/tests/t-addexistingsubkey.cpp | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/lang/qt/tests/t-addexistingsubkey.cpp b/lang/qt/tests/t-addexistingsubkey.cpp
+index 589c90bf..2e654cec 100644
+--- a/lang/qt/tests/t-addexistingsubkey.cpp
++++ b/lang/qt/tests/t-addexistingsubkey.cpp
+@@ -168,7 +168,7 @@ private Q_SLOTS:
+         QSignalSpy spy (this, SIGNAL(asyncDone()));
+         QVERIFY(spy.wait(QSIGNALSPY_TIMEOUT));
+ 
+-        QVERIFY(result.code() == GPG_ERR_NO_ERROR);
++        QCOMPARE(result.code(), static_cast<int>(GPG_ERR_NO_ERROR));
+         key.update();
+         QCOMPARE(key.numSubkeys(), 3u);
+     }
+@@ -190,7 +190,7 @@ private Q_SLOTS:
+ 
+         const auto result = job->exec(key, sourceSubkey);
+ 
+-        QVERIFY(result.code() == GPG_ERR_NO_ERROR);
++        QCOMPARE(result.code(), static_cast<int>(GPG_ERR_NO_ERROR));
+         key.update();
+         QCOMPARE(key.numSubkeys(), 3u);
+         QCOMPARE(key.subkey(2).expirationTime(), 0);
+@@ -213,7 +213,7 @@ private Q_SLOTS:
+ 
+         const auto result = job->exec(key, sourceSubkey);
+ 
+-        QVERIFY(result.code() == GPG_ERR_NO_ERROR);
++        QCOMPARE(result.code(), static_cast<int>(GPG_ERR_NO_ERROR));
+         key.update();
+         QCOMPARE(key.numSubkeys(), 3u);
+ 
+-- 
+2.36.0.windows.1
+
+
+From f2b48de26b8f8c48c293423eda712831544924f6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ingo=20Kl=C3=B6cker?= <dev@ingo-kloecker.de>
+Date: Wed, 17 Aug 2022 15:22:29 +0200
+Subject: [PATCH 3/5] qt,tests: Make sure expiration time is interpreted as
+ unsigned number
+
+* lang/qt/tests/t-addexistingsubkey.cpp,
+lang/qt/tests/t-changeexpiryjob.cpp: Convert expiration time to
+uint_least32_t.
+--
+
+This doesn't change the outcome of the tests (they also pass without
+this change because of the expiration dates of the test keys), but it's
+still good practise to treat the expiration time as an unsigned number
+if the assertions check that the expiration time is in some range.
+
+GnuPG-bug-id: 6137
+---
+ lang/qt/tests/t-addexistingsubkey.cpp |  6 +++---
+ lang/qt/tests/t-changeexpiryjob.cpp   | 26 +++++++++++++-------------
+ 2 files changed, 16 insertions(+), 16 deletions(-)
+
+diff --git a/lang/qt/tests/t-addexistingsubkey.cpp b/lang/qt/tests/t-addexistingsubkey.cpp
+index 2e654cec..87eadf43 100644
+--- a/lang/qt/tests/t-addexistingsubkey.cpp
++++ b/lang/qt/tests/t-addexistingsubkey.cpp
+@@ -222,9 +222,9 @@ private Q_SLOTS:
+         // several times
+         const auto allowedDeltaTSeconds = 1;
+         const auto expectedExpirationRange = std::make_pair(
+-            sourceSubkey.expirationTime() - allowedDeltaTSeconds,
+-            sourceSubkey.expirationTime() + allowedDeltaTSeconds);
+-        const auto actualExpiration = key.subkey(2).expirationTime();
++            uint_least32_t(sourceSubkey.expirationTime()) - allowedDeltaTSeconds,
++            uint_least32_t(sourceSubkey.expirationTime()) + allowedDeltaTSeconds);
++        const auto actualExpiration = uint_least32_t(key.subkey(2).expirationTime());
+         QVERIFY2(actualExpiration >= expectedExpirationRange.first,
+                  ("actual: " + std::to_string(actualExpiration) +
+                   "; expected: " + std::to_string(expectedExpirationRange.first)).c_str());
+diff --git a/lang/qt/tests/t-changeexpiryjob.cpp b/lang/qt/tests/t-changeexpiryjob.cpp
+index 090002f3..3da74d46 100644
+--- a/lang/qt/tests/t-changeexpiryjob.cpp
++++ b/lang/qt/tests/t-changeexpiryjob.cpp
+@@ -70,7 +70,7 @@ private Q_SLOTS:
+         QVERIFY(!key.isNull());
+         QVERIFY(!key.subkey(0).isNull());
+         QVERIFY(!key.subkey(1).isNull());
+-        const auto subkeyExpiration = key.subkey(1).expirationTime();
++        const auto subkeyExpiration = uint_least32_t(key.subkey(1).expirationTime());
+ 
+         {
+             // Create the job
+@@ -101,7 +101,7 @@ private Q_SLOTS:
+                 newExpirationDate.toSecsSinceEpoch() - 10,
+                 QDateTime::currentDateTime().addDays(1).toSecsSinceEpoch());
+             {
+-                const auto actualExpiration = key.subkey(0).expirationTime();
++                const auto actualExpiration = uint_least32_t(key.subkey(0).expirationTime());
+                 QVERIFY2(actualExpiration >= expectedExpirationRange.first,
+                         ("actual: " + std::to_string(actualExpiration) +
+                          "; expected: " + std::to_string(expectedExpirationRange.first)).c_str());
+@@ -110,7 +110,7 @@ private Q_SLOTS:
+                          "; expected: " + std::to_string(expectedExpirationRange.second)).c_str());
+             }
+             {
+-                const auto actualExpiration = key.subkey(1).expirationTime();
++                const auto actualExpiration = uint_least32_t(key.subkey(1).expirationTime());
+                 QCOMPARE(actualExpiration, subkeyExpiration);  // unchanged
+             }
+         }
+@@ -133,7 +133,7 @@ private Q_SLOTS:
+         QVERIFY(!key.isNull());
+         QVERIFY(!key.subkey(0).isNull());
+         QVERIFY(!key.subkey(1).isNull());
+-        const auto primaryKeyExpiration = key.subkey(0).expirationTime();
++        const auto primaryKeyExpiration = uint_least32_t(key.subkey(0).expirationTime());
+ 
+         {
+             // Create the job
+@@ -164,11 +164,11 @@ private Q_SLOTS:
+                 newExpirationDate.toSecsSinceEpoch() - 10,
+                 QDateTime::currentDateTime().addDays(2).toSecsSinceEpoch());
+             {
+-                const auto actualExpiration = key.subkey(0).expirationTime();
++                const auto actualExpiration = uint_least32_t(key.subkey(0).expirationTime());
+                 QCOMPARE(actualExpiration, primaryKeyExpiration);  // unchanged
+             }
+             {
+-                const auto actualExpiration = key.subkey(1).expirationTime();
++                const auto actualExpiration = uint_least32_t(key.subkey(1).expirationTime());
+                 QVERIFY2(actualExpiration >= expectedExpirationRange.first,
+                         ("actual: " + std::to_string(actualExpiration) +
+                          "; expected: " + std::to_string(expectedExpirationRange.first)).c_str());
+@@ -196,7 +196,7 @@ private Q_SLOTS:
+         QVERIFY(!key.isNull());
+         QVERIFY(!key.subkey(0).isNull());
+         QVERIFY(!key.subkey(1).isNull());
+-        const auto subkeyExpiration = key.subkey(1).expirationTime();
++        const auto subkeyExpiration = uint_least32_t(key.subkey(1).expirationTime());
+ 
+         {
+             // Create the job
+@@ -228,7 +228,7 @@ private Q_SLOTS:
+                 newExpirationDate.toSecsSinceEpoch() - 10,
+                 QDateTime::currentDateTime().addDays(3).toSecsSinceEpoch());
+             {
+-                const auto actualExpiration = key.subkey(0).expirationTime();
++                const auto actualExpiration = uint_least32_t(key.subkey(0).expirationTime());
+                 QVERIFY2(actualExpiration >= expectedExpirationRange.first,
+                         ("actual: " + std::to_string(actualExpiration) +
+                          "; expected: " + std::to_string(expectedExpirationRange.first)).c_str());
+@@ -237,7 +237,7 @@ private Q_SLOTS:
+                          "; expected: " + std::to_string(expectedExpirationRange.second)).c_str());
+             }
+             {
+-                const auto actualExpiration = key.subkey(1).expirationTime();
++                const auto actualExpiration = uint_least32_t(key.subkey(1).expirationTime());
+                 QCOMPARE(actualExpiration, subkeyExpiration);  // unchanged
+             }
+         }
+@@ -291,7 +291,7 @@ private Q_SLOTS:
+                 newExpirationDate.toSecsSinceEpoch() - 10,
+                 QDateTime::currentDateTime().addDays(4).toSecsSinceEpoch());
+             {
+-                const auto actualExpiration = key.subkey(0).expirationTime();
++                const auto actualExpiration = uint_least32_t(key.subkey(0).expirationTime());
+                 QVERIFY2(actualExpiration >= expectedExpirationRange.first,
+                         ("actual: " + std::to_string(actualExpiration) +
+                          "; expected: " + std::to_string(expectedExpirationRange.first)).c_str());
+@@ -300,7 +300,7 @@ private Q_SLOTS:
+                          "; expected: " + std::to_string(expectedExpirationRange.second)).c_str());
+             }
+             {
+-                const auto actualExpiration = key.subkey(1).expirationTime();
++                const auto actualExpiration = uint_least32_t(key.subkey(1).expirationTime());
+                 QVERIFY2(actualExpiration >= expectedExpirationRange.first,
+                         ("actual: " + std::to_string(actualExpiration) +
+                           "; expected: " + std::to_string(expectedExpirationRange.first)).c_str());
+@@ -359,7 +359,7 @@ private Q_SLOTS:
+                 newExpirationDate.toSecsSinceEpoch() - 10,
+                 QDateTime::currentDateTime().addDays(5).toSecsSinceEpoch());
+             {
+-                const auto actualExpiration = key.subkey(0).expirationTime();
++                const auto actualExpiration = uint_least32_t(key.subkey(0).expirationTime());
+                 QVERIFY2(actualExpiration >= expectedExpirationRange.first,
+                         ("actual: " + std::to_string(actualExpiration) +
+                          "; expected: " + std::to_string(expectedExpirationRange.first)).c_str());
+@@ -368,7 +368,7 @@ private Q_SLOTS:
+                          "; expected: " + std::to_string(expectedExpirationRange.second)).c_str());
+             }
+             {
+-                const auto actualExpiration = key.subkey(1).expirationTime();
++                const auto actualExpiration = uint_least32_t(key.subkey(1).expirationTime());
+                 QVERIFY2(actualExpiration >= expectedExpirationRange.first,
+                         ("actual: " + std::to_string(actualExpiration) +
+                           "; expected: " + std::to_string(expectedExpirationRange.first)).c_str());
+-- 
+2.36.0.windows.1
+
+
+From 2fa5c80aeba4528b3bdf41ec5740e7db5d4b6d2b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ingo=20Kl=C3=B6cker?= <dev@ingo-kloecker.de>
+Date: Thu, 18 Aug 2022 10:43:19 +0200
+Subject: [PATCH 4/5] cpp: Fix handling of "no key" or "invalid time"
+ situations
+
+* lang/cpp/src/gpgaddexistingsubkeyeditinteractor.cpp
+(GpgAddExistingSubkeyEditInteractor::Private::nextState): Fix inverted
+logic of string comparisons.
+--
+
+This fixes the problem that the interactor didn't return the proper
+error code if gpg didn't accept the key grip or the expiration date.
+
+GnuPG-bug-id: 6137
+---
+ lang/cpp/src/gpgaddexistingsubkeyeditinteractor.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lang/cpp/src/gpgaddexistingsubkeyeditinteractor.cpp b/lang/cpp/src/gpgaddexistingsubkeyeditinteractor.cpp
+index 547e613d..8eec7460 100644
+--- a/lang/cpp/src/gpgaddexistingsubkeyeditinteractor.cpp
++++ b/lang/cpp/src/gpgaddexistingsubkeyeditinteractor.cpp
+@@ -136,7 +136,7 @@ unsigned int GpgAddExistingSubkeyEditInteractor::Private::nextState(unsigned int
+                 strcmp(args, "keygen.flags") == 0) {
+             return FLAGS;
+         } else if (status == GPGME_STATUS_GET_LINE &&
+-                   strcmp(args, "keygen.keygrip")) {
++                   strcmp(args, "keygen.keygrip") == 0) {
+             err = NO_KEY_ERROR;
+             return ERROR;
+         }
+@@ -157,7 +157,7 @@ unsigned int GpgAddExistingSubkeyEditInteractor::Private::nextState(unsigned int
+                 strcmp(args, "keyedit.prompt") == 0) {
+             return QUIT;
+         } else if (status == GPGME_STATUS_GET_LINE &&
+-                   strcmp(args, "keygen.valid")) {
++                   strcmp(args, "keygen.valid") == 0) {
+             err = INV_TIME_ERROR;
+             return ERROR;
+         }
+-- 
+2.36.0.windows.1
+
+
+From 2e7a61b898fccc1c20000b79dee83cd980901fa9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ingo=20Kl=C3=B6cker?= <dev@ingo-kloecker.de>
+Date: Thu, 18 Aug 2022 10:55:09 +0200
+Subject: [PATCH 5/5] qt,tests: Make test pass on 32-bit systems
+
+* lang/qt/tests/t-addexistingsubkey.cpp
+(AddExistingSubkeyJobTest::testAddExistingSubkeyWithExpiration): Handle
+negative expiration date.
+--
+
+On 32-bit systems the expiration date of the test key overflows. This
+will cause the AddExistingSubkeyJob to fail. We expect it to fail with
+an "invalid time" error.
+
+GnuPG-bug-id: 6137
+---
+ lang/qt/tests/t-addexistingsubkey.cpp | 42 +++++++++++++++------------
+ 1 file changed, 24 insertions(+), 18 deletions(-)
+
+diff --git a/lang/qt/tests/t-addexistingsubkey.cpp b/lang/qt/tests/t-addexistingsubkey.cpp
+index 87eadf43..c0eee57b 100644
+--- a/lang/qt/tests/t-addexistingsubkey.cpp
++++ b/lang/qt/tests/t-addexistingsubkey.cpp
+@@ -213,24 +213,30 @@ private Q_SLOTS:
+ 
+         const auto result = job->exec(key, sourceSubkey);
+ 
+-        QCOMPARE(result.code(), static_cast<int>(GPG_ERR_NO_ERROR));
+-        key.update();
+-        QCOMPARE(key.numSubkeys(), 3u);
+-
+-        // allow 1 second different expiration because gpg calculates with
+-        // expiration as difference to current time and takes current time
+-        // several times
+-        const auto allowedDeltaTSeconds = 1;
+-        const auto expectedExpirationRange = std::make_pair(
+-            uint_least32_t(sourceSubkey.expirationTime()) - allowedDeltaTSeconds,
+-            uint_least32_t(sourceSubkey.expirationTime()) + allowedDeltaTSeconds);
+-        const auto actualExpiration = uint_least32_t(key.subkey(2).expirationTime());
+-        QVERIFY2(actualExpiration >= expectedExpirationRange.first,
+-                 ("actual: " + std::to_string(actualExpiration) +
+-                  "; expected: " + std::to_string(expectedExpirationRange.first)).c_str());
+-        QVERIFY2(actualExpiration <= expectedExpirationRange.second,
+-                 ("actual: " + std::to_string(actualExpiration) +
+-                  "; expected: " + std::to_string(expectedExpirationRange.second)).c_str());
++        if (sourceSubkey.expirationTime() > 0) {
++            QCOMPARE(result.code(), static_cast<int>(GPG_ERR_NO_ERROR));
++            key.update();
++            QCOMPARE(key.numSubkeys(), 3u);
++
++            // allow 1 second different expiration because gpg calculates with
++            // expiration as difference to current time and takes current time
++            // several times
++            const auto allowedDeltaTSeconds = 1;
++            const auto expectedExpirationRange = std::make_pair(
++                uint_least32_t(sourceSubkey.expirationTime()) - allowedDeltaTSeconds,
++                uint_least32_t(sourceSubkey.expirationTime()) + allowedDeltaTSeconds);
++            const auto actualExpiration = uint_least32_t(key.subkey(2).expirationTime());
++            QVERIFY2(actualExpiration >= expectedExpirationRange.first,
++                    ("actual: " + std::to_string(actualExpiration) +
++                    "; expected: " + std::to_string(expectedExpirationRange.first)).c_str());
++            QVERIFY2(actualExpiration <= expectedExpirationRange.second,
++                    ("actual: " + std::to_string(actualExpiration) +
++                    "; expected: " + std::to_string(expectedExpirationRange.second)).c_str());
++        } else {
++            // on 32-bit systems the expiration date of the test key overflows;
++            // in this case we expect an appropriate error code
++            QCOMPARE(result.code(), static_cast<int>(GPG_ERR_INV_TIME));
++        }
+     }
+ 
+ private:
+-- 
+2.36.0.windows.1
+
