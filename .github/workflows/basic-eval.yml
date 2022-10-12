@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v17
-    - uses: cachix/cachix-action@v10
+    - uses: cachix/cachix-action@v11
       with:
         # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
         name: nixpkgs-ci
