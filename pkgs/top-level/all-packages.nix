@@ -17029,7 +17029,9 @@ with pkgs;
 
   libwhich = callPackage ../development/tools/misc/libwhich { };
 
-  linuxkit = callPackage ../development/tools/misc/linuxkit { };
+  linuxkit = callPackage ../development/tools/misc/linuxkit {
+    inherit (darwin.apple_sdk_11_0.frameworks) Virtualization;
+  };
 
   lit = callPackage ../development/tools/misc/lit { };
 
