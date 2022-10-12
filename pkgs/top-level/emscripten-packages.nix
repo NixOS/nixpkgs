@@ -180,4 +180,24 @@ rec {
       '';
     });
 
+
+  minisat = (pkgs.minisat.override {
+    stdenv = pkgs.emscriptenStdenv;
+  }).overrideAttrs
+    (old: {
+      propagatedBuildInputs = [ zlib ];
+      CXXFLAGS = "-isystem ${zlib}/include";
+      LDFLAGS = "-L ${zlib}/lib";
+      configurePhase = ''
+        make config prefix="$out"
+      '';
+      buildPhase = ''
+        emmake make lr lsh
+      '';
+      installPhase = ''
+        emmake make install-lib install-headers
+      '';
+      checkPhase = ''
+      '';
+    });
 }
