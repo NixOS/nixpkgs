@@ -3,6 +3,7 @@
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
 , extraProfile ? "" # string to append to profile
+, extraArgs ? "" # arguments to always pass to steam
 , runtimeOnly ? false
 , runtimeShell
 , stdenv
@@ -255,7 +256,7 @@ in buildFHSUserEnv rec {
 
     ${exportLDPath}
     ${fixBootstrap}
-    exec steam "$@"
+    exec steam ${extraArgs} "$@"
   '';
 
   inherit (steam) meta;

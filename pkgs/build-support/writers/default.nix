@@ -187,7 +187,7 @@ let
     };
   in writeDash name ''
     export NODE_PATH=${node-env}/lib/node_modules
-    exec ${pkgs.nodejs}/bin/node ${pkgs.writeText "js" content}
+    exec ${pkgs.nodejs}/bin/node ${pkgs.writeText "js" content} "$@"
   '';
 
   # writeJSBin takes the same arguments as writeJS but outputs a directory (like writeScriptBin)
