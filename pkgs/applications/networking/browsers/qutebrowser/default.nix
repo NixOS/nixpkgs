@@ -75,7 +75,8 @@ buildPythonApplication {
   nativeBuildInputs = [
     wrapQtAppsHook wrapGAppsHook asciidoc
     docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
-  ];
+  ]
+    ++ lib.optional isQt6 python3Packages.pygments;
 
   propagatedBuildInputs = with python3Packages; ([
     pyyaml backendPackage jinja2 pygments
@@ -97,16 +98,18 @@ buildPythonApplication {
   dontWrapGApps = true;
   dontWrapQtApps = true;
 
+  preConfigure = ''
+    a2x -f manpage doc/qutebrowser.1.asciidoc
+  '' + lib.optionalString isQt6 ''
+    python scripts/asciidoc2html.py
+  '';
+
   postPatch = ''
     substituteInPlace qutebrowser/misc/quitter.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
 
     sed -i "s,/usr,$out,g" qutebrowser/utils/standarddir.py
   '' + lib.optionalString withPdfReader ''
     sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
-  '';
-
-  postBuild = ''
-    a2x -f manpage doc/qutebrowser.1.asciidoc
   '';
 
   postInstall = ''
