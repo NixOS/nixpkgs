@@ -6970,6 +6970,8 @@ with pkgs;
 
   git-my = callPackage ../applications/version-management/git-and-tools/git-my { };
 
+  git-nomad = callPackage ../applications/version-management/git-and-tools/git-nomad { };
+
   git-octopus = callPackage ../applications/version-management/git-and-tools/git-octopus { };
 
   git-open = callPackage ../applications/version-management/git-and-tools/git-open { };
@@ -15588,7 +15590,7 @@ with pkgs;
   update-python-libraries = callPackage ../development/interpreters/python/update-python-libraries { };
 
   # Should eventually be moved inside Python interpreters.
-  python-setup-hook = callPackage ../development/interpreters/python/setup-hook.nix { };
+  python-setup-hook = buildPackages.callPackage ../development/interpreters/python/setup-hook.nix { };
 
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/cpython/docs {});
 
@@ -30722,6 +30724,8 @@ with pkgs;
   pavucontrol = callPackage ../applications/audio/pavucontrol { };
 
   paraview = libsForQt5.callPackage ../applications/graphics/paraview { };
+
+  parlatype = callPackage ../applications/audio/parlatype { };
 
   packet = callPackage ../development/tools/packet { };
 
