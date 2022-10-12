@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, nixosTests }:
 
 stdenv.mkDerivation rec {
   version = "0.9.2";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url= "http://www.litech.org/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "1700y121lhvpna49bjpssb7jq1abj9qw5wxgjn8gzp6jm4kpj7rb";
   };
+
+  passthru.tests.tayga = nixosTests.tayga;
 
   meta = with lib; {
     description = "Userland stateless NAT64 daemon";
