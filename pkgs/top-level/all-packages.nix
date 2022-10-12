@@ -4758,6 +4758,8 @@ with pkgs;
 
   spacevim = callPackage ../applications/editors/spacevim { };
 
+  srvc = callPackage ../applications/version-management/srvc { };
+
   ssmsh = callPackage ../tools/admin/ssmsh { };
 
   stacs = callPackage ../tools/security/stacs { };
