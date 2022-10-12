@@ -18,6 +18,8 @@ import ./make-test-python.nix ({ pkgs, ...} :
       enable = true;
       user = "alice";
     };
+
+    users.users.alice.extraGroups = ["uinput"];
   };
 
   testScript = { nodes, ... }: let

@@ -623,7 +623,9 @@ in
         ];
 
       services.xserver.displayManager.sessionPackages = [ pkgs.plasma5Packages.plasma-bigscreen ];
-      services.udev.packages = [ pkgs.plasma5Packages.plasma-remotecontrollers ];
+
+      # required for plasma-remotecontrollers to work correctly
+      hardware.uinput.enable = true;
     })
   ];
 }
