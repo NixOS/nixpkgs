@@ -1,27 +1,38 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, git, testers, linuxkit }:
 
-buildGoPackage rec {
-  pname   = "linuxkit";
-  version = "0.8";
-
-  goPackagePath = "github.com/linuxkit/linuxkit";
+buildGoModule rec {
+  pname = "linuxkit";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "linuxkit";
     repo = "linuxkit";
     rev = "v${version}";
-    sha256 = "15jj60k8wz9cahjbdscnwyyfb1k1grjh7yrilb1cj4r8mby4sp2g";
+    sha256 = "sha256-kmsc3CyeCE61fLEpKMTN09WTVo+By6ZrtO89eyBqZ34=";
   };
 
-  subPackages = [ "src/cmd/linuxkit" ];
+  vendorSha256 = null;
 
-  ldflags = [ "-s" "-w" "-X ${goPackagePath}/src/cmd/linuxkit/version.GitCommit=${src.rev}" "-X ${goPackagePath}/src/cmd/linuxkit/version.Version=${version}" ];
+  modRoot = "./src/cmd/linuxkit";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.Version=${version}"
+  ];
+
+  checkInputs = [ git ];
+
+  passthru.tests.version = testers.testVersion {
+    package = linuxkit;
+    command = "linuxkit version";
+  };
 
   meta = with lib; {
     description = "A toolkit for building secure, portable and lean operating systems for containers";
     license = licenses.asl20;
     homepage = "https://github.com/linuxkit/linuxkit";
-    maintainers = [ maintainers.nicknovitski ];
+    maintainers = with maintainers; [ nicknovitski ];
     platforms = platforms.unix;
   };
 }
