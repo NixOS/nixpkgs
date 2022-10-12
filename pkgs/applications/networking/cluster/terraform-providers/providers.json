@@ -669,13 +669,13 @@
     "version": "0.7.0"
   },
   "linode": {
-    "hash": "sha256-gysdJOGUmhwFoRpR0Yp2p/Vjb69k+fDzcWatOgA+/AQ=",
+    "hash": "sha256-FtJYpHmXkXBIcxlrUN9hOid3x4wMSk5NI2CFzmwniu4=",
     "owner": "linode",
     "provider-source-address": "registry.terraform.io/linode/linode",
     "repo": "terraform-provider-linode",
-    "rev": "v1.29.2",
-    "vendorHash": "sha256-Sp/e3QVdUeQGflDGYLSMPGqxcMWoIY8Q9nZUteFIryo=",
-    "version": "1.29.2"
+    "rev": "v1.29.3",
+    "vendorHash": "sha256-D7WZ2Ep/W8aCCFOVgsveJKAIg/j5l9fEnnXLMobICnc=",
+    "version": "1.29.3"
   },
   "linuxbox": {
     "hash": "sha256-MzasMVtXO7ZeZ+qEx2Z+7881fOIA0SFzSvXVHeEROtg=",
