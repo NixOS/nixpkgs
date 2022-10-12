@@ -31558,9 +31558,19 @@ with pkgs;
 
   prusa-slicer = callPackage ../applications/misc/prusa-slicer { };
 
-  super-slicer = callPackage ../applications/misc/prusa-slicer/super-slicer.nix { };
+  super-slicer = callPackage ../applications/misc/prusa-slicer/super-slicer.nix {
+    wxGTK31-gtk3 = wxGTK31-gtk3.override {
+      # https://github.com/supermerill/SuperSlicer/issues/1093
+      withEGL = false;
+    };
+  };
 
-  super-slicer-latest = (callPackage ../applications/misc/prusa-slicer/super-slicer.nix { }).latest;
+  super-slicer-latest = (callPackage ../applications/misc/prusa-slicer/super-slicer.nix {
+    wxGTK31-gtk3 = wxGTK31-gtk3.override {
+      # https://github.com/supermerill/SuperSlicer/issues/1093
+      withEGL = false;
+    };
+  }).latest;
 
   snapmaker-luban = callPackage ../applications/misc/snapmaker-luban { };
 

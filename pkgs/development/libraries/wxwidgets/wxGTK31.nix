@@ -17,6 +17,7 @@
 , compat28 ? false
 , compat30 ? true
 , unicode ? true
+, withEGL ? true
 , withGtk2 ? (!stdenv.isDarwin)
 , withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , withWebKit ? stdenv.isDarwin
@@ -95,6 +96,7 @@ stdenv.mkDerivation rec {
     (if compat28 then "--enable-compat28" else "--disable-compat28")
     (if compat30 then "--enable-compat30" else "--disable-compat30")
   ]
+  ++ lib.optional (!withEGL) "--disable-glcanvasegl"
   ++ lib.optional unicode "--enable-unicode"
   ++ lib.optional withMesa "--with-opengl"
   ++ lib.optionals stdenv.isDarwin [
