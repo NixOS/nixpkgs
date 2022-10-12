@@ -12,6 +12,8 @@
 , which
 }:
 
+# Arango 3.10.0 officially only supports gcc11+, but seems to compile
+# with 10
 gcc10Stdenv.mkDerivation rec {
   pname = "arangodb";
   version = "3.10.0";
