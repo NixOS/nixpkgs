@@ -2,12 +2,17 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "kea-exporter";
-  version = "0.4.2";
+  version = "0.4.4";
+  format = "pyproject";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0dpzicv0ksyda2lprldkj452c23qycl5c9avca6x7f7rbqry9pnd";
+    hash = "sha256-8hWQfI9HCSKhkgN3F0mwvKKJg6FlwqRZ1QuQFB1YXrc=";
   };
+
+  nativeBuildInputs = with python3Packages; [
+    poetry-core
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     click
