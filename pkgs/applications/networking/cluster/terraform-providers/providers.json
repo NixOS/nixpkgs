@@ -1138,13 +1138,13 @@
     "version": "1.0.0"
   },
   "time": {
-    "hash": "sha256-r1AzzO1fxmDZkxWKg+LUiYU19oAg8TthIJA7c0tktZE=",
+    "hash": "sha256-tDYrKU/kggrv/p8QZ0LbHjQSOaNrQ0qy9ekY7DAXqEA=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/time",
     "repo": "terraform-provider-time",
-    "rev": "v0.8.0",
-    "vendorHash": "sha256-67V+lG6mkLuzoJnd8OoH73/XBnkgqDmv6aqpSSsHSqg=",
-    "version": "0.8.0"
+    "rev": "v0.9.0",
+    "vendorHash": "sha256-I4CnaSyn32S7FM56dYWZhzGUKByP2DXD0t/eBOL2ALs=",
+    "version": "0.9.0"
   },
   "tls": {
     "hash": "sha256-q3zt+5zd/bJ42sWbFwuE+rDyHHcZoVBZF4c61aJJkMs=",
