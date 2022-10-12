@@ -6533,6 +6533,11 @@ in {
 
   openidc-client = callPackage ../development/python-modules/openidc-client { };
 
+  openmm = toPythonModule (pkgs.openmm.override {
+    python3Packages = self;
+    enablePython = true;
+  });
+
   openpyxl = callPackage ../development/python-modules/openpyxl { };
 
   openrazer = callPackage ../development/python-modules/openrazer/pylib.nix { };
