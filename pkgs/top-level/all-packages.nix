@@ -6970,6 +6970,8 @@ with pkgs;
 
   git-my = callPackage ../applications/version-management/git-and-tools/git-my { };
 
+  git-nomad = callPackage ../applications/version-management/git-and-tools/git-nomad { };
+
   git-octopus = callPackage ../applications/version-management/git-and-tools/git-octopus { };
 
   git-open = callPackage ../applications/version-management/git-and-tools/git-open { };
