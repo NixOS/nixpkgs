@@ -78,6 +78,12 @@ in mkLicense lset) ({
     url = "https://aomedia.org/license/patent-license/";
   };
 
+  apsl10 = {
+    spdxId = "APSL-1.0";
+    fullName = "Apple Public Source License 1.0";
+    url = "https://web.archive.org/web/20040701000000*/http://www.opensource.apple.com/apsl/1.0.txt";
+  };
+
   apsl20 = {
     spdxId = "APSL-2.0";
     fullName = "Apple Public Source License 2.0";
