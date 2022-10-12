@@ -119,7 +119,7 @@ in {
   certmgr = handleTest ./certmgr.nix {};
   cfssl = handleTestOn ["x86_64-linux"] ./cfssl.nix {};
   charliecloud = handleTest ./charliecloud.nix {};
-  chromium = (handleTestOn ["x86_64-linux"] ./chromium.nix {}).stable or {};
+  chromium = (handleTestOn ["aarch64-linux" "x86_64-linux"] ./chromium.nix {}).stable or {};
   cinnamon = handleTest ./cinnamon.nix {};
   cjdns = handleTest ./cjdns.nix {};
   clickhouse = handleTest ./clickhouse.nix {};
@@ -634,6 +634,8 @@ in {
   traefik = handleTestOn ["x86_64-linux"] ./traefik.nix {};
   trafficserver = handleTest ./trafficserver.nix {};
   transmission = handleTest ./transmission.nix {};
+  # tracee requires bpf
+  tracee = handleTestOn ["x86_64-linux"] ./tracee.nix {};
   trezord = handleTest ./trezord.nix {};
   trickster = handleTest ./trickster.nix {};
   trilium-server = handleTestOn ["x86_64-linux"] ./trilium-server.nix {};

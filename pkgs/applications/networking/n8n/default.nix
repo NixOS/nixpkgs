@@ -7,16 +7,15 @@ let
   };
 in
 nodePackages.n8n.override {
-  nativeBuildInputs = with pkgs.nodePackages; [
-    node-pre-gyp
+  nativeBuildInputs = [
+    pkgs.nodePackages.node-pre-gyp
+  ];
+
+  buildInputs = [
+    pkgs.postgresql
   ];
 
   dontNpmInstall = true;
-
-  postInstall = ''
-    mkdir -p $out/bin
-    ln -s $out/lib/node_modules/n8n/bin/n8n $out/bin/n8n
-  '';
 
   passthru = {
     updateScript = ./generate-dependencies.sh;
