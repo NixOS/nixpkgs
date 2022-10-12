@@ -22,6 +22,7 @@ python3Packages.buildPythonApplication rec {
     description = "A text scroller for use with panels and shells";
     homepage = "https://github.com/noctuid/zscroll";
     license = licenses.gpl3;
+    changelog = "https://github.com/noctuid/zscroll/blob/${version}/Changelog.org";
     platforms = platforms.all;
   };
 }
