@@ -6669,7 +6669,7 @@ with pkgs;
   freeze = callPackage ../tools/security/freeze { };
 
   freqtweak = callPackage ../applications/audio/freqtweak {
-    wxGTK = wxGTK31-gtk2;
+    wxGTK = wxGTK32;
   };
 
   frescobaldi = python3Packages.callPackage ../misc/frescobaldi {};
@@ -28613,7 +28613,9 @@ with pkgs;
 
   qrcodegen = callPackage ../development/libraries/qrcodegen { };
 
-  qrencode = callPackage ../development/libraries/qrencode { };
+  qrencode = callPackage ../development/libraries/qrencode {
+    inherit (darwin) libobjc;
+  };
 
   geeqie = callPackage ../applications/graphics/geeqie { };
 
@@ -33335,7 +33337,11 @@ with pkgs;
 
   gotypist = callPackage ../games/gotypist { };
 
-  heroic = callPackage ../games/heroic { };
+  heroic-unwrapped = callPackage ../games/heroic { };
+
+  heroic = callPackage ../games/heroic/fhsenv.nix {
+    buildFHSUserEnv = buildFHSUserEnvBubblewrap;
+  };
 
   julius = callPackage ../games/julius { };
 
@@ -33770,6 +33776,8 @@ with pkgs;
   gnujump = callPackage ../games/gnujump { };
 
   gnushogi = callPackage ../games/gnushogi { };
+
+  gogdl = python3Packages.callPackage ../games/gogdl { };
 
   gogui = callPackage ../games/gogui { };
 
@@ -36197,11 +36205,11 @@ with pkgs;
   # Exceptions are versions that we need to keep to allow upgrades from older NixOS releases
   inherit (callPackage ../applications/networking/cluster/kops {})
     mkKops
-    kops_1_22
     kops_1_23
     kops_1_24
+    kops_1_25
     ;
-  kops = kops_1_24;
+  kops = kops_1_25;
 
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 
