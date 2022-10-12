@@ -34260,6 +34260,8 @@ with pkgs;
 
   sollya = callPackage ../development/interpreters/sollya { };
 
+  solicurses = callPackage ../games/solicurses { };
+
   # You still can override by passing more arguments.
   space-orbit = callPackage ../games/space-orbit { };
 
