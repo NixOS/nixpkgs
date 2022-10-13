@@ -339,6 +339,10 @@ stdenv.mkDerivation (finalAttrs: {
     disable_test t5319-multi-pack-index
     disable_test t6421-merge-partial-clone
 
+    # Fails reproducibly on ZFS on Linux with formD normalization
+    disable_test t0021-conversion
+    disable_test t3910-mac-os-precompose
+
     ${lib.optionalString (!perlSupport) ''
       # request-pull is a Bash script that invokes Perl, so it is not available
       # when NO_PERL=1, and the test should be skipped, but the test suite does
