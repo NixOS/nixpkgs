@@ -111,6 +111,7 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
     })
+    ./9pfs-use-GHashTable-for-fid-table.patch
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
