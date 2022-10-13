@@ -35,6 +35,12 @@ stdenv.mkDerivation rec {
     substituteInPlace ./src/bin/keactrl/Makefile.am --replace '@sysconfdir@' "$out/etc"
   '';
 
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
   configureFlags = [
     "--enable-perfdhcp"
     "--enable-shell"
@@ -47,7 +53,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+  ] ++ (with python3.pkgs; [
+    sphinxHook
+    sphinx-rtd-theme
+  ]);
+
+  sphinxBuilders = [
+    "html"
+    "man"
   ];
+  sphinxRoot = "doc/sphinx";
 
   buildInputs = [
     boost
