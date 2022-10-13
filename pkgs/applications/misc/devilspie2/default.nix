@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       positioned at a specific screen position, or position a window
       on a specific workspace.
     '';
-    homepage = "https://www.gusnan.se/devilspie2/";
+    homepage = "https://www.nongnu.org/devilspie2/";
     license = licenses.gpl3;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.linux;

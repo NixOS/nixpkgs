@@ -907,7 +907,9 @@ with pkgs;
   ld-is-cc-hook = makeSetupHook { name = "ld-is-cc-hook"; }
     ../build-support/setup-hooks/ld-is-cc-hook.sh;
 
-  libgtkflow = callPackage ../development/libraries/libgtkflow { };
+  libgflow = callPackage ../development/libraries/libgflow { };
+  libgtkflow3 = callPackage ../development/libraries/libgtkflow3 { };
+  libgtkflow4 = callPackage ../development/libraries/libgtkflow4 { };
 
   libredirect = callPackage ../build-support/libredirect { };
 
@@ -13197,7 +13199,7 @@ with pkgs;
   semeru-bin = semeru-bin-17;
   semeru-jre-bin = semeru-jre-bin-17;
 
-  adoptopenjdk-bin-17-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk17-linux.nix { inherit lib; };
+  adoptopenjdk-bin-17-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk17-linux.nix { inherit stdenv lib; };
   adoptopenjdk-bin-17-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk17-darwin.nix { inherit lib; };
 
   adoptopenjdk-hotspot-bin-17 = if stdenv.isLinux
@@ -26761,7 +26763,7 @@ with pkgs;
 
   spatialite_gui = callPackage ../applications/gis/spatialite-gui {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa IOKit;
-    wxGTK = wxGTK30-gtk3;
+    wxGTK = wxGTK32;
   };
 
   spatialite_tools = callPackage ../applications/gis/spatialite-tools { };
@@ -30283,6 +30285,8 @@ with pkgs;
   opcr-policy = callPackage ../development/tools/opcr-policy { };
 
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
+
+  openmm = callPackage ../development/libraries/science/chemistry/openmm { };
 
   openshift = callPackage ../applications/networking/cluster/openshift { };
 
@@ -34548,7 +34552,7 @@ with pkgs;
   keen4 = callPackage ../games/keen4 { };
 
   zeroadPackages = recurseIntoAttrs (callPackage ../games/0ad {
-    wxGTK = wxGTK31;
+    wxGTK = wxGTK32;
   });
 
   zeroad = zeroadPackages.zeroad;
@@ -35294,7 +35298,13 @@ with pkgs;
   cadical = callPackage ../applications/science/logic/cadical {};
 
   inherit (callPackage ./coq-packages.nix {
-    inherit (ocaml-ng) ocamlPackages_4_05 ocamlPackages_4_09 ocamlPackages_4_10 ocamlPackages_4_12;
+    inherit (ocaml-ng)
+      ocamlPackages_4_05
+      ocamlPackages_4_09
+      ocamlPackages_4_10
+      ocamlPackages_4_12
+      ocamlPackages_4_14
+    ;
   }) mkCoqPackages
     coqPackages_8_5  coq_8_5
     coqPackages_8_6  coq_8_6
