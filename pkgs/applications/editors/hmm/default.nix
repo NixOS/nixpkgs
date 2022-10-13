@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "nadrad";
     repo = "h-m-m";
     rev = "ecf74433844e5542f78f64f8a79807818743adff";
-    sha256 = "sha256-xxxxvT271ASEk1MFZQ/TPdIsDxbGZUCkde4nmKpVQCU=";
+    sha256 = "sha256-k35xld5VA/IloE0EMTP6MpKUfhdSOk8zEtmA8j1ZWs0=";
   };
   nativeBuildInputs = [ makeWrapper ];
 
