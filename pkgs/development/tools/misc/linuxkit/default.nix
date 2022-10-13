@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname   = "linuxkit";
-  version = "0.8";
+  version = "1.0.0";
 
   goPackagePath = "github.com/linuxkit/linuxkit";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "linuxkit";
     repo = "linuxkit";
     rev = "v${version}";
-    sha256 = "15jj60k8wz9cahjbdscnwyyfb1k1grjh7yrilb1cj4r8mby4sp2g";
+    sha256 = "sha256-y/jsMr7HmrHjVMn4fyQ3MPHION8hQO2G4udX1AMx8bk=";
   };
 
   subPackages = [ "src/cmd/linuxkit" ];

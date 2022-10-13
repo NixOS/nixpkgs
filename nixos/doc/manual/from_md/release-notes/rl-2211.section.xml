@@ -606,6 +606,47 @@
       </listitem>
       <listitem>
         <para>
+          <literal>systemd-networkd</literal> v250 deprecated, renamed,
+          and moved some sections and settings which leads to the
+          following breaking module changes:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>systemd.network.networks.&lt;name&gt;.dhcpV6PrefixDelegationConfig</literal>
+              is renamed to
+              <literal>systemd.network.networks.&lt;name&gt;.dhcpPrefixDelegationConfig</literal>.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>systemd.network.networks.&lt;name&gt;.dhcpV6Config</literal>
+              no longer accepts the
+              <literal>ForceDHCPv6PDOtherInformation=</literal> setting.
+              Please use the <literal>WithoutRA=</literal> and
+              <literal>UseDelegatedPrefix=</literal> settings in your
+              <literal>systemd.network.networks.&lt;name&gt;.dhcpV6Config</literal>
+              and the <literal>DHCPv6Client=</literal> setting in your
+              <literal>systemd.network.networks.&lt;name&gt;.ipv6AcceptRAConfig</literal>
+              to control when the DHCPv6 client is started and how the
+              delegated prefixes are handled by the DHCPv6 client.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>systemd.network.networks.&lt;name&gt;.networkConfig</literal>
+              no longer accepts the <literal>IPv6Token=</literal>
+              setting. Use the <literal>Token=</literal> setting in your
+              <literal>systemd.network.networks.&lt;name&gt;.ipv6AcceptRAConfig</literal>
+              instead. The
+              <literal>systemd.network.networks.&lt;name&gt;.ipv6Prefixes.*.ipv6PrefixConfig</literal>
+              now also accepts the <literal>Token=</literal> setting.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>meta.mainProgram</literal> attribute of packages
           in <literal>wineWowPackages</literal> now defaults to
           <literal>&quot;wine64&quot;</literal>.
