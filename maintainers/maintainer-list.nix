@@ -6397,6 +6397,15 @@
     githubId = 1204734;
     name = "Emil Karlson";
   };
+  jlamur = {
+    email = "contact@juleslamur.fr";
+    github = "jlamur";
+    githubId = 7054317;
+    name = "Jules Lamur";
+    keys = [{
+      fingerprint = "B768 6CD7 451A 650D 9C54  4204 6710 CF0C 1CBD 7762";
+    }];
+  };
   jlesquembre = {
     email = "jl@lafuente.me";
     github = "jlesquembre";
