@@ -2,8 +2,13 @@
 , stdenv
 , pkg-config
 , cmake
+, ninja
 , fetchurl
 , git
+, cctools
+, developer_cmds
+, DarwinTools
+, makeWrapper
 , bison
 , openssl
 , protobuf
@@ -26,30 +31,24 @@
 , python3
 , cyrus_sasl
 , openldap
-, numactl
-, cctools
-, CoreServices
-, developer_cmds
-, DarwinTools
-, makeWrapper
+, antlr
 }:
 
 let
   pythonDeps = with python3.pkgs; [ certifi paramiko pyyaml ];
-  pythonPath = lib.makeSearchPath python3.sitePackages pythonDeps;
 in
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "mysql-shell";
-  version = "8.0.30";
+  version = "8.0.31";
 
   srcs = [
     (fetchurl {
       url = "https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell-${version}-src.tar.gz";
-      sha256 = "sha256-/UJgcYkPG8RShZzybqdcMQDpNUTVWAfAa2p0Cm23fXA=";
+      sha256 = "sha256-VA9dqvPmw2WXP3hAJS2xRTvxBM8D/IPsWYIaYwRZI/s=";
     })
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor version}/mysql-${version}.tar.gz";
-      sha256 = "sha256-yYjVxrqaVmkqbNbpgTRltfyTaO1LRh35cFmi/BYMi4Q=";
+      sha256 = "sha256-Z7uMunWyjpXH95SFY/AfuEUo/LsaNduoOdTORP4Bm6o=";
     })
   ];
 
@@ -62,7 +61,9 @@ stdenv.mkDerivation rec{
     substituteInPlace cmake/libutils.cmake --replace /usr/bin/libtool libtool
   '';
 
-  nativeBuildInputs = [ pkg-config cmake git bison makeWrapper ] ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
+  nativeBuildInputs = [ pkg-config cmake ninja git bison makeWrapper ]
+    ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ]
+    ++ lib.optionals stdenv.isDarwin [ cctools developer_cmds DarwinTools ];
 
   buildInputs = [
     boost
@@ -84,16 +85,15 @@ stdenv.mkDerivation rec{
     openldap
     v8
     python3
-  ] ++ pythonDeps ++ lib.optionals stdenv.isLinux [
-    numactl
-    libtirpc
-  ] ++ lib.optionals stdenv.isDarwin [ cctools CoreServices developer_cmds DarwinTools ];
+    antlr.runtime.cpp
+  ] ++ pythonDeps ++ lib.optionals stdenv.isLinux [ libtirpc ];
 
   preConfigure = ''
     # Build MySQL
     cmake -DWITH_BOOST=system -DWITH_SYSTEM_LIBS=ON -DWITH_ROUTER=OFF -DWITH_UNIT_TESTS=OFF \
-      -DFORCE_UNSUPPORTED_COMPILER=1 -S ../mysql-${version} -B ../mysql-${version}/build
+      -DFORCE_UNSUPPORTED_COMPILER=1 -S ../mysql-${version} -B ../mysql-${version}/build -G Ninja
 
+    echo "building mysqlclient mysqlxclient"
     cmake --build ../mysql-${version}/build --parallel ''${NIX_BUILD_CORES:-1} --target mysqlclient mysqlxclient
   '';
 
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec{
   CXXFLAGS = [ "-DV8_COMPRESS_POINTERS=1" "-DV8_31BIT_SMIS_ON_64BIT_ARCH=1" ];
 
   postFixup = ''
-    wrapProgram $out/bin/mysqlsh --set PYTHONPATH "${pythonPath}"
+    wrapProgram $out/bin/mysqlsh --set PYTHONPATH "${lib.makeSearchPath python3.sitePackages pythonDeps}"
   '';
 
   meta = with lib; {
