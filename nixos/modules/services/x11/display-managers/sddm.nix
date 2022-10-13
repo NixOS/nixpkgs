@@ -283,6 +283,14 @@ in
       # Instead we use tmpfiles.d to ensure it gets wiped.
       # This causes a small but perceptible delay when SDDM starts.
       "e ${config.users.users.sddm.home}/.cache - - - 0"
-    ];
+    ] ++ lib.flatten (lib.mapAttrsToList
+      (_: user: [
+        # SDDM requires access to home directories to access user icons:
+        # https://github.com/sddm/sddm/blob/master/README.md#no-user-icon
+        "a+ ${user.home}            - - - - m:x,u:sddm:x"
+        "a+ ${user.home}/.face.icon - - - - m:r,u:sddm:r"
+      ])
+      (lib.filterAttrs (_: user: user.isNormalUser) config.users.users)
+    );
   };
 }
