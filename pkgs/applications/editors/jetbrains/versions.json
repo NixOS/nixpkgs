@@ -18,6 +18,15 @@
       "version-major-minor": "2022.1.1",
       "build_number": "222.4345.5"
     },
+    "gateway": {
+      "update-channel": "Gateway EAP",
+      "url-template": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}.tar.gz",
+      "version": "2022.3 EAP",
+      "sha256": "4868baed9350065c1db760f07a09badd1473132af640cc19330e20c8a0940d7d",
+      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-223.6646.21.tar.gz",
+      "version-major-minor": "2022.3",
+      "build_number": "223.6646.21"
+    },
     "goland": {
       "update-channel": "GoLand RELEASE",
       "url-template": "https://download.jetbrains.com/go/goland-{version}.tar.gz",
@@ -128,6 +137,15 @@
       "version-major-minor": "2022.1.1",
       "build_number": "222.4345.5"
     },
+    "gateway": {
+      "update-channel": "Gateway EAP",
+      "url-template": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}.dmg",
+      "version": "2022.3 EAP",
+      "sha256": "2db71a052501db41d5cfe142f1a6e3178fe02830f0da127d00fbf93a4629c61b",
+      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-223.6646.21.dmg",
+      "version-major-minor": "2022.3",
+      "build_number": "223.6646.21"
+    },
     "goland": {
       "update-channel": "GoLand RELEASE",
       "url-template": "https://download.jetbrains.com/go/goland-{version}.dmg",
@@ -237,6 +255,15 @@
       "url": "https://download.jetbrains.com/datagrip/datagrip-2022.2.5-aarch64.dmg",
       "version-major-minor": "2022.1.1",
       "build_number": "222.4345.5"
+    },
+    "gateway": {
+      "update-channel": "Gateway EAP",
+      "url-template": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}-aarch64.dmg",
+      "version": "2022.3 EAP",
+      "sha256": "513d3a271c5ff20fdc5c22f6e28eb21cfbb283d01ade2d11f33bb7eb79317410",
+      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-223.6646.21-aarch64.dmg",
+      "version-major-minor": "2022.3",
+      "build_number": "223.6646.21"
     },
     "goland": {
       "update-channel": "GoLand RELEASE",

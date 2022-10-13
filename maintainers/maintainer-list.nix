@@ -7336,6 +7336,12 @@
     githubId = 2037002;
     name = "Konstantinos";
   };
+  kouyk = {
+    email = "skykinetic@stevenkou.xyz";
+    github = "kouyk";
+    githubId = 1729497;
+    name = "Steven Kou";
+  };
   kovirobi = {
     email = "kovirobi@gmail.com";
     github = "KoviRobi";
@@ -7480,6 +7486,10 @@
     github = "L3afMe";
     githubId = 72546287;
     name = "L3af";
+  };
+  laalsaas = {
+    email = "laalsaas@systemli.org";
+    name = "laalsaas";
   };
   lach = {
     email = "iam@lach.pw";
