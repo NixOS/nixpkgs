@@ -14,6 +14,7 @@
 , enableGalliumNine ? stdenv.isLinux
 , enableOSMesa ? stdenv.isLinux
 , enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
+, enablePatentEncumberedCodecs ? true
 , libclc
 , jdupes
 }:
@@ -117,7 +118,8 @@ self = stdenv.mkDerivation {
   ] ++ optionals enableOpenCL [
     "-Dgallium-opencl=icd" # Enable the gallium OpenCL frontend
     "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
-  ];
+  ] ++ optional enablePatentEncumberedCodecs
+    "-Dvideo-codecs=h264dec,h264enc,h265dec,h265enc,vc1dec";
 
   buildInputs = with xorg; [
     expat llvmPackages.libllvm libglvnd xorgproto
