@@ -1,17 +1,24 @@
-{ lib, stdenv, fetchurl, openssl, python3 }:
+{ lib, stdenv, pkgs }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fetchmail";
-  version = "6.4.33";
+  version = "unstable-2022-05-26";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/fetchmail/fetchmail-${version}.tar.xz";
-    sha256 = "sha256-gpVOvSbHeQZGPOIK3KRcvPgGiVdEHheUG9MFKlwVQy4=";
+  src = pkgs.fetchFromGitLab {
+    owner = "fetchmail";
+    repo = "fetchmail";
+    rev = "30b368fb8660d8fec08be1cdf2606c160b4bcb80";
+    sha256 = "sha256-83D2YlFCODK2YD+oLICdim2NtNkkJU67S3YLi8Q6ga8=";
   };
 
-  buildInputs = [ openssl python3 ];
+  buildInputs = with pkgs; [ openssl python3 ];
+  nativeBuildInputs = with pkgs; [ autoreconfHook pkg-config bison flex ];
 
-  configureFlags = [ "--with-ssl=${openssl.dev}" ];
+  configureFlags = [ "--with-ssl=${pkgs.openssl.dev}" ];
+
+  postInstall = ''
+    cp -a contrib/. $out/share/fetchmail-contrib
+  '';
 
   meta = with lib; {
     homepage = "https://www.fetchmail.info/";
