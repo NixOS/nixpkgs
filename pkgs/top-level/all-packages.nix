@@ -11924,7 +11924,7 @@ with pkgs;
 
   toml2json = callPackage ../development/tools/toml2json { };
 
-  toml2nix = (callPackage ../tools/toml2nix { }).toml2nix { };
+  toml2nix = callPackage ../development/tools/toml2nix { };
 
   topgrade = callPackage ../tools/misc/topgrade {
     inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
@@ -31096,7 +31096,7 @@ with pkgs;
   qdirstat = libsForQt5.callPackage ../applications/misc/qdirstat {};
 
   qemu = callPackage ../applications/virtualization/qemu {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Hypervisor;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Hypervisor vmnet;
     inherit (darwin.stubs) rez setfile;
     inherit (darwin) sigtool;
   };
@@ -37692,4 +37692,6 @@ with pkgs;
   swaysettings = callPackage ../applications/misc/swaysettings { };
 
   aitrack = libsForQt5.callPackage ../applications/misc/aitrack { };
+
+  widevine-cdm = callPackage ../applications/networking/browsers/misc/widevine-cdm.nix { };
 }

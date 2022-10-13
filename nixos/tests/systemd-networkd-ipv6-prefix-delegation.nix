@@ -227,7 +227,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
               IPv6AcceptRA = false;
 
               # Delegate prefixes from the DHCPv6 PD pool.
-              DHCPv6PrefixDelegation = true;
+              DHCPPrefixDelegation = true;
               IPv6SendRA = true;
             };
 
