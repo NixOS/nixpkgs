@@ -497,13 +497,13 @@
     "version": "1.35.2"
   },
   "helm": {
-    "hash": "sha256-oX6pchJcgv9w5xLGe09GBzngz9+a/OZn6FTBWURgiLk=",
+    "hash": "sha256-s8ZOzTG3qux+4Yh1wj3ArjB1uJ32bdGhxY9iSL5LOK8=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/helm",
     "repo": "terraform-provider-helm",
-    "rev": "v2.7.0",
+    "rev": "v2.7.1",
     "vendorHash": null,
-    "version": "2.7.0"
+    "version": "2.7.1"
   },
   "heroku": {
     "hash": "sha256-V6jShbhVwsUTxj2tp2msIseZnckHgB7bBswqIRlrwjQ=",
