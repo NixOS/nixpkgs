@@ -3,10 +3,14 @@
  * where GSettings system could look for schemas, we need to point the software to a correct location somehow.
  * For executables, we handle this using wrappers but this is not an option for libraries like e-d-s.
  * Instead, we hardcode the schema path when creating the settings.
+ * A schema path (ie org.gnome.evolution) can be replaced by @EVOLUTION_SCHEMA_PATH@
+ * which is then replaced at build time by substituteAll.
+ * The mapping is provided in a json file ./glib-schema-to-var.json
  */
 
 @initialize:python@
 @@
+import json
 
 cpp_constants = {}
 
@@ -16,25 +20,16 @@ def register_cpp_constant(const_name, val):
 def resolve_cpp_constant(const_name):
     return cpp_constants.get(const_name, const_name)
 
-e_s_d_schema_constants = [
-    # The following are actually part of e-d-s, despite the name.
-    # We rename the old ambiguos constant name in ./prepare-for-gsettings-patching.patch
-    "\"org.gnome.Evolution.DefaultSources\"",
-    "\"org.gnome.evolution.shell.network-config\"",
-]
-
-g_d_s_schema_constants = [
-]
+with open("./glib-schema-to-var.json") as mapping_file:
+    schema_to_var = json.load(mapping_file);
 
 def get_schema_directory(schema_path):
     # Sometimes the schema id is referenced using C preprocessor #define constant in the same file
     # let’s try to resolve it first.
-    schema_path = resolve_cpp_constant(schema_path.strip())
-    if schema_path.startswith("\"org.gnome.evolution-data-server") or schema_path in e_s_d_schema_constants:
-        return "\"@EDS_GSETTINGS_PATH@\""
-    elif schema_path in g_d_s_schema_constants:
-        return "\"@GDS_GSETTINGS_PATH@\""
-    raise Exception(f"Unknown schema path {schema_path}")
+    schema_path = resolve_cpp_constant(schema_path.strip()).strip('"')
+    if schema_path in schema_to_var:
+        return f'"@{schema_to_var[schema_path]}@"'
+    raise Exception(f"Unknown schema path {schema_path!r}, please add it to ./glib-schema-to-var.json")
 
 
 @find_cpp_constants@

@@ -2,9 +2,6 @@
 , lib
 , fetchurl
 , substituteAll
-, runCommand
-, git
-, coccinelle
 , pkg-config
 , gnome
 , _experimental-update-script-combinators
@@ -70,7 +67,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substitute ${./hardcode-gsettings.patch} hardcode-gsettings.patch \
-      --subst-var-by EDS_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+      --subst-var-by EDS ${glib.makeSchemaPath "$out" "${pname}-${version}"}
     patches="$patches $PWD/hardcode-gsettings.patch"
   '';
 
@@ -153,40 +150,28 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    # In order for GNOME not to depend on OCaml through Coccinelle,
-    # we materialize the SmPL patch into a unified diff-style patch.
-    hardcodeGsettingsPatch =
-      runCommand
-        "hardcode-gsettings.patch"
-        {
-          inherit src;
-          nativeBuildInputs = [
-            git
-            coccinelle
-            python3 # For patch script
-          ];
-        }
-        ''
-          unpackPhase
-          cd "''${sourceRoot:-.}"
-          git init
-          git add -A
-          spatch --sp-file "${./hardcode-gsettings.cocci}" --dir . --in-place
-          git diff > "$out"
-        '';
+    hardcodeGsettingsPatch = glib.mkHardcodeGsettingsPatch {
+      glib-schema-to-var = {
+        "org.gnome.Evolution.DefaultSources" = "EDS";
+        "org.gnome.evolution.shell.network-config" = "EDS";
+        "org.gnome.evolution-data-server.addressbook" = "EDS";
+        "org.gnome.evolution-data-server.calendar" = "EDS";
+        "org.gnome.evolution-data-server" = "EDS";
 
+      };
+      inherit src;
+    };
     updateScript =
       let
         updateSource = gnome.updateScript {
           packageName = "evolution-data-server";
           versionPolicy = "odd-unstable";
         };
-
-        updateGsettingsPatch = _experimental-update-script-combinators.copyAttrOutputToFile "evolution-data-server.hardcodeGsettingsPatch" ./hardcode-gsettings.patch;
+        updatePatch = _experimental-update-script-combinators.copyAttrOutputToFile "evolution-data-server.hardcodeGsettingsPatch" ./hardcode-gsettings.patch;
       in
       _experimental-update-script-combinators.sequence [
         updateSource
-        updateGsettingsPatch
+        updatePatch
       ];
   };
 
