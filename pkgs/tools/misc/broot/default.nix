@@ -9,7 +9,7 @@
 , oniguruma
 , libiconv
 , Security
-, libxcb
+, xorg
 , zlib
 }:
 
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ libgit2 oniguruma libxcb ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ libgit2 oniguruma xorg.libxcb ] ++ lib.optionals stdenv.isDarwin [
     libiconv
     Security
     zlib

@@ -4,11 +4,7 @@
 , stdenv
 , python3
 , libGL
-, libX11
-, libXcursor
-, libXi
-, libXrandr
-, libxcb
+, xorg
 , libxkbcommon
 , AppKit
 , IOKit
@@ -31,11 +27,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isLinux [
     libGL
-    libX11
-    libXcursor
-    libXi
-    libXrandr
-    libxcb
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libxcb
     libxkbcommon
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
