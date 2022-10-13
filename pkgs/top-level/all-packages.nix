@@ -1434,6 +1434,8 @@ with pkgs;
     use64 = true;
   };
 
+  wwcd = callPackage ../tools/misc/wwcd { };
+
   writedisk = callPackage ../tools/misc/writedisk { };
 
   xcd = callPackage ../tools/misc/xcd { };
@@ -14778,6 +14780,9 @@ with pkgs;
   cargo-c = callPackage ../development/tools/rust/cargo-c {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
+  cargo-clone = callPackage ../development/tools/rust/cargo-clone {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+  };
   cargo-criterion = callPackage ../development/tools/rust/cargo-criterion { };
   cargo-deadlinks = callPackage ../development/tools/rust/cargo-deadlinks {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -18531,6 +18536,7 @@ with pkgs;
   fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix {};
 
   freeimage = callPackage ../development/libraries/freeimage {
+    inherit (darwin) autoSignDarwinBinariesHook;
     libraw = libraw_unstable;
   };
 
@@ -21666,10 +21672,10 @@ with pkgs;
       };
     };
   });
-  libsForQt5_openssl_1_1 = recurseIntoAttrs (import ./qt5-packages.nix {
+  libsForQt5_openssl_1_1 = import ./qt5-packages.nix {
     inherit lib pkgs;
     qt5 = qt5_openssl_1_1;
-  });
+  };
 
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
   plasma5Packages = libsForQt515;
@@ -27150,6 +27156,8 @@ with pkgs;
 
   bevelbar = callPackage ../applications/window-managers/bevelbar { };
 
+  bfcal = libsForQt5.callPackage ../applications/misc/bfcal { };
+
   bibletime = libsForQt5.callPackage ../applications/misc/bibletime { };
 
   bino3d = libsForQt5.callPackage ../applications/video/bino3d {
@@ -29476,6 +29484,8 @@ with pkgs;
   ktimetracker = libsForQt5.callPackage ../applications/office/ktimetracker { };
 
   kubedb-cli = callPackage ../applications/networking/cluster/kubedb-cli { };
+
+  kubedog = callPackage ../applications/networking/cluster/kubedog { };
 
   kubecfg = callPackage ../applications/networking/cluster/kubecfg { };
 

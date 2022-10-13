@@ -1,5 +1,4 @@
-{
-  mkDerivation
+{ mkDerivation
 }:
 
 mkDerivation {
