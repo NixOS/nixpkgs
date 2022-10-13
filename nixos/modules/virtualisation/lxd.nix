@@ -85,6 +85,17 @@ in {
           considered failed and systemd will attempt to restart it.
         '';
       };
+
+      ovsSupport = mkOption {
+        type = types.bool;
+        default = config.virtualisation.vswitch.enable;
+        defaultText = literalExpression "config.virtualisation.vswitch.enable";
+        description = lib.mdDoc ''
+          Enables lxd to use open vswitch as a network bridge for containers.
+
+          This option is enabled by default if Open vSwitch is enabled.
+        '';
+      };
     };
   };
 
@@ -133,7 +144,8 @@ in {
       requires = [ "network-online.target" "lxd.socket"  "lxcfs.service" ];
       documentation = [ "man:lxd(1)" ];
 
-      path = optional cfg.zfsSupport config.boot.zfs.package;
+      path = (optionals cfg.zfsSupport [ config.boot.zfs.package ]) ++
+             (optionals cfg.ovsSupport [ config.virtualisation.vswitch.package ]);
 
       serviceConfig = {
         ExecStart = "@${cfg.package}/bin/lxd lxd --group lxd";
