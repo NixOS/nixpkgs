@@ -31802,6 +31802,8 @@ with pkgs;
 
   tagainijisho = libsForQt5.callPackage ../applications/office/tagainijisho {};
 
+  tagger = callPackage ../applications/audio/tagger {};
+
   tahoe-lafs = callPackage ../tools/networking/p2p/tahoe-lafs {};
 
   tailor = callPackage ../applications/version-management/tailor {};
