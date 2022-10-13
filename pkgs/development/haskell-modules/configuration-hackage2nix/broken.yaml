@@ -1999,7 +1999,6 @@ broken-packages:
   - haskell-igraph
   - haskell-import-graph
   - haskell-in-space
-  - haskellish
   - haskell-kubernetes
   - HaskellLM
   - haskell-lsp
