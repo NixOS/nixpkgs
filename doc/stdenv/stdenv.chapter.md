@@ -1115,11 +1115,6 @@ This hook only runs when compiling for Linux.
 
 This sets `SOURCE_DATE_EPOCH` to the modification time of the most recent file.
 
-### Other hooks
-
-Many other packages provide hooks, that are not part of `stdenv`. You can find
-these in the [Hooks Reference](#chap-hooks).
-
 ### Bintools Wrapper and hook {#bintools-wrapper}
 
 The Bintools Wrapper wraps the binary utilities for a bunch of miscellaneous purposes. These are GNU Binutils when targeting Linux, and a mix of cctools and GNU binutils for Darwin. \[The “Bintools” name is supposed to be a compromise between “Binutils” and “cctools” not denoting any specific implementation.\] Specifically, the underlying bintools package, and a C standard library (glibc or Darwin’s libSystem, just for the dynamic loader) are all fed in, and dependency finding, hardening (see below), and purity checks for each are handled by the Bintools Wrapper. Packages typically depend on CC Wrapper, which in turn (at run time) depends on the Bintools Wrapper.
@@ -1139,6 +1134,11 @@ Dependency finding is undoubtedly the main task of the CC Wrapper. This works ju
 Similarly, the CC Wrapper follows the Bintools Wrapper in defining standard environment variables with the names of the tools it wraps, for the same reasons described above. Importantly, while it includes a `cc` symlink to the c compiler for portability, the `CC` will be defined using the compiler’s “real name” (i.e. `gcc` or `clang`). This helps lousy build systems that inspect on the name of the compiler rather than run it.
 
 Here are some more packages that provide a setup hook. Since the list of hooks is extensible, this is not an exhaustive list. The mechanism is only to be used as a last resort, so it might cover most uses.
+
+### Other hooks
+
+Many other packages provide hooks, that are not part of `stdenv`. You can find
+these in the [Hooks Reference](#chap-hooks).
 
 ## Purity in Nixpkgs {#sec-purity-in-nixpkgs}
 
