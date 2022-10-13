@@ -5985,6 +5985,8 @@ with pkgs;
 
   edid-generator = callPackage ../tools/misc/edid-generator { };
 
+  linuxhw-edid-fetcher = callPackage ../tools/misc/linuxhw-edid-fetcher { };
+
   edir = callPackage ../tools/misc/edir { };
 
   editres = callPackage ../tools/graphics/editres { };
