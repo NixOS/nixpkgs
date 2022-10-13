@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , zlib
 , pkg-config
 , autoreconfHook
@@ -22,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libxml2";
-  version = "2.10.0";
+  version = "2.10.2";
 
   outputs = [ "bin" "dev" "out" "doc" ]
     ++ lib.optional pythonSupport "py"
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "LdMxEOp3hnbeFL6kmZ7hFzxMpV1f8UUryiJOBvAVJZU=";
+    sha256 = "0kCr5tqcZcsZAN2b86NQHM+Is8Khy5gxfQPyct2lsmU=";
   };
 
   patches = [
@@ -47,17 +46,6 @@ stdenv.mkDerivation rec {
     #   https://github.com/NixOS/nixpkgs/pull/63174
     #   https://github.com/NixOS/nixpkgs/pull/72342
     ./utf8-xmlErrorFuncHandler.patch
-
-    # Fix PostgreSQL tests
-    # https://gitlab.gnome.org/GNOME/libxml2/-/issues/397
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/4ad71c2d72beef0d10cf75aa417db10d77846f75.patch";
-      sha256 = "gubGDhBhHNYdEty+sFQFd3pSWB9isN5AjD//ksujGQk=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/5b2d07a72670513e41b481a9d922c983a64027ca.patch";
-      sha256 = "7jYvMW6bgImXubbaWpQhrIw3xBBnaNn+iJt3EQiW3yU=";
-    })
   ];
 
   nativeBuildInputs = [
