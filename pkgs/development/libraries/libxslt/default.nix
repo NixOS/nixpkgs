@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libxslt";
-  version = "1.1.36";
+  version = "1.1.37";
 
   outputs = [ "bin" "dev" "out" "doc" "devdoc" ] ++ lib.optional pythonSupport "py";
   outputMan = "bin";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "EoSPCkQI9ltTDTlizZ/2cLaueWGRz+/zdSK1dy3o3I4=";
+    sha256 = "Oksn3IAnzNYUZyWVAzbx7FIJKPMg8UTrX6eZCuYSOrQ=";
   };
 
   nativeBuildInputs = [
