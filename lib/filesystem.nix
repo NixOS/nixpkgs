@@ -47,11 +47,13 @@
   # listFilesRecursive: Path -> [ Path ]
   #
   # Given a directory, return a flattened list of all files within it recursively.
-  listFilesRecursive = dir: lib.flatten (lib.mapAttrsToList (name: type:
-    if type == "directory" then
-      lib.filesystem.listFilesRecursive (dir + "/${name}")
-    else
-      dir + "/${name}"
-  ) (builtins.readDir dir));
+  listFilesRecursive = dir: let
+    recurse = dir: lib.flatten (lib.mapAttrsToList (name: type:
+      if type == "directory" then
+        recurse (dir + "/${name}")
+      else
+        dir + "/${name}"
+    ) (builtins.readDir dir));
+  in recurse dir;
 
 }
