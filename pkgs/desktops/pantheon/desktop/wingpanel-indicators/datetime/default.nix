@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       elementary_calendar = elementary-calendar;
     })
+
+    # Workaround for showing date numbers (TODO: should try to fix upstream)
+    # https://github.com/elementary/calendar/issues/756#issuecomment-1252400047
+    ./partly-revert-pr-150.patch
   ];
 
   nativeBuildInputs = [

@@ -17,8 +17,7 @@
 , nss
 , dbus
 , libgee
-, evolution-data-server
-, libgdata
+, evolution-data-server-gtk4
 , libsecret
 , db
 , python3
@@ -61,8 +60,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     db
     dbus-glib
-    evolution-data-server
-    libgdata # required for some backends transitively
+    evolution-data-server-gtk4
     libsecret
     libsoup
     libxml2

@@ -423,13 +423,13 @@
     "version": "2.2.0"
   },
   "github": {
-    "hash": "sha256-NJ5HvW3LOvshzea7t0/sAsp3SqiXErXd32Ej0Qp4zsk=",
+    "hash": "sha256-XivwHkibeaoFTeJRtTF8xqt2IwXbzcKtKwAmwCf8Ll4=",
     "owner": "integrations",
     "provider-source-address": "registry.terraform.io/integrations/github",
     "repo": "terraform-provider-github",
-    "rev": "v5.3.0",
+    "rev": "v5.4.0",
     "vendorHash": null,
-    "version": "5.3.0"
+    "version": "5.4.0"
   },
   "gitlab": {
     "hash": "sha256-eNd1o0UjG6A9OTRmcJfcPLLtWIJmdZ+viDnSZhyHpgY=",
@@ -497,13 +497,13 @@
     "version": "1.35.2"
   },
   "helm": {
-    "hash": "sha256-oX6pchJcgv9w5xLGe09GBzngz9+a/OZn6FTBWURgiLk=",
+    "hash": "sha256-s8ZOzTG3qux+4Yh1wj3ArjB1uJ32bdGhxY9iSL5LOK8=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/helm",
     "repo": "terraform-provider-helm",
-    "rev": "v2.7.0",
+    "rev": "v2.7.1",
     "vendorHash": null,
-    "version": "2.7.0"
+    "version": "2.7.1"
   },
   "heroku": {
     "hash": "sha256-V6jShbhVwsUTxj2tp2msIseZnckHgB7bBswqIRlrwjQ=",
@@ -1075,13 +1075,13 @@
     "version": "0.7.1"
   },
   "spotinst": {
-    "hash": "sha256-D/HFeozi5IRj7G+pRzY/V98+oejfmQlW4y6ddob7OBI=",
+    "hash": "sha256-hlTeN8dQWHU4yHDUqCeBbfapDI1lbxj05FlUN+vUOuM=",
     "owner": "spotinst",
     "provider-source-address": "registry.terraform.io/spotinst/spotinst",
     "repo": "terraform-provider-spotinst",
-    "rev": "v1.84.0",
+    "rev": "v1.85.0",
     "vendorHash": "sha256-BDYX/4D3R2A1w3k14mON/2KZUg2kPbwePXQQpVanqdU=",
-    "version": "1.84.0"
+    "version": "1.85.0"
   },
   "stackpath": {
     "hash": "sha256-nTR9HgSmuNCt7wxE4qqIH2+HA2igzqVx0lLRx6FoKrE=",
@@ -1111,13 +1111,13 @@
     "version": "2.19.1"
   },
   "tencentcloud": {
-    "hash": "sha256-SoCXh0pRqEkto2K+ZfN7ncVGDVC32zDElS+rBdOfa0g=",
+    "hash": "sha256-kAbLfuENWHxu51Eu+7X1X4HiWkD8KAL4awZpGRg0BaU=",
     "owner": "tencentcloudstack",
     "provider-source-address": "registry.terraform.io/tencentcloudstack/tencentcloud",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.78.3",
+    "rev": "v1.78.4",
     "vendorHash": null,
-    "version": "1.78.3"
+    "version": "1.78.4"
   },
   "tfe": {
     "hash": "sha256-jh5bRe/3OsdgvSpraYEc1NgvBmYb1tFuVSPQ2ZAesSY=",
