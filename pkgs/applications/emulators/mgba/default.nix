@@ -9,6 +9,7 @@
 , libedit
 , libelf
 , libzip
+, lua5_4
 , makeDesktopItem
 , minizip
 , pkg-config
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mgba";
-  version = "0.9.3";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
     rev = version;
-    hash = "sha256-0ZtoyyoD+YjplJlPFpZgIg5119j/6X8ZaSZP+UpX5K0=";
+    hash = "sha256-2thc2v3aD8t1PrREZIjzRuYfP7b3BA7uFb6R95zxsZI=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
     libedit
     libelf
     libzip
+    lua5_4
     minizip
     qtbase
     qtmultimedia
@@ -79,6 +81,7 @@ stdenv.mkDerivation rec {
       runners, and a modern feature set for emulators that older emulators may
       not support.
     '';
+    changelog = "https://github.com/mgba-emu/mgba/blob/${version}/CHANGES";
     license = licenses.mpl20;
     maintainers = with maintainers; [ MP2E AndersonTorres ];
     platforms = platforms.linux;
