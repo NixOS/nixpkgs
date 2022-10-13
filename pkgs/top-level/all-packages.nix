@@ -27891,6 +27891,8 @@ with pkgs;
 
   icesl = callPackage ../applications/misc/icesl { };
 
+  karlender = callPackage ../applications/office/karlender { };
+
   keepassx = callPackage ../applications/misc/keepassx { };
   keepassx2 = callPackage ../applications/misc/keepassx/2.0.nix { };
   keepassxc = libsForQt5.callPackage ../applications/misc/keepassx/community.nix { };
