@@ -1,6 +1,10 @@
 { lib, stdenv, fetchurl, writeTextDir
 , fetchpatch
 , withCMake ? true, cmake
+
+# sensitive downstream packages
+, curl
+, grpc # consumes cmake config
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -30,6 +34,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = lib.optionals withCMake [ cmake ];
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit curl grpc;
+  };
 
   meta = with lib; {
     description = "A C library for asynchronous DNS requests";
