@@ -107,6 +107,23 @@ in {
           };
         });
       };
+      postExportCommands = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          ${pkgs.cot}/bin/cot edit-hardware "$fn" \
+            -v vmx-14 \
+            --nics 2 \
+            --nic-types VMXNET3 \
+            --nic-names 'Nic name' \
+            --nic-networks 'Nic match' \
+            --network-descriptions 'Nic description' \
+            --scsi-subtypes VirtualSCSI
+        '';
+        description = lib.mdDoc ''
+          Extra commands to run after exporting the OVA to `$fn`.
+        '';
+      };
     };
   };
 
@@ -179,6 +196,7 @@ in {
           mkdir -p $out
           fn="$out/${cfg.vmFileName}"
           VBoxManage export "$vmName" --output "$fn" --options manifest ${escapeShellArgs cfg.exportParams}
+          ${cfg.postExportCommands}
 
           rm -v $diskImage
 
