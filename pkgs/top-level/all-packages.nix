@@ -21970,6 +21970,7 @@ with pkgs;
     postgresql_12
     postgresql_13
     postgresql_14
+    postgresql_15
   ;
   postgresql = postgresql_13.override { this = postgresql; };
   postgresqlPackages = recurseIntoAttrs postgresql.pkgs;
@@ -21977,6 +21978,7 @@ with pkgs;
   postgresql12Packages = recurseIntoAttrs postgresql_12.pkgs;
   postgresql13Packages = postgresqlPackages;
   postgresql14Packages = recurseIntoAttrs postgresql_14.pkgs;
+  postgresql15Packages = recurseIntoAttrs postgresql_15.pkgs;
 
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
 
