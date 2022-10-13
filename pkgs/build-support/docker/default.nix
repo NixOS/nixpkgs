@@ -984,33 +984,34 @@ rec {
           # following lines, double-check that your code behaves properly
           # when the number of layers equals:
           #      maxLayers-1, maxLayers, and maxLayers+1, 0
-          store_layers="$(
-            paths |
-              jq -sR '
-                rtrimstr("\n") | split("\n")
-                  | (.[:$maxLayers-1] | map([.])) + [ .[$maxLayers-1:] ]
-                  | map(select(length > 0))
+          paths |
+            jq -sR '
+              rtrimstr("\n") | split("\n")
+                | (.[:$maxLayers-1] | map([.])) + [ .[$maxLayers-1:] ]
+                | map(select(length > 0))
               ' \
-                --argjson maxLayers "$availableLayers"
-          )"
+              --argjson maxLayers "$availableLayers" > store_layers.json
 
+          # The index on $store_layers is necessary because the --slurpfile
+          # automatically reads the file as an array.
           cat ${baseJson} | jq '
             . + {
               "store_dir": $store_dir,
               "from_image": $from_image,
-              "store_layers": $store_layers,
+              "store_layers": $store_layers[0],
               "customisation_layer", $customisation_layer,
               "repo_tag": $repo_tag,
               "created": $created
             }
             ' --arg store_dir "${storeDir}" \
               --argjson from_image ${if fromImage == null then "null" else "'\"${fromImage}\"'"} \
-              --argjson store_layers "$store_layers" \
+              --slurpfile store_layers store_layers.json \
               --arg customisation_layer ${customisationLayer} \
               --arg repo_tag "$imageName:$imageTag" \
               --arg created "$created" |
             tee $out
         '';
+
         result = runCommand "stream-${baseName}"
           {
             inherit (conf) imageName;
