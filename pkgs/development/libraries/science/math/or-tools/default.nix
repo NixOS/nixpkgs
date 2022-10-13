@@ -3,10 +3,9 @@
 , fetchFromGitHub
 , cmake
 , abseil-cpp
-, bzip2
-, zlib
 , lsb-release
 , which
+, pkg-config
 , protobuf
 , cbc
 , ensureNewerSourcesForZipFilesHook
@@ -31,13 +30,13 @@ stdenv.mkDerivation rec {
   # obviously don't want to do this so instead we provide the
   # dependencies straight from nixpkgs and use the make build method.
 
-  # Cbc is linked against bzip2 and declares this in its pkgs-config file,
-  # but this makefile doesn't use pkgs-config, so we also have to add lbz2
+  # Cbc is linked against bzip2 and some other stuff and declares this in
+  # its pkgs-config file, but this makefile doesn't use pkgs-config, so
+  # we add that too
   configurePhase = ''
     substituteInPlace makefiles/Makefile.third_party.unix.mk \
       --replace 'COINUTILS_LNK = $(STATIC_COINUTILS_LNK)' \
-                'COINUTILS_LNK = $(STATIC_COINUTILS_LNK) -lbz2'
-
+                "COINUTILS_LNK = $(STATIC_COINUTILS_LNK) $(pkg-config --libs cbc)"
     cat <<EOF > Makefile.local
       UNIX_ABSL_DIR=${abseil-cpp}
       UNIX_PROTOBUF_DIR=${protobuf}
@@ -61,6 +60,7 @@ stdenv.mkDerivation rec {
     substituteInPlace ortools/linear_solver/samples/simple_mip_program.cc \
       --replace 'SCIP' 'CBC'
   '';
+
   makeFlags = [
     "prefix=${placeholder "out"}"
     "PROTOBUF_PYTHON_DESC=${python.pkgs.protobuf}/${python.sitePackages}/google/protobuf/descriptor_pb2.py"
@@ -85,13 +85,13 @@ stdenv.mkDerivation rec {
     lsb-release
     swig4
     which
+    pkg-config
     ensureNewerSourcesForZipFilesHook
     python.pkgs.setuptools
     python.pkgs.wheel
   ];
   buildInputs = [
-    zlib
-    bzip2
+    cbc
     python
   ];
   propagatedBuildInputs = [

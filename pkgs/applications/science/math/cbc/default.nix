@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, zlib, bzip2 }:
+{ lib, stdenv, fetchurl, zlib, bzip2, openblas }:
 
 stdenv.mkDerivation rec {
   pname = "cbc";
@@ -13,13 +13,26 @@ stdenv.mkDerivation rec {
   };
 
   # or-tools has a hard dependency on Cbc static libraries, so we build both
-  configureFlags = [ "-C" "--enable-static" ];
+  configureFlags = [
+    "-C"
+    "--enable-static"
+    "--enable-cbc-parallel"
+  ];
+
+  CXXFLAGS = ["-DCLP_USE_OPENBLAS=1"];
+  LDFLAGS = ["-lopenblas"];
 
   enableParallelBuilding = true;
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ zlib bzip2 ];
+  propagatedBuildInputs = [ zlib bzip2 openblas ];
+
+  postInstall = ''
+    substituteInPlace $out/lib/pkgconfig/coinutils.pc --replace \
+      'Requires: ' \
+      'Requires: openblas'
+  '';
 
   # FIXME: move share/coin/Data to a separate output?
 
