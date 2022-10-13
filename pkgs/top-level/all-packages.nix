@@ -22891,9 +22891,9 @@ with pkgs;
   ### DEVELOPMENT / GO
 
   # the unversioned attributes should always point to the same go version
-  go = go_1_18;
-  buildGoModule = buildGo118Module;
-  buildGoPackage = buildGo118Package;
+  go = go_1_19;
+  buildGoModule = buildGo119Module;
+  buildGoPackage = buildGo119Package;
 
   go_1_17 = callPackage ../development/compilers/go/1.17.nix ({
     inherit (darwin.apple_sdk.frameworks) Foundation Security;
