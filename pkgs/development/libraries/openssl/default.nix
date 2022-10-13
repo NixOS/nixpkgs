@@ -16,14 +16,14 @@
 # files.
 
 let
-  common = { version, hash, patches ? [], withDocs ? false, extraMeta ? {} }:
+  common = { version, sha256, patches ? [], withDocs ? false, extraMeta ? {} }:
    stdenv.mkDerivation rec {
     pname = "openssl";
     inherit version;
 
     src = fetchurl {
       url = "https://www.openssl.org/source/${pname}-${version}.tar.gz";
-      inherit hash;
+      inherit sha256;
     };
 
     inherit patches;
@@ -213,8 +213,8 @@ in {
 
 
   openssl_1_1 = common rec {
-    version = "1.1.1r";
-    hash = "sha256-44k1KuPVrk04WXv4pU8dy2+zyLUPT+WKlLsb9/hdgqA=";
+    version = "1.1.1q";
+    sha256 = "sha256-15Oc5hQCnN/wtsIPDi5XAxWKSJpyslB7i9Ub+Mj9EMo=";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 
@@ -228,8 +228,8 @@ in {
   };
 
   openssl_3 = common {
-    version = "3.0.6";
-    hash = "sha256-5KEKKYaUXj8aHy69aKx4BEmhdzuWtqF0/fZQ1ryWEfE=";
+    version = "3.0.5";
+    sha256 = "sha256-qn2Nm+9xrWUlxVuhHl9Dl4ic5Jwsk0nc6m0+TwsCSno=";
     patches = [
       ./3.0/nix-ssl-cert-file.patch
 
