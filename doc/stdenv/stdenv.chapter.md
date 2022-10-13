@@ -1010,19 +1010,19 @@ The *existence* of setups hooks has long been documented and packages inside Nix
 
 First, let’s cover some setup hooks that are part of Nixpkgs default `stdenv`. This means that they are run for every package built using `stdenv.mkDerivation` or when using a custom builder that has `source $stdenv/setup`. Some of these are platform specific, so they may run on Linux but not Darwin or vice-versa.
 
-### `move-docs.sh` {#move-docs.sh}
+### Default hook `move-docs.sh` {#move-docs.sh}
 
 This setup hook moves any installed documentation to the `/share` subdirectory directory. This includes the man, doc and info directories. This is needed for legacy programs that do not know how to use the `share` subdirectory.
 
-### `compress-man-pages.sh` {#compress-man-pages.sh}
+### Default hook `compress-man-pages.sh` {#compress-man-pages.sh}
 
 This setup hook compresses any man pages that have been installed. The compression is done using the gzip program. This helps to reduce the installed size of packages.
 
-### `strip.sh` {#strip.sh}
+### Default hook `strip.sh` {#strip.sh}
 
 This runs the strip command on installed binaries and libraries. This removes unnecessary information like debug symbols when they are not needed. This also helps to reduce the installed size of packages.
 
-### `patch-shebangs.sh` {#patch-shebangs.sh}
+### Default hook `patch-shebangs.sh` {#patch-shebangs.sh}
 
 This setup hook patches installed scripts to add Nix store paths to their shebang interpreter as found in the build environment. The [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) line tells a Unix-like operating system which interpreter to use to execute the script's contents.
 
@@ -1089,27 +1089,29 @@ If you need to run `patchShebangs` at build time, it must be called explicitly w
 [patchShebangs]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/pkgs/build-support/setup-hooks/patch-shebangs.sh#L24-L105
 [patchShebangsAuto]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/pkgs/build-support/setup-hooks/patch-shebangs.sh#L107-L119
 
-### `audit-tmpdir.sh` {#audit-tmpdir.sh}
+### Default hook `audit-tmpdir.sh` {#audit-tmpdir.sh}
 
 This verifies that no references are left from the install binaries to the directory used to build those binaries. This ensures that the binaries do not need things outside the Nix store. This is currently supported in Linux only.
 
-### `multiple-outputs.sh` {#multiple-outputs.sh}
+### Default hook `multiple-outputs.sh` {#multiple-outputs.sh}
 
 This setup hook adds configure flags that tell packages to install files into any one of the proper outputs listed in `outputs`. This behavior can be turned off by setting `setOutputFlags` to false in the derivation environment. See [](#chap-multiple-output) for more information.
 
-### `move-sbin.sh` {#move-sbin.sh}
+### Default hook `move-sbin.sh` {#move-sbin.sh}
 
 This setup hook moves any binaries installed in the `sbin/` subdirectory into `bin/`. In addition, a link is provided from `sbin/` to `bin/` for compatibility.
 
-### `move-lib64.sh` {#move-lib64.sh}
+### Default hook `move-lib64.sh` {#move-lib64.sh}
 
 This setup hook moves any libraries installed in the `lib64/` subdirectory into `lib/`. In addition, a link is provided from `lib64/` to `lib/` for compatibility.
 
-### `move-systemd-user-units.sh` {#move-systemd-user-units.sh}
+### Default hook `move-systemd-user-units.sh` {#move-systemd-user-units.sh}
 
 This setup hook moves any systemd user units installed in the `lib/` subdirectory into `share/`. In addition, a link is provided from `share/` to `lib/` for compatibility. This is needed for systemd to find user services when installed into the user profile.
 
-### `set-source-date-epoch-to-latest.sh` {#set-source-date-epoch-to-latest.sh}
+This hook only runs when compiling for Linux.
+
+### Default hook `set-source-date-epoch-to-latest.sh` {#set-source-date-epoch-to-latest.sh}
 
 This sets `SOURCE_DATE_EPOCH` to the modification time of the most recent file.
 
@@ -1133,51 +1135,51 @@ Similarly, the CC Wrapper follows the Bintools Wrapper in defining standard envi
 
 Here are some more packages that provide a setup hook. Since the list of hooks is extensible, this is not an exhaustive list. The mechanism is only to be used as a last resort, so it might cover most uses.
 
-### Perl {#setup-hook-perl}
+### Optional hook Perl {#setup-hook-perl}
 
 Adds the `lib/site_perl` subdirectory of each build input to the `PERL5LIB` environment variable. For instance, if `buildInputs` contains Perl, then the `lib/site_perl` subdirectory of each input is added to the `PERL5LIB` environment variable.
 
-### Python {#setup-hook-python}
+### Optional hook Python {#setup-hook-python}
 
 Adds the `lib/${python.libPrefix}/site-packages` subdirectory of each build input to the `PYTHONPATH` environment variable.
 
-### pkg-config {#setup-hook-pkg-config}
+### Optional hook pkg-config {#setup-hook-pkg-config}
 
 Adds the `lib/pkgconfig` and `share/pkgconfig` subdirectories of each build input to the `PKG_CONFIG_PATH` environment variable.
 
-### Automake {#setup-hook-automake}
+### Optional hook Automake {#setup-hook-automake}
 
 Adds the `share/aclocal` subdirectory of each build input to the `ACLOCAL_PATH` environment variable.
 
-### Autoconf {#setup-hook-autoconf}
+### Optional hook Autoconf {#setup-hook-autoconf}
 
 The `autoreconfHook` derivation adds `autoreconfPhase`, which runs autoreconf, libtoolize and automake, essentially preparing the configure script in autotools-based builds. Most autotools-based packages come with the configure script pre-generated, but this hook is necessary for a few packages and when you need to patch the package’s configure scripts.
 
-### libxml2 {#setup-hook-libxml2}
+### Optional hook libxml2 {#setup-hook-libxml2}
 
 Adds every file named `catalog.xml` found under the `xml/dtd` and `xml/xsl` subdirectories of each build input to the `XML_CATALOG_FILES` environment variable.
 
-### teTeX / TeX Live {#tetex-tex-live}
+### Optional hook teTeX / TeX Live {#tetex-tex-live}
 
 Adds the `share/texmf-nix` subdirectory of each build input to the `TEXINPUTS` environment variable.
 
-### Qt 4 {#qt-4}
+### Optional hook Qt 4 {#qt-4}
 
 Sets the `QTDIR` environment variable to Qt’s path.
 
-### gdk-pixbuf {#setup-hook-gdk-pixbuf}
+### Optional hook gdk-pixbuf {#setup-hook-gdk-pixbuf}
 
 Exports `GDK_PIXBUF_MODULE_FILE` environment variable to the builder. Add librsvg package to `buildInputs` to get svg support. See also the [setup hook description in GNOME platform docs](#ssec-gnome-hooks-gdk-pixbuf).
 
-### GHC {#ghc}
+### Optional hook GHC {#ghc}
 
 Creates a temporary package database and registers every Haskell build input in it (TODO: how?).
 
-### GNOME platform {#gnome-platform}
+### Optional hook GNOME platform {#gnome-platform}
 
 Hooks related to GNOME platform and related libraries like GLib, GTK and GStreamer are described in [](#sec-language-gnome).
 
-### autoPatchelfHook {#setup-hook-autopatchelfhook}
+### Optional hook autoPatchelfHook {#setup-hook-autopatchelfhook}
 
 This is a special setup hook which helps in packaging proprietary software in that it automatically tries to find missing shared library dependencies of ELF files based on the given `buildInputs` and `nativeBuildInputs`.
 
@@ -1189,7 +1191,7 @@ By default `autoPatchelf` will fail as soon as any ELF file requires a dependenc
 
 The `autoPatchelf` command also recognizes a `--no-recurse` command line flag, which prevents it from recursing into subdirectories.
 
-### breakpointHook {#breakpointhook}
+### Optional hook breakpointHook {#breakpointhook}
 
 This hook will make a build pause instead of stopping when a failure happens. It prevents nix from cleaning up the build environment immediately and allows the user to attach to a build environment using the `cntr` command. Upon build error it will print instructions on how to use `cntr`, which can be used to enter the environment for debugging. Installing cntr and running the command will provide shell access to the build sandbox of failed build. At `/var/lib/cntr` the sandboxed filesystem is mounted. All commands and files of the system are still accessible within the shell. To execute commands from the sandbox use the cntr exec subcommand. `cntr` is only supported on Linux-based platforms. To use it first add `cntr` to your `environment.systemPackages` on NixOS or alternatively to the root user on non-NixOS systems. Then in the package that is supposed to be inspected, add `breakpointHook` to `nativeBuildInputs`.
 
@@ -1207,7 +1209,7 @@ Caution with remote builds
 This won’t work with remote builds as the build environment is on a different machine and can’t be accessed by `cntr`. Remote builds can be turned off by setting `--option builders ''` for `nix-build` or `--builders ''` for `nix build`.
 :::
 
-### installShellFiles {#installshellfiles}
+### Optional hook `installShellFiles` {#installshellfiles}
 
 This hook helps with installing manpages and shell completion files. It exposes 2 shell functions `installManPage` and `installShellCompletion` that can be used from your `postInstall` hook.
 
@@ -1233,23 +1235,23 @@ postInstall = ''
 '';
 ```
 
-### libiconv, libintl {#libiconv-libintl}
+### Optional hook libiconv, libintl {#libiconv-libintl}
 
 A few libraries automatically add to `NIX_LDFLAGS` their library, making their symbols automatically available to the linker. This includes libiconv and libintl (gettext). This is done to provide compatibility between GNU Linux, where libiconv and libintl are bundled in, and other systems where that might not be the case. Sometimes, this behavior is not desired. To disable this behavior, set `dontAddExtraLibs`.
 
-### validatePkgConfig {#validatepkgconfig}
+### Optional hook validatePkgConfig {#validatepkgconfig}
 
 The `validatePkgConfig` hook validates all pkg-config (`.pc`) files in a package. This helps catching some common errors in pkg-config files, such as undefined variables.
 
-### cmake {#cmake}
+### Optional hook cmake {#cmake}
 
 Overrides the default configure phase to run the CMake command. By default, we use the Make generator of CMake. In addition, dependencies are added automatically to `CMAKE_PREFIX_PATH` so that packages are correctly detected by CMake. Some additional flags are passed in to give similar behavior to configure-based packages. You can disable this hook’s behavior by setting `configurePhase` to a custom value, or by setting `dontUseCmakeConfigure`. `cmakeFlags` controls flags passed only to CMake. By default, parallel building is enabled as CMake supports parallel building almost everywhere. When Ninja is also in use, CMake will detect that and use the ninja generator.
 
-### xcbuildHook {#xcbuildhook}
+### Optional hook xcbuildHook {#xcbuildhook}
 
 Overrides the build and install phases to run the "xcbuild" command. This hook is needed when a project only comes with build files for the XCode build system. You can disable this behavior by setting buildPhase and configurePhase to a custom value. xcbuildFlags controls flags passed only to xcbuild.
 
-### Meson {#meson}
+### Optional hook Meson {#meson}
 
 Overrides the configure phase to run meson to generate Ninja files. To run these files, you should accompany Meson with ninja. By default, `enableParallelBuilding` is enabled as Meson supports parallel building almost everywhere.
 
@@ -1275,19 +1277,19 @@ What value to set [`-Dwrap_mode=`](https://mesonbuild.com/Builtin-options.html#c
 
 Disables using Meson’s `configurePhase`.
 
-### ninja {#ninja}
+### Optional hook ninja {#ninja}
 
 Overrides the build, install, and check phase to run ninja instead of make. You can disable this behavior with the `dontUseNinjaBuild`, `dontUseNinjaInstall`, and `dontUseNinjaCheck`, respectively. Parallel building is enabled by default in Ninja.
 
-### unzip {#unzip}
+### Optional hook unzip {#unzip}
 
 This setup hook will allow you to unzip .zip files specified in `$src`. There are many similar packages like `unrar`, `undmg`, etc.
 
-### wafHook {#wafhook}
+### Optional hook wafHook {#wafhook}
 
 Overrides the configure, build, and install phases. This will run the “waf” script used by many projects. If `wafPath` (default `./waf`) doesn’t exist, it will copy the version of waf available in Nixpkgs. `wafFlags` can be used to pass flags to the waf script.
 
-### scons {#scons}
+### Optional hook scons {#scons}
 
 Overrides the build, install, and check phases. This uses the scons build system as a replacement for make. scons does not provide a configure phase, so everything is managed at build and install time.
 
