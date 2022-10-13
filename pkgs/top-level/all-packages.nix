@@ -2097,6 +2097,7 @@ with pkgs;
   corsair = with python3Packages; toPythonApplication corsair-scan;
 
   cosign = callPackage ../tools/security/cosign {
+    buildGoModule = buildGo118Module;
     inherit (darwin.apple_sdk.frameworks) PCSC;
   };
 
@@ -28963,6 +28964,8 @@ with pkgs;
   pavucontrol = callPackage ../applications/audio/pavucontrol { };
 
   paraview = libsForQt5.callPackage ../applications/graphics/paraview { };
+
+  parlatype = callPackage ../applications/audio/parlatype { };
 
   packet = callPackage ../development/tools/packet { };
 

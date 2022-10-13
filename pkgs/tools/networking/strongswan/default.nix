@@ -8,6 +8,7 @@
 , enableNetworkManager ? false, networkmanager
 , darwin
 , nixosTests
+, fetchpatch
 }:
 
 # Note on curl support: If curl is built with gnutls as its backend, the
@@ -41,6 +42,11 @@ stdenv.mkDerivation rec {
     ./ext_auth-path.patch
     ./firewall_defaults.patch
     ./updown-path.patch
+    (fetchpatch {
+      name = "CVE-2022-40617.patch";
+      url = "https://download.strongswan.org/security/CVE-2022-40617/strongswan-5.1.0-5.9.7_cert_online_validate.patch";
+      sha256 = "sha256-xjKK1vsHmBLAnyXF5FTdb0LE6wPzSovLWcaApuox92s=";
+    })
   ];
 
   postPatch = optionalString stdenv.isLinux ''
