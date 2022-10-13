@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "gcsfs";
-  version = "2022.5.0";
+  version = "2022.8.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = pname;
     rev = version;
-    hash = "sha256-gIkK1VSg1h04+MQBoxFtXIdn80faJlgQ9ayqV5p0RMU=";
+    hash = "sha256-BnnKFrWz47izKc7nS8NR1Vze1x9kJdYBsQT2KEY9ghM=";
   };
 
   propagatedBuildInputs = [
