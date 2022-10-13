@@ -28,7 +28,7 @@ in {
     };
 
     mkAdoptopenjdk = path-linux: path-darwin: let
-      package-linux  = import path-linux { inherit lib; };
+      package-linux  = import path-linux { inherit stdenv lib; };
       package-darwin = import path-darwin { inherit lib; };
       package = if stdenv.isLinux
         then package-linux
