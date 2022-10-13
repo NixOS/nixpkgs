@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.free;
     maintainers = [ lib.maintainers.bzizou lib.maintainers.smaret ];
     platforms = lib.platforms.all;
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 
 }
