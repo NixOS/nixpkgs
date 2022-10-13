@@ -14,13 +14,13 @@ let
 in
 buildGoModule rec {
   pname = "immudb";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "codenotary";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lcKjeqZeTQQMhVjnWNP3c+HanI/eenfUbpZJAo5FEkM=";
+    sha256 = "sha256-L8RvbMmq9DPJ2FvxlCE1KC8TRhmZA5CrzUPmr9JNy0Q=";
   };
 
   preBuild = ''
@@ -31,7 +31,7 @@ buildGoModule rec {
 
   proxyVendor = true; # check if this is needed anymore when updating
 
-  vendorSha256 = "sha256-gMpkV0XqY6wh7s0lndIdCoYlvVBrMk7/lvyDVqnJ66c=";
+  vendorSha256 = "sha256-+k2oH3qs9rLLh1rfxfTCAv3UyWnmaX6pVhYXV20F0lY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
