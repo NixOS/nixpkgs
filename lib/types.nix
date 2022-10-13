@@ -262,7 +262,8 @@ rec {
     };
 
     unspecified = mkOptionType {
-      name = "unspecified value";
+      name = "unspecified";
+      description = "unspecified value";
       descriptionClass = "noun";
     };
 
