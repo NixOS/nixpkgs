@@ -1432,6 +1432,8 @@ with pkgs;
     use64 = true;
   };
 
+  wwcd = callPackage ../tools/misc/wwcd { };
+
   writedisk = callPackage ../tools/misc/writedisk { };
 
   xcd = callPackage ../tools/misc/xcd { };
