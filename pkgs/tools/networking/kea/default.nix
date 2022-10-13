@@ -1,14 +1,20 @@
 { stdenv
 , lib
 , fetchurl
+
+# build time
 , autoreconfHook
 , pkg-config
+
+# runtime
 , boost
-, botan2
 , libmysqlclient
 , log4cplus
+, openssl
 , postgresql
 , python3
+
+# tests
 , nixosTests
 }:
 
@@ -21,7 +27,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-2n2QymKncmAtrG535QcxkDhCKJWtaO6xQvFIfWfVMdI=";
   };
 
-  patches = [ ./dont-create-var.patch ];
+  patches = [
+    ./dont-create-var.patch
+  ];
 
   postPatch = ''
     substituteInPlace ./src/bin/keactrl/Makefile.am --replace '@sysconfdir@' "$out/etc"
@@ -31,6 +39,7 @@ stdenv.mkDerivation rec {
     "--enable-perfdhcp"
     "--enable-shell"
     "--localstatedir=/var"
+    "--with-openssl=${lib.getDev openssl}"
     "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config"
     "--with-pgsql=${postgresql}/bin/pg_config"
   ];
@@ -42,9 +51,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost
-    botan2
     libmysqlclient
     log4cplus
+    openssl
     python3
   ];
 
