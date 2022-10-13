@@ -41,9 +41,12 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-xatxoSwAIHiUA03vvBdM8HSW27vhPLvAxEuGK0gLiio=";
     })
 
-    # Workaround for showing date numbers (TODO: should try to fix upstream)
-    # https://github.com/elementary/calendar/issues/756#issuecomment-1252400047
-    ./partly-revert-pr-301.patch
+    # GridDay: Fix day in month in grid with GLib 2.73.1+
+    # https://github.com/elementary/calendar/pull/763
+    (fetchpatch {
+      url = "https://github.com/elementary/calendar/commit/20b0983c85935bedef065b786ec8bbca55ba7d9e.patch";
+      sha256 = "sha256-Tw9uNqqRAC+vOp7EWzZVeDmZxt3hTGl9UIP21FcunqA=";
+    })
   ];
 
   nativeBuildInputs = [

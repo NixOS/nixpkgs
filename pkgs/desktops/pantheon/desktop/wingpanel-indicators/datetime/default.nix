@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , substituteAll
 , pkg-config
@@ -38,9 +39,12 @@ stdenv.mkDerivation rec {
       elementary_calendar = elementary-calendar;
     })
 
-    # Workaround for showing date numbers (TODO: should try to fix upstream)
-    # https://github.com/elementary/calendar/issues/756#issuecomment-1252400047
-    ./partly-revert-pr-150.patch
+    # GridDay: Do not connect to the notify signal for the property
+    # https://github.com/elementary/wingpanel-indicator-datetime/pull/305
+    (fetchpatch {
+      url = "https://github.com/elementary/wingpanel-indicator-datetime/commit/845ac1345124571fe995ab7138d5dfe4d29847e9.patch";
+      sha256 = "sha256-/wd/FnhjC0c0Y8mCZg8XNoPOYAAmfK+g1F6L6TMEkdM=";
+    })
   ];
 
   nativeBuildInputs = [
