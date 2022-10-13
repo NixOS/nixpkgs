@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cmake  ];
+  nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs = [ c-ares openssl.dev tl-expected];
+  propagatedBuildInputs = [ c-ares openssl.dev tl-expected ];
   #buildInputs = [ openssl.dev ];
   #patches = [ ./cmake_install.patch ];
   #patchFlags = [ "-p2" ];
