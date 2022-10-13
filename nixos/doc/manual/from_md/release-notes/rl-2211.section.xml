@@ -751,6 +751,14 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>guake</literal> package has been updated from
+          3.6.3 to 3.9.0, see the
+          <link xlink:href="https://github.com/Guake/guake/releases">changelog</link>
+          for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>dockerTools.buildImage</literal> deprecates the
           misunderstood <literal>contents</literal> parameter, in favor
           of <literal>copyToRoot</literal>. Use
