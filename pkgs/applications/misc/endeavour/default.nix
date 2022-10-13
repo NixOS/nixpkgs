@@ -5,8 +5,7 @@
 , meson
 , ninja
 , pkg-config
-, python3
-, wrapGAppsHook
+, wrapGAppsHook4
 , gettext
 , gnome
 , glib
@@ -17,24 +16,24 @@
 , gnome-online-accounts
 , gsettings-desktop-schemas
 , libportal-gtk4
-, evolution-data-server
+, evolution-data-server-gtk4
 , libical
 , librest
 , json-glib
 , itstool
-, unstableGitUpdater
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-todo";
-  version = "unstable-2022-06-12";
+  pname = "endeavour";
+  version = "42.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "gnome-todo";
-    rev = "ad4e15f0b58860caf8c6d497795b83b594a9c3e5";
-    sha256 = "HRufLoZou9ssQ/qoDG8anhOAtl8IYvFpyjq/XJlsotQ=";
+    owner = "World";
+    repo = "Endeavour";
+    rev = "v${version}";
+    sha256 = "U91WAoyIeQ0WbFbOCrbFJjbWe2eT7b/VL2M1hNXxyzQ=";
   };
 
   patches = [
@@ -45,6 +44,20 @@ stdenv.mkDerivation rec {
       extraPrefix = "";
       name = "gnome-todo_meson-build.patch";
     })
+
+    # build: Fix building with -Werror=format-security
+    # https://gitlab.gnome.org/World/Endeavour/-/merge_requests/132
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/World/Endeavour/-/commit/3bad03e90fcc28f6e3f87f2c90df5984dbeb0791.patch";
+      sha256 = "sha256-HRkNfhn+EH0Fc+KBDdX1Q+T9QWSctTOn1cvecP2N0zo=";
+    })
+
+    # build: Use GNOME module post_install()
+    # https://gitlab.gnome.org/World/Endeavour/-/merge_requests/135
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/World/Endeavour/-/commit/a8daa1d8acd0a5da7aef54d6e16d8a585c71e555.patch";
+      sha256 = "sha256-zUTQ36eUMOY9ODAgwSKUhSlB9Cj0Yu/60KjFFW5fx2I=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -52,8 +65,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gettext
-    python3
-    wrapGAppsHook
+    wrapGAppsHook4
     itstool
   ];
 
@@ -69,26 +81,22 @@ stdenv.mkDerivation rec {
 
     # Plug-ins
     libportal-gtk4 # background
-    evolution-data-server # eds
+    evolution-data-server-gtk4 # eds
     libical
     librest # todoist
     json-glib # todoist
   ];
 
-  postPatch = ''
-    chmod +x build-aux/meson/meson_post_install.py
-    patchShebangs build-aux/meson/meson_post_install.py
-  '';
-
   passthru = {
-    updateScript = unstableGitUpdater {
-      url = "https://gitlab.gnome.org/GNOME/gnome-todo.git";
+    updateScript = gitUpdater {
+      inherit pname version;
+      rev-prefix = "v";
     };
   };
 
   meta = with lib; {
     description = "Personal task manager for GNOME";
-    homepage = "https://wiki.gnome.org/Apps/Todo";
+    homepage = "https://gitlab.gnome.org/World/Endeavour";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
