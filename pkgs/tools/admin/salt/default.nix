@@ -9,16 +9,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3005";
+  version = "3005.1";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    hash = "sha256-HSAMRbiARheOpW+1p1cm3GIMxeUUEQdqBN+A/1L3nNQ=";
+    hash = "sha256-+hTF2HP4Y7UJUBIdfiOiRJUCdFSQx8SMDPBFQGz+V8E=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     distro
     jinja2
+    jmespath
     markupsafe
     msgpack
     psutil
