@@ -28614,6 +28614,8 @@ with pkgs;
 
   moe =  callPackage ../applications/editors/moe { };
 
+  pattypan = callPackage ../applications/misc/pattypan {};
+
   praat = callPackage ../applications/audio/praat { };
 
   quvi = callPackage ../applications/video/quvi/tool.nix {
