@@ -471,20 +471,9 @@ self: super: {
     dependencies = with self; [ lush-nvim ];
   });
 
-  himalaya-vim = buildVimPluginFrom2Nix {
-    pname = "himalaya-vim";
-    inherit (himalaya) src version;
+  himalaya-vim = super.himalaya-vim.overrideAttrs (old: {
     dependencies = with self; [ himalaya ];
-    configurePhase = ''
-      cd vim
-      substituteInPlace plugin/himalaya.vim \
-        --replace 'if !executable("himalaya")' 'if v:false'
-    '';
-    postFixup = ''
-      mkdir -p $out/bin
-      ln -s ${himalaya}/bin/himalaya $out/bin/himalaya
-    '';
-  };
+  });
 
   jedi-vim = super.jedi-vim.overrideAttrs (old: {
     # checking for python3 support in vim would be neat, too, but nobody else seems to care
