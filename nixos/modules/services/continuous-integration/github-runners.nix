@@ -44,7 +44,7 @@ in
         (import ./github-runner/service.nix (args // {
           inherit svcName;
           cfg = v;
-          systemdDir = svcName;
+          systemdDir = "github-runner/${n}";
         }))
     );
   };
