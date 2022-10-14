@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, wxGTK, subversion, apr, aprutil, python3, fetchpatch }:
+{ lib, stdenv, fetchurl, wxGTK30-gtk3, subversion, apr, aprutil, python3, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "rapidsvn";
@@ -9,12 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "1bmcqjc12k5w0z40k7fkk8iysqv4fw33i80gvcmbakby3d4d4i4p";
   };
 
-  buildInputs = [ wxGTK subversion apr aprutil python3 ];
+  buildInputs = [ wxGTK30-gtk3 subversion apr aprutil python3 ];
 
   NIX_CFLAGS_COMPILE = [ "-std=c++14" ];
 
-  configureFlags = [ "--with-svn-include=${subversion.dev}/include"
-    "--with-svn-lib=${subversion.out}/lib" ];
+  configureFlags = [
+    "--with-svn-include=${subversion.dev}/include"
+    "--with-svn-lib=${subversion.out}/lib"
+  ];
 
   patches = [
     ./fix-build.patch
@@ -30,6 +32,11 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/RapidSVN/RapidSVN/pull/44/commits/3e375f11d94cb8faddb8b7417354a9fb51f304ec.patch";
       hash = "sha256-BUpCMEH7jctOLtJktDUE52bxexfLemLItZ0IgdAnq9g=";
+    })
+    # wxWidgets 3.0 compatibility patches
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/r/rapidsvn/0.12.1dfsg-3.1/debian/patches/wx3.0.patch";
+      sha256 = "sha256-/07+FoOrNw/Pc+wlVt4sGOITfIIEu8ZbI3/ym0u8bs4=";
     })
   ];
 
