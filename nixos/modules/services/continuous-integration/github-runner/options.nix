@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ config
+, lib
+, pkgs
+, includeNameDefault
+, ...
+}:
 
 with lib;
 
@@ -59,6 +64,7 @@ with lib;
       Changing this option triggers a new runner registration.
     '';
     example = "nixos";
+  } // lib.optionalAttrs includeNameDefault {
     default = config.networking.hostName;
     defaultText = literalExpression "config.networking.hostName";
   };
