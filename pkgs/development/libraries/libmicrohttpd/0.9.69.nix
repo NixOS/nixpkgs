@@ -1,11 +1,10 @@
 { callPackage, fetchurl }:
 
 callPackage ./generic.nix ( rec {
-  version = "0.9.70";
+  version = "0.9.69";
 
   src = fetchurl {
     url = "mirror://gnu/libmicrohttpd/libmicrohttpd-${version}.tar.gz";
-    sha256 = "01vkjy89b1ylmh22dy5yza2r414nfwcfixxh3v29nvzrjv9s7l4h";
+    sha256 = "sha256-+5trFIt4dJPmN9MINYhxHmXLy3JvoCzuLNVDxd4n434=";
   };
-  meta.knownVulnerabilities = [ "CVE-2021-3466" ];
 })
