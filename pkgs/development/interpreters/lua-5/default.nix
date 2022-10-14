@@ -70,6 +70,8 @@ let
         inherit executable luaversion sourceVersion;
         luaOnBuild = luaOnBuildForHost.override { inherit packageOverrides; self = luaOnBuild; };
 
+        tests = callPackage ./tests { inherit (luaPackages) wrapLua; };
+
         inherit luaAttr;
   };
 

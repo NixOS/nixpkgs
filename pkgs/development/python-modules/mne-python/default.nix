@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "mne-python";
-  version = "1.1.1";
+  version = "1.2.0";
 
   # PyPI dist insufficient to run tests
   src = fetchFromGitHub {
     owner = "mne-tools";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-VM7sKcQeAeK20r4/jehhGlvBSHhYwA2SgsNL5Oa/Hug=";
+    sha256 = "sha256-IqZYkPomS/AjZrPDZapPaZ1jhtrzAvi5MOd9rYrSdKo=";
   };
 
   propagatedBuildInputs = [
