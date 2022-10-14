@@ -36747,6 +36747,8 @@ with pkgs;
 
   xlockmore = callPackage ../misc/screensavers/xlockmore { };
 
+  xq = callPackage ../tools/misc/xq { };
+
   xtrlock-pam = callPackage ../misc/screensavers/xtrlock-pam { };
 
   sailsd = callPackage ../misc/sailsd { };
