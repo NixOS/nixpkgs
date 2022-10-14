@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     homepage = "http://www.go.cd";
     license = licenses.asl20;
     platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     maintainers = with maintainers; [ grahamc swarren83 ];
   };
 
