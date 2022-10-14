@@ -7419,6 +7419,10 @@ with pkgs;
 
   partimage = callPackage ../tools/backup/partimage { };
 
+  pdisk = callPackage ../tools/system/pdisk {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
+  };
+
   pgf_graphics = callPackage ../tools/graphics/pgf { };
 
   pgformatter = callPackage ../development/tools/pgformatter { };
