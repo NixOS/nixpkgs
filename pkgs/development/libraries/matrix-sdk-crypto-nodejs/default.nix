@@ -23,10 +23,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-G2Um7vHinOuOx9U2BH14LAx+s/0Sxtlc9Nz6nPJfmU8=";
   };
 
-  postPatch = ''
-    cd bindings/${pname}
-  '';
-
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.rust.cargo
@@ -40,6 +36,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
+    cd bindings/${pname}
     npm run release-build --offline
 
     runHook postBuild
