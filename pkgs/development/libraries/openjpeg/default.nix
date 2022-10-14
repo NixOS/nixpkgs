@@ -2,8 +2,6 @@
 , libdeflate, libpng, libtiff, zlib, lcms2, jpylyzer
 , jpipLibSupport ? false # JPIP library & executables
 , jpipServerSupport ? false, curl, fcgi # JPIP Server
-, opjViewerSupport ? false, wxGTK # OPJViewer executable
-, openjpegJarSupport ? false # Openjpeg jar (Java)
 , jdk
 , poppler
 }:
@@ -45,8 +43,8 @@ stdenv.mkDerivation rec {
     "-DBUILD_THIRDPARTY=OFF"
     (mkFlag jpipLibSupport "BUILD_JPIP")
     (mkFlag jpipServerSupport "BUILD_JPIP_SERVER")
-    (mkFlag opjViewerSupport "BUILD_VIEWER")
-    (mkFlag openjpegJarSupport "BUILD_JAVA")
+    "-DBUILD_VIEWER=OFF"
+    "-DBUILD_JAVA=OFF"
     (mkFlag doCheck "BUILD_TESTING")
   ];
 
@@ -54,8 +52,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libdeflate libpng libtiff zlib lcms2 ]
     ++ lib.optionals jpipServerSupport [ curl fcgi ]
-    ++ lib.optional opjViewerSupport wxGTK
-    ++ lib.optional (openjpegJarSupport || jpipLibSupport) jdk;
+    ++ lib.optional (jpipLibSupport) jdk;
 
   doCheck = (!stdenv.isAarch64 && !stdenv.hostPlatform.isPower64); # tests fail on aarch64-linux and powerpc64
 
@@ -78,7 +75,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ codyopel ];
     platforms = platforms.all;
-    # opj viewer fails to compile with lots of errors, jar requires openjpeg library already compiled and installed
-    broken = (opjViewerSupport || openjpegJarSupport);
   };
 }
