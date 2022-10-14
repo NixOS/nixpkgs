@@ -48,6 +48,6 @@ rustPlatform.buildRustPackage rec {
     description = "Create beautiful image of your source code";
     homepage = "https://github.com/Aloxaf/silicon";
     license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ evanjs ];
+    maintainers = with maintainers; [ evanjs _0x4A6F ];
   };
 }
