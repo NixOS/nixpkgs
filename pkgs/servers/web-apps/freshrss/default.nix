@@ -1,4 +1,10 @@
-{ stdenvNoCC, lib, fetchFromGitHub, nixosTests, pkgs }:
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, nixosTests
+, php
+, pkgs
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "FreshRSS";
@@ -13,6 +19,8 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.tests = nixosTests.freshrss;
 
+  buildInputs = [ php ];
+
   # There's nothing to build.
   dontBuild = true;
 
@@ -20,6 +28,10 @@ stdenvNoCC.mkDerivation rec {
   overrideConfig = pkgs.writeText "constants.local.php" ''
     <?php
       define('DATA_PATH', getenv('FRESHRSS_DATA_PATH'));
+  '';
+
+  postPatch = ''
+    patchShebangs cli/*.php app/actualize_script.php
   '';
 
   installPhase = ''
