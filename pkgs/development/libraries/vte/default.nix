@@ -48,6 +48,11 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/community/vte3/fix-W_EXITCODE.patch?id=4d35c076ce77bfac7655f60c4c3e4c86933ab7dd";
       sha256 = "FkVyhsM0mRUzZmS2Gh172oqwcfXv6PyD6IEgjBhy2uU=";
     })
+    # error: implicit declaration of function 'cfmakeraw' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/vte/-/commit/1f1f177ff797ac2bb453168951135865cfded900.patch";
+      sha256 = "sha256-VRVhq8JAshtcFejJkNUpMilo7tLgcojlEnCTrAtGVa0=";
+    })
   ];
 
   nativeBuildInputs = [
