@@ -90,10 +90,10 @@
     "version": "0.9.3"
   },
   "webp-converter-for-media": {
-    "path": "webp-converter-for-media/tags/5.3.0",
-    "rev": "2797448",
-    "sha256": "1w6i4z09rj9prj4skv9j2m45nsi1an092j2frfzf1wmdacvsrmvh",
-    "version": "5.3.0"
+    "path": "webp-converter-for-media/tags/5.3.1",
+    "rev": "2798010",
+    "sha256": "1flggxd6hw0ps3b0y32a2aj9g3zfpzbaiwzx1zn2s7zpxn508y1b",
+    "version": "5.3.1"
   },
   "worker": {
     "path": "worker/tags/4.9.14",

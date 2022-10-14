@@ -19,8 +19,8 @@ PLUGINS=`cat wordpress-plugins.json | jq -r '.[]' | sed -z 's/\n/,/g;s/,$/\n/'`
 THEMES=`cat wordpress-themes.json | jq -r '.[]' | sed -z 's/\n/,/g;s/,$/\n/'`
 LANGUAGES=`cat wordpress-languages.json | jq -r '.[]' | sed -z 's/\n/,/g;s/,$/\n/'`
 
-wp4nix -p $PLUGINS -pl en
-wp4nix -t $THEMES -tl en
+wp4nix -p $PLUGINS -pl $PLUGINS
+wp4nix -t $THEMES
 wp4nix -l $LANGUAGES
 
-rm *.log themeLanguages.json pluginLanguages.json
+rm *.log themeLanguages.json
