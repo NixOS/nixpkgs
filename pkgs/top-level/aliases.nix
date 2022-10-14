@@ -1195,6 +1195,7 @@ mapAliases ({
   usb_modeswitch = throw "'usb_modeswitch' has been renamed to/replaced by 'usb-modeswitch'"; # Converted to throw 2022-02-22
   usbguard-nox = throw "'usbguard-nox' has been renamed to/replaced by 'usbguard'"; # Converted to throw 2022-09-24
   util-linuxCurses = util-linux; # Added 2022-04-12
+  utillinux = throw "'utillinux' has been renamed to/replaced by 'util-linux'"; # Converted to throw 2022-09-24
 
   ### V ###
 
