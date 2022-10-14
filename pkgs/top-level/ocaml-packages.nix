@@ -174,6 +174,10 @@ let
 
     caqti-type-calendar = callPackage ../development/ocaml-modules/caqti/type-calendar.nix { };
 
+    cduce = callPackage ../development/ocaml-modules/cduce { };
+
+    cduce-types = callPackage ../development/ocaml-modules/cduce/types.nix { };
+
     cfstream = callPackage ../development/ocaml-modules/cfstream { };
 
     chacha = callPackage ../development/ocaml-modules/chacha { };
