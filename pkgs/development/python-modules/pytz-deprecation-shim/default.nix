@@ -43,6 +43,10 @@ buildPythonPackage rec {
   # https://github.com/pganssle/pytz-deprecation-shim/issues/27
   doCheck = pythonAtLeast "3.9";
 
+  disabledTests = [
+    "test_localize_explicit_is_dst"
+  ];
+
   meta = with lib; {
     description = "Shims to make deprecation of pytz easier";
     homepage = "https://github.com/pganssle/pytz-deprecation-shim";
