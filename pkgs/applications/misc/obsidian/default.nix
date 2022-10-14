@@ -1,35 +1,35 @@
-{ stdenv
-, fetchurl
-, lib
-, makeWrapper
-, electron_18
-, makeDesktopItem
-, graphicsmagick
-, writeScript
-, undmg
-, unzip
-}:
+{ stdenv, fetchurl, lib, makeWrapper, electron_18, makeDesktopItem
+, graphicsmagick, writeScript, undmg, unzip }:
 let
   inherit (stdenv.hostPlatform) system;
   pname = "obsidian";
-  version = "0.15.9";
+  version = "1.0.0";
   appname = "Obsidian";
   meta = with lib; {
-    description = "A powerful knowledge base that works on top of a local folder of plain text Markdown files";
+    description =
+      "A powerful knowledge base that works on top of a local folder of plain text Markdown files";
     homepage = "https://obsidian.md";
     downloadPage = "https://github.com/obsidianmd/obsidian-releases/releases";
     license = licenses.obsidian;
     maintainers = with maintainers; [ atila conradmearns zaninime opeik ];
   };
 
-  filename = if stdenv.isDarwin then "Obsidian-${version}-universal.dmg" else "obsidian-${version}.tar.gz";
+  filename = if stdenv.isDarwin then
+    "Obsidian-${version}-universal.dmg"
+  else
+    "obsidian-${version}.tar.gz";
   src = fetchurl {
-    url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
-    sha256 = if stdenv.isDarwin then "1q9almr8k1i2wzksd09libgnvypj5k9j15y6cxg4rgnw32fa152n" else "sha256-Qz1Ic5FtxXIk8J/2spNZaqpPIgx3yNyXiAQllbVrGjw=";
+    url =
+      "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
+    sha256 = if stdenv.isDarwin then
+      "2955aa757cdb413f770e3e327ac7677c5c007588a7d6f7e93ec8ffbabd40180d"
+    else
+      "1f50a5f52073fe6c0df207b3164715e0ac48efec558d057602dc8b2b28d5a48f";
   };
 
   icon = fetchurl {
-    url = "https://forum.obsidian.md/uploads/default/original/1X/bf119bd48f748f4fd2d65f2d1bb05d3c806883b5.png";
+    url =
+      "https://forum.obsidian.md/uploads/default/original/1X/bf119bd48f748f4fd2d65f2d1bb05d3c806883b5.png";
     sha256 = "18ylnbvxr6k4x44c4i1d55wxy2dq4fdppp43a4wl6h6zar0sc9s2";
   };
 
@@ -85,5 +85,4 @@ let
       runHook postInstall
     '';
   };
-in
-if stdenv.isDarwin then darwin else linux
+in if stdenv.isDarwin then darwin else linux
