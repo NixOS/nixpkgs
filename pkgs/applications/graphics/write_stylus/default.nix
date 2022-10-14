@@ -15,7 +15,7 @@ mkDerivation rec {
   version = "300";
 
   src = fetchurl {
-    url = "http://www.styluslabs.com/write/write${version}.tar.gz";
+    url = "http://styluslabs.com/write/write${version}.tar.gz";
     sha256 = "0h1wf3af7jzp3f3l8mlnshi83d7a4v4y8nfqfai4lmskyicqlz7c";
   };
 
@@ -52,7 +52,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://www.styluslabs.com/";
+    homepage = "http://styluslabs.com/";
     description = "Write is a word processor for handwriting";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
