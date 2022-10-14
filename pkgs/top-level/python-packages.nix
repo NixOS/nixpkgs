@@ -9634,6 +9634,8 @@ in {
 
   readthedocs-sphinx-ext = callPackage ../development/python-modules/readthedocs-sphinx-ext { };
 
+  reactivex = callPackage ../development/python-modules/reactivex { };
+
   rebulk = callPackage ../development/python-modules/rebulk { };
 
   recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
