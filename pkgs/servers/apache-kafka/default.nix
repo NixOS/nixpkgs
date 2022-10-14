@@ -2,32 +2,36 @@
   majorVersion ? "1.0" }:
 
 let
-  jre11 = jdk11_headless;
-  jre   = jdk17_headless;
   versionMap = {
-    "3.2" = {
-      kafkaVersion = "3.2.1";
+    "3.3" = {
+      kafkaVersion = "3.3.1";
       scalaVersion = "2.13";
       sha256 = "440fe73d73ebb78ee0d7accbfd69f53e2281544cf18ea6672c85ef4f6734170b";
-      jre = jre;
+      jre = jdk17_headless;
+    };
+    "3.2" = {
+      kafkaVersion = "3.2.3";
+      scalaVersion = "2.13";
+      sha256 = "440fe73d73ebb78ee0d7accbfd69f53e2281544cf18ea6672c85ef4f6734170b";
+      jre = jdk17_headless;
     };
     "3.1" = {
-      kafkaVersion = "3.1.1";
+      kafkaVersion = "3.1.2";
       scalaVersion = "2.13";
       sha256 = "e91e50b0aaa499795a51d984a9d00953f9a2781c51314f47ae4df8b2db1a6c9a";
-      jre = jre;
+      jre = jdk17_headless;
     };
     "3.0" = {
-      kafkaVersion = "3.0.1";
+      kafkaVersion = "3.0.2";
       scalaVersion = "2.13";
       sha256 = "1a95abe81dc18eafee65f5bc440ff21ba0c49bd2c6d36bf7878ee8a2e2536097";
-      jre = jre;
+      jre = jdk17_headless;
     };
     "2.8" = {
       kafkaVersion = "2.8.2";
       scalaVersion = "2.13";
       sha256 = "sha256-inZXZJSs8ivtEqF6E/ApoyUHn8vg38wUG3KhowP8mfQ=";
-      jre = jre11;
+      jre = jdk11_headless;
     };
 
   };
@@ -79,5 +83,5 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.ragge ];
     platforms = platforms.unix;
   };
-  passthru = { inherit jre; };
+  passthru = { inherit jdk17_headless; };
 }
