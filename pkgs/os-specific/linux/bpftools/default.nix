@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xDalSMcxLOb8WjRyy+rYle749ShB++fHH9jki9/isLo=";
   };
 
+  patches = [ ./strip-binary-name.patch ];
+
   nativeBuildInputs = [ python3 bison flex ];
   buildInputs = (if (lib.versionAtLeast version "5.20")
                  then [ libopcodes libbfd ]
