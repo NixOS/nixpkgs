@@ -118,5 +118,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ vrthra ramkromberg atemu ];
     platforms = with platforms; linux ++ darwin;
+    broken = stdenv.system == "aarch64-darwin"; # https://github.com/arakiken/mlterm/issues/51
   };
 }
