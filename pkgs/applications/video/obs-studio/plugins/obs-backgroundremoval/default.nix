@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , obs-studio
 , onnxruntime
@@ -10,14 +9,22 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-backgroundremoval";
-  version = "0.4.0";
+  version = "unstable-2022-05-02";
 
   src = fetchFromGitHub {
     owner = "royshil";
     repo = "obs-backgroundremoval";
-    rev = "v${version}";
-    sha256 = "sha256-TI1FlhE0+JL50gAZCSsI+g8savX8GRQkH3jYli/66hQ=";
+    rev = "cc9d4a5711f9388ed110230f9f793bb071577a23";
+    hash = "sha256-xkVZ4cB642p4DvZAPwI2EVhkfVl5lJhgOQobjNMqpec=";
   };
+
+  patches = [
+    # Fix c++ include directives
+    ./includes.patch
+
+    # Use CPU backend instead of CUDA/DirectML
+    ./use-cpu-backend.patch
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio onnxruntime opencv ];
@@ -29,10 +36,9 @@ stdenv.mkDerivation rec {
     "-DOnnxruntime_INCLUDE_DIRS=${onnxruntime.dev}/include/onnxruntime/core/session"
   ];
 
-  patches = [ ./obs-backgroundremoval-includes.patch ];
 
   prePatch = ''
-    sed -i 's/version_from_git()/set(VERSION "${version}")/' CMakeLists.txt
+    sed -i 's/version_from_git()/set(VERSION "0.4.0")/' CMakeLists.txt
   '';
 
   meta = with lib; {
