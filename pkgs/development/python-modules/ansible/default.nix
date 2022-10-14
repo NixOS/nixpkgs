@@ -20,7 +20,7 @@
 
 let
   pname = "ansible";
-  version = "6.3.0";
+  version = "6.5.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -30,7 +30,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1fqfwVqNRcjVJHqWRbC0j5ldc1sSxNplVmbUhQYnNSY=";
+    sha256 = "sha256-fAzc0RIaXxKrLaS90uFMLBU+ASFL/GprwVa2G9dAHFs=";
   };
 
   postPatch = ''

@@ -12,6 +12,8 @@
 , qtbase ? null
 , qtwebengine ? null
 , wrapGAppsHook ? null
+, enableWideVine ? false
+, widevine-cdm
 }: let
   isQt6 = mkDerivationWith == null;
 
@@ -149,6 +151,7 @@ buildPythonApplication {
       --add-flags '--backend ${backend}'
       --set QUTE_QTWEBENGINE_VERSION_OVERRIDE "${lib.getVersion qtwebengine}"
       ${lib.optionalString (pipewireSupport && backend == "webengine") ''--prefix LD_LIBRARY_PATH : ${libPath}''}
+      ${lib.optionalString enableWideVine ''--add-flags "--qt-flag widevine-path=${widevine-cdm}/libwidevinecdm.so"''}
     )
   '';
 
@@ -157,6 +160,6 @@ buildPythonApplication {
     description = "Keyboard-focused browser with a minimal GUI";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry dotlambda ];
-    inherit (backendPackage.meta) platforms;
+    platforms   = if enableWideVine then [ "x86_64-linux" ] else backendPackage.meta.platforms;
   };
 }

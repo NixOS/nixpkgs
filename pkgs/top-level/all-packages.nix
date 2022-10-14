@@ -1432,6 +1432,8 @@ with pkgs;
     use64 = true;
   };
 
+  wwcd = callPackage ../tools/misc/wwcd { };
+
   writedisk = callPackage ../tools/misc/writedisk { };
 
   xcd = callPackage ../tools/misc/xcd { };
@@ -1821,6 +1823,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit CoreGraphics CoreServices CoreText Foundation OpenGL;
   };
 
+  blackbox-terminal = callPackage ../applications/terminal-emulators/blackbox-terminal { };
+
   contour = libsForQt5.callPackage ../applications/terminal-emulators/contour { fmt = fmt_8; };
 
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
@@ -2078,6 +2082,8 @@ with pkgs;
 
   arduino-core = callPackage ../development/embedded/arduino/arduino-core/chrootenv.nix { };
   arduino-core-unwrapped = callPackage ../development/embedded/arduino/arduino-core { };
+
+  arduino-language-server = callPackage ../development/embedded/arduino/arduino-language-server { };
 
   arduino-mk = callPackage ../development/embedded/arduino/arduino-mk {};
 
@@ -7431,6 +7437,8 @@ with pkgs;
 
   gssdp = callPackage ../development/libraries/gssdp { };
 
+  gssdp_1_6 = callPackage ../development/libraries/gssdp/1.6.nix { };
+
   gssdp-tools = callPackage ../development/libraries/gssdp/tools.nix { };
 
   grype = callPackage ../tools/security/grype { };
@@ -7462,6 +7470,8 @@ with pkgs;
   gup = callPackage ../development/tools/build-managers/gup {};
 
   gupnp = callPackage ../development/libraries/gupnp { };
+
+  gupnp_1_6 = callPackage ../development/libraries/gupnp/1.6.nix { };
 
   gupnp-av = callPackage ../development/libraries/gupnp-av {};
 
@@ -8613,7 +8623,9 @@ with pkgs;
   nodejs-slim-16_x = callPackage ../development/web/nodejs/v16.nix {
     enableNpm = false;
   };
-  nodejs-16_x-openssl_1_1 = callPackage ../development/web/nodejs/v16.nix { };
+  nodejs-16_x-openssl_1_1 = callPackage ../development/web/nodejs/v16.nix {
+    openssl = openssl_1_1;
+  };
   nodejs-18_x = callPackage ../development/web/nodejs/v18.nix { };
   nodejs-slim-18_x = callPackage ../development/web/nodejs/v18.nix {
     enableNpm = false;
@@ -10163,6 +10175,8 @@ with pkgs;
   phockup = callPackage ../applications/misc/phockup { };
 
   phodav = callPackage ../tools/networking/phodav { };
+
+  phodav_2_0 = callPackage ../tools/networking/phodav/2.0.nix { };
 
   photon-rss = callPackage ../applications/networking/feedreaders/photon { };
 
@@ -11898,7 +11912,7 @@ with pkgs;
 
   toml2json = callPackage ../development/tools/toml2json { };
 
-  toml2nix = (callPackage ../tools/toml2nix { }).toml2nix { };
+  toml2nix = callPackage ../development/tools/toml2nix { };
 
   topgrade = callPackage ../tools/misc/topgrade {
     inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
@@ -14751,6 +14765,9 @@ with pkgs;
   cargo-bitbake = callPackage ../development/tools/rust/cargo-bitbake { };
   cargo-c = callPackage ../development/tools/rust/cargo-c {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+  cargo-clone = callPackage ../development/tools/rust/cargo-clone {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
   cargo-criterion = callPackage ../development/tools/rust/cargo-criterion { };
   cargo-deadlinks = callPackage ../development/tools/rust/cargo-deadlinks {
@@ -17858,7 +17875,8 @@ with pkgs;
 
   at-spi2-core = callPackage ../development/libraries/at-spi2-core { };
 
-  at-spi2-atk = callPackage ../development/libraries/at-spi2-atk { };
+  # Not moved to aliases while we decide if we should split the package again.
+  at-spi2-atk = at-spi2-core;
 
   aqbanking = callPackage ../development/libraries/aqbanking { };
 
@@ -18499,6 +18517,7 @@ with pkgs;
   fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix {};
 
   freeimage = callPackage ../development/libraries/freeimage {
+    inherit (darwin) autoSignDarwinBinariesHook;
     libraw = libraw_unstable;
   };
 
@@ -18573,6 +18592,8 @@ with pkgs;
 
   gcr = callPackage ../development/libraries/gcr { };
 
+  gcr_4 = callPackage ../development/libraries/gcr/4.nix { };
+
   gdl = callPackage ../development/libraries/gdl { };
 
   gdome2 = callPackage ../development/libraries/gdome2 { };
@@ -18596,6 +18617,10 @@ with pkgs;
   geoclue2-with-demo-agent = geoclue2.override { withDemoAgent = true; };
 
   geocode-glib = callPackage ../development/libraries/geocode-glib {};
+
+  geocode-glib_2 = geocode-glib.override {
+    libsoup = libsoup_3;
+  };
 
   geoipWithDatabase = makeOverridable (callPackage ../development/libraries/geoip) {
     drvName = "geoip-tools";
@@ -18970,7 +18995,8 @@ with pkgs;
 
   ace = callPackage ../development/libraries/ace { };
 
-  atk = callPackage ../development/libraries/atk { };
+  # Not moved to aliases while we decide if we should split the package again.
+  atk = at-spi2-core;
 
   atkmm = callPackage ../development/libraries/atkmm { };
 
@@ -19627,6 +19653,8 @@ with pkgs;
   libcdr = callPackage ../development/libraries/libcdr { lcms = lcms2; };
 
   libchamplain = callPackage ../development/libraries/libchamplain { };
+
+  libchamplain_libsoup3 = libchamplain.override { withLibsoup3 = true; };
 
   libchardet = callPackage ../development/libraries/libchardet { };
 
@@ -20361,9 +20389,7 @@ with pkgs;
 
   libopusenc = callPackage ../development/libraries/libopusenc { };
 
-  libosinfo = callPackage ../development/libraries/libosinfo {
-    inherit (gnome) libsoup;
-  };
+  libosinfo = callPackage ../development/libraries/libosinfo { };
 
   libosip = callPackage ../development/libraries/osip {};
 
@@ -21617,10 +21643,10 @@ with pkgs;
       };
     };
   });
-  libsForQt5_openssl_1_1 = recurseIntoAttrs (import ./qt5-packages.nix {
+  libsForQt5_openssl_1_1 = import ./qt5-packages.nix {
     inherit lib pkgs;
     qt5 = qt5_openssl_1_1;
-  });
+  };
 
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
   plasma5Packages = libsForQt515;
@@ -22112,6 +22138,8 @@ with pkgs;
 
   spice-gtk = callPackage ../development/libraries/spice-gtk { };
 
+  spice-gtk_libsoup2 = spice-gtk.override { withLibsoup2 = true; };
+
   spice-protocol = callPackage ../development/libraries/spice-protocol { };
 
   spice-up = callPackage ../applications/office/spice-up { };
@@ -22440,6 +22468,10 @@ with pkgs;
   vte = callPackage ../development/libraries/vte {
     # Needs GCC ≥10 but aarch64 defaults to GCC 9.
     stdenv = clangStdenv;
+  };
+
+  vte-gtk4 = vte.override {
+    gtkVersion = "4";
   };
 
   vte_290 = callPackage ../development/libraries/vte/2.90.nix { };
@@ -27095,6 +27127,8 @@ with pkgs;
 
   bevelbar = callPackage ../applications/window-managers/bevelbar { };
 
+  bfcal = libsForQt5.callPackage ../applications/misc/bfcal { };
+
   bibletime = libsForQt5.callPackage ../applications/misc/bibletime { };
 
   bino3d = libsForQt5.callPackage ../applications/video/bino3d {
@@ -27763,6 +27797,8 @@ with pkgs;
 
   inherit (gnome) empathy;
 
+  endeavour = callPackage ../applications/misc/endeavour { };
+
   enhanced-ctorrent = callPackage ../applications/networking/enhanced-ctorrent { };
 
   entangle = callPackage ../applications/video/entangle {
@@ -27867,6 +27903,7 @@ with pkgs;
 
   inherit (gnome) evince;
   evolution-data-server = gnome.evolution-data-server;
+  evolution-data-server-gtk4 = evolution-data-server.override { withGtk3 = false; withGtk4 = true; };
   evolution-ews = callPackage ../applications/networking/mailreaders/evolution/evolution-ews { };
   evolution = callPackage ../applications/networking/mailreaders/evolution/evolution { };
   evolutionWithPlugins = callPackage ../applications/networking/mailreaders/evolution/evolution/wrapper.nix { plugins = [ evolution evolution-ews ]; };
@@ -29418,6 +29455,8 @@ with pkgs;
   ktimetracker = libsForQt5.callPackage ../applications/office/ktimetracker { };
 
   kubedb-cli = callPackage ../applications/networking/cluster/kubedb-cli { };
+
+  kubedog = callPackage ../applications/networking/cluster/kubedog { };
 
   kubecfg = callPackage ../applications/networking/cluster/kubecfg { };
 
@@ -31022,7 +31061,7 @@ with pkgs;
   qdirstat = libsForQt5.callPackage ../applications/misc/qdirstat {};
 
   qemu = callPackage ../applications/virtualization/qemu {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Hypervisor;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Hypervisor vmnet;
     inherit (darwin.stubs) rez setfile;
     inherit (darwin) sigtool;
   };
@@ -34602,7 +34641,7 @@ with pkgs;
 
   gnome-tour = callPackage ../desktops/gnome/core/gnome-tour { };
 
-  chrome-gnome-shell = callPackage ../desktops/gnome/extensions/chrome-gnome-shell { };
+  gnome-browser-connector = callPackage ../desktops/gnome/extensions/gnome-browser-connector { };
 
   gnome-2048 = callPackage ../desktops/gnome/games/gnome-2048 { };
 
@@ -37616,4 +37655,6 @@ with pkgs;
   swaysettings = callPackage ../applications/misc/swaysettings { };
 
   aitrack = libsForQt5.callPackage ../applications/misc/aitrack { };
+
+  widevine-cdm = callPackage ../applications/networking/browsers/misc/widevine-cdm.nix { };
 }

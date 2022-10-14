@@ -19411,10 +19411,10 @@ let
 
   perlldap = buildPerlPackage {
     pname = "perl-ldap";
-    version = "0.66";
+    version = "0.68";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MARSCHAP/perl-ldap-0.66.tar.gz";
-      hash = "sha256-CSY85hZugMmNaJ1B0JmVuBM4n9Bpt4RgH23Ff44rQQI=";
+      url = "mirror://cpan/authors/id/M/MA/MARSCHAP/perl-ldap-0.68.tar.gz";
+      hash = "sha256-4vOJ/j56nkthSIaSkZrXI7mPO0ebUoj2ENqownmVs1E=";
     };
     # ldapi socket location should match the one compiled into the openldap package
     postPatch = ''

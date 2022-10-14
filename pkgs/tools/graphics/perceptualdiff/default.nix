@@ -20,6 +20,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ uri-canva ];
     platforms = platforms.unix;
-    broken = stdenv.hostPlatform.system == "aarch64-darwin";
   };
 }
