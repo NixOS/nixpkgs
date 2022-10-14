@@ -14,22 +14,24 @@
 , CoreText
 , Security
 , fira-code
+, fontconfig
+, harfbuzz
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "silicon";
-  version = "0.4.3";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "Aloxaf";
     repo = "silicon";
     rev = "v${version}";
-    sha256 = "sha256-yhs9BEMMFUtptd0cLsaUW02QZVhztvn8cB0nUqPnO+Y=";
+    sha256 = "sha256-RuzaRJr1n21MbHSeHBt8CjEm5AwbDbvX9Nw5PeBTl+w=";
   };
 
-  cargoSha256 = "sha256-tj5HPE9EGC7JQ3dyeMPPI0/3r/idrShqfbpnVuaEtDk=";
+  cargoSha256 = "sha256-q+CoXoNZOxDmEJ+q1vPWxBJsfHQiCxAMlCZo8C49aQA=";
 
-  buildInputs = [ llvmPackages.libclang expat freetype fira-code ]
+  buildInputs = [ llvmPackages.libclang expat freetype fira-code fontconfig harfbuzz ]
     ++ lib.optionals stdenv.isLinux [ libxcb ]
     ++ lib.optionals stdenv.isDarwin [ libiconv AppKit CoreText Security ];
 
@@ -37,6 +39,10 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isLinux [ python3 ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
 
   meta = with lib; {
     description = "Create beautiful image of your source code";
