@@ -28166,11 +28166,11 @@ with pkgs;
   grandorgue = callPackage ../applications/audio/grandorgue { };
 
   greetd = recurseIntoAttrs {
-    wlgreet = callPackage ../os-specific/linux/wlgreet { };
     dlm = callPackage ../applications/display-managers/greetd/dlm.nix { };
     greetd = callPackage ../applications/display-managers/greetd { };
     gtkgreet = callPackage ../applications/display-managers/greetd/gtkgreet.nix { };
     tuigreet = callPackage ../applications/display-managers/greetd/tuigreet.nix { };
+    wlgreet = callPackage ../applications/display-managers/greetd/wlgreet.nix { };
   };
 
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict {
