@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "millet";
-  version = "0.3.14";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "azdavis";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fi0kU1+gazSfQEyL3qYcK/qeMh1UGuitGXJ9FsVAiTw=";
+    sha256 = "sha256-7CIi1a3SyuJzvBrjTE5wS7xKXEVdmUu2RUVeL3P//z8=";
   };
 
-  cargoSha256 = "sha256-ijXGXq5+OOnf4Nmg68GcSKZe/5tjG0KebOsCWU+vmHc=";
+  cargoSha256 = "sha256-Dg/dq2/q+snqbkX1fR/mgKozfKZlZOuT5vXFTuu0AiY=";
 
   postPatch = ''
     rm .cargo/config.toml
