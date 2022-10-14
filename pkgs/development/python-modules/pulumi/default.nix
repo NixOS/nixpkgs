@@ -25,6 +25,21 @@
 }:
 let
   data = import ./data.nix {};
+
+  # Pulumi uses a pinned version because tests didn't pass with later versions, see
+  # https://github.com/pulumi/pulumi/issues/10301
+  grpcio-1_47 = grpcio.overrideAttrs (finalAttrs: previousAttrs: rec {
+    src = fetchFromGitHub {
+      owner = "grpc";
+      repo = "grpc";
+      rev = "v${version}";
+      hash = "sha256-fMYAos0gQelFMPkpR0DdKr4wPX+nhZSSqeaU4URqgto=";
+      fetchSubmodules = true;
+    };
+
+    version = "1.47.0";
+  });
+
 in
 buildPythonPackage rec {
   pname = "pulumi";
@@ -35,14 +50,14 @@ buildPythonPackage rec {
     owner = "pulumi";
     repo = "pulumi";
     rev = "v${pulumi-bin.version}";
-    sha256 = "sha256-vqEZEHTpJV65a3leWwYhyi3dzAsN67BXOvk5hnTPeuI=";
+    sha256 = "sha256-LbPXCwU6aJp+z5scfej5Reo2X8QUvZpASWkcDBBF1J0=";
   };
 
   propagatedBuildInputs = [
     semver
     protobuf
     dill
-    grpcio
+    grpcio-1_47
     pyyaml
     six
   ];
