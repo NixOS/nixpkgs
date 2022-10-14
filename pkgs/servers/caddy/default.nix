@@ -7,7 +7,7 @@
 , installShellFiles
 }:
 let
-  version = "2.6.1";
+  version = "2.6.2";
   dist = fetchFromGitHub {
     owner = "caddyserver";
     repo = "dist";
@@ -23,20 +23,16 @@ buildGoModule {
     owner = "caddyserver";
     repo = "caddy";
     rev = "v${version}";
-    sha256 = "sha256-Z8MiMhXH1er+uYvmDQiamF/jSxHbTMwjo61qbH0ioEo=";
+    sha256 = "sha256-Tbf6RB3106OEZGc/Wx7vk+I82Z8/Q3WqnID4f8uZ6z0=";
   };
 
-  vendorSha256 = "sha256-6UTErIPB/z4RfndPSLKFJDFweLB3ax8WxEDA+3G5asI=";
-
-  patches = [
-    ./inject_version.diff
-  ];
+  vendorSha256 = "sha256-YxGXk3Q1qw6uZxrGc8l2lKExP2GP+nm3eYbHDoEbgdY=";
 
   subPackages = [ "cmd/caddy" ];
 
   ldflags = [
     "-s" "-w"
-    "-X github.com/caddyserver/caddy/v2.ShortVersion=${version}"
+    "-X github.com/caddyserver/caddy/v2.CustomVersion=${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
