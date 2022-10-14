@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "dinghy";
-  version = "0.13.2";
+  version = "0.13.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nedbat";
     repo = pname;
     rev = version;
-    sha256 = "sha256-uRiWcrs3xIb6zxNg0d6/+NCqnEgadHSTLpS53CoZ5so=";
+    sha256 = "sha256-H3AFKKtSiFD3LqyWaIYB4LncPaH2/eptuKS4BN0cNBQ=";
   };
 
   propagatedBuildInputs = [
