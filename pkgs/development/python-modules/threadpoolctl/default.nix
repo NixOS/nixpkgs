@@ -22,11 +22,25 @@ buildPythonPackage rec {
     sha256 = "sha256-/qt7cgFbvpc1BLZC7a4S0RToqSggKXAqF1Xr6xOqzw8=";
   };
 
-  checkInputs = [ pytestCheckHook numpy scipy ];
+  checkInputs = [
+    pytestCheckHook
+    numpy
+    scipy
+  ];
+
   disabledTests = [
     # accepts a limited set of cpu models based on project
     # developers' hardware
     "test_architecture"
+    # https://github.com/joblib/threadpoolctl/issues/128
+    "test_threadpool_limits_by_prefix"
+    "test_controller_info_actualized"
+    "test_command_line_command_flag"
+    "test_command_line_import_flag"
+  ];
+
+  pythonImportsCheck = [
+    "threadpoolctl"
   ];
 
   meta = with lib; {
