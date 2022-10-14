@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
 
     fcitx
     ibus
+  ] ++ lib.optionals (stdenv.system != "aarch64-linux") [
+    # FIXME Currently broken on aarch64-linux
     uim
   ];
 
