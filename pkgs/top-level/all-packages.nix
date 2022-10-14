@@ -28167,9 +28167,9 @@ with pkgs;
 
   greetd = recurseIntoAttrs {
     gtkgreet = callPackage ../os-specific/linux/gtkgreet { };
-    dlm = callPackage ../os-specific/linux/dlm { };
     wlgreet = callPackage ../os-specific/linux/wlgreet { };
     tuigreet = callPackage ../os-specific/linux/tuigreet { };
+    dlm = callPackage ../applications/display-managers/greetd/dlm.nix { };
     greetd = callPackage ../applications/display-managers/greetd { };
   };
 
