@@ -40,9 +40,7 @@ stdenv.mkDerivation rec {
   # load libraries from the install path, which doesn't usually exist
   # when `make check' is run.  So to work around that, we run it as an
   # install check instead, when those paths will have been created.
-  # Failing with GLib 2.73.2
-  # https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/issues/601
-  doInstallCheck = false;
+  doInstallCheck = true;
   preInstallCheck = ''
     export G_TEST_DBUS_DAEMON="${dbus.daemon}/bin/dbus-daemon"
     patchShebangs tools/tests/test-wrapper.sh
