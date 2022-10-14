@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   pname = "kcat";
 
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "edenhill";
     repo = "kcat";
     rev = version;
-    sha256 = "sha256-koDhj/RQc9fhfqjrJylhURw6tppPELhLlBGbNVJsii8=";
+    sha256 = "sha256-pCIYNx0GYPGDYzTLq9h/LbOrJjhKWLAV4gq07Ikl5O4=";
   };
 
   nativeBuildInputs = [ pkg-config which ];
