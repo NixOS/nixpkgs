@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "pgvector";
@@ -10,6 +10,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-kIgdr3+KC11Qxk1uBTmcN4dDaLIhfo/Fs898boESsBc=";
   };
+
+  patches = [
+    # Added support for Postgres 15. Remove with the next release.
+    (fetchpatch {
+      url = "https://github.com/pgvector/pgvector/commit/c9c6b96eede7d78758ca7ca5db98bf8b24021d0f.patch";
+      sha256 = "sha256-hgCpGtuYmqo4Ttlpn4FBskbNdZmM1wJeMQBJZ7H923g=";
+    })
+  ];
 
   buildInputs = [ postgresql ];
 
