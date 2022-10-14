@@ -4772,6 +4772,8 @@ with pkgs;
 
   spacevim = callPackage ../applications/editors/spacevim { };
 
+  srvc = callPackage ../applications/version-management/srvc { };
+
   ssmsh = callPackage ../tools/admin/ssmsh { };
 
   stacs = callPackage ../tools/security/stacs { };
@@ -11299,6 +11301,8 @@ with pkgs;
   smesh = callPackage ../development/libraries/smesh {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
+
+  boost-sml = callPackage ../development/libraries/boost-ext/boost-sml {};
 
   smu = callPackage ../tools/text/smu { };
 
