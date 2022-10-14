@@ -3,7 +3,6 @@
 , fetchFromGitLab
 , pkg-config
 , autoreconfHook
-, qmake
 , rake
 , boost
 , cmark

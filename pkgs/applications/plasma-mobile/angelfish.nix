@@ -1,6 +1,5 @@
 { lib
 , mkDerivation
-, fetchurl
 , cmake
 , corrosion
 , extra-cmake-modules

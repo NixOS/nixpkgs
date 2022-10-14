@@ -1,7 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
 , nix-update-script
-, fetchpatch
 , vala
 , pkg-config
 , python3
