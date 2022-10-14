@@ -84,21 +84,6 @@ in
               assert "::1" in output
               assert "127.0.0.1" not in output
 
-              # ahosts
-              output = machine.succeed("getent ahosts _gateway")
-
-              # returns something like the following:
-              # 10.0.2.2        STREAM _gateway
-              # 10.0.2.2        DGRAM
-              # 10.0.2.2        RAW
-              # fe80::2         STREAM
-              # fe80::2         DGRAM
-              # fe80::2         RAW
-
-              # Verify we see both ip addresses
-              assert "10.0.2.2" in output
-              assert "fe80::2" in output
-
       start_all()
       machine.wait_for_unit("default.target")
 
