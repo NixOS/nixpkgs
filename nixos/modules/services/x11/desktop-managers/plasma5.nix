@@ -345,6 +345,8 @@ in
       services.accounts-daemon.enable = true;
       # when changing an account picture the accounts-daemon reads a temporary file containing the image which systemsettings5 may place under /tmp
       systemd.services.accounts-daemon.serviceConfig.PrivateTmp = false;
+      # Required by many Gnome programs to work.
+      programs.dconf.enable = mkDefault true;
       services.power-profiles-daemon.enable = mkDefault true;
       services.system-config-printer.enable = mkIf config.services.printing.enable (mkDefault true);
       services.udisks2.enable = true;
