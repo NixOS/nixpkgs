@@ -100,6 +100,35 @@ stdenv.mkDerivation (finalAttrs: {
           grep -q "${finalAttrs.version}" "$out"
           kill -0 "$pid"
         '';
+
+        regression = stdenv.mkDerivation {
+          name = "plv8-regression";
+          inherit (finalAttrs) src patches nativeBuildInputs buildInputs dontConfigure;
+
+          buildPhase = ''
+            runHook preBuild
+
+            # The regression tests need to be run in the order specified in the Makefile.
+            echo -e "include Makefile\nprint_regress_files:\n\t@echo \$(REGRESS)" > Makefile.regress
+            REGRESS_TESTS=$(make -f Makefile.regress print_regress_files)
+
+            ${postgresql}/lib/pgxs/src/test/regress/pg_regress \
+              --bindir='${postgresqlWithSelf}/bin' \
+              --temp-instance=regress-instance \
+              --dbname=contrib_regression \
+              $REGRESS_TESTS
+
+            runHook postBuild
+          '';
+
+          installPhase = ''
+            runHook preInstall
+
+            touch "$out"
+
+            runHook postInstall
+          '';
+        };
       };
   };
 
