@@ -119,7 +119,7 @@ in {
 
     kernels = mkOption {
       type = types.nullOr (types.attrsOf(types.submodule (import ./kernel-options.nix {
-        inherit lib;
+        inherit lib pkgs;
       })));
 
       default = null;

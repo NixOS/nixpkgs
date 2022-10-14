@@ -1,9 +1,11 @@
 # Options that can be used for creating a jupyter kernel.
-{ lib }:
+{ lib, pkgs }:
 
 with lib;
 
 {
+  freeformType = (pkgs.formats.json { }).type;
+
   options = {
 
     displayName = mkOption {
