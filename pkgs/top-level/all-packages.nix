@@ -28167,10 +28167,10 @@ with pkgs;
 
   greetd = recurseIntoAttrs {
     wlgreet = callPackage ../os-specific/linux/wlgreet { };
-    tuigreet = callPackage ../os-specific/linux/tuigreet { };
     dlm = callPackage ../applications/display-managers/greetd/dlm.nix { };
     greetd = callPackage ../applications/display-managers/greetd { };
     gtkgreet = callPackage ../applications/display-managers/greetd/gtkgreet.nix { };
+    tuigreet = callPackage ../applications/display-managers/greetd/tuigreet.nix { };
   };
 
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict {
