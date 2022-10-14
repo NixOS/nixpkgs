@@ -120,13 +120,13 @@
     "version": "2.29.0"
   },
   "azurerm": {
-    "hash": "sha256-3dJ/nXpMYEK7sB6VAnkbUfQRoCsiqXhBkU6gCYBpmHY=",
+    "hash": "sha256-MWbw0E5TtqHaoU9nxeMVrUCPlRE73KYxvC6A6tMrjC0=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/azurerm",
     "repo": "terraform-provider-azurerm",
-    "rev": "v3.26.0",
+    "rev": "v3.27.0",
     "vendorHash": null,
-    "version": "3.26.0"
+    "version": "3.27.0"
   },
   "azurestack": {
     "hash": "sha256-aSwVa7y1AJ6sExx+bO/93oLBNgSBDJjuPYPY8i3C9T0=",
@@ -385,13 +385,13 @@
     "version": "2.2.2"
   },
   "fastly": {
-    "hash": "sha256-CafrOJiDkIrRph8X+EvvBkI1T7j0qUlOnyhrylToJ7s=",
+    "hash": "sha256-WxFkJBi87IvO4a/8bmftMKCc/JcfoQILCtklvr9bcuc=",
     "owner": "fastly",
     "provider-source-address": "registry.terraform.io/fastly/fastly",
     "repo": "terraform-provider-fastly",
-    "rev": "v2.3.3",
+    "rev": "v2.4.0",
     "vendorHash": null,
-    "version": "2.3.3"
+    "version": "2.4.0"
   },
   "flexibleengine": {
     "hash": "sha256-2eXNumT1Hkc33bW635qYr5jxlByX+yZ8zSKRpgKWQJo=",
@@ -423,13 +423,13 @@
     "version": "2.2.0"
   },
   "github": {
-    "hash": "sha256-XivwHkibeaoFTeJRtTF8xqt2IwXbzcKtKwAmwCf8Ll4=",
+    "hash": "sha256-dUL01cuP5fQdPPm6+R1XDQNups5BJC2oq8LSjJ1+tB0=",
     "owner": "integrations",
     "provider-source-address": "registry.terraform.io/integrations/github",
     "repo": "terraform-provider-github",
-    "rev": "v5.4.0",
+    "rev": "v5.5.0",
     "vendorHash": null,
-    "version": "5.4.0"
+    "version": "5.5.0"
   },
   "gitlab": {
     "hash": "sha256-eNd1o0UjG6A9OTRmcJfcPLLtWIJmdZ+viDnSZhyHpgY=",
@@ -615,13 +615,13 @@
     "version": "0.3.0"
   },
   "keycloak": {
-    "hash": "sha256-5IMSUSaSoe+zqwtcL6aQ7PTtLpNiWxYp/J38Zm+Hniw=",
+    "hash": "sha256-1yV3w3hhZf113XMxvpRvr3ADaRcuCl7BCIa5SIZPcCs=",
     "owner": "mrparkers",
     "provider-source-address": "registry.terraform.io/mrparkers/keycloak",
     "repo": "terraform-provider-keycloak",
-    "rev": "v4.0.0",
+    "rev": "v4.0.1",
     "vendorHash": "sha256-nDvnLEOtXkUJFY22pKogOzkWrj4qjyQbdlJ5pa/xnK8=",
-    "version": "4.0.0"
+    "version": "4.0.1"
   },
   "ksyun": {
     "hash": "sha256-sfvmDByxAQbbdPHb9l5tIT5dyu8eA3r63i5FZJYEYTI=",
