@@ -18,7 +18,7 @@ in
   config = mkIf cfg.enable {
     warnings = optionals (isStorePath cfg.tokenFile) [
       ''
-        `services.${svgName}.tokenFile` points to the Nix store and, therefore, is world-readable.
+        `services.${svcName}.tokenFile` points to the Nix store and, therefore, is world-readable.
         Consider using a path outside of the Nix store to keep the token private.
       ''
     ];
