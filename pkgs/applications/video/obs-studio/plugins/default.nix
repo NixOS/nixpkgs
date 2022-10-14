@@ -8,7 +8,7 @@
 {
   looking-glass-obs = callPackage ./looking-glass-obs.nix { };
 
-  obs-backgroundremoval = callPackage ./obs-backgroundremoval.nix { };
+  obs-backgroundremoval = callPackage ./obs-backgroundremoval { };
 
   obs-gstreamer = callPackage ./obs-gstreamer.nix { };
 
