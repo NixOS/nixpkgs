@@ -27324,6 +27324,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
+  cyan = callPackage ../applications/graphics/cyan {};
+
   cyanrip = callPackage ../applications/audio/cyanrip { };
 
   centerim = callPackage ../applications/networking/instant-messengers/centerim { };
