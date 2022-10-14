@@ -133,10 +133,10 @@ with pkgs;
       sourceVersion = {
         major = "3";
         minor = "10";
-        patch = "7";
+        patch = "8";
         suffix = "";
       };
-      sha256 = "sha256-bu2EFbdRb7LyYJBttdSN1MBqzAyySn1swVKWpgTc3Eg=";
+      sha256 = "sha256-ajDs3lnEcEgBPrWmWMm13sJ3ID0nk2Z/V433Zx9/A/M=";
     };
   };
 
