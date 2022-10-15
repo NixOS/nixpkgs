@@ -1918,9 +1918,7 @@ with pkgs;
   };
   termite-unwrapped = callPackage ../applications/terminal-emulators/termite { };
 
-  termonad-with-packages = callPackage ../applications/terminal-emulators/termonad { };
-
-  termonad = termonad-with-packages;
+  termonad = callPackage ../applications/terminal-emulators/termonad { };
 
   tilda = callPackage ../applications/terminal-emulators/tilda {
     gtk = gtk3;
@@ -3263,7 +3261,8 @@ with pkgs;
 
   cue2pops = callPackage ../tools/cd-dvd/cue2pops { };
 
-  cabal2nix-unwrapped = haskell.lib.compose.justStaticExecutables (haskell.lib.compose.generateOptparseApplicativeCompletion "cabal2nix" haskellPackages.cabal2nix);
+  cabal2nix-unwrapped = haskell.lib.compose.justStaticExecutables
+    (haskellPackages.generateOptparseApplicativeCompletions [ "cabal2nix" ] haskellPackages.cabal2nix);
 
   cabal2nix = symlinkJoin {
     inherit (cabal2nix-unwrapped) name meta;
@@ -4547,7 +4546,7 @@ with pkgs;
 
   nixel = callPackage ../tools/nix/nixel { };
 
-  nix-output-monitor = callPackage ../tools/nix/nix-output-monitor { };
+  nix-output-monitor = callPackage ../tools/nix/nix-output-monitor { haskellPackages = haskell.packages.ghc92; };
 
   nix-template = callPackage ../tools/package-management/nix-template {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -9440,7 +9439,8 @@ with pkgs;
 
   ngrep = callPackage ../tools/networking/ngrep { };
 
-  neuron-notes = haskell.lib.compose.justStaticExecutables (haskell.lib.compose.generateOptparseApplicativeCompletion "neuron" haskellPackages.neuron);
+  neuron-notes = haskell.lib.compose.justStaticExecutables
+    (haskellPackages.generateOptparseApplicativeCompletions [ "neuron" ] haskellPackages.neuron);
 
   ngrok = callPackage ../tools/networking/ngrok { };
 
