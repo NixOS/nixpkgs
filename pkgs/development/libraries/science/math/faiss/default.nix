@@ -10,7 +10,7 @@
 , pythonPackages
 , blas
 , swig
-, addOpenGLRunpath
+, addHardwareRunpath
 , optLevel ? let
     optLevels =
       lib.optional stdenv.hostPlatform.avx2Support "avx2"
@@ -55,8 +55,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [
     cudatoolkit
-    addOpenGLRunpath
-  ] ++ lib.optionals pythonSupport [
+    addHardwareRunpath
+  ] ++ lib.optional pythonSupport [
     pythonPackages.python
   ];
 
@@ -94,8 +94,8 @@ stdenv.mkDerivation {
   '';
 
   fixupPhase = lib.optionalString (pythonSupport && cudaSupport) ''
-    addOpenGLRunpath $out/${pythonPackages.python.sitePackages}/faiss/*.so
-    addOpenGLRunpath $demos/bin/*
+    addHardwareRunpath $out/${pythonPackages.python.sitePackages}/faiss/*.so
+    addHardwareRunpath $demos/bin/*
   '';
 
   passthru = {

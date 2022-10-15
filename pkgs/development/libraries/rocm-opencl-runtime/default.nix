@@ -2,7 +2,7 @@
 , lib
 , fetchFromGitHub
 , writeScript
-, addOpenGLRunpath
+, addHardwareRunpath
 , cmake
 , rocm-cmake
 , clang
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   # Fix the ICD installation path for NixOS
   postPatch = ''
     substituteInPlace khronos/icd/loader/linux/icd_linux.c \
-      --replace 'ICD_VENDOR_PATH' '"${addOpenGLRunpath.driverLink}/etc/OpenCL/vendors/"'
+      --replace 'ICD_VENDOR_PATH' '"${addHardwareRunpath.driverLink}/etc/OpenCL/vendors/"'
   '';
 
   passthru.updateScript = writeScript "update.sh" ''

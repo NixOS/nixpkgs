@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, addOpenGLRunpath
+, addHardwareRunpath
 , buildPythonPackage
 , fetchFromGitHub
 , cmake
@@ -53,7 +53,7 @@ buildPythonPackage rec {
 
     fixRunPath $out/lib/libgpuarray.so
   '' + lib.optionalString cudaSupport ''
-    addOpenGLRunpath $out/lib/libgpuarray.so
+    addHardwareRunpath $out/lib/libgpuarray.so
   '';
 
   propagatedBuildInputs = [
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cmake
   ] ++ lib.optionals cudaSupport [
-    addOpenGLRunpath
+    addHardwareRunpath
   ];
 
 

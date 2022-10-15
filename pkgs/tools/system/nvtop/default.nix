@@ -7,14 +7,14 @@
 , cudatoolkit
 , libdrm
 , ncurses
-, addOpenGLRunpath
+, addHardwareRunpath
 , amd ? true
 , nvidia ? true
 }:
 
 let
   pname-suffix = if amd && nvidia then "" else if amd then "-amd" else "-nvidia";
-  nvidia-postFixup = "addOpenGLRunpath $out/bin/nvtop";
+  nvidia-postFixup = "addHardwareRunpath $out/bin/nvtop";
   libPath = lib.makeLibraryPath [ libdrm ncurses ];
   amd-postFixup = ''
     patchelf \
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ++ optional (!nvidia) "-DNVIDIA_SUPPORT=OFF"
   ++ optional amd "-DLibdrm_INCLUDE_DIRS=${libdrm}/lib/stubs/libdrm.so.2"
   ;
-  nativeBuildInputs = [ cmake gtest ] ++ lib.optional nvidia addOpenGLRunpath;
+  nativeBuildInputs = [ cmake gtest ] ++ lib.optional nvidia addHardwareRunpath;
   buildInputs = with lib; [ ncurses ]
     ++ optional nvidia cudatoolkit
     ++ optional amd libdrm

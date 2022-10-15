@@ -6,7 +6,7 @@
 , targetPlatform
 , unzip
 , appimage-run
-, addOpenGLRunpath
+, addHardwareRunpath
 , libGLU
 , xorg
 , buildFHSUserEnv
@@ -25,7 +25,7 @@ let
       pname = "davinci-resolve";
       version = "17.4.3";
 
-      nativeBuildInputs = [ unzip appimage-run addOpenGLRunpath ];
+      nativeBuildInputs = [ unzip appimage-run addHardwareRunpath ];
 
       # Pretty sure, there are missing dependencies ...
       buildInputs = [ libGLU xorg.libXxf86vm ];
@@ -117,14 +117,14 @@ let
       postFixup = ''
         for program in $out/bin/*; do
           isELF "$program" || continue
-          addOpenGLRunpath "$program"
+          addHardwareRunpath "$program"
         done
 
         for program in $out/libs/*; do
           isELF "$program" || continue
           if [[ "$program" != *"libcudnn_cnn_infer"* ]];then
             echo $program
-            addOpenGLRunpath "$program"
+            addHardwareRunpath "$program"
           fi
         done
       '';

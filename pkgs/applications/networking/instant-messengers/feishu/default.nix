@@ -1,4 +1,4 @@
-{ addOpenGLRunpath
+{ addHardwareRunpath
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -159,7 +159,7 @@ stdenv.mkDerivation rec {
     for executable in $out/opt/bytedance/feishu/{feishu,vulcan/vulcan}; do
       wrapProgram $executable \
         --prefix XDG_DATA_DIRS    :  "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-        --prefix LD_LIBRARY_PATH  :  ${rpath}:$out/opt/bytedance/feishu:${addOpenGLRunpath.driverLink}/share \
+        --prefix LD_LIBRARY_PATH  :  ${rpath}:$out/opt/bytedance/feishu:${addHardwareRunpath.driverLink}/share \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
         ${lib.optionalString (commandLineArgs!="") "--add-flags ${lib.escapeShellArg commandLineArgs}"}
     done

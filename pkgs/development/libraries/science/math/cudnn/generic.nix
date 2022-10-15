@@ -47,7 +47,7 @@ stdenv.mkDerivation {
   };
 
   # Check and normalize Runpath against DT_NEEDED using autoPatchelf.
-  # Prepend /run/opengl-driver/lib using addOpenGLRunpath for dlopen("libcudacuda.so")
+  # Prepend /run/opengl-driver/lib using addHardwareRunpath for dlopen("libcudacuda.so")
   nativeBuildInputs = [
     autoPatchelfHook
     autoAddOpenGLRunpathHook

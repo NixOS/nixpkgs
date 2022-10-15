@@ -4,7 +4,7 @@ echo "Sourcing auto-add-opengl-runpath-hook"
 autoAddOpenGLRunpathPhase  () {
     # TODO: support multiple outputs
     for file in $(find ${out,lib,bin} -type f); do
-        addOpenGLRunpath $file
+        addHardwareRunpath $file
     done
 }
 

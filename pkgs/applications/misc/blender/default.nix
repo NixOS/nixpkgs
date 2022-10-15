@@ -3,7 +3,7 @@
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio2, openjpeg, python310Packages
 , openvdb, libXxf86vm, tbb, alembic
-, zlib, zstd, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
+, zlib, zstd, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addHardwareRunpath
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
 , hipSupport ? false, hip # comes with a significantly larger closure size
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
 
   nativeBuildInputs = [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev ]
-    ++ optionals cudaSupport [ addOpenGLRunpath ];
+    ++ optionals cudaSupport [ addHardwareRunpath ];
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff
@@ -157,7 +157,7 @@ stdenv.mkDerivation rec {
   postFixup = optionalString cudaSupport ''
     for program in $out/bin/blender $out/bin/.blender-wrapped; do
       isELF "$program" || continue
-      addOpenGLRunpath "$program"
+      addHardwareRunpath "$program"
     done
   '';
 

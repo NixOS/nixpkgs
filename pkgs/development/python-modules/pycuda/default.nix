@@ -1,5 +1,5 @@
 { buildPythonPackage
-, addOpenGLRunpath
+, addHardwareRunpath
 , fetchPypi
 , fetchFromGitHub
 , Mako
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   postFixup = ''
     find $out/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       echo "setting opengl runpath for $lib..."
-      addOpenGLRunpath "$lib"
+      addHardwareRunpath "$lib"
     done
   '';
 
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addHardwareRunpath
   ];
 
   propagatedBuildInputs = [

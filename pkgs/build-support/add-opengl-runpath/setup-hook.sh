@@ -5,7 +5,7 @@
 # actually sets RUNPATH not RPATH, which applies only to dependencies of the binary
 # it set on (including for dlopen), so the RUNPATH must indeed be set on these
 # libraries and would not work if set only on executables.
-addOpenGLRunpath() {
+addHardwareRunpath() {
     local forceRpath=
 
     while [ $# -gt 0 ]; do
@@ -13,7 +13,7 @@ addOpenGLRunpath() {
             --) shift; break;;
             --force-rpath) shift; forceRpath=1;;
             --*)
-                echo "addOpenGLRunpath: ERROR: Invalid command line" \
+                echo "addHardwareRunpath: ERROR: Invalid command line" \
                      "argument: $1" >&2
                 return 1;;
             *) break;;

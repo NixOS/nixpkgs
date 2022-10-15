@@ -47,11 +47,11 @@ let
 
     nccl = final.callPackage ../development/libraries/science/math/nccl { };
 
-    autoAddOpenGLRunpathHook = final.callPackage ( { makeSetupHook, addOpenGLRunpath }:
+    autoAddOpenGLRunpathHook = final.callPackage ( { makeSetupHook, addHardwareRunpath }:
       makeSetupHook {
         name = "auto-add-opengl-runpath-hook";
         deps = [
-          addOpenGLRunpath
+          addHardwareRunpath
         ];
       } ../development/compilers/cudatoolkit/auto-add-opengl-runpath-hook.sh
     ) {};

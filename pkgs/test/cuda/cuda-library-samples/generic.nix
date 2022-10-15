@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, cmake, addOpenGLRunpath
+, cmake, addHardwareRunpath
 , cudatoolkit
 , cutensor
 }:
@@ -14,11 +14,11 @@ let
   };
   commonAttrs = {
     version = lib.strings.substring 0 7 rev + "-" + lib.versions.majorMinor cudatoolkit.version;
-    nativeBuildInputs = [ cmake addOpenGLRunpath ];
+    nativeBuildInputs = [ cmake addHardwareRunpath ];
     buildInputs = [ cudatoolkit ];
     postFixup = ''
       for exe in $out/bin/*; do
-        addOpenGLRunpath $exe
+        addHardwareRunpath $exe
       done
     '';
     meta = {

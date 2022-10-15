@@ -214,7 +214,7 @@ with pkgs;
 
   chkservice = callPackage ../tools/admin/chkservice { };
 
-  addOpenGLRunpath = callPackage ../build-support/add-opengl-runpath { };
+  addHardwareRunpath = callPackage ../build-support/add-opengl-runpath { };
 
   quickemu = callPackage ../development/quickemu { };
 

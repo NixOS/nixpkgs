@@ -2,7 +2,7 @@
 , lib
 , stdenv
 , fetchFromGitHub
-, addOpenGLRunpath
+, addHardwareRunpath
 , docutils
 , perl
 , pkg-config
@@ -124,7 +124,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optional (!swiftSupport) "--disable-macos-cocoa-cb";
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addHardwareRunpath
     docutils
     perl
     pkg-config
@@ -198,9 +198,9 @@ in stdenv.mkDerivation rec {
   '';
 
   # Set RUNPATH so that libcuda in /run/opengl-driver(-32)/lib can be found.
-  # See the explanation in addOpenGLRunpath.
+  # See the explanation in addHardwareRunpath.
   postFixup = lib.optionalString stdenv.isLinux ''
-    addOpenGLRunpath $out/bin/mpv
+    addHardwareRunpath $out/bin/mpv
   '';
 
   passthru = {

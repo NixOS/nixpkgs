@@ -2,7 +2,7 @@
 , fetchpatch
 , openblas, blas, lapack, opencv3, libzip, boost, protobuf, mpi
 , onebitSGDSupport ? false
-, cudaSupport ? false, cudaPackages ? {}, addOpenGLRunpath, cudatoolkit, nvidia_x11
+, cudaSupport ? false, cudaPackages ? {}, addHardwareRunpath, cudatoolkit, nvidia_x11
 , cudnnSupport ? cudaSupport
 }:
 
@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
                 'SetTotalBytesLimit(limit)'
   '';
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional cudaSupport addOpenGLRunpath;
+  nativeBuildInputs = [ cmake ] ++ lib.optional cudaSupport addHardwareRunpath;
 
   # Force OpenMPI to use g++ in PATH.
   OMPI_CXX = "g++";
@@ -115,7 +115,7 @@ in stdenv.mkDerivation rec {
 
   postFixup = lib.optionalString cudaSupport ''
     for lib in $out/lib/*; do
-      addOpenGLRunpath "$lib"
+      addHardwareRunpath "$lib"
     done
   '';
 

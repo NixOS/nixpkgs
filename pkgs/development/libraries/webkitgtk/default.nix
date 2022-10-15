@@ -60,7 +60,7 @@
 , xdg-dbus-proxy
 , substituteAll
 , glib
-, addOpenGLRunpath
+, addHardwareRunpath
 , enableGeoLocation ? true
 , withLibsecret ? true
 , systemdSupport ? stdenv.isLinux
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     (substituteAll {
       src = ./fix-bubblewrap-paths.patch;
       inherit (builtins) storeDir;
-      inherit (addOpenGLRunpath) driverLink;
+      inherit (addHardwareRunpath) driverLink;
     })
 
     ./libglvnd-headers.patch

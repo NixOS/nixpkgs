@@ -29,7 +29,7 @@
 , glfw
 , nlohmann_json
 , xorg
-, addOpenGLRunpath
+, addHardwareRunpath
 , gamescopeSupport ? true # build mangoapp and mangohudctl
 }:
 
@@ -174,12 +174,12 @@ in stdenv.mkDerivation rec {
   # Vulkan applications without requiring MangoHud to be installed
   postFixup = ''
     wrapProgram "$out/bin/mangohud" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ addOpenGLRunpath.driverLink ]} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ addHardwareRunpath.driverLink ]} \
       --prefix XDG_DATA_DIRS : "$out/share"
   '' + lib.optionalString (gamescopeSupport) ''
     if [[ -e "$out/bin/mangoapp" ]]; then
       wrapProgram "$out/bin/mangoapp" \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ addOpenGLRunpath.driverLink ]} \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ addHardwareRunpath.driverLink ]} \
         --prefix XDG_DATA_DIRS : "$out/share"
     fi
   '';

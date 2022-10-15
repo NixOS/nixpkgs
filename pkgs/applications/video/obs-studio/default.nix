@@ -3,7 +3,7 @@
 , stdenv
 , mkDerivation
 , fetchFromGitHub
-, addOpenGLRunpath
+, addHardwareRunpath
 , cmake
 , fdk_aac
 , ffmpeg_4
@@ -62,7 +62,7 @@ mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addHardwareRunpath
     cmake
     pkg-config
     wrapGAppsHook
@@ -128,8 +128,8 @@ mkDerivation rec {
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
-    addOpenGLRunpath $out/lib/lib*.so
-    addOpenGLRunpath $out/lib/obs-plugins/*.so
+    addHardwareRunpath $out/lib/lib*.so
+    addHardwareRunpath $out/lib/obs-plugins/*.so
   '';
 
   meta = with lib; {

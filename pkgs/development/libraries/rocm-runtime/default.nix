@@ -2,7 +2,7 @@
 , lib
 , fetchFromGitHub
 , writeScript
-, addOpenGLRunpath
+, addHardwareRunpath
 , cmake
 , pkg-config
 , xxd

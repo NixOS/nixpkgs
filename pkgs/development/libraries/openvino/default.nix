@@ -1,5 +1,5 @@
 { lib
-, addOpenGLRunpath
+, addHardwareRunpath
 , autoPatchelfHook
 , stdenv
 , fetchFromGitHub
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     autoPatchelfHook
-    addOpenGLRunpath
+    addHardwareRunpath
     unzip
   ];
 
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Link to OpenCL
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      addOpenGLRunpath "$lib"
+      addHardwareRunpath "$lib"
     done
   '';
 

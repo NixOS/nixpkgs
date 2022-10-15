@@ -3,7 +3,7 @@
 , stdenv
 
   # Build-time dependencies:
-, addOpenGLRunpath
+, addHardwareRunpath
 , bazel_5
 , binutils
 , buildBazelPackage
@@ -303,12 +303,12 @@ buildPythonPackage {
     ln -s ${cudatoolkit}/bin/ptxas $out/bin/ptxas
 
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      addOpenGLRunpath "$lib"
+      addHardwareRunpath "$lib"
       patchelf --set-rpath "${cudatoolkit}/lib:${cudatoolkit.lib}/lib:${cudnn}/lib:${nccl}/lib:$(patchelf --print-rpath "$lib")" "$lib"
     done
   '';
 
-  nativeBuildInputs = lib.optional cudaSupport addOpenGLRunpath;
+  nativeBuildInputs = lib.optional cudaSupport addHardwareRunpath;
 
   propagatedBuildInputs = [
     absl-py

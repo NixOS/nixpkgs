@@ -5,7 +5,7 @@ args@
 , name ? ""
 , developerProgram ? false
 , runPatches ? []
-, addOpenGLRunpath
+, addHardwareRunpath
 , alsa-lib
 , expat
 , fetchurl
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "doc" ];
 
-  nativeBuildInputs = [ perl makeWrapper addOpenGLRunpath ];
+  nativeBuildInputs = [ perl makeWrapper addHardwareRunpath ];
   buildInputs = [ gdk-pixbuf ]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
   runtimeDependencies = [
     ncurses5 expat python27 zlib glibc
@@ -220,15 +220,15 @@ stdenv.mkDerivation rec {
 
   # Set RPATH so that libcuda and other libraries in
   # /run/opengl-driver(-32)/lib can be found. See the explanation in
-  # addOpenGLRunpath.  Don't try to figure out which libraries really need
+  # addHardwareRunpath.  Don't try to figure out which libraries really need
   # it, just patch all (but not the stubs libraries). Note that
   # --force-rpath prevents changing RPATH (set above) to RUNPATH.
   postFixup = ''
-    addOpenGLRunpath --force-rpath {$out,$lib}/lib/lib*.so
+    addHardwareRunpath --force-rpath {$out,$lib}/lib/lib*.so
   '' + lib.optionalString (lib.versionAtLeast version "11") ''
-    addOpenGLRunpath $out/cuda_sanitizer_api/compute-sanitizer/*
-    addOpenGLRunpath $out/cuda_sanitizer_api/compute-sanitizer/x86/*
-    addOpenGLRunpath $out/target-linux-x64/*
+    addHardwareRunpath $out/cuda_sanitizer_api/compute-sanitizer/*
+    addHardwareRunpath $out/cuda_sanitizer_api/compute-sanitizer/x86/*
+    addHardwareRunpath $out/target-linux-x64/*
   '';
 
   # cuda-gdb doesn't run correctly when not using sandboxing, so

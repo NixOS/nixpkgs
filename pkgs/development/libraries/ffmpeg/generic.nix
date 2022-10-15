@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, fetchurl, pkg-config, addOpenGLRunpath, perl, texinfo, yasm
+{ lib, stdenv, buildPackages, fetchurl, pkg-config, addHardwareRunpath, perl, texinfo, yasm
 , alsa-lib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
 , libssh, libtheora, libva, libdrm, libvorbis, xz, soxr
 , x264, x265, xvidcore, zimg, zlib, libopus, speex, nv-codec-headers, dav1d
@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
   ] ++ optional stdenv.cc.isClang "--cc=clang");
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ addOpenGLRunpath perl pkg-config texinfo yasm ];
+  nativeBuildInputs = [ addHardwareRunpath perl pkg-config texinfo yasm ];
 
   buildInputs = [
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libssh libtheora
@@ -189,9 +189,9 @@ stdenv.mkDerivation rec {
     done
   '' + optionalString stdenv.isLinux ''
     # Set RUNPATH so that libnvcuvid and libcuda in /run/opengl-driver(-32)/lib can be found.
-    # See the explanation in addOpenGLRunpath.
-    addOpenGLRunpath $out/lib/libavcodec.so
-    addOpenGLRunpath $out/lib/libavutil.so
+    # See the explanation in addHardwareRunpath.
+    addHardwareRunpath $out/lib/libavcodec.so
+    addHardwareRunpath $out/lib/libavutil.so
   '';
 
   installFlags = [ "install-man" ];

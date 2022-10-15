@@ -4,7 +4,7 @@
 , cudatoolkit
 , fetchurl
 , autoPatchelfHook
-, addOpenGLRunpath
+, addHardwareRunpath
 
 , version
 , hash
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    addOpenGLRunpath
+    addHardwareRunpath
   ];
 
   buildInputs = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   ];
 
   # Set RUNPATH so that libcuda in /run/opengl-driver(-32)/lib can be found.
-  # See the explanation in addOpenGLRunpath.
+  # See the explanation in addHardwareRunpath.
   installPhase = ''
     mkdir -p "$out" "$dev"
     mv include "$dev"
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
 
     function finalRPathFixups {
       for lib in $out/lib/lib*.so; do
-        addOpenGLRunpath $lib
+        addHardwareRunpath $lib
       done
     }
     postFixupHooks+=(finalRPathFixups)

@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
-, addOpenGLRunpath
+, addHardwareRunpath
 , cudatoolkit
 , pkg-config
 , sha256
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ pkg-config addOpenGLRunpath ];
+  nativeBuildInputs = [ pkg-config addHardwareRunpath ];
 
   buildInputs = [ cudatoolkit ];
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     for exe in $out/bin/*; do
-      addOpenGLRunpath $exe
+      addHardwareRunpath $exe
     done
   '';
 

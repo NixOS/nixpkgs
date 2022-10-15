@@ -13,7 +13,7 @@
 , substituteAll
 
 # CUDA-only dependencies:
-, addOpenGLRunpath ? null
+, addHardwareRunpath ? null
 , cudaPackages ? {}
 
 # CUDA flags:
@@ -41,7 +41,7 @@ in buildPythonPackage rec {
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
   nativeBuildInputs = lib.optionals cudaSupport [
-    addOpenGLRunpath
+    addHardwareRunpath
   ];
 
   propagatedBuildInputs = [
@@ -65,7 +65,7 @@ in buildPythonPackage rec {
 
   postFixup = lib.optionalString cudaSupport ''
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      addOpenGLRunpath "$lib"
+      addHardwareRunpath "$lib"
       patchelf --set-rpath "${cudatoolkit}/lib:${cudatoolkit.lib}/lib:$(patchelf --print-rpath "$lib")" "$lib"
     done
   '';

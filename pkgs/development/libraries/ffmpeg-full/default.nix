@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, ffmpeg, addOpenGLRunpath, pkg-config, perl, texinfo, yasm
+{ lib, stdenv, buildPackages, ffmpeg, addHardwareRunpath, pkg-config, perl, texinfo, yasm
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
  */
@@ -435,7 +435,7 @@ stdenv.mkDerivation rec {
     "--cxx=clang++"
   ];
 
-  nativeBuildInputs = [ addOpenGLRunpath perl pkg-config texinfo yasm ];
+  nativeBuildInputs = [ addHardwareRunpath perl pkg-config texinfo yasm ];
 
   buildInputs = [
     bzip2 celt dav1d fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
@@ -475,9 +475,9 @@ stdenv.mkDerivation rec {
 
   postFixup = optionalString stdenv.isLinux ''
     # Set RUNPATH so that libnvcuvid and libcuda in /run/opengl-driver(-32)/lib can be found.
-    # See the explanation in addOpenGLRunpath.
-    addOpenGLRunpath $out/lib/libavcodec.so
-    addOpenGLRunpath $out/lib/libavutil.so
+    # See the explanation in addHardwareRunpath.
+    addHardwareRunpath $out/lib/libavcodec.so
+    addHardwareRunpath $out/lib/libavutil.so
   '';
 
   enableParallelBuilding = true;

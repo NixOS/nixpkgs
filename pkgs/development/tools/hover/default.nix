@@ -9,7 +9,7 @@
 , writeScript
 , xorg
 , libglvnd
-, addOpenGLRunpath
+, addHardwareRunpath
 , makeWrapper
 , gcc
 , go
@@ -55,7 +55,7 @@ let
       sha256 = "sha256-ch59Wx4g72u7x99807ppURI4I+5aJ/W8Zr35q8X68v4=";
     };
 
-    nativeBuildInputs = [ addOpenGLRunpath makeWrapper ];
+    nativeBuildInputs = [ addHardwareRunpath makeWrapper ];
 
     buildInputs = libs;
 
@@ -79,7 +79,7 @@ let
     '';
 
     postFixup = ''
-      addOpenGLRunpath $out/bin/hover
+      addHardwareRunpath $out/bin/hover
     '';
   };
 

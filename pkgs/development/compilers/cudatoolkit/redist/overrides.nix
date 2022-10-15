@@ -21,7 +21,7 @@ in (lib.filterAttrs (attr: _: (prev ? "${attr}")) {
   ];
 
   cuda_nvprof = prev.cuda_nvprof.overrideAttrs (oldAttrs: {
-    nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ pkgs.addOpenGLRunpath ];
+    nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ pkgs.addHardwareRunpath ];
     buildInputs = oldAttrs.buildInputs ++ [ prev.cuda_cupti ];
     # libcuda needs to be resolved during runtime
     autoPatchelfIgnoreMissingDeps = true;
@@ -49,7 +49,7 @@ in (lib.filterAttrs (attr: _: (prev ? "${attr}")) {
 
   nsight_systems = prev.nsight_systems.overrideAttrs (oldAttrs: {
     nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [
-      pkgs.addOpenGLRunpath
+      pkgs.addHardwareRunpath
       pkgs.qt5.wrapQtAppsHook
     ];
     buildInputs = oldAttrs.buildInputs ++ [

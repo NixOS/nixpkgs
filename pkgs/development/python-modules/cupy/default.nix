@@ -2,7 +2,7 @@
 , fetchPypi, isPy3k, cython
 , fastrlock, numpy, six, wheel, pytestCheckHook, mock, setuptools
 , cudaPackages
-, addOpenGLRunpath
+, addHardwareRunpath
 }:
 
 let
@@ -29,7 +29,7 @@ in buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addHardwareRunpath
     cython
   ];
 
@@ -58,7 +58,7 @@ in buildPythonPackage rec {
 
   postFixup = ''
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      addOpenGLRunpath "$lib"
+      addHardwareRunpath "$lib"
     done
   '';
 

@@ -14,7 +14,7 @@
 #   * https://github.com/google/jax/issues/5723#issuecomment-913038780
 
 { absl-py
-, addOpenGLRunpath
+, addHardwareRunpath
 , autoPatchelfHook
 , buildPythonPackage
 , config
@@ -98,7 +98,7 @@ buildPythonPackage rec {
 
   # Prebuilt wheels are dynamically linked against things that nix can't find.
   # Run `autoPatchelfHook` to automagically fix them.
-  nativeBuildInputs = [ autoPatchelfHook ] ++ lib.optional cudaSupport addOpenGLRunpath;
+  nativeBuildInputs = [ autoPatchelfHook ] ++ lib.optional cudaSupport addHardwareRunpath;
   # Dynamic link dependencies
   buildInputs = [ stdenv.cc.cc ];
 
@@ -114,7 +114,7 @@ buildPythonPackage rec {
   preInstallCheck = lib.optional cudaSupport ''
     shopt -s globstar
 
-    addOpenGLRunpath $out/**/*.so
+    addHardwareRunpath $out/**/*.so
 
     for file in $out/**/*.so; do
       rpath=$(patchelf --print-rpath $file)

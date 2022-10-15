@@ -17,7 +17,7 @@
 , pcre
 , automake
 , autoconf
-, addOpenGLRunpath
+, addHardwareRunpath
 , waylandSupport ? false
 , wayland
 }:
@@ -47,7 +47,7 @@ mkDerivation rec {
   # TODO: figure out how to make cmake recognise pyside2
   ++ lib.optional waylandSupport wayland;
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config bison pcre automake autoconf addOpenGLRunpath ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config bison pcre automake autoconf addHardwareRunpath ];
 
   postUnpack = ''
     cp -r ${custom_swig} swig
@@ -78,7 +78,7 @@ mkDerivation rec {
 
   # The only documentation for this so far is in pkgs/build-support/add-opengl-runpath/setup-hook.sh
   postFixup = ''
-    addOpenGLRunpath $out/lib/librenderdoc.so
+    addHardwareRunpath $out/lib/librenderdoc.so
   '';
 
   passthru.updateScript = nix-update-script {

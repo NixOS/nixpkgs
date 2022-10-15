@@ -27,7 +27,7 @@
 , python
 , keras-applications
 , keras-preprocessing
-, addOpenGLRunpath
+, addHardwareRunpath
 , astunparse
 , flatbuffers
 , h5py
@@ -82,7 +82,7 @@ in buildPythonPackage {
     ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
 
   # remove patchelfUnstable once patchelf 0.14 with https://github.com/NixOS/patchelf/pull/256 becomes the default
-  nativeBuildInputs = [ wheel ] ++ lib.optionals cudaSupport [ addOpenGLRunpath patchelfUnstable ];
+  nativeBuildInputs = [ wheel ] ++ lib.optionals cudaSupport [ addHardwareRunpath patchelfUnstable ];
 
   preConfigure = ''
     unset SOURCE_DATE_EPOCH
@@ -166,7 +166,7 @@ in buildPythonPackage {
         chmod a+rx "$lib"
         patchelf --set-rpath "$rrPath" "$lib"
         ${lib.optionalString cudaSupport ''
-          addOpenGLRunpath "$lib"
+          addHardwareRunpath "$lib"
         ''}
       done
     '';

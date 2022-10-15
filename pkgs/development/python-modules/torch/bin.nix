@@ -6,7 +6,7 @@
 , isPy39
 , isPy310
 , python
-, addOpenGLRunpath
+, addHardwareRunpath
 , future
 , numpy
 , patchelf
@@ -34,7 +34,7 @@ in buildPythonPackage {
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addHardwareRunpath
     patchelf
   ];
 
@@ -58,7 +58,7 @@ in buildPythonPackage {
     find $out/${python.sitePackages}/torch/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       echo "setting rpath for $lib..."
       patchelf --set-rpath "${rpath}:$out/${python.sitePackages}/torch/lib" "$lib"
-      addOpenGLRunpath "$lib"
+      addHardwareRunpath "$lib"
     done
   '';
 

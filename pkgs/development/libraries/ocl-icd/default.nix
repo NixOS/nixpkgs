@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , ruby
 , opencl-headers
-, addOpenGLRunpath
+, addHardwareRunpath
 , autoreconfHook
 }:
 
