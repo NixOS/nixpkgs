@@ -3,19 +3,16 @@
 
 buildGoModule rec {
   pname = "matrix-dendrite";
-  version = "0.10.1";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "dendrite";
     rev = "v${version}";
-    sha256 = "sha256-o+vdxjxbgTPhXtmjrMXf/kBGYaaF3nvVnrG+PGnaM70=";
+    sha256 = "sha256-ziKVv5ql1gIAIYpsRCV9f9y711hYz24M1Z+mGWO1vqs=";
   };
 
-  vendorSha256 = "sha256-sd2frDxtMd0YUVCCQGaNYU7KopZQC1Ld5OHnjttTrgA=";
-
-  # some tests are racy, re-enable once upstream has fixed them
-  doCheck = false;
+  vendorSha256 = "sha256-p1UmHIM4h6oe5PRSPD8rtEJpwypTxN1IHzge0Me/9mQ=";
 
   checkInputs = [
     postgresqlTestHook
@@ -37,6 +34,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://matrix-org.github.io/dendrite";
     description = "A second-generation Matrix homeserver written in Go";
+    changelog = "https://github.com/matrix-org/dendrite/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = teams.matrix.members;
     platforms = platforms.unix;

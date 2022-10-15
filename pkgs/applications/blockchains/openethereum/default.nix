@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , rustPlatform
 , cmake
-, llvmPackages
 , openssl
 , pkg-config
 , stdenv

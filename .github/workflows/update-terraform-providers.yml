@@ -34,12 +34,16 @@ jobs:
             --argstr keep-going true \
             --argstr max-workers 2 \
             --argstr path terraform-providers
+      - name: clean repo
+        run: |
           git clean -f
       - name: create PR
         uses: peter-evans/create-pull-request@v4
         with:
           body: |
             Automatic update by [update-terraform-providers](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/update-terraform-providers.yml) action.
+
+            https://github.com/NixOS/nixpkgs/actions/runs/${{ github.run_id }}
 
             Check that all providers build with:
             ```

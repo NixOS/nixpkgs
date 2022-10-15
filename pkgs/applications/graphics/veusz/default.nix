@@ -1,6 +1,5 @@
 { python3Packages
 , qtbase
-, ghostscript
 , wrapQtAppsHook
 , lib
 }:

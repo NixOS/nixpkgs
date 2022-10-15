@@ -1580,7 +1580,15 @@ with pkgs;
 
   melonDS = libsForQt5.callPackage ../applications/emulators/melonDS { };
 
-  mgba = libsForQt5.callPackage ../applications/emulators/mgba { };
+  mgba = callPackage ../applications/emulators/mgba {
+    ffmpeg = ffmpeg_4;
+    lua = lua5_4;
+    inherit (libsForQt5)
+      qtbase
+      qtmultimedia
+      qttools
+      wrapQtAppsHook;
+  };
 
   mupen64plus = callPackage ../applications/emulators/mupen64plus { };
 
@@ -2599,6 +2607,8 @@ with pkgs;
   git-fire = callPackage ../tools/misc/git-fire { };
 
   git-privacy = callPackage ../development/tools/git-privacy { };
+
+  git-publish = python3Packages.callPackage ../applications/version-management/git-and-tools/git-publish { };
 
   git-repo-updater = python3Packages.callPackage ../development/tools/git-repo-updater { };
 
@@ -4766,6 +4776,8 @@ with pkgs;
   soju = callPackage ../applications/networking/soju { };
 
   spacevim = callPackage ../applications/editors/spacevim { };
+
+  srvc = callPackage ../applications/version-management/srvc { };
 
   ssmsh = callPackage ../tools/admin/ssmsh { };
 
@@ -11285,6 +11297,8 @@ with pkgs;
   smesh = callPackage ../development/libraries/smesh {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
+
+  boost-sml = callPackage ../development/libraries/boost-ext/boost-sml {};
 
   smu = callPackage ../tools/text/smu { };
 
@@ -23924,12 +23938,14 @@ with pkgs;
     postgresql_12
     postgresql_13
     postgresql_14
+    postgresql_15
   ;
   postgresql = postgresql_14.override { this = postgresql; };
   postgresqlPackages = recurseIntoAttrs postgresql.pkgs;
   postgresql11Packages = recurseIntoAttrs postgresql_11.pkgs;
   postgresql12Packages = recurseIntoAttrs postgresql_12.pkgs;
   postgresql13Packages = recurseIntoAttrs postgresql_13.pkgs;
+  postgresql15Packages = recurseIntoAttrs postgresql_15.pkgs;
   postgresql14Packages = postgresqlPackages;
 
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
@@ -27312,6 +27328,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
+  cyan = callPackage ../applications/graphics/cyan {};
+
   cyanrip = callPackage ../applications/audio/cyanrip { };
 
   centerim = callPackage ../applications/networking/instant-messengers/centerim { };
@@ -27894,6 +27912,8 @@ with pkgs;
   helix = callPackage ../applications/editors/helix { };
 
   icesl = callPackage ../applications/misc/icesl { };
+
+  karlender = callPackage ../applications/office/karlender { };
 
   keepassx = callPackage ../applications/misc/keepassx { };
   keepassx2 = callPackage ../applications/misc/keepassx/2.0.nix { };
@@ -28595,6 +28615,8 @@ with pkgs;
   mi2ly = callPackage ../applications/audio/mi2ly {};
 
   moe =  callPackage ../applications/editors/moe { };
+
+  pattypan = callPackage ../applications/misc/pattypan {};
 
   praat = callPackage ../applications/audio/praat { };
 
@@ -33282,6 +33304,12 @@ with pkgs;
 
   taro = callPackage ../applications/blockchains/taro { };
 
+  inherit (callPackages ../applications/blockchains/teos {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+  })
+    teos
+    teos-watchtower-plugin;
+
   terra-station = callPackage ../applications/blockchains/terra-station { };
 
   tessera = callPackage ../applications/blockchains/tessera { };
@@ -36729,6 +36757,8 @@ with pkgs;
 
   xlockmore = callPackage ../misc/screensavers/xlockmore { };
 
+  xq = callPackage ../tools/misc/xq { };
+
   xtrlock-pam = callPackage ../misc/screensavers/xtrlock-pam { };
 
   sailsd = callPackage ../misc/sailsd { };
@@ -36828,7 +36858,9 @@ with pkgs;
 
   soundmodem = callPackage ../applications/radio/soundmodem {};
 
-  soundOfSorting = callPackage ../misc/sound-of-sorting { };
+  soundOfSorting = callPackage ../misc/sound-of-sorting {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   sourceAndTags = callPackage ../misc/source-and-tags {
     hasktags = haskellPackages.hasktags;

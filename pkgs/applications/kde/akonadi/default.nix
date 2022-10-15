@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, kdepimTeam, substituteAll,
+  mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, shared-mime-info, qtbase, accounts-qt,
   boost, kaccounts-integration, kcompletion, kconfigwidgets, kcrash, kdbusaddons,
   kdesignerplugin, ki18n, kiconthemes, kio, kitemmodels, kwindowsystem, mariadb, qttools,

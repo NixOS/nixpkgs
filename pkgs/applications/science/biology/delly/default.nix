@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, htslib, zlib, bzip2, xz, ncurses, boost }:
+{ lib, stdenv, fetchFromGitHub, htslib, zlib, bzip2, xz, ncurses, boost }:
 
 stdenv.mkDerivation rec {
   pname = "delly";

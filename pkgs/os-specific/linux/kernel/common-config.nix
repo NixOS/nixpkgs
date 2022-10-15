@@ -505,6 +505,11 @@ let
       # Depends on MODULE_SIG and only really helps when you sign your modules
       # and enforce signatures which we don't do by default.
       SECURITY_LOCKDOWN_LSM = option no;
+
+      # provides a register of persistent per-UID keyrings, useful for encrypting storage pools in stratis
+      PERSISTENT_KEYRINGS              = yes;
+      # enable temporary caching of the last request_key() result
+      KEYS_REQUEST_CACHE               = whenAtLeast "5.3" yes;
     } // optionalAttrs (!stdenv.hostPlatform.isAarch32) {
 
       # Detect buffer overflows on the stack

@@ -20,7 +20,6 @@
 , Cocoa
 , unixODBC
 , poppler
-, hdf4
 , hdf5
 , netcdf
 , sqlite
