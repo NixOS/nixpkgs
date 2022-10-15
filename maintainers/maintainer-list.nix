@@ -5240,6 +5240,12 @@
     githubId = 1742172;
     name = "Hamish Hutchings";
   };
+  hanDerPeder = {
+    email = "peder.refsnes@gmail.com";
+    github = "hanDerPeder";
+    githubId = 97645;
+    name = "Peder Refsnes";
+  };
   hanemile = {
     email = "mail@emile.space";
     github = "HanEmile";

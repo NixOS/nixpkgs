@@ -71,4 +71,6 @@ self: super: {
     rum = super.callPackage ./ext/rum.nix { };
 
     wal2json = super.callPackage ./ext/wal2json.nix { };
+
+    mysql_fdw = super.callPackage ./ext/mysql_fdw.nix { };
 }
