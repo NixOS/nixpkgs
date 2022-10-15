@@ -84,6 +84,16 @@ let
         };
       });
 
+      iaqualink = super.iaqualink.overridePythonAttrs (oldAttrs: rec {
+        version = "0.4.1";
+        src = fetchFromGitHub {
+          owner = "flz";
+          repo = "iaqualink-py";
+          rev = "v${version}";
+          hash = "sha256-GDJwPBEU7cteAdYj7eo5tAo0G8AVcQR7KSxLNLhU/XU=";
+        };
+      });
+
       # pytest-aiohttp>0.3.0 breaks home-assistant tests
       pytest-aiohttp = super.pytest-aiohttp.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.0";
