@@ -6360,6 +6360,8 @@ with pkgs;
 
   expect = callPackage ../tools/misc/expect { };
 
+  expected-lite = callPackage ../development/libraries/expected-lite { };
+
   exportarr = callPackage ../servers/monitoring/prometheus/exportarr { };
 
   expliot = callPackage ../tools/security/expliot { };
