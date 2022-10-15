@@ -79,7 +79,7 @@ in import ../make-test-python.nix ({ pkgs, ... }: {
       kernelPackages = lib.mkIf (kernelPackages != null) kernelPackages;
     };
 
-    specialisation.boot-lvm.configuration.virtualisation.bootDevice = "/dev/test_vg/test_lv";
+    specialisation.boot-lvm.configuration.virtualisation.rootDevice = "/dev/test_vg/test_lv";
   };
 
   testScript = ''

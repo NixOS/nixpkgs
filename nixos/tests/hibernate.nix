@@ -63,7 +63,7 @@ in makeTest {
         # Small root disk for installer
         512
       ];
-      virtualisation.bootDevice = "/dev/vdb";
+      virtualisation.rootDevice = "/dev/vdb";
     };
   };
 
