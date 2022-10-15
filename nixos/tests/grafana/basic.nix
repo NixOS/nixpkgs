@@ -19,6 +19,8 @@ let
   };
 
   extraNodeConfs = {
+    sqlite = {};
+
     declarativePlugins = {
       services.grafana.declarativePlugins = [ pkgs.grafanaPlugins.grafana-clock-panel ];
     };
@@ -54,12 +56,7 @@ let
     };
   };
 
-  nodes = builtins.listToAttrs (map (dbName:
-    nameValuePair dbName (mkMerge [
-    baseGrafanaConf
-    (extraNodeConfs.${dbName} or {})
-  ])) [ "sqlite" "declarativePlugins" "postgresql" "mysql" ]);
-
+  nodes = builtins.mapAttrs (_: val: mkMerge [ val baseGrafanaConf ]) extraNodeConfs;
 in {
   name = "grafana-basic";
 
