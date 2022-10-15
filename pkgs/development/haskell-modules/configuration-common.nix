@@ -2431,10 +2431,6 @@ self: super: {
   # 2022-02-25: Unmaintained and to strict upper bounds
   paths = doJailbreak super.paths;
 
-  # Too strict bounds on hspec, fixed on main branch, but unreleased
-  colourista = assert super.colourista.version == "0.1.0.1";
-    doJailbreak super.colourista;
-
   # 2022-02-26: https://github.com/emilypi/base64/issues/39
   base64 = dontCheck super.base64;
 
