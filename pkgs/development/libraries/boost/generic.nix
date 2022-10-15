@@ -101,6 +101,7 @@ let
     ++ optional (toolset != null) "toolset=${toolset}"
     ++ optional (!enablePython) "--without-python"
     ++ optional needUserConfig "--user-config=user-config.jam"
+    ++ optional (stdenv.buildPlatform.isDarwin && stdenv.hostPlatform.isLinux) "pch=off"
     ++ optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "threadapi=win32"
   ] ++ extraB2Args
