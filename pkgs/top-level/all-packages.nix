@@ -31883,6 +31883,8 @@ with pkgs;
 
   temporal-cli = callPackage ../applications/networking/cluster/temporal-cli { };
 
+  temporalite = callPackage ../applications/networking/cluster/temporalite { };
+
   tenacity = callPackage ../applications/audio/tenacity { wxGTK = wxGTK31-gtk3; };
 
   tendermint = callPackage ../tools/networking/tendermint { };
