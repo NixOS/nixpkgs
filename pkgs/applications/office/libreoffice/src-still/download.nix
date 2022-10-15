@@ -280,11 +280,11 @@
     md5name = "b98b67602a2c8880a1770f0b9e37c190f29a7e2ade5616784f0b89fbdb75bf52-alef-1.001.tar.gz";
   }
   {
-    name = "Amiri-0.111.zip";
-    url = "https://dev-www.libreoffice.org/src/Amiri-0.111.zip";
-    sha256 = "1fbfccced6348b5db2c1c21d5b319cd488e14d055702fa817a0f6cb83d882166";
+    name = "Amiri-0.117.zip";
+    url = "https://dev-www.libreoffice.org/src/Amiri-0.117.zip";
+    sha256 = "9c4e768893e0023a0ad6f488d5c84bd5add6565d3dcadb838ba5b20e75fcc9a7";
     md5 = "";
-    md5name = "1fbfccced6348b5db2c1c21d5b319cd488e14d055702fa817a0f6cb83d882166-Amiri-0.111.zip";
+    md5name = "9c4e768893e0023a0ad6f488d5c84bd5add6565d3dcadb838ba5b20e75fcc9a7-Amiri-0.117.zip";
   }
   {
     name = "ttf-kacst_2.01+mry.tar.gz";
@@ -294,11 +294,11 @@
     md5name = "dca00f5e655f2f217a766faa73a81f542c5c204aa3a47017c3c2be0b31d00a56-ttf-kacst_2.01+mry.tar.gz";
   }
   {
-    name = "ReemKufi-0.7.zip";
-    url = "https://dev-www.libreoffice.org/src/ReemKufi-0.7.zip";
-    sha256 = "f60c6508d209ce4236d2d7324256c2ffddd480be7e3d6023770b93dc391a605f";
+    name = "ReemKufi-1.2.zip";
+    url = "https://dev-www.libreoffice.org/src/ReemKufi-1.2.zip";
+    sha256 = "c4fd68a23c0ea471cc084ae7efe888da372b925cb208eeb0322c26792d2ef413";
     md5 = "";
-    md5name = "f60c6508d209ce4236d2d7324256c2ffddd480be7e3d6023770b93dc391a605f-ReemKufi-0.7.zip";
+    md5name = "c4fd68a23c0ea471cc084ae7efe888da372b925cb208eeb0322c26792d2ef413-ReemKufi-1.2.zip";
   }
   {
     name = "Scheherazade-2.100.zip";
@@ -880,12 +880,5 @@
     sha256 = "653d9e44195d86cf64a36af9ff3a1978ec5599df3882439fefa56e7064f55e8a";
     md5 = "";
     md5name = "653d9e44195d86cf64a36af9ff3a1978ec5599df3882439fefa56e7064f55e8a-zxing-cpp-1.2.0.tar.gz";
-  }
-  {
-    name = "libcuckoo-93217f8d391718380c508a722ab9acd5e9081233.tar.gz";
-    url = "https://dev-www.libreoffice.org/src/libcuckoo-93217f8d391718380c508a722ab9acd5e9081233.tar.gz";
-    sha256 = "471dd83a813ed2816c2246c373004470ad0f6612c7ce72038929dc5161cdd58e";
-    md5 = "";
-    md5name = "471dd83a813ed2816c2246c373004470ad0f6612c7ce72038929dc5161cdd58e-libcuckoo-93217f8d391718380c508a722ab9acd5e9081233.tar.gz";
   }
 ]
