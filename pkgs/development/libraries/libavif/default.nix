@@ -7,6 +7,7 @@
 , libpng
 , libjpeg
 , dav1d
+, libyuv
 }:
 
 stdenv.mkDerivation rec {
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     libpng
     libjpeg
     dav1d
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ libyuv ];
 
   meta = with lib; {
     description  = "C implementation of the AV1 Image File Format";
