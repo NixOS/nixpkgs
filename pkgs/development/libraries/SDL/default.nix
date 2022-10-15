@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
       url = "https://github.com/libsdl-org/SDL-1.2/commit/d7e00208738a0bc6af302723fe64908ac35b777b.patch";
       sha256 = "sha256-fuxXsqZW94/C8CKu9LakppCU4zHupj66O2MngQ4BO9o=";
     })
-    # pkg-config support in in sdl.m4.
+    # Add pkg-config support in sdl.m4
 	  # Using unofficial mirror because git import issue:
 	  # https://github.com/libsdl-org/SDL/issues/5220
     (fetchpatch {
