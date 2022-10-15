@@ -3217,7 +3217,7 @@ in {
 
   facedancer = callPackage ../development/python-modules/facedancer { };
 
-  face_recognition = callPackage ../development/python-modules/face_recognition { };
+  face-recognition = callPackage ../development/python-modules/face-recognition { };
 
   face_recognition_models = callPackage ../development/python-modules/face_recognition_models { };
 
