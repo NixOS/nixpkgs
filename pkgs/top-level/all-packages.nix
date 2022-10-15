@@ -14958,6 +14958,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
   rust-analyzer = callPackage ../development/tools/rust/rust-analyzer/wrapper.nix { };
+  rust-audit-info = callPackage ../development/tools/rust/rust-audit-info { };
   rust-bindgen-unwrapped = callPackage ../development/tools/rust/bindgen/unwrapped.nix { };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
   rust-cbindgen = callPackage ../development/tools/rust/cbindgen {
