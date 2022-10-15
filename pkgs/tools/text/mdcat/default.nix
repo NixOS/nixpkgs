@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitea
+, fetchFromGitHub
 , rustPlatform
 , pkg-config
 , asciidoctor
@@ -14,9 +14,8 @@ rustPlatform.buildRustPackage rec {
   pname = "mdcat";
   version = "0.28.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "flausch";
+  src = fetchFromGitHub {
+    owner = "lunaryorn";
     repo = "mdcat";
     rev = "mdcat-${version}";
     sha256 = "sha256-l64gRoWYYLbPA0n6vNQf14CCUtnkfMnQdqbetIbWvBU=";
@@ -51,7 +50,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "cat for markdown";
-    homepage = "https://codeberg.org/flausch/mdcat";
+    homepage = "https://github.com/lunaryorn/mdcat";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
