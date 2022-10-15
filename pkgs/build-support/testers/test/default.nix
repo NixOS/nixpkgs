@@ -68,9 +68,123 @@ lib.recurseIntoAttrs {
 
       # Checking our note that dev is the default output
       echo $failed/_ | grep -- '-dev/_' >/dev/null
-
+      echo 'All good.'
       touch $out
     '';
   };
 
+  testEqualContents = lib.recurseIntoAttrs {
+    happy = testers.testEqualContents {
+      assertion = "The same directory contents at different paths are recognized as equal";
+      expected = runCommand "expected" {} ''
+        mkdir -p $out/c
+        echo a >$out/a
+        echo b >$out/b
+        echo d >$out/c/d
+      '';
+      actual = runCommand "actual" {} ''
+        mkdir -p $out/c
+        echo a >$out/a
+        echo b >$out/b
+        echo d >$out/c/d
+      '';
+    };
+
+    unequalExe =
+      runCommand "testEqualContents-unequalExe" {
+        log = testers.testBuildFailure (testers.testEqualContents {
+          assertion = "The same directory contents at different paths are recognized as equal";
+          expected = runCommand "expected" {} ''
+            mkdir -p $out/c
+            echo a >$out/a
+            chmod a+x $out/a
+            echo b >$out/b
+            echo d >$out/c/d
+          '';
+          actual = runCommand "actual" {} ''
+            mkdir -p $out/c
+            echo a >$out/a
+            echo b >$out/b
+            chmod a+x $out/b
+            echo d >$out/c/d
+          '';
+        });
+      } ''
+        (
+          set -x
+          grep -F -- "executable bits don't match" $log/testBuildFailure.log
+          grep -E -- '+.*-actual/a' $log/testBuildFailure.log
+          grep -E -- '-.*-actual/b' $log/testBuildFailure.log
+          grep -F -- "--- actual-executables" $log/testBuildFailure.log
+          grep -F -- "+++ expected-executables" $log/testBuildFailure.log
+        ) || {
+          echo "Test failed: could not find pattern in build log $log"
+          exit 1
+        }
+        echo 'All good.'
+        touch $out
+      '';
+
+    fileDiff =
+      runCommand "testEqualContents-fileDiff" {
+        log = testers.testBuildFailure (testers.testEqualContents {
+          assertion = "The same directory contents at different paths are recognized as equal";
+          expected = runCommand "expected" {} ''
+            mkdir -p $out/c
+            echo a >$out/a
+            echo b >$out/b
+            echo d >$out/c/d
+          '';
+          actual = runCommand "actual" {} ''
+            mkdir -p $out/c
+            echo a >$out/a
+            echo B >$out/b
+            echo d >$out/c/d
+          '';
+        });
+      } ''
+        (
+          set -x
+          grep -F -- "Contents must be equal but were not" $log/testBuildFailure.log
+          grep -E -- '+++ .*-actual/b' $log/testBuildFailure.log
+          grep -E -- '--- .*-actual/b' $log/testBuildFailure.log
+          grep -F -- "-B" $log/testBuildFailure.log
+          grep -F -- "+b" $log/testBuildFailure.log
+        ) || {
+          echo "Test failed: could not find pattern in build log $log"
+          exit 1
+        }
+        echo 'All good.'
+        touch $out
+      '';
+
+    fileMissing =
+      runCommand "testEqualContents-fileMissing" {
+        log = testers.testBuildFailure (testers.testEqualContents {
+          assertion = "The same directory contents at different paths are recognized as equal";
+          expected = runCommand "expected" {} ''
+            mkdir -p $out/c
+            echo a >$out/a
+            echo b >$out/b
+            echo d >$out/c/d
+          '';
+          actual = runCommand "actual" {} ''
+            mkdir -p $out/c
+            echo a >$out/a
+            echo d >$out/c/d
+          '';
+        });
+      } ''
+        (
+          set -x
+          grep -F -- "Contents must be equal but were not" $log/testBuildFailure.log
+          grep -E -- 'Only in .*-expected: b' $log/testBuildFailure.log
+        ) || {
+          echo "Test failed: could not find pattern in build log $log"
+          exit 1
+        }
+        echo 'All good.'
+        touch $out
+      '';
+  };
 }

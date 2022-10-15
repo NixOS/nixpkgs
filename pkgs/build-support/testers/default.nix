@@ -13,6 +13,44 @@
 
   testEqualDerivation = callPackage ./test-equal-derivation.nix { };
 
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualContents
+  # or doc/builders/testers.chapter.md
+  testEqualContents = {
+    assertion,
+    actual,
+    expected,
+  }: runCommand "equal-contents-${lib.strings.toLower assertion}" {
+    inherit assertion actual expected;
+  } ''
+    echo "Checking:"
+    echo "$assertion"
+    if ! diff -U5 -r "$actual" "$expected" --color=always
+    then
+      echo
+      echo 'Contents must be equal, but were not!'
+      echo
+      echo "+: expected,   at $expected"
+      echo "-: unexpected, at $actual"
+      exit 1
+    else
+      find "$expected" -type f -executable > expected-executables | sort
+      find "$actual" -type f -executable > actual-executables | sort
+      if ! diff -U0 actual-executables expected-executables --color=always
+      then
+        echo
+        echo "Contents must be equal, but some files' executable bits don't match"
+        echo
+        echo "+: make this file executable in the actual contents"
+        echo "-: make this file non-executable in the actual contents"
+        exit 1
+      else
+        echo "expected $expected and actual $actual match."
+        echo 'OK'
+        touch $out
+      fi
+    fi
+  '';
+
   testVersion =
     { package,
       command ? "${package.meta.mainProgram or package.pname or package.name} --version",
