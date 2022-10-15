@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "dyff";
-  version = "1.5.4";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "homeport";
     repo = "dyff";
     rev = "v${version}";
-    sha256 = "sha256-6r7e35hJrrkBaDHMUJGVOP7b0OwekJzedTs/P5E8Ykc=";
+    sha256 = "sha256-98A8yI0YnGeSz1ie1zQLXPtBAr6JyxsLAf/uNwRAb3M=";
   };
 
-  vendorSha256 = "sha256-nam/so7ylbGVhEjGKZzeYZyHz90rq5XEZelHkjcIeh8=";
+  vendorSha256 = "sha256-iJTIOZUNMKW3wpFhLiNRJW1SM8rThG0tBMpCWdvO/YA=";
 
   subPackages = [
     "cmd/dyff"
@@ -52,6 +52,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/homeport/dyff";
     license = licenses.mit;
-    maintainers = with maintainers; [ edlimerkaj ];
+    maintainers = with maintainers; [ edlimerkaj jceb ];
   };
 }

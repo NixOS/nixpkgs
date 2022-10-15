@@ -2,13 +2,6 @@
 let
   packages = self: with self; {
 
-    # Update script tailored to LXQt packages from git repository
-    lxqtUpdateScript = { pname, version, src }:
-      pkgs.gitUpdater {
-        inherit pname version;
-        attrPath = "lxqt.${pname}";
-      };
-
     # For compiling information, see:
     # - https://github.com/lxqt/lxqt/wiki/Building-from-source
 

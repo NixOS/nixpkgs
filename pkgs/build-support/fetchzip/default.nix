@@ -14,6 +14,8 @@
 , extraPostFetch ? ""
 , postFetch ? ""
 , name ? "source"
+, pname ? ""
+, version ? ""
 , nativeBuildInputs ? [ ]
 , # Allows to set the extension for the intermediate downloaded
   # file. This can be used as a hint for the unpackCmdHooks to select
@@ -23,14 +25,23 @@
 
 
 lib.warnIf (extraPostFetch != "") "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub'."
-(fetchurl (let
+
+(let
   tmpFilename =
     if extension != null
     then "download.${extension}"
     else baseNameOf (if url != "" then url else builtins.head urls);
-in {
-  inherit name;
+in
 
+fetchurl ((
+  if (pname != "" && version != "") then
+    {
+      name = "${name}-${version}";
+      inherit pname version;
+    }
+  else
+    { inherit name; }
+) // {
   recursiveHash = true;
 
   downloadToTemp = true;

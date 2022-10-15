@@ -7,7 +7,7 @@ with lib;
   options = {
     services.spark = {
       master = {
-        enable = mkEnableOption "Spark master service";
+        enable = mkEnableOption (lib.mdDoc "Spark master service");
         bind = mkOption {
           type = types.str;
           description = lib.mdDoc "Address the spark master binds to.";
@@ -35,7 +35,7 @@ with lib;
         };
       };
       worker = {
-        enable = mkEnableOption "Spark worker service";
+        enable = mkEnableOption (lib.mdDoc "Spark worker service");
         workDir = mkOption {
           type = types.path;
           description = lib.mdDoc "Spark worker work dir.";

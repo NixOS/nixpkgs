@@ -1,26 +1,26 @@
 { lib
 , buildPythonPackage
-, docutils
 , fetchPypi
 , psutil
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "pynisher";
-  version = "0.6.4";
+  version = "1.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ER2RqtRxN1wFCakSQV/5AFPvkJEA+s9BJRE4OvEHwSQ=";
+    hash = "sha256-5FJQCN+yO1gh7HK47MRR/SAr8Qzix3bfrjyzsakBQXA=";
   };
 
   propagatedBuildInputs = [
     psutil
-    docutils
+    typing-extensions
   ];
 
   # No tests in the Pypi archive

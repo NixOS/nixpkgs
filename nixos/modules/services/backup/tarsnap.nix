@@ -30,7 +30,7 @@ in
 
   options = {
     services.tarsnap = {
-      enable = mkEnableOption "periodic tarsnap backups";
+      enable = mkEnableOption (lib.mdDoc "periodic tarsnap backups");
 
       keyfile = mkOption {
         type = types.str;
@@ -140,12 +140,11 @@ in
                 type = types.str;
                 default = "01:15";
                 example = "hourly";
-                description = ''
+                description = lib.mdDoc ''
                   Create archive at this interval.
 
                   The format is described in
-                  <citerefentry><refentrytitle>systemd.time</refentrytitle>
-                  <manvolnum>7</manvolnum></citerefentry>.
+                  {manpage}`systemd.time(7)`.
                 '';
               };
 

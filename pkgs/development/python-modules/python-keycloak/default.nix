@@ -4,6 +4,7 @@
 , requests
 , python-jose
 , httmock
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -23,12 +24,9 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    unittestCheckHook
     httmock
   ];
-
-  checkPhase = ''
-    python -m unittest discover
-  '';
 
   pythonImportsCheck = [ "keycloak" ];
 

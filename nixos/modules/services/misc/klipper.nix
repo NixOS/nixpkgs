@@ -14,7 +14,7 @@ in
   ##### interface
   options = {
     services.klipper = {
-      enable = mkEnableOption "Klipper, the 3D printer firmware";
+      enable = mkEnableOption (lib.mdDoc "Klipper, the 3D printer firmware");
 
       package = mkOption {
         type = types.package;
@@ -33,6 +33,30 @@ in
         type = types.nullOr types.path;
         default = "/run/klipper/api";
         description = lib.mdDoc "Path of the API socket to create.";
+      };
+
+      mutableConfig = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = lib.mdDoc ''
+          Whether to copy the config to a mutable directory instead of using the one directly from the nix store.
+          This will only copy the config if the file at `services.klipper.mutableConfigPath` doesn't exist.
+        '';
+      };
+
+      mutableConfigFolder = mkOption {
+        type = types.path;
+        default = "/var/lib/klipper";
+        description = lib.mdDoc "Path to mutable Klipper config file.";
+      };
+
+      configFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = lib.mdDoc ''
+          Path to default Klipper config.
+        '';
       };
 
       octoprintIntegration = mkOption {
@@ -62,8 +86,8 @@ in
       };
 
       settings = mkOption {
-        type = format.type;
-        default = { };
+        type = types.nullOr format.type;
+        default = null;
         description = lib.mdDoc ''
           Configuration for Klipper. See the [documentation](https://www.klipper3d.org/Overview.html#configuration-and-tuning-guides)
           for supported values.
@@ -76,13 +100,17 @@ in
         type = with types; attrsOf
           (submodule {
             options = {
-              enable = mkEnableOption ''
+              enable = mkEnableOption (lib.mdDoc ''
                 building of firmware and addition of klipper-flash tools for manual flashing.
                 This will add `klipper-flash-$mcu` scripts to your environment which can be called to flash the firmware.
-              '';
+              '');
+              serial = mkOption {
+                type = types.nullOr path;
+                description = lib.mdDoc "Path to serial port this printer is connected to. Leave `null` to derive it from `service.klipper.settings`.";
+              };
               configFile = mkOption {
                 type = path;
-                description = "Path to firmware config which is generated using `klipper-genconf`";
+                description = lib.mdDoc "Path to firmware config which is generated using `klipper-genconf`";
               };
             };
           });
@@ -95,19 +123,25 @@ in
     assertions = [
       {
         assertion = cfg.octoprintIntegration -> config.services.octoprint.enable;
-        message = "Option klipper.octoprintIntegration requires Octoprint to be enabled on this system. Please enable services.octoprint to use it.";
+        message = "Option services.klipper.octoprintIntegration requires Octoprint to be enabled on this system. Please enable services.octoprint to use it.";
       }
       {
         assertion = cfg.user != null -> cfg.group != null;
-        message = "Option klipper.group is not set when a user is specified.";
+        message = "Option services.klipper.group is not set when services.klipper.user is specified.";
       }
       {
-        assertion = foldl (a: b: a && b) true (mapAttrsToList (mcu: _: mcu != null -> (hasAttrByPath [ "${mcu}" "serial" ] cfg.settings)) cfg.firmwares);
-        message = "Option klipper.settings.$mcu.serial must be set when klipper.firmware.$mcu is specified";
+        assertion = cfg.settings != null -> foldl (a: b: a && b) true (mapAttrsToList (mcu: _: mcu != null -> (hasAttrByPath [ "${mcu}" "serial" ] cfg.settings)) cfg.firmwares);
+        message = "Option services.klipper.settings.$mcu.serial must be set when settings.klipper.firmware.$mcu is specified";
+      }
+      {
+        assertion = (cfg.configFile != null) != (cfg.settings != null);
+        message = "You need to either specify services.klipper.settings or services.klipper.defaultConfig.";
       }
     ];
 
-    environment.etc."klipper.cfg".source = format.generate "klipper.cfg" cfg.settings;
+    environment.etc = mkIf (!cfg.mutableConfig) {
+      "klipper.cfg".source = if cfg.settings != null then format.generate "klipper.cfg" cfg.settings else cfg.configFile;
+    };
 
     services.klipper = mkIf cfg.octoprintIntegration {
       user = config.services.octoprint.user;
@@ -118,17 +152,42 @@ in
       let
         klippyArgs = "--input-tty=${cfg.inputTTY}"
           + optionalString (cfg.apiSocket != null) " --api-server=${cfg.apiSocket}";
+        printerConfigPath =
+          if cfg.mutableConfig
+          then cfg.mutableConfigFolder + "/printer.cfg"
+          else "/etc/klipper.cfg";
+        printerConfigFile =
+          if cfg.settings != null
+          then format.generate "klipper.cfg" cfg.settings
+          else cfg.configFile;
       in
       {
         description = "Klipper 3D Printer Firmware";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
+        preStart = ''
+          mkdir -p ${cfg.mutableConfigFolder}
+          ${lib.optionalString (cfg.mutableConfig) ''
+            [ -e ${printerConfigPath} ] || {
+              cp ${printerConfigFile} ${printerConfigPath}
+              chmod +w ${printerConfigPath}
+            }
+          ''}
+          mkdir -p ${cfg.mutableConfigFolder}/gcodes
+        '';
 
         serviceConfig = {
-          ExecStart = "${cfg.package}/lib/klipper/klippy.py ${klippyArgs} /etc/klipper.cfg";
+          ExecStart = "${cfg.package}/lib/klipper/klippy.py ${klippyArgs} ${printerConfigPath}";
           RuntimeDirectory = "klipper";
+          StateDirectory = "klipper";
           SupplementaryGroups = [ "dialout" ];
           WorkingDirectory = "${cfg.package}/lib";
+          OOMScoreAdjust = "-999";
+          CPUSchedulingPolicy = "rr";
+          CPUSchedulingPriority = 99;
+          IOSchedulingClass = "realtime";
+          IOSchedulingPriority = 0;
+          UMask = "0002";
         } // (if cfg.user != null then {
           Group = cfg.group;
           User = cfg.user;
@@ -141,8 +200,9 @@ in
     environment.systemPackages =
       with pkgs;
       let
+        default = a: b: if a != null then a else b;
         firmwares = filterAttrs (n: v: v!= null) (mapAttrs
-          (mcu: { enable, configFile }: if enable then pkgs.klipper-firmware.override {
+          (mcu: { enable, configFile, serial }: if enable then pkgs.klipper-firmware.override {
             mcu = lib.strings.sanitizeDerivationName mcu;
             firmwareConfig = configFile;
           } else null)
@@ -151,11 +211,14 @@ in
           (mcu: firmware: pkgs.klipper-flash.override {
             mcu = lib.strings.sanitizeDerivationName mcu;
             klipper-firmware = firmware;
-            flashDevice = cfg.settings."${mcu}".serial;
+            flashDevice = default cfg.firmwares."${mcu}".serial cfg.settings."${mcu}".serial;
             firmwareConfig = cfg.firmwares."${mcu}".configFile;
           })
           firmwares;
       in
       [ klipper-genconf ] ++ firmwareFlasher ++ attrValues firmwares;
   };
+  meta.maintainers = [
+    maintainers.cab404
+  ];
 }

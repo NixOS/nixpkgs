@@ -1,4 +1,5 @@
 { lib
+, asyauth
 , asysocks
 , buildPythonPackage
 , colorama
@@ -15,17 +16,18 @@
 
 buildPythonPackage rec {
   pname = "aiosmb";
-  version = "0.3.8";
+  version = "0.4.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-CvqQEJPwrZHQuEId7GbIC9LpyyN6jaQFmEQTpddHU5g=";
+    hash = "sha256-jJVXGBK8wWXEGvCzOTicHUh9jH35d1ARIxkLwn/ctjM=";
   };
 
   propagatedBuildInputs = [
+    asyauth
     asysocks
     colorama
     minikerberos

@@ -6,7 +6,7 @@ let cfg = config.programs.noisetorch;
 in
 {
   options.programs.noisetorch = {
-    enable = mkEnableOption "noisetorch + setcap wrapper";
+    enable = mkEnableOption (lib.mdDoc "noisetorch + setcap wrapper");
 
     package = mkOption {
       type = types.package;

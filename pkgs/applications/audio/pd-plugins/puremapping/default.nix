@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Set of externals to facilitate the use of sensors within Pure Data and to create complex relations between input and output of a dynamic system";
     homepage = "http://www.chnry.net/ch/?090-Pure-Mapping&lang=en";
-    license = lib.licenses.gpl1;
+    license = lib.licenses.gpl1Only;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
   };

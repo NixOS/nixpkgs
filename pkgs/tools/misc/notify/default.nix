@@ -1,20 +1,21 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nix-update-script
 }:
 
 buildGoModule rec {
   pname = "notify";
-  version = "1.0.0";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-grTHSMN4PpsCo5mST6nXE5+u7DewMVJXI3hnNIJdhLs=";
+    sha256 = "sha256-PZSt4mhon0JbFxeq5tOXb+xWKOoxT6rjRS1E3Jf2V3c=";
   };
 
-  vendorSha256 = "sha256-BbhDNy3FmnHzAfv3lxPwL2jhp8Opfo0WVFhncfTO/28=";
+  vendorSha256 = "sha256-MoGaIs2WmJk+E8pTljrahuaJ1VwYBhGBf1XGYVYOVt4=";
 
   modRoot = ".";
   subPackages = [
@@ -23,6 +24,10 @@ buildGoModule rec {
 
   # Test files are not part of the release tarball
   doCheck = false;
+
+  passthru = {
+    updateScript = nix-update-script { attrPath = pname; };
+  };
 
   meta = with lib; {
     description = "Notify allows sending the output from any tool to Slack, Discord and Telegram";

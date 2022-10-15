@@ -18,17 +18,19 @@
 , pytestCheckHook
 , matplotlib
 , pytest-xdist
+, gcc
+, llvmPackages
 }:
 
 buildPythonPackage rec {
   pname = "devito";
-  version = "unstable-2022-04-22";
+  version = "4.7.1";
 
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = "devito";
-    rev = "7cb52eded4038c1a0ee92cfd04d3412c48f2fb7c";
-    sha256 = "sha256-75hkkufQK9Nv65DBz8cmYTfkxH/UUWDQK/rGUDULvjM=";
+    rev = "v${version}";
+    sha256 = "sha256-crKTxlueE8NGjAqu625iFvp35UK2U7+9kl8rpbzf0gs=";
   };
 
   postPatch = ''
@@ -46,7 +48,7 @@ buildPythonPackage rec {
         -i requirements.txt
   '';
 
-  checkInputs = [ pytestCheckHook pytest-xdist matplotlib ];
+  checkInputs = [ pytestCheckHook pytest-xdist matplotlib gcc ];
 
   # I've had to disable the following tests since they fail while using nix-build, but they do pass
   # outside the build. They mostly related to the usage of MPI in a sandboxed environment.
@@ -88,12 +90,11 @@ buildPythonPackage rec {
     pyrevolve
     scipy
     sympy
-  ];
+  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   pythonImportsCheck = [ "devito" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     homepage = "https://www.devitoproject.org/";
     description = "Code generation framework for automated finite difference computation";
     license = licenses.mit;

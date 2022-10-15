@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
+, cryptography
+, django
 , fetchFromGitHub
 , mock
+, multidict
 , pyjwt
 , pytestCheckHook
 , pythonOlder
@@ -11,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "twilio";
-  version = "7.12.0";
+  version = "7.14.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +23,7 @@ buildPythonPackage rec {
     owner = "twilio";
     repo = "twilio-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-/ni7QwBJTLc9hZPFg6wPskwuqmyKS4MHr+r7d/i87Mc=";
+    hash = "sha256-lamP7ltKLizwPGX1063bZ90M89oPmXVSogi3HNksvHE=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +33,10 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    cryptography
+    django
     mock
+    multidict
     pytestCheckHook
   ];
 

@@ -183,5 +183,15 @@
       "volume_scroller@trflynn89.pm.me",
       "volume_scroller@noskoski"
     ]
+  },
+  "43": {
+    "applications-menu": [
+      "apps-menu@gnome-shell-extensions.gcampax.github.com",
+      "Applications_Menu@rmy.pobox.com"
+    ],
+    "workspace-indicator": [
+      "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
+      "horizontal-workspace-indicator@tty2.io"
+    ]
   }
 }

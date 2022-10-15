@@ -15,14 +15,14 @@ let
 in
 with python.pkgs; buildPythonApplication rec {
   pname = "esphome";
-  version = "2022.6.2";
+  version = "2022.9.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-VD2ZTsNIgWtIuWPv1ZQS7G1PlDr2cgYWqXrSuriZWtw=";
+    hash = "sha256-xrfNdJD8c0PbtipGTQNSCcXaWu4TEyER6lHtREdVcFI=";
   };
 
   postPatch = ''
@@ -91,6 +91,7 @@ with python.pkgs; buildPythonApplication rec {
 
   passthru = {
     dashboard = esphome-dashboard;
+    updateScript = callPackage ./update.nix {};
   };
 
   meta = with lib; {

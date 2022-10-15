@@ -1,22 +1,31 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "metal-cli";
-  version = "0.9.0";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "equinix";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ivO4YFFDTza20WgTGEaSGUcIEvXVtwKKVGyKWe8d9bA=";
+    sha256 = "sha256-DjsJ/pJu62hn89KhOgQAT5gZcMD+5fF4IXU0PL7Pzdo=";
   };
 
-  vendorSha256 = "sha256-rf0EWMVvuoPUMTQKi/FnUbE2ZAs0C7XosHAzCgwB5wg=";
+  vendorSha256 = "sha256-eH/T5KlFvZx7sCZHLn0GNIAwTizLglvv9BoDndcJivo=";
 
   ldflags = [
     "-s" "-w"
     "-X github.com/equinix/metal-cli/cmd.Version=${version}"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd metal \
+      --bash <($out/bin/metal completion bash) \
+      --fish <($out/bin/metal completion fish) \
+      --zsh <($out/bin/metal completion zsh)
+  '';
 
   doCheck = false;
 

@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , substituteAll
-, intltool
+, gettext
 , pkg-config
 , fetchpatch
 , dbus
@@ -24,6 +24,7 @@
 , libselinux
 , audit
 , gobject-introspection
+, perl
 , modemmanager
 , openresolv
 , libndp
@@ -57,11 +58,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "networkmanager";
-  version = "1.38.2";
+  version = "1.40.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "sha256-nP/SrcaGUTFt8tL4oJ4XF7sdDC6jic/HIaAQnbmzWCY=";
+    sha256 = "sha256-rufgV7wsyl2rhOQfFfHai3lespB0ewTL7ugiutnp/AM=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -124,22 +125,6 @@ stdenv.mkDerivation rec {
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
-
-    (fetchpatch {
-      # Prevent downgrade to plain network on Enhanced Open profiles
-      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/b7946e50acc0d20d31b0c1098fdadc2f105ba799.patch";
-      hash = "sha256-CdZiubfqhJQ5w4+s9O8C5WI9Ls/paONzDX4rX6yEmS0=";
-    })
-    (fetchpatch {
-      # Treat OWE BSSIDs as valid candidates for open profiles
-      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/dd80cdcc1bd5e2535b8e4a1d1d0c62f1d3328a7c.patch";
-      hash = "sha256-QMZvWN3g8K+UH6y05+RkCmF+gHHU4pB+UXfU770AUis=";
-    })
-    (fetchpatch {
-      # Allow distinguishing pure OWE networks from those with transition mode enabled
-      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/13ea8d2e7dddd8279c82230594cea533ca349dd3.patch";
-      hash = "sha256-BiINGzX/Zp8pwdbMiDScrZvrHtH7coXkZm1HScFuFWA=";
-    })
   ];
 
   buildInputs = [
@@ -169,10 +154,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    intltool
+    gettext
     pkg-config
     vala
     gobject-introspection
+    perl
     elfutils # used to find jansson soname
     # Docs
     gtk-doc

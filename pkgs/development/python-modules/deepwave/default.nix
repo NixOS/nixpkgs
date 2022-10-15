@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytorch
+, torch
 , ninja
 , scipy
 , which
@@ -18,14 +18,14 @@ let
 in
 buildPythonPackage rec {
   pname = "deepwave";
-  version = "0.0.12";
+  version = "0.0.14";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "ar4";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WWu0LyHlOwWMVPUy+LAszKF3VlgcqlcMlDi4oon4Dl8=";
+    sha256 = "sha256-k1MUrnIkllxGIpkEScTZBEDBBNHgJHxau1e/L8TOEKc=";
   };
 
   # unable to find ninja although it is available, most likely because it looks for its pip version
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  propagatedBuildInputs = [ pytorch pybind11 ];
+  propagatedBuildInputs = [ torch pybind11 ];
 
   checkInputs = [
     which

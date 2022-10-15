@@ -144,14 +144,15 @@ stdenv.mkDerivation {
 
   inherit gtk3;
 
-  buildInputs = [ wrapGAppsHook gtk3 adwaita-icon-theme ];
+  nativeBuildInputs = [ wrapGAppsHook ];
+  buildInputs = [ gtk3 adwaita-icon-theme ];
 
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10
   dontStrip = true;
   dontPatchELF = true;
 
-  patchPhase = ''
+  postPatch = ''
     # Don't download updates from Mozilla directly
     echo 'pref("app.update.auto", "false");' >> defaults/pref/channel-prefs.js
   '';

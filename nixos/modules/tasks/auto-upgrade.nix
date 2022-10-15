@@ -46,11 +46,11 @@ in {
         type = types.nullOr types.str;
         default = null;
         example = "https://nixos.org/channels/nixos-14.12-small";
-        description = ''
+        description = lib.mdDoc ''
           The URI of the NixOS channel to use for automatic
           upgrades. By default, this is the channel set using
-          <command>nix-channel</command> (run <literal>nix-channel
-          --list</literal> to see the current value).
+          {command}`nix-channel` (run `nix-channel --list`
+          to see the current value).
         '';
       };
 
@@ -77,13 +77,12 @@ in {
         type = types.str;
         default = "04:40";
         example = "daily";
-        description = ''
+        description = lib.mdDoc ''
           How often or when upgrade occurs. For most desktop and server systems
           a sufficient upgrade frequency is once a day.
 
           The format is described in
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
+          {manpage}`systemd.time(7)`.
         '';
       };
 
@@ -102,12 +101,11 @@ in {
         default = "0";
         type = types.str;
         example = "45min";
-        description = ''
+        description = lib.mdDoc ''
           Add a randomized delay before each automatic upgrade.
           The delay will be chosen between zero and this value.
           This value must be a time span in the format specified by
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>
+          {manpage}`systemd.time(7)`
         '';
       };
 

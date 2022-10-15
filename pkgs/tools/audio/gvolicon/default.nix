@@ -11,9 +11,9 @@ stdenv.mkDerivation {
     sha256 = "sha256-lm5OfryV1/1T1RgsVDdp0Jg5rh8AND8M3ighfrznKes=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [
-    makeWrapper alsa-lib gtk3 gdk-pixbuf gnome.adwaita-icon-theme
+    alsa-lib gtk3 gdk-pixbuf gnome.adwaita-icon-theme
     librsvg wrapGAppsHook
   ];
 

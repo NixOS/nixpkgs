@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.cage;
 in {
-  options.services.cage.enable = mkEnableOption "cage kiosk service";
+  options.services.cage.enable = mkEnableOption (lib.mdDoc "cage kiosk service");
 
   options.services.cage.user = mkOption {
     type = types.str;

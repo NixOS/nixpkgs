@@ -7,7 +7,7 @@ let
 in
 {
   options.programs.openvpn3 = {
-    enable = mkEnableOption "the openvpn3 client";
+    enable = mkEnableOption (lib.mdDoc "the openvpn3 client");
   };
 
   config = mkIf cfg.enable {

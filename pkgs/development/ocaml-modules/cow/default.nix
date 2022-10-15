@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, alcotest
+{ lib, fetchurl, buildDunePackage, ocaml, alcotest
 , uri, xmlm, omd, ezjsonm }:
 
 buildDunePackage rec {
@@ -15,7 +15,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ xmlm uri ezjsonm omd ];
   checkInputs = [ alcotest ];
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = with lib; {
     description = "Caml on the Web";

@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     unzip
   ];
   sourceRoot = ".";
+  unpackCmd = "unzip -o $curSrc";
   buildPhase = ''
     echo "selected fonts are ${toString selectedFonts}"
     ls *.otf *.ttf

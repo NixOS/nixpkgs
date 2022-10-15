@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "tabula-py";
-  version = "2.4.0";
+  version = "2.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "chezou";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-cVhtFfzDQvVnDaXOU3dx/m3LENMMG3E+RnFVFCZ0AAc=";
+    hash = "sha256-Dfi6LzrLDz9VVDmbeK1dEaWuQosD4tvAH13Q4Mp3smA=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

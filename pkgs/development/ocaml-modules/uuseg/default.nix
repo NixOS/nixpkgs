@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uucp, uutf, cmdliner }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uucp, uutf, cmdliner
+, cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1"
+}:
 
 let
   pname = "uuseg";
@@ -8,20 +10,29 @@ in
 stdenv.mkDerivation rec {
 
   name = "ocaml${ocaml.version}-${pname}-${version}";
-  version = "14.0.0";
+  version = "15.0.0";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "sha256:1g9zyzjkhqxgbb9mh3cgaawscwdazv6y8kdqvmy6yhnimmfqv25p";
+    sha256 = "sha256-q8x3bia1QaKpzrWFxUmLWIraKqby7TuPNGvbSjkY4eM=";
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
-  buildInputs = [  topkg cmdliner  uutf ];
+  buildInputs = [  topkg uutf ]
+  ++ lib.optional cmdlinerSupport cmdliner;
   propagatedBuildInputs = [ uucp ];
 
   strictDeps = true;
 
-  inherit (topkg) buildPhase installPhase;
+  buildPhase = ''
+    runHook preBuild
+    ${topkg.run} build \
+      --with-uutf true \
+      --with-cmdliner ${lib.boolToString cmdlinerSupport}
+    runHook postBuild
+  '';
+
+  inherit (topkg) installPhase;
 
   meta = with lib; {
     description = "An OCaml library for segmenting Unicode text";

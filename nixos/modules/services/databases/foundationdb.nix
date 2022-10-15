@@ -62,7 +62,7 @@ in
 {
   options.services.foundationdb = {
 
-    enable = mkEnableOption "FoundationDB Server";
+    enable = mkEnableOption (lib.mdDoc "FoundationDB Server");
 
     package = mkOption {
       type        = types.package;
@@ -97,9 +97,9 @@ in
     openFirewall = mkOption {
       type        = types.bool;
       default     = false;
-      description = ''
+      description = lib.mdDoc ''
         Open the firewall ports corresponding to FoundationDB processes and coordinators
-        using <option>config.networking.firewall.*</option>.
+        using {option}`config.networking.firewall.*`.
       '';
     };
 

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "reaver-wps-t6x";
-  version = "1.6.5";
+  version = "1.6.6";
 
   src = fetchFromGitHub {
     owner = "t6x";
     repo = "reaver-wps-fork-t6x";
     rev = "v${version}";
-    sha256 = "03v5jyb4if74rpg0mcd8700snb120b6w2gnsa3aqdgj5676ic5dn";
+    sha256 = "sha256-7g4ZRkyu0TIOUw68dSPP4RyIRyeq1GgUMYFVSQB8/1I=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -270,6 +270,9 @@ let
     };
 
     video = {
+      DRM_LEGACY = no;
+      NOUVEAU_LEGACY_CTX_SUPPORT = whenAtLeast "5.2" no;
+
       # Allow specifying custom EDID on the kernel command line
       DRM_LOAD_EDID_FIRMWARE = yes;
       VGA_SWITCHEROO         = yes; # Hybrid graphics support
@@ -394,6 +397,10 @@ let
       EXT4_FS_SECURITY  = yes;
       EXT4_ENCRYPTION   = option yes;
 
+      NTFS_FS            = whenAtLeast "5.15" no;
+      NTFS3_LZX_XPRESS   = whenAtLeast "5.15" yes;
+      NTFS3_FS_POSIX_ACL = whenAtLeast "5.15" yes;
+
       REISERFS_FS_XATTR     = option yes;
       REISERFS_FS_POSIX_ACL = option yes;
       REISERFS_FS_SECURITY  = option yes;
@@ -474,6 +481,7 @@ let
       DEBUG_LIST                       = yes;
       # Detect writes to read-only module pages
       DEBUG_SET_MODULE_RONX            = whenOlder "4.11" (option yes);
+      HARDENED_USERCOPY                = yes;
       RANDOMIZE_BASE                   = option yes;
       STRICT_DEVMEM                    = mkDefault yes; # Filter access to /dev/mem
       IO_STRICT_DEVMEM                 = mkDefault yes;
@@ -497,6 +505,11 @@ let
       # Depends on MODULE_SIG and only really helps when you sign your modules
       # and enforce signatures which we don't do by default.
       SECURITY_LOCKDOWN_LSM = option no;
+
+      # provides a register of persistent per-UID keyrings, useful for encrypting storage pools in stratis
+      PERSISTENT_KEYRINGS              = yes;
+      # enable temporary caching of the last request_key() result
+      KEYS_REQUEST_CACHE               = whenAtLeast "5.3" yes;
     } // optionalAttrs (!stdenv.hostPlatform.isAarch32) {
 
       # Detect buffer overflows on the stack
@@ -852,6 +865,8 @@ let
       MOUSE_PS2_VMMOUSE  = yes;
       MTRR_SANITIZER     = yes;
       NET_FC             = yes; # Fibre Channel driver support
+      # Needed for touchpads to work on some AMD laptops
+      PINCTRL_AMD        = whenAtLeast "5.19" yes;
       # GPIO on Intel Bay Trail, for some Chromebook internal eMMC disks
       PINCTRL_BAYTRAIL   = yes;
       # GPIO for Braswell and Cherryview devices
@@ -871,6 +886,9 @@ let
 
       SCSI_LOGGING = yes; # SCSI logging facility
       SERIAL_8250  = yes; # 8250/16550 and compatible serial support
+
+      SLAB_FREELIST_HARDENED = whenAtLeast "4.14" yes;
+      SLAB_FREELIST_RANDOM   = whenAtLeast "4.10" yes;
 
       SLIP_COMPRESSED = yes; # CSLIP compressed headers
       SLIP_SMART      = yes;

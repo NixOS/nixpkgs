@@ -14,7 +14,7 @@ let
 in {
   options = {
     services.moonraker = {
-      enable = mkEnableOption "Moonraker, an API web server for Klipper";
+      enable = mkEnableOption (lib.mdDoc "Moonraker, an API web server for Klipper");
 
       klipperSocket = mkOption {
         type = types.path;
@@ -123,7 +123,11 @@ in {
           host = cfg.address;
           port = cfg.port;
           klippy_uds_address = cfg.klipperSocket;
+        };
+        file_manager = {
           config_path = cfg.configDir;
+        };
+        database = {
           database_path = "${cfg.stateDir}/database";
         };
       };
@@ -153,6 +157,7 @@ in {
 
       serviceConfig = {
         WorkingDirectory = cfg.stateDir;
+        PrivateTmp = true;
         Group = cfg.group;
         User = cfg.user;
       };
@@ -175,4 +180,9 @@ in {
       });
     '';
   };
+
+  meta.maintainers = with maintainers; [
+    cab404
+    vtuan10
+  ];
 }

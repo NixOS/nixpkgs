@@ -18,7 +18,7 @@ let
         "binnt"
         (lib.optionalString is32bit "binw")
       ] else if (isDarwin && is64bit) then [
-        "osx64"
+        "bino64"
       ] else [
         (lib.optionalString is64bit "binl64")
         "binl"
@@ -29,14 +29,14 @@ let
       ++ lib.optional isWindows "h/nt"
       ++ lib.optional isLinux "lh";
       listToDirs = list: lib.strings.concatMapStringsSep ":" (dir: "${placeholder "out"}/${dir}") list;
-      name = "${open-watcom.pname}-${open-watcom.version}";
+      name = "${open-watcom.passthru.prettyName}-${open-watcom.version}";
     in
     symlinkJoin {
       inherit name;
 
       paths = [ open-watcom ];
 
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
 
       postBuild = ''
         mkdir $out/bin

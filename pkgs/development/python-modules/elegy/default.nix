@@ -8,7 +8,7 @@
 , lib
 , poetry
 , pytestCheckHook
-, pytorch
+, torch
 , pyyaml
 , sh
 , tables
@@ -66,7 +66,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    pytorch
+    torch
     sh
     tensorflow
   ];

@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "elastic-apm";
-  version = "6.10.1";
+  version = "6.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "apm-agent-python";
-    rev = "v${version}";
-    hash = "sha256-ql6qBnZXa0JL1qEXj2OzzP3onjYrMx6+Be6K3SDuWf4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-tAX96aOPuwtchLk5A1ANuZI5w5H9/yX3Zj9bRSyHv90=";
   };
 
   propagatedBuildInputs = [

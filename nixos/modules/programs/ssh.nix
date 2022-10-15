@@ -14,6 +14,7 @@ let
     ''
       #! ${pkgs.runtimeShell} -e
       export DISPLAY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^DISPLAY=\(.*\)/\1/; t; d')"
+      export WAYLAND_DISPLAY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^WAYLAND_DISPLAY=\(.*\)/\1/; t; d')"
       exec ${askPassword} "$@"
     '';
 
@@ -93,10 +94,10 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
-          Extra configuration text prepended to <filename>ssh_config</filename>. Other generated
-          options will be added after a <literal>Host *</literal> pattern.
-          See <citerefentry><refentrytitle>ssh_config</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+        description = lib.mdDoc ''
+          Extra configuration text prepended to {file}`ssh_config`. Other generated
+          options will be added after a `Host *` pattern.
+          See {manpage}`ssh_config(5)`
           for help.
         '';
       };

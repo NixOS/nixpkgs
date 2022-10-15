@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "age";
-  version = "1.0.0-rc1";
+  version = "1.1.0-rc0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "age";
     rev = "v${version}";
-    sha256 = "sha256-b5cBpS5xWaohRZf5H0DwzNq0BodqWDjkAP44osPVYps=";
+    sha256 = "sha256-7qQGiiFkGbS/j7ouP2Joj5EGT+ferIgYYMoTe9jmTqQ=";
   };
 
   buildInputs = [ postgresql ];

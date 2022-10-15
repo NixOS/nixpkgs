@@ -1,4 +1,4 @@
-import ./make-test-python.nix (
+import ./make-test-python.nix ({ pkgs, ... }:
   let
 
     container = {
@@ -18,6 +18,7 @@ import ./make-test-python.nix (
     };
 
     containerSystem = (import ../lib/eval-config.nix {
+      inherit (pkgs) system;
       modules = [ container ];
     }).config.system.build.toplevel;
 
@@ -33,11 +34,11 @@ import ./make-test-python.nix (
       networking.useNetworkd = true;
       networking.useDHCP = false;
 
-      # open DHCP server on interface to container
-      networking.firewall.trustedInterfaces = [ "ve-+" ];
-
       # do not try to access cache.nixos.org
       nix.settings.substituters = lib.mkForce [ ];
+
+      # auto-start container
+      systemd.targets.machines.wants = [ "systemd-nspawn@${containerName}.service" ];
 
       virtualisation.additionalPaths = [ containerSystem ];
     };
@@ -59,6 +60,12 @@ import ./make-test-python.nix (
       machine.succeed("machinectl start ${containerName}");
       machine.wait_until_succeeds("systemctl -M ${containerName} is-active default.target");
 
+      # Test nss_mymachines without nscd
+      machine.succeed('LD_LIBRARY_PATH="/run/current-system/sw/lib" getent -s hosts:mymachines hosts ${containerName}');
+
+      # Test nss_mymachines via nscd
+      machine.succeed("getent hosts ${containerName}");
+
       # Test systemd-nspawn network configuration
       machine.succeed("ping -n -c 1 ${containerName}");
 
@@ -72,6 +79,14 @@ import ./make-test-python.nix (
       # Test machinectl reboot
       machine.succeed("machinectl reboot ${containerName}");
       machine.wait_until_succeeds("systemctl -M ${containerName} is-active default.target");
+
+      # Restart machine
+      machine.shutdown()
+      machine.start()
+      machine.wait_for_unit("default.target");
+
+      # Test auto-start
+      machine.succeed("machinectl show ${containerName}")
 
       # Test machinectl stop
       machine.succeed("machinectl stop ${containerName}");

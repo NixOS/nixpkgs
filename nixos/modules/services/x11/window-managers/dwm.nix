@@ -13,7 +13,7 @@ in
   ###### interface
 
   options = {
-    services.xserver.windowManager.dwm.enable = mkEnableOption "dwm";
+    services.xserver.windowManager.dwm.enable = mkEnableOption (lib.mdDoc "dwm");
   };
 
 

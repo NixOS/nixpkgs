@@ -2,6 +2,7 @@
 , fetchPypi
 , lib
 , python-gnupg
+, setuptools
 }:
 
 buildPythonApplication rec {
@@ -13,6 +14,10 @@ buildPythonApplication rec {
     inherit pname version;
     sha256 = "03a11bd0b0905737f4adb21d87aa1653d84cc1d9b5dcfdfb8a29092245d65db8";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     python-gnupg

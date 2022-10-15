@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   buildInputs = [ gtk3 ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config gobject-introspection ];
   propagatedBuildInputs =
     [ libX11 libGL libGLU libXext libXfixes libXdamage libXcomposite libXi cogl pango
       atk json-glib gobject-introspection libxcb libinput libgudev libxkbcommon

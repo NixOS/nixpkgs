@@ -21,10 +21,11 @@
 }:
 
 # daemon and client are not build monolithic
-assert monolithic || (!monolithic && (enableDaemon || client));
+assert monolithic || (!monolithic && (enableDaemon || client || httpServer));
 
 stdenv.mkDerivation rec {
   pname = "amule"
+    + lib.optionalString httpServer "-web"
     + lib.optionalString enableDaemon "-daemon"
     + lib.optionalString client "-gui";
   version = "2.3.3";
@@ -53,7 +54,17 @@ stdenv.mkDerivation rec {
     "-DBUILD_DAEMON=${if enableDaemon then "ON" else "OFF"}"
     "-DBUILD_REMOTEGUI=${if client then "ON" else "OFF"}"
     "-DBUILD_WEBSERVER=${if httpServer then "ON" else "OFF"}"
+    # building only the daemon fails when these are not set... this is
+    # due to mistakes in the Amule cmake code, but it does not cause
+    # extra code to be built...
+    "-Dwx_NEED_GUI=ON"
+    "-Dwx_NEED_ADV=ON"
+    "-Dwx_NEED_NET=ON"
   ];
+
+  postPatch = ''
+    echo "find_package(Threads)" >> cmake/options.cmake
+  '';
 
   # aMule will try to `dlopen' libupnp and libixml, so help it
   # find them.
@@ -79,7 +90,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
-    # cmake fails: Cannot specify link libraries for target "wxWidgets::ADV" which is not built by this project.
-    broken = enableDaemon || stdenv.isDarwin;
+    broken = stdenv.isDarwin;
   };
 }

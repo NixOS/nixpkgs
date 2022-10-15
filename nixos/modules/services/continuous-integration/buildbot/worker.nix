@@ -121,10 +121,10 @@ in {
       keepalive = mkOption {
         default = 600;
         type = types.int;
-        description = "
+        description = lib.mdDoc ''
           This is a number that indicates how frequently keepalive messages should be sent
           from the worker to the buildmaster, expressed in seconds.
-        ";
+        '';
       };
 
       package = mkOption {

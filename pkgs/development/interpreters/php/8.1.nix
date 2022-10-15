@@ -2,8 +2,8 @@
 
 let
   base = callPackage ./generic.nix (_args // {
-    version = "8.1.8";
-    hash = "sha256-uIFaWgJDFFPUJh41mL0fKFFuTANU8yjBKJDyV4cOTAE=";
+    version = "8.1.11";
+    hash = "sha256-r2JQsYtEA7bu/5tKAnhqyGoSoggUH29lR495JW9H8kY=";
   });
 
 in
@@ -21,6 +21,7 @@ base.withExtensions ({ all, ... }: with all; ([
   gettext
   gmp
   iconv
+  imap
   intl
   ldap
   mbstring
@@ -42,10 +43,11 @@ base.withExtensions ({ all, ... }: with all; ([
   sockets
   soap
   sodium
+  sysvsem
   sqlite3
   tokenizer
   xmlreader
   xmlwriter
   zip
   zlib
-] ++ lib.optionals (!stdenv.isDarwin) [ imap ]))
+]))

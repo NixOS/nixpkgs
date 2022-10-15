@@ -16,14 +16,14 @@ let
       Absolute path to the certificate to load. Passed as-is to the daemon, so
       it must be readable by it.
 
-      Configure either this or <option>handle</option>, but not both, in one section.
+      Configure either this or {option}`handle`, but not both, in one section.
     '';
 
     handle = mkOptionalHexParam ''
       Hex-encoded CKA_ID or handle of the certificate on a token or TPM,
       respectively.
 
-      Configure either this or <option>file</option>, but not both, in one section.
+      Configure either this or {option}`file`, but not both, in one section.
     '';
 
     slot = mkOptionalIntParam ''
@@ -39,11 +39,11 @@ in {
 
     cacert = mkOptionalStrParam ''
       The certificates may use a relative path from the swanctl
-      <literal>x509ca</literal> directory or an absolute path.
+      `x509ca` directory or an absolute path.
 
-      Configure one of <option>cacert</option>,
-      <option>file</option>, or
-      <option>handle</option> per section.
+      Configure one of {option}`cacert`,
+      {option}`file`, or
+      {option}`handle` per section.
     '';
 
     cert_uri_base = mkOptionalStrParam ''
@@ -71,12 +71,11 @@ in {
 
     version = mkIntParam 0 ''
       IKE major version to use for connection.
-      <itemizedlist>
-      <listitem><para>1 uses IKEv1 aka ISAKMP,</para></listitem>
-      <listitem><para>2 uses IKEv2.</para></listitem>
-      <listitem><para>A connection using the default of 0 accepts both IKEv1 and IKEv2 as
-      responder, and initiates the connection actively with IKEv2.</para></listitem>
-      </itemizedlist>
+
+      - 1 uses IKEv1 aka ISAKMP,
+      - 2 uses IKEv2.
+      - A connection using the default of 0 accepts both IKEv1 and IKEv2 as
+        responder, and initiates the connection actively with IKEv2.
     '';
 
     local_addrs	= mkCommaSepListParam [] ''
@@ -107,9 +106,9 @@ in {
 
     local_port = mkIntParam 500 ''
       Local UDP port for IKE communication. By default the port of the socket
-      backend is used, which is usually <literal>500</literal>. If port
-      <literal>500</literal> is used, automatic IKE port floating to port
-      <literal>4500</literal> is used to work around NAT issues.
+      backend is used, which is usually `500`. If port
+      `500` is used, automatic IKE port floating to port
+      `4500` is used to work around NAT issues.
 
       Using a non-default local IKE port requires support from the socket
       backend in use (socket-dynamic).
@@ -117,8 +116,8 @@ in {
 
     remote_port = mkIntParam 500 ''
       Remote UDP port for IKE communication. If the default of port
-      <literal>500</literal> is used, automatic IKE port floating to port
-      <literal>4500</literal> is used to work around NAT issues.
+      `500` is used, automatic IKE port floating to port
+      `4500` is used to work around NAT issues.
     '';
 
     proposals = mkCommaSepListParam ["default"] ''
@@ -134,15 +133,15 @@ in {
       combinations in IKEv1.
 
       Algorithm keywords get separated using dashes. Multiple proposals may be
-      specified in a list. The special value <literal>default</literal> forms a
+      specified in a list. The special value `default` forms a
       default proposal of supported algorithms considered safe, and is usually a
       good choice for interoperability.
     '';
 
     vips = mkCommaSepListParam [] ''
       List of virtual IPs to request in IKEv2 configuration payloads or IKEv1
-      Mode Config. The wildcard addresses <literal>0.0.0.0</literal> and
-      <literal>::</literal> request an arbitrary address, specific addresses may
+      Mode Config. The wildcard addresses `0.0.0.0` and
+      `::` request an arbitrary address, specific addresses may
       be defined. The responder may return a different address, though, or none
       at all.
     '';
@@ -207,21 +206,20 @@ in {
 
     fragmentation = mkEnumParam ["yes" "accept" "force" "no"] "yes" ''
       Use IKE fragmentation (proprietary IKEv1 extension or RFC 7383 IKEv2
-      fragmentation). Acceptable values are <literal>yes</literal> (the default
-      since 5.5.1), <literal>accept</literal> (since versions:5.5.3),
-      <literal>force</literal> and <literal>no</literal>.
-      <itemizedlist>
-      <listitem><para>If set to <literal>yes</literal>, and the peer
-      supports it, oversized IKE messages will be sent in fragments.</para></listitem>
-      <listitem><para>If set to
-      <literal>accept</literal>, support for fragmentation is announced to the peer but the daemon
-      does not send its own messages in fragments.</para></listitem>
-      <listitem><para>If set to <literal>force</literal> (only
-      supported for IKEv1) the initial IKE message will already be fragmented if
-      required.</para></listitem>
-      <listitem><para>Finally, setting the option to <literal>no</literal> will disable announcing
-      support for this feature.</para></listitem>
-      </itemizedlist>
+      fragmentation). Acceptable values are `yes` (the default
+      since 5.5.1), `accept` (since versions:5.5.3),
+      `force` and `no`.
+
+      - If set to `yes`, and the peer
+        supports it, oversized IKE messages will be sent in fragments.
+      - If set to
+        `accept`, support for fragmentation is announced to the peer but the daemon
+        does not send its own messages in fragments.
+      - If set to `force` (only
+        supported for IKEv1) the initial IKE message will already be fragmented if
+        required.
+      - Finally, setting the option to `no` will disable announcing
+        support for this feature.
 
       Note that fragmented IKE messages sent by a peer are always processed
       irrespective of the value of this option (even when set to no).
@@ -229,17 +227,17 @@ in {
 
     childless = mkEnumParam [ "allow" "force" "never" ] "allow" ''
       Use childless IKE_SA initiation (RFC 6023) for IKEv2.  Acceptable values
-      are <literal>allow</literal> (the default), <literal>force</literal> and
-      <literal>never</literal>. If set to <literal>allow</literal>, responders
+      are `allow` (the default), `force` and
+      `never`. If set to `allow`, responders
       will accept childless IKE_SAs (as indicated via notify in the IKE_SA_INIT
       response) while initiators continue to create regular IKE_SAs with the
       first CHILD_SA created during IKE_AUTH, unless the IKE_SA is initiated
       explicitly without any children (which will fail if the responder does not
       support or has disabled this extension).  If set to
-      <literal>force</literal>, only childless initiation is accepted and the
+      `force`, only childless initiation is accepted and the
       first CHILD_SA is created with a separate CREATE_CHILD_SA exchange
       (e.g. to use an independent DH exchange for all CHILD_SAs). Finally,
-      setting the option to <literal>never</literal> disables support for
+      setting the option to `never` disables support for
       childless IKE_SAs as responder.
     '';
 
@@ -254,14 +252,13 @@ in {
 
     send_cert = mkEnumParam ["always" "never" "ifasked" ] "ifasked" ''
       Send certificate payloads when using certificate authentication.
-      <itemizedlist>
-      <listitem><para>With the default of <literal>ifasked</literal> the daemon sends
-      certificate payloads only if certificate requests have been received.</para></listitem>
-      <listitem><para><literal>never</literal> disables sending of certificate payloads
-      altogether,</para></listitem>
-      <listitem><para><literal>always</literal> causes certificate payloads to be sent
-      unconditionally whenever certificate authentication is used.</para></listitem>
-      </itemizedlist>
+
+      - With the default of `ifasked` the daemon sends
+        certificate payloads only if certificate requests have been received.
+      - `never` disables sending of certificate payloads
+        altogether,
+      - `always` causes certificate payloads to be sent
+        unconditionally whenever certificate authentication is used.
     '';
 
     ppk_id = mkOptionalStrParam ''
@@ -275,9 +272,9 @@ in {
     keyingtries = mkIntParam 1 ''
       Number of retransmission sequences to perform during initial
       connect. Instead of giving up initiation after the first retransmission
-      sequence with the default value of <literal>1</literal>, additional
+      sequence with the default value of `1`, additional
       sequences may be started according to the configured value. A value of
-      <literal>0</literal> initiates a new sequence until the connection
+      `0` initiates a new sequence until the connection
       establishes or fails with a permanent error.
     '';
 
@@ -285,24 +282,15 @@ in {
       Connection uniqueness policy to enforce. To avoid multiple connections
       from the same user, a uniqueness policy can be enforced.
 
-      <itemizedlist>
-      <listitem><para>
-      The value <literal>never</literal> does never enforce such a policy, even
-      if a peer included INITIAL_CONTACT notification messages,
-      </para></listitem>
-      <listitem><para>
-      whereas <literal>no</literal> replaces existing connections for the same
-      identity if a new one has the INITIAL_CONTACT notify.
-      </para></listitem>
-      <listitem><para>
-      <literal>keep</literal> rejects new connection attempts if the same user
-      already has an active connection,
-      </para></listitem>
-      <listitem><para>
-      <literal>replace</literal> deletes any existing connection if a new one
-      for the same user gets established.
-      </para></listitem>
-      </itemizedlist>
+      - The value `never` does never enforce such a policy, even
+        if a peer included INITIAL_CONTACT notification messages,
+      - whereas `no` replaces existing connections for the same
+        identity if a new one has the INITIAL_CONTACT notify.
+      - `keep` rejects new connection attempts if the same user
+        already has an active connection,
+      - `replace` deletes any existing connection if a new one
+        for the same user gets established.
+
       To compare connections for uniqueness, the remote IKE identity is used. If
       EAP or XAuth authentication is involved, the EAP-Identity or XAuth
       username is used to enforce the uniqueness policy instead.
@@ -310,7 +298,7 @@ in {
       On initiators this setting specifies whether an INITIAL_CONTACT notify is
       sent during IKE_AUTH if no existing connection is found with the remote
       peer (determined by the identities of the first authentication
-      round). Unless set to <literal>never</literal> the client will send a notify.
+      round). Unless set to `never` the client will send a notify.
     '';
 
     reauth_time	= mkDurationParam "0s" ''
@@ -347,8 +335,8 @@ in {
       In contrast to CHILD_SA rekeying, over_time is relative in time to the
       rekey_time and reauth_time values, as it applies to both.
 
-      The default is 10% of the longer of <option>rekey_time</option> and
-      <option>reauth_time</option>.
+      The default is 10% of the longer of {option}`rekey_time` and
+      {option}`reauth_time`.
     '';
 
     rand_time = mkOptionalDurationParam ''
@@ -357,7 +345,7 @@ in {
       procedure simultaneously, a random time gets subtracted from the
       rekey/reauth times.
 
-      The default is equal to the configured <option>over_time</option>.
+      The default is equal to the configured {option}`over_time`.
     '';
 
     pools = mkCommaSepListParam [] ''
@@ -409,7 +397,7 @@ in {
       certs = mkCommaSepListParam [] ''
         List of certificate candidates to use for
         authentication. The certificates may use a relative path from the
-        swanctl <literal>x509</literal> directory or an absolute path.
+        swanctl `x509` directory or an absolute path.
 
         The certificate used for authentication is selected based on the
         received certificate request payloads. If no appropriate CA can be
@@ -425,7 +413,7 @@ in {
       pubkeys = mkCommaSepListParam [] ''
         List of raw public key candidates to use for
         authentication. The public keys may use a relative path from the swanctl
-        <literal>pubkey</literal> directory or an absolute path.
+        `pubkey` directory or an absolute path.
 
         Even though multiple local public keys could be defined in principle,
         only the first public key in the list is used for authentication.
@@ -433,59 +421,44 @@ in {
 
       auth = mkStrParam "pubkey" ''
         Authentication to perform locally.
-        <itemizedlist>
-        <listitem><para>
-        The default <literal>pubkey</literal> uses public key authentication
-        using a private key associated to a usable certificate.
-        </para></listitem>
-        <listitem><para>
-        <literal>psk</literal> uses pre-shared key authentication.
-        </para></listitem>
-        <listitem><para>
-        The IKEv1 specific <literal>xauth</literal> is used for XAuth or Hybrid
-        authentication,
-        </para></listitem>
-        <listitem><para>
-        while the IKEv2 specific <literal>eap</literal> keyword defines EAP
-        authentication.
-        </para></listitem>
-        <listitem><para>
-        For <literal>xauth</literal>, a specific backend name may be appended,
-        separated by a dash. The appropriate <literal>xauth</literal> backend is
-        selected to perform the XAuth exchange. For traditional XAuth, the
-        <literal>xauth</literal> method is usually defined in the second
-        authentication round following an initial <literal>pubkey</literal> (or
-        <literal>psk</literal>) round. Using <literal>xauth</literal> in the
-        first round performs Hybrid Mode client authentication.
-        </para></listitem>
-        <listitem><para>
-        For <literal>eap</literal>, a specific EAP method name may be appended, separated by a
-        dash. An EAP module implementing the appropriate method is selected to
-        perform the EAP conversation.
-        </para></listitem>
-        <listitem><para>
-        Since 5.4.0, if both peers support RFC 7427 ("Signature Authentication
-        in IKEv2") specific hash algorithms to be used during IKEv2
-        authentication may be configured. To do so use <literal>ike:</literal>
-        followed by a trust chain signature scheme constraint (see description
-        of the <option>remote</option> section's <option>auth</option>
-        keyword). For example, with <literal>ike:pubkey-sha384-sha256</literal>
-        a public key signature scheme with either SHA-384 or SHA-256 would get
-        used for authentication, in that order and depending on the hash
-        algorithms supported by the peer. If no specific hash algorithms are
-        configured, the default is to prefer an algorithm that matches or
-        exceeds the strength of the signature key. If no constraints with
-        <literal>ike:</literal> prefix are configured any signature scheme
-        constraint (without <literal>ike:</literal> prefix) will also apply to
-        IKEv2 authentication, unless this is disabled in
-        <literal>strongswan.conf</literal>. To use RSASSA-PSS signatures use
-        <literal>rsa/pss</literal> instead of <literal>pubkey</literal> or
-        <literal>rsa</literal> as in e.g.
-        <literal>ike:rsa/pss-sha256</literal>. If <literal>pubkey</literal> or
-        <literal>rsa</literal> constraints are configured RSASSA-PSS signatures
-        will only be used if enabled in <literal>strongswan.conf</literal>(5).
-        </para></listitem>
-        </itemizedlist>
+
+        - The default `pubkey` uses public key authentication
+          using a private key associated to a usable certificate.
+        - `psk` uses pre-shared key authentication.
+        - The IKEv1 specific `xauth` is used for XAuth or Hybrid
+          authentication,
+        - while the IKEv2 specific `eap` keyword defines EAP
+          authentication.
+        - For `xauth`, a specific backend name may be appended,
+          separated by a dash. The appropriate `xauth` backend is
+          selected to perform the XAuth exchange. For traditional XAuth, the
+          `xauth` method is usually defined in the second
+          authentication round following an initial `pubkey` (or
+          `psk`) round. Using `xauth` in the
+          first round performs Hybrid Mode client authentication.
+        - For `eap`, a specific EAP method name may be appended, separated by a
+          dash. An EAP module implementing the appropriate method is selected to
+          perform the EAP conversation.
+        - Since 5.4.0, if both peers support RFC 7427 ("Signature Authentication
+          in IKEv2") specific hash algorithms to be used during IKEv2
+          authentication may be configured. To do so use `ike:`
+          followed by a trust chain signature scheme constraint (see description
+          of the {option}`remote` section's {option}`auth`
+          keyword). For example, with `ike:pubkey-sha384-sha256`
+          a public key signature scheme with either SHA-384 or SHA-256 would get
+          used for authentication, in that order and depending on the hash
+          algorithms supported by the peer. If no specific hash algorithms are
+          configured, the default is to prefer an algorithm that matches or
+          exceeds the strength of the signature key. If no constraints with
+          `ike:` prefix are configured any signature scheme
+          constraint (without `ike:` prefix) will also apply to
+          IKEv2 authentication, unless this is disabled in
+          `strongswan.conf`. To use RSASSA-PSS signatures use
+          `rsa/pss` instead of `pubkey` or
+          `rsa` as in e.g.
+          `ike:rsa/pss-sha256`. If `pubkey` or
+          `rsa` constraints are configured RSASSA-PSS signatures
+          will only be used if enabled in `strongswan.conf`(5).
       '';
 
       id = mkOptionalStrParam ''
@@ -519,7 +492,7 @@ in {
       peer. Multiple rounds may be defined to use IKEv2 RFC 4739 Multiple
       Authentication or IKEv1 XAuth.
 
-      Each round is defined in a section having <literal>local</literal> as
+      Each round is defined in a section having `local` as
       prefix, and an optional unique suffix. To define a single authentication
       round, the suffix may be omitted.
     '';
@@ -540,7 +513,7 @@ in {
 
       eap_id = mkOptionalStrParam ''
         Identity to use as peer identity during EAP authentication. If set to
-        <literal>%any</literal> the EAP-Identity method will be used to ask the
+        `%any` the EAP-Identity method will be used to ask the
         client for an EAP identity.
       '';
 
@@ -559,7 +532,7 @@ in {
 
       certs = mkCommaSepListParam [] ''
         List of certificates to accept for authentication. The certificates may
-        use a relative path from the swanctl <literal>x509</literal> directory
+        use a relative path from the swanctl `x509` directory
         or an absolute path.
       '';
 
@@ -573,7 +546,7 @@ in {
         Identity in CA certificate to accept for authentication. The specified
         identity must be contained in one (intermediate) CA of the remote peer
         trustchain, either as subject or as subjectAltName. This has the same
-        effect as specifying <literal>cacerts</literal> to force clients under
+        effect as specifying `cacerts` to force clients under
         a CA to specific connections; it does not require the CA certificate
         to be available locally, and can be received from the peer during the
         IKE exchange.
@@ -582,7 +555,7 @@ in {
       cacerts = mkCommaSepListParam [] ''
         List of CA certificates to accept for
         authentication. The certificates may use a relative path from the
-        swanctl <literal>x509ca</literal> directory or an absolute path.
+        swanctl `x509ca` directory or an absolute path.
       '';
 
       cacert = mkPostfixedAttrsOfParams certParams ''
@@ -594,57 +567,50 @@ in {
       pubkeys = mkCommaSepListParam [] ''
         List of raw public keys to accept for
         authentication. The public keys may use a relative path from the swanctl
-        <literal>pubkey</literal> directory or an absolute path.
+        `pubkey` directory or an absolute path.
       '';
 
       revocation = mkEnumParam ["strict" "ifuri" "relaxed"] "relaxed" ''
         Certificate revocation policy for CRL or OCSP revocation.
-        <itemizedlist>
-        <listitem><para>
-        A <literal>strict</literal> revocation policy fails if no revocation information is
-        available, i.e. the certificate is not known to be unrevoked.
-        </para></listitem>
-        <listitem><para>
-        <literal>ifuri</literal> fails only if a CRL/OCSP URI is available, but certificate
-        revocation checking fails, i.e. there should be revocation information
-        available, but it could not be obtained.
-        </para></listitem>
-        <listitem><para>
-        The default revocation policy <literal>relaxed</literal> fails only if a certificate is
-        revoked, i.e. it is explicitly known that it is bad.
-        </para></listitem>
-        </itemizedlist>
+
+        - A `strict` revocation policy fails if no revocation information is
+          available, i.e. the certificate is not known to be unrevoked.
+        - `ifuri` fails only if a CRL/OCSP URI is available, but certificate
+          revocation checking fails, i.e. there should be revocation information
+          available, but it could not be obtained.
+        - The default revocation policy `relaxed` fails only if a certificate is
+          revoked, i.e. it is explicitly known that it is bad.
       '';
 
       auth = mkStrParam "pubkey" ''
-        Authentication to expect from remote. See the <option>local</option>
-        section's <option>auth</option> keyword description about the details of
+        Authentication to expect from remote. See the {option}`local`
+        section's {option}`auth` keyword description about the details of
         supported mechanisms.
 
         Since 5.4.0, to require a trustchain public key strength for the remote
         side, specify the key type followed by the minimum strength in bits (for
-        example <literal>ecdsa-384</literal> or
-        <literal>rsa-2048-ecdsa-256</literal>). To limit the acceptable set of
+        example `ecdsa-384` or
+        `rsa-2048-ecdsa-256`). To limit the acceptable set of
         hashing algorithms for trustchain validation, append hash algorithms to
         pubkey or a key strength definition (for example
-        <literal>pubkey-sha256-sha512</literal>,
-        <literal>rsa-2048-sha256-sha384-sha512</literal> or
-        <literal>rsa-2048-sha256-ecdsa-256-sha256-sha384</literal>).
-        Unless disabled in <literal>strongswan.conf</literal>, or explicit IKEv2
+        `pubkey-sha256-sha512`,
+        `rsa-2048-sha256-sha384-sha512` or
+        `rsa-2048-sha256-ecdsa-256-sha256-sha384`).
+        Unless disabled in `strongswan.conf`, or explicit IKEv2
         signature constraints are configured (refer to the description of the
-        <option>local</option> section's <option>auth</option> keyword for
+        {option}`local` section's {option}`auth` keyword for
         details), such key types and hash algorithms are also applied as
         constraints against IKEv2 signature authentication schemes used by the
         remote side. To require RSASSA-PSS signatures use
-        <literal>rsa/pss</literal> instead of <literal>pubkey</literal> or
-        <literal>rsa</literal> as in e.g. <literal>rsa/pss-sha256</literal>. If
-        <literal>pubkey</literal> or <literal>rsa</literal> constraints are
+        `rsa/pss` instead of `pubkey` or
+        `rsa` as in e.g. `rsa/pss-sha256`. If
+        `pubkey` or `rsa` constraints are
         configured RSASSA-PSS signatures will only be accepted if enabled in
-        <literal>strongswan.conf</literal>(5).
+        `strongswan.conf`(5).
 
         To specify trust chain constraints for EAP-(T)TLS, append a colon to the
         EAP method, followed by the key type/size and hash algorithm as
-        discussed above (e.g. <literal>eap-tls:ecdsa-384-sha384</literal>).
+        discussed above (e.g. `eap-tls:ecdsa-384-sha384`).
       '';
 
     } ''
@@ -653,7 +619,7 @@ in {
       connection. Multiple rounds may be defined to use IKEv2 RFC 4739 Multiple
       Authentication or IKEv1 XAuth.
 
-      Each round is defined in a section having <literal>remote</literal> as
+      Each round is defined in a section having `remote` as
       prefix, and an optional unique suffix. To define a single authentication
       round, the suffix may be omitted.
     '';
@@ -673,7 +639,7 @@ in {
         combinations in IKEv1.
 
         Algorithm keywords get separated using dashes. Multiple proposals may be
-        specified in a list. The special value <literal>default</literal> forms
+        specified in a list. The special value `default` forms
         a default proposal of supported algorithms considered safe, and is
         usually a good choice for interoperability. By default no AH proposals
         are included, instead ESP is proposed.
@@ -697,9 +663,9 @@ in {
         SA is established, but may later cause rekeying to fail.
 
         Extended Sequence Number support may be indicated with the
-        <literal>esn</literal> and <literal>noesn</literal> values, both may be
+        `esn` and `noesn` values, both may be
         included to indicate support for both modes. If omitted,
-        <literal>noesn</literal> is assumed.
+        `noesn` is assumed.
 
         In IKEv2, multiple algorithms of the same kind can be specified in a
         single proposal, from which one gets selected. In IKEv1, only one
@@ -708,7 +674,7 @@ in {
         combinations in IKEv1.
 
         Algorithm keywords get separated using dashes. Multiple proposals may be
-        specified as a list. The special value <literal>default</literal> forms
+        specified as a list. The special value `default` forms
         a default proposal of supported algorithms considered safe, and is
         usually a good choice for interoperability. If no algorithms are
         specified for AH nor ESP, the default set of algorithms for ESP is
@@ -726,7 +692,7 @@ in {
       local_ts = mkCommaSepListParam ["dynamic"] ''
         List of local traffic selectors to include in CHILD_SA. Each selector is
         a CIDR subnet definition, followed by an optional proto/port
-        selector. The special value <literal>dynamic</literal> may be used
+        selector. The special value `dynamic` may be used
         instead of a subnet definition, which gets replaced by the tunnel outer
         address or the virtual IP, if negotiated. This is the default.
 
@@ -735,7 +701,7 @@ in {
         name may be specified. After the optional protocol restriction, an
         optional port restriction may be specified, separated by a slash. The
         port restriction may be numeric, a getservent(3) service name, or the
-        special value <literal>opaque</literal> for RFC 4301 OPAQUE
+        special value `opaque` for RFC 4301 OPAQUE
         selectors. Port ranges may be specified as well, none of the kernel
         backends currently support port ranges, though.
 
@@ -752,31 +718,31 @@ in {
 
       remote_ts = mkCommaSepListParam ["dynamic"] ''
         List of remote selectors to include in CHILD_SA. See
-        <option>local_ts</option> for a description of the selector syntax.
+        {option}`local_ts` for a description of the selector syntax.
       '';
 
       rekey_time = mkDurationParam "1h" ''
         Time to schedule CHILD_SA rekeying. CHILD_SA rekeying refreshes key
         material, optionally using a Diffie-Hellman exchange if a group is
         specified in the proposal.  To avoid rekey collisions initiated by both
-        ends simultaneously, a value in the range of <option>rand_time</option>
+        ends simultaneously, a value in the range of {option}`rand_time`
         gets subtracted to form the effective soft lifetime.
 
         By default CHILD_SA rekeying is scheduled every hour, minus
-        <option>rand_time</option>.
+        {option}`rand_time`.
       '';
 
       life_time = mkOptionalDurationParam ''
         Maximum lifetime before CHILD_SA gets closed. Usually this hard lifetime
         is never reached, because the CHILD_SA gets rekeyed before. If that fails
         for whatever reason, this limit closes the CHILD_SA.  The default is 10%
-        more than the <option>rekey_time</option>.
+        more than the {option}`rekey_time`.
       '';
 
       rand_time = mkOptionalDurationParam ''
         Time range from which to choose a random value to subtract from
-        <option>rekey_time</option>. The default is the difference between
-        <option>life_time</option> and <option>rekey_time</option>.
+        {option}`rekey_time`. The default is the difference between
+        {option}`life_time` and {option}`rekey_time`.
       '';
 
       rekey_bytes = mkIntParam 0 ''
@@ -785,7 +751,7 @@ in {
         exchange if a group is specified in the proposal.
 
         To avoid rekey collisions initiated by both ends simultaneously, a value
-        in the range of <option>rand_bytes</option> gets subtracted to form the
+        in the range of {option}`rand_bytes` gets subtracted to form the
         effective soft volume limit.
 
         Volume based CHILD_SA rekeying is disabled by default.
@@ -795,13 +761,13 @@ in {
         Maximum bytes processed before CHILD_SA gets closed. Usually this hard
         volume limit is never reached, because the CHILD_SA gets rekeyed
         before. If that fails for whatever reason, this limit closes the
-        CHILD_SA.  The default is 10% more than <option>rekey_bytes</option>.
+        CHILD_SA.  The default is 10% more than {option}`rekey_bytes`.
       '';
 
       rand_bytes = mkOptionalIntParam ''
         Byte range from which to choose a random value to subtract from
-        <option>rekey_bytes</option>. The default is the difference between
-        <option>life_bytes</option> and <option>rekey_bytes</option>.
+        {option}`rekey_bytes`. The default is the difference between
+        {option}`life_bytes` and {option}`rekey_bytes`.
       '';
 
       rekey_packets = mkIntParam 0 ''
@@ -810,7 +776,7 @@ in {
         exchange if a group is specified in the proposal.
 
         To avoid rekey collisions initiated by both ends simultaneously, a value
-        in the range of <option>rand_packets</option> gets subtracted to form
+        in the range of {option}`rand_packets` gets subtracted to form
         the effective soft packet count limit.
 
         Packet count based CHILD_SA rekeying is disabled by default.
@@ -822,13 +788,13 @@ in {
         rekeyed before. If that fails for whatever reason, this limit closes the
         CHILD_SA.
 
-        The default is 10% more than <option>rekey_bytes</option>.
+        The default is 10% more than {option}`rekey_bytes`.
       '';
 
       rand_packets = mkOptionalIntParam ''
         Packet range from which to choose a random value to subtract from
-        <option>rekey_packets</option>. The default is the difference between
-        <option>life_packets</option> and <option>rekey_packets</option>.
+        {option}`rekey_packets`. The default is the difference between
+        {option}`life_packets` and {option}`rekey_packets`.
       '';
 
       updown = mkOptionalStrParam ''
@@ -836,7 +802,7 @@ in {
       '';
 
       hostaccess = mkYesNoParam no ''
-        Hostaccess variable to pass to <literal>updown</literal> script.
+        Hostaccess variable to pass to `updown` script.
       '';
 
       mode = mkEnumParam [ "tunnel"
@@ -847,33 +813,20 @@ in {
                            "drop"
                          ] "tunnel" ''
         IPsec Mode to establish CHILD_SA with.
-        <itemizedlist>
-        <listitem><para>
-        <literal>tunnel</literal> negotiates the CHILD_SA in IPsec Tunnel Mode,
-        </para></listitem>
-        <listitem><para>
-        whereas <literal>transport</literal> uses IPsec Transport Mode.
-        </para></listitem>
-        <listitem><para>
-        <literal>transport_proxy</literal> signifying the special Mobile IPv6
-        Transport Proxy Mode.
-        </para></listitem>
-        <listitem><para>
-        <literal>beet</literal> is the Bound End to End Tunnel mixture mode,
-        working with fixed inner addresses without the need to include them in
-        each packet.
-        </para></listitem>
-        <listitem><para>
-        Both <literal>transport</literal> and <literal>beet</literal> modes are
-        subject to mode negotiation; <literal>tunnel</literal> mode is
-        negotiated if the preferred mode is not available.
-        </para></listitem>
-        <listitem><para>
-        <literal>pass</literal> and <literal>drop</literal> are used to install
-        shunt policies which explicitly bypass the defined traffic from IPsec
-        processing or drop it, respectively.
-        </para></listitem>
-        </itemizedlist>
+
+        - `tunnel` negotiates the CHILD_SA in IPsec Tunnel Mode,
+        - whereas `transport` uses IPsec Transport Mode.
+        - `transport_proxy` signifying the special Mobile IPv6
+          Transport Proxy Mode.
+        - `beet` is the Bound End to End Tunnel mixture mode,
+          working with fixed inner addresses without the need to include them in
+          each packet.
+        - Both `transport` and `beet` modes are
+          subject to mode negotiation; `tunnel` mode is
+          negotiated if the preferred mode is not available.
+        - `pass` and `drop` are used to install
+          shunt policies which explicitly bypass the defined traffic from IPsec
+          processing or drop it, respectively.
       '';
 
       policies = mkYesNoParam yes ''
@@ -932,18 +885,18 @@ in {
         set. This allows installing duplicate policies and enables Netfilter
         rules to select specific SAs/policies for incoming traffic. Note that
         inbound marks are only set on policies, by default, unless
-        <option>mark_in_sa</option> is enabled. The special value
-        <literal>%unique</literal> sets a unique mark on each CHILD_SA instance,
-        beyond that the value <literal>%unique-dir</literal> assigns a different
+        {option}`mark_in_sa` is enabled. The special value
+        `%unique` sets a unique mark on each CHILD_SA instance,
+        beyond that the value `%unique-dir` assigns a different
         unique mark for each
 
         An additional mask may be appended to the mark, separated by
-        <literal>/</literal>. The default mask if omitted is
-        <literal>0xffffffff</literal>.
+        `/`. The default mask if omitted is
+        `0xffffffff`.
       '';
 
       mark_in_sa = mkYesNoParam no ''
-        Whether to set <option>mark_in</option> on the inbound SA. By default,
+        Whether to set {option}`mark_in` on the inbound SA. By default,
         the inbound mark is only set on the inbound policy. The tuple destination
         address, protocol and SPI is unique and the mark is not required to find
         the correct SA, allowing to mark traffic after decryption instead (where
@@ -957,13 +910,13 @@ in {
         require marks on each packet to match a policy/SA having that option
         set. This allows installing duplicate policies and enables Netfilter
         rules to select specific policies/SAs for outgoing traffic. The special
-        value <literal>%unique</literal> sets a unique mark on each CHILD_SA
-        instance, beyond that the value <literal>%unique-dir</literal> assigns a
+        value `%unique` sets a unique mark on each CHILD_SA
+        instance, beyond that the value `%unique-dir` assigns a
         different unique mark for each CHILD_SA direction (in/out).
 
         An additional mask may be appended to the mark, separated by
-        <literal>/</literal>. The default mask if omitted is
-        <literal>0xffffffff</literal>.
+        `/`. The default mask if omitted is
+        `0xffffffff`.
       '';
 
       set_mark_in = mkStrParam "0/0x00000000" ''
@@ -973,10 +926,10 @@ in {
         differently (e.g. via policy routing).
 
         An additional mask may be appended to the mark, separated by
-        <literal>/</literal>. The default mask if omitted is 0xffffffff. The
-        special value <literal>%same</literal> uses the value (but not the mask)
-        from <option>mark_in</option> as mark value, which can be fixed,
-        <literal>%unique</literal> or <literal>%unique-dir</literal>.
+        `/`. The default mask if omitted is 0xffffffff. The
+        special value `%same` uses the value (but not the mask)
+        from {option}`mark_in` as mark value, which can be fixed,
+        `%unique` or `%unique-dir`.
 
         Setting marks in XFRM input requires Linux 4.19 or higher.
       '';
@@ -987,10 +940,10 @@ in {
         traffic (e.g. via policy routing).
 
         An additional mask may be appended to the mark, separated by
-        <literal>/</literal>. The default mask if omitted is 0xffffffff. The
-        special value <literal>%same</literal> uses the value (but not the mask)
-        from <option>mark_out</option> as mark value, which can be fixed,
-        <literal>%unique_</literal> or <literal>%unique-dir</literal>.
+        `/`. The default mask if omitted is 0xffffffff. The
+        special value `%same` uses the value (but not the mask)
+        from {option}`mark_out` as mark value, which can be fixed,
+        `%unique_` or `%unique-dir`.
 
         Setting marks in XFRM output is supported since Linux 4.14. Setting a
         mask requires at least Linux 4.19.
@@ -999,18 +952,18 @@ in {
       if_id_in = mkStrParam "0" ''
         XFRM interface ID set on inbound policies/SA. This allows installing
         duplicate policies/SAs and associates them with an interface with the
-        same ID. The special value <literal>%unique</literal> sets a unique
+        same ID. The special value `%unique` sets a unique
         interface ID on each CHILD_SA instance, beyond that the value
-        <literal>%unique-dir</literal> assigns a different unique interface ID
+        `%unique-dir` assigns a different unique interface ID
         for each CHILD_SA direction (in/out).
       '';
 
       if_id_out = mkStrParam "0" ''
         XFRM interface ID set on outbound policies/SA. This allows installing
         duplicate policies/SAs and associates them with an interface with the
-        same ID. The special value <literal>%unique</literal> sets a unique
+        same ID. The special value `%unique` sets a unique
         interface ID on each CHILD_SA instance, beyond that the value
-        <literal>%unique-dir</literal> assigns a different unique interface ID
+        `%unique-dir` assigns a different unique interface ID
         for each CHILD_SA direction (in/out).
 
         The daemon will not install routes for CHILD_SAs that have this option set.
@@ -1020,23 +973,23 @@ in {
         Pads ESP packets with additional data to have a consistent ESP packet
         size for improved Traffic Flow Confidentiality. The padding defines the
         minimum size of all ESP packets sent.  The default value of
-        <literal>0</literal> disables TFC padding, the special value
-        <literal>mtu</literal> adds TFC padding to create a packet size equal to
+        `0` disables TFC padding, the special value
+        `mtu` adds TFC padding to create a packet size equal to
         the Path Maximum Transfer Unit.
       '';
 
       replay_window = mkIntParam 32 ''
         IPsec replay window to configure for this CHILD_SA. Larger values than
-        the default of <literal>32</literal> are supported using the Netlink
-        backend only, a value of <literal>0</literal> disables IPsec replay
+        the default of `32` are supported using the Netlink
+        backend only, a value of `0` disables IPsec replay
         protection.
       '';
 
       hw_offload = mkEnumParam ["yes" "no" "auto"] "no" ''
         Enable hardware offload for this CHILD_SA, if supported by the IPsec
-        implementation. The value <literal>yes</literal> enforces offloading
+        implementation. The value `yes` enforces offloading
         and the installation will fail if it's not supported by either kernel or
-        device. The value <literal>auto</literal> enables offloading, if it's
+        device. The value `auto` enables offloading, if it's
         supported, but the installation does not fail otherwise.
       '';
 
@@ -1055,55 +1008,42 @@ in {
       copy_dscp = mkEnumParam [ "out" "in" "yes" "no" ] "out" ''
         Whether to copy the DSCP (Differentiated Services Field Codepoint)
         header field to/from the outer IP header in tunnel mode. The value
-        <literal>out</literal> only copies the field from the inner to the outer
-        header, the value <literal>in</literal> does the opposite and only
+        `out` only copies the field from the inner to the outer
+        header, the value `in` does the opposite and only
         copies the field from the outer to the inner header when decapsulating,
-        the value <literal>yes</literal> copies the field in both directions,
-        and the value <literal>no</literal> disables copying the field
-        altogether. Setting this to <literal>yes</literal> or
-        <literal>in</literal> could allow an attacker to adversely affect other
+        the value `yes` copies the field in both directions,
+        and the value `no` disables copying the field
+        altogether. Setting this to `yes` or
+        `in` could allow an attacker to adversely affect other
         traffic at the receiver, which is why the default is
-        <literal>out</literal>. Controlling this behavior is not supported by
+        `out`. Controlling this behavior is not supported by
         all kernel interfaces.
       '';
 
       start_action = mkEnumParam ["none" "trap" "start"] "none" ''
         Action to perform after loading the configuration.
-        <itemizedlist>
-        <listitem><para>
-        The default of <literal>none</literal> loads the connection only, which
-        then can be manually initiated or used as a responder configuration.
-        </para></listitem>
-        <listitem><para>
-        The value <literal>trap</literal> installs a trap policy, which triggers
-        the tunnel as soon as matching traffic has been detected.
-        </para></listitem>
-        <listitem><para>
-        The value <literal>start</literal> initiates the connection actively.
-        </para></listitem>
-        </itemizedlist>
+
+        - The default of `none` loads the connection only, which
+          then can be manually initiated or used as a responder configuration.
+        - The value `trap` installs a trap policy, which triggers
+          the tunnel as soon as matching traffic has been detected.
+        - The value `start` initiates the connection actively.
+
         When unloading or replacing a CHILD_SA configuration having a
-        <option>start_action</option> different from <literal>none</literal>,
+        {option}`start_action` different from `none`,
         the inverse action is performed. Configurations with
-        <literal>start</literal> get closed, while such with
-        <literal>trap</literal> get uninstalled.
+        `start` get closed, while such with
+        `trap` get uninstalled.
       '';
 
       close_action = mkEnumParam ["none" "trap" "start"] "none" ''
         Action to perform after a CHILD_SA gets closed by the peer.
-        <itemizedlist>
-        <listitem><para>
-        The default of <literal>none</literal> does not take any action,
-        </para></listitem>
-        <listitem><para>
-        <literal>trap</literal> installs a trap policy for the CHILD_SA.
-        </para></listitem>
-        <listitem><para>
-        <literal>start</literal> tries to re-create the CHILD_SA.
-        </para></listitem>
-        </itemizedlist>
 
-        <option>close_action</option> does not provide any guarantee that the
+        - The default of `none` does not take any action,
+        - `trap` installs a trap policy for the CHILD_SA.
+        - `start` tries to re-create the CHILD_SA.
+
+        {option}`close_action` does not provide any guarantee that the
         CHILD_SA is kept alive. It acts on explicit close messages only, but not
         on negotiation failures. Use trap policies to reliably re-create failed
         CHILD_SAs.
@@ -1111,9 +1051,9 @@ in {
 
     } ''
       CHILD_SA configuration sub-section. Each connection definition may have
-      one or more sections in its <option>children</option> subsection. The
+      one or more sections in its {option}`children` subsection. The
       section name defines the name of the CHILD_SA configuration, which must be
-      unique within the connection (denoted &#60;child&#62; below).
+      unique within the connection (denoted \<child\> below).
     '';
   } ''
     Section defining IKE connection configurations, each in its own subsection
@@ -1130,13 +1070,13 @@ in {
 
       id = mkPrefixedAttrsOfParam (mkOptionalStrParam "") ''
         Identity the EAP/XAuth secret belongs to. Multiple unique identities may
-        be specified, each having an <literal>id</literal> prefix, if a secret
+        be specified, each having an `id` prefix, if a secret
         is shared between multiple users.
       '';
 
     } ''
       EAP secret section for a specific secret. Each EAP secret is defined in a
-      unique section having the <literal>eap</literal> prefix. EAP secrets are
+      unique section having the `eap` prefix. EAP secrets are
       used for XAuth authentication as well.
     '';
 
@@ -1160,7 +1100,7 @@ in {
       '';
     } ''
       NTLM secret section for a specific secret. Each NTLM secret is defined in
-      a unique section having the <literal>ntlm</literal> prefix. NTLM secrets
+      a unique section having the `ntlm` prefix. NTLM secrets
       may only be used for EAP-MSCHAPv2 authentication.
     '';
 
@@ -1173,30 +1113,30 @@ in {
 
       id = mkPrefixedAttrsOfParam (mkOptionalStrParam "") ''
         IKE identity the IKE preshared secret belongs to. Multiple unique
-        identities may be specified, each having an <literal>id</literal>
+        identities may be specified, each having an `id`
         prefix, if a secret is shared between multiple peers.
       '';
     } ''
       IKE preshared secret section for a specific secret. Each IKE PSK is
-      defined in a unique section having the <literal>ike</literal> prefix.
+      defined in a unique section having the `ike` prefix.
     '';
 
     ppk = mkPrefixedAttrsOfParams {
       secret = mkOptionalStrParam ''
         Value of the PPK. It may either be an ASCII string, a hex encoded string
-        if it has a <literal>0x</literal> prefix or a Base64 encoded string if
-        it has a <literal>0s</literal> prefix in its value. Should have at least
+        if it has a `0x` prefix or a Base64 encoded string if
+        it has a `0s` prefix in its value. Should have at least
         256 bits of entropy for 128-bit security.
       '';
 
       id = mkPrefixedAttrsOfParam (mkOptionalStrParam "") ''
         PPK identity the PPK belongs to. Multiple unique identities may be
-        specified, each having an <literal>id</literal> prefix, if a secret is
+        specified, each having an `id` prefix, if a secret is
         shared between multiple peers.
       '';
     } ''
       Postquantum Preshared Key (PPK) section for a specific secret. Each PPK is
-      defined in a unique section having the <literal>ppk</literal> prefix.
+      defined in a unique section having the `ppk` prefix.
     '';
 
     private = mkPrefixedAttrsOfParams {
@@ -1209,25 +1149,25 @@ in {
       '';
     } ''
       Private key decryption passphrase for a key in the
-      <literal>private</literal> folder.
+      `private` folder.
     '';
 
     rsa = mkPrefixedAttrsOfParams {
       file = mkOptionalStrParam ''
-        File name in the <literal>rsa</literal> folder for which this passphrase
+        File name in the `rsa` folder for which this passphrase
         should be used.
       '';
       secret = mkOptionalStrParam ''
         Value of decryption passphrase for RSA key.
       '';
     } ''
-      Private key decryption passphrase for a key in the <literal>rsa</literal>
+      Private key decryption passphrase for a key in the `rsa`
       folder.
     '';
 
     ecdsa = mkPrefixedAttrsOfParams {
       file = mkOptionalStrParam ''
-        File name in the <literal>ecdsa</literal> folder for which this
+        File name in the `ecdsa` folder for which this
         passphrase should be used.
       '';
       secret = mkOptionalStrParam ''
@@ -1235,12 +1175,12 @@ in {
       '';
     } ''
       Private key decryption passphrase for a key in the
-      <literal>ecdsa</literal> folder.
+      `ecdsa` folder.
     '';
 
     pkcs8 = mkPrefixedAttrsOfParams {
       file = mkOptionalStrParam ''
-        File name in the <literal>pkcs8</literal> folder for which this
+        File name in the `pkcs8` folder for which this
         passphrase should be used.
       '';
       secret = mkOptionalStrParam ''
@@ -1248,12 +1188,12 @@ in {
       '';
     } ''
       Private key decryption passphrase for a key in the
-      <literal>pkcs8</literal> folder.
+      `pkcs8` folder.
     '';
 
     pkcs12 = mkPrefixedAttrsOfParams {
       file = mkOptionalStrParam ''
-        File name in the <literal>pkcs12</literal> folder for which this
+        File name in the `pkcs12` folder for which this
         passphrase should be used.
       '';
       secret = mkOptionalStrParam ''
@@ -1261,7 +1201,7 @@ in {
       '';
     } ''
       PKCS#12 decryption passphrase for a container in the
-      <literal>pkcs12</literal> folder.
+      `pkcs12` folder.
     '';
 
     token = mkPrefixedAttrsOfParams {
@@ -1281,7 +1221,7 @@ in {
       pin = mkOptionalStrParam ''
         Optional PIN required to access the key on the token. If none is
         provided the user is prompted during an interactive
-        <literal>--load-creds</literal> call.
+        `--load-creds` call.
       '';
     } "Definition for a private key that's stored on a token/smartcard/TPM.";
 
@@ -1291,7 +1231,7 @@ in {
     addrs = mkOptionalStrParam ''
       Subnet or range defining addresses allocated in pool. Accepts a single
       CIDR subnet defining the pool to allocate addresses from or an address
-      range (&#60;from&#62;-&#60;to&#62;). Pools must be unique and non-overlapping.
+      range (\<from\>-\<to\>). Pools must be unique and non-overlapping.
     '';
 
     dns           = mkCommaSepListParam [] "Address or CIDR subnets";
@@ -1305,6 +1245,6 @@ in {
   } ''
     Section defining named pools. Named pools may be referenced by connections
     with the pools option to assign virtual IPs and other configuration
-    attributes. Each pool must have a unique name (denoted &#60;name&#62; below).
+    attributes. Each pool must have a unique name (denoted \<name\> below).
   '';
 }

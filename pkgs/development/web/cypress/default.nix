@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "10.3.1";
+  version = "10.8.0";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/linux-x64/cypress.zip";
-    sha256 = "sha256-LfvTnvOGFFZn7tUQ150fCO0gw7TK6JJj+Ys75VjJJ2M=";
+    sha256 = "sha256-QKzdK/3WGcNoPPgsCO08rmOFgwgYTI9yvP70HoGvojg=";
   };
 
   # don't remove runtime deps
@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Fast, easy and reliable testing for anything that runs in a browser";
     homepage = "https://www.cypress.io";
+    mainProgram = "Cypress";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];

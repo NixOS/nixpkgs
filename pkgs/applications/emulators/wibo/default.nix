@@ -1,23 +1,44 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchzip
+, srcOnly
 , cmake
+, unzip
 }:
 
 stdenv.mkDerivation rec {
   pname = "wibo";
-  version = "0.2.0";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "decompals";
-    repo = "WiBo";
+    repo = "wibo";
     rev = version;
-    sha256 = "sha256-zv+FiordPo7aho3RJqDEe/1sJtjVt6Vy665VeNul/Kw=";
+    hash = "sha256-dpfKSiIWE9L5BLPH2t8RsUz7Ufkdo/5zn1dewaEgJl0=";
   };
 
   nativeBuildInputs = [
     cmake
+    unzip
   ];
+
+  doCheck = false;
+  # Test step from https://github.com/decompals/wibo/blob/main/.github/workflows/ci.yml
+  checkPhase = let
+    gc = srcOnly {
+      name = "GC_WII_COMPILERS";
+      src = fetchzip {
+        url = "https://cdn.discordapp.com/attachments/727918646525165659/917185027656286218/GC_WII_COMPILERS.zip";
+        hash = "sha256-o+UrmIbCsa74LxtLofT0DKrTRgT0qDK5/V7GsG2Zprc=";
+        stripRoot = false;
+      };
+      meta.license = lib.licenses.unfree;
+    };
+  in lib.optionalString doCheck ''
+    MWCIncludes=. ./wibo ${gc}/GC/2.7/mwcceppc.exe -c ../test/test.c
+    file test.o | grep "ELF 32-bit"
+  '';
 
   meta = with lib; {
     description = "Quick-and-dirty wrapper to run 32-bit windows EXEs on linux";

@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchpatch
 , fetchPypi
-, pythonAtLeast
 , pythonOlder
 
 # native
@@ -12,19 +11,19 @@
 , typing-extensions
 
 # tests
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "aioitertools";
-  version = "0.10.0";
+  version = "0.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fR0dSgPUYsWghAeH098JjxJYR+DTi4M7MPj4y8RaFCA=";
+    hash = "sha256-QsaLjdOmnCv38iM7999LtYtVe8pSUqwC7VGHu8Z9aDE=";
   };
 
   nativeBuildInputs = [
@@ -35,18 +34,18 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  checkInputs = [
+    unittestCheckHook
+  ];
+
   pythonImportsCheck = [
     "aioitertools"
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
-
   meta = with lib; {
     description = "Implementation of itertools, builtins, and more for AsyncIO and mixed-type iterables";
+    homepage = "https://aioitertools.omnilib.dev/";
     license = licenses.mit;
-    homepage = "https://pypi.org/project/aioitertools/";
     maintainers = with maintainers; [ teh ];
   };
 }

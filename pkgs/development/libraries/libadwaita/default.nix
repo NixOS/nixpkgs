@@ -1,10 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, docbook-xsl-nons
 , gi-docgen
-, gtk-doc
-, libxml2
 , meson
 , ninja
 , pkg-config
@@ -23,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libadwaita";
-  version = "1.1.3";
+  version = "1.2.0";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -33,19 +30,21 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libadwaita";
     rev = version;
-    hash = "sha256-Mjv4Z9YaIT9atD8ekepBAA1ZV30kWnMnV8+kOuGULnw=";
+    hash = "sha256-3lH7Vi9M8k+GSrCpvruRpLrIpMoOakKbcJlaAc/FK+U=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
-    docbook-xsl-nons
     gi-docgen
-    gtk-doc
-    libxml2 # for xmllint
     meson
     ninja
     pkg-config
     sassc
     vala
+    gobject-introspection
   ];
 
   mesonFlags = [
@@ -56,7 +55,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     fribidi
-    gobject-introspection
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
     Foundation
@@ -99,8 +97,9 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  postInstall = ''
-    mv $out/share/{doc,gtk-doc}
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {

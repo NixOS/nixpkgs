@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "wktutils";
-  version = "1.1.5";
+  version = "1.1.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "asfadmin";
     repo = "Discovery-WKTUtils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nAmU51f7K2n69G/vlLTji9EpMU1ynUpj/bZVZsaDEwM=";
+    hash = "sha256-PFeIMIFOff9ztdmIP7jcFzKkmhm01G0QnDm20AafUsg=";
   };
 
   propagatedBuildInputs = [

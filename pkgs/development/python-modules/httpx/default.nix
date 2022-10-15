@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , brotli
 , brotlicffi
 , buildPythonPackage
@@ -62,6 +63,9 @@ buildPythonPackage rec {
       pygments
     ];
   };
+
+  # trustme uses pyopenssl
+  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
 
   checkInputs = [
     chardet

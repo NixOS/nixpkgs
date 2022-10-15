@@ -5,8 +5,6 @@
 , ninja
 , pkg-config
 , makeFontsConf
-, boost
-, gnutls
 , openssl
 , libdrm
 , libevent
@@ -23,12 +21,12 @@
 
 stdenv.mkDerivation {
   pname = "libcamera";
-  version = "unstable-2022-07-15";
+  version = "unstable-2022-09-15";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
-    rev = "e9b6b362820338d0546563444e7b1767f5c7044c";
-    hash = "sha256-geqFcMBHcVe7dPdVOal8V2pVItYUdoC+5isISqRG4Wc=";
+    rev = "74ab3f778c848b20cbf8fe299170756ff6ebab1a";
+    hash = "sha256-w0I4L6xXTBUdqj30LpVW/KZW6bdoUeoW9lnMOW0OLJY=";
   };
 
   postPatch = ''
@@ -39,8 +37,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     # IPA and signing
-    gnutls
-    boost
+    openssl
 
     # gstreamer integration
     gst_all_1.gstreamer

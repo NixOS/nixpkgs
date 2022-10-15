@@ -21,11 +21,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pygobject3
+    gtk3
   ];
 
   checkInputs = [
     pytestCheckHook
-    gtk3
     gobject-introspection
   ];
 

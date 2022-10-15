@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "glfw";
-  version = "2.5.4";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "FlorianRhiem";
     repo = "pyGLFW";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-4Ym3Vmkf+HwORbhR72Ws/cqLkNMPCY8FL35O2hSalGQ=";
+    sha256 = "sha256-puaKveByAEkgME81uePTMSglvMgyqornW1sNAbJXNuc=";
   };
 
   # Patch path to GLFW shared object

@@ -66,7 +66,7 @@ let
 in {
   options = {
     services.zoneminder = with lib; {
-      enable = lib.mkEnableOption ''
+      enable = lib.mkEnableOption (lib.mdDoc ''
         ZoneMinder
 
         If you intend to run the database locally, you should set
@@ -75,12 +75,12 @@ in {
         and database user as well as populate the database yourself.
         Additionally, you will need to run `zmupdate.pl` yourself when
         upgrading to a newer version.
-      '';
+      '');
 
       webserver = mkOption {
         type = types.enum [ "nginx" "none" ];
         default = "nginx";
-        description = ''
+        description = lib.mdDoc ''
           The webserver to configure for the PHP frontend.
 
           Set it to `none` if you want to configure it yourself. PRs are welcome

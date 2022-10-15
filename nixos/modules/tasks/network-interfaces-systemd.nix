@@ -134,7 +134,7 @@ in
               # Most of these route options have not been tested.
               # Please fix or report any mistakes you may find.
               routeConfig =
-                optionalAttrs (route.prefixLength > 0) {
+                optionalAttrs (route.address != null && route.prefixLength != null) {
                   Destination = "${route.address}/${toString route.prefixLength}";
                 } //
                 optionalAttrs (route.options ? fastopen_no_cookie) {

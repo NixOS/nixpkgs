@@ -83,6 +83,8 @@ stdenv.mkDerivation rec {
       rm -f ../tests/bugfixes/redmine/test_issue_662.py
       rm -f ../tests/bugfixes/github/test_issue_1046.py
 
+      rm ../tests/bugfixes/redmine/test_issue_683.py
+
       # disable tests that requires loopback networking
       substituteInPlace  ../tests/bash_tests/testcases.py \
         --replace "def io_test(self):" "def io_disabled(self):"
@@ -118,7 +120,7 @@ stdenv.mkDerivation rec {
   disallowedReferences = [ stdenv.cc.cc ];
 
   meta = with lib; {
-    homepage = "https://www.exiv2.org/";
+    homepage = "https://exiv2.org";
     description = "A library and command-line utility to manage image metadata";
     platforms = platforms.all;
     license = licenses.gpl2Plus;

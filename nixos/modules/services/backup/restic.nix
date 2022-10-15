@@ -182,17 +182,29 @@ in
         pruneOpts = mkOption {
           type = types.listOf types.str;
           default = [ ];
-          description = ''
-            A list of options (--keep-* et al.) for 'restic forget
+          description = lib.mdDoc ''
+            A list of options (--keep-\* et al.) for 'restic forget
             --prune', to automatically prune old snapshots.  The
             'forget' command is run *after* the 'backup' command, so
-            keep that in mind when constructing the --keep-* options.
+            keep that in mind when constructing the --keep-\* options.
           '';
           example = [
             "--keep-daily 7"
             "--keep-weekly 5"
             "--keep-monthly 12"
             "--keep-yearly 75"
+          ];
+        };
+
+        checkOpts = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          description = lib.mdDoc ''
+            A list of options for 'restic check', which is run after
+            pruning.
+          '';
+          example = [
+            "--with-cache"
           ];
         };
 
@@ -270,8 +282,8 @@ in
               then if (backup.paths != null) then concatStringsSep " " backup.paths else ""
               else "--files-from ${filesFromTmpFile}";
             pruneCmd = optionals (builtins.length backup.pruneOpts > 0) [
-              (resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts))
-              (resticCmd + " check")
+              (resticCmd + " forget --prune --cache-dir=%C/restic-backups-${name} " + (concatStringsSep " " backup.pruneOpts))
+              (resticCmd + " check --cache-dir=%C/restic-backups-${name} " + (concatStringsSep " " backup.checkOpts))
             ];
             # Helper functions for rclone remotes
             rcloneRemoteName = builtins.elemAt (splitString ":" backup.repository) 1;
@@ -321,7 +333,7 @@ in
               ''}
             '';
           } // optionalAttrs (backup.dynamicFilesFrom != null || backup.backupCleanupCommand != null) {
-            postStart = ''
+            postStop = ''
               ${optionalString (backup.backupCleanupCommand != null) ''
                 ${pkgs.writeScript "backupCleanupCommand" backup.backupCleanupCommand}
               ''}

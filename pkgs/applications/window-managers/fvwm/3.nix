@@ -25,26 +25,27 @@
 , libxslt
 , perl
 , pkg-config
-, python3
+, python3Packages
 , readline
 , sharutils
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fvwm3";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "fvwmorg";
     repo = "fvwm3";
     rev = finalAttrs.version;
-    hash = "sha256-ByMSX4nwXkp+ly39C2+cYy3e9B0vnGcJlyIiS7V6zoI=";
+    hash = "sha256-/2Ssl/sgKCXbUCtKj2WIcvEC3B16h5/1Jp87AggKxJo=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     asciidoctor
     pkg-config
+    python3Packages.wrapPython
   ];
 
   buildInputs = [
@@ -69,14 +70,24 @@ stdenv.mkDerivation (finalAttrs: {
     libstroke
     libxslt
     perl
-    python3
+    python3Packages.python
     readline
     sharutils
+  ];
+
+  pythonPath = [
+    python3Packages.pyxdg
   ];
 
   configureFlags = [
     "--enable-mandoc"
   ];
+
+  postFixup = ''
+    wrapPythonPrograms
+  '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "http://fvwm.org";

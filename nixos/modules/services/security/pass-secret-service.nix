@@ -7,7 +7,7 @@ let
 in
 {
   options.services.passSecretService = {
-    enable = mkEnableOption "pass secret service";
+    enable = mkEnableOption (lib.mdDoc "pass secret service");
 
     package = mkOption {
       type = types.package;

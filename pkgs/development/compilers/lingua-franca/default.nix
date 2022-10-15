@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace bin/lfc \
       --replace 'base=`dirname $(dirname ''${abs_path})`' "base='$out'" \
-      --replace "run_lfc_with_args" "${jdk17_headless}/bin/java -jar $out/lib/jars/org.lflang.lfc-${version}-SNAPSHOT-all.jar"
+      --replace "run_lfc_with_args" "${jdk17_headless}/bin/java -jar $out/lib/jars/org.lflang.lfc-${version}-all.jar"
   '';
 
   installPhase = ''

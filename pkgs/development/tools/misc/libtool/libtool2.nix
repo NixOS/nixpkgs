@@ -38,10 +38,9 @@ stdenv.mkDerivation rec {
   # libtool commit da2e352735722917bf0786284411262195a6a3f6 changed
   # the shebang from `/bin/sh` (which is a special sandbox exception)
   # to `/usr/bin/env sh`, meaning that we now need to patch shebangs
-  # in libtoolize and ltmain.sh since `dontPatchShebangs` is set:
+  # in libtoolize.in:
   ''
     substituteInPlace libtoolize.in       --replace '#! /usr/bin/env sh' '#!${runtimeShell}'
-    substituteInPlace build-aux/ltmain.in --replace '#! /usr/bin/env sh' '#!${runtimeShell}'
   '';
 
   strictDeps = true;

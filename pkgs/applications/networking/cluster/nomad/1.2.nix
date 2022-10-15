@@ -4,7 +4,7 @@
 
 callPackage ./generic.nix {
   inherit buildGoModule;
-  version = "1.2.9";
-  sha256 = "05pd4y5aq91ac73447aqr0pk56rx5qhqzzp5cw4w06yh5iry0bmn";
-  vendorSha256 = "08nqqd3dz8bzxnh729kckvg59wnvmixmsh8g74nlxk90gq07zsn4";
+  version = "1.2.13";
+  sha256 = "sha256-yDcvN6cKG1BlBq1ygYB58bS1YRHWqJgLXRlqI7lrW1A=";
+  vendorSha256 = "sha256-dPErDlJ4oNpER3Ij4yrN77V8sZvDUuXY7dM39u9xT4I=";
 }

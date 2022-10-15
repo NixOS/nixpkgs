@@ -14,7 +14,7 @@ in
 
   options = {
 
-    services.teamviewer.enable = mkEnableOption "TeamViewer daemon";
+    services.teamviewer.enable = mkEnableOption (lib.mdDoc "TeamViewer daemon");
 
   };
 

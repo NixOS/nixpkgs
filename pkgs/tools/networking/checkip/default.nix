@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "checkip";
-  version = "0.40.1";
+  version = "0.40.4";
 
   src = fetchFromGitHub {
     owner = "jreisinger";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SPfr88ZEIFlbU4ofuxb2I42L7FR4EXbckCVylEQHfN4=";
+    sha256 = "sha256-KGRcHtrmgUN7yi6SmJuckFOUec0Bhgz0iL6AUgdCWVw=";
   };
 
   vendorSha256 = "sha256-bFhSMjm9rqUUbCV9keeXm+yhzQMKrYKs1DbCt53J8aM=";

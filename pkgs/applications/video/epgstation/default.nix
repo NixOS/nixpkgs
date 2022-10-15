@@ -1,15 +1,11 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, gitUpdater
-, writers
 , makeWrapper
 , bash
 , nodejs
-, nodePackages
 , gzip
-, jq
-, yq
+, callPackage
 }:
 
 let
@@ -23,19 +19,19 @@ let
     sha256 = "K1cAvmqWEfS6EY4MKAtjXb388XLYHtouxNM70PWgFig=";
   };
 
-  client = nodePackages.epgstation-client.override (drv: {
-    # FIXME: remove this option if possible
-    #
-    # Unsetting this option resulted NPM attempting to re-download packages.
-    dontNpmInstall = true;
+  client = nodejs.pkgs.epgstation-client.override (drv: {
+    # This is set to false to keep devDependencies at build time. Build time
+    # dependencies are pruned afterwards.
+    production = false;
 
     meta = drv.meta // {
       inherit (nodejs.meta) platforms;
     };
   });
 
-  server = nodePackages.epgstation.override (drv: {
-    inherit src;
+  server = nodejs.pkgs.epgstation.override (drv: {
+    # NOTE: updateScript relies on version matching the src.
+    inherit version src;
 
     # This is set to false to keep devDependencies at build time. Build time
     # dependencies are pruned afterwards.
@@ -47,11 +43,17 @@ let
     ];
 
     preRebuild = ''
+      # Fix for OpenSSL compat with newer Node.js
+      export NODE_OPTIONS=--openssl-legacy-provider
+
       # Fix for not being able to connect to mysql using domain sockets.
       patch -p1 < ${./use-mysql-over-domain-socket.patch}
 
       # Workaround for https://github.com/svanderburg/node2nix/issues/275
       sed -i -e "s|#!/usr/bin/env node|#! ${nodejs}/bin/node|" node_modules/node-gyp-build/bin.js
+
+      # Optional typeorm dependency that does not build on aarch64-linux
+      rm -r node_modules/oracledb
 
       find . -name package-lock.json -delete
     '';
@@ -64,8 +66,8 @@ let
 
       pushd $out/lib/node_modules/epgstation
 
-      cp -r ${client}/lib/node_modules/epgstation-client/node_modules client/node_modules
-      chmod -R u+w client/node_modules
+      cp -r ${client}/lib/node_modules/epgstation-client/{package-lock.json,node_modules} client/
+      chmod -R u+w client/{package-lock.json,node_modules}
 
       npm run build
 
@@ -104,17 +106,7 @@ let
 
     # NOTE: this may take a while since it has to update all packages in
     # nixpkgs.nodePackages
-    passthru.updateScript = import ./update.nix {
-      inherit lib;
-      inherit (src.meta) homepage;
-      inherit
-        pname
-        version
-        gitUpdater
-        writers
-        jq
-        yq;
-    };
+    passthru.updateScript = callPackage ./update.nix { };
 
     # nodePackages.epgstation is a stub package to fetch npm dependencies and
     # its meta.platforms is made empty to prevent users from installing it

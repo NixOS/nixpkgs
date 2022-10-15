@@ -1,5 +1,17 @@
-{ lib, fetchFromGitHub, rustPlatform, alsa-lib, atk, cairo, dbus, gdk-pixbuf, glib, gtk3, pango, pkg-config }:
+{ lib, fetchFromGitHub, rustPlatform, alsa-lib, atk, cairo, dbus, gdk-pixbuf, glib, gtk3, pango, pkg-config, makeDesktopItem }:
 
+let
+  desktopItem = makeDesktopItem {
+    name = "Psst";
+    exec = "psst-gui";
+    comment = "Fast and multi-platform Spotify client with native GUI";
+    desktopName = "Psst";
+    type = "Application";
+    categories = [ "Audio" "AudioVideo" ];
+    icon = "psst";
+    terminal = false;
+  };
+in
 rustPlatform.buildRustPackage rec {
   pname = "psst";
   version = "unstable-2022-05-19";
@@ -29,7 +41,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    install -Dm444 psst-gui/assets/logo_512.png $out/share/icons/${pname}.png
+    mkdir -pv $out/share/icons/hicolor/512x512/apps
+    install -Dm444 psst-gui/assets/logo_512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
+    mkdir -pv $out/share/applications
+    ln -s ${desktopItem}/share/applications/* $out/share/applications
   '';
 
   meta = with lib; {

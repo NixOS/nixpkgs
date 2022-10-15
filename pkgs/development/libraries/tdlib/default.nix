@@ -15,6 +15,16 @@ stdenv.mkDerivation rec {
   buildInputs = [ gperf openssl readline zlib ];
   nativeBuildInputs = [ cmake ];
 
+  # https://github.com/tdlib/td/issues/1974
+  postPatch = ''
+    substituteInPlace CMake/GeneratePkgConfig.cmake \
+      --replace 'function(generate_pkgconfig' \
+                'include(GNUInstallDirs)
+                 function(generate_pkgconfig' \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  '';
+
   meta = with lib; {
     description = "Cross-platform library for building Telegram clients";
     homepage = "https://core.telegram.org/tdlib/";

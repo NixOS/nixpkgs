@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , mkDerivation
 , SDL2
 , frei0r
@@ -76,7 +75,6 @@ mkDerivation rec {
   '';
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     rev-prefix = "v";
   };
 

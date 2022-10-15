@@ -26,13 +26,13 @@ let
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
-    version = "0.7.2";
+    version = "0.8.0";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "sha256-eKKQNM02Vhy+3yL2QV+0FSEpcniEa5Aq6hkAUIgLo1k=";
+      sha256 = "sha256-mVeVjkP8JpTi2aW59ZuzQPi5YvEySVAtxko7xxAx/es=";
     };
 
     patches = [
@@ -103,9 +103,6 @@ in
     ]
     ++ optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
     ;
-
-    # triggers on buffer overflow bug while running tests
-    hardeningDisable = [ "fortify" ];
 
     preConfigure = lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""

@@ -53,6 +53,7 @@ let
     ghc8107
     ghc902
     ghc924
+    ghc942
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -247,7 +248,7 @@ let
         taffybar
         tamarin-prover
         taskell
-        termonad-with-packages
+        termonad
         tldr-hs
         tweet-hs
         update-nix-fetchgit
@@ -287,6 +288,7 @@ let
 
           # Can't be built with musl, see meta.broken comment in the drv
           integer-simple.ghc884 = {};
+          integer-simple.ghc88 = {};
         };
 
       # Get some cache going for MUSL-enabled GHC.
@@ -332,7 +334,7 @@ let
             };
 
             haskell.packages.native-bignum.ghc924 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc924)
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc92)
                 hello
                 lens
                 random
@@ -353,12 +355,20 @@ let
       # working as expected.
       cabal-install = released;
       Cabal_3_6_3_0 = released;
+      Cabal_3_8_1_0 = released;
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
       haskell-language-server = released;
       hoogle = released;
-      hlint = released;
+      hlint = [
+        compilerNames.ghc884
+        compilerNames.ghc8107
+        compilerNames.ghc902
+        compilerNames.ghc924
+        # https://github.com/ndmitchell/hlint/issues/1413
+      ];
+      hpack = released;
       hsdns = released;
       jailbreak-cabal = released;
       language-nix = released;

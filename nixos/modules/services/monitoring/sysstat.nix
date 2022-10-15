@@ -5,7 +5,7 @@ let
 in {
   options = {
     services.sysstat = {
-      enable = mkEnableOption "sar system activity collection";
+      enable = mkEnableOption (lib.mdDoc "sar system activity collection");
 
       collect-frequency = mkOption {
         type = types.str;

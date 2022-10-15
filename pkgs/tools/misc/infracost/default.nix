@@ -1,16 +1,16 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, stdenv }:
 
 buildGoModule rec {
   pname = "infracost";
-  version = "0.10.9";
+  version = "0.10.12";
 
   src = fetchFromGitHub {
     owner = "infracost";
     rev = "v${version}";
     repo = "infracost";
-    sha256 = "sha256-qDMGeuNY/Y7A6ZGd6giztQrx4psUAjOamUbC0Z4H80k=";
+    sha256 = "sha256-sobIgUiFMLZ2/vkKO2DIQfEM92eRK1PV+oKaWfwk/nE=";
   };
-  vendorSha256 = "sha256-ccoFTg5OYpaagyzb2lJLr6WlTO/L4YevXK09gZOELOw=";
+  vendorSha256 = "sha256-QowKhRakXkkmKDI0vbSjWdftz4nXnjKNpdD4gscR3dM=";
 
   ldflags = [ "-s" "-w" "-X github.com/infracost/infracost/internal/version.Version=v${version}" ];
 
@@ -63,5 +63,6 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ davegallant jk ];
+    broken = stdenv.isx86_64; # https://hydra.nixos.org/build/193087915
   };
 }

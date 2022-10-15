@@ -15,15 +15,6 @@ gccStdenv.mkDerivation {
 
   buildInputs = [ autoconf ];
 
-  # disable stackprotector on aarch64-darwin for now
-  # build error:
-  # ```
-  # /private/tmp/nix-build-gambit-bootstrap-4.9.3.drv-0/ccbOVwnF.s:207:15: error: index must be an integer in range [-256, 255].
-  #         ldr     x2, [x2, ___stack_chk_guard];momd
-  #                          ^
-  # ```
-  hardeningDisable = lib.optionals (gccStdenv.isAarch64 && gccStdenv.isDarwin) [ "stackprotector" ];
-
   configurePhase = ''
     export CC=${gcc}/bin/gcc CXX=${gcc}/bin/g++ \
            CPP=${gcc}/bin/cpp CXXCPP=${gcc}/bin/cpp LD=${gcc}/bin/ld \

@@ -11,6 +11,7 @@
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , yarl
 }:
 
@@ -30,6 +31,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    setuptools
   ];
 
   propagatedBuildInputs = [

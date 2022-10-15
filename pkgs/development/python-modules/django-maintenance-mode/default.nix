@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pytest, django }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pytest
+, django
+, python-fsutil
+}:
 
 buildPythonPackage rec {
   pname = "django-maintenance-mode";
@@ -8,12 +14,12 @@ buildPythonPackage rec {
     owner = "fabiocaccamo";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-G08xQpLQxnt7JbtIo06z0NlRAMbca3UWbo4aXQR/Wy0=";
+    hash = "sha256-G08xQpLQxnt7JbtIo06z0NlRAMbca3UWbo4aXQR/Wy0=";
   };
 
   checkInputs = [ pytest ];
 
-  propagatedBuildInputs = [ django ];
+  propagatedBuildInputs = [ django python-fsutil ];
 
   meta = with lib; {
     description = "Shows a 503 error page when maintenance-mode is on";

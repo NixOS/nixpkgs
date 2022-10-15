@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;
-    hash = "sha256-g+iHUL83PokXPGu7HJ8ffLocQr0uGpMqS5MbfIlZZ2E=";
+    hash = "sha256-8NaTr0RcnsVik/AB4g8QL+FkcRlgkkASFe8fXIvFt/A=";
   };
 
   patches = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
       # https://github.com/dpgaspar/Flask-AppBuilder/pull/1734
       name = "flask-appbuilder-wtf3.patch";
       url = "https://github.com/dpgaspar/Flask-AppBuilder/commit/bccb3d719cd3ceb872fe74a9ab304d74664fbf43.patch";
-      sha256 = "sha256-8NaTr0RcnsVik/AB4g8QL+FkcRlgkkASFe8fXIvFt/A=";
+      hash = "sha256-24mlS3HIs77wKOlwdHah5oks31OOmCBHmcafZT2ITOc=";
       excludes = [
         "requirements.txt"
         "setup.py"
@@ -78,8 +78,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "apispec[yaml]>=3.3, <4" "apispec[yaml] >=3.3" \
-      --replace "Flask-Login>=0.3, <0.5" "Flask-Login >=0.3" \
-      --replace "Flask-WTF>=0.14.2, <0.15.0" "Flask-WTF" \
+      --replace "Flask-WTF>=0.14.2, <1.0.0" "Flask-WTF" \
       --replace "WTForms<3.0.0" "WTForms" \
       --replace "marshmallow-sqlalchemy>=0.22.0, <0.27.0" "marshmallow-sqlalchemy" \
       --replace "prison>=0.2.1, <1.0.0" "prison"

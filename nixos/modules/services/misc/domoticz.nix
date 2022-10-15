@@ -12,7 +12,7 @@ in {
   options = {
 
     services.domoticz = {
-      enable = mkEnableOption pkgDesc;
+      enable = mkEnableOption (lib.mdDoc pkgDesc);
 
       bind = mkOption {
         type = types.str;

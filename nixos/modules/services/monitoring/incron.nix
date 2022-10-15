@@ -17,10 +17,10 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the incron daemon.
 
-          Note that commands run under incrontab only support common Nix profiles for the <envar>PATH</envar> provided variable.
+          Note that commands run under incrontab only support common Nix profiles for the {env}`PATH` provided variable.
         '';
       };
 

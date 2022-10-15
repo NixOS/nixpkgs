@@ -36,6 +36,7 @@ let
     "fastly"
     "fritzbox"
     "influxdb"
+    "ipmi"
     "json"
     "jitsi"
     "kea"
@@ -72,6 +73,7 @@ let
     "unbound"
     "unifi"
     "unifi-poller"
+    "v2ray"
     "varnish"
     "wireguard"
     "flow"
@@ -80,32 +82,32 @@ let
   );
 
   mkExporterOpts = ({ name, port }: {
-    enable = mkEnableOption "the prometheus ${name} exporter";
+    enable = mkEnableOption (lib.mdDoc "the prometheus ${name} exporter");
     port = mkOption {
       type = types.port;
       default = port;
-      description = ''
+      description = lib.mdDoc ''
         Port to listen on.
       '';
     };
     listenAddress = mkOption {
       type = types.str;
       default = "0.0.0.0";
-      description = ''
+      description = lib.mdDoc ''
         Address to listen on.
       '';
     };
     extraFlags = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Extra commandline options to pass to the ${name} exporter.
       '';
     };
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Open port in firewall for incoming connections.
       '';
     };
@@ -115,23 +117,23 @@ let
       example = literalExpression ''
         "-i eth0 -p tcp -m tcp --dport ${toString port}"
       '';
-      description = ''
+      description = lib.mdDoc ''
         Specify a filter for iptables to use when
-        <option>services.prometheus.exporters.${name}.openFirewall</option>
-        is true. It is used as `ip46tables -I nixos-fw <option>firewallFilter</option> -j nixos-fw-accept`.
+        {option}`services.prometheus.exporters.${name}.openFirewall`
+        is true. It is used as `ip46tables -I nixos-fw firewallFilter -j nixos-fw-accept`.
       '';
     };
     user = mkOption {
       type = types.str;
       default = "${name}-exporter";
-      description = ''
+      description = lib.mdDoc ''
         User name under which the ${name} exporter shall be run.
       '';
     };
     group = mkOption {
       type = types.str;
       default = "${name}-exporter";
-      description = ''
+      description = lib.mdDoc ''
         Group under which the ${name} exporter shall be run.
       '';
     };
@@ -227,7 +229,7 @@ in
     type = types.submodule {
       options = (mkSubModules);
     };
-    description = "Prometheus exporter configuration";
+    description = lib.mdDoc "Prometheus exporter configuration";
     default = {};
     example = literalExpression ''
       {
@@ -242,6 +244,22 @@ in
 
   config = mkMerge ([{
     assertions = [ {
+      assertion = cfg.ipmi.enable -> (cfg.ipmi.configFile != null) -> (
+        !(lib.hasPrefix "/tmp/" cfg.ipmi.configFile)
+      );
+      message = ''
+        Config file specified in `services.prometheus.exporters.ipmi.configFile' must
+          not reside within /tmp - it won't be visible to the systemd service.
+      '';
+    } {
+      assertion = cfg.ipmi.enable -> (cfg.ipmi.webConfigFile != null) -> (
+        !(lib.hasPrefix "/tmp/" cfg.ipmi.webConfigFile)
+      );
+      message = ''
+        Config file specified in `services.prometheus.exporters.ipmi.webConfigFile' must
+          not reside within /tmp - it won't be visible to the systemd service.
+      '';
+    } {
       assertion = cfg.snmp.enable -> (
         (cfg.snmp.configurationPath == null) != (cfg.snmp.configuration == null)
       );

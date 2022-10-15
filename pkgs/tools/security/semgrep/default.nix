@@ -4,6 +4,7 @@
 , semgrep-core
 , buildPythonApplication
 , pythonPackages
+, pythonRelaxDepsHook
 
 , pytestCheckHook
 , git
@@ -19,12 +20,15 @@ buildPythonApplication rec {
 
   SEMGREP_CORE_BIN = "${semgrep-core}/bin/semgrep-core";
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "typing-extensions~=4.2" "typing-extensions" \
-      --replace "jsonschema~=3.2" "jsonschema" \
-      --replace "boltons~=21.0" "boltons"
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  pythonRelaxDeps = [
+    "attrs"
+    "boltons"
+    "jsonschema"
+    "typing-extensions"
+  ];
 
+  postPatch = ''
     # remove git submodule placeholders
     rm -r ./src/semgrep/{lang,semgrep_interfaces}
     # link submodule dependencies

@@ -10,7 +10,7 @@ in
   options = {
     services.r53-ddns = {
 
-      enable = mkEnableOption "r53-ddyns";
+      enable = mkEnableOption (lib.mdDoc "r53-ddyns");
 
       interval = mkOption {
         type = types.str;

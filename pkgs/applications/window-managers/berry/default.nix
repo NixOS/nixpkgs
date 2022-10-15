@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
     freetype
   ];
 
+  postPatch = ''
+    sed -i --regexp-extended 's/(pkg_verstr=").*(")/\1${version}\2/' configure
+  '';
+
   preConfigure = ''
     patchShebangs configure
   '';

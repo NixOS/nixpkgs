@@ -1,24 +1,30 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy3k
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "sqlite-fts4";
-  version = "1.0.1";
-  disabled = !isPy3k;
+  version = "1.0.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = pname;
-    rev = version;
-    sha256 = "15r1mijk306fpm61viry5wjhqyxlbqqdk4nfcd901qarx7vqypgy";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Ibiows3DSnzjIUv7U9tYNVnDaecBBxjXzDqxbIlNhhU=";
   };
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "sqlite_fts4"
   ];
 
   meta = with lib; {
@@ -27,5 +33,4 @@ buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ meatcar ];
   };
-
 }

@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     + lib.optionalString isBootstrap "-boot"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.23.2";
+  version = "3.24.2";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
-    sha256 = "sha256-8xa0AFNGb5pBat+YHv2kGxYMqFnpf2pIS0R+opn/Jqo=";
+    sha256 = "sha256-DZAg8G893xf7U33CKOGlbJJ+5Qa0hvVf4twZ9pvwyNs=";
   };
 
   patches = [
@@ -61,13 +61,15 @@ stdenv.mkDerivation rec {
   outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" "info" ];
   setOutputFlags = false;
 
-  setupHook = ./setup-hook.sh;
+  setupHooks = [
+    ./setup-hook.sh
+    ./check-pc-files-hook.sh
+  ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = setupHooks ++ [
     pkg-config
-    setupHook
   ]
   ++ lib.optionals buildDocs [ texinfo ]
   ++ lib.optionals qt5UI [ wrapQtAppsHook ];

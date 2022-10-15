@@ -57,7 +57,7 @@ let
 in
 {
   options.services.kapacitor = {
-    enable = mkEnableOption "kapacitor";
+    enable = mkEnableOption (lib.mdDoc "kapacitor");
 
     dataDir = mkOption {
       type = types.path;
@@ -109,7 +109,7 @@ in
     };
 
     defaultDatabase = {
-      enable = mkEnableOption "kapacitor.defaultDatabase";
+      enable = mkEnableOption (lib.mdDoc "kapacitor.defaultDatabase");
 
       url = mkOption {
         description = lib.mdDoc "The URL to an InfluxDB server that serves as the default database";
@@ -129,7 +129,7 @@ in
     };
 
     alerta = {
-      enable = mkEnableOption "kapacitor alerta integration";
+      enable = mkEnableOption (lib.mdDoc "kapacitor alerta integration");
 
       url = mkOption {
         description = lib.mdDoc "The URL to the Alerta REST API";

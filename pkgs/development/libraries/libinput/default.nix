@@ -122,7 +122,6 @@ stdenv.mkDerivation rec {
       libinput-module = nixosTests.libinput;
     };
     updateScript = gitUpdater {
-      inherit pname version;
       patchlevel-unstable = true;
     };
   };

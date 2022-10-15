@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fmt_8
+{ lib, stdenv, fetchFromGitHub, cmake, fmt_8, fetchpatch
 , staticBuild ? stdenv.hostPlatform.isStatic
 }:
 
@@ -14,6 +14,13 @@ let
         rev    = "v${version}";
         inherit sha256;
       };
+
+      # in master post 1.10.0, see https://github.com/gabime/spdlog/issues/2380
+      patches = lib.optional (lib.versionAtLeast version "1.4.1") (fetchpatch {
+        name = "fix-pkg-config.patch";
+        url = "https://github.com/gabime/spdlog/commit/afb69071d5346b84e38fbcb0c8c32eddfef02a55.patch";
+        sha256 = "0cab2bbv8zyfhrhfvcyfwf5p2fddlq5hs2maampn5w18f6jhvk6q";
+      });
 
       nativeBuildInputs = [ cmake ];
       # spdlog <1.3 uses a bundled version of fmt

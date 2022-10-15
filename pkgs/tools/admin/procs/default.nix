@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security, libiconv }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security, libiconv, Libsystem }:
 
 rustPlatform.buildRustPackage rec {
   pname = "procs";
-  version = "0.13.0";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-O5q+T6GO03Wf26CLyEgS45h7O38HsVZ+EJi8TgFcNaI=";
+    sha256 = "sha256-lf+vJHR4+PZgoZNP4cSJswP0hi8YkUV85JISJxSjyjU=";
   };
 
-  cargoSha256 = "sha256-JZsDKeiF/Mg4P6dLaN+8+TLHnCsB97d9TDn4cSdzZZE=";
+  cargoSha256 = "sha256-evnUG94PagkgKoVwyd4aBaLXYYpF2k7zGhLRhdNDcoU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion procs.{bash,fish} --zsh _procs
   '';
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv Libsystem ];
 
   meta = with lib; {
     description = "A modern replacement for ps written in Rust";
@@ -32,6 +32,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/dalance/procs/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne SuperSandro2000 sciencentistguy ];
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

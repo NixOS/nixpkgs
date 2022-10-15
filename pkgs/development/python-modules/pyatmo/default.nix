@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "7.0.1";
+  version = "7.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "jabesq";
     repo = "pyatmo";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-WrpRLAfViudC0n7AG5es2CM8XbZ0yJqXCY9yod9czb0=";
+    sha256 = "sha256-qFF2uhaaw2hz5jH/xeLiNlyvFgx17P+WmujnoF9qcqo=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

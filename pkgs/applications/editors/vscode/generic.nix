@@ -2,7 +2,6 @@
 , unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook, makeWrapper
 , atomEnv, at-spi2-atk, autoPatchelfHook
 , systemd, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap
-, writeShellScriptBin
 
 # Populate passthru.tests
 , tests
@@ -11,7 +10,7 @@
 , nodePackages, bash
 
 # Attributes inherit from specific versions
-, version, src, meta, sourceRoot
+, version, src, meta, sourceRoot, commandLineArgs
 , executableName, longName, shortName, pname, updateScript
 # sourceExecutableName is the name of the binary in the source archive, over
 # which we have no control
@@ -109,7 +108,8 @@ let
       gappsWrapperArgs+=(
         # Add gio to PATH so that moving files to the trash works when not using a desktop environment
         --prefix PATH : ${glib.bin}/bin
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+        --add-flags ${lib.escapeShellArg commandLineArgs}
       )
     '';
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     openssl
     zlib
     db
-    curl
+    (curl.override { inherit openssl; })
     wxGTK
   ];
 

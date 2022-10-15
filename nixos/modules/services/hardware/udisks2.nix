@@ -19,14 +19,7 @@ in
 
     services.udisks2 = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = true;
-        description = lib.mdDoc ''
-          Whether to enable Udisks, a DBus service that allows
-          applications to query and manipulate storage devices.
-        '';
-      };
+      enable = mkEnableOption (lib.mdDoc "udisks2, a DBus service that allows applications to query and manipulate storage devices.");
 
       settings = mkOption rec {
         type = types.attrsOf settingsFormat.type;

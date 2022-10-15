@@ -70,7 +70,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     rev-prefix = "v";
   };
 

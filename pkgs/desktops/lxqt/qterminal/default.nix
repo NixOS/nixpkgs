@@ -7,7 +7,7 @@
 , qtbase
 , qttools
 , qtx11extras
-, lxqtUpdateScript
+, gitUpdater
 , nixosTests
 }:
 
@@ -34,7 +34,7 @@ mkDerivation rec {
     qtermwidget
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   passthru.tests.test = nixosTests.terminal-emulators.qterminal;
 

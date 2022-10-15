@@ -22,10 +22,10 @@ with lib;
   config = {
 
     # Enable in installer, even if the minimal profile disables it.
-    documentation.enable = mkForce true;
+    documentation.enable = mkImageMediaOverride true;
 
     # Show the manual.
-    documentation.nixos.enable = mkForce true;
+    documentation.nixos.enable = mkImageMediaOverride true;
 
     # Use less privileged nixos user
     users.users.nixos = {
@@ -41,7 +41,7 @@ with lib;
     # Allow passwordless sudo from nixos user
     security.sudo = {
       enable = mkDefault true;
-      wheelNeedsPassword = mkForce false;
+      wheelNeedsPassword = mkImageMediaOverride false;
     };
 
     # Automatically log in at the virtual consoles.

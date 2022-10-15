@@ -13,13 +13,13 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.13" "8.15"; out = "0.6"; }
+    { case = range "8.13" "8.16"; out = "0.6"; }
     { case = range "8.11" "8.12"; out = "0.4"; }
   ] null;
 
   propagatedBuildInputs = [ mathcomp-ssreflect mathcomp-algebra mathcomp-fingroup paramcoq ];
 
-  useDune2 = true;
+  useDune = true;
 
   meta = {
     description = "Exponentiation algorithms following addition chains";

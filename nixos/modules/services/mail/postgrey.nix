@@ -15,12 +15,12 @@ with lib; let
         type = nullOr str;
         default = null;
         example = "127.0.0.1";
-        description = "The address to bind to. Localhost if null";
+        description = lib.mdDoc "The address to bind to. Localhost if null";
       };
       port = mkOption {
         type = natural';
         default = 10030;
-        description = "Tcp port to bind to";
+        description = lib.mdDoc "Tcp port to bind to";
       };
     };
   };
@@ -30,13 +30,13 @@ with lib; let
       path = mkOption {
         type = path;
         default = "/run/postgrey.sock";
-        description = "Path of the unix socket";
+        description = lib.mdDoc "Path of the unix socket";
       };
 
       mode = mkOption {
         type = str;
         default = "0777";
-        description = "Mode of the unix socket";
+        description = lib.mdDoc "Mode of the unix socket";
       };
     };
   };

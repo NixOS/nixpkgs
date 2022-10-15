@@ -53,7 +53,7 @@ in
 {
   options = {
     services.dgraph = {
-      enable = mkEnableOption "Dgraph native GraphQL database with a graph backend";
+      enable = mkEnableOption (lib.mdDoc "Dgraph native GraphQL database with a graph backend");
 
       package = lib.mkPackageOption pkgs "dgraph" { };
 

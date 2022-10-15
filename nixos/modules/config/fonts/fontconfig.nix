@@ -259,7 +259,7 @@ in
           internal = true;
           type     = with types; listOf path;
           default  = [ ];
-          description = ''
+          description = lib.mdDoc ''
             Fontconfig configuration packages.
           '';
         };

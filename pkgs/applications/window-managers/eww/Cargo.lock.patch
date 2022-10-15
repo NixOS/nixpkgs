@@ -1,13 +1,11 @@
-diff --git a/Cargo.lock b/Cargo.lock
-index 9ae7ab9..c810728 100644
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -403,7 +403,7 @@ dependencies = [
+@@ -406,7 +406,7 @@ dependencies = [
  
  [[package]]
  name = "eww"
--version = "0.2.0"
-+version = "0.3.0"
+-version = "0.3.0"
++version = "0.4.0"
  dependencies = [
   "anyhow",
   "bincode",

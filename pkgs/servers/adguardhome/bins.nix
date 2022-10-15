@@ -1,23 +1,23 @@
 { fetchurl, fetchzip }:
 {
 x86_64-darwin = fetchzip {
-  sha256 = "sha256-SLGzciTzzvW0DTG8v6lNb1IovbOjxBFgFVjNY6MEyKY=";
-  url = "https://github.com/AdguardTeam/AdGuardHome/releases/download/v0.107.9/AdGuardHome_darwin_amd64.zip";
+  sha256 = "sha256-rVc1ad8qwXfEuqZUrTsdzSQHUit3j8PQp3B0dD6FrcQ=";
+  url = "https://github.com/AdguardTeam/AdGuardHome/releases/download/v0.107.16/AdGuardHome_darwin_amd64.zip";
 };
 aarch64-darwin = fetchzip {
-  sha256 = "sha256-d7hnCM7BJuYfSH89jv516uVyKTMueQmVKQxEeTGIDUE=";
-  url = "https://github.com/AdguardTeam/AdGuardHome/releases/download/v0.107.9/AdGuardHome_darwin_arm64.zip";
+  sha256 = "sha256-GaeTdv467dVfSk2YuILmi2KphMfFYfLdpNI+dVx/UoU=";
+  url = "https://github.com/AdguardTeam/AdGuardHome/releases/download/v0.107.16/AdGuardHome_darwin_arm64.zip";
 };
 i686-linux = fetchurl {
-  sha256 = "sha256-wTmUF6NHWis4dyw/bPjAjvZ0aQ1l1BCDlm6eLu4m/0o=";
-  url = "https://github.com/AdguardTeam/AdGuardHome/releases/download/v0.107.9/AdGuardHome_linux_386.tar.gz";
+  sha256 = "sha256-6fXU2vU3MgveWZhgrphOeczDc1GUBv7ZUehPF8+GUdY=";
+  url = "https://github.com/AdguardTeam/AdGuardHome/releases/download/v0.107.16/AdGuardHome_linux_386.tar.gz";
 };
 x86_64-linux = fetchurl {
-  sha256 = "sha256-Mxe9Gb1ErrZZl3a+0SqC/0ghoeV51X93YxIOs9gM2lY=";
-  url = "https://github.com/AdguardTeam/AdGuardHome/releases/download/v0.107.9/AdGuardHome_linux_amd64.tar.gz";
+  sha256 = "sha256-6rUC0R0bGS4omX9bybShk78mFaNRjUUkQqczZE2Wz5M=";
+  url = "https://github.com/AdguardTeam/AdGuardHome/releases/download/v0.107.16/AdGuardHome_linux_amd64.tar.gz";
 };
 aarch64-linux = fetchurl {
-  sha256 = "sha256-SyHuzXAe24Nf0v9Ds3Z+cbXoIVLCJSj243I6B0XWBlM=";
-  url = "https://github.com/AdguardTeam/AdGuardHome/releases/download/v0.107.9/AdGuardHome_linux_arm64.tar.gz";
+  sha256 = "sha256-3cowMi081TIx65dgzBP+YkIj4IBwyK1Yd/gn2zL9kOI=";
+  url = "https://github.com/AdguardTeam/AdGuardHome/releases/download/v0.107.16/AdGuardHome_linux_arm64.tar.gz";
 };
 }

@@ -8,7 +8,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.smallwm.enable = mkEnableOption "smallwm";
+    services.xserver.windowManager.smallwm.enable = mkEnableOption (lib.mdDoc "smallwm");
   };
 
   ###### implementation

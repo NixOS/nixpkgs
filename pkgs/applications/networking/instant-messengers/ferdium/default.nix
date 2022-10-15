@@ -3,10 +3,10 @@
 mkFranzDerivation rec {
   pname = "ferdium";
   name = "Ferdium";
-  version = "6.0.0";
+  version = "6.1.0";
   src = fetchurl {
     url = "https://github.com/ferdium/ferdium-app/releases/download/v${version}/Ferdium-linux-${version}-amd64.deb";
-    sha256 = "sha256-395rleN2T8iUejLRjl51N+lgqtWwHXad36WpIT1BFGQ=";
+    sha256 = "sha256-19HDEbp+zqd1VjRoT3yaGEDAwElKlhCm31bemdK90VU=";
   };
 
   extraBuildInputs = [ xorg.libxshmfence ];

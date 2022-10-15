@@ -29,7 +29,7 @@ buildPythonPackage rec {
     "setuptools_scm"
   ];
 
-  # check in passhtru.tests.pytest to escape infinite recursion on pytest
+  # check in passthru.tests.pytest to escape infinite recursion on pytest
   doCheck = false;
 
   passthru.tests = {

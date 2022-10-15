@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , autoreconfHook
 , pkg-config
 , cairo
@@ -29,14 +30,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "graphviz";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
     rev = version;
-    sha256 = "sha256-vDqVJJg2ezYGZPp7UtpvWfCypLBqRrr0aPMSyEN+IQo=";
+    sha256 = "sha256-lcU6Pb45kg7AxXQ9lmqwAazT2JpGjBz4PzK+S5lpYa0=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.com/graphviz/graphviz/-/commit/8d662734b6a34709d9475b120e7ce3de872339e2.diff";
+      includes = [ "lib/*" ];
+      sha256 = "sha256-cqzUpK//2TnzWb7oSa/g8LJ61yr3O+Wiq5LsZzw34NE=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

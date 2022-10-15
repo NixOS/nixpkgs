@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pescea";
-  version = "1.0.10";
+  version = "1.0.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lazdavila";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "Q38mLGjrRdXEvT+PCNsil1e2p0mmM0Xy8TUx9QOnFRA=";
+    # https://github.com/lazdavila/pescea/issues/4
+    rev = "a3dd7deedc64205e24adbc4ff406a2f6aed3b240";
+    hash = "sha256-5TkFrGaSkQOORhf5a7SjkzggFLPyqe9k3M0B4ljhWTQ=";
   };
 
   propagatedBuildInputs = [

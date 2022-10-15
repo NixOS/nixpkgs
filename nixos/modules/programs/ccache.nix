@@ -6,7 +6,7 @@ let
 in {
   options.programs.ccache = {
     # host configuration
-    enable = mkEnableOption "CCache";
+    enable = mkEnableOption (lib.mdDoc "CCache");
     cacheDir = mkOption {
       type = types.path;
       description = lib.mdDoc "CCache directory";

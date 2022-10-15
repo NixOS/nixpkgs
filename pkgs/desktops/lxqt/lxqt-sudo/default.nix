@@ -11,7 +11,7 @@
 , liblxqt
 , libqtxdg
 , sudo
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
@@ -41,7 +41,7 @@ mkDerivation rec {
     sudo
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-sudo";

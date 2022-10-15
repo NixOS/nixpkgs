@@ -6,6 +6,8 @@
 .vscode/
 outputs/
 result-*
+result
+!pkgs/development/python-modules/result
 /doc/NEWS.html
 /doc/NEWS.txt
 /doc/manual.html

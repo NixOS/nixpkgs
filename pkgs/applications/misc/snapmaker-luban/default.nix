@@ -1,6 +1,6 @@
 { lib, stdenv, autoPatchelfHook, makeDesktopItem, copyDesktopItems, wrapGAppsHook, fetchurl
 , alsa-lib, at-spi2-atk, at-spi2-core, atk, cairo, cups
-, gtk3, nss, glib, dbus, nspr, gdk-pixbuf
+, gtk3, nss, glib, dbus, nspr, gdk-pixbuf, libdrm, mesa
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
 , libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, pango
 , gcc-unwrapped, udev
@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "snapmaker-luban";
-  version = "4.1.4";
+  version = "4.4.0";
 
   src = fetchurl {
     url = "https://github.com/Snapmaker/Luban/releases/download/v${version}/snapmaker-luban-${version}-linux-x64.tar.gz";
-    sha256 = "sha256-hbqIwX6YCrUQAjvKKWFAUjHvcZycnIA6v6l6qmAMuUI=";
+    sha256 = "sha256-cXFnFWa6IDGuC6M46Ybnr9/LM8hG0KTUlkzcyuje5SI=";
   };
 
   nativeBuildInputs = [
@@ -29,11 +29,13 @@ stdenv.mkDerivation rec {
     cups
     gcc-unwrapped
     gtk3
+    libdrm
     libXdamage
     libX11
     libXScrnSaver
     libXtst
     libxcb
+    mesa # Required for libgbm
     nspr
     nss
   ];

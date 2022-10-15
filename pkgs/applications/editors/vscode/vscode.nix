@@ -1,4 +1,7 @@
-{ stdenv, lib, callPackage, fetchurl, isInsiders ? false }:
+{ stdenv, lib, callPackage, fetchurl
+, isInsiders ? false
+, commandLineArgs ? ""
+}:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -15,22 +18,23 @@ let
   archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "1ldn2m7mi3sfkcv417a2ci68p8r178kfr9bf1wx6j0r09sn5r4i0";
-    x86_64-darwin = "1pkxcj6dz5lcvf0ivzafvwvcyw2098ylxrqqzj9dfgfad29kyszd";
-    aarch64-linux = "1q1l7vrf4ifv6y46b4zz9km83wrsq80wx6rb4rnqkgijpbx02f7z";
-    aarch64-darwin = "1zhvbn6kmp99a5p0299256fm08y67rfzz03zygif7y20zrmr27ka";
-    armv7l-linux = "0jn2li0j1cmk5m61ha6m4lskc80q1j7mfmgidc3x9x9yiv6yacr7";
+    x86_64-linux = "0hj6rpg65ivnnvzfjm16vjpjzzqbabpw5ldrr78x7ddrr06h02z6";
+    x86_64-darwin = "01gskihfp5s0j4dw8nxmfsp0sav1zqlmylmvwhi1y2qqq4y9c3w9";
+    aarch64-linux = "07n1svlkd2ji4b6yvhci6qvx429xipp8y418cqq3173gw8v59lws";
+    aarch64-darwin = "0gr94l7lk54fhhhqbiv23hd7d25xilqlwla2dbs5c171nj9pz325";
+    armv7l-linux = "0nxnjrzwfvma9zl4x11r45qwqq8mk91cxg47mg33qgr22lvbgz63";
   }.${system} or throwSystem;
 in
   callPackage ./generic.nix rec {
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.70.0";
+    version = "1.72.1";
     pname = "vscode";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";
     longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
     shortName = "Code" + lib.optionalString isInsiders " - Insiders";
+    inherit commandLineArgs;
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";

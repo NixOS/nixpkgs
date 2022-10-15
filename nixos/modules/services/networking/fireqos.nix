@@ -10,7 +10,7 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         If enabled, FireQOS will be launched with the specified
         configuration given in `config`.
       '';

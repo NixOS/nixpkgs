@@ -4,7 +4,7 @@ with lib;
 let cfg = config.services.phylactery;
 in {
   options.services.phylactery = {
-    enable = mkEnableOption "Whether to enable Phylactery server";
+    enable = mkEnableOption (lib.mdDoc "Whether to enable Phylactery server");
 
     host = mkOption {
       type = types.str;

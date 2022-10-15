@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "jarowinkler";
-  version = "1.2.0";
+  version = "1.2.3";
 
   disabled = pythonOlder "3.6";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "JaroWinkler";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JR6nCLO6oUxpGKjnrrVAOLbrIALSNKkll53+3p4bb1g=";
+    hash = "sha256-j+ZabVsiVitNkTPhGjDg72XogjvPaL453lTW45ITm90=";
   };
 
   nativeBuildInputs = [

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "autograd";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-OD3g9TfvLji4X/lpJZOwz66JWMmzvUUbUsJV/ZFx/84=";
+    sha256 = "sha256-2AvSJRVNHbE8tOrM96GMNYvnIJJkG2hxf5b88dFqzQs=";
   };
 
   propagatedBuildInputs = [ numpy future ];

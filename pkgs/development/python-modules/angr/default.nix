@@ -46,16 +46,16 @@ in
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.12";
+  version = "9.2.22";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-GGTl5zGixGkikBWJ45hg3HkdrUw5Ic40VUuuEQME6ag=";
+    hash = "sha256-hkFWZHEdIXOQm14t05eyOqFTtWdXdgrQLjh+iVdKiCw=";
   };
 
   propagatedBuildInputs = [

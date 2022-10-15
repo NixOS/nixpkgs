@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, zlib, protobuf, ncurses, pkg-config
 , makeWrapper, perl, openssl, autoreconfHook, openssh, bash-completion
-, withUtempter ? stdenv.isLinux, libutempter }:
+, withUtempter ? stdenv.isLinux && !stdenv.hostPlatform.isMusl, libutempter }:
 
 stdenv.mkDerivation rec {
   pname = "mosh";

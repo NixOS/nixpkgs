@@ -22,7 +22,7 @@ in
 
     services.dwm-status = {
 
-      enable = mkEnableOption "dwm-status user service";
+      enable = mkEnableOption (lib.mdDoc "dwm-status user service");
 
       package = mkOption {
         type = types.package;

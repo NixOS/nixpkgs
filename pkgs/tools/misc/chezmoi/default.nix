@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "chezmoi";
-  version = "2.20.0";
+  version = "2.25.0";
 
   src = fetchFromGitHub {
     owner = "twpayne";
     repo = "chezmoi";
     rev = "v${version}";
-    sha256 = "sha256-02YPLWuwMBvjIrkkZWlOmoASJ0El0YcQhVnt8wfpMaY=";
+    sha256 = "sha256-a7Qf0mKo1aWABftgIDgh94mJf49d7KAtBkemRNRash0=";
   };
 
-  vendorSha256 = "sha256-CJZiItzpk5vQBeKvarfHFsW2ek2yn7z6+CAlDPXdNyI=";
+  vendorSha256 = "sha256-jqK115vnEYlER3sAFVFlMFGjpMnAIMlFM+4oN8Ujad4=";
 
   doCheck = false;
 

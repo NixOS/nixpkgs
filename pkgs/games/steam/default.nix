@@ -29,7 +29,7 @@ let
     selfBuildHost = pkgsBuildHost.${steamPackagesAttr};
     selfBuildTarget = pkgsBuildTarget.${steamPackagesAttr};
     selfHostHost = pkgsHostHost.${steamPackagesAttr};
-    selfTargetTarget = pkgsTargetTarget.${steamPackagesAttr};
+    selfTargetTarget = pkgsTargetTarget.${steamPackagesAttr} or {}; # might be missing;
   };
   keep = self: { };
   extra = spliced0: { };

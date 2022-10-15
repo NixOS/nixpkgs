@@ -5,6 +5,7 @@
 , gnome-themes-extra
 , gtk-engine-murrine
 , sassc
+, border-radius ? null # Suggested: 2 < value < 16
 , tweaks ? [ ] # can be "solid" "compact" "black" "primary"
 , withWallpapers ? false
 }:
@@ -21,13 +22,13 @@ assert lib.assertMsg (unknownTweaks == [ ]) ''
 stdenvNoCC.mkDerivation
 rec {
   pname = "orchis-theme";
-  version = "2022-07-20";
+  version = "2022-09-28";
 
   src = fetchFromGitHub {
     repo = "Orchis-theme";
     owner = "vinceliuice";
     rev = version;
-    sha256 = "sha256-0T9D42XwyvIb5XeXdqXbyahVHNcSeT469lSgWSisNvA=";
+    sha256 = "sha256-gabOn5ErJjDgqZCyIboMgFb1FqmDw8dljIskBENKTBg=";
   };
 
   nativeBuildInputs = [ gtk3 sassc ];
@@ -42,7 +43,9 @@ rec {
 
   installPhase = ''
     runHook preInstall
-    bash install.sh -d $out/share/themes -t all ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks}
+    bash install.sh -d $out/share/themes -t all \
+      ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks} \
+      ${lib.optionalString (!isNull border-radius) ("--round " + builtins.toString border-radius + "px")}
     ${lib.optionalString withWallpapers ''
       mkdir -p $out/share/backgrounds
       cp src/wallpaper/{1080p,2k,4k}.jpg $out/share/backgrounds

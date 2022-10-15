@@ -42,7 +42,7 @@ let
     makeWrapperArgs = concatStringsSep " " (mapAttrsToList (key: value: "--set \"${key}\" \"${value}\"") hydraEnv);
   in pkgs.buildEnv rec {
     name = "hydra-env";
-    buildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     paths = [ cfg.package ];
 
     postBuild = ''
@@ -87,7 +87,7 @@ in
         type = types.str;
         default = localDB;
         example = "dbi:Pg:dbname=hydra;host=postgres.example.org;user=foo;";
-        description = ''
+        description = lib.mdDoc ''
           The DBI string for Hydra database connection.
 
           NOTE: Attempts to set `application_name` will be overridden by
@@ -115,8 +115,8 @@ in
         type = types.str;
         default = "*";
         example = "localhost";
-        description = ''
-          The hostname or address to listen on or <literal>*</literal> to listen
+        description = lib.mdDoc ''
+          The hostname or address to listen on or `*` to listen
           on all interfaces.
         '';
       };

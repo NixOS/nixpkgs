@@ -20,6 +20,7 @@
 , gzip # needed at runtime by gitweb.cgi
 , withSsh ? false
 , doInstallCheck ? !stdenv.isDarwin  # extremely slow on darwin
+, tests
 }:
 
 assert osxkeychainSupport -> stdenv.isDarwin;
@@ -27,7 +28,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.37.1";
+  version = "2.37.3";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
@@ -40,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "sha256-yBYsa4uPHF23BqsBtO4p4xBhGCE13CfEhgIkquwbNQA=";
+    sha256 = "sha256-gUZB1/YWWc+8F4JdBGJJnKFAPjn/U9dqhRIFDmSD6Ho=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -73,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  nativeBuildInputs = [ gettext perlPackages.perl makeWrapper ]
+  nativeBuildInputs = [ gettext perlPackages.perl makeWrapper pkg-config ]
     ++ lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ];
   buildInputs = [ curl openssl zlib expat cpio libiconv bash ]
@@ -81,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals guiSupport [tcl tk]
     ++ lib.optionals withpcre2 [ pcre2 ]
     ++ lib.optionals stdenv.isDarwin [ Security CoreServices ]
-    ++ lib.optionals withLibsecret [ pkg-config glib libsecret ];
+    ++ lib.optionals withLibsecret [ glib libsecret ];
 
   # required to support pthread_cancel()
   NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && stdenv.hostPlatform.libc == "glibc") "-lgcc_s"
@@ -251,7 +252,7 @@ stdenv.mkDerivation (finalAttrs: {
       '')
 
    + lib.optionalString withManual ''# Install man pages
-       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html \
+       make -j $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html \
          -C Documentation ''
 
    + (if guiSupport then ''
@@ -374,7 +375,7 @@ stdenv.mkDerivation (finalAttrs: {
         doInstallCheck = true;
       });
       buildbot-integration = nixosTests.buildbot;
-    };
+    } // tests.fetchgit;
   };
 
   meta = {

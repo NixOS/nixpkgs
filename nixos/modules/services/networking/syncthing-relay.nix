@@ -22,7 +22,7 @@ in {
   ###### interface
 
   options.services.syncthing.relay = {
-    enable = mkEnableOption "Syncthing relay service";
+    enable = mkEnableOption (lib.mdDoc "Syncthing relay service");
 
     listenAddress = mkOption {
       type = types.str;

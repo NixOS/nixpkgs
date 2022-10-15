@@ -14,7 +14,7 @@ in
   meta.maintainers = [ maintainers.bachp ];
 
   options.services.minio = {
-    enable = mkEnableOption "Minio Object Storage";
+    enable = mkEnableOption (lib.mdDoc "Minio Object Storage");
 
     listenAddress = mkOption {
       default = ":9000";
@@ -102,7 +102,7 @@ in
 
     systemd.services.minio = {
       description = "Minio Object Storage";
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/minio server --json --address ${cfg.listenAddress} --console-address ${cfg.consoleAddress} --config-dir=${cfg.configDir} ${toString cfg.dataDir}";

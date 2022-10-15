@@ -18,6 +18,8 @@ in import ./make-test-python.nix ({ pkgs, ... }: {
       serverProperties = {
         enable-rcon = true;
         level-seed = seed;
+        level-type = "flat";
+        generate-structures = false;
         online-mode = false;
         "rcon.password" = rcon-pass;
         "rcon.port" = rcon-port;

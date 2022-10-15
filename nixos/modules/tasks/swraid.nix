@@ -5,7 +5,7 @@
 in {
 
   options.boot.initrd.services.swraid = {
-    enable = (lib.mkEnableOption "swraid support using mdadm") // {
+    enable = (lib.mkEnableOption (lib.mdDoc "swraid support using mdadm")) // {
       visible = false; # only has effect when the new stage 1 is in place
     };
 

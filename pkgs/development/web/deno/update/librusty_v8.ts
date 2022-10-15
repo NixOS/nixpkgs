@@ -27,7 +27,7 @@ const getLibrustyV8Version = async (
 ) =>
   fetch(`https://github.com/${owner}/${repo}/raw/${version}/core/Cargo.toml`)
     .then((res) => res.text())
-    .then((txt) => mod.parse(txt).dependencies.v8.version);
+    .then((txt) => toml.parse(txt).dependencies.v8.version);
 
 const fetchArchShaTasks = (version: string, arches: Architecture[]) =>
   arches.map(

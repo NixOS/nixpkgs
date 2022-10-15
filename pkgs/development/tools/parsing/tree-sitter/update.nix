@@ -39,6 +39,7 @@ let
     "tree-sitter-verilog"
     "tree-sitter-jsdoc"
     "tree-sitter-ql"
+    "tree-sitter-ql-dbscheme"
     "tree-sitter-embedded-template"
     "tree-sitter-tsq"
     "tree-sitter-toml"
@@ -52,7 +53,7 @@ let
     # this is the haskell language bindings, tree-sitter-haskell is the grammar
     "haskell-tree-sitter"
     # this is the ruby language bindings, tree-sitter-ruby is the grammar
-    "ruby-tree-sitter"
+    "ruby-tree-sitter.old"
     # this is the (unmaintained) rust language bindings, tree-sitter-rust is the grammar
     "rust-tree-sitter"
     # this is the nodejs language bindings, tree-sitter-javascript is the grammar
@@ -337,6 +338,18 @@ let
     "tree-sitter-tiger" = {
       orga = "ambroisie";
       repo = "tree-sitter-tiger";
+    };
+    "tree-sitter-nickel" = {
+      orga = "nickel-lang";
+      repo = "tree-sitter-nickel";
+    };
+    "tree-sitter-smithy" = {
+      orga = "indoorvivants";
+      repo = "tree-sitter-smithy";
+    };
+    "tree-sitter-jsonnet" = {
+      orga = "sourcegraph";
+      repo = "tree-sitter-jsonnet";
     };
   };
 

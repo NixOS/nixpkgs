@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extensions";
-  version = "42.3";
+  version = "43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell-extensions/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "DsK+oy6fKKyAWJH2ExlNSPwMCR8JxIMTBlo4hPcic/w=";
+    sha256 = "5Hw51CeCpyRJu/fes28D/ZbLWSkZRikTkSEuL9mNX5M=";
   };
 
   patches = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     # Fixup adapted from export-zips.sh in the source.
 
     extensiondir=$out/share/gnome-shell/extensions
-    schemadir=${glib.makeSchemaPath "$out" "${pname}-${version}"}
+    schemadir=${glib.makeSchemaPath "$out" "$name"}
 
     glib-compile-schemas $schemadir
 

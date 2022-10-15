@@ -186,6 +186,7 @@ let
       kreversi = callPackage ./kreversi.nix {};
       krfb = callPackage ./krfb.nix {};
       kruler = callPackage ./kruler.nix {};
+      ksanecore = callPackage ./ksanecore.nix {};
       kshisen = callPackage ./kshisen.nix {};
       ksmtp = callPackage ./ksmtp {};
       kspaceduel = callPackage ./kspaceduel.nix {};

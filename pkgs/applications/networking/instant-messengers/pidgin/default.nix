@@ -2,21 +2,21 @@
 , gst_all_1, libstartup_notification, gettext, perlPackages, libxml2, nss
 , nspr, farstream, libXScrnSaver, avahi, dbus, dbus-glib, intltool, libidn
 , lib, python3, libICE, libXext, libSM, libgnt, ncurses, cyrus_sasl, openssl
-, gnutls, libgcrypt, symlinkJoin, cacert, plugins, withOpenssl, withGnutls, withCyrus_sasl ? true
+, gnutls, libgcrypt, cacert, plugins, withOpenssl, withGnutls, withCyrus_sasl ? true
 }:
 
 # FIXME: clean the mess around choosing the SSL library (nss by default)
 
 let unwrapped = stdenv.mkDerivation rec {
   pname = "pidgin";
-  version = "2.14.8";
+  version = "2.14.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/pidgin/pidgin-${version}.tar.bz2";
-    sha256 = "1jjc15pfyw3012q5ffv7q4r88wv07ndqh0wakyxa2k0w4708b01z";
+    sha256 = "sha256-RUsbkovGvLsYM1OvMPv95VlfIkWjQjoaRubJei3yKBA=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper intltool ];
 
   NIX_CFLAGS_COMPILE = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
 
@@ -27,7 +27,7 @@ let unwrapped = stdenv.mkDerivation rec {
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     libxml2 nss nspr
     libXScrnSaver python-with-dbus
-    avahi dbus dbus-glib intltool libidn
+    avahi dbus dbus-glib libidn
     libICE libXext libSM cyrus_sasl
     libgnt ncurses # optional: build finch - the console UI
   ]

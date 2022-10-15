@@ -211,6 +211,10 @@ stdenv.mkDerivation rec {
       src = ../bazel_rc.patch;
       bazelSystemBazelRCPath = bazelRC;
     })
+
+    # disable suspend detection during a build inside Nix as this is
+    # not available inside the darwin sandbox
+    ../bazel_darwin_sandbox.patch
   ] ++ lib.optional enableNixHacks ../nix-hacks.patch;
 
 

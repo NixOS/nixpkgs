@@ -6,7 +6,7 @@
 , libfm-qt
 , lxqt-qtplugin
 , qtx11extras
-, lxqtUpdateScript
+, gitUpdater
 , extraQtStyles ? []
 }:
 
@@ -33,7 +33,7 @@ mkDerivation rec {
   ]
   ++ extraQtStyles;
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/xdg-desktop-portal-lxqt";

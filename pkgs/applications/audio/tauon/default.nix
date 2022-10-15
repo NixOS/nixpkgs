@@ -9,9 +9,11 @@
 , librsvg
 , gobject-introspection
 , gtk3
+, kissfft
 , libnotify
 , libsamplerate
 , libvorbis
+, miniaudio
 , mpg123
 , libopenmpt
 , opusfile
@@ -23,14 +25,22 @@
 
 stdenv.mkDerivation rec {
   pname = "tauon";
-  version = "7.3.1";
+  version = "7.4.2";
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "TauonMusicBox";
     rev = "v${version}";
-    sha256 = "sha256-g3mRVPOXU3N+MApLaHAAIIsVuVv2GeB1Nj//8tuS0oI=";
+    sha256 = "sha256-fEEu7GqK1leOop3kd1Ci9BAH2bP31jvTOg3DEL8lIF4=";
   };
+
+  postUnpack = ''
+    rmdir source/src/phazor/kissfft
+    ln -s ${kissfft.src} source/src/phazor/kissfft
+
+    rmdir source/src/phazor/miniaudio
+    ln -s ${miniaudio.src} source/src/phazor/miniaudio
+  '';
 
   postPatch = ''
     substituteInPlace tauon.py \
@@ -108,7 +118,7 @@ stdenv.mkDerivation rec {
     install -Dm755 tauon.py $out/bin/tauon
     mkdir -p $out/share/tauon
     cp -r lib $out
-    cp -r assets input.txt t_modules theme $out/share/tauon
+    cp -r assets input.txt t_modules theme templates $out/share/tauon
 
     wrapPythonPrograms
 
@@ -122,7 +132,7 @@ stdenv.mkDerivation rec {
     description = "The Linux desktop music player from the future";
     homepage = "https://tauonmusicbox.rocks/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ jansol ];
     platforms = platforms.linux;
   };
 }

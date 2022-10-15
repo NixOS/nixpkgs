@@ -10,6 +10,7 @@ let
   useMysql = cfg.database.type == "mysql";
   usePostgresql = cfg.database.type == "postgres";
   useSqlite = cfg.database.type == "sqlite3";
+  format = pkgs.formats.ini { };
   configFile = pkgs.writeText "app.ini" ''
     APP_NAME = ${cfg.appName}
     RUN_USER = ${cfg.user}
@@ -22,6 +23,16 @@ let
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "gitea" "cookieSecure" ] [ "services" "gitea" "settings" "session" "COOKIE_SECURE" ])
+    (mkRenamedOptionModule [ "services" "gitea" "disableRegistration" ] [ "services" "gitea" "settings" "service" "DISABLE_REGISTRATION" ])
+    (mkRenamedOptionModule [ "services" "gitea" "log" "level" ] [ "services" "gitea" "settings" "log" "LEVEL" ])
+    (mkRenamedOptionModule [ "services" "gitea" "log" "rootPath" ] [ "services" "gitea" "settings" "log" "ROOT_PATH" ])
+    (mkRenamedOptionModule [ "services" "gitea" "ssh" "clonePort" ] [ "services" "gitea" "settings" "server" "SSH_PORT" ])
+
+    (mkRemovedOptionModule [ "services" "gitea" "ssh" "enable" ] "services.gitea.ssh.enable has been migrated into freeform setting services.gitea.settings.server.DISABLE_SSH. Keep in mind that the setting is inverted")
+  ];
+
   options = {
     services.gitea = {
       enable = mkOption {
@@ -49,20 +60,6 @@ in
         description = lib.mdDoc "gitea data directory.";
       };
 
-      log = {
-        rootPath = mkOption {
-          default = "${cfg.stateDir}/log";
-          defaultText = literalExpression ''"''${config.${opt.stateDir}}/log"'';
-          type = types.str;
-          description = lib.mdDoc "Root path for log files.";
-        };
-        level = mkOption {
-          default = "Info";
-          type = types.enum [ "Trace" "Debug" "Info" "Warn" "Error" "Critical" ];
-          description = lib.mdDoc "General log level.";
-        };
-      };
-
       user = mkOption {
         type = types.str;
         default = "gitea";
@@ -85,7 +82,7 @@ in
 
         port = mkOption {
           type = types.port;
-          default = (if !usePostgresql then 3306 else pg.port);
+          default = if !usePostgresql then 3306 else pg.port;
           defaultText = literalExpression ''
             if config.${opt.database.type} != "postgresql"
             then 3306
@@ -162,12 +159,11 @@ in
           type = types.str;
           default = "04:31";
           example = "hourly";
-          description = ''
+          description = lib.mdDoc ''
             Run a gitea dump at this interval. Runs by default at 04:31 every day.
 
             The format is described in
-            <citerefentry><refentrytitle>systemd.time</refentrytitle>
-            <manvolnum>7</manvolnum></citerefentry>.
+            {manpage}`systemd.time(7)`.
           '';
         };
 
@@ -187,27 +183,8 @@ in
         file = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = "Filename to be used for the dump. If `null` a default name is choosen by gitea.";
+          description = lib.mdDoc "Filename to be used for the dump. If `null` a default name is choosen by gitea.";
           example = "gitea-dump";
-        };
-      };
-
-      ssh = {
-        enable = mkOption {
-          type = types.bool;
-          default = true;
-          description = lib.mdDoc "Enable external SSH feature.";
-        };
-
-        clonePort = mkOption {
-          type = types.int;
-          default = 22;
-          example = 2222;
-          description = lib.mdDoc ''
-            SSH port displayed in clone URL.
-            The option is required to configure a service when the external visible port
-            differs from the local listening port i.e. if port forwarding is used.
-          '';
         };
       };
 
@@ -269,15 +246,6 @@ in
         description = lib.mdDoc "Configure Gitea to listen on a unix socket instead of the default TCP port.";
       };
 
-      cookieSecure = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Marks session cookies as "secure" as a hint for browsers to only send
-          them via HTTPS. This option is recommend, if gitea is being served over HTTPS.
-        '';
-      };
-
       staticRootPath = mkOption {
         type = types.either types.str types.path;
         default = gitea.data;
@@ -293,20 +261,7 @@ in
         description = lib.mdDoc "Path to a file containing the SMTP password.";
       };
 
-      disableRegistration = mkEnableOption "the registration lock" // {
-        description = ''
-          By default any user can create an account on this <literal>gitea</literal> instance.
-          This can be disabled by using this option.
-
-          <emphasis>Note:</emphasis> please keep in mind that this should be added after the initial
-          deploy unless <link linkend="opt-services.gitea.useWizard">services.gitea.useWizard</link>
-          is <literal>true</literal> as the first registered user will be the administrator if
-          no install wizard is used.
-        '';
-      };
-
       settings = mkOption {
-        type = with types; attrsOf (attrsOf (oneOf [ bool int str ]));
         default = {};
         description = lib.mdDoc ''
           Gitea configuration. Refer to <https://docs.gitea.io/en-us/config-cheat-sheet/>
@@ -330,6 +285,68 @@ in
             };
           }
         '';
+        type = with types; submodule {
+          freeformType = format.type;
+          options = {
+            log = {
+              ROOT_PATH = mkOption {
+                default = "${cfg.stateDir}/log";
+                defaultText = literalExpression ''"''${config.${opt.stateDir}}/log"'';
+                type = types.str;
+                description = lib.mdDoc "Root path for log files.";
+              };
+              LEVEL = mkOption {
+                default = "Info";
+                type = types.enum [ "Trace" "Debug" "Info" "Warn" "Error" "Critical" ];
+                description = lib.mdDoc "General log level.";
+              };
+            };
+
+            server = {
+              DISABLE_SSH = mkOption {
+                type = types.bool;
+                default = false;
+                description = lib.mdDoc "Disable external SSH feature.";
+              };
+
+              SSH_PORT = mkOption {
+                type = types.int;
+                default = 22;
+                example = 2222;
+                description = lib.mdDoc ''
+                  SSH port displayed in clone URL.
+                  The option is required to configure a service when the external visible port
+                  differs from the local listening port i.e. if port forwarding is used.
+                '';
+              };
+            };
+
+            service = {
+              DISABLE_REGISTRATION = mkEnableOption (lib.mdDoc "the registration lock") // {
+                description = lib.mdDoc ''
+                  By default any user can create an account on this `gitea` instance.
+                  This can be disabled by using this option.
+
+                  *Note:* please keep in mind that this should be added after the initial
+                  deploy unless [](#opt-services.gitea.useWizard)
+                  is `true` as the first registered user will be the administrator if
+                  no install wizard is used.
+                '';
+              };
+            };
+
+            session = {
+              COOKIE_SECURE = mkOption {
+                type = types.bool;
+                default = false;
+                description = lib.mdDoc ''
+                  Marks session cookies as "secure" as a hint for browsers to only send
+                  them via HTTPS. This option is recommend, if gitea is being served over HTTPS.
+                '';
+              };
+            };
+          };
+        };
       };
 
       extraConfig = mkOption {
@@ -385,13 +402,6 @@ in
           HTTP_ADDR = cfg.httpAddress;
           HTTP_PORT = cfg.httpPort;
         })
-        (mkIf cfg.ssh.enable {
-          DISABLE_SSH = false;
-          SSH_PORT = cfg.ssh.clonePort;
-        })
-        (mkIf (!cfg.ssh.enable) {
-          DISABLE_SSH = true;
-        })
         (mkIf cfg.lfs.enable {
           LFS_START_SERVER = true;
           LFS_CONTENT_PATH = cfg.lfs.contentDir;
@@ -400,23 +410,13 @@ in
       ];
 
       session = {
-        COOKIE_NAME = "session";
-        COOKIE_SECURE = cfg.cookieSecure;
+        COOKIE_NAME = lib.mkDefault "session";
       };
 
       security = {
         SECRET_KEY = "#secretkey#";
         INTERNAL_TOKEN = "#internaltoken#";
         INSTALL_LOCK = true;
-      };
-
-      log = {
-        ROOT_PATH = cfg.log.rootPath;
-        LEVEL = cfg.log.level;
-      };
-
-      service = {
-        DISABLE_REGISTRATION = cfg.disableRegistration;
       };
 
       mailer = mkIf (cfg.mailerPasswordFile != null) {
@@ -502,7 +502,7 @@ in
         replaceSecretBin = "${pkgs.replace-secret}/bin/replace-secret";
       in ''
         # copy custom configuration and generate a random secret key if needed
-        ${optionalString (cfg.useWizard == false) ''
+        ${optionalString (!cfg.useWizard) ''
           function gitea_setup {
             cp -f ${configFile} ${runConfig}
 
@@ -622,10 +622,10 @@ in
 
     # Create database passwordFile default when password is configured.
     services.gitea.database.passwordFile =
-      (mkDefault (toString (pkgs.writeTextFile {
+      mkDefault (toString (pkgs.writeTextFile {
         name = "gitea-database-password";
         text = cfg.database.password;
-      })));
+      }));
 
     systemd.services.gitea-dump = mkIf cfg.dump.enable {
        description = "gitea dump";

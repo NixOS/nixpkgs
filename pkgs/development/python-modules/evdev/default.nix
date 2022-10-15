@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "evdev";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-WzOxdPfIRXbn3WBx5Di/WtIn2pXv1DVqOf5Mg1VBL+Y=";
+    sha256 = "sha256-7PoBtchPfoxs7TNnrJUoj0PNhO+/1919DNv8DRjIemo=";
   };
 
   buildInputs = [ linuxHeaders ];

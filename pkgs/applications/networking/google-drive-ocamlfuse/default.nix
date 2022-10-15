@@ -6,13 +6,13 @@
 
 buildDunePackage rec {
   pname = "google-drive-ocamlfuse";
-  version = "0.7.28";
+  version = "0.7.30";
 
   src = fetchFromGitHub {
     owner = "astrada";
     repo = "google-drive-ocamlfuse";
     rev = "v${version}";
-    sha256 = "sha256:1layxqz5iz6wnvk83579m1im9vzq608h7n1h04znpkan0fls6nad";
+    sha256 = "sha256-DWG0nBiqeVHaYQfGzU43gGwL4m8X61x5/RT5jD4AwYA=";
   };
 
   doCheck = true;

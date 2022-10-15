@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "moonlight-qt";
-  version = "4.0.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "moonlight-stream";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-CfOphr8QILCZg+UrImp5JO/1DTqoan5EwiQeTKR15Fo=";
+    sha256 = "sha256-cDX6XiAPFIS/csVpRl7yyAexiZwjmxp1Ng9gAo1uUw8=";
     fetchSubmodules = true;
   };
 

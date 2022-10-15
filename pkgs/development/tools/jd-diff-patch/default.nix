@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "jd-diff-patch";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner  = "josephburnett";
     repo   = "jd";
     rev    = "v${version}";
-    sha256 = "sha256-VxCsr7u7Ds3BMtZtnVS0VoLKM46NYLqVZGmRDSyqmtg=";
+    sha256 = "sha256-Ti7eElLplnYGP7v1VuGpyeZ3ZIau6Ffx4ACMBDIBROw=";
   };
 
   # not including web ui

@@ -2,15 +2,15 @@
 
 buildDunePackage rec {
   pname = "ocp-index";
-  version = "1.3.3";
+  version = "1.3.4";
 
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = "ocp-index";
     rev = version;
-    sha256 = "sha256-ElCXjUR85tkyBLIpIKefDouE1upzJytQnk4xoQt/cb0=";
+    sha256 = "sha256-a7SBGHNKUstfrdHx9KI33tYpvzTwIGhs4Hfie5EeKww=";
   };
 
   strictDeps = true;

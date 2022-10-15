@@ -5,7 +5,7 @@
 , ninja
 , pytestCheckHook
 , python
-, pytorch
+, torch
 , pybind11
 , which
 }:
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   # `setup.py` imports `torch.utils.cpp_extension`.
   nativeBuildInputs = [
     ninja
-    pytorch
+    torch
     which
   ];
 

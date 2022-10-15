@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "python-songpal";
-  version = "0.15";
+  version = "0.15.1";
 
   format = "pyproject";
 
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rytilahti";
     repo = "python-songpal";
-    rev = "refs/tags/${version}";
-    hash = "sha256-NoO3cgviFbXosEnx46nXdW02jYOfRPHUdc1VeCvwBsQ=";
+    rev = "refs/tags/release/${version}";
+    hash = "sha256-FX5pDWjUhrhK5B7zEfvihN77pSNi2QltRu0xbkUdc/c=";
   };
 
   nativeBuildInputs = [

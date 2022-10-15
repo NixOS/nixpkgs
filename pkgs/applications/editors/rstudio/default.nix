@@ -39,17 +39,17 @@
 
 let
   pname = "RStudio";
-  version = "2022.02.3+492";
+  version = "2022.07.1+554";
   RSTUDIO_VERSION_MAJOR  = "2022";
-  RSTUDIO_VERSION_MINOR  = "02";
-  RSTUDIO_VERSION_PATCH  = "3";
-  RSTUDIO_VERSION_SUFFIX = "+492";
+  RSTUDIO_VERSION_MINOR  = "07";
+  RSTUDIO_VERSION_PATCH  = "1";
+  RSTUDIO_VERSION_SUFFIX = "+554";
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
     rev = "v${version}";
-    sha256 = "1pgbk5rpy47h9ihdrplbfhfc49hrc6242j9099bclq7rqif049wi";
+    sha256 = "0rmdqxizxqg2vgr3lv066cjmlpjrxjlgi0m97wbh6iyhkfm2rrj1";
   };
 
   mathJaxSrc = fetchurl {
@@ -129,6 +129,8 @@ in
       ./use-system-node.patch
       ./fix-resources-path.patch
       ./pandoc-nix-path.patch
+      ./remove-quarto-from-generator.patch
+      ./do-not-install-pandoc.patch
     ];
 
     postPatch = ''
@@ -196,7 +198,6 @@ in
       done
 
       rm -r $out/lib/rstudio/{INSTALL,COPYING,NOTICE,README.md,SOURCE,VERSION}
-      rm -r $out/lib/rstudio/bin/{pandoc/pandoc,pandoc}
     '';
 
     meta = with lib; {

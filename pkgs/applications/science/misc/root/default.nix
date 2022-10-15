@@ -56,11 +56,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.26.04";
+  version = "6.26.06";
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-onHPgngtbtLIfqXu9mgYA/LmnhezA2352GNjbpNYQh4=";
+    hash = "sha256-sfc8l2pYClxWyMigFSWCod/FYLTdgOG3VFI3tl5sics=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
@@ -195,5 +195,9 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = [ maintainers.veprbl ];
     license = licenses.lgpl21;
+
+    # See https://github.com/NixOS/nixpkgs/pull/192581#issuecomment-1256860426
+    # for some context on issues on aarch64.
+    broken = stdenv.isAarch64;
   };
 }

@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , autoconf
 , automake
 , bison
@@ -17,7 +16,8 @@
 , libev
 , libgcrypt
 , libinjection
-, libmicrohttpd_0_9_70
+, libmicrohttpd_0_9_69
+, libuuid
 , lz4
 , nlohmann_json
 , openssl
@@ -30,22 +30,18 @@
 
 stdenv.mkDerivation rec {
   pname = "proxysql";
-  version = "2.3.2";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "sysown";
     repo = pname;
     rev = version;
-    sha256 = "13l4bf7zhfjy701qx9hfr40vlsm4d0pbfmwr5d6lf514xznvsnzl";
+    hash = "sha256-S0Oy0uQPbAn52KM0r7yxLvVl1DKQwRW3QYVHtJ20CnM=";
   };
 
   patches = [
     ./makefiles.patch
     ./dont-phone-home.patch
-    (fetchpatch {
-      url = "https://github.com/sysown/proxysql/pull/3402.patch";
-      sha256 = "079jjhvx32qxjczmsplkhzjn9gl7c2a3famssczmjv2ffs65vibi";
-    })
   ];
 
   nativeBuildInputs = [
@@ -63,9 +59,11 @@ stdenv.mkDerivation rec {
     flex
     gnutls
     libgcrypt
-    openssl
+    libuuid
     zlib
   ];
+
+  enableParallelBuilding = true;
 
   GIT_VERSION = version;
 
@@ -102,7 +100,7 @@ stdenv.mkDerivation rec {
         { f = "libdaemon"; p = libdaemon; }
         { f = "libev"; p = libev; }
         { f = "libinjection"; p = libinjection; }
-        { f = "libmicrohttpd"; p = libmicrohttpd_0_9_70; }
+        { f = "libmicrohttpd"; p = libmicrohttpd_0_9_69; }
         { f = "libssl"; p = openssl; }
         { f = "lz4"; p = lz4; }
         { f = "pcre"; p = pcre; }
@@ -125,10 +123,6 @@ stdenv.mkDerivation rec {
     popd
 
     sed -i s_/usr/bin/env_${coreutils}/bin/env_g libssl/openssl/config
-
-    # https://github.com/sysown/proxysql/issues/3679
-    # TODO: remove when upgrading past 2.3.2
-    sed -i -e 's@^\(\s\+cd curl/curl \&\& ./configure .*\) \(--with-ssl=.*\)$@\1 --without-zstd \2@' Makefile
 
     popd
     patchShebangs .

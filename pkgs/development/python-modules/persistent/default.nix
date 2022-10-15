@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "persistent";
-  version = "4.9.0";
+  version = "4.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RwGzHYHBBCJlclrzkEUOnZFq10ucF4twEAU4U1keDGo=";
+    hash = "sha256-pfkeAJD5OS/TJNl/TCpjbJI5lYKCOM2i4/vMaxu8RoY=";
   };
 
   nativeBuildInputs = [

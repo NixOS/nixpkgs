@@ -4,10 +4,12 @@
 , substituteAll
 , nix
 , coreutils
-, findutils
-, gnused
 , jq
+, yq
 , curl
+, gnugrep
+, gawk
+, dotnet-sdk
 }:
 
 runCommandLocal "nuget-to-nix" {
@@ -18,10 +20,12 @@ runCommandLocal "nuget-to-nix" {
     binPath = lib.makeBinPath [
       nix
       coreutils
-      findutils
-      gnused
       jq
+      yq
       curl
+      gnugrep
+      gawk
+      dotnet-sdk
     ];
   };
 

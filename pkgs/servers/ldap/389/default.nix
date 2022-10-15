@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     # lib389
     (python3.withPackages (ps: with ps; [
       setuptools
-      ldap
+      python-ldap
       six
       pyasn1
       pyasn1-modules

@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "vikunja-frontend";
-  version = "0.19.0";
+  version = "0.19.1";
   src = fetchurl {
     url = "https://dl.vikunja.io/frontend/${pname}-${version}.zip";
-    sha256 = "sha256-pdUNPfGgbSMyXcS2HKMekIiIzJ3GutHCs0gFVkHN9yc=";
+    sha256 = "sha256-Kf55M1m/NBQhgaul/4seDMdPFU8jhgOwTNAzdgVg2OQ=";
   };
 
   nativeBuildInputs = [ unzip ];

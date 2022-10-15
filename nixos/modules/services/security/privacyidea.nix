@@ -61,30 +61,36 @@ let
       (flip mapAttrs cfg.ldap-proxy.settings
         (const (mapAttrs (const renderValue)))));
 
+  privacyidea-token-janitor = pkgs.writeShellScriptBin "privacyidea-token-janitor" ''
+    exec -a privacyidea-token-janitor \
+      /run/wrappers/bin/sudo -u ${cfg.user} \
+      env PRIVACYIDEA_CONFIGFILE=${cfg.stateDir}/privacyidea.cfg \
+      ${penv}/bin/privacyidea-token-janitor $@
+  '';
 in
 
 {
   options = {
     services.privacyidea = {
-      enable = mkEnableOption "PrivacyIDEA";
+      enable = mkEnableOption (lib.mdDoc "PrivacyIDEA");
 
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/root/privacyidea.env";
-        description = ''
+        description = lib.mdDoc ''
           File to load as environment file. Environment variables
           from this file will be interpolated into the config file
-          using <package>envsubst</package> which is helpful for specifying
+          using `envsubst` which is helpful for specifying
           secrets:
-          <programlisting>
-          { <xref linkend="opt-services.privacyidea.secretKey"/> = "$SECRET"; }
-          </programlisting>
+          ```
+          { services.privacyidea.secretKey = "$SECRET"; }
+          ```
 
           The environment-file can now specify the actual secret key:
-          <programlisting>
+          ```
           SECRET=veryverytopsecret
-          </programlisting>
+          ```
         '';
       };
 
@@ -178,8 +184,44 @@ in
         description = lib.mdDoc "Group account under which PrivacyIDEA runs.";
       };
 
+      tokenjanitor = {
+        enable = mkEnableOption (lib.mdDoc "automatic runs of the token janitor");
+        interval = mkOption {
+          default = "quarterly";
+          type = types.str;
+          description = lib.mdDoc ''
+            Interval in which the cleanup program is supposed to run.
+            See {manpage}`systemd.time(7)` for further information.
+          '';
+        };
+        action = mkOption {
+          type = types.enum [ "delete" "mark" "disable" "unassign" ];
+          description = lib.mdDoc ''
+            Which action to take for matching tokens.
+          '';
+        };
+        unassigned = mkOption {
+          default = false;
+          type = types.bool;
+          description = lib.mdDoc ''
+            Whether to search for **unassigned** tokens
+            and apply [](#opt-services.privacyidea.tokenjanitor.action)
+            onto them.
+          '';
+        };
+        orphaned = mkOption {
+          default = true;
+          type = types.bool;
+          description = lib.mdDoc ''
+            Whether to search for **orphaned** tokens
+            and apply [](#opt-services.privacyidea.tokenjanitor.action)
+            onto them.
+          '';
+        };
+      };
+
       ldap-proxy = {
-        enable = mkEnableOption "PrivacyIDEA LDAP Proxy";
+        enable = mkEnableOption (lib.mdDoc "PrivacyIDEA LDAP Proxy");
 
         configFile = mkOption {
           type = types.nullOr types.path;
@@ -204,11 +246,11 @@ in
         settings = mkOption {
           type = with types; attrsOf (attrsOf (oneOf [ str bool int (listOf str) ]));
           default = {};
-          description = ''
-            Attribute-set containing the settings for <package>privacyidea-ldap-proxy</package>.
+          description = lib.mdDoc ''
+            Attribute-set containing the settings for `privacyidea-ldap-proxy`.
             It's possible to pass secrets using env-vars as substitutes and
-            use the option <xref linkend="opt-services.privacyidea.ldap-proxy.environmentFile"/>
-            to inject them via <package>envsubst</package>.
+            use the option [](#opt-services.privacyidea.ldap-proxy.environmentFile)
+            to inject them via `envsubst`.
           '';
         };
 
@@ -228,9 +270,59 @@ in
 
     (mkIf cfg.enable {
 
-      environment.systemPackages = [ pkgs.privacyidea ];
+      assertions = [
+        {
+          assertion = cfg.tokenjanitor.enable -> (cfg.tokenjanitor.orphaned || cfg.tokenjanitor.unassigned);
+          message = ''
+            privacyidea-token-janitor has no effect if neither orphaned nor unassigned tokens
+            are to be searched.
+          '';
+        }
+      ];
+
+      environment.systemPackages = [ pkgs.privacyidea (hiPrio privacyidea-token-janitor) ];
 
       services.postgresql.enable = mkDefault true;
+
+      systemd.services.privacyidea-tokenjanitor = mkIf cfg.tokenjanitor.enable {
+        environment.PRIVACYIDEA_CONFIGFILE = "${cfg.stateDir}/privacyidea.cfg";
+        path = [ penv ];
+        serviceConfig = {
+          CapabilityBoundingSet = [ "" ];
+          ExecStart = "${pkgs.writeShellScript "pi-token-janitor" ''
+            ${optionalString cfg.tokenjanitor.orphaned ''
+              echo >&2 "Removing orphaned tokens..."
+              privacyidea-token-janitor find \
+                --orphaned true \
+                --action ${cfg.tokenjanitor.action}
+            ''}
+            ${optionalString cfg.tokenjanitor.unassigned ''
+              echo >&2 "Removing unassigned tokens..."
+              privacyidea-token-janitor find \
+                --assigned false \
+                --action ${cfg.tokenjanitor.action}
+            ''}
+          ''}";
+          Group = cfg.group;
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectSystem = "strict";
+          ReadWritePaths = cfg.stateDir;
+          Type = "oneshot";
+          User = cfg.user;
+          WorkingDirectory = cfg.stateDir;
+        };
+      };
+      systemd.timers.privacyidea-tokenjanitor = mkIf cfg.tokenjanitor.enable {
+        wantedBy = [ "timers.target" ];
+        timerConfig.OnCalendar = cfg.tokenjanitor.interval;
+        timerConfig.Persistent = true;
+      };
 
       systemd.services.privacyidea = let
         piuwsgi = pkgs.writeText "uwsgi.json" (builtins.toJSON {

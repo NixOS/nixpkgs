@@ -11,7 +11,7 @@ in
 {
   options = {
     services.plantuml-server = {
-      enable = mkEnableOption "PlantUML server";
+      enable = mkEnableOption (lib.mdDoc "PlantUML server");
 
       package = mkOption {
         type = types.package;

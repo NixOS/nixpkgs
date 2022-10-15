@@ -25,15 +25,13 @@ in
 
     boot.initrd.network.openvpn.configuration = mkOption {
       type = types.path; # Same type as boot.initrd.secrets
-      description = ''
+      description = lib.mdDoc ''
         The configuration file for OpenVPN.
 
-        <warning>
-          <para>
-            Unless your bootloader supports initrd secrets, this configuration
-            is stored insecurely in the global Nix store.
-          </para>
-        </warning>
+        ::: {.warning}
+        Unless your bootloader supports initrd secrets, this configuration
+        is stored insecurely in the global Nix store.
+        :::
       '';
       example = literalExpression "./configuration.ovpn";
     };

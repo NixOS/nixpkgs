@@ -7,8 +7,8 @@
 , setuptools-scm
 
 # runtime
-, ldap
 , django
+, python-ldap
 
 # tests
 , python
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     django
-    ldap
+    python-ldap
   ];
 
   # ValueError: SCHEMADIR is None, ldap schemas are missing.

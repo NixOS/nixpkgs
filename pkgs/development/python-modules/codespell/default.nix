@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   pname = "codespell";
-  version = "2.1.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "codespell-project";
     repo = "codespell";
     rev = "v${version}";
-    sha256 = "sha256-BhYVztSr2MalILEcOcvMl07CObYa73o3kW8S/idqAO8=";
+    sha256 = "sha256-H/istsEt6kYzwvwy8GlOH0fkMTWbEdXVF1P1qO6sITs=";
   };
 
   postPatch = ''
@@ -23,8 +23,12 @@ buildPythonApplication rec {
     export ASPELL_CONF="dict-dir ${aspellDicts.en}/lib/aspell"
   '';
 
-  # tries to run not fully installed script
-  disabledTests = [ "test_command" ];
+  disabledTests = [
+    # tries to run not fully installed script
+    "test_command"
+    # error 'dateset' should not be in aspell dictionaries (en, en_GB, en_US, en_CA, en_AU) for dictionary /build/source/codespell_lib/tests/../data/dictionary.txt
+    "test_dictionary_formatting"
+  ];
 
   pythonImportsCheck = [ "codespell_lib" ];
 

@@ -18,7 +18,7 @@ in
 
   options = {
     services.sniproxy = {
-      enable = mkEnableOption "sniproxy server";
+      enable = mkEnableOption (lib.mdDoc "sniproxy server");
 
       user = mkOption {
         type = types.str;

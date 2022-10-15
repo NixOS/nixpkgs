@@ -6,11 +6,9 @@
 , cmake
 , rocm-cmake
 , clang
-, clang-unwrapped
 , glew
 , libglvnd
 , libX11
-, lld
 , llvm
 , mesa
 , numactl
@@ -24,24 +22,22 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-opencl-runtime";
-  version = "5.1.1";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-OpenCL-Runtime";
     rev = "rocm-${version}";
-    hash = "sha256-O7q3uTjspO/rZ2+8+g7pRfBXsCRaEr4DZxEqABHbOeY=";
+    hash = "sha256-QvAF25Zfq9d1M/KIsr2S+Ggxzqw/MQ2OVcm9ZNfjTa8=";
   };
 
   nativeBuildInputs = [ cmake rocm-cmake ];
 
   buildInputs = [
     clang
-    clang-unwrapped
     glew
     libglvnd
     libX11
-    lld
     llvm
     mesa
     numactl
@@ -83,7 +79,7 @@ stdenv.mkDerivation rec {
     description = "OpenCL runtime for AMD GPUs, part of the ROCm stack";
     homepage = "https://github.com/RadeonOpenCompute/ROCm-OpenCL-Runtime";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ acowley lovesegfault ];
+    maintainers = with maintainers; [ acowley lovesegfault Flakebi ];
     platforms = platforms.linux;
   };
 }

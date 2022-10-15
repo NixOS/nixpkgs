@@ -16,6 +16,8 @@ self: super: {
 
     pg_hint_plan = super.callPackage ./ext/pg_hint_plan.nix { };
 
+    pg_ivm = super.callPackage ./ext/pg_ivm.nix { };
+
     pg_rational = super.callPackage ./ext/pg_rational.nix { };
 
     pg_repack = super.callPackage ./ext/pg_repack.nix { };
@@ -30,7 +32,7 @@ self: super: {
 
     plr = super.callPackage ./ext/plr.nix { };
 
-    plv8 = super.callPackage ./ext/plv8.nix {
+    plv8 = super.callPackage ./ext/plv8 {
       v8 = self.v8_8_x;
     };
 

@@ -698,4 +698,21 @@ rec {
     tag = "latest";
     contents = [ pkgs.bashInteractive ./test-dummy ];
   };
+
+  # ensure that caCertificates builds
+  image-with-certs = buildImage {
+    name = "image-with-certs";
+    tag = "latest";
+
+    copyToRoot = pkgs.buildEnv {
+      name = "image-with-certs-root";
+      paths = [
+        pkgs.coreutils
+        pkgs.dockerTools.caCertificates
+      ];
+    };
+
+    config = {
+    };
+  };
 }

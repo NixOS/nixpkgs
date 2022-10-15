@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-dash-to-dock";
-  version = "72";
+  version = "74";
 
   # Temporarily switched to commit hash because stable version is buggy.
   src = fetchFromGitHub {
     owner = "micheleg";
     repo = "dash-to-dock";
     rev = "extensions.gnome.org-v${version}";
-    sha256 = "Cds5Fc+rnvoy01GTZBS7qPh8UC9ekrNBOs+IEkDNkJw=";
+    sha256 = "3WNm9kX76+qmn9KWLSKwxmHHpc21kWHrBW9266TOKZ0=";
   };
 
   nativeBuildInputs = [
@@ -34,8 +34,6 @@ stdenv.mkDerivation rec {
     extensionPortalSlug = "dash-to-dock";
 
     updateScript = gitUpdater {
-      pname = "gnomeExtensions.dash-to-dock";
-      inherit version;
       rev-prefix = "extensions.gnome.org-v";
     };
   };

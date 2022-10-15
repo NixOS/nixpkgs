@@ -4,6 +4,7 @@
 , buildPythonPackage
 , python
 , cython
+, pythran
 , numpy
 , scipy
 , matplotlib
@@ -16,25 +17,24 @@
 , imageio
 , tifffile
 , pytestCheckHook
-, doCheck ? false
 }:
 
 let
   installedPackageRoot = "${builtins.placeholder "out"}/${python.sitePackages}";
   self = buildPythonPackage rec {
     pname = "scikit-image";
-    version = "0.18.3";
+    version = "0.19.3";
 
     src = fetchFromGitHub {
       owner = pname;
       repo = pname;
       rev = "v${version}";
-      sha256 = "0a2h3bw5rkk23k4r04qc9maccg00nddssd7lfsps8nhp5agk1vyh";
+      sha256 = "sha256-zvXgZdvYycFbbMsBFSqMDzLanEtF9+JuVSQ3AM8/LQk=";
     };
 
     patches = [ ./add-testing-data.patch ];
 
-    nativeBuildInputs = [ cython ];
+    nativeBuildInputs = [ cython pythran ];
 
     propagatedBuildInputs = [
       cloudpickle
@@ -51,7 +51,7 @@ let
     ];
 
     # test suite is very cpu intensive, move to passthru.tests
-    inherit doCheck;
+    doCheck = false;
     checkInputs = [ pytestCheckHook ];
 
     # (1) The package has cythonized modules, whose .so libs will appear only in the wheel, i.e. in nix store;

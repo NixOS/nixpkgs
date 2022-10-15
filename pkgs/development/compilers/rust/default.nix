@@ -28,7 +28,7 @@ in
   lib = lib';
 
   # Backwards compat before `lib` was factored out.
-  inherit (lib') toTargetArch toTargetOs toRustTarget toRustTargetSpec;
+  inherit (lib') toTargetArch toTargetOs toRustTarget toRustTargetSpec IsNoStdTarget;
 
   # This just contains tools for now. But it would conceivably contain
   # libraries too, say if we picked some default/recommended versions from
@@ -83,7 +83,6 @@ in
         inherit CoreFoundation Security;
       };
       clippy = self.callPackage ./clippy.nix { inherit Security; };
-      rls = self.callPackage ./rls { inherit CoreFoundation Security SystemConfiguration; };
     });
   };
 }

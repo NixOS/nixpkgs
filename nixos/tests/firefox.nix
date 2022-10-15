@@ -8,7 +8,7 @@ let firefoxPackage' = firefoxPackage.override (args: {
 
 in
 {
-  name = firefoxPackage'.unwrapped.binaryName;
+  name = firefoxPackage'.unwrapped.pname;
   meta = with pkgs.lib.maintainers; {
     maintainers = [ eelco shlevy ];
   };

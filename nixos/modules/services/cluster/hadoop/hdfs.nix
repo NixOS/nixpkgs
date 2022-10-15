@@ -8,7 +8,7 @@ let
 
   # Generator for HDFS service options
   hadoopServiceOption = { serviceName, firewallOption ? true, extraOpts ? null }: {
-    enable = mkEnableOption serviceName;
+    enable = mkEnableOption (lib.mdDoc serviceName);
     restartIfChanged = mkOption {
       type = types.bool;
       description = lib.mdDoc ''
@@ -158,8 +158,8 @@ in
         50010 # datanode.address
         50020 # datanode.ipc.address
       ];
-      extraConfig.services.hadoop.hdfsSiteInternal."dfs.datanode.data.dir" = let d = cfg.hdfs.datanode.dataDirs; in
-        if (d!= null) then (concatMapStringsSep "," (x: "["+x.type+"]file://"+x.path) cfg.hdfs.datanode.dataDirs) else d;
+      extraConfig.services.hadoop.hdfsSiteInternal."dfs.datanode.data.dir" = mkIf (cfg.hdfs.datanode.dataDirs!= null)
+        (concatMapStringsSep "," (x: "["+x.type+"]file://"+x.path) cfg.hdfs.datanode.dataDirs);
     })
 
     (hadoopServiceConfig {

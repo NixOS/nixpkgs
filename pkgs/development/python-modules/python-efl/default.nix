@@ -34,7 +34,7 @@ buildPythonPackage rec {
   '';
 
   installPhase = ''
-    ${python.interpreter} setup.py install --prefix=$out
+    ${python.interpreter} setup.py install --prefix=$out --single-version-externally-managed
   '';
 
   doCheck = false;

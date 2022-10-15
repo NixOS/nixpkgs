@@ -8,6 +8,7 @@
 , gobject-introspection
 , gjs
 , nixosTests
+, curl
 , glib
 , systemd
 , xz
@@ -42,13 +43,13 @@ let
   ]));
 in stdenv.mkDerivation rec {
   pname = "ostree";
-  version = "2022.5";
+  version = "2022.6";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
-    sha256 = "sha256-kUxNmTvBEdfdMK6XIbb/6KtW6x/W6BsJewn0AMwbBT8=";
+    sha256 = "sha256-g170fZoLNaEMd//X8PvS4rh/fMy1iNonRCoF/3H/rYw=";
   };
 
   patches = [
@@ -85,6 +86,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    curl
     glib
     systemd
     e2fsprogs
@@ -108,6 +110,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configureFlags = [
+    "--with-curl"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-systemdsystemgeneratordir=${placeholder "out"}/lib/systemd/system-generators"
     "--enable-installed-tests"

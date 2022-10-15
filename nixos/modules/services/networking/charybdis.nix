@@ -18,7 +18,7 @@ in
 
     services.charybdis = {
 
-      enable = mkEnableOption "Charybdis IRC daemon";
+      enable = mkEnableOption (lib.mdDoc "Charybdis IRC daemon");
 
       config = mkOption {
         type = types.str;

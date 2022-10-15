@@ -1,7 +1,8 @@
 { lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, pytest
+, setuptools
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -12,13 +13,23 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hsoft";
     repo = "send2trash";
-    rev = version;
-    sha256 = "sha256-kDUEfyMTk8CXSxTEi7E6kl09ohnWHeaoif+EIaIJh9Q=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-kDUEfyMTk8CXSxTEi7E6kl09ohnWHeaoif+EIaIJh9Q=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   doCheck = !stdenv.isDarwin;
-  checkPhase = "HOME=$TMPDIR pytest";
-  checkInputs = [ pytest ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Send file to trash natively under macOS, Windows and Linux";

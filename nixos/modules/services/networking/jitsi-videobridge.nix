@@ -51,7 +51,7 @@ let
 in
 {
   options.services.jitsi-videobridge = with types; {
-    enable = mkEnableOption "Jitsi Videobridge, a WebRTC compatible video router";
+    enable = mkEnableOption (lib.mdDoc "Jitsi Videobridge, a WebRTC compatible video router");
 
     config = mkOption {
       type = attrs;
@@ -70,7 +70,7 @@ in
       description = lib.mdDoc ''
         Videobridge configuration.
 
-        See <https://github.com/jitsi/jitsi-videobridge/blob/master/src/main/resources/reference.conf>
+        See <https://github.com/jitsi/jitsi-videobridge/blob/master/jvb/src/main/resources/reference.conf>
         for default configuration with comments.
       '';
     };

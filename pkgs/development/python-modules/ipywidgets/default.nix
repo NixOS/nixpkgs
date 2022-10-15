@@ -6,18 +6,19 @@
 , lib
 , nbformat
 , pytestCheckHook
+, pytz
 , traitlets
 , widgetsnbextension
 }:
 
 buildPythonPackage rec {
   pname = "ipywidgets";
-  version = "7.7.1";
+  version = "8.0.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Xy+ht6+uGvMsiAiMmCitl43pPd2jk9ftQU5VP+6T3Ks=";
+    hash = "sha256-CMt1xuCpaDYUfL/cVVgK4E0T4F0m/7w3e04caLqiix8=";
   };
 
   propagatedBuildInputs = [
@@ -26,6 +27,7 @@ buildPythonPackage rec {
     jupyterlab-widgets
     traitlets
     nbformat
+    pytz
     widgetsnbextension
   ];
 

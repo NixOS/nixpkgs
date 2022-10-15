@@ -8,20 +8,33 @@
 , proto-plus
 , pytestCheckHook
 , pytest-asyncio
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-trace";
-  version = "1.7.0";
+  version = "1.7.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-4EC6jLcFNF8G0dXvc+cZB6Ok3zeltc6Xon8EGRTkyCs=";
+    hash = "sha256-HFntFmPn3FPhCrB+nnJlBD9zqG2jDsP2naEl2IxhRqE=";
   };
 
-  propagatedBuildInputs = [ google-api-core google-cloud-core proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    google-cloud-core
+    proto-plus
+  ];
 
-  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [
+    google-cloud-testutils
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   disabledTests = [
     # require credentials

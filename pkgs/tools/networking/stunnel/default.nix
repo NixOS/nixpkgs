@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, nixosTests }:
+{ lib, stdenv, fetchurl, fetchpatch, openssl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "stunnel";
@@ -10,6 +10,15 @@ stdenv.mkDerivation rec {
     # please use the contents of "https://www.stunnel.org/downloads/stunnel-${version}.tar.gz.sha256",
     # not the output of `nix-prefetch-url`
   };
+  patches = [
+    # Fixes compilation on darwin, patch is from
+    # https://github.com/mtrojnar/stunnel/pull/15.
+    (fetchpatch {
+        name = "stunnel_darwin_environ.patch";
+        url = "https://github.com/mtrojnar/stunnel/commit/d41932f6d55f639cc921007c2e180a55ef88bf00.patch";
+        sha256 = "sha256-d2K/BHE6GxvDCBIbttCHEVwH9SCu0jggNvhVHkC/qto=";
+      })
+  ];
 
   buildInputs = [ openssl ];
   configureFlags = [

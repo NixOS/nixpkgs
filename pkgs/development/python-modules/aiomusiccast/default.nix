@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , poetry-core
 , aiohttp
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -31,6 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    setuptools
   ];
 
   # upstream has no tests

@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.42.0";
+  version = "0.49.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-MShlKtrorqXRInQ01dEzVeLDRDua9PISkficF02PrBI=";
+    sha256 = "sha256-MShlKtrorqXRInQ01dEzVeLDRDua9PISkficF02PrBI=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;

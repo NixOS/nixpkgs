@@ -121,7 +121,7 @@ let
       "final.target"
       "kexec.target"
       "systemd-kexec.service"
-      "systemd-update-utmp.service"
+    ] ++ lib.optional cfg.package.withUtmp "systemd-update-utmp.service" ++ [
 
       # Password entry.
       "systemd-ask-password-console.path"
@@ -325,8 +325,8 @@ in
       type = types.lines;
       example = "DefaultLimitCORE=infinity";
       description = lib.mdDoc ''
-        Extra config options for systemd. See man systemd-system.conf for
-        available options.
+        Extra config options for systemd. See systemd-system.conf(5) man page
+        for available options.
       '';
     };
 

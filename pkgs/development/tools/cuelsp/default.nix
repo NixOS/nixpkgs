@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cuelsp";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "dagger";
     repo = "cuelsp";
     rev = "v${version}";
-    sha256 = "sha256-78snbfxm6nSNDQRhj7cC4FSkKeOEUw+wfjhJtP/CpwY=";
+    sha256 = "sha256-+E49TR2D26HSTwgwO1XFkIwXr5lmvv9l3KtR8dVT/cQ=";
   };
 
   vendorSha256 = "sha256-zg4aXPY2InY5VEX1GLJkGhMlfa5EezObAjIuX/bGvlc=";

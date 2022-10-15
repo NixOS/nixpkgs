@@ -9,7 +9,7 @@ let
         version = "3.1.14";
         src = old.src.override {
           inherit version;
-          sha256 = "72a4a5a136a214c39cf016ccdd6b69e2aa08c7479c66d93f3a9b5e4bb9d8a347";
+          hash = "sha256-cqSloTaiFMOc8BbM3Wtp4qoIx0ecZtk/OpteS7nYo0c=";
         };
         meta = old.meta // {
           knownVulnerabilities = [

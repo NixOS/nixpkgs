@@ -96,7 +96,7 @@ self: let
           ./build.sh -j$NIX_BUILD_CORES
         '';
 
-        postInstall = ''
+        postInstall = (old.postInstall or "") + "\n" + ''
           ./install.sh --prefix=$out
         '';
 

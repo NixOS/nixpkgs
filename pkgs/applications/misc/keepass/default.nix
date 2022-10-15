@@ -1,7 +1,8 @@
 { lib, fetchurl, buildDotnetPackage, substituteAll, makeWrapper, makeDesktopItem,
   unzip, icoutils, gtk2, xorg, xdotool, xsel, coreutils, unixtools, glib, plugins ? [] }:
-
-with builtins; buildDotnetPackage rec {
+let
+  inherit (builtins) add length readFile replaceStrings unsafeDiscardStringContext toString map;
+in buildDotnetPackage rec {
   pname = "keepass";
   version = "2.49";
 

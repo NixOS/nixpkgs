@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "weconnect";
-  version = "0.46.0";
+  version = "0.48.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,15 +21,20 @@ buildPythonPackage rec {
     owner = "tillsteinbach";
     repo = "WeConnect-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FnTHL3CUBxuHWr90MSQD4nwUFJQwP2nblQP1bo/olrc=";
+    hash = "sha256-GXTjG/3Gk58C6TxKrgtblUZI+xf7Te9OA8HnDvNEIvA=";
   };
 
   propagatedBuildInputs = [
-    ascii-magic
     oauthlib
-    pillow
     requests
   ];
+
+  passthru.optional-dependencies = {
+    Images = [
+      ascii-magic
+      pillow
+    ];
+  };
 
   checkInputs = [
     pytest-httpserver

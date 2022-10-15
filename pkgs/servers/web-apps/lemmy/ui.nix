@@ -6,6 +6,7 @@
 , pkg-config
 , fetchFromGitHub
 , fetchYarnDeps
+, nixosTests
 }:
 
 let
@@ -13,8 +14,8 @@ let
 
   pkgConfig = {
     node-sass = {
-      nativeBuildInputs = [ ];
-      buildInputs = [ libsass pkg-config python3 ];
+      nativeBuildInputs = [ pkg-config ];
+      buildInputs = [ libsass python3 ];
       postInstall = ''
         LIBSASS_EXT=auto yarn --offline run build
         rm build/config.gypi
@@ -67,6 +68,7 @@ mkYarnPackage {
   distPhase = "true";
 
   passthru.updateScript = ./update.sh;
+  passthru.tests.lemmy-ui = nixosTests.lemmy;
 
   meta = with lib; {
     description = "Building a federated alternative to reddit in rust";

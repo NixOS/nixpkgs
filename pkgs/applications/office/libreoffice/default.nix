@@ -205,6 +205,8 @@ in
 
     # Fix build with poppler 22.04
     ./poppler-22-04-0.patch
+
+    ./gpgme-1.18.patch
   ];
 
   ### QT/KDE
@@ -553,7 +555,6 @@ in
     openssl
     pam
     perl
-    pkg-config
     poppler
     python3
     sane-backends

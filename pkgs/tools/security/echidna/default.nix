@@ -1,5 +1,4 @@
 { lib
-, fetchpatch
 , fetchFromGitHub
 # Haskell deps
 , mkDerivation, aeson, ansi-terminal, base, base16-bytestring, binary, brick
@@ -8,18 +7,23 @@
 , MonadRandom, mtl, optparse-applicative, process, random, stm, tasty
 , tasty-hunit, tasty-quickcheck, temporary, text, transformers , unix, unliftio
 , unliftio-core, unordered-containers, vector, vector-instances, vty
-, wl-pprint-annotated, word8, yaml , extra, ListLike, semver
+, wl-pprint-annotated, word8, yaml, extra, ListLike, semver
 }:
 mkDerivation rec {
   pname = "echidna";
-  version = "1.7.3";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "echidna";
     rev = "v${version}";
-    sha256 = "sha256-NkAAXYa1bbCNUO0eDM7LQbyC3//RRFAKmEHGH2Dhl/M=";
+    sha256 = "sha256-ZLk3K00O6aERf+G5SagDVUk1/ba9U+9n9dqCImkczJs=";
   };
+
+  # NOTE: echidna is behind with aeson because of hevm, this patch updates
+  # the code to work with the major aeson update that broke the build
+  # it's temporary until hevm version 0.50.0 is released - https://github.com/ethereum/hevm/milestone/1
+  patches = [ ./echidna-update-aeson.patch ];
 
   isLibrary = true;
   isExecutable = true;
@@ -51,4 +55,5 @@ mkDerivation rec {
   license = lib.licenses.agpl3Plus;
   maintainers = with lib.maintainers; [ arturcygan ];
   platforms = lib.platforms.unix;
+  mainProgram = "echidna-test";
 }

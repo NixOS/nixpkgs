@@ -1,66 +1,21 @@
 { lib
-, buildPythonPackage
 , fetchFromGitLab
-, regex
-, service-identity
-, itsdangerous
-, requests
-, redis
-, channels
-, channels-redis
-, psycopg2
-, gunicorn
-, django-cors-headers
-, django-celery-email
-, advocate
-, django-storages
-, pillow
-, faker
-, uvicorn
-, twisted
-, django
-, drf-jwt
-, cryptography
-, tqdm
-, celery-redbeat
-, drf-spectacular
-, websockets
-, asgiref
-, antlr4-python3-runtime
-, psutil
-, dj-database-url
-, django-health-check
-, celery
-, unicodecsv
-, django-celery-beat
-, django-redis
-, zipp
-, boto3
-, cached-property
-, importlib-resources
-, zope_interface
-, freezegun
-, pyinstrument
-, responses
-, pytestCheckHook
-, setuptools
-, pytest-django
-, python
-, httpretty
-, pytest-unordered
-, openapi-spec-validator }:
+, makeWrapper
+, python3
+}:
 
 let
 
-  baserow_premium = with python.pkgs; ( buildPythonPackage rec {
+  baserow_premium = with python3.pkgs; ( buildPythonPackage rec {
     pname = "baserow_premium";
     version = "1.10.2";
+    foramt = "setuptools";
 
     src = fetchFromGitLab {
       owner = "bramw";
       repo = pname;
-      rev = version;
-      sha256 = "sha256-4BrhTwAxHboXz8sMZL0V68skgNw2D2/YJuiWVNe0p4w=";
+      rev = "refs/tags/${version}";
+      hash = "sha256-4BrhTwAxHboXz8sMZL0V68skgNw2D2/YJuiWVNe0p4w=";
     };
 
     sourceRoot = "source/premium/backend";
@@ -70,15 +25,16 @@ let
 
 in
 
-buildPythonPackage rec {
+with python3.pkgs; buildPythonPackage rec {
   pname = "baserow";
   version = "1.10.2";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "bramw";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-4BrhTwAxHboXz8sMZL0V68skgNw2D2/YJuiWVNe0p4w=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-4BrhTwAxHboXz8sMZL0V68skgNw2D2/YJuiWVNe0p4w=";
   };
 
   sourceRoot = "source/backend";
@@ -87,7 +43,10 @@ buildPythonPackage rec {
     # remove dependency constraints
     sed 's/[~<>=].*//' -i requirements/base.in requirements/base.txt
     sed 's/zope-interface/zope.interface/' -i requirements/base.in requirements/base.txt
+    sed 's/\[standard\]//' -i requirements/base.in requirements/base.txt
   '';
+
+  nativeBuildInputs = [ makeWrapper ];
 
   propagatedBuildInputs = [
     advocate
@@ -122,8 +81,15 @@ buildPythonPackage rec {
     twisted
     unicodecsv
     uvicorn
+    watchgod
     zipp
-  ];
+  ] ++ uvicorn.optional-dependencies.standard;
+
+  postInstall = ''
+    wrapProgram $out/bin/baserow \
+      --prefix PYTHONPATH : "$PYTHONPATH" \
+      --prefix DJANGO_SETTINGS_MODULE : "baserow.config.settings.base"
+  '';
 
   checkInputs = [
     baserow_premium

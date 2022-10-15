@@ -31,7 +31,7 @@ The recommended way of defining a derivation for a Coq library, is to use the `c
 * `releaseRev` (optional, defaults to `(v: v)`), provides a default mapping from release names to revision hashes/branch names/tags,
 * `displayVersion` (optional), provides a way to alter the computation of `name` from `pname`, by explaining how to display version numbers,
 * `namePrefix` (optional, defaults to `[ "coq" ]`), provides a way to alter the computation of `name` from `pname`, by explaining which dependencies must occur in `name`,
-* `nativeBuildInputs` (optional), is a list of executables that are required to build the current derivation, in addition to the default ones (namely `which`, `dune` and `ocaml` depending on whether `useDune2`, `useDune2ifVersion` and `mlPlugin` are set).
+* `nativeBuildInputs` (optional), is a list of executables that are required to build the current derivation, in addition to the default ones (namely `which`, `dune` and `ocaml` depending on whether `useDune`, `useDuneifVersion` and `mlPlugin` are set).
 * `extraNativeBuildInputs` (optional, deprecated), an additional list of derivation to add to `nativeBuildInputs`,
 * `overrideNativeBuildInputs` (optional) replaces the default list of derivation to which `nativeBuildInputs` and `extraNativeBuildInputs` adds extra elements,
 * `buildInputs` (optional), is a list of libraries and dependencies that are required to build and run the current derivation, in addition to the default one `[ coq ]`,
@@ -39,8 +39,8 @@ The recommended way of defining a derivation for a Coq library, is to use the `c
 * `overrideBuildInputs` (optional) replaces the default list of derivation to which `buildInputs` and `extraBuildInputs` adds extras elements,
 * `propagatedBuildInputs` (optional) is passed as is to `mkDerivation`, we recommend to use this for Coq libraries and Coq plugin dependencies, as this makes sure the paths of the compiled libraries and plugins will always be added to the build environements of subsequent derivation, which is necessary for Coq packages to work correctly,
 * `mlPlugin` (optional, defaults to `false`). Some extensions (plugins) might require OCaml and sometimes other OCaml packages. Standard dependencies can be added by setting the current option to `true`. For a finer grain control, the `coq.ocamlPackages` attribute can be used in `nativeBuildInputs`, `buildInputs`, and `propagatedBuildInputs` to depend on the same package set Coq was built against.
-* `useDune2ifVersion` (optional, default to `(x: false)` uses Dune2 to build the package if the provided predicate evaluates to true on the version, e.g. `useDune2ifVersion = versions.isGe "1.1"`  will use dune if the version of the package is greater or equal to `"1.1"`,
-* `useDune2` (optional, defaults to `false`) uses Dune2 to build the package if set to true, the presence of this attribute overrides the behavior of the previous one.
+* `useDuneifVersion` (optional, default to `(x: false)` uses Dune to build the package if the provided predicate evaluates to true on the version, e.g. `useDuneifVersion = versions.isGe "1.1"`  will use dune if the version of the package is greater or equal to `"1.1"`,
+* `useDune` (optional, defaults to `false`) uses Dune to build the package if set to true, the presence of this attribute overrides the behavior of the previous one.
 * `opam-name` (optional, defaults to concatenating with a dash separator the components of `namePrefix` and `pname`), name of the Dune package to build.
 * `enableParallelBuilding` (optional, defaults to `true`), since it is activated by default, we provide a way to disable it.
 * `extraInstallFlags` (optional), allows to extend `installFlags` which initializes the variable `COQMF_COQLIB` so as to install in the proper subdirectory. Indeed Coq libraries should be installed in `$(out)/lib/coq/${coq.coq-version}/user-contrib/`. Such directories are automatically added to the `$COQPATH` environment variable by the hook defined in the Coq derivation.
@@ -87,4 +87,59 @@ with lib; mkCoqDerivation {
     license = licenses.cecill-c;
   };
 }
+```
+
+## Three ways of overriding Coq packages {#coq-overriding-packages}
+
+There are three distinct ways of changing a Coq package by overriding one of its values: `.override`, `overrideCoqDerivation`, and `.overrideAttrs`.  This section explains what sort of values can be overridden with each of these methods.
+
+### `.override` {#coq-override}
+
+`.override` lets you change arguments to a Coq derivation.  In the case of the `multinomials` package above, `.override` would let you override arguments like `mkCoqDerivation`, `version`, `coq`, `mathcomp`, `mathcom-finmap`, etc.
+
+For example, assuming you have a special `mathcomp` dependency you want to use, here is how you could override the `mathcomp` dependency:
+
+```nix
+multinomials.override {
+  mathcomp = my-special-mathcomp;
+}
+```
+
+In Nixpkgs, all Coq derivations take a `version` argument.  This can be overridden in order to easily use a different version:
+
+```nix
+coqPackages.multinomials.override {
+  version = "1.5.1";
+}
+```
+
+Refer to [](#coq-packages-attribute-sets-coqpackages) for all the different formats that you can potentially pass to `version`, as well as the restrictions.
+
+### `overrideCoqDerivation` {#coq-overrideCoqDerivation}
+
+The `overrideCoqDerivation` function lets you easily change arguments to `mkCoqDerivation`.  These arguments are described in [](#coq-packages-attribute-sets-coqpackages).
+
+For example, here is how you could locally add a new release of the `multinomials` library, and set the `defaultVersion` to use this release:
+
+```nix
+coqPackages.lib.overrideCoqDerivation
+  {
+    defaultVersion = "2.0";
+    release."2.0".sha256 = "1lq8x86vd3vqqh2yq6hvyagpnhfq5wmk5pg2z0xq7b7dbbbhyfkk";
+  }
+  coqPackages.multinomials
+```
+
+### `.overrideAttrs` {#coq-overrideAttrs}
+
+`.overrideAttrs` lets you override arguments to the underlying `stdenv.mkDerivation` call. Internally, `mkCoqDerivation` uses `stdenv.mkDerivation` to create derivations for Coq libraries.  You can override arguments to `stdenv.mkDerivation` with `.overrideAttrs`.
+
+For instance, here is how you could add some code to be performed in the derivation after installation is complete:
+
+```nix
+coqPackages.multinomials.overrideAttrs (oldAttrs: {
+  postInstall = oldAttrs.postInstall or "" + ''
+    echo "you can do anything you want here"
+  '';
+})
 ```

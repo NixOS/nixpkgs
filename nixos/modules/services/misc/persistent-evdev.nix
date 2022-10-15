@@ -11,21 +11,21 @@ let
 in
 {
   options.services.persistent-evdev = {
-    enable = lib.mkEnableOption "virtual input devices that persist even if the backing device is hotplugged";
+    enable = lib.mkEnableOption (lib.mdDoc "virtual input devices that persist even if the backing device is hotplugged");
 
     devices = lib.mkOption {
       default = {};
       type = with lib.types; attrsOf str;
-      description = ''
+      description = lib.mdDoc ''
         A set of virtual proxy device labels with backing physical device ids.
 
-        Physical devices should already exist in <filename class="devicefile">/dev/input/by-id/</filename>.
-        Proxy devices will be automatically given a <literal>uinput-</literal> prefix.
+        Physical devices should already exist in {file}`/dev/input/by-id/`.
+        Proxy devices will be automatically given a `uinput-` prefix.
 
-        See the <link xlink:href="https://github.com/aiberia/persistent-evdev#example-usage-with-libvirt">project page</link>
+        See the [project page](https://github.com/aiberia/persistent-evdev#example-usage-with-libvirt)
         for example configuration of virtual devices with libvirt
-        and remember to add <literal>uinput-*</literal> devices to the qemu
-        <literal>cgroup_device_acl</literal> list (see <xref linkend="opt-virtualisation.libvirtd.qemu.verbatimConfig"/>).
+        and remember to add `uinput-*` devices to the qemu
+        `cgroup_device_acl` list (see [](#opt-virtualisation.libvirtd.qemu.verbatimConfig)).
       '';
       example = lib.literalExpression ''
         {

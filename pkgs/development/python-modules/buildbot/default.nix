@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchpatch, fetchPypi, makeWrapper, isPy3k
+{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k
 , python, twisted, jinja2, msgpack, zope_interface, sqlalchemy, alembic
 , python-dateutil, txaio, autobahn, pyjwt, pyyaml, treq, txrequests, pypugjs
 , boto3, moto, mock, lz4, setuptoolsTrial
@@ -11,6 +11,7 @@ let
   withPlugins = plugins: buildPythonPackage {
     pname = "${package.pname}-with-plugins";
     inherit (package) version;
+    format = "other";
 
     dontUnpack = true;
     dontBuild = true;
@@ -32,11 +33,11 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "3.5.0";
+    version = "3.6.1";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "sha256-woGHdCan5qTp00toNkWa821EgVQMrPK+OWXoqFcgIDQ=";
+      sha256 = "sha256-ByJPkI0AHis+Ey1lSuMly4M6W4s/xes4eG0gPPJ3fZA=";
     };
 
     propagatedBuildInputs = [
@@ -78,11 +79,6 @@ let
       # This patch disables the test that tries to read /etc/os-release which
       # is not accessible in sandboxed builds.
       ./skip_test_linux_distro.patch
-      (fetchpatch{
-        url = "https://github.com/buildbot/buildbot/commit/54b8f62902122b0091319a96d0f9edd4195ab4c6.patch";
-        stripLen = 1;
-        sha256 = "sha256-OqW3ZQK0bfqPG3YlrBbrSEEKsM/XqY2NO862ZD/DgHs=";
-      })
     ];
 
     postPatch = ''

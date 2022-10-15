@@ -7,20 +7,32 @@
 , proto-plus
 , pytestCheckHook
 , pytest-asyncio
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-videointelligence";
-  version = "2.8.0";
+  version = "2.8.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-d5sEMQxHUTrCmGJehsFHBPK79YhpnscTGk9ilKpwrUQ=";
+    hash = "sha256-pB7exeGYpFT4nf3YuIhoI+bqG6YYEP6oWs0tohkOIbw=";
   };
 
-  propagatedBuildInputs = [ google-api-core proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    proto-plus
+  ];
 
-  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [
+    google-cloud-testutils
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   disabledTests = [
     # require credentials

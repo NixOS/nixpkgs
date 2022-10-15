@@ -9,13 +9,13 @@
 
 llvmPackages.stdenv.mkDerivation rec {
   pname = "wasmedge";
-  version = "0.10.1";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "WasmEdge";
     repo = "WasmEdge";
     rev = version;
-    sha256 = "sha256-SJi8CV0sa+g+Ngvdw8+SxV3kHqoiKBhYUwDLZM4+jX0=";
+    sha256 = "sha256-+rCzbw44/8mHo6v4rUuXOq4FVs/LJtSF5zhva9/LIL0=";
   };
 
   buildInputs = [

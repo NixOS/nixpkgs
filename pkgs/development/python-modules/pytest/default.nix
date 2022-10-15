@@ -20,12 +20,12 @@
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "7.1.2";
+  version = "7.1.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-oGoEJUU4ZKJwvEXnH3gzMKdCje+0Iw+15qcx/eBuzUU=";
+    sha256 = "sha256-TzZf7C3/nBFi+DTZ8YrxuhMGLbDHCL97lG+KXHYYDDk=";
   };
 
   outputs = [
@@ -69,7 +69,7 @@ buildPythonPackage rec {
     # - files are not needed after tests are finished
     pytestRemoveBytecodePhase () {
         # suffix is defined at:
-        #    https://github.com/pytest-dev/pytest/blob/7.1.2/src/_pytest/assertion/rewrite.py#L51-L53
+        #    https://github.com/pytest-dev/pytest/blob/7.1.3/src/_pytest/assertion/rewrite.py#L51-L53
         find $out -name "*-pytest-*.py[co]" -delete
     }
     preDistPhases+=" pytestRemoveBytecodePhase"

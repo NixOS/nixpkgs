@@ -21,6 +21,11 @@ buildPythonPackage rec {
     sha256 = "sha256-nlfcmFpKBdtb3NXaIZy/bO0lVIygk/jXS8EHs8VU7AA=";
   };
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "protobuf>=3.19.1,<4" "protobuf>=3.19.1"
+  '';
+
   propagatedBuildInputs = [
     casttube
     protobuf

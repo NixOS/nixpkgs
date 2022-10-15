@@ -11,13 +11,13 @@
 }@args:
 
 let
-  version = "2.9.0.beta4";
+  version = "2.9.0.beta10";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-DpUEBGLgjcroVzdDG8/nGvC+ym19ZkGa7qvHKZZ1mH4=";
+    sha256 = "sha256-7uMcJZolLUoJILRYbmcSDArcMP3o89ubh6XttZ7TsLg=";
   };
 
   runtimeDeps = [
@@ -159,14 +159,14 @@ let
     ];
   };
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/app/assets/javascripts/yarn.lock";
-    sha256 = "1l4nfc14cm42lkilsawfhdcnv1ln7m7bpan9a804abv4hwrs3f52";
-  };
-
   assets = stdenv.mkDerivation {
     pname = "discourse-assets";
     inherit version src;
+
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = src + "/app/assets/javascripts/yarn.lock";
+      sha256 = "0s8cmy76xh4z9y932bjshmpyr04zn3yn62ld9174lks2j965qkbl";
+    };
 
     nativeBuildInputs = runtimeDeps ++ [
       postgresql
@@ -176,6 +176,8 @@ let
       yarn
       nodejs-14_x
     ];
+
+    outputs = [ "out" "javascripts" ];
 
     patches = [
       # Use the Ruby API version in the plugin gem path, to match the
@@ -201,7 +203,7 @@ let
       export HOME=$NIX_BUILD_TOP/fake_home
 
       # Make yarn install packages from our offline cache, not the registry
-      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
       ${fixup_yarn_lock}/bin/fixup_yarn_lock app/assets/javascripts/yarn.lock
@@ -253,12 +255,12 @@ let
 
       mv public/assets $out
 
+      rm -r app/assets/javascripts/plugins
+      mv app/assets/javascripts $javascripts
+      ln -sf /run/discourse/assets/javascripts/plugins $javascripts/plugins
+
       runHook postInstall
     '';
-
-    passthru = {
-      inherit yarnOfflineCache;
-    };
   };
 
   discourse = stdenv.mkDerivation {
@@ -301,7 +303,10 @@ let
       # path, not their relative state directory path. This gets rid of
       # warnings and means we don't have to link back to lib from the
       # state directory.
-      find config -type f -execdir sed -Ei "s,(\.\./)+(lib|app)/,$out/share/discourse/\2/," {} \;
+      find config -type f -name "*.rb" -execdir \
+        sed -Ei "s,(\.\./)+(lib|app)/,$out/share/discourse/\2/," {} \;
+      find config -maxdepth 1 -type f -name "*.rb" -execdir \
+        sed -Ei "s,require_relative (\"|')([[:alnum:]].*)(\"|'),require_relative '$out/share/discourse/config/\2'," {} \;
     '';
 
     buildPhase = ''
@@ -322,9 +327,10 @@ let
       ln -sf /var/log/discourse $out/share/discourse/log
       ln -sf /var/lib/discourse/tmp $out/share/discourse/tmp
       ln -sf /run/discourse/config $out/share/discourse/config
-      ln -sf /run/discourse/assets/javascripts/plugins $out/share/discourse/app/assets/javascripts/plugins
       ln -sf /run/discourse/public $out/share/discourse/public
       ln -sf ${assets} $out/share/discourse/public.dist/assets
+      rm -r $out/share/discourse/app/assets/javascripts
+      ln -sf ${assets.javascripts} $out/share/discourse/app/assets/javascripts
       ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} $out/share/discourse/plugins/${p.pluginName or ""}") plugins}
 
       runHook postInstall

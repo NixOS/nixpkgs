@@ -424,5 +424,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         docker.succeed("docker run --rm etc | grep localhost")
         docker.succeed("docker image rm etc:latest")
 
+    with subtest("image-with-certs"):
+        docker.succeed("<${examples.image-with-certs} docker load")
+        docker.succeed("docker run --rm image-with-certs:latest test -r /etc/ssl/certs/ca-bundle.crt")
+        docker.succeed("docker run --rm image-with-certs:latest test -r /etc/ssl/certs/ca-certificates.crt")
+        docker.succeed("docker run --rm image-with-certs:latest test -r /etc/pki/tls/certs/ca-bundle.crt")
+        docker.succeed("docker image rm image-with-certs:latest")
+
   '';
 })

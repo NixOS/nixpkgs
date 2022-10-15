@@ -356,6 +356,10 @@ in
       #   stage5.gcc -> stage4.coreutils -> stage3.glibc -> bootstrap
       gmp = lib.makeOverridable (super.gmp.override { stdenv = self.stdenv; }).overrideAttrs (a: { pname = "${a.pname}-stage4"; });
 
+      # To allow users' overrides inhibit dependencies too heavy for
+      # bootstrap, like guile: https://github.com/NixOS/nixpkgs/issues/181188
+      gnumake = super.gnumake.override { inBootstrap = true; };
+
       gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         nativeTools = false;
         nativeLibc = false;
@@ -411,12 +415,6 @@ in
       inherit (prevStage.stdenv) fetchurlBoot;
 
       extraAttrs = {
-        # remove before 22.11
-        glibc = lib.warn
-          ( "`stdenv.glibc` is deprecated and will be removed in release 22.11."
-           + " Please use `pkgs.glibc` instead.")
-          prevStage.glibc;
-
         inherit bootstrapTools;
         shellPackage = prevStage.bash;
       };
@@ -446,7 +444,7 @@ in
       overrides = self: super: {
         inherit (prevStage)
           gzip bzip2 xz bash coreutils diffutils findutils gawk
-          gnumake gnused gnutar gnugrep gnupatch patchelf
+          gnused gnutar gnugrep gnupatch patchelf
           attr acl zlib pcre libunistring;
         ${localSystem.libc} = getLibc prevStage;
 
@@ -457,6 +455,7 @@ in
           inherit (self) stdenv runCommandLocal patchelf libunistring;
         };
 
+        gnumake = super.gnumake.override { inBootstrap = false; };
       } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
         # Need to get rid of these when cross-compiling.
         inherit (prevStage) binutils binutils-unwrapped;

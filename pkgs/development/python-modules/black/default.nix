@@ -19,16 +19,15 @@
 , uvloop
 }:
 
-
 buildPythonPackage rec {
   pname = "black";
-  version = "22.6.0";
+  version = "22.8.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bG054ortN5rsQNocZUNMd9deZbtZoeHCg95UX7Tnxsk=";
+    hash = "sha256-eS9+tUC6mhfoZWU4cB0+sa/LE047RbcfILJcd6jbfm4=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -37,7 +36,7 @@ buildPythonPackage rec {
   # Black starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
 
-  checkInputs = [ pytestCheckHook parameterized ];
+  checkInputs = [ pytestCheckHook parameterized aiohttp ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin"
@@ -64,17 +63,19 @@ buildPythonPackage rec {
   doCheck = !(stdenv.isLinux && stdenv.isAarch64);
 
   propagatedBuildInputs = [
-    aiohttp
-    aiohttp-cors
     click
-    colorama
     mypy-extensions
     pathspec
     platformdirs
     tomli
-    uvloop
   ] ++ lib.optional (pythonOlder "3.8") typed-ast
   ++ lib.optional (pythonOlder "3.10") typing-extensions;
+
+  passthru.optional-dependencies = {
+    d = [ aiohttp aiohttp-cors ];
+    colorama = [ colorama ];
+    uvloop = [ uvloop ];
+  };
 
   meta = with lib; {
     description = "The uncompromising Python code formatter";

@@ -21,13 +21,11 @@ fi
 
 mkTempDir() {
     tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/nix-prefetch-cvs-XXXXXXXX")"
-    trap removeTempDir EXIT SIGINT SIGQUIT
+    trap removeTempDir EXIT
 }
 
 removeTempDir() {
-    if test -n "$tmpPath"; then
-        rm -rf "$tmpPath" || true
-    fi
+    rm -rf "$tmpPath"
 }
 
 

@@ -131,6 +131,7 @@ in
   config = mkIf cfg.enable {
     users.users.terraria = {
       description = "Terraria server service user";
+      group       = "terraria";
       home        = cfg.dataDir;
       createHome  = true;
       uid         = config.ids.uids.terraria;
@@ -138,7 +139,6 @@ in
 
     users.groups.terraria = {
       gid = config.ids.gids.terraria;
-      members = [ "terraria" ];
     };
 
     systemd.services.terraria = {

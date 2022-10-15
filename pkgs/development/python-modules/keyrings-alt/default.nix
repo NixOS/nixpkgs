@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "keyrings.alt";
-  version = "4.1.1";
+  version = "4.2.0";
   format = "pyproject";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6HFSuVYvqCK1Ew7jECVRK02m5tsNrzjIcFZtCLhK3tY=";
+    sha256 = "sha256-K6PVZEG6Bjf1+cCWBo9nAQrART+dC2Jt4qowGTU7ZDE=";
   };
 
   nativeBuildInputs = [

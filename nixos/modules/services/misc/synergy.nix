@@ -19,7 +19,7 @@ in
       # !!! All these option descriptions needs to be cleaned up.
 
       client = {
-        enable = mkEnableOption "the Synergy client (receive keyboard and mouse events from a Synergy server)";
+        enable = mkEnableOption (lib.mdDoc "the Synergy client (receive keyboard and mouse events from a Synergy server)");
 
         screenName = mkOption {
           default = "";
@@ -45,7 +45,7 @@ in
       };
 
       server = {
-        enable = mkEnableOption "the Synergy server (send keyboard and mouse events)";
+        enable = mkEnableOption (lib.mdDoc "the Synergy server (send keyboard and mouse events)");
 
         configFile = mkOption {
           type = types.path;

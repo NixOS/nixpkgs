@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "difftastic";
-  version = "0.31.0";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "wilfred";
     repo = pname;
     rev = version;
-    sha256 = "sha256-jxxrmlavHdfou9w6KRIoAG3kBDBpg1lpk7J+E8Rx/ew=";
+    sha256 = "sha256-LwDoIvhZj/1fHg2eWgadwTcegeOKPpY8aCAugLfKtDE=";
   };
 
   depsExtraArgs = {
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
       popd
     '';
   };
-  cargoSha256 = "sha256-QW7Y/27AFjuNj+MSwi+DPdjPWqglBW6mAtg9N6BhyAY=";
+  cargoSha256 = "sha256-u4zM4mmYxy1o1FXQ8SjLJB9YFhYI5SbUZH2Wca7Kjmg=";
 
   passthru.tests.version = testers.testVersion { package = difftastic; };
 

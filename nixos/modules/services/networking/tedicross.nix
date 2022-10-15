@@ -13,7 +13,7 @@ let
 in {
   options = {
     services.tedicross = {
-      enable = mkEnableOption "the TediCross Telegram-Discord bridge service";
+      enable = mkEnableOption (lib.mdDoc "the TediCross Telegram-Discord bridge service");
 
       config = mkOption {
         type = types.attrs;

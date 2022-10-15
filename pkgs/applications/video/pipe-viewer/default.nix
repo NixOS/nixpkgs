@@ -6,7 +6,6 @@
 , wrapGAppsHook
 , withGtk3 ? false
 , ffmpeg
-, gtk3
 , wget
 , xdg-utils
 , youtube-dl
@@ -38,13 +37,13 @@ let
 in
 buildPerlModule rec {
   pname = "pipe-viewer";
-  version = "0.1.4";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "trizen";
     repo = "pipe-viewer";
     rev = version;
-    hash = "sha256-kDlZ3Cl8zvN/naGExh2yVW5yHwc1O04x4s22lNkbCzU=";
+    hash = "sha256-2Kzo7NYxARPFuOijwf2a3WQxnNumtKRiRhMhjrWA4GY=";
   };
 
   nativeBuildInputs = [ makeWrapper ]
@@ -72,8 +71,10 @@ buildPerlModule rec {
     wrapProgram "$out/bin/pipe-viewer" \
       --prefix PATH : "${lib.makeBinPath [ ffmpeg wget youtube-dl yt-dlp ]}"
   '' + lib.optionalString withGtk3 ''
+    # make xdg-open overrideable at runtime
     wrapProgram "$out/bin/gtk-pipe-viewer" ''${gappsWrapperArgs[@]} \
-      --prefix PATH : "${lib.makeBinPath [ ffmpeg wget xdg-utils youtube-dl yt-dlp ]}"
+      --prefix PATH : "${lib.makeBinPath [ ffmpeg wget youtube-dl yt-dlp ]}" \
+      --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
   '';
 
   meta = with lib; {

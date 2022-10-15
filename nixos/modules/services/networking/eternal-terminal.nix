@@ -16,7 +16,7 @@ in
 
     services.eternal-terminal = {
 
-      enable = mkEnableOption "Eternal Terminal server";
+      enable = mkEnableOption (lib.mdDoc "Eternal Terminal server");
 
       port = mkOption {
         default = 2022;

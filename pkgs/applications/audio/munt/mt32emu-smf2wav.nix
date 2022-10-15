@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mt32emu-smf2wav";
-  version = "1.8.2";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "munt";
     repo = "munt";
     rev = "${char2underscore "-" pname}_${char2underscore "." version}";
-    sha256 = "1dh5xpnsgx367ch45mm5c2p26vnxf3shax2afg2cd2lrbrlii7l9";
+    sha256 = "sha256-XGds9lDfSiY0D8RhYG4TGyjYEVvVYuAfNSv9+VxiJEs=";
   };
 
   postPatch = ''

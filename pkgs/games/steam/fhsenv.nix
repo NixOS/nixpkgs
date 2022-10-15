@@ -3,6 +3,7 @@
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
 , extraProfile ? "" # string to append to profile
+, extraArgs ? "" # arguments to always pass to steam
 , runtimeOnly ? false
 , runtimeShell
 , stdenv
@@ -227,6 +228,14 @@ in buildFHSUserEnv rec {
         export TZ="$new_TZ"
       fi
     fi
+
+    # udev event notifications don't work reliably inside containers.
+    # SDL2 already tries to automatically detect flatpak and pressure-vessel
+    # and falls back to inotify-based discovery [1]. We make SDL2 do the
+    # same by telling it explicitly.
+    #
+    # [1] <https://github.com/libsdl-org/SDL/commit/8e2746cfb6e1f1a1da5088241a1440fd2535e321>
+    export SDL_JOYSTICK_DISABLE_UDEV=1
   '' + extraProfile;
 
   runScript = writeScript "steam-wrapper.sh" ''
@@ -250,7 +259,7 @@ in buildFHSUserEnv rec {
 
     ${exportLDPath}
     ${fixBootstrap}
-    exec steam "$@"
+    exec steam ${extraArgs} "$@"
   '';
 
   inherit (steam) meta;

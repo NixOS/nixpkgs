@@ -15,7 +15,7 @@ let
   writeKey = "cvpHsNcmGCJqVzf6YxrSnVlwFSAZaYtp";
 in
 buildGoModule rec {
-  version = "2.4.1";
+  version = "2.6.0";
   pname = "crc";
   gitCommit = "6b954d40ec3280ca63e825805503d4414a3ff55b";
 
@@ -23,7 +23,7 @@ buildGoModule rec {
     owner = "code-ready";
     repo = "crc";
     rev = "v${version}";
-    sha256 = "sha256-wjwTf+d19F1NLYmUORMU0PGJeQZd+IrlScm5DiFvAk0=";
+    sha256 = "sha256-4EaonL+7/zPEbuM12jQFx8wLR62iLYZ3LkHAibdGQZc=";
   };
 
   vendorSha256 = null;

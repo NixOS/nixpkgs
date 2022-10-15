@@ -6,7 +6,6 @@
 }:
 
 let
-  inherit (lib) types;
   checkMaintainer = handle: uncheckedAttrs:
   let
       prefix = [ "lib" "maintainers" handle ];

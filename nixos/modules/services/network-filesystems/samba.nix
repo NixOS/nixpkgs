@@ -80,16 +80,15 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable Samba, which provides file and print
           services to Windows clients through the SMB/CIFS protocol.
 
-          <note>
-            <para>If you use the firewall consider adding the following:</para>
-          <programlisting>
-            services.samba.openFirewall = true;
-          </programlisting>
-          </note>
+          ::: {.note}
+          If you use the firewall consider adding the following:
+
+              services.samba.openFirewall = true;
+          :::
         '';
       };
 

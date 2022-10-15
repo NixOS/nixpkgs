@@ -1,22 +1,44 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, pkgs, nodejs, stdenv, buildGoModule, fetchFromGitHub, debianutils, mkdocs, python3, python3Packages }:
 
+let
+  nodeDependencies = (import ./node-composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  }).nodeDependencies;
+in
 buildGoModule rec {
   pname = "ntfy-sh";
-  version = "1.27.2";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "binwiederhier";
     repo = "ntfy";
     rev = "v${version}";
-    sha256 = "sha256-0b4yC2kXh3c2SgKF11voWZh2qS3Y/4KJlt9WtjXswcE=";
+    sha256 = "sha256-pDKeG0Q4cG+UoxpBawHOtO8xVXXxo0Z7nyY2nZSSFvc=";
   };
 
-  vendorSha256 = "sha256-PXYSjhMNtDa0uCaLu0AyM1SMhZPr2wC+xMPDjeQIhDU=";
+  vendorSha256 = "sha256-oMZCjrCsq6aRxcdF6jQK51sZqOjbrdlbofSQvGO/POg=";
 
   doCheck = false;
 
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  nativeBuildInputs = [
+    debianutils
+    mkdocs
+    nodejs
+    python3
+    python3Packages.mkdocs-material
+    python3Packages.mkdocs-minify
+  ];
+
+  postPatch = ''
+    sed -i 's# /bin/echo# echo#' Makefile
+  '';
+
   preBuild = ''
-    make cli-deps-static-sites
+    ln -s ${nodeDependencies}/lib/node_modules web/node_modules
+    DISABLE_ESLINT_PLUGIN=true npm_config_offline=true make web-build docs-build
   '';
 
   meta = with lib; {

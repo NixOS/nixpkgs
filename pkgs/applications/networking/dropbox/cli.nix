@@ -1,5 +1,6 @@
 { lib, stdenv
 , substituteAll
+, autoreconfHook
 , pkg-config
 , fetchurl
 , python3
@@ -21,13 +22,17 @@ stdenv.mkDerivation {
   outputs = [ "out" "nautilusExtension" ];
 
   src = fetchurl {
-    url = "https://linux.dropboxstatic.com/packages/nautilus-dropbox-${version}.tar.bz2";
+    url = "https://linux.dropbox.com/packages/nautilus-dropbox-${version}.tar.bz2";
     sha256 = "1jjc835n2j61d23kvygdb4n4jsrw33r9mbwxrm4fqin6x01l2w7k";
   };
 
   strictDeps = true;
 
   patches = [
+    # Fix extension for Nautilus 43
+    # https://github.com/dropbox/nautilus-dropbox/pull/105
+    ./nautilus-43.patch
+
     (substituteAll {
       src = ./fix-cli-paths.patch;
       inherit dropboxd;
@@ -35,6 +40,7 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
+    autoreconfHook
     pkg-config
     gobject-introspection
     gdk-pixbuf

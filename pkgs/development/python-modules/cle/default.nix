@@ -10,12 +10,13 @@
 , pythonOlder
 , pyvex
 , pyxbe
+, setuptools
 , sortedcontainers
 }:
 
 let
   # The binaries are following the argr projects release cycle
-  version = "9.2.12";
+  version = "9.2.22";
 
   # Binary files from https://github.com/angr/binaries (only used for testing and only here)
   binaries = fetchFromGitHub {
@@ -31,14 +32,18 @@ buildPythonPackage rec {
   inherit version;
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-davY/xYjbFhVP96BZtZXeoZwElmiEYT4Buy3V9GEmeQ=";
+    hash = "sha256-Ppxpptgx91kyCiVrpEUa9ZxZLN9rCLnGB/nl1Fj/gDQ=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     cffi

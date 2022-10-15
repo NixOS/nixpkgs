@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 
 # build time
 , autoreconfHook
@@ -32,14 +33,22 @@
 
 stdenv.mkDerivation rec {
   pname = "frr";
-  version = "8.2.2";
+  version = "8.3.1";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-zuOgbRxyyhFdBplH/K1fpyD+KUWa7FXPDmGKF5Kb7SQ=";
+    hash = "sha256-+M4xTdjCp5TJh0U8ZfUmw84Y7O0TZ9mmUXhh2J/QOE0=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-37032.patch";
+      url = "https://github.com/FRRouting/frr/commit/ff6db1027f8f36df657ff2e5ea167773752537ed.patch";
+      sha256 = "sha256-b3nT6xco620hMSqlj/nTWTJCegf3ARAGaQbii4Yq6Ag=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

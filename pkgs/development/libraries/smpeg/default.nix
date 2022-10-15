@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL gtk2 libGLU libGL ];
 
+  outputs = [ "out" "dev" ];
+
   preConfigure = ''
     touch NEWS AUTHORS ChangeLog
     sh autogen.sh
@@ -35,9 +37,11 @@ stdenv.mkDerivation rec {
     -e 's,"SDL_audio.h",<SDL/SDL_audio.h>,' \
     -e 's,"SDL_thread.h",<SDL/SDL_thread.h>,' \
     -e 's,"SDL_types.h",<SDL/SDL_types.h>,' \
-      $out/include/smpeg/*.h
+      $dev/include/smpeg/*.h
 
-    wrapProgram $out/bin/smpeg-config \
+    moveToOutput bin/smpeg-config "$dev"
+
+    wrapProgram $dev/bin/smpeg-config \
       --prefix PATH ":" "${pkg-config}/bin" \
       --prefix PKG_CONFIG_PATH ":" "${lib.getDev SDL}/lib/pkgconfig"
   '';

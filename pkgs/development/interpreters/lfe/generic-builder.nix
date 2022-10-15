@@ -37,7 +37,7 @@ buildRebar3 {
 
   inherit src version;
 
-  buildInputs = [ erlang makeWrapper ];
+  nativeBuildInputs = [ makeWrapper erlang ];
   beamDeps    = [ proper ];
   patches     = [ ./fix-rebar-config.patch ./dedup-ebins.patch ] ++ patches;
   doCheck     = true;

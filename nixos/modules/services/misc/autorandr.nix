@@ -114,12 +114,9 @@ let
             [ 0.0 0.0 1.0 ]
           ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           Refer to
-          <citerefentry>
-            <refentrytitle>xrandr</refentrytitle>
-            <manvolnum>1</manvolnum>
-          </citerefentry>
+          {manpage}`xrandr(1)`
           for the documentation of the transform matrix.
         '';
       };
@@ -152,18 +149,15 @@ let
             };
           };
         });
-        description = ''
+        description = lib.mdDoc ''
           Output scale configuration.
 
           Either configure by pixels or a scaling factor. When using pixel method the
-          <citerefentry>
-            <refentrytitle>xrandr</refentrytitle>
-            <manvolnum>1</manvolnum>
-          </citerefentry>
+          {manpage}`xrandr(1)`
           option
-          <parameter class="command">--scale-from</parameter>
+          `--scale-from`
           will be used; when using factor method the option
-          <parameter class="command">--scale</parameter>
+          `--scale`
           will be used.
 
           This option is a shortcut version of the transform option and they are mutually
@@ -248,7 +242,7 @@ in {
   options = {
 
     services.autorandr = {
-      enable = mkEnableOption "handling of hotplug and sleep events by autorandr";
+      enable = mkEnableOption (lib.mdDoc "handling of hotplug and sleep events by autorandr");
 
       defaultTarget = mkOption {
         default = "default";

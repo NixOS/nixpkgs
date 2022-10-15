@@ -3,7 +3,8 @@
 , bazelTest
 , fetchFromGitHub
 , fetchurl
-, gccStdenv
+, stdenv
+, darwin
 , lib
 , openjdk8
 , jdk11_headless
@@ -132,9 +133,10 @@ let
   toolsBazel = writeScript "bazel" ''
     #! ${runtimeShell}
 
-    export CXX='${gccStdenv.cc}/bin/g++'
-    export LD='${gccStdenv.cc}/bin/ld'
-    export CC='${gccStdenv.cc}/bin/gcc'
+    export CXX='${stdenv.cc}/bin/clang++'
+    export LD='${darwin.cctools}/bin/ld'
+    export LIBTOOL='${darwin.cctools}/bin/libtool'
+    export CC='${stdenv.cc}/bin/clang'
 
     # XXX: hack for macosX, this flags disable bazel usage of xcode
     # See: https://github.com/bazelbuild/bazel/issues/4231
@@ -152,7 +154,7 @@ let
     cp ${personProto} $out/person/person.proto
     cp ${personBUILD} $out/person/BUILD.bazel
   ''
-  + (lib.optionalString gccStdenv.isDarwin ''
+  + (lib.optionalString stdenv.isDarwin ''
     mkdir $out/tools
     cp ${toolsBazel} $out/tools/bazel
   ''));
@@ -166,14 +168,19 @@ let
       ${bazel}/bin/bazel \
         build \
         --distdir=${distDir} \
-          --verbose_failures \
-          --curses=no \
-          --sandbox_debug \
-          //... \
+        --verbose_failures \
+        --curses=no \
+        --sandbox_debug \
+        --strict_java_deps=off \
+        --strict_proto_deps=off \
+        //... \
     '' + lib.optionalString (lib.strings.versionOlder bazel.version "5.0.0") ''
-          --host_javabase='@local_jdk//:jdk' \
-          --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
-          --javabase='@local_jdk//:jdk' \
+        --host_javabase='@local_jdk//:jdk' \
+        --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
+        --javabase='@local_jdk//:jdk' \
+    '' + lib.optionalString (stdenv.isDarwin) ''
+        --cxxopt=-x --cxxopt=c++ --host_cxxopt=-x --host_cxxopt=c++ \
+        --linkopt=-stdlib=libc++ --host_linkopt=-stdlib=libc++ \
     '';
   };
 

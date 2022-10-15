@@ -25,6 +25,18 @@ in stdenv.mkDerivation {
   buildInputs = [ boostPython openssl zlib python ncurses ]
     ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
+  # https://github.com/arvidn/libtorrent/issues/6865
+  postPatch = ''
+    substituteInPlace cmake/Modules/GeneratePkgConfig.cmake \
+      --replace @CMAKE_INSTALL_PREFIX@/'$<'1: '$<'1:
+    substituteInPlace cmake/Modules/GeneratePkgConfig/target-compile-settings.cmake.in \
+      --replace 'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")' \
+                'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")
+                 set(_INSTALL_FULL_LIBDIR "@CMAKE_INSTALL_FULL_LIBDIR@")'
+    substituteInPlace cmake/Modules/GeneratePkgConfig/pkg-config.cmake.in \
+      --replace '$'{prefix}/@_INSTALL_LIBDIR@ @_INSTALL_FULL_LIBDIR@
+  '';
+
   postInstall = ''
     moveToOutput "include" "$dev"
     moveToOutput "lib/${python.libPrefix}" "$python"

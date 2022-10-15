@@ -4,7 +4,7 @@
 , crossStageStatic, libcCross
 , version
 
-, gmp, mpfr, libmpc, libelf, isl
+, gmp, mpfr, libmpc, isl
 , cloog ? null
 
 , enableLTO
@@ -97,7 +97,7 @@ let
       # In uclibc cases, libgomp needs an additional '-ldl'
       # and as I don't know how to pass it, I disable libgomp.
       "--disable-libgomp"
-    ] ++ lib.optional (targetPlatform.libc == "newlib") "--with-newlib"
+    ] ++ lib.optional (targetPlatform.libc == "newlib" || targetPlatform.libc == "newlib-nano") "--with-newlib"
       ++ lib.optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
     );
 
@@ -110,7 +110,6 @@ let
       "--with-mpfr-lib=${mpfr.out}/lib"
       "--with-mpc=${libmpc}"
     ]
-    ++ lib.optional (libelf != null) "--with-libelf=${libelf}"
     ++ lib.optionals (!crossStageStatic) [
       (if libcCross == null
        then "--with-native-system-header-dir=${lib.getDev stdenv.cc.libc}/include"

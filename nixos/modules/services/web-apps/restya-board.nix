@@ -25,7 +25,7 @@ in
 
     services.restya-board = {
 
-      enable = mkEnableOption "restya-board";
+      enable = mkEnableOption (lib.mdDoc "restya-board");
 
       dataDir = mkOption {
         type = types.path;

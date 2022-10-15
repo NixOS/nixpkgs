@@ -9,7 +9,7 @@
 , configText ? ""
 }:
 let
-  version = "2203";
+  version = "2206";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -35,8 +35,8 @@ let
     pname = "vmware-horizon-files";
     inherit version;
     src = fetchurl {
-      url = "https://download3.vmware.com/software/CART23FQ1_LIN_2203_TARBALL/VMware-Horizon-Client-Linux-2203-8.5.0-19586897.tar.gz";
-      sha256 = "27429dddaeedfa8b701d7aa7868f60ad58efa42687d7f27e84375fda9f5cd137";
+      url = "https://download3.vmware.com/software/CART23FQ2_LIN_2206_TARBALL/VMware-Horizon-Client-Linux-2206-8.6.0-20094634.tar.gz";
+      sha256 = "9819eae5708bf0d71156b81283e3a70100e2e22de9db827a8956ca8e83b2414a";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
@@ -51,7 +51,7 @@ let
       rm "$out/lib/vmware/gcc/libstdc++.so.6"
 
       # This library causes the program to core-dump occasionally. Use ours instead.
-      rm $out/lib/vmware/view/crtbora/libcairo.*
+      rm -r $out/lib/vmware/view/crtbora
 
       ${lib.concatMapStrings wrapBinCommands bins}
     '';

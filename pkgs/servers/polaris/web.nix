@@ -51,6 +51,9 @@ stdenv.mkDerivation rec {
 
       export PATH="${nodeDependencies}/bin:${nodejs}/bin:$PATH"
 
+      # https://github.com/parcel-bundler/parcel/issues/8005
+      export NODE_OPTIONS=--no-experimental-fetch
+
       ln -s ${nodeDependencies}/lib/node_modules .
       npm run production
 

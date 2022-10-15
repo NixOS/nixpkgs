@@ -56,6 +56,7 @@ buildPythonPackage rec {
     "network"
     "test_direct_reference_with_extras"
     "test_local_duplicate_subdependency_combined"
+    "test_bad_setup_file"
   ];
 
   pythonImportsCheck = [

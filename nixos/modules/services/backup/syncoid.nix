@@ -16,11 +16,11 @@ let
     lib.concatMapStrings (s: if lib.isList s then "-" else s)
       (builtins.split "[^a-zA-Z0-9_.\\-]+" name);
 
-  # Function to build "zfs allow" commands for the filesystems we've
-  # delegated permissions to. It also checks if the target dataset
-  # exists before delegating permissions, if it doesn't exist we
-  # delegate it to the parent dataset. This should solve the case of
-  # provisoning new datasets.
+  # Function to build "zfs allow" commands for the filesystems we've delegated
+  # permissions to. It also checks if the target dataset exists before
+  # delegating permissions, if it doesn't exist we delegate it to the parent
+  # dataset (if it exists). This should solve the case of provisoning new
+  # datasets.
   buildAllowCommand = permissions: dataset: (
     "-+${pkgs.writeShellScript "zfs-allow-${dataset}" ''
       # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
@@ -38,15 +38,17 @@ let
           (concatStringsSep "," permissions)
           dataset
         ]}
-      else
-        ${lib.escapeShellArgs [
-          "/run/booted-system/sw/bin/zfs"
-          "allow"
-          cfg.user
-          (concatStringsSep "," permissions)
-          # Remove the last part of the path
-          (builtins.dirOf dataset)
-        ]}
+      ${lib.optionalString ((builtins.dirOf dataset) != ".") ''
+        else
+          ${lib.escapeShellArgs [
+            "/run/booted-system/sw/bin/zfs"
+            "allow"
+            cfg.user
+            (concatStringsSep "," permissions)
+            # Remove the last part of the path
+            (builtins.dirOf dataset)
+          ]}
+      ''}
       fi
     ''}"
   );
@@ -67,14 +69,14 @@ let
         (concatStringsSep "," permissions)
         dataset
       ]}
-      ${lib.escapeShellArgs [
+      ${lib.optionalString ((builtins.dirOf dataset) != ".") (lib.escapeShellArgs [
         "/run/booted-system/sw/bin/zfs"
         "unallow"
         cfg.user
         (concatStringsSep "," permissions)
         # Remove the last part of the path
         (builtins.dirOf dataset)
-      ]}
+      ])}
     ''}"
   );
 in
@@ -83,18 +85,17 @@ in
   # Interface
 
   options.services.syncoid = {
-    enable = mkEnableOption "Syncoid ZFS synchronization service";
+    enable = mkEnableOption (lib.mdDoc "Syncoid ZFS synchronization service");
 
     interval = mkOption {
       type = types.str;
       default = "hourly";
       example = "*-*-* *:15:00";
-      description = ''
+      description = lib.mdDoc ''
         Run syncoid at this interval. The default is to run hourly.
 
         The format is described in
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>.
+        {manpage}`systemd.time(7)`.
       '';
     };
 
@@ -199,7 +200,7 @@ in
             '';
           };
 
-          recursive = mkEnableOption ''the transfer of child datasets'';
+          recursive = mkEnableOption (lib.mdDoc ''the transfer of child datasets'');
 
           sshKey = mkOption {
             type = types.nullOr types.path;

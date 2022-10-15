@@ -1,28 +1,19 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, packaging, ply, toml }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, packaging, ply, toml, fetchpatch }:
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.6.2";
+  version = "6.7.1";
 
   src = fetchPypi {
     pname = "sip";
     inherit version;
-    sha256 = "sha256-Dj76wcXf2OUlrlcUCSffJpk+E/WLidFXfDFPQQW/2Q0=";
+    sha256 = "sha256-KBcP34gPk3Am/If6qcF3sGLDU8XRaeoyQrB4AmFN3Qw=";
   };
-
-  patches = [
-    # on non-x86 Linux platforms, sip incorrectly detects the manylinux version
-    # and PIP will refuse to install the resulting wheel.
-    # remove once upstream fixes this, hopefully in 6.5.2
-    ./fix-manylinux-version.patch
-  ];
 
   propagatedBuildInputs = [ packaging ply toml ];
 
   # There aren't tests
   doCheck = false;
-
-  pythonImportsCheck = [ "sipbuild" ];
 
   # FIXME: Why isn't this detected automatically?
   # Needs to be specified in pyproject.toml, e.g.:
@@ -38,10 +29,12 @@ buildPythonPackage rec {
     else
       throw "unsupported platform";
 
+  pythonImportsCheck = [ "sipbuild" ];
+
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";
     homepage    = "https://riverbankcomputing.com/";
     license     = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ nrdxp ];
   };
 }

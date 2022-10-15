@@ -12,7 +12,7 @@ version() {
 }
 
 vivaldi_version_old=$(version vivaldi)
-vivaldi_version=$(curl -sS https://vivaldi.com/download/ | sed -rne 's/.*vivaldi-stable_([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+-[0-9]+)_amd64\.deb.*/\1/p')
+vivaldi_version=$(curl -sS https://vivaldi.com/download/ | sed -rne 's/.*vivaldi-stable_([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)-1_amd64\.deb.*/\1/p')
 
 if [[ "$vivaldi_version" = "$vivaldi_version_old" ]]; then
   echo "vivaldi is already up-to-date"
@@ -20,7 +20,7 @@ if [[ "$vivaldi_version" = "$vivaldi_version_old" ]]; then
 fi
 
 # Download vivaldi and save hash and file path.
-url="https://downloads.vivaldi.com/stable/vivaldi-stable_${vivaldi_version}_amd64.deb"
+url="https://downloads.vivaldi.com/stable/vivaldi-stable_${vivaldi_version}-1_amd64.deb"
 mapfile -t prefetch < <(nix-prefetch-url --print-path "$url")
 hash=${prefetch[0]}
 path=${prefetch[1]}
@@ -37,7 +37,7 @@ git commit -m "vivaldi: ${vivaldi_version_old} -> ${vivaldi_version}"
 # Check vivaldi-ffmpeg-codecs version.
 chromium_version_old=$(version vivaldi-ffmpeg-codecs)
 ffmpeg_update_script=$(bsdtar xOf "$path" data.tar.xz | bsdtar xOf - ./opt/vivaldi/update-ffmpeg)
-chromium_version=$(sed -rne 's/FFMPEG_VERSION_DEB\=([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*/\1/p' <<< $ffmpeg_update_script)
+chromium_version=$(sed -rne 's/^FFMPEG_VERSION_DEB\=([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*/\1/p' <<< $ffmpeg_update_script)
 download_subdir=$(sed -rne 's/.*FFMPEG_URL_DEB\=https:\/\/launchpadlibrarian\.net\/([0-9]+)\/.*_amd64\.deb/\1/p' <<< $ffmpeg_update_script)
 
 if [[ "$chromium_version" != "$chromium_version_old" ]]; then

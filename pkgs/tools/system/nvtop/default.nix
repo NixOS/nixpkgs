@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , gtest
 , cudatoolkit
@@ -24,13 +25,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nvtop" + pname-suffix;
-  version = "2.0.2";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "Syllo";
     repo = "nvtop";
     rev = version;
-    sha256 = "sha256-TlhCU7PydzHG/YMlk922mxEJ3CZw40784U0w1YawI3I=";
+    sha256 = "sha256-WOXVmKnVNRjWqShbOUZ0Z4hd0m9njLmCGLnV9FBS3Us=";
   };
 
   cmakeFlags = with lib; [

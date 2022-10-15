@@ -10,7 +10,7 @@ let
 in
 {
   options.programs.k40-whisperer = {
-    enable = mkEnableOption "K40-Whisperer";
+    enable = mkEnableOption (lib.mdDoc "K40-Whisperer");
 
     group = mkOption {
       type = types.str;

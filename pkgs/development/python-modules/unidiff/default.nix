@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, python }:
+{ lib, buildPythonPackage, fetchPypi, unittestCheckHook }:
 
 buildPythonPackage rec {
   pname = "unidiff";
@@ -9,9 +9,9 @@ buildPythonPackage rec {
     sha256 = "2bbcbc986e1fb97f04b1d7b864aa6002ab02f4d8a996bf03aa6e5a81447d1fc5";
   };
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests/
-  '';
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "tests" ];
 
   pythonImportsCheck = [ "unidiff" ];
 

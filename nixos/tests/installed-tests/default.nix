@@ -40,7 +40,7 @@ let
           name = tested.name;
 
           meta = {
-            maintainers = tested.meta.maintainers;
+            maintainers = tested.meta.maintainers or [];
           };
 
           nodes.machine = { ... }: {
@@ -98,9 +98,9 @@ in
   gnome-photos = callInstalledTest ./gnome-photos.nix {};
   graphene = callInstalledTest ./graphene.nix {};
   gsconnect = callInstalledTest ./gsconnect.nix {};
+  json-glib = callInstalledTest ./json-glib.nix {};
   ibus = callInstalledTest ./ibus.nix {};
   libgdata = callInstalledTest ./libgdata.nix {};
-  librsvg = callInstalledTest ./librsvg.nix {};
   glib-testing = callInstalledTest ./glib-testing.nix {};
   libjcat = callInstalledTest ./libjcat.nix {};
   libxmlb = callInstalledTest ./libxmlb.nix {};

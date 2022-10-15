@@ -37,11 +37,11 @@ rec {
 
   initrdContents = types.attrsOf (types.submodule ({ config, options, name, ... }: {
     options = {
-      enable = mkEnableOption "copying of this file and symlinking it" // { default = true; };
+      enable = mkEnableOption (lib.mdDoc "copying of this file and symlinking it") // { default = true; };
 
       target = mkOption {
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           Path of the symlink.
         '';
         default = name;
@@ -50,12 +50,12 @@ rec {
       text = mkOption {
         default = null;
         type = types.nullOr types.lines;
-        description = "Text of the file.";
+        description = lib.mdDoc "Text of the file.";
       };
 
       source = mkOption {
         type = types.path;
-        description = "Path of the source file.";
+        description = lib.mdDoc "Path of the source file.";
       };
     };
 

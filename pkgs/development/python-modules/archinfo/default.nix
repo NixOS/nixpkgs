@@ -2,26 +2,29 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
-, nose
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "archinfo";
-  version = "9.2.12";
+  version = "9.2.22";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-cBlc2YtAgjxYZE3Hoh1oW8OUf+nxzVaWtzNidSKlg3k=";
+    hash = "sha256-fqGz8+ZKmeBuwbjxFofspKSMdyG0NLVj+Jq+VPK2A90=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   checkInputs = [
-    nose
     pytestCheckHook
   ];
 

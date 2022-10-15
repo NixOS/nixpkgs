@@ -33,7 +33,7 @@ in
 
   options.services.cntlm = {
 
-    enable = mkEnableOption "cntlm, which starts a local proxy";
+    enable = mkEnableOption (lib.mdDoc "cntlm, which starts a local proxy");
 
     username = mkOption {
       type = types.str;

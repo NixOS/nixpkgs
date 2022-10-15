@@ -17,7 +17,7 @@
 
 let nbclient = buildPythonPackage rec {
   pname = "nbclient";
-  version = "0.6.6";
+  version = "0.6.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ let nbclient = buildPythonPackage rec {
     owner = "jupyter";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Rs4Jk4OtexB/NKM1Jo4cV87hBxXDlnX9X+4KO+pGb0E=";
+    hash = "sha256-+GQkEGWReo9y8bgcysslQdzJUcvQiZkQTQiwmWJ1mx8=";
   };
 
   propagatedBuildInputs = [ async_generator traitlets nbformat nest-asyncio jupyter-client ];

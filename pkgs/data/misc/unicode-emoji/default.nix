@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "14.0";
+  version = "15.0";
 
   fetchData = { file, sha256 }: fetchurl {
     url = "https://www.unicode.org/Public/emoji/${version}/${file}";
@@ -21,15 +21,15 @@ let
   srcs = {
     emoji-sequences = fetchData {
       file = "emoji-sequences.txt";
-      sha256 = "sha256-4helD/0oe+UmNIuVxPx/P0R9V10EY/RccewdeemeGxE=";
+      sha256 = "sha256-vRpXHAcdY3arTnFwBH3WUW3DOh8B3L9+sRcecLHZ2lg=";
     };
     emoji-test = fetchData {
       file = "emoji-test.txt";
-      sha256 = "sha256-DDOVhnFzfvowINzBZ7dGYMZnL4khyRWVzrLL95djsUg=";
+      sha256 = "sha256-3Rega6+ZJ5jXRhLFL/i/12V5IypEo5FaGG6Wf9Bj0UU=";
     };
     emoji-zwj-sequences = fetchData {
       file = "emoji-zwj-sequences.txt";
-      sha256 = "sha256-owlGLICFkyEsIHz/DUZucxjBmgVO40A69BCJPbIYDA0=";
+      sha256 = "sha256-9AqrpyUCiBcR/fafa4VaH0pT5o1YzEZDVySsX4ja1u8=";
     };
   };
 in

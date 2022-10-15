@@ -50,6 +50,13 @@ in stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DSHADERC_SKIP_TESTS=ON" ];
 
+  # Fix the paths in .pc, even though it's unclear if all these .pc are really useful.
+  postFixup = ''
+    substituteInPlace "$dev"/lib/pkgconfig/*.pc \
+      --replace '=''${prefix}//' '=/' \
+      --replace "$dev/$dev/" "$dev/"
+  '';
+
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "A collection of tools, libraries and tests for shader compilation";

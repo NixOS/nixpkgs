@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gf";
-  version = "unstable-2022-06-22";
+  version = "unstable-2022-09-26";
 
   src = fetchFromGitHub {
     repo = "gf";
     owner = "nakst";
-    rev = "e0d6d2f59344f853a4a204d5313db6b6a5e5de7d";
-    sha256 = "01fln4wnn1caqr4wa1nhcp0rqdx5m5nqyn2amvclp5hhi3h3qaiq";
+    rev = "404fc6d66c60bb01e9bcbb69021e66c543bda2d5";
+    hash = "sha256-HRejpEN/29Q+wukU3Jv3vZoK6/VjZK6VnZdvPuFBC9I=";
   };
 
   nativeBuildInputs = [ makeWrapper pkg-config ];

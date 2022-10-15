@@ -1,18 +1,22 @@
-{lib, stdenv, fetchurl, zlib, gperf}:
+{ lib, stdenv, fetchurl, zlib, gperf_3_0 }:
 
 stdenv.mkDerivation rec {
   pname = "libid3tag";
   version = "0.15.1b";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mad/libid3tag-0.15.1b.tar.gz";
+    url = "mirror://sourceforge/mad/libid3tag-${version}.tar.gz";
     sha256 = "63da4f6e7997278f8a3fef4c6a372d342f705051d1eeb6a46a86b03610e26151";
   };
 
   outputs = [ "out" "dev" ];
   setOutputFlags = false;
 
-  propagatedBuildInputs = [ zlib gperf ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ gperf_3_0 ];
+
+  buildInputs = [ zlib ];
 
   patches = [
     ./debian-patches.patch

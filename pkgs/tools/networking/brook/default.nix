@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "brook";
-  version = "20220707";
+  version = "20221010";
 
   src = fetchFromGitHub {
     owner = "txthinking";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TlbVXfNUvCHHX0BReSVE6GNfmS+p6lWSdO0OtOC+I2U=";
+    sha256 = "sha256-l5sdujUj6uHL7uuntAxagROvzOc/Z648ax6ZADtA/bk=";
   };
 
-  vendorSha256 = "sha256-MPLM1lBM1K55q6nsfmOekdFlSDmPsLLDv09mD1XqLNo=";
+  vendorSha256 = "sha256-kNd0TYaJmz7+bOXf7EaDsiU14eJmz9BPdhKmR7HhxCo=";
 
   meta = with lib; {
     homepage = "https://github.com/txthinking/brook";

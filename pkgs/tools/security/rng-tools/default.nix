@@ -5,23 +5,15 @@
 , libtool
 , pkg-config
 , psmisc
-, argp-standalone ? null
+, argp-standalone
 , openssl
-, jitterentropy ? null, withJitterEntropy ? true
+, jitterentropy, withJitterEntropy ? true
   # WARNING: DO NOT USE BEACON GENERATED VALUES AS SECRET CRYPTOGRAPHIC KEYS
   # https://www.nist.gov/programs-projects/nist-randomness-beacon
-, curl ? null, jansson ? null, libxml2 ? null, withNistBeacon ? false
-, libp11 ? null, opensc ? null, withPkcs11 ? true
-, librtlsdr ? null, withRtlsdr ? true
+, curl, jansson, libxml2, withNistBeacon ? false
+, libp11, opensc, withPkcs11 ? true
+, librtlsdr, withRtlsdr ? true
 }:
-
-assert (stdenv.hostPlatform.isMusl) -> argp-standalone != null;
-assert (withJitterEntropy) -> jitterentropy != null;
-assert (withNistBeacon) -> curl != null && jansson != null && libxml2 != null;
-assert (withPkcs11) -> libp11 != null && opensc != null;
-assert (withRtlsdr) -> librtlsdr != null;
-
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "rng-tools";
@@ -37,24 +29,24 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook libtool pkg-config ];
 
   configureFlags = [
-    (enableFeature (withJitterEntropy) "jitterentropy")
-    (withFeature   (withNistBeacon)    "nistbeacon")
-    (withFeature   (withPkcs11)        "pkcs11")
-    (withFeature   (withRtlsdr)        "rtlsdr")
+    (lib.enableFeature (withJitterEntropy) "jitterentropy")
+    (lib.withFeature   (withNistBeacon)    "nistbeacon")
+    (lib.withFeature   (withPkcs11)        "pkcs11")
+    (lib.withFeature   (withRtlsdr)        "rtlsdr")
   ];
 
   buildInputs = [ openssl ]
-    ++ optionals (stdenv.hostPlatform.isMusl) [ argp-standalone ]
-    ++ optionals (withJitterEntropy) [ jitterentropy ]
-    ++ optionals (withNistBeacon)    [ curl jansson libxml2 ]
-    ++ optionals (withPkcs11)        [ libp11 openssl ]
-    ++ optionals (withRtlsdr)        [ librtlsdr ];
+    ++ lib.optionals stdenv.hostPlatform.isMusl [ argp-standalone ]
+    ++ lib.optionals withJitterEntropy [ jitterentropy ]
+    ++ lib.optionals withNistBeacon    [ curl jansson libxml2 ]
+    ++ lib.optionals withPkcs11        [ libp11 openssl ]
+    ++ lib.optionals withRtlsdr        [ librtlsdr ];
 
   enableParallelBuilding = true;
 
   makeFlags = [
     "AR:=$(AR)" # For cross-compilation
-  ] ++ optionals (withPkcs11) [
+  ] ++ lib.optionals withPkcs11 [
     "PKCS11_ENGINE=${opensc}/lib/opensc-pkcs11.so" # Overrides configure script paths
   ];
 
@@ -70,7 +62,7 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A random number generator daemon";
     homepage = "https://github.com/nhorman/rng-tools";
     changelog = "https://github.com/nhorman/rng-tools/releases/tag/v${version}";

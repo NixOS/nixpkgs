@@ -47,7 +47,7 @@ in
 {
   options = {
     services.nitter = {
-      enable = mkEnableOption "If enabled, start Nitter.";
+      enable = mkEnableOption (lib.mdDoc "If enabled, start Nitter.");
 
       package = mkOption {
         default = pkgs.nitter;
@@ -347,8 +347,9 @@ in
         };
     };
 
-    services.redis = lib.mkIf (cfg.redisCreateLocally) {
+    services.redis.servers.nitter = lib.mkIf (cfg.redisCreateLocally) {
       enable = true;
+      port = cfg.cache.redisPort;
     };
 
     networking.firewall = mkIf cfg.openFirewall {

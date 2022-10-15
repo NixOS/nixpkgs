@@ -5,6 +5,7 @@
 , pkg-config
 , util-linux
 , hexdump
+, autoSignDarwinBinariesHook
 , wrapQtAppsHook ? null
 , boost
 , libevent
@@ -24,19 +25,20 @@
 with lib;
 stdenv.mkDerivation rec {
   pname = if withGui then "elements" else "elementsd";
-  version = "0.21.0.2";
+  version = "22.0";
 
   src = fetchFromGitHub {
     owner = "ElementsProject";
     repo = "elements";
     rev = "elements-${version}";
-    sha256 = "sha256-5b3wylp9Z2U0ueu2gI9jGeWiiJoddjcjQ/6zkFATyvA=";
+    sha256 = "sha256-n98bz1W9hoJ5JDH34LG7R6igEIY1j4mRbO2PKnV8R2U=";
   };
 
   nativeBuildInputs =
     [ autoreconfHook pkg-config ]
     ++ optionals stdenv.isLinux [ util-linux ]
     ++ optionals stdenv.isDarwin [ hexdump ]
+    ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ]
     ++ optionals withGui [ wrapQtAppsHook ];
 
   buildInputs = [ boost libevent miniupnpc zeromq zlib ]
@@ -56,12 +58,16 @@ stdenv.mkDerivation rec {
     "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
   ];
 
+  # fix "Killed: 9  test/test_bitcoin"
+  # https://github.com/NixOS/nixpkgs/issues/179474
+  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "fortify" "stackprotector" ];
+
   checkInputs = [ python3 ];
 
   doCheck = true;
 
   checkFlags =
-    [ "LC_ALL=C.UTF-8" ]
+    [ "LC_ALL=en_US.UTF-8" ]
     # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Bitcoin's GUI.
     # See also https://github.com/NixOS/nixpkgs/issues/24256
     ++ optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";

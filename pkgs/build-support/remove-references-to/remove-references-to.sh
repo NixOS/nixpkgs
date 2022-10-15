@@ -27,7 +27,7 @@ for i in "$@"; do
 done
 
 for target in "${targets[@]}" ; do
-    sed -i -e "s|@storeDir@/$target-|@storeDir@/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" "${regions[@]}"
+    sed -i -e "s|$target|eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee|g" "${regions[@]}"
 done
 
 for region in "${regions[@]}"; do

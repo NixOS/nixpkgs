@@ -2,7 +2,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nerd-font-patcher";
-  version = "2.1.0";
+  version = "2.2.2";
 
   # This uses a sparse checkout because the repo is >2GB without it
   src = fetchFromGitHub {
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
       font-patcher
       /src/glyphs
     '';
-    sha256 = "sha256-ePBlEVjzAJ7g6iAGIqPfgZ8bwtNILmyEVm0zD+xNN6k=";
+    sha256 = "sha256-boZUd1PM8puc9BTgOwCJpkfk6VMdXLsIyp+fQmW/ZqI=";
   };
 
   propagatedBuildInputs = with python3Packages; [ fontforge ];
@@ -22,15 +22,15 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     sed -i font-patcher \
-      -e 's,__dir__ + "/src,"'$out'/share/${pname},'
+      -e 's,__dir__ + "/src,"'$out'/share/nerd-font-patcher,'
   '';
 
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/${pname}
-    install -Dm755 font-patcher $out/bin/${pname}
-    cp -ra src/glyphs $out/share/${pname}
+    mkdir -p $out/bin $out/share/nerd-font-patcher
+    install -Dm755 font-patcher $out/bin/nerd-font-patcher
+    cp -ra src/glyphs $out/share/nerd-font-patcher
   '';
 
   meta = with lib; {

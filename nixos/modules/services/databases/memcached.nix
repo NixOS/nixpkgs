@@ -17,7 +17,7 @@ in
   options = {
 
     services.memcached = {
-      enable = mkEnableOption "Memcached";
+      enable = mkEnableOption (lib.mdDoc "Memcached");
 
       user = mkOption {
         type = types.str;
@@ -37,7 +37,7 @@ in
         description = lib.mdDoc "The port to bind to.";
       };
 
-      enableUnixSocket = mkEnableOption "unix socket at /run/memcached/memcached.sock";
+      enableUnixSocket = mkEnableOption (lib.mdDoc "unix socket at /run/memcached/memcached.sock");
 
       maxMemory = mkOption {
         type = types.ints.unsigned;

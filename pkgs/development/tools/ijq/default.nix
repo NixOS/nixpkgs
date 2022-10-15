@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "ijq";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromSourcehut {
     owner = "~gpanders";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-EQfCEdQIrjg38JjjePNDNWKi0cFezjYvIGVJajbf9jw=";
+    sha256 = "sha256-WTA14W8JFHdouDgWmsc4wMygnwlANPjSYCAhxFVrwAA=";
   };
 
   vendorSha256 = "sha256-DX8m5FsqMZnzk1wgJA/ESZl0QeDv3p9huF4h1HY9DIA=";

@@ -31,7 +31,6 @@
 , nss
 , openssl
 , pango
-, procps
 , python3
 , stdenv
 , systemd
@@ -87,11 +86,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "appgate-sdp";
-  version = "5.5.5";
+  version = "6.0.2";
 
   src = fetchurl {
     url = "https://bin.appgate-sdp.com/${versions.majorMinor version}/client/appgate-sdp_${version}_amd64.deb";
-    sha256 = "sha256-eXcGHd3TGNFqjFQ+wSg4+1hF/6DJTPOs0ldjegFktGo=";
+    sha256 = "sha256-ut5a/tpWEQX1Jug9IZksnxbQ/rs2pGNh8zBb2a43KUE=";
   };
 
   # just patch interpreter
@@ -141,8 +140,9 @@ stdenv.mkDerivation rec {
         --prefix PATH : ${makeBinPath [ iproute2 networkmanager dnsmasq ]} \
         --set LD_LIBRARY_PATH $out/opt/appgate/service
 
+    # make xdg-open overrideable at runtime
     makeWrapper $out/opt/appgate/Appgate $out/bin/appgate \
-        --prefix PATH : ${makeBinPath [ xdg-utils ]} \
+        --suffix PATH : ${makeBinPath [ xdg-utils ]} \
         --set LD_LIBRARY_PATH $out/opt/appgate:${makeLibraryPath deps}
 
     wrapProgram $out/opt/appgate/linux/set_dns --set PYTHONPATH $PYTHONPATH

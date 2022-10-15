@@ -8,7 +8,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.pekwm.enable = mkEnableOption "pekwm";
+    services.xserver.windowManager.pekwm.enable = mkEnableOption (lib.mdDoc "pekwm");
   };
 
   ###### implementation

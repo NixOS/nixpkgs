@@ -25,14 +25,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rofi-unwrapped";
-  version = "1.7.3";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "davatorium";
     repo = "rofi";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-bUedRRmrfdmzNW+2PzJvLbCTIWta2rbQ3CTLRSdJqbs=";
+    sha256 = "sha256-3XFusKeckagEPfbLtt1xAVTEfn1Qebdi/Iq1AYbHCR4=";
   };
 
   preConfigure = ''

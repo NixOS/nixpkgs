@@ -84,6 +84,9 @@ stdenv.mkDerivation {
     substituteInPlace src/cmake/linux.cmake \
       --replace '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
 
+    substituteInPlace src/connectionbenchmark/benchmarktaskdownload.cpp \
+      --replace 'QT_VERSION >= 0x060400' 'false'
+
     ln -s '${netfilter-go-modules}' linux/netfilter/vendor
   '';
 

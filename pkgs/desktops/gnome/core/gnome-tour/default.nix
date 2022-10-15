@@ -17,19 +17,25 @@
 , libadwaita
 , librsvg
 , rustc
+, rust
+, writeText
 , cargo
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-tour";
-  version = "42.0";
+  version = "43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-/PGsaJBX2oZZaXDsPag1VSHApy6VBj6wWdX+5N6oL08=";
+    hash = "sha256-E1HkGWJ/vXx3GTKm7xrYDAvy5oKMSUigYgaJhN2zzIg=";
   };
 
   cargoVendorDir = "vendor";
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     appstream-glib
@@ -53,6 +59,16 @@ stdenv.mkDerivation rec {
     libadwaita
     librsvg
   ];
+
+  mesonFlags =
+    let
+      # ERROR: 'rust' compiler binary not defined in cross or native file
+      crossFile = writeText "cross-file.conf" ''
+        [binaries]
+        rust = [ 'rustc', '--target', '${rust.toRustTargetSpec stdenv.hostPlatform}' ]
+      '';
+    in
+    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
 
   passthru = {
     updateScript = gnome.updateScript {

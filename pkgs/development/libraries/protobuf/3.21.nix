@@ -1,6 +1,6 @@
 { callPackage, abseil-cpp, ... }:
 
 callPackage ./generic-v3-cmake.nix {
-  version = "3.21.2";
-  sha256 = "sha256-DUv07pWiZV7jNeSA2ClDOz9DY0x/hiJynxkbSTeJOSs=";
+  version = "3.21.6";
+  sha256 = "sha256-6Omd2O/eIZIgod3YV+zIIv+GqT+trith6+eepFEJIWM=";
 }

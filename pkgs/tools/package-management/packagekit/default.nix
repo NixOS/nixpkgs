@@ -44,7 +44,6 @@ stdenv.mkDerivation rec {
     glib
     polkit
     python3
-    gobject-introspection
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gtk3
@@ -54,6 +53,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional enableSystemd systemd
   ++ lib.optional enableBashCompletion bash-completion;
   nativeBuildInputs = [
+    gobject-introspection
+    glib
     vala
     gettext
     pkg-config

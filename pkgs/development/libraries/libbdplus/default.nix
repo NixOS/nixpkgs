@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libbdplus";
-  version  = "0.1.2";
+  version  = "0.2.0";
 
   src = fetchurl {
     url = "http://get.videolan.org/libbdplus/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "02n87lysqn4kg2qk7d1ffrp96c44zkdlxdj0n16hbgrlrpiwlcd6";
+    sha256 = "sha256-uT7qPq7zPW6RVdLDSwaMUFSTqlpJNuYydPQ0KrD0Clg=";
   };
 
   buildInputs = [ libgcrypt libgpg-error gettext ];

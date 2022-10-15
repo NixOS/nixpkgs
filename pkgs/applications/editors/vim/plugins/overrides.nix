@@ -53,7 +53,7 @@
 , zsh
 
   # command-t dependencies
-, rake
+, getconf
 , ruby
 
   # cpsm dependencies
@@ -103,6 +103,7 @@
 , golint
 , gomodifytags
 , gopls
+, gotags
 , gotools
 , iferr
 , impl
@@ -239,9 +240,12 @@ self: super: {
   };
 
   command-t = super.command-t.overrideAttrs (old: {
-    buildInputs = [ ruby rake ];
+    nativeBuildInputs = [ getconf ruby ];
     buildPhase = ''
-      rake make
+      substituteInPlace lua/wincent/commandt/lib/Makefile \
+        --replace '/bin/bash' 'bash' \
+        --replace xcrun ""
+      make build
       rm ruby/command-t/ext/command-t/*.o
     '';
   });
@@ -253,6 +257,10 @@ self: super: {
       mkdir -p $target/binaries/${tabnine.version}
       ln -s ${tabnine}/bin/ $target/binaries/${tabnine.version}/${tabnine.passthru.platform}
     '';
+  });
+
+  compiler-explorer-nvim = super.compiler-explorer-nvim.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
   });
 
   completion-buffers = super.completion-buffers.overrideAttrs (old: {
@@ -349,6 +357,10 @@ self: super: {
       description = "Keep and restore fcitx state when leaving/re-entering insert mode or search mode";
       license = lib.licenses.mit;
     };
+  });
+
+  flit-nvim = super.flit-nvim.overrideAttrs (old: {
+    dependencies = with self; [ leap-nvim ];
   });
 
   forms = super.forms.overrideAttrs (old: {
@@ -510,8 +522,16 @@ self: super: {
       '';
     };
 
+  lazy-lsp-nvim = super.lazy-lsp-nvim.overrideAttrs (old: {
+    dependencies = with self; [ nvim-lspconfig ];
+  });
+
   lean-nvim = super.lean-nvim.overrideAttrs (old: {
     dependencies = with self; [ nvim-lspconfig plenary-nvim ];
+  });
+
+  leap-ast-nvim = super.leap-ast-nvim.overrideAttrs (old: {
+    dependencies = with self; [ leap-nvim nvim-treesitter ];
   });
 
   lens-vim = super.lens-vim.overrideAttrs (old: {
@@ -547,8 +567,7 @@ self: super: {
       })
     ];
     postInstall = ''
-      # The node package name is `*-vim` not `*-nvim`.
-      ln -s ${nodeDep}/lib/node_modules/markdown-preview-vim/node_modules $out/app
+      ln -s ${nodeDep}/lib/node_modules/markdown-preview/node_modules $out/app
     '';
 
     nativeBuildInputs = [ nodejs ];
@@ -605,8 +624,16 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  noice-nvim = super.noice-nvim.overrideAttrs(old: {
+    dependencies = with self; [ nui-nvim nvim-notify ];
+  });
+
   null-ls-nvim = super.null-ls-nvim.overrideAttrs (old: {
     dependencies = with self; [ plenary-nvim ];
+  });
+
+  nvim-dap-python = super.nvim-dap-python.overrideAttrs (old: {
+    dependencies = with self; [ nvim-dap ];
   });
 
   nvim-lsputils = super.nvim-lsputils.overrideAttrs (old: {
@@ -978,7 +1005,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-prqS4cx5T+EiilXf3v7ResNBtgst0Kpgvayknf0QDXA=";
+          cargoSha256 = "sha256-AY14YEdMpHXmiHwEA9hwSwwwJ8hYIomAuIuCJv1OUDw=";
         };
       in
       ''
@@ -1045,7 +1072,7 @@ self: super: {
         gomodifytags
         gopls
         # gorename
-        # gotags
+        gotags
         gotools
         # guru
         iferr
@@ -1101,7 +1128,7 @@ self: super: {
   vim-isort = super.vim-isort.overrideAttrs (old: {
     postPatch = ''
       substituteInPlace ftplugin/python_vimisort.vim \
-        --replace 'import vim' 'import vim; import sys; sys.path.append("${python2.pkgs.isort}/${python2.sitePackages}")'
+        --replace 'import vim' 'import vim; import sys; sys.path.append("${python3.pkgs.isort}/${python3.sitePackages}")'
     '';
   });
 

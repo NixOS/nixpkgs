@@ -39,7 +39,7 @@ in
 
   options = {
     services.usbguard = {
-      enable = mkEnableOption "USBGuard daemon";
+      enable = mkEnableOption (lib.mdDoc "USBGuard daemon");
 
       package = mkOption {
         type = types.package;
@@ -57,21 +57,19 @@ in
         example = ''
           allow with-interface equals { 08:*:* }
         '';
-        description = ''
+        description = lib.mdDoc ''
           The USBGuard daemon will load this as the policy rule set.
           As these rules are NixOS managed they are immutable and can't
           be changed by the IPC interface.
 
           If you do not set this option, the USBGuard daemon will load
-          it's policy rule set from <literal>${defaultRuleFile}</literal>.
+          it's policy rule set from `${defaultRuleFile}`.
           This file can be changed manually or via the IPC interface.
 
-          Running <literal>usbguard generate-policy</literal> as root will
+          Running `usbguard generate-policy` as root will
           generate a config for your currently plugged in devices.
 
-          For more details see <citerefentry>
-          <refentrytitle>usbguard-rules.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          For more details see {manpage}`usbguard-rules.conf(5)`.
         '';
       };
 

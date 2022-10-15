@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, cmake, pandoc, pkg-config, zlib
-, Security, libiconv, installShellFiles
+{ lib
+, gitSupport ? true
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, pandoc
+, pkg-config
+, zlib
+, Security
+, libiconv
+, installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,6 +35,9 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ cmake pkg-config installShellFiles pandoc ];
   buildInputs = [ zlib ]
     ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = lib.optional gitSupport "git";
 
   outputs = [ "out" "man" ];
 

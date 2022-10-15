@@ -46,6 +46,7 @@
 , libfreeaptx
 , ldacbt
 , fdk_aac
+, libopus
 , nativeHspSupport ? true
 , nativeHfpSupport ? true
 , ofonoSupport ? true
@@ -69,7 +70,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.56";
+    version = "0.3.58";
 
     outputs = [
       "out"
@@ -87,7 +88,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-wbHHr7BW8Gdj9D1IjzOuD6VuXApJ5E0Zde2iKWImzxg=";
+      sha256 = "sha256-r8sDXyXwtA2o2xqglOI8XflttSScrqJ57cj1//k2tZ8=";
     };
 
     patches = [
@@ -133,7 +134,7 @@ let
     ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
     ++ lib.optionals libcameraSupport [ libcamera libdrm ]
     ++ lib.optional ffmpegSupport ffmpeg
-    ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt sbc fdk_aac ]
+    ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt sbc fdk_aac libopus ]
     ++ lib.optional pulseTunnelSupport libpulseaudio
     ++ lib.optional zeroconfSupport avahi
     ++ lib.optional raopSupport openssl

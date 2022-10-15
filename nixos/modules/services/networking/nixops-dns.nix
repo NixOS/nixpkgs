@@ -40,7 +40,7 @@ in
       dnsmasq = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Enable dnsmasq forwarding to nixops-dns. This allows to use
           nixops-dns for `services.nixops-dns.domain` resolution
           while forwarding the rest of the queries to original resolvers.

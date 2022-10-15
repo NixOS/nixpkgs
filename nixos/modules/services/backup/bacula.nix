@@ -195,7 +195,7 @@ let
       };
 
       devices = mkOption {
-        description = "";
+        description = lib.mdDoc "";
         type = types.listOf types.str;
       };
 

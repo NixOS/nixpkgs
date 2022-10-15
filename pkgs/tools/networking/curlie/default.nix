@@ -11,7 +11,11 @@ buildGoModule rec {
     hash = "sha256-3EKxuEpFm+lp2myMfymYYY9boSXGOF2iAdjtGKnjJK0=";
   };
 
-  vendorSha256 = "sha256-tYZtnD7RUurhl8yccXlTIvOxybBJITM+it1ollYJ1OI=";
+  patches = [
+    ./bump-golang-x-sys.patch
+  ];
+
+  vendorSha256 = "sha256-VsPdMUfS4UVem6uJgFISfFHQEKtIumDQktHQFPC1muc=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 

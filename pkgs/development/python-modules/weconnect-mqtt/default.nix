@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "weconnect-mqtt";
-  version = "0.38.3";
+  version = "0.40.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,14 +19,14 @@ buildPythonPackage rec {
     owner = "tillsteinbach";
     repo = "WeConnect-mqtt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9Vdm9C+2HNoUucY66dZkmDIhylgXMQ2ul/644JQtu5o=";
+    hash = "sha256-kV4BWQ4XfB2QjXY5b46+pxt3rhyo1glKRYO2mMJNhJM=";
   };
 
   propagatedBuildInputs = [
     paho-mqtt
     python-dateutil
     weconnect
-  ];
+  ] ++ weconnect.optional-dependencies.Images;
 
   postPatch = ''
     substituteInPlace weconnect_mqtt/__version.py \
@@ -34,8 +34,6 @@ buildPythonPackage rec {
     substituteInPlace pytest.ini \
       --replace "--cov=weconnect_mqtt --cov-config=.coveragerc --cov-report html" "" \
       --replace "pytest-cov" ""
-    substituteInPlace requirements.txt \
-      --replace "weconnect[Images]~=0.40.0" "weconnect"
   '';
 
   checkInputs = [

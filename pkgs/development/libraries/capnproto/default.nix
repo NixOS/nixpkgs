@@ -1,8 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, capnproto
-, cmake }:
+, cmake
+, openssl
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "capnproto";
@@ -16,10 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vBp4CAfPpd7/hdGk7JBxMTjtFFvXx16ODOfqDd8bAjc=";
   };
 
-  nativeBuildInputs = [ cmake ]
-    ++ lib.optional (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) capnproto;
-
-  cmakeFlags = lib.optional (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) "-DEXTERNAL_CAPNP";
+  nativeBuildInputs = [ cmake ];
+  propagatedBuildInputs = [ openssl zlib ];
 
   meta = with lib; {
     homepage    = "https://capnproto.org/";

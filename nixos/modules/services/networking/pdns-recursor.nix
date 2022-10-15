@@ -27,7 +27,7 @@ let
 
 in {
   options.services.pdns-recursor = {
-    enable = mkEnableOption "PowerDNS Recursor, a recursive DNS server";
+    enable = mkEnableOption (lib.mdDoc "PowerDNS Recursor, a recursive DNS server");
 
     dns.address = mkOption {
       type = oneOrMore types.str;

@@ -40,7 +40,7 @@ let
     mirror = "mirror://kde";
   };
 
-  mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
+  mkDerivation = libsForQt5.callPackage ({ stdenv, mkDerivation ? stdenv.mkDerivation }: mkDerivation) {};
 
   packages = self: with self;
     # SUPPORT
@@ -152,8 +152,8 @@ let
     # TIER 3
       baloo = callPackage ./baloo.nix {};
       kbookmarks = callPackage ./kbookmarks.nix {};
-      kcmutils = callPackage ./kcmutils {};
-      kconfigwidgets = callPackage ./kconfigwidgets {};
+      kcmutils = callPackage ./kcmutils.nix {};
+      kconfigwidgets = callPackage ./kconfigwidgets.nix {};
       kdav = callPackage ./kdav.nix {};
       kdeclarative = callPackage ./kdeclarative.nix {};
       kded = callPackage ./kded.nix {};

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kube-linter";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "stackrox";
     repo = pname;
     rev = version;
-    sha256 = "XAsPbl9fqYk2nhDxRg5wyPwciwSpfigoBZ4hzdWAVgw=";
+    sha256 = "sha256-YEcEXXtCuK4Yg9EsaDFOfM+ri6iGoU7d0O6SlYYKG+U=";
   };
 
-  vendorSha256 = "sha256-0bjAIHSjw0kHrh9CzJHv1UAaBJDn6381055eOHufvCw=";
+  vendorSha256 = "sha256-UVa+0mrQ2pW/4Zmegon/IOrH4SiWhrdCc3/fs3pxGq8=";
 
   ldflags = [
     "-s" "-w" "-X golang.stackrox.io/kube-linter/internal/version.version=${version}"
@@ -34,6 +34,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "A static analysis tool that checks Kubernetes YAML files and Helm charts";
     homepage = "https://kubelinter.io";
+    changelog   = "https://github.com/stackrox/kube-linter/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ mtesseract stehessel ];
     platforms = platforms.all;

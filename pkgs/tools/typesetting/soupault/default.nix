@@ -5,7 +5,7 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "soupault";
-  version = "4.0.1";
+  version = "4.1.0";
 
   minimalOCamlVersion = "4.08";
 
@@ -14,7 +14,7 @@ ocamlPackages.buildDunePackage rec {
     owner = "PataphysicalSociety";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Ojsup/BgXsqhRUsU6JevvuLnMtVs2Kd5kTeDvVO5BOk=";
+    sha256 = "sha256-fYobjkruzuUEVuIoH8mkaFdJvYp/I/aRQzgJXnQwX4U=";
   };
 
   buildInputs = with ocamlPackages; [

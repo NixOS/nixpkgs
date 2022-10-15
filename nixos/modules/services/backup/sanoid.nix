@@ -112,18 +112,17 @@ in
   # Interface
 
   options.services.sanoid = {
-    enable = mkEnableOption "Sanoid ZFS snapshotting service";
+    enable = mkEnableOption (lib.mdDoc "Sanoid ZFS snapshotting service");
 
     interval = mkOption {
       type = types.str;
       default = "hourly";
       example = "daily";
-      description = ''
+      description = lib.mdDoc ''
         Run sanoid at this interval. The default is to run hourly.
 
         The format is described in
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>.
+        {manpage}`systemd.time(7)`.
       '';
     };
 
@@ -131,8 +130,8 @@ in
       type = types.attrsOf (types.submodule ({ config, options, ... }: {
         freeformType = datasetSettingsType;
         options = commonOptions // datasetOptions;
-        config.use_template = mkAliasDefinitions (mkDefault options.useTemplate or { });
-        config.process_children_only = mkAliasDefinitions (mkDefault options.processChildrenOnly or { });
+        config.use_template = modules.mkAliasAndWrapDefsWithPriority id (options.useTemplate or { });
+        config.process_children_only = modules.mkAliasAndWrapDefsWithPriority id (options.processChildrenOnly or { });
       }));
       default = { };
       description = lib.mdDoc "Datasets to snapshot.";

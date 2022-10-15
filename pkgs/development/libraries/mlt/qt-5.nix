@@ -26,13 +26,13 @@
 
 mkDerivation rec {
   pname = "mlt";
-  version = "7.0.1";
+  version = "7.8.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "13c5miph9jjbz69dhy0zvbkk5zbb05dr3vraaci0d5fdbrlhyscf";
+    sha256 = "sha256-r8lvzz083WWlDtjvlsPwvOgplx2lPPkDDf3t0G9PqAQ=";
   };
 
   buildInputs = [
@@ -45,7 +45,6 @@ mkDerivation rec {
     libvorbis
     libxml2
     movit
-    pkg-config
     qtbase
     qtsvg
     sox
@@ -56,7 +55,7 @@ mkDerivation rec {
     ladspaPlugins
   ];
 
-  nativeBuildInputs = [ cmake which ];
+  nativeBuildInputs = [ cmake which pkg-config ];
 
   outputs = [ "out" "dev" ];
 
@@ -70,13 +69,16 @@ mkDerivation rec {
     "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"
   ];
 
+  postFixup = ''
+    substituteInPlace "$dev"/lib/pkgconfig/mlt-framework-7.pc \
+      --replace '=''${prefix}//' '=/'
+  '';
+
   passthru = {
     inherit ffmpeg;
   };
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
-    attrPath = "libsForQt5.mlt";
     rev-prefix = "v";
   };
 

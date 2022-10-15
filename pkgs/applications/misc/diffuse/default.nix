@@ -53,7 +53,6 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru = {
     updateScript = gitUpdater {
-      inherit pname version;
       rev-prefix = "v";
     };
   };

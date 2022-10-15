@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy-znp";
-  version = "0.8.1";
+  version = "0.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-GKdhzmSQZ+D7o9OJZ5880mRI1mIcckW+dY5DnP7zIuo=";
+    sha256 = "sha256-32QSFBzYg+E++5euCWKgbF3/uLEn1uObenmR/Wv9XZc=";
   };
 
   propagatedBuildInputs = [

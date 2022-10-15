@@ -22,7 +22,7 @@ in
 {
 
   options.virtualisation.waydroid = {
-    enable = mkEnableOption "Waydroid";
+    enable = mkEnableOption (lib.mdDoc "Waydroid");
   };
 
   config = mkIf cfg.enable {

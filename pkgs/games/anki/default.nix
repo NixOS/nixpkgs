@@ -74,6 +74,7 @@ in
 buildPythonApplication rec {
   pname = "anki";
   inherit version;
+  format = "other";
 
   src = fetchurl {
     urls = [

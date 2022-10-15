@@ -10,10 +10,12 @@ let
   mkManualPkiOption = desc: mkOption {
     type = types.nullOr types.path;
     default = null;
-    description = desc + ''
-      <note><para>
+    description = lib.mdDoc ''
+      ${desc}
+
+      ::: {.note}
       Setting this option will prevent automatic CA creation and handling.
-      </para></note>
+      :::
     '';
   };
 
@@ -35,13 +37,13 @@ let
     '';
   };
 
-  mkAutoDesc = preamble: ''
+  mkAutoDesc = preamble: lib.mdDoc ''
     ${preamble}
 
-    <note><para>
+    ::: {.note}
     This option is for the automatically handled CA and will be ignored if any
-    of the <option>services.taskserver.pki.manual.*</option> options are set.
-    </para></note>
+    of the {option}`services.taskserver.pki.manual.*` options are set.
+    :::
   '';
 
   mkExpireOption = desc: mkOption {
@@ -50,7 +52,7 @@ let
     example = 365;
     apply = val: if val == null then -1 else val;
     description = mkAutoDesc ''
-      The expiration time of ${desc} in days or <literal>null</literal> for no
+      The expiration time of ${desc} in days or `null` for no
       expiration time.
     '';
   };
@@ -140,11 +142,11 @@ in {
         default = false;
         description = let
           url = "https://nixos.org/manual/nixos/stable/index.html#module-services-taskserver";
-        in ''
+        in lib.mdDoc ''
           Whether to enable the Taskwarrior server.
 
           More instructions about NixOS in conjuction with Taskserver can be
-          found <link xlink:href="${url}">in the NixOS manual</link>.
+          found [in the NixOS manual](${url}).
         '';
       };
 
@@ -172,9 +174,9 @@ in {
         example = "NORMAL:-VERS-SSL3.0";
         description = let
           url = "https://gnutls.org/manual/html_node/Priority-Strings.html";
-        in ''
+        in lib.mdDoc ''
           List of GnuTLS ciphers to use. See the GnuTLS documentation about
-          priority strings at <link xlink:href="${url}"/> for full details.
+          priority strings at <${url}> for full details.
         '';
       };
 
@@ -227,11 +229,8 @@ in {
       queueSize = mkOption {
         type = types.int;
         default = 10;
-        description = ''
-          Size of the connection backlog, see <citerefentry>
-            <refentrytitle>listen</refentrytitle>
-            <manvolnum>2</manvolnum>
-          </citerefentry>.
+        description = lib.mdDoc ''
+          Size of the connection backlog, see {manpage}`listen(2)`.
         '';
       };
 
@@ -324,18 +323,16 @@ in {
       config = mkOption {
         type = types.attrs;
         example.client.cert = "/tmp/debugging.cert";
-        description = ''
+        description = lib.mdDoc ''
           Configuration options to pass to Taskserver.
 
-          The options here are the same as described in <citerefentry>
-            <refentrytitle>taskdrc</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>, but with one difference:
+          The options here are the same as described in
+          {manpage}`taskdrc(5)`, but with one difference:
 
-          The <literal>server</literal> option is
-          <literal>server.listen</literal> here, because the
-          <literal>server</literal> option would collide with other options
-          like <literal>server.cert</literal> and we would run in a type error
+          The `server` option is
+          `server.listen` here, because the
+          `server` option would collide with other options
+          like `server.cert` and we would run in a type error
           (attribute set versus string).
 
           Nix types like integers or booleans are automatically converted to

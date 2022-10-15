@@ -42,7 +42,7 @@ in
 
     services.xrdp = {
 
-      enable = mkEnableOption "xrdp, the Remote Desktop Protocol server";
+      enable = mkEnableOption (lib.mdDoc "xrdp, the Remote Desktop Protocol server");
 
       package = mkOption {
         type = types.package;
@@ -100,7 +100,7 @@ in
       confDir = mkOption {
         type = types.path;
         default = confDir;
-        defaultText = literalDocBook "generated from configuration";
+        defaultText = literalMD "generated from configuration";
         description = lib.mdDoc "The location of the config files for xrdp.";
       };
     };

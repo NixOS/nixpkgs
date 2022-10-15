@@ -1,28 +1,39 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, IOKit
+}:
 
 buildGoModule rec {
   pname = "gotop";
-  version = "4.1.4";
+  version = "4.2.0";
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "xxxserxxx";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-jAUlaj9Nv/ipzxAkG2myd9DIboHj7IarNMVk/FQ274g=";
+    hash = "sha256-W7a3QnSIR95N88RqU2sr6oEDSqOXVfAwacPvS219+1Y=";
   };
 
   proxyVendor = true;
-  vendorSha256 = "sha256-y4hVouvqMYUrdF7fowsvJLp0FCGCZDeVGUQXG8z8Lyg=";
+  vendorSha256 = "sha256-KLeVSrPDS1lKsKFemRmgxT6Pxack3X3B/btSCOUSUFY=";
 
   ldflags = [ "-s" "-w" "-X main.Version=v${version}" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
+  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
+
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
-
-  doCheck = !stdenv.isDarwin;
 
   postInstall = ''
     $out/bin/gotop --create-manpage > gotop.1
@@ -35,6 +46,5 @@ buildGoModule rec {
     changelog = "https://github.com/xxxserxxx/gotop/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = [ maintainers.magnetophon ];
-    broken = stdenv.isDarwin; # needs to update gopsutil to at least v3.21.3 to include https://github.com/shirou/gopsutil/pull/1042
   };
 }

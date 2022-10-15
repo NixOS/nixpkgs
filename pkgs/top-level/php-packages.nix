@@ -22,6 +22,7 @@
 , libffi
 , libiconv
 , libjpeg
+, libkrb5
 , libpng
 , libsodium
 , libwebp
@@ -31,6 +32,7 @@
 , net-snmp
 , oniguruma
 , openldap
+, openssl_1_1
 , openssl
 , pam
 , pcre2
@@ -216,6 +218,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     imagick = callPackage ../development/php-packages/imagick { };
 
+    inotify = callPackage ../development/php-packages/inotify { };
+
     mailparse = callPackage ../development/php-packages/mailparse { };
 
     maxminddb = callPackage ../development/php-packages/maxminddb { };
@@ -339,10 +343,8 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "imap";
-          buildInputs = [ uwimap openssl pam pcre2 ];
-          configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" ];
-          # uwimap doesn't build on darwin.
-          enable = (!stdenv.isDarwin);
+          buildInputs = [ uwimap openssl pam pcre2 libkrb5 ];
+          configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" "--with-kerberos" ];
         }
         {
           name = "intl";
@@ -407,7 +409,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "openssl";
-          buildInputs = [ openssl ];
+          buildInputs = if (lib.versionAtLeast php.version "8.1") then [ openssl ] else [ openssl_1_1 ];
           configureFlags = [ "--with-openssl" ];
           doCheck = false;
         }

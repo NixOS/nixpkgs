@@ -40,7 +40,7 @@ in {
   options = {
     services.unbound = {
 
-      enable = mkEnableOption "Unbound domain name server";
+      enable = mkEnableOption (lib.mdDoc "Unbound domain name server");
 
       package = mkOption {
         type = types.package;
@@ -150,10 +150,9 @@ in {
             remote-control.control-enable = true;
           };
         '';
-        description = ''
+        description = lib.mdDoc ''
           Declarative Unbound configuration
-          See the <citerefentry><refentrytitle>unbound.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> manpage for a list of
+          See the {manpage}`unbound.conf(5)` manpage for a list of
           available options.
         '';
       };

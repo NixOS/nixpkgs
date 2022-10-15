@@ -12,7 +12,7 @@
 
 # tests
 , responses
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -44,14 +44,9 @@ buildPythonPackage rec {
     doCheck = false;
 
     checkInputs = [
+      unittestCheckHook
       responses
     ];
-
-    checkPhase = ''
-      runHook preCheck
-      ${python.interpreter} -m unittest discover
-      runHook postCheck
-    '';
 
     pythonImportsCheck = [
       "kbcstorage"

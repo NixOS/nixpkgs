@@ -32,48 +32,48 @@ in
   # interface
 
   options.services.limesurvey = {
-    enable = mkEnableOption "Limesurvey web application.";
+    enable = mkEnableOption (lib.mdDoc "Limesurvey web application.");
 
     database = {
       type = mkOption {
         type = types.enum [ "mysql" "pgsql" "odbc" "mssql" ];
         example = "pgsql";
         default = "mysql";
-        description = "Database engine to use.";
+        description = lib.mdDoc "Database engine to use.";
       };
 
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = "Database host address.";
+        description = lib.mdDoc "Database host address.";
       };
 
       port = mkOption {
         type = types.int;
         default = if cfg.database.type == "pgsql" then 5442 else 3306;
         defaultText = literalExpression "3306";
-        description = "Database host port.";
+        description = lib.mdDoc "Database host port.";
       };
 
       name = mkOption {
         type = types.str;
         default = "limesurvey";
-        description = "Database name.";
+        description = lib.mdDoc "Database name.";
       };
 
       user = mkOption {
         type = types.str;
         default = "limesurvey";
-        description = "Database user.";
+        description = lib.mdDoc "Database user.";
       };
 
       passwordFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/run/keys/limesurvey-dbpassword";
-        description = ''
+        description = lib.mdDoc ''
           A file containing the password corresponding to
-          <option>database.user</option>.
+          {option}`database.user`.
         '';
       };
 
@@ -85,14 +85,14 @@ in
           else null
         ;
         defaultText = literalExpression "/run/mysqld/mysqld.sock";
-        description = "Path to the unix socket file to use for authentication.";
+        description = lib.mdDoc "Path to the unix socket file to use for authentication.";
       };
 
       createLocally = mkOption {
         type = types.bool;
         default = cfg.database.type == "mysql";
         defaultText = literalExpression "true";
-        description = ''
+        description = lib.mdDoc ''
           Create the database and database user locally.
           This currently only applies if database type "mysql" is selected.
         '';
@@ -109,9 +109,9 @@ in
           enableACME = true;
         }
       '';
-      description = ''
-        Apache configuration can be done by adapting <literal>services.httpd.virtualHosts.&lt;name&gt;</literal>.
-        See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
+      description = lib.mdDoc ''
+        Apache configuration can be done by adapting `services.httpd.virtualHosts.<name>`.
+        See [](#opt-services.httpd.virtualHosts) for further information.
       '';
     };
 
@@ -125,8 +125,8 @@ in
         "pm.max_spare_servers" = 4;
         "pm.max_requests" = 500;
       };
-      description = ''
-        Options for the LimeSurvey PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+      description = lib.mdDoc ''
+        Options for the LimeSurvey PHP pool. See the documentation on `php-fpm.conf`
         for details on configuration directives.
       '';
     };
@@ -134,9 +134,9 @@ in
     config = mkOption {
       type = configType;
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         LimeSurvey configuration. Refer to
-        <link xlink:href="https://manual.limesurvey.org/Optional_settings"/>
+        <https://manual.limesurvey.org/Optional_settings>
         for details on supported values.
       '';
     };

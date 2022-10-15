@@ -12,7 +12,6 @@ let
     concatStringsSep
     elem
     filter
-    findFirst
     foldl'
     getAttrFromPath
     head
@@ -34,7 +33,6 @@ let
     recursiveUpdate
     reverseList sort
     setAttrByPath
-    toList
     types
     warnIf
     zipAttrsWith
@@ -46,7 +44,6 @@ let
     showFiles
     showOption
     unknownModule
-    literalExpression
     ;
 
   showDeclPrefix = loc: decl: prefix:
@@ -163,84 +160,50 @@ rec {
             # TODO: Change the type of this option to a submodule with a
             # freeformType, so that individual arguments can be documented
             # separately
-            description = ''
+            description = lib.mdDoc ''
               Additional arguments passed to each module in addition to ones
-              like <literal>lib</literal>, <literal>config</literal>,
-              and <literal>pkgs</literal>, <literal>modulesPath</literal>.
-              </para>
-              <para>
+              like `lib`, `config`,
+              and `pkgs`, `modulesPath`.
+
               This option is also available to all submodules. Submodules do not
               inherit args from their parent module, nor do they provide args to
               their parent module or sibling submodules. The sole exception to
-              this is the argument <literal>name</literal> which is provided by
+              this is the argument `name` which is provided by
               parent modules to a submodule and contains the attribute name
               the submodule is bound to, or a unique generated name if it is
               not bound to an attribute.
-              </para>
-              <para>
+
               Some arguments are already passed by default, of which the
-              following <emphasis>cannot</emphasis> be changed with this option:
-              <itemizedlist>
-               <listitem>
-                <para>
-                 <varname>lib</varname>: The nixpkgs library.
-                </para>
-               </listitem>
-               <listitem>
-                <para>
-                 <varname>config</varname>: The results of all options after merging the values from all modules together.
-                </para>
-               </listitem>
-               <listitem>
-                <para>
-                 <varname>options</varname>: The options declared in all modules.
-                </para>
-               </listitem>
-               <listitem>
-                <para>
-                 <varname>specialArgs</varname>: The <literal>specialArgs</literal> argument passed to <literal>evalModules</literal>.
-                </para>
-               </listitem>
-               <listitem>
-                <para>
-                 All attributes of <varname>specialArgs</varname>
-                </para>
-                <para>
-                 Whereas option values can generally depend on other option values
-                 thanks to laziness, this does not apply to <literal>imports</literal>, which
-                 must be computed statically before anything else.
-                </para>
-                <para>
-                 For this reason, callers of the module system can provide <literal>specialArgs</literal>
-                 which are available during import resolution.
-                </para>
-                <para>
-                 For NixOS, <literal>specialArgs</literal> includes
-                 <varname>modulesPath</varname>, which allows you to import
-                 extra modules from the nixpkgs package tree without having to
-                 somehow make the module aware of the location of the
-                 <literal>nixpkgs</literal> or NixOS directories.
-              <programlisting>
-              { modulesPath, ... }: {
-                imports = [
-                  (modulesPath + "/profiles/minimal.nix")
-                ];
-              }
-              </programlisting>
-                </para>
-               </listitem>
-              </itemizedlist>
-              </para>
-              <para>
+              following *cannot* be changed with this option:
+              - {var}`lib`: The nixpkgs library.
+              - {var}`config`: The results of all options after merging the values from all modules together.
+              - {var}`options`: The options declared in all modules.
+              - {var}`specialArgs`: The `specialArgs` argument passed to `evalModules`.
+              - All attributes of {var}`specialArgs`
+
+                Whereas option values can generally depend on other option values
+                thanks to laziness, this does not apply to `imports`, which
+                must be computed statically before anything else.
+
+                For this reason, callers of the module system can provide `specialArgs`
+                which are available during import resolution.
+
+                For NixOS, `specialArgs` includes
+                {var}`modulesPath`, which allows you to import
+                extra modules from the nixpkgs package tree without having to
+                somehow make the module aware of the location of the
+                `nixpkgs` or NixOS directories.
+                ```
+                { modulesPath, ... }: {
+                  imports = [
+                    (modulesPath + "/profiles/minimal.nix")
+                  ];
+                }
+                ```
+
               For NixOS, the default value for this option includes at least this argument:
-              <itemizedlist>
-               <listitem>
-                <para>
-                 <varname>pkgs</varname>: The nixpkgs package set according to
-                 the <option>nixpkgs.pkgs</option> option.
-                </para>
-               </listitem>
-              </itemizedlist>
+              - {var}`pkgs`: The nixpkgs package set according to
+                the {option}`nixpkgs.pkgs` option.
             '';
           };
 
@@ -248,22 +211,31 @@ rec {
             type = types.bool;
             internal = true;
             default = true;
-            description = "Whether to check whether all option definitions have matching declarations.";
+            description = lib.mdDoc "Whether to check whether all option definitions have matching declarations.";
           };
 
           _module.freeformType = mkOption {
             type = types.nullOr types.optionType;
             internal = true;
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               If set, merge all definitions that don't have an associated option
               together using this type. The result then gets combined with the
-              values of all declared options to produce the final <literal>
-              config</literal> value.
+              values of all declared options to produce the final `
+              config` value.
 
-              If this is <literal>null</literal>, definitions without an option
-              will throw an error unless <option>_module.check</option> is
+              If this is `null`, definitions without an option
+              will throw an error unless {option}`_module.check` is
               turned off.
+            '';
+          };
+
+          _module.specialArgs = mkOption {
+            readOnly = true;
+            internal = true;
+            description = lib.mdDoc ''
+              Externally provided module arguments that can't be modified from
+              within a configuration, but can be used in module imports.
             '';
           };
         };
@@ -273,6 +245,7 @@ rec {
             inherit extendModules;
             moduleType = type;
           };
+          _module.specialArgs = specialArgs;
         };
       };
 
@@ -423,7 +396,9 @@ rec {
       # modules recursively. It returns the final list of unique-by-key modules
       filterModules = modulesPath: { disabled, modules }:
         let
-          moduleKey = m: if isString m then toString modulesPath + "/" + m else toString m;
+          moduleKey = m: if isString m && (builtins.substring 0 1 m != "/")
+            then toString modulesPath + "/" + m
+            else toString m;
           disabledKeys = map moduleKey disabled;
           keyFilter = filter (attrs: ! elem attrs.key disabledKeys);
         in map (attrs: attrs.module) (builtins.genericClosure {
@@ -462,13 +437,14 @@ rec {
           config = addFreeformType (addMeta (m.config or {}));
         }
     else
+      # shorthand syntax
       lib.throwIfNot (isAttrs m) "module ${file} (${key}) does not look like a module."
       { _file = toString m._file or file;
         key = toString m.key or key;
         disabledModules = m.disabledModules or [];
         imports = m.require or [] ++ m.imports or [];
         options = {};
-        config = addFreeformType (addMeta (removeAttrs m ["_file" "key" "disabledModules" "require" "imports" "freeformType"]));
+        config = addFreeformType (removeAttrs m ["_file" "key" "disabledModules" "require" "imports" "freeformType"]);
       };
 
   applyModuleArgsIfFunction = key: f: args@{ config, options, lib, ... }: if isFunction f then
@@ -625,7 +601,6 @@ rec {
                 }
               else
                 let
-                  firstNonOption = findFirst (m: !isOption m.options) "" decls;
                   nonOptions = filter (m: !isOption m.options) decls;
                 in
                 throw "The option `${showOption loc}' in module `${(lib.head optionDecls)._file}' would be a parent of the following options, but its type `${(lib.head optionDecls).options.type.description or "<no description>"}' does not support nested options.\n${
@@ -673,11 +648,7 @@ rec {
      'opts' is a list of modules.  Each module has an options attribute which
      correspond to the definition of 'loc' in 'opt.file'. */
   mergeOptionDecls =
-   let
-    coerceOption = file: opt:
-      if isFunction opt then setDefaultModuleLocation file opt
-      else setDefaultModuleLocation file { options = opt; };
-   in loc: opts:
+   loc: opts:
     foldl' (res: opt:
       let t  = res.type;
           t' = opt.options.type;
@@ -742,6 +713,7 @@ rec {
         inherit (res.defsFinal') highestPrio;
         definitions = map (def: def.value) res.defsFinal;
         files = map (def: def.file) res.defsFinal;
+        definitionsWithLocations = res.defsFinal;
         inherit (res) isDefined;
         # This allows options to be correctly displayed using `${options.path.to.it}`
         __toString = _: showOption loc;
@@ -1157,7 +1129,7 @@ rec {
     {
       options = setAttrByPath from (mkOption {
         inherit visible;
-        description = "Alias of <option>${showOption to}</option>.";
+        description = lib.mdDoc "Alias of {option}`${showOption to}`.";
         apply = x: use (toOf config);
       } // optionalAttrs (toType != null) {
         type = toType;

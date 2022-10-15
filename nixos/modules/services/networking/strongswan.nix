@@ -51,7 +51,7 @@ let
 in
 {
   options.services.strongswan = {
-    enable = mkEnableOption "strongSwan";
+    enable = mkEnableOption (lib.mdDoc "strongSwan");
 
     secrets = mkOption {
       type = types.listOf types.str;

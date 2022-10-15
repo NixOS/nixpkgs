@@ -2,6 +2,9 @@
 , buildPythonPackage
 , fetchPypi
 
+# build
+, setuptools
+
 # propagtes
 , sigtools
 , six
@@ -21,6 +24,7 @@
 buildPythonPackage rec {
   pname = "clize";
   version = "4.2.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,8 +33,13 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "docutils ~= 0.17.0" "docutils"
+      --replace "docutils ~= 0.17.0" "docutils" \
+      --replace "attrs>=19.1.0,<22" "attrs>=19.1.0"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     attrs

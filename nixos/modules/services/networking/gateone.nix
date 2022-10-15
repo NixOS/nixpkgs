@@ -6,7 +6,7 @@ in
 {
 options = {
     services.gateone = {
-      enable = mkEnableOption "GateOne server";
+      enable = mkEnableOption (lib.mdDoc "GateOne server");
       pidDir = mkOption {
         default = "/run/gateone";
         type = types.path;

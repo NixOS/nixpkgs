@@ -11,14 +11,14 @@
 , libtiff, librsvg, libwebp, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsa-lib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
 , sigtool, jansson, harfbuzz, sqlite, nixosTests
-, dontRecurseIntoAttrs, emacsPackagesFor
+, recurseIntoAttrs, emacsPackagesFor
 , libgccjit, targetPlatform, makeWrapper # native-comp params
 , fetchFromSavannah
 , systemd ? null
-, withX ? !stdenv.isDarwin
+, withX ? !stdenv.isDarwin && !withPgtk
 , withNS ? stdenv.isDarwin
 , withGTK2 ? false, gtk2-x11 ? null
-, withGTK3 ? true, gtk3-x11 ? null, gsettings-desktop-schemas ? null
+, withGTK3 ? withPgtk, gtk3-x11 ? null, gsettings-desktop-schemas ? null
 , withXwidgets ? false, webkitgtk ? null, wrapGAppsHook ? null, glib-networking ? null
 , withMotif ? false, motif ? null
 , withSQLite3 ? false
@@ -26,11 +26,11 @@
 , withWebP ? false
 , srcRepo ? true, autoreconfHook ? null, texinfo ? null
 , siteStart ? ./site-start.el
-, nativeComp ? false
+, nativeComp ? true
 , withAthena ? false
 , withToolkitScrollBars ? true
-, withPgtk ? false
-, withXinput2 ? false
+, withPgtk ? false, gtk3 ? null
+, withXinput2 ? withX && lib.versionAtLeast version "29"
 , withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
 , toolkit ? (
   if withGTK2 then "gtk2"
@@ -45,9 +45,10 @@ assert stdenv.isDarwin -> libXaw != null;       # fails to link otherwise
 assert withNS -> !withX;
 assert withNS -> stdenv.isDarwin;
 assert (withGTK2 && !withNS) -> withX;
-assert (withGTK3 && !withNS) -> withX;
-assert withGTK2 -> !withGTK3 && gtk2-x11 != null;
-assert withGTK3 -> !withGTK2 && gtk3-x11 != null;
+assert (withGTK3 && !withNS) -> withX || withPgtk;
+assert withGTK2 -> !withGTK3 && gtk2-x11 != null && !withPgtk;
+assert withGTK3 -> !withGTK2 && ((gtk3-x11 != null) || withPgtk);
+assert withPgtk -> withGTK3 && !withX && gtk3 != null;
 assert withXwidgets -> withGTK3 && webkitgtk != null;
 
 
@@ -134,7 +135,9 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ++ lib.optionals withImageMagick [ imagemagick ]
     ++ lib.optionals (stdenv.isLinux && withX) [ m17n_lib libotf ]
     ++ lib.optional (withX && withGTK2) gtk2-x11
-    ++ lib.optionals (withX && withGTK3) [ gtk3-x11 gsettings-desktop-schemas ]
+    ++ lib.optional (withX && withGTK3) gtk3-x11
+    ++ lib.optional (!stdenv.isDarwin && withGTK3) gsettings-desktop-schemas
+    ++ lib.optional withPgtk gtk3
     ++ lib.optional (withX && withMotif) motif
     ++ lib.optional withSQLite3 sqlite
     ++ lib.optional withWebP libwebp
@@ -204,19 +207,14 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
       -f batch-native-compile $out/share/emacs/site-lisp/site-start.el
   '';
 
-  postFixup = lib.concatStringsSep "\n" [
-
-    (lib.optionalString (stdenv.isLinux && withX && toolkit == "lucid") ''
-      patchelf --set-rpath \
-        "$(patchelf --print-rpath "$out/bin/emacs"):${lib.makeLibraryPath [ libXcursor ]}" \
-        "$out/bin/emacs"
+  postFixup = lib.optionalString (stdenv.isLinux && withX && toolkit == "lucid") ''
+      patchelf --add-rpath ${lib.makeLibraryPath [ libXcursor ]} $out/bin/emacs
       patchelf --add-needed "libXcursor.so.1" "$out/bin/emacs"
-    '')
-  ];
+  '';
 
   passthru = {
     inherit nativeComp;
-    pkgs = dontRecurseIntoAttrs (emacsPackagesFor emacs);
+    pkgs = recurseIntoAttrs (emacsPackagesFor emacs);
     tests = { inherit (nixosTests) emacs-daemon; };
   };
 

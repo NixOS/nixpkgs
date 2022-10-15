@@ -1,5 +1,5 @@
 { fetchurl, lib, stdenv, pkg-config, makeWrapper, meson, ninja, installShellFiles, libxcb, xcbutilkeysyms
-, xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification, libX11, pcre, libev
+, xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification, libX11, pcre2, libev
 , yajl, xcb-util-cursor, perl, pango, perlPackages, libxkbcommon
 , xorgserver, xvfb-run
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "i3";
-  version = "4.20.1";
+  version = "4.21";
 
   src = fetchurl {
     url = "https://i3wm.org/downloads/${pname}-${version}.tar.xz";
-    sha256 = "1rpwdgykcvmrmdz244f0wm7446ih1dcw8rlc1hm1c7cc42pyrq93";
+    sha256 = "sha256-jcUgXg80Q9WGYeMHg1If2cbUJtHn82Z6sS8qwbLTIHg=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxcb xcbutilkeysyms xcbutil xcbutilwm xcbutilxrm libxkbcommon
-    libstartup_notification libX11 pcre libev yajl xcb-util-cursor perl pango
+    libstartup_notification libX11 pcre2 libev yajl xcb-util-cursor perl pango
     perlPackages.AnyEventI3 perlPackages.X11XCB perlPackages.IPCRun
     perlPackages.ExtUtilsPkgConfig perlPackages.InlineC
     xorgserver xvfb-run

@@ -622,6 +622,7 @@ let
     ncdfFlow = [ pkgs.zlib.dev ];
     proj4 = [ pkgs.proj.dev ];
     rtmpt = [ pkgs.gsl ];
+    rmarkdown = [ pkgs.pandoc ];
     mixcat = [ pkgs.gsl ];
     libstableR = [ pkgs.gsl ];
     landsepi = [ pkgs.gsl ];
@@ -1039,6 +1040,11 @@ let
             sed -i 's#system("which \(\w\+\)"[^)]*)#"${pkgs.darwin.cctools}/bin/\1"#g' $file
         done
       '';
+    });
+
+    s2 = old.s2.overrideDerivation (attrs: {
+      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
+      PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
     });
 
     Rmpi = old.Rmpi.overrideDerivation (attrs: {

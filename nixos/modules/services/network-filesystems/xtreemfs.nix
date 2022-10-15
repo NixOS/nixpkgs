@@ -89,7 +89,7 @@ in
 
     services.xtreemfs = {
 
-      enable = mkEnableOption "XtreemFS";
+      enable = mkEnableOption (lib.mdDoc "XtreemFS");
 
       homeDir = mkOption {
         type = types.path;
@@ -111,7 +111,7 @@ in
         uuid = mkOption {
           example = "eacb6bab-f444-4ebf-a06a-3f72d7465e40";
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             Must be set to a unique identifier, preferably a UUID according to
             RFC 4122. UUIDs can be generated with `uuidgen` command, found in
             the `util-linux` package.
@@ -180,7 +180,7 @@ in
           '';
         };
         replication = {
-          enable = mkEnableOption "XtreemFS DIR replication plugin";
+          enable = mkEnableOption (lib.mdDoc "XtreemFS DIR replication plugin");
           extraConfig = mkOption {
             type = types.lines;
             example = ''
@@ -236,7 +236,7 @@ in
         uuid = mkOption {
           example = "eacb6bab-f444-4ebf-a06a-3f72d7465e41";
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             Must be set to a unique identifier, preferably a UUID according to
             RFC 4122. UUIDs can be generated with `uuidgen` command, found in
             the `util-linux` package.
@@ -323,7 +323,7 @@ in
           '';
         };
         replication = {
-          enable = mkEnableOption "XtreemFS MRC replication plugin";
+          enable = mkEnableOption (lib.mdDoc "XtreemFS MRC replication plugin");
           extraConfig = mkOption {
             type = types.lines;
             example = ''
@@ -379,7 +379,7 @@ in
         uuid = mkOption {
           example = "eacb6bab-f444-4ebf-a06a-3f72d7465e42";
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             Must be set to a unique identifier, preferably a UUID according to
             RFC 4122. UUIDs can be generated with `uuidgen` command, found in
             the `util-linux` package.

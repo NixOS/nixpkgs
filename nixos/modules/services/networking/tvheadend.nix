@@ -9,7 +9,7 @@ in
 {
   options = {
     services.tvheadend = {
-      enable = mkEnableOption "Tvheadend";
+      enable = mkEnableOption (lib.mdDoc "Tvheadend");
       httpPort = mkOption {
         type        = types.int;
         default     = 9981;

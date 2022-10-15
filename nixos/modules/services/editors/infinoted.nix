@@ -6,7 +6,7 @@ let
   cfg = config.services.infinoted;
 in {
   options.services.infinoted = {
-    enable = mkEnableOption "infinoted";
+    enable = mkEnableOption (lib.mdDoc "infinoted");
 
     package = mkOption {
       type = types.package;
@@ -36,7 +36,7 @@ in {
     certificateChain = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Chain of CA-certificates to which our `certificateFile` is relative.
         Optional for TLS.
       '';

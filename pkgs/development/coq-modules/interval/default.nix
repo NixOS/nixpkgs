@@ -7,11 +7,12 @@ mkCoqDerivation rec {
   domain = "gitlab.inria.fr";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.8" "8.15"; out = "4.5.1"; }
+    { case = range "8.8" "8.16"; out = "4.5.2"; }
     { case = range "8.8" "8.12"; out = "4.0.0"; }
     { case = range "8.7" "8.11"; out = "3.4.2"; }
     { case = range "8.5" "8.6";  out = "3.3.0"; }
   ] null;
+  release."4.5.2".sha256 = "sha256-r0yE9pkC4EYlqsimxkdlCXevRcwKa3HGFZiUH+ueUY8=";
   release."4.5.1".sha256 = "sha256-5OxbSPdw/1FFENubulKSk6fEIEYSPCxfvMMgtgN6j6s=";
   release."4.3.0".sha256 = "sha256-k8DLC4HYYpHeEEgXUafS8jkaECqlM+/CoYaInmUTYko=";
   release."4.2.0".sha256 = "sha256-SD5thgpirs3wmZBICjXGpoefg9AAXyExb5t8tz3iZhE=";

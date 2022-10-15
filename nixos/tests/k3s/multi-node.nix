@@ -1,4 +1,4 @@
-import ../make-test-python.nix ({ pkgs, ... }:
+import ../make-test-python.nix ({ pkgs, lib, ... }:
   let
     imageEnv = pkgs.buildEnv {
       name = "k3s-pause-image-env";
@@ -53,15 +53,54 @@ import ../make-test-python.nix ({ pkgs, ... }:
           enable = true;
           role = "server";
           package = pkgs.k3s;
-          extraFlags = "--no-deploy coredns,servicelb,traefik,local-storage,metrics-server --pause-image test.local/pause:local --node-ip 192.168.1.1";
+          clusterInit = true;
+          extraFlags = ''
+            --disable coredns \
+            --disable local-storage \
+            --disable metrics-server \
+            --disable servicelb \
+            --disable traefik \
+            --node-ip 192.168.1.1 \
+            --pause-image test.local/pause:local
+          '';
         };
-        networking.firewall.allowedTCPPorts = [ 6443 ];
+        networking.firewall.allowedTCPPorts = [ 2379 2380 6443 ];
         networking.firewall.allowedUDPPorts = [ 8472 ];
         networking.firewall.trustedInterfaces = [ "flannel.1" ];
         networking.useDHCP = false;
         networking.defaultGateway = "192.168.1.1";
         networking.interfaces.eth1.ipv4.addresses = pkgs.lib.mkForce [
           { address = "192.168.1.1"; prefixLength = 24; }
+        ];
+      };
+
+      server2 = { pkgs, ... }: {
+        environment.systemPackages = with pkgs; [ gzip jq ];
+        virtualisation.memorySize = 1536;
+        virtualisation.diskSize = 4096;
+
+        services.k3s = {
+          inherit tokenFile;
+          enable = true;
+          serverAddr = "https://192.168.1.1:6443";
+          clusterInit = false;
+          extraFlags = ''
+            --disable coredns \
+            --disable local-storage \
+            --disable metrics-server \
+            --disable servicelb \
+            --disable traefik \
+            --node-ip 192.168.1.3 \
+            --pause-image test.local/pause:local
+          '';
+        };
+        networking.firewall.allowedTCPPorts = [ 2379 2380 6443 ];
+        networking.firewall.allowedUDPPorts = [ 8472 ];
+        networking.firewall.trustedInterfaces = [ "flannel.1" ];
+        networking.useDHCP = false;
+        networking.defaultGateway = "192.168.1.3";
+        networking.interfaces.eth1.ipv4.addresses = pkgs.lib.mkForce [
+          { address = "192.168.1.3"; prefixLength = 24; }
         ];
       };
 
@@ -72,7 +111,7 @@ import ../make-test-python.nix ({ pkgs, ... }:
           inherit tokenFile;
           enable = true;
           role = "agent";
-          serverAddr = "https://192.168.1.1:6443";
+          serverAddr = "https://192.168.1.3:6443";
           extraFlags = "--pause-image test.local/pause:local --node-ip 192.168.1.2";
         };
         networking.firewall.allowedTCPPorts = [ 6443 ];
@@ -91,16 +130,17 @@ import ../make-test-python.nix ({ pkgs, ... }:
     };
 
     testScript = ''
-      start_all()
-      machines = [server, agent]
+      machines = [server, server2, agent]
       for m in machines:
+          m.start()
           m.wait_for_unit("k3s")
 
       # wait for the agent to show up
       server.wait_until_succeeds("k3s kubectl get node agent")
 
       for m in machines:
-          m.succeed("k3s check-config")
+      '' # Fix-Me: Tests fail for 'aarch64-linux' as: "CONFIG_CGROUP_FREEZER: missing (fail)"
+      + lib.optionalString (!pkgs.stdenv.isAarch64) ''m.succeed("k3s check-config")'' + ''
           m.succeed(
               "${pauseImage} | k3s ctr image import -"
           )

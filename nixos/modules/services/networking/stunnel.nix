@@ -77,11 +77,10 @@ in
 
 
       servers = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Define the server configuations.
 
-          See "SERVICE-LEVEL OPTIONS" in <citerefentry><refentrytitle>stunnel</refentrytitle>
-          <manvolnum>8</manvolnum></citerefentry>.
+          See "SERVICE-LEVEL OPTIONS" in {manpage}`stunnel(8)`.
         '';
         type = with types; attrsOf (attrsOf (nullOr (oneOf [bool int str])));
         example = {
@@ -95,13 +94,12 @@ in
       };
 
       clients = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Define the client configurations.
 
           By default, verifyChain and OCSPaia are enabled and a CAFile is provided from pkgs.cacert.
 
-          See "SERVICE-LEVEL OPTIONS" in <citerefentry><refentrytitle>stunnel</refentrytitle>
-          <manvolnum>8</manvolnum></citerefentry>.
+          See "SERVICE-LEVEL OPTIONS" in {manpage}`stunnel(8)`.
         '';
         type = with types; attrsOf (attrsOf (nullOr (oneOf [bool int str])));
 

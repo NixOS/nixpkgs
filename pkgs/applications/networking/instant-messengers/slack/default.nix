@@ -44,14 +44,14 @@ let
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.27.154";
-  x86_64-darwin-sha256 = "0a3cc9kkiq18vr4hk532vc59cza1hq8qh9x9hlhli4n72n3h7y3n";
+  x86_64-darwin-version = "4.28.182";
+  x86_64-darwin-sha256 = "0x0zc45k0jh0hivgjymcxnnwc2lwyfq68rw39lbxp4i1ir2sbnxg";
 
-  x86_64-linux-version = "4.27.156";
-  x86_64-linux-sha256 = "sha256-/xtD+/+KGtPr4vQJm8ZczvpyPxfMBw0OE7hzTzFhSs0=";
+  x86_64-linux-version = "4.28.184";
+  x86_64-linux-sha256 = "sha256-qAc9rHJbM7lmqNxOcOSnqnuib5zJ0Ry3hAGri8DKIlo=";
 
-  aarch64-darwin-version = "4.27.154";
-  aarch64-darwin-sha256 = "1n3vgcsbi1w49w4xqc5hyadb9qwvsqdiirfw9v4s65wsnark1iz6";
+  aarch64-darwin-version = "4.28.182";
+  aarch64-darwin-sha256 = "0bc8lhmpm0310gh1w9xkb8i1cpldchm4b4mzsr9h0mhvljxmvlyf";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
@@ -164,12 +164,13 @@ let
         patchelf --set-rpath ${rpath}:$out/lib/slack $file || true
       done
 
-      # Replace the broken bin/slack symlink with a startup wrapper
+      # Replace the broken bin/slack symlink with a startup wrapper.
+      # Make xdg-open overrideable at runtime.
       rm $out/bin/slack
       makeWrapper $out/lib/slack/slack $out/bin/slack \
         --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
-        --prefix PATH : ${lib.makeBinPath [xdg-utils]} \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+        --suffix PATH : ${lib.makeBinPath [xdg-utils]} \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
       # Fix the desktop link
       substituteInPlace $out/share/applications/slack.desktop \
@@ -193,10 +194,6 @@ let
       runHook preInstall
       mkdir -p $out/Applications/Slack.app
       cp -R . $out/Applications/Slack.app
-    '' + lib.optionalString (!stdenv.isAarch64) ''
-      # on aarch64-darwin we get: Could not write domain com.tinyspeck.slackmacgap; exiting
-      /usr/bin/defaults write com.tinyspeck.slackmacgap SlackNoAutoUpdates -Bool YES
-    '' + ''
       runHook postInstall
     '';
   };

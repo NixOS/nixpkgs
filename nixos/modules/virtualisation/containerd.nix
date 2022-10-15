@@ -19,7 +19,7 @@ in
 {
 
   options.virtualisation.containerd = with lib.types; {
-    enable = lib.mkEnableOption "containerd container runtime";
+    enable = lib.mkEnableOption (lib.mdDoc "containerd container runtime");
 
     configFile = lib.mkOption {
       default = null;

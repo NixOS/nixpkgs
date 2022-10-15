@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , fetchPypi
 , jupyterlab
@@ -8,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-lsp";
-  version = "3.10.1";
+  version = "3.10.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-mtbvIsSXK4VIB5cDT8eRRyjrePGFa02rM2Fobk8gyd0=";
+    sha256 = "sha256-VZrUaS+X9C3WufCzMKuScD8CuORbuvbpz1mJiolyIqA=";
   };
 
   propagatedBuildInputs = [

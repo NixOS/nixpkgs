@@ -20,27 +20,15 @@
 
 buildPythonPackage rec {
   pname = "streamz";
-  version = "0.6.3";
+  version = "0.6.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0wZ1ldLFRAIL9R+gLfwsFbL+gvdORAkYWNjnDmeafm8=";
+    hash = "sha256-VXfWkEwuxInBQVQJV3IQXgGVRkiBmYfUZCBMbjyWNPM=";
   };
-
-  patches = [
-    # remove with next bump
-    (fetchpatch {
-      name = "fix-tests-against-distributed-2021.10.0.patch";
-      url = "https://github.com/python-streamz/streamz/commit/5bd3bc4d305ff40c740bc2550c8491be9162778a.patch";
-      sha256 = "1xzxcbf7yninkyizrwm3ahqk6ij2fmh0454iqjx2n7mmzx3sazx7";
-      includes = [
-        "streamz/tests/test_dask.py"
-      ];
-    })
-  ];
 
   propagatedBuildInputs = [
     networkx
@@ -65,6 +53,12 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Error with distutils version: fixture 'cleanup' not found
+    "test_separate_thread_without_time"
+    "test_await_syntax"
+    "test_partition_then_scatter_sync"
+    "test_sync"
+    "test_sync_2"
     # Test fail in the sandbox
     "test_tcp_async"
     "test_tcp"

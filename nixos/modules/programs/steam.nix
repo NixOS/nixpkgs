@@ -13,7 +13,7 @@ let
   };
 in {
   options.programs.steam = {
-    enable = mkEnableOption "steam";
+    enable = mkEnableOption (lib.mdDoc "steam");
 
     remotePlay.openFirewall = mkOption {
       type = types.bool;

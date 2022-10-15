@@ -190,7 +190,7 @@ let
     );
     renewOpts = escapeShellArgs (
       commonOpts
-      ++ [ "renew" ]
+      ++ [ "renew" "--no-random-sleep" ]
       ++ optionals data.ocspMustStaple [ "--must-staple" ]
       ++ data.extraLegoRenewFlags
     );
@@ -223,9 +223,9 @@ let
         # have many certificates, the renewals are distributed over
         # the course of the day to avoid rate limits.
         AccuracySec = "${toString (_24hSecs / numCerts)}s";
-
         # Skew randomly within the day, per https://letsencrypt.org/docs/integration-guide/.
         RandomizedDelaySec = "24h";
+        FixedRandomDelay = true;
       };
     };
 
@@ -325,6 +325,7 @@ let
         '');
       } // optionalAttrs (data.listenHTTP != null && toInt (elemAt (splitString ":" data.listenHTTP) 1) < 1024) {
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
       };
 
       # Working directory will be /tmp
@@ -376,7 +377,8 @@ let
 
         # Check if we can renew.
         # We can only renew if the list of domains has not changed.
-        if cmp -s domainhash.txt certificates/domainhash.txt && [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' -a -n "$(ls -1 accounts)" ]; then
+        # We also need an account key. Avoids #190493
+        if cmp -s domainhash.txt certificates/domainhash.txt && [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' -a -n "$(find accounts -name '${data.email}.key')" ]; then
 
           # Even if a cert is not expired, it may be revoked by the CA.
           # Try to renew, and silently fail if the cert is not expired.
@@ -451,14 +453,13 @@ let
       renewInterval = mkOption {
         type = types.str;
         inherit (defaultAndText "renewInterval" "daily") default defaultText;
-        description = ''
+        description = lib.mdDoc ''
           Systemd calendar expression when to check for renewal. See
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
+          {manpage}`systemd.time(7)`.
         '';
       };
 
-      enableDebugLogs = mkEnableOption "debug logging for this certificate" // {
+      enableDebugLogs = mkEnableOption (lib.mdDoc "debug logging for this certificate") // {
         inherit (defaultAndText "enableDebugLogs" true) default defaultText;
       };
 
@@ -577,13 +578,12 @@ let
       ocspMustStaple = mkOption {
         type = types.bool;
         inherit (defaultAndText "ocspMustStaple" false) default defaultText;
-        description = ''
+        description = lib.mdDoc ''
           Turns on the OCSP Must-Staple TLS extension.
           Make sure you know what you're doing! See:
-          <itemizedlist>
-            <listitem><para><link xlink:href="https://blog.apnic.net/2019/01/15/is-the-web-ready-for-ocsp-must-staple/"/></para></listitem>
-            <listitem><para><link xlink:href="https://blog.hboeck.de/archives/886-The-Problem-with-OCSP-Stapling-and-Must-Staple-and-why-Certificate-Revocation-is-still-broken.html"/></para></listitem>
-          </itemizedlist>
+
+          - <https://blog.apnic.net/2019/01/15/is-the-web-ready-for-ocsp-must-staple/>
+          - <https://blog.hboeck.de/archives/886-The-Problem-with-OCSP-Stapling-and-Must-Staple-and-why-Certificate-Revocation-is-still-broken.html>
         '';
       };
 
@@ -677,7 +677,7 @@ let
       inheritDefaults = mkOption {
         default = true;
         example = true;
-        description = "Whether to inherit values set in `security.acme.defaults` or not.";
+        description = lib.mdDoc "Whether to inherit values set in `security.acme.defaults` or not.";
         type = lib.types.bool;
       };
     };

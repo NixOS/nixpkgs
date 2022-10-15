@@ -2,19 +2,19 @@
 let
   # You can check the latest version with `curl -sS https://update.tabnine.com/bundles/version`
   # There's a handy prefetch script in ./fetch-latest.sh
-  version = "4.4.98";
+  version = "4.4.139";
   supportedPlatforms = {
     "x86_64-linux" = {
       name = "x86_64-unknown-linux-musl";
-      hash = "sha256-AYgv/XrHjEOhtyx8QeOhssdsc/fssShZcA+15fFgI1g=";
+      hash = "sha256-CXm9WR77SMvv+9w+8QUBNHKPhe4otquLyHAwzd+jbNk=";
     };
     "x86_64-darwin" = {
       name = "x86_64-apple-darwin";
-      hash = "sha256-XUd97ZUUb8XqMrlnSBER68fU3+58zpwKnzZ+i3dlWIs=";
+      hash = "sha256-01lotn9DzgwIj1n9GCUuGmwgtS4DtK+XOl/wduI+QyI=";
     };
     "aarch64-darwin" = {
       name = "aarch64-apple-darwin";
-      hash = "sha256-L2r4fB4OtJJUvwnFP7zYAm8RLf8b7r6kDNGlwZRkLnw=";
+      hash = "sha256-RQBBsp48Xhxi3WQKsYzSiiSEW8W7UikKAyFf4sJ2JqQ=";
     };
   };
   platform =

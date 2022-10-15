@@ -11,3 +11,9 @@ thisroot () {
 }
 
 postHooks+=(thisroot)
+
+addRootInludePath() {
+    addToSearchPath ROOT_INCLUDE_PATH $1/include
+}
+
+addEnvHooks "$targetOffset" addRootInludePath

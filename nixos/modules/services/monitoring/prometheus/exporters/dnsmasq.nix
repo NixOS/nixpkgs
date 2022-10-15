@@ -11,7 +11,7 @@ in
     dnsmasqListenAddress = mkOption {
       type = types.str;
       default = "localhost:53";
-      description = ''
+      description = lib.mdDoc ''
         Address on which dnsmasq listens.
       '';
     };
@@ -19,8 +19,8 @@ in
       type = types.path;
       default = "/var/lib/misc/dnsmasq.leases";
       example = "/var/lib/dnsmasq/dnsmasq.leases";
-      description = ''
-        Path to the <literal>dnsmasq.leases</literal> file.
+      description = lib.mdDoc ''
+        Path to the `dnsmasq.leases` file.
       '';
     };
   };

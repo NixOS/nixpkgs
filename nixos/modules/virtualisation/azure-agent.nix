@@ -17,7 +17,7 @@ let
 
     patches = [ ./azure-agent-entropy.patch ];
 
-    buildInputs = [ makeWrapper python pythonPackages.wrapPython ];
+    nativeBuildInputs = [ makeWrapper python pythonPackages.wrapPython ];
     runtimeDeps = [ findutils gnugrep gawk coreutils openssl openssh
                     nettools # for hostname
                     procps # for pidof
@@ -60,15 +60,15 @@ in
   options.virtualisation.azure.agent = {
     enable = mkOption {
       default = false;
-      description = "Whether to enable the Windows Azure Linux Agent.";
+      description = lib.mdDoc "Whether to enable the Windows Azure Linux Agent.";
     };
     verboseLogging = mkOption {
       default = false;
-      description = "Whether to enable verbose logging.";
+      description = lib.mdDoc "Whether to enable verbose logging.";
     };
     mountResourceDisk = mkOption {
       default = true;
-      description = "Whether the agent should format (ext4) and mount the resource disk to /mnt/resource.";
+      description = lib.mdDoc "Whether the agent should format (ext4) and mount the resource disk to /mnt/resource.";
     };
   };
 

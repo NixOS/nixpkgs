@@ -19,7 +19,8 @@ buildDunePackage rec {
   buildInputs = [ astring cmdliner cppo fpath result tyxml odoc-parser fmt ];
 
   checkInputs = [ markup yojson sexplib0 jq ppx_expect bash ];
-  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  doCheck = lib.versionAtLeast ocaml.version "4.08"
+    && lib.versionOlder yojson.version "2.0";
 
   preCheck = ''
     # some run.t files check the content of patchShebangs-ed scripts, so patch

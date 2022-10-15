@@ -36,7 +36,7 @@ in
   meta.maintainers = with lib.maintainers; [ peterhoeg ];
 
   options.hardware.sata.timeout = {
-    enable = mkEnableOption "SATA drive timeouts";
+    enable = mkEnableOption (lib.mdDoc "SATA drive timeouts");
 
     deciSeconds = mkOption {
       example = 70;

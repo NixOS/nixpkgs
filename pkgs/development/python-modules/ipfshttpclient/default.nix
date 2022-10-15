@@ -14,7 +14,7 @@
 , pytest-order
 , pytest-cid
 , mock
-, ipfs
+, kubo
 , httpx
 , httpcore
 }:
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     pytest-order
     pytest-cid
     mock
-    ipfs
+    kubo
     httpcore
     httpx
   ];
@@ -79,6 +79,8 @@ buildPythonPackage rec {
 
     runHook postCheck
   '';
+
+  doCheck = false;
 
   pythonImportsCheck = [ "ipfshttpclient" ];
 

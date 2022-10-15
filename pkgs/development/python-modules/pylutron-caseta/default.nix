@@ -7,11 +7,12 @@
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pylutron-caseta";
-  version = "0.14.0";
+  version = "0.16.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,8 +21,12 @@ buildPythonPackage rec {
     owner = "gurumitts";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-D1P4roUZ+byU031RtdwIOR/ncxY9wl9UqCKVb/XPGVk=";
+    hash = "sha256-QASVifbDh9nsgKi0cT4VaUX0d6inVS8rddr/rsbJ7/I=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     cryptography

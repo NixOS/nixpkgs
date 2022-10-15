@@ -28,11 +28,6 @@ buildPythonPackage rec {
     sed -i "/--no-cov-on-fail/d" setup.cfg
   '';
 
-  preCheck = ''
-    # Confuses source vs dist imports in pytest
-    rm -r dist
-  '';
-
   disabledTestPaths = [
     # Don't test the documentation
     "docs/*.rst"

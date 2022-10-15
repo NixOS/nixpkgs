@@ -119,6 +119,21 @@ let
   writeDashBin = name:
     writeDash "/bin/${name}";
 
+  # Like writeScript but the first line is a shebang to fish
+  #
+  # Example:
+  #   writeFish "example" ''
+  #     echo hello world
+  #   ''
+  writeFish = makeScriptWriter {
+    interpreter = "${pkgs.fish}/bin/fish --no-config";
+    check = "${pkgs.fish}/bin/fish --no-config --no-execute";  # syntax check only
+  };
+
+  # Like writeScriptBin but the first line is a shebang to fish
+  writeFishBin = name:
+    writeFish "/bin/${name}";
+
   # writeHaskell takes a name, an attrset with libraries and haskell version (both optional)
   # and some haskell source code and returns an executable.
   #
@@ -192,7 +207,7 @@ let
     };
   in writeDash name ''
     export NODE_PATH=${node-env}/lib/node_modules
-    exec ${pkgs.nodejs}/bin/node ${pkgs.writeText "js" content}
+    exec ${pkgs.nodejs}/bin/node ${pkgs.writeText "js" content} "$@"
   '';
 
   # writeJSBin takes the same arguments as writeJS but outputs a directory (like writeScriptBin)
@@ -237,7 +252,7 @@ let
   # makePythonWriter takes python and compatible pythonPackages and produces python script writer,
   # which validates the script with flake8 at build time. If any libraries are specified,
   # python.withPackages is used as interpreter, otherwise the "bare" python is used.
-  makePythonWriter = python: pythonPackages: name: { libraries ? [], flakeIgnore ? [] }:
+  makePythonWriter = python: pythonPackages: buildPythonPackages: name: { libraries ? [], flakeIgnore ? [] }:
   let
     ignoreAttribute = optionalString (flakeIgnore != []) "--ignore ${concatMapStringsSep "," escapeShellArg flakeIgnore}";
   in
@@ -248,7 +263,7 @@ let
       else "${python.withPackages (ps: libraries)}/bin/python"
     ;
     check = optionalString python.isPy3k (writeDash "pythoncheck.sh" ''
-      exec ${pythonPackages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
+      exec ${buildPythonPackages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
     '');
   } name;
 
@@ -264,7 +279,7 @@ let
   #
   #   print Test.a
   # ''
-  writePyPy2 = makePythonWriter pkgs.pypy2 pkgs.pypy2Packages;
+  writePyPy2 = makePythonWriter pkgs.pypy2 pkgs.pypy2Packages buildPackages.pypy2Packages;
 
   # writePyPy2Bin takes the same arguments as writePyPy2 but outputs a directory (like writeScriptBin)
   writePyPy2Bin = name:
@@ -282,7 +297,7 @@ let
   #   """)
   #   print(y[0]['test'])
   # ''
-  writePython3 = makePythonWriter pkgs.python3 pkgs.python3Packages;
+  writePython3 = makePythonWriter pkgs.python3 pkgs.python3Packages buildPackages.python3Packages;
 
   # writePython3Bin takes the same arguments as writePython3 but outputs a directory (like writeScriptBin)
   writePython3Bin = name:
@@ -300,7 +315,7 @@ let
   #   """)
   #   print(y[0]['test'])
   # ''
-  writePyPy3 = makePythonWriter pkgs.pypy3 pkgs.pypy3Packages;
+  writePyPy3 = makePythonWriter pkgs.pypy3 pkgs.pypy3Packages buildPackages.pypy3Packages;
 
   # writePyPy3Bin takes the same arguments as writePyPy3 but outputs a directory (like writeScriptBin)
   writePyPy3Bin = name:

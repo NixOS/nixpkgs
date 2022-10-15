@@ -156,6 +156,14 @@ let cfg = config.services.xserver.libinput;
           '';
       };
 
+      tappingButtonMap = mkOption {
+        type = types.nullOr (types.enum [ "lrm" "lmr" ]);
+        default = null;
+        description = lib.mdDoc ''
+          Set the button mapping for 1/2/3-finger taps to left/right/middle or left/middle/right, respectively.
+        '';
+      };
+
       tappingDragLock = mkOption {
         type = types.bool;
         default = true;
@@ -220,6 +228,7 @@ let cfg = config.services.xserver.libinput;
       Option "HorizontalScrolling" "${xorgBool cfg.${deviceType}.horizontalScrolling}"
       Option "SendEventsMode" "${cfg.${deviceType}.sendEventsMode}"
       Option "Tapping" "${xorgBool cfg.${deviceType}.tapping}"
+      ${optionalString (cfg.${deviceType}.tappingButtonMap != null) ''Option "TappingButtonMap" "${cfg.${deviceType}.tappingButtonMap}"''}
       Option "TappingDragLock" "${xorgBool cfg.${deviceType}.tappingDragLock}"
       Option "DisableWhileTyping" "${xorgBool cfg.${deviceType}.disableWhileTyping}"
       ${cfg.${deviceType}.additionalOptions}
@@ -241,6 +250,7 @@ in {
       "horizontalScrolling"
       "sendEventsMode"
       "tapping"
+      "tappingButtonMap"
       "tappingDragLock"
       "transformationMatrix"
       "disableWhileTyping"
@@ -250,7 +260,7 @@ in {
   options = {
 
     services.xserver.libinput = {
-      enable = mkEnableOption "libinput";
+      enable = mkEnableOption (lib.mdDoc "libinput");
       mouse = mkConfigForDevice "mouse";
       touchpad = mkConfigForDevice "touchpad";
     };

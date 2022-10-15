@@ -17,28 +17,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "duckdb";
-  version = "0.4.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pQ/t26dv9ZWLl0MHcAn0sgxryW2T2hM8XyOkXyfC5CY=";
+    sha256 = "sha256-qzDQFS2ogQ6hqTCddHnttWF365007Labnn4BmHB219k=";
   };
-
-  patches = [
-    ./version.patch
-    (fetchpatch {
-      name = "fix-tpce-test.patch";
-      url = "https://github.com/duckdb/duckdb/commit/82e13a4bb9f0683af6c52468af2fb903cce4286d.patch";
-      sha256 = "sha256-m0Bs0DOJQtkadbKZKk88NHyBFJkjxXUsiWYciuRIJLU=";
-    })
-    (fetchpatch {
-      name = "fix-list-type-metadata.patch";
-      url = "https://github.com/duckdb/duckdb/commit/26d123fdc57273903573c72b1ddafc52f365e378.patch";
-      sha256 = "sha256-ttqs5EjeSLhZQOXc43Y5/N5IYSESQTD1FZWV1uJ15Fo=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt --subst-var-by DUCKDB_VERSION "v${version}"
@@ -52,8 +38,6 @@ stdenv.mkDerivation rec {
     "-DBUILD_JSON_EXTENSION=ON"
     "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
     "-DBUILD_PARQUET_EXTENSION=ON"
-    "-DBUILD_REST=ON"
-    "-DBUILD_SUBSTRAIT_EXTENSION=ON"
     "-DBUILD_TPCDS_EXTENSION=ON"
     "-DBUILD_TPCE=ON"
     "-DBUILD_TPCH_EXTENSION=ON"
@@ -63,7 +47,9 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
-  preInstallCheck = lib.optionalString stdenv.isDarwin ''
+  preInstallCheck = ''
+    export HOME="$(mktemp -d)"
+  '' + lib.optionalString stdenv.isDarwin ''
     export DYLD_LIBRARY_PATH="$out/lib''${DYLD_LIBRARY_PATH:+:}''${DYLD_LIBRARY_PATH}"
   '';
 

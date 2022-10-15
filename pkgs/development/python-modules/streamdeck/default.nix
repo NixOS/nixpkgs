@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "streamdeck";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0116a376afc18f3abbf79cc1a4409f81472e19197d5641b9e97e697d105cbdc0";
+    sha256 = "sha256-XhNB/flNju2XdOMbVo7X4dhGCqNEV1314PDFC9Ma3nw=";
   };
 
   patches = [

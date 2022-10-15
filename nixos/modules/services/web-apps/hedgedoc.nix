@@ -32,7 +32,7 @@ in
   ];
 
   options.services.hedgedoc = {
-    enable = mkEnableOption "the HedgeDoc Markdown Editor";
+    enable = mkEnableOption (lib.mdDoc "the HedgeDoc Markdown Editor");
 
     groups = mkOption {
       type = types.listOf types.str;
@@ -51,7 +51,7 @@ in
     };
 
     settings = let options = {
-      debug = mkEnableOption "debug mode";
+      debug = mkEnableOption (lib.mdDoc "debug mode");
       domain = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -189,9 +189,9 @@ in
       allowAnonymousEdits = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          Whether to allow guests to edit existing notes with the `freely' permission,
-          when <option>allowAnonymous</option> is enabled.
+        description = lib.mdDoc ''
+          Whether to allow guests to edit existing notes with the `freely` permission,
+          when {option}`allowAnonymous` is enabled.
         '';
       };
       allowFreeURL = mkOption {
@@ -933,11 +933,19 @@ in
                 Required group names.
               '';
             };
+            providerName = mkOption {
+              type = types.str;
+              default = "";
+              example = "My institution";
+              description = lib.mdDoc ''
+                Optional name to be displayed at login form indicating the SAML provider.
+              '';
+            };
             attribute = {
               id = mkOption {
                 type = types.str;
                 default = "";
-                description = ''
+                description = lib.mdDoc ''
                   Attribute map for `id'.
                   Defaults to `NameID' of SAML response.
                 '';
@@ -945,7 +953,7 @@ in
               username = mkOption {
                 type = types.str;
                 default = "";
-                description = ''
+                description = lib.mdDoc ''
                   Attribute map for `username'.
                   Defaults to `NameID' of SAML response.
                 '';
@@ -953,10 +961,10 @@ in
               email = mkOption {
                 type = types.str;
                 default = "";
-                description = ''
-                  Attribute map for `email'.
-                  Defaults to `NameID' of SAML response if
-                  <option>identifierFormat</option> has
+                description = lib.mdDoc ''
+                  Attribute map for `email`.
+                  Defaults to `NameID` of SAML response if
+                  {option}`identifierFormat` has
                   the default value.
                 '';
               };
@@ -982,29 +990,27 @@ in
       type = with types; nullOr path;
       default = null;
       example = "/var/lib/hedgedoc/hedgedoc.env";
-      description = ''
-        Environment file as defined in <citerefentry>
-        <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
-        </citerefentry>.
+      description = lib.mdDoc ''
+        Environment file as defined in {manpage}`systemd.exec(5)`.
 
         Secrets may be passed to the service without adding them to the world-readable
         Nix store, by specifying placeholder variables as the option value in Nix and
         setting these variables accordingly in the environment file.
 
-        <programlisting>
+        ```
           # snippet of HedgeDoc-related config
           services.hedgedoc.configuration.dbURL = "postgres://hedgedoc:\''${DB_PASSWORD}@db-host:5432/hedgedocdb";
           services.hedgedoc.configuration.minio.secretKey = "$MINIO_SECRET_KEY";
-        </programlisting>
+        ```
 
-        <programlisting>
+        ```
           # content of the environment file
           DB_PASSWORD=verysecretdbpassword
           MINIO_SECRET_KEY=verysecretminiokey
-        </programlisting>
+        ```
 
         Note that this file needs to be available on the host on which
-        <literal>HedgeDoc</literal> is running.
+        `HedgeDoc` is running.
       '';
     };
 

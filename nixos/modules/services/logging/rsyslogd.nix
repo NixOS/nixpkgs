@@ -48,10 +48,10 @@ in
       defaultConfig = mkOption {
         type = types.lines;
         default = defaultConf;
-        description = ''
-          The default <filename>syslog.conf</filename> file configures a
+        description = lib.mdDoc ''
+          The default {file}`syslog.conf` file configures a
           fairly standard setup of log files, which can be extended by
-          means of <varname>extraConfig</varname>.
+          means of {var}`extraConfig`.
         '';
       };
 
@@ -59,9 +59,9 @@ in
         type = types.lines;
         default = "";
         example = "news.* -/var/log/news";
-        description = ''
-          Additional text appended to <filename>syslog.conf</filename>,
-          i.e. the contents of <varname>defaultConfig</varname>.
+        description = lib.mdDoc ''
+          Additional text appended to {file}`syslog.conf`,
+          i.e. the contents of {var}`defaultConfig`.
         '';
       };
 

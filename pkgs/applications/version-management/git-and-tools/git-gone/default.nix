@@ -1,29 +1,27 @@
 { lib
 , stdenv
-, fetchFromGitea
+, fetchFromGitHub
 , rustPlatform
-, libiconv
 , Security
 , installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-gone";
-  version = "0.3.8";
+  version = "0.4.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "flausch";
-    repo = pname;
+  src = fetchFromGitHub {
+    owner = "lunaryorn";
+    repo = "git-gone";
     rev = "v${version}";
-    sha256 = "sha256-hKbq2rJwEZI3391RsZXsQSjjp7rSqglUckRDYAu42KE=";
+    sha256 = "sha256-aKBNi797aMPawxD+BLpk0sazXz2g0XTzmDpR/mk07no=";
   };
 
-  cargoSha256 = "sha256-gBQ4V8Bwx6Di8aVnOYwx0UZZIIOFxZAXT7Tl1Yli0Fk=";
+  cargoSha256 = "sha256-vO1ePqDIy5HEBauO3OkMCovrgtIVB9biJExw/q89ivE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   postInstall = ''
     installManPage git-gone.1
@@ -31,8 +29,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Cleanup stale Git branches of merge requests";
-    homepage = "https://codeberg.org/flausch/git-gone";
-    changelog = "https://codeberg.org/flausch/git-gone/raw/tag/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/lunaryorn/git-gone";
+    changelog = "https://github.com/lunaryorn/git-gone/raw/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
   };

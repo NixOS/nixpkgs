@@ -7,8 +7,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cert-manager";
     repo = "cert-manager";
-    rev = "v${version}";
-    hash = "sha256-Z1aJ18X4mfJPlCPBC7QgfdX5Tk4+PK8mYoJZhGwz9ec=";
+    rev = "4486c01f726f17d2790a8a563ae6bc6e98465505";
+    sha256 = "1rzm6dn88nc2c8kayg1y9r7gkmbx42s0ph93ji7z56gqqpbqjmk7";
   };
 
   vendorSha256 = "sha256-45+tZZAEHaLdTN1NQCueJVTx5x2IanwDl+Y9MELqdBE=";
@@ -19,6 +19,8 @@ buildGoModule rec {
     "-s" "-w"
     "-X github.com/cert-manager/cert-manager/cmd/ctl/pkg/build.name=cmctl"
     "-X github.com/cert-manager/cert-manager/cmd/ctl/pkg/build/commands.registerCompletion=true"
+    "-X github.com/cert-manager/cert-manager/pkg/util.AppVersion=v${version}"
+    "-X github.com/cert-manager/cert-manager/pkg/util.AppGitCommit=${src.rev}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -46,7 +48,6 @@ buildGoModule rec {
     downloadPage = "https://github.com/cert-manager/cert-manager";
     license = licenses.asl20;
     homepage = "https://cert-manager.io/";
-    maintainers = with maintainers; [ joshvanl superherointj ];
+    maintainers = with maintainers; [ joshvanl ];
   };
 }
-

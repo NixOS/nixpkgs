@@ -5,6 +5,7 @@
 , pyserial
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , six
 }:
 
@@ -21,6 +22,10 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-rGwfGq3zdoG9NCGqVN29Q4bWApk5B6CRdsW9ctWgOec=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     future

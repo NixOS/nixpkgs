@@ -91,7 +91,7 @@ in
 
     systemd.services.post-resume =
       { description = "Post-Resume Actions";
-        after = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" ];
+        after = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" "suspend-then-hibernate.target" ];
         script =
           ''
             /run/current-system/systemd/bin/systemctl try-restart post-resume.target

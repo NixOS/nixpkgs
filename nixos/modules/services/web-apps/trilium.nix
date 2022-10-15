@@ -24,7 +24,7 @@ in
 {
 
   options.services.trilium-server = with lib; {
-    enable = mkEnableOption "trilium-server";
+    enable = mkEnableOption (lib.mdDoc "trilium-server");
 
     dataDir = mkOption {
       type = types.str;

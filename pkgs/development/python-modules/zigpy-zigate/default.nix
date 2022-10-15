@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, gpiozero
 , mock
 , pyserial
 , pyserial-asyncio
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy-zigate";
-  version = "0.9.0";
+  version = "0.10.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,11 +22,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-zigate";
-    rev = "v${version}";
-    hash = "sha256-rFmcgfn87XS1fvbSdJG6pItXRMkeogp4faKMe7pCxkM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Vb87G+R4SvAhCF3h/U5Q4/avxPgfIjklWdWGaiIWGhk=";
   };
 
   propagatedBuildInputs = [
+    gpiozero
     pyserial
     pyserial-asyncio
     pyusb

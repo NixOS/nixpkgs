@@ -3,6 +3,7 @@
 , qtwebchannel
 , qtpositioning
 , qtwebsockets
+, buildPackages
 , bison
 , coreutils
 , flex
@@ -63,11 +64,12 @@
 , lcms2
 , re2
 , libkrb5
+, mesa
 , xkeyboard_config
 , enableProprietaryCodecs ? true
 }:
 
-qtModule rec {
+qtModule {
   pname = "qtwebengine";
   qtInputs = [ qtdeclarative qtwebchannel qtwebsockets qtpositioning ];
   nativeBuildInputs = [
@@ -92,6 +94,12 @@ qtModule rec {
   # which cannot be set at the same time as -Wformat-security
   hardeningDisable = [ "format" ];
 
+  patches = [
+    # fixes consistent crashing in github on 6.4.0, can probably remove when there is a patch release
+    # https://codereview.qt-project.org/c/qt/qtwebengine/+/436316
+    ../patches/qtwebengine-fix.patch
+  ];
+
   postPatch = ''
     # Patch Chromium build tools
     (
@@ -100,10 +108,13 @@ qtModule rec {
       # Manually fix unsupported shebangs
       substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
         --replace "/usr/bin/env -S make -f" "/usr/bin/make -f" || true
-      substituteInPlace third_party/webgpu-cts/src/tools/deno \
+      substituteInPlace third_party/webgpu-cts/src/tools/run_deno \
         --replace "/usr/bin/env -S deno" "/usr/bin/deno" || true
       patchShebangs .
     )
+
+    substituteInPlace cmake/Functions.cmake \
+      --replace "/bin/bash" "${buildPackages.bash}/bin/bash"
 
     sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
       src/3rdparty/chromium/device/udev_linux/udev?_loader.cc
@@ -208,6 +219,7 @@ qtModule rec {
     pipewire
 
     libkrb5
+    mesa
   ];
 
   buildInputs = [

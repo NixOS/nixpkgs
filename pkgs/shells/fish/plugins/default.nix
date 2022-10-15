@@ -8,6 +8,8 @@ lib.makeScope newScope (self: with self; {
 
   clownfish = callPackage ./clownfish.nix { };
 
+  bass = callPackage ./bass.nix { };
+
   done = callPackage ./done.nix { };
 
   # Fishtape 2.x and 3.x aren't compatible,

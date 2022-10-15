@@ -3,8 +3,6 @@
 , cinnamon-settings-daemon
 , cinnamon-translations
 , dbus-glib
-, docbook_xsl
-, docbook_xml_dtd_412
 , glib
 , gsettings-desktop-schemas
 , gtk3
@@ -19,8 +17,7 @@
 , stdenv
 , systemd
 , wrapGAppsHook
-, xapps
-, xmlto
+, xapp
 , xorg
 , libexecinfo
 , pango
@@ -28,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-session";
-  version = "5.2.0";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-E5ascwLnpa5NSBAPo9dXRhoraUntzDPHVV32uDU4U8k=";
+    hash = "sha256-m16nf3eC15ZT8eDvRTylBfxsnShkU1Sm8J9qcRGeGQo=";
   };
 
   patches = [
@@ -49,7 +46,7 @@ stdenv.mkDerivation rec {
     pango
     xorg.libX11
     xorg.libXext
-    xapps
+    xapp
     xorg.libXau
     xorg.libXcomposite
 
@@ -73,18 +70,12 @@ stdenv.mkDerivation rec {
     ninja
     wrapGAppsHook
     libexecinfo
-    docbook_xsl
-    docbook_xml_dtd_412
     python3
     pkg-config
     libxslt
-    xmlto
   ];
 
   mesonFlags = [
-    # TODO: https://github.com/NixOS/nixpkgs/issues/36468
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
-    "-Dgconf=false"
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
   ];

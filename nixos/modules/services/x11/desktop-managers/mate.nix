@@ -19,7 +19,7 @@ in
         description = lib.mdDoc "Enable the MATE desktop environment";
       };
 
-      debug = mkEnableOption "mate-session debug messages";
+      debug = mkEnableOption (lib.mdDoc "mate-session debug messages");
     };
 
     environment.mate.excludePackages = mkOption {

@@ -15,23 +15,16 @@
 
 let
   pname = "zerotierone";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
-    sha256 = "sha256-2lxXgQArHTFCuSBbKRSaLka42p2INLDg0z3TZ+J5msc=";
+    sha256 = "sha256-Y0klfE7ANQl1uYMkRg+AaIiJYSVPT6zME7tDMg2xbOk=";
   };
 in stdenv.mkDerivation {
   inherit pname version src;
-
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    src = "${src}/zeroidc";
-    name = "${pname}-${version}";
-    sha256 = "sha256-Q9uBUD5xxo5gcTQTedVqQv+Z7B1TTPWtaTSuWo7WEPM=";
-  };
-  postPatch = "cp ${src}/zeroidc/Cargo.lock Cargo.lock";
 
   preConfigure = ''
     patchShebangs ./doc/build.sh
@@ -41,12 +34,17 @@ in stdenv.mkDerivation {
     substituteInPlace ./make-linux.mk \
       --replace '-march=armv6zk' "" \
       --replace '-mcpu=arm1176jzf-s' ""
+
+    # Upstream does not define the cargo settings necessary to use the vendorized rust-jwt version, so it has to be added manually.
+    # Can be removed once ZeroTierOne's zeroidc no longer uses a git url in Cargo.toml for jwt
+    echo '[source."https://github.com/glimberg/rust-jwt"]
+git = "https://github.com/glimberg/rust-jwt"
+replace-with = "vendored-sources"' >> ./zeroidc/.cargo/config.toml
   '';
 
   nativeBuildInputs = [
     pkg-config
     ronn
-    rustPlatform.cargoSetupHook
     rustPlatform.rust.cargo
     rustPlatform.rust.rustc
   ];

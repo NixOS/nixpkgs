@@ -13,6 +13,8 @@ let
       inherit sha256;
     };
 
+    patches = [ ./0001-Setup-remove-custom-dbuser-creation-behavior.patch ];
+
     passthru.tests = nixosTests.nextcloud;
 
     installPhase = ''
@@ -46,13 +48,13 @@ in {
   '';
 
   nextcloud23 = generic {
-    version = "23.0.7";
-    sha256 = "89a53d3447d1dcb7ea382d18accf52223040336d08899f0b7568c6dd8a36cd50";
+    version = "23.0.10";
+    sha256 = "c68cff7f40b1e73e8d173f068e7d9c02d37e3f94a6a36a556a49c3ff5def4267";
   };
 
   nextcloud24 = generic {
-    version = "24.0.3";
-    sha256 = "320c81f9b902922b4bcef3eacf858596a14347fd45bddd26dac198562d212439";
+    version = "24.0.6";
+    sha256 = "b26dff9980a47e7e722805fdbbf87e07f59a3817b03ecc32698e028e9baf0301";
   };
 
   # tip: get the sha with:

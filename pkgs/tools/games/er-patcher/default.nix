@@ -6,13 +6,13 @@
 
 runCommandLocal "er-patcher" rec {
   pname = "er-patcher";
-  version = "1.04-1";
+  version = "1.06-2";
 
   src = fetchFromGitHub {
     owner = "gurrgur";
     repo = "er-patcher";
     rev = "v${version}";
-    sha256 = "sha256-SnqYGtdtl1KMwUAWvdPK0heHMBtwpH2Jk6lieng6ngw=";
+    sha256 = "sha256-rFIuswn55FNVmBoDfIpG2cKxybNDaTwOeIUFFoncGF0=";
   };
 
   buildInputs = [

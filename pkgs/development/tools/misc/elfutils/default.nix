@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, pkg-config, musl-fts
 , musl-obstack, m4, zlib, zstd, bzip2, bison, flex, gettext, xz, setupDebugInfoDirs
 , argp-standalone
-, enableDebuginfod ? false, sqlite, curl, libmicrohttpd_0_9_70, libarchive
+, enableDebuginfod ? false, sqlite, curl, libmicrohttpd, libarchive
 , gitUpdater
 }:
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableDebuginfod [
     sqlite
     curl
-    libmicrohttpd_0_9_70
+    libmicrohttpd
     libarchive
   ];
 
@@ -79,7 +79,6 @@ stdenv.mkDerivation rec {
   doInstallCheck = !stdenv.hostPlatform.isMusl;
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     url = "https://sourceware.org/git/elfutils.git";
     rev-prefix = "elfutils-";
   };

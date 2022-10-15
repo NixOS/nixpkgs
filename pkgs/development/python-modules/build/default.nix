@@ -3,7 +3,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , filelock
-, flit-core
 , importlib-metadata
 , packaging
 , pep517
@@ -12,6 +11,7 @@
 , pytest-xdist
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , toml
 , tomli
 }:
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    flit-core
+    setuptools
   ];
 
   propagatedBuildInputs = [

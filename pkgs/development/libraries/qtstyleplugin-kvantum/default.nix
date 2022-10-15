@@ -1,25 +1,43 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, qmake, qtbase, qtsvg, qtx11extras, kwindowsystem
-, libX11, libXext, qttools, wrapQtAppsHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, qmake
+, qtbase
+, qtsvg
+, qtx11extras
+, kwindowsystem
+, libX11
+, libXext
+, qttools
+, wrapQtAppsHook
 , gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "qtstyleplugin-kvantum";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "Kvantum";
     rev = "V${version}";
-    sha256 = "chdtcx73mfr/b1P3yVevx0m7HkMFzEYG7YLuhSyG7rk=";
+    sha256 = "DJRTOpmmiB3VivZt66qaQwz7tp+sEMP+3E0dwUAkvXU=";
   };
 
   nativeBuildInputs = [
-    qmake qttools wrapQtAppsHook
+    qmake
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase qtsvg qtx11extras kwindowsystem libX11 libXext
+    qtbase
+    qtsvg
+    qtx11extras
+    kwindowsystem
+    libX11
+    libXext
   ];
 
   sourceRoot = "source/Kvantum";
@@ -40,8 +58,6 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
-    attrPath = "libsForQt5.${pname}";
     rev-prefix = "V";
   };
 
@@ -51,6 +67,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     broken = lib.versionOlder qtbase.version "5.14";
-    maintainers = [ maintainers.bugworm ];
+    maintainers = [ maintainers.romildo ];
   };
 }

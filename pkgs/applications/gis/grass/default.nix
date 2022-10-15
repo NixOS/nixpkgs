@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VK9FCqIwHGmeJe5lk12lpAGcsC1aPRBiI+XjACXjDd4=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite
-  readline ffmpeg makeWrapper netcdf geos postgresql libmysqlclient blas
+  readline ffmpeg netcdf geos postgresql libmysqlclient blas
   libLAS proj-datumgrid zstd wrapGAppsHook ]
     ++ lib.optionals stdenv.isLinux [ cairo pdal wxGTK31 ]
     ++ lib.optional stdenv.isDarwin wxmac

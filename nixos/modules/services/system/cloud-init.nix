@@ -39,7 +39,7 @@ in
       btrfs.enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Allow the cloud-init service to operate `btrfs` filesystem.
         '';
       };
@@ -47,7 +47,7 @@ in
       ext4.enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Allow the cloud-init service to operate `ext4` filesystem.
         '';
       };

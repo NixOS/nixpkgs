@@ -1,6 +1,14 @@
-{ lib, pythonOlder, fetchFromGitHub, buildPythonPackage
-, six, enum34, pyasn1, cryptography
-, pytestCheckHook }:
+{ lib
+, pythonOlder
+, fetchFromGitHub
+, fetchpatch
+, buildPythonPackage
+, six
+, enum34
+, pyasn1
+, cryptography
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pgpy";
@@ -10,8 +18,18 @@ buildPythonPackage rec {
     owner = "SecurityInnovation";
     repo = "PGPy";
     rev = "v${version}";
-    sha256 = "03pch39y3hi4ici6y6lvz0j0zram8dw2wvnmq1zyjy3vyvm1ms4a";
+    hash = "sha256-iuga6vZ7eOl/wNVuLnhDVeUPJPibGm8iiyTC4dOA7A4=";
   };
+
+  patches = [
+    # Fixes the issue in https://github.com/SecurityInnovation/PGPy/issues/402.
+    # by pulling in https://github.com/SecurityInnovation/PGPy/pull/403.
+    (fetchpatch {
+      name = "crytography-38-support.patch";
+      url = "https://github.com/SecurityInnovation/PGPy/commit/d84597eb8417a482433ff51dc6b13060d4b2e686.patch";
+      hash = "sha256-dviXCSGtPguROHVZ1bt/eEfpATjehm8jZ5BeVjxdb8U=";
+    })
+  ];
 
   propagatedBuildInputs = [
     six

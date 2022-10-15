@@ -1,17 +1,15 @@
-{ lib, rustPlatform, fetchFromSourcehut }:
+{ lib, rustPlatform, fetchCrate }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-depgraph";
-  version = "1.2.5";
+  version = "1.3.0";
 
-  src = fetchFromSourcehut {
-    owner = "~jplatte";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-ewlrxxHnsXBWSMPAlxTfrHj23jMiThkDSJhEsChO/sM=";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-mlbS9EI/ltxnWfpci9hK9QwYpA/nII+wc2IRSHrmNGI=";
   };
 
-  cargoSha256 = "sha256-Ce13vJ5zE63hHVkg/WFdz3LrASj7Xw6nqOO64uALOeQ=";
+  cargoSha256 = "sha256-9CKFZmkFiip6iQVkBmy/XoMEoyMhlKNRyI8oDHaAILc=";
 
   meta = with lib; {
     description = "Create dependency graphs for cargo projects using `cargo metadata` and graphviz";

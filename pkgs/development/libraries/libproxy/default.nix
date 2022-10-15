@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , cmake
 , zlib
@@ -27,6 +29,14 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-pqj1LwRdOK2CUu3hYIsogQIXxWzShDuKEbDTbtWkgnQ=";
   };
+
+  patches = lib.optionals stdenv.isDarwin [
+    # https://github.com/libproxy/libproxy/pull/189
+    (fetchpatch {
+      url = "https://github.com/libproxy/libproxy/commit/4331b9db427ce2c25ff5eeb597bec4bc35ed1a0b.patch";
+      sha256 = "sha256-uTh3rYVvEke1iWVHsT3Zj2H1F+gyLrffcmyt0JEKaCA=";
+    })
+  ];
 
   outputs = [ "out" "dev" "py3" ];
 

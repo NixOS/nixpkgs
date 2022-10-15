@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchurl, b43FirmwareCutter }:
+{ lib, stdenvNoCC, fetchurl, b43FirmwareCutter }:
 
 let version = "5.100.138"; in
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "b43-firmware";
   inherit version;
 
@@ -24,4 +24,3 @@ stdenv.mkDerivation {
     license = lib.licenses.unfree;
   };
 }
-

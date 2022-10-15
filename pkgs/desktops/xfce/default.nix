@@ -5,13 +5,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   genericUpdater = pkgs.genericUpdater;
 
-  archiveUpdater = { category, pname, version }:
-    pkgs.httpTwoLevelsUpdater {
-      inherit pname version;
-      attrPath = "xfce.${pname}";
-      url = "https://archive.xfce.org/src/${category}/${pname}";
-    };
-
   mkXfceDerivation = callPackage ./mkXfceDerivation.nix { };
 
   automakeAddFlags = pkgs.makeSetupHook { } ./automakeAddFlags.sh;
@@ -143,6 +136,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   xfce4-sensors-plugin = callPackage ./panel-plugins/xfce4-sensors-plugin { };
 
   xfce4-systemload-plugin = callPackage ./panel-plugins/xfce4-systemload-plugin { };
+
+  xfce4-time-out-plugin = callPackage ./panel-plugins/xfce4-time-out-plugin { };
 
   xfce4-timer-plugin = callPackage ./panel-plugins/xfce4-timer-plugin { };
 

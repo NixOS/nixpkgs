@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libglvnd";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "glvnd";
     repo = "libglvnd";
     rev = "v${version}";
-    sha256 = "06y7m486kgg566krbhb0gvmpzy6ayd98psnrmmkrnw8p513lg8k3";
+    sha256 = "sha256-yXSuG8UwD5KZbn4ysDStTdOGD4uHigjOhazlHT9ndNs=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config python3 addOpenGLRunpath ];

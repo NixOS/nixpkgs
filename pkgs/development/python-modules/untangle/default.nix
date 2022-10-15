@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, defusedxml }:
+{ lib, buildPythonPackage, fetchFromGitHub, unittestCheckHook, defusedxml }:
 
 buildPythonPackage rec {
   pname = "untangle";
@@ -16,9 +16,9 @@ buildPythonPackage rec {
     defusedxml
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests
-  '';
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "tests" ];
 
   meta = with lib; {
     description = "Convert XML documents into Python objects";

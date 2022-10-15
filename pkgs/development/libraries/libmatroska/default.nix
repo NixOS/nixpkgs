@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config
 , libebml }:
 
 stdenv.mkDerivation rec {
@@ -11,6 +11,15 @@ stdenv.mkDerivation rec {
     rev    = "release-${version}";
     sha256 = "01dg12ndxfdqgjx5v2qy4mff6xjdxglywyg82sr3if5aw6rp3dji";
   };
+
+  # in master post 1.6.3, see https://github.com/Matroska-Org/libmatroska/issues/62
+  patches = [
+    (fetchpatch {
+      name = "fix-pkg-config.patch";
+      url = "https://github.com/Matroska-Org/libmatroska/commit/53f6ea573878621871bca5f089220229fcb33a3b.patch";
+      sha256 = "1lcxl3n32kk5x4aa4ja7p68km7qb2bwscavpv7qdmbhp3w5ia0mk";
+    })
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 

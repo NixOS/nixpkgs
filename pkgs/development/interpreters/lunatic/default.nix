@@ -1,19 +1,26 @@
-{ lib, rustPlatform, fetchFromGitHub, cmake }:
+{ lib, rustPlatform, fetchFromGitHub, cmake, stdenv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lunatic";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "lunatic-solutions";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-gHG8jk23qTANbLNPH4Q+YusEkDZ/G33SARAsLVLrVPs=";
+    sha256 = "sha256-MQ10WwvUdqU4w9uA4H1+VRM29HXVtLMwfGvbM6VqS90=";
   };
 
-  cargoSha256 = "sha256-keu9lNYuOruU58YBPyqtDqBS/jjruK9GcYrKv7dGmlQ=";
+  cargoSha256 = "sha256-tNYA3YruI7VENmLbd3rmZr7BkqHp1HNOfzPTkIiixqA=";
 
   nativeBuildInputs = [ cmake ];
+
+  buildInputs = lib.optional stdenv.isDarwin Security;
+
+  checkFlags = [
+    # requires simd support which is not always available on hydra
+    "--skip=state::tests::import_filter_signature_matches"
+  ];
 
   meta = with lib; {
     description = "An Erlang inspired runtime for WebAssembly";

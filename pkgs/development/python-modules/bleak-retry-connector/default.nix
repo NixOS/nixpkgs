@@ -1,6 +1,7 @@
 { lib
 , async-timeout
 , bleak
+, dbus-fast
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "bleak-retry-connector";
-  version = "1.3.0";
+  version = "2.1.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,9 +20,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-WjjpehrYy9187C3wUDR3sfQG+2p6YbQfp4EwC5FbzGU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-fEdyo6QBmHWgl5o/ZIu/HM8GWp5t88awhb+7SPWngf0=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=bleak_retry_connector --cov-report=term-missing:skip-covered" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -30,6 +36,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     async-timeout
     bleak
+    dbus-fast
   ];
 
   checkInputs = [
@@ -37,10 +44,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=bleak_retry_connector --cov-report=term-missing:skip-covered" ""
-  '';
+  disabledTests = [
+    # broken mocking
+    "test_establish_connection_can_cache_services_services_missing"
+    "test_establish_connection_with_dangerous_use_cached_services"
+    "test_establish_connection_without_dangerous_use_cached_services"
+  ];
 
   pythonImportsCheck = [
     "bleak_retry_connector"

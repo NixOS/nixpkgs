@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "geopandas";
-  version = "0.11.0";
+  version = "0.11.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "geopandas";
     repo = "geopandas";
     rev = "v${version}";
-    hash = "sha256-w3F2Uqr/+DdG2Td5YmHdF/LII2y29rQkGK5ooMUcfRk=";
+    hash = "sha256-vL+zC8q7bif5pheq6pz7XRfzMKLaLQ0xDceTz0imw/E=";
   };
 
   propagatedBuildInputs = [

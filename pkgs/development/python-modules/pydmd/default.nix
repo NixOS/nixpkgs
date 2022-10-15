@@ -8,11 +8,12 @@
 , pytestCheckHook
 , pythonOlder
 , scipy
+, ezyrb
 }:
 
 buildPythonPackage rec {
   pname = "pydmd";
-  version = "0.4.0.post2207";
+  version = "0.4.0.post2210";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "mathLab";
     repo = "PyDMD";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-IiHNn8BXOl+eQdxwTrF8PQhDlsMOTj87ugpQ09kDTO4=";
+    sha256 = "sha256-2GSmd+OxdGW9XdLGL08Bnrz0WCtTAYQtYHf2gM5CFIE=";
   };
 
   propagatedBuildInputs = [
@@ -29,6 +30,7 @@ buildPythonPackage rec {
     matplotlib
     numpy
     scipy
+    ezyrb
   ];
 
   checkInputs = [

@@ -1,6 +1,9 @@
 { lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, help2man, python3,
   alsa-lib, xlibsWrapper, libxslt, systemd, libusb-compat-0_1, libftdi1 }:
 
+let
+  pythonEnv = python3.pythonForBuild.withPackages (p: with p; [ pyyaml setuptools ]);
+in
 stdenv.mkDerivation rec {
   pname = "lirc";
   version = "0.10.1";
@@ -34,6 +37,10 @@ stdenv.mkDerivation rec {
     # Pull fix for new pyyaml pending upstream inclusion
     #   https://sourceforge.net/p/lirc/git/merge-requests/39/
     substituteInPlace python-pkg/lirc/database.py --replace 'yaml.load(' 'yaml.safe_load('
+
+    # cant import '/build/lirc-0.10.1/python-pkg/lirc/_client.so' while cross-compiling to check the version
+    substituteInPlace python-pkg/setup.py \
+      --replace "VERSION='0.0.0'" "VERSION='${version}'"
   '';
 
   preConfigure = ''
@@ -41,10 +48,15 @@ stdenv.mkDerivation rec {
     touch lib/lirc/input_map.inc
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config help2man
-    (python3.withPackages (p: with p; [ pyyaml setuptools ])) ];
+  strictDeps = true;
 
-  buildInputs = [ alsa-lib xlibsWrapper libxslt systemd libusb-compat-0_1 libftdi1 ];
+  nativeBuildInputs = [ autoreconfHook help2man libxslt pythonEnv ];
+
+  depsBuildBuild = [ pkg-config ];
+
+  buildInputs = [ alsa-lib xlibsWrapper systemd libusb-compat-0_1 libftdi1 ];
+
+  DEVINPUT_HEADER = "include/linux/input-event-codes.h";
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -53,6 +65,7 @@ stdenv.mkDerivation rec {
     "--enable-uinput" # explicit activation because build env has no uinput
     "--enable-devinput" # explicit activation because build env has no /dev/input
     "--with-lockdir=/run/lirc/lock" # /run/lock is not writable for 'lirc' user
+    "PYTHON=${pythonEnv.interpreter}"
   ];
 
   installFlags = [

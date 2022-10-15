@@ -103,6 +103,11 @@ in mkLicense lset) ({
     fullName = "Apache License 2.0";
   };
 
+  bola11 = {
+    url = "https://blitiri.com.ar/p/bola/";
+    fullName = "Buena Onda License Agreement 1.1";
+  };
+
   boost = {
     spdxId = "BSL-1.0";
     fullName = "Boost Software License 1.0";
@@ -148,6 +153,11 @@ in mkLicense lset) ({
     fullName = ''BSD 4-clause "Original" or "Old" License'';
   };
 
+  bsdOriginalShortened = {
+    spdxId = "BSD-4-Clause-Shortened";
+    fullName = "BSD 4 Clause Shortened";
+  };
+
   bsdOriginalUC = {
     spdxId = "BSD-4-Clause-UC";
     fullName = "BSD 4-Clause University of California-Specific";
@@ -162,6 +172,11 @@ in mkLicense lset) ({
     fullName = "Business Source License 1.1";
     url = "https://mariadb.com/bsl11";
     free = false;
+  };
+
+  cal10 = {
+    fullName = "Cryptographic Autonomy License version 1.0 (CAL-1.0)";
+    url = "https://opensource.org/licenses/CAL-1.0";
   };
 
   capec = {
@@ -578,6 +593,11 @@ in mkLicense lset) ({
     fullName = "PNG Reference Library version 2";
   };
 
+  libssh2 = {
+    fullName = "libssh2 License";
+    url = "https://www.libssh2.org/license.html";
+  };
+
   libtiff = {
     spdxId = "libtiff";
     fullName = "libtiff License";
@@ -691,6 +711,11 @@ in mkLicense lset) ({
   ofl = {
     spdxId = "OFL-1.1";
     fullName = "SIL Open Font License 1.1";
+  };
+
+  oml = {
+    spdxId = "OML";
+    fullName = "Open Market License";
   };
 
   openldap = {
@@ -824,6 +849,11 @@ in mkLicense lset) ({
     fullName = "TCL/TK License";
   };
 
+  ucd = {
+    fullName = "Unicode Character Database License";
+    url = "https://fedoraproject.org/wiki/Licensing:UCD";
+  };
+
   ufl = {
     fullName = "Ubuntu Font License 1.0";
     url = "https://ubuntu.com/legal/font-licence";
@@ -876,6 +906,11 @@ in mkLicense lset) ({
     fullName = "Oracle VM VirtualBox Extension Pack Personal Use and Evaluation License (PUEL)";
     url = "https://www.virtualbox.org/wiki/VirtualBox_PUEL";
     free = false;
+  };
+
+  vol-sl = {
+    fullName = "Volatility Software License, Version 1.0";
+    url = "https://www.volatilityfoundation.org/license/vsl-v1.0";
   };
 
   vsl10 = {
@@ -947,11 +982,6 @@ in mkLicense lset) ({
   fdl13 = {
     spdxId = "GFDL-1.3";
     fullName = "GNU Free Documentation License v1.3";
-    deprecated = true;
-  };
-  gpl1 = {
-    spdxId = "GPL-1.0";
-    fullName = "GNU General Public License v1.0";
     deprecated = true;
   };
   gpl2 = {

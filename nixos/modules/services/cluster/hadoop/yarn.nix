@@ -31,7 +31,7 @@ in
 {
   options.services.hadoop.yarn = {
     resourcemanager = {
-      enable = mkEnableOption "Hadoop YARN ResourceManager";
+      enable = mkEnableOption (lib.mdDoc "Hadoop YARN ResourceManager");
       inherit restartIfChanged extraFlags extraEnv;
 
       openFirewall = mkOption {
@@ -43,7 +43,7 @@ in
       };
     };
     nodemanager = {
-      enable = mkEnableOption "Hadoop YARN NodeManager";
+      enable = mkEnableOption (lib.mdDoc "Hadoop YARN NodeManager");
       inherit restartIfChanged extraFlags extraEnv;
 
       resource = {
@@ -178,18 +178,18 @@ in
 
       services.hadoop.gatewayRole.enable = true;
 
-      services.hadoop.yarnSiteInternal = with cfg.yarn.nodemanager; {
-        "yarn.nodemanager.local-dirs" = localDir;
+      services.hadoop.yarnSiteInternal = with cfg.yarn.nodemanager; mkMerge [ ({
+        "yarn.nodemanager.local-dirs" = mkIf (localDir!= null) (concatStringsSep "," localDir);
         "yarn.scheduler.maximum-allocation-vcores" = resource.maximumAllocationVCores;
         "yarn.scheduler.maximum-allocation-mb" = resource.maximumAllocationMB;
         "yarn.nodemanager.resource.cpu-vcores" = resource.cpuVCores;
         "yarn.nodemanager.resource.memory-mb" = resource.memoryMB;
-      } // mkIf useCGroups {
+      }) (mkIf useCGroups {
         "yarn.nodemanager.linux-container-executor.cgroups.hierarchy" = "/hadoop-yarn";
         "yarn.nodemanager.linux-container-executor.resources-handler.class" = "org.apache.hadoop.yarn.server.nodemanager.util.CgroupsLCEResourcesHandler";
         "yarn.nodemanager.linux-container-executor.cgroups.mount" = "true";
         "yarn.nodemanager.linux-container-executor.cgroups.mount-path" = "/run/wrappers/yarn-nodemanager/cgroup";
-      };
+      })];
 
       networking.firewall.allowedTCPPortRanges = [
         (mkIf (cfg.yarn.nodemanager.openFirewall) {from = 1024; to = 65535;})

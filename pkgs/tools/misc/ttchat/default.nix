@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ttchat";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "atye";
     repo = "ttchat";
     rev = "v${version}";
-    sha256 = "sha256-Km8aBThs2h8vVpQQaN/OuDeQcrewhP0hMMRuU8/1Ilk=";
+    sha256 = "sha256-+fPARVS1ILxrigHpvb+iNqz7Xw7+c/LmHJEeRxhCbhQ=";
   };
 
-  vendorSha256 = "sha256-pJAwx7RmD2sSHsz1DxtsU7bjC/b0JujlrFeGL6zmTiI=";
+  vendorSha256 = "sha256-XWCjnHg0P7FCuiMjCV6ijy60h0u776GyiIC/k/KMW38=";
 
   meta = with lib; {
     description = "Connect to a Twitch channel's chat from your terminal";

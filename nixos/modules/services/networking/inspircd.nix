@@ -12,7 +12,7 @@ in {
 
   options = {
     services.inspircd = {
-      enable = lib.mkEnableOption "InspIRCd";
+      enable = lib.mkEnableOption (lib.mdDoc "InspIRCd");
 
       package = lib.mkOption {
         type = lib.types.package;

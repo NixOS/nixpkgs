@@ -21,14 +21,14 @@
 }:
 
 mkDerivation rec {
-  version = "1.2.1";
+  version = "1.2.3";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${version}";
-    sha256 = "sha256-qcfmePPSuaCydATNhUCZ9ee9tV1KqclP9PPX6UPILTM=";
+    sha256 = "sha256-jMl2kXpHVXH/TfdPbq6bzdpNec6f1AUWsMNZzaAvK/I=";
   };
 
   buildInputs = [

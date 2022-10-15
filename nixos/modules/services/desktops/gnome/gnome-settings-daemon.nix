@@ -34,7 +34,7 @@ in
 
     services.gnome.gnome-settings-daemon = {
 
-      enable = mkEnableOption "GNOME Settings Daemon";
+      enable = mkEnableOption (lib.mdDoc "GNOME Settings Daemon");
 
     };
 

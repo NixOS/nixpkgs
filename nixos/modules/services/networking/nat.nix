@@ -319,7 +319,10 @@ in
         }
       ];
 
-      environment.systemPackages = [ pkgs.iptables ];
+      # Use the same iptables package as in config.networking.firewall.
+      # When the firewall is enabled, this should be deduplicated without any
+      # error.
+      environment.systemPackages = [ config.networking.firewall.package ];
 
       boot = {
         kernelModules = [ "nf_nat_ftp" ];
@@ -347,7 +350,7 @@ in
         description = "Network Address Translation";
         wantedBy = [ "network.target" ];
         after = [ "network-pre.target" "systemd-modules-load.service" ];
-        path = [ pkgs.iptables ];
+        path = [ config.networking.firewall.package ];
         unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 
         serviceConfig = {

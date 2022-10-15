@@ -8,19 +8,20 @@ let
   _kernel = kernel;
   pythonEnv = python3.withPackages (ps: with ps; [ six ]);
 in stdenv.mkDerivation rec {
-  version = "2.17.0";
+  version = "2.17.2";
   pname = "openvswitch";
 
   src = fetchurl {
-    url = "https://www.openvswitch.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-4Dv6t8qC2Bp9OjbeTzkKO1IQ4/OWV2cfkih3zU6m3HM=";
+    url = "https://www.openvswitch.org/releases/openvswitch-${version}.tar.gz";
+    sha256 = "sha256-ai4NtCutuMvK9/O+vVtemicBMZ3x0EKU6aennpRQTWk=";
   };
 
   kernel = optional (_kernel != null) _kernel.dev;
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [ util-linux openssl libcap_ng pythonEnv
-                  perl procps which ];
+  buildInputs = [
+    util-linux openssl libcap_ng pythonEnv perl procps which
+  ];
 
   configureFlags = [
     "--localstatedir=/var"

@@ -4,6 +4,7 @@
 , pythonOlder
 , fetchFromGitHub
 , fetchpatch
+
 # propagatedBuildInputs
 , babel
 , alabaster
@@ -23,7 +24,9 @@
 , sphinxcontrib-qthelp
 , sphinxcontrib-serializinghtml
 , sphinxcontrib-websupport
+
 # check phase
+, cython
 , html5lib
 , pytestCheckHook
 , typed-ast
@@ -31,7 +34,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "5.0.2";
+  version = "5.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -40,7 +43,7 @@ buildPythonPackage rec {
     owner = "sphinx-doc";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-kdwznYvs4szhC+qoL2Zsib9cU69fag1KhCXl8qIGkZU=";
+    hash = "sha256-dTgQNMRIn7ETm+1HgviOkWWOCmLX7Ez6DM9ChlI32mY=";
     postFetch = ''
       cd $out
       mv tests/roots/test-images/testimäge.png \
@@ -49,19 +52,7 @@ buildPythonPackage rec {
     '';
   };
 
-  patches = [
-    # https://github.com/sphinx-doc/sphinx/pull/10624
-    (fetchpatch {
-      name = "avoid-deprecated-docutils-0.19-api.patch";
-      sha256 = "sha256-QIrLkxnexNcfuI00UOeCpAamMLqqt4wxoVY1VA72jIw=";
-      url = "https://github.com/sphinx-doc/sphinx/commit/8d99168794ab8be0de1e6281d1b76af8177acd3d.patch";
-    })
-  ];
-
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "docutils>=0.14,<0.19" "docutils>=0.14"
-
     # remove impurity caused by date inclusion
     # https://github.com/sphinx-doc/sphinx/blob/master/setup.cfg#L4-L6
     substituteInPlace setup.cfg \
@@ -95,11 +86,16 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    cython
     html5lib
     pytestCheckHook
   ] ++ lib.optionals (pythonOlder "3.8") [
     typed-ast
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   disabledTests = [
     # requires network access

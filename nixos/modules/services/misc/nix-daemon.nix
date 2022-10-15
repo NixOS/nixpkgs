@@ -155,30 +155,29 @@ in
         type = types.enum [ "other" "batch" "idle" ];
         default = "other";
         example = "batch";
-        description = ''
+        description = lib.mdDoc ''
           Nix daemon process CPU scheduling policy. This policy propagates to
-          build processes. <literal>other</literal> is the default scheduling
-          policy for regular tasks. The <literal>batch</literal> policy is
-          similar to <literal>other</literal>, but optimised for
-          non-interactive tasks. <literal>idle</literal> is for extremely
+          build processes. `other` is the default scheduling
+          policy for regular tasks. The `batch` policy is
+          similar to `other`, but optimised for
+          non-interactive tasks. `idle` is for extremely
           low-priority tasks that should only be run when no other task
           requires CPU time.
 
-          Please note that while using the <literal>idle</literal> policy may
+          Please note that while using the `idle` policy may
           greatly improve responsiveness of a system performing expensive
           builds, it may also slow down and potentially starve crucial
           configuration updates during load.
 
-          <literal>idle</literal> may therefore be a sensible policy for
+          `idle` may therefore be a sensible policy for
           systems that experience only intermittent phases of high CPU load,
           such as desktop or portable computers used interactively. Other
-          systems should use the <literal>other</literal> or
-          <literal>batch</literal> policy instead.
+          systems should use the `other` or
+          `batch` policy instead.
 
           For more fine-grained resource control, please refer to
-          <citerefentry><refentrytitle>systemd.resource-control
-          </refentrytitle><manvolnum>5</manvolnum></citerefentry> and adjust
-          <option>systemd.services.nix-daemon</option> directly.
+          {manpage}`systemd.resource-control(5)` and adjust
+          {option}`systemd.services.nix-daemon` directly.
       '';
       };
 
@@ -228,14 +227,27 @@ in
                 The hostname of the build machine.
               '';
             };
+            protocol = mkOption {
+              type = types.enum [ null "ssh" "ssh-ng" ];
+              default = "ssh";
+              example = "ssh-ng";
+              description = lib.mdDoc ''
+                The protocol used for communicating with the build machine.
+                Use `ssh-ng` if your remote builder and your
+                local Nix version support that improved protocol.
+
+                Use `null` when trying to change the special localhost builder
+                without a protocol which is for example used by hydra.
+              '';
+            };
             system = mkOption {
               type = types.nullOr types.str;
               default = null;
               example = "x86_64-linux";
-              description = ''
+              description = lib.mdDoc ''
                 The system type the build machine can execute derivations on.
-                Either this attribute or <varname>systems</varname> must be
-                present, where <varname>system</varname> takes precedence if
+                Either this attribute or {var}`systems` must be
+                present, where {var}`system` takes precedence if
                 both are set.
               '';
             };
@@ -243,10 +255,10 @@ in
               type = types.listOf types.str;
               default = [ ];
               example = [ "x86_64-linux" "aarch64-linux" ];
-              description = ''
+              description = lib.mdDoc ''
                 The system types the build machine can execute derivations on.
-                Either this attribute or <varname>system</varname> must be
-                present, where <varname>system</varname> takes precedence if
+                Either this attribute or {var}`system` must be
+                present, where {var}`system` takes precedence if
                 both are set.
               '';
             };
@@ -265,7 +277,7 @@ in
               type = types.nullOr types.str;
               default = null;
               example = "/root/.ssh/id_buildhost_builduser";
-              description = ''
+              description = lib.mdDoc ''
                 The path to the SSH private key with which to authenticate on
                 the build machine. The private key must not have a passphrase.
                 If null, the building user (root on NixOS machines) must have an
@@ -298,11 +310,11 @@ in
               type = types.listOf types.str;
               default = [ ];
               example = [ "big-parallel" ];
-              description = ''
+              description = lib.mdDoc ''
                 A list of features mandatory for this builder. The builder will
                 be ignored for derivations that don't require all features in
                 this list. All mandatory features are automatically included in
-                <varname>supportedFeatures</varname>.
+                {var}`supportedFeatures`.
               '';
             };
             supportedFeatures = mkOption {
@@ -341,7 +353,7 @@ in
         type = types.attrs;
         internal = true;
         default = { };
-        description = "Environment variables used by Nix.";
+        description = lib.mdDoc "Environment variables used by Nix.";
       };
 
       nrBuildUsers = mkOption {
@@ -431,13 +443,14 @@ in
             };
             config = {
               from = mkDefault { type = "indirect"; id = name; };
-              to = mkIf (config.flake != null) (mkDefault
+              to = mkIf (config.flake != null) (mkDefault (
                 {
                   type = "path";
                   path = config.flake.outPath;
                 } // filterAttrs
-                (n: _: n == "lastModified" || n == "rev" || n == "revCount" || n == "narHash")
-                config.flake);
+                  (n: _: n == "lastModified" || n == "rev" || n == "revCount" || n == "narHash")
+                  config.flake
+              ));
             };
           }
         ));
@@ -563,13 +576,13 @@ in
             trusted-public-keys = mkOption {
               type = types.listOf types.str;
               example = [ "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs=" ];
-              description = ''
+              description = lib.mdDoc ''
                 List of public keys used to sign binary caches. If
-                <option>nix.settings.trusted-public-keys</option> is enabled,
+                {option}`nix.settings.trusted-public-keys` is enabled,
                 then Nix will use a binary from a binary cache if and only
-                if it is signed by <emphasis>any</emphasis> of the keys
+                if it is signed by *any* of the keys
                 listed here. By default, only the key for
-                <uri>cache.nixos.org</uri> is included.
+                `cache.nixos.org` is included.
               '';
             };
 
@@ -606,13 +619,13 @@ in
               type = types.listOf types.str;
               default = [ "*" ];
               example = [ "@wheel" "@builders" "alice" "bob" ];
-              description = ''
+              description = lib.mdDoc ''
                 A list of names of users (separated by whitespace) that are
                 allowed to connect to the Nix daemon. As with
-                <option>nix.settings.trusted-users</option>, you can specify groups by
-                prefixing them with <literal>@</literal>. Also, you can
-                allow all users by specifying <literal>*</literal>. The
-                default is <literal>*</literal>. Note that trusted users are
+                {option}`nix.settings.trusted-users`, you can specify groups by
+                prefixing them with `@`. Also, you can
+                allow all users by specifying `*`. The
+                default is `*`. Note that trusted users are
                 always allowed to connect.
               '';
             };
@@ -628,20 +641,17 @@ in
             sandbox-paths = { "/bin/sh" = "''${pkgs.busybox-sandbox-shell.out}/bin/busybox"; };
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           Configuration for Nix, see
-          <link xlink:href="https://nixos.org/manual/nix/stable/#sec-conf-file"/> or
-          <citerefentry>
-            <refentrytitle>nix.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry> for avalaible options.
+          <https://nixos.org/manual/nix/stable/#sec-conf-file> or
+          {manpage}`nix.conf(5)` for avalaible options.
           The value declared here will be translated directly to the key-value pairs Nix expects.
 
-          You can use <command>nix-instantiate --eval --strict '&lt;nixpkgs/nixos&gt;' -A config.nix.settings</command>
+          You can use {command}`nix-instantiate --eval --strict '<nixpkgs/nixos>' -A config.nix.settings`
           to view the current value. By default it is empty.
 
-          Nix configurations defined under <option>nix.*</option> will be translated and applied to this
-          option. In addition, configuration specified in <option>nix.extraOptions</option> which will be appended
+          Nix configurations defined under {option}`nix.*` will be translated and applied to this
+          option. In addition, configuration specified in {option}`nix.extraOptions` which will be appended
           verbatim to the resulting config file.
         '';
       };
@@ -673,13 +683,15 @@ in
         concatMapStrings
           (machine:
             (concatStringsSep " " ([
-              "${optionalString (machine.sshUser != null) "${machine.sshUser}@"}${machine.hostName}"
+              "${optionalString (machine.protocol != null) "${machine.protocol}://"}${optionalString (machine.sshUser != null) "${machine.sshUser}@"}${machine.hostName}"
               (if machine.system != null then machine.system else if machine.systems != [ ] then concatStringsSep "," machine.systems else "-")
               (if machine.sshKey != null then machine.sshKey else "-")
               (toString machine.maxJobs)
               (toString machine.speedFactor)
-              (concatStringsSep "," (machine.supportedFeatures ++ machine.mandatoryFeatures))
-              (concatStringsSep "," machine.mandatoryFeatures)
+              (let res = (machine.supportedFeatures ++ machine.mandatoryFeatures);
+               in if (res == []) then "-" else (concatStringsSep "," res))
+              (let res = machine.mandatoryFeatures;
+               in if (res == []) then "-" else (concatStringsSep "," machine.mandatoryFeatures))
             ]
             ++ optional (isNixAtLeast "2.4pre") (if machine.publicHostKey != null then machine.publicHostKey else "-")))
             + "\n"

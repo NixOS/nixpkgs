@@ -5,6 +5,7 @@
 , geopy
 , imageio
 , lxml
+, pandas
 , pillow
 , pytestCheckHook
 , python-dateutil
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "env-canada";
-  version = "0.5.24";
+  version = "0.5.25";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "michaeldavie";
     repo = "env_canada";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-R6X4TY0yrfSj30FXHmHHK6QBHAT3pb+UXjjZ3SW1SP8=";
+    sha256 = "sha256-UF04TAhgeb76bYisNYOAraw59K54WkX9a8QOtHywMTQ=";
   };
 
   propagatedBuildInputs = [
@@ -31,6 +32,7 @@ buildPythonPackage rec {
     geopy
     imageio
     lxml
+    pandas
     pillow
     python-dateutil
     voluptuous

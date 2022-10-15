@@ -1,9 +1,9 @@
 {
-  "version": "1.10.12-sc.1",
-  "rev": "v1.10.12-sc.1",
-  "srcHash": "1rpfax6xx731w59a2i7v6jr17l3rnrn79d666f0cjchg36nkqqg9",
-  "webYarnHash": "0m5dnz3m68iz94siwmavzj50wxd6w6wanjsm1zhq76lgymgcbqc2",
-  "jsSdkYarnHash": "1k1jvavbqr7vcbdaxc6yqiq5254kxhywn1s2zndrfny7ap8z5c1c",
-  "reactSdkYarnHash": "0cz7pgrbysljmhpf4m0wqwqjqijxahl3wz5qhczlkj46dvq6qyxb",
-  "desktopYarnHash": "09ri87ynfgxrv22sykggiy6nlcf20qwj7zj9qq0rz3c2acr6g9mn"
+  "version": "1.11.8-sc.1",
+  "rev": "v1.11.8-sc.1",
+  "srcHash": "1a4flbdc18whphxldk0nxqhw0zddsj7zw5js4fpyrr6h85h8qxcp",
+  "webYarnHash": "1q05r2shv1c3kghwksjzrh9rl25ins6r2y46ng7smdml4f9vdcc0",
+  "jsSdkYarnHash": "0z6qqif7kccbvbzr9fw92vs4affm4vw8rgs08rqig8pqpk52lwi2",
+  "reactSdkYarnHash": "0mx9iaciy965jr6vd0gnmyc3jiila9mmh36rv5vm60rx9aw02dv6",
+  "desktopYarnHash": "105xj2xwc9g8cfiby0x93gy8w8w5c76mzzxck5mgvawcc6qpvmrc"
 }

@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "pybase64";
-  version = "1.2.2";
+  version = "1.2.3";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-vv2YOlp7ZVE1W2q+VnI/f58SxYDgLxJreIOwdb6/8lw=";
+    sha256 = "sha256-dtB035p7mJs1iZJqsZRmd7uzmez+IwcUsTFX4mM2Ee0=";
   };
 
   checkInputs = [ pytestCheckHook ];

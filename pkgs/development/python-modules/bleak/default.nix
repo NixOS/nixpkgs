@@ -1,8 +1,10 @@
 { lib
+, async-timeout
 , bluez
 , buildPythonPackage
-, dbus-next
-, fetchPypi
+, dbus-fast
+, fetchFromGitHub
+, poetry-core
 , pytestCheckHook
 , pythonOlder
 , typing-extensions
@@ -10,18 +12,25 @@
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "0.15.1";
-  format = "setuptools";
+  version = "0.18.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2MjYjeDyKhW9E1ugVsTlsvufFRGSg97yGx7X1DwA1ZA=";
+  src = fetchFromGitHub {
+    owner = "hbldh";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2/jJ2C2TudwCAshDBLUQjNMbYa2j4XfW8bXmeWrAyrA=";
   };
 
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
   propagatedBuildInputs = [
-    dbus-next
+    async-timeout
+    dbus-fast
     typing-extensions
   ];
 

@@ -37,7 +37,7 @@ in {
 
   options.services.elasticsearch-curator = {
 
-    enable = mkEnableOption "elasticsearch curator";
+    enable = mkEnableOption (lib.mdDoc "elasticsearch curator");
     interval = mkOption {
       description = lib.mdDoc "The frequency to run curator, a systemd.time such as 'hourly'";
       default = "hourly";

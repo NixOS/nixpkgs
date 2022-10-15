@@ -8,7 +8,7 @@ let
 in {
   options = {
     services.powerdns = {
-      enable = mkEnableOption "PowerDNS domain name server";
+      enable = mkEnableOption (lib.mdDoc "PowerDNS domain name server");
 
       extraConfig = mkOption {
         type = types.lines;

@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "sentry-native";
-  version = "0.4.18";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-native";
     rev = version;
-    sha256 = "sha256-2WNmpx6ReVmsRvKHAaZznGuugvmLxK25P1WdmorNj/g=";
+    sha256 = "sha256-whbzoKIYLwj4yoFaT3frghJd/WzfpolSAuZzQRtnP5E=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ curl breakpad pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ curl breakpad ];
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
     "-DSENTRY_BREAKPAD_SYSTEM=On"

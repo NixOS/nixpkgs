@@ -51,23 +51,21 @@ let
     options.capabilities = lib.mkOption
       { type = lib.types.commas;
         default = "";
-        description = ''
-          A comma-separated list of capabilities to be given to the wrapper
-          program. For capabilities supported by the system check the
-          <citerefentry>
-            <refentrytitle>capabilities</refentrytitle>
-            <manvolnum>7</manvolnum>
-          </citerefentry>
-          manual page.
+        description = lib.mdDoc ''
+          A comma-separated list of capability clauses to be given to the
+          wrapper program. The format for capability clauses is described in the
+          “TEXTUAL REPRESENTATION” section of the {manpage}`cap_from_text(3)`
+          manual page. For a list of capabilities supported by the system, check
+          the {manpage}`capabilities(7)` manual page.
 
-          <note><para>
-            <literal>cap_setpcap</literal>, which is required for the wrapper
-            program to be able to raise caps into the Ambient set is NOT raised
-            to the Ambient set so that the real program cannot modify its own
-            capabilities!! This may be too restrictive for cases in which the
-            real program needs cap_setpcap but it at least leans on the side
-            security paranoid vs. too relaxed.
-          </para></note>
+          ::: {.note}
+          `cap_setpcap`, which is required for the wrapper
+          program to be able to raise caps into the Ambient set is NOT raised
+          to the Ambient set so that the real program cannot modify its own
+          capabilities!! This may be too restrictive for cases in which the
+          real program needs cap_setpcap but it at least leans on the side
+          security paranoid vs. too relaxed.
+          :::
         '';
       };
     options.setuid = lib.mkOption
@@ -188,11 +186,21 @@ in
       '';
     };
 
+    security.wrapperDirSize = lib.mkOption {
+      default = "50%";
+      example = "10G";
+      type = lib.types.str;
+      description = lib.mdDoc ''
+        Size limit for the /run/wrappers tmpfs. Look at mount(8), tmpfs size option,
+        for the accepted syntax. WARNING: don't set to less than 64MB.
+      '';
+    };
+
     security.wrapperDir = lib.mkOption {
       type        = lib.types.path;
       default     = "/run/wrappers/bin";
       internal    = true;
-      description = ''
+      description = lib.mdDoc ''
         This option defines the path to the wrapper programs. It
         should not be overriden.
       '';
@@ -230,7 +238,7 @@ in
 
     boot.specialFileSystems.${parentWrapperDir} = {
       fsType = "tmpfs";
-      options = [ "nodev" "mode=755" ];
+      options = [ "nodev" "mode=755" "size=${config.security.wrapperDirSize}" ];
     };
 
     # Make sure our wrapperDir exports to the PATH env variable when

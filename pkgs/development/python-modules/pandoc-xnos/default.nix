@@ -3,6 +3,7 @@
 , lib
 , pandocfilters
 , psutil
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -17,9 +18,21 @@ buildPythonPackage rec {
     sha256 = "sha256-beiGvN0DS6s8wFjcDKozDuwAM2OApX3lTRaUDRUqLeU=";
   };
 
-  propagatedBuildInputs = [ pandocfilters psutil ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  pythonImportsCheck = [ "pandocxnos" ];
+  propagatedBuildInputs = [
+    pandocfilters
+    psutil
+  ];
+
+  pythonImportsCheck = [
+    "pandocxnos"
+  ];
+
+  # tests need some patching
+  doCheck = false;
 
   meta = with lib; {
     description = "Pandoc filter suite providing facilities for cross-referencing in markdown documents";

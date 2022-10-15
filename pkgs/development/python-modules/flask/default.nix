@@ -10,16 +10,21 @@
 , werkzeug
 , pytestCheckHook
 , pythonOlder
+  # used in passthru.tests
+, flask-limiter
+, flask-restful
+, flask-restx
+, moto
 }:
 
 buildPythonPackage rec {
   pname = "flask";
-  version = "2.1.3";
+  version = "2.2.2";
 
   src = fetchPypi {
     pname = "Flask";
     inherit version;
-    sha256 = "sha256-FZcuUBffBXXD1sCQuhaLbbkCWeYgrI1+qBOjlrrVtss=";
+    sha256 = "sha256-ZCxFDRnErUgvlnKb0qj20yVUqh4jH09rTn5SZLFsyis=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +39,10 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
+
+  passthru.tests = {
+    inherit flask-limiter flask-restful flask-restx moto;
+  };
 
   meta = with lib; {
     homepage = "https://flask.palletsprojects.com/";

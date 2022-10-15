@@ -8,6 +8,7 @@
 , Security
 , protobuf
 , rustfmt
+, nixosTests
 }:
 let
   pinData = lib.importJSON ./pin.json;
@@ -42,6 +43,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ protobuf rustfmt ];
 
   passthru.updateScript = ./update.sh;
+  passthru.tests.lemmy-server = nixosTests.lemmy;
 
   meta = with lib; {
     description = "🐀 Building a federated alternative to reddit in rust";

@@ -54,7 +54,6 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     url = "https://git.enlightenment.org/e16/e16";
     rev-prefix = "v";
   };

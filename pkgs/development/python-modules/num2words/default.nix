@@ -7,12 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.5.11";
+  version = "0.5.12";
   pname = "num2words";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bGhOIiDYrbNhLSyAepdyzDJplj+81395ebaJp39gQ9Q=";
+    sha256 = "sha256-fnwLDwgEBao6HdnTKxypCzvwO6sXuOVNsF4beDAaCYg=";
   };
 
   propagatedBuildInputs = [ docopt ];

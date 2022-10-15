@@ -7,7 +7,7 @@ let
 in
 {
   options.programs.weylus = with types; {
-    enable = mkEnableOption "weylus";
+    enable = mkEnableOption (lib.mdDoc "weylus");
 
     openFirewall = mkOption {
       type = bool;

@@ -84,13 +84,13 @@ let
 in
 buildPythonApplication rec {
   pname = "lutris-original";
-  version = "0.5.10.1";
+  version = "0.5.11";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Bf8UEGEM6M4PKoX/qKQNb9XxrxLcjKZD1vR3R2/PykI=";
+    sha256 = "sha256-D2qMKYmi5TC8jEAECcz2V0rUrmp5kjXJ5qyW6C4re3w=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];

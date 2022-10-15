@@ -1,13 +1,13 @@
-{ lib, fetchFromGitHub, fetchzip }:
+{ lib, fetchFromGitHub, fetchzip, stdenv }:
 
 rec {
-  version = "0.106.0";
+  version = "0.112.1";
 
   src = fetchFromGitHub {
     owner = "returntocorp";
     repo = "semgrep";
     rev = "v${version}";
-    sha256 = "sha256-/L8w8imvfjO3ICe0FBhfVrTivK58/9Y+j9Hc71tlpjA=";
+    sha256 = "sha256-SZtxZz4x6YUKw1uO5HQTU4lRY989SoCNsPQphJr+L0Y=";
   };
 
   # submodule dependencies
@@ -17,22 +17,25 @@ rec {
   langsSrc = fetchFromGitHub {
     owner = "returntocorp";
     repo = "semgrep-langs";
-    rev = "98e4aacb0d58539b50a642a28d916a5d749e2a42";
-    sha256 = "sha256-7w+8vLmzqBjbeV+a4Br7kLQ2bJv3aZJw8cB0R9d/D+E=";
+    rev = "91e288062eb794e8a5e6967d1009624237793491";
+    sha256 = "sha256-z2t2bTRyj5zu9h/GBg2YeRFimpJsd3dA7dK8VBaKzHo=";
   };
 
   interfacesSrc = fetchFromGitHub {
     owner = "returntocorp";
     repo = "semgrep-interfaces";
-    rev = "8bc79b2bca62c051e46a33fb65751357a71b87b6";
-    sha256 = "sha256-k/rsTGYqHnw/4bsmeg7pQ/ckNglvuA0yhuz+OayXCdw=";
+    rev = "7bc457a32e088ef21adf1529fa0ddeea634b9131";
+    sha256 = "sha256-xN8Qm1/YLa49k9fZKDoPPmHASI2ipI3mkKlwEK2ajO4=";
   };
 
   # fetch pre-built semgrep-core since the ocaml build is complex and relies on
   # the opam package manager at some point
-  coreRelease = fetchzip {
-    url = "https://github.com/returntocorp/semgrep/releases/download/v${version}/semgrep-v${version}-ubuntu-16.04.tgz";
-    sha256 = "sha256-ARf776uOJkCBGsJI8ul3IDWI24vFQxs2jlGEA6uXG+o=";
+  coreRelease = if stdenv.isDarwin then fetchzip {
+      url = "https://github.com/returntocorp/semgrep/releases/download/v${version}/semgrep-v${version}-osx.zip";
+      sha256 = "sha256-JiOH39vMDL6r9WKuPO0CDkRwGZtzl/GIFoSegVddFpw=";
+  } else fetchzip {
+      url = "https://github.com/returntocorp/semgrep/releases/download/v${version}/semgrep-v${version}-ubuntu-16.04.tgz";
+      sha256 = "sha256-V6r+VQrgz8uVSbRa2AmW4lnLxovk63FL7LqVKD46RBw=";
   };
 
   meta = with lib; {
@@ -50,6 +53,6 @@ rec {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jk ambroisie ];
     # limited by semgrep-core
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

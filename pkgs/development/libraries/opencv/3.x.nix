@@ -40,20 +40,20 @@ assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 assert enablePython -> pythonPackages != null;
 
 let
-  version = "3.4.15";
+  version = "3.4.18";
 
   src = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv";
     rev    = version;
-    hash   = "sha256-dLwQM2VhVlBV4xazS2rItTscKYeeNlNT0G8G1A1mOmc=";
+    hash   = "sha256-PgwAZNoPknFT0jCLt3TCzend6OYFY3iUIzDf/FptAYA=";
   };
 
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
     rev    = version;
-    hash   = "sha256-FJDRMmSOT5jA+n2Ke0gEH7n5rgGvB1UzYpYZ1vmucjg=";
+    hash   = "sha256-TEF/GHglOmsshlC6q4iw14ZMpvA0SaKwlidomAN+sRc=";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -155,11 +155,6 @@ stdenv.mkDerivation {
   # Ensures that we use the system OpenEXR rather than the vendored copy of the source included with OpenCV.
   patches = [
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
-    # Fix usage of deprecated version of protobuf' SetTotalBytesLimit. Remove with the next release.
-    (fetchpatch {
-      url = "https://github.com/opencv/opencv/commit/384875f4fcf1782b10699a379aa245a03cb27a04.patch";
-      sha256 = "1agwd0pm07m2dy8a62vmfl4n73dsmsdll2a73q6kara9wm3jlp41";
-    })
   ];
 
   # This prevents cmake from using libraries in impure paths (which

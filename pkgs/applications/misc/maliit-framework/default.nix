@@ -1,6 +1,7 @@
 { mkDerivation
 , lib
 , fetchFromGitHub
+, fetchpatch
 
 , at-spi2-atk
 , at-spi2-core
@@ -31,6 +32,15 @@ mkDerivation rec {
     rev = version;
     sha256 = "138jyvw130kmrldksbk4l38gvvahh3x51zi4vyplad0z5nxmbazb";
   };
+
+  # in master post 2.2.1, see https://github.com/maliit/framework/issues/106
+  patches = [
+    (fetchpatch {
+      name = "fix-pkg-config.patch";
+      url = "https://github.com/maliit/framework/commit/1e20a4a5113f1c092295f5a5f04ab6e584f6fcff.patch";
+      sha256 = "0h7jfqnqvjka626wx2z2g150rch4air7q3zbq59gcb12g7x6gfyn";
+    })
+  ];
 
   buildInputs = [
     at-spi2-atk

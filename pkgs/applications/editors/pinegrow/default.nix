@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
   pname = "pinegrow";
   # deactivate auto update, because an old 6.21 version is getting mixed up
   # see e.g. https://github.com/NixOS/nixpkgs/pull/184460
-  version = "6.6"; # nixpkgs-update: no auto update
+  version = "6.8"; # nixpkgs-update: no auto update
 
   src = fetchurl {
     url = "https://download.pinegrow.com/PinegrowLinux64.${version}.zip";
-    sha256 = "sha256-a3SwUNcMXl42+Gy3wjcx/KvVprgFAO0D0lFPohPV3Tk=";
+    sha256 = "sha256-gqRmu0VR8Aj57UwYYLKICd4FnYZMhM6pTTSGIY5MLMk=";
   };
 
   nativeBuildInputs = [
@@ -58,16 +58,16 @@ stdenv.mkDerivation rec {
     # folder and symlinked.
     unzip -q $src -d $out/opt/pinegrow
     substituteInPlace $out/opt/pinegrow/Pinegrow.desktop \
-      --replace 'Exec=sh -c "$(dirname %k)/PinegrowLibrary"' 'Exec=sh -c "$out/bin/Pinegrow"'
-    mv $out/opt/pinegrow/Pinegrow.desktop $out/share/applications/Pinegrow.desktop
-    ln -s $out/opt/pinegrow/PinegrowLibrary $out/bin/Pinegrow
+      --replace 'Exec=sh -c "$(dirname %k)/PinegrowLibrary"' 'Exec=sh -c "$out/bin/pinegrow"'
+    mv $out/opt/pinegrow/Pinegrow.desktop $out/share/applications/pinegrow.desktop
+    ln -s $out/opt/pinegrow/PinegrowLibrary $out/bin/pinegrow
 
     runHook postInstall
   '';
 
   # GSETTINGS_SCHEMAS_PATH is not set in installPhase
   preFixup = ''
-    wrapProgram $out/bin/Pinegrow \
+    wrapProgram $out/bin/pinegrow \
       ''${makeWrapperArgs[@]} \
       ''${gappsWrapperArgs[@]}
   '';

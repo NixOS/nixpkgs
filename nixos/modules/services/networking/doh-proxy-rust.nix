@@ -10,7 +10,7 @@ in {
 
   options.services.doh-proxy-rust = {
 
-    enable = mkEnableOption "doh-proxy-rust";
+    enable = mkEnableOption (lib.mdDoc "doh-proxy-rust");
 
     flags = mkOption {
       type = types.listOf types.str;

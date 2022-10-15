@@ -39,6 +39,7 @@ python3Packages.buildPythonApplication rec {
       --replace share/pixmaps share/icons
 
     cp requirements.in requirements.txt
+    sed -i requirements.txt -e 's/^chromaprint$//'
   '' + lib.concatMapStringsSep "\n"
     (e: ''
       sed -i requirements.txt -e 's/^${e}.*/${e}/'
@@ -49,7 +50,6 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     pyacoustid
-    chromaprint
     configobj
     levenshtein
     lxml

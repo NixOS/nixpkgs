@@ -53,9 +53,9 @@ let
 in
 {
   options.services.kanidm = {
-    enableClient = lib.mkEnableOption "the Kanidm client";
-    enableServer = lib.mkEnableOption "the Kanidm server";
-    enablePam = lib.mkEnableOption "the Kanidm PAM and NSS integration.";
+    enableClient = lib.mkEnableOption (lib.mdDoc "the Kanidm client");
+    enableServer = lib.mkEnableOption (lib.mdDoc "the Kanidm server");
+    enablePam = lib.mkEnableOption (lib.mdDoc "the Kanidm PAM and NSS integration.");
 
     serverSettings = lib.mkOption {
       type = lib.types.submodule {
@@ -248,6 +248,8 @@ in
           "-/etc/localtime"
           "-/etc/kanidm"
           "-/etc/static/kanidm"
+          "-/etc/ssl"
+          "-/etc/static/ssl"
         ];
         BindPaths = [
           # To create the socket

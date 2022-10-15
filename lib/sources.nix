@@ -4,7 +4,6 @@
 # Tested in lib/tests/sources.sh
 let
   inherit (builtins)
-    hasContext
     match
     readDir
     split

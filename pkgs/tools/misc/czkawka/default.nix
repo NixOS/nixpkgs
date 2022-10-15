@@ -8,7 +8,7 @@
 , gdk-pixbuf
 , atk
 , gtk4
-, wrapGAppsHook
+, wrapGAppsHook4
 , gobject-introspection
 , xvfb-run
 , testers
@@ -17,20 +17,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "czkawka";
-  version = "5.0.1";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "qarmin";
     repo = "czkawka";
     rev = version;
-    sha256 = "sha256-ochHohwCOKCF9kiiMxMIaJXaHUWNbq7pIh+VNRKQlcg=";
+    sha256 = "sha256-+Z4R6eRYNU0/wmrrTCLabY1zgxGbdSkgrfJd8rI5fZo=";
   };
 
-  cargoSha256 = "sha256-ap8OpaLs1jZtEHbXVZyaGj3gvblWtyHmYrHiHvZKhfs=";
+  cargoSha256 = "sha256-hkqGOl6ew3GBMPem8bPRy0PYphHhXJVv6iQiH6lK0kE=";
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
     gobject-introspection
   ];
 

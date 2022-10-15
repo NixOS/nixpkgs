@@ -17,7 +17,7 @@ let
 in
 {
   options.networking.wireless.iwd = {
-    enable = mkEnableOption "iwd";
+    enable = mkEnableOption (lib.mdDoc "iwd");
 
     settings = mkOption {
       type = ini.type;
@@ -67,5 +67,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ mic92 dtzWill ];
+  meta.maintainers = with lib.maintainers; [ dtzWill ];
 }

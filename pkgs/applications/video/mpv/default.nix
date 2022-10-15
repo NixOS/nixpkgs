@@ -2,7 +2,6 @@
 , lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , addOpenGLRunpath
 , docutils
 , perl
@@ -24,6 +23,7 @@
 , waylandSupport ? stdenv.isLinux
   , wayland
   , wayland-protocols
+  , wayland-scanner
   , libxkbcommon
 
 , x11Support ? stdenv.isLinux
@@ -32,6 +32,7 @@
   , libXext
   , libXxf86vm
   , libXrandr
+  , libXpresent
 
 , cddaSupport ? false
   , libcdio
@@ -59,7 +60,7 @@
 , libpngSupport      ? true,           libpng
 , openalSupport      ? true,           openalSoft
 , pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio
-, rubberbandSupport  ? stdenv.isLinux, rubberband
+, rubberbandSupport  ? true,           rubberband
 , screenSaverSupport ? true,           libXScrnSaver
 , sdl2Support        ? true,           SDL2
 , sixelSupport       ? false,          libsixel
@@ -99,6 +100,10 @@ in stdenv.mkDerivation rec {
   NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext "
     + lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
 
+  # These flags are not supported and cause the build
+  # to fail, even when cross compilation itself works.
+  dontAddWafCrossFlags = true;
+
   wafConfigureFlags = [
     "--enable-libmpv-shared"
     "--enable-manpage-build"
@@ -126,7 +131,8 @@ in stdenv.mkDerivation rec {
     python3
     wafHook
     which
-  ] ++ lib.optionals swiftSupport [ swift ];
+  ] ++ lib.optionals swiftSupport [ swift ]
+    ++ lib.optionals waylandSupport [ wayland-scanner ];
 
   buildInputs = [
     ffmpeg
@@ -160,7 +166,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals vdpauSupport       [ libvdpau ]
     ++ lib.optionals vulkanSupport      [ libplacebo shaderc vulkan-headers vulkan-loader ]
     ++ lib.optionals waylandSupport     [ wayland wayland-protocols libxkbcommon ]
-    ++ lib.optionals x11Support         [ libX11 libXext libGLU libGL libXxf86vm libXrandr ]
+    ++ lib.optionals x11Support         [ libX11 libXext libGLU libGL libXxf86vm libXrandr libXpresent ]
     ++ lib.optionals xineramaSupport    [ libXinerama ]
     ++ lib.optionals xvSupport          [ libXv ]
     ++ lib.optionals zimgSupport        [ zimg ]

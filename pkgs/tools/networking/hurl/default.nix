@@ -3,7 +3,6 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, python3
 , installShellFiles
 , libxml2
 , openssl
@@ -12,18 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hurl";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "Orange-OpenSource";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ud4ARpiyMcYwPKsLbeK4MMBLzkD/tecF1L1vWyYpKmY=";
+    sha256 = "sha256-bv51OOOQFHkFjtv/VXeemMybohtzrhyGfXQkVPDjcps=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    python3
     installShellFiles
   ];
 
@@ -37,12 +35,10 @@ rustPlatform.buildRustPackage rec {
   # Tests require network access to a test server
   doCheck = false;
 
-  cargoSha256 = "sha256-tmHP7xwVce/hh8nX1LO/zwPIlDZkICPMlBjZjuv37xU=";
+  cargoSha256 = "sha256-BIt8xZveOeDUktLldtymYQqlkgqa7MJjKeSPby70Czg=";
 
   postInstall = ''
-    python ci/gen_manpage.py docs/hurl.md > hurl.1
-    python ci/gen_manpage.py docs/hurlfmt.md > hurlfmt.1
-    installManPage hurl.1 hurlfmt.1
+    installManPage docs/manual/hurl.1 docs/manual/hurlfmt.1
   '';
 
   meta = with lib; {

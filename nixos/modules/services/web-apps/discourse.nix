@@ -6,7 +6,7 @@ let
   cfg = config.services.discourse;
   opt = options.services.discourse;
 
-  # Keep in sync with https://github.com/discourse/discourse_docker/blob/master/image/base/Dockerfile#L5
+  # Keep in sync with https://github.com/discourse/discourse_docker/blob/main/image/base/slim.Dockerfile#L5
   upstreamPostgresqlVersion = lib.getVersion pkgs.postgresql_13;
 
   postgresqlPackage = if config.services.postgresql.enable then
@@ -26,7 +26,7 @@ in
 {
   options = {
     services.discourse = {
-      enable = lib.mkEnableOption "Discourse, an open source discussion platform";
+      enable = lib.mkEnableOption (lib.mdDoc "Discourse, an open source discussion platform");
 
       package = lib.mkOption {
         type = lib.types.package;
@@ -57,20 +57,20 @@ in
         type = with lib.types; nullOr path;
         default = null;
         example = "/run/keys/secret_key_base";
-        description = ''
+        description = lib.mdDoc ''
           The path to a file containing the
-          <literal>secret_key_base</literal> secret.
+          `secret_key_base` secret.
 
-          Discourse uses <literal>secret_key_base</literal> to encrypt
+          Discourse uses `secret_key_base` to encrypt
           the cookie store, which contains session data, and to digest
           user auth tokens.
 
           Needs to be a 64 byte long string of hexadecimal
           characters. You can generate one by running
 
-          <screen>
-          <prompt>$ </prompt>openssl rand -hex 64 >/path/to/secret_key_base_file
-          </screen>
+          ```
+          openssl rand -hex 64 >/path/to/secret_key_base_file
+          ```
 
           This should be a string, not a nix path, since nix paths are
           copied into the world-readable nix store.
@@ -100,9 +100,9 @@ in
       enableACME = lib.mkOption {
         type = lib.types.bool;
         default = cfg.sslCertificate == null && cfg.sslCertificateKey == null;
-        defaultText = lib.literalDocBook ''
-          <literal>true</literal>, unless <option>services.discourse.sslCertificate</option>
-          and <option>services.discourse.sslCertificateKey</option> are set.
+        defaultText = lib.literalMD ''
+          `true`, unless {option}`services.discourse.sslCertificate`
+          and {option}`services.discourse.sslCertificateKey` are set.
         '';
         description = lib.mdDoc ''
           Whether an ACME certificate should be used to secure
@@ -121,17 +121,16 @@ in
             max_reqs_per_ip_mode = "warn+block";
           };
         '';
-        description = ''
+        description = lib.mdDoc ''
           Additional settings to put in the
-          <filename>discourse.conf</filename> file.
+          {file}`discourse.conf` file.
 
           Look in the
-          <link xlink:href="https://github.com/discourse/discourse/blob/master/config/discourse_defaults.conf">discourse_defaults.conf</link>
+          [discourse_defaults.conf](https://github.com/discourse/discourse/blob/master/config/discourse_defaults.conf)
           file in the upstream distribution to find available options.
 
-          Setting an option to <literal>null</literal> means
-          <quote>define variable, but leave right-hand side
-          empty</quote>.
+          Setting an option to `null` means
+          “define variable, but leave right-hand side empty”.
         '';
       };
 
@@ -241,9 +240,9 @@ in
         host = lib.mkOption {
           type = with lib.types; nullOr str;
           default = null;
-          description = ''
-            Discourse database hostname. <literal>null</literal> means <quote>prefer
-            local unix socket connection</quote>.
+          description = lib.mdDoc ''
+            Discourse database hostname. `null` means
+            “prefer local unix socket connection”.
           '';
         };
 
@@ -494,10 +493,8 @@ in
             discourse-github
           ];
         '';
-        description = ''
-          Plugins to install as part of
-          <productname>Discourse</productname>, expressed as a list of
-          derivations.
+        description = lib.mdDoc ''
+          Plugins to install as part of Discourse, expressed as a list of derivations.
         '';
       };
 
@@ -604,7 +601,6 @@ in
       cors_origin = "";
       serve_static_assets = false;
       sidekiq_workers = 5;
-      rtl_css = false;
       connection_reaper_age = 30;
       connection_reaper_interval = 30;
       relative_url_root = null;
@@ -940,7 +936,6 @@ in
                   proxy_cache discourse;
                   proxy_cache_key "$scheme,$host,$request_uri";
                   proxy_cache_valid 200 301 302 7d;
-                  proxy_cache_valid any 1m;
                 '';
               };
               "/message-bus/" = proxy {

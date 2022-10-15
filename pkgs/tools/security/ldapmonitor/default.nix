@@ -19,8 +19,8 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     impacket
-    ldap
     ldap3
+    python-ldap
   ];
 
   installPhase = ''

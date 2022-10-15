@@ -8,6 +8,10 @@
 , which
 }:
 
+let
+  # avoid "malformed 32-bit x.y.z" error on mac when using clang
+  isCleanVer = version: builtins.match "^[0-9]\\.+[0-9]+\\.[0-9]+" version != null;
+in
 stdenv.mkDerivation rec {
   pname = "tcc";
   version = "unstable-2022-07-15";
@@ -62,7 +66,11 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    echo ${version} > VERSION
+    ${
+      if stdenv.isDarwin && ! isCleanVer version
+      then "echo 'not overwriting VERSION since it would upset ld'"
+      else "echo ${version} > VERSION"
+    }
     configureFlagsArray+=("--elfinterp=$(< $NIX_CC/nix-support/dynamic-linker)")
   '';
 

@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
-  version = "2.8.0";
+  version = "2.8.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/zqsy+xrgmjsSrybBpwCfphTGGVp2AOp+ANsYPSrVfA=";
+    sha256 = "sha256-JtSY/mQ7BAatBiq9XCO9O0x6nnyPpECnlSYNq9brxp8=";
   };
 
   propagatedBuildInputs = [
@@ -44,6 +44,7 @@ buildPythonPackage rec {
     "tests/system/test_allocate_reserve_ids.py"
     "tests/system/test_query.py"
     "tests/system/test_put.py"
+    "tests/system/test_read_consistency.py"
     "tests/system/test_transaction.py"
   ];
 

@@ -25,13 +25,13 @@ in
 
   options.services.lighttpd.collectd = {
 
-    enable = mkEnableOption "collectd subservice accessible at http://yourserver/collectd";
+    enable = mkEnableOption (lib.mdDoc "collectd subservice accessible at http://yourserver/collectd");
 
     collectionCgi = mkOption {
       type = types.path;
       default = defaultCollectionCgi;
-      defaultText = literalDocBook ''
-        <literal>config.${options.services.collectd.package}</literal> configured for lighttpd
+      defaultText = literalMD ''
+        `config.${options.services.collectd.package}` configured for lighttpd
       '';
       description = lib.mdDoc ''
         Path to collection.cgi script from (collectd sources)/contrib/collection.cgi

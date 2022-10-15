@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     cp ${catch}/include/catch/catch.hpp Tests/catch.hpp
+
+    # https://github.com/recastnavigation/recastnavigation/issues/524
+    substituteInPlace CMakeLists.txt \
+      --replace '\$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
   '';
 
   doCheck = true;

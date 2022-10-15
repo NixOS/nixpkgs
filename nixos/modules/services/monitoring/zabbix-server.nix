@@ -40,7 +40,7 @@ in
   options = {
 
     services.zabbixServer = {
-      enable = mkEnableOption "the Zabbix Server";
+      enable = mkEnableOption (lib.mdDoc "the Zabbix Server");
 
       package = mkOption {
         type = types.package;
@@ -53,8 +53,8 @@ in
         type = types.listOf types.package;
         default = with pkgs; [ nettools nmap traceroute ];
         defaultText = literalExpression "[ nettools nmap traceroute ]";
-        description = ''
-          Packages to be added to the Zabbix <envar>PATH</envar>.
+        description = lib.mdDoc ''
+          Packages to be added to the Zabbix {env}`PATH`.
           Typically used to add executables for scripts, but can be anything.
         '';
       };

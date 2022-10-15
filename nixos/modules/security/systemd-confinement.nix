@@ -10,12 +10,10 @@ in {
       options.confinement.enable = lib.mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           If set, all the required runtime store paths for this service are
-          bind-mounted into a <literal>tmpfs</literal>-based <citerefentry>
-            <refentrytitle>chroot</refentrytitle>
-            <manvolnum>2</manvolnum>
-          </citerefentry>.
+          bind-mounted into a `tmpfs`-based
+          {manpage}`chroot(2)`.
         '';
       };
 
@@ -40,8 +38,8 @@ in {
         type = types.listOf (types.either types.str types.package);
         default = [];
         description = let
-          mkScOption = optName: "<option>serviceConfig.${optName}</option>";
-        in ''
+          mkScOption = optName: "{option}`serviceConfig.${optName}`";
+        in lib.mdDoc ''
           Additional packages or strings with context to add to the closure of
           the chroot. By default, this includes all the packages from the
           ${lib.concatMapStringsSep ", " mkScOption [
@@ -49,12 +47,14 @@ in {
             "ExecStopPost"
           ]} and ${mkScOption "ExecStart"} options. If you want to have all the
           dependencies of this systemd unit, you can use
-          <option>confinement.fullUnit</option>.
+          {option}`confinement.fullUnit`.
 
-          <note><para>The store paths listed in <option>path</option> are
-          <emphasis role="strong">not</emphasis> included in the closure as
+          ::: {.note}
+          The store paths listed in {option}`path` are
+          **not** included in the closure as
           well as paths from other options except those listed
-          above.</para></note>
+          above.
+          :::
         '';
       };
 
@@ -63,38 +63,33 @@ in {
         default = toplevelConfig.environment.binsh;
         defaultText = lib.literalExpression "config.environment.binsh";
         example = lib.literalExpression ''"''${pkgs.dash}/bin/dash"'';
-        description = ''
-          The program to make available as <filename>/bin/sh</filename> inside
-          the chroot. If this is set to <literal>null</literal>, no
-          <filename>/bin/sh</filename> is provided at all.
+        description = lib.mdDoc ''
+          The program to make available as {file}`/bin/sh` inside
+          the chroot. If this is set to `null`, no
+          {file}`/bin/sh` is provided at all.
 
           This is useful for some applications, which for example use the
-          <citerefentry>
-            <refentrytitle>system</refentrytitle>
-            <manvolnum>3</manvolnum>
-          </citerefentry> library function to execute commands.
+          {manpage}`system(3)` library function to execute commands.
         '';
       };
 
       options.confinement.mode = lib.mkOption {
         type = types.enum [ "full-apivfs" "chroot-only" ];
         default = "full-apivfs";
-        description = ''
-          The value <literal>full-apivfs</literal> (the default) sets up
-          private <filename class="directory">/dev</filename>, <filename
-          class="directory">/proc</filename>, <filename
-          class="directory">/sys</filename> and <filename
-          class="directory">/tmp</filename> file systems in a separate user
+        description = lib.mdDoc ''
+          The value `full-apivfs` (the default) sets up
+          private {file}`/dev`, {file}`/proc`,
+          {file}`/sys` and {file}`/tmp` file systems in a separate user
           name space.
 
-          If this is set to <literal>chroot-only</literal>, only the file
-          system name space is set up along with the call to <citerefentry>
-            <refentrytitle>chroot</refentrytitle>
-            <manvolnum>2</manvolnum>
-          </citerefentry>.
+          If this is set to `chroot-only`, only the file
+          system name space is set up along with the call to
+          {manpage}`chroot(2)`.
 
-          <note><para>This doesn't cover network namespaces and is solely for
-          file system level isolation.</para></note>
+          ::: {.note}
+          This doesn't cover network namespaces and is solely for
+          file system level isolation.
+          :::
         '';
       };
 

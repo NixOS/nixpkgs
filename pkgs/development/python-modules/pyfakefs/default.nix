@@ -7,13 +7,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.6.2";
+  version = "4.6.3";
   pname = "pyfakefs";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jdnIAgvNCB8llleoadXq+cynuzZzx/A7+uiyi751mbY=";
+    sha256 = "sha256-bfEqfPZXY3obA2vCAFlyfGQvkpkOkP7i+wA9qjzabKE=";
   };
 
   postPatch = ''

@@ -43,7 +43,7 @@ in
   options = {
     services.nbd = {
       server = {
-        enable = mkEnableOption "the Network Block Device (nbd) server";
+        enable = mkEnableOption (lib.mdDoc "the Network Block Device (nbd) server");
 
         listenPort = mkOption {
           type = types.port;
@@ -56,10 +56,9 @@ in
           default = {
             allowlist = false;
           };
-          description = ''
+          description = lib.mdDoc ''
             Extra options for the server. See
-            <citerefentry><refentrytitle>nbd-server</refentrytitle>
-            <manvolnum>5</manvolnum></citerefentry>.
+            {manpage}`nbd-server(5)`.
           '';
         };
 
@@ -88,10 +87,9 @@ in
                     flush = true;
                     fua = true;
                   };
-                  description = ''
+                  description = lib.mdDoc ''
                     Extra options for this export. See
-                    <citerefentry><refentrytitle>nbd-server</refentrytitle>
-                    <manvolnum>5</manvolnum></citerefentry>.
+                    {manpage}`nbd-server(5)`.
                   '';
                 };
               };

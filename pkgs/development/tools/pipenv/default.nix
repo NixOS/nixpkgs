@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , python3
 , installShellFiles
 }:
@@ -13,17 +14,20 @@ let
     pip
     virtualenv
     virtualenv-clone
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAndroid [
+    pyjnius
   ];
 
   pythonEnv = python3.withPackages runtimeDeps;
 
 in buildPythonApplication rec {
   pname = "pipenv";
-  version = "2022.6.7";
+  version = "2022.10.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-asDnqLvgKFnUbFPAPT8zE2u/ScjH2abYGECeF6YE7aA=";
+    sha256 = "sha256-pNiPZmfLzZ6kMtYmqLNzzTEBiGufuWTqfn+WUKg/wwc=";
   };
 
   LC_ALL = "en_US.UTF-8";

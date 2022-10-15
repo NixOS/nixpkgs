@@ -1,6 +1,6 @@
-{ lib, buildPackages, stdenv, autoreconfHook, fetchurl }:
+{ lib, buildPackages, stdenvNoCC, autoreconfHook, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "alsa-firmware";
   version = "1.2.4";
 

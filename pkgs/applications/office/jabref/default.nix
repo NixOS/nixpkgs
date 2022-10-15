@@ -1,48 +1,45 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, makeWrapper
+, wrapGAppsHook
 , makeDesktopItem
 , copyDesktopItems
 , unzip
 , xdg-utils
+, gtk3
 , jdk
 , gradle
 , perl
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.6";
+  version = "5.7";
   pname = "jabref";
 
   src = fetchFromGitHub {
     owner = "JabRef";
     repo = "jabref";
     rev = "v${version}";
-    hash = "sha256-w3F1td7KmdSor/2vKar3w17bChe1yH7JMobOaCjZqd4=";
+    hash = "sha256-wzBaAaxGsMPh64uW+bBOiycYfVCW9H5FCn06r6XdxeE=";
   };
 
   desktopItems = [
     (makeDesktopItem {
       comment = meta.description;
-      name = "jabref";
+      name = "JabRef %U";
       desktopName = "JabRef";
       genericName = "Bibliography manager";
       categories = [ "Office" ];
       icon = "jabref";
-      exec = "jabref";
+      exec = "JabRef";
+      startupWMClass = "org.jabref.gui.JabRefMain";
+      mimeTypes = [ "text/x-bibtex" ];
     })
   ];
 
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
     inherit src version;
-
-    postPatch = ''
-        sed -i -e '/testImplementation/d' -e '/testRuntimeOnly/d' build.gradle
-        echo 'dependencyLocking { lockAllConfigurations() }' >> build.gradle
-        cp ${./gradle.lockfile} ./
-      '';
 
     nativeBuildInputs = [ gradle perl ];
     buildPhase = ''
@@ -59,8 +56,8 @@ stdenv.mkDerivation rec {
     forceShare = [ "dummy" ];
     outputHashMode = "recursive";
     outputHash = {
-      x86_64-linux = "sha256-ySGXZM9LCJUjGCrKMc+5I6duEbmSsp3tU3t/o5nM+5M=";
-      aarch64-linux = "sha256-mfWyGGBqjRQ8q9ddR57O2rwtby2T1H6Ra2m0JGVZ1Zs=";
+      x86_64-linux = "sha256-OicHJVFxHGPE76bEDoLhkEhVcAJmplqjoh2I3nnVaLA=";
+      aarch64-linux = "sha256-8QWmweptL/+pSO6DhfBLaLcBrfKd4TDsDoXs4TgXvew=";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
   };
 
@@ -78,10 +75,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     jdk
     gradle
-    makeWrapper
+    wrapGAppsHook
     copyDesktopItems
     unzip
   ];
+
+  buildInputs = [ gtk3 ];
 
   buildPhase = ''
     runHook preBuild
@@ -92,10 +91,13 @@ stdenv.mkDerivation rec {
       --no-daemon \
       -PprojVersion="${version}" \
       -PprojVersionInfo="${version} NixOS" \
+      -Dorg.gradle.java.home=${jdk} \
       assemble
 
     runHook postBuild
   '';
+
+  dontWrapGApps = true;
 
   installPhase = ''
     runHook preInstall
@@ -106,8 +108,6 @@ stdenv.mkDerivation rec {
 
     # script to support browser extensions
     install -Dm755 buildres/linux/jabrefHost.py $out/lib/jabrefHost.py
-    # This can be removed in the next version
-    sed -i -e "/importBibtex/s/{}/'{}'/" $out/lib/jabrefHost.py
     install -Dm644 buildres/linux/native-messaging-host/firefox/org.jabref.jabref.json $out/lib/mozilla/native-messaging-hosts/org.jabref.jabref.json
     sed -i -e "s|/opt/jabref|$out|" $out/lib/mozilla/native-messaging-hosts/org.jabref.jabref.json
 
@@ -116,12 +116,16 @@ stdenv.mkDerivation rec {
 
     # workaround for https://github.com/NixOS/nixpkgs/issues/162064
     tar xf build/distributions/JabRef-${version}.tar -C $out --strip-components=1
-    unzip $out/lib/javafx-web-18-linux${lib.optionalString stdenv.isAarch64 "-aarch64"}.jar libjfxwebkit.so -d $out/lib/
+    unzip $out/lib/javafx-web-*-linux${lib.optionalString stdenv.isAarch64 "-aarch64"}.jar libjfxwebkit.so -d $out/lib/
 
-    wrapProgram $out/bin/JabRef \
-      --prefix PATH : ${lib.makeBinPath [ xdg-utils ]} \
-      --set JAVA_HOME "${jdk}" \
-      --set JAVA_OPTS "-Djava.library.path=$out/lib/ --patch-module org.jabref=$out/share/java/jabref/resources/main"
+    DEFAULT_JVM_OPTS=$(sed -n -E "s/^DEFAULT_JVM_OPTS='(.*)'$/\1/p" $out/bin/JabRef | sed -e "s|\$APP_HOME|$out|g" -e 's/"//g')
+    rm $out/bin/*
+
+    makeWrapper ${jdk}/bin/java $out/bin/JabRef \
+      "''${gappsWrapperArgs[@]}" \
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+      --add-flags "-Djava.library.path=$out/lib/ --patch-module org.jabref=$out/share/java/jabref/resources/main" \
+      --add-flags "$DEFAULT_JVM_OPTS"
 
     # lowercase alias (for convenience and required for browser extensions)
     ln -sf $out/bin/JabRef $out/bin/jabref
@@ -134,8 +138,8 @@ stdenv.mkDerivation rec {
     homepage = "https://www.jabref.org";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # source bundles dependencies as jars
-      binaryNativeCode  # source bundles dependencies as jars
+      binaryBytecode # source bundles dependencies as jars
+      binaryNativeCode # source bundles dependencies as jars
     ];
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "aarch64-linux" ];

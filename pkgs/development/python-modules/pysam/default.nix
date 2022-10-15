@@ -109,6 +109,6 @@ buildPythonPackage rec {
     homepage = "https://pysam.readthedocs.io/";
     maintainers = with maintainers; [ unode ];
     license = licenses.mit;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = platforms.unix;
   };
 }

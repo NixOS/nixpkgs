@@ -3,6 +3,7 @@
 , syslinux ? null
 , embedScript ? null
 , additionalTargets ? {}
+, additionalOptions ? []
 }:
 
 let
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
     "IMAGE_TRUST_CMD"
     "DOWNLOAD_PROTO_HTTP"
     "DOWNLOAD_PROTO_HTTPS"
-  ];
+  ] ++ additionalOptions;
 
   configurePhase = ''
     runHook preConfigure

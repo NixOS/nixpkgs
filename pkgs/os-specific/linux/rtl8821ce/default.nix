@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-4PgISOjCSSGymz96VwE4jzcUiOEO+Ocuk2kJVIA+TQM=";
   };
 
+  patches = fetchpatch {
+    url = "https://github.com/tomaspinho/rtl8821ce/pull/291.patch";
+    sha256 = "sha256-GCZ/iPtzF7PP0ZgagBev6r7IVQ2VenPoLKL9GnPSt+U=";
+  };
+
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
@@ -41,7 +46,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tomaspinho/rtl8821ce";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    broken = stdenv.isAarch64;
     maintainers = with maintainers; [ hhm ivar ];
+    broken = stdenv.isAarch64 || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened);
   };
 }

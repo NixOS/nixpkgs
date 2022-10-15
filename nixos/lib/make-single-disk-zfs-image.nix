@@ -131,15 +131,6 @@ let
       properties
   );
 
-  featuresToProperties = features:
-    lib.listToAttrs
-      (builtins.map
-        (feature: {
-          name = "feature@${feature}";
-          value = "enabled";
-        })
-        features);
-
   createDatasets =
     let
       datasetlist = lib.mapAttrsToList lib.nameValuePair datasets;

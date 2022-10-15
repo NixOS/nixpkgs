@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "django-cors-headers";
-  version = "3.7.0";
+  version = "3.13.0";
 
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "django-cors-headers";
     rev = version;
-    sha256 = "1wc8cs1gpg9v98bq5qwnd4pcv043za50wd63gwkm86lbvjxyxynz";
+    sha256 = "sha256-pIyf4poW8/slxj4PVvmXpuYp//v5w00yU0Vz6Jiy2yM=";
   };
 
   propagatedBuildInputs = [
