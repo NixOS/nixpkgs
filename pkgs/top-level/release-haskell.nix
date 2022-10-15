@@ -248,7 +248,7 @@ let
         taffybar
         tamarin-prover
         taskell
-        termonad-with-packages
+        termonad
         tldr-hs
         tweet-hs
         update-nix-fetchgit

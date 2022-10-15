@@ -1919,9 +1919,7 @@ with pkgs;
   };
   termite-unwrapped = callPackage ../applications/terminal-emulators/termite { };
 
-  termonad-with-packages = callPackage ../applications/terminal-emulators/termonad { };
-
-  termonad = termonad-with-packages;
+  termonad = callPackage ../applications/terminal-emulators/termonad { };
 
   tilda = callPackage ../applications/terminal-emulators/tilda {
     gtk = gtk3;

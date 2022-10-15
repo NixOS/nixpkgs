@@ -1142,6 +1142,7 @@ mapAliases ({
   telepathy_qt = throw "'telepathy_qt' has been renamed to/replaced by 'telepathy-qt'"; # Converted to throw 2022-02-22
   telepathy_qt5 = throw "'telepathy_qt5' has been renamed to/replaced by 'libsForQt5.telepathy'"; # Converted to throw 2022-02-22
   telnet = throw "'telnet' has been renamed to/replaced by 'inetutils'"; # Converted to throw 2022-02-22
+  termonad-with-packages = throw "termonad-with-packages has been renamed to just 'termonad'"; # Added 2022-10-15
   terraform-full = throw "terraform-full has been removed, it was an alias for 'terraform.full'"; # Added 2022-08-02
   terraform_0_13 = throw "terraform_0_13 has been removed from nixpkgs"; # Added 2022-06-26
   terraform_0_14 = throw "terraform_0_14 has been removed from nixpkgs"; # Added 2022-06-26
