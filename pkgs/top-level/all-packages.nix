@@ -11821,6 +11821,8 @@ with pkgs;
 
   trackma-qt = trackma.override { withQT = true; };
 
+  tran = callPackage ../tools/networking/tran { };
+
   tpmmanager = libsForQt5.callPackage ../applications/misc/tpmmanager { };
 
   tpm-quote-tools = callPackage ../tools/security/tpm-quote-tools { };
