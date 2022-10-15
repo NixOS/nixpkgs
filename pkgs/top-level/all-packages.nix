@@ -29842,8 +29842,19 @@ with pkgs;
 
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
-  mepo = callPackage ../applications/misc/mepo { };
-  mepo-x11 = callPackage ../applications/misc/mepo { withX11 = true; };
+  mepo-bemenu = callPackage ../applications/misc/mepo {
+    menuChoice = "bemenu";
+  };
+  mepo-dmenu = callPackage ../applications/misc/mepo {
+    menuChoice = "dmenu";
+  };
+  mepo-framebuffer = callPackage ../applications/misc/mepo {
+    menuChoice = "framebuffer";
+  };
+  mepo-zenity = callPackage ../applications/misc/mepo {
+    menuChoice = "zenity";
+  };
+  mepo = mepo-zenity;
 
   meshcentral = callPackage ../tools/admin/meshcentral { };
 
