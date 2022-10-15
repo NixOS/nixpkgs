@@ -18962,6 +18962,8 @@ with pkgs;
 
   gsl_1 = callPackage ../development/libraries/gsl/gsl-1_16.nix { };
 
+  gsl-lite = callPackage ../development/libraries/gsl-lite { };
+
   gsm = callPackage ../development/libraries/gsm {};
 
   gsoap = callPackage ../development/libraries/gsoap { };
