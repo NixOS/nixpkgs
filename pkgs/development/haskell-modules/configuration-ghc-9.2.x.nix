@@ -226,4 +226,7 @@ self: super: {
   inline-c-cpp =
     (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
     super.inline-c-cpp;
+
+  relude = dontCheck self.relude_1_1_0_0;
+  hermes-json = doJailbreak super.hermes-json;
 }
