@@ -79,5 +79,6 @@
   vscode-html-languageserver-bin = "html-languageserver";
   vscode-json-languageserver-bin = "json-languageserver";
   vue-language-server = "vls";
+  wasm4 = "w4";
   webtorrent-cli = "webtorrent";
 }

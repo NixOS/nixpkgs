@@ -382,6 +382,7 @@
 , "vscode-langservers-extracted"
 , "vue-cli"
 , "vue-language-server"
+, "wasm4"
 , "wavedrom-cli"
 , "web-ext"
 , "webpack"
