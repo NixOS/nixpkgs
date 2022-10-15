@@ -8,11 +8,7 @@
 , stdenv
 , fontconfig
 , libGL
-, libX11
-, libXcursor
-, libXi
-, libXrandr
-, libxcb
+, xorg
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,11 +29,11 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [
     fontconfig
     libGL
-    libX11
-    libXcursor
-    libXi
-    libXrandr
-    libxcb
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libxcb
   ];
 
   postInstall = lib.optionalString stdenv.isLinux ''

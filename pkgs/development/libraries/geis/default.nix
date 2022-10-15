@@ -10,10 +10,7 @@
 , gobject-introspection
 , grail
 , gtk3
-, libX11
-, libXext
-, libXi
-, libXtst
+, xorg
 , pango
 , xorgserver
 }:
@@ -38,7 +35,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook python3Packages.wrapPython];
   buildInputs = [ atk dbus evemu frame gdk-pixbuf gobject-introspection grail
-    gtk3 libX11 libXext libXi libXtst pango python3Packages.python xorgserver
+    gtk3 xorg.libX11 xorg.libXext xorg.libXi xorg.libXtst pango python3Packages.python xorgserver
   ];
 
   patchPhase = ''
