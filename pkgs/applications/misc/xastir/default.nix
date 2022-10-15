@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , curl, db, libgeotiff
-, libXpm, libXt, motif, pcre
+, xorg, motif, pcre
 , perl, proj, rastermagick, shapelib
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl db libgeotiff
-    libXpm libXt motif pcre
+    xorg.libXpm xorg.libXt motif pcre
     perl proj rastermagick shapelib
   ];
 

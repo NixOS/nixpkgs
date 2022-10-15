@@ -79,12 +79,19 @@ in buildGoModule {
   version = version;
   src = src;
 
-  nativeBuildInputs = [ go-bindata pkg-config ];
+  nativeBuildInputs = [ go-bindata pkg-config perl ];
 
   vendorSha256 = "sha256-DZsd6qPKfRbnvz0UAww+ubaeTEqQxLeil1S3SZAmmJk=";
   subPackages = [ "cmd/influxd" "cmd/telemetryd" ];
 
   PKG_CONFIG_PATH = "${flux}/pkgconfig";
+
+  postPatch = ''
+    # use go-bindata from environment
+    substituteInPlace static/static.go \
+      --replace 'go run github.com/kevinburke/go-bindata/' ""
+  '';
+
   # Check that libflux and the UI are at the right version, and embed
   # the UI assets into the Go source tree.
   preBuild = ''
@@ -95,7 +102,7 @@ in buildGoModule {
         exit 1
       fi
 
-      ui_ver=$(egrep 'influxdata/ui/releases/.*/sha256.txt' scripts/fetch-ui-assets.sh | ${perl}/bin/perl -pe 's#.*/OSS-([^/]+)/.*#$1#')
+      ui_ver=$(egrep 'influxdata/ui/releases/.*/sha256.txt' scripts/fetch-ui-assets.sh | perl -pe 's#.*/OSS-([^/]+)/.*#$1#')
       if [ "$ui_ver" != "${ui_version}" ]; then
         echo "scripts/fetch-ui-assets.sh wants UI $ui_ver, but nix derivation provides ${ui_version}"
         exit 1

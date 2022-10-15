@@ -4,12 +4,8 @@
 , stdenv
 , pkg-config
 , fontconfig
-, libXcursor
-, libXi
-, libXrandr
-, libxcb
+, xorg
 , libGL
-, libX11
 , openssl
 , AppKit
 , ApplicationServices
@@ -42,10 +38,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isLinux [
     fontconfig
-    libXcursor
-    libXi
-    libXrandr
-    libxcb
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libxcb
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
@@ -64,7 +60,7 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf $out/bin/inlyne \
-      --add-rpath ${lib.makeLibraryPath [ libGL libX11 ]}
+      --add-rpath ${lib.makeLibraryPath [ libGL xorg.libX11 ]}
   '';
 
   meta = with lib; {

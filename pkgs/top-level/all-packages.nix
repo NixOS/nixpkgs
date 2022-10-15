@@ -763,6 +763,8 @@ with pkgs;
 
   run = callPackage ../development/tools/run { };
 
+  ruler = callPackage ../tools/security/ruler { };
+
   mblock-mlink = callPackage ../development/tools/mblock-mlink { };
 
   mod = callPackage ../development/tools/mod { };
@@ -1562,9 +1564,7 @@ with pkgs;
 
   libmirage = callPackage ../applications/emulators/cdemu/libmirage.nix { };
 
-  maiko = callPackage ../applications/emulators/maiko {
-    inherit (xorg) libX11;
-  };
+  maiko = callPackage ../applications/emulators/maiko { };
 
   mame = libsForQt514.callPackage ../applications/emulators/mame {
     inherit (darwin.apple_sdk.frameworks) CoreAudioKit ForceFeedback;
@@ -1827,7 +1827,6 @@ with pkgs;
   ### APPLICATIONS/TERMINAL-EMULATORS
 
   alacritty = callPackage ../applications/terminal-emulators/alacritty {
-    inherit (xorg) libXcursor libXxf86vm libXi;
     inherit (darwin.apple_sdk.frameworks) AppKit CoreGraphics CoreServices CoreText Foundation OpenGL;
   };
 
@@ -1870,10 +1869,10 @@ with pkgs;
 
   microcom = callPackage ../applications/terminal-emulators/microcom { };
 
-  mlterm = callPackage ../applications/terminal-emulators/mlterm {
+  mlterm = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/mlterm {
     libssh2 = null;
     openssl = null;
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa;
   };
 
   mrxvt = callPackage ../applications/terminal-emulators/mrxvt { };
@@ -3194,7 +3193,6 @@ with pkgs;
 
   broot = callPackage ../tools/misc/broot {
     inherit (darwin.apple_sdk.frameworks) Security;
-    inherit (xorg) libxcb;
   };
 
   bruteforce-luks = callPackage ../tools/security/bruteforce-luks { };
@@ -4502,9 +4500,7 @@ with pkgs;
 
   morsel = callPackage ../tools/text/morsel {};
 
-  mousetweaks = callPackage ../applications/accessibility/mousetweaks {
-    inherit (xorg) libX11 libXtst libXfixes;
-  };
+  mousetweaks = callPackage ../applications/accessibility/mousetweaks { };
 
   mp3blaster = callPackage ../applications/audio/mp3blaster { };
 
@@ -5357,9 +5353,7 @@ with pkgs;
 
   m17n_lib = callPackage ../tools/inputmethods/m17n-lib { };
 
-  libotf = callPackage ../tools/inputmethods/m17n-lib/otf.nix {
-    inherit (xorg) libXaw;
-  };
+  libotf = callPackage ../tools/inputmethods/m17n-lib/otf.nix { };
 
   netbird = callPackage ../tools/networking/netbird {
     inherit (darwin.apple_sdk_11_0.frameworks) Cocoa IOKit Kernel UserNotifications WebKit;
@@ -7368,7 +7362,6 @@ with pkgs;
   gromit-mpx = callPackage ../tools/graphics/gromit-mpx {
     gtk = gtk3;
     libappindicator = libappindicator-gtk3;
-    inherit (xorg) libXdmcp;
   };
 
   gron = callPackage ../development/tools/gron { };
@@ -7526,7 +7519,6 @@ with pkgs;
   pixz = callPackage ../tools/compression/pixz { };
 
   plplot = callPackage ../development/libraries/plplot {
-    inherit (xorg) libX11;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
@@ -10256,6 +10248,8 @@ with pkgs;
 
   playbar2 = libsForQt5.callPackage ../applications/audio/playbar2 { };
 
+  please = callPackage ../tools/security/please { };
+
   plecost = callPackage ../tools/security/plecost { };
 
   plujain-ramp = callPackage ../applications/audio/plujain-ramp { };
@@ -10389,6 +10383,8 @@ with pkgs;
   pretty-simple = callPackage ../development/tools/pretty-simple { };
 
   prettyping = callPackage ../tools/networking/prettyping { };
+
+  pritunl-client = callPackage ../tools/networking/pritunl-client { };
 
   pritunl-ssh = callPackage ../tools/networking/pritunl-ssh { };
 
@@ -11665,9 +11661,7 @@ with pkgs;
 
   squeekboard = callPackage ../applications/accessibility/squeekboard { };
 
-  sx = callPackage ../tools/X11/sx {
-    inherit (xorg) xauth xorgserver;
-  };
+  sx = callPackage ../tools/X11/sx { };
 
   systemdgenie = libsForQt5.callPackage ../applications/system/systemdgenie { };
 
@@ -12024,9 +12018,7 @@ with pkgs;
 
   trdl-client = callPackage ../tools/misc/trdl-client { };
 
-  trenchbroom = libsForQt5.callPackage ../applications/misc/trenchbroom {
-    inherit (xorg) libXxf86vm;
-  };
+  trenchbroom = libsForQt5.callPackage ../applications/misc/trenchbroom { };
 
   trickle = callPackage ../tools/networking/trickle {};
 
@@ -12452,9 +12444,7 @@ with pkgs;
 
   woof = callPackage ../tools/misc/woof { };
 
-  wootility = callPackage ../tools/misc/wootility {
-    inherit (xorg) libxkbfile;
-  };
+  wootility = callPackage ../tools/misc/wootility { };
 
   wormhole-william = callPackage ../tools/networking/wormhole-william { };
 
@@ -14789,7 +14779,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-deps = callPackage ../development/tools/rust/cargo-deps { };
-  cargo-download = callPackage ../development/tools/rust/cargo-download { };
   cargo-edit = callPackage ../development/tools/rust/cargo-edit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -14904,7 +14893,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
   cargo-ui = callPackage ../development/tools/rust/cargo-ui {
-    inherit (xorg) libX11 libXcursor libXi libXrandr libxcb;
     inherit (darwin.apple_sdk.frameworks);
   };
 
@@ -15893,7 +15881,6 @@ with pkgs;
 
   msp430Newlib      = callPackage ../development/misc/msp430/newlib.nix { };
   msp430NewlibCross = callPackage ../development/misc/msp430/newlib.nix {
-    inherit (buildPackages.xorg) lndir;
     newlib = newlibCross;
   };
 
@@ -16756,9 +16743,7 @@ with pkgs;
 
   flexcpp = callPackage ../development/tools/parsing/flexc++ { };
 
-  geis = callPackage ../development/libraries/geis {
-    inherit (xorg) libX11 libXext libXi libXtst;
-  };
+  geis = callPackage ../development/libraries/geis { };
 
   gi-docgen = callPackage ../development/tools/documentation/gi-docgen { };
 
@@ -17043,7 +17028,9 @@ with pkgs;
 
   libwhich = callPackage ../development/tools/misc/libwhich { };
 
-  linuxkit = callPackage ../development/tools/misc/linuxkit { };
+  linuxkit = callPackage ../development/tools/misc/linuxkit {
+    inherit (darwin.apple_sdk_11_0.frameworks) Virtualization;
+  };
 
   lit = callPackage ../development/tools/misc/lit { };
 
@@ -17475,7 +17462,6 @@ with pkgs;
   slimerjs = callPackage ../development/tools/slimerjs {};
 
   slint-lsp = callPackage ../development/tools/misc/slint-lsp {
-    inherit (xorg) libXcursor libXi;
     inherit (darwin.apple_sdk.frameworks) AppKit CoreGraphics CoreServices CoreText Foundation OpenGL;
   };
 
@@ -19612,9 +19598,7 @@ with pkgs;
 
   libbytesize = callPackage ../development/libraries/libbytesize { };
 
-  libcaca = callPackage ../development/libraries/libcaca {
-    inherit (xorg) libX11 libXext;
-  };
+  libcaca = callPackage ../development/libraries/libcaca { };
 
   libcacard = callPackage ../development/libraries/libcacard { };
 
@@ -20858,7 +20842,9 @@ with pkgs;
 
   lirc = callPackage ../development/libraries/lirc { };
 
-  liquid-dsp = callPackage ../development/libraries/liquid-dsp { inherit (darwin) cctools; };
+  liquid-dsp = callPackage ../development/libraries/liquid-dsp {
+    inherit (darwin) autoSignDarwinBinariesHook cctools;
+  };
 
   liquidfun = callPackage ../development/libraries/liquidfun { };
 
@@ -22474,6 +22460,8 @@ with pkgs;
   vrb = callPackage ../development/libraries/vrb { };
 
   vrpn = callPackage ../development/libraries/vrpn { };
+
+  vsmtp = callPackage ../servers/mail/vsmtp { };
 
   vsqlite = callPackage ../development/libraries/vsqlite { };
 
@@ -25789,7 +25777,7 @@ with pkgs;
 
   changie = callPackage ../development/tools/changie { };
 
-  cherry = callPackage ../data/fonts/cherry { inherit (xorg) fonttosfnt mkfontdir; };
+  cherry = callPackage ../data/fonts/cherry { };
 
   chonburi-font = callPackage ../data/fonts/chonburi { };
 
@@ -25823,13 +25811,11 @@ with pkgs;
 
   culmus = callPackage ../data/fonts/culmus { };
 
-  clearlyU = callPackage ../data/fonts/clearlyU
-    { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
+  clearlyU = callPackage ../data/fonts/clearlyU { };
 
   cm_unicode = callPackage ../data/fonts/cm-unicode {};
 
-  creep = callPackage ../data/fonts/creep
-    { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
+  creep = callPackage ../data/fonts/creep { };
 
   crimson = callPackage ../data/fonts/crimson {};
 
@@ -25841,8 +25827,7 @@ with pkgs;
     paths = [ dejavu_fonts.out ];
   };
 
-  dina-font = callPackage ../data/fonts/dina
-    { inherit (buildPackages.xorg) mkfontscale; };
+  dina-font = callPackage ../data/fonts/dina { };
 
   dns-root-data = callPackage ../data/misc/dns-root-data { };
 
@@ -25940,8 +25925,7 @@ with pkgs;
 
   encode-sans = callPackage ../data/fonts/encode-sans { };
 
-  envypn-font = callPackage ../data/fonts/envypn-font
-    { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
+  envypn-font = callPackage ../data/fonts/envypn-font { };
 
   execline-man-pages = skawarePackages.execline-man-pages;
 
@@ -25987,8 +25971,7 @@ with pkgs;
 
   geolite-legacy = callPackage ../data/misc/geolite-legacy { };
 
-  gohufont = callPackage ../data/fonts/gohufont
-    { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
+  gohufont = callPackage ../data/fonts/gohufont { };
 
   gnome-user-docs = callPackage ../data/documentation/gnome-user-docs { };
 
@@ -26432,8 +26415,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  profont = callPackage ../data/fonts/profont
-    { inherit (buildPackages.xorg) mkfontscale; };
+  profont = callPackage ../data/fonts/profont { };
 
   proggyfonts = callPackage ../data/fonts/proggyfonts { };
 
@@ -26583,8 +26565,7 @@ with pkgs;
 
   scientifica = callPackage ../data/fonts/scientifica { };
 
-  siji = callPackage ../data/fonts/siji
-    { inherit (buildPackages.xorg) mkfontscale fonttosfnt; };
+  siji = callPackage ../data/fonts/siji { };
 
   sound-theme-freedesktop = callPackage ../data/misc/sound-theme-freedesktop { };
 
@@ -26603,7 +26584,7 @@ with pkgs;
   source-han-serif = sourceHanPackages.serif;
   source-han-mono = sourceHanPackages.mono;
 
-  spleen = callPackage ../data/fonts/spleen { inherit (buildPackages.xorg) mkfontscale; };
+  spleen = callPackage ../data/fonts/spleen { };
 
   stilo-themes = callPackage ../data/themes/stilo { };
 
@@ -26615,9 +26596,9 @@ with pkgs;
 
   taskspooler = callPackage ../tools/system/taskspooler { };
 
-  tamsyn = callPackage ../data/fonts/tamsyn { inherit (buildPackages.xorg) mkfontscale; };
+  tamsyn = callPackage ../data/fonts/tamsyn { };
 
-  tamzen = callPackage ../data/fonts/tamzen { inherit (buildPackages.xorg) mkfontscale; };
+  tamzen = callPackage ../data/fonts/tamzen { };
 
   tango-icon-theme = callPackage ../data/icons/tango-icon-theme {
     gtk = res.gtk2;
@@ -26641,8 +26622,7 @@ with pkgs;
 
   tenderness = callPackage ../data/fonts/tenderness { };
 
-  terminus_font = callPackage ../data/fonts/terminus-font
-    { inherit (buildPackages.xorg) mkfontscale; };
+  terminus_font = callPackage ../data/fonts/terminus-font { };
 
   terminus_font_ttf = callPackage ../data/fonts/terminus-font-ttf { };
 
@@ -26678,8 +26658,7 @@ with pkgs;
 
   ubuntu_font_family = callPackage ../data/fonts/ubuntu-font-family { };
 
-  ucs-fonts = callPackage ../data/fonts/ucs-fonts
-    { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
+  ucs-fonts = callPackage ../data/fonts/ucs-fonts { };
 
   bront_fonts = callPackage ../data/fonts/bront { };
 
@@ -26691,8 +26670,7 @@ with pkgs;
 
   unfonts-core = callPackage ../data/fonts/unfonts-core { };
 
-  uni-vga = callPackage ../data/fonts/uni-vga
-    { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
+  uni-vga = callPackage ../data/fonts/uni-vga { };
 
   unicode-character-database = callPackage ../data/misc/unicode-character-database { };
 
@@ -26700,14 +26678,13 @@ with pkgs;
 
   unihan-database = callPackage ../data/misc/unihan-database { };
 
-  unifont = callPackage ../data/fonts/unifont
-    { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
+  unifont = callPackage ../data/fonts/unifont { };
 
   unifont_upper = callPackage ../data/fonts/unifont_upper { };
 
   unscii = callPackage ../data/fonts/unscii { };
 
-  uw-ttyp0 = callPackage ../data/fonts/uw-ttyp0 { inherit (xorg) fonttosfnt mkfontdir; };
+  uw-ttyp0 = callPackage ../data/fonts/uw-ttyp0 { };
 
   u001-font = callPackage ../data/fonts/u001 { };
 
@@ -27379,9 +27356,7 @@ with pkgs;
 
   ciscoPacketTracer8 = callPackage ../applications/networking/cisco-packet-tracer/8.nix { };
 
-  claws-mail = callPackage ../applications/networking/mailreaders/claws-mail {
-    inherit (xorg) libSM;
-  };
+  claws-mail = callPackage ../applications/networking/mailreaders/claws-mail { };
 
   cligh = python3Packages.callPackage ../development/tools/github/cligh {};
 
@@ -27495,7 +27470,9 @@ with pkgs;
 
   ctop = callPackage ../tools/system/ctop { };
 
-  cubicsdr = callPackage ../applications/radio/cubicsdr { };
+  cubicsdr = callPackage ../applications/radio/cubicsdr {
+    inherit (darwin.apple_sdk.frameworks) Cocoa WebKit;
+  };
 
   cum = callPackage ../applications/misc/cum { };
 
@@ -27841,7 +27818,6 @@ with pkgs;
 
   epick = callPackage ../applications/graphics/epick {
     inherit (darwin.apple_sdk.frameworks) AppKit IOKit;
-    inherit (xorg) libX11 libXcursor libXi libXrandr libxcb;
   };
 
   epr = callPackage ../applications/misc/epr { };
@@ -28184,11 +28160,11 @@ with pkgs;
   grandorgue = callPackage ../applications/audio/grandorgue { };
 
   greetd = recurseIntoAttrs {
-    greetd = callPackage ../os-specific/linux/greetd { };
-    gtkgreet = callPackage ../os-specific/linux/gtkgreet { };
-    dlm = callPackage ../os-specific/linux/dlm { };
-    wlgreet = callPackage ../os-specific/linux/wlgreet { };
-    tuigreet = callPackage ../os-specific/linux/tuigreet { };
+    dlm = callPackage ../applications/display-managers/greetd/dlm.nix { };
+    greetd = callPackage ../applications/display-managers/greetd { };
+    gtkgreet = callPackage ../applications/display-managers/greetd/gtkgreet.nix { };
+    tuigreet = callPackage ../applications/display-managers/greetd/tuigreet.nix { };
+    wlgreet = callPackage ../applications/display-managers/greetd/wlgreet.nix { };
   };
 
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict {
@@ -29003,12 +28979,8 @@ with pkgs;
   };
 
   wlroots = wlroots_0_15;
-  wlroots_0_14 = callPackage ../development/libraries/wlroots/0.14.nix {
-    inherit (xorg) xcbutilrenderutil;
-  };
-  wlroots_0_15 = callPackage ../development/libraries/wlroots/0.15.nix {
-    inherit (xorg) xcbutilrenderutil;
-  };
+  wlroots_0_14 = callPackage ../development/libraries/wlroots/0.14.nix { };
+  wlroots_0_15 = callPackage ../development/libraries/wlroots/0.15.nix { };
 
   sway-unwrapped = callPackage ../applications/window-managers/sway { };
   sway = callPackage ../applications/window-managers/sway/wrapper.nix { };
@@ -29031,9 +29003,7 @@ with pkgs;
 
   tiramisu = callPackage ../applications/misc/tiramisu { };
 
-  rlaunch = callPackage ../applications/misc/rlaunch {
-    inherit (xorg) libX11 libXft libXinerama;
-  };
+  rlaunch = callPackage ../applications/misc/rlaunch { };
 
   rootbar = callPackage ../applications/misc/rootbar {};
 
@@ -29093,9 +29063,7 @@ with pkgs;
 
   i3lock-pixeled = callPackage ../misc/screensavers/i3lock-pixeled { };
 
-  betterlockscreen = callPackage ../misc/screensavers/betterlockscreen {
-    inherit (xorg) xdpyinfo xrandr xset;
-  };
+  betterlockscreen = callPackage ../misc/screensavers/betterlockscreen { };
 
   multilockscreen = callPackage ../misc/screensavers/multilockscreen { };
 
@@ -29255,7 +29223,6 @@ with pkgs;
   inkscape-extensions = recurseIntoAttrs (callPackages ../applications/graphics/inkscape/extensions.nix {});
 
   inlyne = callPackage ../applications/misc/inlyne {
-    inherit (xorg) libX11 libXcursor libXi libXrandr libxcb;
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) AppKit ApplicationServices CoreFoundation CoreGraphics CoreServices CoreText CoreVideo Foundation Metal QuartzCore Security;
   };
@@ -29942,7 +29909,6 @@ with pkgs;
   menumaker = callPackage ../applications/misc/menumaker { };
 
   menyoki = callPackage ../applications/graphics/menyoki {
-    inherit (xorg) libX11 libXrandr;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
@@ -31587,9 +31553,7 @@ with pkgs;
 
   lightdm_qt = lightdm.override { withQt5 = true; };
 
-  lightdm-enso-os-greeter = callPackage ../applications/display-managers/lightdm-enso-os-greeter {
-    inherit (xorg) libX11 libXdmcp libpthreadstubs;
-  };
+  lightdm-enso-os-greeter = callPackage ../applications/display-managers/lightdm-enso-os-greeter { };
 
   lightdm-gtk-greeter = callPackage ../applications/display-managers/lightdm/gtk-greeter.nix {
     inherit (xfce) xfce4-dev-tools;
@@ -31835,6 +31799,8 @@ with pkgs;
   };
 
   tagainijisho = libsForQt5.callPackage ../applications/office/tagainijisho {};
+
+  tagger = callPackage ../applications/audio/tagger {};
 
   tahoe-lafs = callPackage ../tools/networking/p2p/tahoe-lafs {};
 
@@ -32690,7 +32656,6 @@ with pkgs;
 
   xastir = callPackage ../applications/misc/xastir {
     rastermagick = imagemagick6;
-    inherit (xorg) libXt;
   };
 
   xautomation = callPackage ../tools/X11/xautomation { };
@@ -33259,7 +33224,7 @@ with pkgs;
   oxen = callPackage ../applications/blockchains/oxen
     { stdenv = gcc10StdenvCompat; boost = boost17x; };
 
-  masari = callPackage ../applications/blockchains/masari { boost = boost165; };
+  masari = callPackage ../applications/blockchains/masari { boost = boost174; };
 
   napari = with python3Packages; toPythonApplication napari;
 
@@ -33772,7 +33737,6 @@ with pkgs;
   fish-fillets-ng = callPackage ../games/fish-fillets-ng { };
 
   jumpy = callPackage ../games/jumpy {
-    inherit (xorg) libX11 libXi;
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
 
@@ -36940,8 +36904,7 @@ with pkgs;
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
-  tewi-font = callPackage ../data/fonts/tewi
-    { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
+  tewi-font = callPackage ../data/fonts/tewi { };
 
   texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
 
