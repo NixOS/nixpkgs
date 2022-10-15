@@ -2,7 +2,6 @@
 , unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook, makeWrapper
 , atomEnv, at-spi2-atk, autoPatchelfHook
 , systemd, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap
-, writeShellScriptBin
 
 # Populate passthru.tests
 , tests

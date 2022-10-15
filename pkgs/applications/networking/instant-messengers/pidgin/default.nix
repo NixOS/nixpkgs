@@ -2,7 +2,7 @@
 , gst_all_1, libstartup_notification, gettext, perlPackages, libxml2, nss
 , nspr, farstream, libXScrnSaver, avahi, dbus, dbus-glib, intltool, libidn
 , lib, python3, libICE, libXext, libSM, libgnt, ncurses, cyrus_sasl, openssl
-, gnutls, libgcrypt, symlinkJoin, cacert, plugins, withOpenssl, withGnutls, withCyrus_sasl ? true
+, gnutls, libgcrypt, cacert, plugins, withOpenssl, withGnutls, withCyrus_sasl ? true
 }:
 
 # FIXME: clean the mess around choosing the SSL library (nss by default)

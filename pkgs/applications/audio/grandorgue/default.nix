@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchsvn, cmake, gcc, pkg-config, fftwFloat, alsa-lib
+{ lib, stdenv, fetchsvn, cmake, pkg-config, fftwFloat, alsa-lib
 , zlib, wavpack, wxGTK31, udev, jackaudioSupport ? false, libjack2
 , includeDemo ? true }:
 
