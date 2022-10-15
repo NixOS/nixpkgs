@@ -33214,7 +33214,7 @@ with pkgs;
   oxen = callPackage ../applications/blockchains/oxen
     { stdenv = gcc10StdenvCompat; boost = boost17x; };
 
-  masari = callPackage ../applications/blockchains/masari { boost = boost165; };
+  masari = callPackage ../applications/blockchains/masari { boost = boost174; };
 
   napari = with python3Packages; toPythonApplication napari;
 
