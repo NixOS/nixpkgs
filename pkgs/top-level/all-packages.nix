@@ -22455,6 +22455,8 @@ with pkgs;
 
   vrpn = callPackage ../development/libraries/vrpn { };
 
+  vsmtp = callPackage ../servers/mail/vsmtp { };
+
   vsqlite = callPackage ../development/libraries/vsqlite { };
 
   vte = callPackage ../development/libraries/vte {
