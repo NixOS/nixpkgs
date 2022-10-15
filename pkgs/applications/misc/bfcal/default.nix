@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     description = "Quickly display a calendar";
     homepage = "https://git.sr.ht/~bitfehler/bfcal";
     license = licenses.gpl3Plus;
+    platforms = qtbase.meta.platforms;
     maintainers = with maintainers; [ laalsaas ];
   };
 }
