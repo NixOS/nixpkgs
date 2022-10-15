@@ -53,6 +53,10 @@ In addition to writing properly formatted commit messages, it's important to inc
 
 For package version upgrades and such a one-line commit message is usually sufficient.
 
+We prefer not to use the "squash merge" feature in nixpkgs: in order to keep as much information as possible in the commit history, we expect pull requests to consist of self-contained commits as described above.
+This means that, after addressing review comments and before the PR is merged, you will sometimes need to rewrite your branch's history and then force-push it with `git push --force-with-lease`.
+Useful commands to be comfortable with are `git commit --amend`, `git commit --fixup` and `git rebase -i` (and don't forget that git lets you define aliases!).
+
 ## Rebasing between branches (i.e. from master to staging)
 
 From time to time, changes between branches must be rebased, for example, if the
