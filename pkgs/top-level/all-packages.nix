@@ -8787,6 +8787,8 @@ with pkgs;
 
   libipfix = callPackage ../development/libraries/libipfix { };
 
+  libirc = libsForQt5.callPackage ../development/libraries/libirc { };
+
   libircclient = callPackage ../development/libraries/libircclient { };
 
   libiscsi = callPackage ../development/libraries/libiscsi { };
