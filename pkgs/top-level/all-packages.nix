@@ -763,6 +763,8 @@ with pkgs;
 
   run = callPackage ../development/tools/run { };
 
+  ruler = callPackage ../tools/security/ruler { };
+
   mblock-mlink = callPackage ../development/tools/mblock-mlink { };
 
   mod = callPackage ../development/tools/mod { };
