@@ -35567,6 +35567,8 @@ with pkgs;
 
   jflap = callPackage ../applications/science/engineering/jflap { };
 
+  parsifal = python3.pkgs.callPackage ../applications/science/engineering/parsifal { };
+
   strictdoc = python3.pkgs.callPackage ../applications/science/engineering/strictdoc { };
 
   ### SCIENCE / ELECTRONICS
