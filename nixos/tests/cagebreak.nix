@@ -31,7 +31,7 @@ in
       fi
     '';
 
-    hardware.opengl.enable = true;
+    hardware.drivers.enable = true;
     programs.xwayland.enable = true;
     security.polkit.enable = true;
     environment.systemPackages = [ pkgs.cagebreak pkgs.wayland-utils ];

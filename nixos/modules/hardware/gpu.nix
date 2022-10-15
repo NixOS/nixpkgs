@@ -20,13 +20,14 @@ in {
         "amdgpu-pro"
       ];
       # TODO(@oxij): think how to easily add the rest, like those nvidia things
-      relatedPackages = concatLists
-        (mapAttrsToList (n: v:
-        optional (hasPrefix "xf86video" n) {
-        path  = [ "xorg" n ];
-        title = removePrefix "xf86video" n;
-      }) pkgs.xorg);
-      description = ''
+      # TODO: fix this
+      # relatedPackages = concatLists
+      #   (mapAttrsToList (n: v:
+      #   optional (hasPrefix "xf86video" n) {
+      #   path  = [ "xorg" n ];
+      #   title = removePrefix "xf86video" n;
+      # }) pkgs.xorg);
+      description = lib.mdDoc ''
         The names of the video drivers the configuration
         supports. They will be tried in order until one that
         supports your card is found.

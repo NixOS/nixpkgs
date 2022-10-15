@@ -12,7 +12,7 @@ driver from a set of X.org drivers (such as `vesa` and `intel`). You can
 also specify a driver manually, e.g.
 
 ```nix
-services.xserver.videoDrivers = [ "r128" ];
+hardware.gpu.drivers = [ "r128" ];
 ```
 
 to enable X.org's `xf86-video-r128` driver.
@@ -66,7 +66,7 @@ On 64-bit systems, if you want OpenGL for 32-bit programs such as in
 Wine, you should also set the following:
 
 ```nix
-hardware.opengl.driSupport32Bit = true;
+hardware.drivers.enable32bit = true;
 ```
 
 ## Auto-login {#sec-x11-auto-login .unnumbered}
@@ -115,18 +115,18 @@ officially updated since 2015.
 
 The results vary depending on the hardware, so you may have to try both
 drivers. Use the option
-[](#opt-services.xserver.videoDrivers)
+[](#opt-hardware.gpu.drivers)
 to set one. The recommended configuration for modern systems is:
 
 ```nix
-services.xserver.videoDrivers = [ "modesetting" ];
+hardware.gpu.drivers = [ "modesetting" ];
 ```
 
 If you experience screen tearing no matter what, this configuration was
 reported to resolve the issue:
 
 ```nix
-services.xserver.videoDrivers = [ "intel" ];
+hardware.gpu.drivers = [ "intel" ];
 services.xserver.deviceSection = ''
   Option "DRI" "2"
   Option "TearFree" "true"
@@ -143,16 +143,16 @@ better 3D performance than the X.org drivers. It is not enabled by
 default because it's not free software. You can enable it as follows:
 
 ```nix
-services.xserver.videoDrivers = [ "nvidia" ];
+hardware.gpu.drivers = [ "nvidia" ];
 ```
 
 Or if you have an older card, you may have to use one of the legacy
 drivers:
 
 ```nix
-services.xserver.videoDrivers = [ "nvidiaLegacy390" ];
-services.xserver.videoDrivers = [ "nvidiaLegacy340" ];
-services.xserver.videoDrivers = [ "nvidiaLegacy304" ];
+hardware.gpu.drivers = [ "nvidiaLegacy390" ];
+hardware.gpu.drivers = [ "nvidiaLegacy340" ];
+hardware.gpu.drivers = [ "nvidiaLegacy304" ];
 ```
 
 You may need to reboot after enabling this driver to prevent a clash
@@ -167,7 +167,7 @@ performance. If you still want to use it anyway, you need to explicitly
 set:
 
 ```nix
-services.xserver.videoDrivers = [ "amdgpu-pro" ];
+hardware.gpu.drivers = [ "amdgpu-pro" ];
 ```
 
 You will need to reboot after enabling this driver to prevent a clash

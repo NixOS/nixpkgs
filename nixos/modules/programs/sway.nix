@@ -135,7 +135,7 @@ in {
     };
     security.polkit.enable = true;
     security.pam.services.swaylock = {};
-    hardware.opengl.enable = mkDefault true;
+    hardware.drivers.enable = mkDefault true;
     fonts.enableDefaultFonts = mkDefault true;
     programs.dconf.enable = mkDefault true;
     # To make a Sway session available if a display manager like SDDM is enabled:

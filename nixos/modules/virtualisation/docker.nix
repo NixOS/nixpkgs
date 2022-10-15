@@ -226,7 +226,7 @@ in
       };
 
       assertions = [
-        { assertion = cfg.enableNvidia -> config.hardware.opengl.driSupport32Bit or false;
+        { assertion = cfg.enableNvidia -> config.hardware.drivers.driSupport32Bit or false;
           message = "Option enableNvidia requires 32bit support libraries";
         }];
 

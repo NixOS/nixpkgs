@@ -347,7 +347,7 @@ sub findStableDevPath {
     return $dev;
 }
 
-push @attrs, "services.xserver.videoDrivers = [ \"$videoDriver\" ];" if $videoDriver;
+push @attrs, "hardware.gpu.drivers = [ \"$videoDriver\" ];" if $videoDriver;
 
 # Generate the swapDevices option from the currently activated swap
 # devices.

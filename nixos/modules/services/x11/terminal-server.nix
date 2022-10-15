@@ -14,7 +14,7 @@ with lib;
   config = {
 
     services.xserver.enable = true;
-    services.xserver.videoDrivers = [];
+    hardware.gpu.drivers = [];
 
     # Enable GDM.  Any display manager will do as long as it supports XDMCP.
     services.xserver.displayManager.gdm.enable = true;

@@ -2076,14 +2076,14 @@ CREATE ROLE postgres LOGIN SUPERUSER;
         <para>
           For AMD GPUs, Vulkan can now be used by adding
           <literal>amdvlk</literal> to
-          <literal>hardware.opengl.extraPackages</literal>.
+          <literal>hardware.drivers.packages</literal>.
         </para>
       </listitem>
       <listitem>
         <para>
           Similarly, still for AMD GPUs, the ROCm OpenCL stack can now
           be used by adding <literal>rocm-opencl-icd</literal> to
-          <literal>hardware.opengl.extraPackages</literal>.
+          <literal>hardware.drivers.packages</literal>.
         </para>
       </listitem>
     </itemizedlist>

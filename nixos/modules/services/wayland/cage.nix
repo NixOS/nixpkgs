@@ -91,7 +91,7 @@ in {
       session required ${config.systemd.package}/lib/security/pam_systemd.so
     '';
 
-    hardware.opengl.enable = mkDefault true;
+    hardware.drivers.enable = mkDefault true;
 
     systemd.targets.graphical.wants = [ "cage-tty1.service" ];
 

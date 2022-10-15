@@ -506,9 +506,8 @@ nginx.override {
     <listitem>
       <para>
         <literal>services.xserver.vaapiDrivers</literal> has been
-        removed. Use
-        <literal>hardware.opengl.extraPackages{,32}</literal> instead.
-        You can also specify VDPAU drivers there.
+        removed. Use <literal>hardware.drivers.packages{,32}</literal>
+        instead. You can also specify VDPAU drivers there.
       </para>
     </listitem>
     <listitem>

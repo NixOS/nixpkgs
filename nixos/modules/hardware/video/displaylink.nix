@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  enabled = elem "displaylink" config.services.xserver.videoDrivers;
+  enabled = elem "displaylink" config.hardware.gpu.drivers;
 
   evdi = config.boot.kernelPackages.evdi;
 

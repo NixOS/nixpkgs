@@ -6,7 +6,7 @@ with lib;
 
 let
   nvidia_x11 = let
-    drivers = config.services.xserver.videoDrivers;
+    drivers = config.hardware.gpu.drivers;
     isDeprecated = str: (hasPrefix "nvidia" str) && (str != "nvidia");
     hasDeprecated = drivers: any isDeprecated drivers;
   in if (hasDeprecated drivers) then
@@ -108,7 +108,7 @@ in
         without a multiplexer.
 
         Note that this option only has any effect if the "nvidia" driver is specified
-        in {option}`services.xserver.videoDrivers`, and it should preferably
+        in {option}`hardware.gpu.drivers`, and it should preferably
         be the only driver there.
 
         If this is enabled, then the bus IDs of the NVIDIA and Intel GPUs have to be
@@ -314,12 +314,12 @@ in
     environment.etc."egl/egl_external_platform.d".source =
       "/run/opengl-driver/share/egl/egl_external_platform.d/";
 
-    hardware.opengl.extraPackages = [
-      nvidia_x11.out
+    hardware.drivers.packages = [
+      cfg.package
       pkgs.nvidia-vaapi-driver
     ];
-    hardware.opengl.extraPackages32 = [
-      nvidia_x11.lib32
+    hardware.drivers.packages32 = [
+      cfg.package.lib32
       pkgs.pkgsi686Linux.nvidia-vaapi-driver
     ];
 

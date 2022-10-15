@@ -810,7 +810,7 @@ self: super:
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="options.html#opt-services.xserver.videoDrivers">services.xserver.videoDrivers</link>
+          <link xlink:href="options.html#opt-hardware.gpu.drivers">hardware.gpu.drivers</link>
           no longer uses the deprecated <literal>cirrus</literal> and
           <literal>vesa</literal> device dependent X drivers by default.
           It also enables both <literal>amdgpu</literal> and

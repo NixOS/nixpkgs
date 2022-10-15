@@ -8,7 +8,7 @@ let
 
   kernelPackages = config.boot.kernelPackages;
 
-  videoDrivers = config.services.xserver.videoDrivers;
+  videoDrivers = config.hardware.gpu.drivers;
 
   drivers = pkgs.buildEnv {
     name = "hardware-drivers";
