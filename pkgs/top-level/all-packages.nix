@@ -10942,7 +10942,7 @@ with pkgs;
 
   reredirect = callPackage ../tools/misc/reredirect { };
 
-  retext = libsForQt5.callPackage ../applications/editors/retext { };
+  retext = qt6Packages.callPackage ../applications/editors/retext { };
 
   inherit (callPackage ../tools/security/rekor { })
     rekor-cli
