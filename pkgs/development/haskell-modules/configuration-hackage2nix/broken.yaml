@@ -2061,6 +2061,7 @@ broken-packages:
   - hasql-resource-pool
   - hasql-simple
   - hasql-streams-example
+  - hasql-transaction-io
   - hastache
   - haste
   - haste-prim
@@ -3962,6 +3963,7 @@ broken-packages:
   - PortFusion
   - portray-pretty
   - portray-prettyprinter
+  - posit
   - positron
   - posix-acl
   - posix-api
@@ -4427,6 +4429,8 @@ broken-packages:
   - sandman
   - sarasvati
   - sat
+  - satchmo-backends
+  - satchmo-minisat
   - Saturnin
   - satyros
   - savage
@@ -4469,6 +4473,7 @@ broken-packages:
   - sdl2-cairo-image
   - sdl2-compositor
   - sdl2-fps
+  - SDL-mpeg
   - sdr
   - seacat
   - seakale
