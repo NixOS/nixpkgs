@@ -14,6 +14,26 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-p1UmHIM4h6oe5PRSPD8rtEJpwypTxN1IHzge0Me/9mQ=";
 
+  subPackages = [
+    # The server as a monolith: https://matrix-org.github.io/dendrite/installation/install/monolith
+    "cmd/dendrite-monolith-server"
+    # The server as a polylith: https://matrix-org.github.io/dendrite/installation/install/polylith
+    "cmd/dendrite-polylith-multi"
+    # admin tools
+    "cmd/create-account"
+    "cmd/generate-config"
+    "cmd/generate-keys"
+    "cmd/resolve-state"
+    ## curl, but for federation requests, only useful for developers
+    # "cmd/furl"
+    ## an internal tool for upgrading ci tests, only relevant for developers
+    # "cmd/dendrite-upgrade-tests"
+    ## tech demos
+    # "cmd/dendrite-demo-pinecone"
+    # "cmd/dendrite-demo-yggdrasil"
+    # "cmd/dendritejs-pinecone"
+  ];
+
   checkInputs = [
     postgresqlTestHook
     postgresql
