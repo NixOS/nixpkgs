@@ -56,7 +56,7 @@ let
     REDIRECT_STATUS   = "200";
   };
 
-  recommendedProxyConfig = pkgs.writeText "nginx-recommended-proxy-headers.conf" ''
+  recommendedProxyConfig = ''
     proxy_set_header        Host $host;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -164,8 +164,7 @@ let
         proxy_send_timeout      ${cfg.proxyTimeout};
         proxy_read_timeout      ${cfg.proxyTimeout};
         proxy_http_version      1.1;
-        include ${recommendedProxyConfig};
-      ''}
+      '' + recommendedProxyConfig}
 
       ${optionalString (cfg.mapHashBucketSize != null) ''
         map_hash_bucket_size ${toString cfg.mapHashBucketSize};
@@ -373,7 +372,7 @@ let
       ${optionalString (config.alias != null) "alias ${config.alias};"}
       ${optionalString (config.return != null) "return ${config.return};"}
       ${config.extraConfig}
-      ${optionalString (config.proxyPass != null && config.recommendedProxySettings) "include ${recommendedProxyConfig};"}
+      ${optionalString (config.proxyPass != null && config.recommendedProxySettings) recommendedProxyConfig}
       ${mkBasicAuth "sublocation" config}
     }
   '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
