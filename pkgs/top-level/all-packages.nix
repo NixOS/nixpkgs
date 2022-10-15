@@ -28653,6 +28653,8 @@ with pkgs;
 
   moe =  callPackage ../applications/editors/moe { };
 
+  pattypan = callPackage ../applications/misc/pattypan {};
+
   praat = callPackage ../applications/audio/praat { };
 
   quvi = callPackage ../applications/video/quvi/tool.nix {
@@ -33339,6 +33341,12 @@ with pkgs;
 
   taro = callPackage ../applications/blockchains/taro { };
 
+  inherit (callPackages ../applications/blockchains/teos {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+  })
+    teos
+    teos-watchtower-plugin;
+
   terra-station = callPackage ../applications/blockchains/terra-station { };
 
   tessera = callPackage ../applications/blockchains/tessera { };
@@ -36787,6 +36795,8 @@ with pkgs;
   xdragon = lowPrio (callPackage ../tools/X11/xdragon { });
 
   xlockmore = callPackage ../misc/screensavers/xlockmore { };
+
+  xq = callPackage ../tools/misc/xq { };
 
   xtrlock-pam = callPackage ../misc/screensavers/xtrlock-pam { };
 

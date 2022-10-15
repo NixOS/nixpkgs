@@ -1,5 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgs
-, autoconf, automake, curl, iprange, iproute2, iptables, iputils
+{ stdenv, lib, fetchFromGitHub, autoconf, automake, curl, iprange, iproute2, iptables, iputils
 , kmod, nettools, procps, tcpdump, traceroute, util-linux, whois
 
 # If true, just install FireQOS without FireHOL

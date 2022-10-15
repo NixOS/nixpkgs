@@ -8,6 +8,7 @@
 , gdal
 , hdf5-cpp
 , LASzip
+, enableE57 ? lib.meta.availableOn stdenv.hostPlatform libe57format
 , libe57format
 , libgeotiff
 , libxml2
@@ -40,7 +41,6 @@ stdenv.mkDerivation rec {
     gdal
     hdf5-cpp
     LASzip
-    libe57format
     libgeotiff
     libxml2
     postgresql
@@ -48,10 +48,12 @@ stdenv.mkDerivation rec {
     xercesc
     zlib
     zstd
+  ] ++ lib.optionals enableE57 [
+    libe57format
   ];
 
   cmakeFlags = [
-    "-DBUILD_PLUGIN_E57=ON"
+    "-DBUILD_PLUGIN_E57=${if enableE57 then "ON" else "OFF"}"
     "-DBUILD_PLUGIN_HDF=ON"
     "-DBUILD_PLUGIN_PGPOINTCLOUD=ON"
     "-DBUILD_PLUGIN_TILEDB=ON"

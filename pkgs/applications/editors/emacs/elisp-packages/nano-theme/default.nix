@@ -1,5 +1,4 @@
-{ lib
-, trivialBuild
+{ trivialBuild
 , fetchFromGitHub
 , emacs
 }:
