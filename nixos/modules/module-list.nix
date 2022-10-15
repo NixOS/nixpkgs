@@ -1385,6 +1385,7 @@
   ./services/web-apps/nifi.nix
   ./services/web-apps/node-red.nix
   ./services/web-apps/ocis.nix
+  ./services/web-apps/piler.nix
   ./services/web-apps/onlyoffice.nix
   ./services/web-apps/openvscode-server.nix
   ./services/web-apps/mobilizon.nix
