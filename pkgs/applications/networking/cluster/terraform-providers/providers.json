@@ -1012,13 +1012,13 @@
     "version": "1.2.1"
   },
   "selectel": {
-    "hash": "sha256-27Sdez4coJ4Enc1zTg4lr1SzlW3r6wCjciC5ID8vo0w=",
+    "hash": "sha256-2PwqVzwl8UIO+334lp9zkwkr2zAdI8S/rO+6iqTLu+I=",
     "owner": "selectel",
     "provider-source-address": "registry.terraform.io/selectel/selectel",
     "repo": "terraform-provider-selectel",
-    "rev": "v3.8.4",
-    "vendorHash": "sha256-kmsO9jFoR/93PkOeIo0pkS/OjE+m3QbIspobAv/9+KI=",
-    "version": "3.8.4"
+    "rev": "v3.8.5",
+    "vendorHash": "sha256-/7YQa84hOrOAGQSW1kVE27aM2253IB4pvA0ASAJe8VQ=",
+    "version": "3.8.5"
   },
   "sentry": {
     "hash": "sha256-dNyUp+gXrOvMQu5tEnv2dOsXihyd19gdYakIo7+h3pY=",
