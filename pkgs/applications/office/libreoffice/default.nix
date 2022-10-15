@@ -1,4 +1,4 @@
-{ stdenv
+{ Stdenv
 , fetchurl
 , lib
 , pam
@@ -133,7 +133,7 @@ let
 
   langsSpaces = concatStringsSep " " langs;
 
-  mkDrv = if kdeIntegration then mkDerivation else stdenv.mkDerivation;
+  mkDrv = if kdeIntegration then mkDerivation else Stdenv.mkDerivation;
 
   srcs = {
     third_party =
@@ -195,10 +195,8 @@ in
     tar -xf ${srcs.translations}
   '';
 
-  patches = [
-    ./skip-failed-test-with-icu70.patch
-    ./gpgme-1.18.patch
-  ];
+  patches = optional (variant == "still") [ ./skip-failed-test-with-icu70.patch ./gpgme-1.18.patch ]
+  ;
 
   ### QT/KDE
   #
