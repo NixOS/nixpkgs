@@ -150,6 +150,7 @@ mapAliases ({
   caffe2 = throw "caffe2 has been removed: subsumed under the PyTorch project"; # Added 2022-04-25
   callPackage_i686 = pkgsi686Linux.callPackage;
   cantarell_fonts = throw "'cantarell_fonts' has been renamed to/replaced by 'cantarell-fonts'"; # Converted to throw 2022-02-22
+  cargo-download = throw "cargo-download has been removed from nixpkgs as it is unmaintained, use cargo-clone instead"; # Added 2022-10-11
   catfish = throw "'catfish' has been renamed to/replaced by 'xfce.catfish'"; # Converted to throw 2022-09-24
   cde-gtk-theme = throw "cde-gtk-theme has been removed from nixpkgs as it shipped with python2 scripts that didn't work anymore"; # Added 2022-01-12
   checkbashism = throw "'checkbashism' has been renamed to/replaced by 'checkbashisms'"; # Converted to throw 2022-02-22
