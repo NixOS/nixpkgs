@@ -3619,6 +3619,12 @@
     githubId = 10198051;
     name = "Drew Risinger";
   };
+  dritter = {
+    email = "dritter03@googlemail.com";
+    github = "dritter";
+    githubId = 1544760;
+    name = "Dominik Ritter";
+  };
   drperceptron = {
     email = "92106371+drperceptron@users.noreply.github.com";
     github = "drperceptron";
