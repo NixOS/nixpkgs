@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # strip -mno-ieee-fp flag from configure and configure.ac when using
+  # clang as the flag is not recognized by the compiler
   preConfigure = lib.optionalString (stdenv.cc.isClang or false) ''
     sed s/\-mno\-ieee\-fp// -i {configure,configure.ac}
   '';
