@@ -2456,6 +2456,8 @@ with pkgs;
 
   msr = callPackage ../os-specific/linux/msr { };
 
+  ctre = callPackage ../development/libraries/ctre { };
+
   ctrtool = callPackage ../tools/archivers/ctrtool { };
 
   crowbar = callPackage ../tools/security/crowbar { };
