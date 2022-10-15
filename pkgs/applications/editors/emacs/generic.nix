@@ -64,7 +64,7 @@ let emacs = (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation
   NATIVE_FULL_AOT = "1";
   LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
 } // {
-  pname = pname + lib.optionalString ( !withX && !withNS && !withGTK2 && !withGTK3 ) "-nox";
+  pname = pname + lib.optionalString ( !withX && !withNS && !withMacport && !withGTK2 && !withGTK3 ) "-nox";
   inherit version;
 
   patches = patches fetchpatch;
