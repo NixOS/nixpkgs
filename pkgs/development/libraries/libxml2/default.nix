@@ -19,9 +19,19 @@
 , gnome
 }:
 
+let
+  # Newer versions fail with minimal python, probably because
+  # https://gitlab.gnome.org/GNOME/libxml2/-/commit/b706824b612adb2c8255819c9a55e78b52774a3c
+  # This case is encountered "temporarily" during stdenv bootstrapping on darwin.
+  # Beware that the old version has known security issues, so the final set shouldn't use it.
+  oldVer = python.pname == "python3-minimal";
+in
+  assert oldVer -> stdenv.isDarwin; # reduce likelihood of using old libxml2 unintentionally
+
 stdenv.mkDerivation rec {
   pname = "libxml2";
-  version = "2.10.2";
+  version = if oldVer then "2.10.1" else
+    "2.10.2";
 
   outputs = [ "bin" "dev" "out" "doc" ]
     ++ lib.optional pythonSupport "py"
@@ -30,7 +40,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0kCr5tqcZcsZAN2b86NQHM+Is8Khy5gxfQPyct2lsmU=";
+    sha256 = if oldVer then "21a9e13cc7c4717a6c36268d0924f92c3f67a1ece6b7ff9d588958a6db9fb9d8" else
+      "0kCr5tqcZcsZAN2b86NQHM+Is8Khy5gxfQPyct2lsmU=";
   };
 
   patches = [
