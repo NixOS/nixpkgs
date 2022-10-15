@@ -88,12 +88,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "freeswitch";
-  version = "1.10.7";
+  version = "1.10.8";
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0npdvidvsi4dhwswdwilff4p3x04qmz7hgs9sdadiy2w83qb6alf";
+    sha256 = "sha256-66kwEN42LjTh/oEdFeOyXP2fU88tjR1K5ZWQJkKcDLQ=";
   };
 
   postPatch = ''
