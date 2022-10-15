@@ -1869,10 +1869,10 @@ with pkgs;
 
   microcom = callPackage ../applications/terminal-emulators/microcom { };
 
-  mlterm = callPackage ../applications/terminal-emulators/mlterm {
+  mlterm = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/mlterm {
     libssh2 = null;
     openssl = null;
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa;
   };
 
   mrxvt = callPackage ../applications/terminal-emulators/mrxvt { };
