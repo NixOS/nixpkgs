@@ -185,10 +185,10 @@ in rec {
       Carbon                  = { inherit IOKit QuartzCore libobjc; };
       CoreAudio               = { inherit IOKit; };
       CoreFoundation          = { inherit libobjc; };
-      CoreGraphics            = { inherit Accelerate IOSurface SystemConfiguration; };
+      CoreGraphics            = { inherit SystemConfiguration; };
       CoreMIDIServer          = { inherit CoreMIDI; };
       CoreMedia               = { inherit ApplicationServices AudioToolbox AudioUnit; };
-      CoreServices            = { inherit CoreAudio CoreData NetFS OpenDirectory ServiceManagement; };
+      CoreServices            = { inherit CoreAudio NetFS ServiceManagement; };
       CoreWLAN                = { inherit SecurityFoundation; };
       DiscRecording           = { inherit IOKit libobjc; };
       Foundation              = { inherit SystemConfiguration libobjc; };
