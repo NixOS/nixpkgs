@@ -4757,6 +4757,8 @@ with pkgs;
 
   shisho = callPackage ../tools/security/shisho { };
 
+  sigslot = callPackage ../development/libraries/sigslot { };
+
   siglo = callPackage ../applications/misc/siglo { };
 
   simg2img = callPackage ../tools/filesystems/simg2img { };
