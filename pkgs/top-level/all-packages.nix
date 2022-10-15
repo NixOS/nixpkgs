@@ -20860,7 +20860,9 @@ with pkgs;
 
   lirc = callPackage ../development/libraries/lirc { };
 
-  liquid-dsp = callPackage ../development/libraries/liquid-dsp { inherit (darwin) cctools; };
+  liquid-dsp = callPackage ../development/libraries/liquid-dsp {
+    inherit (darwin) autoSignDarwinBinariesHook cctools;
+  };
 
   liquidfun = callPackage ../development/libraries/liquidfun { };
 
@@ -27497,7 +27499,9 @@ with pkgs;
 
   ctop = callPackage ../tools/system/ctop { };
 
-  cubicsdr = callPackage ../applications/radio/cubicsdr { };
+  cubicsdr = callPackage ../applications/radio/cubicsdr {
+    inherit (darwin.apple_sdk.frameworks) Cocoa WebKit;
+  };
 
   cum = callPackage ../applications/misc/cum { };
 
