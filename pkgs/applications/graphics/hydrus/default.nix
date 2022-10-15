@@ -30,6 +30,7 @@ python3Packages.buildPythonPackage rec {
     cbor2
     chardet
     cloudscraper
+    dateutil
     html5lib
     lxml
     lz4
