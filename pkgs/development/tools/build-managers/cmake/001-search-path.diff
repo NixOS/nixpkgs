@@ -23,9 +23,9 @@ index b9381c3d7d..5e944640b5 100644
  
  # List common include file locations not under the common prefixes.
 +if(DEFINED ENV{NIX_CC})
-+  if(IS_DIRECTORY $ENV{NIX_CC}
-+    AND EXISTS $ENV{NIX_CC}/nix-support/orig-libc
-+    AND EXISTS $ENV{NIX_CC}/nix-support/orig-libc-dev)
++  if(IS_DIRECTORY "$ENV{NIX_CC}"
++    AND EXISTS "$ENV{NIX_CC}/nix-support/orig-libc"
++    AND EXISTS "$ENV{NIX_CC}/nix-support/orig-libc-dev")
 +    file(STRINGS "$ENV{NIX_CC}/nix-support/orig-libc" _nix_cmake_libc)
 +    file(STRINGS "$ENV{NIX_CC}/nix-support/orig-libc-dev" _nix_cmake_libc_dev)
 +  else()
