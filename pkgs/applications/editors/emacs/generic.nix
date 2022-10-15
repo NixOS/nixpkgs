@@ -4,7 +4,7 @@
   , versionModifier ? ""
   , pname ? "emacs"
   , name ? "emacs-${version}${versionModifier}"
-  , patches ? [ ]
+  , patches ? _: [ ]
 }:
 { stdenv, lib, fetchurl, fetchpatch, ncurses, xlibsWrapper, libXaw, libXpm
 , Xaw3d, libXcursor,  pkg-config, gettext, libXft, dbus, libpng, libjpeg, giflib
