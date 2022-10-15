@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       for networks where dedicated NAT64 hardware would be overkill.
     '';
     homepage = "http://www.litech.org/tayga";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ _0x4A6F ];
     platforms = platforms.linux;
   };
