@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "A script to handle Mozilla's mozlz4 files";
     license = lib.licenses.bsd2;
     maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = lib.platforms.unix;
     homepage = "https://gist.githubusercontent.com/Tblue/62ff47bef7f894e92ed5";
   };
 }
