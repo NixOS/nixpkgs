@@ -44,6 +44,7 @@ rustPlatform.buildRustPackage rec {
     description = "A next-gen mail transfer agent (MTA) written in Rust";
     homepage = "https://viridit.com";
     license = licenses.gpl3Plus;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nickcao ];
   };
 }
