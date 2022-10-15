@@ -13,8 +13,6 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-is1dQJwvhygn95rbeHeGI97vDXo8ftnNqug4eERN3gI=";
 
-  doCheck = false;
-
   proxyVendor = true;
 
   tags = [ "extended" ];
