@@ -155,7 +155,7 @@ in stdenv.mkDerivation rec {
   # use it for the normal build. This disables cmake in Nix.
   dontUseCmakeConfigure = true;
 
-  depsBuildBuild = [ pkg-config ];
+  depsBuildBuild = [ pkgsBuildHost.stdenv.cc pkg-config ];
 
   nativeBuildInputs = [
     file python3 rustPlatform.rust.rustc cmake
