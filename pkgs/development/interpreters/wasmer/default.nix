@@ -19,6 +19,10 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    sed -i "s/gcc/clang/g" lib/engine-dylib/src/engine.rs
+  '';
+
   cargoSha256 = "sha256-tswsbijNN5UcSZovVmy66yehcEOpQDGMdRgR/1mkuE8=";
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -36,10 +40,13 @@ rustPlatform.buildRustPackage rec {
   # error: Package `wasmer-workspace v2.3.0 (/build/source)` does not have the feature `test-jit`
   checkFeatures = [ "test-cranelift" ];
 
+  checkFlags = [
+    "--skip=wast::spec::unreachable::cranelift::universal"
+  ];
+
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "The Universal WebAssembly Runtime";
     longDescription = ''
       Wasmer is a standalone WebAssembly runtime for running WebAssembly outside
