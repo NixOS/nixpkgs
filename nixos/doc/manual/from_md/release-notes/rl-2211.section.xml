@@ -227,6 +227,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/edneville/please">Please</link>,
+          a Sudo clone written in Rust. Available as
+          <link linkend="opt-security.please.enable">security.please</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/messagebird/sachet/">Sachet</link>,
           an SMS alerting tool for the Prometheus Alertmanager.
           Available as
@@ -613,6 +620,27 @@
       </listitem>
       <listitem>
         <para>
+          <literal>generateOptparseApplicativeCompletions</literal> and
+          <literal>generateOptparseApplicativeCompletion</literal> from
+          <literal>haskell.lib.compose</literal> (and
+          <literal>haskell.lib</literal>) have been deprecated in favor
+          of <literal>generateOptparseApplicativeCompletions</literal>
+          (plural!) as provided by the haskell package sets (so
+          <literal>haskellPackages.generateOptparseApplicativeCompletions</literal>
+          etc.). The latter allows for cross-compilation (by
+          automatically disabling generation of completion in the cross
+          case). For it to work properly you need to make sure that the
+          function comes from the same context as the package you are
+          trying to override, i.e. always use the same package set as
+          your package is coming from or – even better – use
+          <literal>self.generateOptparseApplicativeCompletions</literal>
+          if you are overriding a haskell package set. The old functions
+          are retained for backwards compatibility, but yield are
+          warning.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>services.graphite.api</literal> and
           <literal>services.graphite.beacon</literal> NixOS options, and
           the <literal>python3.pkgs.graphite_api</literal>,
@@ -682,6 +710,12 @@
           The <literal>paperless</literal> module now defaults
           <literal>PAPERLESS_TIME_ZONE</literal> to your configured
           system timezone.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The top-level <literal>termonad-with-packages</literal> alias
+          for <literal>termonad</literal> has been removed.
         </para>
       </listitem>
       <listitem>

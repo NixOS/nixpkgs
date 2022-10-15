@@ -10,9 +10,8 @@
     testTarget = "unit-tests";
     buildTools = [installShellFiles];
     postInstall = ''
-      substitute "exe-sh/nom-build" "$out/bin/nom-build" \
-        --replace 'unbuffer' '${expect}/bin/unbuffer' \
-        --replace 'nom' "$out/bin/nom"
+      ln -s nom "$out/bin/nom-build"
+      ln -s nom "$out/bin/nom-shell"
       chmod a+x $out/bin/nom-build
       installShellCompletion --zsh --name _nom-build completions/completion.zsh
     '';

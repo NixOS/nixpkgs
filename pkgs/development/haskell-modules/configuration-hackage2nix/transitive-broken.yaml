@@ -1984,6 +1984,11 @@ dont-distribute-packages:
  - hasql-cursor-query
  - hasql-postgres
  - hasql-postgres-options
+ - hasql-streams-conduit
+ - hasql-streams-core
+ - hasql-streams-pipes
+ - hasql-streams-streaming
+ - hasql-streams-streamly
  - hasqlator-mysql
  - hasqly-mysql
  - hastache-aeson
@@ -2221,7 +2226,6 @@ dont-distribute-packages:
  - hws
  - hwsl2-bytevector
  - hwsl2-reducers
- - hxmppc
  - hxournal
  - hxt-binary
  - hxt-filter
@@ -2805,7 +2809,6 @@ dont-distribute-packages:
  - network-minihttp
  - network-netpacket
  - network-pgi
- - network-protocol-xmpp
  - network-rpca
  - network-stream
  - network-topic-models
@@ -3328,6 +3331,7 @@ dont-distribute-packages:
  - sarsi
  - sasl
  - sat-micro-hs
+ - satchmo-examples
  - satchmo-funsat
  - satchmo-toysat
  - sauron

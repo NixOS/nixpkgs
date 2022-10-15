@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "weconnect-mqtt";
-  version = "0.40.2";
+  version = "0.40.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "tillsteinbach";
     repo = "WeConnect-mqtt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TRBS51ZlE4TbDAQdQyODUNDVfIuKZtrf38iBPIGyRhI=";
+    hash = "sha256-kV4BWQ4XfB2QjXY5b46+pxt3rhyo1glKRYO2mMJNhJM=";
   };
 
   propagatedBuildInputs = [

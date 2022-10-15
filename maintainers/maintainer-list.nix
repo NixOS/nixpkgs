@@ -1760,6 +1760,12 @@
     githubId = 28444296;
     name = "Benjamin Hougland";
   };
+  bigzilla = {
+    email = "m.billyzaelani@gmail.com";
+    github = "bigzilla";
+    githubId = 20436235;
+    name = "Billy Zaelani Malik";
+  };
   billewanick = {
     email = "bill@ewanick.com";
     github = "billewanick";
@@ -3612,6 +3618,12 @@
     github = "drewrisinger";
     githubId = 10198051;
     name = "Drew Risinger";
+  };
+  dritter = {
+    email = "dritter03@googlemail.com";
+    github = "dritter";
+    githubId = 1544760;
+    name = "Dominik Ritter";
   };
   drperceptron = {
     email = "92106371+drperceptron@users.noreply.github.com";

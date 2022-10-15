@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "nsjail";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner           = "google";
     repo            = "nsjail";
     rev             = version;
     fetchSubmodules = true;
-    sha256          = "sha256-ICJpD7iCT7tLRX+52XvayOUuO1g0L0jQgk60S2zLz6c=";
+    sha256          = "sha256-SFRnCEPawMKEIdmrOnJ45IIb17W1d4qCceuRdWTDTQU=";
   };
 
   nativeBuildInputs = [ autoconf bison flex libtool pkg-config which installShellFiles ];
