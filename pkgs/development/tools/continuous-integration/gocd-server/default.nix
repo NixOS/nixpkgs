@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, unzip }:
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "gocd-server";
@@ -19,6 +24,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ unzip ];
+
+  passthru.tests = {
+    inherit (nixosTests) gocd-server;
+  };
 
   buildCommand = "
     unzip $src -d $out
