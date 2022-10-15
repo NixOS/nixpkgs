@@ -2596,6 +2596,8 @@ with pkgs;
 
   gopacked = callPackage ../applications/misc/gopacked { };
 
+  goperf = callPackage ../development/tools/goperf { };
+
   gotktrix = callPackage ../applications/networking/instant-messengers/gotktrix { };
 
   gucci = callPackage ../tools/text/gucci { };
