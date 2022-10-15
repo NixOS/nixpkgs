@@ -69,6 +69,7 @@ mapAliases ({
   eebrightbox = throw "eebrightbox is unmaintained upstream and has therefore been removed"; # added 2022-02-03
   email_validator = email-validator; # added 2022-06-22
   face_recognition = face-recognition; # added 2022-10-15
+  face_recognition_models = face-recognition-models; # added 2022-10-15
   fake_factory = throw "fake_factory has been removed because it is unused and deprecated by upstream since 2016."; # added 2022-05-30
   flask_sqlalchemy = flask-sqlalchemy; # added 2022-07-20
   flask_testing = flask-testing; # added 2022-04-25
