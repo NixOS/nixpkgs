@@ -8,12 +8,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
       boot.initrd.systemd = {
         enable = true;
-        network.networks."99-eth0" = {
-          matchConfig.Name = "eth0";
-          DHCP = "yes";
-        };
+        # Enable network-online to fail the test in case of timeout
         network.wait-online.timeout = 10;
-        # Drop the boot into emergency mode if we timeout
+        network.wait-online.anyInterface = true;
         targets.network-online.requiredBy = [ "initrd.target" ];
         services.systemd-networkd-wait-online.requiredBy =
           [ "network-online.target" ];
