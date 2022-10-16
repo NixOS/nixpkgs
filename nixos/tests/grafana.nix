@@ -81,8 +81,11 @@ in {
     with subtest("Successful API query as admin user with sqlite db"):
         sqlite.wait_for_unit("grafana.service")
         sqlite.wait_for_open_port(3000)
+        print(sqlite.succeed(
+            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/org/users -i"
+        ))
         sqlite.succeed(
-            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/org/users | grep testadmin\@localhost"
+            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/org/users | grep admin\@localhost"
         )
         sqlite.shutdown()
 
@@ -92,7 +95,7 @@ in {
         postgresql.wait_for_open_port(3000)
         postgresql.wait_for_open_port(5432)
         postgresql.succeed(
-            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/org/users | grep testadmin\@localhost"
+            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/org/users | grep admin\@localhost"
         )
         postgresql.shutdown()
 
@@ -102,7 +105,7 @@ in {
         mysql.wait_for_open_port(3000)
         mysql.wait_for_open_port(3306)
         mysql.succeed(
-            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/org/users | grep testadmin\@localhost"
+            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/org/users | grep admin\@localhost"
         )
         mysql.shutdown()
   '';

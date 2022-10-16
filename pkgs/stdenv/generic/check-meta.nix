@@ -301,7 +301,7 @@ let
     executables = listOf str;
     outputsToInstall = listOf str;
     position = str;
-    available = bool;
+    available = unspecified;
     isBuildPythonPackage = platforms;
     schedulingPriority = int;
     isFcitxEngine = bool;
