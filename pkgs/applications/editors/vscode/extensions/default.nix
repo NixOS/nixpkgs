@@ -189,8 +189,8 @@ let
         mktplcRef = {
           name = "vscode-apollo";
           publisher = "apollographql";
-          version = "1.19.9";
-          sha256 = "sha256-iJpzNKcuQrfq4Z0LXuadt6OKXelBbDQg/vuc7NJ2I5o=";
+          version = "1.19.11";
+          sha256 = "sha256-EixefDuJiw/p5yAR/UQLK1a1RXJLXlTmOlD34qpAN+U=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/apollographql.vscode-apollo/changelog";
@@ -553,8 +553,8 @@ let
         mktplcRef = {
           name = "vscode-eslint";
           publisher = "dbaeumer";
-          version = "2.2.2";
-          sha256 = "sha256-llalyQXl+k/ugZq+Ti9mApHRqAGu6QyoMP51GtZnRJ4=";
+          version = "2.2.6";
+          sha256 = "sha256-1yZeyLrXuubhKzobWcd00F/CdU824uJDTkB6qlHkJlQ=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -578,8 +578,8 @@ let
         mktplcRef = {
           name = "vscode-markdownlint";
           publisher = "DavidAnson";
-          version = "0.47.0";
-          sha256 = "sha256-KtDJo8rhQXkZtJz93E+J7eNiAIcLk4e5qKDLoR3DoGw=";
+          version = "0.48.1";
+          sha256 = "sha256-3TpZGvas+pfabHayaA6Yd9nOO2MbfXbCvCiTcbja9Vo=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint/changelog";
@@ -814,8 +814,8 @@ let
         mktplcRef = {
           name = "prettier-vscode";
           publisher = "esbenp";
-          version = "9.5.0";
-          sha256 = "sha256-L/jW6xAnJ8v9Qq+iyQI8usGr8BoICR+2ENAMGQ05r0A=";
+          version = "9.9.0";
+          sha256 = "sha256-Yr7M4HyRNcsBf8YglQLvyZjblMhtkpMP+f9SH8oUav0=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";
@@ -1609,8 +1609,8 @@ let
         mktplcRef = {
           name = "color-highlight";
           publisher = "naumovs";
-          version = "2.5.0";
-          sha256 = "sha256-dYMDV84LEGXUjt/fbsSy3BVM5SsBHcPaDDll8KjPIWY=";
+          version = "2.6.0";
+          sha256 = "sha256-TcPQOAHCYeFHPdR85GIXsy3fx70p8cLdO2UNO0krUOs=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/naumovs.color-highlight/changelog";
@@ -1950,8 +1950,8 @@ let
         mktplcRef = {
           publisher = "stkb";
           name = "rewrap";
-          version = "1.16.1";
-          sha256 = "sha256-OTPNbwoQmKd73g8IwLKMIbe6c7E2jKNkzwuBU/f8dmY=";
+          version = "1.16.3";
+          sha256 = "sha256-WHeLTN992ltEZw2W7B3sJrHfAFsOGMq3llV4C0hXLNA=";
         };
         meta = with lib; {
           changelog = "https://github.com/stkb/Rewrap/blob/master/CHANGELOG.md";
