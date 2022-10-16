@@ -1,22 +1,9 @@
 # Customising Packages {#sec-customising-packages}
 
-Some packages in Nixpkgs have options to enable or disable optional
-functionality or change other aspects of the package. For instance, the
-Firefox wrapper package (which provides Firefox with a set of plugins
-such as the Adobe Flash player) has an option to enable the Google Talk
-plugin. It can be set in `configuration.nix` as follows:
-`nixpkgs.config.firefox.enableGoogleTalkPlugin = true;`
-
-::: {.warning}
-Unfortunately, Nixpkgs currently lacks a way to query available
-configuration options.
-:::
-
-Apart from high-level options, it's possible to tweak a package in
-almost arbitrary ways, such as changing or disabling dependencies of a
-package. For instance, the Emacs package in Nixpkgs by default has a
-dependency on GTK 2. If you want to build it against GTK 3, you can
-specify that as follows:
+It's possible to tweak a package in almost arbitrary ways, such as changing or
+disabling dependencies of a package. For instance, the Emacs package in Nixpkgs
+by default has a dependency on GTK 2. If you want to build it against GTK 3, you
+can specify that as follows:
 
 ```nix
 environment.systemPackages = [ (pkgs.emacs.override { gtk = pkgs.gtk3; }) ];
