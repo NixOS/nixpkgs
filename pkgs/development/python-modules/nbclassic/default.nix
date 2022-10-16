@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "nbclassic";
-  version = "0.4.5";
+  version = "0.4.6";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BXBMbN2DAb9S5A7Z+uOegNa8XS1EfcZ4McFFtN2Sh3k=";
+    sha256 = "sha256-PBjTQ7KS+TjvyTIFdh5nTyDsoG6tJeDu3Bf3riUr9W0=";
   };
 
   propagatedBuildInputs = [ jupyter_server notebook notebook-shim ];
