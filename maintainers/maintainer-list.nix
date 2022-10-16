@@ -15642,4 +15642,10 @@
     githubId = 5228243;
     name = "waelwindows";
   };
+  rwxd = {
+    name = "rwxd";
+    email = "rwxd@pm.me";
+    github = "rwxd";
+    githubId = 40308458;
+  };
 }
