@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     };
     maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
+    mainProgram = "wn";
   };
 }

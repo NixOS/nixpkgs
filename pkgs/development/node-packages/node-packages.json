@@ -120,6 +120,7 @@
 , "dockerfile-language-server-nodejs"
 , "elasticdump"
 , "@electron-forge/cli"
+, "eas-cli"
 , "elm-oracle"
 , "emoj"
 , "emojione"

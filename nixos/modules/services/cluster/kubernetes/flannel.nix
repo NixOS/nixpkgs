@@ -26,7 +26,6 @@ in
     };
 
     services.kubernetes.kubelet = {
-      networkPlugin = mkDefault "cni";
       cni.config = mkDefault [{
         name = "mynet";
         type = "flannel";

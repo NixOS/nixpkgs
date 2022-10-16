@@ -1760,6 +1760,12 @@
     githubId = 28444296;
     name = "Benjamin Hougland";
   };
+  bigzilla = {
+    email = "m.billyzaelani@gmail.com";
+    github = "bigzilla";
+    githubId = 20436235;
+    name = "Billy Zaelani Malik";
+  };
   billewanick = {
     email = "bill@ewanick.com";
     github = "billewanick";
@@ -3613,6 +3619,12 @@
     githubId = 10198051;
     name = "Drew Risinger";
   };
+  dritter = {
+    email = "dritter03@googlemail.com";
+    github = "dritter";
+    githubId = 1544760;
+    name = "Dominik Ritter";
+  };
   drperceptron = {
     email = "92106371+drperceptron@users.noreply.github.com";
     github = "drperceptron";
@@ -4403,6 +4415,12 @@
     githubId = 66258975;
     name = "Fedx sudo";
     matrix = "fedx:matrix.org";
+  };
+  fee1-dead = {
+    email = "ent3rm4n@gmail.com";
+    github = "fee1-dead";
+    githubId = 43851243;
+    name = "Deadbeef";
   };
   fehnomenal = {
     email = "fehnomenal@fehn.systems";
@@ -12168,6 +12186,15 @@
     github = "sebbel";
     githubId = 1940568;
     name = "Sebastian Ball";
+  };
+  seberm = {
+    email = "seberm@seberm.com";
+    github = "seberm";
+    githubId = 212597;
+    name = "Otto Sabart";
+    keys = [{
+      fingerprint = "0AF6 4C3B 1F12 14B3 8C8C  5786 1FA2 DBE6 7438 7CC3";
+    }];
   };
   sebtm = {
     email = "mail@sebastian-sellmeier.de";

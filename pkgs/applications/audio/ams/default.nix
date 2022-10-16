@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchgit
-, automake
 , alsa-lib
 , ladspaH
 , libjack2

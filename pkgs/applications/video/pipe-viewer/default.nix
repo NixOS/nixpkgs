@@ -6,7 +6,6 @@
 , wrapGAppsHook
 , withGtk3 ? false
 , ffmpeg
-, gtk3
 , wget
 , xdg-utils
 , youtube-dl

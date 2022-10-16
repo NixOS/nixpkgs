@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , vala
 , meson
@@ -11,7 +12,8 @@
 , wrapGAppsHook
 , itstool
 , gnupg
-, libsoup
+, desktop-file-utils
+, libsoup_3
 , gnome
 , gpgme
 , python3
@@ -27,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "seahorse";
-  version = "42.0";
+  version = "43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-xQys6/jeen4uXx2uC5gjIRR0Epar6NVD45I9YqFT1jA=";
+    hash = "sha256-Wx0b+6dPNlgifzyC4pbzMN0PzR70Y2tqIYIo/uXqgy0=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +46,7 @@ stdenv.mkDerivation rec {
     python3
     openssh
     gnupg
+    desktop-file-utils
     gcr
     # error: Package `...' not found in specified Vala API directories or GObject-Introspection GIR directories
     # TODO: the vala setuphook should look for vala filess in targetOffset instead of hostOffset
@@ -60,7 +63,7 @@ stdenv.mkDerivation rec {
     gpgme
     libsecret
     avahi
-    libsoup
+    libsoup_3
     p11-kit
     openldap
     libpwquality
@@ -70,7 +73,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   postPatch = ''
-    patchShebangs build-aux/
+    patchShebangs build-aux/gpg_check_version.py
   '';
 
   preCheck = ''

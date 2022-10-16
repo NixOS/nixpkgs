@@ -8,7 +8,6 @@
 , libXfixes
 , libXtst
 , qtx11extras
-, git
 , knotifications
 , qtwayland
 , wayland

@@ -32,7 +32,7 @@ self: super: {
 
     plr = super.callPackage ./ext/plr.nix { };
 
-    plv8 = super.callPackage ./ext/plv8.nix {
+    plv8 = super.callPackage ./ext/plv8 {
       v8 = self.v8_8_x;
     };
 

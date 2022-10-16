@@ -1,5 +1,4 @@
 { python3
-, openssl
 , callPackage
 , recurseIntoAttrs
 , nixosTests
