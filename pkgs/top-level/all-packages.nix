@@ -29493,7 +29493,7 @@ with pkgs;
 
   kubeval-schema = callPackage ../applications/networking/cluster/kubeval/schema.nix { };
 
-  kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
+  kubernetes = callPackage ../applications/networking/cluster/kubernetes { buildGoModule = buildGo119Module; };
   kubectl = callPackage ../applications/networking/cluster/kubernetes/kubectl.nix { };
   kubectl-convert = kubectl.convert;
 
