@@ -232,14 +232,35 @@ rec {
        filterAttrsRecursive (n: v: v != null) { foo = { bar = null; }; }
        => { foo = {}; }
   */
-  filterAttrsRecursive = pred: set:
+  filterAttrsRecursive = filterAttrsRecursiveCond (x: true);
+
+  /* Like `filterAttrsRecursive', but it takes an additional predicate
+     function that tells it whether to recurse into an attribute
+     set.  If it returns false, `filterAttrsRecursiveCond' does not
+     recurse, but does apply the filter function.  If it returns true, it
+     does recurse, and does not apply the filter function.
+
+     Type:
+       filterAttrsRecursiveCond ::
+         (AttrSet -> Bool) -> (String -> a -> Bool) -> AttrSet -> AttrSet
+
+     Example:
+       # To prevent recursing into derivations (which are attribute
+       # sets with the attribute "type" equal to "derivation"):
+       filterAttrsRecursiveCond
+         (as: !(as ? "type" && as.type == "derivation"))
+         (x: ... do something ...)
+         attrs
+  */
+  filterAttrsRecursiveCond = cond: pred: set:
     listToAttrs (
       concatMap (name:
         let v = set.${name}; in
         if pred name v then [
           (nameValuePair name (
-            if isAttrs v then filterAttrsRecursive pred v
-            else v
+            if isAttrs v && cond v
+              then filterAttrsRecursiveCond cond pred v
+              else v
           ))
         ] else []
       ) (attrNames set)
