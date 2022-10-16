@@ -30943,6 +30943,8 @@ with pkgs;
 
   poke = callPackage ../applications/editors/poke { };
 
+  pokemonsay = callPackage ../tools/misc/pokemonsay { };
+
   polar-bookshelf = callPackage ../applications/misc/polar-bookshelf { };
 
   poezio = python3Packages.poezio;
