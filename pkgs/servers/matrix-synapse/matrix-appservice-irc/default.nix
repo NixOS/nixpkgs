@@ -24,6 +24,9 @@ ourNodePackages.package.override {
   dontAutoPatchelf = true;
 
   postInstall = ''
+    # Compile typescript
+    npm run build
+
     makeWrapper '${nodejs}/bin/node' "$out/bin/matrix-appservice-irc" \
       --add-flags "$out/lib/node_modules/matrix-appservice-irc/app.js"
   '';
