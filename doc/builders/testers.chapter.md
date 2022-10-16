@@ -35,6 +35,46 @@ passthru.tests.version = testers.testVersion {
 };
 ```
 
+## `testBuildFailure` {#tester-testBuildFailure}
+
+Make sure that a build does not succeed. This is useful for testing testers.
+
+This returns a derivation with an override on the builder, with the following effects:
+
+ - Fail the build when the original builder succeeds
+ - Move `$out` to `$out/result`, if it exists (assuming `out` is the default output)
+ - Save the build log to `$out/testBuildFailure.log` (same)
+
+Example:
+
+```nix
+runCommand "example" {
+  failed = testers.testBuildFailure (runCommand "fail" {} ''
+    echo ok-ish >$out
+    echo failing though
+    exit 3
+  '');
+} ''
+  grep -F 'ok-ish' $failed/result
+  grep -F 'failing though' $failed/testBuildFailure.log
+  [[ 3 = $(cat $failed/testBuildFailure.exit) ]]
+  touch $out
+'';
+```
+
+While `testBuildFailure` is designed to keep changes to the original builder's 
+environment to a minimum, some small changes are inevitable.
+
+ - The file `$TMPDIR/testBuildFailure.log` is present. It should not be deleted.
+ - `stdout` and `stderr` are a pipe instead of a tty. This could be improved.
+ - One or two extra processes are present in the sandbox during the original
+   builder's execution.
+ - The derivation and output hashes are different, but not unusual.
+ - The derivation includes a dependency on `buildPackages.bash` and
+   `expect-failure.sh`, which is built to include a transitive dependency on
+   `buildPackages.coreutils` and possibly more. These are not added to `PATH`
+   or any other environment variable, so they should be hard to observe.
+
 ## `testEqualDerivation` {#tester-testEqualDerivation}
 
 Checks that two packages produce the exact same build instructions.

@@ -1,6 +1,16 @@
-{ pkgs, lib, callPackage, runCommand, stdenv }:
+{ pkgs, buildPackages, lib, callPackage, runCommand, stdenv, substituteAll, }:
 # Documentation is in doc/builders/testers.chapter.md
 {
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailure
+  # or doc/builders/testers.chapter.md
+  testBuildFailure = drv: drv.overrideAttrs (orig: {
+    builder = buildPackages.bash;
+    args = [
+      (substituteAll { coreutils = buildPackages.coreutils; src = ./expect-failure.sh; })
+      orig.realBuilder or stdenv.shell
+    ] ++ orig.args or ["-e" (orig.builder or ../../stdenv/generic/default-builder.sh)];
+  });
+
   testEqualDerivation = callPackage ./test-equal-derivation.nix { };
 
   testVersion =
