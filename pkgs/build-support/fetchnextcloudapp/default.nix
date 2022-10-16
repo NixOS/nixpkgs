@@ -1,32 +1,27 @@
-{ stdenv, fetchurl, ... }:
-{ name
-, url
-, version
+{ stdenv, fetchzip, applyPatches, ... }:
+{ url
 , sha256
 , patches ? [ ]
+, name ? null
+, version ? null
 }:
-stdenv.mkDerivation {
-  pname = "nc-app-${name}";
-  inherit version patches;
-
-  src = fetchurl {
+if name != null || version != null then throw ''
+  `pkgs.fetchNextcloudApp` has been changed to use `fetchzip`.
+  To update, please
+  * remove `name`/`version`
+  * update the hash
+''
+else applyPatches {
+  inherit patches;
+  src = fetchzip {
     inherit url sha256;
+    postFetch = ''
+      pushd $out &>/dev/null
+      if [ ! -f ./appinfo/info.xml ]; then
+        echo "appinfo/info.xml doesn't exist in $out, aborting!"
+        exit 1
+      fi
+      popd &>/dev/null
+    '';
   };
-
-  unpackPhase = ''
-    tar -xzpf $src
-  '';
-
-  installPhase = ''
-    approot="$(dirname $(dirname $(find -path '*/appinfo/info.xml' | head -n 1)))"
-
-    if [ -d "$approot" ];
-    then
-      mv "$approot/" $out
-      chmod -R a-w $out
-    else
-      echo "Could not find appinfo/info.xml"
-      exit 1;
-    fi
-  '';
 }
