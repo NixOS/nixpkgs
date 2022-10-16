@@ -27,6 +27,7 @@
 , tpmSupport ? true
 , uringSupport ? stdenv.isLinux, liburing
 , canokeySupport ? false, canokey-qemu
+, dbusDisplaySupport ? stdenv.isLinux
 , hostCpuOnly ? false
 , hostCpuTargets ? (if hostCpuOnly
                     then (lib.optional stdenv.isx86_64 "i386-softmmu"
@@ -165,7 +166,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional libiscsiSupport "--enable-libiscsi"
     ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
     ++ lib.optional uringSupport "--enable-linux-io-uring"
-    ++ lib.optional canokeySupport "--enable-canokey";
+    ++ lib.optional canokeySupport "--enable-canokey"
+    ++ lib.optional dbusDisplaySupport "--enable-dbus-display"
+    ++ lib.optional dbusDisplaySupport "--enable-modules";
 
   dontWrapGApps = true;
 
