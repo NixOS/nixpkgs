@@ -18437,7 +18437,6 @@ with pkgs;
 
   ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
     svt-av1 = if stdenv.isAarch64 then null else svt-av1;
-    rav1e = null; # We already have SVT-AV1 for faster encoding
     rtmpdump = null; # Prefer the built-in RTMP implementation
     # The following need to be fixed on Darwin
     libjack2 = if stdenv.isDarwin then null else libjack2;
