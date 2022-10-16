@@ -228,6 +228,10 @@ qtModule {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
+  preConfigure = ''
+    export NINJAFLAGS="-j$NIX_BUILD_CORES"
+  '';
+
   postInstall = ''
     # This is required at runtime
     mkdir $out/libexec

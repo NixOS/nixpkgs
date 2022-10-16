@@ -2606,19 +2606,24 @@ buildLuarocksPackage {
 }) {};
 
 nvim-cmp = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchzip, lua
+, fetchgit, lua
 }:
 buildLuarocksPackage {
   pname = "nvim-cmp";
-  version = "0.0.1-2";
-  knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/nvim-cmp-0.0.1-2.rockspec";
-    sha256 = "0jx4i2rnc7zmy1bbqp6fqymlklc7xvqyv35prjl3ld05c4dpg7nq";
-  }).outPath;
-  src = fetchzip {
-    url    = "http://github.com/hrsh7th/nvim-cmp/archive/v0.0.1.zip";
-    sha256 = "0649n476jd6dqd79fmywmigz19sb0s344ablwr25gr23fp46hzaz";
-  };
+  version = "scm-1";
+
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/hrsh7th/nvim-cmp",
+  "rev": "3347dd3c59b6c62288d861ddb92b9ba1227257a8",
+  "date": "2022-10-15T15:20:35+09:00",
+  "path": "/nix/store/yz8ak36srpzaw6qm2gip07ppl6zladcd-nvim-cmp",
+  "sha256": "1ca9mpxq7cqi36mqz0cgyhl9w1dwcalwh6v4kj377g1vqslyl5ay",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
 
   disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.4");
   propagatedBuildInputs = [ lua ];
