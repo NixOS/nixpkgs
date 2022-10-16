@@ -3693,7 +3693,7 @@ with pkgs;
 
   dbus-broker = callPackage ../os-specific/linux/dbus-broker { };
 
-  dbx = python3Packages.callPackage ../applications/misc/dbx { };
+  dbx = callPackage ../applications/misc/dbx { };
 
   ioport = callPackage ../os-specific/linux/ioport {};
 
