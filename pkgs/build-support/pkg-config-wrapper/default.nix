@@ -127,6 +127,7 @@ stdenv.mkDerivation {
 
   env = {
     shell = getBin stdenvNoCC.shell + stdenvNoCC.shell.shellPath or "";
+    inherit (targetPlatform.rust) cargoEnvVarTarget;
     wrapperName = "PKG_CONFIG_WRAPPER";
     inherit targetPrefix suffixSalt baseBinName;
   };
