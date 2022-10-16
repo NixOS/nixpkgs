@@ -9730,6 +9730,8 @@ in {
 
   requests_ntlm = callPackage ../development/python-modules/requests_ntlm { };
 
+  requests-oauth = callPackage ../development/python-modules/requests-oauth { };
+
   requests-oauthlib = callPackage ../development/python-modules/requests-oauthlib { };
 
   requests-pkcs12 = callPackage ../development/python-modules/requests-pkcs12 { };
