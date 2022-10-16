@@ -29456,7 +29456,7 @@ with pkgs;
 
   kubeval-schema = callPackage ../applications/networking/cluster/kubeval/schema.nix { };
 
-  kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
+  kubernetes = callPackage ../applications/networking/cluster/kubernetes { buildGoModule = buildGo119Module; };
   kubectl = callPackage ../applications/networking/cluster/kubernetes/kubectl.nix { };
   kubectl-convert = kubectl.convert;
 
@@ -34298,6 +34298,8 @@ with pkgs;
   solarus-quest-editor = libsForQt5.callPackage ../development/tools/solarus-quest-editor { };
 
   sollya = callPackage ../development/interpreters/sollya { };
+
+  solicurses = callPackage ../games/solicurses { };
 
   # You still can override by passing more arguments.
   space-orbit = callPackage ../games/space-orbit { };

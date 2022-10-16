@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "datasets";
-  version = "2.6.0";
+  version = "2.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-BYTsIdzKcCxJBQs6s1MkBs6ZnUx1nYjSFGGFDkhTuUg=";
+    hash = "sha256-5j8HT/DzHH8xssv97g/9kpSgtpaY6daWOGwjasD1psg=";
   };
 
   postPatch = ''
