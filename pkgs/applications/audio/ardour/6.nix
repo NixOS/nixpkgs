@@ -56,13 +56,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ardour";
-  version = "7.1";
+  version = "6.9";
 
   # don't fetch releases from the GitHub mirror, they are broken
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
     rev = version;
-    sha256 = "eLF9n71tjdPA+ks0B8UonmPZqRgcZEA7ok79+m9PioU=";
+    sha256 = "0vlcbd70y0an881zv87kc3akmaiz4w7whsy3yaiiqqjww35jg1mm";
   };
 
   patches = [
@@ -156,16 +156,16 @@ stdenv.mkDerivation rec {
     # wscript does not install these for some reason
     install -vDm 644 "build/gtk2_ardour/ardour.xml" \
       -t "$out/share/mime/packages"
-    install -vDm 644 "build/gtk2_ardour/ardour7.desktop" \
+    install -vDm 644 "build/gtk2_ardour/ardour6.desktop" \
       -t "$out/share/applications"
     for size in 16 22 32 48 256 512; do
       install -vDm 644 "gtk2_ardour/resources/Ardour-icon_''${size}px.png" \
-        "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour7.png"
+        "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour6.png"
     done
     install -vDm 644 "ardour.1"* -t "$out/share/man/man1"
   '' + lib.optionalString videoSupport ''
     # `harvid` and `xjadeo` must be accessible in `PATH` for video to work.
-    wrapProgram "$out/bin/ardour7" \
+    wrapProgram "$out/bin/ardour6" \
       --prefix PATH : "${lib.makeBinPath [ harvid xjadeo ]}"
   '';
 
