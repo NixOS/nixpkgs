@@ -5,6 +5,7 @@
 , dbus-fast
 , fetchFromGitHub
 , poetry-core
+, pytest-asyncio
 , pytestCheckHook
 , pythonOlder
 , typing-extensions
@@ -12,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "0.18.1";
+  version = "0.19.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hbldh";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-2/jJ2C2TudwCAshDBLUQjNMbYa2j4XfW8bXmeWrAyrA=";
+    hash = "sha256-79hvDPVF5PhY0CeM0MXIJm3uMGP1YqDtOBbIl8SbM3U=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +36,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    pytest-asyncio
     pytestCheckHook
   ];
 
