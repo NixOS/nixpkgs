@@ -62,16 +62,23 @@ rustPlatform.buildRustPackage.override
     # fixes: the cargo feature `edition` requires a nightly version of Cargo, but this is the `stable` channel
     RUSTC_BOOTSTRAP = 1;
 
-    postInstall = ''
-      wrapProgram "$out/bin/cargo" --suffix PATH : "${rustc}/bin"
+    postInstall =
+      ''
+        wrapProgram "$out/bin/cargo" --suffix PATH : "${rustc}/bin"
 
-      installManPage src/tools/cargo/src/etc/man/*
+        installManPage src/tools/cargo/src/etc/man/*
 
-      installShellCompletion --bash --name cargo \
-        src/tools/cargo/src/etc/cargo.bashcomp.sh
+        installShellCompletion --bash --name cargo \
+          src/tools/cargo/src/etc/cargo.bashcomp.sh
 
-      installShellCompletion --zsh src/tools/cargo/src/etc/_cargo
-    '';
+        installShellCompletion --zsh src/tools/cargo/src/etc/_cargo
+      ''
+      + lib.optionalString (!stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isElf) ''
+        # Check that it didn't build its own static libcurl.  This isn't an
+        # installCheck because it should be run even when cross compiling.
+        echo Checking libcurl is dynamically linked...
+        $READELF -a $out/bin/.cargo-wrapped | grep -F 'Shared library: [libcurl.so'
+      '';
 
     checkPhase = ''
       # Disable cross compilation tests
@@ -81,13 +88,6 @@ rustPlatform.buildRustPackage.override
 
     # Disable check phase as there are failures (4 tests fail)
     doCheck = false;
-
-    doInstallCheck = !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isElf;
-    installCheckPhase = ''
-      runHook preInstallCheck
-      ${stdenv.cc.targetPrefix}readelf -a $out/bin/.cargo-wrapped | grep -F 'Shared library: [libcurl.so'
-      runHook postInstallCheck
-    '';
 
     meta = with lib; {
       homepage = "https://crates.io";
