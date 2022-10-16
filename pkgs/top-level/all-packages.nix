@@ -5951,6 +5951,8 @@ with pkgs;
 
   duo-unix = callPackage ../tools/security/duo-unix { };
 
+  dupe-krill = callPackage ../tools/filesystems/dupe-krill { };
+
   duplicacy = callPackage ../tools/backup/duplicacy { };
 
   duplicati = callPackage ../tools/backup/duplicati { };
