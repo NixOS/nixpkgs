@@ -15636,4 +15636,9 @@
     github = "quasigod-io";
     githubId = 62124625;
   };
+  fabius = {
+    name = "Fabian Deifuß";
+    email = "deifussfabian@icloud.com";
+    github = "fabius";
+  };
 }

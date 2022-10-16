@@ -23625,6 +23625,8 @@ with pkgs;
 
   openxr-loader = callPackage ../development/libraries/openxr-loader { };
 
+  ory-kratos = callPackage ../servers/ory-kratos { };
+
   osrm-backend = callPackage ../servers/osrm-backend { };
 
   oven-media-engine = callPackage ../servers/misc/oven-media-engine { };
