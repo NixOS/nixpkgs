@@ -52,6 +52,11 @@ let
       dir = "libfreerdp/crypto/test";
       file = "Test_x509_cert_info.c";
     }
+  ] ++ lib.optionals stdenv.isDarwin [
+    {
+      dir = "winpr/libwinpr/sysinfo/test";
+      file = "TestGetComputerName.c";
+    }
   ];
 
 in
