@@ -3,6 +3,7 @@
 
 { stdenvNoCC
 , lib
+, rust
 , buildPackages
 , pkg-config
 , baseBinName ? "pkg-config"
@@ -39,6 +40,7 @@ stdenv.mkDerivation {
   shell = getBin stdenvNoCC.shell + stdenvNoCC.shell.shellPath or "";
 
   inherit targetPrefix suffixSalt baseBinName;
+  rustTarget = replaceStrings ["-"] ["_"] (rust.toRustTarget targetPlatform);
 
   outputs = [ "out" ] ++ optionals propagateDoc ([ "man" ] ++ optional (pkg-config ? doc) "doc");
 

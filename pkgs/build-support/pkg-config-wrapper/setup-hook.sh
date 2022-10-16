@@ -25,5 +25,11 @@ addEnvHooks "$targetOffset" pkgConfigWrapper_addPkgConfigPath
 
 export PKG_CONFIG${role_post}=@targetPrefix@@baseBinName@
 
+# The Rust pkg-config crate does not support prefixed pkg-config executables[1],
+# but it does support checking these idiosyncratic PKG_CONFIG_${TRIPLE}
+# environment variables.
+# [1]: https://github.com/rust-lang/pkg-config-rs/issues/53
+export PKG_CONFIG_@rustTarget@=@targetPrefix@@baseBinName@
+
 # No local scope in sourced file
 unset -v role_post
