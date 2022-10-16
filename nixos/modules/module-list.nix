@@ -263,6 +263,7 @@
   ./security/pam.nix
   ./security/pam_usb.nix
   ./security/pam_mount.nix
+  ./security/please.nix
   ./security/polkit.nix
   ./security/rngd.nix
   ./security/rtkit.nix

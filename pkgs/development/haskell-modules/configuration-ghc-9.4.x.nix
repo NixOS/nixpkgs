@@ -74,7 +74,12 @@ in {
   # removed after https://github.com/NixOS/cabal2nix/pull/571 is merged.
   # TODO(@sternenseemann): merge and release a fixed version
   distribution-nixpkgs = dontCheck super.distribution-nixpkgs;
-  cabal2nix = dontCheck super.cabal2nix;
+  cabal2nix =
+    # cabal2nix depends on foundation, which is broken on aarch64-linux.
+    # https://github.com/haskell-foundation/foundation/issues/571
+    overrideCabal
+      (drv: { badPlatforms = [ "aarch64-linux" ]; })
+      (dontCheck super.cabal2nix);
   cabal2nix-unstable = dontCheck super.cabal2nix-unstable;
 
   # build fails on due to ghc api changes
@@ -224,4 +229,25 @@ in {
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
 
+  # 2022-10-06: https://gitlab.haskell.org/ghc/ghc/-/issues/22260
+  ghc-check = dontHaddock super.ghc-check;
+
+  # 2022-10-06: plugins disabled for hls 1.8.0.0 based on
+  # https://haskell-language-server.readthedocs.io/en/latest/support/plugin-support.html#current-plugin-support-tiers
+  haskell-language-server = super.haskell-language-server.override {
+    hls-refactor-plugin = null;
+    hls-class-plugin = null;
+    hls-eval-plugin = null;
+    hls-floskell-plugin = null;
+    hls-fourmolu-plugin = null;
+    hls-gadt-plugin = null;
+    hls-hlint-plugin = null;
+    hls-ormolu-plugin = null;
+    hls-rename-plugin = null;
+    hls-stylish-haskell-plugin = null;
+    hls-tactics-plugin = null;
+    hls-haddock-comments-plugin = null;
+    hls-retrie-plugin = null;
+    hls-splice-plugin = null;
+  };
 }
