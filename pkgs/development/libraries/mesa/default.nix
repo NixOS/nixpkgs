@@ -130,6 +130,8 @@ self = stdenv.mkDerivation {
   ] ++ optionals enableOpenCL [
     "-Dgallium-opencl=icd" # Enable the gallium OpenCL frontend
     "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
+  ] ++ optionals (!withValgrind) [
+    "-Dvalgrind=false"
   ];
 
   buildInputs = with xorg; [
