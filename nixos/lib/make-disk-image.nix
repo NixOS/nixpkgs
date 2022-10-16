@@ -17,7 +17,7 @@
   # either "efi" or "hybrid"
   # This will be undersized slightly, as this is actually the offset of
   # the end of the partition. Generally it will be 1MiB smaller.
-  bootSize ? "256MiB"
+  bootSize ? "256M"
 
 , # The files and directories to be placed in the target file system.
   # This is a list of attribute sets {source, target, mode, user, group} where
