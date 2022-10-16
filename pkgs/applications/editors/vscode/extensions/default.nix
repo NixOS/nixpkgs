@@ -1955,6 +1955,8 @@ let
         };
       };
 
+      QURI.vscode-squiggle = callPackage ./squiggle { };
+
       redhat.java = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "java";
