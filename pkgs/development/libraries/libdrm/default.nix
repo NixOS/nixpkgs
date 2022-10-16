@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.hostPlatform.isAarch [
     "-Dtegra=enabled"
     "-Detnaviv=enabled"
+  ] ++ lib.optionals (!withValgrind) [
+    "-Dvalgrind=disabled"
   ];
 
   meta = with lib; {
