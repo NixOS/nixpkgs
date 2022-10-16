@@ -24,13 +24,13 @@ lib.checkListOfEnum "${pname}: tweaks" [ "image" "square" "round" ] tweaks
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version = "2022-07-17";
+  version = "2022-10-16";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "NGgTToaSJBwmHnZjWbJ3dSJg9Mmfchj3W0xgK0CMb9M=";
+    sha256 = "S9pLwkgWdnk1AezHE2D4vpV+JSmRW3vr6G5qYoup1ko=";
   };
 
   nativeBuildInputs = [
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
 
     rm $out/share/themes/*/{AUTHORS,COPYING}
 
-    jdupes --link-soft --recurse $out/share
+    jdupes --quiet --link-soft --recurse $out/share
 
     runHook postInstall
   '';
