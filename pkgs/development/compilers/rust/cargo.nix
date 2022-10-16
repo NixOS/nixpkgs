@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgsHostHost
+{ lib, stdenv, fetchpatch, pkgsHostHost
 , file, curl, pkg-config, python3, openssl, cmake, zlib
 , installShellFiles, makeWrapper, cacert, rustPlatform, rustc
 , libiconv, CoreFoundation, Security
@@ -7,6 +7,18 @@
 rustPlatform.buildRustPackage {
   pname = "cargo";
   inherit (rustc) version src;
+
+  patches = [
+    # Update the pkg-config crate so it supports the cross-compilation
+    # environment variables exported by the pkg-config setup hook.
+    # Fortunately, the new version of the crate is already present in
+    # the vendor directory, as it was already updated for the
+    # "bootstrap" crate that implements the build system for rustc.
+    (fetchpatch {
+      url = "https://github.com/rust-lang/rust/commit/b3b6fbc8341a008347cad370af1210aa4efa3080.patch";
+      sha256 = "09xcfladpdrd7lmncai5160f47yibg5x1n9p6xsfpvh2cnaci3c5";
+    })
+  ];
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
   cargoVendorDir = "vendor";
@@ -20,8 +32,10 @@ rustPlatform.buildRustPackage {
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
 
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs = [
-    pkg-config cmake installShellFiles makeWrapper
+    pkg-config cmake installShellFiles makeWrapper zlib
     (lib.getDev pkgsHostHost.curl)
   ];
   buildInputs = [ cacert file curl python3 openssl zlib ]
