@@ -6109,8 +6109,13 @@ with pkgs;
 
   timeline = callPackage ../applications/office/timeline { };
 
-  tsm-client = callPackage ../tools/backup/tsm-client { };
-  tsm-client-withGui = callPackage ../tools/backup/tsm-client { enableGui = true; };
+  tsm-client = callPackage ../tools/backup/tsm-client {
+    openssl = openssl_1_1;
+  };
+  tsm-client-withGui = callPackage ../tools/backup/tsm-client {
+    openssl = openssl_1_1;
+    enableGui = true;
+  };
 
   tracker = callPackage ../development/libraries/tracker { };
 
