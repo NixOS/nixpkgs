@@ -607,6 +607,7 @@ in {
   syncthing = handleTest ./syncthing/syncthing.nix {};
   syncthing-init = handleTest ./syncthing/syncthing-init.nix {};
   syncthing-relay = handleTest ./syncthing/syncthing-relay.nix {};
+  syncthing-declarative = handleTest ./syncthing/syncthing-declarative.nix {};
   systemd = handleTest ./systemd.nix {};
   systemd-analyze = handleTest ./systemd-analyze.nix {};
   systemd-binfmt = handleTestOn ["x86_64-linux"] ./systemd-binfmt.nix {};
