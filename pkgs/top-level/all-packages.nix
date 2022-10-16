@@ -18421,9 +18421,28 @@ with pkgs;
 
   linbox = callPackage ../development/libraries/linbox { };
 
+  ffmpeg_4-headless = callPackage ../development/libraries/ffmpeg/4.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia VideoToolbox;
+
+    sdlSupport = false;
+    vdpauSupport = false;
+    pulseaudioSupport = false;
+    libva = libva-minimal;
+  };
+
   ffmpeg_4 = callPackage ../development/libraries/ffmpeg/4.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia VideoToolbox;
   };
+
+  ffmpeg_5-headless = callPackage ../development/libraries/ffmpeg/5.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia VideoToolbox;
+
+    sdlSupport = false;
+    vdpauSupport = false;
+    pulseaudioSupport = false;
+    libva = libva-minimal;
+  };
+
   ffmpeg_5 = callPackage ../development/libraries/ffmpeg/5.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia VideoToolbox;
   };
@@ -18434,6 +18453,8 @@ with pkgs;
   # Packages which use ffmpeg as a library, should pin to the relevant major
   # version number which the upstream support.
   ffmpeg = ffmpeg_4;
+
+  ffmpeg-headless = ffmpeg_4-headless;
 
   ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
     svt-av1 = if stdenv.isAarch64 then null else svt-av1;
