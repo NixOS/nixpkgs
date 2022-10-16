@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "502";
+  version = "502a";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-f3VnPmrRdo4PLQvS5pUafOh6ppq4hiwolz/FVVBNgxI=";
+    sha256 = "sha256-GmYjf2r5dyxkPWTmypChKbkeifCMFKi1lzRhPNe7Ckw=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +30,7 @@ python3Packages.buildPythonPackage rec {
     cbor2
     chardet
     cloudscraper
+    dateutil
     html5lib
     lxml
     lz4
