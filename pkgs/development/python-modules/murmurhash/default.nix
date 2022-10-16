@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "murmurhash";
-  version = "1.0.8";
+  version = "1.0.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-i7A6rYQoN6ZLDB0u0itQ66hfn6UUdsi8CnfDZql58fM=";
+    sha256 = "sha256-/no4yw09h8FOyd3cSTL/4tvHfXVGmrgP1QFGibDge1g=";
   };
 
   postPatch = ''
