@@ -87,7 +87,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # tries to import flynt, which isn't in Nixpkgs
+    # Tries to import flynt, which isn't in Nixpkgs
     "test_metadata_search_path"
     # Fails due pandas MultiIndex. Maybe issue with pandas version in nix?
     "test_benchmark_2q_xeb_fidelities"
