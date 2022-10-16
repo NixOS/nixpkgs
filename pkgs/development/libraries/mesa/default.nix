@@ -9,6 +9,7 @@
 , galliumDrivers ? ["auto"]
 , vulkanDrivers ? ["auto"]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
+, vulkanLayers ? [ "device-select" "overlay" ]
 , OpenGL, Xplugin
 , withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !valgrind-light.meta.broken, valgrind-light
 , enableGalliumNine ? stdenv.isLinux
@@ -119,7 +120,8 @@ self = stdenv.mkDerivation {
     "-Dgallium-opencl=icd" # Enable the gallium OpenCL frontend
     "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
   ] ++ optional enablePatentEncumberedCodecs
-    "-Dvideo-codecs=h264dec,h264enc,h265dec,h265enc,vc1dec";
+    "-Dvideo-codecs=h264dec,h264enc,h265dec,h265enc,vc1dec"
+  ++ optional (vulkanLayers != []) "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}";
 
   buildInputs = with xorg; [
     expat llvmPackages.libllvm libglvnd xorgproto
@@ -195,6 +197,11 @@ self = stdenv.mkDerivation {
     # move libOSMesa to $osmesa, as it's relatively big
     mkdir -p $osmesa/lib
     mv -t $osmesa/lib/ $out/lib/libOSMesa*
+  '' + lib.optionalString (vulkanLayers != []) ''
+    mv -t $drivers/lib $out/lib/libVkLayer*
+    for js in $drivers/share/vulkan/{im,ex}plicit_layer.d/*.json; do
+      substituteInPlace "$js" --replace '"libVkLayer_' '"'"$drivers/lib/libVkLayer_"
+    done
   '';
 
   postFixup = optionalString stdenv.isLinux ''
