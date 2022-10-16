@@ -14745,7 +14745,9 @@ with pkgs;
   buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
   cratesIO = callPackage ../build-support/rust/crates-io.nix { };
 
-  cargo-espflash = callPackage ../development/tools/rust/cargo-espflash { };
+  cargo-espflash = callPackage ../development/tools/rust/cargo-espflash {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   cargo-web = callPackage ../development/tools/rust/cargo-web {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
