@@ -4,6 +4,7 @@
 , rustPlatform
 , pkg-config
 , openssl
+, CoreServices
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,6 +27,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
   ];
 
   meta = with lib; {

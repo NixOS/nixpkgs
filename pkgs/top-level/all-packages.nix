@@ -25367,7 +25367,9 @@ with pkgs;
 
   roccat-tools = callPackage ../os-specific/linux/roccat-tools { };
 
-  rojo = callPackage ../development/tools/rojo { };
+  rojo = callPackage ../development/tools/rojo {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   rtsp-simple-server = callPackage ../servers/rtsp-simple-server { };
 
