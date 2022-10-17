@@ -30,6 +30,7 @@ let
     { adminAddr = "alice@example.org";
       forceSSL = true;
       enableACME = true;
+      enablePHP = true;
     };
 in
 {
