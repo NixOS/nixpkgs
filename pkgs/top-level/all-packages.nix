@@ -13304,7 +13304,7 @@ with pkgs;
 
   avra = callPackage ../development/compilers/avra { };
 
-  ballerina = callPackage ../development/compilers/ballerina { };
+  ballerina = callPackage ../development/compilers/ballerina { openjdk = openjdk11; };
 
   beekeeper-studio = callPackage ../development/tools/database/beekeeper-studio { };
 
