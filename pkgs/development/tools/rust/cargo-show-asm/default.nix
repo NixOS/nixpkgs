@@ -6,6 +6,7 @@
 , installShellFiles
 , openssl
 , nix-update-script
+, callPackage
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-asm";
@@ -30,8 +31,13 @@ rustPlatform.buildRustPackage rec {
       --zsh  <($out/bin/cargo-asm --bpaf-complete-style-zsh )
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+    tests = lib.optionalAttrs stdenv.hostPlatform.isx86_64 {
+      test-basic-x86_64 = callPackage ./test-basic-x86_64.nix { };
+    };
   };
 
   meta = with lib; {
