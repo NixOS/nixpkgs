@@ -3478,8 +3478,6 @@ with pkgs;
 
   clipman = callPackage ../tools/wayland/clipman { };
 
-  hyprpaper = callPackage ../tools/wayland/hyprpaper { };
-
   kabeljau = callPackage ../games/kabeljau { };
 
   kanshi = callPackage ../tools/wayland/kanshi { };
@@ -4219,6 +4217,8 @@ with pkgs;
   hunt = callPackage ../tools/misc/hunt { };
 
   hyprland = callPackage ../applications/window-managers/hyprwm/hyprland { };
+
+  hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
 
   hysteria = callPackage ../tools/networking/hysteria {
     buildGoModule = buildGo119Module;
