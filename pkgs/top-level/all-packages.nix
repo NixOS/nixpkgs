@@ -27601,7 +27601,9 @@ with pkgs;
 
   convos = callPackage ../applications/networking/irc/convos { };
 
-  comical = callPackage ../applications/graphics/comical { };
+  comical = callPackage ../applications/graphics/comical {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   containerd = callPackage ../applications/virtualization/containerd { };
 
