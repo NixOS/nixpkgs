@@ -60,6 +60,7 @@ in makeTest {
   name = "cloud-init";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ lewo ];
+    broken = true; # almost always times out after spending many hours
   };
   nodes.machine = { ... }:
   {
