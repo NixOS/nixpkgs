@@ -23049,6 +23049,8 @@ with pkgs;
 
   alps = callPackage ../servers/alps { };
 
+  apache-directory-server = callPackage ../servers/ldap/apache-directory-server {};
+
   apacheHttpd_2_4 = callPackage ../servers/http/apache-httpd/2.4.nix { };
   apacheHttpd = apacheHttpd_2_4;
 
@@ -26953,8 +26955,6 @@ with pkgs;
   anytype = callPackage ../applications/misc/anytype { };
 
   ao = libfive;
-
-  apache-directory-server = callPackage ../servers/apache-directory-server {};
 
   apache-directory-studio = callPackage ../applications/networking/apache-directory-studio {};
 
