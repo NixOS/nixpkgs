@@ -1,0 +1,24 @@
+diff --git a/crates/rover-client/build.rs b/crates/rover-client/build.rs
+index f664ce5..42ac161 100644
+--- a/crates/rover-client/build.rs
++++ b/crates/rover-client/build.rs
+@@ -20,7 +20,11 @@ fn main() -> Result<()> {
+     let hash_path = Utf8PathBuf::from(".schema/hash.id");
+
+     // skip updating the schema if we already have an etag or we're offline
+-    let should_update_schema = !(hash_path.exists()) || online::check(None).is_ok();
++    let should_update_schema = if hash_path.exists() {
++        false
++    } else {
++        online::check(None).is_ok()
++    };
+
+     if should_update_schema {
+         if !(hash_path.exists()) {
+@@ -45,6 +49,7 @@ fn main() -> Result<()> {
+
+ fn query_hash() -> Result<String> {
+     let (hash, _) = query(false)?;
++    println!("the hash is {hash}");
+     Ok(hash)
+ }

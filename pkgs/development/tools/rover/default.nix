@@ -3,23 +3,36 @@
 , fetchFromGitHub
 , perl
 , rustPlatform
+, stdenv
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rover";
-  version = "0.5.1";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "apollographql";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wBHMND/xpm9o7pkWMUj9lEtEkzy3mX+E4Dt7qDn6auY=";
+    sha256 = "sha256-gcSRW4Tbbfn0A2P8ymHwu4P2Ox4INYUw5vEMUcAA9Dc=";
   };
 
-  cargoSha256 = "sha256-n0R2MdAYGsOsYt4x1N1KdGvBZYTALyhSzCGW29bnFU4=";
+  cargoSha256 = "sha256-YVXpIsuchbv0mvKbUfhsuPzkmxyAWG9zP7h4iyL1ih0=";
+
+  patches = [
+    ./logic.patch
+  ];
 
   nativeBuildInputs = [
     perl
+  ];
+
+  buildInputs = [] ++ lib.lists.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.SystemConfiguration
+    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.CoreServices
+    darwin.apple_sdk.frameworks.CoreFoundation
   ];
 
   # The rover-client's build script (crates/rover-client/build.rs) will try to
@@ -27,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   # To avoid this we pre-download it to a location the build script checks.
   preBuild = ''
     mkdir crates/rover-client/.schema
-    cp ${./schema}/etag.id        crates/rover-client/.schema/
+    cp ${./schema}/hash.id        crates/rover-client/.schema/
     cp ${./schema}/schema.graphql crates/rover-client/.schema/
   '';
 
@@ -45,6 +58,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.apollographql.com/docs/rover";
     license = licenses.mit;
     maintainers = [ maintainers.ivanbrennan ];
-    platforms = ["x86_64-linux"];
+    platforms = ["x86_64-linux"] ++ lib.platforms.darwin;
   };
 }
