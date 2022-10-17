@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "gatk";
-  version = "4.2.6.1";
+  version = "4.3.0.0";
   src = fetchzip {
     url = "https://github.com/broadinstitute/gatk/releases/download/${version}/gatk-${version}.zip";
-    sha256 = "0hjlsl7fxf3ankyjidqhwxc70gjh6z4lnjzw6b5fldzb0qvgfvy8";
+    sha256 = "sha256-AhXZyWbAXM5iwqxkYkMlqYUN838BjvIf5X95MVEfJ2I=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

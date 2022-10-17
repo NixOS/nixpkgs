@@ -720,6 +720,12 @@ in {
         assertion = cfg.smtp.password != opt.smtp.password.default -> cfg.smtp.passwordFile == null;
         message = "Cannot set both password and passwordFile";
       }
+      {
+        assertion = all
+          ({ type, access, ... }: type == "prometheus" -> access != "direct")
+          cfg.provision.datasources;
+        message = "For datasources of type `prometheus`, the `direct` access mode is not supported anymore (since Grafana 9.2.0)";
+      }
     ];
 
     systemd.services.grafana = {

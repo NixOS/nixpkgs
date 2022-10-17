@@ -48,13 +48,13 @@
     "version": "2.4.2"
   },
   "alicloud": {
-    "hash": "sha256-lJsCXLSIbb/jLjNsvU0GFljlrKBR2TDDOGXDhBTaIKI=",
+    "hash": "sha256-k5WZpqZvoL4R1kQ0CBWK8JLkWCvfpkl1b849ZbJsPxw=",
     "owner": "aliyun",
     "provider-source-address": "registry.terraform.io/aliyun/alicloud",
     "repo": "terraform-provider-alicloud",
-    "rev": "v1.187.0",
+    "rev": "v1.188.0",
     "vendorHash": null,
-    "version": "1.187.0"
+    "version": "1.188.0"
   },
   "ansible": {
     "hash": "sha256-3nha5V4rNgVzgqliebmbC5e12Lj/zlCsyyiIVFlmUrY=",
@@ -515,13 +515,13 @@
     "version": "5.1.5"
   },
   "hetznerdns": {
-    "hash": "sha256-QmD9UlQpyvEz4in1I960J0eC6xNtgk5z8tZUxaApOwE=",
+    "hash": "sha256-wmXZ6+5Ex3G2JUdw2is2VIo/X1X0V1Auw5KmYpGllug=",
     "owner": "timohirt",
     "provider-source-address": "registry.terraform.io/timohirt/hetznerdns",
     "repo": "terraform-provider-hetznerdns",
-    "rev": "v2.1.0",
+    "rev": "v2.2.0",
     "vendorHash": "sha256-Bat/S4e5vzT0/XOhJ9zCWLa4IE4owLC6ec1yvEh+c0Y=",
-    "version": "2.1.0"
+    "version": "2.2.0"
   },
   "htpasswd": {
     "hash": "sha256-3Az8iNoau+2KGkdDjR+QAfuEcEhKfRmZFb5f4kaFyoU=",
@@ -543,13 +543,13 @@
     "version": "3.1.0"
   },
   "huaweicloud": {
-    "hash": "sha256-Hr60bx3fGpfSxQAwGckhmZ80Iw/bPKLNDXeVXV1GTdo=",
+    "hash": "sha256-QBRnlBR+gPMy9gtM2P93Lot4GDW94z7B4BgYs+lT5IQ=",
     "owner": "huaweicloud",
     "provider-source-address": "registry.terraform.io/huaweicloud/huaweicloud",
     "repo": "terraform-provider-huaweicloud",
-    "rev": "v1.41.0",
+    "rev": "v1.41.1",
     "vendorHash": null,
-    "version": "1.41.0"
+    "version": "1.41.1"
   },
   "huaweicloudstack": {
     "hash": "sha256-WSJDp+LFjVPquQVMgib/YZV35kktLH2vMCIZJWqakXs=",
@@ -741,13 +741,13 @@
     "version": "3.3.0"
   },
   "minio": {
-    "hash": "sha256-57wks4TYv7+kUPEhlj8V/X1fQ0/J/kbsuFQFlPxXwns=",
+    "hash": "sha256-9EpVDRX5rPJ1TIlC+gI79AC442cBzWq76ebFLKPbwmc=",
     "owner": "aminueza",
     "provider-source-address": "registry.terraform.io/aminueza/minio",
     "repo": "terraform-provider-minio",
-    "rev": "v1.6.0",
-    "vendorHash": "sha256-0pWW7CDVwVombuKqAwzmkJmLpB1RCuV2SEoQnWppA1M=",
-    "version": "1.6.0"
+    "rev": "v1.7.0",
+    "vendorHash": "sha256-DDP/YAZ5CVcQWxG6+RTw8ihrk9wADAckpWx2x1I0MDE=",
+    "version": "1.7.0"
   },
   "mongodbatlas": {
     "hash": "sha256-NVbUKSG5rGUtRlaJVND3nW+0Svc2d8R8uvxGKcQktco=",
@@ -1093,13 +1093,13 @@
     "version": "1.4.0"
   },
   "statuscake": {
-    "hash": "sha256-wpDe+mtFh96qIbtfg+uilklvFNftQxqF9DOuudKLMm0=",
+    "hash": "sha256-rT+NJBPA73WCctlZnu0i952fzrGCxVF2vIIvE0SzvNI=",
     "owner": "StatusCakeDev",
     "provider-source-address": "registry.terraform.io/StatusCakeDev/statuscake",
     "repo": "terraform-provider-statuscake",
-    "rev": "v2.0.4",
-    "vendorHash": "sha256-FxTGEeJkElMovd6VGUEGss0gjorZPSPc+whqeHe4s2Y=",
-    "version": "2.0.4"
+    "rev": "v2.0.5",
+    "vendorHash": "sha256-wPNMrHFCUn1AScxTwgRXHSGrs+6Ebm4c+cS5EwHUeUU=",
+    "version": "2.0.5"
   },
   "sumologic": {
     "hash": "sha256-DvEd1OdLmUEEmk0zl7jiTjdk/3Fp1Z/3KCpYRpxHTn4=",
@@ -1109,6 +1109,15 @@
     "rev": "v2.19.1",
     "vendorHash": "sha256-W+dV6rmyOqCeQboYvpxYoNZixv2+uBd2+sc9BvTE+Ag=",
     "version": "2.19.1"
+  },
+  "tailscale": {
+    "hash": "sha256-/qC8TOtoVoBTWeAFpt2TYE8tlYBCCcn/mzVQ/DN51YQ=",
+    "owner": "tailscale",
+    "provider-source-address": "registry.terraform.io/tailscale/tailscale",
+    "repo": "terraform-provider-tailscale",
+    "rev": "v0.13.5",
+    "vendorHash": "sha256-8EIxqKkVO706oejlvN79K8aEZAF5H2vZRdr5vbQa0l4=",
+    "version": "0.13.5"
   },
   "tencentcloud": {
     "hash": "sha256-kAbLfuENWHxu51Eu+7X1X4HiWkD8KAL4awZpGRg0BaU=",

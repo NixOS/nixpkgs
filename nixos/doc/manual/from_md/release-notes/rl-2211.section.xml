@@ -734,6 +734,16 @@
           <literal>[ &quot;lua54&quot; &quot;luau&quot; ]</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.fetchNextcloudApp</literal> has been rewritten
+          to circumvent impurities in e.g. tarballs from GitHub and to
+          make it easier to apply patches. This means that your hashes
+          are out-of-date and the (previously required) attributes
+          <literal>name</literal> and <literal>version</literal> are no
+          longer accepted.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-notable-changes">

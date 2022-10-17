@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "502";
+  version = "502a";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-f3VnPmrRdo4PLQvS5pUafOh6ppq4hiwolz/FVVBNgxI=";
+    hash = "sha256-GmYjf2r5dyxkPWTmypChKbkeifCMFKi1lzRhPNe7Ckw=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,7 @@ python3Packages.buildPythonPackage rec {
     pyopenssl
     pyside2
     pysocks
+    python-dateutil
     python3Packages.mpv
     pyyaml
     qtpy
@@ -51,7 +52,11 @@ python3Packages.buildPythonPackage rec {
     twisted
   ];
 
-  checkInputs = with python3Packages; [ nose mock httmock ];
+  checkInputs = with python3Packages; [
+    nose
+    mock
+    httmock
+  ];
 
   # most tests are failing, presumably because we are not using test.py
   checkPhase = ''

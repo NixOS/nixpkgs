@@ -55,6 +55,7 @@ with python.pkgs; buildPythonApplication rec {
     protobuf
     pyserial
     pyyaml
+    requests
     tornado
     tzdata
     tzlocal

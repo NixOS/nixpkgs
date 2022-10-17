@@ -1,18 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub, stdenv }:
+{ lib, buildGoModule, fetchFromGitHub, stdenv, makeWrapper, gitMinimal }:
 
 buildGoModule rec {
   pname = "gitsign";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jL39U7kmdy5lo/caetpFlFCLfby6ftMWDMPq6yt3nUk=";
+    sha256 = "sha256-hDVn7ZiZoY0FSgIsApZliMIq1xjuNdg+DMvKzP5kET0=";
   };
-  vendorSha256 = "sha256-9tmENlR3vVELmT7JWcz7RhtIji7go2V/Bsu9nMrvHfs=";
+  vendorSha256 = "sha256-5hVcul5DlHZ0Gtw1LdBmxGpsmuD2bTtwPGysOUwe2k0=";
+
+  nativeBuildInputs = [ makeWrapper ];
 
   ldflags = [ "-s" "-w" "-buildid=" "-X github.com/sigstore/gitsign/pkg/version.gitVersion=${version}" ];
+
+  postInstall = ''
+    for f in $out/bin/*; do
+      wrapProgram $f --prefix PATH : ${lib.makeBinPath [ gitMinimal ]}
+    done
+  '';
 
   meta = {
     homepage = "https://github.com/sigstore/gitsign";
