@@ -4218,7 +4218,7 @@ with pkgs;
 
   hunt = callPackage ../tools/misc/hunt { };
 
-  hyprland = callPackage ../applications/window-managers/hyprland { };
+  hyprland = callPackage ../applications/window-managers/hyprwm/hyprland { };
 
   hysteria = callPackage ../tools/networking/hysteria {
     buildGoModule = buildGo119Module;
