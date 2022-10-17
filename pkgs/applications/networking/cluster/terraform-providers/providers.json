@@ -741,13 +741,13 @@
     "version": "3.3.0"
   },
   "minio": {
-    "hash": "sha256-9EpVDRX5rPJ1TIlC+gI79AC442cBzWq76ebFLKPbwmc=",
+    "hash": "sha256-rB7GhbTUSPTd8YOFV2XG1riBr2Wd6DTEZd2CreMbBD0=",
     "owner": "aminueza",
     "provider-source-address": "registry.terraform.io/aminueza/minio",
     "repo": "terraform-provider-minio",
-    "rev": "v1.7.0",
+    "rev": "v1.7.1",
     "vendorHash": "sha256-DDP/YAZ5CVcQWxG6+RTw8ihrk9wADAckpWx2x1I0MDE=",
-    "version": "1.7.0"
+    "version": "1.7.1"
   },
   "mongodbatlas": {
     "hash": "sha256-NVbUKSG5rGUtRlaJVND3nW+0Svc2d8R8uvxGKcQktco=",

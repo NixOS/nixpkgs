@@ -9,8 +9,9 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pushbullet.py";
+  pname = "pushbullet-py";
   version = "0.12.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
