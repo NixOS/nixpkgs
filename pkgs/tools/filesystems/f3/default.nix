@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, parted, systemd ? null
+, parted, systemd, argp-standalone
 }:
 
 stdenv.mkDerivation rec {
@@ -22,10 +22,8 @@ stdenv.mkDerivation rec {
      done
   '';
 
-  buildInputs = [
-    parted
-  ]
-  ++ lib.optional stdenv.isLinux systemd;
+  buildInputs = lib.optional stdenv.isLinux [ systemd parted ]
+  ++ lib.optional stdenv.isDarwin [ argp-standalone ];
 
   enableParallelBuilding = true;
 
