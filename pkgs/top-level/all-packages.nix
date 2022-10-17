@@ -3548,6 +3548,8 @@ with pkgs;
 
   cambalache = callPackage ../development/tools/cambalache { };
 
+  changedetection-io = callPackage ../servers/web-apps/changedetection-io { };
+
   clipster = callPackage ../tools/misc/clipster { };
 
   clockify = callPackage ../applications/office/clockify {
