@@ -8530,6 +8530,12 @@
     githubId = 95194;
     name = "Mauricio Scheffer";
   };
+  maxhero = {
+    email = "contact@maxhero.dev";
+    github = "themaxhero";
+    githubId = 4708337;
+    name = "Marcelo A. de L. Santos";
+  };
   max-niederman = {
     email = "max@maxniederman.com";
     github = "max-niederman";
