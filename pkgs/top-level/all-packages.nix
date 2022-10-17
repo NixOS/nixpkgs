@@ -32744,6 +32744,8 @@ with pkgs;
 
   picom = callPackage ../applications/window-managers/picom {};
 
+  picom-jonaburg = callPackage ../applications/window-managers/picom/picom-jonaburg.nix { };
+
   picom-next = callPackage ../applications/window-managers/picom/picom-next.nix { };
 
   xd = callPackage ../applications/networking/p2p/xd {};
