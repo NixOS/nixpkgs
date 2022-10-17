@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-hMAxKijmlckkCtQZiC5ubaZQKU2m99gL/MkYoU7zQxU=";
-  
+
   postPatch = ''
     rm .cargo/config.toml;
   '';
