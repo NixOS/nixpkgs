@@ -793,6 +793,8 @@ let
 
     mdx = callPackage ../development/ocaml-modules/mdx { };
 
+    mec = callPackage ../development/ocaml-modules/mec { };
+
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
     menhirLib = callPackage ../development/ocaml-modules/menhir/lib.nix { };
