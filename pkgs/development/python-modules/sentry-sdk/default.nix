@@ -19,7 +19,7 @@
 , django
 , falcon
 , flask
-, flask_login
+, flask-login
 , httpx
 , pure-eval
 , pyramid

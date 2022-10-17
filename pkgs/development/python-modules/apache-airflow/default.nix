@@ -20,7 +20,7 @@
 , deprecated
 , dill
 , flask
-, flask_login
+, flask-login
 , flask-appbuilder
 , flask-caching
 , flask-session
@@ -159,7 +159,7 @@ buildPythonPackage rec {
     flask-caching
     flask-session
     flask-wtf
-    flask_login
+    flask-login
     GitPython
     graphviz
     gunicorn

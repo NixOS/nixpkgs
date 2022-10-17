@@ -29,7 +29,7 @@ let
   buildDeps = with pythonPackages; [
     flask
     flask-gravatar
-    flask_login
+    flask-login
     flask_mail
     flask_migrate
     flask-sqlalchemy
