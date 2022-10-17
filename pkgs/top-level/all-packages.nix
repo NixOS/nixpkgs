@@ -5333,7 +5333,9 @@ with pkgs;
 
   keyd = callPackage ../tools/inputmethods/keyd { };
 
-  twitch-tui = callPackage ../applications/networking/instant-messengers/twitch-tui { };
+  twitch-tui = callPackage ../applications/networking/instant-messengers/twitch-tui {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   gebaar-libinput = callPackage ../tools/inputmethods/gebaar-libinput { stdenv = gcc10StdenvCompat; };
 
