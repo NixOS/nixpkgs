@@ -3506,6 +3506,8 @@ with pkgs;
 
   wayland-proxy-virtwl = callPackage ../tools/wayland/wayland-proxy-virtwl { };
 
+  waynergy = callPackage ../tools/wayland/waynergy { };
+
   wayout = callPackage ../tools/wayland/wayout { };
 
   way-displays = callPackage ../tools/wayland/way-displays { };
