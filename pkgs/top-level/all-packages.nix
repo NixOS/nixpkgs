@@ -34677,6 +34677,7 @@ with pkgs;
     gnome40Extensions
     gnome41Extensions
     gnome42Extensions
+    gnome43Extensions
   ;
 
   gnome-connections = callPackage ../desktops/gnome/apps/gnome-connections { };
