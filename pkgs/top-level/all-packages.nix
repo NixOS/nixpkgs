@@ -15554,7 +15554,7 @@ with pkgs;
 
   pypy = pypy2;
   pypy2 = pypy27;
-  pypy3 = pypy38;
+  pypy3 = pypy39;
 
   # Python interpreter that is build with all modules, including tkinter.
   # These are for compatibility and should not be used inside Nixpkgs.
@@ -15600,7 +15600,7 @@ with pkgs;
   };
 
   pythonInterpreters = callPackage ./../development/interpreters/python { };
-  inherit (pythonInterpreters) python27 python37 python38 python39 python310 python311 python3Minimal pypy27 pypy38 pypy37 rustpython;
+  inherit (pythonInterpreters) python27 python37 python38 python39 python310 python311 python3Minimal pypy27 pypy39 pypy38 pypy37 rustpython;
 
   # List of extensions with overrides to apply to all Python package sets.
   pythonPackagesExtensions = [ ];
@@ -15617,6 +15617,7 @@ with pkgs;
   pypy3Packages = pypy3.pkgs;
   pypy37Packages = pypy37.pkgs;
   pypy38Packages = pypy38.pkgs;
+  pypy39Packages = pypy39.pkgs;
 
   py3c = callPackage ../development/libraries/py3c { };
 
