@@ -33149,6 +33149,8 @@ with pkgs;
 
   yate = callPackage ../applications/misc/yate { };
 
+  yaup = callPackage ../applications/networking/yaup { };
+
   ydiff = with python3.pkgs; toPythonApplication ydiff;
 
   ydict = callPackage ../applications/misc/ydict {};
