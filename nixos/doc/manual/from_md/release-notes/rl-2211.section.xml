@@ -120,6 +120,11 @@
       </listitem>
       <listitem>
         <para>
+          LXD now supports creating Open vSwitch bridges.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           PHP now defaults to PHP 8.1, updated from 8.0.
         </para>
       </listitem>
