@@ -3420,7 +3420,8 @@
     ]; # missing inputs: wirelesstagpy
     "withings" = ps: with ps; [
       aiohttp-cors
-    ]; # missing inputs: withings-api
+      withings-api
+    ];
     "wiz" = ps: with ps; [
       aiohttp-cors
       ifaddr
@@ -4267,6 +4268,7 @@
     "whois"
     "wiffi"
     "wilight"
+    "withings"
     "wiz"
     "wled"
     "workday"

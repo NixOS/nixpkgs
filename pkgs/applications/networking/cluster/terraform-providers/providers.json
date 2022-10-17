@@ -1110,6 +1110,15 @@
     "vendorHash": "sha256-W+dV6rmyOqCeQboYvpxYoNZixv2+uBd2+sc9BvTE+Ag=",
     "version": "2.19.1"
   },
+  "tailscale": {
+    "hash": "sha256-/qC8TOtoVoBTWeAFpt2TYE8tlYBCCcn/mzVQ/DN51YQ=",
+    "owner": "tailscale",
+    "provider-source-address": "registry.terraform.io/tailscale/tailscale",
+    "repo": "terraform-provider-tailscale",
+    "rev": "v0.13.5",
+    "vendorHash": "sha256-8EIxqKkVO706oejlvN79K8aEZAF5H2vZRdr5vbQa0l4=",
+    "version": "0.13.5"
+  },
   "tencentcloud": {
     "hash": "sha256-kAbLfuENWHxu51Eu+7X1X4HiWkD8KAL4awZpGRg0BaU=",
     "owner": "tencentcloudstack",

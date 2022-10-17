@@ -3697,7 +3697,7 @@ with pkgs;
 
   dbus-broker = callPackage ../os-specific/linux/dbus-broker { };
 
-  dbx = python3Packages.callPackage ../applications/misc/dbx { };
+  dbx = callPackage ../applications/misc/dbx { };
 
   ioport = callPackage ../os-specific/linux/ioport {};
 
@@ -6022,6 +6022,8 @@ with pkgs;
 
   edk2 = callPackage ../development/compilers/edk2 { };
 
+  edk2-uefi-shell = callPackage ../tools/misc/edk2-uefi-shell { };
+
   eff = callPackage ../development/interpreters/eff { };
 
   eflite = callPackage ../applications/audio/eflite {};
@@ -6121,8 +6123,13 @@ with pkgs;
 
   timeline = callPackage ../applications/office/timeline { };
 
-  tsm-client = callPackage ../tools/backup/tsm-client { };
-  tsm-client-withGui = callPackage ../tools/backup/tsm-client { enableGui = true; };
+  tsm-client = callPackage ../tools/backup/tsm-client {
+    openssl = openssl_1_1;
+  };
+  tsm-client-withGui = callPackage ../tools/backup/tsm-client {
+    openssl = openssl_1_1;
+    enableGui = true;
+  };
 
   tracker = callPackage ../development/libraries/tracker { };
 
@@ -14764,7 +14771,9 @@ with pkgs;
   buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
   cratesIO = callPackage ../build-support/rust/crates-io.nix { };
 
-  cargo-espflash = callPackage ../development/tools/rust/cargo-espflash { };
+  cargo-espflash = callPackage ../development/tools/rust/cargo-espflash {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   cargo-web = callPackage ../development/tools/rust/cargo-web {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
@@ -14983,6 +14992,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
   rust-analyzer = callPackage ../development/tools/rust/rust-analyzer/wrapper.nix { };
+  rust-audit-info = callPackage ../development/tools/rust/rust-audit-info { };
   rust-bindgen-unwrapped = callPackage ../development/tools/rust/bindgen/unwrapped.nix { };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
   rust-cbindgen = callPackage ../development/tools/rust/cbindgen {
@@ -27469,10 +27479,7 @@ with pkgs;
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate AudioUnit CoreAudio CoreMIDI;
   };
 
-  csound-manual = callPackage ../applications/audio/csound/csound-manual {
-    python = python27;
-    pygments = python27Packages.pygments;
-  };
+  csound-manual = callPackage ../applications/audio/csound/csound-manual { };
 
   csound-qt = libsForQt5.callPackage ../applications/audio/csound/csound-qt {
     python = python27;
@@ -30989,6 +30996,8 @@ with pkgs;
   plugin-torture = callPackage ../applications/audio/plugin-torture { };
 
   poke = callPackage ../applications/editors/poke { };
+
+  pokemonsay = callPackage ../tools/misc/pokemonsay { };
 
   polar-bookshelf = callPackage ../applications/misc/polar-bookshelf { };
 
