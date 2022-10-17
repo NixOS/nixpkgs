@@ -1,0 +1,20 @@
+--- hddtemp-0.3-beta15/src/sata.c	2012-07-01 16:35:01.681708074 +0200
++++ hddtemp-0.3-beta15/src/sata.c	2012-07-01 16:33:58.172109699 +0200
+@@ -125,6 +125,17 @@
+     dsk->fd = -1;
+     return GETTEMP_NOSENSOR;
+   }
++
++  switch(ata_get_powermode(dsk->fd)) {
++  case PWM_STANDBY:
++  case PWM_SLEEPING:
++    if (!wakeup)
++      return GETTEMP_DRIVE_SLEEP;
++  case PWM_UNKNOWN:
++  case PWM_ACTIVE: /* active or idle */
++  default:
++    break;
++  }
+   
+   /* get SMART values */
+   if(sata_enable_smart(dsk->fd) != 0) {

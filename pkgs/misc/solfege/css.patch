@@ -1,0 +1,33 @@
+Fix theme parsing errors: https://savannah.gnu.org/bugs/index.php?53107
+
+--- a/solfege.css
++++ b/solfege.css
+@@ -7,19 +7,19 @@
+-#ProgressionNameLabel, #Feedback { font: "Sans 18" }
+-#ProgressionLabelNumber { font: "Sans 12" }
+-#BoldText { font: Bold }
++#ProgressionNameLabel, #Feedback { font: 18px Sans }
++#ProgressionLabelNumber { font: 12px Sans }
++#BoldText { font: 12px Sans Bold }
+ 
+-#StatisticsH1, #Heading1 { font: Sans 18 }
+-#StatisticsH2, #Heading2 { font: Sans 14 }
++#StatisticsH1, #Heading1 { font: 18px Sans }
++#StatisticsH2, #Heading2 { font: 14px Sans }
+ 
+-#BpmInactiveLabel { font: Sans 12 }
+-#BpmActiveLabel { font: Sans Bold 12 }
++#BpmInactiveLabel { font: 12px Sans }
++#BpmActiveLabel { font: 12px Sans Bold }
+ 
+ #DIALOGWARNING2 { background: red; }
+ #DIALOGWARNING  { background: yellow; }
+ 
+ #DEBUGWARNING {
+   background: red;
+-  font: Sans Bold 24;
++  font: 24px Sans Bold;
+ }
+ 
+-#FlashBarLabel { font: Sans 16 }
++#FlashBarLabel { font: 16px Sans }

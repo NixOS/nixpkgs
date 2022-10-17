@@ -1,0 +1,90 @@
+diff --git a/config/aerc.conf b/config/aerc.conf
+index fbbf587..ede1a03 100644
+--- a/config/aerc.conf
++++ b/config/aerc.conf
+@@ -107,8 +107,7 @@ next-message-on-delete=true
+ #
+ #   ${XDG_CONFIG_HOME:-~/.config}/aerc/stylesets
+ #   ${XDG_DATA_HOME:-~/.local/share}/aerc/stylesets
+-#   /usr/local/share/aerc/stylesets
+-#   /usr/share/aerc/stylesets
++#   @out@/share/aerc/stylesets
+ #
+ # default: ""
+ stylesets-dirs=
+@@ -254,8 +253,7 @@ new-email=
+ #
+ #   ${XDG_CONFIG_HOME:-~/.config}/aerc/templates
+ #   ${XDG_DATA_HOME:-~/.local/share}/aerc/templates
+-#   /usr/local/share/aerc/templates
+-#   /usr/share/aerc/templates
++#   @out@/share/aerc/templates
+ #
+ # default: ""
+ template-dirs=
+diff --git a/config/config.go b/config/config.go
+index 2120310..92b7655 100644
+--- a/config/config.go
++++ b/config/config.go
+@@ -331,8 +331,8 @@ func buildDefaultDirs() []string {
+ 	}
+ 
+ 	// Add fixed fallback locations
+-	defaultDirs = append(defaultDirs, "/usr/local/share/aerc")
+-	defaultDirs = append(defaultDirs, "/usr/share/aerc")
++	defaultDirs = append(defaultDirs, "@out@/local/share/aerc")
++	defaultDirs = append(defaultDirs, "@out@/share/aerc")
+ 
+ 	return defaultDirs
+ }
+diff --git a/doc/aerc-config.5.scd b/doc/aerc-config.5.scd
+index 885c4f8..77a853e 100644
+--- a/doc/aerc-config.5.scd
++++ b/doc/aerc-config.5.scd
+@@ -12,7 +12,7 @@ account credentials. We look for these files in your XDG config home plus
+ "aerc", which defaults to ~/.config/aerc.
+ 
+ Examples of these config files are typically included with your installation of
+-aerc and are usually installed in /usr/share/aerc.
++aerc and are usually installed in @out@/share/aerc.
+ 
+ Each file uses the _ini_ format, and consists of sections with keys and values.
+ A line beginning with # is considered a comment and ignored, as are empty lines.
+@@ -221,8 +221,7 @@ These options are configured in the *[ui]* section of aerc.conf.
+ 	```
+ 	${XDG_CONFIG_HOME:-~/.config}/aerc/stylesets
+ 	${XDG_DATA_HOME:-~/.local/share}/aerc/stylesets
+-	/usr/local/share/aerc/stylesets
+-	/usr/share/aerc/stylesets
++	@out@/share/aerc/stylesets
+ 	```
+ 
+ 	Default: ""
+@@ -381,7 +380,7 @@ against (non-case-sensitive) and a comma, e.g. subject,text will match a
+ subject which contains "text". Use header,~regex to match against a regex.
+ 
+ aerc ships with some default filters installed in the share directory (usually
+-_/usr/share/aerc/filters_). Note that these may have additional dependencies
++_@out@/share/aerc/filters_). Note that these may have additional dependencies
+ that aerc does not have alone.
+ 
+ ## TRIGGERS
+@@ -407,7 +406,7 @@ and forward commands can be called with the -T flag with the name of the
+ template name.
+ 
+ aerc ships with some default templates installed in the share directory (usually
+-_/usr/share/aerc/templates_).
++_@out@/share/aerc/templates_).
+ 
+ These options are configured in the *[templates]* section of aerc.conf.
+ 
+@@ -419,8 +418,7 @@ These options are configured in the *[templates]* section of aerc.conf.
+ 	```
+ 	${XDG_CONFIG_HOME:-~/.config}/aerc/templates
+ 	${XDG_DATA_HOME:-~/.local/share}/aerc/templates
+-	/usr/local/share/aerc/templates
+-	/usr/share/aerc/templates
++	@out@/share/aerc/templates
+ 	```
+ 
+ 	Default: ""

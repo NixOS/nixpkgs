@@ -1,0 +1,34 @@
+diff --git a/glob/glob.c b/glob/glob.c
+index f3911bcd861..6cb76e8e162 100644
+--- a/glob/glob.c
++++ b/glob/glob.c
+@@ -208,29 +208,8 @@ my_realloc (p, n)
+ #endif /* __GNU_LIBRARY__ || __DJGPP__ */
+ 
+ 
+-#if !defined __alloca && !defined __GNU_LIBRARY__
+-
+-# ifdef	__GNUC__
+-#  undef alloca
+-#  define alloca(n)	__builtin_alloca (n)
+-# else	/* Not GCC.  */
+-#  ifdef HAVE_ALLOCA_H
+-#   include <alloca.h>
+-#  else	/* Not HAVE_ALLOCA_H.  */
+-#   ifndef _AIX
+-#    ifdef WINDOWS32
+-#     include <malloc.h>
+-#    else
+-extern char *alloca ();
+-#    endif /* WINDOWS32 */
+-#   endif /* Not _AIX.  */
+-#  endif /* sparc or HAVE_ALLOCA_H.  */
+-# endif	/* GCC.  */
+-
+ # define __alloca	alloca
+ 
+-#endif
+-
+ #ifndef __GNU_LIBRARY__
+ # define __stat stat
+ # ifdef STAT_MACROS_BROKEN

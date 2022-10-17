@@ -1,0 +1,51 @@
+{ stdenv
+, lib
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, vala
+, gtk-doc
+, docbook-xsl-nons
+, glib
+, libsoup
+}:
+
+stdenv.mkDerivation rec {
+  pname = "uhttpmock";
+  version = "0.5.5";
+
+  outputs = [ "out" "dev" "devdoc" ];
+
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "pwithnall";
+    repo = "uhttpmock";
+    rev = version;
+    sha256 = "NuxiVVowZ8ilP9rcgapCe9OzFCpoOfZxZiSyjTeOrts=";
+  };
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    vala
+    gtk-doc
+    docbook-xsl-nons
+  ];
+
+  buildInputs = [
+    glib
+    libsoup
+  ];
+
+  meta = with lib; {
+    description = "Project for mocking web service APIs which use HTTP or HTTPS";
+    homepage = "https://gitlab.freedesktop.org/pwithnall/uhttpmock/";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
+  };
+}

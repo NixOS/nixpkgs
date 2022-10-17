@@ -1,0 +1,35 @@
+--- unzip60/list.c	
++++ unzip60/list.c	
+@@ -97,7 +97,7 @@ int list_files(__G)    /* return PK-type
+ {
+     int do_this_file=FALSE, cfactor, error, error_in_archive=PK_COOL;
+ #ifndef WINDLL
+-    char sgn, cfactorstr[10];
++    char sgn, cfactorstr[1+10+1+1];	/* <sgn><int>%NUL */
+     int longhdr=(uO.vflag>1);
+ #endif
+     int date_format;
+@@ -389,9 +389,9 @@ int list_files(__G)    /* return PK-type
+             }
+ #else /* !WINDLL */
+             if (cfactor == 100)
+-                sprintf(cfactorstr, LoadFarString(CompFactor100));
++                snprintf(cfactorstr, sizeof(cfactorstr), LoadFarString(CompFactor100));
+             else
+-                sprintf(cfactorstr, LoadFarString(CompFactorStr), sgn, cfactor);
++                snprintf(cfactorstr, sizeof(cfactorstr), LoadFarString(CompFactorStr), sgn, cfactor);
+             if (longhdr)
+                 Info(slide, 0, ((char *)slide, LoadFarString(LongHdrStats),
+                   FmZofft(G.crec.ucsize, "8", "u"), methbuf,
+@@ -471,9 +471,9 @@ int list_files(__G)    /* return PK-type
+ 
+ #else /* !WINDLL */
+         if (cfactor == 100)
+-            sprintf(cfactorstr, LoadFarString(CompFactor100));
++            snprintf(cfactorstr, sizeof(cfactorstr), LoadFarString(CompFactor100));
+         else
+-            sprintf(cfactorstr, LoadFarString(CompFactorStr), sgn, cfactor);
++            snprintf(cfactorstr, sizeof(cfactorstr), LoadFarString(CompFactorStr), sgn, cfactor);
+         if (longhdr) {
+             Info(slide, 0, ((char *)slide, LoadFarString(LongFileTrailer),
+               FmZofft(tot_ucsize, "8", "u"), FmZofft(tot_csize, "8", "u"),

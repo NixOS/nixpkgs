@@ -1,0 +1,90 @@
+source 'https://rubygems.org'
+
+ruby '>= 2.4.0', '< 2.8.0'
+gem 'bundler', '>= 1.12.0'
+
+gem 'rails', '5.2.8.1'
+gem 'sprockets', '~> 3.7.2' if RUBY_VERSION < '2.5'
+gem 'globalid', '~> 0.4.2' if Gem.ruby_version < Gem::Version.new('2.6.0')
+gem 'rouge', '~> 3.26.0'
+gem 'request_store', '~> 1.5.0'
+gem "mini_mime", "~> 1.0.1"
+gem "actionpack-xml_parser"
+gem 'roadie-rails', (RUBY_VERSION < '2.5' ? '~> 1.3.0' : '~> 2.2.0')
+gem 'marcel'
+gem "mail", "~> 2.7.1"
+gem 'csv', (RUBY_VERSION < '2.5' ? ['>= 3.1.1', '<= 3.1.5'] : '~> 3.1.1')
+gem 'nokogiri', (if Gem.ruby_version < Gem::Version.new('2.5.0')
+                   '~> 1.10.10'
+                 elsif Gem.ruby_version < Gem::Version.new('2.6.0')
+                   '~> 1.12.5'
+                 else
+                   '~> 1.13.6'
+                 end)
+gem 'i18n', '~> 1.8.2'
+gem "rbpdf", "~> 1.20.0"
+gem 'addressable'
+gem 'rubyzip', '~> 2.3.0'
+gem 'psych', '~> 3.1' if Gem.ruby_version < Gem::Version.new('2.6.0')
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: [:mingw, :x64_mingw, :mswin]
+
+# TOTP-based 2-factor authentication
+gem 'rotp', '>= 5.0.0'
+gem 'rqrcode'
+
+# Optional gem for LDAP authentication
+group :ldap do
+  gem 'net-ldap', '~> 0.17.0'
+end
+
+# Optional gem for OpenID authentication
+group :openid do
+  gem "ruby-openid", "~> 2.9.2", :require => "openid"
+  gem "rack-openid"
+end
+
+# Optional gem for exporting the gantt to a PNG file
+group :minimagick do
+  gem 'mini_magick', '~> 4.11.0'
+end
+
+# Optional Markdown support, not for JRuby
+group :markdown do
+  gem 'redcarpet', '~> 3.5.1'
+end
+
+# Include database gems for the database adapters NixOS supports
+gem "mysql2", "~> 0.5.0", :platforms => [:mri, :mingw, :x64_mingw]
+gem "pg", "~> 1.2.2", :platforms => [:mri, :mingw, :x64_mingw]
+
+group :development do
+  gem "yard"
+end
+
+group :test do
+  gem "rails-dom-testing"
+  gem 'mocha', '>= 1.4.0'
+  gem 'simplecov', '~> 0.18.5', :require => false
+  gem "ffi", platforms: [:mingw, :x64_mingw, :mswin]
+  # For running system tests
+  gem 'puma'
+  gem 'capybara', '~> 3.31.0'
+  gem "selenium-webdriver"
+  gem 'webdrivers', '~> 4.4', require: false
+  # RuboCop
+  gem 'rubocop', '~> 1.12.0'
+  gem 'rubocop-performance', '~> 1.10.1'
+  gem 'rubocop-rails', '~> 2.9.0'
+end
+
+local_gemfile = File.join(File.dirname(__FILE__), "Gemfile.local")
+if File.exists?(local_gemfile)
+  eval_gemfile local_gemfile
+end
+
+# Load plugins' Gemfiles
+Dir.glob File.expand_path("../plugins/*/{Gemfile,PluginGemfile}", __FILE__) do |file|
+  eval_gemfile file
+end

@@ -1,0 +1,13 @@
+Index: phonon-gstreamer-4.9.0/gstreamer/backend.cpp
+===================================================================
+--- phonon-gstreamer-4.9.0.orig/gstreamer/backend.cpp
++++ phonon-gstreamer-4.9.0/gstreamer/backend.cpp
+@@ -85,6 +85,8 @@ Backend::Backend(QObject *parent, const
+         "--gst-debug-no-color"
+     };
+ 
++    qputenv("GST_PLUGIN_PATH_1_0", GST_PLUGIN_PATH_1_0);
++
+     int argc = sizeof(args) / sizeof(*args);
+     char **argv = const_cast<char**>(args);
+     GError *err = 0;

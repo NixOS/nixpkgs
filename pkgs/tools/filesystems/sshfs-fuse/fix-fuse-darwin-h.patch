@@ -1,0 +1,14 @@
+diff --git a/sshfs.c b/sshfs.c
+index 97eaf06..d442577 100644
+--- a/sshfs.c
++++ b/sshfs.c
+@@ -14,9 +14,6 @@
+ #if !defined(__CYGWIN__)
+ #include <fuse_lowlevel.h>
+ #endif
+-#ifdef __APPLE__
+-#  include <fuse_darwin.h>
+-#endif
+ #include <assert.h>
+ #include <stdio.h>
+ #include <stdlib.h>

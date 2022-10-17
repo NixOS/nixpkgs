@@ -1,0 +1,29 @@
+diff --git a/rebar.config b/rebar.config
+index 1d5a68e..a86ee39 100644
+--- a/rebar.config
++++ b/rebar.config
+@@ -2,20 +2,20 @@
+ 
+ {erl_opts, [debug_info]}.
+ 
+-{profiles, [{test, [{deps, [proper]}]}]}.
++%%{profiles, [{test, [{deps, [proper]}]}]}.
+ 
+ {pre_hooks, [{"(linux|darwin|solaris|freebsd|netbsd|openbsd)", ct,
+               "bin/lfe bin/lfec"
+-              " -o $REBAR_DEPS_DIR/lfe/test"
++              " -o test"
+               " test/*_SUITE.lfe"},
+              {"(linux|darwin|solaris|freebsd|netbsd|openbsd)", eunit,
+               "bin/lfe bin/lfec"
+-              " -o $REBAR_DEPS_DIR/lfe/ebin"
++              " -o ebin"
+               " test/clj-tests.lfe"},
+              %% TODO: Test this on a win32 box
+              %%  {"win32", ct,
+              %%   "bin/lfe bin/lfec -o $REBAR_DEPS_DIR/lfe/test test/*_SUITE.lfe"}
+              {"(linux|darwin|solaris|freebsd|netbsd|openbsd)", app_compile,
+-              "bin/lfe bin/lfec -o $REBAR_DEPS_DIR/lfe/ebin src/*.lfe"}
++              "bin/lfe bin/lfec -o ebin src/*.lfe"}
+              %% TODO: equivalent win32 hook
+             ]}.

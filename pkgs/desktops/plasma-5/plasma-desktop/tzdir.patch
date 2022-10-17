@@ -1,0 +1,18 @@
+Index: plasma-desktop-5.8.5/kcms/dateandtime/helper.cpp
+===================================================================
+--- plasma-desktop-5.8.5.orig/kcms/dateandtime/helper.cpp
++++ plasma-desktop-5.8.5/kcms/dateandtime/helper.cpp
+@@ -181,7 +181,12 @@ int ClockHelper::tz( const QString& sele
+ 
+     val = selectedzone;
+ #else
+-    QString tz = "/usr/share/zoneinfo/" + selectedzone;
++    QString tzdir = QString::fromLocal8Bit(qgetenv("TZDIR"));
++    QString tz = tzdir + "/" + selectedzone;
++    if (tzdir.isEmpty()) {
++      // Standard Linux path
++      tz = "/usr/share/zoneinfo/" + selectedzone;
++    }
+ 
+     if (QFile::exists(tz)) { // make sure the new TZ really exists
+         QFile::remove(QStringLiteral("/etc/localtime"));

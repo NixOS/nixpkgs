@@ -1,0 +1,26 @@
+diff --git a/meson.build b/meson.build
+index efc9002b..070f37e4 100644
+--- a/meson.build
++++ b/meson.build
+@@ -34,6 +34,12 @@ if slurmdep.found()
+   conf_data.set10('HAVE_SLURM', 1)
+ endif
+ 
++if build_machine.system() == 'darwin' or build_machine.system() == 'freebsd' or not cc.links('#include <argp.h>\nstatic error_t parse_opt (int key, char *arg, struct argp_state *state) { argp_usage(state); return 0; }; void main() {}')
++    argpdep = cc.find_library('argp')
++else
++    argpdep = dependency('', required : false)
++endif
++
+ # Find HDF5 using inbuilt Meson methods.  Requires Meson >= 0.50.0
+ hdf5dep = dependency('hdf5', language: 'c', required: true)
+ 
+@@ -180,7 +186,7 @@ if zmqdep.found()
+ endif
+ 
+ executable('indexamajig', indexamajig_sources,
+-           dependencies: [mdep, libcrystfeldep, gsldep, pthreaddep, zmqdep],
++           dependencies: [mdep, libcrystfeldep, gsldep, pthreaddep, zmqdep, argpdep],
+            install: true,
+            install_rpath: '$ORIGIN/../lib64/:$ORIGIN/../lib')
+ 

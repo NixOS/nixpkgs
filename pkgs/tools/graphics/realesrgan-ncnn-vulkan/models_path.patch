@@ -1,0 +1,22 @@
+diff --git a/main.cpp b/main.cpp
+index eb6f6c8..b230bed 100644
+--- a/main.cpp
++++ b/main.cpp
+@@ -110,7 +110,7 @@ static void print_usage()
+     fprintf(stderr, "  -o output-path       output image path (jpg/png/webp) or directory\n");
+     fprintf(stderr, "  -s scale             upscale ratio (can be 2, 4. default=4)\n");
+     fprintf(stderr, "  -t tile-size         tile size (>=32/0=auto, default=0) can be 0,0,0 for multi-gpu\n");
+-    fprintf(stderr, "  -m model-path        folder path to pre-trained models(default=models)\n");
++    fprintf(stderr, "  -m model-path        folder path to pre-trained models(default=REPLACE_MODELS)\n");
+     fprintf(stderr, "  -n model-name        model name (default=realesrgan-x4plus, can be realesrgan-x4plus | realesrgan-x4plus-anime | realesrnet-x4plus | RealESRGANv2-animevideo-xsx2 | RealESRGANv2-animevideo-xsx4 | RealESRGANv2-anime-xsx2 | RealESRGANv2-anime-xsx4)\n");
+     fprintf(stderr, "  -g gpu-id            gpu device to use (default=auto) can be 0,1,2 for multi-gpu\n");
+     fprintf(stderr, "  -j load:proc:save    thread count for load/proc/save (default=1:2:2) can be 1:2,2,2:2 for multi-gpu\n");
+@@ -438,7 +438,7 @@ int main(int argc, char** argv)
+     path_t outputpath;
+     int scale = 4;
+     std::vector<int> tilesize;
+-    path_t model = PATHSTR("models");
++    path_t model = PATHSTR("REPLACE_MODELS");
+     path_t modelname = PATHSTR("realesrgan-x4plus");
+     std::vector<int> gpuid;
+     int jobs_load = 1;

@@ -1,0 +1,36 @@
+From 26601fec36a4978e805aad40e6d0cbf268c653d2 Mon Sep 17 00:00:00 2001
+From: grindhold <grindhold@gmx.net>
+Date: Thu, 28 Apr 2022 17:13:06 +0200
+Subject: [PATCH] ignore qwt_compat
+
+---
+ ElmerGUI/Application/src/convergenceview.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/ElmerGUI/Application/src/convergenceview.h b/ElmerGUI/Application/src/convergenceview.h
+index 377b644b..64250149 100755
+--- a/ElmerGUI/Application/src/convergenceview.h
++++ b/ElmerGUI/Application/src/convergenceview.h
+@@ -52,7 +52,7 @@
+ #include <qwt_plot_grid.h>
+ #include <qwt_legend.h>
+ /*#include <qwt_data.h> <-- deprecated in Qwt6, using qwt_compat.h instead*/
+-#include <qwt_compat.h>
++/*#include <qwt_compat.h>*/
+ #include <qwt_text.h>
+ #include <qwt_scale_engine.h>
+ 
+@@ -76,8 +76,8 @@ public:
+   
+ private:
+   int d_count;
+-  QwtArray<double> d_x;
+-  QwtArray<double> d_y;
++  QVector<double> d_x;
++  QVector<double> d_y;
+ };
+ 
+ class Curve
+-- 
+2.33.3
+

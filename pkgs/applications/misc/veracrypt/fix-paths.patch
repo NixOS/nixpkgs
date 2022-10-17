@@ -1,0 +1,22 @@
+diff --color --unified --recursive --text a/Core/VolumeCreator.h b/Core/VolumeCreator.h
+--- a/Core/VolumeCreator.h	2021-06-20 20:54:50.725210056 +0300
++++ b/Core/VolumeCreator.h	2021-06-20 20:58:46.117742419 +0300
+@@ -77,12 +77,12 @@
+ 				switch (fsType)
+ 				{
+ 	#if defined (TC_LINUX)
+-				case VolumeCreationOptions::FilesystemType::Ext2:		return "mkfs.ext2";
+-				case VolumeCreationOptions::FilesystemType::Ext3:		return "mkfs.ext3";
+-				case VolumeCreationOptions::FilesystemType::Ext4:		return "mkfs.ext4";
+-				case VolumeCreationOptions::FilesystemType::NTFS:		return "mkfs.ntfs";
+-				case VolumeCreationOptions::FilesystemType::exFAT:		return "mkfs.exfat";
+-				case VolumeCreationOptions::FilesystemType::Btrfs:		return "mkfs.btrfs";
++				case VolumeCreationOptions::FilesystemType::Ext2:		return "@ext2@";
++				case VolumeCreationOptions::FilesystemType::Ext3:		return "@ext3@";
++				case VolumeCreationOptions::FilesystemType::Ext4:		return "@ext4@";
++				case VolumeCreationOptions::FilesystemType::NTFS:		return "@ntfs@";
++				case VolumeCreationOptions::FilesystemType::exFAT:		return "@exfat@";
++				case VolumeCreationOptions::FilesystemType::Btrfs:		return "@btrfs@";
+ 	#elif defined (TC_MACOSX)
+ 				case VolumeCreationOptions::FilesystemType::MacOsExt:	return "newfs_hfs";
+ 				case VolumeCreationOptions::FilesystemType::exFAT:		return "newfs_exfat";

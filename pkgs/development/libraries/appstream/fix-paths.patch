@@ -1,0 +1,32 @@
+diff --git a/data/meson.build b/data/meson.build
+index 53f31cb4..90f40e77 100644
+--- a/data/meson.build
++++ b/data/meson.build
+@@ -68,7 +68,7 @@ test('as-validate_metainfo.cli',
+ )
+ 
+ install_data('appstream.conf',
+-             install_dir: get_option('sysconfdir'))
++             install_dir: get_option('prefix') / 'etc')
+ 
+ if get_option('compose')
+     ascompose_metainfo = 'org.freedesktop.appstream.compose.metainfo.xml'
+diff --git a/meson.build b/meson.build
+index 2efe86b7..9dc79e28 100644
+--- a/meson.build
++++ b/meson.build
+@@ -107,12 +107,12 @@ if get_option ('gir')
+     dependency('gobject-introspection-1.0', version: '>=1.56')
+ endif
+ 
+-stemmer_inc_dirs = include_directories(['/usr/include'])
++stemmer_inc_dirs = include_directories(['@libstemmer_includedir@'])
+ if get_option('stemming')
+     stemmer_lib = cc.find_library('stemmer', required: true)
+     if not cc.has_header('libstemmer.h')
+         if cc.has_header('libstemmer/libstemmer.h')
+-            stemmer_inc_dirs = include_directories('/usr/include/libstemmer')
++            stemmer_inc_dirs = include_directories('@libstemmer_includedir@/libstemmer')
+         else
+             error('Unable to find Snowball header "libstemmer.h". Please ensure libstemmer/Snowball is installed properly in order to continue.')
+         endif
