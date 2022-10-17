@@ -3083,6 +3083,8 @@ with pkgs;
 
   blitz = callPackage ../development/libraries/blitz { };
 
+  bls-signatures = callPackage ../development/libraries/bls-signatures { };
+
   blockbook = callPackage ../servers/blockbook { };
 
   blockhash = callPackage ../tools/graphics/blockhash { };
@@ -18116,7 +18118,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  chipmunk = callPackage ../development/libraries/chipmunk {};
+
+  chia-relic = callPackage ../development/libraries/chia-relic { };
+
+  chipmunk = callPackage ../development/libraries/chipmunk { };
 
   chmlib = callPackage ../development/libraries/chmlib { };
 
@@ -20523,6 +20528,8 @@ with pkgs;
   libsnark = callPackage ../development/libraries/libsnark { };
 
   libsodium = callPackage ../development/libraries/libsodium { };
+
+  libsodium-cmake = callPackage ../development/libraries/libsodium-cmake { };
 
   libsoup = callPackage ../development/libraries/libsoup { };
 
@@ -33094,6 +33101,8 @@ with pkgs;
     withGui = false;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
+
+  bladebit = callPackage ../applications/blockchains/bladebit { };
 
   cgminer = callPackage ../applications/blockchains/cgminer { };
 

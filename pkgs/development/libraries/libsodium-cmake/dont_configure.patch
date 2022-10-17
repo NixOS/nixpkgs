@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2132da2..9ce5870 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -333,10 +333,6 @@ if(SODIUM_MINIMAL OR SODIUM_CHIA_MINIMAL)
+     set(SODIUM_LIBRARY_MINIMAL_DEF "#define SODIUM_LIBRARY_MINIMAL 1")
+ endif()
+ 
+-configure_file(
+-    libsodium/src/libsodium/include/sodium/version.h.in
+-    ${CMAKE_CURRENT_SOURCE_DIR}/libsodium/src/libsodium/include/sodium/version.h
+-)
+ 
+ if(NOT SODIUM_DISABLE_TESTS)
+     enable_testing()
