@@ -19896,7 +19896,9 @@ with pkgs;
 
   libgringotts = callPackage ../development/libraries/libgringotts { };
 
-  libgrss = callPackage ../development/libraries/libgrss { };
+  libgrss = callPackage ../development/libraries/libgrss {
+    inherit (darwin.apple_sdk_11_0.frameworks) Foundation AppKit;
+  };
 
   libgweather = callPackage ../development/libraries/libgweather { };
 
