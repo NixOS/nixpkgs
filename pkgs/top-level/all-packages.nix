@@ -10219,7 +10219,7 @@ with pkgs;
 
   prism = callPackage ../applications/video/prism { };
 
-  pulumi-bin = callPackage ../tools/admin/pulumi { };
+  pulumi-bin = callPackage ../tools/admin/pulumi-bin { };
 
   p0f = callPackage ../tools/security/p0f { };
 
