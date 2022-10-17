@@ -112,6 +112,11 @@ stdenv.mkDerivation rec {
       revert = true;
     })
     ./9pfs-use-GHashTable-for-fid-table.patch
+    (fetchpatch {
+      name = "CVE-2022-3165.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/d307040b18bfcb1393b910f1bae753d5c12a4dc7.patch";
+      sha256 = "sha256-YPhm580lBNuAv7G1snYccKZ2V5ycdV8Ri8mTw5jjFBc=";
+    })
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
