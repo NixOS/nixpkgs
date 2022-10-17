@@ -35869,7 +35869,9 @@ with pkgs;
 
   apfel = callPackage ../development/libraries/physics/apfel { };
 
-  applgrid = callPackage ../development/libraries/physics/applgrid { };
+  applgrid = callPackage ../development/libraries/physics/applgrid {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   hoppet = callPackage ../development/libraries/physics/hoppet { };
 
