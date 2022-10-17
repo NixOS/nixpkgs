@@ -4614,6 +4614,8 @@ in {
 
   inquirer = callPackage ../development/python-modules/inquirer { };
 
+  inscriptis = callPackage ../development/python-modules/inscriptis { };
+
   insegel = callPackage ../development/python-modules/insegel { };
 
   installer = callPackage ../development/python-modules/installer { };
