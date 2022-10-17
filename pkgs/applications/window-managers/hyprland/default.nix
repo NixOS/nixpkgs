@@ -1,14 +1,15 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchFromGitLab
 , cmake
-, pkg-config
 , libdrm
 , libinput
 , libxcb
 , libxkbcommon
 , mesa
 , pango
+, pkg-config
 , wayland
 , wayland-protocols
 , wayland-scanner
@@ -16,16 +17,15 @@
 , xcbutilwm
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland";
   version = "0.6.1beta";
 
-  # When updating Hyprland, the overridden wlroots commit must be bumped to match the commit upstream uses.
   src = fetchFromGitHub {
     owner = "hyprwm";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-0Msqe2ErAJvnO1zHoB2k6TkDhTYnHRGkvJrfSG12dTU=";
+    repo = "Hyprland";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-0Msqe2ErAJvnO1zHoB2k6TkDhTYnHRGkvJrfSG12dTU=";
   };
 
   nativeBuildInputs = [
@@ -43,13 +43,26 @@ stdenv.mkDerivation rec {
     pango
     wayland
     wayland-protocols
-    wlroots
     xcbutilwm
+  ]
+  ++ [
+    # INFO: When updating src, remember to synchronize this wlroots with the
+    # exact commit used by upstream
+    (wlroots.overrideAttrs (_: {
+      version = "unstable-2022-06-07";
+      src = fetchFromGitLab {
+        domain = "gitlab.freedesktop.org";
+        owner = "wlroots";
+        repo = "wlroots";
+        rev = "b89ed9015c3fbe8d339e9d65cf70fdca6e5645bc";
+        hash = "sha256-8y3u8CoigjoZOVbA2wCWBHlDNEakv0AVxU46/cOC00s=";
+      };
+    }))
   ];
 
   # build with system wlroots
   postPatch = ''
-    sed -Ei 's/"\.\.\/wlroots\/include\/([a-zA-Z0-9./_-]+)"/<\1>/g' src/includes.hpp
+    sed -Ei 's|"\.\./wlroots/include/([a-zA-Z0-9./_-]+)"|<\1>|g' src/includes.hpp
   '';
 
   preConfigure = ''
@@ -58,22 +71,24 @@ stdenv.mkDerivation rec {
 
   postBuild = ''
     pushd ../hyprctl
-    $CXX -std=c++20 -w ./main.cpp -o ./hyprctl
+    ${stdenv.cc.targetPrefix}c++ -std=c++20 -w ./main.cpp -o ./hyprctl
     popd
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    install -m755 ./Hyprland $out/bin
-    install -m755 ../hyprctl/hyprctl $out/bin
+    runHook preInstall
+
+    install -Dm755 ../hyprctl/hyprctl ./Hyprland -t $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/vaxerski/Hyprland";
+    inherit (finalAttrs.src.meta) homepage;
     description = "A dynamic tiling Wayland compositor that doesn't sacrifice on its looks";
     license = licenses.bsd3;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ wozeparrot ];
+    inherit (wayland.meta) platforms;
     mainProgram = "Hyprland";
   };
-}
+})
