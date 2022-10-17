@@ -4003,7 +4003,9 @@ with pkgs;
     jdk = openjdk8;
   };
 
-  fondu = callPackage ../tools/misc/fondu { };
+  fondu = callPackage ../tools/misc/fondu {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   fpp = callPackage ../tools/misc/fpp { };
 
