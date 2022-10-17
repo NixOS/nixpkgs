@@ -29,14 +29,14 @@ let
     { shortName, shortDescription, dictFileName }:
     mkDict rec {
       inherit dictFileName;
-      version = "2.2";
+      version = "2.5";
       pname = "hunspell-dict-${shortName}-rla";
       readmeFile = "README.txt";
       src = fetchFromGitHub {
         owner = "sbosio";
         repo = "rla-es";
         rev = "v${version}";
-        sha256 = "0n9ms092k7vg7xpd3ksadxydbrizkb7js7dfxr08nbnnb9fgy0i8";
+        sha256 = "sha256-oGnxOGHzDogzUMZESydIxRTbq9Dmd03flwHx16AK1yk=";
       };
       meta = with lib; {
         description = "Hunspell dictionary for ${shortDescription} from rla";
@@ -46,13 +46,13 @@ let
         platforms = platforms.all;
       };
       nativeBuildInputs = [ bash coreutils which zip unzip ];
-      patchPhase = ''
+      postPatch = ''
         substituteInPlace ortograf/herramientas/make_dict.sh \
-           --replace /bin/bash bash \
+           --replace /bin/bash ${bash}/bin/bash \
            --replace /dev/stderr stderr.log
 
         substituteInPlace ortograf/herramientas/remover_comentarios.sh \
-           --replace /bin/bash bash \
+           --replace /bin/bash ${bash}/bin/bash \
       '';
       buildPhase = ''
         cd ortograf/herramientas
@@ -442,7 +442,7 @@ rec {
   es_CR = es-cr;
   es-cr = mkDictFromRla {
     shortName = "es-cr";
-    shortDescription = "Spanish (Costra Rica)";
+    shortDescription = "Spanish (Costa Rica)";
     dictFileName = "es_CR";
   };
 
