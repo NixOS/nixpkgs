@@ -27772,7 +27772,9 @@ with pkgs;
     alsa-lib = null;
     acl = null;
     gpm = null;
-    inherit (darwin.apple_sdk.frameworks) AppKit GSS ImageIO;
+    inherit (darwin.apple_sdk.frameworks)
+      AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
+      ImageCaptureCore GSS ImageIO;
     inherit (darwin) sigtool;
   };
 
@@ -27788,10 +27790,14 @@ with pkgs;
   });
 
   emacsMacport = callPackage ../applications/editors/emacs/macport.nix {
+    withMacport = true;
+
+    gconf = null;
+
     inherit (darwin.apple_sdk.frameworks)
       AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
       ImageCaptureCore GSS ImageIO;
-    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+    inherit (darwin) sigtool;
   };
 
   emacsPackagesFor = emacs: import ./emacs-packages.nix {
