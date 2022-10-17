@@ -12,7 +12,7 @@
 , ostree
 , glib
 , appstream
-, libsoup
+, libsoup_3
 , libadwaita
 , polkit
 , isocodes
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     glib
     packagekit
     appstream
-    libsoup
+    libsoup_3
     libadwaita
     gsettings-desktop-schemas
     gnome-desktop
@@ -102,8 +102,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    # Needs flatpak to upgrade
-    "-Dsoup2=true"
     # Requires /etc/machine-id, D-Bus system bus, etc.
     "-Dtests=false"
   ] ++ lib.optionals (!withFwupd) [
