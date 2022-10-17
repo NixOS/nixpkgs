@@ -10078,8 +10078,7 @@ with pkgs;
     openssl = openssl_1_1;
   };
   percona-xtrabackup_8_0 = callPackage ../tools/backup/percona-xtrabackup/8_0.nix {
-    stdenv = gcc10StdenvCompat;
-    boost = boost170;
+    boost = boost177;
     openssl = openssl_1_1;
   };
 
