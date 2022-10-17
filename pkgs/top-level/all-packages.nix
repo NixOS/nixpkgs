@@ -30354,7 +30354,7 @@ with pkgs;
     openssl = openssl_1_1;
   };
   p4d = callPackage ../applications/version-management/p4d { };
-  p4v = libsForQt515.callPackage ../applications/version-management/p4v { };
+  p4v = callPackage ../applications/version-management/p4v { };
 
   partio = callPackage ../development/libraries/partio {};
 
