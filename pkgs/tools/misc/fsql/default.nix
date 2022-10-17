@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "fsql";
@@ -20,6 +20,7 @@ buildGoModule rec {
     homepage = "https://github.com/kshvmdn/fsql";
     license = licenses.mit;
     maintainers = with maintainers; [ pSub ];
+    broken = stdenv.isDarwin; # old x/unix module, see https://github.com/kashav/fsql/issues/46
     platforms = platforms.unix;
   };
 }
