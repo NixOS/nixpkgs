@@ -21,7 +21,7 @@ buildPythonPackage rec {
     repo = pname;
     owner = "pytest-dev";
     rev = version;
-    hash = "sha256-NoYpMpFWz52Z0+KIUumUFp3xMPA1jGw8COojU+bsgHc=";
+    hash = "sha256-M9Z6IK5R1TDlVynZYo5K4nOz0qkx/wr3OAk59BLBT+o=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libks";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1wvl8kzi1fx7pg58r5x1lw4gwkvrkljqajsn72yq6sbsd3iqn8wr";
+    sha256 = "sha256-Bfp8+jqXu1utlaYuPewm+t3zHxaTWEw+cGZu1nFzkDk=";
   };
 
   patches = [
