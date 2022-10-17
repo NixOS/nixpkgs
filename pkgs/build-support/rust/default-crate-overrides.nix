@@ -28,6 +28,7 @@
 , rdkafka
 , udev
 , libevdev
+, alsa-lib
 , ...
 }:
 
@@ -35,6 +36,11 @@ let
   inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
 in
 {
+  alsa-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ alsa-lib ];
+  };
+
   cairo-rs = attrs: {
     buildInputs = [ cairo ];
   };
