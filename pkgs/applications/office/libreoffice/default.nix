@@ -1,4 +1,4 @@
-{ Stdenv
+{ stdenv
 , fetchurl
 , lib
 , pam
@@ -117,7 +117,7 @@ assert builtins.elem variant [ "fresh" "still" ];
 let
   inherit (lib)
     flatten flip
-    concatMapStrings concatMapStringsSep concatStringsSep
+    concatMapStrings concatStringsSep
     getDev getLib
     optional optionals optionalString;
 
@@ -129,11 +129,11 @@ let
 
   primary-src = importVariant "primary.nix" { inherit fetchurl; };
 
-  inherit (primary-src) major minor subdir version;
+  inherit (primary-src) major minor version;
 
   langsSpaces = concatStringsSep " " langs;
 
-  mkDrv = if kdeIntegration then mkDerivation else Stdenv.mkDerivation;
+  mkDrv = if kdeIntegration then mkDerivation else stdenv.mkDerivation;
 
   srcs = {
     third_party =
@@ -215,7 +215,7 @@ in
   # add the missing dependencies to it).
   postPatch = ''
     substituteInPlace shell/source/unix/exec/shellexec.cxx \
-      --replace /usr/bin/xdg-open ${if kdeIntegration then "kde-open5" else "xdg-open"}
+      --replace xdg-open ${if kdeIntegration then "kde-open5" else "xdg-open"}
 
     # configure checks for header 'gpgme++/gpgmepp_version.h',
     # and if it is found (no matter where) uses a hardcoded path
@@ -330,6 +330,7 @@ in
       sed -e '/CPPUNIT_TEST(testEmbeddedDataSource);/d' -i './sw/qa/extras/uiwriter/uiwriter.cxx'
       sed -e '/CPPUNIT_TEST(testTdf96479);/d' -i './sw/qa/extras/uiwriter/uiwriter.cxx'
       sed -e '/CPPUNIT_TEST(testInconsistentBookmark);/d' -i './sw/qa/extras/uiwriter/uiwriter.cxx'
+      sed -e /CppunitTest_sw_layoutwriter/d -i sw/Module_sw.mk
       sed -e "s/DECLARE_SW_ROUNDTRIP_TEST(\([_a-zA-Z0-9.]\+\)[, ].*, *\([_a-zA-Z0-9.]\+\))/class \\1: public \\2 { public: void verify() override; }; void \\1::verify() /" -i "sw/qa/extras/ooxmlexport/ooxmlexport9.cxx"
       sed -e "s/DECLARE_SW_ROUNDTRIP_TEST(\([_a-zA-Z0-9.]\+\)[, ].*, *\([_a-zA-Z0-9.]\+\))/class \\1: public \\2 { public: void verify() override; }; void \\1::verify() /" -i "sw/qa/extras/ooxmlexport/ooxmlencryption.cxx"
       sed -e "s/DECLARE_SW_ROUNDTRIP_TEST(\([_a-zA-Z0-9.]\+\)[, ].*, *\([_a-zA-Z0-9.]\+\))/class \\1: public \\2 { public: void verify() override; }; void \\1::verify() /" -i "sw/qa/extras/odfexport/odfexport.cxx"
@@ -362,12 +363,6 @@ in
 
     ln -s $out/bin/soffice $out/bin/libreoffice
     ln -s $out/lib/libreoffice/share/xdg $out/share/applications
-
-    for f in $out/share/applications/*.desktop; do
-      substituteInPlace "$f" \
-        --replace "Exec=libreofficedev${major}.${minor}" "Exec=libreoffice" \
-        --replace "Exec=libreoffice${major}.${minor}"    "Exec=libreoffice"
-    done
 
     cp -r sysui/desktop/icons  "$out/share"
     sed -re 's@Icon=libreoffice(dev)?[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
@@ -421,7 +416,6 @@ in
     "--disable-postgresql-sdbc"
     "--disable-firebird-sdbc"
     "--without-fonts"
-    "--without-myspell-dicts"
     "--without-doxygen"
 
     # TODO: package these as system libraries
@@ -438,7 +432,7 @@ in
     "--without-system-libstaroffice"
     "--without-system-libepubgen"
     "--without-system-libqxp"
-    "--without-system-mdds" # we have mdds but our version is too new
+    "--with-system-mdds"
     # https://github.com/NixOS/nixpkgs/commit/5c5362427a3fa9aefccfca9e531492a8735d4e6f
     "--without-system-orcus"
     "--without-system-xmlsec"
