@@ -1,14 +1,23 @@
-{ lib, buildPythonApplication, fetchFromGitHub, pytestCheckHook, pytest-dependency, aspell-python, aspellDicts, chardet }:
+{ lib
+, aspell-python
+, aspellDicts
+, buildPythonApplication
+, chardet
+, fetchFromGitHub
+, pytestCheckHook
+, pytest-dependency
+, setuptools-scm
+}:
 
 buildPythonApplication rec {
   pname = "codespell";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "codespell-project";
     repo = "codespell";
     rev = "v${version}";
-    sha256 = "sha256-H/istsEt6kYzwvwy8GlOH0fkMTWbEdXVF1P1qO6sITs=";
+    sha256 = "sha256-zXHqaZzGIS7BOFc/kPzA4sgpoEmXuaKHdOcKpMWWeOI=";
   };
 
   postPatch = ''
@@ -17,7 +26,16 @@ buildPythonApplication rec {
       --replace "--cov-report=" ""
   '';
 
-  checkInputs = [ aspell-python chardet pytestCheckHook pytest-dependency ];
+  nativeBuildInputs = [ setuptools-scm ];
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  checkInputs = [
+    aspell-python
+    chardet
+    pytestCheckHook
+    pytest-dependency
+  ];
 
   preCheck = ''
     export ASPELL_CONF="dict-dir ${aspellDicts.en}/lib/aspell"
