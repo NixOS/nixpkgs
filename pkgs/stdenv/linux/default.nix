@@ -456,7 +456,7 @@ in
         };
 
         gnumake = super.gnumake.override { inBootstrap = false; };
-      } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
+      } // lib.optionalAttrs (super.stdenv.cc.targetPrefix == "") {
         # Need to get rid of these when cross-compiling.
         inherit (prevStage) binutils binutils-unwrapped;
         gcc = cc;
