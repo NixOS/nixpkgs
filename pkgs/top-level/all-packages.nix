@@ -28210,7 +28210,9 @@ with pkgs;
     };
   };
 
-  grandorgue = callPackage ../applications/audio/grandorgue { };
+  grandorgue = callPackage ../applications/audio/grandorgue {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   greetd = recurseIntoAttrs {
     dlm = callPackage ../applications/display-managers/greetd/dlm.nix { };
