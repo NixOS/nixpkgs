@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "pykira";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zxglzmd2k1nc4wri76ykra910fdgli027nw9d6541ic7xmw87vj";
+    sha256 = "sha256-MMjmA5N9Ms40eJP9fDDq+LIoPduAnqVrbNLXm+Vl5qw=";
   };
 
   # Project has no tests
