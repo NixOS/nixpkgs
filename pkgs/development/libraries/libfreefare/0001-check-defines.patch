@@ -1,0 +1,36 @@
+From c215658683598eded810fc30d32af130bffe27f7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Stanis=C5=82aw=20Pitucha?= <stan.pitucha@envato.com>
+Date: Tue, 18 Oct 2022 20:56:54 +1100
+Subject: [PATCH] check defines
+
+---
+ libfreefare/freefare_internal.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/libfreefare/freefare_internal.h b/libfreefare/freefare_internal.h
+index 26910ed..f313740 100644
+--- a/libfreefare/freefare_internal.h
++++ b/libfreefare/freefare_internal.h
+@@ -41,6 +41,19 @@
+     #define htole32(x) CFSwapInt32HostToLittle(x)
+ #endif
+ 
++#pragma GCC warning "def:"
++#if defined(le16toh)
++#pragma GCC warning "true"
++#else
++#pragma GCC warning "false"
++#endif
++
++#pragma GCC warning "head:"
++#if defined(HAVE_COREFOUNDATION_COREFOUNDATION_H)
++#pragma GCC warning "true"
++#else
++#pragma GCC warning "false"
++#endif
+ #if !defined(le16toh) && defined(HAVE_COREFOUNDATION_COREFOUNDATION_H)
+     #define be16toh(x) CFSwapInt16BigToHost(x)
+     #define htobe16(x) CFSwapInt16HostToBig(x)
+-- 
+2.36.2
+

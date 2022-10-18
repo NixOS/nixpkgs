@@ -12,6 +12,10 @@ stdenv.mkDerivation {
     sha256 = "0r5wfvwgf35lb1v65wavnwz2wlfyfdims6a9xpslf4lsm4a1v8xz";
   };
 
+  patches = [
+    ./0001-check-defines.patch
+  ];
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libnfc openssl ] ++ lib.optionals stdenv.isDarwin [ libobjc IOKit Security ];
 
