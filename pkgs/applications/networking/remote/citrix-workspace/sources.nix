@@ -13,49 +13,6 @@ let
   #
   # The latest versions can be found at https://www.citrix.com/downloads/workspace-app/linux/
   supportedVersions = lib.mapAttrs mkVersionInfo {
-    "21.01.0" = {
-      major     = "21";
-      minor     = "1";
-      patch     = "0";
-      x64hash   = "01m9g1bs6iiqbd778gjps2zznvqijlyn3mfw38aa0w1rr6ms326a";
-      x86hash   = "1mmx5r3wi9i6bwh4kdlpw446m8kijkaar8shi0q1n21fv0ygg3r5";
-      x64suffix = "14";
-      x86suffix = "14";
-      homepage  = "https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-2101.html";
-    };
-
-    "21.03.0" = {
-      major     = "21";
-      minor     = "3";
-      patch     = "0";
-      x64hash   = "004pgvxl81l99sqvrs5xzvjivjlc21rrlm2gky9hmbsm53nsl3zc";
-      x86hash   = "11nn9734a515dm1q880z9wmhvx8ikyh3riayyn42z22q4kd852n3";
-      x64suffix = "38";
-      x86suffix = "38";
-      homepage  = "https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-2103.html";
-    };
-
-    "21.06.0" = {
-      major     = "21";
-      minor     = "6";
-      patch     = "0";
-      x64hash   = "f3f98c60b0aaac31eb44dc98f22ee7ae7df229c960d5d29785eb5e9554f85f68";
-      x86hash   = "c2d9652ad9488a9ff171e62df8455ebe6890bcfade1cc289893ee35322d9d812";
-      x64suffix = "28";
-      x86suffix = "28";
-      homepage  = "https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-2106.html";
-    };
-
-    "21.08.0" = {
-      major     = "21";
-      minor     = "8";
-      patch     = "0";
-      x64hash   = "69ddae29cc8b4b68341c3d9503a54ee70ab58a5795fd83e79573f013eda5518c";
-      x86hash   = "b6d1bde5a8533f22374e1f5bbb3f5949e5b89773d0703e021fbe784b455aad3f";
-      x64suffix = "40";
-      x86suffix = "40";
-      homepage  = "https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-2108.html";
-    };
 
     "21.09.0" = {
       major     = "21";

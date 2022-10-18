@@ -5739,10 +5739,6 @@ with pkgs;
   cirrusgo = callPackage ../tools/security/cirrusgo { };
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
-    citrix_workspace_21_01_0
-    citrix_workspace_21_03_0
-    citrix_workspace_21_06_0
-    citrix_workspace_21_08_0
     citrix_workspace_21_09_0
     citrix_workspace_21_12_0
     citrix_workspace_22_05_0
