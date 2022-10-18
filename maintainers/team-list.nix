@@ -93,6 +93,7 @@ with lib.maintainers; {
 
   cinnamon = {
     members = [
+      bobby285271
       mkg20001
     ];
     scope = "Maintain Cinnamon desktop environment and applications made by the LinuxMint team.";
