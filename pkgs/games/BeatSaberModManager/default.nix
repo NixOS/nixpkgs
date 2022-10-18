@@ -1,5 +1,7 @@
 {
   lib,
+  dotnet-sdk,
+  targetPlatform,
 
   buildDotnetModule,
   fetchFromGitHub,
@@ -22,12 +24,15 @@ buildDotnetModule rec {
     fetchSubmodules = true; # It vendors BSIPA-Linux
   };
 
-  nugetDeps = ./deps.nix;
+  # This _must_ be specified in the project file and it can only be one so
+  # obviously you wouldn't specify it as an upstream project. Typical M$.
+  patches = [ ./add-runtime-identifier.patch ];
+  postPatch = ''
+    substituteInPlace BeatSaberModManager/BeatSaberModManager.csproj \
+      --replace @RuntimeIdentifier@ "${dotnet-sdk.passthru.systemToDotnetRid targetPlatform.system}"
+  '';
 
-  dotnetInstallFlags = [
-    # FIXME It doesn't like that for some reason beyond my ability to package dotnet
-    "-p:PublishSingleFile=false"
-  ];
+  nugetDeps = ./deps.nix;
 
   runtimeDeps = [
     libX11
