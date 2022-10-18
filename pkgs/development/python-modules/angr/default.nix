@@ -12,7 +12,7 @@
 , dpkt
 , fetchFromGitHub
 , GitPython
-, itanium_demangler
+, itanium-demangler
 , mulpyplexer
 , nampa
 , networkx
@@ -69,7 +69,7 @@ buildPythonPackage rec {
     cppheaderparser
     dpkt
     GitPython
-    itanium_demangler
+    itanium-demangler
     mulpyplexer
     nampa
     networkx

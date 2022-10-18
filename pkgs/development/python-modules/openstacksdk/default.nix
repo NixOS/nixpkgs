@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "openstacksdk";
-  version = "0.101.0";
+  version = "0.102.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YIAMenWg0WXFnwa7yLPnUxVHG4hrmf3EGy76qVpLd5o=";
+    hash = "sha256-sqGP66eerCrDRpyNr+AdQAjIrDC+OkxrUydbTxxroq0=";
   };
 
   propagatedBuildInputs = [

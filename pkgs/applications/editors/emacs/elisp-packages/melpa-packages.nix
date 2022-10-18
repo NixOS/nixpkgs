@@ -554,6 +554,13 @@ let
           });
         });
 
+        wordnut = super.wordnut.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace wordnut.el \
+              --replace 'wordnut-cmd "wn"' 'wordnut-cmd "${lib.getExe pkgs.wordnet}"'
+          '';
+        });
+
         mozc = super.mozc.overrideAttrs (attrs: {
           postPatch = attrs.postPatch or "" + ''
             substituteInPlace src/unix/emacs/mozc.el \

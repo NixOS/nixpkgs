@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "libxc";
     repo = "libxc";
     rev = version;
-    sha256 = "sha256-PuLpwhyyht+kkPUTrJTH+VTY5WuOhi2mIUDrFqubF+w=";
+    hash = "sha256-PuLpwhyyht+kkPUTrJTH+VTY5WuOhi2mIUDrFqubF+w=";
   };
 
   nativeBuildInputs = [ perl cmake gfortran ];

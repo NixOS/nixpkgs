@@ -4003,7 +4003,9 @@ with pkgs;
     jdk = openjdk8;
   };
 
-  fondu = callPackage ../tools/misc/fondu { };
+  fondu = callPackage ../tools/misc/fondu {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   fpp = callPackage ../tools/misc/fpp { };
 
@@ -5333,7 +5335,9 @@ with pkgs;
 
   keyd = callPackage ../tools/inputmethods/keyd { };
 
-  twitch-tui = callPackage ../applications/networking/instant-messengers/twitch-tui { };
+  twitch-tui = callPackage ../applications/networking/instant-messengers/twitch-tui {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   gebaar-libinput = callPackage ../tools/inputmethods/gebaar-libinput { stdenv = gcc10StdenvCompat; };
 
@@ -6941,7 +6945,9 @@ with pkgs;
 
   git-chglog = callPackage ../applications/version-management/git-and-tools/git-chglog { };
 
-  git-cinnabar = callPackage ../applications/version-management/git-and-tools/git-cinnabar { };
+  git-cinnabar = callPackage ../applications/version-management/git-and-tools/git-cinnabar {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   git-cliff = callPackage ../applications/version-management/git-and-tools/git-cliff {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -6996,7 +7002,9 @@ with pkgs;
 
   git-my = callPackage ../applications/version-management/git-and-tools/git-my { };
 
-  git-nomad = callPackage ../applications/version-management/git-and-tools/git-nomad { };
+  git-nomad = callPackage ../applications/version-management/git-and-tools/git-nomad {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+  };
 
   git-octopus = callPackage ../applications/version-management/git-and-tools/git-octopus { };
 
@@ -7152,6 +7160,8 @@ with pkgs;
      inherit (gst_all_1) gstreamer gst-plugins-base;
      gst-plugins-bad = gst_all_1.gst-plugins-bad.override { enableZbar = true; };
   };
+
+  gnome-extension-manager = callPackage ../applications/misc/gnome-extension-manager { };
 
   gnome-feeds = callPackage ../applications/networking/feedreaders/gnome-feeds {};
 
@@ -13300,7 +13310,7 @@ with pkgs;
 
   avra = callPackage ../development/compilers/avra { };
 
-  ballerina = callPackage ../development/compilers/ballerina { };
+  ballerina = callPackage ../development/compilers/ballerina { openjdk = openjdk11; };
 
   beekeeper-studio = callPackage ../development/tools/database/beekeeper-studio { };
 
@@ -15554,7 +15564,7 @@ with pkgs;
 
   pypy = pypy2;
   pypy2 = pypy27;
-  pypy3 = pypy38;
+  pypy3 = pypy39;
 
   # Python interpreter that is build with all modules, including tkinter.
   # These are for compatibility and should not be used inside Nixpkgs.
@@ -15600,7 +15610,7 @@ with pkgs;
   };
 
   pythonInterpreters = callPackage ./../development/interpreters/python { };
-  inherit (pythonInterpreters) python27 python37 python38 python39 python310 python311 python3Minimal pypy27 pypy38 pypy37 rustpython;
+  inherit (pythonInterpreters) python27 python37 python38 python39 python310 python311 python3Minimal pypy27 pypy39 pypy38 pypy37 rustpython;
 
   # List of extensions with overrides to apply to all Python package sets.
   pythonPackagesExtensions = [ ];
@@ -15617,6 +15627,7 @@ with pkgs;
   pypy3Packages = pypy3.pkgs;
   pypy37Packages = pypy37.pkgs;
   pypy38Packages = pypy38.pkgs;
+  pypy39Packages = pypy39.pkgs;
 
   py3c = callPackage ../development/libraries/py3c { };
 
@@ -19891,7 +19902,9 @@ with pkgs;
 
   libgringotts = callPackage ../development/libraries/libgringotts { };
 
-  libgrss = callPackage ../development/libraries/libgrss { };
+  libgrss = callPackage ../development/libraries/libgrss {
+    inherit (darwin.apple_sdk_11_0.frameworks) Foundation AppKit;
+  };
 
   libgweather = callPackage ../development/libraries/libgweather { };
 
@@ -19986,6 +19999,7 @@ with pkgs;
   libfreeaptx = callPackage ../development/libraries/libfreeaptx { };
 
   libfreefare = callPackage ../development/libraries/libfreefare {
+    inherit (darwin.apple_sdk.frameworks) IOKit Security;
     inherit (darwin) libobjc;
   };
 
@@ -22326,6 +22340,8 @@ with pkgs;
   tevent = callPackage ../development/libraries/tevent { };
 
   tet = callPackage ../development/tools/misc/tet { };
+
+  text-engine = callPackage ../development/libraries/text-engine { };
 
   the-foundation = callPackage ../development/libraries/the-foundation { };
 
@@ -27771,7 +27787,9 @@ with pkgs;
     alsa-lib = null;
     acl = null;
     gpm = null;
-    inherit (darwin.apple_sdk.frameworks) AppKit GSS ImageIO;
+    inherit (darwin.apple_sdk.frameworks)
+      AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
+      ImageCaptureCore GSS ImageIO;
     inherit (darwin) sigtool;
   };
 
@@ -27787,10 +27805,14 @@ with pkgs;
   });
 
   emacsMacport = callPackage ../applications/editors/emacs/macport.nix {
+    withMacport = true;
+
+    gconf = null;
+
     inherit (darwin.apple_sdk.frameworks)
       AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
       ImageCaptureCore GSS ImageIO;
-    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+    inherit (darwin) sigtool;
   };
 
   emacsPackagesFor = emacs: import ./emacs-packages.nix {
@@ -27959,6 +27981,7 @@ with pkgs;
   fehlstart = callPackage ../applications/misc/fehlstart { };
 
   fetchmail = callPackage ../applications/misc/fetchmail { };
+  fetchmail_7 = callPackage ../applications/misc/fetchmail/v7.nix { };
 
   ff2mpv = callPackage ../applications/misc/ff2mpv { };
 
@@ -28436,6 +28459,7 @@ with pkgs;
   xrdp = callPackage ../applications/networking/remote/xrdp { };
 
   freerdp = callPackage ../applications/networking/remote/freerdp {
+    inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Carbon Cocoa CoreMedia;
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good;
   };
 
@@ -30346,7 +30370,7 @@ with pkgs;
     openssl = openssl_1_1;
   };
   p4d = callPackage ../applications/version-management/p4d { };
-  p4v = libsForQt515.callPackage ../applications/version-management/p4v { };
+  p4v = callPackage ../applications/version-management/p4v { };
 
   partio = callPackage ../development/libraries/partio {};
 
@@ -32725,6 +32749,8 @@ with pkgs;
   x-create-mouse-void = callPackage ../applications/window-managers/x-create-mouse-void { };
 
   picom = callPackage ../applications/window-managers/picom {};
+
+  picom-jonaburg = callPackage ../applications/window-managers/picom/picom-jonaburg.nix { };
 
   picom-next = callPackage ../applications/window-managers/picom/picom-next.nix { };
 
@@ -35869,7 +35895,9 @@ with pkgs;
 
   apfel = callPackage ../development/libraries/physics/apfel { };
 
-  applgrid = callPackage ../development/libraries/physics/applgrid { };
+  applgrid = callPackage ../development/libraries/physics/applgrid {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   hoppet = callPackage ../development/libraries/physics/hoppet { };
 

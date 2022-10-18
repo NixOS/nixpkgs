@@ -71,6 +71,8 @@ mapAliases ({
   dogpile-core = throw "dogpile-core is no longer maintained, use dogpile-cache instead"; # added 2021-11-20
   eebrightbox = throw "eebrightbox is unmaintained upstream and has therefore been removed"; # added 2022-02-03
   email_validator = email-validator; # added 2022-06-22
+  face_recognition = face-recognition; # added 2022-10-15
+  face_recognition_models = face-recognition-models; # added 2022-10-15
   fake_factory = throw "fake_factory has been removed because it is unused and deprecated by upstream since 2016."; # added 2022-05-30
   faulthandler = throw "faulthandler is built into ${python.executable}"; # added 2021-07-12
   flask_sqlalchemy = flask-sqlalchemy; # added 2022-07-20
@@ -93,6 +95,7 @@ mapAliases ({
   imdbpy = throw "imdbpy has been renamed to cinemagoer"; # added 2022-08-08
   ipaddress = throw "ipaddress has been removed because it is no longer required since python 2.7."; # added 2022-05-30
   influxgraph = throw "influxgraph has been removed because it is no longer maintained"; # added 2022-07-10
+  itanium_demangler = itanium-demangler; # added 2022-1017
   jupyter_client = jupyter-client; # added 2021-10-15
   Keras = keras; # added 2021-11-25
   ldap = python-ldap; # added 2022-09-16
@@ -121,6 +124,7 @@ mapAliases ({
   prometheus_client = prometheus-client; # added 2021-06-10
   prompt_toolkit = prompt-toolkit; # added 2021-07-22
   pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
+  pushbullet = pushbullet-py;  # Added 2022-10-15
   pydrive = throw "pydrive is broken and deprecated and has been replaced with pydrive2."; # added 2022-06-01
   pyGtkGlade = throw "Glade support for pygtk has been removed"; # added 2022-01-15
   pycallgraph = throw "pycallgraph has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
