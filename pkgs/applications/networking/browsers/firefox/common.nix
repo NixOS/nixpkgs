@@ -90,7 +90,7 @@
 , jackSupport ? stdenv.isLinux, libjack2
 , jemallocSupport ? !stdenv.hostPlatform.isMusl, jemalloc
 , ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
-, pgoSupport ? (stdenv.isLinux && stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isMusl), xvfb-run
+, pgoSupport ? (stdenv.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
 , sndioSupport ? stdenv.isLinux, sndio
@@ -324,6 +324,8 @@ buildStdenv.mkDerivation ({
      configureFlagsArray+=(
        "--enable-profile-generate=cross"
      )
+     OLD_LDFLAGS="$LDFLAGS"
+     LDFLAGS="-Wl,-rpath,$(pwd)/mozobj/dist/${binaryName}"
    fi
   '' + lib.optionalString googleAPISupport ''
     # Google API key used by Chromium and Firefox.
@@ -469,6 +471,9 @@ buildStdenv.mkDerivation ({
 
     # Clean build dir
     ./mach clobber
+
+    LDFLAGS="$OLD_LDFLAGS"
+    unset OLD_LDFLAGS
   '';
 
   preBuild = ''
