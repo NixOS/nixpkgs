@@ -17630,6 +17630,10 @@ with pkgs;
 
   tflint = callPackage ../development/tools/analysis/tflint { };
 
+  tflint-plugins = recurseIntoAttrs (
+    callPackage ../development/tools/analysis/tflint-plugins { }
+  );
+
   tfsec = callPackage ../development/tools/analysis/tfsec { };
 
   todoist = callPackage ../applications/misc/todoist { };
