@@ -36,8 +36,7 @@ index 2b3c290..093dce6 100644
  	bss = cfg80211_get_bss(wl_to_wiphy(wl), NULL, (s8 *)&wl->bssid,
  	ssid->SSID, ssid->SSID_len, WLAN_CAPABILITY_ESS, WLAN_CAPABILITY_ESS);
 -	struct cfg80211_roam_info roam_info = {
--// Rel. commit "cfg80211: Indicate MLO connection info in connect and roam callbacks" (Veerendranath Jakkam, Wed Jun 8)
-+	// Rel. commit "cfg80211: Indicate MLO connection info in connect and roam callbacks" (Veerendranath Jakkam, Wed Jun 8)
+ // Rel. commit "cfg80211: Indicate MLO connection info in connect and roam callbacks" (Veerendranath Jakkam, Wed Jun 8)
  #if LINUX_VERSION_CODE < KERNEL_VERSION(6, 0, 0)
 -		.bss = bss,
 +	roam_info.bss = bss;
