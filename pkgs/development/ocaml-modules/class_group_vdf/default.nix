@@ -1,4 +1,4 @@
-{ lib, fetchFromGitLab, buildDunePackage, ocaml
+{ lib, fetchFromGitLab, buildDunePackage
 , gmp, pkg-config, dune-configurator
 , zarith, integers
 , alcotest, bisect_ppx }:
