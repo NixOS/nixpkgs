@@ -5,6 +5,11 @@
 , fetchFromGitHub
 , installShellFiles
 , git
+  # passthru
+, runCommand
+, makeWrapper
+, pulumi
+, pulumiPackages
 }:
 
 buildGoModule rec {
@@ -75,6 +80,19 @@ buildGoModule rec {
       --fish <($out/bin/pulumi gen-completion fish) \
       --zsh  <($out/bin/pulumi gen-completion zsh)
   '';
+
+  passthru = {
+    pkgs = pulumiPackages;
+    withPackages = f: runCommand "${pulumi.name}-with-packages"
+      {
+        nativeBuildInputs = [ makeWrapper ];
+      }
+      ''
+        mkdir -p $out/bin
+        makeWrapper ${pulumi}/bin/pulumi $out/bin/pulumi \
+          --suffix PATH : ${lib.makeSearchPath "bin" (f pulumiPackages)}
+      '';
+  };
 
   meta = with lib; {
     homepage = "https://pulumi.io/";
