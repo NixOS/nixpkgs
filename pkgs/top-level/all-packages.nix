@@ -37278,6 +37278,8 @@ with pkgs;
 
   kmon = callPackage ../tools/system/kmon { };
 
+  komikku = callPackage ../applications/misc/komikku { };
+
   kompose = callPackage ../applications/networking/cluster/kompose { };
 
   kompute = callPackage ../development/libraries/kompute { };
