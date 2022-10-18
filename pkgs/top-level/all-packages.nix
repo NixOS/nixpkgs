@@ -36579,6 +36579,8 @@ with pkgs;
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
 
+  nix-serve-ng = haskell.lib.compose.justStaticExecutables haskellPackages.nix-serve-ng;
+
   nix-simple-deploy = callPackage ../tools/package-management/nix-simple-deploy { };
 
   alejandra = callPackage ../tools/nix/alejandra { };
