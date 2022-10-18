@@ -16,7 +16,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "build2";
-  version = "0.14.0";
+  version = "0.15.0";
 
   outputs = [ "out" "dev" "doc" "man" ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/build2-${version}.tar.gz";
-    sha256 = "sha256-/pWj68JmBthOJ2CTQHo9Ww3MCv4xBOw0SusJpMfX5Y8=";
+    sha256 = "07369gw6zlad6nk29564kj17yp145l3dzbgrx04pyiyl1s84aa1r";
   };
 
   patches = [
@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
   build2ConfigureFlags = [
     "config.bin.lib=${configSharedStatic enableShared enableStatic}"
     "config.cc.poptions+=-I${lib.getDev libpkgconf}/include/pkgconf"
+    "config.build2.libpkgconf=true"
   ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
