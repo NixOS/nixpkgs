@@ -451,14 +451,14 @@
     "version": "4.41.0"
   },
   "google-beta": {
-    "hash": "sha256-U27ZzjNMFP/TCpXrU0QQ0uYB0sgeWVmRrQFIzq7FAhs=",
+    "hash": "sha256-zeCz6B5WmNJVirWOPU+8HYab9hTwxX490Pk1gX/0jd8=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/google-beta",
     "proxyVendor": true,
     "repo": "terraform-provider-google-beta",
-    "rev": "v4.40.0",
+    "rev": "v4.41.0",
     "vendorHash": "sha256-PWSok1sTU/57Xeri4Un5B9Fbwg8gBP6Quy5oIZrjxUI=",
-    "version": "4.40.0"
+    "version": "4.41.0"
   },
   "googleworkspace": {
     "hash": "sha256-dedYnsKHizxJZibuvJOMbJoux0W6zgKaK5fxIofKqCY=",
