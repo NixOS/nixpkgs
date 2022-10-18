@@ -297,7 +297,11 @@ in lib.makeScopeWithSplicing
       mandoc groff rsync
     ];
     skipIncludesPhase = true;
-    buildInputs = with self; compatIfNeeded;
+    buildInputs = with self; compatIfNeeded
+      # fts header is needed. glibc already has this header, but musl doesn't,
+      # so make sure pkgsMusl.netbsd.install still builds in case you want to
+      # remove it!
+      ++ [ fts ];
     installPhase = ''
       runHook preInstall
 
