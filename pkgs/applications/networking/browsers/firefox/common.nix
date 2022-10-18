@@ -91,7 +91,7 @@
 , jackSupport ? stdenv.isLinux, libjack2
 , jemallocSupport ? !stdenv.hostPlatform.isMusl, jemalloc
 , ltoSupport ? (stdenv.isLinux && stdenv.is64bit && !stdenv.hostPlatform.isRiscV), overrideCC, buildPackages
-, pgoSupport ? (stdenv.isLinux && stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isMusl), xvfb-run
+, pgoSupport ? (stdenv.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
 , sndioSupport ? stdenv.isLinux, sndio
@@ -320,11 +320,23 @@ buildStdenv.mkDerivation ({
        "--with-pgo-profile-path="$TMPDIR/merged.profdata""
        "--with-pgo-jarlog="$TMPDIR/jarlog""
      )
+     ${lib.optionalString stdenv.hostPlatform.isMusl ''
+       LDFLAGS="$OLD_LDFLAGS"
+       unset OLD_LDFLAGS
+     ''}
    else
      echo "Configuring to generate profiling data"
      configureFlagsArray+=(
        "--enable-profile-generate=cross"
      )
+     ${lib.optionalString stdenv.hostPlatform.isMusl
+     # Set the rpath appropriately for the profiling run
+     # During the profiling run, loading libraries from $out would fail,
+     # since the profiling build has not been installed to $out
+     ''
+       OLD_LDFLAGS="$LDFLAGS"
+       LDFLAGS="-Wl,-rpath,$(pwd)/mozobj/dist/${binaryName}"
+     ''}
    fi
   '' + lib.optionalString googleAPISupport ''
     # Google API key used by Chromium and Firefox.
