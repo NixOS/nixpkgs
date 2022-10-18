@@ -9,6 +9,15 @@ rec {
       sha512 = "30ced2fff818858267eaab23974f6962c5d39433ce8e26507589535fc9348f00cf5e45b90997dfb6e2361b70900547fdb0e70d741127cc6705089ea585ea2296";
     };
 
+    # This patch could be applied anywhere (just rebuild, no effect)
+    extraPatches = lib.optionals stdenv.isAarch64 [
+      (fetchpatch { # https://bugzilla.mozilla.org/show_bug.cgi?id=1791275
+        name = "no-sysctl-aarch64.patch";
+        url = "https://hg.mozilla.org/mozilla-central/raw-rev/0efaf5a00aaceeed679885e4cd393bd9a5fcd0ff";
+        hash = "sha256-wS/KufeLFxCexQalGGNg8+vnQhzDiL79OLt8FtL/JJ8=";
+      })
+    ];
+
     meta = {
       description = "A web browser built from Firefox source tree";
       homepage = "http://www.mozilla.com/en-US/firefox/";
