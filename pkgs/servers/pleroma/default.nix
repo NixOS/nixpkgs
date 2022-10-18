@@ -49,6 +49,8 @@ beamPackages.mixRelease rec {
           sha256 = "0qbf86l59kmpf1nd82v4141ba9ba75xwmnqzpgbm23fa1hh8pi9c";
         };
         beamDeps = with final; [ ];
+
+        postInstall = "mv priv/* $out/lib/erlang/lib/${name}-${version}/priv/";
       };
       remote_ip = beamPackages.buildMix rec {
         name = "remote_ip";
