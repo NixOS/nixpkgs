@@ -1,6 +1,6 @@
 { stdenv, lib, nixosTests, buildGoModule, fetchFromGitHub, installShellFiles
 , pkg-config
-, libayatana-appindicator, libX11, libXcursor, libXxf86vm
+, gtk3, libayatana-appindicator, libX11, libXcursor, libXxf86vm
 , Cocoa, IOKit, Kernel, UserNotifications, WebKit
 , ui ? false }:
 let
@@ -28,6 +28,7 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
 
   buildInputs = lib.optionals (stdenv.isLinux && ui) [
+    gtk3
     libayatana-appindicator
     libX11
     libXcursor
