@@ -10,8 +10,6 @@ let
 
     # Libs
 
-    buildOcaml = callPackage ../build-support/ocaml { };
-
     buildOasisPackage = callPackage ../build-support/ocaml/oasis.nix { };
 
     buildDunePackage = callPackage ../build-support/ocaml/dune.nix {};
