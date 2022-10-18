@@ -7572,6 +7572,8 @@ self: super: with self; {
 
   pure-pcapy3 = callPackage ../development/python-modules/pure-pcapy3 { };
 
+  pure-protobuf = callPackage ../development/python-modules/pure-protobuf { };
+
   purepng = callPackage ../development/python-modules/purepng { };
 
   pure-python-adb = callPackage ../development/python-modules/pure-python-adb { };
