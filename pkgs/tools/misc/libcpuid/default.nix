@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  NIX_LDFLAGS = lib.optional stdenv.hostPlatform.isNetBSD "-lpthread";
+
   meta = with lib; {
     homepage = "http://libcpuid.sourceforge.net/";
     description = "A small C library for x86 CPU detection and feature extraction";
