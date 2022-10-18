@@ -14,14 +14,14 @@ buildPythonPackage rec {
     hash = "sha256-iNLQu9c8Q3B+FXMObRTtxqE3B/siJIlIlCH6T0rX+sY=";
   };
 
+  patches = [
+    ./0001-locate-libnvidia-ml.so.1-on-NixOS.patch
+  ];
+
   # no tests
   doCheck = false;
 
   pythonImportsCheck = [ "pynvml" ];
-
-  patches = [
-    ./0001-locate-libnvidia-ml.so.1-on-NixOS.patch
-  ];
 
   meta = {
     description = "Python Bindings for the NVIDIA Management Library";
