@@ -6406,6 +6406,8 @@ in {
 
   nvchecker = callPackage ../development/python-modules/nvchecker { };
 
+  nvidia-ml-py = callPackage ../development/python-modules/nvidia-ml-py { };
+
   nxt-python = callPackage ../development/python-modules/nxt-python { };
 
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
