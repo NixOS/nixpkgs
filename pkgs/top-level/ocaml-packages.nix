@@ -531,8 +531,6 @@ let
 
     hashcons = callPackage ../development/ocaml-modules/hashcons { };
 
-    herelib = callPackage ../development/ocaml-modules/herelib { };
-
     hidapi = callPackage ../development/ocaml-modules/hidapi { };
 
     higlo = callPackage ../development/ocaml-modules/higlo { };
