@@ -20094,8 +20094,6 @@ with pkgs;
   libindicator-gtk3 = libindicator.override { gtkVersion = "3"; };
   libindicator = callPackage ../development/libraries/libindicator { };
 
-  libayatana-indicator-gtk2 = libayatana-indicator.override { gtkVersion = "2"; };
-  libayatana-indicator-gtk3 = libayatana-indicator.override { gtkVersion = "3"; };
   libayatana-indicator = callPackage ../development/libraries/libayatana-indicator { };
 
   libinotify-kqueue = callPackage ../development/libraries/libinotify-kqueue { };
