@@ -92,6 +92,6 @@ stdenv.mkDerivation rec {
     description = "A map application for GNOME 3";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
