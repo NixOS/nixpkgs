@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "felix";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "kyoheiu";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7WeikYd/mADsp9DQ0jelhuZo5ZiyJrHG9HBg/YLpjZY=";
+    sha256 = "sha256-ewPDbrOxinu+GXegunZjumTCnkflXQk74Ovr8QStDBM=";
   };
 
-  cargoSha256 = "sha256-IUiyDk+TRfODXQ+45ARcFximkLVk32pqvJfn23H0kAw=";
+  cargoSha256 = "sha256-wD0h8tXnqQOuBbFmpjMu0ZK7+omcOSqno6wFnSMTSjk=";
 
   checkInputs = [ zoxide ];
 
