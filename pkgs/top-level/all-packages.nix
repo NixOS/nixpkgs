@@ -5743,8 +5743,9 @@ with pkgs;
     citrix_workspace_21_12_0
     citrix_workspace_22_05_0
     citrix_workspace_22_07_0
+    citrix_workspace_22_12_0
   ;
-  citrix_workspace = citrix_workspace_22_07_0;
+  citrix_workspace = citrix_workspace_22_12_0;
 
   cmigemo = callPackage ../tools/text/cmigemo { };
 
