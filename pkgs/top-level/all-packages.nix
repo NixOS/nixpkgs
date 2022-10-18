@@ -26504,7 +26504,9 @@ with pkgs;
 
   session-desktop = callPackage ../applications/networking/instant-messengers/session-desktop { };
 
-  shaderc = callPackage ../development/compilers/shaderc { };
+  shaderc = callPackage ../development/compilers/shaderc {
+    inherit (darwin) autoSignDarwinBinariesHook cctools;
+  };
 
   shades-of-gray-theme = callPackage ../data/themes/shades-of-gray { };
 
