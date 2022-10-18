@@ -49,6 +49,10 @@ stdenv.mkDerivation rec {
     "config.bin.lib=${build2.configSharedStatic enableShared enableStatic}"
   ];
 
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -add_rpath '${lib.getLib build2}/lib' "''${!outputBin}/bin/bpkg"
+  '';
+
   meta = with lib; {
     description = "build2 package dependency manager";
     # https://build2.org/bpkg/doc/bpkg.xhtml
