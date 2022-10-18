@@ -9062,6 +9062,8 @@ self: super: with self; {
     sanic = self.sanic.override { doCheck = false; };
   };
 
+  pytest-steps = callPackage ../development/python-modules/pytest-steps { };
+
   pytest-server-fixtures = callPackage ../development/python-modules/pytest-server-fixtures { };
 
   pytest-services = callPackage ../development/python-modules/pytest-services { };
