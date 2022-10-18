@@ -29363,6 +29363,7 @@ with pkgs;
     jdk = jetbrains.jdk;
   }) // {
     jdk = callPackage ../development/compilers/jetbrains-jdk {  };
+    jcef = callPackage ../development/compilers/jetbrains-jdk/jcef.nix { };
   });
 
   jmusicbot = callPackage ../applications/audio/jmusicbot { };

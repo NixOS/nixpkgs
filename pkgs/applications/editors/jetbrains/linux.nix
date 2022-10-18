@@ -46,6 +46,8 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
         truncate --size=$size $fname
       }
 
+      rm -rf jbr
+
       interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
       if [[ "${stdenv.hostPlatform.system}" == "x86_64-linux" && -e bin/fsnotifier64 ]]; then
         target_size=$(get_file_size bin/fsnotifier64)
