@@ -7530,9 +7530,15 @@ with pkgs;
 
   lucky-cli = callPackage ../development/web/lucky-cli { };
 
+  mac-fdisk = callPackage ../tools/system/mac-fdisk { };
+
   partclone = callPackage ../tools/backup/partclone { };
 
   partimage = callPackage ../tools/backup/partimage { };
+
+  pdisk = callPackage ../tools/system/pdisk {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
+  };
 
   pgf_graphics = callPackage ../tools/graphics/pgf { };
 
