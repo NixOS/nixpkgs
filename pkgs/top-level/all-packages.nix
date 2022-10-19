@@ -14914,6 +14914,9 @@ with pkgs;
   cargo-semver-checks = callPackage ../development/tools/rust/cargo-semver-checks {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  cargo-show-asm = callPackage ../development/tools/rust/cargo-show-asm { };
+
   cargo-sort = callPackage ../development/tools/rust/cargo-sort { };
   cargo-spellcheck = callPackage ../development/tools/rust/cargo-spellcheck {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -25170,8 +25173,8 @@ with pkgs;
 
   ginkgo = callPackage ../development/tools/ginkgo { };
 
-  gdlv = callPackage ../development/tools/gdlv {
-    inherit (darwin.apple_sdk.frameworks) OpenGL;
+  gdlv = darwin.apple_sdk_11_0.callPackage ../development/tools/gdlv {
+    inherit (darwin.apple_sdk_11_0.frameworks) OpenGL AppKit;
   };
 
   go-bindata = callPackage ../development/tools/go-bindata { };
