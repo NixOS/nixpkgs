@@ -14,18 +14,18 @@ let
 in
   mkYarnPackage rec {
     pname = "micropad";
-    version = "4.0.0";
+    version = "4.1.0";
 
     src = fetchFromGitHub {
       owner = "MicroPad";
       repo = "Micropad-Electron";
       rev = "v${version}";
-      sha256 = "sha256-slutuLH95wQaZK02vRU/WDbYgG0RZbNKvrihLVMZWpQ=";
+      sha256 = "sha256-ity5oU6TCBpQgimoiaMswOV3FY7Z0GmBcFWqQzdYmao=";
     };
 
     micropad-core = fetchzip {
       url = "https://github.com/MicroPad/MicroPad-Core/releases/download/v${version}/micropad.tar.xz";
-      sha256 = "1w0ajx15rm2mmyy4518ai8xfkfd6dfm38i3vfr9q9bw9h6igfn6g";
+      sha256 = "0br8lsdrbjkr5gl434r5ngdhbwbzhav94q8kizsixb8k0wwyfxy5";
     };
 
     packageJSON = ./package.json;
