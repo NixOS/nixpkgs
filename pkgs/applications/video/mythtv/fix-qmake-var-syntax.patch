@@ -1,0 +1,12 @@
+diff -Naur b/configure c/configure
+--- b/configure	2022-04-22 14:39:29.998895626 -0400
++++ c/configure	2022-04-22 14:38:36.688266601 -0400
+@@ -6296,7 +6296,7 @@
+ 
+ # add some linker flags
+ check_ldflags -Wl,--warn-common
+-check_ldflags '-Wl,-rpath-link,\${SRC_PATH_BARE}/external/FFmpeg/libpostproc:\${SRC_PATH_BARE}/external/FFmpeg/libswresample:\${SRC_PATH_BARE}/external/FFmpeg/libswscale:\${SRC_PATH_BARE}/external/FFmpeg/libavfilter:\${SRC_PATH_BARE}/external/FFmpeg/libavdevice:\${SRC_PATH_BARE}/external/FFmpeg/libavformat:\${SRC_PATH_BARE}/external/FFmpeg/libavcodec:\${SRC_PATH_BARE}/external/FFmpeg/libavutil:\${SRC_PATH_BARE}/external/FFmpeg/libavresample'
++check_ldflags '-Wl,-rpath-link,\$\${SRC_PATH_BARE}/external/FFmpeg/libpostproc:\$\${SRC_PATH_BARE}/external/FFmpeg/libswresample:\$\${SRC_PATH_BARE}/external/FFmpeg/libswscale:\$\${SRC_PATH_BARE}/external/FFmpeg/libavfilter:\$\${SRC_PATH_BARE}/external/FFmpeg/libavdevice:\$\${SRC_PATH_BARE}/external/FFmpeg/libavformat:\$\${SRC_PATH_BARE}/external/FFmpeg/libavcodec:\$\${SRC_PATH_BARE}/external/FFmpeg/libavutil:\$\${SRC_PATH_BARE}/external/FFmpeg/libavresample'
+ enabled rpath && add_ldexeflags -Wl,-rpath,$libdir
+ enabled rpath && add_ldlibflags -Wl,-rpath,$libdir
+ test_ldflags -Wl,-Bsymbolic && append SHFLAGS -Wl,-Bsymbolic
