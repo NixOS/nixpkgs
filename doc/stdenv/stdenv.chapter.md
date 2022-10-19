@@ -1429,27 +1429,15 @@ The basic idea is that we inject the `mini_compile_commands_client.py` into the 
 Whenever the wrapper is executed, it sends the unwrapped compile command to a running `mini_compile_commands_server.py`, which collects them and when shut down, writes a `compile_commands.json`.
 The client server architecture is required to handle parallel builds.
 
-
 The `mini-compile-commands.wrap` function takes a nixpkgs standard environment, and returns a new standard environment with the `mini_compile_commands_client.py` insert into the compiler wrapper as a post wrapper hook and `mini_compile_commands_server.py` in scope.
 
-For example, in the environment
+For example, we can use the following environment to build the linux kernel:
 
 ```
-with (import <nixpkgs> {});
-let llvm = llvmPackages_latest;
-in (mkShell.override {stdenv = ( mini-compile-commands.wrap llvm.stdenv );}) {
-   buildInputs = [ cmake gtest ];
-}
+nix-shell -E "with (import <nixpkgs> {}); linux.override { stdenv = (mini-compile-commands.wrap stdenv); }"
 ```
 
-A `compile_commands.json` file can be produced as follows:
-
-```
-$ mini_compile_commands_server.py compile_commands.json &
-
-# record the pid of the mini_compile_commands_server
-$ PID_OF_MINI_COMPILE_COMMANDS_SERVER=$!
-
-$ <your-build-commands>
-$ kill $PID_OF_MINI_COMPILE_COMMANDS_SERVER
-```
+Clone the linux kernel source tree, and spawn two shells with the above command.
+In the first run `mini_compile_commands_server.py compile_commands.json`.
+In the second run `make $makeFlags defconfig -j $(nproc); make $makeFlags -j $(nproc)`.
+Once the build has finished, close `mini_compile_commands_server.py` and a `compile_commands.json` will be generated.
