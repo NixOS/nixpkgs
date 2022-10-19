@@ -6851,6 +6851,18 @@ final: prev:
     meta.homepage = "https://github.com/lewis6991/satellite.nvim/";
   };
 
+  scope-nvim = buildVimPluginFrom2Nix {
+    pname = "scope.nvim";
+    version = "2022-06-27";
+    src = fetchFromGitHub {
+      owner = "tiagovla";
+      repo = "scope.nvim";
+      rev = "2db6d31de8e3a98d2b41c0f0d1f5dc299ee76875";
+      sha256 = "10l7avsjcgzh0s29az4zzskqcp9jw5xpvdiih02rf7c1j85zxm85";
+    };
+    meta.homepage = "https://github.com/tiagovla/scope.nvim/";
+  };
+
   scrollbar-nvim = buildVimPluginFrom2Nix {
     pname = "scrollbar.nvim";
     version = "2022-06-16";
