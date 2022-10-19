@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "httpagentparser";
-  version = "1.9.3";
+  version = "1.9.5";
 
   # Github version does not have any release tags
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1x20j4gyx4vfsxs3bx8qcbdhq7n34gjr8gd01qlri96wpmn4c3rp";
+    sha256 = "sha256-U879nWWZD2/lnAN4ytjqG53493DS6L2dh2LtrgM76Ao=";
   };
 
   # PyPi version does not include test directory
