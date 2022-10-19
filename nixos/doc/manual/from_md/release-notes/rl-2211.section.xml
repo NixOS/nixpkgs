@@ -256,6 +256,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/prymitive/karma">karma</link>,
+          an alert dashboard for Prometheus Alertmanager. Available as
+          <link xlink:href="options.html#opt-services.karma.enable">services.karma</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://languagetool.org/">languagetool</link>,
           a multilingual grammar, style, and spell checker. Available as
           <link xlink:href="options.html#opt-services.languagetool.enable">services.languagetool</link>.

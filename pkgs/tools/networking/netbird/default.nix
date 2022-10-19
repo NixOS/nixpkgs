@@ -1,6 +1,6 @@
 { stdenv, lib, nixosTests, buildGoModule, fetchFromGitHub, installShellFiles
 , pkg-config
-, libayatana-appindicator, libX11, libXcursor, libXxf86vm
+, gtk3, libayatana-appindicator, libX11, libXcursor, libXxf86vm
 , Cocoa, IOKit, Kernel, UserNotifications, WebKit
 , ui ? false }:
 let
@@ -14,13 +14,13 @@ let
 in
 buildGoModule rec {
   pname = "netbird";
-  version = "0.9.8";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-M+zuC0S1dbCC7udgnXe5Ksm4XbLRJoH9StinShDkDMU=";
+    sha256 = "sha256-irOrYQIMy1GS/EsN4YtLP4/lHuQ+r7ZGzvNA4dkHi8s=";
   };
 
   vendorSha256 = "sha256-+jJUKp2EvtDxGsv+9B+s7FiIopvO8yH9jldeRZkrd20=";
@@ -28,6 +28,7 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
 
   buildInputs = lib.optionals (stdenv.isLinux && ui) [
+    gtk3
     libayatana-appindicator
     libX11
     libXcursor
