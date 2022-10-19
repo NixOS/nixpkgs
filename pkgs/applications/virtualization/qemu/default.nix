@@ -167,8 +167,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
     ++ lib.optional uringSupport "--enable-linux-io-uring"
     ++ lib.optional canokeySupport "--enable-canokey"
-    ++ lib.optional dbusDisplaySupport "--enable-dbus-display"
-    ++ lib.optional dbusDisplaySupport "--enable-modules";
+    ++ lib.optionals dbusDisplaySupport [ "--enable-dbus-display" "--enable-modules" ];
 
   dontWrapGApps = true;
 
