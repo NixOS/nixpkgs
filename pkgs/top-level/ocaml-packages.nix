@@ -144,6 +144,8 @@ let
 
     camlimages = callPackage ../development/ocaml-modules/camlimages { };
 
+    class_group_vdf = callPackage ../development/ocaml-modules/class_group_vdf { };
+
     benchmark = callPackage ../development/ocaml-modules/benchmark { };
 
     biniou = callPackage ../development/ocaml-modules/biniou { };
@@ -1397,6 +1399,8 @@ let
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
 
     semaphore-compat = callPackage ../development/ocaml-modules/semaphore-compat { };
+
+    semver = callPackage ../development/ocaml-modules/semver { };
 
     sha = callPackage ../development/ocaml-modules/sha { };
 

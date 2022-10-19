@@ -38,10 +38,10 @@
 }:
 mkDerivation {
   pname = "nix-output-monitor";
-  version = "2.0.0.0";
+  version = "2.0.0.2";
   src = fetchzip {
-    url = "https://github.com/maralorn/nix-output-monitor/archive/refs/tags/v2.0.0.0.tar.gz";
-    sha256 = "033582nzyi0hfis062cnz8lgx918lk1bmzfimsd78a9zzxn20frg";
+    url = "https://github.com/maralorn/nix-output-monitor/archive/refs/tags/v2.0.0.2.tar.gz";
+    sha256 = "1xfcl7203sgc88a9xdnswwk7rirsaff7jb27yil7mrb7ni10g2f9";
   };
   isLibrary = true;
   isExecutable = true;
