@@ -5429,7 +5429,6 @@ broken-packages:
   - uxadt
   - vabal-lib
   - vacuum
-  - vado
   - validated-types
   - Validation
   - validations
