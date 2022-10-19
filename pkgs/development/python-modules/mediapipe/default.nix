@@ -48,7 +48,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pythonRelaxDepsHook autoPatchelfHook ];
 
   pythonRemoveDeps = [ "opencv-contrib-python" ];
-  
+    
   pythonRelaxDeps = ["protobuf"];
 
   propagatedBuildInputs = with python.pkgs;[
