@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, python3
+, python3Minimal
 }:
 
 rec {
@@ -33,7 +33,7 @@ rec {
 
     # specifying python environment variable so that it gets substituted
     # during install phase
-    python = python3;
+    python = python3Minimal;
 
     installPhase = ''
       mkdir -p $out/bin
