@@ -5011,6 +5011,8 @@ with pkgs;
   beetsPackages = lib.recurseIntoAttrs (callPackage ../tools/audio/beets { });
   inherit (beetsPackages) beets beets-unstable;
 
+  beeref = qt6Packages.callPackage ../applications/graphics/beeref { };
+
   bento4 = callPackage ../tools/video/bento4 { };
 
   bepasty = callPackage ../tools/misc/bepasty { };
