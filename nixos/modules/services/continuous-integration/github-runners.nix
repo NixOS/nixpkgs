@@ -15,7 +15,7 @@ in
   options.services.github-runners = mkOption {
     default = {};
     type = with types; attrsOf (submodule { options = import ./github-runner/options.nix (args // {
-      # services.github-runners.${name}.name doesn't have a default; instead it is set to ${name} below.
+      # services.github-runners.${name}.name doesn't have a default; it falls back to ${name} below.
       includeNameDefault = false;
     }); });
     example = {
@@ -39,15 +39,17 @@ in
   };
 
   config = {
-    systemd.services = flip mapAttrs' cfg (name: v:
+    systemd.services = flip mapAttrs' cfg (n: v:
       let
-        svcName = "github-runner-${name}";
+        svcName = "github-runner-${n}";
       in
         nameValuePair svcName
         (import ./github-runner/service.nix (args // {
           inherit svcName;
-          cfg = v // { inherit name; };
-          systemdDir = "github-runner/${name}";
+          cfg = v // {
+            name = if v.name != null then v.name else n;
+          };
+          systemdDir = "github-runner/${n}";
         }))
     );
   };
