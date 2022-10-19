@@ -14,13 +14,13 @@ buildPythonPackage rec {
   version = "0.2.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = pname;
     rev = version;
-    sha256 = "sha256-IY72hDklPkGjb2zo7Wf0MBiPn/jHtyUKW9D0jxA0P54=";
+    hash = "sha256-IY72hDklPkGjb2zo7Wf0MBiPn/jHtyUKW9D0jxA0P54=";
   };
 
   nativeBuildInputs = [
