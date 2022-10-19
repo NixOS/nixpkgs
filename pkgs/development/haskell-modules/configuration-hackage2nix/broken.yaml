@@ -387,7 +387,6 @@ broken-packages:
   - bind-marshal
   - binembed
   - bins
-  - binsm
   - bio
   - BiobaseBlast
   - BiobaseNewick
