@@ -5,6 +5,8 @@
 , pkg-config
 , libconfuse
 , libxcrypt
+, testers
+, merecat
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +30,13 @@ stdenv.mkDerivation rec {
     libconfuse
     libxcrypt
   ];
+
+  passthru.tests = {
+    testVersion = testers.testVersion {
+      package = merecat;
+      command = "merecat -V";
+    };
+  };
 
   meta = with lib; {
     description = "Small and made-easy HTTP/HTTPS server based on Jef Poskanzer's thttpd";
