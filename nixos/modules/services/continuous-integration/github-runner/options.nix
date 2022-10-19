@@ -42,13 +42,14 @@ with lib;
     type = types.path;
     description = lib.mdDoc ''
       The full path to a file which contains either a runner registration token or a
-      personal access token (PAT).
+      (fine-grained) personal access token (PAT).
       The file should contain exactly one line with the token without any newline.
       If a registration token is given, it can be used to re-register a runner of the same
       name but is time-limited. If the file contains a PAT, the service creates a new
       registration token on startup as needed. Make sure the PAT has a scope of
       `admin:org` for organization-wide registrations or a scope of
-      `repo` for a single repository.
+      `repo` for a single repository. Fine-grained PATs need read and write permission
+      to the "Adminstration" resources.
 
       Changing this option or the file's content triggers a new runner registration.
     '';
