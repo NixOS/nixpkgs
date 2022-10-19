@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "freeciv";
-  version = "3.0.3";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "freeciv";
     repo = "freeciv";
     rev = "R${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-WIp1R27UahbkLZZuF0nbX/XHVDc2OJukPKgoQ+qnjMc=";
+    sha256 = "sha256-hhX+aM/NHdqOM0qSKSJyW2FAWTsyAHrjaNhxtP2vbVA=";
   };
 
   postPatch = ''

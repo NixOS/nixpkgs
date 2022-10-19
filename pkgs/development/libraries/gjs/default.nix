@@ -79,9 +79,11 @@ in stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+  ] ++ lib.optionals (!stdenv.isLinux) [
+    "-Dprofiler=disabled"
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   postPatch = ''
     patchShebangs build/choose-tests-locale.sh
@@ -139,6 +141,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/gjs/blob/master/doc/Home.md";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

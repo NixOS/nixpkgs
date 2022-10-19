@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "octosql";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner  = "cube2222";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-wzi+rDZsrffeKuNbTlWRH9jdo4+tiDTAporGdQfIqEw=";
+    sha256 = "sha256-Ao1c0oCgrn0XGCMlIhvHqCnWIIiLejp7gfkK0guIDrI=";
   };
 
   vendorSha256 = "sha256-as8vJmUH0mDPQ8K6D5yRybPV5ibvHEtyQjArXjimGpo=";

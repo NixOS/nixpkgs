@@ -2,24 +2,24 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, pkg-config
 , libjpeg
 , mesa
 , pango
+, pkg-config
 , wayland
 , wayland-protocols
 , wayland-scanner
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
-  version = "unstable-2022-07-24";
+  version = "unstable-2022-09-30";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
-    repo = pname;
-    rev = "f75fcf01d1f652d55f79032a40d821d2ff78520e";
-    sha256 = "sha256-M2g4NeDoYt32j02cimCR4vWzAzauIzQVQaWgBWXDAtk=";
+    repo = "hyprpaper";
+    rev = "8f4c712950ad6a9bc7c7281c15a63f5fa06ba92b";
+    hash = "sha256-KojBifIOkJ2WmO/lRjQIgPgUnX5Eu10U4VDg+1MB2co=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace src/main.cpp \
-      --replace GIT_COMMIT_HASH '"${src.rev}"'
+      --replace GIT_COMMIT_HASH '"${finalAttrs.src.rev}"'
   '';
 
   preConfigure = ''
@@ -46,15 +46,20 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    install -m755 ./hyprpaper $out/bin
+    runHook preInstall
+
+    install -Dm755 ./hyprpaper -t $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/hyprwm/hyprpaper";
+    inherit (finalAttrs.src.meta) homepage;
     description = "A blazing fast wayland wallpaper utility";
     license = licenses.bsd3;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ wozeparrot ];
+    inherit (wayland.meta) platforms;
+    # ofborg failure: g++ does not recognize '-std=c++23'
+    broken = stdenv.isAarch64;
   };
-}
+})

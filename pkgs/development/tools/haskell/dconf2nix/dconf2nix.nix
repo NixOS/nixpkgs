@@ -1,19 +1,19 @@
-{ mkDerivation, base, containers, fetchFromGitHub, hedgehog, lib
+{ mkDerivation, base, containers, emojis, fetchgit, hedgehog, lib
 , optparse-applicative, parsec, template-haskell, text
 }:
 mkDerivation {
   pname = "dconf2nix";
-  version = "0.0.11";
-  src = fetchFromGitHub {
-    owner = "gvolpe";
-    repo = "dconf2nix";
-    rev = "fe7e3d973caa87b1b706096aff3d670f65e39fda";
-    sha256 = "sha256-zuhiFVA8LvFKOPMMvqFu+ofv0CrIl2pMZbPQE/tCaM8=";
+  version = "0.0.12";
+  src = fetchgit {
+    url = "https://github.com/gvolpe/dconf2nix.git";
+    sha256 = "0cy47g6ksxf7p0qnzljg0c5dv65r79krkzw6iasivv8czc2lv8sc";
+    rev = "101e102c6a3aa79d1787e2ae77fa3379153d29f8";
+    fetchSubmodules = true;
   };
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    base containers optparse-applicative parsec text
+    base containers emojis optparse-applicative parsec text
   ];
   executableHaskellDepends = [ base ];
   testHaskellDepends = [
@@ -21,4 +21,5 @@ mkDerivation {
   ];
   description = "Convert dconf files to Nix, as expected by Home Manager";
   license = lib.licenses.asl20;
+  mainProgram = "dconf2nix";
 }

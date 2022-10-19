@@ -1,8 +1,11 @@
 { lib
 , mkDerivation
+, gcc11Stdenv
+, srcs
 
 , cmake
 , extra-cmake-modules
+, wrapQtAppsHook
 
 , c-ares
 , curl
@@ -20,12 +23,15 @@
 , qtquickcontrols2
 }:
 
-mkDerivation rec {
+# Workaround for AArch64 not using GCC11 yet.
+gcc11Stdenv.mkDerivation rec {
   pname = "spacebar";
+  inherit (srcs.spacebar) version src;
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    wrapQtAppsHook
   ];
 
   buildInputs = [
