@@ -859,7 +859,6 @@ broken-packages:
   - control-monad-failure-mtl
   - Control-Monad-ST2
   - contstuff
-  - copilot-c99
   - copilot-sbv
   - copr
   - coquina
