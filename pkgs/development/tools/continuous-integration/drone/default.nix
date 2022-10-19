@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "drone.io${lib.optionalString (!enableUnfree) "-oss"}";
-  version = "2.13.0";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "harness";
     repo = "drone";
     rev = "v${version}";
-    sha256 = "sha256-2NezH7+hsOz+r+gong2CxXVjtxRyIKkA0G6OGoJcGFk=";
+    sha256 = "sha256-8G7Xy4bKBybw5waL/AqqYZ6FKBlnzp7b6PAwixydTEg=";
   };
 
   vendorSha256 = "sha256-6/wbxQ+Cv0lOlBqi8NUQQ8Z21w27betfeX/NiNDpOjA=";
