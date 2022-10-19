@@ -2,11 +2,11 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-
-# pythonPackages
 , azure-core
 , cryptography
+, isodate
 , msrest
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "12.10.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,7 +25,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     azure-core
     cryptography
+    isodate
     msrest
+    typing-extensions
   ];
 
   # requires checkout from monorepo
