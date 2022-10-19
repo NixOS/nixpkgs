@@ -2,6 +2,7 @@
   lib,
   dotnet-sdk,
   targetPlatform,
+  substituteAll,
 
   buildDotnetModule,
   fetchFromGitHub,
@@ -27,11 +28,12 @@ buildDotnetModule rec {
   # This _must_ be specified in the project file and it can only be one so
   # obviously you wouldn't specify it as an upstream project. Typical M$.
   # https://github.com/NixOS/nixpkgs/pull/196648#discussion_r998709996
-  patches = [ ./add-runtime-identifier.patch ];
-  postPatch = ''
-    substituteInPlace BeatSaberModManager/BeatSaberModManager.csproj \
-      --replace @RuntimeIdentifier@ "${dotnet-sdk.passthru.systemToDotnetRid targetPlatform.system}"
-  '';
+  patches = [
+    (substituteAll {
+      src = ./add-runtime-identifier.patch;
+      runtimeIdentifier = dotnet-sdk.passthru.systemToDotnetRid targetPlatform.system;
+    })
+  ];
 
   nugetDeps = ./deps.nix;
 

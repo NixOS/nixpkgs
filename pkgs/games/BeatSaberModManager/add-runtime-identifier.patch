@@ -4,7 +4,7 @@
          <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
          <GenerateDocumentationFile>true</GenerateDocumentationFile>
          <ApplicationIcon>Resources/Icons/Icon.ico</ApplicationIcon>
-+        <RuntimeIdentifier>@RuntimeIdentifier@</RuntimeIdentifier>
++        <RuntimeIdentifier>@runtimeIdentifier@</RuntimeIdentifier>
      </PropertyGroup>
  
      <PropertyGroup Condition="'$(Configuration)'=='Debug'">
