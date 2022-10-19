@@ -4,6 +4,7 @@
 , enableNvidiaCgToolkit ? false
 , withGamemode ? stdenv.isLinux
 , withVulkan ? stdenv.isLinux
+, withWayland ? stdenv.isLinux
 , alsa-lib
 , AppKit
 , dbus
@@ -33,19 +34,20 @@
 , udev
 , vulkan-loader
 , wayland
-, which
 }:
 
 let
-  version = "1.11.0";
+  version = "1.12.0";
   libretroCoreInfo = fetchFromGitHub {
     owner = "libretro";
     repo = "libretro-core-info";
-    sha256 = "sha256-46T87BpzWUQHD7CsCF2sZo065Sl8Y4Sj1zwzBWmCiiU=";
-    rev = "v${version}";
+    sha256 = "sha256-9Sfp/JkMJIe34YGNRxf93fONOBuQxR2pduoJU+xtuF0=";
+    # Upstream didn't tag a new libretro-core-info in 1.12.0 release
+    rev = "v1.11.1";
   };
-  runtimeLibs = lib.optional withVulkan vulkan-loader
-    ++ lib.optional withGamemode gamemode.lib;
+  runtimeLibs =
+    lib.optional withVulkan vulkan-loader ++
+    lib.optional withGamemode (lib.getLib gamemode);
 in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
@@ -54,60 +56,77 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "sha256-/rOf85TQTXbY9kIETaO5E58f2ZvKPqEFLsbNne/+/lw=";
+    sha256 = "sha256-doLWNA8aTAllxx3zABtvZaegBQEPIi8276zbytPSdBU=";
     rev = "v${version}";
   };
 
   patches = [
-    ./disable-menu_show_core_updater.patch
-    ./use-fixed-paths-on-libretro_info_path.patch
+    ./use-fixed-paths.patch
   ];
 
   postPatch = ''
     substituteInPlace "frontend/drivers/platform_unix.c" \
-      --replace "@libretro_directory@" "$out/lib" \
-      --replace "@libretro_info_path@" "$out/share/libretro/info"
+      --subst-var-by libretro_directory "$out/lib" \
+      --subst-var-by libretro_info_path "$out/share/libretro/info" \
+      --subst-var-by out "$out"
     substituteInPlace "frontend/drivers/platform_darwin.m" \
-      --replace "@libretro_directory@" "$out/lib" \
-      --replace "@libretro_info_path@" "$out/share/libretro/info"
+      --subst-var-by libretro_directory "$out/lib" \
+      --subst-var-by libretro_info_path "$out/share/libretro/info"
   '';
 
   nativeBuildInputs = [ pkg-config ] ++
-    lib.optional stdenv.isLinux wayland ++
+    lib.optional withWayland wayland ++
     lib.optional (runtimeLibs != [ ]) makeWrapper;
 
-  buildInputs = [ ffmpeg_4 freetype libxml2 libGLU libGL python3 SDL2 which ] ++
-    lib.optional enableNvidiaCgToolkit nvidia_cg_toolkit ++
-    lib.optional withVulkan vulkan-loader ++
-    lib.optionals stdenv.isDarwin [ libobjc AppKit Foundation ] ++
-    lib.optionals stdenv.isLinux [
-      alsa-lib
-      dbus
-      libX11
-      libXdmcp
-      libXext
-      libXxf86vm
-      libdrm
-      libpulseaudio
-      libv4l
-      libxkbcommon
-      mesa
-      udev
-      wayland
-    ];
+  buildInputs = [
+    ffmpeg_4
+    freetype
+    libGL
+    libGLU
+    libxml2
+    python3
+    SDL2
+  ] ++
+  lib.optional enableNvidiaCgToolkit nvidia_cg_toolkit ++
+  lib.optional withVulkan vulkan-loader ++
+  lib.optional withWayland wayland ++
+  lib.optionals stdenv.isDarwin [ libobjc AppKit Foundation ] ++
+  lib.optionals stdenv.isLinux [
+    alsa-lib
+    dbus
+    libX11
+    libXdmcp
+    libXext
+    libXxf86vm
+    libdrm
+    libpulseaudio
+    libv4l
+    libxkbcommon
+    mesa
+    udev
+  ];
 
   enableParallelBuilding = true;
 
-  configureFlags = lib.optionals stdenv.isLinux [ "--enable-kms" "--enable-egl" "--enable-dbus" ];
+  configureFlags = [
+    "--disable-update_cores"
+  ] ++
+  lib.optionals stdenv.isLinux [
+    "--enable-dbus"
+    "--enable-egl"
+    "--enable-kms"
+  ];
 
   postInstall = ''
-    mkdir -p $out/share/libretro/info
     # TODO: ideally each core should have its own core information
+    mkdir -p $out/share/libretro/info
     cp -r ${libretroCoreInfo}/* $out/share/libretro/info
-  '' + lib.optionalString (runtimeLibs != [ ]) ''
+  '' +
+  lib.optionalString (runtimeLibs != [ ]) ''
     wrapProgram $out/bin/retroarch \
       --prefix LD_LIBRARY_PATH ':' ${lib.makeLibraryPath runtimeLibs}
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' +
+  lib.optionalString stdenv.isDarwin ''
     # https://github.com/libretro/RetroArch/blob/master/retroarch-apple-packaging.sh
     app=$out/Applications/RetroArch.app
     mkdir -p $app/Contents/MacOS
