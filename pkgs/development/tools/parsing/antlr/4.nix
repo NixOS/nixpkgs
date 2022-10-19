@@ -111,6 +111,22 @@ in {
     })
   ).antlr;
 
+  antlr4_10 = (
+    (mkAntlr {
+      version = "4.10.1";
+      sourceSha256 = "sha256-Z1P81L0aPbimitzrHH/9rxsMCA6Qn3i42jFbUmVqu1E=";
+      jarSha256 = "sha256-QZSdQfINMdW4J3GHc13XVRCN9Ss422yGUQjTOCBA+Rg=";
+    }).extend (self: super: {
+      runtime.cpp = super.runtime.cpp.overrideAttrs (attrs: {
+        buildInputs = lib.optional stdenv.isLinux libuuid ++ attrs.buildInputs;
+        cmakeFlags = [
+          "-DANTLR4_INSTALL=ON"
+          "-DANTLR_BUILD_CPP_TESTS=OFF"
+        ];
+      });
+    })
+  ).antlr;
+
   antlr4_9 = (
     (mkAntlr {
       version = "4.9.3";
