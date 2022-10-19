@@ -970,7 +970,6 @@ broken-packages:
   - database-study
   - data-check
   - data-combinator-gen
-  - data-compat
   - data-concurrent-queue
   - data-construction
   - data-constructors
