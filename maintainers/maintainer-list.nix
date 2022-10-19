@@ -5225,6 +5225,12 @@
     githubId = 1178864;
     name = "David Guibert";
   };
+  greg = {
+    email = "greg+nixos@thehellings.com";
+    github = "greg-hellings";
+    githubId = 273582;
+    name = "Greg Hellings";
+  };
   groodt = {
     email = "groodt@gmail.com";
     github = "groodt";

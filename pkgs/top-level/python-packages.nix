@@ -5802,6 +5802,14 @@ self: super: with self; {
 
   moku = callPackage ../development/python-modules/moku { };
 
+  molecule = callPackage ../development/python-modules/molecule { };
+
+  molecule-containers = callPackage ../development/python-modules/molecule-containers { };
+
+  molecule-docker = callPackage ../development/python-modules/molecule-containers { };
+
+  molecule-podman = callPackage ../development/python-modules/molecule-podman { };
+
   monai = callPackage ../development/python-modules/monai { };
 
   monero = callPackage ../development/python-modules/monero { };
