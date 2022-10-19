@@ -4449,7 +4449,6 @@ broken-packages:
   - scottish
   - scotty-binding-play
   - scotty-blaze
-  - scotty-form
   - scotty-format
   - scotty-params-parser
   - scotty-resource
