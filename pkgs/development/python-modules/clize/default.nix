@@ -23,12 +23,12 @@
 
 buildPythonPackage rec {
   pname = "clize";
-  version = "4.2.1";
+  version = "5.0.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3177a028e4169d8865c79af82bdd441b24311d4bd9c0ae8803641882d340a51d";
+    sha256 = "sha256-/cFpEvAN/Movd38xaE53Y+D9EYg/SFyHeqtlVUo1D0I=";
   };
 
   postPatch = ''
