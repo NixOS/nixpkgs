@@ -14,12 +14,12 @@ buildPythonPackage rec {
   version = "20.5.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-tSlupPxnMkvBDBXAvZUGlzUhkODPpL31jAPTvjrKUFg=";
+    hash = "sha256-tSlupPxnMkvBDBXAvZUGlzUhkODPpL31jAPTvjrKUFg=";
   };
 
   propagatedBuildInputs = [
