@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "atom";
-  version = "0.8.1";
+  version = "0.8.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "nucleic";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-odthydKmgbOXYT8YAIn5MlFfH/BD8MMkuRYaiI8OZD4=";
+    hash = "sha256-45c17lewJPo39ZWMaE8kyOo6n0A9f0m58TbMAiNAqeg=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
