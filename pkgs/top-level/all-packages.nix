@@ -2671,6 +2671,8 @@ with pkgs;
     inherit (darwin) cctools;
   };
 
+  granted = callPackage ../tools/admin/granted { };
+
   hakrawler = callPackage ../tools/security/hakrawler { };
 
   harvid = callPackage ../tools/video/harvid { };
