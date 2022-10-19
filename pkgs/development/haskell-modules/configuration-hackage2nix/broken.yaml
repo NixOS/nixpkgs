@@ -5425,7 +5425,6 @@ broken-packages:
   - uuagc-diagrams
   - uu-cco
   - uuid-aeson
-  - uuid-bytes
   - uvector
   - uxadt
   - vabal-lib
