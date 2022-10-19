@@ -1028,7 +1028,8 @@
       afsapi
     ];
     "fully_kiosk" = ps: with ps; [
-    ]; # missing inputs: python-fullykiosk
+      python-fullykiosk
+    ];
     "futurenow" = ps: with ps; [
       pyfnip
     ];
@@ -3801,6 +3802,7 @@
     "fritzbox_callmonitor"
     "fronius"
     "frontend"
+    "fully_kiosk"
     "garages_amsterdam"
     "gdacs"
     "generic"
