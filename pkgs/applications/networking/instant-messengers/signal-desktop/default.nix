@@ -114,7 +114,10 @@ stdenv.mkDerivation rec {
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/signal-desktop.desktop \
-      --replace /opt/Signal/signal-desktop $out/bin/signal-desktop
+      --replace /opt/Signal/signal-desktop "$out/bin/signal-desktop --start-in-tray"
+    # Fix end of command - redirect stdout
+    substituteInPlace $out/share/applications/signal-desktop.desktop \
+      --replace "%U" "> /tmp/signal-desktop.log %U"
 
     autoPatchelf --no-recurse -- $out/lib/Signal/
     patchelf --add-needed ${libpulseaudio}/lib/libpulse.so $out/lib/Signal/resources/app.asar.unpacked/node_modules/ringrtc/build/linux/libringrtc-x64.node
