@@ -9552,6 +9552,8 @@ in {
 
   quantum-gateway = callPackage ../development/python-modules/quantum-gateway { };
 
+  qudida = callPackage ../development/python-modules/qudida { };
+
   querystring_parser = callPackage ../development/python-modules/querystring-parser { };
 
   questionary = callPackage ../development/python-modules/questionary { };
