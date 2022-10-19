@@ -5722,6 +5722,8 @@ in {
 
   mediafile = callPackage ../development/python-modules/mediafile { };
 
+  mediapipe = callPackage ../development/python-modules/mediapipe { };  
+    
   mediapy = callPackage ../development/python-modules/mediapy { };
 
   meilisearch = callPackage ../development/python-modules/meilisearch { };
