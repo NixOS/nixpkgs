@@ -6,6 +6,7 @@
 , od
 , pygments
 , pytestCheckHook
+, pythonOlder
 , python-dateutil
 , setuptools
 , sigtools
