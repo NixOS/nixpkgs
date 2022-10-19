@@ -2508,7 +2508,6 @@ broken-packages:
   - http-client-request-modifiers
   - http-client-session
   - http-client-streams
-  - http-client-websockets
   - http-conduit-browser
   - http-conduit-downloader
   - http-directory
