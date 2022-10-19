@@ -11,21 +11,21 @@ buildPythonPackage rec {
   version = "3.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "asottile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OzU3Qv6qdEw0hJdbQ7Q3T6zOGpUt2uZyfy1Fxm3GT0Q=";
+    hash = "sha256-OzU3Qv6qdEw0hJdbQ7Q3T6zOGpUt2uZyfy1Fxm3GT0Q=";
   };
-
-  checkInputs = [
-    pytestCheckHook
-  ];
 
   propagatedBuildInputs = [
     tokenize-rt
+  ];
+
+  checkInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
