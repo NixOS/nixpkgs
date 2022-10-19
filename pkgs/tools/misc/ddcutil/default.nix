@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchurl
 , autoreconfHook
 , pkg-config
 , glib
@@ -15,13 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ddcutil";
-  version = "1.3.0";
+  version = "1.3.2";
 
-  src = fetchFromGitHub {
-    owner = "rockowitz";
-    repo = "ddcutil";
-    rev = "v${version}";
-    sha256 = "sha256-Di/feEQOHNhU3y/HwXQoOnu+gPQYP2Oedf1CPt8gHJ0=";
+  src = fetchurl {
+    url = "http://www.ddcutil.com/tarballs/${pname}-${version}.tar.gz";
+    sha256 = "sha256-vZI7OquGjZ0koArdOWKkfFtfRzCvtXm8lGFCUklloEI=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
