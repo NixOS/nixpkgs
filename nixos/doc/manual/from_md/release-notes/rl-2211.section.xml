@@ -367,6 +367,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://troglobit.com/projects/merecat/">merecat</link>,
+          a small and easy HTTP server based on thttpd. Available as
+          <link linkend="opt-services.merecat.enable">services.merecat</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/L11R/go-autoconfig">go-autoconfig</link>,
           IMAP/SMTP autodiscover server. Available as
           <link linkend="opt-services.go-autoconfig.enable">services.go-autoconfig</link>.

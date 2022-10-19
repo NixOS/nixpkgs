@@ -7,6 +7,7 @@
 , libxcrypt
 , testers
 , merecat
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
       package = merecat;
       command = "merecat -V";
     };
+    inherit (nixosTests) merecat;
   };
 
   meta = with lib; {
