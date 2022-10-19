@@ -3,21 +3,58 @@
 
 { runCommand, fetchzip, pkgs, ... }:
 
-# Ensures that every non-slashy `system` exists in a unique .asd file.
-# (Think cl-async-base being declared in cl-async.asd upstream)
+# Ensures that every non-slashy `system` exists in a unique .asd file, without
+# any other defsystems in it.  That is the convention, but some packages define
+# multiple systems in one file.
 #
-# This is required because we're building and loading a system called
-# `system`, not `asd`, so otherwise `system` would not be loadable
-# without building and loading `asd` first.
+# E.g.: in the cl-async source, the file cl-async.asd defines multiple systems:
 #
-let createAsd = { url, sha256, asd, system }:
-   let
-     src = fetchzip { inherit url sha256; };
-   in runCommand "source" {} ''
-      mkdir -pv $out
-      cp -r ${src}/* $out
-      find $out -name "${asd}.asd" | while read f; do mv -fv $f $(dirname $f)/${system}.asd || true; done
-  '';
+# - CL-ASYNC-BASE
+# - CL-ASYNC-UTIL
+# - CL-ASYNC
+#
+# This is required because we're building and loading a system by a specific
+# name. That name lives in ‘system’. When the name of the .asd file (passed in
+# ‘asd’) doesn’t match, ASDF can’t find it without building and loading the
+# ‘asd’ named system, first.
+#
+let
+  createAsd = { url, sha256, asd, system }:
+    let
+      src = fetchzip { inherit url sha256; };
+    in
+      # This insane awk script strips out any defsystem that is not for this
+      # specific system.
+      #
+      # Possible areas of improvement, to fix if any problems arise:
+      #
+      # - case insensitivity
+      # - match aliases for ASDF, e.g. (asdf/parse-defsystem:defsystem
+      #
+      # While the lisp reader would be a more elegant solution to this problem,
+      # it can’t be used because some packages define reader macros in their
+      # defsystems, e.g. Alexandria. Those can’t be portably read.
+      runCommand "source" {} ''
+        mkdir -pv $out
+        cp -r ${src}/* $out
+        find $out -name "${asd}.asd" | while read f; do
+          temp="$(mktemp)"
+          mv -f "$f" "$temp"
+          awk '
+            (/^$/ || /^[^ \t]/) {
+              f=0
+            }
+            (!/^\(asdf:defsystem [#:'"'"'"]*${system}"?$/ &&
+             /^\(asdf:defsystem/) {
+              f=1
+            }
+
+            !f {
+              print $0
+            }' "$temp" > "$(dirname $f)/${system}.asd"
+          rm -f "$temp"
+        done
+      '';
 
 getAttr = builtins.getAttr;
 
