@@ -45,6 +45,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Tencent/ncnn";
     license = licenses.bsd3;
     maintainers = with maintainers; [ tilcreator ];
-    broken = true; # at 2022-11-23
   };
 }
