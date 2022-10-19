@@ -1,13 +1,16 @@
 { lib
-, stdenv
-, fetchFromGitHub
 , rustPlatform
-, pkg-config
+, fetchFromGitHub
+, curl
 , installShellFiles
+, pkg-config
 , openssl
+, stdenv
+, darwin
 , nix-update-script
 , callPackage
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "cargo-asm";
   version = "0.1.24";
@@ -21,14 +24,25 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-S7OpHNjiTfQg7aPmHEx6Q/OV5QA9pB29F3MTIeiLAXg=";
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
-  buildInputs = [ openssl ];
+  nativeBuildInputs = [
+    curl.dev
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    curl
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    CoreFoundation
+    SystemConfiguration
+  ]);
 
   postInstall = ''
-    installShellCompletion --cmd foobar \
+    installShellCompletion --cmd cargo-asm \
       --bash <($out/bin/cargo-asm --bpaf-complete-style-bash) \
       --fish <($out/bin/cargo-asm --bpaf-complete-style-fish) \
-      --zsh  <($out/bin/cargo-asm --bpaf-complete-style-zsh )
+      --zsh  <($out/bin/cargo-asm --bpaf-complete-style-zsh)
   '';
 
   passthru = {
@@ -44,7 +58,6 @@ rustPlatform.buildRustPackage rec {
     description = "Cargo subcommand showing the assembly, LLVM-IR and MIR generated for Rust code";
     homepage = "https://github.com/pacak/cargo-show-asm";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ oxalica ];
-    broken = stdenv.isDarwin; # FIXME: Seems to have issue compiling bundled curl.
+    maintainers = with maintainers; [ figsoda oxalica ];
   };
 }
