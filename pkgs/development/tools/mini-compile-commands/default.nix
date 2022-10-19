@@ -16,6 +16,7 @@ rec {
           installPhase = previous.installPhase or "" + hook;
         });
         extraBuildInputs = old.extraBuildInputs or [] ++ [ package ];
+        allowedRequisites = null;
       });
 
   # mini compile commands package. You probably don't want to use this directly.
