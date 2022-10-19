@@ -75,5 +75,6 @@ mkDerivation rec {
     changelog = "https://github.com/PolyMC/PolyMC/releases/tag/${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ cleverca22 starcraft66 ];
+    knownVulnerabilities = [ "OVE-20221017-0001" ];
   };
 }
