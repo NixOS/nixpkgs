@@ -3,7 +3,7 @@
 }:
 
 let
-  python3Env = python3.withPackages(ps: with ps; [ numpy ]);
+  python3Env = python3.withPackages(ps: with ps; [ numpy setuptools ]);
 in
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk2-x11 lesstif cfitsio python3Env ncurses ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation ]);
 
-  patches = [ ./wrapper.patch ./clang.patch ./aarch64.patch ];
+  patches = [ ./wrapper.patch ./clang.patch ./aarch64.patch ./python-ldflags.patch ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
