@@ -134,10 +134,10 @@ with lib;
               ${optionalString (cfg.runnerGroup != null) "--runnergroup ${escapeShellArg cfg.runnerGroup}"}
               ${optionalString cfg.ephemeral "--ephemeral"}
             )
-            # If the token file contains a PAT (i.e., it starts with "ghp_"), we have to use the --pat option,
+            # If the token file contains a PAT (i.e., it starts with "ghp_" or "github_pat_"), we have to use the --pat option,
             # if it is not a PAT, we assume it contains a registration token and use the --token option
             token=$(<"${newConfigTokenPath}")
-            if [[ "$token" =~ ^ghp_* ]]; then
+            if [[ "$token" =~ ^ghp_* ]] || [[ "$token" =~ ^github_pat_* ]]; then
               args+=(--pat "$token")
             else
               args+=(--token "$token")
