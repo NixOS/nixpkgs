@@ -9,7 +9,7 @@
 
 , x11Support ? false
 
-, useSystemd ? (stdenv.isLinux && (!stdenv.hostPlatform == stdenv.buildPlatform || libOnly))
+, useSystemd ? (stdenv.isLinux && !libOnly)
 
 , # Whether to support the JACK sound system as a backend.
   jackaudioSupport ? false
