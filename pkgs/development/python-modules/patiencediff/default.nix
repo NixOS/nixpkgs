@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "patiencediff";
-  version = "0.2.3";
+  version = "0.2.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ATyTGFDomGUY8e53krBJzVgab7ked73fbIIwp63+tzI=";
+    sha256 = "sha256-wdaNB6VzqeLEt5HBMIki08j08aRuc11l4wg8J01e5Fk=";
   };
 
   meta = with lib; {
