@@ -185,6 +185,16 @@ rec {
   */
   makeBinPath = makeSearchPathOutput "bin" "bin";
 
+  /* Normalize path, removing extranous /s
+
+     Type: normalizePath :: string -> string
+
+     Example:
+       normalizePath "/a//b///c/"
+       => "/a/b/c/"
+  */
+  normalizePath = s: (builtins.foldl' (x: y: if y == "/" && hasSuffix "/" x then x else x+y) "" (splitString "" s));
+
   /* Depending on the boolean `cond', return either the given string
      or the empty string. Useful to concatenate against a bigger string.
 
@@ -294,6 +304,21 @@ rec {
       map f (stringToCharacters s)
     );
 
+  /* Convert char to ascii value, must be in printable range
+
+     Type: charToInt :: string -> int
+
+     Example:
+       charToInt "A"
+       => 65
+       charToInt "("
+       => 40
+
+  */
+  charToInt = let
+    table = import ./ascii-table.nix;
+  in c: builtins.getAttr c table;
+
   /* Escape occurrence of the elements of `list` in `string` by
      prefixing it with a backslash.
 
@@ -304,6 +329,19 @@ rec {
        => "\\(foo\\)"
   */
   escape = list: replaceChars list (map (c: "\\${c}") list);
+
+  /* Escape occurence of the element of `list` in `string` by
+     converting to its ASCII value and prefixing it with \\x.
+     Only works for printable ascii characters.
+
+     Type: escapeC = [string] -> string -> string
+
+     Example:
+       escapeC [" "] "foo bar"
+       => "foo\\x20bar"
+
+  */
+  escapeC = list: replaceChars list (map (c: "\\x${ toLower (lib.toHexString (charToInt c))}") list);
 
   /* Quote string to be used safely within the Bourne shell.
 

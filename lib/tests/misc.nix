@@ -312,6 +312,21 @@ runTests {
     expected = true;
   };
 
+  testNormalizePath = {
+    expr = strings.normalizePath "//a/b//c////d/";
+    expected = "/a/b/c/d/";
+  };
+
+  testCharToInt = {
+    expr = strings.charToInt "A";
+    expected = 65;
+  };
+
+  testEscapeC = {
+    expr = strings.escapeC [ " " ] "Hello World";
+    expected = "Hello\\x20World";
+  };
+
 # LISTS
 
   testFilter = {
