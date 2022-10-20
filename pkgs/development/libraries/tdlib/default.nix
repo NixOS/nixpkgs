@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
                  function(generate_pkgconfig' \
       --replace '\$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
       --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    sed -i "/vptr/d" test/CMakeLists.txt
   '';
 
   meta = with lib; {
