@@ -479,13 +479,13 @@
     "version": "1.30.0"
   },
   "gridscale": {
-    "hash": "sha256-3JB82wbZ6mosFJZ96rGOnv/f1VFhHk6WEfm2u6sop2E=",
+    "hash": "sha256-0XKSGfvJ61iD6zZ3Re3tB6Orb2Dklu5tbD8hBGyzlgo=",
     "owner": "gridscale",
     "provider-source-address": "registry.terraform.io/gridscale/gridscale",
     "repo": "terraform-provider-gridscale",
-    "rev": "v1.16.0",
+    "rev": "v1.16.1",
     "vendorHash": null,
-    "version": "1.16.0"
+    "version": "1.16.1"
   },
   "hcloud": {
     "hash": "sha256-DWDM3yWKkRV9FJMzKK7JJQdI0WvFILF/bsZFv2CjrvM=",
