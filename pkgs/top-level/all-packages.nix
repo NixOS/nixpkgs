@@ -14969,6 +14969,8 @@ with pkgs;
 
   cargo-zigbuild = callPackage ../development/tools/rust/cargo-zigbuild { };
 
+  cauwugo = callPackage ../development/tools/rust/cauwugo { };
+
   crate2nix = callPackage ../development/tools/rust/crate2nix { };
 
   convco = callPackage ../development/tools/convco {
