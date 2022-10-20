@@ -8,7 +8,7 @@ with lib;
 {
   options = {
 
-    netboot.storeContents = mkOption {
+    netboot.store.contents = mkOption {
       example = literalExpression "[ pkgs.stdenv ]";
       description = lib.mdDoc ''
         This option lists additional derivations to be included in the
@@ -16,7 +16,19 @@ with lib;
       '';
     };
 
+    netboot.store.compression = mkOption {
+      default = "xz -Xdict-size 100%";
+      example = "zstd -Xcompression-level 6";
+      description = lib.mdDoc ''
+        Compression for the Nix store squashfs
+      '';
+    };
+
   };
+
+  imports = [
+    (mkRenamedOptionModule [ "netboot" "storeContents" ] [ "netboot" "store" "contents" ])
+  ];
 
   config = {
     # Don't build the GRUB menu builder script, since we don't need it
@@ -71,12 +83,13 @@ with lib;
 
     # Closures to be copied to the Nix store, namely the init
     # script and the top-level system configuration directory.
-    netboot.storeContents =
+    netboot.store.contents =
       [ config.system.build.toplevel ];
 
     # Create the squashfs image that contains the Nix store.
     system.build.squashfsStore = pkgs.callPackage ../../../lib/make-squashfs.nix {
-      storeContents = config.netboot.storeContents;
+      storeContents = config.netboot.store.contents;
+      comp = config.netboot.store.compression;
     };
 
 
