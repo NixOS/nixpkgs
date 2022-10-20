@@ -10221,6 +10221,10 @@ with pkgs;
 
   pulumi = callPackage ../tools/admin/pulumi { };
 
+  pulumiPackages = recurseIntoAttrs (
+    callPackage ../tools/admin/pulumi-packages { }
+  );
+
   pulumi-bin = callPackage ../tools/admin/pulumi-bin { };
 
   p0f = callPackage ../tools/security/p0f { };
