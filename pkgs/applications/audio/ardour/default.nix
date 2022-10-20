@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchgit
 , alsa-lib
 , aubio
@@ -156,16 +157,16 @@ stdenv.mkDerivation rec {
     # wscript does not install these for some reason
     install -vDm 644 "build/gtk2_ardour/ardour.xml" \
       -t "$out/share/mime/packages"
-    install -vDm 644 "build/gtk2_ardour/ardour7.desktop" \
+    install -vDm 644 "build/gtk2_ardour/ardour${lib.versions.major version}.desktop" \
       -t "$out/share/applications"
     for size in 16 22 32 48 256 512; do
       install -vDm 644 "gtk2_ardour/resources/Ardour-icon_''${size}px.png" \
-        "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour7.png"
+        "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour${lib.versions.major version}.png"
     done
     install -vDm 644 "ardour.1"* -t "$out/share/man/man1"
   '' + lib.optionalString videoSupport ''
     # `harvid` and `xjadeo` must be accessible in `PATH` for video to work.
-    wrapProgram "$out/bin/ardour7" \
+    wrapProgram "$out/bin/ardour${lib.versions.major version}" \
       --prefix PATH : "${lib.makeBinPath [ harvid xjadeo ]}"
   '';
 
