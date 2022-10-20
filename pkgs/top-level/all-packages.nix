@@ -7267,6 +7267,8 @@ with pkgs;
   # rename to upower-notify?
   go-upower-notify = callPackage ../tools/misc/upower-notify { };
 
+  goatcounter = callPackage ../tools/misc/goatcounter { };
+
   goattracker = callPackage ../applications/audio/goattracker { };
 
   goattracker-stereo = callPackage ../applications/audio/goattracker {
