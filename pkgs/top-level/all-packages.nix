@@ -33850,11 +33850,7 @@ with pkgs;
 
   frozen-bubble = callPackage ../games/frozen-bubble { };
 
-  fsg = callPackage ../games/fsg {
-    wxGTK = wxGTK28.override {
-      unicode = false;
-    };
-  };
+  fsg = callPackage ../games/fsg { };
 
   galaxis = callPackage ../games/galaxis { };
 
