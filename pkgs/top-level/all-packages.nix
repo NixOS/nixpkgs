@@ -2607,6 +2607,8 @@ with pkgs;
 
   galene = callPackage ../servers/web-apps/galene { };
 
+  galaxy-buds-client = callPackage ../applications/audio/galaxy-buds-client { };
+
   gamecube-tools = callPackage ../development/tools/gamecube-tools { };
 
   gams = callPackage ../tools/misc/gams (config.gams or {});
@@ -6870,6 +6872,8 @@ with pkgs;
   getoptions = callPackage ../tools/misc/getoptions { };
 
   gexiv2 = callPackage ../development/libraries/gexiv2 { };
+
+  gex = callPackage ../applications/version-management/git-and-tools/gex { };
 
   gftp = callPackage ../applications/networking/ftp/gftp {
     gtk = gtk2;
