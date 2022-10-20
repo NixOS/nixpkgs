@@ -19,14 +19,14 @@
 , systemd # for libudev
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "unstable-2022-09-15";
+  version = "0.0.1";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
-    rev = "74ab3f778c848b20cbf8fe299170756ff6ebab1a";
-    hash = "sha256-w0I4L6xXTBUdqj30LpVW/KZW6bdoUeoW9lnMOW0OLJY=";
+    rev = "v${version}";
+    hash = "sha256-u5FnfXBCjwSp8QBrH8KIkVGV32/9pff41ZWjWXOwuMI=";
   };
 
   postPatch = ''
