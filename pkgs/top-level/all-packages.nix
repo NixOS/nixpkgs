@@ -1395,6 +1395,8 @@ with pkgs;
 
   sgrep = callPackage ../tools/text/sgrep { };
 
+  sorted-grep = callPackage ../tools/text/sorted-grep { };
+
   smbscan = callPackage ../tools/security/smbscan { };
 
   spectre-cli = callPackage ../tools/security/spectre-cli { };
