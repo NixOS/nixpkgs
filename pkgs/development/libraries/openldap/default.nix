@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
     libsodium
     libtool
     openssl
-    libxcrypt
   ] ++ lib.optionals (stdenv.isLinux) [
+    libxcrypt # causes linking issues on *-darwin
     systemdMinimal
   ];
 
