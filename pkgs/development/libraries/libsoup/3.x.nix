@@ -10,9 +10,7 @@
 , sqlite
 , glib-networking
 , gobject-introspection
-, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
 , vala
-, withVala ? stdenv.buildPlatform == stdenv.hostPlatform
 , libpsl
 , python3
 , gi-docgen
@@ -31,6 +29,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ses9LDvkn7vQUacfZTLJYmvOzqaXgxkGkM1+Tf3yjyk=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -38,9 +40,7 @@ stdenv.mkDerivation rec {
     glib
     python3
     gi-docgen
-  ] ++ lib.optionals withIntrospection [
     gobject-introspection
-  ] ++ lib.optionals withVala [
     vala
   ];
 
@@ -61,8 +61,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dtls_check=false" # glib-networking is a runtime dependency, not a compile-time dependency
     "-Dgssapi=disabled"
-    "-Dvapi=${if withVala then "enabled" else "disabled"}"
-    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
+    "-Dvapi=enabled"
+    "-Dintrospection=enabled"
     "-Dntlm=disabled"
     # Requires wstest from autobahn-testsuite.
     "-Dautobahn=disabled"
