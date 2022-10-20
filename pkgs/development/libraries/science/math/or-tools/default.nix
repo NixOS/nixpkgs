@@ -27,6 +27,13 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Upstream develops with a version of abseil where `absl::string_view` is
+    # an alias of `std::string_view`, but `abseil-cpp` in nixpkgs uses its own
+    # implementation for compatibility with older C++ versions. The implementations
+    # are mostly API compatible, but implicit string conversions only work with
+    # std::string_view.
+    # tobim: We should switch to a C++17 native abseil build soon so we can drop
+    # this patch.
     ./absl-string_view.patch
   ];
 
