@@ -8691,9 +8691,13 @@ with pkgs;
   nodejs-slim-18_x = callPackage ../development/web/nodejs/v18.nix {
     enableNpm = false;
   };
+  nodejs-19_x = callPackage ../development/web/nodejs/v19.nix { };
+  nodejs-slim-19_x = callPackage ../development/web/nodejs/v19.nix {
+    enableNpm = false;
+  };
   # Update this when adding the newest nodejs major version!
-  nodejs_latest = nodejs-18_x;
-  nodejs-slim_latest = nodejs-slim-18_x;
+  nodejs_latest = nodejs-19_x;
+  nodejs-slim_latest = nodejs-slim-19_x;
 
   nodePackages_latest = dontRecurseIntoAttrs nodejs_latest.pkgs;
 
