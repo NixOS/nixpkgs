@@ -26,10 +26,12 @@ stdenv.mkDerivation (rec {
   version = "1.2.13";
 
   src = fetchurl {
-    urls =
-      [ "https://www.zlib.net/fossils/zlib-${version}.tar.gz"  # stable archive path
-        "mirror://sourceforge/libpng/zlib/${version}/zlib-${version}.tar.gz"
-      ];
+    urls = [
+      # This URL works for 1.2.13 only; hopefully also for future releases.
+      "https://github.com/madler/zlib/releases/download/v${version}/zlib-${version}.tar.gz"
+      # Stable archive path, but captcha can be encountered, causing hash mismatch.
+      "https://www.zlib.net/fossils/zlib-${version}.tar.gz"
+    ];
     hash = "sha256-s6JN6XqP28g1uYMxaVAQMLiXcDG8tUs7OsE3QPhGqzA=";
   };
 
