@@ -4,7 +4,7 @@
 
 , bubblewrap
 , cacert
-, git
+, gitMinimal
 , nix
 
 , withSandboxSupport ? false
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
 
   makeWrapperArgs =
     let
-      binPath = [ nix git ] ++ lib.optional withSandboxSupport bubblewrap;
+      binPath = [ nix gitMinimal ] ++ lib.optional withSandboxSupport bubblewrap;
     in
     [
       "--prefix PATH : ${lib.makeBinPath binPath}"
