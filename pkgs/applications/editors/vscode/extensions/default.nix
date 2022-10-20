@@ -2375,6 +2375,8 @@ let
         };
       };
 
+      sumneko.lua = callPackage ./lua { };
+
       svelte.svelte-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "svelte-vscode";
