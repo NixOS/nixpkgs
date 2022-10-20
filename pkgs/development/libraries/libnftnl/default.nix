@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libmnl ];
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "A userspace library providing a low-level netlink API to the in-kernel nf_tables subsystem";
     homepage = "https://netfilter.org/projects/libnftnl/";
