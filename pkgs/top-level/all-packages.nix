@@ -16864,6 +16864,8 @@ with pkgs;
   gradle_7 = callPackage gradle-packages.gradle_7 { };
   gradle = gradle_7;
 
+  graudit = callPackage ../development/tools/analysis/graudit { };
+
   grcov = callPackage ../development/tools/misc/grcov { };
 
   gperf = callPackage ../development/tools/misc/gperf { };

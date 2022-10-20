@@ -1,0 +1,23 @@
+diff --git a/graudit b/graudit
+index 70626e6..0e458b0 100755
+--- a/graudit
++++ b/graudit
+@@ -94,6 +94,9 @@ listdb () {
+     if [ -d "$basedir"/signatures/ ]; then
+         ls -1 "$basedir"/signatures/*.db 2>/dev/null
+     fi
++    if [ -d "$basedir"/../share/graudit/ ]; then
++        ls -1 "$basedir"/../share/graudit/*.db 2>/dev/null
++    fi
+     if [ -d "$basedir"/misc/ ]; then
+         ls -1 "$basedir"/misc/*.db 2>/dev/null
+     fi
+@@ -175,6 +178,8 @@ elif [ -f "$HOME/.graudit/$sigdb.db" ]; then
+     database="$HOME/.graudit/$sigdb.db"
+ elif [ -f "$basedir/signatures/$sigdb.db" ]; then
+     database="$basedir/signatures/$sigdb.db"
++elif [ -f "$basedir/../share/graudit/$sigdb.db" ]; then
++    database="$basedir/../share/graudit/$sigdb.db"
+ elif [ -f "$basedir/misc/$sigdb.db" ]; then
+     database="$basedir/misc/$sigdb.db"
+ elif [ -f "$HOME/graudit/signatures/$sigdb.db" ]; then
