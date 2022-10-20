@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , substituteAll
 , pkg-config
@@ -24,26 +23,19 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-datetime";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-GxlnzLDrZmDDAGlUMoM4k4SkbCqra3Th6ugRAj3Wse4=";
+    sha256 = "sha256-5hg0TH12bEeEPhUUmZz7vS4YTB6t779CXyOCf0c4/X4=";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
       elementary_calendar = elementary-calendar;
-    })
-
-    # GridDay: Do not connect to the notify signal for the property
-    # https://github.com/elementary/wingpanel-indicator-datetime/pull/305
-    (fetchpatch {
-      url = "https://github.com/elementary/wingpanel-indicator-datetime/commit/845ac1345124571fe995ab7138d5dfe4d29847e9.patch";
-      sha256 = "sha256-/wd/FnhjC0c0Y8mCZg8XNoPOYAAmfK+g1F6L6TMEkdM=";
     })
   ];
 
