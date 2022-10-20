@@ -2605,6 +2605,8 @@ with pkgs;
 
   galene = callPackage ../servers/web-apps/galene { };
 
+  galaxy-buds-client = callPackage ../applications/audio/galaxy-buds-client { };
+
   gamecube-tools = callPackage ../development/tools/gamecube-tools { };
 
   gams = callPackage ../tools/misc/gams (config.gams or {});
