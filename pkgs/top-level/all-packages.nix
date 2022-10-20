@@ -24923,6 +24923,14 @@ with pkgs;
   inherit (callPackages ../os-specific/linux/kernel-headers { })
     linuxHeaders makeLinuxHeaders;
 
+  linuxHeaders_5_19 = linuxHeaders.overrideAttrs (_: rec {
+    version = "5.19.16";
+    src = fetchurl {
+      url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
+      sha256 = "13g0c6ljxk3sd0ja39ndih5vrzp2ssj78qxaf8nswn8hgrkazsx1";
+    };
+  });
+
   klibc = callPackage ../os-specific/linux/klibc { };
 
   klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
