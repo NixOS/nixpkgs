@@ -10884,7 +10884,11 @@ with pkgs;
 
   rnnoise = callPackage ../development/libraries/rnnoise { };
 
-  rnnoise-plugin = callPackage ../development/libraries/rnnoise-plugin {};
+  # Use `apple_sdk_11_0` because `apple_sdk.libs` does not provide `simd`
+  rnnoise-plugin = darwin.apple_sdk_11_0.callPackage ../development/libraries/rnnoise-plugin {
+    inherit (darwin.apple_sdk_11_0.frameworks) WebKit MetalKit CoreAudioKit;
+    inherit (darwin.apple_sdk_11_0.libs) simd;
+  };
 
   rnote = callPackage ../applications/graphics/rnote {
     inherit (gst_all_1) gstreamer;
@@ -11975,7 +11979,7 @@ with pkgs;
   toml2nix = callPackage ../development/tools/toml2nix { };
 
   topgrade = callPackage ../tools/misc/topgrade {
-    inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation;
   };
 
   top-git = callPackage ../applications/version-management/git-and-tools/topgit { };
@@ -16300,6 +16304,8 @@ with pkgs;
   bossa = callPackage ../development/embedded/bossa {
     wxGTK = wxGTK30;
   };
+
+  bossa-arduino = callPackage ../development/embedded/bossa/arduino.nix { };
 
   bob = callPackage ../development/tools/build-managers/bob { };
 
@@ -23291,9 +23297,7 @@ with pkgs;
 
   dodgy = with python3Packages; toPythonApplication dodgy;
 
-  dovecot = callPackage ../servers/mail/dovecot {
-    openssl = openssl_1_1;
-  };
+  dovecot = callPackage ../servers/mail/dovecot { };
   dovecot_pigeonhole = callPackage ../servers/mail/dovecot/plugins/pigeonhole { };
   dovecot_fts_xapian = callPackage ../servers/mail/dovecot/plugins/fts_xapian { };
 
@@ -23718,6 +23722,8 @@ with pkgs;
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
   opensmtpd-extras = callPackage ../servers/mail/opensmtpd/extras.nix { };
   opensmtpd-filter-rspamd = callPackage ../servers/mail/opensmtpd/filter-rspamd.nix { };
+  opensmtpd-filter-dkimsign = callPackage ../servers/mail/opensmtpd/filter-dkimsign { };
+  libopensmtpd = callPackage ../servers/mail/opensmtpd/libopensmtpd { };
 
   openxr-loader = callPackage ../development/libraries/openxr-loader { };
 
