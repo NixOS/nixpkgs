@@ -6118,6 +6118,12 @@
     githubId = 488556;
     name = "Javier Aguirre";
   };
+  jaybosamiya = {
+    name = "Jay Bosamiya";
+    email = "nixpkgs@jaybosamiya.com";
+    github = "jaybosamiya";
+    githubId = 5683582;
+  };
   jayesh-bhoot = {
     name = "Jayesh Bhoot";
     email = "jayesh@bhoot.sh";
