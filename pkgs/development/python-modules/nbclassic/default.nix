@@ -5,7 +5,7 @@
 , ipykernel
 , ipython_genutils
 , jinja2
-, jupyter_client
+, jupyter-client
 , jupyter_core
 , jupyter_server
 , nbconvert
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     ipykernel
     ipython_genutils
     jinja2
-    jupyter_client
+    jupyter-client
     jupyter_core
     jupyter_server
     nbconvert

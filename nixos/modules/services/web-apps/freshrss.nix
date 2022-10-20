@@ -238,17 +238,17 @@ in
             # do installation or reconfigure
             if test -f ${cfg.dataDir}/config.php; then
               # reconfigure with settings
-              ${pkgs.php}/bin/php ./cli/reconfigure.php ${settingsFlags}
-              ${pkgs.php}/bin/php ./cli/update-user.php --user ${cfg.defaultUser} --password "$(cat ${cfg.passwordFile})"
+              ./cli/reconfigure.php ${settingsFlags}
+              ./cli/update-user.php --user ${cfg.defaultUser} --password "$(cat ${cfg.passwordFile})"
             else
               # Copy the user data template directory
               cp -r ./data ${cfg.dataDir}
 
               # check correct folders in data folder
-              ${pkgs.php}/bin/php ./cli/prepare.php
+              ./cli/prepare.php
               # install with settings
-              ${pkgs.php}/bin/php ./cli/do-install.php ${settingsFlags}
-              ${pkgs.php}/bin/php ./cli/create-user.php --user ${cfg.defaultUser} --password "$(cat ${cfg.passwordFile})"
+              ./cli/do-install.php ${settingsFlags}
+              ./cli/create-user.php --user ${cfg.defaultUser} --password "$(cat ${cfg.passwordFile})"
             fi
           '';
         };
@@ -267,7 +267,7 @@ in
           Group = "freshrss";
           StateDirectory = "freshrss";
           WorkingDirectory = cfg.package;
-          ExecStart = "${pkgs.php}/bin/php ./app/actualize_script.php";
+          ExecStart = "./app/actualize_script.php";
         } // systemd-hardening;
       };
     };

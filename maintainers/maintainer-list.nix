@@ -9078,6 +9078,15 @@
       fingerprint = "E90C BA34 55B3 6236 740C  038F 0D94 8CE1 9CF4 9C5F";
     }];
   };
+  mktip = {
+    email = "mo.issa.ok+nix@gmail.com";
+    github = "mktip";
+    githubId = 45905717;
+    name = "Mohammad Issa";
+    keys = [{
+      fingerprint = "64BE BF11 96C3 DD7A 443E  8314 1DC0 82FA DE5B A863";
+    }];
+  };
   mlieberman85 = {
     email = "mlieberman85@gmail.com";
     github = "mlieberman85";
@@ -14473,6 +14482,12 @@
     keys = [{
       fingerprint = "2145 955E 3F5E 0C95 3458  41B5 11F7 BAEA 8567 43FF";
     }];
+  };
+  wentam = {
+    name = "Matt Egeler";
+    email = "wentam42@gmail.com";
+    github = "wentam";
+    githubId = 901583;
   };
   wentasah = {
     name = "Michal Sojka";

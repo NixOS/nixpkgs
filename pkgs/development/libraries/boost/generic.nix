@@ -81,7 +81,9 @@ let
     "-sEXPAT_LIBPATH=${expat.out}/lib"
 
     # TODO: make this unconditional
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform ||
+                  # required on mips; see 61d9f201baeef4c4bb91ad8a8f5f89b747e0dfe4
+                  (stdenv.hostPlatform.isMips && versionAtLeast version "1.79")) [
     "address-model=${toString stdenv.hostPlatform.parsed.cpu.bits}"
     "architecture=${if stdenv.hostPlatform.isMips64
                     then if versionOlder version "1.78" then "mips1" else "mips"
