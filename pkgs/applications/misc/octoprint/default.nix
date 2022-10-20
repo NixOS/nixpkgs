@@ -95,7 +95,7 @@ let
                 flask
                 flask-babel
                 flask_assets
-                flask_login
+                flask-login
                 flask-limiter
                 frozendict
                 future

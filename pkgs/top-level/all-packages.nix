@@ -3558,6 +3558,8 @@ with pkgs;
 
   cambalache = callPackage ../development/tools/cambalache { };
 
+  changedetection-io = callPackage ../servers/web-apps/changedetection-io { };
+
   clipster = callPackage ../tools/misc/clipster { };
 
   clockify = callPackage ../applications/office/clockify {
@@ -10289,6 +10291,8 @@ with pkgs;
   platinum-searcher = callPackage ../tools/text/platinum-searcher { };
 
   playbar2 = libsForQt5.callPackage ../applications/audio/playbar2 { };
+
+  playwright = with python3Packages; toPythonApplication playwright;
 
   please = callPackage ../tools/security/please { };
 

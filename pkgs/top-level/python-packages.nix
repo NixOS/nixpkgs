@@ -3441,7 +3441,7 @@ in {
 
   flask-limiter = callPackage ../development/python-modules/flask-limiter { };
 
-  flask_login = callPackage ../development/python-modules/flask-login { };
+  flask-login = callPackage ../development/python-modules/flask-login { };
 
   flask_mail = callPackage ../development/python-modules/flask-mail { };
 
@@ -4613,6 +4613,8 @@ in {
   inotifyrecursive = callPackage ../development/python-modules/inotifyrecursive { };
 
   inquirer = callPackage ../development/python-modules/inquirer { };
+
+  inscriptis = callPackage ../development/python-modules/inscriptis { };
 
   insegel = callPackage ../development/python-modules/insegel { };
 
@@ -7037,6 +7039,10 @@ in {
   pkginfo2 = callPackage ../development/python-modules/pkginfo2 { };
 
   pkuseg = callPackage ../development/python-modules/pkuseg { };
+
+  playwright = callPackage ../development/python-modules/playwright {
+    inherit (pkgs) jq;
+  };
 
   pmsensor = callPackage ../development/python-modules/pmsensor { };
 
