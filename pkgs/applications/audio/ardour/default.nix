@@ -71,6 +71,17 @@ stdenv.mkDerivation rec {
     ./as-flags.patch
   ];
 
+  # Ardour's wscript requires git revision and date to be available.
+  # Since they are not, let's generate the file manually.
+  postPatch = ''
+    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = "${version}"; const char* date = ""; }\n' > libs/ardour/revision.cc
+    sed 's|/usr/include/libintl.h|${glibc.dev}/include/libintl.h|' -i wscript
+    patchShebangs ./tools/
+    substituteInPlace libs/ardour/video_tools_paths.cc \
+      --replace 'ffmpeg_exe = X_("");' 'ffmpeg_exe = X_("${ffmpeg}/bin/ffmpeg");' \
+      --replace 'ffprobe_exe = X_("");' 'ffprobe_exe = X_("${ffmpeg}/bin/ffprobe");'
+  '';
+
   nativeBuildInputs = [
     doxygen
     graphviz # for dot
@@ -141,17 +152,6 @@ stdenv.mkDerivation rec {
   ];
   # removed because it fixes https://tracker.ardour.org/view.php?id=8161 and https://tracker.ardour.org/view.php?id=8437
   # "--use-external-libs"
-
-  # Ardour's wscript requires git revision and date to be available.
-  # Since they are not, let's generate the file manually.
-  postPatch = ''
-    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = "${version}"; const char* date = ""; }\n' > libs/ardour/revision.cc
-    sed 's|/usr/include/libintl.h|${glibc.dev}/include/libintl.h|' -i wscript
-    patchShebangs ./tools/
-    substituteInPlace libs/ardour/video_tools_paths.cc \
-      --replace 'ffmpeg_exe = X_("");' 'ffmpeg_exe = X_("${ffmpeg}/bin/ffmpeg");' \
-      --replace 'ffprobe_exe = X_("");' 'ffprobe_exe = X_("${ffmpeg}/bin/ffprobe");'
-  '';
 
   postInstall = ''
     # wscript does not install these for some reason
