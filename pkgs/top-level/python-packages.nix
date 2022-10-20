@@ -7136,6 +7136,8 @@ in {
 
   python-flirt = callPackage ../development/python-modules/python-flirt { };
 
+  python-fullykiosk = callPackage ../development/python-modules/python-fullykiosk { };
+
   python-glanceclient = callPackage ../development/python-modules/python-glanceclient { };
 
   python-google-nest = callPackage ../development/python-modules/python-google-nest { };
