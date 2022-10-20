@@ -877,13 +877,13 @@
     "version": "1.48.0"
   },
   "opentelekomcloud": {
-    "hash": "sha256-9JDRGya/2SJm4JsM6o6E7dqLQqDjfR8Gjf6BuSFEdpo=",
+    "hash": "sha256-oqagD7YK/HyAoeI5WBrHuAmWiLoz/1441zne8vqN3A8=",
     "owner": "opentelekomcloud",
     "provider-source-address": "registry.terraform.io/opentelekomcloud/opentelekomcloud",
     "repo": "terraform-provider-opentelekomcloud",
-    "rev": "v1.31.5",
-    "vendorHash": "sha256-7iDE/DKix9AKY0hX7m6V9KgDYmCiVFrpRMmgCSsm/5c=",
-    "version": "1.31.5"
+    "rev": "v1.31.6",
+    "vendorHash": "sha256-AuxvQffKOHPqda8nMJPxWVMui9+d8IhmbPsZK/9A1yI=",
+    "version": "1.31.6"
   },
   "opsgenie": {
     "hash": "sha256-hdLKa2usoDedzOlzPQrADJOqIxtANqTeTamn/DakRh4=",
