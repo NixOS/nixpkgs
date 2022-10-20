@@ -364,6 +364,11 @@ in
     ln -s $out/bin/soffice $out/bin/libreoffice
     ln -s $out/lib/libreoffice/share/xdg $out/share/applications
 
+    for f in $out/share/applications/*.desktop; do
+      substituteInPlace "$f" \
+        --replace "Exec=libreoffice${major}.${minor}" "Exec=libreoffice"
+    done
+
     cp -r sysui/desktop/icons  "$out/share"
     sed -re 's@Icon=libreoffice(dev)?[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
 
