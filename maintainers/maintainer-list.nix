@@ -6869,6 +6869,12 @@
     githubId = 7183441;
     name = "Justin Lovinger";
   };
+  justinmir = {
+    email = "justinmiron@protonmail.com";
+    github = "justinmir";
+    githubId = 8886628;
+    name = "Justin Miron";
+  };
   justinwoo = {
     email = "moomoowoo@gmail.com";
     github = "justinwoo";
