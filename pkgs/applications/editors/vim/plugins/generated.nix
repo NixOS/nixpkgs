@@ -4400,18 +4400,6 @@ final: prev:
     meta.homepage = "https://github.com/kkharji/lspsaga.nvim/";
   };
 
-  lua-dev-nvim = buildVimPluginFrom2Nix {
-    pname = "lua-dev.nvim";
-    version = "2022-10-20";
-    src = fetchFromGitHub {
-      owner = "folke";
-      repo = "neodev.nvim";
-      rev = "218d9b06f6b91a0d5b9d8d9c165c5c286f9521ea";
-      sha256 = "0m88ykblj7nssw7l6492h742zl8cm0mhv23sb1nj73m5x95h4d4c";
-    };
-    meta.homepage = "https://github.com/folke/neodev.nvim/";
-  };
-
   lualine-lsp-progress = buildVimPluginFrom2Nix {
     pname = "lualine-lsp-progress";
     version = "2021-10-23";
@@ -4903,6 +4891,18 @@ final: prev:
       sha256 = "0rifx4x8v4ndn7p33m54gn9m3vwh1nz8lyrz87n50incryh09vbl";
     };
     meta.homepage = "https://github.com/KeitaNakamura/neodark.vim/";
+  };
+
+  neodev-nvim = buildVimPluginFrom2Nix {
+    pname = "neodev.nvim";
+    version = "2022-10-20";
+    src = fetchFromGitHub {
+      owner = "folke";
+      repo = "neodev.nvim";
+      rev = "218d9b06f6b91a0d5b9d8d9c165c5c286f9521ea";
+      sha256 = "0m88ykblj7nssw7l6492h742zl8cm0mhv23sb1nj73m5x95h4d4c";
+    };
+    meta.homepage = "https://github.com/folke/neodev.nvim/";
   };
 
   neoformat = buildVimPluginFrom2Nix {
