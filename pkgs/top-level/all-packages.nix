@@ -5818,6 +5818,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  diffsitter = callPackage ../tools/text/diffsitter { };
+
   diffstat = callPackage ../tools/text/diffstat { };
 
   difftastic = callPackage ../tools/text/difftastic { };
