@@ -1442,6 +1442,12 @@ let
 
     tezos-base58 = callPackage ../development/ocaml-modules/tezos-base58 { };
 
+    tezos-bls12-381-polynomial = callPackage ../development/ocaml-modules/tezos-bls12-381-polynomial { };
+
+    tezos-plompiler = callPackage ../development/ocaml-modules/tezos-bls12-381-polynomial/plompiler.nix { };
+
+    tezos-plonk = callPackage ../development/ocaml-modules/tezos-bls12-381-polynomial/plonk.nix { };
+
     theora = callPackage ../development/ocaml-modules/theora { };
 
     toml = callPackage ../development/ocaml-modules/toml { };
