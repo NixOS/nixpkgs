@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
     rev = version;
-    sha256 = "eLF9n71tjdPA+ks0B8UonmPZqRgcZEA7ok79+m9PioU=";
+    hash = "sha256-eLF9n71tjdPA+ks0B8UonmPZqRgcZEA7ok79+m9PioU=";
   };
 
   patches = [
