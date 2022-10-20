@@ -17,8 +17,8 @@
 }:
 
 buildPythonPackage rec {
-  version = "2022.10.0";
   pname = "jupyter-repo2docker";
+  version = "2022.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "jupyterhub";
     repo = "repo2docker";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-n1Yhl3QC1YqdsCl6pI5NjzTiSEs6NrGq9jwT0uyS/p0=";
+    hash = "sha256-n1Yhl3QC1YqdsCl6pI5NjzTiSEs6NrGq9jwT0uyS/p0=";
   };
 
   propagatedBuildInputs = [
