@@ -279,6 +279,16 @@ in {
         '';
         type = types.listOf types.str;
       };
+
+      useStdQemu = mkOption {
+        default = true;
+        example = false;
+        description = lib.mdDoc ''
+          Use the normal pkgs.qemu instead of the one specific to the system being emulated.
+          This means it can be can be fetched from the binary cache, but does take up more space.
+        '';
+        type = types.bool;
+      };
     };
   };
 
@@ -286,7 +296,11 @@ in {
     boot.binfmt.registrations = builtins.listToAttrs (map (system: {
       name = system;
       value = { config, ... }: let
-        interpreter = getEmulator system;
+        emu = getEmulator system;
+        storePathLen = builtins.stringLength pkgs.qemu.outPath;
+        binPath = builtins.substring storePathLen (builtins.stringLength emu) emu;
+        useStdQemu = cfg.useStdQemu && (lib.hasInfix "qemu" emu);
+        interpreter = if useStdQemu then pkgs.qemu.outPath + binPath else emu;
         qemuArch = getQemuArch system;
 
         preserveArgvZero = "qemu-${qemuArch}" == baseNameOf interpreter;
