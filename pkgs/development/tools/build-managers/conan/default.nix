@@ -32,14 +32,14 @@ let newPython = python3.override {
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.49.0";
+  version = "1.53.0";
   pname = "conan";
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     rev = version;
-    hash = "sha256-BJGstNAnAZtpwagsCY+4quTd0/79zL+v4ifKikS3vaw=";
+    hash = "sha256-2DNDNdZO1D30egOiYa3qw8F2xsUTBOm/CHv07v5OrC8=";
   };
 
   propagatedBuildInputs = with newPython.pkgs; [
