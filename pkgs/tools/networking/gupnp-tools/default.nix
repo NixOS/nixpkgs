@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/GUPnP";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
