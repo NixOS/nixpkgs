@@ -47,7 +47,6 @@ rustPlatform.buildRustPackage rec {
   buildNoDefaultFeatures = true;
   buildFeatures = [
     "dynamic-grammar-libs"
-    # "better-build-info"
   ];
 
   nativeBuildInputs = [
