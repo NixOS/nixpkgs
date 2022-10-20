@@ -11,6 +11,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libmnl ];
+  
+  # Avoid
+  #
+  # # object.c:399:19: error: no member named '__builtin___snprintf_chk' in 'struct obj_ops'
+  hardeningDisable = lib.optional
+    (stdenv.cc.isClang && stdenv.hostPlatform != stdenv.buildPlatform)
+    "fortify";
 
   enableParallelBuilding = true;
 
