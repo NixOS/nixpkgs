@@ -13,17 +13,18 @@
 , systemd
 , go-md2man
 , nixosTests
+, python3
 }:
 
 buildGoModule rec {
   pname = "podman";
-  version = "4.2.1";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    sha256 = "sha256-e3MC7doAC2jpHWI+DX5+m+sbGxFpz7JDheGn+Yp7CF4=";
+    sha256 = "sha256-wp3Dd5bhLd/eq926C+MpzMWoxieJRAslt1beZU/WbeU=";
   };
 
   vendorSha256 = null;
@@ -32,7 +33,7 @@ buildGoModule rec {
 
   outputs = [ "out" "man" ] ++ lib.optionals stdenv.isLinux [ "rootlessport" ];
 
-  nativeBuildInputs = [ pkg-config go-md2man installShellFiles ];
+  nativeBuildInputs = [ pkg-config go-md2man installShellFiles python3 ];
 
   buildInputs = lib.optionals stdenv.isLinux [
     btrfs-progs

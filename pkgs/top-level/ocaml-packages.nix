@@ -920,8 +920,6 @@ let
 
     mldoc =  callPackage ../development/ocaml-modules/mldoc { };
 
-    mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
-
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
 
     mm = callPackage ../development/ocaml-modules/mm { };
