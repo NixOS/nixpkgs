@@ -8,19 +8,22 @@
 , pytest-resource-path
 , pytest-sugar
 , pytestCheckHook
+, pythonOlder
 , time-machine
 }:
 
 buildPythonPackage rec {
   pname = "aioswitcher";
-  version = "3.0.3";
+  version = "3.1.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "TomerFi";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-CHyJuIqJpO7wUmOyeDXa4oBvxMthC96OCECtg13gqe0=";
+    hash = "sha256-UnKi9/+BmQoJcv/Mlv9C9FYUgMy3J8KCGRrWPMGrM8Y=";
   };
 
   nativeBuildInputs = [

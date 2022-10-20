@@ -35,7 +35,7 @@ in {
         ${pkgs.prometheus-kea-exporter}/bin/kea-exporter \
           --address ${cfg.listenAddress} \
           --port ${toString cfg.port} \
-          ${concatStringsSep " \\n" cfg.controlSocketPaths}
+          ${concatStringsSep " " cfg.controlSocketPaths}
       '';
       SupplementaryGroups = [ "kea" ];
       RestrictAddressFamilies = [

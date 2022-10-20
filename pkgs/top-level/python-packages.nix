@@ -2191,6 +2191,8 @@ in {
 
   curve25519-donna = callPackage ../development/python-modules/curve25519-donna { };
 
+  cvelib = callPackage ../development/python-modules/cvelib { };
+
   cvxopt = callPackage ../development/python-modules/cvxopt { };
 
   cvxpy = callPackage ../development/python-modules/cvxpy { };
@@ -2772,8 +2774,6 @@ in {
   dnslib = callPackage ../development/python-modules/dnslib { };
 
   dnspython = callPackage ../development/python-modules/dnspython { };
-
-  dnspythonchia = callPackage ../development/python-modules/dnspythonchia { };
 
   doc8 = callPackage ../development/python-modules/doc8 { };
 
@@ -6151,6 +6151,8 @@ in {
   nbval = callPackage ../development/python-modules/nbval { };
 
   nbxmpp = callPackage ../development/python-modules/nbxmpp { };
+
+  nc-dnsapi = callPackage ../development/python-modules/nc-dnsapi { };
 
   ncclient = callPackage ../development/python-modules/ncclient { };
 

@@ -936,22 +936,6 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXaw3d = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, libXmu, libXpm, xorgproto, libXt }: stdenv.mkDerivation {
-    pname = "libXaw3d";
-    version = "1.6.3";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXaw3d-1.6.3.tar.bz2";
-      sha256 = "0i653s8g25cc0mimkwid9366bqkbyhdyjhckx7bw77j20hzrkfid";
-    };
-    hardeningDisable = [ "bindnow" "relro" ];
-    strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ libX11 libXext libXmu libXpm xorgproto libXt ];
-    meta.platforms = lib.platforms.unix;
-  }) {};
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXcomposite = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXfixes }: stdenv.mkDerivation {
     pname = "libXcomposite";
     version = "0.4.5";

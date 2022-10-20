@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "fastbencode";
-  version = "0.0.13";
+  version = "0.0.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jwAXWJwrybcV6CrDBlsKY/KL3xdTw016pJUZnAXmxsk=";
+    hash = "sha256-A1XfgjNV9k4iA3HYf0HlA1CvpwzFh52OaN7f6YLgU+I=";
   };
 
   nativeBuildInputs = [

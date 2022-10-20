@@ -374,25 +374,34 @@ let
     };
 
     kea = let
-      controlSocketPath = "/run/kea/dhcp6.sock";
+      controlSocketPathV4 = "/run/kea/dhcp4.sock";
+      controlSocketPathV6 = "/run/kea/dhcp6.sock";
     in
     {
       exporterConfig = {
         enable = true;
         controlSocketPaths = [
-          controlSocketPath
+          controlSocketPathV4
+          controlSocketPathV6
         ];
       };
       metricProvider = {
-        systemd.services.prometheus-kea-exporter.after = [ "kea-dhcp6-server.service" ];
-
         services.kea = {
+          dhcp4 = {
+            enable = true;
+            settings = {
+              control-socket = {
+                socket-type = "unix";
+                socket-name = controlSocketPathV4;
+              };
+            };
+          };
           dhcp6 = {
             enable = true;
             settings = {
               control-socket = {
                 socket-type = "unix";
-                socket-name = controlSocketPath;
+                socket-name = controlSocketPathV6;
               };
             };
           };
@@ -400,8 +409,10 @@ let
       };
 
       exporterTest = ''
+        wait_for_unit("kea-dhcp4-server.service")
         wait_for_unit("kea-dhcp6-server.service")
-        wait_for_file("${controlSocketPath}")
+        wait_for_file("${controlSocketPathV4}")
+        wait_for_file("${controlSocketPathV6}")
         wait_for_unit("prometheus-kea-exporter.service")
         wait_for_open_port(9547)
         succeed(

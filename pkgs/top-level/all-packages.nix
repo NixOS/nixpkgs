@@ -260,6 +260,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
+  cve = with python3Packages; toPythonApplication cvelib;
+
   fiche = callPackage ../servers/fiche { };
 
   fishnet = callPackage ../servers/fishnet { };
@@ -321,6 +323,8 @@ with pkgs;
   cbfmt = callPackage ../development/tools/cbfmt { };
 
   cfn-nag = callPackage ../development/tools/cfn-nag { };
+
+  circumflex = callPackage ../applications/networking/circumflex { };
 
   cxx-rs = callPackage ../development/libraries/cxx-rs { };
 
@@ -1277,6 +1281,8 @@ with pkgs;
 
   bikeshed = python3Packages.callPackage ../applications/misc/bikeshed { };
 
+  cie-middleware-linux = callPackage ../tools/security/cie-middleware-linux { };
+
   cidrgrep = callPackage ../tools/text/cidrgrep { };
 
   cope = callPackage ../tools/misc/cope { };
@@ -1370,6 +1376,8 @@ with pkgs;
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
 
   pferd = callPackage ../tools/misc/pferd {};
+
+  proycon-wayout = callPackage ../tools/wayland/proycon-wayout {};
 
   q = callPackage ../tools/networking/q {};
 
@@ -3478,8 +3486,6 @@ with pkgs;
 
   clipman = callPackage ../tools/wayland/clipman { };
 
-  hyprpaper = callPackage ../tools/wayland/hyprpaper { };
-
   kabeljau = callPackage ../games/kabeljau { };
 
   kanshi = callPackage ../tools/wayland/kanshi { };
@@ -4224,18 +4230,9 @@ with pkgs;
 
   hunt = callPackage ../tools/misc/hunt { };
 
-  hyprland = callPackage ../applications/window-managers/hyprland {
-    wlroots = wlroots.overrideAttrs (_: {
-      version = "unstable-2022-06-07";
-      src = fetchFromGitLab {
-        domain = "gitlab.freedesktop.org";
-        owner = "wlroots";
-        repo = "wlroots";
-        rev = "b89ed9015c3fbe8d339e9d65cf70fdca6e5645bc";
-        sha256 = "sha256-8y3u8CoigjoZOVbA2wCWBHlDNEakv0AVxU46/cOC00s=";
-      };
-    });
-  };
+  hyprland = callPackage ../applications/window-managers/hyprwm/hyprland { };
+
+  hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
 
   hysteria = callPackage ../tools/networking/hysteria {
     buildGoModule = buildGo119Module;
@@ -5964,6 +5961,8 @@ with pkgs;
 
   duo-unix = callPackage ../tools/security/duo-unix { };
 
+  dupe-krill = callPackage ../tools/filesystems/dupe-krill { };
+
   duplicacy = callPackage ../tools/backup/duplicacy { };
 
   duplicati = callPackage ../tools/backup/duplicati { };
@@ -7531,9 +7530,15 @@ with pkgs;
 
   lucky-cli = callPackage ../development/web/lucky-cli { };
 
+  mac-fdisk = callPackage ../tools/system/mac-fdisk { };
+
   partclone = callPackage ../tools/backup/partclone { };
 
   partimage = callPackage ../tools/backup/partimage { };
+
+  pdisk = callPackage ../tools/system/pdisk {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
+  };
 
   pgf_graphics = callPackage ../tools/graphics/pgf { };
 
@@ -7617,6 +7622,8 @@ with pkgs;
   ham = pkgs.perlPackages.ham;
 
   hardinfo = callPackage ../tools/system/hardinfo { };
+
+  harmonia = callPackage ../tools/package-management/harmonia { };
 
   hcl2json = callPackage ../applications/misc/hcl2json { };
 
@@ -14354,7 +14361,9 @@ with pkgs;
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
-  kind2 = callPackage ../development/compilers/kind2 { };
+  kind2 = callPackage ../development/compilers/kind2 {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   knightos-genkfs = callPackage ../development/tools/knightos/genkfs { };
 
@@ -14907,6 +14916,9 @@ with pkgs;
   cargo-semver-checks = callPackage ../development/tools/rust/cargo-semver-checks {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  cargo-show-asm = callPackage ../development/tools/rust/cargo-show-asm { };
+
   cargo-sort = callPackage ../development/tools/rust/cargo-sort { };
   cargo-spellcheck = callPackage ../development/tools/rust/cargo-spellcheck {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -23057,6 +23069,8 @@ with pkgs;
 
   alps = callPackage ../servers/alps { };
 
+  apache-directory-server = callPackage ../servers/ldap/apache-directory-server {};
+
   apacheHttpd_2_4 = callPackage ../servers/http/apache-httpd/2.4.nix { };
   apacheHttpd = apacheHttpd_2_4;
 
@@ -25143,8 +25157,8 @@ with pkgs;
 
   ginkgo = callPackage ../development/tools/ginkgo { };
 
-  gdlv = callPackage ../development/tools/gdlv {
-    inherit (darwin.apple_sdk.frameworks) OpenGL;
+  gdlv = darwin.apple_sdk_11_0.callPackage ../development/tools/gdlv {
+    inherit (darwin.apple_sdk_11_0.frameworks) OpenGL AppKit;
   };
 
   go-bindata = callPackage ../development/tools/go-bindata { };
@@ -26962,8 +26976,6 @@ with pkgs;
 
   ao = libfive;
 
-  apache-directory-server = callPackage ../servers/apache-directory-server {};
-
   apache-directory-studio = callPackage ../applications/networking/apache-directory-studio {};
 
   apkeep = callPackage ../tools/misc/apkeep {
@@ -27865,7 +27877,7 @@ with pkgs;
   epic5 = callPackage ../applications/networking/irc/epic5 { };
 
   epick = callPackage ../applications/graphics/epick {
-    inherit (darwin.apple_sdk.frameworks) AppKit IOKit;
+    inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
   epr = callPackage ../applications/misc/epr { };
@@ -34194,7 +34206,7 @@ with pkgs;
 
   planetary_annihilation = callPackage ../games/planetaryannihilation { };
 
-  polymc = libsForQt5.callPackage ../games/polymc { };
+  prismlauncher = libsForQt5.callPackage ../games/prismlauncher { };
 
   pong3d = callPackage ../games/pong3d { };
 
