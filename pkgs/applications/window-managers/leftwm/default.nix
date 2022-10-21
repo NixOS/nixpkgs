@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = rpathLibs;
 
   postInstall = ''
-    for p in $out/bin/leftwm*; do
+    for p in $out/bin/left*; do
       patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $p
     done
   '';
