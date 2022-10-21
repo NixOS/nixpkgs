@@ -13,6 +13,7 @@
 , dconf
 , dbus
 , libepoxy
+, faust2
 , fftw
 , fftwFloat
 , flex
@@ -50,6 +51,7 @@
 , rtaudio
 , rtmidi
 , rubberband
+, sassc
 , serd
 , sord
 , sox
@@ -61,18 +63,17 @@
 , vamp-plugin-sdk
 , zix
 , zstd
-, sassc
 }:
 
 stdenv.mkDerivation rec {
   pname = "zrythm";
-  version = "1.0.0-beta.3.4.1";
+  version = "1.0.0-beta.3.9.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-J5yS33vShq/xQI2lNWGvskXp8fCBn0gqb4adG16Fnnw=";
+    hash = "sha256-3UfvkED2KDTZr3LTic36uVA82rS+rO+vNDpn98tpwMI=";
   };
 
   # this uses meson to build, but requires cmake for dependency detection
@@ -105,6 +106,7 @@ stdenv.mkDerivation rec {
     dconf
     dbus
     libepoxy
+    faust2
     fftw
     fftwFloat
     flex
@@ -134,6 +136,7 @@ stdenv.mkDerivation rec {
     rtaudio
     rtmidi
     rubberband
+    sassc
     serd
     sord
     sox
@@ -143,7 +146,6 @@ stdenv.mkDerivation rec {
     xxHash
     zix
     zstd
-    sassc
   ];
 
   mesonFlags = [
