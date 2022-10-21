@@ -86,6 +86,8 @@ self = stdenv.mkDerivation {
       'DATADIR "/drirc.d"' '"${placeholder "out"}/share/drirc.d"'
     substituteInPlace src/util/meson.build --replace \
       "get_option('datadir')" "'${placeholder "out"}/share'"
+    substituteInPlace src/amd/vulkan/meson.build --replace \
+      "get_option('datadir')" "'${placeholder "out"}/share'"
   '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     substituteInPlace meson.build --replace \
       "find_program('nm')" \
