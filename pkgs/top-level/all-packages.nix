@@ -8582,6 +8582,8 @@ with pkgs;
 
   ministat = callPackage ../tools/misc/ministat { };
 
+  minivmac = callPackage ../applications/emulators/minivmac { };
+
   mjolnir = callPackage ../servers/mjolnir { };
 
   mmutils = callPackage ../tools/X11/mmutils { };
