@@ -5742,6 +5742,8 @@ self: super: with self; {
     inherit (pkgs.darwin) cctools;
   };
 
+  mip = callPackage ../development/python-modules/mip { };
+
   misaka = callPackage ../development/python-modules/misaka { };
 
   misoc = callPackage ../development/python-modules/misoc { };
