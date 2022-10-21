@@ -23,6 +23,7 @@ in
     ./fvwm3.nix
     ./hackedbox.nix
     ./herbstluftwm.nix
+    ./hypr.nix
     ./i3.nix
     ./jwm.nix
     ./leftwm.nix

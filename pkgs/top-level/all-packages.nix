@@ -4234,6 +4234,8 @@ with pkgs;
 
   hunt = callPackage ../tools/misc/hunt { };
 
+  hypr = callPackage ../applications/window-managers/hyprwm/hypr { };
+
   hyprland = callPackage ../applications/window-managers/hyprwm/hyprland { };
 
   hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
