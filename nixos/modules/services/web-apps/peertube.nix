@@ -67,6 +67,12 @@ let
     node ~/dist/server/tools/peertube.js $@
   '';
 
+  nginxCommonHeaders = ''
+    add_header Access-Control-Allow-Origin    '*';
+    add_header Access-Control-Allow-Methods   'GET, OPTIONS';
+    add_header Access-Control-Allow-Headers   'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
+  '';
+
 in {
   options.services.peertube = {
     enable = lib.mkEnableOption (lib.mdDoc "Enable Peertube’s service");
@@ -143,6 +149,12 @@ in {
         }
       '';
       description = lib.mdDoc "Configuration for peertube.";
+    };
+
+    configureNginx = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = lib.mdDoc "Configure nginx as a reverse proxy for peertube.";
     };
 
     database = {
@@ -351,6 +363,8 @@ in {
     systemd.tmpfiles.rules = [
       "d '/var/lib/peertube/config' 0700 ${cfg.user} ${cfg.group} - -"
       "z '/var/lib/peertube/config' 0700 ${cfg.user} ${cfg.group} - -"
+      "d '/var/lib/peertube/www' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '/var/lib/peertube/www' 0750 ${cfg.user} ${cfg.group} - -"
     ];
 
     systemd.services.peertube-init-db = lib.mkIf cfg.database.createLocally {
@@ -410,8 +424,11 @@ in {
           password: '$(cat ${cfg.smtp.passwordFile})'
         ''}
         EOF
-        ln -sf ${cfg.package}/config/default.yaml /var/lib/peertube/config/default.yaml
+        umask 027
         ln -sf ${configFile} /var/lib/peertube/config/production.json
+        ln -sf ${cfg.package}/config/default.yaml /var/lib/peertube/config/default.yaml
+        ln -sf ${cfg.package}/client/dist -T /var/lib/peertube/www/client
+        ln -sf ${cfg.settings.storage.client_overrides} -T /var/lib/peertube/www/client-overrides
         npm start
       '';
       serviceConfig = {
@@ -439,6 +456,269 @@ in {
         # System Call Filtering
         SystemCallFilter = [ ("~" + lib.concatStringsSep " " systemCallsList) "pipe" "pipe2" ];
       } // cfgService;
+    };
+
+    services.nginx = lib.mkIf cfg.configureNginx {
+      enable = true;
+      virtualHosts."${cfg.localDomain}" = {
+        root = "/var/lib/peertube";
+
+        # Application
+        locations."/" = {
+          tryFiles = "/dev/null @api";
+          priority = 1110;
+        };
+
+        locations."= /api/v1/videos/upload-resumable" = {
+          tryFiles = "/dev/null @api";
+          priority = 1120;
+
+          extraConfig = ''
+            client_max_body_size                        0;
+            proxy_request_buffering                     off;
+          '';
+        };
+
+        locations."~ ^/api/v1/videos/(upload|([^/]+/studio/edit))$" = {
+          tryFiles = "/dev/null @api";
+          root = cfg.settings.storage.tmp;
+          priority = 1130;
+
+          extraConfig = ''
+            client_max_body_size                        12G;
+            add_header X-File-Maximum-Size              8G always;
+          '';
+        };
+
+        locations."~ ^/api/v1/(videos|video-playlists|video-channels|users/me)" = {
+          tryFiles = "/dev/null @api";
+          priority = 1140;
+
+          extraConfig = ''
+            client_max_body_size                        6M;
+            add_header X-File-Maximum-Size              4M always;
+          '';
+        };
+
+        locations."@api" = {
+          proxyPass = "http://127.0.0.1:${toString cfg.listenHttp}";
+          priority = 1150;
+
+          extraConfig = ''
+            proxy_set_header X-Forwarded-For            $proxy_add_x_forwarded_for;
+            proxy_set_header Host                       $host;
+            proxy_set_header X-Real-IP                  $remote_addr;
+
+            proxy_connect_timeout                       10m;
+
+            proxy_send_timeout                          10m;
+            proxy_read_timeout                          10m;
+
+            client_max_body_size                        100k;
+            send_timeout                                10m;
+          '';
+        };
+
+        # Websocket
+        locations."/socket.io" = {
+          tryFiles = "/dev/null @api_websocket";
+          priority = 1210;
+        };
+
+        locations."/tracker/socket" = {
+          tryFiles = "/dev/null @api_websocket";
+          priority = 1220;
+
+          extraConfig = ''
+            proxy_read_timeout                          15m;
+          '';
+        };
+
+        locations."@api_websocket" = {
+          proxyPass = "http://127.0.0.1:${toString cfg.listenHttp}";
+          priority = 1230;
+
+          extraConfig = ''
+            proxy_set_header X-Forwarded-For            $proxy_add_x_forwarded_for;
+            proxy_set_header Host                       $host;
+            proxy_set_header X-Real-IP                  $remote_addr;
+            proxy_set_header Upgrade                    $http_upgrade;
+            proxy_set_header Connection                 'upgrade';
+
+            proxy_http_version                          1.1;
+          '';
+        };
+
+        # Bypass PeerTube for performance reasons.
+        locations."~ ^/client/(assets/images/(icons/icon-36x36\.png|icons/icon-48x48\.png|icons/icon-72x72\.png|icons/icon-96x96\.png|icons/icon-144x144\.png|icons/icon-192x192\.png|icons/icon-512x512\.png|logo\.svg|favicon\.png|default-playlist\.jpg|default-avatar-account\.png|default-avatar-account-48x48\.png|default-avatar-video-channel\.png|default-avatar-video-channel-48x48\.png))$" = {
+          tryFiles = "/www/client-overrides/$1 /www/client/$1 $1";
+          priority = 1310;
+        };
+
+        locations."~ ^/client/(.*\.(js|css|png|svg|woff2|otf|ttf|woff|eot))$" = {
+          alias = "${cfg.package}/client/dist/$1";
+          priority = 1320;
+          extraConfig = ''
+            add_header Cache-Control                    'public, max-age=604800, immutable';
+          '';
+        };
+
+        locations."~ ^/lazy-static/(avatars|banners)/" = {
+          tryFiles = "$uri @api";
+          root = cfg.settings.storage.avatars;
+          priority = 1330;
+          extraConfig = ''
+            if ($request_method = 'OPTIONS') {
+              ${nginxCommonHeaders}
+              add_header Access-Control-Max-Age         1728000;
+              add_header Cache-Control                  'no-cache';
+              add_header Content-Type                   'text/plain charset=UTF-8';
+              add_header Content-Length                 0;
+              return                                    204;
+            }
+
+            ${nginxCommonHeaders}
+            add_header Cache-Control                    'public, max-age=7200';
+
+            rewrite ^/lazy-static/avatars/(.*)$         /$1 break;
+            rewrite ^/lazy-static/banners/(.*)$         /$1 break;
+          '';
+        };
+
+        locations."^~ /lazy-static/previews/" = {
+          tryFiles = "$uri @api";
+          root = cfg.settings.storage.previews;
+          priority = 1340;
+          extraConfig = ''
+            if ($request_method = 'OPTIONS') {
+              ${nginxCommonHeaders}
+              add_header Access-Control-Max-Age         1728000;
+              add_header Cache-Control                  'no-cache';
+              add_header Content-Type                   'text/plain charset=UTF-8';
+              add_header Content-Length                 0;
+              return                                    204;
+            }
+
+            ${nginxCommonHeaders}
+            add_header Cache-Control                    'public, max-age=7200';
+
+            rewrite ^/lazy-static/previews/(.*)$        /$1 break;
+          '';
+        };
+
+        locations."^~ /static/thumbnails/" = {
+          tryFiles = "$uri @api";
+          root = cfg.settings.storage.thumbnails;
+          priority = 1350;
+          extraConfig = ''
+            if ($request_method = 'OPTIONS') {
+              ${nginxCommonHeaders}
+              add_header Access-Control-Max-Age         1728000;
+              add_header Cache-Control                  'no-cache';
+              add_header Content-Type                   'text/plain charset=UTF-8';
+              add_header Content-Length                 0;
+              return                                    204;
+            }
+
+            ${nginxCommonHeaders}
+            add_header Cache-Control                    'public, max-age=7200';
+
+            rewrite ^/static/thumbnails/(.*)$           /$1 break;
+          '';
+        };
+
+        locations."^~ /static/redundancy/" = {
+          tryFiles = "$uri @api";
+          root = cfg.settings.storage.redundancy;
+          priority = 1360;
+          extraConfig = ''
+            if ($request_method = 'OPTIONS') {
+              ${nginxCommonHeaders}
+              add_header Access-Control-Max-Age         1728000;
+              add_header Content-Type                   'text/plain charset=UTF-8';
+              add_header Content-Length                 0;
+              return                                    204;
+            }
+            if ($request_method = 'GET') {
+              ${nginxCommonHeaders}
+
+              access_log                                off;
+            }
+            aio                                         threads;
+            sendfile                                    on;
+            sendfile_max_chunk                          1M;
+
+            limit_rate_after                            5M;
+
+            set $peertube_limit_rate                    800k;
+            set $limit_rate                             $peertube_limit_rate;
+
+            rewrite ^/static/redundancy/(.*)$           /$1 break;
+          '';
+        };
+
+        locations."^~ /static/streaming-playlists/" = {
+          tryFiles = "$uri @api";
+          root = cfg.settings.storage.streaming_playlists;
+          priority = 1370;
+          extraConfig = ''
+            if ($request_method = 'OPTIONS') {
+              ${nginxCommonHeaders}
+              add_header Access-Control-Max-Age         1728000;
+              add_header Content-Type                   'text/plain charset=UTF-8';
+              add_header Content-Length                 0;
+              return                                    204;
+            }
+            if ($request_method = 'GET') {
+              ${nginxCommonHeaders}
+
+              access_log                                off;
+            }
+
+            aio                                         threads;
+            sendfile                                    on;
+            sendfile_max_chunk                          1M;
+
+            limit_rate_after                            5M;
+
+            set $peertube_limit_rate                    5M;
+            set $limit_rate                             $peertube_limit_rate;
+
+            rewrite ^/static/streaming-playlists/(.*)$  /$1 break;
+          '';
+        };
+
+        locations."~ ^/static/webseed/" = {
+          tryFiles = "$uri @api";
+          root = cfg.settings.storage.videos;
+          priority = 1380;
+          extraConfig = ''
+            if ($request_method = 'OPTIONS') {
+              ${nginxCommonHeaders}
+              add_header Access-Control-Max-Age         1728000;
+              add_header Content-Type                   'text/plain charset=UTF-8';
+              add_header Content-Length                 0;
+              return                                    204;
+            }
+            if ($request_method = 'GET') {
+              ${nginxCommonHeaders}
+
+              access_log                                off;
+            }
+
+            aio                                         threads;
+            sendfile                                    on;
+            sendfile_max_chunk                          1M;
+
+            limit_rate_after                            5M;
+
+            set $peertube_limit_rate                    800k;
+            set $limit_rate                             $peertube_limit_rate;
+
+            rewrite ^/static/webseed/(.*)$              /$1 break;
+          '';
+        };
+      };
     };
 
     services.postgresql = lib.mkIf cfg.database.createLocally {
@@ -476,8 +756,10 @@ in {
       (lib.mkIf cfg.redis.enableUnixSocket {${config.services.peertube.user}.extraGroups = [ "redis-peertube" ];})
     ];
 
-    users.groups = lib.optionalAttrs (cfg.group == "peertube") {
-      peertube = { };
+    users.groups = {
+      ${cfg.group} = {
+        members = lib.optional cfg.configureNginx config.services.nginx.user;
+      };
     };
   };
 }
