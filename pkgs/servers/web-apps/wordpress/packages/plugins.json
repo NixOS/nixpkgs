@@ -47,6 +47,12 @@
     "sha256": "04x5dj79bx5avx8db991nlhrpd3qv3maniqmzwnyd8ab2zblzx83",
     "version": "1.0.1"
   },
+  "gutenberg": {
+    "path": "gutenberg/tags/14.3.0",
+    "rev": "2797654",
+    "sha256": "0gf9spzsljhvmvhhqcgdcbrh95y2j0idmxjxsqnv2hk0miaka00d",
+    "version": "14.3.0"
+  },
   "jetpack": {
     "path": "jetpack/tags/11.4",
     "rev": "2794223",
@@ -90,10 +96,10 @@
     "version": "0.9.3"
   },
   "webp-converter-for-media": {
-    "path": "webp-converter-for-media/tags/5.3.0",
-    "rev": "2797448",
-    "sha256": "1w6i4z09rj9prj4skv9j2m45nsi1an092j2frfzf1wmdacvsrmvh",
-    "version": "5.3.0"
+    "path": "webp-converter-for-media/tags/5.3.1",
+    "rev": "2798010",
+    "sha256": "1flggxd6hw0ps3b0y32a2aj9g3zfpzbaiwzx1zn2s7zpxn508y1b",
+    "version": "5.3.1"
   },
   "worker": {
     "path": "worker/tags/4.9.14",

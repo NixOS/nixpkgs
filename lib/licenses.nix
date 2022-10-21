@@ -554,6 +554,16 @@ in mkLicense lset) ({
     free = false;
   };
 
+  lal12 = {
+    spdxId = "LAL-1.2";
+    fullName = "Licence Art Libre 1.2";
+  };
+
+  lal13 = {
+    spdxId = "LAL-1.3";
+    fullName = "Licence Art Libre 1.3";
+  };
+
   lgpl2Only = {
     spdxId = "LGPL-2.0-only";
     fullName = "GNU Library General Public License v2 only";

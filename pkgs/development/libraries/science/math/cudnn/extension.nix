@@ -141,7 +141,7 @@ final: prev: let
         supportedCudaVersions = [ "10.2" ];
       }
       rec {
-        fileVersion = "11.7";
+        fileVersion = "11.8";
         fullVersion = "8.6.0.163";
         hash = "sha256-u8OW30cpTGV+3AnGAGdNYIyxv8gLgtz0VHBgwhcRFZ4=";
         url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${major fileVersion}-archive.tar.xz";
