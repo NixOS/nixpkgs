@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitLab, fetchFromGitHub
 , file, libxslt, docbook_xml_dtd_412, docbook_xsl, xmlto
 , w3m, gnugrep, gnused, coreutils, xset, perlPackages
-, mimiSupport ? false, gawk }:
+, mimiSupport ? false, gawk
+, withXdgOpenUsePortalPatch ? true }:
 
 let
   # A much better xdg-open
@@ -29,6 +30,12 @@ stdenv.mkDerivation rec {
     rev = "d11b33ec7f24cfb1546f6b459611d440013bdc72";
     sha256 = "sha256-8PtXfI8hRneEpnUvIV3M+6ACjlkx0w/NEiJFdGbbHnQ=";
   };
+
+  patches = lib.optionals withXdgOpenUsePortalPatch [
+    # Allow forcing the use of XDG portals using NIXOS_XDG_OPEN_USE_PORTAL environment variable.
+    # Upstream PR: https://github.com/freedesktop/xdg-utils/pull/12
+    ./allow-forcing-portal-use.patch
+  ];
 
   # just needed when built from git
   nativeBuildInputs = [ libxslt docbook_xml_dtd_412 docbook_xsl xmlto w3m ];
