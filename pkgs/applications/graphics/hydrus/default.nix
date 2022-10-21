@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "501";
+  version = "503";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-dmQD3CAAAhE6IOfT38PHUIlHdDFdk6HZ6ZEZmKw7+WM=";
+    sha256 = "sha256-nJn5EphbmVYAAOisV3fym/nHlJl/aPZ2Iyp+Z2/N3Jc=";
   };
 
   nativeBuildInputs = [
@@ -38,10 +38,10 @@ python3Packages.buildPythonPackage rec {
     opencv4
     pillow
     psutil
-    pylzma
     pyopenssl
     pyside2
     pysocks
+    python-dateutil
     python3Packages.mpv
     pyyaml
     qtpy
