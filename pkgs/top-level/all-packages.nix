@@ -33978,6 +33978,8 @@ with pkgs;
     inherit (haskellPackages) ghcWithPackages;
   };
 
+  hikounomizu = callPackage ../games/hikounomizu { };
+
   hyperrogue = callPackage ../games/hyperrogue { };
 
   icbm3d = callPackage ../games/icbm3d { };
