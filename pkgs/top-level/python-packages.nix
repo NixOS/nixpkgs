@@ -8412,6 +8412,8 @@ in {
 
   pyprosegur = callPackage ../development/python-modules/pyprosegur { };
 
+  pyprusalink = callPackage ../development/python-modules/pyprusalink { };
+
   pyptlib = callPackage ../development/python-modules/pyptlib { };
 
   pypubsub = callPackage ../development/python-modules/pypubsub { };
