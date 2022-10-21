@@ -14,6 +14,8 @@
 , xdg-desktop-portal
 , wayland
 , gnome
+, librsvg
+, webp-pixbuf-loader
 }:
 
 stdenv.mkDerivation rec {
@@ -46,6 +48,17 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
   ];
+
+  postInstall = ''
+    # Pull in WebP support for gnome-backgrounds.
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        librsvg
+        webp-pixbuf-loader
+      ];
+    }}"
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
