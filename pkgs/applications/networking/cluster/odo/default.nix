@@ -31,7 +31,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "Developer-focused CLI for OpenShift and Kubernetes";
     license = licenses.asl20;
-    homepage = "odo.dev";
+    homepage = "https://odo.dev";
+    changelog = "https://github.com/redhat-developer/odo/releases/v${version}";
     maintainers = with maintainers; [ stehessel ];
     platforms = platforms.unix;
   };
