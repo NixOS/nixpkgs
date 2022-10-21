@@ -726,14 +726,14 @@ type GraphVariantMutation {
   """
   _Asynchronously_ kicks off operation checks for a proposed non-federated
   schema change against its associated graph.
-  
+
   Returns a `CheckRequestSuccess` object with a workflow ID that you can use
   to check status, or an error object if the checks workflow failed to start.
   """
   submitCheckSchemaAsync(input: CheckSchemaAsyncInput!): CheckRequestResult!
   """
   _Asynchronously_ kicks off composition and operation checks for a proposed subgraph schema change against its associated supergraph.
-  
+
   Returns a `CheckRequestSuccess` object with a workflow ID that you can use
   to check status, or an error object if the checks workflow failed to start.
   """
@@ -1556,7 +1556,7 @@ type Graph implements Identity {
   """
   Provides details of the graph variant with the provided `name`, if a variant
   with that name exists for this graph. Otherwise, returns null.
-  
+
    For a list of _all_ variants associated with a graph, use `Graph.variants` instead.
   """
   variant(name: String!): GraphVariant
@@ -1836,7 +1836,7 @@ type UserMutation {
   newKey(keyName: String!): UserApiKey!
   """
   If this user has no active user API keys, this creates one for the user.
-  
+
   If this user has at least one active user API key, this returns one of those keys at random and does _not_ create a new key.
   """
   provisionKey(keyName: String! = "add-a-name"): ApiKeyProvision
