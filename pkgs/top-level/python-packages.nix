@@ -5827,6 +5827,8 @@ in {
     inherit (pkgs.darwin) cctools;
   };
 
+  mip = callPackage ../development/python-modules/mip { };
+
   misaka = callPackage ../development/python-modules/misaka { };
 
   mistletoe = callPackage ../development/python-modules/mistletoe { };
