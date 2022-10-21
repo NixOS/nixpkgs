@@ -920,8 +920,6 @@ let
 
     mldoc =  callPackage ../development/ocaml-modules/mldoc { };
 
-    mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
-
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
 
     mm = callPackage ../development/ocaml-modules/mm { };
@@ -1441,6 +1439,12 @@ let
     terminal_size = callPackage ../development/ocaml-modules/terminal_size { };
 
     tezos-base58 = callPackage ../development/ocaml-modules/tezos-base58 { };
+
+    tezos-bls12-381-polynomial = callPackage ../development/ocaml-modules/tezos-bls12-381-polynomial { };
+
+    tezos-plompiler = callPackage ../development/ocaml-modules/tezos-bls12-381-polynomial/plompiler.nix { };
+
+    tezos-plonk = callPackage ../development/ocaml-modules/tezos-bls12-381-polynomial/plonk.nix { };
 
     theora = callPackage ../development/ocaml-modules/theora { };
 

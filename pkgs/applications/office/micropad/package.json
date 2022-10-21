@@ -1,6 +1,6 @@
 {
   "name": "micropad",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "A powerful note-taking app that helps you organise + take notes without restrictions.",
   "main": "main.js",
   "scripts": {
