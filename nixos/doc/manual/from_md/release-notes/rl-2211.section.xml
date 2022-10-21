@@ -939,6 +939,19 @@
       </listitem>
       <listitem>
         <para>
+          The Qt QML disk cache is now disabled by default. This fixes a
+          long-standing issue where updating Qt/KDE apps would sometimes
+          cause them to crash or behave strangely without explanation.
+          Those concerned about the small (~10%) performance hit to
+          application startup can re-enable the cache (and expose
+          themselves to gremlins) by setting the envrionment variable
+          <literal>QML_FORCE_DISK_CACHE</literal> to
+          <literal>1</literal> using e.g. the
+          <literal>environment.sessionVariables</literal> NixOS option.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           systemd-oomd is enabled by default. Depending on which systemd
           units have <literal>ManagedOOMSwap=kill</literal> or
           <literal>ManagedOOMMemoryPressure=kill</literal>, systemd-oomd
