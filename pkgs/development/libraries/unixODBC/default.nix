@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, curlFull }:
 
 stdenv.mkDerivation rec {
   pname = "unixODBC";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     ];
     sha256 = "sha256-2eVcjnEYNH48ZshzOIVtrRUWtJD7fHVsFWKiwmfHO1w=";
   };
+
+  postFixup = "cp ${curlFull.out}/lib/libcurl.so $out/lib";
 
   configureFlags = [ "--disable-gui" "--sysconfdir=/etc" ];
 
