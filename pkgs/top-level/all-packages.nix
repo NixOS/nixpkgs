@@ -3562,6 +3562,8 @@ with pkgs;
 
   cambalache = callPackage ../development/tools/cambalache { };
 
+  changedetection-io = callPackage ../servers/web-apps/changedetection-io { };
+
   clipster = callPackage ../tools/misc/clipster { };
 
   clockify = callPackage ../applications/office/clockify {
@@ -5619,6 +5621,7 @@ with pkgs;
   cudaPackages_11_5 = callPackage ./cuda-packages.nix { cudaVersion = "11.5"; };
   cudaPackages_11_6 = callPackage ./cuda-packages.nix { cudaVersion = "11.6"; };
   cudaPackages_11_7 = callPackage ./cuda-packages.nix { cudaVersion = "11.7"; };
+  cudaPackages_11_8 = callPackage ./cuda-packages.nix { cudaVersion = "11.8"; };
   cudaPackages_11 = cudaPackages_11_7;
   cudaPackages = recurseIntoAttrs cudaPackages_11;
 
@@ -10303,6 +10306,8 @@ with pkgs;
   platinum-searcher = callPackage ../tools/text/platinum-searcher { };
 
   playbar2 = libsForQt5.callPackage ../applications/audio/playbar2 { };
+
+  playwright = with python3Packages; toPythonApplication playwright;
 
   please = callPackage ../tools/security/please { };
 
@@ -14995,6 +15000,8 @@ with pkgs;
 
   cargo-zigbuild = callPackage ../development/tools/rust/cargo-zigbuild { };
 
+  cauwugo = callPackage ../development/tools/rust/cauwugo { };
+
   crate2nix = callPackage ../development/tools/rust/crate2nix { };
 
   convco = callPackage ../development/tools/convco {
@@ -18511,9 +18518,28 @@ with pkgs;
 
   linbox = callPackage ../development/libraries/linbox { };
 
+  ffmpeg_4-headless = callPackage ../development/libraries/ffmpeg/4.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia VideoToolbox;
+
+    sdlSupport = false;
+    vdpauSupport = false;
+    pulseaudioSupport = false;
+    libva = libva-minimal;
+  };
+
   ffmpeg_4 = callPackage ../development/libraries/ffmpeg/4.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia VideoToolbox;
   };
+
+  ffmpeg_5-headless = callPackage ../development/libraries/ffmpeg/5.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia VideoToolbox;
+
+    sdlSupport = false;
+    vdpauSupport = false;
+    pulseaudioSupport = false;
+    libva = libva-minimal;
+  };
+
   ffmpeg_5 = callPackage ../development/libraries/ffmpeg/5.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia VideoToolbox;
   };
@@ -18524,6 +18550,8 @@ with pkgs;
   # Packages which use ffmpeg as a library, should pin to the relevant major
   # version number which the upstream support.
   ffmpeg = ffmpeg_4;
+
+  ffmpeg-headless = ffmpeg_4-headless;
 
   ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
     svt-av1 = if stdenv.isAarch64 then null else svt-av1;
@@ -32296,7 +32324,9 @@ with pkgs;
     enableX11 = config.unison.enableX11 or true;
   };
 
-  unpaper = callPackage ../tools/graphics/unpaper { };
+  unpaper = callPackage ../tools/graphics/unpaper {
+    ffmpeg_5 = ffmpeg_5-headless;
+  };
 
   unison-ucm = callPackage ../development/compilers/unison { };
 
@@ -37721,7 +37751,9 @@ with pkgs;
 
   gpio-utils = callPackage ../os-specific/linux/kernel/gpio-utils.nix { };
 
-  navidrome = callPackage ../servers/misc/navidrome {};
+  navidrome = callPackage ../servers/misc/navidrome {
+    ffmpeg = ffmpeg-headless;
+  };
 
   zalgo = callPackage ../tools/misc/zalgo { };
 
