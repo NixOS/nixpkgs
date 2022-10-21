@@ -114,7 +114,7 @@ let
       jq
     ];
   } (''
-    BROWSERS_JSON=${driver}/share/playwright-driver/package/browsers.json
+    BROWSERS_JSON=${driver}/package/browsers.json
   '' + lib.optionalString withChromium ''
     CHROMIUM_REVISION=$(jq -r '.browsers[] | select(.name == "chromium").revision' $BROWSERS_JSON)
     mkdir -p $out/chromium-$CHROMIUM_REVISION/chrome-linux
