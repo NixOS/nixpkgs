@@ -1326,8 +1326,6 @@ let
 
     process = callPackage ../development/ocaml-modules/process { };
 
-    prof_spacetime = callPackage ../development/ocaml-modules/prof_spacetime { };
-
     progress = callPackage ../development/ocaml-modules/progress { };
 
     promise_jsoo = callPackage ../development/ocaml-modules/promise_jsoo { };
