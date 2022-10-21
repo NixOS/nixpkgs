@@ -27,6 +27,12 @@ buildPythonApplication rec {
     hash = "sha256-RJq4mdPtnAR45rAycGDSSuvZwkJPOiqFBp+8mnBTKvU=";
   };
 
+  postPatch = ''
+    # Remove setuptools_rust from runtime dependencies
+    # https://github.com/matrix-org/synapse/blob/v1.69.0/pyproject.toml#L177-L185
+    sed -i '/^setuptools_rust =/d' pyproject.toml
+  '';
+
   nativeBuildInputs = [
     poetry-core
     rustPlatform.cargoSetupHook
