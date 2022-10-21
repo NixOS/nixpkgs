@@ -8792,6 +8792,8 @@ with pkgs;
 
   libipfix = callPackage ../development/libraries/libipfix { };
 
+  libirc = libsForQt5.callPackage ../development/libraries/libirc { };
+
   libircclient = callPackage ../development/libraries/libircclient { };
 
   libiscsi = callPackage ../development/libraries/libiscsi { };
@@ -28956,6 +28958,8 @@ with pkgs;
   };
 
   haunt = callPackage ../applications/misc/haunt { };
+
+  huggle = libsForQt5.callPackage ../applications/misc/huggle {};
 
   hugo = callPackage ../applications/misc/hugo {
     buildGoModule = buildGo119Module;
