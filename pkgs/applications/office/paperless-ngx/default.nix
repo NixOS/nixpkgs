@@ -198,7 +198,9 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "src" ];
+  pytestFlagsArray = [
+    "src"
+  ];
 
   # The tests require:
   # - PATH with runtime binaries
@@ -214,14 +216,21 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
       --replace "--cov --cov-report=html" ""
   '';
 
+  disabledTests = [
+    # Tests require a running Redis instance
+    "test_consume_barcode_file"
+    "test_consume_barcode_tiff_file"
+    "test_consume_barcode_supported_no_extension_file"
+  ];
+
   passthru = {
     inherit python path;
     tests = { inherit (nixosTests) paperless; };
   };
 
   meta = with lib; {
-    description = "A supercharged version of paperless: scan, index, and archive all of your physical documents";
-    homepage = "https://paperless-ngx.readthedocs.io/en/latest/";
+    description = "Tool to scan, index, and archive all of your physical documents";
+    homepage = "https://paperless-ngx.readthedocs.io/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ lukegb gador erikarvstedt ];
   };
