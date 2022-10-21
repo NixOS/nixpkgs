@@ -22,7 +22,7 @@ let
 
       # use paperless-ngx version of django-q
       # see https://github.com/paperless-ngx/paperless-ngx/pull/1014
-      django-q = super.django-q.overridePythonAttrs (oldAttrs: rec {
+      django-q = super.django-q.overridePythonAttrs (oldAttrs: {
         src = fetchFromGitHub {
           owner = "paperless-ngx";
           repo = "django-q";
@@ -42,8 +42,39 @@ let
         };
       });
 
-      eth-keys = super.eth-keys.overridePythonAttrs (_: {
-        doCheck = false;
+      # downgrade redis due to https://github.com/paperless-ngx/paperless-ngx/pull/1802
+      # and https://github.com/django/channels_redis/issues/332
+      channels-redis = super.channels-redis.overridePythonAttrs (oldAttrs: rec {
+        version = "3.4.1";
+        src = fetchFromGitHub {
+          owner = "django";
+          repo = "channels_redis";
+          rev = version;
+          hash = "sha256-ZQSsE3pkM+nfDhWutNuupcyC5MDikUu6zU4u7Im6bRQ=";
+        };
+      });
+
+      channels = super.channels.overridePythonAttrs (oldAttrs: rec {
+        version = "3.0.5";
+        pname = "channels";
+        src = fetchFromGitHub {
+          owner = "django";
+          repo = pname;
+          rev = version;
+          sha256 = "sha256-bKrPLbD9zG7DwIYBst1cb+zkDsM8B02wh3D80iortpw=";
+        };
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ self.daphne ];
+      });
+
+      daphne = super.daphne.overridePythonAttrs (oldAttrs: rec {
+        version = "3.0.2";
+        pname = "daphne";
+        src = fetchFromGitHub {
+          owner = "django";
+          repo = pname;
+          rev = version;
+          hash = "sha256-KWkMV4L7bA2Eo/u4GGif6lmDNrZAzvYyDiyzyWt9LeI=";
+        };
       });
     };
   };
@@ -216,12 +247,6 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
       --replace "--cov --cov-report=html" ""
   '';
 
-  disabledTests = [
-    # Tests require a running Redis instance
-    "test_consume_barcode_file"
-    "test_consume_barcode_tiff_file"
-    "test_consume_barcode_supported_no_extension_file"
-  ];
 
   passthru = {
     inherit python path;
