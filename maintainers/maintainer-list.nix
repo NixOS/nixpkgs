@@ -8473,6 +8473,17 @@
       fingerprint = "3196 83D3 9A1B 4DE1 3DC2  51FD FEA8 88C9 F5D6 4F62";
     }];
   };
+  minion3665 = {
+    name = "Skyler Grey";
+    email = "skyler3665@gmail.com";
+    matrix = "@minion3665:matrix.org";
+    github = "Minion3665";
+    githubId = 34243578;
+    keys = [{
+      longkeyid = "rsa4096/0x1AFD10256B3C714D";
+      fingerprint = "D520 AC8D 7C96 9212 5B2B  BD3A 1AFD 1025 6B3C 714D";
+    }];
+  };
   mir06 = {
     email = "armin.leuprecht@uni-graz.at";
     github = "mir06";
@@ -11465,6 +11476,17 @@
     github = "scriptkiddi";
     githubId = 3598650;
     name = "Fritz Otlinghaus";
+  };
+  Scrumplex = {
+    name = "Sefa Eyeoglu";
+    email = "contact@scrumplex.net";
+    matrix = "@Scrumplex:duckhub.io";
+    github = "Scrumplex";
+    githubId = 11587657;
+    keys = [{
+      longkeyid = "rsa2048/0xC10411294912A422";
+      fingerprint = "AF1F B107 E188 CB97 9A94  FD7F C104 1129 4912 A422";
+    }];
   };
   scubed2 = {
     email = "scubed2@gmail.com";
