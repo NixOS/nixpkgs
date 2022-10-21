@@ -30,13 +30,13 @@
     "version": "0.1.1"
   },
   "aiven": {
-    "hash": "sha256-ceicNERNIM6KDjSXF/D3NG1aTC2Mhlhbq56QbsJUuF4=",
+    "hash": "sha256-+Uzz2eu873lh707/zADfMK/4D5wDMxXZtAf0RU6V42M=",
     "owner": "aiven",
     "provider-source-address": "registry.terraform.io/aiven/aiven",
     "repo": "terraform-provider-aiven",
-    "rev": "v3.7.0",
-    "vendorHash": "sha256-4fbbbJnWzJ4DF3YjkeH/mqS45LVc5yg7zSC9V8jGbXo=",
-    "version": "3.7.0"
+    "rev": "v3.8.0",
+    "vendorHash": "sha256-F+zF9xqHNCXrGxOjEoe8gaGS0C7EO0s61CjN9+9PiYk=",
+    "version": "3.8.0"
   },
   "akamai": {
     "hash": "sha256-+EHXB2VH1UWYQ1y6Ou+5VhjH7elhfgLYW/imhN2t15Q=",
