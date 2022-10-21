@@ -311,6 +311,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://ntfy.sh">ntfy.sh</link>, a push
+          notification service. Available as
+          <link linkend="opt-services.ntfy-sh.enable">services.ntfy-sh</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://git.sr.ht/~migadu/alps">alps</link>,
           a simple and extensible webmail. Available as
           <link linkend="opt-services.alps.enable">services.alps</link>.

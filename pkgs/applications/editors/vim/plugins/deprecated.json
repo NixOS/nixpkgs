@@ -12,7 +12,7 @@
         "new": "vim-gist"
     },
     "lua-dev-nvim": {
-        "date": "2022-10-18",
+        "date": "2022-10-20",
         "new": "neodev-nvim"
     },
     "nvim-bufferline-lua": {

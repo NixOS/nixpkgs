@@ -15,6 +15,6 @@ rustPlatform.buildRustPackage rec {
     description = "A tool to identify anything";
     homepage = "https://github.com/swanandx/lemmeknow";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda Br1ght0ne ];
   };
 }

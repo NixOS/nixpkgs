@@ -12,14 +12,15 @@
 
 buildPythonPackage rec {
   pname = "selenium";
-  version = "4.4.2";
+  version = "4.5.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SeleniumHQ";
     repo = "selenium";
-    rev = "refs/tags/selenium-${version}-python"; # check if there is a newer tag with -python suffix
-    hash = "sha256-sJJ3i4mnGp5fDgo64p6B2vRCqp/Wm99VoyRLyy4nBH8=";
+    # check if there is a newer tag with or without -python suffix
+    rev = "refs/tags/selenium-${version}";
+    hash = "sha256-K90CQYTeX9GKpP0ahxLx2HO5HG0P6MN7jeWmHtfiOns=";
   };
 
   postPatch = ''
@@ -50,6 +51,6 @@ buildPythonPackage rec {
     description = "Bindings for Selenium WebDriver";
     homepage = "https://selenium.dev/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jraygauthier ];
+    maintainers = with maintainers; [ jraygauthier SuperSandro2000 ];
   };
 }

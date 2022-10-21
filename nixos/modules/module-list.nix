@@ -613,6 +613,7 @@
   ./services/misc/nix-optimise.nix
   ./services/misc/nix-ssh-serve.nix
   ./services/misc/novacomd.nix
+  ./services/misc/ntfy-sh.nix
   ./services/misc/nzbget.nix
   ./services/misc/nzbhydra2.nix
   ./services/misc/octoprint.nix
@@ -1072,6 +1073,7 @@
   ./services/web-apps/calibre-web.nix
   ./services/web-apps/code-server.nix
   ./services/web-apps/baget.nix
+  ./services/web-apps/changedetection-io.nix
   ./services/web-apps/convos.nix
   ./services/web-apps/dex.nix
   ./services/web-apps/discourse.nix
