@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     backports_abc
     chardet
     flask-babel
-    flask_login
+    flask-login
     flask_principal
     flask-wtf
     iso-639
