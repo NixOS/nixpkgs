@@ -33,6 +33,7 @@
 , libpulseaudio
 , libpwquality
 , librsvg
+, webp-pixbuf-loader
 , libsecret
 , libwacom
 , libxml2
@@ -137,6 +138,17 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     # For ITS rules
     addToSearchPath "XDG_DATA_DIRS" "${polkit.out}/share"
+  '';
+
+  postInstall = ''
+    # Pull in WebP support for gnome-backgrounds.
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        librsvg
+        webp-pixbuf-loader
+      ];
+    }}"
   '';
 
   preFixup = ''
