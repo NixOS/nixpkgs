@@ -403,6 +403,48 @@ have a predefined type and string generator already declared under
 
     :   Creates PHP array that contains both indexed and associative values. For example, `lib.mkMixedArray [ "hello" "world" ] { "nix" = "is-great"; }` returns `['hello', 'world', 'nix' => 'is-great']`
 
+`pkgs.formats.edn { keywordTransform ? (kw: "${optionalString (!hasPrefix ":" kw) ":"}${kw}") }`
+
+: A function taking an attribute set with values
+
+    `keywordTransform`
+
+    :   A function to format the names in an attribute set. The default turns names into EDN keywords.
+
+    It returns a set with EDN-specific attributes `type`, `lib`, and
+    `generate` as specified [below](#pkgs-formats-result).
+
+    The `lib` attribute contains functions to be used in settings, for
+    generating special EDN values:
+
+    `mkRaw ednCode`
+
+    :   Outputs the given string as raw EDN
+
+    `mkSet list`
+
+    :   Outputs the given list as an EDN set, instead of the default
+        EDN vector
+
+    `mkList list`
+
+    :   Outputs the given list as an EDN list, instead of the default
+        EDN vector
+
+    `mkKeyword string`
+
+    :   Outputs the given string as an EDN keyword, instead of the default
+        EDN string
+
+    `mkSymbol string`
+
+    :   Outputs the given string as an EDN symbol, instead of the default
+        EDN string
+
+    `mkTaggedElement tag value`
+
+    :   Outputs an EDN tagged element
+
 []{#pkgs-formats-result}
 These functions all return an attribute set with these values:
 
