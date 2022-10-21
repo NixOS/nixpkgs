@@ -13,8 +13,8 @@ let params =
   if lib.versionAtLeast ocaml.version "4.14"
   then {
     name = "lsp";
-    version = "1.12.4";
-    sha256 = "sha256-kZuYAny8VjWdq+ipEdPSTRcGzqjNBOgXOi0dOwb52EY=";
+    version = "1.14.1";
+    sha256 = "sha256-5kxMM90Dd5H8yb7f1NYV3abRaePqztFQ82VTnayradk=";
   } else if lib.versionAtLeast ocaml.version "4.13"
   then {
     name = "jsonrpc";
