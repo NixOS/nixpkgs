@@ -10,10 +10,12 @@
 , polkit
 , systemdMinimal
 , IOKit
+, pname ? "pcsclite"
+, polkitSupport ? false
 }:
 
 stdenv.mkDerivation rec {
-  pname = "pcsclite";
+  inherit pname;
   version = "1.9.5";
 
   outputs = [ "bin" "out" "dev" "doc" "man" ];
@@ -34,14 +36,12 @@ stdenv.mkDerivation rec {
     "--enable-confdir=/etc"
     # The OS should care on preparing the drivers into this location
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
-  ]
-  ++ (if stdenv.isLinux then [
+    (lib.enableFeature stdenv.isLinux "systemd")
+    (lib.enableFeature polkitSupport "polkit")
+  ] ++ lib.optionals stdenv.isLinux [
     "--enable-ipcdir=/run/pcscd"
-    "--enable-polkit"
     "--with-systemdsystemunitdir=${placeholder "bin"}/lib/systemd/system"
-  ] else [
-    "--disable-libsystemd"
-  ]);
+  ];
 
   postConfigure = ''
     sed -i -re '/^#define *PCSCLITE_HP_DROPDIR */ {
@@ -59,8 +59,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config perl ];
 
   buildInputs = [ python3 ]
-    ++ lib.optionals stdenv.isLinux [ dbus polkit systemdMinimal ]
-    ++ lib.optionals stdenv.isDarwin [ IOKit ];
+    ++ lib.optionals stdenv.isLinux [ systemdMinimal ]
+    ++ lib.optionals stdenv.isDarwin [ IOKit ]
+    ++ lib.optionals polkitSupport [ dbus polkit ];
 
   meta = with lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
