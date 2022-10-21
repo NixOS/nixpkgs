@@ -200,7 +200,7 @@ buildPythonPackage rec {
     "playwright"
   ];
 
-  passthru = {
+  passthru = rec {
     inherit driver;
     browsers = {
       x86_64-linux = browsers-linux { };
@@ -210,6 +210,10 @@ buildPythonPackage rec {
     }.${system} or throwSystem;
     browsers-chromium = browsers-linux { withFirefox = false; };
     browsers-firefox = browsers-linux { withChromium = false; };
+
+    tests = {
+      inherit driver browsers;
+    };
   };
 
   meta = with lib; {
