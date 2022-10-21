@@ -5,7 +5,7 @@ let
   inherit (builtins) head tail length;
   inherit (lib.trivial) flip id mergeAttrs pipe;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
-  inherit (lib.lists) foldr foldl' concatMap concatLists elemAt all partition groupBy take foldl;
+  inherit (lib.lists) foldr foldl' concatMap concatLists elemAt all partition groupBy take foldl imap0;
 in
 
 rec {
@@ -518,6 +518,27 @@ rec {
     set:
     listToAttrs (map (attr: f attr set.${attr}) (attrNames set));
 
+  /* Like mapAttrs, but additionally taking a variable that
+     will be automatically incremented, starting from 0.
+
+     Example:
+       imapAttrs (i: name: value: value + i)
+          { a = 1; b = 1; c = 1; }
+       => { a = 1; b = 2; c = 3; }
+  */
+  imapAttrs = f: set:
+    listToAttrs (imap0 (i: attr: nameValuePair attr (f i attr set.${attr})) (attrNames set));
+
+  /* Like mapAttrs', but additionally taking a variable that
+     will be automatically incremented, starting from 0.
+
+     Example:
+       imapAttrs' (i: name: value: nameValuePair "${name}${toString i}" value + i)
+          { a = 2; b = 3; }
+       => { a0 = 2; b1 = 4 }
+  */
+  imapAttrs' = f: set:
+    listToAttrs (imap0 (i: attr: f i attr set.${attr}) (attrNames set));
 
   /* Call a function for each attribute in the given set and return
      the result in a list.
@@ -617,6 +638,17 @@ rec {
     f:
     listToAttrs (map (n: nameValuePair n (f n)) names);
 
+  /* Generate an attribute set by mapping over a list of items
+     Taking two functions, one to apply for the name and one to
+     apply for the value of the attribute set.
+
+     Example:
+       genAttrs' [ {a = 2; b.c = "a" } {a = 1; b.c = "b"} ]
+          (i: i.b.c) (i: i.a)
+       => { a = 2; b = 1; }
+  */
+  genAttrs' = items: f: g:
+    listToAttrs (map (i: nameValuePair (f i) (g i)) items);
 
   /* Check whether the argument is a derivation. Any set with
      `{ type = "derivation"; }` counts as a derivation.
