@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   ];
 
   postBuild = ''
-    make data
+    make data -j$NIX_BUILD_CORES
   '';
 
   meta = with lib; {
