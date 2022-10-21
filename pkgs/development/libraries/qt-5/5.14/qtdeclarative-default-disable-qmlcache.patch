@@ -1,0 +1,13 @@
+diff --git a/src/qml/qml/qqmltypeloader.cpp b/src/qml/qml/qqmltypeloader.cpp
+index 6c12de92..fc67dc07 100644
+--- a/src/qml/qml/qqmltypeloader.cpp
++++ b/src/qml/qml/qqmltypeloader.cpp
+@@ -705,7 +705,7 @@ bool QQmlTypeLoader::Blob::isDebugging() const
+ 
+ bool QQmlTypeLoader::Blob::diskCacheEnabled() const
+ {
+-    return (!disableDiskCache() || forceDiskCache()) && !isDebugging();
++    return (forceDiskCache()) && !isDebugging();
+ }
+ 
+ bool QQmlTypeLoader::Blob::qmldirDataAvailable(const QQmlRefPointer<QQmlQmldirData> &data, QList<QQmlError> *errors)
