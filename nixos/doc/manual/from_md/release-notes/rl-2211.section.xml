@@ -457,6 +457,14 @@
           <link linkend="opt-services.uptime-kuma.enable">services.uptime-kuma</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://mepo.milesalan.com">Mepo</link>, a
+          fast, simple, hackable OSM map viewer for mobile and desktop
+          Linux. Available as
+          <link linkend="opt-programs.mepo.enable">programs.mepo.enable</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-incompatibilities">
