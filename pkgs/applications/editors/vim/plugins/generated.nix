@@ -12936,12 +12936,12 @@ final: prev:
 
   which-key-nvim = buildVimPluginFrom2Nix {
     pname = "which-key.nvim";
-    version = "2022-09-18";
+    version = "2022-10-21";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "which-key.nvim";
-      rev = "6885b669523ff4238de99a7c653d47b081b5506d";
-      sha256 = "1fwb3mmc190xam96jm743ml56idx3zvqmxf8j61yhb8879879rj6";
+      rev = "26eb5300565b7bc1f5d8163ef2c49d6f0a14bc5f";
+      sha256 = "0agfa4nbfwrq7zczzr93653gpk4x8i5vgv628fh1nif26idgqwki";
     };
     meta.homepage = "https://github.com/folke/which-key.nvim/";
   };
