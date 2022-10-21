@@ -32285,6 +32285,8 @@ with pkgs;
 
   unison-ucm = callPackage ../development/compilers/unison { };
 
+  upnp-router-control = callPackage ../applications/networking/upnp-router-control { };
+
   urh = callPackage ../applications/radio/urh { };
 
   uroboros = callPackage ../tools/system/uroboros { };
