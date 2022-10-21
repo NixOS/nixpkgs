@@ -10,9 +10,19 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     docker =
       { pkgs, ... }:
         {
-          virtualisation.docker.enable = true;
-          virtualisation.docker.autoPrune.enable = true;
-          virtualisation.docker.package = pkgs.docker;
+          virtualisation.docker = {
+            enable = true;
+            package = pkgs.docker;
+            volumes = [ "thevolume" ];
+            networks.thenetwork = {
+              driver = "bridge";
+              subnet = "172.28.0.0/16";
+              ip-range = "172.28.5.0/24";
+              gateway = "172.28.5.254";
+            };
+
+            logLevel = "warn";
+          };
 
           users.users = {
             noprivs = {
@@ -43,6 +53,15 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     docker.succeed("sudo -u hasprivs docker ps")
     docker.fail("sudo -u noprivs docker ps")
     docker.succeed("docker stop sleeping")
+
+    $docker->succeed("docker volume ls | grep thevolume");
+    $docker->succeed("docker network ls | grep thenetwork");
+
+    $docker->succeed("docker volume create superfluousvolume");
+    $docker->succeed("docker network create superfluousnetwork");
+    $docker->systemctl("restart docker");
+    $docker->waitForUnit("docker.service");
+    $docker->fail("docker volume ls | grep superfluous");
 
     # Must match version 4 times to ensure client and server git commits and versions are correct
     docker.succeed('[ $(docker version | grep ${pkgs.docker.version} | wc -l) = "4" ]')
