@@ -786,13 +786,13 @@
     "version": "3.5.1"
   },
   "nomad": {
-    "hash": "sha256-HhocWB3ZCFdeYgmA64hv1CYwqIf4EB/Q+vNrFKVB31I=",
+    "hash": "sha256-oHY+jM4JQgLlE1wd+/H9H8H2g0e9ZuxI6OMlz3Izfjg=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/nomad",
     "repo": "terraform-provider-nomad",
-    "rev": "v1.4.18",
-    "vendorHash": "sha256-jS0soOe8kVnsC8Aum1zuiqHColOZmKEpu7jP74AnXmM=",
-    "version": "1.4.18"
+    "rev": "v1.4.19",
+    "vendorHash": "sha256-3t8pUAwuVeZN5cYGs72YsdRvJunudSmKSldFWEFVA/4=",
+    "version": "1.4.19"
   },
   "ns1": {
     "hash": "sha256-vw3n1EBKwOThoJ+2hFa4rsMzvWCOnhoYOmJpX8LQKy8=",
