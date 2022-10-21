@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, buildPackages
+{ stdenv, lib, fetchurl
 , meson, pkg-config, ninja
 , intltool, bison, flex, file, python3Packages, wayland-scanner
 , expat, libdrm, xorg, wayland, wayland-protocols, openssl
