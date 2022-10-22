@@ -16,6 +16,7 @@
 , "simple-login-captcha"
 , "static-mail-sender-configurator"
 , "webp-converter-for-media"
+, "webp-express"
 , "wordpress-seo"
 , "worker"
 , "wp-mail-smtp"

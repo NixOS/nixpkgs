@@ -48,10 +48,10 @@
     "version": "1.0.1"
   },
   "gutenberg": {
-    "path": "gutenberg/tags/14.3.0",
-    "rev": "2797654",
-    "sha256": "0gf9spzsljhvmvhhqcgdcbrh95y2j0idmxjxsqnv2hk0miaka00d",
-    "version": "14.3.0"
+    "path": "gutenberg/tags/14.3.1",
+    "rev": "2800224",
+    "sha256": "1irs8slis4vax8l5pnal6zlaxs6487xh84kq1c89azf9raqx4h0z",
+    "version": "14.3.1"
   },
   "jetpack": {
     "path": "jetpack/tags/11.4",
@@ -106,6 +106,12 @@
     "rev": "2796969",
     "sha256": "0vnj7b37s9rra2m957baz8ki4z6x6acl76wgx8yj2063823q0pl2",
     "version": "19.8"
+  },
+  "webp-express": {
+    "path": "webp-express/tags/0.25.5",
+    "rev": "2728620",
+    "sha256": "0m8hbz72kvzlrcb5jnyfka90xfk1dg602rwmf22xnawzbw52532p",
+    "version": "0.25.5"
   },
   "worker": {
     "path": "worker/tags/4.9.14",
