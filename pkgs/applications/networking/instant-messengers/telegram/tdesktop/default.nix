@@ -65,9 +65,7 @@
 
 let
   tg_owt = callPackage ./tg_owt.nix {
-    abseil-cpp = abseil-cpp.override {
-      cxxStandard = "17";
-    };
+    inherit abseil-cpp;
   };
   # Aarch64 default gcc9 will cause ICE. For reference #108305
   env = if stdenv.isAarch64 then gcc10Stdenv else stdenv;

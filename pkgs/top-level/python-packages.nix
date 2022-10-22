@@ -2763,11 +2763,7 @@ in {
 
   dm-sonnet = callPackage ../development/python-modules/dm-sonnet { };
 
-  dm-tree = callPackage ../development/python-modules/dm-tree {
-    abseil-cpp = pkgs.abseil-cpp.override {
-      cxxStandard = "14";
-    };
-  };
+  dm-tree = callPackage ../development/python-modules/dm-tree { };
 
   dnachisel = callPackage ../development/python-modules/dnachisel { };
 
