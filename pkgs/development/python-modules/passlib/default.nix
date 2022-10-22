@@ -33,7 +33,7 @@ buildPythonPackage rec {
     # timming sensitive
     "test_dummy_verify"
   ]
-  # These tests fail because they don't expect native support for these algorithms
+  # These tests fail because they don't expect support for algorithms provided through libxcrypt
   ++ lib.optionals stdenv.isDarwin [
     "test_82_crypt_support"
   ];
