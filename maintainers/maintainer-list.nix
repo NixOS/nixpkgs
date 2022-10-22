@@ -8974,6 +8974,12 @@
     githubId = 1222539;
     name = "Roman Naumann";
   };
+  naphta = {
+    email = "naphta@noreply.github.com";
+    github = "naphta";
+    githubId = 6709831;
+    name = "Jake Hill";
+  };
   nasirhm = {
     email = "nasirhussainm14@gmail.com";
     github = "nasirhm";

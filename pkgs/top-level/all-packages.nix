@@ -28551,6 +28551,8 @@ with pkgs;
 
   onlyoffice-bin = callPackage ../applications/office/onlyoffice-bin { };
 
+  opcr-policy = callPackage ../development/tools/opcr-policy { };
+
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
 
   openshift = callPackage ../applications/networking/cluster/openshift { };
@@ -34945,6 +34947,8 @@ with pkgs;
   unixcw = libsForQt5.callPackage ../applications/radio/unixcw { };
 
   vault = callPackage ../tools/security/vault { };
+
+  vault-medusa = callPackage ../tools/security/vault-medusa { };
 
   vault-bin = callPackage ../tools/security/vault/vault-bin.nix { };
 
