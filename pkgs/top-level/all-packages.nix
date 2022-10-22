@@ -13547,6 +13547,8 @@ with pkgs;
 
   copper = callPackage ../development/compilers/copper {};
 
+  cotton = callPackage ../development/tools/cotton { };
+
   inherit (callPackages ../development/compilers/crystal {
     llvmPackages = if stdenv.system == "aarch64-darwin" then llvmPackages_11 else llvmPackages_10;
   })
@@ -15056,7 +15058,6 @@ with pkgs;
   };
   rust-script = callPackage ../development/tools/rust/rust-script { };
   rustup = callPackage ../development/tools/rust/rustup {
-    openssl = openssl_1_1;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
   rustup-toolchain-install-master = callPackage ../development/tools/rust/rustup-toolchain-install-master {
@@ -27599,7 +27600,9 @@ with pkgs;
 
   convos = callPackage ../applications/networking/irc/convos { };
 
-  comical = callPackage ../applications/graphics/comical { };
+  comical = callPackage ../applications/graphics/comical {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   containerd = callPackage ../applications/virtualization/containerd { };
 
