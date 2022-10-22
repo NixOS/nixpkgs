@@ -42,14 +42,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "changedetection-io";
-  version = "0.39.20.3";
+  version = "0.39.20.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "changedetection.io";
     rev = version;
-    sha256 = "sha256-0Sv/1YoZuSnslQgMOu+uHTxb9QewXPC0tLAvzJA4Aa8=";
+    sha256 = "sha256-XhCByQbGWAwWe71jsitpYJnQ2xRIdmhc9mY6Smxmp3w=";
   };
 
   postPatch = ''
