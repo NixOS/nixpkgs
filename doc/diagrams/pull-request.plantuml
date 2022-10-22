@@ -6,7 +6,6 @@ endheader
 
 title NixOS - Pull request workflow
 
-|#d1ecf1|Hydra|
 |#4078c0|Github|
 |#grey|Maintainer|
 |#white|Contributor|
@@ -57,15 +56,6 @@ start
   |Maintainer|
   :<&heart> Thank the contributor;
   end fork
-
-  |Hydra|
-  :<&bolt> Start new jobset build>
-  if (Evaluation is green?) is (no) then
-
-  stop
-  else (yes)
-  endif
-
-  :<&cog> Update channel and git branch>
+  |Contributor|
 end
 @enduml
