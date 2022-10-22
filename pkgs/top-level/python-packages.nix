@@ -10337,6 +10337,8 @@ in {
 
   skorch = callPackage ../development/python-modules/skorch { };
 
+  skrl = callPackage ../development/python-modules/skrl { };
+
   skybellpy = callPackage ../development/python-modules/skybellpy { };
 
   skyfield = callPackage ../development/python-modules/skyfield { };
