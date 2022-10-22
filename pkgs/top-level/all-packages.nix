@@ -3691,6 +3691,8 @@ with pkgs;
 
   dedup = callPackage ../tools/backup/dedup { };
 
+  deheader = callPackage ../development/tools/misc/deheader { };
+
   dehydrated = callPackage ../tools/admin/dehydrated { };
 
   deja-dup = callPackage ../applications/backup/deja-dup { };
@@ -4233,6 +4235,8 @@ with pkgs;
   huniq = callPackage ../tools/text/huniq { };
 
   hunt = callPackage ../tools/misc/hunt { };
+
+  hypr = callPackage ../applications/window-managers/hyprwm/hypr { };
 
   hyprland = callPackage ../applications/window-managers/hyprwm/hyprland { };
 
@@ -8790,6 +8794,8 @@ with pkgs;
 
   libipfix = callPackage ../development/libraries/libipfix { };
 
+  libirc = libsForQt5.callPackage ../development/libraries/libirc { };
+
   libircclient = callPackage ../development/libraries/libircclient { };
 
   libiscsi = callPackage ../development/libraries/libiscsi { };
@@ -10031,6 +10037,10 @@ with pkgs;
   PageEdit = libsForQt5.callPackage ../applications/office/PageEdit { };
 
   pagmo2 = callPackage ../development/libraries/pagmo2 { };
+
+  paho-mqtt-c = callPackage ../development/libraries/paho-mqtt-c { };
+
+  paho-mqtt-cpp = callPackage ../development/libraries/paho-mqtt-cpp { };
 
   pakcs = callPackage ../development/compilers/pakcs {
     # Doesn't compile with GHC 9.0 due to whitespace syntax changes
@@ -21290,6 +21300,8 @@ with pkgs;
 
   nvidia-optical-flow-sdk = callPackage ../development/libraries/nvidia-optical-flow-sdk { };
 
+  nvitop = callPackage ../tools/system/nvitop { };
+
   nvtop = callPackage ../tools/system/nvtop { };
   nvtop-nvidia = callPackage ../tools/system/nvtop { amd = false; };
   nvtop-amd = callPackage ../tools/system/nvtop { nvidia = false; };
@@ -28955,6 +28967,8 @@ with pkgs;
 
   haunt = callPackage ../applications/misc/haunt { };
 
+  huggle = libsForQt5.callPackage ../applications/misc/huggle {};
+
   hugo = callPackage ../applications/misc/hugo {
     buildGoModule = buildGo119Module;
   };
@@ -32283,6 +32297,8 @@ with pkgs;
 
   unison-ucm = callPackage ../development/compilers/unison { };
 
+  upnp-router-control = callPackage ../applications/networking/upnp-router-control { };
+
   urh = callPackage ../applications/radio/urh { };
 
   uroboros = callPackage ../tools/system/uroboros { };
@@ -33973,6 +33989,8 @@ with pkgs;
   hedgewars = libsForQt5.callPackage ../games/hedgewars {
     inherit (haskellPackages) ghcWithPackages;
   };
+
+  hikounomizu = callPackage ../games/hikounomizu { };
 
   hyperrogue = callPackage ../games/hyperrogue { };
 
@@ -36653,6 +36671,8 @@ with pkgs;
 
   nhentai = callPackage ../applications/misc/nhentai { };
 
+  nsncd = callPackage ../os-specific/linux/nsncd { };
+
   nvd = callPackage ../tools/package-management/nvd { };
 
   solfege = python3Packages.callPackage ../misc/solfege { };
@@ -36791,6 +36811,8 @@ with pkgs;
   redprl = callPackage ../applications/science/logic/redprl { };
 
   renderizer = callPackage ../development/tools/renderizer {};
+
+  rfc = callPackage ../tools/misc/rfc { };
 
   rfc-bibtex = python3Packages.callPackage ../development/python-modules/rfc-bibtex { };
 

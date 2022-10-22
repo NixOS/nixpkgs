@@ -3,10 +3,10 @@
 rec {
   firefox = buildMozillaMach rec {
     pname = "firefox";
-    version = "106.0";
+    version = "106.0.1";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "30ced2fff818858267eaab23974f6962c5d39433ce8e26507589535fc9348f00cf5e45b90997dfb6e2361b70900547fdb0e70d741127cc6705089ea585ea2296";
+      sha512 = "15f5a65a69e11dd0c463b358cafb5ad0f31db93619b9ec3f89e8c5e14d4d319d9423fe4dcd0dbbcbedc1ad444dcbd8e5e30e483220277f5b550bff6124b66519";
     };
 
     # This patch could be applied anywhere (just rebuild, no effect)

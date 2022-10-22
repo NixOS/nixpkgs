@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "odo";
-  version = "2.5.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "redhat-developer";
     repo = "odo";
     rev = "v${version}";
-    sha256 = "sha256-+UvG+aDji/GtkXdt+xZB06j6NxjeK2nhBjle5K+lx/A=";
+    sha256 = "sha256-CtlT6nUh0oqjJSWaIqAgu9CNGVHcf+uLNWBCl950Kus=";
   };
 
   vendorSha256 = null;
@@ -31,7 +31,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "Developer-focused CLI for OpenShift and Kubernetes";
     license = licenses.asl20;
-    homepage = "odo.dev";
+    homepage = "https://odo.dev";
+    changelog = "https://github.com/redhat-developer/odo/releases/v${version}";
     maintainers = with maintainers; [ stehessel ];
     platforms = platforms.unix;
   };
