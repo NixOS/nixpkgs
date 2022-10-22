@@ -3,7 +3,9 @@
 , groff
 , less
 , fetchFromGitHub
+, nix-update-script
 }:
+
 let
   py = python3.override {
     packageOverrides = self: super: {
@@ -90,7 +92,12 @@ with py.pkgs; buildPythonApplication rec {
     rm $out/bin/aws.cmd
   '';
 
-  passthru.python = py; # for aws_shell
+  passthru = {
+    python = py; # for aws_shell
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html";
