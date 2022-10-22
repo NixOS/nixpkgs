@@ -4,6 +4,7 @@
 , fix
 , menhirLib
 , menhirSdk
+, gitUpdater
 }:
 
 buildDunePackage rec {
@@ -25,6 +26,8 @@ buildDunePackage rec {
     menhirLib
     menhirSdk
   ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "A simple fork of OCaml parser with support for error recovery";
