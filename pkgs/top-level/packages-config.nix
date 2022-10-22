@@ -48,5 +48,15 @@
 
     # This is an alias which we disallow by default; explicitly allow it
     emacs28Packages = emacs28.pkgs;
+
+    # FIXME: if minetestPackages uses callPackage anywhere, this will not work. Why?
+    minetestPackages = {
+      # ContentDB packages are scoped by author
+      contentDB = recurseIntoAttrs
+        (lib.mapAttrs
+          (_: set: recurseIntoAttrs set)
+          super.minetestPackages.contentDB);
+      extraPackages = recurseIntoAttrs super.minetestPackages.extraPackages;
+    };
   };
 }

@@ -34183,6 +34183,11 @@ with pkgs;
   minetestclient = minetestclient_5;
   minetestserver = minetestserver_5;
 
+  minetestPackages = dontRecurseIntoAttrs (import ../games/minetest/packages {
+    callPackage = newScope minetestPackages;
+  });
+  minetestWithPackages = callPackage ../games/minetest/minetest-with-packages.nix { };
+
   mnemosyne = callPackage ../games/mnemosyne {
     python = python3;
   };

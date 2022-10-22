@@ -368,6 +368,7 @@ in {
   metabase = handleTest ./metabase.nix {};
   minecraft = handleTest ./minecraft.nix {};
   minecraft-server = handleTest ./minecraft-server.nix {};
+  minetest-with-packages = handleTest ./minetest-with-packages.nix {};
   minidlna = handleTest ./minidlna.nix {};
   miniflux = handleTest ./miniflux.nix {};
   minio = handleTest ./minio.nix {};
