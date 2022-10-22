@@ -237,12 +237,17 @@ buildPythonPackage rec {
     "--prefix PYTHONPATH : $PYTHONPATH"
   ];
 
+  postInstall = ''
+    cp -rv ${airflow-frontend}/static/dist $out/lib/${python.libPrefix}/site-packages/airflow/www/static
+    # Needed for pythonImportsCheck below
+    export HOME=$(mktemp -d)
+  '';
+
   pythonImportsCheck = [
     "airflow"
   ] ++ providerImports;
 
-  checkPhase = ''
-    export HOME=$(mktemp -d)
+  preCheck = ''
     export AIRFLOW_HOME=$HOME
     export AIRFLOW__CORE__UNIT_TEST_MODE=True
     export AIRFLOW_DB="$HOME/airflow.db"
@@ -260,10 +265,6 @@ buildPythonPackage rec {
   disabledTests = lib.optionals stdenv.isDarwin [
     "bash_operator_kill" # psutil.AccessDenied
   ];
-
-  postInstall = ''
-    cp -rv ${airflow-frontend}/static/dist $out/lib/${python.libPrefix}/site-packages/airflow/www/static
-  '';
 
   # Updates yarn.lock and package.json
   passthru.updateScript = writeScript "update.sh" ''
