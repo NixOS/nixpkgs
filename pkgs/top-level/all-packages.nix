@@ -13444,6 +13444,9 @@ with pkgs;
   inherit (callPackages ../development/compilers/crystal {
     llvmPackages = if stdenv.system == "aarch64-darwin" then llvmPackages_11 else llvmPackages_10;
   })
+    crystal_1_0
+    crystal_1_1
+    crystal_1_2
     crystal_1_5
     crystal_1_6
     crystal;
