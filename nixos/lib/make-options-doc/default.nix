@@ -108,20 +108,27 @@ let
 in rec {
   inherit optionsNix;
 
-  optionsAsciiDoc = pkgs.runCommand "options.adoc" {} ''
+  optionsAsciiDoc = pkgs.runCommand "options.adoc" {
+    preferLocalBuild = true;
+  } ''
     ${pkgs.python3Minimal}/bin/python ${./generateAsciiDoc.py} \
       < ${optionsJSON}/share/doc/nixos/options.json \
       > $out
   '';
 
-  optionsCommonMark = pkgs.runCommand "options.md" {} ''
+  optionsCommonMark = pkgs.runCommand "options.md" {
+    preferLocalBuild = true;
+  } ''
     ${pkgs.python3Minimal}/bin/python ${./generateCommonMark.py} \
       < ${optionsJSON}/share/doc/nixos/options.json \
       > $out
   '';
 
   optionsJSON = pkgs.runCommand "options.json"
-    { meta.description = "List of NixOS options in JSON format";
+    {
+      preferLocalBuild = true;
+
+      meta.description = "List of NixOS options in JSON format";
       buildInputs = [
         pkgs.brotli
         (let
@@ -161,7 +168,11 @@ in rec {
   # Convert options.json into an XML file.
   # The actual generation of the xml file is done in nix purely for the convenience
   # of not having to generate the xml some other way
-  optionsXML = pkgs.runCommand "options.xml" {} ''
+  optionsXML = pkgs.runCommand "options.xml"
+    {
+      preferLocalBuild = true;
+    }
+    ''
     export NIX_STORE_DIR=$TMPDIR/store
     export NIX_STATE_DIR=$TMPDIR/state
     ${pkgs.nix}/bin/nix-instantiate \
@@ -170,7 +181,11 @@ in rec {
       > "$out"
   '';
 
-  optionsDocBook = pkgs.runCommand "options-docbook.xml" {} ''
+  optionsDocBook = pkgs.runCommand "options-docbook.xml"
+    {
+      preferLocalBuild = true;
+    }
+    ''
     optionsXML=${optionsXML}
     if grep /nixpkgs/nixos/modules $optionsXML; then
       echo "The manual appears to depend on the location of Nixpkgs, which is bad"
