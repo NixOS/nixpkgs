@@ -293,6 +293,18 @@ buildPythonPackage rec {
     ./update-providers.py
   '';
 
+  # Note on testing the web UI:
+  # You can (manually) test the web UI as follows:
+  #
+  #   nix shell .#python3Packages.apache-airflow
+  #   airflow db init
+  #   airflow reset -y # WARNING: this will wipe any existing db state you might have!
+  #   airflow standalone
+  #
+  # Then navigate to the localhost URL using the credentials printed, try
+  # triggering the 'example_bash_operator' and 'example_bash_operator' DAGs and
+  # see if they report success.
+
   meta = with lib; {
     description = "Programmatically author, schedule and monitor data pipelines";
     homepage = "https://airflow.apache.org/";
