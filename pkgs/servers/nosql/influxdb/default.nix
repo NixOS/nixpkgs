@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, stdenv, pkg-config, rustPlatform, llvmPackages, libiconv, fetchpatch }:
+{ lib, buildGoModule, fetchFromGitHub, stdenv, pkg-config, rustPlatform, llvmPackages, libiconv, fetchpatch, nixosTests }:
 
 let
   libflux_version = "0.170.1";
@@ -77,6 +77,8 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   excludedPackages = "test";
+
+  passthru.tests = { inherit (nixosTests) influxdb; };
 
   meta = with lib; {
     description = "An open-source distributed time series database";
