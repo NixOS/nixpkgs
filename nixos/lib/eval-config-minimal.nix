@@ -40,6 +40,12 @@ let
     inherit prefix modules;
     specialArgs = {
       modulesPath = builtins.toString ../modules;
+      prepareImport = x:
+        # TODO https://github.com/NixOS/nix/issues/7186
+        #      x._type or null == "flake"
+        if x?sourceInfo && x?inputs && x?nixosModules.default
+        then x.nixosModules.default
+        else x;
     } // specialArgs;
   };
 
