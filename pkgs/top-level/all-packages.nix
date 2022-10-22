@@ -10754,6 +10754,8 @@ with pkgs;
 
   rcon = callPackage ../tools/networking/rcon { };
 
+  rconc = callPackage ../tools/networking/rconc { };
+
   rdap = callPackage ../tools/networking/rdap { };
 
   rdbtools = callPackage ../development/tools/rdbtools { python = python3; };
