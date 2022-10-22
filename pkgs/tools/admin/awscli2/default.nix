@@ -97,6 +97,6 @@ with py.pkgs; buildPythonApplication rec {
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
     description = "Unified tool to manage your AWS services";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bhipple davegallant bryanasdev000 devusb ];
+    maintainers = with maintainers; [ bhipple davegallant bryanasdev000 devusb anthonyroussel ];
   };
 }
