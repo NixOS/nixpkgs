@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , argon2_cffi
@@ -31,6 +32,10 @@ buildPythonPackage rec {
   disabledTests = [
     # timming sensitive
     "test_dummy_verify"
+  ]
+  # These tests fail because they don't expect support for algorithms provided through libxcrypt
+  ++ lib.optionals stdenv.isDarwin [
+    "test_82_crypt_support"
   ];
 
   meta = with lib; {
