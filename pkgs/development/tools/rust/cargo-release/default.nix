@@ -1,4 +1,12 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv, Security, openssl, pkg-config }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, Security
+, curl
+, openssl
+, pkg-config
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-release";
@@ -16,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+    ++ lib.optionals stdenv.isDarwin [ Security curl ];
 
   meta = with lib; {
     description = ''Cargo subcommand "release": everything about releasing a rust crate'';
