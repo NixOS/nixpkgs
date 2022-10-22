@@ -275,7 +275,10 @@ let
         redirectListen = filter (x: !x.ssl) defaultListen;
 
         acmeLocation = optionalString (vhost.enableACME || vhost.useACMEHost != null) ''
-          location /.well-known/acme-challenge {
+          # Rule for legitimate ACME Challenge requests (like /.well-known/acme-challenge/xxxxxxxxx)
+          # We use ^~ here, so that we don't check any regexes (which could
+          # otherwise easily override this intended match accidentally).
+          location ^~ /.well-known/acme-challenge/ {
             ${optionalString (vhost.acmeFallbackHost != null) "try_files $uri @acme-fallback;"}
             ${optionalString (vhost.acmeRoot != null) "root ${vhost.acmeRoot};"}
             auth_basic off;

@@ -433,6 +433,8 @@ in {
 
   aiorun = callPackage ../development/python-modules/aiorun { };
 
+  aiorwlock = callPackage ../development/python-modules/aiorwlock { };
+
   aiosenseme = callPackage ../development/python-modules/aiosenseme { };
 
   aiosenz = callPackage ../development/python-modules/aiosenz { };
@@ -4031,6 +4033,8 @@ in {
 
   gpsoauth = callPackage ../development/python-modules/gpsoauth { };
 
+  gpustat = callPackage ../development/python-modules/gpustat { };
+
   gpxpy = callPackage ../development/python-modules/gpxpy { };
 
   gpy = callPackage ../development/python-modules/gpy { };
@@ -4776,9 +4780,6 @@ in {
 
   jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix {
     cudaSupport = pkgs.config.cudaSupport or false;
-    # At the time of writing (2022-04-18), `cudaPackages.nccl` is broken, so we
-    # pin to `cudaPackages_11_6` instead.
-    cudaPackages = pkgs.cudaPackages_11_6;
   };
 
   jaxlib-build = callPackage ../development/python-modules/jaxlib rec {
@@ -4788,9 +4789,6 @@ in {
     };
     # Some platforms don't have `cudaSupport` defined, hence the need for 'or false'.
     cudaSupport = pkgs.config.cudaSupport or false;
-    # At the time of writing (2022-04-18), `cudaPackages.nccl` is broken, so we
-    # pin to `cudaPackages_11_6` instead.
-    cudaPackages = pkgs.cudaPackages_11_6;
     IOKit = pkgs.darwin.apple_sdk_11_0.IOKit;
     protobuf = pkgs.protobuf3_20; # jaxlib-build 0.3.15 won't build with protobuf 3.21
   };
@@ -6517,6 +6515,8 @@ in {
   openbabel-bindings = callPackage ../development/python-modules/openbabel-bindings {
       openbabel = callPackage ../development/libraries/openbabel { inherit (self) python; };
   };
+
+  opencensus = callPackage ../development/python-modules/opencensus { };
 
   opencv3 = toPythonModule (pkgs.opencv3.override {
     enablePython = true;
@@ -8400,6 +8400,8 @@ in {
 
   pyprosegur = callPackage ../development/python-modules/pyprosegur { };
 
+  pyprusalink = callPackage ../development/python-modules/pyprusalink { };
+
   pyptlib = callPackage ../development/python-modules/pyptlib { };
 
   pypubsub = callPackage ../development/python-modules/pypubsub { };
@@ -9613,6 +9615,8 @@ in {
   raven = callPackage ../development/python-modules/raven { };
 
   rawkit = callPackage ../development/python-modules/rawkit { };
+
+  ray = callPackage ../development/python-modules/ray { redis = pkgs.redis; };
 
   rbtools = callPackage ../development/python-modules/rbtools { };
 
