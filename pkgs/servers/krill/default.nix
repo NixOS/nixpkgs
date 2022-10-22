@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
       Authorisations (ROAs) on your own servers or with a third party.
     '';
     homepage = "https://github.com/NLnetLabs/krill";
-    changelog = "https://github.com/NLnetLabs/krill/blob/v${version}/Changelog.md";
+    changelog = "https://github.com/NLnetLabs/krill/releases/tag/v${version}";
     license = licenses.mpl20;
     maintainers = with maintainers; [ steamwalker ];
   };
