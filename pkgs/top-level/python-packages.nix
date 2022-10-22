@@ -3482,6 +3482,8 @@ self: super: with self; {
 
   fe25519 = callPackage ../development/python-modules/fe25519 { };
 
+  feature-check = callPackage ../development/python-modules/feature-check { };
+
   feedgen = callPackage ../development/python-modules/feedgen { };
 
   feedgenerator = callPackage ../development/python-modules/feedgenerator {
