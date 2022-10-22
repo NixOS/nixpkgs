@@ -2154,7 +2154,7 @@ with pkgs;
   astc-encoder = callPackage ../tools/graphics/astc-encoder { };
 
   asymptote = callPackage ../tools/graphics/asymptote {
-    texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super texinfo; };
+    texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super texinfo media9 ocgx2; };
     gsl = gsl_1;
   };
 
