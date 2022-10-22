@@ -3,7 +3,6 @@
   "mpd(1)": "https://mpd.readthedocs.io/en/latest/mpd.1.html",
   "mpd.conf(5)": "https://mpd.readthedocs.io/en/latest/mpd.conf.5.html",
   "nix.conf(5)": "https://nixos.org/manual/nix/stable/command-ref/conf-file.html",
-  "mount(5)": "https://linux.die.net/man/8/mount",
 
   "journald.conf(5)": "https://www.freedesktop.org/software/systemd/man/journald.conf.html",
   "logind.conf(5)": "https://www.freedesktop.org/software/systemd/man/logind.conf.html",
