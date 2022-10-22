@@ -167,7 +167,7 @@ let
          else throw "No device specified for mount point ‘${fs.mountPoint}’.")
       + " " + escape (rootPrefix + fs.mountPoint)
       + " " + fs.fsType
-      + " " + builtins.concatStringsSep "," (fs.options ++ (extraOpts fs))
+      + " " + escape (builtins.concatStringsSep "," (fs.options ++ (extraOpts fs)))
       + " " + (optionalString (!excludeChecks)
         ("0 " + (if skipCheck fs then "0" else if fs.mountPoint == "/" then "1" else "2")))
       + "\n"
