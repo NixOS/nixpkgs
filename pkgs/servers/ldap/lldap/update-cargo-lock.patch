@@ -1,0 +1,31 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 5f894f5..ff6e0ca 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -2100,7 +2100,7 @@ checksum = "0717cef1bc8b636c6e1c1bbdefc09e6322da8a9321966e8928ef80d20f7f770f"
+
+ [[package]]
+ name = "lldap"
+-version = "0.4.0"
++version = "0.4.1"
+ dependencies = [
+  "actix",
+  "actix-files",
+@@ -2166,7 +2166,7 @@ dependencies = [
+
+ [[package]]
+ name = "lldap_app"
+-version = "0.4.0"
++version = "0.4.1"
+ dependencies = [
+  "anyhow",
+  "base64",
+@@ -2285,7 +2285,7 @@ checksum = "2dffe52ecf27772e601905b7522cb4ef790d2cc203488bbd0e2fe85fcb74566d"
+
+ [[package]]
+ name = "migration-tool"
+-version = "0.3.0-alpha.1"
++version = "0.4.1"
+ dependencies = [
+  "anyhow",
+  "base64",

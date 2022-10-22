@@ -23540,6 +23540,8 @@ with pkgs;
 
   livepeer = callPackage ../servers/livepeer { };
 
+  lldap = callPackage ../servers/ldap/lldap { };
+
   lwan = callPackage ../servers/http/lwan { };
 
   labelImg = callPackage ../applications/science/machine-learning/labelimg { };
