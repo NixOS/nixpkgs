@@ -4212,6 +4212,8 @@ with pkgs;
 
   hid-listen = callPackage ../tools/misc/hid-listen { };
 
+  hid-tools = callPackage ../tools/misc/hid-tools { };
+
   hidrd = callPackage ../tools/misc/hidrd { };
 
   hiksink = callPackage ../tools/misc/hiksink {
