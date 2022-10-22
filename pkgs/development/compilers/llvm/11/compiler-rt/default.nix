@@ -78,6 +78,8 @@ stdenv.mkDerivation {
   postPatch = lib.optionalString (!stdenv.isDarwin) ''
     substituteInPlace cmake/builtin-config-ix.cmake \
       --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
+    substituteInPlace cmake/config-ix.cmake \
+      --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace cmake/config-ix.cmake \
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
@@ -96,8 +98,16 @@ stdenv.mkDerivation {
   '' + lib.optionalString (useLLVM) ''
     ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbegin.o
     ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtend.o
+    ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbeginS.o
+    ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtendS.o
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
+  ''
+  # See https://reviews.llvm.org/D37278 for why android exception
+  + lib.optionalString (stdenv.hostPlatform.isx86_32 && !stdenv.hostPlatform.isAndroid) ''
+    for f in $out/lib/*/*builtins-i?86*; do
+      ln -s "$f" $(echo "$f" | sed -e 's/builtins-i.86/builtins-i386/')
+    done
   '';
 
   meta = llvm_meta // {
