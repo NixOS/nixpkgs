@@ -45,6 +45,9 @@ let
   fetchVsixFromVscodeMarketplace = mktplcExtRef:
     fetchurl (import ./mktplcExtRefToFetchArgs.nix mktplcExtRef);
 
+  fetchVsixFromOpenVsx = mktplcExtRef:
+    fetchurl (import ./openvsxExtRefToFetchArgs.nix mktplcExtRef);
+
   buildVscodeMarketplaceExtension = a@{
     name ? "",
     src ? null,
@@ -57,6 +60,21 @@ let
     src = if (vsix != null)
       then vsix
       else fetchVsixFromVscodeMarketplace mktplcRef;
+    vscodeExtUniqueId = "${mktplcRef.publisher}.${mktplcRef.name}";
+  });
+
+  buildOpenVsxExtension = a@{
+    name ? "",
+    src ? null,
+    vsix ? null,
+    mktplcRef,
+    ...
+  }: assert "" == name; assert null == src;
+  buildVscodeExtension ((removeAttrs a [ "mktplcRef" "vsix" ]) // {
+    name = "${mktplcRef.publisher}-${mktplcRef.name}-${mktplcRef.version}";
+    src = if (vsix != null)
+      then vsix
+      else fetchVsixFromOpenVsx mktplcRef;
     vscodeExtUniqueId = "${mktplcRef.publisher}.${mktplcRef.name}";
   });
 
@@ -73,15 +91,23 @@ let
       mktplcRef = builtins.intersectAttrs (lib.genAttrs mktplcRefAttrList (_: null)) ext;
     });
 
+  openvsxExtRefToExtDrv = ext:
+    buildOpenVsxExtension (removeAttrs ext mktplcRefAttrList // {
+      mktplcRef = builtins.intersectAttrs (lib.genAttrs mktplcRefAttrList (_: null)) ext;
+    });
+
   extensionFromVscodeMarketplace = mktplcExtRefToExtDrv;
   extensionsFromVscodeMarketplace = mktplcExtRefList:
     builtins.map extensionFromVscodeMarketplace mktplcExtRefList;
+
+  extensionFromOpenVsx = openvsxExtRefToExtDrv;
+  extensionsFromOpenVsx = mktplcExtRefList:
+    builtins.map extensionFromOpenVsx mktplcExtRefList;
 
   vscodeWithConfiguration = import ./vscodeWithConfiguration.nix {
    inherit lib extensionsFromVscodeMarketplace writeShellScriptBin;
    vscodeDefault = vscode;
   };
-
 
   vscodeExts2nix = import ./vscodeExts2nix.nix {
     inherit lib writeShellScriptBin;
@@ -95,7 +121,9 @@ let
 in
 {
   inherit fetchVsixFromVscodeMarketplace buildVscodeExtension
-          buildVscodeMarketplaceExtension extensionFromVscodeMarketplace
-          extensionsFromVscodeMarketplace
-          vscodeWithConfiguration vscodeExts2nix vscodeEnv;
+    buildVscodeMarketplaceExtension extensionFromVscodeMarketplace
+    extensionsFromVscodeMarketplace
+    vscodeWithConfiguration vscodeExts2nix vscodeEnv;
+  inherit fetchVsixFromOpenVsx buildOpenVsxExtension
+    openvsxExtRefToExtDrv extensionFromOpenVsx;
 }
