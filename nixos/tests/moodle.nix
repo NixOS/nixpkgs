@@ -6,7 +6,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     { ... }:
     { services.moodle.enable = true;
       services.moodle.virtualHost.hostName = "localhost";
-      services.moodle.virtualHost.adminAddr = "root@example.com";
       services.moodle.initialPassword = "correcthorsebatterystaple";
 
       # Ensure the virtual machine has enough memory to avoid errors like:

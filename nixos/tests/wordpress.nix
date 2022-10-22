@@ -12,7 +12,6 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
   nodes = {
     wp_httpd = { ... }: {
-      services.httpd.adminAddr = "webmaster@site.local";
       services.httpd.logPerVirtualHost = true;
 
       services.wordpress.sites = {

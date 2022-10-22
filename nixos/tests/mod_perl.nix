@@ -8,7 +8,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   nodes.machine = { config, lib, pkgs, ... }: {
     services.httpd = {
       enable = true;
-      adminAddr = "admin@localhost";
       virtualHosts."modperl" =
         let
           inc = pkgs.writeTextDir "ModPerlTest.pm" ''

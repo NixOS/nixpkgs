@@ -307,7 +307,6 @@ in
         example = literalExpression ''
           {
             hostName = "mediawiki.example.org";
-            adminAddr = "webmaster@example.org";
             forceSSL = true;
             enableACME = true;
           }

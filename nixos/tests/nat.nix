@@ -58,7 +58,6 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ?
           { virtualisation.vlans = [ 2 ];
             networking.firewall.enable = false;
             services.httpd.enable = true;
-            services.httpd.adminAddr = "foo@example.org";
             services.vsftpd.enable = true;
             services.vsftpd.anonymousUser = true;
           };

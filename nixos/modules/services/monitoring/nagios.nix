@@ -158,7 +158,6 @@ in
         type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
         example = literalExpression ''
           { hostName = "example.org";
-            adminAddr = "webmaster@example.org";
             enableSSL = true;
             sslServerCert = "/var/lib/acme/example.org/full.pem";
             sslServerKey = "/var/lib/acme/example.org/key.pem";

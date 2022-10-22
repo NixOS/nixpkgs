@@ -104,7 +104,6 @@ in
       example = literalExpression ''
         {
           hostName = "survey.example.org";
-          adminAddr = "webmaster@example.org";
           forceSSL = true;
           enableACME = true;
         }
@@ -209,7 +208,6 @@ in
 
     services.httpd = {
       enable = true;
-      adminAddr = mkDefault cfg.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
       virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
         documentRoot = mkForce "${pkg}/share/limesurvey";

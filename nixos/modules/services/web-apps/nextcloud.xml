@@ -198,7 +198,6 @@
   };
   services.httpd = {
     <link linkend="opt-services.httpd.enable">enable</link> = true;
-    <link linkend="opt-services.httpd.adminAddr">adminAddr</link> = "webmaster@localhost";
     <link linkend="opt-services.httpd.extraModules">extraModules</link> = [ "proxy_fcgi" ];
     virtualHosts."localhost" = {
       <link linkend="opt-services.httpd.virtualHosts._name_.documentRoot">documentRoot</link> = config.services.nextcloud.package;

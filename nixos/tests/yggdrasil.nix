@@ -38,7 +38,6 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
           firewall.allowedTCPPorts = [ 80 12345 ];
         };
         services.httpd.enable = true;
-        services.httpd.adminAddr = "foo@example.org";
 
         services.yggdrasil = {
           enable = true;
@@ -98,7 +97,6 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
               }];
             };
             services.httpd.enable = true;
-            services.httpd.adminAddr = "foo@example.org";
             networking.firewall.allowedTCPPorts = [ 80 ];
           };
         };

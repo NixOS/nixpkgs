@@ -25,7 +25,6 @@
 { config, pkgs, ... }:
 
 { services.httpd.enable = true;
-  services.httpd.adminAddr = &quot;alice@example.org&quot;;
   services.httpd.virtualHosts.localhost.documentRoot = &quot;/webroot&quot;;
 }
 </programlisting>
@@ -50,7 +49,6 @@
 { services = {
     httpd = {
       enable = true;
-      adminAddr = &quot;alice@example.org&quot;;
       virtualHosts = {
         localhost = {
           documentRoot = &quot;/webroot&quot;;

@@ -52,12 +52,7 @@ in
       # We need Apache on the tracker to serve the torrents.
       services.httpd = {
         enable = true;
-        virtualHosts = {
-          "torrentserver.org" = {
-            adminAddr = "foo@example.org";
-            documentRoot = "/tmp";
-          };
-        };
+        virtualHosts."torrentserver.org".documentRoot = "/tmp";
       };
       services.opentracker.enable = true;
     };

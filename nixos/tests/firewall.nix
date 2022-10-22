@@ -12,7 +12,6 @@ import ./make-test-python.nix ( { pkgs, ... } : {
         { networking.firewall.enable = true;
           networking.firewall.logRefusedPackets = true;
           services.httpd.enable = true;
-          services.httpd.adminAddr = "foo@example.org";
         };
 
       # Dummy configuration to check whether firewall.service will be honored
@@ -28,7 +27,6 @@ import ./make-test-python.nix ( { pkgs, ... } : {
       attacker =
         { ... }:
         { services.httpd.enable = true;
-          services.httpd.adminAddr = "foo@example.org";
           networking.firewall.enable = false;
         };
     };

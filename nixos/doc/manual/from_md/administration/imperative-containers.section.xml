@@ -101,7 +101,6 @@ Linux foo 3.4.82 #1-NixOS SMP Thu Mar 20 14:44:05 UTC 2014 x86_64 GNU/Linux
   <programlisting>
 # nixos-container update foo --config '
   services.httpd.enable = true;
-  services.httpd.adminAddr = &quot;foo@example.org&quot;;
   networking.firewall.allowedTCPPorts = [ 80 ];
 '
 
