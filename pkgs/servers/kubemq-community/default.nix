@@ -2,12 +2,12 @@
 
 buildGoModule rec {
   pname = "kubemq-community";
-  version = "2.3.2";
+  version = "2.3.3";
   src = fetchFromGitHub {
     owner = "kubemq-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-uomC3bO+u46LvLapXXzx57nY5DdwBk7sWXuBX1Ntrz4=";
+    sha256 = "sha256-rZlWVbAmmZ1w6YSb481GHl64aUvdehPVAqYpwk48RGA=";
   };
 
   CGO_ENABLED=0;
