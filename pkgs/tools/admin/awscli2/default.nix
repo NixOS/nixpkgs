@@ -21,14 +21,19 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.7.33"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.8.5"; # N.B: if you change this, check if overrides are still up-to-date
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "sha256-9X056Xc9DPp8BiuAeCvQrswcj7mnZKrkMOad5aP1TI8=";
+    sha256 = "sha256-il5vUTHRTb1Y2ofu5z8W/8S39KRmRgKXVZs1f1T8YAg=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     awscrt
@@ -57,14 +62,12 @@ with py.pkgs; buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.cfg \
+    substituteInPlace pyproject.toml \
       --replace "colorama>=0.2.5,<0.4.4" "colorama" \
-      --replace "cryptography>=3.3.2,<37.0.0" "cryptography" \
+      --replace "distro>=1.5.0,<1.6.0" "distro" \
       --replace "docutils>=0.10,<0.16" "docutils" \
-      --replace "ruamel.yaml>=0.15.0,<=0.17.21" "ruamel.yaml" \
-      --replace "wcwidth<0.2.0" "wcwidth" \
       --replace "prompt-toolkit>=3.0.24,<3.0.29" "prompt-toolkit~=3.0" \
-      --replace "distro>=1.5.0,<1.6.0" "distro"
+      --replace "wcwidth<0.2.0" "wcwidth"
   '';
 
   checkPhase = ''
