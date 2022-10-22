@@ -63,7 +63,9 @@ let
         if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then ''
           echo "Ignoring validation for cross-compilation"
         ''
-        else ''
+        else if !cfg.checkConfig then ''
+          echo "Config checking disabled"
+        '' else ''
           echo "Validating generated nix.conf"
           ln -s $out ./nix.conf
           set -e
@@ -72,7 +74,7 @@ let
             ${cfg.package}/bin/nix show-config ${optionalString (isNixAtLeast "2.3pre") "--no-net"} \
               ${optionalString (isNixAtLeast "2.4pre") "--option experimental-features nix-command"} \
             |& sed -e 's/^warning:/error:/' \
-            | (! grep '${if cfg.checkConfig then "^error:" else "^error: unknown setting"}')
+            | (! grep '^error:')
           set -o pipefail
         '';
     };
