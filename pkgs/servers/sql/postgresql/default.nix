@@ -21,7 +21,6 @@ let
     }:
   let
     atLeast = lib.versionAtLeast version;
-    icuEnabled = atLeast "10";
     lz4Enabled = atLeast "14";
 
   in stdenv.mkDerivation rec {
@@ -39,14 +38,13 @@ let
     setOutputFlags = false; # $out retains configureFlags :-/
 
     buildInputs =
-      [ zlib readline openssl libxml2 ]
-      ++ lib.optionals icuEnabled [ icu ]
+      [ zlib readline openssl libxml2 icu ]
       ++ lib.optionals lz4Enabled [ lz4 ]
       ++ lib.optionals enableSystemd [ systemd ]
       ++ lib.optionals gssSupport [ libkrb5 ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
-    nativeBuildInputs = [ makeWrapper ] ++ lib.optionals icuEnabled [ pkg-config ];
+    nativeBuildInputs = [ makeWrapper pkg-config ];
 
     enableParallelBuilding = !stdenv.isDarwin;
 
@@ -62,14 +60,14 @@ let
     configureFlags = [
       "--with-openssl"
       "--with-libxml"
+      "--with-icu"
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
       "--enable-debug"
       (lib.optionalString enableSystemd "--with-systemd")
       (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
-    ] ++ lib.optionals icuEnabled [ "--with-icu" ]
-      ++ lib.optionals lz4Enabled [ "--with-lz4" ]
+    ] ++ lib.optionals lz4Enabled [ "--with-lz4" ]
       ++ lib.optionals gssSupport [ "--with-gssapi" ]
       ++ lib.optionals stdenv.hostPlatform.isRiscV [ "--disable-spinlocks" ];
 
@@ -199,16 +197,6 @@ let
   };
 
 in self: {
-
-  postgresql_10 = self.callPackage generic {
-    version = "10.22";
-    psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    hash = "sha256-lVl3VVxp3xpk9EuB1KGYfrdKu9GHBXn1rZ2UYTPdjk0=";
-    this = self.postgresql_10;
-    thisAttr = "postgresql_10";
-    inherit self;
-    icu = self.icu67;
-  };
 
   postgresql_11 = self.callPackage generic {
     version = "11.17";

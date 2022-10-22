@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   installTargets = [
     "install"
     "install-lib-headers"
-  ] ++ lib.optional (!enableStatic) [
+  ] ++ lib.optionals (!enableStatic) [
     "install-lib-so-link"
   ];
 

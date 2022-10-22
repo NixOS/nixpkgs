@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
     "--disable-bundled-md5"
     "--disable-dynamic-load"
     "--enable-shared"
-  ] ++ lib.optional (libmaxminddb != null) [
+  ] ++ lib.optionals (libmaxminddb != null) [
     "--enable-mmdb"
-  ] ++ lib.optional (geolite-legacy != null) [
+  ] ++ lib.optionals (geolite-legacy != null) [
     "--with-geoip-db=${geolite-legacy}/share/GeoIP"
-  ] ++ lib.optional (ip2location-c != null) [
+  ] ++ lib.optionals (ip2location-c != null) [
     "--enable-ip2location"
   ];
 

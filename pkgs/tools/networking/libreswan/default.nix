@@ -11,6 +11,7 @@
 , pam
 , libevent
 , libcap_ng
+, libxcrypt
 , curl
 , nspr
 , bash
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     systemd coreutils
     gnused gawk gmp unbound pam libevent
-    libcap_ng curl nspr nss ldns
+    libcap_ng libxcrypt curl nspr nss ldns
     # needed to patch shebangs
     python3 bash
   ] ++ lib.optional stdenv.isLinux libselinux;

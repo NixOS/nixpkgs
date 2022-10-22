@@ -1,5 +1,3 @@
-{ version, sha256 }:
-
 { lib, stdenv, fetchurl, fetchpatch, writeText, sbclBootstrap, zstd
 , sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
 , threadSupport ? (stdenv.hostPlatform.isx86 || "aarch64-linux" == stdenv.hostPlatform.system || "aarch64-darwin" == stdenv.hostPlatform.system)
@@ -11,7 +9,53 @@
 , purgeNixReferences ? false
 , coreCompression ? lib.versionAtLeast version "2.2.6"
 , texinfo
+, version
 }:
+
+let
+  versionMap = {
+    "2.0.8" = {
+      sha256 = "1xwrwvps7drrpyw3wg5h3g2qajmkwqs9gz0fdw1ns9adp7vld390";
+    };
+
+    "2.0.9" = {
+      sha256 = "17wvrcwgp45z9b6arik31fjnz7908qhr5ackxq1y0gqi1hsh1xy4";
+    };
+
+    "2.1.1" = {
+      sha256 = "15wa66sachhzgvg5n35vihmkpasg100lh561c1d1bdrql0p8kbd9";
+    };
+
+    "2.1.2" = {
+      sha256 = "sha256:02scrqyp2izsd8xjm2k5j5lhn4pdhd202jlcb54ysmcqjd80awdp";
+    };
+
+    "2.1.9" = {
+      sha256 = "189gjqzdz10xh3ybiy4ch1r98bsmkcb4hpnrmggd4y2g5kqnyx4y";
+    };
+
+    "2.1.10" = {
+      sha256 = "0f5ihj486m7ghh3nc0jlnqa656sbqcmhdv32syz2rjx5b47ky67b";
+    };
+
+    "2.1.11" = {
+      sha256 = "1zgypmn19c58pv7j33ga7m1l7lzghj70w3xbybpgmggxwwflihdz";
+    };
+
+    "2.2.4" = {
+      sha256 = "sha256-/N0lHLxl9/gI7QrXckaEjRvhZqppoX90mWABhLelcgI=";
+    };
+
+    "2.2.6" = {
+      sha256 = "sha256-PiMEjI+oJvuRMiC+sqw2l9vFwM3y6J/tjbOe0XEjBKA=";
+    };
+
+    "2.2.9" = {
+      sha256 = "sha256-fr69bSAj//cHewNy+hFx+IBSm97GEE8gmDKXwv63wXI=";
+    };
+  };
+
+in with versionMap.${version};
 
 stdenv.mkDerivation rec {
   pname = "sbcl";
@@ -32,8 +76,8 @@ stdenv.mkDerivation rec {
       url = "https://github.com/sbcl/sbcl/commit/8fa3f76fba2e8572e86ac6fc5754e6b2954fc774.patch";
       sha256 = "1ic531pjnws1k3xd03a5ixbq8cn10dlh2nfln59k0vbm0253g3lv";
     })
-  ++ lib.optionals (lib.versionAtLeast version "2.1.10") [
-      # Fix pending upstream inclusion on -fno-common toolchains:
+  ++ lib.optionals (lib.versionAtLeast version "2.1.10" && lib.versionOlder version "2.2.9") [
+      # Fix included in SBCL trunk since 2.2.9:
       #   https://bugs.launchpad.net/sbcl/+bug/1980570
       (fetchpatch {
         name = "darwin-fno-common.patch";
@@ -109,7 +153,7 @@ stdenv.mkDerivation rec {
     optional (!threadSupport) "sb-thread" ++
     optionals disableImmobileSpace [ "immobile-space" "immobile-code" "compact-instance-header" ];
 
-  NIX_CFLAGS_COMPILE = lib.optional (lib.versionOlder version "2.1.10") [
+  NIX_CFLAGS_COMPILE = lib.optionals (lib.versionOlder version "2.1.10") [
     # Workaround build failure on -fno-common toolchains like upstream
     # clang-13. Without the change build fails as:
     #   duplicate symbol '_static_code_space_free_pointer' in: alloc.o traceroot.o

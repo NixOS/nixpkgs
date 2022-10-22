@@ -1,19 +1,16 @@
 { lib
-, buildPythonApplication
-, isPy3k
 , fetchFromGitHub
-, notmuch
-, pygobject3
 , gobject-introspection
 , libnotify
 , wrapGAppsHook
 , gtk3
+, python3
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "notifymuch";
   version = "0.1";
-  disabled = !isPy3k;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kspi";
@@ -24,11 +21,12 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    notmuch
-    pygobject3
     libnotify
     gtk3
-  ];
+  ] ++ (with python3.pkgs; [
+    notmuch
+    pygobject3
+  ]);
 
   nativeBuildInputs = [
     gobject-introspection

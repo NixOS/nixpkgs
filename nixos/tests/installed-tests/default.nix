@@ -28,7 +28,7 @@ let
     , withX11 ? false
 
       # Extra flags to pass to gnome-desktop-testing-runner.
-    , testRunnerFlags ? ""
+    , testRunnerFlags ? []
 
       # Extra attributes to pass to makeTest.
       # They will be recursively merged into the attrset created by this function.
@@ -67,7 +67,7 @@ let
             '' +
             ''
               machine.succeed(
-                  "gnome-desktop-testing-runner ${testRunnerFlags} -d '${tested.installedTests}/share'"
+                  "gnome-desktop-testing-runner ${escapeShellArgs testRunnerFlags} -d '${tested.installedTests}/share'"
               )
             '';
         }

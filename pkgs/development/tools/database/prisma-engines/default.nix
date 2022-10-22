@@ -45,7 +45,13 @@ rustPlatform.buildRustPackage rec {
     export SQLITE_MAX_EXPR_DEPTH=10000
   '';
 
-  cargoBuildFlags = "-p query-engine -p query-engine-node-api -p migration-engine-cli -p introspection-core -p prisma-fmt";
+  cargoBuildFlags = [
+    "-p" "query-engine"
+    "-p" "query-engine-node-api"
+    "-p" "migration-engine-cli"
+    "-p" "introspection-core"
+    "-p" "prisma-fmt"
+  ];
 
   postInstall = ''
     mv $out/lib/libquery_engine${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libquery_engine.node

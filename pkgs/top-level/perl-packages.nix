@@ -849,7 +849,7 @@ let
     };
     buildInputs = [ PodParser ];
     propagatedBuildInputs = [ AppPackager FileLoadLines IOString ImageInfo PDFAPI2 StringInterpolateNamed TextLayout ]
-      ++ lib.optional (!stdenv.isDarwin) [ Wx ];
+      ++ lib.optionals (!stdenv.isDarwin) [ Wx ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
     postInstall = lib.optionalString stdenv.isDarwin ''
       shortenPerlShebang $out/bin/chordpro
@@ -5290,7 +5290,7 @@ let
       hash = "sha256-+OzKRch+uRMlmSsT8FlPgI5vG8TDuafxQbmoODhNJSw=";
     };
 
-    makeMakerFlags = "--libpath=${lib.getLib pkgs.openssl}/lib --incpath=${pkgs.openssl.dev}/include";
+    makeMakerFlags = [ "--libpath=${lib.getLib pkgs.openssl}/lib" "--incpath=${pkgs.openssl.dev}/include" ];
     buildInputs = [ PathClass ];
     propagatedBuildInputs = [ BytesRandomSecure LWPProtocolHttps ];
     meta = {
@@ -6699,7 +6699,7 @@ let
       })
     ];
 
-    makeMakerFlags = "SQLITE_INC=${pkgs.sqlite.dev}/include SQLITE_LIB=${pkgs.sqlite.out}/lib";
+    makeMakerFlags = [ "SQLITE_INC=${pkgs.sqlite.dev}/include" "SQLITE_LIB=${pkgs.sqlite.out}/lib" ];
 
     postInstall = ''
       # Get rid of a pointless copy of the SQLite sources.
@@ -6788,7 +6788,7 @@ let
     buildInputs = [ pkgs.postgresql ];
     propagatedBuildInputs = [ DBI ];
 
-    makeMakerFlags = "POSTGRES_HOME=${pkgs.postgresql}";
+    makeMakerFlags = [ "POSTGRES_HOME=${pkgs.postgresql}" ];
 
     # tests freeze in a sandbox
     doCheck = false;
@@ -9312,7 +9312,7 @@ let
       hash = "sha256-Uuax3Hyy2HpM30OboUXguejPKMwmpIo8+Zd8g0Y5Z+4=";
     };
     buildInputs = [ pkgs.file ConfigAutoConf TestFatal ];
-    makeMakerFlags = "--lib=${pkgs.file}/lib";
+    makeMakerFlags = [ "--lib=${pkgs.file}/lib" ];
     preCheck = ''
       substituteInPlace t/oo-api.t \
         --replace "/usr/share/file/magic.mgc" "${pkgs.file}/share/misc/magic.mgc"
@@ -9960,7 +9960,7 @@ let
     # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
     hardeningDisable = [ "format" ];
 
-    makeMakerFlags = "--lib_png_path=${pkgs.libpng.out} --lib_jpeg_path=${pkgs.libjpeg.out} --lib_zlib_path=${pkgs.zlib.out} --lib_ft_path=${pkgs.freetype.out} --lib_fontconfig_path=${pkgs.fontconfig.lib} --lib_xpm_path=${pkgs.xorg.libXpm.out}";
+    makeMakerFlags = [ "--lib_png_path=${pkgs.libpng.out}" "--lib_jpeg_path=${pkgs.libjpeg.out}" "--lib_zlib_path=${pkgs.zlib.out}" "--lib_ft_path=${pkgs.freetype.out}" "--lib_fontconfig_path=${pkgs.fontconfig.lib}" "--lib_xpm_path=${pkgs.xorg.libXpm.out}" ];
 
     meta = {
       description = "Perl interface to the gd2 graphics library";
@@ -10019,7 +10019,7 @@ let
       url = "mirror://cpan/authors/id/M/MA/MAXMIND/Geo-IP-1.51.tar.gz";
       hash = "sha256-FjAgMV1cVEGDaseeCKd7Qo8nf9CQvqT6gNpwd7JDaro=";
     };
-    makeMakerFlags = "LIBS=-L${pkgs.geoip}/lib INC=-I${pkgs.geoip}/include";
+    makeMakerFlags = [ "LIBS=-L${pkgs.geoip}/lib" "INC=-I${pkgs.geoip}/include" ];
     doCheck = false; # seems to access the network
     meta = {
       description = "Look up location and network information by IP Address";
@@ -10512,7 +10512,7 @@ let
       hash = "sha256-fY8se2F2L7TsctLsKBKQ8vh/nH0pgnPaRSVDKmXncNY=";
     };
     propagatedBuildInputs = [ pkgs.krb5Full.dev ];
-    makeMakerFlags = "--gssapiimpl ${pkgs.krb5Full.dev}";
+    makeMakerFlags = [ "--gssapiimpl" "${pkgs.krb5Full.dev}" ];
     meta = {
       description = "Perl extension providing access to the GSSAPIv2 library";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -11785,7 +11785,7 @@ let
       hash = "sha256-dNRNcBwfFPxLmE+toelVcmtQTC2LBtJl56hh+llDy0g=";
     };
     buildInputs = [ pkgs.freetype pkgs.fontconfig pkgs.libjpeg pkgs.libpng ];
-    makeMakerFlags = "--incpath ${pkgs.libjpeg.dev}/include --libpath ${pkgs.libjpeg.out}/lib --incpath ${pkgs.libpng.dev}/include --libpath ${pkgs.libpng.out}/lib";
+    makeMakerFlags = [ "--incpath ${pkgs.libjpeg.dev}/include" "--libpath ${pkgs.libjpeg.out}/lib" "--incpath" "${pkgs.libpng.dev}/include" "--libpath" "${pkgs.libpng.out}/lib" ];
     meta = {
       description = "Perl extension for Generating 24 bit Images";
       homepage = "http://imager.perl.org";
@@ -11846,7 +11846,7 @@ let
     };
     buildInputs = [ pkgs.libpng pkgs.libjpeg TestNoWarnings ];
     propagatedBuildInputs = [ pkgs.zlib ];
-    makeMakerFlags = "--with-jpeg-includes=${pkgs.libjpeg.dev}/include --with-jpeg-libs=${pkgs.libjpeg.out}/lib --with-png-includes=${pkgs.libpng.dev}/include --with-png-libs=${pkgs.libpng.out}/lib";
+    makeMakerFlags = [ "--with-jpeg-includes=${pkgs.libjpeg.dev}/include" "--with-jpeg-libs=${pkgs.libjpeg.out}/lib" "--with-png-includes=${pkgs.libpng.dev}/include" "--with-png-libs=${pkgs.libpng.out}/lib" ];
     meta = {
       description = "Fast, high-quality fixed-point image resizing";
       license = with lib.licenses; [ gpl2Plus ];
@@ -12576,7 +12576,7 @@ let
     propagatedBuildInputs = [ Inline ];
 
     # TODO: upgrade https://github.com/NixOS/nixpkgs/pull/89731
-    makeMakerFlags = "J2SDK=${pkgs.jdk8}";
+    makeMakerFlags = [ "J2SDK=${pkgs.jdk8}" ];
 
     # FIXME: Apparently tests want to access the network.
     doCheck = false;
@@ -12833,7 +12833,7 @@ let
     outputs = [ "out" "tex" ];
     propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageMagick ImageSize JSONXS LWP ParseRecDescent PodParser TextUnidecode XMLLibXSLT ];
     nativeBuildInputs = [ pkgs.makeWrapper ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
-    makeMakerFlags = "TEXMF=\${tex} NOMKTEXLSR";
+    makeMakerFlags = [ "TEXMF=\${tex}" "NOMKTEXLSR" ];
     # shebangs need to be patched before executables are copied to $out
     preBuild = ''
       patchShebangs bin/
@@ -12911,7 +12911,13 @@ let
     outputs = [ "out" ];
     buildInputs = [ pkgs.apacheHttpd pkgs.apr pkgs.aprutil ApacheTest ExtUtilsXSBuilder ];
     propagatedBuildInputs = [ (pkgs.apacheHttpdPackages.mod_perl.override { inherit perl; }) ];
-    makeMakerFlags = "--with-apache2-src=${pkgs.apacheHttpd.dev} --with-apache2-apxs=${pkgs.apacheHttpd.dev}/bin/apxs --with-apache2-httpd=${pkgs.apacheHttpd.out}/bin/httpd --with-apr-config=${pkgs.apr.dev}/bin/apr-1-config --with-apu-config=${pkgs.aprutil.dev}/bin/apu-1-config";
+    makeMakerFlags = [
+      "--with-apache2-src=${pkgs.apacheHttpd.dev}"
+      "--with-apache2-apxs=${pkgs.apacheHttpd.dev}/bin/apxs"
+      "--with-apache2-httpd=${pkgs.apacheHttpd.out}/bin/httpd"
+      "--with-apr-config=${pkgs.apr.dev}/bin/apr-1-config"
+      "--with-apu-config=${pkgs.aprutil.dev}/bin/apu-1-config"
+    ];
     preConfigure = ''
       # override broken prereq check
       substituteInPlace configure --replace "prereq_check=\"\$PERL \$PERL_OPTS build/version_check.pl\"" "prereq_check=\"echo\""
@@ -14575,7 +14581,7 @@ let
     #   `overflow'; Pari.o:(.bss+0x80): first defined here
     NIX_CFLAGS_COMPILE = "-fcommon";
     preConfigure = "cp ${pari_tgz} pari-${pariversion}.tgz";
-    makeMakerFlags = "pari_tgz=pari-${pariversion}.tgz";
+    makeMakerFlags = [ "pari_tgz=pari-${pariversion}.tgz" ];
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IL/ILYAZ/modules/Math-Pari-2.030518.zip";
       hash = "sha256-3DiVWpaQvmuvqN4lJiEjd8Psn+jaXsAiY6nK+UtYu5E=";
@@ -15741,7 +15747,7 @@ let
       hash = "sha256-9bghtZsP3JZw5G7Q/PMtiRHyUSYYmotowWUvkiHu4mk=";
     };
 
-    makeMakerFlags = "MP_AP_DESTDIR=$out";
+    makeMakerFlags = [ "MP_AP_DESTDIR=$out" ];
     buildInputs = [ pkgs.apacheHttpd ];
     doCheck = false; # would try to start Apache HTTP server
     passthru.tests = nixosTests.mod_perl;
@@ -16439,7 +16445,7 @@ let
     buildInputs = [ ModuleBuildTiny TestSharedFork pkgs.postgresql ];
     propagatedBuildInputs = [ DBDPg DBI FileWhich FunctionParameters Moo TieHashMethod TryTiny TypeTiny ];
 
-    makeMakerFlags = "POSTGRES_HOME=${pkgs.postgresql}";
+    makeMakerFlags = [ "POSTGRES_HOME=${pkgs.postgresql}" ];
 
     meta = {
       description = "PostgreSQL runner for tests";
@@ -17580,7 +17586,7 @@ let
       hash = "sha256-hS1u6H6PDQFCIwJlgcu1aSS6jN3TzrKcYZHbthItQ8U=";
     };
     propagatedBuildInputs = [ DigestHMAC ];
-    makeMakerFlags = "--noonline-tests";
+    makeMakerFlags = [ "--noonline-tests" ];
     meta = {
       description = "Perl Interface to the Domain Name System";
       license = with lib.licenses; [ mit ];
@@ -22736,8 +22742,8 @@ let
       pkgs.tk
     ] ++ lib.optionals stdenv.isDarwin [
       darwin.apple_sdk.frameworks.CoreServices ];
-    makeMakerFlags = lib.optionalString stdenv.isLinux
-      "--tclsh=${pkgs.tcl}/bin/tclsh --nousestubs";
+    makeMakerFlags = lib.optionals stdenv.isLinux
+      [ "--tclsh=${pkgs.tcl}/bin/tclsh" "--nousestubs" ];
     meta = {
       description = "Tcl extension module for Perl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -26158,7 +26164,7 @@ let
       url = "mirror://cpan/authors/id/S/SR/SREZIC/Tk-804.035.tar.gz";
       hash = "sha256-TSuAKRum3jTY7IhqCFptvSt5C5JgNaCH6ZAlYUxf/dQ=";
     };
-    makeMakerFlags = "X11INC=${pkgs.xorg.libX11.dev}/include X11LIB=${pkgs.xorg.libX11.out}/lib";
+    makeMakerFlags = [ "X11INC=${pkgs.xorg.libX11.dev}/include" "X11LIB=${pkgs.xorg.libX11.out}/lib" ];
     buildInputs = [ pkgs.xorg.libX11 pkgs.libpng ];
     doCheck = false;            # Expects working X11.
     meta = {
@@ -26174,7 +26180,7 @@ let
       url = "mirror://cpan/authors/id/A/AS/ASB/Tk-ToolBar-0.12.tar.gz";
       hash = "sha256-Rj4oTsRxN+fEJclpGwKo3sXOJytY6h9jWa6AQaI53Q8=";
     };
-    makeMakerFlags = "X11INC=${pkgs.xorg.libX11.dev}/include X11LIB=${pkgs.xorg.libX11.out}/lib";
+    makeMakerFlags = [ "X11INC=${pkgs.xorg.libX11.dev}/include" "X11LIB=${pkgs.xorg.libX11.out}/lib" ];
     buildInputs = [ Tk ];
     doCheck = false;            # Expects working X11.
     meta = {
@@ -27281,7 +27287,7 @@ let
     '' + lib.optionalString stdenv.isCygwin ''
       sed -i"" -e "s@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. \$Config{_exe};@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. (\$^O eq 'cygwin' ? \"\" : \$Config{_exe});@" inc/Devel/CheckLib.pm
     '';
-    makeMakerFlags = "EXPATLIBPATH=${pkgs.expat.out}/lib EXPATINCPATH=${pkgs.expat.dev}/include";
+    makeMakerFlags = [ "EXPATLIBPATH=${pkgs.expat.out}/lib" "EXPATINCPATH=${pkgs.expat.dev}/include" ];
     propagatedBuildInputs = [ LWP ];
     meta = {
       description = "A perl module for parsing XML documents";
@@ -27808,7 +27814,7 @@ let
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_1.dev}/include -I${pkgs.libidn2}.dev}/include";
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl_1_1}/lib -L${lib.getLib pkgs.libidn2}/lib -lcrypto -lidn2";
 
-    makeMakerFlags = "--prefix-openssl=${pkgs.openssl_1_1.dev}";
+    makeMakerFlags = [ "--prefix-openssl=${pkgs.openssl_1_1.dev}" ];
 
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ DevelChecklib ModuleInstall ModuleInstallXSUtil TestFatal pkgs.ldns pkgs.libidn2 pkgs.openssl_1_1 ];

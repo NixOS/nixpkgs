@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libpng
   ] ++ lib.optionals stdenv.isLinux [
     systemd
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     Carbon
   ];
 

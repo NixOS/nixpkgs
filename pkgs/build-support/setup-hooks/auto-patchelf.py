@@ -5,6 +5,7 @@ import os
 import pprint
 import subprocess
 import sys
+from fnmatch import fnmatch
 from collections import defaultdict
 from contextlib import contextmanager
 from dataclasses import dataclass
@@ -265,8 +266,10 @@ def auto_patchelf(
     print(f"auto-patchelf: {len(missing)} dependencies could not be satisfied")
     failure = False
     for dep in missing:
-        if dep.name.name in ignore_missing or "*" in ignore_missing:
-            print(f"warn: auto-patchelf ignoring missing {dep.name} wanted by {dep.file}")
+        for pattern in ignore_missing:
+            if fnmatch(dep.name.name, pattern):
+                print(f"warn: auto-patchelf ignoring missing {dep.name} wanted by {dep.file}")
+                break
         else:
             print(f"error: auto-patchelf could not satisfy dependency {dep.name} wanted by {dep.file}")
             failure = True

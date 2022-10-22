@@ -1,34 +1,26 @@
 { stdenv
 , lib
-, buildPythonApplication
-, click
-, fetchPypi
+, python3
 , git
-, httpretty
-, qrcode
-, pygments
-, pyopenssl
-, pytestCheckHook
-, requests
-, rollbar
-, stripe
-, pythonOlder
-, sure
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "gigalixir";
   version = "1.3.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
     hash = "sha256-kNtybgv8j7t1tl6R5ZuC4vj5fnEcEenuNt0twA1kAh0=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'," "" \
+      --replace "cryptography==" "cryptography>="
+  '';
+
+  propagatedBuildInputs = with python3.pkgs; [
     click
     pygments
     pyopenssl
@@ -40,16 +32,11 @@ buildPythonApplication rec {
 
   checkInputs = [
     git
+  ] ++ (with python3.pkgs; [
     httpretty
     pytestCheckHook
     sure
-  ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest-runner'," "" \
-      --replace "cryptography==" "cryptography>="
-  '';
+  ]);
 
   disabledTests = [
     # Test requires network access

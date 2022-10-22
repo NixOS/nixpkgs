@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, withoutInitTools ? false }:
+{ lib, stdenv, fetchurl, libxcrypt, withoutInitTools ? false }:
 
 stdenv.mkDerivation rec {
   pname = if withoutInitTools then "sysvtools" else "sysvinit";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     # Patch some minimal hard references, so halt/shutdown work
     sed -i -e "s,/sbin/,$out/sbin/," src/halt.c src/init.c src/paths.h
   '';
+
+  buildInputs = [ libxcrypt ];
 
   makeFlags = [ "SULOGINLIBS=-lcrypt" "ROOT=$(out)" "MANDIR=/share/man" ];
 

@@ -50,7 +50,7 @@ let
 
       cmakeFlags = with lib; [
         "-DENABLE_MAN=ON"
-        "-DENABLE_DOC=OFF"         # TODO(@ncfavier): Documentation fails to build, was deactivated to push through security update
+        "-DENABLE_DOC=ON"
         "-DENABLE_TESTS=${if enableTests then "ON" else "OFF"}"
       ]
         ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"]

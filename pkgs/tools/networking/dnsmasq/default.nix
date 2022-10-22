@@ -2,6 +2,7 @@
 , libidn, libnetfilter_conntrack, buildPackages
 , dbusSupport ? stdenv.isLinux
 , dbus
+, nixosTests
 }:
 
 with lib;
@@ -17,11 +18,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "dnsmasq";
-  version = "2.86";
+  version = "2.87";
 
   src = fetchurl {
     url = "https://www.thekelleys.org.uk/dnsmasq/${pname}-${version}.tar.xz";
-    sha256 = "sha256-KNUs/J4gBKxPhSdPUrMuFke028l2G4Ln3h5BxJkH6wg=";
+    sha256 = "sha256-AijANkp/I1b9fn8VSZN8vzCZp407LrG6W7DDHiuJ3no=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -76,6 +77,15 @@ stdenv.mkDerivation rec {
   buildInputs = [ nettle libidn ]
     ++ optionals dbusSupport [ dbus ]
     ++ optionals stdenv.isLinux [ libnetfilter_conntrack ];
+
+  passthru.tests = {
+    prometheus-exporter = nixosTests.prometheus-exporters.dnsmasq;
+
+    # these tests use dnsmasq incidentally
+    inherit (nixosTests) dnscrypt-proxy2;
+    kubernetes-dns-single = nixosTests.kubernetes.dns-single-node;
+    kubernetes-dns-multi = nixosTests.kubernetes.dns-multi-node;
+  };
 
   meta = {
     description = "An integrated DNS, DHCP and TFTP server for small networks";

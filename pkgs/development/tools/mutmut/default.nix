@@ -1,16 +1,9 @@
 { lib
 , fetchFromGitHub
-, buildPythonApplication
-, click
-, glob2
-, parso
-, pony
-, junit-xml
-, pythonOlder
-, testers
+, python3
 }:
 
-let self = buildPythonApplication rec {
+let self = with python3.pkgs; buildPythonApplication rec {
   pname = "mutmut";
   version = "2.2.0";
 

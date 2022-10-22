@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     pcre
     libiconv
     libintl
-  ] ++ lib.optional withData [
+  ] ++ lib.optionals withData [
     poppler_data
   ];
 
