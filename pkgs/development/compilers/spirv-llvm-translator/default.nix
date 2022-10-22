@@ -12,7 +12,15 @@ let
   llvmMajor = lib.versions.major llvm.version;
 
   branch =
-    if llvmMajor == "11" then {
+    if llvmMajor == "15" then rec {
+      version = "15.0.0";
+      rev = "v${version}";
+      hash = "sha256-111yL6Wh8hykoGz1QmT1F7lfGDEmG4U3iqmqrJxizOg=";
+    } else if llvmMajor == "14" then rec{
+      version = "14.0.0";
+      rev = "v${version}";
+      hash = "sha256-BhNAApgZ/w/92XjpoDY6ZEIhSTwgJ4D3/EfNvPmNM2o=";
+    } else if llvmMajor == "11" then {
       version = "unstable-2022-05-04";
       rev = "99420daab98998a7e36858befac9c5ed109d4920"; # 265 commits ahead of v11.0.0
       hash = "sha256-/vUyL6Wh8hykoGz1QmT1F7lfGDEmG4U3iqmqrJxizOg=";
@@ -41,7 +49,7 @@ stdenv.mkDerivation rec {
     "-DLLVM_SPIRV_BUILD_EXTERNAL=YES"
     # RPATH of binary /nix/store/.../bin/llvm-spirv contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
-  ];
+  ] ++ lib.optionals (llvmMajor != "11") [ "-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${spirv-headers.src}" ];
 
   # FIXME: CMake tries to run "/llvm-lit" which of course doesn't exist
   doCheck = false;
