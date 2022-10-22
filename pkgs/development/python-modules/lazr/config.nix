@@ -1,10 +1,10 @@
-{ buildPythonPackage, fetchPypi, lazr_delegates }:
+{ buildPythonPackage, fetchPypi, lazr-delegates }:
 
 buildPythonPackage rec {
   pname = "lazr.config";
   version = "2.2.3";
 
-  propagatedBuildInputs = [ lazr_delegates ];
+  propagatedBuildInputs = [ lazr-delegates ];
 
   src = fetchPypi {
     inherit pname version;

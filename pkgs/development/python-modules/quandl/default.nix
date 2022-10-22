@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, factory_boy
+, factory-boy
 , faker
 , fetchPypi
 , httpretty
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    factory_boy
+    factory-boy
     faker
     httpretty
     jsondate

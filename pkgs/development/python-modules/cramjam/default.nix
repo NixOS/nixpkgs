@@ -6,7 +6,7 @@
 , libiconv
 , brotli
 , lz4
-, memory_profiler
+, memory-profiler
 , numpy
 , pytest-benchmark
 , pytestCheckHook
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   checkInputs = [
     brotli
     lz4
-    memory_profiler
+    memory-profiler
     numpy
     pytest-benchmark
     pytestCheckHook

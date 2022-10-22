@@ -233,7 +233,7 @@
     imports = [ "airflow.providers.presto.hooks.presto" ];
   };
   qubole = {
-    deps = [ "qds_sdk" ];
+    deps = [ "qds-sdk" ];
     imports = [ "airflow.providers.qubole.hooks.qubole" "airflow.providers.qubole.hooks.qubole_check" "airflow.providers.qubole.operators.qubole" "airflow.providers.qubole.operators.qubole_check" ];
   };
   redis = {

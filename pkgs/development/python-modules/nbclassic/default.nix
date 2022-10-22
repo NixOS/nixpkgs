@@ -3,11 +3,11 @@
 , buildPythonPackage
 , fetchPypi
 , ipykernel
-, ipython_genutils
+, ipython-genutils
 , jinja2
 , jupyter-client
-, jupyter_core
-, jupyter_server
+, jupyter-core
+, jupyter-server
 , nbconvert
 , nbformat
 , nest-asyncio
@@ -39,11 +39,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     argon2-cffi
     ipykernel
-    ipython_genutils
+    ipython-genutils
     jinja2
     jupyter-client
-    jupyter_core
-    jupyter_server
+    jupyter-core
+    jupyter-server
     nbconvert
     nbformat
     nest-asyncio

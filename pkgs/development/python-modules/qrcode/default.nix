@@ -3,7 +3,7 @@
 , fetchPypi
 , six
 , pillow
-, pymaging_png
+, pymaging-png
 , mock
 , setuptools
 }:
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "375a6ff240ca9bd41adc070428b5dfc1dcfbb0f2507f1ac848f6cded38956578";
   };
 
-  propagatedBuildInputs = [ six pillow pymaging_png setuptools ];
+  propagatedBuildInputs = [ six pillow pymaging-png setuptools ];
   checkInputs = [ mock ];
 
   meta = with lib; {

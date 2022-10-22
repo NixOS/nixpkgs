@@ -14,8 +14,8 @@
 , flask
 , flask-babel
 , flask-cors
-, flask_mail
-, flask_migrate
+, flask-mail
+, flask-migrate
 , flask-restful
 , flask-talisman
 , flask-wtf
@@ -61,8 +61,8 @@ buildPythonPackage rec {
     dnspython
     email-validator
     flask
-    flask_mail
-    flask_migrate
+    flask-mail
+    flask-migrate
     flask-wtf
     flask-babel
     flask-cors

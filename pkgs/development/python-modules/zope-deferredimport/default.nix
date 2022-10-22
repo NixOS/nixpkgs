@@ -1,8 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, zope_proxy
-, zope_testrunner
+, zope-proxy
+, zope-testrunner
 }:
 
 buildPythonPackage rec {
@@ -15,9 +15,9 @@ buildPythonPackage rec {
     sha256 = "2ae3257256802787e52ad840032f39c1496d3ce0b7e11117f663420e4a4c9add";
   };
 
-  propagatedBuildInputs = [ zope_proxy ];
+  propagatedBuildInputs = [ zope-proxy ];
 
-  checkInputs = [ zope_testrunner ];
+  checkInputs = [ zope-testrunner ];
 
   checkPhase = ''
     zope-testrunner --test-path=src []

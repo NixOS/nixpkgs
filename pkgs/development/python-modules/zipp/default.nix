@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , func-timeout
-, jaraco_itertools
+, jaraco-itertools
 , pythonOlder
 , setuptools-scm
 }:
@@ -28,7 +28,7 @@ let zipp = buildPythonPackage rec {
 
   checkInputs = [
     func-timeout
-    jaraco_itertools
+    jaraco-itertools
   ];
 
   pythonImportsCheck = [

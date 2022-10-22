@@ -18,7 +18,7 @@
 , typing-extensions
 , idna-ssl
 # tests_require
-, async_generator
+, async-generator
 , freezegun
 , gunicorn
 , pytest-mock
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    async_generator
+    async-generator
     freezegun
     gunicorn
     pytest-mock

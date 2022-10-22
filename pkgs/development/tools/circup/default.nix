@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     requests
     semver
     setuptools
-    update_checker
+    update-checker
   ];
 
   checkInputs = with python3.pkgs; [

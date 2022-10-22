@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, jupyterlab_server
+, jupyterlab-server
 , notebook
 , pythonOlder
 , jupyter-packaging
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    jupyterlab_server
+    jupyterlab-server
     notebook
     nbclassic
   ];

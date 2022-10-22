@@ -5,7 +5,7 @@
 , mock
 , blessings
 , nose
-, nose_progressive
+, nose-progressive
 , pillow
 , args
 , pkgs
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   # no longer compatible as behavior demand 2to3, which was removed
   # in setuptools>=58
   doCheck  = false;
-  checkInputs = [ mock nose nose_progressive pkgs.glibcLocales ];
+  checkInputs = [ mock nose nose-progressive pkgs.glibcLocales ];
   checkPhase = ''
     ${python.interpreter} test_clint.py
   '';

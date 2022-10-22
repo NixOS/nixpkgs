@@ -60,7 +60,7 @@ buildPythonApplication rec {
     colorama
     configargparse
     cyclonedx-python-lib
-    deep_merge
+    deep-merge
     detect-secrets
     docker
     dockerfile-parse
@@ -82,7 +82,7 @@ buildPythonApplication rec {
     termcolor
     tqdm
     typing-extensions
-    update_checker
+    update-checker
   ];
 
   checkInputs = with py.pkgs; [

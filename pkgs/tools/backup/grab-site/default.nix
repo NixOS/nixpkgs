@@ -29,12 +29,12 @@ with python.pkgs; buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"wpull @ https://github.com/ArchiveTeam/ludios_wpull/tarball/master#egg=wpull-${ludios_wpull.version}"' '"wpull"'
+      --replace '"wpull @ https://github.com/ArchiveTeam/ludios-wpull/tarball/master#egg=wpull-${ludios_wpull.version}"' '"wpull"'
   '';
 
   propagatedBuildInputs = [
     click
-    ludios_wpull
+    ludios-wpull
     manhole
     lmdb
     autobahn

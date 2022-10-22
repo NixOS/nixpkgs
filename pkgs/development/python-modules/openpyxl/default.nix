@@ -4,7 +4,7 @@
 , isPy27
 , pytest
 , jdcal
-, et_xmlfile
+, et-xmlfile
 , lxml
 }:
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ jdcal et_xmlfile lxml ];
+  propagatedBuildInputs = [ jdcal et-xmlfile lxml ];
 
   postPatch = ''
     # LICENSE.rst is missing, and setup.cfg currently doesn't contain anything useful anyway

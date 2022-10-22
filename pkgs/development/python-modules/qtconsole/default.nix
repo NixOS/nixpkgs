@@ -5,7 +5,7 @@
 , isPy27
 , mock
 , traitlets
-, jupyter_core
+, jupyter-core
 , jupyter-client
 , pygments
 , ipykernel
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose ] ++ lib.optionals isPy27 [mock];
-  propagatedBuildInputs = [traitlets jupyter_core jupyter-client pygments ipykernel pyqt5 qtpy];
+  propagatedBuildInputs = [traitlets jupyter-core jupyter-client pygments ipykernel pyqt5 qtpy];
 
   # : cannot connect to X server
   doCheck = false;

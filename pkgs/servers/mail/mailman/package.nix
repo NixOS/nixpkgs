@@ -20,17 +20,17 @@ buildPythonPackage rec {
     click
     dnspython
     falcon
-    flufl_bounce
-    flufl_i18n
-    flufl_lock
+    flufl-bounce
+    flufl-i18n
+    flufl-lock
     gunicorn
     importlib-resources
-    lazr_config
+    lazr-config
     passlib
     requests
     sqlalchemy
-    zope_component
-    zope_configuration
+    zope-component
+    zope-configuration
   ];
 
   patches = [

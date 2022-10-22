@@ -1,6 +1,6 @@
-{ python_openzwave, fetchPypi, openzwave, fetchFromGitHub }:
+{ python-openzwave, fetchPypi, openzwave, fetchFromGitHub }:
 
-(python_openzwave.override {
+(python-openzwave.override {
   openzwave = openzwave.overrideAttrs (oldAttrs: {
     version = "unstable-2020-03-24";
 

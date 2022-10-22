@@ -13,7 +13,7 @@
 , twisted
 , typing-extensions
 , werkzeug
-, zope_interface
+, zope-interface
 }:
 
 buildPythonPackage rec {
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     twisted
     tubes
     werkzeug
-    zope_interface
+    zope-interface
   ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
   ];

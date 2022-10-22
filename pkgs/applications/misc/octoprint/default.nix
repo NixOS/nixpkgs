@@ -94,7 +94,7 @@ let
                 filetype
                 flask
                 flask-babel
-                flask_assets
+                flask-assets
                 flask-login
                 flask-limiter
                 frozendict

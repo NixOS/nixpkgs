@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, zope_testrunner, six, chardet}:
+, zope-testrunner, six, chardet}:
 
 buildPythonPackage rec {
   pname = "ghdiff";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "17mdhi2sq9017nq8rkjhhc87djpi5z99xiil0xz17dyplr7nmkqk";
   };
 
-  checkInputs = [ zope_testrunner ];
+  checkInputs = [ zope-testrunner ];
   propagatedBuildInputs = [ six chardet ];
 
   meta = with lib; {

@@ -18,11 +18,11 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     APScheduler
     advocate
-    backports_abc
+    backports-abc
     chardet
     flask-babel
     flask-login
-    flask_principal
+    flask-principal
     flask-wtf
     iso-639
     lxml

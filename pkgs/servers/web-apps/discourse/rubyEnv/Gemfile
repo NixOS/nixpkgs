@@ -227,7 +227,7 @@ gem 'ruby-readability', require: false
 gem 'rss', require: false
 
 gem 'stackprof', require: false, platform: :mri
-gem 'memory_profiler', require: false, platform: :mri
+gem 'memory-profiler', require: false, platform: :mri
 
 gem 'cppjieba_rb', require: false
 

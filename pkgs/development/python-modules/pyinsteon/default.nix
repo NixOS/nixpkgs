@@ -1,7 +1,7 @@
 { lib
 , aiofiles
 , aiohttp
-, async_generator
+, async-generator
 , buildPythonPackage
 , fetchFromGitHub
 , pypubsub
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    async_generator
+    async-generator
     pytest-asyncio
     pytest-timeout
     pytestCheckHook

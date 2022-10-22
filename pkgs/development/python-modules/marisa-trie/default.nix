@@ -4,7 +4,7 @@
 , cython
 , pytestCheckHook
 , hypothesis
-, readme_renderer
+, readme-renderer
 }:
 
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    readme_renderer
+    readme-renderer
     hypothesis
   ];
 

@@ -144,7 +144,7 @@
     };
     version = "2.15.11";
   };
-  deep_merge = {
+  deep-merge = {
     groups = ["default"];
     platforms = [];
     source = {
@@ -599,7 +599,7 @@
     version = "4.0.7";
   };
   puppet = {
-    dependencies = ["concurrent-ruby" "deep_merge" "facter" "fast_gettext" "hiera" "locale" "multi_json" "puppet-resource_api" "scanf" "semantic_puppet"];
+    dependencies = ["concurrent-ruby" "deep-merge" "facter" "fast_gettext" "hiera" "locale" "multi_json" "puppet-resource_api" "scanf" "semantic_puppet"];
     groups = ["default"];
     platforms = [];
     source = {

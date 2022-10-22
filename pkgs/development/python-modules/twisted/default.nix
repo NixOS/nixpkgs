@@ -27,7 +27,7 @@
 , service-identity
 , setuptools
 , typing-extensions
-, zope_interface
+, zope-interface
 
   # for passthru.tests
 , cassandra-driver
@@ -75,7 +75,7 @@ buildPythonPackage rec {
     incremental
     setuptools
     typing-extensions
-    zope_interface
+    zope-interface
   ];
 
   postPatch = ''

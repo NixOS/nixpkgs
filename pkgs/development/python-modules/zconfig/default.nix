@@ -2,7 +2,7 @@
 , stdenv
 , fetchPypi
 , buildPythonPackage
-, zope_testrunner
+, zope-testrunner
 , manuel
 , docutils
 , pygments
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   patches = lib.optional stdenv.hostPlatform.isMusl ./remove-setlocale-test.patch;
 
   buildInputs = [ manuel docutils ];
-  propagatedBuildInputs = [ zope_testrunner ];
+  propagatedBuildInputs = [ zope-testrunner ];
   checkInputs = [ pygments ];
 
   meta = with lib; {

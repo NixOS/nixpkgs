@@ -7,7 +7,7 @@
 , click-help-colors
 , colorama
 , fetchPypi
-, gradient_statsd
+, gradient-statsd
 , gradient-utils
 , gql
 , halo
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     click-help-colors
     colorama
     gql
-    gradient_statsd
+    gradient-statsd
     gradient-utils
     halo
     marshmallow

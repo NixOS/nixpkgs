@@ -4,7 +4,7 @@
 , bokeh
 , buildPythonPackage
 , click
-, docker_pycreds
+, docker-pycreds
 , fetchFromGitHub
 , flask
 , git
@@ -66,7 +66,7 @@ buildPythonPackage rec {
   # setuptools is necessary since pkg_resources is required at runtime.
   propagatedBuildInputs = [
     click
-    docker_pycreds
+    docker-pycreds
     GitPython
     pathtools
     promise

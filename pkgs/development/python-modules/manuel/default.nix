@@ -3,7 +3,7 @@
 , fetchPypi
 , isPy27
 , six
-, zope_testing
+, zope-testing
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six ];
-  checkInputs = [ zope_testing ];
+  checkInputs = [ zope-testing ];
 
   meta = with lib; {
     description = "A documentation builder";

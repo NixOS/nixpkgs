@@ -12,7 +12,7 @@
 , gprof2dot
 , html5lib
 , jinja2
-, memory_profiler
+, memory-profiler
 , psutil
 , pytestCheckHook
 }:

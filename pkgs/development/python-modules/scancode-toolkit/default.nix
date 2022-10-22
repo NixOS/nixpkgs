@@ -22,7 +22,7 @@
 , html5lib
 , importlib-metadata
 , intbitset
-, jaraco_functools
+, jaraco-functools
 , javaproperties
 , jinja2
 , jsonstreams
@@ -93,7 +93,7 @@ buildPythonPackage rec {
     html5lib
     importlib-metadata
     intbitset
-    jaraco_functools
+    jaraco-functools
     javaproperties
     jinja2
     jsonstreams

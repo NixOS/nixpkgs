@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , django
-, factory_boy
+, factory-boy
 , mock
 , pygments
 , pytest-django
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   checkInputs = [
-    factory_boy
+    factory-boy
     mock
     pygments # not explicitly declared in setup.py, but some tests require it
     pytest-django

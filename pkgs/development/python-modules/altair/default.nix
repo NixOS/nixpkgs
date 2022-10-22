@@ -13,7 +13,7 @@
 , sphinx
 , toolz
 , typing ? null
-, vega_datasets
+, vega-datasets
 }:
 
 buildPythonPackage rec {
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     pytestCheckHook
     recommonmark
     sphinx
-    vega_datasets
+    vega-datasets
   ];
 
   pythonImportsCheck = [ "altair" ];

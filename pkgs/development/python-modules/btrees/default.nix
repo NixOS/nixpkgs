@@ -2,9 +2,9 @@
 , fetchPypi
 , buildPythonPackage
 , persistent
-, zope_interface
+, zope-interface
 , transaction
-, zope_testrunner
+, zope-testrunner
 , python
 , pythonOlder
 }:
@@ -24,12 +24,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     persistent
-    zope_interface
+    zope-interface
   ];
 
   checkInputs = [
     transaction
-    zope_testrunner
+    zope-testrunner
   ];
 
   checkPhase = ''

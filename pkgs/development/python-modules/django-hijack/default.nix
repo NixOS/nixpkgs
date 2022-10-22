@@ -2,7 +2,7 @@
 , fetchPypi
 , buildPythonPackage
 , django
-, django_compat
+, django-compat
 , pytest-django
 , pytestCheckHook
 }:
@@ -16,13 +16,13 @@ buildPythonPackage rec {
   format = "wheel";
   src = fetchPypi {
     inherit version format;
-    pname = "django_hijack";
+    pname = "django-hijack";
     dist = "py3";
     python = "py3";
     sha256 = "sha256-sHI3ULJH5bH2n2AKQLHVEkBAYfM5GOC/+0qpKDFOods=";
   };
 
-  propagatedBuildInputs = [ django django_compat ];
+  propagatedBuildInputs = [ django django-compat ];
 
   checkInputs = [ pytestCheckHook pytest-django ];
   preCheck = ''

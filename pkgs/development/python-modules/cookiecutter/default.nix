@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, isPyPy
 , pytest, pytest-cov, pytest-mock, freezegun
-, jinja2, future, binaryornot, click, jinja2_time, requests
+, jinja2, future, binaryornot, click, jinja2-time, requests
 , python-slugify
 , pyyaml
 }:
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     jinja2
     click
     pyyaml
-    jinja2_time
+    jinja2-time
     python-slugify
     requests
   ];

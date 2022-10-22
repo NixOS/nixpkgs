@@ -8,7 +8,7 @@
 , incremental
 , twisted
 , automat
-, zope_interface
+, zope-interface
 , idna
 , pyopenssl
 , service-identity
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     incremental
     twisted
     automat
-    zope_interface
+    zope-interface
   ] ++ twisted.optional-dependencies.tls;
 
   checkInputs = [ pytestCheckHook mock lsof GeoIP ];

@@ -26,7 +26,7 @@
 , tldextract
 , twisted
 , w3lib
-, zope_interface
+, zope-interface
 }:
 
 buildPythonPackage rec {
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     tldextract
     twisted
     w3lib
-    zope_interface
+    zope-interface
   ];
 
   checkInputs = [

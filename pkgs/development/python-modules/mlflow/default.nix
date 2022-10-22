@@ -21,7 +21,7 @@
 , python-dateutil
 , pythonOlder
 , pyyaml
-, querystring_parser
+, querystring-parser
 , requests
 , scipy
 , simplejson
@@ -61,7 +61,7 @@ buildPythonPackage rec {
     protobuf
     python-dateutil
     pyyaml
-    querystring_parser
+    querystring-parser
     requests
     scipy
     simplejson

@@ -3,7 +3,7 @@
 , cython, setuptools-scm
 , six, pyshp, shapely, geos, numpy
 , gdal, pillow, matplotlib, pyepsg, pykdtree, scipy, owslib, fiona
-, proj, flufl_lock
+, proj, flufl-lock
 }:
 
 buildPythonPackage rec {
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     gdal pillow matplotlib pyepsg pykdtree scipy fiona owslib
   ];
 
-  checkInputs = [ pytestCheckHook filelock mock pep8 flufl_lock ];
+  checkInputs = [ pytestCheckHook filelock mock pep8 flufl-lock ];
 
   pytestFlagsArray = [
     "--pyargs" "cartopy"

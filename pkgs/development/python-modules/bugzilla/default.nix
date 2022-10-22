@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, pep8, coverage, logilab_common, requests }:
+, pep8, coverage, logilab-common, requests }:
 
 buildPythonPackage rec {
   pname = "bugzilla";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0q8c3k0kdnd11g2s56cp8va9365x0xfr2m2zn9fgxjijdyhwdic5";
   };
 
-  buildInputs = [ pep8 coverage logilab_common ];
+  buildInputs = [ pep8 coverage logilab-common ];
   propagatedBuildInputs = [ requests ];
 
   preCheck = ''

@@ -13,6 +13,12 @@
 
 (let
 
+  checkPythonPkgsAttrNames = self: super:
+    #let bad = builtins.filter (pypkg: lib.hasInfix "_" pypkg) (builtins.attrNames super);
+    let bad = builtins.filter (pypkg: builtins.match ".*_[^0-9].*" "${pypkg}" != null) (builtins.attrNames super);
+    in if bad != []
+    then throw "Underscore not allowed in python package attribute names: ${toString bad}"
+    else {};
   # Common passthru for all Python interpreters.
   passthruFun =
     { implementation
@@ -96,7 +102,12 @@
           otherSplices
           keep
           extra
-          (lib.extends (lib.composeExtensions aliases extensions) pythonPackagesFun))
+          (lib.foldl' (lib.flip lib.extends) pythonPackagesFun [
+            # Check ust be before the aliases, as they are allowed to have them (for now)
+            checkPythonPkgsAttrNames 
+            aliases
+            extensions
+          ]))
         {
           overrides = packageOverrides;
           python = self;

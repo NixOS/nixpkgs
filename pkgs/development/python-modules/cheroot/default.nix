@@ -2,8 +2,8 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, jaraco_functools
-, jaraco_text
+, jaraco-functools
+, jaraco-text
 , more-itertools
 , portend
 , pypytools
@@ -35,13 +35,13 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    jaraco_functools
+    jaraco-functools
     more-itertools
     six
   ];
 
   checkInputs = [
-    jaraco_text
+    jaraco-text
     portend
     pypytools
     pytest-mock

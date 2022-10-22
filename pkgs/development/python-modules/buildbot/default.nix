@@ -1,5 +1,5 @@
 { stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k
-, python, twisted, jinja2, msgpack, zope_interface, sqlalchemy, alembic
+, python, twisted, jinja2, msgpack, zope-interface, sqlalchemy, alembic
 , python-dateutil, txaio, autobahn, pyjwt, pyyaml, treq, txrequests, pypugjs
 , boto3, moto, mock, lz4, setuptoolsTrial
 , buildbot-worker, buildbot-pkg, buildbot-plugins, parameterized, git, openssh
@@ -45,7 +45,7 @@ let
       twisted
       jinja2
       msgpack
-      zope_interface
+      zope-interface
       sqlalchemy
       alembic
       python-dateutil

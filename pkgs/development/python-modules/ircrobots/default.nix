@@ -7,7 +7,7 @@
 , asyncio-throttle
 , dataclasses
 , ircstates
-, async_stagger
+, async-stagger
 , async-timeout
 , python
 }:
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     asyncio-rlock
     asyncio-throttle
     ircstates
-    async_stagger
+    async-stagger
     async-timeout
   ] ++ lib.optionals (pythonOlder "3.7") [
     dataclasses

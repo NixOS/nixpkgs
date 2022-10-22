@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , jupyter-packaging
-, jupyter_server
+, jupyter-server
 , pytest-tornasync
 , pytestCheckHook
 }:
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit version;
-    pname = "jupyter_server_mathjax";
+    pname = "jupyter-server_mathjax";
     sha256 = "sha256-ux5rbcBobB/jhqIrWIYWPbVIiTqZwoEMNjmenEyiOUM=";
   };
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    jupyter_server
+    jupyter-server
   ];
 
   checkInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "jupyter_server_mathjax" ];
+  pythonImportsCheck = [ "jupyter-server_mathjax" ];
 
   __darwinAllowLocalNetworking = true;
 

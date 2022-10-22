@@ -1106,7 +1106,7 @@
     };
     version = "0.1.22";
   };
-  memory_profiler = {
+  memory-profiler = {
     groups = ["default"];
     platforms = [{
       engine = "maglev";

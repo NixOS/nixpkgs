@@ -85,7 +85,7 @@ python3Packages.buildPythonApplication {
     distro
   ] ++ lib.optionals withQt5 [
     pyqt5
-    pyqt5_sip
+    pyqt5-sip
     enum-compat
   ];
 

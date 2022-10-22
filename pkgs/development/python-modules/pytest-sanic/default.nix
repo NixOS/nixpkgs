@@ -1,6 +1,6 @@
 { lib
 , aiohttp
-, async_generator
+, async-generator
 , buildPythonPackage
 , fetchFromGitHub
 , httpx
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    async_generator
+    async-generator
     httpx
     pytest
     websockets

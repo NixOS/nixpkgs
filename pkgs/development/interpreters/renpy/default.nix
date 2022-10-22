@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     SDL2 libpng ffmpeg freetype glew libGLU libGL fribidi zlib
   ] ++ (with python3.pkgs; [
-    python pygame_sdl2 tkinter future six pefile requests
+    python pygame-sdl2 tkinter future six pefile requests
   ]);
 
   RENPY_DEPS_INSTALL = lib.concatStringsSep "::" (map (path: path) [
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  NIX_CFLAGS_COMPILE = with python3.pkgs; "-I${pygame_sdl2}/include/${python.libPrefix}";
+  NIX_CFLAGS_COMPILE = with python3.pkgs; "-I${pygame-sdl2}/include/${python.libPrefix}";
 
   meta = with lib; {
     description = "Visual Novel Engine";

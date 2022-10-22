@@ -5,11 +5,11 @@
 , flit-core
 , pytestCheckHook
 , glibcLocales
-, ipython_genutils
+, ipython-genutils
 , traitlets
 , testpath
 , jsonschema
-, jupyter_core
+, jupyter-core
 , pep440
 }:
 
@@ -31,9 +31,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     fastjsonschema
-    ipython_genutils
+    ipython-genutils
     jsonschema
-    jupyter_core
+    jupyter-core
     pep440
     testpath
     traitlets

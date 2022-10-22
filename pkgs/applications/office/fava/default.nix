@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     click
     flask
     flaskbabel
-    jaraco_functools
+    jaraco-functools
     jinja2
     markdown2
     ply
