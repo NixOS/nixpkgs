@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "fsql";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "kshvmdn";
     repo = "fsql";
     rev = "v${version}";
-    sha256 = "sha256-YavkN7n2Nt92T+uMwWRVv3q81DA6fFoNIJt9NYMS3rc=";
+    sha256 = "sha256-6KqlpFBaAWrlEjkFQhOEic569+eoYVAsnhMrg8AEPV4=";
   };
 
   vendorSha256 = "sha256-xuD7/gTssf1Iu1VuIRysjtUjve16gozOq0Wz4w6mIB8=";

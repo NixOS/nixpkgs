@@ -433,6 +433,8 @@ in {
 
   aiorun = callPackage ../development/python-modules/aiorun { };
 
+  aiorwlock = callPackage ../development/python-modules/aiorwlock { };
+
   aiosenseme = callPackage ../development/python-modules/aiosenseme { };
 
   aiosenz = callPackage ../development/python-modules/aiosenz { };
@@ -4031,6 +4033,8 @@ in {
 
   gpsoauth = callPackage ../development/python-modules/gpsoauth { };
 
+  gpustat = callPackage ../development/python-modules/gpustat { };
+
   gpxpy = callPackage ../development/python-modules/gpxpy { };
 
   gpy = callPackage ../development/python-modules/gpy { };
@@ -6511,6 +6515,8 @@ in {
   openbabel-bindings = callPackage ../development/python-modules/openbabel-bindings {
       openbabel = callPackage ../development/libraries/openbabel { inherit (self) python; };
   };
+
+  opencensus = callPackage ../development/python-modules/opencensus { };
 
   opencv3 = toPythonModule (pkgs.opencv3.override {
     enablePython = true;
@@ -9611,6 +9617,8 @@ in {
   raven = callPackage ../development/python-modules/raven { };
 
   rawkit = callPackage ../development/python-modules/rawkit { };
+
+  ray = callPackage ../development/python-modules/ray { redis = pkgs.redis; };
 
   rbtools = callPackage ../development/python-modules/rbtools { };
 

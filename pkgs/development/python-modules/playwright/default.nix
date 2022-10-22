@@ -43,7 +43,7 @@ let
       sha256 = {
         x86_64-linux = "0x71b4kb8hlyacixipgfbgjgrbmhckxpbmrs2xk8iis7n5kg7539";
         aarch64-linux = "125lih7g2gj91k7j196wy5a5746wyfr8idj3ng369yh5wl7lfcfv";
-        x86_64-darwin = "0z2kww4iby1izkwn6z2ai94y87bkjvwak8awdmjm8sgg00pa9l1a";
+        x86_64-darwin = "sha256-TzprR95KHYBu9SruI4BgwCaqI7KKe3HuzgCO1A5YFiM=";
         aarch64-darwin = "0qajh4ac5lr1sznb2c471r5c5g2r0dk2pyqz8vhvnbk36r524h1h";
       }.${system} or throwSystem;
     };
@@ -114,7 +114,7 @@ let
       jq
     ];
   } (''
-    BROWSERS_JSON=${driver}/share/playwright-driver/package/browsers.json
+    BROWSERS_JSON=${driver}/package/browsers.json
   '' + lib.optionalString withChromium ''
     CHROMIUM_REVISION=$(jq -r '.browsers[] | select(.name == "chromium").revision' $BROWSERS_JSON)
     mkdir -p $out/chromium-$CHROMIUM_REVISION/chrome-linux
@@ -200,7 +200,7 @@ buildPythonPackage rec {
     "playwright"
   ];
 
-  passthru = {
+  passthru = rec {
     inherit driver;
     browsers = {
       x86_64-linux = browsers-linux { };
@@ -210,6 +210,10 @@ buildPythonPackage rec {
     }.${system} or throwSystem;
     browsers-chromium = browsers-linux { withFirefox = false; };
     browsers-firefox = browsers-linux { withChromium = false; };
+
+    tests = {
+      inherit driver browsers;
+    };
   };
 
   meta = with lib; {

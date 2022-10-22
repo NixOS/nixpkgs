@@ -3695,6 +3695,8 @@ with pkgs;
 
   dedup = callPackage ../tools/backup/dedup { };
 
+  deheader = callPackage ../development/tools/misc/deheader { };
+
   dehydrated = callPackage ../tools/admin/dehydrated { };
 
   deja-dup = callPackage ../applications/backup/deja-dup { };
@@ -10049,6 +10051,10 @@ with pkgs;
   PageEdit = libsForQt5.callPackage ../applications/office/PageEdit { };
 
   pagmo2 = callPackage ../development/libraries/pagmo2 { };
+
+  paho-mqtt-c = callPackage ../development/libraries/paho-mqtt-c { };
+
+  paho-mqtt-cpp = callPackage ../development/libraries/paho-mqtt-cpp { };
 
   pakcs = callPackage ../development/compilers/pakcs {
     # Doesn't compile with GHC 9.0 due to whitespace syntax changes
@@ -21328,6 +21334,8 @@ with pkgs;
   nvidia-video-sdk = callPackage ../development/libraries/nvidia-video-sdk { };
 
   nvidia-optical-flow-sdk = callPackage ../development/libraries/nvidia-optical-flow-sdk { };
+
+  nvitop = callPackage ../tools/system/nvitop { };
 
   nvtop = callPackage ../tools/system/nvtop { };
   nvtop-nvidia = callPackage ../tools/system/nvtop { amd = false; };
