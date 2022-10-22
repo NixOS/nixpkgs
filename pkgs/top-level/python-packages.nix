@@ -12582,6 +12582,8 @@ self: super: with self; {
 
   ush = callPackage ../development/python-modules/ush { };
 
+  utf8-locale = callPackage ../development/python-modules/utf8-locale { };
+
   utils = callPackage ../development/python-modules/utils { };
 
   uuid = callPackage ../development/python-modules/uuid { };
