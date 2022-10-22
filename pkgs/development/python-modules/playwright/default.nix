@@ -126,8 +126,8 @@ let
       --set FONTCONFIG_FILE ${fontconfig}
   '' + lib.optionalString withFirefox ''
     FIREFOX_REVISION=$(jq -r '.browsers[] | select(.name == "firefox").revision' $BROWSERS_JSON)
-    mkdir -p $out/firefox-$FIREFOX_REVISION
-    ln -s ${firefox}/bin/firefox $out/firefox-$FIREFOX_REVISION/firefox
+    mkdir -p $out/firefox-$FIREFOX_REVISION/firefox
+    ln -s ${firefox}/bin/firefox $out/firefox-$FIREFOX_REVISION/firefox/firefox
   '' + ''
     FFMPEG_REVISION=$(jq -r '.browsers[] | select(.name == "ffmpeg").revision' $BROWSERS_JSON)
     mkdir -p $out/ffmpeg-$FFMPEG_REVISION
