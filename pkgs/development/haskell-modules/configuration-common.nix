@@ -2544,32 +2544,9 @@ self: super: {
   # Remove once version 1.* is released
   monad-bayes = doJailbreak super.monad-bayes;
 
-  crypt-sha512 = overrideCabal (drv: {
-    librarySystemDepends = [
-      pkgs.libxcrypt
-    ];
-    # Test failure after libxcrypt migration, reported upstrem at
-    # https://github.com/phadej/crypt-sha512/issues/13
-    doCheck = false;
-  }) super.crypt-sha512;
-
-  nano-cryptr = overrideCabal (drv: {
-    librarySystemDepends = [
-      pkgs.libxcrypt
-    ];
-  }) super.nano-cryptr;
-
-  Unixutils = overrideCabal (drv: {
-    librarySystemDepends = [
-      pkgs.libxcrypt
-    ];
-  }) super.Unixutils;
-
-  xmonad-utils = overrideCabal (drv: {
-    librarySystemDepends = [
-      pkgs.libxcrypt
-    ];
-  }) super.xmonad-utils;
+  # Test failure after libxcrypt migration, reported upstrem at
+  # https://github.com/phadej/crypt-sha512/issues/13
+  crypt-sha512 = dontCheck super.crypt-sha512;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super // (let
   # We need to build purescript with these dependencies and thus also its reverse
