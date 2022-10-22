@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
 , meson
+, mesonEmulatorHook
 , ninja
 , gettext
 , gtk-doc
@@ -15,6 +16,8 @@
 , mobile-broadband-provider-info
 , gobject-introspection
 , gtk3
+, withGtk4 ? false
+, gtk4
 , withGnome ? true
 , gcr
 , glib
@@ -24,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libnma";
-  version = "1.8.32";
+  version = "1.10.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Cle5Oi+tQ6zHY/Mg3Tp6k8QpsOMRjfpUnWeCTN3E6QU=";
+    sha256 = "T8PZxAS3sTMD2TlPlpYcUpjXGvqfH6evXk8PboQqCUA=";
   };
 
   patches = [
@@ -49,6 +52,8 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
     libxml2
     vala
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -56,6 +61,8 @@ stdenv.mkDerivation rec {
     networkmanager
     isocodes
     mobile-broadband-provider-info
+  ] ++ lib.optionals withGtk4 [
+    gtk4
   ] ++ lib.optionals withGnome [
     # advanced certificate chooser
     gcr
@@ -63,11 +70,12 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgcr=${lib.boolToString withGnome}"
+    "-Dlibnma_gtk4=${lib.boolToString withGtk4}"
   ];
 
   postPatch = ''
     substituteInPlace src/nma-ws/nma-eap.c --subst-var-by \
-      NM_APPLET_GSETTINGS ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+      NM_APPLET_GSETTINGS ${glib.makeSchemaPath "$out" "$name"}
   '';
 
   postInstall = ''

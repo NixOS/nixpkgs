@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchpatch
 , substituteAll
 , fetchurl
@@ -67,6 +68,30 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/commit/82d88014dfca2df7e081712870e1fb017c16b808.patch";
       sha256 = "H5k/v+M2bRaswt5nrDJFNn4gS4BdB0UfzdjUCT4yLKg=";
+    })
+
+    # Fix build with new meson
+    # plugins/power/meson.build:78:7: ERROR: Function does not take positional arguments.
+    # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/merge_requests/283
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/commit/afa7e4bb9c519e2daf500a6079088669500768c0.patch";
+      sha256 = "8wxJIKPoZyfs1t0zAsb5SVCdt297NUiGmXIBNI6hbCQ=";
+    })
+    # meson.build:86:3: ERROR: The `==` operator of str does not accept objects of type bool (True)
+    # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/merge_requests/249
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/commit/28e28e9e598342c897ae5ca350d0da6f4aea057b.diff";
+      sha256 = "U+suR7wYjLWPqmkJpHm6pPOWL7sjL6GhIFX8MHrBRAY=";
+    })
+
+    # Port to gweather4
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/commit/66cae69ad82cfc59435016fba737ce046ffb7e66.patch";
+      sha256 = "zf8/rkKdQQFNV/qx/jo4kx1KoLl7SUSu4/T1OBGrZ4c=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/commit/f390e6e9d56ce7d3e3a725b8204d81c0b6240515.patch";
+      sha256 = "8mfnlhkSF9ogjVWE+IESzRQzrxHQSwUWsq5OLBM08iM=";
     })
   ];
 

@@ -1,7 +1,7 @@
 { stdenv, fetchpatch, fetchFromGitHub, lib
 , cmake, perl, uthash, pkg-config, gettext
 , python, freetype, zlib, glib, giflib, libpng, libjpeg, libtiff, libxml2, cairo, pango
-, readline, woff2, zeromq, libuninameslist
+, readline, woff2, zeromq
 , withSpiro ? false, libspiro
 , withGTK ? false, gtk3
 , withGUI ? withGTK
@@ -14,13 +14,13 @@ assert withGTK -> withGUI;
 
 stdenv.mkDerivation rec {
   pname = "fontforge";
-  version = "20201107";
+  version = "20220308";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-Rl/5lbXaPgIndANaD0IakaDus6T53FjiBb45FIuGrvc=";
+    sha256 = "sha256-q+71PDPODl5fEEy3d1icRl+rBGY7AhH+2dMUKeBWGgI=";
   };
 
   patches = [
@@ -28,13 +28,11 @@ stdenv.mkDerivation rec {
     # Taken from https://salsa.debian.org/fonts-team/fontforge/-/blob/master/debian/patches/0001-add-extra-cmake-install-rules.patch
     (fetchpatch {
       url = "https://salsa.debian.org/fonts-team/fontforge/raw/76bffe6ccf8ab20a0c81476a80a87ad245e2fd1c/debian/patches/0001-add-extra-cmake-install-rules.patch";
-      sha256 = "u3D9od2xLECNEHhZ+8dkuv9818tPkdP6y/Tvd9CADJg=";
-    })
-    # Fix segmentation fault with some fonts.
-    # This is merged and should be present in the next release.
-    (fetchpatch {
-      url = "https://github.com/fontforge/fontforge/commit/69e263b2aff29ad22f97f13935cfa97a1eabf207.patch";
-      sha256 = "06yyf90605aq6ppfiz83mqkdmnaq5418axp9jgsjyjq78b00xb29";
+      excludes = [
+        # Already handled upstream: https://github.com/fontforge/fontforge/commit/f97a2cd7b344ec8fcb9f8bfb908e1b6f36326d20
+        "contrib/cidmap/CMakeLists.txt"
+      ];
+      sha256 = "iQwaGeBHUais979hGVbU2NxKozQSQkpYXjApxPuLI/4=";
     })
   ];
 
@@ -52,7 +50,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [
-    readline uthash woff2 zeromq libuninameslist
+    readline uthash woff2 zeromq
     python freetype zlib glib giflib libpng libjpeg libtiff libxml2
   ]
     ++ lib.optionals withSpiro [ libspiro ]
@@ -65,7 +63,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!withGTK) "-DENABLE_X11=ON"
     ++ lib.optional withExtras "-DENABLE_FONTFORGE_EXTRAS=ON";
 
-  # work-around: git isn't really used, but configuration fails without it
   preConfigure = ''
     # The way $version propagates to $version of .pe-scripts (https://github.com/dejavu-fonts/dejavu-fonts/blob/358190f/scripts/generate.pe#L19)
     export SOURCE_DATE_EPOCH=$(date -d ${version} +%s)

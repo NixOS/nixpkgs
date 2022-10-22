@@ -12,10 +12,10 @@
 
 stdenv.mkDerivation rec {
   pname = "MAR1D";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
-    sha256 = "sha256-/QZH2H0PFCLeweXUE11vimLnJTt86PjnTnHC9vWkKsk=";
+    sha256 = "sha256-c48azBGdnzhEQGUeRJWlNLJhtrYjnpiORuWvowcQK5Y=";
     rev = "v${version}";
     repo = "MAR1D";
     owner = "Radvendii";

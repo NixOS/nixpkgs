@@ -1,6 +1,7 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , wrapQtAppsHook
@@ -54,6 +55,13 @@ mkDerivation rec {
     rev = "${pname}-${version}";
     sha256 = "sha256-Xq9hDUTCQr79Zzjk0CsiXclVTHK6nrSowukIQqVdrKY=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.com/OpenMW/openmw/-/merge_requests/1239.diff";
+      sha256 = "sha256-RhbIGeE6GyqnipisiMTwWjcFnIiR055hUPL8IkjPgZw=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
 

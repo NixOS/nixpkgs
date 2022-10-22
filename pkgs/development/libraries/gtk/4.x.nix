@@ -23,6 +23,9 @@
 , xorg
 , libepoxy
 , libxkbcommon
+, libpng
+, libtiff
+, libjpeg
 , libxml2
 , gnome
 , gsettings-desktop-schemas
@@ -39,6 +42,7 @@
 , vulkan-headers
 , wayland
 , wayland-protocols
+, wayland-scanner
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
 , cups
@@ -59,7 +63,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk4";
-  version = "4.4.1";
+  version = "4.8.1";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -71,8 +75,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "D6ramD3GsLxAnLNMFxPB8yZ+Z8CT+GseOxfbYQCj3fQ=";
+    sha256 = "XOjY3piiO9DI7KGmEJThwAm18AncvWC0XpkKjbG3Qv0=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     gettext
@@ -85,11 +93,16 @@ stdenv.mkDerivation rec {
     sassc
     gi-docgen
     libxml2 # for xmllint
+  ] ++ lib.optionals waylandSupport [
+    wayland-scanner
   ] ++ setupHooks;
 
   buildInputs = [
     libxkbcommon
-    libepoxy
+    libpng
+    libtiff
+    libjpeg
+    (libepoxy.override { inherit x11Support; })
     isocodes
   ] ++ lib.optionals vulkanSupport [
     vulkan-headers
@@ -130,6 +143,8 @@ stdenv.mkDerivation rec {
     glib
     graphene
     pango
+  ] ++ lib.optionals waylandSupport [
+    wayland
   ] ++ lib.optionals vulkanSupport [
     vulkan-loader
   ] ++ [
@@ -175,6 +190,14 @@ stdenv.mkDerivation rec {
 
     chmod +x ''${files[@]}
     patchShebangs ''${files[@]}
+
+  '' +
+  # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
+  # it should be a build-time dep for build
+  # TODO: send upstream
+  ''
+    substituteInPlace meson.build \
+      --replace "'gi-docgen', ver" "'gi-docgen', native:true, ver"
   '';
 
   preInstall = ''
@@ -194,13 +217,9 @@ stdenv.mkDerivation rec {
     for f in $dev/bin/gtk4-encode-symbolic-svg; do
       wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     done
-
-  '' + lib.optionalString x11Support ''
-    # So that DevHelp can find this.
-    # TODO: Remove this with DevHelp 41.
-    mkdir -p "$devdoc/share/devhelp/books"
-    mv "$out/share/doc/"* "$devdoc/share/devhelp/books"
-    rmdir -p --ignore-fail-on-non-empty "$out/share/doc"
+  '' + lib.optionalString broadwaySupport ''
+    # Broadway daemon
+    moveToOutput bin/gtk4-broadwayd "$out"
   '';
 
   # Wrap demos
@@ -211,6 +230,9 @@ stdenv.mkDerivation rec {
       wrapProgram $dev/bin/$program \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}"
     done
+  '' + lib.optionalString x11Support ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {

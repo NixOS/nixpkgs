@@ -4,7 +4,7 @@
 
 buildDunePackage rec {
   pname = "iter";
-  version = "1.3";
+  version = "1.4";
 
   useDune2 = true;
 
@@ -12,7 +12,7 @@ buildDunePackage rec {
     owner = "c-cube";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256:0xgkplpbi41sw0yv1wfd12cfbybls6cal8qxddmd9x8khgk5s3vx";
+    sha256 = "sha256-Kk92GM7IVXOSVBkeN6wj67Q3UGCyuOOVi2umpn1AZTo=";
   };
 
   buildInputs = [ dune-configurator ];

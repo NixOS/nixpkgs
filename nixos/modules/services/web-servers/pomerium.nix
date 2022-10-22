@@ -7,18 +7,18 @@ let
 in
 {
   options.services.pomerium = {
-    enable = mkEnableOption "the Pomerium authenticating reverse proxy";
+    enable = mkEnableOption (lib.mdDoc "the Pomerium authenticating reverse proxy");
 
     configFile = mkOption {
       type = with types; nullOr path;
       default = null;
-      description = "Path to Pomerium config YAML. If set, overrides services.pomerium.settings.";
+      description = lib.mdDoc "Path to Pomerium config YAML. If set, overrides services.pomerium.settings.";
     };
 
     useACMEHost = mkOption {
       type = with types; nullOr str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         If set, use a NixOS-generated ACME certificate with the specified name.
 
         Note that this will require you to use a non-HTTP-based challenge, or
@@ -32,13 +32,13 @@ in
     };
 
     settings = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         The contents of Pomerium's config.yaml, in Nix expressions.
 
         Specifying configFile will override this in its entirety.
 
-        See <link xlink:href="https://pomerium.io/reference/">the Pomerium
-        configuration reference</link> for more information about what to put
+        See [the Pomerium
+        configuration reference](https://pomerium.io/reference/) for more information about what to put
         here.
       '';
       default = {};
@@ -48,7 +48,7 @@ in
     secretsFile = mkOption {
       type = with types; nullOr path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Path to file containing secrets for Pomerium, in systemd
         EnvironmentFile format. See the systemd.exec(5) man page.
       '';
@@ -69,11 +69,16 @@ in
         CERTIFICATE_KEY_FILE = "key.pem";
       };
       startLimitIntervalSec = 60;
+      script = ''
+        if [[ -v CREDENTIALS_DIRECTORY ]]; then
+          cd "$CREDENTIALS_DIRECTORY"
+        fi
+        exec "${pkgs.pomerium}/bin/pomerium" -config "${cfgFile}"
+      '';
 
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = [ "pomerium" ];
-        ExecStart = "${pkgs.pomerium}/bin/pomerium -config ${cfgFile}";
 
         PrivateUsers = false;  # breaks CAP_NET_BIND_SERVICE
         MemoryDenyWriteExecute = false;  # breaks LuaJIT
@@ -99,7 +104,6 @@ in
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
 
-        WorkingDirectory = mkIf (cfg.useACMEHost != null) "$CREDENTIALS_DIRECTORY";
         LoadCredential = optionals (cfg.useACMEHost != null) [
           "fullchain.pem:/var/lib/acme/${cfg.useACMEHost}/fullchain.pem"
           "key.pem:/var/lib/acme/${cfg.useACMEHost}/key.pem"
@@ -124,7 +128,7 @@ in
         Type = "oneshot";
         TimeoutSec = 60;
         ExecCondition = "/run/current-system/systemd/bin/systemctl -q is-active pomerium.service";
-        ExecStart = "/run/current-system/systemd/bin/systemctl restart pomerium.service";
+        ExecStart = "/run/current-system/systemd/bin/systemctl --no-block restart pomerium.service";
       };
     };
   });

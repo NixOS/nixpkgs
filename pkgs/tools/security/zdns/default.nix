@@ -5,19 +5,16 @@
 
 buildGoModule rec {
   pname = "zdns";
-  version = "20210327-${lib.strings.substring 0 7 rev}";
-  rev = "8c53210f0b9a4fe16c70a5d854e9413c3d0c1ba2";
+  version = "2022-03-14-unstable";
 
   src = fetchFromGitHub {
     owner = "zmap";
     repo = pname;
-    inherit rev;
-    sha256 = "0pdfz1489ynpw72flalnlkwybp683v826icjx7ljys45xvagdvck";
+    rev = "d659a361f6d5165462c10e1c1243f420175e066b";
+    hash = "sha256-856O6H03me3IM39/+6n56KJIetL+v4on6+lJx5D2Pcw=";
   };
 
-  vendorSha256 = "0b8h5n01xmhar1a09svb35ah48k9zdy1mn5balq0h2l0jxr05z78";
-
-  subPackages = [ "zdns" ];
+  vendorSha256 = "sha256-5kZ0voyicnqK/0yrMYW+gR1vVDyptW6I1HgyG4zleX8=";
 
   meta = with lib; {
     description = "CLI DNS lookup tool";

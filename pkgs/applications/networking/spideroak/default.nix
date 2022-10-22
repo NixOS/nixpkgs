@@ -37,7 +37,7 @@ in stdenv.mkDerivation {
 
     rm -f $out/opt/SpiderOakONE/lib/libz*
 
-    patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2 \
+    patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \
       "$out/opt/SpiderOakONE/lib/SpiderOakONE"
 
     RPATH=$out/opt/SpiderOakONE/lib:${ldpath}
@@ -53,6 +53,7 @@ in stdenv.mkDerivation {
   meta = {
     homepage = "https://spideroak.com";
     description = "Secure online backup and sychronization";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ amorsillo ];
     platforms = lib.platforms.linux;

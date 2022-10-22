@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "duf";
-  version = "0.6.2";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "muesli";
     repo = "duf";
     rev = "v${version}";
-    sha256 = "sha256-aRXm31sGHvHPpqPck5+jplbWT52OzaiQIgU/C7llJs8=";
+    sha256 = "sha256-bVuqX88KY+ky+fd1FU9GWP78jQc4fRDk9yRSeIesHyI=";
   };
 
-  vendorSha256 = "153z0ccd556c0wpnxgyjq7m0c4y2z6fxsqq2p77kly9nr8cpzdb9";
+  vendorSha256 = "sha256-oihi7E67VQmym9U1gdD802AYxWRrSowhzBiKg0CBDPc=";
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 
@@ -20,6 +20,6 @@ buildGoModule rec {
     description = "Disk Usage/Free Utility";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ petabyteboy penguwin SuperSandro2000 ];
+    maintainers = with maintainers; [ penguwin SuperSandro2000 ];
   };
 }

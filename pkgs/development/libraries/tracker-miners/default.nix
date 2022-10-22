@@ -1,6 +1,6 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
-, substituteAll
 , asciidoc
 , docbook-xsl-nons
 , docbook_xml_dtd_45
@@ -13,10 +13,9 @@
 , ninja
 , pkg-config
 , vala
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , bzip2
 , dbus
-, evolution-data-server
 , exempi
 , giflib
 , glib
@@ -33,7 +32,6 @@
 , libosinfo
 , libpng
 , libseccomp
-, libsoup
 , libtiff
 , libuuid
 , libxml2
@@ -43,15 +41,16 @@
 , taglib
 , upower
 , totem-pl-parser
+, e2fsprogs
 }:
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "3.2.1";
+  version = "3.4.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "RDafU+Lt70FDdAbb7s1Hepf4qa/dkTSDLqRdG6KqLEc=";
+    sha256 = "ouA2XjCBG7YelcghSzP0eCo6BODGJGoG7NnAFBfNhOY=";
   };
 
   nativeBuildInputs = [
@@ -65,14 +64,13 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsNoGuiHook
   ];
 
   # TODO: add libenca, libosinfo
   buildInputs = [
     bzip2
     dbus
-    evolution-data-server
     exempi
     giflib
     glib
@@ -80,7 +78,11 @@ stdenv.mkDerivation rec {
     totem-pl-parser
     tracker
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
     gst_all_1.gstreamer
+    gst_all_1.gst-libav
     icu
     json-glib
     libcue
@@ -91,16 +93,18 @@ stdenv.mkDerivation rec {
     libjpeg
     libosinfo
     libpng
-    libseccomp
-    libsoup
     libtiff
     libuuid
     libxml2
-    networkmanager
     poppler
-    systemd
     taglib
+  ] ++ lib.optionals stdenv.isLinux [
+    libseccomp
+    networkmanager
+    systemd
     upower
+  ] ++ lib.optionals stdenv.isDarwin [
+    e2fsprogs
   ];
 
   mesonFlags = [
@@ -111,13 +115,9 @@ stdenv.mkDerivation rec {
     # security issue since then. Despite a patch now being availab, we're opting
     # to be safe due to the general state of the project
     "-Dminer_rss=false"
-  ];
-
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit asciidoc;
-    })
+  ] ++ lib.optionals (!stdenv.isLinux) [
+    "-Dnetwork_manager=disabled"
+    "-Dsystemd_user_services=false"
   ];
 
   postInstall = ''
@@ -127,7 +127,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "none";
     };
   };
 
@@ -136,6 +135,6 @@ stdenv.mkDerivation rec {
     description = "Desktop-neutral user information store, search tool and indexer";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

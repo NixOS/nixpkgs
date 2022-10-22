@@ -2,11 +2,12 @@
 , buildPythonPackage
 , fetchPypi
 , flit-core
-, toml
+, tomli
 , pythonOlder
 , importlib-metadata
 , zipp
 , pytestCheckHook
+, setuptools
 , testpath
 , mock
 , pip
@@ -14,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "pep517";
-  version = "0.9.1";
+  version = "0.13.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zqidxah03qpnp6zkg3zd1kmd5f79hhdsfmlc0cldaniy80qddxf";
+    sha256 = "sha256-rmmSfFwXK+Gt2SA3JtS4TPPrrR7c1fcfzcdG5m6Cn1k=";
   };
 
   nativeBuildInputs = [
@@ -27,16 +28,22 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    toml
+    tomli
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata zipp
   ];
 
   checkInputs = [
     pytestCheckHook
+    setuptools
     testpath
     mock
     pip
+  ];
+
+  disabledTests = [
+    "test_setup_py"
+    "test_issue_104"
   ];
 
   preCheck = ''

@@ -14,7 +14,6 @@ buildGoModule rec {
   };
 
   subPackages = [ "cli" ];
-  runVend = true;
 
   preBuild = ''
     env GOFLAGS="" go generate ./pkg/charts/static
@@ -54,6 +53,6 @@ buildGoModule rec {
     downloadPage = "https://github.com/linkerd/linkerd2/";
     homepage = "https://linkerd.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Gonzih bryanasdev000 ];
+    maintainers = with maintainers; [ bryanasdev000 Gonzih ];
   };
 }

@@ -7,7 +7,7 @@
 , qtbase
 , qmake
 , git
-, libpng_apng
+, libpng
 , pkg-config
 , wrapQtAppsHook
 , stdenv
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     libarchive
     libusb-compat-0_1
     qtbase
-    libpng_apng
+    libpng
   ];
 
   qmakeFlags = [

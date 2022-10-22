@@ -13,7 +13,7 @@ with lib;
         "Python 3"
         "Python 3 for Data Science"
       '';
-      description = ''
+      description = lib.mdDoc ''
         Name that will be shown to the user.
       '';
     };
@@ -27,7 +27,7 @@ with lib;
         "-f"
         "{connection_file}"
       ];
-      description = ''
+      description = lib.mdDoc ''
         Command and arguments to start the kernel.
       '';
     };
@@ -35,7 +35,7 @@ with lib;
     language = mkOption {
       type = types.str;
       example = "python";
-      description = ''
+      description = lib.mdDoc ''
         Language of the environment. Typically the name of the binary.
       '';
     };
@@ -44,7 +44,7 @@ with lib;
       type = types.nullOr types.path;
       default = null;
       example = literalExpression ''"''${env.sitePackages}/ipykernel/resources/logo-32x32.png"'';
-      description = ''
+      description = lib.mdDoc ''
         Path to 32x32 logo png.
       '';
     };
@@ -52,8 +52,17 @@ with lib;
       type = types.nullOr types.path;
       default = null;
       example = literalExpression ''"''${env.sitePackages}/ipykernel/resources/logo-64x64.png"'';
-      description = ''
+      description = lib.mdDoc ''
         Path to 64x64 logo png.
+      '';
+    };
+
+    extraPaths = mkOption {
+      type = types.attrsOf types.path;
+      default = { };
+      example = literalExpression ''"{ examples = ''${env.sitePack}/IRkernel/kernelspec/kernel.js"; }'';
+      description = lib.mdDoc ''
+        Extra paths to link in kernel directory
       '';
     };
   };

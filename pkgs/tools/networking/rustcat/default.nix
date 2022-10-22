@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustcat";
-  version = "2.0.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "robiot";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aoeinz1XVJ+MNt8ndV/HnKLdwa7rXwxIZucCkZCnNaM=";
+    sha256 = "sha256-/6vNFh7n6WvYerrL8m9sgUKsO2KKj7/f8xc4rzHy9Io=";
   };
 
-  cargoSha256 = "sha256-cQxBM8m0sy9WKvKqyY/sNE3p4l2v9zdx80mReQEAoc8=";
+  cargoSha256 = "sha256-wqoU9UfXDmf7KIHgFif5rZfZY8Zu0SsaMVfwTtXLzHg=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/robiot/rustcat";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "rcat";
   };
 }

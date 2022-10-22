@@ -1,55 +1,95 @@
 { lib
+, babel
 , buildPythonPackage
-, fetchFromGitHub
 , click
-, watchdog
+, deprecated
 , exifread
-, requests
-, mistune
-, inifile
-, Babel
-, jinja2
+, fetchFromGitHub
+, filetype
 , flask
+, importlib-metadata
+, inifile
+, jinja2
+, marshmallow
+, marshmallow-dataclass
+, mistune
+, pip
 , pyopenssl
-, ndg-httpsclient
-, pytestCheckHook
-, pytest-cov
+, pytest-click
 , pytest-mock
 , pytest-pylint
-, pytest-click
-, isPy27
-, functools32
+, pytestCheckHook
+, pythonOlder
+, python-slugify
+, requests
 , setuptools
+, typing-inspect
+, watchdog
+, werkzeug
 }:
 
 buildPythonPackage rec {
   pname = "lektor";
-  version = "3.1.3";
+  version = "3.4.0b2";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "lektor";
-    repo = "lektor";
-    rev = version;
-    sha256 = "16qw68rz5q77w84lwyhjpfd3bm4mfrhcjrnxwwnz3vmi610h68hx";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5w3tT0celHgjmLlsM3sdBdYlXx57z3kMePVGSQkOP7M=";
   };
 
   propagatedBuildInputs = [
-    click watchdog exifread requests mistune inifile Babel jinja2
-    flask pyopenssl ndg-httpsclient setuptools
-  ] ++ lib.optionals isPy27 [ functools32 ];
-
-  checkInputs = [
-    pytestCheckHook pytest-cov pytest-mock pytest-pylint pytest-click
+    babel
+    click
+    deprecated
+    exifread
+    filetype
+    flask
+    inifile
+    jinja2
+    marshmallow
+    marshmallow-dataclass
+    mistune
+    pip
+    pyopenssl
+    python-slugify
+    requests
+    setuptools
+    typing-inspect
+    watchdog
+    werkzeug
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
-  # many errors -- tests assume inside of git repo, linting errors 13/317 fail
-  doCheck = false;
+  checkInputs = [
+    pytest-click
+    pytest-mock
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "typing.inspect < 0.8.0" "typing.inspect"
+  '';
+
+  pythonImportsCheck = [
+    "lektor"
+  ];
+
+  disabledTests = [
+    # Test requires network access
+    "test_path_installed_plugin_is_none"
+  ];
 
   meta = with lib; {
     description = "A static content management system";
-    homepage    = "https://www.getlektor.com/";
-    license     = licenses.bsd0;
+    homepage = "https://www.getlektor.com/";
+    license = licenses.bsd0;
     maintainers = with maintainers; [ costrouc ];
   };
-
 }

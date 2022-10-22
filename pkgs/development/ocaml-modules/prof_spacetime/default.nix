@@ -1,13 +1,14 @@
 { buildDunePackage
 , lib
 , fetchFromGitHub
+, ocaml
 , cmdliner
 , spacetime_lib
 , yojson
 , cohttp
 , ocaml_lwt
 , cohttp-lwt-unix
-, lambdaTerm
+, lambda-term
 , stdlib-shims
 }:
 
@@ -30,7 +31,7 @@ buildDunePackage rec {
     cohttp
     ocaml_lwt
     cohttp-lwt-unix
-    lambdaTerm
+    lambda-term
     stdlib-shims
   ];
 
@@ -38,6 +39,7 @@ buildDunePackage rec {
     description = "A viewer for OCaml spacetime profiles";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.symphorien ];
+    broken = true; # 2022-10-20, doesn't work with updated lambda-term
     inherit (src.meta) homepage;
   };
 }

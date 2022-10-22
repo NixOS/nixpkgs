@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "iaia";
+  pname = "iaia";
   version = "2017-11-10";
 
   idrisDeps = [ contrib ];

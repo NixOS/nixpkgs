@@ -1,25 +1,19 @@
 { lib, fetchFromGitHub, buildDunePackage
-, nonstd, sosa
+, base, fmt
 }:
 
 buildDunePackage rec {
   pname = "genspio";
-  version = "0.0.2";
+  version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "hammerlab";
     repo = pname;
     rev = "${pname}.${version}";
-    sha256 = "0cp6p1f713sfv4p2r03bzvjvakzn4ili7hf3a952b3w1k39hv37x";
+    sha256 = "sha256:1788cnn10idp5i1hggg4pys7k0w8m3h2p4xa42jipfg4cpj7shaf";
   };
 
-  minimumOCamlVersion = "4.03";
-
-  propagatedBuildInputs = [ nonstd sosa ];
-
-  configurePhase = ''
-    ocaml please.mlt configure
-  '';
+  propagatedBuildInputs = [ base fmt ];
 
   doCheck = true;
 

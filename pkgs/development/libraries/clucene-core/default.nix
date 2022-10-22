@@ -11,7 +11,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gcc6.patch ];
 
+  NIX_CFLAGS_COMPILE = [
+    "-std=c++11"
+  ];
+
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Core library for full-featured text search engine";
     longDescription = ''
       CLucene is a high-performance, scalable, cross platform, full-featured,

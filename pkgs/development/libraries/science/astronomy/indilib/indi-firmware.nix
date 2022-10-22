@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    for f in libfishcamp/CMakeLists.txt libsbig/CMakeLists.txt
+    for f in {libfishcamp,libsbig,libqhy}/CMakeLists.txt
     do
       substituteInPlace $f --replace "/lib/firmware" "lib/firmware"
     done

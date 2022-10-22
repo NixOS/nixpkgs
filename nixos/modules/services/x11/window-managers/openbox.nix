@@ -7,7 +7,7 @@ in
 
 {
   options = {
-    services.xserver.windowManager.openbox.enable = mkEnableOption "openbox";
+    services.xserver.windowManager.openbox.enable = mkEnableOption (lib.mdDoc "openbox");
   };
 
   config = mkIf cfg.enable {

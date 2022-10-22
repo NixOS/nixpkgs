@@ -66,6 +66,5 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     downloadPage = "http://www.ps.uni-saarland.de/~cebrown/satallax/downloads.php";
     homepage = "http://www.ps.uni-saarland.de/~cebrown/satallax/index.php";
-    updateWalker = true;
   };
 }

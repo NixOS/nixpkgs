@@ -32,8 +32,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     # system one. Overriding this pretty bad default behaviour.
     export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 
-    export TOOT_LOGIN_CLI_PASSWORD="jamy-password"
-    toot login_cli -i "pleroma.nixos.test" -e "jamy@nixos.test"
+    echo "jamy-password" | toot login_cli -i "pleroma.nixos.test" -e "jamy@nixos.test"
     echo "Login OK"
 
     # Send a toot then verify it's part of the public timeline
@@ -159,7 +158,9 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
     # Waiting for pleroma to be up.
     timeout 5m bash -c 'while [[ "$(curl -s -o /dev/null -w '%{http_code}' https://pleroma.nixos.test/api/v1/instance)" != "200" ]]; do sleep 2; done'
-    pleroma_ctl user new jamy jamy@nixos.test --password 'jamy-password' --moderator --admin -y
+    # Toremove the RELEASE_COOKIE bit when https://github.com/NixOS/nixpkgs/issues/166229 gets fixed.
+    RELEASE_COOKIE="/var/lib/pleroma/.cookie" \
+      pleroma_ctl user new jamy jamy@nixos.test --password 'jamy-password' --moderator --admin -y
   '';
 
   tls-cert = pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
@@ -167,21 +168,6 @@ import ./make-test-python.nix ({ pkgs, ... }:
     mkdir -p $out
     cp key.pem cert.pem $out
   '';
-
-  /* Toot is preventing users from feeding login_cli a password non
-     interactively. While it makes sense most of the times, it's
-     preventing us to login in this non-interactive test. This patch
-     introduce a TOOT_LOGIN_CLI_PASSWORD env variable allowing us to
-     provide a password to toot login_cli
-
-     If https://github.com/ihabunek/toot/pull/180 gets merged at some
-     point, feel free to remove this patch. */
-  custom-toot = pkgs.toot.overrideAttrs(old:{
-    patches = [ (pkgs.fetchpatch {
-      url = "https://github.com/NinjaTrappeur/toot/commit/b4a4c30f41c0cb7e336714c2c4af9bc9bfa0c9f2.patch";
-      sha256 = "sha256-0xxNwjR/fStLjjUUhwzCCfrghRVts+fc+fvVJqVcaFg=";
-    }) ];
-  });
 
   hosts = nodes: ''
     ${nodes.pleroma.config.networking.primaryIPAddress} pleroma.nixos.test
@@ -194,7 +180,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       security.pki.certificateFiles = [ "${tls-cert}/cert.pem" ];
       networking.extraHosts = hosts nodes;
       environment.systemPackages = with pkgs; [
-        custom-toot
+        toot
         send-toot
       ];
     };

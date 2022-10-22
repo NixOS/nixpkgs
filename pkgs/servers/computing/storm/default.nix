@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, zip, unzip
-, jdk, python
+, jdk, python2
 , confFile ? ""
 , extraLibraryPaths ? []
 , extraJars ? []
@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-storm";
-  version = "2.3.0";
+  version = "2.4.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://apache/storm/${name}/${name}.tar.gz";
-    sha256 = "sha256-ScIlWyZjPG/ZY5nFIDOeRZ/NopoOfm0Mh3XO/P9sNjY=";
+    sha256 = "sha256-VFNcaISPBRMGR5l/P6/pGnK7lHClDW2AmXJ00gzxwMY=";
   };
 
   nativeBuildInputs = [ zip unzip ];
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
   fixupPhase = ''
     # Fix python reference
     sed -i \
-      -e '19iPYTHON=${python}/bin/python' \
-      -e 's|#!/usr/bin/.*python|#!${python}/bin/python|' \
+      -e '19iPYTHON=${python2}/bin/python' \
+      -e 's|#!/usr/bin/.*python|#!${python2}/bin/python|' \
       $out/bin/storm
     sed -i \
-      -e 's|#!/usr/bin/.*python|#!${python}/bin/python|' \
+      -e 's|#!/usr/bin/.*python|#!${python2}/bin/python|' \
       -e "s|STORM_CONF_DIR = .*|STORM_CONF_DIR = os.getenv('STORM_CONF_DIR','$out/conf')|" \
       -e 's|STORM_LOG4J2_CONF_DIR =.*|STORM_LOG4J2_CONF_DIR = os.path.join(STORM_CONF_DIR, "log4j2")|' \
         $out/bin/storm.py
@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://storm.apache.org/";
     description = "Distributed realtime computation system";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     maintainers = with maintainers; [ edwtjo vizanto ];
     platforms = with platforms; unix;

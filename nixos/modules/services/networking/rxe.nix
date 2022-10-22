@@ -10,14 +10,14 @@ in {
 
   options = {
     networking.rxe = {
-      enable = mkEnableOption "RDMA over converged ethernet";
+      enable = mkEnableOption (lib.mdDoc "RDMA over converged ethernet");
       interfaces = mkOption {
         type = types.listOf types.str;
         default = [ ];
         example = [ "eth0" ];
-        description = ''
+        description = lib.mdDoc ''
           Enable RDMA on the listed interfaces. The corresponding virtual
-          RDMA interfaces will be named rxe_&lt;interface&gt;.
+          RDMA interfaces will be named rxe_\<interface\>.
           UDP port 4791 must be open on the respective ethernet interfaces.
         '';
       };

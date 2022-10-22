@@ -1,8 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
-, fetchurl
 , cmake
 , obs-studio
 }:

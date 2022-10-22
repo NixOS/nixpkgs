@@ -1,4 +1,4 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript, six, requests, inputstreamhelper }:
+{ lib, buildKodiAddon, fetchpatch, fetchzip, addonUpdateScript, six, requests, inputstreamhelper }:
 
 buildKodiAddon rec {
   pname = "youtube";
@@ -22,6 +22,15 @@ buildKodiAddon rec {
       attrPath = "kodi.packages.youtube";
     };
   };
+
+  patches = [
+    # This patch can be removed once https://github.com/anxdpanic/plugin.video.youtube/pull/260 has been merged.
+    (fetchpatch {
+      name = "fix-addon-path";
+      url = "https://patch-diff.githubusercontent.com/raw/anxdpanic/plugin.video.youtube/pull/260.patch";
+      sha256 = "11c9sfwl5kvfll2jws5b4i46s60v6gkfns4al13p4m5ch9rk06hs";
+    })
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/anxdpanic/plugin.video.youtube";

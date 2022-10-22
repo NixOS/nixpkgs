@@ -106,7 +106,7 @@ in {
       services.openssh = {
         enable = true;
         passwordAuthentication = false;
-        challengeResponseAuthentication = false;
+        kbdInteractiveAuthentication = false;
       };
 
       services.borgbackup.repos.repo1 = {

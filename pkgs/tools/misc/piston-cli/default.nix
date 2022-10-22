@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ stdenv, lib, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "piston-cli";
@@ -16,6 +16,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Piston api tool";
     homepage = "https://github.com/Shivansh-007/piston-cli";
     license = licenses.mit;

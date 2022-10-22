@@ -22,7 +22,7 @@ let
     rev = "fb9f2b7bc9fcba954d70f63857cc0c3841b1cf47";
     sha256 = "1arkbpbzvhcmz5fhjqg34x2jbjnwmlisapk22rjki17qpamh7zks";
     # ncdns must be put in a subdirectory for this to work.
-    extraPostFetch = ''
+    postFetch = ''
       cp -r --no-preserve=mode "${ncdns}" "$out/ncdns"
     '';
   };
@@ -100,13 +100,12 @@ buildGoModule {
     cp -r _tpl "$out/share/tpl"
   '';
 
+  passthru.tests.ncdns = nixosTests.ncdns;
+
   meta = with lib; {
     description = "Namecoin to DNS bridge daemon";
     homepage = "https://github.com/namecoin/ncdns";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ rnhmjoj ];
   };
-
-  passthru.tests.ncdns = nixosTests.ncdns;
-
 }

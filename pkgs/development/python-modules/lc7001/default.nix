@@ -4,6 +4,7 @@
 , fetchPypi
 , pythonOlder
 , poetry-core
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -20,6 +21,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    setuptools
   ];
 
   propagatedBuildInputs = [

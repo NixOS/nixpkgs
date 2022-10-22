@@ -15,6 +15,9 @@ in stdenv.mkDerivation rec {
   postPatch = lib.optionalString stdenv.isAarch32 ''
     # https://gitlab.freedesktop.org/gstreamer/orc/-/issues/20
     sed -i '/exec_opcodes_sys/d' testsuite/meson.build
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    # This benchmark times out on Hydra.nixos.org
+    sed -i '/memcpy_speed/d' testsuite/meson.build
   '';
 
   outputs = [ "out" "dev" ]

@@ -1,0 +1,13 @@
+diff --git i/src/lib.rs w/src/lib.rs
+index fdd69f2..07c794e 100644
+--- i/src/lib.rs
++++ w/src/lib.rs
+@@ -1667,7 +1667,7 @@ pub fn search_path(binary: &str) -> Option<String> {
+         }
+     }
+ 
+-    for dir in "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin".split(':') {
++    for dir in "/run/wrappers/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin".split(':') {
+         let path_name = format!("{}/{}", &dir, &binary);
+         let p = Path::new(&path_name);
+ 

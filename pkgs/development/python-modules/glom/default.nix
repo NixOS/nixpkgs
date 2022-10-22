@@ -4,24 +4,47 @@
 , boltons
 , attrs
 , face
-, pytest
+, pytestCheckHook
 , pyyaml
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "glom";
-  version = "20.11.0";
+  version = "22.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "54051072bccc9cdb3ebbd8af0559195137a61d308f04bff19678e4b61350eb12";
+    hash = "sha256-FRDGWHqPnGSiRmQbcAM8vF696Z8CrSRWk2eAOOghrrU=";
   };
 
-  propagatedBuildInputs = [ boltons attrs face ];
+  propagatedBuildInputs = [
+    boltons
+    attrs
+    face
+  ];
 
-  checkInputs = [ pytest pyyaml ];
-  # test_cli.py checks the output of running "glom"
-  checkPhase = "PATH=$out/bin:$PATH pytest glom/test";
+  checkInputs = [
+    pytestCheckHook
+    pyyaml
+  ];
+
+  preCheck = ''
+    # test_cli.py checks the output of running "glom"
+    export PATH=$out/bin:$PATH
+  '';
+
+  disabledTests = [
+    # Test is outdated (was made for PyYAML 3.x)
+    "test_main_yaml_target"
+  ];
+
+  pythonImportsCheck = [
+    "glom"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/mahmoud/glom";

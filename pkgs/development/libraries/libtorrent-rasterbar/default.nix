@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "2.0.5";
+  version = "2.0.7";
 
   # Make sure we override python, so the correct version is chosen
   boostPython = boost.override { enablePython = true; inherit python; };
@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
     owner = "arvidn";
     repo = "libtorrent";
     rev = "v${version}";
-    sha256 = "sha256-wTyeGTxihnjTGBsVa0Yq2M/cxhWhZ9KLHVy10ya2gc4=";
+    sha256 = "sha256-ikDtx1BIikVEL5jf37byNbuS+ft1lDtHUlFqegndapw=";
     fetchSubmodules = true;
   };
 
@@ -24,6 +24,18 @@ in stdenv.mkDerivation {
 
   buildInputs = [ boostPython openssl zlib python ncurses ]
     ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
+
+  # https://github.com/arvidn/libtorrent/issues/6865
+  postPatch = ''
+    substituteInPlace cmake/Modules/GeneratePkgConfig.cmake \
+      --replace @CMAKE_INSTALL_PREFIX@/'$<'1: '$<'1:
+    substituteInPlace cmake/Modules/GeneratePkgConfig/target-compile-settings.cmake.in \
+      --replace 'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")' \
+                'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")
+                 set(_INSTALL_FULL_LIBDIR "@CMAKE_INSTALL_FULL_LIBDIR@")'
+    substituteInPlace cmake/Modules/GeneratePkgConfig/pkg-config.cmake.in \
+      --replace '$'{prefix}/@_INSTALL_LIBDIR@ @_INSTALL_FULL_LIBDIR@
+  '';
 
   postInstall = ''
     moveToOutput "include" "$dev"
@@ -37,6 +49,7 @@ in stdenv.mkDerivation {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://libtorrent.org/";
     description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
     license = licenses.bsd3;

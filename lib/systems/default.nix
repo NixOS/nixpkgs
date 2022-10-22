@@ -8,7 +8,13 @@ rec {
   platforms = import ./platforms.nix { inherit lib; };
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
-  supported = import ./supported.nix { inherit lib; };
+
+  /* List of all Nix system doubles the nixpkgs flake will expose the package set
+     for. All systems listed here must be supported by nixpkgs as `localSystem`.
+
+     **Warning**: This attribute is considered experimental and is subject to change.
+  */
+  flakeExposed = import ./flake-systems.nix { };
 
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
   # necessary.
@@ -25,8 +31,12 @@ rec {
       # Either of these can be losslessly-extracted from `parsed` iff parsing succeeds.
       system = parse.doubleFromSystem final.parsed;
       config = parse.tripleFromSystem final.parsed;
-      # Determine whether we are compatible with the provided CPU
-      isCompatible = platform: parse.isCompatible final.parsed.cpu platform.parsed.cpu;
+      # Determine whether we can execute binaries built for the provided platform.
+      canExecute = platform:
+        final.isAndroid == platform.isAndroid &&
+        parse.isCompatible final.parsed.cpu platform.parsed.cpu
+        && final.parsed.kernel == platform.parsed.kernel;
+      isCompatible = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
       # Derived meta-data
       libc =
         /**/ if final.isDarwin              then "libSystem"
@@ -55,11 +65,17 @@ rec {
         # is why we use the more obscure "bfd" and not "binutils" for this
         # choice.
         else                                     "bfd";
-      extensions = {
+      extensions = rec {
         sharedLibrary =
           /**/ if final.isDarwin  then ".dylib"
           else if final.isWindows then ".dll"
           else                         ".so";
+        staticLibrary =
+          /**/ if final.isWindows then ".lib"
+          else                         ".a";
+        library =
+          /**/ if final.isStatic then staticLibrary
+          else                        sharedLibrary;
         executable =
           /**/ if final.isWindows then ".exe"
           else                         "";
@@ -83,7 +99,7 @@ rec {
           genode = "Genode";
         }.${final.parsed.kernel.name} or null;
 
-         # uname -p
+         # uname -m
          processor = final.parsed.cpu.name;
 
          # uname -r
@@ -105,7 +121,10 @@ rec {
         else if final.isAarch64 then "arm64"
         else if final.isx86_32 then "i386"
         else if final.isx86_64 then "x86_64"
-        else if final.isMips then "mips"
+        # linux kernel does not distinguish microblaze/microblazeel
+        else if final.isMicroBlaze then "microblaze"
+        else if final.isMips32 then "mips"
+        else if final.isMips64 then "mips"    # linux kernel does not distinguish mips32/mips64
         else if final.isPower then "powerpc"
         else if final.isRiscV then "riscv"
         else if final.isS390 then "s390"
@@ -121,6 +140,14 @@ rec {
           powerpc64 = "ppc64";
           powerpc64le = "ppc64le";
         }.${final.parsed.cpu.name} or final.parsed.cpu.name;
+
+      # Name used by UEFI for architectures.
+      efiArch =
+        if final.isx86_32 then "ia32"
+        else if final.isx86_64 then "x64"
+        else if final.isAarch32 then "arm"
+        else if final.isAarch64 then "aa64"
+        else final.parsed.cpu.name;
 
       darwinArch = {
         armv7a  = "armv7";
@@ -139,38 +166,47 @@ rec {
         if final.isMacOS then "MACOSX_DEPLOYMENT_TARGET"
         else if final.isiOS then "IPHONEOS_DEPLOYMENT_TARGET"
         else null;
+    } // (
+      let
+        selectEmulator = pkgs:
+          let
+            qemu-user = pkgs.qemu.override {
+              smartcardSupport = false;
+              spiceSupport = false;
+              openGLSupport = false;
+              virglSupport = false;
+              vncSupport = false;
+              gtkSupport = false;
+              sdlSupport = false;
+              pulseSupport = false;
+              smbdSupport = false;
+              seccompSupport = false;
+              hostCpuTargets = [ "${final.qemuArch}-linux-user" ];
+            };
+            wine-name = "wine${toString final.parsed.cpu.bits}";
+            wine = (pkgs.winePackagesFor wine-name).minimal;
+          in
+          if final.parsed.kernel.name == pkgs.stdenv.hostPlatform.parsed.kernel.name &&
+            pkgs.stdenv.hostPlatform.canExecute final
+          then "${pkgs.runtimeShell} -c '\"$@\"' --"
+          else if final.isWindows
+          then "${wine}/bin/${wine-name}"
+          else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux
+          then "${qemu-user}/bin/qemu-${final.qemuArch}"
+          else if final.isWasi
+          then "${pkgs.wasmtime}/bin/wasmtime"
+          else if final.isMmix
+          then "${pkgs.mmixware}/bin/mmix"
+          else null;
+      in {
+        emulatorAvailable = pkgs: (selectEmulator pkgs) != null;
 
-      emulator = pkgs: let
-        qemu-user = pkgs.qemu.override {
-          smartcardSupport = false;
-          spiceSupport = false;
-          openGLSupport = false;
-          virglSupport = false;
-          vncSupport = false;
-          gtkSupport = false;
-          sdlSupport = false;
-          pulseSupport = false;
-          smbdSupport = false;
-          seccompSupport = false;
-          hostCpuTargets = ["${final.qemuArch}-linux-user"];
-        };
-        wine-name = "wine${toString final.parsed.cpu.bits}";
-        wine = (pkgs.winePackagesFor wine-name).minimal;
-      in
-        if final.parsed.kernel.name == pkgs.stdenv.hostPlatform.parsed.kernel.name &&
-           pkgs.stdenv.hostPlatform.isCompatible final
-        then "${pkgs.runtimeShell} -c '\"$@\"' --"
-        else if final.isWindows
-        then "${wine}/bin/${wine-name}"
-        else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux
-        then "${qemu-user}/bin/qemu-${final.qemuArch}"
-        else if final.isWasi
-        then "${pkgs.wasmtime}/bin/wasmtime"
-        else if final.isMmix
-        then "${pkgs.mmixware}/bin/mmix"
-        else throw "Don't know how to run ${final.config} executables.";
+        emulator = pkgs:
+          if (final.emulatorAvailable pkgs)
+          then selectEmulator pkgs
+          else throw "Don't know how to run ${final.config} executables.";
 
-    } // mapAttrs (n: v: v final.parsed) inspect.predicates
+    }) // mapAttrs (n: v: v final.parsed) inspect.predicates
       // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
       // args;
   in assert final.useAndroidPrebuilt -> final.isAndroid;

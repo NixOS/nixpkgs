@@ -1,27 +1,28 @@
 { lib
-, black
+, pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, black
 , python-lsp-server
-, pythonOlder
+, toml
 }:
 
 buildPythonPackage rec {
   pname = "python-lsp-black";
-  version = "1.0.1";
+  version = "1.2.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "python-lsp-black";
     rev = "v${version}";
-    sha256 = "03k32m4jfqfzrawj69yxhk9kwzsdcwginip77kxdbra2xwgqfc3w";
+    sha256 = "sha256-qNA6Bj1VI0YEtRuvcMQZGWakQNNrJ2PqhozrLmQHPAg=";
   };
 
   checkInputs = [ pytestCheckHook ];
 
-  propagatedBuildInputs = [ black python-lsp-server ];
+  propagatedBuildInputs = [ black python-lsp-server toml ];
 
   meta = with lib; {
     homepage = "https://github.com/python-lsp/python-lsp-black";

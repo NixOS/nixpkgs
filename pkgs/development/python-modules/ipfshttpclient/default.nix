@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -13,7 +14,7 @@
 , pytest-order
 , pytest-cid
 , mock
-, ipfs
+, kubo
 , httpx
 , httpcore
 }:
@@ -45,7 +46,7 @@ buildPythonPackage rec {
     pytest-order
     pytest-cid
     mock
-    ipfs
+    kubo
     httpcore
     httpx
   ];
@@ -79,9 +80,12 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+  doCheck = false;
+
   pythonImportsCheck = [ "ipfshttpclient" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A python client library for the IPFS API";
     homepage = "https://github.com/ipfs-shipyard/py-ipfs-http-client";
     license = licenses.mit;

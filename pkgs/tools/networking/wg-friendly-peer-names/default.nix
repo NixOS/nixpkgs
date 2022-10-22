@@ -25,5 +25,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     platforms = wireguard-tools.meta.platforms;
     maintainers = with maintainers; [ mkg20001 ];
+    mainProgram = "wgg";
   };
 }

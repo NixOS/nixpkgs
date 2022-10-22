@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "srain";
-  version = "1.3.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "SrainApp";
     repo = "srain";
     rev = version;
-    sha256 = "sha256-jGt0DlxlR2J9bE5S9pqT45OZTqzsr+DiZ7pON5QbU/Y=";
+    sha256 = "sha256-AJ02S5+A/n8kO6lic8EbPYqNDmHL/tKbXhIkHTrcXOM=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Modern IRC client written in GTK";
-    homepage = "https://srain.im";
+    homepage = "https://srain.silverrainz.me";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rewine ];

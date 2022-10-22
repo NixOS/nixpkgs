@@ -1,6 +1,9 @@
 { buildPythonPackage
 , inkscape
+, cssselect
 , lxml
+, numpy
+, pygobject3
 , python
 }:
 
@@ -11,7 +14,10 @@ buildPythonPackage {
   format = "other";
 
   propagatedBuildInputs = [
+    cssselect
     lxml
+    numpy
+    pygobject3
   ];
 
   # We just copy the files.

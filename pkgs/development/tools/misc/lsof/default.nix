@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, buildPackages, ncurses }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, buildPackages, ncurses }:
 
 let dialect = with lib; last (splitString "-" stdenv.hostPlatform.system); in
 
 stdenv.mkDerivation rec {
   pname = "lsof";
-  version = "4.94.0";
+  version = "4.95.0";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ ncurses ];
@@ -13,10 +13,26 @@ stdenv.mkDerivation rec {
     owner = "lsof-org";
     repo = "lsof";
     rev = version;
-    sha256 = "0yxv2jg6rnzys49lyrz9yjb4knamah4xvlqj596y6ix3vm4k3chp";
+    sha256 = "sha256-HgU7/HxLdUOfLU2E/dpusko6gBOoEKeWPJIFbBQGzFU=";
   };
 
-  patches = [ ./no-build-info.patch ];
+  patches = [
+    ./no-build-info.patch
+
+    # Pull upstream fix for -fno-common toolchains:
+    #   https://github.com/lsof-org/lsof/pull/226
+    #   https://github.com/lsof-org/lsof/pull/233
+    (fetchpatch {
+      name = "add-extern.patch";
+      url = "https://github.com/lsof-org/lsof/commit/180ffa29b0544f77cabbc54d7f77d50d33dd27d7.patch";
+      sha256 = "sha256-zzcN9HrFYMTBeEekeAwi2RIcVukymgaqtpvFIBV6njU=";
+    })
+    (fetchpatch {
+      name = "add-declaration.patch";
+      url = "https://github.com/lsof-org/lsof/commit/8e47e1491636e8cf41baf834554391be45177b00.patch";
+      sha256 = "sha256-kwkDQp7VApLenOLTPMY24Me+/xUhD56skHWRd4ZB1I4=";
+    })
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace dialects/linux/dlsof.h --replace "defined(__UCLIBC__)" 1

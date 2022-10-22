@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "qgit";
-  version = "2.9";
+  version = "2.10";
 
   src = fetchFromGitHub {
     owner = "tibirna";
     repo = "qgit";
     rev = "${pname}-${version}";
-    sha256 = "0n4dq9gffm9yd7n5p5qcdfgrmg2kwnfd51hfx10adgj9ibxlnc3z";
+    sha256 = "sha256-xM0nroWs4WByc2O469zVeAlzKn6LLr+8WDlEdSjtRYI=";
   };
 
   buildInputs = [ qtbase ];

@@ -1,9 +1,11 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , runCommand
 , fetchurl
 , perl
 , python3
 , ruby
+, gi-docgen
 , bison
 , gperf
 , cmake
@@ -11,13 +13,15 @@
 , pkg-config
 , gettext
 , gobject-introspection
-, libnotify
 , gnutls
 , libgcrypt
 , libgpg-error
 , gtk3
 , wayland
+, wayland-protocols
 , libwebp
+, libwpe
+, libwpe-fdo
 , enchant2
 , xorg
 , libxkbcommon
@@ -44,7 +48,6 @@
 , lcms2
 , libmanette
 , openjpeg
-, enableGeoLocation ? true
 , geoclue2
 , sqlite
 , enableGLES ? true
@@ -58,21 +61,23 @@
 , substituteAll
 , glib
 , addOpenGLRunpath
+, enableGeoLocation ? true
+, withLibsecret ? true
+, systemdSupport ? stdenv.isLinux
 }:
 
-assert enableGeoLocation -> geoclue2 != null;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.34.3";
+  version = "2.38.0";
+  name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "5.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   separateDebugInfo = stdenv.isLinux;
 
   src = fetchurl {
-    url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-DS83qjLiGjbk3Vpc565c4nQ1wp1oA7liuMkMsMxJxS0=";
+    url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-+c5jdaO24TKbC2CfRpIeJifcetYiSze5Z6supkO8D70=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -81,7 +86,15 @@ stdenv.mkDerivation rec {
       inherit (builtins) storeDir;
       inherit (addOpenGLRunpath) driverLink;
     })
+
     ./libglvnd-headers.patch
+
+    # Hardcode path to WPE backend
+    # https://github.com/NixOS/nixpkgs/issues/110468
+    (substituteAll {
+      src = ./fdo-backend-path.patch;
+      wpebackend_fdo = libwpe-fdo;
+    })
   ];
 
   preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -104,6 +117,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     ruby
+    gi-docgen
     glib # for gdbus-codegen
   ] ++ lib.optionals stdenv.isLinux [
     wayland # for wayland-scanner
@@ -125,12 +139,7 @@ stdenv.mkDerivation rec {
     libidn
     libintl
     lcms2
-  ] ++ lib.optionals stdenv.isLinux [
-    libmanette
-  ] ++ [
-    libnotify
     libpthreadstubs
-    libsecret
     libtasn1
     libwebp
     libxkbcommon
@@ -155,28 +164,41 @@ stdenv.mkDerivation rec {
     # (We pick just that one because using the other headers from `sdk` is not
     # compatible with our C++ standard library. This header is already in
     # the standard library on aarch64)
-    runCommand "${pname}_headers" {} ''
+    runCommand "webkitgtk_headers" { } ''
       install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
     ''
   ) ++ lib.optionals stdenv.isLinux [
     bubblewrap
     libseccomp
-    systemd
+    libmanette
     wayland
+    libwpe
+    libwpe-fdo
     xdg-dbus-proxy
-  ] ++ lib.optional enableGeoLocation geoclue2;
+  ] ++ lib.optionals systemdSupport [
+    systemd
+  ] ++ lib.optionals enableGeoLocation [
+    geoclue2
+  ] ++ lib.optionals withLibsecret [
+    libsecret
+  ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
+    xorg.libXcomposite
+    wayland-protocols
+  ];
 
   propagatedBuildInputs = [
     gtk3
     libsoup
   ];
 
-  cmakeFlags = [
+  cmakeFlags = let
+    cmakeBool = x: if x then "ON" else "OFF";
+  in [
     "-DENABLE_INTROSPECTION=ON"
     "-DPORT=GTK"
     "-DUSE_LIBHYPHEN=OFF"
-    "-DUSE_WPE_RENDERER=OFF"
-    "-DUSE_SOUP2=${if lib.versions.major libsoup.version == "2" then "ON" else "OFF"}"
+    "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
+    "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DENABLE_GAMEPAD=OFF"
     "-DENABLE_GTKDOC=OFF"
@@ -189,9 +211,13 @@ stdenv.mkDerivation rec {
     "-DUSE_APPLE_ICU=OFF"
     "-DUSE_OPENGL_OR_ES=OFF"
     "-DUSE_SYSTEM_MALLOC=ON"
-  ] ++ lib.optionals (!stdenv.isLinux) [
-    "-DUSE_SYSTEMD=OFF"
-  ] ++ lib.optional (stdenv.isLinux && enableGLES) "-DENABLE_GLES2=ON";
+  ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
+    "-DUSE_GTK4=ON"
+  ] ++ lib.optionals (!systemdSupport) [
+    "-DENABLE_JOURNALD_LOG=OFF"
+  ] ++ lib.optionals (stdenv.isLinux && enableGLES) [
+    "-DENABLE_GLES2=ON"
+  ];
 
   postPatch = ''
     patchShebangs .
@@ -200,6 +226,11 @@ stdenv.mkDerivation rec {
     sed 22i'#include <malloc/malloc.h>' -i Source/WTF/wtf/FastMalloc.h
     # <CommonCrypto/CommonRandom.h> needs CCCryptorStatus.
     sed 43i'#include <CommonCrypto/CommonCryptor.h>' -i Source/WTF/wtf/RandomDevice.cpp
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   requiredSystemFeatures = [ "big-parallel" ];
@@ -212,4 +243,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     broken = stdenv.isDarwin;
   };
-}
+})

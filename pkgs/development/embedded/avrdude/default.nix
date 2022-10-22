@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, bison, flex, libusb-compat-0_1, libelf, libftdi1, readline
+{ lib, stdenv, fetchFromGitHub, cmake, bison, flex, libusb-compat-0_1, libelf, libftdi1, readline
 # docSupport is a big dependency, disabled by default
 , docSupport ? false, texLive ? null, texinfo ? null, texi2html ? null
 }:
@@ -7,17 +7,23 @@ assert docSupport -> texLive != null && texinfo != null && texi2html != null;
 
 stdenv.mkDerivation rec {
   pname = "avrdude";
-  version = "6.3";
+  version = "7.0";
 
-  src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "15m1w1qad3dj7r8n5ng1qqcaiyx1gyd6hnc3p2apgjllccdp77qg";
+  src = fetchFromGitHub {
+    owner = "avrdudes";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-T8MKrvBvFF3WFwBMIN75vCOS0khliHQI+GGQvCk7T1o=";
   };
 
-  configureFlags = lib.optionals docSupport "--enable-doc";
+  nativeBuildInputs = [ cmake bison flex ];
 
-  buildInputs = [ bison flex libusb-compat-0_1 libelf libftdi1 readline ]
+  buildInputs = [ libusb-compat-0_1 libelf libftdi1 readline ]
     ++ lib.optionals docSupport [ texLive texinfo texi2html ];
+
+  cmakeFlags = lib.optionals docSupport [
+    "-DBUILD_DOC=ON"
+  ];
 
   meta = with lib; {
     description = "Command-line tool for programming Atmel AVR microcontrollers";

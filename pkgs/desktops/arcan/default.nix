@@ -1,6 +1,6 @@
-{ callPackage, lib, pkgs }:
+{ config, lib, pkgs }:
 
-rec {
+lib.makeScope pkgs.newScope (self: with self; {
   # Dependencies
 
   espeak = pkgs.espeak-ng;
@@ -40,4 +40,4 @@ rec {
     name = "all-wrapped";
     appls = [ durden pipeworld ];
   };
-}
+})

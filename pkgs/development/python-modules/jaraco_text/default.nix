@@ -2,22 +2,26 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, autocommand
 , importlib-resources
 , jaraco_functools
 , jaraco-context
+, inflect
+, pathlib2
+, pytestCheckHook
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "jaraco.text";
-  version = "3.6.0";
-  format = "setuptools";
+  version = "3.9.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "901d3468eaaa04f1d8a8f141f54b8887bfd943ccba311fc1c1de62c66604dfe0";
+    sha256 = "sha256-1XzURIpYgCAxhCXgQZTol/lvwjuSuC/5MIok1cvys/s=";
   };
 
   pythonNamespaces = [
@@ -29,14 +33,19 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    autocommand
     jaraco-context
     jaraco_functools
+    inflect
   ] ++ lib.optional (pythonOlder "3.9") [
     importlib-resources
   ];
 
-  # no tests in pypi package
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ] ++ lib.optional (pythonOlder "3.10") [
+    pathlib2
+  ];
 
   pythonImportsCheck = [
     "jaraco.text"

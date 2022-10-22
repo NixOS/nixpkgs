@@ -6,17 +6,17 @@
 
 buildGoModule {
   pname = "goofys";
-  version = "unstable-2021-03-26";
+  version = "unstable-2022-04-21";
 
   src = fetchFromGitHub {
     owner = "kahing";
     repo = "goofys";
     # Same as v0.24.0 but migrated to Go modules
-    rev = "0c993271269b539196330a18716a33fbeeebd624";
-    sha256 = "18is5sv2a9wmsm0qpakly988z1qyl2b2hf2105lpxrgl659sf14p";
+    rev = "829d8e5ce20faa3f9f6f054077a14325e00e9249";
+    sha256 = "sha256-6yVMNSwwPZlADXuPBDRlgoz4Stuz2pgv6r6+y2/C8XY=";
   };
 
-  vendorSha256 = "15yq0msh9icxd5n2zkkqrlwxifizhpa99d4aznv8clg32ybs61fj";
+  vendorSha256 = "sha256-2N8MshBo9+2q8K00eTW5So6d8ZNRzOfQkEKmxR428gI=";
 
   subPackages = [ "." ];
 

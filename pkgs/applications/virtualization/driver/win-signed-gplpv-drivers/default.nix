@@ -39,8 +39,9 @@ stdenv.mkDerivation {
       Certificate obtained from the VeriSign CA.
     '';
     homepage = "http://wiki.univention.de/index.php?title=Installing-signed-GPLPV-drivers";
-    maintainers = [ maintainers.tstrobel ];
+    maintainers = [ ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
     license = licenses.gpl2;
   };
-}
+  }

@@ -1,31 +1,22 @@
 { lib
-, python3
-, fetchpatch
+, copyDesktopItems
 , makeDesktopItem
+, python3
 , qtsvg
 , wrapQtAppsHook
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pyspread";
-  version = "1.99.6";
+  version = "2.0.2";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-B1oyWUAXn63mmVFN9brJwbHxi7I5nYrK2JJU1DjAlb8=";
+    hash = "sha256-rg2T9Y9FU2a+aWg0XM8jyQB9t8zDVlpad3TjUcx4//8=";
   };
 
-  patches = [
-    # https://gitlab.com/pyspread/pyspread/-/merge_requests/34
-    (fetchpatch {
-      name = "entry-points.patch";
-      url = "https://gitlab.com/pyspread/pyspread/-/commit/3d8da6a7a7d76f7027d77ca95fac103961d729a2.patch";
-      excludes = [ "bin/pyspread" "bin/pyspread.bat" ];
-      sha256 = "1l614k7agv339hrin23jj7s1mq576vkdfkdim6wp224k7y37bnil";
-    })
-  ];
-
   nativeBuildInputs = [
+    copyDesktopItems
     wrapQtAppsHook
   ];
 
@@ -47,19 +38,17 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "pyspread" ];
 
-  desktopItem = makeDesktopItem rec {
-    name = pname;
-    exec = name;
-    icon = name;
-    desktopName = "Pyspread";
-    genericName = "Spreadsheet";
-    comment = meta.description;
-    categories = "Office;Development;Spreadsheet;";
-  };
-
-  postInstall = ''
-    install -m 444 -Dt $out/share/applications ${desktopItem}/share/applications/*
-  '';
+  desktopItems = [
+    (makeDesktopItem rec {
+      name = pname;
+      exec = name;
+      icon = name;
+      desktopName = "Pyspread";
+      genericName = "Spreadsheet";
+      comment = meta.description;
+      categories = [ "Office" "Development" "Spreadsheet" ];
+    })
+  ];
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")

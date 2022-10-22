@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "doc" "info" ];
 
+  strictDeps = true;
   # mpfr.h requires gmp.h
   propagatedBuildInputs = [ gmp ];
 

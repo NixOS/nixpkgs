@@ -1,63 +1,71 @@
-{ lib, stdenv, fetchFromGitHub, libtool, autoreconfHook, pkg-config
-, sysfsutils
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libtool
+, pkg-config
+, psmisc
 , argp-standalone
+, openssl
+, jitterentropy, withJitterEntropy ? true
   # WARNING: DO NOT USE BEACON GENERATED VALUES AS SECRET CRYPTOGRAPHIC KEYS
   # https://www.nist.gov/programs-projects/nist-randomness-beacon
-, curl ? null, libxml2 ? null, openssl ? null, withNistBeacon ? false
-  # Systems that support RDRAND but not AES-NI require libgcrypt to use RDRAND as an entropy source
-, libgcrypt ? null, withGcrypt ? true
-, jitterentropy ? null, withJitterEntropy ? true
-, libp11 ? null, opensc ? null, withPkcs11 ? true
+, curl, jansson, libxml2, withNistBeacon ? false
+, libp11, opensc, withPkcs11 ? true
+, librtlsdr, withRtlsdr ? true
 }:
-
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "rng-tools";
-  version = "6.11";
+  version = "6.15";
 
   src = fetchFromGitHub {
     owner = "nhorman";
-    repo = "rng-tools";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-qheJaeVX2zuv0mvKEd6wcbSHFjiJE0t5hVCJiRSKm3M=";
+    hash = "sha256-km+MEng3VWZF07sdvGLbAG/vf8/A1DxhA/Xa2Y+LAEQ=";
   };
-
-  postPatch = ''
-    ${optionalString withPkcs11 ''
-      substituteInPlace rngd.c \
-        --replace /usr/lib64/opensc-pkcs11.so ${opensc}/lib/opensc-pkcs11.so
-    ''}
-  '';
 
   nativeBuildInputs = [ autoreconfHook libtool pkg-config ];
 
   configureFlags = [
-    (withFeature   withGcrypt        "libgcrypt")
-    (enableFeature withJitterEntropy "jitterentropy")
-    (withFeature   withNistBeacon    "nistbeacon")
-    (withFeature   withPkcs11        "pkcs11")
+    (lib.enableFeature (withJitterEntropy) "jitterentropy")
+    (lib.withFeature   (withNistBeacon)    "nistbeacon")
+    (lib.withFeature   (withPkcs11)        "pkcs11")
+    (lib.withFeature   (withRtlsdr)        "rtlsdr")
   ];
 
-  # argp-standalone is only used when libc lacks argp parsing (musl)
-  buildInputs = [ sysfsutils ]
-    ++ optionals stdenv.hostPlatform.isx86_64 [ argp-standalone ]
-    ++ optionals withGcrypt        [ libgcrypt ]
-    ++ optionals withJitterEntropy [ jitterentropy ]
-    ++ optionals withNistBeacon    [ curl libxml2 openssl ]
-    ++ optionals withPkcs11        [ libp11 openssl ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [ argp-standalone ]
+    ++ lib.optionals withJitterEntropy [ jitterentropy ]
+    ++ lib.optionals withNistBeacon    [ curl jansson libxml2 ]
+    ++ lib.optionals withPkcs11        [ libp11 openssl ]
+    ++ lib.optionals withRtlsdr        [ librtlsdr ];
 
   enableParallelBuilding = true;
 
-  # For cross-compilation
-  makeFlags = [ "AR:=$(AR)" ];
+  makeFlags = [
+    "AR:=$(AR)" # For cross-compilation
+  ] ++ lib.optionals withPkcs11 [
+    "PKCS11_ENGINE=${opensc}/lib/opensc-pkcs11.so" # Overrides configure script paths
+  ];
 
   doCheck = true;
   preCheck = "patchShebangs tests/*.sh";
+  checkInputs = [ psmisc ]; # rngtestjitter.sh needs killall
 
-  meta = {
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    set -o pipefail
+    $out/bin/rngtest --version | grep $version
+    runHook postInstallCheck
+  '';
+
+  meta = with lib; {
     description = "A random number generator daemon";
     homepage = "https://github.com/nhorman/rng-tools";
+    changelog = "https://github.com/nhorman/rng-tools/releases/tag/v${version}";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ johnazoidberg c0bw3b ];

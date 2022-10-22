@@ -1,41 +1,34 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, zstd }:
 
-let
-  fetchDB = src: sha256: fetchurl {
-    inherit sha256;
-    url = "https://geolite.maxmind.com/download/geoip/database/${src}";
-  };
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "geolite-legacy";
-  version = "2017-12-02";
+  version = "20220621";
 
-  srcGeoIP = fetchDB
-    "GeoLiteCountry/GeoIP.dat.gz"
-    "1nggml11wzlanmzk6wbw2kla91fj8ggd9kh9yz42lnyckdlf5ac4";
-  srcGeoIPv6 = fetchDB
-    "GeoIPv6.dat.gz"
-    "0w809xgmr5zi4fgm9q3lhrnh1vl62s49n737bhq4jplm5918ki50";
-  srcGeoLiteCity = fetchDB
-    "GeoLiteCity.dat.gz"
-    "0cibajsv5xdjpw1qfx22izm5azqcj0d7nvk39irgwflkim9jfjbs";
-  srcGeoLiteCityv6 = fetchDB
-    "GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz"
-    "1ldwbzgs64irfgb3kq3jp8fmhwmwqk713dr4kkdqlglrblr9hfkc";
-  srcGeoIPASNum = fetchDB
-    "asnum/GeoIPASNum.dat.gz"
-    "06qqs8qr8vxqwd80npz7n66k3bpc1vs7w43i2bb4k0di5yxnjwr9";
-  srcGeoIPASNumv6 = fetchDB
-    "asnum/GeoIPASNumv6.dat.gz"
-    "1qyq4h8cja62giv6q1qqc502vsq53wzz1kx80mgvwngmycrxa21k";
+  # We use Arch Linux package as a snapshot, because upstream database is updated in-place.
+  geoip = fetchurl {
+    url = "https://archive.archlinux.org/packages/g/geoip-database/geoip-database-${version}-1-any.pkg.tar.zst";
+    sha256 = "sha256-dmj3EtdAYVBcRnmHGNjBVyDQIKtVoubNs07zYVH9HVM=";
+  };
+
+  extra = fetchurl {
+    url = "https://archive.archlinux.org/packages/g/geoip-database-extra/geoip-database-extra-${version}-1-any.pkg.tar.zst";
+    sha256 = "sha256-jViHQ+w9SEqFCbWf4KtNiTdWXT0RuCTjZ9dus0a3F0k=";
+  };
+
+  nativeBuildInputs = [ zstd ];
+
+  buildCommand = ''
+    tar -xaf ${geoip}
+    tar -xaf ${extra}
+    mkdir -p $out/share
+    mv usr/share/GeoIP $out/share
+  '';
 
   meta = with lib; {
     description = "GeoLite Legacy IP geolocation databases";
-    homepage = "https://geolite.maxmind.com/download/geoip";
-    license = licenses.cc-by-sa-30;
+    homepage = "https://mailfud.org/geoip-legacy/";
+    license = licenses.cc-by-sa-40;
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];
   };
-
-  builder = ./builder.sh;
 }

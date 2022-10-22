@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "cachelib";
-  version = "0.3.0";
+  version = "0.9.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-ssyHNlrSrG8YHRS131jJtmgl6eMTNdet1Hf0nTxL8sM=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-LO1VdirKWXIAy3U8oRtnFI58qO+yn6Vm5bZdCjdgKwo=";
   };
 
   checkInputs = [

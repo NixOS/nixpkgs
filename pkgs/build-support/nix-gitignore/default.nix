@@ -12,11 +12,6 @@ with builtins;
 let
   debug = a: trace a a;
   last = l: elemAt l ((length l) - 1);
-
-  throwIfOldNix = let required = "2.0"; in
-    if compareVersions nixVersion required == -1
-    then throw "nix (v${nixVersion} =< v${required}) is too old for nix-gitignore"
-    else true;
 in rec {
   # [["good/relative/source/file" true] ["bad.tmpfile" false]] -> root -> path
   filterPattern = patterns: root:
@@ -31,7 +26,6 @@ in rec {
 
   # string -> [[regex bool]]
   gitignoreToPatterns = gitignore:
-    assert throwIfOldNix;
     let
       # ignore -> bool
       isComment = i: (match "^(#.*|$)" i) != null;

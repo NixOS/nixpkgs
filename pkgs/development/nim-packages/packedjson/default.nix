@@ -3,6 +3,6 @@
 fetchFromGitHub {
   owner = "Araq";
   repo = "packedjson";
-  rev = "7198cc8";
-  sha256 = "1ay2zd88q8hvpvigsg8h0y5vc65hk3lk0d48fy9hwg4lcng19mp1";
+  rev = "d11d167";
+  sha256 = "1302rn58277c3ic5sfq89c4mkn0d66bhilifh5xjf40x74ahir5x";
 }

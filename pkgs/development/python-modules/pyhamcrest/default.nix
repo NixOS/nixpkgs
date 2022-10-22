@@ -1,20 +1,39 @@
-{ lib, buildPythonPackage, fetchPypi
-, mock, pytest
-, six
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, hatch-vcs
+, numpy
+, pythonOlder
+, pytest-xdist
+, pytestCheckHook
 }:
-buildPythonPackage rec {
-  pname = "PyHamcrest";
-  version = "2.0.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "412e00137858f04bde0729913874a48485665f2d36fe9ee449f26be864af9316";
+buildPythonPackage rec {
+  pname = "pyhamcrest";
+  version = "2.0.4";
+  format = "pyproject";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "hamcrest";
+    repo = "PyHamcrest";
+    rev = "refs/tags/V${version}";
+    hash = "sha256-CIkttiijbJCR0zdmwM5JvFogQKYuHUXHJhdyWonHcGk=";
   };
 
-  checkInputs = [ mock pytest ];
-  propagatedBuildInputs = [ six ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  doCheck = false;  # pypi tarball does not include tests
+  nativeBuildInputs = [
+    hatchling
+    hatch-vcs
+  ];
+
+  checkInputs = [
+    numpy
+    pytest-xdist
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/hamcrest/PyHamcrest";

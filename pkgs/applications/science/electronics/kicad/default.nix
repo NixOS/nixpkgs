@@ -22,7 +22,7 @@
 , sanitizeAddress ? false
 , sanitizeThreads ? false
 , with3d ? true
-, withI18n ? false
+, withI18n ? true
 , withPCM ? true # Plugin and Content Manager
 , srcs ? { }
 }:

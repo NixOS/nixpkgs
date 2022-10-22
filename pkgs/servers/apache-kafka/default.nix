@@ -12,9 +12,9 @@ let
       jre = jre11;
     };
     "2.8" = {
-      kafkaVersion = "2.8.1";
+      kafkaVersion = "2.8.2";
       scalaVersion = "2.13";
-      sha256 = "0fgil47hxdnc374k0p9sxv6b163xknp3pkihv3r99p977czb1228";
+      sha256 = "sha256-inZXZJSs8ivtEqF6E/ApoyUHn8vg38wUG3KhowP8mfQ=";
       jre = jre11;
     };
   };
@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
     homepage = "https://kafka.apache.org";
     description = "A high-throughput distributed messaging system";
     license = licenses.asl20;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     maintainers = [ maintainers.ragge ];
     platforms = platforms.unix;
   };

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, m17n_db, autoreconfHook, pkg-config }:
+{ lib, stdenv, fetchurl, fetchpatch, m17n_db, autoreconfHook, pkg-config }:
 stdenv.mkDerivation rec {
   pname = "m17n-lib";
   version = "1.8.0";
@@ -7,6 +7,17 @@ stdenv.mkDerivation rec {
     url = "https://download.savannah.gnu.org/releases/m17n/m17n-lib-${version}.tar.gz";
     sha256 = "0jp61y09xqj10mclpip48qlfhniw8gwy8b28cbzxy8hq8pkwmfkq";
   };
+
+  patches = [
+    (fetchpatch {
+      # Patch pending upstream inclusion:
+      #   https://savannah.nongnu.org/bugs/index.php?61377
+      name = "parallel-build.patch";
+      url = "https://savannah.nongnu.org/bugs/download.php?file_id=53704";
+      hash = "sha256-1smKSIFVRJZSwCv0NiUsnndxKcPnJ/wqzH8+ka6nfNM=";
+      excludes = [ "src/ChangeLog" ];
+    })
+  ];
 
   strictDeps = true;
 
@@ -17,10 +28,7 @@ stdenv.mkDerivation rec {
     m17n_db
   ];
 
-  # Fails parallel build due to missing intra-package depends:
-  #   https://savannah.nongnu.org/bugs/index.php?61377
-  #     make[2]: *** No rule to make target '../src/libm17n-core.la', needed by 'libm17n.la'.  Stop.
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   meta = {
     homepage = "https://www.nongnu.org/m17n/";

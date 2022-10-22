@@ -86,6 +86,8 @@ mkDerivation rec {
     homepage = "https://www.signalyst.com/custom.html";
     description = "High-end upsampling multichannel software HD-audio player";
     license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ lovesegfault ];
   };
 }

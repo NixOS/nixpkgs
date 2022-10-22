@@ -29,6 +29,8 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
 
               inherit (wg-snakeoil-keys.peer1) publicKey;
             };
+
+            dns = [ "10.23.42.2" "fc00::2" "wg0" ];
           };
         };
       };
@@ -38,6 +40,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
         ip6 = "fd00::2";
         extraConfig = {
           boot = lib.mkIf (kernelPackages != null) { inherit kernelPackages; };
+          networking.useNetworkd = true;
           networking.wg-quick.interfaces.wg0 = {
             address = [ "10.23.42.2/32" "fc00::2/128" ];
             inherit (wg-snakeoil-keys.peer1) privateKey;
@@ -49,6 +52,8 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
 
               inherit (wg-snakeoil-keys.peer0) publicKey;
             };
+
+            dns = [ "10.23.42.1" "fc00::1" "wg0" ];
           };
         };
       };

@@ -1,21 +1,32 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pox";
-  version = "0.2.7";
+  version = "0.3.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06afe1a4a1dbf8b47f7ad5a3c1d8ada9104c64933a1da11338269a2bd8642778";
+    sha256 = "sha256-y7DArNZQwP+2IJmdphHpOq5RBcRqCExM6vL3BO1wjB4=";
   };
+
+  # Test sare failing the sandbox
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "pox"
+  ];
 
   meta = with lib; {
     description = "Utilities for filesystem exploration and automated builds";
+    homepage = "https://pox.readthedocs.io/";
     license = licenses.bsd3;
-    homepage = "https://github.com/uqfoundation/pox/";
+    maintainers = with maintainers; [ ];
   };
-
 }

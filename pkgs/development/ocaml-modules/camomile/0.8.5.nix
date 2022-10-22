@@ -14,7 +14,9 @@ stdenv.mkDerivation {
     sha256 = "167279lia6qx62mdcyc5rjsi4gf4yi52wn9mhgd9y1v3754z7fwb";
   })];
 
-  buildInputs = [ocaml findlib camlp4];
+  nativeBuildInputs = [ocaml findlib camlp4 ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 
@@ -22,7 +24,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/yoriyuki/Camomile/tree/master/Camomile";
     description = "A comprehensive Unicode library for OCaml";
     license = lib.licenses.lgpl21;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = [
       lib.maintainers.maggesi
     ];

@@ -151,7 +151,7 @@ let
 
     disallowedReferences = [ openjdk13-bootstrap ];
 
-    meta = import ./meta.nix lib;
+    meta = import ./meta.nix lib version;
 
     passthru = {
       architecture = "";

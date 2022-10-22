@@ -1,17 +1,22 @@
-{ lib, python3Packages, ffmpeg }:
+{ stdenv
+, lib
+, python3
+, ffmpeg
+}:
 
-python3Packages.buildPythonApplication rec {
-  version = "2.2";
-  pname   = "sigal";
+python3.pkgs.buildPythonApplication rec {
+  pname = "sigal";
+  version = "2.3";
+  format = "setuptools";
 
-  src = python3Packages.fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit version pname;
-    sha256 = "sha256-49XsNdZuicsiYJZuF1UdqMA4q33Ly/Ug/Hc4ybJKmPo=";
+    hash = "sha256-4Zsb/OBtU/jV0gThEYe8bcrb+6hW+hnzQS19q1H409Q=";
   };
 
-  disabled = !(python3Packages.pythonAtLeast "3.6");
+  patches = [ ./copytree-permissions.patch ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     # install_requires
     jinja2
     markdown
@@ -25,20 +30,28 @@ python3Packages.buildPythonApplication rec {
     feedgenerator
     zopfli
     cryptography
+
+    setuptools # needs pkg_resources
   ];
 
   checkInputs = [
     ffmpeg
-  ] ++ (with python3Packages; [
+  ] ++ (with python3.pkgs; [
     pytestCheckHook
   ]);
 
-  makeWrapperArgs = [ "--prefix PATH : ${ffmpeg}/bin" ];
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_nonmedia_files"
+  ];
+
+  makeWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}"
+  ];
 
   meta = with lib; {
     description = "Yet another simple static gallery generator";
-    homepage    = "http://sigal.saimon.org/en/latest/index.html";
-    license     = licenses.mit;
+    homepage = "http://sigal.saimon.org/";
+    license = licenses.mit;
     maintainers = with maintainers; [ domenkozar matthiasbeyer ];
   };
 }

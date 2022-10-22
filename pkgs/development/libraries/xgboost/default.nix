@@ -6,9 +6,8 @@
 , gtest
 , doCheck ? true
 , cudaSupport ? config.cudaSupport or false
-, cudatoolkit
 , ncclSupport ? false
-, nccl
+, cudaPackages
 , llvmPackages
 }:
 
@@ -16,26 +15,39 @@ assert ncclSupport -> cudaSupport;
 
 stdenv.mkDerivation rec {
   pname = "xgboost";
-  version = "1.5.0";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "dmlc";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-xrRKpZ6NSBtEL2CBN7KggDwIvQKIPD8EBlA0oCJv8mw=";
+    sha256 = "sha256-h7zcHCOxe1h7HRB6idtjf4HUBEoHC4V2pqbN9hpe00g=";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
+  nativeBuildInputs = [
+    cmake
+  ] ++ lib.optionals stdenv.isDarwin [
+    llvmPackages.openmp
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.autoAddOpenGLRunpathHook
+  ];
 
-  buildInputs = [ gtest ] ++ lib.optional cudaSupport cudatoolkit
-                ++ lib.optional ncclSupport nccl;
+  buildInputs = [ gtest ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit
+                ++ lib.optional ncclSupport cudaPackages.nccl;
 
   cmakeFlags = lib.optionals doCheck [ "-DGOOGLE_TEST=ON" ]
-    ++ lib.optionals cudaSupport [ "-DUSE_CUDA=ON" "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc" ]
+    ++ lib.optionals cudaSupport [ "-DUSE_CUDA=ON" "-DCUDA_HOST_COMPILER=${cudaPackages.cudatoolkit.cc}/bin/cc" ]
+    ++ lib.optionals (cudaSupport && lib.versionAtLeast cudaPackages.cudatoolkit.version "11.4.0") [ "-DBUILD_WITH_CUDA_CUB=ON" ]
     ++ lib.optionals ncclSupport [ "-DUSE_NCCL=ON" ];
 
   inherit doCheck;
+
+  # By default, cmake build will run ctests with all checks enabled
+  # If we're building with cuda, we run ctest manually so that we can skip the GPU tests
+  checkPhase = lib.optionalString cudaSupport ''
+    ctest --force-new-ctest-process ${lib.optionalString cudaSupport "-E TestXGBoostLib"}
+  '';
 
   installPhase = let
     libname = "libxgboost${stdenv.hostPlatform.extensions.sharedLibrary}";

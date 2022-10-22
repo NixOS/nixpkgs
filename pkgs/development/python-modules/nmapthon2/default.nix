@@ -1,25 +1,32 @@
 { lib
 , appdirs
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "nmapthon2";
-  version = "0.1.2";
+  version = "0.1.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-6mGMB8nW6CqTPxgc1fveh6fJo/t+jpUS6rJ2VR2gU/g=";
+  src = fetchFromGitHub {
+    owner = "cblopez";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-4Na75TdKDywUomJF4tDWUWwCCtcOSxBUMOF7+FDhbpY=";
   };
 
-  # Tests are not part of the PyPI source and source is not tagged
-  # https://github.com/cblopez/nmapthon2/issues/3
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "tests/scanner_tests.py"
+  ];
 
   pythonImportsCheck = [
     "nmapthon2"

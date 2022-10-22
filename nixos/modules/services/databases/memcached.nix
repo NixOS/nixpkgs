@@ -17,44 +17,44 @@ in
   options = {
 
     services.memcached = {
-      enable = mkEnableOption "Memcached";
+      enable = mkEnableOption (lib.mdDoc "Memcached");
 
       user = mkOption {
         type = types.str;
         default = "memcached";
-        description = "The user to run Memcached as";
+        description = lib.mdDoc "The user to run Memcached as";
       };
 
       listen = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = "The IP address to bind to.";
+        description = lib.mdDoc "The IP address to bind to.";
       };
 
       port = mkOption {
         type = types.port;
         default = 11211;
-        description = "The port to bind to.";
+        description = lib.mdDoc "The port to bind to.";
       };
 
-      enableUnixSocket = mkEnableOption "unix socket at /run/memcached/memcached.sock";
+      enableUnixSocket = mkEnableOption (lib.mdDoc "unix socket at /run/memcached/memcached.sock");
 
       maxMemory = mkOption {
         type = types.ints.unsigned;
         default = 64;
-        description = "The maximum amount of memory to use for storage, in megabytes.";
+        description = lib.mdDoc "The maximum amount of memory to use for storage, in megabytes.";
       };
 
       maxConnections = mkOption {
         type = types.ints.unsigned;
         default = 1024;
-        description = "The maximum number of simultaneous connections.";
+        description = lib.mdDoc "The maximum number of simultaneous connections.";
       };
 
       extraOptions = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "A list of extra options that will be added as a suffix when running memcached.";
+        description = lib.mdDoc "A list of extra options that will be added as a suffix when running memcached.";
       };
     };
 

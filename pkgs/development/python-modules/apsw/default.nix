@@ -4,12 +4,12 @@
 , fetchFromGitHub
 , sqlite
 , isPyPy
-, pytestCheckHook
+, python
 }:
 
 buildPythonPackage rec {
   pname = "apsw";
-  version = "3.36.0-r1";
+  version = "3.39.3.0";
   format = "setuptools";
 
   disabled = isPyPy;
@@ -17,35 +17,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rogerbinns";
     repo = "apsw";
-    rev = version;
-    sha256 = "sha256-kQqJqDikvEC0+PNhQxSNTcjQc+RwvaOSGz9VL3FCetg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-rUG6TXGdF+XaRTFn2luffYw+1EEChxtLgQx2Gn+7J6A=";
   };
 
   buildInputs = [
     sqlite
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "tests.py"
-  ];
-
-  disabledTests = [
-    "testCursor"
-    "testLoadExtension"
-    "testShell"
-    "testVFS"
-    "testVFSWithWAL"
-    "testdb"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # This is https://github.com/rogerbinns/apsw/issues/277 but
-    # because we use pytestCheckHook we need to blacklist the test
-    # manually
-    "testzzForkChecker"
-  ];
+  # Project uses custom test setup to exclude some tests by default, so using pytest
+  # requires more maintenance
+  # https://github.com/rogerbinns/apsw/issues/335
+  checkPhase = ''
+    ${python.interpreter} setup.py test
+  '';
 
   pythonImportsCheck = [
     "apsw"
@@ -55,6 +40,6 @@ buildPythonPackage rec {
     description = "A Python wrapper for the SQLite embedded relational database engine";
     homepage = "https://github.com/rogerbinns/apsw";
     license = licenses.zlib;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ gador ];
   };
 }

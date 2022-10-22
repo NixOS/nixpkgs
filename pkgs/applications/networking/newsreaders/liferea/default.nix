@@ -19,15 +19,16 @@
 , libsecret
 , gobject-introspection
 , glib-networking
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "liferea";
-  version = "1.12.9";
+  version = "1.14-RC1";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "06ybr1wjlfir8iqjx6x0v1knd4b2hsy30qmkk4kssy6ky2ahc66q";
+    sha256 = "cBtS+Km2d1n5Yl0wrQkN3Pg6OxSzhG7oVu7ZJ5RQuRQ=";
   };
 
   nativeBuildInputs = [
@@ -68,6 +69,11 @@ stdenv.mkDerivation rec {
     buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/lwindolf/${pname}";
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "A GTK-based news feed aggregator";

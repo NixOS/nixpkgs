@@ -16,7 +16,6 @@ import ./make-test-python.nix ({ pkgs, ...}: {
           frontend http
             bind *:80
             mode http
-            option http-use-htx
             http-request use-service prometheus-exporter if { path /metrics }
             use_backend http_server
         '';

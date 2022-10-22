@@ -14,7 +14,7 @@ python3Packages.buildPythonPackage rec {
     pyyaml
     pyfiglet
     asciimatics
-    mistune_2_0
+    mistune
   ];
 
   pythonImportsCheck = [ "present" ];

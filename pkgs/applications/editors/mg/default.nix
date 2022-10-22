@@ -2,14 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "mg";
-  version = "6.9";
+  version = "7.0";
 
   src = fetchFromGitHub {
     owner = "ibara";
     repo = "mg";
     rev = "mg-${version}";
-    sha256 = "1w49yb9v1657rv1w5w7rc9ih1d2vzv6ym3mzhf2wgmh04pdm6hid";
+    sha256 = "sha256-qnb0yB/NNJV257dsLmP84brajoRG03U+Ja1ACYbBvbE=";
   };
+
+  postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    substituteInPlace configure --replace "./conftest" "echo"
+  '';
 
   enableParallelBuilding = true;
 

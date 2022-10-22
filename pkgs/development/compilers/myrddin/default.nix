@@ -4,7 +4,6 @@
 , pkg-config
 , bison
 , binutils
-, binutils-unwrapped
 , makeWrapper
 }:
 
@@ -27,17 +26,17 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace mk/c.mk \
-        --replace "-Werror" ""
+      --replace "-Werror" ""
   '';
 
   buildPhase = ''
-    make bootstrap
-    make
+    make bootstrap -j$NIX_BUILD_CORES
+    make -j$NIX_BUILD_CORES
   '';
 
   postInstall = ''
     for b in $out/bin/*; do
-        wrapProgram $b --prefix PATH : $out/bin:${lib.makeBinPath [ binutils ]}
+      wrapProgram $b --prefix PATH : $out/bin:${lib.makeBinPath [ binutils ]}
     done
   '';
 
@@ -53,5 +52,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ luc65r ];
     platforms = platforms.all;
+    # darwin: never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/myrddin.x86_64-darwin
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
   };
 }

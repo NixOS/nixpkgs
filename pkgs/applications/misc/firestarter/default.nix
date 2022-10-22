@@ -8,11 +8,13 @@
 , glibc
 , git
 , pkg-config
-, cudatoolkit
+, cudaPackages ? {}
 , withCuda ? false
 }:
 
 let
+  inherit (cudaPackages) cudatoolkit;
+
   hwloc = stdenv.mkDerivation rec {
     pname = "hwloc";
     version = "2.2.0";
@@ -97,6 +99,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     homepage = "https://tu-dresden.de/zih/forschung/projekte/firestarter";
     description = "Processor Stress Test Utility";
     platforms = platforms.linux;

@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     description = "Icarus Verilog compiler";
     homepage    = "http://iverilog.icarus.com/";  # https does not work
     license     = with licenses; [ gpl2Plus lgpl21Plus ];
-    maintainers = with maintainers; [ winden thoughtpolice ];
+    maintainers = with maintainers; [ thoughtpolice ];
     platforms   = platforms.all;
   };
 }

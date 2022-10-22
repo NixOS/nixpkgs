@@ -10,21 +10,22 @@
 , libX11
 , Carbon
 , OpenGL
+, x11Support ? !stdenv.isDarwin
 }:
 
 let
   inherit (lib) getLib optional optionalString;
 
 in
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "libepoxy";
-  version = "1.5.9";
+  version = "1.5.10";
 
   src = fetchFromGitHub {
     owner = "anholt";
     repo = pname;
     rev = version;
-    sha256 = "sha256-8rdmC8FZUkKkEvWPJIdfrBQHiwa81vl5tmVqRdU4UIY=";
+    sha256 = "sha256-gZiyPOW2PeTMILcPiUTqPUGRNlMM5mI1z9563v4SgEs=";
   };
 
   patches = [ ./libgl-path.patch ];
@@ -40,7 +41,7 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [ meson ninja pkg-config utilmacros python3 ];
 
-  buildInputs = [
+  buildInputs = lib.optionals x11Support [
     libGL
     libX11
   ] ++ lib.optionals stdenv.isDarwin [
@@ -50,12 +51,17 @@ stdenv.mkDerivation (rec {
 
   mesonFlags = [
     "-Dtests=${if doCheck then "true" else "false"}"
-  ]
-  ++ optional stdenv.isDarwin "-Dglx=yes";
+    "-Dglx=${if x11Support then "yes" else "no"}"
+  ];
 
-  NIX_CFLAGS_COMPILE = ''-DLIBGL_PATH="${getLib libGL}/lib"'';
+  NIX_CFLAGS_COMPILE = lib.optionalString x11Support ''-DLIBGL_PATH="${getLib libGL}/lib"'';
 
-  # tests are running from version 1.5.9
+  # cgl_epoxy_api fails in darwin sandbox and on Hydra (because it's headless?)
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace ../test/meson.build \
+      --replace "[ 'cgl_epoxy_api', [ 'cgl_epoxy_api.c' ] ]," ""
+  '';
+
   doCheck = true;
 
   meta = with lib; {
@@ -65,10 +71,4 @@ stdenv.mkDerivation (rec {
     maintainers = with maintainers; [ goibhniu erictapen ];
     platforms = platforms.unix;
   };
-} // lib.optionalAttrs stdenv.isDarwin {
-  # cgl_epoxy_api fails in darwin sandbox and on Hydra (because it's headless?)
-  preCheck = ''
-    substituteInPlace ../test/meson.build \
-      --replace "[ 'cgl_epoxy_api', [ 'cgl_epoxy_api.c' ] ]," ""
-  '';
-})
+}

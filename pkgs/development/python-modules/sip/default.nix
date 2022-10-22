@@ -1,21 +1,19 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, packaging, toml }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, packaging, ply, toml, fetchpatch }:
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.1.1";
+  version = "6.7.1";
 
   src = fetchPypi {
     pname = "sip";
     inherit version;
-    sha256 = "083ykzg7zbvrfrg3ram2vx93zrmhpm817kf9bkhw8r6pzkr5mljj";
+    sha256 = "sha256-KBcP34gPk3Am/If6qcF3sGLDU8XRaeoyQrB4AmFN3Qw=";
   };
 
-  propagatedBuildInputs = [ packaging toml ];
+  propagatedBuildInputs = [ packaging ply toml ];
 
   # There aren't tests
   doCheck = false;
-
-  pythonImportsCheck = [ "sipbuild" ];
 
   # FIXME: Why isn't this detected automatically?
   # Needs to be specified in pyproject.toml, e.g.:
@@ -31,10 +29,12 @@ buildPythonPackage rec {
     else
       throw "unsupported platform";
 
+  pythonImportsCheck = [ "sipbuild" ];
+
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";
     homepage    = "https://riverbankcomputing.com/";
     license     = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ nrdxp ];
   };
 }

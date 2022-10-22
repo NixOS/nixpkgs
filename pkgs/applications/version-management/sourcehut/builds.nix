@@ -1,7 +1,8 @@
 { lib
 , fetchFromSourcehut
-, buildPythonPackage
+, fetchpatch
 , buildGoModule
+, buildPythonPackage
 , srht
 , redis
 , celery
@@ -9,32 +10,49 @@
 , markdown
 , ansi2html
 , python
+, unzip
 }:
 let
-  version = "0.74.17";
+  version = "0.82.8";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "builds.sr.ht";
     rev = version;
-    sha256 = "sha256-6Yc33lkhozpnx8e6yukUfo+/Qw5mwpJQQKuYbC7uqcU=";
+    hash = "sha256-M94zkEUJU8EwksN34sd5IkASDCQ0hHb98G5wzZsCrpg=";
   };
 
-  buildWorker = src: buildGoModule {
+  buildsrht-api = buildGoModule ({
     inherit src version;
-    pname = "builds-sr-ht-worker";
+    pname = "buildsrht-api";
+    modRoot = "api";
+    vendorHash = "sha256-8z5m4bMwLeYg4i91MMjLMqbciWvqS0icCHFUJTUHBgk=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
-    vendorSha256 = "sha256-Pf1M9a43eK4jr6QMi6kRHA8DodXQU0pqq9ua5VC3ER0=";
+  buildsrht-worker = buildGoModule {
+    inherit src version;
+    sourceRoot = "source/worker";
+    pname = "buildsrht-worker";
+    vendorHash = "sha256-y5RFPbtaGmgPpiV2Q3njeWORGZF1TJRjAbY6VgC1hek=";
+
+    patches = [
+      (fetchpatch {
+        name = "update-x-sys-for-go-1.18-on-aarch64-darwin.patch";
+        url = "https://git.sr.ht/~sircmpwn/builds.sr.ht/commit/f58bbde6bfed7d2321a3b17e991c91fc83d4c230.patch";
+        stripLen = 1;
+        hash = "sha256-vQR/T5G5Gz5tY+SEZZabsbnFKW44b+Bs+GDdydyeCDs=";
+      })
+    ];
   };
 in
 buildPythonPackage rec {
   inherit src version;
   pname = "buildsrht";
 
-  patches = [
-    # Revert change breaking Unix socket support for Redis
-    patches/redis-socket/build/0001-Revert-Add-build-submission-and-queue-monitoring.patch
-  ];
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "all: api worker" ""
+  '';
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -58,7 +76,8 @@ buildPythonPackage rec {
 
     cp -r images $out/lib
     cp contrib/submit_image_build $out/bin/builds.sr.ht
-    cp ${buildWorker "${src}/worker"}/bin/worker $out/bin/builds.sr.ht-worker
+    ln -s ${buildsrht-api}/bin/api $out/bin/buildsrht-api
+    ln -s ${buildsrht-worker}/bin/worker $out/bin/buildsrht-worker
   '';
 
   pythonImportsCheck = [ "buildsrht" ];

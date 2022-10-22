@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     description = "Named Data Neworking (NDN) Forwarding Daemon";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.bertof ];
+    maintainers = [ lib.maintainers.bertof ];
   };
 }

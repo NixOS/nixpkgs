@@ -1,24 +1,24 @@
 { lib
 , buildPythonPackage
+, dask
 , fetchPypi
-, isPy3k
 , numba
 , numpy
-, scipy
-  # Test Inputs
 , pytestCheckHook
-, dask
+, pythonOlder
+, scipy
 }:
 
 buildPythonPackage rec {
   pname = "sparse";
   version = "0.13.0";
+  format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "685dc994aa770ee1b23f2d5392819c8429f27958771f8dceb2c4fb80210d5915";
+    hash = "sha256-aF3JlKp3DuGyPy1TkoGchCnyeVh3H43OssT7gCENWRU=";
   };
 
   propagatedBuildInputs = [
@@ -26,16 +26,22 @@ buildPythonPackage rec {
     numpy
     scipy
   ];
-  checkInputs = [ pytestCheckHook dask ];
 
-  pythonImportsCheck = [ "sparse" ];
+  checkInputs = [
+    dask
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "sparse"
+  ];
 
   meta = with lib; {
     description = "Sparse n-dimensional arrays computations";
-    homepage = "https://sparse.pydata.org/en/stable/";
+    homepage = "https://sparse.pydata.org/";
     changelog = "https://sparse.pydata.org/en/stable/changelog.html";
     downloadPage = "https://github.com/pydata/sparse/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

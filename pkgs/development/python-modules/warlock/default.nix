@@ -1,27 +1,58 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, six
+, fetchFromGitHub
+, pythonOlder
+, poetry-core
 , jsonpatch
 , jsonschema
-, jsonpointer
+, six
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "warlock";
-  version = "1.3.3";
+  version = "2.0.1";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a093c4d04b42b7907f69086e476a766b7639dca50d95edc83aef6aeab9db2090";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "bcwaldon";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-HOCLzFYmOL/tCXT+NO/tCZuVXVowNEPP3g33ZYg4+6Q=";
   };
 
-  propagatedBuildInputs = [ six jsonpatch jsonschema jsonpointer ];
+  postPatch = ''
+    sed -i '/--cov/d' pytest.ini
+  '';
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    jsonpatch
+    jsonschema
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # https://github.com/bcwaldon/warlock/issues/64
+    "test_recursive_models"
+  ];
+
+  pythonImportsCheck = [
+    "warlock"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/bcwaldon/warlock";
     description = "Python object model built on JSON schema and JSON patch";
+    homepage = "https://github.com/bcwaldon/warlock";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
-
 }

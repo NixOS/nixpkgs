@@ -1,5 +1,5 @@
 { fetchurl, lib, stdenv, SDL, SDL_image, SDL_mixer, SDL_sound, libsigcxx, physfs
-, boost, expat, freetype, libjpeg, wxGTK, lua, perl, pkg-config, zlib, zip, bzip2
+, boost, expat, freetype, libjpeg, wxGTK32, lua, perl, pkg-config, zlib, zip, bzip2
 , libpng, libtiff, fluidsynth, libmikmod, libvorbis, flac, libogg }:
 
 stdenv.mkDerivation rec {
@@ -13,12 +13,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-paragui" "--disable-paraguitest" ];
 
-  NIX_CFLAGS_COMPILE = "-fpermissive -Wno-error=narrowing"; # I'm too lazy to catch all gcc47-related problems
+  NIX_CFLAGS_COMPILE = "-fpermissive -Wno-error=narrowing -std=c++11"; # I'm too lazy to catch all gcc47-related problems
   hardeningDisable = [ "format" ];
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     SDL SDL_image SDL_mixer SDL_sound libsigcxx physfs boost expat
-    freetype libjpeg wxGTK lua perl pkg-config zlib zip bzip2 libpng
+    freetype libjpeg wxGTK32 lua perl zlib zip bzip2 libpng
     libtiff fluidsynth libmikmod flac libvorbis libogg
   ];
 

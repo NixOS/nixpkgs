@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Wrapper for testing PAM modules";
     homepage = "https://cwrap.org/pam_wrapper.html";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.elyhaka ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

@@ -140,12 +140,12 @@ let
 
     certifi = buildRebar3 rec {
       name = "certifi";
-      version = "2.6.1";
+      version = "2.8.0";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "0zmvagzisnk7lj5pfipl19mjq9wn70i339hpbkfljf0vk6s9fk2j";
+        sha256 = "1slp20z2fgcq9p2bbdp1gj218kjqpx5jsa95sq40nq7qqv0yziva";
       };
 
       beamDeps = [];
@@ -686,12 +686,12 @@ let
 
     hackney = buildRebar3 rec {
       name = "hackney";
-      version = "1.17.4";
+      version = "1.18.0";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "05kbk3rpw2j3cb9pybikydxmi2nm5pidpx0jsm48av2mjr4zy5ny";
+        sha256 = "0pjwbf87nqj2ki3i076whrswh2cdhklj6cbaikdj1mq40xidmz4s";
       };
 
       beamDeps = [ certifi idna metrics mimerl parse_trans ssl_verify_fun unicode_util_compat ];
@@ -1375,12 +1375,12 @@ let
 
     sweet_xml = buildMix rec {
       name = "sweet_xml";
-      version = "0.6.6";
+      version = "0.7.2";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "0wrm3wx1c4wg8xj8lx1pg9xdpxhsbbry71l3kwgsizwjz1cc87if";
+        sha256 = "1s56f3ak35z2h9gk3g302akhwx7p4lrylichv4s4ai8g2a5fd538";
       };
 
       beamDeps = [];
@@ -1511,6 +1511,19 @@ let
         pkg = "${name}";
         version = "${version}";
         sha256 = "1rahpgz1lsd66r7ycns1ryz2qymamz1anrlps986900lsai2jxvc";
+      };
+
+      beamDeps = [];
+    };
+
+    websockex = buildMix rec {
+      name = "websockex";
+      version = "0.4.3";
+
+      src = fetchHex {
+        pkg = "${name}";
+        version = "${version}";
+        sha256 = "1r2kmi2pcmdzvgbd08ci9avy0g5p2lhx80jn736a98w55c3ygwlm";
       };
 
       beamDeps = [];

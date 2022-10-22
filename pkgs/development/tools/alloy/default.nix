@@ -17,7 +17,7 @@ let generic = { version, sha256 }:
       desktopName = "Alloy ${lib.versions.major version}";
       genericName = "Relational modelling tool";
       comment = meta.description;
-      categories = "Development;IDE;Education;";
+      categories = [ "Development" "IDE" "Education" ];
     };
 
     nativeBuildInputs = [ makeWrapper ];
@@ -47,6 +47,7 @@ let generic = { version, sha256 }:
       '';
       homepage = "http://alloytools.org/";
       downloadPage = "http://alloytools.org/download.html";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ notbandali ];

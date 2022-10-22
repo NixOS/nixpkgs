@@ -1,29 +1,45 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, pkgs
+, bluez
+, gattlib
 }:
 
 buildPythonPackage rec {
-  version = "unstable-20160819";
   pname = "pybluez";
-
-  propagatedBuildInputs = [ pkgs.bluez ];
+  version = "unstable-2022-01-28";
+  format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "karulis";
+    owner = pname;
     repo = pname;
-    rev = "a0b226a61b166e170d48539778525b31e47a4731";
-    sha256 = "104dm5ngfhqisv1aszdlr3szcav2g3bhsgzmg4qfs09b3i5zj047";
+    rev = "5096047f90a1f6a74ceb250aef6243e144170f92";
+    hash = "sha256-GA58DfCFaVzZQA1HYpGQ68bznrt4SX1ojyOVn8hyCGo=";
   };
 
-  # the tests do not pass
+  buildInputs = [
+    bluez
+  ];
+
+  propagatedBuildInputs = [
+    gattlib
+  ];
+
+  # there are no tests
   doCheck = false;
+
+  pythonImportsCheck = [
+    "bluetooth"
+    "bluetooth.ble"
+  ];
 
   meta = with lib; {
     description = "Bluetooth Python extension module";
+    homepage = "https://github.com/pybluez/pybluez";
     license = licenses.gpl2;
     maintainers = with maintainers; [ leenaars ];
+    broken = stdenv.isDarwin; # requires pyobjc-core, pyobjc-framework-Cocoa
   };
 
 }

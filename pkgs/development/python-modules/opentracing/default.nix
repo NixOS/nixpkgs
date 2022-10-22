@@ -5,12 +5,15 @@
 , futures ? null
 , gevent
 , mock
-, pytest
-, tornado }:
+, pytestCheckHook
+, tornado
+, six
+}:
 
 buildPythonPackage rec {
   pname = "opentracing";
   version = "2.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,11 +22,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = lib.optional isPy27 futures;
 
-  checkInputs = [ gevent mock pytest tornado ];
-
-  checkPhase = ''
-    pytest
-  '';
+  checkInputs = [
+    gevent
+    mock
+    pytestCheckHook
+    six
+    tornado
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/opentracing/opentracing-python";

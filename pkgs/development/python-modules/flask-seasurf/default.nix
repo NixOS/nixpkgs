@@ -1,18 +1,23 @@
-{ lib, fetchFromGitHub, buildPythonPackage, isPy3k, flask }:
+{ lib, fetchFromGitHub, buildPythonPackage, isPy3k, flask, mock, unittestCheckHook }:
 
 buildPythonPackage rec {
   pname = "Flask-SeaSurf";
-  version = "0.3.0";
+  version = "1.1.1";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "maxcountryman";
     repo = "flask-seasurf";
     rev = version;
-    sha256 = "02hsvppsz1d93v641f14fdnd22gbc12ilc9k9kn7wl119n5s3pd8";
+    sha256 = "sha256-L/ZUEqqHmsyXG5eShcITII36ttwQlZN5GBngo+GcCdw=";
   };
 
   propagatedBuildInputs = [ flask ];
+
+  checkInputs = [
+    unittestCheckHook
+    mock
+  ];
 
   pythonImportsCheck = [ "flask_seasurf" ];
 

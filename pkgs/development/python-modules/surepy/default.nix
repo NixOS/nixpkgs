@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "surepy";
-  version = "0.7.2";
+  version = "0.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -26,14 +26,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "benleb";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-yc+jXA4ndFhRZmFPz11HbVs9qaPFNa6WdwXj6hRyjw4=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-/fgNznsucjHPO44lK4tk5tDJHKjCJEbPtOO7YHmDcRQ=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'aiohttp = {extras = ["speedups"], version = "^3.7.4"}' 'aiohttp = {extras = ["speedups"], version = ">=3.7.4"}' \
-      --replace 'async-timeout = "^3.0.1"' 'async-timeout = ">=3.0.1"'
+      --replace 'async-timeout = "^3.0.1"' 'async-timeout = ">=3.0.1"' \
+      --replace 'rich = "^10.1.0"' 'rich = ">=10.1.0"'
   '';
 
   nativeBuildInputs = [

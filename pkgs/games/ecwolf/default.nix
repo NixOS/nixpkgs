@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       exec = "ecwolf";
       comment = "Enhanced Wolfenstein 3D port";
       desktopName = "Wolfenstein 3D";
-      categories = "Game;";
+      categories = [ "Game" ];
     })
   ];
 

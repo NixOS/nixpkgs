@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
       icon = pname;
       desktopName = "PreMiD";
       genericName = meta.description;
-      mimeType = "x-scheme-handler/premid";
+      mimeTypes = [ "x-scheme-handler/premid" ];
     })
   ];
 
@@ -85,6 +85,7 @@ stdenv.mkDerivation rec {
     description = "A simple, configurable utility to show your web activity as playing status on Discord";
     homepage = "https://premid.app";
     downloadPage = "https://premid.app/downloads";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mpl20;
     maintainers = with maintainers; [ natto1784 ];
     platforms = [ "x86_64-linux" ];

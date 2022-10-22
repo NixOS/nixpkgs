@@ -1,19 +1,30 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , writeScript
 , rocm-comgr
 }:
 
 stdenv.mkDerivation rec {
   pname = "rocclr";
-  version = "4.5.2";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "ROCclr";
     rev = "rocm-${version}";
-    hash = "sha256-fsQANBND/oDeC/+wmCH/aLlDTxPIi7Z/oN1HnNHHnm0=";
+    hash = "sha256-l14+l8FkiFmGuRZ9dyD/PEYH9nHVRRg1vMXMnVhg3K4=";
   };
+
+  patches = [
+    # Enable support for gfx8 again
+    # See the upstream issue: https://github.com/RadeonOpenCompute/ROCm/issues/1659
+    # And the arch patch: https://github.com/rocm-arch/rocm-arch/pull/742
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/John-Gee/rocm-arch/d6812d308fee3caf2b6bb01b4d19fe03a6a0e3bd/rocm-opencl-runtime/enable-gfx800.patch";
+      hash = "sha256-59jFDIIsTTZcNns9RyMVWPRUggn/bSlAGrky4quu8B4=";
+    })
+  ];
 
   prePatch = ''
     substituteInPlace device/comgrctx.cpp \
@@ -42,7 +53,7 @@ stdenv.mkDerivation rec {
     description = "Source package of the Radeon Open Compute common language runtime";
     homepage = "https://github.com/ROCm-Developer-Tools/ROCclr";
     license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [ lovesegfault Flakebi ];
     # rocclr seems to have some AArch64 ifdefs, but does not seem
     # to be supported yet by the build infrastructure. Recheck in
     # the future.

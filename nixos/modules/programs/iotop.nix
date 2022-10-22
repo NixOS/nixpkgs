@@ -6,7 +6,7 @@ let
   cfg = config.programs.iotop;
 in {
   options = {
-    programs.iotop.enable = mkEnableOption "iotop + setcap wrapper";
+    programs.iotop.enable = mkEnableOption (lib.mdDoc "iotop + setcap wrapper");
   };
   config = mkIf cfg.enable {
     security.wrappers.iotop = {

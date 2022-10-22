@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "openshift";
-  version = "0.12.1";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "openshift";
     repo = "openshift-restclient-python";
     rev = "v${version}";
-    sha256 = "1di55xg3nl4dwrrfw314p4mfm6593kdi7ia517v1sm6x5p4hjl78";
+    sha256 = "sha256-9mMHih2xuQve8hEnc5x4f9Pd4wX7IMy3vrxxGFCG+8o=";
   };
 
   postPatch = ''
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # requires docker
-    "test/functional"
+    # requires kubeconfig
+    "test/integration"
   ];
 
   meta = with lib; {

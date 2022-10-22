@@ -7,11 +7,12 @@
 , pytestCheckHook
 , pythonOlder
 , requests
+, oauthlib
 }:
 
 buildPythonPackage rec {
   pname = "weconnect";
-  version = "0.28.0";
+  version = "0.48.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,15 +20,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tillsteinbach";
     repo = "WeConnect-python";
-    rev = "v${version}";
-    sha256 = "sha256-J7T62L6wT9rkl/Ukf2y5kBbJEdzh2XnGgCgedkxVEmA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GXTjG/3Gk58C6TxKrgtblUZI+xf7Te9OA8HnDvNEIvA=";
   };
 
   propagatedBuildInputs = [
-    ascii-magic
-    pillow
+    oauthlib
     requests
   ];
+
+  passthru.optional-dependencies = {
+    Images = [
+      ascii-magic
+      pillow
+    ];
+  };
 
   checkInputs = [
     pytest-httpserver
@@ -40,6 +47,8 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "setup_requires=SETUP_REQUIRED," "setup_requires=[]," \
       --replace "tests_require=TEST_REQUIRED," "tests_require=[],"
+    substituteInPlace image_extra_requirements.txt \
+      --replace "pillow~=9.2.0" "pillow"
     substituteInPlace pytest.ini \
       --replace "--cov=weconnect --cov-config=.coveragerc --cov-report html" "" \
       --replace "pytest-cov" ""

@@ -1,12 +1,12 @@
 { stdenv, lib, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "rubygems";
-  version = "3.2.26";
+  pname = "rubygems";
+  version = "3.3.20";
 
   src = fetchurl {
     url = "https://rubygems.org/rubygems/rubygems-${version}.tgz";
-    sha256 = "sha256-9wa6lOWnua8zBblQKRgjjiTVPYp2TW0n7XOvgW7u1e8=";
+    sha256 = "sha256-VTUMZ2mqbszM7uXOYV6Grg7dkeGAGVXYjBX0hA/vOTg=";
   };
 
   patches = [

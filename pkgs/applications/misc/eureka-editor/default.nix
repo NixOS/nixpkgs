@@ -1,25 +1,21 @@
-{ lib, stdenv, fetchzip, fltk, zlib, xdg-utils, xorg, libjpeg, libGL }:
+{ lib, stdenv, fetchzip, fltk, zlib, xdg-utils, xorg, libjpeg, libGLU }:
 
 stdenv.mkDerivation rec {
   pname = "eureka-editor";
-  version = "1.21";
-  shortver = "121";
+  version = "1.27b";
 
   src = fetchzip {
-    url = "mirror://sourceforge/eureka-editor/Eureka/${version}/eureka-${shortver}-source.tar.gz";
-    sha256 = "0fpj13aq4wh3f7473cdc5jkf1c71jiiqmjc0ihqa0nm3hic1d4yv";
+    url = "mirror://sourceforge/eureka-editor/Eureka/${lib.versions.majorMinor version}/eureka-${version}-source.tar.gz";
+    sha256 = "075w7xxsgbgh6dhndc1pfxb2h1s5fhsw28yl1c025gmx9bb4v3bf";
   };
 
-  buildInputs = [ fltk zlib xdg-utils libjpeg xorg.libXinerama libGL ];
+  buildInputs = [ fltk zlib xdg-utils libjpeg xorg.libXinerama libGLU ];
 
   enableParallelBuilding = true;
 
-  preBuild = ''
-    substituteInPlace src/main.cc \
-      --replace /usr/local $out
-    substituteInPlace Makefile \
-      --replace /usr/local $out \
-      --replace "-o root " ""
+  postPatch = ''
+    substituteInPlace src/main.cc --replace /usr/local $out
+    substituteInPlace Makefile    --replace /usr/local $out
   '';
 
   preInstall = ''
@@ -32,9 +28,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://eureka-editor.sourceforge.net";
     description = "A map editor for the classic DOOM games, and a few related games such as Heretic and Hexen";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
+    badPlatforms = platforms.darwin;
     maintainers = with maintainers; [ neonfuz ];
   };
 }

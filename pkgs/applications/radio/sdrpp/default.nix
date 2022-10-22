@@ -99,9 +99,6 @@ stdenv.mkDerivation rec {
     OPT_BUILD_RIGCTL_SERVER = rigctl_server;
   };
 
-  CXXFLAGS = lib.optional stdenv.cc.isClang "-std=c++17";
-  LDFLAGS = lib.optional stdenv.cc.isClang "-lc++fs";
-
   NIX_CFLAGS_COMPILE = "-fpermissive";
 
   hardeningDisable = lib.optional stdenv.cc.isClang "format";

@@ -53,12 +53,12 @@ in
 
   options.services.privoxy = {
 
-    enable = mkEnableOption "Privoxy, non-caching filtering proxy";
+    enable = mkEnableOption (lib.mdDoc "Privoxy, non-caching filtering proxy");
 
     enableTor = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to configure Privoxy to use Tor's faster SOCKS port,
         suitable for HTTP.
       '';
@@ -67,21 +67,21 @@ in
     inspectHttps = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to configure Privoxy to inspect HTTPS requests, meaning all
         encrypted traffic will be filtered as well. This works by decrypting
         and re-encrypting the requests using a per-domain generated certificate.
 
         To issue per-domain certificates, Privoxy must be provided with a CA
-        certificate, using the <literal>ca-cert-file</literal>,
-        <literal>ca-key-file</literal> settings.
+        certificate, using the `ca-cert-file`,
+        `ca-key-file` settings.
 
-        <warning><para>
-          The CA certificate must also be added to the system trust roots,
-          otherwise browsers will reject all Privoxy certificates as invalid.
-          You can do so by using the option
-          <option>security.pki.certificateFiles</option>.
-        </para></warning>
+        ::: {.warning}
+        The CA certificate must also be added to the system trust roots,
+        otherwise browsers will reject all Privoxy certificates as invalid.
+        You can do so by using the option
+        {option}`security.pki.certificateFiles`.
+        :::
       '';
     };
 
@@ -89,8 +89,8 @@ in
       type = ageType;
       default = "10d";
       example = "12h";
-      description = ''
-        If <literal>inspectHttps</literal> is enabled, the time generated HTTPS
+      description = lib.mdDoc ''
+        If `inspectHttps` is enabled, the time generated HTTPS
         certificates will be stored in a temporary directory for reuse. Once
         the lifetime has expired the directory will cleared and the certificate
         will have to be generated again, on-demand.
@@ -98,16 +98,18 @@ in
         Depending on the traffic, you may want to reduce the lifetime to limit
         the disk usage, since Privoxy itself never deletes the certificates.
 
-        <note><para>The format is that of the <literal>tmpfiles.d(5)</literal>
-        Age parameter.</para></note>
+        ::: {.note}
+        The format is that of the `tmpfiles.d(5)`
+        Age parameter.
+        :::
       '';
     };
 
     userActions = mkOption {
       type = types.lines;
       default = "";
-      description = ''
-        Actions to be included in a <literal>user.action</literal> file. This
+      description = lib.mdDoc ''
+        Actions to be included in a `user.action` file. This
         will have a higher priority and can be used to override all other
         actions.
       '';
@@ -116,8 +118,8 @@ in
     userFilters = mkOption {
       type = types.lines;
       default = "";
-      description = ''
-        Filters to be included in a <literal>user.filter</literal> file. This
+      description = lib.mdDoc ''
+        Filters to be included in a `user.filter` file. This
         will have a higher priority and can be used to override all other
         filters definitions.
       '';
@@ -130,13 +132,13 @@ in
         options.listen-address = mkOption {
           type = types.str;
           default = "127.0.0.1:8118";
-          description = "Pair of address:port the proxy server is listening to.";
+          description = lib.mdDoc "Pair of address:port the proxy server is listening to.";
         };
 
         options.enable-edit-actions = mkOption {
           type = types.bool;
           default = false;
-          description = "Whether the web-based actions file editor may be used.";
+          description = lib.mdDoc "Whether the web-based actions file editor may be used.";
         };
 
         options.actionsfile = mkOption {
@@ -146,7 +148,7 @@ in
           apply = x: x ++ optional (cfg.userActions != "")
             (toString (pkgs.writeText "user.actions" cfg.userActions));
           default = [ "match-all.action" "default.action" ];
-          description = ''
+          description = lib.mdDoc ''
             List of paths to Privoxy action files. These paths may either be
             absolute or relative to the privoxy configuration directory.
           '';
@@ -157,7 +159,7 @@ in
           default = [ "default.filter" ];
           apply = x: x ++ optional (cfg.userFilters != "")
             (toString (pkgs.writeText "user.filter" cfg.userFilters));
-          description = ''
+          description = lib.mdDoc ''
             List of paths to Privoxy filter files. These paths may either be
             absolute or relative to the privoxy configuration directory.
           '';
@@ -179,15 +181,15 @@ in
           # debug 64
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         This option is mapped to the main Privoxy configuration file.
         Check out the Privoxy user manual at
-        <link xlink:href="https://www.privoxy.org/user-manual/config.html"/>
+        <https://www.privoxy.org/user-manual/config.html>
         for available settings and documentation.
 
-        <note><para>
-          Repeated settings can be represented by using a list.
-        </para></note>
+        ::: {.note}
+        Repeated settings can be represented by using a list.
+        :::
       '';
     };
 

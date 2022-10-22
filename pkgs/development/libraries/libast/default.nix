@@ -1,20 +1,29 @@
-{ lib, stdenv, fetchurl
-, pkg-config }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+}:
 
 stdenv.mkDerivation rec {
   pname = "libast";
-  version = "0.7.1";
+  version = "0.8";
 
-  src = fetchurl {
-    url = "http://www.eterm.org/download/${pname}-${version}.tar.gz";
-    sha256 = "1w7bs46r4lykfd83kc3bg9i1rxzzlb4ydk23ikf8mx8avz05q1aj";
+  src = fetchFromGitHub {
+    owner = "mej";
+    repo = pname;
+    rev = version;
+    hash = "sha256-rnqToFi+d6D6O+JDHQxkVjTc/0RBag6Jqv4uDcE4PNc=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   meta = with lib; {
+    inherit (src.meta) homepage;
     description = "Library of Assorted Spiffy Things";
-    homepage = "https://www.eterm.org";
     license = licenses.bsd2;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;

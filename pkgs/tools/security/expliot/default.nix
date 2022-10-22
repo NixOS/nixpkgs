@@ -12,6 +12,7 @@ let
           inherit version;
           sha256 = "0qiax309my534drk81lihq9ghngr96qnm40kbmgc9ay4fncqq6kh";
         };
+        doCheck = false;
       });
     };
   };
@@ -26,7 +27,7 @@ buildPythonApplication rec {
     owner = "expliot_framework";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7Cuj3YKKwDxP2KKueJR9ZO5Bduv+lw0Y87Rw4b0jbGY=";
+    hash = "sha256-7Cuj3YKKwDxP2KKueJR9ZO5Bduv+lw0Y87Rw4b0jbGY=";
   };
 
   propagatedBuildInputs = [
@@ -51,7 +52,10 @@ buildPythonApplication rec {
   postPatch = ''
     # https://gitlab.com/expliot_framework/expliot/-/merge_requests/113
     substituteInPlace setup.py \
-      --replace "pynetdicom>=1.5.1,<2" "pynetdicom>=2,<3"
+      --replace "pynetdicom>=1.5.1,<2" "pynetdicom>=2,<3" \
+      --replace "cryptography>=3.0,<4" "cryptography>=35,<40" \
+      --replace "python-can>=3.3.3,<4" "python-can>=3.3.3,<5" \
+      --replace "pyparsing>=2.4.7,<3" "pyparsing>=2.4.7,<4"
   '';
 
   # Project has no tests

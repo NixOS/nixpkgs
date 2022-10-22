@@ -1,27 +1,31 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "steampipe";
-  version = "0.11.0";
+  version = "0.16.4";
 
   src = fetchFromGitHub {
     owner = "turbot";
     repo = "steampipe";
     rev = "v${version}";
-    sha256 = "sha256-P/Fys9/V71+VL5Az3EGGaW+tdeQbr2wO+jvVSVZmJT0=";
+    sha256 = "sha256-awZlA02lKYpFdvCsGUC8Blv8FHek5XskkljseDGjDmk=";
   };
 
-  vendorSha256 = "sha256-PYaq74NNEOJ1jZ6PoS6zcTiUN4JA9JDjO7GB9tqgT6c=";
+  vendorSha256 = "sha256-6l3bBxGhdZGIXmdzgF44TGZQqT6gSUHSwOAE2SlgLgg=";
+  proxyVendor = true;
 
-  # tests are failing for no obvious reasons
-  doCheck = false;
+  patchPhase = ''
+    runHook prePatch
+    # Patch test that relies on looking up homedir in user struct to prefer ~
+    substituteInPlace pkg/steampipeconfig/shared_test.go \
+      --replace '"github.com/turbot/go-kit/helpers"' "" \
+      --replace 'filepaths.SteampipeDir, _ = helpers.Tildefy("~/.steampipe")' 'filepaths.SteampipeDir = "~/.steampipe"';
+    runHook postPatch
+  '';
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" "-w" ];
 
   postInstall = ''
     INSTALL_DIR=$(mktemp -d)
@@ -36,5 +40,6 @@ buildGoModule rec {
     description = "select * from cloud;";
     license = licenses.agpl3;
     maintainers = with maintainers; [ hardselius ];
+    changelog = "https://github.com/turbot/steampipe/blob/v${version}/CHANGELOG.md";
   };
 }

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, nixosTests, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.services.step-ca;
   settingsFormat = (pkgs.formats.json { });
@@ -8,68 +8,64 @@ in
 
   options = {
     services.step-ca = {
-      enable = lib.mkEnableOption "the smallstep certificate authority server";
-      openFirewall = lib.mkEnableOption "opening the certificate authority server port";
+      enable = lib.mkEnableOption (lib.mdDoc "the smallstep certificate authority server");
+      openFirewall = lib.mkEnableOption (lib.mdDoc "opening the certificate authority server port");
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.step-ca;
         defaultText = lib.literalExpression "pkgs.step-ca";
-        description = "Which step-ca package to use.";
+        description = lib.mdDoc "Which step-ca package to use.";
       };
       address = lib.mkOption {
         type = lib.types.str;
         example = "127.0.0.1";
-        description = ''
+        description = lib.mdDoc ''
           The address (without port) the certificate authority should listen at.
-          This combined with <option>services.step-ca.port</option> overrides <option>services.step-ca.settings.address</option>.
+          This combined with {option}`services.step-ca.port` overrides {option}`services.step-ca.settings.address`.
         '';
       };
       port = lib.mkOption {
         type = lib.types.port;
         example = 8443;
-        description = ''
+        description = lib.mdDoc ''
           The port the certificate authority should listen on.
-          This combined with <option>services.step-ca.address</option> overrides <option>services.step-ca.settings.address</option>.
+          This combined with {option}`services.step-ca.address` overrides {option}`services.step-ca.settings.address`.
         '';
       };
       settings = lib.mkOption {
         type = with lib.types; attrsOf anything;
-        description = ''
-          Settings that go into <filename>ca.json</filename>. See
-          <link xlink:href="https://smallstep.com/docs/step-ca/configuration">
-          the step-ca manual</link> for more information. The easiest way to
-          configure this module would be to run <literal>step ca init</literal>
-          to generate <filename>ca.json</filename> and then import it using
-          <literal>builtins.fromJSON</literal>.
-          <link xlink:href="https://smallstep.com/docs/step-cli/basic-crypto-operations#run-an-offline-x509-certificate-authority">This article</link>
+        description = lib.mdDoc ''
+          Settings that go into {file}`ca.json`. See
+          [the step-ca manual](https://smallstep.com/docs/step-ca/configuration)
+          for more information. The easiest way to
+          configure this module would be to run `step ca init`
+          to generate {file}`ca.json` and then import it using
+          `builtins.fromJSON`.
+          [This article](https://smallstep.com/docs/step-cli/basic-crypto-operations#run-an-offline-x509-certificate-authority)
           may also be useful if you want to customize certain aspects of
           certificate generation for your CA.
-          You need to change the database storage path to <filename>/var/lib/step-ca/db</filename>.
+          You need to change the database storage path to {file}`/var/lib/step-ca/db`.
 
-          <warning>
-            <para>
-              The <option>services.step-ca.settings.address</option> option
-              will be ignored and overwritten by
-              <option>services.step-ca.address</option> and
-              <option>services.step-ca.port</option>.
-            </para>
-          </warning>
+          ::: {.warning}
+          The {option}`services.step-ca.settings.address` option
+          will be ignored and overwritten by
+          {option}`services.step-ca.address` and
+          {option}`services.step-ca.port`.
+          :::
         '';
       };
       intermediatePasswordFile = lib.mkOption {
         type = lib.types.path;
         example = "/run/keys/smallstep-password";
-        description = ''
+        description = lib.mdDoc ''
           Path to the file containing the password for the intermediate
           certificate private key.
 
-          <warning>
-            <para>
-              Make sure to use a quoted absolute path instead of a path literal
-              to prevent it from being copied to the globally readable Nix
-              store.
-            </para>
-          </warning>
+          ::: {.warning}
+          Make sure to use a quoted absolute path instead of a path literal
+          to prevent it from being copied to the globally readable Nix
+          store.
+          :::
         '';
       };
     };
@@ -82,8 +78,6 @@ in
       });
     in
     {
-      passthru.tests.step-ca = nixosTests.step-ca;
-
       assertions =
         [
           {
@@ -108,6 +102,9 @@ in
           ConditionFileNotEmpty = ""; # override upstream
         };
         serviceConfig = {
+          User = "step-ca";
+          Group = "step-ca";
+          UMask = "0077";
           Environment = "HOME=%S/step-ca";
           WorkingDirectory = ""; # override upstream
           ReadWriteDirectories = ""; # override upstream
@@ -128,6 +125,14 @@ in
           StateDirectory = "step-ca";
         };
       };
+
+      users.users.step-ca = {
+        home = "/var/lib/step-ca";
+        group = "step-ca";
+        isSystemUser = true;
+      };
+
+      users.groups.step-ca = {};
 
       networking.firewall = lib.mkIf cfg.openFirewall {
         allowedTCPPorts = [ cfg.port ];

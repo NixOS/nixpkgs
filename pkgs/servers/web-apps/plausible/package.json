@@ -64,5 +64,5 @@
     "webpack-bundle-analyzer": "^4.4.2"
   },
   "name": "plausible",
-  "version": "v1.4.0"
+  "version": "v1.4.4"
 }

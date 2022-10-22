@@ -1,19 +1,23 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "sfsexp";
-  version = "1.3";
+  version = "1.4.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/sexpr/sexpr-${version}.tar.gz";
-    sha256 = "18gdwxjja0ip378hlzs8sp7q2g6hrmy7x10yf2wnxfmmylbpqn8k";
+  src = fetchFromGitHub {
+    owner = "mjsottile";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-TCAxofSRbyIdwowhHhPn483UA+QOHkLMz0P2LIi0ncA=";
   };
 
+  nativeBuildInputs = [ autoreconfHook ];
+
   meta = with lib; {
-    description = "Small, fast s-expression library";
-    homepage = "http://sexpr.sourceforge.net/";
+    description = "Small Fast S-Expression Library";
+    homepage = "https://github.com/mjsottile/sfsexp";
     maintainers = with maintainers; [ jb55 ];
-    license = licenses.gpl3;
-    platforms = with platforms; unix;
+    license = licenses.lgpl21Plus;
+    platforms = platforms.all;
   };
 }

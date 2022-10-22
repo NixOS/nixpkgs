@@ -1,20 +1,19 @@
 { angstrom
 , buildDunePackage
-, fetchzip
+, fetchurl
 , findlib
 , lib
-, menhir
 , ocaml
 , re
 }:
 
 buildDunePackage rec {
   pname = "uuuu";
-  version = "0.2.0";
+  version = "0.3.0";
 
-  src = fetchzip {
-    url = "https://github.com/mirage/uuuu/releases/download/v${version}/uuuu-v${version}.tbz";
-    sha256 = "0457qcxvakbbc56frsh8a5v4y4l0raj9p4zz7jx3brn9255j1mw3";
+  src = fetchurl {
+    url = "https://github.com/mirage/uuuu/releases/download/v${version}/uuuu-${version}.tbz";
+    sha256 = "sha256:19n39yc7spgzpk9i70r0nhkwsb0bfbvbgpf8d863p0a3wgryhzkb";
   };
 
   postPatch = ''
@@ -22,19 +21,20 @@ buildDunePackage rec {
       'ocaml} -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib '
   '';
 
-  useDune2 = true;
-
-  nativeBuildInputs = [ menhir ];
+  nativeBuildInputs = [ findlib ];
 
   buildInputs = [ angstrom ];
+
+  strictDeps = !doCheck;
 
   checkInputs = [ re ];
   doCheck = true;
 
   meta = {
     description = "A library to normalize an ISO-8859 input to Unicode code-point";
-    license = lib.licenses.mit;
     homepage = "https://github.com/mirage/uuuu";
-    maintainers = with lib.maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    mainProgram = "uuuu.generate";
   };
 }

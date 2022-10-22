@@ -1,14 +1,26 @@
-{ stable, branch, version, sha256Hash, mkOverride, commonOverrides }:
+{ stable
+, branch
+, version
+, sha256Hash
+, mkOverride
+, commonOverrides
+}:
 
-{ lib, python3, fetchFromGitHub, wrapQtAppsHook }:
+{ lib
+, python3
+, fetchFromGitHub
+, wrapQtAppsHook
+, packageOverrides ? self: super: {}
+}:
 
 let
   defaultOverrides = commonOverrides ++ [
   ];
 
   python = python3.override {
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
   };
+
 in python.pkgs.buildPythonPackage rec {
   pname = "gns3-gui";
   inherit version;
@@ -20,17 +32,33 @@ in python.pkgs.buildPythonPackage rec {
     sha256 = sha256Hash;
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [
+    wrapQtAppsHook
+  ];
+
   propagatedBuildInputs = with python.pkgs; [
-    sentry-sdk psutil jsonschema # tox for check
-    # Runtime dependencies
-    sip_4 (pyqt5.override { withWebSockets = true; }) distro setuptools
+    distro
+    jsonschema
+    psutil
+    sentry-sdk
+    setuptools
+    sip_4 (pyqt5.override { withWebSockets = true; })
   ];
 
   doCheck = false; # Failing
+
   dontWrapQtApps = true;
+
   postFixup = ''
       wrapQtApp "$out/bin/gns3"
+  '';
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "sentry-sdk==" "sentry-sdk>=" \
+      --replace "psutil==" "psutil>=" \
+      --replace "distro==" "distro>=" \
+      --replace "setuptools==" "setuptools>="
   '';
 
   meta = with lib; {
@@ -44,6 +72,6 @@ in python.pkgs.buildPythonPackage rec {
     changelog = "https://github.com/GNS3/gns3-gui/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ anthonyroussel ];
   };
 }

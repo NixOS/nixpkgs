@@ -28,8 +28,13 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     gobject-introspection
     python3Packages.poetry-core
+    python3Packages.pythonRelaxDepsHook
     wrapGAppsHook
   ];
+
+  # Can be removed in later versions
+  # https://gitlab.com/sublime-music/sublime-music/-/issues/343
+  pythonRelaxDeps = [ "python-mpv" ];
 
   buildInputs = [
     gtk3

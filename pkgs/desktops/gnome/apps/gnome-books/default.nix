@@ -1,8 +1,10 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , meson
 , ninja
 , gettext
 , fetchurl
+, fetchpatch
 , evince
 , gjs
 , pkg-config
@@ -34,6 +36,15 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
     sha256 = "0c41l8m2di8h39bmk2fnhpwglwp6qhljmwqqbihzp4ay9976zrc5";
   };
+
+  patches = [
+    # Fix build with meson 0.61
+    # https://gitlab.gnome.org/GNOME/gnome-books/-/merge_requests/62
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-books/-/commit/2663dcdaaaa71f067a4c2d0005eecc0fdf940bf5.patch";
+      sha256 = "v2mLzrxSWrkJ0N6seR8jNXX14FsneEPuE9ELLVUe6+E=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -77,6 +88,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    broken = true; # won't build with current meson; upstream is dead/archived
     homepage = "https://wiki.gnome.org/Apps/Books";
     description = "An e-book manager application for GNOME";
     maintainers = teams.gnome.members;

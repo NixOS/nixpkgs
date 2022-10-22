@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = [ asbachb ];
   };
 
-  machine = { config, pkgs, ... }: {
+  nodes.machine = { config, pkgs, ... }: {
     services.isso = {
       enable = true;
       settings = {
@@ -22,7 +22,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   ''
     machine.wait_for_unit("isso.service")
 
-    machine.wait_for_open_port("${toString port}")
+    machine.wait_for_open_port(${toString port})
 
     machine.succeed("curl --fail http://localhost:${toString port}/?uri")
     machine.succeed("curl --fail http://localhost:${toString port}/js/embed.min.js")

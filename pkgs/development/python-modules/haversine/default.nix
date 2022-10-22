@@ -3,17 +3,21 @@
 , fetchFromGitHub
 , numpy
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "haversine";
-  version = "2.5.1";
+  version = "2.7.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mapado";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-tHA1Ff/J1mfSnER2X/8e0QyQkuRz1mn8MeGlThVQaSg=";
+    hash = "sha256-iAGG1mjrt6oJ0IkmlJwrvb2Bpk4dNxV7ee9LYov03UY=";
   };
 
   checkInputs = [
@@ -21,7 +25,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "haversine" ];
+  pythonImportsCheck = [
+    "haversine"
+  ];
 
   meta = with lib; {
     description = "Python module the distance between 2 points on earth";

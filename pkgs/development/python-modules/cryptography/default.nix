@@ -1,17 +1,20 @@
-{ lib, stdenv
+{ lib
+, stdenv
+, callPackage
 , buildPythonPackage
 , fetchPypi
 , rustPlatform
 , setuptools-rust
 , openssl
-, cryptography_vectors
-, darwin
+, Security
 , packaging
 , six
 , isPyPy
 , cffi
-, pytest
+, pytestCheckHook
+, pytest-benchmark
 , pytest-subtests
+, pythonOlder
 , pretend
 , libiconv
 , iso8601
@@ -19,25 +22,27 @@
 , hypothesis
 }:
 
+let
+  cryptography-vectors = callPackage ./vectors.nix { };
+in
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "3.4.8"; # Also update the hash in vectors.nix
+  version = "38.0.1"; # Also update the hash in vectors.nix
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "072awar70cwfd2hnx0pvp1dkc7gw45mbm3wcyddvxz5frva5xk4l";
+    hash = "sha256-HbPYB6FJMfoxf5ZDVpXZ7Dhr57hLYYzGHPpdCLCuM9c=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    sha256 = "01h511h6l4qvjxbaw662m1l84pb4wrhwxmnb3qj6ik13mx2m477m";
+    hash = "sha256-o8l13fnfEUvUdDasq3LxSPArozRHKVsZfQg9DNR6M6Q=";
   };
 
   cargoRoot = "src/rust";
-
-  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = lib.optionals (!isPyPy) [
     cffi
@@ -47,37 +52,32 @@ buildPythonPackage rec {
   ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
 
   buildInputs = [ openssl ]
-             ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security libiconv ];
-  propagatedBuildInputs = [
-    packaging
-    six
-  ] ++ lib.optionals (!isPyPy) [
+    ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
+
+  propagatedBuildInputs = lib.optionals (!isPyPy) [
     cffi
   ];
 
   checkInputs = [
-    cryptography_vectors
+    cryptography-vectors
     hypothesis
     iso8601
     pretend
-    pytest
+    pytestCheckHook
+    pytest-benchmark
     pytest-subtests
     pytz
   ];
 
-  pytestFlags = lib.concatStringsSep " " ([
+  pytestFlagsArray = [
     "--disable-pytest-warnings"
-  ] ++
-    lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-      # aarch64-darwin forbids W+X memory, but this tests depends on it:
-      # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
-      "--ignore=tests/hazmat/backends/test_openssl_memleak.py"
-    ]
-  );
+  ];
 
-  checkPhase = ''
-    py.test ${pytestFlags} tests
-  '';
+  disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # aarch64-darwin forbids W+X memory, but this tests depends on it:
+    # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
+    "tests/hazmat/backends/test_openssl_memleak.py"
+  ];
 
   meta = with lib; {
     description = "A package which provides cryptographic recipes and primitives";
@@ -92,6 +92,6 @@ buildPythonPackage rec {
     changelog = "https://cryptography.io/en/latest/changelog/#v"
       + replaceStrings [ "." ] [ "-" ] version;
     license = with licenses; [ asl20 bsd3 psfl ];
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

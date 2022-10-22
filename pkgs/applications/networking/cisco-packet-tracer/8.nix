@@ -3,7 +3,6 @@
 , alsa-lib
 , autoPatchelfHook
 , buildFHSUserEnvBubblewrap
-, callPackage
 , copyDesktopItems
 , dbus
 , dpkg
@@ -27,7 +26,7 @@
 }:
 
 let
-  version = "8.0.1";
+  version = "8.2.0";
 
   ptFiles = stdenv.mkDerivation {
     name = "PacketTracer8Drv";
@@ -36,7 +35,7 @@ let
     dontUnpack = true;
     src = requireFile {
       name = "CiscoPacketTracer_${builtins.replaceStrings ["."] [""] version}_Ubuntu_64bit.deb";
-      sha256 = "77a25351b016faed7c78959819c16c7013caa89c6b1872cb888cd96edd259140";
+      sha256 = "1b19885d59f6130ee55414fb02e211a1773460689db38bfd1ac7f0d45117ed16";
       url = "https://www.netacad.com";
     };
 
@@ -72,6 +71,7 @@ let
       libXrandr
       libXrender
       libXScrnSaver
+      libXtst
       xcbutilimage
       xcbutilkeysyms
       xcbutilrenderutil
@@ -94,7 +94,7 @@ let
     desktopName = "Cisco Packet Tracer 8";
     icon = "${ptFiles}/opt/pt/art/app.png";
     exec = "packettracer8 %f";
-    mimeType = "application/x-pkt;application/x-pka;application/x-pkz;";
+    mimeTypes = [ "application/x-pkt" "application/x-pka" "application/x-pkz" ];
   };
 
   fhs = buildFHSUserEnvBubblewrap {
@@ -107,7 +107,8 @@ let
       cp "${desktopItem}"/share/applications/* "$out/share/applications/"
     '';
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "ciscoPacketTracer8";
   inherit version;
 
@@ -124,6 +125,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "Network simulation tool from Cisco";
     homepage = "https://www.netacad.com/courses/packet-tracer";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ lucasew ];
     platforms = [ "x86_64-linux" ];

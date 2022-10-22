@@ -8,17 +8,17 @@ let beat = package: extraArgs: buildGoModule (rec {
     owner = "elastic";
     repo = "beats";
     rev = "v${version}";
-    sha256 = "sha256-9Jl5Xo1iKdOY9ZE5JXKSL4ee+NdsN3KCY2dDYuxlzPI=";
+    sha256 = "sha256-DE7XpzVBu9qL7fMXXYRYLdVXrr0WB0IL0KAG0Zc3TVo=";
   };
 
-  vendorSha256 = "sha256-tyxyM7RsTHTVVxc9gagPsSvFRaWGTmobKzyv9RODXBk=";
+  vendorSha256 = "sha256-TQrXUcLv7rFo3PP3bVx0wEC1WbtkJDsCm+/izHAxqBc=";
 
   subPackages = [ package ];
 
   meta = with lib; {
     homepage = "https://www.elastic.co/products/beats";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fadenb basvandijk ];
+    maintainers = with maintainers; [ fadenb basvandijk dfithian ];
     platforms = platforms.linux;
   };
 } // extraArgs);

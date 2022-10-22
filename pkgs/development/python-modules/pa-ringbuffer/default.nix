@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pa-ringbuffer";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "spatialaudio";
     repo = "python-pa-ringbuffer";
     rev = version;
-    sha256 = "0afpydy1l20hd1xncjppjhqa2c8dj5h9nlv4z8m55cs9hc9h1mxv";
+    sha256 = "1d4k6z13mc1f88m6wbhfx8hillb7q78n33ws5bmyblsdkv1gx607";
   };
 
   meta = {

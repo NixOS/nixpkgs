@@ -25,9 +25,12 @@ let
 
   systemsWithAnySupport = supportedSystems ++ limitedSupportedSystems;
 
-  supportDarwin = builtins.elem "x86_64-darwin" systemsWithAnySupport;
+  supportDarwin = lib.genAttrs [
+    "x86_64"
+    "aarch64"
+  ] (arch: builtins.elem "${arch}-darwin" systemsWithAnySupport);
 
-  jobs =
+  nonPackageJobs =
     { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease supportedSystems; };
 
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
@@ -36,7 +39,7 @@ let
       lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
       pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
 
-      darwin-tested = if supportDarwin then pkgs.releaseTools.aggregate
+      darwin-tested = if supportDarwin.x86_64 then pkgs.releaseTools.aggregate
         { name = "nixpkgs-darwin-${jobs.tarball.version}";
           meta.description = "Release-critical builds for the Nixpkgs darwin channel";
           constituents =
@@ -54,7 +57,6 @@ let
               jobs.openssl.x86_64-darwin
               jobs.pandoc.x86_64-darwin
               jobs.postgresql.x86_64-darwin
-              jobs.python.x86_64-darwin
               jobs.python3.x86_64-darwin
               jobs.ruby.x86_64-darwin
               jobs.rustc.x86_64-darwin
@@ -99,7 +101,6 @@ let
               jobs.go.x86_64-linux
               jobs.linux.x86_64-linux
               jobs.pandoc.x86_64-linux
-              jobs.python.x86_64-linux
               jobs.python3.x86_64-linux
               # Needed by contributors to test PRs (by inclusion of the PR template)
               jobs.nixpkgs-review.x86_64-linux
@@ -107,7 +108,7 @@ let
               jobs.nix-info.x86_64-linux
               jobs.nix-info-tested.x86_64-linux
               # Ensure that X11/GTK are in order.
-              jobs.thunderbird-unwrapped.x86_64-linux
+              jobs.firefox-unwrapped.x86_64-linux
               jobs.cachix.x86_64-linux
 
               /*
@@ -130,11 +131,11 @@ let
               */
             ]
             ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools
-            ++ lib.optionals supportDarwin [
+            ++ lib.optionals supportDarwin.x86_64 [
               jobs.stdenv.x86_64-darwin
               jobs.cargo.x86_64-darwin
+              jobs.cachix.x86_64-darwin
               jobs.go.x86_64-darwin
-              jobs.python.x86_64-darwin
               jobs.python3.x86_64-darwin
               jobs.nixpkgs-review.x86_64-darwin
               jobs.nix-info.x86_64-darwin
@@ -166,33 +167,48 @@ let
           (system: {
             inherit
               (import ../stdenv/linux/make-bootstrap-tools.nix {
-                localSystem = { inherit system; };
+                pkgs = import ../.. {
+                  localSystem = { inherit system; };
+                };
               })
               dist test;
           })
         # darwin is special in this
-        // optionalAttrs supportDarwin {
+        // optionalAttrs supportDarwin.x86_64 {
           x86_64-darwin =
             let
-              bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix { system = "x86_64-darwin"; };
+              bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix {
+                localSystem = { system = "x86_64-darwin"; };
+              };
             in {
               # Lightweight distribution and test
               inherit (bootstrap) dist test;
               # Test a full stdenv bootstrap from the bootstrap tools definition
               inherit (bootstrap.test-pkgs) stdenv;
             };
-
+        } // optionalAttrs supportDarwin.aarch64 {
           # Cross compiled bootstrap tools
           aarch64-darwin =
             let
-              bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix { system = "x86_64-darwin"; crossSystem = "aarch64-darwin"; };
+              bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix {
+                localSystem = { system = "x86_64-darwin"; };
+                crossSystem = { system = "aarch64-darwin"; };
+              };
             in {
               # Distribution only for now
               inherit (bootstrap) dist;
             };
           };
 
-    } // (mapTestOn ((packagePlatforms pkgs) // {
+       };
+
+  # Do not allow attribute collision between jobs inserted in
+  # 'nonPackageAttrs' and jobs pulled in from 'pkgs'.
+  # Conflicts usually cause silent job drops like in
+  #   https://github.com/NixOS/nixpkgs/pull/182058
+  jobs = lib.attrsets.unionOfDisjoint
+    nonPackageJobs
+    (mapTestOn ((packagePlatforms pkgs) // {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
       idrisPackages = packagePlatforms pkgs.idrisPackages;

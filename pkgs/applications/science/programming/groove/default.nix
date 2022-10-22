@@ -7,7 +7,7 @@ let
     icon = "groove";
     desktopName = "GROOVE Simulator";
     comment = "GRaphs for Object-Oriented VErification";
-    categories = "Science;ComputerScience;";
+    categories = [ "Science" "ComputerScience" ];
   };
 
 in stdenv.mkDerivation rec {
@@ -48,6 +48,7 @@ in stdenv.mkDerivation rec {
     description = "GRaphs for Object-Oriented VErification";
     homepage = "http://groove.cs.utwente.nl/";
     license = licenses.asl20;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     platforms = platforms.all;
     maintainers = with maintainers; [ jfrankenau ];
   };

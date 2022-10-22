@@ -1,26 +1,25 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , setuptools
 , setuptools-scm
 , cocotb-bus
-, pytest
+, pytestCheckHook
 , swig
 , verilog
 }:
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "1.6.0";
+  version = "1.7.1";
 
-  # - we need to use the tarball from PyPi
-  #   or the full git checkout (with .git)
-  # - using fetchFromGitHub will cause a build failure,
-  #   because it does not include required metadata
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a695544ab314e6d795b72ece9e67b51c6668c569b21303158e00452db43c5756";
+  # pypi source doesn't include tests
+  src = fetchFromGitHub {
+    owner = "cocotb";
+    repo = "cocotb";
+    rev = "v${version}";
+    sha256 = "sha256-wACgT5r0YmSYvLhTsuFhTcJqeCtGGLifOmr7/Lz2Vug=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -40,20 +39,29 @@ buildPythonPackage rec {
 
     # remove circular dependency cocotb-bus from setup.py
     substituteInPlace setup.py --replace "'cocotb-bus<1.0'" ""
+  '' + lib.optionalString stdenv.isDarwin ''
+    # disable lto on darwin
+    # https://github.com/NixOS/nixpkgs/issues/19098
+    substituteInPlace cocotb_build_libs.py --replace "-flto" ""
   '';
 
-  checkInputs = [ cocotb-bus pytest swig verilog ];
+  patches = [
+    # Fix "can't link with bundle (MH_BUNDLE) only dylibs (MH_DYLIB) file" error
+    ./0001-Patch-LDCXXSHARED-for-macOS-along-with-LDSHARED.patch
+  ];
 
-  checkPhase = ''
+  checkInputs = [ cocotb-bus pytestCheckHook swig verilog ];
+  preCheck = ''
     export PATH=$out/bin:$PATH
-    make test
+    mv cocotb cocotb.hidden
   '';
+
+  pythonImportsCheck = [ "cocotb" ];
 
   meta = with lib; {
     description = "Coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python";
     homepage = "https://github.com/cocotb/cocotb";
     license = licenses.bsd3;
     maintainers = with maintainers; [ matthuszagh ];
-    broken = stdenv.isDarwin;
   };
 }

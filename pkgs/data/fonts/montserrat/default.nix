@@ -2,13 +2,13 @@
 
 let
   pname = "montserrat";
-  version = "7.210";
+  version = "7.222";
 in fetchFromGitHub {
   name = "${pname}-${version}";
   owner = "JulietaUla";
   repo = pname;
   rev = "v${version}";
-  sha256 = "sha256-C6T0Iz1rFC+EsKFJRil2jGTMQ4X7wR80E3eORL5qi0U=";
+  sha256 = "sha256-MeNnc1e5X5f0JyaLY6fX22rytHkvL++eM2ygsdlGMv0=";
 
   postFetch = ''
     tar xf $downloadedFile --strip 1

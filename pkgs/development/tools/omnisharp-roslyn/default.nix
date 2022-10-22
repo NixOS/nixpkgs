@@ -1,117 +1,125 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchurl
-, mono6
-, msbuild
+{ buildDotnetModule
 , dotnetCorePackages
-, makeWrapper
-, unzip
-, writeText
+, fetchFromGitHub
+, icu
+, lib
+, patchelf
+, stdenv
+, runCommand
+, expect
 }:
-
 let
-
-  dotnet-sdk = dotnetCorePackages.sdk_5_0;
-
-  deps = map (package: stdenv.mkDerivation (with package; {
-    pname = name;
-    inherit version src;
-
-    buildInputs = [ unzip ];
-    unpackPhase = ''
-      unzip $src
-      chmod -R u+r .
-      function traverseRename () {
-        for e in *
-        do
-          t="$(echo "$e" | sed -e "s/%20/\ /g" -e "s/%2B/+/g")"
-          [ "$t" != "$e" ] && mv -vn "$e" "$t"
-          if [ -d "$t" ]
-          then
-            cd "$t"
-            traverseRename
-            cd ..
-          fi
-        done
-      }
-
-      traverseRename
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      package=$out/lib/dotnet/${name}/${version}
-      mkdir -p $package
-      cp -r . $package
-      echo "{}" > $package/.nupkg.metadata
-
-      runHook postInstall
-    '';
-
-    dontFixup = true;
-  }))
-    (import ./deps.nix { inherit fetchurl; });
-
-  nuget-config = writeText "NuGet.Config" ''
-    <?xml version="1.0" encoding="utf-8"?>
-    <configuration>
-      <packageSources>
-        <clear />
-      </packageSources>
-      <fallbackPackageFolders>
-        ${lib.concatStringsSep "\n" (map (package: "<add key=\"${package}\" value=\"${package}/lib/dotnet\"/>") deps)}
-      </fallbackPackageFolders>
-    </configuration>
-  '';
-
-in stdenv.mkDerivation rec {
-
+  inherit (dotnetCorePackages) sdk_6_0 runtime_6_0;
+in
+let finalPackage = buildDotnetModule rec {
   pname = "omnisharp-roslyn";
-  version = "1.37.15";
+  version = "1.39.1";
 
   src = fetchFromGitHub {
     owner = "OmniSharp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "070wqs667si3f78fy6w4rrfm8qncnabg0yckjhll0yv1pzbj9q42";
+    sha256 = "Fd9fS5iSEynZfRwZexDlVndE/zSZdUdugR0VgXXAdmI=";
   };
 
-  nativeBuildInputs = [ makeWrapper msbuild ];
+  projectFile = "src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj";
+  nugetDeps = ./deps.nix;
 
-  buildPhase = ''
-    runHook preBuild
+  nativeBuildInputs = [
+    patchelf
+  ];
 
-    HOME=$(pwd)/fake-home msbuild -r \
-      -p:Configuration=Release \
-      -p:RestoreConfigFile=${nuget-config} \
-      src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj
+  dotnetInstallFlags = [ "--framework net6.0" ];
+  dotnetBuildFlags = [ "--framework net6.0" ];
+  dotnetFlags = [
+    # These flags are set by the cake build.
+    "-property:PackageVersion=${version}"
+    "-property:AssemblyVersion=${version}.0"
+    "-property:FileVersion=${version}.0"
+    "-property:InformationalVersion=${version}"
+    "-property:RuntimeFrameworkVersion=${runtime_6_0.version}"
+    "-property:RollForward=LatestMajor"
+  ];
 
-    runHook postBuild
+  postPatch = ''
+    # Relax the version requirement
+    substituteInPlace global.json \
+      --replace '7.0.100-preview.4.22252.9' '${sdk_6_0.version}'
+    # Patch the project files so we can compile them properly
+    for project in src/OmniSharp.Http.Driver/OmniSharp.Http.Driver.csproj src/OmniSharp.LanguageServerProtocol/OmniSharp.LanguageServerProtocol.csproj src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj; do
+      substituteInPlace $project \
+        --replace '<RuntimeIdentifiers>win7-x64;win7-x86;win10-arm64</RuntimeIdentifiers>' '<RuntimeIdentifiers>linux-x64;linux-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>'
+    done
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -r bin/Release/OmniSharp.Stdio.Driver/net472 $out/src
-    cp bin/Release/OmniSharp.Host/net472/SQLitePCLRaw* $out/src
-    mkdir $out/src/.msbuild
-    ln -s ${msbuild}/lib/mono/xbuild/* $out/src/.msbuild/
-    rm $out/src/.msbuild/Current
-    mkdir $out/src/.msbuild/Current
-    ln -s ${msbuild}/lib/mono/xbuild/Current/* $out/src/.msbuild/Current/
-    ln -s ${msbuild}/lib/mono/msbuild/Current/bin $out/src/.msbuild/Current/Bin
+  dontDotnetFixup = true; # we'll fix it ourselves
+  postFixup = lib.optionalString stdenv.isLinux ''
+    # Emulate what .NET 7 does to its binaries while a fix doesn't land in buildDotnetModule
+    patchelf --set-interpreter $(patchelf --print-interpreter ${sdk_6_0}/dotnet) \
+      --set-rpath $(patchelf --print-rpath ${sdk_6_0}/dotnet) \
+      $out/lib/omnisharp-roslyn/OmniSharp
 
-    makeWrapper ${mono6}/bin/mono $out/bin/omnisharp \
-      --suffix PATH : ${dotnet-sdk}/bin \
-      --add-flags "$out/src/OmniSharp.exe"
+  '' + ''
+    # Now create a wrapper without DOTNET_ROOT
+    # we explicitly don't set DOTNET_ROOT as it should get the one from PATH
+    # as you can use any .NET SDK higher than 6 to run OmniSharp and you most
+    # likely will NOT want the .NET 6 runtime running it (as it'll use that to
+    # detect the SDKs for its own use, so it's better to let it find it in PATH).
+    makeWrapper $out/lib/omnisharp-roslyn/OmniSharp $out/bin/OmniSharp \
+      --prefix LD_LIBRARY_PATH : ${sdk_6_0.icu}/lib \
+      --set-default DOTNET_ROOT ${sdk_6_0}
+
+    # Delete files to mimick hacks in https://github.com/OmniSharp/omnisharp-roslyn/blob/bdc14ca/build.cake#L594
+    rm $out/lib/omnisharp-roslyn/NuGet.*.dll
+    rm $out/lib/omnisharp-roslyn/System.Configuration.ConfigurationManager.dll
   '';
+
+  passthru.tests = {
+    no-sdk = runCommand "no-sdk" { nativeBuildInputs = [ finalPackage expect ]; meta.timeout = 60; } ''
+      HOME=$TMPDIR
+      expect <<"EOF"
+        spawn OmniSharp
+        expect_before timeout {
+          send_error "timeout!\n"
+          exit 1
+        }
+        expect "\"ERROR\",\"Name\":\"OmniSharp.MSBuild.Discovery.Providers.SdkInstanceProvider\""
+        expect eof
+        catch wait result
+        if { [lindex $result 3] == 0 } {
+          exit 1
+        }
+      EOF
+      touch $out
+    '';
+
+    with-sdk = runCommand "with-sdk" { nativeBuildInputs = [ finalPackage sdk_6_0 expect ]; meta.timeout = 60; } ''
+      HOME=$TMPDIR
+      expect <<"EOF"
+        spawn OmniSharp
+        expect_before timeout {
+          send_error "timeout!\n"
+          exit 1
+        }
+        expect "{\"Event\":\"started\","
+        send \x03
+        expect eof
+        catch wait result
+        exit [lindex $result 3]
+      EOF
+      touch $out
+    '';
+  };
 
   meta = with lib; {
     description = "OmniSharp based on roslyn workspaces";
     homepage = "https://github.com/OmniSharp/omnisharp-roslyn";
-    platforms = platforms.linux;
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode # dependencies
+    ];
     license = licenses.mit;
-    maintainers = with maintainers; [ tesq0 ericdallo corngood ];
+    maintainers = with maintainers; [ tesq0 ericdallo corngood mdarocha ];
+    mainProgram = "OmniSharp";
   };
-
-}
+}; in finalPackage

@@ -4,8 +4,8 @@
 , appstream-glib
 , desktop-file-utils
 , glib
-, gobject-introspection
 , gst_all_1
+, pipewire
 , gtk4
 , libadwaita
 , libpulseaudio
@@ -13,27 +13,26 @@
 , meson
 , ninja
 , pkg-config
-, python3
 , rustPlatform
 , wayland
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "kooha";
-  version = "2.0.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "SeaDve";
     repo = "Kooha";
     rev = "v${version}";
-    sha256 = "05ynpwjdpl7zp9f17zhhvb59rbz3gd7hc0amla1g85ldgfxbgl00";
+    hash = "sha256-HgouIMbwpmR/K1hPU7QDzeEtyi5hC66huvInkJFLS2w=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256:16zf6vb001z7xdv2g4kpmb2vqsmaql2cpsx1rl9zrfhpl2z6frs9";
+    hash = "sha256-rdxD9pys11QcUtufcZ/zCrviytyc8hIXJfsXg2JoaKE=";
   };
 
   nativeBuildInputs = [
@@ -41,34 +40,25 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    python3
     pkg-config
     rustPlatform.cargoSetupHook
     rustPlatform.rust.cargo
     rustPlatform.rust.rustc
-    wayland
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     glib
-    gobject-introspection
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-ugly
     gtk4
     libadwaita
     libpulseaudio
     librsvg
+    wayland
+    pipewire
   ];
-
-  propagatedBuildInputs = [ python3.pkgs.pygobject3 ];
-
-  strictDeps = false;
-
-  # Fixes https://github.com/NixOS/nixpkgs/issues/31168
-  postPatch = ''
-    patchShebangs build-aux/meson_post_install.py
-  '';
 
   installCheckPhase = ''
     $out/bin/kooha --help

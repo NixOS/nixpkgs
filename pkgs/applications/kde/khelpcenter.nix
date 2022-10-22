@@ -11,6 +11,13 @@ mkDerivation {
     grantlee kcmutils kconfig kcoreaddons kdbusaddons khtml
     ki18n kinit kservice xapian
   ];
+
+  preFixup = ''
+    qtWrapperArgs+=(
+      --prefix MANPATH : /nix/var/nix/profiles/system/sw/share/man
+    )
+  '';
+
   meta = with lib; {
     homepage = "https://apps.kde.org/help/";
     description = "Help center";

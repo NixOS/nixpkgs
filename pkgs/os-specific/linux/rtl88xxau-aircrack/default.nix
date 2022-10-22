@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, kernel }:
 
 let
-  rev = "307d694076b056588c652c2bdaa543a89eb255d9";
+  rev = "37e27f9165300c89607144b646545fac576ec510";
 in
 stdenv.mkDerivation rec {
   pname = "rtl88xxau-aircrack";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "aircrack-ng";
     repo = "rtl8812au";
     inherit rev;
-    sha256 = "sha256-iSJnKWc+LxGHUhb/wbFSMh7w6Oi9v4v5V+R+LI96X7w=";
+    sha256 = "sha256-TpmpueKAaCe7Nlmv8pMvgMXGVmXVa/1mBwtEoy4JyCY=";
   };
 
   buildInputs = kernel.moduleBuildDependencies;
@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = [ maintainers.jethro ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    broken = kernel.kernelAtLeast "5.18";
   };
 }

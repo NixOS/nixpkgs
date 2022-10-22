@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq common-updater-scripts nuget-to-nix dotnet-sdk_5
+#!nix-shell -I nixpkgs=./. -i bash -p curl jq common-updater-scripts
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
@@ -14,17 +14,4 @@ fi
 
 cd ../../../..
 update-source-version discordchatexporter-cli "$new_version"
-store_src="$(nix-build . -A discordchatexporter-cli.src --no-out-link)"
-src="$(mktemp -d /tmp/discordexporter-src.XXX)"
-cp -rT "$store_src" "$src"
-chmod -R +w "$src"
-
-pushd "$src"
-
-mkdir ./nuget_tmp.packages
-dotnet restore DiscordChatExporter.Cli/DiscordChatExporter.Cli.csproj --packages ./nuget_tmp.packages
-
-nuget-to-nix ./nuget_tmp.packages > "$deps_file"
-
-popd
-rm -r "$src"
+$(nix-build -A discordchatexporter-cli.fetch-deps --no-out-link) "$deps_file"

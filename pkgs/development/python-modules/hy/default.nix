@@ -4,29 +4,36 @@
 , colorama
 , fetchFromGitHub
 , funcparserlib
+, hy
 , pytestCheckHook
+, python
 , pythonOlder
 , rply
+, testers
 }:
 
 buildPythonPackage rec {
   pname = "hy";
-  version = "1.0a3";
+  version = "0.24.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hylang";
     repo = pname;
     rev = version;
-    sha256 = "1dqw24rvsps2nab1pbjjm1c81vrs34r4kkk691h3xdyxnv9hb84b";
+    sha256 = "sha256-PmnYOniYqNHGTxpWuAc+zBhOsgRgMMbERHq81KpHheg=";
   };
+
+  # https://github.com/hylang/hy/blob/1.0a4/get_version.py#L9-L10
+  HY_VERSION = version;
 
   propagatedBuildInputs = [
     colorama
     funcparserlib
-    rply
-  ] ++ lib.optionals (pythonOlder "3.9") [
+  ] ++
+  lib.optionals (pythonOlder "3.9") [
     astor
   ];
 
@@ -34,19 +41,41 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  preCheck = ''
+    # For test_bin_hy
+    export PATH="$out/bin:$PATH"
+  '';
+
   disabledTests = [
-    # Don't test the binary
-    "test_bin_hy"
-    "test_hystartup"
-    "est_hy2py_import"
+    "test_circular_macro_require"
+    "test_macro_require"
   ];
 
   pythonImportsCheck = [ "hy" ];
 
+  passthru = {
+    tests.version = testers.testVersion {
+      package = hy;
+      command = "hy -v";
+    };
+    # For backwards compatibility with removed pkgs/development/interpreters/hy
+    # Example usage:
+    #   hy.withPackages (ps: with ps; [ hyrule requests ])
+    withPackages = python-packages:
+      (python.withPackages
+        (ps: (python-packages ps) ++ [ ps.hy ])).overrideAttrs (old: {
+          name = "${hy.name}-env";
+          meta = lib.mergeAttrs (builtins.removeAttrs hy.meta [ "license" ]) {
+            mainProgram = "hy";
+          };
+        });
+  };
+
   meta = with lib; {
-    description = "Python to/from Lisp layer";
-    homepage = "https://github.com/hylang/hy";
+    description = "A LISP dialect embedded in Python";
+    homepage = "https://hylang.org/";
+    changelog = "https://github.com/hylang/hy/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab mazurel nixy thiagokokada ];
   };
 }

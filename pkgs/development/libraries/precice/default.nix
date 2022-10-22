@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "precice";
-  version = "2.3.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "precice";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256:0p8d2xf4bl41b30yp38sqyp4fipwgcdhl0khxcv5g69fxvz2i2il";
+    sha256 = "sha256-n/UuiVHw1zwlhwR/HDaKgoMnPy6fm9HWZ5FmAr7F/GE=";
   };
 
   cmakeFlags = [
@@ -25,10 +25,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "preCICE stands for Precise Code Interaction Coupling Environment";
+    homepage = "https://precice.org/";
     license = with lib.licenses; [ gpl3 ];
-    homepage = "https://www.precice.org/";
-    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ Scriptkiddi ];
+    mainProgram = "binprecice";
+    platforms = lib.platforms.unix;
   };
 }
 

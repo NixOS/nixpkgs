@@ -1,11 +1,11 @@
 { stdenv, fetchurl, lib, expat, octave, libxml2, texinfo, zip }:
 stdenv.mkDerivation rec {
   pname = "gama";
-  version = "2.16";
+  version = "2.22";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-fO2AHZnqRvCF1+AlKDeD3ygivW3zXCuF10O2nKL2CWs=";
+    sha256 = "sha256-jOyoWPcZvHWuddLasjIjHSn8MOV3viIgmBrsuzY7P6U=";
   };
 
   buildInputs = [ expat ];

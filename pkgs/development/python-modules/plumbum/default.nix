@@ -1,19 +1,69 @@
-{ buildPythonPackage
-, fetchPypi
-, pytest
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, openssh
+, ps
+, psutil
+, pytest-mock
+, pytest-timeout
+, pytestCheckHook
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "plumbum";
-  version = "1.7.1";
+  version = "1.7.2";
 
-  checkInputs = [ pytest ];
+  src = fetchFromGitHub {
+    owner = "tomerfiliba";
+    repo = "plumbum";
+    rev = "v${version}";
+    sha256 = "sha256-bCCcNFz+ZsbKSF7aCfy47lBHb873tDYN0qFuSCxJp1w=";
+  };
 
-  # No tests in archive
-  doCheck = false;
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov-config=setup.cfg" ""
+  '';
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3c0ac8c4ee57b2adddc82909d3c738a62ef5f77faf24ec7cb6f0a117e1679740";
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  checkInputs = [
+    openssh
+    ps
+    psutil
+    pytest-mock
+    pytest-timeout
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$TMP
+  '';
+
+  disabledTests = [
+    # broken in nix env
+    "test_change_env"
+    "test_dictlike"
+    "test_local"
+    # incompatible with pytest 7
+    "test_incorrect_login"
+  ];
+
+  disabledTestPaths = [
+    # incompatible with pytest7
+    # https://github.com/tomerfiliba/plumbum/issues/594
+    "tests/test_remote.py"
+  ];
+
+  meta = with lib; {
+    description = " Plumbum: Shell Combinators ";
+    homepage = " https://github.com/tomerfiliba/plumbum ";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

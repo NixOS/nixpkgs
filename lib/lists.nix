@@ -4,6 +4,7 @@
 let
   inherit (lib.strings) toInt;
   inherit (lib.trivial) compare min;
+  inherit (lib.attrsets) mapAttrs;
 in
 rec {
 
@@ -35,7 +36,7 @@ rec {
   forEach = xs: f: map f xs;
 
   /* “right fold” a binary function `op` between successive elements of
-     `list` with `nul' as the starting value, i.e.,
+     `list` with `nul` as the starting value, i.e.,
      `foldr op nul [x_1 x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))`.
 
      Type: foldr :: (a -> b -> b) -> b -> [a] -> b
@@ -340,15 +341,15 @@ rec {
        groupBy' builtins.add 0 (x: boolToString (x > 2)) [ 5 1 2 3 4 ]
        => { true = 12; false = 3; }
   */
-  groupBy' = op: nul: pred: lst:
-    foldl' (r: e:
-              let
-                key = pred e;
-              in
-                r // { ${key} = op (r.${key} or nul) e; }
-           ) {} lst;
+  groupBy' = op: nul: pred: lst: mapAttrs (name: foldl op nul) (groupBy pred lst);
 
-  groupBy = groupBy' (sum: e: sum ++ [e]) [];
+  groupBy = builtins.groupBy or (
+    pred: foldl' (r: e:
+       let
+         key = pred e;
+       in
+         r // { ${key} = (r.${key} or []) ++ [e]; }
+    ) {});
 
   /* Merges two lists of the same size together. If the sizes aren't the same
      the merging stops at the shortest. How both lists are merged is defined
@@ -506,7 +507,7 @@ rec {
        compareLists compare [ "a" ] []
        => 1
        compareLists compare [ "a" "b" ] [ "a" "c" ]
-       => 1
+       => -1
   */
   compareLists = cmp: a: b:
     if a == []

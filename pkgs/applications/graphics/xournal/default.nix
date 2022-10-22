@@ -10,9 +10,9 @@ in
 
 stdenv.mkDerivation rec {
   version = "0.4.8.2016";
-  name = "xournal-" + version;
+  pname = "xournal";
   src = fetchurl {
-    url = "mirror://sourceforge/xournal/${name}.tar.gz";
+    url = "mirror://sourceforge/xournal/xournal-${version}.tar.gz";
     sha256 = "09i88v3wacmx7f96dmq0l3afpyv95lh6jrx16xzm0jd1szdrhn5j";
   };
 
@@ -30,13 +30,13 @@ stdenv.mkDerivation rec {
     + lib.optionalString (!isGdkQuartzBackend) " -lX11";
 
   desktopItem = makeDesktopItem {
-    name = name;
+    name = "xournal-${version}";
     exec = "xournal";
     icon = "xournal";
     desktopName = "Xournal";
     comment = meta.description;
-    categories = "Office;Graphics;";
-    mimeType = "application/pdf;application/x-xoj";
+    categories = [ "Office" "Graphics" ];
+    mimeTypes = [ "application/pdf" "application/x-xoj" ];
     genericName = "PDF Editor";
   };
 

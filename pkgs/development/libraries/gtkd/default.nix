@@ -1,40 +1,25 @@
-{ lib, stdenv, fetchzip, fetchpatch, atk, cairo, ldc, gdk-pixbuf, gnome, gst_all_1, librsvg
+{ lib, stdenv, fetchzip, atk, cairo, dcompiler, gdk-pixbuf, gnome, gst_all_1, librsvg
 , glib, gtk3, gtksourceview4, libgda, libpeas, pango, pkg-config, which, vte }:
 
 let
   inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad;
 in stdenv.mkDerivation rec {
   pname = "gtkd";
-  version = "3.9.0";
-
-  outputs = [ "out" "dev" ];
+  version = "3.10.0";
 
   src = fetchzip {
     url = "https://gtkd.org/Downloads/sources/GtkD-${version}.zip";
-    sha256 = "12kc4s5gp6gn456d8pzhww1ggi9qbxldmcpp6855297g2x8xxy5p";
+    sha256 = "DEKVDexGyg/T3SdnnvRjaHq1LbDo8ekNslxKROpMCCE=";
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ ldc pkg-config which ];
+  nativeBuildInputs = [ dcompiler pkg-config which ];
   propagatedBuildInputs = [
     atk cairo gdk-pixbuf glib gstreamer gst-plugins-base gtk3 gtksourceview4
     libgda libpeas librsvg pango vte
   ];
 
-  patches = [
-    # Fix makefile not installing .pc's
-    (fetchpatch {
-      url = "https://github.com/gtkd-developers/GtkD/commit/a9db09117ab27127ca4c3b8d2f308fae483a9199.patch";
-      sha256 = "0ngyqifw1kandc1vk01kms3z65pcisfd75q7z09rml96glhfzjd6";
-    })
-    # Fix breakage with dmd ldc 1.26 and newer
-    (fetchpatch {
-      url = "https://github.com/gtkd-developers/GtkD/commit/323ff96c648882eaca2faee170bd9e90c6e1e9c3.patch";
-      sha256 = "1rhyi0isl6fl5i6fgsinvgq6v72xq7c6sajrxcsnmrzpvw91il3d";
-    })
-  ];
-
-  prePatch = ''
+  postPatch = ''
     substituteAll ${./paths.d} generated/gtkd/gtkd/paths.d
 
     substituteInPlace generated/gstreamer/gst/app/c/functions.d \
@@ -133,6 +118,10 @@ in stdenv.mkDerivation rec {
         --replace "$out/include" "$dev/include"
     done
   '';
+
+  passthru = {
+    inherit dcompiler;
+  };
 
   meta = with lib; {
     description = "D binding and OO wrapper for GTK";

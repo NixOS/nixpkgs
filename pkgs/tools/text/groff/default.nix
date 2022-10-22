@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, fetchpatch, perl
-, ghostscript #for postscript and html output
-, psutils, netpbm #for html output
+, enableGhostscript ? false, ghostscript # for postscript and html output
+, enableHtml ? false, psutils, netpbm # for html output
 , buildPackages
 , autoreconfHook
 , pkg-config
 , texinfo
+, bash
 }:
 
 stdenv.mkDerivation rec {
@@ -18,6 +19,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" "info" "perl" ];
 
+  # Parallel build is failing for missing depends. Known upstream as:
+  #   https://savannah.gnu.org/bugs/?62084
   enableParallelBuilding = false;
 
   patches = [
@@ -31,11 +34,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = lib.optionalString (psutils != null) ''
+  postPatch = ''
+    # BASH_PROG gets replaced with a path to the build bash which doesn't get automatically patched by patchShebangs
+    substituteInPlace contrib/gdiffmk/gdiffmk.sh \
+      --replace "@BASH_PROG@" "/bin/sh"
+  '' + lib.optionalString enableHtml ''
     substituteInPlace src/preproc/html/pre-html.cpp \
-      --replace "psselect" "${psutils}/bin/psselect"
-  '' + lib.optionalString (netpbm != null) ''
-    substituteInPlace src/preproc/html/pre-html.cpp \
+      --replace "psselect" "${psutils}/bin/psselect" \
       --replace "pnmcut" "${lib.getBin netpbm}/bin/pnmcut" \
       --replace "pnmcrop" "${lib.getBin netpbm}/bin/pnmcrop" \
       --replace "pnmtopng" "${lib.getBin netpbm}/bin/pnmtopng"
@@ -45,8 +50,11 @@ stdenv.mkDerivation rec {
       --replace "@PNMTOPS_NOSETPAGE@" "${lib.getBin netpbm}/bin/pnmtops -nosetpage"
   '';
 
-  buildInputs = [ ghostscript psutils netpbm perl ];
+  strictDeps = true;
   nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
+  buildInputs = [ perl bash ]
+    ++ lib.optionals enableGhostscript [ ghostscript ]
+    ++ lib.optionals enableHtml [ psutils netpbm ];
 
   # Builds running without a chroot environment may detect the presence
   # of /usr/X11 in the host system, leading to an impure build of the
@@ -56,7 +64,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--without-x"
     "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
-  ] ++ lib.optionals (ghostscript != null) [
+  ] ++ lib.optionals enableGhostscript [
     "--with-gs=${ghostscript}/bin/gs"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "gl_cv_func_signbit=yes"

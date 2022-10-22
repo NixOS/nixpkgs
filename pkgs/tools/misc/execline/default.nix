@@ -1,15 +1,29 @@
-{ skawarePackages }:
+{ fetchFromGitHub, skawarePackages }:
 
 with skawarePackages;
+let
+  version = "2.9.0.1";
 
-buildPackage {
+  # Maintainer of manpages uses following versioning scheme: for every
+  # upstream $version he tags manpages release as ${version}.1, and,
+  # in case of extra fixes to manpages, new tags in form ${version}.2,
+  # ${version}.3 and so on are created.
+  manpages = fetchFromGitHub {
+    owner = "flexibeast";
+    repo = "execline-man-pages";
+    rev = "v2.9.0.0.1";
+    sha256 = "sha256-hT0YsuYJ3XSMYwtlwDR8PGlD8ng8XPky93rCprruHu8=";
+  };
+
+in buildPackage {
+  inherit version;
+
   pname = "execline";
-  version = "2.8.2.0";
-  sha256 = "0h9kb3cx8dw05md6smvs56i4lr8g5n3ljaxy5vj4zs86yc3pdprg";
+  sha256 = "sha256-ASYPyvgP+8oqlKpV6kdN+545swM7VciviBJnkYeVMfY=";
 
   description = "A small scripting language, to be used in place of a shell in non-interactive scripts";
 
-  outputs = [ "bin" "lib" "dev" "doc" "out" ];
+  outputs = [ "bin" "man" "lib" "dev" "doc" "out" ];
 
   # TODO: nsss support
   configureFlags = [
@@ -48,5 +62,7 @@ buildPackage {
       -o "$bin/bin/execlineb" \
       ${./execlineb-wrapper.c} \
       -lskarnet
+    mkdir -p $man/share/
+    cp -vr ${manpages}/man* $man/share
   '';
 }

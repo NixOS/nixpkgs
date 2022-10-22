@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "lightyear";
+  pname = "lightyear";
   version = "2017-09-10";
 
   idrisDeps = [ effects ];

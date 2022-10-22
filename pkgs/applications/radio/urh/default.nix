@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "urh";
-  version = "2.9.2";
+  version = "2.9.3";
 
   src = fetchFromGitHub {
     owner = "jopohl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ibcr2ypnyl2aq324sbmmr18ksxszg81yrhybawx46ba9vym6j99";
+    sha256 = "sha256-TrvyPcpSMACrbKPVOjxHsVsC28LmruiVO/CyCPh0KZ8=";
   };
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];

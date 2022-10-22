@@ -1,18 +1,34 @@
-{ lib, stdenv, substituteAll, fetchFromGitHub, autoreconfHook, libtool, intltool, pkg-config
-, file, findutils
-, gtk3, networkmanager, ppp, xl2tpd, strongswan, libsecret
-, withGnome ? true, libnma }:
+{ stdenv
+, lib
+, substituteAll
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, gtk3
+, gtk4
+, networkmanager
+, ppp
+, xl2tpd
+, strongswan
+, libsecret
+, withGnome ? true
+, libnma
+, libnma-gtk4
+, glib
+, openssl
+, nss
+}:
 
 stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
   pname = "NetworkManager-l2tp";
-  version = "1.2.12";
+  version = "1.20.4";
 
   src = fetchFromGitHub {
     owner = "nm-l2tp";
     repo = "network-manager-l2tp";
     rev = version;
-    sha256 = "0cq07kvlm98s8a7l4a3zmqnif8x3307kv7n645zx3f1r7x72b8m4";
+    sha256 = "VoqPjMQILBYemRE5VD/XwhWi9zL9QxxHZJ2JKtGglFo=";
   };
 
   patches = [
@@ -22,30 +38,43 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ networkmanager ppp ]
-    ++ lib.optionals withGnome [ gtk3 libsecret libnma ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  nativeBuildInputs = [ autoreconfHook libtool intltool pkg-config file findutils ];
-
-  preConfigure = ''
-    intltoolize -f
-  '';
+  buildInputs = [
+    networkmanager
+    ppp
+    glib
+    openssl
+    nss
+  ] ++ lib.optionals withGnome [
+    gtk3
+    gtk4
+    libsecret
+    libnma
+    libnma-gtk4
+  ];
 
   configureFlags = [
-    "--without-libnm-glib"
     "--with-gnome=${if withGnome then "yes" else "no"}"
+    "--with-gtk4=${if withGnome then "yes" else "no"}"
     "--localstatedir=/var"
-    "--sysconfdir=$(out)/etc"
     "--enable-absolute-paths"
   ];
 
   enableParallelBuilding = true;
 
+  passthru = {
+    networkManagerPlugin = "VPN/nm-l2tp-service.name";
+  };
+
   meta = with lib; {
     description = "L2TP plugin for NetworkManager";
     inherit (networkmanager.meta) platforms;
     homepage = "https://github.com/nm-l2tp/network-manager-l2tp";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ abbradar obadz ];
   };
 }

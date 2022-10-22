@@ -3,18 +3,21 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.3+20200317";
-  name = "ocaml${ocaml.version}-erm_xmpp-${version}";
+  version = "0.3+20220404";
+  pname = "ocaml${ocaml.version}-erm_xmpp";
 
   src = fetchFromGitHub {
     owner  = "hannesm";
     repo   = "xmpp";
-    rev    = "7fa5bea252671fd88625c6af109998b879ca564f";
-    sha256 = "0spzyd9kbyizzwl8y3mq8z19zlkzxnkh2fppry4lyc7vaw7bqrwq";
+    rev    = "e54d54e142ac9770c37e144693473692bf473530";
+    sha256 = "sha256-Ize8Em4LI54Cy1Xuzr9BjQGV7JMr3W6KI1YzI8G1q/U=";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild camlp4 ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild camlp4 ];
+  buildInputs = [ camlp4 ];
   propagatedBuildInputs = [ erm_xml mirage-crypto mirage-crypto-rng base64 ];
+
+  strictDeps = true;
 
   configurePhase = ''
     runHook preConfigure

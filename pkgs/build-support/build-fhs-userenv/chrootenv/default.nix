@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   name = "chrootenv";
-  src = ./.;
+  src = ./src;
 
   nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [ glib ];
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Setup mount/user namespace for FHS emulation";
     license = licenses.mit;
-    maintainers = with maintainers; [ yegortimoshenko ];
+    maintainers = with maintainers; [ yana ];
     platforms = platforms.linux;
   };
 }

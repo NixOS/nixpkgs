@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "extra-container";
-  version = "0.8";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner = "erikarvstedt";
     repo = pname;
     rev = version;
-    hash = "sha256-/AetqDPkz32JMdjbSdzZCBVmGbvzjeAb8Wv82iTgHFE=";
+    hash = "sha256-vtCZ0w1Kaiw9bIrzwEb4Jnv7QoQLp8JDjaGmAP91hpE=";
   };
 
   buildCommand = ''
@@ -18,13 +18,14 @@ stdenv.mkDerivation rec {
     install $src/eval-config.nix -Dt $share
 
     # Use existing PATH for systemctl and machinectl
-    scriptPath="export PATH=${lib.makeBinPath [ nixos-container openssh ]}:\$PATH"
+    scriptPath="export PATH=${lib.makeBinPath [ openssh ]}:\$PATH"
 
-    sed -i \
-      -e "s|evalConfig=.*|evalConfig=$share/eval-config.nix|" \
-      -e "s|LOCALE_ARCHIVE=.*|LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive|" \
-      -e "2i$scriptPath" \
-      $out/bin/extra-container
+    sed -i "
+      s|evalConfig=.*|evalConfig=$share/eval-config.nix|
+      s|LOCALE_ARCHIVE=.*|LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive|
+      2i$scriptPath
+      2inixosContainer=${nixos-container}/bin
+    " $out/bin/extra-container
   '';
 
   meta = with lib; {
@@ -32,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/erikarvstedt/extra-container";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.earvstedt ];
+    maintainers = [ maintainers.erikarvstedt ];
   };
 }

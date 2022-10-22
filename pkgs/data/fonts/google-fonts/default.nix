@@ -2,15 +2,15 @@
 
 stdenvNoCC.mkDerivation {
   pname = "google-fonts";
-  version = "unstable-2021-06-12";
+  version = "unstable-2022-02-26";
 
   outputs = [ "out" "adobeBlank" ];
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fonts";
-    rev = "370c795d7e5f9b02db9a793c2779e2c8f94c6adc";
-    sha256 = "sha256-XKjxmupY2KuefCtKZMXWaba1TnNwdYM/P0xGXOtBGmM=";
+    rev = "2fba0d68602b7eb3374d030c1c34939de56023f9";
+    sha256 = "sha256-IFkKwRRyZeOXD8/9n8UDrruUKK6oQK4BD9wYN2dmSAc=";
   };
 
   patchPhase = ''

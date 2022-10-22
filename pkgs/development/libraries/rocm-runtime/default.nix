@@ -3,10 +3,11 @@
 , fetchFromGitHub
 , writeScript
 , addOpenGLRunpath
-, clang-unwrapped
 , cmake
+, pkg-config
 , xxd
 , elfutils
+, libdrm
 , llvm
 , numactl
 , rocm-device-libs
@@ -14,28 +15,33 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-runtime";
-  version = "4.5.2";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCR-Runtime";
     rev = "rocm-${version}";
-    hash = "sha256-DJDlEHnXhegcenO8BIY/8GnZdHldVs0GFLrQy4Z6heY=";
+    hash = "sha256-26E7vA2JlC50zmpaQfDrFMlgjAqmfTdp9/A8g5caDqI=";
   };
 
   sourceRoot = "source/src";
 
-  nativeBuildInputs = [ cmake xxd ];
+  nativeBuildInputs = [ cmake pkg-config xxd ];
 
-  buildInputs = [ clang-unwrapped elfutils llvm numactl ];
+  buildInputs = [ elfutils libdrm llvm numactl ];
 
-  cmakeFlags = [
-   "-DBITCODE_DIR=${rocm-device-libs}/amdgcn/bitcode"
-   "-DCMAKE_PREFIX_PATH=${rocm-thunk}"
-  ];
+  cmakeFlags = [ "-DCMAKE_PREFIX_PATH=${rocm-thunk}" ];
 
   postPatch = ''
     patchShebangs image/blit_src/create_hsaco_ascii_file.sh
+    patchShebangs core/runtime/trap_handler/create_trap_handler_header.sh
+
+    substituteInPlace CMakeLists.txt \
+      --replace 'hsa/include/hsa' 'include/hsa'
+
+    # We compile clang before rocm-device-libs, so patch it in afterwards
+    substituteInPlace image/blit_src/CMakeLists.txt \
+      --replace '-cl-denorms-are-zero' '-cl-denorms-are-zero --rocm-device-lib-path=${rocm-device-libs}/amdgcn/bitcode'
   '';
 
   fixupPhase = ''
@@ -53,6 +59,6 @@ stdenv.mkDerivation rec {
     description = "Platform runtime for ROCm";
     homepage = "https://github.com/RadeonOpenCompute/ROCR-Runtime";
     license = with licenses; [ ncsa ];
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [ lovesegfault Flakebi ];
   };
 }

@@ -7,7 +7,7 @@
 , SDL_ttf
 , SDL_mixer
 , libmysqlclient
-, wxGTK
+, wxGTK32
 , symlinkJoin
 , runCommandLocal
 , makeWrapper
@@ -31,7 +31,7 @@ let
     SDL_ttf
     SDL_mixer
     libmysqlclient
-    wxGTK
+    wxGTK32
     coreutils
   ];
   hardeningDisable = [ "format" ];
@@ -44,7 +44,7 @@ let
     installPhase = ''
       mkdir -p $out/bin
       install -m755 zod $out/bin/
-      wrapProgram $out/bin/zod --run "cd ${zod_assets}/usr/lib/commander-zod"
+      wrapProgram $out/bin/zod --chdir "${zod_assets}/usr/lib/commander-zod"
     '';
   };
   zod_map_editor = stdenv.mkDerivation {
@@ -56,7 +56,7 @@ let
     installPhase = ''
       mkdir -p $out/bin
       install -m755 zod_map_editor $out/bin
-      wrapProgram $out/bin/zod_map_editor --run "cd ${zod_assets}/usr/lib/commander-zod"
+      wrapProgram $out/bin/zod_map_editor --chdir "${zod_assets}/usr/lib/commander-zod"
     '';
   };
   zod_launcher = stdenv.mkDerivation {
@@ -74,7 +74,8 @@ let
       ];
       postPatch = ''
         substituteInPlace zod_launcher_src/zod_launcherFrm.cpp \
-          --replace 'message = wxT("./zod");' 'message = wxT("zod");'
+          --replace 'message = wxT("./zod");' 'message = wxT("zod");' \
+          --replace "check.replace(i,1,1,'_');" "check.replace(i,1,1,(wxUniChar)'_');"
       '';
       preBuild = "cd zod_launcher_src";
       installPhase = ''
@@ -106,5 +107,6 @@ in
       homepage = "http://zod.sourceforge.net/";
       maintainers = with maintainers; [ zeri ];
       license = licenses.gpl3Plus; /* Says the website */
+      platforms = platforms.linux;
     };
   }

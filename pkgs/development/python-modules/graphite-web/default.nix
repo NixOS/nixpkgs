@@ -1,69 +1,73 @@
 { lib
+, stdenv
 , buildPythonPackage
-, fetchPypi
-, django
-, memcached
-, txamqp
-, django_tagging
-, gunicorn
-, pytz
-, pyparsing
 , cairocffi
+, django
+, django_tagging
+, fetchPypi
+, gunicorn
+, pyparsing
+, python-memcached
+, pythonOlder
+, pytz
+, six
+, txamqp
+, urllib3
 , whisper
 , whitenoise
-, urllib3
-, six
 }:
 
 buildPythonPackage rec {
   pname = "graphite-web";
-  version = "1.1.8";
+  version = "1.1.10";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "54240b0f1e069b53e2ce92d4e534e21b195fb0ebd64b6ad8a49c44284e3eb0b1";
+    hash = "sha256-Pxho1QWo2jJZYAMJx999bbELDVMr7Wp7wsssYPkc01o=";
   };
 
-  patches = [
-    ./update-django-tagging.patch
+  propagatedBuildInputs = [
+    cairocffi
+    django
+    django_tagging
+    gunicorn
+    pyparsing
+    python-memcached
+    pytz
+    six
+    txamqp
+    urllib3
+    whisper
+    whitenoise
   ];
 
   postPatch = ''
-    # https://github.com/graphite-project/graphite-web/pull/2701
     substituteInPlace setup.py \
-      --replace "'scandir'" "'scandir; python_version < \"3.5\"'"
+      --replace "Django>=1.8,<3.1" "Django" \
+      --replace "django-tagging==0.4.3" "django-tagging"
   '';
 
-  propagatedBuildInputs = [
-    django
-    memcached
-    txamqp
-    django_tagging
-    gunicorn
-    pytz
-    pyparsing
-    cairocffi
-    whisper
-    whitenoise
-    urllib3
-    six
-  ];
-
   # Carbon-s default installation is /opt/graphite. This env variable ensures
-  # carbon is installed as a regular python module.
-  GRAPHITE_NO_PREFIX="True";
+  # carbon is installed as a regular Python module.
+  GRAPHITE_NO_PREFIX = "True";
 
   preConfigure = ''
     substituteInPlace webapp/graphite/settings.py \
       --replace "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
   '';
 
-  pythonImportsCheck = [ "graphite" ];
+  pythonImportsCheck = [
+    "graphite"
+  ];
 
   meta = with lib; {
-    homepage = "http://graphiteapp.org/";
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Enterprise scalable realtime graphing";
-    maintainers = with maintainers; [ offline basvandijk ];
+    homepage = "http://graphiteapp.org/";
     license = licenses.asl20;
+    maintainers = with maintainers; [ offline basvandijk ];
   };
 }

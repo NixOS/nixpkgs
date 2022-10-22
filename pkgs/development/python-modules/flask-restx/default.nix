@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , aniso8601
 , jsonschema
 , flask
@@ -27,6 +28,26 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "18vrmknyxw6adn62pz3kr9kvazfgjgl4pgimdf8527fyyiwcqy15";
   };
+
+  patches = [
+    # Fixes werkzeug 2.1 compatibility
+    (fetchpatch {
+      # https://github.com/python-restx/flask-restx/pull/427
+      url = "https://github.com/python-restx/flask-restx/commit/bb72a51860ea8a42c928f69bdd44ad20b1f9ee7e.patch";
+      hash = "sha256-DRH3lI6TV1m0Dq1VyscL7GQS26OOra9g88dXZNrNpmQ=";
+    })
+    (fetchpatch {
+      # https://github.com/python-restx/flask-restx/pull/427
+      url = "https://github.com/python-restx/flask-restx/commit/bb3e9dd83b9d4c0d0fa0de7d7ff713fae71eccee.patch";
+      hash = "sha256-HJpjG4aQWzEPCMfbXfkw4mz5TH9d89BCvGH2dE6Jfv0=";
+    })
+    # Fixes werkzeug 2.2 compatibility
+    (fetchpatch {
+      # https://github.com/python-restx/flask-restx/pull/463
+      url = "https://github.com/python-restx/flask-restx/commit/82f7340ebb51e5c143b804bc0f20f785e96968c0.patch";
+      hash = "sha256-GA+UlFDu771ul3qplsukce/mjGvJ3E4Dw/IoJQLevNU=";
+    })
+  ];
 
   propagatedBuildInputs = [
     aniso8601

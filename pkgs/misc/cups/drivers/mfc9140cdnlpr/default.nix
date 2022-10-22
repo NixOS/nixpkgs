@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Brother MFC-9140CDN LPR printer driver";
     homepage = "http://www.brother.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ hexa ];
     platforms = [ "i686-linux" "x86_64-linux" ];

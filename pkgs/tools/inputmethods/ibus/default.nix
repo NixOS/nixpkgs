@@ -1,6 +1,5 @@
 { lib, stdenv
 , substituteAll
-, fetchurl
 , fetchFromGitHub
 , autoreconfHook
 , gettext
@@ -9,32 +8,31 @@
 , vala
 , wrapGAppsHook
 , dbus
+, systemd
 , dconf ? null
 , glib
 , gdk-pixbuf
 , gobject-introspection
 , gtk2
 , gtk3
+, gtk4
 , gtk-doc
 , runCommand
 , isocodes
-, cldr-emoji-annotation
+, cldr-annotations
 , unicode-character-database
 , unicode-emoji
 , python3
 , json-glib
 , libnotify ? null
-, enablePython2Library ? false
 , enableUI ? true
 , withWayland ? false
-, libxkbcommon ? null
-, wayland ? null
+, libxkbcommon
+, wayland
 , buildPackages
 , runtimeShell
 , nixosTests
 }:
-
-assert withWayland -> wayland != null && libxkbcommon != null;
 
 with lib;
 
@@ -60,13 +58,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ibus";
-  version = "1.5.24";
+  version = "1.5.27";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
     rev = version;
-    sha256 = "sha256-1qx06MlEUjSS067FdQG1Bdi4ZAh3hPcNjUX5PIiC3Sk=";
+    sha256 = "sha256-DwX7SYRb18C0Lz2ySPS3yV99Q1xQezs0Ls2P7Rbtk5Q=";
   };
 
   patches = [
@@ -82,6 +80,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs --build data/dconf/make-dconf-override-db.sh
     cp ${buildPackages.gtk-doc}/share/gtk-doc/data/gtk-doc.make .
+    substituteInPlace bus/services/org.freedesktop.IBus.session.GNOME.service.in --replace "ExecStart=sh" "ExecStart=${runtimeShell}"
+    substituteInPlace bus/services/org.freedesktop.IBus.session.generic.service.in --replace "ExecStart=sh" "ExecStart=${runtimeShell}"
   '';
 
   preAutoreconf = "touch ChangeLog";
@@ -91,12 +91,11 @@ stdenv.mkDerivation rec {
     (enableFeature (dconf != null) "dconf")
     (enableFeature (libnotify != null) "libnotify")
     (enableFeature withWayland "wayland")
-    (enableFeature enablePython2Library "python-library")
-    (enableFeature enablePython2Library "python2") # XXX: python2 library does not work anyway
     (enableFeature enableUI "ui")
+    "--enable-gtk4"
     "--enable-install-tests"
     "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
-    "--with-emoji-annotation-dir=${cldr-emoji-annotation}/share/unicode/cldr/common/annotations"
+    "--with-emoji-annotation-dir=${cldr-annotations}/share/unicode/cldr/common/annotations"
     "--with-ucd-dir=${unicode-character-database}/share/unicode"
   ];
 
@@ -123,12 +122,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dbus
+    systemd
     dconf
     gdk-pixbuf
     gobject-introspection
     python3.pkgs.pygobject3 # for pygobject overrides
     gtk2
     gtk3
+    gtk4
     isocodes
     json-glib
     libnotify
@@ -169,6 +170,6 @@ stdenv.mkDerivation rec {
     description = "Intelligent Input Bus, input method framework";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ttuegel yegortimoshenko ];
+    maintainers = with maintainers; [ ttuegel yana ];
   };
 }

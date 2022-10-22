@@ -1,37 +1,67 @@
-{ lib, buildGoPackage, fetchFromGitLab, fetchurl }:
+{ lib, buildGoModule, fetchFromGitLab, fetchurl, bash }:
 
 let
-  version = "14.6.0";
+  version = "15.4.0";
 in
-buildGoPackage rec {
+buildGoModule rec {
   inherit version;
   pname = "gitlab-runner";
-  goPackagePath = "gitlab.com/gitlab-org/gitlab-runner";
-  subPackages = [ "." ];
-  commonPackagePath = "${goPackagePath}/common";
+
+  commonPackagePath = "gitlab.com/gitlab-org/gitlab-runner/common";
   ldflags = [
     "-X ${commonPackagePath}.NAME=gitlab-runner"
     "-X ${commonPackagePath}.VERSION=${version}"
     "-X ${commonPackagePath}.REVISION=v${version}"
   ];
 
+  # For patchShebangs
+  buildInputs = [ bash ];
+
+  vendorSha256 = "sha256-S0x1b2ITtqMoqdssoTgnolDC6Tyq3IdkJqxwZ29qCyU=";
+
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     rev = "v${version}";
-    sha256 = "1sgz8gri51i2pxnzzkcvwx5ncw1rjz7ain82hlcx6f3874qfsniy";
+    sha256 = "sha256-zItzg5r0V+m68c5aIJLMKsTKgmkgWrQD9t0cx5Lcaho=";
   };
 
   patches = [
     ./fix-shell-path.patch
-    ./0001-gitlab-runner-don-t-checked-for-fixed-runtime.patch
+    ./remove-bash-test.patch
   ];
+
+  prePatch = ''
+    # Remove some tests that can't work during a nix build
+
+    # Requires to run in a git repo
+    sed -i "s/func TestCacheArchiverAddingUntrackedFiles/func OFF_TestCacheArchiverAddingUntrackedFiles/" commands/helpers/file_archiver_test.go
+    sed -i "s/func TestCacheArchiverAddingUntrackedUnicodeFiles/func OFF_TestCacheArchiverAddingUntrackedUnicodeFiles/" commands/helpers/file_archiver_test.go
+
+    # No writable developer environment
+    rm common/build_test.go
+    rm executors/custom/custom_test.go
+
+    # No docker during build
+    rm executors/docker/terminal_test.go
+    rm executors/docker/docker_test.go
+    rm helpers/docker/auth/auth_test.go
+  '';
+
+  postInstall = ''
+    install packaging/root/usr/share/gitlab-runner/clear-docker-cache $out/bin
+  '';
+
+  preCheck = ''
+    # Make the tests pass outside of GitLab CI
+    export CI=0
+  '';
 
   meta = with lib; {
     description = "GitLab Runner the continuous integration executor of GitLab";
     license = licenses.mit;
     homepage = "https://about.gitlab.com/gitlab-ci/";
     platforms = platforms.unix ++ platforms.darwin;
-    maintainers = with maintainers; [ bachp zimbatm globin ];
+    maintainers = with maintainers; [ bachp zimbatm globin yayayayaka ];
   };
 }

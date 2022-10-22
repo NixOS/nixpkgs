@@ -21,7 +21,7 @@
 , visualizationSupport ? false }:
 
 buildPythonPackage rec {
-  pname = "binwalk";
+  pname = "binwalk${lib.optionalString visualizationSupport "-full"}";
   version = "2.3.3";
 
   src = fetchFromGitHub {

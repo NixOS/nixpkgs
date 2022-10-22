@@ -20,7 +20,7 @@ with lib;
 {
   name = "couchdb";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ fpletz ];
+    maintainers = [ ];
   };
 
   nodes = {

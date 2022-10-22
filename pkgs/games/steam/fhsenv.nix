@@ -3,7 +3,7 @@
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
 , extraProfile ? "" # string to append to profile
-, nativeOnly ? false
+, extraArgs ? "" # arguments to always pass to steam
 , runtimeOnly ? false
 , runtimeShell
 , stdenv
@@ -16,7 +16,6 @@
 let
   commonTargetPkgs = pkgs: with pkgs;
     [
-      steamPackages.steam-fonts
       # Needed for operating system detection until
       # https://github.com/ValveSoftware/steam-for-linux/issues/5909 is resolved
       lsb-release
@@ -62,22 +61,6 @@ let
     fi
   '';
 
-  setupSh = writeScript "setup.sh" ''
-    #!${runtimeShell}
-  '';
-
-  runSh = writeScript "run.sh" ''
-    #!${runtimeShell}
-    runtime_paths="${lib.concatStringsSep ":" ldPath}"
-    if [ "$1" == "--print-steam-runtime-library-paths" ]; then
-      echo "$runtime_paths''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-      exit 0
-    fi
-    export LD_LIBRARY_PATH="$runtime_paths''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-    export STEAM_LD_LIBRARY_PATH="$STEAM_LD_LIBRARY_PATH''${STEAM_LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-    exec "$@"
-  '';
-
 in buildFHSUserEnv rec {
   name = "steam";
 
@@ -113,16 +96,18 @@ in buildFHSUserEnv rec {
     json-glib # paradox launcher (Stellaris)
     libdrm
     libxkbcommon # paradox launcher
+    libvorbis # Dead Cells
     mono
     xorg.xkeyboardconfig
     xorg.libpciaccess
+    xorg.libXScrnSaver # Dead Cells
     udev # shadow of the tomb raider
+    icu # dotnet runtime, e.g. stardew valley
 
     # screeps dependencies
     gtk3
     dbus
     zlib
-    glib
     atk
     cairo
     freetype
@@ -148,11 +133,7 @@ in buildFHSUserEnv rec {
     openssl_1_1
     rtmpdump
 
-    # needed by getcap for vr startup
-    libcap
-
     # dependencies for mesa drivers, needed inside pressure-vessel
-    mesa.drivers
     mesa.llvmPackages.llvm.lib
     vulkan-loader
     expat
@@ -162,52 +143,36 @@ in buildFHSUserEnv rec {
     xorg.libxshmfence
     xorg.libXxf86vm
     libelf
-  ] ++ (if (!nativeOnly) then [
-    (steamPackages.steam-runtime-wrapped.override {
-      inherit runtimeOnly;
-    })
-  ] else [
+
     # Required
     glib
     gtk2
     bzip2
-    zlib
-    gdk-pixbuf
 
     # Without these it silently fails
     xorg.libXinerama
-    xorg.libXdamage
     xorg.libXcursor
     xorg.libXrender
     xorg.libXScrnSaver
-    xorg.libXxf86vm
     xorg.libXi
     xorg.libSM
     xorg.libICE
     gnome2.GConf
-    freetype
-    (curl.override { gnutlsSupport = true; opensslSupport = false; })
+    curlWithGnuTls
     nspr
     nss
-    fontconfig
-    cairo
-    expat
-    dbus
     cups
     libcap
     SDL2
     libusb1
     dbus-glib
     ffmpeg
-    atk
     # Only libraries are needed from those two
     libudev0-shim
-    networkmanager098
 
     # Verified games requirements
     xorg.libXt
     xorg.libXmu
-    xorg.libxcb
     libogg
     libvorbis
     SDL
@@ -215,12 +180,12 @@ in buildFHSUserEnv rec {
     glew110
     libidn
     tbb
-    wayland
 
     # Other things from runtime
     flac
     freeglut
     libjpeg
+    libpng
     libpng12
     libsamplerate
     libmikmod
@@ -234,6 +199,8 @@ in buildFHSUserEnv rec {
     SDL2_ttf
     SDL2_mixer
     libappindicator-gtk2
+    libdbusmenu-gtk2
+    libindicator-gtk2
     libcaca
     libcanberra
     libgcrypt
@@ -241,29 +208,9 @@ in buildFHSUserEnv rec {
     librsvg
     xorg.libXft
     libvdpau
-  ] ++ steamPackages.steam-runtime-wrapped.overridePkgs) ++ extraLibraries pkgs;
-
-  extraBuildCommands = ''
-    if [ -f $out/usr/share/vulkan/icd.d/nvidia_icd.json ]; then
-      cp $out/usr/share/vulkan/icd.d/nvidia_icd{,32}.json
-      nvidia32Lib=$(realpath $out/lib32/libGLX_nvidia.so.0 | cut -d'/' -f-4)
-      escapedNvidia32Lib="''${nvidia32Lib//\//\\\/}"
-      sed -i "s/\/nix\/store\/.*\/lib\/libGLX_nvidia\.so\.0/$escapedNvidia32Lib\/lib\/libGLX_nvidia\.so\.0/g" $out/usr/share/vulkan/icd.d/nvidia_icd32.json
-    fi
-  '' + (if (!nativeOnly) then ''
-    mkdir -p steamrt
-    ln -s ../lib/steam-runtime steamrt/${steam-runtime-wrapped.arch}
-    ${lib.optionalString (steam-runtime-wrapped-i686 != null) ''
-      ln -s ../lib32/steam-runtime steamrt/${steam-runtime-wrapped-i686.arch}
-    ''}
-    ln -s ${runSh} steamrt/run.sh
-    ln -s ${setupSh} steamrt/setup.sh
-  '' else ''
-    ln -s /usr/lib/libbz2.so usr/lib/libbz2.so.1.0
-    ${lib.optionalString (steam-runtime-wrapped-i686 != null) ''
-      ln -s /usr/lib32/libbz2.so usr/lib32/libbz2.so.1.0
-    ''}
-  '');
+  ]
+  ++ steamPackages.steam-runtime-wrapped.overridePkgs
+  ++ extraLibraries pkgs;
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications
@@ -282,9 +229,13 @@ in buildFHSUserEnv rec {
       fi
     fi
 
-    export STEAM_RUNTIME=${if nativeOnly then "0" else "/steamrt"}
-
-    export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.x86_64.json:/usr/share/vulkan/icd.d/intel_icd.i686.json:/usr/share/vulkan/icd.d/lvp_icd.x86_64.json:/usr/share/vulkan/icd.d/lvp_icd.i686.json:/usr/share/vulkan/icd.d/nvidia_icd.json:/usr/share/vulkan/icd.d/nvidia_icd32.json:/usr/share/vulkan/icd.d/radeon_icd.x86_64.json:/usr/share/vulkan/icd.d/radeon_icd.i686.json
+    # udev event notifications don't work reliably inside containers.
+    # SDL2 already tries to automatically detect flatpak and pressure-vessel
+    # and falls back to inotify-based discovery [1]. We make SDL2 do the
+    # same by telling it explicitly.
+    #
+    # [1] <https://github.com/libsdl-org/SDL/commit/8e2746cfb6e1f1a1da5088241a1440fd2535e321>
+    export SDL_JOYSTICK_DISABLE_UDEV=1
   '' + extraProfile;
 
   runScript = writeScript "steam-wrapper.sh" ''
@@ -305,14 +256,13 @@ in buildFHSUserEnv rec {
     EOF
       fi
     fi
-    ${lib.optionalString (!nativeOnly) exportLDPath}
+
+    ${exportLDPath}
     ${fixBootstrap}
-    exec steam "$@"
+    exec steam ${extraArgs} "$@"
   '';
 
-  meta = steam.meta // {
-    broken = nativeOnly;
-  };
+  inherit (steam) meta;
 
   # allows for some gui applications to share IPC
   # this fixes certain issues where they don't render correctly
@@ -327,7 +277,7 @@ in buildFHSUserEnv rec {
     name = "steam-run";
 
     targetPkgs = commonTargetPkgs;
-    inherit multiPkgs extraBuildCommands;
+    inherit multiPkgs profile extraInstallCommands;
 
     inherit unshareIpc unsharePid;
 
@@ -339,9 +289,15 @@ in buildFHSUserEnv rec {
         exit 1
       fi
       shift
-      ${lib.optionalString (!nativeOnly) exportLDPath}
+
+      ${exportLDPath}
       ${fixBootstrap}
       exec -- "$run" "$@"
     '';
+
+    meta = steam.meta // {
+      description = "Run commands in the same FHS environment that is used for Steam";
+      name = "steam-run";
+    };
   };
 }

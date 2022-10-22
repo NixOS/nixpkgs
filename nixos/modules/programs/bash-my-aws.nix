@@ -13,7 +13,7 @@ in
   {
     options = {
       programs.bash-my-aws = {
-        enable = mkEnableOption "bash-my-aws";
+        enable = mkEnableOption (lib.mdDoc "bash-my-aws");
       };
     };
 

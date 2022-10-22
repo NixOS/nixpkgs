@@ -5,37 +5,39 @@
 , flaky
 , keyring
 , requests-mock
-, requests_oauthlib
+, requests-oauthlib
 , requests-toolbelt
 , setuptools-scm
 , setuptools-scm-git-archive
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "jira";
-  version = "3.0.1";
+  version = "3.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pycontribs";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-hAUAzkHPXFDlKEom+dkzr8GQ+sqK2Ci1/k+QuSNvifE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-XyMywnuJOGSXWsMNbwNbMaOeAa9bosBg6rvfNKw77Ik=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov-report=xml --cov jira" ""
-  '';
-
-  nativeBuildInputs = [ setuptools-scm setuptools-scm-git-archive ];
+  nativeBuildInputs = [
+    setuptools-scm
+    setuptools-scm-git-archive
+  ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
     defusedxml
     keyring
-    requests_oauthlib
+    requests-oauthlib
     requests-toolbelt
   ];
 
@@ -45,11 +47,20 @@ buildPythonPackage rec {
     requests-mock
   ];
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov-report=xml --cov jira" ""
+  '';
+
+  pythonImportsCheck = [
+    "jira"
+  ];
+
   # impure tests because of connectivity attempts to jira servers
   doCheck = false;
 
   meta = with lib; {
-    description = "This library eases the use of the JIRA REST API from Python.";
+    description = "Library to interact with the JIRA REST API";
     homepage = "https://github.com/pycontribs/jira";
     license = licenses.bsd2;
     maintainers = with maintainers; [ globin ];

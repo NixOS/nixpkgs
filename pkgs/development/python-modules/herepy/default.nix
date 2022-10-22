@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "herepy";
-  version = "3.5.6";
+  version = "3.5.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "abdullahselek";
     repo = "HerePy";
-    rev = version;
-    sha256 = "sha256-I5u5PKB29jQNFdsx+y5ZJOE837D7Hpcsf3pwlCvmEqU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BwuH3GxEXiIFFM0na8Jhgp7J5TPW41/u89LWf+EprG4=";
   };
 
   propagatedBuildInputs = [

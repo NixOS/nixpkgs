@@ -5,7 +5,7 @@ let
 in fetchzip rec {
   name = "quattrocento-${version}";
 
-  url = "http://web.archive.org/web/20170707001804/http://www.impallari.com/media/releases/quattrocento-v${version}.zip";
+  url = "https://web.archive.org/web/20170707001804/http://www.impallari.com/media/releases/quattrocento-v${version}.zip";
 
   postFetch = ''
     mkdir -p $out/share/{fonts,doc}

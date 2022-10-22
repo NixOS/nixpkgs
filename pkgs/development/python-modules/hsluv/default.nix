@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "hsluv";
-  version = "5.0.2";
+  version = "5.0.3";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "hsluv";
     repo = "hsluv-python";
     rev = "v${version}";
-    sha256 = "0r0w8ycjwfg3pmzjghzrs0lkam93fzvgiqvrwh3nl9jnqlpw7v7j";
+    sha256 = "sha256-p3KD+zhHCOs/rLUVf1IkW/isfpUPQstB2VHGmZ/aEPU=";
   };
 
   checkInputs = [

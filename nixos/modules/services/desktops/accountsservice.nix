@@ -19,7 +19,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable AccountsService, a DBus service for accessing
           the list of user accounts and information attached to those accounts.
         '';

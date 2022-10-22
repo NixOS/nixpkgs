@@ -1,0 +1,16 @@
+diff --git i/data/meson.build w/data/meson.build
+index 6fb82d8..2e9e170 100644
+--- i/data/meson.build
++++ w/data/meson.build
+@@ -21,11 +21,6 @@ if sd_bus_provider == 'systemd'
+         configuration: data_conf,
+         install_dir: path_systemd_unit_dir,
+     )
+-    # Install the sysusers.d file
+-    install_data(
+-        files('gamemode.conf'),
+-        install_dir: path_systemd_sysusers_dir,
+-    )
+ endif
+ 
+ # Install the D-BUS service file

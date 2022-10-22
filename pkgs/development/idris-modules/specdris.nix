@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package {
-  name = "specdris";
+  pname = "specdris";
   version = "2018-01-23";
 
   src = fetchFromGitHub {

@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "eternal";
+  pname = "eternal";
   version = "2018-07-02";
 
   idrisDeps = [ effects ];

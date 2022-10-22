@@ -71,6 +71,7 @@ architecture/i386/table.h
 architecture/i386/tss.h
 arpa/ftp.h
 arpa/inet.h
+arpa/nameser.h
 arpa/nameser_compat.h
 arpa/telnet.h
 arpa/tftp.h
@@ -956,6 +957,7 @@ mpool.h
 msgcat.h
 nameser.h
 nc_tparm.h
+ncurses.h
 ncurses_dll.h
 ndbm.h
 net/bpf.h

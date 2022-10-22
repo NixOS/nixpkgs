@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, neon, pkg-config, readline, zlib}:
+{ lib, stdenv, fetchurl, fetchpatch, neon, pkg-config, readline, zlib, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "cadaver";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-ssl" "--with-readline" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ neon readline zlib ];
+  buildInputs = [ neon readline zlib openssl ];
 
   meta = with lib; {
     description = "A command-line WebDAV client";

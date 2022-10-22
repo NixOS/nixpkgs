@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./use-gcc.patch ];
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: /build/cc566Cj9.o:(.bss+0x0): multiple definition of `mpc123_file_reader'; ao.o:(.bss+0x40): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   buildInputs = [ gettext libmpcdec libao ];
 
   installPhase =

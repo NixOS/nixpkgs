@@ -1,53 +1,37 @@
-{ stdenv, lib, fetchurl, autoreconfHook, pkg-config, texinfo
-, netcat-gnu, gnutls, gsasl, libidn2, Security
-, withKeyring ? true, libsecret ? null
-, systemd ? null }:
+{ resholve
+, stdenv
+, symlinkJoin
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, bash
+, coreutils
+, gnugrep
+, gnutls
+, gsasl
+, libidn2
+, netcat-gnu
+, texinfo
+, which
+, Security
+, withKeyring ? true
+, libsecret ? null
+, withSystemd ? stdenv.isLinux
+, systemd ? null
+}:
 
 let
-  tester = "n"; # {x| |p|P|n|s}
-  journal = if stdenv.isLinux then "y" else "n";
+  inherit (lib) getBin getExe optionals;
 
-in stdenv.mkDerivation rec {
-  pname = "msmtp";
-  version = "1.8.19";
+  version = "1.8.22";
 
-  src = fetchurl {
-    url = "https://marlam.de/${pname}/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-NKHhmBF2h02+TuZu4NkQPJCYmqTc3Ehh5N4Fzn5EUms=";
+  src = fetchFromGitHub {
+    owner = "marlam";
+    repo = "msmtp-mirror";
+    rev = "msmtp-${version}";
+    hash = "sha256-Jt/uvGBrYYr6ua6LVPiP0nuRiIkxBJASdgHBNHivzxQ=";
   };
-
-  patches = [
-    ./paths.patch
-  ];
-
-  buildInputs = [ gnutls gsasl libidn2 ]
-    ++ lib.optional stdenv.isDarwin Security
-    ++ lib.optional withKeyring libsecret;
-
-  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
-
-  configureFlags = [ "--sysconfdir=/etc" "--with-libgsasl" ]
-    ++ lib.optional stdenv.isDarwin [ "--with-macosx-keyring" ];
-
-  postInstall = ''
-    install -d $out/share/doc/${pname}/scripts
-    cp -r scripts/{find_alias,msmtpqueue,msmtpq,set_sendmail} $out/share/doc/${pname}/scripts
-    install -Dm644 doc/*.example $out/share/doc/${pname}
-
-    substitute scripts/msmtpq/msmtpq $out/bin/msmtpq \
-      --replace @msmtp@      $out/bin/msmtp \
-      --replace @nc@         ${netcat-gnu}/bin/nc \
-      --replace @journal@    ${journal} \
-      ${lib.optionalString (journal == "y") "--replace @systemdcat@ ${systemd}/bin/systemd-cat" } \
-      --replace @test@       ${tester}
-
-    substitute scripts/msmtpq/msmtp-queue $out/bin/msmtp-queue \
-      --replace @msmtpq@ $out/bin/msmtpq
-
-    ln -s msmtp $out/bin/sendmail
-
-    chmod +x $out/bin/*
-  '';
 
   meta = with lib; {
     description = "Simple and easy to use SMTP client with excellent sendmail compatibility";
@@ -56,4 +40,92 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
   };
+
+  binaries = stdenv.mkDerivation rec {
+    pname = "msmtp-binaries";
+    inherit version src meta;
+
+    configureFlags = [ "--sysconfdir=/etc" "--with-libgsasl" ]
+      ++ optionals stdenv.isDarwin [ "--with-macosx-keyring" ];
+
+    buildInputs = [ gnutls gsasl libidn2 ]
+      ++ optionals stdenv.isDarwin [ Security ]
+      ++ optionals withKeyring [ libsecret ];
+
+    nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
+
+    enableParallelBuilding = true;
+
+    postInstall = ''
+      install -Dm444 -t $out/share/doc/msmtp doc/*.example
+      ln -s msmtp $out/bin/sendmail
+    '';
+  };
+
+  scripts = resholve.mkDerivation rec {
+    pname = "msmtp-scripts";
+    inherit version src meta;
+
+    patches = [ ./paths.patch ];
+
+    postPatch = ''
+      substituteInPlace scripts/msmtpq/msmtpq \
+        --replace @journal@ ${if withSystemd then "Y" else "N"}
+    '';
+
+    dontConfigure = true;
+    dontBuild = true;
+
+    installPhase = ''
+      runHook preInstall
+
+      install -Dm555 -t $out/bin                     scripts/msmtpq/msmtp*
+      install -Dm444 -t $out/share/doc/msmtp/scripts scripts/msmtpq/README*
+      install -Dm444 -t $out/share/doc/msmtp/scripts scripts/{find_alias,msmtpqueue,set_sendmail}/*
+
+      if grep --quiet -E '@.+@' $out/bin/*; then
+        echo "Unsubstituted variables found. Aborting!"
+        grep -E '@.+@' $out/bin/*
+        exit 1
+      fi
+
+      runHook postInstall
+    '';
+
+    solutions = {
+      msmtpq = {
+        scripts = [ "bin/msmtpq" ];
+        interpreter = getExe bash;
+        inputs = [
+          binaries
+          coreutils
+          gnugrep
+          netcat-gnu
+          which
+        ] ++ optionals withSystemd [ systemd ];
+        execer = [
+          "cannot:${getBin binaries}/bin/msmtp"
+          "cannot:${getBin netcat-gnu}/bin/nc"
+        ] ++ optionals withSystemd [
+          "cannot:${getBin systemd}/bin/systemd-cat"
+        ];
+        fix."$MSMTP" = [ "msmtp" ];
+        fake.external = [ "ping" ]
+          ++ optionals (!withSystemd) [ "systemd-cat" ];
+      };
+
+      msmtp-queue = {
+        scripts = [ "bin/msmtp-queue" ];
+        interpreter = getExe bash;
+        inputs = [ "${placeholder "out"}/bin" ];
+        execer = [ "cannot:${placeholder "out"}/bin/msmtpq" ];
+      };
+    };
+  };
+
+in
+symlinkJoin {
+  name = "msmtp-${version}";
+  inherit version meta;
+  paths = [ binaries scripts ];
 }

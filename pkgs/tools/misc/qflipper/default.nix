@@ -1,31 +1,104 @@
-{ lib, fetchurl, appimageTools }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, zlib
+, libusb1
+, libGL
+, qmake
+, wrapQtAppsHook
+, mkDerivation
 
+, qttools
+, qtbase
+, qt3d
+, qtsvg
+, qtserialport
+, qtdeclarative
+, qtquickcontrols
+, qtquickcontrols2
+, qtgraphicaleffects
+, qtwayland
+, nix-update-script
+}:
 let
-  pname = "qflipper";
-  version = "0.5.3";
-  name = "${pname}-${version}";
-  src = fetchurl {
-    url = "https://update.flipperzero.one/builds/qFlipper/${version}/qFlipper-x86_64-${version}.AppImage";
-    sha256 = "sha256-UFGFl1zb0t1y7FBd5EX1YS3npWM5slL/wLiTOF/CLNM=";
+  pname = "qFlipper";
+  version = "1.2.1";
+  sha256 = "sha256-6pfkZfT/8DNZGIdc8YvHN2TPyhDqHU6e3mqtAZOpHLo=";
+  timestamp = "99999999999";
+  commit = "nix-${version}";
+
+in
+mkDerivation {
+  inherit pname version;
+
+  src = fetchFromGitHub {
+    owner = "flipperdevices";
+    repo = "qFlipper";
+    rev = version;
+    fetchSubmodules = true;
+    inherit sha256;
   };
-  appimageContents = appimageTools.extractType2 { inherit name src; };
 
-in appimageTools.wrapType2 {
-  inherit name src;
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+    qttools
+    wrapQtAppsHook
+  ];
 
-  extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.libsecret ];
+  buildInputs = [
+    zlib
+    libusb1
+    libGL
 
-  extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/qFlipper
-    install -m 444 -D ${appimageContents}/qFlipper.desktop -t $out/share/applications
-    cp -r ${appimageContents}/usr/share/icons $out/share
+    qtbase
+    qt3d
+    qtsvg
+    qtserialport
+    qtdeclarative
+    qtquickcontrols
+    qtquickcontrols2
+    qtgraphicaleffects
+  ] ++ lib.optionals (stdenv.isLinux) [
+    qtwayland
+  ];
+
+  qmakeFlags = [
+    "DEFINES+=DISABLE_APPLICATION_UPDATES"
+    "CONFIG+=qtquickcompiler"
+  ];
+
+  postPatch = ''
+    substituteInPlace qflipper_common.pri \
+        --replace 'GIT_VERSION = unknown' 'GIT_VERSION = "${version}"' \
+        --replace 'GIT_TIMESTAMP = 0' 'GIT_TIMESTAMP = ${timestamp}' \
+        --replace 'GIT_COMMIT = unknown' 'GIT_COMMIT = "${commit}"'
+    cat qflipper_common.pri
   '';
 
+  postInstall = ''
+    mkdir -p $out/bin
+    ${lib.optionalString stdenv.isDarwin ''
+    cp qFlipper.app/Contents/MacOS/qFlipper $out/bin
+    ''}
+    cp qFlipper-cli $out/bin
+
+    mkdir -p $out/etc/udev/rules.d
+    cp installer-assets/udev/42-flipperzero.rules $out/etc/udev/rules.d/
+  '';
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
+
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Cross-platform desktop tool to manage your flipper device";
     homepage = "https://flipperzero.one/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ wolfangaukang ];
-    platforms = [ "x86_64-linux" ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ cab404 ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]; # qtbase doesn't build yet on aarch64-darwin
   };
+
 }

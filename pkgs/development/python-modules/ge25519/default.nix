@@ -4,19 +4,21 @@
 , fe25519
 , fetchPypi
 , fountains
-, nose
 , parts
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "ge25519";
-  version = "1.1.0";
-  format = "setuptools";
+  version = "1.3.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-0M9RF8tlEoLyduvY3RvltGAnsus3HF6FEy22b6w6aUs=";
+    hash = "sha256-y9Nv59pLWk1kRjZG3EmalT34Mjx7RLZ4WkvJlRrK5LI=";
   };
 
   propagatedBuildInputs = [
@@ -27,9 +29,13 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    nose
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "--doctest-modules --ignore=docs --cov=ge25519 --cov-report term-missing" ""
+  '';
 
   pythonImportsCheck = [
     "ge25519"

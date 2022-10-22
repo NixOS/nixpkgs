@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, ncurses, readline, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, ncurses, readline, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  version = "1.7.0";
+  version = "1.7.1";
   pname = "hunspell";
 
-  src = fetchurl {
-    url = "https://github.com/hunspell/hunspell/archive/v${version}.tar.gz";
-    sha256 = "12mwwqz6qkx7q1lg9vpjiiwh4fk4c8xs6g6g0xa2ia0hp5pbh9xv";
+  src = fetchFromGitHub {
+    owner = "hunspell";
+    repo = "hunspell";
+    rev = "v${version}";
+    sha256 = "sha256-YSJztik0QTZFNR8k8Xu1hakyE16NziDavYVkEUCbtGM=";
   };
 
   outputs = [ "bin" "dev" "out" "man" ];
@@ -16,11 +18,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001-Make-hunspell-look-in-XDG_DATA_DIRS-for-dictionaries.patch
-    (fetchpatch {
-      name = "CVE-2019-16707.patch";
-      url = "https://github.com/hunspell/hunspell/commit/ac938e2ecb48ab4dd21298126c7921689d60571b.patch";
-      sha256 = "0bwfksz87iy7ikx3fb54zd5ww169qfm9kl076hsch3cs8p30s8az";
-    })
   ];
 
   postPatch = ''

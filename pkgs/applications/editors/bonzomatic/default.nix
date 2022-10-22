@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bonzomatic";
-  version = "2021-03-07";
+  version = "2022-02-05";
 
   src = fetchFromGitHub {
     owner = "Gargaj";
     repo = pname;
     rev = version;
-    sha256 = "0gbh7kj7irq2hyvlzjgbs9fcns9kamz7g5p6msv12iw75z9yi330";
+    sha256 = "sha256-y0zNluIDxms+Lpg7yBiEJNNyxx5TLaSiWBKXjqXiVJg=";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];

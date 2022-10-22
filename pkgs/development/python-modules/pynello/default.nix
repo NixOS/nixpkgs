@@ -4,7 +4,7 @@
 , python-dateutil
 , pythonOlder
 , requests
-, requests_oauthlib
+, requests-oauthlib
 }:
 
 buildPythonPackage rec {
@@ -18,19 +18,21 @@ buildPythonPackage rec {
     owner = "pschmitt";
     repo = pname;
     rev = version;
-    sha256 = "015rlccsn2vff9if82rjj2fza3bjbmawqhamc22wq40gq7pbfk5i";
+    hash = "sha256-sUy37sEPEMyFYFVBzFVdcg31nZAyC+Ricm4LqxmjuQQ=";
   };
 
   propagatedBuildInputs = [
     python-dateutil
     requests
-    requests_oauthlib
+    requests-oauthlib
   ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "pynello" ];
+  pythonImportsCheck = [
+    "pynello"
+  ];
 
   meta = with lib; {
     description = "Python library for nello.io intercoms";

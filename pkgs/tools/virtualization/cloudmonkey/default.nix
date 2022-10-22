@@ -11,8 +11,6 @@ buildGoModule rec {
     sha256 = "sha256-C9e2KsnoggjWZp8gx757MbFdGxmfh+TtAd+luS3ycHU=";
   };
 
-  runVend = true;
-
   vendorSha256 = null;
 
   meta = with lib; {
@@ -20,6 +18,7 @@ buildGoModule rec {
     homepage = "https://github.com/apache/cloudstack-cloudmonkey";
     license = [ licenses.asl20 ];
     maintainers = [ maintainers.womfoo ];
+    mainProgram = "cloudstack-cloudmonkey";
   };
 
 }

@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "aocd";
-  version = "1.1.1";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "wimglenn";
     repo = "advent-of-code-data";
-    rev = "v${version}";
-    sha256 = "sha256-wdg6XUkjnAc9yAP7DP0UT6SlQHfj/ymhqzIGNM3fco4=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-V6byleGCgXc2xfceb+aO0sYwGD6uThE6/8s5NDEjerw=";
   };
 
   propagatedBuildInputs = [

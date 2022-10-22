@@ -8,7 +8,6 @@
 , lwt_ssl
 , magic-mime
 , mrmime
-, openssl
 , pecu
 , psq
 , ssl
@@ -28,8 +27,6 @@ buildDunePackage rec {
     substituteInPlace ./vendor/dune --replace "mrmime.prettym" "prettym"
   '';
 
-  useDune2 = true;
-
   propagatedBuildInputs = [
     logs
     magic-mime
@@ -43,7 +40,8 @@ buildDunePackage rec {
     alcotest-lwt
     dune-site
   ];
-  doCheck = true;
+  # Check fails with OpenSSL 3
+  doCheck = false;
 
   meta = {
     description = "An HTTP library with HTTP/2 support written entirely in OCaml";

@@ -1,6 +1,6 @@
 { lib
-, stdenv
 , fetchFromGitHub
+, fetchpatch
 , buildPythonPackage
 , pythonOlder
   # Mitmproxy requirements
@@ -20,7 +20,6 @@
 , passlib
 , protobuf
 , publicsuffix2
-, pyasn1
 , pyopenssl
 , pyparsing
 , pyperclip
@@ -32,8 +31,6 @@
 , wsproto
 , zstandard
   # Additional check requirements
-, beautifulsoup4
-, glibcLocales
 , hypothesis
 , parver
 , pytest-asyncio
@@ -45,15 +42,23 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "7.0.4";
+  version = "8.1.1";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-424WNG9Yj+Zfo1UTh7emknZ7xTtpFPz7Ph+FpE149FM=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-nW/WfiY6uF67qNa95tvNvSv/alP2WmzTk34LEBma/04=";
   };
+
+  patches = [
+    # Fix onboarding addon tests failing with Flask >= v2.2
+    (fetchpatch {
+      url = "https://github.com/mitmproxy/mitmproxy/commit/bc370276a19c1d1039e7a45ecdc23c362626c81a.patch";
+      hash = "sha256-Cp7RnYpZEuRhlWYOk8BOnAKBAUa7Vy296UmQi3/ufes=";
+    })
+  ];
 
   propagatedBuildInputs = [
     setuptools
@@ -74,7 +79,6 @@ buildPythonPackage rec {
     passlib
     protobuf
     publicsuffix2
-    pyasn1
     pyopenssl
     pyparsing
     pyperclip
@@ -87,8 +91,6 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    beautifulsoup4
-    glibcLocales
     hypothesis
     parver
     pytest-asyncio
@@ -97,8 +99,6 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
   ];
-
-  doCheck = !stdenv.isDarwin;
 
   postPatch = ''
     # remove dependency constraints
@@ -115,7 +115,12 @@ buildPythonPackage rec {
     # https://github.com/mitmproxy/mitmproxy/commit/36ebf11916704b3cdaf4be840eaafa66a115ac03
     # Tests require terminal
     "test_integration"
+    "test_contentview_flowview"
+    "test_flowview"
+    # ValueError: Exceeds the limit (4300) for integer string conversion
+    "test_roundtrip_big_integer"
   ];
+  dontUsePytestXdist = true;
 
   pythonImportsCheck = [ "mitmproxy" ];
 
@@ -123,6 +128,6 @@ buildPythonPackage rec {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz kamilchm ];
+    maintainers = with maintainers; [ kamilchm SuperSandro2000 ];
   };
 }

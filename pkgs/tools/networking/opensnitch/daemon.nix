@@ -1,6 +1,8 @@
 { buildGoModule
 , fetchFromGitHub
 , fetchpatch
+, protobuf
+, go-protobuf
 , pkg-config
 , libnetfilter_queue
 , libnfnetlink
@@ -8,17 +10,18 @@
 , coreutils
 , iptables
 , makeWrapper
+, protoc-gen-go-grpc
 }:
 
 buildGoModule rec {
   pname = "opensnitch";
-  version = "1.3.6";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     rev = "v${version}";
-    sha256 = "sha256-Cgo+bVQQeUZuYYhA1WSqlLyQQGAeXbbNno9LS7oNvhI=";
+    sha256 = "sha256-MF7K3WasG1xLdw1kWz6xVYrdfuZW5GUq6dlS0pPOkHI=";
   };
 
   patches = [
@@ -33,15 +36,24 @@ buildGoModule rec {
 
   modRoot = "daemon";
 
-  vendorSha256 = "sha256-LMwQBFkHg1sWIUITLOX2FZi5QUfOivvrkcl9ELO3Trk=";
-
-  nativeBuildInputs = [ pkg-config makeWrapper ];
-
   buildInputs = [ libnetfilter_queue libnfnetlink ];
+
+  nativeBuildInputs = [ pkg-config protobuf go-protobuf makeWrapper protoc-gen-go-grpc ];
+
+  vendorSha256 = "sha256-81BKMLuEXA/NeIjO7icBm48ROq6KxAxHtvP0nV5yM5A=";
+
+  preBuild = ''
+    make -C ../proto ../daemon/ui/protocol/ui.pb.go
+  '';
 
   postBuild = ''
     mv $GOPATH/bin/daemon $GOPATH/bin/opensnitchd
-    mkdir -p $out/lib/systemd/system
+    mkdir -p $out/etc/opensnitchd $out/lib/systemd/system
+    cp system-fw.json $out/etc/opensnitchd/
+    substitute default-config.json $out/etc/default-config.json \
+      --replace "/var/log/opensnitchd.log" "/dev/stdout" \
+      --replace "iptables" "nftables" \
+      --replace "ebpf" "proc"
     substitute opensnitchd.service $out/lib/systemd/system/opensnitchd.service \
       --replace "/usr/local/bin/opensnitchd" "$out/bin/opensnitchd" \
       --replace "/etc/opensnitchd/rules" "/var/lib/opensnitch/rules" \

@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, options, lib, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.couchdb;
+  opt = options.services.couchdb;
   configFile = pkgs.writeText "couchdb.ini" (
     ''
       [couchdb]
@@ -36,7 +37,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to run CouchDB Server.
         '';
       };
@@ -45,7 +46,7 @@ in {
         type = types.package;
         default = pkgs.couchdb3;
         defaultText = literalExpression "pkgs.couchdb3";
-        description = ''
+        description = lib.mdDoc ''
           CouchDB package to use.
         '';
       };
@@ -53,7 +54,7 @@ in {
       adminUser = mkOption {
         type = types.str;
         default = "admin";
-        description = ''
+        description = lib.mdDoc ''
           Couchdb (i.e. fauxton) account with permission for all dbs and
           tasks.
         '';
@@ -62,7 +63,7 @@ in {
       adminPass = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Couchdb (i.e. fauxton) account with permission for all dbs and
           tasks.
         '';
@@ -71,7 +72,7 @@ in {
       user = mkOption {
         type = types.str;
         default = "couchdb";
-        description = ''
+        description = lib.mdDoc ''
           User account under which couchdb runs.
         '';
       };
@@ -79,7 +80,7 @@ in {
       group = mkOption {
         type = types.str;
         default = "couchdb";
-        description = ''
+        description = lib.mdDoc ''
           Group account under which couchdb runs.
         '';
       };
@@ -89,7 +90,7 @@ in {
       databaseDir = mkOption {
         type = types.path;
         default = "/var/lib/couchdb";
-        description = ''
+        description = lib.mdDoc ''
           Specifies location of CouchDB database files (*.couch named). This
           location should be writable and readable for the user the CouchDB
           service runs as (couchdb by default).
@@ -99,7 +100,7 @@ in {
       uriFile = mkOption {
         type = types.path;
         default = "/run/couchdb/couchdb.uri";
-        description = ''
+        description = lib.mdDoc ''
           This file contains the full URI that can be used to access this
           instance of CouchDB. It is used to help discover the port CouchDB is
           running on (if it was set to 0 (e.g. automatically assigned any free
@@ -111,7 +112,7 @@ in {
       viewIndexDir = mkOption {
         type = types.path;
         default = "/var/lib/couchdb";
-        description = ''
+        description = lib.mdDoc ''
           Specifies location of CouchDB view index files. This location should
           be writable and readable for the user that runs the CouchDB service
           (couchdb by default).
@@ -121,7 +122,7 @@ in {
       bindAddress = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = ''
+        description = lib.mdDoc ''
           Defines the IP address by which CouchDB will be accessible.
         '';
       };
@@ -129,7 +130,7 @@ in {
       port = mkOption {
         type = types.int;
         default = 5984;
-        description = ''
+        description = lib.mdDoc ''
           Defined the port number to listen.
         '';
       };
@@ -137,7 +138,7 @@ in {
       logFile = mkOption {
         type = types.path;
         default = "/var/log/couchdb.log";
-        description = ''
+        description = lib.mdDoc ''
           Specifies the location of file for logging output.
         '';
       };
@@ -145,7 +146,7 @@ in {
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration. Overrides any other cofiguration.
         '';
       };
@@ -153,14 +154,15 @@ in {
       argsFile = mkOption {
         type = types.path;
         default = "${cfg.package}/etc/vm.args";
-        description = ''
+        defaultText = literalExpression ''"config.${opt.package}/etc/vm.args"'';
+        description = lib.mdDoc ''
           vm.args configuration. Overrides Couchdb's Erlang VM parameters file.
         '';
       };
 
       configFile = mkOption {
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           Configuration file for persisting runtime changes. File
           needs to be readable and writable from couchdb user/group.
         '';
@@ -191,6 +193,11 @@ in {
 
       preStart = ''
         touch ${cfg.configFile}
+        if ! test -e ${cfg.databaseDir}/.erlang.cookie; then
+          touch ${cfg.databaseDir}/.erlang.cookie
+          chmod 600 ${cfg.databaseDir}/.erlang.cookie
+          dd if=/dev/random bs=16 count=1 | base64 > ${cfg.databaseDir}/.erlang.cookie
+        fi
       '';
 
       environment = {
@@ -202,6 +209,7 @@ in {
         ERL_FLAGS= ''-couch_ini ${cfg.package}/etc/default.ini ${configFile} ${pkgs.writeText "couchdb-extra.ini" cfg.extraConfig} ${cfg.configFile}'';
         # 5. the vm.args file
         COUCHDB_ARGS_FILE=''${cfg.argsFile}'';
+        HOME =''${cfg.databaseDir}'';
       };
 
       serviceConfig = {

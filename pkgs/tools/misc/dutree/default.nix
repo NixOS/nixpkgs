@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "17lm8jd07bi499mywg2iq669im34j4x4yhc8a3adxn12f8j0dfg7";
     # test directory has files with unicode names which causes hash mismatches
     # It is also not used by any tests or parts of build process
-    extraPostFetch = ''
+    postFetch = ''
       rm -r $out/test
     '';
   };

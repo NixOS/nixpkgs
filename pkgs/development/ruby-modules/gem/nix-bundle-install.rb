@@ -118,9 +118,7 @@ else
   source = Bundler::Source::Path.new(options)
 end
 spec = source.specs.search_all(name).first
-Bundler.rubygems.with_build_args build_flags do
-  source.install(spec)
-end
+source.install(spec, :build_args => build_flags)
 
 msg = spec.post_install_message
 if msg

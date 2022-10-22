@@ -3,20 +3,20 @@
 , fetchFromGitHub
 , runCommand
 , darwin
+, removeReferencesTo
 }:
 
 stdenv.mkDerivation rec {
   pname = "btop";
-  version = "1.1.3";
+  version = "1.2.9";
+  hash = "sha256-YCVRWmBZmzAAFxMIWMBb8NPCRp8NeBtMqEbkgXYS9M4=";
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-uKR1ogQwEoyxyWBiLnW8BsOsYgTpeIpKrKspq0JwYjY=";
+    sha256 = hash;
   };
-
-  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
   ADDFLAGS = with darwin.apple_sdk.frameworks;
     lib.optional stdenv.isDarwin
@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
     );
 
   installFlags = [ "PREFIX=$(out)" ];
+
+  postInstall = ''
+    ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/bin/btop)
+  '';
 
   meta = with lib; {
     description = "A monitor of resources";

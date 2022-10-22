@@ -3,20 +3,24 @@
 , fetchPypi
 , isPy27
 , setuptools-scm
+, pydantic
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "inflect";
-  version = "5.3.0";
+  version = "6.0.0";
   disabled = isPy27;
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "41a23f6788962e9775e40e2ecfb1d6455d02de315022afeedd3c5dc070019d73";
+    sha256 = "sha256-C8FRbsJyXi2CIXB6YSJFCTy28c6iCc/Yy9T8Xpb6Y2U=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
+
+  propagatedBuildInputs = [ pydantic ];
 
   checkInputs = [ pytestCheckHook ];
 

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
-    homepage = "http://microscheme.org";
+    homepage = "https://ryansuchocki.github.io/microscheme/";
     description = "A Scheme subset for Atmel microcontrollers";
     longDescription = ''
       Microscheme is a Scheme subset/variant designed for Atmel

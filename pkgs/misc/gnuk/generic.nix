@@ -10,9 +10,9 @@
 }:
 
 stdenv.mkDerivation {
-  name = "gnuk-${version}-${device}";
+  pname = "gnuk-${device}";
 
-  inherit src;
+  inherit version src;
 
   nativeBuildInputs = [ gcc-arm-embedded binutils-arm-embedded makeWrapper ];
   buildInputs = with python3Packages; [ python pyusb colorama ];

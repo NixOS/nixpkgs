@@ -11,7 +11,7 @@ let
   # 1. Needs ocaml >= 4.04 and <= 4.11
   # 2. ocaml 4.10 defaults to safe (immutable) strings so we need a version with
   #    that disabled as weidu is strongly dependent on mutable strings
-  ocaml' = ocaml-ng.ocamlPackages_4_10.ocaml.overrideAttrs (old: {
+  ocaml' = ocaml-ng.ocamlPackages_4_11.ocaml.overrideAttrs (old: {
     configureFlags = old.configureFlags ++ [
       # https://github.com/WeiDUorg/weidu/issues/197
       "--disable-force-safe-string"
@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "weidu";
-  version = "247.00";
+  version = "249.00";
 
   src = fetchFromGitHub {
     owner = "WeiDUorg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vAIIYn0urQnnL82mdfwJtahrS3uWPFferm+0F13TKcw=";
+    sha256 = "sha256-+vkKTzFZdAzY2dL+mZ4A0PDxhTKGgs9bfArz7S6b4m4=";
   };
 
   postPatch = ''

@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "sanic-routing";
-  version = "0.7.2";
+  version = "22.3.0";
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "sanic-routing";
     rev = "v${version}";
-    hash = "sha256-MN6A8CtDVxj34eehr3UIwCT09VOfcruVX+/iImr1MgY=";
+    hash = "sha256-dX+uxrVjtPxX0ba3WUE/JKgj0PZzvFdKr/lXQgASN6Y=";
   };
 
   checkInputs = [ pytestCheckHook pytest-asyncio ];

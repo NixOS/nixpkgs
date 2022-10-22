@@ -7,7 +7,7 @@
 }:
 
 mkDerivation {
-  name = "ktexteditor";
+  pname = "ktexteditor";
   nativeBuildInputs = [ extra-cmake-modules perl ];
   buildInputs = [
     karchive kconfig kguiaddons ki18n kiconthemes kio libgit2 qtscript

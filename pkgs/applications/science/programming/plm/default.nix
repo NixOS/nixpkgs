@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     description = "Free cross-platform programming exerciser";
     homepage = "http://people.irisa.fr/Martin.Quinson/Teaching/PLM/";
     license = licenses.gpl3;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     maintainers = [ ];
     platforms = lib.platforms.all;
   };

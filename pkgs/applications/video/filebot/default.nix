@@ -1,20 +1,14 @@
-{ lib, stdenv, fetchurl, openjdk11, makeWrapper, autoPatchelfHook
-, zlib, libzen, libmediainfo, curl, libmms, glib
+{ lib, stdenv, fetchurl, openjdk17, makeWrapper, autoPatchelfHook
+, zlib, libzen, libmediainfo, curlWithGnuTls, libmms, glib
 }:
-
-let
-  # FileBot requires libcurl-gnutls.so to build
-  curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
-
-in
 
 stdenv.mkDerivation rec {
   pname = "filebot";
-  version = "4.9.4";
+  version = "4.9.6";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20210326102451/https://get.filebot.net/filebot/FileBot_${version}/FileBot_${version}-portable.tar.xz";
-    sha256 = "sha256-fz0B9P/UBrlKGPZkheMd/4cFnWHt+brS3zRTv4nVt9o=";
+    url = "https://web.archive.org/web/20220305095926/https://get.filebot.net/filebot/FileBot_${version}/FileBot_${version}-portable.tar.xz";
+    sha256 = "sha256-3j0WmmamE9KUNwjOVZvrdFH5dS/9FHSdbLfcAsOzQOo=";
   };
 
   unpackPhase = "tar xvf $src";
@@ -33,7 +27,7 @@ stdenv.mkDerivation rec {
       --replace 'APP_DATA="$FILEBOT_HOME/data/$(id -u)"' 'APP_DATA=''${XDG_DATA_HOME:-$HOME/.local/share}/filebot/data' \
       --replace '$FILEBOT_HOME/data/.license' '$APP_DATA/.license'
     wrapProgram $out/opt/filebot.sh \
-      --prefix PATH : ${lib.makeBinPath [ openjdk11 ]}
+      --prefix PATH : ${lib.makeBinPath [ openjdk17 ]}
     # Expose the binary in bin to make runnable.
     ln -s $out/opt/filebot.sh $out/bin/filebot
   '';
@@ -47,6 +41,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://filebot.net";
     changelog = "https://www.filebot.net/forums/viewforum.php?f=7";
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ gleber felschr ];
     platforms = platforms.linux;

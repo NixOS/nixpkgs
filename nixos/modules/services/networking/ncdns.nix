@@ -50,16 +50,16 @@ in
 
     services.ncdns = {
 
-      enable = mkEnableOption ''
+      enable = mkEnableOption (lib.mdDoc ''
         ncdns, a Go daemon to bridge Namecoin to DNS.
-        To resolve .bit domains set <literal>services.namecoind.enable = true;</literal>
+        To resolve .bit domains set `services.namecoind.enable = true;`
         and an RPC username/password
-      '';
+      '');
 
       address = mkOption {
         type = types.str;
-        default = "127.0.0.1";
-        description = ''
+        default = "[::1]";
+        description = lib.mdDoc ''
           The IP address the ncdns resolver will bind to.  Leave this unchanged
           if you do not wish to directly expose the resolver.
         '';
@@ -68,7 +68,7 @@ in
       port = mkOption {
         type = types.port;
         default = 5333;
-        description = ''
+        description = lib.mdDoc ''
           The port the ncdns resolver will bind to.
         '';
       };
@@ -78,16 +78,16 @@ in
         default = config.networking.hostName;
         defaultText = literalExpression "config.networking.hostName";
         example = "example.com";
-        description = ''
+        description = lib.mdDoc ''
           The hostname of this ncdns instance, which defaults to the machine
           hostname. If specified, ncdns lists the hostname as an NS record at
           the zone apex:
-          <programlisting>
+          ```
           bit. IN NS ns1.example.com.
-          </programlisting>
+          ```
           If unset ncdns will generate an internal psuedo-hostname under the
           zone, which will resolve to the value of
-          <option>services.ncdns.identity.address</option>.
+          {option}`services.ncdns.identity.address`.
           If you are only using ncdns locally you can ignore this.
         '';
       };
@@ -96,7 +96,7 @@ in
         type = types.str;
         default = "";
         example = "root@example.com";
-        description = ''
+        description = lib.mdDoc ''
           An email address for the SOA record at the bit zone.
           If you are only using ncdns locally you can ignore this.
         '';
@@ -105,38 +105,38 @@ in
       identity.address = mkOption {
         type = types.str;
         default = "127.127.127.127";
-        description = ''
+        description = lib.mdDoc ''
           The IP address the hostname specified in
-          <option>services.ncdns.identity.hostname</option> should resolve to.
+          {option}`services.ncdns.identity.hostname` should resolve to.
           If you are only using ncdns locally you can ignore this.
         '';
       };
 
-      dnssec.enable = mkEnableOption ''
+      dnssec.enable = mkEnableOption (lib.mdDoc ''
         DNSSEC support in ncdns. This will generate KSK and ZSK keypairs
         (unless provided via the options
-        <option>services.ncdns.dnssec.publicKey</option>,
-        <option>services.ncdns.dnssec.privateKey</option> etc.) and add a trust
+        {option}`services.ncdns.dnssec.publicKey`,
+        {option}`services.ncdns.dnssec.privateKey` etc.) and add a trust
         anchor to recursive resolvers
-      '';
+      '');
 
       dnssec.keys.public = mkOption {
         type = types.path;
         default = defaultFiles.public;
-        description = ''
+        description = lib.mdDoc ''
           Path to the file containing the KSK public key.
-          The key can be generated using the <literal>dnssec-keygen</literal>
-          command, provided by the package <package>bind</package> as follows:
-          <programlisting>
+          The key can be generated using the `dnssec-keygen`
+          command, provided by the package `bind` as follows:
+          ```
           $ dnssec-keygen -a RSASHA256 -3 -b 2048 -f KSK bit
-          </programlisting>
+          ```
         '';
       };
 
       dnssec.keys.private = mkOption {
         type = types.path;
         default = defaultFiles.private;
-        description = ''
+        description = lib.mdDoc ''
           Path to the file containing the KSK private key.
         '';
       };
@@ -144,20 +144,20 @@ in
       dnssec.keys.zonePublic = mkOption {
         type = types.path;
         default = defaultFiles.zonePublic;
-        description = ''
+        description = lib.mdDoc ''
           Path to the file containing the ZSK public key.
-          The key can be generated using the <literal>dnssec-keygen</literal>
-          command, provided by the package <package>bind</package> as follows:
-          <programlisting>
+          The key can be generated using the `dnssec-keygen`
+          command, provided by the package `bind` as follows:
+          ```
           $ dnssec-keygen -a RSASHA256 -3 -b 2048 bit
-          </programlisting>
+          ```
         '';
       };
 
       dnssec.keys.zonePrivate = mkOption {
         type = types.path;
         default = defaultFiles.zonePrivate;
-        description = ''
+        description = lib.mdDoc ''
           Path to the file containing the ZSK private key.
         '';
       };
@@ -176,11 +176,11 @@ in
             certstore.nssdbdir = "../../home/alice/.pki/nssdb";
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           ncdns settings. Use this option to configure ncds
           settings not exposed in a NixOS option or to bypass one.
-          See the example ncdns.conf file at <link xlink:href="
-          https://git.io/JfX7g"/> for the available options.
+          See the example ncdns.conf file at <https://github.com/namecoin/ncdns/blob/master/_doc/ncdns.conf.example>
+          for the available options.
         '';
       };
 
@@ -189,8 +189,8 @@ in
     services.pdns-recursor.resolveNamecoin = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Resolve <literal>.bit</literal> top-level domains using ncdns and namecoin.
+      description = lib.mdDoc ''
+        Resolve `.bit` top-level domains using ncdns and namecoin.
       '';
     };
 
@@ -202,7 +202,7 @@ in
   config = mkIf cfg.enable {
 
     services.pdns-recursor = mkIf cfgs.pdns-recursor.resolveNamecoin {
-      forwardZonesRecurse.bit = "127.0.0.1:${toString cfg.port}";
+      forwardZonesRecurse.bit = "${cfg.address}:${toString cfg.port}";
       luaConfig =
         if cfg.dnssec.enable
           then ''readTrustAnchorsFromFile("${cfg.dnssec.keys.public}")''

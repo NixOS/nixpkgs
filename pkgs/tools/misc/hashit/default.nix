@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     libgee
-    pantheon.elementary-icon-theme
     pantheon.granite
   ];
 

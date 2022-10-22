@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "snitun";
-  version = "0.30.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = pname;
     rev = version;
-    sha256 = "sha256-IjdgxX6ed9IWMFaMXIXQWZWoODrZBzXtMAcMOIhPFVQ=";
+    hash = "sha256-Ehafb35H462Ffn6omGh/MDJKQX5qJJZeiIBO3n0IGlA=";
   };
 
   propagatedBuildInputs = [

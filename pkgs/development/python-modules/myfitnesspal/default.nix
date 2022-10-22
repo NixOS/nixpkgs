@@ -2,42 +2,44 @@
 , fetchPypi
 , buildPythonPackage
 , blessed
+, browser-cookie3
 , keyring
 , keyrings-alt
 , lxml
 , measurement
 , python-dateutil
 , requests
-, six
 , rich
+, typing-extensions
 , pytestCheckHook
 , mock
 , nose
+, pythonOlder
 }:
-
-# TODO: Define this package in "all-packages.nix" using "toPythonApplication".
-# This currently errors out, complaining about not being able to find "etree" from "lxml" even though "lxml" is defined in "propagatedBuildInputs".
 
 buildPythonPackage rec {
   pname = "myfitnesspal";
-  version = "1.16.6";
+  version = "2.0.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ac07369ede3ca4c6d673e02f2b9e0893b17d079f3085e36fdfdbdd1cba9f37db";
+    sha256 = "sha256-xkO4rzjQTf1H4ZtJlzx6dT6BnfSg3VZU8pXdJFraTAI=";
   };
 
   propagatedBuildInputs = [
     blessed
+    browser-cookie3
     keyring
     keyrings-alt
     lxml
     measurement
     python-dateutil
     requests
-    six
     rich
+    typing-extensions
   ];
 
   checkInputs = [

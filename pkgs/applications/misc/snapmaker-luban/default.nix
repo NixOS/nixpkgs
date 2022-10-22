@@ -1,6 +1,6 @@
 { lib, stdenv, autoPatchelfHook, makeDesktopItem, copyDesktopItems, wrapGAppsHook, fetchurl
 , alsa-lib, at-spi2-atk, at-spi2-core, atk, cairo, cups
-, gtk3, nss, glib, dbus, nspr, gdk-pixbuf
+, gtk3, nss, glib, dbus, nspr, gdk-pixbuf, libdrm, mesa
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
 , libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, pango
 , gcc-unwrapped, udev
@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "snapmaker-luban";
-  version = "4.1.1";
+  version = "4.4.0";
 
   src = fetchurl {
     url = "https://github.com/Snapmaker/Luban/releases/download/v${version}/snapmaker-luban-${version}-linux-x64.tar.gz";
-    sha256 = "sha256-M+e3dNK1Z1Nkswac04TkuYHFX/Y/Cz4Z6P1xGv99kOo=";
+    sha256 = "sha256-cXFnFWa6IDGuC6M46Ybnr9/LM8hG0KTUlkzcyuje5SI=";
   };
 
   nativeBuildInputs = [
@@ -29,11 +29,13 @@ stdenv.mkDerivation rec {
     cups
     gcc-unwrapped
     gtk3
+    libdrm
     libXdamage
     libX11
     libXScrnSaver
     libXtst
     libxcb
+    mesa # Required for libgbm
     nspr
     nss
   ];
@@ -74,13 +76,14 @@ stdenv.mkDerivation rec {
       icon = "snapmaker-luban";
       desktopName = "Snapmaker Luban";
       genericName = meta.description;
-      categories = "Office;Printing;";
+      categories = [ "Office" "Printing" ];
     })
   ];
 
   meta = with lib; {
     description = "Snapmaker Luban is an easy-to-use 3-in-1 software tailor-made for Snapmaker machines";
     homepage = "https://github.com/Snapmaker/Luban";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3;
     maintainers = [ maintainers.simonkampe ];
     platforms = [ "x86_64-linux" ];

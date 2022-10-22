@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A JavaScript and CSS minifier";
     homepage = "http://yui.github.io/yuicompressor/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.bsd3;
     maintainers = with maintainers; [ jwiegley ];
     platforms = platforms.all;

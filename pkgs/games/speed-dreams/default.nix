@@ -3,7 +3,7 @@ libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm, openscenegraph, ex
 libpng, zlib, bash, SDL2, enet, libjpeg, cmake, pkg-config, libvorbis, runtimeShell, curl }:
 
 let
-  version = "2.2.2-r6553";
+  version = "2.2.3-r7616";
   shortVersion = builtins.substring 0 5 version;
 in
 stdenv.mkDerivation rec {
@@ -12,22 +12,22 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/speed-dreams/${shortVersion}/speed-dreams-src-base-${version}.tar.xz";
-    sha256 = "1l47d2619kpfkvdwbkwr311qss6jjfwvgl5h9z2w3bwdgz0mbaij";
+    sha256 = "sha256-GvB8SDZB9UivJSsQfMMon9N5MURdxTOwsaN4F0XQUCE=";
   };
 
   cars-and-tracks = fetchurl {
     url = "mirror://sourceforge/speed-dreams/${shortVersion}/speed-dreams-src-hq-cars-and-tracks-${version}.tar.xz";
-    sha256 = "0l8ba5pzqqcfy4inyxy2lrrhhgfs43xab7fy751xz2xqpqpfksyq";
+    sha256 = "sha256-BuryCUvBD7rKmApCNsTkRN0UJ1q6P3sdYrSzpTqdTHc=";
   };
 
   more-cars-and-tracks = fetchurl {
     url = "mirror://sourceforge/speed-dreams/${shortVersion}/speed-dreams-src-more-hq-cars-and-tracks-${version}.tar.xz";
-    sha256 = "10w180mhhk6dw4cza6mqa0hp5qgym9lcizfwykqbgcvs01yl2yqb";
+    sha256 = "sha256-GSCHYbJS352yAMczzss7tYSQXwLQV68rv/XkyGy+GoY=";
   };
 
   wip-cars-and-tracks = fetchurl {
     url = "mirror://sourceforge/speed-dreams/${shortVersion}/speed-dreams-src-wip-cars-and-tracks-${version}.tar.xz";
-    sha256 = "1wad9yaydaryhyi7ckyaii124h0z7kziqgcl475a5jr7ggbxc24q";
+    sha256 = "sha256-r/IOSf+UZg2e+WIHn2QNDO6qQUhpIJvh7EF2jQ7lyyA=";
   };
 
   sourceRoot = ".";

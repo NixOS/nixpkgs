@@ -1,17 +1,18 @@
 { fetchurl
-, substituteAll
 , runCommand
 , lib
+, fetchpatch
 , stdenv
 , pkg-config
 , gnome
 , gettext
 , gobject-introspection
 , cairo
+, colord
+, lcms2
 , pango
 , json-glib
 , libstartup_notification
-, zenity
 , libcanberra
 , ninja
 , xvfb-run
@@ -36,7 +37,9 @@
 , xorgserver
 , python3
 , wrapGAppsHook
+, gi-docgen
 , sysprof
+, libsysprof-capture
 , desktop-file-utils
 , libcap_ng
 , egl-wayland
@@ -46,24 +49,31 @@
 
 let self = stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "41.2";
+  version = "43.0";
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "AN+oEvHEhtdKK3P0IEWuEYL5JGx3lNZ9dLXlQ+pwBhc=";
+    sha256 = "jZulKO2Z72eZZC4Uez/p8ry+ypvs7ShFwcrbMxzT5SU=";
   };
 
   patches = [
-    # Drop inheritable cap_sys_nice, to prevent the ambient set from leaking
-    # from mutter/gnome-shell, see https://github.com/NixOS/nixpkgs/issues/71381
-    # ./drop-inheritable.patch
-
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit zenity;
+    # Fix build with separate sysprof.
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2572
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/285a5a4d54ca83b136b787ce5ebf1d774f9499d5.patch";
+      sha256 = "/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
     })
+
+    # color-device: Don't create profiles from obvious garbage data
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2627
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2627.patch";
+      sha256 = "SafC29+gjcj6JswHY6yuwcOS16LPYvFwYW1TEpNNSHc=";
+    })
+
+
   ];
 
   mesonFlags = [
@@ -75,6 +85,7 @@ let self = stdenv.mkDerivation rec {
     # This should be auto detected, but it looks like it manages a false
     # positive.
     "-Dxwayland_initfd=disabled"
+    "-Ddocs=true"
   ];
 
   propagatedBuildInputs = [
@@ -95,6 +106,7 @@ let self = stdenv.mkDerivation rec {
     pkg-config
     python3
     wrapGAppsHook
+    gi-docgen
     xorgserver # for cvt command
   ];
 
@@ -116,9 +128,12 @@ let self = stdenv.mkDerivation rec {
     libxkbcommon
     libxkbfile
     libXdamage
+    colord
+    lcms2
     pango
     pipewire
-    sysprof
+    sysprof # for D-Bus interfaces
+    libsysprof-capture
     xkeyboard_config
     xwayland
     wayland-protocols
@@ -132,11 +147,19 @@ let self = stdenv.mkDerivation rec {
     ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    # TODO: Move this into a directory devhelp can find.
+    moveToOutput "share/mutter-11/doc" "$devdoc"
+  '';
+
   # Install udev files into our own tree.
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
+  separateDebugInfo = true;
+
   passthru = {
-    libdir = "${self}/lib/mutter-9";
+    libdir = "${self}/lib/mutter-11";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" {} ''

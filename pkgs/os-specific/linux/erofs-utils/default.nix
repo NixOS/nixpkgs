@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "erofs-utils";
-  version = "1.4";
+  version = "1.5";
   outputs = [ "out" "man" ];
 
   src = fetchgit {
     url =
       "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git";
     rev = "v" + version;
-    sha256 = "sha256-yYMvtW6mQKGx+TZGzadbLX9pXU7vY5b4d1B8d5Ph6vk=";
+    sha256 = "sha256-vMWAmGMJp0XDuc4sbo6Y7gfCQVAo4rETea0Tkdbg82U=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

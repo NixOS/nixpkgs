@@ -19,11 +19,11 @@ in
 {
   options = {
     services.miniupnpd = {
-      enable = mkEnableOption "MiniUPnP daemon";
+      enable = mkEnableOption (lib.mdDoc "MiniUPnP daemon");
 
       externalInterface = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Name of the external interface.
         '';
       };
@@ -31,17 +31,17 @@ in
       internalIPs = mkOption {
         type = types.listOf types.str;
         example = [ "192.168.1.1/24" "enp1s0" ];
-        description = ''
+        description = lib.mdDoc ''
           The IP address ranges to listen on.
         '';
       };
 
-      natpmp = mkEnableOption "NAT-PMP support";
+      natpmp = mkEnableOption (lib.mdDoc "NAT-PMP support");
 
       upnp = mkOption {
         default = true;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable UPNP support.
         '';
       };
@@ -49,7 +49,7 @@ in
       appendConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Configuration lines appended to the MiniUPnP config.
         '';
       };

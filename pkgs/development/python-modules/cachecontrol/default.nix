@@ -7,12 +7,13 @@
 , msgpack
 , pytestCheckHook
 , pythonOlder
+, redis
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "cachecontrol";
-  version = "0.12.10";
+  version = "0.12.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "ionrock";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mgvL0q10UbPHY1H3tJprke5p8qNl3HNYoeLAERZTcTs=";
+    hash = "sha256-uUPIQz/n347Q9G7NDOGuB760B/KxOglUxiS/rYjt5Po=";
   };
 
   propagatedBuildInputs = [
@@ -32,13 +33,17 @@ buildPythonPackage rec {
   checkInputs = [
     cherrypy
     mock
-    lockfile
     pytestCheckHook
-  ];
+  ] ++ passthru.optional-dependencies.filecache;
 
   pythonImportsCheck = [
     "cachecontrol"
   ];
+
+  passthru.optional-dependencies = {
+    filecache = [ lockfile ];
+    redis = [ redis ];
+  };
 
   meta = with lib; {
     description = "Httplib2 caching for requests";

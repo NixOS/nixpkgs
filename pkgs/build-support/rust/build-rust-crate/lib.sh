@@ -16,6 +16,7 @@ build_lib() {
     --out-dir target/lib \
     -L dependency=target/deps \
     --cap-lints allow \
+    $LINK \
     $LIB_RUSTC_OPTS \
     $BUILD_OUT_DIR \
     $EXTRA_BUILD \
@@ -97,7 +98,6 @@ setup_link_paths() {
      if [[ ! -z "$i" ]]; then
        for library in $i; do
          echo "-l $library" >> target/link
-         echo "-l $library" >> target/link.final
        done
      fi
   done

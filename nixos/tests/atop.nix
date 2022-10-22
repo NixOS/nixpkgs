@@ -107,7 +107,7 @@ in
 {
   justThePackage = makeTest {
     name = "atop-justThePackage";
-    machine = {
+    nodes.machine = {
       environment.systemPackages = [ pkgs.atop ];
     };
     testScript = with assertions; builtins.concatStringsSep "\n" [
@@ -123,7 +123,7 @@ in
   };
   defaults = makeTest {
     name = "atop-defaults";
-    machine = {
+    nodes.machine = {
       programs.atop = {
         enable = true;
       };
@@ -141,7 +141,7 @@ in
   };
   minimal = makeTest {
     name = "atop-minimal";
-    machine = {
+    nodes.machine = {
       programs.atop = {
         enable = true;
         atopService.enable = false;
@@ -162,7 +162,7 @@ in
   };
   netatop = makeTest {
     name = "atop-netatop";
-    machine = {
+    nodes.machine = {
       programs.atop = {
         enable = true;
         netatop.enable = true;
@@ -181,11 +181,7 @@ in
   };
   atopgpu = makeTest {
     name = "atop-atopgpu";
-    machine = {
-      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (getName pkg) [
-        "cudatoolkit"
-      ];
-
+    nodes.machine = {
       programs.atop = {
         enable = true;
         atopgpu.enable = true;
@@ -204,11 +200,7 @@ in
   };
   everything = makeTest {
     name = "atop-everthing";
-    machine = {
-      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (getName pkg) [
-        "cudatoolkit"
-      ];
-
+    nodes.machine = {
       programs.atop = {
         enable = true;
         settings = {

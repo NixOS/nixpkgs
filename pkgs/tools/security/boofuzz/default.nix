@@ -1,17 +1,18 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitHub
 , python3
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "boofuzz";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "jtpereyda";
     repo = pname;
     rev = "v${version}";
-    sha256 = "4WtTZ2S2rC2XXN0HbiEht9NW0JXcPnpp66AH67F88yk=";
+    sha256 = "sha256-mbxImm5RfYWq1JCCSvvG58Sxv2ad4BOh+RLvtNjQCKE=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -36,9 +37,10 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   disabledTests = [
-    # Tests require socket access
-    "test_raw_l2"
-    "test_raw_l3"
+    "TestNetworkMonitor"
+    "TestNoResponseFailure"
+    "TestProcessMonitor"
+    "TestSocketConnection"
   ];
 
   pythonImportsCheck = [

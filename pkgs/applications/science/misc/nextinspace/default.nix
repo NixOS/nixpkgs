@@ -1,24 +1,44 @@
-{ lib, fetchPypi, python3Packages }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
-python3Packages.buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "nextinspace";
-  version = "1.0.6";
+  version = "2.0.5";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1h3dksxyy5gq071fa7i2p73s50918y1bkk38hgfwr4226c3wipvg";
+  src = fetchFromGitHub {
+    owner = "not-stirred";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CrhzCvIA3YAFsWvdemvK1RLMacsM5RtgMjLeiqz5MwY=";
   };
 
-  pythonPath = with python3Packages; [
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
+
+  pythonPath = with python3.pkgs; [
     requests
     tzlocal
     colorama
   ];
 
+  checkInputs = with python3.pkgs; [
+    pytest-lazy-fixture
+    pytestCheckHook
+    requests-mock
+  ];
+
+  pythonImportsCheck = [
+    "nextinspace"
+  ];
+
   meta = with lib; {
     description = "Print upcoming space-related events in your terminal";
     homepage = "https://github.com/The-Kid-Gid/nextinspace";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ penguwin ];
   };
 }

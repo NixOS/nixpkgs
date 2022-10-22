@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , substituteAll
 , nix-update-script
-, gnome
+, gnome-power-manager
 , pkg-config
 , meson
 , python3
@@ -21,20 +21,21 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-power";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1zlpnl7983jkpy2nik08ih8lwrqvm456h993ixa6armzlazdvnjk";
+    sha256 = "sha256-TxrskbwitsilTidWifSWg9IP6BzH1y/OOrFohlENJmM=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      gnome_power_manager = gnome-power-manager;
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -55,17 +56,16 @@ stdenv.mkDerivation rec {
     wingpanel
   ];
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      gnome_power_manager = gnome.gnome-power-manager;
-    })
-  ];
-
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Power Indicator for Wingpanel";

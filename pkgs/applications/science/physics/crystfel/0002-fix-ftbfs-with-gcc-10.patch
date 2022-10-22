@@ -1,0 +1,43 @@
+Description: Fixing argument mismatches in Fortran code, addressing #957430.
+Author: Andrius Merkys <merkys@debian.org>
+Forwarded: ccp4-dev@dl.ac.uk
+--- a/fortran/pack_f.f
++++ b/fortran/pack_f.f
+@@ -106,7 +106,7 @@
+          endif
+  10   continue
+       filnarray(len(filn) + 1) = 0
+-      call pack_wordimage_f(data, x, y, filnarray)
++      call pack_longimage_f(data, x, y, filnarray)
+       return
+       end
+ 
+@@ -138,7 +138,7 @@
+          endif
+  10   continue
+       filnarray(len(filn) + 1) = 0
+-      call v2pack_wordimage_f(data, x, y, filnarray)
++      call v2pack_longimage_f(data, x, y, filnarray)
+       return
+       end
+ 
+--- a/fortran/lgglib.f
++++ b/fortran/lgglib.f
+@@ -1236,7 +1236,7 @@
+       B3(2) = XYZ(2) * CELL(2)
+       B3(3) = XYZ(3) * CELL(3)
+ C
+-      CALL matmult(3,3,3,1,ORTH,B3,XYZ,B1)
++      CALL matmult(3,3,3,1,ORTH,B3,XYZ)
+       END
+ c
+ c
+@@ -1274,7 +1274,7 @@
+       B3(1) = XYZ(1)
+       B3(2) = XYZ(2)
+       B3(3) = XYZ(3)
+-      CALL matmult(3,3,3,1,ORTH,B3,XYZ,B1)
++      CALL matmult(3,3,3,1,ORTH,B3,XYZ)
+       END
+       character*80 function getnam(filnam)
+       character*(*) filnam

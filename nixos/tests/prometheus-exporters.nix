@@ -35,7 +35,7 @@ let
     *      };
     *      exporterTest = ''
     *        wait_for_unit("prometheus-<exporterName>-exporter.service")
-    *        wait_for_open_port("1234")
+    *        wait_for_open_port(1234)
     *        succeed("curl -sSf 'localhost:1234/metrics'")
     *      '';
     *    };
@@ -52,7 +52,7 @@ let
     *    testScript = ''
     *      <exporterName>.start()
     *      <exporterName>.wait_for_unit("prometheus-<exporterName>-exporter.service")
-    *      <exporterName>.wait_for_open_port("1234")
+    *      <exporterName>.wait_for_open_port(1234)
     *      <exporterName>.succeed("curl -sSf 'localhost:1234/metrics'")
     *      <exporterName>.shutdown()
     *    '';
@@ -307,6 +307,19 @@ let
       '';
     };
 
+    ipmi = {
+      exporterConfig = {
+        enable = true;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-ipmi-exporter.service")
+        wait_for_open_port(9290)
+        succeed(
+          "curl -sSf http://localhost:9290/metrics | grep 'ipmi_scrape_duration_seconds'"
+        )
+      '';
+    };
+
     jitsi = {
       exporterConfig = {
         enable = true;
@@ -361,25 +374,34 @@ let
     };
 
     kea = let
-      controlSocketPath = "/run/kea/dhcp6.sock";
+      controlSocketPathV4 = "/run/kea/dhcp4.sock";
+      controlSocketPathV6 = "/run/kea/dhcp6.sock";
     in
     {
       exporterConfig = {
         enable = true;
         controlSocketPaths = [
-          controlSocketPath
+          controlSocketPathV4
+          controlSocketPathV6
         ];
       };
       metricProvider = {
-        systemd.services.prometheus-kea-exporter.after = [ "kea-dhcp6-server.service" ];
-
         services.kea = {
+          dhcp4 = {
+            enable = true;
+            settings = {
+              control-socket = {
+                socket-type = "unix";
+                socket-name = controlSocketPathV4;
+              };
+            };
+          };
           dhcp6 = {
             enable = true;
             settings = {
               control-socket = {
                 socket-type = "unix";
-                socket-name = controlSocketPath;
+                socket-name = controlSocketPathV6;
               };
             };
           };
@@ -387,8 +409,10 @@ let
       };
 
       exporterTest = ''
+        wait_for_unit("kea-dhcp4-server.service")
         wait_for_unit("kea-dhcp6-server.service")
-        wait_for_file("${controlSocketPath}")
+        wait_for_file("${controlSocketPathV4}")
+        wait_for_file("${controlSocketPathV6}")
         wait_for_unit("prometheus-kea-exporter.service")
         wait_for_open_port(9547)
         succeed(
@@ -557,10 +581,12 @@ let
         systemd.services.prometheus-mail-exporter = {
           after = [ "postfix.service" ];
           requires = [ "postfix.service" ];
-          preStart = ''
-            mkdir -p -m 0700 mail-exporter/new
-          '';
           serviceConfig = {
+            ExecStartPre = [
+              "${pkgs.writeShellScript "create-maildir" ''
+                mkdir -p -m 0700 mail-exporter/new
+              ''}"
+            ];
             ProtectHome = true;
             ReadOnlyPaths = "/";
             ReadWritePaths = "/var/spool/mail";
@@ -672,7 +698,7 @@ let
             basicAuth.nextcloud-exporter = "snakeoilpw";
             locations."/" = {
               root = "${pkgs.prometheus-nextcloud-exporter.src}/serverinfo/testdata";
-              tryFiles = "/negative-space.xml =404";
+              tryFiles = "/negative-space.json =404";
             };
           };
         };
@@ -933,6 +959,27 @@ let
       '';
     };
 
+    pve = let
+      pveExporterEnvFile = pkgs.writeTextFile {
+        name = "pve.env";
+        text = ''
+          PVE_USER="test_user@pam"
+          PVE_PASSWORD="hunter3"
+          PVE_VERIFY_SSL="false"
+        '';
+      };
+    in {
+      exporterConfig = {
+        enable = true;
+        environmentFile = pveExporterEnvFile;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-pve-exporter.service")
+        wait_for_open_port(9221)
+        wait_until_succeeds("curl localhost:9221")
+      '';
+    };
+
     py-air-control = {
       nodeName = "py_air_control";
       exporterConfig = {
@@ -1040,7 +1087,7 @@ let
       };
       exporterTest = ''
         wait_for_unit("prometheus-smartctl-exporter.service")
-        wait_for_open_port("9633")
+        wait_for_open_port(9633)
         wait_until_succeeds(
           "curl -sSf 'localhost:9633/metrics'"
         )
@@ -1156,14 +1203,23 @@ let
     systemd = {
       exporterConfig = {
         enable = true;
+
+        extraFlags = [
+          "--systemd.collector.enable-restart-count"
+        ];
       };
       metricProvider = { };
       exporterTest = ''
         wait_for_unit("prometheus-systemd-exporter.service")
         wait_for_open_port(9558)
-        succeed(
+        wait_until_succeeds(
             "curl -sSf localhost:9558/metrics | grep '{}'".format(
                 'systemd_unit_state{name="basic.target",state="active",type="target"} 1'
+            )
+        )
+        succeed(
+            "curl -sSf localhost:9558/metrics | grep '{}'".format(
+                'systemd_service_restart_total{name="prometheus-systemd-exporter.service"} 0'
             )
         )
       '';
@@ -1221,6 +1277,67 @@ let
         wait_for_unit("prometheus-unbound-exporter.service")
         wait_for_open_port(9167)
         succeed("curl -sSf localhost:9167/metrics | grep 'unbound_up 1'")
+      '';
+    };
+
+    v2ray = {
+      exporterConfig = {
+        enable = true;
+      };
+
+      metricProvider = {
+        systemd.services.prometheus-nginx-exporter.after = [ "v2ray.service" ];
+        services.v2ray = {
+          enable = true;
+          config = {
+            stats = {};
+            api = {
+              tag = "api";
+              services = [ "StatsService" ];
+            };
+            inbounds = [
+              {
+                port = 1080;
+                listen = "127.0.0.1";
+                protocol = "http";
+              }
+              {
+                listen = "127.0.0.1";
+                port = 54321;
+                protocol = "dokodemo-door";
+                settings = { address = "127.0.0.1"; };
+                tag = "api";
+              }
+            ];
+            outbounds = [
+              {
+                protocol = "freedom";
+              }
+              {
+                protocol = "freedom";
+                settings = {};
+                tag = "api";
+              }
+            ];
+            routing = {
+              strategy = "rules";
+              settings = {
+                rules = [
+                  {
+                    inboundTag = [ "api" ];
+                    outboundTag = "api";
+                    type = "field";
+                  }
+                ];
+              };
+            };
+          };
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-v2ray-exporter.service")
+        wait_for_open_port(9299)
+        succeed("curl -sSf localhost:9299/scrape | grep 'v2ray_up 1'")
       '';
     };
 
@@ -1305,7 +1422,7 @@ mapAttrs
       '';
 
       meta = with maintainers; {
-        maintainers = [ willibutz elseym ];
+        maintainers = [ willibutz ];
       };
     }
   )))

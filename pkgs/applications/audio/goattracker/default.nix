@@ -12,7 +12,6 @@ with lib;
 let
   pname = "goattracker" + optionalString isStereo "-stereo";
   desktopItem = makeDesktopItem {
-    type = "Application";
     name = pname;
     desktopName = "GoatTracker 2" + optionalString isStereo " Stereo";
     genericName = "Music Tracker";
@@ -20,8 +19,8 @@ let
       then "gt2stereo"
       else "goattrk2";
     icon = "goattracker";
-    categories = "AudioVideo;AudioVideoEditing;";
-    extraEntries = "Keywords=tracker;music;";
+    categories = [ "AudioVideo" "AudioVideoEditing" ];
+    keywords = [ "tracker" "music" ];
   };
 
 in stdenv.mkDerivation rec {

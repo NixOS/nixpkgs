@@ -35,6 +35,5 @@ stdenv.mkDerivation rec {
     homepage = "https://wkz.github.io/ply/";
     license = [ licenses.gpl2Only ];
     maintainers = with maintainers; [ mic92 mbbx6spp ];
-    broken = lib.versionOlder kernel.version "4.0";
   };
 }

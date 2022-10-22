@@ -37,6 +37,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    # hbmqtt was replaced by amqtt
+    substituteInPlace tests/test_roomba_integration.py \
+      --replace "from hbmqtt.broker import Broker" "from amqtt.broker import Broker"
+  '';
+
   disabledTestPaths = [
     # Requires network access
     "tests/test_discovery.py"
@@ -55,6 +61,6 @@ buildPythonPackage rec {
     description = "Python program and library to control Wi-Fi enabled iRobot Roombas";
     homepage = "https://github.com/pschmitt/roombapy";
     license = licenses.mit;
-    maintainers = with maintainers; [ justinas ];
+    maintainers = [ ];
   };
 }

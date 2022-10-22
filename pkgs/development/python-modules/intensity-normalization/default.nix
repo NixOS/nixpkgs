@@ -15,25 +15,17 @@
 
 buildPythonPackage rec {
   pname = "intensity-normalization";
-  version = "2.1.1";
+  version = "2.2.3";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-aGuGdUqaUgoD95PLFch+lF9o7eeKwK0bNWTF1beslIY=";
+    pname = "intensity_normalization";
+    inherit version;
+    sha256 = "sha256-Yjd4hXmbT87xNKSqc6zkKNisOVhQzQAUZI5wBiI/UBk=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg --replace "pytest-runner" ""
-  '';
-
-  checkInputs = [ pytestCheckHook ];
-  pythonImportsCheck = [
-    "intensity_normalization"
-    "intensity_normalization.normalize"
-    "intensity_normalization.plot"
-    "intensity_normalization.util"
-  ];
   propagatedBuildInputs = [
     matplotlib
     nibabel
@@ -45,10 +37,28 @@ buildPythonPackage rec {
     statsmodels
   ];
 
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pytest-runner" ""
+  '';
+
+  pythonImportsCheck = [
+    "intensity_normalization"
+    "intensity_normalization.normalize"
+    "intensity_normalization.plot"
+    "intensity_normalization.util"
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/jcreinhold/intensity-normalization";
     description = "MRI intensity normalization tools";
     maintainers = with maintainers; [ bcdarwin ];
     license = licenses.asl20;
+    # depends on simpleitk python wrapper which is not packaged yet
+    broken = true;
   };
 }

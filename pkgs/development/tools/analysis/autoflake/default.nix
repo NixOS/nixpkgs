@@ -1,22 +1,36 @@
-{ lib, python3Packages }:
+{ lib
+, python3
+}:
 
-with python3Packages;
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "autoflake";
   version = "1.4";
 
-  src = fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "61a353012cff6ab94ca062823d1fb2f692c4acda51c76ff83a8d77915fba51ea";
+    hash = "sha256-YaNTASz/arlMoGKCPR+y9pLErNpRx2/4Oo13kV+6Ueo=";
   };
 
-  propagatedBuildInputs = [ pyflakes ];
+  propagatedBuildInputs = with python3.pkgs; [
+    pyflakes
+  ];
 
-  doCheck = true;
+  checkInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "autoflake"
+  ];
+
+  disabledTests = [
+    # AssertionError: True is not false
+    "test_is_literal_or_name"
+  ];
 
   meta = with lib; {
+    description = "Tool to remove unused imports and unused variables";
     homepage = "https://github.com/myint/autoflake";
-    description = "A simple program which removes unused imports and unused variables as reported by pyflakes";
     license = licenses.mit;
     maintainers = with maintainers; [ yuriaisaka ];
   };

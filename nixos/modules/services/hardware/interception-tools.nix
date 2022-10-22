@@ -9,14 +9,14 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = "Whether to enable the interception tools service.";
+      description = lib.mdDoc "Whether to enable the interception tools service.";
     };
 
     plugins = mkOption {
       type = types.listOf types.package;
       default = [ pkgs.interception-tools-plugins.caps2esc ];
       defaultText = literalExpression "[ pkgs.interception-tools-plugins.caps2esc ]";
-      description = ''
+      description = lib.mdDoc ''
         A list of interception tools plugins that will be made available to use
         inside the udevmon configuration.
       '';
@@ -36,7 +36,7 @@ in {
             EVENTS:
               EV_KEY: [KEY_X, KEY_Y]
       '';
-      description = ''
+      description = lib.mdDoc ''
         String of udevmon YAML configuration, or path to a udevmon YAML
         configuration file.
       '';

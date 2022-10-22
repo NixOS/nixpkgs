@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tig";
-  version = "2.5.4";
+  version = "2.5.7";
 
   src = fetchFromGitHub {
     owner = "jonas";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-dZqqUydZ4q/mDEjtojpMGfzAmW3yCNDvT9oCEmhq1hg=";
+    sha256 = "sha256-D5NQaxkGhwyBoScI7fZxnSHC0ABmsUeRf8pZCKooV3w=";
   };
 
   nativeBuildInputs = [ makeWrapper autoreconfHook asciidoc xmlto docbook_xsl docbook_xml_dtd_45 findXMLCatalogs pkg-config ];
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://jonas.github.io/tig/";
     description = "Text-mode interface for git";
-    maintainers = with maintainers; [ bjornfor domenkozar qknight globin ma27 ];
+    maintainers = with maintainers; [ bjornfor domenkozar qknight globin ma27 srapenne ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

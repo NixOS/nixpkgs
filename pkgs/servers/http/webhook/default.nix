@@ -1,11 +1,11 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "webhook";
   version = "2.8.0";
-
-  goPackagePath = "github.com/adnanh/webhook";
-  excludedPackages = [ "test" ];
 
   src = fetchFromGitHub {
     owner = "adnanh";
@@ -14,9 +14,16 @@ buildGoPackage rec {
     sha256 = "0n03xkgwpzans0cymmzb0iiks8mi2c76xxdak780dk0jbv6qgp5i";
   };
 
+  vendorSha256 = null;
+
+  subPackages = [ "." ];
+
+  doCheck = false;
+
   meta = with lib; {
+    description = "Incoming webhook server that executes shell commands";
     homepage = "https://github.com/adnanh/webhook";
-    license = [ licenses.mit ];
-    description = "incoming webhook server that executes shell commands";
+    license = licenses.mit;
+    maintainers = with maintainers; [ azahi ];
   };
 }

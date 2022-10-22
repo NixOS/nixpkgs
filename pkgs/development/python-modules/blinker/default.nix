@@ -1,21 +1,26 @@
-{ lib, buildPythonPackage, fetchPypi, nose, pytestCheckHook }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "blinker";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1dpq0vb01p36jjwbhhd08ylvrnyvcc82yxx3mwjx6awrycjyw6j7";
+    sha256 = "sha256-kj5eL2nBVfLMQtr7vXDhbj/eJNLUqiq3L744YjiJJGI=";
   };
 
-  checkInputs = [ nose pytestCheckHook ];
+  checkInputs = [ pytestCheckHook ];
+
   pythonImportsCheck = [ "blinker" ];
 
   meta = with lib; {
     homepage = "https://pythonhosted.org/blinker/";
     description = "Fast, simple object-to-object and broadcast signaling";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

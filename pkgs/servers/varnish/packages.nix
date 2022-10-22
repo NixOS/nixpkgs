@@ -1,6 +1,7 @@
-{ callPackage, varnish60, varnish70, fetchFromGitHub }: {
+{ callPackages, callPackage, varnish60, varnish71, varnish72, fetchFromGitHub }: {
   varnish60Packages = rec {
     varnish = varnish60;
+    modules = (callPackages ./modules.nix { inherit varnish; }).modules15;
     digest  = callPackage ./digest.nix {
       inherit varnish;
       version = "libvmod-digest-1.0.2";
@@ -12,8 +13,9 @@
       sha256 = "1n94slrm6vn3hpymfkla03gw9603jajclg84bjhwb8kxsk3rxpmk";
     };
   };
-  varnish70Packages = rec {
-    varnish = varnish70;
+  varnish71Packages = rec {
+    varnish = varnish71;
+    modules = (callPackages ./modules.nix { inherit varnish; }).modules20;
     digest  = callPackage ./digest.nix {
       inherit varnish;
       version = "6.6";
@@ -24,5 +26,9 @@
       version = "2.4.0";
       sha256 = "1g53zblyxi1jivwppmpdqhi5xnzapsfib453sxyqbc5dfs7fijxr";
     };
+  };
+  varnish72Packages = rec {
+    varnish = varnish72;
+    modules = (callPackages ./modules.nix { inherit varnish; }).modules20;
   };
 }

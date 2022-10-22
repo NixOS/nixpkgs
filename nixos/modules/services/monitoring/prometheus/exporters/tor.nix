@@ -11,7 +11,7 @@ in
     torControlAddress = mkOption {
       type = types.str;
       default = "127.0.0.1";
-      description = ''
+      description = lib.mdDoc ''
         Tor control IP address or hostname.
       '';
     };
@@ -19,7 +19,7 @@ in
     torControlPort = mkOption {
       type = types.int;
       default = 9051;
-      description = ''
+      description = lib.mdDoc ''
         Tor control port.
       '';
     };

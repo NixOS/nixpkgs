@@ -51,6 +51,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Open source IFC library and geometry engine";
     homepage    = "http://ifcopenshell.org/";
     license     = licenses.lgpl3;

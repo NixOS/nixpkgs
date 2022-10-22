@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, unzip
-, bdftopcf, mkfontscale, fonttosfnt
+, bdftopcf, xorg
 }:
 
 stdenv.mkDerivation {
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs =
-    [ unzip bdftopcf mkfontscale fonttosfnt ];
+    [ unzip bdftopcf xorg.mkfontscale xorg.fonttosfnt ];
 
   postPatch = ''
     sed -i 's/microsoft-cp1252/ISO8859-1/' *.bdf

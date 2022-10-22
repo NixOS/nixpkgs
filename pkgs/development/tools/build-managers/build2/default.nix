@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
     ./remove-config-store-paths.patch
     # Pick up sysdirs from NIX_LDFLAGS
     ./nix-ldflags-sysdirs.patch
+
+    ./remove-const-void-param.patch
   ];
 
   strictDeps = true;
@@ -94,5 +96,6 @@ stdenv.mkDerivation rec {
     changelog = "https://git.build2.org/cgit/build2/tree/NEWS";
     platforms = platforms.all;
     maintainers = with maintainers; [ hiro98 r-burns ];
+    mainProgram = "b";
   };
 }

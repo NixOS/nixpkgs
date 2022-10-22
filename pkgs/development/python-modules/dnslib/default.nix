@@ -1,20 +1,34 @@
-{ lib, python, buildPythonPackage, fetchPypi }:
+{ lib
+, python
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "dnslib";
-  version = "0.9.16";
+  version = "0.9.22";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2d66b43d563d60c469117c8cb615843e7d05bf8fb2e6cb00a637281d26b7ec7d";
+    hash = "sha256-EK/JT2pfHLiziCTgQuJeVBTh+q7f05s0iujZdyKSGoY=";
   };
 
-  checkPhase = "VERSIONS=${python.interpreter} ./run_tests.sh";
+  checkPhase = ''
+    VERSIONS=${python.interpreter} ./run_tests.sh
+  '';
+
+  pythonImportsCheck = [
+    "dnslib"
+  ];
 
   meta = with lib; {
     description = "Simple library to encode/decode DNS wire-format packets";
+    homepage = "https://github.com/paulc/dnslib";
     license = licenses.bsd2;
-    homepage = "https://bitbucket.org/paulc/dnslib/";
     maintainers = with maintainers; [ delroth ];
   };
 }

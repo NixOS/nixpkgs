@@ -1,13 +1,22 @@
-{ lib, stdenv, fetchurl, makeWrapper, perlPackages }:
+{ lib, stdenvNoCC, fetchurl, makeWrapper, perlPackages }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "schema2ldif";
   version = "1.3";
 
   src = fetchurl {
     url = "https://repos.fusiondirectory.org/sources/schema2ldif/schema2ldif-${version}.tar.gz";
-    sha256 = "00cd9xx9g0mnnfn5lvay3vg166z84jla0ya1x34ljdc8bflxsr9a";
+    hash = "sha256-KmXdqVuINUnJ6EF5oKgk6BsT3h5ebVqss7aCl3pPjQE=";
   };
+
+  postPatch = ''
+    # Removes the root check and changes the temporary location
+    # from the nix store to $PWD
+    sed -i \
+      -e '/You have to run this script as root/d' \
+      -e 's|/\^(\.\*)\\\.schema\$/|/.*\\/(.*)\\.schema$/|g' \
+      bin/ldap-schema-manager
+  '';
 
   buildInputs = [ perlPackages.perl ];
   nativeBuildInputs = [ makeWrapper ];

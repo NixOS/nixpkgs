@@ -5,15 +5,17 @@
 , funcy
 , redis
 , six
+, pytest-django
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "django-cacheops";
-  version = "6.0";
+  version = "6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "78e161ebd96a32e28e19ec7da31f2afed9e62a79726b8b5f0ed12dd16c2e5841";
+    sha256 = "sha256-toTvOf1DQYnTy7fYVBfNlyr2NSiaAyRHmCRztKifcn0=";
   };
 
   propagatedBuildInputs = [
@@ -23,14 +25,33 @@ buildPythonPackage rec {
     six
   ];
 
-  # tests need a redis server
-  # pythonImportsCheck not possible since DJANGO_SETTINGS_MODULE needs to be set
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+    pytest-django
+  ];
+
+  disabledTests = [
+    # Tests require networking
+    "test_cached_as"
+    "test_invalidation_signal"
+    "test_queryset"
+    "test_queryset_empty"
+    "test_lock"
+    "test_context_manager"
+    "test_decorator"
+    "test_in_transaction"
+    "test_nested"
+    "test_unhashable_args"
+    "test_db_agnostic_by_default"
+    "test_db_agnostic_disabled"
+  ];
+
+  DJANGO_SETTINGS_MODULE = "tests.settings";
 
   meta = with lib; {
     description = "A slick ORM cache with automatic granular event-driven invalidation for Django";
     homepage = "https://github.com/Suor/django-cacheops";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ onny ];
   };
 }

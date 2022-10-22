@@ -14,13 +14,13 @@
 
 buildDunePackage rec {
   pname = "ca-certs-nss";
-  version = "3.71.0.1";
+  version = "3.77";
 
   minimumOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ca-certs-nss/releases/download/v${version}/ca-certs-nss-v${version}.tbz";
-    sha256 = "b83749d983781631745079dccb7345d9ee1b52c1844ce865e97a25349289a124";
+    url = "https://github.com/mirage/ca-certs-nss/releases/download/v${version}/ca-certs-nss-${version}.tbz";
+    sha256 = "sha256-Ezos9A2AQOo43R9akVbJ5l+euTDtguzMfH63YXo9hvc=";
   };
 
   useDune2 = true;
@@ -43,9 +43,10 @@ buildDunePackage rec {
   checkInputs = [ alcotest ];
 
   meta = with lib; {
-    license = licenses.isc;
     description = "X.509 trust anchors extracted from Mozilla's NSS";
-    maintainers = [ maintainers.sternenseemann ];
     homepage = "https://github.com/mirage/ca-certs-nss";
+    license = licenses.isc;
+    maintainers = [ maintainers.sternenseemann ];
+    mainProgram = "extract-from-certdata";
   };
 }

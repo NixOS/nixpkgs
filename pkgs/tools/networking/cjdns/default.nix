@@ -15,7 +15,15 @@ stdenv.mkDerivation rec {
     # for flock
     lib.optional stdenv.isLinux util-linux;
 
-  CFLAGS = "-O2 -Wno-error=stringop-truncation";
+  NIX_CFLAGS_COMPILE = [
+    "-O2"
+    "-Wno-error=array-bounds"
+    "-Wno-error=stringop-overflow"
+    "-Wno-error=stringop-truncation"
+  ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
+    "-Wno-error=stringop-overread"
+  ];
+
   buildPhase =
     lib.optionalString stdenv.isAarch32 "Seccomp_NO=1 "
     + "bash do";

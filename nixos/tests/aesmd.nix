@@ -1,10 +1,10 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }: {
   name = "aesmd";
   meta = {
     maintainers = with lib.maintainers; [ veehaitch ];
   };
 
-  machine = { lib, ... }: {
+  nodes.machine = { lib, ... }: {
     services.aesmd = {
       enable = true;
       settings = {
@@ -59,4 +59,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
       assert aesmd_config == "whitelist url = http://nixos.org\nproxy type = direct\ndefault quoting type = ecdsa_256\n", "aesmd.conf differs"
   '';
-})
+}

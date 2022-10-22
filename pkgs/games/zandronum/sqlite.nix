@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
+}:
 
 stdenv.mkDerivation {
   pname = "sqlite-zandronum";
@@ -6,7 +9,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.sqlite.org/2017/sqlite-autoconf-3180000.tar.gz";
-    sha256 = "0p5cx7nbjxk7glcm277ypi5w4gv144qazw79ql47svlpccj62mrp";
+    hash = "sha256-N1dhJGOXbn0IxenwrzAhYT/CS7z+HFEZfWd2uezprFw=";
   };
 
   buildPhase = ''

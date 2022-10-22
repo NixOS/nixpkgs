@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   name = "overlayfs";
   meta.maintainers = with pkgs.lib.maintainers; [ bachp ];
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     virtualisation.emptyDiskImages = [ 512 ];
     networking.hostId = "deadbeef";
     environment.systemPackages = with pkgs; [ parted ];

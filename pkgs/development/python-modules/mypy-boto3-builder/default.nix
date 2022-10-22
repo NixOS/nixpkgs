@@ -7,24 +7,26 @@
 , jinja2
 , md-toc
 , mdformat
+, newversion
 , poetry-core
 , pyparsing
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
-  version = "5.5.0";
+  version = "7.11.10";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
-    owner = "vemel";
+    owner = "youtype";
     repo = "mypy_boto3_builder";
     rev = version;
-    sha256 = "sha256-cFe8d6w28VFTNyj/ABWHkFQDfnM4aTrNZ+WUw5g8H5I=";
+    hash = "sha256-bS56xHrAoYKjwfbz5vh6O41EGDM821z4ZFZfpqc65cE=";
   };
 
   nativeBuildInputs = [
@@ -38,23 +40,28 @@ buildPythonPackage rec {
     jinja2
     md-toc
     mdformat
+    newversion
     pyparsing
+    setuptools
   ];
 
   checkInputs = [
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # Should be fixed with 5.x
-    "test_get_types"
+  pythonImportsCheck = [
+    "mypy_boto3_builder"
   ];
 
-  pythonImportsCheck = [ "mypy_boto3_builder" ];
+  disabledTests = [
+    # Tests require network access
+    "TestBotocoreChangelogChangelog"
+  ];
 
   meta = with lib; {
     description = "Type annotations builder for boto3";
-    homepage = "https://vemel.github.io/mypy_boto3_builder/";
+    homepage = "https://github.com/youtype/mypy_boto3_builder";
+    changelog = "https://github.com/youtype/mypy_boto3_builder/releases/tag/${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

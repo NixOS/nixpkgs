@@ -1,6 +1,6 @@
 {
   mkDerivation, lib, fetchpatch,
-  extra-cmake-modules, karchive, kio, libkexiv2, libkdcraw
+  extra-cmake-modules, karchive, kio, libkexiv2, libkdcraw, kdegraphics-mobipocket
 }:
 
 mkDerivation {
@@ -10,5 +10,5 @@ mkDerivation {
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ karchive kio libkexiv2 libkdcraw ];
+  buildInputs = [ karchive kio libkexiv2 libkdcraw kdegraphics-mobipocket ];
 }

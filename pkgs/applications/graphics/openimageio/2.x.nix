@@ -52,6 +52,11 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib" # needs relative path for pkg-config
   ];
 
+  postFixup = ''
+    substituteInPlace $dev/lib/cmake/OpenImageIO/OpenImageIOTargets-*.cmake \
+      --replace "\''${_IMPORT_PREFIX}/lib/lib" "$out/lib/lib"
+  '';
+
   meta = with lib; {
     homepage = "http://www.openimageio.org";
     description = "A library and tools for reading and writing images";

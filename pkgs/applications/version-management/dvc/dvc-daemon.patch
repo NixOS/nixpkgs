@@ -1,21 +1,18 @@
 diff --git a/dvc/daemon.py b/dvc/daemon.py
-index 1d67a37..7ce6fde 100644
+index 9854a0e1..fefdd613 100644
 --- a/dvc/daemon.py
 +++ b/dvc/daemon.py
-@@ -67,14 +67,8 @@ def daemon(args):
-     Args:
-         args (list): list of arguments to append to `dvc daemon` command.
-     """
--    cmd = [sys.executable]
--    if not is_binary():
--        cmd += ['-m', 'dvc']
--    cmd += ['daemon', '-q'] + args
+@@ -103,11 +103,8 @@ def daemon(args):
+         logger.debug("skipping launching a new daemon.")
+         return
+ 
+-    cmd = ["daemon", "-q"] + args
 -
 -    env = fix_env()
 -    file_path = os.path.abspath(inspect.stack()[0][1])
--    env['PYTHONPATH'] = os.path.dirname(os.path.dirname(file_path))
+-    env["PYTHONPATH"] = os.path.dirname(os.path.dirname(file_path))
 +    cmd = [ "@dvc@" , "daemon", "-q"] + args
-+    env = None
++    env = os.environ.copy()
+     env[DVC_DAEMON] = "1"
  
-     logger.debug("Trying to spawn '{}' with env '{}'".format(cmd, env))
- 
+     _spawn(cmd, env)

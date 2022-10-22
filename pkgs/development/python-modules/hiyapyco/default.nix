@@ -7,26 +7,19 @@
 
 buildPythonPackage rec {
   pname = "hiyapyco";
-  version = "0.4.16";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "zerwes";
     repo = pname;
-    rev = "release-${version}";
-    sha256 = "1ams9dp05yhgbg6255wrjgchl2mqg0s34d8b8prvql9lsh59s1fj";
+    rev = "refs/tags/release-${version}";
+    sha256 = "sha256-MVJoMnEi+319ZkhffYWYVi/wj0Ihm0nfVeEXvx7Ac/4=";
   };
 
   propagatedBuildInputs = [
     pyyaml
     jinja2
   ];
-
-  postPatch = ''
-    # Should no longer be needed with the next release
-    # https://github.com/zerwes/hiyapyco/pull/42
-    substituteInPlace setup.py \
-      --replace "Jinja2>1,<3" "Jinja2>1"
-  '';
 
   checkPhase = ''
     set -e

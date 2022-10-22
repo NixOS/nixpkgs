@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "amass";
-  version = "3.15.2";
+  version = "3.20.0";
 
   src = fetchFromGitHub {
     owner = "OWASP";
     repo = "Amass";
     rev = "v${version}";
-    sha256 = "sha256-0zTnknpjTvUEai06JsRfQASclxpvaJnEfYK7biZeqU0=";
+    sha256 = "sha256-c6PAmCIxQEkLJi0PNS+8oO/q3lWS0ZSXMiOiExWRpgY=";
   };
 
-  vendorSha256 = "sha256-Lh/VN+IBXpT8e7ok5Qjfk5tgXEUVwKMHYcp9WrChN3A=";
+  vendorSha256 = "sha256-hoX/i3RIMhs2ssm1qELHKceS3Vzo6cj/eMuAROyz/mQ=";
 
   outputs = [ "out" "wordlists" ];
 

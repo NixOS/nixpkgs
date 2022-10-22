@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
     owner = "vectorgraphics";
     repo = pname;
     rev = version;
-    sha256 = "sha256:1lawj2gf0985clzbyym26s5mxxp2syl1dqqxfzk0sq9s30l2rj3l";
+    hash = "sha256-dMgsKBg6YQ3mdx3jFqjX4vZeizaier8+ZQUl4J6QXNE=";
   };
 
   patches =
     (lib.optional (lib.versionOlder version "2.68")
       (fetchpatch {
         url = "https://github.com/vectorgraphics/asymptote/commit/3361214340d58235f4dbb8f24017d0cd5d94da72.patch";
-        sha256 = "sha256:1z2b41x8v7683myd45lq6niixpdjy0b185x0xl61130vrijhq5nm";
+        hash = "sha256-1RYMZcwbjBAM7aAXFBbwst0eozWYFtJ8HcicjXogS/w=";
       }))
   ;
 

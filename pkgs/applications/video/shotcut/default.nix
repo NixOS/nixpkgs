@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , mkDerivation
 , SDL2
 , frei0r
@@ -17,8 +16,7 @@
 , qtgraphicaleffects
 , qmake
 , qttools
-, genericUpdater
-, common-updater-scripts
+, gitUpdater
 }:
 
 assert lib.versionAtLeast mlt.version "6.24.0";
@@ -76,9 +74,7 @@ mkDerivation rec {
     cp -r src/qml $out/share/shotcut/
   '';
 
-  passthru.updateScript = genericUpdater {
-    inherit pname version;
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+  passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };
 

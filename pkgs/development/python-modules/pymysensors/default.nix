@@ -1,4 +1,5 @@
 { lib
+, awesomeversion
 , buildPythonPackage
 , click
 , crcmod
@@ -17,28 +18,34 @@
 
 buildPythonPackage rec {
   pname = "pymysensors";
-  version = "0.22.1";
+  version = "0.24.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "theolind";
     repo = pname;
     rev = version;
-    sha256 = "sha256-n4khOQspJBeq0w+epdXYZh6I1lI1drB1JewZ6GfzVHs=";
+    hash = "sha256-3t9YrSJf02kc5CuTqPBc/qNJV7yy7Vke4WqhtuOaAYo=";
   };
 
   propagatedBuildInputs = [
+    awesomeversion
     click
     crcmod
     getmac
     intelhex
-    paho-mqtt
     pyserial
     pyserial-asyncio
     voluptuous
   ];
+
+  passthru.optional-dependencies = {
+    mqtt-client = [
+      paho-mqtt
+    ];
+  };
 
   checkInputs = [
     pytest-sugar

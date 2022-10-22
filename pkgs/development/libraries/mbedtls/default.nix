@@ -15,13 +15,13 @@ stdenv.mkDerivation rec {
   # versions. See
   #  * https://github.com/NixOS/nixpkgs/pull/119838#issuecomment-822100428
   #  * https://github.com/NixOS/nixpkgs/commit/0ee02a9d42b5fe1825b0f7cee7a9986bb4ba975d
-  version = "2.26.0"; # nixpkgs-update: no auto update
+  version = "2.28.0"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "ARMmbed";
     repo = "mbedtls";
     rev = "${pname}-${version}";
-    sha256 = "0scwpmrgvg6q7rvqkc352d2fqlsx0aylcbyibcp1f1rsn8iiif2m";
+    sha256 = "sha256-VDoIUBaK2e0E5nkwU1u3Wvxc+s6OzBSdIeHsJKJuZ2g=";
   };
 
   nativeBuildInputs = [ cmake ninja perl python3 ];
@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     description = "Portable cryptographic and TLS library, formerly known as PolarSSL";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ ];
   };
 }

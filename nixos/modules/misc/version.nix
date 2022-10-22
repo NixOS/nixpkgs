@@ -1,61 +1,97 @@
 { config, lib, options, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.system.nixos;
   opt = options.system.nixos;
-in
 
+  inherit (lib)
+    concatStringsSep mapAttrsToList toLower
+    literalExpression mkRenamedOptionModule mkDefault mkOption trivial types;
+
+  needsEscaping = s: null != builtins.match "[a-zA-Z0-9]+" s;
+  escapeIfNeccessary = s: if needsEscaping s then s else ''"${lib.escape [ "\$" "\"" "\\" "\`" ] s}"'';
+  attrsToText = attrs:
+    concatStringsSep "\n" (
+      mapAttrsToList (n: v: ''${n}=${escapeIfNeccessary (toString v)}'') attrs
+    ) + "\n";
+
+  osReleaseContents = {
+    NAME = "NixOS";
+    ID = "nixos";
+    VERSION = "${cfg.release} (${cfg.codeName})";
+    VERSION_CODENAME = toLower cfg.codeName;
+    VERSION_ID = cfg.release;
+    BUILD_ID = cfg.version;
+    PRETTY_NAME = "NixOS ${cfg.release} (${cfg.codeName})";
+    LOGO = "nix-snowflake";
+    HOME_URL = "https://nixos.org/";
+    DOCUMENTATION_URL = "https://nixos.org/learn.html";
+    SUPPORT_URL = "https://nixos.org/community.html";
+    BUG_REPORT_URL = "https://github.com/NixOS/nixpkgs/issues";
+  };
+
+  initrdReleaseContents = osReleaseContents // {
+    PRETTY_NAME = "${osReleaseContents.PRETTY_NAME} (Initrd)";
+  };
+  initrdRelease = pkgs.writeText "initrd-release" (attrsToText initrdReleaseContents);
+
+in
 {
   imports = [
+    ./label.nix
     (mkRenamedOptionModule [ "system" "nixosVersion" ] [ "system" "nixos" "version" ])
     (mkRenamedOptionModule [ "system" "nixosVersionSuffix" ] [ "system" "nixos" "versionSuffix" ])
     (mkRenamedOptionModule [ "system" "nixosRevision" ] [ "system" "nixos" "revision" ])
     (mkRenamedOptionModule [ "system" "nixosLabel" ] [ "system" "nixos" "label" ])
   ];
 
+  options.boot.initrd.osRelease = mkOption {
+    internal = true;
+    readOnly = true;
+    default = initrdRelease;
+  };
+
   options.system = {
 
     nixos.version = mkOption {
       internal = true;
       type = types.str;
-      description = "The full NixOS version (e.g. <literal>16.03.1160.f2d4ee1</literal>).";
+      description = lib.mdDoc "The full NixOS version (e.g. `16.03.1160.f2d4ee1`).";
     };
 
     nixos.release = mkOption {
       readOnly = true;
       type = types.str;
       default = trivial.release;
-      description = "The NixOS release (e.g. <literal>16.03</literal>).";
+      description = lib.mdDoc "The NixOS release (e.g. `16.03`).";
     };
 
     nixos.versionSuffix = mkOption {
       internal = true;
       type = types.str;
       default = trivial.versionSuffix;
-      description = "The NixOS version suffix (e.g. <literal>1160.f2d4ee1</literal>).";
+      description = lib.mdDoc "The NixOS version suffix (e.g. `1160.f2d4ee1`).";
     };
 
     nixos.revision = mkOption {
       internal = true;
       type = types.nullOr types.str;
       default = trivial.revisionWithDefault null;
-      description = "The Git revision from which this NixOS configuration was built.";
+      description = lib.mdDoc "The Git revision from which this NixOS configuration was built.";
     };
 
     nixos.codeName = mkOption {
       readOnly = true;
       type = types.str;
       default = trivial.codeName;
-      description = "The NixOS release code name (e.g. <literal>Emu</literal>).";
+      description = lib.mdDoc "The NixOS release code name (e.g. `Emu`).";
     };
 
     stateVersion = mkOption {
       type = types.str;
       default = cfg.release;
       defaultText = literalExpression "config.${opt.release}";
-      description = ''
+      description = lib.mdDoc ''
         Every once in a while, a new NixOS release may change
         configuration defaults in a way incompatible with stateful
         data. For instance, if the default version of PostgreSQL
@@ -79,13 +115,13 @@ in
       internal = true;
       type = types.str;
       default = "https://nixos.org/channels/nixos-unstable";
-      description = "Default NixOS channel to which the root user is subscribed.";
+      description = lib.mdDoc "Default NixOS channel to which the root user is subscribed.";
     };
 
     configurationRevision = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = "The Git revision of the top-level flake from which this configuration was built.";
+      description = lib.mdDoc "The Git revision of the top-level flake from which this configuration was built.";
     };
 
   };
@@ -101,22 +137,28 @@ in
     # Generate /etc/os-release.  See
     # https://www.freedesktop.org/software/systemd/man/os-release.html for the
     # format.
-    environment.etc.os-release.text =
-      ''
-        NAME=NixOS
-        ID=nixos
-        VERSION="${cfg.release} (${cfg.codeName})"
-        VERSION_CODENAME=${toLower cfg.codeName}
-        VERSION_ID="${cfg.release}"
-        BUILD_ID="${cfg.version}"
-        PRETTY_NAME="NixOS ${cfg.release} (${cfg.codeName})"
-        LOGO="nix-snowflake"
-        HOME_URL="https://nixos.org/"
-        DOCUMENTATION_URL="https://nixos.org/learn.html"
-        SUPPORT_URL="https://nixos.org/community.html"
-        BUG_REPORT_URL="https://github.com/NixOS/nixpkgs/issues"
-      '';
+    environment.etc = {
+      "lsb-release".text = attrsToText {
+        LSB_VERSION = "${cfg.release} (${cfg.codeName})";
+        DISTRIB_ID = "nixos";
+        DISTRIB_RELEASE = cfg.release;
+        DISTRIB_CODENAME = toLower cfg.codeName;
+        DISTRIB_DESCRIPTION = "NixOS ${cfg.release} (${cfg.codeName})";
+      };
 
+      "os-release".text = attrsToText osReleaseContents;
+    };
+
+    # We have to use `warnings` because when warning in the default of the option
+    # the warning would also be shown when building the manual since the manual
+    # has to evaluate the default.
+    #
+    # TODO Remove this and drop the default of the option so people are forced to set it.
+    # Doing this also means fixing the comment in nixos/modules/testing/test-instrumentation.nix
+    warnings = lib.optional (options.system.stateVersion.highestPrio == (lib.mkOptionDefault { }).priority)
+      "system.stateVersion is not set, defaulting to ${config.system.stateVersion}. Read why this matters on https://nixos.org/manual/nixos/stable/options.html#opt-system.stateVersion.";
   };
 
+  # uses version info nixpkgs, which requires a full nixpkgs path
+  meta.buildDocsInSandbox = false;
 }

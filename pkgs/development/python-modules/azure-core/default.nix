@@ -1,9 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , aiodns
 , aiohttp
 , flask
 , mock
-, msrest
 , pytest
 , pytest-asyncio
 , pytest-trio
@@ -11,23 +14,23 @@
 , requests
 , six
 , trio
-, typing-extensions
-}:
+, typing-extensions }:
 
 buildPythonPackage rec {
-  version = "1.20.1";
+  version = "1.25.1";
   pname = "azure-core";
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "21d06311c9c373e394ed9f9db035306773334a0181932e265889eca34d778d17";
+    sha256 = "sha256-PBzzaGUOduwAnAfNEXSpXNy0cbJHu3LRgkX31WwYCbI=";
   };
 
   propagatedBuildInputs = [
     requests
     six
+    typing-extensions
   ];
 
   checkInputs = [
@@ -35,13 +38,11 @@ buildPythonPackage rec {
     aiohttp
     flask
     mock
-    msrest
     pytest
     pytest-trio
     pytest-asyncio
     pytestCheckHook
     trio
-    typing-extensions
   ];
 
   # test server needs to be available
@@ -51,7 +52,20 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/" ];
   # disable tests which touch network
-  disabledTests = [ "aiohttp" "multipart_send" "response" "request" "timeout" ];
+  disabledTests = [
+    "aiohttp"
+    "multipart_send"
+    "response"
+    "request"
+    "timeout"
+    "test_sync_transport_short_read_download_stream"
+    "test_aio_transport_short_read_download_stream"
+  # disable 8 tests failing on some darwin machines with errors:
+  # azure.core.polling.base_polling.BadStatus: Invalid return status 403 for 'GET' operation
+  # azure.core.exceptions.HttpResponseError: Operation returned an invalid status 'Forbidden'
+  ] ++ lib.optional stdenv.isDarwin [
+    "location_polling_fail"
+  ];
   disabledTestPaths = [
     # requires testing modules which aren't published, and likely to create cyclic dependencies
     "tests/test_connection_string_parsing.py"
@@ -60,6 +74,13 @@ buildPythonPackage rec {
     "tests/test_streaming.py"
     # testserver tests require being in a very specific working directory to make it work
     "tests/testserver_tests/"
+    # requires missing pytest plugin
+    "tests/async_tests/test_rest_asyncio_transport.py"
+    # needs msrest, which cannot be included in checkInputs due to circular dependency new in msrest 0.7.1
+    # azure-core needs msrest which needs azure-core
+    "tests/test_polling.py"
+    "tests/async_tests/test_base_polling_async.py"
+    "tests/async_tests/test_polling_async.py"
   ];
 
   meta = with lib; {

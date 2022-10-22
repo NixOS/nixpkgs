@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sqlcheck";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "jarulraj";
     repo = "sqlcheck";
     rev = "v${version}";
-    sha256 = "0v8idyhwhbphxzmh03lih3wd9gdq317zn7wsf01infih7b6l0k69";
+    sha256 = "sha256-rGqCtEO2K+OT44nYU93mF1bJ07id+ixPkRSC8DcO6rY=";
     fetchSubmodules = true;
   };
 

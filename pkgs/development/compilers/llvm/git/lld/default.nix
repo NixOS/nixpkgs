@@ -1,6 +1,6 @@
 { lib, stdenv, llvm_meta
 , buildLlvmTools
-, src
+, monorepoSrc, runCommand
 , cmake
 , libxml2
 , libllvm
@@ -11,8 +11,17 @@ stdenv.mkDerivation rec {
   pname = "lld";
   inherit version;
 
-  inherit src;
-  sourceRoot = "source/${pname}";
+  # Blank llvm dir just so relative path works
+  src = runCommand "${pname}-src-${version}" {} ''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/${pname} "$out"
+    mkdir -p "$out/libunwind"
+    cp -r ${monorepoSrc}/libunwind/include "$out/libunwind"
+    mkdir -p "$out/llvm"
+  '';
+
+  sourceRoot = "${src.name}/${pname}";
 
   patches = [
     ./gnu-install-dirs.patch
@@ -22,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libllvm libxml2 ];
 
   cmakeFlags = [
-    "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
+    "-DLLD_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/lld"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
   ];
@@ -31,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = llvm_meta // {
     homepage = "https://lld.llvm.org/";
-    description = "The LLVM linker";
+    description = "The LLVM linker (unwrapped)";
     longDescription = ''
       LLD is a linker from the LLVM project that is a drop-in replacement for
       system linkers and runs much faster than them. It also provides features

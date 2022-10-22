@@ -5,7 +5,7 @@
 
   minimalOCamlVersion = "4.05";
 
-  buildInputs = [
+  nativeBuildInputs = [
     reason
   ];
   propagatedBuildInputs = [

@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/auto-multiple-choice \
     ''${makeWrapperArgs[@]} \
-    --prefix PERL5LIB : "${with perlPackages; makePerlPath [
+    --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [
       ArchiveZip
       DBDSQLite
       Cairo
@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
       GlibObjectIntrospection
       Gtk3
       LocaleGettext
+      OpenOfficeOODoc
       PerlMagick
       TextCSV
       XMLParser
@@ -82,7 +83,7 @@ stdenv.mkDerivation rec {
       XMLWriter
     ]}:"$out/share/perl5 \
     --prefix XDG_DATA_DIRS : "$out/share" \
-    --set TEXINPUTS ":.:$out/share/texmf/tex/latex/AMC"
+    --set TEXINPUTS ":.:$out/tex/latex"
   '';
 
   nativeBuildInputs = [

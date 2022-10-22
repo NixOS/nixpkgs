@@ -6,11 +6,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "3.0.3";
+  version = "5.0.1";
+  format = "pyproject";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-oEK9p6OuqGSm2JdgfnJ+N0sJtRq6wCoVCGcU0GNEMLI=";
+    hash = "sha256-PKRioPBhTV6i3ckQgcKuhQFmpBvUQE4o3FLej8qx4mM=";
   };
 
   checkInputs = with python3Packages; [
@@ -18,6 +19,10 @@ python3Packages.buildPythonApplication rec {
     mock
     requests-mock
     freezegun
+  ];
+
+  nativeBuildInputs = with python3Packages; [
+    versioningit
   ];
 
   propagatedBuildInputs = (with python3Packages; [
@@ -32,10 +37,6 @@ python3Packages.buildPythonApplication rec {
     ffmpeg
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg --replace 'lxml >=4.6.4,<5.0' 'lxml'
-  '';
-
   meta = with lib; {
     homepage = "https://streamlink.github.io/";
     description = "CLI for extracting streams from various websites to video player of your choosing";
@@ -48,7 +49,6 @@ python3Packages.buildPythonApplication rec {
     '';
     changelog = "https://github.com/streamlink/streamlink/raw/${version}/CHANGELOG.md";
     license = licenses.bsd2;
-    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ dezgeg zraexy DeeUnderscore ];
   };
 }

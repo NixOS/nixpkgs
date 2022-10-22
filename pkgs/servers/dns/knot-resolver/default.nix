@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl
 # native deps.
 , runCommand, pkg-config, meson, ninja, makeWrapper
 # build+runtime deps.
@@ -17,22 +17,14 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.4.3";
+  version = "5.5.3";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "488729eb93190336b6bca10de0d78ecb7919f77fcab105debc0a644aa7d0a506";
+    sha256 = "a38f57c68b7d237d662784d8406e6098aad66a148f44dcf498d1e9664c5fed2d";
   };
 
   outputs = [ "out" "dev" ];
-
-  patches = [
-    (fetchpatch { # https://gitlab.nic.cz/knot/knot-resolver/-/merge_requests/1237
-      name = "console.aws.amazon.com-fix.patch";
-      url = "https://gitlab.nic.cz/knot/knot-resolver/-/commit/f4dabfbec9273703.diff";
-      sha256 = "3J+FDwNQ6CqIGo9pSzhrQZlHX99vXFDpPOBpwpCnOxs=";
-    })
-  ];
 
   # Path fixups for the NixOS service.
   postPatch = ''
@@ -47,6 +39,13 @@ unwrapped = stdenv.mkDerivation rec {
     # ExecStart can't be overwritten in overrides.
     # We need that to use wrapped executable and correct config file.
     sed '/^ExecStart=/d' -i systemd/kresd@.service.in
+
+    # On x86_64-darwin loading by soname fails to find the libs, surprisingly.
+    # Even though they should already be loaded and they're in RPATH, too.
+    for f in daemon/lua/{kres,zonefile}.lua; do
+      substituteInPlace "$f" \
+        --replace "ffi.load(" "ffi.load('${lib.getLib knot-dns}/lib/' .. "
+    done
   ''
     # some tests have issues with network sandboxing, apparently
   + optionalString doInstallCheck ''
@@ -63,7 +62,7 @@ unwrapped = stdenv.mkDerivation rec {
 
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns lua.lua libuv gnutls lmdb ]
-    ++ optionals stdenv.isLinux [ systemd libcap_ng ]
+    ++ optionals stdenv.isLinux [ /*lib*/systemd libcap_ng ]
     ++ [ nghttp2 ]
     ## optional dependencies; TODO: dnstap
     ;
@@ -75,7 +74,7 @@ unwrapped = stdenv.mkDerivation rec {
     "--default-library=static" # not used by anyone
   ]
   ++ optional doInstallCheck "-Dunit_tests=enabled"
-  ++ optional (doInstallCheck && !stdenv.isDarwin) "-Dconfig_tests=enabled"
+  ++ optional doInstallCheck "-Dconfig_tests=enabled"
   ++ optional stdenv.isLinux "-Dsystemd_files=enabled" # used by NixOS service
     #"-Dextra_tests=enabled" # not suitable as in-distro tests; many deps, too.
   ;
@@ -87,8 +86,7 @@ unwrapped = stdenv.mkDerivation rec {
     rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
   '';
 
-  doInstallCheck = with stdenv; hostPlatform == buildPlatform
-    && !(isDarwin && isAarch64); # avoid luarocks, as it's broken ATM on the platform
+  doInstallCheck = with stdenv; hostPlatform == buildPlatform;
   installCheckInputs = [ cmocka which cacert lua.cqueues lua.basexx lua.http ];
   installCheckPhase = ''
     meson test --print-errorlogs
@@ -100,6 +98,7 @@ unwrapped = stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.vcunat /* upstream developer */ ];
+    mainProgram = "kresd";
   };
 };
 
@@ -114,6 +113,7 @@ wrapped-full = runCommand unwrapped.name
     ];
     preferLocalBuild = true;
     allowSubstitutes = false;
+    inherit (unwrapped) meta;
   }
   ''
     mkdir -p "$out"/bin

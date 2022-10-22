@@ -1,12 +1,10 @@
 { lib
+, babel
 , buildPythonPackage
-, fetchPypi
-, isPy27
-, Babel
 , colorama
 , cssselect
-, python-dateutil
 , feedparser
+, fetchFromGitLab
 , gdata
 , gnupg
 , google-api-python-client
@@ -15,10 +13,12 @@
 , lxml
 , mechanize
 , nose
-, pdfminer
+, pdfminer-six
 , pillow
 , prettytable
 , pyqt5
+, python-dateutil
+, pythonOlder
 , pyyaml
 , requests
 , simplejson
@@ -29,24 +29,23 @@
 buildPythonPackage rec {
   pname = "woob";
   version = "3.0";
-  disabled = isPy27;
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "09hpxy5zhn2b8li0xjf3zd7s46lawb0315p5mdcsci3bj3s4v1j7";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitLab {
+    owner = "woob";
+    repo = pname;
+    rev = version;
+    hash = "sha256-XLcHNidclORbxVXgcsHY6Ja/dak+EVSKTaVQmg1f/rw=";
   };
 
-  patches = [
-    # Disable doctests that require networking:
-    ./no-test-requiring-network.patch
+  nativeBuildInputs = [
+    pyqt5
   ];
 
-  checkInputs = [ nose ];
-
-  nativeBuildInputs = [ pyqt5 ];
-
   propagatedBuildInputs = [
-    Babel
+    babel
     colorama
     cssselect
     python-dateutil
@@ -58,7 +57,7 @@ buildPythonPackage rec {
     libyaml
     lxml
     mechanize
-    pdfminer
+    pdfminer-six
     pillow
     prettytable
     pyqt5
@@ -69,14 +68,28 @@ buildPythonPackage rec {
     unidecode
   ];
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "with-doctest = 1" "" \
+      --replace "with-coverage = 1" ""
+  '';
+
+  checkInputs = [
+    nose
+  ];
+
   checkPhase = ''
     nosetests
   '';
 
+  pythonImportsCheck = [
+    "woob"
+  ];
+
   meta = with lib; {
+    description = "Collection of applications and APIs to interact with websites";
     homepage = "https://woob.tech";
-    description = "Collection of applications and APIs to interact with websites without requiring the user to open a browser";
     license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.DamienCassou ];
- };
+    maintainers = with maintainers; [ DamienCassou ];
+  };
 }

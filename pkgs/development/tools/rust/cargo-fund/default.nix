@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-fund";
-  version = "0.2.0";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "acfoltzer";
     repo = pname;
     rev = version;
-    sha256 = "1jim5bgq3fc33391qpa1q1csbzqf4hk1qyfzwxpcs5pb4ixb6vgk";
+    sha256 = "sha256-hUTBDC2XU82jc9TbyCYVKgWxrKG/OIc1a+fEdj5566M=";
   };
 
-  cargoSha256 = "1c2zryxn1bbg3ksp8azk9xmwfgwr6663hlmdv9c358hzqdfp9hli";
+  cargoSha256 = "sha256-cU/X+oNTMjUSODkdm+P+vVLmBJlkeQ9WTJGvQmUOQKw=";
 
   # The tests need a GitHub API token.
   doCheck = false;

@@ -1,15 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, gtk3, gnome-icon-theme, tango-icon-theme, hicolor-icon-theme, xfce }:
-
-let
-  category = "art";
-in
+{ lib, stdenv, fetchurl, pkg-config, intltool, gtk3, gnome-icon-theme, tango-icon-theme, hicolor-icon-theme, httpTwoLevelsUpdater }:
 
 stdenv.mkDerivation rec {
   pname  = "xfce4-icon-theme";
   version = "4.4.3";
 
   src = fetchurl {
-    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "mirror://xfce/src/art/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
     sha256 = "sha256-1HhmktVrilY/ZqXyYPHxOt4R6Gx4y8slqfml/EfPZvo=";
   };
 
@@ -28,10 +24,8 @@ stdenv.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
-  passthru.updateScript = xfce.updateScript {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
-    versionLister = xfce.archiveLister category pname;
+  passthru.updateScript = httpTwoLevelsUpdater {
+    url = "https://archive.xfce.org/src/art/${pname}";
   };
 
   meta = with lib; {

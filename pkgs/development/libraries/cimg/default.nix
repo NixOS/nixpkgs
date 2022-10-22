@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cimg";
-  version = "2.9.9";
+  version = "3.1.6";
 
   src = fetchFromGitHub {
     owner = "dtschump";
     repo = "CImg";
     rev = "v.${version}";
-    hash = "sha256-DWyqVN7v+j2XCArv4jmrD45XKWMNhd2DddJHH3gQWQY=";
+    hash = "sha256-NZwivsTYgirZXuS25buGHL3uk75shRGMH4c3YdS7Mgg=";
   };
 
   outputs = [ "out" "doc" ];
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
 
     install -dm 755 $out/include/CImg/plugins $doc/share/doc/cimg/examples
     install -m 644 CImg.h $out/include/
-    cp -dr --no-preserve=ownership examples/* $doc/share/doc/cimg/examples/
     cp -dr --no-preserve=ownership plugins/* $out/include/CImg/plugins/
+    cp -dr --no-preserve=ownership examples/* $doc/share/doc/cimg/examples/
     cp README.txt $doc/share/doc/cimg/
 
     runHook postInstall

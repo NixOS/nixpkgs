@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, fetchpatch }:
 
 with lib;
 
@@ -12,6 +12,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "03iiaafdcwh220pqignk407h6klrakwz0zkb8iwk6nkwipkwvhsx";
   };
+
+  patches = [
+    # glibc-2.34 compat
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/gentoo/gentoo/dbb8a5c9f749cc11e61cfe558f164b165cbc30cb/mail-filter/libspf2/files/libspf2-1.2.11-undefined-dn_.patch";
+      sha256 = "sha256-6JVVkVGCcFJsNeBdVTPcLhW4KoHLY4ai/KXDMliXgPA=";
+    })
+  ];
 
   postPatch = ''
     # disable static bins compilation
@@ -28,8 +36,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "Implementation of the Sender Policy Framework for SMTP authorization";
-    homepage = "https://www.libspf2.org";
+    description = "Implementation of the Sender Policy Framework for SMTP " +
+                  "authorization (Helsinki Systems fork)";
+    homepage = "https://github.com/helsinki-systems/libspf2";
     license = with licenses; [ lgpl21Plus bsd2 ];
     maintainers = with maintainers; [ pacien ajs124 das_j ];
     platforms = platforms.all;

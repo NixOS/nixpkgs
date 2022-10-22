@@ -2,17 +2,18 @@
 
 tcl.mkTclDerivation rec {
   pname = "tcllib";
-  version = "1.20";
+  version = "1.21";
 
   src = fetchurl {
     url = "mirror://sourceforge/tcllib/tcllib-${version}.tar.gz";
-    sha256 = "0wax281h6ksz974a5qpfgf9y34lmlpd8i87lkm1w94ybbd3rgc73";
+    sha256 = "sha256-RrK7XsgEk2OuAWRa8RvaO9tdsQYp6AfYHRrUbNG+rVA=";
   };
 
   meta = {
-    homepage = "https://sourceforge.net/projects/tcllib/";
+    homepage = "https://core.tcl-lang.org/tcllib/";
     description = "Tcl-only library of standard routines for Tcl";
     license = lib.licenses.tcltk;
     platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

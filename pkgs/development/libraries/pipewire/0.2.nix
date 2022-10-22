@@ -28,6 +28,11 @@ in stdenv.mkDerivation rec {
     alsa-lib ffmpeg_4 libjack2 udev libva xorg.libX11 sbc SDL2
   ];
 
+  # Workaround build on gcc-10+ and clang11+:
+  #  spa/plugins/bluez5/libspa-bluez5.so.p/bluez5-monitor.c.o:(.bss+0x0):
+  #    multiple definition of `spa_a2dp_sink_factory'
+  NIX_CFLAGS_COMPILE = [ "-fcommon" ];
+
   mesonFlags = [
     "-Ddocs=true"
     "-Dgstreamer=enabled"

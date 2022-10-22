@@ -1,53 +1,55 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
-, lib
-
-# pythonPackages
 , azure-common
 , azure-core
-, azure-nspkg
 , cryptography
 , mock
 , msal
 , msal-extensions
 , msrest
 , msrestazure
+, pythonOlder
+, six
 }:
 
 buildPythonPackage rec {
   pname = "azure-identity";
-  version = "1.7.1";
+  version = "1.10.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "7f22cd0c7a9b92ed297dd67ae79d9bb9a866e404061c02cec709ad10c4c88e19";
+    hash = "sha256-ZW5QNNnO8pfPmzU3btYgCFJzwYz6Us6kpiW/DV0tZAk=";
   };
 
   propagatedBuildInputs = [
     azure-common
     azure-core
-    azure-nspkg
     cryptography
     mock
     msal
     msal-extensions
     msrest
     msrestazure
+    six
   ];
 
-  pythonImportsCheck = [ "azure.identity" ];
+  pythonImportsCheck = [
+    "azure.identity"
+  ];
 
   # Requires checkout from mono-repo and a mock account:
-  #   https://github.com/Azure/azure-sdk-for-python/blob/master/sdk/identity/tests.yml
+  # https://github.com/Azure/azure-sdk-for-python/blob/master/sdk/identity/tests.yml
   doCheck = false;
 
   meta = with lib; {
     description = "Microsoft Azure Identity Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

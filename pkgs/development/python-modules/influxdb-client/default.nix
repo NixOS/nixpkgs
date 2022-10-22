@@ -1,49 +1,66 @@
 { lib
+, aiohttp
+, aiocsv
 , buildPythonPackage
-, fetchFromGitHub
-, rx
 , certifi
-, six
+, ciso8601
+, fetchFromGitHub
+, numpy
+, pandas
 , python-dateutil
+, pythonOlder
+, reactivex
 , setuptools
 , urllib3
-, ciso8601
-, pytz
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "influxdb-client";
-  version = "1.24.0";
-  disabled = pythonOlder "3.6";
+  version = "1.33.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb-client-python";
-    rev = "v${version}";
-    sha256 = "0w0pw87fnxms88f3dadyhxdgms4rzvcww18h6l87wnqc6wxa6paw";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-RhUIdIwLYJwlpLtyrXO9GCvKY6OLDJl7Aop5acgTHN0=";
   };
 
   propagatedBuildInputs = [
-    rx
     certifi
-    six
     python-dateutil
+    reactivex
     setuptools
     urllib3
-    ciso8601
-    pytz
   ];
 
-  # requires influxdb server
+  passthru.optional-dependencies = {
+    async = [
+      aiocsv
+      aiohttp
+    ];
+    ciso = [
+      ciso8601
+    ];
+    extra = [
+      numpy
+      pandas
+    ];
+  };
+
+  # Requires influxdb server
   doCheck = false;
 
-  pythonImportsCheck = [ "influxdb_client" ];
+  pythonImportsCheck = [
+    "influxdb_client"
+  ];
 
   meta = with lib; {
-    description = "InfluxDB 2.0 Python client library";
+    description = "InfluxDB client library";
     homepage = "https://github.com/influxdata/influxdb-client-python";
     license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }

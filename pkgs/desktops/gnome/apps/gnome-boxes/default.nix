@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
 , ninja
@@ -11,16 +12,12 @@
 , gobject-introspection
 , libxml2
 , gtk3
-, gtksourceview4
-, gtk-vnc
-, freerdp
 , libvirt
 , spice-gtk
-, python3
 , appstream-glib
 , spice-protocol
 , libhandy
-, libsoup
+, libsoup_3
 , libosinfo
 , systemd
 , tracker
@@ -46,36 +43,43 @@
 , numactl
 , libapparmor
 , json-glib
-, webkitgtk
+, webkitgtk_4_1
 , vte
 , glib-networking
 , qemu-utils
-, qemu
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-boxes";
-  version = "41.2";
+  version = "43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "u3G2zflFOBjyblV0Tl5ZUN2TJ5PQ6Ot+n/h78Mvvwz0=";
+    sha256 = "V0UFCWQUyCC4COzQ9x4tGakzI1HhKj3YJvdi5DK/ayY=";
   };
+
+  patches = [
+    # Fix path to libgovf-0.1.so in the gir file. We patch gobject-introspection to hardcode absolute paths but
+    # our Meson patch will only pass the info when install_dir is absolute as well.
+    ./fix-gir-lib-path.patch
+  ];
 
   doCheck = true;
 
   nativeBuildInputs = [
     appstream-glib # for appstream-util
-    desktop-file-utils
     gettext
     gobject-introspection
     itstool
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook
+    # For post install script
+    glib
+    gtk3
+    desktop-file-utils
   ];
 
   # Required for USB redirection PolicyKit rules file
@@ -86,15 +90,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     acl
     cyrus_sasl
-    freerdp
     gdbm
     glib
     glib-networking
     gmp
     gnome.adwaita-icon-theme
-    gtk-vnc
     gtk3
-    gtksourceview4
     json-glib
     libapparmor
     libarchive
@@ -105,7 +106,7 @@ stdenv.mkDerivation rec {
     libosinfo
     librsvg
     libsecret
-    libsoup
+    libsoup_3
     libusb1
     libvirt
     libvirt-glib
@@ -117,17 +118,12 @@ stdenv.mkDerivation rec {
     tracker
     tracker-miners
     vte
-    webkitgtk
+    webkitgtk_4_1
     yajl
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ mtools cdrkit libcdio qemu-utils qemu ]}")
-  '';
-
-  postPatch = ''
-    chmod +x build-aux/post_install.py # patchShebangs requires executable file
-    patchShebangs build-aux/post_install.py
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ mtools cdrkit libcdio qemu-utils ]}")
   '';
 
   passthru = {

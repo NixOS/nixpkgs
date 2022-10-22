@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   pname = "easyloggingpp";
   version = "9.97.0";
   src = fetchFromGitHub {
-    owner = "muflihun";
+    owner = "amrayn";
     repo = "easyloggingpp";
     rev = "v${version}";
     sha256 = "sha256-sFWmZMnucMuvpwDzuowni21KiD3bx0lH1Ts+yhusOYs=";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     description = "C++ logging library";
-    homepage = "https://muflihun.github.io/easyloggingpp/";
+    homepage = "https://github.com/amrayn/easyloggingpp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [acowley];
     platforms = lib.platforms.all;

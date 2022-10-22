@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , libX11
 , xorgproto
 , libXt
@@ -28,6 +29,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Ky5T6EKK2bbo3IpVs6UYM4GRGk2uLABy+pYpa7sZcNY=";
   };
 
+  patches = [
+    # Pull patch pending upstream inclusion for -fno-common toolchain support:
+    #   https://savannah.gnu.org/patch/index.php?10211
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://savannah.gnu.org/patch/download.php?file_id=53275";
+      sha256 = "sha256-ZOo9jAy1plFjhC5HXJQvXL+Zf7FL14asV3G4AwfgqTY=";
+    })
+  ];
+
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libX11
     xorgproto
@@ -40,7 +52,6 @@ stdenv.mkDerivation rec {
     gnuchess
     texinfo
     libXpm
-    pkg-config
     librsvg
     cairo
     pango

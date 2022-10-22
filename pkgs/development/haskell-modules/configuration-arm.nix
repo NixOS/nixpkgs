@@ -1,8 +1,8 @@
 # ARM-SPECIFIC OVERRIDES FOR THE HASKELL PACKAGE SET IN NIXPKGS
 #
-# This extension is applied to all haskell package sets in nixpkgs
-# if `stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64`
-# to apply arm specific workarounds or fixes.
+# This extension is applied to all haskell package sets in nixpkgs if
+# `stdenv.hostPlatform.isAarch` to apply arm specific workarounds or
+# fixes.
 #
 # The file is split into three parts:
 #
@@ -62,7 +62,6 @@ self: super: {
   headroom = dontCheck super.headroom;
   hgeometry = dontCheck super.hgeometry;
   hhp = dontCheck super.hhp;
-  hint = dontCheck super.hint;
   hls-splice-plugin = dontCheck super.hls-splice-plugin;
   hsakamai = dontCheck super.hsakamai;
   hsemail-ns = dontCheck super.hsemail-ns;
@@ -96,13 +95,9 @@ self: super: {
   hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
   hls-module-name-plugin = dontCheck super.hls-module-name-plugin;
   hls-brittany-plugin = dontCheck super.hls-brittany-plugin;
-
-  # Similar RTS issue in test suite:
-  # rts/linker/elf_reloc_aarch64.c:98: encodeAddendAarch64: Assertion `isInt64(21+12, addend)' failed.
-  hls-hlint-plugin = dontCheck super.hls-hlint-plugin;
-  hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
-  hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
-
+  hls-qualify-imported-names-plugin = dontCheck super.hls-qualify-imported-names-plugin;
+  hls-class-plugin = dontCheck super.hls-class-plugin;
+  hls-selection-range-plugin = dontCheck super.hls-selection-range-plugin;
 
   # https://github.com/ekmett/half/issues/35
   half = dontCheck super.half;
@@ -110,7 +105,18 @@ self: super: {
   # We disable profiling on aarch64, so tests naturally fail
   ghc-prof = dontCheck super.ghc-prof;
 
+  # Similar RTS issue in test suite:
+  # rts/linker/elf_reloc_aarch64.c:98: encodeAddendAarch64: Assertion `isInt64(21+12, addend)' failed.
+  # These still fail sporadically on ghc 9.2
+  hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
+  hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
+  hls-rename-plugin = dontCheck super.hls-rename-plugin;
+  hls-fourmolu-plugin = dontCheck super.hls-fourmolu-plugin;
+  hls-floskell-plugin = dontCheck super.hls-floskell-plugin;
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch32 {
   # AARCH32-SPECIFIC OVERRIDES
 
+  # KAT/ECB/D2 test segfaults on armv7l
+  # https://github.com/haskell-crypto/cryptonite/issues/367
+  cryptonite = dontCheck super.cryptonite;
 }

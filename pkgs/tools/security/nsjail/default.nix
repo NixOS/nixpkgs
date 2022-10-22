@@ -1,36 +1,30 @@
 { lib, stdenv, fetchFromGitHub, autoconf, bison, flex, libtool, pkg-config, which
-, libnl, protobuf, protobufc, shadow
+, libnl, protobuf, protobufc, shadow, installShellFiles
 }:
 
 stdenv.mkDerivation rec {
   pname = "nsjail";
-  version = "3.0"; # Bumping? Remove the bison patch.
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner           = "google";
     repo            = "nsjail";
     rev             = version;
     fetchSubmodules = true;
-    sha256          = "1w6x8xcrs0i1y3q41gyq8z3cq9x24qablklc4jiydf855lhqn4dh";
+    sha256          = "sha256-SFRnCEPawMKEIdmrOnJ45IIb17W1d4qCceuRdWTDTQU=";
   };
 
-  nativeBuildInputs = [ autoconf bison flex libtool pkg-config which ];
+  nativeBuildInputs = [ autoconf bison flex libtool pkg-config which installShellFiles ];
   buildInputs = [ libnl protobuf protobufc ];
   enableParallelBuilding = true;
-
-  patches = [
-    # To remove after bumping 3.0
-    ./001-fix-bison-link-error.patch
-  ];
 
   preBuild = ''
     makeFlagsArray+=(USER_DEFINES='-DNEWUIDMAP_PATH=${shadow}/bin/newuidmap -DNEWGIDMAP_PATH=${shadow}/bin/newgidmap')
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/man/man1
-    install nsjail $out/bin/
-    install nsjail.1 $out/share/man/man1/
+    install -Dm755 nsjail "$out/bin/nsjail"
+    installManPage nsjail.1
   '';
 
   meta = with lib; {

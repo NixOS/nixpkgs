@@ -180,7 +180,7 @@ in (buildEnv {
       echo -n "Wrapping '$link'"
       rm "$link"
       makeWrapper "$target" "$link" \
-        --prefix PATH : "$out/bin:${perl}/bin" \
+        --prefix PATH : "${gnused}/bin:${gnugrep}/bin:${coreutils}/bin:$out/bin:${perl}/bin" \
         --prefix PERL5LIB : "$PERL5LIB" \
         --set-default TEXMFCNF "$TEXMFCNF"
 
@@ -223,17 +223,20 @@ in (buildEnv {
     sed "1s|$| -I $out/share/texmf/scripts/texlive|" -i "$out/bin/fmtutil"
     ln -sf fmtutil "$out/bin/mktexfmt"
 
-    perl `type -P mktexlsr.pl` ./share/texmf
-    ${bin.texlinks} "$out/bin" && wrapBin
-    perl `type -P fmtutil.pl` --sys --all | grep '^fmtutil' # too verbose
-    #${bin.texlinks} "$out/bin" && wrapBin # do we need to regenerate format links?
+    perl `type -P mktexlsr.pl` --sort ./share/texmf
+    ${bin.texlinks}/bin/texlinks "$out/bin" && wrapBin
+    FORCE_SOURCE_DATE=1 perl `type -P fmtutil.pl` --sys --all | grep '^fmtutil' # too verbose
+    #${bin.texlinks}/bin/texlinks "$out/bin" && wrapBin # do we need to regenerate format links?
 
     # Disable unavailable map files
     echo y | perl `type -P updmap.pl` --sys --syncwithtrees --force
     # Regenerate the map files (this is optional)
     perl `type -P updmap.pl` --sys --force
 
-    perl `type -P mktexlsr.pl` ./share/texmf-* # to make sure
+    # sort entries to improve reproducibility
+    [[ -f "$TEXMFSYSCONFIG"/web2c/updmap.cfg ]] && sort -o "$TEXMFSYSCONFIG"/web2c/updmap.cfg "$TEXMFSYSCONFIG"/web2c/updmap.cfg
+
+    perl `type -P mktexlsr.pl` --sort ./share/texmf-* # to make sure
   '' +
     # install (wrappers for) scripts, based on a list from upstream texlive
   ''
@@ -299,7 +302,12 @@ in (buildEnv {
       )
     fi
   ''
-    + bin.cleanBrokenLinks
+    + bin.cleanBrokenLinks +
+  # Get rid of all log files. They are not needed, but take up space
+  # and render the build unreproducible by their embedded timestamps.
+  ''
+    find $TEXMFSYSVAR/web2c -name '*.log' -delete
+  ''
   ;
 }).overrideAttrs (_: { allowSubstitutes = true; })
 # TODO: make TeX fonts visible by fontconfig: it should be enough to install an appropriate file

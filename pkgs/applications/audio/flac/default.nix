@@ -2,20 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flac";
-  version = "1.3.3";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "http://downloads.xiph.org/releases/flac/${pname}-${version}.tar.xz";
-    sha256 = "0j0p9sf56a2fm2hkjnf7x3py5ir49jyavg4q5zdyd7bcf6yq4gi1";
+    # Official checksum is published at https://github.com/xiph/flac/releases/tag/${version}
+    sha256 = "91303c3e5dfde52c3e94e75976c0ab3ee14ced278ab8f60033a3a12db9209ae6";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2020-0499.patch";
-      url = "https://github.com/xiph/flac/commit/2e7931c27eb15e387da440a37f12437e35b22dd4.patch";
-      sha256 = "160qzq9ms5addz7sx06pnyjjkqrffr54r4wd8735vy4x008z71ah";
-    })
-  ];
 
   buildInputs = [ libogg ];
 
@@ -28,5 +21,6 @@ stdenv.mkDerivation rec {
     description = "Library and tools for encoding and decoding the FLAC lossless audio file format";
     platforms = platforms.all;
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ruuda ];
   };
 }

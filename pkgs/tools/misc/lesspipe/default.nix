@@ -1,34 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, perl, file, ncurses, bash }:
+{ lib, stdenv, fetchFromGitHub, substituteAll, makeWrapper, perl, procps, file, gnused, bash }:
 
 stdenv.mkDerivation rec {
   pname = "lesspipe";
-  version = "1.85";
-
-  nativeBuildInputs = [ perl ];
-  buildInputs = [ perl bash ];
-  strictDeps = true;
-  preConfigure = ''
-    patchShebangs --build configure
-  '';
-  configureFlags = [ "--shell=${bash}/bin/bash" "--yes" ];
-  configurePlatforms = [];
-  dontBuild = true;
+  version = "2.06";
 
   src = fetchFromGitHub {
     owner = "wofr06";
     repo = "lesspipe";
-    rev = version;
-    sha256 = "1v1jdkdq1phc93gdr6mjlk98gipxrkkq4bj8kks0kfdvjgdwkdaa";
+    rev = "v${version}";
+    sha256 = "sha256-4hyDtr2/9lhAWuiLd7OQ/+rdg/u5f5JT4hba3wpxxzg=";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      file = "${file}/bin/file";
-      tput = "${ncurses}/bin/tput";
-    })
-    ./override-shell-detection.patch
-  ];
+  nativeBuildInputs = [ perl makeWrapper ];
+  buildInputs = [ perl bash ];
+  strictDeps = true;
+
+  postPatch = ''
+    patchShebangs --build configure
+    substituteInPlace configure --replace '/etc/bash_completion.d' '/share/bash-completion/completions'
+  '';
+
+  configureFlags = [ "--shell=${bash}/bin/bash" "--prefix=/" ];
+  configurePlatforms = [ ];
+
+  dontBuild = true;
+
+  installFlags = [ "DESTDIR=$(out)" ];
+
+  postInstall = ''
+    for f in lesspipe.sh lesscomplete; do
+      wrapProgram "$out/bin/$f" --prefix-each PATH : "${lib.makeBinPath [ file gnused procps ]}"
+    done
+  '';
 
   meta = with lib; {
     description = "A preprocessor for less";

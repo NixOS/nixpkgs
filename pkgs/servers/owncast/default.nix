@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "owncast";
-  version = "0.0.10";
+  version = "0.0.12";
 
   src = fetchFromGitHub {
     owner = "owncast";
     repo = "owncast";
     rev = "v${version}";
-    sha256 = "sha256-OcolQ4KnZbSgS1dpphbCML40jlheKAxbac7rjRul6Oc=";
+    sha256 = "sha256-i/MxF+8ytpbVzGyRLbfHx7sR2bHEvAYdiwAc5TNrafc=";
   };
 
-  vendorSha256 = "sha256-NARHYeOVT7sxfL1BdJc/CPCgHNZzjWE7kACJvrEC71Y=";
+  vendorSha256 = "sha256-sQRNf+eT9JUbYne/3E9LoY0K+c7MlxtIbGmTa3VkHvI=";
 
   propagatedBuildInputs = [ ffmpeg ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   preInstall = ''
     mkdir -p $out
@@ -30,6 +30,7 @@ buildGoModule rec {
       )
 
       [ ! -d "$PWD/static" ] && (
+        [ -L "$PWD/static" ] && ${coreutils}/bin/rm "$PWD/static"
         ${coreutils}/bin/ln -s "${placeholder "out"}/static" "$PWD"
       )
     '';

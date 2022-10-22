@@ -120,7 +120,17 @@ in lib.makeScopeWithSplicing
   } // lib.optionalAttrs (attrs.headersOnly or false) {
     installPhase = "includesPhase";
     dontBuild = true;
-  } // attrs));
+  } // attrs // {
+    postPatch = lib.optionalString (!stdenv'.hostPlatform.isNetBSD) ''
+      # Files that use NetBSD-specific macros need to have nbtool_config.h
+      # included ahead of them on non-NetBSD platforms.
+      set +e
+      grep -Zlr "^__RCSID
+      ^__BEGIN_DECLS" | xargs -0r grep -FLZ nbtool_config.h |
+          xargs -0tr sed -i '0,/^#/s//#include <nbtool_config.h>\n\0/'
+      set -e
+    '' + attrs.postPatch or "";
+  }));
 
   ##
   ## START BOOTSTRAPPING
@@ -182,6 +192,12 @@ in lib.makeScopeWithSplicing
     configurePlatforms = [ "build" "host" ];
     configureFlags = [
       "--cache-file=config.cache"
+    ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+      # We include this header in our musl package only for legacy
+      # compatibility, and compat works fine without it (and having it
+      # know about sys/cdefs.h breaks packages like glib when built
+      # statically).
+      "ac_cv_header_sys_cdefs_h=no"
     ];
 
     nativeBuildInputs = with buildPackages.netbsd; commonDeps ++ [
@@ -523,6 +539,7 @@ in lib.makeScopeWithSplicing
     version = "9.2";
     sha256 = "00a3zmh15pg4vx6hz0kaa5mi8d2b1sj4h512d7p6wbvxq6mznwcn";
     NIX_CFLAGS_COMPILE = lib.optional stdenv.isLinux "-DNO_BASE64";
+    NIX_LDFLAGS = lib.optional stdenv.isDarwin "-lresolv";
   };
 
   cksum = mkDerivation {
@@ -891,7 +908,7 @@ in lib.makeScopeWithSplicing
       byacc genassym gencat lorder tsort statHook rsync rpcgen
     ];
     buildInputs = with self; [ headers csu ];
-    NIX_CFLAGS_COMPILE = "-B${self.csu}/lib";
+    NIX_CFLAGS_COMPILE = "-B${self.csu}/lib -fcommon";
     meta.platforms = lib.platforms.netbsd;
     SHLIBINSTALLDIR = "$(out)/lib";
     MKPICINSTALL = "yes";

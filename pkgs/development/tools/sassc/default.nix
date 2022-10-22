@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-jcs3+orRqKt9C3c2FTdeaj4H2rBP74lW3HF8CHSm7lQ=";
   };
 
-  preConfigure = ''
+  postPatch = ''
     export SASSC_VERSION=${version}
   '';
 

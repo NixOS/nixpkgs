@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, bison, pkg-config, popt, libxml2, gtk2, libtool
+{ lib, stdenv, fetchurl, bison, pkg-config, popt, libxml2, gtk2, libtool
 , intltool, libbonobo, GConf, libgnomecanvas, libgnome, libglade }:
 
 stdenv.mkDerivation rec {
-  name = "libbonoboui-${minVer}.5";
-  minVer = "2.24";
+  pname = "libbonoboui";
+  version = "2.24.5";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libbonoboui/${minVer}/${name}.tar.bz2";
+    url = "mirror://gnome/sources/libbonoboui/${lib.versions.majorMinor version}/libbonoboui-${version}.tar.bz2";
     sha256 = "1kbgqh7bw0fdx4f1a1aqwpff7gp5mwhbaz60c6c98bc4djng5dgs";
   };
 

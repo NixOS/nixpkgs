@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "micropython";
-  version = "1.17";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
-    owner  = "micropython";
-    repo   = "micropython";
-    rev    = "v${version}";
-    sha256 = "0aqij36iykmfdsv5dqrifvghmjx7qid8hmbxcpx3xpk3nizh7w84";
+    owner = "micropython";
+    repo = "micropython";
+    rev = "v${version}";
+    sha256 = "sha256-BoX3Z3Zr/AQqkgRrq+UVgdoDqNESDTNsY9AtrElpzfA=";
     fetchSubmodules = true;
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   skippedTests = ""
-    + lib.optionalString (stdenv.isDarwin) " -e uasyncio_basic -e uasyncio_wait_task"
+    + lib.optionalString (stdenv.isDarwin) " -e uasyncio_basic -e uasyncio_heaplock -e uasyncio_wait_task"
     + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) " -e ffi_callback"
     + lib.optionalString (stdenv.isLinux && stdenv.isAarch64) " -e float_parse"
   ;

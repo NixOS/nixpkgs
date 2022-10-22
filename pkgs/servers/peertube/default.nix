@@ -1,69 +1,44 @@
-{ lib, stdenv, callPackage, fetchurl, fetchFromGitHub, buildGoModule, fetchYarnDeps, nixosTests
-, esbuild, fixup_yarn_lock, jq, nodejs, yarn
-, nodePackages, youtube-dl
+{ lib, stdenv, callPackage, fetchurl, fetchFromGitHub, fetchYarnDeps, nixosTests
+, brotli, fixup_yarn_lock, jq, nodejs, which, yarn
 }:
 let
   arch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "linux-x64"
     else throw "Unsupported architecture: ${stdenv.hostPlatform.system}";
 
-  version = "3.4.1";
-
-  source = fetchFromGitHub {
-    owner = "Chocobozzz";
-    repo = "PeerTube";
-    rev = "v${version}";
-    sha256 = "0l1ibqmliy4aq60a16v383v4ijv1c9sf2a35k9q365mkl42jbzx1";
-  };
-
-  yarnOfflineCacheServer = fetchYarnDeps {
-    yarnLock = "${source}/yarn.lock";
-    sha256 = "0zyxf1km79w6329jay4bcpw5bgvhnvmvl11r9hka5c6s46d3ms7n";
-  };
-
-  yarnOfflineCacheTools = fetchYarnDeps {
-    yarnLock = "${source}/server/tools/yarn.lock";
-    sha256 = "12xmwc8lnalcpx3nww457avn5zw04ly4pp4kjxkvhsqs69arfl2m";
-  };
-
-  yarnOfflineCacheClient = fetchYarnDeps {
-    yarnLock = "${source}/client/yarn.lock";
-    sha256 = "1glnip6mpizif36vil61sw8i8lnn0jg5hrqgqw6k4cc7hkd2qkpc";
-  };
-
   bcrypt_version = "5.0.1";
   bcrypt_lib = fetchurl {
     url = "https://github.com/kelektiv/node.bcrypt.js/releases/download/v${bcrypt_version}/bcrypt_lib-v${bcrypt_version}-napi-v3-${arch}-glibc.tar.gz";
-    sha256 = "3R3dBZyPansTuM77Nmm3f7BbTDkDdiT2HQIrti2Ottc=";
-  };
-
-  wrtc_version = "0.4.7";
-  wrtc_lib = fetchurl {
-    url = "https://node-webrtc.s3.amazonaws.com/wrtc/v${wrtc_version}/Release/${arch}.tar.gz";
-    sha256 = "1zd3jlwq3lc2vhmr3bs1h6mrzyswdp3y20vb4d9s67ir9q7jn1zf";
-  };
-
-  esbuild_locked = buildGoModule rec {
-    pname = "esbuild";
-    version = "0.12.17";
-
-    src = fetchFromGitHub {
-      owner = "evanw";
-      repo = "esbuild";
-      rev = "v${version}";
-      sha256 = "16xxscha2y69mgm20rpjdxykyqiy0qy8gayh8046q6m0sf6834y1";
-    };
-    vendorSha256 = "1n5538yik72x94vzfq31qaqrkpxds5xys1wlibw2gn2am0z5c06q";
+    hash = "sha256-3R3dBZyPansTuM77Nmm3f7BbTDkDdiT2HQIrti2Ottc=";
   };
 
 in stdenv.mkDerivation rec {
-  inherit version;
   pname = "peertube";
-  src = source;
+  version = "4.3.0";
 
-  nativeBuildInputs = [ esbuild fixup_yarn_lock jq nodejs yarn ];
+  src = fetchFromGitHub {
+    owner = "Chocobozzz";
+    repo = "PeerTube";
+    rev = "v${version}";
+    hash = "sha256-1QpJtonn/mWGcTv2mSeGKAHwPAqOV6VBAYFZH1/jAH8=";
+  };
 
-  buildInputs = [ nodePackages.node-gyp-build youtube-dl ];
+  yarnOfflineCacheServer = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-BimtZpU3aZepvlMfhJ/u0trk1rUsGlzjYk2G90fstII=";
+  };
+
+  yarnOfflineCacheTools = fetchYarnDeps {
+    yarnLock = "${src}/server/tools/yarn.lock";
+    hash = "sha256-maPR8OCiuNlle0JQIkZSgAqW+BrSxPwVm6CkxIrIg5k=";
+  };
+
+  yarnOfflineCacheClient = fetchYarnDeps {
+    yarnLock = "${src}/client/yarn.lock";
+    hash = "sha256-IKMu+gQa+d30+yXjHCu/oQOQXL6kTN9WxDI/Y5IL1E8=";
+  };
+
+  nativeBuildInputs = [ brotli fixup_yarn_lock jq nodejs which yarn ];
 
   buildPhase = ''
     # Build node modules
@@ -71,13 +46,13 @@ in stdenv.mkDerivation rec {
     fixup_yarn_lock ~/yarn.lock
     fixup_yarn_lock ~/server/tools/yarn.lock
     fixup_yarn_lock ~/client/yarn.lock
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCacheServer}
+    yarn config --offline set yarn-offline-mirror $yarnOfflineCacheServer
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
     cd ~/server/tools
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCacheTools}
+    yarn config --offline set yarn-offline-mirror $yarnOfflineCacheTools
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
     cd ~/client
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCacheClient}
+    yarn config --offline set yarn-offline-mirror $yarnOfflineCacheClient
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
 
     patchShebangs ~/node_modules
@@ -93,31 +68,21 @@ in stdenv.mkDerivation rec {
     fi
     mkdir -p ./lib/binding && tar -C ./lib/binding -xf ${bcrypt_lib}
 
-    # Fix youtube-dl node module
-    cd ~/node_modules/youtube-dl
-    mkdir ./bin
-    ln -s ${youtube-dl}/bin/youtube-dl ./bin/youtube-dl
-    cat > ./bin/details <<EOF
-    {"version":"${youtube-dl.version}","path":null,"exec":"youtube-dl"}
-    EOF
-
-    # Fix wrtc node module
-    cd ~/server/tools/node_modules/wrtc
-    if [ "${wrtc_version}" != "$(cat package.json | jq -r .version)" ]; then
-      echo "Mismatching version please update wrtc in derivation"
-      exit
-    fi
-    mkdir -p ./build && tar -C ./build -xf ${wrtc_lib}
+    # Return to home directory
+    cd ~
 
     # Build PeerTube server
-    cd ~
-    npm run build:server
+    npm run tsc -- --build ./tsconfig.json
+    npm run resolve-tspaths:server
+    cp -r "./server/static" "./server/assets" "./dist/server"
+    cp -r "./server/lib/emails" "./dist/server/lib"
 
     # Build PeerTube tools
+    cp -r "./server/tools/node_modules" "./dist/server/tools"
     npm run tsc -- --build ./server/tools/tsconfig.json
+    npm run resolve-tspaths:server
 
     # Build PeerTube client
-    export ESBUILD_BINARY_PATH="${esbuild_locked}/bin/esbuild"
     npm run build:client
   '';
 
@@ -129,6 +94,12 @@ in stdenv.mkDerivation rec {
     mkdir $out/client
     mv ~/client/{dist,node_modules,package.json,yarn.lock} $out/client
     mv ~/{config,scripts,support,CREDITS.md,FAQ.md,LICENSE,README.md,package.json,tsconfig.json,yarn.lock} $out
+
+    # Create static gzip and brotli files
+    find $out/client/dist -type f -regextype posix-extended -iregex '.*\.(css|eot|html|js|json|svg|webmanifest|xlf)' | while read file; do
+      gzip -9 -n -c $file > $file.gz
+      brotli --best -f $file -o $file.br
+    done
   '';
 
   passthru.tests.peertube = nixosTests.peertube;

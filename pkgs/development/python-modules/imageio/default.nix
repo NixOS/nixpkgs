@@ -1,24 +1,35 @@
 { lib
+, stdenv
 , buildPythonPackage
-, isPy27
+, pythonOlder
 , fetchPypi
+, substituteAll
 , imageio-ffmpeg
 , numpy
 , pillow
 , psutil
 , pytestCheckHook
 , tifffile
+, fsspec
+, libGL
 }:
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.12.0";
-  disabled = isPy27;
+  version = "2.22.1";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    sha256 = "c416dd68328ace8536ff333cbb8927954036be56e201fed416e53e8f95e08a6c";
+    sha256 = "sha256-Rl7DX5GdU4kG0wI7Yczsdm2OdXX+Vfy9dmns5Vr7l8o=";
     inherit pname version;
   };
+
+  patches = [
+    (substituteAll {
+      src = ./libgl-path.patch;
+      libgl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
+    })
+  ];
 
   propagatedBuildInputs = [
     imageio-ffmpeg
@@ -27,34 +38,33 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    fsspec
     psutil
     pytestCheckHook
     tifffile
   ];
 
-  preCheck = ''
-    export IMAGEIO_USERDIR="$TMP"
-    export IMAGEIO_NO_INTERNET="true"
-    export HOME="$(mktemp -d)"
-  '';
-
-  disabledTests = [
-    # tries to pull remote resources, even with IMAGEIO_NO_INTERNET
-    "test_png_remote"
-    # needs git history
-    "test_mvolread_out_of_bytes"
-    "test_imiter"
-    "test_memory_size"
-    "test_legacy_write_empty"
+  pytestFlagsArray = [
+    "-m 'not needs_internet'"
   ];
 
+  preCheck = ''
+    export IMAGEIO_USERDIR="$TMP"
+    export HOME=$TMPDIR
+  '';
+
   disabledTestPaths = [
+    # tries to fetch fixtures over the network
+    "tests/test_freeimage.py"
     "tests/test_pillow.py"
+    "tests/test_spe.py"
+    "tests/test_swf.py"
   ];
 
   meta = with lib; {
     description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";
     homepage = "http://imageio.github.io/";
     license = licenses.bsd2;
+    maintainers = with maintainers; [ Luflosi ];
   };
 }

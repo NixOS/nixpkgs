@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A program to help prevent Repetitive Strain Injury";
     longDescription = ''
       Workrave is a program that assists in the recovery and prevention of

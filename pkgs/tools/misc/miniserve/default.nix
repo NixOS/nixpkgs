@@ -1,36 +1,43 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
-, pkg-config
-, zlib
-, libiconv
+, stdenv
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
-  version = "0.18.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     rev = "v${version}";
-    sha256 = "sha256-5rFxVk+D11Iqr0SP2VYdMEnFwijpxQT8e5EoK2PYtmQ=";
+    hash = "sha256-pi+dBJE+EqQpyZAkIV7duK1g378J6BgjIiFcjV5H1fQ=";
   };
 
-  cargoSha256 = "sha256-40TJzhaD1bi/u8k472K89A51wKhm/XjBs13W6oU/06Q=";
+  cargoSha256 = "sha256-nRTGKW33NO2vRkvpNVk4pT1DrHPEsSfhwf8y5pJ+n9U=";
 
-  nativeBuildInputs = [ installShellFiles pkg-config zlib ];
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Security
+  ];
 
   checkFlags = [
     "--skip=bind_ipv4_ipv6::case_2"
     "--skip=cant_navigate_up_the_root"
+    "--skip=qrcode_hidden_in_tty_when_disabled"
+    "--skip=qrcode_shown_in_tty_when_enabled"
   ];
 
   postInstall = ''
+    $out/bin/miniserve --print-manpage >miniserve.1
+    installManPage miniserve.1
+
     installShellCompletion --cmd miniserve \
       --bash <($out/bin/miniserve --print-completions bash) \
       --fish <($out/bin/miniserve --print-completions fish) \
@@ -38,10 +45,12 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "For when you really just want to serve some files over HTTP right now!";
+    description = "CLI tool to serve files and directories over HTTP";
     homepage = "https://github.com/svenstaro/miniserve";
+    changelog = "https://github.com/svenstaro/miniserve/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ figsoda ];
+    # https://hydra.nixos.org/build/162650896/nixlog/1
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

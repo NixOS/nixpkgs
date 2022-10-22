@@ -1,5 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, pkg-config, alsa-lib, libjack2, tox, flake8, alabaster
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, pkg-config
+, alsa-lib
+, libjack2
+, tox
+, flake8
+, alabaster
+, CoreAudio
+, CoreMIDI
+, CoreServices
 }:
 
 buildPythonPackage rec {
@@ -13,7 +25,15 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsa-lib libjack2 ];
+  buildInputs = [
+    libjack2
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreAudio
+    CoreMIDI
+    CoreServices
+  ];
   checkInputs = [
     tox
     flake8

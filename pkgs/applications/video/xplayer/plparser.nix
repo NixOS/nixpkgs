@@ -1,9 +1,10 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, intltool
+, meson
+, ninja
 , gobject-introspection
-, gmime
+, gmime3
 , libxml2
 , libsoup
 , pkg-config
@@ -11,23 +12,24 @@
 
 stdenv.mkDerivation rec {
   pname = "xplayer-plparser";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "1i7sld8am6b1wwbpfb18v7qp17vk2a5p8xcfds50yznr30lddsb2";
+    sha256 = "6GMKsIpyQdiyHPxrjWHAHvuCouJxrAcYPIo9u6TLOA4=";
   };
 
   nativeBuildInputs = [
-    intltool
+    meson
+    ninja
     pkg-config
     gobject-introspection
   ];
 
   buildInputs = [
-    gmime
+    gmime3
     libxml2
     libsoup
   ];

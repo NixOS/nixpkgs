@@ -37,7 +37,8 @@ let
   # base pkg/lib
   baseLib = python3Packages.callPackage ./lib.nix { };
 in mkDerivation {
-  inherit (baseLib) pname version src;
+  pname = baseLib.pname + lib.optionalString (pdfSupport && presentationSupport && vlcSupport && gstreamerSupport) "-full";
+  inherit (baseLib) version src;
 
   nativeBuildInputs = [ python3Packages.wrapPython wrapGAppsHook ];
   buildInputs = [ qtbase ] ++ optionals gstreamerSupport

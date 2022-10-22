@@ -32,7 +32,6 @@
 , gnutar
 , json-glib
 , libcap
-, libdwarf
 , libsoup
 , libyaml
 , ostree
@@ -47,13 +46,13 @@ let
   installed_test_metadir = "${placeholder "installedTests"}/share/installed-tests/flatpak-builder";
 in stdenv.mkDerivation rec {
   pname = "flatpak-builder";
-  version = "1.2.0";
+  version = "1.2.2";
 
   outputs = [ "out" "doc" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-38tqPKONYeB3W3CkaatQUoXhKTYUYt8JAE5tQlHCRqg=";
+    sha256 = "sha256-if2mjlN8Hp3gI1JpC9icMhenKRZFWNNfNbCPea2E4D4=";
   };
 
   patches = [
@@ -87,10 +86,6 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    # TODO: Remove older versions.
-    # https://github.com/flatpak/flatpak-builder/pull/437
-    docbook_xml_dtd_412
-    docbook_xml_dtd_42
     docbook_xml_dtd_43
     docbook_xsl
     gettext
@@ -110,7 +105,6 @@ in stdenv.mkDerivation rec {
     glib
     json-glib
     libcap
-    libdwarf
     libsoup
     libxml2
     libyaml

@@ -12,27 +12,25 @@ let
     icon = "anydesk";
     desktopName = "AnyDesk";
     genericName = description;
-    categories = "Network;";
-    startupNotify = "false";
+    categories = [ "Network" ];
+    startupNotify = false;
   };
 
 in stdenv.mkDerivation rec {
   pname = "anydesk";
-  version = "6.1.1";
+  version = "6.2.0";
 
   src = fetchurl {
     urls = [
       "https://download.anydesk.com/linux/${pname}-${version}-amd64.tar.gz"
       "https://download.anydesk.com/linux/generic-linux/${pname}-${version}-amd64.tar.gz"
     ];
-    sha256 = "1ai58fsivb8al1279bayl800qavy0kfj40rjhf87g902ap3p4bhh";
+    sha256 = "k85nQH2FWyEXDgB+Pd4yStfNCjkiIGE2vA/YTXLaK4o=";
   };
 
   passthru = {
     updateScript = genericUpdater {
-      inherit pname version;
       versionLister = writeShellScript "anydesk-versionLister" ''
-        echo "# Versions for $1:" >> "$2"
         curl -s https://anydesk.com/en/downloads/linux \
           | grep "https://[a-z0-9._/-]*-amd64.tar.gz" -o \
           | uniq \
@@ -85,6 +83,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     inherit description;
     homepage = "https://www.anydesk.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ shyim ];

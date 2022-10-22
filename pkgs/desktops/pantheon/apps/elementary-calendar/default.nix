@@ -1,47 +1,55 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
-, pkg-config
 , meson
 , ninja
+, pkg-config
+, python3
 , vala
-, desktop-file-utils
-, gtk3
+, wrapGAppsHook
+, clutter
+, evolution-data-server
+, folks
+, geoclue2
+, geocode-glib_2
 , granite
+, gtk3
+, libchamplain_libsoup3
 , libgee
 , libhandy
-, geoclue2
-, libchamplain
-, clutter
-, folks
-, geocode-glib
-, python3
-, libnotify
 , libical
-, libgdata
-, evolution-data-server
-, appstream-glib
-, elementary-icon-theme
-, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-calendar";
-  version = "6.0.3";
-
-  repoName = "calendar";
+  version = "6.1.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "calendar";
     rev = version;
-    sha256 = "sha256-+RQUiJLuCIbmcbtsOCfF9HYFrxtldZMbg2vg/a/IOaY=";
+    sha256 = "sha256-c2c8QNifBDzb0CelB72AIL4G694l6KCSXBjWIHrzZJo=";
   };
 
+  patches = [
+    # build: support evolution-data-server 3.46
+    # https://github.com/elementary/calendar/pull/758
+    (fetchpatch {
+      url = "https://github.com/elementary/calendar/commit/62c20e5786accd68b96c423b04e32c043e726cac.patch";
+      sha256 = "sha256-xatxoSwAIHiUA03vvBdM8HSW27vhPLvAxEuGK0gLiio=";
+    })
+
+    # GridDay: Fix day in month in grid with GLib 2.73.1+
+    # https://github.com/elementary/calendar/pull/763
+    (fetchpatch {
+      url = "https://github.com/elementary/calendar/commit/20b0983c85935bedef065b786ec8bbca55ba7d9e.patch";
+      sha256 = "sha256-Tw9uNqqRAC+vOp7EWzZVeDmZxt3hTGl9UIP21FcunqA=";
+    })
+  ];
+
   nativeBuildInputs = [
-    appstream-glib
-    desktop-file-utils
     meson
     ninja
     pkg-config
@@ -52,19 +60,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     clutter
-    elementary-icon-theme
     evolution-data-server
     folks
     geoclue2
-    geocode-glib
+    geocode-glib_2
     granite
     gtk3
-    libchamplain
+    libchamplain_libsoup3
     libgee
     libhandy
     libical
-    libnotify
-    libgdata # required by some dependency transitively
   ];
 
   postPatch = ''

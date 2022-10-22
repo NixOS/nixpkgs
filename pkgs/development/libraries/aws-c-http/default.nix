@@ -5,18 +5,19 @@
 , aws-c-compression
 , aws-c-io
 , cmake
+, nix
 , s2n-tls
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-http";
-  version = "0.6.10";
+  version = "0.6.20";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-http";
     rev = "v${version}";
-    sha256 = "sha256-R+teEKSQjSFYt3+XXvooAy4GJwN4yzEhJtiuknBZIgU=";
+    sha256 = "sha256-eHsk/ME/kVGm8gxkR9NcJUkfbvI+4u5S4y4Tw29hEnY=";
   };
 
   nativeBuildInputs = [
@@ -32,9 +33,12 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DBUILD_SHARED_LIBS=ON"
   ];
+
+  passthru.tests = {
+    inherit nix;
+  };
 
   meta = with lib; {
     description = "C99 implementation of the HTTP/1.1 and HTTP/2 specifications";

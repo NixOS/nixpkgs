@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , makeWrapper
 , pythonOlder
 , crytic-compile
@@ -13,12 +13,16 @@
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
-  version = "0.8.2";
-  disabled = pythonOlder "3.6";
+  version = "0.9.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-77045eB7KvHBb0j61qz4zJTtEprg4/aH6MrPlQY1wiM=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "crytic";
+    repo = "slither";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Td7WBPpc+ZYlFroZNzvUqQZJag0lbkCgj8TVOPrAAPY=";
   };
 
   nativeBuildInputs = [

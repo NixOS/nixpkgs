@@ -6,19 +6,19 @@ let
 in {
   options = {
     services.shiori = {
-      enable = mkEnableOption "Shiori simple bookmarks manager";
+      enable = mkEnableOption (lib.mdDoc "Shiori simple bookmarks manager");
 
       package = mkOption {
         type = types.package;
         default = pkgs.shiori;
         defaultText = literalExpression "pkgs.shiori";
-        description = "The Shiori package to use.";
+        description = lib.mdDoc "The Shiori package to use.";
       };
 
       address = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           The IP address on which Shiori will listen.
           If empty, listens on all interfaces.
         '';
@@ -27,7 +27,7 @@ in {
       port = mkOption {
         type = types.port;
         default = 8080;
-        description = "The port of the Shiori web application";
+        description = lib.mdDoc "The port of the Shiori web application";
       };
     };
   };

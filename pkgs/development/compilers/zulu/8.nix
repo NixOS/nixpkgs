@@ -61,18 +61,22 @@ in stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    autoPatchelfHook makeWrapper
+    makeWrapper
+  ] ++ lib.optionals stdenv.isLinux [
+    autoPatchelfHook
   ] ++ lib.optionals stdenv.isDarwin [
     unzip
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r ./* "$out/"
-
+  '' + lib.optionalString stdenv.isLinux ''
     # jni.h expects jni_md.h to be in the header search path.
     ln -s $out/include/linux/*_md.h $out/include/
-
+  '' + ''
     mkdir -p $out/nix-support
     printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
 
@@ -87,6 +91,8 @@ in stdenv.mkDerivation {
         wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
       fi
     done
+  '' + ''
+    runHook postInstall
   '';
 
   preFixup = ''
@@ -106,7 +112,7 @@ in stdenv.mkDerivation {
       Certified builds of OpenJDK that can be deployed across multiple
       operating systems, containers, hypervisors and Cloud platforms.
     '';
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     mainProgram = "java";
   };

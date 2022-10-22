@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
   version = "3.2.1";
 
   src = fetchurl {
-    url = "https://bumblebee-project.org/${pname}-${version}.tar.gz";
+    url = "https://www.bumblebee-project.org/${pname}-${version}.tar.gz";
     sha256 = "03p3gvx99lwlavznrpg9l7jnl1yfg2adcj8jcjj0gxp20wxp060h";
   };
 
@@ -132,10 +132,13 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/Bumblebee-Project/Bumblebee";
     description = "Daemon for managing Optimus videocards (power-on/off, spawns xservers)";
-    platforms = platforms.linux;
+    homepage = "https://github.com/Bumblebee-Project/Bumblebee";
     license = licenses.gpl3;
     maintainers = with maintainers; [ abbradar ];
+    platforms = platforms.linux;
+    # linking fails with multiple error of type:
+    # multiple definition of `bb_pm_method_string'; src/module.o:(.bss+0x0): first defined here
+    broken = true; # Added 03-08-2022
   };
 }

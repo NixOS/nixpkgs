@@ -16,9 +16,7 @@ buildGoModule rec {
     sha256 = "143ig0lqnkpnydhl8gnfzhg613x4wc38ibdbikkqwfyijlr6sgzd";
   };
 
-  vendorSha256 = "06j6cj4m0w6n9vl7sxlxpsgk77k941npq9767rdzzgy2srfqlskq";
-
-  runVend = true;
+  vendorSha256 = "sha256-ITz6nkhttG6bsIZLsp03rcbEBHUQ7pFl4H6FOHTXIU4=";
 
   subPackages = [ "." ];
 
@@ -27,5 +25,6 @@ buildGoModule rec {
     homepage = "https://github.com/redcode-labs/GoSH";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ] ++ teams.redcodelabs.members;
+    mainProgram = "GoSH";
   };
 }

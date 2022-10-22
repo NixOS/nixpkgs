@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, nixosTests }:
+{ lib, stdenv, fetchurl, nixosTests, writeScript }:
 
 stdenv.mkDerivation rec {
   pname = "wordpress";
-  version = "5.8.2";
+  version = "6.0.2";
 
   src = fetchurl {
     url = "https://wordpress.org/${pname}-${version}.tar.gz";
-    sha256 = "sha256-o9KeTmZXTHtqa/Z2KOo1n6gVCFuna42dFrvf9OBC8v8=";
+    sha256 = "sha256-UG5FYlJowBy71DJHgoDE1/lIIndp0qx1yFlDIeMV0Og=";
   };
 
   installPhase = ''
@@ -17,6 +17,14 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     inherit (nixosTests) wordpress;
   };
+
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts jq
+    set -eu -o pipefail
+    version=$(curl --globoff "https://api.wordpress.org/core/version-check/1.7/" | jq -r '.offers[0].version')
+    update-source-version wordpress $version
+  '';
 
   meta = with lib; {
     homepage = "https://wordpress.org";

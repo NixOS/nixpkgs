@@ -5,7 +5,7 @@ let
   cfg = config.services.urserver;
 in {
 
-  options.services.urserver.enable = lib.mkEnableOption "urserver";
+  options.services.urserver.enable = lib.mkEnableOption (lib.mdDoc "urserver");
 
   config = lib.mkIf cfg.enable {
 

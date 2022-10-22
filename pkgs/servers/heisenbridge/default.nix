@@ -3,27 +3,26 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      mautrix_0_13 = self.mautrix.overridePythonAttrs (oldAttrs: rec {
-        version = "0.13.3";
+      mautrix = super.mautrix.overridePythonAttrs (oldAttrs: rec {
+        version = "0.16.3";
         src = oldAttrs.src.override {
           inherit (oldAttrs) pname;
           inherit version;
-          sha256 = "1e4a292469f3e200c182aaa5bf693a5c3834b2a0cfb3d29e4c9a1559db7740e3";
+          sha256 = "sha256-OpHLh5pCzGooQ5yxAa0+85m/szAafV+l+OfipQcfLtU=";
         };
       });
     };
   };
-in
 
-python.pkgs.buildPythonApplication rec {
+in python.pkgs.buildPythonApplication rec {
   pname = "heisenbridge";
-  version = "1.8.2";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "hifi";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "173prcd56rwlxjxlw67arnm12k1l317xi5s6m7jhmp8zbbrj5vwr";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-sgZql9373xKT7Hi8M5TIZTOkS2AOFoKA1DXYa2f2IkA=";
   };
 
   postPatch = ''
@@ -33,7 +32,7 @@ python.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python.pkgs; [
     aiohttp
     irc
-    mautrix_0_13
+    mautrix
     python-socks
     pyyaml
   ];

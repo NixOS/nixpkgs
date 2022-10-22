@@ -7,24 +7,16 @@
 , ninja
 , glib
 , gnome
-, nspr
 , gettext
 , gobject-introspection
 , vala
 , sqlite
-, libxml2
 , dbus-glib
-, libsoup
-, nss
 , dbus
 , libgee
-, evolution-data-server
-, libgdata
-, libsecret
-, db
+, evolution-data-server-gtk4
 , python3
 , readline
-, gtk3
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
@@ -36,50 +28,44 @@
 
 stdenv.mkDerivation rec {
   pname = "folks";
-  version = "0.15.3";
+  version = "0.15.5";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Idc3+vCT9L4GVHPucMogiFuaLDaFlB26JMIjn9PFRKU=";
+    sha256 = "D/+KiWMwzYKu5FmDJPflQciE0DN1NiEnI7S+s4x1kIY=";
   };
 
   patches = [
-    # Fix build with evolution-data-server ≥ 3.41
-    # https://gitlab.gnome.org/GNOME/folks/-/merge_requests/52
+    # Do not check for unneeded GTK dependency.
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/folks/-/commit/62d588b0c609de17df5b4d1ebfbc67c456267efc.patch";
-      sha256 = "TDL/5kvVwHnvDMuKDdPLQmpmE1FTZhY+7HG8NxKqt5w=";
+      url = "https://gitlab.gnome.org/GNOME/folks/-/commit/686d58fb2454e5038bb951423245ed8c2d4b5cf6.patch";
+      sha256 = "0ydafVKhSrkHZK8bitPF5mNDTG5GrixGzBgBLNzLuXQ=";
     })
   ];
 
   nativeBuildInputs = [
     gettext
     gobject-introspection
-    gtk3
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
     meson
     ninja
     pkg-config
-    python3
     vala
+  ] ++ lib.optionals telepathySupport [
+    python3
   ];
 
   buildInputs = [
-    db
     dbus-glib
-    evolution-data-server
-    libgdata # required for some backends transitively
-    libsecret
-    libsoup
-    libxml2
-    nspr
-    nss
+    evolution-data-server-gtk4 # UI part not needed, using gtk4 version to reduce system closure.
     readline
-  ] ++ lib.optional telepathySupport telepathy-glib;
+  ] ++ lib.optionals telepathySupport [
+    telepathy-glib
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -117,9 +103,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
+  postPatch = lib.optionalString telepathySupport ''
     patchShebangs tests/tools/manager-file.py
   '';
 

@@ -138,18 +138,18 @@ in {
   };
 
   testScript = ''
-    def compare_tables(expected, actual):
-        assert (
-            expected == actual
-        ), """
-        Routing tables don't match!
-        Expected:
-          {}
-        Actual:
-          {}
-        """.format(
-            expected, actual
-        )
+    import json
+
+    def compare(raw_json, to_compare):
+        data = json.loads(raw_json)
+        assert len(raw_json) >= len(to_compare)
+        for i, row in enumerate(to_compare):
+            actual = data[i]
+            assert len(row.keys()) > 0
+            for key, value in row.items():
+                assert value == actual[key], f"""
+                  In entry {i}, value {key}: got: {actual[key]}, expected {value}
+                """
 
 
     start_all()
@@ -159,36 +159,47 @@ in {
     node2.wait_for_unit("network.target")
     node3.wait_for_unit("network.target")
 
-    # NOTE: please keep in mind that the trailing whitespaces in the following strings
-    # are intentional as the output is compared against the raw `iproute2`-output.
     client_ipv4_table = """
-    192.168.1.2 dev vrf1 proto static metric 100 
+    192.168.1.2 dev vrf1 proto static metric 100\x20
     192.168.2.3 dev vrf2 proto static metric 100
     """.strip()
     vrf1_table = """
-    broadcast 192.168.1.0 dev eth1 proto kernel scope link src 192.168.1.1 
-    192.168.1.0/24 dev eth1 proto kernel scope link src 192.168.1.1 
-    local 192.168.1.1 dev eth1 proto kernel scope host src 192.168.1.1 
+    192.168.1.0/24 dev eth1 proto kernel scope link src 192.168.1.1\x20
+    local 192.168.1.1 dev eth1 proto kernel scope host src 192.168.1.1\x20
     broadcast 192.168.1.255 dev eth1 proto kernel scope link src 192.168.1.1
     """.strip()
     vrf2_table = """
-    broadcast 192.168.2.0 dev eth2 proto kernel scope link src 192.168.2.1 
-    192.168.2.0/24 dev eth2 proto kernel scope link src 192.168.2.1 
-    local 192.168.2.1 dev eth2 proto kernel scope host src 192.168.2.1 
+    192.168.2.0/24 dev eth2 proto kernel scope link src 192.168.2.1\x20
+    local 192.168.2.1 dev eth2 proto kernel scope host src 192.168.2.1\x20
     broadcast 192.168.2.255 dev eth2 proto kernel scope link src 192.168.2.1
     """.strip()
+    # editorconfig-checker-enable
 
     # Check that networkd properly configures the main routing table
     # and the routing tables for the VRF.
     with subtest("check vrf routing tables"):
-        compare_tables(
-            client_ipv4_table, client.succeed("ip -4 route list | head -n2").strip()
+        compare(
+            client.succeed("ip --json -4 route list"),
+            [
+                {"dst": "192.168.1.2", "dev": "vrf1", "metric": 100},
+                {"dst": "192.168.2.3", "dev": "vrf2", "metric": 100}
+            ]
         )
-        compare_tables(
-            vrf1_table, client.succeed("ip -4 route list table 23 | head -n4").strip()
+        compare(
+            client.succeed("ip --json -4 route list table 23"),
+            [
+                {"dst": "192.168.1.0/24", "dev": "eth1", "prefsrc": "192.168.1.1"},
+                {"type": "local", "dst": "192.168.1.1", "dev": "eth1", "prefsrc": "192.168.1.1"},
+                {"type": "broadcast", "dev": "eth1", "prefsrc": "192.168.1.1", "dst": "192.168.1.255"}
+            ]
         )
-        compare_tables(
-            vrf2_table, client.succeed("ip -4 route list table 42 | head -n4").strip()
+        compare(
+            client.succeed("ip --json -4 route list table 42"),
+            [
+                {"dst": "192.168.2.0/24", "dev": "eth2", "prefsrc": "192.168.2.1"},
+                {"type": "local", "dst": "192.168.2.1", "dev": "eth2", "prefsrc": "192.168.2.1"},
+                {"type": "broadcast", "dev": "eth2", "prefsrc": "192.168.2.1", "dst": "192.168.2.255"}
+            ]
         )
 
     # Ensure that other nodes are reachable via ICMP through the VRF.

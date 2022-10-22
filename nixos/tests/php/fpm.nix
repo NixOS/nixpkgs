@@ -2,7 +2,7 @@ import ../make-test-python.nix ({ pkgs, lib, php, ... }: {
   name = "php-${php.version}-fpm-nginx-test";
   meta.maintainers = lib.teams.php.members;
 
-  machine = { config, lib, pkgs, ... }: {
+  nodes.machine = { config, lib, pkgs, ... }: {
     environment.systemPackages = [ php ];
 
     services.nginx = {
@@ -17,7 +17,7 @@ import ../make-test-python.nix ({ pkgs, lib, php, ... }: {
           locations."~ \\.php$".extraConfig = ''
             fastcgi_pass unix:${config.services.phpfpm.pools.foobar.socket};
             fastcgi_index index.php;
-            include ${pkgs.nginx}/conf/fastcgi_params;
+            include ${config.services.nginx.package}/conf/fastcgi_params;
             include ${pkgs.nginx}/conf/fastcgi.conf;
           '';
           locations."/" = {

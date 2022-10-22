@@ -18,6 +18,10 @@ self: super: ({
     __darwinAllowLocalNetworking = true;
   });
 
+  streaming-commons = super.streaming-commons.overrideAttrs (_: {
+    __darwinAllowLocalNetworking = true;
+  });
+
   halive = addBuildDepend darwin.apple_sdk.frameworks.AppKit super.halive;
 
   # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
@@ -29,6 +33,8 @@ self: super: ({
   barbly = addBuildDepend darwin.apple_sdk.frameworks.AppKit super.barbly;
 
   double-conversion = addExtraLibrary pkgs.libcxx super.double-conversion;
+
+  streamly = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.streamly;
 
   apecs-physics = addPkgconfigDepends [
     darwin.apple_sdk.frameworks.ApplicationServices
@@ -198,6 +204,8 @@ self: super: ({
   hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
   hls-floskell-plugin = dontCheck super.hls-floskell-plugin;
   hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
+  # 2022-05-05: Tests fail and I have no way to debug them.
+  hls-rename-plugin = dontCheck super.hls-rename-plugin;
 
   # We are lacking pure pgrep at the moment for tests to work
   tmp-postgres = dontCheck super.tmp-postgres;
@@ -249,18 +257,63 @@ self: super: ({
   # Otherwise impure gcc is used, which is Apple's weird wrapper
   c2hsc = addTestToolDepends [ pkgs.gcc ] super.c2hsc;
 
-  # streamly depends on Cocoa starting with 0.8.0
-  streamly_0_8_1_1 = overrideCabal (drv: {
-    libraryFrameworkDepends = [
-      darwin.apple_sdk.frameworks.Cocoa
-    ] ++ (drv.libraryFrameworkDepends or []);
-  }) super.streamly_0_8_1_1;
+  http-client-tls = overrideCabal (drv: {
+    postPatch = ''
+      # This comment has been inserted, so the derivation hash changes, forcing
+      # a rebuild of this derivation which has succeeded to build on Hydra before,
+      # but apparently been corrupted, causing reverse dependencies to fail.
+      #
+      # This workaround can be removed upon the next darwin stdenv rebuild,
+      # presumably https://github.com/NixOS/nixpkgs/pull/152850 or the next
+      # full haskellPackages rebuild.
+    '' + drv.postPatch or "";
+  }) super.http-client-tls;
+
+  foldl = overrideCabal (drv: {
+    postPatch = ''
+      # This comment has been inserted, so the derivation hash changes, forcing
+      # a rebuild of this derivation which has succeeded to build on Hydra before,
+      # but apparently been corrupted, causing reverse dependencies to fail.
+      #
+      # This workaround can be removed upon the next darwin stdenv rebuild,
+      # presumably https://github.com/NixOS/nixpkgs/pull/152850 or the next
+      # full haskellPackages rebuild.
+    '' + drv.postPatch or "";
+  }) super.foldl;
 
 } // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
 
   # https://github.com/fpco/unliftio/issues/87
   unliftio = dontCheck super.unliftio;
+  # This is the same issue as above; the rio tests call functions in unliftio
+  # that have issues as tracked in the GitHub issue above. Once the unliftio
+  # tests are fixed, we can remove this as well.
+  #
+  # We skip just the problematic tests by replacing 'it' with 'xit'.
+  rio = overrideCabal (drv: {
+    preConfigure = ''
+      sed -i 's/\bit /xit /g' test/RIO/FileSpec.hs
+    '';
+  }) super.rio;
 
-  # https://github.com/fpco/inline-c/issues/127
-  inline-c-cpp = dontCheck super.inline-c-cpp;
+  # https://github.com/haskell-crypto/cryptonite/issues/360
+  cryptonite = appendPatch ./patches/cryptonite-remove-argon2.patch super.cryptonite;
+
+  # Build segfaults unless `fixity-th` is disabled.
+  # https://github.com/tweag/ormolu/issues/927
+  ormolu_0_5_0_1 = overrideCabal (drv: {
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
+  }) (disableCabalFlag "fixity-th" super.ormolu_0_5_0_1);
+  fourmolu_0_8_2_0 = overrideCabal (drv: {
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
+  }) (disableCabalFlag "fixity-th" super.fourmolu_0_8_2_0);
+
+} // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
+
+  # tests appear to be failing to link or something:
+  # https://hydra.nixos.org/build/174540882/nixlog/9
+  regex-rure = dontCheck super.regex-rure;
+  # same
+  # https://hydra.nixos.org/build/174540882/nixlog/9
+  jacinda = dontCheck super.jacinda;
 })

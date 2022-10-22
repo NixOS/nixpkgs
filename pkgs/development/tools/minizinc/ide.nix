@@ -1,7 +1,7 @@
 { lib, mkDerivation, fetchFromGitHub, qtbase, qtwebengine, qtwebkit, qmake, minizinc }:
 mkDerivation rec {
   pname = "minizinc-ide";
-  version = "2.5.3";
+  version = "2.5.5";
 
   nativeBuildInputs = [ qmake ];
   buildInputs = [ qtbase qtwebengine qtwebkit ];
@@ -10,7 +10,7 @@ mkDerivation rec {
     owner = "MiniZinc";
     repo = "MiniZincIDE";
     rev = version;
-    sha256 = "1c80ilb1xbgzfadgal668h2zsaiv62il1jnljizrisgb7pszzyzw";
+    sha256 = "sha256-0U3KFRDam8psbCaEOcrwqzICAy1oBgo8SFEiR/PMqZk=";
     fetchSubmodules = true;
   };
 

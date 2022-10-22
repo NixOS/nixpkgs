@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost curl openssl log4shib xercesc xml-security-c ];
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
+  NIX_CFLAGS_COMPILE = [ "-std=c++14" ];
+
   enableParallelBuilding = true;
 
   meta = with lib; {

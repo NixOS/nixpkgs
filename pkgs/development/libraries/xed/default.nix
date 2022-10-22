@@ -4,25 +4,25 @@ let
   # mbuild is a custom build system used only to build xed
   mbuild = python3Packages.buildPythonPackage rec {
     pname = "mbuild";
-    version = "0.2496-dev";
+    version = "2022.07.28";
 
     src = fetchFromGitHub {
       owner = "intelxed";
       repo = "mbuild";
-      rev = "3e8eb33aada4153c21c4261b35e5f51f6e2019e8";
-      sha256 = "0yamgzkzw4v6x1a857psw9f7i62ydgd0zaqrf33dbdg8hfd2mq3q";
+      rev = "v${version}";
+      sha256 = "sha256-eOAqmoPotdXGcBmrD9prXph4XOL6noJU6GYT/ud/VXk=";
     };
   };
 
 in stdenv.mkDerivation rec {
   pname = "xed";
-  version = "12.0.1";
+  version = "2022.08.11";
 
   src = fetchFromGitHub {
     owner = "intelxed";
     repo = "xed";
-    rev = version;
-    sha256 = "07zfff8zf29c2n0wal87hiqfq3cwcjn80zz78mz0nyjfj09nd39f";
+    rev = "v${version}";
+    sha256 = "sha256-Iil+dfjuWYPbzmSjgwKTKScSE/IsWuHEKQ5HsBJDqWM=";
   };
 
   nativeBuildInputs = [ mbuild ];
@@ -37,9 +37,10 @@ in stdenv.mkDerivation rec {
   dontInstall = true; # already installed during buildPhase
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Intel X86 Encoder Decoder (Intel XED)";
     homepage    = "https://intelxed.github.io/";
-    license     = licenses.apsl20;
+    license     = licenses.asl20;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ arturcygan ];
   };

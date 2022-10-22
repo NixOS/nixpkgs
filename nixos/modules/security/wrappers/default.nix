@@ -22,63 +22,61 @@ let
   wrapperType = lib.types.submodule ({ name, config, ... }: {
     options.source = lib.mkOption
       { type = lib.types.path;
-        description = "The absolute path to the program to be wrapped.";
+        description = lib.mdDoc "The absolute path to the program to be wrapped.";
       };
     options.program = lib.mkOption
       { type = with lib.types; nullOr str;
         default = name;
-        description = ''
+        description = lib.mdDoc ''
           The name of the wrapper program. Defaults to the attribute name.
         '';
       };
     options.owner = lib.mkOption
       { type = lib.types.str;
-        description = "The owner of the wrapper program.";
+        description = lib.mdDoc "The owner of the wrapper program.";
       };
     options.group = lib.mkOption
       { type = lib.types.str;
-        description = "The group of the wrapper program.";
+        description = lib.mdDoc "The group of the wrapper program.";
       };
     options.permissions = lib.mkOption
       { type = fileModeType;
         default  = "u+rx,g+x,o+x";
         example = "a+rx";
-        description = ''
+        description = lib.mdDoc ''
           The permissions of the wrapper program. The format is that of a
-          symbolic or numeric file mode understood by <command>chmod</command>.
+          symbolic or numeric file mode understood by {command}`chmod`.
         '';
       };
     options.capabilities = lib.mkOption
       { type = lib.types.commas;
         default = "";
-        description = ''
-          A comma-separated list of capabilities to be given to the wrapper
-          program. For capabilities supported by the system check the
-          <citerefentry>
-            <refentrytitle>capabilities</refentrytitle>
-            <manvolnum>7</manvolnum>
-          </citerefentry>
-          manual page.
+        description = lib.mdDoc ''
+          A comma-separated list of capability clauses to be given to the
+          wrapper program. The format for capability clauses is described in the
+          “TEXTUAL REPRESENTATION” section of the {manpage}`cap_from_text(3)`
+          manual page. For a list of capabilities supported by the system, check
+          the {manpage}`capabilities(7)` manual page.
 
-          <note><para>
-            <literal>cap_setpcap</literal>, which is required for the wrapper
-            program to be able to raise caps into the Ambient set is NOT raised
-            to the Ambient set so that the real program cannot modify its own
-            capabilities!! This may be too restrictive for cases in which the
-            real program needs cap_setpcap but it at least leans on the side
-            security paranoid vs. too relaxed.
-          </para></note>
+          ::: {.note}
+          `cap_setpcap`, which is required for the wrapper
+          program to be able to raise caps into the Ambient set is NOT raised
+          to the Ambient set so that the real program cannot modify its own
+          capabilities!! This may be too restrictive for cases in which the
+          real program needs cap_setpcap but it at least leans on the side
+          security paranoid vs. too relaxed.
+          :::
         '';
       };
     options.setuid = lib.mkOption
       { type = lib.types.bool;
         default = false;
-        description = "Whether to add the setuid bit the wrapper program.";
+        description = lib.mdDoc "Whether to add the setuid bit the wrapper program.";
       };
     options.setgid = lib.mkOption
       { type = lib.types.bool;
         default = false;
-        description = "Whether to add the setgid bit the wrapper program.";
+        description = lib.mdDoc "Whether to add the setgid bit the wrapper program.";
       };
   });
 
@@ -92,14 +90,13 @@ let
     , permissions
     , ...
     }:
-    assert (lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.3");
     ''
       cp ${securityWrapper}/bin/security-wrapper "$wrapperDir/${program}"
       echo -n "${source}" > "$wrapperDir/${program}.real"
 
       # Prevent races
       chmod 0000 "$wrapperDir/${program}"
-      chown ${owner}.${group} "$wrapperDir/${program}"
+      chown ${owner}:${group} "$wrapperDir/${program}"
 
       # Set desired capabilities on the file plus cap_setpcap so
       # the wrapper program can elevate the capabilities set on
@@ -127,7 +124,7 @@ let
 
       # Prevent races
       chmod 0000 "$wrapperDir/${program}"
-      chown ${owner}.${group} "$wrapperDir/${program}"
+      chown ${owner}:${group} "$wrapperDir/${program}"
 
       chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" "$wrapperDir/${program}"
     '';
@@ -180,12 +177,22 @@ in
               };
           }
         '';
-      description = ''
+      description = lib.mdDoc ''
         This option effectively allows adding setuid/setgid bits, capabilities,
         changing file ownership and permissions of a program without directly
         modifying it. This works by creating a wrapper program under the
-        <option>security.wrapperDir</option> directory, which is then added to
-        the shell <literal>PATH</literal>.
+        {option}`security.wrapperDir` directory, which is then added to
+        the shell `PATH`.
+      '';
+    };
+
+    security.wrapperDirSize = lib.mkOption {
+      default = "50%";
+      example = "10G";
+      type = lib.types.str;
+      description = lib.mdDoc ''
+        Size limit for the /run/wrappers tmpfs. Look at mount(8), tmpfs size option,
+        for the accepted syntax. WARNING: don't set to less than 64MB.
       '';
     };
 
@@ -193,7 +200,7 @@ in
       type        = lib.types.path;
       default     = "/run/wrappers/bin";
       internal    = true;
-      description = ''
+      description = lib.mdDoc ''
         This option defines the path to the wrapper programs. It
         should not be overriden.
       '';
@@ -231,7 +238,7 @@ in
 
     boot.specialFileSystems.${parentWrapperDir} = {
       fsType = "tmpfs";
-      options = [ "nodev" "mode=755" ];
+      options = [ "nodev" "mode=755" "size=${config.security.wrapperDirSize}" ];
     };
 
     # Make sure our wrapperDir exports to the PATH env variable when
@@ -244,8 +251,6 @@ in
     security.apparmor.includes."nixos/security.wrappers" = ''
       include "${pkgs.apparmorRulesFromClosure { name="security.wrappers"; } [
         securityWrapper
-        pkgs.stdenv.cc.cc
-        pkgs.stdenv.cc.libc
       ]}"
     '';
 

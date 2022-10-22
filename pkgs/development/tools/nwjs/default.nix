@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, buildEnv, makeWrapper
 
 , xorg, alsa-lib, at-spi2-core, dbus, glib, gtk3, atk, pango, freetype
-, fontconfig , gdk-pixbuf, cairo, mesa, nss, nspr, gconf, expat, systemd
+, fontconfig , gdk-pixbuf, cairo, mesa, nss, nspr, expat, systemd
 , libcap, libdrm, libxkbcommon
 , libnotify
 , ffmpeg, libxcb, cups
@@ -18,7 +18,7 @@ let
     paths = [
       xorg.libX11 xorg.libXrender glib gtk3 atk at-spi2-core pango cairo gdk-pixbuf
       freetype fontconfig xorg.libXcomposite alsa-lib xorg.libXdamage
-      xorg.libXext xorg.libXfixes mesa nss nspr gconf expat dbus
+      xorg.libXext xorg.libXfixes mesa nss nspr expat dbus
       xorg.libXtst xorg.libXi xorg.libXcursor xorg.libXrandr
       xorg.libXScrnSaver xorg.libxshmfence cups
       libcap libdrm libnotify

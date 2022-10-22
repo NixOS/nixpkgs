@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 pwd=$(pwd)
 workdir=$(mktemp -d)
 
@@ -15,8 +16,8 @@ mv poetry2nix-master/* .
 
 mkdir build
 cp *.* build/
-cp -r pkgs hooks bin build/
-rm build/shell.nix build/generate.py build/overlay.nix build/flake.* build/check-fmt.nix
+cp -r overrides pkgs hooks bin build/
+rm build/shell.nix build/generate.py build/overlay.nix build/flake.* build/check-fmt.nix build/pkgs/poetry/update*
 
 cat > build/README.md << EOF
 Dont change these files here, they are maintained at https://github.com/nix-community/poetry2nix

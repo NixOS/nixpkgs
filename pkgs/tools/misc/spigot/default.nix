@@ -1,36 +1,54 @@
 { lib
 , stdenv
-, buildPackages
-, fetchgit
-, autoreconfHook
+, fetchurl
+, cmake
 , gmp
-, ncurses
 , halibut
+, ncurses
 , perl
 }:
 
 stdenv.mkDerivation rec {
   pname = "spigot";
-  version = "20200901";
-  src = fetchgit {
-    url = "https://git.tartarus.org/simon/spigot.git";
-    rev = "9910e5bdc203bae6b7bbe1ed4a93f13755c1cae";
-    sha256 = "1az6v9gk0g2k197lr288nmr9jv20bvgc508vn9ic3v7mav7hf5bf";
+  version = "20210527";
+  srcVersion = "20210527.7dd3cfd";
+
+  src = fetchurl {
+    url = "https://www.chiark.greenend.org.uk/~sgtatham/spigot/${pname}-${srcVersion}.tar.gz";
+    hash = "sha256-EBS3lgfLtsyBQ8mzoJPyZhRBJNmkVSeF5XecGgcvqtw=";
   };
 
-  nativeBuildInputs = [ autoreconfHook halibut perl ];
+  nativeBuildInputs = [
+    cmake
+    halibut
+    perl
+  ];
 
-  configureFlags = [ "--with-gmp" ];
+  buildInputs = [
+    gmp
+    ncurses
+  ];
 
-  buildInputs = [ gmp ncurses ];
+  outputs = [ "out" "man" ];
 
   strictDeps = true;
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    [ `$out/bin/spigot -b 10 -d 10 e` == "2.7182818284" ] || exit 1
+    [ `$out/bin/spigot -b 10 -d 10 pi` == "3.1415926535" ] || exit 1
+    [ `$out/bin/spigot -b 10 -d 10 sqrt\(2\)` == "1.4142135623" ] || exit 1
+
+    runHook postInstallCheck
+  '';
+
   meta = with lib; {
-    description = "A command-line exact real calculator";
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/spigot/";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = with maintainers; [ mcbeth ];
+    description = "A command-line exact real calculator";
+    license = licenses.mit;
+    maintainers = with maintainers; [ AndersonTorres mcbeth ];
+    platforms = platforms.unix;
   };
 }

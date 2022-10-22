@@ -4,7 +4,7 @@
 , libxkbcommon
 , systemd
 , xorg
-, electron_11
+, electron_13
 , makeWrapper
 , makeDesktopItem
 }:
@@ -15,17 +15,17 @@ let
     icon = "obinskit";
     desktopName = "Obinskit";
     genericName = "Obinskit keyboard configurator";
-    categories = "Utility";
+    categories = [ "Utility" ];
   };
-  electron = electron_11;
+  electron = electron_13;
 in
 stdenv.mkDerivation rec {
   pname = "obinskit";
-  version = "1.1.8";
+  version = "1.2.11";
 
   src = fetchurl {
-    url = "http://releases.obins.net/occ/linux/tar/ObinsKit_${version}_x64.tar.gz";
-    sha256 = "MgasbgexOdscQrUte/6OzCSrc74RvaBq44oHplQA/Gc=";
+    url = "https://s3.hexcore.xyz/occ/linux/tar/ObinsKit_${version}_x64.tar.gz";
+    sha256 = "1kcn41wmwcx6q70spa9a1qh7wfrj1sk4v4i58lbnf9kc6vasw41a";
   };
 
   unpackPhase = "tar -xzf $src";

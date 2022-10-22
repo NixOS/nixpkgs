@@ -21,45 +21,25 @@ let newPython = python3.override {
         sha256 = "1dv6mjsm67l1razcgmq66riqmsb36wns17mnipqr610v0z0zf5j0";
       };
     });
-    # https://github.com/conan-io/conan/issues/8876
-    pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
-      version = "1.7.1";
+    distro = super.distro.overridePythonAttrs (oldAttrs: rec {
+      version = "1.5.0";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96";
-      };
-      disabledTests = [
-        "test_ec_verify_should_return_false_if_signature_invalid"
-      ];
-    });
-    # conan needs jinja2<3
-    jinja2 = super.jinja2.overridePythonAttrs (oldAttrs: rec {
-      version = "2.11.3";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "a6d58433de0ae800347cab1fa3043cebbabe8baa9d29e668f1c768cb87a333c6";
-      };
-    });
-    # old jinja2 needs old markupsafe
-    markupsafe = super.markupsafe.overridePythonAttrs (oldAttrs: rec {
-      version = "1.1.1";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b";
+        sha256 = "14nz51cqlnxmgfqqilxyvjwwa5xfivdvlm0d0b1qzgcgwdm7an0f";
       };
     });
   };
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.43.1";
+  version = "1.49.0";
   pname = "conan";
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     rev = version;
-    sha256 = "0jwi7smgy2d9m49igijqr2p4ncw5nksjbijj8fzjvf1lgxgnyjhr";
+    hash = "sha256-BJGstNAnAZtpwagsCY+4quTd0/79zL+v4ifKikS3vaw=";
   };
 
   propagatedBuildInputs = with newPython.pkgs; [
@@ -98,6 +78,10 @@ in newPython.pkgs.buildPythonApplication rec {
   # TODO: reenable tests now that we fetch tests w/ the source from GitHub.
   # Not enabled right now due to time constraints/failing tests that I didn't have time to track down
   doCheck = false;
+
+  postPatch = ''
+    substituteInPlace conans/requirements.txt --replace 'PyYAML>=3.11, <6.0' 'PyYAML>=3.11'
+  '';
 
   meta = with lib; {
     homepage = "https://conan.io";

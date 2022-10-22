@@ -15,15 +15,26 @@
 
 stdenv.mkDerivation rec {
   pname = "eccodes";
-  version = "2.24.0";
+  version = "2.24.2";
 
   src = fetchurl {
     url = "https://confluence.ecmwf.int/download/attachments/45757960/eccodes-${version}-Source.tar.gz";
-    sha256 = "sha256-MHrit59KfTF4mCS8od8UEvYMrWj0m/xJu8HUeA8+W5Y=";
+    sha256 = "sha256-xgrQ/YnhGRis4NhMAUifISIrEdbK0/90lYVqCt1hBAM=";
   };
 
   postPatch = ''
     substituteInPlace cmake/FindOpenJPEG.cmake --replace openjpeg-2.1 ${openjpeg.incDir}
+
+    # https://github.com/ecmwf/ecbuild/issues/40
+    substituteInPlace cmake/ecbuild_config.h.in \
+      --replace @CMAKE_INSTALL_PREFIX@/@INSTALL_LIB_DIR@ @eccodes_FULL_INSTALL_LIB_DIR@ \
+      --replace @CMAKE_INSTALL_PREFIX@/@INSTALL_BIN_DIR@ @eccodes_FULL_INSTALL_BIN_DIR@
+    substituteInPlace cmake/pkg-config.pc.in \
+      --replace '$'{prefix}/@INSTALL_LIB_DIR@ @eccodes_FULL_INSTALL_LIB_DIR@ \
+      --replace '$'{prefix}/@INSTALL_INCLUDE_DIR@ @eccodes_FULL_INSTALL_INCLUDE_DIR@ \
+      --replace '$'{prefix}/@INSTALL_BIN_DIR@ @eccodes_FULL_INSTALL_BIN_DIR@
+    substituteInPlace cmake/ecbuild_install_project.cmake \
+      --replace '$'{CMAKE_INSTALL_PREFIX}/'$'{INSTALL_INCLUDE_DIR} '$'{'$'{PROJECT_NAME}_FULL_INSTALL_INCLUDE_DIR}
   '';
 
   nativeBuildInputs = [ cmake gfortran perl ];
@@ -56,6 +67,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://confluence.ecmwf.int/display/ECC/";
     license = licenses.asl20;
     maintainers = with maintainers; [ knedlsepp ];

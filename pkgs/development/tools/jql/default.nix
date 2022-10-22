@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jql";
-  version = "3.0.4";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "yamafaktory";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SU8byylr/Rv4lDWkt9+U4UvgCM5kYZeRsTk+hdz0y8w=";
+    sha256 = "sha256-d2DETEASOe73mpyuk5NZzSzKln1LPttCbnmWEiFnAks=";
   };
 
-  cargoSha256 = "sha256-snc5QSaxbnXo6FOceqYucjN+ECo+RonejXda9Fvgggc=";
+  cargoSha256 = "sha256-se5tGgZysetH4dlh+oe41FRhVqFQIw218fEKwqa3WCA=";
 
   meta = with lib; {
     description = "A JSON Query Language CLI tool built with Rust";

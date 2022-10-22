@@ -1,21 +1,45 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, zlib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, doxygen
+, installShellFiles
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "liberasurecode";
-  version = "1.6.2";
+  version = "1.6.3";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "doc" ];
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qV7DL/7zrwrYOaPj6iHnChGA6KHFwYKjeaMnrGrTPrQ=";
+    sha256 = "sha256-HCp+FQ9nq4twk6FtfKhzT80wXXJbvG+clrDO2/9ATpU=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  postPatch = ''
+    substituteInPlace doc/doxygen.cfg.in \
+      --replace "GENERATE_MAN           = NO" "GENERATE_MAN           = YES"
+  '';
+
+  nativeBuildInputs = [ autoreconfHook doxygen installShellFiles ];
 
   buildInputs = [ zlib ];
+
+  configureFlags = [ "--enable-doxygen" ];
+
+  postInstall = ''
+    # remove useless man pages about directories
+    rm doc/man/man*/_*
+    installManPage doc/man/man*/*
+
+    moveToOutput share/liberasurecode/ $doc
+  '';
+
+  checkTarget = "test";
 
   meta = with lib; {
     description = "Erasure Code API library written in C with pluggable Erasure Code backends";

@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
     set_env_suffix("PATH", ":", "/usr/local/bin/");
     putenv("MESSAGE2=WORLD");
 
-    char **argv_tmp = calloc(4 + argc, sizeof(*argv_tmp));
+    char **argv_tmp = calloc(3 + argc + 0 + 1, sizeof(*argv_tmp));
     assert(argv_tmp != NULL);
     argv_tmp[0] = argv[0];
     argv_tmp[1] = "-x";
@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
     for (int i = 1; i < argc; ++i) {
         argv_tmp[3 + i] = argv[i];
     }
-    argv_tmp[3 + argc] = NULL;
+    argv_tmp[3 + argc + 0] = NULL;
     argv = argv_tmp;
 
     argv[0] = "my-wrapper";

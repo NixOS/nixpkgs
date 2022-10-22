@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , six
 , pygraphviz
 , pytestCheckHook
@@ -12,11 +13,12 @@
 
 buildPythonPackage rec {
   pname = "transitions";
-  version = "0.8.10";
+  version = "0.9.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b0385975a842e885c1a55c719d2f90164471665794d39d51f9eb3f11e1d9c8ac";
+    sha256 = "sha256-L1TRG9siV3nX5ykBHpOp+3F2aM49xl+NT1pde6L0jhA=";
   };
 
   propagatedBuildInputs = [
@@ -35,6 +37,10 @@ buildPythonPackage rec {
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
     export HOME=$TMPDIR
   '';
+
+  pythonImportsCheck = [
+    "transitions"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/pytransitions/transitions";

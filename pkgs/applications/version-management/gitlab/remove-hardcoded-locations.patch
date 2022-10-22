@@ -207,3 +207,13 @@ index 567c7540777..29906b1c132 100644
        end
      end
    end
+diff --git a/scripts/decomposition/generate-loose-foreign-key b/scripts/decomposition/generate-loose-foreign-key
+index 35f84c64ce1..c2fecf3404c 100755
+--- a/scripts/decomposition/generate-loose-foreign-key
++++ b/scripts/decomposition/generate-loose-foreign-key
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env -S ENABLE_SPRING=0 bin/rails runner -e test
++#!/usr/bin/env rails
+ 
+ # This is helper script to swap foreign key to loose foreign key
+ # using DB schema

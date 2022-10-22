@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, python3, libxslt, texlive
-, enableAllFeatures ? false, imagemagick ? null, transfig ? null, inkscape ? null, fontconfig ? null, ghostscript ? null
+, enableAllFeatures ? false, imagemagick, fig2dev, inkscape, fontconfig, ghostscript
 
 , tex ? texlive.combine { # satisfy all packages that ./configure mentions
     inherit (texlive) scheme-basic epstopdf anysize appendix changebar
@@ -13,15 +13,8 @@
 # NOTE: enableAllFeatures just purifies the expression, it doesn't actually
 # enable any extra features.
 
-assert enableAllFeatures ->
-  imagemagick != null &&
-  transfig != null &&
-  inkscape != null &&
-  fontconfig != null &&
-  ghostscript != null;
-
 stdenv.mkDerivation rec {
-  pname = "dblatex";
+  pname = "dblatex${lib.optionalString enableAllFeatures "-full"}";
   version = "0.3.12";
 
   src = fetchurl {
@@ -30,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ python3 libxslt tex ]
-    ++ lib.optionals enableAllFeatures [ imagemagick transfig ];
+    ++ lib.optionals enableAllFeatures [ imagemagick fig2dev ];
 
   # TODO: dblatex tries to execute texindy command, but nixpkgs doesn't have
   # that yet. In Ubuntu, texindy is a part of the xindy package.
@@ -49,7 +42,7 @@ stdenv.mkDerivation rec {
             -e 's|"fc-match"|"${fontconfig.bin}/bin/fc-match"|g' \
             -e 's|"fc-list"|"${fontconfig.bin}/bin/fc-list"|g' \
             -e 's|cmd = "inkscape|cmd = "${inkscape}/bin/inkscape|g' \
-            -e 's|cmd = "fig2dev|cmd = "${transfig}/bin/fig2dev|g' \
+            -e 's|cmd = "fig2dev|cmd = "${fig2dev}/bin/fig2dev|g' \
             -e 's|cmd = \["ps2pdf|cmd = ["${ghostscript}/bin/ps2pdf|g' \
             -e 's|cmd = "convert|cmd = "${imagemagick.out}/bin/convert|g' \
             -i "$file"

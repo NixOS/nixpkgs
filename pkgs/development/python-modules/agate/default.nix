@@ -1,5 +1,5 @@
 { lib
-, Babel
+, babel
 , buildPythonPackage
 , cssselect
 , fetchFromGitHub
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    Babel
+    babel
     isodate
     leather
     parsedatetime

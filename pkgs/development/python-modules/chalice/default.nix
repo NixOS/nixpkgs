@@ -24,14 +24,21 @@
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.26.2";
+  version = "1.27.1";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = pname;
     rev = version;
-    sha256 = "sha256-zF7wmrJTMX0Cr3wpJECUqhH58G2SLiVoC4Z2XbblQdQ=";
+    sha256 = "sha256-Qz8kYXu2NmcgtW8GbmLPfB4BOearEycE6EMmQRXmWeI=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "attrs>=19.3.0,<21.5.0" "attrs" \
+      --replace "pip>=9,<22.2" "pip" \
+      --replace "typing==3.6.4" "typing"
+  '';
 
   propagatedBuildInputs = [
     attrs
@@ -57,12 +64,6 @@ buildPythonPackage rec {
     requests
     websocket-client
   ];
-
-  postPatch = ''
-    sed -i setup.py -e "/pip>=/c\'pip',"
-    substituteInPlace setup.py \
-      --replace 'typing==3.6.4' 'typing'
-  '';
 
   disabledTestPaths = [
     # Don't check the templates and the sample app

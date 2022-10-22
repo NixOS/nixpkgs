@@ -5,14 +5,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     apiUrl = "http://${listenAddress}:${toString listenPort}";
     uid = "movies";
     indexJSON = pkgs.writeText "index.json" (builtins.toJSON { inherit uid; });
-    moviesJSON = pkgs.runCommand "movies.json" {} ''
-      sed -n '1,5p;$p' ${pkgs.meilisearch.src}/datasets/movies/movies.json > $out
-    '';
+    moviesJSON = pkgs.fetchurl {
+      url = "https://github.com/meilisearch/meilisearch/raw/v0.23.1/datasets/movies/movies.json";
+      sha256 = "1r3srld63dpmg9yrmysm6xl175661j5cspi93mk5q2wf8xwn50c5";
+    };
   in {
     name = "meilisearch";
     meta.maintainers = with lib.maintainers; [ Br1ght0ne ];
 
-    machine = { ... }: {
+    nodes.machine = { ... }: {
       environment.systemPackages = with pkgs; [ curl jq ];
       services.meilisearch = {
         enable = true;
@@ -26,7 +27,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       start_all()
 
       machine.wait_for_unit("meilisearch")
-      machine.wait_for_open_port("7700")
+      machine.wait_for_open_port(7700)
 
       with subtest("check version"):
           version = json.loads(machine.succeed("curl ${apiUrl}/version"))
@@ -34,20 +35,20 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
       with subtest("create index"):
           machine.succeed(
-              "curl -XPOST ${apiUrl}/indexes --data @${indexJSON}"
+              "curl -X POST -H 'Content-Type: application/json' ${apiUrl}/indexes --data @${indexJSON}"
           )
           indexes = json.loads(machine.succeed("curl ${apiUrl}/indexes"))
-          assert len(indexes) == 1, "index wasn't created"
+          assert indexes["total"] == 1, "index wasn't created"
 
       with subtest("add documents"):
           response = json.loads(
               machine.succeed(
-                  "curl -XPOST ${apiUrl}/indexes/${uid}/documents --data @${moviesJSON}"
+                  "curl -X POST -H 'Content-Type: application/json' ${apiUrl}/indexes/${uid}/documents --data-binary @${moviesJSON}"
               )
           )
-          update_id = response["updateId"]
+          task_uid = response["taskUid"]
           machine.wait_until_succeeds(
-              f"curl ${apiUrl}/indexes/${uid}/updates/{update_id} | jq -e '.status == \"processed\"'"
+              f"curl ${apiUrl}/tasks/{task_uid} | jq -e '.status == \"succeeded\"'"
           )
 
       with subtest("search"):

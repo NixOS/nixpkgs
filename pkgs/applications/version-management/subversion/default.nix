@@ -6,6 +6,7 @@
 , javahlBindings ? false
 , saslSupport ? false
 , lib, stdenv, fetchurl, apr, aprutil, zlib, sqlite, openssl, lz4, utf8proc
+, CoreServices, Security
 , autoconf, libtool
 , apacheHttpd ? null, expat, swig ? null, jdk ? null, python3 ? null, py3c ? null, perl ? null
 , sasl ? null, serf ? null
@@ -22,10 +23,10 @@ let
 
   common = { version, sha256, extraPatches ? [ ] }: stdenv.mkDerivation (rec {
     inherit version;
-    pname = "subversion";
+    pname = "subversion${lib.optionalString (!bdbSupport && perlBindings && pythonBindings) "-client"}";
 
     src = fetchurl {
-      url = "mirror://apache/subversion/${pname}-${version}.tar.bz2";
+      url = "mirror://apache/subversion/subversion-${version}.tar.bz2";
       inherit sha256;
     };
 
@@ -38,7 +39,8 @@ let
       ++ lib.optional httpSupport serf
       ++ lib.optionals pythonBindings [ python3 py3c ]
       ++ lib.optional perlBindings perl
-      ++ lib.optional saslSupport sasl;
+      ++ lib.optional saslSupport sasl
+      ++ lib.optional stdenv.hostPlatform.isDarwin [ CoreServices Security ];
 
     patches = [ ./apr-1.patch ] ++ extraPatches;
 
@@ -57,7 +59,6 @@ let
       (lib.withFeatureAs (pythonBindings || perlBindings) "swig" swig)
       (lib.withFeatureAs saslSupport "sasl" sasl)
       (lib.withFeatureAs httpSupport "serf" serf)
-      "--disable-keychain"
       "--with-zlib=${zlib.dev}"
       "--with-sqlite=${sqlite.dev}"
     ] ++ lib.optionals javahlBindings [
@@ -92,7 +93,7 @@ let
           --replace "${expat.dev}/lib" "${expat.out}/lib" \
           --replace "${zlib.dev}/lib" "${zlib.out}/lib" \
           --replace "${sqlite.dev}/lib" "${sqlite.out}/lib" \
-          --replace "${openssl.dev}/lib" "${openssl.out}/lib"
+          --replace "${openssl.dev}/lib" "${lib.getLib openssl}/lib"
       done
     '';
 
@@ -106,7 +107,7 @@ let
     meta = with lib; {
       description = "A version control system intended to be a compelling replacement for CVS in the open source community";
       license = licenses.asl20;
-      homepage = "http://subversion.apache.org/";
+      homepage = "https://subversion.apache.org/";
       maintainers = with maintainers; [ eelco lovek323 ];
       platforms = platforms.linux ++ platforms.darwin;
     };
@@ -119,13 +120,8 @@ let
   });
 
 in {
-  subversion_1_10 = common {
-    version = "1.10.7";
-    sha256 = "1nhrd8z6c94sc0ryrzpyd98qdn5a5g3x0xv1kdb9da4drrk8y2ww";
-  };
-
   subversion = common {
-    version = "1.14.1";
-    sha256 = "1ag1hvcm9q92kgalzbbgcsq9clxnzmbj9nciz9lmabjx4lyajp9c";
+    version = "1.14.2";
+    sha256 = "sha256-yRMOjQt1copm8OcDj8dwUuZxgw14W1YWqtU7SBDTzCg=";
   };
 }

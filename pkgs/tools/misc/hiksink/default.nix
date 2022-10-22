@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hiksink";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "CornerBit";
     repo = pname;
     rev = version;
-    sha256 = "1m8hd7qbasxyq09ycnqma2y4b9s2k54h9i2rkzsa9sksc868wxh8";
+    sha256 = "sha256-k/cBCc7DywyBbAzCRCHdrOVmo+QVCsSgDn8hcyTIUI8=";
   };
 
-  cargoSha256 = "15r6rwhyy0s5i0v9nzx3hfl5cvlb0hxnllcwfnw0bbn9km25l9r3";
+  cargoSha256 = "sha256-vqzXpSPBwY7m/Fdob0mHH0OXnzyQwFk7x2kk9Tgez3M=";
 
   nativeBuildInputs = [
     pkg-config
@@ -35,5 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/CornerBit/HikSink";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "hik_sink";
   };
 }

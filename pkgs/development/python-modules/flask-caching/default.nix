@@ -1,18 +1,40 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, flask, pytestCheckHook, pytest-cov, pytest-xprocess, pytestcache }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, cachelib
+, flask
+, pytest-asyncio
+, pytest-xprocess
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "Flask-Caching";
-  version = "1.10.1";
-  disabled = isPy27; # invalid python2 syntax
+  version = "2.0.1";
+  format = "setuptools";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cf19b722fcebc2ba03e4ae7c55b532ed53f0cbf683ce36fafe5e881789a01c00";
+    sha256 = "sha256-EN8gCgPwMq9gB3vv5Bd53ZSJi2fIIEDTTochC3G6Jjg=";
   };
 
-  propagatedBuildInputs = [ flask ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "Flask <= 2.1.2" "Flask <= 2.2"
+  '';
 
-  checkInputs = [ pytestCheckHook pytest-cov pytest-xprocess pytestcache ];
+  propagatedBuildInputs = [
+    cachelib
+    flask
+  ];
+
+  checkInputs = [
+    pytest-asyncio
+    pytest-xprocess
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # backend_cache relies on pytest-cache, which is a stale package from 2013

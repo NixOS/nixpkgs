@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "py-synologydsm-api";
-  version = "1.0.5";
+  version = "1.0.8";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "synologydsm-api";
     rev = "v${version}";
-    sha256 = "sha256-mm5N2RKn2KP2dV7+dw0sNWlCDT5X/fRmH8POQqJIoZY=";
+    sha256 = "sha256-9bh7uLt9+uda6yFCWV6xUh//jFC4DgiS+KtRXQrU3A8=";
   };
 
   nativeBuildInputs = [

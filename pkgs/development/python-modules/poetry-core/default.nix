@@ -1,51 +1,42 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, isPy27
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, build
 , git
 , importlib-metadata
-, intreehooks
-, pathlib2
 , pep517
 , pytest-mock
 , pytestCheckHook
+, setuptools
 , tomlkit
-, typing ? null
 , virtualenv
 }:
 
 buildPythonPackage rec {
   pname = "poetry-core";
-  version = "1.0.7";
+  version = "1.1.0";
   format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = pname;
     rev = version;
-    sha256 = "0v86x8f8pcbviv2cdn7jjbgj3c994qasx0bqk1kr0mj8m6pjwy9z";
+    sha256 = "sha256-WUgBrO9h1E7N2SVFD47UPv39DMx1yQviV5tcNPmR+/g=";
   };
-
-  postPatch = lib.optionalString (pythonOlder "3.8") ''
-    # remove >1.0.3
-    substituteInPlace pyproject.toml \
-      --replace 'importlib-metadata = {version = "^1.7.0", python = "~2.7 || >=3.5, <3.8"}' \
-        'importlib-metadata = {version = ">=1.7.0", python = "~2.7 || >=3.5, <3.8"}'
-  '';
-
-  nativeBuildInputs = [
-    intreehooks
-  ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     importlib-metadata
-  ] ++ lib.optionals isPy27 [
-    pathlib2
-    typing
   ];
 
   checkInputs = [
+    build
     git
     pep517
     pytest-mock
     pytestCheckHook
+    setuptools
     tomlkit
     virtualenv
   ];

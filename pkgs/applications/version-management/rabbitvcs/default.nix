@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
     owner = "rabbitvcs";
     repo = "rabbitvcs";
     rev = "v${version}";
-    sha256 = "01cr16zf3gzsci1hhfli79m34fcx5m1pvswl16rkxxn212yc9fhy";
+    hash = "sha256-gVrdf8vQWAGORZqlTS/axs4U7aZlS8OAgPM3iKgqAtM=";
   };
 
   buildInputs = [ gtk3 ];

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, autoreconfHook, makeWrapper
-, perlPackages, libxml2, libiconv }:
+, perlPackages, libxml2, libintl }:
 
 stdenv.mkDerivation rec {
   pname = "hivex";
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./hivex-syms.patch ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
   buildInputs = [
-    autoreconfHook makeWrapper libxml2
+    libxml2
   ]
   ++ (with perlPackages; [ perl IOStringy ])
-  ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  ++ lib.optionals stdenv.isDarwin [ libintl ];
 
   postInstall = ''
     wrapProgram $out/bin/hivexregedit \
@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2;
     homepage = "https://github.com/libguestfs/hivex";
     maintainers = with maintainers; [offline];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

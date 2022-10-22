@@ -1,20 +1,37 @@
 { lib
 , buildPythonPackage
+, cryptography
 , fetchPypi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "winacl";
-  version = "0.1.2";
+  version = "0.1.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "187b4394ef247806f50e1d8320bdb9e33ad1f759d9e61e2e391b97b9adf5f58a";
+    hash = "sha256-8/dLFbzn7ARuJ27MA8LSMCykBdEntYQXuOyj/yqjaWE=";
   };
+
+  propagatedBuildInputs = [
+    cryptography
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "cryptography>=38.0.1" "cryptography"
+  '';
 
   # Project doesn't have tests
   doCheck = false;
-  pythonImportsCheck = [ "winacl" ];
+
+  pythonImportsCheck = [
+    "winacl"
+  ];
 
   meta = with lib; {
     description = "Python module for ACL/ACE/Security descriptor manipulation";

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   buildPhase = ''
-    ${stdenv.cc}/bin/cc -Wall -pedantic -I${libX11}/include tinywm.c -L${libX11}/lib -lX11 -o tinywm
+    $CC -Wall -pedantic -I${libX11}/include tinywm.c -L${libX11}/lib -lX11 -o tinywm
   '';
 
   installPhase = ''

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, bzip2, lzo, zlib, xz, bash, python, gnutar, gnused, gnugrep, which }:
+{ lib, stdenv, fetchurl, bzip2, lzo, zlib, xz, bash, python2, gnutar, gnused, gnugrep, which }:
 
 stdenv.mkDerivation (rec {
   pname = "xe-guest-utilities";
@@ -14,11 +14,16 @@ stdenv.mkDerivation (rec {
     url = "https://sources.archlinux.org/other/community/xe-guest-utilities/xe-guest-utilities_${version}-1120.tar.gz";
     sha256 = "f9593cd9588188f80253e736f48d8dd94c5b517abb18316085f86acffab48794";
   };
-  buildInputs = [ bzip2 gnutar gnused python lzo zlib xz stdenv gnugrep which ];
+  buildInputs = [ bzip2 gnutar gnused python2 lzo zlib xz gnugrep which ];
   patches = [ ./ip-address.patch ];
   postPatch = ''
     tar xf "$NIX_BUILD_TOP/$name/xenstore-sources.tar.bz2"
   '';
+
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: utils.o:xenstore/utils.h:27:
+  #     multiple definition of `xprintf'; xenstored_core.o:xenstore/utils.h:27: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   buildPhase = ''
     export CC=gcc

@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 {
-  options.programs.bcc.enable = lib.mkEnableOption "bcc";
+  options.programs.bcc.enable = lib.mkEnableOption (lib.mdDoc "bcc");
 
   config = lib.mkIf config.programs.bcc.enable {
     environment.systemPackages = [ pkgs.bcc ];

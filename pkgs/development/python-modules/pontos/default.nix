@@ -1,18 +1,20 @@
 { lib
 , buildPythonPackage
+, colorful
 , fetchFromGitHub
+, git
+, httpx
+, packaging
 , poetry-core
 , pytestCheckHook
 , pythonOlder
-, colorful
+, rich
 , tomlkit
-, git
-, requests
 }:
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "21.11.0";
+  version = "22.9.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-uP4M1ShhKsvqnUixc3JUJVpNQOwYn8Gm2uWVcXhFKLg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CZ2Y3ePRfwj9VbdoQjdQMs9+/cdixkRovGISv9T+pYU=";
   };
 
   nativeBuildInputs = [
@@ -30,8 +32,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     colorful
+    httpx
+    packaging
+    rich
     tomlkit
-    requests
   ];
 
   checkInputs = [
@@ -39,16 +43,28 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'packaging = "^20.3"' 'packaging = "*"'
+  '';
+
   disabledTests = [
+    "PrepareTestCase"
     # Signing fails
     "test_find_no_signing_key"
     "test_find_signing_key"
     "test_find_unreleased_information"
     # CLI test fails
     "test_missing_cmd"
+    "test_update_file_changed"
+    # Network access
+    "test_fail_sign_on_upload_fail"
+    "test_successfully_sign"
   ];
 
-  pythonImportsCheck = [ "pontos" ];
+  pythonImportsCheck = [
+    "pontos"
+  ];
 
   meta = with lib; {
     description = "Collection of Python utilities, tools, classes and functions";

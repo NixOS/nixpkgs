@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       desktopName = "GKrellM";
       genericName = "System monitor";
       comment = "The GNU Krell Monitors";
-      categories = "System;Monitor;";
+      categories = [ "System" "Monitor" ];
     })
   ];
 

@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
   makeFlags = [ "SUBDIRS=src" ];
 
   installPhase = ''
-    install -vDm 755 src/hdhomerun_config_gui $out/usr/bin/hdhomerun_config_gui
+    runHook preInstall
+    install -vDm 755 src/hdhomerun_config_gui $out/bin/hdhomerun_config_gui
+    runHook postInstall
   '';
 
   meta = with lib; {

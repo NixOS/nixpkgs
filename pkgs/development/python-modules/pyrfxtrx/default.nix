@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "pyrfxtrx";
-  version = "0.27.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyRFXtrx";
-    rev = version;
-    sha256 = "0nzgy56b2v3bnn9idlb67qkzj4cj5j9v1436ri1y305fqwjy48nm";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ntnZITj8upzUzlrSTjQxY9xNTU+gJ2rE9PN35cpWwvM=";
   };
 
   propagatedBuildInputs = [
@@ -22,6 +22,11 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # https://github.com/Danielhiversen/pyRFXtrx/issues/130
+    "tests/test_rollertrol.py"
   ];
 
   meta = with lib; {

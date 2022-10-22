@@ -12,19 +12,19 @@
 
 stdenv.mkDerivation rec {
   pname = "wxsqlite3";
-  version = "4.7.3";
+  version = "4.9.0";
 
   src = fetchFromGitHub {
     owner = "utelle";
     repo = "wxsqlite3";
     rev = "v${version}";
-    sha256 = "sha256-t8y4oq4p7ZMDELAkRVmoNguYRNG8spcW7MHnpdINN8g=";
+    hash = "sha256-9WnXaMpKzqJhdfT7ScOhULbOwJsmuiS0IpYDArWq82s=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ wxGTK sqlite ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa setfile rez derez ];
+  buildInputs = [ sqlite wxGTK ]
+    ++ lib.optionals (stdenv.isDarwin) [ Cocoa setfile rez derez ];
 
   meta = with lib; {
     homepage = "https://utelle.github.io/wxsqlite3/";

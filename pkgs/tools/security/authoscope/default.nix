@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "authoscope";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11ci38m6d3lj4f0g7cl3dqf10kfk258k2k92phd2nav1my4i90pf";
+    sha256 = "sha256-SKgb/N249s0+Rb59moBT/MeFb4zAAElCMQJto0diyUk=";
   };
 
-  cargoSha256 = "13x7i52i3k88vkfvk2smy2aqfg3na4317scvw7ali1rv545nbxds";
+  cargoSha256 = "sha256-rSHuKy86iJNLAKSVcb7fn7A/cc75EOc97jGI14EaC6k=";
 
   nativeBuildInputs = [
     installShellFiles

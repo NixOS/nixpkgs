@@ -40,13 +40,13 @@ in {
 
   options = {
     services.prometheus.alertmanager = {
-      enable = mkEnableOption "Prometheus Alertmanager";
+      enable = mkEnableOption (lib.mdDoc "Prometheus Alertmanager");
 
       package = mkOption {
         type = types.package;
         default = pkgs.prometheus-alertmanager;
         defaultText = literalExpression "pkgs.alertmanager";
-        description = ''
+        description = lib.mdDoc ''
           Package that should be used for alertmanager.
         '';
       };
@@ -54,7 +54,7 @@ in {
       configuration = mkOption {
         type = types.nullOr types.attrs;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Alertmanager configuration as nix attribute set.
         '';
       };
@@ -62,7 +62,7 @@ in {
       configText = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Alertmanager configuration as YAML text. If non-null, this option
           defines the text that is written to alertmanager.yml. If null, the
           contents of alertmanager.yml is generated from the structured config
@@ -73,7 +73,7 @@ in {
       logFormat = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           If set use a syslog logger or JSON logging.
         '';
       };
@@ -81,7 +81,7 @@ in {
       logLevel = mkOption {
         type = types.enum ["debug" "info" "warn" "error" "fatal"];
         default = "warn";
-        description = ''
+        description = lib.mdDoc ''
           Only log messages with the given severity or above.
         '';
       };
@@ -89,7 +89,7 @@ in {
       webExternalUrl = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The URL under which Alertmanager is externally reachable (for example, if Alertmanager is served via a reverse proxy).
           Used for generating relative and absolute links back to Alertmanager itself.
           If the URL has a path portion, it will be used to prefix all HTTP endoints served by Alertmanager.
@@ -100,7 +100,7 @@ in {
       listenAddress = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Address to listen on for the web interface and API. Empty string will listen on all interfaces.
           "localhost" will listen on 127.0.0.1 (but not ::1).
         '';
@@ -109,7 +109,7 @@ in {
       port = mkOption {
         type = types.int;
         default = 9093;
-        description = ''
+        description = lib.mdDoc ''
           Port to listen on for the web interface and API.
         '';
       };
@@ -117,7 +117,7 @@ in {
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Open port in firewall for incoming connections.
         '';
       };
@@ -125,7 +125,7 @@ in {
       clusterPeers = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Initial peers for HA cluster.
         '';
       };
@@ -133,7 +133,7 @@ in {
       extraFlags = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Extra commandline options when launching the Alertmanager.
         '';
       };
@@ -142,11 +142,11 @@ in {
         type = types.nullOr types.path;
         default = null;
         example = "/root/alertmanager.env";
-        description = ''
+        description = lib.mdDoc ''
           File to load as environment file. Environment variables
           from this file will be interpolated into the config file
           using envsubst with this syntax:
-          <literal>$ENVIRONMENT ''${VARIABLE}</literal>
+          `$ENVIRONMENT ''${VARIABLE}`
         '';
       };
     };

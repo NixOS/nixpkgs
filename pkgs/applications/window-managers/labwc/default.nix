@@ -1,33 +1,33 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, pkg-config
-, meson
-, ninja
 , cairo
 , glib
+, libdrm
 , libinput
+, libxcb
+, libxkbcommon
 , libxml2
+, meson
+, ninja
 , pango
+, pkg-config
+, scdoc
 , wayland
 , wayland-protocols
 , wlroots
-, libxcb
-, libxkbcommon
 , xwayland
-, libdrm
-, scdoc
 }:
 
 stdenv.mkDerivation rec {
   pname = "labwc";
-  version = "0.3.0";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
-    owner = "johanmalm";
+    owner = "labwc";
     repo = pname;
     rev = version;
-    sha256 = "sha256-v8LGiQG/n1IXeVMPWyiP9MgZzZLW78JftvxnRVTswaM=";
+    hash = "sha256-YD2bGxa7uss6KRvOGM0kn8dM+277ubaYeOB7ugRZCcY=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     pkg-config
     scdoc
   ];
+
   buildInputs = [
     cairo
     glib
@@ -54,10 +55,10 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Dxwayland=enabled" ];
 
   meta = with lib; {
-    homepage = "https://github.com/johanmalm/labwc";
-    description = "Openbox alternative for Wayland";
+    homepage = "https://github.com/labwc/labwc";
+    description = "A Wayland stacking compositor, similar to Openbox";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    inherit (wayland.meta) platforms;
   };
 }

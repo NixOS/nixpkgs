@@ -9,9 +9,12 @@
 , gnome
 , glib
 , gtk3
+, gtk4
+, gtkVersion ? "3"
 , gobject-introspection
 , vala
 , python3
+, gi-docgen
 , libxml2
 , gnutls
 , gperf
@@ -21,17 +24,19 @@
 , zlib
 , icu
 , systemd
+, systemdSupport ? stdenv.hostPlatform.isLinux
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "vte";
-  version = "0.64.2";
+  version = "0.70.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-KzyCC2WmZ8HYhZuiBHi+Ym0VGcwxWdrCX3AzMMbQfhg=";
+    sha256 = "sha256-k+DdShvCp6GmLaZBYKJ0zORWl26hVn2YWR2pbi0mWuY=";
   };
 
   patches = [
@@ -42,6 +47,11 @@ stdenv.mkDerivation rec {
       name = "0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
       url = "https://git.alpinelinux.org/aports/plain/community/vte3/fix-W_EXITCODE.patch?id=4d35c076ce77bfac7655f60c4c3e4c86933ab7dd";
       sha256 = "FkVyhsM0mRUzZmS2Gh172oqwcfXv6PyD6IEgjBhy2uU=";
+    })
+    # error: implicit declaration of function 'cfmakeraw' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/vte/-/commit/1f1f177ff797ac2bb453168951135865cfded900.patch";
+      sha256 = "sha256-VRVhq8JAshtcFejJkNUpMilo7tLgcojlEnCTrAtGVa0=";
     })
   ];
 
@@ -55,6 +65,7 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     python3
+    gi-docgen
   ];
 
   buildInputs = [
@@ -63,15 +74,31 @@ stdenv.mkDerivation rec {
     pcre2
     zlib
     icu
+  ] ++ lib.optionals systemdSupport [
     systemd
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = assert (gtkVersion == "3" || gtkVersion == "4"); [
     # Required by vte-2.91.pc.
-    gtk3
+    (if gtkVersion == "3" then gtk3 else gtk4)
     glib
     pango
   ];
+
+  mesonFlags = [
+    "-Ddocs=true"
+  ] ++ lib.optionals (!systemdSupport) [
+    "-D_systemd=false"
+  ] ++ lib.optionals (gtkVersion == "4") [
+    "-Dgtk3=false"
+    "-Dgtk4=true"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # -Bsymbolic-functions is not supported on darwin
+    "-D_b_symbolic_functions=false"
+  ];
+
+  # error: argument unused during compilation: '-pie' [-Werror,-Wunused-command-line-argument]
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-Wno-unused-command-line-argument";
 
   postPatch = ''
     patchShebangs perf/*
@@ -80,10 +107,18 @@ stdenv.mkDerivation rec {
     patchShebangs src/modes.py
   '';
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
+    };
+    tests = {
+      inherit (nixosTests.terminal-emulators) gnome-terminal lxterminal mlterm roxterm sakura stupidterm terminator termite xfce4-terminal;
     };
   };
 

@@ -2,15 +2,15 @@
 
 buildPythonPackage rec {
   pname = "formbox";
-  version = "0.1.0";
+  version = "0.4.1";
   format = "flit";
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromSourcehut {
     owner = "~cnx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-6OzmYqUC3mmrAMeMExI4rdVGUoWrxRuBfjKFYbHUlgE=";
+    sha256 = "sha256-zOvXmSeBiwc0Z5mRMwMsHLU3A/iP7rpjXm0T0I2gUTk=";
   };
 
   propagatedBuildInputs = [ bleach markdown ];

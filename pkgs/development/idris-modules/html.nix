@@ -6,7 +6,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "html";
+  pname = "html";
   version = "2017-04-23";
 
   idrisDeps = [ idrisscript hrtime webgl ];

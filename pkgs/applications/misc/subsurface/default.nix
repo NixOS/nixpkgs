@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, wrapQtAppsHook, pkg-config, qmake
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, cmake, wrapQtAppsHook, pkg-config, qmake
 , curl, grantlee, libgit2, libusb-compat-0_1, libssh2, libxml2, libxslt, libzip, zlib
 , qtbase, qtconnectivity, qtlocation, qtsvg, qttools, qtwebkit, libXcomposite
 , bluez
@@ -20,7 +20,8 @@ let
     inherit version;
 
     src = subsurfaceSrc;
-    sourceRoot = "source/libdivecomputer";
+
+    prePatch = "cd libdivecomputer";
 
     nativeBuildInputs = [ autoreconfHook ];
 

@@ -1,10 +1,9 @@
-{ lib, buildPythonPackage, python, pythonOlder, glibcLocales, fetchFromGitHub, ipaddress, six, simplejson }:
+{ lib, buildPythonPackage, python, glibcLocales, fetchFromGitHub, six, simplejson }:
 
 buildPythonPackage rec {
   pname = "mail-parser";
   version = "3.15.0";
 
-  # no tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "SpamScope";
     repo = pname;
@@ -15,7 +14,7 @@ buildPythonPackage rec {
   LC_ALL = "en_US.utf-8";
 
   nativeBuildInputs = [ glibcLocales ];
-  propagatedBuildInputs = [ simplejson six ] ++ lib.optional (pythonOlder "3.3") ipaddress;
+  propagatedBuildInputs = [ simplejson six ];
 
   # Taken from .travis.yml
   checkPhase = ''

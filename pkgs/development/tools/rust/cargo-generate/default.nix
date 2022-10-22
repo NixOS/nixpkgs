@@ -1,22 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, openssl, pkg-config, libiconv, curl }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libgit2
+, openssl
+, stdenv
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-generate";
-  version = "0.11.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
-    owner = "ashleygwilliams";
+    owner = "cargo-generate";
     repo = "cargo-generate";
     rev = "v${version}";
-    sha256 = "sha256-t0vIuJUGPgHQFBezmEMOlEJItwOJHlIQMFvcUZlx9is=";
+    sha256 = "sha256-qL5ZbLimpsi/7yuhubHF3/tAouE/5zCWRx4nZG841cU=";
   };
 
-  cargoSha256 = "sha256-esfiMnnij3Tf1qROVViPAqXFJA4DAHarV44pK5zpDrc=";
+  # patch Cargo.toml to not vendor libgit2 and openssl
+  cargoPatches = [ ./no-vendor.patch ];
+
+  cargoSha256 = "sha256-OB3rjJNxkUKRQPsWRvCniNPfYBgLFV4yXO7dnVvL7wo=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl  ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv curl ];
+  buildInputs = [ libgit2 openssl ]
+    ++ lib.optionals stdenv.isDarwin [ Security ];
 
   preCheck = ''
     export HOME=$(mktemp -d) USER=nixbld
@@ -28,12 +39,13 @@ rustPlatform.buildRustPackage rec {
   # - favorites_default_to_git_if_not_defined: requires network access to github.com
   # - should_canonicalize: the test assumes that it will be called from the /Users/<project_dir>/ folder on darwin variant.
   checkFlags = [ "--skip favorites::favorites_default_to_git_if_not_defined" ]
-      ++ lib.optionals stdenv.isDarwin [ "--skip git::should_canonicalize" ];
+      ++ lib.optionals stdenv.isDarwin [ "--skip git::utils::should_canonicalize" ];
 
   meta = with lib; {
     description = "cargo, make me a project";
-    homepage = "https://github.com/ashleygwilliams/cargo-generate";
-    license = licenses.asl20;
-    maintainers = [ maintainers.turbomack ];
+    homepage = "https://github.com/cargo-generate/cargo-generate";
+    changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [ asl20 /* or */ mit ];
+    maintainers = with maintainers; [ figsoda turbomack ];
   };
 }

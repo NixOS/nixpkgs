@@ -12,7 +12,7 @@
 , dpkt
 , fetchFromGitHub
 , GitPython
-, itanium_demangler
+, itanium-demangler
 , mulpyplexer
 , nampa
 , networkx
@@ -22,6 +22,7 @@
 , pycparser
 , pythonOlder
 , pyvex
+, sympy
 , sqlalchemy
 , rpyc
 , sortedcontainers
@@ -45,17 +46,17 @@ in
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.1.10913";
-  disabled = pythonOlder "3.6";
+  version = "9.2.23";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AZlqSalTOQh3QR959ZuanFuTZVKi9valKJ3snsquC/A=";
+    hash = "sha256-qI/KKfbr2M46Bn8+4qbB6NCmaTF4nHzm+dZ3AJrsD2o=";
   };
-
-  setupPyBuildFlags = lib.optionals stdenv.isLinux [ "--plat-name" "linux" ];
 
   propagatedBuildInputs = [
     ailment
@@ -68,27 +69,31 @@ buildPythonPackage rec {
     cppheaderparser
     dpkt
     GitPython
-    itanium_demangler
+    itanium-demangler
     mulpyplexer
     nampa
     networkx
     progressbar2
     protobuf
     psutil
-    sqlalchemy
     pycparser
     pyvex
-    sqlalchemy
     rpyc
     sortedcontainers
+    sqlalchemy
+    sympy
     unicorn'
+  ];
+
+  setupPyBuildFlags = lib.optionals stdenv.isLinux [
+    "--plat-name"
+    "linux"
   ];
 
   # Tests have additional requirements, e.g., pypcode and angr binaries
   # cle is executing the tests with the angr binaries
   doCheck = false;
 
-  # See http://angr.io/api-doc/
   pythonImportsCheck = [
     "angr"
     "claripy"

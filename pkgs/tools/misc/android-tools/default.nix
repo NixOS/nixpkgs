@@ -9,11 +9,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "android-tools";
-  version = "31.0.3";
+  version = "31.0.3p1";
 
   src = fetchurl {
     url = "https://github.com/nmeum/android-tools/releases/download/${version}/android-tools-${version}.tar.xz";
-    sha256 = "0adhws565ny90vzh5jpkbcai8sfs3b9acs0bgl6bm9z1nr2xklnp";
+    sha256 = "1f2svy381r798hjinrc2xiwz13gkkqxfill343zvv8jqkn8rzxhf";
   };
 
   patches = [
@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     install -Dm755 ../vendor/avb/avbtool.py -t $out/bin
-    install -Dm755 ../vendor/mkbootimg/mkbootimg.py $out/bin/mkbootimg
   '';
 
   meta = with lib; {
@@ -56,6 +55,8 @@ stdenv.mkDerivation rec {
       - fastboot
       - mke2fs.android (required by fastboot)
       - simg2img, img2simg, append2simg
+      - lpdump, lpmake, lpadd, lpflash, lpunpack
+      - mkbootimg, unpack_bootimg, repack_bootimg
     '';
     # https://developer.android.com/studio/command-line#tools-platform
     # https://developer.android.com/studio/releases/platform-tools

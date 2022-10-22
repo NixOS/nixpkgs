@@ -7,10 +7,11 @@
 , lib
 , cmake
 , zlib
-, wxGTK
+, wxGTK30-gtk3 # WxGTK 3.0 must be used because aMule does not yet work well with 3.1
 , perl
 , cryptopp
 , libupnp
+, boost # Not using boost leads to crashes with gtk3
 , gettext
 , libpng
 , autoreconfHook
@@ -19,8 +20,14 @@
 , libX11
 }:
 
+# daemon and client are not build monolithic
+assert monolithic || (!monolithic && (enableDaemon || client || httpServer));
+
 stdenv.mkDerivation rec {
-  pname = "amule";
+  pname = "amule"
+    + lib.optionalString httpServer "-web"
+    + lib.optionalString enableDaemon "-daemon"
+    + lib.optionalString client "-gui";
   version = "2.3.3";
 
   src = fetchFromGitHub {
@@ -33,16 +40,31 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake gettext makeWrapper pkg-config ];
 
   buildInputs = [
-    zlib wxGTK perl cryptopp.dev libupnp
+    zlib
+    wxGTK30-gtk3
+    perl
+    cryptopp.dev
+    libupnp
+    boost
   ] ++ lib.optional httpServer libpng
-    ++ lib.optional client libX11;
+  ++ lib.optional client libX11;
 
   cmakeFlags = [
     "-DBUILD_MONOLITHIC=${if monolithic then "ON" else "OFF"}"
     "-DBUILD_DAEMON=${if enableDaemon then "ON" else "OFF"}"
     "-DBUILD_REMOTEGUI=${if client then "ON" else "OFF"}"
     "-DBUILD_WEBSERVER=${if httpServer then "ON" else "OFF"}"
+    # building only the daemon fails when these are not set... this is
+    # due to mistakes in the Amule cmake code, but it does not cause
+    # extra code to be built...
+    "-Dwx_NEED_GUI=ON"
+    "-Dwx_NEED_ADV=ON"
+    "-Dwx_NEED_NET=ON"
   ];
+
+  postPatch = ''
+    echo "find_package(Threads)" >> cmake/options.cmake
+  '';
 
   # aMule will try to `dlopen' libupnp and libixml, so help it
   # find them.
@@ -68,7 +90,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
-    # cmake fails: Cannot specify link libraries for target "wxWidgets::ADV" which is not built by this project.
-    broken = enableDaemon;
+    broken = stdenv.isDarwin;
   };
 }

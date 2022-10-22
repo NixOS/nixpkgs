@@ -1,60 +1,37 @@
-{ config, lib, stdenv, fetchurl, pkg-config, freetype, yasm, ffmpeg
-, aalibSupport ? true, aalib ? null
-, fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
-, fribidiSupport ? true, fribidi ? null
-, x11Support ? true, libX11 ? null, libXext ? null, libGLU, libGL ? null
-, xineramaSupport ? true, libXinerama ? null
-, xvSupport ? true, libXv ? null
-, alsaSupport ? stdenv.isLinux, alsa-lib ? null
-, screenSaverSupport ? true, libXScrnSaver ? null
-, vdpauSupport ? false, libvdpau ? null
-, cddaSupport ? !stdenv.isDarwin, cdparanoia ? null
-, dvdnavSupport ? !stdenv.isDarwin, libdvdnav ? null
-, dvdreadSupport ? true, libdvdread ? null
-, bluraySupport ? true, libbluray ? null
-, amrSupport ? false, amrnb ? null, amrwb ? null
-, cacaSupport ? true, libcaca ? null
-, lameSupport ? true, lame ? null
-, speexSupport ? true, speex ? null
-, theoraSupport ? true, libtheora ? null
-, x264Support ? false, x264 ? null
-, jackaudioSupport ? false, libjack2 ? null
-, pulseSupport ? config.pulseaudio or false, libpulseaudio ? null
-, bs2bSupport ? false, libbs2b ? null
-, v4lSupport ? false, libv4l ? null
+{ config, lib, stdenv, fetchurl, fetchsvn, pkg-config, freetype, yasm, ffmpeg
+, aalibSupport ? true, aalib
+, fontconfigSupport ? true, fontconfig, freefont_ttf
+, fribidiSupport ? true, fribidi
+, x11Support ? true, libX11, libXext, libGLU, libGL
+, xineramaSupport ? true, libXinerama
+, xvSupport ? true, libXv
+, alsaSupport ? stdenv.isLinux, alsa-lib
+, screenSaverSupport ? true, libXScrnSaver
+, vdpauSupport ? false, libvdpau
+, cddaSupport ? !stdenv.isDarwin, cdparanoia
+, dvdnavSupport ? !stdenv.isDarwin, libdvdnav
+, dvdreadSupport ? true, libdvdread
+, bluraySupport ? true, libbluray
+, amrSupport ? false, amrnb, amrwb
+, cacaSupport ? true, libcaca
+, lameSupport ? true, lame
+, speexSupport ? true, speex
+, theoraSupport ? true, libtheora
+, x264Support ? false, x264
+, jackaudioSupport ? false, libjack2
+, pulseSupport ? config.pulseaudio or false, libpulseaudio
+, bs2bSupport ? false, libbs2b
+, v4lSupport ? false, libv4l
 # For screenshots
-, libpngSupport ? true, libpng ? null
-, libjpegSupport ? true, libjpeg ? null
+, libpngSupport ? true, libpng
+, libjpegSupport ? true, libjpeg
 , useUnfreeCodecs ? false
-, darwin ? null
+, darwin
 , buildPackages
 }:
 
-assert fontconfigSupport -> (fontconfig != null);
-assert (!fontconfigSupport) -> (freefont_ttf != null);
-assert fribidiSupport -> (fribidi != null);
-assert x11Support -> (libX11 != null && libXext != null && libGLU != null && libGL != null);
-assert xineramaSupport -> (libXinerama != null && x11Support);
-assert xvSupport -> (libXv != null && x11Support);
-assert alsaSupport -> alsa-lib != null;
-assert screenSaverSupport -> libXScrnSaver != null;
-assert vdpauSupport -> libvdpau != null;
-assert cddaSupport -> cdparanoia != null;
-assert dvdnavSupport -> libdvdnav != null;
-assert dvdreadSupport -> libdvdread != null;
-assert bluraySupport -> libbluray != null;
-assert amrSupport -> (amrnb != null && amrwb != null);
-assert cacaSupport -> libcaca != null;
-assert lameSupport -> lame != null;
-assert speexSupport -> speex != null;
-assert theoraSupport -> libtheora != null;
-assert x264Support -> x264 != null;
-assert jackaudioSupport -> libjack2 != null;
-assert pulseSupport -> libpulseaudio != null;
-assert bs2bSupport -> libbs2b != null;
-assert libpngSupport -> libpng != null;
-assert libjpegSupport -> libjpeg != null;
-assert v4lSupport -> libv4l != null;
+assert xineramaSupport -> x11Support;
+assert xvSupport -> x11Support;
 
 let
 
@@ -93,11 +70,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mplayer";
-  version = "1.4";
+  version = "unstable-2022-02-03";
 
-  src = fetchurl {
-    url = "http://www.mplayerhq.hu/MPlayer/releases/MPlayer-${version}.tar.xz";
-    sha256 = "0j5mflr0wnklxsvnpmxvk704hscyn2785hvvihj2i3a7b3anwnc2";
+  src = fetchsvn {
+    url = "svn://svn.mplayerhq.hu/mplayer/trunk";
+    rev = "38331";
+    sha256 = "1vpic8i6zvg0zsy50vhm45ysqag561bpn9jycfbvvwl9ji7l55zi";
   };
 
   prePatch = ''
@@ -105,8 +83,6 @@ stdenv.mkDerivation rec {
 
     rm -rf ffmpeg
   '';
-
-  patches = [ ./svn-r38199-ffmpeg44fix.patch ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config yasm ];
@@ -163,7 +139,6 @@ stdenv.mkDerivation rec {
     (if pulseSupport then "--enable-pulse" else "--disable-pulse")
     (if v4lSupport then "--enable-v4l2 --enable-tv-v4l2" else "--disable-v4l2 --disable-tv-v4l2")
     "--disable-xanim"
-    "--disable-ivtv"
     "--disable-xvid --disable-xvid-lavc"
     "--disable-ossaudio"
     "--disable-ffmpeg_a"

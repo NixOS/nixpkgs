@@ -11,7 +11,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "swift-corefoundation";
+  pname = "swift-corefoundation";
+  version = "unstable-2018-09-14";
 
   src = fetchFromGitHub {
     owner  = "apple";

@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages
-, appleDerivation', cpio, xnu, Libc, Libm, libdispatch, Libinfo
+, appleDerivation', xnu, Libc, Libm, libdispatch, Libinfo
 , dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto
 , copyfile, removefile, libresolvHeaders, libresolv, Libnotify, libplatform, libpthread
 , mDNSResponder, launchd, libutilHeaders, hfsHeaders, darling, darwin-stubs
@@ -11,15 +11,21 @@ appleDerivation' stdenv {
   dontBuild = true;
   dontFixup = true;
 
-  nativeBuildInputs = [ cpio ];
-
   installPhase = ''
     export NIX_ENFORCE_PURITY=
 
     mkdir -p $out/lib $out/include
 
+    function copyHierarchy () {
+      mkdir -p $1
+      while read f; do
+        mkdir -p $1/$(dirname $f)
+        cp --parents -pn $f $1
+      done
+    }
+
     # Set up our include directories
-    (cd ${xnu}/include && find . -name '*.h' -or -name '*.defs' | cpio -pdm $out/include)
+    (cd ${xnu}/include && find . -name '*.h' -or -name '*.defs' | copyHierarchy $out/include)
     cp ${xnu}/Library/Frameworks/Kernel.framework/Versions/A/Headers/Availability*.h $out/include
     cp ${xnu}/Library/Frameworks/Kernel.framework/Versions/A/Headers/stdarg.h        $out/include
 
@@ -28,10 +34,10 @@ appleDerivation' stdenv {
                ${CommonCrypto} ${copyfile} ${removefile} ${libresolvHeaders} \
                ${Libnotify} ${libplatform} ${mDNSResponder} ${launchd} \
                ${libutilHeaders} ${libpthread} ${hfsHeaders}; do
-      (cd $dep/include && find . -name '*.h' | cpio -pdm $out/include)
+      (cd $dep/include && find . -name '*.h' | copyHierarchy $out/include)
     done
 
-    (cd ${buildPackages.darwin.cctools.dev}/include/mach-o && find . -name '*.h' | cpio -pdm $out/include/mach-o)
+    (cd ${buildPackages.darwin.cctools.dev}/include/mach-o && find . -name '*.h' | copyHierarchy $out/include/mach-o)
 
     mkdir -p $out/include/os
 

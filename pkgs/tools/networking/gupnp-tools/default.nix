@@ -3,11 +3,11 @@
 , fetchurl
 , meson
 , ninja
-, gupnp
-, gssdp
+, gupnp_1_6
+, libsoup_3
+, gssdp_1_6
 , pkg-config
 , gtk3
-, libuuid
 , gettext
 , gupnp-av
 , gtksourceview4
@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gupnp-tools";
-  version = "0.10.2";
+  version = "0.12.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "beSe9LN1uKFk90t2YWixGE4NKBlrawek9TQfCN/YXWw=";
+    sha256 = "XqdgfuNlZCxVWSf+3FteH+COdPBh0MPrCL2QG16yAII=";
   };
 
   nativeBuildInputs = [
@@ -33,13 +33,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gupnp
-    libuuid
-    gssdp
+    gupnp_1_6
+    libsoup_3
+    gssdp_1_6
     gtk3
     gupnp-av
     gtksourceview4
-    gnome.adwaita-icon-theme
   ];
 
   passthru = {

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "htmlq";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "mgdm";
     repo = "htmlq";
     rev = "v${version}";
-    sha256 = "sha256-pTw+dsbbFwrPIxCimMsYfyAF2zVeudebxVtMQV1cJnE=";
+    sha256 = "sha256-kZtK2QuefzfxxuE1NjXphR7otr+RYfMif/RSpR6TxY0=";
   };
 
-  cargoSha256 = "sha256-jeoSA7w2bk0R3L+/FDn/b+ddTCqY8zFr/2GCxI7OCzM=";
+  cargoSha256 = "sha256-r9EnQQPGpPIcNYb1eqGrMnRdh0snIa5iVsTYTI+YErY=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 

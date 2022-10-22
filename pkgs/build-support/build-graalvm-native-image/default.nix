@@ -1,4 +1,4 @@
-{ lib, stdenv, graalvmCEPackages, glibcLocales }:
+{ lib, stdenv, graalvm, glibcLocales }:
 
 { name ? "${args.pname}-${args.version}"
   # Final executable name
@@ -19,16 +19,18 @@
 , extraNativeImageBuildArgs ? [ ]
   # XMX size of GraalVM during build
 , graalvmXmx ? "-J-Xmx6g"
-  # The GraalVM to use
-, graalvm ? graalvmCEPackages.graalvm11-ce
+  # The GraalVM derivation to use
+, graalvmDrv ? graalvm
+  # Locale to be used by GraalVM compiler
+, LC_ALL ? "en_US.UTF-8"
 , meta ? { }
 , ...
 } @ args:
 
 stdenv.mkDerivation (args // {
-  inherit dontUnpack;
+  inherit dontUnpack LC_ALL;
 
-  nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ graalvm glibcLocales ];
+  nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ graalvmDrv glibcLocales ];
 
   nativeImageBuildArgs = nativeImageBuildArgs ++ extraNativeImageBuildArgs ++ [ graalvmXmx ];
 
@@ -50,8 +52,10 @@ stdenv.mkDerivation (args // {
 
   meta = {
     # default to graalvm's platforms
-    platforms = graalvm.meta.platforms;
+    platforms = graalvmDrv.meta.platforms;
     # default to executable name
     mainProgram = executable;
+    # need to have native-image-installable-svm available
+    broken = !(builtins.elem "native-image-installable-svm" graalvmDrv.products);
   } // meta;
 })

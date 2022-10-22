@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, fetchpatch, openssl, pkg-config, libnl
-, nixosTests
-, withDbus ? true, dbus
+{ lib, stdenv, fetchurl, openssl, pkg-config, libnl
+, nixosTests, wpa_supplicant_gui
+, dbusSupport ? true, dbus
 , withReadline ? true, readline
 , withPcsclite ? true, pcsclite
 , readOnlyModeSSIDs ? false
@@ -8,45 +8,18 @@
 
 with lib;
 stdenv.mkDerivation rec {
-  version = "2.9";
+  version = "2.10";
 
   pname = "wpa_supplicant";
 
   src = fetchurl {
     url = "https://w1.fi/releases/${pname}-${version}.tar.gz";
-    sha256 = "05qzak1mssnxcgdrafifxh9w86a4ha69qabkg4bsigk499xyxggw";
+    sha256 = "sha256-IN965RVLODA1X4q0JpEjqHr/3qWf50/pKSqR0Nfhey8=";
   };
 
   patches = [
-    (fetchurl {
-      name = "CVE-2019-16275.patch";
-      url = "https://w1.fi/security/2019-7/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch";
-      sha256 = "15xjyy7crb557wxpx898b5lnyblxghlij0xby5lmj9hpwwss34dz";
-    })
-    (fetchpatch {
-      # Expose OWE key management capability over DBus, remove >= 2.10
-      name = "dbus-Export-OWE-capability-and-OWE-BSS-key_mgmt.patch";
-      url = "https://w1.fi/cgit/hostap/patch/?id=7800725afb27397f7d6033d4969e2aeb61af4737";
-      sha256 = "0c1la7inf4m5y9gzdjjdnhpkx32pm8vi6m5knih8p77q4mbrdgg8";
-    })
-    # P2P: Fix copying of secondary device types for P2P group client (https://w1.fi/security/2020-2/)
-    (fetchurl {
-      name = "CVE-2021-0326.patch";
-      url = "https://w1.fi/security/2020-2/0001-P2P-Fix-copying-of-secondary-device-types-for-P2P-gr.patch";
-      sha256 = "19f4hx0p547mdx8y8arb3vclwyy4w9c8a6a40ryj7q33730mrmn4";
-    })
-    # P2P: Fix a corner case in peer addition based on PD Request (https://w1.fi/security/2021-1/)
-    (fetchurl {
-      name = "CVE-2021-27803.patch";
-      url = "https://w1.fi/security/2021-1/0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch";
-      sha256 = "04cnds7hmbqc44jasabjvrdnh66i5hwvk2h2m5z94pmgbzncyh3z";
-    })
-    # In wpa_supplicant and hostapd 2.9, forging attacks may occur because AlgorithmIdentifier parameters are mishandled in tls/pkcs1.c and tls/x509v3.c.
-    (fetchpatch {
-      name = "CVE-2021-30004.patch";
-      url = "https://w1.fi/cgit/hostap/patch/?id=a0541334a6394f8237a4393b7372693cd7e96f15";
-      sha256 = "1gbhlz41x1ar1hppnb76pqxj6vimiypy7c4kq6h658637s4am3xg";
-    })
+    # Fix a bug when using two config files
+    ./Use-unique-IDs-for-networks-and-credentials.patch
   ] ++ lib.optionals readOnlyModeSSIDs [
     # Allow read-only networks
     ./0001-Implement-read-only-mode-for-ssids.patch
@@ -55,46 +28,48 @@ stdenv.mkDerivation rec {
   # TODO: Patch epoll so that the dbus actually responds
   # TODO: Figure out how to get privsep working, currently getting SIGBUS
   extraConfig = ''
+    #CONFIG_ELOOP_EPOLL=y
+    #CONFIG_PRIVSEP=y
+    #CONFIG_TLSV12=y see #8332
     CONFIG_AP=y
-    CONFIG_LIBNL32=y
+    CONFIG_BGSCAN_LEARN=y
+    CONFIG_BGSCAN_SIMPLE=y
+    CONFIG_DEBUG_SYSLOG=y
+    CONFIG_EAP_EKE=y
     CONFIG_EAP_FAST=y
-    CONFIG_EAP_PWD=y
-    CONFIG_EAP_PAX=y
-    CONFIG_EAP_SAKE=y
     CONFIG_EAP_GPSK=y
     CONFIG_EAP_GPSK_SHA256=y
+    CONFIG_EAP_IKEV2=y
+    CONFIG_EAP_PAX=y
+    CONFIG_EAP_PWD=y
+    CONFIG_EAP_SAKE=y
+    CONFIG_ELOOP=eloop
+    CONFIG_EXT_PASSWORD_FILE=y
+    CONFIG_HS20=y
+    CONFIG_HT_OVERRIDES=y
+    CONFIG_IEEE80211AC=y
+    CONFIG_IEEE80211N=y
+    CONFIG_IEEE80211R=y
+    CONFIG_IEEE80211W=y
+    CONFIG_INTERNETWORKING=y
+    CONFIG_L2_PACKET=linux
+    CONFIG_LIBNL32=y
     CONFIG_OWE=y
+    CONFIG_P2P=y
+    CONFIG_TDLS=y
+    CONFIG_TLS=openssl
+    CONFIG_TLSV11=y
+    CONFIG_VHT_OVERRIDES=y
+    CONFIG_WNM=y
     CONFIG_WPS=y
     CONFIG_WPS_ER=y
     CONFIG_WPS_NFS=y
-    CONFIG_EAP_IKEV2=y
-    CONFIG_EAP_EKE=y
-    CONFIG_HT_OVERRIDES=y
-    CONFIG_VHT_OVERRIDES=y
-    CONFIG_ELOOP=eloop
-    #CONFIG_ELOOP_EPOLL=y
-    CONFIG_L2_PACKET=linux
-    CONFIG_IEEE80211W=y
-    CONFIG_TLS=openssl
-    CONFIG_TLSV11=y
-    #CONFIG_TLSV12=y see #8332
-    CONFIG_IEEE80211R=y
-    CONFIG_DEBUG_SYSLOG=y
-    #CONFIG_PRIVSEP=y
-    CONFIG_IEEE80211N=y
-    CONFIG_IEEE80211AC=y
-    CONFIG_INTERNETWORKING=y
-    CONFIG_HS20=y
-    CONFIG_P2P=y
-    CONFIG_TDLS=y
-    CONFIG_BGSCAN_SIMPLE=y
-    CONFIG_BGSCAN_LEARN=y
   '' + optionalString withPcsclite ''
     CONFIG_EAP_SIM=y
     CONFIG_EAP_AKA=y
     CONFIG_EAP_AKA_PRIME=y
     CONFIG_PCSC=y
-  '' + optionalString withDbus ''
+  '' + optionalString dbusSupport ''
     CONFIG_CTRL_IFACE_DBUS=y
     CONFIG_CTRL_IFACE_DBUS_NEW=y
     CONFIG_CTRL_IFACE_DBUS_INTRO=y
@@ -119,7 +94,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ openssl libnl ]
-    ++ optional withDbus dbus
+    ++ optional dbusSupport dbus
     ++ optional withReadline readline
     ++ optional withPcsclite pcsclite;
 
@@ -142,6 +117,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit (nixosTests) wpa_supplicant;
+    inherit wpa_supplicant_gui; # inherits the src+version updates
   };
 
   meta = with lib; {

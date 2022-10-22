@@ -1,8 +1,25 @@
-{ lib, fetchFromGitHub, cmake, pkg-config, mkDerivation
-, qtbase, qtx11extras, qtsvg, makeWrapper
-, vulkan-loader, libglvnd, xorg, python3, python3Packages
-, bison, pcre, automake, autoconf, addOpenGLRunpath
-, waylandSupport ? false, wayland
+{ lib
+, fetchFromGitHub
+, nix-update-script
+, cmake
+, pkg-config
+, mkDerivation
+, qtbase
+, qtx11extras
+, qtsvg
+, makeWrapper
+, vulkan-loader
+, libglvnd
+, xorg
+, python3
+, python3Packages
+, bison
+, pcre
+, automake
+, autoconf
+, addOpenGLRunpath
+, waylandSupport ? false
+, wayland
 }:
 let
   custom_swig = fetchFromGitHub {
@@ -15,13 +32,13 @@ let
 in
 mkDerivation rec {
   pname = "renderdoc";
-  version = "1.16";
+  version = "1.21";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${version}";
-    sha256 = "150d1qzjs420clqr48gickiw5ymjx4md6iyjbxmxsdml0pyxpwwn";
+    sha256 = "sha256-T6OAr6Pl4VmXVSlNHF6kh8jIKs3FSTZsZ+Y4IH3SPTE=";
   };
 
   buildInputs = [
@@ -64,6 +81,10 @@ mkDerivation rec {
     addOpenGLRunpath $out/lib/librenderdoc.so
   '';
 
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
+
   meta = with lib; {
     description = "A single-frame graphics debugger";
     homepage = "https://renderdoc.org/";
@@ -74,7 +95,7 @@ mkDerivation rec {
       of any application using Vulkan, D3D11, OpenGL or D3D12 across
       Windows 7 - 10, Linux or Android.
     '';
-    maintainers = [ maintainers.jansol ];
+    maintainers = [ ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "signond";
-  version = "8.60";
+  version = "8.61";
 
   src = fetchFromGitLab {
     owner = "accounts-sso";
     repo = pname;
     rev = "VERSION_${version}";
-    sha256 = "pFpeJ13ut5EoP37W33WrYL2LzkX/k7ZKJcRpPO5l8i4=";
+    sha256 = "sha256-d7JZmGpjIvSN9l1nvKbBZjF0OR5L5frPTGHF/pNEqHE=";
   };
 
   nativeBuildInputs = [

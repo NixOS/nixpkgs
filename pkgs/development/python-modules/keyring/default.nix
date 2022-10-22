@@ -6,6 +6,7 @@
 , setuptools-scm
 , importlib-metadata
 , dbus-python
+, jaraco_classes
 , jeepney
 , secretstorage
 , pytestCheckHook
@@ -13,12 +14,13 @@
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "23.4.0";
-  disabled = pythonOlder "3.6";
+  version = "23.9.3";
+  format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-iPIGAkKV48b7FrsKYPtLt+wRhWKdxacp8SqnwjbQE4c=";
+    hash = "sha256-abAd2DxC9ZAlD+eh9QP8IpsU3oOFcxSxkzo92/WVxKU=";
   };
 
   nativeBuildInputs = [
@@ -26,13 +28,14 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    # this should be optional, however, it has a different API
-    importlib-metadata # see https://github.com/jaraco/keyring/issues/503#issuecomment-798973205
-
-    dbus-python
+    jaraco_classes
+  ] ++ lib.optionals stdenv.isLinux [
     jeepney
     secretstorage
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
+
 
   pythonImportsCheck = [
     "keyring"

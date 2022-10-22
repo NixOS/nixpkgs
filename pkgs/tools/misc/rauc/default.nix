@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rauc";
-  version = "1.5.1";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AIizbD2jaZ5SY0K/hwpHdGE20KEhWC53LWUiVYs9Oiw=";
+    sha256 = "sha256-Cst+hSMyuJw6b+ZA6XNVh0kVp7WUTiiXpO1TPeHA+sM=";
   };
 
   passthru = {
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Safe and secure software updates for embedded Linux";
     homepage = "https://rauc.io";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
     maintainers = with maintainers; [ emantor ];
     platforms = with platforms; linux;
   };

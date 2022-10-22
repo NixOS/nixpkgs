@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rslint";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "rslint";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AkSQpGbhRVmDuDAbMzx00BELpI2szJ+rjKo8Qjcug1E=";
+    sha256 = "sha256-3DEwi+bhqwP8aMpZYl07GZbe7IecraB3m54lZ5LViVc=";
   };
 
-  cargoSha256 = "sha256-U8Uf7LG6+dOi+XxRpJrpy0kAqyr8fAlVchE9ZJ+ex/s=";
+  cargoSha256 = "sha256-bqF5v52uxbvmVmphXAmcWlCI6nbQzZemCxlTcqhRDTY=";
 
   cargoBuildFlags = [
     "-p" "rslint_cli"

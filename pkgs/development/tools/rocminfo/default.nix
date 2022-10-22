@@ -7,17 +7,18 @@
   # compilers to determine the desired target.
 , defaultTargets ? []}:
 stdenv.mkDerivation rec {
-  version = "4.5.2";
+  version = "5.3.0";
   pname = "rocminfo";
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "rocminfo";
     rev = "rocm-${version}";
-    sha256 = "sha256-VIlHYiGLen4xmdP7kpmObj5wKy6Qq7iupJFtPa4Zd98=";
+    sha256 = "sha256-4wZTm5AZgG8xEd6uYqxWq4bWZgcSYZ2WYA1z4RAPF8U=";
   };
 
   enableParallelBuilding = true;
-  buildInputs = [ cmake rocm-cmake rocm-runtime ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ rocm-cmake rocm-runtime ];
   cmakeFlags = [
     "-DROCM_DIR=${rocm-runtime}"
     "-DROCRTST_BLD_TYPE=Release"
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "ROCm Application for Reporting System Info";
     homepage = "https://github.com/RadeonOpenCompute/rocminfo";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [ lovesegfault Flakebi ];
     platforms = platforms.linux;
   };
 }

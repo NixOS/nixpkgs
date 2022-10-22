@@ -12,7 +12,7 @@ let
     default = {
       name = "sddm";
 
-      machine = { ... }: {
+      nodes.machine = { ... }: {
         imports = [ ./common/user-account.nix ];
         services.xserver.enable = true;
         services.xserver.displayManager.sddm.enable = true;
@@ -41,7 +41,7 @@ let
         maintainers = [ ttuegel ];
       };
 
-      machine = { ... }: {
+      nodes.machine = { ... }: {
         imports = [ ./common/user-account.nix ];
         services.xserver.enable = true;
         services.xserver.displayManager = {

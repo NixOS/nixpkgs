@@ -32,19 +32,16 @@ let
     genericName = "Text Editor";
     exec = "azuredatastudio --no-sandbox --unity-launch %F";
     icon = "azuredatastudio";
-    startupNotify = "true";
-    categories = "Utility;TextEditor;Development;IDE;";
-    mimeType = "text/plain;inode/directory;application/x-azuredatastudio-workspace;";
-    extraEntries = ''
-      StartupWMClass=azuredatastudio
-      Actions=new-empty-window;
-      Keywords=azuredatastudio;
-
-      [Desktop Action new-empty-window]
-      Name=New Empty Window
-      Exec=azuredatastudio --no-sandbox --new-window %F
-      Icon=azuredatastudio
-    '';
+    startupNotify = true;
+    startupWMClass = "azuredatastudio";
+    categories = [ "Utility" "TextEditor" "Development" "IDE" ];
+    mimeTypes = [ "text/plain" "inode/directory" "application/x-azuredatastudio-workspace" ];
+    keywords = [ "azuredatastudio" ];
+    actions.new-empty-window = {
+      name = "New Empty Window";
+      exec = "azuredatastudio --no-sandbox --new-window %F";
+      icon = "azuredatastudio";
+    };
   };
 
   urlHandlerDesktopItem = makeDesktopItem {
@@ -54,26 +51,25 @@ let
     genericName = "Text Editor";
     exec = "azuredatastudio --no-sandbox --open-url %U";
     icon = "azuredatastudio";
-    startupNotify = "true";
-    categories = "Utility;TextEditor;Development;IDE;";
-    mimeType = "x-scheme-handler/azuredatastudio;";
-    extraEntries = ''
-      NoDisplay=true
-      Keywords=azuredatastudio;
-    '';
+    startupNotify = true;
+    startupWMClass = "azuredatastudio";
+    categories = [ "Utility" "TextEditor" "Development" "IDE" ];
+    mimeTypes = [ "x-scheme-handler/azuredatastudio" ];
+    keywords = [ "azuredatastudio" ];
+    noDisplay = true;
   };
 in
 stdenv.mkDerivation rec {
 
   pname = "azuredatastudio";
-  version = "1.33.1";
+  version = "1.35.1";
 
   desktopItems = [ desktopItem urlHandlerDesktopItem ];
 
   src = fetchurl {
     name = "${pname}-${version}.tar.gz";
     url = "https://azuredatastudio-update.azurewebsites.net/${version}/linux-x64/stable";
-    sha256 = "sha256-jgZ8iZkic26JSgFTXpu1u1+MM4G5AqyW6Mj1tx5QwcY=";
+    sha256 = "sha256-b/ha+81TlffnvSENzaePvfFugcKJffvjRU7y+x60OuQ=";
   };
 
   nativeBuildInputs = [
@@ -116,7 +112,7 @@ stdenv.mkDerivation rec {
   ];
 
   # this will most likely need to be updated when azuredatastudio's version changes
-  sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/3.0.0-release.139";
+  sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/3.0.0-release.215";
 
   rpath = lib.concatStringsSep ":" [
     atomEnv.libPath
@@ -170,6 +166,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ xavierzwirtz ];
     description = "A data management tool that enables working with SQL Server, Azure SQL DB and SQL DW";
     homepage = "https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfreeRedistributable;
     platforms = [ "x86_64-linux" ];
   };

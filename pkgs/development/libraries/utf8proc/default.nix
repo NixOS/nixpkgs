@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DUTF8PROC_ENABLE_TESTING=ON"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
   ];
 
   doCheck = true;

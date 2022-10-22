@@ -1,35 +1,46 @@
 { lib
-, resholvePackage
+, resholve
 , fetchFromGitHub
 , asciidoc
 , bash
 , coreutils
 , gawk
+, gnugrep
 , gnum4
-, testVersion
+, makeWrapper
+, pacman
 , util-linux
+, chrootPath ? [
+    "/usr/local/sbin"
+    "/usr/local/bin"
+    "/usr/bin"
+    "/usr/bin/site_perl"
+    "/usr/bin/vendor_perl"
+    "/usr/bin/core_perl"
+  ]
 }:
 
-resholvePackage rec {
+resholve.mkDerivation rec {
   pname = "arch-install-scripts";
-  version = "24";
+  version = "26";
 
   src = fetchFromGitHub {
     owner = "archlinux";
     repo = "arch-install-scripts";
     rev = "v${version}";
-    sha256 = "06rydiliis34lbz5fsayhbczs1xqi1a80jnhxafpjf6k3rfji6iq";
+    hash = "sha256-TRo1ANKSt3njw4HdBMUymMJDpTkL/i5/hdSqxHZnuYw=";
   };
 
   nativeBuildInputs = [ asciidoc gnum4 ];
 
-  preBuild = ''
+  postPatch = ''
     substituteInPlace ./Makefile \
       --replace "PREFIX = /usr/local" "PREFIX ?= /usr/local"
-
-    # https://github.com/archlinux/arch-install-scripts/pull/10
-    substituteInPlace ./common \
-      --replace "print '%s' \"\$1\"" "printf '%s' \"\$1\""
+    substituteInPlace ./pacstrap.in \
+      --replace "cp -a" "cp -LR --no-preserve=mode" \
+      --replace "unshare pacman" "unshare ${pacman}/bin/pacman" \
+      --replace 'gnupg "$newroot/etc/pacman.d/"' 'gnupg "$newroot/etc/pacman.d/" && chmod 700 "$newroot/etc/pacman.d/gnupg"'
+    echo "export PATH=${lib.strings.makeSearchPath "" chrootPath}:\$PATH" >> ./common
   '';
 
   installFlags = [ "PREFIX=$(out)" ];
@@ -43,7 +54,7 @@ resholvePackage rec {
       # the only *required* arguments are the 3 below
 
       # Specify 1 or more $out-relative script paths. Unlike many
-      # builders, resholvePackage modifies the output files during
+      # builders, resholve.mkDerivation modifies the output files during
       # fixup (to correctly resolve in-package sourcing).
       scripts = [ "bin/arch-chroot" "bin/genfstab" "bin/pacstrap" ];
 
@@ -51,7 +62,7 @@ resholvePackage rec {
       interpreter = "${bash}/bin/bash";
 
       # packages resholve should resolve executables from
-      inputs = [ coreutils gawk util-linux ];
+      inputs = [ coreutils gawk gnugrep pacman util-linux ];
 
       # TODO: no good way to resolve mount/umount in Nix builds for now
       # see https://github.com/abathur/resholve/issues/29
@@ -59,11 +70,7 @@ resholvePackage rec {
         external = [ "mount" "umount" ];
       };
 
-      # TODO: remove the execer lore override below after
-      # https://github.com/abathur/binlore/issues/1
-      execer = [
-        "cannot:${util-linux}/bin/unshare"
-      ];
+      keep = [ "$setup" "$pid_unshare" "$mount_unshare" "${pacman}/bin/pacman" ];
     };
   };
 
@@ -74,7 +81,7 @@ resholvePackage rec {
     '';
     homepage = "https://github.com/archlinux/arch-install-scripts";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ yayayayaka ];
+    maintainers = with maintainers; [ samlukeyes123 ];
     platforms = platforms.linux;
   };
 }

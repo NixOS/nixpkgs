@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osslsigncode";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "mtrojnar";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/YKj6JkVbQ4Fz+KSmBIRQ7F7A8fxi5Eg+pvKwhjpGYQ=";
+    sha256 = "sha256-KJyGDrT3dr8DfjfRrWIENoBFuiWrgQx4qz1V+mT8/yI=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

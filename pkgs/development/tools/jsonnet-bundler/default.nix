@@ -2,18 +2,16 @@
 
 buildGoModule rec {
   pname = "jsonnet-bundler";
-  version = "0.4.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "jsonnet-bundler";
     repo = "jsonnet-bundler";
     rev = "v${version}";
-    sha256 = "0pk6nf8r0wy7lnsnzyjd3vgq4b2kb3zl0xxn01ahpaqgmwpzajlk";
+    sha256 = "sha256-vjb5wEiJw48s7FUarpA94ZauFC7iEgRDAkRTwRIZ8pA=";
   };
 
   vendorSha256 = null;
-
-  subPackages = [ "cmd/jb" ];
 
   ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
 
@@ -22,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/jsonnet-bundler/jsonnet-bundler";
     license = licenses.asl20;
     maintainers = with maintainers; [ preisschild ];
+    mainProgram = "jb";
   };
 }

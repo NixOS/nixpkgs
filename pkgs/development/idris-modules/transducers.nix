@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "transducers";
+  pname = "transducers";
   version = "2017-07-28";
 
   src = fetchFromGitHub {

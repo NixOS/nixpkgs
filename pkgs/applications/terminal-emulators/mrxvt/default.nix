@@ -10,6 +10,7 @@
 , freetype
 , pkg-config
 , which
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "1mqhmnlz32lvld9rc6c1hyz7gjw4anwf39yhbsjkikcgj1das0zl";
   };
 
-  buildInputs = [ libX11 libXft libXi xorgproto libSM libICE freetype pkg-config which ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ libX11 libXft libXi xorgproto libSM libICE freetype which ];
 
   configureFlags = [
     "--with-x"
@@ -37,6 +39,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${freetype.dev}/include/freetype2";
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.mrxvt;
 
   meta = with lib; {
     description = "Lightweight multitabbed feature-rich X11 terminal emulator";

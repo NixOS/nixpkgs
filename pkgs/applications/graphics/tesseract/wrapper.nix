@@ -1,4 +1,5 @@
 { lib, makeWrapper, tesseractBase, languages
+, runCommand, imagemagick
 
 # A list of languages like [ "eng" "spa" … ] or `null` for all available languages
 , enableLanguages ? null
@@ -12,8 +13,6 @@
 }:
 
 let
-  passthru = { inherit tesseractBase languages tessdata; };
-
   tesseractWithData = tesseractBase.overrideAttrs (_: {
     inherit tesseractBase tessdata;
 
@@ -47,9 +46,36 @@ let
          exit 1
       fi
     '';
+
   });
 
-  tesseract = (if enableLanguages == [] then tesseractBase else tesseractWithData) // passthru;
+  passthru = { inherit tesseractBase languages tessdata; };
+
+  # Only run test when all languages are available
+  test = lib.optionalAttrs (enableLanguages == null) {
+    tests.default = runCommand "tesseract-test-ocr" {
+      buildInputs = [
+        tesseractWithData
+        imagemagick
+      ];
+    } ''
+      text="hello nix"
+
+      convert -size 400x40 xc:white -font 'DejaVu-Sans' -pointsize 20 \
+        -fill black -annotate +5+20 "$text" /tmp/test-img.png 2>/dev/null
+      ocrResult=$(tesseract /tmp/test-img.png - | tr -d "\f")
+
+      if [[ $ocrResult != $text ]]; then
+        echo "OCR test failed"
+        echo "expected: '$text'"
+        echo "actual: '$ocrResult'"
+        exit 1
+      fi
+      touch $out
+    '';
+  };
+
+  tesseract = (if enableLanguages == [] then tesseractBase else tesseractWithData) // passthru // test;
 in
   if enableLanguagesHash == null then
     tesseract

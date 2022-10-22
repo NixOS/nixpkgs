@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ xalanc xercesc openssl ];
 
   meta = {
-    homepage = "http://santuario.apache.org/";
+    homepage = "https://santuario.apache.org/";
     description = "C++ Implementation of W3C security standards for XML";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;

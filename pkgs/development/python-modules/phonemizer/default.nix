@@ -1,10 +1,13 @@
 { lib
+, stdenv
 , substituteAll
 , buildPythonApplication
 , fetchPypi
 , joblib
 , segments
 , attrs
+, dlinfo
+, typing-extensions
 , espeak-ng
 , pytestCheckHook
 , pytest-cov
@@ -12,11 +15,11 @@
 
 buildPythonApplication rec {
   pname = "phonemizer";
-  version = "2.2.2";
+  version = "3.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ae252f0bc7633e172b08622f318e7e112cde847e9281d4675ea7210157325146";
+    sha256 = "sha256-Bo+F+FqKmtxjijeHrqyvcaU+R1eLEtdzwJdDNQDNiSs=";
   };
 
   postPatch = ''
@@ -26,9 +29,8 @@ buildPythonApplication rec {
   patches = [
     (substituteAll {
       src = ./backend-paths.patch;
-      espeak = "${lib.getBin espeak-ng}/bin/espeak";
-      # override festival path should you try to integrate it
-      festival = "";
+      libespeak = "${lib.getLib espeak-ng}/lib/libespeak-ng${stdenv.hostPlatform.extensions.sharedLibrary}";
+      # FIXME package festival
     })
     ./remove-intertwined-festival-test.patch
   ];
@@ -37,6 +39,8 @@ buildPythonApplication rec {
     joblib
     segments
     attrs
+    dlinfo
+    typing-extensions
   ];
 
   preCheck = ''
@@ -45,26 +49,26 @@ buildPythonApplication rec {
 
   checkInputs = [
     pytestCheckHook
-    pytest-cov
   ];
 
   # We tried to package festvial, but were unable to get the backend running,
   # so let's disable related tests.
-  pytestFlagsArray = [
-    "--ignore=test/test_festival.py"
+  disabledTestPaths = [
+    "test/test_festival.py"
   ];
 
   disabledTests = [
     "test_festival"
-    "test_relative"
-    "test_absolute"
+    "test_festival_path"
     "test_readme_festival_syll"
+    "test_unicode"
   ];
 
   meta = with lib; {
     homepage = "https://github.com/bootphon/phonemizer";
+    changelog = "https://github.com/bootphon/phonemizer/blob/v${version}/CHANGELOG.md";
     description = "Simple text to phones converter for multiple languages";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
   };
 }

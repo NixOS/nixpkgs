@@ -2,16 +2,18 @@
 , lib
 , stdenv
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , gnome
 , gtk3
 , atk
 , gobject-introspection
-, spidermonkey_78
+, spidermonkey_102
 , pango
 , cairo
 , readline
+, libsysprof-capture
 , glib
 , libxml2
 , dbus
@@ -30,13 +32,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "gjs";
-  version = "1.70.0";
+  version = "1.74.0";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-SwYpNBoxigI3ThE6uX+anzMlQjJp/B4LBDpf+wGGHF8=";
+    sha256 = "sha256-fWQYr2LMc1VqssJbSt9n9FI4q4kliI96VyUTWdTr7R4=";
   };
 
   patches = [
@@ -54,14 +56,17 @@ in stdenv.mkDerivation rec {
     makeWrapper
     which # for locale detection
     libxml2 # for xml-stripblanks
+    dbus # for dbus-run-session
+    gobject-introspection
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
-    gobject-introspection
     cairo
     readline
-    spidermonkey_78
-    dbus # for dbus-run-session
+    libsysprof-capture
+    spidermonkey_102
   ];
 
   checkInputs = [
@@ -73,11 +78,12 @@ in stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dprofiler=disabled"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+  ] ++ lib.optionals (!stdenv.isLinux) [
+    "-Dprofiler=disabled"
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   postPatch = ''
     patchShebangs build/choose-tests-locale.sh
@@ -135,6 +141,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/gjs/blob/master/doc/Home.md";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

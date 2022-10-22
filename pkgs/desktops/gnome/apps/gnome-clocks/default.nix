@@ -1,37 +1,37 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
 , ninja
 , gettext
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , itstool
 , desktop-file-utils
 , vala
 , gobject-introspection
 , libxml2
-, gtk3
+, gtk4
 , glib
 , gsound
 , sound-theme-freedesktop
 , gsettings-desktop-schemas
-, adwaita-icon-theme
 , gnome-desktop
-, geocode-glib
+, geocode-glib_2
 , gnome
 , gdk-pixbuf
 , geoclue2
 , libgweather
-, libhandy
+, libadwaita
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-clocks";
-  version = "41.0";
+  version = "43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-clocks/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "34yLBKuS+mGPXe5RGFce+fyeilt5XqAKNcbcZ3ywLaw=";
+    sha256 = "sHQ7cNAIgKo7zcx/fzTIwihiV7XIFzfU+YG8jE9PmB0=";
   };
 
   nativeBuildInputs = [
@@ -41,24 +41,26 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
-    wrapGAppsHook
+    wrapGAppsHook4
     desktop-file-utils
     libxml2
     gobject-introspection # for finding vapi files
+    # error: Package `...' not found in specified Vala API directories or GObject-Introspection GIR directories
+    # TODO: the vala setuphook should look for vala filess in targetOffset instead of hostOffset
+    gsound
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     glib
     gsettings-desktop-schemas
     gdk-pixbuf
-    adwaita-icon-theme
     gnome-desktop
-    geocode-glib
+    geocode-glib_2
     geoclue2
     libgweather
     gsound
-    libhandy
+    libadwaita
   ];
 
   preFixup = ''
@@ -81,7 +83,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/Clocks";
     description = "Clock application designed for GNOME 3";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

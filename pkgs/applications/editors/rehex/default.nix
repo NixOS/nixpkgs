@@ -2,42 +2,43 @@
 , stdenv
 , fetchFromGitHub
 , pkg-config
+, which
+, zip
+, libicns
 , capstone
 , jansson
-, lua5_3
+, libunistring
 , wxGTK31
+, lua53Packages
+, perlPackages
 , Carbon
 , Cocoa
 , IOKit
-, libicns
-, wxmac
 }:
 
 stdenv.mkDerivation rec {
   pname = "rehex";
-  version = "0.3.92";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "solemnwarning";
     repo = pname;
     rev = version;
-    sha256 = "sha256-yZvJlomUpJwDJOBVSl49lU+JE1YMMs/BSzHepXoFlIY=";
+    hash = "sha256-VBHNrOVIz7UM9tY1V7Ykwt4Cv0fY++8gXc2og4sLDk8=";
   };
 
-  postPatch = ''
-    substituteInPlace Makefile.osx --replace 'iconutil -c icns -o $@ $(ICONSET)' \
-      'png2icns $@ $(ICONSET)/icon_16x16.png $(ICONSET)/icon_32x32.png $(ICONSET)/icon_128x128.png $(ICONSET)/icon_256x256.png $(ICONSET)/icon_512x512.png'
-  '';
-
-  nativeBuildInputs = [ pkg-config ]
+  nativeBuildInputs = [ pkg-config which zip ]
     ++ lib.optionals stdenv.isDarwin [ libicns ];
 
-  buildInputs = [ capstone jansson lua5_3 ]
-    ++ lib.optionals (!stdenv.isDarwin) [ wxGTK31 ]
-    ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa IOKit wxmac ];
+  buildInputs = [ capstone jansson libunistring wxGTK31 ]
+    ++ (with lua53Packages; [ lua busted ])
+    ++ (with perlPackages; [ perl TemplateToolkit ])
+    ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa IOKit ];
 
-  makeFlags = [ "prefix=$(out)" ]
+  makeFlags = [ "prefix=${placeholder "out"}" ]
     ++ lib.optionals stdenv.isDarwin [ "-f Makefile.osx" ];
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Reverse Engineers' Hex Editor";
@@ -46,8 +47,9 @@ stdenv.mkDerivation rec {
       engineering, and everything else.
     '';
     homepage = "https://github.com/solemnwarning/rehex";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ markus1189 SuperSandro2000 ];
+    changelog = "https://github.com/solemnwarning/rehex/raw/${version}/CHANGES.txt";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ markus1189 wegank ];
     platforms = platforms.all;
   };
 }

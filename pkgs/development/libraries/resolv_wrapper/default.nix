@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "resolv_wrapper-1.1.7";
+  pname = "resolv_wrapper";
+  version = "1.1.7";
 
   src = fetchurl {
-    url = "mirror://samba/cwrap/${name}.tar.gz";
+    url = "mirror://samba/cwrap/resolv_wrapper-${version}.tar.gz";
     sha256 = "sha256-Rgrn/V5TSFvn3ZmlXFki8csWNrnoghmB1JrRZQfIoHQ=";
   };
 

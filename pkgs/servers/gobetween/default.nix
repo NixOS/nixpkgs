@@ -32,7 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Modern & minimalistic load balancer for the Сloud era";
-    homepage = "http://gobetween.io";
+    homepage = "https://gobetween.io";
     license = licenses.mit;
     maintainers = with maintainers; [ tomberek ];
   };

@@ -1,0 +1,16 @@
+diff --git a/gio/gdesktopappinfo.c b/gio/gdesktopappinfo.c
+index a441bfec9..6bcd3e690 100644
+--- a/gio/gdesktopappinfo.c
++++ b/gio/gdesktopappinfo.c
+@@ -2678,6 +2678,11 @@ prepend_terminal_to_vector (int    *argc,
+             if (check != NULL)
+               pass_cmd_as_single_arg = TRUE;
+           }
++          if (check == NULL) {
++            check = g_find_program_in_path ("io.elementary.terminal");
++            if (check != NULL)
++              pass_cmd_as_single_arg = TRUE;
++          }
+           if (check == NULL)
+             check = g_find_program_in_path ("tilix");
+           if (check == NULL)

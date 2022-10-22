@@ -21,6 +21,6 @@ in fetchFromGitHub {
     description = "A multi-script display typeface for popular culture";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [ maintainers.linarcx ];
+    maintainers = [ ];
   };
 }

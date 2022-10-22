@@ -1,11 +1,11 @@
 diff --git a/rpy2/rinterface_lib/embedded.py b/rpy2/rinterface_lib/embedded.py
-index 1f4babbf..322363c5 100644
+index ccd3a315..51fb5da4 100644
 --- a/rpy2/rinterface_lib/embedded.py
 +++ b/rpy2/rinterface_lib/embedded.py
-@@ -118,6 +118,16 @@ def _initr(
-         if openrlib.R_HOME is None:
-             raise ValueError('openrlib.R_HOME cannot be None.')
-         os.environ['R_HOME'] = openrlib.R_HOME
+@@ -276,6 +276,16 @@ def _initr(
+                  os.environ.get('LD_LIBRARY_PATH', ''))
+                 )
+         )
 +
 +        # path to libraries
 +        existing = os.environ.get('R_LIBS_SITE')

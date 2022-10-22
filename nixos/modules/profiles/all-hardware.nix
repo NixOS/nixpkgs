@@ -40,21 +40,24 @@ in
       # SD cards.
       "sdhci_pci"
 
+      # NVMe drives
+      "nvme"
+
       # Firewire support.  Not tested.
       "ohci1394" "sbp2"
 
       # Virtio (QEMU, KVM etc.) support.
-      "virtio_net" "virtio_pci" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console"
+      "virtio_net" "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console"
 
       # VMware support.
       "mptspi" "vmxnet3" "vsock"
     ] ++ lib.optional platform.isx86 "vmw_balloon"
-    ++ lib.optionals (!platform.isAarch64 && !platform.isAarch32) [ # not sure where else they're missing
+    ++ lib.optionals (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [
       "vmw_vmci" "vmwgfx" "vmw_vsock_vmci_transport"
 
       # Hyper-V support.
       "hv_storvsc"
-    ] ++ lib.optionals (pkgs.stdenv.isAarch32 || pkgs.stdenv.isAarch64) [
+    ] ++ lib.optionals pkgs.stdenv.hostPlatform.isAarch [
       # Most of the following falls into two categories:
       #  - early KMS / early display
       #  - early storage (e.g. USB) support
@@ -105,6 +108,9 @@ in
 
       # USB drivers
       "xhci-pci-renesas"
+
+      # Reset controllers
+      "reset-raspberrypi" # Triggers USB chip firmware load.
 
       # Misc "weak" dependencies
       "analogix-dp"

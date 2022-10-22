@@ -1,36 +1,35 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitHub
 , buildPythonPackage
 , rustPlatform
 , pythonOlder
 , openssl
 , perl
+, pkgs
 }:
 
 buildPythonPackage rec {
   pname = "clvm_rs";
-  version = "0.1.15";
+  version = "0.1.19";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "clvm_rs";
     rev = version;
-    sha256 = "sha256-4QFreQlRjKqGhPvuXU/pZpxMfF8LkIf6X7C3K2q77MI=";
+    sha256 = "sha256-mCKY/PqNOUTaRsFDxQBvbTD6wC4qzP0uv5FldYkwl6c=";
   };
 
-  patches = [
-    # upstream forgot to refresh the lock file
-    ./bump-cargo-lock.patch
-  ];
-
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src patches;
+    inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-jPNU+P6JgxTPL1GYUBE4VPU3p6cgL8u/+AIELr7r5Mk=";
+    sha256 = "sha256-TmrR8EeySsGWXohMdo3dCX4oT3l9uLVv5TUeRxCBQeE=";
   };
 
   format = "pyproject";
+
+  buildAndTestSubdir = "wheel";
 
   nativeBuildInputs = [
     perl # used by openssl-sys to configure
@@ -44,6 +43,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "clvm_rs" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://chialisp.com/";
     description = "Rust implementation of clvm";
     license = licenses.asl20;

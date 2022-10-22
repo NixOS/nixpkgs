@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "zope-hookable";
-  version = "5.0.1";
+  version = "5.2";
 
   src = fetchPypi {
     pname = "zope.hookable";
     inherit version;
-    sha256 = "0hc82lfr7bk53nvbxvjkibkarngyrzgfk2i6bg8wshl0ly0pdl19";
+    sha256 = "sha256-TDAYvPKznPXMz0CCb3mbS4wUAFbbeA+WywyjMqJDvSk=";
   };
 
   checkInputs = [ zope_testing ];

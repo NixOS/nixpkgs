@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, SDL2, SDL2_mixer, libpng }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, SDL2
+, SDL2_mixer
+, cmake
+, libpng
+}:
 
 stdenv.mkDerivation rec {
   pname = "julius";
@@ -8,18 +15,18 @@ stdenv.mkDerivation rec {
     owner = "bvschaik";
     repo = "julius";
     rev = "v${version}";
-    sha256 = "0w7kmgz9ya0ck9cxhsyralarg7y6ydx4plmh33r4mkxkamlr7493";
+    hash = "sha256-I5GTaVWzz0ryGLDSS3rzxp+XFVXZa9hZmgwon/6r83A=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 SDL2_mixer libpng ];
 
   meta = with lib; {
-    description = "An open source re-implementation of Caesar III";
     homepage = "https://github.com/bvschaik/julius";
+    description = "An open source re-implementation of Caesar III";
     license = licenses.agpl3;
+    maintainers = with maintainers; [ Thra11 ];
     platforms = platforms.all;
     broken = stdenv.isDarwin;
-    maintainers = with maintainers; [ Thra11 ];
   };
 }

@@ -2,20 +2,19 @@
 
 htop.overrideAttrs (oldAttrs: rec {
   pname = "htop-vim";
-  version = "unstable-2021-10-11";
+  version = "unstable-2022-05-24";
 
   src = fetchFromGitHub {
     owner = "KoffeinFlummi";
     repo = pname;
-    rev = "ba6fd3891e9af60b41bd092524cc05f2469fec4b";
-    sha256 = "sha256-G83+5GgEz41begDkdK8zNx48UleufFCJ9pOQ9nbtFNs=";
+    rev = "830ef7144940875d9d9716e33aff8651d164026e";
+    sha256 = "sha256-ojStkpWvhb+W3dWyRev0VwjtCVL/I9L8FhtXcQ+ODLA=";
   };
 
   meta = with lib; {
+    inherit (htop.meta) platforms license;
     description = "An interactive process viewer for Linux, with vim-style keybindings";
     homepage = "https://github.com/KoffeinFlummi/htop-vim";
-    license = licenses.gpl2Only;
-    platforms = platforms.all;
     maintainers = with maintainers; [ thiagokokada ];
     mainProgram = "htop";
   };

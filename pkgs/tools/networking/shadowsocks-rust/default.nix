@@ -1,21 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, libiconv }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, CoreServices, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowsocks-rust";
-  version = "1.12.5";
+  version = "1.14.3";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "shadowsocks";
     repo = pname;
-    sha256 = "sha256-whPaFb+4mYOWmtFc/a+NkH9avCfOnGnAvqz3UFTt+RY=";
+    sha256 = "sha256-tRiziyCw1Qpm22RtZHeKt4VFReJidFHsPxPSjxIA3hA=";
   };
 
-  cargoSha256 = "sha256-w7AqNsa9lolPEiHEv7E4XGaFV/UbCeYvmWekr9YzO6Q=";
+  cargoSha256 = "sha256-snnzNb1yJ8L5pMvNNEIf5hZOpFV6DKOWGtGP1T3YTWg=";
 
   RUSTC_BOOTSTRAP = 1;
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
+
+  cargoBuildFlags = [
+    "--features=aead-cipher-extra,local-dns,local-http-native-tls,local-redir,local-tun"
+  ];
 
   # all of these rely on connecting to www.example.com:80
   checkFlags = [

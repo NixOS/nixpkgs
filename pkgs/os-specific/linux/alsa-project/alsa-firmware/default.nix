@@ -1,20 +1,16 @@
-{ lib, stdenv, buildPackages, autoreconfHook, fetchurl, fetchpatch }:
+{ lib, buildPackages, stdenvNoCC, autoreconfHook, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "alsa-firmware";
-  version = "1.2.1";
+  version = "1.2.4";
 
   src = fetchurl {
     url = "mirror://alsa/firmware/alsa-firmware-${version}.tar.bz2";
-    sha256 = "1aq8z8ajpjvcx7bwhwp36bh5idzximyn77ygk3ifs0my3mbpr8mf";
+    sha256 = "sha256-tnttfQi8/CR+9v8KuIqZwYgwWjz1euLf0LzZpbNs1bs=";
   };
 
-  patches = [ (fetchpatch {
-    url = "https://github.com/alsa-project/alsa-firmware/commit/a8a478485a999ff9e4a8d8098107d3b946b70288.patch";
-    sha256 = "0zd7vrgz00hn02va5bkv7qj2395a1rl6f8jq1mwbryxs7hiysb78";
-  }) ];
-
-  nativeBuildInputs = [ autoreconfHook buildPackages.stdenv.cc ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags = [
     "--with-hotplug-dir=$(out)/lib/firmware"
@@ -32,10 +28,11 @@ stdenv.mkDerivation rec {
     rm -rf $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.alsa-project.org/";
     description = "Soundcard firmwares from the alsa project";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ l-as ];
   };
 }

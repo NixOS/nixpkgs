@@ -7,6 +7,7 @@
 , pykka
 , enum34
 , pythonOlder
+, pythonAtLeast
 }:
 
 # Note we currently do not patch the path to the drivers
@@ -16,6 +17,9 @@
 buildPythonPackage rec {
   pname = "nidaqmx";
   version = src.rev;
+
+  # 3.10 is not supported, upstream inactive
+  disabled = pythonAtLeast "3.10";
 
   src = fetchFromGitHub {
     owner = "ni";

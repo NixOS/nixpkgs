@@ -9,26 +9,33 @@
 
 buildPythonPackage rec {
   pname = "nose2";
-  version = "0.10.0";
+  version = "0.12.0";
+  format = "setuptools";
 
-  # Requires mock 2.0.0 if python < 3.6, but NixPkgs has mock 3.0.5.
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "886ba617a96de0130c54b24479bd5c2d74d5c940d40f3809c3a275511a0c4a60";
+    hash = "sha256-lW55ub1VjuCLYgDAWtLHZGW344YMDAU3aGCJKFwyARM=";
   };
 
-  propagatedBuildInputs = [ six coverage ];
+  propagatedBuildInputs = [
+    coverage
+    six
+  ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest
   '';
 
+  pythonImportsCheck = [
+    "nose2"
+  ];
+
   meta = with lib; {
-    description = "nose2 is the next generation of nicer testing for Python";
+    description = "Test runner for Python";
     homepage = "https://github.com/nose-devs/nose2";
     license = licenses.bsd0;
+    maintainers = with maintainers; [ ];
   };
-
 }

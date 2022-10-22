@@ -1,8 +1,8 @@
 diff --git a/lib/plugin/instance.rb b/lib/plugin/instance.rb
-index e59a6fbc05..c773a1356e 100644
+index 8482ff0210..826d111d65 100644
 --- a/lib/plugin/instance.rb
 +++ b/lib/plugin/instance.rb
-@@ -447,7 +447,7 @@ class Plugin::Instance
+@@ -455,7 +455,7 @@ class Plugin::Instance
    end
  
    def auto_generated_path

@@ -18,7 +18,7 @@ let
         ${master.ip}  api.${domain}
         ${concatMapStringsSep "\n" (machineName: "${machines.${machineName}.ip}  ${machineName}.${domain}") (attrNames machines)}
       '';
-      kubectl = with pkgs; runCommand "wrap-kubectl" { buildInputs = [ makeWrapper ]; } ''
+      wrapKubectl = with pkgs; runCommand "wrap-kubectl" { nativeBuildInputs = [ makeWrapper ]; } ''
         mkdir -p $out/bin
         makeWrapper ${pkgs.kubernetes}/bin/kubectl $out/bin/kubectl --set KUBECONFIG "/etc/kubernetes/cluster-admin.kubeconfig"
       '';
@@ -43,12 +43,12 @@ let
                   trustedInterfaces = ["mynet"];
 
                   extraCommands = concatMapStrings  (node: ''
-                    iptables -A INPUT -s ${node.config.networking.primaryIPAddress} -j ACCEPT
+                    iptables -A INPUT -s ${node.networking.primaryIPAddress} -j ACCEPT
                   '') (attrValues nodes);
                 };
               };
               programs.bash.enableCompletion = true;
-              environment.systemPackages = [ kubectl ];
+              environment.systemPackages = [ wrapKubectl ];
               services.flannel.iface = "eth1";
               services.kubernetes = {
                 proxy.hostname = "${masterName}.${domain}";
@@ -60,13 +60,6 @@ let
                   advertiseAddress = master.ip;
                 };
                 masterAddress = "${masterName}.${config.networking.domain}";
-                # workaround for:
-                #   https://github.com/kubernetes/kubernetes/issues/102676
-                #   (workaround from) https://github.com/kubernetes/kubernetes/issues/95488
-                kubelet.extraOpts = ''\
-                  --cgroups-per-qos=false \
-                  --enforce-node-allocatable="" \
-                '';
               };
             }
             (optionalAttrs (any (role: role == "master") machine.roles) {

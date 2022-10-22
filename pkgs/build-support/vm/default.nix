@@ -35,10 +35,10 @@ rec {
       mkdir -p $out/lib
 
       # Copy what we need from Glibc.
-      cp -p ${pkgs.stdenv.glibc.out}/lib/ld-linux*.so.? $out/lib
-      cp -p ${pkgs.stdenv.glibc.out}/lib/libc.so.* $out/lib
-      cp -p ${pkgs.stdenv.glibc.out}/lib/libm.so.* $out/lib
-      cp -p ${pkgs.stdenv.glibc.out}/lib/libresolv.so.* $out/lib
+      cp -p ${pkgs.stdenv.cc.libc}/lib/ld-linux*.so.? $out/lib
+      cp -p ${pkgs.stdenv.cc.libc}/lib/libc.so.* $out/lib
+      cp -p ${pkgs.stdenv.cc.libc}/lib/libm.so.* $out/lib
+      cp -p ${pkgs.stdenv.cc.libc}/lib/libresolv.so.* $out/lib
 
       # Copy BusyBox.
       cp -pd ${pkgs.busybox}/bin/* $out/bin
@@ -510,8 +510,7 @@ rec {
      tarball must contain an RPM specfile. */
 
   buildRPM = attrs: runInLinuxImage (stdenv.mkDerivation ({
-    prePhases = [ pkgs.prepareImagePhase pkgs.sysInfoPhase ];
-    dontUnpack = true;
+    prePhases = [ "prepareImagePhase" "sysInfoPhase" ];
     dontConfigure = true;
 
     outDir = "rpms/${attrs.diskImage.name}";
@@ -536,9 +535,7 @@ rec {
     buildPhase = ''
       eval "$preBuild"
 
-      # Hacky: RPM looks for <basename>.spec inside the tarball, so
-      # strip off the hash.
-      srcName="$(stripHash "$src")"
+      srcName="$(rpmspec --srpm -q --qf '%{source}' *.spec)"
       cp "$src" "$srcName" # `ln' doesn't work always work: RPM requires that the file is owned by root
 
       export HOME=/tmp/home

@@ -11,6 +11,7 @@ stdenvNoCC.mkDerivation rec {
   };
   # adapted from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=zsh-zplugin-git
   dontBuild = true;
+  strictDeps = true;
   nativeBuildInputs = [ installShellFiles ];
   installPhase = ''
     outdir="$out/share/$pname"

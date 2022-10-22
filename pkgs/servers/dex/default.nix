@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "dex";
-  version = "2.30.0";
+  version = "2.35.1";
 
   src = fetchFromGitHub {
     owner = "dexidp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Z/X9Db57eNUJdjzLCJNIW3lCRw05JP2TQ43PqKO6CiI=";
+    sha256 = "sha256-TiFjJCf9FBvVK6I7/zMOGCwOeVDbAwHWaizcbGSeTwA=";
   };
 
-  vendorSha256 = "sha256-ksN/1boBQVhevlDseVZsGUWL+Bwy4AMgGNdOPgsNNxk=";
+  vendorSha256 = "sha256-ZJ7SO0lCJcDDWdf9/ecltNhs+zbqMXHqthQszJBTt5s=";
 
   subPackages = [
     "cmd/dex"
@@ -32,7 +32,7 @@ buildGoModule rec {
     description = "OpenID Connect and OAuth2 identity provider with pluggable connectors";
     homepage = "https://github.com/dexidp/dex";
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley ];
+    maintainers = with maintainers; [ benley techknowlogick ];
     platforms = platforms.unix;
   };
 }

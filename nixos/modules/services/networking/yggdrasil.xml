@@ -27,7 +27,7 @@ An annotated example of a simple configuration:
       # The NixOS module will generate new keys and a new IPv6 address each time
       # it is started if persistentKeys is not enabled.
 
-    config = {
+    settings = {
       Peers = [
         # Yggdrasil will automatically connect and "peer" with other nodes it
         # discovers via link-local multicast annoucements. Unless this is the
@@ -58,7 +58,7 @@ in {
   services.yggdrasil = {
     enable = true;
     persistentKeys = true; # Maintain a fixed public key and IPv6 address.
-    config = {
+    settings = {
       Peers = [ "tcp://1.2.3.4:1024" "tcp://1.2.3.5:1024" ];
       NodeInfo = {
         # This information is visible to the network.
@@ -84,7 +84,6 @@ in {
       interface eth0
       {
         AdvSendAdvert on;
-        AdvDefaultLifetime 0;
         prefix ${prefix}::/64 {
           AdvOnLink on;
           AdvAutonomous on;

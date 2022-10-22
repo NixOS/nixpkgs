@@ -1,26 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, libjpeg, zlib, perl }:
+{ lib, stdenv, fetchFromGitHub, libjpeg, zlib, cmake, perl }:
 
 stdenv.mkDerivation rec {
   pname = "qpdf";
-  version = "10.3.2";
+  version = "11.1.0";
 
   src = fetchFromGitHub {
     owner = "qpdf";
     repo = "qpdf";
-    rev = "release-qpdf-${version}";
-    sha256 = "sha256-fhn6hE/MLYiaOxZYfaVcj17V+h8Yvn18QTewS0rPIXE=";
+    rev = "v${version}";
+    hash = "sha256-T06BLtDZN6ulJ9Po3LN1RlI6q8ddAfo95RAhyfrn+qg=";
   };
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ cmake perl ];
 
   buildInputs = [ zlib libjpeg ];
 
-  preCheck = ''
+  preConfigure = ''
     patchShebangs qtest/bin/qtest-driver
+    patchShebangs run-qtest
+    # qtest needs to know where the source code is
+    substituteInPlace CMakeLists.txt --replace "run-qtest" "run-qtest --top $src --code $src --bin $out"
   '';
 
   doCheck = true;
-  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "http://qpdf.sourceforge.net/";

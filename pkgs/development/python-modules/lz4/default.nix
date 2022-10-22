@@ -1,41 +1,69 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, future
-, isPy3k
+, pythonOlder
+, python
+
+# native inputs
 , pkgconfig
-, psutil
-, pytest
-, pytest-cov
-, pytest-runner
 , setuptools-scm
+
+# tests
+, psutil
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "python-lz4";
-  version = "3.1.10";
+  version = "4.0.1";
+  format = "setuptools";
 
-  # get full repository inorder to run tests
+  disabled = pythonOlder "3.5";
+
+  # get full repository in order to run tests
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "0a4gic8xh3simkk5k8302rxwf765pr6y63k3js79mkl983vpxcim";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-hQuZkstsB37pFDWmA0W6qGd7rAer1mun7Z6MxMp0ZmE=";
   };
 
-  nativeBuildInputs = [ setuptools-scm pkgconfig pytest-runner ];
-  checkInputs = [ pytest pytest-cov psutil ];
-  propagatedBuildInputs = lib.optionals (!isPy3k) [ future ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  # give a hint to setuptools-scm on package version
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="v${version}"
+  postPatch = ''
+    sed -i '/pytest-cov/d' setup.py
   '';
 
-  meta = {
-     description = "LZ4 Bindings for Python";
-     homepage = "https://github.com/python-lz4/python-lz4";
-     license = lib.licenses.bsd3;
-     maintainers = with lib.maintainers; [ costrouc ];
+  nativeBuildInputs = [
+    setuptools-scm
+    pkgconfig
+  ];
+
+  pythonImportsCheck = [
+    "lz4"
+    "lz4.block"
+    "lz4.frame"
+    "lz4.stream"
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    psutil
+  ];
+
+  # for lz4.steam
+  PYLZ4_EXPERIMENTAL = true;
+
+  # prevent local lz4 directory from getting imported as it lacks native extensions
+  preCheck = ''
+    rm -r lz4
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
+  '';
+
+  meta = with lib; {
+    description = "LZ4 Bindings for Python";
+    homepage = "https://github.com/python-lz4/python-lz4";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ costrouc ];
   };
 }

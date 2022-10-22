@@ -11,14 +11,21 @@ let
   generic = { version, sha256, platform ? "", jdk, ... }@attrs:
   let
     desktopItem = makeDesktopItem {
-      categories = "Network;Development;WebDevelopment;Java;";
+      categories = [ "Network" "Development" "WebDevelopment" "Java" ];
       desktopName = "Charles";
       exec = "charles %F";
       genericName  = "Web Debugging Proxy";
       icon = "charles-proxy";
-      mimeType = "application/x-charles-savedsession;application/x-charles-savedsession+xml;application/x-charles-savedsession+json;application/har+json;application/vnd.tcpdump.pcap;application/x-charles-trace";
+      mimeTypes = [
+        "application/x-charles-savedsession"
+        "application/x-charles-savedsession+xml"
+        "application/x-charles-savedsession+json"
+        "application/har+json"
+        "application/vnd.tcpdump.pcap"
+        "application/x-charles-trace"
+      ];
       name = "Charles";
-      startupNotify = "true";
+      startupNotify = true;
     };
 
   in stdenv.mkDerivation {
@@ -50,6 +57,7 @@ let
         description = "Web Debugging Proxy";
         homepage = "https://www.charlesproxy.com/";
         maintainers = with maintainers; [ kalbasit ];
+        sourceProvenance = with sourceTypes; [ binaryBytecode ];
         license = licenses.unfree;
         platforms = platforms.unix;
       };

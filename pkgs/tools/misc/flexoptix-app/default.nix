@@ -1,20 +1,19 @@
 { lib, appimageTools, fetchurl, nodePackages }: let
   pname = "flexoptix-app";
-  version = "5.11.0";
-  name = "${pname}-${version}";
+  version = "5.12.2";
 
   src = fetchurl {
-    name = "${name}.AppImage";
+    name = "${pname}-${version}.AppImage";
     url = "https://flexbox.reconfigure.me/download/electron/linux/x64/FLEXOPTIX%20App.${version}.AppImage";
-    sha256 = "sha256:1hzdb2fbkwpsf0d3ws4z32blk6549jwhf1lrlqmcxhzqfvkr4gin";
+    hash = "sha256-XVswjIXnuWLRiXFc38lDhSvxYTQtYjs4V/AGdiNLX0g=";
   };
 
   udevRules = fetchurl {
     url = "https://www.flexoptix.net/skin/udev_rules/99-tprogrammer.rules";
-    sha256 = "0mr1bhgvavq1ax4206z1vr2y64s3r676w9jjl9ysziklbrsvk5rr";
+    hash = "sha256-OZe5dV50xq99olImbo7JQxPjRd7hGyBIVwFvtR9cIVc=";
   };
 
-  appimageContents = (appimageTools.extract { inherit name src; }).overrideAttrs (oA: {
+  appimageContents = (appimageTools.extract { inherit pname version src; }).overrideAttrs (oA: {
     buildCommand = ''
       ${oA.buildCommand}
 
@@ -26,7 +25,7 @@
   });
 
 in appimageTools.wrapAppImage {
-  inherit name;
+  inherit pname version;
   src = appimageContents;
 
   multiPkgs = null; # no 32bit needed
@@ -36,7 +35,7 @@ in appimageTools.wrapAppImage {
 
   extraInstallCommands = ''
     # Add desktop convencience stuff
-    mv $out/bin/{${name},${pname}}
+    mv $out/bin/{${pname}-*,${pname}}
     install -Dm444 ${appimageContents}/flexoptix-app.desktop -t $out/share/applications
     install -Dm444 ${appimageContents}/flexoptix-app.png -t $out/share/pixmaps
     substituteInPlace $out/share/applications/flexoptix-app.desktop \

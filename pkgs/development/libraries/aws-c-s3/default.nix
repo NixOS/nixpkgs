@@ -6,19 +6,21 @@
 , aws-c-compression
 , aws-c-http
 , aws-c-io
+, aws-checksums
 , cmake
+, nix
 , s2n-tls
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-s3";
-  version = "0.1.27";
+  version = "0.1.46";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-s3";
     rev = "v${version}";
-    sha256 = "sha256-GtBUC5cKMN9rd5GQbYoipVvxrUCCNKbb5vhHUGQpeH8=";
+    sha256 = "sha256-OUrMdIWWnk+yAJTVJ/UlUNFABLlTkmYac5g125Zq+fQ=";
   };
 
   nativeBuildInputs = [
@@ -32,19 +34,24 @@ stdenv.mkDerivation rec {
     aws-c-compression
     aws-c-http
     aws-c-io
+    aws-checksums
     s2n-tls
   ];
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DBUILD_SHARED_LIBS=ON"
   ];
+
+  passthru.tests = {
+    inherit nix;
+  };
 
   meta = with lib; {
     description = "C99 library implementation for communicating with the S3 service";
     homepage = "https://github.com/awslabs/aws-c-s3";
     license = licenses.asl20;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ r-burns ];
+    mainProgram = "s3";
+    platforms = platforms.unix;
   };
 }

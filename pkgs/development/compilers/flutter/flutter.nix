@@ -32,6 +32,7 @@
 , nss
 , systemd
 , which
+, callPackage
 }:
 let
   drvName = "flutter-${version}";
@@ -60,11 +61,11 @@ let
                  # path is relative otherwise it's replaced by /build/flutter
 
       pushd "$FLUTTER_TOOLS_DIR"
-      ${dart}/bin/pub get --offline
+      ${dart}/bin/dart pub get --offline
       popd
 
       local revision="$(cd "$FLUTTER_ROOT"; git rev-parse HEAD)"
-      ${dart}/bin/dart --snapshot="$SNAPSHOT_PATH" --packages="$FLUTTER_TOOLS_DIR/.packages" "$SCRIPT_PATH"
+      ${dart}/bin/dart --snapshot="$SNAPSHOT_PATH" --packages="$FLUTTER_TOOLS_DIR/.dart_tool/package_config.json" "$SCRIPT_PATH"
       echo "$revision" > "$STAMP_PATH"
       echo -n "${version}" > version
 
@@ -146,6 +147,8 @@ let
   };
 
 in
+let
+self = (self:
 runCommand drvName
 {
   startScript = ''
@@ -159,6 +162,9 @@ runCommand drvName
   passthru = {
     unwrapped = flutter;
     inherit dart;
+    mkFlutterApp = callPackage ../../../build-support/flutter {
+      flutter = self;
+    };
   };
   meta = with lib; {
     description = "Flutter is Google's SDK for building mobile, web and desktop with Dart";
@@ -168,12 +174,17 @@ runCommand drvName
     '';
     homepage = "https://flutter.dev";
     license = licenses.bsd3;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ babariviere ericdallo ];
   };
 } ''
   mkdir -p $out/bin
 
+  mkdir -p $out/bin/cache/
+  ln -sf ${dart} $out/bin/cache/dart-sdk
+
   echo -n "$startScript" > $out/bin/${pname}
   chmod +x $out/bin/${pname}
-''
+'') self;
+in
+self

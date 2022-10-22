@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "enturclient";
-  version = "0.2.2";
+  version = "0.2.4";
   disabled = pythonOlder "3.8";
 
   format = "pyproject";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "hfurubotten";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1kl44ch8p31pr70yv6na2m0w40frackdwzph9rpb05sc83va701i";
+    sha256 = "sha256-Y2sBPikCAxumylP1LUy8XgjBRCWaNryn5XHSrRjJIIo=";
   };
 
   nativeBuildInputs = [

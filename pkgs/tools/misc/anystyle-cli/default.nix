@@ -30,7 +30,7 @@ buildRubyGem rec {
   propagatedBuildInputs = [ deps ];
 
   preFixup = ''
-    wrapProgram $out/bin/anystyle --prefix PATH ${poppler_utils}/bin
+    wrapProgram $out/bin/anystyle --prefix PATH : ${poppler_utils}/bin
   '';
 
   meta = with lib; {
@@ -38,6 +38,7 @@ buildRubyGem rec {
     homepage    = "https://anystyle.io/";
     license     = licenses.bsd2;
     maintainers = with maintainers; [ shamilton ];
+    mainProgram = "anystyle";
     platforms   = platforms.unix;
   };
 }

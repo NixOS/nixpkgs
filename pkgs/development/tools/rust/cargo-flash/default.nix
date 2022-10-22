@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-flash";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "probe-rs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0s49q8x0iscy9rgn9zgymyg39cqm251a99m341znjn55lap3pdl8";
+    sha256 = "sha256-O6T1Wul0nJaTVp9MEOj9FT+FUt4oYfqR5pGFaAxuK30=";
   };
 
-  cargoSha256 = "0rb4s5bwjs7hri636r2viva96a6z9qjv9if6i220j9yglrvi7c8i";
+  cargoSha256 = "sha256-E2gBkr50hjkzY+ZVgMm7tpdwr9yuyFh65Ht6FAPvxYg=";
 
   nativeBuildInputs = [ pkg-config rustfmt ];
   buildInputs = [ libusb1 ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
@@ -29,6 +29,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://probe.rs/";
     changelog = "https://github.com/probe-rs/cargo-flash/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ fooker ];
+    maintainers = with maintainers; [ fooker newam ];
   };
 }

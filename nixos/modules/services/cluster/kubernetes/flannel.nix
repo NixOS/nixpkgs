@@ -12,7 +12,7 @@ in
 {
   ###### interface
   options.services.kubernetes.flannel = {
-    enable = mkEnableOption "enable flannel networking";
+    enable = mkEnableOption (lib.mdDoc "enable flannel networking");
   };
 
   ###### implementation
@@ -26,7 +26,6 @@ in
     };
 
     services.kubernetes.kubelet = {
-      networkPlugin = mkDefault "cni";
       cni.config = mkDefault [{
         name = "mynet";
         type = "flannel";
@@ -95,4 +94,6 @@ in
 
     };
   };
+
+  meta.buildDocsInSandbox = false;
 }

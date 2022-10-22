@@ -1,7 +1,7 @@
 { lib, fetchurl, SDL, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "hhexen";
+  pname = "hhexen";
   version = "1.6.3";
   src = fetchurl {
     url = "mirror://sourceforge/hhexen/hhexen-${version}-src.tgz";

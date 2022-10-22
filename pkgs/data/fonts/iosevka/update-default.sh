@@ -8,7 +8,7 @@ repo=https://github.com/be5invis/Iosevka
 
 # Discover the latest version.
 current_version=$(nix-instantiate "$nixpkgs" --eval --strict -A iosevka.version | tr -d '"')
-new_version=$(list-git-tags "$repo" | sort --reverse --version-sort | awk 'match($0, /^v([0-9.]+)$/, m) { print m[1]; exit; }')
+new_version=$(list-git-tags --url="$repo" | sort --reverse --version-sort | awk 'match($0, /^v([0-9.]+)$/, m) { print m[1]; exit; }')
 if [[ "$new_version" == "$current_version" ]]; then
     echo "iosevka: no update found"
     exit

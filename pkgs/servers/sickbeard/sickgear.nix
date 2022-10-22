@@ -1,23 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, python3, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, python3, makeWrapper, libarchive }:
 
 let
-  pythonEnv = python3.withPackages(ps: with ps; [ cheetah3 ]);
+  pythonEnv = python3.withPackages(ps: with ps; [ cheetah3 lxml ]);
 in stdenv.mkDerivation rec {
   pname = "sickgear";
-  version = "0.25.11";
+  version = "0.25.47";
 
   src = fetchFromGitHub {
     owner = "SickGear";
     repo = "SickGear";
     rev = "release_${version}";
-    sha256 = "sha256-0/Ez10IWvh84G//1vCZMLiu4+Y2+XcVLw9Gm9X+DY0s=";
+    sha256 = "sha256-CnAJ2qpE+k8TvBD06WbZWOvlF740Xgx/Q0JWf3rJcWI=";
   };
+
+  patches = [
+    ./patches/override-python-version-check.patch
+  ];
 
   dontBuild = true;
   doCheck = false;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ pythonEnv ];
+  buildInputs = [ pythonEnv libarchive ];
 
   postPatch = ''
     substituteInPlace sickgear.py --replace "/usr/bin/env python2" "/usr/bin/env python"

@@ -11,14 +11,20 @@
 , cattrs
 , clickclick
 , colorlog
+, configupdater
+, connexion
+, cron-descriptor
 , croniter
 , cryptography
+, dataclasses
+, deprecated
 , dill
 , flask
+, flask-login
 , flask-appbuilder
 , flask-caching
-, flask_login
-, flask_wtf
+, flask-session
+, flask-wtf
 , GitPython
 , graphviz
 , gunicorn
@@ -31,13 +37,16 @@
 , jinja2
 , jsonschema
 , lazy-object-proxy
+, linkify-it-py
 , lockfile
 , markdown
 , markupsafe
 , marshmallow-oneofschema
+, mdit-py-plugins
 , numpy
 , openapi-spec-validator
 , pandas
+, pathspec
 , pendulum
 , psutil
 , pygments
@@ -47,6 +56,7 @@
 , python-nvd3
 , python-slugify
 , python3-openid
+, pythonOlder
 , pyyaml
 , rich
 , setproctitle
@@ -56,21 +66,27 @@
 , tabulate
 , tenacity
 , termcolor
+, typing-extensions
 , unicodecsv
 , werkzeug
 , pytestCheckHook
 , freezegun
 , mkYarnPackage
+, writeScript
+
+# Extra airflow providers to enable
+, enabledProviders ? []
 }:
 let
-
-  version = "2.1.4";
+  version = "2.4.1";
 
   airflow-src = fetchFromGitHub rec {
     owner = "apache";
     repo = "airflow";
-    rev = version;
-    sha256 = "12nxjaz4afkq30s42x3rbsci8jiw2k5zjngsc8i190fasbacbnbs";
+    rev = "refs/tags/${version}";
+    # Required because the GitHub archive tarballs don't appear to include tests
+    leaveDotGit = true;
+    sha256 = "sha256-HpPL/ocV7hRhYXsjfXMYvlP83Vh15kXyjBgubsaqaE8=";
   };
 
   # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
@@ -85,6 +101,12 @@ let
     yarnNix = ./yarn.nix;
 
     distPhase = "true";
+
+    # The webpack license plugin tries to create /licenses when given the
+    # original relative path
+    postPatch = ''
+      sed -i 's!../../../../licenses/LICENSES-ui.txt!licenses/LICENSES-ui.txt!' webpack.config.js
+    '';
 
     configurePhase = ''
       cp -r $node_modules node_modules
@@ -101,11 +123,20 @@ let
     '';
   };
 
+  # Import generated file with metadata for provider dependencies and imports.
+  # Enable additional providers using enabledProviders above.
+  providers = import ./providers.nix;
+  getProviderDeps = provider: map (dep: python.pkgs.${dep}) providers.${provider}.deps;
+  getProviderImports = provider: providers.${provider}.imports;
+  providerDependencies = lib.concatMap getProviderDeps enabledProviders;
+  providerImports = lib.concatMap getProviderImports enabledProviders;
 in
 buildPythonPackage rec {
   pname = "apache-airflow";
   inherit version;
   src = airflow-src;
+
+  disabled = pythonOlder "3.6";
 
   propagatedBuildInputs = [
     alembic
@@ -116,33 +147,40 @@ buildPythonPackage rec {
     cattrs
     clickclick
     colorlog
+    configupdater
+    connexion
+    cron-descriptor
     croniter
     cryptography
+    deprecated
     dill
     flask
     flask-appbuilder
     flask-caching
-    flask_login
-    flask_wtf
+    flask-session
+    flask-wtf
+    flask-login
     GitPython
     graphviz
     gunicorn
     httpx
     iso8601
     importlib-resources
-    importlib-metadata
     inflection
     itsdangerous
     jinja2
     jsonschema
     lazy-object-proxy
+    linkify-it-py
     lockfile
     markdown
     markupsafe
     marshmallow-oneofschema
+    mdit-py-plugins
     numpy
     openapi-spec-validator
     pandas
+    pathspec
     pendulum
     psutil
     pygments
@@ -161,9 +199,14 @@ buildPythonPackage rec {
     tabulate
     tenacity
     termcolor
+    typing-extensions
     unicodecsv
     werkzeug
-  ];
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    dataclasses
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-metadata
+  ] ++ providerDependencies;
 
   buildInputs = [
     airflow-frontend
@@ -174,50 +217,41 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # By default, source code of providers is included but unusable due to missing
+  # transitive dependencies. To enable a provider, add it to extraProviders
+  # above
   INSTALL_PROVIDERS_FROM_SOURCES = "true";
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "importlib_resources~=1.4" "importlib_resources" \
-      --replace "importlib_metadata~=1.7" "importlib_metadata" \
-      --replace "tenacity~=6.2.0" "tenacity" \
-      --replace "pyjwt<2" "pyjwt" \
-      --replace "flask>=1.1.0, <2.0" "flask" \
-      --replace "flask-login>=0.3, <0.5" "flask-login" \
-      --replace "flask-wtf>=0.14.3, <0.15" "flask-wtf" \
-      --replace "jinja2>=2.10.1, <2.12.0" "jinja2" \
-      --replace "attrs>=20.0, <21.0" "attrs" \
-      --replace "cattrs~=1.1, <1.7.0" "cattrs" \
-      --replace "markupsafe>=1.1.1, <2.0" "markupsafe" \
-      --replace "docutils<0.17" "docutils" \
-      --replace "sqlalchemy>=1.3.18, <1.4" "sqlalchemy" \
-      --replace "sqlalchemy_jsonfield~=1.0" "sqlalchemy-jsonfield" \
-      --replace "werkzeug~=1.0, >=1.0.1" "werkzeug" \
-      --replace "itsdangerous>=1.1.0, <2.0" "itsdangerous" \
-      --replace "python-slugify>=3.0.0,<5.0" "python-slugify" \
-      --replace "colorlog>=4.0.2, <6.0" "colorlog"
-
-    substituteInPlace tests/core/test_core.py \
-      --replace "/bin/bash" "${stdenv.shell}"
+      --replace "colorlog>=4.0.2, <5.0" "colorlog" \
+      --replace "flask-login>=0.6.2" "flask-login" \
+      --replace "pathspec~=0.9.0" "pathspec"
   '' + lib.optionalString stdenv.isDarwin ''
     # Fix failing test on Hydra
     substituteInPlace airflow/utils/db.py \
       --replace "/tmp/sqlite_default.db" "$TMPDIR/sqlite_default.db"
   '';
 
-  # allow for gunicorn processes to have access to python packages
-  makeWrapperArgs = [ "--prefix PYTHONPATH : $PYTHONPATH" ];
+  # allow for gunicorn processes to have access to Python packages
+  makeWrapperArgs = [
+    "--prefix PYTHONPATH : $PYTHONPATH"
+  ];
 
-  preCheck = ''
-   export HOME=$(mktemp -d)
-   export AIRFLOW_HOME=$HOME
-   export AIRFLOW__CORE__UNIT_TEST_MODE=True
-   export AIRFLOW_DB="$HOME/airflow.db"
-   export PATH=$PATH:$out/bin
+  pythonImportsCheck = [
+    "airflow"
+  ] ++ providerImports;
 
-   airflow version
-   airflow db init
-   airflow db reset -y
+  checkPhase = ''
+    export HOME=$(mktemp -d)
+    export AIRFLOW_HOME=$HOME
+    export AIRFLOW__CORE__UNIT_TEST_MODE=True
+    export AIRFLOW_DB="$HOME/airflow.db"
+    export PATH=$PATH:$out/bin
+
+    airflow version
+    airflow db init
+    airflow db reset -y
   '';
 
   pytestFlagsArray = [
@@ -225,17 +259,44 @@ buildPythonPackage rec {
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
-    "bash_operator_kill"  # psutil.AccessDenied
+    "bash_operator_kill" # psutil.AccessDenied
   ];
 
   postInstall = ''
     cp -rv ${airflow-frontend}/static/dist $out/lib/${python.libPrefix}/site-packages/airflow/www/static
   '';
 
+  # Updates yarn.lock and package.json
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts curl pcre "python3.withPackages (ps: with ps; [ pyyaml ])" yarn2nix
+
+    set -euo pipefail
+
+    # Get new version
+    new_version="$(curl -s https://airflow.apache.org/docs/apache-airflow/stable/release_notes.html |
+      pcregrep -o1 'Airflow ([0-9.]+).' | head -1)"
+    update-source-version ${pname} "$new_version"
+
+    # Update frontend
+    cd ./pkgs/development/python-modules/apache-airflow
+    curl -O https://raw.githubusercontent.com/apache/airflow/$new_version/airflow/www/yarn.lock
+    curl -O https://raw.githubusercontent.com/apache/airflow/$new_version/airflow/www/package.json
+    # Note: for 2.3.4 a manual change was needed to get a fully resolved URL for
+    # caniuse-lite@1.0.30001312 (with the sha after the #). The error from yarn
+    # was 'Can't make a request in offline mode' from yarn. Corrected install by
+    # manually running yarn add caniuse-lite@1.0.30001312 and copying the
+    # requisite section from the generated yarn.lock.
+    yarn2nix > yarn.nix
+
+    # update provider dependencies
+    ./update-providers.py
+  '';
+
   meta = with lib; {
     description = "Programmatically author, schedule and monitor data pipelines";
     homepage = "https://airflow.apache.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bhipple costrouc ingenieroariel ];
+    maintainers = with maintainers; [ bhipple gbpdt ingenieroariel ];
   };
 }

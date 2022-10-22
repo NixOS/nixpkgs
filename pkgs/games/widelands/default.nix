@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , SDL2
 , SDL2_image
 , SDL2_mixer
@@ -32,7 +33,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gNumYoeKePaxiAzrqEPKibMxFwv9vyBrCSoua+MKhcM=";
   };
 
-  patches = [ ./bincmake.patch ];
+  patches = [
+    ./bincmake.patch
+    # fix for building with Boost 1.77, https://github.com/widelands/widelands/pull/5025
+    (fetchpatch {
+      url = "https://github.com/widelands/widelands/commit/33981fda8c319c9feafc958f5f0b1670c48666ef.patch";
+      sha256 = "sha256-FjxxCTPpg/Zp01XpNfgRXMMLJBfxAptkLpsLmnFXm2Q=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace xdg/org.widelands.Widelands.desktop \

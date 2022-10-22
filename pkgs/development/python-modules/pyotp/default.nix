@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "pyotp";
-  version = "2.6.0";
+  version = "2.7.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d28ddfd40e0c1b6a6b9da961c7d47a10261fb58f378cb00f05ce88b26df9c432";
+    sha256 = "sha256-zpifq6Dfd9wDK0XlHGzKQrzyCJbI09HnzXWaU9x9bLU=";
   };
 
   pythonImportsCheck = [ "pyotp" ];

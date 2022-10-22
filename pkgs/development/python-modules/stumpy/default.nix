@@ -7,22 +7,22 @@
 , pandas
 , dask
 , distributed
-, coverage
-, flake8
-, black
-, pytest
-, codecov
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "stumpy";
-  version = "1.10.0";
+  version = "1.11.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "TDAmeritrade";
     repo = "stumpy";
-    rev = "v${version}";
-    sha256 = "1h3mqz570s9rc45d217xrykcy8f4fnpyk178smam2fzynlr90gd8";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ARpXqZpWkbvIEDVkxA1SwlWoxq+3WO6tvv/e7WZ/25c=";
   };
 
   propagatedBuildInputs = [
@@ -35,22 +35,23 @@ buildPythonPackage rec {
     pandas
     dask
     distributed
-    coverage
-    flake8
-    black
-    pytest
-    codecov
+    pytestCheckHook
   ];
 
-  # ignore changed numpy operations
-  checkPhase = ''
-    pytest -k 'not allc'
-  '';
+  pythonImportsCheck = [
+    "stumpy"
+  ];
+
+  pytestFlagsArray = [
+    # whole testsuite is very CPU intensive, only run core tests
+    # TODO: move entire test suite to passthru.tests
+    "tests/test_core.py"
+  ];
 
   meta = with lib; {
-    description = "A powerful and scalable library that can be used for a variety of time series data mining tasks";
+    description = "Library that can be used for a variety of time series data mining tasks";
     homepage = "https://github.com/TDAmeritrade/stumpy";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

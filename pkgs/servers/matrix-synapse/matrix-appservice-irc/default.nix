@@ -1,4 +1,4 @@
-{ pkgs, nodePackages, makeWrapper, nixosTests, nodejs, stdenv, lib, fetchFromGitHub }:
+{ pkgs, nodePackages, makeWrapper, nixosTests, nodejs, stdenv, lib, fetchFromGitHub, fetchurl, autoPatchelfHook }:
 
 let
   ourNodePackages = import ./node-composition.nix {
@@ -19,7 +19,9 @@ ourNodePackages.package.override {
     inherit (srcInfo) sha256;
   };
 
-  nativeBuildInputs = [ makeWrapper nodePackages.node-gyp-build ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper nodePackages.node-gyp-build ];
+
+  dontAutoPatchelf = true;
 
   postInstall = ''
     makeWrapper '${nodejs}/bin/node' "$out/bin/matrix-appservice-irc" \
@@ -34,5 +36,6 @@ ourNodePackages.package.override {
     maintainers = with maintainers; [ ];
     homepage = "https://github.com/matrix-org/matrix-appservice-irc";
     license = licenses.asl20;
+    platforms = platforms.linux;
   };
 }

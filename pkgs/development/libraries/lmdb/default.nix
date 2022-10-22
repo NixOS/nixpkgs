@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab }:
+{ lib, stdenv, fetchFromGitLab, windows }:
 
 stdenv.mkDerivation rec {
   pname = "lmdb";
@@ -14,17 +14,20 @@ stdenv.mkDerivation rec {
 
   postUnpack = "sourceRoot=\${sourceRoot}/libraries/liblmdb";
 
-  patches = [ ./hardcoded-compiler.patch ];
+  patches = [ ./hardcoded-compiler.patch ./bin-ext.patch ];
   patchFlags = [ "-p3" ];
 
   outputs = [ "bin" "out" "dev" ];
+
+  buildInputs = lib.optional stdenv.hostPlatform.isWindows windows.pthreads;
 
   makeFlags = [
     "prefix=$(out)"
     "CC=${stdenv.cc.targetPrefix}cc"
     "AR=${stdenv.cc.targetPrefix}ar"
   ]
-    ++ lib.optional stdenv.isDarwin "LDFLAGS=-Wl,-install_name,$(out)/lib/liblmdb.so";
+    ++ lib.optional stdenv.isDarwin "LDFLAGS=-Wl,-install_name,$(out)/lib/liblmdb.so"
+    ++ lib.optionals stdenv.hostPlatform.isWindows [ "SOEXT=.dll" "BINEXT=.exe" ];
 
   doCheck = true;
   checkTarget = "test";

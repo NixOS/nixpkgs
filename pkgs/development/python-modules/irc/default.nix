@@ -5,20 +5,18 @@
 
 buildPythonPackage rec {
   pname = "irc";
-  version = "19.0.1";
+  version = "20.1.0";
+  format = "pyproject";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "99fd5d1fa1d054dee4fbb81e0d5193dc1e8200db751d5da9a97850a62162b9ab";
+    sha256 = "sha256-tvc3ky3UeR87GOMZ3nt9rwLSKFpr6iY9EB9NjlU4B+w=";
   };
 
-  doCheck = false;
-
-  pythonImportsCheck = [ "irc" ];
-
   nativeBuildInputs = [ setuptools-scm ];
+
   propagatedBuildInputs = [
     six
     importlib-metadata
@@ -30,10 +28,14 @@ buildPythonPackage rec {
     jaraco_collections
   ];
 
+  doCheck = false;
+
+  pythonImportsCheck = [ "irc" ];
+
   meta = with lib; {
     description = "IRC (Internet Relay Chat) protocol library for Python";
     homepage = "https://github.com/jaraco/irc";
     license = licenses.mit;
-    maintainers = [];
+    maintainers = with maintainers; [];
   };
 }

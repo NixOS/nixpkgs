@@ -7,8 +7,8 @@
 , glib
 , gnome
 , vala
-, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
 , gobject-introspection
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -22,6 +22,25 @@ stdenv.mkDerivation rec {
     sha256 = "1al6nr492nzbm8ql02xhzwci2kwb1advnkaky3j9636jf08v41hd";
   };
 
+  patches = [
+    # https://gitlab.gnome.org/GNOME/libgudev/-/merge_requests/27
+    (fetchpatch {
+      name = "gir-dep";
+      url = "https://gitlab.gnome.org/GNOME/libgudev/-/commit/6bdde16a0cfde462502fce1d9a7eb6ec33f388bb.diff";
+      sha256 = "sha256-bDtLUxOLEgyJURshqEQC4YCBTUVzQQP4qoWL786b3Z8=";
+    })
+    (fetchpatch {
+      name = "vapi-dep";
+      url = "https://gitlab.gnome.org/GNOME/libgudev/-/commit/d1f6457910842ba869c9871e7a2131fbe0d6b6be.diff";
+      sha256 = "sha256-/PY8ziZST/vQvksJm69a3O6/YesknIxCDvj0z40piik=";
+    })
+    (fetchpatch {
+      name = "gtk-doc-dep";
+      url = "https://gitlab.gnome.org/GNOME/libgudev/-/commit/34336cbadbcaac8b9b029f730eed0bdf4c633617.diff";
+      sha256 = "sha256-Bk05xe69LGqWH1uhLMZhwbVMSsCTyBrrOvqWic2TTd4=";
+    })
+  ];
+
   strictDeps = true;
 
   depsBuildBuild = [ pkg-config ];
@@ -32,11 +51,11 @@ stdenv.mkDerivation rec {
     ninja
     vala
     glib # for glib-mkenums needed during the build
-  ] ++ lib.optionals withIntrospection [
     gobject-introspection
   ];
 
   buildInputs = [
+    gobject-introspection
     udev
     glib
   ];
@@ -44,9 +63,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway
     "-Dtests=disabled"
-    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dvapi=disabled"
   ];
 
   passthru = {

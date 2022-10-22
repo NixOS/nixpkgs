@@ -1,27 +1,46 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
 , docopt
 , pillow
 , enum34
+, scikitimage
+, aggdraw
+, pytestCheckHook
+, ipython
+, cython
 }:
 
 buildPythonPackage rec {
   pname = "psd-tools";
-  version = "1.9.18";
+  version = "1.9.23";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d7e510790512f0bb8150c508531c8681c3d9d0ea63b3ba9b11bbf0952cbd69a8";
+  src = fetchFromGitHub {
+    owner = "psd-tools";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-pJUf5rE5QMnfNytU1P0Zbj1iztrK5xrX4CJ/WvIG8mY=";
   };
 
-  propagatedBuildInputs = [
-    docopt
-    pillow
-  ] ++ lib.optionals isPy27 [ enum34 ];
+  nativeBuildInputs = [ cython ];
 
-  meta = {
+  propagatedBuildInputs = [
+    aggdraw
+    docopt
+    ipython
+    pillow
+    scikitimage
+  ];
+
+  checkInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "psd_tools" ];
+
+  meta = with lib; {
     description = "Python package for reading Adobe Photoshop PSD files";
     homepage = "https://github.com/kmike/psd-tools";
-    license = lib.licenses.mit;
-    broken = true; # missing packbits from nixpkgs
+    license = licenses.mit;
+    maintainers = with maintainers; [ onny ];
   };
 }

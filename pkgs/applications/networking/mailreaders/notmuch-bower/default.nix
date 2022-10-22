@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, gawk, mercury, pandoc, ncurses, gpgme }:
+{ lib, stdenv, fetchFromGitHub, mercury, pandoc, ncurses, gpgme }:
 
 stdenv.mkDerivation rec {
   pname = "notmuch-bower";
-  version = "0.13";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "wangp";
     repo = "bower";
     rev = version;
-    sha256 = "0r5s16pc3ym5nd33lv9ljv1p1gpb7yysrdni4g7w7yvjrnwk35l6";
+    sha256 = "sha256-BNuJEVuzreI2AK/fqVMRHq8ZhPQjO33Y2FzkrWlfmm0=";
   };
 
-  nativeBuildInputs = [ gawk mercury pandoc ];
+  nativeBuildInputs = [ mercury pandoc ];
 
   buildInputs = [ ncurses gpgme ];
 

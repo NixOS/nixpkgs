@@ -6,41 +6,45 @@
 , pkg-config
 , fribidi
 , harfbuzz
-, libunistring
 , libwebp
 , mpg123
-, openssl
-, pcre
 , SDL2
+, the-foundation
 , AppKit
 , zip
-, zlib
+, enableTUI ? false, ncurses, sealcurses
 }:
 
 stdenv.mkDerivation rec {
   pname = "lagrange";
-  version = "1.9.3";
+  version = "1.13.7";
 
   src = fetchFromGitHub {
     owner = "skyjake";
     repo = "lagrange";
     rev = "v${version}";
-    sha256 = "sha256-0+NY21oIbRMCYnneWxw48yQ3UOXW0Ves2A4JTXyLnCE=";
-    fetchSubmodules = true;
+    sha256 = "sha256-WUNDkLKT/AgS5WkBKbVSM5/1zSjQuE8Aq68JLSOHFEs=";
   };
-
-  postPatch = ''
-    rm -r lib/fribidi lib/harfbuzz
-  '';
 
   nativeBuildInputs = [ cmake pkg-config zip ];
 
-  buildInputs = [ fribidi harfbuzz libunistring libwebp mpg123 openssl pcre SDL2 zlib ]
+  buildInputs = [ the-foundation ]
+    ++ lib.optionals (!enableTUI) [ fribidi harfbuzz libwebp mpg123 SDL2 ]
+    ++ lib.optionals enableTUI [ ncurses sealcurses ]
     ++ lib.optional stdenv.isDarwin AppKit;
 
-  hardeningDisable = lib.optional (!stdenv.cc.isClang) "format";
+  cmakeFlags = lib.optionals enableTUI [
+    "-DENABLE_TUI=YES"
+    "-DENABLE_MPG123=NO"
+    "-DENABLE_WEBP=NO"
+    "-DENABLE_FRIBIDI=NO"
+    "-DENABLE_HARFBUZZ=NO"
+    "-DENABLE_POPUP_MENUS=NO"
+    "-DENABLE_IDLE_SLEEP=NO"
+    "-DCMAKE_INSTALL_DATADIR=${placeholder "out"}/share"
+  ];
 
-  installPhase = lib.optionalString stdenv.isDarwin ''
+  installPhase = lib.optionalString (stdenv.isDarwin && !enableTUI) ''
     mkdir -p $out/Applications
     mv Lagrange.app $out/Applications
   '';

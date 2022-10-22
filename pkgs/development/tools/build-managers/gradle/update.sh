@@ -35,9 +35,13 @@ do
 
     f="gradle-${v}-spec.nix"
 
-    if [ -f "$f" ]
+    if [[ -n "$1" && "$1" != "$v" ]]
     then
-        echo "$v SKIP"
+        echo "$v SKIP (nomatch)"
+        continue
+    elif [ "$1" == "" ] && [ -f "$f" ]
+    then
+        echo "$v SKIP (exists)"
         continue
     fi
 
@@ -45,11 +49,17 @@ do
     read -d "\n" gradle_hash gradle_path < <(nix-prefetch-url --print-path $url)
 
     # Prefix and suffix for "native-platform" dependency.
-    gradle_native_prefix="gradle-$v/lib/native-native-"
+    gradle_native_prefix="gradle-$v/lib/native-platform-"
     gradle_native_suffix=".jar"
-    gradle_native=$(zipinfo -1 "$gradle_path" "$gradle_native_prefix*$gradle_native_suffix" | head -n1)
+    tmp=$(mktemp)
+    zipinfo -1 "$gradle_path" "$gradle_native_prefix*$gradle_native_suffix" > $tmp
+    gradle_native=$(cat $tmp | head -n1)
     gradle_native=${gradle_native#"$gradle_native_prefix"}
     gradle_native=${gradle_native%"$gradle_native_suffix"}
+
+    # Supported architectures
+    #grep -Pho "(linux|osx)-\w+" $tmp | sort | uniq
+    rm -f $tmp
 
     echo -e "{\\n  version = \"$v\";\\n  nativeVersion = \"$gradle_native\";\\n  sha256 = \"$gradle_hash\";\\n}" > $f
 

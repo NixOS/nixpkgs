@@ -14,44 +14,37 @@
 , imapSupport  ? true
 , withSidebar  ? true
 , gssSupport   ? true
+, writeScript
 }:
-
-assert headerCache  -> gdbm       != null;
-assert sslSupport   -> openssl    != null;
-assert saslSupport  -> cyrus_sasl != null;
-assert smimeSupport -> openssl    != null;
-assert gpgSupport   -> gnupg      != null;
-assert gpgmeSupport -> gpgme      != null && openssl != null;
-
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "mutt";
-  version = "2.1.4";
+  version = "2.2.7";
+  outputs = [ "out" "doc" "info" ];
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
-    sha256 = "0yfvnjqw9l99kdcr995by3mx5vwad6b530x93yb8ipr3xa1bcq9k";
+    sha256 = "6xOFj1i7Np9He/ZS2Q6baq3dDWEKy+o0VQSeXvrTbfE=";
   };
 
-  patches = optional smimeSupport (fetchpatch {
+  patches = lib.optional smimeSupport (fetchpatch {
     url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.10.1-2/debian/patches/misc/smime.rc.patch";
     sha256 = "0b4i00chvx6zj9pcb06x2jysmrcb2znn831lcy32cgfds6gr3nsi";
   });
 
   buildInputs =
     [ ncurses which perl ]
-    ++ optional headerCache  gdbm
-    ++ optional sslSupport   openssl
-    ++ optional gssSupport   libkrb5
-    ++ optional saslSupport  cyrus_sasl
-    ++ optional gpgmeSupport gpgme;
+    ++ lib.optional headerCache  gdbm
+    ++ lib.optional sslSupport   openssl
+    ++ lib.optional gssSupport   libkrb5
+    ++ lib.optional saslSupport  cyrus_sasl
+    ++ lib.optional gpgmeSupport gpgme;
 
   configureFlags = [
-    (enableFeature headerCache  "hcache")
-    (enableFeature gpgmeSupport "gpgme")
-    (enableFeature imapSupport  "imap")
-    (enableFeature withSidebar  "sidebar")
+    (lib.enableFeature headerCache  "hcache")
+    (lib.enableFeature gpgmeSupport "gpgme")
+    (lib.enableFeature imapSupport  "imap")
+    (lib.enableFeature withSidebar  "sidebar")
     "--enable-smtp"
     "--enable-pop"
     "--with-mailpath="
@@ -66,27 +59,41 @@ stdenv.mkDerivation rec {
     # set by the installer, and removing the need for the group 'mail'
     # I set the value 'mailbox' because it is a default in the configure script
     "--with-homespool=mailbox"
-  ] ++ optional sslSupport  "--with-ssl"
-    ++ optional gssSupport  "--with-gss"
-    ++ optional saslSupport "--with-sasl";
+  ] ++ lib.optional sslSupport  "--with-ssl"
+    ++ lib.optional gssSupport  "--with-gss"
+    ++ lib.optional saslSupport "--with-sasl";
 
-  postPatch = optionalString (smimeSupport || gpgmeSupport) ''
+  postPatch = lib.optionalString (smimeSupport || gpgmeSupport) ''
     sed -i 's#/usr/bin/openssl#${openssl}/bin/openssl#' smime_keys.pl
   '';
 
-  postInstall = optionalString smimeSupport ''
+  postInstall = lib.optionalString smimeSupport ''
     # S/MIME setup
     cp contrib/smime.rc $out/etc/smime.rc
     sed -i 's#openssl#${openssl}/bin/openssl#' $out/etc/smime.rc
     echo "source $out/etc/smime.rc" >> $out/etc/Muttrc
-  '' + optionalString gpgSupport ''
+  '' + lib.optionalString gpgSupport ''
     # GnuPG setup
     cp contrib/gpg.rc $out/etc/gpg.rc
     sed -i 's#\(command="\)gpg #\1${gnupg}/bin/gpg #' $out/etc/gpg.rc
     echo "source $out/etc/gpg.rc" >> $out/etc/Muttrc
   '';
 
-  meta = {
+  passthru = {
+    updateScript = writeScript "update-mutt" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -euo pipefail
+
+      # Expect the text in format of "The current stable public release version is 2.2.6."
+      new_version="$(curl -s http://www.mutt.org/download.html |
+          pcregrep -o1 'The current stable public release version is ([0-9.]+).')"
+      update-source-version ${pname} "$new_version"
+    '';
+  };
+
+  meta = with lib; {
     description = "A small but very powerful text-based mail client";
     homepage = "http://www.mutt.org";
     license = licenses.gpl2Plus;

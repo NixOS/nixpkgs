@@ -1,22 +1,23 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, CoreFoundation, CoreServices }:
+{ lib, rustPlatform, fetchCrate, stdenv, CoreFoundation, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-modules";
-  version = "0.5.6";
+  version = "0.5.12";
 
-  src = fetchFromGitHub {
-    owner = "regexident";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-bLljwxNrCmg1ZWfSninIxJIFIn2oHY8dmbHYPdwtD+M=";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-Fm3D1VnudZhXpH7ymQNpViwwODvXYeO/e2xT3XXfclk=";
   };
 
-  cargoSha256 = "sha256-heyVeQwEIOA9qtyXnHY8lPo06YgIUJaWCtaht9dWLoo=";
+  cargoSha256 = "sha256-PiYonf+aD+Q3mWtP+7NDu9wu3vKrMRAlYh94fXLMWD8=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     CoreFoundation
     CoreServices
   ];
+
+  # the crate version doesn't include all the files required to run tests
+  doCheck = false;
 
   meta = with lib; {
     description = "A cargo plugin for showing a tree-like overview of a crate's modules";

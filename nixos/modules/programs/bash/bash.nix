@@ -30,10 +30,10 @@ in
       /*
       enable = mkOption {
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whenever to configure Bash as an interactive shell.
           Note that this tries to make Bash the default
-          <option>users.defaultUserShell</option>,
+          {option}`users.defaultUserShell`,
           which in turn means that you might need to explicitly
           set this variable if you have another shell configured
           with NixOS.
@@ -44,16 +44,16 @@ in
 
       shellAliases = mkOption {
         default = {};
-        description = ''
-          Set of aliases for bash shell, which overrides <option>environment.shellAliases</option>.
-          See <option>environment.shellAliases</option> for an option format description.
+        description = lib.mdDoc ''
+          Set of aliases for bash shell, which overrides {option}`environment.shellAliases`.
+          See {option}`environment.shellAliases` for an option format description.
         '';
         type = with types; attrsOf (nullOr (either str path));
       };
 
       shellInit = mkOption {
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Shell script code called during bash shell initialisation.
         '';
         type = types.lines;
@@ -61,7 +61,7 @@ in
 
       loginShellInit = mkOption {
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Shell script code called during login bash shell initialisation.
         '';
         type = types.lines;
@@ -69,7 +69,7 @@ in
 
       interactiveShellInit = mkOption {
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Shell script code called during interactive bash shell initialisation.
         '';
         type = types.lines;
@@ -92,7 +92,7 @@ in
             fi
           fi
         '';
-        description = ''
+        description = lib.mdDoc ''
           Shell script code used to initialise the bash prompt.
         '';
         type = types.lines;
@@ -100,7 +100,7 @@ in
 
       promptPluginInit = mkOption {
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Shell script code used to initialise bash prompt plugins.
         '';
         type = types.lines;

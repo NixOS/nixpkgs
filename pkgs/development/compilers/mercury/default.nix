@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mercury";
-  version = "20.06.1";
+  version = "22.01.3";
 
   src = fetchurl {
     url    = "https://dl.mercurylang.org/release/mercury-srcdist-${version}.tar.gz";
-    sha256 = "ef093ae81424c4f3fe696eff9aefb5fb66899e11bb17ae0326adfb70d09c1c1f";
+    sha256 = "sha256-1bS0t7OkpjoYcx2XA0tE8TG/WJttGxDo68S+zvAA0Eg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

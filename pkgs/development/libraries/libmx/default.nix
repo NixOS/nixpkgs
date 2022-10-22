@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchFromGitHub
 , libtool, pkg-config, automake, autoconf, intltool
 , glib, gobject-introspection, gtk2, gtk-doc
 , clutter, clutter-gtk
@@ -8,9 +8,11 @@ stdenv.mkDerivation rec {
   pname = "libmx";
   version = "1.4.7";
 
-  src = fetchurl {
-    url = "https://github.com/clutter-project/mx/archive/${version}.tar.gz";
-    sha256 = "8a7514ea33c1dec7251d0141e24a702e7701dc9f00348cbcf1816925b7f74dbc";
+  src = fetchFromGitHub {
+    owner = "clutter-project";
+    repo = "mx";
+    rev = version;
+    sha256 = "sha256-+heIPSkg3d22xsU48UOTJ9FPLXC7zLivcnabQOM9aEk=";
   };
 
   # remove the following superfluous checks
@@ -31,10 +33,9 @@ stdenv.mkDerivation rec {
 
   configureScript = "sh autogen.sh";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config automake autoconf intltool ];
   buildInputs = [
-    automake autoconf libtool
-    intltool
+    libtool
     gobject-introspection glib
     gtk2 gtk-doc clutter clutter-gtk
   ];

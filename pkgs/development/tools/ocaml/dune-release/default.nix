@@ -10,13 +10,13 @@
 let runtimeInputs = [ opam findlib git mercurial bzip2 gnutar coreutils ];
 in buildDunePackage rec {
   pname = "dune-release";
-  version = "1.5.2";
+  version = "1.6.2";
 
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
 
   src = fetchurl {
     url = "https://github.com/ocamllabs/${pname}/releases/download/${version}/${pname}-${version}.tbz";
-    sha256 = "1r6bz1zz1al5y762ws3w98d8bnyi5ipffajgczixacmbrxvp3zgx";
+    sha256 = "sha256-oJ5SL7qNM5izoEpr+nTjbT+YmmNIoy7QgSNse3wNIA4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -24,17 +24,6 @@ in buildDunePackage rec {
                   rresult logs odoc bos yojson astring fpath ];
   checkInputs = [ alcotest ] ++ runtimeInputs;
   doCheck = true;
-
-  useDune2 = true;
-
-  patches = [
-    # add missing git config calls to avoid failing due to the lack of a global git config
-    (fetchpatch {
-      name = "tests-missing-git-config.patch";
-      url = "https://github.com/ocamllabs/dune-release/commit/87e7ffe2a9c574620d4e2fc0d79eed8772eab973.patch";
-      sha256 = "0wrzcpzr54dwrdjdc75mijh78xk4bmsmqs1pci06fb2nf03vbd2k";
-    })
-  ];
 
   postPatch = ''
     # remove check for curl in PATH, since curly is patched

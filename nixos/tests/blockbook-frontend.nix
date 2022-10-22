@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = with maintainers; [ _1000101 ];
   };
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     services.blockbook-frontend."test" = {
       enable = true;
     };

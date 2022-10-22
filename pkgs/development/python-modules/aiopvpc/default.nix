@@ -33,16 +33,22 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    backports-zoneinfo
     holidays
     tzdata
     async-timeout
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    backports-zoneinfo
   ];
 
   checkInputs = [
     pytest-asyncio
     pytest-timeout
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Failures seem related to changes in holidays-0.13, https://github.com/azogue/aiopvpc/issues/44
+    "test_number_of_national_holidays"
   ];
 
   postPatch = ''

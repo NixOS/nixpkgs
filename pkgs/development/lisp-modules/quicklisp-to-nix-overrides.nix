@@ -64,7 +64,7 @@ in
     propagatedBuildInputs = [pkgs.openssl];
     overrides = y: (x.overrides y) // {
       prePatch = ''
-        sed 's|libssl.so|${pkgs.openssl.out}/lib/libssl.so|' -i src/reload.lisp
+        sed 's|libssl.so|${pkgs.lib.getLib pkgs.openssl}/lib/libssl.so|' -i src/reload.lisp
       '';
     };
   };

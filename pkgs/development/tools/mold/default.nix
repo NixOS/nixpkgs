@@ -1,38 +1,54 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, lib
-, autoPatchelfHook
 , cmake
-, llvmPackages_latest
-, xxHash
-, zlib
+, mimalloc
+, ninja
 , openssl
+, zlib
+, testers
+, mold
 }:
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "1.0.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-89Dh4qly70Jzyo/KPlRte58hbN5HNnzZpi32tFd8fXU=";
+    hash = "sha256-IXXyZZw1Tp/s9YkPR5Y+A6LpvaRo+XfA8UJBtt5Bjmg=";
   };
 
-  buildInputs = [ zlib openssl ];
-  nativeBuildInputs = [ autoPatchelfHook cmake xxHash ];
+  nativeBuildInputs = [ cmake ninja ];
 
-  dontUseCmakeConfigure = true;
-  EXTRA_LDFLAGS = "-fuse-ld=${llvmPackages_latest.lld}/bin/ld.lld";
-  LTO = 1;
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  buildInputs = [ openssl zlib ]
+    ++ lib.optionals (!stdenv.isDarwin) [ mimalloc ];
+
+  postPatch = ''
+    sed -i CMakeLists.txt -e '/.*set(DEST\ .*/d'
+  '';
+
+  cmakeFlags = [ "-DMOLD_USE_SYSTEM_MIMALLOC:BOOL=ON" ];
+
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [ "-faligned-allocation" ];
+
+  passthru.tests.version = testers.testVersion { package = mold; };
 
   meta = with lib; {
-    description = "A high performance drop-in replacement for existing unix linkers";
+    description = "A faster drop-in replacement for existing Unix linkers";
+    longDescription = ''
+      mold is a faster drop-in replacement for existing Unix linkers. It is
+      several times faster than the LLVM lld linker. mold is designed to
+      increase developer productivity by reducing build time, especially in
+      rapid debug-edit-rebuild cycles.
+    '';
     homepage = "https://github.com/rui314/mold";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with maintainers; [ nitsky ];
-    broken = stdenv.isAarch64;
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ azahi nitsky ];
+    platforms = platforms.unix;
+    # https://github.com/NixOS/nixpkgs/pull/189712#issuecomment-1237791234
+    broken = (stdenv.isLinux && stdenv.isAarch64);
   };
 }

@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 
 let
-  version = "6.0.0";
+  version = "6.0.1";
 
 in fetchzip {
   name = "ibm-plex-${version}";
@@ -13,7 +13,7 @@ in fetchzip {
     unzip -j $downloadedFile "OpenType/*/*.otf" -x "OpenType/IBM-Plex-Sans-JP/unhinted/*" -d $out/share/fonts/opentype
   '';
 
-  sha256 = "0zv9kw4hmchf374pl0iajzybmx5wklsplg56j115m46i4spij6mr";
+  sha256 = "sha256-HxO0L5Q6WJQBqtg64cczzuRcSYi4jEqbOzEWxDmqFp8=";
 
   meta = with lib; {
     description = "IBM Plex Typeface";

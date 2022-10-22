@@ -5,28 +5,32 @@
 , substituteAll
 , coreutils
 , curl
-, gawk
 , glxinfo
 , gnugrep
 , gnused
-, lsof
 , xdg-utils
 , dbus
 , hwdata
 , libX11
 , mangohud32
 , vulkan-headers
+, appstream
 , glslang
 , makeWrapper
+, Mako
 , meson
 , ninja
 , pkg-config
-, python3Packages
 , unzip
 , vulkan-loader
 , libXNVCtrl
 , wayland
+, glew
+, glfw
+, nlohmann_json
+, xorg
 , addOpenGLRunpath
+, gamescopeSupport ? true # build mangoapp and mangohudctl
 }:
 
 let
@@ -36,24 +40,45 @@ let
     src = fetchFromGitHub {
       owner = "ocornut";
       repo = "imgui";
-      rev = "v${version}";
-      hash = "sha256-rRkayXk3xz758v6vlMSaUu5fui6NR8Md3njhDB0gJ18=";
+      rev = "refs/tags/v${version}";
+      sha256 = "sha256-rRkayXk3xz758v6vlMSaUu5fui6NR8Md3njhDB0gJ18=";
     };
     patch = fetchurl {
       url = "https://wrapdb.mesonbuild.com/v2/imgui_${version}-1/get_patch";
-      hash = "sha256-bQC0QmkLalxdj4mDEdqvvOFtNwz2T1MpTDuMXGYeQ18=";
+      sha256 = "sha256-bQC0QmkLalxdj4mDEdqvvOFtNwz2T1MpTDuMXGYeQ18=";
+    };
+  };
+
+  # Derived from subprojects/spdlog.wrap
+  #
+  # NOTE: We only statically link spdlog due to a bug in pressure-vessel:
+  # https://github.com/ValveSoftware/steam-runtime/issues/511
+  #
+  # Once this fix is released upstream, we should switch back to using
+  # the system provided spdlog
+  spdlog = rec {
+    version = "1.8.5";
+    src = fetchFromGitHub {
+      owner = "gabime";
+      repo = "spdlog";
+      rev = "refs/tags/v${version}";
+      sha256 = "sha256-D29jvDZQhPscaOHlrzGN1s7/mXlcsovjbqYpXd7OM50=";
+    };
+    patch = fetchurl {
+      url = "https://wrapdb.mesonbuild.com/v2/spdlog_${version}-1/get_patch";
+      sha256 = "sha256-PDjyddV5KxKGORECWUMp6YsXc3kks0T5gxKrCZKbdL4=";
     };
   };
 in stdenv.mkDerivation rec {
   pname = "mangohud";
-  version = "0.6.5";
+  version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-RRtti0VnB6SXrpFYaEqANvpgvP/Dkvc+x/I40AXaspU=";
+    sha256 = "sha256-jfmgN90kViHa7vMOjo2x4bNY2QbLk93uYEvaA4DxYvg=";
   };
 
   outputs = [ "out" "doc" "man" ];
@@ -62,7 +87,7 @@ in stdenv.mkDerivation rec {
   postUnpack = ''(
     cd "$sourceRoot/subprojects"
     cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
-    unzip ${imgui.patch}
+    cp -R --no-preserve=mode,ownership ${spdlog.src} spdlog-${spdlog.version}
   )'';
 
   patches = [
@@ -74,11 +99,9 @@ in stdenv.mkDerivation rec {
       path = lib.makeBinPath [
         coreutils
         curl
-        gawk
         glxinfo
         gnugrep
         gnused
-        lsof
         xdg-utils
       ];
 
@@ -99,20 +122,30 @@ in stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''(
+    cd subprojects
+    unzip ${imgui.patch}
+    unzip ${spdlog.patch}
+  )'';
+
   mesonFlags = [
     "-Duse_system_vulkan=enabled"
     "-Dvulkan_datadir=${vulkan-headers}/share"
     "-Dwith_wayland=enabled"
+  ] ++ lib.optionals gamescopeSupport [
+    "-Dmangoapp_layer=true"
+    "-Dmangoapp=true"
+    "-Dmangohudctl=true"
   ];
 
   nativeBuildInputs = [
+    appstream
     glslang
     makeWrapper
+    Mako
     meson
     ninja
     pkg-config
-    python3Packages.Mako
-    python3Packages.python
     unzip
     vulkan-loader
   ];
@@ -122,6 +155,12 @@ in stdenv.mkDerivation rec {
     libX11
     libXNVCtrl
     wayland
+  ] ++ lib.optionals gamescopeSupport [
+    glew
+    glfw
+    nlohmann_json
+    vulkan-headers
+    xorg.libXrandr
   ];
 
   # Support 32bit Vulkan applications by linking in 32bit Vulkan layer
@@ -137,6 +176,12 @@ in stdenv.mkDerivation rec {
     wrapProgram "$out/bin/mangohud" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ addOpenGLRunpath.driverLink ]} \
       --prefix XDG_DATA_DIRS : "$out/share"
+  '' + lib.optionalString (gamescopeSupport) ''
+    if [[ -e "$out/bin/mangoapp" ]]; then
+      wrapProgram "$out/bin/mangoapp" \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ addOpenGLRunpath.driverLink ]} \
+        --prefix XDG_DATA_DIRS : "$out/share"
+    fi
   '';
 
   meta = with lib; {

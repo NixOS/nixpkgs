@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "lxml";
-  version = "4.6.4-5";
+  version = "4.9.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "lxml-${version}";
-    sha256 = "159cc48nl40qsx8pc8sasgny5xc0s3y0xrq3w3aw53s3ijncsgfl";
+    rev = "refs/tags/lxml-${version}";
+    sha256 = "sha256-5MJw3ciXYnfctSNcemJ/QJGKAaYpadvdbFhkc8+pmPM=";
   };
 
   # setuptoolsBuildPhase needs dependencies to be passed through nativeBuildInputs
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Pythonic binding for the libxml2 and libxslt libraries";
     homepage = "https://lxml.de";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jonringer sjourdois ];
+    maintainers = with maintainers; [ jonringer ];
   };
 }

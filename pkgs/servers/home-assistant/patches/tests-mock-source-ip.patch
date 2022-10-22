@@ -1,8 +1,8 @@
 diff --git a/homeassistant/components/network/__init__.py b/homeassistant/components/network/__init__.py
-index 7cc864727d..69333a5454 100644
+index b3ef88e7ab..b7a8471e1a 100644
 --- a/homeassistant/components/network/__init__.py
 +++ b/homeassistant/components/network/__init__.py
-@@ -26,7 +26,7 @@ async def async_get_source_ip(
+@@ -30,7 +30,7 @@ async def async_get_source_ip(
  ) -> str:
      """Get the source ip for a target ip."""
      adapters = await async_get_adapters(hass)

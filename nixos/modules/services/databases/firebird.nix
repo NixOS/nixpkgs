@@ -40,23 +40,23 @@ in
 
     services.firebird = {
 
-      enable = mkEnableOption "the Firebird super server";
+      enable = mkEnableOption (lib.mdDoc "the Firebird super server");
 
       package = mkOption {
         default = pkgs.firebird;
         defaultText = literalExpression "pkgs.firebird";
         type = types.package;
         example = literalExpression "pkgs.firebird_3";
-        description = ''
-          Which Firebird package to be installed: <code>pkgs.firebird_3</code>
-          For SuperServer use override: <code>pkgs.firebird_3.override { superServer = true; };</code>
+        description = lib.mdDoc ''
+          Which Firebird package to be installed: `pkgs.firebird_3`
+          For SuperServer use override: `pkgs.firebird_3.override { superServer = true; };`
         '';
       };
 
       port = mkOption {
         default = 3050;
         type = types.port;
-        description = ''
+        description = lib.mdDoc ''
           Port Firebird uses.
         '';
       };
@@ -64,7 +64,7 @@ in
       user = mkOption {
         default = "firebird";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           User account under which firebird runs.
         '';
       };
@@ -72,7 +72,7 @@ in
       baseDir = mkOption {
         default = "/var/lib/firebird";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Location containing data/ and system/ directories.
           data/ stores the databases, system/ stores the password database security2.fdb.
         '';

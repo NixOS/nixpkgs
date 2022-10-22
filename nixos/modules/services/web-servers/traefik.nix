@@ -50,20 +50,20 @@ let
     cfg.staticConfigFile;
 in {
   options.services.traefik = {
-    enable = mkEnableOption "Traefik web server";
+    enable = mkEnableOption (lib.mdDoc "Traefik web server");
 
     staticConfigFile = mkOption {
       default = null;
       example = literalExpression "/path/to/static_config.toml";
       type = types.nullOr types.path;
-      description = ''
+      description = lib.mdDoc ''
         Path to traefik's static configuration to use.
-        (Using that option has precedence over <literal>staticConfigOptions</literal> and <literal>dynamicConfigOptions</literal>)
+        (Using that option has precedence over `staticConfigOptions` and `dynamicConfigOptions`)
       '';
     };
 
     staticConfigOptions = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Static configuration for Traefik.
       '';
       type = jsonValue;
@@ -80,14 +80,14 @@ in {
       default = null;
       example = literalExpression "/path/to/dynamic_config.toml";
       type = types.nullOr types.path;
-      description = ''
+      description = lib.mdDoc ''
         Path to traefik's dynamic configuration to use.
-        (Using that option has precedence over <literal>dynamicConfigOptions</literal>)
+        (Using that option has precedence over `dynamicConfigOptions`)
       '';
     };
 
     dynamicConfigOptions = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Dynamic configuration for Traefik.
       '';
       type = jsonValue;
@@ -106,7 +106,7 @@ in {
     dataDir = mkOption {
       default = "/var/lib/traefik";
       type = types.path;
-      description = ''
+      description = lib.mdDoc ''
         Location for any persistent data traefik creates, ie. acme
       '';
     };
@@ -115,9 +115,9 @@ in {
       default = "traefik";
       type = types.str;
       example = "docker";
-      description = ''
+      description = lib.mdDoc ''
         Set the group that traefik runs under.
-        For the docker backend this needs to be set to <literal>docker</literal> instead.
+        For the docker backend this needs to be set to `docker` instead.
       '';
     };
 
@@ -125,7 +125,7 @@ in {
       default = pkgs.traefik;
       defaultText = literalExpression "pkgs.traefik";
       type = types.package;
-      description = "Traefik package to use.";
+      description = lib.mdDoc "Traefik package to use.";
     };
   };
 

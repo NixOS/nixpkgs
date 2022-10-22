@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytest, isPy3k, pyqt5, pyqt ? pyqt5 }:
+{ lib, buildPythonPackage, fetchFromGitHub
+, pytest, isPy3k, pyqt5, pyqt ? pyqt5
+, fetchpatch
+}:
 
 buildPythonPackage rec {
   pname = "quamash";
@@ -13,6 +16,14 @@ buildPythonPackage rec {
     rev = "version-${version}";
     sha256 = "117rp9r4lz0kfz4dmmpa35hp6nhbh6b4xq0jmgvqm68g9hwdxmqa";
   };
+
+  patches = [
+    # add 3.10 compatibility, merged remove on next update
+    (fetchpatch {
+      url = "https://github.com/harvimt/quamash/pull/126/commits/1e9047bec739dbc9d6ab337fc1a111a8b1090244.patch";
+      sha256 = "sha256-6gomY82AOKkrt32SEBKnRugzhnC5FAyKDs6K5xaxnRM=";
+    })
+  ];
 
   propagatedBuildInputs = [ pyqt ];
 

@@ -1,5 +1,5 @@
 /* Helper function to implement a fallback for the bit operators
-   `bitAnd`, `bitOr` and `bitXOr` on older nix version.
+   `bitAnd`, `bitOr` and `bitXor` on older nix version.
    See ./trivial.nix
 */
 f: x: y:

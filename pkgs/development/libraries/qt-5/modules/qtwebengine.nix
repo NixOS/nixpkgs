@@ -1,7 +1,7 @@
 { qtModule
 , qtdeclarative, qtquickcontrols, qtlocation, qtwebchannel
 
-, bison, coreutils, flex, git, gperf, ninja, pkg-config, python2, which
+, bison, flex, git, gperf, ninja, pkg-config, python2, which
 , nodejs, qtbase, perl
 
 , xorg, libXcursor, libXScrnSaver, libXrandr, libXtst
@@ -12,24 +12,25 @@
 , libcap
 , pciutils
 , systemd
-, pipewire_0_2
 , enableProprietaryCodecs ? true
 , gn
 , cctools, libobjc, libunwind, sandbox, xnu
 , ApplicationServices, AVFoundation, Foundation, ForceFeedback, GameController, AppKit
 , ImageCaptureCore, CoreBluetooth, IOBluetooth, CoreWLAN, Quartz, Cocoa, LocalAuthentication
 , cups, openbsm, runCommand, xcbuild, writeScriptBin
-, ffmpeg ? null
+, ffmpeg_4 ? null
 , lib, stdenv, fetchpatch
 , version ? null
 , qtCompatVersion
+, pipewireSupport ? stdenv.isLinux
+, pipewire_0_2
 }:
 
 qtModule {
   pname = "qtwebengine";
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
-    bison coreutils flex git gperf ninja pkg-config python2 which gn nodejs
+    bison flex git gperf ninja pkg-config python2 which gn nodejs
   ] ++ lib.optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
@@ -115,6 +116,7 @@ qtModule {
   ] ++ lib.optionals stdenv.isDarwin [
     "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_12"
     "-DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_12"
+    "-Wno-elaborated-enum-base"
 
     #
     # Prevent errors like
@@ -136,7 +138,7 @@ qtModule {
   '';
 
   qmakeFlags = [ "--" "-system-ffmpeg" ]
-    ++ lib.optional (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) "-webengine-webrtc-pipewire"
+    ++ lib.optional (pipewireSupport && (lib.versionAtLeast qtCompatVersion "5.15")) "-webengine-webrtc-pipewire"
     ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
 
   propagatedBuildInputs = [
@@ -153,7 +155,7 @@ qtModule {
     harfbuzz icu
 
     libevent
-    ffmpeg
+    ffmpeg_4
   ] ++ lib.optionals (!stdenv.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
 
@@ -170,7 +172,7 @@ qtModule {
     xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
     xorg.libXcomposite xorg.libXdamage libdrm xorg.libxkbfile
 
-  ] ++ lib.optionals (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) [
+  ] ++ lib.optionals (pipewireSupport && (lib.versionAtLeast qtCompatVersion "5.15")) [
     # Pipewire
     pipewire_0_2
   ]
@@ -238,7 +240,22 @@ qtModule {
   meta = with lib; {
     description = "A web engine based on the Chromium web browser";
     maintainers = with maintainers; [ matthewbauer ];
-    platforms = platforms.unix;
+
+    # qtwebengine-5.15.8: "QtWebEngine can only be built for x86,
+    # x86-64, ARM, Aarch64, and MIPSel architectures."
+    platforms =
+      lib.trivial.pipe lib.systems.doubles.all [
+        (map (double: lib.systems.elaborate { system = double; }))
+        (lib.lists.filter (parsedPlatform: with parsedPlatform;
+          isUnix &&
+          (isx86_32  ||
+           isx86_64  ||
+           isAarch32 ||
+           isAarch64 ||
+           (isMips && isLittleEndian))))
+        (map (plat: plat.system))
+      ];
+
     # This build takes a long time; particularly on slow architectures
     timeout = 24 * 3600;
     # we are still stuck with MacOS SDK 10.12 on x86_64-darwin

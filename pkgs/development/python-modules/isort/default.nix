@@ -2,24 +2,26 @@
 , colorama
 , hypothesis
 , poetry-core
+, setuptools
 , pylama
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "isort";
-  version = "5.9.3";
+  version = "5.10.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "isort";
     rev = version;
-    sha256 = "sha256-JbRZ/3Xz35tGoCNnQesR08Sjoz3yimxZyxhhOXGvmXw=";
+    sha256 = "09spgl2k9xrprr5gbpfc91a8p7mx7a0c64ydgc91b3jhrmnd9jg1";
   };
 
   nativeBuildInputs = [
     poetry-core
+    setuptools
   ];
 
   checkInputs = [
@@ -52,6 +54,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_run" # doesn't like paths in /build
+    "test_fuzz_show_unified_diff" # flakey
     "test_pyi_formatting_issue_942"
     "test_requirements_finder"
     "test_pipfile_finder"

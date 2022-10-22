@@ -9,18 +9,18 @@ in {
   options = {
 
     services.airsonic = {
-      enable = mkEnableOption "Airsonic, the Free and Open Source media streaming server (fork of Subsonic and Libresonic)";
+      enable = mkEnableOption (lib.mdDoc "Airsonic, the Free and Open Source media streaming server (fork of Subsonic and Libresonic)");
 
       user = mkOption {
         type = types.str;
         default = "airsonic";
-        description = "User account under which airsonic runs.";
+        description = lib.mdDoc "User account under which airsonic runs.";
       };
 
       home = mkOption {
         type = types.path;
         default = "/var/lib/airsonic";
-        description = ''
+        description = lib.mdDoc ''
           The directory where Airsonic will create files.
           Make sure it is writable.
         '';
@@ -29,7 +29,7 @@ in {
       virtualHost = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
         '';
       };
@@ -37,18 +37,20 @@ in {
       listenAddress = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = ''
+        description = lib.mdDoc ''
           The host name or IP address on which to bind Airsonic.
-          Only relevant if you have multiple network interfaces and want
-          to make Airsonic available on only one of them. The default value
-          will bind Airsonic to all available network interfaces.
+          The default value is appropriate for first launch, when the
+          default credentials are easy to guess. It is also appropriate
+          if you intend to use the virtualhost option in the service
+          module. In other cases, you may want to change this to a
+          specific IP or 0.0.0.0 to listen on all interfaces.
         '';
       };
 
       port = mkOption {
         type = types.int;
         default = 4040;
-        description = ''
+        description = lib.mdDoc ''
           The port on which Airsonic will listen for
           incoming HTTP traffic. Set to 0 to disable.
         '';
@@ -57,7 +59,7 @@ in {
       contextPath = mkOption {
         type = types.path;
         default = "/";
-        description = ''
+        description = lib.mdDoc ''
           The context path, i.e., the last part of the Airsonic
           URL. Typically '/' or '/airsonic'. Default '/'
         '';
@@ -66,7 +68,7 @@ in {
       maxMemory = mkOption {
         type = types.int;
         default = 100;
-        description = ''
+        description = lib.mdDoc ''
           The memory limit (max Java heap size) in megabytes.
           Default: 100
         '';
@@ -76,7 +78,7 @@ in {
         type = types.listOf types.path;
         default = [ "${pkgs.ffmpeg.bin}/bin/ffmpeg" ];
         defaultText = literalExpression ''[ "''${pkgs.ffmpeg.bin}/bin/ffmpeg" ]'';
-        description = ''
+        description = lib.mdDoc ''
           List of paths to transcoder executables that should be accessible
           from Airsonic. Symlinks will be created to each executable inside
           ''${config.${opt.home}}/transcoders.
@@ -87,7 +89,7 @@ in {
         type = types.package;
         default = pkgs.jre8;
         defaultText = literalExpression "pkgs.jre8";
-        description = ''
+        description = lib.mdDoc ''
           JRE package to use.
 
           Airsonic only supports Java 8, airsonic-advanced requires at least
@@ -99,11 +101,11 @@ in {
         type = types.path;
         default = "${pkgs.airsonic}/webapps/airsonic.war";
         defaultText = literalExpression ''"''${pkgs.airsonic}/webapps/airsonic.war"'';
-        description = "Airsonic war file to use.";
+        description = lib.mdDoc "Airsonic war file to use.";
       };
 
       jvmOptions = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Extra command line options for the JVM running AirSonic.
           Useful for sending jukebox output to non-default alsa
           devices.

@@ -1,29 +1,47 @@
 { lib, stdenv , fetchFromGitHub
 , pkg-config, autoreconfHook
 , db5, openssl, boost, zlib, miniupnpc, libevent
-, protobuf, util-linux, qt4, qrencode
-, withGui }:
+, protobuf, qtbase ? null
+, wrapQtAppsHook ? null, qttools, qmake ? null, qrencode
+, withGui, withUpnp ? true, withUtils ? true, withWallet ? true
+, withZmq ? true, zeromq, util-linux ? null, Cocoa ? null }:
 
 with lib;
 stdenv.mkDerivation rec {
-  name = "dogecoin" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "1.14.5";
+  pname = "dogecoin" + optionalString (!withGui) "d";
+  version = "1.14.6";
 
   src = fetchFromGitHub {
     owner = "dogecoin";
     repo = "dogecoin";
     rev = "v${version}";
-    sha256 = "sha256-Ewefy6sptSQDJVbvQqFoawhA/ujKEn9W2JWyoPYD7d0=";
+    sha256 = "sha256-PmbmmA2Mq07dwB3cI7A9c/ewtu0I+sWvQT39Yekm/sU=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ openssl db5 openssl util-linux
-                  protobuf boost zlib miniupnpc libevent ]
-                  ++ optionals withGui [ qt4 qrencode ];
+  preConfigure = optionalString withGui ''
+    export LRELEASE=${getDev qttools}/bin/lrelease
+  '';
 
-  configureFlags = [ "--with-incompatible-bdb"
-                     "--with-boost-libdir=${boost.out}/lib" ]
-                     ++ optionals withGui [ "--with-gui" ];
+  nativeBuildInputs = [ pkg-config autoreconfHook util-linux ]
+    ++ optionals withGui [ wrapQtAppsHook qttools ];
+
+  buildInputs = [ openssl protobuf boost zlib libevent ]
+    ++ optionals withGui [ qtbase qrencode ]
+    ++ optionals withUpnp [ miniupnpc ]
+    ++ optionals withWallet [ db5 ]
+    ++ optionals withZmq [ zeromq ]
+    ++ optionals stdenv.isDarwin [ Cocoa ];
+
+  configureFlags = [
+    "--with-incompatible-bdb"
+    "--with-boost-libdir=${boost.out}/lib"
+  ] ++ optionals (!withGui) [ "--with-gui=no" ]
+    ++ optionals (!withUpnp) [ "--without-miniupnpc" ]
+    ++ optionals (!withUtils) [ "--without-utils" ]
+    ++ optionals (!withWallet) [ "--disable-wallet" ]
+    ++ optionals (!withZmq) [ "--disable-zmq" ];
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Wow, such coin, much shiba, very rich";
@@ -33,9 +51,9 @@ stdenv.mkDerivation rec {
       internet currency."
       It is named after a famous Internet meme, the "Doge" - a Shiba Inu dog.
     '';
-    homepage = "http://www.dogecoin.com/";
+    homepage = "https://www.dogecoin.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ edwtjo offline ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

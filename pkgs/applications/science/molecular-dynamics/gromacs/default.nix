@@ -19,11 +19,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "gromacs";
-  version = "2021.4";
+  version = "2022.3";
 
   src = fetchurl {
     url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-${version}.tar.gz";
-    sha256 = "07ds8abxq0k7vfpjvxb8in3fhb6lz0pbdzbmlidyzaw37qz8lw6b";
+    sha256 = "sha256-FM+xMN2vj3WaOvZDwE9aDQ0ysJvDRIsWr6W2F/XjXa4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -62,6 +62,12 @@ in stdenv.mkDerivation rec {
        "-DGMX_MPI:BOOL=FALSE"
      ]
   ) ++ lib.optional enableCuda "-DGMX_GPU=CUDA";
+
+  postFixup = ''
+    substituteInPlace "$out"/lib/pkgconfig/*.pc \
+      --replace '=''${prefix}//' '=/' \
+      --replace "$out/$out/" "$out/"
+  '';
 
   meta = with lib; {
     homepage = "http://www.gromacs.org";

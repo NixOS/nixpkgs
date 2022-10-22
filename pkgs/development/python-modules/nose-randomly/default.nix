@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -16,7 +17,10 @@ buildPythonPackage rec {
 
   checkInputs = [ numpy nose ];
 
-  checkPhase = ''
+  checkPhase = if stdenv.isDarwin then ''
+    # Work around "OSError: AF_UNIX path too long"
+    TMPDIR="/tmp" nosetests
+  '' else ''
     nosetests
   '';
 

@@ -11,7 +11,7 @@ in
     modemAddress = mkOption {
       type = types.str;
       default = "192.168.100.1";
-      description = ''
+      description = lib.mdDoc ''
         The hostname or IP of the cable modem.
       '';
     };

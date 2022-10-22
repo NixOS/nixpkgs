@@ -11,8 +11,8 @@
 let
   version = {
     feature = "17";
-    interim = ".0.1";
-    build = "12";
+    interim = ".0.4";
+    build = "8";
   };
 
   openjdk = stdenv.mkDerivation {
@@ -23,7 +23,7 @@ let
       owner = "openjdk";
       repo = "jdk${version.feature}u";
       rev = "jdk-${version.feature}${version.interim}+${version.build}";
-      sha256 = "1l1jgbz8q7zq66npfg88r0l5xga427vrz35iys09j44b6qllrldd";
+      sha256 = "drbljLz82ZyK29lIDLPqCkwqpBdgU/7zCTZ0ceeb1SI=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];
@@ -40,7 +40,8 @@ let
       ./read-truststore-from-env-jdk10.patch
       ./currency-date-range-jdk10.patch
       ./increase-javadoc-heap-jdk13.patch
-      ./ignore-LegalNoticeFilePlugin.patch
+      ./ignore-LegalNoticeFilePlugin-jdk17.patch
+      ./fix-library-path-jdk17.patch
 
       # -Wformat etc. are stricter in newer gccs, per
       # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79677
@@ -49,6 +50,13 @@ let
       (fetchurl {
         url = "https://src.fedoraproject.org/rpms/java-openjdk/raw/06c001c7d87f2e9fe4fedeef2d993bcd5d7afa2a/f/rh1673833-remove_removal_of_wformat_during_test_compilation.patch";
         sha256 = "082lmc30x64x583vqq00c8y0wqih3y4r0mp1c4bqq36l22qv6b6r";
+      })
+
+      # Patch borrowed from Alpine to fix build errors with musl libc and recent gcc.
+      # This is applied anywhere to prevent patchrot.
+      (fetchurl {
+        url = "https://git.alpinelinux.org/aports/plain/community/openjdk17/FixNullPtrCast.patch?id=6f97cb0ae4dff6588dae5868c2522aea96c99d2c";
+        sha256 = "sha256-giOmMInwLH0Ei9H7ETsrrzQU09I6+dn8KpPrKb7zn8I=";
       })
     ] ++ lib.optionals (!headless && enableGnome2) [
       ./swing-use-gtk-jdk13.patch
@@ -157,7 +165,7 @@ let
 
     disallowedReferences = [ openjdk17-bootstrap ];
 
-    meta = import ./meta.nix lib;
+    meta = import ./meta.nix lib version.feature;
 
     passthru = {
       architecture = "";

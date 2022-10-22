@@ -1,99 +1,99 @@
-diff --git a/taskwhisperer-extension@infinicode.de/extra/create.sh b/taskwhisperer-extension@infinicode.de/extra/create.sh
-index a69e369..35d5ea1 100755
---- a/taskwhisperer-extension@infinicode.de/extra/create.sh
-+++ b/taskwhisperer-extension@infinicode.de/extra/create.sh
-@@ -1 +1 @@
--bash -c "task add $1"
-+bash -c "@task@ add $1"
-diff --git a/taskwhisperer-extension@infinicode.de/extra/modify.sh b/taskwhisperer-extension@infinicode.de/extra/modify.sh
-index 7964a26..8edd21b 100755
---- a/taskwhisperer-extension@infinicode.de/extra/modify.sh
-+++ b/taskwhisperer-extension@infinicode.de/extra/modify.sh
-@@ -1 +1 @@
--bash -c "task $1 modify $2"
-+bash -c "@task@ $1 modify $2"
-diff --git a/taskwhisperer-extension@infinicode.de/taskService.js b/taskwhisperer-extension@infinicode.de/taskService.js
-index ead7a12..aa36db4 100644
---- a/taskwhisperer-extension@infinicode.de/taskService.js
-+++ b/taskwhisperer-extension@infinicode.de/taskService.js
-@@ -182,7 +182,7 @@ const TaskService = class TaskService {
+diff --git a/taskwhisperer-extension@infinicode.de/metadata.json b/taskwhisperer-extension@infinicode.de/metadata.json
+index 2f1471c..a84bdf4 100644
+--- a/taskwhisperer-extension@infinicode.de/metadata.json
++++ b/taskwhisperer-extension@infinicode.de/metadata.json
+@@ -6,7 +6,8 @@
+     "3.32",
+     "3.36",
+     "3.38",
+-    "40"
++    "40",
++    "41"
+   ],
+   "url": "https://github.com/cinatic/taskwhisperer",
+   "uuid": "taskwhisperer-extension@infinicode.de",
+diff --git a/taskwhisperer-extension@infinicode.de/services/taskService.js b/taskwhisperer-extension@infinicode.de/services/taskService.js
+index df09cdf..df68c60 100644
+--- a/taskwhisperer-extension@infinicode.de/services/taskService.js
++++ b/taskwhisperer-extension@infinicode.de/services/taskService.js
+@@ -63,7 +63,7 @@ var loadTaskData = async ({ taskStatus, project, taskOrder }) => {
  
-         let project = projectName ? "project:" + projectName : "";
+   await syncTasks()
  
--        let command = ['task', 'rc.json.array=on', status, project, 'export'];
-+        let command = ['@task@', 'rc.json.array=on', status, project, 'export'];
-         let reader = new SpawnReader.SpawnReader();
+-  const command = ['task', 'rc.json.array=on', statusFilter, projectFilter, 'export'].join(' ')
++  const command = ['@task@', 'rc.json.array=on', statusFilter, projectFilter, 'export'].join(' ')
  
-         let buffer = "";
-@@ -220,7 +220,7 @@ const TaskService = class TaskService {
-                 break;
-         }
+   let { output, error } = await run({ command })
  
--        let shellProc = Gio.Subprocess.new(['task', status, 'projects'], Gio.SubprocessFlags.STDOUT_PIPE);
-+        let shellProc = Gio.Subprocess.new(['@task@', status, 'projects'], Gio.SubprocessFlags.STDOUT_PIPE);
+@@ -110,7 +110,7 @@ var loadProjectsData = async taskStatus => {
  
-         shellProc.wait_async(null, function (obj, result) {
-             let shellProcExited = true;
-@@ -261,7 +261,7 @@ const TaskService = class TaskService {
-             return;
-         }
+   await syncTasks()
  
--        let shellProc = Gio.Subprocess.new(['task', taskID.toString(), 'done'], Gio.SubprocessFlags.STDOUT_PIPE);
-+        let shellProc = Gio.Subprocess.new(['@task@', taskID.toString(), 'done'], Gio.SubprocessFlags.STDOUT_PIPE);
+-  const command = ['task', 'rc.json.array=on', statusFilter, 'export'].join(' ')
++  const command = ['@task@', 'rc.json.array=on', statusFilter, 'export'].join(' ')
+   const { output: allTheTasks } = await run({ command })
  
-         shellProc.wait_async(null, function (obj, result) {
-             let shellProcExited = true;
-@@ -290,7 +290,7 @@ const TaskService = class TaskService {
-             return;
-         }
+   let sortedUniqueProjects = []
+@@ -129,7 +129,7 @@ var setTaskDone = async taskID => {
+     return
+   }
  
--        let shellProc = Gio.Subprocess.new(['task', 'modify', taskID.toString(), 'status:pending'], Gio.SubprocessFlags.STDOUT_PIPE);
-+        let shellProc = Gio.Subprocess.new(['@task@', 'modify', taskID.toString(), 'status:pending'], Gio.SubprocessFlags.STDOUT_PIPE);
+-  const command = ['task', taskID.toString(), 'done'].join(' ')
++  const command = ['@task@', taskID.toString(), 'done'].join(' ')
+   const result = await run({ command, asJson: false })
  
-         shellProc.wait_async(null, function (obj, result) {
-             let shellProcExited = true;
-@@ -318,7 +318,7 @@ const TaskService = class TaskService {
-         if (!taskID) {
-             return;
-         }
--        let shellProc = Gio.Subprocess.new(['task', taskID.toString(), 'start'], Gio.SubprocessFlags.STDOUT_PIPE);
-+        let shellProc = Gio.Subprocess.new(['@task@', taskID.toString(), 'start'], Gio.SubprocessFlags.STDOUT_PIPE);
-         shellProc.wait_async(null, function (obj, result) {
-             let shellProcExited = true;
-             shellProc.wait_finish(result);
-@@ -344,7 +344,7 @@ const TaskService = class TaskService {
-         if (!taskID) {
-             return;
-         }
--        let shellProc = Gio.Subprocess.new(['task', taskID.toString(), 'stop'], Gio.SubprocessFlags.STDOUT_PIPE);
-+        let shellProc = Gio.Subprocess.new(['@task@', taskID.toString(), 'stop'], Gio.SubprocessFlags.STDOUT_PIPE);
-         shellProc.wait_async(null, function (obj, result) {
-             let shellProcExited = true;
-             shellProc.wait_finish(result);
-@@ -374,7 +374,7 @@ const TaskService = class TaskService {
-         // FIXME: Gio.Subprocess: due to only passing string vector is allowed, it's not possible to directly pass the
-         //        input of the user to subprocess (why & how, if you can answer then please send msg to fh@infinicode.de)
-         //        bypassing problem with own shell script
--        let shellProc = Gio.Subprocess.new(['/bin/sh', EXTENSIONDIR + '/extra/modify.sh', taskID.toString(), params], Gio.SubprocessFlags.STDOUT_PIPE + Gio.SubprocessFlags.STDERR_MERGE);
-+        let shellProc = Gio.Subprocess.new(['@shell@', EXTENSIONDIR + '/extra/modify.sh', taskID.toString(), params], Gio.SubprocessFlags.STDOUT_PIPE + Gio.SubprocessFlags.STDERR_MERGE);
+   if (!result.error) {
+@@ -146,7 +146,7 @@ var setTaskUndone = async taskUUID => {
+     return
+   }
  
-         shellProc.wait_async(null, function (obj, result) {
-             let shellProcExited = true;
-@@ -403,7 +403,7 @@ const TaskService = class TaskService {
-         // FIXME: Gio.Subprocess: due to only passing string vector is allowed, it's not possible to directly pass the
-         //        input of the user to subprocess (why & how, if you can answer then please send msg to fh@infinicode.de)
-         //        bypassing problem with own shell script
--        let shellProc = Gio.Subprocess.new(['/bin/sh', EXTENSIONDIR + '/extra/create.sh', params], Gio.SubprocessFlags.STDOUT_PIPE + Gio.SubprocessFlags.STDERR_MERGE);
-+        let shellProc = Gio.Subprocess.new(['@shell@', EXTENSIONDIR + '/extra/create.sh', params], Gio.SubprocessFlags.STDOUT_PIPE + Gio.SubprocessFlags.STDERR_MERGE);
+-  const command = ['task', `uuid:${taskUUID}`, 'modify', 'status:pending'].join(' ')
++  const command = ['@task@', `uuid:${taskUUID}`, 'modify', 'status:pending'].join(' ')
+   const result = await run({ command, asJson: false })
  
-         shellProc.wait_async(null, function (obj, result) {
-             let shellProcExited = true;
-@@ -432,7 +432,7 @@ const TaskService = class TaskService {
-         let shellProc;
+   if (!result.error) {
+@@ -163,7 +163,7 @@ var startTask = async taskID => {
+     return
+   }
  
-         try {
--            shellProc = Gio.Subprocess.new(['task', 'sync'], Gio.SubprocessFlags.STDOUT_PIPE);
-+            shellProc = Gio.Subprocess.new(['@task@', 'sync'], Gio.SubprocessFlags.STDOUT_PIPE);
-         } catch (err) {
-             onError(err);
-             return;
+-  const command = ['task', taskID.toString(), 'start'].join(' ')
++  const command = ['@task@', taskID.toString(), 'start'].join(' ')
+   const result = await run({ command, asJson: false })
+ 
+   if (!result.error) {
+@@ -180,7 +180,7 @@ var stopTask = async taskID => {
+     return
+   }
+ 
+-  const command = ['task', taskID.toString(), 'stop'].join(' ')
++  const command = ['@task@', taskID.toString(), 'stop'].join(' ')
+   const result = await run({ command, asJson: false })
+ 
+   if (!result.error) {
+@@ -195,7 +195,7 @@ var stopTask = async taskID => {
+ var createTask = async task => {
+   const params = _convertTaskToParams(task)
+ 
+-  const command = ['task', 'add', ...params].join(' ')
++  const command = ['@task@', 'add', ...params].join(' ')
+   const result = await run({ command, asJson: false })
+ 
+   if (!result.error) {
+@@ -212,7 +212,7 @@ var modifyTask = async (taskUUID, task) => {
+ 
+   const params = _convertTaskToParams(task)
+ 
+-  const command = ['task', `uuid:${taskUUID}`, 'modify', ...params].join(' ')
++  const command = ['@task@', `uuid:${taskUUID}`, 'modify', ...params].join(' ')
+   const result = await run({ command, asJson: false })
+ 
+   if (!result.error) {
+@@ -227,7 +227,7 @@ var syncTasks = async () => {
+     return
+   }
+ 
+-  const command = ['task', 'sync'].join(' ')
++  const command = ['@task@', 'sync'].join(' ')
+   const result = await run({ command, asJson: false })
+ 
+   _showProcessErrorNotificationIfError(result, 'Sync Tasks')

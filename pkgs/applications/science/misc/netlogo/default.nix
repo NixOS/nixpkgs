@@ -8,7 +8,7 @@ let
     icon = name;
     comment = "A multi-agent programmable modeling environment";
     desktopName = "NetLogo";
-    categories = "Science;";
+    categories = [ "Science" ];
   };
 
 in
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
     # launcher with `cd` is required b/c otherwise the model library isn't usable
     makeWrapper "${jre}/bin/java" "$out/bin/netlogo" \
-      --run "cd $out/share/netlogo/app" \
+      --chdir "$out/share/netlogo/app" \
       --add-flags "-jar netlogo-${version}.jar"
 
     cp $src1 $out/share/icons/hicolor/256x256/apps/netlogo.png
@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
       many tens of thousands of students, teachers and researchers worldwide.
     '';
     homepage = "https://ccl.northwestern.edu/netlogo/index.shtml";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2;
     maintainers = [ maintainers.dpaetzel ];
     platforms = platforms.linux;

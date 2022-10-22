@@ -1,6 +1,6 @@
 { lib, stdenv, llvm_meta
 , runCommand
-, src
+, monorepoSrc
 , cmake
 , zlib
 , ncurses
@@ -21,14 +21,20 @@
 , lit
 , makeWrapper
 , enableManpages ? false
+, lua5_3
 }:
 
 stdenv.mkDerivation (rec {
   pname = "lldb";
   inherit version;
 
-  inherit src;
-  sourceRoot = "source/${pname}";
+  src = runCommand "${pname}-src-${version}" {} ''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/${pname} "$out"
+  '';
+
+  sourceRoot = "${src.name}/${pname}";
 
   patches = [
     ./procfs.patch
@@ -43,7 +49,7 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "lib" "dev" ];
 
   nativeBuildInputs = [
-    cmake python3 which swig lit makeWrapper
+    cmake python3 which swig lit makeWrapper lua5_3
   ] ++ lib.optionals enableManpages [
     python3.pkgs.sphinx python3.pkgs.recommonmark
   ];

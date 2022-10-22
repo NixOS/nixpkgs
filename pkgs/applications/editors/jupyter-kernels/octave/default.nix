@@ -1,5 +1,4 @@
-{ lib
-, stdenv
+{ stdenv
 , callPackage
 , runCommand
 , makeWrapper
@@ -22,7 +21,7 @@ rec {
   launcher = runCommand "octave-kernel-launcher" {
     inherit octave;
     python = python3.withPackages (ps: [ ps.traitlets ps.jupyter_core ps.ipykernel ps.metakernel kernel ]);
-    buildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
   } ''
     mkdir -p $out/bin
 
@@ -32,7 +31,8 @@ rec {
   '';
 
   sizedLogo = size: stdenv.mkDerivation {
-    name = ''octave-logo-${octave.version}-${size}x${size}.png'';
+    pname = "octave-logo-${size}x${size}.png";
+    inherit (octave) version;
 
     src = octave.src;
 

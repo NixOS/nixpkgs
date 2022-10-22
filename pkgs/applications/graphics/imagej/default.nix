@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
       name = "ImageJ";
       desktopName = "ImageJ";
       icon = "imagej";
-      categories = "Science;Utility;Graphics;";
+      categories = [ "Science" "Utility" "Graphics" ];
       exec = "imagej";
     })
   ];
@@ -74,6 +74,7 @@ in stdenv.mkDerivation rec {
       inspired by NIH Image for the Macintosh.
       It runs on any computer with a Java 1.4 or later virtual machine.
     '';
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.publicDomain;
     platforms = platforms.unix;
     maintainers = with maintainers; [ yuriaisaka ];

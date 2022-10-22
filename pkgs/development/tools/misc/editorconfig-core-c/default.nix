@@ -1,21 +1,39 @@
-{ lib, stdenv, fetchgit, cmake, pcre, doxygen }:
+{ lib, stdenv, fetchpatch, fetchFromGitHub, cmake, pcre2, doxygen }:
 
 stdenv.mkDerivation rec {
   pname = "editorconfig-core-c";
-  version = "0.12.1";
+  version = "0.12.5";
 
-  src = fetchgit {
-    url = "https://github.com/editorconfig/editorconfig-core-c.git";
+  outputs = [ "out" "dev" ];
+
+  src = fetchFromGitHub {
+    owner = "editorconfig";
+    repo = "editorconfig-core-c";
     rev = "v${version}";
-    sha256 = "0awpb63ci85kal3pnlj2b54bay8igj1rbc13d8gqkvidlb51nnx4";
+    sha256 = "sha256-4p8bomeXtA+zJ3IvWW0UZixdMnjYWYu7yeA6JUwwRb8=";
     fetchSubmodules = true;
   };
 
-  buildInputs = [ pcre ];
-  nativeBuildInputs = [ cmake doxygen ];
+  patches = [
+    # Fox broken paths in pkg-config.
+    # https://github.com/editorconfig/editorconfig-core-c/pull/81
+    (fetchpatch {
+      url = "https://github.com/editorconfig/editorconfig-core-c/commit/e0ead79d3bb4179fe9bccd3e5598ed47cc0863a3.patch";
+      sha256 = "t/DiPVyyYoMwFpNG6sD+rLWHheFCbMaILXyey6inGdc=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    doxygen
+  ];
+
+  buildInputs = [
+    pcre2
+  ];
 
   # Multiple doxygen can not generate man pages in the same base directory in
-  # parallel: https://bugzilla.gnome.org/show_bug.cgi?id=791153
+  # parallel: https://github.com/doxygen/doxygen/issues/6293
   enableParallelBuilding = false;
 
   meta = with lib; {

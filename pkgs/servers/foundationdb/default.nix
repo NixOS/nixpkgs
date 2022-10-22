@@ -2,7 +2,7 @@
 , lib, fetchurl, fetchpatch, fetchFromGitHub
 
 , cmake, ninja, which, findutils, m4, gawk
-, python2, python3, openjdk, mono, libressl, boost
+, python2, python3, openjdk, mono, libressl, boost168
 }@args:
 
 let
@@ -10,6 +10,7 @@ let
   cmakeBuild = import ./cmake.nix (args // {
     gccStdenv    = gccStdenv;
     llvmPackages = llvmPackages;
+    boost        = boost168;
   });
 
   python3-six-patch = fetchpatch {

@@ -1,10 +1,11 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , cmake
 , ninja
 , intltool
 , fetchurl
 , libxml2
-, webkitgtk
+, webkitgtk_4_1
 , highlight
 , pkg-config
 , gtk3
@@ -13,7 +14,6 @@
 , libpst
 , gspell
 , evolution-data-server
-, libgdata
 , libgweather
 , glib-networking
 , gsettings-desktop-schemas
@@ -22,9 +22,9 @@
 , shared-mime-info
 , libical
 , db
-, gcr
 , sqlite
 , gnome
+, gnome-desktop
 , librsvg
 , gdk-pixbuf
 , libsecret
@@ -32,6 +32,8 @@
 , nspr
 , icu
 , libcanberra-gtk3
+, geocode-glib_2
+, cmark
 , bogofilter
 , gst_all_1
 , procps
@@ -42,11 +44,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.42.2";
+  version = "3.46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "C+QT8W3WjsjUNCpPJpVlryp0oZpb+hxcv2Y1I6W1ujg=";
+    sha256 = "4J6Sdrxrmr8NrTpOgT7qHQJfT2qvH6w7ew+IiVdCkT8=";
   };
 
   nativeBuildInputs = [
@@ -64,11 +66,10 @@ stdenv.mkDerivation rec {
     bogofilter
     db
     evolution-data-server
-    gcr
     gdk-pixbuf
     glib
     glib-networking
-    gnome.gnome-desktop
+    gnome-desktop
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
@@ -77,7 +78,8 @@ stdenv.mkDerivation rec {
     highlight
     icu
     libcanberra-gtk3
-    libgdata
+    geocode-glib_2
+    cmark
     libgweather
     libical
     libnotify
@@ -91,7 +93,7 @@ stdenv.mkDerivation rec {
     procps
     shared-mime-info
     sqlite
-    webkitgtk
+    webkitgtk_4_1
   ];
 
   propagatedUserEnvPkgs = [
@@ -100,7 +102,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_AUTOAR=OFF"
-    "-DENABLE_LIBCRYPTUI=OFF"
     "-DENABLE_YTNEF=OFF"
     "-DWITH_SPAMASSASSIN=${spamassassin}/bin/spamassassin"
     "-DWITH_SA_LEARN=${spamassassin}/bin/sa-learn"
@@ -121,6 +122,7 @@ stdenv.mkDerivation rec {
     };
   };
 
+  PKG_CONFIG_CAMEL_1_2_CAMEL_PROVIDERDIR = "${placeholder "out"}/lib/evolution-data-server/camel-providers";
   PKG_CONFIG_LIBEDATASERVERUI_1_2_UIMODULEDIR = "${placeholder "out"}/lib/evolution-data-server/ui-modules";
 
   meta = with lib; {

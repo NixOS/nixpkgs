@@ -2,7 +2,6 @@
 , lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , addOpenGLRunpath
 , docutils
 , perl
@@ -15,7 +14,6 @@
 , freetype
 , libass
 , libpthreadstubs
-, mujs
 , nv-codec-headers
 , lua
 , libuchardet
@@ -25,6 +23,7 @@
 , waylandSupport ? stdenv.isLinux
   , wayland
   , wayland-protocols
+  , wayland-scanner
   , libxkbcommon
 
 , x11Support ? stdenv.isLinux
@@ -33,6 +32,7 @@
   , libXext
   , libXxf86vm
   , libXrandr
+  , libXpresent
 
 , cddaSupport ? false
   , libcdio
@@ -56,10 +56,11 @@
 , cmsSupport         ? true,           lcms2
 , dvdnavSupport      ? stdenv.isLinux, libdvdnav
 , jackaudioSupport   ? false,          libjack2
+, javascriptSupport  ? true,           mujs
 , libpngSupport      ? true,           libpng
 , openalSupport      ? true,           openalSoft
 , pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio
-, rubberbandSupport  ? stdenv.isLinux, rubberband
+, rubberbandSupport  ? true,           rubberband
 , screenSaverSupport ? true,           libXScrnSaver
 , sdl2Support        ? true,           SDL2
 , sixelSupport       ? false,          libsixel
@@ -81,7 +82,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "mpv";
-  version = "0.34.0";
+  version = "0.34.1";
 
   outputs = [ "out" "dev" "man" ];
 
@@ -89,7 +90,7 @@ in stdenv.mkDerivation rec {
     owner = "mpv-player";
     repo = "mpv";
     rev = "v${version}";
-    sha256 = "sha256-qa6xZV4aLcHBMa2bIqoKjte4+KWEGGZre4L0u1+eDE8=";
+    sha256 = "12qxwm1ww5vhjddl8yvj1xa0n1fi9z3lmzwhaiday2v59ca0qgsk";
   };
 
   postPatch = ''
@@ -98,6 +99,10 @@ in stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext "
     + lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
+
+  # These flags are not supported and cause the build
+  # to fail, even when cross compilation itself works.
+  dontAddWafCrossFlags = true;
 
   wafConfigureFlags = [
     "--enable-libmpv-shared"
@@ -108,6 +113,7 @@ in stdenv.mkDerivation rec {
     (lib.enableFeature archiveSupport  "libarchive")
     (lib.enableFeature cddaSupport     "cdda")
     (lib.enableFeature dvdnavSupport   "dvdnav")
+    (lib.enableFeature javascriptSupport "javascript")
     (lib.enableFeature openalSupport   "openal")
     (lib.enableFeature sdl2Support     "sdl2")
     (lib.enableFeature sixelSupport    "sixel")
@@ -125,7 +131,8 @@ in stdenv.mkDerivation rec {
     python3
     wafHook
     which
-  ] ++ lib.optionals swiftSupport [ swift ];
+  ] ++ lib.optionals swiftSupport [ swift ]
+    ++ lib.optionals waylandSupport [ wayland-scanner ];
 
   buildInputs = [
     ffmpeg
@@ -134,7 +141,6 @@ in stdenv.mkDerivation rec {
     libpthreadstubs
     libuchardet
     luaEnv
-    mujs
   ] ++ lib.optionals alsaSupport        [ alsa-lib ]
     ++ lib.optionals archiveSupport     [ libarchive ]
     ++ lib.optionals bluraySupport      [ libbluray ]
@@ -145,6 +151,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals drmSupport         [ libdrm mesa ]
     ++ lib.optionals dvdnavSupport      [ libdvdnav libdvdnav.libdvdread ]
     ++ lib.optionals jackaudioSupport   [ libjack2 ]
+    ++ lib.optionals javascriptSupport  [ mujs ]
     ++ lib.optionals libpngSupport      [ libpng ]
     ++ lib.optionals openalSupport      [ openalSoft ]
     ++ lib.optionals pulseSupport       [ libpulseaudio ]
@@ -159,7 +166,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals vdpauSupport       [ libvdpau ]
     ++ lib.optionals vulkanSupport      [ libplacebo shaderc vulkan-headers vulkan-loader ]
     ++ lib.optionals waylandSupport     [ wayland wayland-protocols libxkbcommon ]
-    ++ lib.optionals x11Support         [ libX11 libXext libGLU libGL libXxf86vm libXrandr ]
+    ++ lib.optionals x11Support         [ libX11 libXext libGLU libGL libXxf86vm libXrandr libXpresent ]
     ++ lib.optionals xineramaSupport    [ libXinerama ]
     ++ lib.optionals xvSupport          [ libXv ]
     ++ lib.optionals zimgSupport        [ zimg ]

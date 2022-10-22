@@ -7,13 +7,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "gdal";
-  version = "3.3.2";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${version}";
-    sha256 = "sha256-fla3EMDmuW0+vmmU0sgtLsGfO7dDApLQ2EoKJeR/1IM=";
+    sha256 = "sha256-bE55VV0SrG8nxCLdpODRalnuAkn+olRdMLUjduavj6M=";
   };
 
   sourceRoot = "source/gdal";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     expat
     libxml2
     postgresql
-  ] ++ (with pythonPackages; [ python numpy wrapPython ])
+  ] ++ (with pythonPackages; [ python setuptools numpy wrapPython ])
     ++ lib.optional stdenv.isDarwin libiconv
     ++ lib.optionals netcdfSupport [ netcdf hdf5 curl ];
 
@@ -62,7 +62,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  CXXFLAGS = "-fpermissive";
+  CXXFLAGS = lib.concatStringsSep " " [
+    "-fpermissive"
+    # poppler uses std::optional
+    "-std=c++17"
+  ];
 
   # - Unset CC and CXX as they confuse libtool.
   # - teach gdal that libdf is the legacy name for libhdf
@@ -81,6 +85,46 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  doInstallCheck = true;
+  # preCheck rather than preInstallCheck because this is what pytestCheckHook
+  # calls (coming from the python world)
+  preCheck = ''
+    pushd ../autotest
+    # something has made files here read-only by this point
+    chmod -R u+w .
+
+    export HOME=$(mktemp -d)
+    export PYTHONPATH="$out/${pythonPackages.python.sitePackages}:$PYTHONPATH"
+  '';
+  installCheckInputs = with pythonPackages; [
+    pytestCheckHook
+    pytest-env
+    lxml
+  ];
+  disabledTestPaths = [
+    # tests that attempt to make network requests
+    "gcore/vsis3.py"
+    "gdrivers/gdalhttp.py"
+    "gdrivers/wms.py"
+  ];
+  disabledTests = [
+    # tests that attempt to make network requests
+    "test_jp2openjpeg_45"
+    # tests that require the full proj dataset which we don't package yet
+    # https://github.com/OSGeo/gdal/issues/5523
+    "test_transformer_dem_overrride_srs"
+    "test_osr_ct_options_area_of_interest"
+  ] ++ lib.optionals (!stdenv.isx86_64) [
+    # likely precision-related expecting x87 behaviour
+    "test_jp2openjpeg_22"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # flaky on macos
+    "test_rda_download_queue"
+  ];
+  postCheck = ''
+    popd # ../autotest
+  '';
 
   meta = {
     description = "Translator library for raster geospatial data formats";

@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "Wu1mm+yJw2SddddxC5NfnMWLr+dplnRxH3AJ1/mTAKM=";
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Lightweight slowloris (HTTP DoS) tool";
     homepage = "https://github.com/MJVL/slowlorust";
     license = licenses.mit;

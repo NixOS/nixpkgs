@@ -3,33 +3,23 @@
 , fetchFromGitHub
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-      # newest version doesn't support click >8.0 https://github.com/alanhamlett/pip-update-requirements/issues/38
-      click = self.callPackage ../../../development/python-modules/click/7.nix { };
-    };
-  };
-  inherit (py.pkgs) buildPythonApplication click pytestCheckHook;
-in
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "pur";
-  version = "5.4.2";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "alanhamlett";
     repo = "pip-update-requirements";
-    rev = version;
-    sha256 = "sha256-coJO9AYm0Qx0arMf/e+pZFG/VxK6bnxxXRgw7x7V2hY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-JAjz9A9r1H6MJX7MSq7UvQKfULhB9UuPP3tI6Cggx9I=";
   };
 
   propagatedBuildInputs = [
-    click
+    python3.pkgs.click
   ];
 
   checkInputs = [
-    pytestCheckHook
+    python3.pkgs.pytestCheckHook
   ];
 
   pythonImportsCheck = [ "pur" ];

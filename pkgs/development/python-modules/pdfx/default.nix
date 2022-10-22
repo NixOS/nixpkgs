@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pdfminer, chardet, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromGitHub, pdfminer-six, chardet, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pdfx";
@@ -13,10 +13,11 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "chardet==4.0.0" "chardet"
+      --replace "chardet==4.0.0" "chardet" \
+      --replace "pdfminer.six==20201018" "pdfminer.six"
   '';
 
-  propagatedBuildInputs = [ pdfminer chardet ];
+  propagatedBuildInputs = [ pdfminer-six chardet ];
 
   checkInputs = [ pytestCheckHook ];
 

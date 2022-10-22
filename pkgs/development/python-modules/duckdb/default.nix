@@ -1,34 +1,31 @@
 { lib
 , buildPythonPackage
+, fetchpatch
 , duckdb
+, google-cloud-storage
+, mypy
 , numpy
 , pandas
+, psutil
 , pybind11
 , setuptools-scm
-, pytest-runner
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "duckdb";
-  inherit (duckdb) version src;
+  inherit (duckdb) version src patches;
+  format = "setuptools";
 
-  # build attempts to use git to figure out its own version. don't want to add
-  # the dependency for something pointless.
-  postPatch = ''
-    substituteInPlace scripts/package_build.py --replace \
-      "'git'" "'false'"
-  '';
-
-  postConfigure = ''
+  preConfigure = ''
     cd tools/pythonpkg
-    export SETUPTOOLS_SCM_PRETEND_VERSION=${version}
   '';
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     pybind11
     setuptools-scm
-    pytest-runner
   ];
 
   propagatedBuildInputs = [
@@ -37,15 +34,20 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    google-cloud-storage
+    mypy
+    psutil
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "duckdb" ];
+  pythonImportsCheck = [
+    "duckdb"
+  ];
 
   meta = with lib; {
     description = "Python binding for DuckDB";
     homepage = "https://duckdb.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ costrouc cpcloud ];
   };
 }

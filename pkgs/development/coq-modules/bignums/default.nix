@@ -5,9 +5,10 @@ with lib; mkCoqDerivation {
   owner = "coq";
   displayVersion = { bignums = ""; };
   inherit version;
-  defaultVersion = if versions.isGe "8.5" coq.coq-version
+  defaultVersion = if versions.isGe "8.6" coq.coq-version
     then "${coq.coq-version}.0" else null;
 
+  release."8.16.0".sha256 = "sha256-DH3iWwatPlhhCVYVlgL2WLkvneSVzSXUiKo2e0+1zR4=";
   release."8.15.0".sha256 = "093klwlhclgyrba1iv18dyz1qp5f0lwiaa7y0qwvgmai8rll5fns";
   release."8.14.0".sha256 = "0jsgdvj0ddhkls32krprp34r64y1rb5mwxl34fgaxk2k4664yq06";
   release."8.13.0".sha256 = "1n66i7hd9222b2ks606mak7m4f0dgy02xgygjskmmav6h7g2sx7y";

@@ -1,19 +1,20 @@
 { lib
+, aiofile
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
 , pbr
-, requests
+, httpx
 , pycryptodome
 , pyjwt
 , pytestCheckHook
-, requests-mock
+, respx
 , time-machine
 }:
 
 buildPythonPackage rec {
   pname = "bimmer-connected";
-  version = "0.8.7";
+  version = "0.10.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bimmerconnected";
     repo = "bimmer_connected";
-    rev = version;
-    hash = "sha256-nLZdaV341mULXIngkEqiLQeg4G2NDFGNg/AUozgJe74=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-o4h84WM/p4gVrxv7YDNgwDpyBYu7Aileagwc8PXNwPs=";
   };
 
   nativeBuildInputs = [
@@ -32,15 +33,20 @@ buildPythonPackage rec {
   PBR_VERSION = version;
 
   propagatedBuildInputs = [
-    requests
+    aiofile
+    httpx
     pycryptodome
     pyjwt
   ];
 
   checkInputs = [
     pytestCheckHook
-    requests-mock
+    respx
     time-machine
+  ];
+
+  pythonImportsCheck = [
+    "bimmer_connected"
   ];
 
   meta = with lib; {

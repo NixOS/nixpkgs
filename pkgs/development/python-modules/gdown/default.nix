@@ -7,16 +7,19 @@
 , tqdm
 , setuptools
 , six
+, pythonOlder
 }:
 
 buildPythonApplication rec {
   pname = "gdown";
-  version = "4.2.0";
+  version = "4.5.3";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bd871c125242a9d3691aa74f360b6b5268a58c13991bb2405fdb3ec3028307dc";
+    hash = "sha256-bL991BCFiMc0qliBMdjh1S5k8Ic4cPcfdMusGV8MYO8=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +29,7 @@ buildPythonApplication rec {
     tqdm
     setuptools
     six
-  ];
+  ] ++ requests.optional-dependencies.socks;
 
   checkPhase = ''
     $out/bin/gdown --help > /dev/null

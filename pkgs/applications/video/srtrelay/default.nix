@@ -1,17 +1,17 @@
 { lib, buildGoModule, fetchFromGitHub, srt, ffmpeg }:
 
 buildGoModule rec {
-  pname = "srtrelay-unstable";
-  version = "2021-07-28";
+  pname = "srtrelay";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "voc";
     repo = "srtrelay";
-    rev = "c4f02ff2e9637b01a0679b29e5a76f4521eeeef3";
-    sha256 = "06zbl97bjjyv51zp27qk37ffpbh1ylm9bsr0s5qlyd73pyavcj1g";
+    rev = "v${version}";
+    sha256 = "sha256-CA+UuFOWjZjSBDWM62rda3IKO1fwC3X52mP4tg1uoO4=";
   };
 
-  vendorSha256 = "1pdpb0my7gdvjjkka6jhj19b9nx575k6117hg536b106ij2n4zd2";
+  vendorSha256 = "sha256-xTYlfdijSo99ei+ZMX6N9gl+yw0DrPQ2wOhn6SS9S/E=";
 
   buildInputs = [ srt ];
   checkInputs = [ ffmpeg ];

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "luftdaten";
-  version = "0.7.1";
+  version = "0.7.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "home-assistant-ecosystem";
     repo = "python-luftdaten";
     rev = version;
-    sha256 = "sha256-76Y5TJet0WtzYXuK8Og0rmpsUIlXK7b37oesh+MliU8=";
+    sha256 = "sha256-+wIouOHIYgjIrObos21vzdKFQLhwutorarVUBDxCsaA=";
   };
 
   nativeBuildInputs = [

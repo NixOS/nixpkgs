@@ -18,16 +18,15 @@
 , ninja
 , capstone
 , tree-sitter
-, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "rizin";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchurl {
     url = "https://github.com/rizinorg/rizin/releases/download/v${version}/rizin-src-v${version}.tar.xz";
-    sha256 = "sha256-+XW12VIaRfRkLc3Li6ItF4VQfWLNRvxZW2VGtxVYJxY=";
+    sha256 = "sha256-Zp2Va5l4IKNuQjzzXUgqqZhJJUuWWM72hERZkS39v7g=";
   };
 
   mesonFlags = [
@@ -41,9 +40,15 @@ stdenv.mkDerivation rec {
     "-Duse_sys_tree_sitter=enabled"
   ];
 
-  nativeBuildInputs = [ pkg-config meson ninja cmake (python3.withPackages (ps: [ ps.setuptools ])) ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    meson.python3.pkgs.pyyaml
+    ninja
+    cmake
+  ];
 
-  # meson's find_library seems to not use our compiler wrapper if static paraemter
+  # meson's find_library seems to not use our compiler wrapper if static parameter
   # is either true/false... We work around by also providing LIBRARY_PATH
   preConfigure = ''
     LIBRARY_PATH=""
@@ -53,6 +58,9 @@ stdenv.mkDerivation rec {
       fi
     done
     export LIBRARY_PATH
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace binrz/rizin/macos_sign.sh \
+      --replace 'codesign' '# codesign'
   '';
 
   buildInputs = [
@@ -76,6 +84,6 @@ stdenv.mkDerivation rec {
     homepage = "https://rizin.re/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ raskin makefu mic92 ];
-    platforms = with lib.platforms; linux;
+    platforms = with lib.platforms; unix;
   };
 }

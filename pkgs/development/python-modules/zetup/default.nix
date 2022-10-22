@@ -2,14 +2,18 @@
 , buildPythonPackage
 , fetchPypi
 , nbconvert
-, pathpy
+, path
 , pytestCheckHook
 , setuptools-scm
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "zetup";
   version = "0.2.64";
+
+  # https://github.com/zimmermanncode/zetup/issues/4
+  disabled = pythonAtLeast "3.10";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,7 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ setuptools-scm ];
 
   checkInputs = [
-    pathpy
+    path
     nbconvert
     pytestCheckHook
   ];

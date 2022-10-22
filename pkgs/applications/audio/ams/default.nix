@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchgit
-, automake
 , alsa-lib
 , ladspaH
 , libjack2
@@ -12,7 +11,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ams";
+  pname = "ams";
   version = "unstable-2019-04-27";
 
   src = fetchgit {

@@ -9,21 +9,20 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, six
 }:
 
 buildPythonPackage rec {
   pname = "mcstatus";
-  version = "7.0.0";
+  version = "9.3.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "Dinnerbone";
+    owner = "py-mine";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/EoVM3wEiA2suJHxMu2zZktQhO6T9grWcvWuzmUe6V0=";
+    hash = "sha256-kNThVElEDqhbCitktBv5tQkjMaU4IsX0dJk63hvLhb0=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +33,6 @@ buildPythonPackage rec {
     asyncio-dgram
     click
     dnspython
-    six
   ];
 
   checkInputs = [
@@ -45,18 +43,25 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'asyncio-dgram = "1.2.0"' 'asyncio-dgram = ">=1.2.0"' \
-      --replace 'six = "1.14.0"' 'six = ">=1.14.0"' \
-      --replace 'click = "7.1.2"' 'click = ">=7.1.2"'
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace " --cov=mcstatus --cov-append --cov-branch --cov-report=term-missing -vvv --no-cov-on-fail" "" \
+      --replace 'asyncio-dgram = "2.1.2"' 'asyncio-dgram = ">=2.1.2"' \
+      --replace 'dnspython = "2.2.1"' 'dnspython = ">=2.2.0"'
   '';
 
   pythonImportsCheck = [
     "mcstatus"
   ];
 
+  disabledTests = [
+    # DNS features are limited in the sandbox
+    "test_query"
+    "test_query_retry"
+  ];
+
   meta = with lib; {
     description = "Python library for checking the status of Minecraft servers";
-    homepage = "https://github.com/Dinnerbone/mcstatus";
+    homepage = "https://github.com/py-mine/mcstatus";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

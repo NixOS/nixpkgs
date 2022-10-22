@@ -1,41 +1,89 @@
-{ lib, hwdata, pkg-config, lxc, buildGoPackage, fetchurl, fetchpatch
-, makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq, attr
-, squashfsTools, iproute2, iptables, libcap
-, dqlite, raft-canonical, sqlite-replication, udev
-, writeShellScriptBin, apparmor-profiles, apparmor-parser
+{ lib
+, hwdata
+, pkg-config
+, lxc
+, buildGoModule
+, fetchurl
+, makeWrapper
+, acl
+, rsync
+, gnutar
+, xz
+, btrfs-progs
+, gzip
+, dnsmasq
+, attr
+, squashfsTools
+, iproute2
+, iptables
+, libcap
+, dqlite
+, raft-canonical
+, sqlite-replication
+, udev
+, writeShellScriptBin
+, apparmor-profiles
+, apparmor-parser
 , criu
 , bash
 , installShellFiles
 , nixosTests
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "lxd";
-  version = "4.21";
-
-  goPackagePath = "github.com/lxc/lxd";
+  version = "5.6";
 
   src = fetchurl {
-    url = "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz";
-    sha256 = "1b2jls3jgvgdl0136nar8zm3hfrp0gqxxq9fh7vxc52r1aslarvs";
+    urls = [
+      "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz"
+      "https://github.com/lxc/lxd/releases/download/lxd-${version}/lxd-${version}.tar.gz"
+    ];
+    sha256 = "sha256-bLKl9OpvxXozmqjX8hY2xIiVectBiohDxTzd5du5w+4=";
   };
+
+  vendorSha256 = null;
 
   postPatch = ''
     substituteInPlace shared/usbid/load.go \
       --replace "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
   '';
 
+  excludedPackages = [ "test" "lxd/db/generate" ];
+
+  nativeBuildInputs = [ installShellFiles pkg-config makeWrapper ];
+  buildInputs = [
+    lxc
+    acl
+    libcap
+    dqlite.dev
+    raft-canonical.dev
+    sqlite-replication
+    udev.dev
+  ];
+
+  ldflags = [ "-s" "-w" ];
+  tags = [ "libsqlite3" ];
+
   preBuild = ''
     # required for go-dqlite. See: https://github.com/lxc/lxd/pull/8939
     export CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
-
-    makeFlagsArray+=("-tags libsqlite3")
   '';
 
-  postInstall = ''
-    # test binaries, code generation
-    rm $out/bin/{deps,macaroon-identity,generate}
+  preCheck =
+    let skippedTests = [
+      "TestValidateConfig"
+      "TestConvertNetworkConfig"
+      "TestConvertStorageConfig"
+      "TestSnapshotCommon"
+      "TestContainerTestSuite"
+    ]; in
+    ''
+      # Disable tests requiring local operations
+      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
+    '';
 
+  postInstall = ''
     wrapProgram $out/bin/lxd --prefix PATH : ${lib.makeBinPath (
       [ iptables ]
       ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute2 bash criu attr ]
@@ -45,20 +93,18 @@ buildGoPackage rec {
       )
     }
 
-    installShellCompletion --bash --name lxd go/src/github.com/lxc/lxd/scripts/bash/lxd-client
+    installShellCompletion --bash --name lxd ./scripts/bash/lxd-client
   '';
 
   passthru.tests.lxd = nixosTests.lxd;
-
-  nativeBuildInputs = [ installShellFiles pkg-config makeWrapper ];
-  buildInputs = [ lxc acl libcap dqlite.dev raft-canonical.dev
-                  sqlite-replication udev.dev ];
+  passthru.tests.lxd-nftables = nixosTests.lxd-nftables;
 
   meta = with lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";
     homepage = "https://linuxcontainers.org/lxd/";
+    changelog = "https://github.com/lxc/lxd/releases/tag/lxd-${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz wucke13 marsam ];
+    maintainers = with maintainers; [ marsam ];
     platforms = platforms.linux;
   };
 }

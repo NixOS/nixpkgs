@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "pth-2.0.7";
+  pname = "pth";
+  version = "2.0.7";
 
   src = fetchurl {
-    url = "mirror://gnu/pth/${name}.tar.gz";
+    url = "mirror://gnu/pth/pth-${version}.tar.gz";
     sha256 = "0ckjqw5kz5m30srqi87idj7xhpw6bpki43mj07bazjm2qmh3cdbj";
   };
 

@@ -3,7 +3,7 @@
 {
   pname = "pastel-console";
 
-  buildInputs = [
+  nativeBuildInputs = [
     reason
   ];
 

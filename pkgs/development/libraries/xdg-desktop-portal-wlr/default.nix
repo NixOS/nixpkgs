@@ -1,20 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
-, meson, ninja, pkg-config, wayland-protocols
-, pipewire, wayland, systemd, libdrm, inih, scdoc, grim, slurp }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, meson
+, ninja
+, pkg-config
+, wayland-protocols
+, grim
+, inih
+, libdrm
+, mesa
+, pipewire
+, scdoc
+, slurp
+, systemd
+, wayland
+}:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-wlr";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256:13fbzh8bjnhk4xs8j9bpc01q3hy27zpbf0gkk1fnh3hm5pnyfyiv";
+    sha256 = "sha256-UztkfvMIbslPd/d262NZFb6WfESc9nBsSSH96BA4Aqw=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config wayland-protocols makeWrapper ];
-  buildInputs = [ pipewire wayland systemd libdrm inih scdoc ];
+  buildInputs = [ inih libdrm mesa pipewire scdoc systemd wayland ];
 
   mesonFlags = [
     "-Dsd-bus-provider=libsystemd"

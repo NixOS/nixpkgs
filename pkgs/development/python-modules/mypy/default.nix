@@ -1,65 +1,74 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
+, attrs
 , buildPythonPackage
+, filelock
+, lxml
 , mypy-extensions
+, psutil
+, py
+, pytest-forked
+, pytest-xdist
+, pytestCheckHook
 , python
 , pythonOlder
+, setuptools
+, six
 , typed-ast
 , typing-extensions
 , tomli
+, types-setuptools
 , types-typed-ast
+, virtualenv
 }:
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "unstable-2021-11-14";
-  disabled = pythonOlder "3.6";
+  version = "0.981";
+  format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy";
-    rev = "053a1beb94ee4e5b3260725594315d1b6776e42f";
-    sha256 = "sha256-q2ntj3y3GgXrw4v+yMvcqWFv4y/6YwunIj3bNzU9CH0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CkRK/j5DRUZU2enpZtqX4l+89E7ODDG9MeRYFQp9kSs=";
   };
 
-  patches = [
-    # FIXME: Remove patch after upstream has decided the proper solution.
-    #        https://github.com/python/mypy/pull/11143
-    (fetchpatch {
-      url = "https://github.com/python/mypy/commit/f1755259d54330cd087cae763cd5bbbff26e3e8a.patch";
-      sha256 = "sha256-5gPahX2X6+/qUaqDQIGJGvh9lQ2EDtks2cpQutgbOHk=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "tomli>=1.1.0,<1.2.0" "tomli"
-  '';
-
-  buildInputs = [
+  nativeBuildInputs = [
+    setuptools
     types-typed-ast
+    types-setuptools
   ];
 
   propagatedBuildInputs = [
     mypy-extensions
-    tomli
-    typed-ast
     typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typed-ast
   ];
 
-  # Tests not included in pip package.
+  passthru.optional-dependencies = {
+    dmypy = [ psutil ];
+    reports = [ lxml ];
+  };
+
+  # TODO: enable tests
   doCheck = false;
 
   pythonImportsCheck = [
     "mypy"
     "mypy.api"
     "mypy.fastparse"
-    "mypy.report"
     "mypy.types"
     "mypyc"
     "mypyc.analysis"
+  ] ++ lib.optionals (!stdenv.hostPlatform.isi686) [
+    # ImportError: cannot import name 'map_instance_to_supertype' from partially initialized module 'mypy.maptype' (most likely due to a circular import)
+    "mypy.report"
   ];
 
   # Compile mypy with mypyc, which makes mypy about 4 times faster. The compiled

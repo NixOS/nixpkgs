@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "pfds";
+  pname = "pfds";
   version = "2017-09-25";
 
   idrisDeps = [ contrib ];

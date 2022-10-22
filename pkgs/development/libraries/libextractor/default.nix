@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./gst-hardcode-plugins.patch;
       load_gst_plugins = lib.concatMapStrings
-        (plugin: ''gst_registry_scan_path(gst_registry_get(), "${plugin}/lib/gstreamer-1.0");'')
+        (plugin: ''gst_registry_scan_path(gst_registry_get(), "${lib.getLib plugin}/lib/gstreamer-1.0");'')
         (gstPlugins gst_all_1);
     })
   ];
@@ -45,10 +45,11 @@ stdenv.mkDerivation rec {
            -e "s|pexe[[:blank:]]*=.*$|pexe = strdup(\"$out/lib/\");|g"
     '';
 
+  nativeBuildInputs = [ pkg-config ];
+
   buildInputs =
    [ libtool gettext zlib bzip2 flac libvorbis exiv2
      libgsf rpm
-     pkg-config
    ] ++ lib.optionals gstreamerSupport
           ([ gst_all_1.gstreamer ] ++ gstPlugins gst_all_1)
      ++ lib.optionals gtkSupport [ glib gtk3 ]

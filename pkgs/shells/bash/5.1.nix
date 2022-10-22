@@ -10,6 +10,7 @@
 , readline81 ? null
 , withDocs ? false
 , texinfo ? null
+, forFHSEnv ? false
 }:
 
 with lib;
@@ -32,15 +33,21 @@ stdenv.mkDerivation rec {
     sha256 = "1alv68wplnfdm6mh39hm57060xgssb9vqca4yr1cyva0c342n0fc";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" ]
+  # bionic libc is super weird and has issues with fortify outside of its own libc, check this comment:
+  # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
+  # or you can check libc/include/sys/cdefs.h in bionic source code
+  ++ optional (stdenv.hostPlatform.libc == "bionic") "fortify";
 
   outputs = [ "out" "dev" "man" "doc" "info" ];
 
   NIX_CFLAGS_COMPILE = ''
     -DSYS_BASHRC="/etc/bashrc"
     -DSYS_BASH_LOGOUT="/etc/bash_logout"
+  '' + optionalString (!forFHSEnv) ''
     -DDEFAULT_PATH_VALUE="/no-such-path"
     -DSTANDARD_UTILS_PATH="/no-such-path"
+  '' + ''
     -DNON_INTERACTIVE_LOGIN_SHELLS
     -DSSH_SOURCE_BASHRC
   '';
@@ -68,6 +75,7 @@ stdenv.mkDerivation rec {
     "--disable-nls"
   ];
 
+  strictDeps = true;
   # Note: Bison is needed because the patches above modify parse.y.
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bison ]
@@ -95,7 +103,7 @@ stdenv.mkDerivation rec {
     if interactive
     then ''
       substituteInPlace "$out/bin/bashbug" \
-        --replace '${stdenv.shell}' "$out/bin/bash"
+        --replace '#!/bin/sh' "#!$out/bin/bash"
     ''
     # most space is taken by locale data
     else ''
@@ -124,6 +132,8 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
 
     maintainers = with maintainers; [ dtzWill ];
+
+    mainProgram = "bash";
   };
 
   passthru = {

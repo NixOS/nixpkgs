@@ -9,24 +9,31 @@
 , pytest
 , pytest-forked
 , psutil
+, pexpect
 }:
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "2.4.0";
+  version = "2.5.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "89b330316f7fc475f999c81b577c2b926c9569f3d397ae432c0c2e2496d61ff9";
+    sha256 = "sha256-RYDeyj/wTdsqxT66Oddstd1e3qwFDLb7x2iw3XErTt8=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
   buildInputs = [
     pytest
   ];
-  checkInputs = [ pytestCheckHook filelock ];
+  checkInputs = [ pytestCheckHook filelock pexpect ];
   propagatedBuildInputs = [ execnet pytest-forked psutil ];
+
+  pytestFlagsArray = [
+    # pytest can already use xdist at this point
+    "--numprocesses=$NIX_BUILD_CORES"
+    "--forked"
+  ];
 
   # access file system
   disabledTests = [
@@ -39,6 +46,8 @@ buildPythonPackage rec {
     # flakey
     "test_internal_errors_propagate_to_controller"
   ];
+
+  setupHook = ./setup-hook.sh;
 
   meta = with lib; {
     description = "Pytest xdist plugin for distributed testing and loop-on-failing modes";

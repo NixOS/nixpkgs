@@ -9,13 +9,13 @@ in
 {
   options = {
     services.xserver.windowManager.herbstluftwm = {
-      enable = mkEnableOption "herbstluftwm";
+      enable = mkEnableOption (lib.mdDoc "herbstluftwm");
 
       package = mkOption {
         type = types.package;
         default = pkgs.herbstluftwm;
         defaultText = literalExpression "pkgs.herbstluftwm";
-        description = ''
+        description = lib.mdDoc ''
           Herbstluftwm package to use.
         '';
       };
@@ -23,7 +23,7 @@ in
       configFile = mkOption {
         default     = null;
         type        = with types; nullOr path;
-        description = ''
+        description = lib.mdDoc ''
           Path to the herbstluftwm configuration file.  If left at the
           default value, $XDG_CONFIG_HOME/herbstluftwm/autostart will
           be used.

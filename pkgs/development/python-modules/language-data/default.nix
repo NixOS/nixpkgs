@@ -4,6 +4,7 @@
 , marisa-trie
 , poetry-core
 , pythonOlder
+, setuptools
 }:
 
 buildPythonApplication rec {
@@ -22,6 +23,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     poetry-core
+    setuptools
   ];
 
   propagatedBuildInputs = [

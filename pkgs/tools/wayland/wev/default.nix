@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "0l71v3fzgiiv6xkk365q1l08qvaymxd4kpaya6r2g8yzkr7i2hms";
   };
 
+  # for scdoc
+  depsBuildBuild = [
+    pkg-config
+  ];
   nativeBuildInputs = [ pkg-config scdoc wayland-scanner ];
   buildInputs = [ wayland wayland-protocols libxkbcommon ];
 

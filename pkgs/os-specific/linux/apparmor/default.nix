@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, makeWrapper, autoreconfHook
+{ stdenv, lib, fetchFromGitLab, fetchpatch, makeWrapper, autoreconfHook
 , pkg-config, which
 , flex, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
@@ -21,7 +21,7 @@
 }:
 
 let
-  apparmor-version = "3.0.3";
+  apparmor-version = "3.0.7";
 
   apparmor-meta = component: with lib; {
     homepage = "https://apparmor.net/";
@@ -31,9 +31,11 @@ let
     platforms = platforms.linux;
   };
 
-  apparmor-sources = fetchurl {
-    url = "https://launchpad.net/apparmor/${lib.versions.majorMinor apparmor-version}/${apparmor-version}/+download/apparmor-${apparmor-version}.tar.gz";
-    sha256 = "0nasq8pdmzkrf856yg1v8z5hcs0nn6gw2qr60ab0a7j9ixfv0g8m";
+  apparmor-sources = fetchFromGitLab {
+    owner = "apparmor";
+    repo = "apparmor";
+    rev = "v${apparmor-version}";
+    hash = "sha256-iLZY0wZQr+YvR8JCwTeECDuqFb1sQCQtkiUksiYCvWs=";
   };
 
   aa-teardown = writeShellScript "aa-teardown" ''
@@ -48,8 +50,9 @@ let
     substituteInPlace ./common/Make.rules \
       --replace "/usr/bin/pod2man" "${buildPackages.perl}/bin/pod2man" \
       --replace "/usr/bin/pod2html" "${buildPackages.perl}/bin/pod2html" \
-      --replace "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h" \
       --replace "/usr/share/man" "share/man"
+    substituteInPlace ./utils/Makefile \
+      --replace "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
   '';
 
   patches = lib.optionals stdenv.hostPlatform.isMusl [
@@ -59,6 +62,8 @@ let
       sha256 = "0yyaqz8jlmn1bm37arggprqz0njb4lhjni2d9c8qfqj0kll0bam0";
     })
   ];
+
+  python = python3.withPackages (ps: with ps; [ setuptools ]);
 
   # Set to `true` after the next FIXME gets fixed or this gets some
   # common derivation infra. Too much copy-paste to fix one by one.
@@ -86,19 +91,16 @@ let
       ncurses
       which
       perl
-    ] ++ lib.optional withPython python3;
+    ] ++ lib.optional withPython python;
 
     buildInputs = lib.optional withPerl perl
-      ++ lib.optional withPython python3;
+      ++ lib.optional withPython python;
 
     # required to build apparmor-parser
     dontDisableStatic = true;
 
     prePatch = prePatchCommon + ''
       substituteInPlace ./libraries/libapparmor/swig/perl/Makefile.am --replace install_vendor install_site
-      substituteInPlace ./libraries/libapparmor/swig/perl/Makefile.in --replace install_vendor install_site
-      substituteInPlace ./libraries/libapparmor/src/Makefile.am --replace "/usr/include/netinet/in.h" "${lib.getDev stdenv.cc.libc}/include/netinet/in.h"
-      substituteInPlace ./libraries/libapparmor/src/Makefile.in --replace "/usr/include/netinet/in.h" "${lib.getDev stdenv.cc.libc}/include/netinet/in.h"
     '';
     inherit patches;
 
@@ -132,12 +134,12 @@ let
 
     strictDeps = true;
 
-    nativeBuildInputs = [ makeWrapper which python3 ];
+    nativeBuildInputs = [ makeWrapper which python ];
 
     buildInputs = [
       bash
       perl
-      python3
+      python
       libapparmor
       libapparmor.python
     ];
@@ -159,7 +161,7 @@ let
     postInstall = ''
       sed -i $out/bin/aa-unconfined -e "/my_env\['PATH'\]/d"
       for prog in aa-audit aa-autodep aa-cleanprof aa-complain aa-disable aa-enforce aa-genprof aa-logprof aa-mergeprof aa-unconfined ; do
-        wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python3.libPrefix}/site-packages:$PYTHONPATH"
+        wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python.sitePackages}:$PYTHONPATH"
       done
 
       substituteInPlace $out/bin/aa-notify \
@@ -190,7 +192,6 @@ let
     nativeBuildInputs = [
       pkg-config
       libapparmor
-      gawk
       which
     ];
 
@@ -304,10 +305,10 @@ let
     meta = apparmor-meta "kernel patches";
   };
 
-  # Generate generic AppArmor rules in a file,
-  # from the closure of given rootPaths.
-  # To be included in an AppArmor profile like so:
-  # include "$(apparmorRulesFromClosure {} [pkgs.hello]}"
+  # Generate generic AppArmor rules in a file, from the closure of given
+  # rootPaths. To be included in an AppArmor profile like so:
+  #
+  #   include "${apparmorRulesFromClosure { } [ pkgs.hello ]}"
   apparmorRulesFromClosure =
     { # The store path of the derivation is given in $path
       additionalRules ? []

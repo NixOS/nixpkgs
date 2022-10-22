@@ -4,14 +4,15 @@
 , fetchFromGitHub
 , calf
 , fftwFloat
+, fmt_8
 , glib
-, glibmm
 , gtk4
-, gtkmm4
 , itstool
+, libadwaita
 , libbs2b
 , libebur128
 , libsamplerate
+, libsigcxx30
 , libsndfile
 , lilv
 , lsp-plugins
@@ -22,10 +23,10 @@
 , nlohmann_json
 , pipewire
 , pkg-config
-, python3
 , rnnoise
 , rubberband
 , speexdsp
+, tbb
 , wrapGAppsHook4
 , zam-plugins
 , zita-convolver
@@ -33,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "6.1.3";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
-    sha256 = "sha256-1UfeqPJxY4YT98UdqTZtG+QUBOZlKfK+7WbszhO22A0=";
+    sha256 = "sha256-OLxuE1jiALuKlC9U9esVlhaMBEaoZyNae8OO8upE4ZM=";
   };
 
   nativeBuildInputs = [
@@ -48,19 +49,19 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     wrapGAppsHook4
   ];
 
   buildInputs = [
     fftwFloat
+    fmt_8
     glib
-    glibmm
     gtk4
-    gtkmm4
+    libadwaita
     libbs2b
     libebur128
     libsamplerate
+    libsigcxx30
     libsndfile
     lilv
     lv2
@@ -69,15 +70,9 @@ stdenv.mkDerivation rec {
     rnnoise
     rubberband
     speexdsp
+    tbb
     zita-convolver
   ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-    # https://github.com/wwmm/easyeffects/pull/1205
-    substituteInPlace meson_post_install.py --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
-  '';
 
   preFixup =
     let

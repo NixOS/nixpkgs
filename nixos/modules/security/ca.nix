@@ -23,12 +23,12 @@ in
       type = types.listOf types.path;
       default = [];
       example = literalExpression ''[ "''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt" ]'';
-      description = ''
+      description = lib.mdDoc ''
         A list of files containing trusted root certificates in PEM
         format. These are concatenated to form
-        <filename>/etc/ssl/certs/ca-certificates.crt</filename>, which is
+        {file}`/etc/ssl/certs/ca-certificates.crt`, which is
         used by many programs that use OpenSSL, such as
-        <command>curl</command> and <command>git</command>.
+        {command}`curl` and {command}`git`.
       '';
     };
 
@@ -47,7 +47,7 @@ in
           '''
         ]
       '';
-      description = ''
+      description = lib.mdDoc ''
         A list of trusted root certificates in PEM format.
       '';
     };
@@ -60,10 +60,10 @@ in
         "CA WoSign ECC Root"
         "Certification Authority of WoSign G2"
       ];
-      description = ''
+      description = lib.mdDoc ''
         A list of blacklisted CA certificate names that won't be imported from
         the Mozilla Trust Store into
-        <filename>/etc/ssl/certs/ca-certificates.crt</filename>. Use the
+        {file}`/etc/ssl/certs/ca-certificates.crt`. Use the
         names from that file.
       '';
     };

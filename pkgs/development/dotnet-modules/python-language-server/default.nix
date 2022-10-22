@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , buildDotnetModule
 , dotnetCorePackages
+, stdenvNoCC
 , autoPatchelfHook
 , openssl
 , icu
@@ -10,13 +11,13 @@
 
 buildDotnetModule rec {
   pname = "python-language-server";
-  version = "2021-09-08";
+  version = "2022-02-18";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "python-language-server";
-    rev = "26ea18997f45f7d7bc5a3c5a9efc723a8dbb02fa";
-    sha256 = "1m8pf9k20wy4fzv27v3bswvc8s01ag6ka2qm9nn6bgq0s0lq78mh";
+    rev = "52c1afd34b5acb0b44597bb8681232876fe94084";
+    sha256 = "05s8mwi3dqzjghgpr1mfs1b7cgrq818bbj1v7aly6axc8c2n4gny";
   };
 
   projectFile = "src/LanguageServer/Impl/Microsoft.Python.LanguageServer.csproj";
@@ -24,6 +25,8 @@ buildDotnetModule rec {
 
   dotnet-sdk = dotnetCorePackages.sdk_3_1;
   dotnet-runtime = dotnetCorePackages.runtime_3_1;
+
+  dotnetRestoreFlags = [ "--runtime ${dotnet-sdk.systemToDotnetRid stdenvNoCC.targetPlatform.system}" ];
 
   nativeBuildInputs = [ autoPatchelfHook ];
   buildInputs = [ stdenv.cc.cc.lib ];

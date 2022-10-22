@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, gtk3, python3, faba-icon-theme, hicolor-icon-theme, jdupes }:
+{ lib, stdenvNoCC, fetchFromGitHub, meson, ninja, gtk3, python3, faba-icon-theme, hicolor-icon-theme, jdupes }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "moka-icon-theme";
   version = "unstable-2019-05-29";
 

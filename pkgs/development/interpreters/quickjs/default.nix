@@ -55,5 +55,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ stesie AndersonTorres ];
     platforms = platforms.linux;
     license = licenses.mit;
+    mainProgram = "qjs";
   };
 }

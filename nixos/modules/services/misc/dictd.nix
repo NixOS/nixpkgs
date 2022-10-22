@@ -17,7 +17,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the DICT.org dictionary server.
         '';
       };
@@ -27,7 +27,7 @@ in
         default = with pkgs.dictdDBs; [ wiktionary wordnet ];
         defaultText = literalExpression "with pkgs.dictdDBs; [ wiktionary wordnet ]";
         example = literalExpression "[ pkgs.dictdDBs.nld2eng ]";
-        description = "List of databases to make available.";
+        description = lib.mdDoc "List of databases to make available.";
       };
 
     };
@@ -44,6 +44,10 @@ in
 
     # get the command line client on system path to make some use of the service
     environment.systemPackages = [ pkgs.dict ];
+
+    environment.etc."dict.conf".text = ''
+      server localhost
+    '';
 
     users.users.dictd =
       { group = "dictd";

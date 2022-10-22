@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, python
+, python ? null
 , withPython ? false
 }:
 

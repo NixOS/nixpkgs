@@ -3,31 +3,30 @@
 , fetchFromGitHub
 , fetchpatch
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyahocorasick";
-  version = "1.4.1";
+  version = "2.0.0b1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "WojciechMula";
     repo = pname;
     rev = version;
-    sha256 = "13x3718if28l50474xrz1b9709kvnvdg3nzm6y8bh7mc9a4zyss5";
+    hash = "sha256-APpL99kOwzIQjePvRDeJ0FDm1kjBi6083JMKuBqtaRk=";
   };
 
-  patches = [
-    # Use proper temporary directory on Hydra
-    (fetchpatch {
-      url = "https://github.com/WojciechMula/pyahocorasick/commit/b6549e06f3cced7ffdf4d1b587cd7de12041f495.patch";
-      sha256 = "sha256-v3J/0aIPOnBhLlJ18r/l7O0MckqLOCtcmqIS9ZegaSI=";
-    })
+  checkInputs = [
+    pytestCheckHook
   ];
 
-  checkInputs = [ pytestCheckHook ];
-
-  pytestFlagsArray = [ "unittests.py" ];
-  pythonImportsCheck = [ "ahocorasick" ];
+  pythonImportsCheck = [
+    "ahocorasick"
+  ];
 
   meta = with lib; {
     description = "Python module implementing Aho-Corasick algorithm";

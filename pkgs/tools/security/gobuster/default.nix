@@ -1,22 +1,20 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, lib
 }:
 
 buildGoModule rec {
   pname = "gobuster";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "OJ";
     repo = "gobuster";
     rev = "v${version}";
-    sha256 = "0nal2g5c6z46x6337yh0s6mqgnsigp91i7mp1l3sa91p5ihk71wr";
+    hash = "sha256-rTduDHGo5V40OlBnwncSzCNYGsHg0uXnuI8JSwOqCSY=";
   };
 
-  vendorSha256 = "1isp2jd6k4ppns5zi9irj09090imnc0xp6vcps135ymgp8qg4163";
-
-  doCheck = false;
+  vendorHash = "sha256-OYQTVu3L2VxOMIYKMHmjiPCKU15RopLz0KL5+7Zb9WY=";
 
   meta = with lib; {
     description = "Tool used to brute-force URIs, DNS subdomains, Virtual Host names on target web servers";

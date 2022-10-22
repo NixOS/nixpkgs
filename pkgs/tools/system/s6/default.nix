@@ -4,8 +4,8 @@ with skawarePackages;
 
 buildPackage {
   pname = "s6";
-  version = "2.11.0.1";
-  sha256 = "02pr4q4cr9wc8i8ad8s6184a6fyndpmpnylgxwhfnkk3hx2j0zxd";
+  version = "2.11.1.2";
+  sha256 = "sha256-bBR0vj6Inaw5LO4wer4BXNS+DIXHJchOp/GE8ONFA6I=";
 
   description = "skarnet.org's small & secure supervision software suite";
 

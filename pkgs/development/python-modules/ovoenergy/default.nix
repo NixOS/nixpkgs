@@ -8,14 +8,16 @@
 
 buildPythonPackage rec {
   pname = "ovoenergy";
-  version = "1.1.12";
+  version = "1.2.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1430k699gblxwspsbgxnha8afk6npqharhz2jyjw5gir9pi6g9cz";
+    hash = "sha256-OSK74uvpHuEtWgbLVFrz1NO7lvtHbt690smGQ+GlsOI=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +28,9 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "ovoenergy" ];
+  pythonImportsCheck = [
+    "ovoenergy"
+  ];
 
   meta = with lib; {
     description = "Python client for getting data from OVO's API";

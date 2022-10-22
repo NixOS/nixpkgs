@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yder";
-  version = "1.4.14";
+  version = "1.4.17";
 
   src = fetchFromGitHub {
     owner = "babelouest";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4FSUBFqrxTbqg2EKYuXv4gUeE40ViNZRk5gHv+C2p9o=";
+    sha256 = "sha256-4o1sKxlWeAgZZm01sPV2yIR3xXZwzPJwqcGCkz6+Cfc=";
   };
 
   patches = [
@@ -38,11 +38,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (!withSystemd) "-DWITH_JOURNALD=off";
 
   doCheck = true;
-
-  preCheck = ''
-    export LD_LIBRARY_PATH="$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-    export DYLD_FALLBACK_LIBRARY_PATH="$(pwd):$DYLD_FALLBACK_LIBRARY_PATH"
-  '';
 
   meta = with lib; {
     description = "Logging library for C applications";

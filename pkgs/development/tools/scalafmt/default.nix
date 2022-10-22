@@ -1,8 +1,8 @@
-{ lib, stdenv, jdk, jre, coursier, makeWrapper }:
+{ lib, stdenv, jre, coursier, makeWrapper, setJavaClassPath }:
 
 let
   baseName = "scalafmt";
-  version = "3.3.0";
+  version = "3.5.2";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
@@ -12,16 +12,15 @@ let
       cp $(< deps) $out/share/java/
     '';
     outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash     = "PlLQVNn2HomcR9grqGFgaXYWxg9EU7ihd28wXruZiBs=";
+    outputHash     = "sha256-1QP5a0QjYUDU3JzrIX2rM/DclRfU/ACSXVLd6C7uFCo=";
   };
 in
 stdenv.mkDerivation {
   pname = baseName;
   inherit version;
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk deps ];
+  nativeBuildInputs = [ makeWrapper setJavaClassPath ];
+  buildInputs = [ deps ];
 
   dontUnpack = true;
 

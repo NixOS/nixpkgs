@@ -249,6 +249,8 @@ opening the next one.  When you want to merge the currently open
     $ ./maintainers/scripts/haskell/merge-and-open-pr.sh PR_NUM_OF_CURRENT_HASKELL_UPDATES_PR
     ```
 
+    Find the PR number easily [here](https://github.com/nixos/nixpkgs/pulls?q=is%3Apr+is%3Aopen+head%3Ahaskell-updates)
+
     This does the following things:
 
     1.  Fetches `origin`, makes sure you currently have the `haskell-updates`
@@ -345,7 +347,7 @@ Here are some additional tips that didn't fit in above.
         [release-haskell.nix](../../top-level/release-haskell.nix).
 
     1.  Update the
-        [Nextcloud Calendar](https://cloud.maralorn.de/apps/calendar/p/Mw5WLnzsP7fC4Zky)
+        [Nextcloud Calendar](https://cloud.maralorn.de/apps/calendar/p/H6migHmKX7xHoTFa)
         and work the new member into the `haskell-updates` rotation.
 
     1.  Optionally, have the new member add themselves to the Haskell

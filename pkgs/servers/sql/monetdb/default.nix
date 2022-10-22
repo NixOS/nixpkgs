@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "monetdb";
-  version = "11.41.11";
+  version = "11.45.7";
 
   src = fetchurl {
     url = "https://dev.monetdb.org/downloads/sources/archive/MonetDB-${version}.tar.bz2";
-    sha256 = "sha256-SiZvAvsl2NPa5AxeLtpvWwDhl7ZC0Z/6H/l1hCGpWzw=";
+    sha256 = "sha256-hIfi8YfZIExgv+z3YAxvkX8MiiGmOjB+/OryUoRPmDI=";
   };
 
   postPatch = ''
@@ -18,7 +18,14 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    rm $out/bin/monetdb_mtest.sh
+    rm $out/bin/monetdb_mtest.sh \
+      $out/bin/mktest.py \
+      $out/bin/sqlsample.php \
+      $out/bin/sqllogictest.py \
+      $out/bin/Mz.py \
+      $out/bin/Mtest.py \
+      $out/bin/sqlsample.pl \
+      $out/bin/malsample.pl
   '';
 
   nativeBuildInputs = [ cmake python3 ];

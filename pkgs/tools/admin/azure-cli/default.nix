@@ -1,7 +1,7 @@
 { stdenv, lib, python3, fetchFromGitHub, installShellFiles }:
 
 let
-  version = "2.30.0";
+  version = "2.37.0";
   srcName = "azure-cli-${version}-src";
 
   src = fetchFromGitHub {
@@ -9,7 +9,7 @@ let
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    sha256 = "sha256-b4hNacraNomhiFGEiHcMweqbEq3vTHus+xbFPv5X5HQ=";
+    sha256 = "sha256-Y1P+cTOK7NbV7k9rg38vE7EPuZQo88IQW3IYYou8ZOI=";
   };
 
   # put packages that needs to be overriden in the py package scope
@@ -27,11 +27,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     substituteInPlace setup.py \
       --replace "chardet~=3.0.4" "chardet" \
       --replace "javaproperties~=0.5.1" "javaproperties" \
-      --replace "pytz==2019.1" "pytz" \
-      --replace "scp~=0.13.2" "scp" \
-      --replace "jsondiff~=1.2.0" "jsondiff~=1.2" \
-      --replace "antlr4-python3-runtime~=4.7.2" "antlr4-python3-runtime~=4.7" \
-      --replace "mock~=4.0" "mock"
+      --replace "scp~=0.13.2" "scp"
 
     # remove namespace hacks
     # remove urllib3 because it was added as 'urllib3[secure]', which doesn't get handled well
@@ -49,6 +45,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-cli-core
     azure-cli-telemetry
     azure-cosmos
+    azure-data-tables
     azure-datalake-store
     azure-functions-devops-build
     azure-graphrbac
@@ -130,6 +127,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-synapse-artifacts
     azure-synapse-managedprivateendpoints
     azure-synapse-spark
+    chardet
     colorama
     cryptography
     distro
@@ -141,6 +139,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     pydocumentdb
     PyGithub
     pygments
+    pynacl
     pyopenssl
     pytz
     pyyaml
@@ -157,7 +156,6 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     javaproperties
     jsondiff
     # urllib3[secure]
-    ipaddress
     # shell completion
     argcomplete
   ];

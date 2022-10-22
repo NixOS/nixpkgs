@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , arcan
 , audit
 , dbus
@@ -35,15 +36,15 @@
 , xtrans
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalPackages: {
   pname = "xarcan";
-  version = "0.6.0+unstable=2021-06-14";
+  version = "unstable-2022-06-14";
 
   src = fetchFromGitHub {
     owner = "letoram";
-    repo = pname;
-    rev = "98d28a5f2c6860bb191fbc1c9e577c18e4c9a9b7";
-    hash = "sha256-UTIVDKnYD/q0K6G7NJUKh1tHcqnsuiJ/cQxWuPMJ2G4=";
+    repo = "xarcan";
+    rev = "02111f4925453c0c545e9193c6a5e22c0d4e98c3";
+    hash = "sha256-rp2sNRbv0OZdfyqZfsv/v3TGQY5uyXWqbvlmUDd7iBk=";
   };
 
   nativeBuildInputs = [
@@ -113,6 +114,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.all;
+    platforms = platforms.unix;
   };
-}
+})

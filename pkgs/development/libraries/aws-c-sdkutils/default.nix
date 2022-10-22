@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-sdkutils";
-  version = "0.1.1";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-sdkutils";
     rev = "v${version}";
-    sha256 = "sha256-jYeyNEoJsF67XQAkmC7oegnIRBRD3FXKf5wF/NCVb4o=";
+    sha256 = "sha256-mbleTBNZegfYeaRgEup36+mAwYs/2FReA3gW2tp4ctk=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DBUILD_SHARED_LIBS=ON"
   ];
 

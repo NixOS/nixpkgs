@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, fetchpatch
 
 , graphene
 , graphql-core
@@ -19,16 +20,25 @@
 
 buildPythonPackage rec {
   pname = "graphene-django";
-  version = "unstable-2021-06-11";
+  version = "unstable-2022-03-03";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = pname;
-    rev = "e7f7d8da07ba1020f9916153f17e97b0ec037712";
-    sha256 = "0b33q1im90ahp3gzy9wx5amfzy6q57ydjpy5rn988gh81hbyqaxv";
+    rev = "f6ec0689c18929344c79ae363d2e3d5628fa4a2d";
+    hash = "sha256-KTZ5jcoeHYXnlaF47t8jIi6+7NyMyA4hDPv+il3bt+U=";
   };
+
+  patches = [
+    ./graphene-3_2_0.patch
+    (fetchpatch {
+      url = "https://github.com/graphql-python/graphene-django/commit/ca555293a4334c26cf9a390dd1e3d0bd4c819a17.patch";
+      excludes = [ "setup.py" ];
+      sha256 = "sha256-RxG1MRhmpBKnHhSg4SV+DjZ3uA0nl9oUeei56xjtUpw=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \

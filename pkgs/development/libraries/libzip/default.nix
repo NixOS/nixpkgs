@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libzip";
-  version = "1.8.0";
+  version = "1.9.2";
 
   src = fetchurl {
     url = "https://libzip.org/download/${pname}-${version}.tar.gz";
-    sha256 = "17l3ygrnbszm3b99dxmw94wcaqpbljzg54h4c0y8ss8aij35bvih";
+    sha256 = "sha256-/Wp/dF3j1pz1YD7cnLM9KJDwGY5BUlXQmHoM8Q2CTG8=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withBzip2 [ bzip2 ]
     ++ lib.optionals withOpenssl [ openssl ]
     ++ lib.optionals withZstd [ zstd ];
+
+  # Don't build the regression tests because they don't build with
+  # pkgsStatic and are not executed anyway.
+  cmakeFlags = [ "-DBUILD_REGRESS=0" ];
 
   preCheck = ''
     # regress/runtest is a generated file

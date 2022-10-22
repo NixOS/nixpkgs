@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "A MIPS32 simulator";
     homepage = "http://spimsimulator.sourceforge.net/";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.linux;
   };
 }

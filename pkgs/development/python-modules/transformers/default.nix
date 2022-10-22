@@ -1,5 +1,5 @@
-{ buildPythonPackage
-, lib
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
 , cookiecutter
@@ -10,52 +10,95 @@
 , requests
 , numpy
 , packaging
+, tensorflow
+, sagemaker
+, ftfy
 , protobuf
+, scikit-learn
+, pillow
 , pyyaml
-, sacremoses
+, torch
 , tokenizers
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.12.5";
+  version = "4.23.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "07v72fyhm1s3bzg2kvaff15d7d8na39nlqpf5gyxaqvp3hglc3qy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Ziye3lop91VICMVEC42ulE7CU6PfHot8Ij8YZxIS3J0=";
   };
 
-  nativeBuildInputs = [ packaging ];
-
   propagatedBuildInputs = [
-    cookiecutter
     filelock
     huggingface-hub
     numpy
     protobuf
+    packaging
     pyyaml
     regex
     requests
-    sacremoses
     tokenizers
     tqdm
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
+
+  passthru.optional-dependencies = {
+    ja = [
+      # fugashi
+      # ipadic
+      # unidic_lite
+      # unidic
+    ];
+    sklearn = [
+      scikit-learn
+    ];
+    tf = [
+      tensorflow
+      # onnxconverter-common
+      # tf2onnx
+    ];
+    torch = [
+      torch
+    ];
+    tokenizers = [
+      tokenizers
+    ];
+    modelcreation = [
+      cookiecutter
+    ];
+    sagemaker = [
+      sagemaker
+    ];
+    ftfy = [ ftfy ];
+    onnx = [
+      # onnxconverter-common
+      # tf2onnx
+    ];
+    vision = [
+      pillow
+    ];
+  };
+
 
   # Many tests require internet access.
   doCheck = false;
 
-  postPatch = ''
-    sed -ri 's/tokenizers[=>]=[^"]+/tokenizers/g' setup.py src/transformers/dependency_versions_table.py
-  '';
-
-  pythonImportsCheck = [ "transformers" ];
+  pythonImportsCheck = [
+    "transformers"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/huggingface/transformers";
-    description = "State-of-the-art Natural Language Processing for TensorFlow 2.0 and PyTorch";
+    description = "Natural Language Processing for TensorFlow 2.0 and PyTorch";
     changelog = "https://github.com/huggingface/transformers/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.unix;

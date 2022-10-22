@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "monsoon";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "RedTeamPentesting";
     repo = "monsoon";
     rev = "v${version}";
-    sha256 = "01c84s11m645mqaa2vdnbsj0kb842arqjhicgjv0ahb7qdw65zz4";
+    sha256 = "sha256-eXzD47qFkouYJkqWHbs2g2pbl3I7vWgIU6TqN3MEYQI=";
   };
 
-  vendorSha256 = "1g84az07hv8w0jha2yl4f5jm0p9nkbawgw9l7cpmn8ckbfa54l7q";
+  vendorSha256 = "sha256-tG+qV4Q77wT6x8y5cjZUaAWpL//sMUg1Ce3jS/dXF+Y=";
 
   # tests fails on darwin
   doCheck = !stdenv.isDarwin;

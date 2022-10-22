@@ -4,12 +4,9 @@
 , wrapQtAppsHook
 , qtmultimedia
 , qttools
-, qtscript
 , qtdeclarative
 , qtnetworkauth
 , qtbase
-, autogen
-, automake
 , makeWrapper
 , catch2
 , nodejs
@@ -21,24 +18,24 @@
 
 stdenv.mkDerivation rec {
   pname = "imgbrd-grabber";
-  version = "7.5.1";
+  version = "7.9.1";
 
   src = fetchFromGitHub {
     owner = "Bionus";
     repo = "imgbrd-grabber";
     rev = "v${version}";
-    sha256 = "sha256-40JCdtRhAQpz2lBGmYh2MgA9rRzHmOZx7lWW0IbfjP4=";
+    sha256 = "sha256-0CceSXH1GJbWKOnxZkjmbuyj7NBOQ6tpCYrCl7z4Vrw=";
     fetchSubmodules = true;
   };
 
   buildInputs = [
     openssl
-    makeWrapper
     libpulseaudio
     typescript
   ];
 
   nativeBuildInputs = [
+    makeWrapper
     qtmultimedia
     qtbase
     qtdeclarative
