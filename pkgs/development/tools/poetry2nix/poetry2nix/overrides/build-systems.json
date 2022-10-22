@@ -5062,9 +5062,6 @@
   "flask-wtf": [
     "setuptools"
   ],
-  "flaskbabel": [
-    "setuptools"
-  ],
   "flatbuffers": [
     "setuptools"
   ],

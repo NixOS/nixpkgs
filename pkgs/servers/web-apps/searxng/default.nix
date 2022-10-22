@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     certifi
     python-dateutil
     flask
-    flaskbabel
+    flask-babel
     brotli
     jinja2
     langdetect
