@@ -14,7 +14,6 @@ let
 
   mkAntlr = {
     version, sourceSha256, jarSha256,
-    extraCppPatchFlags ? [],
     extraCppBuildInputs ? [],
     extraCppCmakeFlags ? []
   }: rec {
@@ -78,17 +77,9 @@ let
         pname = "antlr-runtime-cpp";
         inherit version;
         src = source;
+        sourceRoot = "runtime/Cpp";
 
         outputs = [ "out" "dev" "doc" ];
-
-        postUnpack = ''
-          export sourceRoot=$sourceRoot/runtime/Cpp
-        '';
-
-        patchFlags =
-          if extraCppPatchFlags == []
-          then null
-          else extraCppPatchFlags;
 
         nativeBuildInputs = [ cmake ninja pkg-config ];
         buildInputs =
@@ -137,7 +128,6 @@ in {
     version = "4.9.3";
     sourceSha256 = "1af3cfqwk7lq1b5qsh1am0922fyhy7wmlpnrqdnvch3zzza9n1qm";
     jarSha256 = "0dnz2x54kigc58bxnynjhmr5iq49f938vj6p50gdir1xdna41kdg";
-    extraCppPatchFlags = [ "-p3" ];
     extraCppBuildInputs = [ utf8cpp ]
       ++ lib.optional stdenv.isLinux libuuid;
   }).antlr;
