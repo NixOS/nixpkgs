@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "demjson3";
-  version = "3.0.5";
+  version = "3.0.6";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "103dc4pzwg8791q3zll1vv4gcc17d9v3jvr9zj23cpv9hpfsp6mb";
+    sha256 = "sha256-N8g7DG6wjSXe/IjfCipIddWKeAmpZQvW7uev2AU826w=";
   };
 
   checkPhase = ''
