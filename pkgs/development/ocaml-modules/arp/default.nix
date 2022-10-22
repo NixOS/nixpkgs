@@ -25,6 +25,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     cstruct
     duration
+    ethernet
     ipaddr
     logs
     lwt
@@ -37,7 +38,6 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [
     alcotest
-    ethernet
     mirage-clock-unix
     mirage-profile
     mirage-random
