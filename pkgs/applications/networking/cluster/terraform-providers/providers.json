@@ -1275,13 +1275,13 @@
     "version": "2.11.4"
   },
   "wavefront": {
-    "hash": "sha256-6hqVAg3YwkEDBpkgPQZQyrjHfKfRc8+iTZqMg2vBwJI=",
+    "hash": "sha256-6uEEvTX0a+pZ9V+upBZOWH+IemEimVk9Jtfiz2UF5fI=",
     "owner": "vmware",
     "provider-source-address": "registry.terraform.io/vmware/wavefront",
     "repo": "terraform-provider-wavefront",
-    "rev": "v3.2.0",
-    "vendorHash": "sha256-0N2YWVnbGvD4YLdEtfdvAjhLY4zkj07GoXtFFPSD5Zk=",
-    "version": "3.2.0"
+    "rev": "v3.3.0",
+    "vendorHash": "sha256-ib1Esx2AO7b9S+v+zzuATgSVHI3HVwbzEeyqhpBz1BQ=",
+    "version": "3.3.0"
   },
   "yandex": {
     "hash": "sha256-WdiJD1gt56VDFe2qVKwiYOvneixaGRie6mrxdOCklQY=",
