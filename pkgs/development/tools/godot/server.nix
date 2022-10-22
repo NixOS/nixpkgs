@@ -1,7 +1,7 @@
 { godot, lib }:
 godot.overrideAttrs (oldAttrs: rec {
   pname = "godot-server";
-  sconsFlags = "target=release platform=server tools=no";
+  sconsFlags = [ "target=release" "platform=server" "tools=no" ];
   installPhase = ''
     mkdir -p "$out/bin"
     cp bin/godot_server.* $out/bin/godot-server

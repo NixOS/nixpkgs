@@ -1,6 +1,6 @@
 { lib
 , beautifulsoup4
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , filelock
 , requests
@@ -10,7 +10,7 @@
 , pythonOlder
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "gdown";
   version = "4.5.3";
   format = "setuptools";

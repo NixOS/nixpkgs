@@ -219,11 +219,11 @@ let
     # relevant dependencies can be downloaded.
     bazelFlags = [
       "-c opt"
-    ] ++ lib.optional (stdenv.targetPlatform.isx86_64 && stdenv.targetPlatform.isUnix) [
+    ] ++ lib.optionals (stdenv.targetPlatform.isx86_64 && stdenv.targetPlatform.isUnix) [
       "--config=avx_posix"
-    ] ++ lib.optional cudaSupport [
+    ] ++ lib.optionals cudaSupport [
       "--config=cuda"
-    ] ++ lib.optional mklSupport [
+    ] ++ lib.optionals mklSupport [
       "--config=mkl_open_source_only"
     ] ++ lib.optionals stdenv.cc.isClang [
       # bazel depends on the compiler frontend automatically selecting these flags based on file

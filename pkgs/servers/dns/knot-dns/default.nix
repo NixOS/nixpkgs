@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   CFLAGS = [ "-O2" "-DNDEBUG" ];
 
   doCheck = true;
-  checkFlags = "V=1"; # verbose output in case some test fails
+  checkFlags = [ "V=1" ]; # verbose output in case some test fails
   doInstallCheck = true;
 
   postInstall = ''

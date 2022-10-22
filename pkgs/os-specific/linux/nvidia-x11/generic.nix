@@ -101,7 +101,7 @@ let
     nativeBuildInputs = [ perl nukeReferences ]
       ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
 
-    disallowedReferences = optional (!libsOnly) [ kernel.dev ];
+    disallowedReferences = optionals (!libsOnly) [ kernel.dev ];
 
     passthru = {
       open = mapNullable (hash: callPackage ./open.nix {

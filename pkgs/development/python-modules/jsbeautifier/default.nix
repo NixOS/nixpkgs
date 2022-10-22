@@ -1,13 +1,13 @@
 { lib
 , fetchPypi
-, buildPythonApplication
+, buildPythonPackage
 , editorconfig
 , pytestCheckHook
 , pythonOlder
 , six
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "jsbeautifier";
   version = "1.14.6";
   format = "setuptools";

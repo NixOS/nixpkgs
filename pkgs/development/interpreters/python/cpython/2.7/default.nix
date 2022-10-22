@@ -166,7 +166,7 @@ let
       # only works for GCC and Apple Clang. This makes distutils to call C++
       # compiler when needed.
       ./python-2.7-distutils-C++.patch
-    ] ++ optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       ./cross-compile.patch
     ];
 

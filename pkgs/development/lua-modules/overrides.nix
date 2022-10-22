@@ -22,6 +22,7 @@
 , libmysqlclient
 , libuuid
 , libuv
+, libxcrypt
 , libyaml
 , mariadb
 , mpfr
@@ -336,6 +337,12 @@ with prev;
     ];
   });
 
+  luaposix = prev.luaLib.overrideLuarocks prev.luaposix (drv: {
+    externalDeps = [
+      { name = "CRYPT"; dep = libxcrypt; }
+    ];
+  });
+
   luasec = prev.luaLib.overrideLuarocks prev.luasec (drv: {
     externalDeps = [
       { name = "OPENSSL"; dep = openssl_1_1; }
@@ -513,7 +520,6 @@ with prev;
       make all
     '';
   });
-
   vusted = prev.vusted.overrideAttrs (_: {
     # make sure vusted_entry.vim doesn't get wrapped
     postInstall = ''
@@ -521,11 +527,6 @@ with prev;
     '';
   });
 
-  # TODO just while testing, remove afterwards
-  # toVimPlugin should do it instead
-  gitsigns-nvim = prev.gitsigns-nvim.overrideAttrs (oa: {
-    nativeBuildInputs = oa.nativeBuildInputs or [ ] ++ [ vimUtils.vimGenDocHook ];
-  });
 
   # aliases
   cjson = prev.lua-cjson;

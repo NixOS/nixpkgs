@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dist" ];
 
   # slashes are significant because upstream uses o/$(MODE)/foo.o
-  buildFlags = "o/cosmopolitan.h o//cosmopolitan.a o//libc/crt/crt.o o//ape/ape.o o//ape/ape.lds";
+  buildFlags = [ "o/cosmopolitan.h" "o//cosmopolitan.a" "o//libc/crt/crt.o" "o//ape/ape.o" "o//ape/ape.lds" ];
   checkTarget = "o//test";
   enableParallelBuilding = true;
 

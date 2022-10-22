@@ -1,4 +1,4 @@
-{ lib, stdenv, icu, expat, zlib, bzip2, python ? null, fixDarwinDylibNames, libiconv
+{ lib, stdenv, icu, expat, zlib, bzip2, python ? null, fixDarwinDylibNames, libiconv, libxcrypt
 , boost-build
 , fetchpatch
 , which
@@ -218,7 +218,7 @@ stdenv.mkDerivation {
     ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ expat zlib bzip2 libiconv ]
     ++ optional (stdenv.hostPlatform == stdenv.buildPlatform) icu
-    ++ optional enablePython python
+    ++ optionals enablePython [ libxcrypt python ]
     ++ optional enableNumpy python.pkgs.numpy;
 
   configureScript = "./bootstrap.sh";

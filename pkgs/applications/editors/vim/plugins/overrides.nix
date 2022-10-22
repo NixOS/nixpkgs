@@ -676,8 +676,6 @@ self: super: {
 
   inherit parinfer-rust;
 
-  # plenary-nvim = super.toVimPlugin(luaPackages.plenary-nvim);
-
   plenary-nvim = super.plenary-nvim.overrideAttrs (old: {
     postPatch = ''
       sed -Ei lua/plenary/curl.lua \

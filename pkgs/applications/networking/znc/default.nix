@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
     (lib.enableFeature withTcl "tcl")
     (lib.withFeatureAs withTcl "tcl" "${tcl}/lib")
     (lib.enableFeature withCyrus "cyrus")
-  ] ++ optional (!withIPv6) [ "--disable-ipv6" ]
-    ++ optional withDebug [ "--enable-debug" ];
+  ] ++ optionals (!withIPv6) [ "--disable-ipv6" ]
+    ++ optionals withDebug [ "--enable-debug" ];
 
   enableParallelBuilding = true;
 

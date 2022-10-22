@@ -385,7 +385,7 @@ lib.composeManyExtensions [
           (
             old: {
               nativeBuildInputs = (old.nativeBuildInputs or [ ])
-                ++ lib.optional (lib.versionAtLeast old.version "3.4") [ self.setuptools-rust ]
+                ++ lib.optionals (lib.versionAtLeast old.version "3.4") [ self.setuptools-rust ]
                 ++ lib.optional (!self.isPyPy) pyBuildPackages.cffi
                 ++ lib.optional (lib.versionAtLeast old.version "3.5" && !isWheel)
                 (with pkgs.rustPlatform; [ cargoSetupHook rust.cargo rust.rustc ]);
@@ -1061,9 +1061,9 @@ lib.composeManyExtensions [
 
           buildInputs = old.buildInputs or [ ] ++ [
             pkgs.which
-          ] ++ lib.optional enableGhostscript [
+          ] ++ lib.optionals enableGhostscript [
             pkgs.ghostscript
-          ] ++ lib.optional stdenv.isDarwin [
+          ] ++ lib.optionals stdenv.isDarwin [
             Cocoa
           ];
 
@@ -1080,7 +1080,7 @@ lib.composeManyExtensions [
 
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
             pkg-config
-          ] ++ lib.optional (lib.versionAtLeast super.matplotlib.version "3.5.0") [
+          ] ++ lib.optionals (lib.versionAtLeast super.matplotlib.version "3.5.0") [
             self.setuptools-scm
             self.setuptools-scm-git-archive
           ];
@@ -2030,7 +2030,7 @@ lib.composeManyExtensions [
         if old.format != "wheel" then {
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++
             [ pkgs.gfortran ] ++
-            lib.optional (lib.versionAtLeast super.scipy.version "1.7.0") [ self.pythran ];
+            lib.optionals (lib.versionAtLeast super.scipy.version "1.7.0") [ self.pythran ];
           propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.pybind11 ];
           setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
           enableParallelBuilding = true;

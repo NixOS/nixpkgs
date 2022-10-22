@@ -1,6 +1,7 @@
 { lib, beamPackages
 , fetchFromGitHub, fetchFromGitLab
 , file, cmake
+, libxcrypt
 , nixosTests, writeText
 , ...
 }:
@@ -133,6 +134,8 @@ beamPackages.mixRelease rec {
         postInstall = "mv $out/lib/erlang/lib/crypt-${version}/priv/{source,crypt}.so";
 
         beamDeps = with final; [ elixir_make ];
+
+        buildInputs = [ libxcrypt ];
       };
       web_push_encryption = beamPackages.buildMix rec {
         name = "web_push_encryption";

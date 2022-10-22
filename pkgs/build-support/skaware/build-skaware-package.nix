@@ -87,7 +87,7 @@ stdenv.mkDerivation {
 
   inherit postConfigure;
 
-  makeFlags = lib.optional stdenv.cc.isClang [ "AR=${stdenv.cc.targetPrefix}ar" "RANLIB=${stdenv.cc.targetPrefix}ranlib" ];
+  makeFlags = lib.optionals stdenv.cc.isClang [ "AR=${stdenv.cc.targetPrefix}ar" "RANLIB=${stdenv.cc.targetPrefix}ranlib" ];
 
   # TODO(Profpatsch): ensure that there is always a $doc output!
   postInstall = ''
