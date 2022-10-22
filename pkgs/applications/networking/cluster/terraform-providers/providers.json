@@ -120,13 +120,13 @@
     "version": "2.29.0"
   },
   "azurerm": {
-    "hash": "sha256-MWbw0E5TtqHaoU9nxeMVrUCPlRE73KYxvC6A6tMrjC0=",
+    "hash": "sha256-ASZs5raOUCMRI+GzncADLtCtc5QJvPfGoQ67n8DiMMg=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/azurerm",
     "repo": "terraform-provider-azurerm",
-    "rev": "v3.27.0",
+    "rev": "v3.28.0",
     "vendorHash": null,
-    "version": "3.27.0"
+    "version": "3.28.0"
   },
   "azurestack": {
     "hash": "sha256-aSwVa7y1AJ6sExx+bO/93oLBNgSBDJjuPYPY8i3C9T0=",
