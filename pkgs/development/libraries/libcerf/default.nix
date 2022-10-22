@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, perl }:
+{ stdenv, lib, fetchurl, cmake, perl, gnuplot }:
 
 stdenv.mkDerivation rec {
   pname = "libcerf";
@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake perl ];
+
+  passthru.tests = {
+    inherit gnuplot;
+  };
 
   meta = with lib; {
     description = "Complex error (erf), Dawson, Faddeeva, and Voigt function library";
