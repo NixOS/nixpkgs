@@ -105,6 +105,12 @@ rec {
                   # when resolving module structure (like in imports). For everything else,
                   # there's _module.args. If specialArgs.modulesPath is defined it will be
                   # used as the base path for disabledModules.
+                  #
+                  # specialArgs.prepareImport: A function that preprocess the raw `imports`.
+                  # This can be used to pick out the default module in flake.
+                  # The argument can be of any type. The return value must
+                  # be a valid imports item. It should not ignore any imports,
+                  # so that imports preparation is a convenience, not a liability.
                   specialArgs ? {}
                 , # This would be remove in the future, Prefer _module.args option instead.
                   args ? {}
@@ -251,6 +257,7 @@ rec {
 
       merged =
         let collected = collectModules
+          (specialArgs.prepareImport or (x: x))
           (specialArgs.modulesPath or "")
           (regularModules ++ [ internalModule ])
           ({ inherit lib options config specialArgs; } // specialArgs);
@@ -337,7 +344,7 @@ rec {
   #
   # Collects all modules recursively through `import` statements, filtering out
   # all modules in disabledModules.
-  collectModules = let
+  collectModules = prepareImport: let
 
       # Like unifyModuleSyntax, but also imports paths and calls functions if necessary
       loadModule = args: fallbackFile: fallbackKey: m:
@@ -382,7 +389,7 @@ rec {
         in parentFile: parentKey: initialModules: args: collectResults (imap1 (n: x:
           let
             module = loadModule args parentFile "${parentKey}:anon-${toString n}" x;
-            collectedImports = collectStructuredModules module._file module.key module.imports args;
+            collectedImports = collectStructuredModules module._file module.key (map prepareImport module.imports) args;
           in {
             key = module.key;
             module = module;
@@ -407,7 +414,7 @@ rec {
         });
 
     in modulesPath: initialModules: args:
-      filterModules modulesPath (collectStructuredModules unknownModule "" initialModules args);
+      filterModules modulesPath (collectStructuredModules unknownModule "" (map prepareImport initialModules) args);
 
   /* Wrap a module with a default location for reporting errors. */
   setDefaultModuleLocation = file: m:
