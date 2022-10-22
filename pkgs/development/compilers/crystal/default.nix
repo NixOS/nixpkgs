@@ -67,7 +67,7 @@ let
         patchShebangs $out/bin/crystal
       '';
 
-      meta.broken = lib.versionOlder version "1.2.0" && isAarch64Darwin;
+      meta.broken = (lib.versionOlder version "1.2.0" && isAarch64Darwin) || (lib.versionAtLeast version "1.3.0" && stdenv.system == "i686-linux") || (lib.versionAtLeast version "1.5.0" && stdenv.system == "aarch64-linux");
     };
 
   commonBuildInputs = extraBuildInputs: [
