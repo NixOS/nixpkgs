@@ -13730,12 +13730,6 @@
     githubId = 2164118;
     name = "Tobias Bora";
   };
-  tohl = {
-    email = "tom@logand.com";
-    github = "tohl";
-    githubId = 12159013;
-    name = "Tomas Hlavaty";
-  };
   tokudan = {
     email = "git@danielfrank.net";
     github = "tokudan";

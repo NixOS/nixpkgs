@@ -1881,6 +1881,8 @@ in {
 
   click-plugins = callPackage ../development/python-modules/click-plugins { };
 
+  click-shell = callPackage ../development/python-modules/click-shell { };
+
   click-spinner = callPackage ../development/python-modules/click-spinner { };
 
   click-repl = callPackage ../development/python-modules/click-repl { };

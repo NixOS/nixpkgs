@@ -160,7 +160,7 @@ stdenv.mkDerivation rec {
     ++ optional libmfxSupport intel-media-sdk
     ++ optional libaomSupport libaom
     ++ optional vpxSupport libvpx
-    ++ optionals (!stdenv.isDarwin && !stdenv.isAarch32 && pulseaudioSupport) [ libpulseaudio ] # Need to be fixed on Darwin and ARM
+    ++ optionals (!stdenv.isDarwin && pulseaudioSupport) [ libpulseaudio ] # Need to be fixed on Darwin
     ++ optionals vaapiSupport [ libva libdrm ]
     ++ optional stdenv.isLinux alsa-lib
     ++ optionals stdenv.isDarwin [ Cocoa CoreMedia VideoToolbox ]
