@@ -1,5 +1,6 @@
 { lib, fetchFromGitHub, ocaml, buildDunePackage
 , cmdliner, dap, fmt, iter, logs, lru, lwt_ppx, lwt_react, menhir, menhirLib, path_glob, ppx_deriving_yojson
+, gitUpdater
 }:
 
 if lib.versionAtLeast ocaml.version "4.13"
@@ -22,6 +23,8 @@ buildDunePackage rec {
   };
 
   buildInputs = [ cmdliner dap fmt iter logs lru lwt_ppx lwt_react menhir menhirLib path_glob ppx_deriving_yojson ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://github.com/hackwaly/ocamlearlybird";
