@@ -12292,6 +12292,8 @@ with pkgs;
 
   vdmfec = callPackage ../applications/backup/vdmfec {};
 
+  vk-bootstrap = callPackage ../development/libraries/vk-bootstrap { };
+
   vk-cli = callPackage ../applications/networking/instant-messengers/vk-cli { };
 
   vk-messenger = callPackage ../applications/networking/instant-messengers/vk-messenger {};
