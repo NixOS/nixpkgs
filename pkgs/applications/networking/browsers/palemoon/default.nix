@@ -45,7 +45,7 @@ assert with lib.strings; (
 
 stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "31.2.0.1";
+  version = "31.3.0.1";
 
   src = fetchFromGitea {
     domain = "repo.palemoon.org";
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     repo = "Pale-Moon";
     rev = "${version}_Release";
     fetchSubmodules = true;
-    sha256 = "sha256-ytJC3QW9grbI6DusYITACc40+xUJ94+ATVGaOzWAwHU=";
+    sha256 = "sha256-qspzTlhK9MRJBsXxmYzl5K6in09LZPvaVc+ibovJAD8=";
   };
 
   nativeBuildInputs = [
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
 
     # Too many cores can lead to build flakiness
     # https://forum.palemoon.org/viewtopic.php?f=5&t=28480
-    export jobs=$(($NIX_BUILD_CORES<=20 ? $NIX_BUILD_CORES : 20))
+    export jobs=$(($NIX_BUILD_CORES<=16 ? $NIX_BUILD_CORES : 16))
     if [ -z "$enableParallelBuilding" ]; then
       jobs=1
     fi
