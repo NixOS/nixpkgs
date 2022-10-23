@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nixosTests
 , cmake
 , rocm-cmake
 , rocm-runtime
@@ -78,6 +79,10 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString (buildTests || buildBenchmarks) ''
     rmdir $out/bin
   '';
+
+  passthru.tests = {
+    smoke-test = nixosTests.hipcub;
+  };
 
   meta = with lib; {
     description = "Thin wrapper library on top of rocPRIM or CUB";
