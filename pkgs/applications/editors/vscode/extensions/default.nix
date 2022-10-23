@@ -1774,6 +1774,40 @@ let
 
       ms-vscode.cpptools = callPackage ./cpptools { };
 
+      ms-vscode.cmake-tools = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "cmake-tools";
+          publisher = "ms-vscode";
+          version = "1.13.17";
+          sha256 = "sha256-RF4KTHXnYBfRCD06GYmprwJNkdplyZyk4ioq5Nu+UDM=";
+        };
+        meta.license = lib.licenses.mit;
+      };
+
+      ms-vscode.hexeditor = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "hexeditor";
+          publisher = "ms-vscode";
+          version = "1.9.9";
+          sha256 = "0w7b9llgm6plzpkr5g8ikpyxdgfdjcd5v9xzhp6967j0xphisdbb";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      ms-vscode.makefile-tools = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "makefile-tools";
+          publisher = "ms-vscode";
+          version = "0.6.0";
+          sha256 = "07zagq5ib9hd3w67yk2g728vypr4qazw0g9dyd5bax21shnmppa9";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       ms-vscode.PowerShell = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "PowerShell";
@@ -1839,7 +1873,43 @@ let
         };
       };
 
+      ms-toolsai.vscode-jupyter-cell-tags = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-jupyter-cell-tags";
+          publisher = "ms-toolsai";
+          version = "0.1.6";
+          sha256 = "1sb3za0ka8bl1kydlniwlaixldlgqxvfbx7pcyrg1a4sg6zwsvk1";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      ms-toolsai.vscode-jupyter-slideshow = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-jupyter-slideshow";
+          publisher = "ms-toolsai";
+          version = "0.1.5";
+          sha256 = "1p6r5vkzvwvxif3wxqi9599vplabzig27fzzz0bx9z0awfglzyi7";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       ms-toolsai.jupyter = callPackage ./ms-toolsai-jupyter {};
+
+      ms-toolsai.jupyter-keymap = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "jupyter-keymap";
+          publisher = "ms-toolsai";
+          version = "1.0.0";
+          sha256 = "0wkwllghadil9hk6zamh9brhgn539yhz6dlr97bzf9szyd36dzv8";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
 
       ms-toolsai.jupyter-renderers = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -2546,6 +2616,18 @@ let
         };
       };
 
+      twxs.cmake = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "cmake";
+          publisher = "twxs";
+          version = "0.0.17";
+          sha256 = "11hzjd0gxkq37689rrr2aszxng5l9fwpgs9nnglq3zhfa1msyn08";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       usernamehw.errorlens = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "errorlens";
@@ -2633,12 +2715,48 @@ let
         };
       };
 
+      vscjava.vscode-java-dependency = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-java-dependency";
+          publisher = "vscjava";
+          version = "0.21.0";
+          sha256 = "0rjxjf137qrn91nxmvv4j0a25xgwv2p2w2a1vb7yykkqlkfazmm6";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       vscjava.vscode-java-test = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-java-test";
           publisher = "vscjava";
           version = "0.37.1";
           sha256 = "sha256-QpDMG+0RbiRY9YQYXQhA6ESBoIjBeUxq+bEZ1Y71oSM=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      vscjava.vscode-maven = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-maven";
+          publisher = "vscjava";
+          version = "0.39.0";
+          sha256 = "1603s2s9abg1pqfakj43zp3dfl0y92pblra85wj2rccbzf3asba3";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      vscjava.vscode-spring-initializr = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-spring-initializr";
+          publisher = "vscjava";
+          version = "0.11.0";
+          sha256 = "1rbwbfz2wgw57vna8ip5b4k8mpk1d1y9vx0xr6gfqhmh6igigqil";
         };
         meta = {
           license = lib.licenses.mit;
