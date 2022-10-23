@@ -14833,6 +14833,8 @@ with pkgs;
     inherit (llvmPackages_rocm) clang llvm;
   };
 
+  hipcub = callPackage ../development/libraries/hipcub { };
+
   rocm-cmake = callPackage ../development/tools/build-managers/rocm-cmake { };
 
   rocm-comgr = callPackage ../development/libraries/rocm-comgr {
