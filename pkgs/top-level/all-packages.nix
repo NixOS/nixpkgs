@@ -30745,7 +30745,9 @@ with pkgs;
 
   obconf = callPackage ../tools/X11/obconf { };
 
-  gnome-obfuscate = callPackage ../applications/graphics/gnome-obfuscate { };
+  gnome-obfuscate = callPackage ../applications/graphics/gnome-obfuscate {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   obs-studio = libsForQt5.callPackage ../applications/video/obs-studio {
     ffmpeg_4 = ffmpeg-full;
