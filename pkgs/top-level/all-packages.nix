@@ -18741,6 +18741,8 @@ with pkgs;
     geoipDatabase = geolite-legacy;
   };
 
+  geographiclib = callPackage ../development/libraries/geographiclib { };
+
   geoip = callPackage ../development/libraries/geoip { };
 
   geoipjava = callPackage ../development/libraries/java/geoipjava { };
