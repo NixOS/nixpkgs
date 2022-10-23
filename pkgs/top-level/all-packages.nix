@@ -9487,7 +9487,7 @@ with pkgs;
   grocy = callPackage ../servers/grocy { };
 
   inherit (callPackage ../servers/nextcloud {})
-    nextcloud22 nextcloud23 nextcloud24;
+    nextcloud23 nextcloud24 nextcloud25;
 
   nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
 
