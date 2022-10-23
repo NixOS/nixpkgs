@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, pkg-config, openssl, which, wasm-pack, nodePackages, rustup }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lldap";
@@ -15,6 +15,13 @@ rustPlatform.buildRustPackage rec {
   cargoPatches = [ ./update-cargo-lock.patch ];
 
   cargoSha256 = "sha256-pO0kEVzgfOGn4PBzTrUyVfcelS+W6RfkYURTUXpms2k=";
+
+  nativeBuildInputs = [ pkg-config which wasm-pack nodePackages.rollup ];
+  buildInputs = [ openssl ];
+
+  postBuild = ''
+    ./app/build.sh
+  '';
 
   meta = with lib; {
     description = "Light LDAP implementation";
