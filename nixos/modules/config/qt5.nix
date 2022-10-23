@@ -12,7 +12,13 @@ let
   isLxqt = cfg.platformTheme == "lxqt";
   isKde = cfg.platformTheme == "kde";
 
-  packages = if isQGnome then [ pkgs.qgnomeplatform pkgs.adwaita-qt ]
+  packages =
+    if isQGnome then [
+      pkgs.qgnomeplatform
+      pkgs.adwaita-qt
+      pkgs.qgnomeplatform-qt6
+      pkgs.adwaita-qt6
+    ]
     else if isQtStyle then [ pkgs.libsForQt5.qtstyleplugins ]
     else if isQt5ct then [ pkgs.libsForQt5.qt5ct ]
     else if isLxqt then [ pkgs.lxqt.lxqt-qtplugin pkgs.lxqt.lxqt-config ]
@@ -40,6 +46,7 @@ in
         example = "gnome";
         relatedPackages = [
           "qgnomeplatform"
+          "qgnomeplatform-qt6"
           ["libsForQt5" "qtstyleplugins"]
           ["libsForQt5" "qt5ct"]
           ["lxqt" "lxqt-qtplugin"]
@@ -71,6 +78,7 @@ in
         example = "adwaita";
         relatedPackages = [
           "adwaita-qt"
+          "adwaita-qt6"
           ["libsForQt5" "qtstyleplugins"]
         ];
         description = lib.mdDoc ''
