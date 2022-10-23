@@ -9,13 +9,13 @@ in
 
 nodeComposition.package.override rec {
   pname = "open-stage-control";
-  version = "1.17.0";
+  version = "1.18.3";
 
   src = fetchFromGitHub {
     owner = "jean-emmanuel";
     repo = "open-stage-control";
     rev = "v${version}";
-    hash = "sha256-q18pRtsHfme+OPmi3LhJDK1AdpfkwhoE9LA2rNenDtY=";
+    hash = "sha256-AXdPxTauy2rMRMdfUjkfTjbNDgOKmoiGUeeLak0wu84=";
   };
 
   strictDeps = true;
