@@ -22562,6 +22562,10 @@ with pkgs;
 
   qgnomeplatform = libsForQt5.callPackage ../development/libraries/qgnomeplatform { };
 
+  qgnomeplatform-qt6 = qt6Packages.callPackage ../development/libraries/qgnomeplatform {
+    useQt6 = true;
+  };
+
   randomx = darwin.apple_sdk_11_0.callPackage ../development/libraries/randomx { };
 
   remodel = callPackage ../development/tools/remodel {
@@ -26434,6 +26438,10 @@ with pkgs;
   adementary-theme = callPackage ../data/themes/adementary { };
 
   adwaita-qt = libsForQt5.callPackage ../data/themes/adwaita-qt { };
+
+  adwaita-qt6 = qt6Packages.callPackage ../data/themes/adwaita-qt {
+    useQt6 = true;
+  };
 
   adw-gtk3 = callPackage ../data/themes/adw-gtk3 { };
 
