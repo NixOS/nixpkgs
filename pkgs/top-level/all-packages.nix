@@ -30570,6 +30570,10 @@ with pkgs;
 
   reproc = callPackage ../development/libraries/reproc { };
 
+  rpki-client = callPackage ../tools/networking/rpki-client { };
+
+  rpki-arin-tal = callPackage ../tools/networking/rpki-arin-tal { };
+
   sawfish = callPackage ../applications/window-managers/sawfish { };
 
   sc68 = callPackage ../applications/audio/sc68 { };

@@ -309,6 +309,15 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://rpki-client.org/">rpki-client</link>
+          the OpenBSD validator for RPKI Route Origin Authorizations.
+          Can be used to generate filter config for BGP routing daemons.
+          Available as
+          <link linkend="opt-services.rpki-client.enable">services.rpki-client</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://git.sr.ht/~migadu/alps">alps</link>,
           a simple and extensible webmail. Available as
           <link linkend="opt-services.alps.enable">services.alps</link>.

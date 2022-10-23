@@ -922,6 +922,7 @@
   ./services/networking/robustirc-bridge.nix
   ./services/networking/routedns.nix
   ./services/networking/rpcbind.nix
+  ./services/networking/rpki-client.nix
   ./services/networking/rxe.nix
   ./services/networking/sabnzbd.nix
   ./services/networking/seafile.nix
