@@ -23,7 +23,7 @@ in {
 
   nodes.machine = { lib, ... }: {
     virtualisation = {
-      diskSize = 2048;
+      diskSize = 4096;
 
       # Since we're testing `limits.cpu`, we've gotta have a known number of
       # cores to lean on
