@@ -122,7 +122,7 @@ in rec {
 
   optionsJSON = pkgs.runCommand "options.json"
     { meta.description = "List of NixOS options in JSON format";
-      buildInputs = [
+      nativeBuildInputs = [
         pkgs.brotli
         (let
           self = (pkgs.python3Minimal.override {

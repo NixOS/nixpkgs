@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildFlags = "release";
+  buildFlags = [ "release" ];
 
   dontAddPrefix = true;
   dontAddStaticConfigureFlags = true;

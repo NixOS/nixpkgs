@@ -37,13 +37,13 @@ buildPythonPackage rec {
     jaraco-context
     jaraco_functools
     inflect
-  ] ++ lib.optional (pythonOlder "3.9") [
+  ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
   ];
 
   checkInputs = [
     pytestCheckHook
-  ] ++ lib.optional (pythonOlder "3.10") [
+  ] ++ lib.optionals (pythonOlder "3.10") [
     pathlib2
   ];
 

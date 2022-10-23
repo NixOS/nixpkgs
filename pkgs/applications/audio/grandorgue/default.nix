@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ Cocoa ]
     ++ lib.optional jackaudioSupport libjack2;
 
-  cmakeFlags = lib.optional (!jackaudioSupport) [
+  cmakeFlags = lib.optionals (!jackaudioSupport) [
     "-DRTAUDIO_USE_JACK=OFF"
     "-DRTMIDI_USE_JACK=OFF"
     "-DGO_USE_JACK=OFF"

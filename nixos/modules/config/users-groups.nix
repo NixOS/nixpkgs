@@ -697,7 +697,7 @@ in {
           value = "[a-zA-Z0-9/+.-]+";
           options = "${id}(=${value})?(,${id}=${value})*";
           scheme  = "${id}(${sep}${options})?";
-          content = "${base64}${sep}${base64}";
+          content = "${base64}${sep}${base64}(${sep}${base64})?";
           mcf = "^${sep}${scheme}${sep}${content}$";
         in
         if (allowsLogin user.hashedPassword

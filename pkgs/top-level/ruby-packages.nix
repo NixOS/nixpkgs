@@ -2152,6 +2152,17 @@
     };
     version = "1.0.3";
   };
+  pastel = {
+    dependencies = ["tty-color"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0xash2gj08dfjvq4hy6l1z22s5v30fhizwgs10d6nviggpxsj7a8";
+      type = "gem";
+    };
+    version = "0.8.0";
+  };
   pathutil = {
     dependencies = ["forwardable-extended"];
     groups = ["default"];
@@ -3096,6 +3107,37 @@
       type = "gem";
     };
     version = "1.6.11";
+  };
+  tty-color = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0aik4kmhwwrmkysha7qibi2nyzb4c8kp42bd5vxnf8sf7b53g73g";
+      type = "gem";
+    };
+    version = "0.6.0";
+  };
+  tty-command = {
+    dependencies = ["pastel"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "14hi8xiahfrrnydw6g3i30lxvvz90wp4xsrlhx8mabckrcglfv0c";
+      type = "gem";
+    };
+    version = "0.10.1";
+  };
+  tty-option = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0xibs7kgbsw401ywfw67wg47fmm7sdcypy85m25af9r2q2hbq7gb";
+      type = "gem";
+    };
+    version = "0.2.0";
   };
   typhoeus = {
     dependencies = ["ethon"];

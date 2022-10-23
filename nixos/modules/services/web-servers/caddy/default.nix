@@ -290,6 +290,9 @@ in
       }
     '';
 
+    # https://github.com/lucas-clemente/quic-go/wiki/UDP-Receive-Buffer-Size
+    boot.kernel.sysctl."net.core.rmem_max" = mkDefault 2500000;
+
     systemd.packages = [ cfg.package ];
     systemd.services.caddy = {
       wants = map (hostOpts: "acme-finished-${hostOpts.useACMEHost}.target") acmeVHosts;

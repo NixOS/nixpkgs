@@ -1326,8 +1326,6 @@ let
 
     process = callPackage ../development/ocaml-modules/process { };
 
-    prof_spacetime = callPackage ../development/ocaml-modules/prof_spacetime { };
-
     progress = callPackage ../development/ocaml-modules/progress { };
 
     promise_jsoo = callPackage ../development/ocaml-modules/promise_jsoo { };
@@ -1662,6 +1660,8 @@ in let inherit (pkgs) callPackage; in rec
   ocamlPackages_4_13 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.13.nix { });
 
   ocamlPackages_4_14 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.14.nix { });
+
+  ocamlPackages_5_0 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.0.nix { });
 
   ocamlPackages_latest = ocamlPackages_4_14;
 

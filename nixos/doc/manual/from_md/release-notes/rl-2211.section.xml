@@ -157,6 +157,15 @@
       </listitem>
       <listitem>
         <para>
+          Improved performances of
+          <literal>lib.closePropagation</literal> which was previously
+          quadratic. This is used in e.g.
+          <literal>ghcWithPackages</literal>. Please see backward
+          incompatibilities notes below.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Cinnamon has been updated to 5.4. While at it, the cinnamon
           module now defaults to blueman as bluetooth manager and
           slick-greeter as lightdm greeter to match upstream.
@@ -507,6 +516,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>openssh</literal> was updated to version 9.1,
+          disabling the generation of DSA keys when using
+          <literal>ssh-keygen -A</literal> as they are insecure. Also,
+          <literal>SetEnv</literal> directives in
+          <literal>ssh_config</literal> and
+          <literal>sshd_config</literal> are now first-match-wins
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>bsp-layout</literal> no longer uses the command
           <literal>cycle</literal> to switch to other window layouts, as
           it got replaced by the commands <literal>previous</literal>
@@ -613,6 +632,12 @@
       </listitem>
       <listitem>
         <para>
+          <literal>lib.closePropagation</literal> now needs that all
+          gathered sets have an <literal>outPath</literal> attribute.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           lemmy module option
           <literal>services.lemmy.settings.database.createLocally</literal>
           moved to
@@ -623,6 +648,14 @@
         <para>
           virtlyst package and <literal>services.virtlyst</literal>
           module removed, due to lack of maintainers.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>nix.checkConfig</literal> option now fully
+          disables the config check. The new
+          <literal>nix.checkAllErrors</literal> option behaves like
+          <literal>nix.checkConfig</literal> previously did.
         </para>
       </listitem>
       <listitem>

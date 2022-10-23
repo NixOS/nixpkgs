@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt
+{ lib, stdenv, fetchFromGitHub, openssl, zlib, pcre, libxcrypt, libxml2, libxslt
 , substituteAll, gd, geoip, gperftools, jemalloc, nixosTests
 , withDebug ? false
 , withMail ? false
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ openssl zlib pcre libxml2 libxslt gd geoip gperftools jemalloc ]
+    [ openssl zlib pcre libxcrypt libxml2 libxslt gd geoip gperftools jemalloc ]
     ++ concatMap (mod: mod.inputs or []) modules;
 
   patches = singleton (substituteAll {

@@ -9,6 +9,7 @@
 , fuse
 , libkrb5
 , libuuid
+, libxcrypt
 , libxml2
 , openssl
 , readline
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
     curl
     libkrb5
     libuuid
+    libxcrypt
     libxml2
     openssl
     readline
