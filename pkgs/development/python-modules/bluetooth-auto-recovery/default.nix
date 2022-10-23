@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-auto-recovery";
-  version = "0.3.4";
+  version = "0.3.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-jInCWya146QI7D89zSAPChF8GMDj7NRzu9NvVIbkntM=";
+    hash = "sha256-2GmBO67sUIjasF5MHrDkZ4D+dk3xN+HNpc7nSN+qTaQ=";
   };
 
   nativeBuildInputs = [
