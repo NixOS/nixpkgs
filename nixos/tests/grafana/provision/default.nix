@@ -1,6 +1,4 @@
-args@{ pkgs, ... }:
-
-(import ../../make-test-python.nix ({ lib, pkgs, ... }:
+import ../../make-test-python.nix ({ lib, pkgs, ... }:
 
 let
   inherit (lib) mkMerge nameValuePair maintainers;
@@ -222,4 +220,4 @@ in {
                 "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/v1/provisioning/mute-timings | grep Test\ Mute\ Timing"
             )
   '';
-})) args
+})
