@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , libiconv
 , openssl
+, pkg-config
 , rustPlatform
 , Security
 , stdenv
@@ -10,19 +11,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wapm-cli";
-  version = "0.5.5";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = "wapm-cli";
     rev = "v${version}";
-    sha256 = "sha256-BKBd1tJwV4VOjRnAx/spQy3LIXzujrO2SS5eA1uybNA=";
+    sha256 = "sha256-QgQQ0lbr7Ggd2HmKlu/5TMFISxrwKWstoAq8e776l8I=";
   };
 
-  cargoSha256 = "sha256-dv04AXOnzizjq/qx3qy524ylQHgE4gIBgeYI+2IRTug=";
+  cargoSha256 = "sha256-F4BvP1yMJ06QgocD6InwkfHtJIsEkOfxuaaalksJCew=";
 
-  buildInputs = [ libiconv openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+  buildInputs = lib.optionals stdenv.isLinux [ openssl pkg-config ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security SystemConfiguration ];
 
   doCheck = false;
 
