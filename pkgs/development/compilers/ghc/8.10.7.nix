@@ -41,6 +41,9 @@
   ghcFlavour ? lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
     (if useLLVM then "perf-cross" else "perf-cross-ncg")
 
+, # Extra flags that should be sent to ghc's ./configure script
+  extraConfigureFlags ? ""
+
 , #  Whether to build sphinx documentation.
   enableDocs ? (
     # Docs disabled for musl and cross because it's a large task to keep
@@ -320,7 +323,7 @@ stdenv.mkDerivation (rec {
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
   ] ++ lib.optionals (disableLargeAddressSpace) [
     "--disable-large-address-space"
-  ];
+  ] ++ extraConfigureFlags;
 
   # Make sure we never relax`$PATH` and hooks support for compatibility.
   strictDeps = true;
