@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ git ];
 
-  buildInputs =  [
+  buildInputs =  if waylandSupport then [
+    cairo
+    libxkbcommon
+    wayland
+  ] else [
     libXi
     libXinerama
     libXft
@@ -34,13 +38,9 @@ stdenv.mkDerivation rec {
     libXtst
     libX11
     libXext
-  ] ++ lib.optionals waylandSupport [
-    cairo
-    libxkbcommon
-    wayland
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" ] ++ lib.optionals waylandSupport [ "PLATFORM=wayland" ];
 
   postPatch = ''
     substituteInPlace Makefile \

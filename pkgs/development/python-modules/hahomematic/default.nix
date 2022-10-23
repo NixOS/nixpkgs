@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "2022.10.6";
+  version = "2022.10.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-rZb1VlJvzRt3YxEK5jrzqYTZXEPbiPJek8XtkUhzgm8=";
+    sha256 = "sha256-92TR0zkYUgIso+ki3k+meTeMQdWrcBooNgL42pf0EqA=";
   };
 
   nativeBuildInputs = [
