@@ -1,5 +1,6 @@
 [
   "@angular/cli"
+, "@ansible/ansible-language-server"
 , "@antfu/ni"
 , "@antora/cli"
 , "@antora/site-generator-default"
