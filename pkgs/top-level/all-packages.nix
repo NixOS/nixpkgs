@@ -2154,7 +2154,7 @@ with pkgs;
   astc-encoder = callPackage ../tools/graphics/astc-encoder { };
 
   asymptote = callPackage ../tools/graphics/asymptote {
-    texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super texinfo; };
+    texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super texinfo media9 ocgx2; };
     gsl = gsl_1;
   };
 
@@ -7152,7 +7152,9 @@ with pkgs;
 
   git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
 
-  gitea = callPackage ../applications/version-management/gitea { };
+  gitea = callPackage ../applications/version-management/gitea {
+    buildGoPackage = buildGo118Package; # nixosTests.gitea fails with 1.19
+  };
 
   gokart = callPackage ../development/tools/gokart { };
 
@@ -9259,10 +9261,7 @@ with pkgs;
     docbook-xsl = docbook_xsl;
   };
 
-  mole = callPackage ../tools/networking/mole {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
-  };
+  mole = callPackage ../tools/networking/mole { };
 
   morgen = callPackage ../applications/office/morgen {
     electron = electron_15;
@@ -12658,6 +12657,8 @@ with pkgs;
   unrar = callPackage ../tools/archivers/unrar { };
 
   unrar-wrapper = python3Packages.callPackage ../tools/archivers/unrar-wrapper { };
+
+  uptime-kuma = callPackage ../servers/monitoring/uptime-kuma { };
 
   vul = callPackage ../applications/misc/vul { };
 
@@ -26850,10 +26851,7 @@ with pkgs;
 
   vegur = callPackage ../data/fonts/vegur { };
 
-  vegeta = callPackage ../tools/networking/vegeta {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
-  };
+  vegeta = callPackage ../tools/networking/vegeta { };
 
   venta = callPackage ../data/themes/venta { };
 
@@ -28007,10 +28005,7 @@ with pkgs;
 
   exaile = callPackage ../applications/audio/exaile { };
 
-  exercism = callPackage ../applications/misc/exercism {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
-  };
+  exercism = callPackage ../applications/misc/exercism { };
 
   expenses = callPackage ../applications/misc/expenses { };
 
@@ -29985,10 +29980,7 @@ with pkgs;
 
   mapmap = libsForQt5.callPackage ../applications/video/mapmap { };
 
-  marathonctl = callPackage ../tools/virtualization/marathonctl {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
-  };
+  marathonctl = callPackage ../tools/virtualization/marathonctl { };
 
   markdown-pp = callPackage ../tools/text/markdown-pp { };
 
@@ -32217,9 +32209,7 @@ with pkgs;
 
   transcribe = callPackage ../applications/audio/transcribe { };
 
-  transmission = callPackage ../applications/networking/p2p/transmission {
-    openssl = openssl_1_1;
-  };
+  transmission = callPackage ../applications/networking/p2p/transmission { };
   libtransmission = transmission.override {
     installLib = true;
     enableDaemon = false;

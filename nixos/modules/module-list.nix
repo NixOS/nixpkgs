@@ -718,6 +718,7 @@
   ./services/monitoring/ups.nix
   ./services/monitoring/uptime.nix
   ./services/monitoring/vmagent.nix
+  ./services/monitoring/uptime-kuma.nix
   ./services/monitoring/vnstat.nix
   ./services/monitoring/zabbix-agent.nix
   ./services/monitoring/zabbix-proxy.nix
