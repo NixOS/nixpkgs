@@ -1,22 +1,21 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchCrate }:
 
 rustPlatform.buildRustPackage rec {
   pname = "eva";
-  version = "0.3.0";
+  version = "0.3.0-2";
 
-  src = fetchFromGitHub {
-    owner = "nerdypepper";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-INXKjjHW9HZ1NWx1CQOerTBUy0rYFLNJMuRgKQfQwdc=";
+  src = fetchCrate {
+    inherit pname;
+    version = "0.3.0";
+    sha256 = "sha256-oeNv4rKZAl/gQ8b8Yr7fgQeeszJjzMcf9q1KzYpVS1Y=";
   };
 
-  cargoSha256 = "sha256-4l9y2qmS7G1PvxF8/51F7fx/sDuYHWDkcyOin2sYHdk=";
+  cargoSha256 = "sha256-WBniKff9arVgNFBY2pwB0QgEBvzCL0Dls+6N49V86to=";
 
   meta = with lib; {
     description = "A calculator REPL, similar to bc";
     homepage = "https://github.com/NerdyPepper/eva";
     license = licenses.mit;
-    maintainers = with maintainers; [ nrdxp ma27 ];
+    maintainers = with maintainers; [ nrdxp ma27 figsoda ];
   };
 }

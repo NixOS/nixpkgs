@@ -739,9 +739,7 @@ with pkgs;
 
   graph-easy = callPackage ../tools/graphics/graph-easy { };
 
-  mangal = callPackage ../applications/misc/mangal {
-    buildGoModule = buildGo119Module;
-  };
+  mangal = callPackage ../applications/misc/mangal { };
 
   graphw00f = callPackage ../tools/security/graphw00f { };
 
@@ -1396,6 +1394,8 @@ with pkgs;
   sdlookup = callPackage ../tools/security/sdlookup { };
 
   sgrep = callPackage ../tools/text/sgrep { };
+
+  sorted-grep = callPackage ../tools/text/sorted-grep { };
 
   smbscan = callPackage ../tools/security/smbscan { };
 
@@ -4051,9 +4051,7 @@ with pkgs;
 
   fx_cast_bridge = callPackage ../tools/misc/fx_cast { };
 
-  fzf = callPackage ../tools/misc/fzf {
-    buildGoModule = buildGo119Module;
-  };
+  fzf = callPackage ../tools/misc/fzf { };
 
   fzf-obc = callPackage ../shells/bash/fzf-obc { };
 
@@ -4248,9 +4246,7 @@ with pkgs;
 
   hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
 
-  hysteria = callPackage ../tools/networking/hysteria {
-    buildGoModule = buildGo119Module;
-  };
+  hysteria = callPackage ../tools/networking/hysteria { };
 
   hyx = callPackage ../tools/text/hyx { };
 
@@ -4808,9 +4804,7 @@ with pkgs;
 
   statserial = callPackage ../tools/misc/statserial { };
 
-  steampipe = callPackage ../tools/misc/steampipe {
-    buildGoModule = buildGo119Module;
-  };
+  steampipe = callPackage ../tools/misc/steampipe { };
 
   step-ca = callPackage ../tools/security/step-ca {
     inherit (darwin.apple_sdk.frameworks) PCSC;
@@ -6163,9 +6157,7 @@ with pkgs;
 
   tridactyl-native = callPackage ../tools/networking/tridactyl-native { };
 
-  trivy = callPackage ../tools/admin/trivy {
-    buildGoModule = buildGo119Module;
-  };
+  trivy = callPackage ../tools/admin/trivy { };
 
   trompeloeil = callPackage ../development/libraries/trompeloeil { };
 
@@ -7972,9 +7964,7 @@ with pkgs;
 
   ipfetch = callPackage ../tools/networking/ipfetch { };
 
-  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {
-    buildGoModule = buildGo119Module;
-  };
+  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
 
   ipfs-upload-client = callPackage ../applications/networking/ipfs-upload-client { };
 
@@ -9953,9 +9943,7 @@ with pkgs;
   opae = callPackage ../development/libraries/opae { };
 
   opentelemetry-collector = callPackage ../tools/misc/opentelemetry-collector { };
-  opentelemetry-collector-contrib = callPackage ../tools/misc/opentelemetry-collector/contrib.nix {
-    buildGoModule = buildGo119Module;
-  };
+  opentelemetry-collector-contrib = callPackage ../tools/misc/opentelemetry-collector/contrib.nix { };
 
   opentracing-cpp = callPackage ../development/libraries/opentracing-cpp { };
 
@@ -10393,9 +10381,7 @@ with pkgs;
   pocketbase = callPackage ../servers/pocketbase { };
 
   podman = callPackage ../applications/virtualization/podman/wrapper.nix { };
-  podman-unwrapped = callPackage ../applications/virtualization/podman {
-    buildGoModule = buildGo118Module; # nixosTests.oci-containers.podman fails with 1.19 (channel blocker)
-  };
+  podman-unwrapped = callPackage ../applications/virtualization/podman { };
 
   podman-compose = python3Packages.callPackage ../applications/virtualization/podman-compose {};
 
@@ -10753,6 +10739,8 @@ with pkgs;
   rc = callPackage ../shells/rc { };
 
   rcon = callPackage ../tools/networking/rcon { };
+
+  rconc = callPackage ../tools/networking/rconc { };
 
   rdap = callPackage ../tools/networking/rdap { };
 
@@ -11823,9 +11811,7 @@ with pkgs;
 
   teip = callPackage ../tools/text/teip { };
 
-  telegraf = callPackage ../servers/monitoring/telegraf {
-    buildGoModule = buildGo119Module;
-  };
+  telegraf = callPackage ../servers/monitoring/telegraf { };
 
   teleport = callPackage ../servers/teleport {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
@@ -17798,9 +17784,7 @@ with pkgs;
 
   vtable-dumper = callPackage ../development/tools/misc/vtable-dumper { };
 
-  wails = callPackage ../development/tools/wails {
-    buildGoModule = buildGo119Module;
-  };
+  wails = callPackage ../development/tools/wails { };
 
   whatsapp-for-linux = callPackage ../applications/networking/instant-messengers/whatsapp-for-linux { };
 
@@ -21650,7 +21634,6 @@ with pkgs;
   protobuf3_19 = callPackage ../development/libraries/protobuf/3.19.nix { };
   protobuf3_17 = callPackage ../development/libraries/protobuf/3.17.nix { };
   protobuf3_8 = callPackage ../development/libraries/protobuf/3.8.nix { };
-  protobuf3_7 = callPackage ../development/libraries/protobuf/3.7.nix { };
 
   protobufc = callPackage ../development/libraries/protobufc { };
 
@@ -23964,7 +23947,6 @@ with pkgs;
     inherit (darwin) cctools developer_cmds;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     boost = boost159;
-    protobuf = protobuf3_7;
     openssl = openssl_1_1;
   };
 
@@ -24336,9 +24318,7 @@ with pkgs;
 
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
-  tailscale = callPackage ../servers/tailscale {
-    buildGoModule = buildGo119Module;
-  };
+  tailscale = callPackage ../servers/tailscale { };
 
   thanos = callPackage ../servers/monitoring/thanos { };
 
@@ -25318,7 +25298,6 @@ with pkgs;
 
   gotop = callPackage ../tools/system/gotop {
     inherit (darwin.apple_sdk.frameworks) IOKit;
-    buildGoModule = buildGo119Module;
   };
 
   go-migrate = callPackage ../development/tools/go-migrate { };
@@ -27108,9 +27087,7 @@ with pkgs;
 
   argocd = callPackage ../applications/networking/cluster/argocd { };
 
-  argocd-autopilot = callPackage ../applications/networking/cluster/argocd-autopilot {
-    buildGoModule = buildGo119Module;
-  };
+  argocd-autopilot = callPackage ../applications/networking/cluster/argocd-autopilot { };
 
   argo-rollouts = callPackage ../applications/networking/cluster/argo-rollouts { };
 
@@ -29023,9 +29000,7 @@ with pkgs;
 
   huggle = libsForQt5.callPackage ../applications/misc/huggle {};
 
-  hugo = callPackage ../applications/misc/hugo {
-    buildGoModule = buildGo119Module;
-  };
+  hugo = callPackage ../applications/misc/hugo { };
 
   gatekeeper = callPackage ../applications/networking/cluster/gatekeeper { };
 
@@ -29630,7 +29605,7 @@ with pkgs;
 
   kubeval-schema = callPackage ../applications/networking/cluster/kubeval/schema.nix { };
 
-  kubernetes = callPackage ../applications/networking/cluster/kubernetes { buildGoModule = buildGo119Module; };
+  kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
   kubectl = callPackage ../applications/networking/cluster/kubernetes/kubectl.nix { };
   kubectl-convert = kubectl.convert;
 
@@ -29673,9 +29648,7 @@ with pkgs;
 
   pinniped = callPackage ../applications/networking/cluster/pinniped { };
 
-  kthxbye = callPackage ../servers/monitoring/prometheus/kthxbye.nix {
-    buildGoModule = buildGo119Module;
-  };
+  kthxbye = callPackage ../servers/monitoring/prometheus/kthxbye.nix { };
 
   pgo-client = callPackage ../applications/networking/cluster/pgo-client { };
 
@@ -33340,9 +33313,7 @@ with pkgs;
 
   ergo = callPackage ../applications/blockchains/ergo { };
 
-  erigon = callPackage ../applications/blockchains/erigon.nix {
-    buildGoModule = buildGo119Module;
-  };
+  erigon = callPackage ../applications/blockchains/erigon.nix { };
 
   exodus = callPackage ../applications/blockchains/exodus { };
 
@@ -36341,9 +36312,7 @@ with pkgs;
 
   gotestwaf = callPackage ../tools/security/gotestwaf { };
 
-  gowitness = callPackage ../tools/security/gowitness {
-    buildGoModule = buildGo119Module;
-  };
+  gowitness = callPackage ../tools/security/gowitness { };
 
   guetzli = callPackage ../applications/graphics/guetzli { };
 
@@ -37714,9 +37683,7 @@ with pkgs;
 
   webwormhole = callPackage ../tools/networking/webwormhole { };
 
-  werf = callPackage ../applications/networking/cluster/werf {
-    buildGoModule = buildGo119Module;
-  };
+  werf = callPackage ../applications/networking/cluster/werf { };
 
   wifi-password = callPackage ../os-specific/darwin/wifi-password {};
 

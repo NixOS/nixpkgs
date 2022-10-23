@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, buildGo119Module
+, buildGoModule
 , fetchFromGitHub
 , callPackage
 , config
@@ -21,7 +21,7 @@ let
      , vendorHash ? throw "use vendorHash instead of vendorSha256" # added 2202/09
      , deleteVendor ? false
      , proxyVendor ? false
-     , mkProviderGoModule ? buildGo119Module
+     , mkProviderGoModule ? buildGoModule
        # Looks like "registry.terraform.io/vancluever/acme"
      , provider-source-address
      , ...
