@@ -652,6 +652,14 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>nix.checkConfig</literal> option now fully
+          disables the config check. The new
+          <literal>nix.checkAllErrors</literal> option behaves like
+          <literal>nix.checkConfig</literal> previously did.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>generateOptparseApplicativeCompletions</literal> and
           <literal>generateOptparseApplicativeCompletion</literal> from
           <literal>haskell.lib.compose</literal> (and
