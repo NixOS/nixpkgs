@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "mailmanclient";
-  version = "3.3.3";
+  version = "3.3.4";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "92fe624675e41f41f59de1208e0125dfaa8d062bbe6138bd7cd79e4dd0b6f85e";
+    sha256 = "sha256-0y31HXjvU/bwy0s0PcDOlrX1RdyTTnk41ceD4A0R4p4=";
   };
 
   propagatedBuildInputs = [ six httplib2 requests ];
