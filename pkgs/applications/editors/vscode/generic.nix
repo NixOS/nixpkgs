@@ -12,6 +12,7 @@
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot, commandLineArgs
 , executableName, longName, shortName, pname, updateScript
+, dontFixup ? false
 # sourceExecutableName is the name of the binary in the source archive, over
 # which we have no control
 , sourceExecutableName ? executableName
@@ -21,7 +22,7 @@ let
   inherit (stdenv.hostPlatform) system;
   unwrapped = stdenv.mkDerivation {
 
-    inherit pname version src sourceRoot;
+    inherit pname version src sourceRoot dontFixup;
 
     passthru = {
       inherit executableName longName tests updateScript;
