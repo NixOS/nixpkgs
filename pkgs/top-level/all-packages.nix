@@ -197,6 +197,10 @@ with pkgs;
 
   appindicator-sharp = callPackage ../development/libraries/appindicator-sharp { };
 
+  bindle = callPackage ../servers/bindle {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   canonicalize-jar = callPackage ../build-support/java/canonicalize-jar.nix { };
   canonicalize-jars-hook = makeSetupHook {
     name = "canonicalize-jars-hook";
