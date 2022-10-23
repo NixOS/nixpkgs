@@ -1,7 +1,9 @@
 { lib, fetchFromGitHub, buildDunePackage, ocaml
 , alcotest
 , astring, cmdliner, cppo, fmt, logs, ocaml-version, odoc-parser, ocaml_lwt, re, result, csexp
-, pandoc}:
+, pandoc
+, gitUpdater
+}:
 
 buildDunePackage rec {
   pname = "mdx";
@@ -31,6 +33,8 @@ buildDunePackage rec {
     dune install --prefix=$bin --libdir=$lib/lib/ocaml/${ocaml.version}/site-lib ${pname}
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Executable OCaml code blocks inside markdown files";
