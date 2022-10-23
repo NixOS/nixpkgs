@@ -1986,6 +1986,8 @@ with pkgs;
 
   twine = with python3Packages; toPythonApplication twine;
 
+  aaxtomp3 = callPackage ../tools/misc/aaxtomp3 { };
+
   aldo = callPackage ../applications/radio/aldo { };
 
   alglib = callPackage ../development/libraries/alglib { };
