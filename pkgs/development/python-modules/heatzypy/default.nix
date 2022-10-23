@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "heatzypy";
-  version = "2.0.6";
+  version = "2.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Cyr-ius";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-sD32zP3HWEq9FCM9PFywHaLEU+MJOvro+FpjrlM4dG4=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-4/v0xodpJzVi6/ciW5icqDFGCtBFKtGoMB92CknH9xw=";
   };
 
   propagatedBuildInputs = [
