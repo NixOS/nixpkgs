@@ -35371,7 +35371,7 @@ with pkgs;
 
   trilinos-mpi = callPackage ../development/libraries/science/math/trilinos { withMPI = true; };
 
-  wolfram-engine = callPackage ../applications/science/math/wolfram-engine { };
+  wolfram-engine = libsForQt5.callPackage ../applications/science/math/wolfram-engine { };
 
   wolfram-for-jupyter-kernel = callPackage ../applications/editors/jupyter-kernels/wolfram { };
 
