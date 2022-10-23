@@ -4316,6 +4316,8 @@ in {
 
   hmmlearn = callPackage ../development/python-modules/hmmlearn { };
 
+  hnswlib = callPackage ../development/python-modules/hnswlib { };
+
   hocr-tools = callPackage ../development/python-modules/hocr-tools { };
 
   hole = callPackage ../development/python-modules/hole { };
@@ -4529,6 +4531,8 @@ in {
   imagecodecs-lite = callPackage ../development/python-modules/imagecodecs-lite { };
 
   imagecorruptions = callPackage ../development/python-modules/imagecorruptions { };
+
+  imagehash = callPackage ../development/python-modules/imagehash { };
 
   imageio = callPackage ../development/python-modules/imageio { };
 
@@ -6491,6 +6495,8 @@ in {
 
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common { };
 
+  onnxmltools = callPackage ../development/python-modules/onnxmltools { };
+
   onnxruntime = callPackage ../development/python-modules/onnxruntime {
     onnxruntime = pkgs.onnxruntime.override {
       python3Packages = self;
@@ -8152,6 +8158,8 @@ in {
   pymaging = callPackage ../development/python-modules/pymaging { };
 
   pymaging_png = callPackage ../development/python-modules/pymaging_png { };
+
+  pymagnitude-lite = callPackage ../development/python-modules/pymagnitude-lite { };
 
   pymailgunner = callPackage ../development/python-modules/pymailgunner { };
 
@@ -11174,6 +11182,8 @@ in {
 
   timezonefinder = callPackage ../development/python-modules/timezonefinder { };
 
+  timm = callPackage ../development/python-modules/timm { };
+
   tinycss2 = callPackage ../development/python-modules/tinycss2 { };
 
   tinycss = callPackage ../development/python-modules/tinycss { };
@@ -11423,6 +11433,8 @@ in {
   txredisapi = callPackage ../development/python-modules/txredisapi { };
 
   txrequests = callPackage ../development/python-modules/txrequests { };
+
+  txtai = callPackage ../development/python-modules/txtai { };
 
   txtorcon = callPackage ../development/python-modules/txtorcon { };
 

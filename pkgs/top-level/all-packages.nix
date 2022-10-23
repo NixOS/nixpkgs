@@ -23298,6 +23298,8 @@ with pkgs;
 
   codeowners = callPackage ../development/tools/codeowners { };
 
+  codequestion = callPackage ../development/tools/codequestion { };
+
   couchdb3 = callPackage ../servers/http/couchdb/3.nix {
     erlang = buildPackages.erlangR22;
   };

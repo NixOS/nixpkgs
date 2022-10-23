@@ -47,6 +47,8 @@ buildPythonPackage rec {
     patchShebangs tools/protoc-gen-mypy.py
     substituteInPlace tools/protoc-gen-mypy.sh.in \
       --replace "/bin/bash" "${bash}/bin/bash"
+    substituteInPlace requirements.txt \
+      --replace "protobuf >= 3.12.2, <= 3.20.1" "protobuf"
 
     sed -i '/pytest-runner/d' setup.py
   '';
