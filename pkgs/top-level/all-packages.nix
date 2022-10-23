@@ -7783,9 +7783,7 @@ with pkgs;
 
   httpx = callPackage ../tools/security/httpx { };
 
-  hurl = callPackage ../tools/networking/hurl {
-    openssl = openssl_1_1;
-  };
+  hurl = callPackage ../tools/networking/hurl { };
 
   hub = callPackage ../applications/version-management/git-and-tools/hub { };
 
@@ -12294,6 +12292,8 @@ with pkgs;
 
   vdmfec = callPackage ../applications/backup/vdmfec {};
 
+  vk-bootstrap = callPackage ../development/libraries/vk-bootstrap { };
+
   vk-cli = callPackage ../applications/networking/instant-messengers/vk-cli { };
 
   vk-messenger = callPackage ../applications/networking/instant-messengers/vk-messenger {};
@@ -15927,6 +15927,8 @@ with pkgs;
 
   guile-commonmark = callPackage ../development/guile-modules/guile-commonmark { };
 
+  guile-config = callPackage ../development/guile-modules/guile-config { };
+
   guile-fibers = callPackage ../development/guile-modules/guile-fibers { };
 
   guile-gcrypt = callPackage ../development/guile-modules/guile-gcrypt { };
@@ -16926,6 +16928,8 @@ with pkgs;
   gtranslator = callPackage ../tools/text/gtranslator { };
 
   guff = callPackage ../tools/graphics/guff { };
+
+  guile-hall = callPackage ../development/tools/guile/guile-hall { };
 
   guile-lint = callPackage ../development/tools/guile/guile-lint {
     guile = guile_1_8;
@@ -18740,6 +18744,8 @@ with pkgs;
     drvName = "geoip-tools";
     geoipDatabase = geolite-legacy;
   };
+
+  geographiclib = callPackage ../development/libraries/geographiclib { };
 
   geoip = callPackage ../development/libraries/geoip { };
 
@@ -30739,7 +30745,9 @@ with pkgs;
 
   obconf = callPackage ../tools/X11/obconf { };
 
-  gnome-obfuscate = callPackage ../applications/graphics/gnome-obfuscate { };
+  gnome-obfuscate = callPackage ../applications/graphics/gnome-obfuscate {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   obs-studio = libsForQt5.callPackage ../applications/video/obs-studio {
     ffmpeg_4 = ffmpeg-full;
@@ -35363,7 +35371,7 @@ with pkgs;
 
   trilinos-mpi = callPackage ../development/libraries/science/math/trilinos { withMPI = true; };
 
-  wolfram-engine = callPackage ../applications/science/math/wolfram-engine { };
+  wolfram-engine = libsForQt5.callPackage ../applications/science/math/wolfram-engine { };
 
   wolfram-for-jupyter-kernel = callPackage ../applications/editors/jupyter-kernels/wolfram { };
 
