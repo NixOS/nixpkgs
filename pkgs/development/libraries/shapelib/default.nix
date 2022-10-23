@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  doCheck = true;
+  preCheck = ''
+    patchShebangs tests contrib/tests
+  '';
+
   meta = with lib; {
     description = "C Library for reading, writing and updating ESRI Shapefiles";
     homepage = "http://shapelib.maptools.org/";
