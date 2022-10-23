@@ -115,7 +115,6 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
     inotifyrecursive
     joblib
     langdetect
-    pkgs.libmysqlclient
     lxml
     msgpack
     numpy
