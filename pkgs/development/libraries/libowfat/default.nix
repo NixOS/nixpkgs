@@ -9,6 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "1hcqg7pvy093bxx8wk7i4gvbmgnxz2grxpyy7b4mphidjbcv7fgl";
   };
 
+  patches = [
+    (fetchurl {
+      name = "first_deferred.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/libowfat/files/libowfat-0.32-gcc10.patch?id=129f4ab9f8571c651937c46ba7bd4c82d6d052a2";
+      sha256 = "zxWb9qq5dkDucOsiPfGG1Gb4BZ6HmhBjgSe3tBnydP4=";
+    })
+  ];
+
   # Fix for glibc 2.34 from Gentoo
   # https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=914a4aa87415dabfe77181a2365766417a5919a4
   postPatch = ''
