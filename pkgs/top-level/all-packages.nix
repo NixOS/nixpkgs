@@ -11241,6 +11241,10 @@ with pkgs;
 
   sftpman = callPackage ../tools/filesystems/sftpman { };
 
+  sftpgo = callPackage ../servers/sftpgo {
+    buildGoModule = buildGo119Module;
+  };
+
   screenfetch = callPackage ../tools/misc/screenfetch { };
 
   sg3_utils = callPackage ../tools/system/sg3_utils { };
