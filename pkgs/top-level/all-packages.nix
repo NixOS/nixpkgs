@@ -9602,6 +9602,16 @@ with pkgs;
   inherit (callPackage ../servers/nextcloud {})
     nextcloud23 nextcloud24 nextcloud25;
 
+  nextcloud23Packages = ( callPackage ../servers/nextcloud/packages {
+    apps = lib.importJSON ../servers/nextcloud/packages/23.json;
+  });
+  nextcloud24Packages = ( callPackage ../servers/nextcloud/packages {
+    apps = lib.importJSON ../servers/nextcloud/packages/24.json;
+  });
+  nextcloud25Packages = ( callPackage ../servers/nextcloud/packages {
+    apps = lib.importJSON ../servers/nextcloud/packages/25.json;
+  });
+
   nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
 
   nextcloud-news-updater = callPackage ../servers/nextcloud/news-updater.nix { };
