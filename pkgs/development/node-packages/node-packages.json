@@ -398,5 +398,6 @@
 , "yalc"
 , "yarn"
 , "yo"
+, "@zwave-js/server"
 , "zx"
 ]
