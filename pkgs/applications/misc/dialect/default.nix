@@ -14,6 +14,7 @@
 , gst_all_1
 , libsoup_3
 , libadwaita
+, nix-update-script
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -68,6 +69,10 @@ python3.pkgs.buildPythonApplication rec {
 
   # handle setup hooks better
   strictDeps = false;
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/dialect-app/dialect";
