@@ -37,5 +37,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
+
+    # tdlib-purple is not actively maintained and currently not
+    # compatible with recent versions of tdlib
+    broken = true;
   };
 }
