@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Vulkan Bootstrapping Iibrary";
+    description = "Vulkan Bootstrapping Library";
     license = licenses.mit;
     homepage = "https://github.com/charles-lunarg/vk-bootstrap";
     maintainers = with maintainers; [ shamilton ];
