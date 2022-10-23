@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+
+# for passthru.tests
+, imagemagick
+, imagemagick6
+, libheif
+, imlib2Full
+, gst_all_1
+}:
 
 stdenv.mkDerivation rec {
   version = "1.0.9";
@@ -14,6 +26,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit imagemagick imagemagick6 libheif imlib2Full;
+    inherit (gst_all_1) gst-plugins-bad;
+  };
 
   meta = {
     homepage = "https://github.com/strukturag/libde265";
