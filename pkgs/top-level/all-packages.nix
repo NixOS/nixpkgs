@@ -14877,6 +14877,8 @@ with pkgs;
 
   rocmlir = callPackage ../development/libraries/rocmlir { };
 
+  rocprim = callPackage ../development/libraries/rocprim { };
+
   rtags = callPackage ../development/tools/rtags {
     inherit (darwin) apple_sdk;
   };
