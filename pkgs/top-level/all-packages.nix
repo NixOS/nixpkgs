@@ -37699,6 +37699,8 @@ with pkgs;
 
   stayrtr = callPackage ../servers/stayrtr {};
 
+  sunshine = callPackage ../servers/sunshine {};
+
   sentencepiece = callPackage ../development/libraries/sentencepiece {};
 
   kaf = callPackage ../development/tools/kaf { };
