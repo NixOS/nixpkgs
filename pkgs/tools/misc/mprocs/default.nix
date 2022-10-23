@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mprocs";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "pvolok";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-CEvQq5tBVRvjgb/yReuGkPk8Uq1oZbrsGilV4ulOPEk=";
+    sha256 = "sha256-uwr+cHenV38IsTEW/PQB0kCDsyahiQrBh4s8v8SyEn8=";
   };
 
-  cargoSha256 = "sha256-RK8VmEajfqYXGS8VMCRxhENLbe40CdaC+vS4EKeW958=";
+  cargoSha256 = "sha256-H9oHppG7sew/3JrUtWq2Pip1S9H36qYeHu6x/sPfwV0=";
 
   # Package tests are currently failing (even upstream) but the package seems to work fine.
   # Relevant issues:
