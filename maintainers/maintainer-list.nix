@@ -8651,6 +8651,12 @@
     github = "SuperSamus";
     githubId = 40663462;
   };
+  martiert = {
+    name = "Martin Ertsås";
+    email = "martiert@gmail.com";
+    github = "martiert";
+    githubId = 223288;
+  };
   marzipankaiser = {
     email = "nixos@gaisseml.de";
     github = "marzipankaiser";
