@@ -40,24 +40,6 @@
       </listitem>
       <listitem>
         <para>
-          The <literal>polymc</literal> package has been removed due to
-          a rogue maintainer. It has been replaced by
-          <literal>prismlauncher</literal>, a fork by the rest of the
-          maintainers. For more details, see
-          <link xlink:href="https://github.com/NixOS/nixpkgs/pull/196624">the
-          pull request that made this change</link> and
-          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/196460">this
-          issue detailing the vulnerability</link>. Users with existing
-          installations should rename
-          <literal>~/.local/share/polymc</literal> to
-          <literal>~/.local/share/PrismLauncher</literal>. The main
-          config file’s path has also moved from
-          <literal>~/.local/share/polymc/polymc.cfg</literal> to
-          <literal>~/.local/share/PrismLauncher/prismlauncher.cfg</literal>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           The <literal>nixpkgs.hostPlatform</literal> and
           <literal>nixpkgs.buildPlatform</literal> options have been
           added. These cover and override the
@@ -865,6 +847,24 @@
         <para>
           The <literal>networking.wireguard</literal> module now can set
           the mtu on interfaces and tag its packets with an fwmark.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>polymc</literal> package has been removed due to
+          a rogue maintainer. It has been replaced by
+          <literal>prismlauncher</literal>, a fork by the rest of the
+          maintainers. For more details, see
+          <link xlink:href="https://github.com/NixOS/nixpkgs/pull/196624">the
+          pull request that made this change</link> and
+          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/196460">this
+          issue detailing the vulnerability</link>. Users with existing
+          installations should rename
+          <literal>~/.local/share/polymc</literal> to
+          <literal>~/.local/share/PrismLauncher</literal>. The main
+          config file’s path has also moved from
+          <literal>~/.local/share/polymc/polymc.cfg</literal> to
+          <literal>~/.local/share/PrismLauncher/prismlauncher.cfg</literal>.
         </para>
       </listitem>
       <listitem>
