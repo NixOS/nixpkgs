@@ -1,42 +1,28 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, curl
 , installShellFiles
-, pkg-config
-, openssl
 , stdenv
-, darwin
 , nix-update-script
 , callPackage
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-asm";
-  version = "0.1.24";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "pacak";
     repo = "cargo-show-asm";
     rev = version;
-    hash = "sha256-ahkKUtg5M88qddzEwYxPecDtBofGfPVxKuYKgmsbWYc=";
+    hash = "sha256-qsr28zuvu+i7P/MpwhDKQFFXTyFFo+vWrjBrpD1V8PY=";
   };
 
-  cargoHash = "sha256-S7OpHNjiTfQg7aPmHEx6Q/OV5QA9pB29F3MTIeiLAXg=";
+  cargoHash = "sha256-IL+BB08uZr5fm05ITxpm66jTb+pYYlLKOwQ8uf5rKSs=";
 
   nativeBuildInputs = [
-    curl.dev
     installShellFiles
-    pkg-config
   ];
-
-  buildInputs = [
-    curl
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    CoreFoundation
-    SystemConfiguration
-  ]);
 
   postInstall = ''
     installShellCompletion --cmd cargo-asm \
