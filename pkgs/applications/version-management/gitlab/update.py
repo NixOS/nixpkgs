@@ -23,9 +23,9 @@ VENDORED_GEMS = [
     "omniauth-azure-oauth2",
     "omniauth-cas3",
     "omniauth-gitlab",
-    "omniauth-google-oauth2",
     "omniauth_crowd",
     "omniauth-salesforce",
+    "attr_encrypted",
     "mail-smtp_pool",
     "microsoft_graph_mailer",
     "ipynbdiff",
@@ -158,11 +158,6 @@ def update_rubyenv():
 
     gemfile = repo.get_file('Gemfile', rev)
     gemfile_lock = repo.get_file('Gemfile.lock', rev)
-
-    if "pg (1.4.1)" in gemfile_lock:
-        gemfile_lock = gemfile_lock.replace("pg (1.4.1)", "pg (1.4.3)")
-    else:
-        logger.info("Looks like pg was updated! Please remove update-pg.patch, as this will cause a build failure")
 
     with open(rubyenv_dir / 'Gemfile', 'w') as f:
         f.write(re.sub(f'.*({"|".join(VENDORED_GEMS)}).*', "", gemfile))

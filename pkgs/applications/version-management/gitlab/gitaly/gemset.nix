@@ -271,10 +271,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0j0598m9445msa0rksl1l1cvd11wsnyq1s4gjmcbw18a9smfa5lg";
+      sha256 = "15ab46fkr006j4ymq7hxbzbdb67vgi6v2wv4a27whldkg62cdkix";
       type = "gem";
     };
-    version = "0.24.0";
+    version = "0.25.0";
   };
   gitlab-license_finder = {
     dependencies = ["rubyzip" "thor" "tomlrb" "with_env" "xml-simple"];
@@ -302,10 +302,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1ysvm5mxx1knjp3sbhi18nswaml625vbgm3gbh7is14h4d8fwjy9";
+      sha256 = "0qncab5ir35r9q74hb21yqwq7hp45hkzg0zr43g9y5bxqxcicl4d";
       type = "gem";
     };
-    version = "3.21.5";
+    version = "3.21.7";
   };
   googleapis-common-protos-types = {
     dependencies = ["google-protobuf"];
@@ -396,10 +396,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "18ymp6l3bv7abz07k6qbbi9c9vsiahq30d2smh4qzsvag8j5m5v1";
+      sha256 = "1fpyk1965py77al7iadkn5dibwgvybknkr7r8bii2dj73wvr29rh";
       type = "gem";
     };
-    version = "2.18.0";
+    version = "2.19.0";
   };
   memoizable = {
     dependencies = ["thread_safe"];
@@ -558,10 +558,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "00bhwkhjy6bkp04313m5il7vd165i3fz0x4jissflf66i164ppgk";
+      sha256 = "1fyhhb5f2y5mqk5vg5ykicxp58wwhc7invfp27x8d7fgi0zkdwa8";
       type = "gem";
     };
-    version = "2.1.3";
+    version = "2.1.4";
   };
   proc_to_ast = {
     dependencies = ["coderay" "parser" "unparser"];
@@ -686,10 +686,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0i4a8hxxcxci3n8hhlm9a8wa7a9m58r6sjvh4749v7362i8cy010";
+      sha256 = "1xid9av3apfz5mszwqgl6v0n58g6038lsfdz0p53xb9ywpa5dcpc";
       type = "gem";
     };
-    version = "4.8.0";
+    version = "4.7.1";
   };
   regexp_parser = {
     groups = ["default" "development" "test"];
@@ -915,10 +915,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1knw2xa3pkfql4np9qazz2mdi1vz21vdsa0wkx648c4ym1p2h8yh";
+      sha256 = "12p856z7inf47azpvh9qswsfx8035r5hbzlg2x5n8z2sjqzjkk80";
       type = "gem";
     };
-    version = "0.16.0";
+    version = "0.17.0";
   };
   timecop = {
     source = {

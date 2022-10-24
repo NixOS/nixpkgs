@@ -13,13 +13,18 @@ gem 'faraday', '~> 1.0'
 gem 'rbtrace', require: false
 
 # Labkit provides observability functionality
-gem 'gitlab-labkit', '~> 0.24'
+gem 'gitlab-labkit', '~> 0.25'
 
 # Detects the open source license the repository includes
 # This version needs to be in sync with GitLab CE/EE
 gem 'licensee', '~> 9.15'
 
-gem 'google-protobuf', '~> 3.21.0'
+gem 'google-protobuf', '~> 3.21.7'
+
+# Rails is currently blocked on the upgrade to the new major version for Redis,
+# so we don't upgrade either until the issue is resolved. This is an indirect
+# dependency and can thus be removed when the version constraint is gone.
+gem 'redis', '~> 4.7.1'
 
 group :development, :test do
   gem 'rubocop', '~> 0.69', require: false

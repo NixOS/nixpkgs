@@ -108,7 +108,7 @@ let
 
       bundle exec rake gettext:po_to_json RAILS_ENV=production NODE_ENV=production
       bundle exec rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:compile_webpack_if_needed RAILS_ENV=production NODE_ENV=production
+      bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production
       bundle exec rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production
       bundle exec rake gitlab:assets:check_page_bundle_mixins_css_for_sideeffects RAILS_ENV=production NODE_ENV=production
 
@@ -137,9 +137,6 @@ stdenv.mkDerivation {
   patches = [
     # Change hardcoded paths to the NixOS equivalent
     ./remove-hardcoded-locations.patch
-
-    # Bump pg to 1.4.3 (see https://github.com/NixOS/nixpkgs/pull/187946)
-    ./update-pg.patch
   ];
 
   postPatch = ''
