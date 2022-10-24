@@ -38,9 +38,6 @@
 , libtasn1
 , p11-kit
 , libidn
-, libedit
-, readline
-, apple_sdk
 , libGL
 , libGLU
 , mesa
@@ -63,7 +60,7 @@
 , addOpenGLRunpath
 , enableGeoLocation ? true
 , withLibsecret ? true
-, systemdSupport ? stdenv.isLinux
+, systemdSupport ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -73,14 +70,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = true;
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-+c5jdaO24TKbC2CfRpIeJifcetYiSze5Z6supkO8D70=";
   };
 
-  patches = lib.optionals stdenv.isLinux [
+  patches = [
     (substituteAll {
       src = ./fix-bubblewrap-paths.patch;
       inherit (builtins) storeDir;
@@ -119,7 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
     ruby
     gi-docgen
     glib # for gdbus-codegen
-  ] ++ lib.optionals stdenv.isLinux [
     wayland # for wayland-scanner
   ];
 
@@ -156,18 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXdmcp
     libXt
     libXtst
-  ]) ++ lib.optionals stdenv.isDarwin [
-    libedit
-    readline
-  ] ++ lib.optional (stdenv.isDarwin && !stdenv.isAarch64) (
-    # Pull a header that contains a definition of proc_pid_rusage().
-    # (We pick just that one because using the other headers from `sdk` is not
-    # compatible with our C++ standard library. This header is already in
-    # the standard library on aarch64)
-    runCommand "webkitgtk_headers" { } ''
-      install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
-    ''
-  ) ++ lib.optionals stdenv.isLinux [
+  ]) ++ [
     bubblewrap
     libseccomp
     libmanette
@@ -199,33 +184,16 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_LIBHYPHEN=OFF"
     "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
     "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DENABLE_GAMEPAD=OFF"
-    "-DENABLE_GTKDOC=OFF"
-    "-DENABLE_MINIBROWSER=OFF"
-    "-DENABLE_QUARTZ_TARGET=ON"
-    "-DENABLE_VIDEO=ON"
-    "-DENABLE_WEBGL=OFF"
-    "-DENABLE_WEB_AUDIO=OFF"
-    "-DENABLE_X11_TARGET=OFF"
-    "-DUSE_APPLE_ICU=OFF"
-    "-DUSE_OPENGL_OR_ES=OFF"
-    "-DUSE_SYSTEM_MALLOC=ON"
   ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
     "-DUSE_GTK4=ON"
   ] ++ lib.optionals (!systemdSupport) [
     "-DENABLE_JOURNALD_LOG=OFF"
-  ] ++ lib.optionals (stdenv.isLinux && enableGLES) [
+  ] ++ lib.optionals enableGLES [
     "-DENABLE_GLES2=ON"
   ];
 
   postPatch = ''
     patchShebangs .
-  '' + lib.optionalString stdenv.isDarwin ''
-    # It needs malloc_good_size.
-    sed 22i'#include <malloc/malloc.h>' -i Source/WTF/wtf/FastMalloc.h
-    # <CommonCrypto/CommonRandom.h> needs CCCryptorStatus.
-    sed 43i'#include <CommonCrypto/CommonCryptor.h>' -i Source/WTF/wtf/RandomDevice.cpp
   '';
 
   postFixup = ''
@@ -239,8 +207,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Web content rendering engine, GTK port";
     homepage = "https://webkitgtk.org/";
     license = licenses.bsd2;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux;
     maintainers = teams.gnome.members;
-    broken = stdenv.isDarwin;
   };
 })

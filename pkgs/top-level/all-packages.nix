@@ -22687,7 +22687,6 @@ with pkgs;
   webkitgtk = callPackage ../development/libraries/webkitgtk {
     harfbuzz = harfbuzzFull;
     inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
-    inherit (darwin) apple_sdk;
   };
 
   webkitgtk_4_1 = webkitgtk.override {
