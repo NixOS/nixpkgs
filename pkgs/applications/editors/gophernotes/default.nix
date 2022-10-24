@@ -16,7 +16,7 @@ buildGoModule rec {
   };
 
   vendorSha256 = "sha256-iIBqx52fD12R+7MSjQNihMYYtZ9vPAdJndOG4YJVhy4=";
-  
+
   # Allow gophernotes to reach go paths when pulling down third party modules
   # or it might fail, complaining that it cannot find GOROOT
   inherit allowGoReference;
