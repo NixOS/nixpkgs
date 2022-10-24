@@ -7694,6 +7694,8 @@ in {
 
   pycosat = callPackage ../development/python-modules/pycosat { };
 
+  pycotap = callPackage ../development/python-modules/pycotap { };
+
   pycountry = callPackage ../development/python-modules/pycountry { };
 
   pycparser = callPackage ../development/python-modules/pycparser { };
@@ -8686,6 +8688,8 @@ in {
   pysnow = callPackage ../development/python-modules/pysnow { };
 
   pysocks = callPackage ../development/python-modules/pysocks { };
+
+  pysol-cards = callPackage ../development/python-modules/pysol-cards { };
 
   pysolr = callPackage ../development/python-modules/pysolr { };
 
