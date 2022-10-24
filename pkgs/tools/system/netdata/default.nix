@@ -117,7 +117,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = {
-    broken = stdenv.isDarwin;
+    broken = stdenv.isDarwin || stdenv.buildPlatform != stdenv.hostPlatform;
     description = "Real-time performance monitoring tool";
     homepage = "https://www.netdata.cloud/";
     license = licenses.gpl3Plus;
