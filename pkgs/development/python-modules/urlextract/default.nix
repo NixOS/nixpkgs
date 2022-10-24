@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "urlextract";
-  version = "1.6.0";
+  version = "1.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-V08NjFYtN3M2pRVIQMfk7s9UwQKlOJcciX9zEwdaiIc=";
+    hash = "sha256-DBzgI5EyPhdCexdo6WKsKSsoDF/ownw94mYtrMlmRLI=";
   };
 
   propagatedBuildInputs = [
