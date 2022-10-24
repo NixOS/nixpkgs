@@ -19,10 +19,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [
-    mesa libGLU glfw libX11 libXi libXcursor libXrandr libXinerama
+    mesa glfw libXi libXcursor libXrandr libXinerama
   ] ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional pulseSupport libpulseaudio;
+  propagatedBuildInputs = [ libGLU libX11 ];
 
   patches = [
     # fixes glfw compile error;
