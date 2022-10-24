@@ -14458,6 +14458,12 @@
     github = "wdavidw";
     githubId = 46896;
   };
+  weathercold = {
+    email = "weathercold.scr@gmail.com";
+    github = "Weathercold";
+    githubId = 49368953;
+    name = "Weathercold";
+  };
   WeebSorceress = {
     name = "WeebSorceress";
     email = "hello@weebsorceress.anonaddy.me";
