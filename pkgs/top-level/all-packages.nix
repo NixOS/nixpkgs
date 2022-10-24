@@ -10019,6 +10019,8 @@ with pkgs;
 
   oxipng = callPackage ../tools/graphics/oxipng { };
 
+  payload_dumper = callPackage ../tools/archivers/payload_dumper { };
+
   p2pvc = callPackage ../applications/video/p2pvc {};
 
   p3x-onenote = callPackage ../applications/office/p3x-onenote { };
