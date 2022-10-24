@@ -14851,6 +14851,8 @@ with pkgs;
 
   hipcub = callPackage ../development/libraries/hipcub { };
 
+  hipsparse = callPackage ../development/libraries/hipsparse { };
+
   rocm-cmake = callPackage ../development/tools/build-managers/rocm-cmake { };
 
   rocm-comgr = callPackage ../development/libraries/rocm-comgr {
