@@ -977,6 +977,48 @@
       </listitem>
       <listitem>
         <para>
+          Nextcloud has been updated to version
+          <emphasis role="strong">25</emphasis>. Additionally the
+          following things have changed for Nextcloud in NixOS:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              For Nextcloud <emphasis role="strong">&gt;=24</emphasis>,
+              the default PHP version is 8.1.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Nextcloud <emphasis role="strong">23</emphasis> has been
+              removed since it will reach its
+              <link xlink:href="https://github.com/nextcloud/server/wiki/Maintenance-and-Release-Schedule/d76576a12a626d53305d480a6065b57cab705d3d">end
+              of life in December 2022</link>.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              For <literal>system.stateVersion</literal> being
+              <emphasis role="strong">&gt;=22.11</emphasis>, Nextcloud
+              25 will be installed by default. For older versions,
+              Nextcloud 24 will be installed.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Please ensure that you only upgrade on major release at a
+              time! Nextcloud doesn’t support upgrades across multiple
+              versions, i.e. an upgrade from
+              <emphasis role="strong">23</emphasis> to
+              <emphasis role="strong">25</emphasis> is only possible
+              when upgrading to <emphasis role="strong">24</emphasis>
+              first.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           Add udev rules for the Teensy family of microcontrollers.
         </para>
       </listitem>

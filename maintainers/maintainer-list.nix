@@ -9445,6 +9445,12 @@
     githubId = 772914;
     name = "Mikael Voss";
   };
+  mwolfe = {
+    email = "corp@m0rg.dev";
+    github = "m0rg-dev";
+    githubId = 38578268;
+    name = "Morgan Wolfe";
+  };
   maxwilson = {
     email = "nixpkgs@maxwilson.dev";
     github = "mwilsoncoding";
