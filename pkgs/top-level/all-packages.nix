@@ -32054,6 +32054,8 @@ with pkgs;
 
   terminal-notifier = callPackage ../applications/misc/terminal-notifier {};
 
+  textpieces = callPackage ../tools/text/textpieces { };
+
   textplots = callPackage ../tools/graphics/textplots { };
 
   texture-synthesis = callPackage ../tools/graphics/texture-synthesis { };
