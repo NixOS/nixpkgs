@@ -4174,8 +4174,6 @@ with pkgs;
     electron = electron_11;
   };
 
-  coder = callPackage ../applications/misc/coder {};
-
   contrast = callPackage ../applications/accessibility/contrast { };
 
   cplex = callPackage ../applications/science/math/cplex (config.cplex or {});
