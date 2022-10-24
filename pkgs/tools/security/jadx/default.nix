@@ -51,6 +51,9 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ gradle jdk makeWrapper ];
 
+  # Otherwise, Gradle fails with `java.net.SocketException: Operation not permitted`
+  __darwinAllowLocalNetworking = true;
+
   buildPhase = ''
     # The installDist Gradle build phase tries to copy some dependency .jar
     # files multiple times into the build directory. This ends up failing when
