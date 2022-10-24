@@ -14853,6 +14853,8 @@ with pkgs;
 
   hipsparse = callPackage ../development/libraries/hipsparse { };
 
+  rccl = callPackage ../development/libraries/rccl { };
+
   rocm-cmake = callPackage ../development/tools/build-managers/rocm-cmake { };
 
   rocm-comgr = callPackage ../development/libraries/rocm-comgr {
