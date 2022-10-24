@@ -8803,7 +8803,7 @@
     email = "megoettlinger@gmail.com";
     github = "mgttlinger";
     githubId = 5120487;
-    name = "Merlin Göttlinger";
+    name = "Merlin Humml";
   };
   mguentner = {
     email = "code@klandest.in";
