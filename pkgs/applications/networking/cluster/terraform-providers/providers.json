@@ -74,6 +74,15 @@
     "vendorHash": null,
     "version": "2.2.0"
   },
+  "argocd": {
+    "hash": "sha256-yWhq2WolfL7PQVuWr5P7EH0cM78wGyL2+yezh2WzL2c=",
+    "owner": "oboukili",
+    "provider-source-address": "registry.terraform.io/oboukili/argocd",
+    "repo": "terraform-provider-argocd",
+    "rev": "v4.1.0",
+    "vendorHash": "sha256-hPgZ/2AebjtovopbSEJqsm0J85LdlLWBtP15vaqgLF4=",
+    "version": "4.1.0"
+  },
   "auth0": {
     "hash": "sha256-kyQBl/gdTj1Dlu4/FFowAQbBDTYMjp0JGQ09eBqwHEc=",
     "owner": "auth0",
