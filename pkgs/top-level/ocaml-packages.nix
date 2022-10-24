@@ -94,6 +94,8 @@ let
     bls12-381-gen = callPackage ../development/ocaml-modules/bls12-381/gen.nix { };
     bls12-381-legacy = callPackage ../development/ocaml-modules/bls12-381/legacy.nix { };
 
+    bls12-381-signature = callPackage ../development/ocaml-modules/bls12-381-signature { };
+
     bos = callPackage ../development/ocaml-modules/bos { };
 
     brisk-reconciler = callPackage ../development/ocaml-modules/brisk-reconciler { };
