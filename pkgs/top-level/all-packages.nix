@@ -32561,10 +32561,13 @@ with pkgs;
   };
 
   vscode = callPackage ../applications/editors/vscode/vscode.nix { };
+  vscode-insiders = vscode.override { isInsiders = true; };
+
   vscode-fhs = vscode.fhs;
   vscode-fhsWithPackages = vscode.fhsWithPackages;
 
   vscode-with-extensions = callPackage ../applications/editors/vscode/with-extensions.nix { };
+  vscode-insiders-with-extensions = vscode-with-extensions.override { vscode = vscode-insiders; };
 
   vscode-utils = callPackage ../applications/editors/vscode/extensions/vscode-utils.nix { };
 
