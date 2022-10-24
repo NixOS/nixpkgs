@@ -49,13 +49,13 @@ let
         sha512 = "vt+kDhq/M2ayberEtJcIN/hxXy1Pk+59g2FV/ZQceeaTyCtCucjL2Q7FXlFjtWn4n15KCr1NE2lNNFhp0lEThw==";
       };
     };
-    "@types/node-18.7.23" = {
+    "@types/node-18.11.4" = {
       name = "_at_types_slash_node";
       packageName = "@types/node";
-      version = "18.7.23";
+      version = "18.11.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-18.7.23.tgz";
-        sha512 = "DWNcCHolDq0ZKGizjx2DZjR/PqsYwAcYUJmfMWqtVU2MBMG5Mo+xFZrhGId5r/O5HOuMPyQEcM6KUBp5lBZZBg==";
+        url = "https://registry.npmjs.org/@types/node/-/node-18.11.4.tgz";
+        sha512 = "BxcJpBu8D3kv/GZkx/gSMz6VnTJREBj/4lbzYOQueUOELkt8WrO6zAcSPmp9uRPEW/d+lUO8QK0W2xnS1hEU0A==";
       };
     };
     "accept-language-parser-1.5.0" = {
@@ -103,13 +103,13 @@ let
         sha512 = "zRpUiDwd/xk6ADqPMATG8vc9VPrkck7T07OIx0gnjmJAnHnTVXNQG3vfvWNuiZIkwu9KrKdA1iJKfsfTVxE6NA==";
       };
     };
-    "bufferutil-4.0.6" = {
+    "bufferutil-4.0.7" = {
       name = "bufferutil";
       packageName = "bufferutil";
-      version = "4.0.6";
+      version = "4.0.7";
       src = fetchurl {
-        url = "https://registry.npmjs.org/bufferutil/-/bufferutil-4.0.6.tgz";
-        sha512 = "jduaYOYtnio4aIAyc6UbvPCVcgq7nYpVnucyxr6eCYg/Woad9Hf/oxxBRDnGGjPfjUm6j5O/uBWhIu4iLebFaw==";
+        url = "https://registry.npmjs.org/bufferutil/-/bufferutil-4.0.7.tgz";
+        sha512 = "kukuqc39WOHtdxtw4UScxF/WVnMFVSQVKhtx3AjZJzhd0RGZZldcrfSEbVsWWe6KNH253574cq5F+wpv0G9pJw==";
       };
     };
     "cookie-0.4.2" = {
@@ -445,13 +445,13 @@ let
         sha512 = "ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==";
       };
     };
-    "minimist-1.2.6" = {
+    "minimist-1.2.7" = {
       name = "minimist";
       packageName = "minimist";
-      version = "1.2.6";
+      version = "1.2.7";
       src = fetchurl {
-        url = "https://registry.npmjs.org/minimist/-/minimist-1.2.6.tgz";
-        sha512 = "Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==";
+        url = "https://registry.npmjs.org/minimist/-/minimist-1.2.7.tgz";
+        sha512 = "bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==";
       };
     };
     "mnemonist-0.38.5" = {
@@ -625,13 +625,13 @@ let
         sha512 = "sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ==";
       };
     };
-    "semver-7.3.7" = {
+    "semver-7.3.8" = {
       name = "semver";
       packageName = "semver";
-      version = "7.3.7";
+      version = "7.3.8";
       src = fetchurl {
-        url = "https://registry.npmjs.org/semver/-/semver-7.3.7.tgz";
-        sha512 = "QlYTucUYOews+WeEujDoEGziz4K6c47V/Bd+LjSSYcA94p+DmINdf7ncaUinThfvZyu13lN9OY1XDxt8C0Tw0g==";
+        url = "https://registry.npmjs.org/semver/-/semver-7.3.8.tgz";
+        sha512 = "NB1ctGL5rlHrPJtFDVIVzTyQylMLu9N9VICA6HSFJo8MCGVTMW6gfpicwKmmK/dAjTOrqu5l63JJOpDSrAis3A==";
       };
     };
     "send-0.18.0" = {
@@ -661,13 +661,13 @@ let
         sha512 = "E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==";
       };
     };
-    "socket.io-4.5.2" = {
+    "socket.io-4.5.3" = {
       name = "socket.io";
       packageName = "socket.io";
-      version = "4.5.2";
+      version = "4.5.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/socket.io/-/socket.io-4.5.2.tgz";
-        sha512 = "6fCnk4ARMPZN448+SQcnn1u8OHUC72puJcNtSgg2xS34Cu7br1gQ09YKkO1PFfDn/wyUE9ZgMAwosJed003+NQ==";
+        url = "https://registry.npmjs.org/socket.io/-/socket.io-4.5.3.tgz";
+        sha512 = "zdpnnKU+H6mOp7nYRXH4GNv1ux6HL6+lHL8g7Ds7Lj8CkdK1jJK/dlwsKDculbyOHifcJ0Pr/yeXnZQ5GeFrcg==";
       };
     };
     "socket.io-adapter-2.4.0" = {
@@ -769,22 +769,22 @@ let
         sha512 = "d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==";
       };
     };
-    "uglify-js-3.17.2" = {
+    "uglify-js-3.17.4" = {
       name = "uglify-js";
       packageName = "uglify-js";
-      version = "3.17.2";
+      version = "3.17.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/uglify-js/-/uglify-js-3.17.2.tgz";
-        sha512 = "bbxglRjsGQMchfvXZNusUcYgiB9Hx2K4AHYXQy2DITZ9Rd+JzhX7+hoocE5Winr7z2oHvPsekkBwXtigvxevXg==";
+        url = "https://registry.npmjs.org/uglify-js/-/uglify-js-3.17.4.tgz";
+        sha512 = "T9q82TJI9e/C1TAxYvfb16xO120tMVFZrGA3f9/P4424DNu6ypK103y0GPFVa17yotwSyZW5iYXgjYHkGrJW/g==";
       };
     };
-    "utf-8-validate-5.0.9" = {
+    "utf-8-validate-5.0.10" = {
       name = "utf-8-validate";
       packageName = "utf-8-validate";
-      version = "5.0.9";
+      version = "5.0.10";
       src = fetchurl {
-        url = "https://registry.npmjs.org/utf-8-validate/-/utf-8-validate-5.0.9.tgz";
-        sha512 = "Yek7dAy0v3Kl0orwMlvi7TPtiCNrdfHNd7Gcc/pLq4BLXqfAmd0J7OWMizUQnTTJsyjKn02mU7anqwfmUP4J8Q==";
+        url = "https://registry.npmjs.org/utf-8-validate/-/utf-8-validate-5.0.10.tgz";
+        sha512 = "Z6czzLq4u8fPOyx7TU6X3dvUZVvoJmxSQ+IcrlmagKhilxlhZgxPK6C5Jqbkw1IDUmFTM+cz9QDnnLTwDz/2gQ==";
       };
     };
     "util-deprecate-1.0.2" = {
@@ -835,32 +835,32 @@ let
   };
 in
 {
-  "whitebophir-git+https://github.com/lovasoa/whitebophir.git#v1.19.0" = nodeEnv.buildNodePackage {
+  "whitebophir-git+https://github.com/lovasoa/whitebophir.git#v1.19.1" = nodeEnv.buildNodePackage {
     name = "whitebophir";
     packageName = "whitebophir";
-    version = "1.19.0";
+    version = "1.19.1";
     src = fetchgit {
       url = "https://github.com/lovasoa/whitebophir.git";
-      rev = "88966365cde8bae2ad57add8eb9e2b6f58c470dd";
-      sha256 = "d46f2cec6206885776ab77e68abb4a7eb801763db78d9b9b2de711632fb75b9b";
+      rev = "8a42a787a05c974e910c2d87736e0af0a1108a48";
+      sha256 = "e13eecf56ae9c8754f730d106340b4b1ccc32582b30386c001f12ff2ada93b2e";
     };
     dependencies = [
       (sources."@financial-times/polyfill-useragent-normaliser-1.10.2" // {
         dependencies = [
-          sources."semver-7.3.7"
+          sources."semver-7.3.8"
         ];
       })
       sources."@financial-times/useragent_parser-1.6.3"
       sources."@socket.io/component-emitter-3.1.0"
       sources."@types/cookie-0.4.1"
       sources."@types/cors-2.8.12"
-      sources."@types/node-18.7.23"
+      sources."@types/node-18.11.4"
       sources."accept-language-parser-1.5.0"
       sources."accepts-1.3.8"
       sources."async-mutex-0.3.2"
       sources."base64id-2.0.0"
       sources."buffer-equal-constant-time-1.0.1"
-      sources."bufferutil-4.0.6"
+      sources."bufferutil-4.0.7"
       sources."cookie-0.4.2"
       sources."core-util-is-1.0.3"
       sources."cors-2.8.5"
@@ -906,7 +906,7 @@ in
       sources."mime-1.6.0"
       sources."mime-db-1.52.0"
       sources."mime-types-2.1.35"
-      sources."minimist-1.2.6"
+      sources."minimist-1.2.7"
       sources."mnemonist-0.38.5"
       sources."ms-2.1.3"
       sources."negotiator-0.6.3"
@@ -930,7 +930,7 @@ in
       sources."send-0.18.0"
       sources."serve-static-1.15.0"
       sources."setprototypeof-1.2.0"
-      (sources."socket.io-4.5.2" // {
+      (sources."socket.io-4.5.3" // {
         dependencies = [
           sources."debug-4.3.4"
           sources."ms-2.1.2"
@@ -956,8 +956,8 @@ in
       sources."toidentifier-1.0.1"
       sources."toposort-2.0.2"
       sources."tslib-2.4.0"
-      sources."uglify-js-3.17.2"
-      sources."utf-8-validate-5.0.9"
+      sources."uglify-js-3.17.4"
+      sources."utf-8-validate-5.0.10"
       sources."util-deprecate-1.0.2"
       sources."vary-1.1.2"
       sources."wordwrap-1.0.0"
