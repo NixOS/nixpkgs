@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "flake8-bugbear";
-  version = "22.9.23";
+  version = "22.10.25";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-LI8NnAB87Iel5aTVb2BIwHUB6KVtHzLvu+pJnFI3nw0=";
+    hash = "sha256-+eE9MY1k9JN0l3g8/wWOfbhkoSZLYG+wPKvl63R1n3o=";
   };
 
   propagatedBuildInputs = [
