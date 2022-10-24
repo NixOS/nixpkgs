@@ -8233,6 +8233,8 @@ with pkgs;
 
   keepalived = callPackage ../tools/networking/keepalived { };
 
+  kestrel = callPackage ../tools/security/kestrel { };
+
   kexec-tools = callPackage ../os-specific/linux/kexec-tools { };
 
   keepkey_agent = with python3Packages; toPythonApplication keepkey_agent;
