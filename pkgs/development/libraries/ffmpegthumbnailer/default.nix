@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, stdenv, ffmpeg, cmake, libpng, pkg-config, libjpeg
+{ fetchFromGitHub, lib, stdenv, ffmpeg-headless, cmake, libpng, pkg-config, libjpeg
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ ffmpeg libpng libjpeg ];
+  buildInputs = [ ffmpeg-headless libpng libjpeg ];
   cmakeFlags = [ "-DENABLE_THUMBNAILER=ON" ];
 
   # https://github.com/dirkvdb/ffmpegthumbnailer/issues/215
