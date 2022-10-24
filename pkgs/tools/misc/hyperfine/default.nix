@@ -4,6 +4,7 @@
 , installShellFiles
 , stdenv
 , Security
+, bash
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,6 +20,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = lib.optional stdenv.isDarwin Security;
+  propagatedBuildInputs = [ bash.out # hyperfine uses 'sh -c' which gets symlinked as alias for bash by this derivation
+                          ];
 
   postInstall = ''
     installManPage doc/hyperfine.1
