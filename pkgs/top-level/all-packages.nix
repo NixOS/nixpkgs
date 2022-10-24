@@ -29045,6 +29045,8 @@ with pkgs;
 
   jackline = callPackage ../applications/networking/instant-messengers/jackline { };
 
+  jay = callPackage ../applications/window-managers/jay { };
+
   keylight-controller-mschneider82 = callPackage ../applications/misc/keylight-controller-mschneider82 { };
 
   leftwm = callPackage ../applications/window-managers/leftwm { };
