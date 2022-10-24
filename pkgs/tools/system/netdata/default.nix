@@ -33,9 +33,9 @@ in stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper protobuf ];
-  buildInputs = [ curl.dev jemalloc libuv zlib.dev ]
+  buildInputs = [ curl jemalloc libuv zlib ]
     ++ optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
-    ++ optionals (!stdenv.isDarwin) [ libcap.dev libuuid.dev ]
+    ++ optionals (!stdenv.isDarwin) [ libcap libuuid ]
     ++ optionals withCups [ cups ]
     ++ optionals withDBengine [ lz4 ]
     ++ optionals withIpmi [ freeipmi ]
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     ++ optionals withConnPubSub [ google-cloud-cpp grpc ]
     ++ optionals withConnPrometheus [ snappy ]
     ++ optionals (withCloud || withConnPrometheus) [ protobuf ]
-    ++ optionals withSsl [ openssl.dev ];
+    ++ optionals withSsl [ openssl ];
 
   patches = [
     # required to prevent plugins from relying on /etc
