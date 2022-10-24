@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, unixODBC, cmake, postgresql, mariadb, sqlite, zlib, libxml2, dpkg, lib, openssl, libkrb5, libuuid, patchelf, libiconv, fetchFromGitHub }:
+{ fetchurl, stdenv, unixODBC, cmake, postgresql, mariadb, sqlite, zlib, libxml2, dpkg, lib, openssl, libkrb5, libuuid, patchelf, libiconv, fixDarwinDylibNames, fetchFromGitHub }:
 
 # I haven't done any parameter tweaking.. So the defaults provided here might be bad
 
@@ -166,13 +166,13 @@
     '';
 
     passthru = {
-      fancyName = "ODBC Driver 17 for SQL Server";
+      fancyName = "ODBC Driver ${versionMajor} for SQL Server";
       driver = "lib/libmsodbcsql-${versionMajor}.${versionMinor}.so.${versionAdditional}";
     };
 
     meta = with lib; {
       broken = stdenv.isDarwin;
-      description = "ODBC Driver 17 for SQL Server";
+      description = "ODBC Driver ${versionMajor} for SQL Server";
       homepage = "https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017";
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       license = licenses.unfree;
@@ -180,6 +180,89 @@
       maintainers = with maintainers; [ spencerjanssen ];
     };
   };
+
+  msodbcsql18 = stdenv.mkDerivation(finalAttrs: {
+    pname = "msodbcsql${finalAttrs.versionMajor}";
+    version = "${finalAttrs.versionMajor}.${finalAttrs.versionMinor}.${finalAttrs.versionAdditional}${finalAttrs.versionSuffix}";
+
+    versionMajor = "18";
+    versionMinor = "1";
+    versionAdditional = "1.1";
+    versionSuffix = lib.optionalString stdenv.isLinux "-1";
+
+    src = fetchurl {
+      url = {
+        x86_64-linux = "https://packages.microsoft.com/debian/11/prod/pool/main/m/${finalAttrs.pname}/${finalAttrs.pname}_${finalAttrs.version}_amd64.deb";
+        aarch64-linux = "https://packages.microsoft.com/debian/11/prod/pool/main/m/${finalAttrs.pname}/${finalAttrs.pname}_${finalAttrs.version}_arm64.deb";
+        x86_64-darwin = "https://download.microsoft.com/download/6/4/0/64006503-51e3-44f0-a6cd-a9b757d0d61b/${finalAttrs.pname}-${finalAttrs.version}-amd64.tar.gz";
+        aarch64-darwin = "https://download.microsoft.com/download/6/4/0/64006503-51e3-44f0-a6cd-a9b757d0d61b/${finalAttrs.pname}-${finalAttrs.version}-arm64.tar.gz";
+      }.${stdenv.system} or (throw "Unsupported platform");
+      hash = {
+        x86_64-linux = "sha256:1f0rmh1aynf1sqmjclbsyh2wz5jby0fixrwz71zp6impxpwvil52";
+        aarch64-linux = "sha256:0zphnbvkqdbkcv6lvv63p7pyl68h5bs2dy6vv44wm6bi89svms4a";
+        x86_64-darwin = "sha256:1fn80byn1yihflznxcm9cpj42mpllnz54apnk9n46vzm2ng2lj6d";
+        aarch64-darwin = "sha256:116xl8r2apr5b48jnq6myj9fwqs88yccw5176yfyzh4534fznj5x";
+      }.${stdenv.system} or (throw "Unsupported platform");
+    };
+
+    nativeBuildInputs =
+      if stdenv.isDarwin
+      then
+        [
+          # Fix up the names encoded into the dylib, and make them absolute.
+          fixDarwinDylibNames
+        ]
+      else
+        [
+          dpkg
+          patchelf
+        ];
+
+    unpackPhase = lib.optionalString stdenv.isLinux ''
+      dpkg -x $src ./
+    '';
+
+    installPhase =
+      if stdenv.isDarwin
+      then
+        ''
+          mkdir -p $out
+          tar xf $src --strip-components=1 -C $out
+        ''
+      else
+        ''
+          mkdir -p $out
+          mkdir -p $out/lib
+          cp -r opt/microsoft/msodbcsql${finalAttrs.versionMajor}/lib64 opt/microsoft/msodbcsql${finalAttrs.versionMajor}/share $out/
+        '';
+
+    # Replace the hard-coded paths in the dylib with nixpkgs equivalents.
+    fixupPhase = lib.optionalString stdenv.isDarwin ''
+      ${stdenv.cc.bintools.targetPrefix}install_name_tool \
+        -change /usr/lib/libiconv.2.dylib ${libiconv}/lib/libiconv.2.dylib \
+        -change /opt/homebrew/lib/libodbcinst.2.dylib ${unixODBC}/lib/libodbcinst.2.dylib \
+        $out/${finalAttrs.passthru.driver}
+    '';
+
+    postFixup = lib.optionalString stdenv.isLinux ''
+      patchelf --set-rpath ${lib.makeLibraryPath [ unixODBC openssl libkrb5 libuuid stdenv.cc.cc ]} \
+        $out/${finalAttrs.passthru.driver}
+    '';
+
+    passthru = {
+      fancyName = "ODBC Driver ${finalAttrs.versionMajor} for SQL Server";
+      driver = "lib/libmsodbcsql${if stdenv.isDarwin then ".${finalAttrs.versionMajor}.dylib" else "-${finalAttrs.versionMajor}.${finalAttrs.versionMinor}.so.${finalAttrs.versionAdditional}"}";
+    };
+
+    meta = with lib; {
+      description = finalAttrs.passthru.fancyName;
+      homepage = "https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver16";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      platforms = platforms.unix;
+      license = licenses.unfree;
+      maintainers = with maintainers; [ SamirTalwar ];
+    };
+  });
 
   redshift = stdenv.mkDerivation rec {
     pname = "redshift-odbc";
