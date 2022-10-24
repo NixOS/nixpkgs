@@ -34348,6 +34348,8 @@ with pkgs;
 
   randtype = callPackage ../games/randtype { };
 
+  raylib-games = callPackage ../games/raylib-games { };
+
   redeclipse = callPackage ../games/redeclipse { };
 
   rftg = callPackage ../games/rftg { };

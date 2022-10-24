@@ -5,6 +5,7 @@
 , pulseSupport ? stdenv.hostPlatform.isLinux, libpulseaudio
 , sharedLib ? true
 , includeEverything ? true
+, raylib-games
 }:
 
 stdenv.mkDerivation rec {
@@ -49,6 +50,8 @@ stdenv.mkDerivation rec {
     ${lib.optionalString alsaSupport "patchelf --add-needed ${alsa-lib}/lib/libasound.so $out/lib/libraylib.so.${version}"}
     ${lib.optionalString pulseSupport "patchelf --add-needed ${libpulseaudio}/lib/libpulse.so $out/lib/libraylib.so.${version}"}
   '';
+
+  passthru.tests = [ raylib-games ];
 
   meta = with lib; {
     description = "A simple and easy-to-use library to enjoy videogames programming";
