@@ -23,7 +23,7 @@ buildGoModule rec {
     inherit prePatch;
   });
 
-  vendorSha256 = "0hjifc3kbwmx7kjn858vi05cwwra6q19cqjfd94k726pwhk37qkw";
+  vendorSha256 = null; #vendorSha256 = "";
 
   buildInputs = [
     pam
@@ -63,5 +63,6 @@ buildGoModule rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lukegb ];
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
   };
 }
