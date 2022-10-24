@@ -2631,6 +2631,13 @@
     githubId = 718298;
     name = "Michael Livshin";
   };
+  CobaltCause = {
+    name = "Charles Hall";
+    email = "charles@computer.surgery";
+    github = "CobaltCause";
+    githubId = 7003738;
+    matrix = "@charles:computer.surgery";
+  };
   cobbal = {
     email = "andrew.cobb@gmail.com";
     github = "cobbal";
