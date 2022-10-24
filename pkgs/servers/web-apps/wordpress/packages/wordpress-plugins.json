@@ -19,9 +19,10 @@
 , "webp-express"
 , "wordpress-seo"
 , "worker"
-, "wp-mail-smtp"
+, "wp-change-email-sender"
+, "wp-fastest-cache"
 , "wp-gdpr-compliance"
+, "wp-mail-smtp"
 , "wp-statistics"
 , "wp-user-avatars"
-, "wp-change-email-sender"
 ]
