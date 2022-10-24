@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "nteract";
     repo = pname;
     rev = version;
-    sha256 = "08fdd5ef7c96480ad11c12d472de21acd32359996f69a5259299b540feba4560";
+    sha256 = "sha256-qaDgae/5TRpjmjOf7aom7TC5HLHp0PHM/ds47AKtq8U=";
   };
 
   nativeBuildInputs = [
