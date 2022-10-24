@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "s3rs";
-  version = "0.4.8";
+  version = "0.4.16";
 
   src = fetchFromGitHub {
     owner = "yanganto";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lYIE5yR7UNUjpqfwT6R0C0ninNvVZdatYd/n+yyGsms=";
+    sha256 = "sha256-n95ejw6EZ4zXzP16xFoUkVn1zIMcVgINy7m5NOz063A=";
   };
 
-  cargoSha256 = "sha256-vCTJ7TClvuIP9IoqXwNFH7/u9jXt/Ue/Dhefx5rCgmA=";
+  cargoSha256 = "sha256-eecQi03w7lq3VAsv9o+3kulwhAXPoxuDPMu/ZCQEom4=";
 
   nativeBuildInputs = [ python3 perl pkg-config ];
   buildInputs = [ openssl ]
