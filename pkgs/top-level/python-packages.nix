@@ -5700,6 +5700,8 @@ in {
 
   mdformat = callPackage ../development/python-modules/mdformat { };
 
+  mdformat-tables = callPackage ../development/python-modules/mdformat-tables { };
+
   mdit-py-plugins = callPackage ../development/python-modules/mdit-py-plugins { };
 
   mdurl = callPackage ../development/python-modules/mdurl { };
