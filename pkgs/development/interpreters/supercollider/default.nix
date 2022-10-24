@@ -2,8 +2,8 @@
 , pkg-config, alsa-lib, libjack2, libsndfile, fftw
 , curl, gcc, libXt, qtbase, qttools, qtwebengine
 , readline, qtwebsockets, useSCEL ? false, emacs
-, supercollider-with-plugins, supercolliderPlugins
-, writeText, runCommand
+, gitUpdater, supercollider-with-plugins
+, supercolliderPlugins, writeText, runCommand
 }:
 
 mkDerivation rec {
@@ -26,6 +26,8 @@ mkDerivation rec {
     })
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [ cmake pkg-config qttools ];
 
   buildInputs = [ gcc libjack2 libsndfile fftw curl libXt qtbase qtwebengine qtwebsockets readline ]
@@ -39,24 +41,32 @@ mkDerivation rec {
     "-DSC_EL=${if useSCEL then "ON" else "OFF"}"
   ];
 
-  passthru.tests = {
-    # test to make sure sclang runs and included plugins are successfully found
-    sclang-sc3-plugins = let
-      supercollider-with-test-plugins = supercollider-with-plugins.override {
-        plugins = with supercolliderPlugins; [ sc3-plugins ];
-      };
-      testsc = writeText "test.sc" ''
-        var err = 0;
-        try {
-        MdaPiano.name.postln;
-        } {
-        err = 1;
+  passthru = {
+    updateScript = gitUpdater {
+      url = "https://github.com/supercollider/supercollider.git";
+      rev-prefix = "Version-";
+      ignoredVersions = "rc|beta";
+    };
+
+    tests = {
+      # test to make sure sclang runs and included plugins are successfully found
+      sclang-sc3-plugins = let
+        supercollider-with-test-plugins = supercollider-with-plugins.override {
+          plugins = with supercolliderPlugins; [ sc3-plugins ];
         };
-        err.exit;
+        testsc = writeText "test.sc" ''
+          var err = 0;
+          try {
+          MdaPiano.name.postln;
+          } {
+          err = 1;
+          };
+          err.exit;
+        '';
+      in runCommand "sclang-sc3-plugins-test" { } ''
+        timeout 60s env XDG_CONFIG_HOME="$(mktemp -d)" QT_QPA_PLATFORM=minimal ${supercollider-with-test-plugins}/bin/sclang ${testsc} >$out
       '';
-    in runCommand "sclang-sc3-plugins-test" {} ''
-      timeout 60s env XDG_CONFIG_HOME="$(mktemp -d)" QT_QPA_PLATFORM=minimal ${supercollider-with-test-plugins}/bin/sclang ${testsc} >$out
-    '';
+    };
   };
 
   meta = with lib; {
