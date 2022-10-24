@@ -10,7 +10,11 @@ buildGoModule rec {
     stripRoot = false;
   };
 
-  vendorSha256 = "sha256-tqrfCpZ/fRYZBZ/SBAvvJebLBeD2M/AVJEPiseehJHY=";
+  patches = [
+    ./2.6.3-CVE-2022-39271.patch
+  ];
+
+  vendorSha256 = "sha256-6JFCd1DtJfCG3b4LpuvOyK77YhZz9qyv6OotpXOPB1Q=";
 
   subPackages = [ "cmd/traefik" ];
 
