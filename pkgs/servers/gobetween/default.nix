@@ -21,7 +21,7 @@ buildGoModule rec {
     make -e build${lib.optionalString enableStatic "-static"}
   '';
 
-  vendorSha256 = "1nkni9ikpc0wngh5v0qmlpn5s9v85lb2ih22f3h3lih7nc29yv87";
+  vendorSha256 = null; #vendorSha256 = "";
 
   installPhase = ''
     mkdir -p $out/bin
@@ -35,5 +35,6 @@ buildGoModule rec {
     homepage = "https://gobetween.io";
     license = licenses.mit;
     maintainers = with maintainers; [ tomberek ];
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
   };
 }
