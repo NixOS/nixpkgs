@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+import ../make-test-python.nix ({ lib, pkgs, ... }:
 
 let
   inherit (lib) mkMerge nameValuePair maintainers;
@@ -17,6 +17,8 @@ let
   };
 
   extraNodeConfs = {
+    sqlite = {};
+
     declarativePlugins = {
       services.grafana.declarativePlugins = [ pkgs.grafanaPlugins.grafana-clock-panel ];
     };
@@ -52,14 +54,9 @@ let
     };
   };
 
-  nodes = builtins.listToAttrs (map (dbName:
-    nameValuePair dbName (mkMerge [
-    baseGrafanaConf
-    (extraNodeConfs.${dbName} or {})
-  ])) [ "sqlite" "declarativePlugins" "postgresql" "mysql" ]);
-
+  nodes = builtins.mapAttrs (_: val: mkMerge [ val baseGrafanaConf ]) extraNodeConfs;
 in {
-  name = "grafana";
+  name = "grafana-basic";
 
   meta = with maintainers; {
     maintainers = [ willibutz ];

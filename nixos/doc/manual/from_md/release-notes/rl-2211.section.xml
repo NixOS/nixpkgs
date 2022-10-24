@@ -437,6 +437,13 @@
           <link xlink:href="options.html#opt-services.listmonk.enable">services.listmonk</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://uptime.kuma.pet/">Uptime
+          Kuma</link>, a fancy self-hosted monitoring tool. Available as
+          <link linkend="opt-services.uptime-kuma.enable">services.uptime-kuma</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-incompatibilities">
@@ -652,6 +659,14 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>nix.checkConfig</literal> option now fully
+          disables the config check. The new
+          <literal>nix.checkAllErrors</literal> option behaves like
+          <literal>nix.checkConfig</literal> previously did.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>generateOptparseApplicativeCompletions</literal> and
           <literal>generateOptparseApplicativeCompletion</literal> from
           <literal>haskell.lib.compose</literal> (and
@@ -860,6 +875,34 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>services.grafana</literal> options were converted
+          to a
+          <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC
+          0042</link> configuration.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.grafana.provision.datasources</literal>
+          and <literal>services.grafana.provision.dashboards</literal>
+          options were converted to a
+          <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC
+          0042</link> configuration. They also now support specifying
+          the provisioning YAML file with <literal>path</literal>
+          option.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.grafana.provision.alerting</literal>
+          option was added. It includes suboptions for every
+          alerting-related objects (with the exception of
+          <literal>notifiers</literal>), which means it’s now possible
+          to configure modern Grafana alerting declaratively.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Matrix Synapse now requires entries in the
           <literal>state_group_edges</literal> table to be unique, in
           order to prevent accidentally introducing duplicate
@@ -931,6 +974,48 @@
           in the previous release, but udisks2 being enabled by default
           re-enabled it.
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          Nextcloud has been updated to version
+          <emphasis role="strong">25</emphasis>. Additionally the
+          following things have changed for Nextcloud in NixOS:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              For Nextcloud <emphasis role="strong">&gt;=24</emphasis>,
+              the default PHP version is 8.1.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Nextcloud <emphasis role="strong">23</emphasis> has been
+              removed since it will reach its
+              <link xlink:href="https://github.com/nextcloud/server/wiki/Maintenance-and-Release-Schedule/d76576a12a626d53305d480a6065b57cab705d3d">end
+              of life in December 2022</link>.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              For <literal>system.stateVersion</literal> being
+              <emphasis role="strong">&gt;=22.11</emphasis>, Nextcloud
+              25 will be installed by default. For older versions,
+              Nextcloud 24 will be installed.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Please ensure that you only upgrade on major release at a
+              time! Nextcloud doesn’t support upgrades across multiple
+              versions, i.e. an upgrade from
+              <emphasis role="strong">23</emphasis> to
+              <emphasis role="strong">25</emphasis> is only possible
+              when upgrading to <emphasis role="strong">24</emphasis>
+              first.
+            </para>
+          </listitem>
+        </itemizedlist>
       </listitem>
       <listitem>
         <para>

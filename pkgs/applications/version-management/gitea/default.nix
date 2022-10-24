@@ -61,7 +61,7 @@ buildGoPackage rec {
 
   goPackagePath = "code.gitea.io/gitea";
 
-  passthru.tests.gitea = nixosTests.gitea;
+  passthru.tests = nixosTests.gitea;
 
   meta = with lib; {
     description = "Git with a cup of tea";

@@ -119,7 +119,7 @@ in
     assertions = [
       {
         assertion = !((cfg.webDriverSupport == true) && (cfg.playwrightSupport == true));
-        message = "'services.changedetection-io.webDriverSupport' and 'services.changedetion-io.playwrightSupport' cannot be used together.";
+        message = "'services.changedetection-io.webDriverSupport' and 'services.changedetection-io.playwrightSupport' cannot be used together.";
       }
     ];
 
@@ -135,7 +135,7 @@ in
         serviceConfig = {
           User = cfg.user;
           Group = cfg.group;
-          StateDirectory = mkIf defaultStateDir "changedetion-io";
+          StateDirectory = mkIf defaultStateDir "changedetection-io";
           StateDirectoryMode = mkIf defaultStateDir "0750";
           WorkingDirectory = cfg.datastorePath;
           Environment = lib.optional (cfg.baseURL != null) "BASE_URL=${cfg.baseURL}"
@@ -213,6 +213,7 @@ in
           };
         })
       ];
+      podman.defaultNetwork.dnsname.enable = true;
     };
   };
 }

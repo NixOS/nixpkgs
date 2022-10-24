@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
     libadwaita
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good # for scaletempo and webm
     gst_all_1.gst-plugins-bad
   ];
 
