@@ -14,27 +14,31 @@ if [ ! -f "$ROOT/vscode.nix" ]; then
   exit 1
 fi
 
+update_vscode () {
+  VSCODE_VER=$1
+  IS_INSIDERS=$2
+  ARCH=$3
+  ARCH_LONG=$4
+  CHANNEL=$($IS_INSIDERS && echo "insider" || echo "stable")
+  VSCODE_URL="https://update.code.visualstudio.com/${VSCODE_VER}/${ARCH}/${CHANNEL}"
+  VSCODE_SHA256=$(nix-prefetch-url ${VSCODE_URL})
+  sed -i "s/${CHANNEL}-${ARCH_LONG} = \".\{52\}\"/${CHANNEL}-${ARCH_LONG} = \"${VSCODE_SHA256}\"/" "$ROOT/vscode.nix"
+}
+
 # VSCode
 
-VSCODE_VER=$(curl --fail --silent https://api.github.com/repos/Microsoft/vscode/releases/latest | jq --raw-output .tag_name)
-sed -i "s/version = \".*\"/version = \"${VSCODE_VER}\"/" "$ROOT/vscode.nix"
+VSCODE_STABLE_VER=$(curl --fail --silent https://update.code.visualstudio.com/api/releases/stable | jq --raw-output .[0])
+VSCODE_INSIDERS_VER=$(curl --fail --silent https://update.code.visualstudio.com/api/releases/insider | jq --raw-output .[0])
+sed -i "s/version = if isInsiders then \".*\" else \".*\"/version = if isInsiders then \"${VSCODE_INSIDERS_VER}\" else \"${VSCODE_STABLE_VER}\"/" "$ROOT/vscode.nix"
 
-VSCODE_X64_LINUX_URL="https://update.code.visualstudio.com/${VSCODE_VER}/linux-x64/stable"
-VSCODE_X64_LINUX_SHA256=$(nix-prefetch-url ${VSCODE_X64_LINUX_URL})
-sed -i "s/x86_64-linux = \".\{52\}\"/x86_64-linux = \"${VSCODE_X64_LINUX_SHA256}\"/" "$ROOT/vscode.nix"
+update_vscode $VSCODE_STABLE_VER false linux-x64 x86_64-linux
+update_vscode $VSCODE_STABLE_VER false darwin x86_64-darwin
+update_vscode $VSCODE_STABLE_VER false linux-arm64 aarch64-linux
+update_vscode $VSCODE_STABLE_VER false darwin-arm64 aarch64-darwin
+update_vscode $VSCODE_STABLE_VER false linux-armhf armv7l-linux
 
-VSCODE_X64_DARWIN_URL="https://update.code.visualstudio.com/${VSCODE_VER}/darwin/stable"
-VSCODE_X64_DARWIN_SHA256=$(nix-prefetch-url ${VSCODE_X64_DARWIN_URL})
-sed -i "s/x86_64-darwin = \".\{52\}\"/x86_64-darwin = \"${VSCODE_X64_DARWIN_SHA256}\"/" "$ROOT/vscode.nix"
-
-VSCODE_AARCH64_LINUX_URL="https://update.code.visualstudio.com/${VSCODE_VER}/linux-arm64/stable"
-VSCODE_AARCH64_LINUX_SHA256=$(nix-prefetch-url ${VSCODE_AARCH64_LINUX_URL})
-sed -i "s/aarch64-linux = \".\{52\}\"/aarch64-linux = \"${VSCODE_AARCH64_LINUX_SHA256}\"/" "$ROOT/vscode.nix"
-
-VSCODE_AARCH64_DARWIN_URL="https://update.code.visualstudio.com/${VSCODE_VER}/darwin-arm64/stable"
-VSCODE_AARCH64_DARWIN_SHA256=$(nix-prefetch-url ${VSCODE_AARCH64_DARWIN_URL})
-sed -i "s/aarch64-darwin = \".\{52\}\"/aarch64-darwin = \"${VSCODE_AARCH64_DARWIN_SHA256}\"/" "$ROOT/vscode.nix"
-
-VSCODE_ARMV7L_LINUX_URL="https://update.code.visualstudio.com/${VSCODE_VER}/linux-armhf/stable"
-VSCODE_ARMV7L_LINUX_SHA256=$(nix-prefetch-url ${VSCODE_ARMV7L_LINUX_URL})
-sed -i "s/armv7l-linux = \".\{52\}\"/armv7l-linux = \"${VSCODE_ARMV7L_LINUX_SHA256}\"/" "$ROOT/vscode.nix"
+update_vscode $VSCODE_INSIDERS_VER true linux-x64 x86_64-linux
+update_vscode $VSCODE_INSIDERS_VER true darwin x86_64-darwin
+update_vscode $VSCODE_INSIDERS_VER true linux-arm64 aarch64-linux
+update_vscode $VSCODE_INSIDERS_VER true darwin-arm64 aarch64-darwin
+update_vscode $VSCODE_INSIDERS_VER true linux-armhf armv7l-linux
