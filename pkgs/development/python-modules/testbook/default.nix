@@ -24,7 +24,7 @@ buildPythonPackage rec {
     sha256 = "sha256-qaDgae/5TRpjmjOf7aom7TC5HLHp0PHM/ds47AKtq8U=";
   };
 
-  nativeBuildInputs = [
+  propagatedBuildInputs = [
     nbclient
     nbformat
   ];
