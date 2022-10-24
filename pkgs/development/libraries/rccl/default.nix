@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nixosTests
 , cmake
 , rocm-cmake
 , rocm-runtime
@@ -73,6 +74,10 @@ stdenv.mkDerivation rec {
     mv $out/bin/* $test/bin
     rmdir $out/bin
   '';
+
+  passthru.tests = {
+    smoke-test = nixosTests.rccl;
+  };
 
   meta = with lib; {
     description = "ROCm communication collectives library";
