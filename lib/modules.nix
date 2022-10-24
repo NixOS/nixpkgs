@@ -105,6 +105,10 @@ let
                   # when resolving module structure (like in imports). For everything else,
                   # there's _module.args. If specialArgs.modulesPath is defined it will be
                   # used as the base path for disabledModules.
+                  #
+                  # `specialArgs.class`:
+                  # A nominal type for modules. When set and non-null, this adds a check to
+                  # make sure that only compatible modules are imported.
                   specialArgs ? {}
                 , # This would be remove in the future, Prefer _module.args option instead.
                   args ? {}
@@ -256,6 +260,7 @@ let
 
       merged =
         let collected = collectModules
+          (specialArgs.class or null)
           (specialArgs.modulesPath or "")
           (regularModules ++ [ internalModule ])
           ({ inherit lib options config specialArgs; } // specialArgs);
@@ -349,11 +354,11 @@ let
       };
     in result;
 
-  # collectModules :: (modulesPath: String) -> (modules: [ Module ]) -> (args: Attrs) -> [ Module ]
+  # collectModules :: (class: String) -> (modulesPath: String) -> (modules: [ Module ]) -> (args: Attrs) -> [ Module ]
   #
   # Collects all modules recursively through `import` statements, filtering out
   # all modules in disabledModules.
-  collectModules = let
+  collectModules = class: let
 
       # Like unifyModuleSyntax, but also imports paths and calls functions if necessary
       loadModule = args: fallbackFile: fallbackKey: m:
@@ -363,6 +368,17 @@ let
           let defs = [{ file = fallbackFile; value = m; }]; in
           throw "Module imports can't be nested lists. Perhaps you meant to remove one level of lists? Definitions: ${showDefs defs}"
         else unifyModuleSyntax (toString m) (toString m) (applyModuleArgsIfFunction (toString m) (import m) args);
+
+      checkModule =
+        if class != null
+        then
+          m:
+            if m.class != null -> m.class == class
+            then m
+            else
+              throw "The module ${m._file or m.key} was imported into ${class} instead of ${m.class}."
+        else
+          m: m;
 
       /*
       Collects all modules recursively into the form
@@ -397,7 +413,7 @@ let
           };
         in parentFile: parentKey: initialModules: args: collectResults (imap1 (n: x:
           let
-            module = loadModule args parentFile "${parentKey}:anon-${toString n}" x;
+            module = checkModule (loadModule args parentFile "${parentKey}:anon-${toString n}" x);
             collectedImports = collectStructuredModules module._file module.key module.imports args;
           in {
             key = module.key;
@@ -461,7 +477,7 @@ let
         else config;
     in
     if m ? config || m ? options then
-      let badAttrs = removeAttrs m ["_file" "key" "disabledModules" "imports" "options" "config" "meta" "freeformType"]; in
+      let badAttrs = removeAttrs m ["_file" "key" "disabledModules" "imports" "options" "config" "meta" "freeformType" "class"]; in
       if badAttrs != {} then
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by introducing a top-level `config' or `options' attribute. Add configuration attributes immediately on the top level instead, or move all of them (namely: ${toString (attrNames badAttrs)}) into the explicit `config' attribute."
       else
@@ -471,6 +487,7 @@ let
           imports = m.imports or [];
           options = m.options or {};
           config = addFreeformType (addMeta (m.config or {}));
+          class = m.class or null;
         }
     else
       # shorthand syntax
@@ -481,6 +498,7 @@ let
         imports = m.require or [] ++ m.imports or [];
         options = {};
         config = addFreeformType (removeAttrs m ["_file" "key" "disabledModules" "require" "imports" "freeformType"]);
+        class = m.class or null;
       };
 
   applyModuleArgsIfFunction = key: f: args@{ config, options, lib, ... }: if isFunction f then
