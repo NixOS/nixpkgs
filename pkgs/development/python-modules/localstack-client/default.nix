@@ -3,6 +3,9 @@
 , fetchFromGitHub
 , boto3
 , pytestCheckHook
+
+# downstream dependencies
+, localstack
 }:
 
 buildPythonPackage rec {
@@ -38,6 +41,10 @@ buildPythonPackage rec {
 
   # For tests
   __darwinAllowLocalNetworking = true;
+
+  passthru.tests = {
+    inherit localstack;
+  };
 
   meta = with lib; {
     description = "A lightweight Python client for LocalStack";
