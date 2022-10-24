@@ -3456,6 +3456,12 @@
     githubId = 8852888;
     name = "David Izquierdo";
   };
+  djacu = {
+    email = "daniel.n.baker@gmail.com";
+    github = "djacu";
+    githubId = "7043297";
+    name = "Daniel Baker";
+  };
   djanatyn = {
     email = "djanatyn@gmail.com";
     github = "djanatyn";
