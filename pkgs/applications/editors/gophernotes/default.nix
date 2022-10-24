@@ -19,7 +19,7 @@ buildGoModule rec {
   
   # Allow gophernotes to reach go paths when pulling down third party modules
   # or it might fail, complaining that it cannot find GOROOT
-  allowGoReference = allowGoReference;
+  inherit allowGoReference;
 
   meta = with lib; {
     description = "Go kernel for Jupyter notebooks";
