@@ -32574,6 +32574,8 @@ with pkgs;
   vscode-extensions = recurseIntoAttrs (callPackage ../applications/editors/vscode/extensions { });
 
   vscodium = callPackage ../applications/editors/vscode/vscodium.nix { };
+  vscodium-insiders = vscodium.override { isInsiders = true; };
+
   vscodium-fhs = vscodium.fhs;
   vscodium-fhsWithPackages = vscodium.fhsWithPackages;
 
