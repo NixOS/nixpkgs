@@ -77,6 +77,12 @@
     "sha256": "050ip4vd514nlfw69ax9x8acszlcsqzd7zw5bdvy1xk3dlva6fkb",
     "version": "3.101.0"
   },
+  "merge-minify-refresh": {
+    "path": "merge-minify-refresh/trunk",
+    "rev": "2749953",
+    "sha256": "1k3d59jfz4v6fjsm37gy0i32b6cr4vxv8rrrgll82fpwxs60i866",
+    "version": "1.13.2"
+  },
   "opengraph": {
     "path": "opengraph/tags/1.11.0",
     "rev": "2730257",

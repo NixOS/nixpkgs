@@ -12,6 +12,7 @@
 , "jetpack-lite"
 , "lightbox-photoswipe"
 , "mailpoet"
+, "merge-minify-refresh"
 , "opengraph"
 , "simple-login-captcha"
 , "static-mail-sender-configurator"
