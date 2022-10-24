@@ -11040,7 +11040,6 @@ with pkgs;
   s3cmd = python3Packages.callPackage ../tools/networking/s3cmd { };
 
   s3rs = callPackage ../tools/networking/s3rs {
-    openssl = openssl_1_1;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
