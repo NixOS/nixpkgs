@@ -402,6 +402,10 @@ with pkgs;
 
   conftest = callPackage ../development/tools/conftest { };
 
+  coldsnap = callPackage ../tools/admin/coldsnap {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   colemak-dh = callPackage ../data/misc/colemak-dh { };
 
   colmena = callPackage ../tools/admin/colmena { };
