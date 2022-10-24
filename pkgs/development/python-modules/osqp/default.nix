@@ -21,6 +21,10 @@ buildPythonPackage rec {
     sha256 = "b2fa17aae42a7ed498ec261b33f262bb4b3605e7e8464062159d9fae817f0d61";
   };
 
+  postPatch = ''
+    sed -i 's/sp.random/np.random/g' src/osqp/tests/*.py
+  '';
+
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [ cmake setuptools-scm ];
