@@ -7160,9 +7160,7 @@ with pkgs;
 
   git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
 
-  gitea = callPackage ../applications/version-management/gitea {
-    buildGoPackage = buildGo118Package; # nixosTests.gitea fails with 1.19
-  };
+  gitea = callPackage ../applications/version-management/gitea { };
 
   gokart = callPackage ../development/tools/gokart { };
 

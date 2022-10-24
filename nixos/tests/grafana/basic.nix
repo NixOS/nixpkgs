@@ -6,12 +6,18 @@ let
   baseGrafanaConf = {
     services.grafana = {
       enable = true;
-      addr = "localhost";
-      analytics.reporting.enable = false;
-      domain = "localhost";
-      security = {
-        adminUser = "testadmin";
-        adminPassword = "snakeoilpwd";
+      settings = {
+        analytics.reporting_enabled = false;
+
+        server = {
+          http_addr = "localhost";
+          domain = "localhost";
+        };
+
+        security = {
+          admin_user = "testadmin";
+          admin_password = "snakeoilpwd";
+        };
       };
     };
   };
@@ -24,7 +30,7 @@ let
     };
 
     postgresql = {
-      services.grafana.database = {
+      services.grafana.settings.database = {
         host = "127.0.0.1:5432";
         user = "grafana";
       };
@@ -40,7 +46,7 @@ let
     };
 
     mysql = {
-      services.grafana.database.user = "grafana";
+      services.grafana.settings.database.user = "grafana";
       services.mysql = {
         enable = true;
         ensureDatabases = [ "grafana" ];
