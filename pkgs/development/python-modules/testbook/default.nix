@@ -1,10 +1,14 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
   pythonOlder,
+  fetchFromGitHub,
   nbformat,
   nbclient,
+  ipykernel,
+  pandas,
+  pytest,
+  traitlets,
 }:
 buildPythonPackage rec {
   pname = "testbook";
@@ -21,9 +25,18 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    nbformat
     nbclient
+    nbformat
   ];
+
+  checkInputs = [
+    ipykernel
+    pandas
+    pytest
+    traitlets
+  ];
+
+  checkPhase = "pytest";
 
   meta = with lib; {
     description = "testbook is a unit testing framework extension for testing code in Jupyter Notebooks.";
