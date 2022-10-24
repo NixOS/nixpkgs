@@ -35441,6 +35441,8 @@ with pkgs;
 
   dawn = callPackage ../applications/science/physics/dawn {};
 
+  dawncut = callPackage ../applications/science/physics/dawncut {};
+
   elmerfem = callPackage ../applications/science/physics/elmerfem {};
 
   mcfm = callPackage ../applications/science/physics/MCFM {
