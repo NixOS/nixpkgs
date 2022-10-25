@@ -4697,7 +4697,6 @@ broken-packages:
   - smiles
   - smoothie
   - smsaero
-  - smt2-parser
   - smt-lib
   - SmtLib
   - smtlib2
