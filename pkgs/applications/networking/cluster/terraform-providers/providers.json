@@ -213,13 +213,13 @@
     "version": "1.3.0"
   },
   "cloudamqp": {
-    "hash": "sha256-RllW85iootELA7iz+UPD0s4KKP7gGRNHVwHd/CCUv0c=",
+    "hash": "sha256-EtFGqYNfyDbS4f1tjRTKcrQNFqEZmmILeuEOpwkx6/4=",
     "owner": "cloudamqp",
     "provider-source-address": "registry.terraform.io/cloudamqp/cloudamqp",
     "repo": "terraform-provider-cloudamqp",
-    "rev": "v1.19.3",
-    "vendorHash": "sha256-S8xlMpsHeJePYyydUpBSuOxW0APZw8qxcm+Ou9u1rWc=",
-    "version": "1.19.3"
+    "rev": "v1.20.0",
+    "vendorHash": "sha256-fDYkeUOW9wuypAJR1YFEQp8KhtTfMr8NZeT7TMYXEmU=",
+    "version": "1.20.0"
   },
   "cloudflare": {
     "hash": "sha256-uItV3BTB3bY8NrjD63oUWZMB0gEscEN4Y6aDTuDQW7c=",
