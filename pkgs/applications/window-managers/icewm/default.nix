@@ -4,6 +4,7 @@
 , fetchpatch
 , cmake
 , expat
+, flac
 , fontconfig
 , freetype
 , fribidi
@@ -26,25 +27,26 @@
 , libXpm
 , libXrandr
 , libjpeg
+, libogg
 , libpng
 , libpthreadstubs
 , libsndfile
 , libtiff
 , libxcb
 , mkfontdir
-, pcre
+, pcre2
 , perl
 , pkg-config
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "icewm";
-  version = "3.0.1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "ice-wm";
-    repo = pname;
-    rev = version;
+    repo = "icewm";
+    rev = finalAttrs.version;
     hash = "sha256-0mnhH/7Y4VXpNUU++ln2//9/vuTxq9sa2D933Cf7Ifw=";
   };
 
@@ -56,6 +58,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     expat
+    flac
     fontconfig
     freetype
     fribidi
@@ -78,13 +81,14 @@ stdenv.mkDerivation rec {
     libXpm
     libXrandr
     libjpeg
+    libogg
     libpng
     libpthreadstubs
     libsndfile
     libtiff
     libxcb
     mkfontdir
-    pcre
+    pcre2
   ];
 
   cmakeFlags = [
@@ -94,7 +98,8 @@ stdenv.mkDerivation rec {
 
   # install legacy themes
   postInstall = ''
-    cp -r ../lib/themes/{gtk2,Natural,nice,nice2,warp3,warp4,yellowmotif} $out/share/icewm/themes/
+    cp -r ../lib/themes/{gtk2,Natural,nice,nice2,warp3,warp4,yellowmotif} \
+      $out/share/icewm/themes/
   '';
 
   meta = with lib; {
@@ -117,4 +122,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
   };
-}
+})
