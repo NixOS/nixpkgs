@@ -5,7 +5,6 @@
 , pkg-config
 , python3
 , substituteAll
-, withDarwinFrameworksGtkDocPatch ? false
 }:
 
 python3.pkgs.buildPythonApplication rec {

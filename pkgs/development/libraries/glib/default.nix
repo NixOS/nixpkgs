@@ -7,10 +7,8 @@
 # this is just for tests (not in the closure of any regular package)
 , coreutils, dbus, libxml2, tzdata
 , desktop-file-utils, shared-mime-info
-, darwin, fetchpatch
+, darwin
 }:
-
-with lib;
 
 assert stdenv.isLinux -> util-linuxMinimal != null;
 
@@ -40,20 +38,22 @@ let
     done
     ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
   '';
+
+  buildDocs = stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isStatic;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.74.0";
+  version = "2.74.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    sha256 = "NlLH8HLXsDGmte3WI/d+vF3NKuaYWYq8yJ/znKda3TA=";
+    sha256 = "CrmBYY0dtHhF5WQXsNfBI/gaNCeyuck/Wkb/W7uWSWQ=";
   };
 
-  patches = optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.isDarwin [
     ./darwin-compilation.patch
-  ] ++ optionals stdenv.hostPlatform.isMusl [
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
   ] ++ [
@@ -90,29 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
     #    * gio-launch-desktop
     ./split-dev-programs.patch
 
-    # Fix build on Darwin
-    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/2914
-    (fetchpatch {
-      name = "gio-properly-guard-use-of-utimensat.patch";
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/7f7171e68a420991b537d3e9e63263a0b2871618.patch";
-      sha256 = "kKEqmBqx/RlvFT3eixu+NnM7JXhHb34b9NLRfAt+9h0=";
-    })
-
-    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/2866
-    (fetchpatch {
-      name = "tests-skip-g-file-info-test-if-atime-unsupported.patch";
-      url = "https://gitlab.gnome.org/qyliss/glib/-/commit/339a06d66685107280ca6bdca5da5d96b8222fb5.patch";
-      sha256 = "sha256-/NdFkuiJvyass3jTDEJPeciA2Lwe53IUd3kAnKAvTaw=";
-    })
-    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/2867
-    ./tests-skip-shared-libs-if-default_library-static.patch
-
-    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/2921
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/f0dd96c28751f15d0703b384bfc7c314af01caa8.patch";
-      sha256 = "sha256-8ucHS6ZnJuP6ajGb4/L8QfhC49FTQG1kAGHVdww/YYE=";
-    })
-
+    # Disable flaky test.
+    # https://gitlab.gnome.org/GNOME/glib/-/issues/820
     ./skip-timer-test.patch
   ];
 
@@ -124,14 +103,14 @@ stdenv.mkDerivation (finalAttrs: {
     libelf
     finalAttrs.setupHook
     pcre2
-  ] ++ optionals (!stdenv.hostPlatform.isWindows) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     libselinux
     util-linuxMinimal # for libmount
-  ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
-  ]) ++ optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+  ]) ++ lib.optionals buildDocs [
     # Note: this needs to be both in buildInputs and nativeBuildInputs. The
     # Meson gtkdoc module uses find_program to look it up (-> build dep), but
     # glib's own Meson configuration uses the host pkg-config to find its
@@ -147,10 +126,18 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs = [
-    (buildPackages.meson.override {
-      withDarwinFrameworksGtkDocPatch = stdenv.isDarwin;
-    })
-    ninja pkg-config perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 libxml2 libxslt
+    meson
+    ninja
+    pkg-config
+    perl
+    python3
+    gettext
+  ] ++ lib.optionals buildDocs [
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_45
+    libxml2
+    libxslt
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
@@ -158,10 +145,10 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     # Avoid the need for gobject introspection binaries in PATH in cross-compiling case.
     # Instead we just copy them over from the native output.
-    "-Dgtk_doc=${boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
+    "-Dgtk_doc=${lib.boolToString buildDocs}"
     "-Dnls=enabled"
     "-Ddevbindir=${placeholder "dev"}/bin"
-  ] ++ optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     "-Dman=true"                # broken on Darwin
   ];
 
@@ -215,7 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
     for i in $dev/bin/*; do
       moveToOutput "share/bash-completion/completions/''${i##*/}" "$dev"
     done
-  '' + optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  '' + lib.optionalString (!buildDocs) ''
     cp -r ${buildPackages.glib.devdoc} $devdoc
   '';
 
@@ -230,7 +217,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
-  preCheck = optionalString finalAttrs.doCheck or config.doCheckByDefault or false ''
+  preCheck = lib.optionalString finalAttrs.doCheck or config.doCheckByDefault or false ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/glib-${finalAttrs.version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export TZDIR="${tzdata}/share/zoneinfo"
     export XDG_CACHE_HOME="$TMP"
