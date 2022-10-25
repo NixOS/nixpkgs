@@ -23,14 +23,14 @@
 stdenv.mkDerivation rec {
   pname = "vulkan-tools-lunarg";
   # The version must match that in vulkan-headers
-  version = "1.3.224.1";
+  version = "1.3.231.0";
 
   src = (assert version == vulkan-headers.version;
     fetchFromGitHub {
       owner = "LunarG";
       repo = "VulkanTools";
       rev = "sdk-${version}";
-      hash = "sha256-YQv6YboyQJjLTEKspZQdV8YFhHux/4RIncHXOsz1cBw=";
+      hash = "sha256-qomhouuKVv4Dat9Sv7X68Dw6bRnaUjj6iEXC9pCqX4E=";
       fetchSubmodules = true;
     });
 
