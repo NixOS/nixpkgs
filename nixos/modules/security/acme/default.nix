@@ -67,6 +67,8 @@ let
       "~@privileged"
       # 3. then allow the required subset within denied groups
       "@chown"
+      # 4. Lego uses setrlimit
+      "setrlimit"
     ];
   };
 
