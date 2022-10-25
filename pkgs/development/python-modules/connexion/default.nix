@@ -11,6 +11,7 @@
 , inflection
 , jsonschema
 , openapi-spec-validator
+, packaging
 , pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
@@ -43,6 +44,7 @@ buildPythonPackage rec {
     inflection
     jsonschema
     openapi-spec-validator
+    packaging
     pyyaml
     requests
     swagger-ui-bundle
