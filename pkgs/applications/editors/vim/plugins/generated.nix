@@ -7418,6 +7418,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-syntastic/syntastic/";
   };
 
+  tabby-nvim = buildVimPluginFrom2Nix {
+    pname = "tabby.nvim";
+    version = "2022-10-17";
+    src = fetchFromGitHub {
+      owner = "nanozuki";
+      repo = "tabby.nvim";
+      rev = "18c8effd11f801793e1a8b9adb4d6ef7fbedf57b";
+      sha256 = "0r68260gc5ln2z338mm7xb4v4y3p8xzkx1wlwagqp35dhgrl2kpn";
+    };
+    meta.homepage = "https://github.com/nanozuki/tabby.nvim/";
+  };
+
   tabline-nvim = buildVimPluginFrom2Nix {
     pname = "tabline.nvim";
     version = "2022-06-13";
