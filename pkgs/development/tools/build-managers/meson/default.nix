@@ -103,10 +103,6 @@ python3.pkgs.buildPythonApplication rec {
     installShellCompletion --bash data/shell-completions/bash/meson
   '';
 
-  passthru = {
-    inherit python3;
-  };
-
   meta = with lib; {
     homepage = "https://mesonbuild.com";
     description = "An open source, fast and friendly build system made in Python";
