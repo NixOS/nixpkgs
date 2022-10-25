@@ -293,6 +293,9 @@ let
       rtc_use_pipewire = true;
       # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
       chrome_pgo_phase = 0;
+    } // optionalAttrs (chromiumVersionAtLeast "107") {
+      clang_base_path = "${llvmPackages.clang}";
+      use_qt = false;
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
