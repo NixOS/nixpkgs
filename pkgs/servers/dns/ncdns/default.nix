@@ -11,16 +11,16 @@ let
   ncdns = fetchFromGitHub {
     owner = "namecoin";
     repo = "ncdns";
-    rev = "2a486311b0fe1a921af34aa3b31e6e4e0569accc";
-    sha256 = "01arwlycp1iia4bd3dgyn8dam1av2a7d9hv7f085n14l2i2aza7v";
+    rev = "5adda8d4726d389597df432eb2e17eac1677cea2";
+    sha256 = "sha256-Q/RrUTY4WfrByvQv1eCX29DQNf2vSIR29msmhgS73xk=";
   };
 
   # script to patch the crypto/x509 package
   x509 = fetchFromGitHub {
     owner = "namecoin";
     repo = "x509-compressed";
-    rev = "fb9f2b7bc9fcba954d70f63857cc0c3841b1cf47";
-    sha256 = "1arkbpbzvhcmz5fhjqg34x2jbjnwmlisapk22rjki17qpamh7zks";
+    rev = "2e30a62a69dac54a977410f283308df232a5d244";
+    sha256 = "sha256-/Bd1gYjguj8AiKHyiaIKT+Y3R7kq5gLZlJhY9g/xFXk=";
     # ncdns must be put in a subdirectory for this to work.
     postFetch = ''
       cp -r --no-preserve=mode "${ncdns}" "$out/ncdns"
@@ -31,11 +31,11 @@ in
 
 buildGoModule {
   pname = "ncdns";
-  version = "unstable-2020-07-18";
+  version = "unstable-2022-10-07";
 
   src = x509;
 
-  vendorSha256 = "02bqf6vkj5msk35sr5sklnqqd16n7gns7knzqslw077xrxiz7bsg";
+  vendorSha256 = "sha256-ENtTnDsz5WhRz1kiqnWQ5vyEpZtgi7ZeYvksffgW78k=";
 
   # Override the go-modules fetcher derivation to apply
   # upstream's patch of the crypto/x509 library.

@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
       revert = true;
       excludes = [ "vendor/fmtlib" ];
     })
+    ./android-tools-kernel-headers-6.0.diff
   ];
 
   nativeBuildInputs = [ cmake perl go ];

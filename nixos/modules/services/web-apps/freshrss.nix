@@ -275,7 +275,7 @@ in
           Group = "freshrss";
           StateDirectory = "freshrss";
           WorkingDirectory = cfg.package;
-          ExecStart = "./app/actualize_script.php";
+          ExecStart = "${cfg.package}/app/actualize_script.php";
         } // systemd-hardening;
       };
     };

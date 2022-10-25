@@ -43,7 +43,7 @@ let
       sha256 = {
         x86_64-linux = "0x71b4kb8hlyacixipgfbgjgrbmhckxpbmrs2xk8iis7n5kg7539";
         aarch64-linux = "125lih7g2gj91k7j196wy5a5746wyfr8idj3ng369yh5wl7lfcfv";
-        x86_64-darwin = "sha256-TzprR95KHYBu9SruI4BgwCaqI7KKe3HuzgCO1A5YFiM=";
+        x86_64-darwin = "0z2kww4iby1izkwn6z2ai94y87bkjvwak8awdmjm8sgg00pa9l1a";
         aarch64-darwin = "0qajh4ac5lr1sznb2c471r5c5g2r0dk2pyqz8vhvnbk36r524h1h";
       }.${system} or throwSystem;
     };
@@ -126,8 +126,8 @@ let
       --set FONTCONFIG_FILE ${fontconfig}
   '' + lib.optionalString withFirefox ''
     FIREFOX_REVISION=$(jq -r '.browsers[] | select(.name == "firefox").revision' $BROWSERS_JSON)
-    mkdir -p $out/firefox-$FIREFOX_REVISION
-    ln -s ${firefox}/bin/firefox $out/firefox-$FIREFOX_REVISION/firefox
+    mkdir -p $out/firefox-$FIREFOX_REVISION/firefox
+    ln -s ${firefox}/bin/firefox $out/firefox-$FIREFOX_REVISION/firefox/firefox
   '' + ''
     FFMPEG_REVISION=$(jq -r '.browsers[] | select(.name == "ffmpeg").revision' $BROWSERS_JSON)
     mkdir -p $out/ffmpeg-$FFMPEG_REVISION

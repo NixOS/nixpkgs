@@ -298,7 +298,7 @@ index e61160c..d17871a 100644
  		G_CALLBACK (mi_user_headers_settings_changed_cb), NULL);
  	G_UNLOCK (mi_user_headers);
 diff --git a/src/camel/providers/imapx/camel-imapx-server.c b/src/camel/providers/imapx/camel-imapx-server.c
-index 2ed68cf..5dad98f 100644
+index e5645e2..170a0be 100644
 --- a/src/camel/providers/imapx/camel-imapx-server.c
 +++ b/src/camel/providers/imapx/camel-imapx-server.c
 @@ -5573,7 +5573,18 @@ camel_imapx_server_skip_old_flags_update (CamelStore *store)
@@ -442,7 +442,7 @@ index 8e4ee81..bb8f8f7 100644
  		g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-oauth2-service.c b/src/libedataserver/e-oauth2-service.c
-index 5a21872..a56d589 100644
+index 7783781..6fb22cb 100644
 --- a/src/libedataserver/e-oauth2-service.c
 +++ b/src/libedataserver/e-oauth2-service.c
 @@ -90,7 +90,18 @@ eos_default_guess_can_process (EOAuth2Service *service,
