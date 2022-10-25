@@ -109,6 +109,9 @@ in {
     buildPhase = ''
       runHook preBuild
       local HOME=$TMPDIR
+    '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+      sed -i "s/aarch64/arm64/g" makefile
+    '' + ''
       make -j$NIX_BUILD_CORES
       ./bin/nim c --parallelBuild:$NIX_BUILD_CORES koch
       ./koch boot $kochArgs --parallelBuild:$NIX_BUILD_CORES

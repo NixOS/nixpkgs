@@ -19,17 +19,6 @@ let
           "test_redirect"
         ];
       });
-      lxml = prev.lxml.override {
-        libxml2 = prev.libxml2.overrideAttrs (old: rec {
-          # etree.fromstring always returns None with 2.10.0
-          version = "2.9.14";
-
-          src = fetchurl {
-            url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-            sha256 = "sha256-YNdKJX0czsBHXnScui8hVZ5IE577pv8oIkNXx8eY3+4=";
-          };
-        });
-      };
       werkzeug = prev.werkzeug.overridePythonAttrs (old: rec {
         version = "2.0.3";
         src = old.src.override {

@@ -6,14 +6,20 @@ let
   baseGrafanaConf = {
     services.grafana = {
       enable = true;
-      addr = "localhost";
-      analytics.reporting.enable = false;
-      domain = "localhost";
-      security = {
-        adminUser = "testadmin";
-        adminPassword = "snakeoilpwd";
-      };
       provision.enable = true;
+      settings = {
+        analytics.reporting_enabled = false;
+
+        server = {
+          http_addr = "localhost";
+          domain = "localhost";
+        };
+
+        security = {
+          admin_user = "testadmin";
+          admin_password = "snakeoilpwd";
+        };
+      };
     };
 
     systemd.tmpfiles.rules = [
