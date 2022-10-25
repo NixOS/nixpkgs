@@ -2066,6 +2066,8 @@ self: super: with self; {
 
   cvelib = callPackage ../development/python-modules/cvelib { };
 
+  cvss = callPackage ../development/python-modules/cvss { };
+
   cvxopt = callPackage ../development/python-modules/cvxopt { };
 
   cvxpy = callPackage ../development/python-modules/cvxpy { };
