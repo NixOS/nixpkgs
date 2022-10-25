@@ -25,7 +25,7 @@
     version = "1.1.10";
   };
   docker-sync = {
-    dependencies = ["daemons" "docker-compose" "dotenv" "gem_update_checker" "os" "terminal-notifier" "thor"];
+    dependencies = ["daemons" "docker-compose" "dotenv" "gem_update-checker" "os" "terminal-notifier" "thor"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "1vrlcggj7k8w30b76f23p64yx4wg7p7mq9lp6lsnh2ysq9n3cjqg";
@@ -41,7 +41,7 @@
     };
     version = "2.6.0";
   };
-  gem_update_checker = {
+  gem_update-checker = {
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0ckbz4q3q59kkv138n0cmsyida0wg45pwscxzf5vshxcrxhmq3x7";

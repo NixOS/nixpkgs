@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-KwzEU9IfcQ6YPZu3jPuFrd6ux/3e2pzoLfTrak/aGmg=";
   };
 
-  propagatedBuildInputs = [ django-mailman3 readme_renderer ];
+  propagatedBuildInputs = [ django-mailman3 readme-renderer ];
   checkInputs = [ beautifulsoup4 vcrpy mock ];
 
   # Tries to connect to database.

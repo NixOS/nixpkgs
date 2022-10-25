@@ -510,7 +510,7 @@
     version = "0.2.0";
   };
   benchmark-memory = {
-    dependencies = ["memory_profiler"];
+    dependencies = ["memory-profiler"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1041,7 +1041,7 @@
     version = "1.5.1";
   };
   derailed_benchmarks = {
-    dependencies = ["benchmark-ips" "dead_end" "get_process_mem" "heapy" "memory_profiler" "mini_histogram" "rack" "rack-test" "rake" "ruby-statistics" "thor"];
+    dependencies = ["benchmark-ips" "dead_end" "get_process_mem" "heapy" "memory-profiler" "mini_histogram" "rack" "rack-test" "rake" "ruby-statistics" "thor"];
     groups = ["test"];
     platforms = [];
     source = {
@@ -3092,7 +3092,7 @@
     };
     version = "0.16.2";
   };
-  memory_profiler = {
+  memory-profiler = {
     groups = ["default"];
     platforms = [];
     source = {

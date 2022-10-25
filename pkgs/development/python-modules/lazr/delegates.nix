@@ -1,10 +1,10 @@
-{ buildPythonPackage, fetchPypi, nose, zope_interface }:
+{ buildPythonPackage, fetchPypi, nose, zope-interface }:
 
 buildPythonPackage rec {
   pname = "lazr.delegates";
   version = "2.0.4";
 
-  propagatedBuildInputs = [ nose zope_interface ];
+  propagatedBuildInputs = [ nose zope-interface ];
 
   doCheck = false;  # cannot import name 'ClassType' from 'types'
 

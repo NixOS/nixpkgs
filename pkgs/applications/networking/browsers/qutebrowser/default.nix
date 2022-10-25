@@ -29,7 +29,7 @@
 
   backendPackage =
    if backend == "webengine" then if isQt6 then python3Packages.pyqt6-webengine else python3Packages.pyqtwebengine else
-   if backend == "webkit"    then python3Packages.pyqt5_with_qtwebkit else
+   if backend == "webkit"    then python3Packages.pyqt5-with-qtwebkit else
    throw ''
      Unknown qutebrowser backend "${backend}".
      Valid choices are qtwebengine (recommended) or qtwebkit.

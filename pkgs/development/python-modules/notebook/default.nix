@@ -4,15 +4,15 @@
 , fetchPypi
 , argon2-cffi
 , nose
-, nose_warnings_filters
+, nose-warnings-filters
 , glibcLocales
 , isPy3k
 , mock
 , jinja2
 , tornado
-, ipython_genutils
+, ipython-genutils
 , traitlets
-, jupyter_core
+, jupyter-core
 , jupyter-client
 , nbformat
 , nbconvert
@@ -38,10 +38,10 @@ buildPythonPackage rec {
   LC_ALL = "en_US.utf8";
 
   checkInputs = [ nose pytestCheckHook glibcLocales ]
-    ++ (if isPy3k then [ nose_warnings_filters ] else [ mock ]);
+    ++ (if isPy3k then [ nose-warnings-filters ] else [ mock ]);
 
   propagatedBuildInputs = [
-    jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
+    jinja2 tornado ipython-genutils traitlets jupyter-core send2trash
     jupyter-client nbformat nbconvert ipykernel terminado requests pexpect
     prometheus-client argon2-cffi
   ];

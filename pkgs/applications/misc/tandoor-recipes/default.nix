@@ -52,7 +52,7 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     django-storages
     django-tables2
     django-webpack-loader
-    django_treebeard
+    django-treebeard
     djangorestframework
     drf-writable-nested
     gunicorn

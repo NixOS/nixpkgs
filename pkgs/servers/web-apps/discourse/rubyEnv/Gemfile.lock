@@ -219,7 +219,7 @@ GEM
     lz4-ruby (0.3.3)
     matrix (0.4.2)
     maxminddb (0.1.22)
-    memory_profiler (1.0.0)
+    memory-profiler (1.0.0)
     message_bus (4.2.0)
       rack (>= 1.1.3)
     method_source (1.0.0)
@@ -565,7 +565,7 @@ DEPENDENCIES
   lz4-ruby
   mail!
   maxminddb
-  memory_profiler
+  memory-profiler
   message_bus
   mini_mime
   mini_racer

@@ -1,4 +1,4 @@
-{ async_generator
+{ async-generator
 , buildPythonPackage
 , fetchFromGitHub
 , ipykernel
@@ -29,7 +29,7 @@ let nbclient = buildPythonPackage rec {
     hash = "sha256-+GQkEGWReo9y8bgcysslQdzJUcvQiZkQTQiwmWJ1mx8=";
   };
 
-  propagatedBuildInputs = [ async_generator traitlets nbformat nest-asyncio jupyter-client ];
+  propagatedBuildInputs = [ async-generator traitlets nbformat nest-asyncio jupyter-client ];
 
   # circular dependencies if enabled by default
   doCheck = false;

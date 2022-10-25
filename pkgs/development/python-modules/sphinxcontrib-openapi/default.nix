@@ -9,7 +9,7 @@
 , picobox
 , pyyaml
 , sphinx-mdinclude
-, sphinxcontrib_httpdomain
+, sphinxcontrib-httpdomain
 }:
 
 buildPythonPackage rec {
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     picobox
     pyyaml
     sphinx-mdinclude
-    sphinxcontrib_httpdomain
+    sphinxcontrib-httpdomain
   ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

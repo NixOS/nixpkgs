@@ -62,7 +62,7 @@ python3Packages.buildPythonApplication rec {
     appdirs beautifulsoup4 characteristic distro eliot fixtures foolscap future
     html5lib magic-wormhole netifaces pyasn1 pycrypto pyutil pyyaml recommonmark
     service-identity simplejson sphinx-rtd-theme testtools treq twisted zfec
-    zope_interface
+    zope-interface
   ] ++ twisted.optional-dependencies.tls
     ++ twisted.optional-dependencies.conch;
 

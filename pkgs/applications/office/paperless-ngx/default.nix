@@ -164,7 +164,7 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
     websockets
     whitenoise
     whoosh
-    zope_interface
+    zope-interface
   ];
 
   # paperless-ngx includes the bundled django-q version. This will
@@ -194,7 +194,7 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
     pytest-env
     pytest-sugar
     pytest-xdist
-    factory_boy
+    factory-boy
     pytestCheckHook
   ];
 

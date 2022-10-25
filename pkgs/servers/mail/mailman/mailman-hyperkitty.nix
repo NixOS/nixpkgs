@@ -19,7 +19,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     mailman
     requests
-    zope_interface
+    zope-interface
   ];
 
   checkInputs = [

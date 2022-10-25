@@ -1,4 +1,4 @@
-{ stdenv, pytest, spacy_models }:
+{ stdenv, pytest, spacy-models }:
 
 stdenv.mkDerivation {
   name = "spacy-annotation-test";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   dontBuild = true;
   doCheck = true;
 
-  checkInputs = [ pytest spacy_models.en_core_web_sm ];
+  checkInputs = [ pytest spacy-models.en_core_web_sm ];
 
   checkPhase = ''
     pytest annotate.py

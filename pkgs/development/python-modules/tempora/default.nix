@@ -8,7 +8,7 @@
 
 # runtime
 , pytz
-, jaraco_functools
+, jaraco-functools
 
 # tests
 , freezegun
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    jaraco_functools
+    jaraco-functools
     pytz
   ];
 

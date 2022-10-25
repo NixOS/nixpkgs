@@ -6,7 +6,7 @@
 , joblib
 , astropy
 , casa-formats-io
-, radio_beam
+, radio-beam
 , six
 , dask
 , pytestCheckHook
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [ astropy casa-formats-io radio_beam joblib six dask ];
+  propagatedBuildInputs = [ astropy casa-formats-io radio-beam joblib six dask ];
   checkInputs = [ pytestCheckHook aplpy pytest-astropy ];
 
   # On x86_darwin, this test fails with "Fatal Python error: Aborted"

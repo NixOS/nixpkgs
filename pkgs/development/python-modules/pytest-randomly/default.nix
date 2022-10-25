@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, factory_boy
+, factory-boy
 , faker
 , fetchFromGitHub
 , importlib-metadata
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    factory_boy
+    factory-boy
     faker
     numpy
     pytest-xdist

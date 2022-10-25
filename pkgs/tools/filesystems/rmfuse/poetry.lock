@@ -26,7 +26,7 @@ python-versions = ">= 3.6.2"
 
 [package.dependencies]
 anyio = ">=2.0,<3.0"
-async_generator = "*"
+async-generator = "*"
 h11 = "*"
 
 [[package]]
@@ -325,8 +325,8 @@ asks = [
     {file = "asks-2.4.12.tar.gz", hash = "sha256:38de944eb350e7e4e3a918055fa8ff033da5f7b5ff385c1160a2d6b9d84783b0"},
 ]
 async-generator = [
-    {file = "async_generator-1.10-py3-none-any.whl", hash = "sha256:01c7bf666359b4967d2cda0000cc2e4af16a0ae098cbffcb8472fb9e8ad6585b"},
-    {file = "async_generator-1.10.tar.gz", hash = "sha256:6ebb3d106c12920aaae42ccb6f787ef5eefdcdd166ea3d628fa8476abe712144"},
+    {file = "async-generator-1.10-py3-none-any.whl", hash = "sha256:01c7bf666359b4967d2cda0000cc2e4af16a0ae098cbffcb8472fb9e8ad6585b"},
+    {file = "async-generator-1.10.tar.gz", hash = "sha256:6ebb3d106c12920aaae42ccb6f787ef5eefdcdd166ea3d628fa8476abe712144"},
 ]
 attrs = [
     {file = "attrs-21.4.0-py2.py3-none-any.whl", hash = "sha256:2d27e3784d7a565d36ab851fe94887c5eccd6a463168875832a1be79c82828b4"},

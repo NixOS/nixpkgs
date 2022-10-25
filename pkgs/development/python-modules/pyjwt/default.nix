@@ -6,7 +6,7 @@
 , pythonOlder
 , sphinxHook
 , sphinx-rtd-theme
-, zope_interface
+, zope-interface
 }:
 
 buildPythonPackage rec {
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     sphinxHook
     sphinx-rtd-theme
-    zope_interface
+    zope-interface
   ];
 
   passthru.optional-dependencies.crypto = [

@@ -5,7 +5,7 @@
 # python deps
 , python, buildPythonPackage
 , alembic, beautifulsoup4, chardet, lxml, Mako, pyenchant
-, pyqt5_with_qtwebkit, pyxdg, sip_4, sqlalchemy, sqlalchemy-migrate
+, pyqt5-with-qtwebkit, pyxdg, sip_4, sqlalchemy, sqlalchemy-migrate
 }:
 
 buildPythonPackage rec {
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     lxml
     Mako
     pyenchant
-    pyqt5_with_qtwebkit
+    pyqt5-with-qtwebkit
     pyxdg
     sip_4
     sqlalchemy

@@ -1,7 +1,7 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, zope_interface
+, zope-interface
 , mock
 }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0c15ef0b7ff3518357ceea75722a30d974c3f85e11aa5cec5d5a2b6a40cfcf68";
   };
 
-  propagatedBuildInputs = [ zope_interface mock ];
+  propagatedBuildInputs = [ zope-interface mock ];
 
   meta = with lib; {
     description = "Transaction management";

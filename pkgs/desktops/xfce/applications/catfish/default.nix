@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    python3Packages.distutils_extra
+    python3Packages.distutils-extra
     file
     which
     intltool

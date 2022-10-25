@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, factory_boy
+, factory-boy
 , faker
 , fetchPypi
 , pytest-cov
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
-    factory_boy
+    factory-boy
     faker
     pytest-cov
     pytestCheckHook

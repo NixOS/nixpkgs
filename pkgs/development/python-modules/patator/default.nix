@@ -24,7 +24,7 @@ buildPythonPackage rec {
     ajpy
     impacket
     pyopenssl
-    cx_oracle
+    cx-oracle
     mysqlclient
     psycopg2
     pycrypto

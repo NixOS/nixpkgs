@@ -418,7 +418,7 @@ mapAliases ({
 
   facette = throw "facette has been removed"; # Added 2020-01-06
   fast-neural-doodle = throw "fast-neural-doodle has been removed, as the upstream project has been abandoned"; # Added 2020-03-28
-  fastnlo = fastnlo_toolkit; # Added 2021-04-24
+  fastnlo = fastnlo-toolkit; # Added 2021-04-24
   fbreader = throw "fbreader has been removed, as the upstream project has been archived"; # Added 2022-05-26
   fedora-coreos-config-transpiler = throw "fedora-coreos-config-transpiler has been renamed to 'butane'"; # Added 2021-04-13
   feedreader = throw "feedreader is no longer activily maintained since 2019. The developer is working on a spiritual successor called NewsFlash."; # Added 2022-05-03
@@ -685,6 +685,7 @@ mapAliases ({
   keepassx-community = throw "'keepassx-community' has been renamed to/replaced by 'keepassxc'"; # Converted to throw 2022-02-22
   keepassx-reboot = throw "'keepassx-reboot' has been renamed to/replaced by 'keepassx-community'"; # Converted to throw 2022-02-22
   keepassx2-http = throw "'keepassx2-http' has been renamed to/replaced by 'keepassx-reboot'"; # Converted to throw 2022-02-22
+  keepkey_agent = keepkey-agent; # Added 2022-10-24
   keepnote = throw "keepnote has been removed from nixpkgs, as it is stuck on python2"; # Added 2022-01-01
   kerberos = libkrb5; # moved from top-level 2021-03-14
   kexectools = kexec-tools; # Added 2021-09-03
@@ -715,6 +716,7 @@ mapAliases ({
 
   lastfmsubmitd = throw "lastfmsubmitd was removed from nixpkgs as the project is abandoned"; # Added 2022-01-01
   latinmodern-math = lmmath;
+  ledger_agent = ledger-agent; # Added 2022-10-24
   letsencrypt = throw "'letsencrypt' has been renamed to/replaced by 'certbot'"; # Converted to throw 2022-02-22
   libGL_driver = throw "'libGL_driver' has been renamed to/replaced by 'mesa.drivers'"; # Converted to throw 2022-02-22
   libaudit = throw "'libaudit' has been renamed to/replaced by 'audit'"; # Converted to throw 2022-02-22
@@ -1471,6 +1473,7 @@ mapAliases ({
   transmission_remote_gtk = throw "'transmission_remote_gtk' has been renamed to/replaced by 'transmission-remote-gtk'"; # Converted to throw 2022-02-22
   transporter = throw "transporter has been removed. It was archived upstream, so it's considered abandoned";
   trebleshot = throw "trebleshot has been removed. It was archived upstream, so it's considered abandoned";
+  trezor_agent = trezor-agent; # Added 2022-10-24
   trilium = throw "trilium has been removed. Please use trilium-desktop instead"; # Added 2020-04-29
   truecrypt = throw "'truecrypt' has been renamed to/replaced by 'veracrypt'"; # Converted to throw 2022-02-22
   tuijam = throw "tuijam has been removed because Google Play Music was discontinued"; # Added 2021-03-07

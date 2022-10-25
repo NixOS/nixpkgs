@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, factory_boy
+, factory-boy
 , fetchFromGitHub
 , inflection
 , mock
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
-    factory_boy
+    factory-boy
     inflection
   ];
 
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytest_factoryboy" ];
 
   meta = with lib; {
-    description = "Integration of factory_boy into the pytest runner";
+    description = "Integration of factory-boy into the pytest runner";
     homepage = "https://pytest-factoryboy.readthedocs.io/en/latest/";
     maintainers = with maintainers; [ winpat ];
     license = licenses.mit;

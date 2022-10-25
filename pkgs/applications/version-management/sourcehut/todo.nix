@@ -7,7 +7,7 @@
 , alembic
 , pystache
 , pytest
-, factory_boy
+, factory-boy
 , python
 , unzip
 }:
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   # pytest tests fail
   checkInputs = [
     pytest
-    factory_boy
+    factory-boy
   ];
 
   dontUseSetuptoolsCheck = true;

@@ -658,17 +658,17 @@
       };
     }
     {
-      name = "_babel_plugin_proposal_async_generator_functions___plugin_proposal_async_generator_functions_7.16.8.tgz";
+      name = "_babel_plugin_proposal_async-generator_functions___plugin_proposal_async_generator_functions_7.16.8.tgz";
       path = fetchurl {
-        name = "_babel_plugin_proposal_async_generator_functions___plugin_proposal_async_generator_functions_7.16.8.tgz";
+        name = "_babel_plugin_proposal_async-generator_functions___plugin_proposal_async_generator_functions_7.16.8.tgz";
         url  = "https://registry.yarnpkg.com/@babel/plugin-proposal-async-generator-functions/-/plugin-proposal-async-generator-functions-7.16.8.tgz";
         sha512 = "71YHIvMuiuqWJQkebWJtdhQTfd4Q4mF76q2IX37uZPkG9+olBxsX+rH1vkhFto4UeJZ9dPY2s+mDvhDm1u2BGQ==";
       };
     }
     {
-      name = "_babel_plugin_proposal_async_generator_functions___plugin_proposal_async_generator_functions_7.17.12.tgz";
+      name = "_babel_plugin_proposal_async-generator_functions___plugin_proposal_async_generator_functions_7.17.12.tgz";
       path = fetchurl {
-        name = "_babel_plugin_proposal_async_generator_functions___plugin_proposal_async_generator_functions_7.17.12.tgz";
+        name = "_babel_plugin_proposal_async-generator_functions___plugin_proposal_async_generator_functions_7.17.12.tgz";
         url  = "https://registry.yarnpkg.com/@babel/plugin-proposal-async-generator-functions/-/plugin-proposal-async-generator-functions-7.17.12.tgz";
         sha512 = "RWVvqD1ooLKP6IqWTA5GyFVX2isGEgC5iFxKzfYOIy/QEFdxYyCybBDtIGjipHpb9bDWHzcqGqFakf+mVmBTdQ==";
       };
@@ -882,9 +882,9 @@
       };
     }
     {
-      name = "_babel_plugin_syntax_async_generators___plugin_syntax_async_generators_7.8.4.tgz";
+      name = "_babel_plugin_syntax_async-generators___plugin_syntax_async_generators_7.8.4.tgz";
       path = fetchurl {
-        name = "_babel_plugin_syntax_async_generators___plugin_syntax_async_generators_7.8.4.tgz";
+        name = "_babel_plugin_syntax_async-generators___plugin_syntax_async_generators_7.8.4.tgz";
         url  = "https://registry.yarnpkg.com/@babel/plugin-syntax-async-generators/-/plugin-syntax-async-generators-7.8.4.tgz";
         sha512 = "tycmZxkGfZaxhMRbXlPXuVFpdWlXpir2W4AMhSJgRKzk/eDlIXOhb2LHWoLpDF7TEHylV5zNhykX6KAgHJmTNw==";
       };

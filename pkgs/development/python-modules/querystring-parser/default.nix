@@ -3,7 +3,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "querystring_parser";
+  pname = "querystring-parser";
   version = "1.2.4";
   disabled = isPy27;
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkPhase = "${python.interpreter} querystring_parser/tests.py -k 'not test_parse_normalized'";
+  checkPhase = "${python.interpreter} querystring-parser/tests.py -k 'not test_parse_normalized'";
   # one test fails due to https://github.com/bernii/querystring-parser/issues/35
   doCheck = true;
 

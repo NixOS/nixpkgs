@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   checkInputs = [ testtools ];
 
-  # There is a conflict with their `lazy_import` and plugin tests
+  # There is a conflict with their `lazy-import` and plugin tests
   doCheck = false;
 
   # symlink for bazaar compatibility

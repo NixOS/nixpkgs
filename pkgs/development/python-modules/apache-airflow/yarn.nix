@@ -594,9 +594,9 @@
       };
     }
     {
-      name = "_babel_plugin_proposal_async_generator_functions___plugin_proposal_async_generator_functions_7.16.0.tgz";
+      name = "_babel_plugin_proposal_async-generator_functions___plugin_proposal_async_generator_functions_7.16.0.tgz";
       path = fetchurl {
-        name = "_babel_plugin_proposal_async_generator_functions___plugin_proposal_async_generator_functions_7.16.0.tgz";
+        name = "_babel_plugin_proposal_async-generator_functions___plugin_proposal_async_generator_functions_7.16.0.tgz";
         url  = "https://registry.yarnpkg.com/@babel/plugin-proposal-async-generator-functions/-/plugin-proposal-async-generator-functions-7.16.0.tgz";
         sha512 = "nyYmIo7ZqKsY6P4lnVmBlxp9B3a96CscbLotlsNuktMHahkDwoPYEjXrZHU0Tj844Z9f1IthVxQln57mhkcExw==";
       };
@@ -714,9 +714,9 @@
       };
     }
     {
-      name = "_babel_plugin_syntax_async_generators___plugin_syntax_async_generators_7.8.4.tgz";
+      name = "_babel_plugin_syntax_async-generators___plugin_syntax_async_generators_7.8.4.tgz";
       path = fetchurl {
-        name = "_babel_plugin_syntax_async_generators___plugin_syntax_async_generators_7.8.4.tgz";
+        name = "_babel_plugin_syntax_async-generators___plugin_syntax_async_generators_7.8.4.tgz";
         url  = "https://registry.yarnpkg.com/@babel/plugin-syntax-async-generators/-/plugin-syntax-async-generators-7.8.4.tgz";
         sha512 = "tycmZxkGfZaxhMRbXlPXuVFpdWlXpir2W4AMhSJgRKzk/eDlIXOhb2LHWoLpDF7TEHylV5zNhykX6KAgHJmTNw==";
       };

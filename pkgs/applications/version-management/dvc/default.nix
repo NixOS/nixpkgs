@@ -47,7 +47,7 @@ python3.pkgs.buildPythonApplication rec {
     dvc-render
     dvc-task
     flatten-dict
-    flufl_lock
+    flufl-lock
     funcy
     grandalf
     nanotime
@@ -71,7 +71,7 @@ python3.pkgs.buildPythonApplication rec {
     tqdm
     typing-extensions
     voluptuous
-    zc_lockfile
+    zc-lockfile
   ] ++ lib.optionals enableGoogle [
     gcsfs
     google-cloud-storage

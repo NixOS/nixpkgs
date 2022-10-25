@@ -33,7 +33,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     httplib2
     libopenshot
-    pyqt5_with_qtwebkit
+    pyqt5-with-qtwebkit
     pyzmq
     requests
     sip_4

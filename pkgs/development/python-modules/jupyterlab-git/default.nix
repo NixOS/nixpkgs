@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , git
-, jupyter_server
+, jupyter-server
 , jupyter-packaging
 , jupyterlab
 , nbdime
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    jupyter_server
+    jupyter-server
     nbdime
     git
     nbformat

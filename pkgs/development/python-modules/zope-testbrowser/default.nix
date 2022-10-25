@@ -2,8 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
-, zope_interface
-, zope_schema
+, zope-interface
+, zope-schema
 , zope-cachedescriptors
 , pytz
 , webtest
@@ -12,8 +12,8 @@
 , wsgiproxy2
 , six
 , mock
-, zope_testing
-, zope_testrunner
+, zope-testing
+, zope-testrunner
 , python
 }:
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     setuptools
-    zope_interface
-    zope_schema
+    zope-interface
+    zope-schema
     zope-cachedescriptors
     pytz
     webtest
@@ -50,8 +50,8 @@ buildPythonPackage rec {
 
   checkInputs = [
     mock
-    zope_testing
-    zope_testrunner
+    zope-testing
+    zope-testrunner
   ];
 
   checkPhase = ''

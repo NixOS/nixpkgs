@@ -3,7 +3,7 @@
 , buildPythonPackage
 , cheroot
 , fetchPypi
-, jaraco_collections
+, jaraco-collections
 , more-itertools
 , objgraph
 , path
@@ -18,7 +18,7 @@
 , routes
 , setuptools-scm
 , simplejson
-, zc_lockfile
+, zc-lockfile
 }:
 
 buildPythonPackage rec {
@@ -51,8 +51,8 @@ buildPythonPackage rec {
     cheroot
     portend
     more-itertools
-    zc_lockfile
-    jaraco_collections
+    zc-lockfile
+    jaraco-collections
   ];
 
   checkInputs = [

@@ -35,7 +35,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "flask_mailman" ];
+  pythonImportsCheck = [ "flask-mailman" ];
 
   meta = with lib; {
     homepage = "https://github.com/waynerv/flask-mailman";

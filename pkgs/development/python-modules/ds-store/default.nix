@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, mac_alias
+, mac-alias
 , pytestCheckHook
 }:
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "1zmhnz110dvisydp5h6s0ry2v9qf4rgr60xhhlak0c66zpvlkkl0";
   };
 
-  propagatedBuildInputs = [ mac_alias ];
+  propagatedBuildInputs = [ mac-alias ];
 
   checkInputs = [ pytestCheckHook ];
 

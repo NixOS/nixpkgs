@@ -17,7 +17,7 @@
 , pytz
 , pyyaml
 , requests
-, requests_ntlm
+, requests-ntlm
 , requests-oauthlib
 , requests-kerberos
 , requests-mock
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     oauthlib
     pygments
     requests
-    requests_ntlm
+    requests-ntlm
     requests-oauthlib
     requests-kerberos
     tzdata

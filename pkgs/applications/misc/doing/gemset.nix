@@ -7,7 +7,7 @@
     };
     version = "0.10.2";
   };
-  deep_merge = {
+  deep-merge = {
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "1q3picw7zx1xdkybmrnhmk2hycxzaa0jv4gqrby1s90dy5n7fmsb";
@@ -16,7 +16,7 @@
     version = "1.2.1";
   };
   doing = {
-    dependencies = ["chronic" "deep_merge" "gli" "haml" "json"];
+    dependencies = ["chronic" "deep-merge" "gli" "haml" "json"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "1y42yc7h45sz9hqj3g1dd77ipx58l7v64i7mrsj3is2f5rszd1rv";

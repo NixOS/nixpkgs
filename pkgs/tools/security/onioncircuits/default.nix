@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ intltool ];
   buildInputs = [ gtk3 gobject-introspection ];
-  propagatedBuildInputs =  with python3.pkgs; [ stem distutils_extra pygobject3 ];
+  propagatedBuildInputs =  with python3.pkgs; [ stem distutils-extra pygobject3 ];
 
   postFixup = ''
     wrapProgram "$out/bin/onioncircuits" \

@@ -170,9 +170,9 @@
       };
     }
     {
-      name = "_babel_plugin_syntax_async_generators___plugin_syntax_async_generators_7.8.4.tgz";
+      name = "_babel_plugin_syntax_async-generators___plugin_syntax_async_generators_7.8.4.tgz";
       path = fetchurl {
-        name = "_babel_plugin_syntax_async_generators___plugin_syntax_async_generators_7.8.4.tgz";
+        name = "_babel_plugin_syntax_async-generators___plugin_syntax_async_generators_7.8.4.tgz";
         url  = "https://registry.yarnpkg.com/@babel/plugin-syntax-async-generators/-/plugin-syntax-async-generators-7.8.4.tgz";
         sha512 = "tycmZxkGfZaxhMRbXlPXuVFpdWlXpir2W4AMhSJgRKzk/eDlIXOhb2LHWoLpDF7TEHylV5zNhykX6KAgHJmTNw==";
       };

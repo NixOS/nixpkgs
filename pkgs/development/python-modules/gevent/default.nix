@@ -6,8 +6,8 @@
 , libev
 , greenlet
 , setuptools
-, zope_event
-, zope_interface
+, zope-event
+, zope-interface
 , pythonOlder
 }:
 
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    zope_event
-    zope_interface
+    zope-event
+    zope-interface
   ] ++ lib.optionals (!isPyPy) [
     greenlet
   ];

@@ -329,7 +329,7 @@ python-versions = ">=3.7"
 
 [package.extras]
 test = ["async-timeout", "pytest", "pytest-asyncio (>=0.17)", "pytest-trio", "testpath", "trio"]
-trio = ["async_generator", "trio"]
+trio = ["async-generator", "trio"]
 
 [[package]]
 name = "jsonschema"

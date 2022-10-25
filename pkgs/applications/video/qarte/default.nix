@@ -1,7 +1,7 @@
 { mkDerivation, lib, fetchbzr, python3, rtmpdump }:
 
 let
-  pythonEnv = python3.withPackages (ps: with ps; [ m3u8 pyqt5_with_qtmultimedia ]);
+  pythonEnv = python3.withPackages (ps: with ps; [ m3u8 pyqt5-with-qtmultimedia ]);
 in mkDerivation {
   pname = "qarte";
   version = "4.17.1";

@@ -15,8 +15,8 @@
 , pytz
 , requests
 , six
-, zope_component
-, zope_interface
+, zope-component
+, zope-interface
 , dialog
 , gnureadline
 , pytest-xdist
@@ -50,8 +50,8 @@ buildPythonPackage rec {
     pytz
     requests
     six
-    zope_component
-    zope_interface
+    zope-component
+    zope-interface
   ];
 
   buildInputs = [ dialog gnureadline ];

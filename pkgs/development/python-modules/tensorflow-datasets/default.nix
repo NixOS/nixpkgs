@@ -119,7 +119,7 @@ buildPythonPackage rec {
     "tensorflow_datasets/audio/nsynth_test.py"
 
     # Requires `gcld3` and `pretty_midi` which are not packaged in `nixpkgs`.
-    "tensorflow_datasets/core/lazy_imports_lib_test.py"
+    "tensorflow_datasets/core/lazy-imports_lib_test.py"
 
     # Requires `tensorflow_io` which is not packaged in `nixpkgs`.
     "tensorflow_datasets/image/lsun_test.py"

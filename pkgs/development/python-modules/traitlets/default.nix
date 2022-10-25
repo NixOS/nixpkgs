@@ -4,7 +4,7 @@
 , glibcLocales
 , pytest
 , mock
-, ipython_genutils
+, ipython-genutils
 , decorator
 , pythonOlder
 , six
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ hatchling ];
   checkInputs = [ glibcLocales pytest mock ];
-  propagatedBuildInputs = [ ipython_genutils decorator six ];
+  propagatedBuildInputs = [ ipython-genutils decorator six ];
 
   checkPhase = ''
     LC_ALL="en_US.UTF-8" py.test

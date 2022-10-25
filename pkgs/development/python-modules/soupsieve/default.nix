@@ -3,7 +3,7 @@
 , fetchPypi
 , hatchling
 , isPy3k
-, backports_functools_lru_cache
+, backports-functools-lru-cache
 }:
 
 buildPythonPackage rec {

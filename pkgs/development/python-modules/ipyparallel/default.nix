@@ -6,7 +6,7 @@
 , hatchling
 , ipykernel
 , ipython
-, ipython_genutils
+, ipython-genutils
 , jupyter-client
 , packaging
 , psutil
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     entrypoints
     ipykernel
     ipython
-    ipython_genutils
+    ipython-genutils
     jupyter-client
     packaging
     psutil

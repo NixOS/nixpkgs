@@ -7,7 +7,7 @@
 , pygments
 , pytestCheckHook
 , pythonOlder
-, restructuredtext_lint
+, restructuredtext-lint
 , setuptools-scm
 , stevedore
 }:
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     docutils
     chardet
     stevedore
-    restructuredtext_lint
+    restructuredtext-lint
     pygments
   ];
 

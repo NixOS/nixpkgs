@@ -4,7 +4,7 @@
 , isPy27
 , alembic
 , flask
-, flask_script
+, flask-script
 , flask-sqlalchemy
 , unittestCheckHook
 }:
@@ -29,12 +29,12 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [
-    "flask_migrate"
+    "flask-migrate"
   ];
 
   checkInputs = [
     unittestCheckHook
-    flask_script
+    flask-script
   ];
 
   meta = with lib; {

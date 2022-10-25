@@ -30,8 +30,8 @@ let
     flask
     flask-gravatar
     flask-login
-    flask_mail
-    flask_migrate
+    flask-mail
+    flask-migrate
     flask-sqlalchemy
     flask-wtf
     flask-compress
@@ -92,7 +92,7 @@ let
         sha256 = "sha256-98jKcHDv/+mls7QVWeGvGcmoYOGCspxM7w5/2RjJxoM=";
       };
       propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
-        final.pythonPackages.flask_mail
+        final.pythonPackages.flask-mail
         final.pythonPackages.pyqrcode
       ];
     });

@@ -1593,7 +1593,7 @@
     };
     version = "0.4.2";
   };
-  memory_profiler = {
+  memory-profiler = {
     groups = ["development"];
     platforms = [];
     source = {

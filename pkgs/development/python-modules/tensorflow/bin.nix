@@ -17,7 +17,7 @@
 , scipy
 , wheel
 , opt-einsum
-, backports_weakref
+, backports-weakref
 , tensorflow-estimator
 , tensorboard
 , cudaSupport ? false
@@ -79,7 +79,7 @@ in buildPythonPackage {
     keras-preprocessing
     h5py
   ] ++ lib.optional (!isPy3k) mock
-    ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
+    ++ lib.optionals (pythonOlder "3.4") [ backports-weakref ];
 
   # remove patchelfUnstable once patchelf 0.14 with https://github.com/NixOS/patchelf/pull/256 becomes the default
   nativeBuildInputs = [ wheel ] ++ lib.optionals cudaSupport [ addOpenGLRunpath patchelfUnstable ];

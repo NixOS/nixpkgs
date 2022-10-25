@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, async_generator
+, async-generator
 , pytest-trio
 , pytestCheckHook
 , trio
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    async_generator
+    async-generator
     trio
     wsproto
   ];

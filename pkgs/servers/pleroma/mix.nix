@@ -83,7 +83,7 @@ let
         sha256 = "1nxd6blgmalb1qm9n11yaq24din2grc3pnnfsx6wkiz9hzkqmm9s";
       };
 
-      beamDeps = [ deep_merge ];
+      beamDeps = [ deep-merge ];
     };
 
     bunt = buildMix rec {
@@ -307,8 +307,8 @@ let
       beamDeps = [];
     };
 
-    deep_merge = buildMix rec {
-      name = "deep_merge";
+    deep-merge = buildMix rec {
+      name = "deep-merge";
       version = "1.0.0";
 
       src = fetchHex {

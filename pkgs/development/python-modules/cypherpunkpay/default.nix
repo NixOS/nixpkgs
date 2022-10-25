@@ -11,7 +11,7 @@
 , pypng
 , pyqrcode
 , pyramid
-, pyramid_jinja2
+, pyramid-jinja2
 , pysocks
 , requests
 , tzlocal
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     pypng
     pyqrcode
     pyramid
-    pyramid_jinja2
+    pyramid-jinja2
     pysocks
     requests
     tzlocal

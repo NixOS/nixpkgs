@@ -74,7 +74,7 @@ python3.pkgs.buildPythonApplication {
     matplotlib
     pbkdf2
     protobuf
-    py_scrypt
+    py-scrypt
     pysocks
     qrcode
     requests
