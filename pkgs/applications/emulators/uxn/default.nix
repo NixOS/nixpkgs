@@ -52,5 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; unix;
+    broken = stdenv.isDarwin;
   };
 })
