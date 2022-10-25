@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitea
 , ocamlPackages
+, soupault
+, testers
 }:
 
 ocamlPackages.buildDunePackage rec {
@@ -36,6 +38,11 @@ ocamlPackages.buildDunePackage rec {
     tsort
     yaml
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = soupault;
+    command = "soupault --version-number";
+  };
 
   meta = {
     description = "A tool that helps you create and manage static websites";
