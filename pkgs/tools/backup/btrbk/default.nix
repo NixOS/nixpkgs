@@ -53,7 +53,9 @@ stdenv.mkDerivation rec {
       --prefix PATH ':' "${lib.makeBinPath [ btrfs-progs bash mbuffer openssh ]}"
   '';
 
-  passthru.tests.btrbk = nixosTests.btrbk;
+  passthru.tests = {
+    inherit (nixosTests) btrbk btrbk-no-timer btrbk-section-order;
+  };
 
   passthru.updateScript = genericUpdater {
     versionLister = writeShellScript "btrbk-versionLister" ''
