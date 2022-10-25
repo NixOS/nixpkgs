@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome-settings-daemon
+    gnome-settings-daemon # media-keys
     granite
     gtk3
     libcanberra-gtk3
